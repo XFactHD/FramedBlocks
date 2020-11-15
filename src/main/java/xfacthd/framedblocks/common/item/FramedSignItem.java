@@ -3,7 +3,6 @@ package xfacthd.framedblocks.common.item;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.*;
-import net.minecraft.tileentity.SignTileEntity;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import xfacthd.framedblocks.FramedBlocks;
@@ -16,7 +15,7 @@ public class FramedSignItem extends WallOrFloorItem
     public FramedSignItem()
     {
         super(FBContent.blockFramedSign, FBContent.blockFramedWallSign,
-                new Properties().group(ItemGroup.DECORATIONS).maxStackSize(16));
+                new Properties().group(FramedBlocks.FRAMED_GROUP).maxStackSize(16));
         setRegistryName(FramedBlocks.MODID, "framed_sign");
     }
 

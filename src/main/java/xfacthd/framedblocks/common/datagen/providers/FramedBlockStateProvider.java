@@ -199,7 +199,15 @@ public class FramedBlockStateProvider extends BlockStateProvider
 
     private void registerFramedPanel()
     {
+        ModelFile panel = models().getExistingFile(modLoc("framed_panel"));
 
+        getVariantBuilder(FBContent.blockFramedPanel).forAllStatesExcept(state ->
+        {
+            int rotY = (int)(state.get(PropertyHolder.FACING_HOR).getHorizontalAngle() + 180) % 360;
+            return ConfiguredModel.builder().modelFile(panel).rotationY(rotY).uvLock(true).build();
+        }, BlockStateProperties.WATERLOGGED);
+
+        simpleBlockItem(FBContent.blockFramedPanel, panel);
     }
 
     private void registerFramedCornerPillar()

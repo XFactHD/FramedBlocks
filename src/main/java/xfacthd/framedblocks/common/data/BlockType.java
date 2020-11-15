@@ -20,7 +20,7 @@ public enum BlockType
     FRAMED_THREEWAY_CORNER(true, false, FramedThreewayCornerBlock::generateThreewayShapes),
     FRAMED_INNER_THREEWAY_CORNER(true, false, FramedThreewayCornerBlock::generateInnerThreewayShapes),
     FRAMED_SLAB(false, true, FramedSlabBlock::generateShapes),
-    //FRAMED_PANEL(false, true, FramedPanelBlock::generateShapes),
+    FRAMED_PANEL(false, true, FramedPanelBlock::generateShapes),
     //FRAMED_CORNER_PILLAR(false, true, FramedCornerPillarBlock::generateShapes),
     FRAMED_STAIRS(false, true),
     FRAMED_WALL(false, false),

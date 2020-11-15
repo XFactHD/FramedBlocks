@@ -9,6 +9,7 @@ import net.minecraft.util.*;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.*;
 import net.minecraftforge.common.ToolType;
+import xfacthd.framedblocks.FramedBlocks;
 import xfacthd.framedblocks.common.data.BlockType;
 import xfacthd.framedblocks.common.tileentity.FramedTileEntity;
 
@@ -29,7 +30,7 @@ public interface IFramedBlock
     default BlockItem createItemBlock()
     {
         Block block = (Block)this;
-        BlockItem item = new BlockItem(block, new Item.Properties().group(ItemGroup.DECORATIONS));
+        BlockItem item = new BlockItem(block, new Item.Properties().group(FramedBlocks.FRAMED_GROUP));
         //noinspection ConstantConditions
         item.setRegistryName(block.getRegistryName());
         return item;

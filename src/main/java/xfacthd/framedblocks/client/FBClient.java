@@ -109,7 +109,7 @@ public class FBClient
         replaceModelsSimple(FBContent.blockFramedSlab, registry);
 
         //Framed Panel
-        //replaceModelsSimple(FBContent.blockFramedPanel, registry);
+        replaceModelsSimple(FBContent.blockFramedPanel, registry);
 
         //Framed Corner Pillar
         //replaceModelsSimple(FBContent.blockFramedCornerPillar, registry);
