@@ -1,0 +1,27 @@
+modLoader="javafml"
+loaderVersion="[31,)"
+issueTrackerURL="https://www.github.com/xfacthd/framedblocks"
+
+[[mods]]
+modId="framedblocks"
+version="${file.jarVersion}"
+displayName="FramedBlocks"
+#updateJSONURL="http://myurl.me/"
+#displayURL="http://example.com/"
+logoFile="logo.png"
+#credits="Thanks for this example mod goes to Java"
+authors="XFactHD"
+description='''
+'''
+[[dependencies.framedblocks]]
+    modId="forge"
+    mandatory=true
+    versionRange="[31,)"
+    ordering="NONE"
+    side="BOTH"
+[[dependencies.framedblocks]]
+    modId="minecraft"
+    mandatory=true
+    versionRange="[1.15.2]"
+    ordering="NONE"
+    side="BOTH"

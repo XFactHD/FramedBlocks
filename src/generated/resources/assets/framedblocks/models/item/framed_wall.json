@@ -1,0 +1,6 @@
+{
+  "parent": "framedblocks:item/framed_wall",
+  "textures": {
+    "wall": "framedblocks:block/framed_block"
+  }
+}

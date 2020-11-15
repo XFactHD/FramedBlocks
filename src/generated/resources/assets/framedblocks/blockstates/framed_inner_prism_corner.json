@@ -1,0 +1,23 @@
+{
+  "variants": {
+    "facing=north": {
+      "model": "framedblocks:block/framed_inner_prism_corner",
+      "y": 180,
+      "uvlock": true
+    },
+    "facing=south": {
+      "model": "framedblocks:block/framed_inner_prism_corner",
+      "uvlock": true
+    },
+    "facing=west": {
+      "model": "framedblocks:block/framed_inner_prism_corner",
+      "y": 90,
+      "uvlock": true
+    },
+    "facing=east": {
+      "model": "framedblocks:block/framed_inner_prism_corner",
+      "y": 270,
+      "uvlock": true
+    }
+  }
+}

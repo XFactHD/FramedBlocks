@@ -1,0 +1,156 @@
+{
+  "variants": {
+    "facing=north,half=upper,hinge=left,open=false": {
+      "model": "framedblocks:block/framed_door",
+      "uvlock": true
+    },
+    "facing=south,half=upper,hinge=left,open=false": {
+      "model": "framedblocks:block/framed_door",
+      "y": 180,
+      "uvlock": true
+    },
+    "facing=west,half=upper,hinge=left,open=false": {
+      "model": "framedblocks:block/framed_door",
+      "y": 270,
+      "uvlock": true
+    },
+    "facing=east,half=upper,hinge=left,open=false": {
+      "model": "framedblocks:block/framed_door",
+      "y": 90,
+      "uvlock": true
+    },
+    "facing=north,half=lower,hinge=left,open=false": {
+      "model": "framedblocks:block/framed_door",
+      "uvlock": true
+    },
+    "facing=south,half=lower,hinge=left,open=false": {
+      "model": "framedblocks:block/framed_door",
+      "y": 180,
+      "uvlock": true
+    },
+    "facing=west,half=lower,hinge=left,open=false": {
+      "model": "framedblocks:block/framed_door",
+      "y": 270,
+      "uvlock": true
+    },
+    "facing=east,half=lower,hinge=left,open=false": {
+      "model": "framedblocks:block/framed_door",
+      "y": 90,
+      "uvlock": true
+    },
+    "facing=north,half=upper,hinge=right,open=false": {
+      "model": "framedblocks:block/framed_door",
+      "uvlock": true
+    },
+    "facing=south,half=upper,hinge=right,open=false": {
+      "model": "framedblocks:block/framed_door",
+      "y": 180,
+      "uvlock": true
+    },
+    "facing=west,half=upper,hinge=right,open=false": {
+      "model": "framedblocks:block/framed_door",
+      "y": 270,
+      "uvlock": true
+    },
+    "facing=east,half=upper,hinge=right,open=false": {
+      "model": "framedblocks:block/framed_door",
+      "y": 90,
+      "uvlock": true
+    },
+    "facing=north,half=lower,hinge=right,open=false": {
+      "model": "framedblocks:block/framed_door",
+      "uvlock": true
+    },
+    "facing=south,half=lower,hinge=right,open=false": {
+      "model": "framedblocks:block/framed_door",
+      "y": 180,
+      "uvlock": true
+    },
+    "facing=west,half=lower,hinge=right,open=false": {
+      "model": "framedblocks:block/framed_door",
+      "y": 270,
+      "uvlock": true
+    },
+    "facing=east,half=lower,hinge=right,open=false": {
+      "model": "framedblocks:block/framed_door",
+      "y": 90,
+      "uvlock": true
+    },
+    "facing=north,half=upper,hinge=left,open=true": {
+      "model": "framedblocks:block/framed_door",
+      "y": 90,
+      "uvlock": true
+    },
+    "facing=south,half=upper,hinge=left,open=true": {
+      "model": "framedblocks:block/framed_door",
+      "y": 270,
+      "uvlock": true
+    },
+    "facing=west,half=upper,hinge=left,open=true": {
+      "model": "framedblocks:block/framed_door",
+      "uvlock": true
+    },
+    "facing=east,half=upper,hinge=left,open=true": {
+      "model": "framedblocks:block/framed_door",
+      "y": 180,
+      "uvlock": true
+    },
+    "facing=north,half=lower,hinge=left,open=true": {
+      "model": "framedblocks:block/framed_door",
+      "y": 90,
+      "uvlock": true
+    },
+    "facing=south,half=lower,hinge=left,open=true": {
+      "model": "framedblocks:block/framed_door",
+      "y": 270,
+      "uvlock": true
+    },
+    "facing=west,half=lower,hinge=left,open=true": {
+      "model": "framedblocks:block/framed_door",
+      "uvlock": true
+    },
+    "facing=east,half=lower,hinge=left,open=true": {
+      "model": "framedblocks:block/framed_door",
+      "y": 180,
+      "uvlock": true
+    },
+    "facing=north,half=upper,hinge=right,open=true": {
+      "model": "framedblocks:block/framed_door",
+      "y": 270,
+      "uvlock": true
+    },
+    "facing=south,half=upper,hinge=right,open=true": {
+      "model": "framedblocks:block/framed_door",
+      "y": 90,
+      "uvlock": true
+    },
+    "facing=west,half=upper,hinge=right,open=true": {
+      "model": "framedblocks:block/framed_door",
+      "y": 180,
+      "uvlock": true
+    },
+    "facing=east,half=upper,hinge=right,open=true": {
+      "model": "framedblocks:block/framed_door",
+      "uvlock": true
+    },
+    "facing=north,half=lower,hinge=right,open=true": {
+      "model": "framedblocks:block/framed_door",
+      "y": 270,
+      "uvlock": true
+    },
+    "facing=south,half=lower,hinge=right,open=true": {
+      "model": "framedblocks:block/framed_door",
+      "y": 90,
+      "uvlock": true
+    },
+    "facing=west,half=lower,hinge=right,open=true": {
+      "model": "framedblocks:block/framed_door",
+      "y": 180,
+      "uvlock": true
+    },
+    "facing=east,half=lower,hinge=right,open=true": {
+      "model": "framedblocks:block/framed_door",
+      "uvlock": true
+    }
+  }
+}

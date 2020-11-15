@@ -1,0 +1,23 @@
+{
+	"credit": "Made with Blockbench",
+	"textures": {
+		"0": "framedblocks:block/framed_block",
+		"particle": "framedblocks:block/framed_block"
+	},
+	"elements": [
+		{
+			"name": "board",
+			"from": [0, 4.25, 14],
+			"to": [16, 12.25, 16],
+			"rotation": {"angle": 0, "axis": "y", "origin": [8, 12.25, 15]},
+			"faces": {
+				"north": {"uv": [0, 0, 16, 8], "texture": "#0"},
+				"east": {"uv": [7, 0, 9, 8], "texture": "#0"},
+				"south": {"uv": [0, 0, 16, 8], "texture": "#0"},
+				"west": {"uv": [7, 0, 9, 8], "texture": "#0"},
+				"up": {"uv": [0, 7, 16, 9], "rotation": 180, "texture": "#0"},
+				"down": {"uv": [0, 7, 16, 9], "rotation": 180, "texture": "#0"}
+			}
+		}
+	]
+}

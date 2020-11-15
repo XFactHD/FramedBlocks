@@ -1,0 +1,84 @@
+{
+  "variants": {
+    "facing=north,half=top,open=false": {
+      "model": "framedblocks:block/framed_trapdoor_top",
+      "y": 360,
+      "uvlock": true
+    },
+    "facing=south,half=top,open=false": {
+      "model": "framedblocks:block/framed_trapdoor_top",
+      "y": 180,
+      "uvlock": true
+    },
+    "facing=west,half=top,open=false": {
+      "model": "framedblocks:block/framed_trapdoor_top",
+      "y": 270,
+      "uvlock": true
+    },
+    "facing=east,half=top,open=false": {
+      "model": "framedblocks:block/framed_trapdoor_top",
+      "y": 450,
+      "uvlock": true
+    },
+    "facing=north,half=bottom,open=false": {
+      "model": "framedblocks:block/framed_trapdoor_bottom",
+      "y": 360,
+      "uvlock": true
+    },
+    "facing=south,half=bottom,open=false": {
+      "model": "framedblocks:block/framed_trapdoor_bottom",
+      "y": 180,
+      "uvlock": true
+    },
+    "facing=west,half=bottom,open=false": {
+      "model": "framedblocks:block/framed_trapdoor_bottom",
+      "y": 270,
+      "uvlock": true
+    },
+    "facing=east,half=bottom,open=false": {
+      "model": "framedblocks:block/framed_trapdoor_bottom",
+      "y": 450,
+      "uvlock": true
+    },
+    "facing=north,half=top,open=true": {
+      "model": "framedblocks:block/framed_trapdoor_open",
+      "y": 360,
+      "uvlock": true
+    },
+    "facing=south,half=top,open=true": {
+      "model": "framedblocks:block/framed_trapdoor_open",
+      "y": 180,
+      "uvlock": true
+    },
+    "facing=west,half=top,open=true": {
+      "model": "framedblocks:block/framed_trapdoor_open",
+      "y": 270,
+      "uvlock": true
+    },
+    "facing=east,half=top,open=true": {
+      "model": "framedblocks:block/framed_trapdoor_open",
+      "y": 450,
+      "uvlock": true
+    },
+    "facing=north,half=bottom,open=true": {
+      "model": "framedblocks:block/framed_trapdoor_open",
+      "y": 360,
+      "uvlock": true
+    },
+    "facing=south,half=bottom,open=true": {
+      "model": "framedblocks:block/framed_trapdoor_open",
+      "y": 180,
+      "uvlock": true
+    },
+    "facing=west,half=bottom,open=true": {
+      "model": "framedblocks:block/framed_trapdoor_open",
+      "y": 270,
+      "uvlock": true
+    },
+    "facing=east,half=bottom,open=true": {
+      "model": "framedblocks:block/framed_trapdoor_open",
+      "y": 450,
+      "uvlock": true
+    }
+  }
+}
