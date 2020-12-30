@@ -39,21 +39,18 @@ public class FramedLootTableProvider extends LootTableProvider
             //noinspection ConstantConditions
             return ForgeRegistries.BLOCKS.getValues()
                     .stream()
-                    .filter(block -> block.getRegistryName().getPath().equals(FramedBlocks.MODID))
+                    .filter(block -> block.getRegistryName().getNamespace().equals(FramedBlocks.MODID))
                     .collect(Collectors.toList());
         }
 
         @Override
-        protected void addTables() //FIXME: blocks do not drop anything, can't register loot table for wall sign
+        protected void addTables()
         {
             //noinspection ConstantConditions
             ForgeRegistries.BLOCKS.getValues()
                     .stream()
-                    .filter(block -> block.getRegistryName().getPath().equals(FramedBlocks.MODID))
-                    .filter(block -> block != FBContent.blockFramedWallSign)
+                    .filter(block -> block.getRegistryName().getNamespace().equals(FramedBlocks.MODID))
                     .forEach(this::registerDropSelfLootTable);
-
-            //registerDropping(FBContent.blockFramedWallSign, FBContent.blockFramedSign);
         }
     }
 }
