@@ -1,5 +1,5 @@
 {
-  "parent": "framedblocks:item/framed_wall",
+  "parent": "block/wall_inventory",
   "textures": {
     "wall": "framedblocks:block/framed_block"
   }

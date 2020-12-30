@@ -219,46 +219,34 @@ public class FramedBlockStateProvider extends BlockStateProvider
     {
         stairsBlock((StairsBlock)FBContent.blockFramedStairs, TEXTURE);
 
-        //TODO: item model
-        //Crashes (can't find generated block model)
-        //ModelFile item = itemModels().withExistingParent("framed_stairs", modLoc("block/framed_stairs"));
-
-        //Creates circular reference: { "parent": "framedblocks:item/framed_stairs" }
-        //ModelFile item = models().withExistingParent("item/framed_stairs", modLoc("block/framed_stairs"));
-
-        //Creates circular reference: { "parent": "framedblocks:item/framed_stairs" }
-        //ModelFile stairs = models().generatedModels.get(modLoc("block/framed_stairs"));
-        //ModelFile item = itemModels().getBuilder("framed_stairs").parent(stairs);
-
-        //simpleBlockItem(FBContent.blockFramedStairs, item);
+        ModelFile stairs = models().generatedModels.get(modLoc("block/framed_stairs"));
+        simpleBlockItem(FBContent.blockFramedStairs, stairs);
     }
 
     private void registerFramedWall()
     {
         wallBlock((WallBlock)FBContent.blockFramedWall, TEXTURE);
 
-        //FIXME: creates parent loop
-        ModelFile item = itemModels().getBuilder("framed_wall")
+        itemModels().getBuilder("framed_wall")
                 .parent(models().getExistingFile(mcLoc("block/wall_inventory")))
                 .texture("wall", TEXTURE);
-        simpleBlockItem(FBContent.blockFramedWall, item);
     }
 
     private void registerFramedFence()
     {
         fenceBlock((FenceBlock)FBContent.blockFramedFence, TEXTURE);
 
-        //FIXME: creates parent loop
-        ModelFile item = itemModels().getBuilder("framed_fence")
+        itemModels().getBuilder("framed_fence")
                 .parent(models().getExistingFile(mcLoc("block/fence_inventory")))
                 .texture("texture", TEXTURE);
-        simpleBlockItem(FBContent.blockFramedFence, item);
     }
 
     private void registerFramedGate()
     {
         fenceGateBlock((FenceGateBlock)FBContent.blockFramedGate, TEXTURE);
-        //TODO: item model
+
+        ModelFile gate = models().generatedModels.get(modLoc("block/framed_gate"));
+        simpleBlockItem(FBContent.blockFramedGate, gate);
     }
 
     private void registerFramedDoor()
@@ -497,11 +485,9 @@ public class FramedBlockStateProvider extends BlockStateProvider
                     .build();
         });
 
-        //FIXME: creates parent loop
-        ModelFile buttonInv = itemModels()
-                .withExistingParent("framed_button", mcLoc("block/button_inventory"))
+        itemModels().getBuilder("framed_button")
+                .parent(models().getExistingFile(mcLoc("block/button_inventory")))
                 .texture("texture", TEXTURE);
-        simpleBlockItem(FBContent.blockFramedButton, buttonInv);
     }
 
     private void registerFramedLever()

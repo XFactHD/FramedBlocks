@@ -1,5 +1,5 @@
 {
-  "parent": "framedblocks:item/framed_button",
+  "parent": "block/button_inventory",
   "textures": {
     "texture": "framedblocks:block/framed_block"
   }

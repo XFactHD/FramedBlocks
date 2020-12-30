@@ -1,5 +1,5 @@
 {
-  "parent": "framedblocks:item/framed_fence",
+  "parent": "block/fence_inventory",
   "textures": {
     "texture": "framedblocks:block/framed_block"
   }
