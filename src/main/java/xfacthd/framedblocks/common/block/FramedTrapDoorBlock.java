@@ -3,14 +3,18 @@ package xfacthd.framedblocks.common.block;
 import net.minecraft.block.*;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.item.ItemStack;
 import net.minecraft.state.properties.Half;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.*;
 import net.minecraft.util.math.*;
 import net.minecraft.world.*;
+import net.minecraft.world.storage.loot.LootContext;
 import xfacthd.framedblocks.FramedBlocks;
 import xfacthd.framedblocks.common.data.BlockType;
 import xfacthd.framedblocks.common.tileentity.FramedTileEntity;
+
+import java.util.List;
 
 public class FramedTrapDoorBlock extends TrapDoorBlock implements IFramedBlock
 {
@@ -36,6 +40,13 @@ public class FramedTrapDoorBlock extends TrapDoorBlock implements IFramedBlock
     public SoundType getSoundType(BlockState state, IWorldReader world, BlockPos pos, Entity entity)
     {
         return getSound(state, world, pos);
+    }
+
+    @Override
+    @SuppressWarnings("deprecation")
+    public List<ItemStack> getDrops(BlockState state, LootContext.Builder builder)
+    {
+        return IFramedBlock.super.getDrops(super.getDrops(state, builder), builder);
     }
 
     @Override

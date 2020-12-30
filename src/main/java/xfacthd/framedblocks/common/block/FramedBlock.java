@@ -4,6 +4,7 @@ import net.minecraft.block.*;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.fluid.*;
+import net.minecraft.item.ItemStack;
 import net.minecraft.state.properties.BlockStateProperties;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.*;
@@ -11,11 +12,13 @@ import net.minecraft.util.math.*;
 import net.minecraft.util.math.shapes.ISelectionContext;
 import net.minecraft.util.math.shapes.VoxelShape;
 import net.minecraft.world.*;
+import net.minecraft.world.storage.loot.LootContext;
 import xfacthd.framedblocks.FramedBlocks;
 import xfacthd.framedblocks.common.data.BlockType;
 import xfacthd.framedblocks.common.data.PropertyHolder;
 import xfacthd.framedblocks.common.tileentity.FramedTileEntity;
 
+import java.util.List;
 import java.util.Map;
 
 @SuppressWarnings("deprecation")
@@ -91,6 +94,12 @@ public class FramedBlock extends Block implements IFramedBlock, IWaterLoggable
     {
         if (isWaterLoggable()) { return false; }
         return IWaterLoggable.super.canContainFluid(world, pos, state, fluid);
+    }
+
+    @Override
+    public List<ItemStack> getDrops(BlockState state, LootContext.Builder builder)
+    {
+        return IFramedBlock.super.getDrops(super.getDrops(state, builder), builder);
     }
 
     @Override

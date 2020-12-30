@@ -110,6 +110,8 @@ public class FramedTileEntity extends TileEntity
 
     public BlockState getCamoState() { return camoState; }
 
+    public ItemStack getCamoStack() { return camoStack; }
+
     public int getLightValue()
     {
         if (glowing) { return 15; }

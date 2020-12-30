@@ -8,10 +8,14 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.*;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.*;
+import net.minecraft.world.storage.loot.LootContext;
+import net.minecraft.world.storage.loot.LootParameters;
 import net.minecraftforge.common.ToolType;
 import xfacthd.framedblocks.FramedBlocks;
 import xfacthd.framedblocks.common.data.BlockType;
 import xfacthd.framedblocks.common.tileentity.FramedTileEntity;
+
+import java.util.List;
 
 @SuppressWarnings("deprecation")
 public interface IFramedBlock
@@ -68,5 +72,20 @@ public interface IFramedBlock
             }
         }
         return ((Block)this).getSoundType(state);
+    }
+
+    default List<ItemStack> getDrops(List<ItemStack> drops, LootContext.Builder builder)
+    {
+        TileEntity te = builder.get(LootParameters.BLOCK_ENTITY);
+        if (te instanceof FramedTileEntity)
+        {
+            ItemStack camo = ((FramedTileEntity) te).getCamoStack();
+            if (!camo.isEmpty())
+            {
+                drops.add(camo);
+            }
+        }
+
+        return drops;
     }
 }
