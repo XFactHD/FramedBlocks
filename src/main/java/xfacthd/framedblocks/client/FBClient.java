@@ -142,9 +142,7 @@ public class FBClient
         replaceModelsSimple(FBContent.blockFramedButton, registry);
 
         //Framed Lever
-        replaceModelsAdvanced(FBContent.blockFramedLever, registry,
-                (state, baseModel) -> new FramedLeverModel(baseModel),
-                baseModel -> baseModel);
+        replaceModelsSimple(FBContent.blockFramedLever, registry, FramedLeverModel::new);
 
         //Framed Sign
         replaceModelsSimple(FBContent.blockFramedSign, registry);
@@ -153,18 +151,22 @@ public class FBClient
         replaceModelsSimple(FBContent.blockFramedWallSign, registry);
 
         //Framed Collapsible Block
-        //replaceModelsAdvanced(FBContent.blockFramedCollapsibleBlock, registry,
-        //        (state, baseModel) -> new FramedCollapsibleBlockModel(baseModel),
-        //        baseModel -> baseModel);
+        //replaceModelsSimple(FBContent.blockFramedCollapsibleBlock, registry, FramedCollapsibleBlockModel::new);
     }
 
     private static void replaceModelsSimple(Block block, Map<ResourceLocation, IBakedModel> models)
+    {
+        replaceModelsSimple(block, models, FramedBlockModel::new);
+    }
+
+    private static void replaceModelsSimple(Block block, Map<ResourceLocation, IBakedModel> models,
+                                            Function<IBakedModel, IBakedModel> blockModelGen)
     {
         for (BlockState state : block.getStateContainer().getValidStates())
         {
             ResourceLocation location = BlockModelShapes.getModelLocation(state);
             IBakedModel baseModel = models.get(location);
-            IBakedModel replacement = new FramedBlockModel(baseModel);
+            IBakedModel replacement = blockModelGen.apply(baseModel);
             models.put(location, replacement);
         }
     }
