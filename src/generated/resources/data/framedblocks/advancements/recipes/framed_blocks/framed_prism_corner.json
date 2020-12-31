@@ -1,0 +1,32 @@
+{
+  "parent": "minecraft:recipes/root",
+  "rewards": {
+    "recipes": [
+      "framedblocks:framed_prism_corner"
+    ]
+  },
+  "criteria": {
+    "hasFramedSlope": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "item": "framedblocks:framed_slope"
+          }
+        ]
+      }
+    },
+    "has_the_recipe": {
+      "trigger": "minecraft:recipe_unlocked",
+      "conditions": {
+        "recipe": "framedblocks:framed_prism_corner"
+      }
+    }
+  },
+  "requirements": [
+    [
+      "hasFramedSlope",
+      "has_the_recipe"
+    ]
+  ]
+}

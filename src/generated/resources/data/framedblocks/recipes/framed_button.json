@@ -1,0 +1,11 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "ingredients": [
+    {
+      "item": "framedblocks:framed_cube"
+    }
+  ],
+  "result": {
+    "item": "framedblocks:framed_button"
+  }
+}

@@ -1,0 +1,18 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "S",
+    "F"
+  ],
+  "key": {
+    "F": {
+      "item": "framedblocks:framed_cube"
+    },
+    "S": {
+      "item": "minecraft:stick"
+    }
+  },
+  "result": {
+    "item": "framedblocks:framed_lever"
+  }
+}
