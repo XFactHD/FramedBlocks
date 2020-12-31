@@ -12,7 +12,7 @@ public class FramedHammerItem extends Item
     {
         super(new Properties()
                 .maxStackSize(1)
-                .group(ItemGroup.TOOLS)
+                .group(FramedBlocks.FRAMED_GROUP)
         );
 
         setRegistryName(FramedBlocks.MODID, "framed_hammer");
