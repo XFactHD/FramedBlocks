@@ -15,6 +15,6 @@ public class FramedItemModelProvider extends ItemModelProvider
     @Override
     protected void registerModels()
     {
-
+        singleTexture("framed_hammer", mcLoc("item/generated"), "layer0", modLoc("item/framed_hammer"));
     }
 }
