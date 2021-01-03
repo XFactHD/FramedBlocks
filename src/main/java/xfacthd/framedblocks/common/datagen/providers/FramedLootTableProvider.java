@@ -1,10 +1,11 @@
 package xfacthd.framedblocks.common.datagen.providers;
 
 import com.mojang.datafixers.util.Pair;
-import net.minecraft.block.Block;
+import net.minecraft.block.*;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.data.LootTableProvider;
 import net.minecraft.data.loot.BlockLootTables;
+import net.minecraft.state.properties.DoubleBlockHalf;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.storage.loot.*;
 import net.minecraftforge.registries.ForgeRegistries;
@@ -50,7 +51,10 @@ public class FramedLootTableProvider extends LootTableProvider
             ForgeRegistries.BLOCKS.getValues()
                     .stream()
                     .filter(block -> block.getRegistryName().getNamespace().equals(FramedBlocks.MODID))
+                    .filter(block -> block != FBContent.blockFramedDoor)
                     .forEach(this::registerDropSelfLootTable);
+
+            registerLootTable(FBContent.blockFramedDoor, block -> droppingWhen(block, DoorBlock.HALF, DoubleBlockHalf.LOWER));
         }
     }
 }

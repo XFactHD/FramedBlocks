@@ -6,6 +6,15 @@
       "entries": [
         {
           "type": "minecraft:item",
+          "conditions": [
+            {
+              "condition": "minecraft:block_state_property",
+              "block": "framedblocks:framed_door",
+              "properties": {
+                "half": "lower"
+              }
+            }
+          ],
           "name": "framedblocks:framed_door"
         }
       ],
