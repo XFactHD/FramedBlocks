@@ -22,7 +22,7 @@ public class FramedLanguageProvider extends LanguageProvider
         add(FBContent.blockFramedInnerThreewayCorner, "Framed Inner Threeway Corner");
         add(FBContent.blockFramedSlab, "Framed Slab");
         add(FBContent.blockFramedPanel, "Framed Panel");
-        //add(FBContent.blockFramedCornerPillar, "Framed Corner Pillar");
+        add(FBContent.blockFramedCornerPillar, "Framed Corner Pillar");
         add(FBContent.blockFramedStairs, "Framed Stairs");
         add(FBContent.blockFramedWall, "Framed Wall");
         add(FBContent.blockFramedFence, "Framed Fence");

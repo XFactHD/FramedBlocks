@@ -94,12 +94,12 @@ public class FramedRecipeProvider extends RecipeProvider
                 .addCriterion("hasFramedBlock", HAS_FRAMED_BLOCK)
                 .build(consumer);
 
-        /*ShapedRecipeBuilder.shapedRecipe(FBContent.blockFramedCornerPillar, 4)
+        ShapedRecipeBuilder.shapedRecipe(FBContent.blockFramedCornerPillar, 4)
                 .patternLine("F")
                 .patternLine("F")
                 .key('F', FBContent.blockFramedCube)
                 .addCriterion("hasFramedBlock", HAS_FRAMED_BLOCK)
-                .build(consumer);*/
+                .build(consumer);
 
         ShapedRecipeBuilder.shapedRecipe(FBContent.blockFramedStairs, 4)
                 .patternLine("F  ")

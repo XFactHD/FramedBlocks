@@ -21,7 +21,7 @@ public enum BlockType
     FRAMED_INNER_THREEWAY_CORNER(true, FramedThreewayCornerBlock::generateInnerThreewayShapes),
     FRAMED_SLAB(false, FramedSlabBlock::generateShapes),
     FRAMED_PANEL(false, FramedPanelBlock::generateShapes),
-    //FRAMED_CORNER_PILLAR(false, FramedCornerPillarBlock::generateShapes),
+    FRAMED_CORNER_PILLAR(false, FramedCornerPillarBlock::generateShapes),
     FRAMED_STAIRS(false),
     FRAMED_WALL(false),
     FRAMED_FENCE(false),

@@ -20,30 +20,30 @@ import java.util.function.Supplier;
 @Mod.EventBusSubscriber(modid = FramedBlocks.MODID, bus = Mod.EventBusSubscriber.Bus.MOD)
 public class FBContent
 {
-    public static Block blockFramedCube;
-    public static Block blockFramedSlope;
-    public static Block blockFramedCornerSlope;
-    public static Block blockFramedInnerCornerSlope;
-    public static Block blockFramedPrismCorner;
-    public static Block blockFramedInnerPrismCorner;
-    public static Block blockFramedThreewayCorner;
-    public static Block blockFramedInnerThreewayCorner;
-    public static Block blockFramedSlab;
-    public static Block blockFramedPanel;
-    public static Block blockFramedCornerPillar;
-    public static Block blockFramedStairs;
-    public static Block blockFramedWall;
-    public static Block blockFramedFence;
-    public static Block blockFramedGate;
-    public static Block blockFramedDoor;
-    public static Block blockFramedTrapDoor;
-    public static Block blockFramedPressurePlate;
-    public static Block blockFramedLadder;
-    public static Block blockFramedButton;
-    public static Block blockFramedLever;
-    public static Block blockFramedSign;
-    public static Block blockFramedWallSign;
-    public static Block blockFramedCollapsibleBlock;
+    public static Block blockFramedCube;                //STATUS: Complete
+    public static Block blockFramedSlope;               //STATUS: Complete
+    public static Block blockFramedCornerSlope;         //STATUS: Complete
+    public static Block blockFramedInnerCornerSlope;    //STATUS: Complete
+    public static Block blockFramedPrismCorner;         //STATUS: Complete
+    public static Block blockFramedInnerPrismCorner;    //STATUS: Complete
+    public static Block blockFramedThreewayCorner;      //STATUS: Complete
+    public static Block blockFramedInnerThreewayCorner; //STATUS: Complete
+    public static Block blockFramedSlab;                //STATUS: Complete
+    public static Block blockFramedPanel;               //STATUS: Complete
+    public static Block blockFramedCornerPillar;        //STATUS: Complete
+    public static Block blockFramedStairs;              //STATUS: Complete
+    public static Block blockFramedWall;                //STATUS: Complete
+    public static Block blockFramedFence;               //STATUS: Complete
+    public static Block blockFramedGate;                //STATUS: Complete
+    public static Block blockFramedDoor;                //STATUS: Complete
+    public static Block blockFramedTrapDoor;            //STATUS: Complete
+    public static Block blockFramedPressurePlate;       //STATUS: Complete
+    public static Block blockFramedLadder;              //STATUS: Complete
+    public static Block blockFramedButton;              //STATUS: Complete
+    public static Block blockFramedLever;               //STATUS: Complete
+    public static Block blockFramedSign;                //STATUS: Missing TER and Screen
+    public static Block blockFramedWallSign;            //STATUS: Missing TER and Screen
+    public static Block blockFramedCollapsibleBlock;    //STATUS: Not implemented
 
     public static Item itemFramedHammer;
 
@@ -65,7 +65,7 @@ public class FBContent
         registry.register(blockFramedInnerThreewayCorner = new FramedThreewayCornerBlock("framed_inner_threeway_corner", BlockType.FRAMED_INNER_THREEWAY_CORNER));
         registry.register(blockFramedSlab = new FramedSlabBlock());
         registry.register(blockFramedPanel = new FramedPanelBlock());
-        //registry.register(blockFramedCornerPillar = new FramedCornerPillarBlock());
+        registry.register(blockFramedCornerPillar = new FramedCornerPillarBlock());
         registry.register(blockFramedStairs = new FramedStairsBlock());
         registry.register(blockFramedWall = new FramedWallBlock());
         registry.register(blockFramedFence = new FramedFenceBlock());
@@ -78,6 +78,7 @@ public class FBContent
         registry.register(blockFramedLever = new FramedLeverBlock());
         registry.register(blockFramedSign = new FramedSignBlock());
         registry.register(blockFramedWallSign = new FramedWallSignBlock());
+        //registry.register(blockFramedCollapsibleBlock = new FramedCollapsibleBlock());
     }
 
     @SubscribeEvent

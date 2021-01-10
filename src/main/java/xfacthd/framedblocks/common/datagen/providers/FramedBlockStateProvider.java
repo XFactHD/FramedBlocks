@@ -212,7 +212,15 @@ public class FramedBlockStateProvider extends BlockStateProvider
 
     private void registerFramedCornerPillar()
     {
+        ModelFile pillar = models().getExistingFile(modLoc("framed_corner_pillar"));
 
+        getVariantBuilder(FBContent.blockFramedCornerPillar).forAllStatesExcept(state ->
+        {
+            int rotY = (int)(state.get(PropertyHolder.FACING_HOR).getHorizontalAngle() + 180) % 360;
+            return ConfiguredModel.builder().modelFile(pillar).rotationY(rotY).uvLock(true).build();
+        }, BlockStateProperties.WATERLOGGED);
+
+        simpleBlockItem(FBContent.blockFramedCornerPillar, pillar);
     }
 
     private void registerFramedStairs()
