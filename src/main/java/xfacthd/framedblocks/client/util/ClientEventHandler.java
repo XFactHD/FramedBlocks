@@ -240,6 +240,10 @@ public class ClientEventHandler
 
         if (!type.isHorizontal())
         {
+            mstack.translate(.5, .5, .5);
+            if (type.isTop()) { mstack.scale(1, -1, 1); }
+            mstack.translate(-.5, -.5, -.5);
+
             //Back face
             drawLine(builder, mstack, 0, 0, 1, 1, 0, 1);
             drawLine(builder, mstack, 0, 1, 1, 1, 1, 1);
@@ -250,34 +254,44 @@ public class ClientEventHandler
             drawLine(builder, mstack, 0, 0, 0, 0, 0, 1);
             drawLine(builder, mstack, 0, 1, 0, 0, 1, 1);
             drawLine(builder, mstack, 0, 0, 0, 0, 1, 0);
-            drawLine(builder, mstack, 0, 0, 1, 0, 1, 1);
 
-            if (type.isTop())
-            {
-                //Top face
-                drawLine(builder, mstack, 1, 1, 0, 1, 1, 1);
-                drawLine(builder, mstack, 0, 1, 0, 1, 1, 0);
+            //Bottom face
+            drawLine(builder, mstack, 1, 0, 0, 1, 0, 1);
+            drawLine(builder, mstack, 0, 0, 0, 1, 0, 0);
 
-                //Slope edges
-                drawLine(builder, mstack, 1, 1, 0, 1, 0, 1);
-                drawLine(builder, mstack, 1, 1, 0, 0, 0, 0);
-                drawLine(builder, mstack, 1, 1, 0, 0, 0, 1);
-            }
-            else
-            {
-                //Bottom face
-                drawLine(builder, mstack, 1, 0, 0, 1, 0, 1);
-                drawLine(builder, mstack, 0, 0, 0, 1, 0, 0);
-
-                //Slope edges
-                drawLine(builder, mstack, 1, 0, 0, 1, 1, 1);
-                drawLine(builder, mstack, 1, 0, 0, 0, 1, 0);
-                drawLine(builder, mstack, 1, 0, 0, 0, 1, 1);
-            }
+            //Slope edges
+            drawLine(builder, mstack, 1, 0, 0, 1, 1, 1);
+            drawLine(builder, mstack, 1, 0, 0, 0, 1, 0);
+            drawLine(builder, mstack, 1, 0, 0, 0, 1, 1);
         }
         else
         {
-            //TODO: implement
+            mstack.translate(.5, .5, .5);
+            if (!type.isRight()) { mstack.scale(-1, 1, 1); }
+            if (type.isTop()) { mstack.scale(1, -1, 1); }
+            mstack.translate(-.5, -.5, -.5);
+
+            //Top face
+            drawLine(builder, mstack, 0, 1, 1, 1, 1, 1);
+            drawLine(builder, mstack, 0, 1, 0, 0, 1, 1);
+            drawLine(builder, mstack, 0, 1, 0, 1, 1, 1);
+
+            //Bottom face
+            drawLine(builder, mstack, 0, 0, 0, 1, 0, 0);
+            drawLine(builder, mstack, 0, 0, 1, 1, 0, 1);
+            drawLine(builder, mstack, 0, 0, 0, 0, 0, 1);
+            drawLine(builder, mstack, 1, 0, 0, 1, 0, 1);
+
+            //Right face
+            drawLine(builder, mstack, 0, 0, 0, 0, 1, 0);
+            drawLine(builder, mstack, 0, 0, 1, 0, 1, 1);
+
+            //Left face
+            drawLine(builder, mstack, 1, 0, 1, 1, 1, 1);
+            drawLine(builder, mstack, 1, 0, 0, 1, 1, 1);
+
+            //Slope edge
+            drawLine(builder, mstack, 0, 0, 0, 1, 1, 1);
         }
     }
 
