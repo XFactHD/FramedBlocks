@@ -92,7 +92,7 @@ public class FramedBlock extends Block implements IFramedBlock, IWaterLoggable
     @Override
     public boolean canContainFluid(IBlockReader world, BlockPos pos, BlockState state, Fluid fluid)
     {
-        if (isWaterLoggable()) { return false; }
+        if (!isWaterLoggable()) { return false; }
         return IWaterLoggable.super.canContainFluid(world, pos, state, fluid);
     }
 
