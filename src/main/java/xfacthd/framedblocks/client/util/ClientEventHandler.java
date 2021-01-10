@@ -79,40 +79,29 @@ public class ClientEventHandler
 
         if (type != SlopeType.HORIZONTAL)
         {
+            if (type == SlopeType.TOP)
+            {
+                mstack.translate(.5, .5, .5);
+                mstack.scale(1, -1, 1);
+                mstack.translate(-.5, -.5, -.5);
+            }
+
             //Back edges
             drawLine(builder, mstack, 0, 0, 1, 0, 1, 1);
             drawLine(builder, mstack, 1, 0, 1, 1, 1, 1);
 
-            if (type == SlopeType.BOTTOM)
-            {
-                //Bottom face
-                drawLine(builder, mstack, 0, 0, 0, 0, 0, 1);
-                drawLine(builder, mstack, 0, 0, 0, 1, 0, 0);
-                drawLine(builder, mstack, 1, 0, 0, 1, 0, 1);
-                drawLine(builder, mstack, 0, 0, 1, 1, 0, 1);
+            //Bottom face
+            drawLine(builder, mstack, 0, 0, 0, 0, 0, 1);
+            drawLine(builder, mstack, 0, 0, 0, 1, 0, 0);
+            drawLine(builder, mstack, 1, 0, 0, 1, 0, 1);
+            drawLine(builder, mstack, 0, 0, 1, 1, 0, 1);
 
-                //Top edge
-                drawLine(builder, mstack, 0, 1, 1, 1, 1, 1);
+            //Top edge
+            drawLine(builder, mstack, 0, 1, 1, 1, 1, 1);
 
-                //Slope
-                drawLine(builder, mstack, 0, 0, 0, 0, 1, 1);
-                drawLine(builder, mstack, 1, 0, 0, 1, 1, 1);
-            }
-            else if (type == SlopeType.TOP)
-            {
-                //Top face
-                drawLine(builder, mstack, 0, 1, 0, 0, 1, 1);
-                drawLine(builder, mstack, 0, 1, 0, 1, 1, 0);
-                drawLine(builder, mstack, 1, 1, 0, 1, 1, 1);
-                drawLine(builder, mstack, 0, 1, 1, 1, 1, 1);
-
-                //Bottom edge
-                drawLine(builder, mstack, 0, 0, 1, 1, 0, 1);
-
-                //Slope
-                drawLine(builder, mstack, 0, 1, 0, 0, 0, 1);
-                drawLine(builder, mstack, 1, 1, 0, 1, 0, 1);
-            }
+            //Slope
+            drawLine(builder, mstack, 0, 0, 0, 0, 1, 1);
+            drawLine(builder, mstack, 1, 0, 0, 1, 1, 1);
         }
         else
         {
@@ -138,99 +127,49 @@ public class ClientEventHandler
         CornerType type = state.get(PropertyHolder.CORNER_TYPE);
         if (!type.isHorizontal())
         {
+            if (type.isTop())
+            {
+                mstack.translate(.5, .5, .5);
+                mstack.scale(1, -1, 1);
+                mstack.translate(-.5, -.5, -.5);
+            }
+
             //Back edge
             drawLine(builder, mstack, 1, 0, 1, 1, 1, 1);
 
-            if (!type.isTop())
-            {
-                //Bottom face
-                drawLine(builder, mstack, 0, 0, 0, 0, 0, 1);
-                drawLine(builder, mstack, 0, 0, 0, 1, 0, 0);
-                drawLine(builder, mstack, 1, 0, 0, 1, 0, 1);
-                drawLine(builder, mstack, 0, 0, 1, 1, 0, 1);
+            //Bottom face
+            drawLine(builder, mstack, 0, 0, 0, 0, 0, 1);
+            drawLine(builder, mstack, 0, 0, 0, 1, 0, 0);
+            drawLine(builder, mstack, 1, 0, 0, 1, 0, 1);
+            drawLine(builder, mstack, 0, 0, 1, 1, 0, 1);
 
-                //Slope
-                drawLine(builder, mstack, 0, 0, 0, 1, 1, 1);
-                drawLine(builder, mstack, 1, 0, 0, 1, 1, 1);
-                drawLine(builder, mstack, 0, 0, 1, 1, 1, 1);
-            }
-            else
-            {
-                //Top face
-                drawLine(builder, mstack, 0, 1, 0, 0, 1, 1);
-                drawLine(builder, mstack, 0, 1, 0, 1, 1, 0);
-                drawLine(builder, mstack, 1, 1, 0, 1, 1, 1);
-                drawLine(builder, mstack, 0, 1, 1, 1, 1, 1);
-
-                //Slope
-                drawLine(builder, mstack, 0, 1, 0, 1, 0, 1);
-                drawLine(builder, mstack, 1, 1, 0, 1, 0, 1);
-                drawLine(builder, mstack, 0, 1, 1, 1, 0, 1);
-            }
+            //Slope
+            drawLine(builder, mstack, 0, 0, 0, 1, 1, 1);
+            drawLine(builder, mstack, 1, 0, 0, 1, 1, 1);
+            drawLine(builder, mstack, 0, 0, 1, 1, 1, 1);
         }
         else
         {
+            mstack.translate(.5, .5, .5);
+            if (!type.isRight()) { mstack.scale(-1, 1, 1); }
+            if (type.isTop()) { mstack.scale(1, -1, 1); }
+            mstack.translate(-.5, -.5, -.5);
+
             //Back face
             drawLine(builder, mstack, 0, 0, 1, 1, 0, 1);
             drawLine(builder, mstack, 0, 1, 1, 1, 1, 1);
             drawLine(builder, mstack, 0, 0, 1, 0, 1, 1);
             drawLine(builder, mstack, 1, 0, 1, 1, 1, 1);
 
-            switch (type)
-            {
-                case HORIZONTAL_TOP_LEFT:
-                {
-                    //Back edge
-                    drawLine(builder, mstack, 1, 1, 0, 1, 1, 1);
+            //Back edge
+            drawLine(builder, mstack, 0, 0, 0, 0, 0, 1);
 
-                    //Center slope edge
-                    drawLine(builder, mstack, 1, 1, 0, 0, 0, 1);
+            //Center slope edge
+            drawLine(builder, mstack, 0, 0, 0, 1, 1, 1);
 
-                    //Side slope edges
-                    drawLine(builder, mstack, 1, 1, 0, 1, 0, 1);
-                    drawLine(builder, mstack, 1, 1, 0, 0, 1, 1);
-                    break;
-                }
-                case HORIZONTAL_TOP_RIGHT:
-                {
-                    //Back edge
-                    drawLine(builder, mstack, 0, 1, 0, 0, 1, 1);
-
-                    //Center slope edge
-                    drawLine(builder, mstack, 0, 1, 0, 1, 0, 1);
-
-                    //Side slope edges
-                    drawLine(builder, mstack, 0, 1, 0, 0, 0, 1);
-                    drawLine(builder, mstack, 0, 1, 0, 1, 1, 1);
-                    break;
-                }
-                case HORIZONTAL_BOTTOM_LEFT:
-                {
-                    //Back edge
-                    drawLine(builder, mstack, 1, 0, 0, 1, 0, 1);
-
-                    //Center slope edge
-                    drawLine(builder, mstack, 1, 0, 0, 0, 1, 1);
-
-                    //Side slope edges
-                    drawLine(builder, mstack, 1, 0, 0, 1, 1, 1);
-                    drawLine(builder, mstack, 1, 0, 0, 0, 0, 1);
-                    break;
-                }
-                case HORIZONTAL_BOTTOM_RIGHT:
-                {
-                    //Back edge
-                    drawLine(builder, mstack, 0, 0, 0, 0, 0, 1);
-
-                    //Center slope edge
-                    drawLine(builder, mstack, 0, 0, 0, 1, 1, 1);
-
-                    //Side slope edges
-                    drawLine(builder, mstack, 0, 0, 0, 0, 1, 1);
-                    drawLine(builder, mstack, 0, 0, 0, 1, 0, 1);
-                    break;
-                }
-            }
+            //Side slope edges
+            drawLine(builder, mstack, 0, 0, 0, 0, 1, 1);
+            drawLine(builder, mstack, 0, 0, 0, 1, 0, 1);
         }
     }
 
@@ -299,35 +238,23 @@ public class ClientEventHandler
     {
         boolean top = state.get(PropertyHolder.TOP);
 
+        mstack.translate(.5, .5, .5);
+        if (top) { mstack.scale(1, -1, 1); }
+        mstack.translate(-.5, -.5, -.5);
+
         //Back edge
         drawLine(builder, mstack, 1, 0, 1, 1, 1, 1);
 
-        if (top)
-        {
-            //Top edges
-            drawLine(builder, mstack, 1, 1, 0, 1, 1, 1);
-            drawLine(builder, mstack, 0, 1, 1, 1, 1, 1);
+        //Bottom edges
+        drawLine(builder, mstack, 1, 0, 0, 1, 0, 1);
+        drawLine(builder, mstack, 0, 0, 1, 1, 0, 1);
 
-            //Front edge
-            drawLine(builder, mstack, 1, 1, 0, 0, 1, 1);
+        //Front edge
+        drawLine(builder, mstack, 1, 0, 0, 0, 0, 1);
 
-            //Slope edges
-            drawLine(builder, mstack, 1, 1, 0, 1, 0, 1);
-            drawLine(builder, mstack, 0, 1, 1, 1, 0, 1);
-        }
-        else
-        {
-            //Bottom edges
-            drawLine(builder, mstack, 1, 0, 0, 1, 0, 1);
-            drawLine(builder, mstack, 0, 0, 1, 1, 0, 1);
-
-            //Front edge
-            drawLine(builder, mstack, 1, 0, 0, 0, 0, 1);
-
-            //Slope edges
-            drawLine(builder, mstack, 1, 0, 0, 1, 1, 1);
-            drawLine(builder, mstack, 0, 0, 1, 1, 1, 1);
-        }
+        //Slope edges
+        drawLine(builder, mstack, 1, 0, 0, 1, 1, 1);
+        drawLine(builder, mstack, 0, 0, 1, 1, 1, 1);
     }
 
     private static void drawInnerPrismCornerBox(BlockState state, MatrixStack mstack, IVertexBuilder builder)
