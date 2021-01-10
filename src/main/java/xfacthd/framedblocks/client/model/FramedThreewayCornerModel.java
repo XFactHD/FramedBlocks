@@ -82,7 +82,7 @@ public class FramedThreewayCornerModel extends FramedBlockModel
         return builder.build();
     }
 
-    private static void createVerticalSlopeTriangle(BakedQuad quad, float[][] pos, float[][] uv, boolean top)
+    public static void createVerticalSlopeTriangle(BakedQuad quad, float[][] pos, float[][] uv, boolean top)
     {
         if (top)
         {
