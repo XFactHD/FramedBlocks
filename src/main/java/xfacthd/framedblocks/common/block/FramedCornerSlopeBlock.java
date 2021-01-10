@@ -154,8 +154,97 @@ public class FramedCornerSlopeBlock extends FramedBlock
 
         for (BlockState state : states)
         {
-            //TODO: implement
-            builder.put(state, VoxelShapes.fullCube());
+            CornerType type = state.get(PropertyHolder.CORNER_TYPE);
+            Direction dir = state.get(PropertyHolder.FACING_HOR);
+
+            if (type.isHorizontal())
+            {
+                VoxelShape shapeBottomLeft = VoxelShapes.or(
+                        makeCuboidShape(0, 0, 0, 16, 16, 4),
+                        makeCuboidShape(0, 0, 4, 16, 12, 8),
+                        makeCuboidShape(0, 0, 8, 16, 8, 12),
+                        makeCuboidShape(0, 0, 12, 16, 4, 16),
+                        makeCuboidShape(0, 8, 8, 8, 16, 12),
+                        makeCuboidShape(0, 4, 12, 4, 16, 16),
+                        makeCuboidShape(0, 12, 4, 12, 16, 8)
+                ).simplify();
+
+                VoxelShape shapeBottomRight = VoxelShapes.or(
+                        makeCuboidShape(0, 0, 0, 16, 16, 4),
+                        makeCuboidShape(0, 0, 4, 16, 12, 8),
+                        makeCuboidShape(0, 0, 8, 16, 8, 12),
+                        makeCuboidShape(0, 0, 12, 16, 4, 16),
+                        makeCuboidShape(8, 8, 8, 16, 16, 12),
+                        makeCuboidShape(12, 4, 12, 16, 16, 16),
+                        makeCuboidShape(4, 12, 4, 16, 16, 8)
+                ).simplify();
+
+                VoxelShape shapeTopLeft = VoxelShapes.or(
+                        makeCuboidShape(0, 0, 0, 16, 16, 4),
+                        makeCuboidShape(0, 4, 4, 16, 16, 8),
+                        makeCuboidShape(0, 8, 8, 16, 16, 12),
+                        makeCuboidShape(0, 12, 12, 16, 16, 16),
+                        makeCuboidShape(0, 0, 8, 8, 8, 12),
+                        makeCuboidShape(0, 0, 12, 4, 12, 16),
+                        makeCuboidShape(0, 0, 4, 12, 4, 8)
+                ).simplify();
+
+                VoxelShape shapeTopRight = VoxelShapes.or(
+                        makeCuboidShape(0, 0, 0, 16, 16, 4),
+                        makeCuboidShape(0, 4, 4, 16, 16, 8),
+                        makeCuboidShape(0, 8, 8, 16, 16, 12),
+                        makeCuboidShape(0, 12, 12, 16, 16, 16),
+                        makeCuboidShape(8, 0, 8, 16, 8, 12),
+                        makeCuboidShape(12, 0, 12, 16, 12, 16),
+                        makeCuboidShape(4, 0, 4, 16, 4, 8)
+                ).simplify();
+
+                VoxelShape shape = VoxelShapes.fullCube();
+                switch (type)
+                {
+                    case HORIZONTAL_BOTTOM_LEFT:
+                        shape = shapeBottomLeft;
+                        break;
+                    case HORIZONTAL_BOTTOM_RIGHT:
+                        shape = shapeBottomRight;
+                        break;
+                    case HORIZONTAL_TOP_LEFT:
+                        shape = shapeTopLeft;
+                        break;
+                    case HORIZONTAL_TOP_RIGHT:
+                        shape = shapeTopRight;
+                        break;
+                }
+                builder.put(state, Utils.rotateShape(Direction.NORTH, dir, shape));
+            }
+            else if (type.isTop())
+            {
+                VoxelShape shapeTop = VoxelShapes.or(
+                        makeCuboidShape( 0,  0,  0, 16,  4,  4),
+                        makeCuboidShape(12,  0,  4, 16,  4, 16),
+                        makeCuboidShape( 0,  4,  0, 16,  8,  8),
+                        makeCuboidShape( 8,  4,  8, 16,  8, 16),
+                        makeCuboidShape( 0,  8,  0, 16, 12, 12),
+                        makeCuboidShape( 4,  8, 12, 16, 12, 16),
+                        makeCuboidShape( 0, 12,  0, 16, 16, 16)
+                ).simplify();
+
+                builder.put(state, Utils.rotateShape(Direction.NORTH, dir, shapeTop));
+            }
+            else
+            {
+                VoxelShape shapeBottom = VoxelShapes.or(
+                        makeCuboidShape( 0,  0,  0, 16,  4, 16),
+                        makeCuboidShape( 0,  4,  0, 16,  8, 12),
+                        makeCuboidShape( 4,  4, 12, 16,  8, 16),
+                        makeCuboidShape( 0,  8,  0, 16, 12,  8),
+                        makeCuboidShape( 8,  8,  8, 16, 12, 16),
+                        makeCuboidShape( 0, 12,  0, 16, 16,  4),
+                        makeCuboidShape(12, 12,  4, 16, 16, 16)
+                ).simplify();
+
+                builder.put(state, Utils.rotateShape(Direction.NORTH, dir, shapeBottom));
+            }
         }
 
         return builder.build();

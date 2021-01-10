@@ -12,6 +12,7 @@ import net.minecraft.util.math.shapes.VoxelShape;
 import net.minecraft.util.math.shapes.VoxelShapes;
 import xfacthd.framedblocks.common.data.BlockType;
 import xfacthd.framedblocks.common.data.PropertyHolder;
+import xfacthd.framedblocks.common.util.Utils;
 
 public class FramedThreewayCornerBlock extends FramedBlock
 {
@@ -41,8 +42,42 @@ public class FramedThreewayCornerBlock extends FramedBlock
 
         for (BlockState state : states)
         {
-            //TODO: implement
-            builder.put(state, VoxelShapes.fullCube());
+            Direction dir = state.get(PropertyHolder.FACING_HOR);
+
+            if (state.get(PropertyHolder.TOP))
+            {
+                VoxelShape shapeTop = VoxelShapes.or(
+                        makeCuboidShape(0, 12, 0, 4, 16, 16),
+                        makeCuboidShape(0, 8, 0, 4, 12, 12),
+                        makeCuboidShape(0, 4, 0, 4, 8, 8),
+                        makeCuboidShape(0, 0, 0, 4, 4, 4),
+                        makeCuboidShape(4, 12, 0, 8, 16, 12),
+                        makeCuboidShape(4, 8, 0, 8, 12, 8),
+                        makeCuboidShape(4, 4, 0, 8, 8, 4),
+                        makeCuboidShape(8, 12, 0, 12, 16, 8),
+                        makeCuboidShape(8, 8, 0, 12, 12, 4),
+                        makeCuboidShape(12, 12, 0, 16, 16, 4)
+                ).simplify();
+
+                builder.put(state, Utils.rotateShape(Direction.NORTH, dir, shapeTop));
+            }
+            else
+            {
+                VoxelShape shapeBottom = VoxelShapes.or(
+                        makeCuboidShape(0, 0, 0, 4, 4, 16),
+                        makeCuboidShape(0, 4, 0, 4, 8, 12),
+                        makeCuboidShape(0, 8, 0, 4, 12, 8),
+                        makeCuboidShape(0, 12, 0, 4, 16, 4),
+                        makeCuboidShape(4, 0, 0, 8, 4, 12),
+                        makeCuboidShape(4, 4, 0, 8, 8, 8),
+                        makeCuboidShape(4, 8, 0, 8, 12, 4),
+                        makeCuboidShape(8, 0, 0, 12, 4, 8),
+                        makeCuboidShape(8, 4, 0, 12, 8, 4),
+                        makeCuboidShape(12, 0, 0, 16, 4, 4)
+                ).simplify();
+
+                builder.put(state, Utils.rotateShape(Direction.NORTH, dir, shapeBottom));
+            }
         }
 
         return builder.build();
@@ -54,8 +89,44 @@ public class FramedThreewayCornerBlock extends FramedBlock
 
         for (BlockState state : states)
         {
-            //TODO: implement
-            builder.put(state, VoxelShapes.fullCube());
+            Direction dir = state.get(PropertyHolder.FACING_HOR);
+
+            if (state.get(PropertyHolder.TOP))
+            {
+                VoxelShape shapeTop = VoxelShapes.or(
+                        makeCuboidShape(0, 8, 12, 12, 12, 16),
+                        makeCuboidShape(0, 12, 0, 16, 16, 16),
+                        makeCuboidShape(0, 8, 0, 16, 12, 12),
+                        makeCuboidShape(0, 4, 0, 16, 8, 8),
+                        makeCuboidShape(0, 0, 0, 16, 4, 4),
+                        makeCuboidShape(0, 0, 4, 4, 4, 16),
+                        makeCuboidShape(0, 4, 8, 8, 8, 16),
+                        makeCuboidShape(8, 4, 8, 12, 8, 12),
+                        makeCuboidShape(4, 0, 4, 8, 4, 8),
+                        makeCuboidShape(4, 0, 8, 8, 4, 12),
+                        makeCuboidShape(8, 0, 4, 12, 4, 8)
+                ).simplify();
+
+                builder.put(state, Utils.rotateShape(Direction.NORTH, dir, shapeTop));
+            }
+            else
+            {
+                VoxelShape shapeBottom = VoxelShapes.or(
+                        makeCuboidShape(0, 4, 12, 12, 8, 16),
+                        makeCuboidShape(0, 0, 0, 16, 4, 16),
+                        makeCuboidShape(0, 4, 0, 16, 8, 12),
+                        makeCuboidShape(0, 8, 0, 16, 12, 8),
+                        makeCuboidShape(0, 12, 0, 16, 16, 4),
+                        makeCuboidShape(0, 12, 4, 4, 16, 16),
+                        makeCuboidShape(0, 8, 8, 8, 12, 16),
+                        makeCuboidShape(8, 8, 8, 12, 12, 12),
+                        makeCuboidShape(4, 12, 4, 8, 16, 8),
+                        makeCuboidShape(4, 12, 8, 8, 16, 12),
+                        makeCuboidShape(8, 12, 4, 12, 16, 8)
+                ).simplify();
+
+                builder.put(state, Utils.rotateShape(Direction.NORTH, dir, shapeBottom));
+            }
         }
 
         return builder.build();
@@ -67,8 +138,40 @@ public class FramedThreewayCornerBlock extends FramedBlock
 
         for (BlockState state : states)
         {
-            //TODO: implement
-            builder.put(state, VoxelShapes.fullCube());
+            Direction dir = state.get(PropertyHolder.FACING_HOR);
+
+            if (state.get(PropertyHolder.TOP))
+            {
+                VoxelShape shapeTop = VoxelShapes.or(
+                        makeCuboidShape(0, 12, 0, 4, 16, 16),
+                        makeCuboidShape(0, 8, 0, 4, 12, 12),
+                        makeCuboidShape(0, 4, 0, 8, 8, 8),
+                        makeCuboidShape(0, 0, 0, 4, 4, 4),
+                        makeCuboidShape(4, 12, 0, 8, 16, 12),
+                        makeCuboidShape(4, 8, 0, 8, 12, 12),
+                        makeCuboidShape(8, 12, 0, 12, 16, 8),
+                        makeCuboidShape(8, 8, 0, 12, 12, 8),
+                        makeCuboidShape(12, 12, 0, 16, 16, 4)
+                ).simplify();
+
+                builder.put(state, Utils.rotateShape(Direction.NORTH, dir, shapeTop));
+            }
+            else
+            {
+                VoxelShape shapeBottom = VoxelShapes.or(
+                        makeCuboidShape(0, 0, 0, 4, 4, 16),
+                        makeCuboidShape(0, 4, 0, 4, 8, 12),
+                        makeCuboidShape(0, 8, 0, 8, 12, 8),
+                        makeCuboidShape(0, 12, 0, 4, 16, 4),
+                        makeCuboidShape(4, 0, 0, 8, 4, 12),
+                        makeCuboidShape(4, 4, 0, 8, 8, 12),
+                        makeCuboidShape(8, 0, 0, 12, 4, 8),
+                        makeCuboidShape(8, 4, 0, 12, 8, 8),
+                        makeCuboidShape(12, 0, 0, 16, 4, 4)
+                ).simplify();
+
+                builder.put(state, Utils.rotateShape(Direction.NORTH, dir, shapeBottom));
+            }
         }
 
         return builder.build();
@@ -80,8 +183,42 @@ public class FramedThreewayCornerBlock extends FramedBlock
 
         for (BlockState state : states)
         {
-            //TODO: implement
-            builder.put(state, VoxelShapes.fullCube());
+            Direction dir = state.get(PropertyHolder.FACING_HOR);
+
+            if (state.get(PropertyHolder.TOP))
+            {
+                VoxelShape shapeTop = VoxelShapes.or(
+                        makeCuboidShape(4, 8, 12, 16, 12, 16),
+                        makeCuboidShape(0, 12, 0, 16, 16, 16),
+                        makeCuboidShape(0, 8, 0, 16, 12, 12),
+                        makeCuboidShape(0, 4, 0, 16, 8, 8),
+                        makeCuboidShape(0, 0, 0, 16, 4, 4),
+                        makeCuboidShape(12, 0, 4, 16, 4, 16),
+                        makeCuboidShape(8, 4, 8, 16, 8, 16),
+                        makeCuboidShape(4, 0, 4, 8, 4, 8),
+                        makeCuboidShape(8, 0, 8, 12, 4, 12),
+                        makeCuboidShape(8, 0, 4, 12, 4, 8)
+                ).simplify();
+
+                builder.put(state, Utils.rotateShape(Direction.NORTH, dir, shapeTop));
+            }
+            else
+            {
+                VoxelShape shapeBottom = VoxelShapes.or(
+                        makeCuboidShape(4, 4, 12, 16, 8, 16),
+                        makeCuboidShape(0, 0, 0, 16, 4, 16),
+                        makeCuboidShape(0, 4, 0, 16, 8, 12),
+                        makeCuboidShape(0, 8, 0, 16, 12, 8),
+                        makeCuboidShape(0, 12, 0, 16, 16, 4),
+                        makeCuboidShape(12, 12, 4, 16, 16, 16),
+                        makeCuboidShape(8, 8, 8, 16, 12, 16),
+                        makeCuboidShape(4, 12, 4, 8, 16, 8),
+                        makeCuboidShape(8, 12, 8, 12, 16, 12),
+                        makeCuboidShape(8, 12, 4, 12, 16, 8)
+                ).simplify();
+
+                builder.put(state, Utils.rotateShape(Direction.NORTH, dir, shapeBottom));
+            }
         }
 
         return builder.build();
