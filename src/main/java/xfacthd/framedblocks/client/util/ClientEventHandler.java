@@ -332,17 +332,90 @@ public class ClientEventHandler
 
     private static void drawInnerPrismCornerBox(BlockState state, MatrixStack mstack, IVertexBuilder builder)
     {
+        boolean top = state.get(PropertyHolder.TOP);
 
+        mstack.translate(.5, .5, .5);
+        if (top) { mstack.scale(1, -1, 1); }
+        mstack.translate(-.5, -.5, -.5);
+
+        //Bottom face
+        drawLine(builder, mstack, 0, 0, 0, 0, 0, 1);
+        drawLine(builder, mstack, 0, 0, 0, 1, 0, 0);
+        drawLine(builder, mstack, 1, 0, 0, 1, 0, 1);
+        drawLine(builder, mstack, 0, 0, 1, 1, 0, 1);
+
+        //Back face
+        drawLine(builder, mstack, 1, 0, 0, 1, 1, 0);
+        drawLine(builder, mstack, 0, 0, 1, 0, 1, 1);
+        drawLine(builder, mstack, 1, 1, 0, 1, 1, 1);
+
+        //Right face
+        drawLine(builder, mstack, 0, 1, 1, 1, 1, 1);
+        drawLine(builder, mstack, 1, 0, 1, 1, 1, 1);
+
+        //Slope edges
+        drawLine(builder, mstack, 1, 1, 0, 0, 1, 1);
+        drawLine(builder, mstack, 0, 0, 0, 1, 1, 0);
+        drawLine(builder, mstack, 0, 0, 0, 0, 1, 1);
     }
 
     private static void drawThreewayCornerBox(BlockState state, MatrixStack mstack, IVertexBuilder builder)
     {
+        boolean top = state.get(PropertyHolder.TOP);
 
+        mstack.translate(.5, .5, .5);
+        if (top) { mstack.scale(1, -1, 1); }
+        mstack.translate(-.5, -.5, -.5);
+
+        //Back edges
+        drawLine(builder, mstack, 1, 0, 1, 1, 1, 1);
+        drawLine(builder, mstack, 1, 0, 0, 1, 0, 1);
+        drawLine(builder, mstack, 0, 0, 1, 1, 0, 1);
+
+        //Slope edges
+        drawLine(builder, mstack, 1, 0, 0, 1, 1, 1);
+        drawLine(builder, mstack, 1, 0, 0, 0, 0, 1);
+        drawLine(builder, mstack, 0, 0, 1, 1, 1, 1);
+
+        //Cross
+        drawLine(builder, mstack, 1, 0, 0, .5, .5, .5);
+        drawLine(builder, mstack, .5, .5, .5, 1, 1, 1);
+        drawLine(builder, mstack, 0, 0, 1, .5, .5, .5);
     }
 
     private static void drawInnerThreewayCornerBox(BlockState state, MatrixStack mstack, IVertexBuilder builder)
     {
+        boolean top = state.get(PropertyHolder.TOP);
 
+        mstack.translate(.5, .5, .5);
+        if (top) { mstack.scale(1, -1, 1); }
+        mstack.translate(-.5, -.5, -.5);
+
+        //Bottom face
+        drawLine(builder, mstack, 0, 0, 0, 0, 0, 1);
+        drawLine(builder, mstack, 0, 0, 0, 1, 0, 0);
+        drawLine(builder, mstack, 1, 0, 0, 1, 0, 1);
+        drawLine(builder, mstack, 0, 0, 1, 1, 0, 1);
+
+        //Back face
+        drawLine(builder, mstack, 0, 1, 1, 1, 1, 1);
+        drawLine(builder, mstack, 0, 0, 1, 0, 1, 1);
+        drawLine(builder, mstack, 1, 0, 1, 1, 1, 1);
+
+        //Right face
+        drawLine(builder, mstack, 0, 0, 0, 0, 0, 1);
+        drawLine(builder, mstack, 0, 1, 0, 0, 1, 1);
+        drawLine(builder, mstack, 0, 0, 0, 0, 1, 0);
+
+        //Slope edges
+        drawLine(builder, mstack, 1, 0, 0, 1, 1, 1);
+        drawLine(builder, mstack, 1, 0, 0, 0, 1, 0);
+        drawLine(builder, mstack, 0, 1, 0, 1, 1, 1);
+
+        //Cross
+        drawLine(builder, mstack, 1, 0, 0, .5, .5, .5);
+        drawLine(builder, mstack, .5, .5, .5, 1, 1, 1);
+        drawLine(builder, mstack, 0, 1, 0, .5, .5, .5);
     }
 
     private static void drawLine(IVertexBuilder builder, MatrixStack mstack, double x1, double y1, double z1, double x2, double y2, double z2)
