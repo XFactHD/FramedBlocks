@@ -100,7 +100,15 @@ public class FBClient
         );
 
         //Framed Threeway Corner
-        //
+        replaceModelsAdvanced(FBContent.blockFramedThreewayCorner, registry,
+                (state, baseModel) ->
+                {
+                    Direction dir = state.get(PropertyHolder.FACING_HOR);
+                    boolean top = state.get(PropertyHolder.TOP);
+                    return new FramedThreewayCornerModel(baseModel, dir, top);
+                },
+                baseModel -> new FramedThreewayCornerModel(baseModel, Direction.SOUTH, false)
+        );
 
         //Framed Inner Threeway Corner
         //
