@@ -1,7 +1,6 @@
 package xfacthd.framedblocks.common.block;
 
-import com.google.common.collect.ImmutableList;
-import com.google.common.collect.ImmutableMap;
+import com.google.common.collect.*;
 import net.minecraft.block.*;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.BlockItemUseContext;
@@ -15,7 +14,9 @@ import net.minecraft.util.math.shapes.*;
 import net.minecraft.world.*;
 import xfacthd.framedblocks.common.data.BlockType;
 import xfacthd.framedblocks.common.data.PropertyHolder;
+import xfacthd.framedblocks.common.tileentity.FramedSignTileEntity;
 
+@SuppressWarnings("deprecation")
 public class FramedWallSignBlock extends FramedBlock
 {
     public FramedWallSignBlock()
@@ -61,12 +62,9 @@ public class FramedWallSignBlock extends FramedBlock
     }
 
     @Override
-    public TileEntity createTileEntity(BlockState state, IBlockReader world)
-    {
-        //TODO: replace with framed sign tile entity
-        return super.createTileEntity(state, world);
-    }
+    public TileEntity createTileEntity(BlockState state, IBlockReader world) { return new FramedSignTileEntity(); }
 
+    @Override
     public BlockState updatePostPlacement(BlockState state, Direction facing, BlockState facingState, IWorld world, BlockPos pos, BlockPos facingPos)
     {
         if (facing.getOpposite() == state.get(PropertyHolder.FACING_HOR) && !state.isValidPosition(world, pos))
@@ -74,6 +72,13 @@ public class FramedWallSignBlock extends FramedBlock
             return Blocks.AIR.getDefaultState();
         }
         return super.updatePostPlacement(state, facing, facingState, world, pos, facingPos);
+    }
+
+    @Override
+    public boolean isValidPosition(BlockState state, IWorldReader world, BlockPos pos)
+    {
+        Direction dir = state.get(PropertyHolder.FACING_HOR).getOpposite();
+        return world.getBlockState(pos.offset(dir)).getMaterial().isSolid();
     }
 
     @Override
@@ -85,8 +90,29 @@ public class FramedWallSignBlock extends FramedBlock
 
         for (BlockState state : states)
         {
-            //TODO: implement
-            builder.put(state, VoxelShapes.fullCube());
+            switch (state.get(PropertyHolder.FACING_HOR))
+            {
+                case NORTH:
+                {
+                    builder.put(state, makeCuboidShape(0.0D, 4.5D, 14.0D, 16.0D, 12.5D, 16.0D));
+                    break;
+                }
+                case EAST:
+                {
+                    builder.put(state, makeCuboidShape(0.0D, 4.5D, 0.0D, 2.0D, 12.5D, 16.0D));
+                    break;
+                }
+                case SOUTH:
+                {
+                    builder.put(state, makeCuboidShape(0.0D, 4.5D, 0.0D, 16.0D, 12.5D, 2.0D));
+                    break;
+                }
+                case WEST:
+                {
+                    builder.put(state, makeCuboidShape(14.0D, 4.5D, 0.0D, 16.0D, 12.5D, 16.0D));
+                    break;
+                }
+            }
         }
 
         return builder.build();

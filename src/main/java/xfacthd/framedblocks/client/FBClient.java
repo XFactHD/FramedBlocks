@@ -10,11 +10,13 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.event.ModelBakeEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.minecraftforge.fml.client.registry.ClientRegistry;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import net.minecraftforge.registries.ForgeRegistries;
 import xfacthd.framedblocks.FramedBlocks;
 import xfacthd.framedblocks.client.model.*;
+import xfacthd.framedblocks.client.render.FramedSignRenderer;
 import xfacthd.framedblocks.common.FBContent;
 import xfacthd.framedblocks.common.data.*;
 
@@ -35,7 +37,8 @@ public class FBClient
                 .forEach(block -> RenderTypeLookup.setRenderLayer(block, type ->
                         type == RenderType.getSolid() || type == RenderType.getCutout() || type == RenderType.getCutoutMipped()));
 
-        //TODO: register Sign TER and Sign Screen
+        ClientRegistry.bindTileEntityRenderer(FBContent.tileTypeFramedSign, FramedSignRenderer::new);
+        //TODO: register Sign Screen
     }
 
     @SubscribeEvent

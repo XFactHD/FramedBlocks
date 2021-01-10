@@ -13,6 +13,7 @@ import net.minecraft.util.math.shapes.VoxelShape;
 import net.minecraft.world.*;
 import xfacthd.framedblocks.common.data.BlockType;
 import xfacthd.framedblocks.common.item.FramedSignItem;
+import xfacthd.framedblocks.common.tileentity.FramedSignTileEntity;
 
 @SuppressWarnings("deprecation")
 public class FramedSignBlock extends FramedBlock
@@ -50,11 +51,7 @@ public class FramedSignBlock extends FramedBlock
     }
 
     @Override
-    public TileEntity createTileEntity(BlockState state, IBlockReader world)
-    {
-        //TODO: replace with framed sign tile entity
-        return super.createTileEntity(state, world);
-    }
+    public TileEntity createTileEntity(BlockState state, IBlockReader world) { return new FramedSignTileEntity(); }
 
     public BlockState updatePostPlacement(BlockState state, Direction facing, BlockState facingState, IWorld world, BlockPos pos, BlockPos facingPos)
     {
