@@ -2,132 +2,132 @@
   "variants": {
     "face=floor,facing=north,powered=false": {
       "model": "framedblocks:block/framed_button",
-      "y": 180,
       "uvlock": true
     },
     "face=wall,facing=north,powered=false": {
       "model": "framedblocks:block/framed_button",
       "x": 90,
-      "y": 180,
       "uvlock": true
     },
     "face=ceiling,facing=north,powered=false": {
       "model": "framedblocks:block/framed_button",
       "x": 180,
-      "y": 180,
       "uvlock": true
     },
     "face=floor,facing=south,powered=false": {
       "model": "framedblocks:block/framed_button",
+      "y": 180,
       "uvlock": true
     },
     "face=wall,facing=south,powered=false": {
       "model": "framedblocks:block/framed_button",
       "x": 90,
+      "y": 180,
       "uvlock": true
     },
     "face=ceiling,facing=south,powered=false": {
       "model": "framedblocks:block/framed_button",
       "x": 180,
+      "y": 180,
       "uvlock": true
     },
     "face=floor,facing=west,powered=false": {
       "model": "framedblocks:block/framed_button",
-      "y": 90,
+      "y": 270,
       "uvlock": true
     },
     "face=wall,facing=west,powered=false": {
       "model": "framedblocks:block/framed_button",
       "x": 90,
-      "y": 90,
+      "y": 270,
       "uvlock": true
     },
     "face=ceiling,facing=west,powered=false": {
       "model": "framedblocks:block/framed_button",
       "x": 180,
-      "y": 90,
+      "y": 270,
       "uvlock": true
     },
     "face=floor,facing=east,powered=false": {
       "model": "framedblocks:block/framed_button",
-      "y": 270,
+      "y": 90,
       "uvlock": true
     },
     "face=wall,facing=east,powered=false": {
       "model": "framedblocks:block/framed_button",
       "x": 90,
-      "y": 270,
+      "y": 90,
       "uvlock": true
     },
     "face=ceiling,facing=east,powered=false": {
       "model": "framedblocks:block/framed_button",
       "x": 180,
-      "y": 270,
+      "y": 90,
       "uvlock": true
     },
     "face=floor,facing=north,powered=true": {
       "model": "framedblocks:block/framed_button_pressed",
-      "y": 180,
       "uvlock": true
     },
     "face=wall,facing=north,powered=true": {
       "model": "framedblocks:block/framed_button_pressed",
       "x": 90,
-      "y": 180,
       "uvlock": true
     },
     "face=ceiling,facing=north,powered=true": {
       "model": "framedblocks:block/framed_button_pressed",
       "x": 180,
-      "y": 180,
       "uvlock": true
     },
     "face=floor,facing=south,powered=true": {
       "model": "framedblocks:block/framed_button_pressed",
+      "y": 180,
       "uvlock": true
     },
     "face=wall,facing=south,powered=true": {
       "model": "framedblocks:block/framed_button_pressed",
       "x": 90,
+      "y": 180,
       "uvlock": true
     },
     "face=ceiling,facing=south,powered=true": {
       "model": "framedblocks:block/framed_button_pressed",
       "x": 180,
+      "y": 180,
       "uvlock": true
     },
     "face=floor,facing=west,powered=true": {
       "model": "framedblocks:block/framed_button_pressed",
-      "y": 90,
+      "y": 270,
       "uvlock": true
     },
     "face=wall,facing=west,powered=true": {
       "model": "framedblocks:block/framed_button_pressed",
       "x": 90,
-      "y": 90,
+      "y": 270,
       "uvlock": true
     },
     "face=ceiling,facing=west,powered=true": {
       "model": "framedblocks:block/framed_button_pressed",
       "x": 180,
-      "y": 90,
+      "y": 270,
       "uvlock": true
     },
     "face=floor,facing=east,powered=true": {
       "model": "framedblocks:block/framed_button_pressed",
-      "y": 270,
+      "y": 90,
       "uvlock": true
     },
     "face=wall,facing=east,powered=true": {
       "model": "framedblocks:block/framed_button_pressed",
       "x": 90,
-      "y": 270,
+      "y": 90,
       "uvlock": true
     },
     "face=ceiling,facing=east,powered=true": {
       "model": "framedblocks:block/framed_button_pressed",
       "x": 180,
-      "y": 270,
+      "y": 90,
       "uvlock": true
     }
   }

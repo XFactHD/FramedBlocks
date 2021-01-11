@@ -482,7 +482,7 @@ public class FramedBlockStateProvider extends BlockStateProvider
             AttachFace face = state.get(HorizontalFaceBlock.FACE);
             boolean powered = state.get(LeverBlock.POWERED);
 
-            int rotY = (int)facing.getHorizontalAngle();
+            int rotY = (int)(facing.getHorizontalAngle() + 180F) % 360;
             int rotX = face.ordinal() * 90;
             ModelFile model = powered ? buttonPressed : button;
             return ConfiguredModel.builder()
