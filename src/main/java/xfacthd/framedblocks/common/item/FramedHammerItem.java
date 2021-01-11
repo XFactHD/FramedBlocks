@@ -19,6 +19,12 @@ public class FramedHammerItem extends Item
     }
 
     @Override
+    public boolean hasContainerItem(ItemStack stack) { return true; }
+
+    @Override
+    public ItemStack getContainerItem(ItemStack stack) { return stack.copy(); }
+
+    @Override
     public boolean doesSneakBypassUse(ItemStack stack, IWorldReader world, BlockPos pos, PlayerEntity player)
     {
         return true;
