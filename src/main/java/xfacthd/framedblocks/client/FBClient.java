@@ -2,11 +2,14 @@ package xfacthd.framedblocks.client;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.*;
 import net.minecraft.client.renderer.model.IBakedModel;
 import net.minecraft.client.renderer.model.ModelResourceLocation;
+import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.Direction;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.math.BlockPos;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.event.ModelBakeEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -17,8 +20,10 @@ import net.minecraftforge.registries.ForgeRegistries;
 import xfacthd.framedblocks.FramedBlocks;
 import xfacthd.framedblocks.client.model.*;
 import xfacthd.framedblocks.client.render.FramedSignRenderer;
+import xfacthd.framedblocks.client.screen.FramedSignScreen;
 import xfacthd.framedblocks.common.FBContent;
 import xfacthd.framedblocks.common.data.*;
+import xfacthd.framedblocks.common.tileentity.FramedSignTileEntity;
 
 import java.util.Map;
 import java.util.function.BiFunction;
@@ -38,7 +43,6 @@ public class FBClient
                         type == RenderType.getSolid() || type == RenderType.getCutout() || type == RenderType.getCutoutMipped()));
 
         ClientRegistry.bindTileEntityRenderer(FBContent.tileTypeFramedSign, FramedSignRenderer::new);
-        //TODO: register Sign Screen
     }
 
     @SubscribeEvent
@@ -207,5 +211,17 @@ public class FBClient
         IBakedModel baseModel = models.get(location);
         IBakedModel replacement = itemModelGen.apply(baseModel);
         models.put(location, replacement);
+    }
+
+
+
+    public static void openSignScreen(BlockPos pos)
+    {
+        //noinspection ConstantConditions
+        TileEntity te = Minecraft.getInstance().world.getTileEntity(pos);
+        if (te instanceof FramedSignTileEntity)
+        {
+            Minecraft.getInstance().displayGuiScreen(new FramedSignScreen((FramedSignTileEntity)te));
+        }
     }
 }

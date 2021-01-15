@@ -1,23 +1,21 @@
 package xfacthd.framedblocks.common.block;
 
-import com.google.common.collect.*;
+import com.google.common.collect.ImmutableList;
+import com.google.common.collect.ImmutableMap;
 import net.minecraft.block.*;
-import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.BlockItemUseContext;
 import net.minecraft.state.StateContainer;
 import net.minecraft.state.properties.BlockStateProperties;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.*;
+import net.minecraft.util.Direction;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.BlockRayTraceResult;
-import net.minecraft.util.math.shapes.*;
-import net.minecraft.world.*;
+import net.minecraft.util.math.shapes.VoxelShape;
+import net.minecraft.world.IWorld;
+import net.minecraft.world.IWorldReader;
 import xfacthd.framedblocks.common.data.BlockType;
 import xfacthd.framedblocks.common.data.PropertyHolder;
-import xfacthd.framedblocks.common.tileentity.FramedSignTileEntity;
 
 @SuppressWarnings("deprecation")
-public class FramedWallSignBlock extends FramedBlock
+public class FramedWallSignBlock extends AbstractFramedSignBlock
 {
     public FramedWallSignBlock()
     {
@@ -55,16 +53,6 @@ public class FramedWallSignBlock extends FramedBlock
     }
 
     @Override
-    public ActionResultType onBlockActivated(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockRayTraceResult hit)
-    {
-        //TODO: implement sign click logic
-        return super.onBlockActivated(state, world, pos, player, hand, hit);
-    }
-
-    @Override
-    public TileEntity createTileEntity(BlockState state, IBlockReader world) { return new FramedSignTileEntity(); }
-
-    @Override
     public BlockState updatePostPlacement(BlockState state, Direction facing, BlockState facingState, IWorld world, BlockPos pos, BlockPos facingPos)
     {
         if (facing.getOpposite() == state.get(PropertyHolder.FACING_HOR) && !state.isValidPosition(world, pos))
@@ -80,9 +68,6 @@ public class FramedWallSignBlock extends FramedBlock
         Direction dir = state.get(PropertyHolder.FACING_HOR).getOpposite();
         return world.getBlockState(pos.offset(dir)).getMaterial().isSolid();
     }
-
-    @Override
-    public boolean canSpawnInBlock() { return true; }
 
     public static ImmutableMap<BlockState, VoxelShape> generateShapes(ImmutableList<BlockState> states)
     {

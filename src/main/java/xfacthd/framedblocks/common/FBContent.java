@@ -41,8 +41,8 @@ public class FBContent
     public static Block blockFramedLadder;              //STATUS: Complete
     public static Block blockFramedButton;              //STATUS: Complete
     public static Block blockFramedLever;               //STATUS: Complete
-    public static Block blockFramedSign;                //STATUS: Missing TER and Screen
-    public static Block blockFramedWallSign;            //STATUS: Missing TER and Screen
+    public static Block blockFramedSign;                //STATUS: Complete
+    public static Block blockFramedWallSign;            //STATUS: Complete
     public static Block blockFramedCollapsibleBlock;    //STATUS: Not implemented
 
     public static Item itemFramedHammer;

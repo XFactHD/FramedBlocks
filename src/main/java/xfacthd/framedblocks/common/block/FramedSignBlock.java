@@ -1,22 +1,21 @@
 package xfacthd.framedblocks.common.block;
 
 import net.minecraft.block.*;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.*;
+import net.minecraft.item.BlockItem;
+import net.minecraft.item.BlockItemUseContext;
 import net.minecraft.state.StateContainer;
 import net.minecraft.state.properties.BlockStateProperties;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.*;
-import net.minecraft.util.math.*;
+import net.minecraft.util.Direction;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.shapes.ISelectionContext;
 import net.minecraft.util.math.shapes.VoxelShape;
 import net.minecraft.world.*;
 import xfacthd.framedblocks.common.data.BlockType;
 import xfacthd.framedblocks.common.item.FramedSignItem;
-import xfacthd.framedblocks.common.tileentity.FramedSignTileEntity;
 
 @SuppressWarnings("deprecation")
-public class FramedSignBlock extends FramedBlock
+public class FramedSignBlock extends AbstractFramedSignBlock
 {
     private static final VoxelShape SHAPE = Block.makeCuboidShape(4.0D, 0.0D, 4.0D, 12.0D, 16.0D, 12.0D);
 
@@ -38,20 +37,10 @@ public class FramedSignBlock extends FramedBlock
     }
 
     @Override
-    public ActionResultType onBlockActivated(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockRayTraceResult hit)
-    {
-        //TODO: implement sign click logic
-        return super.onBlockActivated(state, world, pos, player, hand, hit);
-    }
-
-    @Override
     public VoxelShape getShape(BlockState state, IBlockReader world, BlockPos pos, ISelectionContext ctx)
     {
         return SHAPE;
     }
-
-    @Override
-    public TileEntity createTileEntity(BlockState state, IBlockReader world) { return new FramedSignTileEntity(); }
 
     public BlockState updatePostPlacement(BlockState state, Direction facing, BlockState facingState, IWorld world, BlockPos pos, BlockPos facingPos)
     {
@@ -67,9 +56,6 @@ public class FramedSignBlock extends FramedBlock
     {
         return world.getBlockState(pos.down()).getMaterial().isSolid();
     }
-
-    @Override
-    public boolean canSpawnInBlock() { return true; }
 
     @Override
     public BlockItem createItemBlock() { return new FramedSignItem(); }

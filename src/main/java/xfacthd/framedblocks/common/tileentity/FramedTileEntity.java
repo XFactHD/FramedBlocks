@@ -132,12 +132,15 @@ public class FramedTileEntity extends TileEntity
     public SUpdateTileEntityPacket getUpdatePacket()
     {
         CompoundNBT nbt = new CompoundNBT();
+        writeToDataPacket(nbt);
+        return new SUpdateTileEntityPacket(pos, -1, nbt);
+    }
 
+    protected void writeToDataPacket(CompoundNBT nbt)
+    {
         nbt.put("camo_stack", camoStack.write(new CompoundNBT()));
         nbt.put("camo_state", NBTUtil.writeBlockState(camoState));
         nbt.putBoolean("glowing", glowing);
-
-        return new SUpdateTileEntityPacket(pos, -1, nbt);
     }
 
     @Override
