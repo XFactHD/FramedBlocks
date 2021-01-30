@@ -16,7 +16,7 @@ public enum CornerType implements IStringSerializable
     private final String name = toString().toLowerCase(Locale.ENGLISH);
 
     @Override
-    public String getName() { return name; }
+    public String getString() { return name; }
 
     public boolean isHorizontal() { return this != BOTTOM && this != TOP; }
 

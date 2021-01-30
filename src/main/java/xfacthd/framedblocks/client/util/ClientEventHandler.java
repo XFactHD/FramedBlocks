@@ -7,7 +7,8 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.*;
 import net.minecraft.util.Direction;
 import net.minecraft.util.math.BlockRayTraceResult;
-import net.minecraft.util.math.Vec3d;
+import net.minecraft.util.math.vector.Vector3d;
+import net.minecraft.util.math.vector.Vector3f;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.event.DrawHighlightEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -31,7 +32,7 @@ public class ClientEventHandler
         if (type.hasSpecialHitbox())
         {
             MatrixStack mstack = event.getMatrix();
-            Vec3d offset = new Vec3d(result.getPos()).subtract(event.getInfo().getProjectedView());
+            Vector3d offset = Vector3d.copy(result.getPos()).subtract(event.getInfo().getProjectedView());
             IVertexBuilder builder = event.getBuffers().getBuffer(RenderType.getLines());
 
             Direction dir = state.get(PropertyHolder.FACING_HOR);

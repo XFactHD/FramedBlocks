@@ -59,8 +59,8 @@ public class FramedSlopeModel extends FramedBlockModel
                             quad.getVertexData(),
                             quad.getTintIndex(),
                             dir.getOpposite(),
-                            quad.func_187508_a(),
-                            quad.shouldApplyDiffuseLighting()
+                            quad.getSprite(),
+                            quad.applyDiffuseLighting()
                     ));
                 }
             }

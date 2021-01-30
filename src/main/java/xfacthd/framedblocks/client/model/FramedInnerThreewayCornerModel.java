@@ -52,8 +52,8 @@ public class FramedInnerThreewayCornerModel extends FramedBlockModel
                         quad.getVertexData(),
                         quad.getTintIndex(),
                         quadFace,
-                        quad.func_187508_a(),
-                        quad.shouldApplyDiffuseLighting()
+                        quad.getSprite(),
+                        quad.applyDiffuseLighting()
                 );
 
                 BakedQuad finalQuad = quad;
@@ -113,9 +113,9 @@ public class FramedInnerThreewayCornerModel extends FramedBlockModel
         pos[coord1][2] = .5F;
         pos[coord2][2] = .5F;
 
-        uv[coord1][0] = quad.func_187508_a().getInterpolatedU(8);
-        uv[coord2][0] = quad.func_187508_a().getInterpolatedU(8);
-        uv[coord1][1] = quad.func_187508_a().getInterpolatedV(8);
-        uv[coord2][1] = quad.func_187508_a().getInterpolatedV(8);
+        uv[coord1][0] = quad.getSprite().getInterpolatedU(8);
+        uv[coord2][0] = quad.getSprite().getInterpolatedU(8);
+        uv[coord1][1] = quad.getSprite().getInterpolatedV(8);
+        uv[coord2][1] = quad.getSprite().getInterpolatedV(8);
     }
 }

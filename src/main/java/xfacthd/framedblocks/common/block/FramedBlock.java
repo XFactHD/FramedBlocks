@@ -5,14 +5,15 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.fluid.*;
 import net.minecraft.item.ItemStack;
+import net.minecraft.loot.LootContext;
 import net.minecraft.state.properties.BlockStateProperties;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.*;
 import net.minecraft.util.math.*;
 import net.minecraft.util.math.shapes.ISelectionContext;
 import net.minecraft.util.math.shapes.VoxelShape;
+import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.world.*;
-import net.minecraft.world.storage.loot.LootContext;
 import xfacthd.framedblocks.FramedBlocks;
 import xfacthd.framedblocks.common.data.BlockType;
 import xfacthd.framedblocks.common.data.PropertyHolder;
@@ -74,7 +75,7 @@ public class FramedBlock extends Block implements IFramedBlock, IWaterLoggable
     }
 
     @Override
-    public IFluidState getFluidState(BlockState state)
+    public FluidState getFluidState(BlockState state)
     {
         if (isWaterLoggable() && state.get(BlockStateProperties.WATERLOGGED))
         {
@@ -105,7 +106,7 @@ public class FramedBlock extends Block implements IFramedBlock, IWaterLoggable
     @Override
     public BlockType getBlockType() { return blockType; }
 
-    protected BlockState withTop(BlockState state, Direction side, Vec3d hitVec)
+    protected BlockState withTop(BlockState state, Direction side, Vector3d hitVec)
     {
         if (side == Direction.DOWN)
         {
@@ -127,7 +128,7 @@ public class FramedBlock extends Block implements IFramedBlock, IWaterLoggable
 
     protected BlockState withWater(BlockState state, IWorldReader water, BlockPos pos)
     {
-        IFluidState fluidState = water.getFluidState(pos);
+        FluidState fluidState = water.getFluidState(pos);
         return state.with(BlockStateProperties.WATERLOGGED, fluidState.getFluid() == Fluids.WATER);
     }
 

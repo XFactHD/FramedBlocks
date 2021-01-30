@@ -84,8 +84,8 @@ public class ModelUtils
                 vertexData,
                 quad.getTintIndex(),
                 quad.getFace(),
-                quad.func_187508_a(),
-                quad.shouldApplyDiffuseLighting()
+                quad.getSprite(),
+                quad.applyDiffuseLighting()
         );
     }
 

@@ -6,6 +6,7 @@ import net.minecraft.state.properties.*;
 import net.minecraft.util.Direction;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.client.model.generators.*;
+import net.minecraftforge.common.data.ExistingFileHelper;
 import xfacthd.framedblocks.FramedBlocks;
 import xfacthd.framedblocks.common.FBContent;
 import xfacthd.framedblocks.common.data.*;
@@ -329,7 +330,7 @@ public class FramedBlockStateProvider extends BlockStateProvider
                     .to(2, 16, 16)
                     .allFaces((dir, face) ->
                     {
-                        face.texture("0");
+                        face.texture("#0");
                         switch (dir)
                         {
                             case NORTH:
@@ -354,7 +355,7 @@ public class FramedBlockStateProvider extends BlockStateProvider
                     .to(16, 16, 16)
                     .allFaces((dir, face) ->
                     {
-                        face.texture("0");
+                        face.texture("#0");
                         switch (dir)
                         {
                             case NORTH:
@@ -378,19 +379,19 @@ public class FramedBlockStateProvider extends BlockStateProvider
                     .from(2, 1.5F, 14.5F)
                     .to(14, 2.5F, 15.5F)
                     .face(Direction.NORTH)
-                        .texture("0")
+                        .texture("#0")
                         .uvs(2, 13.5F, 14, 14.5F)
                         .end()
                     .face(Direction.SOUTH)
-                        .texture("0")
+                        .texture("#0")
                         .uvs(2, 13.5F, 14, 14.5F)
                         .end()
                     .face(Direction.UP)
-                        .texture("0")
+                        .texture("#0")
                         .uvs(2, .5F, 14, 1.5F)
                         .end()
                     .face(Direction.DOWN)
-                        .texture("0")
+                        .texture("#0")
                         .uvs(2, 14.5F, 14, 15.5F)
                         .end()
                     .end()
@@ -398,19 +399,19 @@ public class FramedBlockStateProvider extends BlockStateProvider
                     .from(2, 5.5F, 14.5F)
                     .to(14, 6.5F, 15.5F)
                     .face(Direction.NORTH)
-                        .texture("0")
+                        .texture("#0")
                         .uvs(2, 9.5F, 14, 10.5F)
                         .end()
                     .face(Direction.SOUTH)
-                        .texture("0")
+                        .texture("#0")
                         .uvs(2, 9.5F, 14, 10.5F)
                         .end()
                     .face(Direction.UP)
-                        .texture("0")
+                        .texture("#0")
                         .uvs(2, .5F, 14, 1.5F)
                         .end()
                     .face(Direction.DOWN)
-                        .texture("0")
+                        .texture("#0")
                         .uvs(2, 14.5F, 14, 15.5F)
                         .end()
                     .end()
@@ -418,19 +419,19 @@ public class FramedBlockStateProvider extends BlockStateProvider
                     .from(2, 9.5F, 14.5F)
                     .to(14, 10.5F, 15.5F)
                     .face(Direction.NORTH)
-                        .texture("0")
+                        .texture("#0")
                         .uvs(2, 5.5F, 14, 6.5F)
                         .end()
                     .face(Direction.SOUTH)
-                        .texture("0")
+                        .texture("#0")
                         .uvs(2, 5.5F, 14, 6.5F)
                         .end()
                     .face(Direction.UP)
-                        .texture("0")
+                        .texture("#0")
                         .uvs(2, .5F, 14, 1.5F)
                         .end()
                     .face(Direction.DOWN)
-                        .texture("0")
+                        .texture("#0")
                         .uvs(2, 14.5F, 14, 15.5F)
                         .end()
                     .end()
@@ -438,19 +439,19 @@ public class FramedBlockStateProvider extends BlockStateProvider
                     .from(2, 13.5F, 14.5F)
                     .to(14, 14.5F, 15.5F)
                     .face(Direction.NORTH)
-                        .texture("0")
+                        .texture("#0")
                         .uvs(2, 1.5F, 14, 2.5F)
                         .end()
                     .face(Direction.SOUTH)
-                        .texture("0")
+                        .texture("#0")
                         .uvs(2, 1.5F, 14, 2.5F)
                         .end()
                     .face(Direction.UP)
-                        .texture("0")
+                        .texture("#0")
                         .uvs(2, .5F, 14, 1.5F)
                         .end()
                     .face(Direction.DOWN)
-                        .texture("0")
+                        .texture("#0")
                         .uvs(2, 14.5F, 14, 15.5F)
                         .end()
                     .end();

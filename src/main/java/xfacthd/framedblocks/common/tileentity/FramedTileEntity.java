@@ -105,7 +105,7 @@ public class FramedTileEntity extends TileEntity
         if (block.hasTileEntity(state) && !TILE_ENTITY_WHITELIST.contains(block)) { return false; }
 
         //noinspection ConstantConditions
-        return block.isOpaqueCube(state, world, pos);
+        return state.isOpaqueCube(world, pos);
     }
 
     public BlockState getCamoState() { return camoState; }
@@ -194,7 +194,7 @@ public class FramedTileEntity extends TileEntity
     }
 
     @Override
-    public void handleUpdateTag(CompoundNBT nbt)
+    public void handleUpdateTag(BlockState state, CompoundNBT nbt)
     {
         camoStack = ItemStack.read(nbt.getCompound("camo_stack"));
 
@@ -234,9 +234,9 @@ public class FramedTileEntity extends TileEntity
     }
 
     @Override
-    public void read(CompoundNBT nbt)
+    public void read(BlockState state, CompoundNBT nbt)
     {
-        super.read(nbt);
+        super.read(state, nbt);
 
         camoStack = ItemStack.read(nbt.getCompound("camo_stack"));
         camoState = NBTUtil.readBlockState(nbt.getCompound("camo_state"));

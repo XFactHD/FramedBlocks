@@ -52,8 +52,8 @@ public class FramedInnerCornerSlopeModel extends FramedBlockModel
                         quad.getVertexData(),
                         quad.getTintIndex(),
                         ModelUtils.findHorizontalFacing(quad),
-                        quad.func_187508_a(),
-                        quad.shouldApplyDiffuseLighting()
+                        quad.getSprite(),
+                        quad.applyDiffuseLighting()
                 );
 
                 quadIterator.remove();
@@ -101,8 +101,8 @@ public class FramedInnerCornerSlopeModel extends FramedBlockModel
                             quad.getVertexData(),
                             quad.getTintIndex(),
                             quadFace,
-                            quad.func_187508_a(),
-                            quad.shouldApplyDiffuseLighting()
+                            quad.getSprite(),
+                            quad.applyDiffuseLighting()
                     );
 
                     BakedQuad finalQuad = quad;

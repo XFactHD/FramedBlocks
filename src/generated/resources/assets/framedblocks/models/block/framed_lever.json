@@ -1,5 +1,5 @@
 {
-  "parent": "block/lever",
+  "parent": "minecraft:block/lever",
   "textures": {
     "base": "framedblocks:block/framed_block",
     "particle": "framedblocks:block/framed_block"

@@ -5,11 +5,12 @@ import net.minecraft.block.*;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.RenderComponentsUtil;
 import net.minecraft.client.renderer.IRenderTypeBuffer;
-import net.minecraft.client.renderer.Vector3f;
 import net.minecraft.client.renderer.texture.NativeImage;
 import net.minecraft.client.renderer.tileentity.TileEntityRenderer;
 import net.minecraft.client.renderer.tileentity.TileEntityRendererDispatcher;
 import net.minecraft.state.properties.BlockStateProperties;
+import net.minecraft.util.IReorderingProcessor;
+import net.minecraft.util.math.vector.Vector3f;
 import net.minecraft.util.text.ITextComponent;
 import xfacthd.framedblocks.common.block.FramedSignBlock;
 import xfacthd.framedblocks.common.data.PropertyHolder;
@@ -53,17 +54,17 @@ public class FramedSignRenderer extends TileEntityRenderer<FramedSignTileEntity>
         FontRenderer fontrenderer = renderDispatcher.getFontRenderer();
         for (int line = 0; line < 4; line++)
         {
-            String text = tile.getRenderedLine(line, component ->
+            IReorderingProcessor text = tile.getRenderedLine(line, component ->
             {
-                List<ITextComponent> parts = RenderComponentsUtil.splitText(component, 90, fontrenderer, false, true);
-                return parts.isEmpty() ? "" : parts.get(0).getFormattedText();
+                List<IReorderingProcessor> parts = fontrenderer.trimStringToWidth(component, 90);
+                return parts.isEmpty() ? IReorderingProcessor.field_242232_a : parts.get(0);
             });
 
             if (text != null)
             {
-                float xOff = -fontrenderer.getStringWidth(text) / 2F;
+                float xOff = -fontrenderer.func_243245_a(text) / 2F;
                 float y = line * 10 - 20;
-                fontrenderer.renderString(text, xOff, y, argb, false, matrix.getLast().getMatrix(), buffer, false, 0, light);
+                fontrenderer.func_238416_a_(text, xOff, y, argb, false, matrix.getLast().getMatrix(), buffer, false, 0, light);
             }
         }
 

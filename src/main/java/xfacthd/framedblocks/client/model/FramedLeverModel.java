@@ -15,7 +15,7 @@ public class FramedLeverModel extends FramedBlockModel
     @Override
     protected BakedQuad buildQuad(BakedQuad baseQuad, BakedQuad camoQuad)
     {
-        if (!baseQuad.func_187508_a().getName().equals(TEXTURE))
+        if (!baseQuad.getSprite().getName().equals(TEXTURE))
         {
             return ModelUtils.duplicateQuad(baseQuad);
         }

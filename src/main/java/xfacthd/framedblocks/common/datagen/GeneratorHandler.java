@@ -1,7 +1,7 @@
 package xfacthd.framedblocks.common.datagen;
 
 import net.minecraft.data.DataGenerator;
-import net.minecraftforge.client.model.generators.ExistingFileHelper;
+import net.minecraftforge.common.data.ExistingFileHelper;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.lifecycle.GatherDataEvent;
@@ -21,7 +21,7 @@ public class GeneratorHandler
         gen.addProvider(new FramedItemModelProvider(gen, fileHelper));
         gen.addProvider(new FramedLootTableProvider(gen));
         gen.addProvider(new FramedRecipeProvider(gen));
-        gen.addProvider(new FramedTagProvider(gen));
+        gen.addProvider(new FramedTagProvider(gen, fileHelper));
         gen.addProvider(new FramedLanguageProvider(gen));
     }
 }

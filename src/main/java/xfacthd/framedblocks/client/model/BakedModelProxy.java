@@ -28,7 +28,7 @@ public abstract class BakedModelProxy implements IBakedModel
     public boolean isGui3d() { return true; }
 
     @Override
-    public boolean func_230044_c_() { return baseModel.func_230044_c_(); }
+    public boolean isSideLit() { return baseModel.isSideLit(); }
 
     @Override
     public boolean isBuiltInRenderer() { return false; }

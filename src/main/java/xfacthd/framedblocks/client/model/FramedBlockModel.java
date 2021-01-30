@@ -77,12 +77,12 @@ public class FramedBlockModel extends BakedModelProxy
                 Arrays.copyOf(baseQuad.getVertexData(), baseQuad.getVertexData().length),
                 baseQuad.getTintIndex(),
                 baseQuad.getFace(),
-                camoQuad.func_187508_a(),
-                baseQuad.shouldApplyDiffuseLighting()
+                camoQuad.getSprite(),
+                baseQuad.applyDiffuseLighting()
         );
 
         ModelUtils.modifyQuad(quadCopy, ((pos, color, uv, light, normal) ->
-                setTextureUV(uv, baseQuad.func_187508_a(), camoQuad.func_187508_a())
+                setTextureUV(uv, baseQuad.getSprite(), camoQuad.getSprite())
         ));
 
         return quadCopy;

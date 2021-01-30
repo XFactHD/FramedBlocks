@@ -39,6 +39,6 @@ public class FramedLanguageProvider extends LanguageProvider
 
         add(FBContent.itemFramedHammer, "Framed Hammer");
 
-        add(FramedBlocks.FRAMED_GROUP.getTranslationKey(), "FramedBlocks");
+        add(FramedBlocks.FRAMED_GROUP.getGroupName().getString(), "FramedBlocks");
     }
 }

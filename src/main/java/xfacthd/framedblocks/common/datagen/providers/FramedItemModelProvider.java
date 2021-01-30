@@ -1,8 +1,8 @@
 package xfacthd.framedblocks.common.datagen.providers;
 
 import net.minecraft.data.DataGenerator;
-import net.minecraftforge.client.model.generators.ExistingFileHelper;
 import net.minecraftforge.client.model.generators.ItemModelProvider;
+import net.minecraftforge.common.data.ExistingFileHelper;
 import xfacthd.framedblocks.FramedBlocks;
 
 public class FramedItemModelProvider extends ItemModelProvider

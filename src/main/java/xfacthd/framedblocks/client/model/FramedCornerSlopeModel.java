@@ -41,8 +41,8 @@ public class FramedCornerSlopeModel extends FramedBlockModel
                         quad.getVertexData(),
                         quad.getTintIndex(),
                         dir.getOpposite(),
-                        quad.func_187508_a(),
-                        quad.shouldApplyDiffuseLighting()
+                        quad.getSprite(),
+                        quad.applyDiffuseLighting()
                 );
             }
             else if (type == CornerType.TOP && quad.getFace() == Direction.DOWN)
@@ -52,8 +52,8 @@ public class FramedCornerSlopeModel extends FramedBlockModel
                         quad.getVertexData(),
                         quad.getTintIndex(),
                         face,
-                        quad.func_187508_a(),
-                        quad.shouldApplyDiffuseLighting()
+                        quad.getSprite(),
+                        quad.applyDiffuseLighting()
                 );
             }
 

@@ -1,6 +1,7 @@
 package xfacthd.framedblocks.common.tileentity;
 
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
+import net.minecraft.block.BlockState;
 import net.minecraft.command.CommandSource;
 import net.minecraft.command.ICommandSource;
 import net.minecraft.entity.player.PlayerEntity;
@@ -9,8 +10,9 @@ import net.minecraft.item.DyeColor;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.network.NetworkManager;
 import net.minecraft.network.play.server.SUpdateTileEntityPacket;
-import net.minecraft.util.math.Vec2f;
-import net.minecraft.util.math.Vec3d;
+import net.minecraft.util.IReorderingProcessor;
+import net.minecraft.util.math.vector.Vector2f;
+import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.util.text.*;
 import net.minecraft.util.text.event.ClickEvent;
 import net.minecraft.world.server.ServerWorld;
@@ -22,7 +24,7 @@ import java.util.function.Function;
 public class FramedSignTileEntity extends FramedTileEntity
 {
     private final ITextComponent[] lines = new ITextComponent[4];
-    private final String[] renderLines = new String[4];
+    private final IReorderingProcessor[] renderLines = new IReorderingProcessor[4];
     private DyeColor textColor = DyeColor.BLACK;
     private PlayerEntity editingPlayer;
 
@@ -40,7 +42,7 @@ public class FramedSignTileEntity extends FramedTileEntity
 
     public ITextComponent getLine(int line) { return lines[line]; }
 
-    public String getRenderedLine(int line, Function<ITextComponent, String> converter)
+    public IReorderingProcessor getRenderedLine(int line, Function<ITextComponent, IReorderingProcessor> converter)
     {
         if (lines[line] != null && renderLines[line] == null)
         {
@@ -72,10 +74,10 @@ public class FramedSignTileEntity extends FramedTileEntity
     {
         String nameString = player == null ? "Sign" : player.getName().getString();
         ITextComponent name = player == null ? new StringTextComponent("Sign") : player.getDisplayName();
-        Vec3d posVec = new Vec3d(pos.getX() + 0.5D, pos.getY() + 0.5D, pos.getZ() + 0.5D);
+        Vector3d posVec = new Vector3d(pos.getX() + 0.5D, pos.getY() + 0.5D, pos.getZ() + 0.5D);
 
         //noinspection ConstantConditions
-        return new CommandSource(ICommandSource.DUMMY, posVec, Vec2f.ZERO, (ServerWorld)world, 2, nameString, name, world.getServer(), player);
+        return new CommandSource(ICommandSource.DUMMY, posVec, Vector2f.ZERO, (ServerWorld)world, 2, nameString, name, world.getServer(), player);
     }
 
 
@@ -128,9 +130,9 @@ public class FramedSignTileEntity extends FramedTileEntity
     }
 
     @Override
-    public void handleUpdateTag(CompoundNBT nbt)
+    public void handleUpdateTag(BlockState state, CompoundNBT nbt)
     {
-        super.handleUpdateTag(nbt);
+        super.handleUpdateTag(state, nbt);
         readFromNbt(nbt);
     }
 
@@ -149,12 +151,12 @@ public class FramedSignTileEntity extends FramedTileEntity
         for(int i = 0; i < 4; i++)
         {
             String s = nbt.getString("text" + i);
-            ITextComponent line = ITextComponent.Serializer.fromJson(s.isEmpty() ? "\"\"" : s);
+            ITextComponent line = ITextComponent.Serializer.getComponentFromJson(s.isEmpty() ? "\"\"" : s);
             if (world instanceof ServerWorld && line != null)
             {
                 try
                 {
-                    lines[i] = TextComponentUtils.updateForEntity(getCommandSource(null), line, null, 0);
+                    lines[i] = TextComponentUtils.func_240645_a_(getCommandSource(null), line, null, 0);
                 }
                 catch (CommandSyntaxException e)
                 {
@@ -180,9 +182,9 @@ public class FramedSignTileEntity extends FramedTileEntity
     }
 
     @Override
-    public void read(CompoundNBT nbt)
+    public void read(BlockState state, CompoundNBT nbt)
     {
-        super.read(nbt);
+        super.read(state, nbt);
         readFromNbt(nbt);
     }
 }
