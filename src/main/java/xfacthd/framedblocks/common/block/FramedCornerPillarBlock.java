@@ -58,7 +58,7 @@ public class FramedCornerPillarBlock extends FramedBlock
             state = state.with(PropertyHolder.FACING_HOR, dir);
         }
 
-        return state;
+        return withWater(state, context.getWorld(), context.getPos());
     }
 
     public static ImmutableMap<BlockState, VoxelShape> generateShapes(ImmutableList<BlockState> states)

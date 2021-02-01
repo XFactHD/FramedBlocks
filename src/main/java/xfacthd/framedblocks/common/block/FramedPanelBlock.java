@@ -38,7 +38,7 @@ public class FramedPanelBlock extends FramedBlock
             state = state.with(PropertyHolder.FACING_HOR, context.getPlacementHorizontalFacing());
         }
 
-        return state;
+        return withWater(state, context.getWorld(), context.getPos());
     }
 
     public static ImmutableMap<BlockState, VoxelShape> generateShapes(ImmutableList<BlockState> states)

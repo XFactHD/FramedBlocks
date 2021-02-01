@@ -33,7 +33,8 @@ public class FramedLadderBlock extends FramedBlock
     @Override
     public BlockState getStateForPlacement(BlockItemUseContext context)
     {
-        return getDefaultState().with(PropertyHolder.FACING_HOR, context.getPlacementHorizontalFacing());
+        BlockState state = getDefaultState().with(PropertyHolder.FACING_HOR, context.getPlacementHorizontalFacing());
+        return withWater(state, context.getWorld(), context.getPos());
     }
 
     @Override

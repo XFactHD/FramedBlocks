@@ -13,7 +13,7 @@ apply plugin: 'net.minecraftforge.gradle'
 apply plugin: 'idea'
 apply plugin: 'maven-publish'
 
-version = '2.0'
+version = '2.1'
 group = 'xfacthd.framedblocks'
 archivesBaseName = 'FramedBlocks'
 
