@@ -9,21 +9,32 @@ import net.minecraft.client.renderer.model.BakedQuad;
 import net.minecraft.client.renderer.model.IBakedModel;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.util.Direction;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.World;
 import net.minecraftforge.client.MinecraftForgeClient;
 import net.minecraftforge.client.model.data.EmptyModelData;
 import net.minecraftforge.client.model.data.IModelData;
+import xfacthd.framedblocks.FramedBlocks;
 import xfacthd.framedblocks.client.util.*;
+import xfacthd.framedblocks.common.data.BlockType;
 
+import java.lang.reflect.Field;
 import java.util.*;
 
 @SuppressWarnings("deprecation")
 public class FramedBlockModel extends BakedModelProxy
 {
-    private final Table<BlockState, RenderType, List<BakedQuad>> modelCacheTable = HashBasedTable.create();
+    private final Table<BlockState, RenderType, List<BakedQuad>> quadCacheTable = HashBasedTable.create();
+    private final Map<BlockState, IBakedModel> modelCache = new HashMap<>();
     private final HashMap<BlockState, TextureAtlasSprite> particleCache = new HashMap<>();
+    private final BlockType type;
     private ImmutableList<BakedQuad> baseQuads = null;
 
-    public FramedBlockModel(IBakedModel baseModel) { super(baseModel); }
+    public FramedBlockModel(BlockType type, IBakedModel baseModel)
+    {
+        super(baseModel);
+        this.type = type;
+    }
 
     @Override
     public List<BakedQuad> getQuads(BlockState state, Direction side, Random rand, IModelData extraData)
@@ -38,14 +49,7 @@ public class FramedBlockModel extends BakedModelProxy
             {
                 if (RenderTypeLookup.canRenderInLayer(camoState, layer))
                 {
-                    synchronized (modelCacheTable)
-                    {
-                        if (!modelCacheTable.contains(camoState, layer))
-                        {
-                            modelCacheTable.put(camoState, layer, makeQuads(camoState, rand));
-                        }
-                        return modelCacheTable.get(camoState, layer);
-                    }
+                    return getCamoQuads(state, camoState, side, rand, extraData, layer);
                 }
                 return Collections.emptyList();
             }
@@ -54,13 +58,54 @@ public class FramedBlockModel extends BakedModelProxy
         return layer == RenderType.getCutoutMipped() ? baseQuads : Collections.emptyList();
     }
 
-    private List<BakedQuad> makeQuads(BlockState camoState, Random rand)
+    protected List<BakedQuad> getCamoQuads(BlockState state, BlockState camoState, Direction side, Random rand, IModelData extraData, RenderType layer)
     {
-        IBakedModel camoModel = getCamoModel(camoState);
+        if (side == null)
+        {
+            synchronized (quadCacheTable)
+            {
+                if (!quadCacheTable.contains(camoState, layer))
+                {
+                    quadCacheTable.put(camoState, layer, makeQuads(state, camoState, rand));
+                }
+                return quadCacheTable.get(camoState, layer);
+            }
+        }
+        else if (type.getCtmPredicate().test(state, side))
+        {
+            synchronized (modelCache)
+            {
+                if (!modelCache.containsKey(camoState))
+                {
+                    modelCache.put(camoState, getCamoModel(camoState, false));
+                }
+                IBakedModel model = modelCache.get(camoState);
+                IModelData data = getCamoData(model, camoState, extraData);
+                return model.getQuads(camoState, side, rand, data);
+            }
+        }
+        return Collections.emptyList();
+    }
+
+    private static IModelData getCamoData(IBakedModel model, BlockState state, IModelData data)
+    {
+        World world = data.getData(FramedBlockData.WORLD);
+        BlockPos pos = data.getData(FramedBlockData.POS);
+
+        if (world == null || pos == null || pos.equals(BlockPos.ZERO)) { return data; }
+
+        return model.getModelData(world, pos, state, data);
+    }
+
+    private List<BakedQuad> makeQuads(BlockState state, BlockState camoState, Random rand)
+    {
+        IBakedModel camoModel = getCamoModel(camoState, true);
         ImmutableList.Builder<BakedQuad> listBuilder = ImmutableList.builder();
 
         for (BakedQuad quad : baseQuads)
         {
+            if (type.getCtmPredicate().test(state, quad.getFace())) { continue; }
+
             List<BakedQuad> camoQuads = getSideQuads(camoModel, camoState, quad.getFace(), rand);
             for (BakedQuad camoQuad : camoQuads)
             {
@@ -135,7 +180,7 @@ public class FramedBlockModel extends BakedModelProxy
                 synchronized (particleCache)
                 {
                     return particleCache.computeIfAbsent(camoState, state ->
-                            getCamoModel(camoState).getParticleTexture()
+                            getCamoModel(camoState, false).getParticleTexture()
                     );
                 }
             }
@@ -147,9 +192,28 @@ public class FramedBlockModel extends BakedModelProxy
      * Static helpers
      */
 
-    protected static IBakedModel getCamoModel(BlockState camoState)
+    private static Field ctmParent = null;
+    protected static IBakedModel getCamoModel(BlockState camoState, boolean needCtmParent)
     {
-        return Minecraft.getInstance().getBlockRendererDispatcher().getModelForState(camoState);
+        IBakedModel model = Minecraft.getInstance().getBlockRendererDispatcher().getModelForState(camoState);
+        if (needCtmParent && model.getClass().getName().equals("team.chisel.ctm.client.model.ModelBakedCTM"))
+        {
+            try
+            {
+                if (ctmParent == null)
+                {
+                    ctmParent = model.getClass().getSuperclass().getDeclaredField("parent");
+                    ctmParent.setAccessible(true);
+                }
+
+                model = (IBakedModel) ctmParent.get(model);
+            }
+            catch (IllegalAccessException | NoSuchFieldException e)
+            {
+                FramedBlocks.LOGGER.error("Failed to retrieve parent model from CTM model!", e);
+            }
+        }
+        return model;
     }
 
     protected static List<BakedQuad> getSideQuads(IBakedModel model, BlockState state, Direction side, Random rand)

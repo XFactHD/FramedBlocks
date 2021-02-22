@@ -4,6 +4,7 @@ import net.minecraft.block.*;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
+import net.minecraft.state.properties.BlockStateProperties;
 import net.minecraft.state.properties.Half;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.*;
@@ -15,9 +16,23 @@ import xfacthd.framedblocks.common.data.BlockType;
 import xfacthd.framedblocks.common.tileentity.FramedTileEntity;
 
 import java.util.List;
+import java.util.function.BiPredicate;
 
 public class FramedTrapDoorBlock extends TrapDoorBlock implements IFramedBlock
 {
+    public static final BiPredicate<BlockState, Direction> CTM_PREDICATE = (state, dir) ->
+    {
+        if (state.get(BlockStateProperties.OPEN))
+        {
+            return state.get(BlockStateProperties.HORIZONTAL_FACING).getOpposite() == dir;
+        }
+        else if (state.get(BlockStateProperties.HALF) == Half.TOP)
+        {
+            return dir == Direction.UP;
+        }
+        return dir == Direction.DOWN;
+    };
+
     public FramedTrapDoorBlock()
     {
         super(IFramedBlock.createProperties());

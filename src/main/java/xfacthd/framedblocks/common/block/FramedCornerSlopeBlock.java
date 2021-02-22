@@ -13,8 +13,40 @@ import net.minecraft.util.math.shapes.VoxelShapes;
 import xfacthd.framedblocks.common.data.*;
 import xfacthd.framedblocks.common.util.Utils;
 
+import java.util.function.BiPredicate;
+
 public class FramedCornerSlopeBlock extends FramedBlock
 {
+    public static final BiPredicate<BlockState, Direction> CTM_PREDICATE = (state, dir) ->
+    {
+        CornerType type = state.get(PropertyHolder.CORNER_TYPE);
+        if (type == CornerType.TOP)
+        {
+            return dir == Direction.UP;
+        }
+        else if (type == CornerType.BOTTOM)
+        {
+            return dir == Direction.DOWN;
+        }
+        return state.get(PropertyHolder.FACING_HOR) == dir;
+    };
+
+    public static final BiPredicate<BlockState, Direction> CTM_PREDICATE_INNER = (state, dir) ->
+    {
+        CornerType type = state.get(PropertyHolder.CORNER_TYPE);
+        if (type == CornerType.TOP && dir == Direction.UP)
+        {
+            return true;
+        }
+        else if (type == CornerType.BOTTOM && dir == Direction.DOWN)
+        {
+            return true;
+        }
+
+        Direction facing = state.get(PropertyHolder.FACING_HOR);
+        return facing == dir || facing.rotateY() == dir;
+    };
+
     public FramedCornerSlopeBlock(String name, BlockType type) { super(name, type); }
 
     @Override

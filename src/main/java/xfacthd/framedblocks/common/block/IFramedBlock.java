@@ -11,14 +11,18 @@ import net.minecraft.world.*;
 import net.minecraft.world.storage.loot.LootContext;
 import net.minecraft.world.storage.loot.LootParameters;
 import net.minecraftforge.common.ToolType;
+import team.chisel.ctm.api.IFacade;
 import xfacthd.framedblocks.FramedBlocks;
 import xfacthd.framedblocks.common.data.BlockType;
 import xfacthd.framedblocks.common.tileentity.FramedTileEntity;
 
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import java.util.List;
+import java.util.function.BiPredicate;
 
 @SuppressWarnings("deprecation")
-public interface IFramedBlock
+public interface IFramedBlock extends IFacade
 {
     BlockType getBlockType();
 
@@ -87,5 +91,31 @@ public interface IFramedBlock
         }
 
         return drops;
+    }
+
+    default BiPredicate<BlockState, Direction> getCtmPredicate() { return getBlockType().getCtmPredicate(); }
+
+    @Nonnull
+    @Override
+    @Deprecated
+    default BlockState getFacade(@Nonnull IBlockReader world, @Nonnull BlockPos pos, @Nullable Direction side)
+    {
+        return Blocks.AIR.getDefaultState();
+    }
+
+    @Nonnull
+    @Override
+    default BlockState getFacade(@Nonnull IBlockReader world, @Nonnull BlockPos pos, @Nullable Direction side, @Nonnull BlockPos connection)
+    {
+        BlockState state = world.getBlockState(pos);
+        if (getCtmPredicate().test(state, side))
+        {
+            TileEntity te = world.getTileEntity(pos);
+            if (te instanceof FramedTileEntity)
+            {
+                return ((FramedTileEntity) te).getCamoState();
+            }
+        }
+        return Blocks.AIR.getDefaultState();
     }
 }

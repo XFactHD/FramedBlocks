@@ -6,8 +6,7 @@ import net.minecraft.client.renderer.model.BakedQuad;
 import net.minecraft.client.renderer.model.IBakedModel;
 import net.minecraft.util.Direction;
 import xfacthd.framedblocks.client.util.ModelUtils;
-import xfacthd.framedblocks.common.data.CornerType;
-import xfacthd.framedblocks.common.data.SlopeType;
+import xfacthd.framedblocks.common.data.*;
 
 import java.util.*;
 
@@ -18,7 +17,7 @@ public class FramedInnerCornerSlopeModel extends FramedBlockModel
 
     public FramedInnerCornerSlopeModel(IBakedModel baseModel, Direction dir, CornerType type)
     {
-        super(baseModel);
+        super(BlockType.FRAMED_INNER_CORNER_SLOPE, baseModel);
         this.dir = dir;
         this.type = type;
     }

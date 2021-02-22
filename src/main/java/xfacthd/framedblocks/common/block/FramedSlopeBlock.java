@@ -13,8 +13,29 @@ import net.minecraft.util.math.shapes.VoxelShapes;
 import xfacthd.framedblocks.common.data.*;
 import xfacthd.framedblocks.common.util.Utils;
 
+import java.util.function.BiPredicate;
+
 public class FramedSlopeBlock extends FramedBlock
 {
+    public static final BiPredicate<BlockState, Direction> CTM_PREDICATE = (state, dir) ->
+    {
+        SlopeType type = state.get(PropertyHolder.SLOPE_TYPE);
+        if (dir == Direction.UP && type == SlopeType.TOP)
+        {
+            return true;
+        }
+        else if (dir == Direction.DOWN && type == SlopeType.BOTTOM)
+        {
+            return true;
+        }
+        else if (type == SlopeType.HORIZONTAL)
+        {
+            Direction facing = state.get(PropertyHolder.FACING_HOR);
+            return dir == facing || dir == facing.rotateYCCW();
+        }
+        return state.get(PropertyHolder.FACING_HOR) == dir;
+    };
+
     public FramedSlopeBlock() { super("framed_slope", BlockType.FRAMED_SLOPE); }
 
     @Override

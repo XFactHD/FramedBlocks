@@ -14,8 +14,30 @@ import xfacthd.framedblocks.common.data.BlockType;
 import xfacthd.framedblocks.common.data.PropertyHolder;
 import xfacthd.framedblocks.common.util.Utils;
 
+import java.util.function.BiPredicate;
+
 public class FramedThreewayCornerBlock extends FramedBlock
 {
+    public static final BiPredicate<BlockState, Direction> CTM_PREDICATE = (state, dir) ->
+    {
+        boolean top = state.get(PropertyHolder.TOP);
+        if (top && dir == Direction.UP)
+        {
+            return true;
+        }
+        else if (!top && dir == Direction.DOWN)
+        {
+            return true;
+        }
+
+        Direction facing = state.get(PropertyHolder.FACING_HOR);
+        if (facing == dir) { return true; }
+
+        BlockType type = ((FramedBlock) state.getBlock()).getBlockType();
+        if (type == BlockType.FRAMED_INNER_PRISM_CORNER) { return facing.rotateYCCW() == dir; }
+        else { return facing.rotateY() == dir; }
+    };
+
     public FramedThreewayCornerBlock(String name, BlockType type) { super(name, type); }
 
     @Override

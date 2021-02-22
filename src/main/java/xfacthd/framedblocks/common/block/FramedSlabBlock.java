@@ -7,12 +7,19 @@ import net.minecraft.block.BlockState;
 import net.minecraft.item.BlockItemUseContext;
 import net.minecraft.state.StateContainer;
 import net.minecraft.state.properties.BlockStateProperties;
+import net.minecraft.util.Direction;
 import net.minecraft.util.math.shapes.VoxelShape;
 import xfacthd.framedblocks.common.data.BlockType;
 import xfacthd.framedblocks.common.data.PropertyHolder;
 
+import java.util.function.BiPredicate;
+
 public class FramedSlabBlock extends FramedBlock
 {
+    public static final BiPredicate<BlockState, Direction> CTM_PREDICATE = (state, dir) ->
+            (state.get(PropertyHolder.TOP) && dir == Direction.UP) ||
+            (!state.get(PropertyHolder.TOP) && dir == Direction.DOWN);
+
     public FramedSlabBlock()
     {
         super("framed_slab", BlockType.FRAMED_SLAB);

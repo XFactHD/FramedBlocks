@@ -5,6 +5,7 @@ import net.minecraft.block.BlockState;
 import net.minecraft.client.renderer.model.*;
 import net.minecraft.util.Direction;
 import xfacthd.framedblocks.client.util.ModelUtils;
+import xfacthd.framedblocks.common.data.BlockType;
 import xfacthd.framedblocks.common.data.SlopeType;
 
 import java.util.*;
@@ -16,7 +17,7 @@ public class FramedSlopeModel extends FramedBlockModel
 
     public FramedSlopeModel(IBakedModel baseModel, Direction dir, SlopeType type)
     {
-        super(baseModel);
+        super(BlockType.FRAMED_SLOPE, baseModel);
         this.dir = dir;
         this.type = type;
     }
