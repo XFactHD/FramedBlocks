@@ -85,8 +85,16 @@ sourceSets {
     main.resources.srcDirs += 'src/generated/resources'
 }
 
+repositories {
+    maven {
+        url "https://www.cursemaven.com"
+    }
+}
+
 dependencies {
     minecraft 'net.minecraftforge:forge:1.16.5-36.0.12'
+
+    implementation fg.deobf("curse.maven:ctm-267602:3137659")
 }
 
 // Example for how to get properties into the manifest for reading by the runtime..

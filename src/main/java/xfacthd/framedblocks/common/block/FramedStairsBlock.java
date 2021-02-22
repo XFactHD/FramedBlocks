@@ -5,9 +5,10 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.loot.LootContext;
+import net.minecraft.state.properties.BlockStateProperties;
+import net.minecraft.state.properties.Half;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.ActionResultType;
-import net.minecraft.util.Hand;
+import net.minecraft.util.*;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.BlockRayTraceResult;
 import net.minecraft.world.*;
@@ -17,10 +18,24 @@ import xfacthd.framedblocks.common.data.BlockType;
 import xfacthd.framedblocks.common.tileentity.FramedTileEntity;
 
 import java.util.List;
+import java.util.function.BiPredicate;
 
 @SuppressWarnings("deprecation")
 public class FramedStairsBlock extends StairsBlock implements IFramedBlock
 {
+    public static final BiPredicate<BlockState, Direction> CTM_PREDICATE = (state, dir) ->
+    {
+        if (dir == Direction.UP)
+        {
+            return state.get(BlockStateProperties.HALF) == Half.TOP;
+        }
+        else if (dir == Direction.DOWN)
+        {
+            return state.get(BlockStateProperties.HALF) == Half.BOTTOM;
+        }
+        return state.get(BlockStateProperties.HORIZONTAL_FACING) == dir;
+    };
+
     public FramedStairsBlock()
     {
         super(() -> FBContent.blockFramedCube.getDefaultState(), IFramedBlock.createProperties());

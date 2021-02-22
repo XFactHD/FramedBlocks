@@ -7,6 +7,7 @@ import net.minecraft.client.renderer.model.IBakedModel;
 import net.minecraft.util.Direction;
 import net.minecraftforge.client.ForgeHooksClient;
 import xfacthd.framedblocks.client.util.ModelUtils;
+import xfacthd.framedblocks.common.data.BlockType;
 import xfacthd.framedblocks.common.data.SlopeType;
 
 import java.util.*;
@@ -18,7 +19,7 @@ public class FramedInnerPrismCornerModel extends FramedBlockModel
 
     public FramedInnerPrismCornerModel(IBakedModel baseModel, Direction dir, boolean top)
     {
-        super(baseModel);
+        super(BlockType.FRAMED_INNER_PRISM_CORNER, baseModel);
         this.dir = dir;
         this.top = top;
     }

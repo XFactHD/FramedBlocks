@@ -4,10 +4,9 @@ import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
-import net.minecraftforge.client.model.data.IModelData;
-import net.minecraftforge.client.model.data.ModelProperty;
+import net.minecraftforge.client.model.data.*;
 
-public class FramedBlockData implements IModelData
+public class FramedBlockData extends ModelDataMap
 {
     public static final ModelProperty<World> WORLD = new ModelProperty<>();
     public static final ModelProperty<BlockPos> POS = new ModelProperty<>();
@@ -18,7 +17,7 @@ public class FramedBlockData implements IModelData
     private BlockState camoState = Blocks.AIR.getDefaultState();
 
     @Override
-    public boolean hasProperty(ModelProperty<?> prop) { return prop == CAMO; }
+    public boolean hasProperty(ModelProperty<?> prop) { return prop == CAMO || super.hasProperty(prop); }
 
     @Override
     @SuppressWarnings("unchecked")
@@ -27,7 +26,7 @@ public class FramedBlockData implements IModelData
         if (prop == CAMO) { return (T)camoState; }
         if (prop == WORLD) { return (T)world; }
         if (prop == POS) { return (T)pos; }
-        return null;
+        return super.getData(prop);
     }
 
     @Override
@@ -36,6 +35,7 @@ public class FramedBlockData implements IModelData
         if (prop == CAMO) { camoState = (BlockState)data; }
         else if (prop == WORLD) { world = (World)data; }
         else if (prop == POS) { pos = (BlockPos)data; }
+        else { return super.setData(prop, data); }
         return data;
     }
 

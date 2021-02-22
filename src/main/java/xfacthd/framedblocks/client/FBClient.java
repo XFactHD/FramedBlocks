@@ -22,6 +22,7 @@ import xfacthd.framedblocks.client.model.*;
 import xfacthd.framedblocks.client.render.FramedSignRenderer;
 import xfacthd.framedblocks.client.screen.FramedSignScreen;
 import xfacthd.framedblocks.common.FBContent;
+import xfacthd.framedblocks.common.block.IFramedBlock;
 import xfacthd.framedblocks.common.data.*;
 import xfacthd.framedblocks.common.tileentity.FramedSignTileEntity;
 
@@ -183,13 +184,14 @@ public class FBClient
     }
 
     private static void replaceModelsSimple(Block block, Map<ResourceLocation, IBakedModel> models,
-                                            Function<IBakedModel, IBakedModel> blockModelGen)
+                                            BiFunction<BlockType, IBakedModel, IBakedModel> blockModelGen)
     {
+        BlockType type = ((IFramedBlock)block).getBlockType();
         for (BlockState state : block.getStateContainer().getValidStates())
         {
             ResourceLocation location = BlockModelShapes.getModelLocation(state);
             IBakedModel baseModel = models.get(location);
-            IBakedModel replacement = blockModelGen.apply(baseModel);
+            IBakedModel replacement = blockModelGen.apply(type, baseModel);
             models.put(location, replacement);
         }
     }

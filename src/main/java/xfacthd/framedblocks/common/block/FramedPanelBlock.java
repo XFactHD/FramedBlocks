@@ -13,8 +13,13 @@ import xfacthd.framedblocks.common.data.BlockType;
 import xfacthd.framedblocks.common.data.PropertyHolder;
 import xfacthd.framedblocks.common.util.Utils;
 
+import java.util.function.BiPredicate;
+
 public class FramedPanelBlock extends FramedBlock
 {
+    public static final BiPredicate<BlockState, Direction> CTM_PREDICATE = (state, dir) ->
+            state.get(PropertyHolder.FACING_HOR) == dir;
+
     public FramedPanelBlock(){ super("framed_panel", BlockType.FRAMED_PANEL); }
 
     @Override

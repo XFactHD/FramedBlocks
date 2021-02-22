@@ -6,6 +6,7 @@ import net.minecraft.client.renderer.model.BakedQuad;
 import net.minecraft.client.renderer.model.IBakedModel;
 import net.minecraft.util.Direction;
 import xfacthd.framedblocks.client.util.ModelUtils;
+import xfacthd.framedblocks.common.data.BlockType;
 import xfacthd.framedblocks.common.data.SlopeType;
 
 import java.util.*;
@@ -17,7 +18,7 @@ public class FramedInnerThreewayCornerModel extends FramedBlockModel
 
     public FramedInnerThreewayCornerModel(IBakedModel baseModel, Direction dir, boolean top)
     {
-        super(baseModel);
+        super(BlockType.FRAMED_INNER_THREEWAY_CORNER, baseModel);
         this.dir = dir;
         this.top = top;
     }
