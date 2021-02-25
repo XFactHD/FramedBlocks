@@ -5,8 +5,7 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.loot.LootContext;
-import net.minecraft.state.properties.BlockStateProperties;
-import net.minecraft.state.properties.Half;
+import net.minecraft.state.properties.*;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.*;
 import net.minecraft.util.math.BlockPos;
@@ -33,7 +32,8 @@ public class FramedStairsBlock extends StairsBlock implements IFramedBlock
         {
             return state.get(BlockStateProperties.HALF) == Half.BOTTOM;
         }
-        return state.get(BlockStateProperties.HORIZONTAL_FACING) == dir;
+        return state.get(BlockStateProperties.STAIRS_SHAPE) == StairsShape.STRAIGHT &&
+               state.get(BlockStateProperties.HORIZONTAL_FACING) == dir;
     };
 
     public FramedStairsBlock()
