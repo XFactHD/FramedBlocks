@@ -198,15 +198,15 @@ public class FramedSignScreen extends Screen
         for(int i = 0; i < lines.length; ++i)
         {
             String line = lines[i];
-            if (line != null && i == currLine && inputUtil.getEndIndex() >= 0)
+            if (line != null && i == currLine && inputUtil.getSelectionEnd() >= 0)
             {
                 int hw = font.getStringWidth(line) / 2;
-                int selectionEnd = font.getStringWidth(line.substring(0, Math.max(Math.min(inputUtil.getEndIndex(), line.length()), 0)));
+                int selectionEnd = font.getStringWidth(line.substring(0, Math.max(Math.min(inputUtil.getSelectionEnd(), line.length()), 0)));
                 int cursorX = (selectionEnd - hw) * dir;
 
                 if (blink)
                 {
-                    if (inputUtil.getEndIndex() < line.length())
+                    if (inputUtil.getSelectionEnd() < line.length())
                     {
                         fill(mstack, cursorX, y - 1, cursorX + 1, y + 9, 0xff000000 | color);
                     }
@@ -217,10 +217,10 @@ public class FramedSignScreen extends Screen
                     }
                 }
 
-                if (inputUtil.getStartIndex() != inputUtil.getEndIndex())
+                if (inputUtil.getSelectionStart() != inputUtil.getSelectionEnd())
                 {
-                    int x1 = (font.getStringWidth(line.substring(0, inputUtil.getStartIndex())) - hw) * dir;
-                    int x2 =   (font.getStringWidth(line.substring(0, inputUtil.getEndIndex()  )) - hw) * dir;
+                    int x1 = (font.getStringWidth(line.substring(0, inputUtil.getSelectionStart())) - hw) * dir;
+                    int x2 =   (font.getStringWidth(line.substring(0, inputUtil.getSelectionEnd()  )) - hw) * dir;
                     int xStart = Math.min(x1, x2);
                     int xEnd = Math.max(x1, x2);
 

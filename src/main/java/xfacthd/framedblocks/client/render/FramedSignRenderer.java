@@ -1,9 +1,8 @@
 package xfacthd.framedblocks.client.render;
 
 import com.mojang.blaze3d.matrix.MatrixStack;
-import net.minecraft.block.*;
+import net.minecraft.block.BlockState;
 import net.minecraft.client.gui.FontRenderer;
-import net.minecraft.client.gui.RenderComponentsUtil;
 import net.minecraft.client.renderer.IRenderTypeBuffer;
 import net.minecraft.client.renderer.texture.NativeImage;
 import net.minecraft.client.renderer.tileentity.TileEntityRenderer;
@@ -11,7 +10,6 @@ import net.minecraft.client.renderer.tileentity.TileEntityRendererDispatcher;
 import net.minecraft.state.properties.BlockStateProperties;
 import net.minecraft.util.IReorderingProcessor;
 import net.minecraft.util.math.vector.Vector3f;
-import net.minecraft.util.text.ITextComponent;
 import xfacthd.framedblocks.common.block.FramedSignBlock;
 import xfacthd.framedblocks.common.data.PropertyHolder;
 import xfacthd.framedblocks.common.tileentity.FramedSignTileEntity;
@@ -64,7 +62,7 @@ public class FramedSignRenderer extends TileEntityRenderer<FramedSignTileEntity>
             {
                 float xOff = -fontrenderer.func_243245_a(text) / 2F;
                 float y = line * 10 - 20;
-                fontrenderer.func_238416_a_(text, xOff, y, argb, false, matrix.getLast().getMatrix(), buffer, false, 0, light);
+                fontrenderer.drawEntityText(text, xOff, y, argb, false, matrix.getLast().getMatrix(), buffer, false, 0, light);
             }
         }
 
