@@ -11,6 +11,7 @@ import net.minecraft.util.Direction;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.client.event.ColorHandlerEvent;
 import net.minecraftforge.client.event.ModelBakeEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.client.registry.ClientRegistry;
@@ -25,6 +26,7 @@ import xfacthd.framedblocks.common.FBContent;
 import xfacthd.framedblocks.common.block.IFramedBlock;
 import xfacthd.framedblocks.common.data.*;
 import xfacthd.framedblocks.common.tileentity.FramedSignTileEntity;
+import xfacthd.framedblocks.common.tileentity.FramedTileEntity;
 
 import java.util.Map;
 import java.util.function.BiFunction;
@@ -44,6 +46,32 @@ public class FBClient
                         type == RenderType.getSolid() || type == RenderType.getCutout() || type == RenderType.getCutoutMipped()));
 
         ClientRegistry.bindTileEntityRenderer(FBContent.tileTypeFramedSign, FramedSignRenderer::new);
+    }
+
+    @SubscribeEvent
+    public static void onBlockColors(final ColorHandlerEvent.Block event)
+    {
+        Block[] blocks = ForgeRegistries.BLOCKS.getValues()
+                .stream()
+                .filter(block -> block.getRegistryName().getNamespace().equals(FramedBlocks.MODID))
+                .toArray(Block[]::new);
+
+        event.getBlockColors().register((state, world, pos, tintIndex) ->
+        {
+            if (world != null && pos != null)
+            {
+                TileEntity te = world.getTileEntity(pos);
+                if (te instanceof FramedTileEntity)
+                {
+                    BlockState camoState = ((FramedTileEntity) te).getCamoState();
+                    if (!camoState.isAir())
+                    {
+                        return event.getBlockColors().getColor(camoState, world, pos, tintIndex);
+                    }
+                }
+            }
+            return -1;
+        }, blocks);
     }
 
     @SubscribeEvent

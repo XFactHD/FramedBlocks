@@ -120,7 +120,7 @@ public class FramedBlockModel extends BakedModelProxy
     {
         BakedQuad quadCopy = new BakedQuad(
                 Arrays.copyOf(baseQuad.getVertexData(), baseQuad.getVertexData().length),
-                baseQuad.getTintIndex(),
+                camoQuad.getTintIndex(),
                 baseQuad.getFace(),
                 camoQuad.getSprite(),
                 baseQuad.applyDiffuseLighting()
