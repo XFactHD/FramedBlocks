@@ -44,7 +44,14 @@ public class FramedCornerSlopeBlock extends FramedBlock
         }
 
         Direction facing = state.get(PropertyHolder.FACING_HOR);
-        return facing == dir || facing.rotateY() == dir;
+        if (type.isHorizontal())
+        {
+            return facing == dir || (type.isRight() && facing.rotateY() == dir) || (!type.isRight() && facing.rotateYCCW() == dir);
+        }
+        else
+        {
+            return facing == dir || facing.rotateY() == dir;
+        }
     };
 
     public FramedCornerSlopeBlock(String name, BlockType type) { super(name, type); }
