@@ -32,8 +32,27 @@ public class FramedStairsBlock extends StairsBlock implements IFramedBlock
         {
             return state.get(BlockStateProperties.HALF) == Half.BOTTOM;
         }
-        return state.get(BlockStateProperties.STAIRS_SHAPE) == StairsShape.STRAIGHT &&
-               state.get(BlockStateProperties.HORIZONTAL_FACING) == dir;
+        else
+        {
+            Direction facing = state.get(BlockStateProperties.HORIZONTAL_FACING);
+            StairsShape shape = state.get(BlockStateProperties.STAIRS_SHAPE);
+            if (shape == StairsShape.STRAIGHT)
+            {
+                return facing == dir;
+            }
+            else if (shape == StairsShape.INNER_LEFT)
+            {
+                return facing == dir || facing.rotateYCCW() == dir;
+            }
+            else if (shape == StairsShape.INNER_RIGHT)
+            {
+                return facing == dir || facing.rotateY() == dir;
+            }
+            else
+            {
+                return false;
+            }
+        }
     };
 
     public FramedStairsBlock()
