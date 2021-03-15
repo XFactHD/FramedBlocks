@@ -51,6 +51,10 @@ public class FramedThreewayCornerBlock extends FramedBlock
         BlockState state = getDefaultState();
 
         Direction facing = context.getPlacementHorizontalFacing();
+        if (getBlockType() == BlockType.FRAMED_INNER_THREEWAY_CORNER)
+        {
+            facing = facing.rotateYCCW();
+        }
         state = state.with(PropertyHolder.FACING_HOR, facing);
 
         state = withWater(state, context.getWorld(), context.getPos());

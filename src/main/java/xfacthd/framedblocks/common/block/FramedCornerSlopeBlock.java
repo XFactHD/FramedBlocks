@@ -68,6 +68,10 @@ public class FramedCornerSlopeBlock extends FramedBlock
         BlockState state = getDefaultState();
 
         Direction facing = context.getPlacementHorizontalFacing();
+        if (getBlockType() == BlockType.FRAMED_INNER_CORNER_SLOPE && facing.getAxis() != Direction.Axis.Y)
+        {
+            facing = facing.rotateYCCW();
+        }
         state = state.with(PropertyHolder.FACING_HOR, facing);
 
         Direction side = context.getFace();
