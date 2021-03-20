@@ -1,12 +1,17 @@
 package xfacthd.framedblocks.common.datagen.providers;
 
 import com.mojang.datafixers.util.Pair;
+import net.minecraft.advancements.criterion.StatePropertiesPredicate;
 import net.minecraft.block.*;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.data.LootTableProvider;
 import net.minecraft.data.loot.BlockLootTables;
+import net.minecraft.item.ItemStack;
 import net.minecraft.loot.*;
+import net.minecraft.loot.conditions.BlockStateProperty;
+import net.minecraft.loot.functions.SetCount;
 import net.minecraft.state.properties.DoubleBlockHalf;
+import net.minecraft.state.properties.SlabType;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.registries.ForgeRegistries;
 import xfacthd.framedblocks.FramedBlocks;
@@ -51,10 +56,24 @@ public class FramedLootTableProvider extends LootTableProvider
             ForgeRegistries.BLOCKS.getValues()
                     .stream()
                     .filter(block -> block.getRegistryName().getNamespace().equals(FramedBlocks.MODID))
-                    .filter(block -> block != FBContent.blockFramedDoor)
+                    .filter(block -> block != FBContent.blockFramedDoor && block != FBContent.blockFramedDoubleSlab && block != FBContent.blockFramedDoublePanel)
                     .forEach(this::registerDropSelfLootTable);
 
             registerLootTable(FBContent.blockFramedDoor, block -> droppingWhen(block, DoorBlock.HALF, DoubleBlockHalf.LOWER));
+            registerLootTable(FBContent.blockFramedDoubleSlab, block -> droppingTwo(block, FBContent.blockFramedSlab));
+            registerLootTable(FBContent.blockFramedDoublePanel, block -> droppingTwo(block, FBContent.blockFramedPanel));
+            registerLootTable(FBContent.blockFramedDoubleSlope, block -> droppingTwo(block, FBContent.blockFramedSlope));
+        }
+
+        protected static LootTable.Builder droppingTwo(Block block, Block drop) {
+            return LootTable.builder().addLootPool(
+                    LootPool.builder().rolls(ConstantRange.of(1)).addEntry(
+                            withExplosionDecay(drop, ItemLootEntry.builder(block).acceptFunction(
+                                    SetCount.builder(ConstantRange.of(2))
+                                    )
+                            )
+                    )
+            );
         }
     }
 }

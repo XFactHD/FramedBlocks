@@ -37,7 +37,7 @@ public class FramedBlock extends Block implements IFramedBlock, IWaterLoggable
 
         this.blockType = blockType;
         shapes = blockType.generateShapes(getStateContainer().getValidStates());
-        if (blockType != BlockType.FRAMED_CUBE)
+        if (blockType.supportsWaterLogging())
         {
             setDefaultState(getDefaultState().with(BlockStateProperties.WATERLOGGED, false));
         }
@@ -46,7 +46,7 @@ public class FramedBlock extends Block implements IFramedBlock, IWaterLoggable
     @Override
     public ActionResultType onBlockActivated(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockRayTraceResult hit)
     {
-        return handleBlockActivated(world, pos, player, hand);
+        return handleBlockActivated(world, pos, player, hand, hit);
     }
 
     public BlockState updatePostPlacement(BlockState state, Direction facing, BlockState facingState, IWorld world, BlockPos pos, BlockPos facingPos)

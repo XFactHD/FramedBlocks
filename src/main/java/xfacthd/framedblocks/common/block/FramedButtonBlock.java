@@ -35,7 +35,7 @@ public class FramedButtonBlock extends WoodButtonBlock implements IFramedBlock
     @Override
     public final ActionResultType onBlockActivated(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockRayTraceResult hit)
     {
-        ActionResultType result = handleBlockActivated(world, pos, player, hand);
+        ActionResultType result = handleBlockActivated(world, pos, player, hand, hit);
         if (result.isSuccessOrConsume()) { return result; }
 
         return super.onBlockActivated(state, world, pos, player, hand, hit);

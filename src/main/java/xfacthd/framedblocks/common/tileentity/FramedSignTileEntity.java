@@ -116,10 +116,10 @@ public class FramedSignTileEntity extends FramedTileEntity
     }
 
     @Override
-    public void onDataPacket(NetworkManager net, SUpdateTileEntityPacket pkt)
+    protected boolean readFromDataPacket(CompoundNBT nbt)
     {
-        super.onDataPacket(net, pkt);
-        readFromNbt(pkt.getNbtCompound());
+        readFromNbt(nbt);
+        return super.readFromDataPacket(nbt);
     }
 
     public CompoundNBT getUpdateTag()

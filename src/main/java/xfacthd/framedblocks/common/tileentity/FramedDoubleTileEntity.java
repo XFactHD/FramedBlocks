@@ -1,0 +1,157 @@
+package xfacthd.framedblocks.common.tileentity;
+
+import net.minecraft.block.BlockState;
+import net.minecraft.block.Blocks;
+import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.nbt.NBTUtil;
+import net.minecraft.tileentity.TileEntityType;
+import net.minecraftforge.client.model.data.*;
+import xfacthd.framedblocks.client.util.FramedBlockData;
+
+public abstract class FramedDoubleTileEntity extends FramedTileEntity
+{
+    public static final ModelProperty<IModelData> DATA_LEFT = new ModelProperty<>();
+    public static final ModelProperty<IModelData> DATA_RIGHT = new ModelProperty<>();
+
+    private final IModelData multiModelData = new ModelDataMap.Builder().build();
+    private final IModelData modelData = new FramedBlockData();
+    protected ItemStack camoStack = ItemStack.EMPTY;
+    protected BlockState camoState = Blocks.AIR.getDefaultState();
+
+    public FramedDoubleTileEntity(TileEntityType<?> type) { super(type); }
+
+    @Override
+    public void setCamo(ItemStack camoStack, BlockState camoState, boolean secondary)
+    {
+        if (secondary)
+        {
+            int light = getLightValue();
+
+            this.camoStack = camoStack;
+            this.camoState = camoState;
+
+            markDirty();
+            if (getLightValue() != light)
+            {
+                doLightUpdate();
+            }
+            //noinspection ConstantConditions
+            world.notifyBlockUpdate(pos, getBlockState(), getBlockState(), 3);
+        }
+        else
+        {
+            super.setCamo(camoStack, camoState, false);
+        }
+    }
+
+    public BlockState getCamoStateTwo() { return camoState; }
+
+    public ItemStack getCamoStackTwo() { return camoStack; }
+
+    @Override
+    public int getLightValue()
+    {
+        int light = camoState.getLightValue();
+        if (light > 0) { return light; }
+        return super.getLightValue();
+    }
+
+    /*
+     * Sync
+     */
+
+    @Override
+    protected void writeToDataPacket(CompoundNBT nbt)
+    {
+        super.writeToDataPacket(nbt);
+
+        nbt.put("camo_stack_two", camoStack.write(new CompoundNBT()));
+        nbt.put("camo_state_two", NBTUtil.writeBlockState(camoState));
+    }
+
+    @Override
+    protected boolean readFromDataPacket(CompoundNBT nbt)
+    {
+        camoStack = ItemStack.read(nbt.getCompound("camo_stack_two"));
+
+        boolean needUpdate = false;
+        BlockState newState = NBTUtil.readBlockState(nbt.getCompound("camo_state_two"));
+        if (newState != camoState)
+        {
+            camoState = newState;
+
+            modelData.setData(FramedBlockData.WORLD, world);
+            modelData.setData(FramedBlockData.POS, pos);
+            modelData.setData(FramedBlockData.CAMO, camoState);
+
+            needUpdate = true;
+        }
+
+        return super.readFromDataPacket(nbt) || needUpdate;
+    }
+
+    @Override
+    public CompoundNBT getUpdateTag()
+    {
+        CompoundNBT nbt = super.getUpdateTag();
+
+        nbt.put("camo_stack_two", camoStack.write(new CompoundNBT()));
+        nbt.put("camo_state_two", NBTUtil.writeBlockState(camoState));
+
+        return nbt;
+    }
+
+    @Override
+    public void handleUpdateTag(BlockState state, CompoundNBT nbt)
+    {
+        super.handleUpdateTag(state, nbt);
+
+        camoStack = ItemStack.read(nbt.getCompound("camo_stack_two"));
+
+        BlockState newState = NBTUtil.readBlockState(nbt.getCompound("camo_state_two"));
+        if (newState != camoState)
+        {
+            camoState = newState;
+
+            modelData.setData(FramedBlockData.WORLD, world);
+            modelData.setData(FramedBlockData.POS, pos);
+            modelData.setData(FramedBlockData.CAMO, camoState);
+            requestModelDataUpdate();
+        }
+    }
+
+    /*
+     * Model data
+     */
+
+    @Override
+    public IModelData getModelData()
+    {
+        multiModelData.setData(DATA_LEFT, super.getModelData());
+        multiModelData.setData(DATA_RIGHT, modelData);
+        return multiModelData;
+    }
+
+    /*
+     * NBT stuff
+     */
+
+    @Override
+    public CompoundNBT write(CompoundNBT nbt)
+    {
+        nbt.put("camo_stack_two", camoStack.write(new CompoundNBT()));
+        nbt.put("camo_state_two", NBTUtil.writeBlockState(camoState));
+
+        return super.write(nbt);
+    }
+
+    @Override
+    public void read(BlockState state, CompoundNBT nbt)
+    {
+        super.read(state, nbt);
+
+        camoStack = ItemStack.read(nbt.getCompound("camo_stack_two"));
+        camoState = NBTUtil.readBlockState(nbt.getCompound("camo_state_two"));
+    }
+}

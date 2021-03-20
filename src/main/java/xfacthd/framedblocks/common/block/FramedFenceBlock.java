@@ -17,6 +17,7 @@ import xfacthd.framedblocks.common.tileentity.FramedTileEntity;
 
 import java.util.List;
 
+@SuppressWarnings("deprecation")
 public class FramedFenceBlock extends FenceBlock implements IFramedBlock
 {
     public FramedFenceBlock()
@@ -28,7 +29,7 @@ public class FramedFenceBlock extends FenceBlock implements IFramedBlock
     @Override
     public final ActionResultType onBlockActivated(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockRayTraceResult hit)
     {
-        ActionResultType result = handleBlockActivated(world, pos, player, hand);
+        ActionResultType result = handleBlockActivated(world, pos, player, hand, hit);
         if (result.isSuccessOrConsume()) { return result; }
 
         return super.onBlockActivated(state, world, pos, player, hand, hit);
@@ -44,7 +45,6 @@ public class FramedFenceBlock extends FenceBlock implements IFramedBlock
     }
 
     @Override
-    @SuppressWarnings("deprecation")
     public List<ItemStack> getDrops(BlockState state, LootContext.Builder builder)
     {
         return IFramedBlock.super.getDrops(super.getDrops(state, builder), builder);

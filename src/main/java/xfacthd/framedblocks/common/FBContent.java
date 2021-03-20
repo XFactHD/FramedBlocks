@@ -43,12 +43,18 @@ public class FBContent
     public static Block blockFramedLever;               //STATUS: Complete
     public static Block blockFramedSign;                //STATUS: Complete
     public static Block blockFramedWallSign;            //STATUS: Complete
+    public static Block blockFramedDoubleSlab;          //STATUS: Complete
+    public static Block blockFramedDoublePanel;         //STATUS: WIP
+    public static Block blockFramedDoubleSlope;         //STATUS: Missing model and TE impl
     public static Block blockFramedCollapsibleBlock;    //STATUS: Not implemented
 
     public static Item itemFramedHammer;
 
     public static TileEntityType<FramedTileEntity> tileTypeFramedBlock;
     public static TileEntityType<FramedSignTileEntity> tileTypeFramedSign;
+    public static TileEntityType<FramedDoubleSlabTileEntity> tileTypeDoubleFramedSlab;
+    public static TileEntityType<FramedDoublePanelTileEntity> tileTypeDoubleFramedPanel;
+    public static TileEntityType<FramedDoubleSlopeTileEntity> tileTypeDoubleFramedSlope;
 
     @SubscribeEvent
     public static void onRegisterBlocks(final RegistryEvent.Register<Block> event)
@@ -78,6 +84,9 @@ public class FBContent
         registry.register(blockFramedLever = new FramedLeverBlock());
         registry.register(blockFramedSign = new FramedSignBlock());
         registry.register(blockFramedWallSign = new FramedWallSignBlock());
+        registry.register(blockFramedDoubleSlab = new FramedDoubleSlabBlock());
+        registry.register(blockFramedDoublePanel = new FramedDoublePanelBlock());
+        registry.register(blockFramedDoubleSlope = new FramedDoubleSlopeBlock());
         //registry.register(blockFramedCollapsibleBlock = new FramedCollapsibleBlock());
     }
 
@@ -90,7 +99,7 @@ public class FBContent
         ForgeRegistries.BLOCKS.getValues()
                 .stream()
                 .filter(block -> block.getRegistryName().getNamespace().equals(FramedBlocks.MODID))
-                .filter(block -> block != blockFramedWallSign)
+                .filter(block -> ((IFramedBlock)block).getBlockType().hasBlockItem())
                 .forEach(block -> registry.register(((IFramedBlock)block).createItemBlock()));
 
         registry.register(itemFramedHammer = new FramedHammerItem());
@@ -103,12 +112,15 @@ public class FBContent
         Block[] validBlocks = ForgeRegistries.BLOCKS.getValues()
                 .stream()
                 .filter(block -> block.getRegistryName().getNamespace().equals(FramedBlocks.MODID))
-                .filter(block -> block != blockFramedSign && block != blockFramedWallSign)
+                .filter(block -> !((IFramedBlock)block).getBlockType().hasSpecialTile())
                 .toArray(Block[]::new);
 
         event.getRegistry().registerAll(
             tileTypeFramedBlock = createTileType(FramedTileEntity::new, "framed_tile", validBlocks),
-            tileTypeFramedSign = createTileType(FramedSignTileEntity::new, "framed_sign", blockFramedSign, blockFramedWallSign)
+            tileTypeFramedSign = createTileType(FramedSignTileEntity::new, "framed_sign", blockFramedSign, blockFramedWallSign),
+            tileTypeDoubleFramedSlab = createTileType(FramedDoubleSlabTileEntity::new, "framed_double_slab", blockFramedDoubleSlab),
+            tileTypeDoubleFramedPanel = createTileType(FramedDoublePanelTileEntity::new, "framed_double_panel", blockFramedDoublePanel),
+            tileTypeDoubleFramedSlope = createTileType(FramedDoubleSlopeTileEntity::new, "framed_double_slope", blockFramedDoubleSlope)
         );
     }
 

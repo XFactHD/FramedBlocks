@@ -206,6 +206,15 @@ public class FBClient
         //Framed Wall Sign
         replaceModelsSimple(FBContent.blockFramedWallSign, registry);
 
+        //Framed Double Slab
+        replaceModelsAdvanced(FBContent.blockFramedDoubleSlab, registry, FramedDoubleSlabModel::new, model -> model);
+
+        //Framed Double Panel
+        replaceModelsAdvanced(FBContent.blockFramedDoublePanel, registry, FramedDoublePanelModel::new, model -> model);
+
+        //Framed Double Slope
+        //replaceModelsAdvanced(FBContent.blockFramedDoubleSlope, registry, FramedDoubleSlopeModel::new, model -> model);
+
         //Framed Collapsible Block
         //replaceModelsSimple(FBContent.blockFramedCollapsibleBlock, registry, FramedCollapsibleBlockModel::new);
     }

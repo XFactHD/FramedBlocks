@@ -18,6 +18,7 @@ import xfacthd.framedblocks.common.tileentity.FramedTileEntity;
 import java.util.List;
 import java.util.function.BiPredicate;
 
+@SuppressWarnings("deprecation")
 public class FramedTrapDoorBlock extends TrapDoorBlock implements IFramedBlock
 {
     public static final BiPredicate<BlockState, Direction> CTM_PREDICATE = (state, dir) ->
@@ -42,7 +43,7 @@ public class FramedTrapDoorBlock extends TrapDoorBlock implements IFramedBlock
     @Override
     public final ActionResultType onBlockActivated(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockRayTraceResult hit)
     {
-        ActionResultType result = handleBlockActivated(world, pos, player, hand);
+        ActionResultType result = handleBlockActivated(world, pos, player, hand, hit);
         if (result.isSuccessOrConsume()) { return result; }
 
         return super.onBlockActivated(state, world, pos, player, hand, hit);
@@ -58,7 +59,6 @@ public class FramedTrapDoorBlock extends TrapDoorBlock implements IFramedBlock
     }
 
     @Override
-    @SuppressWarnings("deprecation")
     public List<ItemStack> getDrops(BlockState state, LootContext.Builder builder)
     {
         return IFramedBlock.super.getDrops(super.getDrops(state, builder), builder);

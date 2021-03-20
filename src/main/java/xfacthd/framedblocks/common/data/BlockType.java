@@ -36,6 +36,11 @@ public enum BlockType
     FRAMED_LEVER                (false),
     FRAMED_SIGN                 (false, (states) -> null),
     FRAMED_WALL_SIGN            (false, FramedWallSignBlock::generateShapes),
+    FRAMED_DOUBLE_SLAB          (false, (state, dir) -> dir.getAxis() == Direction.Axis.Y, VoxelShapes.fullCube()),
+    FRAMED_DOUBLE_PANEL         (false, FramedDoublePanelBlock.CTM_PREDICATE_PANEL, VoxelShapes.fullCube()),
+    FRAMED_DOUBLE_SLOPE         (false, FramedDoubleSlopeBlock.CTM_PREDICATE_SLOPE, VoxelShapes.fullCube()),
+    FRAMED_TORCH                (false),
+    FRAMED_WALL_TORCH           (false),
     FRAMED_COLLAPSIBLE_BLOCK    (true);
 
     private final boolean specialHitbox;
@@ -81,5 +86,29 @@ public enum BlockType
     public ImmutableMap<BlockState, VoxelShape> generateShapes(ImmutableList<BlockState> states)
     {
         return shapeGen.apply(states);
+    }
+
+    public boolean hasSpecialTile()
+    {
+        return this == FRAMED_SIGN ||
+               this == FRAMED_WALL_SIGN ||
+               this == FRAMED_DOUBLE_SLAB ||
+               this == FRAMED_DOUBLE_PANEL ||
+               this == FRAMED_DOUBLE_SLOPE;
+    }
+
+    public boolean hasBlockItem()
+    {
+        return this != FRAMED_WALL_SIGN &&
+               this != FRAMED_DOUBLE_SLAB &&
+               this != FRAMED_DOUBLE_PANEL;
+    }
+
+    public boolean supportsWaterLogging()
+    {
+        return this != FRAMED_CUBE &&
+               this != FRAMED_DOUBLE_SLAB &&
+               this != FRAMED_DOUBLE_PANEL &&
+               this != FRAMED_DOUBLE_SLOPE;
     }
 }

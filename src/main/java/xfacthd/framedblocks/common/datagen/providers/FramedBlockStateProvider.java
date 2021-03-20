@@ -47,6 +47,9 @@ public class FramedBlockStateProvider extends BlockStateProvider
         registerFramedLever();
         registerFramedSign();
         registerFramedWallSign();
+        registerFramedDoubleSlab();
+        registerDoublePanel();
+        registerDoubleSlope();
         registerFramedCollapsibleBlock();
     }
 
@@ -559,6 +562,25 @@ public class FramedBlockStateProvider extends BlockStateProvider
             int rotY = ((int)dir.getHorizontalAngle() + 180) % 360;
             return ConfiguredModel.builder().modelFile(sign).rotationY(rotY).uvLock(true).build();
         }, BlockStateProperties.WATERLOGGED);
+    }
+
+    private void registerFramedDoubleSlab()
+    {
+        ModelFile doubleSlab = models().getExistingFile(modLoc("framed_double_slab"));
+        simpleBlock(FBContent.blockFramedDoubleSlab, doubleSlab);
+    }
+
+    private void registerDoublePanel()
+    {
+        ModelFile doublePanel = models().getExistingFile(modLoc("framed_double_panel"));
+        simpleBlock(FBContent.blockFramedDoublePanel, doublePanel);
+    }
+
+    private void registerDoubleSlope()
+    {
+        ModelFile doubleSlope = models().getExistingFile(modLoc("framed_double_slope"));
+        simpleBlock(FBContent.blockFramedDoubleSlope, doubleSlope);
+        simpleBlockItem(FBContent.blockFramedDoubleSlope, doubleSlope);
     }
 
     private void registerFramedCollapsibleBlock()

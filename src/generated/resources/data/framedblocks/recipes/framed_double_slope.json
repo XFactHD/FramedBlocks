@@ -1,0 +1,14 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "FF"
+  ],
+  "key": {
+    "F": {
+      "item": "framedblocks:framed_slope"
+    }
+  },
+  "result": {
+    "item": "framedblocks:framed_double_slope"
+  }
+}

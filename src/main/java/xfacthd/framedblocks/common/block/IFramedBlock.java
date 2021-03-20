@@ -9,11 +9,14 @@ import net.minecraft.loot.LootParameters;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.*;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.BlockRayTraceResult;
 import net.minecraft.world.*;
 import net.minecraftforge.common.ToolType;
 import team.chisel.ctm.api.IFacade;
 import xfacthd.framedblocks.FramedBlocks;
+import xfacthd.framedblocks.client.util.DataHolder;
 import xfacthd.framedblocks.common.data.BlockType;
+import xfacthd.framedblocks.common.tileentity.FramedDoubleTileEntity;
 import xfacthd.framedblocks.common.tileentity.FramedTileEntity;
 
 import javax.annotation.Nonnull;
@@ -44,12 +47,12 @@ public interface IFramedBlock extends IFacade
         return item;
     }
 
-    default ActionResultType handleBlockActivated(World world, BlockPos pos, PlayerEntity player, Hand hand)
+    default ActionResultType handleBlockActivated(World world, BlockPos pos, PlayerEntity player, Hand hand, BlockRayTraceResult hit)
     {
         TileEntity te = world.getTileEntity(pos);
         if (te instanceof FramedTileEntity)
         {
-            return ((FramedTileEntity) te).handleInteraction(player, hand);
+            return ((FramedTileEntity) te).handleInteraction(player, hand, hit);
         }
         return ActionResultType.FAIL;
     }
@@ -74,6 +77,15 @@ public interface IFramedBlock extends IFacade
             {
                 return camoState.getSoundType();
             }
+
+            if (te instanceof FramedDoubleTileEntity)
+            {
+                camoState = ((FramedDoubleTileEntity) te).getCamoStateTwo();
+                if (!camoState.isAir())
+                {
+                    return camoState.getSoundType();
+                }
+            }
         }
         return ((Block)this).getSoundType(state);
     }
@@ -87,6 +99,15 @@ public interface IFramedBlock extends IFacade
             if (!camo.isEmpty())
             {
                 drops.add(camo);
+            }
+
+            if (te instanceof FramedDoubleTileEntity)
+            {
+                camo = ((FramedDoubleTileEntity) te).getCamoStackTwo();
+                if (!camo.isEmpty())
+                {
+                    drops.add(camo);
+                }
             }
         }
 

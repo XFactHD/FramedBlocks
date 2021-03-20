@@ -29,7 +29,7 @@ public class FramedWallBlock extends WallBlock implements IFramedBlock
     @Override
     public final ActionResultType onBlockActivated(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockRayTraceResult hit)
     {
-        return handleBlockActivated(world, pos, player, hand);
+        return handleBlockActivated(world, pos, player, hand, hit);
     }
 
     @Override
@@ -42,7 +42,6 @@ public class FramedWallBlock extends WallBlock implements IFramedBlock
     }
 
     @Override
-    @SuppressWarnings("deprecation")
     public List<ItemStack> getDrops(BlockState state, LootContext.Builder builder)
     {
         return IFramedBlock.super.getDrops(super.getDrops(state, builder), builder);

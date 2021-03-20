@@ -186,6 +186,12 @@ public class FramedRecipeProvider extends RecipeProvider
                 .addCriterion("hasFramedBlock", HAS_FRAMED_BLOCK)
                 .build(consumer);
 
+        ShapedRecipeBuilder.shapedRecipe(FBContent.blockFramedDoubleSlope, 1)
+                .patternLine("FF")
+                .key('F', FBContent.blockFramedSlope)
+                .addCriterion("hasFramedSlope", HAS_FRAMED_SLOPE)
+                .build(consumer);
+
         /*ShapedRecipeBuilder.shapedRecipe(FBContent.blockFramedCollapsibleBlock, 4)
                 .patternLine("FF")
                 .patternLine("FF")
