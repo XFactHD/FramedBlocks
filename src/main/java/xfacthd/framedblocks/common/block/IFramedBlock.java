@@ -118,4 +118,39 @@ public interface IFramedBlock extends IFacade
         }
         return Blocks.AIR.getDefaultState();
     }
+
+    //TODO: look into special casing certain interactions like slab <-> slab, panel <-> panel, panel <-> pillar, slab <-> stairs
+    default boolean isSideHidden(BlockState state, BlockState adjState, Direction side)
+    {
+        FramedTileEntity adjTile = null;
+        if (adjState.getBlock() instanceof IFramedBlock && ((IFramedBlock)adjState.getBlock()).getCtmPredicate().test(adjState, side.getOpposite()))
+        {
+            TileEntity te = DataHolder.world.getTileEntity(DataHolder.pos.offset(side.getOpposite()));
+            if (te instanceof FramedTileEntity)
+            {
+                adjTile = (FramedTileEntity)te;
+                adjState = adjTile.getCamoState(side.getOpposite());
+            }
+        }
+
+        if (adjState.isAir()) { return false; }
+
+        if (((IFramedBlock)state.getBlock()).getCtmPredicate().test(state, side))
+        {
+            TileEntity te = DataHolder.world.getTileEntity(DataHolder.pos);
+            if (te instanceof FramedTileEntity)
+            {
+                if (adjTile != null)
+                {
+                    return adjTile.getCamoState(side.getOpposite()) == ((FramedTileEntity)te).getCamoState(side);
+                }
+                else
+                {
+                    return ((FramedTileEntity)te).getCamoState(side) == adjState;
+                }
+            }
+        }
+
+        return false;
+    }
 }

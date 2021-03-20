@@ -75,6 +75,15 @@ public class FramedBlock extends Block implements IFramedBlock, IWaterLoggable
     }
 
     @Override
+    public boolean isSideInvisible(BlockState state, BlockState adjState, Direction side)
+    {
+        return isSideHidden(state, adjState, side);
+    }
+
+    @Override
+    public float getAmbientOcclusionLightValue(BlockState state, IBlockReader world, BlockPos pos) { return 1F; }
+
+    @Override
     public FluidState getFluidState(BlockState state)
     {
         if (isWaterLoggable() && state.get(BlockStateProperties.WATERLOGGED))

@@ -108,6 +108,20 @@ public class FramedTileEntity extends TileEntity
         return state.isOpaqueCube(world, pos);
     }
 
+    /**
+     * Checks if this block hides the given face on the given adjacent block, assumes the caller has
+     * checked that the corresponding face on this block fills the whole face (can be checked via the CTM_PREDICATE)
+     * @param adjState The adjacent BlockState
+     * @param face The face on the adjacent block
+     */
+    public boolean hidesAdjacentFace(BlockState adjState, Direction face) { return getCamoState(face.getOpposite()) == adjState; }
+
+    /**
+     * Used to return a different camo state depending on the given side
+     * @param side The blocks face, can return AIR if the face does not pass the CTM_PREDICATE
+     */
+    public BlockState getCamoState(Direction side) { return camoState; }
+
     public BlockState getCamoState() { return camoState; }
 
     public ItemStack getCamoStack() { return camoStack; }

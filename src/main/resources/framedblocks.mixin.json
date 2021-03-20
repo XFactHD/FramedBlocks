@@ -1,0 +1,16 @@
+{
+    "required": true,
+    "package": "xfacthd.framedblocks.client.util.mixin",
+    "compatibilityLevel": "JAVA_8",
+    "refmap": "framedblocks.refmap.json",
+    "mixins": [
+    ],
+    "client":[
+        "MixinBlock",
+        "MixinBreakableBlock"
+    ],
+    "injectors": {
+        "defaultRequire": 1
+    },
+    "minVersion": "0.8"
+}

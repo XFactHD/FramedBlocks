@@ -73,6 +73,12 @@ public class FramedDoorBlock extends DoorBlock implements IFramedBlock
     }
 
     @Override
+    public boolean isSideInvisible(BlockState state, BlockState adjState, Direction side)
+    {
+        return isSideHidden(state, adjState, side);
+    }
+
+    @Override
     public final boolean hasTileEntity(BlockState state) { return true; }
 
     @Override

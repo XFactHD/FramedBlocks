@@ -43,7 +43,11 @@ public class FBClient
                 .stream()
                 .filter(block -> block.getRegistryName().getNamespace().equals(FramedBlocks.MODID))
                 .forEach(block -> RenderTypeLookup.setRenderLayer(block, type ->
-                        type == RenderType.getSolid() || type == RenderType.getCutout() || type == RenderType.getCutoutMipped()));
+                        type == RenderType.getSolid() ||
+                        type == RenderType.getCutout() ||
+                        type == RenderType.getCutoutMipped() ||
+                        type == RenderType.getTranslucent()
+                ));
 
         ClientRegistry.bindTileEntityRenderer(FBContent.tileTypeFramedSign, FramedSignRenderer::new);
     }
