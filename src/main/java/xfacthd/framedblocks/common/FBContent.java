@@ -44,8 +44,8 @@ public class FBContent
     public static Block blockFramedSign;                //STATUS: Complete
     public static Block blockFramedWallSign;            //STATUS: Complete
     public static Block blockFramedDoubleSlab;          //STATUS: Complete
-    public static Block blockFramedDoublePanel;         //STATUS: WIP
-    public static Block blockFramedDoubleSlope;         //STATUS: Missing model and TE impl
+    public static Block blockFramedDoublePanel;         //STATUS: Complete
+    public static Block blockFramedDoubleSlope;         //STATUS: Complete
     public static Block blockFramedCollapsibleBlock;    //STATUS: Not implemented
 
     public static Item itemFramedHammer;

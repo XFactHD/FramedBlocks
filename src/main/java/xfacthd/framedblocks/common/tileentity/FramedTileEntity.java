@@ -43,6 +43,7 @@ public class FramedTileEntity extends TileEntity
             {
                 int light = getLightValue();
 
+                ItemStack camoStack = getCamoStack(hit);
                 if (!player.inventory.addItemStackToInventory(camoStack))
                 {
                     player.dropItem(camoStack, false);
@@ -110,8 +111,6 @@ public class FramedTileEntity extends TileEntity
         return state.isOpaqueCube(world, pos) || state.getBlock() instanceof AbstractGlassBlock; //TODO: find a better way to allow glass blocks
     }
 
-    protected BlockState getCamoState(BlockRayTraceResult hit) { return camoState; }
-
     protected void applyCamo(ItemStack camoStack, BlockState camoState, BlockRayTraceResult hit)
     {
         this.camoStack = camoStack;
@@ -148,7 +147,11 @@ public class FramedTileEntity extends TileEntity
      */
     public BlockState getCamoState(Direction side) { return camoState; }
 
+    protected BlockState getCamoState(BlockRayTraceResult hit) { return camoState; }
+
     public BlockState getCamoState() { return camoState; }
+
+    protected ItemStack getCamoStack(BlockRayTraceResult hit) { return camoStack; }
 
     public ItemStack getCamoStack() { return camoStack; }
 

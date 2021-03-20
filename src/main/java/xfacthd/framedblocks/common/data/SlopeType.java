@@ -14,4 +14,14 @@ public enum SlopeType implements IStringSerializable
 
     @Override
     public String getString() { return name; }
+
+    public SlopeType getOpposite()
+    {
+        switch (this)
+        {
+            case TOP: return BOTTOM;
+            case BOTTOM: return TOP;
+            default: throw new IllegalArgumentException("Can't get opposite of '" + getString() + "'!");
+        }
+    }
 }

@@ -16,14 +16,19 @@ public class FramedDoubleSlabTileEntity extends FramedDoubleTileEntity
     @Override
     protected BlockState getCamoState(BlockRayTraceResult hit)
     {
-        return MathHelper.frac(hit.getHitVec().getY()) >= .5F ? getCamoStateTwo() : getCamoState();
+        return hitSecondary(hit) ? getCamoStateTwo() : getCamoState();
+    }
+
+    @Override
+    protected ItemStack getCamoStack(BlockRayTraceResult hit)
+    {
+        return hitSecondary(hit) ? getCamoStackTwo() : getCamoStack();
     }
 
     @Override
     protected void applyCamo(ItemStack camoStack, BlockState camoState, BlockRayTraceResult hit)
     {
-        Vector3d vec = hit.getHitVec();
-        if (MathHelper.frac(vec.getY()) >= .5F)
+        if (hitSecondary(hit))
         {
             this.camoStack = camoStack;
             this.camoState = camoState;
@@ -32,6 +37,11 @@ public class FramedDoubleSlabTileEntity extends FramedDoubleTileEntity
         {
             super.applyCamo(camoStack, camoState, hit);
         }
+    }
+
+    private boolean hitSecondary(BlockRayTraceResult hit)
+    {
+        return hit.getFace() == Direction.UP || MathHelper.frac(hit.getHitVec().getY()) >= .5F;
     }
 
     @Override

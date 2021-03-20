@@ -213,7 +213,7 @@ public class FBClient
         replaceModelsAdvanced(FBContent.blockFramedDoublePanel, registry, FramedDoublePanelModel::new, model -> model);
 
         //Framed Double Slope
-        //replaceModelsAdvanced(FBContent.blockFramedDoubleSlope, registry, FramedDoubleSlopeModel::new, model -> model);
+        replaceModelsAdvanced(FBContent.blockFramedDoubleSlope, registry, FramedDoubleSlopeModel::new, model -> model);
 
         //Framed Collapsible Block
         //replaceModelsSimple(FBContent.blockFramedCollapsibleBlock, registry, FramedCollapsibleBlockModel::new);

@@ -22,6 +22,7 @@ import xfacthd.framedblocks.common.tileentity.FramedTileEntity;
 
 import java.util.function.BiPredicate;
 
+@SuppressWarnings("deprecation")
 public class FramedSlabBlock extends FramedBlock
 {
     public static final BiPredicate<BlockState, Direction> CTM_PREDICATE = (state, dir) ->
@@ -69,6 +70,9 @@ public class FramedSlabBlock extends FramedBlock
                     }
 
                     world.setBlockState(pos, FBContent.blockFramedDoubleSlab.getDefaultState());
+
+                    SoundType sound = FBContent.blockFramedCube.getSoundType(FBContent.blockFramedCube.getDefaultState());
+                    world.playSound(null, pos, sound.getPlaceSound(), SoundCategory.BLOCKS, (sound.getVolume() + 1.0F) / 2.0F, sound.getPitch() * 0.8F);
 
                     te = world.getTileEntity(pos);
                     if (te instanceof FramedDoubleTileEntity)

@@ -23,6 +23,7 @@ import xfacthd.framedblocks.common.util.Utils;
 
 import java.util.function.BiPredicate;
 
+@SuppressWarnings("deprecation")
 public class FramedPanelBlock extends FramedBlock
 {
     public static final BiPredicate<BlockState, Direction> CTM_PREDICATE = (state, dir) ->
@@ -78,6 +79,9 @@ public class FramedPanelBlock extends FramedBlock
                     Direction newFacing = (facing == Direction.NORTH || facing == Direction.EAST) ? facing : facing.getOpposite();
                     BlockState newState = FBContent.blockFramedDoublePanel.getDefaultState();
                     world.setBlockState(pos, newState.with(PropertyHolder.FACING_NE, newFacing));
+
+                    SoundType sound = FBContent.blockFramedCube.getSoundType(FBContent.blockFramedCube.getDefaultState());
+                    world.playSound(null, pos, sound.getPlaceSound(), SoundCategory.BLOCKS, (sound.getVolume() + 1.0F) / 2.0F, sound.getPitch() * 0.8F);
 
                     te = world.getTileEntity(pos);
                     if (te instanceof FramedDoubleTileEntity)

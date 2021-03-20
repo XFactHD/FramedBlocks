@@ -21,6 +21,12 @@ public class FramedDoublePanelTileEntity extends FramedDoubleTileEntity
     }
 
     @Override
+    protected ItemStack getCamoStack(BlockRayTraceResult hit)
+    {
+        return hitSecondary(hit) ? getCamoStackTwo() : getCamoStack();
+    }
+
+    @Override
     protected void applyCamo(ItemStack camoStack, BlockState camoState, BlockRayTraceResult hit)
     {
         if (hitSecondary(hit))
