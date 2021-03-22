@@ -34,11 +34,11 @@ public class FramedCornerSlopeBlock extends FramedBlock
     public static final BiPredicate<BlockState, Direction> CTM_PREDICATE_INNER = (state, dir) ->
     {
         CornerType type = state.get(PropertyHolder.CORNER_TYPE);
-        if (type == CornerType.TOP && dir == Direction.UP)
+        if ((type == CornerType.TOP || (type.isHorizontal() && type.isTop())) && dir == Direction.UP)
         {
             return true;
         }
-        else if (type == CornerType.BOTTOM && dir == Direction.DOWN)
+        else if ((type == CornerType.BOTTOM || (type.isHorizontal() && !type.isTop())) && dir == Direction.DOWN)
         {
             return true;
         }
@@ -68,7 +68,7 @@ public class FramedCornerSlopeBlock extends FramedBlock
         BlockState state = getDefaultState();
 
         Direction facing = context.getPlacementHorizontalFacing();
-        if (getBlockType() == BlockType.FRAMED_INNER_CORNER_SLOPE && facing.getAxis() != Direction.Axis.Y)
+        if (getBlockType() == BlockType.FRAMED_INNER_CORNER_SLOPE && context.getFace().getAxis() == Direction.Axis.Y)
         {
             facing = facing.rotateYCCW();
         }
