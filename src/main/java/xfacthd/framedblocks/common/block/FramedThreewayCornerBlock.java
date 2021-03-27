@@ -37,7 +37,11 @@ public class FramedThreewayCornerBlock extends FramedBlock
         else { return facing.rotateY() == dir; }
     };
 
-    public FramedThreewayCornerBlock(String name, BlockType type) { super(name, type); }
+    public FramedThreewayCornerBlock(String name, BlockType type)
+    {
+        super(name, type);
+        setDefaultState(getDefaultState().with(PropertyHolder.TOP, false));
+    }
 
     @Override
     protected void fillStateContainer(StateContainer.Builder<Block, BlockState> builder)
