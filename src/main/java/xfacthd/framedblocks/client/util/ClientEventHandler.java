@@ -23,6 +23,8 @@ public class ClientEventHandler
     @SubscribeEvent
     public static void onRenderBlockHighlight(final DrawHighlightEvent.HighlightBlock event)
     {
+        if (!ClientConfig.fancyHitboxes) { return; }
+
         BlockRayTraceResult result = event.getTarget();
         //noinspection ConstantConditions
         BlockState state = Minecraft.getInstance().world.getBlockState(result.getPos());
