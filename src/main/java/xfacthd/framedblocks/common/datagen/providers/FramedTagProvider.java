@@ -21,7 +21,7 @@ public class FramedTagProvider extends BlockTagsProvider
         getOrCreateBuilder(BlockTags.STAIRS).add(FBContent.blockFramedStairs);
         getOrCreateBuilder(BlockTags.WALLS).add(FBContent.blockFramedWall);
         getOrCreateBuilder(BlockTags.FENCES).add(FBContent.blockFramedFence);
-        //getOrCreateBuilder(BlockTags.DOORS).add(FBContent.blockFramedDoor);
-        //getOrCreateBuilder(BlockTags.TRAPDOORS).add(FBContent.blockFramedTrapDoor);
+        getOrCreateBuilder(BlockTags.DOORS).add(FBContent.blockFramedDoor);
+        getOrCreateBuilder(BlockTags.TRAPDOORS).add(FBContent.blockFramedTrapDoor);
     }
 }
