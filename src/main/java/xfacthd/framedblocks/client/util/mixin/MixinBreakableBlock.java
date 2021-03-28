@@ -12,7 +12,7 @@ import xfacthd.framedblocks.common.block.IFramedBlock;
 import xfacthd.framedblocks.common.tileentity.FramedTileEntity;
 
 @Mixin(BreakableBlock.class)
-public abstract class MixinBreakableBlock extends Block //TODO: check if this works in production
+public abstract class MixinBreakableBlock extends Block
 {
     public MixinBreakableBlock(Properties properties) { super(properties); }
 
@@ -21,7 +21,7 @@ public abstract class MixinBreakableBlock extends Block //TODO: check if this wo
     {
         if (adjState.getBlock() instanceof IFramedBlock && ((IFramedBlock)adjState.getBlock()).getCtmPredicate().test(adjState, side.getOpposite()))
         {
-            TileEntity te = DataHolder.world.getTileEntity(DataHolder.pos.offset(side));
+            TileEntity te = DataHolder.world.get().getTileEntity(DataHolder.pos.get().offset(side));
             if (te instanceof FramedTileEntity)
             {
                 if (((FramedTileEntity)te).hidesAdjacentFace(state, side))

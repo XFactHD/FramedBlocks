@@ -9,6 +9,6 @@ import xfacthd.framedblocks.client.util.mixin.MixinBreakableBlock;
  */
 public class DataHolder
 {
-    public static IBlockReader world;
-    public static BlockPos pos;
+    public static ThreadLocal<IBlockReader> world = new ThreadLocal<>();
+    public static ThreadLocal<BlockPos> pos = new ThreadLocal<>();
 }

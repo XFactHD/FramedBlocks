@@ -146,7 +146,7 @@ public interface IFramedBlock extends IFacade
         FramedTileEntity adjTile = null;
         if (adjState.getBlock() instanceof IFramedBlock && ((IFramedBlock)adjState.getBlock()).getCtmPredicate().test(adjState, side.getOpposite()))
         {
-            TileEntity te = DataHolder.world.getTileEntity(DataHolder.pos.offset(side.getOpposite()));
+            TileEntity te = DataHolder.world.get().getTileEntity(DataHolder.pos.get().offset(side.getOpposite()));
             if (te instanceof FramedTileEntity)
             {
                 adjTile = (FramedTileEntity)te;
@@ -158,7 +158,7 @@ public interface IFramedBlock extends IFacade
 
         if (((IFramedBlock)state.getBlock()).getCtmPredicate().test(state, side))
         {
-            TileEntity te = DataHolder.world.getTileEntity(DataHolder.pos);
+            TileEntity te = DataHolder.world.get().getTileEntity(DataHolder.pos.get());
             if (te instanceof FramedTileEntity)
             {
                 if (adjTile != null)
