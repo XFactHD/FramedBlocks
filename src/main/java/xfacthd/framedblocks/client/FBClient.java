@@ -7,7 +7,6 @@ import net.minecraft.client.renderer.*;
 import net.minecraft.client.renderer.model.IBakedModel;
 import net.minecraft.client.renderer.model.ModelResourceLocation;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.Direction;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraftforge.api.distmarker.Dist;
@@ -19,7 +18,7 @@ import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import net.minecraftforge.registries.ForgeRegistries;
 import xfacthd.framedblocks.FramedBlocks;
-import xfacthd.framedblocks.client.model.*;
+import xfacthd.framedblocks.client.model.v2.*;
 import xfacthd.framedblocks.client.render.FramedSignRenderer;
 import xfacthd.framedblocks.client.screen.FramedSignScreen;
 import xfacthd.framedblocks.common.FBContent;
@@ -83,163 +82,46 @@ public class FBClient
     {
         Map<ResourceLocation, IBakedModel> registry = event.getModelRegistry();
 
-        //Framed Cube
-        replaceModelsSimple(FBContent.blockFramedCube, registry);
-
-        //Framed Slope
-        replaceModelsAdvanced(FBContent.blockFramedSlope, registry,
-                (state, baseModel) ->
-                {
-                    Direction dir = state.get(PropertyHolder.FACING_HOR);
-                    SlopeType type = state.get(PropertyHolder.SLOPE_TYPE);
-                    return new FramedSlopeModel(baseModel, dir, type);
-                },
-                baseModel -> new FramedSlopeModel(baseModel, Direction.SOUTH, SlopeType.BOTTOM));
-
-        //Framed Corner Slope
-        replaceModelsAdvanced(FBContent.blockFramedCornerSlope, registry,
-                (state, baseModel) ->
-                {
-                    Direction dir = state.get(PropertyHolder.FACING_HOR);
-                    CornerType type = state.get(PropertyHolder.CORNER_TYPE);
-                    return new FramedCornerSlopeModel(baseModel, dir, type);
-                },
-                baseModel -> new FramedCornerSlopeModel(baseModel, Direction.SOUTH, CornerType.BOTTOM));
-
-        //Framed Inner Corner Slope
-        replaceModelsAdvanced(FBContent.blockFramedInnerCornerSlope, registry,
-                (state, baseModel) ->
-                {
-                    Direction dir = state.get(PropertyHolder.FACING_HOR);
-                    CornerType type = state.get(PropertyHolder.CORNER_TYPE);
-                    return new FramedInnerCornerSlopeModel(baseModel, dir, type);
-                },
-                baseModel -> new FramedInnerCornerSlopeModel(baseModel, Direction.SOUTH, CornerType.BOTTOM)
-        );
-
-        //Framed Prism Corner
-        replaceModelsAdvanced(FBContent.blockFramedPrismCorner, registry,
-                (state, baseModel) ->
-                {
-                    Direction dir = state.get(PropertyHolder.FACING_HOR);
-                    boolean top = state.get(PropertyHolder.TOP);
-                    return new FramedPrismCornerModel(baseModel, dir, top);
-                },
-                baseModel -> new FramedPrismCornerModel(baseModel, Direction.SOUTH, false)
-        );
-
-        //Framed Inner Prism Corner
-        replaceModelsAdvanced(FBContent.blockFramedInnerPrismCorner, registry,
-                (state, baseModel) ->
-                {
-                    Direction dir = state.get(PropertyHolder.FACING_HOR);
-                    boolean top = state.get(PropertyHolder.TOP);
-                    return new FramedInnerPrismCornerModel(baseModel, dir, top);
-                },
-                baseModel -> new FramedInnerPrismCornerModel(baseModel, Direction.SOUTH, false)
-        );
-
-        //Framed Threeway Corner
-        replaceModelsAdvanced(FBContent.blockFramedThreewayCorner, registry,
-                (state, baseModel) ->
-                {
-                    Direction dir = state.get(PropertyHolder.FACING_HOR);
-                    boolean top = state.get(PropertyHolder.TOP);
-                    return new FramedThreewayCornerModel(baseModel, dir, top);
-                },
-                baseModel -> new FramedThreewayCornerModel(baseModel, Direction.SOUTH, false)
-        );
-
-        //Framed Inner Threeway Corner
-        replaceModelsAdvanced(FBContent.blockFramedInnerThreewayCorner, registry,
-                (state, baseModel) ->
-                {
-                    Direction dir = state.get(PropertyHolder.FACING_HOR);
-                    boolean top = state.get(PropertyHolder.TOP);
-                    return new FramedInnerThreewayCornerModel(baseModel, dir, top);
-                },
-                baseModel -> new FramedInnerThreewayCornerModel(baseModel, Direction.SOUTH, false)
-        );
-
-        //Framed Slab
-        replaceModelsSimple(FBContent.blockFramedSlab, registry);
-
-        //Framed Panel
-        replaceModelsSimple(FBContent.blockFramedPanel, registry);
-
-        //Framed Corner Pillar
-        replaceModelsSimple(FBContent.blockFramedCornerPillar, registry);
-
-        //Framed Stairs
-        replaceModelsSimple(FBContent.blockFramedStairs, registry);
-
-        //Framed Wall
-        replaceModelsSimple(FBContent.blockFramedWall, registry);
-
-        //Framed Fence
-        replaceModelsSimple(FBContent.blockFramedFence, registry);
-
-        //Framed Gate
-        replaceModelsSimple(FBContent.blockFramedGate, registry);
-
-        //Framed Door
-        replaceModelsSimple(FBContent.blockFramedDoor, registry);
-
-        //Framed Trapdoor
-        replaceModelsSimple(FBContent.blockFramedTrapDoor, registry);
-
-        //Framed Pressure Plate
-        replaceModelsSimple(FBContent.blockFramedPressurePlate, registry);
-
-        //Framed Ladder
-        replaceModelsSimple(FBContent.blockFramedLadder, registry);
-
-        //Framed Button
-        replaceModelsSimple(FBContent.blockFramedButton, registry);
-
-        //Framed Lever
-        replaceModelsSimple(FBContent.blockFramedLever, registry, FramedLeverModel::new);
-
-        //Framed Sign
-        replaceModelsSimple(FBContent.blockFramedSign, registry);
-
-        //Framed Wall Sign
-        replaceModelsSimple(FBContent.blockFramedWallSign, registry);
-
-        //Framed Double Slab
-        replaceModelsAdvanced(FBContent.blockFramedDoubleSlab, registry, FramedDoubleSlabModel::new, model -> model);
-
-        //Framed Double Panel
-        replaceModelsAdvanced(FBContent.blockFramedDoublePanel, registry, FramedDoublePanelModel::new, model -> model);
-
-        //Framed Double Slope
-        replaceModelsAdvanced(FBContent.blockFramedDoubleSlope, registry, FramedDoubleSlopeModel::new, model -> model);
+        replaceModels(FBContent.blockFramedCube, registry, FramedCubeModelV2::new);
+        replaceModels(FBContent.blockFramedSlope, registry, FramedSlopeModelV2::new, FramedSlopeModelV2::new);
+        replaceModels(FBContent.blockFramedCornerSlope, registry, FramedCornerSlopeModelV2::new, FramedCornerSlopeModelV2::new);
+        replaceModels(FBContent.blockFramedInnerCornerSlope, registry, FramedInnerCornerSlopeModelV2::new, FramedInnerCornerSlopeModelV2::new);
+        replaceModels(FBContent.blockFramedPrismCorner, registry, FramedPrismCornerModelV2::new, FramedPrismCornerModelV2::new);
+        replaceModels(FBContent.blockFramedInnerPrismCorner, registry, FramedInnerPrismCornerModelV2::new, FramedInnerPrismCornerModelV2::new);
+        replaceModels(FBContent.blockFramedThreewayCorner, registry, FramedThreewayCornerModelV2::new, FramedThreewayCornerModelV2::new);
+        replaceModels(FBContent.blockFramedInnerThreewayCorner, registry, FramedInnerThreewayCornerModelV2::new, FramedInnerThreewayCornerModelV2::new);
+        replaceModels(FBContent.blockFramedSlab, registry, FramedSlabModelV2::new);
+        replaceModels(FBContent.blockFramedPanel, registry, FramedPanelModelV2::new);
+        replaceModels(FBContent.blockFramedCornerPillar, registry, FramedCornerPillarModelV2::new);
+        replaceModels(FBContent.blockFramedStairs, registry, FramedStairsModelV2::new);
+        replaceModels(FBContent.blockFramedWall, registry, FramedWallModelV2::new);
+        replaceModels(FBContent.blockFramedFence, registry, FramedFenceModelV2::new);
+        replaceModels(FBContent.blockFramedGate, registry, FramedFenceGateModelV2::new);
+        replaceModels(FBContent.blockFramedDoor, registry, FramedDoorModelV2::new);
+        replaceModels(FBContent.blockFramedTrapDoor, registry, FramedTrapDoorModelV2::new);
+        replaceModels(FBContent.blockFramedPressurePlate, registry, FramedPressurePlateModelV2::new);
+        replaceModels(FBContent.blockFramedLadder, registry, FramedLadderModelV2::new);
+        replaceModels(FBContent.blockFramedButton, registry, FramedButtonModelV2::new);
+        replaceModels(FBContent.blockFramedLever, registry, FramedLeverModelV2::new);
+        replaceModels(FBContent.blockFramedSign, registry, FramedSignModelV2::new);
+        replaceModels(FBContent.blockFramedWallSign, registry, FramedWallSignModelV2::new);
+        replaceModels(FBContent.blockFramedDoubleSlab, registry, FramedDoubleSlabModel::new);
+        replaceModels(FBContent.blockFramedDoublePanel, registry, FramedDoublePanelModel::new);
+        replaceModels(FBContent.blockFramedDoubleSlope, registry, FramedDoubleSlopeModel::new);
 
         //Framed Collapsible Block
         //replaceModelsSimple(FBContent.blockFramedCollapsibleBlock, registry, FramedCollapsibleBlockModel::new);
     }
 
-    private static void replaceModelsSimple(Block block, Map<ResourceLocation, IBakedModel> models)
+    private static void replaceModels(Block block, Map<ResourceLocation, IBakedModel> models,
+                                      BiFunction<BlockState, IBakedModel, IBakedModel> blockModelGen)
     {
-        replaceModelsSimple(block, models, FramedBlockModel::new);
+        replaceModels(block, models, blockModelGen, model -> model);
     }
 
-    private static void replaceModelsSimple(Block block, Map<ResourceLocation, IBakedModel> models,
-                                            BiFunction<BlockType, IBakedModel, IBakedModel> blockModelGen)
-    {
-        BlockType type = ((IFramedBlock)block).getBlockType();
-        for (BlockState state : block.getStateContainer().getValidStates())
-        {
-            ResourceLocation location = BlockModelShapes.getModelLocation(state);
-            IBakedModel baseModel = models.get(location);
-            IBakedModel replacement = blockModelGen.apply(type, baseModel);
-            models.put(location, replacement);
-        }
-    }
-
-    private static void replaceModelsAdvanced(Block block, Map<ResourceLocation, IBakedModel> models,
-                                              BiFunction<BlockState, IBakedModel, IBakedModel> blockModelGen,
-                                              Function<IBakedModel, IBakedModel> itemModelGen)
+    private static void replaceModels(Block block, Map<ResourceLocation, IBakedModel> models,
+                                      BiFunction<BlockState, IBakedModel, IBakedModel> blockModelGen,
+                                      Function<IBakedModel, IBakedModel> itemModelGen)
     {
         for (BlockState state : block.getStateContainer().getValidStates())
         {
@@ -251,8 +133,7 @@ public class FBClient
 
         //noinspection ConstantConditions
         ResourceLocation location = new ModelResourceLocation(block.getRegistryName(), "inventory");
-        IBakedModel baseModel = models.get(location);
-        IBakedModel replacement = itemModelGen.apply(baseModel);
+        IBakedModel replacement = itemModelGen.apply(models.get(location));
         models.put(location, replacement);
     }
 

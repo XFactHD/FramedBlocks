@@ -1,4 +1,4 @@
-package xfacthd.framedblocks.client.model;
+package xfacthd.framedblocks.client.model.v1;
 
 import com.google.common.collect.*;
 import net.minecraft.block.BlockState;
@@ -15,6 +15,7 @@ import net.minecraftforge.client.MinecraftForgeClient;
 import net.minecraftforge.client.model.data.EmptyModelData;
 import net.minecraftforge.client.model.data.IModelData;
 import xfacthd.framedblocks.FramedBlocks;
+import xfacthd.framedblocks.client.model.BakedModelProxy;
 import xfacthd.framedblocks.client.util.*;
 import xfacthd.framedblocks.common.data.BlockType;
 

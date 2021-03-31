@@ -4,6 +4,7 @@ import net.minecraft.client.renderer.model.BakedQuad;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.client.renderer.vertex.VertexFormatElement;
 import net.minecraft.util.Direction;
+import net.minecraft.util.math.MathHelper;
 import net.minecraftforge.client.model.pipeline.LightUtil;
 
 import java.util.Arrays;
@@ -151,6 +152,63 @@ public class ModelUtils
             }
         }
     }
+
+    /**
+     * Maps a x/z coordinate 'xzto' between the given x/z coordinates 'xzf1' and 'xzf2'
+     * onto the u range they occupy as given by 'u1' and 'u2' and calculates the
+     * u value corresponding to the value of 'xzto'
+     * @param xzf1 The left X/Z coordinate
+     * @param xzf2 The right X/Z coordinate
+     * @param xzto The target X/Z coordinate, must lie between xzf1 and xzf2
+     * @param u1 The left U texture coordinate
+     * @param u2 The right U texture coordinate
+     * @param invert Wether the coordinates grow in the opposite direction of the texture coordinates (true for quads pointing north or east)
+     */
+    public static float remapU(float xzf1, float xzf2, float xzto, float u1, float u2, boolean invert)
+    {
+        float xzMin = Math.min(xzf1, xzf2);
+        float xzMax = Math.max(xzf1, xzf2);
+
+        float uMin = Math.min(u1, u2);
+        float uMax = Math.max(u1, u2);
+
+        if (xzto == xzMin) { return invert ? uMax : uMin; }
+        if (xzto == xzMax) { return invert ? uMin : uMax; }
+
+        float mult = (xzto - xzMin) / (xzMax - xzMin);
+        if (invert) { mult = 1F - mult; }
+        return MathHelper.lerp(mult, uMin, uMax);
+    }
+
+    /**
+     * Maps a y coordinate 'yto' between the given y coordinates 'yf1' and 'yf2'
+     * onto the v range they occupy as given by 'v1' and 'v2' and calculates the
+     * v value corresponding to the value of 'yto'
+     * @param yf1 The bottom Y coordinate
+     * @param yf2 The top Y coordinate
+     * @param yto The target Y coordinate, must lie between yf1 and yf2
+     * @param v1 The bottom V texture coordinate
+     * @param v2 The top V texture coordinate
+     * @param invert Wether the coordinates grow in the opposite direction of the texture coordinates (true for all quads except thos pointing up)
+     */
+    public static float remapV(float yf1, float yf2, float yto, float v1, float v2, boolean invert)
+    {
+        float yMin = Math.min(yf1, yf2);
+        float yMax = Math.max(yf1, yf2);
+
+        float vMin = Math.min(v1, v2);
+        float vMax = Math.max(v1, v2);
+
+        //Return values "flipped" because y value grows up while v value grows down
+        if (yto == yMin) { return invert ? vMax : vMin; }
+        if (yto == yMax) { return invert ? vMin : vMax; }
+
+        float mult = (yto - yMin) / (yMax - yMin);
+        if (invert) { mult = 1F - mult; }
+        return MathHelper.lerp(mult, vMin, vMax);
+    }
+
+
 
     public interface VertexDataConsumer
     {

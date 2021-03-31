@@ -1,15 +1,17 @@
-package xfacthd.framedblocks.client.model;
+package xfacthd.framedblocks.client.model.v2;
 
 import net.minecraft.block.BlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.BlockRendererDispatcher;
 import net.minecraft.client.renderer.model.BakedQuad;
 import net.minecraft.client.renderer.model.IBakedModel;
+import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.util.Direction;
 import net.minecraft.util.Tuple;
 import net.minecraftforge.client.model.data.EmptyModelData;
 import net.minecraftforge.client.model.data.IModelData;
 import xfacthd.framedblocks.client.model.BakedModelProxy;
+import xfacthd.framedblocks.client.util.FramedBlockData;
 import xfacthd.framedblocks.common.tileentity.FramedDoubleTileEntity;
 
 import javax.annotation.Nonnull;
@@ -39,6 +41,23 @@ public abstract class FramedDoubleBlockModel extends BakedModelProxy
         quads.addAll(models.getB().getQuads(dummyStates.getB(), side, rand, dataRight != null ? dataRight : EmptyModelData.INSTANCE));
 
         return quads;
+    }
+
+    @Override
+    @SuppressWarnings({"deprecation", "ConstantConditions"})
+    public TextureAtlasSprite getParticleTexture(@Nonnull IModelData data)
+    {
+        IModelData innerData = data.getData(FramedDoubleTileEntity.DATA_LEFT);
+        if (innerData != null && !innerData.getData(FramedBlockData.CAMO).isAir())
+        {
+            return models.getA().getParticleTexture(innerData);
+        }
+        innerData = data.getData(FramedDoubleTileEntity.DATA_RIGHT);
+        if (innerData != null && !innerData.getData(FramedBlockData.CAMO).isAir())
+        {
+            return models.getB().getParticleTexture(innerData);
+        }
+        return baseModel.getParticleTexture();
     }
 
     protected abstract Tuple<BlockState, BlockState> getDummyStates();

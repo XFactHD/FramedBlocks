@@ -1,4 +1,4 @@
-package xfacthd.framedblocks.client.model;
+package xfacthd.framedblocks.client.model.v1;
 
 import com.google.common.collect.ImmutableList;
 import net.minecraft.block.BlockState;
