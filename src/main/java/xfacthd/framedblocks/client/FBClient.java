@@ -22,10 +22,7 @@ import xfacthd.framedblocks.client.model.v2.*;
 import xfacthd.framedblocks.client.render.FramedSignRenderer;
 import xfacthd.framedblocks.client.screen.FramedSignScreen;
 import xfacthd.framedblocks.common.FBContent;
-import xfacthd.framedblocks.common.block.IFramedBlock;
-import xfacthd.framedblocks.common.data.*;
-import xfacthd.framedblocks.common.tileentity.FramedSignTileEntity;
-import xfacthd.framedblocks.common.tileentity.FramedTileEntity;
+import xfacthd.framedblocks.common.tileentity.*;
 
 import java.util.Map;
 import java.util.function.BiFunction;
@@ -52,6 +49,7 @@ public class FBClient
     }
 
     @SubscribeEvent
+    @SuppressWarnings({"ConstantConditions", "deprecation"})
     public static void onBlockColors(final ColorHandlerEvent.Block event)
     {
         Block[] blocks = ForgeRegistries.BLOCKS.getValues()
@@ -69,7 +67,17 @@ public class FBClient
                     BlockState camoState = ((FramedTileEntity) te).getCamoState();
                     if (!camoState.isAir())
                     {
-                        return event.getBlockColors().getColor(camoState, world, pos, tintIndex);
+                        int color = event.getBlockColors().getColor(camoState, world, pos, tintIndex);
+                        if (color != -1) { return color; }
+                    }
+
+                    if (te instanceof FramedDoubleTileEntity)
+                    {
+                        camoState = ((FramedDoubleTileEntity) te).getCamoStateTwo();
+                        if (!camoState.isAir())
+                        {
+                            return event.getBlockColors().getColor(camoState, world, pos, tintIndex);
+                        }
                     }
                 }
             }
