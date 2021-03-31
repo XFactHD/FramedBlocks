@@ -81,13 +81,48 @@ public class ModelUtils
         int[] vertexData = quad.getVertexData();
         vertexData = Arrays.copyOf(vertexData, vertexData.length);
 
-        return new BakedQuad(
+        BakedQuad dupeQuad = new BakedQuad(
                 vertexData,
                 quad.getTintIndex(),
                 quad.getFace(),
                 quad.getSprite(),
                 quad.applyDiffuseLighting()
         );
+
+        ModelUtils.modifyQuad(dupeQuad, (pos, color, uv, light, normal) -> unmirrorUVs(uv));
+        return dupeQuad;
+    }
+
+    /**
+     * Unmirrors the UV coordinates if needed. This is the case for eg. grass and sand blocks
+     */
+    private static void unmirrorUVs(float[][] uv)
+    {
+        if (uv[0][0] > uv[2][0])
+        {
+            float temp = uv[0][0];
+            uv[0][0] = uv[2][0];
+            uv[2][0] = temp;
+        }
+        if (uv[1][0] > uv[3][0])
+        {
+            float temp = uv[1][0];
+            uv[1][0] = uv[3][0];
+            uv[3][0] = temp;
+        }
+
+        if (uv[0][1] > uv[2][1])
+        {
+            float temp = uv[0][1];
+            uv[0][1] = uv[2][1];
+            uv[2][1] = temp;
+        }
+        if (uv[3][1] > uv[1][1])
+        {
+            float temp = uv[1][1];
+            uv[1][1] = uv[3][1];
+            uv[3][1] = temp;
+        }
     }
 
     public static Direction findHorizontalFacing(BakedQuad quad)
@@ -189,7 +224,7 @@ public class ModelUtils
      * @param yto The target Y coordinate, must lie between yf1 and yf2
      * @param v1 The bottom V texture coordinate
      * @param v2 The top V texture coordinate
-     * @param invert Wether the coordinates grow in the opposite direction of the texture coordinates (true for all quads except thos pointing up)
+     * @param invert Wether the coordinates grow in the opposite direction of the texture coordinates (true for all quads except those pointing up)
      */
     public static float remapV(float yf1, float yf2, float yto, float v1, float v2, boolean invert)
     {
@@ -199,7 +234,6 @@ public class ModelUtils
         float vMin = Math.min(v1, v2);
         float vMax = Math.max(v1, v2);
 
-        //Return values "flipped" because y value grows up while v value grows down
         if (yto == yMin) { return invert ? vMax : vMin; }
         if (yto == yMax) { return invert ? vMin : vMax; }
 
