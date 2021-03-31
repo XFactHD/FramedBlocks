@@ -15,7 +15,7 @@
               "function": "minecraft:explosion_decay"
             }
           ],
-          "name": "minecraft:air"
+          "name": "framedblocks:framed_panel"
         }
       ]
     }

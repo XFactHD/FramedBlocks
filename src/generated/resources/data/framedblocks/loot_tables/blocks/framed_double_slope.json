@@ -6,16 +6,12 @@
       "entries": [
         {
           "type": "minecraft:item",
-          "functions": [
-            {
-              "function": "minecraft:set_count",
-              "count": 2
-            },
-            {
-              "function": "minecraft:explosion_decay"
-            }
-          ],
           "name": "framedblocks:framed_double_slope"
+        }
+      ],
+      "conditions": [
+        {
+          "condition": "minecraft:survives_explosion"
         }
       ]
     }
