@@ -33,6 +33,7 @@ public class FramedBlockStateProvider extends BlockStateProvider
         registerFramedThreewayCorner();
         registerFramedInnerThreewayCorner();
         registerFramedSlab();
+        registerFramedSlabEdge();
         registerFramedCornerPillar();
         registerFramedPanel();
         registerFramedStairs();
@@ -199,6 +200,20 @@ public class FramedBlockStateProvider extends BlockStateProvider
                 BlockStateProperties.WATERLOGGED);
 
         simpleBlockItem(FBContent.blockFramedSlab, bottomSlab);
+    }
+
+    private void registerFramedSlabEdge()
+    {
+        ModelFile bottomSlab = models().getExistingFile(modLoc("framed_slab_edge_bottom"));
+        ModelFile topSlab = models().getExistingFile(modLoc("framed_slab_edge_top"));
+
+        getVariantBuilder(FBContent.blockFramedSlabEdge).forAllStatesExcept(state ->
+        {
+            int rotY = (int)(state.get(PropertyHolder.FACING_HOR).getHorizontalAngle() + 180) % 360;
+            return ConfiguredModel.builder().modelFile(state.get(PropertyHolder.TOP) ? topSlab : bottomSlab).rotationY(rotY).uvLock(true).build();
+        }, BlockStateProperties.WATERLOGGED);
+
+        simpleBlockItem(FBContent.blockFramedSlabEdge, bottomSlab);
     }
 
     private void registerFramedPanel()
