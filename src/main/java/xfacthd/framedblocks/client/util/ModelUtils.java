@@ -91,14 +91,7 @@ public class ModelUtils
 
     public static Direction findHorizontalFacing(BakedQuad quad)
     {
-        int[] vertexData = quad.getVertexData();
-        float[][] normal = new float[4][3];
-
-        int elem = ModelUtils.findElement(VertexFormatElement.Usage.NORMAL, 0);
-        for (int vert = 0; vert < 4; vert++)
-        {
-            LightUtil.unpack(vertexData, normal[vert], DefaultVertexFormats.BLOCK, vert, elem);
-        }
+        float[][] normal = unpackElement(quad, VertexFormatElement.Usage.NORMAL, 0);
 
         float nX = normal[0][0];
         float nZ = normal[0][2];
@@ -112,14 +105,7 @@ public class ModelUtils
 
     public static boolean isFacingTowards(BakedQuad quad, Direction dir)
     {
-        int[] vertexData = quad.getVertexData();
-        float[][] normal = new float[4][3];
-
-        int elem = ModelUtils.findElement(VertexFormatElement.Usage.NORMAL, 0);
-        for (int vert = 0; vert < 4; vert++)
-        {
-            LightUtil.unpack(vertexData, normal[vert], DefaultVertexFormats.BLOCK, vert, elem);
-        }
+        float[][] normal = unpackElement(quad, VertexFormatElement.Usage.NORMAL, 0);
 
         float nX = normal[0][0];
         float nY = normal[0][1];
