@@ -61,12 +61,14 @@ public class FramedSlabBlock extends FramedBlock
                 {
                     BlockState camoState = Blocks.AIR.getDefaultState();
                     ItemStack camoStack = ItemStack.EMPTY;
+                    boolean glowing = false;
 
                     TileEntity te = world.getTileEntity(pos);
                     if (te instanceof FramedTileEntity)
                     {
                         camoState = ((FramedTileEntity) te).getCamoState();
                         camoStack = ((FramedTileEntity) te).getCamoStack();
+                        glowing = ((FramedTileEntity) te).isGlowing();
                     }
 
                     world.setBlockState(pos, FBContent.blockFramedDoubleSlab.getDefaultState());
@@ -78,6 +80,7 @@ public class FramedSlabBlock extends FramedBlock
                     if (te instanceof FramedDoubleTileEntity)
                     {
                         ((FramedDoubleTileEntity) te).setCamo(camoStack, camoState, top);
+                        ((FramedDoubleTileEntity) te).setGlowing(glowing);
                     }
                 }
                 return ActionResultType.func_233537_a_(world.isRemote());

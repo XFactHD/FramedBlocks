@@ -68,12 +68,14 @@ public class FramedPanelBlock extends FramedBlock
                 {
                     BlockState camoState = Blocks.AIR.getDefaultState();
                     ItemStack camoStack = ItemStack.EMPTY;
+                    boolean glowing = false;
 
                     TileEntity te = world.getTileEntity(pos);
                     if (te instanceof FramedTileEntity)
                     {
                         camoState = ((FramedTileEntity) te).getCamoState();
                         camoStack = ((FramedTileEntity) te).getCamoStack();
+                        glowing = ((FramedTileEntity) te).isGlowing();
                     }
 
                     Direction newFacing = (facing == Direction.NORTH || facing == Direction.EAST) ? facing : facing.getOpposite();
@@ -87,6 +89,7 @@ public class FramedPanelBlock extends FramedBlock
                     if (te instanceof FramedDoubleTileEntity)
                     {
                         ((FramedDoubleTileEntity) te).setCamo(camoStack, camoState, facing != newFacing);
+                        ((FramedDoubleTileEntity) te).setGlowing(glowing);
                     }
                 }
                 return ActionResultType.func_233537_a_(world.isRemote());

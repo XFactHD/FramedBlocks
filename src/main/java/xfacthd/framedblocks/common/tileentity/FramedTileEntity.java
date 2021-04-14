@@ -155,6 +155,25 @@ public class FramedTileEntity extends TileEntity
 
     public ItemStack getCamoStack() { return camoStack; }
 
+    public void setGlowing(boolean glowing)
+    {
+        if (this.glowing != glowing)
+        {
+            int oldLight = getLightValue();
+
+            this.glowing = glowing;
+
+            if (oldLight != getLightValue())
+            {
+                doLightUpdate();
+            }
+            //noinspection ConstantConditions
+            world.notifyBlockUpdate(pos, getBlockState(), getBlockState(), 3);
+        }
+    }
+
+    public boolean isGlowing() { return glowing; }
+
     public int getLightValue()
     {
         if (glowing) { return 15; }
