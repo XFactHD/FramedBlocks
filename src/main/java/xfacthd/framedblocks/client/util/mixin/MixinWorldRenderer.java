@@ -22,6 +22,7 @@ public class MixinWorldRenderer
     @Inject(method = "renderBlockLayer", at = @At(value = "INVOKE", shift = At.Shift.BEFORE, target = "Lcom/mojang/blaze3d/systems/RenderSystem;clearCurrentColor()V"))
     private void renderTransparentLayer(RenderType layer, MatrixStack matrix, double camX, double camY, double camZ, CallbackInfo ci)
     {
+        if (layer != RenderType.getTranslucent()) { return; }
         GhostBlockRenderer.drawGhostBlock(renderTypeTextures.getBufferSource(), matrix);
     }
 }
