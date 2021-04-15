@@ -52,6 +52,7 @@ public class FramedBlockStateProvider extends BlockStateProvider
         registerDoublePanel();
         registerDoubleSlope();
         registerFramedCollapsibleBlock();
+        registerFramedGhostBlock();
     }
 
     private void registerFramedCube()
@@ -601,5 +602,11 @@ public class FramedBlockStateProvider extends BlockStateProvider
     private void registerFramedCollapsibleBlock()
     {
 
+    }
+
+    private void registerFramedGhostBlock()
+    {
+        ModelFile cube = models().cubeAll("framed_ghost_block", modLoc("block/framed_ghost_block"));
+        simpleBlock(FBContent.blockFramedGhostBlock, cube);
     }
 }

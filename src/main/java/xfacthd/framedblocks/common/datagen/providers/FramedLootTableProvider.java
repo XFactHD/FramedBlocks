@@ -52,7 +52,11 @@ public class FramedLootTableProvider extends LootTableProvider
             ForgeRegistries.BLOCKS.getValues()
                     .stream()
                     .filter(block -> block.getRegistryName().getNamespace().equals(FramedBlocks.MODID))
-                    .filter(block -> block != FBContent.blockFramedDoor && block != FBContent.blockFramedDoubleSlab && block != FBContent.blockFramedDoublePanel)
+                    .filter(block -> block != FBContent.blockFramedDoor &&
+                            block != FBContent.blockFramedDoubleSlab &&
+                            block != FBContent.blockFramedDoublePanel &&
+                            block != FBContent.blockFramedGhostBlock
+                    )
                     .forEach(this::registerDropSelfLootTable);
 
             registerLootTable(FBContent.blockFramedDoor, block -> droppingWhen(block, DoorBlock.HALF, DoubleBlockHalf.LOWER));

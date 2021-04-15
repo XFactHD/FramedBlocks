@@ -22,6 +22,7 @@ import xfacthd.framedblocks.client.model.v2.*;
 import xfacthd.framedblocks.client.render.FramedSignRenderer;
 import xfacthd.framedblocks.client.screen.FramedSignScreen;
 import xfacthd.framedblocks.common.FBContent;
+import xfacthd.framedblocks.common.block.IFramedBlock;
 import xfacthd.framedblocks.common.tileentity.*;
 
 import java.util.Map;
@@ -38,12 +39,14 @@ public class FBClient
         ForgeRegistries.BLOCKS.getValues()
                 .stream()
                 .filter(block -> block.getRegistryName().getNamespace().equals(FramedBlocks.MODID))
+                .filter(block -> block instanceof IFramedBlock)
                 .forEach(block -> RenderTypeLookup.setRenderLayer(block, type ->
                         type == RenderType.getSolid() ||
                         type == RenderType.getCutout() ||
                         type == RenderType.getCutoutMipped() ||
                         type == RenderType.getTranslucent()
                 ));
+        RenderTypeLookup.setRenderLayer(FBContent.blockFramedGhostBlock, RenderType.getTranslucent());
 
         ClientRegistry.bindTileEntityRenderer(FBContent.tileTypeFramedSign, FramedSignRenderer::new);
     }
@@ -55,6 +58,7 @@ public class FBClient
         Block[] blocks = ForgeRegistries.BLOCKS.getValues()
                 .stream()
                 .filter(block -> block.getRegistryName().getNamespace().equals(FramedBlocks.MODID))
+                .filter(block -> block instanceof IFramedBlock)
                 .toArray(Block[]::new);
 
         event.getBlockColors().register((state, world, pos, tintIndex) ->

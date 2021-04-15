@@ -48,6 +48,7 @@ public class FBContent
     public static Block blockFramedDoublePanel;         //STATUS: Complete
     public static Block blockFramedDoubleSlope;         //STATUS: Complete
     public static Block blockFramedCollapsibleBlock;    //STATUS: Not implemented
+    public static Block blockFramedGhostBlock;          //STATUS: Complete
 
     public static Item itemFramedHammer;
 
@@ -90,6 +91,7 @@ public class FBContent
         registry.register(blockFramedDoublePanel = new FramedDoublePanelBlock());
         registry.register(blockFramedDoubleSlope = new FramedDoubleSlopeBlock());
         //registry.register(blockFramedCollapsibleBlock = new FramedCollapsibleBlock());
+        registry.register(blockFramedGhostBlock = new FramedGhostBlock());
     }
 
     @SubscribeEvent
@@ -101,6 +103,7 @@ public class FBContent
         ForgeRegistries.BLOCKS.getValues()
                 .stream()
                 .filter(block -> block.getRegistryName().getNamespace().equals(FramedBlocks.MODID))
+                .filter(block -> block instanceof IFramedBlock)
                 .filter(block -> ((IFramedBlock)block).getBlockType().hasBlockItem())
                 .forEach(block -> registry.register(((IFramedBlock)block).createItemBlock()));
 
@@ -114,6 +117,7 @@ public class FBContent
         Block[] validBlocks = ForgeRegistries.BLOCKS.getValues()
                 .stream()
                 .filter(block -> block.getRegistryName().getNamespace().equals(FramedBlocks.MODID))
+                .filter(block -> block instanceof IFramedBlock)
                 .filter(block -> !((IFramedBlock)block).getBlockType().hasSpecialTile())
                 .toArray(Block[]::new);
 
