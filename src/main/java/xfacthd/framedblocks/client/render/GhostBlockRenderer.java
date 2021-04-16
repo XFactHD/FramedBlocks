@@ -7,6 +7,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.IRenderTypeBuffer;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.item.*;
+import net.minecraft.state.properties.DoubleBlockHalf;
 import net.minecraft.util.Direction;
 import net.minecraft.util.Hand;
 import net.minecraft.util.math.*;
@@ -88,6 +89,11 @@ public class GhostBlockRenderer
         if (doRender)
         {
             doRenderGhostBlock(mstack, buffers, renderPos, renderState);
+
+            if (renderState.getBlock() == FBContent.blockFramedDoor)
+            {
+                doRenderGhostBlock(mstack, buffers, renderPos.up(), renderState.with(DoorBlock.HALF, DoubleBlockHalf.UPPER));
+            }
         }
     }
 
