@@ -18,11 +18,14 @@ import net.minecraftforge.common.Tags;
 import xfacthd.framedblocks.client.util.FramedBlockData;
 import xfacthd.framedblocks.common.FBContent;
 
+import java.util.function.Predicate;
+
 @SuppressWarnings("deprecation")
 public class FramedTileEntity extends TileEntity
 {
     private static final ImmutableList<Block> TILE_ENTITY_WHITELIST = buildTileEntityWhitelist();
     private static final ImmutableList<Block> BLOCK_BLACKLIST = buildBlockBlacklist();
+    private static final Predicate<Block> BLOCK_PREDICATE = buildBlockPredicate();
 
     private final IModelData modelData = new FramedBlockData();
     private ItemStack camoStack = ItemStack.EMPTY;
@@ -108,7 +111,7 @@ public class FramedTileEntity extends TileEntity
         if (block.hasTileEntity(state) && !TILE_ENTITY_WHITELIST.contains(block)) { return false; }
 
         //noinspection ConstantConditions
-        return state.isOpaqueCube(world, pos) || state.getBlock() instanceof AbstractGlassBlock; //TODO: find a better way to allow glass blocks
+        return state.isOpaqueCube(world, pos) || BLOCK_PREDICATE.test(state.getBlock());
     }
 
     protected void applyCamo(ItemStack camoStack, BlockState camoState, BlockRayTraceResult hit)
@@ -325,5 +328,12 @@ public class FramedTileEntity extends TileEntity
                 .add(Blocks.STICKY_PISTON)
                 .add(Blocks.COMPOSTER)
                 .build();
+    }
+
+    private static Predicate<Block> buildBlockPredicate()
+    {
+        return block ->
+                (block instanceof BreakableBlock && !(block instanceof SlimeBlock) && !(block instanceof HoneyBlock)) ||
+                 block instanceof LeavesBlock;
     }
 }
