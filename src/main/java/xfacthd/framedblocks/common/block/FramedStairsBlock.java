@@ -16,6 +16,7 @@ import xfacthd.framedblocks.common.FBContent;
 import xfacthd.framedblocks.common.data.BlockType;
 import xfacthd.framedblocks.common.tileentity.FramedTileEntity;
 
+import javax.annotation.Nullable;
 import java.util.List;
 import java.util.function.BiPredicate;
 
@@ -80,6 +81,12 @@ public class FramedStairsBlock extends StairsBlock implements IFramedBlock
     public List<ItemStack> getDrops(BlockState state, LootContext.Builder builder)
     {
         return IFramedBlock.super.getDrops(super.getDrops(state, builder), builder);
+    }
+
+    @Override
+    public float getSlipperiness(BlockState state, IWorldReader world, BlockPos pos, @Nullable Entity entity)
+    {
+        return IFramedBlock.super.getSlipperiness(state, world, pos, entity);
     }
 
     @Override

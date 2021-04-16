@@ -2,6 +2,7 @@ package xfacthd.framedblocks.common.block;
 
 import net.minecraft.block.*;
 import net.minecraft.block.material.Material;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.*;
 import net.minecraft.loot.LootContext;
@@ -173,5 +174,19 @@ public interface IFramedBlock extends IFacade
         }
 
         return false;
+    }
+
+    default float getSlipperiness(BlockState state, IWorldReader world, BlockPos pos, @Nullable Entity entity)
+    {
+        TileEntity te = world.getTileEntity(pos);
+        if (te instanceof FramedTileEntity)
+        {
+            BlockState camoState = ((FramedTileEntity) te).getCamoState(Direction.UP);
+            if (!camoState.isAir())
+            {
+                return camoState.getSlipperiness(world, pos, entity);
+            }
+        }
+        return state.getBlock().getSlipperiness();
     }
 }

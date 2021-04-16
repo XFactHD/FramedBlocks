@@ -19,6 +19,7 @@ import xfacthd.framedblocks.common.data.BlockType;
 import xfacthd.framedblocks.common.data.PropertyHolder;
 import xfacthd.framedblocks.common.tileentity.FramedTileEntity;
 
+import javax.annotation.Nullable;
 import java.util.List;
 import java.util.Map;
 
@@ -72,6 +73,12 @@ public class FramedBlock extends Block implements IFramedBlock, IWaterLoggable
     public VoxelShape getShape(BlockState state, IBlockReader world, BlockPos pos, ISelectionContext ctx)
     {
         return shapes.get(state);
+    }
+
+    @Override
+    public float getSlipperiness(BlockState state, IWorldReader world, BlockPos pos, @Nullable Entity entity)
+    {
+        return IFramedBlock.super.getSlipperiness(state, world, pos, entity);
     }
 
     @Override
