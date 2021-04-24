@@ -54,7 +54,7 @@ public class FramedLeverBlock extends LeverBlock implements IFramedBlock
     @Override
     public List<ItemStack> getDrops(BlockState state, LootContext.Builder builder)
     {
-        return IFramedBlock.super.getDrops(super.getDrops(state, builder), builder);
+        return getDrops(super.getDrops(state, builder), builder);
     }
 
     @Override

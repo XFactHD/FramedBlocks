@@ -179,7 +179,7 @@ public interface IFramedBlock extends IFacade
         return false;
     }
 
-    default float getSlipperiness(BlockState state, IWorldReader world, BlockPos pos, @Nullable Entity entity)
+    default float getCamoSlipperiness(BlockState state, IWorldReader world, BlockPos pos, @Nullable Entity entity)
     {
         TileEntity te = world.getTileEntity(pos);
         if (te instanceof FramedTileEntity)

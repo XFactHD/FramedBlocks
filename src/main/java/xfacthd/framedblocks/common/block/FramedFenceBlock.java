@@ -48,13 +48,13 @@ public class FramedFenceBlock extends FenceBlock implements IFramedBlock
     @Override
     public List<ItemStack> getDrops(BlockState state, LootContext.Builder builder)
     {
-        return IFramedBlock.super.getDrops(super.getDrops(state, builder), builder);
+        return getDrops(super.getDrops(state, builder), builder);
     }
 
     @Override
     public float getSlipperiness(BlockState state, IWorldReader world, BlockPos pos, @Nullable Entity entity)
     {
-        return IFramedBlock.super.getSlipperiness(state, world, pos, entity);
+        return getCamoSlipperiness(state, world, pos, entity);
     }
 
     @Override
