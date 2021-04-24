@@ -3,9 +3,11 @@ package xfacthd.framedblocks.common.datagen.providers;
 import net.minecraft.data.BlockTagsProvider;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.tags.BlockTags;
+import net.minecraftforge.common.Tags;
 import net.minecraftforge.common.data.ExistingFileHelper;
 import xfacthd.framedblocks.FramedBlocks;
 import xfacthd.framedblocks.common.FBContent;
+import xfacthd.framedblocks.common.util.Utils;
 
 public class FramedTagProvider extends BlockTagsProvider
 {
@@ -23,5 +25,13 @@ public class FramedTagProvider extends BlockTagsProvider
         getOrCreateBuilder(BlockTags.FENCES).add(FBContent.blockFramedFence);
         getOrCreateBuilder(BlockTags.DOORS).add(FBContent.blockFramedDoor);
         getOrCreateBuilder(BlockTags.TRAPDOORS).add(FBContent.blockFramedTrapDoor);
+
+        //noinspection unchecked
+        getOrCreateBuilder(Utils.FRAMEABLE).addTags(
+                Tags.Blocks.GLASS,
+                Tags.Blocks.STAINED_GLASS,
+                BlockTags.ICE,
+                BlockTags.LEAVES
+        );
     }
 }

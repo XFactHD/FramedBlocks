@@ -1,11 +1,17 @@
 package xfacthd.framedblocks.common.util;
 
+import net.minecraft.block.Block;
+import net.minecraft.tags.BlockTags;
+import net.minecraft.tags.ITag;
 import net.minecraft.util.Direction;
 import net.minecraft.util.math.shapes.VoxelShape;
 import net.minecraft.util.math.shapes.VoxelShapes;
+import xfacthd.framedblocks.FramedBlocks;
 
 public class Utils
 {
+    public static final ITag.INamedTag<Block> FRAMEABLE = BlockTags.makeWrapperTag(FramedBlocks.MODID + ":frameable");
+
     public static VoxelShape rotateShape(Direction from, Direction to, VoxelShape shape)
     {
         if (from.getAxis() == Direction.Axis.Y || to.getAxis() == Direction.Axis.Y) { throw new IllegalArgumentException("Invalid Direction!"); }
