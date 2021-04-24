@@ -10,6 +10,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 import xfacthd.framedblocks.client.util.DataHolder;
 import xfacthd.framedblocks.common.block.IFramedBlock;
 import xfacthd.framedblocks.common.tileentity.FramedTileEntity;
+import xfacthd.framedblocks.common.util.Utils;
 
 @Mixin(BreakableBlock.class)
 public abstract class MixinBreakableBlock extends Block
@@ -19,6 +20,8 @@ public abstract class MixinBreakableBlock extends Block
     @Inject(method = {"isSideInvisible(Lnet/minecraft/block/BlockState;Lnet/minecraft/block/BlockState;Lnet/minecraft/util/Direction;)Z"}, at = @At("HEAD"), cancellable = true)
     private void isSideInvisibleFramed(BlockState state, BlockState adjState, Direction side, CallbackInfoReturnable<Boolean> cir)
     {
+        if (Utils.OPTIFINE_LOADED.getValue() || Utils.SODIUM_LOADED.getValue()) { return; } //Should fix crash with OptiFine and Sodium
+
         if (adjState.getBlock() instanceof IFramedBlock && ((IFramedBlock)adjState.getBlock()).getCtmPredicate().test(adjState, side.getOpposite()))
         {
             TileEntity te = DataHolder.world.get().getTileEntity(DataHolder.pos.get().offset(side));

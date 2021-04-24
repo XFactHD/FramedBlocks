@@ -3,6 +3,7 @@
     "package": "xfacthd.framedblocks.client.util.mixin",
     "compatibilityLevel": "JAVA_8",
     "refmap": "framedblocks.refmap.json",
+    "plugin": "xfacthd.framedblocks.common.util.FramedMixinConfigPlugin",
     "mixins": [
     ],
     "client":[
