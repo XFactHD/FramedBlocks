@@ -14,7 +14,17 @@ public class Utils
 {
     public static final ITag.INamedTag<Block> FRAMEABLE = BlockTags.makeWrapperTag(FramedBlocks.MODID + ":frameable");
 
-    public static final LazyValue<Boolean> OPTIFINE_LOADED = new LazyValue<>(() -> ModList.get().isLoaded("optifine"));
+    public static final LazyValue<Boolean> OPTIFINE_LOADED = new LazyValue<>(() -> {
+        try
+        {
+            Class.forName("optifine.Utils");
+            return true;
+        }
+        catch (ClassNotFoundException e)
+        {
+            return false;
+        }
+    });
     public static final LazyValue<Boolean> SODIUM_LOADED = new LazyValue<>(() -> ModList.get().isLoaded("sodium"));
 
     public static VoxelShape rotateShape(Direction from, Direction to, VoxelShape shape)
