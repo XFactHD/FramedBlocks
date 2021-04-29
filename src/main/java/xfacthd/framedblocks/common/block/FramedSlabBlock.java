@@ -76,6 +76,12 @@ public class FramedSlabBlock extends FramedBlock
                     SoundType sound = FBContent.blockFramedCube.getSoundType(FBContent.blockFramedCube.getDefaultState());
                     world.playSound(null, pos, sound.getPlaceSound(), SoundCategory.BLOCKS, (sound.getVolume() + 1.0F) / 2.0F, sound.getPitch() * 0.8F);
 
+                    if (!player.isCreative())
+                    {
+                        stack.shrink(1);
+                        player.inventory.markDirty();
+                    }
+
                     te = world.getTileEntity(pos);
                     if (te instanceof FramedDoubleTileEntity)
                     {
