@@ -9,6 +9,7 @@ import net.minecraft.state.StateContainer;
 import net.minecraft.state.properties.BlockStateProperties;
 import net.minecraft.util.Direction;
 import net.minecraft.util.math.shapes.VoxelShape;
+import net.minecraft.util.math.vector.Vector3d;
 import xfacthd.framedblocks.common.data.BlockType;
 import xfacthd.framedblocks.common.data.PropertyHolder;
 import xfacthd.framedblocks.common.util.Utils;
@@ -32,12 +33,12 @@ public class FramedCornerPillarBlock extends FramedBlock
         BlockState state = getDefaultState();
 
         Direction face = context.getFace();
+        Vector3d hitPoint = Utils.fraction(context.getHitVec());
         if (face.getAxis().isHorizontal())
         {
             boolean xAxis = face.getAxis() == Direction.Axis.X;
             boolean positive = face.rotateYCCW().getAxisDirection() == Direction.AxisDirection.POSITIVE;
-            double xz = xAxis ? context.getHitVec().z : context.getHitVec().x;
-            xz -= Math.floor(xz);
+            double xz = xAxis ? hitPoint.getZ() : hitPoint.getX();
 
             Direction dir = face.getOpposite();
             if ((xz > .5D) == positive)
@@ -48,10 +49,8 @@ public class FramedCornerPillarBlock extends FramedBlock
         }
         else
         {
-            double x = context.getHitVec().x;
-            x -= Math.floor(x);
-            double z = context.getHitVec().z;
-            z -= Math.floor(z);
+            double x = hitPoint.getX();
+            double z = hitPoint.getZ();
 
             Direction dir = z > .5D ? Direction.SOUTH : Direction.NORTH;
             if ((x > .5D) == (dir.getAxisDirection() == Direction.AxisDirection.NEGATIVE)) { dir = dir.rotateY(); }

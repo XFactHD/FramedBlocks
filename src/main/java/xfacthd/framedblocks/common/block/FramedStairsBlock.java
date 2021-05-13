@@ -15,15 +15,15 @@ import xfacthd.framedblocks.FramedBlocks;
 import xfacthd.framedblocks.common.FBContent;
 import xfacthd.framedblocks.common.data.BlockType;
 import xfacthd.framedblocks.common.tileentity.FramedTileEntity;
+import xfacthd.framedblocks.common.util.CtmPredicate;
 
 import javax.annotation.Nullable;
 import java.util.List;
-import java.util.function.BiPredicate;
 
 @SuppressWarnings("deprecation")
 public class FramedStairsBlock extends StairsBlock implements IFramedBlock
 {
-    public static final BiPredicate<BlockState, Direction> CTM_PREDICATE = (state, dir) ->
+    public static final CtmPredicate CTM_PREDICATE = (state, dir) ->
     {
         if (dir == Direction.UP)
         {

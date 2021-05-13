@@ -9,13 +9,13 @@ import net.minecraft.util.Direction;
 import net.minecraft.world.IBlockReader;
 import xfacthd.framedblocks.common.data.*;
 import xfacthd.framedblocks.common.tileentity.FramedDoubleSlopeTileEntity;
+import xfacthd.framedblocks.common.util.CtmPredicate;
 
 import javax.annotation.Nullable;
-import java.util.function.BiPredicate;
 
 public class FramedDoubleSlopeBlock extends AbstractFramedDoubleBlock
 {
-    public static final BiPredicate<BlockState, Direction> CTM_PREDICATE_SLOPE = (state, dir) ->
+    public static final CtmPredicate CTM_PREDICATE_SLOPE = (state, dir) ->
     {
         if (state.get(PropertyHolder.SLOPE_TYPE) == SlopeType.HORIZONTAL)
         {
@@ -40,40 +40,7 @@ public class FramedDoubleSlopeBlock extends AbstractFramedDoubleBlock
     @Override
     public BlockState getStateForPlacement(BlockItemUseContext context)
     {
-        BlockState state = getDefaultState();
-
-        Direction facing = context.getPlacementHorizontalFacing();
-        state = state.with(PropertyHolder.FACING_HOR, facing);
-
-        Direction side = context.getFace();
-        if (side == Direction.DOWN)
-        {
-            state = state.with(PropertyHolder.SLOPE_TYPE, SlopeType.TOP);
-        }
-        else if (side == Direction.UP)
-        {
-            state = state.with(PropertyHolder.SLOPE_TYPE, SlopeType.BOTTOM);
-        }
-        else
-        {
-            state = state.with(PropertyHolder.SLOPE_TYPE, SlopeType.HORIZONTAL);
-
-            boolean xAxis = context.getFace().getAxis() == Direction.Axis.X;
-            boolean positive = context.getFace().rotateYCCW().getAxisDirection() == Direction.AxisDirection.POSITIVE;
-            double xz = xAxis ? context.getHitVec().z : context.getHitVec().x;
-            xz -= Math.floor(xz);
-
-            if ((xz > .5D) == positive)
-            {
-                state = state.with(PropertyHolder.FACING_HOR, side.getOpposite().rotateY());
-            }
-            else
-            {
-                state = state.with(PropertyHolder.FACING_HOR, side.getOpposite());
-            }
-        }
-
-        return state;
+        return withSlopeType(getDefaultState(), context.getFace(), context.getPlacementHorizontalFacing(), context.getHitVec());
     }
 
     @Override

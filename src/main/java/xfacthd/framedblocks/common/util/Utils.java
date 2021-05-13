@@ -7,6 +7,7 @@ import net.minecraft.util.Direction;
 import net.minecraft.util.LazyValue;
 import net.minecraft.util.math.shapes.VoxelShape;
 import net.minecraft.util.math.shapes.VoxelShapes;
+import net.minecraft.util.math.vector.Vector3d;
 import net.minecraftforge.fml.ModList;
 import xfacthd.framedblocks.FramedBlocks;
 
@@ -46,5 +47,14 @@ public class Utils
         }
 
         return buffer[0];
+    }
+
+    public static Vector3d fraction(Vector3d vec)
+    {
+        return new Vector3d(
+                vec.getX() - Math.floor(vec.getX()),
+                vec.getY() - Math.floor(vec.getY()),
+                vec.getZ() - Math.floor(vec.getZ())
+        );
     }
 }

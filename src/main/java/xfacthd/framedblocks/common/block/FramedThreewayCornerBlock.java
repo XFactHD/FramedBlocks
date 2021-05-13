@@ -11,13 +11,12 @@ import net.minecraft.util.Direction;
 import net.minecraft.util.math.shapes.VoxelShape;
 import net.minecraft.util.math.shapes.VoxelShapes;
 import xfacthd.framedblocks.common.data.*;
+import xfacthd.framedblocks.common.util.CtmPredicate;
 import xfacthd.framedblocks.common.util.Utils;
-
-import java.util.function.BiPredicate;
 
 public class FramedThreewayCornerBlock extends FramedBlock
 {
-    public static final BiPredicate<BlockState, Direction> CTM_PREDICATE = (state, dir) ->
+    public static final CtmPredicate CTM_PREDICATE = (state, dir) ->
     {
         boolean top = state.get(PropertyHolder.TOP);
         if (top && dir == Direction.UP)

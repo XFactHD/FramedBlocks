@@ -8,7 +8,6 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockReader;
 import xfacthd.framedblocks.common.data.BlockType;
 import xfacthd.framedblocks.common.tileentity.FramedDoubleTileEntity;
-import xfacthd.framedblocks.common.tileentity.FramedTileEntity;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -32,7 +31,4 @@ public abstract class AbstractFramedDoubleBlock extends FramedBlock
         }
         return Blocks.AIR.getDefaultState();
     }
-
-    @Override
-    protected boolean isWaterLoggable() { return false; }
 }

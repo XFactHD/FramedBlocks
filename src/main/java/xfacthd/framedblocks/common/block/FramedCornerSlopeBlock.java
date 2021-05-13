@@ -10,14 +10,14 @@ import net.minecraft.state.properties.BlockStateProperties;
 import net.minecraft.util.Direction;
 import net.minecraft.util.math.shapes.VoxelShape;
 import net.minecraft.util.math.shapes.VoxelShapes;
+import net.minecraft.util.math.vector.Vector3d;
 import xfacthd.framedblocks.common.data.*;
+import xfacthd.framedblocks.common.util.CtmPredicate;
 import xfacthd.framedblocks.common.util.Utils;
-
-import java.util.function.BiPredicate;
 
 public class FramedCornerSlopeBlock extends FramedBlock
 {
-    public static final BiPredicate<BlockState, Direction> CTM_PREDICATE = (state, dir) ->
+    public static final CtmPredicate CTM_PREDICATE = (state, dir) ->
     {
         CornerType type = state.get(PropertyHolder.CORNER_TYPE);
         if (type == CornerType.TOP)
@@ -31,7 +31,7 @@ public class FramedCornerSlopeBlock extends FramedBlock
         return state.get(PropertyHolder.FACING_HOR) == dir;
     };
 
-    public static final BiPredicate<BlockState, Direction> CTM_PREDICATE_INNER = (state, dir) ->
+    public static final CtmPredicate CTM_PREDICATE_INNER = (state, dir) ->
     {
         CornerType type = state.get(PropertyHolder.CORNER_TYPE);
         if ((type == CornerType.TOP || (type.isHorizontal() && type.isTop())) && dir == Direction.UP)
@@ -67,14 +67,27 @@ public class FramedCornerSlopeBlock extends FramedBlock
     {
         BlockState state = getDefaultState();
 
+        Direction side = context.getFace();
+        Vector3d hitPoint = Utils.fraction(context.getHitVec());
+        if (side.getAxis() != Direction.Axis.Y)
+        {
+            if (hitPoint.getY() < (3D / 16D))
+            {
+                side = Direction.UP;
+            }
+            else if (hitPoint.getY() > (13D / 16D))
+            {
+                side = Direction.DOWN;
+            }
+        }
+
         Direction facing = context.getPlacementHorizontalFacing();
-        if (getBlockType() == BlockType.FRAMED_INNER_CORNER_SLOPE && context.getFace().getAxis() == Direction.Axis.Y)
+        if (getBlockType() == BlockType.FRAMED_INNER_CORNER_SLOPE && side.getAxis() == Direction.Axis.Y)
         {
             facing = facing.rotateYCCW();
         }
         state = state.with(PropertyHolder.FACING_HOR, facing);
 
-        Direction side = context.getFace();
         if (side == Direction.DOWN)
         {
             state = state.with(PropertyHolder.CORNER_TYPE, CornerType.TOP);
@@ -87,10 +100,8 @@ public class FramedCornerSlopeBlock extends FramedBlock
         {
             boolean xAxis = context.getFace().getAxis() == Direction.Axis.X;
             boolean positive = context.getFace().rotateYCCW().getAxisDirection() == Direction.AxisDirection.POSITIVE;
-            double xz = xAxis ? context.getHitVec().z : context.getHitVec().x;
-            double y = context.getHitVec().y;
-            xz -= Math.floor(xz);
-            y -= Math.floor(y);
+            double xz = xAxis ? hitPoint.getZ() : hitPoint.getX();
+            double y = hitPoint.getY();
 
             CornerType type;
             if ((xz > .5D) == positive)

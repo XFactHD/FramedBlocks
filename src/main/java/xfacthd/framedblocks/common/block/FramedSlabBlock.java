@@ -19,13 +19,12 @@ import xfacthd.framedblocks.common.data.BlockType;
 import xfacthd.framedblocks.common.data.PropertyHolder;
 import xfacthd.framedblocks.common.tileentity.FramedDoubleTileEntity;
 import xfacthd.framedblocks.common.tileentity.FramedTileEntity;
-
-import java.util.function.BiPredicate;
+import xfacthd.framedblocks.common.util.CtmPredicate;
 
 @SuppressWarnings("deprecation")
 public class FramedSlabBlock extends FramedBlock
 {
-    public static final BiPredicate<BlockState, Direction> CTM_PREDICATE = (state, dir) ->
+    public static final CtmPredicate CTM_PREDICATE = (state, dir) ->
             (state.get(PropertyHolder.TOP) && dir == Direction.UP) ||
             (!state.get(PropertyHolder.TOP) && dir == Direction.DOWN);
 

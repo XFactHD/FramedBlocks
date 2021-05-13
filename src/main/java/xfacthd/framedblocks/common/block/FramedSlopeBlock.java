@@ -11,13 +11,12 @@ import net.minecraft.util.Direction;
 import net.minecraft.util.math.shapes.VoxelShape;
 import net.minecraft.util.math.shapes.VoxelShapes;
 import xfacthd.framedblocks.common.data.*;
+import xfacthd.framedblocks.common.util.CtmPredicate;
 import xfacthd.framedblocks.common.util.Utils;
-
-import java.util.function.BiPredicate;
 
 public class FramedSlopeBlock extends FramedBlock
 {
-    public static final BiPredicate<BlockState, Direction> CTM_PREDICATE = (state, dir) ->
+    public static final CtmPredicate CTM_PREDICATE = (state, dir) ->
     {
         SlopeType type = state.get(PropertyHolder.SLOPE_TYPE);
         if (dir == Direction.UP && type == SlopeType.TOP)
@@ -47,39 +46,7 @@ public class FramedSlopeBlock extends FramedBlock
     @Override
     public BlockState getStateForPlacement(BlockItemUseContext context)
     {
-        BlockState state = getDefaultState();
-
-        Direction facing = context.getPlacementHorizontalFacing();
-        state = state.with(PropertyHolder.FACING_HOR, facing);
-
-        Direction side = context.getFace();
-        if (side == Direction.DOWN)
-        {
-            state = state.with(PropertyHolder.SLOPE_TYPE, SlopeType.TOP);
-        }
-        else if (side == Direction.UP)
-        {
-            state = state.with(PropertyHolder.SLOPE_TYPE, SlopeType.BOTTOM);
-        }
-        else
-        {
-            state = state.with(PropertyHolder.SLOPE_TYPE, SlopeType.HORIZONTAL);
-
-            boolean xAxis = context.getFace().getAxis() == Direction.Axis.X;
-            boolean positive = context.getFace().rotateYCCW().getAxisDirection() == Direction.AxisDirection.POSITIVE;
-            double xz = xAxis ? context.getHitVec().z : context.getHitVec().x;
-            xz -= Math.floor(xz);
-
-            if ((xz > .5D) == positive)
-            {
-                state = state.with(PropertyHolder.FACING_HOR, side.getOpposite().rotateY());
-            }
-            else
-            {
-                state = state.with(PropertyHolder.FACING_HOR, side.getOpposite());
-            }
-        }
-
+        BlockState state = withSlopeType(getDefaultState(), context.getFace(), context.getPlacementHorizontalFacing(), context.getHitVec());
         return withWater(state, context.getWorld(), context.getPos());
     }
 

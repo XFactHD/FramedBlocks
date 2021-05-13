@@ -14,6 +14,9 @@ public class FramedItemTagProvider extends ItemTagsProvider
     }
 
     @Override
+    public String getName() { return super.getName() + ": " + FramedBlocks.MODID; }
+
+    @Override
     protected void registerTags()
     {
         getOrCreateBuilder(ItemTags.SLABS).add(FBContent.blockFramedSlab.asItem());

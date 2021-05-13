@@ -15,15 +15,15 @@ import net.minecraft.world.*;
 import xfacthd.framedblocks.FramedBlocks;
 import xfacthd.framedblocks.common.data.BlockType;
 import xfacthd.framedblocks.common.tileentity.FramedTileEntity;
+import xfacthd.framedblocks.common.util.CtmPredicate;
 
 import javax.annotation.Nullable;
 import java.util.List;
-import java.util.function.BiPredicate;
 
 @SuppressWarnings("deprecation")
 public class FramedDoorBlock extends DoorBlock implements IFramedBlock
 {
-    public static final BiPredicate<BlockState, Direction> CTM_PREDICATE = (state, dir) ->
+    public static final CtmPredicate CTM_PREDICATE = (state, dir) ->
     {
         Direction facing = state.get(BlockStateProperties.HORIZONTAL_FACING);
         if (state.get(BlockStateProperties.OPEN))

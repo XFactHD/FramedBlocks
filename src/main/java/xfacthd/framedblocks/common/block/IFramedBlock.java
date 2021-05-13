@@ -19,12 +19,11 @@ import xfacthd.framedblocks.client.util.DataHolder;
 import xfacthd.framedblocks.common.data.BlockType;
 import xfacthd.framedblocks.common.tileentity.FramedDoubleTileEntity;
 import xfacthd.framedblocks.common.tileentity.FramedTileEntity;
-import xfacthd.framedblocks.common.util.Utils;
+import xfacthd.framedblocks.common.util.*;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.List;
-import java.util.function.BiPredicate;
 
 @SuppressWarnings("deprecation")
 public interface IFramedBlock extends IFacade
@@ -116,7 +115,7 @@ public interface IFramedBlock extends IFacade
         return drops;
     }
 
-    default BiPredicate<BlockState, Direction> getCtmPredicate() { return getBlockType().getCtmPredicate(); }
+    default CtmPredicate getCtmPredicate() { return getBlockType().getCtmPredicate(); }
 
     @Nonnull
     @Override
@@ -147,36 +146,7 @@ public interface IFramedBlock extends IFacade
     {
         if (Utils.OPTIFINE_LOADED.getValue() || Utils.SODIUM_LOADED.getValue()) { return false; } //Should fix crash with OptiFine and Sodium
 
-        FramedTileEntity adjTile = null;
-        if (adjState.getBlock() instanceof IFramedBlock && ((IFramedBlock)adjState.getBlock()).getCtmPredicate().test(adjState, side.getOpposite()))
-        {
-            TileEntity te = DataHolder.world.get().getTileEntity(DataHolder.pos.get().offset(side));
-            if (te instanceof FramedTileEntity)
-            {
-                adjTile = (FramedTileEntity)te;
-                adjState = adjTile.getCamoState(side.getOpposite());
-            }
-        }
-
-        if (adjState.isAir()) { return false; }
-
-        if (((IFramedBlock)state.getBlock()).getCtmPredicate().test(state, side))
-        {
-            TileEntity te = DataHolder.world.get().getTileEntity(DataHolder.pos.get());
-            if (te instanceof FramedTileEntity)
-            {
-                if (adjTile != null)
-                {
-                    return adjTile.getCamoState(side.getOpposite()) == ((FramedTileEntity)te).getCamoState(side);
-                }
-                else
-                {
-                    return ((FramedTileEntity)te).getCamoState(side) == adjState;
-                }
-            }
-        }
-
-        return false;
+        return getBlockType().getSideSkipPredicate().test(DataHolder.world.get(), DataHolder.pos.get(), state, adjState, side, true);
     }
 
     default float getCamoSlipperiness(BlockState state, IWorldReader world, BlockPos pos, @Nullable Entity entity)

@@ -15,9 +15,9 @@ import net.minecraft.util.math.shapes.VoxelShape;
 import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.world.*;
 import xfacthd.framedblocks.FramedBlocks;
-import xfacthd.framedblocks.common.data.BlockType;
-import xfacthd.framedblocks.common.data.PropertyHolder;
+import xfacthd.framedblocks.common.data.*;
 import xfacthd.framedblocks.common.tileentity.FramedTileEntity;
+import xfacthd.framedblocks.common.util.Utils;
 
 import javax.annotation.Nullable;
 import java.util.List;
@@ -122,6 +122,52 @@ public class FramedBlock extends Block implements IFramedBlock, IWaterLoggable
     @Override
     public BlockType getBlockType() { return blockType; }
 
+    protected BlockState withSlopeType(BlockState state, Direction side, Direction facing, Vector3d hitVec)
+    {
+        state = state.with(PropertyHolder.FACING_HOR, facing);
+
+        Vector3d hitPoint = Utils.fraction(hitVec);
+        if (side.getAxis() != Direction.Axis.Y)
+        {
+            if (hitPoint.getY() < (3D / 16D))
+            {
+                side = Direction.UP;
+            }
+            else if (hitPoint.getY() > (13D / 16D))
+            {
+                side = Direction.DOWN;
+            }
+        }
+
+        if (side == Direction.DOWN)
+        {
+            state = state.with(PropertyHolder.SLOPE_TYPE, SlopeType.TOP);
+        }
+        else if (side == Direction.UP)
+        {
+            state = state.with(PropertyHolder.SLOPE_TYPE, SlopeType.BOTTOM);
+        }
+        else
+        {
+            state = state.with(PropertyHolder.SLOPE_TYPE, SlopeType.HORIZONTAL);
+
+            boolean xAxis = side.getAxis() == Direction.Axis.X;
+            boolean positive = side.rotateYCCW().getAxisDirection() == Direction.AxisDirection.POSITIVE;
+            double xz = xAxis ? hitPoint.getZ() : hitPoint.getX();
+
+            if ((xz > .5D) == positive)
+            {
+                state = state.with(PropertyHolder.FACING_HOR, side.getOpposite().rotateY());
+            }
+            else
+            {
+                state = state.with(PropertyHolder.FACING_HOR, side.getOpposite());
+            }
+        }
+
+        return state;
+    }
+
     protected BlockState withTop(BlockState state, Direction side, Vector3d hitVec)
     {
         if (side == Direction.DOWN)
@@ -142,11 +188,11 @@ public class FramedBlock extends Block implements IFramedBlock, IWaterLoggable
         return state;
     }
 
-    protected BlockState withWater(BlockState state, IWorldReader water, BlockPos pos)
+    protected BlockState withWater(BlockState state, IWorldReader world, BlockPos pos)
     {
-        FluidState fluidState = water.getFluidState(pos);
+        FluidState fluidState = world.getFluidState(pos);
         return state.with(BlockStateProperties.WATERLOGGED, fluidState.getFluid() == Fluids.WATER);
     }
 
-    protected boolean isWaterLoggable() { return blockType != BlockType.FRAMED_CUBE; }
+    protected boolean isWaterLoggable() { return blockType.supportsWaterLogging(); }
 }

@@ -14,12 +14,11 @@ import xfacthd.framedblocks.common.FBContent;
 import xfacthd.framedblocks.common.data.BlockType;
 import xfacthd.framedblocks.common.data.PropertyHolder;
 import xfacthd.framedblocks.common.tileentity.FramedDoublePanelTileEntity;
-
-import java.util.function.BiPredicate;
+import xfacthd.framedblocks.common.util.CtmPredicate;
 
 public class FramedDoublePanelBlock extends AbstractFramedDoubleBlock
 {
-    public static final BiPredicate<BlockState, Direction> CTM_PREDICATE_PANEL = (state, dir) ->
+    public static final CtmPredicate CTM_PREDICATE_PANEL = (state, dir) ->
     {
         Direction facing = state.get(PropertyHolder.FACING_NE);
         return dir == facing || dir == facing.getOpposite();
