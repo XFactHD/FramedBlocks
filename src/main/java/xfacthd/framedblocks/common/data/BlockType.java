@@ -56,7 +56,7 @@ public enum BlockType
 
     BlockType(boolean specialHitbox, boolean specialTile, boolean waterloggable, boolean blockItem, CtmPredicate ctmPredicate)
     {
-        this(specialHitbox, specialTile, waterloggable, blockItem, ctmPredicate, states -> ImmutableMap.<BlockState, VoxelShape>builder().build());
+        this(specialHitbox, specialTile, waterloggable, blockItem, ctmPredicate, VoxelShapeGenerator.EMTPTY);
     }
 
     BlockType(boolean specialHitbox, boolean specialTile, boolean waterloggable, boolean blockItem, VoxelShapeGenerator shapeGen)
@@ -66,12 +66,7 @@ public enum BlockType
 
     BlockType(boolean specialHitbox, boolean specialTile, boolean waterloggable, boolean blockItem, CtmPredicate ctmPredicate, VoxelShape shape)
     {
-        this(specialHitbox, specialTile, waterloggable, blockItem, ctmPredicate, states ->
-        {
-            ImmutableMap.Builder<BlockState, VoxelShape> builder = ImmutableMap.builder();
-            states.forEach(state -> builder.put(state, shape));
-            return builder.build();
-        });
+        this(specialHitbox, specialTile, waterloggable, blockItem, ctmPredicate, VoxelShapeGenerator.singleShape(shape));
     }
 
     BlockType(boolean specialHitbox, boolean specialTile, boolean waterloggable, boolean blockItem, CtmPredicate ctmPredicate, VoxelShapeGenerator shapeGen)
