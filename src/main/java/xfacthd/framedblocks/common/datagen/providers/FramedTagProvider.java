@@ -1,5 +1,6 @@
 package xfacthd.framedblocks.common.datagen.providers;
 
+import net.minecraft.block.Blocks;
 import net.minecraft.data.BlockTagsProvider;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.tags.BlockTags;
@@ -17,6 +18,7 @@ public class FramedTagProvider extends BlockTagsProvider
     public String getName() { return super.getName() + ": " + FramedBlocks.MODID; }
 
     @Override
+    @SuppressWarnings("unchecked")
     protected void registerTags()
     {
         getOrCreateBuilder(BlockTags.SLABS).add(FBContent.blockFramedSlab);
@@ -26,12 +28,17 @@ public class FramedTagProvider extends BlockTagsProvider
         getOrCreateBuilder(BlockTags.DOORS).add(FBContent.blockFramedDoor);
         getOrCreateBuilder(BlockTags.TRAPDOORS).add(FBContent.blockFramedTrapDoor);
 
-        //noinspection unchecked
         getOrCreateBuilder(Utils.FRAMEABLE).addTags(
                 Tags.Blocks.GLASS,
                 Tags.Blocks.STAINED_GLASS,
                 BlockTags.ICE,
                 BlockTags.LEAVES
+        );
+
+        getOrCreateBuilder(Utils.BLACKLIST).add(
+                Blocks.PISTON,
+                Blocks.STICKY_PISTON,
+                Blocks.COMPOSTER
         );
     }
 }

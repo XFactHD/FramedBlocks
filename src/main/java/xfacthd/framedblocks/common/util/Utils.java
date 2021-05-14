@@ -14,6 +14,7 @@ import xfacthd.framedblocks.FramedBlocks;
 public class Utils
 {
     public static final ITag.INamedTag<Block> FRAMEABLE = BlockTags.makeWrapperTag(FramedBlocks.MODID + ":frameable");
+    public static final ITag.INamedTag<Block> BLACKLIST = BlockTags.makeWrapperTag(FramedBlocks.MODID + ":blacklisted");
 
     public static final LazyValue<Boolean> OPTIFINE_LOADED = new LazyValue<>(() -> {
         try

@@ -13,17 +13,21 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.tileentity.TileEntityType;
 import net.minecraft.util.*;
 import net.minecraft.util.math.BlockRayTraceResult;
+import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraftforge.client.model.data.IModelData;
 import net.minecraftforge.common.Tags;
+import xfacthd.framedblocks.FramedBlocks;
 import xfacthd.framedblocks.client.util.FramedBlockData;
 import xfacthd.framedblocks.common.FBContent;
+import xfacthd.framedblocks.common.block.IFramedBlock;
 import xfacthd.framedblocks.common.util.Utils;
 
 @SuppressWarnings("deprecation")
 public class FramedTileEntity extends TileEntity
 {
+    public static final TranslationTextComponent MSG_BLACKLISTED = new TranslationTextComponent("msg." + FramedBlocks.MODID + ".blacklisted");
+    public static final TranslationTextComponent MSG_TILE_ENTITY = new TranslationTextComponent("msg." + FramedBlocks.MODID + ".tile_entity");
     private static final ImmutableList<Block> TILE_ENTITY_WHITELIST = buildTileEntityWhitelist();
-    private static final ImmutableList<Block> BLOCK_BLACKLIST = buildBlockBlacklist();
 
     private final IModelData modelData = new FramedBlockData();
     private ItemStack camoStack = ItemStack.EMPTY;
@@ -64,7 +68,7 @@ public class FramedTileEntity extends TileEntity
         else if (getCamoState(hit).isAir() && stack.getItem() instanceof BlockItem)
         {
             BlockState state = ((BlockItem) stack.getItem()).getBlock().getDefaultState();
-            if (isValidBlock(state))
+            if (isValidBlock(state, player))
             {
                 //noinspection ConstantConditions
                 if (!world.isRemote())
@@ -101,12 +105,21 @@ public class FramedTileEntity extends TileEntity
         return ActionResultType.FAIL;
     }
 
-    protected boolean isValidBlock(BlockState state)
+    protected boolean isValidBlock(BlockState state, PlayerEntity player)
     {
         Block block = state.getBlock();
+        if (block instanceof IFramedBlock) { return false; }
 
-        if (BLOCK_BLACKLIST.contains(block)) { return false; }
-        if (block.hasTileEntity(state) && !TILE_ENTITY_WHITELIST.contains(block)) { return false; }
+        if (state.isIn(Utils.BLACKLIST))
+        {
+            player.sendStatusMessage(MSG_BLACKLISTED, true);
+            return false;
+        }
+        if (block.hasTileEntity(state) && !TILE_ENTITY_WHITELIST.contains(block))
+        {
+            player.sendStatusMessage(MSG_TILE_ENTITY, true);
+            return false;
+        }
 
         //noinspection ConstantConditions
         return state.isOpaqueCube(world, pos) || state.isIn(Utils.FRAMEABLE);
@@ -316,15 +329,6 @@ public class FramedTileEntity extends TileEntity
     {
         return ImmutableList.<Block>builder()
                 .add(Blocks.JUKEBOX)
-                .build();
-    }
-
-    private static ImmutableList<Block> buildBlockBlacklist()
-    {
-        return ImmutableList.<Block>builder()
-                .add(Blocks.PISTON)
-                .add(Blocks.STICKY_PISTON)
-                .add(Blocks.COMPOSTER)
                 .build();
     }
 }

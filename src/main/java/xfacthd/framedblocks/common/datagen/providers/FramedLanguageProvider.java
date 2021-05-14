@@ -4,6 +4,7 @@ import net.minecraft.data.DataGenerator;
 import net.minecraftforge.common.data.LanguageProvider;
 import xfacthd.framedblocks.FramedBlocks;
 import xfacthd.framedblocks.common.FBContent;
+import xfacthd.framedblocks.common.tileentity.FramedTileEntity;
 
 public class FramedLanguageProvider extends LanguageProvider
 {
@@ -44,5 +45,7 @@ public class FramedLanguageProvider extends LanguageProvider
         add(FBContent.itemFramedHammer, "Framed Hammer");
 
         add(FramedBlocks.FRAMED_GROUP.getGroupName().getString(), "FramedBlocks");
+        add(FramedTileEntity.MSG_BLACKLISTED.getKey(), "This block is blacklisted!");
+        add(FramedTileEntity.MSG_TILE_ENTITY.getKey(), "Blocks with TileEntities cannot be inserted into framed blocks!");
     }
 }
