@@ -39,5 +39,15 @@ public class FramedBlockData extends ModelDataMap
         return data;
     }
 
+    public void setWorld(World world) { this.world = world; }
 
+    public void setPos(BlockPos pos) { this.pos = pos; }
+
+    public void setCamoState(BlockState camoState) { this.camoState = camoState; }
+
+    public World getWorld() { return world; }
+
+    public BlockPos getPos() { return pos; }
+
+    public BlockState getCamoState() { return camoState; }
 }

@@ -39,7 +39,7 @@ public class GhostBlockRenderer
     @SubscribeEvent
     public static void onClientSetup(final FMLClientSetupEvent event)
     {
-        GHOST_MODEL_DATA.setData(FramedBlockData.CAMO, FBContent.blockFramedGhostBlock.getDefaultState());
+        GHOST_MODEL_DATA.setCamoState(FBContent.blockFramedGhostBlock.getDefaultState());
 
         //Needed to render ghosts of double blocks
         GHOST_MODEL_DATA.setData(FramedDoubleTileEntity.DATA_LEFT, GHOST_MODEL_DATA);
@@ -99,8 +99,8 @@ public class GhostBlockRenderer
 
     private static void doRenderGhostBlock(MatrixStack mstack, IRenderTypeBuffer buffers, BlockPos renderPos, BlockState renderState)
     {
-        GHOST_MODEL_DATA.setData(FramedBlockData.WORLD, mc().world);
-        GHOST_MODEL_DATA.setData(FramedBlockData.POS, renderPos);
+        GHOST_MODEL_DATA.setWorld(mc().world);
+        GHOST_MODEL_DATA.setPos(renderPos);
 
         ForgeHooksClient.setRenderLayer(RenderType.getTranslucent());
 

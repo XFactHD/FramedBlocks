@@ -45,7 +45,7 @@ public class FramedBlockModel extends BakedModelProxy
         RenderType layer = MinecraftForgeClient.getRenderLayer();
         if (extraData instanceof FramedBlockData)
         {
-            BlockState camoState = extraData.getData(FramedBlockData.CAMO);
+            BlockState camoState = ((FramedBlockData) extraData).getCamoState();
             if (camoState != null && !camoState.isAir())
             {
                 if (RenderTypeLookup.canRenderInLayer(camoState, layer))

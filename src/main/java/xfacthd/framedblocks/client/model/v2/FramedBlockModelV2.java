@@ -51,7 +51,15 @@ public abstract class FramedBlockModelV2 extends BakedModelProxy
 
         if (extraData instanceof FramedBlockData)
         {
-            camoState = extraData.getData(FramedBlockData.CAMO);
+            FramedBlockData data = (FramedBlockData) extraData;
+            if (side != null && ((IFramedBlock)state.getBlock()).isSideHidden(
+                    data.getWorld(),
+                    data.getPos(),
+                    state,
+                    side
+            )) { return Collections.emptyList(); }
+
+            camoState = data.getCamoState();
             if (camoState != null && !camoState.isAir() && RenderTypeLookup.canRenderInLayer(camoState, layer))
             {
                 return getCamoQuads(state, camoState, side, rand, extraData, layer);

@@ -15,7 +15,6 @@ import net.minecraft.world.*;
 import net.minecraftforge.common.ToolType;
 import team.chisel.ctm.api.IFacade;
 import xfacthd.framedblocks.FramedBlocks;
-import xfacthd.framedblocks.client.util.DataHolder;
 import xfacthd.framedblocks.common.data.BlockType;
 import xfacthd.framedblocks.common.tileentity.FramedDoubleTileEntity;
 import xfacthd.framedblocks.common.tileentity.FramedTileEntity;
@@ -141,12 +140,10 @@ public interface IFramedBlock extends IFacade
         return Blocks.AIR.getDefaultState();
     }
 
-    //TODO: look into special casing certain interactions like slab <-> slab, panel <-> panel, panel <-> pillar, slab <-> stairs
-    default boolean isSideHidden(BlockState state, BlockState adjState, Direction side)
+    default boolean isSideHidden(IBlockReader world, BlockPos pos, BlockState state, Direction side)
     {
-        if (Utils.OPTIFINE_LOADED.getValue() || Utils.SODIUM_LOADED.getValue()) { return false; } //Should fix crash with OptiFine and Sodium
-
-        return getBlockType().getSideSkipPredicate().test(DataHolder.world.get(), DataHolder.pos.get(), state, adjState, side, true);
+        if (world == null) { return false; } //Block had no camo when loaded => world in data not set
+        return getBlockType().getSideSkipPredicate().test(world, pos, state, world.getBlockState(pos.offset(side)), side);
     }
 
     default float getCamoSlipperiness(BlockState state, IWorldReader world, BlockPos pos, @Nullable Entity entity)

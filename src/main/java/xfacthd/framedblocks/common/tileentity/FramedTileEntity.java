@@ -29,7 +29,7 @@ public class FramedTileEntity extends TileEntity
     public static final TranslationTextComponent MSG_TILE_ENTITY = new TranslationTextComponent("msg." + FramedBlocks.MODID + ".tile_entity");
     private static final ImmutableList<Block> TILE_ENTITY_WHITELIST = buildTileEntityWhitelist();
 
-    private final IModelData modelData = new FramedBlockData();
+    private final FramedBlockData modelData = new FramedBlockData();
     private ItemStack camoStack = ItemStack.EMPTY;
     private BlockState camoState = Blocks.AIR.getDefaultState();
     private boolean glowing = false;
@@ -244,9 +244,9 @@ public class FramedTileEntity extends TileEntity
             camoState = newState;
             if (oldLight != getLightValue()) { doLightUpdate(); }
 
-            modelData.setData(FramedBlockData.WORLD, world);
-            modelData.setData(FramedBlockData.POS, pos);
-            modelData.setData(FramedBlockData.CAMO, camoState);
+            modelData.setWorld(world);
+            modelData.setPos(pos);
+            modelData.setCamoState(camoState);
 
             needUpdate = true;
         }
@@ -285,9 +285,9 @@ public class FramedTileEntity extends TileEntity
         {
             camoState = newState;
 
-            modelData.setData(FramedBlockData.WORLD, world);
-            modelData.setData(FramedBlockData.POS, pos);
-            modelData.setData(FramedBlockData.CAMO, camoState);
+            modelData.setWorld(world);
+            modelData.setPos(pos);
+            modelData.setCamoState(camoState);
             requestModelDataUpdate();
         }
 

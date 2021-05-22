@@ -15,7 +15,7 @@ public abstract class FramedDoubleTileEntity extends FramedTileEntity
     public static final ModelProperty<IModelData> DATA_RIGHT = new ModelProperty<>();
 
     private final IModelData multiModelData = new ModelDataMap.Builder().build();
-    private final IModelData modelData = new FramedBlockData();
+    private final FramedBlockData modelData = new FramedBlockData();
     protected ItemStack camoStack = ItemStack.EMPTY;
     protected BlockState camoState = Blocks.AIR.getDefaultState();
 
@@ -81,9 +81,9 @@ public abstract class FramedDoubleTileEntity extends FramedTileEntity
         {
             camoState = newState;
 
-            modelData.setData(FramedBlockData.WORLD, world);
-            modelData.setData(FramedBlockData.POS, pos);
-            modelData.setData(FramedBlockData.CAMO, camoState);
+            modelData.setWorld(world);
+            modelData.setPos(pos);
+            modelData.setCamoState(camoState);
 
             needUpdate = true;
         }
@@ -114,9 +114,9 @@ public abstract class FramedDoubleTileEntity extends FramedTileEntity
         {
             camoState = newState;
 
-            modelData.setData(FramedBlockData.WORLD, world);
-            modelData.setData(FramedBlockData.POS, pos);
-            modelData.setData(FramedBlockData.CAMO, camoState);
+            modelData.setWorld(world);
+            modelData.setPos(pos);
+            modelData.setCamoState(camoState);
             requestModelDataUpdate();
         }
     }
