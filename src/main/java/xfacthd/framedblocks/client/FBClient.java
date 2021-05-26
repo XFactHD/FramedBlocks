@@ -122,6 +122,8 @@ public class FBClient
         replaceModels(FBContent.blockFramedDoublePanel, registry, FramedDoublePanelModel::new);
         replaceModels(FBContent.blockFramedDoubleSlope, registry, FramedDoubleSlopeModel::new);
 
+        replaceModels(FBContent.blockFramedFloor, registry, FramedFloorModel::new);
+
         //Framed Collapsible Block
         //replaceModelsSimple(FBContent.blockFramedCollapsibleBlock, registry, FramedCollapsibleBlockModel::new);
     }

@@ -47,6 +47,7 @@ public class FBContent
     public static Block blockFramedDoubleSlab;          //STATUS: Complete
     public static Block blockFramedDoublePanel;         //STATUS: Complete
     public static Block blockFramedDoubleSlope;         //STATUS: Complete
+    public static Block blockFramedFloor;               //STATUS: Complete
     public static Block blockFramedCollapsibleBlock;    //STATUS: Not implemented
     public static Block blockFramedGhostBlock;          //STATUS: Complete
 
@@ -90,6 +91,7 @@ public class FBContent
         registry.register(blockFramedDoubleSlab = new FramedDoubleSlabBlock());
         registry.register(blockFramedDoublePanel = new FramedDoublePanelBlock());
         registry.register(blockFramedDoubleSlope = new FramedDoubleSlopeBlock());
+        registry.register(blockFramedFloor = new FramedFloorBlock());
         //registry.register(blockFramedCollapsibleBlock = new FramedCollapsibleBlock());
         registry.register(blockFramedGhostBlock = new FramedGhostBlock());
     }

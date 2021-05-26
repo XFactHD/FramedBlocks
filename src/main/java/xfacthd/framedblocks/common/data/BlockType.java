@@ -40,6 +40,7 @@ public enum BlockType
     FRAMED_TORCH                (false, false, false,  true),
     FRAMED_WALL_TORCH           (false, false, false, false),
     FRAMED_COLLAPSIBLE_BLOCK    ( true,  true, false,  true);
+	FRAMED_FLOOR_BOARD          (false, false,  true,  true, FramedFloorBlock.CTM_PREDICATE, /*FramedFloorBlock.SKIP_PREDICATE, */VoxelShapes.create(0, 0, 0, 1, 1D/16D, 1)),
 
     private final boolean specialHitbox;
     private final boolean specialTile;
