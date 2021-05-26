@@ -20,6 +20,7 @@ import xfacthd.framedblocks.common.data.PropertyHolder;
 import xfacthd.framedblocks.common.tileentity.FramedDoubleTileEntity;
 import xfacthd.framedblocks.common.tileentity.FramedTileEntity;
 import xfacthd.framedblocks.common.util.CtmPredicate;
+import xfacthd.framedblocks.common.util.SideSkipPredicate;
 
 @SuppressWarnings("deprecation")
 public class FramedSlabBlock extends FramedBlock
@@ -27,6 +28,43 @@ public class FramedSlabBlock extends FramedBlock
     public static final CtmPredicate CTM_PREDICATE = (state, dir) ->
             (state.get(PropertyHolder.TOP) && dir == Direction.UP) ||
             (!state.get(PropertyHolder.TOP) && dir == Direction.DOWN);
+
+    public static final SideSkipPredicate SKIP_PREDICATE = (world, pos, state, adjState, side) ->
+    {
+        if (side.getAxis() == Direction.Axis.Y)
+        {
+            return SideSkipPredicate.CTM.test(world, pos, state, adjState, side);
+        }
+
+        if (adjState.getBlock() instanceof FramedSlabBlock)
+        {
+            boolean top = state.get(PropertyHolder.TOP);
+            if (top != adjState.get(PropertyHolder.TOP)) { return false; }
+
+            return SideSkipPredicate.compareState(world, pos, side, top ? Direction.UP : Direction.DOWN);
+        }
+
+        if (adjState.getBlock() instanceof FramedDoubleSlabBlock)
+        {
+            TileEntity te = world.getTileEntity(pos.offset(side));
+            if (!(te instanceof FramedDoubleTileEntity)) { return false; }
+            FramedDoubleTileEntity tile = (FramedDoubleTileEntity) te;
+
+            Direction face = state.get(PropertyHolder.TOP) ? Direction.UP : Direction.DOWN;
+            return SideSkipPredicate.compareState(world, pos, tile.getCamoState(face), face);
+        }
+
+        if (adjState.getBlock() instanceof FramedSlabEdgeBlock)
+        {
+            boolean top = state.get(PropertyHolder.TOP);
+            if (top != adjState.get(PropertyHolder.TOP)) { return false; }
+            if (adjState.get(PropertyHolder.FACING_HOR) != side.getOpposite()) { return false; }
+
+            return SideSkipPredicate.compareState(world, pos, side, top ? Direction.UP : Direction.DOWN);
+        }
+
+        return false;
+    };
 
     public FramedSlabBlock()
     {

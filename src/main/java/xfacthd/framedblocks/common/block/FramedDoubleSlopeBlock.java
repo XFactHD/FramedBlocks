@@ -15,7 +15,7 @@ import javax.annotation.Nullable;
 
 public class FramedDoubleSlopeBlock extends AbstractFramedDoubleBlock
 {
-    public static final CtmPredicate CTM_PREDICATE_SLOPE = (state, dir) ->
+    public static final CtmPredicate CTM_PREDICATE = (state, dir) ->
     {
         if (state.get(PropertyHolder.SLOPE_TYPE) == SlopeType.HORIZONTAL)
         {

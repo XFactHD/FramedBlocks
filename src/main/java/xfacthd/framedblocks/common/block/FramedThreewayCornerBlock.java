@@ -11,8 +11,7 @@ import net.minecraft.util.Direction;
 import net.minecraft.util.math.shapes.VoxelShape;
 import net.minecraft.util.math.shapes.VoxelShapes;
 import xfacthd.framedblocks.common.data.*;
-import xfacthd.framedblocks.common.util.CtmPredicate;
-import xfacthd.framedblocks.common.util.Utils;
+import xfacthd.framedblocks.common.util.*;
 
 public class FramedThreewayCornerBlock extends FramedBlock
 {
@@ -35,6 +34,8 @@ public class FramedThreewayCornerBlock extends FramedBlock
         if (type == BlockType.FRAMED_INNER_PRISM_CORNER) { return facing.rotateYCCW() == dir; }
         else { return facing.rotateY() == dir; }
     };
+
+    public static final SideSkipPredicate SKIP_PREDICATE = SideSkipPredicate.CTM; //TODO: implement properly
 
     public FramedThreewayCornerBlock(String name, BlockType type)
     {

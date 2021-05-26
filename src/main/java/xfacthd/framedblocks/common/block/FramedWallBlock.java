@@ -6,14 +6,14 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.loot.LootContext;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.ActionResultType;
-import net.minecraft.util.Hand;
+import net.minecraft.util.*;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.BlockRayTraceResult;
 import net.minecraft.world.*;
 import xfacthd.framedblocks.FramedBlocks;
 import xfacthd.framedblocks.common.data.BlockType;
 import xfacthd.framedblocks.common.tileentity.FramedTileEntity;
+import xfacthd.framedblocks.common.util.SideSkipPredicate;
 
 import javax.annotation.Nullable;
 import java.util.List;
@@ -21,6 +21,16 @@ import java.util.List;
 @SuppressWarnings("deprecation")
 public class FramedWallBlock extends WallBlock implements IFramedBlock
 {
+    public static final SideSkipPredicate SKIP_PREDICATE = (world, pos, state, adjState, side) ->
+    {
+        if (adjState.getBlock() instanceof FramedWallBlock)
+        {
+            return SideSkipPredicate.compareState(world, pos, side);
+        }
+
+        return false;
+    };
+
     public FramedWallBlock()
     {
         super(IFramedBlock.createProperties());

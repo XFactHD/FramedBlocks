@@ -12,8 +12,7 @@ import net.minecraft.util.math.shapes.VoxelShape;
 import net.minecraft.util.math.shapes.VoxelShapes;
 import net.minecraft.util.math.vector.Vector3d;
 import xfacthd.framedblocks.common.data.*;
-import xfacthd.framedblocks.common.util.CtmPredicate;
-import xfacthd.framedblocks.common.util.Utils;
+import xfacthd.framedblocks.common.util.*;
 
 public class FramedCornerSlopeBlock extends FramedBlock
 {
@@ -53,6 +52,10 @@ public class FramedCornerSlopeBlock extends FramedBlock
             return facing == dir || facing.rotateY() == dir;
         }
     };
+
+    public static final SideSkipPredicate SKIP_PREDICATE = SideSkipPredicate.CTM; //TODO: implement properly
+
+    public static final SideSkipPredicate SKIP_PREDICATE_INNER = SideSkipPredicate.CTM; //TODO: implement properly
 
     public FramedCornerSlopeBlock(String name, BlockType type) { super(name, type); }
 

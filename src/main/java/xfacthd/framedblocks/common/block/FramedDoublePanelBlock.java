@@ -18,7 +18,7 @@ import xfacthd.framedblocks.common.util.CtmPredicate;
 
 public class FramedDoublePanelBlock extends AbstractFramedDoubleBlock
 {
-    public static final CtmPredicate CTM_PREDICATE_PANEL = (state, dir) ->
+    public static final CtmPredicate CTM_PREDICATE = (state, dir) ->
     {
         Direction facing = state.get(PropertyHolder.FACING_NE);
         return dir == facing || dir == facing.getOpposite();

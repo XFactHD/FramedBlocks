@@ -7,15 +7,63 @@ import net.minecraft.block.BlockState;
 import net.minecraft.item.BlockItemUseContext;
 import net.minecraft.state.StateContainer;
 import net.minecraft.state.properties.BlockStateProperties;
+import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.Direction;
 import net.minecraft.util.math.shapes.VoxelShape;
 import net.minecraft.util.math.vector.Vector3d;
 import xfacthd.framedblocks.common.data.BlockType;
 import xfacthd.framedblocks.common.data.PropertyHolder;
+import xfacthd.framedblocks.common.tileentity.FramedDoubleTileEntity;
+import xfacthd.framedblocks.common.util.SideSkipPredicate;
 import xfacthd.framedblocks.common.util.Utils;
 
 public class FramedCornerPillarBlock extends FramedBlock
 {
+    public static final SideSkipPredicate SKIP_PREDICATE = (world, pos, state, adjState, side) ->
+    {
+        Direction dir = state.get(PropertyHolder.FACING_HOR);
+
+        if (adjState.getBlock() instanceof FramedPanelBlock && (side == dir || side == dir.rotateYCCW()))
+        {
+            Direction adjDir = adjState.get(PropertyHolder.FACING_HOR);
+            if ((side == dir && adjDir == dir.rotateYCCW()) || (side == dir.rotateYCCW() && dir == adjDir))
+            {
+                return SideSkipPredicate.compareState(world, pos, side);
+            }
+            return false;
+        }
+
+        if (adjState.getBlock() instanceof FramedCornerPillarBlock)
+        {
+            Direction adjDir = adjState.get(PropertyHolder.FACING_HOR);
+            if ((side == dir && adjDir == dir.rotateYCCW()) || (side == dir.rotateYCCW() && adjDir == dir.rotateY()))
+            {
+                return SideSkipPredicate.compareState(world, pos, side);
+            }
+            return false;
+        }
+
+        if (adjState.getBlock() instanceof FramedDoublePanelBlock)
+        {
+            TileEntity te = world.getTileEntity(pos.offset(side));
+            if (!(te instanceof FramedDoubleTileEntity)) { return false; }
+            FramedDoubleTileEntity tile = (FramedDoubleTileEntity) te;
+
+            Direction adjDir = adjState.get(PropertyHolder.FACING_NE);
+            if (side == dir && (adjDir == dir.rotateY() || adjDir == dir.rotateYCCW()))
+            {
+                return SideSkipPredicate.compareState(world, pos, tile.getCamoState(dir.rotateYCCW()), side);
+            }
+
+            if (side == dir.rotateYCCW() && (adjDir == dir || adjDir == dir.getOpposite()))
+            {
+                return SideSkipPredicate.compareState(world, pos, tile.getCamoState(dir), side);
+            }
+        }
+
+        return false;
+    };
+
     public FramedCornerPillarBlock()
     {
         super("framed_corner_pillar", BlockType.FRAMED_CORNER_PILLAR);

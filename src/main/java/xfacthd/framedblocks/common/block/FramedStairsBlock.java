@@ -16,6 +16,7 @@ import xfacthd.framedblocks.common.FBContent;
 import xfacthd.framedblocks.common.data.BlockType;
 import xfacthd.framedblocks.common.tileentity.FramedTileEntity;
 import xfacthd.framedblocks.common.util.CtmPredicate;
+import xfacthd.framedblocks.common.util.SideSkipPredicate;
 
 import javax.annotation.Nullable;
 import java.util.List;
@@ -55,6 +56,8 @@ public class FramedStairsBlock extends StairsBlock implements IFramedBlock
             }
         }
     };
+
+    public static final SideSkipPredicate SKIP_PREDICATE = SideSkipPredicate.CTM; //TODO: implement properly
 
     public FramedStairsBlock()
     {

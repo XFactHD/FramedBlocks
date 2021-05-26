@@ -5,15 +5,16 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.loot.LootContext;
+import net.minecraft.state.properties.BlockStateProperties;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.ActionResultType;
-import net.minecraft.util.Hand;
+import net.minecraft.util.*;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.BlockRayTraceResult;
 import net.minecraft.world.*;
 import xfacthd.framedblocks.FramedBlocks;
 import xfacthd.framedblocks.common.data.BlockType;
 import xfacthd.framedblocks.common.tileentity.FramedTileEntity;
+import xfacthd.framedblocks.common.util.SideSkipPredicate;
 
 import javax.annotation.Nullable;
 import java.util.List;
@@ -21,6 +22,25 @@ import java.util.List;
 @SuppressWarnings("deprecation")
 public class FramedFenceBlock extends FenceBlock implements IFramedBlock
 {
+    public static final SideSkipPredicate SKIP_PREDICATE = (world, pos, state, adjState, side) ->
+    {
+        if (adjState.getBlock() instanceof FramedFenceBlock)
+        {
+            return SideSkipPredicate.compareState(world, pos, side);
+        }
+
+        if (adjState.getBlock() instanceof FramedGateBlock)
+        {
+            Direction adjDir = adjState.get(BlockStateProperties.HORIZONTAL_FACING);
+            if (adjDir == side.rotateY() || adjDir == side.rotateYCCW())
+            {
+                return SideSkipPredicate.compareState(world, pos, side);
+            }
+        }
+
+        return false;
+    };
+
     public FramedFenceBlock()
     {
         super(IFramedBlock.createProperties());

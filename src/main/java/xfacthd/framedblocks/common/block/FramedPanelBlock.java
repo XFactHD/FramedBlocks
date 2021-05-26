@@ -19,14 +19,58 @@ import xfacthd.framedblocks.common.data.BlockType;
 import xfacthd.framedblocks.common.data.PropertyHolder;
 import xfacthd.framedblocks.common.tileentity.FramedDoubleTileEntity;
 import xfacthd.framedblocks.common.tileentity.FramedTileEntity;
-import xfacthd.framedblocks.common.util.CtmPredicate;
-import xfacthd.framedblocks.common.util.Utils;
+import xfacthd.framedblocks.common.util.*;
 
 @SuppressWarnings("deprecation")
 public class FramedPanelBlock extends FramedBlock
 {
     public static final CtmPredicate CTM_PREDICATE = (state, dir) ->
             state.get(PropertyHolder.FACING_HOR) == dir;
+
+    public static final SideSkipPredicate SKIP_PREDICATE = (world, pos, state, adjState, side) ->
+    {
+        Direction dir = state.get(PropertyHolder.FACING_HOR);
+        if (side == dir) { return SideSkipPredicate.CTM.test(world, pos, state, adjState, side); }
+
+        if (adjState.getBlock() instanceof FramedPanelBlock && side != dir.getOpposite())
+        {
+            return dir == adjState.get(PropertyHolder.FACING_HOR) && SideSkipPredicate.compareState(world, pos, side, dir);
+        }
+
+        if (adjState.getBlock() instanceof FramedDoublePanelBlock && side != dir.getOpposite())
+        {
+            TileEntity te = world.getTileEntity(pos.offset(side));
+            if (!(te instanceof FramedDoubleTileEntity)) { return false; }
+            FramedDoubleTileEntity tile = (FramedDoubleTileEntity) te;
+
+            Direction adjDir = adjState.get(PropertyHolder.FACING_NE);
+            return (dir == adjDir || dir == adjDir.getOpposite()) && SideSkipPredicate.compareState(world, pos, tile.getCamoState(dir), dir);
+        }
+
+        if (adjState.getBlock() instanceof FramedCornerPillarBlock)
+        {
+            Direction adjDir = adjState.get(PropertyHolder.FACING_HOR);
+            if ((side == dir.rotateY() && adjDir == dir) || (side == dir.rotateYCCW() && adjDir == dir.rotateY()))
+            {
+                return SideSkipPredicate.compareState(world, pos, side, dir);
+            }
+            return false;
+        }
+
+        if (adjState.getBlock() instanceof FramedSlabEdgeBlock)
+        {
+            Direction adjDir = adjState.get(PropertyHolder.FACING_HOR);
+            if (adjDir != dir) { return false; }
+
+            boolean adjTop = adjState.get(PropertyHolder.TOP);
+            if ((side == Direction.UP && !adjTop) || (side == Direction.DOWN && adjTop))
+            {
+                return SideSkipPredicate.compareState(world, pos, side, dir);
+            }
+        }
+
+        return false;
+    };
 
     public FramedPanelBlock(){ super("framed_panel", BlockType.FRAMED_PANEL); }
 

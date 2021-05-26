@@ -17,7 +17,7 @@ public class FramedFloorBlock extends FramedBlock
 {
     public static final CtmPredicate CTM_PREDICATE = (state, dir) -> dir == Direction.DOWN;
 
-    public static final SideSkipPredicate SKIP_PREDICATE = (world, pos, state, adjState, side, thisBlock) ->
+    public static final SideSkipPredicate SKIP_PREDICATE = (world, pos, state, adjState, side) ->
     {
         if (side == Direction.DOWN) { return SideSkipPredicate.CTM.test(world, pos, state, adjState, side); }
 

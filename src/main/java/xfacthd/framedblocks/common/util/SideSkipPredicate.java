@@ -10,7 +10,9 @@ import xfacthd.framedblocks.common.tileentity.FramedTileEntity;
 
 public interface SideSkipPredicate
 {
-    SideSkipPredicate CTM = (world, pos, state, adjState, side, thisBlock) ->
+    SideSkipPredicate FALSE = (world, pos, state, adjState, side) -> false;
+
+    SideSkipPredicate CTM = (world, pos, state, adjState, side) ->
     {
         if (adjState.getBlock() instanceof IFramedBlock)
         {
@@ -31,7 +33,7 @@ public interface SideSkipPredicate
 
         if (!((IFramedBlock) state.getBlock()).getCtmPredicate().test(state, side)) { return false; }
 
-        return !thisBlock || compareState(world, pos, adjState, side);
+        return compareState(world, pos, adjState, side);
     };
 
     /**
@@ -41,10 +43,28 @@ public interface SideSkipPredicate
      * @param state The blocks state
      * @param adjState The neighboring blocks state
      * @param side The side to be checked
-     * @param thisBlock Wether this block is the one being asked wether the given side should be hidden
      * @return Wether the given side should be hidden
      */
-    boolean test(IBlockReader world, BlockPos pos, BlockState state, BlockState adjState, Direction side, boolean thisBlock);
+    boolean test(IBlockReader world, BlockPos pos, BlockState state, BlockState adjState, Direction side);
+
+    static boolean compareState(IBlockReader world, BlockPos pos, Direction side)
+    {
+        return compareState(world, pos, side, side);
+    }
+
+    static boolean compareState(IBlockReader world, BlockPos pos, Direction side, Direction camoSide)
+    {
+        TileEntity te = world.getTileEntity(pos.offset(side));
+        if (te instanceof FramedTileEntity)
+        {
+            BlockState adjState = ((FramedTileEntity) te).getCamoState(side.getOpposite());
+            //noinspection deprecation
+            if (adjState.isAir()) { return false; }
+
+            return compareState(world, pos, adjState, camoSide);
+        }
+        return false;
+    }
 
     static boolean compareState(IBlockReader world, BlockPos pos, BlockState adjState, Direction side)
     {
