@@ -41,6 +41,7 @@ public class FramedLanguageProvider extends LanguageProvider
         add(FBContent.blockFramedDoublePanel, "Framed Double Panel");
         add(FBContent.blockFramedDoubleSlope, "Framed Double Slope");
         add(FBContent.blockFramedFloor, "Framed Floor Board");
+        add(FBContent.blockFramedLattice, "Framed Lattice");
         //add(FBContent.blockFramedCollapsibleBlock, "Framed Collapsible Block");
 
         add(FBContent.itemFramedHammer, "Framed Hammer");

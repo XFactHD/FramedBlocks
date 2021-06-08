@@ -52,6 +52,7 @@ public class FramedBlockStateProvider extends BlockStateProvider
         registerDoublePanel();
         registerDoubleSlope();
         registerFramedFloorBoard();
+        registerFramedLattice();
         registerFramedCollapsibleBlock();
         registerFramedGhostBlock();
     }
@@ -605,6 +606,13 @@ public class FramedBlockStateProvider extends BlockStateProvider
         ModelFile cube = models().carpet("framed_floor_board", TEXTURE);
         simpleBlock(FBContent.blockFramedFloor, cube);
         simpleBlockItem(FBContent.blockFramedFloor, cube);
+    }
+
+    private void registerFramedLattice()
+    {
+        ModelFile cube = models().getExistingFile(modLoc("framed_lattice"));
+        simpleBlock(FBContent.blockFramedLattice, cube);
+        simpleBlockItem(FBContent.blockFramedLattice, cube);
     }
 
     private void registerFramedCollapsibleBlock()
