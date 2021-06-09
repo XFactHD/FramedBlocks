@@ -30,10 +30,7 @@ public class FramedStairsModel extends FramedBlockModel
     {
         if ((top && quad.getFace() == Direction.DOWN) || (!top && quad.getFace() == Direction.UP))
         {
-            BakedQuad topBotQuad = ModelUtils.duplicateQuad(quad);
-            BakedQuadTransformer.setQuadPosInFacingDir(topBotQuad, .5F);
-            quadMap.get(null).add(topBotQuad);
-
+            createCenterQuads(quadMap.get(null), quad);
             createTopBottomQuads(quadMap.get(quad.getFace()), quad);
         }
         else if (quad.getFace().getAxis() != Direction.Axis.Y)
@@ -45,6 +42,34 @@ public class FramedStairsModel extends FramedBlockModel
             }
 
             createSideQuads(quadMap, quad);
+        }
+    }
+
+    private void createCenterQuads(List<BakedQuad> quadList, BakedQuad quad)
+    {
+        if (shape == StairsShape.STRAIGHT || shape == StairsShape.OUTER_LEFT || shape == StairsShape.OUTER_RIGHT)
+        {
+            BakedQuad topBotQuad = ModelUtils.duplicateQuad(quad);
+            if (BakedQuadTransformer.createTopBottomQuad(topBotQuad, dir, .5F))
+            {
+                BakedQuadTransformer.setQuadPosInFacingDir(topBotQuad, .5F);
+                quadList.add(topBotQuad);
+            }
+        }
+
+        if (shape != StairsShape.STRAIGHT)
+        {
+            boolean opposite = shape == StairsShape.OUTER_LEFT || shape == StairsShape.OUTER_RIGHT;
+            boolean left = shape == StairsShape.OUTER_LEFT || shape == StairsShape.INNER_LEFT;
+
+            BakedQuad topBotQuad = ModelUtils.duplicateQuad(quad);
+            if (BakedQuadTransformer.createTopBottomQuad(topBotQuad, opposite ? dir.getOpposite() : dir, .5F) &&
+                    BakedQuadTransformer.createTopBottomQuad(topBotQuad, left ? dir.rotateYCCW() : dir.rotateY(), .5F)
+            )
+            {
+                BakedQuadTransformer.setQuadPosInFacingDir(topBotQuad, .5F);
+                quadList.add(topBotQuad);
+            }
         }
     }
 
