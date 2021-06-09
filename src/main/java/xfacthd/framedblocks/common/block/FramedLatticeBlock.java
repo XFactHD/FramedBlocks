@@ -4,6 +4,7 @@ import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
+import net.minecraft.item.BlockItemUseContext;
 import net.minecraft.state.BooleanProperty;
 import net.minecraft.state.StateContainer;
 import net.minecraft.state.properties.BlockStateProperties;
@@ -12,6 +13,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.shapes.VoxelShape;
 import net.minecraft.util.math.shapes.VoxelShapes;
 import net.minecraft.world.IWorld;
+import net.minecraft.world.World;
 import xfacthd.framedblocks.common.FBContent;
 import xfacthd.framedblocks.common.data.BlockType;
 import xfacthd.framedblocks.common.data.PropertyHolder;
@@ -42,6 +44,19 @@ public class FramedLatticeBlock extends FramedBlock
     protected void fillStateContainer(StateContainer.Builder<Block, BlockState> builder)
     {
         builder.add(PropertyHolder.X_AXIS, PropertyHolder.Y_AXIS, PropertyHolder.Z_AXIS, BlockStateProperties.WATERLOGGED);
+    }
+
+    @Override
+    public BlockState getStateForPlacement(BlockItemUseContext context)
+    {
+        World world = context.getWorld();
+        BlockPos pos = context.getPos();
+
+        BlockState state = getDefaultState();
+        state = state.with(PropertyHolder.X_AXIS, world.getBlockState(pos.east()).matchesBlock(this) || world.getBlockState(pos.west()).matchesBlock(this));
+        state = state.with(PropertyHolder.Y_AXIS, world.getBlockState(pos.up()).matchesBlock(this) || world.getBlockState(pos.down()).matchesBlock(this));
+        state = state.with(PropertyHolder.Z_AXIS, world.getBlockState(pos.north()).matchesBlock(this) || world.getBlockState(pos.south()).matchesBlock(this));
+        return state;
     }
 
     @Override
