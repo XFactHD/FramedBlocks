@@ -39,7 +39,7 @@ public class FramedLatticeModel extends FramedBlockModel
                 }
                 else
                 {
-                    BakedQuadTransformer.offsetQuadInDir(topBotQuad, quad.getFace().getOpposite(), 6F/16F);
+                    BakedQuadTransformer.setQuadPosInFacingDir(topBotQuad, 10F/16F);
                     quadMap.get(null).add(topBotQuad);
                 }
             }
@@ -49,14 +49,14 @@ public class FramedLatticeModel extends FramedBlockModel
                 topBotQuad = ModelUtils.duplicateQuad(quad);
                 if (BakedQuadTransformer.createTopBottomQuad(topBotQuad, 0, 6F/16F, 6F/16F, 10F/16F))
                 {
-                    BakedQuadTransformer.offsetQuadInDir(topBotQuad, quad.getFace().getOpposite(), 6F/16F);
+                    BakedQuadTransformer.setQuadPosInFacingDir(topBotQuad, 10F/16F);
                     quadMap.get(null).add(topBotQuad);
                 }
 
                 topBotQuad = ModelUtils.duplicateQuad(quad);
                 if (BakedQuadTransformer.createTopBottomQuad(topBotQuad, 10F/16F, 6F/16F, 1, 10F/16F))
                 {
-                    BakedQuadTransformer.offsetQuadInDir(topBotQuad, quad.getFace().getOpposite(), 6F/16F);
+                    BakedQuadTransformer.setQuadPosInFacingDir(topBotQuad, 10F/16F);
                     quadMap.get(null).add(topBotQuad);
                 }
             }
@@ -66,14 +66,14 @@ public class FramedLatticeModel extends FramedBlockModel
                 topBotQuad = ModelUtils.duplicateQuad(quad);
                 if (BakedQuadTransformer.createTopBottomQuad(topBotQuad, 6F/16F, 0, 10F/16F, 6F/16F))
                 {
-                    BakedQuadTransformer.offsetQuadInDir(topBotQuad, quad.getFace().getOpposite(), 6F/16F);
+                    BakedQuadTransformer.setQuadPosInFacingDir(topBotQuad, 10F/16F);
                     quadMap.get(null).add(topBotQuad);
                 }
 
                 topBotQuad = ModelUtils.duplicateQuad(quad);
                 if (BakedQuadTransformer.createTopBottomQuad(topBotQuad, 6F/16F, 10F/16F, 10F/16F, 1))
                 {
-                    BakedQuadTransformer.offsetQuadInDir(topBotQuad, quad.getFace().getOpposite(), 6F/16F);
+                    BakedQuadTransformer.setQuadPosInFacingDir(topBotQuad, 10F/16F);
                     quadMap.get(null).add(topBotQuad);
                 }
             }
@@ -92,14 +92,14 @@ public class FramedLatticeModel extends FramedBlockModel
             BakedQuad sideQuad = ModelUtils.duplicateQuad(quad);
             if (BakedQuadTransformer.createSideQuad(sideQuad, 6F/16F, 0, 10F/16F, 6F/16F))
             {
-                BakedQuadTransformer.offsetQuadInDir(sideQuad, quad.getFace().getOpposite(), 6F/16F);
+                BakedQuadTransformer.setQuadPosInFacingDir(sideQuad, 10F/16F);
                 quadMap.get(null).add(sideQuad);
             }
 
             sideQuad = ModelUtils.duplicateQuad(quad);
             if (BakedQuadTransformer.createSideQuad(sideQuad, 6F/16F, 10F/16F, 10F/16F, 1))
             {
-                BakedQuadTransformer.offsetQuadInDir(sideQuad, quad.getFace().getOpposite(), 6F/16F);
+                BakedQuadTransformer.setQuadPosInFacingDir(sideQuad, 10F/16F);
                 quadMap.get(null).add(sideQuad);
             }
         }
@@ -116,7 +116,7 @@ public class FramedLatticeModel extends FramedBlockModel
             }
             else
             {
-                BakedQuadTransformer.offsetQuadInDir(sideQuad, quad.getFace().getOpposite(), 6F/16F);
+                BakedQuadTransformer.setQuadPosInFacingDir(sideQuad, 10F/16F);
                 quadMap.get(null).add(sideQuad);
             }
         }
@@ -126,14 +126,14 @@ public class FramedLatticeModel extends FramedBlockModel
             sideQuad = ModelUtils.duplicateQuad(quad);
             if (BakedQuadTransformer.createSideQuad(sideQuad, 0, 6F/16F, 6F/16F, 10F/16F))
             {
-                BakedQuadTransformer.offsetQuadInDir(sideQuad, quad.getFace().getOpposite(), 6F/16F);
+                BakedQuadTransformer.setQuadPosInFacingDir(sideQuad, 10F/16F);
                 quadMap.get(null).add(sideQuad);
             }
 
             sideQuad = ModelUtils.duplicateQuad(quad);
             if (BakedQuadTransformer.createSideQuad(sideQuad, 10F/16F, 6F/16F, 1, 10F/16F))
             {
-                BakedQuadTransformer.offsetQuadInDir(sideQuad, quad.getFace().getOpposite(), 6F/16F);
+                BakedQuadTransformer.setQuadPosInFacingDir(sideQuad, 10F/16F);
                 quadMap.get(null).add(sideQuad);
             }
         }
