@@ -49,7 +49,7 @@ public interface SideSkipPredicate
 
     static boolean compareState(IBlockReader world, BlockPos pos, Direction side)
     {
-        return compareState(world, pos, side, side);
+        return compareState(world, pos, side, side.getOpposite());
     }
 
     static boolean compareState(IBlockReader world, BlockPos pos, Direction side, Direction camoSide)
@@ -57,7 +57,7 @@ public interface SideSkipPredicate
         TileEntity te = world.getTileEntity(pos.offset(side));
         if (te instanceof FramedTileEntity)
         {
-            BlockState adjState = ((FramedTileEntity) te).getCamoState(side.getOpposite());
+            BlockState adjState = ((FramedTileEntity) te).getCamoState(camoSide);
             //noinspection deprecation
             if (adjState.isAir()) { return false; }
 

@@ -6,7 +6,7 @@ import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.item.BlockItemUseContext;
 import net.minecraft.state.StateContainer;
-import net.minecraft.state.properties.BlockStateProperties;
+import net.minecraft.state.properties.*;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.Direction;
 import net.minecraft.util.math.shapes.VoxelShape;
@@ -96,6 +96,24 @@ public class FramedSlabEdgeBlock extends FramedBlock
                 FramedDoubleTileEntity tile = (FramedDoubleTileEntity) te;
 
                 return SideSkipPredicate.compareState(world, pos, tile.getCamoState(dir), side);
+            }
+            return false;
+        }
+
+        if (adjState.getBlock() == FBContent.blockFramedStairs)
+        {
+            Direction adjDir = adjState.get(BlockStateProperties.HORIZONTAL_FACING);
+            StairsShape adjShape = adjState.get(BlockStateProperties.STAIRS_SHAPE);
+            boolean adjTop = adjState.get(BlockStateProperties.HALF) == Half.TOP;
+
+            if ((top && side == Direction.UP) || (!top && side == Direction.DOWN))
+            {
+                if (adjShape != StairsShape.STRAIGHT || dir != adjDir) { return false; }
+                return top == adjTop && SideSkipPredicate.compareState(world, pos, side);
+            }
+            else if (top == adjTop && side == dir && FramedStairsBlock.isSlabSide(adjShape, adjDir, side.getOpposite()))
+            {
+                return SideSkipPredicate.compareState(world, pos, side);
             }
             return false;
         }

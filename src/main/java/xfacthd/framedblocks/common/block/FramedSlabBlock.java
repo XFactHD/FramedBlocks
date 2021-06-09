@@ -7,7 +7,7 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.BlockItemUseContext;
 import net.minecraft.item.ItemStack;
 import net.minecraft.state.StateContainer;
-import net.minecraft.state.properties.BlockStateProperties;
+import net.minecraft.state.properties.*;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.*;
 import net.minecraft.util.math.BlockPos;
@@ -36,9 +36,10 @@ public class FramedSlabBlock extends FramedBlock
             return SideSkipPredicate.CTM.test(world, pos, state, adjState, side);
         }
 
+        boolean top = state.get(PropertyHolder.TOP);
+
         if (adjState.getBlock() == FBContent.blockFramedSlab)
         {
-            boolean top = state.get(PropertyHolder.TOP);
             if (top != adjState.get(PropertyHolder.TOP)) { return false; }
 
             return SideSkipPredicate.compareState(world, pos, side, top ? Direction.UP : Direction.DOWN);
@@ -50,17 +51,29 @@ public class FramedSlabBlock extends FramedBlock
             if (!(te instanceof FramedDoubleTileEntity)) { return false; }
             FramedDoubleTileEntity tile = (FramedDoubleTileEntity) te;
 
-            Direction face = state.get(PropertyHolder.TOP) ? Direction.UP : Direction.DOWN;
+            Direction face = top ? Direction.UP : Direction.DOWN;
             return SideSkipPredicate.compareState(world, pos, tile.getCamoState(face), face);
         }
 
         if (adjState.getBlock() == FBContent.blockFramedSlabEdge)
         {
-            boolean top = state.get(PropertyHolder.TOP);
             if (top != adjState.get(PropertyHolder.TOP)) { return false; }
             if (adjState.get(PropertyHolder.FACING_HOR) != side.getOpposite()) { return false; }
 
             return SideSkipPredicate.compareState(world, pos, side, top ? Direction.UP : Direction.DOWN);
+        }
+
+        if (adjState.getBlock() == FBContent.blockFramedStairs)
+        {
+            Direction adjDir = adjState.get(BlockStateProperties.HORIZONTAL_FACING);
+            StairsShape adjShape = adjState.get(BlockStateProperties.STAIRS_SHAPE);
+            boolean adjTop = adjState.get(BlockStateProperties.HALF) == Half.TOP;
+
+            if (top == adjTop && FramedStairsBlock.isSlabSide(adjShape, adjDir, side.getOpposite()))
+            {
+                return SideSkipPredicate.compareState(world, pos, side);
+            }
+            return false;
         }
 
         return false;

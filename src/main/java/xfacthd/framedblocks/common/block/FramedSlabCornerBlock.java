@@ -6,7 +6,7 @@ import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.item.BlockItemUseContext;
 import net.minecraft.state.StateContainer;
-import net.minecraft.state.properties.BlockStateProperties;
+import net.minecraft.state.properties.*;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.Direction;
 import net.minecraft.util.math.shapes.VoxelShape;
@@ -57,6 +57,25 @@ public class FramedSlabCornerBlock extends FramedBlock
             if ((top && side == Direction.UP) || (!top && side == Direction.DOWN))
             {
                 return dir == adjDir && SideSkipPredicate.compareState(world, pos, side);
+            }
+            return false;
+        }
+
+        if (adjState.getBlock() == FBContent.blockFramedStairs && side.getAxis() == Direction.Axis.Y)
+        {
+            Direction adjDir = adjState.get(BlockStateProperties.HORIZONTAL_FACING);
+            StairsShape adjShape = adjState.get(BlockStateProperties.STAIRS_SHAPE);
+            boolean adjTop = adjState.get(BlockStateProperties.HALF) == Half.TOP;
+
+            if (top != adjTop) { return false; }
+
+            if (adjShape == StairsShape.OUTER_LEFT)
+            {
+                return dir == adjDir && SideSkipPredicate.compareState(world, pos, side);
+            }
+            if (adjShape == StairsShape.OUTER_RIGHT)
+            {
+                return dir.rotateYCCW() == adjDir && SideSkipPredicate.compareState(world, pos, side);
             }
             return false;
         }
