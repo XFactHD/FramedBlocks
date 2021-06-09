@@ -20,6 +20,7 @@ public enum BlockType
     FRAMED_INNER_THREEWAY_CORNER( true, false,  true,  true, FramedThreewayCornerBlock.CTM_PREDICATE, FramedThreewayCornerBlock.SKIP_PREDICATE, FramedThreewayCornerBlock::generateInnerThreewayShapes),
     FRAMED_SLAB                 (false, false,  true,  true, FramedSlabBlock.CTM_PREDICATE, FramedSlabBlock.SKIP_PREDICATE, FramedSlabBlock::generateShapes),
     FRAMED_SLAB_EDGE            (false, false,  true,  true, CtmPredicate.FALSE, FramedSlabEdgeBlock.SKIP_PREDICATE, FramedSlabEdgeBlock::generateShapes),
+    FRAMED_SLAB_CORNER          (false, false,  true,  true, CtmPredicate.FALSE, FramedSlabCornerBlock.SKIP_PREDICATE, FramedSlabCornerBlock::generateShapes),
     FRAMED_PANEL                (false, false,  true,  true, FramedPanelBlock.CTM_PREDICATE, FramedPanelBlock.SKIP_PREDICATE, FramedPanelBlock::generateShapes),
     FRAMED_CORNER_PILLAR        (false, false,  true,  true, CtmPredicate.FALSE, FramedCornerPillarBlock.SKIP_PREDICATE, FramedCornerPillarBlock::generateShapes),
     FRAMED_STAIRS               (false, false,  true,  true, FramedStairsBlock.CTM_PREDICATE, FramedStairsBlock.SKIP_PREDICATE),

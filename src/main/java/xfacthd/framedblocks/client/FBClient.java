@@ -104,6 +104,7 @@ public class FBClient
         replaceModels(FBContent.blockFramedInnerThreewayCorner, registry, FramedInnerThreewayCornerModelV2::new, FramedInnerThreewayCornerModelV2::new);
         replaceModels(FBContent.blockFramedSlab, registry, FramedSlabModelV2::new);
         replaceModels(FBContent.blockFramedSlabEdge, registry, FramedSlabEdgeModel::new);
+        replaceModels(FBContent.blockFramedSlabCorner, registry, FramedSlabCornerModel::new);
         replaceModels(FBContent.blockFramedPanel, registry, FramedPanelModelV2::new);
         replaceModels(FBContent.blockFramedCornerPillar, registry, FramedCornerPillarModelV2::new);
         replaceModels(FBContent.blockFramedStairs, registry, FramedStairsModelV2::new);

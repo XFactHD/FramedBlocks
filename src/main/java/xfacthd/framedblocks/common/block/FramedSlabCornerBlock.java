@@ -18,73 +18,62 @@ import xfacthd.framedblocks.common.tileentity.FramedDoubleTileEntity;
 import xfacthd.framedblocks.common.util.SideSkipPredicate;
 import xfacthd.framedblocks.common.util.Utils;
 
-public class FramedCornerPillarBlock extends FramedBlock
+public class FramedSlabCornerBlock extends FramedBlock
 {
     public static final SideSkipPredicate SKIP_PREDICATE = (world, pos, state, adjState, side) ->
     {
         Direction dir = state.get(PropertyHolder.FACING_HOR);
-
-        if (adjState.getBlock() instanceof FramedPanelBlock && (side == dir || side == dir.rotateYCCW()))
-        {
-            Direction adjDir = adjState.get(PropertyHolder.FACING_HOR);
-            if ((side == dir && adjDir == dir.rotateYCCW()) || (side == dir.rotateYCCW() && dir == adjDir))
-            {
-                return SideSkipPredicate.compareState(world, pos, side);
-            }
-            return false;
-        }
-
-        if (adjState.getBlock() instanceof FramedCornerPillarBlock)
-        {
-            Direction adjDir = adjState.get(PropertyHolder.FACING_HOR);
-            if ((side == dir && adjDir == dir.rotateYCCW()) || (side == dir.rotateYCCW() && adjDir == dir.rotateY()))
-            {
-                return SideSkipPredicate.compareState(world, pos, side);
-            }
-            return false;
-        }
+        boolean top = state.get(PropertyHolder.TOP);
 
         if (adjState.getBlock() == FBContent.blockFramedSlabCorner)
         {
             Direction adjDir = adjState.get(PropertyHolder.FACING_HOR);
             boolean adjTop = adjState.get(PropertyHolder.TOP);
-            if ((adjTop && side == Direction.DOWN) || (!adjTop && side == Direction.UP))
+            if ((side == dir && adjDir == dir.rotateYCCW()) || (side == dir.rotateYCCW() && adjDir == dir.rotateY()))
+            {
+                return top == adjTop && SideSkipPredicate.compareState(world, pos, side);
+            }
+            if ((side == Direction.DOWN && !top && adjTop) || (side == Direction.UP && top && !adjTop))
+            {
+                return SideSkipPredicate.compareState(world, pos, side);
+            }
+            return false;
+        }
+
+        if (adjState.getBlock() == FBContent.blockFramedSlabEdge)
+        {
+            Direction adjDir = adjState.get(PropertyHolder.FACING_HOR);
+            boolean adjTop = adjState.get(PropertyHolder.TOP);
+            if ((side == dir && adjDir == dir.rotateYCCW()) || (side == dir.rotateYCCW() && adjDir == dir))
+            {
+                return top == adjTop && SideSkipPredicate.compareState(world, pos, side);
+            }
+            return false;
+        }
+
+        if (adjState.getBlock() == FBContent.blockFramedCornerPillar)
+        {
+            Direction adjDir = adjState.get(PropertyHolder.FACING_HOR);
+            if ((top && side == Direction.UP) || (!top && side == Direction.DOWN))
             {
                 return dir == adjDir && SideSkipPredicate.compareState(world, pos, side);
             }
             return false;
         }
 
-        if (adjState.getBlock() instanceof FramedDoublePanelBlock)
-        {
-            TileEntity te = world.getTileEntity(pos.offset(side));
-            if (!(te instanceof FramedDoubleTileEntity)) { return false; }
-            FramedDoubleTileEntity tile = (FramedDoubleTileEntity) te;
-
-            Direction adjDir = adjState.get(PropertyHolder.FACING_NE);
-            if (side == dir && (adjDir == dir.rotateY() || adjDir == dir.rotateYCCW()))
-            {
-                return SideSkipPredicate.compareState(world, pos, tile.getCamoState(dir.rotateYCCW()), side);
-            }
-
-            if (side == dir.rotateYCCW() && (adjDir == dir || adjDir == dir.getOpposite()))
-            {
-                return SideSkipPredicate.compareState(world, pos, tile.getCamoState(dir), side);
-            }
-        }
-
         return false;
     };
 
-    public FramedCornerPillarBlock()
+    public FramedSlabCornerBlock()
     {
-        super("framed_corner_pillar", BlockType.FRAMED_CORNER_PILLAR);
+        super("framed_slab_corner", BlockType.FRAMED_SLAB_CORNER);
+        setDefaultState(getDefaultState().with(PropertyHolder.TOP, false));
     }
 
     @Override
     protected void fillStateContainer(StateContainer.Builder<Block, BlockState> builder)
     {
-        builder.add(PropertyHolder.FACING_HOR, BlockStateProperties.WATERLOGGED);
+        builder.add(PropertyHolder.FACING_HOR, PropertyHolder.TOP, BlockStateProperties.WATERLOGGED);
     }
 
     @Override
@@ -117,19 +106,22 @@ public class FramedCornerPillarBlock extends FramedBlock
             state = state.with(PropertyHolder.FACING_HOR, dir);
         }
 
+        state = withTop(state, face, context.getHitVec());
         return withWater(state, context.getWorld(), context.getPos());
     }
 
     public static ImmutableMap<BlockState, VoxelShape> generateShapes(ImmutableList<BlockState> states)
     {
-        VoxelShape shape = makeCuboidShape(0, 0, 0, 8, 16, 8);
+        VoxelShape shapeBot = makeCuboidShape(0, 0, 0, 8, 8, 8);
+        VoxelShape shapeTop = makeCuboidShape(0, 8, 0, 8, 16, 8);
 
         ImmutableMap.Builder<BlockState, VoxelShape> builder = ImmutableMap.builder();
 
         for (BlockState state : states)
         {
             Direction dir = state.get(PropertyHolder.FACING_HOR);
-            builder.put(state, Utils.rotateShape(Direction.NORTH, dir, shape));
+            boolean top = state.get(PropertyHolder.TOP);
+            builder.put(state, Utils.rotateShape(Direction.NORTH, dir, top ? shapeTop : shapeBot));
         }
 
         return builder.build();

@@ -10,6 +10,7 @@ import net.minecraft.state.properties.BlockStateProperties;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.Direction;
 import net.minecraft.util.math.shapes.VoxelShape;
+import xfacthd.framedblocks.common.FBContent;
 import xfacthd.framedblocks.common.data.BlockType;
 import xfacthd.framedblocks.common.data.PropertyHolder;
 import xfacthd.framedblocks.common.tileentity.FramedDoubleTileEntity;
@@ -21,21 +22,23 @@ public class FramedSlabEdgeBlock extends FramedBlock
     public static final SideSkipPredicate SKIP_PREDICATE = (world, pos, state, adjState, side) ->
     {
         Direction dir = state.get(PropertyHolder.FACING_HOR);
+        boolean top = state.get(PropertyHolder.TOP);
 
         if (adjState.getBlock() instanceof FramedSlabEdgeBlock)
         {
             Direction adjDir = adjState.get(PropertyHolder.FACING_HOR);
+            boolean adjTop = adjState.get(PropertyHolder.TOP);
             if (side == dir && adjDir == side.getOpposite())
             {
-                return SideSkipPredicate.compareState(world, pos, side);
+                return top == adjTop && SideSkipPredicate.compareState(world, pos, side);
             }
             else if (side == dir.rotateY() || side == dir.rotateYCCW())
             {
-                return dir == adjDir && SideSkipPredicate.compareState(world, pos, side);
+                return dir == adjDir && top == adjTop && SideSkipPredicate.compareState(world, pos, side);
             }
             else if (side.getAxis() == Direction.Axis.Y && dir == adjDir)
             {
-                return state.get(PropertyHolder.TOP) != adjState.get(PropertyHolder.TOP) && SideSkipPredicate.compareState(world, pos, side);
+                return top != adjTop && SideSkipPredicate.compareState(world, pos, side);
             }
 
             return false;
@@ -43,9 +46,20 @@ public class FramedSlabEdgeBlock extends FramedBlock
 
         if (adjState.getBlock() instanceof FramedSlabBlock && side == dir)
         {
-            if (state.get(PropertyHolder.TOP) != adjState.get(PropertyHolder.TOP)) { return false; }
+            if (top != adjState.get(PropertyHolder.TOP)) { return false; }
 
             return SideSkipPredicate.compareState(world, pos, side);
+        }
+
+        if (adjState.getBlock() == FBContent.blockFramedSlabCorner)
+        {
+            Direction adjDir = adjState.get(PropertyHolder.FACING_HOR);
+            boolean adjTop = adjState.get(PropertyHolder.TOP);
+            if ((side == dir.rotateY() && adjDir == dir) || (side == dir.rotateYCCW() && adjDir == dir.rotateY()))
+            {
+                return top == adjTop && SideSkipPredicate.compareState(world, pos, side);
+            }
+            return false;
         }
 
         if (adjState.getBlock() instanceof FramedDoubleSlabBlock && side == dir)
@@ -63,7 +77,6 @@ public class FramedSlabEdgeBlock extends FramedBlock
             Direction adjDir = adjState.get(PropertyHolder.FACING_HOR);
             if (dir != adjDir) { return false; }
 
-            boolean top = state.get(PropertyHolder.TOP);
             if ((side == Direction.UP && top) || (side == Direction.DOWN && !top))
             {
                 return SideSkipPredicate.compareState(world, pos, side);
@@ -76,7 +89,6 @@ public class FramedSlabEdgeBlock extends FramedBlock
             Direction adjDir = adjState.get(PropertyHolder.FACING_NE);
             if (dir != adjDir && dir != adjDir.getOpposite()) { return false; }
 
-            boolean top = state.get(PropertyHolder.TOP);
             if ((side == Direction.UP && top) || (side == Direction.DOWN && !top))
             {
                 TileEntity te = world.getTileEntity(pos.offset(side));
