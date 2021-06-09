@@ -24,7 +24,7 @@ public class FramedSlabEdgeBlock extends FramedBlock
         Direction dir = state.get(PropertyHolder.FACING_HOR);
         boolean top = state.get(PropertyHolder.TOP);
 
-        if (adjState.getBlock() instanceof FramedSlabEdgeBlock)
+        if (adjState.getBlock() == FBContent.blockFramedSlabEdge)
         {
             Direction adjDir = adjState.get(PropertyHolder.FACING_HOR);
             boolean adjTop = adjState.get(PropertyHolder.TOP);
@@ -44,7 +44,7 @@ public class FramedSlabEdgeBlock extends FramedBlock
             return false;
         }
 
-        if (adjState.getBlock() instanceof FramedSlabBlock && side == dir)
+        if (adjState.getBlock() == FBContent.blockFramedSlab && side == dir)
         {
             if (top != adjState.get(PropertyHolder.TOP)) { return false; }
 
@@ -62,7 +62,7 @@ public class FramedSlabEdgeBlock extends FramedBlock
             return false;
         }
 
-        if (adjState.getBlock() instanceof FramedDoubleSlabBlock && side == dir)
+        if (adjState.getBlock() == FBContent.blockFramedDoubleSlab && side == dir)
         {
             TileEntity te = world.getTileEntity(pos.offset(side));
             if (!(te instanceof FramedDoubleTileEntity)) { return false; }
@@ -72,7 +72,7 @@ public class FramedSlabEdgeBlock extends FramedBlock
             return SideSkipPredicate.compareState(world, pos, tile.getCamoState(face), side);
         }
 
-        if (adjState.getBlock() instanceof FramedPanelBlock && side.getAxis() == Direction.Axis.Y)
+        if (adjState.getBlock() == FBContent.blockFramedPanel && side.getAxis() == Direction.Axis.Y)
         {
             Direction adjDir = adjState.get(PropertyHolder.FACING_HOR);
             if (dir != adjDir) { return false; }
@@ -84,7 +84,7 @@ public class FramedSlabEdgeBlock extends FramedBlock
             return false;
         }
 
-        if (adjState.getBlock() instanceof FramedDoublePanelBlock && side.getAxis() == Direction.Axis.Y)
+        if (adjState.getBlock() == FBContent.blockFramedDoublePanel && side.getAxis() == Direction.Axis.Y)
         {
             Direction adjDir = adjState.get(PropertyHolder.FACING_NE);
             if (dir != adjDir && dir != adjDir.getOpposite()) { return false; }

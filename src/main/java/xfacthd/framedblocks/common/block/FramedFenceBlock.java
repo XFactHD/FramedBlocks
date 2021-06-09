@@ -12,6 +12,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.BlockRayTraceResult;
 import net.minecraft.world.*;
 import xfacthd.framedblocks.FramedBlocks;
+import xfacthd.framedblocks.common.FBContent;
 import xfacthd.framedblocks.common.data.BlockType;
 import xfacthd.framedblocks.common.tileentity.FramedTileEntity;
 import xfacthd.framedblocks.common.util.SideSkipPredicate;
@@ -24,12 +25,12 @@ public class FramedFenceBlock extends FenceBlock implements IFramedBlock
 {
     public static final SideSkipPredicate SKIP_PREDICATE = (world, pos, state, adjState, side) ->
     {
-        if (adjState.getBlock() instanceof FramedFenceBlock)
+        if (adjState.getBlock() == FBContent.blockFramedFence)
         {
             return SideSkipPredicate.compareState(world, pos, side);
         }
 
-        if (adjState.getBlock() instanceof FramedGateBlock)
+        if (adjState.getBlock() == FBContent.blockFramedGate)
         {
             Direction adjDir = adjState.get(BlockStateProperties.HORIZONTAL_FACING);
             if (adjDir == side.rotateY() || adjDir == side.rotateYCCW())

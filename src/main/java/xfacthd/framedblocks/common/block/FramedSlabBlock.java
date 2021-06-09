@@ -36,7 +36,7 @@ public class FramedSlabBlock extends FramedBlock
             return SideSkipPredicate.CTM.test(world, pos, state, adjState, side);
         }
 
-        if (adjState.getBlock() instanceof FramedSlabBlock)
+        if (adjState.getBlock() == FBContent.blockFramedSlab)
         {
             boolean top = state.get(PropertyHolder.TOP);
             if (top != adjState.get(PropertyHolder.TOP)) { return false; }
@@ -44,7 +44,7 @@ public class FramedSlabBlock extends FramedBlock
             return SideSkipPredicate.compareState(world, pos, side, top ? Direction.UP : Direction.DOWN);
         }
 
-        if (adjState.getBlock() instanceof FramedDoubleSlabBlock)
+        if (adjState.getBlock() == FBContent.blockFramedDoubleSlab)
         {
             TileEntity te = world.getTileEntity(pos.offset(side));
             if (!(te instanceof FramedDoubleTileEntity)) { return false; }
@@ -54,7 +54,7 @@ public class FramedSlabBlock extends FramedBlock
             return SideSkipPredicate.compareState(world, pos, tile.getCamoState(face), face);
         }
 
-        if (adjState.getBlock() instanceof FramedSlabEdgeBlock)
+        if (adjState.getBlock() == FBContent.blockFramedSlabEdge)
         {
             boolean top = state.get(PropertyHolder.TOP);
             if (top != adjState.get(PropertyHolder.TOP)) { return false; }

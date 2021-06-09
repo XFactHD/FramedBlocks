@@ -24,7 +24,7 @@ public class FramedCornerPillarBlock extends FramedBlock
     {
         Direction dir = state.get(PropertyHolder.FACING_HOR);
 
-        if (adjState.getBlock() instanceof FramedPanelBlock && (side == dir || side == dir.rotateYCCW()))
+        if (adjState.getBlock() == FBContent.blockFramedPanel && (side == dir || side == dir.rotateYCCW()))
         {
             Direction adjDir = adjState.get(PropertyHolder.FACING_HOR);
             if ((side == dir && adjDir == dir.rotateYCCW()) || (side == dir.rotateYCCW() && dir == adjDir))
@@ -34,7 +34,7 @@ public class FramedCornerPillarBlock extends FramedBlock
             return false;
         }
 
-        if (adjState.getBlock() instanceof FramedCornerPillarBlock)
+        if (adjState.getBlock() == FBContent.blockFramedCornerPillar)
         {
             Direction adjDir = adjState.get(PropertyHolder.FACING_HOR);
             if ((side == dir && adjDir == dir.rotateYCCW()) || (side == dir.rotateYCCW() && adjDir == dir.rotateY()))
@@ -55,7 +55,7 @@ public class FramedCornerPillarBlock extends FramedBlock
             return false;
         }
 
-        if (adjState.getBlock() instanceof FramedDoublePanelBlock)
+        if (adjState.getBlock() == FBContent.blockFramedDoublePanel)
         {
             TileEntity te = world.getTileEntity(pos.offset(side));
             if (!(te instanceof FramedDoubleTileEntity)) { return false; }

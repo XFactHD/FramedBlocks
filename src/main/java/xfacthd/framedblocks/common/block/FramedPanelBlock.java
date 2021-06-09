@@ -24,20 +24,19 @@ import xfacthd.framedblocks.common.util.*;
 @SuppressWarnings("deprecation")
 public class FramedPanelBlock extends FramedBlock
 {
-    public static final CtmPredicate CTM_PREDICATE = (state, dir) ->
-            state.get(PropertyHolder.FACING_HOR) == dir;
+    public static final CtmPredicate CTM_PREDICATE = (state, dir) -> state.get(PropertyHolder.FACING_HOR) == dir;
 
     public static final SideSkipPredicate SKIP_PREDICATE = (world, pos, state, adjState, side) ->
     {
         Direction dir = state.get(PropertyHolder.FACING_HOR);
         if (side == dir) { return SideSkipPredicate.CTM.test(world, pos, state, adjState, side); }
 
-        if (adjState.getBlock() instanceof FramedPanelBlock && side != dir.getOpposite())
+        if (adjState.getBlock() == FBContent.blockFramedPanel && side != dir.getOpposite())
         {
             return dir == adjState.get(PropertyHolder.FACING_HOR) && SideSkipPredicate.compareState(world, pos, side, dir);
         }
 
-        if (adjState.getBlock() instanceof FramedDoublePanelBlock && side != dir.getOpposite())
+        if (adjState.getBlock() == FBContent.blockFramedDoublePanel && side != dir.getOpposite())
         {
             TileEntity te = world.getTileEntity(pos.offset(side));
             if (!(te instanceof FramedDoubleTileEntity)) { return false; }
@@ -47,7 +46,7 @@ public class FramedPanelBlock extends FramedBlock
             return (dir == adjDir || dir == adjDir.getOpposite()) && SideSkipPredicate.compareState(world, pos, tile.getCamoState(dir), dir);
         }
 
-        if (adjState.getBlock() instanceof FramedCornerPillarBlock)
+        if (adjState.getBlock() == FBContent.blockFramedCornerPillar)
         {
             Direction adjDir = adjState.get(PropertyHolder.FACING_HOR);
             if ((side == dir.rotateY() && adjDir == dir) || (side == dir.rotateYCCW() && adjDir == dir.rotateY()))
@@ -57,7 +56,7 @@ public class FramedPanelBlock extends FramedBlock
             return false;
         }
 
-        if (adjState.getBlock() instanceof FramedSlabEdgeBlock)
+        if (adjState.getBlock() == FBContent.blockFramedSlabEdge)
         {
             Direction adjDir = adjState.get(PropertyHolder.FACING_HOR);
             if (adjDir != dir) { return false; }
