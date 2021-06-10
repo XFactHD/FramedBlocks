@@ -122,7 +122,8 @@ public class FBClient
         replaceModels(FBContent.blockFramedDoubleSlab, registry, FramedDoubleSlabModel::new);
         replaceModels(FBContent.blockFramedDoublePanel, registry, FramedDoublePanelModel::new);
         replaceModels(FBContent.blockFramedDoubleSlope, registry, FramedDoubleSlopeModel::new);
-
+        replaceModels(FBContent.blockFramedTorch, registry, FramedTorchModel::new);
+        replaceModels(FBContent.blockFramedWallTorch, registry, FramedWallTorchModel::new);
         replaceModels(FBContent.blockFramedFloor, registry, FramedFloorModel::new);
         replaceModels(FBContent.blockFramedLattice, registry, FramedLatticeModel::new);
 

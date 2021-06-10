@@ -52,6 +52,8 @@ public class FramedBlockStateProvider extends BlockStateProvider
         registerFramedDoubleSlab();
         registerDoublePanel();
         registerDoubleSlope();
+        registerFramedTorch();
+        registerFramedWallTorch();
         registerFramedFloorBoard();
         registerFramedLattice();
         registerFramedCollapsibleBlock();
@@ -615,6 +617,24 @@ public class FramedBlockStateProvider extends BlockStateProvider
         ModelFile doubleSlope = models().getExistingFile(modLoc("framed_double_slope"));
         simpleBlock(FBContent.blockFramedDoubleSlope, doubleSlope);
         simpleBlockItem(FBContent.blockFramedDoubleSlope, doubleSlope);
+    }
+
+    private void registerFramedTorch()
+    {
+        ModelFile torch = models().getExistingFile(modLoc("framed_torch"));
+        simpleBlock(FBContent.blockFramedTorch, torch);
+        itemModels().withExistingParent("framed_torch", "item/generated").texture("layer0", modLoc("block/framed_torch"));
+    }
+
+    private void registerFramedWallTorch()
+    {
+        ModelFile wallTorch = models().getExistingFile(modLoc("framed_wall_torch"));
+        getVariantBuilder(FBContent.blockFramedWallTorch).forAllStates(state ->
+        {
+            Direction dir = state.get(BlockStateProperties.HORIZONTAL_FACING);
+            int rotY = ((int)dir.getHorizontalAngle() + 90) % 360;
+            return ConfiguredModel.builder().modelFile(wallTorch).rotationY(rotY).build();
+        });
     }
 
     private void registerFramedFloorBoard()

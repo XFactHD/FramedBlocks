@@ -4,7 +4,6 @@ import net.minecraft.block.BlockState;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.model.BakedQuad;
 import net.minecraft.client.renderer.model.IBakedModel;
-import net.minecraft.client.renderer.vertex.VertexFormatElement;
 import net.minecraft.state.properties.BlockStateProperties;
 import net.minecraft.util.Direction;
 import net.minecraft.util.ResourceLocation;
@@ -20,6 +19,7 @@ import java.util.*;
 public class FramedWallTorchModel extends FramedBlockModel
 {
     private static final ResourceLocation TEXTURE = new ResourceLocation(FramedBlocks.MODID, "block/framed_torch");
+    private static final Vector3f ROTATION_ORIGIN = new Vector3f(0, 3.5F/16F, 8F/16F);
 
     private final List<BakedQuad> topQuads = new ArrayList<>();
     private final Direction dir;
@@ -64,8 +64,6 @@ public class FramedWallTorchModel extends FramedBlockModel
         "rotation": {"angle": -22.5, "axis": "z", "origin": [0, 3.5, 8]},
         */
 
-
-
         if (quad.getFace().getAxis() == Direction.Axis.Y)
         {
             BakedQuad topBotQuad = ModelUtils.duplicateQuad(quad);
@@ -101,18 +99,16 @@ public class FramedWallTorchModel extends FramedBlockModel
                 quadMap.get(null).add(sideQuad);
             }
         }
+    }
 
-        //FIXME: rotation fucks shit over
-        Vector3f rotOrigin = new Vector3f(0, 3.5F/16F, 8F/16F);
-        float angle = ((int)dir.getHorizontalAngle() + 90) % 360;
+    @Override
+    protected void postProcessQuads(Map<Direction, List<BakedQuad>> quadMap)
+    {
+        float yAngle = 270F - dir.getHorizontalAngle();
         quadMap.get(null).forEach(q ->
         {
-            float[][] pos = ModelUtils.unpackElement(q, VertexFormatElement.Usage.POSITION, 0);
-            Vector3f posVec = new Vector3f(pos[1]);
-
-            //BakedQuadTransformer.rotateQuadAroundAxis(q, Direction.Axis.Z, posVec, -22.5F, false);
-            BakedQuadTransformer.rotateQuadAroundAxis(q, Direction.Axis.Z, rotOrigin, -22.5F, false);
-            BakedQuadTransformer.rotateQuadAroundAxisCentered(q, Direction.Axis.Y, angle, false);
+            BakedQuadTransformer.rotateQuadAroundAxis(q, Direction.Axis.Z, ROTATION_ORIGIN, -22.5F, false);
+            BakedQuadTransformer.rotateQuadAroundAxisCentered(q, Direction.Axis.Y, yAngle, false);
         });
     }
 

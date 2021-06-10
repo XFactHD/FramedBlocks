@@ -127,11 +127,14 @@ public abstract class FramedBlockModel extends BakedModelProxy
         {
             transformQuad(quadMap, quad);
         }
+        postProcessQuads(quadMap);
 
         return quadMap;
     }
 
     protected abstract void transformQuad(Map<Direction, List<BakedQuad>> quadMap, BakedQuad quad);
+
+    protected void postProcessQuads(Map<Direction, List<BakedQuad>> quadMap) {}
 
     @Override
     public TextureAtlasSprite getParticleTexture(IModelData data)

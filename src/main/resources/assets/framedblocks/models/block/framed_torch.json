@@ -1,0 +1,41 @@
+{
+	"credit": "Made with Blockbench",
+	"ambientocclusion": false,
+	"textures": {
+		"particle": "framedblocks:block/framed_torch",
+		"torch": "framedblocks:block/framed_torch",
+		"top": "minecraft:block/torch"
+	},
+	"elements": [
+		{
+			"name": "base",
+			"from": [7, 0, 7],
+			"to": [9, 8, 9],
+			"shade": false,
+			"rotation": {"angle": 0, "axis": "y", "origin": [15, 8, 15]},
+			"faces": {
+				"north": {"uv": [7, 8, 9, 16], "texture": "#torch"},
+				"east": {"uv": [7, 8, 9, 16], "texture": "#torch"},
+				"south": {"uv": [7, 8, 9, 16], "texture": "#torch"},
+				"west": {"uv": [7, 8, 9, 16], "texture": "#torch"},
+				"up": {"uv": [7, 14, 9, 16], "texture": "#torch"},
+				"down": {"uv": [7, 14, 9, 16], "texture": "#torch"}
+			}
+		},
+		{
+			"name": "top",
+			"from": [7, 8, 7],
+			"to": [9, 10, 9],
+			"shade": false,
+			"rotation": {"angle": 0, "axis": "y", "origin": [15, 16, 15]},
+			"faces": {
+				"north": {"uv": [7, 6, 9, 8], "texture": "#top"},
+				"east": {"uv": [7, 6, 9, 8], "texture": "#top"},
+				"south": {"uv": [7, 6, 9, 8], "texture": "#top"},
+				"west": {"uv": [7, 6, 9, 8], "texture": "#top"},
+				"up": {"uv": [7, 6, 9, 8], "texture": "#top"},
+				"down": {"uv": [7, 6, 9, 8], "texture": "#top"}
+			}
+		}
+	]
+}
