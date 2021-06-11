@@ -21,7 +21,7 @@ public class FramedWallTorchModel extends FramedBlockModel
     private static final ResourceLocation TEXTURE = new ResourceLocation(FramedBlocks.MODID, "block/framed_torch");
     private static final Vector3f ROTATION_ORIGIN = new Vector3f(0, 3.5F/16F, 8F/16F);
 
-    private final List<BakedQuad> topQuads = new ArrayList<>();
+    protected final List<BakedQuad> topQuads = new ArrayList<>();
     private final Direction dir;
 
     public FramedWallTorchModel(BlockState state, IBakedModel baseModel)
@@ -43,7 +43,7 @@ public class FramedWallTorchModel extends FramedBlockModel
         return quads;
     }
 
-    private void getTopQuads(BlockState state, Random rand, IModelData extraData)
+    protected void getTopQuads(BlockState state, Random rand, IModelData extraData)
     {
         List<BakedQuad> quads = baseModel.getQuads(state, null, rand, extraData);
         for (BakedQuad quad : quads)

@@ -213,6 +213,16 @@ public class FramedRecipeProvider extends RecipeProvider
                 .addCriterion("hasFramedBlock", HAS_FRAMED_BLOCK)
                 .build(consumer);
 
+        ShapedRecipeBuilder.shapedRecipe(FBContent.blockFramedSoulTorch, 4)
+                .patternLine("C")
+                .patternLine("F")
+                .patternLine("S")
+                .key('C', ItemTags.COALS)
+                .key('F', FBContent.blockFramedCube)
+                .key('S', ItemTags.SOUL_FIRE_BASE_BLOCKS)
+                .addCriterion("hasFramedBlock", HAS_FRAMED_BLOCK)
+                .build(consumer);
+
         ShapedRecipeBuilder.shapedRecipe(FBContent.blockFramedFloor, 3)
                 .patternLine("FFH")
                 .key('F', FBContent.blockFramedCube)

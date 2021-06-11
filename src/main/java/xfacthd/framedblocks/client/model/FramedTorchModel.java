@@ -18,7 +18,7 @@ public class FramedTorchModel extends FramedBlockModel
 {
     private static final ResourceLocation TEXTURE = new ResourceLocation(FramedBlocks.MODID, "block/framed_torch");
 
-    private final List<BakedQuad> topQuads = new ArrayList<>();
+    protected final List<BakedQuad> topQuads = new ArrayList<>();
 
     public FramedTorchModel(BlockState state, IBakedModel baseModel) { super(state, baseModel); }
 
@@ -35,7 +35,7 @@ public class FramedTorchModel extends FramedBlockModel
         return quads;
     }
 
-    private void getTopQuads(BlockState state, Random rand, IModelData extraData)
+    protected void getTopQuads(BlockState state, Random rand, IModelData extraData)
     {
         List<BakedQuad> quads = baseModel.getQuads(state, null, rand, extraData);
         for (BakedQuad quad : quads)

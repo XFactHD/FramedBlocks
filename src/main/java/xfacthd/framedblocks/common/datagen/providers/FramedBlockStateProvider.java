@@ -54,6 +54,8 @@ public class FramedBlockStateProvider extends BlockStateProvider
         registerDoubleSlope();
         registerFramedTorch();
         registerFramedWallTorch();
+        registerFramedSoulTorch();
+        registerFramedSoulWallTorch();
         registerFramedFloorBoard();
         registerFramedLattice();
         registerFramedVerticalStairs();
@@ -631,6 +633,30 @@ public class FramedBlockStateProvider extends BlockStateProvider
     {
         ModelFile wallTorch = models().getExistingFile(modLoc("framed_wall_torch"));
         getVariantBuilder(FBContent.blockFramedWallTorch).forAllStates(state ->
+        {
+            Direction dir = state.get(BlockStateProperties.HORIZONTAL_FACING);
+            int rotY = ((int)dir.getHorizontalAngle() + 90) % 360;
+            return ConfiguredModel.builder().modelFile(wallTorch).rotationY(rotY).build();
+        });
+    }
+
+    private void registerFramedSoulTorch()
+    {
+        ModelFile torch = models().withExistingParent("framed_soul_torch", modLoc("framed_torch"))
+                .texture("torch", modLoc("block/framed_soul_torch"))
+                .texture("particle", modLoc("block/framed_soul_torch"))
+                .texture("top", mcLoc("block/soul_torch"));
+        simpleBlock(FBContent.blockFramedSoulTorch, torch);
+        itemModels().withExistingParent("framed_soul_torch", "item/generated").texture("layer0", modLoc("block/framed_soul_torch"));
+    }
+
+    private void registerFramedSoulWallTorch()
+    {
+        ModelFile wallTorch = models().withExistingParent("framed_soul_wall_torch", modLoc("framed_wall_torch"))
+                .texture("torch", modLoc("block/framed_soul_torch"))
+                .texture("particle", modLoc("block/framed_soul_torch"))
+                .texture("top", mcLoc("block/soul_torch"));
+        getVariantBuilder(FBContent.blockFramedSoulWallTorch).forAllStates(state ->
         {
             Direction dir = state.get(BlockStateProperties.HORIZONTAL_FACING);
             int rotY = ((int)dir.getHorizontalAngle() + 90) % 360;

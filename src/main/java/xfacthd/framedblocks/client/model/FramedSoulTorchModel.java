@@ -1,0 +1,31 @@
+package xfacthd.framedblocks.client.model;
+
+import net.minecraft.block.BlockState;
+import net.minecraft.client.renderer.model.BakedQuad;
+import net.minecraft.client.renderer.model.IBakedModel;
+import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.client.model.data.IModelData;
+import xfacthd.framedblocks.FramedBlocks;
+
+import java.util.List;
+import java.util.Random;
+
+public class FramedSoulTorchModel extends FramedTorchModel
+{
+    private static final ResourceLocation TEXTURE = new ResourceLocation(FramedBlocks.MODID, "block/framed_soul_torch");
+
+    public FramedSoulTorchModel(BlockState state, IBakedModel baseModel) { super(state, baseModel); }
+
+    @Override
+    protected void getTopQuads(BlockState state, Random rand, IModelData extraData)
+    {
+        List<BakedQuad> quads = baseModel.getQuads(state, null, rand, extraData);
+        for (BakedQuad quad : quads)
+        {
+            if (!quad.getSprite().getName().equals(TEXTURE))
+            {
+                topQuads.add(quad);
+            }
+        }
+    }
+}

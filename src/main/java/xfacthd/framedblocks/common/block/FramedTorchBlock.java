@@ -6,6 +6,7 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.*;
 import net.minecraft.loot.LootContext;
+import net.minecraft.particles.IParticleData;
 import net.minecraft.particles.ParticleTypes;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ActionResultType;
@@ -35,6 +36,8 @@ public class FramedTorchBlock extends TorchBlock implements IFramedBlock
         );
         setRegistryName(FramedBlocks.MODID, "framed_torch");
     }
+
+    public FramedTorchBlock(Properties props, IParticleData particle) { super(props, particle); }
 
     @Override
     public final ActionResultType onBlockActivated(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockRayTraceResult hit)

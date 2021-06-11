@@ -50,6 +50,8 @@ public class FBContent
     public static Block blockFramedDoubleSlope;         //STATUS: Complete
     public static Block blockFramedTorch;               //STATUS: Complete
     public static Block blockFramedWallTorch;           //STATUS: Complete
+    public static Block blockFramedSoulTorch;           //STATUS: Complete
+    public static Block blockFramedSoulWallTorch;       //STATUS: Complete
     public static Block blockFramedFloor;               //STATUS: Complete
     public static Block blockFramedLattice;             //STATUS: Complete
     public static Block blockFramedVerticalStairs;      //STATUS: Complete
@@ -99,6 +101,8 @@ public class FBContent
         registry.register(blockFramedDoubleSlope = new FramedDoubleSlopeBlock());
         registry.register(blockFramedTorch = new FramedTorchBlock());
         registry.register(blockFramedWallTorch = new FramedWallTorchBlock());
+        registry.register(blockFramedSoulTorch = new FramedSoulTorchBlock());
+        registry.register(blockFramedSoulWallTorch = new FramedSoulWallTorchBlock());
         registry.register(blockFramedFloor = new FramedFloorBlock());
         registry.register(blockFramedLattice = new FramedLatticeBlock());
         registry.register(blockFramedVerticalStairs = new FramedVerticalStairs());
