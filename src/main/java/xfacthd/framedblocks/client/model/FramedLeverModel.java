@@ -1,14 +1,12 @@
 package xfacthd.framedblocks.client.model;
 
 import net.minecraft.block.BlockState;
-import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.model.BakedQuad;
 import net.minecraft.client.renderer.model.IBakedModel;
 import net.minecraft.state.properties.AttachFace;
 import net.minecraft.state.properties.BlockStateProperties;
 import net.minecraft.util.Direction;
 import net.minecraft.util.ResourceLocation;
-import net.minecraftforge.client.MinecraftForgeClient;
 import net.minecraftforge.client.model.data.IModelData;
 import xfacthd.framedblocks.FramedBlocks;
 import xfacthd.framedblocks.client.util.BakedQuadTransformer;
@@ -20,7 +18,6 @@ public class FramedLeverModel extends FramedBlockModel
 {
     private static final ResourceLocation TEXTURE = new ResourceLocation(FramedBlocks.MODID, "block/framed_block");
 
-    private final List<BakedQuad> handleQuads = new ArrayList<>();
     private final Direction dir;
     private final AttachFace face;
 
@@ -32,26 +29,14 @@ public class FramedLeverModel extends FramedBlockModel
     }
 
     @Override
-    public List<BakedQuad> getQuads(BlockState state, Direction side, Random rand, IModelData extraData)
+    protected void getAdditionalQuads(Map<Direction, List<BakedQuad>> quadMap, BlockState state, Random rand, IModelData data)
     {
-        List<BakedQuad> quads = new ArrayList<>();
-        if (side == null && MinecraftForgeClient.getRenderLayer() == RenderType.getCutoutMipped())
-        {
-            if (handleQuads.isEmpty()) { getHandleQuads(state, rand, extraData); }
-            quads.addAll(handleQuads);
-        }
-        quads.addAll(super.getQuads(state, side, rand, extraData));
-        return quads;
-    }
-
-    private void getHandleQuads(BlockState state, Random rand, IModelData extraData)
-    {
-        List<BakedQuad> quads = baseModel.getQuads(state, null, rand, extraData);
+        List<BakedQuad> quads = baseModel.getQuads(state, null, rand, data);
         for (BakedQuad quad : quads)
         {
             if (!quad.getSprite().getName().equals(TEXTURE))
             {
-                handleQuads.add(quad);
+                quadMap.get(null).add(quad);
             }
         }
     }

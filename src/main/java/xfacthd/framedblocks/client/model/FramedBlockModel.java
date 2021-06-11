@@ -1,6 +1,7 @@
 package xfacthd.framedblocks.client.model;
 
-import com.google.common.collect.*;
+import com.google.common.collect.HashBasedTable;
+import com.google.common.collect.Table;
 import it.unimi.dsi.fastutil.objects.Object2ObjectArrayMap;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
@@ -17,7 +18,6 @@ import net.minecraftforge.client.MinecraftForgeClient;
 import net.minecraftforge.client.model.data.EmptyModelData;
 import net.minecraftforge.client.model.data.IModelData;
 import net.minecraftforge.fml.loading.FMLEnvironment;
-import xfacthd.framedblocks.client.model.BakedModelProxy;
 import xfacthd.framedblocks.client.util.FramedBlockData;
 import xfacthd.framedblocks.common.FBContent;
 import xfacthd.framedblocks.common.block.IFramedBlock;
@@ -103,14 +103,14 @@ public abstract class FramedBlockModel extends BakedModelProxy
             {
                 if (!quadCacheTable.contains(camoState, layer))
                 {
-                    quadCacheTable.put(camoState, layer, makeQuads(camoState, rand, extraData));
+                    quadCacheTable.put(camoState, layer, makeQuads(state, camoState, rand, extraData));
                 }
                 return quadCacheTable.get(camoState, layer).get(side);
             }
         }
     }
 
-    private Map<Direction, List<BakedQuad>> makeQuads(BlockState camoState, Random rand, IModelData data)
+    private Map<Direction, List<BakedQuad>> makeQuads(BlockState state, BlockState camoState, Random rand, IModelData data)
     {
         Map<Direction, List<BakedQuad>> quadMap = new Object2ObjectArrayMap<>(7);
         quadMap.put(null, new ArrayList<>());
@@ -128,6 +128,7 @@ public abstract class FramedBlockModel extends BakedModelProxy
             transformQuad(quadMap, quad);
         }
         postProcessQuads(quadMap);
+        getAdditionalQuads(quadMap, state, rand, data);
 
         return quadMap;
     }
@@ -135,6 +136,8 @@ public abstract class FramedBlockModel extends BakedModelProxy
     protected abstract void transformQuad(Map<Direction, List<BakedQuad>> quadMap, BakedQuad quad);
 
     protected void postProcessQuads(Map<Direction, List<BakedQuad>> quadMap) {}
+
+    protected void getAdditionalQuads(Map<Direction, List<BakedQuad>> quadMap, BlockState state, Random rand, IModelData data) {}
 
     @Override
     public TextureAtlasSprite getParticleTexture(IModelData data)
