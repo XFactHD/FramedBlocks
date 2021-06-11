@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "FFF",
+    "FF ",
+    "F  "
+  ],
+  "key": {
+    "F": {
+      "item": "framedblocks:framed_cube"
+    }
+  },
+  "result": {
+    "item": "framedblocks:framed_vertical_stairs",
+    "count": 4
+  }
+}

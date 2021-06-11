@@ -13,8 +13,7 @@ import net.minecraft.util.math.BlockRayTraceResult;
 import net.minecraft.world.*;
 import xfacthd.framedblocks.FramedBlocks;
 import xfacthd.framedblocks.common.FBContent;
-import xfacthd.framedblocks.common.data.BlockType;
-import xfacthd.framedblocks.common.data.PropertyHolder;
+import xfacthd.framedblocks.common.data.*;
 import xfacthd.framedblocks.common.tileentity.FramedTileEntity;
 import xfacthd.framedblocks.common.util.CtmPredicate;
 import xfacthd.framedblocks.common.util.SideSkipPredicate;
@@ -159,6 +158,30 @@ public class FramedStairsBlock extends StairsBlock implements IFramedBlock
             if ((shape == StairsShape.OUTER_LEFT && dir == adjDir) || (shape == StairsShape.OUTER_RIGHT && dir.rotateY() == adjDir))
             {
                 return adjTop == top && SideSkipPredicate.compareState(world, pos, side);
+            }
+            return false;
+        }
+
+        if (adjState.getBlock() == FBContent.blockFramedVerticalStairs)
+        {
+            Direction adjDir = adjState.get(PropertyHolder.FACING_HOR);
+            StairsType adjType = adjState.get(PropertyHolder.STAIRS_TYPE);
+
+            if (adjType == StairsType.VERTICAL)
+            {
+                if (((side == Direction.DOWN && top) || (side == Direction.UP && !top)) &&
+                    ((shape == StairsShape.INNER_LEFT && adjDir == dir) || (shape == StairsShape.INNER_RIGHT && adjDir == dir.rotateY()))
+                )
+                {
+                    return SideSkipPredicate.compareState(world, pos, side);
+                }
+            }
+            else if (adjType.isTop() != top)
+            {
+                if ((side == dir.rotateY() && adjDir == dir) || (side == dir.rotateYCCW() && adjDir == dir.rotateY()))
+                {
+                    return SideSkipPredicate.compareState(world, pos, side);
+                }
             }
             return false;
         }

@@ -56,6 +56,7 @@ public class FramedBlockStateProvider extends BlockStateProvider
         registerFramedWallTorch();
         registerFramedFloorBoard();
         registerFramedLattice();
+        registerFramedVerticalStairs();
         registerFramedCollapsibleBlock();
         registerFramedGhostBlock();
     }
@@ -649,6 +650,24 @@ public class FramedBlockStateProvider extends BlockStateProvider
         ModelFile cube = models().getExistingFile(modLoc("framed_lattice"));
         simpleBlock(FBContent.blockFramedLattice, cube);
         simpleBlockItem(FBContent.blockFramedLattice, cube);
+    }
+
+    private void registerFramedVerticalStairs()
+    {
+        ModelFile stairsVert = models().getExistingFile(modLoc("block/framed_vertical_stairs"));
+        ModelFile stairsTop = models().getExistingFile(modLoc("block/framed_vertical_stairs_top"));
+        ModelFile stairsBottom = models().getExistingFile(modLoc("block/framed_vertical_stairs_bottom"));
+
+        getVariantBuilder(FBContent.blockFramedVerticalStairs).forAllStatesExcept(state ->
+        {
+            StairsType type = state.get(PropertyHolder.STAIRS_TYPE);
+            ModelFile model = type == StairsType.TOP_CORNER ? stairsTop : (type == StairsType.BOTTOM_CORNER ? stairsBottom : stairsVert);
+            Direction dir = state.get(PropertyHolder.FACING_HOR);
+
+            return ConfiguredModel.builder().modelFile(model).rotationY(dir.getHorizontalIndex() * 90).uvLock(true).build();
+        }, BlockStateProperties.WATERLOGGED);
+
+        simpleBlockItem(FBContent.blockFramedVerticalStairs, stairsVert);
     }
 
     private void registerFramedCollapsibleBlock()

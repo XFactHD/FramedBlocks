@@ -7,7 +7,7 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.BlockItemUseContext;
 import net.minecraft.item.ItemStack;
 import net.minecraft.state.StateContainer;
-import net.minecraft.state.properties.BlockStateProperties;
+import net.minecraft.state.properties.*;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.*;
 import net.minecraft.util.math.BlockPos;
@@ -15,8 +15,7 @@ import net.minecraft.util.math.BlockRayTraceResult;
 import net.minecraft.util.math.shapes.VoxelShape;
 import net.minecraft.world.World;
 import xfacthd.framedblocks.common.FBContent;
-import xfacthd.framedblocks.common.data.BlockType;
-import xfacthd.framedblocks.common.data.PropertyHolder;
+import xfacthd.framedblocks.common.data.*;
 import xfacthd.framedblocks.common.tileentity.FramedDoubleTileEntity;
 import xfacthd.framedblocks.common.tileentity.FramedTileEntity;
 import xfacthd.framedblocks.common.util.*;
@@ -66,6 +65,31 @@ public class FramedPanelBlock extends FramedBlock
             {
                 return SideSkipPredicate.compareState(world, pos, side, dir);
             }
+        }
+
+        if (adjState.getBlock() == FBContent.blockFramedStairs && side.getAxis() == Direction.Axis.Y)
+        {
+            Direction adjDir = adjState.get(BlockStateProperties.HORIZONTAL_FACING);
+            StairsShape adjShape = adjState.get(BlockStateProperties.STAIRS_SHAPE);
+            boolean adjTop = adjState.get(BlockStateProperties.HALF) == Half.TOP;
+
+            if (((side == Direction.UP && adjTop) || (side == Direction.DOWN && !adjTop)) && dir == adjDir)
+            {
+                return adjShape == StairsShape.STRAIGHT && SideSkipPredicate.compareState(world, pos, side, dir);
+            }
+            return false;
+        }
+
+        if (adjState.getBlock() == FBContent.blockFramedVerticalStairs && (side == dir.rotateY() || side == dir.rotateYCCW()))
+        {
+            Direction adjDir = adjState.get(PropertyHolder.FACING_HOR);
+            StairsType adjType = adjState.get(PropertyHolder.STAIRS_TYPE);
+
+            if ((side == dir.rotateYCCW() && adjDir == dir) || (side == dir.rotateY() && adjDir == dir.rotateY()))
+            {
+                return adjType == StairsType.VERTICAL && SideSkipPredicate.compareState(world, pos, side, dir);
+            }
+            return false;
         }
 
         return false;

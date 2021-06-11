@@ -12,8 +12,7 @@ import net.minecraft.util.Direction;
 import net.minecraft.util.math.shapes.VoxelShape;
 import net.minecraft.util.math.vector.Vector3d;
 import xfacthd.framedblocks.common.FBContent;
-import xfacthd.framedblocks.common.data.BlockType;
-import xfacthd.framedblocks.common.data.PropertyHolder;
+import xfacthd.framedblocks.common.data.*;
 import xfacthd.framedblocks.common.tileentity.FramedDoubleTileEntity;
 import xfacthd.framedblocks.common.util.SideSkipPredicate;
 import xfacthd.framedblocks.common.util.Utils;
@@ -76,6 +75,18 @@ public class FramedSlabCornerBlock extends FramedBlock
             if (adjShape == StairsShape.OUTER_RIGHT)
             {
                 return dir.rotateYCCW() == adjDir && SideSkipPredicate.compareState(world, pos, side);
+            }
+            return false;
+        }
+
+        if (adjState.getBlock() == FBContent.blockFramedVerticalStairs)
+        {
+            Direction adjDir = adjState.get(PropertyHolder.FACING_HOR);
+            StairsType adjType = adjState.get(PropertyHolder.STAIRS_TYPE);
+
+            if ((side.getAxis() == Direction.Axis.Y || side == dir || side == dir.rotateYCCW()) && adjType.isTop() != top && dir == adjDir)
+            {
+                return SideSkipPredicate.compareState(world, pos, side);
             }
             return false;
         }

@@ -44,6 +44,7 @@ public class FramedLanguageProvider extends LanguageProvider
         add(FBContent.blockFramedTorch, "Framed Torch"); //Wall torch name is handled through WallTorchBlock
         add(FBContent.blockFramedFloor, "Framed Floor Board");
         add(FBContent.blockFramedLattice, "Framed Lattice");
+        add(FBContent.blockFramedVerticalStairs, "Framed Vertical Stairs");
         //add(FBContent.blockFramedCollapsibleBlock, "Framed Collapsible Block");
 
         add(FBContent.itemFramedHammer, "Framed Hammer");

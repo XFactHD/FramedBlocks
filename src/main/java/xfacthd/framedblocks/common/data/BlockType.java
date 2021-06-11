@@ -42,6 +42,7 @@ public enum BlockType
     FRAMED_WALL_TORCH           (false, false, false, false),
 	FRAMED_FLOOR_BOARD          (false, false,  true,  true, FramedFloorBlock.CTM_PREDICATE, FramedFloorBlock.SKIP_PREDICATE, VoxelShapes.create(0, 0, 0, 1, 1D/16D, 1)),
     FRAMED_LATTICE              (false, false,  true,  true, CtmPredicate.FALSE, FramedLatticeBlock.SKIP_PREDICATE, FramedLatticeBlock::generateShapes),
+    FRAMED_VERTICAL_STAIRS      (false, false,  true,  true, FramedVerticalStairs.CTM_PREDICATE, FramedVerticalStairs.SKIP_PREDICATE, FramedVerticalStairs::generateShapes),
     FRAMED_COLLAPSIBLE_BLOCK    ( true,  true, false,  true/*, FramedCollapsibleBlock.CTM_PREDICATE, FramedCollapsibleBlock.SKIP_PREDICATE*/);
 
     private final boolean specialHitbox;

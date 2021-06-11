@@ -11,8 +11,7 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.Direction;
 import net.minecraft.util.math.shapes.VoxelShape;
 import xfacthd.framedblocks.common.FBContent;
-import xfacthd.framedblocks.common.data.BlockType;
-import xfacthd.framedblocks.common.data.PropertyHolder;
+import xfacthd.framedblocks.common.data.*;
 import xfacthd.framedblocks.common.tileentity.FramedDoubleTileEntity;
 import xfacthd.framedblocks.common.util.SideSkipPredicate;
 import xfacthd.framedblocks.common.util.Utils;
@@ -114,6 +113,19 @@ public class FramedSlabEdgeBlock extends FramedBlock
             else if (top == adjTop && side == dir && FramedStairsBlock.isSlabSide(adjShape, adjDir, side.getOpposite()))
             {
                 return SideSkipPredicate.compareState(world, pos, side);
+            }
+            return false;
+        }
+
+        if (adjState.getBlock() == FBContent.blockFramedVerticalStairs)
+        {
+            Direction adjDir = adjState.get(PropertyHolder.FACING_HOR);
+            StairsType adjType = adjState.get(PropertyHolder.STAIRS_TYPE);
+
+            if (adjType == StairsType.VERTICAL) { return false; }
+            if (((side == dir.rotateYCCW() && adjDir == dir) || (side == dir.rotateY() && adjDir == dir.rotateY())))
+            {
+                return top != adjType.isTop() && SideSkipPredicate.compareState(world, pos, side);
             }
             return false;
         }
