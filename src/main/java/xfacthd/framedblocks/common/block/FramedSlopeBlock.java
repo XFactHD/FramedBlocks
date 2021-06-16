@@ -7,12 +7,10 @@ import net.minecraft.block.BlockState;
 import net.minecraft.item.BlockItemUseContext;
 import net.minecraft.state.StateContainer;
 import net.minecraft.state.properties.BlockStateProperties;
-import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.Direction;
 import net.minecraft.util.math.shapes.VoxelShape;
 import net.minecraft.util.math.shapes.VoxelShapes;
 import xfacthd.framedblocks.common.data.*;
-import xfacthd.framedblocks.common.tileentity.FramedDoubleTileEntity;
 import xfacthd.framedblocks.common.util.*;
 
 public class FramedSlopeBlock extends FramedBlock
@@ -49,39 +47,29 @@ public class FramedSlopeBlock extends FramedBlock
         {
             Direction adjDir = adjState.get(PropertyHolder.FACING_HOR);
             SlopeType adjType = adjState.get(PropertyHolder.SLOPE_TYPE);
+
             if (type == SlopeType.HORIZONTAL && side.getAxis() == Direction.Axis.Y)
             {
-                return dir == adjDir && type == adjType && SideSkipPredicate.compareState(
-                        world, pos, side, dir
-                );
+                return dir == adjDir && type == adjType && SideSkipPredicate.compareState(world, pos, side, dir);
             }
             else if (type != SlopeType.HORIZONTAL && (side == dir.rotateY() || side == dir.rotateYCCW()))
             {
-                return dir == adjDir && type == adjType && SideSkipPredicate.compareState(
-                        world, pos, side, dir
-                );
+                return dir == adjDir && type == adjType && SideSkipPredicate.compareState(world, pos, side, dir);
             }
         }
 
         else if (adjBlock == BlockType.FRAMED_DOUBLE_SLOPE)
         {
-            TileEntity te = world.getTileEntity(pos.offset(side));
-            if (!(te instanceof FramedDoubleTileEntity)) { return false; }
-            FramedDoubleTileEntity tile = (FramedDoubleTileEntity) te;
-
             Direction adjDir = adjState.get(PropertyHolder.FACING_HOR);
             SlopeType adjType = adjState.get(PropertyHolder.SLOPE_TYPE);
-            if (type == SlopeType.HORIZONTAL && side.getAxis() == Direction.Axis.Y)
+
+            if (type == SlopeType.HORIZONTAL && adjType == SlopeType.HORIZONTAL && side.getAxis() == Direction.Axis.Y)
             {
-                return dir == adjDir && type == adjType && SideSkipPredicate.compareState(
-                        world, pos, tile.getCamoState(dir), dir
-                );
+                return (dir == adjDir || adjDir == dir.getOpposite()) && SideSkipPredicate.compareState(world, pos, side, dir);
             }
-            else if (type != SlopeType.HORIZONTAL && (side == dir.rotateY() || side == dir.rotateYCCW()))
+            else if (type != SlopeType.HORIZONTAL && adjType != SlopeType.HORIZONTAL && (side == dir.rotateY() || side == dir.rotateYCCW()))
             {
-                return dir == adjDir && type == adjType && SideSkipPredicate.compareState(
-                        world, pos, tile.getCamoState(dir), dir
-                );
+                return (dir == adjDir && type == adjType) || (dir.getOpposite() == adjDir && type != adjType) && SideSkipPredicate.compareState(world, pos, side, dir);
             }
         }
 
@@ -218,8 +206,9 @@ public class FramedSlopeBlock extends FramedBlock
         else if (adjBlock == BlockType.FRAMED_INNER_PRISM_CORNER || adjBlock == BlockType.FRAMED_INNER_THREEWAY_CORNER)
         {
             Direction adjDir = adjState.get(PropertyHolder.FACING_HOR);
-            if (adjBlock == BlockType.FRAMED_INNER_THREEWAY_CORNER) { adjDir = adjDir.rotateY(); }
             boolean adjTop = adjState.get(PropertyHolder.TOP);
+
+            if (adjBlock == BlockType.FRAMED_INNER_THREEWAY_CORNER) { adjDir = adjDir.rotateY(); }
 
             if (type != SlopeType.HORIZONTAL && adjTop == (type == SlopeType.TOP))
             {

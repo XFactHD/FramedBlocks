@@ -7,12 +7,10 @@ import net.minecraft.block.BlockState;
 import net.minecraft.item.BlockItemUseContext;
 import net.minecraft.state.StateContainer;
 import net.minecraft.state.properties.*;
-import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.Direction;
 import net.minecraft.util.math.shapes.VoxelShape;
 import xfacthd.framedblocks.common.FBContent;
 import xfacthd.framedblocks.common.data.*;
-import xfacthd.framedblocks.common.tileentity.FramedDoubleTileEntity;
 import xfacthd.framedblocks.common.util.SideSkipPredicate;
 import xfacthd.framedblocks.common.util.Utils;
 
@@ -63,12 +61,8 @@ public class FramedSlabEdgeBlock extends FramedBlock
 
         if (adjState.getBlock() == FBContent.blockFramedDoubleSlab && side == dir)
         {
-            TileEntity te = world.getTileEntity(pos.offset(side));
-            if (!(te instanceof FramedDoubleTileEntity)) { return false; }
-            FramedDoubleTileEntity tile = (FramedDoubleTileEntity) te;
-
             Direction face = state.get(PropertyHolder.TOP) ? Direction.UP : Direction.DOWN;
-            return SideSkipPredicate.compareState(world, pos, tile.getCamoState(face), side);
+            return SideSkipPredicate.compareState(world, pos, side, face);
         }
 
         if (adjState.getBlock() == FBContent.blockFramedPanel && side.getAxis() == Direction.Axis.Y)
@@ -90,11 +84,7 @@ public class FramedSlabEdgeBlock extends FramedBlock
 
             if ((side == Direction.UP && top) || (side == Direction.DOWN && !top))
             {
-                TileEntity te = world.getTileEntity(pos.offset(side));
-                if (!(te instanceof FramedDoubleTileEntity)) { return false; }
-                FramedDoubleTileEntity tile = (FramedDoubleTileEntity) te;
-
-                return SideSkipPredicate.compareState(world, pos, tile.getCamoState(dir), side);
+                return SideSkipPredicate.compareState(world, pos, side, dir);
             }
             return false;
         }

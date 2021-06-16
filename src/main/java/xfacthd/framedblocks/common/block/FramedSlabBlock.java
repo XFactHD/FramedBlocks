@@ -47,12 +47,8 @@ public class FramedSlabBlock extends FramedBlock
 
         if (adjState.getBlock() == FBContent.blockFramedDoubleSlab)
         {
-            TileEntity te = world.getTileEntity(pos.offset(side));
-            if (!(te instanceof FramedDoubleTileEntity)) { return false; }
-            FramedDoubleTileEntity tile = (FramedDoubleTileEntity) te;
-
             Direction face = top ? Direction.UP : Direction.DOWN;
-            return SideSkipPredicate.compareState(world, pos, tile.getCamoState(face), face);
+            return SideSkipPredicate.compareState(world, pos, side, face);
         }
 
         if (adjState.getBlock() == FBContent.blockFramedSlabEdge)

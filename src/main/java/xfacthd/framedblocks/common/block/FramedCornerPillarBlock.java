@@ -56,19 +56,15 @@ public class FramedCornerPillarBlock extends FramedBlock
 
         if (adjState.getBlock() == FBContent.blockFramedDoublePanel)
         {
-            TileEntity te = world.getTileEntity(pos.offset(side));
-            if (!(te instanceof FramedDoubleTileEntity)) { return false; }
-            FramedDoubleTileEntity tile = (FramedDoubleTileEntity) te;
-
             Direction adjDir = adjState.get(PropertyHolder.FACING_NE);
             if (side == dir && (adjDir == dir.rotateY() || adjDir == dir.rotateYCCW()))
             {
-                return SideSkipPredicate.compareState(world, pos, tile.getCamoState(dir.rotateYCCW()), side);
+                return SideSkipPredicate.compareState(world, pos, side, dir.rotateYCCW());
             }
 
             if (side == dir.rotateYCCW() && (adjDir == dir || adjDir == dir.getOpposite()))
             {
-                return SideSkipPredicate.compareState(world, pos, tile.getCamoState(dir), side);
+                return SideSkipPredicate.compareState(world, pos, side, dir);
             }
         }
 

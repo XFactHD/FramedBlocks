@@ -120,6 +120,37 @@ public class FramedCornerSlopeBlock extends FramedBlock
             return false;
         }
 
+        else if (adjBlock == BlockType.FRAMED_DOUBLE_SLOPE)
+        {
+            Direction adjDir = adjState.get(PropertyHolder.FACING_HOR);
+            SlopeType adjType = adjState.get(PropertyHolder.SLOPE_TYPE);
+            boolean adjTop = adjType == SlopeType.TOP;
+
+            if (!type.isHorizontal() && adjType != SlopeType.HORIZONTAL && (
+                    (side == dir && type.isTop() == adjTop && adjDir == dir.rotateYCCW()) ||
+                    (side == dir && type.isTop() != adjTop && adjDir == dir.rotateY()) ||
+                    (side == dir.rotateYCCW() && type.isTop() == adjTop && adjDir == dir) ||
+                    (side == dir.rotateYCCW() && type.isTop() != adjTop && adjDir == dir.getOpposite())
+            ))
+            {
+                Direction face = type.isTop() == adjTop ? adjDir : adjDir.getOpposite();
+                return SideSkipPredicate.compareState(world, pos, side, face);
+            }
+            else if (type.isHorizontal() && adjType == SlopeType.HORIZONTAL && ((side == Direction.DOWN && !type.isTop()) || (side == Direction.UP && type.isTop())))
+            {
+                if ((!type.isRight() && (adjDir == dir || adjDir == dir.getOpposite())) || (type.isRight() && (adjDir == dir.rotateY() || adjDir == dir.rotateYCCW())))
+                {
+                    return SideSkipPredicate.compareState(world, pos, side, dir);
+                }
+            }
+            else if (type.isHorizontal() && adjType != SlopeType.HORIZONTAL && ((side == dir.rotateYCCW() && !type.isRight()) || (side == dir.rotateY() && type.isRight())))
+            {
+                Direction face = type.isTop() == adjTop ? adjDir : adjDir.getOpposite();
+                return ((type.isTop() == adjTop && adjDir == dir) || (type.isTop() != adjTop && adjDir == dir.getOpposite())) && SideSkipPredicate.compareState(world, pos, side, face);
+            }
+            return false;
+        }
+
         else if (adjBlock == BlockType.FRAMED_INNER_CORNER_SLOPE)
         {
             Direction adjDir = adjState.get(PropertyHolder.FACING_HOR);
@@ -265,6 +296,37 @@ public class FramedCornerSlopeBlock extends FramedBlock
                 {
                     return ((!type.isRight() && side == dir.rotateY()) || (type.isRight() && side == dir.rotateYCCW())) && SideSkipPredicate.compareState(world, pos, side);
                 }
+            }
+            return false;
+        }
+
+        else if (adjBlock == BlockType.FRAMED_DOUBLE_SLOPE)
+        {
+            Direction adjDir = adjState.get(PropertyHolder.FACING_HOR);
+            SlopeType adjType = adjState.get(PropertyHolder.SLOPE_TYPE);
+            boolean adjTop = adjType == SlopeType.TOP;
+
+            if (!type.isHorizontal() && adjType != SlopeType.HORIZONTAL && (
+                    (side == dir.getOpposite() && type.isTop() == adjTop && adjDir == dir.rotateY()) ||
+                    (side == dir.getOpposite() && type.isTop() != adjTop && adjDir == dir.rotateYCCW()) ||
+                    (side == dir.rotateYCCW() && type.isTop() == adjTop && adjDir == dir) ||
+                    (side == dir.rotateYCCW() && type.isTop() != adjTop && adjDir == dir.getOpposite())
+            ))
+            {
+                Direction face = type.isTop() == adjTop ? adjDir : adjDir.getOpposite();
+                return SideSkipPredicate.compareState(world, pos, side, face);
+            }
+            else if (type.isHorizontal() && adjType == SlopeType.HORIZONTAL && ((side == Direction.UP && !type.isTop()) || (side == Direction.DOWN && type.isTop())))
+            {
+                if ((!type.isRight() && (adjDir == dir || adjDir == dir.getOpposite())) || (type.isRight() && (adjDir == dir.rotateY() || adjDir == dir.rotateYCCW())))
+                {
+                    return SideSkipPredicate.compareState(world, pos, side, dir);
+                }
+            }
+            else if (type.isHorizontal() && adjType != SlopeType.HORIZONTAL && ((side == dir.rotateY() && !type.isRight()) || (side == dir.rotateYCCW() && type.isRight())))
+            {
+                Direction face = type.isTop() == adjTop ? adjDir : adjDir.getOpposite();
+                return ((type.isTop() == adjTop && adjDir == dir) || (type.isTop() != adjTop && adjDir == dir.getOpposite())) && SideSkipPredicate.compareState(world, pos, side, face);
             }
             return false;
         }
