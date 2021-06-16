@@ -78,15 +78,6 @@ public interface IFramedBlock extends IFacade
             {
                 return camoState.getSoundType();
             }
-
-            if (te instanceof FramedDoubleTileEntity)
-            {
-                camoState = ((FramedDoubleTileEntity) te).getCamoStateTwo();
-                if (!camoState.isAir())
-                {
-                    return camoState.getSoundType();
-                }
-            }
         }
         return ((Block)this).getSoundType(state);
     }

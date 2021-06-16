@@ -1,11 +1,11 @@
 package xfacthd.framedblocks.common.block;
 
-import net.minecraft.block.BlockState;
-import net.minecraft.block.Blocks;
+import net.minecraft.block.*;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.Direction;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockReader;
+import net.minecraft.world.IWorldReader;
 import xfacthd.framedblocks.common.data.BlockType;
 import xfacthd.framedblocks.common.tileentity.FramedDoubleTileEntity;
 
@@ -30,5 +30,27 @@ public abstract class AbstractFramedDoubleBlock extends FramedBlock
             }
         }
         return Blocks.AIR.getDefaultState();
+    }
+
+    @Override
+    @SuppressWarnings("deprecation")
+    public SoundType getSound(BlockState state, IWorldReader world, BlockPos pos)
+    {
+        TileEntity te = world.getTileEntity(pos);
+        if (te instanceof FramedDoubleTileEntity)
+        {
+            BlockState camoState = ((FramedDoubleTileEntity) te).getCamoStateTwo();
+            if (!camoState.isAir())
+            {
+                return camoState.getSoundType();
+            }
+
+            camoState = ((FramedDoubleTileEntity) te).getCamoState();
+            if (!camoState.isAir())
+            {
+                return camoState.getSoundType();
+            }
+        }
+        return getSoundType(state);
     }
 }
