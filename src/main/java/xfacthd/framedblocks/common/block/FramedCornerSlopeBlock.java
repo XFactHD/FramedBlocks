@@ -14,6 +14,10 @@ import net.minecraft.util.math.vector.Vector3d;
 import xfacthd.framedblocks.common.data.*;
 import xfacthd.framedblocks.common.util.*;
 
+/*
+FIXME: BREAKING CHANGE!!!
+FIXME: Fix inner corner top/bottom rotation discrepancy from other corners (should be rotated 90 degree clockwise)
+*/
 public class FramedCornerSlopeBlock extends FramedBlock
 {
     public static final CtmPredicate CTM_PREDICATE = (state, dir) ->
@@ -75,6 +79,18 @@ public class FramedCornerSlopeBlock extends FramedBlock
             {
                 return SideSkipPredicate.compareState(world, pos, side);
             }
+            else if (!type.isHorizontal() && adjType.isHorizontal() && adjType.isTop() == type.isTop() &&
+                    ((side == dir && !adjType.isRight() && adjDir == dir.rotateYCCW()) || (side == dir.rotateYCCW() && adjType.isRight() && adjDir == dir))
+            )
+            {
+                return SideSkipPredicate.compareState(world, pos, side);
+            }
+            else if (type.isHorizontal() && !adjType.isHorizontal() && adjType.isTop() == type.isTop() &&
+                    ((!type.isRight() && side == dir.rotateYCCW() && adjDir == dir.rotateY()) || (type.isRight() && side == dir.rotateY() && adjDir == dir))
+            )
+            {
+                return SideSkipPredicate.compareState(world, pos, side);
+            }
             return false;
         }
 
@@ -115,6 +131,18 @@ public class FramedCornerSlopeBlock extends FramedBlock
             }
             else if (type.isHorizontal() && adjType == type && ((side == Direction.UP && type.isTop()) || (side == Direction.DOWN && !type.isTop()) ||
                     (side == dir.rotateY() && type.isRight()) || (side == dir.rotateYCCW() && !type.isRight()))
+            )
+            {
+                return SideSkipPredicate.compareState(world, pos, side);
+            }
+            else if (!type.isHorizontal() && adjType.isHorizontal() && adjType.isTop() == type.isTop() &&
+                    ((side == dir && adjType.isRight() && adjDir == dir.rotateYCCW()) || (side == dir.rotateYCCW() && !adjType.isRight() && adjDir == dir))
+            )
+            {
+                return SideSkipPredicate.compareState(world, pos, side);
+            }
+            else if (type.isHorizontal() && !adjType.isHorizontal() && adjType.isTop() == type.isTop() &&
+                    ((!type.isRight() && side == dir.rotateYCCW() && adjDir == dir.rotateYCCW()) || (type.isRight() && side == dir.rotateY() && adjDir == dir))
             )
             {
                 return SideSkipPredicate.compareState(world, pos, side);
@@ -181,7 +209,144 @@ public class FramedCornerSlopeBlock extends FramedBlock
         return false;
     };
 
-    public static final SideSkipPredicate SKIP_PREDICATE_INNER = SideSkipPredicate.CTM; //TODO: implement properly
+    public static final SideSkipPredicate SKIP_PREDICATE_INNER = (world, pos, state, adjState, side) ->
+    {
+        if (SideSkipPredicate.CTM.test(world, pos, state, adjState, side)) { return true; }
+        if (!(adjState.getBlock() instanceof IFramedBlock)) { return false; }
+
+        BlockType adjBlock = ((IFramedBlock) adjState.getBlock()).getBlockType();
+        Direction dir = state.get(PropertyHolder.FACING_HOR);
+        CornerType type = state.get(PropertyHolder.CORNER_TYPE);
+
+        if (adjBlock == BlockType.FRAMED_INNER_CORNER_SLOPE)
+        {
+            Direction adjDir = adjState.get(PropertyHolder.FACING_HOR);
+            CornerType adjType = adjState.get(PropertyHolder.CORNER_TYPE);
+
+            if (!type.isHorizontal() && adjType == type && ((side == dir.getOpposite() && adjDir == dir.rotateY()) || (side == dir.rotateYCCW() && adjDir == dir.rotateYCCW())))
+            {
+                return SideSkipPredicate.compareState(world, pos, side);
+            }
+            else if (type.isHorizontal() && type.isHorizontalAdjacentInner(dir, side, adjType) && adjDir == dir)
+            {
+                return SideSkipPredicate.compareState(world, pos, side);
+            }
+            else if (!type.isHorizontal() && adjType.isHorizontal() && adjType.isTop() == type.isTop() &&
+                    ((side == dir.getOpposite() && adjType.isRight() && adjDir == dir.rotateY()) || (side == dir.rotateYCCW() && !adjType.isRight() && adjDir == dir))
+            )
+            {
+                return SideSkipPredicate.compareState(world, pos, side);
+            }
+            else if (type.isHorizontal() && !adjType.isHorizontal() && adjType.isTop() == type.isTop() &&
+                    ((!type.isRight() && side == dir.rotateY() && adjDir == dir) || (type.isRight() && side == dir.rotateYCCW() && adjDir == dir.rotateYCCW()))
+            )
+            {
+                return SideSkipPredicate.compareState(world, pos, side);
+            }
+            return false;
+        }
+
+        else if (adjBlock == BlockType.FRAMED_SLOPE)
+        {
+            Direction adjDir = adjState.get(PropertyHolder.FACING_HOR);
+            SlopeType adjType = adjState.get(PropertyHolder.SLOPE_TYPE);
+
+            if (!type.isHorizontal() && adjType != SlopeType.HORIZONTAL && ((side == dir.getOpposite() && adjDir == dir.rotateY()) || (side == adjDir.rotateYCCW() && adjDir == dir)))
+            {
+                return (adjType == SlopeType.TOP) == type.isTop() && SideSkipPredicate.compareState(world, pos, side);
+            }
+            else if (type.isHorizontal())
+            {
+                if (((side == Direction.UP && !type.isTop()) || (side == Direction.DOWN && type.isTop())) && adjType == SlopeType.HORIZONTAL)
+                {
+                    return ((!type.isRight() && adjDir == dir) || (type.isRight() && adjDir == dir.rotateY())) && SideSkipPredicate.compareState(world, pos, side);
+                }
+                else if (side.getAxis() != Direction.Axis.Y && adjDir == dir && (adjType == SlopeType.TOP) == type.isTop())
+                {
+                    return ((!type.isRight() && side == dir.rotateY()) || (type.isRight() && side == dir.rotateYCCW())) && SideSkipPredicate.compareState(world, pos, side);
+                }
+            }
+            return false;
+        }
+
+        else if (adjBlock == BlockType.FRAMED_CORNER_SLOPE)
+        {
+            Direction adjDir = adjState.get(PropertyHolder.FACING_HOR);
+            CornerType adjType = adjState.get(PropertyHolder.CORNER_TYPE);
+
+            if (!type.isHorizontal() && !adjType.isHorizontal() && adjDir == dir.rotateY() && adjType.isTop() == type.isTop())
+            {
+                return (side == dir.getOpposite() || side == dir.rotateYCCW()) && SideSkipPredicate.compareState(world, pos, side);
+            }
+            else if (type.isHorizontal() && adjType == type && adjDir == dir && ((side == Direction.UP && !type.isTop()) || (side == Direction.DOWN && type.isTop()) ||
+                     (side == dir.rotateY() && !type.isRight()) || (side == dir.rotateYCCW() && type.isRight()))
+            )
+            {
+                return SideSkipPredicate.compareState(world, pos, side);
+            }
+            else if (!type.isHorizontal() && adjType.isHorizontal() && adjType.isTop() == type.isTop() &&
+                    ((side == dir.getOpposite() && !adjType.isRight() && adjDir == dir.rotateY()) || (side == dir.rotateYCCW() && adjType.isRight() && adjDir == dir))
+            )
+            {
+                return SideSkipPredicate.compareState(world, pos, side);
+            }
+            else if (type.isHorizontal() && !adjType.isHorizontal() && adjType.isTop() == type.isTop() &&
+                    ((!type.isRight() && side == dir.rotateY() && adjDir == dir) || (type.isRight() && side == dir.rotateYCCW() && adjDir == dir.rotateY()))
+            )
+            {
+                return SideSkipPredicate.compareState(world, pos, side);
+            }
+            return false;
+        }
+
+        else if (adjBlock == BlockType.FRAMED_PRISM_CORNER || adjBlock == BlockType.FRAMED_THREEWAY_CORNER)
+        {
+            Direction adjDir = adjState.get(PropertyHolder.FACING_HOR);
+            boolean adjTop = adjState.get(PropertyHolder.TOP);
+
+            if (!type.isHorizontal() && adjDir == dir.rotateY() && adjTop == type.isTop() && (side == dir.getOpposite() || side == dir.rotateYCCW()))
+            {
+                return SideSkipPredicate.compareState(world, pos, side);
+            }
+            else if (type.isHorizontal() && ((!type.isRight() && adjDir == dir) || (type.isRight() && adjDir == dir.rotateY())) && adjTop == type.isTop() &&
+                    ((side == Direction.UP && !type.isTop()) || (side == Direction.DOWN && type.isTop()) || (side == dir.rotateY() && !type.isRight()) ||
+                     (side == dir.rotateYCCW() && type.isRight()))
+            )
+            {
+                return SideSkipPredicate.compareState(world, pos, side);
+            }
+            return false;
+        }
+
+        else if (adjBlock == BlockType.FRAMED_INNER_PRISM_CORNER || adjBlock == BlockType.FRAMED_INNER_THREEWAY_CORNER)
+        {
+            Direction adjDir = adjState.get(PropertyHolder.FACING_HOR);
+            boolean adjTop = adjState.get(PropertyHolder.TOP);
+
+            if (adjBlock == BlockType.FRAMED_INNER_THREEWAY_CORNER) { adjDir = adjDir.rotateY(); } //Correct rotation discrepancy of the threeway corner
+
+            if (!type.isHorizontal() && adjTop == type.isTop() && ((side == dir.getOpposite() && adjDir == dir.getOpposite()) || (side == dir.rotateYCCW() && adjDir == dir)))
+            {
+                return SideSkipPredicate.compareState(world, pos, side);
+            }
+            else if (type.isHorizontal())
+            {
+                if (adjTop != type.isTop() && adjDir == dir && ((!type.isTop() && side == Direction.UP) || (type.isTop() && side == Direction.DOWN)))
+                {
+                    return SideSkipPredicate.compareState(world, pos, side);
+                }
+                else if (adjTop == type.isTop() && ((!type.isRight() && side == dir.rotateY() && adjDir == dir.rotateY()) ||
+                         (type.isRight() && side == dir.rotateYCCW() && adjDir == dir))
+                )
+                {
+                    return SideSkipPredicate.compareState(world, pos, side);
+                }
+            }
+            return false;
+        }
+
+        return false;
+    };
 
     public FramedCornerSlopeBlock(String name, BlockType type) { super(name, type); }
 
