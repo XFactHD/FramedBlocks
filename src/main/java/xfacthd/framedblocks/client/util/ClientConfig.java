@@ -14,9 +14,11 @@ public class ClientConfig
 
     public static boolean showGhostBlocks = false;
     public static boolean fancyHitboxes = false;
+    public static boolean detailedCulling = false;
 
     private final ForgeConfigSpec.BooleanValue showGhostBlocksValue;
     private final ForgeConfigSpec.BooleanValue fancyHitboxesValue;
+    private final ForgeConfigSpec.BooleanValue detailedCullingValue;
 
     static
     {
@@ -38,6 +40,10 @@ public class ClientConfig
                 .comment("Wether certain framed blocks should show fancy hitboxes")
                 .translation("config." + FramedBlocks.MODID + ".fancyHitboxes")
                 .define("fancyHitboxes", true);
+        detailedCullingValue = builder
+                .comment("If false only full block faces of framed blocks will be culled, if true all outer faces of famed blocks can be culled")
+                .translation("config." + FramedBlocks.MODID + ".detailedCulling")
+                .define("detailedCulling", true);
         builder.pop();
     }
 
@@ -48,6 +54,7 @@ public class ClientConfig
         {
             showGhostBlocks = showGhostBlocksValue.get();
             fancyHitboxes = fancyHitboxesValue.get();
+            detailedCulling = detailedCullingValue.get();
         }
     }
 }

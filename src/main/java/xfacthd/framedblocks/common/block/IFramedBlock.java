@@ -15,6 +15,7 @@ import net.minecraft.world.*;
 import net.minecraftforge.common.ToolType;
 import team.chisel.ctm.api.IFacade;
 import xfacthd.framedblocks.FramedBlocks;
+import xfacthd.framedblocks.client.util.ClientConfig;
 import xfacthd.framedblocks.common.data.BlockType;
 import xfacthd.framedblocks.common.tileentity.FramedDoubleTileEntity;
 import xfacthd.framedblocks.common.tileentity.FramedTileEntity;
@@ -143,7 +144,9 @@ public interface IFramedBlock extends IFacade
     default boolean isSideHidden(IBlockReader world, BlockPos pos, BlockState state, Direction side)
     {
         if (world == null) { return false; } //Block had no camo when loaded => world in data not set
-        return getBlockType().getSideSkipPredicate().test(world, pos, state, world.getBlockState(pos.offset(side)), side);
+
+        SideSkipPredicate pred = ClientConfig.detailedCulling ? getBlockType().getSideSkipPredicate() : SideSkipPredicate.CTM;
+        return pred.test(world, pos, state, world.getBlockState(pos.offset(side)), side);
     }
 
     default float getCamoSlipperiness(BlockState state, IWorldReader world, BlockPos pos, @Nullable Entity entity)
