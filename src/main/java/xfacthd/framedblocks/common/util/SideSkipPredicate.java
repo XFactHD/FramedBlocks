@@ -71,7 +71,8 @@ public interface SideSkipPredicate
         TileEntity te = world.getTileEntity(pos);
         if (te instanceof FramedTileEntity)
         {
-            return ((FramedTileEntity) te).getCamoState(side) == adjState;
+            BlockState state = ((FramedTileEntity) te).getCamoState(side);
+            return state == adjState || (state.isSolid() && adjState.isSolid());
         }
 
         return false;
