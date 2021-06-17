@@ -191,6 +191,7 @@ a80a19a8bb25a6a8afaea31181e0ab2e8dddb1c9 data/framedblocks/recipes/framed_torch.
 e8a9291a98759a08164736bfc3f348c94686ad0a data/framedblocks/recipes/framed_wall.json
 2547623b2e29bf21e647fbe7bf43bcf17fc0777a data/framedblocks/tags/blocks/blacklisted.json
 ded698d407a1e35b5ebff718170ed3f3a042f4bf data/framedblocks/tags/blocks/frameable.json
+def53fe2e88a4349d61c7a377cc550483c07eed4 data/minecraft/tags/blocks/climbable.json
 22ce3458b3b504fc92a471dfc7f17afa2955e3a3 data/minecraft/tags/blocks/doors.json
 3e2d88c1ebe0fd8046c865d8fc6f821ff71d4a46 data/minecraft/tags/blocks/fences.json
 347fe311fec6423bc5cb12c4545d90159ff187d3 data/minecraft/tags/blocks/slabs.json
