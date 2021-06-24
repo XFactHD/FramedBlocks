@@ -5,6 +5,7 @@ import net.minecraft.client.renderer.model.BakedQuad;
 import net.minecraft.client.renderer.model.IBakedModel;
 import net.minecraft.state.properties.BlockStateProperties;
 import net.minecraft.util.Direction;
+import net.minecraftforge.fml.ModList;
 import xfacthd.framedblocks.client.util.BakedQuadTransformer;
 import xfacthd.framedblocks.client.util.ModelUtils;
 
@@ -108,5 +109,16 @@ public class FramedFenceModel extends FramedBlockModel
                 }
             }
         }
+    }
+
+
+
+    public static IBakedModel createFenceModel(BlockState state, IBakedModel baseModel)
+    {
+        if (ModList.get().isLoaded("diagonalfences"))
+        {
+            return new FramedDiagonalFenceModel(state, baseModel);
+        }
+        return new FramedFenceModel(state, baseModel);
     }
 }

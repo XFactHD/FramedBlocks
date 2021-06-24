@@ -126,6 +126,7 @@ jar {
             "MixinConfigs": "framedblocks.mixin.json"
         ])
     }
+    exclude("fuzs") //Exclude DiagonalFences API from the built jar
 }
 
 jar.finalizedBy('reobfJar') 

@@ -13,6 +13,8 @@ public class BakedQuadTransformer
     private static final float SCALE_ROTATION_45 = 1.0F / (float)Math.cos(Math.PI / 4D) - 1.0F;
     private static final float SCALE_ROTATION_22_5 = 1.0F / (float)Math.cos(Math.PI / 8F) - 1.0F;
     private static final float PRISM_TILT_ANGLE = (float)Math.toDegrees(Math.atan(.5D));
+    private static final Vector3f ONE = new Vector3f(1, 1, 1);
+    private static final Vector3f HALF = new Vector3f(.5F, .5F, .5F);
     private static final Vector3f[] DIR_TO_ORIGIN_VECS = new Vector3f[]
     {
             new Vector3f(1F, 0F, 0F), //North, bottom left corner
@@ -598,7 +600,20 @@ public class BakedQuadTransformer
      */
     public static void rotateQuadAroundAxisCentered(BakedQuad quad, Direction.Axis axis, float angle, boolean rescale)
     {
-        rotateQuadAroundAxis(quad, axis, new Vector3f(.5F, .5F, .5F), angle, rescale);
+        rotateQuadAroundAxis(quad, axis, HALF, angle, rescale);
+    }
+
+    /**
+     * Rotates the quad on the given axis around the block center
+     * @param quad The BakedQuad to manipulate, must be a copy of the original quad
+     * @param axis The axis to rotate around
+     * @param angle The angle of rotation in degrees
+     * @param rescale Wether the quad should be rescaled or retain its dimensions
+     * @param scaleMult Modifier for the scale vector, can be used to inhibit scaling on selected axes
+     */
+    public static void rotateQuadAroundAxisCentered(BakedQuad quad, Direction.Axis axis, float angle, boolean rescale, Vector3f scaleMult)
+    {
+        rotateQuadAroundAxis(quad, axis, HALF, angle, rescale, scaleMult);
     }
 
     /**
@@ -610,6 +625,20 @@ public class BakedQuadTransformer
      * @param rescale Wether the quad should be rescaled or retain its dimensions
      */
     public static void rotateQuadAroundAxis(BakedQuad quad, Direction.Axis axis, Vector3f origin, float angle, boolean rescale)
+    {
+        rotateQuadAroundAxis(quad, axis, origin, angle, rescale, ONE);
+    }
+
+    /**
+     * Rotates the quad on the given axis around the given origin
+     * @param quad The BakedQuad to manipulate, must be a copy of the original quad
+     * @param axis The axis to rotate around
+     * @param origin The point to rotate around
+     * @param angle The angle of rotation in degrees
+     * @param rescale Wether the quad should be rescaled or retain its dimensions
+     * @param scaleMult Modifier for the scale vector, can be used to inhibit scaling on selected axes
+     */
+    public static void rotateQuadAroundAxis(BakedQuad quad, Direction.Axis axis, Vector3f origin, float angle, boolean rescale, Vector3f scaleMult)
     {
         ModelUtils.modifyQuad(quad, (pos, color, uv, light, normal) ->
         {
@@ -646,9 +675,11 @@ public class BakedQuadTransformer
                 else if (Math.abs(angle) == 45F) { scaleVec.mul(SCALE_ROTATION_45); }
                 else
                 {
-                    float scaleMult = 1.0F / (float)Math.cos(Math.PI / (180D / (double)angle)) - 1.0F;
-                    scaleVec.mul(scaleMult);
+                    float scaleFactor = 1.0F / (float)Math.cos(Math.PI / (180D / (double)angle)) - 1.0F;
+                    scaleVec.mul(scaleFactor);
                 }
+                scaleMult.apply(Math::abs);
+                scaleVec.mul(scaleMult.getX(), scaleMult.getY(), scaleMult.getZ());
                 scaleVec.add(1.0F, 1.0F, 1.0F);
             }
 

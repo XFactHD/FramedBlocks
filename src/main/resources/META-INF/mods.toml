@@ -26,3 +26,9 @@ description='''
     versionRange="[1.16.5,1.17)"
     ordering="NONE"
     side="BOTH"
+[[dependencies.framedblocks]]
+    modId="diagonalfences"
+    mandatory=false
+    versionRange="[1.1,)"
+    ordering="NONE"
+    side="BOTH"
