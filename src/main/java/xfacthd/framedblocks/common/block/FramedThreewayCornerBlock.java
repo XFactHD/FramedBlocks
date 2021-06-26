@@ -75,7 +75,29 @@ public class FramedThreewayCornerBlock extends FramedBlock
             }
             else if ((!top && side == Direction.DOWN) || (top && side == Direction.UP))
             {
-                return  adjType == SlopeType.HORIZONTAL && adjDir == dir && SideSkipPredicate.compareState(world, pos, side);
+                return adjType == SlopeType.HORIZONTAL && adjDir == dir && SideSkipPredicate.compareState(world, pos, side);
+            }
+            return false;
+        }
+
+        else if (adjBlock == BlockType.FRAMED_DOUBLE_SLOPE)
+        {
+            Direction adjDir = adjState.get(PropertyHolder.FACING_HOR);
+            SlopeType adjType = adjState.get(PropertyHolder.SLOPE_TYPE);
+
+            if (adjType != SlopeType.HORIZONTAL && (adjType == SlopeType.TOP) == top && ((side == dir.rotateYCCW() && adjDir == dir) || (side == dir && adjDir == dir.rotateYCCW())))
+            {
+                return SideSkipPredicate.compareState(world, pos, side, adjDir);
+            }
+            else if (adjType != SlopeType.HORIZONTAL && (adjType == SlopeType.TOP) != top &&
+                     ((side == dir.rotateYCCW() && adjDir == dir.getOpposite()) || (side == dir && adjDir == dir.rotateY()))
+            )
+            {
+                return SideSkipPredicate.compareState(world, pos, side, adjDir.getOpposite());
+            }
+            else if (adjType == SlopeType.HORIZONTAL && ((!top && side == Direction.DOWN) || (top && side == Direction.UP)) && (adjDir == dir || adjDir == dir.getOpposite()))
+            {
+                return SideSkipPredicate.compareState(world, pos, side, dir);
             }
             return false;
         }
@@ -180,6 +202,29 @@ public class FramedThreewayCornerBlock extends FramedBlock
             else if (adjType == SlopeType.HORIZONTAL && adjDir == dir && ((side == Direction.UP && !top) || (side == Direction.DOWN && top)))
             {
                 return SideSkipPredicate.compareState(world, pos, side);
+            }
+            return false;
+        }
+
+        else if (adjBlock == BlockType.FRAMED_DOUBLE_SLOPE)
+        {
+            Direction adjDir = adjState.get(PropertyHolder.FACING_HOR);
+            SlopeType adjType = adjState.get(PropertyHolder.SLOPE_TYPE);
+
+            if (adjType != SlopeType.HORIZONTAL)
+            {
+                if ((adjDir == dir && (adjType == SlopeType.TOP) == top) || (adjDir == dir.getOpposite() && (adjType == SlopeType.TOP) != top))
+                {
+                    return side == dir.rotateY() && SideSkipPredicate.compareState(world, pos, side, dir);
+                }
+                else if ((adjDir == dir.rotateYCCW() && (adjType == SlopeType.TOP) == top) || (adjDir == dir.rotateY() && (adjType == SlopeType.TOP) != top))
+                {
+                    return side == dir.getOpposite() && SideSkipPredicate.compareState(world, pos, side, dir.rotateYCCW());
+                }
+            }
+            else if (adjDir == dir || adjDir == dir.getOpposite())
+            {
+                return ((side == Direction.UP && !top) || (side == Direction.DOWN && top)) && SideSkipPredicate.compareState(world, pos, side, dir);
             }
             return false;
         }
