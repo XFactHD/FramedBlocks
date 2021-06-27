@@ -16,12 +16,14 @@ public class FramedPrismCornerModel extends FramedBlockModel
 {
     private final Direction dir;
     private final boolean top;
+    private final boolean offset;
 
     public FramedPrismCornerModel(BlockState state, IBakedModel baseModel)
     {
         super(state, baseModel);
         dir = state.get(PropertyHolder.FACING_HOR);
         top = state.get(PropertyHolder.TOP);
+        offset = state.get(PropertyHolder.OFFSET);
     }
 
     public FramedPrismCornerModel(IBakedModel baseModel)
@@ -54,9 +56,33 @@ public class FramedPrismCornerModel extends FramedBlockModel
         else if (quad.getFace() == dir.getOpposite())
         {
             BakedQuad prismQuad = ModelUtils.duplicateQuad(quad);
-            if (BakedQuadTransformer.createPrismTriangleQuad(prismQuad, !top, true))
+            if (!offset)
             {
-                quadMap.get(null).add(prismQuad);
+                if (BakedQuadTransformer.createPrismTriangleQuad(prismQuad, !top, true))
+                {
+                    quadMap.get(null).add(prismQuad);
+                }
+            }
+            else
+            {
+                if (BakedQuadTransformer.createVerticalSideQuad(prismQuad, dir.rotateY(), .5F))
+                {
+                    BakedQuadTransformer.offsetQuadInDir(prismQuad, dir.rotateY(), .5F);
+                    if (BakedQuadTransformer.createPrismTriangleQuad(prismQuad, !top, true))
+                    {
+                        quadMap.get(null).add(prismQuad);
+                    }
+                }
+
+                prismQuad = ModelUtils.duplicateQuad(quad);
+                if (BakedQuadTransformer.createVerticalSideQuad(prismQuad, dir.rotateYCCW(), .5F))
+                {
+                    BakedQuadTransformer.offsetQuadInDir(prismQuad, dir.rotateYCCW(), .5F);
+                    if (BakedQuadTransformer.createPrismTriangleQuad(prismQuad, !top, true))
+                    {
+                        quadMap.get(null).add(prismQuad);
+                    }
+                }
             }
         }
     }

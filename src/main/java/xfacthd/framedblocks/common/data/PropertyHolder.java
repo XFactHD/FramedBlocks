@@ -12,6 +12,7 @@ public class PropertyHolder
     public static final EnumProperty<StairsType> STAIRS_TYPE = EnumProperty.create("type", StairsType.class);
 
     public static final BooleanProperty TOP = BooleanProperty.create("top");
+    public static final BooleanProperty OFFSET = BooleanProperty.create("offset");
     public static final BooleanProperty X_AXIS = BooleanProperty.create("x_axis");
     public static final BooleanProperty Y_AXIS = BooleanProperty.create("y_asix");
     public static final BooleanProperty Z_AXIS = BooleanProperty.create("z_axis");

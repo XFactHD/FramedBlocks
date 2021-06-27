@@ -75,8 +75,8 @@ public class FBContent
         registry.register(blockFramedSlope = new FramedSlopeBlock());
         registry.register(blockFramedCornerSlope = new FramedCornerSlopeBlock("framed_corner_slope", BlockType.FRAMED_CORNER_SLOPE));
         registry.register(blockFramedInnerCornerSlope = new FramedCornerSlopeBlock("framed_inner_corner_slope", BlockType.FRAMED_INNER_CORNER_SLOPE));
-        registry.register(blockFramedPrismCorner = new FramedThreewayCornerBlock("framed_prism_corner", BlockType.FRAMED_PRISM_CORNER));
-        registry.register(blockFramedInnerPrismCorner = new FramedThreewayCornerBlock("framed_inner_prism_corner", BlockType.FRAMED_INNER_PRISM_CORNER));
+        registry.register(blockFramedPrismCorner = new FramedPrismCornerBlock("framed_prism_corner", BlockType.FRAMED_PRISM_CORNER));
+        registry.register(blockFramedInnerPrismCorner = new FramedPrismCornerBlock("framed_inner_prism_corner", BlockType.FRAMED_INNER_PRISM_CORNER));
         registry.register(blockFramedThreewayCorner = new FramedThreewayCornerBlock("framed_threeway_corner", BlockType.FRAMED_THREEWAY_CORNER));
         registry.register(blockFramedInnerThreewayCorner = new FramedThreewayCornerBlock("framed_inner_threeway_corner", BlockType.FRAMED_INNER_THREEWAY_CORNER));
         registry.register(blockFramedSlab = new FramedSlabBlock());
