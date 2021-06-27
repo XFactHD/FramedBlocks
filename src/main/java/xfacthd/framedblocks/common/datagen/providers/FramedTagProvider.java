@@ -21,13 +21,13 @@ public class FramedTagProvider extends BlockTagsProvider
     @SuppressWarnings("unchecked")
     protected void registerTags()
     {
-        getOrCreateBuilder(BlockTags.SLABS).add(FBContent.blockFramedSlab);
-        getOrCreateBuilder(BlockTags.STAIRS).add(FBContent.blockFramedStairs);
-        getOrCreateBuilder(BlockTags.WALLS).add(FBContent.blockFramedWall);
-        getOrCreateBuilder(BlockTags.FENCES).add(FBContent.blockFramedFence);
-        getOrCreateBuilder(BlockTags.DOORS).add(FBContent.blockFramedDoor);
-        getOrCreateBuilder(BlockTags.TRAPDOORS).add(FBContent.blockFramedTrapDoor);
-        getOrCreateBuilder(BlockTags.CLIMBABLE).add(FBContent.blockFramedLadder);
+        getOrCreateBuilder(BlockTags.SLABS).add(FBContent.blockFramedSlab.get());
+        getOrCreateBuilder(BlockTags.STAIRS).add(FBContent.blockFramedStairs.get());
+        getOrCreateBuilder(BlockTags.WALLS).add(FBContent.blockFramedWall.get());
+        getOrCreateBuilder(BlockTags.FENCES).add(FBContent.blockFramedFence.get());
+        getOrCreateBuilder(BlockTags.DOORS).add(FBContent.blockFramedDoor.get());
+        getOrCreateBuilder(BlockTags.TRAPDOORS).add(FBContent.blockFramedTrapDoor.get());
+        getOrCreateBuilder(BlockTags.CLIMBABLE).add(FBContent.blockFramedLadder.get());
 
         getOrCreateBuilder(Utils.FRAMEABLE).addTags(
                 Tags.Blocks.GLASS,

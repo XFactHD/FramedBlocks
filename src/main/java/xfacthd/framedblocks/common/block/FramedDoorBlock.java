@@ -12,7 +12,6 @@ import net.minecraft.util.*;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.BlockRayTraceResult;
 import net.minecraft.world.*;
-import xfacthd.framedblocks.FramedBlocks;
 import xfacthd.framedblocks.common.data.BlockType;
 import xfacthd.framedblocks.common.tileentity.FramedTileEntity;
 import xfacthd.framedblocks.common.util.CtmPredicate;
@@ -46,7 +45,6 @@ public class FramedDoorBlock extends DoorBlock implements IFramedBlock
     public FramedDoorBlock()
     {
         super(IFramedBlock.createProperties());
-        setRegistryName(FramedBlocks.MODID, "framed_door");
     }
 
     @Override

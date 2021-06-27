@@ -28,7 +28,7 @@ public class FramedSignTileEntity extends FramedTileEntity
 
     public FramedSignTileEntity()
     {
-        super(FBContent.tileTypeFramedSign);
+        super(FBContent.tileTypeFramedSign.get());
         for (int i = 0; i < 4; i++) { lines[i] = new StringTextComponent(""); }
     }
 

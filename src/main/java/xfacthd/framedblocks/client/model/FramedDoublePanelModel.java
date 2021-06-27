@@ -21,7 +21,7 @@ public class FramedDoublePanelModel extends FramedDoubleBlockModel
     protected Tuple<BlockState, BlockState> getDummyStates()
     {
         Direction facing = state.get(PropertyHolder.FACING_NE);
-        BlockState panelState = FBContent.blockFramedPanel.getDefaultState();
+        BlockState panelState = FBContent.blockFramedPanel.get().getDefaultState();
 
         return new Tuple<>(
                 panelState.with(PropertyHolder.FACING_HOR, facing),

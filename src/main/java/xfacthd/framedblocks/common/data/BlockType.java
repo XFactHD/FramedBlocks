@@ -8,6 +8,8 @@ import net.minecraft.util.math.shapes.VoxelShapes;
 import xfacthd.framedblocks.common.block.*;
 import xfacthd.framedblocks.common.util.*;
 
+import java.util.Locale;
+
 public enum BlockType
 {
     FRAMED_CUBE                   (false, false, false,  true, CtmPredicate.TRUE, SideSkipPredicate.CTM, VoxelShapes.fullCube()),
@@ -46,10 +48,11 @@ public enum BlockType
     FRAMED_SOUL_TORCH             (false, false, false,  true),
     FRAMED_SOUL_WALL_TORCH        (false, false, false, false),
 	FRAMED_FLOOR_BOARD            (false, false,  true,  true, FramedFloorBlock.CTM_PREDICATE, FramedFloorBlock.SKIP_PREDICATE, VoxelShapes.create(0, 0, 0, 1, 1D/16D, 1)),
-    FRAMED_LATTICE                (false, false,  true,  true, CtmPredicate.FALSE, FramedLatticeBlock.SKIP_PREDICATE, FramedLatticeBlock::generateShapes),
+    FRAMED_LATTICE_BLOCK          (false, false,  true,  true, CtmPredicate.FALSE, FramedLatticeBlock.SKIP_PREDICATE, FramedLatticeBlock::generateShapes),
     FRAMED_VERTICAL_STAIRS        (false, false,  true,  true, FramedVerticalStairs.CTM_PREDICATE, FramedVerticalStairs.SKIP_PREDICATE, FramedVerticalStairs::generateShapes),
     FRAMED_COLLAPSIBLE_BLOCK      ( true,  true, false,  true/*, FramedCollapsibleBlock.CTM_PREDICATE, FramedCollapsibleBlock.SKIP_PREDICATE*/);
 
+    private final String name = toString().toLowerCase(Locale.ROOT);
     private final boolean specialHitbox;
     private final boolean specialTile;
     private final boolean waterloggable;
@@ -100,4 +103,6 @@ public enum BlockType
     public boolean hasBlockItem() { return blockItem; }
 
     public boolean supportsWaterLogging() { return waterloggable; }
+
+    public String getName() { return name; }
 }

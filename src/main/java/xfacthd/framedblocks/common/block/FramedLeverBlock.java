@@ -12,7 +12,6 @@ import net.minecraft.util.Hand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.BlockRayTraceResult;
 import net.minecraft.world.*;
-import xfacthd.framedblocks.FramedBlocks;
 import xfacthd.framedblocks.common.data.BlockType;
 import xfacthd.framedblocks.common.tileentity.FramedTileEntity;
 
@@ -29,8 +28,6 @@ public class FramedLeverBlock extends LeverBlock implements IFramedBlock
                 .notSolid()
                 .sound(SoundType.WOOD)
         );
-
-        setRegistryName(FramedBlocks.MODID, "framed_lever");
     }
 
     @Override

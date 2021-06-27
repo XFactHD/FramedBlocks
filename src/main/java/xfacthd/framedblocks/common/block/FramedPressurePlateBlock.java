@@ -11,7 +11,6 @@ import net.minecraft.util.Hand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.BlockRayTraceResult;
 import net.minecraft.world.*;
-import xfacthd.framedblocks.FramedBlocks;
 import xfacthd.framedblocks.common.data.BlockType;
 import xfacthd.framedblocks.common.tileentity.FramedTileEntity;
 
@@ -27,7 +26,6 @@ public class FramedPressurePlateBlock extends PressurePlateBlock implements IFra
                 .doesNotBlockMovement()
                 .hardnessAndResistance(0.5F)
         );
-        setRegistryName(FramedBlocks.MODID, "framed_pressure_plate");
     }
 
     @Override

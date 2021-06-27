@@ -11,7 +11,7 @@ import xfacthd.framedblocks.common.util.Utils;
 
 public class FramedDoubleCornerTileEntity extends FramedDoubleTileEntity
 {
-    public FramedDoubleCornerTileEntity() { super(FBContent.tileTypeDoubleFramedCorner); }
+    public FramedDoubleCornerTileEntity() { super(FBContent.tileTypeDoubleFramedCorner.get()); }
 
     @Override
     protected boolean hitSecondary(BlockRayTraceResult hit)

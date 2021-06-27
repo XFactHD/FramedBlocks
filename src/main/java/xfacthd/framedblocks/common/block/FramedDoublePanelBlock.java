@@ -24,7 +24,7 @@ public class FramedDoublePanelBlock extends AbstractFramedDoubleBlock
         return dir == facing || dir == facing.getOpposite();
     };
 
-    public FramedDoublePanelBlock() { super("framed_double_panel", BlockType.FRAMED_DOUBLE_PANEL); }
+    public FramedDoublePanelBlock() { super(BlockType.FRAMED_DOUBLE_PANEL); }
 
     @Override
     protected void fillStateContainer(StateContainer.Builder<Block, BlockState> builder)
@@ -35,7 +35,7 @@ public class FramedDoublePanelBlock extends AbstractFramedDoubleBlock
     @Override
     public ItemStack getPickBlock(BlockState state, RayTraceResult target, IBlockReader world, BlockPos pos, PlayerEntity player)
     {
-        return new ItemStack(FBContent.blockFramedPanel);
+        return new ItemStack(FBContent.blockFramedPanel.get());
     }
 
     @Override

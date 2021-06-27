@@ -20,7 +20,7 @@ public class FramedDoubleThreewayCornerModel extends FramedDoubleBlockModel
     public FramedDoubleThreewayCornerModel(IBakedModel baseModel)
     {
         this(
-                FBContent.blockFramedDoubleThreewayCorner.getDefaultState().with(PropertyHolder.FACING_HOR, Direction.WEST),
+                FBContent.blockFramedDoubleThreewayCorner.get().getDefaultState().with(PropertyHolder.FACING_HOR, Direction.WEST),
                 baseModel
         );
     }
@@ -31,10 +31,10 @@ public class FramedDoubleThreewayCornerModel extends FramedDoubleBlockModel
         Direction facing = state.get(PropertyHolder.FACING_HOR);
         boolean top = state.get(PropertyHolder.TOP);
 
-        BlockState stateOne = FBContent.blockFramedInnerThreewayCorner.getDefaultState()
+        BlockState stateOne = FBContent.blockFramedInnerThreewayCorner.get().getDefaultState()
                 .with(PropertyHolder.TOP, top)
                 .with(PropertyHolder.FACING_HOR, facing.rotateYCCW()); //FIXME: remove rotation when fixing inner corner rotation
-        BlockState stateTwo = FBContent.blockFramedThreewayCorner.getDefaultState()
+        BlockState stateTwo = FBContent.blockFramedThreewayCorner.get().getDefaultState()
                 .with(PropertyHolder.TOP, !top)
                 .with(PropertyHolder.FACING_HOR, facing.getOpposite());
 

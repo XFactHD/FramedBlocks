@@ -36,7 +36,7 @@ public class FramedVerticalStairs extends FramedBlock
         StairsType type = state.get(PropertyHolder.STAIRS_TYPE);
         Direction dir = state.get(PropertyHolder.FACING_HOR);
 
-        if (adjState.getBlock() == FBContent.blockFramedVerticalStairs)
+        if (adjState.getBlock() == FBContent.blockFramedVerticalStairs.get())
         {
             StairsType adjType = adjState.get(PropertyHolder.STAIRS_TYPE);
             Direction adjDir = adjState.get(PropertyHolder.FACING_HOR);
@@ -54,7 +54,7 @@ public class FramedVerticalStairs extends FramedBlock
             return false;
         }
 
-        if (adjState.getBlock() == FBContent.blockFramedStairs)
+        if (adjState.getBlock() == FBContent.blockFramedStairs.get())
         {
             Direction adjDir = adjState.get(BlockStateProperties.HORIZONTAL_FACING);
             boolean adjBottom = adjState.get(BlockStateProperties.HALF) == Half.BOTTOM;
@@ -77,7 +77,7 @@ public class FramedVerticalStairs extends FramedBlock
             return false;
         }
 
-        if (adjState.getBlock() == FBContent.blockFramedPanel && type == StairsType.VERTICAL)
+        if (adjState.getBlock() == FBContent.blockFramedPanel.get() && type == StairsType.VERTICAL)
         {
             Direction adjDir = adjState.get(PropertyHolder.FACING_HOR);
             if ((side == dir.rotateY() && adjDir == dir) || (side == dir.getOpposite() && adjDir == dir.rotateYCCW()))
@@ -87,7 +87,7 @@ public class FramedVerticalStairs extends FramedBlock
             return false;
         }
 
-        if (adjState.getBlock() == FBContent.blockFramedDoublePanel && type == StairsType.VERTICAL)
+        if (adjState.getBlock() == FBContent.blockFramedDoublePanel.get() && type == StairsType.VERTICAL)
         {
             Direction adjDir = adjState.get(PropertyHolder.FACING_NE);
             if (side == dir.rotateY() && (adjDir == dir || adjDir == dir.getOpposite()))
@@ -101,7 +101,7 @@ public class FramedVerticalStairs extends FramedBlock
             return false;
         }
 
-        if (adjState.getBlock() == FBContent.blockFramedSlabCorner && type != StairsType.VERTICAL)
+        if (adjState.getBlock() == FBContent.blockFramedSlabCorner.get() && type != StairsType.VERTICAL)
         {
             Direction adjDir = adjState.get(PropertyHolder.FACING_HOR);
             boolean adjTop = adjState.get(PropertyHolder.TOP);
@@ -113,7 +113,7 @@ public class FramedVerticalStairs extends FramedBlock
             return false;
         }
 
-        if (adjState.getBlock() == FBContent.blockFramedCornerPillar)
+        if (adjState.getBlock() == FBContent.blockFramedCornerPillar.get())
         {
             Direction adjDir = adjState.get(PropertyHolder.FACING_HOR);
             if (type == StairsType.VERTICAL)
@@ -133,7 +133,7 @@ public class FramedVerticalStairs extends FramedBlock
             return false;
         }
 
-        if (adjState.getBlock() == FBContent.blockFramedSlabEdge && type != StairsType.VERTICAL && side.getAxis() != Direction.Axis.Y)
+        if (adjState.getBlock() == FBContent.blockFramedSlabEdge.get() && type != StairsType.VERTICAL && side.getAxis() != Direction.Axis.Y)
         {
             Direction adjDir = adjState.get(PropertyHolder.FACING_HOR);
             boolean adjTop = adjState.get(PropertyHolder.TOP);
@@ -148,7 +148,7 @@ public class FramedVerticalStairs extends FramedBlock
         return false;
     };
 
-    public FramedVerticalStairs() { super("framed_vertical_stairs", BlockType.FRAMED_VERTICAL_STAIRS); }
+    public FramedVerticalStairs() { super(BlockType.FRAMED_VERTICAL_STAIRS); }
 
     @Override
     protected void fillStateContainer(StateContainer.Builder<Block, BlockState> builder)

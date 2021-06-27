@@ -38,20 +38,20 @@ public class FramedSlabBlock extends FramedBlock
 
         boolean top = state.get(PropertyHolder.TOP);
 
-        if (adjState.getBlock() == FBContent.blockFramedSlab)
+        if (adjState.getBlock() == FBContent.blockFramedSlab.get())
         {
             if (top != adjState.get(PropertyHolder.TOP)) { return false; }
 
             return SideSkipPredicate.compareState(world, pos, side, top ? Direction.UP : Direction.DOWN);
         }
 
-        if (adjState.getBlock() == FBContent.blockFramedDoubleSlab)
+        if (adjState.getBlock() == FBContent.blockFramedDoubleSlab.get())
         {
             Direction face = top ? Direction.UP : Direction.DOWN;
             return SideSkipPredicate.compareState(world, pos, side, face);
         }
 
-        if (adjState.getBlock() == FBContent.blockFramedSlabEdge)
+        if (adjState.getBlock() == FBContent.blockFramedSlabEdge.get())
         {
             if (top != adjState.get(PropertyHolder.TOP)) { return false; }
             if (adjState.get(PropertyHolder.FACING_HOR) != side.getOpposite()) { return false; }
@@ -59,7 +59,7 @@ public class FramedSlabBlock extends FramedBlock
             return SideSkipPredicate.compareState(world, pos, side, top ? Direction.UP : Direction.DOWN);
         }
 
-        if (adjState.getBlock() == FBContent.blockFramedStairs)
+        if (adjState.getBlock() == FBContent.blockFramedStairs.get())
         {
             Direction adjDir = adjState.get(BlockStateProperties.HORIZONTAL_FACING);
             StairsShape adjShape = adjState.get(BlockStateProperties.STAIRS_SHAPE);
@@ -77,7 +77,7 @@ public class FramedSlabBlock extends FramedBlock
 
     public FramedSlabBlock()
     {
-        super("framed_slab", BlockType.FRAMED_SLAB);
+        super(BlockType.FRAMED_SLAB);
         setDefaultState(getDefaultState().with(PropertyHolder.TOP, false));
     }
 
@@ -97,7 +97,7 @@ public class FramedSlabBlock extends FramedBlock
     public ActionResultType onBlockActivated(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockRayTraceResult hit)
     {
         ItemStack stack = player.getHeldItem(hand);
-        if (stack.getItem() == FBContent.blockFramedSlab.asItem())
+        if (stack.getItem() == FBContent.blockFramedSlab.get().asItem())
         {
             boolean top = state.get(PropertyHolder.TOP);
             Direction face = hit.getFace();
@@ -117,9 +117,9 @@ public class FramedSlabBlock extends FramedBlock
                         glowing = ((FramedTileEntity) te).isGlowing();
                     }
 
-                    world.setBlockState(pos, FBContent.blockFramedDoubleSlab.getDefaultState());
+                    world.setBlockState(pos, FBContent.blockFramedDoubleSlab.get().getDefaultState());
 
-                    SoundType sound = FBContent.blockFramedCube.getSoundType(FBContent.blockFramedCube.getDefaultState());
+                    SoundType sound = FBContent.blockFramedCube.get().getSoundType(FBContent.blockFramedCube.get().getDefaultState());
                     world.playSound(null, pos, sound.getPlaceSound(), SoundCategory.BLOCKS, (sound.getVolume() + 1.0F) / 2.0F, sound.getPitch() * 0.8F);
 
                     if (!player.isCreative())

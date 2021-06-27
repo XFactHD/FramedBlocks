@@ -28,7 +28,7 @@ public class FramedCornerSlopeModel extends FramedBlockModel
     public FramedCornerSlopeModel(IBakedModel baseModel)
     {
         this(
-                FBContent.blockFramedCornerSlope.getDefaultState().with(PropertyHolder.FACING_HOR, Direction.SOUTH),
+                FBContent.blockFramedCornerSlope.get().getDefaultState().with(PropertyHolder.FACING_HOR, Direction.SOUTH),
                 baseModel
         );
     }

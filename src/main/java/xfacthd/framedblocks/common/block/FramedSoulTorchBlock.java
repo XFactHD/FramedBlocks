@@ -20,7 +20,6 @@ public class FramedSoulTorchBlock extends FramedTorchBlock
                 .notSolid(),
                 ParticleTypes.SOUL_FIRE_FLAME
         );
-        setRegistryName(FramedBlocks.MODID, "framed_soul_torch");
     }
 
     @Override
@@ -30,8 +29,8 @@ public class FramedSoulTorchBlock extends FramedTorchBlock
     public BlockItem createItemBlock()
     {
         BlockItem item = new WallOrFloorItem(
-                FBContent.blockFramedSoulTorch,
-                FBContent.blockFramedSoulWallTorch,
+                FBContent.blockFramedSoulTorch.get(),
+                FBContent.blockFramedSoulWallTorch.get(),
                 new Item.Properties().group(FramedBlocks.FRAMED_GROUP)
         );
         //noinspection ConstantConditions

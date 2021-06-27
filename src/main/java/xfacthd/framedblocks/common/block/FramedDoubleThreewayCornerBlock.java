@@ -23,11 +23,9 @@ public class FramedDoubleThreewayCornerBlock extends AbstractFramedDoubleBlock
         return side == dir || side == dir.rotateYCCW() || (dir == Direction.DOWN && !top) || (dir == Direction.UP && top);
     };
 
-    public FramedDoubleThreewayCornerBlock() { this("framed_double_threeway_corner", BlockType.FRAMED_DOUBLE_THREEWAY_CORNER); }
-
-    public FramedDoubleThreewayCornerBlock(String name, BlockType blockType)
+    public FramedDoubleThreewayCornerBlock(BlockType blockType)
     {
-        super(name, blockType);
+        super(blockType);
         setDefaultState(getDefaultState().with(PropertyHolder.TOP, false));
     }
 

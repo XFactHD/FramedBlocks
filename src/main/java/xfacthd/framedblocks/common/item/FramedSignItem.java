@@ -20,7 +20,7 @@ public class FramedSignItem extends WallOrFloorItem
 {
     public FramedSignItem()
     {
-        super(FBContent.blockFramedSign, FBContent.blockFramedWallSign,
+        super(FBContent.blockFramedSign.get(), FBContent.blockFramedWallSign.get(),
                 new Properties().group(FramedBlocks.FRAMED_GROUP).maxStackSize(16));
         setRegistryName(FramedBlocks.MODID, "framed_sign");
     }

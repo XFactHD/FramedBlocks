@@ -6,116 +6,112 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.tileentity.TileEntityType;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.minecraftforge.fml.RegistryObject;
 import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.registries.ForgeRegistries;
-import net.minecraftforge.registries.IForgeRegistry;
+import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
+import net.minecraftforge.registries.*;
 import xfacthd.framedblocks.FramedBlocks;
 import xfacthd.framedblocks.common.block.*;
 import xfacthd.framedblocks.common.data.BlockType;
 import xfacthd.framedblocks.common.item.*;
 import xfacthd.framedblocks.common.tileentity.*;
 
+import java.util.Arrays;
+import java.util.function.Function;
 import java.util.function.Supplier;
 
 @Mod.EventBusSubscriber(modid = FramedBlocks.MODID, bus = Mod.EventBusSubscriber.Bus.MOD)
 public class FBContent
 {
-    public static Block blockFramedCube;                //STATUS: Complete
-    public static Block blockFramedSlope;               //STATUS: Complete
-    public static Block blockFramedCornerSlope;         //STATUS: Complete
-    public static Block blockFramedInnerCornerSlope;    //STATUS: Complete
-    public static Block blockFramedPrismCorner;         //STATUS: Complete
-    public static Block blockFramedInnerPrismCorner;    //STATUS: Complete
-    public static Block blockFramedThreewayCorner;      //STATUS: Complete
-    public static Block blockFramedInnerThreewayCorner; //STATUS: Complete
-    public static Block blockFramedSlab;                //STATUS: Complete
-    public static Block blockFramedSlabEdge;            //STATUS: Complete
-    public static Block blockFramedSlabCorner;          //STATUS: Complete
-    public static Block blockFramedPanel;               //STATUS: Complete
-    public static Block blockFramedCornerPillar;        //STATUS: Complete
-    public static Block blockFramedStairs;              //STATUS: Complete
-    public static Block blockFramedWall;                //STATUS: Complete
-    public static Block blockFramedFence;               //STATUS: Complete
-    public static Block blockFramedGate;                //STATUS: Complete
-    public static Block blockFramedDoor;                //STATUS: Complete
-    public static Block blockFramedTrapDoor;            //STATUS: Complete
-    public static Block blockFramedPressurePlate;       //STATUS: Complete
-    public static Block blockFramedLadder;              //STATUS: Complete
-    public static Block blockFramedButton;              //STATUS: Complete
-    public static Block blockFramedLever;               //STATUS: Complete
-    public static Block blockFramedSign;                //STATUS: Complete
-    public static Block blockFramedWallSign;            //STATUS: Complete
-    public static Block blockFramedDoubleSlab;          //STATUS: Complete
-    public static Block blockFramedDoublePanel;         //STATUS: Complete
-    public static Block blockFramedDoubleSlope;         //STATUS: Complete
-    public static Block blockFramedDoubleCorner;        //STATUS: WIP
-    public static Block blockFramedDoublePrismCorner;   //STATUS: WIP
-    public static Block blockFramedDoubleThreewayCorner;//STATUS: WIP
-    public static Block blockFramedTorch;               //STATUS: Complete
-    public static Block blockFramedWallTorch;           //STATUS: Complete
-    public static Block blockFramedSoulTorch;           //STATUS: Complete
-    public static Block blockFramedSoulWallTorch;       //STATUS: Complete
-    public static Block blockFramedFloor;               //STATUS: Complete
-    public static Block blockFramedLattice;             //STATUS: Complete
-    public static Block blockFramedVerticalStairs;      //STATUS: Complete
-    public static Block blockFramedCollapsibleBlock;    //STATUS: Not implemented
-    public static Block blockFramedGhostBlock;          //STATUS: Complete
+    private static final DeferredRegister<Block> BLOCKS = DeferredRegister.create(ForgeRegistries.BLOCKS, FramedBlocks.MODID);
+    private static final DeferredRegister<Item> ITEMS = DeferredRegister.create(ForgeRegistries.ITEMS, FramedBlocks.MODID);
+    private static final DeferredRegister<TileEntityType<?>> TILE_TYPES = DeferredRegister.create(ForgeRegistries.TILE_ENTITIES, FramedBlocks.MODID);
 
-    public static Item itemFramedHammer;
+    /** BLOCKS */
+    public static final RegistryObject<Block> blockFramedCube = registerBlock(FramedBlock::new, BlockType.FRAMED_CUBE);
+    public static final RegistryObject<Block> blockFramedSlope = registerBlock(FramedSlopeBlock::new, BlockType.FRAMED_SLOPE);
+    public static final RegistryObject<Block> blockFramedCornerSlope = registerBlock(FramedCornerSlopeBlock::new, BlockType.FRAMED_CORNER_SLOPE);
+    public static final RegistryObject<Block> blockFramedInnerCornerSlope = registerBlock(FramedCornerSlopeBlock::new, BlockType.FRAMED_INNER_CORNER_SLOPE);
+    public static final RegistryObject<Block> blockFramedPrismCorner = registerBlock(FramedPrismCornerBlock::new, BlockType.FRAMED_PRISM_CORNER);
+    public static final RegistryObject<Block> blockFramedInnerPrismCorner = registerBlock(FramedPrismCornerBlock::new, BlockType.FRAMED_INNER_PRISM_CORNER);
+    public static final RegistryObject<Block> blockFramedThreewayCorner = registerBlock(FramedThreewayCornerBlock::new, BlockType.FRAMED_THREEWAY_CORNER);
+    public static final RegistryObject<Block> blockFramedInnerThreewayCorner = registerBlock(FramedThreewayCornerBlock::new, BlockType.FRAMED_INNER_THREEWAY_CORNER);
+    public static final RegistryObject<Block> blockFramedSlab = registerBlock(FramedSlabBlock::new, BlockType.FRAMED_SLAB);
+    public static final RegistryObject<Block> blockFramedSlabEdge = registerBlock(FramedSlabEdgeBlock::new, BlockType.FRAMED_SLAB_EDGE);
+    public static final RegistryObject<Block> blockFramedSlabCorner = registerBlock(FramedSlabCornerBlock::new, BlockType.FRAMED_SLAB_CORNER);
+    public static final RegistryObject<Block> blockFramedPanel = registerBlock(FramedPanelBlock::new, BlockType.FRAMED_PANEL);
+    public static final RegistryObject<Block> blockFramedCornerPillar = registerBlock(FramedCornerPillarBlock::new, BlockType.FRAMED_CORNER_PILLAR);
+    public static final RegistryObject<Block> blockFramedStairs = registerBlock(FramedStairsBlock::new, BlockType.FRAMED_STAIRS);
+    public static final RegistryObject<Block> blockFramedWall = registerBlock(FramedWallBlock::new, BlockType.FRAMED_WALL);
+    public static final RegistryObject<Block> blockFramedFence = registerBlock(FramedFenceBlock::new, BlockType.FRAMED_FENCE);
+    public static final RegistryObject<Block> blockFramedGate = registerBlock(FramedGateBlock::new, BlockType.FRAMED_GATE);
+    public static final RegistryObject<Block> blockFramedDoor = registerBlock(FramedDoorBlock::new, BlockType.FRAMED_DOOR);
+    public static final RegistryObject<Block> blockFramedTrapDoor = registerBlock(FramedTrapDoorBlock::new, BlockType.FRAMED_TRAPDOOR);
+    public static final RegistryObject<Block> blockFramedPressurePlate = registerBlock(FramedPressurePlateBlock::new, BlockType.FRAMED_PRESSURE_PLATE);
+    public static final RegistryObject<Block> blockFramedLadder = registerBlock(FramedLadderBlock::new, BlockType.FRAMED_LADDER);
+    public static final RegistryObject<Block> blockFramedButton = registerBlock(FramedButtonBlock::new, BlockType.FRAMED_BUTTON);
+    public static final RegistryObject<Block> blockFramedLever = registerBlock(FramedLeverBlock::new, BlockType.FRAMED_LEVER);
+    public static final RegistryObject<Block> blockFramedSign = registerBlock(FramedSignBlock::new, BlockType.FRAMED_SIGN);
+    public static final RegistryObject<Block> blockFramedWallSign = registerBlock(FramedWallSignBlock::new, BlockType.FRAMED_WALL_SIGN);
+    public static final RegistryObject<Block> blockFramedDoubleSlab = registerBlock(FramedDoubleSlabBlock::new, BlockType.FRAMED_DOUBLE_SLAB);
+    public static final RegistryObject<Block> blockFramedDoublePanel = registerBlock(FramedDoublePanelBlock::new, BlockType.FRAMED_DOUBLE_PANEL);
+    public static final RegistryObject<Block> blockFramedDoubleSlope = registerBlock(FramedDoubleSlopeBlock::new, BlockType.FRAMED_DOUBLE_SLOPE);
+    public static final RegistryObject<Block> blockFramedDoubleCorner = registerBlock(FramedDoubleCornerBlock::new, BlockType.FRAMED_DOUBLE_CORNER); //STATUS: WIP
+    public static final RegistryObject<Block> blockFramedDoublePrismCorner = registerBlock(FramedDoublePrismCornerBlock::new, BlockType.FRAMED_DOUBLE_PRISM_CORNER); //STATUS: WIP
+    public static final RegistryObject<Block> blockFramedDoubleThreewayCorner = registerBlock(FramedDoubleThreewayCornerBlock::new, BlockType.FRAMED_DOUBLE_THREEWAY_CORNER); //STATUS: WIP
+    public static final RegistryObject<Block> blockFramedTorch = registerBlock(FramedTorchBlock::new, BlockType.FRAMED_TORCH);
+    public static final RegistryObject<Block> blockFramedWallTorch = registerBlock(FramedWallTorchBlock::new, BlockType.FRAMED_WALL_TORCH);
+    public static final RegistryObject<Block> blockFramedSoulTorch = registerBlock(FramedSoulTorchBlock::new, BlockType.FRAMED_SOUL_TORCH);
+    public static final RegistryObject<Block> blockFramedSoulWallTorch = registerBlock(FramedSoulWallTorchBlock::new, BlockType.FRAMED_SOUL_WALL_TORCH);
+    public static final RegistryObject<Block> blockFramedFloor = registerBlock(FramedFloorBlock::new, BlockType.FRAMED_FLOOR_BOARD);
+    public static final RegistryObject<Block> blockFramedLattice = registerBlock(FramedLatticeBlock::new, BlockType.FRAMED_LATTICE_BLOCK);
+    public static final RegistryObject<Block> blockFramedVerticalStairs = registerBlock(FramedVerticalStairs::new, BlockType.FRAMED_VERTICAL_STAIRS);
+    //public static final RegistryObject<Block> blockFramedCollapsibleBlock = register(FramedCollapsibleBlock::new, BlockType.FRAMED_COLLAPSIBLE_BLOCK); //STATUS: Not implemented
+    public static final RegistryObject<Block> blockFramedGhostBlock = BLOCKS.register("framed_ghost_block", FramedGhostBlock::new);
 
-    public static TileEntityType<FramedTileEntity> tileTypeFramedBlock;
-    public static TileEntityType<FramedSignTileEntity> tileTypeFramedSign;
-    public static TileEntityType<FramedDoubleSlabTileEntity> tileTypeDoubleFramedSlab;
-    public static TileEntityType<FramedDoublePanelTileEntity> tileTypeDoubleFramedPanel;
-    public static TileEntityType<FramedDoubleSlopeTileEntity> tileTypeDoubleFramedSlope;
-    public static TileEntityType<FramedDoubleCornerTileEntity> tileTypeDoubleFramedCorner;
-    public static TileEntityType<FramedDoubleThreewayCornerTileEntity> tileTypeDoubleFramedThreewayCorner;
+    /** ITEMS */
+    public static final RegistryObject<Item> itemFramedHammer = ITEMS.register("framed_hammer", FramedHammerItem::new);
 
-    @SubscribeEvent
-    public static void onRegisterBlocks(final RegistryEvent.Register<Block> event)
+    /** TILE ENTITY TYPES */
+    public static final RegistryObject<TileEntityType<FramedTileEntity>> tileTypeFramedBlock = createTileType(FramedTileEntity::new, "framed_tile", getTileBlocks());
+    public static final RegistryObject<TileEntityType<FramedSignTileEntity>> tileTypeFramedSign = createTileType(
+            FramedSignTileEntity::new,
+            "framed_sign",
+            blockFramedSign, blockFramedWallSign
+    );
+    public static final RegistryObject<TileEntityType<FramedDoubleSlabTileEntity>> tileTypeDoubleFramedSlab = createTileType(
+            FramedDoubleSlabTileEntity::new,
+            "framed_double_slab",
+            blockFramedDoubleSlab
+    );
+    public static final RegistryObject<TileEntityType<FramedDoublePanelTileEntity>> tileTypeDoubleFramedPanel = createTileType(
+            FramedDoublePanelTileEntity::new,
+            "framed_double_panel",
+            blockFramedDoublePanel
+    );
+    public static final RegistryObject<TileEntityType<FramedDoubleSlopeTileEntity>> tileTypeDoubleFramedSlope = createTileType(
+            FramedDoubleSlopeTileEntity::new,
+            "framed_double_slope",
+            blockFramedDoubleSlope
+    );
+    public static final RegistryObject<TileEntityType<FramedDoubleCornerTileEntity>> tileTypeDoubleFramedCorner = createTileType(
+            FramedDoubleCornerTileEntity::new,
+            "framed_double_corner",
+            blockFramedDoubleCorner
+    );
+    public static final RegistryObject<TileEntityType<FramedDoubleThreewayCornerTileEntity>> tileTypeDoubleFramedThreewayCorner = createTileType(
+            FramedDoubleThreewayCornerTileEntity::new,
+            "framed_double_threeway_corner",
+            blockFramedDoublePrismCorner, blockFramedDoubleThreewayCorner
+    );
+
+
+
+    public static void init()
     {
-        IForgeRegistry<Block> registry = event.getRegistry();
-
-        registry.register(blockFramedCube = new FramedBlock("framed_cube", BlockType.FRAMED_CUBE));
-        registry.register(blockFramedSlope = new FramedSlopeBlock());
-        registry.register(blockFramedCornerSlope = new FramedCornerSlopeBlock("framed_corner_slope", BlockType.FRAMED_CORNER_SLOPE));
-        registry.register(blockFramedInnerCornerSlope = new FramedCornerSlopeBlock("framed_inner_corner_slope", BlockType.FRAMED_INNER_CORNER_SLOPE));
-        registry.register(blockFramedPrismCorner = new FramedPrismCornerBlock("framed_prism_corner", BlockType.FRAMED_PRISM_CORNER));
-        registry.register(blockFramedInnerPrismCorner = new FramedPrismCornerBlock("framed_inner_prism_corner", BlockType.FRAMED_INNER_PRISM_CORNER));
-        registry.register(blockFramedThreewayCorner = new FramedThreewayCornerBlock("framed_threeway_corner", BlockType.FRAMED_THREEWAY_CORNER));
-        registry.register(blockFramedInnerThreewayCorner = new FramedThreewayCornerBlock("framed_inner_threeway_corner", BlockType.FRAMED_INNER_THREEWAY_CORNER));
-        registry.register(blockFramedSlab = new FramedSlabBlock());
-        registry.register(blockFramedSlabEdge = new FramedSlabEdgeBlock());
-        registry.register(blockFramedSlabCorner = new FramedSlabCornerBlock());
-        registry.register(blockFramedPanel = new FramedPanelBlock());
-        registry.register(blockFramedCornerPillar = new FramedCornerPillarBlock());
-        registry.register(blockFramedStairs = new FramedStairsBlock());
-        registry.register(blockFramedWall = new FramedWallBlock());
-        registry.register(blockFramedFence = new FramedFenceBlock());
-        registry.register(blockFramedGate = new FramedGateBlock());
-        registry.register(blockFramedDoor = new FramedDoorBlock());
-        registry.register(blockFramedTrapDoor = new FramedTrapDoorBlock());
-        registry.register(blockFramedPressurePlate = new FramedPressurePlateBlock());
-        registry.register(blockFramedLadder = new FramedLadderBlock());
-        registry.register(blockFramedButton = new FramedButtonBlock());
-        registry.register(blockFramedLever = new FramedLeverBlock());
-        registry.register(blockFramedSign = new FramedSignBlock());
-        registry.register(blockFramedWallSign = new FramedWallSignBlock());
-        registry.register(blockFramedDoubleSlab = new FramedDoubleSlabBlock());
-        registry.register(blockFramedDoublePanel = new FramedDoublePanelBlock());
-        registry.register(blockFramedDoubleSlope = new FramedDoubleSlopeBlock());
-        registry.register(blockFramedDoubleCorner = new FramedDoubleCornerBlock());
-        registry.register(blockFramedDoublePrismCorner = new FramedDoublePrismCornerBlock());
-        registry.register(blockFramedDoubleThreewayCorner = new FramedDoubleThreewayCornerBlock());
-        registry.register(blockFramedTorch = new FramedTorchBlock());
-        registry.register(blockFramedWallTorch = new FramedWallTorchBlock());
-        registry.register(blockFramedSoulTorch = new FramedSoulTorchBlock());
-        registry.register(blockFramedSoulWallTorch = new FramedSoulWallTorchBlock());
-        registry.register(blockFramedFloor = new FramedFloorBlock());
-        registry.register(blockFramedLattice = new FramedLatticeBlock());
-        registry.register(blockFramedVerticalStairs = new FramedVerticalStairs());
-        //registry.register(blockFramedCollapsibleBlock = new FramedCollapsibleBlock());
-        registry.register(blockFramedGhostBlock = new FramedGhostBlock());
+        BLOCKS.register(FMLJavaModLoadingContext.get().getModEventBus());
+        ITEMS.register(FMLJavaModLoadingContext.get().getModEventBus());
+        TILE_TYPES.register(FMLJavaModLoadingContext.get().getModEventBus());
     }
 
     @SubscribeEvent
@@ -123,46 +119,47 @@ public class FBContent
     {
         IForgeRegistry<Item> registry = event.getRegistry();
 
-        //noinspection ConstantConditions
-        ForgeRegistries.BLOCKS.getValues()
+        BLOCKS.getEntries()
                 .stream()
-                .filter(block -> block.getRegistryName().getNamespace().equals(FramedBlocks.MODID))
+                .map(RegistryObject::get)
                 .filter(block -> block instanceof IFramedBlock)
                 .filter(block -> ((IFramedBlock)block).getBlockType().hasBlockItem())
-                .forEach(block -> registry.register(((IFramedBlock)block).createItemBlock()));
-
-        registry.register(itemFramedHammer = new FramedHammerItem());
+                .map(block -> ((IFramedBlock)block).createItemBlock())
+                .forEach(registry::register);
     }
 
-    @SubscribeEvent
-    public static void onRegisterTiles(final RegistryEvent.Register<TileEntityType<?>> event)
+    private static Supplier<Block[]> getTileBlocks()
     {
-        //noinspection ConstantConditions
-        Block[] validBlocks = ForgeRegistries.BLOCKS.getValues()
+        return () -> BLOCKS.getEntries()
                 .stream()
-                .filter(block -> block.getRegistryName().getNamespace().equals(FramedBlocks.MODID))
+                .map(RegistryObject::get)
                 .filter(block -> block instanceof IFramedBlock)
                 .filter(block -> !((IFramedBlock)block).getBlockType().hasSpecialTile())
                 .toArray(Block[]::new);
-
-        event.getRegistry().registerAll(
-            tileTypeFramedBlock = createTileType(FramedTileEntity::new, "framed_tile", validBlocks),
-            tileTypeFramedSign = createTileType(FramedSignTileEntity::new, "framed_sign", blockFramedSign, blockFramedWallSign),
-            tileTypeDoubleFramedSlab = createTileType(FramedDoubleSlabTileEntity::new, "framed_double_slab", blockFramedDoubleSlab),
-            tileTypeDoubleFramedPanel = createTileType(FramedDoublePanelTileEntity::new, "framed_double_panel", blockFramedDoublePanel),
-            tileTypeDoubleFramedSlope = createTileType(FramedDoubleSlopeTileEntity::new, "framed_double_slope", blockFramedDoubleSlope),
-            tileTypeDoubleFramedCorner = createTileType(FramedDoubleCornerTileEntity::new, "framed_double_corner", blockFramedDoubleCorner),
-            tileTypeDoubleFramedThreewayCorner = createTileType(FramedDoubleThreewayCornerTileEntity::new, "framed_double_threeway_corner",
-                    blockFramedDoublePrismCorner, blockFramedDoubleThreewayCorner
-            )
-        );
     }
 
-    private static <T extends TileEntity> TileEntityType<T> createTileType(Supplier<T> factory, String name, Block... blocks)
+    private static RegistryObject<Block> registerBlock(Function<BlockType, Block> blockFactory, BlockType type)
     {
-        //noinspection ConstantConditions
-        TileEntityType<T> type = TileEntityType.Builder.create(factory, blocks).build(null);
-        type.setRegistryName(FramedBlocks.MODID, name);
-        return type;
+        return registerBlock(() -> blockFactory.apply(type), type);
+    }
+
+    private static RegistryObject<Block> registerBlock(Supplier<Block> blockFactory, BlockType type)
+    {
+        return BLOCKS.register(type.getName(), blockFactory);
+    }
+
+    @SafeVarargs
+    private static <T extends TileEntity> RegistryObject<TileEntityType<T>> createTileType(Supplier<T> factory, String name, RegistryObject<Block>... roBlocks)
+    {
+        return createTileType(factory, name, () -> Arrays.stream(roBlocks).map(RegistryObject::get).toArray(Block[]::new));
+    }
+
+    private static <T extends TileEntity> RegistryObject<TileEntityType<T>> createTileType(Supplier<T> factory, String name, Supplier<Block[]> blocks)
+    {
+        return TILE_TYPES.register(name, () ->
+        {
+            //noinspection ConstantConditions
+            return TileEntityType.Builder.create(factory, blocks.get()).build(null);
+        });
     }
 }

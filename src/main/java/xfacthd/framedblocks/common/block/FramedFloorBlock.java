@@ -21,7 +21,7 @@ public class FramedFloorBlock extends FramedBlock
     {
         if (side == Direction.DOWN) { return SideSkipPredicate.CTM.test(world, pos, state, adjState, side); }
 
-        if (side.getAxis() != Direction.Axis.Y && adjState.getBlock() == FBContent.blockFramedFloor)
+        if (side.getAxis() != Direction.Axis.Y && adjState.getBlock() == FBContent.blockFramedFloor.get())
         {
             return SideSkipPredicate.compareState(world, pos, side);
         }
@@ -29,7 +29,7 @@ public class FramedFloorBlock extends FramedBlock
         return false;
     };
 
-    public FramedFloorBlock() { super("framed_floor_board", BlockType.FRAMED_FLOOR_BOARD); }
+    public FramedFloorBlock() { super(BlockType.FRAMED_FLOOR_BOARD); }
 
     @Override
     protected void fillStateContainer(StateContainer.Builder<Block, BlockState> builder)

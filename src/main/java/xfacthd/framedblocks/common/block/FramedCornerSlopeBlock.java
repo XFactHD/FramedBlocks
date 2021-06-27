@@ -410,7 +410,7 @@ public class FramedCornerSlopeBlock extends FramedBlock
         return false;
     };
 
-    public FramedCornerSlopeBlock(String name, BlockType type) { super(name, type); }
+    public FramedCornerSlopeBlock(BlockType type) { super(type); }
 
     @Override
     protected void fillStateContainer(StateContainer.Builder<Block, BlockState> builder)

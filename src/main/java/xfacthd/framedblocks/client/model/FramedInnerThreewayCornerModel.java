@@ -26,7 +26,7 @@ public class FramedInnerThreewayCornerModel extends FramedBlockModel
     public FramedInnerThreewayCornerModel(IBakedModel baseModel)
     {
         this(
-                FBContent.blockFramedInnerThreewayCorner.getDefaultState().with(PropertyHolder.FACING_HOR, Direction.EAST),
+                FBContent.blockFramedInnerThreewayCorner.get().getDefaultState().with(PropertyHolder.FACING_HOR, Direction.EAST),
                 baseModel
         );
     }

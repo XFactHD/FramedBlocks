@@ -19,7 +19,7 @@ public class FramedCubeModel extends FramedBlockModel
     @Override
     protected IBakedModel getCamoModel(BlockState camoState)
     {
-        if (camoState == FBContent.blockFramedCube.getDefaultState()) { return baseModel; }
+        if (camoState == FBContent.blockFramedCube.get().getDefaultState()) { return baseModel; }
         return super.getCamoModel(camoState);
     }
 }

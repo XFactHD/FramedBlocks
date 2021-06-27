@@ -14,7 +14,7 @@ public class FramedDoubleSlabModel extends FramedDoubleBlockModel
     @Override
     protected Tuple<BlockState, BlockState> getDummyStates()
     {
-        BlockState slabState = FBContent.blockFramedSlab.getDefaultState();
+        BlockState slabState = FBContent.blockFramedSlab.get().getDefaultState();
         return new Tuple<>(slabState.with(PropertyHolder.TOP, false), slabState.with(PropertyHolder.TOP, true));
     }
 }

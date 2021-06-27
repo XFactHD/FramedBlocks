@@ -11,7 +11,6 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.*;
 import net.minecraft.util.math.*;
 import net.minecraft.world.*;
-import xfacthd.framedblocks.FramedBlocks;
 import xfacthd.framedblocks.common.data.BlockType;
 import xfacthd.framedblocks.common.tileentity.FramedTileEntity;
 import xfacthd.framedblocks.common.util.CtmPredicate;
@@ -38,7 +37,6 @@ public class FramedTrapDoorBlock extends TrapDoorBlock implements IFramedBlock
     public FramedTrapDoorBlock()
     {
         super(IFramedBlock.createProperties());
-        setRegistryName(FramedBlocks.MODID, "framed_trapdoor");
     }
 
     @Override

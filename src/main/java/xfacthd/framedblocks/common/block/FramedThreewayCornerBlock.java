@@ -292,9 +292,9 @@ public class FramedThreewayCornerBlock extends FramedBlock
         return false;
     };
 
-    public FramedThreewayCornerBlock(String name, BlockType type)
+    public FramedThreewayCornerBlock(BlockType type)
     {
-        super(name, type);
+        super(type);
         setDefaultState(getDefaultState().with(PropertyHolder.TOP, false));
     }
 

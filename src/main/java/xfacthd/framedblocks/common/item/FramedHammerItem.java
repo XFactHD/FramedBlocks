@@ -14,8 +14,6 @@ public class FramedHammerItem extends Item
                 .maxStackSize(1)
                 .group(FramedBlocks.FRAMED_GROUP)
         );
-
-        setRegistryName(FramedBlocks.MODID, "framed_hammer");
     }
 
     @Override

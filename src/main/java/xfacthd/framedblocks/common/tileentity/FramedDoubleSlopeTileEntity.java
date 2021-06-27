@@ -12,7 +12,7 @@ import xfacthd.framedblocks.common.util.Utils;
 
 public class FramedDoubleSlopeTileEntity extends FramedDoubleTileEntity
 {
-    public FramedDoubleSlopeTileEntity() { super(FBContent.tileTypeDoubleFramedSlab); }
+    public FramedDoubleSlopeTileEntity() { super(FBContent.tileTypeDoubleFramedSlope.get()); }
 
     @Override
     protected boolean hitSecondary(BlockRayTraceResult hit)

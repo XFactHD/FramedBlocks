@@ -13,6 +13,7 @@ import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.event.ColorHandlerEvent;
 import net.minecraftforge.client.event.ModelBakeEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.minecraftforge.fml.RegistryObject;
 import net.minecraftforge.fml.client.registry.ClientRegistry;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
@@ -46,9 +47,9 @@ public class FBClient
                         type == RenderType.getCutoutMipped() ||
                         type == RenderType.getTranslucent()
                 ));
-        RenderTypeLookup.setRenderLayer(FBContent.blockFramedGhostBlock, RenderType.getTranslucent());
+        RenderTypeLookup.setRenderLayer(FBContent.blockFramedGhostBlock.get(), RenderType.getTranslucent());
 
-        ClientRegistry.bindTileEntityRenderer(FBContent.tileTypeFramedSign, FramedSignRenderer::new);
+        ClientRegistry.bindTileEntityRenderer(FBContent.tileTypeFramedSign.get(), FramedSignRenderer::new);
     }
 
     @SubscribeEvent
@@ -137,17 +138,17 @@ public class FBClient
         //replaceModelsSimple(FBContent.blockFramedCollapsibleBlock, registry, FramedCollapsibleBlockModel::new);
     }
 
-    private static void replaceModels(Block block, Map<ResourceLocation, IBakedModel> models,
+    private static void replaceModels(RegistryObject<Block> block, Map<ResourceLocation, IBakedModel> models,
                                       BiFunction<BlockState, IBakedModel, IBakedModel> blockModelGen)
     {
         replaceModels(block, models, blockModelGen, model -> model);
     }
 
-    private static void replaceModels(Block block, Map<ResourceLocation, IBakedModel> models,
+    private static void replaceModels(RegistryObject<Block> block, Map<ResourceLocation, IBakedModel> models,
                                       BiFunction<BlockState, IBakedModel, IBakedModel> blockModelGen,
                                       Function<IBakedModel, IBakedModel> itemModelGen)
     {
-        for (BlockState state : block.getStateContainer().getValidStates())
+        for (BlockState state : block.get().getStateContainer().getValidStates())
         {
             ResourceLocation location = BlockModelShapes.getModelLocation(state);
             IBakedModel baseModel = models.get(location);
@@ -156,7 +157,7 @@ public class FBClient
         }
 
         //noinspection ConstantConditions
-        ResourceLocation location = new ModelResourceLocation(block.getRegistryName(), "inventory");
+        ResourceLocation location = new ModelResourceLocation(block.get().getRegistryName(), "inventory");
         IBakedModel replacement = itemModelGen.apply(models.get(location));
         models.put(location, replacement);
     }

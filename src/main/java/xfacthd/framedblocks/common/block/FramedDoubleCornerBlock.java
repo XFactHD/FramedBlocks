@@ -35,7 +35,7 @@ public class FramedDoubleCornerBlock extends AbstractFramedDoubleBlock
         }
     };
 
-    public FramedDoubleCornerBlock() { super("framed_double_corner", BlockType.FRAMED_DOUBLE_CORNER); }
+    public FramedDoubleCornerBlock() { super(BlockType.FRAMED_DOUBLE_CORNER); }
 
     @Override
     protected void fillStateContainer(StateContainer.Builder<Block, BlockState> builder)

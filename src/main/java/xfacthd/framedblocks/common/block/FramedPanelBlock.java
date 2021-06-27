@@ -30,18 +30,18 @@ public class FramedPanelBlock extends FramedBlock
         Direction dir = state.get(PropertyHolder.FACING_HOR);
         if (side == dir) { return SideSkipPredicate.CTM.test(world, pos, state, adjState, side); }
 
-        if (adjState.getBlock() == FBContent.blockFramedPanel && side != dir.getOpposite())
+        if (adjState.getBlock() == FBContent.blockFramedPanel.get() && side != dir.getOpposite())
         {
             return dir == adjState.get(PropertyHolder.FACING_HOR) && SideSkipPredicate.compareState(world, pos, side, dir);
         }
 
-        if (adjState.getBlock() == FBContent.blockFramedDoublePanel && side != dir.getOpposite())
+        if (adjState.getBlock() == FBContent.blockFramedDoublePanel.get() && side != dir.getOpposite())
         {
             Direction adjDir = adjState.get(PropertyHolder.FACING_NE);
             return (dir == adjDir || dir == adjDir.getOpposite()) && SideSkipPredicate.compareState(world, pos, side, dir);
         }
 
-        if (adjState.getBlock() == FBContent.blockFramedCornerPillar)
+        if (adjState.getBlock() == FBContent.blockFramedCornerPillar.get())
         {
             Direction adjDir = adjState.get(PropertyHolder.FACING_HOR);
             if ((side == dir.rotateY() && adjDir == dir) || (side == dir.rotateYCCW() && adjDir == dir.rotateY()))
@@ -51,7 +51,7 @@ public class FramedPanelBlock extends FramedBlock
             return false;
         }
 
-        if (adjState.getBlock() == FBContent.blockFramedSlabEdge)
+        if (adjState.getBlock() == FBContent.blockFramedSlabEdge.get())
         {
             Direction adjDir = adjState.get(PropertyHolder.FACING_HOR);
             if (adjDir != dir) { return false; }
@@ -63,7 +63,7 @@ public class FramedPanelBlock extends FramedBlock
             }
         }
 
-        if (adjState.getBlock() == FBContent.blockFramedStairs && side.getAxis() == Direction.Axis.Y)
+        if (adjState.getBlock() == FBContent.blockFramedStairs.get() && side.getAxis() == Direction.Axis.Y)
         {
             Direction adjDir = adjState.get(BlockStateProperties.HORIZONTAL_FACING);
             StairsShape adjShape = adjState.get(BlockStateProperties.STAIRS_SHAPE);
@@ -76,7 +76,7 @@ public class FramedPanelBlock extends FramedBlock
             return false;
         }
 
-        if (adjState.getBlock() == FBContent.blockFramedVerticalStairs && (side == dir.rotateY() || side == dir.rotateYCCW()))
+        if (adjState.getBlock() == FBContent.blockFramedVerticalStairs.get() && (side == dir.rotateY() || side == dir.rotateYCCW()))
         {
             Direction adjDir = adjState.get(PropertyHolder.FACING_HOR);
             StairsType adjType = adjState.get(PropertyHolder.STAIRS_TYPE);
@@ -91,7 +91,7 @@ public class FramedPanelBlock extends FramedBlock
         return false;
     };
 
-    public FramedPanelBlock(){ super("framed_panel", BlockType.FRAMED_PANEL); }
+    public FramedPanelBlock(){ super(BlockType.FRAMED_PANEL); }
 
     @Override
     protected void fillStateContainer(StateContainer.Builder<Block, BlockState> builder)
@@ -121,7 +121,7 @@ public class FramedPanelBlock extends FramedBlock
     public ActionResultType onBlockActivated(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockRayTraceResult hit)
     {
         ItemStack stack = player.getHeldItem(hand);
-        if (stack.getItem() == FBContent.blockFramedPanel.asItem())
+        if (stack.getItem() == FBContent.blockFramedPanel.get().asItem())
         {
             Direction facing = state.get(PropertyHolder.FACING_HOR);
             if (hit.getFace() == facing.getOpposite())
@@ -141,10 +141,10 @@ public class FramedPanelBlock extends FramedBlock
                     }
 
                     Direction newFacing = (facing == Direction.NORTH || facing == Direction.EAST) ? facing : facing.getOpposite();
-                    BlockState newState = FBContent.blockFramedDoublePanel.getDefaultState();
+                    BlockState newState = FBContent.blockFramedDoublePanel.get().getDefaultState();
                     world.setBlockState(pos, newState.with(PropertyHolder.FACING_NE, newFacing));
 
-                    SoundType sound = FBContent.blockFramedCube.getSoundType(FBContent.blockFramedCube.getDefaultState());
+                    SoundType sound = FBContent.blockFramedCube.get().getSoundType(FBContent.blockFramedCube.get().getDefaultState());
                     world.playSound(null, pos, sound.getPlaceSound(), SoundCategory.BLOCKS, (sound.getVolume() + 1.0F) / 2.0F, sound.getPitch() * 0.8F);
 
                     if (!player.isCreative())

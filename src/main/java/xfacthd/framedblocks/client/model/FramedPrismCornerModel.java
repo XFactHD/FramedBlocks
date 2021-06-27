@@ -29,7 +29,7 @@ public class FramedPrismCornerModel extends FramedBlockModel
     public FramedPrismCornerModel(IBakedModel baseModel)
     {
         this(
-                FBContent.blockFramedPrismCorner.getDefaultState().with(PropertyHolder.FACING_HOR, Direction.SOUTH),
+                FBContent.blockFramedPrismCorner.get().getDefaultState().with(PropertyHolder.FACING_HOR, Direction.SOUTH),
                 baseModel
         );
     }

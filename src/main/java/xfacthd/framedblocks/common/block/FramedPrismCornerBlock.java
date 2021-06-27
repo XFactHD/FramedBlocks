@@ -15,9 +15,9 @@ import xfacthd.framedblocks.common.util.Utils;
 
 public class FramedPrismCornerBlock extends FramedThreewayCornerBlock
 {
-    public FramedPrismCornerBlock(String name, BlockType type)
+    public FramedPrismCornerBlock(BlockType type)
     {
-        super(name, type);
+        super(type);
         setDefaultState(getDefaultState().with(PropertyHolder.TOP, false).with(PropertyHolder.OFFSET, false));
     }
 

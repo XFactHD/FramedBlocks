@@ -12,7 +12,6 @@ import net.minecraft.util.Hand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.BlockRayTraceResult;
 import net.minecraft.world.*;
-import xfacthd.framedblocks.FramedBlocks;
 import xfacthd.framedblocks.common.data.BlockType;
 import xfacthd.framedblocks.common.tileentity.FramedTileEntity;
 
@@ -29,7 +28,6 @@ public class FramedButtonBlock extends WoodButtonBlock implements IFramedBlock
                 .sound(SoundType.WOOD)
                 .notSolid()
         );
-        setRegistryName(FramedBlocks.MODID, "framed_button");
     }
 
     @Override

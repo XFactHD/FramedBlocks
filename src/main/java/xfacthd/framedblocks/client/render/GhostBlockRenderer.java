@@ -39,7 +39,7 @@ public class GhostBlockRenderer
     @SubscribeEvent
     public static void onClientSetup(final FMLClientSetupEvent event)
     {
-        GHOST_MODEL_DATA.setCamoState(FBContent.blockFramedGhostBlock.getDefaultState());
+        GHOST_MODEL_DATA.setCamoState(FBContent.blockFramedGhostBlock.get().getDefaultState());
 
         //Needed to render ghosts of double blocks
         GHOST_MODEL_DATA.setData(FramedDoubleTileEntity.DATA_LEFT, GHOST_MODEL_DATA);
@@ -90,7 +90,7 @@ public class GhostBlockRenderer
         {
             doRenderGhostBlock(mstack, buffers, renderPos, renderState);
 
-            if (renderState.getBlock() == FBContent.blockFramedDoor)
+            if (renderState.getBlock() == FBContent.blockFramedDoor.get())
             {
                 doRenderGhostBlock(mstack, buffers, renderPos.up(), renderState.with(DoorBlock.HALF, DoubleBlockHalf.UPPER));
             }
@@ -133,7 +133,7 @@ public class GhostBlockRenderer
 
     private static BlockState tryBuildDoubleSlab(BlockRayTraceResult trace, Block heldBlock)
     {
-        if (heldBlock != FBContent.blockFramedSlab) { return null; }
+        if (heldBlock != FBContent.blockFramedSlab.get()) { return null; }
 
         BlockState target = mc().world.getBlockState(trace.getPos());
         if (target.getBlock() == heldBlock)
@@ -149,7 +149,7 @@ public class GhostBlockRenderer
 
     private static BlockState tryBuildDoublePanel(BlockRayTraceResult trace, Block heldBlock)
     {
-        if (heldBlock != FBContent.blockFramedPanel) { return null; }
+        if (heldBlock != FBContent.blockFramedPanel.get()) { return null; }
 
         BlockState target = mc().world.getBlockState(trace.getPos());
         if (target.getBlock() == heldBlock)

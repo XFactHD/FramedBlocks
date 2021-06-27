@@ -34,7 +34,6 @@ public class FramedTorchBlock extends TorchBlock implements IFramedBlock
                 .notSolid(),
                 ParticleTypes.FLAME
         );
-        setRegistryName(FramedBlocks.MODID, "framed_torch");
     }
 
     public FramedTorchBlock(Properties props, IParticleData particle) { super(props, particle); }
@@ -73,8 +72,8 @@ public class FramedTorchBlock extends TorchBlock implements IFramedBlock
     public BlockItem createItemBlock()
     {
         BlockItem item = new WallOrFloorItem(
-                FBContent.blockFramedTorch,
-                FBContent.blockFramedWallTorch,
+                FBContent.blockFramedTorch.get(),
+                FBContent.blockFramedWallTorch.get(),
                 new Item.Properties().group(FramedBlocks.FRAMED_GROUP)
         );
         //noinspection ConstantConditions

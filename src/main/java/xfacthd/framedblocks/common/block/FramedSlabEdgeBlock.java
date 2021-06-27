@@ -21,7 +21,7 @@ public class FramedSlabEdgeBlock extends FramedBlock
         Direction dir = state.get(PropertyHolder.FACING_HOR);
         boolean top = state.get(PropertyHolder.TOP);
 
-        if (adjState.getBlock() == FBContent.blockFramedSlabEdge)
+        if (adjState.getBlock() == FBContent.blockFramedSlabEdge.get())
         {
             Direction adjDir = adjState.get(PropertyHolder.FACING_HOR);
             boolean adjTop = adjState.get(PropertyHolder.TOP);
@@ -41,14 +41,14 @@ public class FramedSlabEdgeBlock extends FramedBlock
             return false;
         }
 
-        if (adjState.getBlock() == FBContent.blockFramedSlab && side == dir)
+        if (adjState.getBlock() == FBContent.blockFramedSlab.get() && side == dir)
         {
             if (top != adjState.get(PropertyHolder.TOP)) { return false; }
 
             return SideSkipPredicate.compareState(world, pos, side);
         }
 
-        if (adjState.getBlock() == FBContent.blockFramedSlabCorner)
+        if (adjState.getBlock() == FBContent.blockFramedSlabCorner.get())
         {
             Direction adjDir = adjState.get(PropertyHolder.FACING_HOR);
             boolean adjTop = adjState.get(PropertyHolder.TOP);
@@ -59,13 +59,13 @@ public class FramedSlabEdgeBlock extends FramedBlock
             return false;
         }
 
-        if (adjState.getBlock() == FBContent.blockFramedDoubleSlab && side == dir)
+        if (adjState.getBlock() == FBContent.blockFramedDoubleSlab.get() && side == dir)
         {
             Direction face = state.get(PropertyHolder.TOP) ? Direction.UP : Direction.DOWN;
             return SideSkipPredicate.compareState(world, pos, side, face);
         }
 
-        if (adjState.getBlock() == FBContent.blockFramedPanel && side.getAxis() == Direction.Axis.Y)
+        if (adjState.getBlock() == FBContent.blockFramedPanel.get() && side.getAxis() == Direction.Axis.Y)
         {
             Direction adjDir = adjState.get(PropertyHolder.FACING_HOR);
             if (dir != adjDir) { return false; }
@@ -77,7 +77,7 @@ public class FramedSlabEdgeBlock extends FramedBlock
             return false;
         }
 
-        if (adjState.getBlock() == FBContent.blockFramedDoublePanel && side.getAxis() == Direction.Axis.Y)
+        if (adjState.getBlock() == FBContent.blockFramedDoublePanel.get() && side.getAxis() == Direction.Axis.Y)
         {
             Direction adjDir = adjState.get(PropertyHolder.FACING_NE);
             if (dir != adjDir && dir != adjDir.getOpposite()) { return false; }
@@ -89,7 +89,7 @@ public class FramedSlabEdgeBlock extends FramedBlock
             return false;
         }
 
-        if (adjState.getBlock() == FBContent.blockFramedStairs)
+        if (adjState.getBlock() == FBContent.blockFramedStairs.get())
         {
             Direction adjDir = adjState.get(BlockStateProperties.HORIZONTAL_FACING);
             StairsShape adjShape = adjState.get(BlockStateProperties.STAIRS_SHAPE);
@@ -107,7 +107,7 @@ public class FramedSlabEdgeBlock extends FramedBlock
             return false;
         }
 
-        if (adjState.getBlock() == FBContent.blockFramedVerticalStairs)
+        if (adjState.getBlock() == FBContent.blockFramedVerticalStairs.get())
         {
             Direction adjDir = adjState.get(PropertyHolder.FACING_HOR);
             StairsType adjType = adjState.get(PropertyHolder.STAIRS_TYPE);
@@ -125,7 +125,7 @@ public class FramedSlabEdgeBlock extends FramedBlock
 
     public FramedSlabEdgeBlock()
     {
-        super("framed_slab_edge", BlockType.FRAMED_SLAB_EDGE);
+        super(BlockType.FRAMED_SLAB_EDGE);
         setDefaultState(getDefaultState().with(PropertyHolder.TOP, false));
     }
 

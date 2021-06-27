@@ -34,14 +34,14 @@ public class FramedTileEntity extends TileEntity
     private BlockState camoState = Blocks.AIR.getDefaultState();
     private boolean glowing = false;
 
-    public FramedTileEntity() { this(FBContent.tileTypeFramedBlock); }
+    public FramedTileEntity() { this(FBContent.tileTypeFramedBlock.get()); }
 
     protected FramedTileEntity(TileEntityType<?> type) { super(type); }
 
     public ActionResultType handleInteraction(PlayerEntity player, Hand hand, BlockRayTraceResult hit)
     {
         ItemStack stack = player.getHeldItem(hand);
-        if (!getCamoState(hit).isAir() && stack.getItem() == FBContent.itemFramedHammer)
+        if (!getCamoState(hit).isAir() && stack.getItem() == FBContent.itemFramedHammer.get())
         {
             //noinspection ConstantConditions
             if (!world.isRemote())

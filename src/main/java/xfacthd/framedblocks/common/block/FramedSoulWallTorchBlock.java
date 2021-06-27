@@ -18,7 +18,6 @@ public class FramedSoulWallTorchBlock extends FramedWallTorchBlock
                 .notSolid(),
                 ParticleTypes.SOUL_FIRE_FLAME
         );
-        setRegistryName(FramedBlocks.MODID, "framed_soul_wall_torch");
     }
 
     @Override

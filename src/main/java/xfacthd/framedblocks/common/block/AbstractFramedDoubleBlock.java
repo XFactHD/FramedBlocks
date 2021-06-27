@@ -14,7 +14,7 @@ import javax.annotation.Nullable;
 
 public abstract class AbstractFramedDoubleBlock extends FramedBlock
 {
-    public AbstractFramedDoubleBlock(String name, BlockType blockType) { super(name, blockType); }
+    public AbstractFramedDoubleBlock(BlockType blockType) { super(blockType); }
 
     @Nonnull
     @Override

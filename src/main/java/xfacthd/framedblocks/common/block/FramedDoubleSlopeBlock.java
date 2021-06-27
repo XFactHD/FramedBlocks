@@ -30,7 +30,7 @@ public class FramedDoubleSlopeBlock extends AbstractFramedDoubleBlock
         }
     };
 
-    public FramedDoubleSlopeBlock() { super("framed_double_slope", BlockType.FRAMED_DOUBLE_SLOPE); }
+    public FramedDoubleSlopeBlock() { super(BlockType.FRAMED_DOUBLE_SLOPE); }
 
     @Override
     protected void fillStateContainer(StateContainer.Builder<Block, BlockState> builder)

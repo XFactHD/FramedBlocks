@@ -20,7 +20,7 @@ public class FramedDoublePrismCornerModel extends FramedDoubleBlockModel
     public FramedDoublePrismCornerModel(IBakedModel baseModel)
     {
         this(
-                FBContent.blockFramedDoublePrismCorner.getDefaultState().with(PropertyHolder.FACING_HOR, Direction.WEST),
+                FBContent.blockFramedDoublePrismCorner.get().getDefaultState().with(PropertyHolder.FACING_HOR, Direction.WEST),
                 baseModel
         );
     }
@@ -32,11 +32,11 @@ public class FramedDoublePrismCornerModel extends FramedDoubleBlockModel
         boolean top = state.get(PropertyHolder.TOP);
         boolean offset = state.get(PropertyHolder.OFFSET);
 
-        BlockState stateOne = FBContent.blockFramedInnerPrismCorner.getDefaultState()
+        BlockState stateOne = FBContent.blockFramedInnerPrismCorner.get().getDefaultState()
                 .with(PropertyHolder.TOP, top)
                 .with(PropertyHolder.FACING_HOR, facing)
                 .with(PropertyHolder.OFFSET, offset);
-        BlockState stateTwo = FBContent.blockFramedPrismCorner.getDefaultState()
+        BlockState stateTwo = FBContent.blockFramedPrismCorner.get().getDefaultState()
                 .with(PropertyHolder.TOP, !top)
                 .with(PropertyHolder.FACING_HOR, facing.getOpposite())
                 .with(PropertyHolder.OFFSET, !offset);

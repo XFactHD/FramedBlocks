@@ -254,7 +254,7 @@ public class FramedSignScreen extends Screen
         Direction front;
 
         BlockState state = sign.getBlockState();
-        if (state.getBlock() == FBContent.blockFramedWallSign)
+        if (state.getBlock() == FBContent.blockFramedWallSign.get())
         {
             front = state.get(PropertyHolder.FACING_HOR);
         }
@@ -268,7 +268,7 @@ public class FramedSignScreen extends Screen
         BlockState camoState = sign.getCamoState();
         if (camoState == Blocks.AIR.getDefaultState())
         {
-            camoState = FBContent.blockFramedCube.getDefaultState();
+            camoState = FBContent.blockFramedCube.get().getDefaultState();
         }
 
         if (!SPRITE_CACHE.contains(camoState, front))

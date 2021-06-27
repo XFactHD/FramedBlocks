@@ -10,7 +10,6 @@ import net.minecraft.util.*;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.BlockRayTraceResult;
 import net.minecraft.world.*;
-import xfacthd.framedblocks.FramedBlocks;
 import xfacthd.framedblocks.common.FBContent;
 import xfacthd.framedblocks.common.data.BlockType;
 import xfacthd.framedblocks.common.tileentity.FramedTileEntity;
@@ -24,7 +23,7 @@ public class FramedWallBlock extends WallBlock implements IFramedBlock
 {
     public static final SideSkipPredicate SKIP_PREDICATE = (world, pos, state, adjState, side) ->
     {
-        if (adjState.getBlock() == FBContent.blockFramedWall)
+        if (adjState.getBlock() == FBContent.blockFramedWall.get())
         {
             return SideSkipPredicate.compareState(world, pos, side);
         }
@@ -35,7 +34,6 @@ public class FramedWallBlock extends WallBlock implements IFramedBlock
     public FramedWallBlock()
     {
         super(IFramedBlock.createProperties());
-        setRegistryName(FramedBlocks.MODID, "framed_wall");
     }
 
     @Override

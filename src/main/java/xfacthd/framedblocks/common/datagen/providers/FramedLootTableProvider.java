@@ -52,16 +52,16 @@ public class FramedLootTableProvider extends LootTableProvider
             ForgeRegistries.BLOCKS.getValues()
                     .stream()
                     .filter(block -> block.getRegistryName().getNamespace().equals(FramedBlocks.MODID))
-                    .filter(block -> block != FBContent.blockFramedDoor &&
-                            block != FBContent.blockFramedDoubleSlab &&
-                            block != FBContent.blockFramedDoublePanel &&
-                            block != FBContent.blockFramedGhostBlock
+                    .filter(block -> block != FBContent.blockFramedDoor.get() &&
+                            block != FBContent.blockFramedDoubleSlab.get() &&
+                            block != FBContent.blockFramedDoublePanel.get() &&
+                            block != FBContent.blockFramedGhostBlock.get()
                     )
                     .forEach(this::registerDropSelfLootTable);
 
-            registerLootTable(FBContent.blockFramedDoor, block -> droppingWhen(block, DoorBlock.HALF, DoubleBlockHalf.LOWER));
-            registerLootTable(FBContent.blockFramedDoubleSlab, block -> droppingTwo(block, FBContent.blockFramedSlab));
-            registerLootTable(FBContent.blockFramedDoublePanel, block -> droppingTwo(block, FBContent.blockFramedPanel));
+            registerLootTable(FBContent.blockFramedDoor.get(), block -> droppingWhen(block, DoorBlock.HALF, DoubleBlockHalf.LOWER));
+            registerLootTable(FBContent.blockFramedDoubleSlab.get(), block -> droppingTwo(block, FBContent.blockFramedSlab.get()));
+            registerLootTable(FBContent.blockFramedDoublePanel.get(), block -> droppingTwo(block, FBContent.blockFramedPanel.get()));
         }
 
         protected static LootTable.Builder droppingTwo(Block block, Block drop) {

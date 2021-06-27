@@ -23,7 +23,7 @@ public class FramedLatticeBlock extends FramedBlock
 {
     public static final SideSkipPredicate SKIP_PREDICATE = (world, pos, state, adjState, side) ->
     {
-        if (adjState.getBlock() == FBContent.blockFramedLattice)
+        if (adjState.getBlock() == FBContent.blockFramedLattice.get())
         {
             return SideSkipPredicate.compareState(world, pos, side);
         }
@@ -32,7 +32,7 @@ public class FramedLatticeBlock extends FramedBlock
 
     public FramedLatticeBlock()
     {
-        super("framed_lattice_block", BlockType.FRAMED_LATTICE);
+        super(BlockType.FRAMED_LATTICE_BLOCK);
         setDefaultState(getDefaultState()
                 .with(PropertyHolder.X_AXIS, false)
                 .with(PropertyHolder.Y_AXIS, false)

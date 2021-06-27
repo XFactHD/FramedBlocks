@@ -29,7 +29,7 @@ import java.util.stream.Collectors;
 @SuppressWarnings("deprecation")
 public abstract class FramedBlockModel extends BakedModelProxy
 {
-    private static final boolean FORCE_NODATA = false;
+    private static final boolean FORCE_NODATA = true;
 
     private final Table<BlockState, RenderType, Map<Direction, List<BakedQuad>>> quadCacheTable = HashBasedTable.create();
     private final Map<BlockState, IBakedModel> modelCache = new HashMap<>();
@@ -69,7 +69,7 @@ public abstract class FramedBlockModel extends BakedModelProxy
         if (layer == null) { layer = RenderType.getCutout(); }
         if ((camoState == null || camoState.isAir()) && layer == RenderType.getCutout())
         {
-            return getCamoQuads(state, FBContent.blockFramedCube.getDefaultState(), side, rand, extraData, layer);
+            return getCamoQuads(state, FBContent.blockFramedCube.get().getDefaultState(), side, rand, extraData, layer);
         }
 
         return Collections.emptyList();
@@ -79,7 +79,7 @@ public abstract class FramedBlockModel extends BakedModelProxy
     public List<BakedQuad> getQuads(BlockState state, Direction side, Random rand)
     {
         if (state == null) { state = this.state; }
-        return getCamoQuads(state, FBContent.blockFramedCube.getDefaultState(), side, rand, EmptyModelData.INSTANCE, RenderType.getCutout());
+        return getCamoQuads(state, FBContent.blockFramedCube.get().getDefaultState(), side, rand, EmptyModelData.INSTANCE, RenderType.getCutout());
     }
 
     private List<BakedQuad> getCamoQuads(BlockState state, BlockState camoState, Direction side, Random rand, IModelData extraData, RenderType layer)

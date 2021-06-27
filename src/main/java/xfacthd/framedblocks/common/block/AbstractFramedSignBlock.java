@@ -17,7 +17,7 @@ import xfacthd.framedblocks.common.tileentity.FramedSignTileEntity;
 
 public abstract class AbstractFramedSignBlock extends FramedBlock
 {
-    protected AbstractFramedSignBlock(String name, BlockType type, Properties props) { super(name, type, props); }
+    protected AbstractFramedSignBlock(BlockType type, Properties props) { super(type, props); }
 
     @Override
     public ActionResultType onBlockActivated(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockRayTraceResult hit)

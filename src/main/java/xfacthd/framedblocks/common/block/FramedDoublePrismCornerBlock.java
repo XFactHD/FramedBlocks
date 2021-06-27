@@ -11,7 +11,7 @@ public class FramedDoublePrismCornerBlock extends FramedDoubleThreewayCornerBloc
 {
     public FramedDoublePrismCornerBlock()
     {
-        super("framed_double_prism_corner", BlockType.FRAMED_DOUBLE_PRISM_CORNER);
+        super(BlockType.FRAMED_DOUBLE_PRISM_CORNER);
         setDefaultState(getDefaultState().with(PropertyHolder.OFFSET, false));
     }
 

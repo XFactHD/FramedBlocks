@@ -24,10 +24,10 @@ public class FramedDoubleSlopeModel extends FramedDoubleBlockModel
         SlopeType type = state.get(PropertyHolder.SLOPE_TYPE);
         Direction facing = state.get(PropertyHolder.FACING_HOR);
 
-        BlockState stateOne = FBContent.blockFramedSlope.getDefaultState()
+        BlockState stateOne = FBContent.blockFramedSlope.get().getDefaultState()
                 .with(PropertyHolder.SLOPE_TYPE, type)
                 .with(PropertyHolder.FACING_HOR, facing);
-        BlockState stateTwo = FBContent.blockFramedSlope.getDefaultState()
+        BlockState stateTwo = FBContent.blockFramedSlope.get().getDefaultState()
                 .with(PropertyHolder.SLOPE_TYPE, type == SlopeType.HORIZONTAL ? type : type.getOpposite())
                 .with(PropertyHolder.FACING_HOR, facing.getOpposite());
 

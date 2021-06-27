@@ -14,7 +14,6 @@ import net.minecraft.util.Hand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.BlockRayTraceResult;
 import net.minecraft.world.*;
-import xfacthd.framedblocks.FramedBlocks;
 import xfacthd.framedblocks.common.data.BlockType;
 import xfacthd.framedblocks.common.tileentity.FramedTileEntity;
 
@@ -33,7 +32,6 @@ public class FramedWallTorchBlock extends WallTorchBlock implements IFramedBlock
                 .notSolid(),
                 ParticleTypes.FLAME
         );
-        setRegistryName(FramedBlocks.MODID, "framed_wall_torch");
     }
 
     public FramedWallTorchBlock(Properties props, IParticleData particle) { super(props, particle); }

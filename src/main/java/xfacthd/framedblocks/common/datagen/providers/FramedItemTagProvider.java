@@ -19,11 +19,11 @@ public class FramedItemTagProvider extends ItemTagsProvider
     @Override
     protected void registerTags()
     {
-        getOrCreateBuilder(ItemTags.SLABS).add(FBContent.blockFramedSlab.asItem());
-        getOrCreateBuilder(ItemTags.STAIRS).add(FBContent.blockFramedStairs.asItem());
-        getOrCreateBuilder(ItemTags.WALLS).add(FBContent.blockFramedWall.asItem());
-        getOrCreateBuilder(ItemTags.FENCES).add(FBContent.blockFramedFence.asItem());
-        getOrCreateBuilder(ItemTags.DOORS).add(FBContent.blockFramedDoor.asItem());
-        getOrCreateBuilder(ItemTags.TRAPDOORS).add(FBContent.blockFramedTrapDoor.asItem());
+        getOrCreateBuilder(ItemTags.SLABS).add(FBContent.blockFramedSlab.get().asItem());
+        getOrCreateBuilder(ItemTags.STAIRS).add(FBContent.blockFramedStairs.get().asItem());
+        getOrCreateBuilder(ItemTags.WALLS).add(FBContent.blockFramedWall.get().asItem());
+        getOrCreateBuilder(ItemTags.FENCES).add(FBContent.blockFramedFence.get().asItem());
+        getOrCreateBuilder(ItemTags.DOORS).add(FBContent.blockFramedDoor.get().asItem());
+        getOrCreateBuilder(ItemTags.TRAPDOORS).add(FBContent.blockFramedTrapDoor.get().asItem());
     }
 }

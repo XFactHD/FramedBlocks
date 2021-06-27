@@ -13,45 +13,45 @@ public class FramedLanguageProvider extends LanguageProvider
     @Override
     protected void addTranslations()
     {
-        add(FBContent.blockFramedCube, "Framed Cube");
-        add(FBContent.blockFramedSlope, "Framed Slope");
-        add(FBContent.blockFramedCornerSlope, "Framed Corner Slope");
-        add(FBContent.blockFramedInnerCornerSlope, "Framed Inner Corner Slope");
-        add(FBContent.blockFramedPrismCorner, "Framed Prism Corner");
-        add(FBContent.blockFramedInnerPrismCorner, "Framed Inner Prism Corner");
-        add(FBContent.blockFramedThreewayCorner, "Framed Threeway Corner");
-        add(FBContent.blockFramedInnerThreewayCorner, "Framed Inner Threeway Corner");
-        add(FBContent.blockFramedSlab, "Framed Slab");
-        add(FBContent.blockFramedSlabEdge, "Framed Slab Edge");
-        add(FBContent.blockFramedSlabCorner, "Framed Slab Corner");
-        add(FBContent.blockFramedPanel, "Framed Panel");
-        add(FBContent.blockFramedCornerPillar, "Framed Corner Pillar");
-        add(FBContent.blockFramedStairs, "Framed Stairs");
-        add(FBContent.blockFramedWall, "Framed Wall");
-        add(FBContent.blockFramedFence, "Framed Fence");
-        add(FBContent.blockFramedGate, "Framed Fence Gate");
-        add(FBContent.blockFramedDoor, "Framed Door");
-        add(FBContent.blockFramedTrapDoor, "Framed Trapdoor");
-        add(FBContent.blockFramedPressurePlate, "Framed Pressure Plate");
-        add(FBContent.blockFramedLadder, "Framed Ladder");
-        add(FBContent.blockFramedButton, "Framed Button");
-        add(FBContent.blockFramedLever, "Framed Lever");
-        add(FBContent.blockFramedSign, "Framed Sign");
-        add(FBContent.blockFramedWallSign, "Framed Sign");
-        add(FBContent.blockFramedDoubleSlab, "Framed Double Slab");
-        add(FBContent.blockFramedDoublePanel, "Framed Double Panel");
-        add(FBContent.blockFramedDoubleSlope, "Framed Double Slope");
-        add(FBContent.blockFramedDoubleCorner, "Framed Double Corner");
-        add(FBContent.blockFramedDoublePrismCorner, "Framed Double Prism Corner");
-        add(FBContent.blockFramedDoubleThreewayCorner, "Framed Double Threeway Corner");
-        add(FBContent.blockFramedTorch, "Framed Torch"); //Wall torch name is handled through WallTorchBlock
-        add(FBContent.blockFramedSoulTorch, "Framed Soul Torch"); //See above
-        add(FBContent.blockFramedFloor, "Framed Floor Board");
-        add(FBContent.blockFramedLattice, "Framed Lattice");
-        add(FBContent.blockFramedVerticalStairs, "Framed Vertical Stairs");
-        //add(FBContent.blockFramedCollapsibleBlock, "Framed Collapsible Block");
+        add(FBContent.blockFramedCube.get(), "Framed Cube");
+        add(FBContent.blockFramedSlope.get(), "Framed Slope");
+        add(FBContent.blockFramedCornerSlope.get(), "Framed Corner Slope");
+        add(FBContent.blockFramedInnerCornerSlope.get(), "Framed Inner Corner Slope");
+        add(FBContent.blockFramedPrismCorner.get(), "Framed Prism Corner");
+        add(FBContent.blockFramedInnerPrismCorner.get(), "Framed Inner Prism Corner");
+        add(FBContent.blockFramedThreewayCorner.get(), "Framed Threeway Corner");
+        add(FBContent.blockFramedInnerThreewayCorner.get(), "Framed Inner Threeway Corner");
+        add(FBContent.blockFramedSlab.get(), "Framed Slab");
+        add(FBContent.blockFramedSlabEdge.get(), "Framed Slab Edge");
+        add(FBContent.blockFramedSlabCorner.get(), "Framed Slab Corner");
+        add(FBContent.blockFramedPanel.get(), "Framed Panel");
+        add(FBContent.blockFramedCornerPillar.get(), "Framed Corner Pillar");
+        add(FBContent.blockFramedStairs.get(), "Framed Stairs");
+        add(FBContent.blockFramedWall.get(), "Framed Wall");
+        add(FBContent.blockFramedFence.get(), "Framed Fence");
+        add(FBContent.blockFramedGate.get(), "Framed Fence Gate");
+        add(FBContent.blockFramedDoor.get(), "Framed Door");
+        add(FBContent.blockFramedTrapDoor.get(), "Framed Trapdoor");
+        add(FBContent.blockFramedPressurePlate.get(), "Framed Pressure Plate");
+        add(FBContent.blockFramedLadder.get(), "Framed Ladder");
+        add(FBContent.blockFramedButton.get(), "Framed Button");
+        add(FBContent.blockFramedLever.get(), "Framed Lever");
+        add(FBContent.blockFramedSign.get(), "Framed Sign");
+        add(FBContent.blockFramedWallSign.get(), "Framed Sign");
+        add(FBContent.blockFramedDoubleSlab.get(), "Framed Double Slab");
+        add(FBContent.blockFramedDoublePanel.get(), "Framed Double Panel");
+        add(FBContent.blockFramedDoubleSlope.get(), "Framed Double Slope");
+        add(FBContent.blockFramedDoubleCorner.get(), "Framed Double Corner");
+        add(FBContent.blockFramedDoublePrismCorner.get(), "Framed Double Prism Corner");
+        add(FBContent.blockFramedDoubleThreewayCorner.get(), "Framed Double Threeway Corner");
+        add(FBContent.blockFramedTorch.get(), "Framed Torch"); //Wall torch name is handled through WallTorchBlock
+        add(FBContent.blockFramedSoulTorch.get(), "Framed Soul Torch"); //See above
+        add(FBContent.blockFramedFloor.get(), "Framed Floor Board");
+        add(FBContent.blockFramedLattice.get(), "Framed Lattice");
+        add(FBContent.blockFramedVerticalStairs.get(), "Framed Vertical Stairs");
+        //add(FBContent.blockFramedCollapsibleBlock.get(), "Framed Collapsible Block");
 
-        add(FBContent.itemFramedHammer, "Framed Hammer");
+        add(FBContent.itemFramedHammer.get(), "Framed Hammer");
 
         add(FramedBlocks.FRAMED_GROUP.getGroupName().getString(), "FramedBlocks");
         add(FramedTileEntity.MSG_BLACKLISTED.getKey(), "This block is blacklisted!");

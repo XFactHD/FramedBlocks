@@ -38,7 +38,7 @@ public class FramedBlocks
     public static final ItemGroup FRAMED_GROUP = new ItemGroup("framed_blocks")
     {
         @Override
-        public ItemStack createIcon() { return new ItemStack(FBContent.blockFramedCube); }
+        public ItemStack createIcon() { return new ItemStack(FBContent.blockFramedCube.get()); }
 
         @Override
         public void fill(NonNullList<ItemStack> items)
@@ -46,8 +46,8 @@ public class FramedBlocks
             super.fill(items);
             items.sort((s1, s2) ->
             {
-                if (s1.getItem() == FBContent.itemFramedHammer) { return 1; }
-                if (s2.getItem() == FBContent.itemFramedHammer) { return -1; }
+                if (s1.getItem() == FBContent.itemFramedHammer.get()) { return 1; }
+                if (s2.getItem() == FBContent.itemFramedHammer.get()) { return -1; }
 
                 Block b1 = ((BlockItem) s1.getItem()).getBlock();
                 Block b2 = ((BlockItem) s2.getItem()).getBlock();
@@ -56,7 +56,11 @@ public class FramedBlocks
         }
     };
 
-    public FramedBlocks() { ModLoadingContext.get().registerConfig(ModConfig.Type.CLIENT, ClientConfig.SPEC); }
+    public FramedBlocks()
+    {
+        FBContent.init();
+        ModLoadingContext.get().registerConfig(ModConfig.Type.CLIENT, ClientConfig.SPEC);
+    }
 
     @SubscribeEvent
     public static void setup(final FMLCommonSetupEvent event)

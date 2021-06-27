@@ -9,7 +9,7 @@ import xfacthd.framedblocks.common.FBContent;
 
 public class FramedDoubleSlabTileEntity extends FramedDoubleTileEntity
 {
-    public FramedDoubleSlabTileEntity() { super(FBContent.tileTypeDoubleFramedSlab); }
+    public FramedDoubleSlabTileEntity() { super(FBContent.tileTypeDoubleFramedSlab.get()); }
 
     @Override
     protected boolean hitSecondary(BlockRayTraceResult hit)

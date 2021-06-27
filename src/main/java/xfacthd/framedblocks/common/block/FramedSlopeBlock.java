@@ -230,7 +230,7 @@ public class FramedSlopeBlock extends FramedBlock
         return false;
     };
 
-    public FramedSlopeBlock() { super("framed_slope", BlockType.FRAMED_SLOPE); }
+    public FramedSlopeBlock() { super(BlockType.FRAMED_SLOPE); }
 
     @Override
     protected void fillStateContainer(StateContainer.Builder<Block, BlockState> builder)

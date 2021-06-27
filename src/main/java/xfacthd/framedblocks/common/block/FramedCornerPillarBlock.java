@@ -7,13 +7,11 @@ import net.minecraft.block.BlockState;
 import net.minecraft.item.BlockItemUseContext;
 import net.minecraft.state.StateContainer;
 import net.minecraft.state.properties.*;
-import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.Direction;
 import net.minecraft.util.math.shapes.VoxelShape;
 import net.minecraft.util.math.vector.Vector3d;
 import xfacthd.framedblocks.common.FBContent;
 import xfacthd.framedblocks.common.data.*;
-import xfacthd.framedblocks.common.tileentity.FramedDoubleTileEntity;
 import xfacthd.framedblocks.common.util.SideSkipPredicate;
 import xfacthd.framedblocks.common.util.Utils;
 
@@ -23,7 +21,7 @@ public class FramedCornerPillarBlock extends FramedBlock
     {
         Direction dir = state.get(PropertyHolder.FACING_HOR);
 
-        if (adjState.getBlock() == FBContent.blockFramedPanel && (side == dir || side == dir.rotateYCCW()))
+        if (adjState.getBlock() == FBContent.blockFramedPanel.get() && (side == dir || side == dir.rotateYCCW()))
         {
             Direction adjDir = adjState.get(PropertyHolder.FACING_HOR);
             if ((side == dir && adjDir == dir.rotateYCCW()) || (side == dir.rotateYCCW() && dir == adjDir))
@@ -33,7 +31,7 @@ public class FramedCornerPillarBlock extends FramedBlock
             return false;
         }
 
-        if (adjState.getBlock() == FBContent.blockFramedCornerPillar)
+        if (adjState.getBlock() == FBContent.blockFramedCornerPillar.get())
         {
             Direction adjDir = adjState.get(PropertyHolder.FACING_HOR);
             if ((side == dir && adjDir == dir.rotateYCCW()) || (side == dir.rotateYCCW() && adjDir == dir.rotateY()))
@@ -43,7 +41,7 @@ public class FramedCornerPillarBlock extends FramedBlock
             return false;
         }
 
-        if (adjState.getBlock() == FBContent.blockFramedSlabCorner)
+        if (adjState.getBlock() == FBContent.blockFramedSlabCorner.get())
         {
             Direction adjDir = adjState.get(PropertyHolder.FACING_HOR);
             boolean adjTop = adjState.get(PropertyHolder.TOP);
@@ -54,7 +52,7 @@ public class FramedCornerPillarBlock extends FramedBlock
             return false;
         }
 
-        if (adjState.getBlock() == FBContent.blockFramedDoublePanel)
+        if (adjState.getBlock() == FBContent.blockFramedDoublePanel.get())
         {
             Direction adjDir = adjState.get(PropertyHolder.FACING_NE);
             if (side == dir && (adjDir == dir.rotateY() || adjDir == dir.rotateYCCW()))
@@ -68,7 +66,7 @@ public class FramedCornerPillarBlock extends FramedBlock
             }
         }
 
-        if (adjState.getBlock() == FBContent.blockFramedStairs && side.getAxis() == Direction.Axis.Y)
+        if (adjState.getBlock() == FBContent.blockFramedStairs.get() && side.getAxis() == Direction.Axis.Y)
         {
             Direction adjDir = adjState.get(BlockStateProperties.HORIZONTAL_FACING);
             StairsShape adjShape = adjState.get(BlockStateProperties.STAIRS_SHAPE);
@@ -88,7 +86,7 @@ public class FramedCornerPillarBlock extends FramedBlock
             return false;
         }
 
-        if (adjState.getBlock() == FBContent.blockFramedVerticalStairs)
+        if (adjState.getBlock() == FBContent.blockFramedVerticalStairs.get())
         {
             Direction adjDir = adjState.get(PropertyHolder.FACING_HOR);
             StairsType adjType = adjState.get(PropertyHolder.STAIRS_TYPE);
@@ -115,7 +113,7 @@ public class FramedCornerPillarBlock extends FramedBlock
 
     public FramedCornerPillarBlock()
     {
-        super("framed_corner_pillar", BlockType.FRAMED_CORNER_PILLAR);
+        super(BlockType.FRAMED_CORNER_PILLAR);
     }
 
     @Override

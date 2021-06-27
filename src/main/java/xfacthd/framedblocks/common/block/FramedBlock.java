@@ -14,7 +14,6 @@ import net.minecraft.util.math.shapes.ISelectionContext;
 import net.minecraft.util.math.shapes.VoxelShape;
 import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.world.*;
-import xfacthd.framedblocks.FramedBlocks;
 import xfacthd.framedblocks.common.data.*;
 import xfacthd.framedblocks.common.tileentity.FramedTileEntity;
 import xfacthd.framedblocks.common.util.Utils;
@@ -29,12 +28,11 @@ public class FramedBlock extends Block implements IFramedBlock, IWaterLoggable
     private final BlockType blockType;
     private final Map<BlockState, VoxelShape> shapes;
 
-    public FramedBlock(String name, BlockType blockType) { this(name, blockType, IFramedBlock.createProperties()); }
+    public FramedBlock(BlockType blockType) { this(blockType, IFramedBlock.createProperties()); }
 
-    protected FramedBlock(String name, BlockType blockType, Properties props)
+    protected FramedBlock(BlockType blockType, Properties props)
     {
         super(props);
-        setRegistryName(FramedBlocks.MODID, name);
 
         this.blockType = blockType;
         shapes = blockType.generateShapes(getStateContainer().getValidStates());

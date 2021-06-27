@@ -22,7 +22,7 @@ public class FramedLadderBlock extends FramedBlock
     private static final VoxelShape SHAPE_WEST =  makeCuboidShape( 0, 0,  0,  2, 16, 16);
     private static final VoxelShape[] SHAPES = new VoxelShape[] { SHAPE_SOUTH, SHAPE_WEST, SHAPE_NORTH, SHAPE_EAST };
 
-    public FramedLadderBlock() { super("framed_ladder", BlockType.FRAMED_LADDER); }
+    public FramedLadderBlock() { super(BlockType.FRAMED_LADDER); }
 
     @Override
     protected void fillStateContainer(StateContainer.Builder<Block, BlockState> builder)
