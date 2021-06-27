@@ -25,6 +25,20 @@ public enum CornerType implements IStringSerializable
 
     public boolean isRight() { return this == HORIZONTAL_BOTTOM_RIGHT || this == HORIZONTAL_TOP_RIGHT; }
 
+    public CornerType verticalOpposite()
+    {
+        switch (this)
+        {
+            case TOP: return BOTTOM;
+            case BOTTOM: return TOP;
+            case HORIZONTAL_BOTTOM_RIGHT: return HORIZONTAL_TOP_RIGHT;
+            case HORIZONTAL_BOTTOM_LEFT: return HORIZONTAL_TOP_LEFT;
+            case HORIZONTAL_TOP_RIGHT: return HORIZONTAL_BOTTOM_RIGHT;
+            case HORIZONTAL_TOP_LEFT: return HORIZONTAL_BOTTOM_LEFT;
+            default: throw new IllegalArgumentException("Invalid CornerType!");
+        }
+    }
+
     @SuppressWarnings("DuplicatedCode") //Switch over enum cannot be deduplicated
     public boolean isHorizontalAdjacent(Direction dir, Direction side, CornerType adjType)
     {

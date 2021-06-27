@@ -48,6 +48,9 @@ public class FBContent
     public static Block blockFramedDoubleSlab;          //STATUS: Complete
     public static Block blockFramedDoublePanel;         //STATUS: Complete
     public static Block blockFramedDoubleSlope;         //STATUS: Complete
+    public static Block blockFramedDoubleCorner;        //STATUS: WIP
+    public static Block blockFramedDoublePrismCorner;   //STATUS: WIP
+    public static Block blockFramedDoubleThreewayCorner;//STATUS: WIP
     public static Block blockFramedTorch;               //STATUS: Complete
     public static Block blockFramedWallTorch;           //STATUS: Complete
     public static Block blockFramedSoulTorch;           //STATUS: Complete
@@ -65,6 +68,8 @@ public class FBContent
     public static TileEntityType<FramedDoubleSlabTileEntity> tileTypeDoubleFramedSlab;
     public static TileEntityType<FramedDoublePanelTileEntity> tileTypeDoubleFramedPanel;
     public static TileEntityType<FramedDoubleSlopeTileEntity> tileTypeDoubleFramedSlope;
+    public static TileEntityType<FramedDoubleCornerTileEntity> tileTypeDoubleFramedCorner;
+    public static TileEntityType<FramedDoubleThreewayCornerTileEntity> tileTypeDoubleFramedThreewayCorner;
 
     @SubscribeEvent
     public static void onRegisterBlocks(final RegistryEvent.Register<Block> event)
@@ -99,6 +104,9 @@ public class FBContent
         registry.register(blockFramedDoubleSlab = new FramedDoubleSlabBlock());
         registry.register(blockFramedDoublePanel = new FramedDoublePanelBlock());
         registry.register(blockFramedDoubleSlope = new FramedDoubleSlopeBlock());
+        registry.register(blockFramedDoubleCorner = new FramedDoubleCornerBlock());
+        registry.register(blockFramedDoublePrismCorner = new FramedDoublePrismCornerBlock());
+        registry.register(blockFramedDoubleThreewayCorner = new FramedDoubleThreewayCornerBlock());
         registry.register(blockFramedTorch = new FramedTorchBlock());
         registry.register(blockFramedWallTorch = new FramedWallTorchBlock());
         registry.register(blockFramedSoulTorch = new FramedSoulTorchBlock());
@@ -142,7 +150,11 @@ public class FBContent
             tileTypeFramedSign = createTileType(FramedSignTileEntity::new, "framed_sign", blockFramedSign, blockFramedWallSign),
             tileTypeDoubleFramedSlab = createTileType(FramedDoubleSlabTileEntity::new, "framed_double_slab", blockFramedDoubleSlab),
             tileTypeDoubleFramedPanel = createTileType(FramedDoublePanelTileEntity::new, "framed_double_panel", blockFramedDoublePanel),
-            tileTypeDoubleFramedSlope = createTileType(FramedDoubleSlopeTileEntity::new, "framed_double_slope", blockFramedDoubleSlope)
+            tileTypeDoubleFramedSlope = createTileType(FramedDoubleSlopeTileEntity::new, "framed_double_slope", blockFramedDoubleSlope),
+            tileTypeDoubleFramedCorner = createTileType(FramedDoubleCornerTileEntity::new, "framed_double_corner", blockFramedDoubleCorner),
+            tileTypeDoubleFramedThreewayCorner = createTileType(FramedDoubleThreewayCornerTileEntity::new, "framed_double_threeway_corner",
+                    blockFramedDoublePrismCorner, blockFramedDoubleThreewayCorner
+            )
         );
     }
 

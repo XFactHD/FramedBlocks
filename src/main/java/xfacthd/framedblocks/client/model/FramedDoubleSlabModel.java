@@ -9,7 +9,7 @@ import xfacthd.framedblocks.common.data.PropertyHolder;
 public class FramedDoubleSlabModel extends FramedDoubleBlockModel
 {
     @SuppressWarnings("unused")
-    public FramedDoubleSlabModel(BlockState state, IBakedModel baseModel) { super(baseModel); }
+    public FramedDoubleSlabModel(BlockState state, IBakedModel baseModel) { super(baseModel, false); }
 
     @Override
     protected Tuple<BlockState, BlockState> getDummyStates()

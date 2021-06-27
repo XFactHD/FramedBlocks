@@ -50,8 +50,11 @@ public class FramedBlockStateProvider extends BlockStateProvider
         registerFramedSign();
         registerFramedWallSign();
         registerFramedDoubleSlab();
-        registerDoublePanel();
-        registerDoubleSlope();
+        registerFramedDoublePanel();
+        registerFramedDoubleSlope();
+        registerFramedDoubleCorner();
+        registerFramedDoublePrismCorner();
+        registerFramedDoubleThreewayCorner();
         registerFramedTorch();
         registerFramedWallTorch();
         registerFramedSoulTorch();
@@ -609,17 +612,38 @@ public class FramedBlockStateProvider extends BlockStateProvider
         simpleBlock(FBContent.blockFramedDoubleSlab, doubleSlab);
     }
 
-    private void registerDoublePanel()
+    private void registerFramedDoublePanel()
     {
         ModelFile doublePanel = models().getExistingFile(modLoc("framed_double_panel"));
         simpleBlock(FBContent.blockFramedDoublePanel, doublePanel);
     }
 
-    private void registerDoubleSlope()
+    private void registerFramedDoubleSlope()
     {
         ModelFile doubleSlope = models().getExistingFile(modLoc("framed_double_slope"));
         simpleBlock(FBContent.blockFramedDoubleSlope, doubleSlope);
         simpleBlockItem(FBContent.blockFramedDoubleSlope, doubleSlope);
+    }
+
+    private void registerFramedDoubleCorner()
+    {
+        ModelFile doubleCorner = models().getExistingFile(modLoc("framed_double_corner"));
+        simpleBlock(FBContent.blockFramedDoubleCorner, doubleCorner);
+        simpleBlockItem(FBContent.blockFramedDoubleCorner, doubleCorner);
+    }
+
+    private void registerFramedDoublePrismCorner()
+    {
+        ModelFile doubleCorner = models().getExistingFile(modLoc("framed_double_prism_corner"));
+        simpleBlock(FBContent.blockFramedDoublePrismCorner, doubleCorner);
+        simpleBlockItem(FBContent.blockFramedDoublePrismCorner, doubleCorner);
+    }
+
+    private void registerFramedDoubleThreewayCorner()
+    {
+        ModelFile doubleCorner = models().getExistingFile(modLoc("framed_double_threeway_corner"));
+        simpleBlock(FBContent.blockFramedDoubleThreewayCorner, doubleCorner);
+        simpleBlockItem(FBContent.blockFramedDoubleThreewayCorner, doubleCorner);
     }
 
     private void registerFramedTorch()

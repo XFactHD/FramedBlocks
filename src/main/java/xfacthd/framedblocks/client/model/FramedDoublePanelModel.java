@@ -13,7 +13,7 @@ public class FramedDoublePanelModel extends FramedDoubleBlockModel
 
     public FramedDoublePanelModel(BlockState state, IBakedModel baseModel)
     {
-        super(baseModel);
+        super(baseModel, false);
         this.state = state;
     }
 

@@ -1,39 +1,77 @@
 {
   "variants": {
-    "facing=north,top=false": {
+    "facing=north,offset=false,top=false": {
       "model": "framedblocks:block/framed_prism_corner_bottom",
       "y": 180,
       "uvlock": true
     },
-    "facing=south,top=false": {
+    "facing=south,offset=false,top=false": {
       "model": "framedblocks:block/framed_prism_corner_bottom",
       "uvlock": true
     },
-    "facing=west,top=false": {
+    "facing=west,offset=false,top=false": {
       "model": "framedblocks:block/framed_prism_corner_bottom",
       "y": 90,
       "uvlock": true
     },
-    "facing=east,top=false": {
+    "facing=east,offset=false,top=false": {
       "model": "framedblocks:block/framed_prism_corner_bottom",
       "y": 270,
       "uvlock": true
     },
-    "facing=north,top=true": {
+    "facing=north,offset=true,top=false": {
+      "model": "framedblocks:block/framed_prism_corner_bottom",
+      "y": 180,
+      "uvlock": true
+    },
+    "facing=south,offset=true,top=false": {
+      "model": "framedblocks:block/framed_prism_corner_bottom",
+      "uvlock": true
+    },
+    "facing=west,offset=true,top=false": {
+      "model": "framedblocks:block/framed_prism_corner_bottom",
+      "y": 90,
+      "uvlock": true
+    },
+    "facing=east,offset=true,top=false": {
+      "model": "framedblocks:block/framed_prism_corner_bottom",
+      "y": 270,
+      "uvlock": true
+    },
+    "facing=north,offset=false,top=true": {
       "model": "framedblocks:block/framed_prism_corner_top",
       "y": 180,
       "uvlock": true
     },
-    "facing=south,top=true": {
+    "facing=south,offset=false,top=true": {
       "model": "framedblocks:block/framed_prism_corner_top",
       "uvlock": true
     },
-    "facing=west,top=true": {
+    "facing=west,offset=false,top=true": {
       "model": "framedblocks:block/framed_prism_corner_top",
       "y": 90,
       "uvlock": true
     },
-    "facing=east,top=true": {
+    "facing=east,offset=false,top=true": {
+      "model": "framedblocks:block/framed_prism_corner_top",
+      "y": 270,
+      "uvlock": true
+    },
+    "facing=north,offset=true,top=true": {
+      "model": "framedblocks:block/framed_prism_corner_top",
+      "y": 180,
+      "uvlock": true
+    },
+    "facing=south,offset=true,top=true": {
+      "model": "framedblocks:block/framed_prism_corner_top",
+      "uvlock": true
+    },
+    "facing=west,offset=true,top=true": {
+      "model": "framedblocks:block/framed_prism_corner_top",
+      "y": 90,
+      "uvlock": true
+    },
+    "facing=east,offset=true,top=true": {
       "model": "framedblocks:block/framed_prism_corner_top",
       "y": 270,
       "uvlock": true

@@ -20,10 +20,15 @@ import java.util.*;
 
 public abstract class FramedDoubleBlockModel extends BakedModelProxy
 {
+    private final boolean specialItemModel;
     private Tuple<BlockState, BlockState> dummyStates = null;
     private Tuple<IBakedModel, IBakedModel> models = null;
 
-    protected FramedDoubleBlockModel(IBakedModel baseModel) { super(baseModel); }
+    protected FramedDoubleBlockModel(IBakedModel baseModel, boolean specialItemModel)
+    {
+        super(baseModel);
+        this.specialItemModel = specialItemModel;
+    }
 
     @Nonnull
     @Override
@@ -41,6 +46,21 @@ public abstract class FramedDoubleBlockModel extends BakedModelProxy
         quads.addAll(models.getB().getQuads(dummyStates.getB(), side, rand, dataRight != null ? dataRight : EmptyModelData.INSTANCE));
 
         return quads;
+    }
+
+    @Override
+    public List<BakedQuad> getQuads(BlockState state, Direction side, Random rand)
+    {
+        if (specialItemModel)
+        {
+            if (dummyStates == null) { dummyStates = getDummyStates(); }
+            if (models == null) { models = getModels(); }
+
+            List<BakedQuad> quads = new ArrayList<>(models.getA().getQuads(state, side, rand));
+            quads.addAll(models.getB().getQuads(state, side, rand));
+            return quads;
+        }
+        return super.getQuads(state, side, rand);
     }
 
     @Override

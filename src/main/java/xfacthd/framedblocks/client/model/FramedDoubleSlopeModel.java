@@ -14,7 +14,7 @@ public class FramedDoubleSlopeModel extends FramedDoubleBlockModel
 
     public FramedDoubleSlopeModel(BlockState state, IBakedModel baseModel)
     {
-        super(baseModel);
+        super(baseModel, false);
         this.state = state;
     }
 

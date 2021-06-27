@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "IC"
+  ],
+  "key": {
+    "C": {
+      "item": "framedblocks:framed_corner_slope"
+    },
+    "I": {
+      "item": "framedblocks:framed_inner_corner_slope"
+    }
+  },
+  "result": {
+    "item": "framedblocks:framed_double_corner"
+  }
+}

@@ -6,6 +6,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.nbt.NBTUtil;
 import net.minecraft.tileentity.TileEntityType;
+import net.minecraft.util.math.BlockRayTraceResult;
 import net.minecraftforge.client.model.data.*;
 import xfacthd.framedblocks.client.util.FramedBlockData;
 
@@ -45,17 +46,41 @@ public abstract class FramedDoubleTileEntity extends FramedTileEntity
         }
     }
 
+    @Override
+    protected void applyCamo(ItemStack camoStack, BlockState camoState, BlockRayTraceResult hit)
+    {
+        if (hitSecondary(hit))
+        {
+            this.camoStack = camoStack;
+            this.camoState = camoState;
+        }
+        else
+        {
+            super.applyCamo(camoStack, camoState, hit);
+        }
+    }
+
     public BlockState getCamoStateTwo() { return camoState; }
 
     public ItemStack getCamoStackTwo() { return camoStack; }
 
     @Override
-    public int getLightValue()
+    @SuppressWarnings("deprecation")
+    public int getLightValue() { return Math.max(camoState.getLightValue(), super.getLightValue()); }
+
+    @Override
+    protected BlockState getCamoState(BlockRayTraceResult hit)
     {
-        int light = camoState.getLightValue();
-        if (light > 0) { return light; }
-        return super.getLightValue();
+        return hitSecondary(hit) ? getCamoStateTwo() : getCamoState();
     }
+
+    @Override
+    protected ItemStack getCamoStack(BlockRayTraceResult hit)
+    {
+        return hitSecondary(hit) ? getCamoStackTwo() : getCamoStack();
+    }
+
+    protected abstract boolean hitSecondary(BlockRayTraceResult hit);
 
     /*
      * Sync
