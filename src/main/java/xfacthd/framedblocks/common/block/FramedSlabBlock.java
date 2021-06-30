@@ -20,7 +20,6 @@ import xfacthd.framedblocks.common.data.PropertyHolder;
 import xfacthd.framedblocks.common.tileentity.FramedDoubleTileEntity;
 import xfacthd.framedblocks.common.tileentity.FramedTileEntity;
 import xfacthd.framedblocks.common.util.CtmPredicate;
-import xfacthd.framedblocks.common.util.SideSkipPredicate;
 
 @SuppressWarnings("deprecation")
 public class FramedSlabBlock extends FramedBlock
@@ -28,52 +27,6 @@ public class FramedSlabBlock extends FramedBlock
     public static final CtmPredicate CTM_PREDICATE = (state, dir) ->
             (state.get(PropertyHolder.TOP) && dir == Direction.UP) ||
             (!state.get(PropertyHolder.TOP) && dir == Direction.DOWN);
-
-    public static final SideSkipPredicate SKIP_PREDICATE = (world, pos, state, adjState, side) ->
-    {
-        if (side.getAxis() == Direction.Axis.Y)
-        {
-            return SideSkipPredicate.CTM.test(world, pos, state, adjState, side);
-        }
-
-        boolean top = state.get(PropertyHolder.TOP);
-
-        if (adjState.getBlock() == FBContent.blockFramedSlab.get())
-        {
-            if (top != adjState.get(PropertyHolder.TOP)) { return false; }
-
-            return SideSkipPredicate.compareState(world, pos, side, top ? Direction.UP : Direction.DOWN);
-        }
-
-        if (adjState.getBlock() == FBContent.blockFramedDoubleSlab.get())
-        {
-            Direction face = top ? Direction.UP : Direction.DOWN;
-            return SideSkipPredicate.compareState(world, pos, side, face);
-        }
-
-        if (adjState.getBlock() == FBContent.blockFramedSlabEdge.get())
-        {
-            if (top != adjState.get(PropertyHolder.TOP)) { return false; }
-            if (adjState.get(PropertyHolder.FACING_HOR) != side.getOpposite()) { return false; }
-
-            return SideSkipPredicate.compareState(world, pos, side, top ? Direction.UP : Direction.DOWN);
-        }
-
-        if (adjState.getBlock() == FBContent.blockFramedStairs.get())
-        {
-            Direction adjDir = adjState.get(BlockStateProperties.HORIZONTAL_FACING);
-            StairsShape adjShape = adjState.get(BlockStateProperties.STAIRS_SHAPE);
-            boolean adjTop = adjState.get(BlockStateProperties.HALF) == Half.TOP;
-
-            if (top == adjTop && FramedStairsBlock.isSlabSide(adjShape, adjDir, side.getOpposite()))
-            {
-                return SideSkipPredicate.compareState(world, pos, side);
-            }
-            return false;
-        }
-
-        return false;
-    };
 
     public FramedSlabBlock()
     {

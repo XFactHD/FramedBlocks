@@ -10,107 +10,11 @@ import net.minecraft.state.properties.*;
 import net.minecraft.util.Direction;
 import net.minecraft.util.math.shapes.VoxelShape;
 import net.minecraft.util.math.vector.Vector3d;
-import xfacthd.framedblocks.common.FBContent;
 import xfacthd.framedblocks.common.data.*;
-import xfacthd.framedblocks.common.util.SideSkipPredicate;
 import xfacthd.framedblocks.common.util.Utils;
 
 public class FramedCornerPillarBlock extends FramedBlock
 {
-    public static final SideSkipPredicate SKIP_PREDICATE = (world, pos, state, adjState, side) ->
-    {
-        Direction dir = state.get(PropertyHolder.FACING_HOR);
-
-        if (adjState.getBlock() == FBContent.blockFramedPanel.get() && (side == dir || side == dir.rotateYCCW()))
-        {
-            Direction adjDir = adjState.get(PropertyHolder.FACING_HOR);
-            if ((side == dir && adjDir == dir.rotateYCCW()) || (side == dir.rotateYCCW() && dir == adjDir))
-            {
-                return SideSkipPredicate.compareState(world, pos, side);
-            }
-            return false;
-        }
-
-        if (adjState.getBlock() == FBContent.blockFramedCornerPillar.get())
-        {
-            Direction adjDir = adjState.get(PropertyHolder.FACING_HOR);
-            if ((side == dir && adjDir == dir.rotateYCCW()) || (side == dir.rotateYCCW() && adjDir == dir.rotateY()))
-            {
-                return SideSkipPredicate.compareState(world, pos, side);
-            }
-            return false;
-        }
-
-        if (adjState.getBlock() == FBContent.blockFramedSlabCorner.get())
-        {
-            Direction adjDir = adjState.get(PropertyHolder.FACING_HOR);
-            boolean adjTop = adjState.get(PropertyHolder.TOP);
-            if ((adjTop && side == Direction.DOWN) || (!adjTop && side == Direction.UP))
-            {
-                return dir == adjDir && SideSkipPredicate.compareState(world, pos, side);
-            }
-            return false;
-        }
-
-        if (adjState.getBlock() == FBContent.blockFramedDoublePanel.get())
-        {
-            Direction adjDir = adjState.get(PropertyHolder.FACING_NE);
-            if (side == dir && (adjDir == dir.rotateY() || adjDir == dir.rotateYCCW()))
-            {
-                return SideSkipPredicate.compareState(world, pos, side, dir.rotateYCCW());
-            }
-
-            if (side == dir.rotateYCCW() && (adjDir == dir || adjDir == dir.getOpposite()))
-            {
-                return SideSkipPredicate.compareState(world, pos, side, dir);
-            }
-        }
-
-        if (adjState.getBlock() == FBContent.blockFramedStairs.get() && side.getAxis() == Direction.Axis.Y)
-        {
-            Direction adjDir = adjState.get(BlockStateProperties.HORIZONTAL_FACING);
-            StairsShape adjShape = adjState.get(BlockStateProperties.STAIRS_SHAPE);
-            boolean adjTop = adjState.get(BlockStateProperties.HALF) == Half.TOP;
-
-            if ((adjTop && side == Direction.UP) || (!adjTop && side == Direction.DOWN))
-            {
-                if (adjShape == StairsShape.OUTER_LEFT)
-                {
-                    return dir == adjDir && SideSkipPredicate.compareState(world, pos, side);
-                }
-                if (adjShape == StairsShape.OUTER_RIGHT)
-                {
-                    return dir.rotateYCCW() == adjDir && SideSkipPredicate.compareState(world, pos, side);
-                }
-            }
-            return false;
-        }
-
-        if (adjState.getBlock() == FBContent.blockFramedVerticalStairs.get())
-        {
-            Direction adjDir = adjState.get(PropertyHolder.FACING_HOR);
-            StairsType adjType = adjState.get(PropertyHolder.STAIRS_TYPE);
-
-            if (adjType == StairsType.VERTICAL)
-            {
-                if ((side == dir.rotateYCCW() || side == dir) && adjDir == dir)
-                {
-                    return SideSkipPredicate.compareState(world, pos, side);
-                }
-            }
-            else if (side.getAxis() == Direction.Axis.Y)
-            {
-                if ((side == Direction.DOWN) == adjType.isTop() && adjDir == dir)
-                {
-                    return SideSkipPredicate.compareState(world, pos, side);
-                }
-            }
-            return false;
-        }
-
-        return false;
-    };
-
     public FramedCornerPillarBlock()
     {
         super(BlockType.FRAMED_CORNER_PILLAR);
