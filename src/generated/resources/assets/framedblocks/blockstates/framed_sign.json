@@ -1,64 +1,7 @@
 {
   "variants": {
-    "rotation=0": {
-      "model": "framedblocks:block/framed_sign"
-    },
-    "rotation=1": {
-      "model": "framedblocks:block/framed_sign_675",
-      "y": 270
-    },
-    "rotation=2": {
-      "model": "framedblocks:block/framed_sign_45",
-      "y": 270
-    },
-    "rotation=3": {
-      "model": "framedblocks:block/framed_sign_225",
-      "y": 270
-    },
-    "rotation=4": {
-      "model": "framedblocks:block/framed_sign",
-      "y": 270
-    },
-    "rotation=5": {
-      "model": "framedblocks:block/framed_sign_675",
-      "y": 180
-    },
-    "rotation=6": {
-      "model": "framedblocks:block/framed_sign_45",
-      "y": 180
-    },
-    "rotation=7": {
-      "model": "framedblocks:block/framed_sign_225",
-      "y": 180
-    },
-    "rotation=8": {
-      "model": "framedblocks:block/framed_sign",
-      "y": 180
-    },
-    "rotation=9": {
-      "model": "framedblocks:block/framed_sign_675",
-      "y": 90
-    },
-    "rotation=10": {
-      "model": "framedblocks:block/framed_sign_45",
-      "y": 90
-    },
-    "rotation=11": {
-      "model": "framedblocks:block/framed_sign_225",
-      "y": 90
-    },
-    "rotation=12": {
-      "model": "framedblocks:block/framed_sign",
-      "y": 90
-    },
-    "rotation=13": {
-      "model": "framedblocks:block/framed_sign_675"
-    },
-    "rotation=14": {
-      "model": "framedblocks:block/framed_sign_45"
-    },
-    "rotation=15": {
-      "model": "framedblocks:block/framed_sign_225"
+    "": {
+      "model": "framedblocks:block/framed_cube"
     }
   }
 }

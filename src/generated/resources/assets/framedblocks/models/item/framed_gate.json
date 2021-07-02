@@ -1,3 +1,6 @@
 {
-  "parent": "framedblocks:block/framed_gate"
+  "parent": "minecraft:block/template_fence_gate",
+  "textures": {
+    "texture": "framedblocks:block/framed_block"
+  }
 }

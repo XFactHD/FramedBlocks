@@ -1,10 +1,7 @@
 {
   "variants": {
-    "top=false": {
-      "model": "framedblocks:block/framed_slab_bottom"
-    },
-    "top=true": {
-      "model": "framedblocks:block/framed_slab_top"
+    "": {
+      "model": "framedblocks:block/framed_cube"
     }
   }
 }

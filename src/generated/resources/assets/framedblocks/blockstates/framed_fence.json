@@ -1,48 +1,7 @@
 {
-  "multipart": [
-    {
-      "apply": {
-        "model": "framedblocks:block/framed_fence_post"
-      }
-    },
-    {
-      "when": {
-        "north": "true"
-      },
-      "apply": {
-        "model": "framedblocks:block/framed_fence_side",
-        "uvlock": true
-      }
-    },
-    {
-      "when": {
-        "south": "true"
-      },
-      "apply": {
-        "model": "framedblocks:block/framed_fence_side",
-        "y": 180,
-        "uvlock": true
-      }
-    },
-    {
-      "when": {
-        "west": "true"
-      },
-      "apply": {
-        "model": "framedblocks:block/framed_fence_side",
-        "y": 270,
-        "uvlock": true
-      }
-    },
-    {
-      "when": {
-        "east": "true"
-      },
-      "apply": {
-        "model": "framedblocks:block/framed_fence_side",
-        "y": 90,
-        "uvlock": true
-      }
+  "variants": {
+    "": {
+      "model": "framedblocks:block/framed_cube"
     }
-  ]
+  }
 }

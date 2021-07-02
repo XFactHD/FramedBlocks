@@ -1,3 +1,6 @@
 {
-  "parent": "framedblocks:block/framed_pressure_plate"
+  "parent": "minecraft:block/pressure_plate_up",
+  "textures": {
+    "texture": "framedblocks:block/framed_block"
+  }
 }

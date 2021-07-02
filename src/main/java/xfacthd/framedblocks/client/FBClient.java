@@ -115,7 +115,7 @@ public class FBClient
         replaceModels(FBContent.blockFramedDoor, registry, FramedDoorModel::new);
         replaceModels(FBContent.blockFramedTrapDoor, registry, FramedTrapDoorModel::new);
         replaceModels(FBContent.blockFramedPressurePlate, registry, FramedPressurePlateModel::new);
-        replaceModels(FBContent.blockFramedLadder, registry, FramedLadderModel::new);
+        replaceModels(FBContent.blockFramedLadder, registry, FramedLadderModel::new, FramedLadderModel::new);
         replaceModels(FBContent.blockFramedButton, registry, FramedButtonModel::new);
         replaceModels(FBContent.blockFramedLever, registry, FramedLeverModel::new);
         replaceModels(FBContent.blockFramedSign, registry, FramedSignModel::new);

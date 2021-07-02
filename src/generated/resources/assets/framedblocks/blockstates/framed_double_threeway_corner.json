@@ -1,7 +1,7 @@
 {
   "variants": {
     "": {
-      "model": "framedblocks:block/framed_double_threeway_corner"
+      "model": "framedblocks:block/framed_cube"
     }
   }
 }

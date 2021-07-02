@@ -1,23 +1,7 @@
 {
   "variants": {
-    "facing=north": {
-      "model": "framedblocks:block/framed_corner_pillar",
-      "uvlock": true
-    },
-    "facing=south": {
-      "model": "framedblocks:block/framed_corner_pillar",
-      "y": 180,
-      "uvlock": true
-    },
-    "facing=west": {
-      "model": "framedblocks:block/framed_corner_pillar",
-      "y": 270,
-      "uvlock": true
-    },
-    "facing=east": {
-      "model": "framedblocks:block/framed_corner_pillar",
-      "y": 90,
-      "uvlock": true
+    "": {
+      "model": "framedblocks:block/framed_cube"
     }
   }
 }

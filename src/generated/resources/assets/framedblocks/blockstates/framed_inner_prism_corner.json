@@ -1,42 +1,7 @@
 {
   "variants": {
-    "facing=north,offset=false": {
-      "model": "framedblocks:block/framed_inner_prism_corner",
-      "y": 180,
-      "uvlock": true
-    },
-    "facing=south,offset=false": {
-      "model": "framedblocks:block/framed_inner_prism_corner",
-      "uvlock": true
-    },
-    "facing=west,offset=false": {
-      "model": "framedblocks:block/framed_inner_prism_corner",
-      "y": 90,
-      "uvlock": true
-    },
-    "facing=east,offset=false": {
-      "model": "framedblocks:block/framed_inner_prism_corner",
-      "y": 270,
-      "uvlock": true
-    },
-    "facing=north,offset=true": {
-      "model": "framedblocks:block/framed_inner_prism_corner",
-      "y": 180,
-      "uvlock": true
-    },
-    "facing=south,offset=true": {
-      "model": "framedblocks:block/framed_inner_prism_corner",
-      "uvlock": true
-    },
-    "facing=west,offset=true": {
-      "model": "framedblocks:block/framed_inner_prism_corner",
-      "y": 90,
-      "uvlock": true
-    },
-    "facing=east,offset=true": {
-      "model": "framedblocks:block/framed_inner_prism_corner",
-      "y": 270,
-      "uvlock": true
+    "": {
+      "model": "framedblocks:block/framed_cube"
     }
   }
 }

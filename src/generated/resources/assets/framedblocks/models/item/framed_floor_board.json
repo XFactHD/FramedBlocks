@@ -1,3 +1,6 @@
 {
-  "parent": "framedblocks:block/framed_floor_board"
+  "parent": "minecraft:block/carpet",
+  "textures": {
+    "wool": "framedblocks:block/framed_block"
+  }
 }

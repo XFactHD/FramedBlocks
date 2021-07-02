@@ -1,61 +1,7 @@
 {
   "variants": {
-    "facing=north,type=bottom": {
-      "model": "framedblocks:block/framed_slope_bottom",
-      "y": 180,
-      "uvlock": true
-    },
-    "facing=south,type=bottom": {
-      "model": "framedblocks:block/framed_slope_bottom",
-      "uvlock": true
-    },
-    "facing=west,type=bottom": {
-      "model": "framedblocks:block/framed_slope_bottom",
-      "y": 90,
-      "uvlock": true
-    },
-    "facing=east,type=bottom": {
-      "model": "framedblocks:block/framed_slope_bottom",
-      "y": 270,
-      "uvlock": true
-    },
-    "facing=north,type=horizontal": {
-      "model": "framedblocks:block/framed_slope_horizontal",
-      "y": 180,
-      "uvlock": true
-    },
-    "facing=south,type=horizontal": {
-      "model": "framedblocks:block/framed_slope_horizontal",
-      "uvlock": true
-    },
-    "facing=west,type=horizontal": {
-      "model": "framedblocks:block/framed_slope_horizontal",
-      "y": 90,
-      "uvlock": true
-    },
-    "facing=east,type=horizontal": {
-      "model": "framedblocks:block/framed_slope_horizontal",
-      "y": 270,
-      "uvlock": true
-    },
-    "facing=north,type=top": {
-      "model": "framedblocks:block/framed_slope_top",
-      "y": 180,
-      "uvlock": true
-    },
-    "facing=south,type=top": {
-      "model": "framedblocks:block/framed_slope_top",
-      "uvlock": true
-    },
-    "facing=west,type=top": {
-      "model": "framedblocks:block/framed_slope_top",
-      "y": 90,
-      "uvlock": true
-    },
-    "facing=east,type=top": {
-      "model": "framedblocks:block/framed_slope_top",
-      "y": 270,
-      "uvlock": true
+    "": {
+      "model": "framedblocks:block/framed_cube"
     }
   }
 }

@@ -6,6 +6,7 @@ import net.minecraft.client.renderer.model.IBakedModel;
 import net.minecraft.util.Direction;
 import xfacthd.framedblocks.client.util.BakedQuadTransformer;
 import xfacthd.framedblocks.client.util.ModelUtils;
+import xfacthd.framedblocks.common.FBContent;
 import xfacthd.framedblocks.common.data.PropertyHolder;
 
 import java.util.List;
@@ -28,6 +29,14 @@ public class FramedLadderModel extends FramedBlockModel
     {
         super(state, baseModel);
         dir = state.get(PropertyHolder.FACING_HOR);
+    }
+
+    public FramedLadderModel(IBakedModel baseModel)
+    {
+        this(
+                FBContent.blockFramedLadder.get().getDefaultState().with(PropertyHolder.FACING_HOR, Direction.SOUTH),
+                baseModel
+        );
     }
 
     @Override
