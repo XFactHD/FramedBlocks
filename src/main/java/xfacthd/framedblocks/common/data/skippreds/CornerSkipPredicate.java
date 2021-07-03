@@ -66,13 +66,13 @@ public class CornerSkipPredicate implements SideSkipPredicate
             return SideSkipPredicate.compareState(world, pos, side, dir);
         }
         else if (!type.isHorizontal() && adjType.isHorizontal() && adjType.isTop() == type.isTop() &&
-                ((side == dir && !adjType.isRight() && adjDir == dir.rotateYCCW()) || (side == dir.rotateYCCW() && adjType.isRight() && adjDir == dir))
+                 ((side == dir && !adjType.isRight() && adjDir == dir.rotateYCCW()) || (side == dir.rotateYCCW() && adjType.isRight() && adjDir == dir))
         )
         {
             return SideSkipPredicate.compareState(world, pos, side, type.isTop() ? Direction.UP : Direction.DOWN);
         }
         else if (type.isHorizontal() && !adjType.isHorizontal() && adjType.isTop() == type.isTop() &&
-                ((!type.isRight() && side == dir.rotateYCCW() && adjDir == dir.rotateY()) || (type.isRight() && side == dir.rotateY() && adjDir == dir))
+                 ((!type.isRight() && side == dir.rotateYCCW() && adjDir == dir.rotateY()) || (type.isRight() && side == dir.rotateY() && adjDir == dir))
         )
         {
             return SideSkipPredicate.compareState(world, pos, side, dir);
@@ -105,7 +105,7 @@ public class CornerSkipPredicate implements SideSkipPredicate
                 return SideSkipPredicate.compareState(world, pos, side, dir);
             }
             else if ((adjDir == dir.rotateYCCW() && side == dir.rotateYCCW() && !type.isRight() && adjType.isTop() != type.isTop()) ||
-                    (adjDir == dir.rotateY() && side == dir.rotateY() && type.isRight() && adjType.isTop() == type.isTop())
+                     (adjDir == dir.rotateY() && side == dir.rotateY() && type.isRight() && adjType.isTop() == type.isTop())
             )
             {
                 return SideSkipPredicate.compareState(world, pos, side, dir);
@@ -135,7 +135,7 @@ public class CornerSkipPredicate implements SideSkipPredicate
                 return SideSkipPredicate.compareState(world, pos, side, dir);
             }
             else if (adjDir == dir.getOpposite() && type.isTop() != adjType.isTop() && type.isRight() != adjType.isRight() &&
-                    ((side == dir.rotateY() && !type.isRight()) || (side == dir.rotateYCCW() && type.isRight()))
+                     ((side == dir.rotateY() && type.isRight()) || (side == dir.rotateYCCW() && !type.isRight()))
             )
             {
                 return SideSkipPredicate.compareState(world, pos, side, dir);
@@ -213,25 +213,25 @@ public class CornerSkipPredicate implements SideSkipPredicate
 
         if (!type.isHorizontal() && adjType == type && adjDir == dir.rotateYCCW() && (side == dir || side == dir.rotateYCCW()))
         {
-            return SideSkipPredicate.compareState(world, pos, side);
+            return SideSkipPredicate.compareState(world, pos, side, type.isTop() ? Direction.UP : Direction.DOWN);
         }
         else if (type.isHorizontal() && adjType == type && ((side == Direction.UP && type.isTop()) || (side == Direction.DOWN && !type.isTop()) ||
                 (side == dir.rotateY() && type.isRight()) || (side == dir.rotateYCCW() && !type.isRight()))
         )
         {
-            return SideSkipPredicate.compareState(world, pos, side);
+            return SideSkipPredicate.compareState(world, pos, side, dir);
         }
         else if (!type.isHorizontal() && adjType.isHorizontal() && adjType.isTop() == type.isTop() &&
                 ((side == dir && adjType.isRight() && adjDir == dir.rotateYCCW()) || (side == dir.rotateYCCW() && !adjType.isRight() && adjDir == dir))
         )
         {
-            return SideSkipPredicate.compareState(world, pos, side);
+            return SideSkipPredicate.compareState(world, pos, side, type.isTop() ? Direction.UP : Direction.DOWN);
         }
         else if (type.isHorizontal() && !adjType.isHorizontal() && adjType.isTop() == type.isTop() &&
                 ((!type.isRight() && side == dir.rotateYCCW() && adjDir == dir.rotateYCCW()) || (type.isRight() && side == dir.rotateY() && adjDir == dir))
         )
         {
-            return SideSkipPredicate.compareState(world, pos, side);
+            return SideSkipPredicate.compareState(world, pos, side, dir);
         }
         return false;
     }
@@ -245,22 +245,22 @@ public class CornerSkipPredicate implements SideSkipPredicate
         {
             if ((side == dir && adjDir == dir.rotateYCCW()) || (side == dir.rotateYCCW() && adjDir == dir.rotateY()))
             {
-                return SideSkipPredicate.compareState(world, pos, side);
+                return SideSkipPredicate.compareState(world, pos, side, type.isTop() ? Direction.UP : Direction.DOWN);
             }
         }
         else if (type.isHorizontal())
         {
             if ((side == dir.rotateY() && type.isRight() && adjDir == dir && type.isTop() == adjTop) ||
-                    (side == dir.rotateYCCW() && !type.isRight() && adjDir == dir.rotateY() && type.isTop() == adjTop)
+                (side == dir.rotateYCCW() && !type.isRight() && adjDir == dir.rotateY() && type.isTop() == adjTop)
             )
             {
-                return SideSkipPredicate.compareState(world, pos, side);
+                return SideSkipPredicate.compareState(world, pos, side, dir);
             }
             else if (side.getAxis() == Direction.Axis.Y && type.isTop() != adjTop && (side == Direction.DOWN) == !type.isTop() &&
                     ((type.isRight() && adjDir == dir.rotateY()) || (!type.isRight() && adjDir == dir))
             )
             {
-                return SideSkipPredicate.compareState(world, pos, side);
+                return SideSkipPredicate.compareState(world, pos, side, dir);
             }
         }
         return false;
@@ -275,19 +275,19 @@ public class CornerSkipPredicate implements SideSkipPredicate
 
         if (!type.isHorizontal() && type.isTop() == adjTop && adjDir == dir)
         {
-            return (side == dir || side == dir.rotateYCCW()) && SideSkipPredicate.compareState(world, pos, side);
+            return (side == dir || side == dir.rotateYCCW()) && SideSkipPredicate.compareState(world, pos, side, type.isTop() ? Direction.UP : Direction.DOWN);
         }
         else if (type.isHorizontal())
         {
             if (side.getAxis() == Direction.Axis.Y && ((!type.isRight() && adjDir == dir) || (type.isRight() && adjDir == dir.rotateY())))
             {
-                return type.isTop() == adjTop && SideSkipPredicate.compareState(world, pos, side);
+                return type.isTop() == adjTop && SideSkipPredicate.compareState(world, pos, side, dir);
             }
             else if ((!type.isRight() && side == dir.rotateYCCW() && adjDir == dir) ||
-                    (type.isRight() && side == dir.rotateY() && adjDir == dir.rotateY())
+                     (type.isRight() && side == dir.rotateY() && adjDir == dir.rotateY())
             )
             {
-                return type.isTop() == adjTop && SideSkipPredicate.compareState(world, pos, side);
+                return type.isTop() == adjTop && SideSkipPredicate.compareState(world, pos, side, dir);
             }
         }
         return false;

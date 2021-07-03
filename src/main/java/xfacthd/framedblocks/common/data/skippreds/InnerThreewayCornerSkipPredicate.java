@@ -173,7 +173,46 @@ public class InnerThreewayCornerSkipPredicate implements SideSkipPredicate
 
     private boolean testAgainstDoubleCorner(IBlockReader world, BlockPos pos, Direction dir, boolean top, BlockState adjState, Direction side)
     {
-        //TODO: implement
+        Direction adjDir = adjState.get(PropertyHolder.FACING_HOR);
+        CornerType adjType = adjState.get(PropertyHolder.CORNER_TYPE);
+
+        if (!adjType.isHorizontal())
+        {
+            if (adjType.isTop() == top && ((side == dir.getOpposite() && adjDir == dir.rotateYCCW()) || (side == dir.rotateY() && adjDir == dir.rotateY())))
+            {
+                return SideSkipPredicate.compareState(world, pos, side, top ? Direction.UP : Direction.DOWN);
+            }
+            else if (adjType.isTop() != top && ((side == dir.getOpposite() && adjDir == dir.getOpposite()) || (side == dir.rotateY() && adjDir == dir.getOpposite())))
+            {
+                return SideSkipPredicate.compareState(world, pos, side, top ? Direction.UP : Direction.DOWN);
+            }
+        }
+        else
+        {
+            if (adjType.isTop() != top && ((side == Direction.UP && !top) || (side == Direction.DOWN && top)))
+            {
+                if ((adjDir == dir && !adjType.isRight()) || (adjDir == dir.rotateYCCW() && adjType.isRight()))
+                {
+                    return SideSkipPredicate.compareState(world, pos, side, adjDir);
+                }
+                else if ((adjDir == dir.getOpposite() && !adjType.isRight()) || (adjDir == dir.rotateY() && adjType.isRight()))
+                {
+                    return SideSkipPredicate.compareState(world, pos, side, adjDir.getOpposite());
+                }
+            }
+            else if (adjType.isTop() == top && ((side == dir.getOpposite() && !adjType.isRight() && adjDir == dir.rotateYCCW()) ||
+                                                (side == dir.rotateY() && adjType.isRight() && adjDir == dir)
+            ))
+            {
+                return SideSkipPredicate.compareState(world, pos, side, adjDir);
+            }
+            else if (adjType.isTop() != top && ((side == dir.rotateY() && !adjType.isRight() && adjDir == dir.getOpposite()) ||
+                                                (side == dir.getOpposite() && adjType.isRight() && adjDir == dir.rotateY())
+            ))
+            {
+                return SideSkipPredicate.compareState(world, pos, side, adjDir.getOpposite());
+            }
+        }
         return false;
     }
 }
