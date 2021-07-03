@@ -63,7 +63,6 @@ public class FramedDoubleCornerTileEntity extends FramedDoubleTileEntity
                     secondary = vec.getY() >= hor;
                 }
 
-                if (facing.getAxisDirection() == Direction.AxisDirection.POSITIVE) { secondary = !secondary; }
                 return secondary;
             }
         }
