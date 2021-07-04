@@ -17,7 +17,6 @@ import net.minecraftforge.fml.RegistryObject;
 import net.minecraftforge.fml.client.registry.ClientRegistry;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
-import net.minecraftforge.registries.ForgeRegistries;
 import xfacthd.framedblocks.FramedBlocks;
 import xfacthd.framedblocks.client.model.*;
 import xfacthd.framedblocks.client.render.FramedSignRenderer;
@@ -34,12 +33,11 @@ import java.util.function.Function;
 public class FBClient
 {
     @SubscribeEvent
-    @SuppressWarnings("ConstantConditions")
     public static void onClientSetup(final FMLClientSetupEvent event)
     {
-        ForgeRegistries.BLOCKS.getValues()
+        FBContent.getRegisteredBlocks()
                 .stream()
-                .filter(block -> block.getRegistryName().getNamespace().equals(FramedBlocks.MODID))
+                .map(RegistryObject::get)
                 .filter(block -> block instanceof IFramedBlock)
                 .forEach(block -> RenderTypeLookup.setRenderLayer(block, type ->
                         type == RenderType.getSolid() ||
@@ -53,12 +51,12 @@ public class FBClient
     }
 
     @SubscribeEvent
-    @SuppressWarnings({"ConstantConditions", "deprecation"})
+    @SuppressWarnings("deprecation")
     public static void onBlockColors(final ColorHandlerEvent.Block event)
     {
-        Block[] blocks = ForgeRegistries.BLOCKS.getValues()
+        Block[] blocks = FBContent.getRegisteredBlocks()
                 .stream()
-                .filter(block -> block.getRegistryName().getNamespace().equals(FramedBlocks.MODID))
+                .map(RegistryObject::get)
                 .filter(block -> block instanceof IFramedBlock)
                 .toArray(Block[]::new);
 

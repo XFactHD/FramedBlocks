@@ -17,6 +17,7 @@ import xfacthd.framedblocks.common.item.*;
 import xfacthd.framedblocks.common.tileentity.*;
 
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.function.Function;
 import java.util.function.Supplier;
 
@@ -56,9 +57,9 @@ public class FBContent
     public static final RegistryObject<Block> blockFramedDoubleSlab = registerBlock(FramedDoubleSlabBlock::new, BlockType.FRAMED_DOUBLE_SLAB);
     public static final RegistryObject<Block> blockFramedDoublePanel = registerBlock(FramedDoublePanelBlock::new, BlockType.FRAMED_DOUBLE_PANEL);
     public static final RegistryObject<Block> blockFramedDoubleSlope = registerBlock(FramedDoubleSlopeBlock::new, BlockType.FRAMED_DOUBLE_SLOPE);
-    public static final RegistryObject<Block> blockFramedDoubleCorner = registerBlock(FramedDoubleCornerBlock::new, BlockType.FRAMED_DOUBLE_CORNER); //STATUS: WIP
-    public static final RegistryObject<Block> blockFramedDoublePrismCorner = registerBlock(FramedDoublePrismCornerBlock::new, BlockType.FRAMED_DOUBLE_PRISM_CORNER); //STATUS: WIP
-    public static final RegistryObject<Block> blockFramedDoubleThreewayCorner = registerBlock(FramedDoubleThreewayCornerBlock::new, BlockType.FRAMED_DOUBLE_THREEWAY_CORNER); //STATUS: WIP
+    public static final RegistryObject<Block> blockFramedDoubleCorner = registerBlock(FramedDoubleCornerBlock::new, BlockType.FRAMED_DOUBLE_CORNER);
+    public static final RegistryObject<Block> blockFramedDoublePrismCorner = registerBlock(FramedDoublePrismCornerBlock::new, BlockType.FRAMED_DOUBLE_PRISM_CORNER);
+    public static final RegistryObject<Block> blockFramedDoubleThreewayCorner = registerBlock(FramedDoubleThreewayCornerBlock::new, BlockType.FRAMED_DOUBLE_THREEWAY_CORNER);
     public static final RegistryObject<Block> blockFramedTorch = registerBlock(FramedTorchBlock::new, BlockType.FRAMED_TORCH);
     public static final RegistryObject<Block> blockFramedWallTorch = registerBlock(FramedWallTorchBlock::new, BlockType.FRAMED_WALL_TORCH);
     public static final RegistryObject<Block> blockFramedSoulTorch = registerBlock(FramedSoulTorchBlock::new, BlockType.FRAMED_SOUL_TORCH);
@@ -73,7 +74,7 @@ public class FBContent
     public static final RegistryObject<Item> itemFramedHammer = ITEMS.register("framed_hammer", FramedHammerItem::new);
 
     /** TILE ENTITY TYPES */
-    public static final RegistryObject<TileEntityType<FramedTileEntity>> tileTypeFramedBlock = createTileType(FramedTileEntity::new, "framed_tile", getTileBlocks());
+    public static final RegistryObject<TileEntityType<FramedTileEntity>> tileTypeFramedBlock = createTileType(FramedTileEntity::new, "framed_tile", getDefaultTileBlocks());
     public static final RegistryObject<TileEntityType<FramedSignTileEntity>> tileTypeFramedSign = createTileType(
             FramedSignTileEntity::new,
             "framed_sign",
@@ -114,6 +115,8 @@ public class FBContent
         TILE_TYPES.register(FMLJavaModLoadingContext.get().getModEventBus());
     }
 
+    public static Collection<RegistryObject<Block>> getRegisteredBlocks() { return BLOCKS.getEntries(); }
+
     @SubscribeEvent
     public static void onRegisterItems(final RegistryEvent.Register<Item> event)
     {
@@ -128,7 +131,7 @@ public class FBContent
                 .forEach(registry::register);
     }
 
-    private static Supplier<Block[]> getTileBlocks()
+    private static Supplier<Block[]> getDefaultTileBlocks()
     {
         return () -> BLOCKS.getEntries()
                 .stream()

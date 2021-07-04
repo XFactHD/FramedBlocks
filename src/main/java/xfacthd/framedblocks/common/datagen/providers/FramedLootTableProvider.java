@@ -9,7 +9,7 @@ import net.minecraft.loot.*;
 import net.minecraft.loot.functions.SetCount;
 import net.minecraft.state.properties.DoubleBlockHalf;
 import net.minecraft.util.ResourceLocation;
-import net.minecraftforge.registries.ForgeRegistries;
+import net.minecraftforge.fml.RegistryObject;
 import xfacthd.framedblocks.FramedBlocks;
 import xfacthd.framedblocks.common.FBContent;
 
@@ -38,20 +38,18 @@ public class FramedLootTableProvider extends LootTableProvider
         @Override
         protected Iterable<Block> getKnownBlocks()
         {
-            //noinspection ConstantConditions
-            return ForgeRegistries.BLOCKS.getValues()
+            return FBContent.getRegisteredBlocks()
                     .stream()
-                    .filter(block -> block.getRegistryName().getNamespace().equals(FramedBlocks.MODID))
+                    .map(RegistryObject::get)
                     .collect(Collectors.toList());
         }
 
         @Override
         protected void addTables()
         {
-            //noinspection ConstantConditions
-            ForgeRegistries.BLOCKS.getValues()
+            FBContent.getRegisteredBlocks()
                     .stream()
-                    .filter(block -> block.getRegistryName().getNamespace().equals(FramedBlocks.MODID))
+                    .map(RegistryObject::get)
                     .filter(block -> block != FBContent.blockFramedDoor.get() &&
                             block != FBContent.blockFramedDoubleSlab.get() &&
                             block != FBContent.blockFramedDoublePanel.get() &&
