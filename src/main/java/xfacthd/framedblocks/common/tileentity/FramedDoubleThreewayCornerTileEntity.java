@@ -47,7 +47,9 @@ public class FramedDoubleThreewayCornerTileEntity extends FramedDoubleTileEntity
             }
             else if (side == Direction.DOWN)
             {
-                //TODO: implement
+                boolean secondary = facing.getAxis() == Direction.Axis.X ? vec.getX() >= vec.getZ() : vec.getZ() >= (1D - vec.getX());
+                if (facing.getAxisDirection() == Direction.AxisDirection.POSITIVE) { secondary = !secondary; }
+                return secondary;
             }
         }
         else
@@ -75,7 +77,9 @@ public class FramedDoubleThreewayCornerTileEntity extends FramedDoubleTileEntity
             }
             else if (side == Direction.UP)
             {
-                //TODO: implement
+                boolean secondary = facing.getAxis() == Direction.Axis.X ? vec.getX() >= vec.getZ() : vec.getZ() >= (1D - vec.getX());
+                if (facing.getAxisDirection() == Direction.AxisDirection.POSITIVE) { secondary = !secondary; }
+                return secondary;
             }
         }
         return false;
