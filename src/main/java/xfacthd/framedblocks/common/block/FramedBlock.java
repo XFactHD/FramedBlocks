@@ -106,6 +106,13 @@ public class FramedBlock extends Block implements IFramedBlock, IWaterLoggable
     }
 
     @Override
+    public Fluid pickupFluid(IWorld world, BlockPos pos, BlockState state)
+    {
+        if (!isWaterLoggable()) { return Fluids.EMPTY; }
+        return IWaterLoggable.super.pickupFluid(world, pos, state);
+    }
+
+    @Override
     public List<ItemStack> getDrops(BlockState state, LootContext.Builder builder)
     {
         return getDrops(super.getDrops(state, builder), builder);
