@@ -36,6 +36,10 @@ public class SlopeSkipPredicate implements SideSkipPredicate
         {
             return testAgainstDoubleCorner(world, pos, dir, type, adjState, side);
         }
+        else if (adjBlock == BlockType.FRAMED_DOUBLE_PRISM_CORNER || adjBlock == BlockType.FRAMED_DOUBLE_THREEWAY_CORNER)
+        {
+            return testAgainstDoubleThreewayCorner(world, pos, dir, type, adjState, side);
+        }
         else if (adjBlock == BlockType.FRAMED_INNER_CORNER_SLOPE)
         {
             return testAgainstInnerCorner(world, pos, dir, type, adjState, side);
@@ -177,6 +181,29 @@ public class SlopeSkipPredicate implements SideSkipPredicate
                 Direction face = adjType.isTop() ? Direction.DOWN : Direction.UP;
                 return (type == SlopeType.TOP) != adjType.isTop() && SideSkipPredicate.compareState(world, pos, side, face);
             }
+        }
+        return false;
+    }
+
+    private boolean testAgainstDoubleThreewayCorner(IBlockReader world, BlockPos pos, Direction dir, SlopeType type, BlockState adjState, Direction side)
+    {
+        Direction adjDir = adjState.get(PropertyHolder.FACING_HOR);
+        boolean adjTop = adjState.get(PropertyHolder.TOP);
+
+        if (type != SlopeType.HORIZONTAL)
+        {
+            if ((type == SlopeType.TOP) == adjTop && ((side == dir.rotateYCCW() && adjDir == dir) || (side == dir.rotateY() && adjDir == dir.rotateY())))
+            {
+                return SideSkipPredicate.compareState(world, pos, side, dir);
+            }
+            else if ((type == SlopeType.TOP) != adjTop && ((side == dir.rotateYCCW() && adjDir == dir.rotateYCCW()) || (side == dir.rotateY() && adjDir == dir.getOpposite())))
+            {
+                return SideSkipPredicate.compareState(world, pos, side, dir);
+            }
+        }
+        else if ((adjDir == dir || adjDir == dir.getOpposite()) && ((side == Direction.DOWN && !adjTop) || (side == Direction.UP && adjTop)))
+        {
+            return SideSkipPredicate.compareState(world, pos, side, dir);
         }
         return false;
     }
