@@ -3,8 +3,7 @@ package xfacthd.framedblocks.client.model;
 import com.google.common.collect.HashBasedTable;
 import com.google.common.collect.Table;
 import it.unimi.dsi.fastutil.objects.Object2ObjectArrayMap;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.Blocks;
+import net.minecraft.block.*;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.RenderTypeLookup;
@@ -60,7 +59,10 @@ public abstract class FramedBlockModel extends BakedModelProxy
             )) { return Collections.emptyList(); }
 
             camoState = data.getCamoState();
-            if (camoState != null && !camoState.isAir() && RenderTypeLookup.canRenderInLayer(camoState, layer))
+            boolean canRender = camoState != null && camoState.getBlock() instanceof FlowingFluidBlock ?
+                    RenderTypeLookup.canRenderInLayer(camoState.getFluidState(), layer) :
+                    camoState != null && RenderTypeLookup.canRenderInLayer(camoState, layer);
+            if (camoState != null && !camoState.isAir() && canRender)
             {
                 return getCamoQuads(state, camoState, side, rand, extraData, layer);
             }
@@ -160,8 +162,13 @@ public abstract class FramedBlockModel extends BakedModelProxy
 
 
 
+    private final Map<BlockState, FluidDummyModel> fluidModels = new HashMap<>();
     protected IBakedModel getCamoModel(BlockState camoState)
     {
+        if (camoState.getBlock() instanceof FlowingFluidBlock)
+        {
+            return fluidModels.computeIfAbsent(camoState, state -> new FluidDummyModel(((FlowingFluidBlock) state.getBlock()).getFluid()));
+        }
         return Minecraft.getInstance().getBlockRendererDispatcher().getModelForState(camoState);
     }
 

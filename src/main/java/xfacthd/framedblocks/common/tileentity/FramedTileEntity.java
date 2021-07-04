@@ -3,8 +3,7 @@ package xfacthd.framedblocks.common.tileentity;
 import com.google.common.collect.ImmutableList;
 import net.minecraft.block.*;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.BlockItem;
-import net.minecraft.item.ItemStack;
+import net.minecraft.item.*;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.nbt.NBTUtil;
 import net.minecraft.network.NetworkManager;
@@ -16,6 +15,9 @@ import net.minecraft.util.math.BlockRayTraceResult;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraftforge.client.model.data.IModelData;
 import net.minecraftforge.common.Tags;
+import net.minecraftforge.common.util.LazyOptional;
+import net.minecraftforge.fluids.FluidStack;
+import net.minecraftforge.fluids.capability.*;
 import xfacthd.framedblocks.FramedBlocks;
 import xfacthd.framedblocks.client.util.FramedBlockData;
 import xfacthd.framedblocks.common.FBContent;
@@ -41,50 +43,24 @@ public class FramedTileEntity extends TileEntity
     public ActionResultType handleInteraction(PlayerEntity player, Hand hand, BlockRayTraceResult hit)
     {
         ItemStack stack = player.getHeldItem(hand);
-        if (!getCamoState(hit).isAir() && stack.getItem() == FBContent.itemFramedHammer.get())
+        BlockState camo = getCamoState(hit);
+        if (!camo.isAir() && !(camo.getBlock() instanceof FlowingFluidBlock) && stack.getItem() == FBContent.itemFramedHammer.get())
         {
-            //noinspection ConstantConditions
-            if (!world.isRemote())
-            {
-                int light = getLightValue();
-
-                ItemStack camoStack = getCamoStack(hit);
-                if (!player.inventory.addItemStackToInventory(camoStack))
-                {
-                    player.dropItem(camoStack, false);
-                }
-
-                boolean lightUpdate = getLightValue() != light;
-
-                applyCamo(ItemStack.EMPTY, Blocks.AIR.getDefaultState(), hit);
-
-                markDirty();
-                if (lightUpdate) { doLightUpdate(); }
-                world.notifyBlockUpdate(pos, getBlockState(), getBlockState(), 3);
-            }
-
-            return world.isRemote() ? ActionResultType.SUCCESS : ActionResultType.CONSUME;
+            return clearBlockCamo(player, hit);
         }
-        else if (getCamoState(hit).isAir() && stack.getItem() instanceof BlockItem)
+        else if (!camo.isAir() && camo.getBlock() instanceof FlowingFluidBlock && stack.getCapability(CapabilityFluidHandler.FLUID_HANDLER_ITEM_CAPABILITY).isPresent())
         {
-            BlockState state = ((BlockItem) stack.getItem()).getBlock().getDefaultState();
-            if (isValidBlock(state, player))
-            {
-                //noinspection ConstantConditions
-                if (!world.isRemote())
-                {
-                    int light = getLightValue();
-
-                    applyCamo(stack.split(1), state, hit);
-                    if (player.isCreative()) { stack.grow(1); }
-
-                    markDirty();
-                    if (getLightValue() != light) { doLightUpdate(); }
-                    world.notifyBlockUpdate(pos, getBlockState(), getBlockState(), 3);
-                }
-
-                return world.isRemote() ? ActionResultType.SUCCESS : ActionResultType.CONSUME;
-            }
+            if (true) { return ActionResultType.PASS; }
+            return clearFluidCamo(player, camo, stack, hit);
+        }
+        else if (camo.isAir() && stack.getItem() instanceof BlockItem)
+        {
+            return setBlockCamo(player, stack, hit);
+        }
+        else if (camo.isAir() && stack.getCapability(CapabilityFluidHandler.FLUID_HANDLER_ITEM_CAPABILITY).isPresent())
+        {
+            if (true) { return ActionResultType.PASS; }
+            return setFluidCamo(player, stack, hit);
         }
         else if (stack.getItem().isIn(Tags.Items.DUSTS_GLOWSTONE) && !glowing)
         {
@@ -103,6 +79,147 @@ public class FramedTileEntity extends TileEntity
         }
 
         return ActionResultType.FAIL;
+    }
+
+    private ActionResultType clearBlockCamo(PlayerEntity player, BlockRayTraceResult hit)
+    {
+        //noinspection ConstantConditions
+        if (!world.isRemote())
+        {
+            int light = getLightValue();
+
+            ItemStack camoStack = getCamoStack(hit);
+            if (!player.inventory.addItemStackToInventory(camoStack))
+            {
+                player.dropItem(camoStack, false);
+            }
+
+            applyCamo(ItemStack.EMPTY, Blocks.AIR.getDefaultState(), hit);
+
+            boolean lightUpdate = getLightValue() != light;
+
+            markDirty();
+            if (lightUpdate) { doLightUpdate(); }
+            world.notifyBlockUpdate(pos, getBlockState(), getBlockState(), 3);
+        }
+
+        return world.isRemote() ? ActionResultType.SUCCESS : ActionResultType.CONSUME;
+    }
+
+    private ActionResultType clearFluidCamo(PlayerEntity player, BlockState camo, ItemStack stack, BlockRayTraceResult hit)
+    {
+        LazyOptional<IFluidHandlerItem> cap = stack.getCapability(CapabilityFluidHandler.FLUID_HANDLER_ITEM_CAPABILITY);
+        return cap.map(handler ->
+        {
+            FluidStack fluid = new FluidStack(((FlowingFluidBlock) camo.getBlock()).getFluid(), 1000);
+            if (handler.fill(fluid, IFluidHandler.FluidAction.SIMULATE) == 1000)
+            {
+                //noinspection ConstantConditions
+                if (!world.isRemote())
+                {
+                    if (!player.isCreative())
+                    {
+                        if (stack.getItem() == Items.BUCKET)
+                        {
+                            stack.shrink(1);
+
+                            ItemStack result = new ItemStack(fluid.getFluid().getFilledBucket());
+                            if (!player.inventory.addItemStackToInventory(result))
+                            {
+                                player.dropItem(result, false);
+                            }
+                        }
+                        else
+                        {
+                            handler.fill(fluid, IFluidHandler.FluidAction.EXECUTE);
+                        }
+                    }
+
+                    int light = getLightValue();
+                    applyCamo(ItemStack.EMPTY, Blocks.AIR.getDefaultState(), hit);
+                    boolean lightUpdate = getLightValue() != light;
+
+                    markDirty();
+                    if (lightUpdate) { doLightUpdate(); }
+                    world.notifyBlockUpdate(pos, getBlockState(), getBlockState(), 3);
+                }
+                return world.isRemote() ? ActionResultType.SUCCESS : ActionResultType.CONSUME;
+            }
+            return ActionResultType.FAIL;
+        }).orElse(ActionResultType.FAIL);
+    }
+
+    private ActionResultType setBlockCamo(PlayerEntity player, ItemStack stack, BlockRayTraceResult hit)
+    {
+        BlockState state = ((BlockItem) stack.getItem()).getBlock().getDefaultState();
+        if (isValidBlock(state, player))
+        {
+            //noinspection ConstantConditions
+            if (!world.isRemote())
+            {
+                int light = getLightValue();
+
+                applyCamo(stack.split(1), state, hit);
+                if (player.isCreative()) { stack.grow(1); }
+
+                markDirty();
+                if (getLightValue() != light) { doLightUpdate(); }
+                world.notifyBlockUpdate(pos, getBlockState(), getBlockState(), 3);
+            }
+
+            return world.isRemote() ? ActionResultType.SUCCESS : ActionResultType.CONSUME;
+        }
+        return ActionResultType.FAIL;
+    }
+
+    private ActionResultType setFluidCamo(PlayerEntity player, ItemStack stack, BlockRayTraceResult hit)
+    {
+        LazyOptional<IFluidHandlerItem> cap = stack.getCapability(CapabilityFluidHandler.FLUID_HANDLER_ITEM_CAPABILITY);
+        return cap.map(handler ->
+        {
+            FluidStack fluid = handler.getFluidInTank(0);
+
+            BlockState state = fluid.getFluid().getDefaultState().getBlockState();
+            if (!state.isAir())
+            {
+                ItemStack bucket = new ItemStack(fluid.getFluid().getFilledBucket());
+                if (fluid.getAmount() >= 1000 && !bucket.isEmpty() && handler.drain(1000, IFluidHandler.FluidAction.SIMULATE).getAmount() == 1000)
+                {
+                    //noinspection ConstantConditions
+                    if (!world.isRemote())
+                    {
+                        if (!player.isCreative())
+                        {
+                            if (stack.getItem() instanceof BucketItem)
+                            {
+                                stack.shrink(1);
+
+                                ItemStack emptyBucket = new ItemStack(Items.BUCKET);
+                                if (!player.inventory.addItemStackToInventory(emptyBucket))
+                                {
+                                    player.dropItem(emptyBucket, false);
+                                }
+                            }
+                            else
+                            {
+                                handler.drain(1000, IFluidHandler.FluidAction.EXECUTE);
+                            }
+                        }
+
+                        int light = getLightValue();
+
+                        //Setting the bucket as the camo stack would allow duping buckets
+                        applyCamo(ItemStack.EMPTY, state, hit);
+
+                        markDirty();
+                        if (getLightValue() != light) { doLightUpdate(); }
+                        world.notifyBlockUpdate(pos, getBlockState(), getBlockState(), 3);
+                    }
+                    return world.isRemote() ? ActionResultType.SUCCESS : ActionResultType.CONSUME;
+                }
+            }
+            return ActionResultType.FAIL;
+        }).orElse(ActionResultType.FAIL);
     }
 
     protected boolean isValidBlock(BlockState state, PlayerEntity player)
