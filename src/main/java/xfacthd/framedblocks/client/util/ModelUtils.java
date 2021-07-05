@@ -20,7 +20,7 @@ public class ModelUtils
         int elemLight = findElement(VertexFormatElement.Usage.UV, 2);
         int elemNormal = findElement(VertexFormatElement.Usage.NORMAL, 0);
 
-        int[] vertexData = quad.getVertexData();
+        int[] vertexData = quad.getVertices();
 
         float[][] pos = new float[4][3];
         float[][] color = new float[4][4];
@@ -58,7 +58,7 @@ public class ModelUtils
         float[][] data = new float[4][4];
         for (int vert = 0; vert < 4; vert++)
         {
-            LightUtil.unpack(quad.getVertexData(), data[vert], DefaultVertexFormats.BLOCK, vert, elemPos);
+            LightUtil.unpack(quad.getVertices(), data[vert], DefaultVertexFormats.BLOCK, vert, elemPos);
         }
         return data;
     }
@@ -74,20 +74,20 @@ public class ModelUtils
             }
             idx++;
         }
-        throw new IllegalArgumentException("Format doesn't have a " + usage.getDisplayName() + " element");
+        throw new IllegalArgumentException("Format doesn't have a " + usage.getName() + " element");
     }
 
     public static BakedQuad duplicateQuad(BakedQuad quad)
     {
-        int[] vertexData = quad.getVertexData();
+        int[] vertexData = quad.getVertices();
         vertexData = Arrays.copyOf(vertexData, vertexData.length);
 
         BakedQuad dupeQuad = new BakedQuad(
                 vertexData,
                 quad.getTintIndex(),
-                quad.getFace(),
+                quad.getDirection(),
                 quad.getSprite(),
-                quad.applyDiffuseLighting()
+                quad.isShade()
         );
 
         ModelUtils.modifyQuad(dupeQuad, (pos, color, uv, light, normal) -> unmirrorUVs(uv));

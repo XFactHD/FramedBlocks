@@ -23,21 +23,21 @@ public abstract class AbstractFramedSignBlock extends FramedBlock
     protected AbstractFramedSignBlock(BlockType type, Properties props) { super(type, props); }
 
     @Override
-    public ActionResultType onBlockActivated(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockRayTraceResult hit)
+    public ActionResultType use(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockRayTraceResult hit)
     {
         //Makes sure the block can have a camo applied, even when the sign can execute a command
-        ActionResultType result = super.onBlockActivated(state, world, pos, player, hand, hit);
+        ActionResultType result = super.use(state, world, pos, player, hand, hit);
         if (result != ActionResultType.FAIL) { return result; }
 
-        ItemStack stack = player.getHeldItem(hand);
-        boolean dye = stack.getItem() instanceof DyeItem && player.abilities.allowEdit;
-        if (world.isRemote)
+        ItemStack stack = player.getItemInHand(hand);
+        boolean dye = stack.getItem() instanceof DyeItem && player.abilities.mayBuild;
+        if (world.isClientSide())
         {
             return dye ? ActionResultType.SUCCESS : ActionResultType.CONSUME;
         }
         else
         {
-            if (world.getTileEntity(pos) instanceof FramedSignTileEntity sign)
+            if (world.getBlockEntity(pos) instanceof FramedSignTileEntity sign)
             {
                 if (dye)
                 {
@@ -45,7 +45,7 @@ public abstract class AbstractFramedSignBlock extends FramedBlock
                     if (success && !player.isCreative())
                     {
                         stack.shrink(1);
-                        player.inventory.markDirty();
+                        player.inventory.setChanged();
                     }
 
                     if (success) { return ActionResultType.SUCCESS; }
@@ -70,5 +70,5 @@ public abstract class AbstractFramedSignBlock extends FramedBlock
     public TileEntity createTileEntity(BlockState state, IBlockReader world) { return new FramedSignTileEntity(); }
 
     @Override
-    public boolean canSpawnInBlock() { return true; }
+    public boolean isPossibleToRespawnInThis() { return true; }
 }

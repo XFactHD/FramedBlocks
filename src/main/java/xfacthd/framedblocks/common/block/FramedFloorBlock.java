@@ -32,21 +32,21 @@ public class FramedFloorBlock extends FramedBlock
     public FramedFloorBlock() { super(BlockType.FRAMED_FLOOR_BOARD); }
 
     @Override
-    protected void fillStateContainer(StateContainer.Builder<Block, BlockState> builder)
+    protected void createBlockStateDefinition(StateContainer.Builder<Block, BlockState> builder)
     {
         builder.add(BlockStateProperties.WATERLOGGED);
     }
 
     @Override
-    public boolean isValidPosition(BlockState state, IWorldReader world, BlockPos pos)
+    public boolean canSurvive(BlockState state, IWorldReader world, BlockPos pos)
     {
-        BlockState below = world.getBlockState(pos.down());
+        BlockState below = world.getBlockState(pos.below());
         return !below.isAir() && below.getBlock() != this && below.getMaterial().isSolid();
     }
 
     @Override
-    public BlockState updatePostPlacement(BlockState state, Direction side, BlockState neighborState, IWorld world, BlockPos pos, BlockPos neighborPos)
+    public BlockState updateShape(BlockState state, Direction side, BlockState neighborState, IWorld world, BlockPos pos, BlockPos neighborPos)
     {
-        return !state.isValidPosition(world, pos) ? Blocks.AIR.getDefaultState() : super.updatePostPlacement(state, side, neighborState, world, pos, neighborPos);
+        return !state.canSurvive(world, pos) ? Blocks.AIR.defaultBlockState() : super.updateShape(state, side, neighborState, world, pos, neighborPos);
     }
 }

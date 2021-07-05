@@ -20,25 +20,25 @@ public class FramedStairsModel extends FramedBlockModel
     public FramedStairsModel(BlockState state, IBakedModel baseModel)
     {
         super(state, baseModel);
-        dir = state.get(BlockStateProperties.HORIZONTAL_FACING);
-        top = state.get(BlockStateProperties.HALF) == Half.TOP;
-        shape = state.get(BlockStateProperties.STAIRS_SHAPE);
+        dir = state.getValue(BlockStateProperties.HORIZONTAL_FACING);
+        top = state.getValue(BlockStateProperties.HALF) == Half.TOP;
+        shape = state.getValue(BlockStateProperties.STAIRS_SHAPE);
     }
 
     @Override
     protected void transformQuad(Map<Direction, List<BakedQuad>> quadMap, BakedQuad quad)
     {
-        if ((top && quad.getFace() == Direction.DOWN) || (!top && quad.getFace() == Direction.UP))
+        if ((top && quad.getDirection() == Direction.DOWN) || (!top && quad.getDirection() == Direction.UP))
         {
             createCenterQuads(quadMap.get(null), quad);
-            createTopBottomQuads(quadMap.get(quad.getFace()), quad);
+            createTopBottomQuads(quadMap.get(quad.getDirection()), quad);
         }
-        else if (quad.getFace().getAxis() != Direction.Axis.Y)
+        else if (quad.getDirection().getAxis() != Direction.Axis.Y)
         {
             BakedQuad sideQuad = ModelUtils.duplicateQuad(quad);
             if (BakedQuadTransformer.createHorizontalSideQuad(sideQuad, top, .5F))
             {
-                quadMap.get(quad.getFace()).add(sideQuad);
+                quadMap.get(quad.getDirection()).add(sideQuad);
             }
 
             createSideQuads(quadMap, quad);
@@ -64,7 +64,7 @@ public class FramedStairsModel extends FramedBlockModel
 
             BakedQuad topBotQuad = ModelUtils.duplicateQuad(quad);
             if (BakedQuadTransformer.createTopBottomQuad(topBotQuad, opposite ? dir.getOpposite() : dir, .5F) &&
-                    BakedQuadTransformer.createTopBottomQuad(topBotQuad, left ? dir.rotateYCCW() : dir.rotateY(), .5F)
+                    BakedQuadTransformer.createTopBottomQuad(topBotQuad, left ? dir.getCounterClockWise() : dir.getClockWise(), .5F)
             )
             {
                 BakedQuadTransformer.setQuadPosInFacingDir(topBotQuad, .5F);
@@ -88,7 +88,7 @@ public class FramedStairsModel extends FramedBlockModel
         {
             BakedQuad topBotQuad = ModelUtils.duplicateQuad(quad);
             if (BakedQuadTransformer.createTopBottomQuad(topBotQuad, dir.getOpposite(), .5F) &&
-                BakedQuadTransformer.createTopBottomQuad(topBotQuad, shape == StairsShape.OUTER_LEFT ? dir.rotateY() : dir.rotateYCCW(), .5F)
+                BakedQuadTransformer.createTopBottomQuad(topBotQuad, shape == StairsShape.OUTER_LEFT ? dir.getClockWise() : dir.getCounterClockWise(), .5F)
             )
             {
                 quadList.add(topBotQuad);
@@ -98,7 +98,7 @@ public class FramedStairsModel extends FramedBlockModel
         {
             BakedQuad topBotQuad = ModelUtils.duplicateQuad(quad);
             if (BakedQuadTransformer.createTopBottomQuad(topBotQuad, dir, .5F) &&
-                BakedQuadTransformer.createTopBottomQuad(topBotQuad, shape == StairsShape.INNER_LEFT ? dir.rotateY() : dir.rotateYCCW(), .5F)
+                BakedQuadTransformer.createTopBottomQuad(topBotQuad, shape == StairsShape.INNER_LEFT ? dir.getClockWise() : dir.getCounterClockWise(), .5F)
             )
             {
                 quadList.add(topBotQuad);
@@ -108,7 +108,7 @@ public class FramedStairsModel extends FramedBlockModel
 
     private void createSideQuads(Map<Direction, List<BakedQuad>> quadMap, BakedQuad quad)
     {
-        if (quad.getFace() == dir.getOpposite())
+        if (quad.getDirection() == dir.getOpposite())
         {
             if (shape == StairsShape.STRAIGHT)
             {
@@ -123,15 +123,15 @@ public class FramedStairsModel extends FramedBlockModel
             {
                 BakedQuad sideQuad = ModelUtils.duplicateQuad(quad);
                 if (BakedQuadTransformer.createHorizontalSideQuad(sideQuad, !top, .5F) &&
-                    BakedQuadTransformer.createVerticalSideQuad(sideQuad, shape == StairsShape.INNER_LEFT ? dir.rotateY() : dir.rotateYCCW(), .5F)
+                    BakedQuadTransformer.createVerticalSideQuad(sideQuad, shape == StairsShape.INNER_LEFT ? dir.getClockWise() : dir.getCounterClockWise(), .5F)
                 )
                 {
-                    quadMap.get(quad.getFace()).add(sideQuad);
+                    quadMap.get(quad.getDirection()).add(sideQuad);
                 }
 
                 sideQuad = ModelUtils.duplicateQuad(quad);
                 if (BakedQuadTransformer.createHorizontalSideQuad(sideQuad, !top, .5F) &&
-                    BakedQuadTransformer.createVerticalSideQuad(sideQuad, shape == StairsShape.INNER_LEFT ? dir.rotateYCCW() : dir.rotateY(), .5F)
+                    BakedQuadTransformer.createVerticalSideQuad(sideQuad, shape == StairsShape.INNER_LEFT ? dir.getCounterClockWise() : dir.getClockWise(), .5F)
                 )
                 {
                     BakedQuadTransformer.setQuadPosInFacingDir(sideQuad, .5F);
@@ -142,7 +142,7 @@ public class FramedStairsModel extends FramedBlockModel
             {
                 BakedQuad sideQuad = ModelUtils.duplicateQuad(quad);
                 if (BakedQuadTransformer.createHorizontalSideQuad(sideQuad, !top, .5F) &&
-                    BakedQuadTransformer.createVerticalSideQuad(sideQuad, shape == StairsShape.OUTER_LEFT ? dir.rotateY() : dir.rotateYCCW(), .5F)
+                    BakedQuadTransformer.createVerticalSideQuad(sideQuad, shape == StairsShape.OUTER_LEFT ? dir.getClockWise() : dir.getCounterClockWise(), .5F)
                 )
                 {
                     BakedQuadTransformer.setQuadPosInFacingDir(sideQuad, .5F);
@@ -150,7 +150,7 @@ public class FramedStairsModel extends FramedBlockModel
                 }
             }
         }
-        else if (quad.getFace() == dir.rotateY())
+        else if (quad.getDirection() == dir.getClockWise())
         {
             if (shape == StairsShape.OUTER_RIGHT || shape == StairsShape.STRAIGHT)
             {
@@ -159,7 +159,7 @@ public class FramedStairsModel extends FramedBlockModel
                     BakedQuadTransformer.createVerticalSideQuad(sideQuad, dir.getOpposite(), .5F)
                 )
                 {
-                    quadMap.get(quad.getFace()).add(sideQuad);
+                    quadMap.get(quad.getDirection()).add(sideQuad);
                 }
             }
             else if (shape == StairsShape.INNER_LEFT)
@@ -169,7 +169,7 @@ public class FramedStairsModel extends FramedBlockModel
                     BakedQuadTransformer.createVerticalSideQuad(sideQuad, dir.getOpposite(), .5F)
                 )
                 {
-                    quadMap.get(quad.getFace()).add(sideQuad);
+                    quadMap.get(quad.getDirection()).add(sideQuad);
                 }
 
                 sideQuad = ModelUtils.duplicateQuad(quad);
@@ -193,7 +193,7 @@ public class FramedStairsModel extends FramedBlockModel
                 }
             }
         }
-        else if (quad.getFace() == dir.rotateYCCW())
+        else if (quad.getDirection() == dir.getCounterClockWise())
         {
             if (shape == StairsShape.OUTER_LEFT || shape == StairsShape.STRAIGHT)
             {
@@ -202,7 +202,7 @@ public class FramedStairsModel extends FramedBlockModel
                     BakedQuadTransformer.createVerticalSideQuad(sideQuad, dir.getOpposite(), .5F)
                 )
                 {
-                    quadMap.get(quad.getFace()).add(sideQuad);
+                    quadMap.get(quad.getDirection()).add(sideQuad);
                 }
             }
             else if (shape == StairsShape.INNER_RIGHT)
@@ -212,7 +212,7 @@ public class FramedStairsModel extends FramedBlockModel
                     BakedQuadTransformer.createVerticalSideQuad(sideQuad, dir.getOpposite(), .5F)
                 )
                 {
-                    quadMap.get(quad.getFace()).add(sideQuad);
+                    quadMap.get(quad.getDirection()).add(sideQuad);
                 }
 
                 sideQuad = ModelUtils.duplicateQuad(quad);
@@ -236,14 +236,14 @@ public class FramedStairsModel extends FramedBlockModel
                 }
             }
         }
-        else if (quad.getFace() == dir && (shape == StairsShape.OUTER_LEFT || shape == StairsShape.OUTER_RIGHT))
+        else if (quad.getDirection() == dir && (shape == StairsShape.OUTER_LEFT || shape == StairsShape.OUTER_RIGHT))
         {
             BakedQuad backQuad = ModelUtils.duplicateQuad(quad);
             if (BakedQuadTransformer.createHorizontalSideQuad(backQuad, !top, .5F) &&
-                BakedQuadTransformer.createVerticalSideQuad(backQuad, shape == StairsShape.OUTER_LEFT ? dir.rotateY() : dir.rotateYCCW(), .5F)
+                BakedQuadTransformer.createVerticalSideQuad(backQuad, shape == StairsShape.OUTER_LEFT ? dir.getClockWise() : dir.getCounterClockWise(), .5F)
             )
             {
-                quadMap.get(quad.getFace()).add(backQuad);
+                quadMap.get(quad.getDirection()).add(backQuad);
             }
         }
     }

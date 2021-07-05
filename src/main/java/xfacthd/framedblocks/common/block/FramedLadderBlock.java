@@ -16,16 +16,16 @@ import xfacthd.framedblocks.common.data.PropertyHolder;
 
 public class FramedLadderBlock extends FramedBlock
 {
-    private static final VoxelShape SHAPE_NORTH = makeCuboidShape( 0, 0,  0, 16, 16,  2);
-    private static final VoxelShape SHAPE_EAST =  makeCuboidShape(14, 0,  0, 16, 16, 16);
-    private static final VoxelShape SHAPE_SOUTH = makeCuboidShape( 0, 0, 14, 16, 16, 16);
-    private static final VoxelShape SHAPE_WEST =  makeCuboidShape( 0, 0,  0,  2, 16, 16);
+    private static final VoxelShape SHAPE_NORTH = box( 0, 0,  0, 16, 16,  2);
+    private static final VoxelShape SHAPE_EAST =  box(14, 0,  0, 16, 16, 16);
+    private static final VoxelShape SHAPE_SOUTH = box( 0, 0, 14, 16, 16, 16);
+    private static final VoxelShape SHAPE_WEST =  box( 0, 0,  0,  2, 16, 16);
     private static final VoxelShape[] SHAPES = new VoxelShape[] { SHAPE_SOUTH, SHAPE_WEST, SHAPE_NORTH, SHAPE_EAST };
 
     public FramedLadderBlock() { super(BlockType.FRAMED_LADDER); }
 
     @Override
-    protected void fillStateContainer(StateContainer.Builder<Block, BlockState> builder)
+    protected void createBlockStateDefinition(StateContainer.Builder<Block, BlockState> builder)
     {
         builder.add(PropertyHolder.FACING_HOR, BlockStateProperties.WATERLOGGED);
     }
@@ -33,14 +33,14 @@ public class FramedLadderBlock extends FramedBlock
     @Override
     public BlockState getStateForPlacement(BlockItemUseContext context)
     {
-        BlockState state = getDefaultState().with(PropertyHolder.FACING_HOR, context.getPlacementHorizontalFacing());
-        return withWater(state, context.getWorld(), context.getPos());
+        BlockState state = defaultBlockState().setValue(PropertyHolder.FACING_HOR, context.getHorizontalDirection());
+        return withWater(state, context.getLevel(), context.getClickedPos());
     }
 
     @Override
     public VoxelShape getShape(BlockState state, IBlockReader world, BlockPos pos, ISelectionContext context)
     {
-        return SHAPES[state.get(PropertyHolder.FACING_HOR).getHorizontalIndex()];
+        return SHAPES[state.getValue(PropertyHolder.FACING_HOR).get2DDataValue()];
     }
 
     @Override

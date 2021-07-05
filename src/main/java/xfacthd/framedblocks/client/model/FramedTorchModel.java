@@ -34,19 +34,19 @@ public class FramedTorchModel extends FramedBlockModel
     @Override
     protected void transformQuad(Map<Direction, List<BakedQuad>> quadMap, BakedQuad quad)
     {
-        if (quad.getFace().getAxis() == Direction.Axis.Y)
+        if (quad.getDirection().getAxis() == Direction.Axis.Y)
         {
             BakedQuad topBotQuad = ModelUtils.duplicateQuad(quad);
             if (BakedQuadTransformer.createTopBottomQuad(topBotQuad, 7F/16F, 7F/16F, 9F/16F, 9F/16F))
             {
-                if (quad.getFace() == Direction.UP)
+                if (quad.getDirection() == Direction.UP)
                 {
                     BakedQuadTransformer.setQuadPosInFacingDir(topBotQuad, 8F/16F);
                     quadMap.get(null).add(topBotQuad);
                 }
                 else
                 {
-                    quadMap.get(quad.getFace()).add(topBotQuad);
+                    quadMap.get(quad.getDirection()).add(topBotQuad);
                 }
             }
         }
@@ -62,5 +62,5 @@ public class FramedTorchModel extends FramedBlockModel
     }
 
     @Override
-    public boolean isAmbientOcclusion() { return false; }
+    public boolean useAmbientOcclusion() { return false; }
 }

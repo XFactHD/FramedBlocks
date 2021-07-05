@@ -25,10 +25,10 @@ public class FramedDiagonalFenceModel extends FramedFenceModel
         super(state, baseModel);
 
         boolean hasProps = state.getBlock() instanceof IDiagonalBlock && ((IDiagonalBlock)state.getBlock()).hasProperties();
-        northEast = hasProps && state.get(IDiagonalBlock.NORTH_EAST);
-        southEast = hasProps && state.get(IDiagonalBlock.SOUTH_EAST);
-        northWest = hasProps && state.get(IDiagonalBlock.NORTH_WEST);
-        southWest = hasProps && state.get(IDiagonalBlock.SOUTH_WEST);
+        northEast = hasProps && state.getValue(IDiagonalBlock.NORTH_EAST);
+        southEast = hasProps && state.getValue(IDiagonalBlock.SOUTH_EAST);
+        northWest = hasProps && state.getValue(IDiagonalBlock.NORTH_WEST);
+        southWest = hasProps && state.getValue(IDiagonalBlock.SOUTH_WEST);
     }
 
     @Override
@@ -46,24 +46,24 @@ public class FramedDiagonalFenceModel extends FramedFenceModel
     {
         if (active)
         {
-            if (quad.getFace().getAxis() == Direction.Axis.Y)
+            if (quad.getDirection().getAxis() == Direction.Axis.Y)
             {
                 BakedQuad topBotQuad = ModelUtils.duplicateQuad(quad);
                 if (BakedQuadTransformer.createTopBottomQuad(topBotQuad, dir.getOpposite(), 7F/16F) &&
-                        BakedQuadTransformer.createTopBottomQuad(topBotQuad, dir.rotateY(), 9F/16F) &&
-                        BakedQuadTransformer.createTopBottomQuad(topBotQuad, dir.rotateYCCW(), 9F/16F)
+                        BakedQuadTransformer.createTopBottomQuad(topBotQuad, dir.getClockWise(), 9F/16F) &&
+                        BakedQuadTransformer.createTopBottomQuad(topBotQuad, dir.getCounterClockWise(), 9F/16F)
                 )
                 {
-                    BakedQuadTransformer.setQuadPosInFacingDir(topBotQuad, quad.getFace() == Direction.UP ? 15F/16F : 4F/16F);
+                    BakedQuadTransformer.setQuadPosInFacingDir(topBotQuad, quad.getDirection() == Direction.UP ? 15F/16F : 4F/16F);
                     rotateQuad(topBotQuad, dir);
                     quadMap.get(null).add(topBotQuad);
 
                     topBotQuad = ModelUtils.duplicateQuad(topBotQuad);
-                    BakedQuadTransformer.setQuadPosInFacingDir(topBotQuad, quad.getFace() == Direction.UP ? 9F/16F : 10F/16F);
+                    BakedQuadTransformer.setQuadPosInFacingDir(topBotQuad, quad.getDirection() == Direction.UP ? 9F/16F : 10F/16F);
                     quadMap.get(null).add(topBotQuad);
                 }
             }
-            else if (quad.getFace() == dir.rotateY() || quad.getFace() == dir.rotateYCCW())
+            else if (quad.getDirection() == dir.getClockWise() || quad.getDirection() == dir.getCounterClockWise())
             {
                 boolean neg = dir.getAxisDirection() == Direction.AxisDirection.NEGATIVE;
                 BakedQuad sideQuad = ModelUtils.duplicateQuad(quad);
@@ -82,7 +82,7 @@ public class FramedDiagonalFenceModel extends FramedFenceModel
                     quadMap.get(null).add(sideQuad);
                 }
             }
-            else if (quad.getFace() == dir)
+            else if (quad.getDirection() == dir)
             {
                 BakedQuad frontQuad = ModelUtils.duplicateQuad(quad);
                 if (BakedQuadTransformer.createSideQuad(frontQuad, 7F/16F, 6F/16F, 9F/16F, 9F/16F))
@@ -103,6 +103,6 @@ public class FramedDiagonalFenceModel extends FramedFenceModel
 
     private void rotateQuad(BakedQuad quad, Direction dir)
     {
-        BakedQuadTransformer.rotateQuadAroundAxisCentered(quad, Direction.Axis.Y, -45F, true, new Vector3f(dir.getXOffset(), 1, dir.getZOffset()));
+        BakedQuadTransformer.rotateQuadAroundAxisCentered(quad, Direction.Axis.Y, -45F, true, new Vector3f(dir.getStepX(), 1, dir.getStepZ()));
     }
 }

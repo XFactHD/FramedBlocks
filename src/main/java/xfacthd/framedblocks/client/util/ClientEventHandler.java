@@ -27,22 +27,22 @@ public class ClientEventHandler
 
         BlockRayTraceResult result = event.getTarget();
         //noinspection ConstantConditions
-        BlockState state = Minecraft.getInstance().world.getBlockState(result.getPos());
+        BlockState state = Minecraft.getInstance().level.getBlockState(result.getBlockPos());
         if (!(state.getBlock() instanceof FramedBlock block)) { return; }
 
         BlockType type = block.getBlockType();
         if (type.hasSpecialHitbox())
         {
             MatrixStack mstack = event.getMatrix();
-            Vector3d offset = Vector3d.copy(result.getPos()).subtract(event.getInfo().getProjectedView());
-            IVertexBuilder builder = event.getBuffers().getBuffer(RenderType.getLines());
+            Vector3d offset = Vector3d.atLowerCornerOf(result.getBlockPos()).subtract(event.getInfo().getPosition());
+            IVertexBuilder builder = event.getBuffers().getBuffer(RenderType.lines());
 
-            Direction dir = state.get(PropertyHolder.FACING_HOR);
+            Direction dir = state.getValue(PropertyHolder.FACING_HOR);
 
-            mstack.push();
+            mstack.pushPose();
             mstack.translate(offset.x, offset.y, offset.z);
             mstack.translate(.5, .5, .5);
-            mstack.rotate(Vector3f.YP.rotationDegrees(-dir.getHorizontalAngle()));
+            mstack.mulPose(Vector3f.YP.rotationDegrees(-dir.toYRot()));
             mstack.translate(-.5, -.5, -.5);
 
             switch (type)
@@ -56,7 +56,7 @@ public class ClientEventHandler
                 case FRAMED_INNER_THREEWAY_CORNER -> drawInnerThreewayCornerBox(state, mstack, builder);
             }
 
-            mstack.pop();
+            mstack.popPose();
 
             event.setCanceled(true);
         }
@@ -64,7 +64,7 @@ public class ClientEventHandler
 
     private static void drawSlopeBox(BlockState state, MatrixStack mstack, IVertexBuilder builder)
     {
-        SlopeType type = state.get(PropertyHolder.SLOPE_TYPE);
+        SlopeType type = state.getValue(PropertyHolder.SLOPE_TYPE);
 
         if (type != SlopeType.HORIZONTAL)
         {
@@ -113,7 +113,7 @@ public class ClientEventHandler
 
     private static void drawCornerSlopeBox(BlockState state, MatrixStack mstack, IVertexBuilder builder)
     {
-        CornerType type = state.get(PropertyHolder.CORNER_TYPE);
+        CornerType type = state.getValue(PropertyHolder.CORNER_TYPE);
         if (!type.isHorizontal())
         {
             if (type.isTop())
@@ -164,7 +164,7 @@ public class ClientEventHandler
 
     private static void drawInnerCornerSlopeBox(BlockState state, MatrixStack mstack, IVertexBuilder builder)
     {
-        CornerType type = state.get(PropertyHolder.CORNER_TYPE);
+        CornerType type = state.getValue(PropertyHolder.CORNER_TYPE);
 
         if (!type.isHorizontal())
         {
@@ -225,7 +225,7 @@ public class ClientEventHandler
 
     private static void drawPrismCornerBox(BlockState state, MatrixStack mstack, IVertexBuilder builder)
     {
-        boolean top = state.get(PropertyHolder.TOP);
+        boolean top = state.getValue(PropertyHolder.TOP);
 
         mstack.translate(.5, .5, .5);
         if (top) { mstack.scale(1, -1, 1); }
@@ -248,7 +248,7 @@ public class ClientEventHandler
 
     private static void drawInnerPrismCornerBox(BlockState state, MatrixStack mstack, IVertexBuilder builder)
     {
-        boolean top = state.get(PropertyHolder.TOP);
+        boolean top = state.getValue(PropertyHolder.TOP);
 
         mstack.translate(.5, .5, .5);
         if (top) { mstack.scale(1, -1, 1); }
@@ -277,7 +277,7 @@ public class ClientEventHandler
 
     private static void drawThreewayCornerBox(BlockState state, MatrixStack mstack, IVertexBuilder builder)
     {
-        boolean top = state.get(PropertyHolder.TOP);
+        boolean top = state.getValue(PropertyHolder.TOP);
 
         mstack.translate(.5, .5, .5);
         if (top) { mstack.scale(1, -1, 1); }
@@ -301,7 +301,7 @@ public class ClientEventHandler
 
     private static void drawInnerThreewayCornerBox(BlockState state, MatrixStack mstack, IVertexBuilder builder)
     {
-        boolean top = state.get(PropertyHolder.TOP);
+        boolean top = state.getValue(PropertyHolder.TOP);
 
         mstack.translate(.5, .5, .5);
         if (top) { mstack.scale(1, -1, 1); }
@@ -336,7 +336,7 @@ public class ClientEventHandler
 
     private static void drawLine(IVertexBuilder builder, MatrixStack mstack, double x1, double y1, double z1, double x2, double y2, double z2)
     {
-        builder.pos(mstack.getLast().getMatrix(), (float)x1, (float)y1, (float)z1).color(0.0F, 0.0F, 0.0F, 0.4F).endVertex();
-        builder.pos(mstack.getLast().getMatrix(), (float)x2, (float)y2, (float)z2).color(0.0F, 0.0F, 0.0F, 0.4F).endVertex();
+        builder.vertex(mstack.last().pose(), (float)x1, (float)y1, (float)z1).color(0.0F, 0.0F, 0.0F, 0.4F).endVertex();
+        builder.vertex(mstack.last().pose(), (float)x2, (float)y2, (float)z2).color(0.0F, 0.0F, 0.0F, 0.4F).endVertex();
     }
 }

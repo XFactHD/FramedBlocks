@@ -19,11 +19,11 @@ public class FramedVerticalStairs extends FramedBlock
 {
     public static final CtmPredicate CTM_PREDICATE = (state, side) ->
     {
-        StairsType type = state.get(PropertyHolder.STAIRS_TYPE);
+        StairsType type = state.getValue(PropertyHolder.STAIRS_TYPE);
         if (type == StairsType.VERTICAL)
         {
-            Direction dir = state.get(PropertyHolder.FACING_HOR);
-            return side == dir || side == dir.rotateYCCW();
+            Direction dir = state.getValue(PropertyHolder.FACING_HOR);
+            return side == dir || side == dir.getCounterClockWise();
         }
         return false;
     };
@@ -31,7 +31,7 @@ public class FramedVerticalStairs extends FramedBlock
     public FramedVerticalStairs() { super(BlockType.FRAMED_VERTICAL_STAIRS); }
 
     @Override
-    protected void fillStateContainer(StateContainer.Builder<Block, BlockState> builder)
+    protected void createBlockStateDefinition(StateContainer.Builder<Block, BlockState> builder)
     {
         builder.add(PropertyHolder.FACING_HOR, PropertyHolder.STAIRS_TYPE, BlockStateProperties.WATERLOGGED);
     }
@@ -39,29 +39,29 @@ public class FramedVerticalStairs extends FramedBlock
     @Override
     public BlockState getStateForPlacement(BlockItemUseContext context)
     {
-        BlockState state = getDefaultState().with(PropertyHolder.FACING_HOR, context.getPlacementHorizontalFacing());
-        return getStateFromContext(state, context.getWorld(), context.getPos());
+        BlockState state = defaultBlockState().setValue(PropertyHolder.FACING_HOR, context.getHorizontalDirection());
+        return getStateFromContext(state, context.getLevel(), context.getClickedPos());
     }
 
     @Override
-    public BlockState updatePostPlacement(BlockState state, Direction facing, BlockState facingState, IWorld world, BlockPos pos, BlockPos facingPos)
+    public BlockState updateShape(BlockState state, Direction facing, BlockState facingState, IWorld world, BlockPos pos, BlockPos facingPos)
     {
-        Direction dir = state.get(PropertyHolder.FACING_HOR);
-        if (facing == dir.getOpposite() || facing == dir.rotateY()) { return state; }
+        Direction dir = state.getValue(PropertyHolder.FACING_HOR);
+        if (facing == dir.getOpposite() || facing == dir.getClockWise()) { return state; }
 
         return getStateFromContext(state, world, pos);
     }
 
     private BlockState getStateFromContext(BlockState state, IWorld world, BlockPos pos)
     {
-        Direction dir = state.get(PropertyHolder.FACING_HOR);
+        Direction dir = state.getValue(PropertyHolder.FACING_HOR);
 
-        BlockState front = world.getBlockState(pos.offset(dir));
-        BlockState left = world.getBlockState(pos.offset(dir.rotateYCCW()));
+        BlockState front = world.getBlockState(pos.relative(dir));
+        BlockState left = world.getBlockState(pos.relative(dir.getCounterClockWise()));
 
         if (!(front.getBlock() instanceof StairsBlock) && !(left.getBlock() instanceof StairsBlock))
         {
-            return state.with(PropertyHolder.STAIRS_TYPE, StairsType.VERTICAL);
+            return state.setValue(PropertyHolder.STAIRS_TYPE, StairsType.VERTICAL);
         }
         else
         {
@@ -70,26 +70,26 @@ public class FramedVerticalStairs extends FramedBlock
             boolean topCorner = false;
             boolean bottomCorner = false;
 
-            if (front.getBlock() instanceof StairsBlock && front.get(BlockStateProperties.HORIZONTAL_FACING) == dir.rotateYCCW())
+            if (front.getBlock() instanceof StairsBlock && front.getValue(BlockStateProperties.HORIZONTAL_FACING) == dir.getCounterClockWise())
             {
-                topCorner = front.get(BlockStateProperties.HALF) == Half.BOTTOM;
-                bottomCorner = front.get(BlockStateProperties.HALF) == Half.TOP;
+                topCorner = front.getValue(BlockStateProperties.HALF) == Half.BOTTOM;
+                bottomCorner = front.getValue(BlockStateProperties.HALF) == Half.TOP;
             }
 
-            if (left.getBlock() instanceof StairsBlock && left.get(BlockStateProperties.HORIZONTAL_FACING) == dir)
+            if (left.getBlock() instanceof StairsBlock && left.getValue(BlockStateProperties.HORIZONTAL_FACING) == dir)
             {
-                topCorner |= left.get(BlockStateProperties.HALF) == Half.BOTTOM;
-                bottomCorner |= left.get(BlockStateProperties.HALF) == Half.TOP;
+                topCorner |= left.getValue(BlockStateProperties.HALF) == Half.BOTTOM;
+                bottomCorner |= left.getValue(BlockStateProperties.HALF) == Half.TOP;
             }
 
-            BlockState above = world.getBlockState(pos.up());
-            BlockState below = world.getBlockState(pos.down());
+            BlockState above = world.getBlockState(pos.above());
+            BlockState below = world.getBlockState(pos.below());
 
-            if (topCorner && !above.matchesBlock(this)) { type = StairsType.TOP_CORNER; }
-            else if (bottomCorner && !below.matchesBlock(this)) { type = StairsType.BOTTOM_CORNER; }
+            if (topCorner && !above.is(this)) { type = StairsType.TOP_CORNER; }
+            else if (bottomCorner && !below.is(this)) { type = StairsType.BOTTOM_CORNER; }
             else { type = StairsType.VERTICAL; }
 
-            return state.with(PropertyHolder.STAIRS_TYPE, type);
+            return state.setValue(PropertyHolder.STAIRS_TYPE, type);
         }
     }
 
@@ -97,28 +97,28 @@ public class FramedVerticalStairs extends FramedBlock
     {
         ImmutableMap.Builder<BlockState, VoxelShape> builder = ImmutableMap.builder();
 
-        VoxelShape vertShape = VoxelShapes.combineAndSimplify(
-                Block.makeCuboidShape(0, 0, 8, 16, 16, 16),
-                Block.makeCuboidShape(8, 0, 0, 16, 16, 8),
+        VoxelShape vertShape = VoxelShapes.join(
+                Block.box(0, 0, 8, 16, 16, 16),
+                Block.box(8, 0, 0, 16, 16, 8),
                 IBooleanFunction.OR
         );
 
         VoxelShape topCornerShape = Stream.of(
-                Block.makeCuboidShape(8, 0, 8, 16, 16, 16),
-                Block.makeCuboidShape(8, 0, 0, 16, 8, 8),
-                Block.makeCuboidShape(0, 0, 8, 8, 8, 16)
-        ).reduce((v1, v2) -> VoxelShapes.combineAndSimplify(v1, v2, IBooleanFunction.OR)).get();
+                Block.box(8, 0, 8, 16, 16, 16),
+                Block.box(8, 0, 0, 16, 8, 8),
+                Block.box(0, 0, 8, 8, 8, 16)
+        ).reduce((v1, v2) -> VoxelShapes.join(v1, v2, IBooleanFunction.OR)).get();
 
         VoxelShape bottomCornerShape = Stream.of(
-                Block.makeCuboidShape(8, 0, 8, 16, 16, 16),
-                Block.makeCuboidShape(8, 8, 0, 16, 16, 8),
-                Block.makeCuboidShape(0, 8, 8, 8, 16, 16)
-        ).reduce((v1, v2) -> VoxelShapes.combineAndSimplify(v1, v2, IBooleanFunction.OR)).get();
+                Block.box(8, 0, 8, 16, 16, 16),
+                Block.box(8, 8, 0, 16, 16, 8),
+                Block.box(0, 8, 8, 8, 16, 16)
+        ).reduce((v1, v2) -> VoxelShapes.join(v1, v2, IBooleanFunction.OR)).get();
 
         for (BlockState state : states)
         {
-            StairsType type = state.get(PropertyHolder.STAIRS_TYPE);
-            Direction dir = state.get(PropertyHolder.FACING_HOR).getOpposite();
+            StairsType type = state.getValue(PropertyHolder.STAIRS_TYPE);
+            Direction dir = state.getValue(PropertyHolder.FACING_HOR).getOpposite();
 
             if (type == StairsType.TOP_CORNER)
             {

@@ -11,8 +11,8 @@ public class FramedHammerItem extends Item
     public FramedHammerItem()
     {
         super(new Properties()
-                .maxStackSize(1)
-                .group(FramedBlocks.FRAMED_GROUP)
+                .stacksTo(1)
+                .tab(FramedBlocks.FRAMED_GROUP)
         );
     }
 

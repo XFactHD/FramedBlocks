@@ -35,7 +35,7 @@ public class BakedQuadTransformer
     {
         ModelUtils.modifyQuad(quad, (pos, color, uv, light, normal) ->
         {
-            Direction dir = quad.getFace();
+            Direction dir = quad.getDirection();
             int idx = dir.getAxis() == Direction.Axis.X ? 0 : 2;
             boolean invert = (dir.getAxisDirection() == Direction.AxisDirection.POSITIVE) == up;
 
@@ -58,7 +58,7 @@ public class BakedQuadTransformer
     {
         ModelUtils.modifyQuad(quad, (pos, color, uv, light, normal) ->
         {
-            Direction dir = quad.getFace();
+            Direction dir = quad.getDirection();
             boolean xAxis = dir.getAxis() == Direction.Axis.X;
             boolean invert = (dir.getAxis() == Direction.Axis.Z) == rightEdge;
 
@@ -93,7 +93,7 @@ public class BakedQuadTransformer
             int idxTargetFront = top ? idxBotFront : idxTopFront;
             int idxTargetBack = top ? idxBotBack : idxTopBack;
 
-            Direction dir = rightSide ? quad.getFace().rotateYCCW() : quad.getFace().rotateY();
+            Direction dir = rightSide ? quad.getDirection().getCounterClockWise() : quad.getDirection().getClockWise();
             boolean xAxis = dir.getAxis() == Direction.Axis.X;
             boolean neg = dir.getAxisDirection() == Direction.AxisDirection.NEGATIVE;
 
@@ -131,9 +131,9 @@ public class BakedQuadTransformer
         ModelUtils.modifyQuad(quad, (pos, color, uv, light, normal) ->
         {
             boolean xAxis = dir.getAxis() == Direction.Axis.X;
-            boolean up = quad.getFace() == Direction.UP;
+            boolean up = quad.getDirection() == Direction.UP;
             boolean negTarget = dir.getAxisDirection() == Direction.AxisDirection.NEGATIVE;
-            boolean negModifier = dir.rotateY().getAxisDirection() == Direction.AxisDirection.NEGATIVE;
+            boolean negModifier = dir.getClockWise().getAxisDirection() == Direction.AxisDirection.NEGATIVE;
             int coordTarget = xAxis ? 0 : 2;
             int coordModifier = xAxis ? 2 : 0;
 
@@ -143,10 +143,10 @@ public class BakedQuadTransformer
             // E | 0->3 | 1->2
             // S | 3->2 | 0->1
             // W | 2->1 | 3->0
-            int idxFromRight = xAxis ? dir.getOpposite().getHorizontalIndex() : dir.getHorizontalIndex();
-            int idxFromLeft = xAxis ? dir.rotateY().getHorizontalIndex() : dir.rotateYCCW().getHorizontalIndex();
-            int idxToRight = xAxis ? dir.rotateYCCW().getHorizontalIndex() : dir.rotateY().getHorizontalIndex();
-            int idxToLeft = !xAxis ? dir.getOpposite().getHorizontalIndex() : dir.getHorizontalIndex();
+            int idxFromRight = xAxis ? dir.getOpposite().get2DDataValue() : dir.get2DDataValue();
+            int idxFromLeft = xAxis ? dir.getClockWise().get2DDataValue() : dir.getCounterClockWise().get2DDataValue();
+            int idxToRight = xAxis ? dir.getCounterClockWise().get2DDataValue() : dir.getClockWise().get2DDataValue();
+            int idxToLeft = !xAxis ? dir.getOpposite().get2DDataValue() : dir.get2DDataValue();
 
             if (!up && !xAxis)
             {
@@ -212,11 +212,11 @@ public class BakedQuadTransformer
         AtomicBoolean useQuad = new AtomicBoolean(false);
         ModelUtils.modifyQuad(quad, (pos, color, uv, light, normal) ->
         {
-            int coord = quad.getFace().getAxis() == Direction.Axis.X ? 2 : 0;
+            int coord = quad.getDirection().getAxis() == Direction.Axis.X ? 2 : 0;
             int checkVert1 = up ? 2 : 3;
             int checkVert2 = up ? 1 : 0;
 
-            boolean vertPos = quad.getFace().rotateYCCW().getAxisDirection() == Direction.AxisDirection.POSITIVE;
+            boolean vertPos = quad.getDirection().getCounterClockWise().getAxisDirection() == Direction.AxisDirection.POSITIVE;
             float h1 = (up ? pos[checkVert1][1] : 1F - pos[checkVert1][1]) / 2F;
             float h2 = 1F - ((up ? pos[checkVert2][1] : 1F - pos[checkVert2][1]) / 2F);
             float xz1 = vertPos ? pos[checkVert1][coord] : 1F - pos[checkVert1][coord];
@@ -225,7 +225,7 @@ public class BakedQuadTransformer
             {
                 useQuad.set(true);
 
-                boolean northeast = quad.getFace() == Direction.NORTH || quad.getFace() == Direction.EAST;
+                boolean northeast = quad.getDirection() == Direction.NORTH || quad.getDirection() == Direction.EAST;
 
                 int idxTip1 = up ? 0 : 1;
                 int idxTip2 = up ? 3 : 2;
@@ -271,11 +271,11 @@ public class BakedQuadTransformer
         });
         if (!useQuad.get()) { return false; }
 
-        Vector3f origin = DIR_TO_ORIGIN_VECS[quad.getFace().ordinal() - 2 + (up ? 0 : 4)];
-        boolean northeast = quad.getFace() == Direction.NORTH || quad.getFace() == Direction.EAST;
+        Vector3f origin = DIR_TO_ORIGIN_VECS[quad.getDirection().ordinal() - 2 + (up ? 0 : 4)];
+        boolean northeast = quad.getDirection() == Direction.NORTH || quad.getDirection() == Direction.EAST;
         float angle = back ? PRISM_TILT_ANGLE : -PRISM_TILT_ANGLE;
         if (northeast != up) { angle *= -1F; }
-        rotateQuadAroundAxis(quad, quad.getFace().rotateY().getAxis(), origin, angle, true);
+        rotateQuadAroundAxis(quad, quad.getDirection().getClockWise().getAxis(), origin, angle, true);
         rotateQuadAroundAxis(quad, Direction.Axis.Y, origin, 45, true);
 
         return true;
@@ -297,7 +297,7 @@ public class BakedQuadTransformer
         }
         else
         {
-            Direction cutDir = dir == TriangleDirection.RIGHT ? quad.getFace().rotateYCCW() : quad.getFace().rotateY();
+            Direction cutDir = dir == TriangleDirection.RIGHT ? quad.getDirection().getCounterClockWise() : quad.getDirection().getClockWise();
             if (!createVerticalSideQuad(quad, cutDir, .5F))
             {
                 return false;
@@ -306,7 +306,7 @@ public class BakedQuadTransformer
 
         ModelUtils.modifyQuad(quad, (pos, color, uv, light, normal) ->
         {
-            Direction perpDir = quad.getFace().rotateYCCW();
+            Direction perpDir = quad.getDirection().getCounterClockWise();
             boolean perpPos = perpDir.getAxisDirection() == Direction.AxisDirection.POSITIVE;
             boolean perpXAxis = perpDir.getAxis() == Direction.Axis.X;
             if (dir.isVertical())
@@ -410,7 +410,9 @@ public class BakedQuadTransformer
 
     public static boolean createVerticalSideQuad(BakedQuad quad, Direction dir, float length)
     {
-        Preconditions.checkArgument(dir == quad.getFace().rotateY() || dir == quad.getFace().rotateYCCW(), "Direction dir must be in the quad's plane!");
+        Preconditions.checkArgument(dir == quad.getDirection().getClockWise() || dir == quad.getDirection().getCounterClockWise(),
+                "Direction dir must be in the quad's plane!"
+        );
         return createVerticalSideQuad(quad, dir.getAxisDirection() == Direction.AxisDirection.NEGATIVE, length);
     }
 
@@ -425,8 +427,8 @@ public class BakedQuadTransformer
         AtomicBoolean useQuad = new AtomicBoolean(false);
         ModelUtils.modifyQuad(quad, (pos, color, uv, light, normal) ->
         {
-            int coordIdx = quad.getFace().getAxis() == Direction.Axis.X ? 2 : 0;
-            boolean right = (quad.getFace().rotateYCCW().getAxisDirection() == Direction.AxisDirection.POSITIVE) == positive;
+            int coordIdx = quad.getDirection().getAxis() == Direction.Axis.X ? 2 : 0;
+            boolean right = (quad.getDirection().getCounterClockWise().getAxisDirection() == Direction.AxisDirection.POSITIVE) == positive;
             int vertIdx = right ? 3 : 0;
             float target = positive ? 1F - length : length;
             if ((positive && pos[vertIdx][coordIdx] > target) || (!positive && pos[vertIdx][coordIdx] < target))
@@ -465,7 +467,7 @@ public class BakedQuadTransformer
         {
             boolean xAxis = cutDir.getAxis() == Direction.Axis.X;
             boolean positive = cutDir.getAxisDirection() == Direction.AxisDirection.POSITIVE;
-            boolean up = quad.getFace() == Direction.UP;
+            boolean up = quad.getDirection() == Direction.UP;
             float target = positive ? length : 1F - length;
 
             int vertIdx = xAxis ? (positive ? 0 : 2) : (up ? (positive ? 0 : 1) : (positive ? 1 : 0));
@@ -560,8 +562,8 @@ public class BakedQuadTransformer
      */
     public static void setQuadPosInFacingDir(BakedQuad quad, float posTarget)
     {
-        int idx = quad.getFace().getAxis().ordinal();
-        float value = quad.getFace().getAxisDirection() == Direction.AxisDirection.POSITIVE ? posTarget : 1F - posTarget;
+        int idx = quad.getDirection().getAxis().ordinal();
+        float value = quad.getDirection().getAxisDirection() == Direction.AxisDirection.POSITIVE ? posTarget : 1F - posTarget;
         ModelUtils.modifyQuad(quad, (pos, color, uv, light, normal) ->
         {
             for (int i = 0; i < 4; i++)
@@ -674,20 +676,20 @@ public class BakedQuadTransformer
                     float scaleFactor = 1.0F / (float)Math.cos(Math.PI / (180D / (double)angle)) - 1.0F;
                     scaleVec.mul(scaleFactor);
                 }
-                scaleMult.apply(Math::abs);
-                scaleVec.mul(scaleMult.getX(), scaleMult.getY(), scaleMult.getZ());
+                scaleMult.map(Math::abs);
+                scaleVec.mul(scaleMult.x(), scaleMult.y(), scaleMult.z());
                 scaleVec.add(1.0F, 1.0F, 1.0F);
             }
 
             for (int i = 0; i < 4; i++)
             {
-                Vector4f vector4f = new Vector4f(pos[i][0] - origin.getX(), pos[i][1] - origin.getY(), pos[i][2] - origin.getZ(), 1.0F);
-                if (rescale) { vector4f.scale(scaleVec); }
+                Vector4f vector4f = new Vector4f(pos[i][0] - origin.x(), pos[i][1] - origin.y(), pos[i][2] - origin.z(), 1.0F);
+                if (rescale) { vector4f.mul(scaleVec); }
                 vector4f.transform(transform);
 
-                pos[i][0] = vector4f.getX() + origin.getX();
-                pos[i][1] = vector4f.getY() + origin.getY();
-                pos[i][2] = vector4f.getZ() + origin.getZ();
+                pos[i][0] = vector4f.x() + origin.x();
+                pos[i][1] = vector4f.y() + origin.y();
+                pos[i][2] = vector4f.z() + origin.z();
             }
         });
 

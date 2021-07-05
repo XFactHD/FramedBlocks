@@ -24,12 +24,12 @@ public class FramedWallTorchBlock extends WallTorchBlock implements IFramedBlock
 {
     public FramedWallTorchBlock()
     {
-        super(Properties.create(Material.MISCELLANEOUS)
-                .doesNotBlockMovement()
-                .hardnessAndResistance(0.5F)
+        super(Properties.of(Material.DECORATION)
+                .noCollission()
+                .strength(0.5F)
                 .sound(SoundType.WOOD)
-                .setLightLevel(state -> 14)
-                .notSolid(),
+                .lightLevel(state -> 14)
+                .noOcclusion(),
                 ParticleTypes.FLAME
         );
     }
@@ -37,9 +37,9 @@ public class FramedWallTorchBlock extends WallTorchBlock implements IFramedBlock
     public FramedWallTorchBlock(Properties props, IParticleData particle) { super(props, particle); }
 
     @Override
-    public final ActionResultType onBlockActivated(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockRayTraceResult hit)
+    public final ActionResultType use(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockRayTraceResult hit)
     {
-        return handleBlockActivated(world, pos, player, hand, hit);
+        return handleUse(world, pos, player, hand, hit);
     }
 
     @Override

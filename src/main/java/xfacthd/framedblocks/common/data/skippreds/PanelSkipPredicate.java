@@ -15,7 +15,7 @@ public class PanelSkipPredicate implements SideSkipPredicate
     @Override
     public boolean test(IBlockReader world, BlockPos pos, BlockState state, BlockState adjState, Direction side)
     {
-        Direction dir = state.get(PropertyHolder.FACING_HOR);
+        Direction dir = state.getValue(PropertyHolder.FACING_HOR);
         if (side == dir) { return SideSkipPredicate.CTM.test(world, pos, state, adjState, side); }
 
         if (adjState.getBlock() == FBContent.blockFramedPanel.get())
@@ -54,21 +54,21 @@ public class PanelSkipPredicate implements SideSkipPredicate
     {
         if (side == dir.getOpposite()) { return false; }
 
-        return dir == adjState.get(PropertyHolder.FACING_HOR) && SideSkipPredicate.compareState(world, pos, side, dir);
+        return dir == adjState.getValue(PropertyHolder.FACING_HOR) && SideSkipPredicate.compareState(world, pos, side, dir);
     }
 
     private boolean testAgainstDoublePanel(IBlockReader world, BlockPos pos, Direction dir, BlockState adjState, Direction side)
     {
         if (side == dir.getOpposite()) { return false; }
 
-        Direction adjDir = adjState.get(PropertyHolder.FACING_NE);
+        Direction adjDir = adjState.getValue(PropertyHolder.FACING_NE);
         return (dir == adjDir || dir == adjDir.getOpposite()) && SideSkipPredicate.compareState(world, pos, side, dir);
     }
 
     private boolean testAgainstPillar(IBlockReader world, BlockPos pos, Direction dir, BlockState adjState, Direction side)
     {
-        Direction adjDir = adjState.get(PropertyHolder.FACING_HOR);
-        if ((side == dir.rotateY() && adjDir == dir) || (side == dir.rotateYCCW() && adjDir == dir.rotateY()))
+        Direction adjDir = adjState.getValue(PropertyHolder.FACING_HOR);
+        if ((side == dir.getClockWise() && adjDir == dir) || (side == dir.getCounterClockWise() && adjDir == dir.getClockWise()))
         {
             return SideSkipPredicate.compareState(world, pos, side, dir);
         }
@@ -77,10 +77,10 @@ public class PanelSkipPredicate implements SideSkipPredicate
 
     private boolean testAgainstEdge(IBlockReader world, BlockPos pos, Direction dir, BlockState adjState, Direction side)
     {
-        Direction adjDir = adjState.get(PropertyHolder.FACING_HOR);
+        Direction adjDir = adjState.getValue(PropertyHolder.FACING_HOR);
         if (adjDir != dir) { return false; }
 
-        boolean adjTop = adjState.get(PropertyHolder.TOP);
+        boolean adjTop = adjState.getValue(PropertyHolder.TOP);
         if ((side == Direction.UP && !adjTop) || (side == Direction.DOWN && adjTop))
         {
             return SideSkipPredicate.compareState(world, pos, side, dir);
@@ -92,9 +92,9 @@ public class PanelSkipPredicate implements SideSkipPredicate
     {
         if (side.getAxis() != Direction.Axis.Y) { return false; }
 
-        Direction adjDir = adjState.get(BlockStateProperties.HORIZONTAL_FACING);
-        StairsShape adjShape = adjState.get(BlockStateProperties.STAIRS_SHAPE);
-        boolean adjTop = adjState.get(BlockStateProperties.HALF) == Half.TOP;
+        Direction adjDir = adjState.getValue(BlockStateProperties.HORIZONTAL_FACING);
+        StairsShape adjShape = adjState.getValue(BlockStateProperties.STAIRS_SHAPE);
+        boolean adjTop = adjState.getValue(BlockStateProperties.HALF) == Half.TOP;
 
         if (dir != adjDir) { return false; }
 
@@ -107,10 +107,10 @@ public class PanelSkipPredicate implements SideSkipPredicate
 
     private boolean testAgainstVerticalStairs(IBlockReader world, BlockPos pos, Direction dir, BlockState adjState, Direction side)
     {
-        Direction adjDir = adjState.get(PropertyHolder.FACING_HOR);
-        StairsType adjType = adjState.get(PropertyHolder.STAIRS_TYPE);
+        Direction adjDir = adjState.getValue(PropertyHolder.FACING_HOR);
+        StairsType adjType = adjState.getValue(PropertyHolder.STAIRS_TYPE);
 
-        if ((side == dir.rotateYCCW() && adjDir == dir) || (side == dir.rotateY() && adjDir == dir.rotateY()))
+        if ((side == dir.getCounterClockWise() && adjDir == dir) || (side == dir.getClockWise() && adjDir == dir.getClockWise()))
         {
             return adjType == StairsType.VERTICAL && SideSkipPredicate.compareState(world, pos, side, dir);
         }

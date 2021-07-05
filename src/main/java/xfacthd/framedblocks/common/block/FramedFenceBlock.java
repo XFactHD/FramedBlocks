@@ -32,8 +32,8 @@ public class FramedFenceBlock extends FenceBlock implements IFramedBlock
 
         if (adjState.getBlock() == FBContent.blockFramedGate.get())
         {
-            Direction adjDir = adjState.get(BlockStateProperties.HORIZONTAL_FACING);
-            if (adjDir == side.rotateY() || adjDir == side.rotateYCCW())
+            Direction adjDir = adjState.getValue(BlockStateProperties.HORIZONTAL_FACING);
+            if (adjDir == side.getClockWise() || adjDir == side.getCounterClockWise())
             {
                 return SideSkipPredicate.compareState(world, pos, side);
             }
@@ -48,12 +48,12 @@ public class FramedFenceBlock extends FenceBlock implements IFramedBlock
     }
 
     @Override
-    public final ActionResultType onBlockActivated(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockRayTraceResult hit)
+    public final ActionResultType use(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockRayTraceResult hit)
     {
-        ActionResultType result = handleBlockActivated(world, pos, player, hand, hit);
-        if (result.isSuccessOrConsume()) { return result; }
+        ActionResultType result = handleUse(world, pos, player, hand, hit);
+        if (result.consumesAction()) { return result; }
 
-        return super.onBlockActivated(state, world, pos, player, hand, hit);
+        return super.use(state, world, pos, player, hand, hit);
     }
 
     @Override

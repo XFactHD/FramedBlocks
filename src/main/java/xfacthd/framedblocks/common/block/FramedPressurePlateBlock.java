@@ -24,15 +24,15 @@ public class FramedPressurePlateBlock extends PressurePlateBlock implements IFra
     public FramedPressurePlateBlock()
     {
         super(Sensitivity.EVERYTHING, IFramedBlock.createProperties()
-                .doesNotBlockMovement()
-                .hardnessAndResistance(0.5F)
+                .noCollission()
+                .strength(0.5F)
         );
     }
 
     @Override
-    public final ActionResultType onBlockActivated(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockRayTraceResult hit)
+    public final ActionResultType use(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockRayTraceResult hit)
     {
-        return handleBlockActivated(world, pos, player, hand, hit);
+        return handleUse(world, pos, player, hand, hit);
     }
 
     @Override

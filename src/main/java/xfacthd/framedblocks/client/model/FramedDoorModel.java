@@ -21,30 +21,30 @@ public class FramedDoorModel extends FramedBlockModel
     public FramedDoorModel(BlockState state, IBakedModel baseModel)
     {
         super(state, baseModel);
-        dir = state.get(BlockStateProperties.HORIZONTAL_FACING);
-        top = state.get(BlockStateProperties.DOUBLE_BLOCK_HALF) == DoubleBlockHalf.UPPER;
-        hingeRight = state.get(BlockStateProperties.DOOR_HINGE) == DoorHingeSide.RIGHT;
-        open = state.get(BlockStateProperties.OPEN);
+        dir = state.getValue(BlockStateProperties.HORIZONTAL_FACING);
+        top = state.getValue(BlockStateProperties.DOUBLE_BLOCK_HALF) == DoubleBlockHalf.UPPER;
+        hingeRight = state.getValue(BlockStateProperties.DOOR_HINGE) == DoorHingeSide.RIGHT;
+        open = state.getValue(BlockStateProperties.OPEN);
     }
 
     @Override
     protected void transformQuad(Map<Direction, List<BakedQuad>> quadMap, BakedQuad quad)
     {
         Direction faceDir = dir;
-        if (open) { faceDir = hingeRight ? faceDir.rotateYCCW() : faceDir.rotateY(); }
+        if (open) { faceDir = hingeRight ? faceDir.getCounterClockWise() : faceDir.getClockWise(); }
         boolean facePositive = faceDir.getAxisDirection() == Direction.AxisDirection.POSITIVE;
 
-        if ((top && quad.getFace() == Direction.UP) || (!top && quad.getFace() == Direction.DOWN))
+        if ((top && quad.getDirection() == Direction.UP) || (!top && quad.getDirection() == Direction.DOWN))
         {
             BakedQuad topBotQuad = ModelUtils.duplicateQuad(quad);
             if (BakedQuadTransformer.createTopBottomQuad(topBotQuad, faceDir, 3F/16F))
             {
-                quadMap.get(quad.getFace()).add(topBotQuad);
+                quadMap.get(quad.getDirection()).add(topBotQuad);
             }
         }
-        else if (quad.getFace().getAxis() != Direction.Axis.Y)
+        else if (quad.getDirection().getAxis() != Direction.Axis.Y)
         {
-            if (quad.getFace() == faceDir)
+            if (quad.getDirection() == faceDir)
             {
                 BakedQuad faceQuad = ModelUtils.duplicateQuad(quad);
                 BakedQuadTransformer.setQuadPosInFacingDir(faceQuad, 3F/16F);
@@ -55,7 +55,7 @@ public class FramedDoorModel extends FramedBlockModel
                 BakedQuad sideQuad = ModelUtils.duplicateQuad(quad);
                 if (BakedQuadTransformer.createVerticalSideQuad(sideQuad, !facePositive, 3F/16F))
                 {
-                    quadMap.get(quad.getFace()).add(sideQuad);
+                    quadMap.get(quad.getDirection()).add(sideQuad);
                 }
             }
         }

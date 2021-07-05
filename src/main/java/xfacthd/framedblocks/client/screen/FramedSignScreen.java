@@ -61,8 +61,8 @@ public class FramedSignScreen extends Screen
     protected void init()
     {
         //noinspection ConstantConditions
-        minecraft.keyboardListener.enableRepeatEvents(true);
-        addButton(new Button(width / 2 - 100, height / 4 + 120, 200, 20, DONE, btn -> closeScreen()));
+        minecraft.keyboardHandler.setSendRepeatsToGui(true);
+        addButton(new Button(width / 2 - 100, height / 4 + 120, 200, 20, DONE, btn -> onClose()));
 
         inputUtil = new TextInputUtil(() -> lines[currLine],
                 (line) ->
@@ -70,17 +70,17 @@ public class FramedSignScreen extends Screen
                     lines[currLine] = line;
                     sign.setLine(currLine, new StringTextComponent(line));
                 },
-                TextInputUtil.getClipboardTextSupplier(minecraft), TextInputUtil.getClipboardTextSetter(minecraft),
-                (line) -> minecraft.fontRenderer.getStringWidth(line) <= 90);
+                TextInputUtil.createClipboardGetter(minecraft), TextInputUtil.createClipboardSetter(minecraft),
+                (line) -> minecraft.font.width(line) <= 90);
     }
 
     @Override
-    public void onClose()
+    public void removed()
     {
         //noinspection ConstantConditions
-        minecraft.keyboardListener.enableRepeatEvents(false);
+        minecraft.keyboardHandler.setSendRepeatsToGui(false);
 
-        FramedBlocks.CHANNEL.sendToServer(new SignUpdatePacket(sign.getPos(), new String[]
+        FramedBlocks.CHANNEL.sendToServer(new SignUpdatePacket(sign.getBlockPos(), new String[]
                 {
                         sign.getLine(0).getString(),
                         sign.getLine(1).getString(),
@@ -94,16 +94,16 @@ public class FramedSignScreen extends Screen
     {
         blinkCounter++;
 
-        if (!sign.getType().isValidBlock(sign.getBlockState().getBlock()))
+        if (!sign.getType().isValid(sign.getBlockState().getBlock()))
         {
-            onClose();
+            removed();
         }
     }
 
     @Override
     public boolean charTyped(char character, int modifiers)
     {
-        inputUtil.putChar(character);
+        inputUtil.charTyped(character);
         return true;
     }
 
@@ -113,58 +113,58 @@ public class FramedSignScreen extends Screen
         if (key == GLFW.GLFW_KEY_UP)
         {
             currLine = currLine - 1 & 3;
-            inputUtil.moveCursorToEnd();
+            inputUtil.setCursorToEnd();
             return true;
         }
         else if (key == GLFW.GLFW_KEY_DOWN || key == GLFW.GLFW_KEY_ENTER || key == GLFW.GLFW_KEY_KP_ENTER)
         {
             currLine = currLine + 1 & 3;
-            inputUtil.moveCursorToEnd();
+            inputUtil.setCursorToEnd();
             return true;
         }
         else
         {
-            return inputUtil.specialKeyPressed(key) || super.keyPressed(key, scanCode, modifiers);
+            return inputUtil.keyPressed(key) || super.keyPressed(key, scanCode, modifiers);
         }
     }
 
     @Override
     public void render(MatrixStack mstack, int mouseX, int mouseY, float partialTicks)
     {
-        RenderHelper.setupGuiFlatDiffuseLighting();
+        RenderHelper.setupForFlatItems();
 
         renderBackground(mstack);
         //noinspection ConstantConditions
         drawCenteredString(mstack, font, title, width / 2, 40, TextFormatting.WHITE.getColor());
 
         //noinspection ConstantConditions
-        minecraft.getTextureManager().bindTexture(AtlasTexture.LOCATION_BLOCKS_TEXTURE);
+        minecraft.getTextureManager().bind(AtlasTexture.LOCATION_BLOCKS);
         TextureAtlasSprite sprite = getFrontSprite();
 
         int w = 128;
         int h = 64;
         int x = width / 2 - w / 2;
         int y = height / 2 - h / 2 - 20;
-        innerBlit(mstack.getLast().getMatrix(),
+        innerBlit(mstack.last().pose(),
                 x, x + w, y, y + h, getBlitOffset(),
-                sprite.getMinU(),
-                sprite.getMaxU(),
-                sprite.getMinV(),
-                sprite.getInterpolatedV(8)
+                sprite.getU0(),
+                sprite.getU1(),
+                sprite.getV0(),
+                sprite.getV(8)
         );
 
-        mstack.push();
+        mstack.pushPose();
         mstack.translate(width / 2D, height / 2D - 20, getBlitOffset());
         mstack.scale(1.2F, 1.2F, 1F);
 
-        IRenderTypeBuffer.Impl buffer = minecraft.getRenderTypeBuffers().getBufferSource();
+        IRenderTypeBuffer.Impl buffer = minecraft.renderBuffers().bufferSource();
 
-        drawLines(mstack.getLast().getMatrix(), buffer, lines);
+        drawLines(mstack.last().pose(), buffer, lines);
         drawCursor(mstack, buffer, lines);
 
-        mstack.pop();
+        mstack.popPose();
 
-        RenderHelper.setupGui3DDiffuseLighting();
+        RenderHelper.setupFor3DItems();
         super.render(mstack, mouseX, mouseY, partialTicks);
     }
 
@@ -177,67 +177,67 @@ public class FramedSignScreen extends Screen
             String text = lines[line];
             if (text != null)
             {
-                if (font.getBidiFlag()) { text = font.bidiReorder(text); }
+                if (font.isBidirectional()) { text = font.bidirectionalShaping(text); }
 
-                float textX = -font.getStringWidth(text) / 2F;
-                font.renderString(text, textX, line * 10 - 20, color, false, matrix, buffer, false, 0, 15728880);
+                float textX = -font.width(text) / 2F;
+                font.drawInBatch(text, textX, line * 10 - 20, color, false, matrix, buffer, false, 0, 15728880);
             }
         }
 
-        buffer.finish();
+        buffer.endBatch();
     }
 
     private void drawCursor(MatrixStack mstack, IRenderTypeBuffer.Impl buffer, String[] lines)
     {
-        Matrix4f matrix = mstack.getLast().getMatrix();
+        Matrix4f matrix = mstack.last().pose();
         int color = sign.getTextColor().getTextColor();
         boolean blink = blinkCounter / 6 % 2 == 0;
-        int dir = font.getBidiFlag() ? -1 : 1;
+        int dir = font.isBidirectional() ? -1 : 1;
         int y = currLine * 10 - 20;
 
         for(int i = 0; i < lines.length; ++i)
         {
             String line = lines[i];
-            if (line != null && i == currLine && inputUtil.getSelectionEnd() >= 0)
+            if (line != null && i == currLine && inputUtil.getCursorPos() >= 0)
             {
-                int hw = font.getStringWidth(line) / 2;
-                int selectionEnd = font.getStringWidth(line.substring(0, Math.max(Math.min(inputUtil.getSelectionEnd(), line.length()), 0)));
+                int hw = font.width(line) / 2;
+                int selectionEnd = font.width(line.substring(0, Math.max(Math.min(inputUtil.getCursorPos(), line.length()), 0)));
                 int cursorX = (selectionEnd - hw) * dir;
 
                 if (blink)
                 {
-                    if (inputUtil.getSelectionEnd() < line.length())
+                    if (inputUtil.getCursorPos() < line.length())
                     {
                         fill(mstack, cursorX, y - 1, cursorX + 1, y + 9, 0xff000000 | color);
                     }
                     else
                     {
-                        font.renderString("_", cursorX, y, color, false, matrix, buffer, false, 0, 15728880);
-                        buffer.finish();
+                        font.drawInBatch("_", cursorX, y, color, false, matrix, buffer, false, 0, 15728880);
+                        buffer.endBatch();
                     }
                 }
 
-                if (inputUtil.getSelectionStart() != inputUtil.getSelectionEnd())
+                if (inputUtil.getSelectionPos() != inputUtil.getCursorPos())
                 {
-                    int x1 = (font.getStringWidth(line.substring(0, inputUtil.getSelectionStart())) - hw) * dir;
-                    int x2 =   (font.getStringWidth(line.substring(0, inputUtil.getSelectionEnd()  )) - hw) * dir;
+                    int x1 = (font.width(line.substring(0, inputUtil.getSelectionPos())) - hw) * dir;
+                    int x2 =   (font.width(line.substring(0, inputUtil.getCursorPos()  )) - hw) * dir;
                     int xStart = Math.min(x1, x2);
                     int xEnd = Math.max(x1, x2);
 
                     Tessellator tessellator = Tessellator.getInstance();
-                    BufferBuilder tessBuffer = tessellator.getBuffer();
+                    BufferBuilder tessBuffer = tessellator.getBuilder();
 
                     RenderSystem.disableTexture();
                     RenderSystem.enableColorLogicOp();
                     RenderSystem.logicOp(GlStateManager.LogicOp.OR_REVERSE);
 
                     tessBuffer.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_COLOR);
-                    tessBuffer.pos(matrix, xStart, y + 9F, 0.0F).color(0, 0, 255, 255).endVertex();
-                    tessBuffer.pos(matrix,   xEnd, y + 9F, 0.0F).color(0, 0, 255, 255).endVertex();
-                    tessBuffer.pos(matrix,   xEnd, y - 1F, 0.0F).color(0, 0, 255, 255).endVertex();
-                    tessBuffer.pos(matrix, xStart, y - 1F, 0.0F).color(0, 0, 255, 255).endVertex();
-                    tessBuffer.finishDrawing();
-                    WorldVertexBufferUploader.draw(tessBuffer);
+                    tessBuffer.vertex(matrix, xStart, y + 9F, 0.0F).color(0, 0, 255, 255).endVertex();
+                    tessBuffer.vertex(matrix,   xEnd, y + 9F, 0.0F).color(0, 0, 255, 255).endVertex();
+                    tessBuffer.vertex(matrix,   xEnd, y - 1F, 0.0F).color(0, 0, 255, 255).endVertex();
+                    tessBuffer.vertex(matrix, xStart, y - 1F, 0.0F).color(0, 0, 255, 255).endVertex();
+                    tessBuffer.end();
+                    WorldVertexBufferUploader.end(tessBuffer);
 
                     RenderSystem.disableColorLogicOp();
                     RenderSystem.enableTexture();
@@ -256,25 +256,25 @@ public class FramedSignScreen extends Screen
         BlockState state = sign.getBlockState();
         if (state.getBlock() == FBContent.blockFramedWallSign.get())
         {
-            front = state.get(PropertyHolder.FACING_HOR);
+            front = state.getValue(PropertyHolder.FACING_HOR);
         }
         else
         {
-            int rot = state.get(BlockStateProperties.ROTATION_0_15);
+            int rot = state.getValue(BlockStateProperties.ROTATION_16);
             double angle = rot * 360D / 16D;
-            front = Direction.fromAngle(angle);
+            front = Direction.fromYRot(angle);
         }
 
         BlockState camoState = sign.getCamoState();
-        if (camoState == Blocks.AIR.getDefaultState())
+        if (camoState == Blocks.AIR.defaultBlockState())
         {
-            camoState = FBContent.blockFramedCube.get().getDefaultState();
+            camoState = FBContent.blockFramedCube.get().defaultBlockState();
         }
 
         if (!SPRITE_CACHE.contains(camoState, front))
         {
-            IBakedModel model = minecraft.getBlockRendererDispatcher().getModelForState(camoState);
-            List<BakedQuad> quads = model.getQuads(camoState, front, minecraft.world.getRandom(), EmptyModelData.INSTANCE);
+            IBakedModel model = minecraft.getBlockRenderer().getBlockModel(camoState);
+            List<BakedQuad> quads = model.getQuads(camoState, front, minecraft.level.getRandom(), EmptyModelData.INSTANCE);
 
             TextureAtlasSprite sprite;
             if (!quads.isEmpty())
@@ -283,7 +283,7 @@ public class FramedSignScreen extends Screen
             }
             else
             {
-                sprite = minecraft.getAtlasSpriteGetter(AtlasTexture.LOCATION_BLOCKS_TEXTURE).apply(DEFAULT_TEXTURE);
+                sprite = minecraft.getTextureAtlas(AtlasTexture.LOCATION_BLOCKS).apply(DEFAULT_TEXTURE);
             }
 
             SPRITE_CACHE.put(camoState, front, sprite);

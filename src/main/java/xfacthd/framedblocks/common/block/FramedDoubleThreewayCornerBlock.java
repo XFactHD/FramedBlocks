@@ -17,20 +17,20 @@ public class FramedDoubleThreewayCornerBlock extends AbstractFramedDoubleBlock
 {
     public static final CtmPredicate CTM_PREDICATE = (state, side) ->
     {
-        Direction dir = state.get(PropertyHolder.FACING_HOR);
-        boolean top = state.get(PropertyHolder.TOP);
+        Direction dir = state.getValue(PropertyHolder.FACING_HOR);
+        boolean top = state.getValue(PropertyHolder.TOP);
 
-        return side == dir || side == dir.rotateYCCW() || (dir == Direction.DOWN && !top) || (dir == Direction.UP && top);
+        return side == dir || side == dir.getCounterClockWise() || (dir == Direction.DOWN && !top) || (dir == Direction.UP && top);
     };
 
     public FramedDoubleThreewayCornerBlock(BlockType blockType)
     {
         super(blockType);
-        setDefaultState(getDefaultState().with(PropertyHolder.TOP, false));
+        registerDefaultState(defaultBlockState().setValue(PropertyHolder.TOP, false));
     }
 
     @Override
-    protected void fillStateContainer(StateContainer.Builder<Block, BlockState> builder)
+    protected void createBlockStateDefinition(StateContainer.Builder<Block, BlockState> builder)
     {
         builder.add(PropertyHolder.FACING_HOR, PropertyHolder.TOP);
     }
@@ -38,17 +38,17 @@ public class FramedDoubleThreewayCornerBlock extends AbstractFramedDoubleBlock
     @Override
     public BlockState getStateForPlacement(BlockItemUseContext context)
     {
-        Direction facing = context.getPlacementHorizontalFacing();
-        BlockState state = getDefaultState().with(PropertyHolder.FACING_HOR, facing);
-        return withTop(state, context.getFace(), context.getHitVec());
+        Direction facing = context.getHorizontalDirection();
+        BlockState state = defaultBlockState().setValue(PropertyHolder.FACING_HOR, facing);
+        return withTop(state, context.getClickedFace(), context.getClickLocation());
     }
 
     @Override
     @SuppressWarnings("deprecation")
     public SoundType getSound(BlockState state, IWorldReader world, BlockPos pos)
     {
-        boolean top = state.get(PropertyHolder.TOP);
-        if (world.getTileEntity(pos) instanceof FramedDoubleTileEntity dte)
+        boolean top = state.getValue(PropertyHolder.TOP);
+        if (world.getBlockEntity(pos) instanceof FramedDoubleTileEntity dte)
         {
             BlockState camoState = top ? dte.getCamoState() : dte.getCamoStateTwo();
             if (!camoState.isAir())

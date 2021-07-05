@@ -17,12 +17,12 @@ public class MixinWorldRenderer
 {
     @Final
     @Shadow
-    private RenderTypeBuffers renderTypeTextures;
+    private RenderTypeBuffers renderBuffers;
 
-    @Inject(method = "renderBlockLayer", at = @At(value = "INVOKE", shift = At.Shift.BEFORE, target = "Lcom/mojang/blaze3d/systems/RenderSystem;clearCurrentColor()V"))
+    @Inject(method = "renderChunkLayer", at = @At(value = "INVOKE", shift = At.Shift.BEFORE, target = "Lcom/mojang/blaze3d/systems/RenderSystem;clearCurrentColor()V"))
     private void renderTransparentLayer(RenderType layer, MatrixStack matrix, double camX, double camY, double camZ, CallbackInfo ci)
     {
-        if (layer != RenderType.getTranslucent()) { return; }
-        GhostBlockRenderer.drawGhostBlock(renderTypeTextures.getBufferSource(), matrix);
+        if (layer != RenderType.translucent()) { return; }
+        GhostBlockRenderer.drawGhostBlock(renderBuffers.bufferSource(), matrix);
     }
 }

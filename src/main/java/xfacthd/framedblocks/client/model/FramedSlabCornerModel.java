@@ -19,23 +19,23 @@ public class FramedSlabCornerModel extends FramedBlockModel
     public FramedSlabCornerModel(BlockState state, IBakedModel baseModel)
     {
         super(state, baseModel);
-        dir = state.get(PropertyHolder.FACING_HOR);
-        top = state.get(PropertyHolder.TOP);
+        dir = state.getValue(PropertyHolder.FACING_HOR);
+        top = state.getValue(PropertyHolder.TOP);
     }
 
     @Override
     protected void transformQuad(Map<Direction, List<BakedQuad>> quadMap, BakedQuad quad)
     {
-        if (quad.getFace() == dir || quad.getFace() == dir.getOpposite())
+        if (quad.getDirection() == dir || quad.getDirection() == dir.getOpposite())
         {
             BakedQuad sideQuad = ModelUtils.duplicateQuad(quad);
-            if (BakedQuadTransformer.createVerticalSideQuad(sideQuad, dir.rotateY(), .5F) &&
+            if (BakedQuadTransformer.createVerticalSideQuad(sideQuad, dir.getClockWise(), .5F) &&
                 BakedQuadTransformer.createHorizontalSideQuad(sideQuad, top, .5F)
             )
             {
-                if (quad.getFace() == dir)
+                if (quad.getDirection() == dir)
                 {
-                    quadMap.get(quad.getFace()).add(sideQuad);
+                    quadMap.get(quad.getDirection()).add(sideQuad);
                 }
                 else
                 {
@@ -44,16 +44,16 @@ public class FramedSlabCornerModel extends FramedBlockModel
                 }
             }
         }
-        else if (quad.getFace() == dir.rotateY() || quad.getFace() == dir.rotateYCCW())
+        else if (quad.getDirection() == dir.getClockWise() || quad.getDirection() == dir.getCounterClockWise())
         {
             BakedQuad sideQuad = ModelUtils.duplicateQuad(quad);
             if (BakedQuadTransformer.createVerticalSideQuad(sideQuad, dir.getOpposite(), .5F) &&
                 BakedQuadTransformer.createHorizontalSideQuad(sideQuad, top, .5F)
             )
             {
-                if (quad.getFace() == dir.rotateYCCW())
+                if (quad.getDirection() == dir.getCounterClockWise())
                 {
-                    quadMap.get(quad.getFace()).add(sideQuad);
+                    quadMap.get(quad.getDirection()).add(sideQuad);
                 }
                 else
                 {
@@ -66,14 +66,14 @@ public class FramedSlabCornerModel extends FramedBlockModel
         {
             BakedQuad topBotQuad = ModelUtils.duplicateQuad(quad);
             if (BakedQuadTransformer.createTopBottomQuad(topBotQuad, dir.getOpposite(), .5F) &&
-                BakedQuadTransformer.createTopBottomQuad(topBotQuad, dir.rotateY(), .5F)
+                BakedQuadTransformer.createTopBottomQuad(topBotQuad, dir.getClockWise(), .5F)
             )
             {
-                if ((top && quad.getFace() == Direction.DOWN) || (!top && quad.getFace() == Direction.UP))
+                if ((top && quad.getDirection() == Direction.DOWN) || (!top && quad.getDirection() == Direction.UP))
                 {
                     BakedQuadTransformer.setQuadPosInFacingDir(topBotQuad, .5F);
                 }
-                quadMap.get(quad.getFace()).add(topBotQuad);
+                quadMap.get(quad.getDirection()).add(topBotQuad);
             }
         }
     }

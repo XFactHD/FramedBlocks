@@ -55,7 +55,7 @@ public class FramedLanguageProvider extends LanguageProvider
 
         add(FBContent.itemFramedHammer.get(), "Framed Hammer");
 
-        add(FramedBlocks.FRAMED_GROUP.getGroupName().getString(), "FramedBlocks");
+        add(FramedBlocks.FRAMED_GROUP.getDisplayName().getString(), "FramedBlocks");
         add(FramedTileEntity.MSG_BLACKLISTED.getKey(), "This block is blacklisted!");
         add(FramedTileEntity.MSG_TILE_ENTITY.getKey(), "Blocks with TileEntities cannot be inserted into framed blocks!");
         add(FramedChestTileEntity.TITLE.getString(), "Framed Chest");

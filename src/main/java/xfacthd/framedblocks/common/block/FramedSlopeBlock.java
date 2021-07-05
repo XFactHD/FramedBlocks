@@ -17,7 +17,7 @@ public class FramedSlopeBlock extends FramedBlock
 {
     public static final CtmPredicate CTM_PREDICATE = (state, dir) ->
     {
-        SlopeType type = state.get(PropertyHolder.SLOPE_TYPE);
+        SlopeType type = state.getValue(PropertyHolder.SLOPE_TYPE);
         if (dir == Direction.UP && type == SlopeType.TOP)
         {
             return true;
@@ -28,16 +28,16 @@ public class FramedSlopeBlock extends FramedBlock
         }
         else if (type == SlopeType.HORIZONTAL)
         {
-            Direction facing = state.get(PropertyHolder.FACING_HOR);
-            return dir == facing || dir == facing.rotateYCCW();
+            Direction facing = state.getValue(PropertyHolder.FACING_HOR);
+            return dir == facing || dir == facing.getCounterClockWise();
         }
-        return state.get(PropertyHolder.FACING_HOR) == dir;
+        return state.getValue(PropertyHolder.FACING_HOR) == dir;
     };
 
     public FramedSlopeBlock() { super(BlockType.FRAMED_SLOPE); }
 
     @Override
-    protected void fillStateContainer(StateContainer.Builder<Block, BlockState> builder)
+    protected void createBlockStateDefinition(StateContainer.Builder<Block, BlockState> builder)
     {
         builder.add(PropertyHolder.FACING_HOR, PropertyHolder.SLOPE_TYPE, BlockStateProperties.WATERLOGGED);
     }
@@ -45,39 +45,39 @@ public class FramedSlopeBlock extends FramedBlock
     @Override
     public BlockState getStateForPlacement(BlockItemUseContext context)
     {
-        BlockState state = withSlopeType(getDefaultState(), context.getFace(), context.getPlacementHorizontalFacing(), context.getHitVec());
-        return withWater(state, context.getWorld(), context.getPos());
+        BlockState state = withSlopeType(defaultBlockState(), context.getClickedFace(), context.getHorizontalDirection(), context.getClickLocation());
+        return withWater(state, context.getLevel(), context.getClickedPos());
     }
 
     public static ImmutableMap<BlockState, VoxelShape> generateShapes(ImmutableList<BlockState> states)
     {
         VoxelShape shapeBottom = VoxelShapes.or(
-                makeCuboidShape(0,  0, 0, 16,  4, 16),
-                makeCuboidShape(0,  4, 0, 16,  8, 12),
-                makeCuboidShape(0,  8, 0, 16, 12,  8),
-                makeCuboidShape(0, 12, 0, 16, 16,  4)
-        ).simplify();
+                box(0,  0, 0, 16,  4, 16),
+                box(0,  4, 0, 16,  8, 12),
+                box(0,  8, 0, 16, 12,  8),
+                box(0, 12, 0, 16, 16,  4)
+        ).optimize();
 
         VoxelShape shapeTop = VoxelShapes.or(
-                makeCuboidShape(0,  0, 0, 16,  4,  4),
-                makeCuboidShape(0,  4, 0, 16,  8,  8),
-                makeCuboidShape(0,  8, 0, 16, 12, 12),
-                makeCuboidShape(0, 12, 0, 16, 16, 16)
-        ).simplify();
+                box(0,  0, 0, 16,  4,  4),
+                box(0,  4, 0, 16,  8,  8),
+                box(0,  8, 0, 16, 12, 12),
+                box(0, 12, 0, 16, 16, 16)
+        ).optimize();
 
         VoxelShape shapeHorizontal = VoxelShapes.or(
-                makeCuboidShape( 0, 0, 0,  4, 16, 16),
-                makeCuboidShape( 4, 0, 0,  8, 16, 12),
-                makeCuboidShape( 8, 0, 0, 12, 16,  8),
-                makeCuboidShape(12, 0, 0, 16, 16,  4)
-        ).simplify();
+                box( 0, 0, 0,  4, 16, 16),
+                box( 4, 0, 0,  8, 16, 12),
+                box( 8, 0, 0, 12, 16,  8),
+                box(12, 0, 0, 16, 16,  4)
+        ).optimize();
 
         ImmutableMap.Builder<BlockState, VoxelShape> builder = ImmutableMap.builder();
 
         for (BlockState state : states)
         {
-            SlopeType type = state.get(PropertyHolder.SLOPE_TYPE);
-            Direction dir = state.get(PropertyHolder.FACING_HOR);
+            SlopeType type = state.getValue(PropertyHolder.SLOPE_TYPE);
+            Direction dir = state.getValue(PropertyHolder.FACING_HOR);
 
             if (type == SlopeType.BOTTOM)
             {

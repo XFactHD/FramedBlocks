@@ -21,14 +21,14 @@ public class FramedSlopeModel extends FramedBlockModel
     public FramedSlopeModel(BlockState state, IBakedModel baseModel)
     {
         super(state, baseModel);
-        dir = state.get(PropertyHolder.FACING_HOR);
-        type = state.get(PropertyHolder.SLOPE_TYPE);
+        dir = state.getValue(PropertyHolder.FACING_HOR);
+        type = state.getValue(PropertyHolder.SLOPE_TYPE);
     }
 
     public FramedSlopeModel(IBakedModel baseModel)
     {
         this(
-                FBContent.blockFramedSlope.get().getDefaultState().with(PropertyHolder.FACING_HOR, Direction.SOUTH),
+                FBContent.blockFramedSlope.get().defaultBlockState().setValue(PropertyHolder.FACING_HOR, Direction.SOUTH),
                 baseModel
         );
     }
@@ -38,35 +38,35 @@ public class FramedSlopeModel extends FramedBlockModel
     {
         if (type == SlopeType.HORIZONTAL)
         {
-            if (quad.getFace() == dir.getOpposite())
+            if (quad.getDirection() == dir.getOpposite())
             {
                 BakedQuad slopeQuad = ModelUtils.duplicateQuad(quad);
                 BakedQuadTransformer.createSideSlopeQuad(slopeQuad, true);
                 quadMap.get(null).add(slopeQuad);
             }
-            else if (quad.getFace() == Direction.UP || quad.getFace() == Direction.DOWN)
+            else if (quad.getDirection() == Direction.UP || quad.getDirection() == Direction.DOWN)
             {
                 BakedQuad triQuad = ModelUtils.duplicateQuad(quad);
                 if (BakedQuadTransformer.createTopBottomTriangleQuad(triQuad, dir))
                 {
-                    quadMap.get(quad.getFace()).add(triQuad);
+                    quadMap.get(quad.getDirection()).add(triQuad);
                 }
             }
         }
         else
         {
-            if (quad.getFace() == dir.getOpposite())
+            if (quad.getDirection() == dir.getOpposite())
             {
                 BakedQuad slopeQuad = ModelUtils.duplicateQuad(quad);
                 BakedQuadTransformer.createTopBottomSlopeQuad(slopeQuad, type == SlopeType.BOTTOM);
                 quadMap.get(null).add(slopeQuad);
             }
-            else if (quad.getFace() == dir.rotateY() || quad.getFace() == dir.rotateYCCW())
+            else if (quad.getDirection() == dir.getClockWise() || quad.getDirection() == dir.getCounterClockWise())
             {
                 BakedQuad triQuad = ModelUtils.duplicateQuad(quad);
-                if (BakedQuadTransformer.createSideTriangleQuad(triQuad, quad.getFace() == dir.rotateY(), type == SlopeType.TOP))
+                if (BakedQuadTransformer.createSideTriangleQuad(triQuad, quad.getDirection() == dir.getClockWise(), type == SlopeType.TOP))
                 {
-                    quadMap.get(quad.getFace()).add(triQuad);
+                    quadMap.get(quad.getDirection()).add(triQuad);
                 }
             }
         }

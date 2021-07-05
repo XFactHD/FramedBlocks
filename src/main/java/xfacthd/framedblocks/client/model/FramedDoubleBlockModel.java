@@ -80,7 +80,7 @@ public abstract class FramedDoubleBlockModel extends BakedModelProxy
         {
             return models.getB().getParticleTexture(innerData);
         }
-        return baseModel.getParticleTexture();
+        return baseModel.getParticleIcon();
     }
 
     @Nonnull
@@ -101,10 +101,10 @@ public abstract class FramedDoubleBlockModel extends BakedModelProxy
 
     private Tuple<IBakedModel, IBakedModel> getModels()
     {
-        BlockRendererDispatcher dispatcher = Minecraft.getInstance().getBlockRendererDispatcher();
+        BlockRendererDispatcher dispatcher = Minecraft.getInstance().getBlockRenderer();
         return new Tuple<>(
-                dispatcher.getModelForState(dummyStates.getA()),
-                dispatcher.getModelForState(dummyStates.getB())
+                dispatcher.getBlockModel(dummyStates.getA()),
+                dispatcher.getBlockModel(dummyStates.getB())
         );
     }
 }

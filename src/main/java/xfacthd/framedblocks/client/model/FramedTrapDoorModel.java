@@ -21,9 +21,9 @@ public class FramedTrapDoorModel extends FramedBlockModel
     public FramedTrapDoorModel(BlockState state, IBakedModel baseModel)
     {
         super(state, baseModel);
-        dir = state.get(BlockStateProperties.HORIZONTAL_FACING);
-        top = state.get(BlockStateProperties.HALF) == Half.TOP;
-        open = state.get(BlockStateProperties.OPEN);
+        dir = state.getValue(BlockStateProperties.HORIZONTAL_FACING);
+        top = state.getValue(BlockStateProperties.HALF) == Half.TOP;
+        open = state.getValue(BlockStateProperties.OPEN);
     }
 
     @Override
@@ -31,18 +31,18 @@ public class FramedTrapDoorModel extends FramedBlockModel
     {
         if (open)
         {
-            if (quad.getFace() == dir)
+            if (quad.getDirection() == dir)
             {
                 BakedQuad frontQuad = ModelUtils.duplicateQuad(quad);
                 BakedQuadTransformer.setQuadPosInFacingDir(frontQuad, 3F/16F);
                 quadMap.get(null).add(frontQuad);
             }
-            else if (quad.getFace().getAxis() == Direction.Axis.Y)
+            else if (quad.getDirection().getAxis() == Direction.Axis.Y)
             {
                 BakedQuad topBotQuad = ModelUtils.duplicateQuad(quad);
                 if (BakedQuadTransformer.createTopBottomQuad(topBotQuad, dir, 3F/16F))
                 {
-                    quadMap.get(quad.getFace()).add(topBotQuad);
+                    quadMap.get(quad.getDirection()).add(topBotQuad);
                 }
             }
             else
@@ -51,24 +51,24 @@ public class FramedTrapDoorModel extends FramedBlockModel
                 boolean facePositive = dir.getAxisDirection() == Direction.AxisDirection.POSITIVE;
                 if (BakedQuadTransformer.createVerticalSideQuad(sideQuad, !facePositive, 3F/16F))
                 {
-                    quadMap.get(quad.getFace()).add(sideQuad);
+                    quadMap.get(quad.getDirection()).add(sideQuad);
                 }
             }
         }
         else
         {
-            if ((top && quad.getFace() == Direction.DOWN) || (!top && quad.getFace() == Direction.UP))
+            if ((top && quad.getDirection() == Direction.DOWN) || (!top && quad.getDirection() == Direction.UP))
             {
                 BakedQuad topBotQuad = ModelUtils.duplicateQuad(quad);
                 BakedQuadTransformer.setQuadPosInFacingDir(topBotQuad, 3F/16F);
                 quadMap.get(null).add(topBotQuad);
             }
-            else if (quad.getFace().getAxis() != Direction.Axis.Y)
+            else if (quad.getDirection().getAxis() != Direction.Axis.Y)
             {
                 BakedQuad sideQuad = ModelUtils.duplicateQuad(quad);
                 if (BakedQuadTransformer.createHorizontalSideQuad(sideQuad, top, 3F/16F))
                 {
-                    quadMap.get(quad.getFace()).add(sideQuad);
+                    quadMap.get(quad.getDirection()).add(sideQuad);
                 }
             }
         }

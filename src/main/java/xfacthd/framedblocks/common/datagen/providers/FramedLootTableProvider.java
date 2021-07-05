@@ -55,18 +55,18 @@ public class FramedLootTableProvider extends LootTableProvider
                             block != FBContent.blockFramedDoublePanel.get() &&
                             block != FBContent.blockFramedGhostBlock.get()
                     )
-                    .forEach(this::registerDropSelfLootTable);
+                    .forEach(this::dropSelf);
 
-            registerLootTable(FBContent.blockFramedDoor.get(), block -> droppingWhen(block, DoorBlock.HALF, DoubleBlockHalf.LOWER));
-            registerLootTable(FBContent.blockFramedDoubleSlab.get(), block -> droppingTwo(block, FBContent.blockFramedSlab.get()));
-            registerLootTable(FBContent.blockFramedDoublePanel.get(), block -> droppingTwo(block, FBContent.blockFramedPanel.get()));
+            add(FBContent.blockFramedDoor.get(), block -> createSinglePropConditionTable(block, DoorBlock.HALF, DoubleBlockHalf.LOWER));
+            add(FBContent.blockFramedDoubleSlab.get(), block -> droppingTwo(block, FBContent.blockFramedSlab.get()));
+            add(FBContent.blockFramedDoublePanel.get(), block -> droppingTwo(block, FBContent.blockFramedPanel.get()));
         }
 
         protected static LootTable.Builder droppingTwo(Block block, Block drop) {
-            return LootTable.builder().addLootPool(
-                    LootPool.builder().rolls(ConstantRange.of(1)).addEntry(
-                            withExplosionDecay(block, ItemLootEntry.builder(drop).acceptFunction(
-                                    SetCount.builder(ConstantRange.of(2))
+            return LootTable.lootTable().withPool(
+                    LootPool.lootPool().setRolls(ConstantRange.exactly(1)).add(
+                            applyExplosionDecay(block, ItemLootEntry.lootTableItem(drop).apply(
+                                    SetCount.setCount(ConstantRange.exactly(2))
                                     )
                             )
                     )

@@ -16,68 +16,68 @@ public class FramedDoubleThreewayCornerTileEntity extends FramedDoubleTileEntity
     @Override
     protected boolean hitSecondary(BlockRayTraceResult hit)
     {
-        Direction facing = getBlockState().get(PropertyHolder.FACING_HOR);
-        boolean top = getBlockState().get(PropertyHolder.TOP);
-        Direction side = hit.getFace();
+        Direction facing = getBlockState().getValue(PropertyHolder.FACING_HOR);
+        boolean top = getBlockState().getValue(PropertyHolder.TOP);
+        Direction side = hit.getDirection();
 
-        Vector3d vec = Utils.fraction(hit.getHitVec());
+        Vector3d vec = Utils.fraction(hit.getLocation());
 
         if (top)
         {
-            if (side == facing || side == Direction.UP || side == facing.rotateYCCW()) { return false; }
+            if (side == facing || side == Direction.UP || side == facing.getCounterClockWise()) { return false; }
 
-            if (side == facing.rotateY())
+            if (side == facing.getClockWise())
             {
-                double hor = facing.getAxis() == Direction.Axis.X ? vec.getX() : vec.getZ();
+                double hor = facing.getAxis() == Direction.Axis.X ? vec.x() : vec.z();
                 if (facing.getAxisDirection() == Direction.AxisDirection.NEGATIVE)
                 {
                     hor = 1D - hor;
                 }
-                return vec.getY() <= (1D - hor);
+                return vec.y() <= (1D - hor);
             }
             else if (side == facing.getOpposite())
             {
-                Direction dir = facing.rotateYCCW();
-                double hor = dir.getAxis() == Direction.Axis.X ? vec.getX() : vec.getZ();
+                Direction dir = facing.getCounterClockWise();
+                double hor = dir.getAxis() == Direction.Axis.X ? vec.x() : vec.z();
                 if (dir.getAxisDirection() == Direction.AxisDirection.NEGATIVE)
                 {
                     hor = 1D - hor;
                 }
-                return vec.getY() <= (1D - hor);
+                return vec.y() <= (1D - hor);
             }
             else if (side == Direction.DOWN)
             {
-                boolean secondary = facing.getAxis() == Direction.Axis.X ? vec.getX() >= vec.getZ() : vec.getZ() >= (1D - vec.getX());
+                boolean secondary = facing.getAxis() == Direction.Axis.X ? vec.x() >= vec.z() : vec.z() >= (1D - vec.x());
                 if (facing.getAxisDirection() == Direction.AxisDirection.POSITIVE) { secondary = !secondary; }
                 return secondary;
             }
         }
         else
         {
-            if (side == facing || side == Direction.DOWN || side == facing.rotateYCCW()) { return false; }
+            if (side == facing || side == Direction.DOWN || side == facing.getCounterClockWise()) { return false; }
 
-            if (side == facing.rotateY())
+            if (side == facing.getClockWise())
             {
-                double hor = facing.getAxis() == Direction.Axis.X ? vec.getX() : vec.getZ();
+                double hor = facing.getAxis() == Direction.Axis.X ? vec.x() : vec.z();
                 if (facing.getAxisDirection() == Direction.AxisDirection.NEGATIVE)
                 {
                     hor = 1D - hor;
                 }
-                return vec.getY() >= hor;
+                return vec.y() >= hor;
             }
             else if (side == facing.getOpposite())
             {
-                Direction dir = facing.rotateYCCW();
-                double hor = dir.getAxis() == Direction.Axis.X ? vec.getX() : vec.getZ();
+                Direction dir = facing.getCounterClockWise();
+                double hor = dir.getAxis() == Direction.Axis.X ? vec.x() : vec.z();
                 if (dir.getAxisDirection() == Direction.AxisDirection.NEGATIVE)
                 {
                     hor = 1D - hor;
                 }
-                return vec.getY() >= hor;
+                return vec.y() >= hor;
             }
             else if (side == Direction.UP)
             {
-                boolean secondary = facing.getAxis() == Direction.Axis.X ? vec.getX() >= vec.getZ() : vec.getZ() >= (1D - vec.getX());
+                boolean secondary = facing.getAxis() == Direction.Axis.X ? vec.x() >= vec.z() : vec.z() >= (1D - vec.x());
                 if (facing.getAxisDirection() == Direction.AxisDirection.POSITIVE) { secondary = !secondary; }
                 return secondary;
             }
@@ -88,21 +88,21 @@ public class FramedDoubleThreewayCornerTileEntity extends FramedDoubleTileEntity
     @Override
     public BlockState getCamoState(Direction side)
     {
-        Direction dir = getBlockState().get(PropertyHolder.FACING_HOR);
-        boolean top = getBlockState().get(PropertyHolder.TOP);
+        Direction dir = getBlockState().getValue(PropertyHolder.FACING_HOR);
+        boolean top = getBlockState().getValue(PropertyHolder.TOP);
 
         if (top)
         {
-            if (side == dir || side == Direction.UP || side == dir.rotateYCCW()) { return getCamoState(); }
-            if (side == dir.getOpposite() || side == Direction.DOWN || side == dir.rotateY()) { return getCamoStateTwo(); }
+            if (side == dir || side == Direction.UP || side == dir.getCounterClockWise()) { return getCamoState(); }
+            if (side == dir.getOpposite() || side == Direction.DOWN || side == dir.getClockWise()) { return getCamoStateTwo(); }
         }
         else
         {
-            if (side == dir || side == Direction.DOWN || side == dir.rotateYCCW()) { return getCamoState(); }
-            if (side == dir.getOpposite() || side == Direction.UP || side == dir.rotateY()) { return getCamoStateTwo(); }
+            if (side == dir || side == Direction.DOWN || side == dir.getCounterClockWise()) { return getCamoState(); }
+            if (side == dir.getOpposite() || side == Direction.UP || side == dir.getClockWise()) { return getCamoStateTwo(); }
         }
 
-        return Blocks.AIR.getDefaultState();
+        return Blocks.AIR.defaultBlockState();
     }
 
     @Override

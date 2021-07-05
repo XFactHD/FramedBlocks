@@ -25,16 +25,16 @@ public class FramedDoorBlock extends DoorBlock implements IFramedBlock
 {
     public static final CtmPredicate CTM_PREDICATE = (state, dir) ->
     {
-        Direction facing = state.get(BlockStateProperties.HORIZONTAL_FACING);
-        if (state.get(BlockStateProperties.OPEN))
+        Direction facing = state.getValue(BlockStateProperties.HORIZONTAL_FACING);
+        if (state.getValue(BlockStateProperties.OPEN))
         {
-            if (state.get(BlockStateProperties.DOOR_HINGE) == DoorHingeSide.LEFT)
+            if (state.getValue(BlockStateProperties.DOOR_HINGE) == DoorHingeSide.LEFT)
             {
-                return facing.rotateYCCW() == dir;
+                return facing.getCounterClockWise() == dir;
             }
             else
             {
-                return facing.rotateY() == dir;
+                return facing.getClockWise() == dir;
             }
         }
         else
@@ -49,12 +49,12 @@ public class FramedDoorBlock extends DoorBlock implements IFramedBlock
     }
 
     @Override
-    public final ActionResultType onBlockActivated(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockRayTraceResult hit)
+    public final ActionResultType use(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockRayTraceResult hit)
     {
-        ActionResultType result = handleBlockActivated(world, pos, player, hand, hit);
-        if (result.isSuccessOrConsume()) { return result; }
+        ActionResultType result = handleUse(world, pos, player, hand, hit);
+        if (result.consumesAction()) { return result; }
 
-        return super.onBlockActivated(state, world, pos, player, hand, hit);
+        return super.use(state, world, pos, player, hand, hit);
     }
 
     @Override

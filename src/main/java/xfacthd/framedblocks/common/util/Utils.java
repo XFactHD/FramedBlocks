@@ -11,8 +11,8 @@ import xfacthd.framedblocks.FramedBlocks;
 
 public class Utils
 {
-    public static final ITag.INamedTag<Block> FRAMEABLE = BlockTags.makeWrapperTag(FramedBlocks.MODID + ":frameable");
-    public static final ITag.INamedTag<Block> BLACKLIST = BlockTags.makeWrapperTag(FramedBlocks.MODID + ":blacklisted");
+    public static final ITag.INamedTag<Block> FRAMEABLE = BlockTags.bind(FramedBlocks.MODID + ":frameable");
+    public static final ITag.INamedTag<Block> BLACKLIST = BlockTags.bind(FramedBlocks.MODID + ":blacklisted");
 
     public static VoxelShape rotateShape(Direction from, Direction to, VoxelShape shape)
     {
@@ -21,12 +21,12 @@ public class Utils
 
         VoxelShape[] buffer = new VoxelShape[] { shape, VoxelShapes.empty() };
 
-        int times = (to.getHorizontalIndex() - from.getHorizontalIndex() + 4) % 4;
+        int times = (to.get2DDataValue() - from.get2DDataValue() + 4) % 4;
         for (int i = 0; i < times; i++)
         {
-            buffer[0].forEachBox((minX, minY, minZ, maxX, maxY, maxZ) -> buffer[1] = VoxelShapes.or(
+            buffer[0].forAllBoxes((minX, minY, minZ, maxX, maxY, maxZ) -> buffer[1] = VoxelShapes.or(
                     buffer[1],
-                    VoxelShapes.create(1 - maxZ, minY, minX, 1 - minZ, maxY, maxX)
+                    VoxelShapes.box(1 - maxZ, minY, minX, 1 - minZ, maxY, maxX)
             ));
             buffer[0] = buffer[1];
             buffer[1] = VoxelShapes.empty();
@@ -38,9 +38,9 @@ public class Utils
     public static Vector3d fraction(Vector3d vec)
     {
         return new Vector3d(
-                vec.getX() - Math.floor(vec.getX()),
-                vec.getY() - Math.floor(vec.getY()),
-                vec.getZ() - Math.floor(vec.getZ())
+                vec.x() - Math.floor(vec.x()),
+                vec.y() - Math.floor(vec.y()),
+                vec.z() - Math.floor(vec.z())
         );
     }
 }

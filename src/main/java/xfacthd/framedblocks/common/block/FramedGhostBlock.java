@@ -5,13 +5,15 @@ import net.minecraft.block.BlockState;
 import net.minecraft.block.material.Material;
 import net.minecraft.item.BlockItemUseContext;
 
+import net.minecraft.block.AbstractBlock.Properties;
+
 public class FramedGhostBlock extends Block
 {
     public FramedGhostBlock()
     {
-        super(Properties.create(Material.WOOD)
-                .notSolid()
-                .doesNotBlockMovement()
+        super(Properties.of(Material.WOOD)
+                .noOcclusion()
+                .noCollission()
                 .noDrops()
         );
     }

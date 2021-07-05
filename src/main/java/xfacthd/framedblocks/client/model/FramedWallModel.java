@@ -35,11 +35,11 @@ public class FramedWallModel extends FramedBlockModel
     public FramedWallModel(BlockState state, IBakedModel baseModel)
     {
         super(state, baseModel);
-        center = state.get(BlockStateProperties.UP);
-        north = state.get(BlockStateProperties.WALL_HEIGHT_NORTH);
-        east =  state.get(BlockStateProperties.WALL_HEIGHT_EAST);
-        south = state.get(BlockStateProperties.WALL_HEIGHT_SOUTH);
-        west =  state.get(BlockStateProperties.WALL_HEIGHT_WEST);
+        center = state.getValue(BlockStateProperties.UP);
+        north = state.getValue(BlockStateProperties.NORTH_WALL);
+        east =  state.getValue(BlockStateProperties.EAST_WALL);
+        south = state.getValue(BlockStateProperties.SOUTH_WALL);
+        west =  state.getValue(BlockStateProperties.WEST_WALL);
     }
 
     @Override
@@ -75,15 +75,15 @@ public class FramedWallModel extends FramedBlockModel
     {
         if (height != WallHeight.NONE)
         {
-            if (quad.getFace().getAxis() == Direction.Axis.Y)
+            if (quad.getDirection().getAxis() == Direction.Axis.Y)
             {
                 Vector4f rect = rects[dir.ordinal() - 2 + (center ? 4 : 0)];
                 BakedQuad topBotQuad = ModelUtils.duplicateQuad(quad);
-                if (BakedQuadTransformer.createTopBottomQuad(topBotQuad, rect.getX(), rect.getY(), rect.getZ(), rect.getW()))
+                if (BakedQuadTransformer.createTopBottomQuad(topBotQuad, rect.x(), rect.y(), rect.z(), rect.w()))
                 {
-                    if (height == WallHeight.TALL || quad.getFace() == Direction.DOWN)
+                    if (height == WallHeight.TALL || quad.getDirection() == Direction.DOWN)
                     {
-                        quadMap.get(quad.getFace()).add(topBotQuad);
+                        quadMap.get(quad.getDirection()).add(topBotQuad);
                     }
                     else
                     {
@@ -92,7 +92,7 @@ public class FramedWallModel extends FramedBlockModel
                     }
                 }
             }
-            else if (quad.getFace() == dir.rotateY() || quad.getFace() == dir.rotateYCCW())
+            else if (quad.getDirection() == dir.getClockWise() || quad.getDirection() == dir.getCounterClockWise())
             {
                 BakedQuad sideQuad = ModelUtils.duplicateQuad(quad);
                 if ((height == WallHeight.TALL || BakedQuadTransformer.createHorizontalSideQuad(sideQuad, false, 14F/16F)) &&
@@ -108,7 +108,7 @@ public class FramedWallModel extends FramedBlockModel
 
     private void buildWallEndCap(Map<Direction, List<BakedQuad>> quadMap, BakedQuad quad, Direction dir, WallHeight height)
     {
-        if (quad.getFace() == dir && height != WallHeight.NONE)
+        if (quad.getDirection() == dir && height != WallHeight.NONE)
         {
             BakedQuad sideQuad = ModelUtils.duplicateQuad(quad);
             if (BakedQuadTransformer.createSideQuad(sideQuad, 5F / 16F, 0F, 11F / 16F, height == WallHeight.TALL ? 1F : 14F / 16F))
@@ -122,12 +122,12 @@ public class FramedWallModel extends FramedBlockModel
     {
         if (center)
         {
-            if (quad.getFace().getAxis() == Direction.Axis.Y)
+            if (quad.getDirection().getAxis() == Direction.Axis.Y)
             {
                 BakedQuad pillarQuad = ModelUtils.duplicateQuad(quad);
                 if (BakedQuadTransformer.createTopBottomQuad(pillarQuad, 4F/16F, 4F/16F, 12F/16F, 12F/16F))
                 {
-                    quadMap.get(quad.getFace()).add(pillarQuad);
+                    quadMap.get(quad.getDirection()).add(pillarQuad);
                 }
             }
             else
@@ -144,19 +144,19 @@ public class FramedWallModel extends FramedBlockModel
         {
             boolean tall = north == WallHeight.TALL || east == WallHeight.TALL || south == WallHeight.TALL || west == WallHeight.TALL;
 
-            if (quad.getFace().getAxis() == Direction.Axis.Y)
+            if (quad.getDirection().getAxis() == Direction.Axis.Y)
             {
                 BakedQuad pillarQuad = ModelUtils.duplicateQuad(quad);
                 if (BakedQuadTransformer.createTopBottomQuad(pillarQuad, 5F/16F, 5F/16F, 11F/16F, 11F/16F))
                 {
                     BakedQuadTransformer.setQuadPosInFacingDir(pillarQuad, tall ? 1F : 14F/16F);
-                    quadMap.get(tall ? quad.getFace() : null).add(pillarQuad);
+                    quadMap.get(tall ? quad.getDirection() : null).add(pillarQuad);
                 }
             }
-            else if (quad.getFace() == Direction.NORTH) { buildSmallCenterSide(quadMap.get(null), quad, north, tall); }
-            else if (quad.getFace() == Direction.EAST ) { buildSmallCenterSide(quadMap.get(null), quad, east , tall); }
-            else if (quad.getFace() == Direction.SOUTH) { buildSmallCenterSide(quadMap.get(null), quad, south, tall); }
-            else if (quad.getFace() == Direction.WEST ) { buildSmallCenterSide(quadMap.get(null), quad, west , tall); }
+            else if (quad.getDirection() == Direction.NORTH) { buildSmallCenterSide(quadMap.get(null), quad, north, tall); }
+            else if (quad.getDirection() == Direction.EAST ) { buildSmallCenterSide(quadMap.get(null), quad, east , tall); }
+            else if (quad.getDirection() == Direction.SOUTH) { buildSmallCenterSide(quadMap.get(null), quad, south, tall); }
+            else if (quad.getDirection() == Direction.WEST ) { buildSmallCenterSide(quadMap.get(null), quad, west , tall); }
         }
     }
 

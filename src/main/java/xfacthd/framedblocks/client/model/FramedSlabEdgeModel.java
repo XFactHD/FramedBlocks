@@ -19,21 +19,21 @@ public class FramedSlabEdgeModel extends FramedBlockModel
     public FramedSlabEdgeModel(BlockState state, IBakedModel baseModel)
     {
         super(state, baseModel);
-        dir = state.get(PropertyHolder.FACING_HOR);
-        top = state.get(PropertyHolder.TOP);
+        dir = state.getValue(PropertyHolder.FACING_HOR);
+        top = state.getValue(PropertyHolder.TOP);
     }
 
     @Override
     protected void transformQuad(Map<Direction, List<BakedQuad>> quadMap, final BakedQuad quad)
     {
-        if (quad.getFace().getAxis() == Direction.Axis.Y)
+        if (quad.getDirection().getAxis() == Direction.Axis.Y)
         {
             BakedQuad topBotQuad = ModelUtils.duplicateQuad(quad);
             if (BakedQuadTransformer.createTopBottomQuad(topBotQuad, dir.getOpposite(), .5F))
             {
-                if ((quad.getFace() == Direction.UP) == top)
+                if ((quad.getDirection() == Direction.UP) == top)
                 {
-                    quadMap.get(quad.getFace()).add(topBotQuad);
+                    quadMap.get(quad.getDirection()).add(topBotQuad);
                 }
                 else
                 {
@@ -42,14 +42,14 @@ public class FramedSlabEdgeModel extends FramedBlockModel
                 }
             }
         }
-        else if (quad.getFace() == dir || quad.getFace() == dir.getOpposite())
+        else if (quad.getDirection() == dir || quad.getDirection() == dir.getOpposite())
         {
             BakedQuad sideQuad = ModelUtils.duplicateQuad(quad);
             if (BakedQuadTransformer.createHorizontalSideQuad(sideQuad, top, .5F))
             {
-                if (quad.getFace() == dir)
+                if (quad.getDirection() == dir)
                 {
-                    quadMap.get(quad.getFace()).add(sideQuad);
+                    quadMap.get(quad.getDirection()).add(sideQuad);
                 }
                 else
                 {
@@ -65,7 +65,7 @@ public class FramedSlabEdgeModel extends FramedBlockModel
                 BakedQuadTransformer.createVerticalSideQuad(sideQuad, dir.getOpposite(), .5F)
             )
             {
-                quadMap.get(quad.getFace()).add(sideQuad);
+                quadMap.get(quad.getDirection()).add(sideQuad);
             }
         }
     }

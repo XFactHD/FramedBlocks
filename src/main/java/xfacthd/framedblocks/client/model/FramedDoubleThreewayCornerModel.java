@@ -20,7 +20,7 @@ public class FramedDoubleThreewayCornerModel extends FramedDoubleBlockModel
     public FramedDoubleThreewayCornerModel(IBakedModel baseModel)
     {
         this(
-                FBContent.blockFramedDoubleThreewayCorner.get().getDefaultState().with(PropertyHolder.FACING_HOR, Direction.WEST),
+                FBContent.blockFramedDoubleThreewayCorner.get().defaultBlockState().setValue(PropertyHolder.FACING_HOR, Direction.WEST),
                 baseModel
         );
     }
@@ -28,15 +28,15 @@ public class FramedDoubleThreewayCornerModel extends FramedDoubleBlockModel
     @Override
     protected Tuple<BlockState, BlockState> getDummyStates()
     {
-        Direction facing = state.get(PropertyHolder.FACING_HOR);
-        boolean top = state.get(PropertyHolder.TOP);
+        Direction facing = state.getValue(PropertyHolder.FACING_HOR);
+        boolean top = state.getValue(PropertyHolder.TOP);
 
-        BlockState stateOne = FBContent.blockFramedInnerThreewayCorner.get().getDefaultState()
-                .with(PropertyHolder.TOP, top)
-                .with(PropertyHolder.FACING_HOR, facing.rotateYCCW()); //FIXME: remove rotation when fixing inner corner rotation
-        BlockState stateTwo = FBContent.blockFramedThreewayCorner.get().getDefaultState()
-                .with(PropertyHolder.TOP, !top)
-                .with(PropertyHolder.FACING_HOR, facing.getOpposite());
+        BlockState stateOne = FBContent.blockFramedInnerThreewayCorner.get().defaultBlockState()
+                .setValue(PropertyHolder.TOP, top)
+                .setValue(PropertyHolder.FACING_HOR, facing.getCounterClockWise()); //FIXME: remove rotation when fixing inner corner rotation
+        BlockState stateTwo = FBContent.blockFramedThreewayCorner.get().defaultBlockState()
+                .setValue(PropertyHolder.TOP, !top)
+                .setValue(PropertyHolder.FACING_HOR, facing.getOpposite());
 
         return new Tuple<>(stateOne, stateTwo);
     }

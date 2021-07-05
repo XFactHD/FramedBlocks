@@ -20,22 +20,22 @@ public class FramedLatticeModel extends FramedBlockModel
     public FramedLatticeModel(BlockState state, IBakedModel baseModel)
     {
         super(state, baseModel);
-        xAxis = state.get(PropertyHolder.X_AXIS);
-        yAxis = state.get(PropertyHolder.Y_AXIS);
-        zAxis = state.get(PropertyHolder.Z_AXIS);
+        xAxis = state.getValue(PropertyHolder.X_AXIS);
+        yAxis = state.getValue(PropertyHolder.Y_AXIS);
+        zAxis = state.getValue(PropertyHolder.Z_AXIS);
     }
 
     @Override
     protected void transformQuad(Map<Direction, List<BakedQuad>> quadMap, BakedQuad quad)
     {
-        if (quad.getFace() == Direction.UP || quad.getFace() == Direction.DOWN)
+        if (quad.getDirection() == Direction.UP || quad.getDirection() == Direction.DOWN)
         {
             BakedQuad topBotQuad = ModelUtils.duplicateQuad(quad);
             if (BakedQuadTransformer.createTopBottomQuad(topBotQuad, 6F/16F, 6F/16F, 10F/16F, 10F/16F))
             {
                 if (yAxis)
                 {
-                    quadMap.get(quad.getFace()).add(topBotQuad);
+                    quadMap.get(quad.getDirection()).add(topBotQuad);
                 }
                 else
                 {
@@ -78,16 +78,16 @@ public class FramedLatticeModel extends FramedBlockModel
                 }
             }
         }
-        else if (quad.getFace().getAxis() == Direction.Axis.X)
+        else if (quad.getDirection().getAxis() == Direction.Axis.X)
         {
             createHorizontalStrutSideQuads(quadMap, quad, xAxis, zAxis);
         }
-        else if (quad.getFace().getAxis() == Direction.Axis.Z)
+        else if (quad.getDirection().getAxis() == Direction.Axis.Z)
         {
             createHorizontalStrutSideQuads(quadMap, quad, zAxis, xAxis);
         }
 
-        if (quad.getFace().getAxis() != Direction.Axis.Y && yAxis)
+        if (quad.getDirection().getAxis() != Direction.Axis.Y && yAxis)
         {
             BakedQuad sideQuad = ModelUtils.duplicateQuad(quad);
             if (BakedQuadTransformer.createSideQuad(sideQuad, 6F/16F, 0, 10F/16F, 6F/16F))
@@ -112,7 +112,7 @@ public class FramedLatticeModel extends FramedBlockModel
         {
             if (frontAxis)
             {
-                quadMap.get(quad.getFace()).add(sideQuad);
+                quadMap.get(quad.getDirection()).add(sideQuad);
             }
             else
             {

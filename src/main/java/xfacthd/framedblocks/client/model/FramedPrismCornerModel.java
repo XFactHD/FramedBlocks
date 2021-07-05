@@ -21,15 +21,15 @@ public class FramedPrismCornerModel extends FramedBlockModel
     public FramedPrismCornerModel(BlockState state, IBakedModel baseModel)
     {
         super(state, baseModel);
-        dir = state.get(PropertyHolder.FACING_HOR);
-        top = state.get(PropertyHolder.TOP);
-        offset = state.get(PropertyHolder.OFFSET);
+        dir = state.getValue(PropertyHolder.FACING_HOR);
+        top = state.getValue(PropertyHolder.TOP);
+        offset = state.getValue(PropertyHolder.OFFSET);
     }
 
     public FramedPrismCornerModel(IBakedModel baseModel)
     {
         this(
-                FBContent.blockFramedPrismCorner.get().getDefaultState().with(PropertyHolder.FACING_HOR, Direction.SOUTH),
+                FBContent.blockFramedPrismCorner.get().defaultBlockState().setValue(PropertyHolder.FACING_HOR, Direction.SOUTH),
                 baseModel
         );
     }
@@ -37,23 +37,23 @@ public class FramedPrismCornerModel extends FramedBlockModel
     @Override
     protected void transformQuad(Map<Direction, List<BakedQuad>> quadMap, BakedQuad quad)
     {
-        if ((quad.getFace() == Direction.UP && top) || (quad.getFace() == Direction.DOWN && !top))
+        if ((quad.getDirection() == Direction.UP && top) || (quad.getDirection() == Direction.DOWN && !top))
         {
             BakedQuad triQuad = ModelUtils.duplicateQuad(quad);
             if (BakedQuadTransformer.createTopBottomTriangleQuad(triQuad, dir))
             {
-                quadMap.get(quad.getFace()).add(triQuad);
+                quadMap.get(quad.getDirection()).add(triQuad);
             }
         }
-        else if (quad.getFace() == dir || quad.getFace() == dir.rotateYCCW())
+        else if (quad.getDirection() == dir || quad.getDirection() == dir.getCounterClockWise())
         {
             BakedQuad triQuad = ModelUtils.duplicateQuad(quad);
-            if (BakedQuadTransformer.createSideTriangleQuad(triQuad, quad.getFace() == dir, top))
+            if (BakedQuadTransformer.createSideTriangleQuad(triQuad, quad.getDirection() == dir, top))
             {
-                quadMap.get(quad.getFace()).add(triQuad);
+                quadMap.get(quad.getDirection()).add(triQuad);
             }
         }
-        else if (quad.getFace() == dir.getOpposite())
+        else if (quad.getDirection() == dir.getOpposite())
         {
             BakedQuad prismQuad = ModelUtils.duplicateQuad(quad);
             if (!offset)
@@ -65,9 +65,9 @@ public class FramedPrismCornerModel extends FramedBlockModel
             }
             else
             {
-                if (BakedQuadTransformer.createVerticalSideQuad(prismQuad, dir.rotateY(), .5F))
+                if (BakedQuadTransformer.createVerticalSideQuad(prismQuad, dir.getClockWise(), .5F))
                 {
-                    BakedQuadTransformer.offsetQuadInDir(prismQuad, dir.rotateY(), .5F);
+                    BakedQuadTransformer.offsetQuadInDir(prismQuad, dir.getClockWise(), .5F);
                     if (BakedQuadTransformer.createPrismTriangleQuad(prismQuad, !top, true))
                     {
                         quadMap.get(null).add(prismQuad);
@@ -75,9 +75,9 @@ public class FramedPrismCornerModel extends FramedBlockModel
                 }
 
                 prismQuad = ModelUtils.duplicateQuad(quad);
-                if (BakedQuadTransformer.createVerticalSideQuad(prismQuad, dir.rotateYCCW(), .5F))
+                if (BakedQuadTransformer.createVerticalSideQuad(prismQuad, dir.getCounterClockWise(), .5F))
                 {
-                    BakedQuadTransformer.offsetQuadInDir(prismQuad, dir.rotateYCCW(), .5F);
+                    BakedQuadTransformer.offsetQuadInDir(prismQuad, dir.getCounterClockWise(), .5F);
                     if (BakedQuadTransformer.createPrismTriangleQuad(prismQuad, !top, true))
                     {
                         quadMap.get(null).add(prismQuad);

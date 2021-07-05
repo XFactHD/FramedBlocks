@@ -3,19 +3,18 @@ package xfacthd.framedblocks.common.block;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
 import net.minecraft.particles.ParticleTypes;
-import xfacthd.framedblocks.FramedBlocks;
 import xfacthd.framedblocks.common.data.BlockType;
 
 public class FramedSoulWallTorchBlock extends FramedWallTorchBlock
 {
     public FramedSoulWallTorchBlock()
     {
-        super(Properties.create(Material.MISCELLANEOUS)
-                .doesNotBlockMovement()
-                .hardnessAndResistance(0.5F)
+        super(Properties.of(Material.DECORATION)
+                .noCollission()
+                .strength(0.5F)
                 .sound(SoundType.WOOD)
-                .setLightLevel(state -> 14)
-                .notSolid(),
+                .lightLevel(state -> 14)
+                .noOcclusion(),
                 ParticleTypes.SOUL_FIRE_FLAME
         );
     }
