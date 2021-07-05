@@ -28,9 +28,9 @@ public class ClientEventHandler
         BlockRayTraceResult result = event.getTarget();
         //noinspection ConstantConditions
         BlockState state = Minecraft.getInstance().world.getBlockState(result.getPos());
-        if (!(state.getBlock() instanceof FramedBlock)) { return; }
+        if (!(state.getBlock() instanceof FramedBlock block)) { return; }
 
-        BlockType type = ((FramedBlock) state.getBlock()).getBlockType();
+        BlockType type = block.getBlockType();
         if (type.hasSpecialHitbox())
         {
             MatrixStack mstack = event.getMatrix();
@@ -47,27 +47,13 @@ public class ClientEventHandler
 
             switch (type)
             {
-                case FRAMED_SLOPE:
-                    drawSlopeBox(state, mstack, builder);
-                    break;
-                case FRAMED_CORNER_SLOPE:
-                    drawCornerSlopeBox(state, mstack, builder);
-                    break;
-                case FRAMED_INNER_CORNER_SLOPE:
-                    drawInnerCornerSlopeBox(state, mstack, builder);
-                    break;
-                case FRAMED_PRISM_CORNER:
-                    drawPrismCornerBox(state, mstack, builder);
-                    break;
-                case FRAMED_INNER_PRISM_CORNER:
-                    drawInnerPrismCornerBox(state, mstack, builder);
-                    break;
-                case FRAMED_THREEWAY_CORNER:
-                    drawThreewayCornerBox(state, mstack, builder);
-                    break;
-                case FRAMED_INNER_THREEWAY_CORNER:
-                    drawInnerThreewayCornerBox(state, mstack, builder);
-                    break;
+                case FRAMED_SLOPE -> drawSlopeBox(state, mstack, builder);
+                case FRAMED_CORNER_SLOPE -> drawCornerSlopeBox(state, mstack, builder);
+                case FRAMED_INNER_CORNER_SLOPE -> drawInnerCornerSlopeBox(state, mstack, builder);
+                case FRAMED_PRISM_CORNER -> drawPrismCornerBox(state, mstack, builder);
+                case FRAMED_INNER_PRISM_CORNER -> drawInnerPrismCornerBox(state, mstack, builder);
+                case FRAMED_THREEWAY_CORNER -> drawThreewayCornerBox(state, mstack, builder);
+                case FRAMED_INNER_THREEWAY_CORNER -> drawInnerThreewayCornerBox(state, mstack, builder);
             }
 
             mstack.pop();

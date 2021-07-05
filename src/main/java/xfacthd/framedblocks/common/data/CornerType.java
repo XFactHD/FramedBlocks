@@ -27,16 +27,15 @@ public enum CornerType implements IStringSerializable
 
     public CornerType verticalOpposite()
     {
-        switch (this)
+        return switch (this)
         {
-            case TOP: return BOTTOM;
-            case BOTTOM: return TOP;
-            case HORIZONTAL_BOTTOM_RIGHT: return HORIZONTAL_TOP_RIGHT;
-            case HORIZONTAL_BOTTOM_LEFT: return HORIZONTAL_TOP_LEFT;
-            case HORIZONTAL_TOP_RIGHT: return HORIZONTAL_BOTTOM_RIGHT;
-            case HORIZONTAL_TOP_LEFT: return HORIZONTAL_BOTTOM_LEFT;
-            default: throw new IllegalArgumentException("Invalid CornerType!");
-        }
+            case TOP -> BOTTOM;
+            case BOTTOM -> TOP;
+            case HORIZONTAL_BOTTOM_RIGHT -> HORIZONTAL_TOP_RIGHT;
+            case HORIZONTAL_BOTTOM_LEFT -> HORIZONTAL_TOP_LEFT;
+            case HORIZONTAL_TOP_RIGHT -> HORIZONTAL_BOTTOM_RIGHT;
+            case HORIZONTAL_TOP_LEFT -> HORIZONTAL_BOTTOM_LEFT;
+        };
     }
 
     @SuppressWarnings("DuplicatedCode") //Switch over enum cannot be deduplicated
@@ -46,25 +45,25 @@ public enum CornerType implements IStringSerializable
 
         switch (this)
         {
-            case HORIZONTAL_TOP_LEFT:
+            case HORIZONTAL_TOP_LEFT ->
             {
                 if (side == Direction.UP) { return adjType == HORIZONTAL_BOTTOM_LEFT; }
                 if (side == dir.rotateYCCW()) { return adjType == HORIZONTAL_TOP_RIGHT; }
                 return false;
             }
-            case HORIZONTAL_TOP_RIGHT:
+            case HORIZONTAL_TOP_RIGHT ->
             {
                 if (side == Direction.UP) { return adjType == HORIZONTAL_BOTTOM_RIGHT; }
                 if (side == dir.rotateY()) { return adjType == HORIZONTAL_TOP_LEFT; }
                 return false;
             }
-            case HORIZONTAL_BOTTOM_LEFT:
+            case HORIZONTAL_BOTTOM_LEFT ->
             {
                 if (side == Direction.DOWN) { return adjType == HORIZONTAL_TOP_LEFT; }
                 if (side == dir.rotateYCCW()) { return adjType == HORIZONTAL_BOTTOM_RIGHT; }
                 return false;
             }
-            case HORIZONTAL_BOTTOM_RIGHT:
+            case HORIZONTAL_BOTTOM_RIGHT ->
             {
                 if (side == Direction.DOWN) { return adjType == HORIZONTAL_TOP_RIGHT; }
                 if (side == dir.rotateY()) { return adjType == HORIZONTAL_BOTTOM_LEFT; }
@@ -81,25 +80,25 @@ public enum CornerType implements IStringSerializable
 
         switch (this)
         {
-            case HORIZONTAL_BOTTOM_RIGHT:
+            case HORIZONTAL_BOTTOM_RIGHT ->
             {
                 if (side == Direction.UP) { return adjType == HORIZONTAL_TOP_RIGHT; }
                 if (side == dir.rotateYCCW()) { return adjType == HORIZONTAL_BOTTOM_LEFT; }
                 return false;
             }
-            case HORIZONTAL_BOTTOM_LEFT:
+            case HORIZONTAL_BOTTOM_LEFT ->
             {
                 if (side == Direction.UP) { return adjType == HORIZONTAL_TOP_LEFT; }
                 if (side == dir.rotateY()) { return adjType == HORIZONTAL_BOTTOM_RIGHT; }
                 return false;
             }
-            case HORIZONTAL_TOP_RIGHT:
+            case HORIZONTAL_TOP_RIGHT ->
             {
                 if (side == Direction.DOWN) { return adjType == HORIZONTAL_BOTTOM_RIGHT; }
                 if (side == dir.rotateYCCW()) { return adjType == HORIZONTAL_TOP_LEFT; }
                 return false;
             }
-            case HORIZONTAL_TOP_LEFT:
+            case HORIZONTAL_TOP_LEFT ->
             {
                 if (side == Direction.DOWN) { return adjType == HORIZONTAL_BOTTOM_LEFT; }
                 if (side == dir.rotateY()) { return adjType == HORIZONTAL_TOP_RIGHT; }

@@ -14,9 +14,9 @@ public class InnerCornerSkipPredicate implements SideSkipPredicate
     public boolean test(IBlockReader world, BlockPos pos, BlockState state, BlockState adjState, Direction side)
     {
         if (SideSkipPredicate.CTM.test(world, pos, state, adjState, side)) { return true; }
-        if (!(adjState.getBlock() instanceof IFramedBlock)) { return false; }
+        if (!(adjState.getBlock() instanceof IFramedBlock block)) { return false; }
 
-        BlockType adjBlock = ((IFramedBlock) adjState.getBlock()).getBlockType();
+        BlockType adjBlock = block.getBlockType();
         Direction dir = state.get(PropertyHolder.FACING_HOR);
         CornerType type = state.get(PropertyHolder.CORNER_TYPE);
 

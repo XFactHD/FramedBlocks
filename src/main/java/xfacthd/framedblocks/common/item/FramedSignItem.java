@@ -5,7 +5,6 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.WallOrFloorItem;
-import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.network.PacketDistributor;
@@ -31,10 +30,9 @@ public class FramedSignItem extends WallOrFloorItem
         boolean hadNBT = super.onBlockPlaced(pos, world, player, stack, state);
         if (!world.isRemote() && !hadNBT && player != null)
         {
-            TileEntity te = world.getTileEntity(pos);
-            if (te instanceof FramedSignTileEntity)
+            if (world.getTileEntity(pos) instanceof FramedSignTileEntity te)
             {
-                ((FramedSignTileEntity)te).setEditingPlayer(player);
+                te.setEditingPlayer(player);
 
                 FramedBlocks.CHANNEL.send(
                         PacketDistributor.PLAYER.with(() -> (ServerPlayerEntity) player),

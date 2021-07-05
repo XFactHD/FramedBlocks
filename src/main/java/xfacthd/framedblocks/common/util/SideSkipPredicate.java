@@ -1,7 +1,6 @@
 package xfacthd.framedblocks.common.util;
 
 import net.minecraft.block.BlockState;
-import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.Direction;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockReader;
@@ -14,17 +13,16 @@ public interface SideSkipPredicate
 
     SideSkipPredicate CTM = (world, pos, state, adjState, side) ->
     {
-        if (adjState.getBlock() instanceof IFramedBlock)
+        if (adjState.getBlock() instanceof IFramedBlock block)
         {
-            if (!((IFramedBlock) adjState.getBlock()).getCtmPredicate().test(adjState, side.getOpposite()))
+            if (!block.getCtmPredicate().test(adjState, side.getOpposite()))
             {
                 return false;
             }
 
-            TileEntity te = world.getTileEntity(pos.offset(side));
-            if (te instanceof FramedTileEntity)
+            if (world.getBlockEntity(pos.relative(side)) instanceof FramedTileEntity te)
             {
-                adjState = ((FramedTileEntity) te).getCamoState(side.getOpposite());
+                adjState = te.getCamoState(side.getOpposite());
             }
         }
 
@@ -54,10 +52,9 @@ public interface SideSkipPredicate
 
     static boolean compareState(IBlockReader world, BlockPos pos, Direction side, Direction camoSide)
     {
-        TileEntity te = world.getTileEntity(pos.offset(side));
-        if (te instanceof FramedTileEntity)
+        if (world.getBlockEntity(pos.relative(side)) instanceof FramedTileEntity te)
         {
-            BlockState adjState = ((FramedTileEntity) te).getCamoState(camoSide);
+            BlockState adjState = te.getCamoState(camoSide);
             //noinspection deprecation
             if (adjState.isAir()) { return false; }
 
@@ -68,11 +65,10 @@ public interface SideSkipPredicate
 
     static boolean compareState(IBlockReader world, BlockPos pos, BlockState adjState, Direction side)
     {
-        TileEntity te = world.getTileEntity(pos);
-        if (te instanceof FramedTileEntity)
+        if (world.getBlockEntity(pos) instanceof FramedTileEntity te)
         {
-            BlockState state = ((FramedTileEntity) te).getCamoState(side);
-            return state == adjState || (state.isOpaqueCube(world, pos) && adjState.isOpaqueCube(world, pos.offset(side)));
+            BlockState state = te.getCamoState(side);
+            return state == adjState || (state.isSolidRender(world, pos) && adjState.isSolidRender(world, pos.relative(side)));
         }
 
         return false;

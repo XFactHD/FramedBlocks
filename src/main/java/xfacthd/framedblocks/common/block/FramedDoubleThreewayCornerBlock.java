@@ -48,10 +48,8 @@ public class FramedDoubleThreewayCornerBlock extends AbstractFramedDoubleBlock
     public SoundType getSound(BlockState state, IWorldReader world, BlockPos pos)
     {
         boolean top = state.get(PropertyHolder.TOP);
-        TileEntity te = world.getTileEntity(pos);
-        if (te instanceof FramedDoubleTileEntity)
+        if (world.getTileEntity(pos) instanceof FramedDoubleTileEntity dte)
         {
-            FramedDoubleTileEntity dte = (FramedDoubleTileEntity) te;
             BlockState camoState = top ? dte.getCamoState() : dte.getCamoStateTwo();
             if (!camoState.isAir())
             {

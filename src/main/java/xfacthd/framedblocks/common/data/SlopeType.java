@@ -17,11 +17,11 @@ public enum SlopeType implements IStringSerializable
 
     public SlopeType getOpposite()
     {
-        switch (this)
+        return switch (this)
         {
-            case TOP: return BOTTOM;
-            case BOTTOM: return TOP;
-            default: throw new IllegalArgumentException("Can't get opposite of '" + getString() + "'!");
-        }
+            case TOP -> BOTTOM;
+            case BOTTOM -> TOP;
+            default -> throw new IllegalArgumentException("Can't get opposite of '" + getString() + "'!");
+        };
     }
 }

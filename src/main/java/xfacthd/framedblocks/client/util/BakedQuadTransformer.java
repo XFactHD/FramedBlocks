@@ -643,27 +643,24 @@ public class BakedQuadTransformer
         {
             Vector3f axisVec;
             Vector3f scaleVec;
-            switch(axis)
+            switch (axis)
             {
-                case X:
+                case X ->
                 {
                     axisVec = new Vector3f(1.0F, 0.0F, 0.0F);
                     scaleVec = new Vector3f(0.0F, 1.0F, 1.0F);
-                    break;
                 }
-                case Y:
+                case Y ->
                 {
                     axisVec = new Vector3f(0.0F, 1.0F, 0.0F);
                     scaleVec = new Vector3f(1.0F, 0.0F, 1.0F);
-                    break;
                 }
-                case Z:
+                case Z ->
                 {
                     axisVec = new Vector3f(0.0F, 0.0F, 1.0F);
                     scaleVec = new Vector3f(1.0F, 1.0F, 0.0F);
-                    break;
                 }
-                default: throw new IllegalArgumentException("Invalid axis!");
+                default -> throw new IllegalArgumentException("Invalid axis!");
             }
 
             Matrix4f transform = new Matrix4f(new Quaternion(axisVec, angle, true));
