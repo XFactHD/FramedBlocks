@@ -14,7 +14,7 @@ public class FramedBlockData extends ModelDataMap
 
     private World world = null;
     private BlockPos pos = BlockPos.ZERO;
-    private BlockState camoState = Blocks.AIR.getDefaultState();
+    private BlockState camoState = Blocks.AIR.defaultBlockState();
 
     @Override
     public boolean hasProperty(ModelProperty<?> prop) { return prop == CAMO || super.hasProperty(prop); }

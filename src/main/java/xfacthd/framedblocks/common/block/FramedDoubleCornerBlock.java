@@ -18,27 +18,27 @@ public class FramedDoubleCornerBlock extends AbstractFramedDoubleBlock
 {
     public static final CtmPredicate CTM_PREDICATE = (state, side) ->
     {
-        Direction dir = state.get(PropertyHolder.FACING_HOR);
-        CornerType type = state.get(PropertyHolder.CORNER_TYPE);
+        Direction dir = state.getValue(PropertyHolder.FACING_HOR);
+        CornerType type = state.getValue(PropertyHolder.CORNER_TYPE);
 
         if (type.isHorizontal())
         {
             if (side == null) { return false; }
 
             return  side == dir || side == dir.getOpposite() ||
-                   (side == dir.rotateYCCW() && !type.isRight()) || (side == dir.rotateY() && type.isRight()) ||
+                   (side == dir.getCounterClockWise() && !type.isRight()) || (side == dir.getClockWise() && type.isRight()) ||
                    (side == Direction.DOWN && !type.isTop()) || (side == Direction.UP && type.isTop());
         }
         else
         {
-            return (side != null && side.getAxis() == Direction.Axis.Y) || side == dir || side == dir.rotateYCCW();
+            return (side != null && side.getAxis() == Direction.Axis.Y) || side == dir || side == dir.getCounterClockWise();
         }
     };
 
     public FramedDoubleCornerBlock() { super(BlockType.FRAMED_DOUBLE_CORNER); }
 
     @Override
-    protected void fillStateContainer(StateContainer.Builder<Block, BlockState> builder)
+    protected void createBlockStateDefinition(StateContainer.Builder<Block, BlockState> builder)
     {
         builder.add(PropertyHolder.FACING_HOR, PropertyHolder.CORNER_TYPE);
     }
@@ -46,39 +46,39 @@ public class FramedDoubleCornerBlock extends AbstractFramedDoubleBlock
     @Override
     public BlockState getStateForPlacement(BlockItemUseContext context)
     {
-        BlockState state = getDefaultState();
+        BlockState state = defaultBlockState();
 
-        Direction side = context.getFace();
-        Vector3d hitPoint = Utils.fraction(context.getHitVec());
+        Direction side = context.getClickedFace();
+        Vector3d hitPoint = Utils.fraction(context.getClickLocation());
         if (side.getAxis() != Direction.Axis.Y)
         {
-            if (hitPoint.getY() < (3D / 16D))
+            if (hitPoint.y() < (3D / 16D))
             {
                 side = Direction.UP;
             }
-            else if (hitPoint.getY() > (13D / 16D))
+            else if (hitPoint.y() > (13D / 16D))
             {
                 side = Direction.DOWN;
             }
         }
 
-        Direction facing = context.getPlacementHorizontalFacing();
-        state = state.with(PropertyHolder.FACING_HOR, facing);
+        Direction facing = context.getHorizontalDirection();
+        state = state.setValue(PropertyHolder.FACING_HOR, facing);
 
         if (side == Direction.DOWN)
         {
-            state = state.with(PropertyHolder.CORNER_TYPE, CornerType.TOP);
+            state = state.setValue(PropertyHolder.CORNER_TYPE, CornerType.TOP);
         }
         else if (side == Direction.UP)
         {
-            state = state.with(PropertyHolder.CORNER_TYPE, CornerType.BOTTOM);
+            state = state.setValue(PropertyHolder.CORNER_TYPE, CornerType.BOTTOM);
         }
         else
         {
-            boolean xAxis = context.getFace().getAxis() == Direction.Axis.X;
-            boolean positive = context.getFace().rotateYCCW().getAxisDirection() == Direction.AxisDirection.POSITIVE;
-            double xz = xAxis ? hitPoint.getZ() : hitPoint.getX();
-            double y = hitPoint.getY();
+            boolean xAxis = context.getClickedFace().getAxis() == Direction.Axis.X;
+            boolean positive = context.getClickedFace().getCounterClockWise().getAxisDirection() == Direction.AxisDirection.POSITIVE;
+            double xz = xAxis ? hitPoint.z() : hitPoint.x();
+            double y = hitPoint.y();
 
             CornerType type;
             if ((xz > .5D) == positive)
@@ -89,7 +89,7 @@ public class FramedDoubleCornerBlock extends AbstractFramedDoubleBlock
             {
                 type = (y > .5D) ? CornerType.HORIZONTAL_TOP_LEFT : CornerType.HORIZONTAL_BOTTOM_LEFT;
             }
-            state = state.with(PropertyHolder.CORNER_TYPE, type);
+            state = state.setValue(PropertyHolder.CORNER_TYPE, type);
         }
 
         return state;
@@ -99,8 +99,8 @@ public class FramedDoubleCornerBlock extends AbstractFramedDoubleBlock
     @SuppressWarnings("deprecation")
     public SoundType getSound(BlockState state, IWorldReader world, BlockPos pos)
     {
-        CornerType type = state.get(PropertyHolder.CORNER_TYPE);
-        if (world.getTileEntity(pos) instanceof FramedDoubleTileEntity dte)
+        CornerType type = state.getValue(PropertyHolder.CORNER_TYPE);
+        if (world.getBlockEntity(pos) instanceof FramedDoubleTileEntity dte)
         {
             BlockState camoState = (type.isHorizontal() || type.isTop()) ? dte.getCamoState() : dte.getCamoStateTwo();
             if (!camoState.isAir())

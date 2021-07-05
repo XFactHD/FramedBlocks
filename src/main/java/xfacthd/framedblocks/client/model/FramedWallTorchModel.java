@@ -24,7 +24,7 @@ public class FramedWallTorchModel extends FramedBlockModel
     public FramedWallTorchModel(BlockState state, IBakedModel baseModel)
     {
         super(state, baseModel);
-        dir = state.get(BlockStateProperties.HORIZONTAL_FACING);
+        dir = state.getValue(BlockStateProperties.HORIZONTAL_FACING);
     }
 
     @Override
@@ -49,14 +49,14 @@ public class FramedWallTorchModel extends FramedBlockModel
         "rotation": {"angle": -22.5, "axis": "z", "origin": [0, 3.5, 8]},
         */
 
-        if (quad.getFace().getAxis() == Direction.Axis.Y)
+        if (quad.getDirection().getAxis() == Direction.Axis.Y)
         {
             BakedQuad topBotQuad = ModelUtils.duplicateQuad(quad);
             if (BakedQuadTransformer.createTopBottomQuad(topBotQuad, 7F/16F, 7F/16F, 9F/16F, 9F/16F))
             {
                 BakedQuadTransformer.setQuadPosInFacingDir(
                         topBotQuad,
-                        quad.getFace() == Direction.UP ? 11.5F/16F : 12.5F/16F
+                        quad.getDirection() == Direction.UP ? 11.5F/16F : 12.5F/16F
                 );
                 BakedQuadTransformer.offsetQuadInDir(topBotQuad, Direction.WEST, 8F/16F);
                 quadMap.get(null).add(topBotQuad);
@@ -67,11 +67,11 @@ public class FramedWallTorchModel extends FramedBlockModel
             BakedQuad sideQuad = ModelUtils.duplicateQuad(quad);
             if (BakedQuadTransformer.createSideQuad(sideQuad, 7F/16F, 0F, 9F/16F, 8F/16F))
             {
-                if (quad.getFace() == Direction.EAST)
+                if (quad.getDirection() == Direction.EAST)
                 {
                     BakedQuadTransformer.setQuadPosInFacingDir(sideQuad, 1F/16F);
                 }
-                else if (quad.getFace() == Direction.WEST)
+                else if (quad.getDirection() == Direction.WEST)
                 {
                     BakedQuadTransformer.setQuadPosInFacingDir(sideQuad, 17F/16F);
                 }
@@ -89,7 +89,7 @@ public class FramedWallTorchModel extends FramedBlockModel
     @Override
     protected void postProcessQuads(Map<Direction, List<BakedQuad>> quadMap)
     {
-        float yAngle = 270F - dir.getHorizontalAngle();
+        float yAngle = 270F - dir.toYRot();
         quadMap.get(null).forEach(q ->
         {
             BakedQuadTransformer.rotateQuadAroundAxis(q, Direction.Axis.Z, ROTATION_ORIGIN, -22.5F, false);
@@ -98,5 +98,5 @@ public class FramedWallTorchModel extends FramedBlockModel
     }
 
     @Override
-    public boolean isAmbientOcclusion() { return false; }
+    public boolean useAmbientOcclusion() { return false; }
 }

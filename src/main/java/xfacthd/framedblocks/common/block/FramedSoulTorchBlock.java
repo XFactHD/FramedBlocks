@@ -12,12 +12,12 @@ public class FramedSoulTorchBlock extends FramedTorchBlock
 {
     public FramedSoulTorchBlock()
     {
-        super(Properties.create(Material.MISCELLANEOUS)
-                .doesNotBlockMovement()
-                .hardnessAndResistance(0.5F)
+        super(Properties.of(Material.DECORATION)
+                .noCollission()
+                .strength(0.5F)
                 .sound(SoundType.WOOD)
-                .setLightLevel(state -> 14)
-                .notSolid(),
+                .lightLevel(state -> 14)
+                .noOcclusion(),
                 ParticleTypes.SOUL_FIRE_FLAME
         );
     }
@@ -31,7 +31,7 @@ public class FramedSoulTorchBlock extends FramedTorchBlock
         BlockItem item = new WallOrFloorItem(
                 FBContent.blockFramedSoulTorch.get(),
                 FBContent.blockFramedSoulWallTorch.get(),
-                new Item.Properties().group(FramedBlocks.FRAMED_GROUP)
+                new Item.Properties().tab(FramedBlocks.FRAMED_GROUP)
         );
         //noinspection ConstantConditions
         item.setRegistryName(getRegistryName());

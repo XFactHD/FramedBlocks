@@ -21,7 +21,7 @@ public class FramedCornerPillarBlock extends FramedBlock
     }
 
     @Override
-    protected void fillStateContainer(StateContainer.Builder<Block, BlockState> builder)
+    protected void createBlockStateDefinition(StateContainer.Builder<Block, BlockState> builder)
     {
         builder.add(PropertyHolder.FACING_HOR, BlockStateProperties.WATERLOGGED);
     }
@@ -29,45 +29,45 @@ public class FramedCornerPillarBlock extends FramedBlock
     @Override
     public BlockState getStateForPlacement(BlockItemUseContext context)
     {
-        BlockState state = getDefaultState();
+        BlockState state = defaultBlockState();
 
-        Direction face = context.getFace();
-        Vector3d hitPoint = Utils.fraction(context.getHitVec());
+        Direction face = context.getClickedFace();
+        Vector3d hitPoint = Utils.fraction(context.getClickLocation());
         if (face.getAxis().isHorizontal())
         {
             boolean xAxis = face.getAxis() == Direction.Axis.X;
-            boolean positive = face.rotateYCCW().getAxisDirection() == Direction.AxisDirection.POSITIVE;
-            double xz = xAxis ? hitPoint.getZ() : hitPoint.getX();
+            boolean positive = face.getCounterClockWise().getAxisDirection() == Direction.AxisDirection.POSITIVE;
+            double xz = xAxis ? hitPoint.z() : hitPoint.x();
 
             Direction dir = face.getOpposite();
             if ((xz > .5D) == positive)
             {
-                dir = dir.rotateY();
+                dir = dir.getClockWise();
             }
-            state = state.with(PropertyHolder.FACING_HOR, dir);
+            state = state.setValue(PropertyHolder.FACING_HOR, dir);
         }
         else
         {
-            double x = hitPoint.getX();
-            double z = hitPoint.getZ();
+            double x = hitPoint.x();
+            double z = hitPoint.z();
 
             Direction dir = z > .5D ? Direction.SOUTH : Direction.NORTH;
-            if ((x > .5D) == (dir.getAxisDirection() == Direction.AxisDirection.NEGATIVE)) { dir = dir.rotateY(); }
-            state = state.with(PropertyHolder.FACING_HOR, dir);
+            if ((x > .5D) == (dir.getAxisDirection() == Direction.AxisDirection.NEGATIVE)) { dir = dir.getClockWise(); }
+            state = state.setValue(PropertyHolder.FACING_HOR, dir);
         }
 
-        return withWater(state, context.getWorld(), context.getPos());
+        return withWater(state, context.getLevel(), context.getClickedPos());
     }
 
     public static ImmutableMap<BlockState, VoxelShape> generateShapes(ImmutableList<BlockState> states)
     {
-        VoxelShape shape = makeCuboidShape(0, 0, 0, 8, 16, 8);
+        VoxelShape shape = box(0, 0, 0, 8, 16, 8);
 
         ImmutableMap.Builder<BlockState, VoxelShape> builder = ImmutableMap.builder();
 
         for (BlockState state : states)
         {
-            Direction dir = state.get(PropertyHolder.FACING_HOR);
+            Direction dir = state.getValue(PropertyHolder.FACING_HOR);
             builder.put(state, Utils.rotateShape(Direction.NORTH, dir, shape));
         }
 

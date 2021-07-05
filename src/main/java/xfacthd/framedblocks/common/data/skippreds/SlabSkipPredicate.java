@@ -16,7 +16,7 @@ public class SlabSkipPredicate implements SideSkipPredicate
     {
         if (side.getAxis() == Direction.Axis.Y) { return SideSkipPredicate.CTM.test(world, pos, state, adjState, side); }
 
-        boolean top = state.get(PropertyHolder.TOP);
+        boolean top = state.getValue(PropertyHolder.TOP);
 
         if (adjState.getBlock() == FBContent.blockFramedSlab.get())
         {
@@ -40,7 +40,7 @@ public class SlabSkipPredicate implements SideSkipPredicate
 
     private boolean testAgainstSlab(IBlockReader world, BlockPos pos, boolean top, BlockState adjState, Direction side)
     {
-        if (top != adjState.get(PropertyHolder.TOP)) { return false; }
+        if (top != adjState.getValue(PropertyHolder.TOP)) { return false; }
 
         return SideSkipPredicate.compareState(world, pos, side, top ? Direction.UP : Direction.DOWN);
     }
@@ -53,17 +53,17 @@ public class SlabSkipPredicate implements SideSkipPredicate
 
     private boolean testAgainstEdge(IBlockReader world, BlockPos pos, boolean top, BlockState adjState, Direction side)
     {
-        if (top != adjState.get(PropertyHolder.TOP)) { return false; }
-        if (adjState.get(PropertyHolder.FACING_HOR) != side.getOpposite()) { return false; }
+        if (top != adjState.getValue(PropertyHolder.TOP)) { return false; }
+        if (adjState.getValue(PropertyHolder.FACING_HOR) != side.getOpposite()) { return false; }
 
         return SideSkipPredicate.compareState(world, pos, side, top ? Direction.UP : Direction.DOWN);
     }
 
     private boolean testAgainstStairs(IBlockReader world, BlockPos pos, boolean top, BlockState adjState, Direction side)
     {
-        Direction adjDir = adjState.get(BlockStateProperties.HORIZONTAL_FACING);
-        StairsShape adjShape = adjState.get(BlockStateProperties.STAIRS_SHAPE);
-        boolean adjTop = adjState.get(BlockStateProperties.HALF) == Half.TOP;
+        Direction adjDir = adjState.getValue(BlockStateProperties.HORIZONTAL_FACING);
+        StairsShape adjShape = adjState.getValue(BlockStateProperties.STAIRS_SHAPE);
+        boolean adjTop = adjState.getValue(BlockStateProperties.HALF) == Half.TOP;
 
         if (top == adjTop && StairsSkipPredicate.isSlabSide(adjShape, adjDir, side.getOpposite()))
         {

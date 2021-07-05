@@ -18,24 +18,24 @@ public class FramedSlabModel extends FramedBlockModel
     public FramedSlabModel(BlockState state, IBakedModel baseModel)
     {
         super(state, baseModel);
-        top = state.get(PropertyHolder.TOP);
+        top = state.getValue(PropertyHolder.TOP);
     }
 
     @Override
     protected void transformQuad(Map<Direction, List<BakedQuad>> quadMap, final BakedQuad quad)
     {
-        if ((top && quad.getFace() == Direction.DOWN) || (!top && quad.getFace() == Direction.UP))
+        if ((top && quad.getDirection() == Direction.DOWN) || (!top && quad.getDirection() == Direction.UP))
         {
             BakedQuad topBotQuad = ModelUtils.duplicateQuad(quad);
             BakedQuadTransformer.setQuadPosInFacingDir(topBotQuad, .5F);
             quadMap.get(null).add(topBotQuad);
         }
-        else if (quad.getFace().getAxis() != Direction.Axis.Y)
+        else if (quad.getDirection().getAxis() != Direction.Axis.Y)
         {
             BakedQuad sideQuad = ModelUtils.duplicateQuad(quad);
             if (BakedQuadTransformer.createHorizontalSideQuad(sideQuad, top, .5F))
             {
-                quadMap.get(quad.getFace()).add(sideQuad);
+                quadMap.get(quad.getDirection()).add(sideQuad);
             }
         }
     }

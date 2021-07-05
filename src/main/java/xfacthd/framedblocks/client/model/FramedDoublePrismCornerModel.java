@@ -20,7 +20,7 @@ public class FramedDoublePrismCornerModel extends FramedDoubleBlockModel
     public FramedDoublePrismCornerModel(IBakedModel baseModel)
     {
         this(
-                FBContent.blockFramedDoublePrismCorner.get().getDefaultState().with(PropertyHolder.FACING_HOR, Direction.WEST),
+                FBContent.blockFramedDoublePrismCorner.get().defaultBlockState().setValue(PropertyHolder.FACING_HOR, Direction.WEST),
                 baseModel
         );
     }
@@ -28,18 +28,18 @@ public class FramedDoublePrismCornerModel extends FramedDoubleBlockModel
     @Override
     protected Tuple<BlockState, BlockState> getDummyStates()
     {
-        Direction facing = state.get(PropertyHolder.FACING_HOR);
-        boolean top = state.get(PropertyHolder.TOP);
-        boolean offset = state.get(PropertyHolder.OFFSET);
+        Direction facing = state.getValue(PropertyHolder.FACING_HOR);
+        boolean top = state.getValue(PropertyHolder.TOP);
+        boolean offset = state.getValue(PropertyHolder.OFFSET);
 
-        BlockState stateOne = FBContent.blockFramedInnerPrismCorner.get().getDefaultState()
-                .with(PropertyHolder.TOP, top)
-                .with(PropertyHolder.FACING_HOR, facing)
-                .with(PropertyHolder.OFFSET, offset);
-        BlockState stateTwo = FBContent.blockFramedPrismCorner.get().getDefaultState()
-                .with(PropertyHolder.TOP, !top)
-                .with(PropertyHolder.FACING_HOR, facing.getOpposite())
-                .with(PropertyHolder.OFFSET, !offset);
+        BlockState stateOne = FBContent.blockFramedInnerPrismCorner.get().defaultBlockState()
+                .setValue(PropertyHolder.TOP, top)
+                .setValue(PropertyHolder.FACING_HOR, facing)
+                .setValue(PropertyHolder.OFFSET, offset);
+        BlockState stateTwo = FBContent.blockFramedPrismCorner.get().defaultBlockState()
+                .setValue(PropertyHolder.TOP, !top)
+                .setValue(PropertyHolder.FACING_HOR, facing.getOpposite())
+                .setValue(PropertyHolder.OFFSET, !offset);
 
         return new Tuple<>(stateOne, stateTwo);
     }

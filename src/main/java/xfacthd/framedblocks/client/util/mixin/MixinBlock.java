@@ -15,7 +15,7 @@ public abstract class MixinBlock extends AbstractBlock
 {
     public MixinBlock(Properties properties) { super(properties); }
 
-    @Inject(method = {"shouldSideBeRendered"}, at = @At("HEAD"))
+    @Inject(method = {"shouldRenderFace"}, at = @At("HEAD"))
     private static void shouldSideBeRenderedFramed(BlockState state, IBlockReader world, BlockPos pos, Direction face, CallbackInfoReturnable<Boolean> cir)
     {
         DataHolder.world.set(world);

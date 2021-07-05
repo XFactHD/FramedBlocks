@@ -20,14 +20,14 @@ public class FramedDoublePanelBlock extends AbstractFramedDoubleBlock
 {
     public static final CtmPredicate CTM_PREDICATE = (state, dir) ->
     {
-        Direction facing = state.get(PropertyHolder.FACING_NE);
+        Direction facing = state.getValue(PropertyHolder.FACING_NE);
         return dir == facing || dir == facing.getOpposite();
     };
 
     public FramedDoublePanelBlock() { super(BlockType.FRAMED_DOUBLE_PANEL); }
 
     @Override
-    protected void fillStateContainer(StateContainer.Builder<Block, BlockState> builder)
+    protected void createBlockStateDefinition(StateContainer.Builder<Block, BlockState> builder)
     {
         builder.add(PropertyHolder.FACING_NE);
     }

@@ -23,11 +23,11 @@ public class FramedTrapDoorBlock extends TrapDoorBlock implements IFramedBlock
 {
     public static final CtmPredicate CTM_PREDICATE = (state, dir) ->
     {
-        if (state.get(BlockStateProperties.OPEN))
+        if (state.getValue(BlockStateProperties.OPEN))
         {
-            return state.get(BlockStateProperties.HORIZONTAL_FACING).getOpposite() == dir;
+            return state.getValue(BlockStateProperties.HORIZONTAL_FACING).getOpposite() == dir;
         }
-        else if (state.get(BlockStateProperties.HALF) == Half.TOP)
+        else if (state.getValue(BlockStateProperties.HALF) == Half.TOP)
         {
             return dir == Direction.UP;
         }
@@ -40,12 +40,12 @@ public class FramedTrapDoorBlock extends TrapDoorBlock implements IFramedBlock
     }
 
     @Override
-    public final ActionResultType onBlockActivated(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockRayTraceResult hit)
+    public final ActionResultType use(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockRayTraceResult hit)
     {
-        ActionResultType result = handleBlockActivated(world, pos, player, hand, hit);
-        if (result.isSuccessOrConsume()) { return result; }
+        ActionResultType result = handleUse(world, pos, player, hand, hit);
+        if (result.consumesAction()) { return result; }
 
-        return super.onBlockActivated(state, world, pos, player, hand, hit);
+        return super.use(state, world, pos, player, hand, hit);
     }
 
     @Override

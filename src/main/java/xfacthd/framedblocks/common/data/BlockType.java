@@ -13,7 +13,7 @@ import java.util.Locale;
 
 public enum BlockType
 {
-    FRAMED_CUBE                   (false, false, false,  true, CtmPredicate.TRUE, SideSkipPredicate.CTM, VoxelShapes.fullCube()),
+    FRAMED_CUBE                   (false, false, false,  true, CtmPredicate.TRUE, SideSkipPredicate.CTM, VoxelShapes.block()),
     FRAMED_SLOPE                  ( true, false,  true,  true, FramedSlopeBlock.CTM_PREDICATE, new SlopeSkipPredicate(), FramedSlopeBlock::generateShapes),
     FRAMED_CORNER_SLOPE           ( true, false,  true,  true, FramedCornerSlopeBlock.CTM_PREDICATE, new CornerSkipPredicate(), FramedCornerSlopeBlock::generateCornerShapes),
     FRAMED_INNER_CORNER_SLOPE     ( true, false,  true,  true, FramedCornerSlopeBlock.CTM_PREDICATE_INNER, new InnerCornerSkipPredicate(), FramedCornerSlopeBlock::generateInnerCornerShapes),
@@ -38,17 +38,17 @@ public enum BlockType
     FRAMED_LEVER                  (false, false, false,  true),
     FRAMED_SIGN                   (false,  true, false,  true),
     FRAMED_WALL_SIGN              (false,  true, false, false, CtmPredicate.FALSE, SideSkipPredicate.FALSE, FramedWallSignBlock::generateShapes),
-    FRAMED_DOUBLE_SLAB            (false,  true, false, false, CtmPredicate.Y_AXIS, SideSkipPredicate.FALSE, VoxelShapes.fullCube()), //Side skip is handled by the single slab
-    FRAMED_DOUBLE_PANEL           (false,  true, false, false, FramedDoublePanelBlock.CTM_PREDICATE, SideSkipPredicate.FALSE, VoxelShapes.fullCube()), //Side skip is handled by the single panel
-    FRAMED_DOUBLE_SLOPE           (false,  true, false,  true, FramedDoubleSlopeBlock.CTM_PREDICATE, SideSkipPredicate.FALSE, VoxelShapes.fullCube()), //Side skip is handled by the single slope
-    FRAMED_DOUBLE_CORNER          (false,  true, false,  true, FramedDoubleCornerBlock.CTM_PREDICATE, SideSkipPredicate.FALSE, VoxelShapes.fullCube()),
-    FRAMED_DOUBLE_PRISM_CORNER    (false,  true, false,  true, FramedDoubleThreewayCornerBlock.CTM_PREDICATE, SideSkipPredicate.FALSE, VoxelShapes.fullCube()),
-    FRAMED_DOUBLE_THREEWAY_CORNER (false,  true, false,  true, FramedDoubleThreewayCornerBlock.CTM_PREDICATE, SideSkipPredicate.FALSE, VoxelShapes.fullCube()),
+    FRAMED_DOUBLE_SLAB            (false,  true, false, false, CtmPredicate.Y_AXIS, SideSkipPredicate.FALSE, VoxelShapes.block()), //Side skip is handled by the single slab
+    FRAMED_DOUBLE_PANEL           (false,  true, false, false, FramedDoublePanelBlock.CTM_PREDICATE, SideSkipPredicate.FALSE, VoxelShapes.block()), //Side skip is handled by the single panel
+    FRAMED_DOUBLE_SLOPE           (false,  true, false,  true, FramedDoubleSlopeBlock.CTM_PREDICATE, SideSkipPredicate.FALSE, VoxelShapes.block()), //Side skip is handled by the single slope
+    FRAMED_DOUBLE_CORNER          (false,  true, false,  true, FramedDoubleCornerBlock.CTM_PREDICATE, SideSkipPredicate.FALSE, VoxelShapes.block()),
+    FRAMED_DOUBLE_PRISM_CORNER    (false,  true, false,  true, FramedDoubleThreewayCornerBlock.CTM_PREDICATE, SideSkipPredicate.FALSE, VoxelShapes.block()),
+    FRAMED_DOUBLE_THREEWAY_CORNER (false,  true, false,  true, FramedDoubleThreewayCornerBlock.CTM_PREDICATE, SideSkipPredicate.FALSE, VoxelShapes.block()),
     FRAMED_TORCH                  (false, false, false,  true),
     FRAMED_WALL_TORCH             (false, false, false, false),
     FRAMED_SOUL_TORCH             (false, false, false,  true),
     FRAMED_SOUL_WALL_TORCH        (false, false, false, false),
-	FRAMED_FLOOR_BOARD            (false, false,  true,  true, FramedFloorBlock.CTM_PREDICATE, FramedFloorBlock.SKIP_PREDICATE, VoxelShapes.create(0, 0, 0, 1, 1D/16D, 1)),
+	FRAMED_FLOOR_BOARD            (false, false,  true,  true, FramedFloorBlock.CTM_PREDICATE, FramedFloorBlock.SKIP_PREDICATE, VoxelShapes.box(0, 0, 0, 1, 1D/16D, 1)),
     FRAMED_LATTICE_BLOCK          (false, false,  true,  true, CtmPredicate.FALSE, FramedLatticeBlock.SKIP_PREDICATE, FramedLatticeBlock::generateShapes),
     FRAMED_VERTICAL_STAIRS        (false, false,  true,  true, FramedVerticalStairs.CTM_PREDICATE, new VerticalStairsSkipPredicate(), FramedVerticalStairs::generateShapes),
     FRAMED_COLLAPSIBLE_BLOCK      ( true,  true, false,  true/*, FramedCollapsibleBlock.CTM_PREDICATE, FramedCollapsibleBlock.SKIP_PREDICATE*/);

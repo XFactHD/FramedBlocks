@@ -39,12 +39,12 @@ public class FBClient
                 .map(RegistryObject::get)
                 .filter(block -> block instanceof IFramedBlock)
                 .forEach(block -> RenderTypeLookup.setRenderLayer(block, type ->
-                        type == RenderType.getSolid() ||
-                        type == RenderType.getCutout() ||
-                        type == RenderType.getCutoutMipped() ||
-                        type == RenderType.getTranslucent()
+                        type == RenderType.solid() ||
+                        type == RenderType.cutout() ||
+                        type == RenderType.cutoutMipped() ||
+                        type == RenderType.translucent()
                 ));
-        RenderTypeLookup.setRenderLayer(FBContent.blockFramedGhostBlock.get(), RenderType.getTranslucent());
+        RenderTypeLookup.setRenderLayer(FBContent.blockFramedGhostBlock.get(), RenderType.translucent());
 
         ClientRegistry.bindTileEntityRenderer(FBContent.tileTypeFramedSign.get(), FramedSignRenderer::new);
     }
@@ -63,7 +63,7 @@ public class FBClient
         {
             if (world != null && pos != null)
             {
-                if (world.getTileEntity(pos) instanceof FramedTileEntity te)
+                if (world.getBlockEntity(pos) instanceof FramedTileEntity te)
                 {
                     BlockState camoState = te.getCamoState();
                     if (!camoState.isAir())
@@ -144,9 +144,9 @@ public class FBClient
                                       BiFunction<BlockState, IBakedModel, IBakedModel> blockModelGen,
                                       Function<IBakedModel, IBakedModel> itemModelGen)
     {
-        for (BlockState state : block.get().getStateContainer().getValidStates())
+        for (BlockState state : block.get().getStateDefinition().getPossibleStates())
         {
-            ResourceLocation location = BlockModelShapes.getModelLocation(state);
+            ResourceLocation location = BlockModelShapes.stateToModelLocation(state);
             IBakedModel baseModel = models.get(location);
             IBakedModel replacement = blockModelGen.apply(state, baseModel);
             models.put(location, replacement);
@@ -163,9 +163,9 @@ public class FBClient
     public static void openSignScreen(BlockPos pos)
     {
         //noinspection ConstantConditions
-        if (Minecraft.getInstance().world.getTileEntity(pos) instanceof FramedSignTileEntity te)
+        if (Minecraft.getInstance().level.getBlockEntity(pos) instanceof FramedSignTileEntity te)
         {
-            Minecraft.getInstance().displayGuiScreen(new FramedSignScreen(te));
+            Minecraft.getInstance().setScreen(new FramedSignScreen(te));
         }
     }
 }

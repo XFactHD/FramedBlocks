@@ -60,7 +60,7 @@ public class FramedSignTileEntity extends FramedTileEntity
                 if (clickevent.getAction() == ClickEvent.Action.RUN_COMMAND)
                 {
                     //noinspection ConstantConditions
-                    player.getServer().getCommandManager().handleCommand(getCommandSource(player), clickevent.getValue());
+                    player.getServer().getCommands().performCommand(getCommandSource(player), clickevent.getValue());
                 }
             }
         }
@@ -72,10 +72,10 @@ public class FramedSignTileEntity extends FramedTileEntity
     {
         String nameString = player == null ? "Sign" : player.getName().getString();
         ITextComponent name = player == null ? new StringTextComponent("Sign") : player.getDisplayName();
-        Vector3d posVec = new Vector3d(pos.getX() + 0.5D, pos.getY() + 0.5D, pos.getZ() + 0.5D);
+        Vector3d posVec = new Vector3d(worldPosition.getX() + 0.5D, worldPosition.getY() + 0.5D, worldPosition.getZ() + 0.5D);
 
         //noinspection ConstantConditions
-        return new CommandSource(ICommandSource.DUMMY, posVec, Vector2f.ZERO, (ServerWorld)world, 2, nameString, name, world.getServer(), player);
+        return new CommandSource(ICommandSource.NULL, posVec, Vector2f.ZERO, (ServerWorld)level, 2, nameString, name, level.getServer(), player);
     }
 
 
@@ -86,9 +86,9 @@ public class FramedSignTileEntity extends FramedTileEntity
         {
             this.textColor = color;
 
-            markDirty();
+            setChanged();
             //noinspection ConstantConditions
-            world.notifyBlockUpdate(getPos(), getBlockState(), getBlockState(), Constants.BlockFlags.DEFAULT);
+            level.sendBlockUpdated(getBlockPos(), getBlockState(), getBlockState(), Constants.BlockFlags.DEFAULT);
 
             return true;
         }
@@ -102,7 +102,7 @@ public class FramedSignTileEntity extends FramedTileEntity
     public void setEditingPlayer(PlayerEntity player) { this.editingPlayer = player; }
 
     @Override
-    public boolean onlyOpsCanSetNbt() { return true; }
+    public boolean onlyOpCanSetNbt() { return true; }
 
 
 
@@ -141,7 +141,7 @@ public class FramedSignTileEntity extends FramedTileEntity
             nbt.putString("text" + i, ITextComponent.Serializer.toJson(lines[i]));
         }
 
-        nbt.putString("color", textColor.getTranslationKey());
+        nbt.putString("color", textColor.getName());
     }
 
     private void readFromNbt(CompoundNBT nbt)
@@ -149,12 +149,12 @@ public class FramedSignTileEntity extends FramedTileEntity
         for(int i = 0; i < 4; i++)
         {
             String s = nbt.getString("text" + i);
-            ITextComponent line = ITextComponent.Serializer.getComponentFromJson(s.isEmpty() ? "\"\"" : s);
-            if (world instanceof ServerWorld && line != null)
+            ITextComponent line = ITextComponent.Serializer.fromJson(s.isEmpty() ? "\"\"" : s);
+            if (level instanceof ServerWorld && line != null)
             {
                 try
                 {
-                    lines[i] = TextComponentUtils.func_240645_a_(getCommandSource(null), line, null, 0);
+                    lines[i] = TextComponentUtils.updateForEntity(getCommandSource(null), line, null, 0);
                 }
                 catch (CommandSyntaxException e)
                 {
@@ -169,20 +169,20 @@ public class FramedSignTileEntity extends FramedTileEntity
             renderLines[i] = null;
         }
 
-        textColor = DyeColor.byTranslationKey(nbt.getString("color"), DyeColor.BLACK);
+        textColor = DyeColor.byName(nbt.getString("color"), DyeColor.BLACK);
     }
 
     @Override
-    public CompoundNBT write(CompoundNBT nbt)
+    public CompoundNBT save(CompoundNBT nbt)
     {
         writeToNbt(nbt);
-        return super.write(nbt);
+        return super.save(nbt);
     }
 
     @Override
-    public void read(BlockState state, CompoundNBT nbt)
+    public void load(BlockState state, CompoundNBT nbt)
     {
-        super.read(state, nbt);
+        super.load(state, nbt);
         readFromNbt(nbt);
     }
 }

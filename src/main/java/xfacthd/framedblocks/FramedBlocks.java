@@ -38,12 +38,12 @@ public class FramedBlocks
     public static final ItemGroup FRAMED_GROUP = new ItemGroup("framed_blocks")
     {
         @Override
-        public ItemStack createIcon() { return new ItemStack(FBContent.blockFramedCube.get()); }
+        public ItemStack makeIcon() { return new ItemStack(FBContent.blockFramedCube.get()); }
 
         @Override
-        public void fill(NonNullList<ItemStack> items)
+        public void fillItemList(NonNullList<ItemStack> items)
         {
-            super.fill(items);
+            super.fillItemList(items);
             items.sort((s1, s2) ->
             {
                 if (s1.getItem() == FBContent.itemFramedHammer.get()) { return 1; }

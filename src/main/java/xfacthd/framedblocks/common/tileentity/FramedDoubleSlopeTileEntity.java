@@ -17,25 +17,25 @@ public class FramedDoubleSlopeTileEntity extends FramedDoubleTileEntity
     @Override
     protected boolean hitSecondary(BlockRayTraceResult hit)
     {
-        SlopeType type = getBlockState().get(PropertyHolder.SLOPE_TYPE);
-        Direction facing = getBlockState().get(PropertyHolder.FACING_HOR);
-        Direction side = hit.getFace();
+        SlopeType type = getBlockState().getValue(PropertyHolder.SLOPE_TYPE);
+        Direction facing = getBlockState().getValue(PropertyHolder.FACING_HOR);
+        Direction side = hit.getDirection();
 
-        Vector3d vec = Utils.fraction(hit.getHitVec());
+        Vector3d vec = Utils.fraction(hit.getLocation());
 
         if (type == SlopeType.HORIZONTAL)
         {
-            if (side == facing || side == facing.rotateYCCW()) { return false; }
-            if (side == facing.getOpposite() || side == facing.rotateY()) { return true; }
+            if (side == facing || side == facing.getCounterClockWise()) { return false; }
+            if (side == facing.getOpposite() || side == facing.getClockWise()) { return true; }
 
-            boolean secondary = facing.getAxis() == Direction.Axis.X ? vec.getX() >= vec.getZ() : vec.getZ() >= (1D - vec.getX());
+            boolean secondary = facing.getAxis() == Direction.Axis.X ? vec.x() >= vec.z() : vec.z() >= (1D - vec.x());
 
             if (facing.getAxisDirection() == Direction.AxisDirection.POSITIVE) { secondary = !secondary; }
             return secondary;
         }
         else
         {
-            double hor = facing.getAxis() == Direction.Axis.X ? vec.getX() : vec.getZ();
+            double hor = facing.getAxis() == Direction.Axis.X ? vec.x() : vec.z();
             if (facing.getAxisDirection() == Direction.AxisDirection.NEGATIVE)
             {
                 hor = 1D - hor;
@@ -45,13 +45,13 @@ public class FramedDoubleSlopeTileEntity extends FramedDoubleTileEntity
             {
                 if (side == facing || side == Direction.UP) { return false; }
                 if (side == facing.getOpposite() || side == Direction.DOWN) { return true; }
-                return vec.getY() <= (1D - hor);
+                return vec.y() <= (1D - hor);
             }
             else if (type == SlopeType.BOTTOM)
             {
                 if (side == facing || side == Direction.DOWN) { return false; }
                 if (side == facing.getOpposite() || side == Direction.UP) { return true; }
-                return vec.getY() >= hor;
+                return vec.y() >= hor;
             }
         }
 
@@ -61,13 +61,13 @@ public class FramedDoubleSlopeTileEntity extends FramedDoubleTileEntity
     @Override
     public BlockState getCamoState(Direction side)
     {
-        SlopeType type = getBlockState().get(PropertyHolder.SLOPE_TYPE);
-        Direction facing = getBlockState().get(PropertyHolder.FACING_HOR);
+        SlopeType type = getBlockState().getValue(PropertyHolder.SLOPE_TYPE);
+        Direction facing = getBlockState().getValue(PropertyHolder.FACING_HOR);
 
         if (type == SlopeType.HORIZONTAL)
         {
-            if (side == facing || side == facing.rotateYCCW()) { return getCamoState(); }
-            if (side == facing.getOpposite() || side == facing.rotateY()) { return getCamoStateTwo(); }
+            if (side == facing || side == facing.getCounterClockWise()) { return getCamoState(); }
+            if (side == facing.getOpposite() || side == facing.getClockWise()) { return getCamoStateTwo(); }
         }
         else if (type == SlopeType.TOP)
         {
@@ -80,6 +80,6 @@ public class FramedDoubleSlopeTileEntity extends FramedDoubleTileEntity
             if (side == facing.getOpposite() || side == Direction.UP) { return getCamoStateTwo(); }
         }
 
-        return Blocks.AIR.getDefaultState();
+        return Blocks.AIR.defaultBlockState();
     }
 }

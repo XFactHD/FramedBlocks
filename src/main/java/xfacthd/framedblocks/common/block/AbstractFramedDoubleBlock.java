@@ -22,19 +22,19 @@ public abstract class AbstractFramedDoubleBlock extends FramedBlock
         BlockState state = world.getBlockState(pos);
         if (getCtmPredicate().test(state, side))
         {
-            if (world.getTileEntity(pos) instanceof FramedDoubleTileEntity te)
+            if (world.getBlockEntity(pos) instanceof FramedDoubleTileEntity te)
             {
                 return te.getCamoState(side);
             }
         }
-        return Blocks.AIR.getDefaultState();
+        return Blocks.AIR.defaultBlockState();
     }
 
     @Override
     @SuppressWarnings("deprecation")
     public SoundType getSound(BlockState state, IWorldReader world, BlockPos pos)
     {
-        if (world.getTileEntity(pos) instanceof FramedDoubleTileEntity te)
+        if (world.getBlockEntity(pos) instanceof FramedDoubleTileEntity te)
         {
             BlockState camoState = te.getCamoStateTwo();
             if (!camoState.isAir())

@@ -18,34 +18,34 @@ public class FramedWallSignModel extends FramedBlockModel
     public FramedWallSignModel(BlockState state, IBakedModel baseModel)
     {
         super(state, baseModel);
-        dir = state.get(BlockStateProperties.HORIZONTAL_FACING);
+        dir = state.getValue(BlockStateProperties.HORIZONTAL_FACING);
     }
 
     @Override
     protected void transformQuad(Map<Direction, List<BakedQuad>> quadMap, BakedQuad quad)
     {
-        if (quad.getFace() == dir || quad.getFace() == dir.getOpposite())
+        if (quad.getDirection() == dir || quad.getDirection() == dir.getOpposite())
         {
             BakedQuad faceQuad = ModelUtils.duplicateQuad(quad);
             if (BakedQuadTransformer.createSideQuad(faceQuad, 0F, 4.5F/16F, 1F, 12.5F/16F))
             {
-                if (quad.getFace() == dir)
+                if (quad.getDirection() == dir)
                 {
                     BakedQuadTransformer.setQuadPosInFacingDir(faceQuad, 2F/16F);
                     quadMap.get(null).add(faceQuad);
                 }
                 else
                 {
-                    quadMap.get(quad.getFace()).add(faceQuad);
+                    quadMap.get(quad.getDirection()).add(faceQuad);
                 }
             }
         }
-        else if (quad.getFace() == Direction.UP || quad.getFace() == Direction.DOWN)
+        else if (quad.getDirection() == Direction.UP || quad.getDirection() == Direction.DOWN)
         {
             BakedQuad topBotQuad = ModelUtils.duplicateQuad(quad);
             if (BakedQuadTransformer.createTopBottomQuad(topBotQuad, dir, 2F/16F))
             {
-                BakedQuadTransformer.setQuadPosInFacingDir(topBotQuad, quad.getFace() == Direction.UP ? 12.5F/16F : 11.5F/16F);
+                BakedQuadTransformer.setQuadPosInFacingDir(topBotQuad, quad.getDirection() == Direction.UP ? 12.5F/16F : 11.5F/16F);
                 quadMap.get(null).add(topBotQuad);
             }
         }
@@ -59,7 +59,7 @@ public class FramedWallSignModel extends FramedBlockModel
 
             if (BakedQuadTransformer.createSideQuad(sideQuad, minXZ, 4.5F/16F, maxXZ, 12.5F/16F))
             {
-                quadMap.get(quad.getFace()).add(sideQuad);
+                quadMap.get(quad.getDirection()).add(sideQuad);
             }
         }
     }

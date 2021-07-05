@@ -17,18 +17,18 @@ public class FramedFloorModel extends FramedBlockModel
     @Override
     protected void transformQuad(Map<Direction, List<BakedQuad>> quadMap, BakedQuad quad)
     {
-        if (quad.getFace() == Direction.UP)
+        if (quad.getDirection() == Direction.UP)
         {
             BakedQuad topBotQuad = ModelUtils.duplicateQuad(quad);
             BakedQuadTransformer.setQuadPosInFacingDir(topBotQuad, 1F/16F);
             quadMap.get(null).add(topBotQuad);
         }
-        else if (quad.getFace().getAxis() != Direction.Axis.Y)
+        else if (quad.getDirection().getAxis() != Direction.Axis.Y)
         {
             BakedQuad sideQuad = ModelUtils.duplicateQuad(quad);
             if (BakedQuadTransformer.createHorizontalSideQuad(sideQuad, false, 1F/16F))
             {
-                quadMap.get(quad.getFace()).add(sideQuad);
+                quadMap.get(quad.getDirection()).add(sideQuad);
             }
         }
     }

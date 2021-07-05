@@ -17,7 +17,7 @@ public enum CornerType implements IStringSerializable
     private final String name = toString().toLowerCase(Locale.ENGLISH);
 
     @Override
-    public String getString() { return name; }
+    public String getSerializedName() { return name; }
 
     public boolean isHorizontal() { return this != BOTTOM && this != TOP; }
 
@@ -48,25 +48,25 @@ public enum CornerType implements IStringSerializable
             case HORIZONTAL_TOP_LEFT ->
             {
                 if (side == Direction.UP) { return adjType == HORIZONTAL_BOTTOM_LEFT; }
-                if (side == dir.rotateYCCW()) { return adjType == HORIZONTAL_TOP_RIGHT; }
+                if (side == dir.getCounterClockWise()) { return adjType == HORIZONTAL_TOP_RIGHT; }
                 return false;
             }
             case HORIZONTAL_TOP_RIGHT ->
             {
                 if (side == Direction.UP) { return adjType == HORIZONTAL_BOTTOM_RIGHT; }
-                if (side == dir.rotateY()) { return adjType == HORIZONTAL_TOP_LEFT; }
+                if (side == dir.getClockWise()) { return adjType == HORIZONTAL_TOP_LEFT; }
                 return false;
             }
             case HORIZONTAL_BOTTOM_LEFT ->
             {
                 if (side == Direction.DOWN) { return adjType == HORIZONTAL_TOP_LEFT; }
-                if (side == dir.rotateYCCW()) { return adjType == HORIZONTAL_BOTTOM_RIGHT; }
+                if (side == dir.getCounterClockWise()) { return adjType == HORIZONTAL_BOTTOM_RIGHT; }
                 return false;
             }
             case HORIZONTAL_BOTTOM_RIGHT ->
             {
                 if (side == Direction.DOWN) { return adjType == HORIZONTAL_TOP_RIGHT; }
-                if (side == dir.rotateY()) { return adjType == HORIZONTAL_BOTTOM_LEFT; }
+                if (side == dir.getClockWise()) { return adjType == HORIZONTAL_BOTTOM_LEFT; }
                 return false;
             }
         }
@@ -83,25 +83,25 @@ public enum CornerType implements IStringSerializable
             case HORIZONTAL_BOTTOM_RIGHT ->
             {
                 if (side == Direction.UP) { return adjType == HORIZONTAL_TOP_RIGHT; }
-                if (side == dir.rotateYCCW()) { return adjType == HORIZONTAL_BOTTOM_LEFT; }
+                if (side == dir.getCounterClockWise()) { return adjType == HORIZONTAL_BOTTOM_LEFT; }
                 return false;
             }
             case HORIZONTAL_BOTTOM_LEFT ->
             {
                 if (side == Direction.UP) { return adjType == HORIZONTAL_TOP_LEFT; }
-                if (side == dir.rotateY()) { return adjType == HORIZONTAL_BOTTOM_RIGHT; }
+                if (side == dir.getClockWise()) { return adjType == HORIZONTAL_BOTTOM_RIGHT; }
                 return false;
             }
             case HORIZONTAL_TOP_RIGHT ->
             {
                 if (side == Direction.DOWN) { return adjType == HORIZONTAL_BOTTOM_RIGHT; }
-                if (side == dir.rotateYCCW()) { return adjType == HORIZONTAL_TOP_LEFT; }
+                if (side == dir.getCounterClockWise()) { return adjType == HORIZONTAL_TOP_LEFT; }
                 return false;
             }
             case HORIZONTAL_TOP_LEFT ->
             {
                 if (side == Direction.DOWN) { return adjType == HORIZONTAL_BOTTOM_LEFT; }
-                if (side == dir.rotateY()) { return adjType == HORIZONTAL_TOP_RIGHT; }
+                if (side == dir.getClockWise()) { return adjType == HORIZONTAL_TOP_RIGHT; }
                 return false;
             }
         }

@@ -35,27 +35,27 @@ public class FramedBlock extends Block implements IFramedBlock, IWaterLoggable
         super(props);
 
         this.blockType = blockType;
-        shapes = blockType.generateShapes(getStateContainer().getValidStates());
+        shapes = blockType.generateShapes(getStateDefinition().getPossibleStates());
         if (blockType.supportsWaterLogging())
         {
-            setDefaultState(getDefaultState().with(BlockStateProperties.WATERLOGGED, false));
+            registerDefaultState(defaultBlockState().setValue(BlockStateProperties.WATERLOGGED, false));
         }
     }
 
     @Override
-    public ActionResultType onBlockActivated(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockRayTraceResult hit)
+    public ActionResultType use(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockRayTraceResult hit)
     {
-        return handleBlockActivated(world, pos, player, hand, hit);
+        return handleUse(world, pos, player, hand, hit);
     }
 
-    public BlockState updatePostPlacement(BlockState state, Direction facing, BlockState facingState, IWorld world, BlockPos pos, BlockPos facingPos)
+    public BlockState updateShape(BlockState state, Direction facing, BlockState facingState, IWorld world, BlockPos pos, BlockPos facingPos)
     {
-        if (isWaterLoggable() && state.get(BlockStateProperties.WATERLOGGED))
+        if (isWaterLoggable() && state.getValue(BlockStateProperties.WATERLOGGED))
         {
-            world.getPendingFluidTicks().scheduleTick(pos, Fluids.WATER, Fluids.WATER.getTickRate(world));
+            world.getLiquidTicks().scheduleTick(pos, Fluids.WATER, Fluids.WATER.getTickDelay(world));
         }
 
-        return super.updatePostPlacement(state, facing, facingState, world, pos, facingPos);
+        return super.updateShape(state, facing, facingState, world, pos, facingPos);
     }
 
     @Override
@@ -80,16 +80,16 @@ public class FramedBlock extends Block implements IFramedBlock, IWaterLoggable
     }
 
     @Override
-    public float getAmbientOcclusionLightValue(BlockState state, IBlockReader world, BlockPos pos) { return 1F; }
+    public float getShadeBrightness(BlockState state, IBlockReader world, BlockPos pos) { return 1F; }
 
     @Override
     public FluidState getFluidState(BlockState state)
     {
-        if (isWaterLoggable() && state.get(BlockStateProperties.WATERLOGGED))
+        if (isWaterLoggable() && state.getValue(BlockStateProperties.WATERLOGGED))
         {
-            return Fluids.WATER.getStillFluidState(false);
+            return Fluids.WATER.getSource(false);
         }
-        return Fluids.EMPTY.getDefaultState();
+        return Fluids.EMPTY.defaultFluidState();
     }
 
     @Override
@@ -99,17 +99,17 @@ public class FramedBlock extends Block implements IFramedBlock, IWaterLoggable
     public TileEntity createTileEntity(BlockState state, IBlockReader world) { return new FramedTileEntity(); }
 
     @Override
-    public boolean canContainFluid(IBlockReader world, BlockPos pos, BlockState state, Fluid fluid)
+    public boolean canPlaceLiquid(IBlockReader world, BlockPos pos, BlockState state, Fluid fluid)
     {
         if (!isWaterLoggable()) { return false; }
-        return IWaterLoggable.super.canContainFluid(world, pos, state, fluid);
+        return IWaterLoggable.super.canPlaceLiquid(world, pos, state, fluid);
     }
 
     @Override
-    public Fluid pickupFluid(IWorld world, BlockPos pos, BlockState state)
+    public Fluid takeLiquid(IWorld world, BlockPos pos, BlockState state)
     {
         if (!isWaterLoggable()) { return Fluids.EMPTY; }
-        return IWaterLoggable.super.pickupFluid(world, pos, state);
+        return IWaterLoggable.super.takeLiquid(world, pos, state);
     }
 
     @Override
@@ -123,16 +123,16 @@ public class FramedBlock extends Block implements IFramedBlock, IWaterLoggable
 
     protected BlockState withSlopeType(BlockState state, Direction side, Direction facing, Vector3d hitVec)
     {
-        state = state.with(PropertyHolder.FACING_HOR, facing);
+        state = state.setValue(PropertyHolder.FACING_HOR, facing);
 
         Vector3d hitPoint = Utils.fraction(hitVec);
         if (side.getAxis() != Direction.Axis.Y)
         {
-            if (hitPoint.getY() < (3D / 16D))
+            if (hitPoint.y() < (3D / 16D))
             {
                 side = Direction.UP;
             }
-            else if (hitPoint.getY() > (13D / 16D))
+            else if (hitPoint.y() > (13D / 16D))
             {
                 side = Direction.DOWN;
             }
@@ -140,27 +140,27 @@ public class FramedBlock extends Block implements IFramedBlock, IWaterLoggable
 
         if (side == Direction.DOWN)
         {
-            state = state.with(PropertyHolder.SLOPE_TYPE, SlopeType.TOP);
+            state = state.setValue(PropertyHolder.SLOPE_TYPE, SlopeType.TOP);
         }
         else if (side == Direction.UP)
         {
-            state = state.with(PropertyHolder.SLOPE_TYPE, SlopeType.BOTTOM);
+            state = state.setValue(PropertyHolder.SLOPE_TYPE, SlopeType.BOTTOM);
         }
         else
         {
-            state = state.with(PropertyHolder.SLOPE_TYPE, SlopeType.HORIZONTAL);
+            state = state.setValue(PropertyHolder.SLOPE_TYPE, SlopeType.HORIZONTAL);
 
             boolean xAxis = side.getAxis() == Direction.Axis.X;
-            boolean positive = side.rotateYCCW().getAxisDirection() == Direction.AxisDirection.POSITIVE;
-            double xz = xAxis ? hitPoint.getZ() : hitPoint.getX();
+            boolean positive = side.getCounterClockWise().getAxisDirection() == Direction.AxisDirection.POSITIVE;
+            double xz = xAxis ? hitPoint.z() : hitPoint.x();
 
             if ((xz > .5D) == positive)
             {
-                state = state.with(PropertyHolder.FACING_HOR, side.getOpposite().rotateY());
+                state = state.setValue(PropertyHolder.FACING_HOR, side.getOpposite().getClockWise());
             }
             else
             {
-                state = state.with(PropertyHolder.FACING_HOR, side.getOpposite());
+                state = state.setValue(PropertyHolder.FACING_HOR, side.getOpposite());
             }
         }
 
@@ -171,18 +171,18 @@ public class FramedBlock extends Block implements IFramedBlock, IWaterLoggable
     {
         if (side == Direction.DOWN)
         {
-            state = state.with(PropertyHolder.TOP, true);
+            state = state.setValue(PropertyHolder.TOP, true);
         }
         else if (side == Direction.UP)
         {
-            state = state.with(PropertyHolder.TOP, false);
+            state = state.setValue(PropertyHolder.TOP, false);
         }
         else
         {
             double y = hitVec.y;
             y -= Math.floor(y);
 
-            state = state.with(PropertyHolder.TOP, y >= .5D);
+            state = state.setValue(PropertyHolder.TOP, y >= .5D);
         }
         return state;
     }
@@ -190,7 +190,7 @@ public class FramedBlock extends Block implements IFramedBlock, IWaterLoggable
     protected BlockState withWater(BlockState state, IWorldReader world, BlockPos pos)
     {
         FluidState fluidState = world.getFluidState(pos);
-        return state.with(BlockStateProperties.WATERLOGGED, fluidState.getFluid() == Fluids.WATER);
+        return state.setValue(BlockStateProperties.WATERLOGGED, fluidState.getType() == Fluids.WATER);
     }
 
     protected boolean isWaterLoggable() { return blockType.supportsWaterLogging(); }

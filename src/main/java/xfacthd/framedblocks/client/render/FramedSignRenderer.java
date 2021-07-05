@@ -23,20 +23,20 @@ public class FramedSignRenderer extends TileEntityRenderer<FramedSignTileEntity>
     @Override
     public void render(FramedSignTileEntity tile, float partialTicks, MatrixStack matrix, IRenderTypeBuffer buffer, int light, int overlay)
     {
-        matrix.push();
+        matrix.pushPose();
 
         BlockState state = tile.getBlockState();
         if (state.getBlock() instanceof FramedSignBlock)
         {
             matrix.translate(0.5D, 0.5D, 0.5D);
-            float rot = -((state.get(BlockStateProperties.ROTATION_0_15) * 360) / 16.0F);
-            matrix.rotate(Vector3f.YP.rotationDegrees(rot));
+            float rot = -((state.getValue(BlockStateProperties.ROTATION_16) * 360) / 16.0F);
+            matrix.mulPose(Vector3f.YP.rotationDegrees(rot));
         }
         else
         {
             matrix.translate(0.5D, 0.5D, 0.5D);
-            float rot = -state.get(PropertyHolder.FACING_HOR).getHorizontalAngle();
-            matrix.rotate(Vector3f.YP.rotationDegrees(rot));
+            float rot = -state.getValue(PropertyHolder.FACING_HOR).toYRot();
+            matrix.mulPose(Vector3f.YP.rotationDegrees(rot));
             matrix.translate(0.0D, -0.3125D, -0.4375D);
         }
 
@@ -44,28 +44,28 @@ public class FramedSignRenderer extends TileEntityRenderer<FramedSignTileEntity>
         matrix.scale(0.01F, -0.01F, 0.01F);
 
         int textColor = tile.getTextColor().getTextColor();
-        int r = (int)(NativeImage.getRed(textColor) * 0.4D);
-        int g = (int)(NativeImage.getGreen(textColor) * 0.4D);
-        int b = (int)(NativeImage.getBlue(textColor) * 0.4D);
-        int argb = NativeImage.getCombined(0, b, g, r);
+        int r = (int)(NativeImage.getR(textColor) * 0.4D);
+        int g = (int)(NativeImage.getG(textColor) * 0.4D);
+        int b = (int)(NativeImage.getB(textColor) * 0.4D);
+        int argb = NativeImage.combine(0, b, g, r);
 
-        FontRenderer fontrenderer = renderDispatcher.getFontRenderer();
+        FontRenderer fontrenderer = renderer.getFont();
         for (int line = 0; line < 4; line++)
         {
             IReorderingProcessor text = tile.getRenderedLine(line, component ->
             {
-                List<IReorderingProcessor> parts = fontrenderer.trimStringToWidth(component, 90);
-                return parts.isEmpty() ? IReorderingProcessor.field_242232_a : parts.get(0);
+                List<IReorderingProcessor> parts = fontrenderer.split(component, 90);
+                return parts.isEmpty() ? IReorderingProcessor.EMPTY : parts.get(0);
             });
 
             if (text != null)
             {
-                float xOff = -fontrenderer.func_243245_a(text) / 2F;
+                float xOff = -fontrenderer.width(text) / 2F;
                 float y = line * 10 - 20;
-                fontrenderer.drawEntityText(text, xOff, y, argb, false, matrix.getLast().getMatrix(), buffer, false, 0, light);
+                fontrenderer.drawInBatch(text, xOff, y, argb, false, matrix.last().pose(), buffer, false, 0, light);
             }
         }
 
-        matrix.pop();
+        matrix.popPose();
     }
 }

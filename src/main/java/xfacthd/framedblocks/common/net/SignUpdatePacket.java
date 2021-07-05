@@ -30,7 +30,7 @@ public class SignUpdatePacket
         lines = new String[count];
         for (int i = 0; i < count; i++)
         {
-            lines[i] = buffer.readString(384);
+            lines[i] = buffer.readUtf(384);
         }
     }
 
@@ -41,7 +41,7 @@ public class SignUpdatePacket
         buffer.writeByte(lines.length);
         for (String line : lines)
         {
-            buffer.writeString(line);
+            buffer.writeUtf(line);
         }
     }
 
@@ -51,12 +51,12 @@ public class SignUpdatePacket
         {
             ServerPlayerEntity player = ctx.get().getSender();
             //noinspection ConstantConditions
-            World world = player.getServerWorld();
+            World world = player.getLevel();
 
             //noinspection deprecation
-            if (world.isBlockLoaded(pos))
+            if (world.hasChunkAt(pos))
             {
-                if (world.getTileEntity(pos) instanceof FramedSignTileEntity sign)
+                if (world.getBlockEntity(pos) instanceof FramedSignTileEntity sign)
                 {
                     if (sign.getEditingPlayer() != player)
                     {
@@ -66,7 +66,7 @@ public class SignUpdatePacket
 
                     for (int i = 0; i < lines.length; i++)
                     {
-                        String line = TextFormatting.getTextWithoutFormattingCodes(lines[i]);
+                        String line = TextFormatting.stripFormatting(lines[i]);
                         sign.setLine(i, new StringTextComponent(line != null ? line : ""));
                     }
                 }

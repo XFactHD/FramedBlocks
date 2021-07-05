@@ -21,9 +21,9 @@ public class FramedButtonModel extends FramedBlockModel
     public FramedButtonModel(BlockState state, IBakedModel baseModel)
     {
         super(state, baseModel);
-        dir = state.get(BlockStateProperties.HORIZONTAL_FACING);
-        face = state.get(BlockStateProperties.FACE);
-        pressed = state.get(BlockStateProperties.POWERED);
+        dir = state.getValue(BlockStateProperties.HORIZONTAL_FACING);
+        face = state.getValue(BlockStateProperties.ATTACH_FACE);
+        pressed = state.getValue(BlockStateProperties.POWERED);
     }
 
     @Override
@@ -41,25 +41,25 @@ public class FramedButtonModel extends FramedBlockModel
             float maxX = rotX ? 10F/16F : 11F/16F;
             float maxZ = rotX ? 11F/16F : 10F/16F;
 
-            if (quad.getFace() == facing || quad.getFace() == facing.getOpposite())
+            if (quad.getDirection() == facing || quad.getDirection() == facing.getOpposite())
             {
                 BakedQuad topBotQuad = ModelUtils.duplicateQuad(quad);
                 if (BakedQuadTransformer.createTopBottomQuad(topBotQuad, minX, minZ, maxX, maxZ))
                 {
-                    if (quad.getFace() == facing)
+                    if (quad.getDirection() == facing)
                     {
                         BakedQuadTransformer.setQuadPosInFacingDir(topBotQuad, pressed ? 1F / 16F : 2F / 16F);
                         quadMap.get(null).add(topBotQuad);
                     }
                     else
                     {
-                        quadMap.get(quad.getFace()).add(topBotQuad);
+                        quadMap.get(quad.getDirection()).add(topBotQuad);
                     }
                 }
             }
             else
             {
-                boolean largeSide = rotX == (quad.getFace().getAxis() == Direction.Axis.X);
+                boolean largeSide = rotX == (quad.getDirection().getAxis() == Direction.Axis.X);
                 float minXZ = largeSide ? 5F/16F : 6F/16F;
                 float maxXZ = largeSide ? 11F/16F : 10F/16F;
                 float minY = (facing == Direction.DOWN) ? (pressed ? 15F/16F : 14F/16F) : 0F;
@@ -75,19 +75,19 @@ public class FramedButtonModel extends FramedBlockModel
         }
         else
         {
-            if (quad.getFace() == facing || quad.getFace() == facing.getOpposite())
+            if (quad.getDirection() == facing || quad.getDirection() == facing.getOpposite())
             {
                 BakedQuad faceQuad = ModelUtils.duplicateQuad(quad);
                 if (BakedQuadTransformer.createSideQuad(faceQuad, 5F/16F, 6F/16F, 11F/16F, 10F/16F))
                 {
-                    if (quad.getFace() == facing)
+                    if (quad.getDirection() == facing)
                     {
                         BakedQuadTransformer.setQuadPosInFacingDir(faceQuad, pressed ? 1F/16F : 2F/16F);
                         quadMap.get(null).add(faceQuad);
                     }
                     else
                     {
-                        quadMap.get(quad.getFace()).add(faceQuad);
+                        quadMap.get(quad.getDirection()).add(faceQuad);
                     }
                 }
             }
@@ -114,7 +114,7 @@ public class FramedButtonModel extends FramedBlockModel
                     maxZ = xAxis ? 11F/16F : (negative ? 1F :  2F/16F);
                 }
 
-                if (quad.getFace().getAxis() == Direction.Axis.Y)
+                if (quad.getDirection().getAxis() == Direction.Axis.Y)
                 {
                     BakedQuad topBotQuad = ModelUtils.duplicateQuad(quad);
                     if (BakedQuadTransformer.createTopBottomQuad(topBotQuad, minX, minZ, maxX, maxZ))

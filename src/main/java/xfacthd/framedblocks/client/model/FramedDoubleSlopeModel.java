@@ -21,15 +21,15 @@ public class FramedDoubleSlopeModel extends FramedDoubleBlockModel
     @Override
     protected Tuple<BlockState, BlockState> getDummyStates()
     {
-        SlopeType type = state.get(PropertyHolder.SLOPE_TYPE);
-        Direction facing = state.get(PropertyHolder.FACING_HOR);
+        SlopeType type = state.getValue(PropertyHolder.SLOPE_TYPE);
+        Direction facing = state.getValue(PropertyHolder.FACING_HOR);
 
-        BlockState stateOne = FBContent.blockFramedSlope.get().getDefaultState()
-                .with(PropertyHolder.SLOPE_TYPE, type)
-                .with(PropertyHolder.FACING_HOR, facing);
-        BlockState stateTwo = FBContent.blockFramedSlope.get().getDefaultState()
-                .with(PropertyHolder.SLOPE_TYPE, type == SlopeType.HORIZONTAL ? type : type.getOpposite())
-                .with(PropertyHolder.FACING_HOR, facing.getOpposite());
+        BlockState stateOne = FBContent.blockFramedSlope.get().defaultBlockState()
+                .setValue(PropertyHolder.SLOPE_TYPE, type)
+                .setValue(PropertyHolder.FACING_HOR, facing);
+        BlockState stateTwo = FBContent.blockFramedSlope.get().defaultBlockState()
+                .setValue(PropertyHolder.SLOPE_TYPE, type == SlopeType.HORIZONTAL ? type : type.getOpposite())
+                .setValue(PropertyHolder.FACING_HOR, facing.getOpposite());
 
         return new Tuple<>(stateOne, stateTwo);
     }

@@ -26,27 +26,27 @@ public class FramedStairsBlock extends StairsBlock implements IFramedBlock
     {
         if (dir == Direction.UP)
         {
-            return state.get(BlockStateProperties.HALF) == Half.TOP;
+            return state.getValue(BlockStateProperties.HALF) == Half.TOP;
         }
         else if (dir == Direction.DOWN)
         {
-            return state.get(BlockStateProperties.HALF) == Half.BOTTOM;
+            return state.getValue(BlockStateProperties.HALF) == Half.BOTTOM;
         }
         else
         {
-            Direction facing = state.get(BlockStateProperties.HORIZONTAL_FACING);
-            StairsShape shape = state.get(BlockStateProperties.STAIRS_SHAPE);
+            Direction facing = state.getValue(BlockStateProperties.HORIZONTAL_FACING);
+            StairsShape shape = state.getValue(BlockStateProperties.STAIRS_SHAPE);
             if (shape == StairsShape.STRAIGHT)
             {
                 return facing == dir;
             }
             else if (shape == StairsShape.INNER_LEFT)
             {
-                return facing == dir || facing.rotateYCCW() == dir;
+                return facing == dir || facing.getCounterClockWise() == dir;
             }
             else if (shape == StairsShape.INNER_RIGHT)
             {
-                return facing == dir || facing.rotateY() == dir;
+                return facing == dir || facing.getClockWise() == dir;
             }
             else
             {
@@ -57,13 +57,13 @@ public class FramedStairsBlock extends StairsBlock implements IFramedBlock
 
     public FramedStairsBlock()
     {
-        super(() -> FBContent.blockFramedCube.get().getDefaultState(), IFramedBlock.createProperties());
+        super(() -> FBContent.blockFramedCube.get().defaultBlockState(), IFramedBlock.createProperties());
     }
 
     @Override
-    public final ActionResultType onBlockActivated(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockRayTraceResult hit)
+    public final ActionResultType use(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockRayTraceResult hit)
     {
-        return handleBlockActivated(world, pos, player, hand, hit);
+        return handleUse(world, pos, player, hand, hit);
     }
 
     @Override
