@@ -160,22 +160,14 @@ public class FramedCornerSlopeBlock extends FramedBlock
                         makeCuboidShape(12, 12, 0, 16, 16, 16)
                 ).simplify();
 
-                VoxelShape shape = VoxelShapes.fullCube();
-                switch (type)
+                VoxelShape shape = switch (type)
                 {
-                    case HORIZONTAL_BOTTOM_LEFT:
-                        shape = shapeBottomLeft;
-                        break;
-                    case HORIZONTAL_BOTTOM_RIGHT:
-                        shape = shapeBottomRight;
-                        break;
-                    case HORIZONTAL_TOP_LEFT:
-                        shape = shapeTopLeft;
-                        break;
-                    case HORIZONTAL_TOP_RIGHT:
-                        shape = shapeTopRight;
-                        break;
-                }
+                    case HORIZONTAL_BOTTOM_LEFT -> shapeBottomLeft;
+                    case HORIZONTAL_BOTTOM_RIGHT -> shapeBottomRight;
+                    case HORIZONTAL_TOP_LEFT -> shapeTopLeft;
+                    case HORIZONTAL_TOP_RIGHT -> shapeTopRight;
+                    default -> VoxelShapes.fullCube();
+                };
                 builder.put(state, Utils.rotateShape(Direction.NORTH, dir, shape));
             }
             else if (type.isTop())
@@ -256,22 +248,14 @@ public class FramedCornerSlopeBlock extends FramedBlock
                         makeCuboidShape(4, 0, 4, 16, 4, 8)
                 ).simplify();
 
-                VoxelShape shape = VoxelShapes.fullCube();
-                switch (type)
+                VoxelShape shape = switch (type)
                 {
-                    case HORIZONTAL_BOTTOM_LEFT:
-                        shape = shapeBottomLeft;
-                        break;
-                    case HORIZONTAL_BOTTOM_RIGHT:
-                        shape = shapeBottomRight;
-                        break;
-                    case HORIZONTAL_TOP_LEFT:
-                        shape = shapeTopLeft;
-                        break;
-                    case HORIZONTAL_TOP_RIGHT:
-                        shape = shapeTopRight;
-                        break;
-                }
+                    case HORIZONTAL_BOTTOM_LEFT -> shapeBottomLeft;
+                    case HORIZONTAL_BOTTOM_RIGHT -> shapeBottomRight;
+                    case HORIZONTAL_TOP_LEFT -> shapeTopLeft;
+                    case HORIZONTAL_TOP_RIGHT -> shapeTopRight;
+                    default -> VoxelShapes.fullCube();
+                };
                 builder.put(state, Utils.rotateShape(Direction.NORTH, dir, shape));
             }
             else if (type.isTop())

@@ -34,10 +34,8 @@ public abstract class AbstractFramedSignBlock extends FramedBlock
         }
         else
         {
-            TileEntity te = world.getTileEntity(pos);
-            if (te instanceof FramedSignTileEntity)
+            if (world.getTileEntity(pos) instanceof FramedSignTileEntity sign)
             {
-                FramedSignTileEntity sign = (FramedSignTileEntity) te;
                 if (dye)
                 {
                     boolean success = sign.setTextColor(((DyeItem) stack.getItem()).getDyeColor());

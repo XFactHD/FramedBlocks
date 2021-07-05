@@ -52,10 +52,8 @@ public class FramedDoubleSlopeBlock extends AbstractFramedDoubleBlock
         SlopeType type = state.get(PropertyHolder.SLOPE_TYPE);
         if (type != SlopeType.HORIZONTAL)
         {
-            TileEntity te = world.getTileEntity(pos);
-            if (te instanceof FramedDoubleTileEntity)
+            if (world.getTileEntity(pos) instanceof FramedDoubleTileEntity dte)
             {
-                FramedDoubleTileEntity dte = (FramedDoubleTileEntity) te;
                 BlockState camoState = type == SlopeType.TOP ? dte.getCamoState() : dte.getCamoStateTwo();
                 if (!camoState.isAir())
                 {

@@ -147,22 +147,15 @@ public class ModelUtils
         float nY = normal[0][1];
         float nZ = normal[0][2];
 
-        switch (dir)
+        return switch (dir)
         {
-            case DOWN:
-                return nY < 0;
-            case UP:
-                return nY > 0;
-            case NORTH:
-                return nZ < 0;
-            case SOUTH:
-                return nZ > 0;
-            case WEST:
-                return nX < 0;
-            case EAST:
-                return nX > 0;
-        }
-        return false;
+            case DOWN -> nY < 0;
+            case UP -> nY > 0;
+            case NORTH -> nZ < 0;
+            case SOUTH -> nZ > 0;
+            case WEST -> nX < 0;
+            case EAST -> nX > 0;
+        };
     }
 
     public static void rotateElement(float[][] elem, boolean right, int count)

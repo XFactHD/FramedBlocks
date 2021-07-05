@@ -56,9 +56,9 @@ public class GhostBlockRenderer
         BlockRayTraceResult target = (BlockRayTraceResult) mouseOver;
 
         ItemStack stack = mc().player.getHeldItemMainhand();
-        if (!(stack.getItem() instanceof BlockItem)) { return; }
+        if (!(stack.getItem() instanceof BlockItem item)) { return; }
 
-        Block block = ((BlockItem) stack.getItem()).getBlock();
+        Block block = item.getBlock();
         if (!(block instanceof IFramedBlock)) { return; }
 
         boolean doRender;

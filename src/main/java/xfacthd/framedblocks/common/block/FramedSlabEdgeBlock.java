@@ -6,12 +6,11 @@ import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.item.BlockItemUseContext;
 import net.minecraft.state.StateContainer;
-import net.minecraft.state.properties.*;
+import net.minecraft.state.properties.BlockStateProperties;
 import net.minecraft.util.Direction;
 import net.minecraft.util.math.shapes.VoxelShape;
-import xfacthd.framedblocks.common.FBContent;
-import xfacthd.framedblocks.common.data.*;
-import xfacthd.framedblocks.common.util.SideSkipPredicate;
+import xfacthd.framedblocks.common.data.BlockType;
+import xfacthd.framedblocks.common.data.PropertyHolder;
 import xfacthd.framedblocks.common.util.Utils;
 
 public class FramedSlabEdgeBlock extends FramedBlock

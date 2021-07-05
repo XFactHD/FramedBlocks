@@ -8,7 +8,6 @@ import net.minecraft.item.BlockItemUseContext;
 import net.minecraft.item.ItemStack;
 import net.minecraft.state.StateContainer;
 import net.minecraft.state.properties.*;
-import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.*;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.BlockRayTraceResult;
@@ -62,12 +61,11 @@ public class FramedSlabBlock extends FramedBlock
                     ItemStack camoStack = ItemStack.EMPTY;
                     boolean glowing = false;
 
-                    TileEntity te = world.getTileEntity(pos);
-                    if (te instanceof FramedTileEntity)
+                    if (world.getTileEntity(pos) instanceof FramedTileEntity te)
                     {
-                        camoState = ((FramedTileEntity) te).getCamoState();
-                        camoStack = ((FramedTileEntity) te).getCamoStack();
-                        glowing = ((FramedTileEntity) te).isGlowing();
+                        camoState = te.getCamoState();
+                        camoStack = te.getCamoStack();
+                        glowing = te.isGlowing();
                     }
 
                     world.setBlockState(pos, FBContent.blockFramedDoubleSlab.get().getDefaultState());
@@ -81,11 +79,10 @@ public class FramedSlabBlock extends FramedBlock
                         player.inventory.markDirty();
                     }
 
-                    te = world.getTileEntity(pos);
-                    if (te instanceof FramedDoubleTileEntity)
+                    if (world.getTileEntity(pos) instanceof FramedDoubleTileEntity te)
                     {
-                        ((FramedDoubleTileEntity) te).setCamo(camoStack, camoState, top);
-                        ((FramedDoubleTileEntity) te).setGlowing(glowing);
+                        te.setCamo(camoStack, camoState, top);
+                        te.setGlowing(glowing);
                     }
                 }
                 return ActionResultType.func_233537_a_(world.isRemote());

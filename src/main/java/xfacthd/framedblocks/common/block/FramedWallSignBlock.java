@@ -77,26 +77,10 @@ public class FramedWallSignBlock extends AbstractFramedSignBlock
         {
             switch (state.get(PropertyHolder.FACING_HOR))
             {
-                case NORTH:
-                {
-                    builder.put(state, makeCuboidShape(0.0D, 4.5D, 14.0D, 16.0D, 12.5D, 16.0D));
-                    break;
-                }
-                case EAST:
-                {
-                    builder.put(state, makeCuboidShape(0.0D, 4.5D, 0.0D, 2.0D, 12.5D, 16.0D));
-                    break;
-                }
-                case SOUTH:
-                {
-                    builder.put(state, makeCuboidShape(0.0D, 4.5D, 0.0D, 16.0D, 12.5D, 2.0D));
-                    break;
-                }
-                case WEST:
-                {
-                    builder.put(state, makeCuboidShape(14.0D, 4.5D, 0.0D, 16.0D, 12.5D, 16.0D));
-                    break;
-                }
+                case NORTH -> builder.put(state, makeCuboidShape(0.0D, 4.5D, 14.0D, 16.0D, 12.5D, 16.0D));
+                case EAST -> builder.put(state, makeCuboidShape(0.0D, 4.5D, 0.0D, 2.0D, 12.5D, 16.0D));
+                case SOUTH -> builder.put(state, makeCuboidShape(0.0D, 4.5D, 0.0D, 16.0D, 12.5D, 2.0D));
+                case WEST -> builder.put(state, makeCuboidShape(14.0D, 4.5D, 0.0D, 16.0D, 12.5D, 16.0D));
             }
         }
 

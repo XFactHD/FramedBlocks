@@ -7,7 +7,6 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.*;
 import net.minecraft.loot.LootContext;
 import net.minecraft.loot.LootParameters;
-import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.*;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.BlockRayTraceResult;
@@ -50,30 +49,27 @@ public interface IFramedBlock extends IFacade
 
     default ActionResultType handleBlockActivated(World world, BlockPos pos, PlayerEntity player, Hand hand, BlockRayTraceResult hit)
     {
-        TileEntity te = world.getTileEntity(pos);
-        if (te instanceof FramedTileEntity)
+        if (world.getTileEntity(pos) instanceof FramedTileEntity te)
         {
-            return ((FramedTileEntity) te).handleInteraction(player, hand, hit);
+            return te.handleInteraction(player, hand, hit);
         }
         return ActionResultType.FAIL;
     }
 
     default int getLight(IBlockReader world, BlockPos pos)
     {
-        TileEntity te = world.getTileEntity(pos);
-        if (te instanceof FramedTileEntity)
+        if (world.getTileEntity(pos) instanceof FramedTileEntity te)
         {
-            return ((FramedTileEntity) te).getLightValue();
+            return te.getLightValue();
         }
         return 0;
     }
 
     default SoundType getSound(BlockState state, IWorldReader world, BlockPos pos)
     {
-        TileEntity te = world.getTileEntity(pos);
-        if (te instanceof FramedTileEntity)
+        if (world.getTileEntity(pos) instanceof FramedTileEntity te)
         {
-            BlockState camoState = ((FramedTileEntity) te).getCamoState();
+            BlockState camoState = te.getCamoState();
             if (!camoState.isAir())
             {
                 return camoState.getSoundType();
@@ -84,18 +80,17 @@ public interface IFramedBlock extends IFacade
 
     default List<ItemStack> getDrops(List<ItemStack> drops, LootContext.Builder builder)
     {
-        TileEntity te = builder.get(LootParameters.BLOCK_ENTITY);
-        if (te instanceof FramedTileEntity)
+        if (builder.get(LootParameters.BLOCK_ENTITY) instanceof FramedTileEntity te)
         {
-            ItemStack camo = ((FramedTileEntity) te).getCamoStack();
+            ItemStack camo = te.getCamoStack();
             if (!camo.isEmpty())
             {
                 drops.add(camo);
             }
 
-            if (te instanceof FramedDoubleTileEntity)
+            if (te instanceof FramedDoubleTileEntity dte)
             {
-                camo = ((FramedDoubleTileEntity) te).getCamoStackTwo();
+                camo = dte.getCamoStackTwo();
                 if (!camo.isEmpty())
                 {
                     drops.add(camo);
@@ -123,10 +118,9 @@ public interface IFramedBlock extends IFacade
         BlockState state = world.getBlockState(pos);
         if (getCtmPredicate().test(state, side))
         {
-            TileEntity te = world.getTileEntity(pos);
-            if (te instanceof FramedTileEntity)
+            if (world.getTileEntity(pos) instanceof FramedTileEntity te)
             {
-                return ((FramedTileEntity) te).getCamoState();
+                return te.getCamoState();
             }
         }
         return Blocks.AIR.getDefaultState();
@@ -142,10 +136,9 @@ public interface IFramedBlock extends IFacade
 
     default float getCamoSlipperiness(BlockState state, IWorldReader world, BlockPos pos, @Nullable Entity entity)
     {
-        TileEntity te = world.getTileEntity(pos);
-        if (te instanceof FramedTileEntity)
+        if (world.getTileEntity(pos) instanceof FramedTileEntity te)
         {
-            BlockState camoState = ((FramedTileEntity) te).getCamoState(Direction.UP);
+            BlockState camoState = te.getCamoState(Direction.UP);
             if (!camoState.isAir())
             {
                 return camoState.getSlipperiness(world, pos, entity);

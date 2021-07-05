@@ -94,21 +94,11 @@ public class FramedLatticeBlock extends FramedBlock
 
     public static BooleanProperty getPropFromAxis(Direction dir)
     {
-        switch (dir.getAxis())
+        return switch (dir.getAxis())
         {
-            case X:
-            {
-                return PropertyHolder.X_AXIS;
-            }
-            case Y:
-            {
-                return PropertyHolder.Y_AXIS;
-            }
-            case Z:
-            {
-                return PropertyHolder.Z_AXIS;
-            }
-            default: throw new IllegalArgumentException("Facing with invalid axis: " + dir);
-        }
+            case X -> PropertyHolder.X_AXIS;
+            case Y -> PropertyHolder.Y_AXIS;
+            case Z -> PropertyHolder.Z_AXIS;
+        };
     }
 }

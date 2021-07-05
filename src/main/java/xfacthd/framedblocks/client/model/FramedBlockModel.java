@@ -48,9 +48,8 @@ public abstract class FramedBlockModel extends BakedModelProxy
         RenderType layer = MinecraftForgeClient.getRenderLayer();
         BlockState camoState = Blocks.AIR.getDefaultState();
 
-        if (extraData instanceof FramedBlockData)
+        if (extraData instanceof FramedBlockData data)
         {
-            FramedBlockData data = (FramedBlockData) extraData;
             if (side != null && ((IFramedBlock)state.getBlock()).isSideHidden(
                     data.getWorld(),
                     data.getPos(),
@@ -165,9 +164,9 @@ public abstract class FramedBlockModel extends BakedModelProxy
     private final Map<BlockState, FluidDummyModel> fluidModels = new HashMap<>();
     protected IBakedModel getCamoModel(BlockState camoState)
     {
-        if (camoState.getBlock() instanceof FlowingFluidBlock)
+        if (camoState.getBlock() instanceof FlowingFluidBlock fluid)
         {
-            return fluidModels.computeIfAbsent(camoState, state -> new FluidDummyModel(((FlowingFluidBlock) state.getBlock()).getFluid()));
+            return fluidModels.computeIfAbsent(camoState, state -> new FluidDummyModel(fluid.getFluid()));
         }
         return Minecraft.getInstance().getBlockRendererDispatcher().getModelForState(camoState);
     }

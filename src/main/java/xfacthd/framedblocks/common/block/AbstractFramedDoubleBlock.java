@@ -1,7 +1,6 @@
 package xfacthd.framedblocks.common.block;
 
 import net.minecraft.block.*;
-import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.Direction;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockReader;
@@ -23,10 +22,9 @@ public abstract class AbstractFramedDoubleBlock extends FramedBlock
         BlockState state = world.getBlockState(pos);
         if (getCtmPredicate().test(state, side))
         {
-            TileEntity te = world.getTileEntity(pos);
-            if (te instanceof FramedDoubleTileEntity)
+            if (world.getTileEntity(pos) instanceof FramedDoubleTileEntity te)
             {
-                return ((FramedDoubleTileEntity) te).getCamoState(side);
+                return te.getCamoState(side);
             }
         }
         return Blocks.AIR.getDefaultState();
@@ -36,16 +34,15 @@ public abstract class AbstractFramedDoubleBlock extends FramedBlock
     @SuppressWarnings("deprecation")
     public SoundType getSound(BlockState state, IWorldReader world, BlockPos pos)
     {
-        TileEntity te = world.getTileEntity(pos);
-        if (te instanceof FramedDoubleTileEntity)
+        if (world.getTileEntity(pos) instanceof FramedDoubleTileEntity te)
         {
-            BlockState camoState = ((FramedDoubleTileEntity) te).getCamoStateTwo();
+            BlockState camoState = te.getCamoStateTwo();
             if (!camoState.isAir())
             {
                 return camoState.getSoundType();
             }
 
-            camoState = ((FramedDoubleTileEntity) te).getCamoState();
+            camoState = te.getCamoState();
             if (!camoState.isAir())
             {
                 return camoState.getSoundType();

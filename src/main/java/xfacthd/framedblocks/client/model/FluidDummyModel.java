@@ -136,47 +136,23 @@ public class FluidDummyModel implements IBakedModel
         for(int elem = 0; elem < elements.size(); elem++)
         {
             VertexFormatElement e = elements.get(elem);
-            switch(e.getUsage())
+            switch (e.getUsage())
             {
-                case POSITION:
-                {
-                    consumer.put(elem, pos.getX(), pos.getY(), pos.getZ(), pos.getW());
-                    break;
-                }
-                case COLOR:
-                {
-                    consumer.put(elem, color.getX(), color.getY(), color.getZ(), color.getW());
-                    break;
-                }
-                case UV:
-                {
+                case POSITION -> consumer.put(elem, pos.getX(), pos.getY(), pos.getZ(), pos.getW());
+                case COLOR -> consumer.put(elem, color.getX(), color.getY(), color.getZ(), color.getW());
+                case UV -> {
                     switch (e.getIndex())
                     {
-                        case 0:
-                            consumer.put(elem,
-                                    texture.getInterpolatedU(tex.x * 16),
-                                    texture.getInterpolatedV(tex.y * 16)
-                            );
-                            break;
-                        case 2:
-                            consumer.put(elem, light.x, light.y);
-                            break;
-                        default:
-                            consumer.put(elem);
-                            break;
+                        case 0 -> consumer.put(elem,
+                                texture.getInterpolatedU(tex.x * 16),
+                                texture.getInterpolatedV(tex.y * 16)
+                        );
+                        case 2 -> consumer.put(elem, light.x, light.y);
+                        default -> consumer.put(elem);
                     }
-                    break;
                 }
-                case NORMAL:
-                {
-                    consumer.put(elem, normal.getX(), normal.getY(), normal.getZ());
-                    break;
-                }
-                default:
-                {
-                    consumer.put(elem);
-                    break;
-                }
+                case NORMAL -> consumer.put(elem, normal.getX(), normal.getY(), normal.getZ());
+                default -> consumer.put(elem);
             }
         }
     }

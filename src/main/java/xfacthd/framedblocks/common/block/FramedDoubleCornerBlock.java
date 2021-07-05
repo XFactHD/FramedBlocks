@@ -100,10 +100,8 @@ public class FramedDoubleCornerBlock extends AbstractFramedDoubleBlock
     public SoundType getSound(BlockState state, IWorldReader world, BlockPos pos)
     {
         CornerType type = state.get(PropertyHolder.CORNER_TYPE);
-        TileEntity te = world.getTileEntity(pos);
-        if (te instanceof FramedDoubleTileEntity)
+        if (world.getTileEntity(pos) instanceof FramedDoubleTileEntity dte)
         {
-            FramedDoubleTileEntity dte = (FramedDoubleTileEntity) te;
             BlockState camoState = (type.isHorizontal() || type.isTop()) ? dte.getCamoState() : dte.getCamoStateTwo();
             if (!camoState.isAir())
             {

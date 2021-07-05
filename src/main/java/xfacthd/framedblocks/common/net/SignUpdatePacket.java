@@ -2,7 +2,6 @@ package xfacthd.framedblocks.common.net;
 
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.network.PacketBuffer;
-import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.*;
 import net.minecraft.world.World;
@@ -57,10 +56,8 @@ public class SignUpdatePacket
             //noinspection deprecation
             if (world.isBlockLoaded(pos))
             {
-                TileEntity te = world.getTileEntity(pos);
-                if (te instanceof FramedSignTileEntity)
+                if (world.getTileEntity(pos) instanceof FramedSignTileEntity sign)
                 {
-                    FramedSignTileEntity sign = (FramedSignTileEntity) te;
                     if (sign.getEditingPlayer() != player)
                     {
                         FramedBlocks.LOGGER.warn("Player " + player + " tried to edit sign at " + pos);

@@ -22,12 +22,12 @@ public abstract class MixinBreakableBlock extends Block
     {
         if (Utils.OPTIFINE_LOADED.getValue() || Utils.SODIUM_LOADED.getValue()) { return; } //Should fix crash with OptiFine and Sodium
 
-        if (adjState.getBlock() instanceof IFramedBlock && ((IFramedBlock)adjState.getBlock()).getCtmPredicate().test(adjState, side.getOpposite()))
+        if (adjState.getBlock() instanceof IFramedBlock block && block.getCtmPredicate().test(adjState, side.getOpposite()))
         {
             TileEntity te = DataHolder.world.get().getTileEntity(DataHolder.pos.get().offset(side));
-            if (te instanceof FramedTileEntity)
+            if (te instanceof FramedTileEntity fte)
             {
-                if (((FramedTileEntity)te).hidesAdjacentFace(state, side))
+                if (fte.hidesAdjacentFace(state, side))
                 {
                     cir.setReturnValue(true);
                 }

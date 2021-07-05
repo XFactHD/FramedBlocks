@@ -6,7 +6,6 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.*;
 import net.minecraft.client.renderer.model.IBakedModel;
 import net.minecraft.client.renderer.model.ModelResourceLocation;
-import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraftforge.api.distmarker.Dist;
@@ -64,19 +63,18 @@ public class FBClient
         {
             if (world != null && pos != null)
             {
-                TileEntity te = world.getTileEntity(pos);
-                if (te instanceof FramedTileEntity)
+                if (world.getTileEntity(pos) instanceof FramedTileEntity te)
                 {
-                    BlockState camoState = ((FramedTileEntity) te).getCamoState();
+                    BlockState camoState = te.getCamoState();
                     if (!camoState.isAir())
                     {
                         int color = event.getBlockColors().getColor(camoState, world, pos, tintIndex);
                         if (color != -1) { return color; }
                     }
 
-                    if (te instanceof FramedDoubleTileEntity)
+                    if (te instanceof FramedDoubleTileEntity dTe)
                     {
-                        camoState = ((FramedDoubleTileEntity) te).getCamoStateTwo();
+                        camoState = dTe.getCamoStateTwo();
                         if (!camoState.isAir())
                         {
                             return event.getBlockColors().getColor(camoState, world, pos, tintIndex);
@@ -165,10 +163,9 @@ public class FBClient
     public static void openSignScreen(BlockPos pos)
     {
         //noinspection ConstantConditions
-        TileEntity te = Minecraft.getInstance().world.getTileEntity(pos);
-        if (te instanceof FramedSignTileEntity)
+        if (Minecraft.getInstance().world.getTileEntity(pos) instanceof FramedSignTileEntity te)
         {
-            Minecraft.getInstance().displayGuiScreen(new FramedSignScreen((FramedSignTileEntity)te));
+            Minecraft.getInstance().displayGuiScreen(new FramedSignScreen(te));
         }
     }
 }
