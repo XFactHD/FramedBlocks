@@ -91,7 +91,11 @@ public class FramedBlockStateProvider extends BlockStateProvider
 
     private void registerFramedFence(ModelFile cube)
     {
-        simpleBlock(FBContent.blockFramedFence.get(), cube);
+        getMultipartBuilder(FBContent.blockFramedFence.get())
+                .part()
+                .modelFile(cube)
+                .addModel();
+
         itemModels().getBuilder("framed_fence")
                 .parent(models().getExistingFile(mcLoc("block/fence_inventory")))
                 .texture("texture", TEXTURE);
