@@ -4,7 +4,6 @@ import com.google.common.base.Preconditions;
 import net.minecraft.client.renderer.model.BakedQuad;
 import net.minecraft.util.Direction;
 import net.minecraft.util.math.vector.*;
-import net.minecraftforge.client.ForgeHooksClient;
 
 import java.util.concurrent.atomic.AtomicBoolean;
 
@@ -47,7 +46,7 @@ public class BakedQuadTransformer
             pos[3][idx] = invert ? 1F - pos[3][1] : pos[3][1];
         });
 
-        ForgeHooksClient.fillNormal(quad.getVertexData(), quad.getFace());
+        ModelUtils.fillNormal(quad);
     }
 
     /**
@@ -72,7 +71,7 @@ public class BakedQuadTransformer
             pos[3][destCoord] = invert ? 1F - pos[3][srcCoord] : pos[3][srcCoord];
             pos[2][destCoord] = invert ? 1F - pos[2][srcCoord] : pos[2][srcCoord];
         });
-        ForgeHooksClient.fillNormal(quad.getVertexData(), quad.getFace());
+        ModelUtils.fillNormal(quad);
     }
 
     /**
@@ -695,6 +694,6 @@ public class BakedQuadTransformer
             }
         });
 
-        ForgeHooksClient.fillNormal(quad.getVertexData(), quad.getFace());
+        ModelUtils.fillNormal(quad);
     }
 }

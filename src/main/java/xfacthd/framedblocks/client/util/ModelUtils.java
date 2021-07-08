@@ -5,6 +5,7 @@ import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.client.renderer.vertex.VertexFormatElement;
 import net.minecraft.util.Direction;
 import net.minecraft.util.math.MathHelper;
+import net.minecraft.util.math.vector.Vector3f;
 import net.minecraftforge.client.model.pipeline.LightUtil;
 
 import java.util.Arrays;
@@ -122,6 +123,38 @@ public class ModelUtils
             float temp = uv[1][1];
             uv[1][1] = uv[3][1];
             uv[3][1] = temp;
+        }
+    }
+
+    /**
+     * Calculate face normals from vertex positions
+     * Adapted from {@link net.minecraftforge.client.ForgeHooksClient#fillNormal(int[], Direction)}
+     */
+    public static void fillNormal(BakedQuad quad)
+    {
+        float[][] pos = unpackElement(quad, VertexFormatElement.Usage.POSITION, 0);
+
+        Vector3f v1 = new Vector3f(pos[3][0], pos[3][1], pos[3][2]);
+        Vector3f t1 = new Vector3f(pos[2][0], pos[2][1], pos[2][2]);
+        Vector3f v2 = new Vector3f(pos[1][0], pos[1][1], pos[1][2]);
+        Vector3f t2 = new Vector3f(pos[0][0], pos[0][1], pos[0][2]);
+
+        v1.sub(t1);
+        v2.sub(t2);
+        v2.cross(v1);
+        v2.normalize();
+
+        int x = ((byte) Math.round(v2.getX() * 127)) & 0xFF;
+        int y = ((byte) Math.round(v2.getY() * 127)) & 0xFF;
+        int z = ((byte) Math.round(v2.getZ() * 127)) & 0xFF;
+
+        int normal = x | (y << 0x08) | (z << 0x10);
+
+        int[] vertexData = quad.getVertexData();
+        int step = vertexData.length / 4; //This is needed to support the extended vertex formats used by shaders in OptiFine
+        for(int vert = 0; vert < 4; vert++)
+        {
+            vertexData[vert * step + 7] = normal;
         }
     }
 
