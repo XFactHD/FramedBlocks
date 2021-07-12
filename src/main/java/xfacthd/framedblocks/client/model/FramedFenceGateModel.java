@@ -38,7 +38,7 @@ public class FramedFenceGateModel extends FramedBlockModel
             )
             {
                 BakedQuadTransformer.setQuadPosInFacingDir(topBotQuad, quad.getFace() == Direction.UP ? 1F - yOff : 11F/16F + yOff);
-                quadMap.get(inWall ? null : quad.getFace()).add(topBotQuad);
+                quadMap.get(inWall || quad.getFace() == Direction.DOWN ? null : quad.getFace()).add(topBotQuad);
             }
 
             topBotQuad = ModelUtils.duplicateQuad(quad);
@@ -48,7 +48,7 @@ public class FramedFenceGateModel extends FramedBlockModel
             )
             {
                 BakedQuadTransformer.setQuadPosInFacingDir(topBotQuad, quad.getFace() == Direction.UP ? 1F - yOff : 11F/16F + yOff);
-                quadMap.get(inWall ? null : quad.getFace()).add(topBotQuad);
+                quadMap.get(inWall || quad.getFace() == Direction.DOWN ? null : quad.getFace()).add(topBotQuad);
             }
         }
         else if (quad.getFace() == dir || quad.getFace() == dir.getOpposite())
