@@ -3,6 +3,7 @@ package xfacthd.framedblocks.common.block;
 import net.minecraft.block.*;
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.*;
 import net.minecraft.loot.LootContext;
@@ -11,6 +12,7 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.*;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.BlockRayTraceResult;
+import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.world.*;
 import net.minecraftforge.common.ToolType;
 import team.chisel.ctm.api.IFacade;
@@ -46,6 +48,27 @@ public interface IFramedBlock extends IFacade
         //noinspection ConstantConditions
         item.setRegistryName(block.getRegistryName());
         return item;
+    }
+
+    default void tryApplyCamoImmediately(World world, BlockPos pos, @Nullable LivingEntity placer, ItemStack stack)
+    {
+        if (!world.isRemote() && placer instanceof PlayerEntity)
+        {
+            PlayerEntity player = (PlayerEntity) placer;
+
+            if (player.getHeldItemMainhand() != stack) { return; }
+
+            ItemStack otherStack = player.getHeldItemOffhand();
+            if (otherStack.getItem() instanceof BlockItem && !(((BlockItem) otherStack.getItem()).getBlock() instanceof IFramedBlock))
+            {
+                TileEntity te = world.getTileEntity(pos);
+                if (te instanceof FramedTileEntity && !(te instanceof FramedDoubleTileEntity))
+                {
+                    Vector3d hitVec = new Vector3d(pos.getX(), pos.getY(), pos.getZ());
+                    ((FramedTileEntity) te).handleInteraction(player, Hand.OFF_HAND, new BlockRayTraceResult(hitVec, Direction.UP, pos, false));
+                }
+            }
+        }
     }
 
     default ActionResultType handleBlockActivated(World world, BlockPos pos, PlayerEntity player, Hand hand, BlockRayTraceResult hit)

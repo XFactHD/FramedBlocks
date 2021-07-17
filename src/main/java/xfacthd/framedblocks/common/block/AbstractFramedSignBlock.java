@@ -1,6 +1,7 @@
 package xfacthd.framedblocks.common.block;
 
 import net.minecraft.block.BlockState;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.item.DyeItem;
@@ -14,6 +15,8 @@ import net.minecraft.world.IBlockReader;
 import net.minecraft.world.World;
 import xfacthd.framedblocks.common.data.BlockType;
 import xfacthd.framedblocks.common.tileentity.FramedSignTileEntity;
+
+import javax.annotation.Nullable;
 
 public abstract class AbstractFramedSignBlock extends FramedBlock
 {
@@ -57,6 +60,12 @@ public abstract class AbstractFramedSignBlock extends FramedBlock
         }
 
         return ActionResultType.PASS;
+    }
+
+    @Override
+    public void onBlockPlacedBy(World world, BlockPos pos, BlockState state, @Nullable LivingEntity placer, ItemStack stack)
+    {
+        tryApplyCamoImmediately(world, pos, placer, stack);
     }
 
     @Override

@@ -2,6 +2,7 @@ package xfacthd.framedblocks.common.block;
 
 import net.minecraft.block.*;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.loot.LootContext;
@@ -46,6 +47,12 @@ public class FramedTrapDoorBlock extends TrapDoorBlock implements IFramedBlock
         if (result.isSuccessOrConsume()) { return result; }
 
         return super.onBlockActivated(state, world, pos, player, hand, hit);
+    }
+
+    @Override
+    public void onBlockPlacedBy(World world, BlockPos pos, BlockState state, @Nullable LivingEntity placer, ItemStack stack)
+    {
+        tryApplyCamoImmediately(world, pos, placer, stack);
     }
 
     @Override
