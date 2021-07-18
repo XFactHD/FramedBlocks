@@ -135,8 +135,8 @@ public class ModelUtils
         float[][] pos = unpackElement(quad, VertexFormatElement.Usage.POSITION, 0);
 
         Vector3f v1 = new Vector3f(pos[3][0], pos[3][1], pos[3][2]);
-        Vector3f t1 = new Vector3f(pos[2][0], pos[2][1], pos[2][2]);
-        Vector3f v2 = new Vector3f(pos[1][0], pos[1][1], pos[1][2]);
+        Vector3f t1 = new Vector3f(pos[1][0], pos[1][1], pos[1][2]);
+        Vector3f v2 = new Vector3f(pos[2][0], pos[2][1], pos[2][2]);
         Vector3f t2 = new Vector3f(pos[0][0], pos[0][1], pos[0][2]);
 
         v1.sub(t1);
