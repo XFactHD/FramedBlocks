@@ -334,8 +334,6 @@ public class FramedTileEntity extends TileEntity
         CompoundNBT nbt = pkt.getNbtCompound();
         if (readFromDataPacket(nbt))
         {
-            requestModelDataUpdate();
-
             //noinspection ConstantConditions
             world.notifyBlockUpdate(pos, getBlockState(), getBlockState(), 3);
         }
@@ -404,7 +402,6 @@ public class FramedTileEntity extends TileEntity
             modelData.setWorld(world);
             modelData.setPos(pos);
             modelData.setCamoState(camoState);
-            requestModelDataUpdate();
         }
 
         glowing = nbt.getBoolean("glowing");

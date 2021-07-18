@@ -10,8 +10,10 @@ import net.minecraft.client.renderer.RenderTypeLookup;
 import net.minecraft.client.renderer.model.BakedQuad;
 import net.minecraft.client.renderer.model.IBakedModel;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
+import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.Direction;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.IBlockDisplayReader;
 import net.minecraft.world.World;
 import net.minecraftforge.client.MinecraftForgeClient;
 import net.minecraftforge.client.model.data.EmptyModelData;
@@ -21,7 +23,9 @@ import xfacthd.framedblocks.client.util.FramedBlockData;
 import xfacthd.framedblocks.common.FBContent;
 import xfacthd.framedblocks.common.block.IFramedBlock;
 import xfacthd.framedblocks.common.data.BlockType;
+import xfacthd.framedblocks.common.tileentity.FramedTileEntity;
 
+import javax.annotation.Nonnull;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -140,6 +144,18 @@ public abstract class FramedBlockModel extends BakedModelProxy
     protected void postProcessQuads(Map<Direction, List<BakedQuad>> quadMap) {}
 
     protected void getAdditionalQuads(Map<Direction, List<BakedQuad>> quadMap, BlockState state, Random rand, IModelData data) {}
+
+    @Nonnull
+    @Override
+    public IModelData getModelData(@Nonnull IBlockDisplayReader world, @Nonnull BlockPos pos, @Nonnull BlockState state, @Nonnull IModelData tileData)
+    {
+        TileEntity te = world.getTileEntity(pos);
+        if (te instanceof FramedTileEntity)
+        {
+            return te.getModelData();
+        }
+        return tileData;
+    }
 
     @Override
     public TextureAtlasSprite getParticleTexture(IModelData data)

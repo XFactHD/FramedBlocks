@@ -142,7 +142,6 @@ public abstract class FramedDoubleTileEntity extends FramedTileEntity
             modelData.setWorld(world);
             modelData.setPos(pos);
             modelData.setCamoState(camoState);
-            requestModelDataUpdate();
         }
     }
 
