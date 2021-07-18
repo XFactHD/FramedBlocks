@@ -33,10 +33,8 @@ public abstract class MixinBlock extends AbstractBlock
             if (state.getBlock() instanceof BreakableBlock && SideSkipPredicate.CTM.test(world, adjPos, world.getBlockState(adjPos), state, face.getOpposite()))
             {
                 cir.setReturnValue(false);
-                return;
             }
-
-            if (fte.isSolidSide(face.getOpposite()))
+            else if (fte.isSolidSide(face.getOpposite()))
             {
                 cir.setReturnValue(false);
             }

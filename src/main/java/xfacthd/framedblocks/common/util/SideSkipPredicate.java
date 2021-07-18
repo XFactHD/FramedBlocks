@@ -72,7 +72,7 @@ public interface SideSkipPredicate
         if (te instanceof FramedTileEntity)
         {
             BlockState state = ((FramedTileEntity) te).getCamoState(side);
-            return state == adjState || (state.isSolid() && adjState.isSolid());
+            return state == adjState || (state.isOpaqueCube(world, pos) && adjState.isOpaqueCube(world, pos.offset(side)));
         }
 
         return false;
