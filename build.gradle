@@ -100,6 +100,9 @@ dependencies {
 
     implementation fg.deobf("curse.maven:ctm-267602:3137659")
 
+    //runtimeOnly fg.deobf("curse.maven:puzzleslib-495476:3374786") //Only needed when Diagonal Fences is switched to implementation
+    compileOnly fg.deobf("curse.maven:diagonalfences-458048:3364147")
+
     annotationProcessor 'org.spongepowered:mixin:0.8'
     annotationProcessor 'com.google.code.gson:gson:2.8.0'
     annotationProcessor 'com.google.guava:guava:21.0'
@@ -126,7 +129,6 @@ jar {
             "MixinConfigs": "framedblocks.mixin.json"
         ])
     }
-    exclude("fuzs") //Exclude DiagonalFences API from the built jar
 }
 
 jar.finalizedBy('reobfJar') 
