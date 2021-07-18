@@ -264,13 +264,10 @@ public class FramedTileEntity extends TileEntity
         world.notifyBlockUpdate(pos, getBlockState(), getBlockState(), 3);
     }
 
-    /**
-     * Checks if this block hides the given face on the given adjacent block, assumes the caller has
-     * checked that the corresponding face on this block fills the whole face (can be checked via the CTM_PREDICATE)
-     * @param adjState The adjacent BlockState
-     * @param face The face on the adjacent block
-     */
-    public boolean hidesAdjacentFace(BlockState adjState, Direction face) { return getCamoState(face.getOpposite()) == adjState; }
+    public boolean isSolidSide(Direction side)
+    {
+        return getBlock().getCtmPredicate().test(getBlockState(), side) && camoState.isSolid();
+    }
 
     /**
      * Used to return a different camo state depending on the given side
@@ -316,6 +313,8 @@ public class FramedTileEntity extends TileEntity
         //noinspection ConstantConditions
         world.getChunkProvider().getLightManager().checkBlock(pos);
     }
+
+    protected final IFramedBlock getBlock() { return (IFramedBlock) getBlockState().getBlock(); }
 
     /*
      * Sync

@@ -154,4 +154,28 @@ public class FramedDoubleCornerTileEntity extends FramedDoubleTileEntity
 
         return Blocks.AIR.getDefaultState();
     }
+
+    @Override
+    public boolean isSolidSide(Direction side)
+    {
+        CornerType type = getBlockState().get(PropertyHolder.CORNER_TYPE);
+        Direction dir = getBlockState().get(PropertyHolder.FACING_HOR);
+
+        if (type.isHorizontal())
+        {
+            if ((!type.isRight() && side == dir.rotateYCCW()) || (type.isRight() && side == dir.rotateY()) ||
+                (!type.isTop() && side == Direction.DOWN) || (type.isTop() && side == Direction.UP) ||
+                side == dir || side == dir.getOpposite()
+            )
+            {
+                return getCamoState(side).isSolid();
+            }
+        }
+        else if ((side == dir || side == dir.rotateYCCW() || side.getAxis() == Direction.Axis.Y))
+        {
+            return getCamoState(side).isSolid();
+        }
+
+        return getCamoState().isSolid() && getCamoStateTwo().isSolid();
+    }
 }

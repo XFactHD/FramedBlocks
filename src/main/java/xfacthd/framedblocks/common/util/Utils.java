@@ -4,30 +4,15 @@ import net.minecraft.block.Block;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.tags.ITag;
 import net.minecraft.util.Direction;
-import net.minecraft.util.LazyValue;
 import net.minecraft.util.math.shapes.VoxelShape;
 import net.minecraft.util.math.shapes.VoxelShapes;
 import net.minecraft.util.math.vector.Vector3d;
-import net.minecraftforge.fml.ModList;
 import xfacthd.framedblocks.FramedBlocks;
 
 public class Utils
 {
     public static final ITag.INamedTag<Block> FRAMEABLE = BlockTags.makeWrapperTag(FramedBlocks.MODID + ":frameable");
     public static final ITag.INamedTag<Block> BLACKLIST = BlockTags.makeWrapperTag(FramedBlocks.MODID + ":blacklisted");
-
-    public static final LazyValue<Boolean> OPTIFINE_LOADED = new LazyValue<>(() -> {
-        try
-        {
-            Class.forName("optifine.Utils");
-            return true;
-        }
-        catch (ClassNotFoundException e)
-        {
-            return false;
-        }
-    });
-    public static final LazyValue<Boolean> SODIUM_LOADED = new LazyValue<>(() -> ModList.get().isLoaded("sodium"));
 
     public static VoxelShape rotateShape(Direction from, Direction to, VoxelShape shape)
     {

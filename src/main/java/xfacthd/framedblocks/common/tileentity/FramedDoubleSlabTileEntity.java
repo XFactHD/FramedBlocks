@@ -24,4 +24,14 @@ public class FramedDoubleSlabTileEntity extends FramedDoubleTileEntity
         if (side == Direction.DOWN) { return getCamoState(); }
         return Blocks.AIR.getDefaultState();
     }
+
+    @Override
+    public boolean isSolidSide(Direction side)
+    {
+        if (side.getAxis() == Direction.Axis.Y)
+        {
+            return getCamoState(side).isSolid();
+        }
+        return getCamoState().isSolid() && getCamoStateTwo().isSolid();
+    }
 }

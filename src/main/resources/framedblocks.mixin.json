@@ -8,7 +8,6 @@
     ],
     "client":[
         "MixinBlock",
-        "MixinBreakableBlock",
         "MixinWorldRenderer"
     ],
     "injectors": {

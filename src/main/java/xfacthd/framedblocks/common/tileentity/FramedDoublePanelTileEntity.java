@@ -41,4 +41,15 @@ public class FramedDoublePanelTileEntity extends FramedDoubleTileEntity
         if (side == facing.getOpposite()) { return getCamoStateTwo(); }
         return Blocks.AIR.getDefaultState();
     }
+
+    @Override
+    public boolean isSolidSide(Direction side)
+    {
+        Direction facing = getBlockState().get(PropertyHolder.FACING_NE);
+        if (side == facing || side == facing.getOpposite())
+        {
+            return getCamoState(side).isSolid();
+        }
+        return getCamoState().isSolid() && getCamoStateTwo().isSolid();
+    }
 }

@@ -104,4 +104,17 @@ public class FramedDoubleThreewayCornerTileEntity extends FramedDoubleTileEntity
 
         return Blocks.AIR.getDefaultState();
     }
+
+    @Override
+    public boolean isSolidSide(Direction side)
+    {
+        Direction dir = getBlockState().get(PropertyHolder.FACING_HOR);
+        boolean top = getBlockState().get(PropertyHolder.TOP);
+
+        if (side == dir || side == dir.rotateYCCW() || (side == Direction.DOWN && !top) || (side == Direction.UP && top))
+        {
+            return getCamoState(side).isSolid();
+        }
+        return getCamoState().isSolid() && getCamoStateTwo().isSolid();
+    }
 }

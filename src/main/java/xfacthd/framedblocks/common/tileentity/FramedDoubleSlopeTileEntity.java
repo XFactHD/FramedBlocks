@@ -82,4 +82,16 @@ public class FramedDoubleSlopeTileEntity extends FramedDoubleTileEntity
 
         return Blocks.AIR.getDefaultState();
     }
+
+    @Override
+    public boolean isSolidSide(Direction side)
+    {
+        BlockState state = getCamoState(side);
+        //noinspection deprecation
+        if (!state.isAir())
+        {
+            return state.isSolid();
+        }
+        return getCamoState().isSolid() && getCamoStateTwo().isSolid();
+    }
 }

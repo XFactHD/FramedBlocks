@@ -1,6 +1,7 @@
 package xfacthd.framedblocks.client.util.mixin;
 
 import net.minecraft.block.*;
+import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.Direction;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockReader;
@@ -8,17 +9,37 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
-import xfacthd.framedblocks.client.util.DataHolder;
+import xfacthd.framedblocks.common.block.IFramedBlock;
+import xfacthd.framedblocks.common.tileentity.FramedTileEntity;
+import xfacthd.framedblocks.common.util.SideSkipPredicate;
 
 @Mixin(Block.class)
 public abstract class MixinBlock extends AbstractBlock
 {
     public MixinBlock(Properties properties) { super(properties); }
 
-    @Inject(method = {"shouldSideBeRendered"}, at = @At("HEAD"))
+    @Inject(method = {"shouldSideBeRendered"}, at = @At("HEAD"), cancellable = true)
     private static void shouldSideBeRenderedFramed(BlockState state, IBlockReader world, BlockPos pos, Direction face, CallbackInfoReturnable<Boolean> cir)
     {
-        DataHolder.world.set(world);
-        DataHolder.pos.set(pos);
+        //noinspection deprecation
+        if (state.getBlock() instanceof IFramedBlock || state.isAir()) { return; }
+
+        BlockPos adjPos = pos.offset(face);
+        TileEntity te = world.getTileEntity(adjPos);
+        if (te instanceof FramedTileEntity)
+        {
+            FramedTileEntity fte = (FramedTileEntity) te;
+
+            if (state.getBlock() instanceof BreakableBlock && SideSkipPredicate.CTM.test(world, adjPos, world.getBlockState(adjPos), state, face.getOpposite()))
+            {
+                cir.setReturnValue(false);
+                return;
+            }
+
+            if (fte.isSolidSide(face.getOpposite()))
+            {
+                cir.setReturnValue(false);
+            }
+        }
     }
 }

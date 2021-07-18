@@ -20,7 +20,6 @@ public class FramedMixinConfigPlugin implements IMixinConfigPlugin
     {
         if (mixinClassName.equals("xfacthd.framedblocks.client.util.mixin.MixinWorldRenderer"))
         {
-            //return !Utils.SODIUM_LOADED.getValue(); //FIXME: find a better solution for this
             try
             {
                 Class.forName("me.jellysquid.mods.sodium.common.config.Option");
