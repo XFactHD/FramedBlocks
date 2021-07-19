@@ -3,6 +3,7 @@ package xfacthd.framedblocks.client;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.ScreenManager;
 import net.minecraft.client.renderer.*;
 import net.minecraft.client.renderer.model.IBakedModel;
 import net.minecraft.client.renderer.model.ModelResourceLocation;
@@ -19,7 +20,9 @@ import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import xfacthd.framedblocks.FramedBlocks;
 import xfacthd.framedblocks.client.model.*;
+import xfacthd.framedblocks.client.render.FramedChestRenderer;
 import xfacthd.framedblocks.client.render.FramedSignRenderer;
+import xfacthd.framedblocks.client.screen.FramedChestScreen;
 import xfacthd.framedblocks.client.screen.FramedSignScreen;
 import xfacthd.framedblocks.common.FBContent;
 import xfacthd.framedblocks.common.block.IFramedBlock;
@@ -48,6 +51,9 @@ public class FBClient
         RenderTypeLookup.setRenderLayer(FBContent.blockFramedGhostBlock.get(), RenderType.getTranslucent());
 
         ClientRegistry.bindTileEntityRenderer(FBContent.tileTypeFramedSign.get(), FramedSignRenderer::new);
+        ClientRegistry.bindTileEntityRenderer(FBContent.tileTypeFramedChest.get(), FramedChestRenderer::new);
+
+        event.enqueueWork(() -> ScreenManager.registerFactory(FBContent.containerTypeFramedChest.get(), FramedChestScreen::new));
     }
 
     @SubscribeEvent
@@ -93,6 +99,8 @@ public class FBClient
     {
         Map<ResourceLocation, IBakedModel> registry = event.getModelRegistry();
 
+        FramedChestRenderer.onModelsLoaded(registry); //Must happen before the chest model is replaced
+
         replaceModels(FBContent.blockFramedCube, registry, FramedCubeModel::new);
         replaceModels(FBContent.blockFramedSlope, registry, FramedSlopeModel::new, FramedSlopeModel::new);
         replaceModels(FBContent.blockFramedCornerSlope, registry, FramedCornerSlopeModel::new, FramedCornerSlopeModel::new);
@@ -131,6 +139,7 @@ public class FBClient
         replaceModels(FBContent.blockFramedFloor, registry, FramedFloorModel::new);
         replaceModels(FBContent.blockFramedLattice, registry, FramedLatticeModel::new);
         replaceModels(FBContent.blockFramedVerticalStairs, registry, FramedVerticalStairsModel::new);
+        replaceModels(FBContent.blockFramedChest, registry, FramedChestModel::new, FramedChestModel::new);
 
         //Framed Collapsible Block
         //replaceModelsSimple(FBContent.blockFramedCollapsibleBlock, registry, FramedCollapsibleBlockModel::new);

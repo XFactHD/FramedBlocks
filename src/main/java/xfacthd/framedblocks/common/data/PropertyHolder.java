@@ -10,6 +10,7 @@ public class PropertyHolder
     public static final EnumProperty<SlopeType> SLOPE_TYPE = EnumProperty.create("type", SlopeType.class);
     public static final EnumProperty<CornerType> CORNER_TYPE = EnumProperty.create("type", CornerType.class);
     public static final EnumProperty<StairsType> STAIRS_TYPE = EnumProperty.create("type", StairsType.class);
+    public static final EnumProperty<ChestState> CHEST_STATE = EnumProperty.create("state", ChestState.class);
 
     public static final BooleanProperty TOP = BooleanProperty.create("top");
     public static final BooleanProperty OFFSET = BooleanProperty.create("offset");

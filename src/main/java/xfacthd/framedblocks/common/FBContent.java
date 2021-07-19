@@ -1,17 +1,22 @@
 package xfacthd.framedblocks.common;
 
 import net.minecraft.block.Block;
+import net.minecraft.inventory.container.Container;
+import net.minecraft.inventory.container.ContainerType;
 import net.minecraft.item.Item;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.tileentity.TileEntityType;
+import net.minecraftforge.common.extensions.IForgeContainerType;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.RegistryObject;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
+import net.minecraftforge.fml.network.IContainerFactory;
 import net.minecraftforge.registries.*;
 import xfacthd.framedblocks.FramedBlocks;
 import xfacthd.framedblocks.common.block.*;
+import xfacthd.framedblocks.common.container.FramedChestContainer;
 import xfacthd.framedblocks.common.data.BlockType;
 import xfacthd.framedblocks.common.item.*;
 import xfacthd.framedblocks.common.tileentity.*;
@@ -27,6 +32,7 @@ public class FBContent
     private static final DeferredRegister<Block> BLOCKS = DeferredRegister.create(ForgeRegistries.BLOCKS, FramedBlocks.MODID);
     private static final DeferredRegister<Item> ITEMS = DeferredRegister.create(ForgeRegistries.ITEMS, FramedBlocks.MODID);
     private static final DeferredRegister<TileEntityType<?>> TILE_TYPES = DeferredRegister.create(ForgeRegistries.TILE_ENTITIES, FramedBlocks.MODID);
+    private static final DeferredRegister<ContainerType<?>> CONTAINER_TYPES = DeferredRegister.create(ForgeRegistries.CONTAINERS, FramedBlocks.MODID);
 
     /** BLOCKS */
     public static final RegistryObject<Block> blockFramedCube = registerBlock(FramedBlock::new, BlockType.FRAMED_CUBE);
@@ -67,6 +73,7 @@ public class FBContent
     public static final RegistryObject<Block> blockFramedFloor = registerBlock(FramedFloorBlock::new, BlockType.FRAMED_FLOOR_BOARD);
     public static final RegistryObject<Block> blockFramedLattice = registerBlock(FramedLatticeBlock::new, BlockType.FRAMED_LATTICE_BLOCK);
     public static final RegistryObject<Block> blockFramedVerticalStairs = registerBlock(FramedVerticalStairs::new, BlockType.FRAMED_VERTICAL_STAIRS);
+    public static final RegistryObject<Block> blockFramedChest = registerBlock(FramedChestBlock::new, BlockType.FRAMED_CHEST);
     //public static final RegistryObject<Block> blockFramedCollapsibleBlock = register(FramedCollapsibleBlock::new, BlockType.FRAMED_COLLAPSIBLE_BLOCK); //STATUS: Not implemented
     public static final RegistryObject<Block> blockFramedGhostBlock = BLOCKS.register("framed_ghost_block", FramedGhostBlock::new);
 
@@ -105,6 +112,10 @@ public class FBContent
             "framed_double_threeway_corner",
             blockFramedDoublePrismCorner, blockFramedDoubleThreewayCorner
     );
+    public static final RegistryObject<TileEntityType<FramedChestTileEntity>> tileTypeFramedChest = createTileType(FramedChestTileEntity::new, "framed_chest", blockFramedChest);
+
+    /** CONTAINER TYPES */
+    public static final RegistryObject<ContainerType<FramedChestContainer>> containerTypeFramedChest = createContainerType(FramedChestContainer::new, "framed_chest");
 
 
 
@@ -113,6 +124,7 @@ public class FBContent
         BLOCKS.register(FMLJavaModLoadingContext.get().getModEventBus());
         ITEMS.register(FMLJavaModLoadingContext.get().getModEventBus());
         TILE_TYPES.register(FMLJavaModLoadingContext.get().getModEventBus());
+        CONTAINER_TYPES.register(FMLJavaModLoadingContext.get().getModEventBus());
     }
 
     public static Collection<RegistryObject<Block>> getRegisteredBlocks() { return BLOCKS.getEntries(); }
@@ -164,5 +176,11 @@ public class FBContent
             //noinspection ConstantConditions
             return TileEntityType.Builder.create(factory, blocks.get()).build(null);
         });
+    }
+
+    @SuppressWarnings("SameParameterValue")
+    private static <T extends Container> RegistryObject<ContainerType<T>> createContainerType(IContainerFactory<T> factory, String name)
+    {
+        return CONTAINER_TYPES.register(name, () -> IForgeContainerType.create(factory));
     }
 }

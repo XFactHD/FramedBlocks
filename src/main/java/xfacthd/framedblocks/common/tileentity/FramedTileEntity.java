@@ -78,7 +78,7 @@ public class FramedTileEntity extends TileEntity
             return world.isRemote() ? ActionResultType.SUCCESS : ActionResultType.CONSUME;
         }
 
-        return ActionResultType.FAIL;
+        return ActionResultType.PASS;
     }
 
     private ActionResultType clearBlockCamo(PlayerEntity player, BlockRayTraceResult hit)

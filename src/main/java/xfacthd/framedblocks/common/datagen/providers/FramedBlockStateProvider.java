@@ -65,6 +65,7 @@ public class FramedBlockStateProvider extends BlockStateProvider
         registerFramedSoulTorch();
         registerFramedSoulWallTorch();
         registerFramedFloorBoard(cube);
+        registerFramedChest();
         registerFramedCollapsibleBlock();
         registerFramedGhostBlock();
     }
@@ -224,6 +225,20 @@ public class FramedBlockStateProvider extends BlockStateProvider
     {
         simpleBlock(FBContent.blockFramedFloor.get(), cube);
         itemModels().carpet("framed_floor_board", TEXTURE);
+    }
+
+    private void registerFramedChest()
+    {
+        ModelFile chest = models().getExistingFile(modLoc("block/framed_chest"));
+
+        getVariantBuilder(FBContent.blockFramedChest.get()).forAllStatesExcept(state ->
+        {
+            Direction dir = state.get(BlockStateProperties.HORIZONTAL_FACING);
+            int rotY = ((int)dir.getHorizontalAngle() + 180) % 360;
+            return ConfiguredModel.builder().modelFile(chest).rotationY(rotY).build();
+        }, BlockStateProperties.WATERLOGGED);
+
+        simpleBlockItem(FBContent.blockFramedChest.get(), chest);
     }
 
     private void registerFramedCollapsibleBlock()

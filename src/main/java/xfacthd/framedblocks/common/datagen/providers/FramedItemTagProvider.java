@@ -2,6 +2,7 @@ package xfacthd.framedblocks.common.datagen.providers;
 
 import net.minecraft.data.*;
 import net.minecraft.tags.ItemTags;
+import net.minecraftforge.common.Tags;
 import net.minecraftforge.common.data.ExistingFileHelper;
 import xfacthd.framedblocks.FramedBlocks;
 import xfacthd.framedblocks.common.FBContent;
@@ -25,5 +26,6 @@ public class FramedItemTagProvider extends ItemTagsProvider
         getOrCreateBuilder(ItemTags.FENCES).add(FBContent.blockFramedFence.get().asItem());
         getOrCreateBuilder(ItemTags.DOORS).add(FBContent.blockFramedDoor.get().asItem());
         getOrCreateBuilder(ItemTags.TRAPDOORS).add(FBContent.blockFramedTrapDoor.get().asItem());
+        getOrCreateBuilder(Tags.Items.CHESTS).add(FBContent.blockFramedChest.get().asItem());
     }
 }

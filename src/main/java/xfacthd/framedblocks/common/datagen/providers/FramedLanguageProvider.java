@@ -4,6 +4,7 @@ import net.minecraft.data.DataGenerator;
 import net.minecraftforge.common.data.LanguageProvider;
 import xfacthd.framedblocks.FramedBlocks;
 import xfacthd.framedblocks.common.FBContent;
+import xfacthd.framedblocks.common.tileentity.FramedChestTileEntity;
 import xfacthd.framedblocks.common.tileentity.FramedTileEntity;
 
 public class FramedLanguageProvider extends LanguageProvider
@@ -49,6 +50,7 @@ public class FramedLanguageProvider extends LanguageProvider
         add(FBContent.blockFramedFloor.get(), "Framed Floor Board");
         add(FBContent.blockFramedLattice.get(), "Framed Lattice");
         add(FBContent.blockFramedVerticalStairs.get(), "Framed Vertical Stairs");
+        add(FBContent.blockFramedChest.get(), "Framed Chest");
         //add(FBContent.blockFramedCollapsibleBlock.get(), "Framed Collapsible Block");
 
         add(FBContent.itemFramedHammer.get(), "Framed Hammer");
@@ -56,5 +58,6 @@ public class FramedLanguageProvider extends LanguageProvider
         add(FramedBlocks.FRAMED_GROUP.getGroupName().getString(), "FramedBlocks");
         add(FramedTileEntity.MSG_BLACKLISTED.getKey(), "This block is blacklisted!");
         add(FramedTileEntity.MSG_TILE_ENTITY.getKey(), "Blocks with TileEntities cannot be inserted into framed blocks!");
+        add(FramedChestTileEntity.TITLE.getString(), "Framed Chest");
     }
 }
