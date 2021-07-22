@@ -34,7 +34,7 @@ public class FramedThreewayCornerBlock extends FramedBlock
         Direction facing = state.getValue(PropertyHolder.FACING_HOR);
         if (facing == dir) { return true; }
 
-        BlockType type = ((FramedBlock) state.getBlock()).getBlockType(); //TODO: check if this can crash
+        BlockType type = ((FramedBlock) state.getBlock()).getBlockType();
         if (type == BlockType.FRAMED_INNER_PRISM_CORNER) { return facing.getCounterClockWise() == dir; }
         else { return facing.getClockWise() == dir; }
     };
