@@ -6,6 +6,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.nbt.NBTUtil;
 import net.minecraft.tileentity.TileEntityType;
+import net.minecraft.util.Direction;
 import net.minecraft.util.math.BlockRayTraceResult;
 import net.minecraft.world.Explosion;
 import net.minecraftforge.client.model.data.*;
@@ -88,6 +89,35 @@ public abstract class FramedDoubleTileEntity extends FramedTileEntity
                 getCamoState().getExplosionResistance(world, pos, explosion),
                 getCamoStateTwo().getExplosionResistance(world, pos, explosion)
         );
+    }
+
+    @Override
+    @SuppressWarnings("deprecation")
+    public boolean isCamoFlammable(Direction face)
+    {
+        BlockState camo = getCamoState(face);
+        if (camo.isAir() && (!getCamoState().isAir() || !getCamoStateTwo().isAir()))
+        {
+            return (getCamoState().isAir() || getCamoState().isFlammable(world, pos, face)) &&
+                   (getCamoStateTwo().isAir() || getCamoStateTwo().isFlammable(world, pos, face));
+        }
+        else if (!camo.isAir())
+        {
+            return camo.isFlammable(world, pos, face);
+        }
+        return true;
+    }
+
+    @Override
+    @SuppressWarnings("deprecation")
+    public int getCamoFlammability(Direction face)
+    {
+        int flammabilityOne = super.getCamoFlammability(face);
+        int flammabilityTwo = getCamoStateTwo().isAir() ? -1 : getCamoStateTwo().getFlammability(world, pos, face);
+
+        if (flammabilityOne == -1) { return flammabilityTwo; }
+        if (flammabilityTwo == -1) { return flammabilityOne; }
+        return Math.min(flammabilityOne, flammabilityTwo);
     }
 
     protected abstract boolean hitSecondary(BlockRayTraceResult hit);

@@ -96,6 +96,18 @@ public class FramedBlock extends Block implements IFramedBlock, IWaterLoggable
     }
 
     @Override
+    public boolean isFlammable(BlockState state, IBlockReader world, BlockPos pos, Direction face)
+    {
+        return isCamoFlammable(world, pos, face);
+    }
+
+    @Override
+    public int getFlammability(BlockState state, IBlockReader world, BlockPos pos, Direction face)
+    {
+        return getCamoFlammability(world, pos, face);
+    }
+
+    @Override
     public FluidState getFluidState(BlockState state)
     {
         if (isWaterLoggable() && state.get(BlockStateProperties.WATERLOGGED))

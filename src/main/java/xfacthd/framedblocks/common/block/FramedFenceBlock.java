@@ -78,6 +78,18 @@ public class FramedFenceBlock extends FenceBlock implements IFramedBlock
     }
 
     @Override
+    public boolean isFlammable(BlockState state, IBlockReader world, BlockPos pos, Direction face)
+    {
+        return isCamoFlammable(world, pos, face);
+    }
+
+    @Override
+    public int getFlammability(BlockState state, IBlockReader world, BlockPos pos, Direction face)
+    {
+        return getCamoFlammability(world, pos, face);
+    }
+
+    @Override
     public List<ItemStack> getDrops(BlockState state, LootContext.Builder builder)
     {
         return getDrops(super.getDrops(state, builder), builder);

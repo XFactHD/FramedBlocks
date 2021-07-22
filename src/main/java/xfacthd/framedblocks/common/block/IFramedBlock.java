@@ -190,4 +190,32 @@ public interface IFramedBlock extends IFacade
         }
         return state.getBlock().getExplosionResistance();
     }
+
+    default boolean isCamoFlammable(IBlockReader world, BlockPos pos, Direction face)
+    {
+        if (CommonConfig.fireproofBlocks) { return false; }
+
+        TileEntity te = world.getTileEntity(pos);
+        if (te instanceof FramedTileEntity)
+        {
+            return ((FramedTileEntity) te).isCamoFlammable(face);
+        }
+        return true;
+    }
+
+    default int getCamoFlammability(IBlockReader world, BlockPos pos, Direction face)
+    {
+        if (CommonConfig.fireproofBlocks) { return 0; }
+
+        TileEntity te = world.getTileEntity(pos);
+        if (te instanceof FramedTileEntity)
+        {
+            int flammability = ((FramedTileEntity) te).getCamoFlammability(face);
+            if (flammability > -1)
+            {
+                return flammability;
+            }
+        }
+        return 20;
+    }
 }

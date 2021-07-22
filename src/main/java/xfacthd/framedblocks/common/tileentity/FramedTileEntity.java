@@ -289,6 +289,16 @@ public class FramedTileEntity extends TileEntity
         return camoState.getExplosionResistance(world, pos, explosion);
     }
 
+    public boolean isCamoFlammable(Direction face)
+    {
+        return camoState.isAir() || camoState.isFlammable(world, pos, face);
+    }
+
+    public int getCamoFlammability(Direction face)
+    {
+        return getCamoState().isAir() ? -1 : getCamoState().getFlammability(world, pos, face);
+    }
+
     public void setGlowing(boolean glowing)
     {
         if (this.glowing != glowing)
