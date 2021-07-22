@@ -51,40 +51,40 @@ public class FramedChestContainer extends Container
 
     public FramedChestContainer(int windowId, PlayerInventory inv, PacketBuffer extraData)
     {
-        this(windowId, inv, inv.player.world.getTileEntity(extraData.readBlockPos()));
+        this(windowId, inv, inv.player.level.getBlockEntity(extraData.readBlockPos()));
     }
 
     @Override
-    public boolean canInteractWith(PlayerEntity player) { return chest.isUsableByPlayer(player); }
+    public boolean stillValid(PlayerEntity player) { return chest.isUsableByPlayer(player); }
 
     @Override
-    public ItemStack transferStackInSlot(PlayerEntity player, int index)
+    public ItemStack quickMoveStack(PlayerEntity player, int index)
     {
         ItemStack remainder = ItemStack.EMPTY;
-        Slot slot = inventorySlots.get(index);
-        if (slot != null && slot.getHasStack())
+        Slot slot = slots.get(index);
+        if (slot != null && slot.hasItem())
         {
-            ItemStack stack = slot.getStack();
+            ItemStack stack = slot.getItem();
             remainder = stack.copy();
             if (index < 36)
             {
-                if (!mergeItemStack(stack, 36, inventorySlots.size(), true))
+                if (!moveItemStackTo(stack, 36, slots.size(), true))
                 {
                     return ItemStack.EMPTY;
                 }
             }
-            else if (!mergeItemStack(stack, 0, 36, false))
+            else if (!moveItemStackTo(stack, 0, 36, false))
             {
                 return ItemStack.EMPTY;
             }
 
             if (stack.isEmpty())
             {
-                slot.putStack(ItemStack.EMPTY);
+                slot.set(ItemStack.EMPTY);
             }
             else
             {
-                slot.onSlotChanged();
+                slot.setChanged();
             }
         }
 
@@ -92,12 +92,12 @@ public class FramedChestContainer extends Container
     }
 
     @Override
-    public void onContainerClosed(PlayerEntity player)
+    public void removed(PlayerEntity player)
     {
-        super.onContainerClosed(player);
+        super.removed(player);
 
         //noinspection ConstantConditions
-        if (!chest.getWorld().isRemote())
+        if (!chest.getLevel().isClientSide())
         {
             chest.close();
         }

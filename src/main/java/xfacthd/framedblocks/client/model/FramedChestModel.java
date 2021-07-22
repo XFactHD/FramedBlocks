@@ -24,27 +24,27 @@ public class FramedChestModel extends FramedBlockModel
     public FramedChestModel(BlockState state, IBakedModel baseModel)
     {
         super(state, baseModel);
-        this.closed = state.get(PropertyHolder.CHEST_STATE) == ChestState.CLOSED;
+        this.closed = state.getValue(PropertyHolder.CHEST_STATE) == ChestState.CLOSED;
     }
 
-    public FramedChestModel(IBakedModel baseModel) { this(FBContent.blockFramedChest.get().getDefaultState(), baseModel); }
+    public FramedChestModel(IBakedModel baseModel) { this(FBContent.blockFramedChest.get().defaultBlockState(), baseModel); }
 
     @Override
     protected void transformQuad(Map<Direction, List<BakedQuad>> quadMap, BakedQuad quad)
     {
-        if (quad.getFace().getAxis() == Direction.Axis.Y)
+        if (quad.getDirection().getAxis() == Direction.Axis.Y)
         {
             BakedQuad topBotQuad = ModelUtils.duplicateQuad(quad);
             if (BakedQuadTransformer.createTopBottomQuad(topBotQuad, 1F/16F, 1F/16F, 15F/16F, 15F/16F))
             {
-                if (topBotQuad.getFace() == Direction.UP)
+                if (topBotQuad.getDirection() == Direction.UP)
                 {
                     BakedQuadTransformer.setQuadPosInFacingDir(topBotQuad, closed ? 14F/16F : 10F/16F);
                     quadMap.get(null).add(topBotQuad);
                 }
                 else
                 {
-                    quadMap.get(quad.getFace()).add(topBotQuad);
+                    quadMap.get(quad.getDirection()).add(topBotQuad);
                 }
             }
         }

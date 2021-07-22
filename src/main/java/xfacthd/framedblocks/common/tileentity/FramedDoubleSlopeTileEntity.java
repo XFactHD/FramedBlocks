@@ -90,8 +90,10 @@ public class FramedDoubleSlopeTileEntity extends FramedDoubleTileEntity
         //noinspection deprecation
         if (!state.isAir())
         {
-            return state.isSolid();
+            //noinspection ConstantConditions
+            return state.isSolidRender(level, worldPosition);
         }
-        return getCamoState().isSolid() && getCamoStateTwo().isSolid();
+        //noinspection ConstantConditions
+        return getCamoState().isSolidRender(level, worldPosition) && getCamoStateTwo().isSolidRender(level, worldPosition);
     }
 }

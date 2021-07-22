@@ -267,7 +267,7 @@ public class FramedTileEntity extends TileEntity
 
     public boolean isSolidSide(Direction side)
     {
-        return getBlock().getCtmPredicate().test(getBlockState(), side) && camoState.isSolid();
+        return getBlock().getCtmPredicate().test(getBlockState(), side) && camoState.canOcclude();
     }
 
     /**
@@ -286,17 +286,17 @@ public class FramedTileEntity extends TileEntity
 
     public float getCamoBlastResistance(Explosion explosion)
     {
-        return camoState.getExplosionResistance(world, pos, explosion);
+        return camoState.getExplosionResistance(level, worldPosition, explosion);
     }
 
     public boolean isCamoFlammable(Direction face)
     {
-        return camoState.isAir() || camoState.isFlammable(world, pos, face);
+        return camoState.isAir() || camoState.isFlammable(level, worldPosition, face);
     }
 
     public int getCamoFlammability(Direction face)
     {
-        return getCamoState().isAir() ? -1 : getCamoState().getFlammability(world, pos, face);
+        return getCamoState().isAir() ? -1 : getCamoState().getFlammability(level, worldPosition, face);
     }
 
     public void setGlowing(boolean glowing)

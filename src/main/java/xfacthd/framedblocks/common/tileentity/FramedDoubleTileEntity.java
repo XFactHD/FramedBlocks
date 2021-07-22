@@ -86,8 +86,8 @@ public abstract class FramedDoubleTileEntity extends FramedTileEntity
     public float getCamoBlastResistance(Explosion explosion)
     {
         return Math.max(
-                getCamoState().getExplosionResistance(world, pos, explosion),
-                getCamoStateTwo().getExplosionResistance(world, pos, explosion)
+                getCamoState().getExplosionResistance(level, worldPosition, explosion),
+                getCamoStateTwo().getExplosionResistance(level, worldPosition, explosion)
         );
     }
 
@@ -98,12 +98,12 @@ public abstract class FramedDoubleTileEntity extends FramedTileEntity
         BlockState camo = getCamoState(face);
         if (camo.isAir() && (!getCamoState().isAir() || !getCamoStateTwo().isAir()))
         {
-            return (getCamoState().isAir() || getCamoState().isFlammable(world, pos, face)) &&
-                   (getCamoStateTwo().isAir() || getCamoStateTwo().isFlammable(world, pos, face));
+            return (getCamoState().isAir() || getCamoState().isFlammable(level, worldPosition, face)) &&
+                   (getCamoStateTwo().isAir() || getCamoStateTwo().isFlammable(level, worldPosition, face));
         }
         else if (!camo.isAir())
         {
-            return camo.isFlammable(world, pos, face);
+            return camo.isFlammable(level, worldPosition, face);
         }
         return true;
     }
@@ -113,7 +113,7 @@ public abstract class FramedDoubleTileEntity extends FramedTileEntity
     public int getCamoFlammability(Direction face)
     {
         int flammabilityOne = super.getCamoFlammability(face);
-        int flammabilityTwo = getCamoStateTwo().isAir() ? -1 : getCamoStateTwo().getFlammability(world, pos, face);
+        int flammabilityTwo = getCamoStateTwo().isAir() ? -1 : getCamoStateTwo().getFlammability(level, worldPosition, face);
 
         if (flammabilityOne == -1) { return flammabilityTwo; }
         if (flammabilityTwo == -1) { return flammabilityOne; }

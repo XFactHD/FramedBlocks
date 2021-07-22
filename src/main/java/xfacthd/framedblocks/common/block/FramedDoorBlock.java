@@ -58,13 +58,13 @@ public class FramedDoorBlock extends DoorBlock implements IFramedBlock
     }
 
     @Override
-    public void onBlockPlacedBy(World world, BlockPos pos, BlockState state, @Nullable LivingEntity placer, ItemStack stack)
+    public void setPlacedBy(World world, BlockPos pos, BlockState state, @Nullable LivingEntity placer, ItemStack stack)
     {
         //noinspection ConstantConditions
-        super.onBlockPlacedBy(world, pos, state, placer, stack);
+        super.setPlacedBy(world, pos, state, placer, stack);
 
         tryApplyCamoImmediately(world, pos, placer, stack);
-        tryApplyCamoImmediately(world, pos.up(), placer, stack); //Apply to upper half as well
+        tryApplyCamoImmediately(world, pos.above(), placer, stack); //Apply to upper half as well
     }
 
     @Override

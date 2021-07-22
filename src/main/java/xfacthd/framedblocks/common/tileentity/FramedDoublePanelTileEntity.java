@@ -45,11 +45,13 @@ public class FramedDoublePanelTileEntity extends FramedDoubleTileEntity
     @Override
     public boolean isSolidSide(Direction side)
     {
-        Direction facing = getBlockState().get(PropertyHolder.FACING_NE);
+        Direction facing = getBlockState().getValue(PropertyHolder.FACING_NE);
         if (side == facing || side == facing.getOpposite())
         {
-            return getCamoState(side).isSolid();
+            //noinspection ConstantConditions
+            return getCamoState(side).isSolidRender(level, worldPosition);
         }
-        return getCamoState().isSolid() && getCamoStateTwo().isSolid();
+        //noinspection ConstantConditions
+        return getCamoState().isSolidRender(level, worldPosition) && getCamoStateTwo().isSolidRender(level, worldPosition);
     }
 }

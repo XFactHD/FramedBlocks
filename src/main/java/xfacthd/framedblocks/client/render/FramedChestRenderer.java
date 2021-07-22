@@ -28,10 +28,10 @@ public class FramedChestRenderer extends TileEntityRenderer<FramedChestTileEntit
 {
     private static final RenderType[] RENDER_TYPES = new RenderType[]
             {
-                    RenderType.getSolid(),
-                    RenderType.getCutout(),
-                    RenderType.getCutoutMipped(),
-                    RenderType.getTranslucent()
+                    RenderType.solid(),
+                    RenderType.cutout(),
+                    RenderType.cutoutMipped(),
+                    RenderType.translucent()
             };
     private static final Map<Direction, IBakedModel> LID_MODELS = new EnumMap<>(Direction.class);
 
@@ -42,8 +42,8 @@ public class FramedChestRenderer extends TileEntityRenderer<FramedChestTileEntit
     {
         BlockState state = te.getBlockState();
 
-        ChestState chestState = state.get(PropertyHolder.CHEST_STATE);
-        Direction dir = state.get(PropertyHolder.FACING_HOR);
+        ChestState chestState = state.getValue(PropertyHolder.CHEST_STATE);
+        Direction dir = state.getValue(PropertyHolder.FACING_HOR);
 
         long lastChange = te.getLastChangeTime(chestState);
 
@@ -51,27 +51,27 @@ public class FramedChestRenderer extends TileEntityRenderer<FramedChestTileEntit
 
         IBakedModel model = LID_MODELS.get(dir);
         //noinspection ConstantConditions
-        IModelData data = model.getModelData(te.getWorld(), te.getPos(), state, EmptyModelData.INSTANCE);
+        IModelData data = model.getModelData(te.getLevel(), te.getBlockPos(), state, EmptyModelData.INSTANCE);
 
         float angle = calculateAngle(te, chestState, dir, lastChange, partialTicks);
 
         float xOff = dir.getAxis() == Direction.Axis.X ? (dir.getAxisDirection() == Direction.AxisDirection.POSITIVE ? 1F/16F : 15F/16F) : 0;
         float zOff = dir.getAxis() == Direction.Axis.Z ? (dir.getAxisDirection() == Direction.AxisDirection.POSITIVE ? 1F/16F : 15F/16F) : 0;
 
-        matrix.push();
+        matrix.pushPose();
 
         matrix.translate(xOff, 9F/16F, zOff);
-        matrix.rotate(dir.getAxis() == Direction.Axis.X ? Vector3f.ZP.rotationDegrees(angle) : Vector3f.XN.rotationDegrees(angle));
+        matrix.mulPose(dir.getAxis() == Direction.Axis.X ? Vector3f.ZP.rotationDegrees(angle) : Vector3f.XN.rotationDegrees(angle));
         matrix.translate(-xOff, -9F/16F, -zOff);
 
         renderLidModel(te, state, matrix, buffer, model, data);
 
-        matrix.pop();
+        matrix.popPose();
     }
 
     private void renderLidModel(FramedChestTileEntity te, BlockState state, MatrixStack matrix, IRenderTypeBuffer buffer, IBakedModel model, IModelData data)
     {
-        BlockModelRenderer renderer = Minecraft.getInstance().getBlockRendererDispatcher().getBlockModelRenderer();
+        BlockModelRenderer renderer = Minecraft.getInstance().getBlockRenderer().getModelRenderer();
 
         for (RenderType type : RENDER_TYPES)
         {
@@ -79,15 +79,15 @@ public class FramedChestRenderer extends TileEntityRenderer<FramedChestTileEntit
 
             //noinspection ConstantConditions
             renderer.renderModelSmooth(
-                    te.getWorld(),
+                    te.getLevel(),
                     model,
                     state,
-                    te.getPos(),
+                    te.getBlockPos(),
                     matrix,
                     buffer.getBuffer(type),
                     false,
-                    te.getWorld().getRandom(),
-                    te.getPos().toLong(),
+                    te.getLevel().getRandom(),
+                    te.getBlockPos().asLong(),
                     OverlayTexture.NO_OVERLAY,
                     data
             );
@@ -98,7 +98,7 @@ public class FramedChestRenderer extends TileEntityRenderer<FramedChestTileEntit
     private float calculateAngle(FramedChestTileEntity te, ChestState chestState, Direction dir, long lastChange, float partialTicks)
     {
         //noinspection ConstantConditions
-        float diff = (float) (te.getWorld().getGameTime() - lastChange) + partialTicks;
+        float diff = (float) (te.getLevel().getGameTime() - lastChange) + partialTicks;
 
         float factor = MathHelper.lerp(diff / 10F, 0, 1);
         if (chestState == ChestState.CLOSING) { factor = 1F - factor; }
@@ -116,9 +116,9 @@ public class FramedChestRenderer extends TileEntityRenderer<FramedChestTileEntit
     {
         for (Direction dir : Direction.Plane.HORIZONTAL)
         {
-            BlockState state = FBContent.blockFramedChest.get().getDefaultState().with(PropertyHolder.FACING_HOR, dir);
+            BlockState state = FBContent.blockFramedChest.get().defaultBlockState().setValue(PropertyHolder.FACING_HOR, dir);
 
-            ResourceLocation location = BlockModelShapes.getModelLocation(state);
+            ResourceLocation location = BlockModelShapes.stateToModelLocation(state);
 
             LID_MODELS.put(dir, new FramedChestLidModel(
                     state,

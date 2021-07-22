@@ -28,7 +28,7 @@ public class FramedChestBlock extends FramedBlock
     public FramedChestBlock() { super(BlockType.FRAMED_CHEST); }
 
     @Override
-    protected void fillStateContainer(StateContainer.Builder<Block, BlockState> builder)
+    protected void createBlockStateDefinition(StateContainer.Builder<Block, BlockState> builder)
     {
         builder.add(PropertyHolder.FACING_HOR, PropertyHolder.CHEST_STATE, BlockStateProperties.WATERLOGGED);
     }
@@ -37,34 +37,31 @@ public class FramedChestBlock extends FramedBlock
     @Override
     public BlockState getStateForPlacement(BlockItemUseContext context)
     {
-        BlockState state = getDefaultState().with(PropertyHolder.FACING_HOR, context.getPlacementHorizontalFacing().getOpposite());
-        return withWater(state, context.getWorld(), context.getPos());
+        BlockState state = defaultBlockState().setValue(PropertyHolder.FACING_HOR, context.getHorizontalDirection().getOpposite());
+        return withWater(state, context.getLevel(), context.getClickedPos());
     }
 
     @Override
-    public ActionResultType onBlockActivated(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockRayTraceResult hit)
+    public ActionResultType use(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockRayTraceResult hit)
     {
-        ActionResultType result = super.onBlockActivated(state, world, pos, player, hand, hit);
+        ActionResultType result = super.use(state, world, pos, player, hand, hit);
         if (result != ActionResultType.PASS) { return result; }
 
-        if (!world.isRemote())
+        if (!world.isClientSide())
         {
-            TileEntity te = world.getTileEntity(pos);
-            if (te instanceof FramedChestTileEntity)
+            if (world.getBlockEntity(pos) instanceof FramedChestTileEntity te)
             {
-                FramedChestTileEntity fte = (FramedChestTileEntity) te;
-
-                if (state.get(PropertyHolder.CHEST_STATE) != ChestState.OPENING)
+                if (state.getValue(PropertyHolder.CHEST_STATE) != ChestState.OPENING)
                 {
-                    world.setBlockState(pos, state.with(PropertyHolder.CHEST_STATE, ChestState.OPENING));
-                    world.playSound(null, pos, SoundEvents.BLOCK_CHEST_OPEN, SoundCategory.BLOCKS, 0.5F, world.rand.nextFloat() * 0.1F + 0.9F);
+                    world.setBlockAndUpdate(pos, state.setValue(PropertyHolder.CHEST_STATE, ChestState.OPENING));
+                    world.playSound(null, pos, SoundEvents.CHEST_OPEN, SoundCategory.BLOCKS, 0.5F, world.random.nextFloat() * 0.1F + 0.9F);
                 }
 
-                fte.open();
-                NetworkHooks.openGui((ServerPlayerEntity) player, fte, pos);
+                te.open();
+                NetworkHooks.openGui((ServerPlayerEntity) player, te, pos);
             }
         }
-        return ActionResultType.func_233537_a_(world.isRemote());
+        return ActionResultType.sidedSuccess(world.isClientSide());
     }
 
     @Override
@@ -72,7 +69,7 @@ public class FramedChestBlock extends FramedBlock
     {
         List<ItemStack> drops = super.getDrops(state, builder);
 
-        TileEntity te = builder.get(LootParameters.BLOCK_ENTITY);
+        TileEntity te = builder.getOptionalParameter(LootParameters.BLOCK_ENTITY);
         if (te instanceof FramedChestTileEntity)
         {
             ((FramedChestTileEntity) te).addDrops(drops);

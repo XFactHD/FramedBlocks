@@ -16,23 +16,23 @@ public class FramedChestScreen extends ContainerScreen<FramedChestContainer>
     {
         super(container, inv, title);
 
-        this.ySize = 168;
-        this.playerInventoryTitleY = ySize - 94;
+        this.imageHeight = 168;
+        this.inventoryLabelY = getYSize() - 94;
     }
 
     @Override
-    protected void drawGuiContainerBackgroundLayer(MatrixStack matrixStack, float partialTicks, int x, int y)
+    protected void renderBg(MatrixStack matrixStack, float partialTicks, int x, int y)
     {
         //noinspection deprecation
         RenderSystem.color4f(1.0F, 1.0F, 1.0F, 1.0F);
 
         //noinspection ConstantConditions
-        minecraft.getTextureManager().bindTexture(CHEST_GUI_TEXTURE);
+        minecraft.getTextureManager().bind(CHEST_GUI_TEXTURE);
 
-        int left = (width - xSize) / 2;
-        int top = (height - ySize) / 2;
+        int left = (width - imageWidth) / 2;
+        int top = (height - imageHeight) / 2;
 
-        blit(matrixStack, left, top, 0, 0, xSize, 71);
-        blit(matrixStack, left, top + 71, 0, 126, xSize, 96);
+        blit(matrixStack, left, top, 0, 0, imageWidth, 71);
+        blit(matrixStack, left, top + 71, 0, 126, imageWidth, 96);
     }
 }

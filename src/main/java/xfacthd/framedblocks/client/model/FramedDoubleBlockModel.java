@@ -6,7 +6,6 @@ import net.minecraft.client.renderer.BlockRendererDispatcher;
 import net.minecraft.client.renderer.model.BakedQuad;
 import net.minecraft.client.renderer.model.IBakedModel;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
-import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.Direction;
 import net.minecraft.util.Tuple;
 import net.minecraft.util.math.BlockPos;
@@ -87,8 +86,7 @@ public abstract class FramedDoubleBlockModel extends BakedModelProxy
     @Override
     public IModelData getModelData(@Nonnull IBlockDisplayReader world, @Nonnull BlockPos pos, @Nonnull BlockState state, @Nonnull IModelData tileData)
     {
-        TileEntity te = world.getTileEntity(pos);
-        if (te instanceof FramedDoubleTileEntity)
+        if (world.getBlockEntity(pos) instanceof FramedDoubleTileEntity te)
         {
             return te.getModelData();
         }

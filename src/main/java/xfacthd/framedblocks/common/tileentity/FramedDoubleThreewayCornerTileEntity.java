@@ -108,13 +108,15 @@ public class FramedDoubleThreewayCornerTileEntity extends FramedDoubleTileEntity
     @Override
     public boolean isSolidSide(Direction side)
     {
-        Direction dir = getBlockState().get(PropertyHolder.FACING_HOR);
-        boolean top = getBlockState().get(PropertyHolder.TOP);
+        Direction dir = getBlockState().getValue(PropertyHolder.FACING_HOR);
+        boolean top = getBlockState().getValue(PropertyHolder.TOP);
 
-        if (side == dir || side == dir.rotateYCCW() || (side == Direction.DOWN && !top) || (side == Direction.UP && top))
+        if (side == dir || side == dir.getCounterClockWise() || (side == Direction.DOWN && !top) || (side == Direction.UP && top))
         {
-            return getCamoState(side).isSolid();
+            //noinspection ConstantConditions
+            return getCamoState(side).isSolidRender(level, worldPosition);
         }
-        return getCamoState().isSolid() && getCamoStateTwo().isSolid();
+        //noinspection ConstantConditions
+        return getCamoState().isSolidRender(level, worldPosition) && getCamoStateTwo().isSolidRender(level, worldPosition);
     }
 }

@@ -233,8 +233,8 @@ public class FramedBlockStateProvider extends BlockStateProvider
 
         getVariantBuilder(FBContent.blockFramedChest.get()).forAllStatesExcept(state ->
         {
-            Direction dir = state.get(BlockStateProperties.HORIZONTAL_FACING);
-            int rotY = ((int)dir.getHorizontalAngle() + 180) % 360;
+            Direction dir = state.getValue(BlockStateProperties.HORIZONTAL_FACING);
+            int rotY = ((int)dir.toYRot() + 180) % 360;
             return ConfiguredModel.builder().modelFile(chest).rotationY(rotY).build();
         }, BlockStateProperties.WATERLOGGED);
 

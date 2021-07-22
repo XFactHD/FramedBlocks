@@ -52,7 +52,7 @@ public class FBClient
         ClientRegistry.bindTileEntityRenderer(FBContent.tileTypeFramedSign.get(), FramedSignRenderer::new);
         ClientRegistry.bindTileEntityRenderer(FBContent.tileTypeFramedChest.get(), FramedChestRenderer::new);
 
-        event.enqueueWork(() -> ScreenManager.registerFactory(FBContent.containerTypeFramedChest.get(), FramedChestScreen::new));
+        event.enqueueWork(() -> ScreenManager.register(FBContent.containerTypeFramedChest.get(), FramedChestScreen::new));
     }
 
     @SubscribeEvent

@@ -158,24 +158,27 @@ public class FramedDoubleCornerTileEntity extends FramedDoubleTileEntity
     @Override
     public boolean isSolidSide(Direction side)
     {
-        CornerType type = getBlockState().get(PropertyHolder.CORNER_TYPE);
-        Direction dir = getBlockState().get(PropertyHolder.FACING_HOR);
+        CornerType type = getBlockState().getValue(PropertyHolder.CORNER_TYPE);
+        Direction dir = getBlockState().getValue(PropertyHolder.FACING_HOR);
 
         if (type.isHorizontal())
         {
-            if ((!type.isRight() && side == dir.rotateYCCW()) || (type.isRight() && side == dir.rotateY()) ||
+            if ((!type.isRight() && side == dir.getCounterClockWise()) || (type.isRight() && side == dir.getClockWise()) ||
                 (!type.isTop() && side == Direction.DOWN) || (type.isTop() && side == Direction.UP) ||
                 side == dir || side == dir.getOpposite()
             )
             {
-                return getCamoState(side).isSolid();
+                //noinspection ConstantConditions
+                return getCamoState(side).isSolidRender(level, worldPosition);
             }
         }
-        else if ((side == dir || side == dir.rotateYCCW() || side.getAxis() == Direction.Axis.Y))
+        else if ((side == dir || side == dir.getCounterClockWise() || side.getAxis() == Direction.Axis.Y))
         {
-            return getCamoState(side).isSolid();
+            //noinspection ConstantConditions
+            return getCamoState(side).isSolidRender(level, worldPosition);
         }
 
-        return getCamoState().isSolid() && getCamoStateTwo().isSolid();
+        //noinspection ConstantConditions
+        return getCamoState().isSolidRender(level, worldPosition) && getCamoStateTwo().isSolidRender(level, worldPosition);
     }
 }

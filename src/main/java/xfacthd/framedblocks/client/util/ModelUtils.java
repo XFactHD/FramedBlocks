@@ -144,13 +144,13 @@ public class ModelUtils
         v2.cross(v1);
         v2.normalize();
 
-        int x = ((byte) Math.round(v2.getX() * 127)) & 0xFF;
-        int y = ((byte) Math.round(v2.getY() * 127)) & 0xFF;
-        int z = ((byte) Math.round(v2.getZ() * 127)) & 0xFF;
+        int x = ((byte) Math.round(v2.x() * 127)) & 0xFF;
+        int y = ((byte) Math.round(v2.y() * 127)) & 0xFF;
+        int z = ((byte) Math.round(v2.z() * 127)) & 0xFF;
 
         int normal = x | (y << 0x08) | (z << 0x10);
 
-        int[] vertexData = quad.getVertexData();
+        int[] vertexData = quad.getVertices();
         int step = vertexData.length / 4; //This is needed to support the extended vertex formats used by shaders in OptiFine
         for(int vert = 0; vert < 4; vert++)
         {

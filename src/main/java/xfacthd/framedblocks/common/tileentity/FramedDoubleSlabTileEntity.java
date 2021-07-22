@@ -30,8 +30,10 @@ public class FramedDoubleSlabTileEntity extends FramedDoubleTileEntity
     {
         if (side.getAxis() == Direction.Axis.Y)
         {
-            return getCamoState(side).isSolid();
+            //noinspection ConstantConditions
+            return getCamoState(side).isSolidRender(level, worldPosition);
         }
-        return getCamoState().isSolid() && getCamoStateTwo().isSolid();
+        //noinspection ConstantConditions
+        return getCamoState().isSolidRender(level, worldPosition) && getCamoStateTwo().isSolidRender(level, worldPosition);
     }
 }
