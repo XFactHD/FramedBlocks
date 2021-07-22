@@ -176,4 +176,18 @@ public interface IFramedBlock extends IFacade
         }
         return state.getBlock().getSlipperiness();
     }
+
+    default float getCamoBlastResistance(BlockState state, IBlockReader world, BlockPos pos, Explosion explosion)
+    {
+        TileEntity te = world.getTileEntity(pos);
+        if (te instanceof FramedTileEntity)
+        {
+            float resistance = ((FramedTileEntity) te).getCamoBlastResistance(explosion);
+            if (resistance > 0F)
+            {
+                return resistance;
+            }
+        }
+        return state.getBlock().getExplosionResistance();
+    }
 }

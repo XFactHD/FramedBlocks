@@ -77,6 +77,12 @@ public class FramedDoorBlock extends DoorBlock implements IFramedBlock
     }
 
     @Override
+    public float getExplosionResistance(BlockState state, IBlockReader world, BlockPos pos, Explosion explosion)
+    {
+        return getCamoBlastResistance(state, world, pos, explosion);
+    }
+
+    @Override
     public List<ItemStack> getDrops(BlockState state, LootContext.Builder builder)
     {
         return getDrops(super.getDrops(state, builder), builder);

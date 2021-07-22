@@ -13,6 +13,7 @@ import net.minecraft.tileentity.TileEntityType;
 import net.minecraft.util.*;
 import net.minecraft.util.math.BlockRayTraceResult;
 import net.minecraft.util.text.TranslationTextComponent;
+import net.minecraft.world.Explosion;
 import net.minecraftforge.client.model.data.IModelData;
 import net.minecraftforge.common.Tags;
 import net.minecraftforge.common.util.LazyOptional;
@@ -282,6 +283,11 @@ public class FramedTileEntity extends TileEntity
     protected ItemStack getCamoStack(BlockRayTraceResult hit) { return camoStack; }
 
     public ItemStack getCamoStack() { return camoStack; }
+
+    public float getCamoBlastResistance(Explosion explosion)
+    {
+        return camoState.getExplosionResistance(world, pos, explosion);
+    }
 
     public void setGlowing(boolean glowing)
     {

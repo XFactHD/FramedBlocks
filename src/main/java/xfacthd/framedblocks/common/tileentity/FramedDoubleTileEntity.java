@@ -7,6 +7,7 @@ import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.nbt.NBTUtil;
 import net.minecraft.tileentity.TileEntityType;
 import net.minecraft.util.math.BlockRayTraceResult;
+import net.minecraft.world.Explosion;
 import net.minecraftforge.client.model.data.*;
 import xfacthd.framedblocks.client.util.FramedBlockData;
 
@@ -78,6 +79,15 @@ public abstract class FramedDoubleTileEntity extends FramedTileEntity
     protected ItemStack getCamoStack(BlockRayTraceResult hit)
     {
         return hitSecondary(hit) ? getCamoStackTwo() : getCamoStack();
+    }
+
+    @Override
+    public float getCamoBlastResistance(Explosion explosion)
+    {
+        return Math.max(
+                getCamoState().getExplosionResistance(world, pos, explosion),
+                getCamoStateTwo().getExplosionResistance(world, pos, explosion)
+        );
     }
 
     protected abstract boolean hitSecondary(BlockRayTraceResult hit);
