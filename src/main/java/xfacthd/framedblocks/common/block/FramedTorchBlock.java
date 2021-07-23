@@ -1,20 +1,22 @@
 package xfacthd.framedblocks.common.block;
 
-import net.minecraft.block.*;
-import net.minecraft.block.material.Material;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.*;
-import net.minecraft.loot.LootContext;
-import net.minecraft.particles.IParticleData;
-import net.minecraft.particles.ParticleTypes;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.ActionResultType;
-import net.minecraft.util.Hand;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.BlockRayTraceResult;
-import net.minecraft.world.*;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.particles.ParticleOptions;
+import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.InteractionResult;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.*;
+import net.minecraft.world.level.*;
+import net.minecraft.world.level.block.SoundType;
+import net.minecraft.world.level.block.TorchBlock;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.material.Material;
+import net.minecraft.world.level.storage.loot.LootContext;
+import net.minecraft.world.phys.BlockHitResult;
 import xfacthd.framedblocks.FramedBlocks;
 import xfacthd.framedblocks.common.FBContent;
 import xfacthd.framedblocks.common.data.BlockType;
@@ -38,31 +40,31 @@ public class FramedTorchBlock extends TorchBlock implements IFramedBlock
         );
     }
 
-    public FramedTorchBlock(Properties props, IParticleData particle) { super(props, particle); }
+    public FramedTorchBlock(Properties props, ParticleOptions particle) { super(props, particle); }
 
     @Override
-    public final ActionResultType use(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockRayTraceResult hit)
+    public final InteractionResult use(BlockState state, Level world, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hit)
     {
         return handleUse(world, pos, player, hand, hit);
     }
 
     @Override
-    public void setPlacedBy(World world, BlockPos pos, BlockState state, @Nullable LivingEntity placer, ItemStack stack)
+    public void setPlacedBy(Level world, BlockPos pos, BlockState state, @Nullable LivingEntity placer, ItemStack stack)
     {
         tryApplyCamoImmediately(world, pos, placer, stack);
     }
 
     @Override
-    public int getLightValue(BlockState state, IBlockReader world, BlockPos pos) { return Math.max(super.getLightValue(state, world, pos), getLight(world, pos)); }
+    public int getLightEmission(BlockState state, BlockGetter world, BlockPos pos) { return Math.max(super.getLightEmission(state, world, pos), getLight(world, pos)); }
 
     @Override
-    public SoundType getSoundType(BlockState state, IWorldReader world, BlockPos pos, Entity entity)
+    public SoundType getSoundType(BlockState state, LevelReader world, BlockPos pos, Entity entity)
     {
-        return getSound(state, world, pos);
+        return getCamoSound(state, world, pos);
     }
 
     @Override
-    public float getExplosionResistance(BlockState state, IBlockReader world, BlockPos pos, Explosion explosion)
+    public float getExplosionResistance(BlockState state, BlockGetter world, BlockPos pos, Explosion explosion)
     {
         return getCamoBlastResistance(state, world, pos, explosion);
     }
@@ -70,14 +72,11 @@ public class FramedTorchBlock extends TorchBlock implements IFramedBlock
     @Override
     public List<ItemStack> getDrops(BlockState state, LootContext.Builder builder)
     {
-        return getDrops(super.getDrops(state, builder), builder);
+        return getCamoDrops(super.getDrops(state, builder), builder);
     }
 
     @Override
-    public final boolean hasTileEntity(BlockState state) { return true; }
-
-    @Override
-    public final TileEntity createTileEntity(BlockState state, IBlockReader world) { return new FramedTileEntity(); }
+    public final BlockEntity newBlockEntity(BlockPos pos, BlockState state) { return new FramedTileEntity(pos, state); }
 
     @Override
     public BlockType getBlockType() { return BlockType.FRAMED_TORCH; }
@@ -85,7 +84,7 @@ public class FramedTorchBlock extends TorchBlock implements IFramedBlock
     @Override
     public BlockItem createItemBlock()
     {
-        BlockItem item = new WallOrFloorItem(
+        BlockItem item = new StandingAndWallBlockItem(
                 FBContent.blockFramedTorch.get(),
                 FBContent.blockFramedWallTorch.get(),
                 new Item.Properties().tab(FramedBlocks.FRAMED_GROUP)

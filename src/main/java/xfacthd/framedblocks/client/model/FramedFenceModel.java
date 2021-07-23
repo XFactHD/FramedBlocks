@@ -1,10 +1,10 @@
 package xfacthd.framedblocks.client.model;
 
-import net.minecraft.block.BlockState;
-import net.minecraft.client.renderer.model.BakedQuad;
-import net.minecraft.client.renderer.model.IBakedModel;
-import net.minecraft.state.properties.BlockStateProperties;
-import net.minecraft.util.Direction;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.client.renderer.block.model.BakedQuad;
+import net.minecraft.client.resources.model.BakedModel;
+import net.minecraft.world.level.block.state.properties.BlockStateProperties;
+import net.minecraft.core.Direction;
 import net.minecraftforge.fml.ModList;
 import xfacthd.framedblocks.client.util.BakedQuadTransformer;
 import xfacthd.framedblocks.client.util.ModelUtils;
@@ -19,7 +19,7 @@ public class FramedFenceModel extends FramedBlockModel
     private final boolean south;
     private final boolean west;
 
-    public FramedFenceModel(BlockState state, IBakedModel baseModel)
+    public FramedFenceModel(BlockState state, BakedModel baseModel)
     {
         super(state, baseModel);
         north = state.getValue(BlockStateProperties.NORTH);
@@ -113,7 +113,7 @@ public class FramedFenceModel extends FramedBlockModel
 
 
 
-    public static IBakedModel createFenceModel(BlockState state, IBakedModel baseModel)
+    public static BakedModel createFenceModel(BlockState state, BakedModel baseModel)
     {
         if (ModList.get().isLoaded("diagonalfences"))
         {

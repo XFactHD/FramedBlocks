@@ -1,16 +1,20 @@
 package xfacthd.framedblocks.client.model;
 
 import com.google.common.collect.ImmutableList;
-import net.minecraft.block.BlockState;
+import com.mojang.blaze3d.vertex.VertexFormatElement;
+import com.mojang.math.Vector3f;
+import com.mojang.math.Vector4f;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.model.*;
-import net.minecraft.client.renderer.texture.AtlasTexture;
+import net.minecraft.client.renderer.block.model.BakedQuad;
+import net.minecraft.client.renderer.block.model.ItemOverrides;
+import net.minecraft.client.renderer.texture.TextureAtlas;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
-import net.minecraft.client.renderer.vertex.VertexFormatElement;
-import net.minecraft.fluid.Fluid;
-import net.minecraft.util.Direction;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.math.vector.*;
+import net.minecraft.client.resources.model.BakedModel;
+import net.minecraft.core.Direction;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.material.Fluid;
+import net.minecraft.world.phys.Vec2;
 import net.minecraftforge.client.model.pipeline.BakedQuadBuilder;
 import net.minecraftforge.client.model.pipeline.IVertexConsumer;
 
@@ -18,7 +22,7 @@ import javax.annotation.Nullable;
 import java.util.*;
 import java.util.function.Function;
 
-public class FluidDummyModel implements IBakedModel
+public class FluidDummyModel implements BakedModel
 {
     private final Fluid fluid;
     private final TextureAtlasSprite particles;
@@ -29,7 +33,7 @@ public class FluidDummyModel implements IBakedModel
         this.fluid = fluid;
 
         //noinspection deprecation
-        Function<ResourceLocation, TextureAtlasSprite> spriteGetter = Minecraft.getInstance().getTextureAtlas(AtlasTexture.LOCATION_BLOCKS);
+        Function<ResourceLocation, TextureAtlasSprite> spriteGetter = Minecraft.getInstance().getTextureAtlas(TextureAtlas.LOCATION_BLOCKS);
         particles = spriteGetter.apply(fluid.getAttributes().getStillTexture());
         buildQuads(spriteGetter);
     }
@@ -56,7 +60,7 @@ public class FluidDummyModel implements IBakedModel
     public TextureAtlasSprite getParticleIcon() { return particles; }
 
     @Override
-    public ItemOverrideList getOverrides() { return null; }
+    public ItemOverrides getOverrides() { return null; }
 
 
 
@@ -115,10 +119,10 @@ public class FluidDummyModel implements IBakedModel
 
                 putVertexData(builder,
                         new Vector4f(x, y, z, 1F),
-                        new Vector2f(u, v),
+                        new Vec2(u, v),
                         dir.step(),
                         new Vector4f(1F, 1F, 1F, 1F),
-                        new Vector2f(0xF0, 0xF0),
+                        new Vec2(0xF0, 0xF0),
                         sprite
                 );
             }
@@ -130,7 +134,7 @@ public class FluidDummyModel implements IBakedModel
     }
 
     /** Copied from { @link net.minecraftforge.client.model.obj.OBJModel } */
-    private void putVertexData(IVertexConsumer consumer, Vector4f pos, Vector2f tex, Vector3f normal, Vector4f color, Vector2f light, TextureAtlasSprite texture)
+    private void putVertexData(IVertexConsumer consumer, Vector4f pos, Vec2 tex, Vector3f normal, Vector4f color, Vec2 light, TextureAtlasSprite texture)
     {
         ImmutableList<VertexFormatElement> elements = consumer.getVertexFormat().getElements();
         for(int elem = 0; elem < elements.size(); elem++)

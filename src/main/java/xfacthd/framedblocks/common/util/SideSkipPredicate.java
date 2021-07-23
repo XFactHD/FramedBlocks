@@ -1,9 +1,9 @@
 package xfacthd.framedblocks.common.util;
 
-import net.minecraft.block.BlockState;
-import net.minecraft.util.Direction;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.IBlockReader;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.core.Direction;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.level.BlockGetter;
 import xfacthd.framedblocks.common.block.IFramedBlock;
 import xfacthd.framedblocks.common.tileentity.FramedTileEntity;
 
@@ -43,19 +43,18 @@ public interface SideSkipPredicate
      * @param side The side to be checked
      * @return Wether the given side should be hidden
      */
-    boolean test(IBlockReader world, BlockPos pos, BlockState state, BlockState adjState, Direction side);
+    boolean test(BlockGetter world, BlockPos pos, BlockState state, BlockState adjState, Direction side);
 
-    static boolean compareState(IBlockReader world, BlockPos pos, Direction side)
+    static boolean compareState(BlockGetter world, BlockPos pos, Direction side)
     {
         return compareState(world, pos, side, side.getOpposite());
     }
 
-    static boolean compareState(IBlockReader world, BlockPos pos, Direction side, Direction camoSide)
+    static boolean compareState(BlockGetter world, BlockPos pos, Direction side, Direction camoSide)
     {
         if (world.getBlockEntity(pos.relative(side)) instanceof FramedTileEntity te)
         {
             BlockState adjState = te.getCamoState(camoSide);
-            //noinspection deprecation
             if (adjState.isAir()) { return false; }
 
             return compareState(world, pos, adjState, camoSide);
@@ -63,7 +62,7 @@ public interface SideSkipPredicate
         return false;
     }
 
-    static boolean compareState(IBlockReader world, BlockPos pos, BlockState adjState, Direction side)
+    static boolean compareState(BlockGetter world, BlockPos pos, BlockState adjState, Direction side)
     {
         if (world.getBlockEntity(pos) instanceof FramedTileEntity te)
         {

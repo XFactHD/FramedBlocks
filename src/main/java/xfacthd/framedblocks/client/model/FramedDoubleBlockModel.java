@@ -1,15 +1,15 @@
 package xfacthd.framedblocks.client.model;
 
-import net.minecraft.block.BlockState;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.BlockRendererDispatcher;
-import net.minecraft.client.renderer.model.BakedQuad;
-import net.minecraft.client.renderer.model.IBakedModel;
+import net.minecraft.client.renderer.block.BlockRenderDispatcher;
+import net.minecraft.client.renderer.block.model.BakedQuad;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
-import net.minecraft.util.Direction;
+import net.minecraft.client.resources.model.BakedModel;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
 import net.minecraft.util.Tuple;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.IBlockDisplayReader;
+import net.minecraft.world.level.BlockAndTintGetter;
+import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.client.model.data.EmptyModelData;
 import net.minecraftforge.client.model.data.IModelData;
 import xfacthd.framedblocks.client.util.FramedBlockData;
@@ -23,9 +23,9 @@ public abstract class FramedDoubleBlockModel extends BakedModelProxy
 {
     private final boolean specialItemModel;
     private Tuple<BlockState, BlockState> dummyStates = null;
-    private Tuple<IBakedModel, IBakedModel> models = null;
+    private Tuple<BakedModel, BakedModel> models = null;
 
-    protected FramedDoubleBlockModel(IBakedModel baseModel, boolean specialItemModel)
+    protected FramedDoubleBlockModel(BakedModel baseModel, boolean specialItemModel)
     {
         super(baseModel);
         this.specialItemModel = specialItemModel;
@@ -67,24 +67,24 @@ public abstract class FramedDoubleBlockModel extends BakedModelProxy
 
     @Override
     @SuppressWarnings({"deprecation", "ConstantConditions"})
-    public TextureAtlasSprite getParticleTexture(@Nonnull IModelData data)
+    public TextureAtlasSprite getParticleIcon(@Nonnull IModelData data)
     {
         IModelData innerData = data.getData(FramedDoubleTileEntity.DATA_LEFT);
         if (innerData != null && !innerData.getData(FramedBlockData.CAMO).isAir())
         {
-            return models.getA().getParticleTexture(innerData);
+            return models.getA().getParticleIcon(innerData);
         }
         innerData = data.getData(FramedDoubleTileEntity.DATA_RIGHT);
         if (innerData != null && !innerData.getData(FramedBlockData.CAMO).isAir())
         {
-            return models.getB().getParticleTexture(innerData);
+            return models.getB().getParticleIcon(innerData);
         }
         return baseModel.getParticleIcon();
     }
 
     @Nonnull
     @Override
-    public IModelData getModelData(@Nonnull IBlockDisplayReader world, @Nonnull BlockPos pos, @Nonnull BlockState state, @Nonnull IModelData tileData)
+    public IModelData getModelData(@Nonnull BlockAndTintGetter world, @Nonnull BlockPos pos, @Nonnull BlockState state, @Nonnull IModelData tileData)
     {
         if (world.getBlockEntity(pos) instanceof FramedDoubleTileEntity te)
         {
@@ -97,9 +97,9 @@ public abstract class FramedDoubleBlockModel extends BakedModelProxy
 
     protected abstract Tuple<BlockState, BlockState> getDummyStates();
 
-    private Tuple<IBakedModel, IBakedModel> getModels()
+    private Tuple<BakedModel, BakedModel> getModels()
     {
-        BlockRendererDispatcher dispatcher = Minecraft.getInstance().getBlockRenderer();
+        BlockRenderDispatcher dispatcher = Minecraft.getInstance().getBlockRenderer();
         return new Tuple<>(
                 dispatcher.getBlockModel(dummyStates.getA()),
                 dispatcher.getBlockModel(dummyStates.getB())

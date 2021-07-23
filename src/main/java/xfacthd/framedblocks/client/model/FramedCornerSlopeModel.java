@@ -1,9 +1,9 @@
 package xfacthd.framedblocks.client.model;
 
-import net.minecraft.block.BlockState;
-import net.minecraft.client.renderer.model.BakedQuad;
-import net.minecraft.client.renderer.model.IBakedModel;
-import net.minecraft.util.Direction;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.client.renderer.block.model.BakedQuad;
+import net.minecraft.client.resources.model.BakedModel;
+import net.minecraft.core.Direction;
 import xfacthd.framedblocks.client.util.BakedQuadTransformer;
 import xfacthd.framedblocks.client.util.ModelUtils;
 import xfacthd.framedblocks.common.FBContent;
@@ -18,14 +18,14 @@ public class FramedCornerSlopeModel extends FramedBlockModel
     private final Direction dir;
     private final CornerType type;
 
-    public FramedCornerSlopeModel(BlockState state, IBakedModel baseModel)
+    public FramedCornerSlopeModel(BlockState state, BakedModel baseModel)
     {
         super(state, baseModel);
         dir = state.getValue(PropertyHolder.FACING_HOR);
         type = state.getValue(PropertyHolder.CORNER_TYPE);
     }
 
-    public FramedCornerSlopeModel(IBakedModel baseModel)
+    public FramedCornerSlopeModel(BakedModel baseModel)
     {
         this(
                 FBContent.blockFramedCornerSlope.get().defaultBlockState().setValue(PropertyHolder.FACING_HOR, Direction.SOUTH),

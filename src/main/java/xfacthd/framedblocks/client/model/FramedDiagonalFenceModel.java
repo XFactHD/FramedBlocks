@@ -1,12 +1,10 @@
 package xfacthd.framedblocks.client.model;
 
-import net.minecraft.block.BlockState;
-import net.minecraft.client.renderer.model.BakedQuad;
-import net.minecraft.client.renderer.model.IBakedModel;
-
-import fuzs.diagonalfences.api.IDiagonalBlock;
-import net.minecraft.util.Direction;
-import net.minecraft.util.math.vector.Vector3f;
+import com.mojang.math.Vector3f;
+import net.minecraft.client.renderer.block.model.BakedQuad;
+import net.minecraft.client.resources.model.BakedModel;
+import net.minecraft.core.Direction;
+import net.minecraft.world.level.block.state.BlockState;
 import xfacthd.framedblocks.client.util.BakedQuadTransformer;
 import xfacthd.framedblocks.client.util.ModelUtils;
 
@@ -20,15 +18,16 @@ public class FramedDiagonalFenceModel extends FramedFenceModel
     private final boolean northWest;
     private final boolean southWest;
 
-    public FramedDiagonalFenceModel(BlockState state, IBakedModel baseModel)
+    public FramedDiagonalFenceModel(BlockState state, BakedModel baseModel)
     {
         super(state, baseModel);
 
-        boolean hasProps = state.getBlock() instanceof IDiagonalBlock && ((IDiagonalBlock)state.getBlock()).hasProperties();
-        northEast = hasProps && state.getValue(IDiagonalBlock.NORTH_EAST);
-        southEast = hasProps && state.getValue(IDiagonalBlock.SOUTH_EAST);
-        northWest = hasProps && state.getValue(IDiagonalBlock.NORTH_WEST);
-        southWest = hasProps && state.getValue(IDiagonalBlock.SOUTH_WEST);
+        //TODO: reactivate when Diagonal Fences is available
+        //boolean hasProps = state.getBlock() instanceof IDiagonalBlock && ((IDiagonalBlock)state.getBlock()).hasProperties();
+        northEast = false; //hasProps && state.getValue(IDiagonalBlock.NORTH_EAST);
+        southEast = false; //hasProps && state.getValue(IDiagonalBlock.SOUTH_EAST);
+        northWest = false; //hasProps && state.getValue(IDiagonalBlock.NORTH_WEST);
+        southWest = false; //hasProps && state.getValue(IDiagonalBlock.SOUTH_WEST);
     }
 
     @Override

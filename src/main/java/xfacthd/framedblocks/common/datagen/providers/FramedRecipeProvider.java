@@ -1,9 +1,10 @@
 package xfacthd.framedblocks.common.datagen.providers;
 
-import net.minecraft.advancements.ICriterionInstance;
-import net.minecraft.data.*;
-import net.minecraft.item.Items;
+import net.minecraft.advancements.CriterionTriggerInstance;
+import net.minecraft.data.DataGenerator;
+import net.minecraft.data.recipes.*;
 import net.minecraft.tags.ItemTags;
+import net.minecraft.world.item.Items;
 import xfacthd.framedblocks.FramedBlocks;
 import xfacthd.framedblocks.common.FBContent;
 
@@ -11,8 +12,8 @@ import java.util.function.Consumer;
 
 public class FramedRecipeProvider extends RecipeProvider
 {
-    private final ICriterionInstance HAS_FRAMED_BLOCK = has(FBContent.blockFramedCube.get());
-    private final ICriterionInstance HAS_FRAMED_SLOPE = has(FBContent.blockFramedSlope.get());
+    private final CriterionTriggerInstance HAS_FRAMED_BLOCK = has(FBContent.blockFramedCube.get());
+    private final CriterionTriggerInstance HAS_FRAMED_SLOPE = has(FBContent.blockFramedSlope.get());
 
     public FramedRecipeProvider(DataGenerator gen) { super(gen); }
 
@@ -20,7 +21,7 @@ public class FramedRecipeProvider extends RecipeProvider
     public String getName() { return super.getName() + ": " + FramedBlocks.MODID; }
 
     @Override
-    protected void buildShapelessRecipes(Consumer<IFinishedRecipe> consumer)
+    protected void buildCraftingRecipes(Consumer<FinishedRecipe> consumer)
     {
         ShapedRecipeBuilder.shaped(FBContent.blockFramedCube.get(), 4)
                 .pattern("PSP")

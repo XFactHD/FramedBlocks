@@ -1,11 +1,11 @@
 package xfacthd.framedblocks.common.data;
 
-import net.minecraft.util.Direction;
-import net.minecraft.util.IStringSerializable;
+import net.minecraft.core.Direction;
+import net.minecraft.util.StringRepresentable;
 
 import java.util.Locale;
 
-public enum CornerType implements IStringSerializable
+public enum CornerType implements StringRepresentable
 {
     BOTTOM,
     TOP,

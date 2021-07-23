@@ -1,24 +1,27 @@
 package xfacthd.framedblocks.client.render;
 
-import com.mojang.blaze3d.matrix.MatrixStack;
-import com.mojang.blaze3d.vertex.IVertexBuilder;
-import net.minecraft.block.*;
+import com.mojang.blaze3d.vertex.PoseStack;
+import com.mojang.blaze3d.vertex.VertexConsumer;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.IRenderTypeBuffer;
+import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
-import net.minecraft.item.*;
-import net.minecraft.state.properties.DoubleBlockHalf;
-import net.minecraft.util.Direction;
-import net.minecraft.util.Hand;
-import net.minecraft.util.math.*;
-import net.minecraft.util.math.shapes.ISelectionContext;
-import net.minecraft.util.math.vector.Vector3d;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.item.*;
+import net.minecraft.world.item.context.BlockPlaceContext;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.DoorBlock;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.state.properties.DoubleBlockHalf;
+import net.minecraft.world.phys.*;
+import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.ForgeHooksClient;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.fml.common.ObfuscationReflectionHelper;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
+import net.minecraftforge.fml.util.ObfuscationReflectionHelper;
 import xfacthd.framedblocks.FramedBlocks;
 import xfacthd.framedblocks.client.util.ClientConfig;
 import xfacthd.framedblocks.client.util.FramedBlockData;
@@ -46,14 +49,14 @@ public class GhostBlockRenderer
         GHOST_MODEL_DATA.setData(FramedDoubleTileEntity.DATA_RIGHT, GHOST_MODEL_DATA);
     }
 
-    public static void drawGhostBlock(IRenderTypeBuffer buffers, MatrixStack mstack)
+    public static void drawGhostBlock(MultiBufferSource buffers, PoseStack mstack)
     {
         if (!ClientConfig.showGhostBlocks) { return; }
 
-        RayTraceResult mouseOver = mc().hitResult;
-        if (mouseOver == null || mouseOver.getType() != RayTraceResult.Type.BLOCK) { return; }
+        HitResult mouseOver = mc().hitResult;
+        if (mouseOver == null || mouseOver.getType() != HitResult.Type.BLOCK) { return; }
 
-        BlockRayTraceResult target = (BlockRayTraceResult) mouseOver;
+        BlockHitResult target = (BlockHitResult) mouseOver;
 
         ItemStack stack = mc().player.getMainHandItem();
         if (!(stack.getItem() instanceof BlockItem item)) { return; }
@@ -77,12 +80,12 @@ public class GhostBlockRenderer
         }
         else
         {
-            BlockItemUseContext context = new BlockItemUseContext(mc().player, Hand.MAIN_HAND, stack, target);
+            BlockPlaceContext context = new BlockPlaceContext(mc().player, InteractionHand.MAIN_HAND, stack, target);
 
             renderPos = context.getClickedPos();
             renderState = getStateForPlacement(context, block);
             doRender = renderState != null &&
-                    mc().level.isUnobstructed(renderState, renderPos, ISelectionContext.of(mc().player)) &&
+                    mc().level.isUnobstructed(renderState, renderPos, CollisionContext.of(mc().player)) &&
                     mc().level.getBlockState(renderPos).canBeReplaced(context);
         }
 
@@ -97,21 +100,21 @@ public class GhostBlockRenderer
         }
     }
 
-    private static void doRenderGhostBlock(MatrixStack mstack, IRenderTypeBuffer buffers, BlockPos renderPos, BlockState renderState)
+    private static void doRenderGhostBlock(PoseStack mstack, MultiBufferSource buffers, BlockPos renderPos, BlockState renderState)
     {
         GHOST_MODEL_DATA.setWorld(mc().level);
         GHOST_MODEL_DATA.setPos(renderPos);
 
         ForgeHooksClient.setRenderLayer(RenderType.translucent());
 
-        Vector3d offset = Vector3d.atLowerCornerOf(renderPos).subtract(mc().gameRenderer.getMainCamera().getPosition());
+        Vec3 offset = Vec3.atLowerCornerOf(renderPos).subtract(mc().gameRenderer.getMainCamera().getPosition());
 
         mstack.pushPose();
         mstack.translate(offset.x, offset.y, offset.z);
 
-        IVertexBuilder builder = buffers.getBuffer(RenderType.translucent());
+        VertexConsumer builder = buffers.getBuffer(RenderType.translucent());
 
-        mc().getBlockRenderer().renderModel(
+        mc().getBlockRenderer().renderBatched(
                 renderState,
                 renderPos,
                 mc().level,
@@ -122,7 +125,7 @@ public class GhostBlockRenderer
                 GHOST_MODEL_DATA
         );
 
-        ((IRenderTypeBuffer.Impl) buffers).endBatch(RenderType.translucent());
+        ((MultiBufferSource.BufferSource) buffers).endBatch(RenderType.translucent());
 
         mstack.popPose();
 
@@ -131,7 +134,7 @@ public class GhostBlockRenderer
 
 
 
-    private static BlockState tryBuildDoubleSlab(BlockRayTraceResult trace, Block heldBlock)
+    private static BlockState tryBuildDoubleSlab(BlockHitResult trace, Block heldBlock)
     {
         if (heldBlock != FBContent.blockFramedSlab.get()) { return null; }
 
@@ -147,7 +150,7 @@ public class GhostBlockRenderer
         return null;
     }
 
-    private static BlockState tryBuildDoublePanel(BlockRayTraceResult trace, Block heldBlock)
+    private static BlockState tryBuildDoublePanel(BlockHitResult trace, Block heldBlock)
     {
         if (heldBlock != FBContent.blockFramedPanel.get()) { return null; }
 
@@ -163,11 +166,11 @@ public class GhostBlockRenderer
         return null;
     }
 
-    private static final Method BLOCKITEM_GETPLACESTATE = ObfuscationReflectionHelper.findMethod(BlockItem.class, "func_195945_b", BlockItemUseContext.class);
-    private static BlockState getStateForPlacement(BlockItemUseContext ctx, Block block)
+    private static final Method BLOCKITEM_GETPLACESTATE = ObfuscationReflectionHelper.findMethod(BlockItem.class, "m_5965_", BlockPlaceContext.class);
+    private static BlockState getStateForPlacement(BlockPlaceContext ctx, Block block)
     {
         Item item = ctx.getItemInHand().getItem();
-        if (item instanceof WallOrFloorItem)
+        if (item instanceof StandingAndWallBlockItem)
         {
             try
             {

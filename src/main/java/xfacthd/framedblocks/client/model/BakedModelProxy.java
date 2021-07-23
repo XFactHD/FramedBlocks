@@ -1,19 +1,20 @@
 package xfacthd.framedblocks.client.model;
 
-import net.minecraft.block.BlockState;
-import net.minecraft.client.renderer.model.*;
+import net.minecraft.client.renderer.block.model.*;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
-import net.minecraft.util.Direction;
+import net.minecraft.client.resources.model.BakedModel;
+import net.minecraft.core.Direction;
+import net.minecraft.world.level.block.state.BlockState;
 
 import java.util.List;
 import java.util.Random;
 
 @SuppressWarnings("deprecation")
-public abstract class BakedModelProxy implements IBakedModel
+public abstract class BakedModelProxy implements BakedModel
 {
-    protected final IBakedModel baseModel;
+    protected final BakedModel baseModel;
 
-    protected BakedModelProxy(IBakedModel baseModel) { this.baseModel = baseModel; }
+    protected BakedModelProxy(BakedModel baseModel) { this.baseModel = baseModel; }
 
     @Override
     public List<BakedQuad> getQuads(BlockState state, Direction side, Random rand)
@@ -37,8 +38,8 @@ public abstract class BakedModelProxy implements IBakedModel
     public TextureAtlasSprite getParticleIcon() { return baseModel.getParticleIcon(); }
 
     @Override
-    public ItemOverrideList getOverrides() { return baseModel.getOverrides(); }
+    public ItemOverrides getOverrides() { return baseModel.getOverrides(); }
 
     @Override
-    public ItemCameraTransforms getTransforms() { return baseModel.getTransforms(); }
+    public ItemTransforms getTransforms() { return baseModel.getTransforms(); }
 }

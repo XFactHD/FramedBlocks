@@ -1,17 +1,21 @@
 package xfacthd.framedblocks.common.block;
 
-import net.minecraft.block.*;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.ItemStack;
-import net.minecraft.loot.LootContext;
-import net.minecraft.state.properties.BlockStateProperties;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.*;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.BlockRayTraceResult;
-import net.minecraft.world.*;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.InteractionResult;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.*;
+import net.minecraft.world.level.block.FenceBlock;
+import net.minecraft.world.level.block.SoundType;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.state.properties.BlockStateProperties;
+import net.minecraft.world.level.storage.loot.LootContext;
+import net.minecraft.world.phys.BlockHitResult;
 import xfacthd.framedblocks.common.FBContent;
 import xfacthd.framedblocks.common.data.BlockType;
 import xfacthd.framedblocks.common.tileentity.FramedTileEntity;
@@ -48,43 +52,43 @@ public class FramedFenceBlock extends FenceBlock implements IFramedBlock
     }
 
     @Override
-    public final ActionResultType use(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockRayTraceResult hit)
+    public final InteractionResult use(BlockState state, Level world, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hit)
     {
-        ActionResultType result = handleUse(world, pos, player, hand, hit);
+        InteractionResult result = handleUse(world, pos, player, hand, hit);
         if (result.consumesAction()) { return result; }
 
         return super.use(state, world, pos, player, hand, hit);
     }
 
     @Override
-    public void setPlacedBy(World world, BlockPos pos, BlockState state, @Nullable LivingEntity placer, ItemStack stack)
+    public void setPlacedBy(Level world, BlockPos pos, BlockState state, @Nullable LivingEntity placer, ItemStack stack)
     {
         tryApplyCamoImmediately(world, pos, placer, stack);
     }
 
     @Override
-    public int getLightValue(BlockState state, IBlockReader world, BlockPos pos) { return getLight(world, pos); }
+    public int getLightEmission(BlockState state, BlockGetter world, BlockPos pos) { return getLight(world, pos); }
 
     @Override
-    public SoundType getSoundType(BlockState state, IWorldReader world, BlockPos pos, Entity entity)
+    public SoundType getSoundType(BlockState state, LevelReader world, BlockPos pos, Entity entity)
     {
-        return getSound(state, world, pos);
+        return getCamoSound(state, world, pos);
     }
 
     @Override
-    public float getExplosionResistance(BlockState state, IBlockReader world, BlockPos pos, Explosion explosion)
+    public float getExplosionResistance(BlockState state, BlockGetter world, BlockPos pos, Explosion explosion)
     {
         return getCamoBlastResistance(state, world, pos, explosion);
     }
 
     @Override
-    public boolean isFlammable(BlockState state, IBlockReader world, BlockPos pos, Direction face)
+    public boolean isFlammable(BlockState state, BlockGetter world, BlockPos pos, Direction face)
     {
         return isCamoFlammable(world, pos, face);
     }
 
     @Override
-    public int getFlammability(BlockState state, IBlockReader world, BlockPos pos, Direction face)
+    public int getFlammability(BlockState state, BlockGetter world, BlockPos pos, Direction face)
     {
         return getCamoFlammability(world, pos, face);
     }
@@ -92,20 +96,17 @@ public class FramedFenceBlock extends FenceBlock implements IFramedBlock
     @Override
     public List<ItemStack> getDrops(BlockState state, LootContext.Builder builder)
     {
-        return getDrops(super.getDrops(state, builder), builder);
+        return getCamoDrops(super.getDrops(state, builder), builder);
     }
 
     @Override
-    public float getSlipperiness(BlockState state, IWorldReader world, BlockPos pos, @Nullable Entity entity)
+    public float getFriction(BlockState state, LevelReader world, BlockPos pos, @Nullable Entity entity)
     {
         return getCamoSlipperiness(state, world, pos, entity);
     }
 
     @Override
-    public final boolean hasTileEntity(BlockState state) { return true; }
-
-    @Override
-    public final TileEntity createTileEntity(BlockState state, IBlockReader world) { return new FramedTileEntity(); }
+    public final BlockEntity newBlockEntity(BlockPos pos, BlockState state) { return new FramedTileEntity(pos, state); }
 
     @Override
     public BlockType getBlockType() { return BlockType.FRAMED_FENCE; }

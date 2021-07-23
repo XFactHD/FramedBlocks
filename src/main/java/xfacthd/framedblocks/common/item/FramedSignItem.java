@@ -1,13 +1,13 @@
 package xfacthd.framedblocks.common.item;
 
-import net.minecraft.block.BlockState;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.ServerPlayerEntity;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.WallOrFloorItem;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
-import net.minecraftforge.fml.network.PacketDistributor;
+import net.minecraft.core.BlockPos;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.StandingAndWallBlockItem;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraftforge.fmllegacy.network.PacketDistributor;
 import xfacthd.framedblocks.FramedBlocks;
 import xfacthd.framedblocks.common.FBContent;
 import xfacthd.framedblocks.common.net.OpenSignScreenPacket;
@@ -15,7 +15,7 @@ import xfacthd.framedblocks.common.tileentity.FramedSignTileEntity;
 
 import javax.annotation.Nullable;
 
-public class FramedSignItem extends WallOrFloorItem
+public class FramedSignItem extends StandingAndWallBlockItem
 {
     public FramedSignItem()
     {
@@ -25,7 +25,7 @@ public class FramedSignItem extends WallOrFloorItem
     }
 
     @Override
-    protected boolean updateCustomBlockEntityTag(BlockPos pos, World world, @Nullable PlayerEntity player, ItemStack stack, BlockState state)
+    protected boolean updateCustomBlockEntityTag(BlockPos pos, Level world, @Nullable Player player, ItemStack stack, BlockState state)
     {
         boolean hadNBT = super.updateCustomBlockEntityTag(pos, world, player, stack, state);
         if (!world.isClientSide() && !hadNBT && player != null)
@@ -35,7 +35,7 @@ public class FramedSignItem extends WallOrFloorItem
                 te.setEditingPlayer(player);
 
                 FramedBlocks.CHANNEL.send(
-                        PacketDistributor.PLAYER.with(() -> (ServerPlayerEntity) player),
+                        PacketDistributor.PLAYER.with(() -> (ServerPlayer) player),
                         new OpenSignScreenPacket(pos)
                 );
             }

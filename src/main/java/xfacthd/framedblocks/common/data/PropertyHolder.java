@@ -1,7 +1,7 @@
 package xfacthd.framedblocks.common.data;
 
-import net.minecraft.state.*;
-import net.minecraft.util.Direction;
+import net.minecraft.core.Direction;
+import net.minecraft.world.level.block.state.properties.*;
 
 public class PropertyHolder
 {

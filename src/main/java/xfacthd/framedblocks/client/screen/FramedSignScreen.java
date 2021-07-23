@@ -2,36 +2,37 @@ package xfacthd.framedblocks.client.screen;
 
 import com.google.common.collect.HashBasedTable;
 import com.google.common.collect.Table;
-import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.platform.GlStateManager;
+import com.mojang.blaze3d.platform.Lighting;
 import com.mojang.blaze3d.systems.RenderSystem;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.Blocks;
-import net.minecraft.client.gui.fonts.TextInputUtil;
-import net.minecraft.client.gui.screen.Screen;
-import net.minecraft.client.gui.widget.button.Button;
-import net.minecraft.client.renderer.*;
-import net.minecraft.client.renderer.model.BakedQuad;
-import net.minecraft.client.renderer.model.IBakedModel;
-import net.minecraft.client.renderer.texture.AtlasTexture;
+import com.mojang.blaze3d.vertex.*;
+import com.mojang.math.Matrix4f;
+import net.minecraft.ChatFormatting;
+import net.minecraft.client.gui.components.Button;
+import net.minecraft.client.gui.font.TextFieldHelper;
+import net.minecraft.client.gui.screens.Screen;
+import net.minecraft.client.renderer.MultiBufferSource;
+import net.minecraft.client.renderer.block.model.BakedQuad;
+import net.minecraft.client.renderer.texture.TextureAtlas;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
-import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
-import net.minecraft.state.properties.BlockStateProperties;
-import net.minecraft.util.*;
-import net.minecraft.util.math.vector.Matrix4f;
-import net.minecraft.util.text.*;
+import net.minecraft.client.resources.model.BakedModel;
+import net.minecraft.core.Direction;
+import net.minecraft.network.chat.*;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.event.TextureStitchEvent;
 import net.minecraftforge.client.model.data.EmptyModelData;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import org.lwjgl.glfw.GLFW;
-import org.lwjgl.opengl.GL11;
 import xfacthd.framedblocks.FramedBlocks;
 import xfacthd.framedblocks.common.FBContent;
 import xfacthd.framedblocks.common.data.PropertyHolder;
-import xfacthd.framedblocks.common.tileentity.FramedSignTileEntity;
 import xfacthd.framedblocks.common.net.SignUpdatePacket;
+import xfacthd.framedblocks.common.tileentity.FramedSignTileEntity;
 
 import java.util.List;
 
@@ -41,17 +42,17 @@ public class FramedSignScreen extends Screen
 {
     private static final Table<BlockState, Direction, TextureAtlasSprite> SPRITE_CACHE = HashBasedTable.create();
     private static final ResourceLocation DEFAULT_TEXTURE = new ResourceLocation(FramedBlocks.MODID, "block/framed_block");
-    private static final ITextComponent DONE = new TranslationTextComponent("gui.done");
+    private static final Component DONE = new TranslatableComponent("gui.done");
 
     private final FramedSignTileEntity sign;
     private final String[] lines = new String[4];
     private int blinkCounter = 0;
     private int currLine = 0;
-    private TextInputUtil inputUtil;
+    private TextFieldHelper inputUtil;
 
     public FramedSignScreen(FramedSignTileEntity sign)
     {
-        super(new TranslationTextComponent("sign.edit"));
+        super(new TranslatableComponent("sign.edit"));
         this.sign = sign;
 
         for (int i = 0; i < 4; i++) { lines[i] = sign.getLine(i).getString(); }
@@ -62,15 +63,15 @@ public class FramedSignScreen extends Screen
     {
         //noinspection ConstantConditions
         minecraft.keyboardHandler.setSendRepeatsToGui(true);
-        addButton(new Button(width / 2 - 100, height / 4 + 120, 200, 20, DONE, btn -> onClose()));
+        addRenderableWidget(new Button(width / 2 - 100, height / 4 + 120, 200, 20, DONE, btn -> onClose()));
 
-        inputUtil = new TextInputUtil(() -> lines[currLine],
+        inputUtil = new TextFieldHelper(() -> lines[currLine],
                 (line) ->
                 {
                     lines[currLine] = line;
-                    sign.setLine(currLine, new StringTextComponent(line));
+                    sign.setLine(currLine, new TextComponent(line));
                 },
-                TextInputUtil.createClipboardGetter(minecraft), TextInputUtil.createClipboardSetter(minecraft),
+                TextFieldHelper.createClipboardGetter(minecraft), TextFieldHelper.createClipboardSetter(minecraft),
                 (line) -> minecraft.font.width(line) <= 90);
     }
 
@@ -94,7 +95,7 @@ public class FramedSignScreen extends Screen
     {
         blinkCounter++;
 
-        if (!sign.getType().isValid(sign.getBlockState().getBlock()))
+        if (!sign.getType().isValid(sign.getBlockState()))
         {
             removed();
         }
@@ -129,16 +130,15 @@ public class FramedSignScreen extends Screen
     }
 
     @Override
-    public void render(MatrixStack mstack, int mouseX, int mouseY, float partialTicks)
+    public void render(PoseStack mstack, int mouseX, int mouseY, float partialTicks)
     {
-        RenderHelper.setupForFlatItems();
+        Lighting.setupForFlatItems();
 
         renderBackground(mstack);
         //noinspection ConstantConditions
-        drawCenteredString(mstack, font, title, width / 2, 40, TextFormatting.WHITE.getColor());
+        drawCenteredString(mstack, font, title, width / 2, 40, ChatFormatting.WHITE.getColor());
 
-        //noinspection ConstantConditions
-        minecraft.getTextureManager().bind(AtlasTexture.LOCATION_BLOCKS);
+        RenderSystem.setShaderTexture(0, TextureAtlas.LOCATION_BLOCKS);
         TextureAtlasSprite sprite = getFrontSprite();
 
         int w = 128;
@@ -157,18 +157,19 @@ public class FramedSignScreen extends Screen
         mstack.translate(width / 2D, height / 2D - 20, getBlitOffset());
         mstack.scale(1.2F, 1.2F, 1F);
 
-        IRenderTypeBuffer.Impl buffer = minecraft.renderBuffers().bufferSource();
+        //noinspection ConstantConditions
+        MultiBufferSource.BufferSource buffer = minecraft.renderBuffers().bufferSource();
 
         drawLines(mstack.last().pose(), buffer, lines);
         drawCursor(mstack, buffer, lines);
 
         mstack.popPose();
 
-        RenderHelper.setupFor3DItems();
+        Lighting.setupFor3DItems();
         super.render(mstack, mouseX, mouseY, partialTicks);
     }
 
-    private void drawLines(Matrix4f matrix, IRenderTypeBuffer.Impl buffer, String[] lines)
+    private void drawLines(Matrix4f matrix, MultiBufferSource.BufferSource buffer, String[] lines)
     {
         int color = sign.getTextColor().getTextColor();
 
@@ -187,7 +188,7 @@ public class FramedSignScreen extends Screen
         buffer.endBatch();
     }
 
-    private void drawCursor(MatrixStack mstack, IRenderTypeBuffer.Impl buffer, String[] lines)
+    private void drawCursor(PoseStack mstack, MultiBufferSource.BufferSource buffer, String[] lines)
     {
         Matrix4f matrix = mstack.last().pose();
         int color = sign.getTextColor().getTextColor();
@@ -224,20 +225,20 @@ public class FramedSignScreen extends Screen
                     int xStart = Math.min(x1, x2);
                     int xEnd = Math.max(x1, x2);
 
-                    Tessellator tessellator = Tessellator.getInstance();
+                    Tesselator tessellator = Tesselator.getInstance();
                     BufferBuilder tessBuffer = tessellator.getBuilder();
 
                     RenderSystem.disableTexture();
                     RenderSystem.enableColorLogicOp();
                     RenderSystem.logicOp(GlStateManager.LogicOp.OR_REVERSE);
 
-                    tessBuffer.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_COLOR);
+                    tessBuffer.begin(VertexFormat.Mode.QUADS, DefaultVertexFormat.POSITION_COLOR);
                     tessBuffer.vertex(matrix, xStart, y + 9F, 0.0F).color(0, 0, 255, 255).endVertex();
                     tessBuffer.vertex(matrix,   xEnd, y + 9F, 0.0F).color(0, 0, 255, 255).endVertex();
                     tessBuffer.vertex(matrix,   xEnd, y - 1F, 0.0F).color(0, 0, 255, 255).endVertex();
                     tessBuffer.vertex(matrix, xStart, y - 1F, 0.0F).color(0, 0, 255, 255).endVertex();
                     tessBuffer.end();
-                    WorldVertexBufferUploader.end(tessBuffer);
+                    BufferUploader.end(tessBuffer);
 
                     RenderSystem.disableColorLogicOp();
                     RenderSystem.enableTexture();
@@ -273,7 +274,7 @@ public class FramedSignScreen extends Screen
 
         if (!SPRITE_CACHE.contains(camoState, front))
         {
-            IBakedModel model = minecraft.getBlockRenderer().getBlockModel(camoState);
+            BakedModel model = minecraft.getBlockRenderer().getBlockModel(camoState);
             List<BakedQuad> quads = model.getQuads(camoState, front, minecraft.level.getRandom(), EmptyModelData.INSTANCE);
 
             TextureAtlasSprite sprite;
@@ -283,7 +284,7 @@ public class FramedSignScreen extends Screen
             }
             else
             {
-                sprite = minecraft.getTextureAtlas(AtlasTexture.LOCATION_BLOCKS).apply(DEFAULT_TEXTURE);
+                sprite = minecraft.getTextureAtlas(TextureAtlas.LOCATION_BLOCKS).apply(DEFAULT_TEXTURE);
             }
 
             SPRITE_CACHE.put(camoState, front, sprite);

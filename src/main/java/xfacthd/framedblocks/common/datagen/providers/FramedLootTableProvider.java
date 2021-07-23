@@ -1,15 +1,20 @@
 package xfacthd.framedblocks.common.datagen.providers;
 
 import com.mojang.datafixers.util.Pair;
-import net.minecraft.block.*;
 import net.minecraft.data.DataGenerator;
-import net.minecraft.data.LootTableProvider;
-import net.minecraft.data.loot.BlockLootTables;
-import net.minecraft.loot.*;
-import net.minecraft.loot.functions.SetCount;
-import net.minecraft.state.properties.DoubleBlockHalf;
-import net.minecraft.util.ResourceLocation;
-import net.minecraftforge.fml.RegistryObject;
+import net.minecraft.data.loot.BlockLoot;
+import net.minecraft.data.loot.LootTableProvider;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.DoorBlock;
+import net.minecraft.world.level.block.state.properties.DoubleBlockHalf;
+import net.minecraft.world.level.storage.loot.*;
+import net.minecraft.world.level.storage.loot.entries.LootItem;
+import net.minecraft.world.level.storage.loot.functions.SetItemCountFunction;
+import net.minecraft.world.level.storage.loot.parameters.LootContextParamSet;
+import net.minecraft.world.level.storage.loot.parameters.LootContextParamSets;
+import net.minecraft.world.level.storage.loot.providers.number.ConstantValue;
+import net.minecraftforge.fmllegacy.RegistryObject;
 import xfacthd.framedblocks.FramedBlocks;
 import xfacthd.framedblocks.common.FBContent;
 
@@ -25,15 +30,15 @@ public class FramedLootTableProvider extends LootTableProvider
     public String getName() { return super.getName() + ": " + FramedBlocks.MODID; }
 
     @Override
-    protected void validate(Map<ResourceLocation, LootTable> map, ValidationTracker tracker) { /*NOOP*/ }
+    protected void validate(Map<ResourceLocation, LootTable> map, ValidationContext tracker) { /*NOOP*/ }
 
     @Override
-    protected List<Pair<Supplier<Consumer<BiConsumer<ResourceLocation, LootTable.Builder>>>, LootParameterSet>> getTables()
+    protected List<Pair<Supplier<Consumer<BiConsumer<ResourceLocation, LootTable.Builder>>>, LootContextParamSet>> getTables()
     {
-        return Collections.singletonList(Pair.of(BlockLootTable::new, LootParameterSets.BLOCK));
+        return Collections.singletonList(Pair.of(BlockLootTable::new, LootContextParamSets.BLOCK));
     }
 
-    private static class BlockLootTable extends BlockLootTables
+    private static class BlockLootTable extends BlockLoot
     {
         @Override
         protected Iterable<Block> getKnownBlocks()
@@ -64,9 +69,9 @@ public class FramedLootTableProvider extends LootTableProvider
 
         protected static LootTable.Builder droppingTwo(Block block, Block drop) {
             return LootTable.lootTable().withPool(
-                    LootPool.lootPool().setRolls(ConstantRange.exactly(1)).add(
-                            applyExplosionDecay(block, ItemLootEntry.lootTableItem(drop).apply(
-                                    SetCount.setCount(ConstantRange.exactly(2))
+                    LootPool.lootPool().setRolls(ConstantValue.exactly(1)).add(
+                            applyExplosionDecay(block, LootItem.lootTableItem(drop).apply(
+                                    SetItemCountFunction.setCount(ConstantValue.exactly(2))
                                     )
                             )
                     )

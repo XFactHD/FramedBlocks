@@ -1,10 +1,10 @@
 package xfacthd.framedblocks.client.model;
 
-import net.minecraft.block.BlockState;
-import net.minecraft.client.renderer.model.BakedQuad;
-import net.minecraft.client.renderer.model.IBakedModel;
-import net.minecraft.util.Direction;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.client.renderer.block.model.BakedQuad;
+import net.minecraft.client.resources.model.BakedModel;
+import net.minecraft.core.Direction;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.client.model.data.IModelData;
 import xfacthd.framedblocks.FramedBlocks;
 import xfacthd.framedblocks.client.util.BakedQuadTransformer;
@@ -16,7 +16,7 @@ public class FramedChestLidModel extends FramedBlockModel
 {
     private static final ResourceLocation TEXTURE = new ResourceLocation(FramedBlocks.MODID, "block/framed_chest_lock");
 
-    public FramedChestLidModel(BlockState state, IBakedModel baseModel) { super(state, baseModel); }
+    public FramedChestLidModel(BlockState state, BakedModel baseModel) { super(state, baseModel); }
 
     @Override
     protected void transformQuad(Map<Direction, List<BakedQuad>> quadMap, BakedQuad quad)

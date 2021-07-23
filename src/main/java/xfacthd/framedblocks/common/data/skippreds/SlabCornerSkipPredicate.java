@@ -1,10 +1,10 @@
 package xfacthd.framedblocks.common.data.skippreds;
 
-import net.minecraft.block.BlockState;
-import net.minecraft.state.properties.*;
-import net.minecraft.util.Direction;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.IBlockReader;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.world.level.BlockGetter;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.state.properties.*;
 import xfacthd.framedblocks.common.FBContent;
 import xfacthd.framedblocks.common.data.PropertyHolder;
 import xfacthd.framedblocks.common.data.StairsType;
@@ -13,7 +13,7 @@ import xfacthd.framedblocks.common.util.SideSkipPredicate;
 public class SlabCornerSkipPredicate implements SideSkipPredicate
 {
     @Override
-    public boolean test(IBlockReader world, BlockPos pos, BlockState state, BlockState adjState, Direction side)
+    public boolean test(BlockGetter world, BlockPos pos, BlockState state, BlockState adjState, Direction side)
     {
         Direction dir = state.getValue(PropertyHolder.FACING_HOR);
         boolean top = state.getValue(PropertyHolder.TOP);
@@ -42,7 +42,7 @@ public class SlabCornerSkipPredicate implements SideSkipPredicate
         return false;
     }
 
-    private boolean testAgainstCorner(IBlockReader world, BlockPos pos, Direction dir, boolean top, BlockState adjState, Direction side)
+    private boolean testAgainstCorner(BlockGetter world, BlockPos pos, Direction dir, boolean top, BlockState adjState, Direction side)
     {
         Direction adjDir = adjState.getValue(PropertyHolder.FACING_HOR);
         boolean adjTop = adjState.getValue(PropertyHolder.TOP);
@@ -57,7 +57,7 @@ public class SlabCornerSkipPredicate implements SideSkipPredicate
         return false;
     }
 
-    private boolean testAgainstEdge(IBlockReader world, BlockPos pos, Direction dir, boolean top, BlockState adjState, Direction side)
+    private boolean testAgainstEdge(BlockGetter world, BlockPos pos, Direction dir, boolean top, BlockState adjState, Direction side)
     {
         Direction adjDir = adjState.getValue(PropertyHolder.FACING_HOR);
         boolean adjTop = adjState.getValue(PropertyHolder.TOP);
@@ -68,7 +68,7 @@ public class SlabCornerSkipPredicate implements SideSkipPredicate
         return false;
     }
 
-    private boolean testAgainstPillar(IBlockReader world, BlockPos pos, Direction dir, boolean top, BlockState adjState, Direction side)
+    private boolean testAgainstPillar(BlockGetter world, BlockPos pos, Direction dir, boolean top, BlockState adjState, Direction side)
     {
         Direction adjDir = adjState.getValue(PropertyHolder.FACING_HOR);
         if ((top && side == Direction.UP) || (!top && side == Direction.DOWN))
@@ -78,7 +78,7 @@ public class SlabCornerSkipPredicate implements SideSkipPredicate
         return false;
     }
 
-    private boolean testAgainstStairs(IBlockReader world, BlockPos pos, Direction dir, boolean top, BlockState adjState, Direction side)
+    private boolean testAgainstStairs(BlockGetter world, BlockPos pos, Direction dir, boolean top, BlockState adjState, Direction side)
     {
         if (side.getAxis() != Direction.Axis.Y) { return false; }
 
@@ -99,7 +99,7 @@ public class SlabCornerSkipPredicate implements SideSkipPredicate
         return false;
     }
 
-    private boolean testAgainstVerticalStairs(IBlockReader world, BlockPos pos, Direction dir, boolean top, BlockState adjState, Direction side)
+    private boolean testAgainstVerticalStairs(BlockGetter world, BlockPos pos, Direction dir, boolean top, BlockState adjState, Direction side)
     {
         Direction adjDir = adjState.getValue(PropertyHolder.FACING_HOR);
         StairsType adjType = adjState.getValue(PropertyHolder.STAIRS_TYPE);

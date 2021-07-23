@@ -1,23 +1,23 @@
 package xfacthd.framedblocks.common.container;
 
 import com.google.common.base.Preconditions;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.inventory.container.Container;
-import net.minecraft.inventory.container.Slot;
-import net.minecraft.item.ItemStack;
-import net.minecraft.network.PacketBuffer;
-import net.minecraft.tileentity.TileEntity;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.inventory.AbstractContainerMenu;
+import net.minecraft.world.inventory.Slot;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.SlotItemHandler;
 import xfacthd.framedblocks.common.FBContent;
 import xfacthd.framedblocks.common.tileentity.FramedChestTileEntity;
 
-public class FramedChestContainer extends Container
+public class FramedChestContainer extends AbstractContainerMenu
 {
     private final FramedChestTileEntity chest;
 
-    public FramedChestContainer(int windowId, PlayerInventory inv, TileEntity chest)
+    public FramedChestContainer(int windowId, Inventory inv, BlockEntity chest)
     {
         super(FBContent.containerTypeFramedChest.get(), windowId);
 
@@ -49,20 +49,20 @@ public class FramedChestContainer extends Container
         }
     }
 
-    public FramedChestContainer(int windowId, PlayerInventory inv, PacketBuffer extraData)
+    public FramedChestContainer(int windowId, Inventory inv, FriendlyByteBuf extraData)
     {
         this(windowId, inv, inv.player.level.getBlockEntity(extraData.readBlockPos()));
     }
 
     @Override
-    public boolean stillValid(PlayerEntity player) { return chest.isUsableByPlayer(player); }
+    public boolean stillValid(Player player) { return chest.isUsableByPlayer(player); }
 
     @Override
-    public ItemStack quickMoveStack(PlayerEntity player, int index)
+    public ItemStack quickMoveStack(Player player, int index)
     {
         ItemStack remainder = ItemStack.EMPTY;
         Slot slot = slots.get(index);
-        if (slot != null && slot.hasItem())
+        if (slot.hasItem())
         {
             ItemStack stack = slot.getItem();
             remainder = stack.copy();
@@ -92,7 +92,7 @@ public class FramedChestContainer extends Container
     }
 
     @Override
-    public void removed(PlayerEntity player)
+    public void removed(Player player)
     {
         super.removed(player);
 

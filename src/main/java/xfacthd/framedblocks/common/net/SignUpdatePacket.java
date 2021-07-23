@@ -1,11 +1,12 @@
 package xfacthd.framedblocks.common.net;
 
-import net.minecraft.entity.player.ServerPlayerEntity;
-import net.minecraft.network.PacketBuffer;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.text.*;
-import net.minecraft.world.World;
-import net.minecraftforge.fml.network.NetworkEvent;
+import net.minecraft.ChatFormatting;
+import net.minecraft.core.BlockPos;
+import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.network.chat.TextComponent;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.level.Level;
+import net.minecraftforge.fmllegacy.network.NetworkEvent;
 import xfacthd.framedblocks.FramedBlocks;
 import xfacthd.framedblocks.common.tileentity.FramedSignTileEntity;
 
@@ -22,7 +23,7 @@ public class SignUpdatePacket
         this.lines = lines;
     }
 
-    public SignUpdatePacket(PacketBuffer buffer)
+    public SignUpdatePacket(FriendlyByteBuf buffer)
     {
         pos = buffer.readBlockPos();
 
@@ -34,7 +35,7 @@ public class SignUpdatePacket
         }
     }
 
-    public void encode(PacketBuffer buffer)
+    public void encode(FriendlyByteBuf buffer)
     {
         buffer.writeBlockPos(pos);
 
@@ -49,9 +50,9 @@ public class SignUpdatePacket
     {
         ctx.get().enqueueWork(() ->
         {
-            ServerPlayerEntity player = ctx.get().getSender();
+            ServerPlayer player = ctx.get().getSender();
             //noinspection ConstantConditions
-            World world = player.getLevel();
+            Level world = player.getLevel();
 
             //noinspection deprecation
             if (world.hasChunkAt(pos))
@@ -66,8 +67,8 @@ public class SignUpdatePacket
 
                     for (int i = 0; i < lines.length; i++)
                     {
-                        String line = TextFormatting.stripFormatting(lines[i]);
-                        sign.setLine(i, new StringTextComponent(line != null ? line : ""));
+                        String line = ChatFormatting.stripFormatting(lines[i]);
+                        sign.setLine(i, new TextComponent(line != null ? line : ""));
                     }
                 }
             }

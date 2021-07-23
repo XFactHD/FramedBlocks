@@ -1,13 +1,14 @@
 package xfacthd.framedblocks.common.block;
 
-import net.minecraft.block.*;
-import net.minecraft.item.BlockItemUseContext;
-import net.minecraft.state.StateContainer;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.Direction;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.IBlockReader;
-import net.minecraft.world.IWorldReader;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.world.item.context.BlockPlaceContext;
+import net.minecraft.world.level.LevelReader;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.SoundType;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.state.StateDefinition;
 import xfacthd.framedblocks.common.data.*;
 import xfacthd.framedblocks.common.tileentity.FramedDoubleSlopeTileEntity;
 import xfacthd.framedblocks.common.tileentity.FramedDoubleTileEntity;
@@ -33,21 +34,21 @@ public class FramedDoubleSlopeBlock extends AbstractFramedDoubleBlock
     public FramedDoubleSlopeBlock() { super(BlockType.FRAMED_DOUBLE_SLOPE); }
 
     @Override
-    protected void createBlockStateDefinition(StateContainer.Builder<Block, BlockState> builder)
+    protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder)
     {
         builder.add(PropertyHolder.FACING_HOR, PropertyHolder.SLOPE_TYPE);
     }
 
     @Nullable
     @Override
-    public BlockState getStateForPlacement(BlockItemUseContext context)
+    public BlockState getStateForPlacement(BlockPlaceContext context)
     {
         return withSlopeType(defaultBlockState(), context.getClickedFace(), context.getHorizontalDirection(), context.getClickLocation());
     }
 
     @Override
     @SuppressWarnings("deprecation")
-    public SoundType getSound(BlockState state, IWorldReader world, BlockPos pos)
+    public SoundType getCamoSound(BlockState state, LevelReader world, BlockPos pos)
     {
         SlopeType type = state.getValue(PropertyHolder.SLOPE_TYPE);
         if (type != SlopeType.HORIZONTAL)
@@ -68,9 +69,12 @@ public class FramedDoubleSlopeBlock extends AbstractFramedDoubleBlock
             }
             return getSoundType(state);
         }
-        return super.getSound(state, world, pos);
+        return super.getCamoSound(state, world, pos);
     }
 
     @Override
-    public TileEntity createTileEntity(BlockState state, IBlockReader world) { return new FramedDoubleSlopeTileEntity(); }
+    public final BlockEntity newBlockEntity(BlockPos pos, BlockState state)
+    {
+        return new FramedDoubleSlopeTileEntity(pos, state);
+    }
 }

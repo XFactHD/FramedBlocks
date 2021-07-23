@@ -1,10 +1,10 @@
 package xfacthd.framedblocks.common.data;
 
-import net.minecraft.util.IStringSerializable;
+import net.minecraft.util.StringRepresentable;
 
 import java.util.Locale;
 
-public enum SlopeType implements IStringSerializable
+public enum SlopeType implements StringRepresentable
 {
     BOTTOM,
     HORIZONTAL,

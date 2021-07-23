@@ -2,15 +2,17 @@ package xfacthd.framedblocks.common.block;
 
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
-import net.minecraft.block.*;
-import net.minecraft.item.BlockItemUseContext;
-import net.minecraft.state.StateContainer;
-import net.minecraft.state.properties.BlockStateProperties;
-import net.minecraft.util.Direction;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.shapes.VoxelShape;
-import net.minecraft.world.IWorld;
-import net.minecraft.world.IWorldReader;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.world.item.context.BlockPlaceContext;
+import net.minecraft.world.level.LevelAccessor;
+import net.minecraft.world.level.LevelReader;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.state.StateDefinition;
+import net.minecraft.world.level.block.state.properties.BlockStateProperties;
+import net.minecraft.world.phys.shapes.VoxelShape;
 import xfacthd.framedblocks.common.data.BlockType;
 import xfacthd.framedblocks.common.data.PropertyHolder;
 
@@ -23,16 +25,16 @@ public class FramedWallSignBlock extends AbstractFramedSignBlock
     }
 
     @Override
-    protected void createBlockStateDefinition(StateContainer.Builder<Block, BlockState> builder)
+    protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder)
     {
         builder.add(PropertyHolder.FACING_HOR, BlockStateProperties.WATERLOGGED);
     }
 
     @Override
-    public BlockState getStateForPlacement(BlockItemUseContext context)
+    public BlockState getStateForPlacement(BlockPlaceContext context)
     {
         BlockState state = defaultBlockState();
-        IWorldReader world = context.getLevel();
+        LevelReader world = context.getLevel();
         BlockPos pos = context.getClickedPos();
         Direction[] dirs = context.getNearestLookingDirections();
 
@@ -53,7 +55,7 @@ public class FramedWallSignBlock extends AbstractFramedSignBlock
     }
 
     @Override
-    public BlockState updateShape(BlockState state, Direction facing, BlockState facingState, IWorld world, BlockPos pos, BlockPos facingPos)
+    public BlockState updateShape(BlockState state, Direction facing, BlockState facingState, LevelAccessor world, BlockPos pos, BlockPos facingPos)
     {
         if (facing.getOpposite() == state.getValue(PropertyHolder.FACING_HOR) && !state.canSurvive(world, pos))
         {
@@ -63,7 +65,7 @@ public class FramedWallSignBlock extends AbstractFramedSignBlock
     }
 
     @Override
-    public boolean canSurvive(BlockState state, IWorldReader world, BlockPos pos)
+    public boolean canSurvive(BlockState state, LevelReader world, BlockPos pos)
     {
         Direction dir = state.getValue(PropertyHolder.FACING_HOR).getOpposite();
         return world.getBlockState(pos.relative(dir)).getMaterial().isSolid();

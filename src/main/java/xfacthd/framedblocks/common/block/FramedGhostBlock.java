@@ -1,11 +1,9 @@
 package xfacthd.framedblocks.common.block;
 
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.material.Material;
-import net.minecraft.item.BlockItemUseContext;
-
-import net.minecraft.block.AbstractBlock.Properties;
+import net.minecraft.world.item.context.BlockPlaceContext;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.material.Material;
 
 public class FramedGhostBlock extends Block
 {
@@ -19,5 +17,5 @@ public class FramedGhostBlock extends Block
     }
 
     @Override
-    public BlockState getStateForPlacement(BlockItemUseContext context) { return null; }
+    public BlockState getStateForPlacement(BlockPlaceContext context) { return null; }
 }

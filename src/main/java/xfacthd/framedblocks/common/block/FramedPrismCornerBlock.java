@@ -2,17 +2,17 @@ package xfacthd.framedblocks.common.block;
 
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockState;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.BlockItemUseContext;
-import net.minecraft.item.ItemStack;
-import net.minecraft.state.StateContainer;
-import net.minecraft.util.Direction;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.shapes.VoxelShape;
-import net.minecraft.util.math.shapes.VoxelShapes;
-import net.minecraft.world.World;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.context.BlockPlaceContext;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.state.StateDefinition;
+import net.minecraft.world.phys.shapes.Shapes;
+import net.minecraft.world.phys.shapes.VoxelShape;
 import xfacthd.framedblocks.common.FBContent;
 import xfacthd.framedblocks.common.data.BlockType;
 import xfacthd.framedblocks.common.data.PropertyHolder;
@@ -27,14 +27,14 @@ public class FramedPrismCornerBlock extends FramedThreewayCornerBlock
     }
 
     @Override
-    protected void createBlockStateDefinition(StateContainer.Builder<Block, BlockState> builder)
+    protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder)
     {
         super.createBlockStateDefinition(builder);
         builder.add(PropertyHolder.OFFSET);
     }
 
     @Override
-    public BlockState getStateForPlacement(BlockItemUseContext context)
+    public BlockState getStateForPlacement(BlockPlaceContext context)
     {
         BlockState state = super.getStateForPlacement(context);
         if (state == null) { return null; }
@@ -53,7 +53,7 @@ public class FramedPrismCornerBlock extends FramedThreewayCornerBlock
 
     @Override
     @SuppressWarnings("deprecation")
-    public void attack(BlockState state, World world, BlockPos pos, PlayerEntity player)
+    public void attack(BlockState state, Level world, BlockPos pos, Player player)
     {
         if (world.isClientSide()) { return; }
 
@@ -74,7 +74,7 @@ public class FramedPrismCornerBlock extends FramedThreewayCornerBlock
 
             if (state.getValue(PropertyHolder.TOP))
             {
-                VoxelShape shapeTop = VoxelShapes.or(
+                VoxelShape shapeTop = Shapes.or(
                         box(0, 12, 0, 4, 16, 16),
                         box(0, 8, 0, 4, 12, 12),
                         box(0, 4, 0, 4, 8, 8),
@@ -91,7 +91,7 @@ public class FramedPrismCornerBlock extends FramedThreewayCornerBlock
             }
             else
             {
-                VoxelShape shapeBottom = VoxelShapes.or(
+                VoxelShape shapeBottom = Shapes.or(
                         box(0, 0, 0, 4, 4, 16),
                         box(0, 4, 0, 4, 8, 12),
                         box(0, 8, 0, 4, 12, 8),
@@ -121,7 +121,7 @@ public class FramedPrismCornerBlock extends FramedThreewayCornerBlock
 
             if (state.getValue(PropertyHolder.TOP))
             {
-                VoxelShape shapeTop = VoxelShapes.or(
+                VoxelShape shapeTop = Shapes.or(
                         box(0, 8, 12, 12, 12, 16),
                         box(0, 12, 0, 16, 16, 16),
                         box(0, 8, 0, 16, 12, 12),
@@ -139,7 +139,7 @@ public class FramedPrismCornerBlock extends FramedThreewayCornerBlock
             }
             else
             {
-                VoxelShape shapeBottom = VoxelShapes.or(
+                VoxelShape shapeBottom = Shapes.or(
                         box(0, 4, 12, 12, 8, 16),
                         box(0, 0, 0, 16, 4, 16),
                         box(0, 4, 0, 16, 8, 12),

@@ -1,16 +1,17 @@
 package xfacthd.framedblocks.client.util;
 
-import com.mojang.blaze3d.matrix.MatrixStack;
-import com.mojang.blaze3d.vertex.IVertexBuilder;
-import net.minecraft.block.BlockState;
+import com.mojang.blaze3d.vertex.PoseStack;
+import com.mojang.blaze3d.vertex.VertexConsumer;
+import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.*;
-import net.minecraft.util.Direction;
-import net.minecraft.util.math.BlockRayTraceResult;
-import net.minecraft.util.math.vector.Vector3d;
-import net.minecraft.util.math.vector.Vector3f;
+import net.minecraft.core.Direction;
+import net.minecraft.world.phys.BlockHitResult;
+import net.minecraft.world.phys.Vec3;
+import com.mojang.math.Vector3f;
 import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.client.event.DrawHighlightEvent;
+import net.minecraftforge.client.event.DrawSelectionEvent;
+import net.minecraftforge.client.event.GuiContainerEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import xfacthd.framedblocks.FramedBlocks;
@@ -20,12 +21,15 @@ import xfacthd.framedblocks.common.data.*;
 @Mod.EventBusSubscriber(modid = FramedBlocks.MODID, value = Dist.CLIENT)
 public class ClientEventHandler
 {
+    @SubscribeEvent //TODO: remove noop listener when the crash related to this event is fixed
+    public static void onDrawContainer(final GuiContainerEvent event) { }
+
     @SubscribeEvent
-    public static void onRenderBlockHighlight(final DrawHighlightEvent.HighlightBlock event)
+    public static void onRenderBlockHighlight(final DrawSelectionEvent.HighlightBlock event)
     {
         if (!ClientConfig.fancyHitboxes) { return; }
 
-        BlockRayTraceResult result = event.getTarget();
+        BlockHitResult result = event.getTarget();
         //noinspection ConstantConditions
         BlockState state = Minecraft.getInstance().level.getBlockState(result.getBlockPos());
         if (!(state.getBlock() instanceof FramedBlock block)) { return; }
@@ -33,9 +37,9 @@ public class ClientEventHandler
         BlockType type = block.getBlockType();
         if (type.hasSpecialHitbox())
         {
-            MatrixStack mstack = event.getMatrix();
-            Vector3d offset = Vector3d.atLowerCornerOf(result.getBlockPos()).subtract(event.getInfo().getPosition());
-            IVertexBuilder builder = event.getBuffers().getBuffer(RenderType.lines());
+            PoseStack mstack = event.getMatrix();
+            Vec3 offset = Vec3.atLowerCornerOf(result.getBlockPos()).subtract(event.getInfo().getPosition());
+            VertexConsumer builder = event.getBuffers().getBuffer(RenderType.lines());
 
             Direction dir = state.getValue(PropertyHolder.FACING_HOR);
 
@@ -62,7 +66,7 @@ public class ClientEventHandler
         }
     }
 
-    private static void drawSlopeBox(BlockState state, MatrixStack mstack, IVertexBuilder builder)
+    private static void drawSlopeBox(BlockState state, PoseStack mstack, VertexConsumer builder)
     {
         SlopeType type = state.getValue(PropertyHolder.SLOPE_TYPE);
 
@@ -111,7 +115,7 @@ public class ClientEventHandler
         }
     }
 
-    private static void drawCornerSlopeBox(BlockState state, MatrixStack mstack, IVertexBuilder builder)
+    private static void drawCornerSlopeBox(BlockState state, PoseStack mstack, VertexConsumer builder)
     {
         CornerType type = state.getValue(PropertyHolder.CORNER_TYPE);
         if (!type.isHorizontal())
@@ -162,7 +166,7 @@ public class ClientEventHandler
         }
     }
 
-    private static void drawInnerCornerSlopeBox(BlockState state, MatrixStack mstack, IVertexBuilder builder)
+    private static void drawInnerCornerSlopeBox(BlockState state, PoseStack mstack, VertexConsumer builder)
     {
         CornerType type = state.getValue(PropertyHolder.CORNER_TYPE);
 
@@ -223,7 +227,7 @@ public class ClientEventHandler
         }
     }
 
-    private static void drawPrismCornerBox(BlockState state, MatrixStack mstack, IVertexBuilder builder)
+    private static void drawPrismCornerBox(BlockState state, PoseStack mstack, VertexConsumer builder)
     {
         boolean top = state.getValue(PropertyHolder.TOP);
 
@@ -246,7 +250,7 @@ public class ClientEventHandler
         drawLine(builder, mstack, 0, 0, 1, 1, 1, 1);
     }
 
-    private static void drawInnerPrismCornerBox(BlockState state, MatrixStack mstack, IVertexBuilder builder)
+    private static void drawInnerPrismCornerBox(BlockState state, PoseStack mstack, VertexConsumer builder)
     {
         boolean top = state.getValue(PropertyHolder.TOP);
 
@@ -275,7 +279,7 @@ public class ClientEventHandler
         drawLine(builder, mstack, 0, 0, 0, 0, 1, 1);
     }
 
-    private static void drawThreewayCornerBox(BlockState state, MatrixStack mstack, IVertexBuilder builder)
+    private static void drawThreewayCornerBox(BlockState state, PoseStack mstack, VertexConsumer builder)
     {
         boolean top = state.getValue(PropertyHolder.TOP);
 
@@ -299,7 +303,7 @@ public class ClientEventHandler
         drawLine(builder, mstack, 0, 0, 1, .5, .5, .5);
     }
 
-    private static void drawInnerThreewayCornerBox(BlockState state, MatrixStack mstack, IVertexBuilder builder)
+    private static void drawInnerThreewayCornerBox(BlockState state, PoseStack mstack, VertexConsumer builder)
     {
         boolean top = state.getValue(PropertyHolder.TOP);
 
@@ -334,9 +338,10 @@ public class ClientEventHandler
         drawLine(builder, mstack, 0, 1, 0, .5, .5, .5);
     }
 
-    private static void drawLine(IVertexBuilder builder, MatrixStack mstack, double x1, double y1, double z1, double x2, double y2, double z2)
+    private static void drawLine(VertexConsumer builder, PoseStack mstack, double x1, double y1, double z1, double x2, double y2, double z2)
     {
-        builder.vertex(mstack.last().pose(), (float)x1, (float)y1, (float)z1).color(0.0F, 0.0F, 0.0F, 0.4F).endVertex();
-        builder.vertex(mstack.last().pose(), (float)x2, (float)y2, (float)z2).color(0.0F, 0.0F, 0.0F, 0.4F).endVertex();
+        //TODO: calculate proper normal values
+        builder.vertex(mstack.last().pose(), (float)x1, (float)y1, (float)z1).color(0.0F, 0.0F, 0.0F, 0.4F).normal(mstack.last().normal(), 0, 0, 0).endVertex();
+        builder.vertex(mstack.last().pose(), (float)x2, (float)y2, (float)z2).color(0.0F, 0.0F, 0.0F, 0.4F).normal(mstack.last().normal(), 0, 0, 0).endVertex();
     }
 }

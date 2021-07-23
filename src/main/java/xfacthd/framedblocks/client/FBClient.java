@@ -1,22 +1,24 @@
 package xfacthd.framedblocks.client;
 
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockState;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.ScreenManager;
-import net.minecraft.client.renderer.*;
-import net.minecraft.client.renderer.model.IBakedModel;
-import net.minecraft.client.renderer.model.ModelResourceLocation;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.math.BlockPos;
+import net.minecraft.client.gui.screens.MenuScreens;
+import net.minecraft.client.renderer.ItemBlockRenderTypes;
+import net.minecraft.client.renderer.RenderType;
+import net.minecraft.client.renderer.block.BlockModelShaper;
+import net.minecraft.client.renderer.blockentity.BlockEntityRenderers;
+import net.minecraft.client.resources.model.BakedModel;
+import net.minecraft.client.resources.model.ModelResourceLocation;
+import net.minecraft.core.BlockPos;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.event.ColorHandlerEvent;
 import net.minecraftforge.client.event.ModelBakeEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.RegistryObject;
-import net.minecraftforge.fml.client.registry.ClientRegistry;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
+import net.minecraftforge.fmllegacy.RegistryObject;
 import xfacthd.framedblocks.FramedBlocks;
 import xfacthd.framedblocks.client.model.*;
 import xfacthd.framedblocks.client.render.FramedChestRenderer;
@@ -41,22 +43,21 @@ public class FBClient
                 .stream()
                 .map(RegistryObject::get)
                 .filter(block -> block instanceof IFramedBlock)
-                .forEach(block -> RenderTypeLookup.setRenderLayer(block, type ->
+                .forEach(block -> ItemBlockRenderTypes.setRenderLayer(block, type ->
                         type == RenderType.solid() ||
                         type == RenderType.cutout() ||
                         type == RenderType.cutoutMipped() ||
                         type == RenderType.translucent()
                 ));
-        RenderTypeLookup.setRenderLayer(FBContent.blockFramedGhostBlock.get(), RenderType.translucent());
+        ItemBlockRenderTypes.setRenderLayer(FBContent.blockFramedGhostBlock.get(), RenderType.translucent());
 
-        ClientRegistry.bindTileEntityRenderer(FBContent.tileTypeFramedSign.get(), FramedSignRenderer::new);
-        ClientRegistry.bindTileEntityRenderer(FBContent.tileTypeFramedChest.get(), FramedChestRenderer::new);
+        BlockEntityRenderers.register(FBContent.tileTypeFramedSign.get(), FramedSignRenderer::new);
+        BlockEntityRenderers.register(FBContent.tileTypeFramedChest.get(), FramedChestRenderer::new);
 
-        event.enqueueWork(() -> ScreenManager.register(FBContent.containerTypeFramedChest.get(), FramedChestScreen::new));
+        event.enqueueWork(() -> MenuScreens.register(FBContent.containerTypeFramedChest.get(), FramedChestScreen::new));
     }
 
     @SubscribeEvent
-    @SuppressWarnings("deprecation")
     public static void onBlockColors(final ColorHandlerEvent.Block event)
     {
         Block[] blocks = FBContent.getRegisteredBlocks()
@@ -95,7 +96,7 @@ public class FBClient
     @SubscribeEvent
     public static void onModelsLoaded(final ModelBakeEvent event)
     {
-        Map<ResourceLocation, IBakedModel> registry = event.getModelRegistry();
+        Map<ResourceLocation, BakedModel> registry = event.getModelRegistry();
 
         FramedChestRenderer.onModelsLoaded(registry); //Must happen before the chest model is replaced
 
@@ -143,27 +144,27 @@ public class FBClient
         //replaceModelsSimple(FBContent.blockFramedCollapsibleBlock, registry, FramedCollapsibleBlockModel::new);
     }
 
-    private static void replaceModels(RegistryObject<Block> block, Map<ResourceLocation, IBakedModel> models,
-                                      BiFunction<BlockState, IBakedModel, IBakedModel> blockModelGen)
+    private static void replaceModels(RegistryObject<Block> block, Map<ResourceLocation, BakedModel> models,
+                                      BiFunction<BlockState, BakedModel, BakedModel> blockModelGen)
     {
         replaceModels(block, models, blockModelGen, model -> model);
     }
 
-    private static void replaceModels(RegistryObject<Block> block, Map<ResourceLocation, IBakedModel> models,
-                                      BiFunction<BlockState, IBakedModel, IBakedModel> blockModelGen,
-                                      Function<IBakedModel, IBakedModel> itemModelGen)
+    private static void replaceModels(RegistryObject<Block> block, Map<ResourceLocation, BakedModel> models,
+                                      BiFunction<BlockState, BakedModel, BakedModel> blockModelGen,
+                                      Function<BakedModel, BakedModel> itemModelGen)
     {
         for (BlockState state : block.get().getStateDefinition().getPossibleStates())
         {
-            ResourceLocation location = BlockModelShapes.stateToModelLocation(state);
-            IBakedModel baseModel = models.get(location);
-            IBakedModel replacement = blockModelGen.apply(state, baseModel);
+            ResourceLocation location = BlockModelShaper.stateToModelLocation(state);
+            BakedModel baseModel = models.get(location);
+            BakedModel replacement = blockModelGen.apply(state, baseModel);
             models.put(location, replacement);
         }
 
         //noinspection ConstantConditions
         ResourceLocation location = new ModelResourceLocation(block.get().getRegistryName(), "inventory");
-        IBakedModel replacement = itemModelGen.apply(models.get(location));
+        BakedModel replacement = itemModelGen.apply(models.get(location));
         models.put(location, replacement);
     }
 

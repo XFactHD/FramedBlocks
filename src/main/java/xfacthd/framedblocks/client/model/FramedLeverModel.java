@@ -1,12 +1,12 @@
 package xfacthd.framedblocks.client.model;
 
-import net.minecraft.block.BlockState;
-import net.minecraft.client.renderer.model.BakedQuad;
-import net.minecraft.client.renderer.model.IBakedModel;
-import net.minecraft.state.properties.AttachFace;
-import net.minecraft.state.properties.BlockStateProperties;
-import net.minecraft.util.Direction;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.client.renderer.block.model.BakedQuad;
+import net.minecraft.client.resources.model.BakedModel;
+import net.minecraft.world.level.block.state.properties.AttachFace;
+import net.minecraft.world.level.block.state.properties.BlockStateProperties;
+import net.minecraft.core.Direction;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.client.model.data.IModelData;
 import xfacthd.framedblocks.FramedBlocks;
 import xfacthd.framedblocks.client.util.BakedQuadTransformer;
@@ -21,7 +21,7 @@ public class FramedLeverModel extends FramedBlockModel
     private final Direction dir;
     private final AttachFace face;
 
-    public FramedLeverModel(BlockState state, IBakedModel baseModel)
+    public FramedLeverModel(BlockState state, BakedModel baseModel)
     {
         super(state, baseModel);
         dir = state.getValue(BlockStateProperties.HORIZONTAL_FACING);

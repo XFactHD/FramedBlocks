@@ -1,10 +1,10 @@
 package xfacthd.framedblocks.common.data.skippreds;
 
-import net.minecraft.block.BlockState;
-import net.minecraft.state.properties.*;
-import net.minecraft.util.Direction;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.IBlockReader;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.world.level.BlockGetter;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.state.properties.*;
 import xfacthd.framedblocks.common.FBContent;
 import xfacthd.framedblocks.common.data.PropertyHolder;
 import xfacthd.framedblocks.common.data.StairsType;
@@ -13,7 +13,7 @@ import xfacthd.framedblocks.common.util.SideSkipPredicate;
 public class CornerPillarSkipPredicate implements SideSkipPredicate
 {
     @Override
-    public boolean test(IBlockReader world, BlockPos pos, BlockState state, BlockState adjState, Direction side)
+    public boolean test(BlockGetter world, BlockPos pos, BlockState state, BlockState adjState, Direction side)
     {
         Direction dir = state.getValue(PropertyHolder.FACING_HOR);
 
@@ -50,7 +50,7 @@ public class CornerPillarSkipPredicate implements SideSkipPredicate
         return false;
     }
 
-    private boolean testAgainstPanel(IBlockReader world, BlockPos pos, Direction dir, BlockState adjState, Direction side)
+    private boolean testAgainstPanel(BlockGetter world, BlockPos pos, Direction dir, BlockState adjState, Direction side)
     {
         if (side != dir && side != dir.getCounterClockWise()) { return false; }
 
@@ -62,7 +62,7 @@ public class CornerPillarSkipPredicate implements SideSkipPredicate
         return false;
     }
 
-    private boolean testAgainstPillar(IBlockReader world, BlockPos pos, Direction dir, BlockState adjState, Direction side)
+    private boolean testAgainstPillar(BlockGetter world, BlockPos pos, Direction dir, BlockState adjState, Direction side)
     {
         Direction adjDir = adjState.getValue(PropertyHolder.FACING_HOR);
         if ((side == dir && adjDir == dir.getCounterClockWise()) || (side == dir.getCounterClockWise() && adjDir == dir.getClockWise()))
@@ -72,7 +72,7 @@ public class CornerPillarSkipPredicate implements SideSkipPredicate
         return false;
     }
 
-    private boolean testAgainstCorner(IBlockReader world, BlockPos pos, Direction dir, BlockState adjState, Direction side)
+    private boolean testAgainstCorner(BlockGetter world, BlockPos pos, Direction dir, BlockState adjState, Direction side)
     {
         Direction adjDir = adjState.getValue(PropertyHolder.FACING_HOR);
         boolean adjTop = adjState.getValue(PropertyHolder.TOP);
@@ -83,7 +83,7 @@ public class CornerPillarSkipPredicate implements SideSkipPredicate
         return false;
     }
 
-    private boolean testAgainstDoublePanel(IBlockReader world, BlockPos pos, Direction dir, BlockState adjState, Direction side)
+    private boolean testAgainstDoublePanel(BlockGetter world, BlockPos pos, Direction dir, BlockState adjState, Direction side)
     {
         Direction adjDir = adjState.getValue(PropertyHolder.FACING_NE);
         if (side == dir && (adjDir == dir.getClockWise() || adjDir == dir.getCounterClockWise()))
@@ -99,7 +99,7 @@ public class CornerPillarSkipPredicate implements SideSkipPredicate
         return false;
     }
 
-    private boolean testAgainstStairs(IBlockReader world, BlockPos pos, Direction dir, BlockState adjState, Direction side)
+    private boolean testAgainstStairs(BlockGetter world, BlockPos pos, Direction dir, BlockState adjState, Direction side)
     {
         Direction adjDir = adjState.getValue(BlockStateProperties.HORIZONTAL_FACING);
         StairsShape adjShape = adjState.getValue(BlockStateProperties.STAIRS_SHAPE);
@@ -119,7 +119,7 @@ public class CornerPillarSkipPredicate implements SideSkipPredicate
         return false;
     }
 
-    private boolean testAgainstVerticalStairs(IBlockReader world, BlockPos pos, Direction dir, BlockState adjState, Direction side)
+    private boolean testAgainstVerticalStairs(BlockGetter world, BlockPos pos, Direction dir, BlockState adjState, Direction side)
     {
         Direction adjDir = adjState.getValue(PropertyHolder.FACING_HOR);
         StairsType adjType = adjState.getValue(PropertyHolder.STAIRS_TYPE);

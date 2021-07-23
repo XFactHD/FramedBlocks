@@ -1,12 +1,12 @@
 package xfacthd.framedblocks.client.model;
 
-import net.minecraft.block.BlockState;
-import net.minecraft.block.WallHeight;
-import net.minecraft.client.renderer.model.BakedQuad;
-import net.minecraft.client.renderer.model.IBakedModel;
-import net.minecraft.state.properties.BlockStateProperties;
-import net.minecraft.util.Direction;
-import net.minecraft.util.math.vector.Vector4f;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.state.properties.WallSide;
+import net.minecraft.client.renderer.block.model.BakedQuad;
+import net.minecraft.client.resources.model.BakedModel;
+import net.minecraft.world.level.block.state.properties.BlockStateProperties;
+import net.minecraft.core.Direction;
+import com.mojang.math.Vector4f;
 import xfacthd.framedblocks.client.util.BakedQuadTransformer;
 import xfacthd.framedblocks.client.util.ModelUtils;
 
@@ -27,12 +27,12 @@ public class FramedWallModel extends FramedBlockModel
     };
 
     private final boolean center;
-    private final WallHeight north;
-    private final WallHeight east;
-    private final WallHeight south;
-    private final WallHeight west;
+    private final WallSide north;
+    private final WallSide east;
+    private final WallSide south;
+    private final WallSide west;
 
-    public FramedWallModel(BlockState state, IBakedModel baseModel)
+    public FramedWallModel(BlockState state, BakedModel baseModel)
     {
         super(state, baseModel);
         center = state.getValue(BlockStateProperties.UP);
@@ -45,20 +45,20 @@ public class FramedWallModel extends FramedBlockModel
     @Override
     protected void transformQuad(Map<Direction, List<BakedQuad>> quadMap, BakedQuad quad)
     {
-        if (north != WallHeight.NONE)
+        if (north != WallSide.NONE)
         {
             buildWallHalfSegment(quadMap, quad, Direction.NORTH, north);
         }
-        if (south != WallHeight.NONE)
+        if (south != WallSide.NONE)
         {
             buildWallHalfSegment(quadMap, quad, Direction.SOUTH, south);
         }
 
-        if (east != WallHeight.NONE)
+        if (east != WallSide.NONE)
         {
             buildWallHalfSegment(quadMap, quad, Direction.EAST, east);
         }
-        if (west != WallHeight.NONE)
+        if (west != WallSide.NONE)
         {
             buildWallHalfSegment(quadMap, quad, Direction.WEST, west);
         }
@@ -71,9 +71,9 @@ public class FramedWallModel extends FramedBlockModel
         buildCenterPillar(quadMap, quad);
     }
 
-    private void buildWallHalfSegment(Map<Direction, List<BakedQuad>> quadMap, BakedQuad quad, Direction dir, WallHeight height)
+    private void buildWallHalfSegment(Map<Direction, List<BakedQuad>> quadMap, BakedQuad quad, Direction dir, WallSide height)
     {
-        if (height != WallHeight.NONE)
+        if (height != WallSide.NONE)
         {
             if (quad.getDirection().getAxis() == Direction.Axis.Y)
             {
@@ -81,7 +81,7 @@ public class FramedWallModel extends FramedBlockModel
                 BakedQuad topBotQuad = ModelUtils.duplicateQuad(quad);
                 if (BakedQuadTransformer.createTopBottomQuad(topBotQuad, rect.x(), rect.y(), rect.z(), rect.w()))
                 {
-                    if (height == WallHeight.TALL || quad.getDirection() == Direction.DOWN)
+                    if (height == WallSide.TALL || quad.getDirection() == Direction.DOWN)
                     {
                         quadMap.get(quad.getDirection()).add(topBotQuad);
                     }
@@ -95,7 +95,7 @@ public class FramedWallModel extends FramedBlockModel
             else if (quad.getDirection() == dir.getClockWise() || quad.getDirection() == dir.getCounterClockWise())
             {
                 BakedQuad sideQuad = ModelUtils.duplicateQuad(quad);
-                if ((height == WallHeight.TALL || BakedQuadTransformer.createHorizontalSideQuad(sideQuad, false, 14F/16F)) &&
+                if ((height == WallSide.TALL || BakedQuadTransformer.createHorizontalSideQuad(sideQuad, false, 14F/16F)) &&
                     BakedQuadTransformer.createVerticalSideQuad(sideQuad, dir.getOpposite(), center ? 4F/16F : 5F/16F)
                 )
                 {
@@ -106,12 +106,12 @@ public class FramedWallModel extends FramedBlockModel
         }
     }
 
-    private void buildWallEndCap(Map<Direction, List<BakedQuad>> quadMap, BakedQuad quad, Direction dir, WallHeight height)
+    private void buildWallEndCap(Map<Direction, List<BakedQuad>> quadMap, BakedQuad quad, Direction dir, WallSide height)
     {
-        if (quad.getDirection() == dir && height != WallHeight.NONE)
+        if (quad.getDirection() == dir && height != WallSide.NONE)
         {
             BakedQuad sideQuad = ModelUtils.duplicateQuad(quad);
-            if (BakedQuadTransformer.createSideQuad(sideQuad, 5F / 16F, 0F, 11F / 16F, height == WallHeight.TALL ? 1F : 14F / 16F))
+            if (BakedQuadTransformer.createSideQuad(sideQuad, 5F / 16F, 0F, 11F / 16F, height == WallSide.TALL ? 1F : 14F / 16F))
             {
                 quadMap.get(dir).add(sideQuad);
             }
@@ -142,7 +142,7 @@ public class FramedWallModel extends FramedBlockModel
         }
         else
         {
-            boolean tall = north == WallHeight.TALL || east == WallHeight.TALL || south == WallHeight.TALL || west == WallHeight.TALL;
+            boolean tall = north == WallSide.TALL || east == WallSide.TALL || south == WallSide.TALL || west == WallSide.TALL;
 
             if (quad.getDirection().getAxis() == Direction.Axis.Y)
             {
@@ -160,9 +160,9 @@ public class FramedWallModel extends FramedBlockModel
         }
     }
 
-    private void buildSmallCenterSide(List<BakedQuad> quadList, BakedQuad quad, WallHeight height, boolean tall)
+    private void buildSmallCenterSide(List<BakedQuad> quadList, BakedQuad quad, WallSide height, boolean tall)
     {
-        if (height == WallHeight.NONE)
+        if (height == WallSide.NONE)
         {
             BakedQuad pillarQuad = ModelUtils.duplicateQuad(quad);
             if (BakedQuadTransformer.createSideQuad(pillarQuad, 5F / 16F, 0F, 11F / 16F, tall ? 1F : 14F/16F))
@@ -171,7 +171,7 @@ public class FramedWallModel extends FramedBlockModel
                 quadList.add(pillarQuad);
             }
         }
-        else if (tall && height == WallHeight.LOW)
+        else if (tall && height == WallSide.LOW)
         {
             BakedQuad pillarQuad = ModelUtils.duplicateQuad(quad);
             if (BakedQuadTransformer.createSideQuad(pillarQuad, 5F / 16F, 14F/16F, 11F / 16F, 1F))

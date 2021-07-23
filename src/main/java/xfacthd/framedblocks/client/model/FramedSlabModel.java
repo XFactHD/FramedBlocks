@@ -1,9 +1,9 @@
 package xfacthd.framedblocks.client.model;
 
-import net.minecraft.block.BlockState;
-import net.minecraft.client.renderer.model.BakedQuad;
-import net.minecraft.client.renderer.model.IBakedModel;
-import net.minecraft.util.Direction;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.client.renderer.block.model.BakedQuad;
+import net.minecraft.client.resources.model.BakedModel;
+import net.minecraft.core.Direction;
 import xfacthd.framedblocks.client.util.BakedQuadTransformer;
 import xfacthd.framedblocks.client.util.ModelUtils;
 import xfacthd.framedblocks.common.data.PropertyHolder;
@@ -15,7 +15,7 @@ public class FramedSlabModel extends FramedBlockModel
 {
     private final boolean top;
 
-    public FramedSlabModel(BlockState state, IBakedModel baseModel)
+    public FramedSlabModel(BlockState state, BakedModel baseModel)
     {
         super(state, baseModel);
         top = state.getValue(PropertyHolder.TOP);

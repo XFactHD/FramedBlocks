@@ -1,22 +1,24 @@
 package xfacthd.framedblocks.common.block;
 
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockState;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.ServerPlayerEntity;
-import net.minecraft.item.BlockItemUseContext;
-import net.minecraft.item.ItemStack;
-import net.minecraft.loot.LootContext;
-import net.minecraft.loot.LootParameters;
-import net.minecraft.state.StateContainer;
-import net.minecraft.state.properties.BlockStateProperties;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.*;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.BlockRayTraceResult;
-import net.minecraft.world.IBlockReader;
-import net.minecraft.world.World;
-import net.minecraftforge.fml.network.NetworkHooks;
+import net.minecraft.core.BlockPos;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.sounds.SoundSource;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.InteractionResult;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.context.BlockPlaceContext;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.entity.*;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.state.StateDefinition;
+import net.minecraft.world.level.block.state.properties.BlockStateProperties;
+import net.minecraft.world.level.storage.loot.LootContext;
+import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
+import net.minecraft.world.phys.BlockHitResult;
+import net.minecraftforge.fmllegacy.network.NetworkHooks;
 import xfacthd.framedblocks.common.data.*;
 import xfacthd.framedblocks.common.tileentity.FramedChestTileEntity;
 
@@ -28,24 +30,24 @@ public class FramedChestBlock extends FramedBlock
     public FramedChestBlock() { super(BlockType.FRAMED_CHEST); }
 
     @Override
-    protected void createBlockStateDefinition(StateContainer.Builder<Block, BlockState> builder)
+    protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder)
     {
         builder.add(PropertyHolder.FACING_HOR, PropertyHolder.CHEST_STATE, BlockStateProperties.WATERLOGGED);
     }
 
     @Nullable
     @Override
-    public BlockState getStateForPlacement(BlockItemUseContext context)
+    public BlockState getStateForPlacement(BlockPlaceContext context)
     {
         BlockState state = defaultBlockState().setValue(PropertyHolder.FACING_HOR, context.getHorizontalDirection().getOpposite());
         return withWater(state, context.getLevel(), context.getClickedPos());
     }
 
     @Override
-    public ActionResultType use(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockRayTraceResult hit)
+    public InteractionResult use(BlockState state, Level world, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hit)
     {
-        ActionResultType result = super.use(state, world, pos, player, hand, hit);
-        if (result != ActionResultType.PASS) { return result; }
+        InteractionResult result = super.use(state, world, pos, player, hand, hit);
+        if (result != InteractionResult.PASS) { return result; }
 
         if (!world.isClientSide())
         {
@@ -54,14 +56,14 @@ public class FramedChestBlock extends FramedBlock
                 if (state.getValue(PropertyHolder.CHEST_STATE) != ChestState.OPENING)
                 {
                     world.setBlockAndUpdate(pos, state.setValue(PropertyHolder.CHEST_STATE, ChestState.OPENING));
-                    world.playSound(null, pos, SoundEvents.CHEST_OPEN, SoundCategory.BLOCKS, 0.5F, world.random.nextFloat() * 0.1F + 0.9F);
+                    world.playSound(null, pos, SoundEvents.CHEST_OPEN, SoundSource.BLOCKS, 0.5F, world.random.nextFloat() * 0.1F + 0.9F);
                 }
 
                 te.open();
-                NetworkHooks.openGui((ServerPlayerEntity) player, te, pos);
+                NetworkHooks.openGui((ServerPlayer) player, te, pos);
             }
         }
-        return ActionResultType.sidedSuccess(world.isClientSide());
+        return InteractionResult.sidedSuccess(world.isClientSide());
     }
 
     @Override
@@ -69,7 +71,7 @@ public class FramedChestBlock extends FramedBlock
     {
         List<ItemStack> drops = super.getDrops(state, builder);
 
-        TileEntity te = builder.getOptionalParameter(LootParameters.BLOCK_ENTITY);
+        BlockEntity te = builder.getOptionalParameter(LootContextParams.BLOCK_ENTITY);
         if (te instanceof FramedChestTileEntity)
         {
             ((FramedChestTileEntity) te).addDrops(drops);
@@ -79,5 +81,15 @@ public class FramedChestBlock extends FramedBlock
     }
 
     @Override
-    public TileEntity createTileEntity(BlockState state, IBlockReader world) { return new FramedChestTileEntity(); }
+    public BlockEntity newBlockEntity(BlockPos pos, BlockState state) { return new FramedChestTileEntity(pos, state); }
+
+    @Nullable
+    @Override
+    public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level world, BlockState state, BlockEntityType<T> type)
+    {
+        if (world.isClientSide()) { return null; }
+
+        //FIXME: fucking generics
+        return (level, pos, blockState, te) -> FramedChestTileEntity.tick(level, pos, blockState, (FramedChestTileEntity) te);
+    }
 }

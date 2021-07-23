@@ -1,10 +1,11 @@
 package xfacthd.framedblocks.common.tileentity;
 
-import net.minecraft.block.BlockState;
-import net.minecraft.block.Blocks;
-import net.minecraft.util.Direction;
-import net.minecraft.util.math.BlockRayTraceResult;
-import net.minecraft.util.math.vector.Vector3d;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.core.Direction;
+import net.minecraft.world.phys.BlockHitResult;
+import net.minecraft.world.phys.Vec3;
 import xfacthd.framedblocks.common.FBContent;
 import xfacthd.framedblocks.common.data.PropertyHolder;
 import xfacthd.framedblocks.common.data.SlopeType;
@@ -12,16 +13,19 @@ import xfacthd.framedblocks.common.util.Utils;
 
 public class FramedDoubleSlopeTileEntity extends FramedDoubleTileEntity
 {
-    public FramedDoubleSlopeTileEntity() { super(FBContent.tileTypeDoubleFramedSlope.get()); }
+    public FramedDoubleSlopeTileEntity(BlockPos pos, BlockState state)
+    {
+        super(FBContent.tileTypeDoubleFramedSlope.get(), pos, state);
+    }
 
     @Override
-    protected boolean hitSecondary(BlockRayTraceResult hit)
+    protected boolean hitSecondary(BlockHitResult hit)
     {
         SlopeType type = getBlockState().getValue(PropertyHolder.SLOPE_TYPE);
         Direction facing = getBlockState().getValue(PropertyHolder.FACING_HOR);
         Direction side = hit.getDirection();
 
-        Vector3d vec = Utils.fraction(hit.getLocation());
+        Vec3 vec = Utils.fraction(hit.getLocation());
 
         if (type == SlopeType.HORIZONTAL)
         {
@@ -87,7 +91,6 @@ public class FramedDoubleSlopeTileEntity extends FramedDoubleTileEntity
     public boolean isSolidSide(Direction side)
     {
         BlockState state = getCamoState(side);
-        //noinspection deprecation
         if (!state.isAir())
         {
             //noinspection ConstantConditions

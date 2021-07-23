@@ -1,9 +1,9 @@
 package xfacthd.framedblocks.common.data.skippreds;
 
-import net.minecraft.block.BlockState;
-import net.minecraft.util.Direction;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.IBlockReader;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.world.level.BlockGetter;
+import net.minecraft.world.level.block.state.BlockState;
 import xfacthd.framedblocks.common.block.IFramedBlock;
 import xfacthd.framedblocks.common.data.*;
 import xfacthd.framedblocks.common.util.SideSkipPredicate;
@@ -11,7 +11,7 @@ import xfacthd.framedblocks.common.util.SideSkipPredicate;
 public class SlopeSkipPredicate implements SideSkipPredicate
 {
     @Override
-    public boolean test(IBlockReader world, BlockPos pos, BlockState state, BlockState adjState, Direction side)
+    public boolean test(BlockGetter world, BlockPos pos, BlockState state, BlockState adjState, Direction side)
     {
         if (SideSkipPredicate.CTM.test(world, pos, state, adjState, side)) { return true; }
         if (!(adjState.getBlock() instanceof IFramedBlock block)) { return false; }
@@ -56,7 +56,7 @@ public class SlopeSkipPredicate implements SideSkipPredicate
         return false;
     }
 
-    private boolean testAgainstSlope(IBlockReader world, BlockPos pos, Direction dir, SlopeType type, BlockState adjState, Direction side)
+    private boolean testAgainstSlope(BlockGetter world, BlockPos pos, Direction dir, SlopeType type, BlockState adjState, Direction side)
     {
         Direction adjDir = adjState.getValue(PropertyHolder.FACING_HOR);
         SlopeType adjType = adjState.getValue(PropertyHolder.SLOPE_TYPE);
@@ -72,7 +72,7 @@ public class SlopeSkipPredicate implements SideSkipPredicate
         return false;
     }
 
-    private boolean testAgainstDoubleSlope(IBlockReader world, BlockPos pos, Direction dir, SlopeType type, BlockState adjState, Direction side)
+    private boolean testAgainstDoubleSlope(BlockGetter world, BlockPos pos, Direction dir, SlopeType type, BlockState adjState, Direction side)
     {
         Direction adjDir = adjState.getValue(PropertyHolder.FACING_HOR);
         SlopeType adjType = adjState.getValue(PropertyHolder.SLOPE_TYPE);
@@ -88,7 +88,7 @@ public class SlopeSkipPredicate implements SideSkipPredicate
         return false;
     }
 
-    private boolean testAgainstCorner(IBlockReader world, BlockPos pos, Direction dir, SlopeType type, BlockState adjState, Direction side)
+    private boolean testAgainstCorner(BlockGetter world, BlockPos pos, Direction dir, SlopeType type, BlockState adjState, Direction side)
     {
         Direction adjDir = adjState.getValue(PropertyHolder.FACING_HOR);
         CornerType adjType = adjState.getValue(PropertyHolder.CORNER_TYPE);
@@ -143,7 +143,7 @@ public class SlopeSkipPredicate implements SideSkipPredicate
         return false;
     }
 
-    private boolean testAgainstDoubleCorner(IBlockReader world, BlockPos pos, Direction dir, SlopeType type, BlockState adjState, Direction side)
+    private boolean testAgainstDoubleCorner(BlockGetter world, BlockPos pos, Direction dir, SlopeType type, BlockState adjState, Direction side)
     {
         Direction adjDir = adjState.getValue(PropertyHolder.FACING_HOR);
         CornerType adjType = adjState.getValue(PropertyHolder.CORNER_TYPE);
@@ -187,7 +187,7 @@ public class SlopeSkipPredicate implements SideSkipPredicate
         return false;
     }
 
-    private boolean testAgainstDoubleThreewayCorner(IBlockReader world, BlockPos pos, Direction dir, SlopeType type, BlockState adjState, Direction side)
+    private boolean testAgainstDoubleThreewayCorner(BlockGetter world, BlockPos pos, Direction dir, SlopeType type, BlockState adjState, Direction side)
     {
         Direction adjDir = adjState.getValue(PropertyHolder.FACING_HOR);
         boolean adjTop = adjState.getValue(PropertyHolder.TOP);
@@ -214,7 +214,7 @@ public class SlopeSkipPredicate implements SideSkipPredicate
         return false;
     }
 
-    private boolean testAgainstInnerCorner(IBlockReader world, BlockPos pos, Direction dir, SlopeType type, BlockState adjState, Direction side)
+    private boolean testAgainstInnerCorner(BlockGetter world, BlockPos pos, Direction dir, SlopeType type, BlockState adjState, Direction side)
     {
         Direction adjDir = adjState.getValue(PropertyHolder.FACING_HOR);
         CornerType adjType = adjState.getValue(PropertyHolder.CORNER_TYPE);
@@ -269,7 +269,7 @@ public class SlopeSkipPredicate implements SideSkipPredicate
         return false;
     }
 
-    private boolean testAgainstThreewayCorner(IBlockReader world, BlockPos pos, Direction dir, SlopeType type, BlockState adjState, Direction side)
+    private boolean testAgainstThreewayCorner(BlockGetter world, BlockPos pos, Direction dir, SlopeType type, BlockState adjState, Direction side)
     {
         Direction adjDir = adjState.getValue(PropertyHolder.FACING_HOR);
         boolean adjTop = adjState.getValue(PropertyHolder.TOP);
@@ -292,7 +292,7 @@ public class SlopeSkipPredicate implements SideSkipPredicate
         return false;
     }
 
-    private boolean testAgainstInnerThreewayCorner(IBlockReader world, BlockPos pos, Direction dir, SlopeType type, BlockType adjBlock, BlockState adjState, Direction side)
+    private boolean testAgainstInnerThreewayCorner(BlockGetter world, BlockPos pos, Direction dir, SlopeType type, BlockType adjBlock, BlockState adjState, Direction side)
     {
         Direction adjDir = adjState.getValue(PropertyHolder.FACING_HOR);
         boolean adjTop = adjState.getValue(PropertyHolder.TOP);

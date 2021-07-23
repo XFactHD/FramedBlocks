@@ -1,18 +1,19 @@
 package xfacthd.framedblocks.client.screen;
 
-import com.mojang.blaze3d.matrix.MatrixStack;
+import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.systems.RenderSystem;
-import net.minecraft.client.gui.screen.inventory.ContainerScreen;
-import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.text.ITextComponent;
+import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
+import net.minecraft.client.renderer.GameRenderer;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.network.chat.Component;
 import xfacthd.framedblocks.common.container.FramedChestContainer;
 
-public class FramedChestScreen extends ContainerScreen<FramedChestContainer>
+public class FramedChestScreen extends AbstractContainerScreen<FramedChestContainer>
 {
     private static final ResourceLocation CHEST_GUI_TEXTURE = new ResourceLocation("textures/gui/container/generic_54.png");
 
-    public FramedChestScreen(FramedChestContainer container, PlayerInventory inv, ITextComponent title)
+    public FramedChestScreen(FramedChestContainer container, Inventory inv, Component title)
     {
         super(container, inv, title);
 
@@ -21,18 +22,16 @@ public class FramedChestScreen extends ContainerScreen<FramedChestContainer>
     }
 
     @Override
-    protected void renderBg(MatrixStack matrixStack, float partialTicks, int x, int y)
+    protected void renderBg(PoseStack poseStack, float partialTicks, int x, int y)
     {
-        //noinspection deprecation
-        RenderSystem.color4f(1.0F, 1.0F, 1.0F, 1.0F);
+        RenderSystem.setShader(GameRenderer::getPositionTexShader);
+        RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
+        RenderSystem.setShaderTexture(0, CHEST_GUI_TEXTURE);
 
-        //noinspection ConstantConditions
-        minecraft.getTextureManager().bind(CHEST_GUI_TEXTURE);
+        int left = (this.width - this.imageWidth) / 2;
+        int top = (this.height - this.imageHeight) / 2;
 
-        int left = (width - imageWidth) / 2;
-        int top = (height - imageHeight) / 2;
-
-        blit(matrixStack, left, top, 0, 0, imageWidth, 71);
-        blit(matrixStack, left, top + 71, 0, 126, imageWidth, 96);
+        blit(poseStack, left, top, 0, 0, imageWidth, 71);
+        blit(poseStack, left, top + 71, 0, 126, imageWidth, 96);
     }
 }

@@ -1,20 +1,24 @@
 package xfacthd.framedblocks.common.tileentity;
 
-import net.minecraft.block.BlockState;
-import net.minecraft.block.Blocks;
-import net.minecraft.util.Direction;
-import net.minecraft.util.math.BlockRayTraceResult;
-import net.minecraft.util.math.MathHelper;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.core.Direction;
+import net.minecraft.world.phys.BlockHitResult;
+import net.minecraft.util.Mth;
 import xfacthd.framedblocks.common.FBContent;
 
 public class FramedDoubleSlabTileEntity extends FramedDoubleTileEntity
 {
-    public FramedDoubleSlabTileEntity() { super(FBContent.tileTypeDoubleFramedSlab.get()); }
+    public FramedDoubleSlabTileEntity(BlockPos pos, BlockState state)
+    {
+        super(FBContent.tileTypeDoubleFramedSlab.get(), pos, state);
+    }
 
     @Override
-    protected boolean hitSecondary(BlockRayTraceResult hit)
+    protected boolean hitSecondary(BlockHitResult hit)
     {
-        return hit.getDirection() == Direction.UP || MathHelper.frac(hit.getLocation().y()) >= .5F;
+        return hit.getDirection() == Direction.UP || Mth.frac(hit.getLocation().y()) >= .5F;
     }
 
     @Override

@@ -1,8 +1,8 @@
 package xfacthd.framedblocks.client.model;
 
-import net.minecraft.block.BlockState;
-import net.minecraft.client.renderer.model.IBakedModel;
-import net.minecraft.util.Direction;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.client.resources.model.BakedModel;
+import net.minecraft.core.Direction;
 import net.minecraft.util.Tuple;
 import xfacthd.framedblocks.common.FBContent;
 import xfacthd.framedblocks.common.data.*;
@@ -11,13 +11,13 @@ public class FramedDoubleCornerModel extends FramedDoubleBlockModel
 {
     private final BlockState state;
 
-    public FramedDoubleCornerModel(BlockState state, IBakedModel baseModel)
+    public FramedDoubleCornerModel(BlockState state, BakedModel baseModel)
     {
         super(baseModel, true);
         this.state = state;
     }
 
-    public FramedDoubleCornerModel(IBakedModel baseModel)
+    public FramedDoubleCornerModel(BakedModel baseModel)
     {
         this(
                 FBContent.blockFramedDoubleCorner.get().defaultBlockState().setValue(PropertyHolder.FACING_HOR, Direction.WEST),

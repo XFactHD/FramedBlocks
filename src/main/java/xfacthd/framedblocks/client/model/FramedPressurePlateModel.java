@@ -1,10 +1,10 @@
 package xfacthd.framedblocks.client.model;
 
-import net.minecraft.block.BlockState;
-import net.minecraft.client.renderer.model.BakedQuad;
-import net.minecraft.client.renderer.model.IBakedModel;
-import net.minecraft.state.properties.BlockStateProperties;
-import net.minecraft.util.Direction;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.client.renderer.block.model.BakedQuad;
+import net.minecraft.client.resources.model.BakedModel;
+import net.minecraft.world.level.block.state.properties.BlockStateProperties;
+import net.minecraft.core.Direction;
 import xfacthd.framedblocks.client.util.BakedQuadTransformer;
 import xfacthd.framedblocks.client.util.ModelUtils;
 
@@ -15,7 +15,7 @@ public class FramedPressurePlateModel extends FramedBlockModel
 {
     private final boolean pressed;
 
-    public FramedPressurePlateModel(BlockState state, IBakedModel baseModel)
+    public FramedPressurePlateModel(BlockState state, BakedModel baseModel)
     {
         super(state, baseModel);
         pressed = state.getValue(BlockStateProperties.POWERED);

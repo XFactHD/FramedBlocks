@@ -1,16 +1,19 @@
 package xfacthd.framedblocks.common.tileentity;
 
-import net.minecraft.block.BlockState;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.inventory.container.Container;
-import net.minecraft.inventory.container.INamedContainerProvider;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.tileentity.ITickableTileEntity;
-import net.minecraft.util.*;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.TranslationTextComponent;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.sounds.SoundSource;
+import net.minecraft.world.MenuProvider;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.inventory.AbstractContainerMenu;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.items.*;
@@ -23,12 +26,13 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.List;
 
-public class FramedChestTileEntity extends FramedTileEntity implements INamedContainerProvider, ITickableTileEntity
+public class FramedChestTileEntity extends FramedTileEntity implements MenuProvider
 {
-    public static final ITextComponent TITLE = new TranslationTextComponent("title.framedblocks:framed_chest");
+    public static final Component TITLE = new TranslatableComponent("title.framedblocks:framed_chest");
 
     private final ItemStackHandler itemHandler = new ItemStackHandler(9 * 4);
-    private LazyOptional<IItemHandler> lazyItemHandler = LazyOptional.empty();
+    //private LazyOptional<IItemHandler> lazyItemHandler = LazyOptional.empty();
+    private LazyOptional<IItemHandler> lazyItemHandler = LazyOptional.of(() -> itemHandler); //TODO: revert to empty when onLoad() is called again
     private int openCount = 0;
     private long closeStart = 0;
 
@@ -36,16 +40,14 @@ public class FramedChestTileEntity extends FramedTileEntity implements INamedCon
     private long lastChangeTime = 0;
     private ChestState lastState = ChestState.CLOSED;
 
-    public FramedChestTileEntity() { super(FBContent.tileTypeFramedChest.get()); }
+    public FramedChestTileEntity(BlockPos pos, BlockState state) { super(FBContent.tileTypeFramedChest.get(), pos, state); }
 
-    @Override
-    public void tick() //TODO: replace with an intelligent tile ticker in 1.17
+    public static void tick(Level level, BlockPos pos, BlockState state, FramedChestTileEntity tile)
     {
-        //noinspection ConstantConditions
-        if (!level.isClientSide() && (level.getGameTime() - closeStart) >= 10 && getBlockState().getValue(PropertyHolder.CHEST_STATE) == ChestState.CLOSING)
+        if (!level.isClientSide() && (level.getGameTime() - tile.closeStart) >= 10 && state.getValue(PropertyHolder.CHEST_STATE) == ChestState.CLOSING)
         {
-            closeStart = 0;
-            level.setBlockAndUpdate(worldPosition, getBlockState().setValue(PropertyHolder.CHEST_STATE, ChestState.CLOSED));
+            tile.closeStart = 0;
+            level.setBlockAndUpdate(pos, state.setValue(PropertyHolder.CHEST_STATE, ChestState.CLOSED));
         }
     }
 
@@ -59,7 +61,7 @@ public class FramedChestTileEntity extends FramedTileEntity implements INamedCon
             if (openCount == 0)
             {
                 //noinspection ConstantConditions
-                level.playSound(null, worldPosition, SoundEvents.CHEST_CLOSE, SoundCategory.BLOCKS, 0.5F, level.random.nextFloat() * 0.1F + 0.9F);
+                level.playSound(null, worldPosition, SoundEvents.CHEST_CLOSE, SoundSource.BLOCKS, 0.5F, level.random.nextFloat() * 0.1F + 0.9F);
                 level.setBlockAndUpdate(worldPosition, getBlockState().setValue(PropertyHolder.CHEST_STATE, ChestState.CLOSING));
 
                 closeStart = level.getGameTime();
@@ -114,7 +116,7 @@ public class FramedChestTileEntity extends FramedTileEntity implements INamedCon
         lazyItemHandler.invalidate();
     }
 
-    public boolean isUsableByPlayer(PlayerEntity player)
+    public boolean isUsableByPlayer(Player player)
     {
         //noinspection ConstantConditions
         if (level.getBlockEntity(worldPosition) != this)
@@ -139,26 +141,26 @@ public class FramedChestTileEntity extends FramedTileEntity implements INamedCon
 
 
     @Override
-    public CompoundNBT save(CompoundNBT nbt)
+    public CompoundTag save(CompoundTag nbt)
     {
         nbt.put("inventory", itemHandler.serializeNBT());
         return super.save(nbt);
     }
 
     @Override
-    public void load(BlockState state, CompoundNBT nbt)
+    public void load(CompoundTag nbt)
     {
-        super.load(state, nbt);
+        super.load(nbt);
         itemHandler.deserializeNBT(nbt.getCompound("inventory"));
     }
 
 
 
     @Override
-    public ITextComponent getDisplayName() { return TITLE; }
+    public Component getDisplayName() { return TITLE; }
 
     @Override
-    public Container createMenu(int windowId, PlayerInventory inv, PlayerEntity player)
+    public AbstractContainerMenu createMenu(int windowId, Inventory inv, Player player)
     {
         return new FramedChestContainer(windowId, inv, this);
     }

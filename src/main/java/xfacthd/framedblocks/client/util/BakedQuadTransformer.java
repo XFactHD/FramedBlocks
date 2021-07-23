@@ -1,9 +1,9 @@
 package xfacthd.framedblocks.client.util;
 
 import com.google.common.base.Preconditions;
-import net.minecraft.client.renderer.model.BakedQuad;
-import net.minecraft.util.Direction;
-import net.minecraft.util.math.vector.*;
+import com.mojang.math.*;
+import net.minecraft.client.renderer.block.model.BakedQuad;
+import net.minecraft.core.Direction;
 
 import java.util.concurrent.atomic.AtomicBoolean;
 

@@ -19,12 +19,12 @@ version = '3.0.0'
 group = 'xfacthd.framedblocks'
 archivesBaseName = 'FramedBlocks'
 
-java.toolchain.languageVersion = JavaLanguageVersion.of(16) // Mojang ships Java 8 to end users, so your mod should target Java 8.
+java.toolchain.languageVersion = JavaLanguageVersion.of(16)
 //Print out JVM information so that we know what version is running. Extreamly useful for people to know when helping you.
 println('Java: ' + System.getProperty('java.version') + ' JVM: ' + System.getProperty('java.vm.version') + '(' + System.getProperty('java.vendor') + ') Arch: ' + System.getProperty('os.arch'))
 
 minecraft {
-    mappings channel: 'official', version: '1.16.5'
+    mappings channel: 'official', version: '1.17.1'
     
     accessTransformer = file('src/main/resources/META-INF/accesstransformer.cfg')
 
@@ -97,12 +97,12 @@ repositories {
 }
 
 dependencies {
-    minecraft 'net.minecraftforge:forge:1.16.5-36.2.0'
+    minecraft 'net.minecraftforge:forge:1.17.1-37.0.1'
 
-    implementation fg.deobf("curse.maven:ctm-267602:3137659")
+    //implementation fg.deobf("curse.maven:ctm-267602:3137659")
 
     //runtimeOnly fg.deobf("curse.maven:puzzleslib-495476:3374786") //Only needed when Diagonal Fences is switched to implementation
-    compileOnly fg.deobf("curse.maven:diagonalfences-458048:3364147")
+    //compileOnly fg.deobf("curse.maven:diagonalfences-458048:3364147")
 
     //TODO: reenable mixins
     //annotationProcessor 'org.spongepowered:mixin:0.8'

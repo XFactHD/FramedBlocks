@@ -1,17 +1,16 @@
 package xfacthd.framedblocks.client.render;
 
-import com.mojang.blaze3d.matrix.MatrixStack;
-import net.minecraft.block.BlockState;
+import com.mojang.blaze3d.vertex.PoseStack;
+import net.minecraft.client.renderer.blockentity.*;
+import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.*;
-import net.minecraft.client.renderer.model.IBakedModel;
+import net.minecraft.client.resources.model.BakedModel;
 import net.minecraft.client.renderer.texture.OverlayTexture;
-import net.minecraft.client.renderer.tileentity.TileEntityRenderer;
-import net.minecraft.client.renderer.tileentity.TileEntityRendererDispatcher;
-import net.minecraft.util.Direction;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.math.MathHelper;
-import net.minecraft.util.math.vector.Vector3f;
+import net.minecraft.core.Direction;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.util.Mth;
+import com.mojang.math.Vector3f;
 import net.minecraftforge.client.ForgeHooksClient;
 import net.minecraftforge.client.model.data.EmptyModelData;
 import net.minecraftforge.client.model.data.IModelData;
@@ -24,7 +23,10 @@ import xfacthd.framedblocks.common.tileentity.FramedChestTileEntity;
 import java.util.EnumMap;
 import java.util.Map;
 
-public class FramedChestRenderer extends TileEntityRenderer<FramedChestTileEntity>
+import net.minecraft.client.renderer.block.BlockModelShaper;
+import net.minecraft.client.renderer.block.ModelBlockRenderer;
+
+public class FramedChestRenderer implements BlockEntityRenderer<FramedChestTileEntity>
 {
     private static final RenderType[] RENDER_TYPES = new RenderType[]
             {
@@ -33,12 +35,12 @@ public class FramedChestRenderer extends TileEntityRenderer<FramedChestTileEntit
                     RenderType.cutoutMipped(),
                     RenderType.translucent()
             };
-    private static final Map<Direction, IBakedModel> LID_MODELS = new EnumMap<>(Direction.class);
+    private static final Map<Direction, BakedModel> LID_MODELS = new EnumMap<>(Direction.class);
 
-    public FramedChestRenderer(TileEntityRendererDispatcher dispatcher) { super(dispatcher); }
+    public FramedChestRenderer(BlockEntityRendererProvider.Context ctx) { }
 
     @Override
-    public void render(FramedChestTileEntity te, float partialTicks, MatrixStack matrix, IRenderTypeBuffer buffer, int light, int overlay)
+    public void render(FramedChestTileEntity te, float partialTicks, PoseStack matrix, MultiBufferSource buffer, int light, int overlay)
     {
         BlockState state = te.getBlockState();
 
@@ -49,7 +51,7 @@ public class FramedChestRenderer extends TileEntityRenderer<FramedChestTileEntit
 
         if (chestState == ChestState.CLOSED) { return; }
 
-        IBakedModel model = LID_MODELS.get(dir);
+        BakedModel model = LID_MODELS.get(dir);
         //noinspection ConstantConditions
         IModelData data = model.getModelData(te.getLevel(), te.getBlockPos(), state, EmptyModelData.INSTANCE);
 
@@ -69,16 +71,16 @@ public class FramedChestRenderer extends TileEntityRenderer<FramedChestTileEntit
         matrix.popPose();
     }
 
-    private void renderLidModel(FramedChestTileEntity te, BlockState state, MatrixStack matrix, IRenderTypeBuffer buffer, IBakedModel model, IModelData data)
+    private void renderLidModel(FramedChestTileEntity te, BlockState state, PoseStack matrix, MultiBufferSource buffer, BakedModel model, IModelData data)
     {
-        BlockModelRenderer renderer = Minecraft.getInstance().getBlockRenderer().getModelRenderer();
+        ModelBlockRenderer renderer = Minecraft.getInstance().getBlockRenderer().getModelRenderer();
 
         for (RenderType type : RENDER_TYPES)
         {
             ForgeHooksClient.setRenderLayer(type);
 
             //noinspection ConstantConditions
-            renderer.renderModelSmooth(
+            renderer.tesselateWithAO(
                     te.getLevel(),
                     model,
                     state,
@@ -100,25 +102,25 @@ public class FramedChestRenderer extends TileEntityRenderer<FramedChestTileEntit
         //noinspection ConstantConditions
         float diff = (float) (te.getLevel().getGameTime() - lastChange) + partialTicks;
 
-        float factor = MathHelper.lerp(diff / 10F, 0, 1);
+        float factor = Mth.lerp(diff / 10F, 0, 1);
         if (chestState == ChestState.CLOSING) { factor = 1F - factor; }
 
         factor = 1.0F - factor;
         factor = 1.0F - factor * factor * factor;
 
-        float angle = MathHelper.clamp(factor * 90F, 0F, 90F);
+        float angle = Mth.clamp(factor * 90F, 0F, 90F);
         if (dir.getAxisDirection() == Direction.AxisDirection.NEGATIVE) { angle *= -1F; }
 
         return angle;
     }
 
-    public static void onModelsLoaded(Map<ResourceLocation, IBakedModel> registry)
+    public static void onModelsLoaded(Map<ResourceLocation, BakedModel> registry)
     {
         for (Direction dir : Direction.Plane.HORIZONTAL)
         {
             BlockState state = FBContent.blockFramedChest.get().defaultBlockState().setValue(PropertyHolder.FACING_HOR, dir);
 
-            ResourceLocation location = BlockModelShapes.stateToModelLocation(state);
+            ResourceLocation location = BlockModelShaper.stateToModelLocation(state);
 
             LID_MODELS.put(dir, new FramedChestLidModel(
                     state,

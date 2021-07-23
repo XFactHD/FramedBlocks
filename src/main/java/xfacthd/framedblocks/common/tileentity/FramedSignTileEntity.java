@@ -1,19 +1,19 @@
 package xfacthd.framedblocks.common.tileentity;
 
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
-import net.minecraft.block.BlockState;
-import net.minecraft.command.CommandSource;
-import net.minecraft.command.ICommandSource;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.ServerPlayerEntity;
-import net.minecraft.item.DyeColor;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.util.IReorderingProcessor;
-import net.minecraft.util.math.vector.Vector2f;
-import net.minecraft.util.math.vector.Vector3d;
-import net.minecraft.util.text.*;
-import net.minecraft.util.text.event.ClickEvent;
-import net.minecraft.world.server.ServerWorld;
+import net.minecraft.commands.CommandSource;
+import net.minecraft.commands.CommandSourceStack;
+import net.minecraft.core.BlockPos;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.chat.*;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.util.FormattedCharSequence;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.DyeColor;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.phys.Vec2;
+import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.common.util.Constants;
 import xfacthd.framedblocks.common.FBContent;
 
@@ -21,26 +21,26 @@ import java.util.function.Function;
 
 public class FramedSignTileEntity extends FramedTileEntity
 {
-    private final ITextComponent[] lines = new ITextComponent[4];
-    private final IReorderingProcessor[] renderLines = new IReorderingProcessor[4];
+    private final Component[] lines = new Component[4];
+    private final FormattedCharSequence[] renderLines = new FormattedCharSequence[4];
     private DyeColor textColor = DyeColor.BLACK;
-    private PlayerEntity editingPlayer;
+    private Player editingPlayer;
 
-    public FramedSignTileEntity()
+    public FramedSignTileEntity(BlockPos pos, BlockState state)
     {
-        super(FBContent.tileTypeFramedSign.get());
-        for (int i = 0; i < 4; i++) { lines[i] = new StringTextComponent(""); }
+        super(FBContent.tileTypeFramedSign.get(), pos, state);
+        for (int i = 0; i < 4; i++) { lines[i] = new TextComponent(""); }
     }
 
-    public void setLine(int line, ITextComponent text)
+    public void setLine(int line, Component text)
     {
         lines[line] = text;
         renderLines[line] = null;
     }
 
-    public ITextComponent getLine(int line) { return lines[line]; }
+    public Component getLine(int line) { return lines[line]; }
 
-    public IReorderingProcessor getRenderedLine(int line, Function<ITextComponent, IReorderingProcessor> converter)
+    public FormattedCharSequence getRenderedLine(int line, Function<Component, FormattedCharSequence> converter)
     {
         if (lines[line] != null && renderLines[line] == null)
         {
@@ -49,9 +49,9 @@ public class FramedSignTileEntity extends FramedTileEntity
         return renderLines[line];
     }
 
-    public boolean executeCommand(ServerPlayerEntity player)
+    public boolean executeCommand(ServerPlayer player)
     {
-        for(ITextComponent line : this.lines)
+        for(Component line : this.lines)
         {
             Style style = line == null ? null : line.getStyle();
             if (style != null && style.getClickEvent() != null)
@@ -68,14 +68,14 @@ public class FramedSignTileEntity extends FramedTileEntity
         return true;
     }
 
-    private CommandSource getCommandSource(ServerPlayerEntity player)
+    private CommandSourceStack getCommandSource(ServerPlayer player)
     {
         String nameString = player == null ? "Sign" : player.getName().getString();
-        ITextComponent name = player == null ? new StringTextComponent("Sign") : player.getDisplayName();
-        Vector3d posVec = new Vector3d(worldPosition.getX() + 0.5D, worldPosition.getY() + 0.5D, worldPosition.getZ() + 0.5D);
+        Component name = player == null ? new TextComponent("Sign") : player.getDisplayName();
+        Vec3 posVec = new Vec3(worldPosition.getX() + 0.5D, worldPosition.getY() + 0.5D, worldPosition.getZ() + 0.5D);
 
         //noinspection ConstantConditions
-        return new CommandSource(ICommandSource.NULL, posVec, Vector2f.ZERO, (ServerWorld)level, 2, nameString, name, level.getServer(), player);
+        return new CommandSourceStack(CommandSource.NULL, posVec, Vec2.ZERO, (ServerLevel)level, 2, nameString, name, level.getServer(), player);
     }
 
 
@@ -97,9 +97,9 @@ public class FramedSignTileEntity extends FramedTileEntity
 
     public DyeColor getTextColor() { return textColor; }
 
-    public PlayerEntity getEditingPlayer() { return editingPlayer; }
+    public Player getEditingPlayer() { return editingPlayer; }
 
-    public void setEditingPlayer(PlayerEntity player) { this.editingPlayer = player; }
+    public void setEditingPlayer(Player player) { this.editingPlayer = player; }
 
     @Override
     public boolean onlyOpCanSetNbt() { return true; }
@@ -107,54 +107,54 @@ public class FramedSignTileEntity extends FramedTileEntity
 
 
     @Override
-    protected void writeToDataPacket(CompoundNBT nbt)
+    protected void writeToDataPacket(CompoundTag nbt)
     {
         super.writeToDataPacket(nbt);
         writeToNbt(nbt);
     }
 
     @Override
-    protected boolean readFromDataPacket(CompoundNBT nbt)
+    protected boolean readFromDataPacket(CompoundTag nbt)
     {
         readFromNbt(nbt);
         return super.readFromDataPacket(nbt);
     }
 
-    public CompoundNBT getUpdateTag()
+    public CompoundTag getUpdateTag()
     {
-        CompoundNBT nbt = super.getUpdateTag();
+        CompoundTag nbt = super.getUpdateTag();
         writeToNbt(nbt);
         return nbt;
     }
 
     @Override
-    public void handleUpdateTag(BlockState state, CompoundNBT nbt)
+    public void handleUpdateTag(CompoundTag nbt)
     {
-        super.handleUpdateTag(state, nbt);
+        super.handleUpdateTag(nbt);
         readFromNbt(nbt);
     }
 
-    private void writeToNbt(CompoundNBT nbt)
+    private void writeToNbt(CompoundTag nbt)
     {
         for(int i = 0; i < 4; i++)
         {
-            nbt.putString("text" + i, ITextComponent.Serializer.toJson(lines[i]));
+            nbt.putString("text" + i, Component.Serializer.toJson(lines[i]));
         }
 
         nbt.putString("color", textColor.getName());
     }
 
-    private void readFromNbt(CompoundNBT nbt)
+    private void readFromNbt(CompoundTag nbt)
     {
         for(int i = 0; i < 4; i++)
         {
             String s = nbt.getString("text" + i);
-            ITextComponent line = ITextComponent.Serializer.fromJson(s.isEmpty() ? "\"\"" : s);
-            if (level instanceof ServerWorld && line != null)
+            Component line = Component.Serializer.fromJson(s.isEmpty() ? "\"\"" : s);
+            if (level instanceof ServerLevel && line != null)
             {
                 try
                 {
-                    lines[i] = TextComponentUtils.updateForEntity(getCommandSource(null), line, null, 0);
+                    lines[i] = ComponentUtils.updateForEntity(getCommandSource(null), line, null, 0);
                 }
                 catch (CommandSyntaxException e)
                 {
@@ -173,16 +173,16 @@ public class FramedSignTileEntity extends FramedTileEntity
     }
 
     @Override
-    public CompoundNBT save(CompoundNBT nbt)
+    public CompoundTag save(CompoundTag nbt)
     {
         writeToNbt(nbt);
         return super.save(nbt);
     }
 
     @Override
-    public void load(BlockState state, CompoundNBT nbt)
+    public void load(CompoundTag nbt)
     {
-        super.load(state, nbt);
+        super.load(nbt);
         readFromNbt(nbt);
     }
 }

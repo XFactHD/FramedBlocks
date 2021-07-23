@@ -1,12 +1,12 @@
 package xfacthd.framedblocks.common.block;
 
-import net.minecraft.block.BlockState;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.ItemStack;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.RayTraceResult;
-import net.minecraft.world.IBlockReader;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.phys.HitResult;
+import net.minecraft.world.level.BlockGetter;
 import xfacthd.framedblocks.common.FBContent;
 import xfacthd.framedblocks.common.data.BlockType;
 import xfacthd.framedblocks.common.tileentity.FramedDoubleSlabTileEntity;
@@ -16,11 +16,14 @@ public class FramedDoubleSlabBlock extends AbstractFramedDoubleBlock
     public FramedDoubleSlabBlock() { super(BlockType.FRAMED_DOUBLE_SLAB); }
 
     @Override
-    public ItemStack getPickBlock(BlockState state, RayTraceResult target, IBlockReader world, BlockPos pos, PlayerEntity player)
+    public ItemStack getPickBlock(BlockState state, HitResult target, BlockGetter world, BlockPos pos, Player player)
     {
         return new ItemStack(FBContent.blockFramedSlab.get());
     }
 
     @Override
-    public TileEntity createTileEntity(BlockState state, IBlockReader world) { return new FramedDoubleSlabTileEntity(); }
+    public final BlockEntity newBlockEntity(BlockPos pos, BlockState state)
+    {
+        return new FramedDoubleSlabTileEntity(pos, state);
+    }
 }

@@ -1,24 +1,23 @@
 package xfacthd.framedblocks.client.util.mixin;
 
-import net.minecraft.block.*;
-import net.minecraft.util.Direction;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.IBlockReader;
-import org.spongepowered.asm.mixin.Mixin;
-import org.spongepowered.asm.mixin.injection.At;
-import org.spongepowered.asm.mixin.injection.Inject;
-import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.world.level.BlockGetter;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.HalfTransparentBlock;
+import net.minecraft.world.level.block.state.BlockBehaviour;
+import net.minecraft.world.level.block.state.BlockState;
 import xfacthd.framedblocks.common.block.IFramedBlock;
 import xfacthd.framedblocks.common.tileentity.FramedTileEntity;
 import xfacthd.framedblocks.common.util.SideSkipPredicate;
 
-@Mixin(Block.class)
-public abstract class MixinBlock extends AbstractBlock
+//@Mixin(Block.class) //TODO: reactivate when Mixin is available
+public abstract class MixinBlock extends BlockBehaviour
 {
     public MixinBlock(Properties properties) { super(properties); }
 
-    @Inject(method = {"shouldRenderFace"}, at = @At("HEAD"), cancellable = true)
-    private static void shouldSideBeRenderedFramed(BlockState state, IBlockReader world, BlockPos pos, Direction face, CallbackInfoReturnable<Boolean> cir)
+    /*@Inject(method = {"shouldRenderFace"}, at = @At("HEAD"), cancellable = true)
+    private static void shouldSideBeRenderedFramed(BlockState state, BlockGetter world, BlockPos pos, Direction face, CallbackInfoReturnable<Boolean> cir)
     {
         //noinspection deprecation
         if (state.getBlock() instanceof IFramedBlock || state.isAir()) { return; }
@@ -26,7 +25,7 @@ public abstract class MixinBlock extends AbstractBlock
         BlockPos adjPos = pos.relative(face);
         if (world.getBlockEntity(pos) instanceof FramedTileEntity te)
         {
-            if (state.getBlock() instanceof BreakableBlock && SideSkipPredicate.CTM.test(world, adjPos, world.getBlockState(adjPos), state, face.getOpposite()))
+            if (state.getBlock() instanceof HalfTransparentBlock && SideSkipPredicate.CTM.test(world, adjPos, world.getBlockState(adjPos), state, face.getOpposite()))
             {
                 cir.setReturnValue(false);
             }
@@ -35,5 +34,5 @@ public abstract class MixinBlock extends AbstractBlock
                 cir.setReturnValue(false);
             }
         }
-    }
+    }*/
 }

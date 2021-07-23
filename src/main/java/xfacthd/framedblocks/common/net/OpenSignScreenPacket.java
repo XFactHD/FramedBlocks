@@ -1,10 +1,10 @@
 package xfacthd.framedblocks.common.net;
 
-import net.minecraft.network.PacketBuffer;
-import net.minecraft.util.math.BlockPos;
+import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.core.BlockPos;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.fml.DistExecutor;
-import net.minecraftforge.fml.network.NetworkEvent;
+import net.minecraftforge.fmllegacy.network.NetworkEvent;
 import xfacthd.framedblocks.client.FBClient;
 
 import java.util.function.Supplier;
@@ -15,9 +15,9 @@ public class OpenSignScreenPacket
 
     public OpenSignScreenPacket(BlockPos pos) { this.pos = pos; }
 
-    public OpenSignScreenPacket(PacketBuffer buffer) { this.pos = buffer.readBlockPos(); }
+    public OpenSignScreenPacket(FriendlyByteBuf buffer) { this.pos = buffer.readBlockPos(); }
 
-    public void encode(PacketBuffer buffer) { buffer.writeBlockPos(pos); }
+    public void encode(FriendlyByteBuf buffer) { buffer.writeBlockPos(pos); }
 
     public boolean handle(Supplier<NetworkEvent.Context> ctx)
     {

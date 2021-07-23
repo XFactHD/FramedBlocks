@@ -1,14 +1,16 @@
 package xfacthd.framedblocks.common.block;
 
-import net.minecraft.block.*;
-import net.minecraft.item.BlockItemUseContext;
-import net.minecraft.state.StateContainer;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.Direction;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.IBlockReader;
-import net.minecraft.world.IWorldReader;
-import xfacthd.framedblocks.common.data.*;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.world.item.context.BlockPlaceContext;
+import net.minecraft.world.level.LevelReader;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.SoundType;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.state.StateDefinition;
+import xfacthd.framedblocks.common.data.BlockType;
+import xfacthd.framedblocks.common.data.PropertyHolder;
 import xfacthd.framedblocks.common.tileentity.FramedDoubleThreewayCornerTileEntity;
 import xfacthd.framedblocks.common.tileentity.FramedDoubleTileEntity;
 import xfacthd.framedblocks.common.util.CtmPredicate;
@@ -30,13 +32,13 @@ public class FramedDoubleThreewayCornerBlock extends AbstractFramedDoubleBlock
     }
 
     @Override
-    protected void createBlockStateDefinition(StateContainer.Builder<Block, BlockState> builder)
+    protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder)
     {
         builder.add(PropertyHolder.FACING_HOR, PropertyHolder.TOP);
     }
 
     @Override
-    public BlockState getStateForPlacement(BlockItemUseContext context)
+    public BlockState getStateForPlacement(BlockPlaceContext context)
     {
         Direction facing = context.getHorizontalDirection();
         BlockState state = defaultBlockState().setValue(PropertyHolder.FACING_HOR, facing);
@@ -45,7 +47,7 @@ public class FramedDoubleThreewayCornerBlock extends AbstractFramedDoubleBlock
 
     @Override
     @SuppressWarnings("deprecation")
-    public SoundType getSound(BlockState state, IWorldReader world, BlockPos pos)
+    public SoundType getCamoSound(BlockState state, LevelReader world, BlockPos pos)
     {
         boolean top = state.getValue(PropertyHolder.TOP);
         if (world.getBlockEntity(pos) instanceof FramedDoubleTileEntity dte)
@@ -66,5 +68,8 @@ public class FramedDoubleThreewayCornerBlock extends AbstractFramedDoubleBlock
     }
 
     @Override
-    public TileEntity createTileEntity(BlockState state, IBlockReader world) { return new FramedDoubleThreewayCornerTileEntity(); }
+    public final BlockEntity newBlockEntity(BlockPos pos, BlockState state)
+    {
+        return new FramedDoubleThreewayCornerTileEntity(pos, state);
+    }
 }

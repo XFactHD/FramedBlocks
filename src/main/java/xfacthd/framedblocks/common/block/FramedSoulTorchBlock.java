@@ -1,9 +1,9 @@
 package xfacthd.framedblocks.common.block;
 
-import net.minecraft.block.SoundType;
-import net.minecraft.block.material.Material;
-import net.minecraft.item.*;
-import net.minecraft.particles.ParticleTypes;
+import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.world.item.*;
+import net.minecraft.world.level.block.SoundType;
+import net.minecraft.world.level.material.Material;
 import xfacthd.framedblocks.FramedBlocks;
 import xfacthd.framedblocks.common.FBContent;
 import xfacthd.framedblocks.common.data.BlockType;
@@ -28,7 +28,7 @@ public class FramedSoulTorchBlock extends FramedTorchBlock
     @Override
     public BlockItem createItemBlock()
     {
-        BlockItem item = new WallOrFloorItem(
+        BlockItem item = new StandingAndWallBlockItem(
                 FBContent.blockFramedSoulTorch.get(),
                 FBContent.blockFramedSoulWallTorch.get(),
                 new Item.Properties().tab(FramedBlocks.FRAMED_GROUP)

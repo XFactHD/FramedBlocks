@@ -1,9 +1,10 @@
 package xfacthd.framedblocks.common.item;
 
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.*;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.IWorldReader;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.LevelReader;
 import xfacthd.framedblocks.FramedBlocks;
 
 public class FramedHammerItem extends Item
@@ -23,7 +24,7 @@ public class FramedHammerItem extends Item
     public ItemStack getContainerItem(ItemStack stack) { return stack.copy(); }
 
     @Override
-    public boolean doesSneakBypassUse(ItemStack stack, IWorldReader world, BlockPos pos, PlayerEntity player)
+    public boolean doesSneakBypassUse(ItemStack stack, LevelReader world, BlockPos pos, Player player)
     {
         return true;
     }

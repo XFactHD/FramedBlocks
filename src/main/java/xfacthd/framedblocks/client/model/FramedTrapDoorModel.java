@@ -1,11 +1,11 @@
 package xfacthd.framedblocks.client.model;
 
-import net.minecraft.block.BlockState;
-import net.minecraft.client.renderer.model.BakedQuad;
-import net.minecraft.client.renderer.model.IBakedModel;
-import net.minecraft.state.properties.BlockStateProperties;
-import net.minecraft.state.properties.Half;
-import net.minecraft.util.Direction;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.client.renderer.block.model.BakedQuad;
+import net.minecraft.client.resources.model.BakedModel;
+import net.minecraft.world.level.block.state.properties.BlockStateProperties;
+import net.minecraft.world.level.block.state.properties.Half;
+import net.minecraft.core.Direction;
 import xfacthd.framedblocks.client.util.BakedQuadTransformer;
 import xfacthd.framedblocks.client.util.ModelUtils;
 
@@ -18,7 +18,7 @@ public class FramedTrapDoorModel extends FramedBlockModel
     private final boolean top;
     private final boolean open;
 
-    public FramedTrapDoorModel(BlockState state, IBakedModel baseModel)
+    public FramedTrapDoorModel(BlockState state, BakedModel baseModel)
     {
         super(state, baseModel);
         dir = state.getValue(BlockStateProperties.HORIZONTAL_FACING);

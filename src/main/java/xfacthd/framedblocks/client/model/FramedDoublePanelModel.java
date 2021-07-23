@@ -1,8 +1,8 @@
 package xfacthd.framedblocks.client.model;
 
-import net.minecraft.block.BlockState;
-import net.minecraft.client.renderer.model.IBakedModel;
-import net.minecraft.util.Direction;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.client.resources.model.BakedModel;
+import net.minecraft.core.Direction;
 import net.minecraft.util.Tuple;
 import xfacthd.framedblocks.common.FBContent;
 import xfacthd.framedblocks.common.data.PropertyHolder;
@@ -11,7 +11,7 @@ public class FramedDoublePanelModel extends FramedDoubleBlockModel
 {
     private final BlockState state;
 
-    public FramedDoublePanelModel(BlockState state, IBakedModel baseModel)
+    public FramedDoublePanelModel(BlockState state, BakedModel baseModel)
     {
         super(baseModel, false);
         this.state = state;

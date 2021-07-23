@@ -1,9 +1,9 @@
 package xfacthd.framedblocks.client.model;
 
-import net.minecraft.block.BlockState;
-import net.minecraft.client.renderer.model.BakedQuad;
-import net.minecraft.client.renderer.model.IBakedModel;
-import net.minecraft.util.Direction;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.client.renderer.block.model.BakedQuad;
+import net.minecraft.client.resources.model.BakedModel;
+import net.minecraft.core.Direction;
 import xfacthd.framedblocks.client.util.*;
 import xfacthd.framedblocks.common.FBContent;
 import xfacthd.framedblocks.common.data.PropertyHolder;
@@ -16,14 +16,14 @@ public class FramedThreewayCornerModel extends FramedBlockModel
     private final Direction dir;
     private final boolean top;
 
-    public FramedThreewayCornerModel(BlockState state, IBakedModel baseModel)
+    public FramedThreewayCornerModel(BlockState state, BakedModel baseModel)
     {
         super(state, baseModel);
         dir = state.getValue(PropertyHolder.FACING_HOR);
         top = state.getValue(PropertyHolder.TOP);
     }
 
-    public FramedThreewayCornerModel(IBakedModel baseModel)
+    public FramedThreewayCornerModel(BakedModel baseModel)
     {
         this(
                 FBContent.blockFramedThreewayCorner.get().defaultBlockState().setValue(PropertyHolder.FACING_HOR, Direction.SOUTH),

@@ -2,18 +2,18 @@ package xfacthd.framedblocks.common.block;
 
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockState;
-import net.minecraft.item.BlockItemUseContext;
-import net.minecraft.state.BooleanProperty;
-import net.minecraft.state.StateContainer;
-import net.minecraft.state.properties.BlockStateProperties;
-import net.minecraft.util.Direction;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.shapes.VoxelShape;
-import net.minecraft.util.math.shapes.VoxelShapes;
-import net.minecraft.world.IWorld;
-import net.minecraft.world.World;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.world.item.context.BlockPlaceContext;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.LevelAccessor;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.state.StateDefinition;
+import net.minecraft.world.level.block.state.properties.BlockStateProperties;
+import net.minecraft.world.level.block.state.properties.BooleanProperty;
+import net.minecraft.world.phys.shapes.Shapes;
+import net.minecraft.world.phys.shapes.VoxelShape;
 import xfacthd.framedblocks.common.FBContent;
 import xfacthd.framedblocks.common.data.BlockType;
 import xfacthd.framedblocks.common.data.PropertyHolder;
@@ -41,15 +41,15 @@ public class FramedLatticeBlock extends FramedBlock
     }
 
     @Override
-    protected void createBlockStateDefinition(StateContainer.Builder<Block, BlockState> builder)
+    protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder)
     {
         builder.add(PropertyHolder.X_AXIS, PropertyHolder.Y_AXIS, PropertyHolder.Z_AXIS, BlockStateProperties.WATERLOGGED);
     }
 
     @Override
-    public BlockState getStateForPlacement(BlockItemUseContext context)
+    public BlockState getStateForPlacement(BlockPlaceContext context)
     {
-        World world = context.getLevel();
+        Level world = context.getLevel();
         BlockPos pos = context.getClickedPos();
 
         BlockState state = defaultBlockState();
@@ -60,7 +60,7 @@ public class FramedLatticeBlock extends FramedBlock
     }
 
     @Override
-    public BlockState updateShape(BlockState state, Direction facing, BlockState facingState, IWorld world, BlockPos pos, BlockPos facingPos)
+    public BlockState updateShape(BlockState state, Direction facing, BlockState facingState, LevelAccessor world, BlockPos pos, BlockPos facingPos)
     {
         state = state.setValue(
                 getPropFromAxis(facing),
@@ -82,9 +82,9 @@ public class FramedLatticeBlock extends FramedBlock
         {
             VoxelShape shape = box(6, 6, 6, 10, 10, 10);
 
-            if (state.getValue(PropertyHolder.X_AXIS)) { shape = VoxelShapes.or(shape, xShape); }
-            if (state.getValue(PropertyHolder.Y_AXIS)) { shape = VoxelShapes.or(shape, yShape); }
-            if (state.getValue(PropertyHolder.Z_AXIS)) { shape = VoxelShapes.or(shape, zShape); }
+            if (state.getValue(PropertyHolder.X_AXIS)) { shape = Shapes.or(shape, xShape); }
+            if (state.getValue(PropertyHolder.Y_AXIS)) { shape = Shapes.or(shape, yShape); }
+            if (state.getValue(PropertyHolder.Z_AXIS)) { shape = Shapes.or(shape, zShape); }
 
             builder.put(state, shape.optimize());
         }

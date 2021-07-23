@@ -1,17 +1,17 @@
 package xfacthd.framedblocks;
 
-import net.minecraft.block.Block;
-import net.minecraft.item.*;
-import net.minecraft.util.NonNullList;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.core.NonNullList;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.item.*;
+import net.minecraft.world.level.block.Block;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.ModLoadingContext;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.config.ModConfig;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
-import net.minecraftforge.fml.network.NetworkDirection;
-import net.minecraftforge.fml.network.NetworkRegistry;
-import net.minecraftforge.fml.network.simple.SimpleChannel;
+import net.minecraftforge.fmllegacy.network.NetworkDirection;
+import net.minecraftforge.fmllegacy.network.NetworkRegistry;
+import net.minecraftforge.fmllegacy.network.simple.SimpleChannel;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import xfacthd.framedblocks.client.util.ClientConfig;
@@ -36,7 +36,7 @@ public class FramedBlocks
             PROTOCOL_VERSION::equals
     );
 	
-    public static final ItemGroup FRAMED_GROUP = new ItemGroup("framed_blocks")
+    public static final CreativeModeTab FRAMED_GROUP = new CreativeModeTab("framed_blocks")
     {
         @Override
         public ItemStack makeIcon() { return new ItemStack(FBContent.blockFramedCube.get()); }

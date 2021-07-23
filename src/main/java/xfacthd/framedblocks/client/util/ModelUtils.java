@@ -1,11 +1,11 @@
 package xfacthd.framedblocks.client.util;
 
-import net.minecraft.client.renderer.model.BakedQuad;
-import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
-import net.minecraft.client.renderer.vertex.VertexFormatElement;
-import net.minecraft.util.Direction;
-import net.minecraft.util.math.MathHelper;
-import net.minecraft.util.math.vector.Vector3f;
+import net.minecraft.client.renderer.block.model.BakedQuad;
+import com.mojang.blaze3d.vertex.DefaultVertexFormat;
+import com.mojang.blaze3d.vertex.VertexFormatElement;
+import net.minecraft.core.Direction;
+import net.minecraft.util.Mth;
+import com.mojang.math.Vector3f;
 import net.minecraftforge.client.model.pipeline.LightUtil;
 
 import java.util.Arrays;
@@ -30,22 +30,22 @@ public class ModelUtils
 
         for (int vert = 0; vert < 4; vert++)
         {
-            LightUtil.unpack(vertexData, pos[vert], DefaultVertexFormats.BLOCK, vert, elemPos);
-            LightUtil.unpack(vertexData, color[vert], DefaultVertexFormats.BLOCK, vert, elemColor);
-            LightUtil.unpack(vertexData, uv[vert], DefaultVertexFormats.BLOCK, vert, elemUV);
-            LightUtil.unpack(vertexData, light[vert], DefaultVertexFormats.BLOCK, vert, elemLight);
-            LightUtil.unpack(vertexData, normal[vert], DefaultVertexFormats.BLOCK, vert, elemNormal);
+            LightUtil.unpack(vertexData, pos[vert], DefaultVertexFormat.BLOCK, vert, elemPos);
+            LightUtil.unpack(vertexData, color[vert], DefaultVertexFormat.BLOCK, vert, elemColor);
+            LightUtil.unpack(vertexData, uv[vert], DefaultVertexFormat.BLOCK, vert, elemUV);
+            LightUtil.unpack(vertexData, light[vert], DefaultVertexFormat.BLOCK, vert, elemLight);
+            LightUtil.unpack(vertexData, normal[vert], DefaultVertexFormat.BLOCK, vert, elemNormal);
         }
 
         consumer.accept(pos, color, uv, light, normal);
 
         for (int vert = 0; vert < 4; vert++)
         {
-            LightUtil.pack(pos[vert], vertexData, DefaultVertexFormats.BLOCK, vert, elemPos);
-            LightUtil.pack(color[vert], vertexData, DefaultVertexFormats.BLOCK, vert, elemColor);
-            LightUtil.pack(uv[vert], vertexData, DefaultVertexFormats.BLOCK, vert, elemUV);
-            LightUtil.pack(light[vert], vertexData, DefaultVertexFormats.BLOCK, vert, elemLight);
-            LightUtil.pack(normal[vert], vertexData, DefaultVertexFormats.BLOCK, vert, elemNormal);
+            LightUtil.pack(pos[vert], vertexData, DefaultVertexFormat.BLOCK, vert, elemPos);
+            LightUtil.pack(color[vert], vertexData, DefaultVertexFormat.BLOCK, vert, elemColor);
+            LightUtil.pack(uv[vert], vertexData, DefaultVertexFormat.BLOCK, vert, elemUV);
+            LightUtil.pack(light[vert], vertexData, DefaultVertexFormat.BLOCK, vert, elemLight);
+            LightUtil.pack(normal[vert], vertexData, DefaultVertexFormat.BLOCK, vert, elemNormal);
         }
 
         return quad;
@@ -58,7 +58,7 @@ public class ModelUtils
         float[][] data = new float[4][4];
         for (int vert = 0; vert < 4; vert++)
         {
-            LightUtil.unpack(quad.getVertices(), data[vert], DefaultVertexFormats.BLOCK, vert, elemPos);
+            LightUtil.unpack(quad.getVertices(), data[vert], DefaultVertexFormat.BLOCK, vert, elemPos);
         }
         return data;
     }
@@ -66,7 +66,7 @@ public class ModelUtils
     public static int findElement(VertexFormatElement.Usage usage, int index)
     {
         int idx = 0;
-        for (VertexFormatElement element : DefaultVertexFormats.BLOCK.getElements())
+        for (VertexFormatElement element : DefaultVertexFormat.BLOCK.getElements())
         {
             if (element.getUsage() == usage && element.getIndex() == index)
             {
@@ -238,7 +238,7 @@ public class ModelUtils
 
         float mult = (xzto - xzMin) / (xzMax - xzMin);
         if (invert) { mult = 1F - mult; }
-        return MathHelper.lerp(mult, uMin, uMax);
+        return Mth.lerp(mult, uMin, uMax);
     }
 
     /**
@@ -265,7 +265,7 @@ public class ModelUtils
 
         float mult = (yto - yMin) / (yMax - yMin);
         if (invert) { mult = 1F - mult; }
-        return MathHelper.lerp(mult, vMin, vMax);
+        return Mth.lerp(mult, vMin, vMax);
     }
 
 

@@ -1,11 +1,11 @@
 package xfacthd.framedblocks.client.model;
 
-import net.minecraft.block.BlockState;
-import net.minecraft.client.renderer.model.BakedQuad;
-import net.minecraft.client.renderer.model.IBakedModel;
-import net.minecraft.state.properties.AttachFace;
-import net.minecraft.state.properties.BlockStateProperties;
-import net.minecraft.util.Direction;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.client.renderer.block.model.BakedQuad;
+import net.minecraft.client.resources.model.BakedModel;
+import net.minecraft.world.level.block.state.properties.AttachFace;
+import net.minecraft.world.level.block.state.properties.BlockStateProperties;
+import net.minecraft.core.Direction;
 import xfacthd.framedblocks.client.util.BakedQuadTransformer;
 import xfacthd.framedblocks.client.util.ModelUtils;
 
@@ -18,7 +18,7 @@ public class FramedButtonModel extends FramedBlockModel
     private final AttachFace face;
     private final boolean pressed;
 
-    public FramedButtonModel(BlockState state, IBakedModel baseModel)
+    public FramedButtonModel(BlockState state, BakedModel baseModel)
     {
         super(state, baseModel);
         dir = state.getValue(BlockStateProperties.HORIZONTAL_FACING);

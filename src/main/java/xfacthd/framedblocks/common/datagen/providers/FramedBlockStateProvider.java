@@ -1,13 +1,14 @@
 package xfacthd.framedblocks.common.datagen.providers;
 
-import net.minecraft.block.*;
+import net.minecraft.core.Direction;
 import net.minecraft.data.DataGenerator;
-import net.minecraft.state.properties.*;
-import net.minecraft.util.Direction;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.level.block.*;
+import net.minecraft.world.level.block.state.properties.AttachFace;
+import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraftforge.client.model.generators.*;
 import net.minecraftforge.common.data.ExistingFileHelper;
-import net.minecraftforge.fml.RegistryObject;
+import net.minecraftforge.fmllegacy.RegistryObject;
 import xfacthd.framedblocks.FramedBlocks;
 import xfacthd.framedblocks.common.FBContent;
 
@@ -156,8 +157,8 @@ public class FramedBlockStateProvider extends BlockStateProvider
 
         getVariantBuilder(FBContent.blockFramedLever.get()).forAllStates(state ->
         {
-            Direction facing = state.getValue(HorizontalBlock.FACING);
-            AttachFace face = state.getValue(HorizontalFaceBlock.FACE);
+            Direction facing = state.getValue(HorizontalDirectionalBlock.FACING);
+            AttachFace face = state.getValue(FaceAttachedHorizontalDirectionalBlock.FACE);
             boolean powered = state.getValue(LeverBlock.POWERED);
 
             int rotY = (int)(facing.toYRot() + 180F) % 360;

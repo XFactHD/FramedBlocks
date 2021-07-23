@@ -1,27 +1,28 @@
 package xfacthd.framedblocks.client.render;
 
-import com.mojang.blaze3d.matrix.MatrixStack;
-import net.minecraft.block.BlockState;
-import net.minecraft.client.gui.FontRenderer;
-import net.minecraft.client.renderer.IRenderTypeBuffer;
-import net.minecraft.client.renderer.texture.NativeImage;
-import net.minecraft.client.renderer.tileentity.TileEntityRenderer;
-import net.minecraft.client.renderer.tileentity.TileEntityRendererDispatcher;
-import net.minecraft.state.properties.BlockStateProperties;
-import net.minecraft.util.IReorderingProcessor;
-import net.minecraft.util.math.vector.Vector3f;
+import com.mojang.blaze3d.vertex.PoseStack;
+import net.minecraft.client.renderer.blockentity.*;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.client.gui.Font;
+import net.minecraft.client.renderer.MultiBufferSource;
+import com.mojang.blaze3d.platform.NativeImage;
+import net.minecraft.world.level.block.state.properties.BlockStateProperties;
+import net.minecraft.util.FormattedCharSequence;
+import com.mojang.math.Vector3f;
 import xfacthd.framedblocks.common.block.FramedSignBlock;
 import xfacthd.framedblocks.common.data.PropertyHolder;
 import xfacthd.framedblocks.common.tileentity.FramedSignTileEntity;
 
 import java.util.List;
 
-public class FramedSignRenderer extends TileEntityRenderer<FramedSignTileEntity>
+public class FramedSignRenderer implements BlockEntityRenderer<FramedSignTileEntity>
 {
-    public FramedSignRenderer(TileEntityRendererDispatcher dispatcher) { super(dispatcher); }
+    private final Font fontrenderer;
+
+    public FramedSignRenderer(BlockEntityRendererProvider.Context ctx) { fontrenderer = ctx.getFont(); }
 
     @Override
-    public void render(FramedSignTileEntity tile, float partialTicks, MatrixStack matrix, IRenderTypeBuffer buffer, int light, int overlay)
+    public void render(FramedSignTileEntity tile, float partialTicks, PoseStack matrix, MultiBufferSource buffer, int light, int overlay)
     {
         matrix.pushPose();
 
@@ -49,13 +50,12 @@ public class FramedSignRenderer extends TileEntityRenderer<FramedSignTileEntity>
         int b = (int)(NativeImage.getB(textColor) * 0.4D);
         int argb = NativeImage.combine(0, b, g, r);
 
-        FontRenderer fontrenderer = renderer.getFont();
         for (int line = 0; line < 4; line++)
         {
-            IReorderingProcessor text = tile.getRenderedLine(line, component ->
+            FormattedCharSequence text = tile.getRenderedLine(line, component ->
             {
-                List<IReorderingProcessor> parts = fontrenderer.split(component, 90);
-                return parts.isEmpty() ? IReorderingProcessor.EMPTY : parts.get(0);
+                List<FormattedCharSequence> parts = fontrenderer.split(component, 90);
+                return parts.isEmpty() ? FormattedCharSequence.EMPTY : parts.get(0);
             });
 
             if (text != null)

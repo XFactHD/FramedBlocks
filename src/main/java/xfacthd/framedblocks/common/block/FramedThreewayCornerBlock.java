@@ -2,14 +2,14 @@ package xfacthd.framedblocks.common.block;
 
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockState;
-import net.minecraft.item.BlockItemUseContext;
-import net.minecraft.state.StateContainer;
-import net.minecraft.state.properties.BlockStateProperties;
-import net.minecraft.util.Direction;
-import net.minecraft.util.math.shapes.VoxelShape;
-import net.minecraft.util.math.shapes.VoxelShapes;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.item.context.BlockPlaceContext;
+import net.minecraft.world.level.block.state.StateDefinition;
+import net.minecraft.world.level.block.state.properties.BlockStateProperties;
+import net.minecraft.core.Direction;
+import net.minecraft.world.phys.shapes.VoxelShape;
+import net.minecraft.world.phys.shapes.Shapes;
 import xfacthd.framedblocks.common.data.*;
 import xfacthd.framedblocks.common.util.*;
 
@@ -46,13 +46,13 @@ public class FramedThreewayCornerBlock extends FramedBlock
     }
 
     @Override
-    protected void createBlockStateDefinition(StateContainer.Builder<Block, BlockState> builder)
+    protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder)
     {
         builder.add(PropertyHolder.FACING_HOR, PropertyHolder.TOP, BlockStateProperties.WATERLOGGED);
     }
 
     @Override
-    public BlockState getStateForPlacement(BlockItemUseContext context)
+    public BlockState getStateForPlacement(BlockPlaceContext context)
     {
         BlockState state = defaultBlockState();
 
@@ -77,7 +77,7 @@ public class FramedThreewayCornerBlock extends FramedBlock
 
             if (state.getValue(PropertyHolder.TOP))
             {
-                VoxelShape shapeTop = VoxelShapes.or(
+                VoxelShape shapeTop = Shapes.or(
                         box(0, 12, 0, 4, 16, 16),
                         box(0, 8, 0, 4, 12, 12),
                         box(0, 4, 0, 8, 8, 8),
@@ -93,7 +93,7 @@ public class FramedThreewayCornerBlock extends FramedBlock
             }
             else
             {
-                VoxelShape shapeBottom = VoxelShapes.or(
+                VoxelShape shapeBottom = Shapes.or(
                         box(0, 0, 0, 4, 4, 16),
                         box(0, 4, 0, 4, 8, 12),
                         box(0, 8, 0, 8, 12, 8),
@@ -122,7 +122,7 @@ public class FramedThreewayCornerBlock extends FramedBlock
 
             if (state.getValue(PropertyHolder.TOP))
             {
-                VoxelShape shapeTop = VoxelShapes.or(
+                VoxelShape shapeTop = Shapes.or(
                         box(4, 8, 12, 16, 12, 16),
                         box(0, 12, 0, 16, 16, 16),
                         box(0, 8, 0, 16, 12, 12),
@@ -139,7 +139,7 @@ public class FramedThreewayCornerBlock extends FramedBlock
             }
             else
             {
-                VoxelShape shapeBottom = VoxelShapes.or(
+                VoxelShape shapeBottom = Shapes.or(
                         box(4, 4, 12, 16, 8, 16),
                         box(0, 0, 0, 16, 4, 16),
                         box(0, 4, 0, 16, 8, 12),

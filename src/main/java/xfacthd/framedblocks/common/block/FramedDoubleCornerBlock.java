@@ -1,14 +1,16 @@
 package xfacthd.framedblocks.common.block;
 
-import net.minecraft.block.*;
-import net.minecraft.item.BlockItemUseContext;
-import net.minecraft.state.StateContainer;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.Direction;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.vector.Vector3d;
-import net.minecraft.world.IBlockReader;
-import net.minecraft.world.IWorldReader;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.world.item.context.BlockPlaceContext;
+import net.minecraft.world.level.BlockGetter;
+import net.minecraft.world.level.LevelReader;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.SoundType;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.state.StateDefinition;
+import net.minecraft.world.phys.Vec3;
 import xfacthd.framedblocks.common.data.*;
 import xfacthd.framedblocks.common.tileentity.*;
 import xfacthd.framedblocks.common.util.CtmPredicate;
@@ -38,18 +40,18 @@ public class FramedDoubleCornerBlock extends AbstractFramedDoubleBlock
     public FramedDoubleCornerBlock() { super(BlockType.FRAMED_DOUBLE_CORNER); }
 
     @Override
-    protected void createBlockStateDefinition(StateContainer.Builder<Block, BlockState> builder)
+    protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder)
     {
         builder.add(PropertyHolder.FACING_HOR, PropertyHolder.CORNER_TYPE);
     }
 
     @Override
-    public BlockState getStateForPlacement(BlockItemUseContext context)
+    public BlockState getStateForPlacement(BlockPlaceContext context)
     {
         BlockState state = defaultBlockState();
 
         Direction side = context.getClickedFace();
-        Vector3d hitPoint = Utils.fraction(context.getClickLocation());
+        Vec3 hitPoint = Utils.fraction(context.getClickLocation());
         if (side.getAxis() != Direction.Axis.Y)
         {
             if (hitPoint.y() < (3D / 16D))
@@ -97,7 +99,7 @@ public class FramedDoubleCornerBlock extends AbstractFramedDoubleBlock
 
     @Override
     @SuppressWarnings("deprecation")
-    public SoundType getSound(BlockState state, IWorldReader world, BlockPos pos)
+    public SoundType getCamoSound(BlockState state, LevelReader world, BlockPos pos)
     {
         CornerType type = state.getValue(PropertyHolder.CORNER_TYPE);
         if (world.getBlockEntity(pos) instanceof FramedDoubleTileEntity dte)
@@ -118,5 +120,8 @@ public class FramedDoubleCornerBlock extends AbstractFramedDoubleBlock
     }
 
     @Override
-    public TileEntity createTileEntity(BlockState state, IBlockReader world) { return new FramedDoubleCornerTileEntity(); }
+    public final BlockEntity newBlockEntity(BlockPos pos, BlockState state)
+    {
+        return new FramedDoubleCornerTileEntity(pos, state);
+    }
 }

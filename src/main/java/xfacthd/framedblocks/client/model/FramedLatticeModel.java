@@ -1,9 +1,9 @@
 package xfacthd.framedblocks.client.model;
 
-import net.minecraft.block.BlockState;
-import net.minecraft.client.renderer.model.BakedQuad;
-import net.minecraft.client.renderer.model.IBakedModel;
-import net.minecraft.util.Direction;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.client.renderer.block.model.BakedQuad;
+import net.minecraft.client.resources.model.BakedModel;
+import net.minecraft.core.Direction;
 import xfacthd.framedblocks.client.util.BakedQuadTransformer;
 import xfacthd.framedblocks.client.util.ModelUtils;
 import xfacthd.framedblocks.common.data.PropertyHolder;
@@ -17,7 +17,7 @@ public class FramedLatticeModel extends FramedBlockModel
     private final boolean yAxis;
     private final boolean zAxis;
 
-    public FramedLatticeModel(BlockState state, IBakedModel baseModel)
+    public FramedLatticeModel(BlockState state, BakedModel baseModel)
     {
         super(state, baseModel);
         xAxis = state.getValue(PropertyHolder.X_AXIS);
