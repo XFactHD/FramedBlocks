@@ -42,8 +42,7 @@ public class FramedFloorBlock extends FramedBlock
     @Override
     public boolean canSurvive(BlockState state, LevelReader world, BlockPos pos)
     {
-        BlockState below = world.getBlockState(pos.below());
-        return !below.isAir() && below.getBlock() != this && below.getMaterial().isSolid();
+        return !world.isEmptyBlock(pos.below());
     }
 
     @Override
