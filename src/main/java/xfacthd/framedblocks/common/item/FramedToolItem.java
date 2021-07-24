@@ -6,15 +6,19 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.LevelReader;
 import xfacthd.framedblocks.FramedBlocks;
+import xfacthd.framedblocks.common.data.FramedToolType;
 
-public class FramedHammerItem extends Item
+public class FramedToolItem extends Item
 {
-    public FramedHammerItem()
+    private final FramedToolType type;
+
+    public FramedToolItem(FramedToolType type)
     {
         super(new Properties()
                 .stacksTo(1)
                 .tab(FramedBlocks.FRAMED_GROUP)
         );
+        this.type = type;
     }
 
     @Override
@@ -24,8 +28,7 @@ public class FramedHammerItem extends Item
     public ItemStack getContainerItem(ItemStack stack) { return stack.copy(); }
 
     @Override
-    public boolean doesSneakBypassUse(ItemStack stack, LevelReader world, BlockPos pos, Player player)
-    {
-        return true;
-    }
+    public boolean doesSneakBypassUse(ItemStack stack, LevelReader world, BlockPos pos, Player player) { return true; }
+
+    public FramedToolType getType() { return type; }
 }

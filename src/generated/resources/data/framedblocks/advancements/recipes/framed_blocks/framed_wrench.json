@@ -2,7 +2,7 @@
   "parent": "minecraft:recipes/root",
   "rewards": {
     "recipes": [
-      "framedblocks:framed_lever"
+      "framedblocks:framed_wrench"
     ]
   },
   "criteria": {
@@ -21,7 +21,7 @@
     "has_the_recipe": {
       "trigger": "minecraft:recipe_unlocked",
       "conditions": {
-        "recipe": "framedblocks:framed_lever"
+        "recipe": "framedblocks:framed_wrench"
       }
     }
   },

@@ -11,7 +11,9 @@
       "conditions": {
         "items": [
           {
-            "item": "framedblocks:framed_cube"
+            "items": [
+              "framedblocks:framed_cube"
+            ]
           }
         ]
       }

@@ -17,6 +17,8 @@ import net.minecraft.world.level.block.*;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.state.properties.BlockStateProperties;
+import net.minecraft.world.level.block.state.properties.Property;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraftforge.client.model.data.IModelData;
 import net.minecraftforge.common.Tags;
@@ -81,6 +83,10 @@ public class FramedTileEntity extends BlockEntity
                 level.sendBlockUpdated(worldPosition, getBlockState(), getBlockState(), 3);
             }
             return InteractionResult.sidedSuccess(level.isClientSide());
+        }
+        else if (!camo.isAir() && stack.is(Utils.WRENCH))
+        {
+            return rotateCamo(camo, hit);
         }
 
         return InteractionResult.PASS;
@@ -227,6 +233,49 @@ public class FramedTileEntity extends BlockEntity
         }).orElse(InteractionResult.FAIL);
     }
 
+    private InteractionResult rotateCamo(BlockState camo, BlockHitResult hit)
+    {
+        Property<?> prop = getRotatableProperty(camo);
+        if (prop != null)
+        {
+            //noinspection ConstantConditions
+            if (!level.isClientSide())
+            {
+                applyCamo(getCamoStack(hit), camo.cycle(prop), hit);
+
+                setChanged();
+                level.sendBlockUpdated(worldPosition, getBlockState(), getBlockState(), 3);
+            }
+            return InteractionResult.sidedSuccess(level.isClientSide());
+        }
+        return InteractionResult.FAIL;
+    }
+
+    private Property<?> getRotatableProperty(BlockState state)
+    {
+        if (state.hasProperty(BlockStateProperties.AXIS))
+        {
+            return BlockStateProperties.AXIS;
+        }
+        else if (state.hasProperty(BlockStateProperties.HORIZONTAL_AXIS))
+        {
+            return BlockStateProperties.HORIZONTAL_AXIS;
+        }
+        else if (state.hasProperty(BlockStateProperties.FACING))
+        {
+            return BlockStateProperties.FACING;
+        }
+        else if (state.hasProperty(BlockStateProperties.HORIZONTAL_FACING))
+        {
+            return BlockStateProperties.HORIZONTAL_FACING;
+        }
+        else if (state.hasProperty(BlockStateProperties.VERTICAL_DIRECTION))
+        {
+            return BlockStateProperties.VERTICAL_DIRECTION;
+        }
+        return null;
+    }
+
     protected boolean isValidBlock(BlockState state, Player player)
     {
         Block block = state.getBlock();
@@ -243,6 +292,7 @@ public class FramedTileEntity extends BlockEntity
             return false;
         }
 
+        //noinspection ConstantConditions
         return state.isSolidRender(level, worldPosition) || state.is(Utils.FRAMEABLE);
     }
 

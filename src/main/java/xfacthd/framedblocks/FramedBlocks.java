@@ -1,5 +1,6 @@
 package xfacthd.framedblocks;
 
+import com.google.common.base.Preconditions;
 import net.minecraft.core.NonNullList;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.*;
@@ -17,6 +18,7 @@ import org.apache.logging.log4j.Logger;
 import xfacthd.framedblocks.client.util.ClientConfig;
 import xfacthd.framedblocks.common.FBContent;
 import xfacthd.framedblocks.common.block.IFramedBlock;
+import xfacthd.framedblocks.common.item.FramedToolItem;
 import xfacthd.framedblocks.common.net.OpenSignScreenPacket;
 import xfacthd.framedblocks.common.net.SignUpdatePacket;
 import xfacthd.framedblocks.common.util.CommonConfig;
@@ -47,11 +49,27 @@ public class FramedBlocks
             super.fillItemList(items);
             items.sort((s1, s2) ->
             {
-                if (s1.getItem() == FBContent.itemFramedHammer.get()) { return 1; }
-                if (s2.getItem() == FBContent.itemFramedHammer.get()) { return -1; }
+                Item itemOne = s1.getItem();
+                Item itemTwo = s2.getItem();
 
-                Block b1 = ((BlockItem) s1.getItem()).getBlock();
-                Block b2 = ((BlockItem) s2.getItem()).getBlock();
+                if (itemOne instanceof FramedToolItem toolOne && itemTwo instanceof FramedToolItem toolTwo)
+                {
+                    return toolOne.getType().compareTo(toolTwo.getType());
+                }
+                else if (itemOne instanceof FramedToolItem) { return 1; }
+                else if (itemTwo instanceof FramedToolItem) { return -1; }
+
+                Preconditions.checkArgument(
+                        itemOne instanceof BlockItem bi && bi.getBlock() instanceof IFramedBlock,
+                        String.format("Invalid item in FramedBlocks creative tab: %s", itemOne.getRegistryName())
+                );
+                Preconditions.checkArgument(
+                        itemTwo instanceof BlockItem bi && bi.getBlock() instanceof IFramedBlock,
+                        String.format("Invalid item in FramedBlocks creative tab: %s", itemOne.getRegistryName())
+                );
+
+                Block b1 = ((BlockItem) itemOne).getBlock();
+                Block b2 = ((BlockItem) itemTwo).getBlock();
                 return ((IFramedBlock)b1).getBlockType().compareTo(((IFramedBlock)b2).getBlockType());
             });
         }

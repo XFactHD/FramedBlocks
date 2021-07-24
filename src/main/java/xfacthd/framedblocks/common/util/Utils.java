@@ -1,8 +1,8 @@
 package xfacthd.framedblocks.common.util;
 
 import net.minecraft.core.Direction;
-import net.minecraft.tags.BlockTags;
-import net.minecraft.tags.Tag;
+import net.minecraft.tags.*;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.phys.Vec3;
 import net.minecraft.world.phys.shapes.Shapes;
@@ -13,6 +13,7 @@ public class Utils
 {
     public static final Tag.Named<Block> FRAMEABLE = BlockTags.bind(FramedBlocks.MODID + ":frameable");
     public static final Tag.Named<Block> BLACKLIST = BlockTags.bind(FramedBlocks.MODID + ":blacklisted");
+    public static final Tag.Named<Item> WRENCH = ItemTags.bind("forge:tools/wrench");
 
     public static VoxelShape rotateShape(Direction from, Direction to, VoxelShape shape)
     {
