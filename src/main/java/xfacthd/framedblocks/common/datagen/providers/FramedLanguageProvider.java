@@ -54,6 +54,7 @@ public class FramedLanguageProvider extends LanguageProvider
         //add(FBContent.blockFramedCollapsibleBlock.get(), "Framed Collapsible Block");
 
         add(FBContent.itemFramedHammer.get(), "Framed Hammer");
+        add(FBContent.itemFramedWrench.get(), "Framed Wrench");
 
         add(FramedBlocks.FRAMED_GROUP.getGroupName().getString(), "FramedBlocks");
         add(FramedTileEntity.MSG_BLACKLISTED.getKey(), "This block is blacklisted!");

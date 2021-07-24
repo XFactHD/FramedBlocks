@@ -5,15 +5,19 @@ import net.minecraft.item.*;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IWorldReader;
 import xfacthd.framedblocks.FramedBlocks;
+import xfacthd.framedblocks.common.data.FramedToolType;
 
-public class FramedHammerItem extends Item
+public class FramedToolItem extends Item
 {
-    public FramedHammerItem()
+    private final FramedToolType type;
+
+    public FramedToolItem(FramedToolType type)
     {
         super(new Properties()
                 .maxStackSize(1)
                 .group(FramedBlocks.FRAMED_GROUP)
         );
+        this.type = type;
     }
 
     @Override
@@ -23,8 +27,7 @@ public class FramedHammerItem extends Item
     public ItemStack getContainerItem(ItemStack stack) { return stack.copy(); }
 
     @Override
-    public boolean doesSneakBypassUse(ItemStack stack, IWorldReader world, BlockPos pos, PlayerEntity player)
-    {
-        return true;
-    }
+    public boolean doesSneakBypassUse(ItemStack stack, IWorldReader world, BlockPos pos, PlayerEntity player) { return true; }
+
+    public FramedToolType getType() { return type; }
 }

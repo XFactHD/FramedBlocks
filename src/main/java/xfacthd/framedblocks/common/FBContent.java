@@ -18,6 +18,7 @@ import xfacthd.framedblocks.FramedBlocks;
 import xfacthd.framedblocks.common.block.*;
 import xfacthd.framedblocks.common.container.FramedChestContainer;
 import xfacthd.framedblocks.common.data.BlockType;
+import xfacthd.framedblocks.common.data.FramedToolType;
 import xfacthd.framedblocks.common.item.*;
 import xfacthd.framedblocks.common.tileentity.*;
 
@@ -78,7 +79,8 @@ public class FBContent
     public static final RegistryObject<Block> blockFramedGhostBlock = BLOCKS.register("framed_ghost_block", FramedGhostBlock::new);
 
     /** ITEMS */
-    public static final RegistryObject<Item> itemFramedHammer = ITEMS.register("framed_hammer", FramedHammerItem::new);
+    public static final RegistryObject<Item> itemFramedHammer = registerToolItem(FramedToolItem::new, FramedToolType.HAMMER);
+    public static final RegistryObject<Item> itemFramedWrench = registerToolItem(FramedToolItem::new, FramedToolType.WRENCH);
 
     /** TILE ENTITY TYPES */
     public static final RegistryObject<TileEntityType<FramedTileEntity>> tileTypeFramedBlock = createTileType(FramedTileEntity::new, "framed_tile", getDefaultTileBlocks());
@@ -161,6 +163,11 @@ public class FBContent
     private static RegistryObject<Block> registerBlock(Supplier<Block> blockFactory, BlockType type)
     {
         return BLOCKS.register(type.getName(), blockFactory);
+    }
+
+    private static RegistryObject<Item> registerToolItem(Function<FramedToolType, Item> itemFactory, FramedToolType type)
+    {
+        return ITEMS.register(type.getName(), () -> itemFactory.apply(type));
     }
 
     @SafeVarargs

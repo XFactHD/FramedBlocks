@@ -40,8 +40,7 @@ public class FramedFloorBlock extends FramedBlock
     @Override
     public boolean isValidPosition(BlockState state, IWorldReader world, BlockPos pos)
     {
-        BlockState below = world.getBlockState(pos.down());
-        return !below.isAir() && below.getBlock() != this && below.getMaterial().isSolid();
+        return !world.isAirBlock(pos.down());
     }
 
     @Override

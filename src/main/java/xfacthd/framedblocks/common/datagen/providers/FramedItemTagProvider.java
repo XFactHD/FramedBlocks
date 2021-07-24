@@ -6,6 +6,7 @@ import net.minecraftforge.common.Tags;
 import net.minecraftforge.common.data.ExistingFileHelper;
 import xfacthd.framedblocks.FramedBlocks;
 import xfacthd.framedblocks.common.FBContent;
+import xfacthd.framedblocks.common.util.Utils;
 
 public class FramedItemTagProvider extends ItemTagsProvider
 {
@@ -27,5 +28,6 @@ public class FramedItemTagProvider extends ItemTagsProvider
         getOrCreateBuilder(ItemTags.DOORS).add(FBContent.blockFramedDoor.get().asItem());
         getOrCreateBuilder(ItemTags.TRAPDOORS).add(FBContent.blockFramedTrapDoor.get().asItem());
         getOrCreateBuilder(Tags.Items.CHESTS).add(FBContent.blockFramedChest.get().asItem());
+        getOrCreateBuilder(Utils.WRENCH).add(FBContent.itemFramedWrench.get());
     }
 }

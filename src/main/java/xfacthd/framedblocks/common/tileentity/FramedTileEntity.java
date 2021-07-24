@@ -8,6 +8,8 @@ import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.nbt.NBTUtil;
 import net.minecraft.network.NetworkManager;
 import net.minecraft.network.play.server.SUpdateTileEntityPacket;
+import net.minecraft.state.Property;
+import net.minecraft.state.properties.BlockStateProperties;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.tileentity.TileEntityType;
 import net.minecraft.util.*;
@@ -77,6 +79,10 @@ public class FramedTileEntity extends TileEntity
                 world.notifyBlockUpdate(pos, getBlockState(), getBlockState(), 3);
             }
             return world.isRemote() ? ActionResultType.SUCCESS : ActionResultType.CONSUME;
+        }
+        else if (!camo.isAir() && stack.getItem().isIn(Utils.WRENCH))
+        {
+            return rotateCamo(camo, hit);
         }
 
         return ActionResultType.PASS;
@@ -221,6 +227,45 @@ public class FramedTileEntity extends TileEntity
             }
             return ActionResultType.FAIL;
         }).orElse(ActionResultType.FAIL);
+    }
+
+    private ActionResultType rotateCamo(BlockState camo, BlockRayTraceResult hit)
+    {
+        Property<?> prop = getRotatableProperty(camo);
+        if (prop != null)
+        {
+            //noinspection ConstantConditions
+            if (!world.isRemote())
+            {
+                applyCamo(getCamoStack(hit), camo.cycleValue(prop), hit);
+
+                markDirty();
+                world.notifyBlockUpdate(pos, getBlockState(), getBlockState(), 3);
+            }
+            return ActionResultType.func_233537_a_(world.isRemote());
+        }
+        return ActionResultType.FAIL;
+    }
+
+    private Property<?> getRotatableProperty(BlockState state)
+    {
+        if (state.hasProperty(BlockStateProperties.AXIS))
+        {
+            return BlockStateProperties.AXIS;
+        }
+        else if (state.hasProperty(BlockStateProperties.HORIZONTAL_AXIS))
+        {
+            return BlockStateProperties.HORIZONTAL_AXIS;
+        }
+        else if (state.hasProperty(BlockStateProperties.FACING))
+        {
+            return BlockStateProperties.FACING;
+        }
+        else if (state.hasProperty(BlockStateProperties.HORIZONTAL_FACING))
+        {
+            return BlockStateProperties.HORIZONTAL_FACING;
+        }
+        return null;
     }
 
     protected boolean isValidBlock(BlockState state, PlayerEntity player)

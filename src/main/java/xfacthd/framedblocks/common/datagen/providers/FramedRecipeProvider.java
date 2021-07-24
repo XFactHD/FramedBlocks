@@ -292,5 +292,14 @@ public class FramedRecipeProvider extends RecipeProvider
                 .key('S', Items.STICK)
                 .addCriterion("hasFramedBlock", HAS_FRAMED_BLOCK)
                 .build(consumer);
+
+        ShapedRecipeBuilder.shapedRecipe(FBContent.itemFramedWrench.get())
+                .patternLine("F F")
+                .patternLine(" S ")
+                .patternLine(" S ")
+                .key('F', FBContent.blockFramedCube.get())
+                .key('S', Items.STICK)
+                .addCriterion("hasFramedBlock", HAS_FRAMED_BLOCK)
+                .build(consumer);
     }
 }

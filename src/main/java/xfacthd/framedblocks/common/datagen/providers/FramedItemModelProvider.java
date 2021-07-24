@@ -16,5 +16,6 @@ public class FramedItemModelProvider extends ItemModelProvider
     protected void registerModels()
     {
         singleTexture("framed_hammer", mcLoc("item/generated"), "layer0", modLoc("item/framed_hammer"));
+        singleTexture("framed_wrench", mcLoc("item/generated"), "layer0", modLoc("item/framed_wrench"));
     }
 }

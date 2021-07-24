@@ -37,6 +37,7 @@
   "block.framedblocks.framed_wall": "Framed Wall",
   "block.framedblocks.framed_wall_sign": "Framed Sign",
   "item.framedblocks.framed_hammer": "Framed Hammer",
+  "item.framedblocks.framed_wrench": "Framed Wrench",
   "itemGroup.framed_blocks": "FramedBlocks",
   "msg.framedblocks.blacklisted": "This block is blacklisted!",
   "msg.framedblocks.tile_entity": "Blocks with TileEntities cannot be inserted into framed blocks!",
