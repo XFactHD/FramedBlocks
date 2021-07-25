@@ -8,8 +8,8 @@ import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.nbt.NBTUtil;
 import net.minecraft.network.NetworkManager;
 import net.minecraft.network.play.server.SUpdateTileEntityPacket;
+import net.minecraft.state.DirectionProperty;
 import net.minecraft.state.Property;
-import net.minecraft.state.properties.BlockStateProperties;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.tileentity.TileEntityType;
 import net.minecraft.util.*;
@@ -249,21 +249,16 @@ public class FramedTileEntity extends TileEntity
 
     private Property<?> getRotatableProperty(BlockState state)
     {
-        if (state.hasProperty(BlockStateProperties.AXIS))
+        for (Property<?> prop : state.getProperties())
         {
-            return BlockStateProperties.AXIS;
-        }
-        else if (state.hasProperty(BlockStateProperties.HORIZONTAL_AXIS))
-        {
-            return BlockStateProperties.HORIZONTAL_AXIS;
-        }
-        else if (state.hasProperty(BlockStateProperties.FACING))
-        {
-            return BlockStateProperties.FACING;
-        }
-        else if (state.hasProperty(BlockStateProperties.HORIZONTAL_FACING))
-        {
-            return BlockStateProperties.HORIZONTAL_FACING;
+            if (prop.getValueClass() == Direction.Axis.class)
+            {
+                return prop;
+            }
+            else if (prop instanceof DirectionProperty)
+            {
+                return prop;
+            }
         }
         return null;
     }
