@@ -17,8 +17,7 @@ import net.minecraft.world.level.block.*;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.level.block.state.properties.BlockStateProperties;
-import net.minecraft.world.level.block.state.properties.Property;
+import net.minecraft.world.level.block.state.properties.*;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraftforge.client.model.data.IModelData;
 import net.minecraftforge.common.Tags;
@@ -253,25 +252,16 @@ public class FramedTileEntity extends BlockEntity
 
     private Property<?> getRotatableProperty(BlockState state)
     {
-        if (state.hasProperty(BlockStateProperties.AXIS))
+        for (Property<?> prop : state.getProperties())
         {
-            return BlockStateProperties.AXIS;
-        }
-        else if (state.hasProperty(BlockStateProperties.HORIZONTAL_AXIS))
-        {
-            return BlockStateProperties.HORIZONTAL_AXIS;
-        }
-        else if (state.hasProperty(BlockStateProperties.FACING))
-        {
-            return BlockStateProperties.FACING;
-        }
-        else if (state.hasProperty(BlockStateProperties.HORIZONTAL_FACING))
-        {
-            return BlockStateProperties.HORIZONTAL_FACING;
-        }
-        else if (state.hasProperty(BlockStateProperties.VERTICAL_DIRECTION))
-        {
-            return BlockStateProperties.VERTICAL_DIRECTION;
+            if (prop.getValueClass() == Direction.Axis.class)
+            {
+                return prop;
+            }
+            else if (prop instanceof DirectionProperty)
+            {
+                return prop;
+            }
         }
         return null;
     }
