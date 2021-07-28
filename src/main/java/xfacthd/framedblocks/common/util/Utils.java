@@ -4,6 +4,7 @@ import net.minecraft.core.Direction;
 import net.minecraft.tags.*;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.entity.*;
 import net.minecraft.world.phys.Vec3;
 import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
@@ -43,5 +44,13 @@ public class Utils
                 vec.y() - Math.floor(vec.y()),
                 vec.z() - Math.floor(vec.z())
         );
+    }
+
+    @SuppressWarnings("unchecked")
+    public static <E extends BlockEntity, A extends BlockEntity> BlockEntityTicker<A> createBlockEntityTicker(
+            BlockEntityType<A> type, BlockEntityType<E> actualType, BlockEntityTicker<? super E> ticker
+    )
+    {
+        return actualType == type ? (BlockEntityTicker<A>)ticker : null;
     }
 }

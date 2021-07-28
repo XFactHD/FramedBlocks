@@ -19,8 +19,10 @@ import net.minecraft.world.level.storage.loot.LootContext;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraftforge.fmllegacy.network.NetworkHooks;
+import xfacthd.framedblocks.common.FBContent;
 import xfacthd.framedblocks.common.data.*;
 import xfacthd.framedblocks.common.tileentity.FramedChestTileEntity;
+import xfacthd.framedblocks.common.util.Utils;
 
 import javax.annotation.Nullable;
 import java.util.List;
@@ -87,9 +89,8 @@ public class FramedChestBlock extends FramedBlock
     @Override
     public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level world, BlockState state, BlockEntityType<T> type)
     {
-        if (world.isClientSide()) { return null; }
+        if (world.isClientSide() || state.getValue(PropertyHolder.CHEST_STATE) == ChestState.CLOSED) { return null; }
 
-        //FIXME: fucking generics
-        return (level, pos, blockState, te) -> FramedChestTileEntity.tick(level, pos, blockState, (FramedChestTileEntity) te);
+        return Utils.createBlockEntityTicker(type, FBContent.tileTypeFramedChest.get(), FramedChestTileEntity::tick);
     }
 }
