@@ -193,6 +193,7 @@ ded698d407a1e35b5ebff718170ed3f3a042f4bf data/framedblocks/tags/blocks/frameable
 def53fe2e88a4349d61c7a377cc550483c07eed4 data/minecraft/tags/blocks/climbable.json
 22ce3458b3b504fc92a471dfc7f17afa2955e3a3 data/minecraft/tags/blocks/doors.json
 3e2d88c1ebe0fd8046c865d8fc6f821ff71d4a46 data/minecraft/tags/blocks/fences.json
+3dd2a8a1a8f1571b136c255c21604fdfe037db16 data/minecraft/tags/blocks/mineable/axe.json
 347fe311fec6423bc5cb12c4545d90159ff187d3 data/minecraft/tags/blocks/slabs.json
 c421d2908d17f42e1f49df963f37242ce2090eec data/minecraft/tags/blocks/stairs.json
 73ce3cb68522fced5298b48113f69e48f2168bee data/minecraft/tags/blocks/trapdoors.json

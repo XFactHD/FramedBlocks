@@ -1,18 +1,22 @@
 package xfacthd.framedblocks.common.datagen.providers;
 
+import net.minecraft.data.tags.TagsProvider;
+import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.data.tags.BlockTagsProvider;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.tags.BlockTags;
 import net.minecraftforge.common.Tags;
 import net.minecraftforge.common.data.ExistingFileHelper;
+import net.minecraftforge.fmllegacy.RegistryObject;
 import xfacthd.framedblocks.FramedBlocks;
 import xfacthd.framedblocks.common.FBContent;
+import xfacthd.framedblocks.common.block.IFramedBlock;
 import xfacthd.framedblocks.common.util.Utils;
 
-public class FramedTagProvider extends BlockTagsProvider
+public class FramedBlockTagProvider extends BlockTagsProvider
 {
-    public FramedTagProvider(DataGenerator gen, ExistingFileHelper fileHelper) { super(gen, FramedBlocks.MODID, fileHelper); }
+    public FramedBlockTagProvider(DataGenerator gen, ExistingFileHelper fileHelper) { super(gen, FramedBlocks.MODID, fileHelper); }
 
     @Override
     public String getName() { return super.getName() + ": " + FramedBlocks.MODID; }
@@ -42,5 +46,12 @@ public class FramedTagProvider extends BlockTagsProvider
                 Blocks.STICKY_PISTON,
                 Blocks.COMPOSTER
         );
+
+        TagsProvider.TagAppender<Block> axeTag = tag(BlockTags.MINEABLE_WITH_AXE);
+        FBContent.getRegisteredBlocks()
+                .stream()
+                .map(RegistryObject::get)
+                .filter(b -> b instanceof IFramedBlock)
+                .forEach(axeTag::add);
     }
 }
