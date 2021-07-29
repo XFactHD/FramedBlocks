@@ -5,8 +5,6 @@ import com.mojang.math.*;
 import net.minecraft.client.renderer.block.model.BakedQuad;
 import net.minecraft.core.Direction;
 
-import java.util.concurrent.atomic.AtomicBoolean;
-
 public class BakedQuadTransformer
 {
     private static final float SCALE_ROTATION_45 = 1.0F / (float)Math.cos(Math.PI / 4D) - 1.0F;
@@ -44,9 +42,9 @@ public class BakedQuadTransformer
 
             pos[0][idx] = invert ? 1F - pos[0][1] : pos[0][1];
             pos[3][idx] = invert ? 1F - pos[3][1] : pos[3][1];
-        });
 
-        ModelUtils.fillNormal(quad);
+            return true;
+        });
     }
 
     /**
@@ -70,8 +68,9 @@ public class BakedQuadTransformer
 
             pos[3][destCoord] = invert ? 1F - pos[3][srcCoord] : pos[3][srcCoord];
             pos[2][destCoord] = invert ? 1F - pos[2][srcCoord] : pos[2][srcCoord];
+
+            return true;
         });
-        ModelUtils.fillNormal(quad);
     }
 
     /**
@@ -82,8 +81,7 @@ public class BakedQuadTransformer
      */
     public static boolean createSideTriangleQuad(BakedQuad quad, boolean rightSide, boolean top)
     {
-        AtomicBoolean useQuad = new AtomicBoolean(false);
-        ModelUtils.modifyQuad(quad, (pos, color, uv, light, normal) ->
+        return ModelUtils.modifyQuad(quad, (pos, color, uv, light, normal) ->
         {
             int idxTopFront = rightSide ? 0 : 3;
             int idxBotFront = rightSide ? 1 : 2;
@@ -102,8 +100,6 @@ public class BakedQuadTransformer
 
             if ((top && pos[idxTopBack][1] >= (1F - xz)) || (!top && pos[idxBotBack][1] <= xz))
             {
-                useQuad.set(true);
-
                 float[][] uvSrc = new float[4][2];
                 for (int i = 0; i < 4; i++) { System.arraycopy(uv[i], 0, uvSrc[i], 0, 2); }
 
@@ -121,9 +117,11 @@ public class BakedQuadTransformer
                 toY = top ? Math.min(Math.max(pos[idxBotBack][1], 1F - xz), pos[idxTopBack][1]) : Math.max(Math.min(pos[idxTopBack][1], xz), pos[idxBotBack][1]);
                 ModelUtils.remapUV(quad.getDirection(), pos[idxTopBack][1], pos[idxBotBack][1], toY, uvSrc, uv, idxTopBack, idxBotBack, idxTargetBack, true, true, rotated, mirrored);
                 pos[idxTargetBack][1] = toY;
+
+                return true;
             }
+            return false;
         });
-        return useQuad.get();
     }
 
     /**
@@ -133,8 +131,7 @@ public class BakedQuadTransformer
      */
     public static boolean createTopBottomTriangleQuad(BakedQuad quad, Direction dir)
     {
-        AtomicBoolean useQuad = new AtomicBoolean(false);
-        ModelUtils.modifyQuad(quad, (pos, color, uv, light, normal) ->
+        return ModelUtils.modifyQuad(quad, (pos, color, uv, light, normal) ->
         {
             boolean xAxis = dir.getAxis() == Direction.Axis.X;
             boolean up = quad.getDirection() == Direction.UP;
@@ -172,8 +169,6 @@ public class BakedQuadTransformer
 
             if ((xAxis && (up ? x > z : x >= z)) || (!xAxis && z > x))
             {
-                useQuad.set(true);
-
                 float[][] uvSrc = new float[4][2];
                 for (int i = 0; i < 4; i++) { System.arraycopy(uv[i], 0, uvSrc[i], 0, 2); }
 
@@ -193,9 +188,11 @@ public class BakedQuadTransformer
                 toXZ = negTarget ? Math.min(xz, Math.max(pos[idxToRight][coordTarget], 1F - mod)) : Math.max(xz, Math.min(pos[idxToRight][coordTarget], mod));
                 ModelUtils.remapUV(quad.getDirection(), xz, pos[idxToRight][coordTarget], toXZ, uvSrc, uv, idxFromRight, idxToRight, idxFromRight, !xAxis, !xAxis && !up, rotated, mirrored);
                 pos[idxFromRight][coordTarget] = toXZ;
+
+                return true;
             }
+            return false;
         });
-        return useQuad.get();
     }
 
     /**
@@ -207,8 +204,7 @@ public class BakedQuadTransformer
      */
     public static boolean createPrismTriangleQuad(BakedQuad quad, boolean up, boolean back)
     {
-        AtomicBoolean useQuad = new AtomicBoolean(false);
-        ModelUtils.modifyQuad(quad, (pos, color, uv, light, normal) ->
+        boolean useQuad = ModelUtils.modifyQuad(quad, (pos, color, uv, light, normal) ->
         {
             int coord = quad.getDirection().getAxis() == Direction.Axis.X ? 2 : 0;
             int checkVert1 = up ? 2 : 3;
@@ -221,8 +217,6 @@ public class BakedQuadTransformer
             float xz2 = vertPos ? pos[checkVert2][coord] : 1F - pos[checkVert2][coord];
             if (xz1 >= h1 && xz2 <= h2)
             {
-                useQuad.set(true);
-
                 boolean northeast = quad.getDirection() == Direction.NORTH || quad.getDirection() == Direction.EAST;
 
                 int idxTip1 = up ? 0 : 1;
@@ -266,9 +260,12 @@ public class BakedQuadTransformer
                 pos[idxTip2][coord] = yTip2;
                 pos[idxBase1][coord] = yBase1;
                 pos[idxBase2][coord] = yBase2;
+
+                return true;
             }
+            return false;
         });
-        if (!useQuad.get()) { return false; }
+        if (!useQuad) { return false; }
 
         Vector3f origin = DIR_TO_ORIGIN_VECS[quad.getDirection().ordinal() - 2 + (up ? 0 : 4)];
         boolean northeast = quad.getDirection() == Direction.NORTH || quad.getDirection() == Direction.EAST;
@@ -281,7 +278,7 @@ public class BakedQuadTransformer
     }
 
     /**
-     * Creates a triangle quad with the tip centered and half a block height above the base line.
+     * Creates a triangle quad with the tip centered and half a block height above the baseline.
      * @param quad The BakedQuad to manipulate, must be a copy of the original quad
      * @param dir The direction the triangle should point
      */
@@ -365,6 +362,8 @@ public class BakedQuadTransformer
                 pos[2][1] = y2;
                 pos[3][1] = y3;
             }
+
+            return true;
         });
         return true;
     }
@@ -377,14 +376,11 @@ public class BakedQuadTransformer
      */
     public static boolean createHorizontalSideQuad(BakedQuad quad, boolean top, float height)
     {
-        AtomicBoolean useQuad = new AtomicBoolean(false);
-        ModelUtils.modifyQuad(quad, (pos, color, uv, light, normal) ->
+        return ModelUtils.modifyQuad(quad, (pos, color, uv, light, normal) ->
         {
             float target = top ? 1F - height : height;
             if ((top && pos[0][1] > target) || (!top && pos[1][1] < target))
             {
-                useQuad.set(true);
-
                 int idx1 = top ? 1 : 0;
                 int idx2 = top ? 2 : 3;
 
@@ -401,9 +397,11 @@ public class BakedQuadTransformer
 
                 pos[idx1][1] = toY1;
                 pos[idx2][1] = toY2;
+
+                return true;
             }
+            return false;
         });
-        return useQuad.get();
     }
 
     public static boolean createVerticalSideQuad(BakedQuad quad, Direction dir, float length)
@@ -422,8 +420,7 @@ public class BakedQuadTransformer
      */
     public static boolean createVerticalSideQuad(BakedQuad quad, boolean positive, float length)
     {
-        AtomicBoolean useQuad = new AtomicBoolean(false);
-        ModelUtils.modifyQuad(quad, (pos, color, uv, light, normal) ->
+        return ModelUtils.modifyQuad(quad, (pos, color, uv, light, normal) ->
         {
             int coordIdx = quad.getDirection().getAxis() == Direction.Axis.X ? 2 : 0;
             boolean right = (quad.getDirection().getCounterClockWise().getAxisDirection() == Direction.AxisDirection.POSITIVE) == positive;
@@ -431,8 +428,6 @@ public class BakedQuadTransformer
             float target = positive ? 1F - length : length;
             if ((positive && pos[vertIdx][coordIdx] > target) || (!positive && pos[vertIdx][coordIdx] < target))
             {
-                useQuad.set(true);
-
                 int idx1 = right ? 0 : 3;
                 int idx2 = right ? 1 : 2;
 
@@ -449,9 +444,11 @@ public class BakedQuadTransformer
 
                 pos[idx1][coordIdx] = toXZ1;
                 pos[idx2][coordIdx] = toXZ2;
+
+                return true;
             }
+            return false;
         });
-        return useQuad.get();
     }
 
     /**
@@ -462,8 +459,7 @@ public class BakedQuadTransformer
      */
     public static boolean createTopBottomQuad(BakedQuad quad, Direction cutDir, float length)
     {
-        AtomicBoolean useQuad = new AtomicBoolean(false);
-        ModelUtils.modifyQuad(quad, (pos, color, uv, light, normal) ->
+        return ModelUtils.modifyQuad(quad, (pos, color, uv, light, normal) ->
         {
             boolean xAxis = cutDir.getAxis() == Direction.Axis.X;
             boolean positive = cutDir.getAxisDirection() == Direction.AxisDirection.POSITIVE;
@@ -474,8 +470,6 @@ public class BakedQuadTransformer
             int coordIdx = xAxis ? 0 : 2;
             if ((positive && pos[vertIdx][coordIdx] < target) || (!positive && pos[vertIdx][coordIdx] > target))
             {
-                useQuad.set(true);
-
                 int idx1 = xAxis ? (positive ? 2 : 1) : ((up == positive) ? 1 : 0);
                 int idx2 = xAxis ? (positive ? 3 : 0) : ((up == positive) ? 2 : 3);
 
@@ -501,9 +495,11 @@ public class BakedQuadTransformer
 
                 pos[idx1][coordIdx] = toXZ1;
                 pos[idx2][coordIdx] = toXZ2;
+
+                return true;
             }
+            return false;
         });
-        return useQuad.get();
     }
 
     /**
@@ -573,6 +569,7 @@ public class BakedQuadTransformer
             {
                 pos[i][idx] = value;
             }
+            return true;
         });
     }
 
@@ -592,6 +589,7 @@ public class BakedQuadTransformer
             {
                 pos[i][idx] += value;
             }
+            return true;
         });
     }
 
@@ -694,8 +692,8 @@ public class BakedQuadTransformer
                 pos[i][1] = vector4f.y() + origin.y();
                 pos[i][2] = vector4f.z() + origin.z();
             }
-        });
 
-        ModelUtils.fillNormal(quad);
+            return true;
+        });
     }
 }
