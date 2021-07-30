@@ -82,48 +82,13 @@ public class ModelUtils
         int[] vertexData = quad.getVertexData();
         vertexData = Arrays.copyOf(vertexData, vertexData.length);
 
-        BakedQuad dupeQuad = new BakedQuad(
+        return new BakedQuad(
                 vertexData,
                 quad.getTintIndex(),
                 quad.getFace(),
                 quad.getSprite(),
                 quad.applyDiffuseLighting()
         );
-
-        ModelUtils.modifyQuad(dupeQuad, (pos, color, uv, light, normal) -> unmirrorUVs(uv));
-        return dupeQuad;
-    }
-
-    /**
-     * Unmirrors the UV coordinates if needed. This is the case for eg. grass and sand blocks
-     */
-    private static void unmirrorUVs(float[][] uv)
-    {
-        if (uv[0][0] > uv[2][0])
-        {
-            float temp = uv[0][0];
-            uv[0][0] = uv[2][0];
-            uv[2][0] = temp;
-        }
-        if (uv[1][0] > uv[3][0])
-        {
-            float temp = uv[1][0];
-            uv[1][0] = uv[3][0];
-            uv[3][0] = temp;
-        }
-
-        if (uv[0][1] > uv[2][1])
-        {
-            float temp = uv[0][1];
-            uv[0][1] = uv[2][1];
-            uv[2][1] = temp;
-        }
-        if (uv[3][1] > uv[1][1])
-        {
-            float temp = uv[1][1];
-            uv[1][1] = uv[3][1];
-            uv[3][1] = temp;
-        }
     }
 
     /**
@@ -222,57 +187,121 @@ public class ModelUtils
     }
 
     /**
-     * Maps a x/z coordinate 'xzto' between the given x/z coordinates 'xzf1' and 'xzf2'
-     * onto the u range they occupy as given by 'u1' and 'u2' and calculates the
-     * u value corresponding to the value of 'xzto'
-     * @param xzf1 The left X/Z coordinate
-     * @param xzf2 The right X/Z coordinate
-     * @param xzto The target X/Z coordinate, must lie between xzf1 and xzf2
-     * @param u1 The left U texture coordinate
-     * @param u2 The right U texture coordinate
-     * @param invert Wether the coordinates grow in the opposite direction of the texture coordinates (true for quads pointing north or east)
+     * Maps a coordinate 'coordTo' between the given coordinates 'coord1' and 'coord2'
+     * onto the UV range they occupy as given by the values at 'uv1' and 'uv2' in the 'uv'
+     * array, calculates the target UV coordinate corresponding to the value of 'coordTo'
+     * and places it at 'uvTo' in the 'uv' array
+     * @param quadDir The direction the quad is facing in
+     * @param coord1 The first coordinate
+     * @param coord2 The second coordinate
+     * @param coordTo The target coordinate, must lie between coord1 and coord2
+     * @param uv The UV data (modified in place)
+     * @param uv1 The first UV texture coordinate
+     * @param uv2 The second UV texture coordinate
+     * @param vAxis Wether the modification should happen on the V axis or the U axis
+     * @param invert Wether the coordinates grow in the opposite direction of the texture coordinates
+     * @param rotated Wether the UVs are rotated
+     * @param mirrored Wether the UVs are mirrored
      */
-    public static float remapU(float xzf1, float xzf2, float xzto, float u1, float u2, boolean invert)
+    public static void remapUV(Direction quadDir, float coord1, float coord2, float coordTo, float[][] uv, int uv1, int uv2, int uvTo, boolean vAxis, boolean invert, boolean rotated, boolean mirrored)
     {
-        float xzMin = Math.min(xzf1, xzf2);
-        float xzMax = Math.max(xzf1, xzf2);
-
-        float uMin = Math.min(u1, u2);
-        float uMax = Math.max(u1, u2);
-
-        if (xzto == xzMin) { return invert ? uMax : uMin; }
-        if (xzto == xzMax) { return invert ? uMin : uMax; }
-
-        float mult = (xzto - xzMin) / (xzMax - xzMin);
-        if (invert) { mult = 1F - mult; }
-        return MathHelper.lerp(mult, uMin, uMax);
+        remapUV(quadDir, coord1, coord2, coordTo, uv, uv, uv1, uv2, uvTo, vAxis, invert, rotated, mirrored);
     }
 
     /**
-     * Maps a y coordinate 'yto' between the given y coordinates 'yf1' and 'yf2'
-     * onto the v range they occupy as given by 'v1' and 'v2' and calculates the
-     * v value corresponding to the value of 'yto'
-     * @param yf1 The bottom Y coordinate
-     * @param yf2 The top Y coordinate
-     * @param yto The target Y coordinate, must lie between yf1 and yf2
-     * @param v1 The bottom V texture coordinate
-     * @param v2 The top V texture coordinate
-     * @param invert Wether the coordinates grow in the opposite direction of the texture coordinates (true for all quads except those pointing up)
+     * Maps a coordinate 'coordTo' between the given coordinates 'coord1' and 'coord2'
+     * onto the UV range they occupy as given by the values at 'uv1' and 'uv2' in the 'uv'
+     * array, calculates the target UV coordinate corresponding to the value of 'coordTo'
+     * and places it at 'uvTo' in the 'uv' array
+     * @param quadDir The direction the quad is facing in
+     * @param coord1 The first coordinate
+     * @param coord2 The second coordinate
+     * @param coordTo The target coordinate, must lie between coord1 and coord2
+     * @param uvSrc The source UV data (not modified)
+     * @param uvDest The UV data to modify (modified in place)
+     * @param uv1 The first UV texture coordinate
+     * @param uv2 The second UV texture coordinate
+     * @param vAxis Wether the modification should happen on the V axis or the U axis
+     * @param invert Wether the coordinates grow in the opposite direction of the texture coordinates
+     * @param rotated Wether the UVs are rotated
+     * @param mirrored Wether the UVs are mirrored
      */
-    public static float remapV(float yf1, float yf2, float yto, float v1, float v2, boolean invert)
+    public static void remapUV(Direction quadDir, float coord1, float coord2, float coordTo, float[][] uvSrc, float[][] uvDest, int uv1, int uv2, int uvTo, boolean vAxis, boolean invert, boolean rotated, boolean mirrored)
     {
-        float yMin = Math.min(yf1, yf2);
-        float yMax = Math.max(yf1, yf2);
+        if (rotated)
+        {
+            if (quadDir == Direction.UP)
+            {
+                invert = vAxis == mirrored;
+            }
+            else if (quadDir == Direction.DOWN)
+            {
+                invert = !mirrored;
+            }
+            else if ((quadDir.getAxisDirection() == Direction.AxisDirection.POSITIVE) != vAxis)
+            {
+                invert = !invert;
+            }
+        }
+        else if (mirrored)
+        {
+            if (quadDir == Direction.UP)
+            {
+                invert = !vAxis || (uvSrc[0][1] > uvSrc[1][1]);
+            }
+            else if (quadDir == Direction.DOWN)
+            {
+                invert = !vAxis || (uvSrc[0][1] < uvSrc[1][1]);
+            }
+            else if (!vAxis)
+            {
+                invert = !invert;
+            }
+        }
 
-        float vMin = Math.min(v1, v2);
-        float vMax = Math.max(v1, v2);
+        float coordMin = Math.min(coord1, coord2);
+        float coordMax = Math.max(coord1, coord2);
 
-        if (yto == yMin) { return invert ? vMax : vMin; }
-        if (yto == yMax) { return invert ? vMin : vMax; }
+        int uvIdx = rotated != vAxis ? 1 : 0;
 
-        float mult = (yto - yMin) / (yMax - yMin);
-        if (invert) { mult = 1F - mult; }
-        return MathHelper.lerp(mult, vMin, vMax);
+        float uvMin = Math.min(uvSrc[uv1][uvIdx], uvSrc[uv2][uvIdx]);
+        float uvMax = Math.max(uvSrc[uv1][uvIdx], uvSrc[uv2][uvIdx]);
+
+        if (coordTo == coordMin)
+        {
+            uvDest[uvTo][uvIdx] = (invert) ? uvMax : uvMin;
+        }
+        else if (coordTo == coordMax)
+        {
+            uvDest[uvTo][uvIdx] = (invert) ? uvMin : uvMax;
+        }
+        else
+        {
+            float mult = (coordTo - coordMin) / (coordMax - coordMin);
+            if (invert) { mult = 1F - mult; }
+            uvDest[uvTo][uvIdx] = MathHelper.lerp(mult, uvMin, uvMax);
+        }
+    }
+
+    public static boolean isQuadRotated(float[][] uv)
+    {
+        return (MathHelper.epsilonEquals(uv[0][1], uv[1][1]) || MathHelper.epsilonEquals(uv[3][1], uv[2][1])) &&
+                (MathHelper.epsilonEquals(uv[1][0], uv[2][0]) || MathHelper.epsilonEquals(uv[0][0], uv[3][0]));
+    }
+
+    public static boolean isQuadMirrored(float[][] uv)
+    {
+        boolean rotated = isQuadRotated(uv);
+        if (!rotated)
+        {
+            return (uv[0][0] > uv[3][0] && uv[1][0] > uv[2][0]) ||
+                    (uv[0][1] > uv[1][1] && uv[3][1] > uv[2][1]);
+        }
+        else
+        {
+            return (uv[0][0] > uv[1][0] && uv[3][0] > uv[2][0]) ||
+                    (uv[0][1] < uv[3][1] && uv[1][1] < uv[2][1]);
+        }
     }
 
 
