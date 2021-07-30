@@ -53,7 +53,7 @@ public abstract class FramedBlockModel extends BakedModelProxy
         RenderType layer = MinecraftForgeClient.getRenderLayer();
         BlockState camoState = Blocks.AIR.defaultBlockState();
 
-        if (extraData instanceof FramedBlockData data)
+        if (extraData instanceof FramedBlockData data && layer != null)
         {
             if (side != null && ((IFramedBlock)state.getBlock()).isSideHidden(
                     data.getWorld(),
