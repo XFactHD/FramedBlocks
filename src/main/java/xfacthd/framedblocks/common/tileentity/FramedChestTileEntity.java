@@ -140,6 +140,9 @@ public class FramedChestTileEntity extends FramedTileEntity implements MenuProvi
 
 
 
+    @Override //Prevent writing inventory contents
+    public CompoundTag writeToBlueprint() { return super.save(new CompoundTag()); }
+
     @Override
     public CompoundTag save(CompoundTag nbt)
     {

@@ -1,7 +1,11 @@
 package xfacthd.framedblocks.common.block;
 
+import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.NbtUtils;
+import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.Entity;
@@ -20,6 +24,7 @@ import net.minecraftforge.common.ToolType;
 import xfacthd.framedblocks.FramedBlocks;
 import xfacthd.framedblocks.client.util.ClientConfig;
 import xfacthd.framedblocks.common.data.BlockType;
+import xfacthd.framedblocks.common.item.FramedBlueprintItem;
 import xfacthd.framedblocks.common.tileentity.FramedDoubleTileEntity;
 import xfacthd.framedblocks.common.tileentity.FramedTileEntity;
 import xfacthd.framedblocks.common.util.*;
@@ -206,5 +211,11 @@ public interface IFramedBlock extends EntityBlock//, IFacade
             }
         }
         return 20;
+    }
+
+    default MutableComponent printCamoBlock(CompoundTag beTag)
+    {
+        BlockState camoState = NbtUtils.readBlockState(beTag.getCompound("camo_state"));
+        return camoState.isAir() ? FramedBlueprintItem.BLOCK_NONE : camoState.getBlock().getName().withStyle(ChatFormatting.WHITE);
     }
 }

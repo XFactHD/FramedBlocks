@@ -373,7 +373,7 @@ public class FramedTileEntity extends BlockEntity
         level.getChunkSource().getLightEngine().checkBlock(worldPosition);
     }
 
-    protected final IFramedBlock getBlock() { return (IFramedBlock) getBlockState().getBlock(); }
+    public final IFramedBlock getBlock() { return (IFramedBlock) getBlockState().getBlock(); }
 
     /*
      * Sync
@@ -476,6 +476,8 @@ public class FramedTileEntity extends BlockEntity
     /*
      * NBT stuff
      */
+
+    public CompoundTag writeToBlueprint() { return save(new CompoundTag()); }
 
     @Override
     public CompoundTag save(CompoundTag nbt)

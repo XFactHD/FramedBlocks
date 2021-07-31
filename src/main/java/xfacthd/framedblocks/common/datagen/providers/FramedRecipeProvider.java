@@ -302,5 +302,14 @@ public class FramedRecipeProvider extends RecipeProvider
                 .define('S', Items.STICK)
                 .unlockedBy("hasFramedBlock", HAS_FRAMED_BLOCK)
                 .save(consumer);
+
+        ShapedRecipeBuilder.shaped(FBContent.itemFramedBlueprint.get())
+                .pattern(" F ")
+                .pattern("FPF")
+                .pattern(" F ")
+                .define('F', FBContent.blockFramedCube.get())
+                .define('P', Items.PAPER)
+                .unlockedBy("hasFramedBlock", HAS_FRAMED_BLOCK)
+                .save(consumer);
     }
 }
