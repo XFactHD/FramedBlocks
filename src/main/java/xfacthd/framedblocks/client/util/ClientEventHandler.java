@@ -2,17 +2,16 @@ package xfacthd.framedblocks.client.util;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
+import com.mojang.math.Vector3f;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.renderer.RenderType;
+import net.minecraft.core.Direction;
 import net.minecraft.util.Mth;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.*;
-import net.minecraft.core.Direction;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.Vec3;
-import com.mojang.math.Vector3f;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.event.DrawSelectionEvent;
-import net.minecraftforge.client.event.GuiContainerEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import xfacthd.framedblocks.FramedBlocks;
@@ -22,9 +21,6 @@ import xfacthd.framedblocks.common.data.*;
 @Mod.EventBusSubscriber(modid = FramedBlocks.MODID, value = Dist.CLIENT)
 public class ClientEventHandler
 {
-    @SubscribeEvent //TODO: remove noop listener when the crash related to this event is fixed
-    public static void onDrawContainer(final GuiContainerEvent event) { }
-
     @SubscribeEvent
     public static void onRenderBlockHighlight(final DrawSelectionEvent.HighlightBlock event)
     {
