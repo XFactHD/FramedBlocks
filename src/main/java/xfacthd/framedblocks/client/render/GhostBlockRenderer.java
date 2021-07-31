@@ -25,6 +25,7 @@ import xfacthd.framedblocks.client.util.FramedBlockData;
 import xfacthd.framedblocks.common.FBContent;
 import xfacthd.framedblocks.common.block.IFramedBlock;
 import xfacthd.framedblocks.common.data.PropertyHolder;
+import xfacthd.framedblocks.common.item.FramedBlueprintItem;
 import xfacthd.framedblocks.common.tileentity.FramedDoubleTileEntity;
 
 import java.lang.reflect.InvocationTargetException;
@@ -55,22 +56,36 @@ public class GhostBlockRenderer
 
         BlockRayTraceResult target = (BlockRayTraceResult) mouseOver;
 
-        ItemStack stack = mc().player.getHeldItemMainhand();
-        if (!(stack.getItem() instanceof BlockItem)) { return; }
+        Block block;
+        boolean blueprint = false;
 
-        Block block = ((BlockItem) stack.getItem()).getBlock();
+        ItemStack stack = mc().player.getHeldItemMainhand();
+        if (stack.getItem() instanceof FramedBlueprintItem)
+        {
+            block = ((FramedBlueprintItem)stack.getItem()).getTargetBlock(stack);
+            blueprint = true;
+        }
+        else if (stack.getItem() instanceof BlockItem)
+        {
+            block = ((BlockItem)stack.getItem()).getBlock();
+        }
+        else
+        {
+            return;
+        }
+
         if (!(block instanceof IFramedBlock)) { return; }
 
         boolean doRender;
         BlockPos renderPos;
         BlockState renderState;
 
-        if ((renderState = tryBuildDoublePanel(target, block)) != null)
+        if (!blueprint && (renderState = tryBuildDoublePanel(target, block)) != null)
         {
             doRender = true;
             renderPos = target.getPos();
         }
-        else if ((renderState = tryBuildDoubleSlab(target, block)) != null)
+        else if (!blueprint && (renderState = tryBuildDoubleSlab(target, block)) != null)
         {
             doRender = true;
             renderPos = target.getPos();

@@ -3,7 +3,8 @@ package xfacthd.framedblocks.common.data;
 public enum FramedToolType
 {
     HAMMER("framed_hammer"),
-    WRENCH("framed_wrench");
+    WRENCH("framed_wrench"),
+    BLUEPRINT("framed_blueprint");
 
     private final String name;
 

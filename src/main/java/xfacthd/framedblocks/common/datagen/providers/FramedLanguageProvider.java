@@ -4,6 +4,7 @@ import net.minecraft.data.DataGenerator;
 import net.minecraftforge.common.data.LanguageProvider;
 import xfacthd.framedblocks.FramedBlocks;
 import xfacthd.framedblocks.common.FBContent;
+import xfacthd.framedblocks.common.item.FramedBlueprintItem;
 import xfacthd.framedblocks.common.tileentity.FramedChestTileEntity;
 import xfacthd.framedblocks.common.tileentity.FramedTileEntity;
 
@@ -55,10 +56,19 @@ public class FramedLanguageProvider extends LanguageProvider
 
         add(FBContent.itemFramedHammer.get(), "Framed Hammer");
         add(FBContent.itemFramedWrench.get(), "Framed Wrench");
+        add(FBContent.itemFramedBlueprint.get(), "Framed Blueprint");
 
         add(FramedBlocks.FRAMED_GROUP.getGroupName().getString(), "FramedBlocks");
         add(FramedTileEntity.MSG_BLACKLISTED.getKey(), "This block is blacklisted!");
         add(FramedTileEntity.MSG_TILE_ENTITY.getKey(), "Blocks with TileEntities cannot be inserted into framed blocks!");
         add(FramedChestTileEntity.TITLE.getString(), "Framed Chest");
+        add(FramedBlueprintItem.CONTAINED_BLOCK, "Contained Block: %s");
+        add(FramedBlueprintItem.CAMO_BLOCK, "Camo Block: %s");
+        add(FramedBlueprintItem.IS_ILLUMINATED, "Illuminated: %s");
+        add(FramedBlueprintItem.BLOCK_NONE.getString(), "None");
+        add(FramedBlueprintItem.BLOCK_INVALID.getString(), "Invalid");
+        add(FramedBlueprintItem.ILLUMINATED_FALSE.getString(), "false");
+        add(FramedBlueprintItem.ILLUMINATED_TRUE.getString(), "true");
+        add(FramedBlueprintItem.CANT_COPY.getString(), "This block can currently not be copied!");
     }
 }

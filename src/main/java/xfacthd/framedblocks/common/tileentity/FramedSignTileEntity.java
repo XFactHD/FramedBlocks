@@ -172,6 +172,9 @@ public class FramedSignTileEntity extends FramedTileEntity
         textColor = DyeColor.byTranslationKey(nbt.getString("color"), DyeColor.BLACK);
     }
 
+    @Override //Prevent writing sign data
+    public CompoundNBT writeToBlueprint() { return super.write(new CompoundNBT()); }
+
     @Override
     public CompoundNBT write(CompoundNBT nbt)
     {

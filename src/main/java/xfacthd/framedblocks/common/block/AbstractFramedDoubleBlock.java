@@ -1,12 +1,16 @@
 package xfacthd.framedblocks.common.block;
 
 import net.minecraft.block.*;
+import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.nbt.NBTUtil;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.Direction;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.text.*;
 import net.minecraft.world.IBlockReader;
 import net.minecraft.world.IWorldReader;
 import xfacthd.framedblocks.common.data.BlockType;
+import xfacthd.framedblocks.common.item.FramedBlueprintItem;
 import xfacthd.framedblocks.common.tileentity.FramedDoubleTileEntity;
 
 import javax.annotation.Nonnull;
@@ -52,5 +56,19 @@ public abstract class AbstractFramedDoubleBlock extends FramedBlock
             }
         }
         return getSoundType(state);
+    }
+
+    @Override
+    @SuppressWarnings("deprecation")
+    public IFormattableTextComponent printCamoBlock(CompoundNBT beTag)
+    {
+        BlockState camoState = NBTUtil.readBlockState(beTag.getCompound("camo_state"));
+        BlockState camoStateTwo = NBTUtil.readBlockState(beTag.getCompound("camo_state_two"));
+
+        IFormattableTextComponent component = camoState.isAir() ? FramedBlueprintItem.BLOCK_NONE : camoState.getBlock().getTranslatedName().mergeStyle(TextFormatting.WHITE);
+        component = component.deepCopy().appendSibling(new StringTextComponent(" | ").mergeStyle(TextFormatting.GOLD));
+        component.appendSibling(camoStateTwo.isAir() ? FramedBlueprintItem.BLOCK_NONE : camoStateTwo.getBlock().getTranslatedName().mergeStyle(TextFormatting.WHITE));
+
+        return component;
     }
 }

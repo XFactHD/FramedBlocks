@@ -24,6 +24,7 @@ import xfacthd.framedblocks.client.render.FramedChestRenderer;
 import xfacthd.framedblocks.client.render.FramedSignRenderer;
 import xfacthd.framedblocks.client.screen.FramedChestScreen;
 import xfacthd.framedblocks.client.screen.FramedSignScreen;
+import xfacthd.framedblocks.client.util.BlueprintPropertyOverride;
 import xfacthd.framedblocks.common.FBContent;
 import xfacthd.framedblocks.common.block.IFramedBlock;
 import xfacthd.framedblocks.common.tileentity.*;
@@ -53,7 +54,12 @@ public class FBClient
         ClientRegistry.bindTileEntityRenderer(FBContent.tileTypeFramedSign.get(), FramedSignRenderer::new);
         ClientRegistry.bindTileEntityRenderer(FBContent.tileTypeFramedChest.get(), FramedChestRenderer::new);
 
-        event.enqueueWork(() -> ScreenManager.registerFactory(FBContent.containerTypeFramedChest.get(), FramedChestScreen::new));
+        event.enqueueWork(() ->
+        {
+            ScreenManager.registerFactory(FBContent.containerTypeFramedChest.get(), FramedChestScreen::new);
+
+            BlueprintPropertyOverride.register();
+        });
     }
 
     @SubscribeEvent

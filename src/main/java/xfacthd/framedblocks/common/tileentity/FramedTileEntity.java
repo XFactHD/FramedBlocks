@@ -370,7 +370,7 @@ public class FramedTileEntity extends TileEntity
         world.getChunkProvider().getLightManager().checkBlock(pos);
     }
 
-    protected final IFramedBlock getBlock() { return (IFramedBlock) getBlockState().getBlock(); }
+    public final IFramedBlock getBlock() { return (IFramedBlock) getBlockState().getBlock(); }
 
     /*
      * Sync
@@ -473,6 +473,8 @@ public class FramedTileEntity extends TileEntity
     /*
      * NBT stuff
      */
+
+    public CompoundNBT writeToBlueprint() { return write(new CompoundNBT()); }
 
     @Override
     public CompoundNBT write(CompoundNBT nbt)

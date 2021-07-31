@@ -138,6 +138,9 @@ public class FramedChestTileEntity extends FramedTileEntity implements INamedCon
 
 
 
+    @Override //Prevent writing inventory contents
+    public CompoundNBT writeToBlueprint() { return super.write(new CompoundNBT()); }
+
     @Override
     public CompoundNBT write(CompoundNBT nbt)
     {

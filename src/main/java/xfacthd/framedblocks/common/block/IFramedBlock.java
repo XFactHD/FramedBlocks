@@ -8,17 +8,22 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.*;
 import net.minecraft.loot.LootContext;
 import net.minecraft.loot.LootParameters;
+import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.nbt.NBTUtil;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.*;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.BlockRayTraceResult;
 import net.minecraft.util.math.vector.Vector3d;
+import net.minecraft.util.text.IFormattableTextComponent;
+import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.*;
 import net.minecraftforge.common.ToolType;
 import team.chisel.ctm.api.IFacade;
 import xfacthd.framedblocks.FramedBlocks;
 import xfacthd.framedblocks.client.util.ClientConfig;
 import xfacthd.framedblocks.common.data.BlockType;
+import xfacthd.framedblocks.common.item.FramedBlueprintItem;
 import xfacthd.framedblocks.common.tileentity.FramedDoubleTileEntity;
 import xfacthd.framedblocks.common.tileentity.FramedTileEntity;
 import xfacthd.framedblocks.common.util.*;
@@ -217,5 +222,11 @@ public interface IFramedBlock extends IFacade
             }
         }
         return 20;
+    }
+
+    default IFormattableTextComponent printCamoBlock(CompoundNBT beTag)
+    {
+        BlockState camoState = NBTUtil.readBlockState(beTag.getCompound("camo_state"));
+        return camoState.isAir() ? FramedBlueprintItem.BLOCK_NONE : camoState.getBlock().getTranslatedName().mergeStyle(TextFormatting.WHITE);
     }
 }
