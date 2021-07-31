@@ -1,6 +1,7 @@
 package xfacthd.framedblocks.common.util;
 
 import net.minecraft.block.BlockState;
+import net.minecraft.tags.BlockTags;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.Direction;
 import net.minecraft.util.math.BlockPos;
@@ -72,7 +73,7 @@ public interface SideSkipPredicate
         if (te instanceof FramedTileEntity)
         {
             BlockState state = ((FramedTileEntity) te).getCamoState(side);
-            return state == adjState || (state.isOpaqueCube(world, pos) && adjState.isOpaqueCube(world, pos.offset(side)));
+            return (state == adjState && !state.isIn(BlockTags.LEAVES)) || (state.isOpaqueCube(world, pos) && adjState.isOpaqueCube(world, pos.offset(side)));
         }
 
         return false;
