@@ -1,5 +1,6 @@
 package xfacthd.framedblocks.common.util;
 
+import net.minecraft.tags.BlockTags;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.core.Direction;
 import net.minecraft.core.BlockPos;
@@ -26,7 +27,6 @@ public interface SideSkipPredicate
             }
         }
 
-        //noinspection deprecation
         if (adjState.isAir()) { return false; }
 
         if (!((IFramedBlock) state.getBlock()).getCtmPredicate().test(state, side)) { return false; }
@@ -67,7 +67,7 @@ public interface SideSkipPredicate
         if (world.getBlockEntity(pos) instanceof FramedTileEntity te)
         {
             BlockState state = te.getCamoState(side);
-            return state == adjState || (state.isSolidRender(world, pos) && adjState.isSolidRender(world, pos.relative(side)));
+            return (state == adjState && !state.is(BlockTags.LEAVES)) || (state.isSolidRender(world, pos) && adjState.isSolidRender(world, pos.relative(side)));
         }
 
         return false;
