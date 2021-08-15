@@ -64,6 +64,7 @@ public class FluidDummyModel implements BakedModel
 
 
 
+    //FIXME: quad modifications break on these quads (maybe look into generating these in a custom loader)
     private void buildQuads(Function<ResourceLocation, TextureAtlasSprite> spriteGetter)
     {
         TextureAtlasSprite stillSprite = spriteGetter.apply(fluid.getAttributes().getStillTexture());
@@ -88,8 +89,8 @@ public class FluidDummyModel implements BakedModel
                 float x;
                 float y;
                 float z;
-                float u = vert >= 2 ? 1F : 0F;
-                float v = (vert == 0 || vert == 3) ? 0F : 1F;
+                float u = vert >= 2 ? .5F : 0F;
+                float v = (vert == 0 || vert == 3) ? 0F : .5F;
 
                 if (isY)
                 {
@@ -121,7 +122,7 @@ public class FluidDummyModel implements BakedModel
                         new Vector4f(x, y, z, 1F),
                         new Vec2(u, v),
                         dir.step(),
-                        new Vector4f(1F, 1F, 1F, 1F),
+                        fluid.getAttributes().getColor(),
                         new Vec2(0xF0, 0xF0),
                         sprite
                 );
@@ -134,7 +135,7 @@ public class FluidDummyModel implements BakedModel
     }
 
     /** Copied from { @link net.minecraftforge.client.model.obj.OBJModel } */
-    private void putVertexData(IVertexConsumer consumer, Vector4f pos, Vec2 tex, Vector3f normal, Vector4f color, Vec2 light, TextureAtlasSprite texture)
+    private void putVertexData(IVertexConsumer consumer, Vector4f pos, Vec2 tex, Vector3f normal, int color, Vec2 light, TextureAtlasSprite texture)
     {
         ImmutableList<VertexFormatElement> elements = consumer.getVertexFormat().getElements();
         for(int elem = 0; elem < elements.size(); elem++)
@@ -143,8 +144,17 @@ public class FluidDummyModel implements BakedModel
             switch (e.getUsage())
             {
                 case POSITION -> consumer.put(elem, pos.x(), pos.y(), pos.z(), pos.w());
-                case COLOR -> consumer.put(elem, color.x(), color.y(), color.z(), color.w());
-                case UV -> {
+                case COLOR ->
+                {
+                    float r = ((color >> 16) & 0xFF) / 255F;
+                    float g = ((color >>  8) & 0xFF) / 255F;
+                    float b = ( color        & 0xFF) / 255F;
+                    float a = ((color >> 24) & 0xFF) / 255F;
+
+                    consumer.put(elem, r, g, b, a);
+                }
+                case UV ->
+                {
                     switch (e.getIndex())
                     {
                         case 0 -> consumer.put(elem, texture.getU(tex.x * 16), texture.getV(tex.y * 16));
