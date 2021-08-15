@@ -53,14 +53,14 @@ public class FramedPrismCornerBlock extends FramedThreewayCornerBlock
 
     @Override
     @SuppressWarnings("deprecation")
-    public void attack(BlockState state, Level world, BlockPos pos, Player player)
+    public void attack(BlockState state, Level level, BlockPos pos, Player player)
     {
-        if (world.isClientSide()) { return; }
+        if (level.isClientSide()) { return; }
 
         ItemStack stack = player.getMainHandItem();
         if (stack.getItem() == FBContent.itemFramedHammer.get())
         {
-            world.setBlockAndUpdate(pos, state.setValue(PropertyHolder.OFFSET, !state.getValue(PropertyHolder.OFFSET)));
+            level.setBlockAndUpdate(pos, state.setValue(PropertyHolder.OFFSET, !state.getValue(PropertyHolder.OFFSET)));
         }
     }
 

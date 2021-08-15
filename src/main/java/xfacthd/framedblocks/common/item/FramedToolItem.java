@@ -16,7 +16,7 @@ public class FramedToolItem extends Item
     {
         super(new Properties()
                 .stacksTo(1)
-                .tab(FramedBlocks.FRAMED_GROUP)
+                .tab(FramedBlocks.FRAMED_TAB)
         );
         this.type = type;
     }
@@ -28,7 +28,7 @@ public class FramedToolItem extends Item
     public ItemStack getContainerItem(ItemStack stack) { return stack.copy(); }
 
     @Override
-    public boolean doesSneakBypassUse(ItemStack stack, LevelReader world, BlockPos pos, Player player) { return true; }
+    public boolean doesSneakBypassUse(ItemStack stack, LevelReader level, BlockPos pos, Player player) { return true; }
 
     public FramedToolType getType() { return type; }
 }

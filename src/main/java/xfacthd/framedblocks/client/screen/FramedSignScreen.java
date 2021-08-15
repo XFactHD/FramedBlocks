@@ -32,7 +32,7 @@ import xfacthd.framedblocks.FramedBlocks;
 import xfacthd.framedblocks.common.FBContent;
 import xfacthd.framedblocks.common.data.PropertyHolder;
 import xfacthd.framedblocks.common.net.SignUpdatePacket;
-import xfacthd.framedblocks.common.tileentity.FramedSignTileEntity;
+import xfacthd.framedblocks.common.blockentity.FramedSignBlockEntity;
 
 import java.util.List;
 
@@ -44,13 +44,13 @@ public class FramedSignScreen extends Screen
     private static final ResourceLocation DEFAULT_TEXTURE = new ResourceLocation(FramedBlocks.MODID, "block/framed_block");
     private static final Component DONE = new TranslatableComponent("gui.done");
 
-    private final FramedSignTileEntity sign;
+    private final FramedSignBlockEntity sign;
     private final String[] lines = new String[4];
     private int blinkCounter = 0;
     private int currLine = 0;
     private TextFieldHelper inputUtil;
 
-    public FramedSignScreen(FramedSignTileEntity sign)
+    public FramedSignScreen(FramedSignBlockEntity sign)
     {
         super(new TranslatableComponent("sign.edit"));
         this.sign = sign;

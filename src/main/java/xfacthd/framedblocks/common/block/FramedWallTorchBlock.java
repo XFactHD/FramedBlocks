@@ -17,7 +17,7 @@ import net.minecraft.world.level.material.Material;
 import net.minecraft.world.level.storage.loot.LootContext;
 import net.minecraft.world.phys.BlockHitResult;
 import xfacthd.framedblocks.common.data.BlockType;
-import xfacthd.framedblocks.common.tileentity.FramedTileEntity;
+import xfacthd.framedblocks.common.blockentity.FramedBlockEntity;
 
 import java.util.List;
 
@@ -39,18 +39,18 @@ public class FramedWallTorchBlock extends WallTorchBlock implements IFramedBlock
     public FramedWallTorchBlock(Properties props, ParticleOptions particle) { super(props, particle); }
 
     @Override
-    public final InteractionResult use(BlockState state, Level world, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hit)
+    public final InteractionResult use(BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hit)
     {
-        return handleUse(world, pos, player, hand, hit);
+        return handleUse(level, pos, player, hand, hit);
     }
 
     @Override
-    public int getLightEmission(BlockState state, BlockGetter world, BlockPos pos) { return getLight(world, pos); }
+    public int getLightEmission(BlockState state, BlockGetter level, BlockPos pos) { return getLight(level, pos); }
 
     @Override
-    public SoundType getSoundType(BlockState state, LevelReader world, BlockPos pos, Entity entity)
+    public SoundType getSoundType(BlockState state, LevelReader level, BlockPos pos, Entity entity)
     {
-        return getCamoSound(state, world, pos);
+        return getCamoSound(state, level, pos);
     }
 
     @Override
@@ -60,7 +60,7 @@ public class FramedWallTorchBlock extends WallTorchBlock implements IFramedBlock
     }
 
     @Override
-    public final BlockEntity newBlockEntity(BlockPos pos, BlockState state) { return new FramedTileEntity(pos, state); }
+    public final BlockEntity newBlockEntity(BlockPos pos, BlockState state) { return new FramedBlockEntity(pos, state); }
 
     @Override
     public BlockType getBlockType() { return BlockType.FRAMED_WALL_TORCH; }

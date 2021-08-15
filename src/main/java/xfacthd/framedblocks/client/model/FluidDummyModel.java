@@ -71,17 +71,17 @@ public class FluidDummyModel implements BakedModel
 
         for (Direction dir : Direction.values())
         {
-            BakedQuadBuilder builder = new BakedQuadBuilder();
-            builder.setQuadOrientation(dir);
-            builder.setQuadTint(1);
-
-            TextureAtlasSprite sprite = dir.getAxis() == Direction.Axis.Y ? stillSprite : flowingSprite;
-            builder.setTexture(sprite);
-
             boolean isX = dir.getAxis() == Direction.Axis.X;
             boolean isY = dir.getAxis() == Direction.Axis.Y;
             boolean isZ = dir.getAxis() == Direction.Axis.Z;
             boolean isPos = dir.getAxisDirection() == Direction.AxisDirection.POSITIVE;
+
+            BakedQuadBuilder builder = new BakedQuadBuilder();
+            builder.setQuadOrientation(dir);
+            builder.setQuadTint(1);
+
+            TextureAtlasSprite sprite = isY ? stillSprite : flowingSprite;
+            builder.setTexture(sprite);
 
             for (int vert = 0; vert < 4; vert++)
             {
@@ -147,10 +147,7 @@ public class FluidDummyModel implements BakedModel
                 case UV -> {
                     switch (e.getIndex())
                     {
-                        case 0 -> consumer.put(elem,
-                                texture.getU(tex.x * 16),
-                                texture.getV(tex.y * 16)
-                        );
+                        case 0 -> consumer.put(elem, texture.getU(tex.x * 16), texture.getV(tex.y * 16));
                         case 2 -> consumer.put(elem, light.x, light.y);
                         default -> consumer.put(elem);
                     }

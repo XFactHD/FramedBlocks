@@ -11,8 +11,8 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import xfacthd.framedblocks.common.data.BlockType;
 import xfacthd.framedblocks.common.data.PropertyHolder;
-import xfacthd.framedblocks.common.tileentity.FramedDoubleThreewayCornerTileEntity;
-import xfacthd.framedblocks.common.tileentity.FramedDoubleTileEntity;
+import xfacthd.framedblocks.common.blockentity.FramedDoubleThreewayCornerBlockEntity;
+import xfacthd.framedblocks.common.blockentity.FramedDoubleBlockEntity;
 import xfacthd.framedblocks.common.util.CtmPredicate;
 
 public class FramedDoubleThreewayCornerBlock extends AbstractFramedDoubleBlock
@@ -47,18 +47,18 @@ public class FramedDoubleThreewayCornerBlock extends AbstractFramedDoubleBlock
 
     @Override
     @SuppressWarnings("deprecation")
-    public SoundType getCamoSound(BlockState state, LevelReader world, BlockPos pos)
+    public SoundType getCamoSound(BlockState state, LevelReader level, BlockPos pos)
     {
         boolean top = state.getValue(PropertyHolder.TOP);
-        if (world.getBlockEntity(pos) instanceof FramedDoubleTileEntity dte)
+        if (level.getBlockEntity(pos) instanceof FramedDoubleBlockEntity dbe)
         {
-            BlockState camoState = top ? dte.getCamoState() : dte.getCamoStateTwo();
+            BlockState camoState = top ? dbe.getCamoState() : dbe.getCamoStateTwo();
             if (!camoState.isAir())
             {
                 return camoState.getSoundType();
             }
 
-            camoState = top ? dte.getCamoStateTwo() : dte.getCamoState();
+            camoState = top ? dbe.getCamoStateTwo() : dbe.getCamoState();
             if (!camoState.isAir())
             {
                 return camoState.getSoundType();
@@ -70,6 +70,6 @@ public class FramedDoubleThreewayCornerBlock extends AbstractFramedDoubleBlock
     @Override
     public final BlockEntity newBlockEntity(BlockPos pos, BlockState state)
     {
-        return new FramedDoubleThreewayCornerTileEntity(pos, state);
+        return new FramedDoubleThreewayCornerBlockEntity(pos, state);
     }
 }

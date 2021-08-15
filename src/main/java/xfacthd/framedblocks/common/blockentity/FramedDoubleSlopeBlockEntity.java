@@ -1,4 +1,4 @@
-package xfacthd.framedblocks.common.tileentity;
+package xfacthd.framedblocks.common.blockentity;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.block.state.BlockState;
@@ -11,11 +11,11 @@ import xfacthd.framedblocks.common.data.PropertyHolder;
 import xfacthd.framedblocks.common.data.SlopeType;
 import xfacthd.framedblocks.common.util.Utils;
 
-public class FramedDoubleSlopeTileEntity extends FramedDoubleTileEntity
+public class FramedDoubleSlopeBlockEntity extends FramedDoubleBlockEntity
 {
-    public FramedDoubleSlopeTileEntity(BlockPos pos, BlockState state)
+    public FramedDoubleSlopeBlockEntity(BlockPos pos, BlockState state)
     {
-        super(FBContent.tileTypeDoubleFramedSlope.get(), pos, state);
+        super(FBContent.blockEntityTypeDoubleFramedSlope.get(), pos, state);
     }
 
     @Override

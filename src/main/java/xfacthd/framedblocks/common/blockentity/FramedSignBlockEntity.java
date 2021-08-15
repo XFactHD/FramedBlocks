@@ -1,4 +1,4 @@
-package xfacthd.framedblocks.common.tileentity;
+package xfacthd.framedblocks.common.blockentity;
 
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import net.minecraft.commands.CommandSource;
@@ -19,16 +19,16 @@ import xfacthd.framedblocks.common.FBContent;
 
 import java.util.function.Function;
 
-public class FramedSignTileEntity extends FramedTileEntity
+public class FramedSignBlockEntity extends FramedBlockEntity
 {
     private final Component[] lines = new Component[4];
     private final FormattedCharSequence[] renderLines = new FormattedCharSequence[4];
     private DyeColor textColor = DyeColor.BLACK;
     private Player editingPlayer;
 
-    public FramedSignTileEntity(BlockPos pos, BlockState state)
+    public FramedSignBlockEntity(BlockPos pos, BlockState state)
     {
-        super(FBContent.tileTypeFramedSign.get(), pos, state);
+        super(FBContent.blockEntityTypeFramedSign.get(), pos, state);
         for (int i = 0; i < 4; i++) { lines[i] = new TextComponent(""); }
     }
 

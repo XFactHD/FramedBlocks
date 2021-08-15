@@ -24,7 +24,7 @@ import xfacthd.framedblocks.client.util.FramedBlockData;
 import xfacthd.framedblocks.common.FBContent;
 import xfacthd.framedblocks.common.block.IFramedBlock;
 import xfacthd.framedblocks.common.data.BlockType;
-import xfacthd.framedblocks.common.tileentity.FramedTileEntity;
+import xfacthd.framedblocks.common.blockentity.FramedBlockEntity;
 
 import javax.annotation.Nonnull;
 import java.util.*;
@@ -56,17 +56,14 @@ public abstract class FramedBlockModel extends BakedModelProxy
         if (extraData instanceof FramedBlockData data && layer != null)
         {
             if (side != null && ((IFramedBlock)state.getBlock()).isSideHidden(
-                    data.getWorld(),
+                    data.getLevel(),
                     data.getPos(),
                     state,
                     side
             )) { return Collections.emptyList(); }
 
             camoState = data.getCamoState();
-            boolean canRender = camoState != null && camoState.getBlock() instanceof LiquidBlock ?
-                    ItemBlockRenderTypes.canRenderInLayer(camoState.getFluidState(), layer) :
-                    camoState != null && ItemBlockRenderTypes.canRenderInLayer(camoState, layer);
-            if (camoState != null && !camoState.isAir() && canRender)
+            if (camoState != null && !camoState.isAir() && canRenderInLayer(camoState, layer))
             {
                 return getCamoQuads(state, camoState, side, rand, extraData, layer);
             }
@@ -149,9 +146,9 @@ public abstract class FramedBlockModel extends BakedModelProxy
     @Override
     public IModelData getModelData(@Nonnull BlockAndTintGetter world, @Nonnull BlockPos pos, @Nonnull BlockState state, @Nonnull IModelData tileData)
     {
-        if (world.getBlockEntity(pos) instanceof FramedTileEntity te)
+        if (world.getBlockEntity(pos) instanceof FramedBlockEntity be)
         {
-            return te.getModelData();
+            return be.getModelData();
         }
         return tileData;
     }
@@ -189,12 +186,12 @@ public abstract class FramedBlockModel extends BakedModelProxy
 
     private static IModelData getCamoData(BakedModel model, BlockState state, IModelData data)
     {
-        Level world = data.getData(FramedBlockData.WORLD);
+        Level level = data.getData(FramedBlockData.LEVEL);
         BlockPos pos = data.getData(FramedBlockData.POS);
 
-        if (world == null || pos == null || pos.equals(BlockPos.ZERO)) { return data; }
+        if (level == null || pos == null || pos.equals(BlockPos.ZERO)) { return data; }
 
-        return model.getModelData(world, pos, state, data);
+        return model.getModelData(level, pos, state, data);
     }
 
     protected static List<BakedQuad> getAllQuads(BakedModel model, BlockState state, Random rand, IModelData data)
@@ -206,5 +203,16 @@ public abstract class FramedBlockModel extends BakedModelProxy
             else { quads.addAll(model.getQuads(state, dir, rand, data)); } //For debug purposes when creating new models
         }
         return quads;
+    }
+
+    private boolean canRenderInLayer(BlockState camoState, RenderType layer)
+    {
+        if (camoState == null) { return false; }
+
+        if (camoState.getBlock() instanceof LiquidBlock)
+        {
+            return ItemBlockRenderTypes.canRenderInLayer(camoState.getFluidState(), layer);
+        }
+        return ItemBlockRenderTypes.canRenderInLayer(camoState, layer);
     }
 }

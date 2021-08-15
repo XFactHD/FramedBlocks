@@ -34,7 +34,7 @@ public class FramedWallSignBlock extends AbstractFramedSignBlock
     public BlockState getStateForPlacement(BlockPlaceContext context)
     {
         BlockState state = defaultBlockState();
-        LevelReader world = context.getLevel();
+        LevelReader level = context.getLevel();
         BlockPos pos = context.getClickedPos();
         Direction[] dirs = context.getNearestLookingDirections();
 
@@ -44,9 +44,9 @@ public class FramedWallSignBlock extends AbstractFramedSignBlock
             {
                 Direction dir = direction.getOpposite();
                 state = state.setValue(PropertyHolder.FACING_HOR, dir);
-                if (state.canSurvive(world, pos))
+                if (state.canSurvive(level, pos))
                 {
-                    return withWater(state, world, pos);
+                    return withWater(state, level, pos);
                 }
             }
         }
@@ -55,20 +55,20 @@ public class FramedWallSignBlock extends AbstractFramedSignBlock
     }
 
     @Override
-    public BlockState updateShape(BlockState state, Direction facing, BlockState facingState, LevelAccessor world, BlockPos pos, BlockPos facingPos)
+    public BlockState updateShape(BlockState state, Direction facing, BlockState facingState, LevelAccessor level, BlockPos pos, BlockPos facingPos)
     {
-        if (facing.getOpposite() == state.getValue(PropertyHolder.FACING_HOR) && !state.canSurvive(world, pos))
+        if (facing.getOpposite() == state.getValue(PropertyHolder.FACING_HOR) && !state.canSurvive(level, pos))
         {
             return Blocks.AIR.defaultBlockState();
         }
-        return super.updateShape(state, facing, facingState, world, pos, facingPos);
+        return super.updateShape(state, facing, facingState, level, pos, facingPos);
     }
 
     @Override
-    public boolean canSurvive(BlockState state, LevelReader world, BlockPos pos)
+    public boolean canSurvive(BlockState state, LevelReader level, BlockPos pos)
     {
         Direction dir = state.getValue(PropertyHolder.FACING_HOR).getOpposite();
-        return world.getBlockState(pos.relative(dir)).getMaterial().isSolid();
+        return level.getBlockState(pos.relative(dir)).getMaterial().isSolid();
     }
 
     public static ImmutableMap<BlockState, VoxelShape> generateShapes(ImmutableList<BlockState> states)

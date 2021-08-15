@@ -21,11 +21,11 @@ import xfacthd.framedblocks.common.util.SideSkipPredicate;
 
 public class FramedLatticeBlock extends FramedBlock
 {
-    public static final SideSkipPredicate SKIP_PREDICATE = (world, pos, state, adjState, side) ->
+    public static final SideSkipPredicate SKIP_PREDICATE = (level, pos, state, adjState, side) ->
     {
         if (adjState.getBlock() == FBContent.blockFramedLattice.get())
         {
-            return SideSkipPredicate.compareState(world, pos, side);
+            return SideSkipPredicate.compareState(level, pos, side);
         }
         return false;
     };
@@ -49,25 +49,25 @@ public class FramedLatticeBlock extends FramedBlock
     @Override
     public BlockState getStateForPlacement(BlockPlaceContext context)
     {
-        Level world = context.getLevel();
+        Level level = context.getLevel();
         BlockPos pos = context.getClickedPos();
 
         BlockState state = defaultBlockState();
-        state = state.setValue(PropertyHolder.X_AXIS, world.getBlockState(pos.east()).is(this) || world.getBlockState(pos.west()).is(this));
-        state = state.setValue(PropertyHolder.Y_AXIS, world.getBlockState(pos.above()).is(this) || world.getBlockState(pos.below()).is(this));
-        state = state.setValue(PropertyHolder.Z_AXIS, world.getBlockState(pos.north()).is(this) || world.getBlockState(pos.south()).is(this));
+        state = state.setValue(PropertyHolder.X_AXIS, level.getBlockState(pos.east()).is(this) || level.getBlockState(pos.west()).is(this));
+        state = state.setValue(PropertyHolder.Y_AXIS, level.getBlockState(pos.above()).is(this) || level.getBlockState(pos.below()).is(this));
+        state = state.setValue(PropertyHolder.Z_AXIS, level.getBlockState(pos.north()).is(this) || level.getBlockState(pos.south()).is(this));
         return state;
     }
 
     @Override
-    public BlockState updateShape(BlockState state, Direction facing, BlockState facingState, LevelAccessor world, BlockPos pos, BlockPos facingPos)
+    public BlockState updateShape(BlockState state, Direction facing, BlockState facingState, LevelAccessor level, BlockPos pos, BlockPos facingPos)
     {
         state = state.setValue(
                 getPropFromAxis(facing),
-                facingState.is(this) || world.getBlockState(pos.relative(facing.getOpposite())).is(this)
+                facingState.is(this) || level.getBlockState(pos.relative(facing.getOpposite())).is(this)
         );
 
-        return super.updateShape(state, facing, facingState, world, pos, facingPos);
+        return super.updateShape(state, facing, facingState, level, pos, facingPos);
     }
 
     public static ImmutableMap<BlockState, VoxelShape> generateShapes(ImmutableList<BlockState> states)

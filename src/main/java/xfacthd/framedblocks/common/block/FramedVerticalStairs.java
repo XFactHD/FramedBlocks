@@ -48,20 +48,20 @@ public class FramedVerticalStairs extends FramedBlock
     }
 
     @Override
-    public BlockState updateShape(BlockState state, Direction facing, BlockState facingState, LevelAccessor world, BlockPos pos, BlockPos facingPos)
+    public BlockState updateShape(BlockState state, Direction facing, BlockState facingState, LevelAccessor level, BlockPos pos, BlockPos facingPos)
     {
         Direction dir = state.getValue(PropertyHolder.FACING_HOR);
         if (facing == dir.getOpposite() || facing == dir.getClockWise()) { return state; }
 
-        return getStateFromContext(state, world, pos);
+        return getStateFromContext(state, level, pos);
     }
 
-    private BlockState getStateFromContext(BlockState state, LevelAccessor world, BlockPos pos)
+    private BlockState getStateFromContext(BlockState state, LevelAccessor level, BlockPos pos)
     {
         Direction dir = state.getValue(PropertyHolder.FACING_HOR);
 
-        BlockState front = world.getBlockState(pos.relative(dir));
-        BlockState left = world.getBlockState(pos.relative(dir.getCounterClockWise()));
+        BlockState front = level.getBlockState(pos.relative(dir));
+        BlockState left = level.getBlockState(pos.relative(dir.getCounterClockWise()));
 
         if (!(front.getBlock() instanceof StairBlock) && !(left.getBlock() instanceof StairBlock))
         {
@@ -86,8 +86,8 @@ public class FramedVerticalStairs extends FramedBlock
                 bottomCorner |= left.getValue(BlockStateProperties.HALF) == Half.TOP;
             }
 
-            BlockState above = world.getBlockState(pos.above());
-            BlockState below = world.getBlockState(pos.below());
+            BlockState above = level.getBlockState(pos.above());
+            BlockState below = level.getBlockState(pos.below());
 
             if (topCorner && !above.is(this)) { type = StairsType.TOP_CORNER; }
             else if (bottomCorner && !below.is(this)) { type = StairsType.BOTTOM_CORNER; }

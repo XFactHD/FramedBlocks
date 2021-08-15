@@ -1,4 +1,4 @@
-package xfacthd.framedblocks.common.container;
+package xfacthd.framedblocks.common.menu;
 
 import com.google.common.base.Preconditions;
 import net.minecraft.world.entity.player.Player;
@@ -11,18 +11,18 @@ import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.SlotItemHandler;
 import xfacthd.framedblocks.common.FBContent;
-import xfacthd.framedblocks.common.tileentity.FramedChestTileEntity;
+import xfacthd.framedblocks.common.blockentity.FramedChestBlockEntity;
 
-public class FramedChestContainer extends AbstractContainerMenu
+public class FramedChestMenu extends AbstractContainerMenu
 {
-    private final FramedChestTileEntity chest;
+    private final FramedChestBlockEntity chest;
 
-    public FramedChestContainer(int windowId, Inventory inv, BlockEntity chest)
+    public FramedChestMenu(int windowId, Inventory inv, BlockEntity chest)
     {
-        super(FBContent.containerTypeFramedChest.get(), windowId);
+        super(FBContent.menuTypeFramedChest.get(), windowId);
 
-        Preconditions.checkArgument(chest instanceof FramedChestTileEntity);
-        this.chest = (FramedChestTileEntity) chest;
+        Preconditions.checkArgument(chest instanceof FramedChestBlockEntity);
+        this.chest = (FramedChestBlockEntity) chest;
 
         this.chest.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY).ifPresent(handler ->
         {
@@ -49,7 +49,7 @@ public class FramedChestContainer extends AbstractContainerMenu
         }
     }
 
-    public FramedChestContainer(int windowId, Inventory inv, FriendlyByteBuf extraData)
+    public FramedChestMenu(int windowId, Inventory inv, FriendlyByteBuf extraData)
     {
         this(windowId, inv, inv.player.level.getBlockEntity(extraData.readBlockPos()));
     }

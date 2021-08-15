@@ -18,7 +18,7 @@ import net.minecraft.world.level.block.state.properties.DoorHingeSide;
 import net.minecraft.world.level.storage.loot.LootContext;
 import net.minecraft.world.phys.BlockHitResult;
 import xfacthd.framedblocks.common.data.BlockType;
-import xfacthd.framedblocks.common.tileentity.FramedTileEntity;
+import xfacthd.framedblocks.common.blockentity.FramedBlockEntity;
 import xfacthd.framedblocks.common.util.CtmPredicate;
 
 import javax.annotation.Nullable;
@@ -53,37 +53,37 @@ public class FramedDoorBlock extends DoorBlock implements IFramedBlock
     }
 
     @Override
-    public final InteractionResult use(BlockState state, Level world, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hit)
+    public final InteractionResult use(BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hit)
     {
-        InteractionResult result = handleUse(world, pos, player, hand, hit);
+        InteractionResult result = handleUse(level, pos, player, hand, hit);
         if (result.consumesAction()) { return result; }
 
-        return super.use(state, world, pos, player, hand, hit);
+        return super.use(state, level, pos, player, hand, hit);
     }
 
     @Override
-    public void setPlacedBy(Level world, BlockPos pos, BlockState state, @Nullable LivingEntity placer, ItemStack stack)
+    public void setPlacedBy(Level level, BlockPos pos, BlockState state, @Nullable LivingEntity placer, ItemStack stack)
     {
         //noinspection ConstantConditions
-        super.setPlacedBy(world, pos, state, placer, stack);
+        super.setPlacedBy(level, pos, state, placer, stack);
 
-        tryApplyCamoImmediately(world, pos, placer, stack);
-        tryApplyCamoImmediately(world, pos.above(), placer, stack); //Apply to upper half as well
+        tryApplyCamoImmediately(level, pos, placer, stack);
+        tryApplyCamoImmediately(level, pos.above(), placer, stack); //Apply to upper half as well
     }
 
     @Override
-    public int getLightEmission(BlockState state, BlockGetter world, BlockPos pos) { return getLight(world, pos); }
+    public int getLightEmission(BlockState state, BlockGetter level, BlockPos pos) { return getLight(level, pos); }
 
     @Override
-    public SoundType getSoundType(BlockState state, LevelReader world, BlockPos pos, Entity entity)
+    public SoundType getSoundType(BlockState state, LevelReader level, BlockPos pos, Entity entity)
     {
-        return getCamoSound(state, world, pos);
+        return getCamoSound(state, level, pos);
     }
 
     @Override
-    public float getExplosionResistance(BlockState state, BlockGetter world, BlockPos pos, Explosion explosion)
+    public float getExplosionResistance(BlockState state, BlockGetter level, BlockPos pos, Explosion explosion)
     {
-        return getCamoBlastResistance(state, world, pos, explosion);
+        return getCamoExplosionResistance(state, level, pos, explosion);
     }
 
     @Override
@@ -93,13 +93,13 @@ public class FramedDoorBlock extends DoorBlock implements IFramedBlock
     }
 
     @Override
-    public float getFriction(BlockState state, LevelReader world, BlockPos pos, @Nullable Entity entity)
+    public float getFriction(BlockState state, LevelReader level, BlockPos pos, @Nullable Entity entity)
     {
-        return getCamoSlipperiness(state, world, pos, entity);
+        return getCamoSlipperiness(state, level, pos, entity);
     }
 
     @Override
-    public final BlockEntity newBlockEntity(BlockPos pos, BlockState state) { return new FramedTileEntity(pos, state); }
+    public final BlockEntity newBlockEntity(BlockPos pos, BlockState state) { return new FramedBlockEntity(pos, state); }
 
     @Override
     public BlockType getBlockType() { return BlockType.FRAMED_DOOR; }

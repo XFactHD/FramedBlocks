@@ -1,4 +1,4 @@
-package xfacthd.framedblocks.common.tileentity;
+package xfacthd.framedblocks.common.blockentity;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.block.state.BlockState;
@@ -13,7 +13,7 @@ import net.minecraft.world.level.Explosion;
 import net.minecraftforge.client.model.data.*;
 import xfacthd.framedblocks.client.util.FramedBlockData;
 
-public abstract class FramedDoubleTileEntity extends FramedTileEntity
+public abstract class FramedDoubleBlockEntity extends FramedBlockEntity
 {
     public static final ModelProperty<IModelData> DATA_LEFT = new ModelProperty<>();
     public static final ModelProperty<IModelData> DATA_RIGHT = new ModelProperty<>();
@@ -23,7 +23,7 @@ public abstract class FramedDoubleTileEntity extends FramedTileEntity
     protected ItemStack camoStack = ItemStack.EMPTY;
     protected BlockState camoState = Blocks.AIR.defaultBlockState();
 
-    public FramedDoubleTileEntity(BlockEntityType<?> type, BlockPos pos, BlockState state) { super(type, pos, state); }
+    public FramedDoubleBlockEntity(BlockEntityType<?> type, BlockPos pos, BlockState state) { super(type, pos, state); }
 
     @Override
     public void setCamo(ItemStack camoStack, BlockState camoState, boolean secondary)
@@ -84,7 +84,7 @@ public abstract class FramedDoubleTileEntity extends FramedTileEntity
     }
 
     @Override
-    public float getCamoBlastResistance(Explosion explosion)
+    public float getCamoExplosionResistance(Explosion explosion)
     {
         return Math.max(
                 getCamoState().getExplosionResistance(level, worldPosition, explosion),
@@ -145,7 +145,7 @@ public abstract class FramedDoubleTileEntity extends FramedTileEntity
         {
             camoState = newState;
 
-            modelData.setWorld(level);
+            modelData.setLevel(level);
             modelData.setPos(worldPosition);
             modelData.setCamoState(camoState);
 
@@ -178,7 +178,7 @@ public abstract class FramedDoubleTileEntity extends FramedTileEntity
         {
             camoState = newState;
 
-            modelData.setWorld(level);
+            modelData.setLevel(level);
             modelData.setPos(worldPosition);
             modelData.setCamoState(camoState);
         }

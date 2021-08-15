@@ -1,4 +1,4 @@
-package xfacthd.framedblocks.common.tileentity;
+package xfacthd.framedblocks.common.blockentity;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -18,7 +18,7 @@ import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.items.*;
 import xfacthd.framedblocks.common.FBContent;
-import xfacthd.framedblocks.common.container.FramedChestContainer;
+import xfacthd.framedblocks.common.menu.FramedChestMenu;
 import xfacthd.framedblocks.common.data.ChestState;
 import xfacthd.framedblocks.common.data.PropertyHolder;
 
@@ -26,7 +26,7 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.List;
 
-public class FramedChestTileEntity extends FramedTileEntity implements MenuProvider
+public class FramedChestBlockEntity extends FramedBlockEntity implements MenuProvider
 {
     public static final Component TITLE = new TranslatableComponent("title.framedblocks:framed_chest");
 
@@ -40,9 +40,9 @@ public class FramedChestTileEntity extends FramedTileEntity implements MenuProvi
     private long lastChangeTime = 0;
     private ChestState lastState = ChestState.CLOSED;
 
-    public FramedChestTileEntity(BlockPos pos, BlockState state) { super(FBContent.tileTypeFramedChest.get(), pos, state); }
+    public FramedChestBlockEntity(BlockPos pos, BlockState state) { super(FBContent.blockEntityTypeFramedChest.get(), pos, state); }
 
-    public static void tick(Level level, BlockPos pos, BlockState state, FramedChestTileEntity tile)
+    public static void tick(Level level, BlockPos pos, BlockState state, FramedChestBlockEntity tile)
     {
         if (!level.isClientSide() && (level.getGameTime() - tile.closeStart) >= 10 && state.getValue(PropertyHolder.CHEST_STATE) == ChestState.CLOSING)
         {
@@ -110,7 +110,7 @@ public class FramedChestTileEntity extends FramedTileEntity implements MenuProvi
     }
 
     @Override
-    protected void invalidateCaps()
+    public void invalidateCaps()
     {
         super.invalidateCaps();
         lazyItemHandler.invalidate();
@@ -165,6 +165,6 @@ public class FramedChestTileEntity extends FramedTileEntity implements MenuProvi
     @Override
     public AbstractContainerMenu createMenu(int windowId, Inventory inv, Player player)
     {
-        return new FramedChestContainer(windowId, inv, this);
+        return new FramedChestMenu(windowId, inv, this);
     }
 }

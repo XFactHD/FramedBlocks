@@ -38,7 +38,7 @@ public class FramedBlocks
             PROTOCOL_VERSION::equals
     );
 	
-    public static final CreativeModeTab FRAMED_GROUP = new CreativeModeTab("framed_blocks")
+    public static final CreativeModeTab FRAMED_TAB = new CreativeModeTab("framed_blocks")
     {
         @Override
         public ItemStack makeIcon() { return new ItemStack(FBContent.blockFramedCube.get()); }

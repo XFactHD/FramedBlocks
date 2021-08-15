@@ -3,7 +3,6 @@ package xfacthd.framedblocks.common.block;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.world.item.context.BlockPlaceContext;
-import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.SoundType;
@@ -12,7 +11,7 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.phys.Vec3;
 import xfacthd.framedblocks.common.data.*;
-import xfacthd.framedblocks.common.tileentity.*;
+import xfacthd.framedblocks.common.blockentity.*;
 import xfacthd.framedblocks.common.util.CtmPredicate;
 import xfacthd.framedblocks.common.util.Utils;
 
@@ -64,53 +63,23 @@ public class FramedDoubleCornerBlock extends AbstractFramedDoubleBlock
             }
         }
 
-        Direction facing = context.getHorizontalDirection();
-        state = state.setValue(PropertyHolder.FACING_HOR, facing);
-
-        if (side == Direction.DOWN)
-        {
-            state = state.setValue(PropertyHolder.CORNER_TYPE, CornerType.TOP);
-        }
-        else if (side == Direction.UP)
-        {
-            state = state.setValue(PropertyHolder.CORNER_TYPE, CornerType.BOTTOM);
-        }
-        else
-        {
-            boolean xAxis = context.getClickedFace().getAxis() == Direction.Axis.X;
-            boolean positive = context.getClickedFace().getCounterClockWise().getAxisDirection() == Direction.AxisDirection.POSITIVE;
-            double xz = xAxis ? hitPoint.z() : hitPoint.x();
-            double y = hitPoint.y();
-
-            CornerType type;
-            if ((xz > .5D) == positive)
-            {
-                type = (y > .5D) ? CornerType.HORIZONTAL_TOP_RIGHT : CornerType.HORIZONTAL_BOTTOM_RIGHT;
-            }
-            else
-            {
-                type = (y > .5D) ? CornerType.HORIZONTAL_TOP_LEFT : CornerType.HORIZONTAL_BOTTOM_LEFT;
-            }
-            state = state.setValue(PropertyHolder.CORNER_TYPE, type);
-        }
-
-        return state;
+        return withCornerType(state, context, side, hitPoint, context.getHorizontalDirection());
     }
 
     @Override
     @SuppressWarnings("deprecation")
-    public SoundType getCamoSound(BlockState state, LevelReader world, BlockPos pos)
+    public SoundType getCamoSound(BlockState state, LevelReader level, BlockPos pos)
     {
         CornerType type = state.getValue(PropertyHolder.CORNER_TYPE);
-        if (world.getBlockEntity(pos) instanceof FramedDoubleTileEntity dte)
+        if (level.getBlockEntity(pos) instanceof FramedDoubleBlockEntity dbe)
         {
-            BlockState camoState = (type.isHorizontal() || type.isTop()) ? dte.getCamoState() : dte.getCamoStateTwo();
+            BlockState camoState = (type.isHorizontal() || type.isTop()) ? dbe.getCamoState() : dbe.getCamoStateTwo();
             if (!camoState.isAir())
             {
                 return camoState.getSoundType();
             }
 
-            camoState = (type.isHorizontal() || type.isTop()) ? dte.getCamoStateTwo() : dte.getCamoState();
+            camoState = (type.isHorizontal() || type.isTop()) ? dbe.getCamoStateTwo() : dbe.getCamoState();
             if (!camoState.isAir())
             {
                 return camoState.getSoundType();
@@ -122,6 +91,6 @@ public class FramedDoubleCornerBlock extends AbstractFramedDoubleBlock
     @Override
     public final BlockEntity newBlockEntity(BlockPos pos, BlockState state)
     {
-        return new FramedDoubleCornerTileEntity(pos, state);
+        return new FramedDoubleCornerBlockEntity(pos, state);
     }
 }

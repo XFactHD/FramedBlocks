@@ -8,11 +8,11 @@ import net.minecraftforge.client.model.data.*;
 
 public class FramedBlockData extends ModelDataMap
 {
-    public static final ModelProperty<Level> WORLD = new ModelProperty<>();
+    public static final ModelProperty<Level> LEVEL = new ModelProperty<>();
     public static final ModelProperty<BlockPos> POS = new ModelProperty<>();
     public static final ModelProperty<BlockState> CAMO = new ModelProperty<>();
 
-    private Level world = null;
+    private Level level = null;
     private BlockPos pos = BlockPos.ZERO;
     private BlockState camoState = Blocks.AIR.defaultBlockState();
 
@@ -24,7 +24,7 @@ public class FramedBlockData extends ModelDataMap
     public <T> T getData(ModelProperty<T> prop)
     {
         if (prop == CAMO) { return (T)camoState; }
-        if (prop == WORLD) { return (T)world; }
+        if (prop == LEVEL) { return (T) level; }
         if (prop == POS) { return (T)pos; }
         return super.getData(prop);
     }
@@ -33,19 +33,19 @@ public class FramedBlockData extends ModelDataMap
     public <T> T setData(ModelProperty<T> prop, T data)
     {
         if (prop == CAMO) { camoState = (BlockState)data; }
-        else if (prop == WORLD) { world = (Level)data; }
+        else if (prop == LEVEL) { level = (Level)data; }
         else if (prop == POS) { pos = (BlockPos)data; }
         else { return super.setData(prop, data); }
         return data;
     }
 
-    public void setWorld(Level world) { this.world = world; }
+    public void setLevel(Level level) { this.level = level; }
 
     public void setPos(BlockPos pos) { this.pos = pos; }
 
     public void setCamoState(BlockState camoState) { this.camoState = camoState; }
 
-    public Level getWorld() { return world; }
+    public Level getLevel() { return level; }
 
     public BlockPos getPos() { return pos; }
 

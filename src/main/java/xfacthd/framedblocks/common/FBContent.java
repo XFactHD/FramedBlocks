@@ -16,12 +16,12 @@ import net.minecraftforge.fmllegacy.network.IContainerFactory;
 import net.minecraftforge.registries.*;
 import xfacthd.framedblocks.FramedBlocks;
 import xfacthd.framedblocks.common.block.*;
-import xfacthd.framedblocks.common.container.FramedChestContainer;
+import xfacthd.framedblocks.common.menu.FramedChestMenu;
 import xfacthd.framedblocks.common.data.BlockType;
 import xfacthd.framedblocks.common.data.FramedToolType;
 import xfacthd.framedblocks.common.item.FramedBlueprintItem;
 import xfacthd.framedblocks.common.item.FramedToolItem;
-import xfacthd.framedblocks.common.tileentity.*;
+import xfacthd.framedblocks.common.blockentity.*;
 
 import java.util.Arrays;
 import java.util.Collection;
@@ -33,7 +33,7 @@ public class FBContent
 {
     private static final DeferredRegister<Block> BLOCKS = DeferredRegister.create(ForgeRegistries.BLOCKS, FramedBlocks.MODID);
     private static final DeferredRegister<Item> ITEMS = DeferredRegister.create(ForgeRegistries.ITEMS, FramedBlocks.MODID);
-    private static final DeferredRegister<BlockEntityType<?>> TILE_TYPES = DeferredRegister.create(ForgeRegistries.BLOCK_ENTITIES, FramedBlocks.MODID);
+    private static final DeferredRegister<BlockEntityType<?>> BE_TYPES = DeferredRegister.create(ForgeRegistries.BLOCK_ENTITIES, FramedBlocks.MODID);
     private static final DeferredRegister<MenuType<?>> CONTAINER_TYPES = DeferredRegister.create(ForgeRegistries.CONTAINERS, FramedBlocks.MODID);
 
     /** BLOCKS */
@@ -85,41 +85,41 @@ public class FBContent
     public static final RegistryObject<Item> itemFramedBlueprint = registerToolItem(FramedBlueprintItem::new, FramedToolType.BLUEPRINT);
 
     /** TILE ENTITY TYPES */
-    public static final RegistryObject<BlockEntityType<FramedTileEntity>> tileTypeFramedBlock = createTileType(FramedTileEntity::new, "framed_tile", getDefaultTileBlocks());
-    public static final RegistryObject<BlockEntityType<FramedSignTileEntity>> tileTypeFramedSign = createTileType(
-            FramedSignTileEntity::new,
+    public static final RegistryObject<BlockEntityType<FramedBlockEntity>> blockEntityTypeFramedBlock = createBlockEntityType(FramedBlockEntity::new, "framed_tile", getDefaultEntityBlocks());
+    public static final RegistryObject<BlockEntityType<FramedSignBlockEntity>> blockEntityTypeFramedSign = createBlockEntityType(
+            FramedSignBlockEntity::new,
             "framed_sign",
             blockFramedSign, blockFramedWallSign
     );
-    public static final RegistryObject<BlockEntityType<FramedDoubleSlabTileEntity>> tileTypeDoubleFramedSlab = createTileType(
-            FramedDoubleSlabTileEntity::new,
+    public static final RegistryObject<BlockEntityType<FramedDoubleSlabBlockEntity>> blockEntityTypeDoubleFramedSlab = createBlockEntityType(
+            FramedDoubleSlabBlockEntity::new,
             "framed_double_slab",
             blockFramedDoubleSlab
     );
-    public static final RegistryObject<BlockEntityType<FramedDoublePanelTileEntity>> tileTypeDoubleFramedPanel = createTileType(
-            FramedDoublePanelTileEntity::new,
+    public static final RegistryObject<BlockEntityType<FramedDoublePanelBlockEntity>> blockEntityTypeDoubleFramedPanel = createBlockEntityType(
+            FramedDoublePanelBlockEntity::new,
             "framed_double_panel",
             blockFramedDoublePanel
     );
-    public static final RegistryObject<BlockEntityType<FramedDoubleSlopeTileEntity>> tileTypeDoubleFramedSlope = createTileType(
-            FramedDoubleSlopeTileEntity::new,
+    public static final RegistryObject<BlockEntityType<FramedDoubleSlopeBlockEntity>> blockEntityTypeDoubleFramedSlope = createBlockEntityType(
+            FramedDoubleSlopeBlockEntity::new,
             "framed_double_slope",
             blockFramedDoubleSlope
     );
-    public static final RegistryObject<BlockEntityType<FramedDoubleCornerTileEntity>> tileTypeDoubleFramedCorner = createTileType(
-            FramedDoubleCornerTileEntity::new,
+    public static final RegistryObject<BlockEntityType<FramedDoubleCornerBlockEntity>> blockEntityTypeDoubleFramedCorner = createBlockEntityType(
+            FramedDoubleCornerBlockEntity::new,
             "framed_double_corner",
             blockFramedDoubleCorner
     );
-    public static final RegistryObject<BlockEntityType<FramedDoubleThreewayCornerTileEntity>> tileTypeDoubleFramedThreewayCorner = createTileType(
-            FramedDoubleThreewayCornerTileEntity::new,
+    public static final RegistryObject<BlockEntityType<FramedDoubleThreewayCornerBlockEntity>> blockEntityTypeDoubleFramedThreewayCorner = createBlockEntityType(
+            FramedDoubleThreewayCornerBlockEntity::new,
             "framed_double_threeway_corner",
             blockFramedDoublePrismCorner, blockFramedDoubleThreewayCorner
     );
-    public static final RegistryObject<BlockEntityType<FramedChestTileEntity>> tileTypeFramedChest = createTileType(FramedChestTileEntity::new, "framed_chest", blockFramedChest);
+    public static final RegistryObject<BlockEntityType<FramedChestBlockEntity>> blockEntityTypeFramedChest = createBlockEntityType(FramedChestBlockEntity::new, "framed_chest", blockFramedChest);
 
     /** CONTAINER TYPES */
-    public static final RegistryObject<MenuType<FramedChestContainer>> containerTypeFramedChest = createContainerType(FramedChestContainer::new, "framed_chest");
+    public static final RegistryObject<MenuType<FramedChestMenu>> menuTypeFramedChest = createMenuType(FramedChestMenu::new, "framed_chest");
 
 
 
@@ -127,7 +127,7 @@ public class FBContent
     {
         BLOCKS.register(FMLJavaModLoadingContext.get().getModEventBus());
         ITEMS.register(FMLJavaModLoadingContext.get().getModEventBus());
-        TILE_TYPES.register(FMLJavaModLoadingContext.get().getModEventBus());
+        BE_TYPES.register(FMLJavaModLoadingContext.get().getModEventBus());
         CONTAINER_TYPES.register(FMLJavaModLoadingContext.get().getModEventBus());
     }
 
@@ -147,7 +147,7 @@ public class FBContent
                 .forEach(registry::register);
     }
 
-    private static Supplier<Block[]> getDefaultTileBlocks()
+    private static Supplier<Block[]> getDefaultEntityBlocks()
     {
         return () -> BLOCKS.getEntries()
                 .stream()
@@ -173,14 +173,14 @@ public class FBContent
     }
 
     @SafeVarargs
-    private static <T extends BlockEntity> RegistryObject<BlockEntityType<T>> createTileType(BlockEntityType.BlockEntitySupplier<T> factory, String name, RegistryObject<Block>... roBlocks)
+    private static <T extends BlockEntity> RegistryObject<BlockEntityType<T>> createBlockEntityType(BlockEntityType.BlockEntitySupplier<T> factory, String name, RegistryObject<Block>... roBlocks)
     {
-        return createTileType(factory, name, () -> Arrays.stream(roBlocks).map(RegistryObject::get).toArray(Block[]::new));
+        return createBlockEntityType(factory, name, () -> Arrays.stream(roBlocks).map(RegistryObject::get).toArray(Block[]::new));
     }
 
-    private static <T extends BlockEntity> RegistryObject<BlockEntityType<T>> createTileType(BlockEntityType.BlockEntitySupplier<T> factory, String name, Supplier<Block[]> blocks)
+    private static <T extends BlockEntity> RegistryObject<BlockEntityType<T>> createBlockEntityType(BlockEntityType.BlockEntitySupplier<T> factory, String name, Supplier<Block[]> blocks)
     {
-        return TILE_TYPES.register(name, () ->
+        return BE_TYPES.register(name, () ->
         {
             //noinspection ConstantConditions
             return BlockEntityType.Builder.of(factory, blocks.get()).build(null);
@@ -188,7 +188,7 @@ public class FBContent
     }
 
     @SuppressWarnings("SameParameterValue")
-    private static <T extends AbstractContainerMenu> RegistryObject<MenuType<T>> createContainerType(IContainerFactory<T> factory, String name)
+    private static <T extends AbstractContainerMenu> RegistryObject<MenuType<T>> createMenuType(IContainerFactory<T> factory, String name)
     {
         return CONTAINER_TYPES.register(name, () -> IForgeContainerType.create(factory));
     }

@@ -1,4 +1,4 @@
-package xfacthd.framedblocks.common.tileentity;
+package xfacthd.framedblocks.common.blockentity;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.block.state.BlockState;
@@ -8,11 +8,11 @@ import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.util.Mth;
 import xfacthd.framedblocks.common.FBContent;
 
-public class FramedDoubleSlabTileEntity extends FramedDoubleTileEntity
+public class FramedDoubleSlabBlockEntity extends FramedDoubleBlockEntity
 {
-    public FramedDoubleSlabTileEntity(BlockPos pos, BlockState state)
+    public FramedDoubleSlabBlockEntity(BlockPos pos, BlockState state)
     {
-        super(FBContent.tileTypeDoubleFramedSlab.get(), pos, state);
+        super(FBContent.blockEntityTypeDoubleFramedSlab.get(), pos, state);
     }
 
     @Override

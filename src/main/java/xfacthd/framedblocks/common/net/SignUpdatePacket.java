@@ -8,7 +8,7 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.level.Level;
 import net.minecraftforge.fmllegacy.network.NetworkEvent;
 import xfacthd.framedblocks.FramedBlocks;
-import xfacthd.framedblocks.common.tileentity.FramedSignTileEntity;
+import xfacthd.framedblocks.common.blockentity.FramedSignBlockEntity;
 
 import java.util.function.Supplier;
 
@@ -52,12 +52,12 @@ public class SignUpdatePacket
         {
             ServerPlayer player = ctx.get().getSender();
             //noinspection ConstantConditions
-            Level world = player.getLevel();
+            Level level = player.getLevel();
 
             //noinspection deprecation
-            if (world.hasChunkAt(pos))
+            if (level.hasChunkAt(pos))
             {
-                if (world.getBlockEntity(pos) instanceof FramedSignTileEntity sign)
+                if (level.getBlockEntity(pos) instanceof FramedSignBlockEntity sign)
                 {
                     if (sign.getEditingPlayer() != player)
                     {

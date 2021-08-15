@@ -11,18 +11,18 @@ import net.minecraft.util.FormattedCharSequence;
 import com.mojang.math.Vector3f;
 import xfacthd.framedblocks.common.block.FramedSignBlock;
 import xfacthd.framedblocks.common.data.PropertyHolder;
-import xfacthd.framedblocks.common.tileentity.FramedSignTileEntity;
+import xfacthd.framedblocks.common.blockentity.FramedSignBlockEntity;
 
 import java.util.List;
 
-public class FramedSignRenderer implements BlockEntityRenderer<FramedSignTileEntity>
+public class FramedSignRenderer implements BlockEntityRenderer<FramedSignBlockEntity>
 {
     private final Font fontrenderer;
 
     public FramedSignRenderer(BlockEntityRendererProvider.Context ctx) { fontrenderer = ctx.getFont(); }
 
     @Override
-    public void render(FramedSignTileEntity tile, float partialTicks, PoseStack matrix, MultiBufferSource buffer, int light, int overlay)
+    public void render(FramedSignBlockEntity tile, float partialTicks, PoseStack matrix, MultiBufferSource buffer, int light, int overlay)
     {
         matrix.pushPose();
 

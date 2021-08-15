@@ -11,7 +11,7 @@ import net.minecraftforge.fmllegacy.network.PacketDistributor;
 import xfacthd.framedblocks.FramedBlocks;
 import xfacthd.framedblocks.common.FBContent;
 import xfacthd.framedblocks.common.net.OpenSignScreenPacket;
-import xfacthd.framedblocks.common.tileentity.FramedSignTileEntity;
+import xfacthd.framedblocks.common.blockentity.FramedSignBlockEntity;
 
 import javax.annotation.Nullable;
 
@@ -20,19 +20,19 @@ public class FramedSignItem extends StandingAndWallBlockItem
     public FramedSignItem()
     {
         super(FBContent.blockFramedSign.get(), FBContent.blockFramedWallSign.get(),
-                new Properties().tab(FramedBlocks.FRAMED_GROUP).stacksTo(16));
+                new Properties().tab(FramedBlocks.FRAMED_TAB).stacksTo(16));
         setRegistryName(FramedBlocks.MODID, "framed_sign");
     }
 
     @Override
-    protected boolean updateCustomBlockEntityTag(BlockPos pos, Level world, @Nullable Player player, ItemStack stack, BlockState state)
+    protected boolean updateCustomBlockEntityTag(BlockPos pos, Level level, @Nullable Player player, ItemStack stack, BlockState state)
     {
-        boolean hadNBT = super.updateCustomBlockEntityTag(pos, world, player, stack, state);
-        if (!world.isClientSide() && !hadNBT && player != null)
+        boolean hadNBT = super.updateCustomBlockEntityTag(pos, level, player, stack, state);
+        if (!level.isClientSide() && !hadNBT && player != null)
         {
-            if (world.getBlockEntity(pos) instanceof FramedSignTileEntity te)
+            if (level.getBlockEntity(pos) instanceof FramedSignBlockEntity be)
             {
-                te.setEditingPlayer(player);
+                be.setEditingPlayer(player);
 
                 FramedBlocks.CHANNEL.send(
                         PacketDistributor.PLAYER.with(() -> (ServerPlayer) player),

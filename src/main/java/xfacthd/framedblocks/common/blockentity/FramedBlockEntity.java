@@ -1,4 +1,4 @@
-package xfacthd.framedblocks.common.tileentity;
+package xfacthd.framedblocks.common.blockentity;
 
 import com.google.common.collect.ImmutableList;
 import net.minecraft.core.BlockPos;
@@ -31,20 +31,20 @@ import xfacthd.framedblocks.common.block.IFramedBlock;
 import xfacthd.framedblocks.common.util.Utils;
 
 @SuppressWarnings("deprecation")
-public class FramedTileEntity extends BlockEntity
+public class FramedBlockEntity extends BlockEntity
 {
     public static final TranslatableComponent MSG_BLACKLISTED = new TranslatableComponent("msg." + FramedBlocks.MODID + ".blacklisted");
-    public static final TranslatableComponent MSG_TILE_ENTITY = new TranslatableComponent("msg." + FramedBlocks.MODID + ".tile_entity");
-    private static final ImmutableList<Block> TILE_ENTITY_WHITELIST = buildTileEntityWhitelist();
+    public static final TranslatableComponent MSG_BLOCK_ENTITY = new TranslatableComponent("msg." + FramedBlocks.MODID + ".block_entity");
+    private static final ImmutableList<Block> BLOCK_ENTITY_WHITELIST = buildBlockEntityWhitelist();
 
     private final FramedBlockData modelData = new FramedBlockData();
     private ItemStack camoStack = ItemStack.EMPTY;
     private BlockState camoState = Blocks.AIR.defaultBlockState();
     private boolean glowing = false;
 
-    public FramedTileEntity(BlockPos pos, BlockState state) { this(FBContent.tileTypeFramedBlock.get(), pos, state); }
+    public FramedBlockEntity(BlockPos pos, BlockState state) { this(FBContent.blockEntityTypeFramedBlock.get(), pos, state); }
 
-    protected FramedTileEntity(BlockEntityType<?> type, BlockPos pos, BlockState state) { super(type, pos, state); }
+    protected FramedBlockEntity(BlockEntityType<?> type, BlockPos pos, BlockState state) { super(type, pos, state); }
 
     public InteractionResult handleInteraction(Player player, InteractionHand hand, BlockHitResult hit)
     {
@@ -276,9 +276,9 @@ public class FramedTileEntity extends BlockEntity
             player.displayClientMessage(MSG_BLACKLISTED, true);
             return false;
         }
-        if (state.hasBlockEntity() && !TILE_ENTITY_WHITELIST.contains(block))
+        if (state.hasBlockEntity() && !BLOCK_ENTITY_WHITELIST.contains(block))
         {
-            player.displayClientMessage(MSG_TILE_ENTITY, true);
+            player.displayClientMessage(MSG_BLOCK_ENTITY, true);
             return false;
         }
 
@@ -327,7 +327,7 @@ public class FramedTileEntity extends BlockEntity
 
     public ItemStack getCamoStack() { return camoStack; }
 
-    public float getCamoBlastResistance(Explosion explosion)
+    public float getCamoExplosionResistance(Explosion explosion)
     {
         return camoState.getExplosionResistance(level, worldPosition, explosion);
     }
@@ -417,7 +417,7 @@ public class FramedTileEntity extends BlockEntity
             camoState = newState;
             if (oldLight != getLightValue()) { doLightUpdate(); }
 
-            modelData.setWorld(level);
+            modelData.setLevel(level);
             modelData.setPos(worldPosition);
             modelData.setCamoState(camoState);
 
@@ -458,7 +458,7 @@ public class FramedTileEntity extends BlockEntity
         {
             camoState = newState;
 
-            modelData.setWorld(level);
+            modelData.setLevel(level);
             modelData.setPos(worldPosition);
             modelData.setCamoState(camoState);
         }
@@ -499,7 +499,7 @@ public class FramedTileEntity extends BlockEntity
         glowing = nbt.getBoolean("glowing");
     }
 
-    private static ImmutableList<Block> buildTileEntityWhitelist()
+    private static ImmutableList<Block> buildBlockEntityWhitelist()
     {
         return ImmutableList.<Block>builder()
                 .add(Blocks.JUKEBOX)

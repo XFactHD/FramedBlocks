@@ -20,8 +20,8 @@ import net.minecraft.world.phys.shapes.VoxelShape;
 import xfacthd.framedblocks.common.FBContent;
 import xfacthd.framedblocks.common.data.BlockType;
 import xfacthd.framedblocks.common.data.PropertyHolder;
-import xfacthd.framedblocks.common.tileentity.FramedDoubleTileEntity;
-import xfacthd.framedblocks.common.tileentity.FramedTileEntity;
+import xfacthd.framedblocks.common.blockentity.FramedDoubleBlockEntity;
+import xfacthd.framedblocks.common.blockentity.FramedBlockEntity;
 import xfacthd.framedblocks.common.util.CtmPredicate;
 
 @SuppressWarnings("deprecation")
@@ -50,7 +50,7 @@ public class FramedSlabBlock extends FramedBlock
     }
 
     @Override
-    public InteractionResult use(BlockState state, Level world, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hit)
+    public InteractionResult use(BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hit)
     {
         ItemStack stack = player.getItemInHand(hand);
         if (stack.getItem() == FBContent.blockFramedSlab.get().asItem())
@@ -59,23 +59,23 @@ public class FramedSlabBlock extends FramedBlock
             Direction face = hit.getDirection();
             if ((face == Direction.UP && !top) || (face == Direction.DOWN && top))
             {
-                if (!world.isClientSide())
+                if (!level.isClientSide())
                 {
                     BlockState camoState = Blocks.AIR.defaultBlockState();
                     ItemStack camoStack = ItemStack.EMPTY;
                     boolean glowing = false;
 
-                    if (world.getBlockEntity(pos) instanceof FramedTileEntity te)
+                    if (level.getBlockEntity(pos) instanceof FramedBlockEntity be)
                     {
-                        camoState = te.getCamoState();
-                        camoStack = te.getCamoStack();
-                        glowing = te.isGlowing();
+                        camoState = be.getCamoState();
+                        camoStack = be.getCamoStack();
+                        glowing = be.isGlowing();
                     }
 
-                    world.setBlockAndUpdate(pos, FBContent.blockFramedDoubleSlab.get().defaultBlockState());
+                    level.setBlockAndUpdate(pos, FBContent.blockFramedDoubleSlab.get().defaultBlockState());
 
                     SoundType sound = FBContent.blockFramedCube.get().getSoundType(FBContent.blockFramedCube.get().defaultBlockState());
-                    world.playSound(null, pos, sound.getPlaceSound(), SoundSource.BLOCKS, (sound.getVolume() + 1.0F) / 2.0F, sound.getPitch() * 0.8F);
+                    level.playSound(null, pos, sound.getPlaceSound(), SoundSource.BLOCKS, (sound.getVolume() + 1.0F) / 2.0F, sound.getPitch() * 0.8F);
 
                     if (!player.isCreative())
                     {
@@ -83,16 +83,16 @@ public class FramedSlabBlock extends FramedBlock
                         player.getInventory().setChanged();
                     }
 
-                    if (world.getBlockEntity(pos) instanceof FramedDoubleTileEntity te)
+                    if (level.getBlockEntity(pos) instanceof FramedDoubleBlockEntity be)
                     {
-                        te.setCamo(camoStack, camoState, top);
-                        te.setGlowing(glowing);
+                        be.setCamo(camoStack, camoState, top);
+                        be.setGlowing(glowing);
                     }
                 }
-                return InteractionResult.sidedSuccess(world.isClientSide());
+                return InteractionResult.sidedSuccess(level.isClientSide());
             }
         }
-        return super.use(state, world, pos, player, hand, hit);
+        return super.use(state, level, pos, player, hand, hit);
     }
 
     public static ImmutableMap<BlockState, VoxelShape> generateShapes(ImmutableList<BlockState> states)

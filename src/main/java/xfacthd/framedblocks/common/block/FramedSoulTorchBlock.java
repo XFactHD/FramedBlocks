@@ -31,7 +31,7 @@ public class FramedSoulTorchBlock extends FramedTorchBlock
         BlockItem item = new StandingAndWallBlockItem(
                 FBContent.blockFramedSoulTorch.get(),
                 FBContent.blockFramedSoulWallTorch.get(),
-                new Item.Properties().tab(FramedBlocks.FRAMED_GROUP)
+                new Item.Properties().tab(FramedBlocks.FRAMED_TAB)
         );
         //noinspection ConstantConditions
         item.setRegistryName(getRegistryName());

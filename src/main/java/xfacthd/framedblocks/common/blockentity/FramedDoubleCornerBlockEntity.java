@@ -1,4 +1,4 @@
-package xfacthd.framedblocks.common.tileentity;
+package xfacthd.framedblocks.common.blockentity;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.block.state.BlockState;
@@ -10,11 +10,11 @@ import xfacthd.framedblocks.common.FBContent;
 import xfacthd.framedblocks.common.data.*;
 import xfacthd.framedblocks.common.util.Utils;
 
-public class FramedDoubleCornerTileEntity extends FramedDoubleTileEntity
+public class FramedDoubleCornerBlockEntity extends FramedDoubleBlockEntity
 {
-    public FramedDoubleCornerTileEntity(BlockPos pos, BlockState state)
+    public FramedDoubleCornerBlockEntity(BlockPos pos, BlockState state)
     {
-        super(FBContent.tileTypeDoubleFramedCorner.get(), pos, state);
+        super(FBContent.blockEntityTypeDoubleFramedCorner.get(), pos, state);
     }
 
     @Override

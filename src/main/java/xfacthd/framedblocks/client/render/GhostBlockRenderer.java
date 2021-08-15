@@ -29,7 +29,7 @@ import xfacthd.framedblocks.common.FBContent;
 import xfacthd.framedblocks.common.block.IFramedBlock;
 import xfacthd.framedblocks.common.data.PropertyHolder;
 import xfacthd.framedblocks.common.item.FramedBlueprintItem;
-import xfacthd.framedblocks.common.tileentity.FramedDoubleTileEntity;
+import xfacthd.framedblocks.common.blockentity.FramedDoubleBlockEntity;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -46,8 +46,8 @@ public class GhostBlockRenderer
         GHOST_MODEL_DATA.setCamoState(FBContent.blockFramedGhostBlock.get().defaultBlockState());
 
         //Needed to render ghosts of double blocks
-        GHOST_MODEL_DATA.setData(FramedDoubleTileEntity.DATA_LEFT, GHOST_MODEL_DATA);
-        GHOST_MODEL_DATA.setData(FramedDoubleTileEntity.DATA_RIGHT, GHOST_MODEL_DATA);
+        GHOST_MODEL_DATA.setData(FramedDoubleBlockEntity.DATA_LEFT, GHOST_MODEL_DATA);
+        GHOST_MODEL_DATA.setData(FramedDoubleBlockEntity.DATA_RIGHT, GHOST_MODEL_DATA);
     }
 
     public static void drawGhostBlock(MultiBufferSource buffers, PoseStack mstack)
@@ -117,7 +117,7 @@ public class GhostBlockRenderer
 
     private static void doRenderGhostBlock(PoseStack mstack, MultiBufferSource buffers, BlockPos renderPos, BlockState renderState)
     {
-        GHOST_MODEL_DATA.setWorld(mc().level);
+        GHOST_MODEL_DATA.setLevel(mc().level);
         GHOST_MODEL_DATA.setPos(renderPos);
 
         ForgeHooksClient.setRenderLayer(RenderType.translucent());

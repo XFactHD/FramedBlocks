@@ -9,14 +9,14 @@ import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.level.BlockGetter;
 import xfacthd.framedblocks.common.FBContent;
 import xfacthd.framedblocks.common.data.BlockType;
-import xfacthd.framedblocks.common.tileentity.FramedDoubleSlabTileEntity;
+import xfacthd.framedblocks.common.blockentity.FramedDoubleSlabBlockEntity;
 
 public class FramedDoubleSlabBlock extends AbstractFramedDoubleBlock
 {
     public FramedDoubleSlabBlock() { super(BlockType.FRAMED_DOUBLE_SLAB); }
 
     @Override
-    public ItemStack getPickBlock(BlockState state, HitResult target, BlockGetter world, BlockPos pos, Player player)
+    public ItemStack getPickBlock(BlockState state, HitResult target, BlockGetter level, BlockPos pos, Player player)
     {
         return new ItemStack(FBContent.blockFramedSlab.get());
     }
@@ -24,6 +24,6 @@ public class FramedDoubleSlabBlock extends AbstractFramedDoubleBlock
     @Override
     public final BlockEntity newBlockEntity(BlockPos pos, BlockState state)
     {
-        return new FramedDoubleSlabTileEntity(pos, state);
+        return new FramedDoubleSlabBlockEntity(pos, state);
     }
 }

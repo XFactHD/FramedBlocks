@@ -13,7 +13,7 @@ import net.minecraft.world.phys.HitResult;
 import xfacthd.framedblocks.common.FBContent;
 import xfacthd.framedblocks.common.data.BlockType;
 import xfacthd.framedblocks.common.data.PropertyHolder;
-import xfacthd.framedblocks.common.tileentity.FramedDoublePanelTileEntity;
+import xfacthd.framedblocks.common.blockentity.FramedDoublePanelBlockEntity;
 import xfacthd.framedblocks.common.util.CtmPredicate;
 
 public class FramedDoublePanelBlock extends AbstractFramedDoubleBlock
@@ -33,7 +33,7 @@ public class FramedDoublePanelBlock extends AbstractFramedDoubleBlock
     }
 
     @Override
-    public ItemStack getPickBlock(BlockState state, HitResult target, BlockGetter world, BlockPos pos, Player player)
+    public ItemStack getPickBlock(BlockState state, HitResult target, BlockGetter level, BlockPos pos, Player player)
     {
         return new ItemStack(FBContent.blockFramedPanel.get());
     }
@@ -41,6 +41,6 @@ public class FramedDoublePanelBlock extends AbstractFramedDoubleBlock
     @Override
     public final BlockEntity newBlockEntity(BlockPos pos, BlockState state)
     {
-        return new FramedDoublePanelTileEntity(pos, state);
+        return new FramedDoublePanelBlockEntity(pos, state);
     }
 }

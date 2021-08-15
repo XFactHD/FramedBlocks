@@ -10,8 +10,8 @@ import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import xfacthd.framedblocks.common.data.*;
-import xfacthd.framedblocks.common.tileentity.FramedDoubleSlopeTileEntity;
-import xfacthd.framedblocks.common.tileentity.FramedDoubleTileEntity;
+import xfacthd.framedblocks.common.blockentity.FramedDoubleSlopeBlockEntity;
+import xfacthd.framedblocks.common.blockentity.FramedDoubleBlockEntity;
 import xfacthd.framedblocks.common.util.CtmPredicate;
 
 import javax.annotation.Nullable;
@@ -48,20 +48,20 @@ public class FramedDoubleSlopeBlock extends AbstractFramedDoubleBlock
 
     @Override
     @SuppressWarnings("deprecation")
-    public SoundType getCamoSound(BlockState state, LevelReader world, BlockPos pos)
+    public SoundType getCamoSound(BlockState state, LevelReader level, BlockPos pos)
     {
         SlopeType type = state.getValue(PropertyHolder.SLOPE_TYPE);
         if (type != SlopeType.HORIZONTAL)
         {
-            if (world.getBlockEntity(pos) instanceof FramedDoubleTileEntity dte)
+            if (level.getBlockEntity(pos) instanceof FramedDoubleBlockEntity dbe)
             {
-                BlockState camoState = type == SlopeType.TOP ? dte.getCamoState() : dte.getCamoStateTwo();
+                BlockState camoState = type == SlopeType.TOP ? dbe.getCamoState() : dbe.getCamoStateTwo();
                 if (!camoState.isAir())
                 {
                     return camoState.getSoundType();
                 }
 
-                camoState = type == SlopeType.TOP ? dte.getCamoStateTwo() : dte.getCamoState();
+                camoState = type == SlopeType.TOP ? dbe.getCamoStateTwo() : dbe.getCamoState();
                 if (!camoState.isAir())
                 {
                     return camoState.getSoundType();
@@ -69,12 +69,12 @@ public class FramedDoubleSlopeBlock extends AbstractFramedDoubleBlock
             }
             return getSoundType(state);
         }
-        return super.getCamoSound(state, world, pos);
+        return super.getCamoSound(state, level, pos);
     }
 
     @Override
     public final BlockEntity newBlockEntity(BlockPos pos, BlockState state)
     {
-        return new FramedDoubleSlopeTileEntity(pos, state);
+        return new FramedDoubleSlopeBlockEntity(pos, state);
     }
 }

@@ -20,7 +20,7 @@ import net.minecraft.world.phys.BlockHitResult;
 import xfacthd.framedblocks.FramedBlocks;
 import xfacthd.framedblocks.common.FBContent;
 import xfacthd.framedblocks.common.data.BlockType;
-import xfacthd.framedblocks.common.tileentity.FramedTileEntity;
+import xfacthd.framedblocks.common.blockentity.FramedBlockEntity;
 
 import javax.annotation.Nullable;
 import java.util.List;
@@ -43,30 +43,30 @@ public class FramedTorchBlock extends TorchBlock implements IFramedBlock
     public FramedTorchBlock(Properties props, ParticleOptions particle) { super(props, particle); }
 
     @Override
-    public final InteractionResult use(BlockState state, Level world, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hit)
+    public final InteractionResult use(BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hit)
     {
-        return handleUse(world, pos, player, hand, hit);
+        return handleUse(level, pos, player, hand, hit);
     }
 
     @Override
-    public void setPlacedBy(Level world, BlockPos pos, BlockState state, @Nullable LivingEntity placer, ItemStack stack)
+    public void setPlacedBy(Level level, BlockPos pos, BlockState state, @Nullable LivingEntity placer, ItemStack stack)
     {
-        tryApplyCamoImmediately(world, pos, placer, stack);
+        tryApplyCamoImmediately(level, pos, placer, stack);
     }
 
     @Override
-    public int getLightEmission(BlockState state, BlockGetter world, BlockPos pos) { return Math.max(super.getLightEmission(state, world, pos), getLight(world, pos)); }
+    public int getLightEmission(BlockState state, BlockGetter level, BlockPos pos) { return Math.max(super.getLightEmission(state, level, pos), getLight(level, pos)); }
 
     @Override
-    public SoundType getSoundType(BlockState state, LevelReader world, BlockPos pos, Entity entity)
+    public SoundType getSoundType(BlockState state, LevelReader level, BlockPos pos, Entity entity)
     {
-        return getCamoSound(state, world, pos);
+        return getCamoSound(state, level, pos);
     }
 
     @Override
-    public float getExplosionResistance(BlockState state, BlockGetter world, BlockPos pos, Explosion explosion)
+    public float getExplosionResistance(BlockState state, BlockGetter level, BlockPos pos, Explosion explosion)
     {
-        return getCamoBlastResistance(state, world, pos, explosion);
+        return getCamoExplosionResistance(state, level, pos, explosion);
     }
 
     @Override
@@ -76,7 +76,7 @@ public class FramedTorchBlock extends TorchBlock implements IFramedBlock
     }
 
     @Override
-    public final BlockEntity newBlockEntity(BlockPos pos, BlockState state) { return new FramedTileEntity(pos, state); }
+    public final BlockEntity newBlockEntity(BlockPos pos, BlockState state) { return new FramedBlockEntity(pos, state); }
 
     @Override
     public BlockType getBlockType() { return BlockType.FRAMED_TORCH; }
@@ -87,7 +87,7 @@ public class FramedTorchBlock extends TorchBlock implements IFramedBlock
         BlockItem item = new StandingAndWallBlockItem(
                 FBContent.blockFramedTorch.get(),
                 FBContent.blockFramedWallTorch.get(),
-                new Item.Properties().tab(FramedBlocks.FRAMED_GROUP)
+                new Item.Properties().tab(FramedBlocks.FRAMED_TAB)
         );
         //noinspection ConstantConditions
         item.setRegistryName(getRegistryName());

@@ -28,7 +28,7 @@ import xfacthd.framedblocks.client.screen.FramedSignScreen;
 import xfacthd.framedblocks.client.util.BlueprintPropertyOverride;
 import xfacthd.framedblocks.common.FBContent;
 import xfacthd.framedblocks.common.block.IFramedBlock;
-import xfacthd.framedblocks.common.tileentity.*;
+import xfacthd.framedblocks.common.blockentity.*;
 
 import java.util.Map;
 import java.util.function.BiFunction;
@@ -52,12 +52,12 @@ public class FBClient
                 ));
         ItemBlockRenderTypes.setRenderLayer(FBContent.blockFramedGhostBlock.get(), RenderType.translucent());
 
-        BlockEntityRenderers.register(FBContent.tileTypeFramedSign.get(), FramedSignRenderer::new);
-        BlockEntityRenderers.register(FBContent.tileTypeFramedChest.get(), FramedChestRenderer::new);
+        BlockEntityRenderers.register(FBContent.blockEntityTypeFramedSign.get(), FramedSignRenderer::new);
+        BlockEntityRenderers.register(FBContent.blockEntityTypeFramedChest.get(), FramedChestRenderer::new);
 
         event.enqueueWork(() ->
         {
-            MenuScreens.register(FBContent.containerTypeFramedChest.get(), FramedChestScreen::new);
+            MenuScreens.register(FBContent.menuTypeFramedChest.get(), FramedChestScreen::new);
 
             BlueprintPropertyOverride.register();
         });
@@ -76,18 +76,18 @@ public class FBClient
         {
             if (world != null && pos != null)
             {
-                if (world.getBlockEntity(pos) instanceof FramedTileEntity te)
+                if (world.getBlockEntity(pos) instanceof FramedBlockEntity be)
                 {
-                    BlockState camoState = te.getCamoState();
+                    BlockState camoState = be.getCamoState();
                     if (!camoState.isAir())
                     {
                         int color = event.getBlockColors().getColor(camoState, world, pos, tintIndex);
                         if (color != -1) { return color; }
                     }
 
-                    if (te instanceof FramedDoubleTileEntity dTe)
+                    if (be instanceof FramedDoubleBlockEntity dbe)
                     {
-                        camoState = dTe.getCamoStateTwo();
+                        camoState = dbe.getCamoStateTwo();
                         if (!camoState.isAir())
                         {
                             return event.getBlockColors().getColor(camoState, world, pos, tintIndex);
@@ -179,9 +179,9 @@ public class FBClient
     public static void openSignScreen(BlockPos pos)
     {
         //noinspection ConstantConditions
-        if (Minecraft.getInstance().level.getBlockEntity(pos) instanceof FramedSignTileEntity te)
+        if (Minecraft.getInstance().level.getBlockEntity(pos) instanceof FramedSignBlockEntity be)
         {
-            Minecraft.getInstance().setScreen(new FramedSignScreen(te));
+            Minecraft.getInstance().setScreen(new FramedSignScreen(be));
         }
     }
 }

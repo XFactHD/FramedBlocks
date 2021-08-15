@@ -18,7 +18,7 @@ import net.minecraft.world.level.storage.loot.LootContext;
 import net.minecraft.world.phys.BlockHitResult;
 import xfacthd.framedblocks.common.FBContent;
 import xfacthd.framedblocks.common.data.BlockType;
-import xfacthd.framedblocks.common.tileentity.FramedTileEntity;
+import xfacthd.framedblocks.common.blockentity.FramedBlockEntity;
 import xfacthd.framedblocks.common.util.CtmPredicate;
 
 import javax.annotation.Nullable;
@@ -66,42 +66,42 @@ public class FramedStairsBlock extends StairBlock implements IFramedBlock
     }
 
     @Override
-    public final InteractionResult use(BlockState state, Level world, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hit)
+    public final InteractionResult use(BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hit)
     {
-        return handleUse(world, pos, player, hand, hit);
+        return handleUse(level, pos, player, hand, hit);
     }
 
     @Override
-    public void setPlacedBy(Level world, BlockPos pos, BlockState state, @Nullable LivingEntity placer, ItemStack stack)
+    public void setPlacedBy(Level level, BlockPos pos, BlockState state, @Nullable LivingEntity placer, ItemStack stack)
     {
-        tryApplyCamoImmediately(world, pos, placer, stack);
+        tryApplyCamoImmediately(level, pos, placer, stack);
     }
 
     @Override
-    public int getLightEmission(BlockState state, BlockGetter world, BlockPos pos) { return getLight(world, pos); }
+    public int getLightEmission(BlockState state, BlockGetter level, BlockPos pos) { return getLight(level, pos); }
 
     @Override
-    public SoundType getSoundType(BlockState state, LevelReader world, BlockPos pos, Entity entity)
+    public SoundType getSoundType(BlockState state, LevelReader level, BlockPos pos, Entity entity)
     {
-        return getCamoSound(state, world, pos);
+        return getCamoSound(state, level, pos);
     }
 
     @Override
-    public float getExplosionResistance(BlockState state, BlockGetter world, BlockPos pos, Explosion explosion)
+    public float getExplosionResistance(BlockState state, BlockGetter level, BlockPos pos, Explosion explosion)
     {
-        return getCamoBlastResistance(state, world, pos, explosion);
+        return getCamoExplosionResistance(state, level, pos, explosion);
     }
 
     @Override
-    public boolean isFlammable(BlockState state, BlockGetter world, BlockPos pos, Direction face)
+    public boolean isFlammable(BlockState state, BlockGetter level, BlockPos pos, Direction face)
     {
-        return isCamoFlammable(world, pos, face);
+        return isCamoFlammable(level, pos, face);
     }
 
     @Override
-    public int getFlammability(BlockState state, BlockGetter world, BlockPos pos, Direction face)
+    public int getFlammability(BlockState state, BlockGetter level, BlockPos pos, Direction face)
     {
-        return getCamoFlammability(world, pos, face);
+        return getCamoFlammability(level, pos, face);
     }
 
     @Override
@@ -111,13 +111,13 @@ public class FramedStairsBlock extends StairBlock implements IFramedBlock
     }
 
     @Override
-    public float getFriction(BlockState state, LevelReader world, BlockPos pos, @Nullable Entity entity)
+    public float getFriction(BlockState state, LevelReader level, BlockPos pos, @Nullable Entity entity)
     {
-        return getCamoSlipperiness(state, world, pos, entity);
+        return getCamoSlipperiness(state, level, pos, entity);
     }
 
     @Override
-    public final BlockEntity newBlockEntity(BlockPos pos, BlockState state) { return new FramedTileEntity(pos, state); }
+    public final BlockEntity newBlockEntity(BlockPos pos, BlockState state) { return new FramedBlockEntity(pos, state); }
 
     @Override
     public BlockType getBlockType() { return BlockType.FRAMED_STAIRS; }

@@ -13,7 +13,7 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.client.model.data.EmptyModelData;
 import net.minecraftforge.client.model.data.IModelData;
 import xfacthd.framedblocks.client.util.FramedBlockData;
-import xfacthd.framedblocks.common.tileentity.FramedDoubleTileEntity;
+import xfacthd.framedblocks.common.blockentity.FramedDoubleBlockEntity;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -38,12 +38,12 @@ public abstract class FramedDoubleBlockModel extends BakedModelProxy
         if (dummyStates == null) { dummyStates = getDummyStates(); }
         if (models == null) { models = getModels(); }
 
-        IModelData dataLeft = extraData.getData(FramedDoubleTileEntity.DATA_LEFT);
+        IModelData dataLeft = extraData.getData(FramedDoubleBlockEntity.DATA_LEFT);
         List<BakedQuad> quads = new ArrayList<>(
                 models.getA().getQuads(dummyStates.getA(), side, rand, dataLeft != null ? dataLeft : EmptyModelData.INSTANCE)
         );
 
-        IModelData dataRight = extraData.getData(FramedDoubleTileEntity.DATA_RIGHT);
+        IModelData dataRight = extraData.getData(FramedDoubleBlockEntity.DATA_RIGHT);
         quads.addAll(models.getB().getQuads(dummyStates.getB(), side, rand, dataRight != null ? dataRight : EmptyModelData.INSTANCE));
 
         return quads;
@@ -69,12 +69,12 @@ public abstract class FramedDoubleBlockModel extends BakedModelProxy
     @SuppressWarnings({"deprecation", "ConstantConditions"})
     public TextureAtlasSprite getParticleIcon(@Nonnull IModelData data)
     {
-        IModelData innerData = data.getData(FramedDoubleTileEntity.DATA_LEFT);
+        IModelData innerData = data.getData(FramedDoubleBlockEntity.DATA_LEFT);
         if (innerData != null && !innerData.getData(FramedBlockData.CAMO).isAir())
         {
             return models.getA().getParticleIcon(innerData);
         }
-        innerData = data.getData(FramedDoubleTileEntity.DATA_RIGHT);
+        innerData = data.getData(FramedDoubleBlockEntity.DATA_RIGHT);
         if (innerData != null && !innerData.getData(FramedBlockData.CAMO).isAir())
         {
             return models.getB().getParticleIcon(innerData);
@@ -86,9 +86,9 @@ public abstract class FramedDoubleBlockModel extends BakedModelProxy
     @Override
     public IModelData getModelData(@Nonnull BlockAndTintGetter world, @Nonnull BlockPos pos, @Nonnull BlockState state, @Nonnull IModelData tileData)
     {
-        if (world.getBlockEntity(pos) instanceof FramedDoubleTileEntity te)
+        if (world.getBlockEntity(pos) instanceof FramedDoubleBlockEntity be)
         {
-            return te.getModelData();
+            return be.getModelData();
         }
         return tileData;
     }

@@ -15,7 +15,7 @@ import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.block.state.BlockState;
 import xfacthd.framedblocks.common.data.BlockType;
 import xfacthd.framedblocks.common.item.FramedBlueprintItem;
-import xfacthd.framedblocks.common.tileentity.FramedDoubleTileEntity;
+import xfacthd.framedblocks.common.blockentity.FramedDoubleBlockEntity;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -26,14 +26,14 @@ public abstract class AbstractFramedDoubleBlock extends FramedBlock
 
     @Nonnull
     @Override
-    public BlockState getFacade(@Nonnull BlockGetter world, @Nonnull BlockPos pos, @Nullable Direction side, @Nonnull BlockPos connection)
+    public BlockState getFacadeDisabled(@Nonnull BlockGetter level, @Nonnull BlockPos pos, @Nullable Direction side, @Nonnull BlockPos connection)
     {
-        BlockState state = world.getBlockState(pos);
+        BlockState state = level.getBlockState(pos);
         if (getCtmPredicate().test(state, side))
         {
-            if (world.getBlockEntity(pos) instanceof FramedDoubleTileEntity te)
+            if (level.getBlockEntity(pos) instanceof FramedDoubleBlockEntity be)
             {
-                return te.getCamoState(side);
+                return be.getCamoState(side);
             }
         }
         return Blocks.AIR.defaultBlockState();
@@ -41,17 +41,17 @@ public abstract class AbstractFramedDoubleBlock extends FramedBlock
 
     @Override
     @SuppressWarnings("deprecation")
-    public SoundType getSoundType(BlockState state, LevelReader world, BlockPos pos, Entity entity)
+    public SoundType getSoundType(BlockState state, LevelReader level, BlockPos pos, Entity entity)
     {
-        if (world.getBlockEntity(pos) instanceof FramedDoubleTileEntity te)
+        if (level.getBlockEntity(pos) instanceof FramedDoubleBlockEntity be)
         {
-            BlockState camoState = te.getCamoStateTwo();
+            BlockState camoState = be.getCamoStateTwo();
             if (!camoState.isAir())
             {
                 return camoState.getSoundType();
             }
 
-            camoState = te.getCamoState();
+            camoState = be.getCamoState();
             if (!camoState.isAir())
             {
                 return camoState.getSoundType();

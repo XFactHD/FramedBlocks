@@ -120,7 +120,7 @@ public class ModelUtils
 
         int[] vertexData = quad.getVertices();
         int step = vertexData.length / 4; //This is needed to support the extended vertex formats used by shaders in OptiFine
-        for(int vert = 0; vert < 4; vert++)
+        for (int vert = 0; vert < 4; vert++)
         {
             vertexData[vert * step + 7] = normal;
         }

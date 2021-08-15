@@ -90,34 +90,7 @@ public class FramedCornerSlopeBlock extends FramedBlock
         {
             facing = facing.getCounterClockWise();
         }
-        state = state.setValue(PropertyHolder.FACING_HOR, facing);
-
-        if (side == Direction.DOWN)
-        {
-            state = state.setValue(PropertyHolder.CORNER_TYPE, CornerType.TOP);
-        }
-        else if (side == Direction.UP)
-        {
-            state = state.setValue(PropertyHolder.CORNER_TYPE, CornerType.BOTTOM);
-        }
-        else
-        {
-            boolean xAxis = context.getClickedFace().getAxis() == Direction.Axis.X;
-            boolean positive = context.getClickedFace().getCounterClockWise().getAxisDirection() == Direction.AxisDirection.POSITIVE;
-            double xz = xAxis ? hitPoint.z() : hitPoint.x();
-            double y = hitPoint.y();
-
-            CornerType type;
-            if ((xz > .5D) == positive)
-            {
-                type = (y > .5D) ? CornerType.HORIZONTAL_TOP_RIGHT : CornerType.HORIZONTAL_BOTTOM_RIGHT;
-            }
-            else
-            {
-                type = (y > .5D) ? CornerType.HORIZONTAL_TOP_LEFT : CornerType.HORIZONTAL_BOTTOM_LEFT;
-            }
-            state = state.setValue(PropertyHolder.CORNER_TYPE, type);
-        }
+        state = withCornerType(state, context, side, hitPoint, facing);
 
         return withWater(state, context.getLevel(), context.getClickedPos());
     }

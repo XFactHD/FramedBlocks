@@ -38,11 +38,11 @@ public class FramedLadderBlock extends FramedBlock
     }
 
     @Override
-    public VoxelShape getShape(BlockState state, BlockGetter world, BlockPos pos, CollisionContext context)
+    public VoxelShape getShape(BlockState state, BlockGetter level, BlockPos pos, CollisionContext context)
     {
         return SHAPES[state.getValue(PropertyHolder.FACING_HOR).get2DDataValue()];
     }
 
     @Override
-    public boolean isLadder(BlockState state, LevelReader world, BlockPos pos, LivingEntity entity) { return true; }
+    public boolean isLadder(BlockState state, LevelReader level, BlockPos pos, LivingEntity entity) { return true; }
 }

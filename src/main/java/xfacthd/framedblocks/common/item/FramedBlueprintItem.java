@@ -21,7 +21,7 @@ import xfacthd.framedblocks.common.FBContent;
 import xfacthd.framedblocks.common.block.IFramedBlock;
 import xfacthd.framedblocks.common.data.BlockType;
 import xfacthd.framedblocks.common.data.FramedToolType;
-import xfacthd.framedblocks.common.tileentity.FramedTileEntity;
+import xfacthd.framedblocks.common.blockentity.FramedBlockEntity;
 
 import javax.annotation.Nullable;
 import java.util.*;
@@ -40,7 +40,7 @@ public class FramedBlueprintItem extends FramedToolItem
     public FramedBlueprintItem(FramedToolType type) { super(type); }
 
     @Override
-    public boolean doesSneakBypassUse(ItemStack stack, LevelReader world, BlockPos pos, Player player) { return false; }
+    public boolean doesSneakBypassUse(ItemStack stack, LevelReader level, BlockPos pos, Player player) { return false; }
 
     @Override
     public InteractionResultHolder<ItemStack> use(Level level, Player player, InteractionHand hand)
@@ -72,7 +72,7 @@ public class FramedBlueprintItem extends FramedToolItem
 
         if (player.isShiftKeyDown())
         {
-            if (!(level.getBlockEntity(pos) instanceof FramedTileEntity be))
+            if (!(level.getBlockEntity(pos) instanceof FramedBlockEntity be))
             {
                 return InteractionResult.FAIL;
             }

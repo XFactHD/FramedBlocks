@@ -42,7 +42,7 @@ minecraft {
 
             property 'mixin.env.disableRefMap', 'true'
 
-            //TODO: remove jvm args and reenable Mixins
+            //TODO: reenable Mixins
             //arg "-mixin.config=framedblocks.mixin.json"
 
             mods {
@@ -97,14 +97,14 @@ repositories {
 }
 
 dependencies {
-    minecraft 'net.minecraftforge:forge:1.17.1-37.0.13'
+    minecraft 'net.minecraftforge:forge:1.17.1-37.0.33'
 
     //implementation fg.deobf("curse.maven:ctm-267602:3137659")
 
     //runtimeOnly fg.deobf("curse.maven:puzzleslib-495476:3374786") //Only needed when Diagonal Fences is switched to implementation
     //compileOnly fg.deobf("curse.maven:diagonalfences-458048:3364147")
 
-    //TODO: reenable mixins
+    //TODO: reenable mixins (check if all of these are needed)
     //annotationProcessor 'org.spongepowered:mixin:0.8'
     //annotationProcessor 'com.google.code.gson:gson:2.8.0'
     //annotationProcessor 'com.google.guava:guava:21.0'

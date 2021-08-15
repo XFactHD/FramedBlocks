@@ -8,6 +8,7 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.*;
 import net.minecraft.world.level.block.*;
 import net.minecraft.world.level.block.entity.BlockEntity;
@@ -20,7 +21,7 @@ import net.minecraft.world.phys.Vec3;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import xfacthd.framedblocks.common.data.*;
-import xfacthd.framedblocks.common.tileentity.FramedTileEntity;
+import xfacthd.framedblocks.common.blockentity.FramedBlockEntity;
 import xfacthd.framedblocks.common.util.Utils;
 
 import javax.annotation.Nullable;
@@ -48,68 +49,68 @@ public class FramedBlock extends Block implements IFramedBlock, SimpleWaterlogge
     }
 
     @Override
-    public InteractionResult use(BlockState state, Level world, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hit)
+    public InteractionResult use(BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hit)
     {
-        return handleUse(world, pos, player, hand, hit);
+        return handleUse(level, pos, player, hand, hit);
     }
 
     @Override
-    public void setPlacedBy(Level world, BlockPos pos, BlockState state, @Nullable LivingEntity placer, ItemStack stack)
+    public void setPlacedBy(Level level, BlockPos pos, BlockState state, @Nullable LivingEntity placer, ItemStack stack)
     {
-        tryApplyCamoImmediately(world, pos, placer, stack);
+        tryApplyCamoImmediately(level, pos, placer, stack);
     }
 
     @Override
-    public BlockState updateShape(BlockState state, Direction facing, BlockState facingState, LevelAccessor world, BlockPos pos, BlockPos facingPos)
+    public BlockState updateShape(BlockState state, Direction facing, BlockState facingState, LevelAccessor level, BlockPos pos, BlockPos facingPos)
     {
         if (isWaterLoggable() && state.getValue(BlockStateProperties.WATERLOGGED))
         {
-            world.getLiquidTicks().scheduleTick(pos, Fluids.WATER, Fluids.WATER.getTickDelay(world));
+            level.getLiquidTicks().scheduleTick(pos, Fluids.WATER, Fluids.WATER.getTickDelay(level));
         }
 
-        return super.updateShape(state, facing, facingState, world, pos, facingPos);
+        return super.updateShape(state, facing, facingState, level, pos, facingPos);
     }
 
     @Override
-    public int getLightEmission(BlockState state, BlockGetter world, BlockPos pos) { return getLight(world, pos); }
+    public int getLightEmission(BlockState state, BlockGetter level, BlockPos pos) { return getLight(level, pos); }
 
     @Override
-    public SoundType getSoundType(BlockState state, LevelReader world, BlockPos pos, Entity entity)
+    public SoundType getSoundType(BlockState state, LevelReader level, BlockPos pos, Entity entity)
     {
-        return getCamoSound(state, world, pos);
+        return getCamoSound(state, level, pos);
     }
 
     @Override
-    public VoxelShape getShape(BlockState state, BlockGetter world, BlockPos pos, CollisionContext ctx)
+    public VoxelShape getShape(BlockState state, BlockGetter level, BlockPos pos, CollisionContext ctx)
     {
         return shapes.get(state);
     }
 
     @Override
-    public float getFriction(BlockState state, LevelReader world, BlockPos pos, @Nullable Entity entity)
+    public float getFriction(BlockState state, LevelReader level, BlockPos pos, @Nullable Entity entity)
     {
-        return getCamoSlipperiness(state, world, pos, entity);
+        return getCamoSlipperiness(state, level, pos, entity);
     }
 
     @Override
-    public float getShadeBrightness(BlockState state, BlockGetter world, BlockPos pos) { return 1F; }
+    public float getShadeBrightness(BlockState state, BlockGetter level, BlockPos pos) { return 1F; }
 
     @Override
-    public float getExplosionResistance(BlockState state, BlockGetter world, BlockPos pos, Explosion explosion)
+    public float getExplosionResistance(BlockState state, BlockGetter level, BlockPos pos, Explosion explosion)
     {
-        return getCamoBlastResistance(state, world, pos, explosion);
+        return getCamoExplosionResistance(state, level, pos, explosion);
     }
 
     @Override
-    public boolean isFlammable(BlockState state, BlockGetter world, BlockPos pos, Direction face)
+    public boolean isFlammable(BlockState state, BlockGetter level, BlockPos pos, Direction face)
     {
-        return isCamoFlammable(world, pos, face);
+        return isCamoFlammable(level, pos, face);
     }
 
     @Override
-    public int getFlammability(BlockState state, BlockGetter world, BlockPos pos, Direction face)
+    public int getFlammability(BlockState state, BlockGetter level, BlockPos pos, Direction face)
     {
-        return getCamoFlammability(world, pos, face);
+        return getCamoFlammability(level, pos, face);
     }
 
     @Override
@@ -123,20 +124,20 @@ public class FramedBlock extends Block implements IFramedBlock, SimpleWaterlogge
     }
 
     @Override
-    public BlockEntity newBlockEntity(BlockPos pos, BlockState state) { return new FramedTileEntity(pos, state); }
+    public BlockEntity newBlockEntity(BlockPos pos, BlockState state) { return new FramedBlockEntity(pos, state); }
 
     @Override
-    public boolean canPlaceLiquid(BlockGetter world, BlockPos pos, BlockState state, Fluid fluid)
+    public boolean canPlaceLiquid(BlockGetter level, BlockPos pos, BlockState state, Fluid fluid)
     {
         if (!isWaterLoggable()) { return false; }
-        return SimpleWaterloggedBlock.super.canPlaceLiquid(world, pos, state, fluid);
+        return SimpleWaterloggedBlock.super.canPlaceLiquid(level, pos, state, fluid);
     }
 
     @Override
-    public ItemStack pickupBlock(LevelAccessor world, BlockPos pos, BlockState state)
+    public ItemStack pickupBlock(LevelAccessor level, BlockPos pos, BlockState state)
     {
         if (!isWaterLoggable()) { return ItemStack.EMPTY; }
-        return SimpleWaterloggedBlock.super.pickupBlock(world, pos, state);
+        return SimpleWaterloggedBlock.super.pickupBlock(level, pos, state);
     }
 
     @Override
@@ -194,6 +195,39 @@ public class FramedBlock extends Block implements IFramedBlock, SimpleWaterlogge
         return state;
     }
 
+    protected BlockState withCornerType(BlockState state, BlockPlaceContext context, Direction side, Vec3 hitPoint, Direction facing)
+    {
+        state = state.setValue(PropertyHolder.FACING_HOR, facing);
+
+        if (side == Direction.DOWN)
+        {
+            state = state.setValue(PropertyHolder.CORNER_TYPE, CornerType.TOP);
+        }
+        else if (side == Direction.UP)
+        {
+            state = state.setValue(PropertyHolder.CORNER_TYPE, CornerType.BOTTOM);
+        }
+        else
+        {
+            boolean xAxis = context.getClickedFace().getAxis() == Direction.Axis.X;
+            boolean positive = context.getClickedFace().getCounterClockWise().getAxisDirection() == Direction.AxisDirection.POSITIVE;
+            double xz = xAxis ? hitPoint.z() : hitPoint.x();
+            double y = hitPoint.y();
+
+            CornerType type;
+            if ((xz > .5D) == positive)
+            {
+                type = (y > .5D) ? CornerType.HORIZONTAL_TOP_RIGHT : CornerType.HORIZONTAL_BOTTOM_RIGHT;
+            }
+            else
+            {
+                type = (y > .5D) ? CornerType.HORIZONTAL_TOP_LEFT : CornerType.HORIZONTAL_BOTTOM_LEFT;
+            }
+            state = state.setValue(PropertyHolder.CORNER_TYPE, type);
+        }
+        return state;
+    }
+
     protected BlockState withTop(BlockState state, Direction side, Vec3 hitVec)
     {
         if (side == Direction.DOWN)
@@ -214,9 +248,9 @@ public class FramedBlock extends Block implements IFramedBlock, SimpleWaterlogge
         return state;
     }
 
-    protected BlockState withWater(BlockState state, LevelReader world, BlockPos pos)
+    protected BlockState withWater(BlockState state, LevelReader level, BlockPos pos)
     {
-        FluidState fluidState = world.getFluidState(pos);
+        FluidState fluidState = level.getFluidState(pos);
         return state.setValue(BlockStateProperties.WATERLOGGED, fluidState.getType() == Fluids.WATER);
     }
 

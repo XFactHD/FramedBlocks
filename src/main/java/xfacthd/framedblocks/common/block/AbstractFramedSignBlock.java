@@ -13,7 +13,7 @@ import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.BlockHitResult;
 import xfacthd.framedblocks.common.data.BlockType;
-import xfacthd.framedblocks.common.tileentity.FramedSignTileEntity;
+import xfacthd.framedblocks.common.blockentity.FramedSignBlockEntity;
 
 import javax.annotation.Nullable;
 
@@ -22,21 +22,21 @@ public abstract class AbstractFramedSignBlock extends FramedBlock
     protected AbstractFramedSignBlock(BlockType type, Properties props) { super(type, props); }
 
     @Override
-    public InteractionResult use(BlockState state, Level world, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hit)
+    public InteractionResult use(BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hit)
     {
         //Makes sure the block can have a camo applied, even when the sign can execute a command
-        InteractionResult result = super.use(state, world, pos, player, hand, hit);
+        InteractionResult result = super.use(state, level, pos, player, hand, hit);
         if (result != InteractionResult.FAIL) { return result; }
 
         ItemStack stack = player.getItemInHand(hand);
         boolean dye = stack.getItem() instanceof DyeItem && player.getAbilities().mayBuild;
-        if (world.isClientSide())
+        if (level.isClientSide())
         {
             return dye ? InteractionResult.SUCCESS : InteractionResult.CONSUME;
         }
         else
         {
-            if (world.getBlockEntity(pos) instanceof FramedSignTileEntity sign)
+            if (level.getBlockEntity(pos) instanceof FramedSignBlockEntity sign)
             {
                 if (dye)
                 {
@@ -60,15 +60,15 @@ public abstract class AbstractFramedSignBlock extends FramedBlock
     }
 
     @Override
-    public void setPlacedBy(Level world, BlockPos pos, BlockState state, @Nullable LivingEntity placer, ItemStack stack)
+    public void setPlacedBy(Level level, BlockPos pos, BlockState state, @Nullable LivingEntity placer, ItemStack stack)
     {
-        tryApplyCamoImmediately(world, pos, placer, stack);
+        tryApplyCamoImmediately(level, pos, placer, stack);
     }
 
     @Override
     public final BlockEntity newBlockEntity(BlockPos pos, BlockState state)
     {
-        return new FramedSignTileEntity(pos, state);
+        return new FramedSignBlockEntity(pos, state);
     }
 
     @Override

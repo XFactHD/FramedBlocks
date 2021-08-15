@@ -39,24 +39,24 @@ public class FramedSignBlock extends AbstractFramedSignBlock
     }
 
     @Override
-    public VoxelShape getShape(BlockState state, BlockGetter world, BlockPos pos, CollisionContext ctx)
+    public VoxelShape getShape(BlockState state, BlockGetter level, BlockPos pos, CollisionContext ctx)
     {
         return SHAPE;
     }
 
-    public BlockState updateShape(BlockState state, Direction facing, BlockState facingState, LevelAccessor world, BlockPos pos, BlockPos facingPos)
+    public BlockState updateShape(BlockState state, Direction facing, BlockState facingState, LevelAccessor level, BlockPos pos, BlockPos facingPos)
     {
-        if (facing == Direction.DOWN && !canSurvive(state, world, pos))
+        if (facing == Direction.DOWN && !canSurvive(state, level, pos))
         {
             return Blocks.AIR.defaultBlockState();
         }
-        return super.updateShape(state, facing, facingState, world, pos, facingPos);
+        return super.updateShape(state, facing, facingState, level, pos, facingPos);
     }
 
     @Override
-    public boolean canSurvive(BlockState state, LevelReader world, BlockPos pos)
+    public boolean canSurvive(BlockState state, LevelReader level, BlockPos pos)
     {
-        return world.getBlockState(pos.below()).getMaterial().isSolid();
+        return level.getBlockState(pos.below()).getMaterial().isSolid();
     }
 
     @Override
