@@ -4,9 +4,10 @@ import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.vertex.IVertexBuilder;
 import net.minecraft.block.*;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.IRenderTypeBuffer;
-import net.minecraft.client.renderer.RenderType;
+import net.minecraft.client.renderer.*;
 import net.minecraft.item.*;
+import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.nbt.NBTUtil;
 import net.minecraft.state.properties.DoubleBlockHalf;
 import net.minecraft.util.Direction;
 import net.minecraft.util.Hand;
@@ -102,21 +103,49 @@ public class GhostBlockRenderer
 
         if (doRender)
         {
-            doRenderGhostBlock(mstack, buffers, renderPos, renderState);
+            BlockState camoState = Blocks.AIR.getDefaultState();
+            if (blueprint)
+            {
+                CompoundNBT beTag = stack.getOrCreateChildTag("blueprint_data").getCompound("camo_data");
+                camoState = NBTUtil.readBlockState(beTag.getCompound("camo_state"));
+                GHOST_MODEL_DATA.setCamoState(camoState);
+            }
+
+            doRenderGhostBlock(mstack, buffers, renderPos, renderState, camoState);
 
             if (renderState.getBlock() == FBContent.blockFramedDoor.get())
             {
-                doRenderGhostBlock(mstack, buffers, renderPos.up(), renderState.with(DoorBlock.HALF, DoubleBlockHalf.UPPER));
+                doRenderGhostBlock(mstack, buffers, renderPos.up(), renderState.with(DoorBlock.HALF, DoubleBlockHalf.UPPER), camoState);
+            }
+
+            if (blueprint)
+            {
+                GHOST_MODEL_DATA.setCamoState(Blocks.AIR.getDefaultState());
             }
         }
     }
 
-    private static void doRenderGhostBlock(MatrixStack mstack, IRenderTypeBuffer buffers, BlockPos renderPos, BlockState renderState)
+    private static void doRenderGhostBlock(MatrixStack mstack, IRenderTypeBuffer buffers, BlockPos renderPos, BlockState renderState, BlockState camoState)
     {
         GHOST_MODEL_DATA.setWorld(mc().world);
         GHOST_MODEL_DATA.setPos(renderPos);
 
-        ForgeHooksClient.setRenderLayer(RenderType.getCutout());
+        //noinspection deprecation
+        if (camoState.isAir())
+        {
+            ForgeHooksClient.setRenderLayer(RenderType.getCutout());
+        }
+        else
+        {
+            for (RenderType type : RenderType.getBlockRenderTypes())
+            {
+                if (RenderTypeLookup.canRenderInLayer(camoState, type))
+                {
+                    ForgeHooksClient.setRenderLayer(type);
+                    break;
+                }
+            }
+        }
 
         Vector3d offset = Vector3d.copy(renderPos).subtract(mc().gameRenderer.getActiveRenderInfo().getProjectedView());
 
