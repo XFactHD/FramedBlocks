@@ -3,15 +3,15 @@ package xfacthd.framedblocks.client.render;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.MultiBufferSource;
-import net.minecraft.client.renderer.RenderType;
+import net.minecraft.client.renderer.*;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.NbtUtils;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.item.*;
 import net.minecraft.world.item.context.BlockPlaceContext;
-import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.DoorBlock;
+import net.minecraft.world.level.block.*;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.DoubleBlockHalf;
 import net.minecraft.world.phys.*;
@@ -23,8 +23,7 @@ import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import net.minecraftforge.fml.util.ObfuscationReflectionHelper;
 import xfacthd.framedblocks.FramedBlocks;
-import xfacthd.framedblocks.client.util.ClientConfig;
-import xfacthd.framedblocks.client.util.FramedBlockData;
+import xfacthd.framedblocks.client.util.*;
 import xfacthd.framedblocks.common.FBContent;
 import xfacthd.framedblocks.common.block.IFramedBlock;
 import xfacthd.framedblocks.common.data.PropertyHolder;
@@ -43,7 +42,7 @@ public class GhostBlockRenderer
     @SubscribeEvent
     public static void onClientSetup(final FMLClientSetupEvent event)
     {
-        GHOST_MODEL_DATA.setCamoState(FBContent.blockFramedGhostBlock.get().defaultBlockState());
+        GHOST_MODEL_DATA.setCamoState(FBContent.blockFramedCube.get().defaultBlockState());
 
         //Needed to render ghosts of double blocks
         GHOST_MODEL_DATA.setData(FramedDoubleBlockEntity.DATA_LEFT, GHOST_MODEL_DATA);
@@ -106,28 +105,57 @@ public class GhostBlockRenderer
 
         if (doRender)
         {
-            doRenderGhostBlock(mstack, buffers, renderPos, renderState);
+            BlockState camoState = Blocks.AIR.defaultBlockState();
+            if (blueprint)
+            {
+                CompoundTag beTag = stack.getOrCreateTagElement("blueprint_data").getCompound("camo_data");
+                camoState = NbtUtils.readBlockState(beTag.getCompound("camo_state"));
+                GHOST_MODEL_DATA.setCamoState(camoState);
+            }
+
+            doRenderGhostBlock(mstack, buffers, renderPos, renderState, camoState);
 
             if (renderState.getBlock() == FBContent.blockFramedDoor.get())
             {
-                doRenderGhostBlock(mstack, buffers, renderPos.above(), renderState.setValue(DoorBlock.HALF, DoubleBlockHalf.UPPER));
+                if (blueprint)
+                {
+                    CompoundTag beTag = stack.getOrCreateTagElement("blueprint_data").getCompound("camo_data_two");
+                    camoState = NbtUtils.readBlockState(beTag.getCompound("camo_state"));
+                    GHOST_MODEL_DATA.setCamoState(camoState);
+                }
+
+                doRenderGhostBlock(mstack, buffers, renderPos.above(), renderState.setValue(DoorBlock.HALF, DoubleBlockHalf.UPPER), camoState);
             }
         }
     }
 
-    private static void doRenderGhostBlock(PoseStack mstack, MultiBufferSource buffers, BlockPos renderPos, BlockState renderState)
+    private static void doRenderGhostBlock(PoseStack mstack, MultiBufferSource buffers, BlockPos renderPos, BlockState renderState, BlockState camoState)
     {
         GHOST_MODEL_DATA.setLevel(mc().level);
         GHOST_MODEL_DATA.setPos(renderPos);
 
-        ForgeHooksClient.setRenderLayer(RenderType.translucent());
+        if (camoState.isAir())
+        {
+            ForgeHooksClient.setRenderLayer(RenderType.cutout());
+        }
+        else
+        {
+            for (RenderType type : RenderType.chunkBufferLayers())
+            {
+                if (ItemBlockRenderTypes.canRenderInLayer(camoState, type))
+                {
+                    ForgeHooksClient.setRenderLayer(type);
+                    break;
+                }
+            }
+        }
 
         Vec3 offset = Vec3.atLowerCornerOf(renderPos).subtract(mc().gameRenderer.getMainCamera().getPosition());
 
         mstack.pushPose();
         mstack.translate(offset.x, offset.y, offset.z);
 
-        VertexConsumer builder = buffers.getBuffer(RenderType.translucent());
+        VertexConsumer builder = new GhostVertexConsumer(buffers.getBuffer(RenderType.translucent()), 0xAA);
 
         mc().getBlockRenderer().renderBatched(
                 renderState,
