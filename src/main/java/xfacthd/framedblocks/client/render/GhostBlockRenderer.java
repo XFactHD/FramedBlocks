@@ -20,8 +20,7 @@ import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.ObfuscationReflectionHelper;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import xfacthd.framedblocks.FramedBlocks;
-import xfacthd.framedblocks.client.util.ClientConfig;
-import xfacthd.framedblocks.client.util.FramedBlockData;
+import xfacthd.framedblocks.client.util.*;
 import xfacthd.framedblocks.common.FBContent;
 import xfacthd.framedblocks.common.block.IFramedBlock;
 import xfacthd.framedblocks.common.data.PropertyHolder;
@@ -40,7 +39,7 @@ public class GhostBlockRenderer
     @SubscribeEvent
     public static void onClientSetup(final FMLClientSetupEvent event)
     {
-        GHOST_MODEL_DATA.setCamoState(FBContent.blockFramedGhostBlock.get().getDefaultState());
+        GHOST_MODEL_DATA.setCamoState(FBContent.blockFramedCube.get().getDefaultState());
 
         //Needed to render ghosts of double blocks
         GHOST_MODEL_DATA.setData(FramedDoubleTileEntity.DATA_LEFT, GHOST_MODEL_DATA);
@@ -117,14 +116,14 @@ public class GhostBlockRenderer
         GHOST_MODEL_DATA.setWorld(mc().world);
         GHOST_MODEL_DATA.setPos(renderPos);
 
-        ForgeHooksClient.setRenderLayer(RenderType.getTranslucent());
+        ForgeHooksClient.setRenderLayer(RenderType.getCutout());
 
         Vector3d offset = Vector3d.copy(renderPos).subtract(mc().gameRenderer.getActiveRenderInfo().getProjectedView());
 
         mstack.push();
         mstack.translate(offset.x, offset.y, offset.z);
 
-        IVertexBuilder builder = buffers.getBuffer(RenderType.getTranslucent());
+        IVertexBuilder builder = new GhostVertexBuilder(buffers.getBuffer(RenderType.getTranslucent()), 0xAA);
 
         mc().getBlockRendererDispatcher().renderModel(
                 renderState,
