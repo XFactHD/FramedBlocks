@@ -115,6 +115,12 @@ public class GhostBlockRenderer
 
             if (renderState.getBlock() == FBContent.blockFramedDoor.get())
             {
+                if (blueprint)
+                {
+                    CompoundNBT beTag = stack.getOrCreateChildTag("blueprint_data").getCompound("camo_data_two");
+                    camoState = NBTUtil.readBlockState(beTag.getCompound("camo_state"));
+                    GHOST_MODEL_DATA.setCamoState(camoState);
+                }
                 doRenderGhostBlock(mstack, buffers, renderPos.up(), renderState.with(DoorBlock.HALF, DoubleBlockHalf.UPPER), camoState);
             }
 
