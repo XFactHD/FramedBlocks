@@ -27,6 +27,12 @@ description='''
     ordering="NONE"
     side="BOTH"
 [[dependencies.framedblocks]]
+    modId="ctm"
+    mandatory=false
+    versionRange="[MC1.16.1-1.1.2.6,)"
+    ordering="NONE"
+    side="BOTH"
+[[dependencies.framedblocks]]
     modId="diagonalfences"
     mandatory=false
     versionRange="[1.1,)"

@@ -54,6 +54,7 @@ public class FramedBlueprintItem extends FramedToolItem
                 CompoundNBT tag = stack.getOrCreateChildTag("blueprint_data");
                 tag.remove("framed_block");
                 tag.remove("camo_data");
+                tag.remove("camo_data_two");
             }
             return ActionResult.func_233538_a_(stack, world.isRemote());
         }
@@ -201,10 +202,8 @@ public class FramedBlueprintItem extends FramedToolItem
 
     private ActionResultType tryPlace(ItemUseContext context, PlayerEntity player, Item item, CompoundNBT tag)
     {
-        CompoundNBT camoData = tag.getCompound("camo_data");
-
         ItemStack dummyStack = new ItemStack(item, 1);
-        dummyStack.getOrCreateTag().put("BlockEntityTag", camoData);
+        dummyStack.getOrCreateTag().put("BlockEntityTag", tag.getCompound("camo_data"));
 
         ItemUseContext placeContext = new ItemUseContext(
                 context.getWorld(),
@@ -220,8 +219,7 @@ public class FramedBlueprintItem extends FramedToolItem
             if (item == FBContent.blockFramedDoor.get().asItem())
             {
                 BlockPos topPos = new BlockItemUseContext(placeContext).getPos().up();
-                TileEntity te = context.getWorld().getTileEntity(topPos);
-                if (te instanceof FramedTileEntity && tag.contains("camo_data_two", Constants.NBT.TAG_COMPOUND))
+                if (context.getWorld().getTileEntity(topPos) instanceof FramedTileEntity && tag.contains("camo_data_two", Constants.NBT.TAG_COMPOUND))
                 {
                     //noinspection ConstantConditions
                     dummyStack.getOrCreateTag().put("BlockEntityTag", tag.get("camo_data_two"));
