@@ -1,10 +1,12 @@
 package xfacthd.framedblocks.client.util.mixin;
 
 import net.minecraft.block.*;
+import net.minecraft.client.renderer.chunk.ChunkRenderCache;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.Direction;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockReader;
+import net.minecraft.world.chunk.Chunk;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
@@ -22,10 +24,10 @@ public abstract class MixinBlock extends AbstractBlock
     private static void shouldSideBeRenderedFramed(BlockState state, IBlockReader world, BlockPos pos, Direction face, CallbackInfoReturnable<Boolean> cir)
     {
         //noinspection deprecation
-        if (state.getBlock() instanceof IFramedBlock || state.isAir()) { return; }
+        if (state.getBlock() instanceof IFramedBlock || state.isAir() || !(world instanceof ChunkRenderCache)) { return; }
 
         BlockPos adjPos = pos.offset(face);
-        TileEntity te = world.getTileEntity(adjPos);
+        TileEntity te = ((ChunkRenderCache)world).getTileEntity(adjPos, Chunk.CreateEntityType.CHECK);
         if (te instanceof FramedTileEntity)
         {
             FramedTileEntity fte = (FramedTileEntity) te;
