@@ -32,3 +32,9 @@ description='''
     versionRange="[1.1,)"
     ordering="NONE"
     side="BOTH"
+[[dependencies.framedblocks]]
+    modId="buildinggadgets"
+    mandatory=false
+    versionRange="[3.8.0,)"
+    ordering="AFTER"
+    side="BOTH"

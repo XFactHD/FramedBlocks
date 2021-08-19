@@ -6,6 +6,7 @@ import net.minecraft.item.*;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.minecraftforge.fml.ModList;
 import net.minecraftforge.fml.ModLoadingContext;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.config.ModConfig;
@@ -18,6 +19,7 @@ import org.apache.logging.log4j.Logger;
 import xfacthd.framedblocks.client.util.ClientConfig;
 import xfacthd.framedblocks.common.FBContent;
 import xfacthd.framedblocks.common.block.IFramedBlock;
+import xfacthd.framedblocks.common.compat.buildinggadgets.BuildingGadgetsCompat;
 import xfacthd.framedblocks.common.item.FramedToolItem;
 import xfacthd.framedblocks.common.net.OpenSignScreenPacket;
 import xfacthd.framedblocks.common.net.SignUpdatePacket;
@@ -80,6 +82,11 @@ public class FramedBlocks
         FBContent.init();
         ModLoadingContext.get().registerConfig(ModConfig.Type.CLIENT, ClientConfig.SPEC);
         ModLoadingContext.get().registerConfig(ModConfig.Type.COMMON, CommonConfig.SPEC);
+
+        if (ModList.get().isLoaded("buildinggadgets"))
+        {
+            BuildingGadgetsCompat.init();
+        }
     }
 
     @SubscribeEvent

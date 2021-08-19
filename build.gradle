@@ -15,7 +15,7 @@ apply plugin: 'eclipse'
 apply plugin: 'maven-publish'
 apply plugin: 'org.spongepowered.mixin'
 
-version = '2.9.3'
+version = '2.9.4'
 group = 'xfacthd.framedblocks'
 archivesBaseName = 'FramedBlocks'
 
@@ -100,10 +100,11 @@ dependencies {
 
     implementation fg.deobf("curse.maven:ctm-267602:3137659")
     runtimeOnly fg.deobf("curse.maven:chisel-235279:3376782")
-    //implementation fg.deobf("curse.maven:sodium-491233:3395290")
 
     //runtimeOnly fg.deobf("curse.maven:puzzleslib-495476:3374786") //Only needed when Diagonal Fences is switched to implementation
     compileOnly fg.deobf("curse.maven:diagonalfences-458048:3364147")
+
+    implementation fg.deobf("curse.maven:buildinggadgets-298187:3205295")
 
     annotationProcessor 'org.spongepowered:mixin:0.8'
     annotationProcessor 'com.google.code.gson:gson:2.8.0'
