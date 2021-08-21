@@ -56,7 +56,8 @@ public class FramedLatticeBlock extends FramedBlock
         state = state.with(PropertyHolder.X_AXIS, world.getBlockState(pos.east()).matchesBlock(this) || world.getBlockState(pos.west()).matchesBlock(this));
         state = state.with(PropertyHolder.Y_AXIS, world.getBlockState(pos.up()).matchesBlock(this) || world.getBlockState(pos.down()).matchesBlock(this));
         state = state.with(PropertyHolder.Z_AXIS, world.getBlockState(pos.north()).matchesBlock(this) || world.getBlockState(pos.south()).matchesBlock(this));
-        return state;
+
+        return withWater(state, world, pos);
     }
 
     @Override
