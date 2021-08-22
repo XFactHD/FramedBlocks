@@ -25,6 +25,7 @@ import xfacthd.framedblocks.FramedBlocks;
 import xfacthd.framedblocks.common.FBContent;
 import xfacthd.framedblocks.common.tileentity.FramedDoubleTileEntity;
 import xfacthd.framedblocks.common.tileentity.FramedTileEntity;
+import xfacthd.framedblocks.common.util.Utils;
 
 import java.util.function.Supplier;
 
@@ -57,7 +58,6 @@ public class BuildingGadgetsCompat
         };
     }
 
-    //FIXME: on blocks that change state after placement (ie. walls) only the first block gets the data (walls, fences) or every second one (lattice)
     private static class FramedTileEntityData extends NBTTileEntityData
     {
         public FramedTileEntityData(FramedTileEntity te) { super(te.writeToBlueprint(), buildMaterialList(te)); }
@@ -70,23 +70,26 @@ public class BuildingGadgetsCompat
             BuildingGadgets.LOG.trace("Placing {} with Tile NBT at {}.", state, pos);
             context.getWorld().setBlockState(pos, state, 0);
 
-            TileEntity te = context.getWorld().getTileEntity(pos);
-            if (te != null)
+            Utils.enqueueImmediateTask(context.getWorld(), () ->
             {
-                CompoundNBT nbt = getNBT();
-                nbt.putInt("x", pos.getX());
-                nbt.putInt("y", pos.getY());
-                nbt.putInt("z", pos.getZ());
+                TileEntity te = context.getWorld().getTileEntity(pos);
+                if (te != null)
+                {
+                    CompoundNBT nbt = getNBT();
+                    nbt.putInt("x", pos.getX());
+                    nbt.putInt("y", pos.getY());
+                    nbt.putInt("z", pos.getZ());
 
-                try
-                {
-                    te.deserializeNBT(nbt);
+                    try
+                    {
+                        te.read(state, nbt);
+                    }
+                    catch (Exception e)
+                    {
+                        BuildingGadgets.LOG.debug("Failed to apply Tile NBT Data to {} at {} in Context {}", state, pos, context, e);
+                    }
                 }
-                catch (Exception e)
-                {
-                    BuildingGadgets.LOG.debug("Failed to apply Tile NBT Data to {} at {} in Context {}", state, pos, context, e);
-                }
-            }
+            }, true);
 
             return true;
         }

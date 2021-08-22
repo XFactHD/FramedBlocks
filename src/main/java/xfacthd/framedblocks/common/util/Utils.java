@@ -2,11 +2,15 @@ package xfacthd.framedblocks.common.util;
 
 import net.minecraft.block.Block;
 import net.minecraft.item.Item;
+import net.minecraft.server.MinecraftServer;
 import net.minecraft.tags.*;
 import net.minecraft.util.Direction;
+import net.minecraft.util.concurrent.TickDelayedTask;
 import net.minecraft.util.math.shapes.VoxelShape;
 import net.minecraft.util.math.shapes.VoxelShapes;
 import net.minecraft.util.math.vector.Vector3d;
+import net.minecraft.world.IWorld;
+import net.minecraft.world.server.ServerWorld;
 import xfacthd.framedblocks.FramedBlocks;
 
 public class Utils
@@ -43,5 +47,28 @@ public class Utils
                 vec.getY() - Math.floor(vec.getY()),
                 vec.getZ() - Math.floor(vec.getZ())
         );
+    }
+
+    public static void enqueueImmediateTask(IWorld world, Runnable task, boolean allowClient)
+    {
+        if (world.isRemote() && allowClient)
+        {
+            task.run();
+        }
+        else
+        {
+            enqueueTask(world, task, 0);
+        }
+    }
+
+    public static void enqueueTask(IWorld world, Runnable task, int delay)
+    {
+        if (!(world instanceof ServerWorld))
+        {
+            throw new IllegalArgumentException("Utils#enqueueTask() called with a non-ServerWorld");
+        }
+
+        MinecraftServer server = ((ServerWorld) world).getServer();
+        server.enqueue(new TickDelayedTask(server.getTickCounter() + delay, task));
     }
 }
