@@ -23,6 +23,7 @@ import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import xfacthd.framedblocks.FramedBlocks;
 import xfacthd.framedblocks.client.util.*;
 import xfacthd.framedblocks.common.FBContent;
+import xfacthd.framedblocks.common.block.AbstractFramedDoubleBlock;
 import xfacthd.framedblocks.common.block.IFramedBlock;
 import xfacthd.framedblocks.common.data.PropertyHolder;
 import xfacthd.framedblocks.common.item.FramedBlueprintItem;
@@ -36,6 +37,8 @@ import java.lang.reflect.Method;
 public class GhostBlockRenderer
 {
     private static final FramedBlockData GHOST_MODEL_DATA = new FramedBlockData();
+    private static final FramedBlockData GHOST_MODEL_DATA_LEFT = new FramedBlockData();
+    private static final FramedBlockData GHOST_MODEL_DATA_RIGHT = new FramedBlockData();
 
     @SubscribeEvent
     public static void onClientSetup(final FMLClientSetupEvent event)
@@ -43,8 +46,8 @@ public class GhostBlockRenderer
         GHOST_MODEL_DATA.setCamoState(FBContent.blockFramedCube.get().getDefaultState());
 
         //Needed to render ghosts of double blocks
-        GHOST_MODEL_DATA.setData(FramedDoubleTileEntity.DATA_LEFT, GHOST_MODEL_DATA);
-        GHOST_MODEL_DATA.setData(FramedDoubleTileEntity.DATA_RIGHT, GHOST_MODEL_DATA);
+        GHOST_MODEL_DATA.setData(FramedDoubleTileEntity.DATA_LEFT, GHOST_MODEL_DATA_LEFT);
+        GHOST_MODEL_DATA.setData(FramedDoubleTileEntity.DATA_RIGHT, GHOST_MODEL_DATA_RIGHT);
     }
 
     public static void drawGhostBlock(IRenderTypeBuffer buffers, MatrixStack mstack)
@@ -104,14 +107,33 @@ public class GhostBlockRenderer
         if (doRender)
         {
             BlockState camoState = Blocks.AIR.getDefaultState();
+            BlockState camoStateTwo = Blocks.AIR.getDefaultState();
             if (blueprint)
             {
                 CompoundNBT beTag = stack.getOrCreateChildTag("blueprint_data").getCompound("camo_data");
                 camoState = NBTUtil.readBlockState(beTag.getCompound("camo_state"));
-                GHOST_MODEL_DATA.setCamoState(camoState);
+
+                if (renderState.getBlock() instanceof AbstractFramedDoubleBlock)
+                {
+                    camoStateTwo = NBTUtil.readBlockState(beTag.getCompound("camo_state_two"));
+
+                    if (block == FBContent.blockFramedDoublePanel.get() && renderState.get(PropertyHolder.FACING_NE) != mc().player.getHorizontalFacing())
+                    {
+                        BlockState temp = camoState;
+                        camoState = camoStateTwo;
+                        camoStateTwo = temp;
+                    }
+
+                    GHOST_MODEL_DATA_LEFT.setCamoState(camoState);
+                    GHOST_MODEL_DATA_RIGHT.setCamoState(camoStateTwo);
+                }
+                else
+                {
+                    GHOST_MODEL_DATA.setCamoState(camoState);
+                }
             }
 
-            doRenderGhostBlock(mstack, buffers, renderPos, renderState, camoState);
+            doRenderGhostBlock(mstack, buffers, renderPos, renderState, camoState, camoStateTwo);
 
             if (renderState.getBlock() == FBContent.blockFramedDoor.get())
             {
@@ -122,44 +144,63 @@ public class GhostBlockRenderer
                     GHOST_MODEL_DATA.setCamoState(camoState);
                 }
 
-                doRenderGhostBlock(mstack, buffers, renderPos.up(), renderState.with(DoorBlock.HALF, DoubleBlockHalf.UPPER), camoState);
+                doRenderGhostBlock(mstack, buffers, renderPos.up(), renderState.with(DoorBlock.HALF, DoubleBlockHalf.UPPER), camoState, camoStateTwo);
             }
 
             if (blueprint)
             {
                 GHOST_MODEL_DATA.setCamoState(Blocks.AIR.getDefaultState());
+                GHOST_MODEL_DATA_LEFT.setCamoState(Blocks.AIR.getDefaultState());
+                GHOST_MODEL_DATA_RIGHT.setCamoState(Blocks.AIR.getDefaultState());
             }
         }
     }
 
-    private static void doRenderGhostBlock(MatrixStack mstack, IRenderTypeBuffer buffers, BlockPos renderPos, BlockState renderState, BlockState camoState)
+    private static void doRenderGhostBlock(MatrixStack mstack, IRenderTypeBuffer buffers, BlockPos renderPos, BlockState renderState, BlockState camoState, BlockState camoStateTwo)
     {
         GHOST_MODEL_DATA.setWorld(mc().world);
         GHOST_MODEL_DATA.setPos(renderPos);
+        GHOST_MODEL_DATA_LEFT.setWorld(mc().world);
+        GHOST_MODEL_DATA_LEFT.setPos(renderPos);
+        GHOST_MODEL_DATA_RIGHT.setWorld(mc().world);
+        GHOST_MODEL_DATA_RIGHT.setPos(renderPos);
+
+        Vector3d offset = Vector3d.copy(renderPos).subtract(mc().gameRenderer.getActiveRenderInfo().getProjectedView());
+        IVertexBuilder builder = new GhostVertexBuilder(buffers.getBuffer(RenderType.getTranslucent()), 0xAA);
 
         //noinspection deprecation
-        if (camoState.isAir())
+        if (camoState.isAir() && camoStateTwo.isAir())
         {
-            ForgeHooksClient.setRenderLayer(RenderType.getCutout());
+            doRenderGhostBlockInLayer(mstack, builder, renderPos, renderState, RenderType.getCutout(), offset);
         }
         else
         {
             for (RenderType type : RenderType.getBlockRenderTypes())
             {
-                if (RenderTypeLookup.canRenderInLayer(camoState, type))
+                if (canRenderInLayer(camoState, type) || canRenderInLayer(camoStateTwo, type))
                 {
-                    ForgeHooksClient.setRenderLayer(type);
-                    break;
+                    doRenderGhostBlockInLayer(mstack, builder, renderPos, renderState, type, offset);
                 }
             }
         }
 
-        Vector3d offset = Vector3d.copy(renderPos).subtract(mc().gameRenderer.getActiveRenderInfo().getProjectedView());
+        ((IRenderTypeBuffer.Impl) buffers).finish(RenderType.getTranslucent());
+        ForgeHooksClient.setRenderLayer(null);
+    }
+
+    private static boolean canRenderInLayer(BlockState camoState, RenderType layer)
+    {
+        //noinspection deprecation
+        if (camoState.isAir()) { return layer == RenderType.getCutout(); }
+        return RenderTypeLookup.canRenderInLayer(camoState, layer);
+    }
+
+    private static void doRenderGhostBlockInLayer(MatrixStack mstack, IVertexBuilder builder, BlockPos renderPos, BlockState renderState, RenderType layer, Vector3d offset)
+    {
+        ForgeHooksClient.setRenderLayer(layer);
 
         mstack.push();
         mstack.translate(offset.x, offset.y, offset.z);
-
-        IVertexBuilder builder = new GhostVertexBuilder(buffers.getBuffer(RenderType.getTranslucent()), 0xAA);
 
         mc().getBlockRendererDispatcher().renderModel(
                 renderState,
@@ -172,11 +213,7 @@ public class GhostBlockRenderer
                 GHOST_MODEL_DATA
         );
 
-        ((IRenderTypeBuffer.Impl) buffers).finish(RenderType.getTranslucent());
-
         mstack.pop();
-
-        ForgeHooksClient.setRenderLayer(null);
     }
 
 

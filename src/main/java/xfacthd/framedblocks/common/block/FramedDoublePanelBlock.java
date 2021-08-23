@@ -3,7 +3,7 @@ package xfacthd.framedblocks.common.block;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.ItemStack;
+import net.minecraft.item.*;
 import net.minecraft.state.StateContainer;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.Direction;
@@ -13,8 +13,11 @@ import net.minecraft.world.IBlockReader;
 import xfacthd.framedblocks.common.FBContent;
 import xfacthd.framedblocks.common.data.BlockType;
 import xfacthd.framedblocks.common.data.PropertyHolder;
+import xfacthd.framedblocks.common.item.FramedDoubleBlockItem;
 import xfacthd.framedblocks.common.tileentity.FramedDoublePanelTileEntity;
 import xfacthd.framedblocks.common.util.CtmPredicate;
+
+import javax.annotation.Nullable;
 
 public class FramedDoublePanelBlock extends AbstractFramedDoubleBlock
 {
@@ -32,6 +35,15 @@ public class FramedDoublePanelBlock extends AbstractFramedDoubleBlock
         builder.add(PropertyHolder.FACING_NE);
     }
 
+    @Nullable
+    @Override //Used by the blueprint
+    public BlockState getStateForPlacement(BlockItemUseContext context)
+    {
+        Direction dir = context.getPlacementHorizontalFacing();
+        if (dir == Direction.SOUTH || dir == Direction.WEST) { dir = dir.getOpposite(); }
+        return getDefaultState().with(PropertyHolder.FACING_NE, dir);
+    }
+
     @Override
     public ItemStack getPickBlock(BlockState state, RayTraceResult target, IBlockReader world, BlockPos pos, PlayerEntity player)
     {
@@ -40,4 +52,7 @@ public class FramedDoublePanelBlock extends AbstractFramedDoubleBlock
 
     @Override
     public TileEntity createTileEntity(BlockState state, IBlockReader world) { return new FramedDoublePanelTileEntity(); }
+
+    @Override
+    public BlockItem createItemBlock() { return new FramedDoubleBlockItem(this); }
 }

@@ -20,7 +20,6 @@ import net.minecraftforge.common.util.Constants;
 import net.minecraftforge.registries.ForgeRegistries;
 import xfacthd.framedblocks.common.FBContent;
 import xfacthd.framedblocks.common.block.IFramedBlock;
-import xfacthd.framedblocks.common.data.BlockType;
 import xfacthd.framedblocks.common.data.FramedToolType;
 import xfacthd.framedblocks.common.tileentity.FramedTileEntity;
 
@@ -74,7 +73,7 @@ public class FramedBlueprintItem extends FramedToolItem
 
         if (player.isSneaking())
         {
-            return writeBlueprint(world, pos, player, tag);
+            return writeBlueprint(world, pos, tag);
         }
         else if (!tag.isEmpty())
         {
@@ -83,19 +82,11 @@ public class FramedBlueprintItem extends FramedToolItem
         return super.onItemUse(context);
     }
 
-    private ActionResultType writeBlueprint(World world, BlockPos pos, PlayerEntity player, CompoundNBT tag)
+    private ActionResultType writeBlueprint(World world, BlockPos pos, CompoundNBT tag)
     {
         TileEntity te = world.getTileEntity(pos);
         if (!(te instanceof FramedTileEntity))
         {
-            return ActionResultType.FAIL;
-        }
-
-        //TODO: remove when double slabs and double panels can be placed from the blueprint
-        BlockType type = ((FramedTileEntity)te).getBlock().getBlockType();
-        if (type == BlockType.FRAMED_DOUBLE_SLAB || type == BlockType.FRAMED_DOUBLE_PANEL)
-        {
-            player.sendStatusMessage(CANT_COPY, true);
             return ActionResultType.FAIL;
         }
 
@@ -129,39 +120,27 @@ public class FramedBlueprintItem extends FramedToolItem
     {
         Block block = getTargetBlock(context.getItem());
 
+        //noinspection deprecation
         if (block.getDefaultState().isAir())
         {
             return ActionResultType.FAIL;
         }
 
-        if (block == FBContent.blockFramedDoubleSlab.get() || block == FBContent.blockFramedDoublePanel.get())
+        Item item = block.asItem();
+        if (!(item instanceof BlockItem))
         {
-            Item item = (block == FBContent.blockFramedDoublePanel.get() ? FBContent.blockFramedPanel.get() : FBContent.blockFramedSlab.get()).asItem();
-            if (checkMissingMaterials(player, item, tag, true))
-            {
-                return ActionResultType.FAIL;
-            }
-
-            return tryPlaceDouble(new BlockItemUseContext(context), block, tag);
+            return ActionResultType.FAIL;
         }
-        else
+
+        if (checkMissingMaterials(player, item, tag))
         {
-            Item item = block.asItem();
-            if (!(item instanceof BlockItem))
-            {
-                return ActionResultType.FAIL;
-            }
-
-            if (checkMissingMaterials(player, item, tag, false))
-            {
-                return ActionResultType.FAIL;
-            }
-
-            return tryPlace(context, player, item, tag);
+            return ActionResultType.FAIL;
         }
+
+        return tryPlace(context, player, item, tag);
     }
 
-    private boolean checkMissingMaterials(PlayerEntity player, Item item, CompoundNBT tag, boolean doubleBlock)
+    private boolean checkMissingMaterials(PlayerEntity player, Item item, CompoundNBT tag)
     {
         if (player.abilities.isCreativeMode) { return false; } //Creative mode can always build
 
@@ -171,9 +150,20 @@ public class FramedBlueprintItem extends FramedToolItem
         ItemStack camoTwo = camoData.contains("camo_stack_two") ? ItemStack.read(camoData.getCompound("camo_stack_two")) : ItemStack.EMPTY;
         boolean glowstone = tag.getCompound("camo_data").getBoolean("glowing");
 
+        boolean doubleBlock = false;
         if (item == FBContent.blockFramedDoor.get().asItem() && tag.contains("camo_data_two"))
         {
             camoTwo = ItemStack.read(tag.getCompound("camo_data_two").getCompound("camo_stack"));
+        }
+        else if (item == FBContent.blockFramedDoublePanel.get().asItem())
+        {
+            item = FBContent.blockFramedPanel.get().asItem();
+            doubleBlock = true;
+        }
+        else if (item == FBContent.blockFramedDoubleSlab.get().asItem())
+        {
+            item = FBContent.blockFramedSlab.get().asItem();
+            doubleBlock = true;
         }
 
         if (doubleBlock)
@@ -203,7 +193,7 @@ public class FramedBlueprintItem extends FramedToolItem
     private ActionResultType tryPlace(ItemUseContext context, PlayerEntity player, Item item, CompoundNBT tag)
     {
         ItemStack dummyStack = new ItemStack(item, 1);
-        dummyStack.getOrCreateTag().put("BlockEntityTag", tag.getCompound("camo_data"));
+        dummyStack.getOrCreateTag().put("BlockEntityTag", tag.getCompound("camo_data").copy());
 
         ItemUseContext placeContext = new ItemUseContext(
                 context.getWorld(),
@@ -212,13 +202,14 @@ public class FramedBlueprintItem extends FramedToolItem
                 dummyStack,
                 new BlockRayTraceResult(context.getHitVec(), context.getFace(), context.getPos(), context.isInside())
         );
+        //Needs to happen before placing to make sure we really get the target pos, especially in case of replacing stuff like grass
+        BlockPos topPos = new BlockItemUseContext(placeContext).getPos().up();
         ActionResultType result = item.onItemUse(placeContext);
 
         if (!context.getWorld().isRemote() && result.isSuccessOrConsume())
         {
             if (item == FBContent.blockFramedDoor.get().asItem())
             {
-                BlockPos topPos = new BlockItemUseContext(placeContext).getPos().up();
                 if (context.getWorld().getTileEntity(topPos) instanceof FramedTileEntity && tag.contains("camo_data_two", Constants.NBT.TAG_COMPOUND))
                 {
                     //noinspection ConstantConditions
@@ -229,20 +220,14 @@ public class FramedBlueprintItem extends FramedToolItem
 
             if (!player.abilities.isCreativeMode)
             {
-                consumeItems(player, item, tag, false);
+                consumeItems(player, item, tag);
             }
         }
 
         return result;
     }
 
-    private ActionResultType tryPlaceDouble(BlockItemUseContext context, Block block, CompoundNBT tag)
-    {
-        //TODO: find a proper way to implement this (duplicating BlockItem logic is not the way)
-        return ActionResultType.FAIL;
-    }
-
-    private void consumeItems(PlayerEntity player, Item item, CompoundNBT tag, boolean doubleBlock)
+    private void consumeItems(PlayerEntity player, Item item, CompoundNBT tag)
     {
         CompoundNBT camoData = tag.getCompound("camo_data");
 
@@ -250,9 +235,20 @@ public class FramedBlueprintItem extends FramedToolItem
         ItemStack camoTwo = camoData.contains("camo_stack_two") ? ItemStack.read(camoData.getCompound("camo_stack_two")) : ItemStack.EMPTY;
         boolean glowstone = camoData.getBoolean("glowing");
 
+        boolean doubleBlock = false;
         if (item == FBContent.blockFramedDoor.get().asItem() && tag.contains("camo_data_two"))
         {
             camoTwo = ItemStack.read(tag.getCompound("camo_data_two").getCompound("camo_stack"));
+        }
+        else if (item == FBContent.blockFramedDoublePanel.get().asItem())
+        {
+            item = FBContent.blockFramedPanel.get().asItem();
+            doubleBlock = true;
+        }
+        else if (item == FBContent.blockFramedDoubleSlab.get().asItem())
+        {
+            item = FBContent.blockFramedSlab.get().asItem();
+            doubleBlock = true;
         }
 
         int foundBlock = doubleBlock ? 2 : 1;
