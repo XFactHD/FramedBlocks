@@ -77,7 +77,6 @@ public class FBContent
     public static final RegistryObject<Block> blockFramedVerticalStairs = registerBlock(FramedVerticalStairs::new, BlockType.FRAMED_VERTICAL_STAIRS);
     public static final RegistryObject<Block> blockFramedChest = registerBlock(FramedChestBlock::new, BlockType.FRAMED_CHEST);
     //public static final RegistryObject<Block> blockFramedCollapsibleBlock = register(FramedCollapsibleBlock::new, BlockType.FRAMED_COLLAPSIBLE_BLOCK); //STATUS: Not implemented
-    public static final RegistryObject<Block> blockFramedGhostBlock = BLOCKS.register("framed_ghost_block", FramedGhostBlock::new);
 
     /** ITEMS */
     public static final RegistryObject<Item> itemFramedHammer = registerToolItem(FramedToolItem::new, FramedToolType.HAMMER);

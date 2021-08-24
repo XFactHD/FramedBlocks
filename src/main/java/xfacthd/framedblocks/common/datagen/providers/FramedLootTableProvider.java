@@ -57,8 +57,7 @@ public class FramedLootTableProvider extends LootTableProvider
                     .map(RegistryObject::get)
                     .filter(block -> block != FBContent.blockFramedDoor.get() &&
                             block != FBContent.blockFramedDoubleSlab.get() &&
-                            block != FBContent.blockFramedDoublePanel.get() &&
-                            block != FBContent.blockFramedGhostBlock.get()
+                            block != FBContent.blockFramedDoublePanel.get()
                     )
                     .forEach(this::dropSelf);
 

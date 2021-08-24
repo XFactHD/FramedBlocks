@@ -50,7 +50,6 @@ public class FBClient
                         type == RenderType.cutoutMipped() ||
                         type == RenderType.translucent()
                 ));
-        ItemBlockRenderTypes.setRenderLayer(FBContent.blockFramedGhostBlock.get(), RenderType.translucent());
 
         BlockEntityRenderers.register(FBContent.blockEntityTypeFramedSign.get(), FramedSignRenderer::new);
         BlockEntityRenderers.register(FBContent.blockEntityTypeFramedChest.get(), FramedChestRenderer::new);
