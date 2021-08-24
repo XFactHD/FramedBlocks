@@ -52,6 +52,8 @@ public class FramedLanguageProvider extends LanguageProvider
         add(FBContent.blockFramedLattice.get(), "Framed Lattice");
         add(FBContent.blockFramedVerticalStairs.get(), "Framed Vertical Stairs");
         add(FBContent.blockFramedChest.get(), "Framed Chest");
+        add(FBContent.blockFramedBars.get(), "Framed Bars");
+        add(FBContent.blockFramedPane.get(), "Framed Pane");
         //add(FBContent.blockFramedCollapsibleBlock.get(), "Framed Collapsible Block");
 
         add(FBContent.itemFramedHammer.get(), "Framed Hammer");

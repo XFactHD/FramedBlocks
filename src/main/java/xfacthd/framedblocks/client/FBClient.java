@@ -146,8 +146,8 @@ public class FBClient
         replaceModels(FBContent.blockFramedLattice, registry, FramedLatticeModel::new);
         replaceModels(FBContent.blockFramedVerticalStairs, registry, FramedVerticalStairsModel::new);
         replaceModels(FBContent.blockFramedChest, registry, FramedChestModel::new, FramedChestModel::new);
-
-        //Framed Collapsible Block
+        replaceModels(FBContent.blockFramedBars, registry, FramedBarsModel::new);
+        replaceModels(FBContent.blockFramedPane, registry, FramedPaneModel::new);
         //replaceModelsSimple(FBContent.blockFramedCollapsibleBlock, registry, FramedCollapsibleBlockModel::new);
     }
 

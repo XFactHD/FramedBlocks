@@ -1,4 +1,5 @@
 {
+  "block.framedblocks.framed_bars": "Framed Bars",
   "block.framedblocks.framed_button": "Framed Button",
   "block.framedblocks.framed_chest": "Framed Chest",
   "block.framedblocks.framed_corner_pillar": "Framed Corner Pillar",
@@ -20,6 +21,7 @@
   "block.framedblocks.framed_ladder": "Framed Ladder",
   "block.framedblocks.framed_lattice_block": "Framed Lattice",
   "block.framedblocks.framed_lever": "Framed Lever",
+  "block.framedblocks.framed_pane": "Framed Pane",
   "block.framedblocks.framed_panel": "Framed Panel",
   "block.framedblocks.framed_pressure_plate": "Framed Pressure Plate",
   "block.framedblocks.framed_prism_corner": "Framed Prism Corner",

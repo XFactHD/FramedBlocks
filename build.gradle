@@ -108,6 +108,8 @@ dependencies {
 
     //implementation fg.deobf("curse.maven:sodium-491233:3395290")
 
+    runtimeOnly fg.deobf("curse.maven:jei-238222:3435100")
+
     annotationProcessor 'org.spongepowered:mixin:0.8'
     annotationProcessor 'com.google.code.gson:gson:2.8.0'
     annotationProcessor 'com.google.guava:guava:21.0'
