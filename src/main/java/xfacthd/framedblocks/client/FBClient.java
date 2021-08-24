@@ -25,6 +25,7 @@ import xfacthd.framedblocks.client.render.FramedSignRenderer;
 import xfacthd.framedblocks.client.screen.FramedChestScreen;
 import xfacthd.framedblocks.client.screen.FramedSignScreen;
 import xfacthd.framedblocks.client.util.BlueprintPropertyOverride;
+import xfacthd.framedblocks.client.util.ModelUtils;
 import xfacthd.framedblocks.common.FBContent;
 import xfacthd.framedblocks.common.block.IFramedBlock;
 import xfacthd.framedblocks.common.tileentity.*;
@@ -77,22 +78,22 @@ public class FBClient
             if (world != null && pos != null)
             {
                 TileEntity te = world.getTileEntity(pos);
-                if (te instanceof FramedTileEntity)
+                if (te instanceof FramedDoubleTileEntity && tintIndex < -1)
+                {
+                    tintIndex = ModelUtils.decodeSecondaryTintIndex(tintIndex);
+
+                    BlockState camoState = ((FramedDoubleTileEntity) te).getCamoStateTwo();
+                    if (!camoState.isAir())
+                    {
+                        return event.getBlockColors().getColor(camoState, world, pos, tintIndex);
+                    }
+                }
+                else if (te instanceof FramedTileEntity)
                 {
                     BlockState camoState = ((FramedTileEntity) te).getCamoState();
                     if (!camoState.isAir())
                     {
-                        int color = event.getBlockColors().getColor(camoState, world, pos, tintIndex);
-                        if (color != -1) { return color; }
-                    }
-
-                    if (te instanceof FramedDoubleTileEntity)
-                    {
-                        camoState = ((FramedDoubleTileEntity) te).getCamoStateTwo();
-                        if (!camoState.isAir())
-                        {
-                            return event.getBlockColors().getColor(camoState, world, pos, tintIndex);
-                        }
+                        return event.getBlockColors().getColor(camoState, world, pos, tintIndex);
                     }
                 }
             }

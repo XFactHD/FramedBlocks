@@ -14,11 +14,13 @@ import net.minecraft.world.IBlockDisplayReader;
 import net.minecraftforge.client.model.data.EmptyModelData;
 import net.minecraftforge.client.model.data.IModelData;
 import xfacthd.framedblocks.client.util.FramedBlockData;
+import xfacthd.framedblocks.client.util.ModelUtils;
 import xfacthd.framedblocks.common.tileentity.FramedDoubleTileEntity;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.*;
+import java.util.stream.Collectors;
 
 public abstract class FramedDoubleBlockModel extends BakedModelProxy
 {
@@ -45,7 +47,9 @@ public abstract class FramedDoubleBlockModel extends BakedModelProxy
         );
 
         IModelData dataRight = extraData.getData(FramedDoubleTileEntity.DATA_RIGHT);
-        quads.addAll(models.getB().getQuads(dummyStates.getB(), side, rand, dataRight != null ? dataRight : EmptyModelData.INSTANCE));
+        quads.addAll(invertTintIndizes(
+                models.getB().getQuads(dummyStates.getB(), side, rand, dataRight != null ? dataRight : EmptyModelData.INSTANCE)
+        ));
 
         return quads;
     }
@@ -106,5 +110,12 @@ public abstract class FramedDoubleBlockModel extends BakedModelProxy
                 dispatcher.getModelForState(dummyStates.getA()),
                 dispatcher.getModelForState(dummyStates.getB())
         );
+    }
+
+    private List<BakedQuad> invertTintIndizes(List<BakedQuad> quads)
+    {
+        return quads.stream()
+                .map(ModelUtils::invertTintIndex)
+                .collect(Collectors.toList());
     }
 }
