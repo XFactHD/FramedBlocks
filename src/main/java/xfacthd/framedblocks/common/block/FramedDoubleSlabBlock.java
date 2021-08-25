@@ -1,5 +1,6 @@
 package xfacthd.framedblocks.common.block;
 
+import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
@@ -10,6 +11,7 @@ import net.minecraft.world.level.BlockGetter;
 import xfacthd.framedblocks.common.FBContent;
 import xfacthd.framedblocks.common.data.BlockType;
 import xfacthd.framedblocks.common.blockentity.FramedDoubleSlabBlockEntity;
+import xfacthd.framedblocks.common.item.FramedDoubleBlockItem;
 
 public class FramedDoubleSlabBlock extends AbstractFramedDoubleBlock
 {
@@ -26,4 +28,7 @@ public class FramedDoubleSlabBlock extends AbstractFramedDoubleBlock
     {
         return new FramedDoubleSlabBlockEntity(pos, state);
     }
+
+    @Override
+    public BlockItem createItemBlock() { return new FramedDoubleBlockItem(this); }
 }

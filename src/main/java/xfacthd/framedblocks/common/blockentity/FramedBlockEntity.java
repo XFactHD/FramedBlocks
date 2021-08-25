@@ -189,7 +189,8 @@ public class FramedBlockEntity extends BlockEntity
         {
             FluidStack fluid = handler.getFluidInTank(0);
 
-            BlockState state = fluid.getFluid().defaultFluidState().createLegacyBlock();
+            //TODO: sides are not hidden when next to a "falling" fluid block
+            BlockState state = fluid.getFluid().defaultFluidState().createLegacyBlock().setValue(BlockStateProperties.LEVEL, 8);
             if (!state.isAir())
             {
                 ItemStack bucket = new ItemStack(fluid.getFluid().getBucket());

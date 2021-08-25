@@ -3,7 +3,9 @@ package xfacthd.framedblocks.common.block;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntity;
@@ -14,6 +16,7 @@ import xfacthd.framedblocks.common.FBContent;
 import xfacthd.framedblocks.common.data.BlockType;
 import xfacthd.framedblocks.common.data.PropertyHolder;
 import xfacthd.framedblocks.common.blockentity.FramedDoublePanelBlockEntity;
+import xfacthd.framedblocks.common.item.FramedDoubleBlockItem;
 import xfacthd.framedblocks.common.util.CtmPredicate;
 
 public class FramedDoublePanelBlock extends AbstractFramedDoubleBlock
@@ -32,6 +35,14 @@ public class FramedDoublePanelBlock extends AbstractFramedDoubleBlock
         builder.add(PropertyHolder.FACING_NE);
     }
 
+    @Override //Used by the blueprint
+    public BlockState getStateForPlacement(BlockPlaceContext context)
+    {
+        Direction dir = context.getHorizontalDirection();
+        if (dir == Direction.SOUTH || dir == Direction.WEST) { dir = dir.getOpposite(); }
+        return defaultBlockState().setValue(PropertyHolder.FACING_NE, dir);
+    }
+
     @Override
     public ItemStack getPickBlock(BlockState state, HitResult target, BlockGetter level, BlockPos pos, Player player)
     {
@@ -43,4 +54,7 @@ public class FramedDoublePanelBlock extends AbstractFramedDoubleBlock
     {
         return new FramedDoublePanelBlockEntity(pos, state);
     }
+
+    @Override
+    public BlockItem createItemBlock() { return new FramedDoubleBlockItem(this); }
 }

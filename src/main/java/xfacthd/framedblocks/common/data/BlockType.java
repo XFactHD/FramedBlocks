@@ -38,8 +38,8 @@ public enum BlockType
     FRAMED_LEVER                  (false, false, false,  true),
     FRAMED_SIGN                   (false,  true, false,  true),
     FRAMED_WALL_SIGN              (false,  true, false, false, CtmPredicate.FALSE, SideSkipPredicate.FALSE, FramedWallSignBlock::generateShapes),
-    FRAMED_DOUBLE_SLAB            (false,  true, false, false, CtmPredicate.Y_AXIS, SideSkipPredicate.FALSE, Shapes.block()), //Side skip is handled by the single slab
-    FRAMED_DOUBLE_PANEL           (false,  true, false, false, FramedDoublePanelBlock.CTM_PREDICATE, SideSkipPredicate.FALSE, Shapes.block()), //Side skip is handled by the single panel
+    FRAMED_DOUBLE_SLAB            (false,  true, false,  true, CtmPredicate.Y_AXIS, SideSkipPredicate.FALSE, Shapes.block()), //Side skip is handled by the single slab
+    FRAMED_DOUBLE_PANEL           (false,  true, false,  true, FramedDoublePanelBlock.CTM_PREDICATE, SideSkipPredicate.FALSE, Shapes.block()), //Side skip is handled by the single panel
     FRAMED_DOUBLE_SLOPE           (false,  true, false,  true, FramedDoubleSlopeBlock.CTM_PREDICATE, SideSkipPredicate.FALSE, Shapes.block()), //Side skip is handled by the single slope
     FRAMED_DOUBLE_CORNER          (false,  true, false,  true, FramedDoubleCornerBlock.CTM_PREDICATE, SideSkipPredicate.FALSE, Shapes.block()),
     FRAMED_DOUBLE_PRISM_CORNER    (false,  true, false,  true, FramedDoubleThreewayCornerBlock.CTM_PREDICATE, SideSkipPredicate.FALSE, Shapes.block()),
