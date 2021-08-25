@@ -52,6 +52,8 @@ public enum BlockType
     FRAMED_LATTICE_BLOCK          (false, false,  true,  true, CtmPredicate.FALSE, FramedLatticeBlock.SKIP_PREDICATE, FramedLatticeBlock::generateShapes),
     FRAMED_VERTICAL_STAIRS        (false, false,  true,  true, FramedVerticalStairs.CTM_PREDICATE, new VerticalStairsSkipPredicate(), FramedVerticalStairs::generateShapes),
     FRAMED_CHEST                  (false,  true,  true,  true, CtmPredicate.FALSE, SideSkipPredicate.FALSE, Shapes.box(1D/16D, 0, 1D/16D, 15D/16D, 14D/16D, 15D/16D)),
+    FRAMED_BARS                   (false, false,  true,  true, CtmPredicate.FALSE, SideSkipPredicate.FALSE, FramedPaneBlock::generateShapes),
+    FRAMED_PANE                   (false, false,  true,  true, CtmPredicate.FALSE, new PaneSkipPredicate(), FramedPaneBlock::generateShapes),
     FRAMED_COLLAPSIBLE_BLOCK      ( true,  true, false,  true/*, FramedCollapsibleBlock.CTM_PREDICATE, FramedCollapsibleBlock.SKIP_PREDICATE*/);
 
     private final String name = toString().toLowerCase(Locale.ROOT);

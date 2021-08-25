@@ -39,6 +39,8 @@
     "framedblocks:framed_floor_board",
     "framedblocks:framed_lattice_block",
     "framedblocks:framed_vertical_stairs",
-    "framedblocks:framed_chest"
+    "framedblocks:framed_chest",
+    "framedblocks:framed_bars",
+    "framedblocks:framed_pane"
   ]
 }

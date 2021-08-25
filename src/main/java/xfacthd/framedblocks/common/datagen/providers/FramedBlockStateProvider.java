@@ -67,6 +67,8 @@ public class FramedBlockStateProvider extends BlockStateProvider
         registerFramedSoulWallTorch();
         registerFramedFloorBoard(cube);
         registerFramedChest();
+        registerFramedBarsBlock(cube);
+        registerFramedPaneBlock(cube);
         registerFramedCollapsibleBlock();
     }
 
@@ -239,6 +241,18 @@ public class FramedBlockStateProvider extends BlockStateProvider
         }, BlockStateProperties.WATERLOGGED);
 
         simpleBlockItem(FBContent.blockFramedChest.get(), chest);
+    }
+
+    private void registerFramedBarsBlock(ModelFile cube)
+    {
+        simpleBlock(FBContent.blockFramedBars.get(), cube);
+        itemModels().withExistingParent("framed_bars", "item/generated").texture("layer0", modLoc("item/framed_bars"));
+    }
+
+    private void registerFramedPaneBlock(ModelFile cube)
+    {
+        simpleBlock(FBContent.blockFramedPane.get(), cube);
+        itemModels().withExistingParent("framed_pane", "item/generated").texture("layer0", TEXTURE);
     }
 
     private void registerFramedCollapsibleBlock()
