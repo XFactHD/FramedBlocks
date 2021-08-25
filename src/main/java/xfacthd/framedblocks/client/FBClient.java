@@ -11,6 +11,7 @@ import net.minecraft.client.resources.model.ModelResourceLocation;
 import net.minecraft.core.BlockPos;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.event.ColorHandlerEvent;
@@ -26,6 +27,7 @@ import xfacthd.framedblocks.client.render.FramedSignRenderer;
 import xfacthd.framedblocks.client.screen.FramedChestScreen;
 import xfacthd.framedblocks.client.screen.FramedSignScreen;
 import xfacthd.framedblocks.client.util.BlueprintPropertyOverride;
+import xfacthd.framedblocks.client.util.ModelUtils;
 import xfacthd.framedblocks.common.FBContent;
 import xfacthd.framedblocks.common.block.IFramedBlock;
 import xfacthd.framedblocks.common.blockentity.*;
@@ -75,22 +77,23 @@ public class FBClient
         {
             if (world != null && pos != null)
             {
-                if (world.getBlockEntity(pos) instanceof FramedBlockEntity be)
+                BlockEntity be = world.getBlockEntity(pos);
+                if (be instanceof FramedDoubleBlockEntity dbe && tintIndex < -1)
                 {
-                    BlockState camoState = be.getCamoState();
+                    tintIndex = ModelUtils.decodeSecondaryTintIndex(tintIndex);
+
+                    BlockState camoState = dbe.getCamoStateTwo();
                     if (!camoState.isAir())
                     {
-                        int color = event.getBlockColors().getColor(camoState, world, pos, tintIndex);
-                        if (color != -1) { return color; }
+                        return event.getBlockColors().getColor(camoState, world, pos, tintIndex);
                     }
-
-                    if (be instanceof FramedDoubleBlockEntity dbe)
+                }
+                else if (be instanceof FramedBlockEntity fbe)
+                {
+                    BlockState camoState = fbe.getCamoState();
+                    if (!camoState.isAir())
                     {
-                        camoState = dbe.getCamoStateTwo();
-                        if (!camoState.isAir())
-                        {
-                            return event.getBlockColors().getColor(camoState, world, pos, tintIndex);
-                        }
+                        return event.getBlockColors().getColor(camoState, world, pos, tintIndex);
                     }
                 }
             }

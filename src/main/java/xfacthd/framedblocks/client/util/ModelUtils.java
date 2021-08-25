@@ -244,6 +244,26 @@ public class ModelUtils
         }
     }
 
+    /**
+     * Creates a shallow copy of the given BakedQuad in order to invert the tint index for BakedQuads
+     * used by the second model of a double block
+     * @apiNote The vertex data of the returned BakedQuad is not a copy, it must not be modified later!
+     */
+    public static BakedQuad invertTintIndex(BakedQuad quad)
+    {
+        return new BakedQuad(
+                quad.getVertices(), //Don't need to copy the vertex data, it won't be modified by the caller
+                encodeSecondaryTintIndex(quad.getTintIndex()),
+                quad.getDirection(),
+                quad.getSprite(),
+                quad.isShade()
+        );
+    }
+
+    public static int encodeSecondaryTintIndex(int tintIndex) { return (tintIndex + 2) * -1; }
+
+    public static int decodeSecondaryTintIndex(int tintIndex) { return (tintIndex * -1) - 2; }
+
 
 
     public interface VertexDataConsumer
