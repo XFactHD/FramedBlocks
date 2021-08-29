@@ -89,7 +89,7 @@ public class FramedChestBlock extends FramedBlock
     @Override
     public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level level, BlockState state, BlockEntityType<T> type)
     {
-        if (level.isClientSide() || state.getValue(PropertyHolder.CHEST_STATE) == ChestState.CLOSED) { return null; }
+        if (level.isClientSide() || state.getValue(PropertyHolder.CHEST_STATE) != ChestState.CLOSING) { return null; }
 
         return Utils.createBlockEntityTicker(type, FBContent.blockEntityTypeFramedChest.get(), FramedChestBlockEntity::tick);
     }
