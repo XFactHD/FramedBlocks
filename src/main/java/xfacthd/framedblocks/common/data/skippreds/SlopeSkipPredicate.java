@@ -50,7 +50,7 @@ public class SlopeSkipPredicate implements SideSkipPredicate
         }
         else if (adjBlock == BlockType.FRAMED_INNER_PRISM_CORNER || adjBlock == BlockType.FRAMED_INNER_THREEWAY_CORNER)
         {
-            return testAgainstInnerThreewayCorner(level, pos, dir, type, adjBlock, adjState, side);
+            return testAgainstInnerThreewayCorner(level, pos, dir, type, adjState, side);
         }
 
         return false;
@@ -219,31 +219,20 @@ public class SlopeSkipPredicate implements SideSkipPredicate
         Direction adjDir = adjState.getValue(PropertyHolder.FACING_HOR);
         CornerType adjType = adjState.getValue(PropertyHolder.CORNER_TYPE);
 
-        if (side == dir.getClockWise() && adjDir == dir)
-        {
-            if (type == SlopeType.BOTTOM && (adjType == CornerType.BOTTOM || adjType == CornerType.HORIZONTAL_BOTTOM_RIGHT))
-            {
-                return SideSkipPredicate.compareState(level, pos, side, dir);
-            }
-            else if (type == SlopeType.TOP && (adjType == CornerType.TOP || adjType == CornerType.HORIZONTAL_TOP_RIGHT))
-            {
-                return SideSkipPredicate.compareState(level, pos, side, dir);
-            }
-        }
-        else if (side == dir.getCounterClockWise())
+        if (side == dir.getClockWise())
         {
             if (adjDir == dir)
             {
-                if (type == SlopeType.BOTTOM && adjType == CornerType.HORIZONTAL_BOTTOM_LEFT)
+                if (type == SlopeType.BOTTOM && adjType == CornerType.HORIZONTAL_BOTTOM_RIGHT)
                 {
                     return SideSkipPredicate.compareState(level, pos, side, dir);
                 }
-                else if (type == SlopeType.TOP && adjType == CornerType.HORIZONTAL_TOP_LEFT)
+                else if (type == SlopeType.TOP && adjType == CornerType.HORIZONTAL_TOP_RIGHT)
                 {
                     return SideSkipPredicate.compareState(level, pos, side, dir);
                 }
             }
-            else if (adjDir == dir.getCounterClockWise())
+            else if (adjDir == dir.getClockWise())
             {
                 if (type == SlopeType.BOTTOM && adjType == CornerType.BOTTOM)
                 {
@@ -253,6 +242,17 @@ public class SlopeSkipPredicate implements SideSkipPredicate
                 {
                     return SideSkipPredicate.compareState(level, pos, side, dir);
                 }
+            }
+        }
+        else if (side == dir.getCounterClockWise() && adjDir == dir)
+        {
+            if (type == SlopeType.BOTTOM && (adjType == CornerType.BOTTOM || adjType == CornerType.HORIZONTAL_BOTTOM_LEFT))
+            {
+                return SideSkipPredicate.compareState(level, pos, side, dir);
+            }
+            else if (type == SlopeType.TOP && (adjType == CornerType.TOP || adjType == CornerType.HORIZONTAL_TOP_LEFT))
+            {
+                return SideSkipPredicate.compareState(level, pos, side, dir);
             }
         }
         else if (side.getAxis() == Direction.Axis.Y && type == SlopeType.HORIZONTAL && ((side == Direction.UP) == (adjType.isTop())))
@@ -292,12 +292,10 @@ public class SlopeSkipPredicate implements SideSkipPredicate
         return false;
     }
 
-    private boolean testAgainstInnerThreewayCorner(BlockGetter level, BlockPos pos, Direction dir, SlopeType type, BlockType adjBlock, BlockState adjState, Direction side)
+    private boolean testAgainstInnerThreewayCorner(BlockGetter level, BlockPos pos, Direction dir, SlopeType type, BlockState adjState, Direction side)
     {
         Direction adjDir = adjState.getValue(PropertyHolder.FACING_HOR);
         boolean adjTop = adjState.getValue(PropertyHolder.TOP);
-
-        if (adjBlock == BlockType.FRAMED_INNER_THREEWAY_CORNER) { adjDir = adjDir.getClockWise(); }
 
         if (type != SlopeType.HORIZONTAL && adjTop == (type == SlopeType.TOP))
         {

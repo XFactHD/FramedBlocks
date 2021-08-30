@@ -13,10 +13,6 @@ import net.minecraft.world.phys.shapes.Shapes;
 import xfacthd.framedblocks.common.data.*;
 import xfacthd.framedblocks.common.util.*;
 
-/*
-FIXME: BREAKING CHANGE!!!
-FIXME: Fix inner threeway corner top/bottom rotation discrepancy from other corners (should be rotated 90 degree clockwise)
-*/
 public class FramedThreewayCornerBlock extends FramedBlock
 {
     public static final CtmPredicate CTM_PREDICATE = (state, dir) ->
@@ -34,9 +30,7 @@ public class FramedThreewayCornerBlock extends FramedBlock
         Direction facing = state.getValue(PropertyHolder.FACING_HOR);
         if (facing == dir) { return true; }
 
-        BlockType type = ((FramedBlock) state.getBlock()).getBlockType();
-        if (type == BlockType.FRAMED_INNER_PRISM_CORNER) { return facing.getCounterClockWise() == dir; }
-        else { return facing.getClockWise() == dir; }
+        return facing.getCounterClockWise() == dir;
     };
 
     public FramedThreewayCornerBlock(BlockType type)
@@ -57,10 +51,6 @@ public class FramedThreewayCornerBlock extends FramedBlock
         BlockState state = defaultBlockState();
 
         Direction facing = context.getHorizontalDirection();
-        if (getBlockType() == BlockType.FRAMED_INNER_THREEWAY_CORNER)
-        {
-            facing = facing.getCounterClockWise();
-        }
         state = state.setValue(PropertyHolder.FACING_HOR, facing);
 
         state = withWater(state, context.getLevel(), context.getClickedPos());
@@ -123,16 +113,15 @@ public class FramedThreewayCornerBlock extends FramedBlock
             if (state.getValue(PropertyHolder.TOP))
             {
                 VoxelShape shapeTop = Shapes.or(
-                        box(4, 8, 12, 16, 12, 16),
                         box(0, 12, 0, 16, 16, 16),
                         box(0, 8, 0, 16, 12, 12),
-                        box(0, 4, 0, 16, 8, 8),
-                        box(0, 0, 0, 16, 4, 4),
-                        box(12, 0, 4, 16, 4, 16),
-                        box(8, 4, 8, 16, 8, 16),
-                        box(4, 0, 4, 8, 4, 8),
-                        box(8, 0, 8, 12, 4, 12),
-                        box(8, 0, 4, 12, 4, 8)
+                        box(0, 8, 12, 12, 12, 16),
+                        box(4, 4, 4, 16, 8, 8),
+                        box(4, 4, 8, 8, 8, 16),
+                        box(0, 0, 0, 16, 8, 4),
+                        box(0, 0, 4, 4, 8, 16),
+                        box(8, 0, 4, 12, 4, 8),
+                        box(4, 0, 4, 8, 4, 12)
                 ).optimize();
 
                 builder.put(state, Utils.rotateShape(Direction.NORTH, dir, shapeTop));
@@ -140,16 +129,15 @@ public class FramedThreewayCornerBlock extends FramedBlock
             else
             {
                 VoxelShape shapeBottom = Shapes.or(
-                        box(4, 4, 12, 16, 8, 16),
                         box(0, 0, 0, 16, 4, 16),
                         box(0, 4, 0, 16, 8, 12),
-                        box(0, 8, 0, 16, 12, 8),
-                        box(0, 12, 0, 16, 16, 4),
-                        box(12, 12, 4, 16, 16, 16),
-                        box(8, 8, 8, 16, 12, 16),
-                        box(4, 12, 4, 8, 16, 8),
-                        box(8, 12, 8, 12, 16, 12),
-                        box(8, 12, 4, 12, 16, 8)
+                        box(0, 4, 12, 12, 8, 16),
+                        box(4, 8, 4, 16, 12, 8),
+                        box(4, 8, 8, 8, 12, 16),
+                        box(0, 8, 0, 16, 16, 4),
+                        box(0, 8, 4, 4, 16, 16),
+                        box(8, 12, 4, 12, 16, 8),
+                        box(4, 12, 4, 8, 16, 12)
                 ).optimize();
 
                 builder.put(state, Utils.rotateShape(Direction.NORTH, dir, shapeBottom));

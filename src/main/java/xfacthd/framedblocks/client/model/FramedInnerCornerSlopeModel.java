@@ -28,7 +28,7 @@ public class FramedInnerCornerSlopeModel extends FramedBlockModel
     public FramedInnerCornerSlopeModel(BakedModel baseModel)
     {
         this(
-                FBContent.blockFramedInnerCornerSlope.get().defaultBlockState().setValue(PropertyHolder.FACING_HOR, Direction.EAST),
+                FBContent.blockFramedInnerCornerSlope.get().defaultBlockState().setValue(PropertyHolder.FACING_HOR, Direction.SOUTH),
                 baseModel
         );
     }
@@ -73,7 +73,7 @@ public class FramedInnerCornerSlopeModel extends FramedBlockModel
         }
         else
         {
-            if (quad.getDirection() == dir.getOpposite())
+            if (quad.getDirection() == dir.getClockWise())
             {
                 BakedQuad triQuad = ModelUtils.duplicateQuad(quad);
                 if (BakedQuadTransformer.createSideTriangleQuad(triQuad, true, type == CornerType.TOP))
@@ -88,7 +88,7 @@ public class FramedInnerCornerSlopeModel extends FramedBlockModel
                     quadMap.get(null).add(slopeQuad);
                 }
             }
-            else if (quad.getDirection() == dir.getCounterClockWise())
+            else if (quad.getDirection() == dir.getOpposite())
             {
                 BakedQuad triQuad = ModelUtils.duplicateQuad(quad);
                 if (BakedQuadTransformer.createSideTriangleQuad(triQuad, false, type == CornerType.TOP))

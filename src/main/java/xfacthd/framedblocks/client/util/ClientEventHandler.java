@@ -179,19 +179,19 @@ public class ClientEventHandler
             drawLine(builder, mstack, 0, 0, 1, 0, 1, 1);
             drawLine(builder, mstack, 1, 0, 1, 1, 1, 1);
 
-            //Right face
-            drawLine(builder, mstack, 0, 0, 0, 0, 0, 1);
-            drawLine(builder, mstack, 0, 1, 0, 0, 1, 1);
-            drawLine(builder, mstack, 0, 0, 0, 0, 1, 0);
+            //Left face
+            drawLine(builder, mstack, 1, 0, 0, 1, 0, 1);
+            drawLine(builder, mstack, 1, 1, 0, 1, 1, 1);
+            drawLine(builder, mstack, 1, 0, 0, 1, 1, 0);
 
             //Bottom face
-            drawLine(builder, mstack, 1, 0, 0, 1, 0, 1);
+            drawLine(builder, mstack, 0, 0, 0, 0, 0, 1);
             drawLine(builder, mstack, 0, 0, 0, 1, 0, 0);
 
             //Slope edges
-            drawLine(builder, mstack, 1, 0, 0, 1, 1, 1);
-            drawLine(builder, mstack, 1, 0, 0, 0, 1, 0);
-            drawLine(builder, mstack, 1, 0, 0, 0, 1, 1);
+            drawLine(builder, mstack, 0, 0, 0, 0, 1, 1);
+            drawLine(builder, mstack, 0, 0, 0, 1, 1, 0);
+            drawLine(builder, mstack, 0, 0, 0, 1, 1, 1);
         }
         else
         {
@@ -319,20 +319,19 @@ public class ClientEventHandler
         drawLine(builder, mstack, 0, 0, 1, 0, 1, 1);
         drawLine(builder, mstack, 1, 0, 1, 1, 1, 1);
 
-        //Right face
-        drawLine(builder, mstack, 0, 0, 0, 0, 0, 1);
-        drawLine(builder, mstack, 0, 1, 0, 0, 1, 1);
-        drawLine(builder, mstack, 0, 0, 0, 0, 1, 0);
+        //Left face
+        drawLine(builder, mstack, 1, 1, 0, 1, 1, 1);
+        drawLine(builder, mstack, 1, 0, 0, 1, 1, 0);
 
         //Slope edges
-        drawLine(builder, mstack, 1, 0, 0, 1, 1, 1);
-        drawLine(builder, mstack, 1, 0, 0, 0, 1, 0);
-        drawLine(builder, mstack, 0, 1, 0, 1, 1, 1);
+        drawLine(builder, mstack, 0, 0, 0, 0, 1, 1);
+        drawLine(builder, mstack, 0, 0, 0, 1, 1, 0);
+        drawLine(builder, mstack, 0, 1, 1, 1, 1, 0);
 
         //Cross
-        drawLine(builder, mstack, 1, 0, 0, .5, .5, .5);
-        drawLine(builder, mstack, .5, .5, .5, 1, 1, 1);
-        drawLine(builder, mstack, 0, 1, 0, .5, .5, .5);
+        drawLine(builder, mstack, 0, 0, 0, .5, .5, .5);
+        drawLine(builder, mstack, .5, .5, .5, 0, 1, 1);
+        drawLine(builder, mstack, 1, 1, 0, .5, .5, .5);
     }
 
     private static void drawLine(VertexConsumer builder, PoseStack mstack, double x1, double y1, double z1, double x2, double y2, double z2)

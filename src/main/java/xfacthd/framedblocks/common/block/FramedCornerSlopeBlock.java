@@ -15,10 +15,6 @@ import xfacthd.framedblocks.common.data.*;
 import xfacthd.framedblocks.common.util.CtmPredicate;
 import xfacthd.framedblocks.common.util.Utils;
 
-/*
-FIXME: BREAKING CHANGE!!!
-FIXME: Fix inner corner top/bottom rotation discrepancy from other corners (should be rotated 90 degree clockwise)
-*/
 public class FramedCornerSlopeBlock extends FramedBlock
 {
     public static final CtmPredicate CTM_PREDICATE = (state, dir) ->
@@ -54,7 +50,7 @@ public class FramedCornerSlopeBlock extends FramedBlock
         }
         else
         {
-            return facing == dir || facing.getClockWise() == dir;
+            return facing == dir || facing.getCounterClockWise() == dir;
         }
     };
 
@@ -86,10 +82,6 @@ public class FramedCornerSlopeBlock extends FramedBlock
         }
 
         Direction facing = context.getHorizontalDirection();
-        if (getBlockType() == BlockType.FRAMED_INNER_CORNER_SLOPE && side.getAxis() == Direction.Axis.Y)
-        {
-            facing = facing.getCounterClockWise();
-        }
         state = withCornerType(state, context, side, hitPoint, facing);
 
         return withWater(state, context.getLevel(), context.getClickedPos());
@@ -235,13 +227,13 @@ public class FramedCornerSlopeBlock extends FramedBlock
             else if (type.isTop())
             {
                 VoxelShape shapeTop = Shapes.or(
-                        box( 0,  0,  0, 16,  4,  4),
-                        box(12,  0,  4, 16,  4, 16),
-                        box( 0,  4,  0, 16,  8,  8),
-                        box( 8,  4,  8, 16,  8, 16),
+                        box( 0, 12,  0, 16, 16, 16),
                         box( 0,  8,  0, 16, 12, 12),
-                        box( 4,  8, 12, 16, 12, 16),
-                        box( 0, 12,  0, 16, 16, 16)
+                        box( 0,  8, 12, 12, 12, 16),
+                        box( 0,  4,  0, 16,  8,  8),
+                        box( 0,  4,  8,  8,  8, 16),
+                        box( 0,  0,  0, 16,  4,  4),
+                        box( 0,  0,  4,  4,  4, 16)
                 ).optimize();
 
                 builder.put(state, Utils.rotateShape(Direction.NORTH, dir, shapeTop));
@@ -251,11 +243,11 @@ public class FramedCornerSlopeBlock extends FramedBlock
                 VoxelShape shapeBottom = Shapes.or(
                         box( 0,  0,  0, 16,  4, 16),
                         box( 0,  4,  0, 16,  8, 12),
-                        box( 4,  4, 12, 16,  8, 16),
+                        box( 0,  4, 12, 12,  8, 16),
                         box( 0,  8,  0, 16, 12,  8),
-                        box( 8,  8,  8, 16, 12, 16),
+                        box( 0,  8,  8,  8, 12, 16),
                         box( 0, 12,  0, 16, 16,  4),
-                        box(12, 12,  4, 16, 16, 16)
+                        box( 0, 12,  4,  4, 16, 16)
                 ).optimize();
 
                 builder.put(state, Utils.rotateShape(Direction.NORTH, dir, shapeBottom));

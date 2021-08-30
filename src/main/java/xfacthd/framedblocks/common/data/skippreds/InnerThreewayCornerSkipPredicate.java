@@ -20,11 +20,9 @@ public class InnerThreewayCornerSkipPredicate implements SideSkipPredicate
         Direction dir = state.getValue(PropertyHolder.FACING_HOR);
         boolean top = state.getValue(PropertyHolder.TOP);
 
-        if (((IFramedBlock)state.getBlock()).getBlockType() == BlockType.FRAMED_INNER_THREEWAY_CORNER) { dir = dir.getClockWise(); } //Correct rotation discrepancy of the threeway corner
-
         if (adjBlock == BlockType.FRAMED_INNER_PRISM_CORNER || adjBlock == BlockType.FRAMED_INNER_THREEWAY_CORNER)
         {
-            return testAgainstInnerThreewayCorner(level, pos, dir, top, adjBlock, adjState, side);
+            return testAgainstInnerThreewayCorner(level, pos, dir, top, adjState, side);
         }
         else if (adjBlock == BlockType.FRAMED_PRISM_CORNER || adjBlock == BlockType.FRAMED_THREEWAY_CORNER)
         {
@@ -58,12 +56,10 @@ public class InnerThreewayCornerSkipPredicate implements SideSkipPredicate
         return false;
     }
 
-    private boolean testAgainstInnerThreewayCorner(BlockGetter level, BlockPos pos, Direction dir, boolean top, BlockType adjBlock, BlockState adjState, Direction side)
+    private boolean testAgainstInnerThreewayCorner(BlockGetter level, BlockPos pos, Direction dir, boolean top, BlockState adjState, Direction side)
     {
         Direction adjDir = adjState.getValue(PropertyHolder.FACING_HOR);
         boolean adjTop = adjState.getValue(PropertyHolder.TOP);
-
-        if (adjBlock == BlockType.FRAMED_INNER_THREEWAY_CORNER) { adjDir = adjDir.getClockWise(); } //Correct rotation discrepancy of the threeway corner
 
         if (adjTop == top && ((side == dir.getClockWise() && adjDir == dir.getClockWise()) || (side == dir.getOpposite() && adjDir == dir.getCounterClockWise())))
         {
@@ -180,8 +176,8 @@ public class InnerThreewayCornerSkipPredicate implements SideSkipPredicate
         Direction adjDir = adjState.getValue(PropertyHolder.FACING_HOR);
         CornerType adjType = adjState.getValue(PropertyHolder.CORNER_TYPE);
 
-        if (!adjType.isHorizontal() && adjType.isTop() == top && ((side == dir.getClockWise() && adjDir == dir) ||
-                                                                  (side == dir.getOpposite() && adjDir == dir.getOpposite()))
+        if (!adjType.isHorizontal() && adjType.isTop() == top && ((side == dir.getClockWise() && adjDir == dir.getClockWise()) ||
+                                                                  (side == dir.getOpposite() && adjDir == dir.getCounterClockWise()))
         )
         {
             return SideSkipPredicate.compareState(level, pos, side);

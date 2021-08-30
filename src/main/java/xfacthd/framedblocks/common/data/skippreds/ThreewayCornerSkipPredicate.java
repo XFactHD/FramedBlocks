@@ -26,7 +26,7 @@ public class ThreewayCornerSkipPredicate implements SideSkipPredicate
         }
         else if (adjBlock == BlockType.FRAMED_INNER_PRISM_CORNER || adjBlock == BlockType.FRAMED_INNER_THREEWAY_CORNER)
         {
-            return testAgainstInnerThreewayCorner(level, pos, dir, top, adjBlock, adjState, side);
+            return testAgainstInnerThreewayCorner(level, pos, dir, top, adjState, side);
         }
         else if (adjBlock == BlockType.FRAMED_DOUBLE_PRISM_CORNER || adjBlock == BlockType.FRAMED_DOUBLE_THREEWAY_CORNER)
         {
@@ -72,12 +72,10 @@ public class ThreewayCornerSkipPredicate implements SideSkipPredicate
         return false;
     }
 
-    private boolean testAgainstInnerThreewayCorner(BlockGetter level, BlockPos pos, Direction dir, boolean top, BlockType adjBlock, BlockState adjState, Direction side)
+    private boolean testAgainstInnerThreewayCorner(BlockGetter level, BlockPos pos, Direction dir, boolean top, BlockState adjState, Direction side)
     {
         Direction adjDir = adjState.getValue(PropertyHolder.FACING_HOR);
         boolean adjTop = adjState.getValue(PropertyHolder.TOP);
-
-        if (adjBlock == BlockType.FRAMED_INNER_THREEWAY_CORNER) { adjDir = adjDir.getClockWise(); } //Correct rotation discrepancy of the threeway corner
 
         if (adjTop == top && adjDir == dir && (side == dir || side == dir.getCounterClockWise() || (side == Direction.DOWN && !top) || (side == Direction.UP && top)))
         {
@@ -174,7 +172,7 @@ public class ThreewayCornerSkipPredicate implements SideSkipPredicate
         Direction adjDir = adjState.getValue(PropertyHolder.FACING_HOR);
         CornerType adjType = adjState.getValue(PropertyHolder.CORNER_TYPE);
 
-        if (!adjType.isHorizontal() && adjDir == dir.getCounterClockWise() && (side == dir || side == dir.getCounterClockWise()) && adjType.isTop() == top)
+        if (!adjType.isHorizontal() && adjDir == dir && (side == dir || side == dir.getCounterClockWise()) && adjType.isTop() == top)
         {
             return SideSkipPredicate.compareState(level, pos, side, top ? Direction.UP : Direction.DOWN);
         }
