@@ -27,7 +27,7 @@ public abstract class AbstractFramedSignBlock extends FramedBlock
     {
         //Makes sure the block can have a camo applied, even when the sign can execute a command
         ActionResultType result = super.onBlockActivated(state, world, pos, player, hand, hit);
-        if (result != ActionResultType.FAIL) { return result; }
+        if (result != ActionResultType.PASS) { return result; }
 
         ItemStack stack = player.getHeldItem(hand);
         boolean dye = stack.getItem() instanceof DyeItem && player.abilities.allowEdit;
