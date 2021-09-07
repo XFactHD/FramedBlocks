@@ -41,6 +41,6 @@ description='''
 [[dependencies.framedblocks]]
     modId="buildinggadgets"
     mandatory=false
-    versionRange="[3.8.0,)"
+    versionRange="[3.8.0]"
     ordering="AFTER"
     side="BOTH"
