@@ -18,7 +18,7 @@ public class FramedDoubleBlockItem extends BlockItem
         setRegistryName(block.getRegistryName());
     }
 
-    @Override //TODO: Think about removing this in 1.17 in favor of adding all four cardinal directions to the double panel
+    @Override
     protected boolean placeBlock(BlockPlaceContext context, BlockState state)
     {
         boolean success = super.placeBlock(context, state);
@@ -29,16 +29,15 @@ public class FramedDoubleBlockItem extends BlockItem
         Direction dir = context.getHorizontalDirection();
         if (dir == Direction.SOUTH || dir == Direction.WEST)
         {
-            CompoundTag teTag = context.getItemInHand().getOrCreateTagElement("BlockEntityTag");
+            CompoundTag beTag = context.getItemInHand().getOrCreateTagElement("BlockEntityTag");
 
-            CompoundTag stateTag = teTag.getCompound("camo_state");
-            teTag.put("camo_state", teTag.getCompound("camo_state_two"));
-            teTag.put("camo_state_two", stateTag);
+            CompoundTag stateTag = beTag.getCompound("camo_state");
+            beTag.put("camo_state", beTag.getCompound("camo_state_two"));
+            beTag.put("camo_state_two", stateTag);
 
-            CompoundTag stackTag = teTag.getCompound("camo_stack");
-            teTag.put("camo_stack", teTag.getCompound("camo_stack_two"));
-            teTag.put("camo_stack_two", stackTag);
-
+            CompoundTag stackTag = beTag.getCompound("camo_stack");
+            beTag.put("camo_stack", beTag.getCompound("camo_stack_two"));
+            beTag.put("camo_stack_two", stackTag);
         }
         return true;
     }
