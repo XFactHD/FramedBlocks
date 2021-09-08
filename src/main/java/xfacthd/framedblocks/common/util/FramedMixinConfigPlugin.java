@@ -1,14 +1,15 @@
 package xfacthd.framedblocks.common.util;
 
 import org.objectweb.asm.tree.ClassNode;
+import org.spongepowered.asm.mixin.extensibility.IMixinConfigPlugin;
+import org.spongepowered.asm.mixin.extensibility.IMixinInfo;
 
 import java.util.List;
 import java.util.Set;
 
-//TODO: reactivate when Mixin is available
-public class FramedMixinConfigPlugin// implements IMixinConfigPlugin
+public class FramedMixinConfigPlugin implements IMixinConfigPlugin
 {
-    /*@Override
+    @Override
     public void onLoad(String mixinPackage) { }
 
     @Override
@@ -42,5 +43,5 @@ public class FramedMixinConfigPlugin// implements IMixinConfigPlugin
     public void preApply(String targetClassName, ClassNode targetClass, String mixinClassName, IMixinInfo mixinInfo) { }
 
     @Override
-    public void postApply(String targetClassName, ClassNode targetClass, String mixinClassName, IMixinInfo mixinInfo) { }*/
+    public void postApply(String targetClassName, ClassNode targetClass, String mixinClassName, IMixinInfo mixinInfo) { }
 }
