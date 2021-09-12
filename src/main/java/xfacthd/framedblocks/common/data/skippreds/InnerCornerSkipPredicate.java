@@ -32,7 +32,7 @@ public class InnerCornerSkipPredicate implements SideSkipPredicate
         {
             return testAgainstDoubleCorner(world, pos, dir, type, adjState, side);
         }
-        else if (adjBlock == BlockType.FRAMED_SLOPE)
+        else if (adjBlock == BlockType.FRAMED_SLOPE || adjBlock == BlockType.FRAMED_RAIL_SLOPE)
         {
             return testAgainstSlope(world, pos, dir, type, adjState, side);
         }

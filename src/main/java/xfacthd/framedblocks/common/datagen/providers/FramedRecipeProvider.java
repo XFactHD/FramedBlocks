@@ -290,6 +290,12 @@ public class FramedRecipeProvider extends RecipeProvider
                 .addCriterion("hasFramedBlock", HAS_FRAMED_BLOCK)
                 .build(consumer);
 
+        ShapelessRecipeBuilder.shapelessRecipe(FBContent.blockFramedRailSlope.get(), 1)
+                .addIngredient(FBContent.blockFramedSlope.get())
+                .addIngredient(Items.RAIL)
+                .addCriterion("hasFramedBlock", HAS_FRAMED_BLOCK)
+                .build(consumer);
+
         /*ShapedRecipeBuilder.shapedRecipe(FBContent.blockFramedCollapsibleBlock.get(), 4)
                 .patternLine("FF")
                 .patternLine("FF")

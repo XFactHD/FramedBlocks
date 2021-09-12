@@ -14,7 +14,7 @@ import net.minecraftforge.client.event.DrawHighlightEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import xfacthd.framedblocks.FramedBlocks;
-import xfacthd.framedblocks.common.block.FramedBlock;
+import xfacthd.framedblocks.common.block.IFramedBlock;
 import xfacthd.framedblocks.common.data.*;
 
 @Mod.EventBusSubscriber(modid = FramedBlocks.MODID, value = Dist.CLIENT)
@@ -28,9 +28,9 @@ public class ClientEventHandler
         BlockRayTraceResult result = event.getTarget();
         //noinspection ConstantConditions
         BlockState state = Minecraft.getInstance().world.getBlockState(result.getPos());
-        if (!(state.getBlock() instanceof FramedBlock)) { return; }
+        if (!(state.getBlock() instanceof IFramedBlock)) { return; }
 
-        BlockType type = ((FramedBlock) state.getBlock()).getBlockType();
+        BlockType type = ((IFramedBlock) state.getBlock()).getBlockType();
         if (type.hasSpecialHitbox())
         {
             MatrixStack mstack = event.getMatrix();
@@ -48,6 +48,7 @@ public class ClientEventHandler
             switch (type)
             {
                 case FRAMED_SLOPE:
+                case FRAMED_RAIL_SLOPE:
                     drawSlopeBox(state, mstack, builder);
                     break;
                 case FRAMED_CORNER_SLOPE:

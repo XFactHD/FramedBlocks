@@ -2,17 +2,24 @@ package xfacthd.framedblocks.common.block;
 
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockState;
-import net.minecraft.item.BlockItemUseContext;
+import net.minecraft.block.*;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.item.*;
 import net.minecraft.state.StateContainer;
 import net.minecraft.state.properties.BlockStateProperties;
-import net.minecraft.util.Direction;
+import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.*;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.BlockRayTraceResult;
 import net.minecraft.util.math.shapes.VoxelShape;
 import net.minecraft.util.math.shapes.VoxelShapes;
+import net.minecraft.world.World;
+import xfacthd.framedblocks.common.FBContent;
 import xfacthd.framedblocks.common.data.*;
+import xfacthd.framedblocks.common.tileentity.FramedTileEntity;
 import xfacthd.framedblocks.common.util.*;
 
+@SuppressWarnings("deprecation")
 public class FramedSlopeBlock extends FramedBlock
 {
     public static final CtmPredicate CTM_PREDICATE = (state, dir) ->
@@ -47,6 +54,65 @@ public class FramedSlopeBlock extends FramedBlock
     {
         BlockState state = withSlopeType(getDefaultState(), context.getFace(), context.getPlacementHorizontalFacing(), context.getHitVec());
         return withWater(state, context.getWorld(), context.getPos());
+    }
+
+    @Override
+    public ActionResultType onBlockActivated(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockRayTraceResult hit)
+    {
+        ItemStack stack = player.getHeldItem(hand);
+        if (!stack.isEmpty() && stack.getItem() == Items.RAIL)
+        {
+            Direction dir = state.get(PropertyHolder.FACING_HOR);
+            SlopeType type = state.get(PropertyHolder.SLOPE_TYPE);
+            Direction face = hit.getFace();
+
+            if (type == SlopeType.BOTTOM && (face == dir.getOpposite() || face == Direction.UP))
+            {
+                Block railSlope = FBContent.blockFramedRailSlope.get();
+                BlockState newState = railSlope.getDefaultState()
+                        .with(PropertyHolder.FACING_HOR, dir)
+                        .with(PropertyHolder.ASCENDING_RAIL_SHAPE, FramedRailSlopeBlock.shapeFromDirection(dir))
+                        .with(BlockStateProperties.WATERLOGGED, state.get(BlockStateProperties.WATERLOGGED));
+
+                if (!railSlope.isValidPosition(newState, world, pos)) { return ActionResultType.FAIL; }
+
+                if (!world.isRemote())
+                {
+                    BlockState camoState = Blocks.AIR.getDefaultState();
+                    ItemStack camoStack = ItemStack.EMPTY;
+                    boolean glowing = false;
+
+                    TileEntity te = world.getTileEntity(pos);
+                    if (te instanceof FramedTileEntity)
+                    {
+                        camoState = ((FramedTileEntity) te).getCamoState();
+                        camoStack = ((FramedTileEntity) te).getCamoStack();
+                        glowing = ((FramedTileEntity) te).isGlowing();
+                    }
+
+                    world.setBlockState(pos, newState);
+
+                    SoundType sound = Blocks.RAIL.getSoundType(Blocks.RAIL.getDefaultState());
+                    world.playSound(null, pos, sound.getPlaceSound(), SoundCategory.BLOCKS, (sound.getVolume() + 1.0F) / 2.0F, sound.getPitch() * 0.8F);
+
+                    if (!player.isCreative())
+                    {
+                        stack.shrink(1);
+                        player.inventory.markDirty();
+                    }
+
+                    te = world.getTileEntity(pos);
+                    if (te instanceof FramedTileEntity)
+                    {
+                        ((FramedTileEntity) te).setCamo(camoStack, camoState, false);
+                        ((FramedTileEntity) te).setGlowing(glowing);
+                    }
+                }
+
+                return ActionResultType.func_233537_a_(world.isRemote());
+            }
+        }
+        return super.onBlockActivated(state, world, pos, player, hand, hit);
     }
 
     public static ImmutableMap<BlockState, VoxelShape> generateShapes(ImmutableList<BlockState> states)

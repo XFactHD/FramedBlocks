@@ -34,7 +34,7 @@ public class InnerThreewayCornerSkipPredicate implements SideSkipPredicate
         {
             return testAgainstDoubleThreewayCorner(world, pos, dir, top, adjState, side);
         }
-        else if (adjBlock == BlockType.FRAMED_SLOPE)
+        else if (adjBlock == BlockType.FRAMED_SLOPE || adjBlock == BlockType.FRAMED_RAIL_SLOPE)
         {
             return testAgainstSlope(world, pos, dir, top, adjState, side);
         }
