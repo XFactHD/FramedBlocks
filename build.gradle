@@ -98,27 +98,13 @@ repositories {
     }
 }
 
-configurations { //TODO: remove when mixin is added by Forge again
-    library
-    implementation.extendsFrom library
-}
-minecraft.runs.all { //TODO: remove when mixin is added by Forge again
-    lazyToken('minecraft_classpath') {
-        configurations.library.copyRecursive().resolve().collect { it.absolutePath }.join(File.pathSeparator)
-    }
-}
-
 dependencies {
-    minecraft 'net.minecraftforge:forge:1.17.1-37.0.53'
+    minecraft 'net.minecraftforge:forge:1.17.1-37.0.59'
 
     //implementation fg.deobf("curse.maven:ctm-267602:3137659")
 
     //runtimeOnly fg.deobf("curse.maven:puzzleslib-495476:3374786") //Only needed when Diagonal Fences is switched to implementation
     //compileOnly fg.deobf("curse.maven:diagonalfences-458048:3364147")
-
-    //TODO: remove both when mixin is added by Forge again
-    library 'com.google.guava:guava:21.0'
-    library 'org.spongepowered:mixin:0.8.4'
 
     annotationProcessor 'org.spongepowered:mixin:0.8.4:processor'
 }
