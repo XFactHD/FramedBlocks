@@ -201,6 +201,7 @@ public class FramedRailSlopeBlock extends AbstractRailBlock implements IFramedBl
         return getShape(state, worldIn, pos, context);
     }
 
+    @Override
     public BlockState updatePostPlacement(BlockState state, Direction facing, BlockState facingState, IWorld world, BlockPos pos, BlockPos facingPos)
     {
         if (state.get(BlockStateProperties.WATERLOGGED))
