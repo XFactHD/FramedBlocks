@@ -291,6 +291,12 @@ public class FramedRecipeProvider extends RecipeProvider
                 .unlockedBy("hasFramedBlock", HAS_FRAMED_BLOCK)
                 .save(consumer);
 
+        ShapelessRecipeBuilder.shapeless(FBContent.blockFramedRailSlope.get(), 1)
+                .requires(FBContent.blockFramedSlope.get())
+                .requires(Items.RAIL)
+                .unlockedBy("hasFramedBlock", HAS_FRAMED_BLOCK)
+                .save(consumer);
+
         /*ShapedRecipeBuilder.shaped(FBContent.blockFramedCollapsibleBlock.get(), 4)
                 .pattern("FF")
                 .pattern("FF")

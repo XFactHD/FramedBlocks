@@ -41,6 +41,7 @@
     "framedblocks:framed_vertical_stairs",
     "framedblocks:framed_chest",
     "framedblocks:framed_bars",
-    "framedblocks:framed_pane"
+    "framedblocks:framed_pane",
+    "framedblocks:framed_rail_slope"
   ]
 }

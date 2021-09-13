@@ -20,7 +20,7 @@ public class SlopeSkipPredicate implements SideSkipPredicate
         Direction dir = state.getValue(PropertyHolder.FACING_HOR);
         SlopeType type = state.getValue(PropertyHolder.SLOPE_TYPE);
 
-        if (adjBlock == BlockType.FRAMED_SLOPE)
+        if (adjBlock == BlockType.FRAMED_SLOPE || adjBlock == BlockType.FRAMED_RAIL_SLOPE)
         {
             return testAgainstSlope(level, pos, dir, type, adjState, side);
         }

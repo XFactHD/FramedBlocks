@@ -15,7 +15,7 @@ import net.minecraftforge.client.event.DrawSelectionEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import xfacthd.framedblocks.FramedBlocks;
-import xfacthd.framedblocks.common.block.FramedBlock;
+import xfacthd.framedblocks.common.block.IFramedBlock;
 import xfacthd.framedblocks.common.data.*;
 
 @Mod.EventBusSubscriber(modid = FramedBlocks.MODID, value = Dist.CLIENT)
@@ -29,7 +29,7 @@ public class ClientEventHandler
         BlockHitResult result = event.getTarget();
         //noinspection ConstantConditions
         BlockState state = Minecraft.getInstance().level.getBlockState(result.getBlockPos());
-        if (!(state.getBlock() instanceof FramedBlock block)) { return; }
+        if (!(state.getBlock() instanceof IFramedBlock block)) { return; }
 
         BlockType type = block.getBlockType();
         if (type.hasSpecialHitbox())
@@ -48,7 +48,7 @@ public class ClientEventHandler
 
             switch (type)
             {
-                case FRAMED_SLOPE -> drawSlopeBox(state, mstack, builder);
+                case FRAMED_SLOPE, FRAMED_RAIL_SLOPE -> drawSlopeBox(state, mstack, builder);
                 case FRAMED_CORNER_SLOPE -> drawCornerSlopeBox(state, mstack, builder);
                 case FRAMED_INNER_CORNER_SLOPE -> drawInnerCornerSlopeBox(state, mstack, builder);
                 case FRAMED_PRISM_CORNER -> drawPrismCornerBox(state, mstack, builder);
