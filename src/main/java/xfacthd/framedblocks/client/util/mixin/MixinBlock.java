@@ -21,7 +21,7 @@ public abstract class MixinBlock extends AbstractBlock
     public MixinBlock(Properties properties) { super(properties); }
 
     @Inject(method = {"shouldSideBeRendered"}, at = @At("HEAD"), cancellable = true)
-    private static void shouldSideBeRenderedFramed(BlockState state, IBlockReader world, BlockPos pos, Direction face, CallbackInfoReturnable<Boolean> cir)
+    private static void framedblocks_shouldSideBeRendered(BlockState state, IBlockReader world, BlockPos pos, Direction face, CallbackInfoReturnable<Boolean> cir)
     {
         //noinspection deprecation
         if (state.getBlock() instanceof IFramedBlock || state.isAir() || !(world instanceof ChunkRenderCache)) { return; }
