@@ -21,7 +21,7 @@ public class MixinLevelRenderer
     private RenderBuffers renderBuffers;
 
     @Inject(method = "renderChunkLayer", at = @At(value = "INVOKE", shift = At.Shift.AFTER, target = "Lcom/mojang/blaze3d/vertex/VertexBuffer;unbindVertexArray()V"))
-    private void renderTransparentLayer(RenderType layer, PoseStack poseStack, double camX, double camY, double camZ, Matrix4f projMat, CallbackInfo ci)
+    private void framedblocks_renderTransparentLayer(RenderType layer, PoseStack poseStack, double camX, double camY, double camZ, Matrix4f projMat, CallbackInfo ci)
     {
         if (layer != RenderType.translucent()) { return; }
         GhostBlockRenderer.drawGhostBlock(renderBuffers.bufferSource(), poseStack);

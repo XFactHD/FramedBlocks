@@ -23,7 +23,7 @@ public abstract class MixinBlock extends BlockBehaviour
     public MixinBlock(Properties properties) { super(properties); }
 
     @Inject(method = {"shouldRenderFace"}, at = @At("HEAD"), cancellable = true)
-    private static void shouldSideBeRenderedFramed(BlockState state, BlockGetter level, BlockPos pos, Direction face, BlockPos adjPos, CallbackInfoReturnable<Boolean> cir)
+    private static void framedblocks_shouldRenderFace(BlockState state, BlockGetter level, BlockPos pos, Direction face, BlockPos adjPos, CallbackInfoReturnable<Boolean> cir)
     {
         if (state.getBlock() instanceof IFramedBlock || state.isAir() || !(level instanceof RenderChunkRegion chunk)) { return; }
 
