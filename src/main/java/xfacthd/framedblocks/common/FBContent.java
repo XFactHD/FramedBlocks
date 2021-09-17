@@ -15,6 +15,8 @@ import net.minecraftforge.fmllegacy.RegistryObject;
 import net.minecraftforge.fmllegacy.network.IContainerFactory;
 import net.minecraftforge.registries.*;
 import xfacthd.framedblocks.FramedBlocks;
+import xfacthd.framedblocks.api.block.FramedBlockEntity;
+import xfacthd.framedblocks.api.block.IFramedBlock;
 import xfacthd.framedblocks.common.block.*;
 import xfacthd.framedblocks.common.menu.FramedChestMenu;
 import xfacthd.framedblocks.common.data.BlockType;

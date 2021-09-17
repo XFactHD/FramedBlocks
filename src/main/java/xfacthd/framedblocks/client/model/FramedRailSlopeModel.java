@@ -15,8 +15,9 @@ import net.minecraft.world.level.block.state.properties.RailShape;
 import net.minecraftforge.client.MinecraftForgeClient;
 import net.minecraftforge.client.model.data.EmptyModelData;
 import net.minecraftforge.client.model.data.IModelData;
+import xfacthd.framedblocks.api.model.BakedModelProxy;
 import xfacthd.framedblocks.common.FBContent;
-import xfacthd.framedblocks.common.blockentity.FramedBlockEntity;
+import xfacthd.framedblocks.api.block.FramedBlockEntity;
 import xfacthd.framedblocks.common.data.PropertyHolder;
 
 import javax.annotation.Nonnull;

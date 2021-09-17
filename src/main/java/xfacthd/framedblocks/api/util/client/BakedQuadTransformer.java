@@ -1,4 +1,4 @@
-package xfacthd.framedblocks.client.util;
+package xfacthd.framedblocks.api.util.client;
 
 import com.google.common.base.Preconditions;
 import com.mojang.math.*;

@@ -4,6 +4,7 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.client.renderer.block.model.BakedQuad;
 import net.minecraft.client.resources.model.BakedModel;
 import net.minecraft.core.Direction;
+import xfacthd.framedblocks.api.model.FramedBlockModel;
 import xfacthd.framedblocks.common.FBContent;
 
 import java.util.List;

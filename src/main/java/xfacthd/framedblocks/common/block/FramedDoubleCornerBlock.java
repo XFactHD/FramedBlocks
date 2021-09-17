@@ -10,10 +10,9 @@ import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.phys.Vec3;
+import xfacthd.framedblocks.api.util.*;
 import xfacthd.framedblocks.common.data.*;
 import xfacthd.framedblocks.common.blockentity.*;
-import xfacthd.framedblocks.common.util.CtmPredicate;
-import xfacthd.framedblocks.common.util.Utils;
 
 public class FramedDoubleCornerBlock extends AbstractFramedDoubleBlock
 {

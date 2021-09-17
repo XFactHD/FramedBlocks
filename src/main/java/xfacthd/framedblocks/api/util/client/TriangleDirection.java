@@ -1,4 +1,4 @@
-package xfacthd.framedblocks.client.util;
+package xfacthd.framedblocks.api.util.client;
 
 public enum TriangleDirection
 {

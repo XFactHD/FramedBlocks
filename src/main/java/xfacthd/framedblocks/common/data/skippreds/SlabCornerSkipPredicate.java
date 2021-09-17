@@ -8,7 +8,7 @@ import net.minecraft.world.level.block.state.properties.*;
 import xfacthd.framedblocks.common.FBContent;
 import xfacthd.framedblocks.common.data.PropertyHolder;
 import xfacthd.framedblocks.common.data.StairsType;
-import xfacthd.framedblocks.common.util.SideSkipPredicate;
+import xfacthd.framedblocks.api.util.SideSkipPredicate;
 
 public class SlabCornerSkipPredicate implements SideSkipPredicate
 {

@@ -4,9 +4,11 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.block.state.BlockState;
-import xfacthd.framedblocks.common.block.IFramedBlock;
+import xfacthd.framedblocks.api.block.IFramedBlock;
+import xfacthd.framedblocks.api.type.IBlockType;
+import xfacthd.framedblocks.common.data.PropertyHolder;
 import xfacthd.framedblocks.common.data.*;
-import xfacthd.framedblocks.common.util.SideSkipPredicate;
+import xfacthd.framedblocks.api.util.SideSkipPredicate;
 
 public class InnerCornerSkipPredicate implements SideSkipPredicate
 {
@@ -16,7 +18,7 @@ public class InnerCornerSkipPredicate implements SideSkipPredicate
         if (SideSkipPredicate.CTM.test(level, pos, state, adjState, side)) { return true; }
         if (!(adjState.getBlock() instanceof IFramedBlock block)) { return false; }
 
-        BlockType adjBlock = block.getBlockType();
+        IBlockType adjBlock = block.getBlockType();
         Direction dir = state.getValue(PropertyHolder.FACING_HOR);
         CornerType type = state.getValue(PropertyHolder.CORNER_TYPE);
 

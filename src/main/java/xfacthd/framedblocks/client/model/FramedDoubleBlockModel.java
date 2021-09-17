@@ -12,8 +12,9 @@ import net.minecraft.world.level.BlockAndTintGetter;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.client.model.data.EmptyModelData;
 import net.minecraftforge.client.model.data.IModelData;
-import xfacthd.framedblocks.client.util.FramedBlockData;
-import xfacthd.framedblocks.client.util.ModelUtils;
+import xfacthd.framedblocks.api.model.BakedModelProxy;
+import xfacthd.framedblocks.api.util.FramedBlockData;
+import xfacthd.framedblocks.api.util.client.ModelUtils;
 import xfacthd.framedblocks.common.blockentity.FramedDoubleBlockEntity;
 
 import javax.annotation.Nonnull;

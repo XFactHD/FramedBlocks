@@ -17,7 +17,7 @@ import xfacthd.framedblocks.common.data.BlockType;
 import xfacthd.framedblocks.common.data.PropertyHolder;
 import xfacthd.framedblocks.common.blockentity.FramedDoublePanelBlockEntity;
 import xfacthd.framedblocks.common.item.FramedDoubleBlockItem;
-import xfacthd.framedblocks.common.util.CtmPredicate;
+import xfacthd.framedblocks.api.util.CtmPredicate;
 
 public class FramedDoublePanelBlock extends AbstractFramedDoubleBlock
 {

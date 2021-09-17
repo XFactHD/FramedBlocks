@@ -1,4 +1,4 @@
-package xfacthd.framedblocks.common.util;
+package xfacthd.framedblocks.api.util;
 
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.core.Direction;

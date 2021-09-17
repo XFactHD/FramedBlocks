@@ -11,8 +11,8 @@ import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import xfacthd.framedblocks.common.FBContent;
 import xfacthd.framedblocks.common.data.BlockType;
-import xfacthd.framedblocks.common.util.CtmPredicate;
-import xfacthd.framedblocks.common.util.SideSkipPredicate;
+import xfacthd.framedblocks.api.util.CtmPredicate;
+import xfacthd.framedblocks.api.util.SideSkipPredicate;
 
 @SuppressWarnings("deprecation")
 public class FramedFloorBlock extends FramedBlock

@@ -16,7 +16,7 @@ import net.minecraft.world.phys.shapes.VoxelShape;
 import xfacthd.framedblocks.common.FBContent;
 import xfacthd.framedblocks.common.data.BlockType;
 import xfacthd.framedblocks.common.data.PropertyHolder;
-import xfacthd.framedblocks.common.util.Utils;
+import xfacthd.framedblocks.api.util.Utils;
 
 public class FramedPrismCornerBlock extends FramedThreewayCornerBlock
 {

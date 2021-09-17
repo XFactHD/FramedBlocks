@@ -5,13 +5,14 @@ import com.google.common.collect.ImmutableMap;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import net.minecraft.world.phys.shapes.Shapes;
+import xfacthd.framedblocks.api.type.IBlockType;
+import xfacthd.framedblocks.api.util.*;
 import xfacthd.framedblocks.common.block.*;
 import xfacthd.framedblocks.common.data.skippreds.*;
-import xfacthd.framedblocks.common.util.*;
 
 import java.util.Locale;
 
-public enum BlockType
+public enum BlockType implements IBlockType
 {
     FRAMED_CUBE                   (false, false, false,  true, CtmPredicate.TRUE, SideSkipPredicate.CTM, Shapes.block()),
     FRAMED_SLOPE                  ( true, false,  true,  true, FramedSlopeBlock.CTM_PREDICATE, new SlopeSkipPredicate(), FramedSlopeBlock::generateShapes),
@@ -92,22 +93,40 @@ public enum BlockType
         this.shapeGen = shapeGen;
     }
 
+    @Override
     public boolean hasSpecialHitbox() { return specialHitbox; }
 
+    @Override
     public CtmPredicate getCtmPredicate() { return ctmPredicate; }
 
+    @Override
     public SideSkipPredicate getSideSkipPredicate() { return skipPredicate; }
 
+    @Override
     public ImmutableMap<BlockState, VoxelShape> generateShapes(ImmutableList<BlockState> states)
     {
         return shapeGen.generate(states);
     }
 
+    @Override
     public boolean hasSpecialTile() { return specialTile; }
 
+    @Override
     public boolean hasBlockItem() { return blockItem; }
 
+    @Override
     public boolean supportsWaterLogging() { return waterloggable; }
 
+    @Override
     public String getName() { return name; }
+
+    @Override
+    public int compareTo(IBlockType other)
+    {
+        if (!(other instanceof BlockType type))
+        {
+            return 0;
+        }
+        return compareTo(type);
+    }
 }

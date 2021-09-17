@@ -1,4 +1,4 @@
-package xfacthd.framedblocks.common.blockentity;
+package xfacthd.framedblocks.api.block;
 
 import com.google.common.collect.ImmutableList;
 import net.minecraft.core.BlockPos;
@@ -24,17 +24,15 @@ import net.minecraftforge.common.Tags;
 import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.capability.*;
-import xfacthd.framedblocks.FramedBlocks;
-import xfacthd.framedblocks.client.util.FramedBlockData;
-import xfacthd.framedblocks.common.FBContent;
-import xfacthd.framedblocks.common.block.IFramedBlock;
-import xfacthd.framedblocks.common.util.Utils;
+import xfacthd.framedblocks.api.FramedBlocksAPI;
+import xfacthd.framedblocks.api.util.FramedBlockData;
+import xfacthd.framedblocks.api.util.Utils;
 
 @SuppressWarnings("deprecation")
 public class FramedBlockEntity extends BlockEntity
 {
-    public static final TranslatableComponent MSG_BLACKLISTED = new TranslatableComponent("msg." + FramedBlocks.MODID + ".blacklisted");
-    public static final TranslatableComponent MSG_BLOCK_ENTITY = new TranslatableComponent("msg." + FramedBlocks.MODID + ".block_entity");
+    public static final TranslatableComponent MSG_BLACKLISTED = Utils.translate("msg", "blacklisted");
+    public static final TranslatableComponent MSG_BLOCK_ENTITY = Utils.translate("msg", "block_entity");
     private static final ImmutableList<Block> BLOCK_ENTITY_WHITELIST = buildBlockEntityWhitelist();
 
     private final FramedBlockData modelData = new FramedBlockData();
@@ -42,15 +40,15 @@ public class FramedBlockEntity extends BlockEntity
     private BlockState camoState = Blocks.AIR.defaultBlockState();
     private boolean glowing = false;
 
-    public FramedBlockEntity(BlockPos pos, BlockState state) { this(FBContent.blockEntityTypeFramedBlock.get(), pos, state); }
+    public FramedBlockEntity(BlockPos pos, BlockState state) { this(FramedBlocksAPI.getInstance().defaultBlockEntity(), pos, state); }
 
     protected FramedBlockEntity(BlockEntityType<?> type, BlockPos pos, BlockState state) { super(type, pos, state); }
 
-    public InteractionResult handleInteraction(Player player, InteractionHand hand, BlockHitResult hit)
+    public final InteractionResult handleInteraction(Player player, InteractionHand hand, BlockHitResult hit)
     {
         ItemStack stack = player.getItemInHand(hand);
         BlockState camo = getCamoState(hit);
-        if (!camo.isAir() && !(camo.getBlock() instanceof LiquidBlock) && stack.getItem() == FBContent.itemFramedHammer.get())
+        if (!camo.isAir() && !(camo.getBlock() instanceof LiquidBlock) && FramedBlocksAPI.getInstance().isFramedHammer(stack))
         {
             return clearBlockCamo(player, hit);
         }
@@ -267,7 +265,7 @@ public class FramedBlockEntity extends BlockEntity
         return null;
     }
 
-    protected boolean isValidBlock(BlockState state, Player player)
+    protected final boolean isValidBlock(BlockState state, Player player)
     {
         Block block = state.getBlock();
         if (block instanceof IFramedBlock) { return false; }
@@ -322,11 +320,11 @@ public class FramedBlockEntity extends BlockEntity
 
     protected BlockState getCamoState(BlockHitResult hit) { return camoState; }
 
-    public BlockState getCamoState() { return camoState; }
+    public final BlockState getCamoState() { return camoState; }
 
     protected ItemStack getCamoStack(BlockHitResult hit) { return camoStack; }
 
-    public ItemStack getCamoStack() { return camoStack; }
+    public final ItemStack getCamoStack() { return camoStack; }
 
     public float getCamoExplosionResistance(Explosion explosion)
     {
@@ -343,7 +341,7 @@ public class FramedBlockEntity extends BlockEntity
         return getCamoState().isAir() ? -1 : getCamoState().getFlammability(level, worldPosition, face);
     }
 
-    public void setGlowing(boolean glowing)
+    public final void setGlowing(boolean glowing)
     {
         if (this.glowing != glowing)
         {
@@ -360,7 +358,7 @@ public class FramedBlockEntity extends BlockEntity
         }
     }
 
-    public boolean isGlowing() { return glowing; }
+    public final boolean isGlowing() { return glowing; }
 
     public int getLightValue()
     {
@@ -368,7 +366,7 @@ public class FramedBlockEntity extends BlockEntity
         return camoState.getLightEmission();
     }
 
-    protected void doLightUpdate()
+    protected final void doLightUpdate()
     {
         //noinspection ConstantConditions
         level.getChunkSource().getLightEngine().checkBlock(worldPosition);
@@ -381,7 +379,7 @@ public class FramedBlockEntity extends BlockEntity
      */
 
     @Override
-    public ClientboundBlockEntityDataPacket getUpdatePacket()
+    public final ClientboundBlockEntityDataPacket getUpdatePacket()
     {
         CompoundTag nbt = new CompoundTag();
         writeToDataPacket(nbt);

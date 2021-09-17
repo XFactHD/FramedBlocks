@@ -19,6 +19,7 @@ import xfacthd.framedblocks.common.blockentity.FramedDoubleBlockEntity;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import java.util.Optional;
 
 public abstract class AbstractFramedDoubleBlock extends FramedBlock
 {
@@ -61,7 +62,7 @@ public abstract class AbstractFramedDoubleBlock extends FramedBlock
     }
 
     @Override
-    public MutableComponent printCamoBlock(CompoundTag beTag)
+    public Optional<MutableComponent> printCamoBlock(CompoundTag beTag)
     {
         BlockState camoState = NbtUtils.readBlockState(beTag.getCompound("camo_state"));
         BlockState camoStateTwo = NbtUtils.readBlockState(beTag.getCompound("camo_state_two"));
@@ -70,6 +71,6 @@ public abstract class AbstractFramedDoubleBlock extends FramedBlock
         component = component.copy().append(new TextComponent(" | ").withStyle(ChatFormatting.GOLD));
         component.append(camoStateTwo.isAir() ? FramedBlueprintItem.BLOCK_NONE : camoStateTwo.getBlock().getName().withStyle(ChatFormatting.WHITE));
 
-        return component;
+        return Optional.of(component);
     }
 }

@@ -19,10 +19,10 @@ import net.minecraft.core.Direction;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import net.minecraft.world.phys.shapes.Shapes;
+import xfacthd.framedblocks.api.util.*;
 import xfacthd.framedblocks.common.FBContent;
-import xfacthd.framedblocks.common.blockentity.FramedBlockEntity;
+import xfacthd.framedblocks.api.block.FramedBlockEntity;
 import xfacthd.framedblocks.common.data.*;
-import xfacthd.framedblocks.common.util.*;
 
 @SuppressWarnings("deprecation")
 public class FramedSlopeBlock extends FramedBlock

@@ -12,7 +12,7 @@ import net.minecraft.world.phys.Vec3;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import xfacthd.framedblocks.common.data.BlockType;
 import xfacthd.framedblocks.common.data.PropertyHolder;
-import xfacthd.framedblocks.common.util.Utils;
+import xfacthd.framedblocks.api.util.Utils;
 
 public class FramedSlabCornerBlock extends FramedBlock
 {

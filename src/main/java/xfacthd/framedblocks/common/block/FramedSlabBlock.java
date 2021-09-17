@@ -21,8 +21,8 @@ import xfacthd.framedblocks.common.FBContent;
 import xfacthd.framedblocks.common.data.BlockType;
 import xfacthd.framedblocks.common.data.PropertyHolder;
 import xfacthd.framedblocks.common.blockentity.FramedDoubleBlockEntity;
-import xfacthd.framedblocks.common.blockentity.FramedBlockEntity;
-import xfacthd.framedblocks.common.util.CtmPredicate;
+import xfacthd.framedblocks.api.block.FramedBlockEntity;
+import xfacthd.framedblocks.api.util.CtmPredicate;
 
 @SuppressWarnings("deprecation")
 public class FramedSlabBlock extends FramedBlock

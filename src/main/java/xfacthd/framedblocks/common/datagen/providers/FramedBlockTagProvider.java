@@ -11,8 +11,8 @@ import net.minecraftforge.common.data.ExistingFileHelper;
 import net.minecraftforge.fmllegacy.RegistryObject;
 import xfacthd.framedblocks.FramedBlocks;
 import xfacthd.framedblocks.common.FBContent;
-import xfacthd.framedblocks.common.block.IFramedBlock;
-import xfacthd.framedblocks.common.util.Utils;
+import xfacthd.framedblocks.api.block.IFramedBlock;
+import xfacthd.framedblocks.api.util.Utils;
 
 public class FramedBlockTagProvider extends BlockTagsProvider
 {

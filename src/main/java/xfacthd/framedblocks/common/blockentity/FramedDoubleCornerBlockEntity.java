@@ -6,9 +6,10 @@ import net.minecraft.world.level.block.Blocks;
 import net.minecraft.core.Direction;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.Vec3;
+import xfacthd.framedblocks.common.data.PropertyHolder;
 import xfacthd.framedblocks.common.FBContent;
 import xfacthd.framedblocks.common.data.*;
-import xfacthd.framedblocks.common.util.Utils;
+import xfacthd.framedblocks.api.util.Utils;
 
 public class FramedDoubleCornerBlockEntity extends FramedDoubleBlockEntity
 {

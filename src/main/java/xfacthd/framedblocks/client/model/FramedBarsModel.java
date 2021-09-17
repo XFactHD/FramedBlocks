@@ -4,8 +4,8 @@ import net.minecraft.client.renderer.block.model.BakedQuad;
 import net.minecraft.client.resources.model.BakedModel;
 import net.minecraft.core.Direction;
 import net.minecraft.world.level.block.state.BlockState;
-import xfacthd.framedblocks.client.util.BakedQuadTransformer;
-import xfacthd.framedblocks.client.util.ModelUtils;
+import xfacthd.framedblocks.api.util.client.BakedQuadTransformer;
+import xfacthd.framedblocks.api.util.client.ModelUtils;
 
 import java.util.List;
 import java.util.Map;

@@ -1,4 +1,4 @@
-package xfacthd.framedblocks.client.model;
+package xfacthd.framedblocks.api.model;
 
 import net.minecraft.client.renderer.block.model.*;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;

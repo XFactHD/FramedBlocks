@@ -21,15 +21,16 @@ import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import net.minecraftforge.fmllegacy.RegistryObject;
 import xfacthd.framedblocks.FramedBlocks;
+import xfacthd.framedblocks.api.block.FramedBlockEntity;
 import xfacthd.framedblocks.client.model.*;
 import xfacthd.framedblocks.client.render.FramedChestRenderer;
 import xfacthd.framedblocks.client.render.FramedSignRenderer;
 import xfacthd.framedblocks.client.screen.FramedChestScreen;
 import xfacthd.framedblocks.client.screen.FramedSignScreen;
 import xfacthd.framedblocks.client.util.BlueprintPropertyOverride;
-import xfacthd.framedblocks.client.util.ModelUtils;
+import xfacthd.framedblocks.api.util.client.ModelUtils;
 import xfacthd.framedblocks.common.FBContent;
-import xfacthd.framedblocks.common.block.IFramedBlock;
+import xfacthd.framedblocks.api.block.IFramedBlock;
 import xfacthd.framedblocks.common.blockentity.*;
 
 import java.util.Map;

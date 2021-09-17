@@ -28,7 +28,7 @@ public class FluidDummyModel implements BakedModel
     private final TextureAtlasSprite particles;
     private final Map<Direction, List<BakedQuad>> quads = new HashMap<>();
 
-    FluidDummyModel(Fluid fluid)
+    public FluidDummyModel(Fluid fluid)
     {
         this.fluid = fluid;
 

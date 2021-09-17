@@ -15,7 +15,9 @@ import net.minecraftforge.client.event.DrawSelectionEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import xfacthd.framedblocks.FramedBlocks;
-import xfacthd.framedblocks.common.block.IFramedBlock;
+import xfacthd.framedblocks.api.block.IFramedBlock;
+import xfacthd.framedblocks.api.type.IBlockType;
+import xfacthd.framedblocks.common.data.PropertyHolder;
 import xfacthd.framedblocks.common.data.*;
 
 @Mod.EventBusSubscriber(modid = FramedBlocks.MODID, value = Dist.CLIENT)
@@ -31,8 +33,8 @@ public class ClientEventHandler
         BlockState state = Minecraft.getInstance().level.getBlockState(result.getBlockPos());
         if (!(state.getBlock() instanceof IFramedBlock block)) { return; }
 
-        BlockType type = block.getBlockType();
-        if (type.hasSpecialHitbox())
+        IBlockType type = block.getBlockType();
+        if (type.hasSpecialHitbox() && type instanceof BlockType blockType)
         {
             PoseStack mstack = event.getMatrix();
             Vec3 offset = Vec3.atLowerCornerOf(result.getBlockPos()).subtract(event.getInfo().getPosition());
@@ -46,7 +48,7 @@ public class ClientEventHandler
             mstack.mulPose(Vector3f.YP.rotationDegrees(-dir.toYRot()));
             mstack.translate(-.5, -.5, -.5);
 
-            switch (type)
+            switch (blockType)
             {
                 case FRAMED_SLOPE, FRAMED_RAIL_SLOPE -> drawSlopeBox(state, mstack, builder);
                 case FRAMED_CORNER_SLOPE -> drawCornerSlopeBox(state, mstack, builder);

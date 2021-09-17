@@ -11,9 +11,8 @@ import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.phys.Vec3;
 import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
+import xfacthd.framedblocks.api.util.*;
 import xfacthd.framedblocks.common.data.*;
-import xfacthd.framedblocks.common.util.CtmPredicate;
-import xfacthd.framedblocks.common.util.Utils;
 
 public class FramedCornerSlopeBlock extends FramedBlock
 {

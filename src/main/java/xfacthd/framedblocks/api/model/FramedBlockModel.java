@@ -1,4 +1,4 @@
-package xfacthd.framedblocks.client.model;
+package xfacthd.framedblocks.api.model;
 
 import com.google.common.collect.HashBasedTable;
 import com.google.common.collect.Table;
@@ -19,12 +19,11 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.client.MinecraftForgeClient;
 import net.minecraftforge.client.model.data.EmptyModelData;
 import net.minecraftforge.client.model.data.IModelData;
-import net.minecraftforge.fml.loading.FMLEnvironment;
-import xfacthd.framedblocks.client.util.FramedBlockData;
-import xfacthd.framedblocks.common.FBContent;
-import xfacthd.framedblocks.common.block.IFramedBlock;
-import xfacthd.framedblocks.common.data.BlockType;
-import xfacthd.framedblocks.common.blockentity.FramedBlockEntity;
+import xfacthd.framedblocks.api.FramedBlocksAPI;
+import xfacthd.framedblocks.api.type.IBlockType;
+import xfacthd.framedblocks.api.util.FramedBlockData;
+import xfacthd.framedblocks.api.block.IFramedBlock;
+import xfacthd.framedblocks.api.block.FramedBlockEntity;
 
 import javax.annotation.Nonnull;
 import java.util.*;
@@ -33,12 +32,10 @@ import java.util.stream.Collectors;
 @SuppressWarnings("deprecation")
 public abstract class FramedBlockModel extends BakedModelProxy
 {
-    private static final boolean FORCE_NODATA = true;
-
     private final Table<BlockState, RenderType, Map<Direction, List<BakedQuad>>> quadCacheTable = HashBasedTable.create();
     private final Map<BlockState, BakedModel> modelCache = new HashMap<>();
     private final BlockState state;
-    private final BlockType type;
+    private final IBlockType type;
 
     public FramedBlockModel(BlockState state, BakedModel baseModel)
     {
@@ -72,7 +69,7 @@ public abstract class FramedBlockModel extends BakedModelProxy
         if (layer == null) { layer = RenderType.cutout(); }
         if ((camoState == null || camoState.isAir()) && layer == RenderType.cutout())
         {
-            return getCamoQuads(state, FBContent.blockFramedCube.get().defaultBlockState(), side, rand, extraData, layer);
+            return getCamoQuads(state, FramedBlocksAPI.getInstance().defaultModelState(), side, rand, extraData, layer);
         }
 
         return Collections.emptyList();
@@ -82,7 +79,7 @@ public abstract class FramedBlockModel extends BakedModelProxy
     public List<BakedQuad> getQuads(BlockState state, Direction side, Random rand)
     {
         if (state == null) { state = this.state; }
-        return getCamoQuads(state, FBContent.blockFramedCube.get().defaultBlockState(), side, rand, EmptyModelData.INSTANCE, RenderType.cutout());
+        return getCamoQuads(state, FramedBlocksAPI.getInstance().defaultModelState(), side, rand, EmptyModelData.INSTANCE, RenderType.cutout());
     }
 
     private List<BakedQuad> getCamoQuads(BlockState state, BlockState camoState, Direction side, Random rand, IModelData extraData, RenderType layer)
@@ -121,7 +118,7 @@ public abstract class FramedBlockModel extends BakedModelProxy
 
         BakedModel camoModel = getCamoModel(camoState);
         List<BakedQuad> quads =
-                getAllQuads(camoModel, camoState, rand, getCamoData(camoModel, camoState, data))
+                getAllQuads(camoModel, camoState, rand)
                 .stream()
                 .filter(q -> !type.getCtmPredicate().test(state, q.getDirection()))
                 .collect(Collectors.toList());
@@ -174,12 +171,12 @@ public abstract class FramedBlockModel extends BakedModelProxy
 
 
 
-    private final Map<BlockState, FluidDummyModel> fluidModels = new HashMap<>();
+    private final Map<BlockState, BakedModel> fluidModels = new HashMap<>();
     protected BakedModel getCamoModel(BlockState camoState)
     {
         if (camoState.getBlock() instanceof LiquidBlock fluid)
         {
-            return fluidModels.computeIfAbsent(camoState, state -> new FluidDummyModel(fluid.getFluid()));
+            return fluidModels.computeIfAbsent(camoState, state -> FramedBlocksAPI.getInstance().createFluidModel(fluid.getFluid()));
         }
         return Minecraft.getInstance().getBlockRenderer().getBlockModel(camoState);
     }
@@ -194,13 +191,12 @@ public abstract class FramedBlockModel extends BakedModelProxy
         return model.getModelData(level, pos, state, data);
     }
 
-    protected static List<BakedQuad> getAllQuads(BakedModel model, BlockState state, Random rand, IModelData data)
+    protected static List<BakedQuad> getAllQuads(BakedModel model, BlockState state, Random rand)
     {
         List<BakedQuad> quads = new ArrayList<>();
         for (Direction dir : Direction.values())
         {
-            if (FMLEnvironment.production || FORCE_NODATA) { quads.addAll(model.getQuads(state, dir, rand, EmptyModelData.INSTANCE)); }
-            else { quads.addAll(model.getQuads(state, dir, rand, data)); } //For debug purposes when creating new models
+            quads.addAll(model.getQuads(state, dir, rand, EmptyModelData.INSTANCE));
         }
         return quads;
     }

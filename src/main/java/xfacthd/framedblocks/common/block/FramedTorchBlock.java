@@ -18,9 +18,10 @@ import net.minecraft.world.level.material.Material;
 import net.minecraft.world.level.storage.loot.LootContext;
 import net.minecraft.world.phys.BlockHitResult;
 import xfacthd.framedblocks.FramedBlocks;
+import xfacthd.framedblocks.api.block.IFramedBlock;
 import xfacthd.framedblocks.common.FBContent;
 import xfacthd.framedblocks.common.data.BlockType;
-import xfacthd.framedblocks.common.blockentity.FramedBlockEntity;
+import xfacthd.framedblocks.api.block.FramedBlockEntity;
 
 import javax.annotation.Nullable;
 import java.util.List;

@@ -6,7 +6,7 @@ import xfacthd.framedblocks.FramedBlocks;
 import xfacthd.framedblocks.common.FBContent;
 import xfacthd.framedblocks.common.item.FramedBlueprintItem;
 import xfacthd.framedblocks.common.blockentity.FramedChestBlockEntity;
-import xfacthd.framedblocks.common.blockentity.FramedBlockEntity;
+import xfacthd.framedblocks.api.block.FramedBlockEntity;
 
 public class FramedLanguageProvider extends LanguageProvider
 {

@@ -8,7 +8,7 @@ import net.minecraftforge.common.Tags;
 import net.minecraftforge.common.data.ExistingFileHelper;
 import xfacthd.framedblocks.FramedBlocks;
 import xfacthd.framedblocks.common.FBContent;
-import xfacthd.framedblocks.common.util.Utils;
+import xfacthd.framedblocks.api.util.Utils;
 
 public class FramedItemTagProvider extends ItemTagsProvider
 {

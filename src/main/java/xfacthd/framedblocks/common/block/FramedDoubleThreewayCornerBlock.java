@@ -13,7 +13,7 @@ import xfacthd.framedblocks.common.data.BlockType;
 import xfacthd.framedblocks.common.data.PropertyHolder;
 import xfacthd.framedblocks.common.blockentity.FramedDoubleThreewayCornerBlockEntity;
 import xfacthd.framedblocks.common.blockentity.FramedDoubleBlockEntity;
-import xfacthd.framedblocks.common.util.CtmPredicate;
+import xfacthd.framedblocks.api.util.CtmPredicate;
 
 public class FramedDoubleThreewayCornerBlock extends AbstractFramedDoubleBlock
 {

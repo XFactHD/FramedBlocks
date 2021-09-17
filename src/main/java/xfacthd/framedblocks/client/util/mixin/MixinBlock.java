@@ -13,9 +13,9 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
-import xfacthd.framedblocks.common.block.IFramedBlock;
-import xfacthd.framedblocks.common.blockentity.FramedBlockEntity;
-import xfacthd.framedblocks.common.util.SideSkipPredicate;
+import xfacthd.framedblocks.api.block.IFramedBlock;
+import xfacthd.framedblocks.api.block.FramedBlockEntity;
+import xfacthd.framedblocks.api.util.SideSkipPredicate;
 
 @Mixin(Block.class)
 public abstract class MixinBlock extends BlockBehaviour

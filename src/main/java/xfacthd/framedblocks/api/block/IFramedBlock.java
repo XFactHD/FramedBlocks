@@ -1,4 +1,4 @@
-package xfacthd.framedblocks.common.block;
+package xfacthd.framedblocks.api.block;
 
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
@@ -21,21 +21,21 @@ import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.Vec3;
 import xfacthd.framedblocks.FramedBlocks;
+import xfacthd.framedblocks.api.FramedBlocksAPI;
+import xfacthd.framedblocks.api.type.IBlockType;
+import xfacthd.framedblocks.api.util.CtmPredicate;
+import xfacthd.framedblocks.api.util.SideSkipPredicate;
 import xfacthd.framedblocks.client.util.ClientConfig;
-import xfacthd.framedblocks.common.data.BlockType;
-import xfacthd.framedblocks.common.item.FramedBlueprintItem;
-import xfacthd.framedblocks.common.blockentity.FramedDoubleBlockEntity;
-import xfacthd.framedblocks.common.blockentity.FramedBlockEntity;
-import xfacthd.framedblocks.common.util.*;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.List;
+import java.util.Optional;
 
 @SuppressWarnings("deprecation")
 public interface IFramedBlock extends EntityBlock//, IFacade
 {
-    BlockType getBlockType();
+    IBlockType getBlockType();
 
     static Block.Properties createProperties()
     {
@@ -63,7 +63,7 @@ public interface IFramedBlock extends EntityBlock//, IFacade
             ItemStack otherStack = player.getOffhandItem();
             if (otherStack.getItem() instanceof BlockItem item && !(item.getBlock() instanceof IFramedBlock))
             {
-                if (level.getBlockEntity(pos) instanceof FramedBlockEntity be && !(be instanceof FramedDoubleBlockEntity))
+                if (level.getBlockEntity(pos) instanceof FramedBlockEntity be && !FramedBlocksAPI.getInstance().isFramedDoubleBlockEntity(be))
                 {
                     Vec3 hitVec = new Vec3(pos.getX(), pos.getY(), pos.getZ());
                     be.handleInteraction(player, InteractionHand.OFF_HAND, new BlockHitResult(hitVec, Direction.UP, pos, false));
@@ -113,13 +113,10 @@ public interface IFramedBlock extends EntityBlock//, IFacade
                 drops.add(camo);
             }
 
-            if (be instanceof FramedDoubleBlockEntity dbe)
+            camo = FramedBlocksAPI.getInstance().getSecondaryCamo(be);
+            if (!camo.isEmpty())
             {
-                camo = dbe.getCamoStackTwo();
-                if (!camo.isEmpty())
-                {
-                    drops.add(camo);
-                }
+                drops.add(camo);
             }
         }
 
@@ -187,7 +184,7 @@ public interface IFramedBlock extends EntityBlock//, IFacade
 
     default boolean isCamoFlammable(BlockGetter level, BlockPos pos, Direction face)
     {
-        if (CommonConfig.fireproofBlocks) { return false; }
+        if (FramedBlocksAPI.getInstance().areBlocksFireproof()) { return false; }
 
         if (level.getBlockEntity(pos) instanceof FramedBlockEntity be)
         {
@@ -198,7 +195,7 @@ public interface IFramedBlock extends EntityBlock//, IFacade
 
     default int getCamoFlammability(BlockGetter level, BlockPos pos, Direction face)
     {
-        if (CommonConfig.fireproofBlocks) { return 0; }
+        if (FramedBlocksAPI.getInstance().areBlocksFireproof()) { return 0; }
 
         if (level.getBlockEntity(pos) instanceof FramedBlockEntity be)
         {
@@ -211,9 +208,11 @@ public interface IFramedBlock extends EntityBlock//, IFacade
         return 20;
     }
 
-    default MutableComponent printCamoBlock(CompoundTag beTag)
+    default Optional<MutableComponent> printCamoBlock(CompoundTag beTag)
     {
         BlockState camoState = NbtUtils.readBlockState(beTag.getCompound("camo_state"));
-        return camoState.isAir() ? FramedBlueprintItem.BLOCK_NONE : camoState.getBlock().getName().withStyle(ChatFormatting.WHITE);
+
+        if (camoState.isAir()) { return Optional.empty(); }
+        return Optional.of(camoState.getBlock().getName().withStyle(ChatFormatting.WHITE));
     }
 }

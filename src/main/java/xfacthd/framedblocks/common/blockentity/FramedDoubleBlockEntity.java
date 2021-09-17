@@ -11,7 +11,8 @@ import net.minecraft.core.Direction;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.level.Explosion;
 import net.minecraftforge.client.model.data.*;
-import xfacthd.framedblocks.client.util.FramedBlockData;
+import xfacthd.framedblocks.api.block.FramedBlockEntity;
+import xfacthd.framedblocks.api.util.FramedBlockData;
 
 public abstract class FramedDoubleBlockEntity extends FramedBlockEntity
 {

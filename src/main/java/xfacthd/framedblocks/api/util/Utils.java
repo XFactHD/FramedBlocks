@@ -1,6 +1,7 @@
-package xfacthd.framedblocks.common.util;
+package xfacthd.framedblocks.api.util;
 
 import net.minecraft.core.Direction;
+import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.tags.*;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.Block;
@@ -8,12 +9,12 @@ import net.minecraft.world.level.block.entity.*;
 import net.minecraft.world.phys.Vec3;
 import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
-import xfacthd.framedblocks.FramedBlocks;
+import xfacthd.framedblocks.api.FramedBlocksAPI;
 
 public class Utils
 {
-    public static final Tag.Named<Block> FRAMEABLE = BlockTags.bind(FramedBlocks.MODID + ":frameable");
-    public static final Tag.Named<Block> BLACKLIST = BlockTags.bind(FramedBlocks.MODID + ":blacklisted");
+    public static final Tag.Named<Block> FRAMEABLE = BlockTags.bind(FramedBlocksAPI.getInstance().modid() + ":frameable");
+    public static final Tag.Named<Block> BLACKLIST = BlockTags.bind(FramedBlocksAPI.getInstance().modid() + ":blacklisted");
     public static final Tag.Named<Item> WRENCH = ItemTags.bind("forge:tools/wrench");
 
     public static VoxelShape rotateShape(Direction from, Direction to, VoxelShape shape)
@@ -52,5 +53,10 @@ public class Utils
     )
     {
         return actualType == type ? (BlockEntityTicker<A>)ticker : null;
+    }
+
+    public static TranslatableComponent translate(String prefix, String postfix)
+    {
+        return new TranslatableComponent(prefix + "." + FramedBlocksAPI.getInstance().modid() + "." + postfix);
     }
 }

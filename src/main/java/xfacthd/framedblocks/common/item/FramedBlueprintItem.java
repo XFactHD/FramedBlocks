@@ -22,9 +22,9 @@ import net.minecraftforge.common.Tags;
 import net.minecraftforge.common.util.Constants;
 import net.minecraftforge.registries.ForgeRegistries;
 import xfacthd.framedblocks.common.FBContent;
-import xfacthd.framedblocks.common.block.IFramedBlock;
+import xfacthd.framedblocks.api.block.IFramedBlock;
 import xfacthd.framedblocks.common.data.FramedToolType;
-import xfacthd.framedblocks.common.blockentity.FramedBlockEntity;
+import xfacthd.framedblocks.api.block.FramedBlockEntity;
 
 import javax.annotation.Nullable;
 import java.util.*;
@@ -323,7 +323,7 @@ public class FramedBlueprintItem extends FramedToolItem
             Component blockName = block == null ? BLOCK_INVALID : block.getName().withStyle(ChatFormatting.WHITE);
 
             CompoundTag beTag = tag.getCompound("camo_data");
-            Component camoName = !(block instanceof IFramedBlock fb) ? BLOCK_NONE : fb.printCamoBlock(beTag);
+            Component camoName = !(block instanceof IFramedBlock fb) ? BLOCK_NONE : fb.printCamoBlock(beTag).orElse(BLOCK_NONE);
             Component illuminated = beTag.getBoolean("glowing") ? ILLUMINATED_TRUE : ILLUMINATED_FALSE;
 
             Component lineOne = new TranslatableComponent(CONTAINED_BLOCK, blockName).withStyle(ChatFormatting.GOLD);

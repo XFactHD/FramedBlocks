@@ -15,12 +15,14 @@ import net.minecraftforge.fmllegacy.network.NetworkRegistry;
 import net.minecraftforge.fmllegacy.network.simple.SimpleChannel;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import xfacthd.framedblocks.api.FramedBlocksAPI;
 import xfacthd.framedblocks.client.util.ClientConfig;
 import xfacthd.framedblocks.common.FBContent;
-import xfacthd.framedblocks.common.block.IFramedBlock;
+import xfacthd.framedblocks.api.block.IFramedBlock;
 import xfacthd.framedblocks.common.item.FramedToolItem;
 import xfacthd.framedblocks.common.net.OpenSignScreenPacket;
 import xfacthd.framedblocks.common.net.SignUpdatePacket;
+import xfacthd.framedblocks.common.util.ApiImpl;
 import xfacthd.framedblocks.common.util.CommonConfig;
 
 @Mod(FramedBlocks.MODID)
@@ -80,6 +82,7 @@ public class FramedBlocks
         FBContent.init();
         ModLoadingContext.get().registerConfig(ModConfig.Type.CLIENT, ClientConfig.SPEC);
         ModLoadingContext.get().registerConfig(ModConfig.Type.COMMON, CommonConfig.SPEC);
+        FramedBlocksAPI.INSTANCE.accept(new ApiImpl());
     }
 
     @SubscribeEvent

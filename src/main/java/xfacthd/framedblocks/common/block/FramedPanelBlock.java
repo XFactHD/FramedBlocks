@@ -21,9 +21,9 @@ import xfacthd.framedblocks.common.FBContent;
 import xfacthd.framedblocks.common.data.BlockType;
 import xfacthd.framedblocks.common.data.PropertyHolder;
 import xfacthd.framedblocks.common.blockentity.FramedDoubleBlockEntity;
-import xfacthd.framedblocks.common.blockentity.FramedBlockEntity;
-import xfacthd.framedblocks.common.util.CtmPredicate;
-import xfacthd.framedblocks.common.util.Utils;
+import xfacthd.framedblocks.api.block.FramedBlockEntity;
+import xfacthd.framedblocks.api.util.CtmPredicate;
+import xfacthd.framedblocks.api.util.Utils;
 
 @SuppressWarnings("deprecation")
 public class FramedPanelBlock extends FramedBlock
