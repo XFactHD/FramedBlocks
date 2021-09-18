@@ -1,5 +1,8 @@
 package xfacthd.framedblocks.client.model;
 
+import net.minecraft.client.renderer.ItemBlockRenderTypes;
+import net.minecraft.client.renderer.RenderType;
+import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.client.renderer.block.model.BakedQuad;
 import net.minecraft.client.resources.model.BakedModel;
@@ -29,7 +32,13 @@ public class FramedWallTorchModel extends FramedBlockModel
     }
 
     @Override
-    protected void getAdditionalQuads(Map<Direction, List<BakedQuad>> quadMap, BlockState state, Random rand, IModelData extraData)
+    protected boolean hasAdditionalQuadsInLayer(RenderType layer)
+    {
+        return ItemBlockRenderTypes.canRenderInLayer(Blocks.TORCH.defaultBlockState(), layer);
+    }
+
+    @Override
+    protected void getAdditionalQuads(Map<Direction, List<BakedQuad>> quadMap, BlockState state, Random rand, IModelData extraData, RenderType layer)
     {
         List<BakedQuad> quads = baseModel.getQuads(state, null, rand, extraData);
         for (BakedQuad quad : quads)
