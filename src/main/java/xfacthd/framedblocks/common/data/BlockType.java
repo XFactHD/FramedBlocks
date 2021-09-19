@@ -55,6 +55,7 @@ public enum BlockType
     FRAMED_BARS                   (false, false,  true,  true, CtmPredicate.FALSE, SideSkipPredicate.FALSE, FramedPaneBlock::generateShapes),
     FRAMED_PANE                   (false, false,  true,  true, CtmPredicate.FALSE, new PaneSkipPredicate(), FramedPaneBlock::generateShapes),
     FRAMED_RAIL_SLOPE             ( true, false,  true,  true, FramedSlopeBlock.CTM_PREDICATE, new SlopeSkipPredicate(), FramedSlopeBlock::generateShapes),
+    FRAMED_FLOWER_POT             (false,  true, false,  true, CtmPredicate.FALSE, SideSkipPredicate.FALSE, VoxelShapes.create(5D/16D, 0, 5D/16D, 11D/16D, 6D/16D, 11D/16D)),
     FRAMED_COLLAPSIBLE_BLOCK      ( true,  true, false,  true/*, FramedCollapsibleBlock.CTM_PREDICATE, FramedCollapsibleBlock.SKIP_PREDICATE*/);
 
     private final String name = toString().toLowerCase(Locale.ROOT);
