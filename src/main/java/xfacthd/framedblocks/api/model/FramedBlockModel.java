@@ -71,9 +71,9 @@ public abstract class FramedBlockModel extends BakedModelProxy
         }
 
         if (layer == null) { layer = RenderType.cutout(); }
-        if ((camoState == null || camoState.isAir()) && layer == RenderType.cutout())
+        if ((camoState == null || camoState.isAir()) && (layer == RenderType.cutout() || hasAdditionalQuadsInLayer(layer)))
         {
-            return getCamoQuads(state, FramedBlocksAPI.getInstance().defaultModelState(), side, rand, extraData, layer, true);
+            return getCamoQuads(state, FramedBlocksAPI.getInstance().defaultModelState(), side, rand, extraData, layer, layer == RenderType.cutout());
         }
 
         return Collections.emptyList();
