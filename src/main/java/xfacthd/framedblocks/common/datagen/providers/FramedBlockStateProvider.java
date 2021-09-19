@@ -70,6 +70,7 @@ public class FramedBlockStateProvider extends BlockStateProvider
         registerFramedChest();
         registerFramedBarsBlock(cube);
         registerFramedPaneBlock(cube);
+        registerFramedFlowerPotBlock(cube);
         registerFramedCollapsibleBlock();
     }
 
@@ -254,6 +255,12 @@ public class FramedBlockStateProvider extends BlockStateProvider
     {
         simpleBlock(FBContent.blockFramedPane.get(), cube);
         itemModels().withExistingParent("framed_pane", "item/generated").texture("layer0", TEXTURE);
+    }
+
+    private void registerFramedFlowerPotBlock(ModelFile cube)
+    {
+        simpleBlock(FBContent.blockFramedFlowerPot.get(), cube);
+        itemModels().withExistingParent("framed_flower_pot", "item/generated").texture("layer0", modLoc("item/framed_flower_pot"));
     }
 
     private void registerFramedCollapsibleBlock()

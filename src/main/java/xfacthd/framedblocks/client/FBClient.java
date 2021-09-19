@@ -151,6 +151,7 @@ public class FBClient
         replaceModels(FBContent.blockFramedBars, registry, FramedBarsModel::new);
         replaceModels(FBContent.blockFramedPane, registry, FramedPaneModel::new);
         replaceModels(FBContent.blockFramedRailSlope, registry, FramedRailSlopeModel::new, FramedRailSlopeModel::new);
+        replaceModels(FBContent.blockFramedFlowerPot, registry, FramedFlowerPotModel::new);
         //replaceModelsSimple(FBContent.blockFramedCollapsibleBlock, registry, FramedCollapsibleBlockModel::new);
     }
 

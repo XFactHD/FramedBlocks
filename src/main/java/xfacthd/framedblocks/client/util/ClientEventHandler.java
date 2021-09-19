@@ -48,7 +48,7 @@ public class ClientEventHandler
             mstack.mulPose(Vector3f.YP.rotationDegrees(-dir.toYRot()));
             mstack.translate(-.5, -.5, -.5);
 
-            switch (blockType)
+            switch (blockType) //TODO: defer to the IBlockType to allow drawing outlines for blocks from add-ons
             {
                 case FRAMED_SLOPE, FRAMED_RAIL_SLOPE -> drawSlopeBox(state, mstack, builder);
                 case FRAMED_CORNER_SLOPE -> drawCornerSlopeBox(state, mstack, builder);
@@ -336,6 +336,7 @@ public class ClientEventHandler
         drawLine(builder, mstack, 1, 1, 0, .5, .5, .5);
     }
 
+    //TODO: move to API to allow usage by add-ons
     private static void drawLine(VertexConsumer builder, PoseStack mstack, double x1, double y1, double z1, double x2, double y2, double z2)
     {
         float nX = (float)(x2 - x1);
