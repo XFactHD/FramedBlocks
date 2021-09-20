@@ -20,6 +20,7 @@ import net.minecraftforge.client.MinecraftForgeClient;
 import net.minecraftforge.client.model.data.EmptyModelData;
 import net.minecraftforge.client.model.data.IModelData;
 import xfacthd.framedblocks.api.FramedBlocksAPI;
+import xfacthd.framedblocks.api.FramedBlocksClientAPI;
 import xfacthd.framedblocks.api.type.IBlockType;
 import xfacthd.framedblocks.api.util.FramedBlockData;
 import xfacthd.framedblocks.api.block.IFramedBlock;
@@ -191,7 +192,7 @@ public abstract class FramedBlockModel extends BakedModelProxy
     {
         if (camoState.getBlock() instanceof LiquidBlock fluid)
         {
-            return fluidModels.computeIfAbsent(camoState, state -> FramedBlocksAPI.getInstance().createFluidModel(fluid.getFluid()));
+            return fluidModels.computeIfAbsent(camoState, state -> FramedBlocksClientAPI.getInstance().createFluidModel(fluid.getFluid()));
         }
         return Minecraft.getInstance().getBlockRenderer().getBlockModel(camoState);
     }
