@@ -14,6 +14,8 @@ import net.minecraftforge.client.model.data.*;
 import xfacthd.framedblocks.api.block.FramedBlockEntity;
 import xfacthd.framedblocks.api.util.FramedBlockData;
 
+import java.util.List;
+
 public abstract class FramedDoubleBlockEntity extends FramedBlockEntity
 {
     public static final ModelProperty<IModelData> DATA_LEFT = new ModelProperty<>();
@@ -21,8 +23,8 @@ public abstract class FramedDoubleBlockEntity extends FramedBlockEntity
 
     private final IModelData multiModelData = new ModelDataMap.Builder().build();
     private final FramedBlockData modelData = new FramedBlockData();
-    protected ItemStack camoStack = ItemStack.EMPTY;
-    protected BlockState camoState = Blocks.AIR.defaultBlockState();
+    private ItemStack camoStack = ItemStack.EMPTY;
+    private BlockState camoState = Blocks.AIR.defaultBlockState();
 
     public FramedDoubleBlockEntity(BlockEntityType<?> type, BlockPos pos, BlockState state) { super(type, pos, state); }
 
@@ -71,6 +73,16 @@ public abstract class FramedDoubleBlockEntity extends FramedBlockEntity
     @Override
     @SuppressWarnings("deprecation")
     public int getLightValue() { return Math.max(camoState.getLightEmission(), super.getLightValue()); }
+
+    @Override
+    public void addCamoDrops(List<ItemStack> drops)
+    {
+        super.addCamoDrops(drops);
+        if (!camoStack.isEmpty())
+        {
+            drops.add(camoStack);
+        }
+    }
 
     @Override
     protected BlockState getCamoState(BlockHitResult hit)

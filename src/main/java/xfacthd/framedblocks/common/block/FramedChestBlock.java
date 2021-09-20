@@ -7,7 +7,6 @@ import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
@@ -15,18 +14,14 @@ import net.minecraft.world.level.block.entity.*;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
-import net.minecraft.world.level.storage.loot.LootContext;
-import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraftforge.fmllegacy.network.NetworkHooks;
-import xfacthd.framedblocks.common.data.PropertyHolder;
-import xfacthd.framedblocks.common.FBContent;
-import xfacthd.framedblocks.common.data.*;
-import xfacthd.framedblocks.common.blockentity.FramedChestBlockEntity;
 import xfacthd.framedblocks.api.util.Utils;
+import xfacthd.framedblocks.common.FBContent;
+import xfacthd.framedblocks.common.blockentity.FramedChestBlockEntity;
+import xfacthd.framedblocks.common.data.*;
 
 import javax.annotation.Nullable;
-import java.util.List;
 
 public class FramedChestBlock extends FramedBlock
 {
@@ -70,17 +65,15 @@ public class FramedChestBlock extends FramedBlock
     }
 
     @Override
-    public List<ItemStack> getDrops(BlockState state, LootContext.Builder builder)
+    @SuppressWarnings("deprecation")
+    public void onRemove(BlockState state, Level level, BlockPos pos, BlockState newState, boolean isMoving)
     {
-        List<ItemStack> drops = super.getDrops(state, builder);
+        super.onRemove(state, level, pos, newState, isMoving);
 
-        BlockEntity be = builder.getOptionalParameter(LootContextParams.BLOCK_ENTITY);
-        if (be instanceof FramedChestBlockEntity cbe)
+        if (level.getBlockEntity(pos) instanceof FramedChestBlockEntity be)
         {
-            cbe.addDrops(drops);
+            be.getDrops().forEach(stack -> popResource(level, pos, stack));
         }
-
-        return drops;
     }
 
     @Override

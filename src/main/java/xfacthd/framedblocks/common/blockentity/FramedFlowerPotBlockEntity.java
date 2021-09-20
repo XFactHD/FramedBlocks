@@ -3,6 +3,7 @@ package xfacthd.framedblocks.common.blockentity;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
@@ -10,6 +11,8 @@ import net.minecraftforge.client.model.data.ModelProperty;
 import net.minecraftforge.registries.ForgeRegistries;
 import xfacthd.framedblocks.api.block.FramedBlockEntity;
 import xfacthd.framedblocks.common.FBContent;
+
+import java.util.List;
 
 public class FramedFlowerPotBlockEntity extends FramedBlockEntity
 {
@@ -35,9 +38,19 @@ public class FramedFlowerPotBlockEntity extends FramedBlockEntity
         }
     }
 
-    public boolean hasFlowerBlock() { return !flowerBlock.defaultBlockState().isAir(); }
+    public boolean hasFlowerBlock() { return flowerBlock != Blocks.AIR; }
 
     public Block getFlowerBlock() { return flowerBlock; }
+
+    @Override
+    public void addCamoDrops(List<ItemStack> drops)
+    {
+        super.addCamoDrops(drops);
+        if (flowerBlock != Blocks.AIR)
+        {
+            drops.add(new ItemStack(flowerBlock));
+        }
+    }
 
     @Override
     protected void writeToDataPacket(CompoundTag nbt)

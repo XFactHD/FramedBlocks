@@ -107,17 +107,7 @@ public interface IFramedBlock extends EntityBlock//, IFacade
     {
         if (builder.getOptionalParameter(LootContextParams.BLOCK_ENTITY) instanceof FramedBlockEntity be)
         {
-            ItemStack camo = be.getCamoStack();
-            if (!camo.isEmpty())
-            {
-                drops.add(camo);
-            }
-
-            camo = FramedBlocksAPI.getInstance().getSecondaryCamo(be);
-            if (!camo.isEmpty())
-            {
-                drops.add(camo);
-            }
+            be.addCamoDrops(drops);
         }
 
         return drops;

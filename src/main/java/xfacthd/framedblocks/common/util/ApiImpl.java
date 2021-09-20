@@ -28,14 +28,4 @@ public class ApiImpl implements FramedBlocksAPI
 
     @Override
     public boolean areBlocksFireproof() { return CommonConfig.fireproofBlocks; }
-
-    @Override
-    public ItemStack getSecondaryCamo(FramedBlockEntity be)
-    {
-        if (be instanceof FramedDoubleBlockEntity dbe)
-        {
-            return dbe.getCamoStackTwo();
-        }
-        return ItemStack.EMPTY;
-    }
 }

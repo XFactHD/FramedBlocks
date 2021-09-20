@@ -25,6 +25,7 @@ import xfacthd.framedblocks.common.data.PropertyHolder;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import java.util.ArrayList;
 import java.util.List;
 
 public class FramedChestBlockEntity extends FramedBlockEntity implements MenuProvider
@@ -127,8 +128,9 @@ public class FramedChestBlockEntity extends FramedBlockEntity implements MenuPro
         return !(player.distanceToSqr((double)worldPosition.getX() + 0.5D, (double)worldPosition.getY() + 0.5D, (double)worldPosition.getZ() + 0.5D) > 64.0D);
     }
 
-    public void addDrops(List<ItemStack> drops)
+    public List<ItemStack> getDrops()
     {
+        List<ItemStack> drops = new ArrayList<>();
         for (int i = 0; i < itemHandler.getSlots(); i++)
         {
             ItemStack stack = itemHandler.getStackInSlot(i);
@@ -137,6 +139,7 @@ public class FramedChestBlockEntity extends FramedBlockEntity implements MenuPro
                 drops.add(stack);
             }
         }
+        return drops;
     }
 
 

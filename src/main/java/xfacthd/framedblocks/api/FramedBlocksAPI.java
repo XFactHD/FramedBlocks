@@ -41,6 +41,4 @@ public interface FramedBlocksAPI
      * Returns the current value of the {@code fireproofBlocks} setting in the common config
      */
     boolean areBlocksFireproof();
-
-    ItemStack getSecondaryCamo(FramedBlockEntity be);
 }

@@ -28,6 +28,8 @@ import xfacthd.framedblocks.api.FramedBlocksAPI;
 import xfacthd.framedblocks.api.util.FramedBlockData;
 import xfacthd.framedblocks.api.util.Utils;
 
+import java.util.List;
+
 @SuppressWarnings("deprecation")
 public class FramedBlockEntity extends BlockEntity
 {
@@ -373,6 +375,14 @@ public class FramedBlockEntity extends BlockEntity
     }
 
     public final IFramedBlock getBlock() { return (IFramedBlock) getBlockState().getBlock(); }
+
+    public void addCamoDrops(List<ItemStack> drops)
+    {
+        if (!camoStack.isEmpty())
+        {
+            drops.add(camoStack);
+        }
+    }
 
     /*
      * Sync
