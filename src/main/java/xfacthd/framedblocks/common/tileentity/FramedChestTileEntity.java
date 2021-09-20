@@ -21,6 +21,7 @@ import xfacthd.framedblocks.common.data.PropertyHolder;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import java.util.ArrayList;
 import java.util.List;
 
 public class FramedChestTileEntity extends FramedTileEntity implements INamedContainerProvider, ITickableTileEntity
@@ -124,8 +125,9 @@ public class FramedChestTileEntity extends FramedTileEntity implements INamedCon
         return !(player.getDistanceSq((double)pos.getX() + 0.5D, (double)pos.getY() + 0.5D, (double)pos.getZ() + 0.5D) > 64.0D);
     }
 
-    public void addDrops(List<ItemStack> drops)
+    public List<ItemStack> getDrops()
     {
+        List<ItemStack> drops = new ArrayList<>();
         for (int i = 0; i < itemHandler.getSlots(); i++)
         {
             ItemStack stack = itemHandler.getStackInSlot(i);
@@ -134,6 +136,7 @@ public class FramedChestTileEntity extends FramedTileEntity implements INamedCon
                 drops.add(stack);
             }
         }
+        return drops;
     }
 
 

@@ -3,8 +3,6 @@ package xfacthd.framedblocks.common.block;
 import net.minecraft.block.*;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.*;
-import net.minecraft.loot.LootContext;
-import net.minecraft.loot.LootParameters;
 import net.minecraft.pathfinding.PathType;
 import net.minecraft.stats.Stats;
 import net.minecraft.tileentity.TileEntity;
@@ -18,7 +16,6 @@ import xfacthd.framedblocks.common.data.BlockType;
 import xfacthd.framedblocks.common.tileentity.FramedFlowerPotTileEntity;
 
 import java.lang.reflect.Field;
-import java.util.List;
 import java.util.Map;
 import java.util.function.Supplier;
 
@@ -81,24 +78,6 @@ public class FramedFlowerPotBlock extends FramedBlock
         }
 
         return ActionResultType.PASS;
-    }
-
-    @Override
-    public List<ItemStack> getDrops(BlockState state, LootContext.Builder builder)
-    {
-        List<ItemStack> drops = super.getDrops(state, builder);
-
-        TileEntity te = builder.get(LootParameters.BLOCK_ENTITY);
-        if (te instanceof FramedFlowerPotTileEntity)
-        {
-            Block flower = ((FramedFlowerPotTileEntity) te).getFlowerBlock();
-            if (!flower.getDefaultState().isAir())
-            {
-                drops.add(new ItemStack(flower));
-            }
-        }
-
-        return drops;
     }
 
     @Override

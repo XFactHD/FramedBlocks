@@ -1,11 +1,14 @@
 package xfacthd.framedblocks.common.tileentity;
 
 import net.minecraft.block.*;
+import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.client.model.data.ModelProperty;
 import net.minecraftforge.registries.ForgeRegistries;
 import xfacthd.framedblocks.common.FBContent;
+
+import java.util.List;
 
 public class FramedFlowerPotTileEntity extends FramedTileEntity
 {
@@ -28,10 +31,19 @@ public class FramedFlowerPotTileEntity extends FramedTileEntity
         }
     }
 
-    @SuppressWarnings("deprecation")
-    public boolean hasFlowerBlock() { return !flowerBlock.getDefaultState().isAir(); }
+    public boolean hasFlowerBlock() { return flowerBlock != Blocks.AIR; }
 
     public Block getFlowerBlock() { return flowerBlock; }
+
+    @Override
+    public void addCamoDrops(List<ItemStack> drops)
+    {
+        super.addCamoDrops(drops);
+        if (flowerBlock != Blocks.AIR)
+        {
+            drops.add(new ItemStack(flowerBlock));
+        }
+    }
 
     @Override
     protected void writeToDataPacket(CompoundNBT nbt)

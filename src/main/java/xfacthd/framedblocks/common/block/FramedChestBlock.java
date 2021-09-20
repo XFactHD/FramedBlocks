@@ -5,9 +5,6 @@ import net.minecraft.block.BlockState;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.item.BlockItemUseContext;
-import net.minecraft.item.ItemStack;
-import net.minecraft.loot.LootContext;
-import net.minecraft.loot.LootParameters;
 import net.minecraft.state.StateContainer;
 import net.minecraft.state.properties.BlockStateProperties;
 import net.minecraft.tileentity.TileEntity;
@@ -21,7 +18,6 @@ import xfacthd.framedblocks.common.data.*;
 import xfacthd.framedblocks.common.tileentity.FramedChestTileEntity;
 
 import javax.annotation.Nullable;
-import java.util.List;
 
 public class FramedChestBlock extends FramedBlock
 {
@@ -68,17 +64,16 @@ public class FramedChestBlock extends FramedBlock
     }
 
     @Override
-    public List<ItemStack> getDrops(BlockState state, LootContext.Builder builder)
+    @SuppressWarnings("deprecation")
+    public void onReplaced(BlockState state, World world, BlockPos pos, BlockState newState, boolean isMoving)
     {
-        List<ItemStack> drops = super.getDrops(state, builder);
+        super.onReplaced(state, world, pos, newState, isMoving);
 
-        TileEntity te = builder.get(LootParameters.BLOCK_ENTITY);
+        TileEntity te = world.getTileEntity(pos);
         if (te instanceof FramedChestTileEntity)
         {
-            ((FramedChestTileEntity) te).addDrops(drops);
+            ((FramedChestTileEntity) te).getDrops().forEach(stack -> spawnAsEntity(world, pos, stack));
         }
-
-        return drops;
     }
 
     @Override

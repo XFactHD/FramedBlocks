@@ -115,20 +115,7 @@ public interface IFramedBlock extends IFacade
         TileEntity te = builder.get(LootParameters.BLOCK_ENTITY);
         if (te instanceof FramedTileEntity)
         {
-            ItemStack camo = ((FramedTileEntity) te).getCamoStack();
-            if (!camo.isEmpty())
-            {
-                drops.add(camo);
-            }
-
-            if (te instanceof FramedDoubleTileEntity)
-            {
-                camo = ((FramedDoubleTileEntity) te).getCamoStackTwo();
-                if (!camo.isEmpty())
-                {
-                    drops.add(camo);
-                }
-            }
+            ((FramedTileEntity) te).addCamoDrops(drops);
         }
 
         return drops;

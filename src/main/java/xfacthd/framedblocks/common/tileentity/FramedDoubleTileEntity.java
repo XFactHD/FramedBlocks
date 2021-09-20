@@ -12,6 +12,8 @@ import net.minecraft.world.Explosion;
 import net.minecraftforge.client.model.data.*;
 import xfacthd.framedblocks.client.util.FramedBlockData;
 
+import java.util.List;
+
 public abstract class FramedDoubleTileEntity extends FramedTileEntity
 {
     public static final ModelProperty<IModelData> DATA_LEFT = new ModelProperty<>();
@@ -19,8 +21,8 @@ public abstract class FramedDoubleTileEntity extends FramedTileEntity
 
     private final IModelData multiModelData = new ModelDataMap.Builder().build();
     private final FramedBlockData modelData = new FramedBlockData();
-    protected ItemStack camoStack = ItemStack.EMPTY;
-    protected BlockState camoState = Blocks.AIR.getDefaultState();
+    private ItemStack camoStack = ItemStack.EMPTY;
+    private BlockState camoState = Blocks.AIR.getDefaultState();
 
     public FramedDoubleTileEntity(TileEntityType<?> type) { super(type); }
 
@@ -69,6 +71,16 @@ public abstract class FramedDoubleTileEntity extends FramedTileEntity
     @Override
     @SuppressWarnings("deprecation")
     public int getLightValue() { return Math.max(camoState.getLightValue(), super.getLightValue()); }
+
+    @Override
+    public void addCamoDrops(List<ItemStack> drops)
+    {
+        super.addCamoDrops(drops);
+        if (!camoStack.isEmpty())
+        {
+            drops.add(camoStack);
+        }
+    }
 
     @Override
     protected BlockState getCamoState(BlockRayTraceResult hit)

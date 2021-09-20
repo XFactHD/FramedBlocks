@@ -27,6 +27,8 @@ import xfacthd.framedblocks.common.FBContent;
 import xfacthd.framedblocks.common.block.IFramedBlock;
 import xfacthd.framedblocks.common.util.Utils;
 
+import java.util.List;
+
 @SuppressWarnings("deprecation")
 public class FramedTileEntity extends TileEntity
 {
@@ -371,6 +373,14 @@ public class FramedTileEntity extends TileEntity
     }
 
     public final IFramedBlock getBlock() { return (IFramedBlock) getBlockState().getBlock(); }
+
+    public void addCamoDrops(List<ItemStack> drops)
+    {
+        if (!camoStack.isEmpty())
+        {
+            drops.add(camoStack);
+        }
+    }
 
     /*
      * Sync
