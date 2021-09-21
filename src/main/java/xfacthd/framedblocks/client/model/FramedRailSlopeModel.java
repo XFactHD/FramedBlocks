@@ -4,6 +4,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.block.BlockRenderDispatcher;
 import net.minecraft.client.renderer.block.model.BakedQuad;
+import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.resources.model.BakedModel;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -83,14 +84,26 @@ public class FramedRailSlopeModel extends BakedModelProxy
         return tileData;
     }
 
-    private List<BakedQuad> getSlopeQuads(@Nullable Direction side, @Nonnull Random rand, @Nonnull IModelData extraData)
+    @Override
+    public TextureAtlasSprite getParticleIcon(@Nonnull IModelData data) { return getSlopeModel().getParticleIcon(data); }
+
+    @Override
+    @SuppressWarnings("deprecation")
+    public TextureAtlasSprite getParticleIcon() { return getSlopeModel().getParticleIcon(); }
+
+    private BakedModel getSlopeModel()
     {
         if (slopeModel == null)
         {
             BlockRenderDispatcher dispatcher = Minecraft.getInstance().getBlockRenderer();
             slopeModel = dispatcher.getBlockModel(slopeState);
         }
-        return slopeModel.getQuads(slopeState, side, rand, extraData);
+        return slopeModel;
+    }
+
+    private List<BakedQuad> getSlopeQuads(@Nullable Direction side, @Nonnull Random rand, @Nonnull IModelData extraData)
+    {
+        return getSlopeModel().getQuads(slopeState, side, rand, extraData);
     }
 
     private List<BakedQuad> getRailQuads(@Nullable Direction side, Random rand)
