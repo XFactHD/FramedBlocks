@@ -278,7 +278,7 @@ public class BakedQuadTransformer
     }
 
     /**
-     * Creates a triangle quad with the tip centered and half a block height above the base line.
+     * Creates a triangle quad with the tip centered and half a block height above the baseline.
      * @param quad The BakedQuad to manipulate, must be a copy of the original quad
      * @param dir The direction the triangle should point
      */

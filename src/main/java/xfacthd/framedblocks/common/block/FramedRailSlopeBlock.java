@@ -28,8 +28,6 @@ import javax.annotation.Nullable;
 import java.util.List;
 import java.util.Map;
 
-//FIXME: placing a rail next to this that would set an invalid RailShape causes an IllegalArgumentException because RailState
-//       doesn't check if the shape property supports the new shape
 @SuppressWarnings("deprecation")
 public class FramedRailSlopeBlock extends AbstractRailBlock implements IFramedBlock
 {
@@ -73,6 +71,15 @@ public class FramedRailSlopeBlock extends AbstractRailBlock implements IFramedBl
         world.setBlockState(pos, newState);
 
         return newState;
+    }
+
+    @Override
+    protected void updateState(BlockState state, World world, BlockPos pos, Block block)
+    {
+        RailShape shape = state.get(PropertyHolder.ASCENDING_RAIL_SHAPE);
+        state = state.with(PropertyHolder.FACING_HOR, directionFromShape(shape));
+
+        world.setBlockState(pos, state);
     }
 
     @Override
