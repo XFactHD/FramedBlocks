@@ -78,6 +78,15 @@ public class FramedRailSlopeBlock extends BaseRailBlock implements IFramedBlock
     }
 
     @Override
+    protected void updateState(BlockState state, Level level, BlockPos pos, Block block)
+    {
+        RailShape shape = state.getValue(PropertyHolder.ASCENDING_RAIL_SHAPE);
+        state = state.setValue(PropertyHolder.FACING_HOR, directionFromShape(shape));
+
+        level.setBlockAndUpdate(pos, state);
+    }
+
+    @Override
     public boolean canSurvive(BlockState state, LevelReader level, BlockPos pos)
     {
         Direction dir = state.getValue(PropertyHolder.FACING_HOR);
