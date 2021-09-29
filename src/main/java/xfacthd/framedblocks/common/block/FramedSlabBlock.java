@@ -6,13 +6,16 @@ import net.minecraft.block.*;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.BlockItemUseContext;
 import net.minecraft.item.ItemStack;
+import net.minecraft.pathfinding.PathType;
 import net.minecraft.state.StateContainer;
 import net.minecraft.state.properties.*;
+import net.minecraft.tags.FluidTags;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.*;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.BlockRayTraceResult;
 import net.minecraft.util.math.shapes.VoxelShape;
+import net.minecraft.world.IBlockReader;
 import net.minecraft.world.World;
 import xfacthd.framedblocks.common.FBContent;
 import xfacthd.framedblocks.common.data.BlockType;
@@ -92,6 +95,12 @@ public class FramedSlabBlock extends FramedBlock
             }
         }
         return super.onBlockActivated(state, world, pos, player, hand, hit);
+    }
+
+    @Override
+    public boolean allowsMovement(BlockState state, IBlockReader world, BlockPos pos, PathType type)
+    {
+        return type == PathType.WATER && world.getFluidState(pos).isTagged(FluidTags.WATER);
     }
 
     public static ImmutableMap<BlockState, VoxelShape> generateShapes(ImmutableList<BlockState> states)

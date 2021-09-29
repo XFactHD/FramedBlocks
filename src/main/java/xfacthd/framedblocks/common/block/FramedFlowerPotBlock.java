@@ -81,7 +81,7 @@ public class FramedFlowerPotBlock extends FramedBlock
     }
 
     @Override
-    public boolean allowsMovement(BlockState state, IBlockReader level, BlockPos pos, PathType type)
+    public boolean allowsMovement(BlockState state, IBlockReader world, BlockPos pos, PathType type)
     {
         return false;
     }

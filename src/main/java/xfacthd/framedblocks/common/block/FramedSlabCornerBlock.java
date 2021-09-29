@@ -5,11 +5,15 @@ import com.google.common.collect.ImmutableMap;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.item.BlockItemUseContext;
+import net.minecraft.pathfinding.PathType;
 import net.minecraft.state.StateContainer;
 import net.minecraft.state.properties.*;
+import net.minecraft.tags.FluidTags;
 import net.minecraft.util.Direction;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.shapes.VoxelShape;
 import net.minecraft.util.math.vector.Vector3d;
+import net.minecraft.world.IBlockReader;
 import xfacthd.framedblocks.common.data.*;
 import xfacthd.framedblocks.common.util.Utils;
 
@@ -59,6 +63,12 @@ public class FramedSlabCornerBlock extends FramedBlock
 
         state = withTop(state, face, context.getHitVec());
         return withWater(state, context.getWorld(), context.getPos());
+    }
+
+    @Override
+    public boolean allowsMovement(BlockState state, IBlockReader world, BlockPos pos, PathType type)
+    {
+        return type == PathType.WATER && world.getFluidState(pos).isTagged(FluidTags.WATER);
     }
 
     public static ImmutableMap<BlockState, VoxelShape> generateShapes(ImmutableList<BlockState> states)

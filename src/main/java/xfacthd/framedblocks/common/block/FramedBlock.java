@@ -7,6 +7,7 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.fluid.*;
 import net.minecraft.item.ItemStack;
 import net.minecraft.loot.LootContext;
+import net.minecraft.pathfinding.PathType;
 import net.minecraft.state.properties.BlockStateProperties;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.*;
@@ -141,6 +142,13 @@ public class FramedBlock extends Block implements IFramedBlock, IWaterLoggable
     public List<ItemStack> getDrops(BlockState state, LootContext.Builder builder)
     {
         return getDrops(super.getDrops(state, builder), builder);
+    }
+
+    @Override
+    public boolean allowsMovement(BlockState state, IBlockReader world, BlockPos pos, PathType type)
+    {
+        if (getBlockType() != BlockType.FRAMED_CUBE) { return false; }
+        return super.allowsMovement(state, world, pos, type);
     }
 
     @Override

@@ -5,13 +5,15 @@ import com.google.common.collect.ImmutableMap;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.item.BlockItemUseContext;
+import net.minecraft.pathfinding.PathType;
 import net.minecraft.state.StateContainer;
 import net.minecraft.state.properties.*;
+import net.minecraft.tags.FluidTags;
 import net.minecraft.util.Direction;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.shapes.VoxelShape;
-import xfacthd.framedblocks.common.FBContent;
+import net.minecraft.world.IBlockReader;
 import xfacthd.framedblocks.common.data.*;
-import xfacthd.framedblocks.common.util.SideSkipPredicate;
 import xfacthd.framedblocks.common.util.Utils;
 
 public class FramedSlabEdgeBlock extends FramedBlock
@@ -34,6 +36,12 @@ public class FramedSlabEdgeBlock extends FramedBlock
         BlockState state = withTop(getDefaultState(), context.getFace(), context.getHitVec());
         state = state.with(PropertyHolder.FACING_HOR, context.getPlacementHorizontalFacing());
         return withWater(state, context.getWorld(), context.getPos());
+    }
+
+    @Override
+    public boolean allowsMovement(BlockState state, IBlockReader world, BlockPos pos, PathType type)
+    {
+        return type == PathType.WATER && world.getFluidState(pos).isTagged(FluidTags.WATER);
     }
 
     public static ImmutableMap<BlockState, VoxelShape> generateShapes(ImmutableList<BlockState> states)

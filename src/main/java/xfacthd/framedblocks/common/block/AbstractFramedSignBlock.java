@@ -6,6 +6,8 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.item.DyeItem;
 import net.minecraft.item.ItemStack;
+import net.minecraft.pathfinding.PathType;
+import net.minecraft.tags.FluidTags;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ActionResultType;
 import net.minecraft.util.Hand;
@@ -66,6 +68,13 @@ public abstract class AbstractFramedSignBlock extends FramedBlock
     public void onBlockPlacedBy(World world, BlockPos pos, BlockState state, @Nullable LivingEntity placer, ItemStack stack)
     {
         tryApplyCamoImmediately(world, pos, placer, stack);
+    }
+
+    @Override
+    @SuppressWarnings("deprecation")
+    public boolean allowsMovement(BlockState state, IBlockReader world, BlockPos pos, PathType type)
+    {
+        return type != PathType.WATER || world.getFluidState(pos).isTagged(FluidTags.WATER);
     }
 
     @Override
