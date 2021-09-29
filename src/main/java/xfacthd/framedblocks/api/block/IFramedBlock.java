@@ -20,12 +20,10 @@ import net.minecraft.world.level.storage.loot.LootContext;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.Vec3;
-import xfacthd.framedblocks.FramedBlocks;
 import xfacthd.framedblocks.api.FramedBlocksAPI;
 import xfacthd.framedblocks.api.type.IBlockType;
 import xfacthd.framedblocks.api.util.CtmPredicate;
 import xfacthd.framedblocks.api.util.SideSkipPredicate;
-import xfacthd.framedblocks.client.util.ClientConfig;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -48,7 +46,7 @@ public interface IFramedBlock extends EntityBlock//, IFacade
     default BlockItem createItemBlock()
     {
         Block block = (Block)this;
-        BlockItem item = new BlockItem(block, new Item.Properties().tab(FramedBlocks.FRAMED_TAB));
+        BlockItem item = new BlockItem(block, new Item.Properties().tab(FramedBlocksAPI.getInstance().defaultCreativeTab()));
         //noinspection ConstantConditions
         item.setRegistryName(block.getRegistryName());
         return item;
@@ -142,7 +140,7 @@ public interface IFramedBlock extends EntityBlock//, IFacade
     {
         if (level == null) { return false; } //Block had no camo when loaded => level in data not set
 
-        SideSkipPredicate pred = ClientConfig.detailedCulling ? getBlockType().getSideSkipPredicate() : SideSkipPredicate.CTM;
+        SideSkipPredicate pred = FramedBlocksAPI.getInstance().detailedCullingEnabled() ? getBlockType().getSideSkipPredicate() : SideSkipPredicate.CTM;
         return pred.test(level, pos, state, level.getBlockState(pos.relative(side)), side);
     }
 

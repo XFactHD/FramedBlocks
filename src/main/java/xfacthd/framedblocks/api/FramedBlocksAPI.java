@@ -1,5 +1,6 @@
 package xfacthd.framedblocks.api;
 
+import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
@@ -28,6 +29,11 @@ public interface FramedBlocksAPI
     BlockState defaultModelState();
 
     /**
+     * Returns the {@link CreativeModeTab} that contains the FramedBlocks items
+     */
+    CreativeModeTab defaultCreativeTab();
+
+    /**
      * Checks if the given {@link ItemStack} is a framed hammer
      */
     boolean isFramedHammer(ItemStack stack);
@@ -41,4 +47,10 @@ public interface FramedBlocksAPI
      * Returns the current value of the {@code fireproofBlocks} setting in the common config
      */
     boolean areBlocksFireproof();
+
+    /**
+     * If true, all faces should be checked for interaction with neighboring blocks for culling purposes,
+     * else only full faces should be checked against neighboring blocks
+     */
+    boolean detailedCullingEnabled();
 }
