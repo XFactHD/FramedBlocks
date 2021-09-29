@@ -72,7 +72,7 @@ public class FramedChestRenderer implements BlockEntityRenderer<FramedChestBlock
         matrix.popPose();
     }
 
-    private void renderLidModel(FramedChestBlockEntity be, BlockState state, PoseStack matrix, MultiBufferSource buffer, BakedModel model, IModelData data)
+    private static void renderLidModel(FramedChestBlockEntity be, BlockState state, PoseStack matrix, MultiBufferSource buffer, BakedModel model, IModelData data)
     {
         ModelBlockRenderer renderer = Minecraft.getInstance().getBlockRenderer().getModelRenderer();
 
@@ -98,7 +98,7 @@ public class FramedChestRenderer implements BlockEntityRenderer<FramedChestBlock
         ForgeHooksClient.setRenderLayer(null);
     }
 
-    private float calculateAngle(FramedChestBlockEntity be, ChestState chestState, Direction dir, long lastChange, float partialTicks)
+    private static float calculateAngle(FramedChestBlockEntity be, ChestState chestState, Direction dir, long lastChange, float partialTicks)
     {
         //noinspection ConstantConditions
         float diff = (float) (be.getLevel().getGameTime() - lastChange) + partialTicks;

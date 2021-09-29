@@ -60,7 +60,7 @@ public class FramedPaneModel extends FramedBlockModel
         }
     }
 
-    protected void createTopBottomCenterQuad(Map<Direction, List<BakedQuad>> quadMap, BakedQuad quad, boolean mirrored)
+    protected static void createTopBottomCenterQuad(Map<Direction, List<BakedQuad>> quadMap, BakedQuad quad, boolean mirrored)
     {
         BakedQuad topBotQuad = ModelUtils.duplicateQuad(quad);
         if (BakedQuadTransformer.createTopBottomQuad(topBotQuad, 7F/16F, 7F/16F, 9F/16F, 9F/16F))
@@ -77,7 +77,7 @@ public class FramedPaneModel extends FramedBlockModel
         }
     }
 
-    protected void createTopBottomEdgeQuad(Map<Direction, List<BakedQuad>> quadMap, BakedQuad quad, Direction dir, boolean mirrored)
+    protected static void createTopBottomEdgeQuad(Map<Direction, List<BakedQuad>> quadMap, BakedQuad quad, Direction dir, boolean mirrored)
     {
         if (dir.getAxis() == Direction.Axis.Y) { throw new IllegalArgumentException(String.format("Invalid direction: %s!", dir)); }
 
@@ -118,7 +118,7 @@ public class FramedPaneModel extends FramedBlockModel
         }
     }
 
-    protected void createSideEdgeQuad(Map<Direction, List<BakedQuad>> quadMap, BakedQuad quad, boolean inset, boolean mirrored)
+    protected static void createSideEdgeQuad(Map<Direction, List<BakedQuad>> quadMap, BakedQuad quad, boolean inset, boolean mirrored)
     {
         if (inset && mirrored) { throw new IllegalArgumentException("Quad can't be mirrored and inset!"); }
 
@@ -145,7 +145,7 @@ public class FramedPaneModel extends FramedBlockModel
         }
     }
 
-    private void createSideQuad(List<BakedQuad> quadList, BakedQuad quad, boolean positive)
+    private static void createSideQuad(List<BakedQuad> quadList, BakedQuad quad, boolean positive)
     {
         float minXZ = positive ? 9F/16F : 0;
         float maxXZ = positive ? 1 : 7F/16F;

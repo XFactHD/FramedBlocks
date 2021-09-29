@@ -85,7 +85,7 @@ public class FramedBlueprintItem extends FramedToolItem
         return super.useOn(context);
     }
 
-    private InteractionResult writeBlueprint(Level level, BlockPos pos, CompoundTag tag)
+    private static InteractionResult writeBlueprint(Level level, BlockPos pos, CompoundTag tag)
     {
         if (!(level.getBlockEntity(pos) instanceof FramedBlockEntity be))
         {
@@ -140,7 +140,7 @@ public class FramedBlueprintItem extends FramedToolItem
         return tryPlace(context, player, item, tag);
     }
 
-    private boolean checkMissingMaterials(Player player, Item item, CompoundTag tag)
+    private static boolean checkMissingMaterials(Player player, Item item, CompoundTag tag)
     {
         if (player.getAbilities().instabuild) { return false; } //Creative mode can always build
 
@@ -229,7 +229,7 @@ public class FramedBlueprintItem extends FramedToolItem
         return result;
     }
 
-    private void consumeItems(Player player, Item item, CompoundTag tag)
+    private static void consumeItems(Player player, Item item, CompoundTag tag)
     {
         CompoundTag camoData = tag.getCompound("camo_data");
 
@@ -301,7 +301,7 @@ public class FramedBlueprintItem extends FramedToolItem
         }
     }
 
-    public Block getTargetBlock(ItemStack stack)
+    public static Block getTargetBlock(ItemStack stack)
     {
         CompoundTag tag = stack.getOrCreateTagElement("blueprint_data");
         Block block = ForgeRegistries.BLOCKS.getValue(new ResourceLocation(tag.getString("framed_block")));

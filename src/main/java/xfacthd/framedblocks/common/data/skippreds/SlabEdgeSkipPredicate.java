@@ -53,7 +53,7 @@ public class SlabEdgeSkipPredicate implements SideSkipPredicate
         return false;
     }
 
-    private boolean testAgainstEdge(BlockGetter level, BlockPos pos, Direction dir, boolean top, BlockState adjState, Direction side)
+    private static boolean testAgainstEdge(BlockGetter level, BlockPos pos, Direction dir, boolean top, BlockState adjState, Direction side)
     {
         Direction adjDir = adjState.getValue(PropertyHolder.FACING_HOR);
         boolean adjTop = adjState.getValue(PropertyHolder.TOP);
@@ -74,14 +74,14 @@ public class SlabEdgeSkipPredicate implements SideSkipPredicate
         return false;
     }
 
-    private boolean testAgainstSlab(BlockGetter level, BlockPos pos, Direction dir, boolean top, BlockState adjState, Direction side)
+    private static boolean testAgainstSlab(BlockGetter level, BlockPos pos, Direction dir, boolean top, BlockState adjState, Direction side)
     {
         if (side != dir || top != adjState.getValue(PropertyHolder.TOP)) { return false; }
 
         return SideSkipPredicate.compareState(level, pos, side);
     }
 
-    private boolean testAgainstDoubleSlab(BlockGetter level, BlockPos pos, Direction dir, boolean top, Direction side)
+    private static boolean testAgainstDoubleSlab(BlockGetter level, BlockPos pos, Direction dir, boolean top, Direction side)
     {
         if (side != dir) { return false; }
 
@@ -89,7 +89,7 @@ public class SlabEdgeSkipPredicate implements SideSkipPredicate
         return SideSkipPredicate.compareState(level, pos, side, face);
     }
 
-    private boolean testAgainstCorner(BlockGetter level, BlockPos pos, Direction dir, boolean top, BlockState adjState, Direction side)
+    private static boolean testAgainstCorner(BlockGetter level, BlockPos pos, Direction dir, boolean top, BlockState adjState, Direction side)
     {
         Direction adjDir = adjState.getValue(PropertyHolder.FACING_HOR);
         boolean adjTop = adjState.getValue(PropertyHolder.TOP);
@@ -101,7 +101,7 @@ public class SlabEdgeSkipPredicate implements SideSkipPredicate
         return false;
     }
 
-    private boolean testAgainstPanel(BlockGetter level, BlockPos pos, Direction dir, boolean top, BlockState adjState, Direction side)
+    private static boolean testAgainstPanel(BlockGetter level, BlockPos pos, Direction dir, boolean top, BlockState adjState, Direction side)
     {
         if (side.getAxis() != Direction.Axis.Y) { return false; }
 
@@ -115,7 +115,7 @@ public class SlabEdgeSkipPredicate implements SideSkipPredicate
         return false;
     }
 
-    private boolean testAgainstDoublePanel(BlockGetter level, BlockPos pos, Direction dir, boolean top, BlockState adjState, Direction side)
+    private static boolean testAgainstDoublePanel(BlockGetter level, BlockPos pos, Direction dir, boolean top, BlockState adjState, Direction side)
     {
         if (side.getAxis() != Direction.Axis.Y) { return false; }
 
@@ -129,7 +129,7 @@ public class SlabEdgeSkipPredicate implements SideSkipPredicate
         return false;
     }
 
-    private boolean testAgainstStairs(BlockGetter level, BlockPos pos, Direction dir, boolean top, BlockState adjState, Direction side)
+    private static boolean testAgainstStairs(BlockGetter level, BlockPos pos, Direction dir, boolean top, BlockState adjState, Direction side)
     {
         Direction adjDir = adjState.getValue(BlockStateProperties.HORIZONTAL_FACING);
         StairsShape adjShape = adjState.getValue(BlockStateProperties.STAIRS_SHAPE);
@@ -148,7 +148,7 @@ public class SlabEdgeSkipPredicate implements SideSkipPredicate
         return false;
     }
 
-    private boolean testAgainstVerticalStairs(BlockGetter level, BlockPos pos, Direction dir, boolean top, BlockState adjState, Direction side)
+    private static boolean testAgainstVerticalStairs(BlockGetter level, BlockPos pos, Direction dir, boolean top, BlockState adjState, Direction side)
     {
         Direction adjDir = adjState.getValue(PropertyHolder.FACING_HOR);
         StairsType adjType = adjState.getValue(PropertyHolder.STAIRS_TYPE);

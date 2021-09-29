@@ -251,7 +251,7 @@ public class FramedBlockEntity extends BlockEntity
         return InteractionResult.FAIL;
     }
 
-    private Property<?> getRotatableProperty(BlockState state)
+    private static Property<?> getRotatableProperty(BlockState state)
     {
         for (Property<?> prop : state.getProperties())
         {

@@ -33,6 +33,7 @@ public class FramedSignBlock extends AbstractFramedSignBlock
         builder.add(BlockStateProperties.ROTATION_16, BlockStateProperties.WATERLOGGED);
     }
 
+    @Override
     public BlockState getStateForPlacement(BlockPlaceContext context)
     {
         int rotation = Mth.floor((double) ((180.0F + context.getRotation()) * 16.0F / 360.0F) + 0.5D) & 15;
@@ -45,6 +46,7 @@ public class FramedSignBlock extends AbstractFramedSignBlock
         return SHAPE;
     }
 
+    @Override
     public BlockState updateShape(BlockState state, Direction facing, BlockState facingState, LevelAccessor level, BlockPos pos, BlockPos facingPos)
     {
         if (facing == Direction.DOWN && !canSurvive(state, level, pos))

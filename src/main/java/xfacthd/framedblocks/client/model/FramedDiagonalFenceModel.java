@@ -41,7 +41,7 @@ public class FramedDiagonalFenceModel extends FramedFenceModel
         createDiagonalFenceBars(quadMap, quad, Direction.WEST, northWest);
     }
 
-    private void createDiagonalFenceBars(Map<Direction, List<BakedQuad>> quadMap, BakedQuad quad, Direction dir, boolean active)
+    private static void createDiagonalFenceBars(Map<Direction, List<BakedQuad>> quadMap, BakedQuad quad, Direction dir, boolean active)
     {
         if (active)
         {
@@ -100,7 +100,7 @@ public class FramedDiagonalFenceModel extends FramedFenceModel
         }
     }
 
-    private void rotateQuad(BakedQuad quad, Direction dir)
+    private static void rotateQuad(BakedQuad quad, Direction dir)
     {
         BakedQuadTransformer.rotateQuadAroundAxisCentered(quad, Direction.Axis.Y, -45F, true, new Vector3f(dir.getStepX(), 1, dir.getStepZ()));
     }

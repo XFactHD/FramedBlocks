@@ -50,7 +50,7 @@ public class CornerPillarSkipPredicate implements SideSkipPredicate
         return false;
     }
 
-    private boolean testAgainstPanel(BlockGetter level, BlockPos pos, Direction dir, BlockState adjState, Direction side)
+    private static boolean testAgainstPanel(BlockGetter level, BlockPos pos, Direction dir, BlockState adjState, Direction side)
     {
         if (side != dir && side != dir.getCounterClockWise()) { return false; }
 
@@ -62,7 +62,7 @@ public class CornerPillarSkipPredicate implements SideSkipPredicate
         return false;
     }
 
-    private boolean testAgainstPillar(BlockGetter level, BlockPos pos, Direction dir, BlockState adjState, Direction side)
+    private static boolean testAgainstPillar(BlockGetter level, BlockPos pos, Direction dir, BlockState adjState, Direction side)
     {
         Direction adjDir = adjState.getValue(PropertyHolder.FACING_HOR);
         if ((side == dir && adjDir == dir.getCounterClockWise()) || (side == dir.getCounterClockWise() && adjDir == dir.getClockWise()))
@@ -72,7 +72,7 @@ public class CornerPillarSkipPredicate implements SideSkipPredicate
         return false;
     }
 
-    private boolean testAgainstCorner(BlockGetter level, BlockPos pos, Direction dir, BlockState adjState, Direction side)
+    private static boolean testAgainstCorner(BlockGetter level, BlockPos pos, Direction dir, BlockState adjState, Direction side)
     {
         Direction adjDir = adjState.getValue(PropertyHolder.FACING_HOR);
         boolean adjTop = adjState.getValue(PropertyHolder.TOP);
@@ -83,7 +83,7 @@ public class CornerPillarSkipPredicate implements SideSkipPredicate
         return false;
     }
 
-    private boolean testAgainstDoublePanel(BlockGetter level, BlockPos pos, Direction dir, BlockState adjState, Direction side)
+    private static boolean testAgainstDoublePanel(BlockGetter level, BlockPos pos, Direction dir, BlockState adjState, Direction side)
     {
         Direction adjDir = adjState.getValue(PropertyHolder.FACING_NE);
         if (side == dir && (adjDir == dir.getClockWise() || adjDir == dir.getCounterClockWise()))
@@ -99,7 +99,7 @@ public class CornerPillarSkipPredicate implements SideSkipPredicate
         return false;
     }
 
-    private boolean testAgainstStairs(BlockGetter level, BlockPos pos, Direction dir, BlockState adjState, Direction side)
+    private static boolean testAgainstStairs(BlockGetter level, BlockPos pos, Direction dir, BlockState adjState, Direction side)
     {
         Direction adjDir = adjState.getValue(BlockStateProperties.HORIZONTAL_FACING);
         StairsShape adjShape = adjState.getValue(BlockStateProperties.STAIRS_SHAPE);
@@ -119,7 +119,7 @@ public class CornerPillarSkipPredicate implements SideSkipPredicate
         return false;
     }
 
-    private boolean testAgainstVerticalStairs(BlockGetter level, BlockPos pos, Direction dir, BlockState adjState, Direction side)
+    private static boolean testAgainstVerticalStairs(BlockGetter level, BlockPos pos, Direction dir, BlockState adjState, Direction side)
     {
         Direction adjDir = adjState.getValue(PropertyHolder.FACING_HOR);
         StairsType adjType = adjState.getValue(PropertyHolder.STAIRS_TYPE);

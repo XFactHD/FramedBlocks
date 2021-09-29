@@ -106,7 +106,7 @@ public class FramedLatticeModel extends FramedBlockModel
         }
     }
 
-    private void createHorizontalStrutSideQuads(Map<Direction, List<BakedQuad>> quadMap, BakedQuad quad, boolean frontAxis, boolean sideAxis)
+    private static void createHorizontalStrutSideQuads(Map<Direction, List<BakedQuad>> quadMap, BakedQuad quad, boolean frontAxis, boolean sideAxis)
     {
         BakedQuad sideQuad = ModelUtils.duplicateQuad(quad);
         if (BakedQuadTransformer.createSideQuad(sideQuad, 6F/16F, 6F/16F, 10F/16F, 10F/16F))

@@ -6,7 +6,6 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.Vec3;
 import xfacthd.framedblocks.api.block.AbstractFramedBlock;
 import xfacthd.framedblocks.api.block.IFramedBlock;
-import xfacthd.framedblocks.common.data.PropertyHolder;
 import xfacthd.framedblocks.common.data.*;
 import xfacthd.framedblocks.api.util.Utils;
 
@@ -16,7 +15,7 @@ public class FramedBlock extends AbstractFramedBlock
 
     protected FramedBlock(BlockType blockType, Properties props) { super(blockType, props); }
 
-    protected BlockState withSlopeType(BlockState state, Direction side, Direction facing, Vec3 hitVec)
+    protected static BlockState withSlopeType(BlockState state, Direction side, Direction facing, Vec3 hitVec)
     {
         state = state.setValue(PropertyHolder.FACING_HOR, facing);
 
@@ -62,7 +61,7 @@ public class FramedBlock extends AbstractFramedBlock
         return state;
     }
 
-    protected BlockState withCornerType(BlockState state, BlockPlaceContext context, Direction side, Vec3 hitPoint, Direction facing)
+    protected static BlockState withCornerType(BlockState state, BlockPlaceContext context, Direction side, Vec3 hitPoint, Direction facing)
     {
         state = state.setValue(PropertyHolder.FACING_HOR, facing);
 

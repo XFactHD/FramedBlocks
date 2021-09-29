@@ -18,7 +18,6 @@ import xfacthd.framedblocks.api.block.IFramedBlock;
 import xfacthd.framedblocks.api.type.IBlockType;
 import xfacthd.framedblocks.api.util.client.OutlineRender;
 import xfacthd.framedblocks.client.util.ClientConfig;
-import xfacthd.framedblocks.common.data.PropertyHolder;
 import xfacthd.framedblocks.common.data.*;
 
 import java.util.HashMap;

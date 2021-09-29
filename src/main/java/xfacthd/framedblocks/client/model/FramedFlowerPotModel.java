@@ -10,6 +10,7 @@ import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.resources.model.BakedModel;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.BlockAndTintGetter;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
@@ -68,6 +69,9 @@ public class FramedFlowerPotModel extends BakedModelProxy
 
     private static class PotModel extends FramedBlockModel
     {
+        private static final ResourceLocation POT_TEXTURE = new ResourceLocation("minecraft:block/flower_pot");
+        private static final ResourceLocation DIRT_TEXTURE = new ResourceLocation("minecraft:block/dirt");
+
         private final Block flower;
 
         public PotModel(BlockState state, BakedModel baseModel, Block flower)
@@ -198,12 +202,12 @@ public class FramedFlowerPotModel extends BakedModelProxy
             }
         }
 
-        private List<BakedQuad> getFilteredPlantQuads(BlockState potState, BakedModel potModel, Direction face, Random rand)
+        private static List<BakedQuad> getFilteredPlantQuads(BlockState potState, BakedModel potModel, Direction face, Random rand)
         {
             return potModel.getQuads(potState, face, rand, EmptyModelData.INSTANCE)
                     .stream()
-                    .filter(q -> !q.getSprite().getName().getPath().equals("block/flower_pot"))
-                    .filter(q -> !q.getSprite().getName().getPath().equals("block/dirt"))
+                    .filter(q -> !q.getSprite().getName().equals(POT_TEXTURE))
+                    .filter(q -> !q.getSprite().getName().equals(DIRT_TEXTURE))
                     .collect(Collectors.toList());
         }
     }

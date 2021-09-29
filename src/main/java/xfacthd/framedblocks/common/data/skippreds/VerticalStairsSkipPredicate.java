@@ -52,7 +52,7 @@ public class VerticalStairsSkipPredicate implements SideSkipPredicate
         return false;
     }
 
-    private boolean testAgainstVerticalStairs(BlockGetter level, BlockPos pos, Direction dir, StairsType type, BlockState adjState, Direction side)
+    private static boolean testAgainstVerticalStairs(BlockGetter level, BlockPos pos, Direction dir, StairsType type, BlockState adjState, Direction side)
     {
         StairsType adjType = adjState.getValue(PropertyHolder.STAIRS_TYPE);
         Direction adjDir = adjState.getValue(PropertyHolder.FACING_HOR);
@@ -70,7 +70,7 @@ public class VerticalStairsSkipPredicate implements SideSkipPredicate
         return false;
     }
 
-    private boolean testAgainstStairs(BlockGetter level, BlockPos pos, Direction dir, StairsType type, BlockState adjState, Direction side)
+    private static boolean testAgainstStairs(BlockGetter level, BlockPos pos, Direction dir, StairsType type, BlockState adjState, Direction side)
     {
         Direction adjDir = adjState.getValue(BlockStateProperties.HORIZONTAL_FACING);
         boolean adjBottom = adjState.getValue(BlockStateProperties.HALF) == Half.BOTTOM;
@@ -93,7 +93,7 @@ public class VerticalStairsSkipPredicate implements SideSkipPredicate
         return false;
     }
 
-    private boolean testAgainstPanel(BlockGetter level, BlockPos pos, Direction dir, StairsType type, BlockState adjState, Direction side)
+    private static boolean testAgainstPanel(BlockGetter level, BlockPos pos, Direction dir, StairsType type, BlockState adjState, Direction side)
     {
         if (type != StairsType.VERTICAL) { return false; }
 
@@ -105,7 +105,7 @@ public class VerticalStairsSkipPredicate implements SideSkipPredicate
         return false;
     }
 
-    private boolean testAgainstDoublePanel(BlockGetter level, BlockPos pos, Direction dir, StairsType type, BlockState adjState, Direction side)
+    private static boolean testAgainstDoublePanel(BlockGetter level, BlockPos pos, Direction dir, StairsType type, BlockState adjState, Direction side)
     {
         if (type != StairsType.VERTICAL) { return false; }
 
@@ -121,7 +121,7 @@ public class VerticalStairsSkipPredicate implements SideSkipPredicate
         return false;
     }
 
-    private boolean testAgainstCorner(BlockGetter level, BlockPos pos, Direction dir, StairsType type, BlockState adjState, Direction side)
+    private static boolean testAgainstCorner(BlockGetter level, BlockPos pos, Direction dir, StairsType type, BlockState adjState, Direction side)
     {
         if (type == StairsType.VERTICAL) { return false; }
 
@@ -135,7 +135,7 @@ public class VerticalStairsSkipPredicate implements SideSkipPredicate
         return false;
     }
 
-    private boolean testAgainstPillar(BlockGetter level, BlockPos pos, Direction dir, StairsType type, BlockState adjState, Direction side)
+    private static boolean testAgainstPillar(BlockGetter level, BlockPos pos, Direction dir, StairsType type, BlockState adjState, Direction side)
     {
         Direction adjDir = adjState.getValue(PropertyHolder.FACING_HOR);
         if (type == StairsType.VERTICAL)
@@ -155,7 +155,7 @@ public class VerticalStairsSkipPredicate implements SideSkipPredicate
         return false;
     }
 
-    private boolean testAgainstEdge(BlockGetter level, BlockPos pos, Direction dir, StairsType type, BlockState adjState, Direction side)
+    private static boolean testAgainstEdge(BlockGetter level, BlockPos pos, Direction dir, StairsType type, BlockState adjState, Direction side)
     {
         Direction adjDir = adjState.getValue(PropertyHolder.FACING_HOR);
         boolean adjTop = adjState.getValue(PropertyHolder.TOP);

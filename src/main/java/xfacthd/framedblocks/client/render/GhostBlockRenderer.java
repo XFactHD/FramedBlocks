@@ -66,9 +66,9 @@ public class GhostBlockRenderer
         boolean blueprint = false;
 
         ItemStack stack = mc().player.getMainHandItem();
-        if (stack.getItem() instanceof FramedBlueprintItem item)
+        if (stack.getItem() instanceof FramedBlueprintItem)
         {
-            block = item.getTargetBlock(stack);
+            block = FramedBlueprintItem.getTargetBlock(stack);
             blueprint = true;
         }
         else if (stack.getItem() instanceof BlockItem item)
@@ -198,6 +198,8 @@ public class GhostBlockRenderer
 
     private static void doRenderGhostBlockInLayer(PoseStack mstack, VertexConsumer builder, BlockPos renderPos, BlockState renderState, RenderType layer, Vec3 offset)
     {
+        ForgeHooksClient.setRenderLayer(layer);
+
         mstack.pushPose();
         mstack.translate(offset.x, offset.y, offset.z);
 

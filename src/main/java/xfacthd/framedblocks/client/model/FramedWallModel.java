@@ -107,7 +107,7 @@ public class FramedWallModel extends FramedBlockModel
         }
     }
 
-    private void buildWallEndCap(Map<Direction, List<BakedQuad>> quadMap, BakedQuad quad, Direction dir, WallSide height)
+    private static void buildWallEndCap(Map<Direction, List<BakedQuad>> quadMap, BakedQuad quad, Direction dir, WallSide height)
     {
         if (quad.getDirection() == dir && height != WallSide.NONE)
         {
@@ -161,7 +161,7 @@ public class FramedWallModel extends FramedBlockModel
         }
     }
 
-    private void buildSmallCenterSide(List<BakedQuad> quadList, BakedQuad quad, WallSide height, boolean tall)
+    private static void buildSmallCenterSide(List<BakedQuad> quadList, BakedQuad quad, WallSide height, boolean tall)
     {
         if (height == WallSide.NONE)
         {

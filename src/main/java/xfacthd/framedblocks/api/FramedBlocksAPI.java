@@ -7,6 +7,7 @@ import net.minecraft.world.level.block.state.BlockState;
 import xfacthd.framedblocks.api.block.FramedBlockEntity;
 import xfacthd.framedblocks.api.util.WriteOnceHolder;
 
+@SuppressWarnings("unused")
 public interface FramedBlocksAPI
 {
     WriteOnceHolder<FramedBlocksAPI> INSTANCE = new WriteOnceHolder<>();

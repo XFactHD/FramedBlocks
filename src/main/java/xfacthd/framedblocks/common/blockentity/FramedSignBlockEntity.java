@@ -121,6 +121,7 @@ public class FramedSignBlockEntity extends FramedBlockEntity
         return super.readFromDataPacket(nbt);
     }
 
+    @Override
     public CompoundTag getUpdateTag()
     {
         CompoundTag nbt = super.getUpdateTag();

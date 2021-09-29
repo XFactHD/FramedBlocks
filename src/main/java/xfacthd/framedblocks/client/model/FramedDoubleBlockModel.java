@@ -111,7 +111,7 @@ public abstract class FramedDoubleBlockModel extends BakedModelProxy
         );
     }
 
-    private List<BakedQuad> invertTintIndizes(List<BakedQuad> quads)
+    private static List<BakedQuad> invertTintIndizes(List<BakedQuad> quads)
     {
         return quads.stream()
                 .map(ModelUtils::invertTintIndex)

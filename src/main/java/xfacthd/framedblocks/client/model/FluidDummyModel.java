@@ -135,7 +135,7 @@ public class FluidDummyModel implements BakedModel
     }
 
     /** Copied from { @link net.minecraftforge.client.model.obj.OBJModel } */
-    private void putVertexData(IVertexConsumer consumer, Vector4f pos, Vec2 tex, Vector3f normal, int color, Vec2 light, TextureAtlasSprite texture)
+    private static void putVertexData(IVertexConsumer consumer, Vector4f pos, Vec2 tex, Vector3f normal, int color, Vec2 light, TextureAtlasSprite texture)
     {
         ImmutableList<VertexFormatElement> elements = consumer.getVertexFormat().getElements();
         for(int elem = 0; elem < elements.size(); elem++)

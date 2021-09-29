@@ -58,7 +58,7 @@ public class FramedFenceModel extends FramedBlockModel
         createFenceBars(quadMap, quad, Direction.WEST, west);
     }
 
-    private void createFenceBars(Map<Direction, List<BakedQuad>> quadMap, BakedQuad quad, Direction dir, boolean active)
+    private static void createFenceBars(Map<Direction, List<BakedQuad>> quadMap, BakedQuad quad, Direction dir, boolean active)
     {
         if (active)
         {

@@ -7,6 +7,7 @@ import xfacthd.framedblocks.api.type.IBlockType;
 import xfacthd.framedblocks.api.util.WriteOnceHolder;
 import xfacthd.framedblocks.api.util.client.OutlineRender;
 
+@SuppressWarnings("unused")
 public interface FramedBlocksClientAPI
 {
     WriteOnceHolder<FramedBlocksClientAPI> INSTANCE = new WriteOnceHolder<>();

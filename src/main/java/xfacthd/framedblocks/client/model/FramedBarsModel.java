@@ -89,7 +89,7 @@ public class FramedBarsModel extends FramedPaneModel
      * @param parNeg Connection state in the negative direction in the same plane as the quad
      * @param parPos Connection state in the positive direction in the same plane as the quad
      */
-    private void createCenterPillarQuad(List<BakedQuad> quadList, BakedQuad quad, boolean perpNeg, boolean perpPos, boolean parNeg, boolean parPos)
+    private static void createCenterPillarQuad(List<BakedQuad> quadList, BakedQuad quad, boolean perpNeg, boolean perpPos, boolean parNeg, boolean parPos)
     {
         if (perpNeg && perpPos && !parNeg && !parPos) { return; }
 
@@ -122,7 +122,7 @@ public class FramedBarsModel extends FramedPaneModel
         }
     }
 
-    private void createPillarQuad(List<BakedQuad> quadList, BakedQuad quad, Direction dir)
+    private static void createPillarQuad(List<BakedQuad> quadList, BakedQuad quad, Direction dir)
     {
         if (dir.getAxis() == Direction.Axis.Y) { throw new IllegalArgumentException(String.format("Invalid direction: %s!", dir)); }
 
@@ -138,7 +138,7 @@ public class FramedBarsModel extends FramedPaneModel
         }
     }
 
-    private void createBarQuads(List<BakedQuad> quadList, BakedQuad quad, Direction dir)
+    private static void createBarQuads(List<BakedQuad> quadList, BakedQuad quad, Direction dir)
     {
         if (dir.getAxis() == Direction.Axis.Y) { throw new IllegalArgumentException(String.format("Invalid direction: %s!", dir)); }
 

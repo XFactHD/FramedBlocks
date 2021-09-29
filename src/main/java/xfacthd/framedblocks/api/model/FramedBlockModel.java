@@ -217,7 +217,7 @@ public abstract class FramedBlockModel extends BakedModelProxy
         return quads;
     }
 
-    private boolean canRenderInLayer(BlockState camoState, RenderType layer)
+    private static boolean canRenderInLayer(BlockState camoState, RenderType layer)
     {
         if (camoState == null) { return false; }
 
