@@ -1,8 +1,11 @@
 package xfacthd.framedblocks.common.block;
 
+import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.world.item.context.BlockPlaceContext;
+import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.pathfinder.PathComputationType;
 import net.minecraft.world.phys.Vec3;
 import xfacthd.framedblocks.api.block.AbstractFramedBlock;
 import xfacthd.framedblocks.api.block.IFramedBlock;
@@ -14,6 +17,14 @@ public class FramedBlock extends AbstractFramedBlock
     public FramedBlock(BlockType blockType) { this(blockType, IFramedBlock.createProperties()); }
 
     protected FramedBlock(BlockType blockType, Properties props) { super(blockType, props); }
+
+    @Override
+    @SuppressWarnings("deprecation")
+    public boolean isPathfindable(BlockState state, BlockGetter level, BlockPos pos, PathComputationType type)
+    {
+        if (getBlockType() != BlockType.FRAMED_CUBE) { return false; }
+        return super.isPathfindable(state, level, pos, type);
+    }
 
     protected static BlockState withSlopeType(BlockState state, Direction side, Direction facing, Vec3 hitVec)
     {
