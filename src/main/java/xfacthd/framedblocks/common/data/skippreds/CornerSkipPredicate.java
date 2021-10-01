@@ -8,6 +8,7 @@ import xfacthd.framedblocks.api.block.IFramedBlock;
 import xfacthd.framedblocks.api.type.IBlockType;
 import xfacthd.framedblocks.common.data.*;
 import xfacthd.framedblocks.api.util.SideSkipPredicate;
+import xfacthd.framedblocks.common.util.FramedUtils;
 
 public class CornerSkipPredicate implements SideSkipPredicate
 {
@@ -159,8 +160,8 @@ public class CornerSkipPredicate implements SideSkipPredicate
 
     private static boolean testAgainstSlope(BlockGetter level, BlockPos pos, Direction dir, CornerType type, BlockState adjState, Direction side)
     {
-        Direction adjDir = adjState.getValue(PropertyHolder.FACING_HOR);
-        SlopeType adjType = adjState.getValue(PropertyHolder.SLOPE_TYPE);
+        Direction adjDir = FramedUtils.getBlockFacing(adjState);
+        SlopeType adjType = FramedUtils.getSlopeType(adjState);
 
         if (!type.isHorizontal() && adjType != SlopeType.HORIZONTAL && (adjType == SlopeType.TOP) == type.isTop())
         {

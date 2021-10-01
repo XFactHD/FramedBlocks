@@ -19,6 +19,7 @@ import xfacthd.framedblocks.api.type.IBlockType;
 import xfacthd.framedblocks.api.util.client.OutlineRender;
 import xfacthd.framedblocks.client.util.ClientConfig;
 import xfacthd.framedblocks.common.data.*;
+import xfacthd.framedblocks.common.util.FramedUtils;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -45,7 +46,7 @@ public class BlockOutlineRenderer
             Vec3 offset = Vec3.atLowerCornerOf(result.getBlockPos()).subtract(event.getInfo().getPosition());
             VertexConsumer builder = event.getBuffers().getBuffer(RenderType.lines());
 
-            Direction dir = state.getValue(PropertyHolder.FACING_HOR);
+            Direction dir = FramedUtils.getBlockFacing(state);
 
             mstack.pushPose();
             mstack.translate(offset.x, offset.y, offset.z);
@@ -75,7 +76,7 @@ public class BlockOutlineRenderer
 
     public static void drawSlopeBox(BlockState state, PoseStack mstack, VertexConsumer builder)
     {
-        SlopeType type = state.getValue(PropertyHolder.SLOPE_TYPE);
+        SlopeType type = FramedUtils.getSlopeType(state);
 
         if (type != SlopeType.HORIZONTAL)
         {

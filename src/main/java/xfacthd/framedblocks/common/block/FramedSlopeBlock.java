@@ -23,13 +23,14 @@ import xfacthd.framedblocks.api.util.*;
 import xfacthd.framedblocks.common.FBContent;
 import xfacthd.framedblocks.api.block.FramedBlockEntity;
 import xfacthd.framedblocks.common.data.*;
+import xfacthd.framedblocks.common.util.FramedUtils;
 
 @SuppressWarnings("deprecation")
 public class FramedSlopeBlock extends FramedBlock
 {
     public static final CtmPredicate CTM_PREDICATE = (state, dir) ->
     {
-        SlopeType type = state.getValue(PropertyHolder.SLOPE_TYPE);
+        SlopeType type = FramedUtils.getSlopeType(state);
         if (dir == Direction.UP && type == SlopeType.TOP)
         {
             return true;
@@ -43,7 +44,7 @@ public class FramedSlopeBlock extends FramedBlock
             Direction facing = state.getValue(PropertyHolder.FACING_HOR);
             return dir == facing || dir == facing.getCounterClockWise();
         }
-        return state.getValue(PropertyHolder.FACING_HOR) == dir;
+        return FramedUtils.getBlockFacing(state) == dir;
     };
 
     public FramedSlopeBlock() { super(BlockType.FRAMED_SLOPE); }
@@ -145,8 +146,8 @@ public class FramedSlopeBlock extends FramedBlock
 
         for (BlockState state : states)
         {
-            SlopeType type = state.getValue(PropertyHolder.SLOPE_TYPE);
-            Direction dir = state.getValue(PropertyHolder.FACING_HOR);
+            SlopeType type = FramedUtils.getSlopeType(state);
+            Direction dir = FramedUtils.getBlockFacing(state);
 
             if (type == SlopeType.BOTTOM)
             {

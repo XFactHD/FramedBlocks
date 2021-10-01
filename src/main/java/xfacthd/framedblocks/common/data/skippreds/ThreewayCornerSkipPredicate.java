@@ -8,6 +8,7 @@ import xfacthd.framedblocks.api.block.IFramedBlock;
 import xfacthd.framedblocks.api.type.IBlockType;
 import xfacthd.framedblocks.common.data.*;
 import xfacthd.framedblocks.api.util.SideSkipPredicate;
+import xfacthd.framedblocks.common.util.FramedUtils;
 
 public class ThreewayCornerSkipPredicate implements SideSkipPredicate
 {
@@ -107,8 +108,8 @@ public class ThreewayCornerSkipPredicate implements SideSkipPredicate
 
     private static boolean testAgainstSlope(BlockGetter level, BlockPos pos, Direction dir, boolean top, BlockState adjState, Direction side)
     {
-        Direction adjDir = adjState.getValue(PropertyHolder.FACING_HOR);
-        SlopeType adjType = adjState.getValue(PropertyHolder.SLOPE_TYPE);
+        Direction adjDir = FramedUtils.getBlockFacing(adjState);
+        SlopeType adjType = FramedUtils.getSlopeType(adjState);
 
         if ((side == dir && adjDir == dir.getCounterClockWise()) || (side == dir.getCounterClockWise() && adjDir == dir))
         {

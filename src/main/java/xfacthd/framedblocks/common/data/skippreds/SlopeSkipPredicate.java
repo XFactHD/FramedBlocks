@@ -8,6 +8,7 @@ import xfacthd.framedblocks.api.block.IFramedBlock;
 import xfacthd.framedblocks.api.type.IBlockType;
 import xfacthd.framedblocks.common.data.*;
 import xfacthd.framedblocks.api.util.SideSkipPredicate;
+import xfacthd.framedblocks.common.util.FramedUtils;
 
 public class SlopeSkipPredicate implements SideSkipPredicate
 {
@@ -18,8 +19,8 @@ public class SlopeSkipPredicate implements SideSkipPredicate
         if (!(adjState.getBlock() instanceof IFramedBlock block)) { return false; }
 
         IBlockType adjBlock = block.getBlockType();
-        Direction dir = state.getValue(PropertyHolder.FACING_HOR);
-        SlopeType type = state.getValue(PropertyHolder.SLOPE_TYPE);
+        Direction dir = FramedUtils.getBlockFacing(state);
+        SlopeType type = FramedUtils.getSlopeType(state);
 
         if (adjBlock == BlockType.FRAMED_SLOPE || adjBlock == BlockType.FRAMED_RAIL_SLOPE)
         {
@@ -59,8 +60,8 @@ public class SlopeSkipPredicate implements SideSkipPredicate
 
     private static boolean testAgainstSlope(BlockGetter level, BlockPos pos, Direction dir, SlopeType type, BlockState adjState, Direction side)
     {
-        Direction adjDir = adjState.getValue(PropertyHolder.FACING_HOR);
-        SlopeType adjType = adjState.getValue(PropertyHolder.SLOPE_TYPE);
+        Direction adjDir = FramedUtils.getBlockFacing(adjState);
+        SlopeType adjType = FramedUtils.getSlopeType(adjState);
 
         if (type == SlopeType.HORIZONTAL && side.getAxis() == Direction.Axis.Y)
         {

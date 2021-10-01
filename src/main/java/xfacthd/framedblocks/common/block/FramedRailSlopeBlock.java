@@ -30,8 +30,6 @@ import javax.annotation.Nullable;
 import java.util.List;
 import java.util.Map;
 
-//FIXME: placing a rail next to this that would set an invalid RailShape causes an IllegalArgumentException because RailState
-//       doesn't check if the shape property supports the new shape
 @SuppressWarnings("deprecation")
 public class FramedRailSlopeBlock extends BaseRailBlock implements IFramedBlock
 {
@@ -47,7 +45,7 @@ public class FramedRailSlopeBlock extends BaseRailBlock implements IFramedBlock
     @Override
     protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder)
     {
-        builder.add(PropertyHolder.FACING_HOR, PropertyHolder.SLOPE_TYPE, PropertyHolder.ASCENDING_RAIL_SHAPE, BlockStateProperties.WATERLOGGED);
+        builder.add(PropertyHolder.ASCENDING_RAIL_SHAPE, BlockStateProperties.WATERLOGGED);
     }
 
     @Override
@@ -59,37 +57,14 @@ public class FramedRailSlopeBlock extends BaseRailBlock implements IFramedBlock
         boolean waterlogged = fluidState.getType() == Fluids.WATER;
 
         return defaultBlockState()
-                .setValue(PropertyHolder.FACING_HOR, context.getHorizontalDirection())
                 .setValue(PropertyHolder.ASCENDING_RAIL_SHAPE, shape)
                 .setValue(BlockStateProperties.WATERLOGGED, waterlogged);
     }
 
     @Override
-    protected BlockState updateDir(Level level, BlockPos pos, BlockState state, boolean placing)
-    {
-        BlockState newState = super.updateDir(level, pos, state, placing);
-
-        RailShape shape = newState.getValue(PropertyHolder.ASCENDING_RAIL_SHAPE);
-        newState = newState.setValue(PropertyHolder.FACING_HOR, directionFromShape(shape));
-
-        level.setBlockAndUpdate(pos, newState);
-
-        return newState;
-    }
-
-    @Override
-    protected void updateState(BlockState state, Level level, BlockPos pos, Block block)
-    {
-        RailShape shape = state.getValue(PropertyHolder.ASCENDING_RAIL_SHAPE);
-        state = state.setValue(PropertyHolder.FACING_HOR, directionFromShape(shape));
-
-        level.setBlockAndUpdate(pos, state);
-    }
-
-    @Override
     public boolean canSurvive(BlockState state, LevelReader level, BlockPos pos)
     {
-        Direction dir = state.getValue(PropertyHolder.FACING_HOR);
+        Direction dir = directionFromShape(state.getValue(PropertyHolder.ASCENDING_RAIL_SHAPE));
         return canSupportRigidBlock(level, pos.relative(dir));
     }
 
@@ -130,7 +105,7 @@ public class FramedRailSlopeBlock extends BaseRailBlock implements IFramedBlock
         };
     }
 
-    private static Direction directionFromShape(RailShape shape)
+    public static Direction directionFromShape(RailShape shape)
     {
         return switch (shape)
         {
