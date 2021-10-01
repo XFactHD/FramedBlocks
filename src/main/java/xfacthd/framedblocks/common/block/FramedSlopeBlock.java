@@ -24,7 +24,7 @@ public class FramedSlopeBlock extends FramedBlock
 {
     public static final CtmPredicate CTM_PREDICATE = (state, dir) ->
     {
-        SlopeType type = state.get(PropertyHolder.SLOPE_TYPE);
+        SlopeType type = Utils.getSlopeType(state);
         if (dir == Direction.UP && type == SlopeType.TOP)
         {
             return true;
@@ -38,7 +38,7 @@ public class FramedSlopeBlock extends FramedBlock
             Direction facing = state.get(PropertyHolder.FACING_HOR);
             return dir == facing || dir == facing.rotateYCCW();
         }
-        return state.get(PropertyHolder.FACING_HOR) == dir;
+        return Utils.getBlockFacing(state) == dir;
     };
 
     public FramedSlopeBlock() { super(BlockType.FRAMED_SLOPE); }
@@ -142,8 +142,8 @@ public class FramedSlopeBlock extends FramedBlock
 
         for (BlockState state : states)
         {
-            SlopeType type = state.get(PropertyHolder.SLOPE_TYPE);
-            Direction dir = state.get(PropertyHolder.FACING_HOR);
+            SlopeType type = Utils.getSlopeType(state);
+            Direction dir = Utils.getBlockFacing(state);
 
             if (type == SlopeType.BOTTOM)
             {

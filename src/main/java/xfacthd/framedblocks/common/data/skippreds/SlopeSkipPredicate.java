@@ -7,6 +7,7 @@ import net.minecraft.world.IBlockReader;
 import xfacthd.framedblocks.common.block.IFramedBlock;
 import xfacthd.framedblocks.common.data.*;
 import xfacthd.framedblocks.common.util.SideSkipPredicate;
+import xfacthd.framedblocks.common.util.Utils;
 
 public class SlopeSkipPredicate implements SideSkipPredicate
 {
@@ -17,8 +18,8 @@ public class SlopeSkipPredicate implements SideSkipPredicate
         if (!(adjState.getBlock() instanceof IFramedBlock)) { return false; }
 
         BlockType adjBlock = ((IFramedBlock) adjState.getBlock()).getBlockType();
-        Direction dir = state.get(PropertyHolder.FACING_HOR);
-        SlopeType type = state.get(PropertyHolder.SLOPE_TYPE);
+        Direction dir = Utils.getBlockFacing(state);
+        SlopeType type = Utils.getSlopeType(state);
 
         if (adjBlock == BlockType.FRAMED_SLOPE || adjBlock == BlockType.FRAMED_RAIL_SLOPE)
         {
@@ -58,8 +59,8 @@ public class SlopeSkipPredicate implements SideSkipPredicate
 
     private boolean testAgainstSlope(IBlockReader world, BlockPos pos, Direction dir, SlopeType type, BlockState adjState, Direction side)
     {
-        Direction adjDir = adjState.get(PropertyHolder.FACING_HOR);
-        SlopeType adjType = adjState.get(PropertyHolder.SLOPE_TYPE);
+        Direction adjDir = Utils.getBlockFacing(adjState);
+        SlopeType adjType = Utils.getSlopeType(adjState);
 
         if (type == SlopeType.HORIZONTAL && side.getAxis() == Direction.Axis.Y)
         {

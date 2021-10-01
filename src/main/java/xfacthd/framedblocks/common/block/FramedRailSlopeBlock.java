@@ -43,7 +43,7 @@ public class FramedRailSlopeBlock extends AbstractRailBlock implements IFramedBl
     @Override
     protected void fillStateContainer(StateContainer.Builder<Block, BlockState> builder)
     {
-        builder.add(PropertyHolder.FACING_HOR, PropertyHolder.SLOPE_TYPE, PropertyHolder.ASCENDING_RAIL_SHAPE, BlockStateProperties.WATERLOGGED);
+        builder.add(PropertyHolder.ASCENDING_RAIL_SHAPE, BlockStateProperties.WATERLOGGED);
     }
 
     @Override
@@ -55,37 +55,14 @@ public class FramedRailSlopeBlock extends AbstractRailBlock implements IFramedBl
         boolean waterlogged = fluidState.getFluid() == Fluids.WATER;
 
         return getDefaultState()
-                .with(PropertyHolder.FACING_HOR, context.getPlacementHorizontalFacing())
                 .with(PropertyHolder.ASCENDING_RAIL_SHAPE, shape)
                 .with(BlockStateProperties.WATERLOGGED, waterlogged);
     }
 
     @Override
-    protected BlockState getUpdatedState(World world, BlockPos pos, BlockState state, boolean placing)
-    {
-        BlockState newState = super.getUpdatedState(world, pos, state, placing);
-
-        RailShape shape = newState.get(PropertyHolder.ASCENDING_RAIL_SHAPE);
-        newState = newState.with(PropertyHolder.FACING_HOR, directionFromShape(shape));
-
-        world.setBlockState(pos, newState);
-
-        return newState;
-    }
-
-    @Override
-    protected void updateState(BlockState state, World world, BlockPos pos, Block block)
-    {
-        RailShape shape = state.get(PropertyHolder.ASCENDING_RAIL_SHAPE);
-        state = state.with(PropertyHolder.FACING_HOR, directionFromShape(shape));
-
-        world.setBlockState(pos, state);
-    }
-
-    @Override
     public boolean isValidPosition(BlockState state, IWorldReader world, BlockPos pos)
     {
-        Direction dir = state.get(PropertyHolder.FACING_HOR);
+        Direction dir = directionFromShape(state.get(PropertyHolder.ASCENDING_RAIL_SHAPE));
         return hasSolidSideOnTop(world, pos.offset(dir));
     }
 
@@ -126,7 +103,7 @@ public class FramedRailSlopeBlock extends AbstractRailBlock implements IFramedBl
         }
     }
 
-    private static Direction directionFromShape(RailShape shape)
+    public static Direction directionFromShape(RailShape shape)
     {
         switch (shape)
         {

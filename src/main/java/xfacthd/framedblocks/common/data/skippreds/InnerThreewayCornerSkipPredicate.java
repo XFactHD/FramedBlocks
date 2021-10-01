@@ -7,6 +7,7 @@ import net.minecraft.world.IBlockReader;
 import xfacthd.framedblocks.common.block.IFramedBlock;
 import xfacthd.framedblocks.common.data.*;
 import xfacthd.framedblocks.common.util.SideSkipPredicate;
+import xfacthd.framedblocks.common.util.Utils;
 
 public class InnerThreewayCornerSkipPredicate implements SideSkipPredicate
 {
@@ -112,8 +113,8 @@ public class InnerThreewayCornerSkipPredicate implements SideSkipPredicate
 
     private boolean testAgainstSlope(IBlockReader world, BlockPos pos, Direction dir, boolean top, BlockState adjState, Direction side)
     {
-        Direction adjDir = adjState.get(PropertyHolder.FACING_HOR);
-        SlopeType adjType = adjState.get(PropertyHolder.SLOPE_TYPE);
+        Direction adjDir = Utils.getBlockFacing(adjState);
+        SlopeType adjType = Utils.getSlopeType(adjState);
 
         if (adjType != SlopeType.HORIZONTAL && ((side == dir.rotateY() && adjDir == dir) || (side == dir.getOpposite() && adjDir == dir.rotateYCCW())))
         {

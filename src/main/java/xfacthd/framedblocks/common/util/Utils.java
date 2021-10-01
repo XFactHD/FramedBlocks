@@ -1,6 +1,7 @@
 package xfacthd.framedblocks.common.util;
 
 import net.minecraft.block.Block;
+import net.minecraft.block.BlockState;
 import net.minecraft.item.Item;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.tags.*;
@@ -12,6 +13,9 @@ import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.world.IWorld;
 import net.minecraft.world.server.ServerWorld;
 import xfacthd.framedblocks.FramedBlocks;
+import xfacthd.framedblocks.common.block.FramedRailSlopeBlock;
+import xfacthd.framedblocks.common.data.PropertyHolder;
+import xfacthd.framedblocks.common.data.SlopeType;
 
 public class Utils
 {
@@ -70,5 +74,23 @@ public class Utils
 
         MinecraftServer server = ((ServerWorld) world).getServer();
         server.enqueue(new TickDelayedTask(server.getTickCounter() + delay, task));
+    }
+
+    public static Direction getBlockFacing(BlockState state)
+    {
+        if (state.getBlock() instanceof FramedRailSlopeBlock)
+        {
+            return FramedRailSlopeBlock.directionFromShape(state.get(PropertyHolder.ASCENDING_RAIL_SHAPE));
+        }
+        return state.get(PropertyHolder.FACING_HOR);
+    }
+
+    public static SlopeType getSlopeType(BlockState state)
+    {
+        if (state.getBlock() instanceof FramedRailSlopeBlock)
+        {
+            return SlopeType.BOTTOM;
+        }
+        return state.get(PropertyHolder.SLOPE_TYPE);
     }
 }

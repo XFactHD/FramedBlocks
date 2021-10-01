@@ -16,6 +16,7 @@ import net.minecraftforge.fml.common.Mod;
 import xfacthd.framedblocks.FramedBlocks;
 import xfacthd.framedblocks.common.block.IFramedBlock;
 import xfacthd.framedblocks.common.data.*;
+import xfacthd.framedblocks.common.util.Utils;
 
 @Mod.EventBusSubscriber(modid = FramedBlocks.MODID, value = Dist.CLIENT)
 public class ClientEventHandler
@@ -37,7 +38,7 @@ public class ClientEventHandler
             Vector3d offset = Vector3d.copy(result.getPos()).subtract(event.getInfo().getProjectedView());
             IVertexBuilder builder = event.getBuffers().getBuffer(RenderType.getLines());
 
-            Direction dir = state.get(PropertyHolder.FACING_HOR);
+            Direction dir = Utils.getBlockFacing(state);
 
             mstack.push();
             mstack.translate(offset.x, offset.y, offset.z);
