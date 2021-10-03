@@ -1,2 +1,0 @@
-net/minecraft/block/BlockState net/minecraft/block/BlockState
-	with (Lnet/minecraft/state/Property;Ljava/lang/Comparable;)Ljava/lang/Object; func_206870_a
