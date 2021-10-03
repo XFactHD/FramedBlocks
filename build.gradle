@@ -120,6 +120,7 @@ dependencies {
 
 mixin {
     add sourceSets.main, "framedblocks.refmap.json"
+    extraMappings file("railshape_mixin.tsrg")
 }
 
 // Example for how to get properties into the manifest for reading by the runtime..

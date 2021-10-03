@@ -80,7 +80,7 @@ public class ClientEventHandler
 
     private static void drawSlopeBox(BlockState state, MatrixStack mstack, IVertexBuilder builder)
     {
-        SlopeType type = state.get(PropertyHolder.SLOPE_TYPE);
+        SlopeType type = Utils.getSlopeType(state);
 
         if (type != SlopeType.HORIZONTAL)
         {
