@@ -24,6 +24,7 @@ public class FramedSignBlockEntity extends FramedBlockEntity
 {
     private final Component[] lines = new Component[4];
     private final FormattedCharSequence[] renderLines = new FormattedCharSequence[4];
+    private boolean glowingText = false;
     private DyeColor textColor = DyeColor.BLACK;
     private Player editingPlayer;
 
@@ -85,7 +86,7 @@ public class FramedSignBlockEntity extends FramedBlockEntity
     {
         if (textColor != color)
         {
-            this.textColor = color;
+            textColor = color;
 
             setChanged();
             //noinspection ConstantConditions
@@ -97,6 +98,23 @@ public class FramedSignBlockEntity extends FramedBlockEntity
     }
 
     public DyeColor getTextColor() { return textColor; }
+
+    public boolean setGlowingText(boolean glowing)
+    {
+        if (glowingText != glowing)
+        {
+            glowingText = glowing;
+
+            setChanged();
+            //noinspection ConstantConditions
+            level.sendBlockUpdated(getBlockPos(), getBlockState(), getBlockState(), Constants.BlockFlags.DEFAULT);
+
+            return true;
+        }
+        return false;
+    }
+
+    public boolean hasGlowingText() { return glowingText; }
 
     public Player getEditingPlayer() { return editingPlayer; }
 
@@ -143,6 +161,7 @@ public class FramedSignBlockEntity extends FramedBlockEntity
             nbt.putString("text" + i, Component.Serializer.toJson(lines[i]));
         }
 
+        nbt.putBoolean("glowingText", glowingText);
         nbt.putString("color", textColor.getName());
     }
 
@@ -171,6 +190,7 @@ public class FramedSignBlockEntity extends FramedBlockEntity
             renderLines[i] = null;
         }
 
+        glowingText = nbt.getBoolean("glowingText");
         textColor = DyeColor.byName(nbt.getString("color"), DyeColor.BLACK);
     }
 

@@ -1,14 +1,17 @@
 package xfacthd.framedblocks.common.block;
 
+import net.minecraft.advancements.CriteriaTriggers;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.sounds.SoundSource;
+import net.minecraft.stats.Stats;
 import net.minecraft.tags.FluidTags;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.item.DyeItem;
-import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.*;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
@@ -32,30 +35,58 @@ public abstract class AbstractFramedSignBlock extends FramedBlock
         if (result != InteractionResult.PASS) { return result; }
 
         ItemStack stack = player.getItemInHand(hand);
-        boolean dye = stack.getItem() instanceof DyeItem && player.getAbilities().mayBuild;
+        boolean dye = stack.getItem() instanceof DyeItem;
+        boolean glowInk = stack.is(Items.GLOW_INK_SAC);
+        boolean inkSac = stack.is(Items.INK_SAC);
+        boolean canInteract = (dye || glowInk || inkSac) && player.getAbilities().mayBuild;
+
         if (level.isClientSide())
         {
-            return dye ? InteractionResult.SUCCESS : InteractionResult.CONSUME;
+            return canInteract ? InteractionResult.SUCCESS : InteractionResult.CONSUME;
         }
-        else
+
+        if (level.getBlockEntity(pos) instanceof FramedSignBlockEntity sign)
         {
-            if (level.getBlockEntity(pos) instanceof FramedSignBlockEntity sign)
+            if (canInteract)
             {
+                boolean success = false;
+
                 if (dye)
                 {
-                    boolean success = sign.setTextColor(((DyeItem) stack.getItem()).getDyeColor());
-                    if (success && !player.isCreative())
+                    level.playSound(null, pos, SoundEvents.DYE_USE, SoundSource.BLOCKS, 1.0F, 1.0F);
+                    success = sign.setTextColor(((DyeItem) stack.getItem()).getDyeColor());
+                }
+                else if (glowInk && !sign.hasGlowingText())
+                {
+                    level.playSound(null, pos, SoundEvents.GLOW_INK_SAC_USE, SoundSource.BLOCKS, 1.0F, 1.0F);
+                    success = sign.setGlowingText(true);
+
+                    if (player instanceof ServerPlayer)
+                    {
+                        CriteriaTriggers.ITEM_USED_ON_BLOCK.trigger((ServerPlayer)player, pos, stack);
+                    }
+                }
+                else if (inkSac && sign.hasGlowingText())
+                {
+                    level.playSound(null, pos, SoundEvents.INK_SAC_USE, SoundSource.BLOCKS, 1.0F, 1.0F);
+                    success = sign.setGlowingText(false);
+                }
+
+                if (success)
+                {
+                    if (!player.isCreative())
                     {
                         stack.shrink(1);
                         player.getInventory().setChanged();
                     }
+                    player.awardStat(Stats.ITEM_USED.get(stack.getItem()));
 
-                    if (success) { return InteractionResult.SUCCESS; }
-                }
-                else if (sign.executeCommand((ServerPlayer) player))
-                {
                     return InteractionResult.SUCCESS;
                 }
+            }
+            else if (sign.executeCommand((ServerPlayer) player))
+            {
+                return InteractionResult.SUCCESS;
             }
         }
 
