@@ -33,8 +33,7 @@ public class FramedChestBlockEntity extends FramedBlockEntity implements MenuPro
     public static final Component TITLE = new TranslatableComponent("title.framedblocks:framed_chest");
 
     private final ItemStackHandler itemHandler = new ItemStackHandler(9 * 4);
-    //private LazyOptional<IItemHandler> lazyItemHandler = LazyOptional.empty();
-    private LazyOptional<IItemHandler> lazyItemHandler = LazyOptional.of(() -> itemHandler); //TODO: revert to empty when onLoad() is called again
+    private LazyOptional<IItemHandler> lazyItemHandler = LazyOptional.empty();
     private int openCount = 0;
     private long closeStart = 0;
 
