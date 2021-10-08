@@ -78,14 +78,25 @@ public class FBClient
             if (world != null && pos != null)
             {
                 TileEntity te = world.getTileEntity(pos);
-                if (te instanceof FramedDoubleTileEntity && tintIndex < -1)
+                if (tintIndex < -1)
                 {
                     tintIndex = ModelUtils.decodeSecondaryTintIndex(tintIndex);
 
-                    BlockState camoState = ((FramedDoubleTileEntity) te).getCamoStateTwo();
-                    if (!camoState.isAir())
+                    if (te instanceof FramedDoubleTileEntity)
                     {
-                        return event.getBlockColors().getColor(camoState, world, pos, tintIndex);
+                        BlockState camoState = ((FramedDoubleTileEntity) te).getCamoStateTwo();
+                        if (!camoState.isAir())
+                        {
+                            return event.getBlockColors().getColor(camoState, world, pos, tintIndex);
+                        }
+                    }
+                    else if (te instanceof FramedFlowerPotTileEntity)
+                    {
+                        BlockState plantState = ((FramedFlowerPotTileEntity) te).getFlowerBlock().getDefaultState();
+                        if (!plantState.isAir())
+                        {
+                            return event.getBlockColors().getColor(plantState, world, pos, tintIndex);
+                        }
                     }
                 }
                 else if (te instanceof FramedTileEntity)

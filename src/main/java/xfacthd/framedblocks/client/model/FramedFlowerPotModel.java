@@ -200,6 +200,7 @@ public class FramedFlowerPotModel extends BakedModelProxy
                     .stream()
                     .filter(q -> !q.getSprite().getName().getPath().equals("block/flower_pot"))
                     .filter(q -> !q.getSprite().getName().getPath().equals("block/dirt"))
+                    .map(ModelUtils::invertTintIndex)
                     .collect(Collectors.toList());
         }
     }
