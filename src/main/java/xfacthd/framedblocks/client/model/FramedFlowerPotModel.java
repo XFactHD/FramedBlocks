@@ -208,6 +208,7 @@ public class FramedFlowerPotModel extends BakedModelProxy
                     .stream()
                     .filter(q -> !q.getSprite().getName().equals(POT_TEXTURE))
                     .filter(q -> !q.getSprite().getName().equals(DIRT_TEXTURE))
+                    .map(ModelUtils::invertTintIndex)
                     .collect(Collectors.toList());
         }
     }
