@@ -16,15 +16,12 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.gameevent.GameEvent;
 import net.minecraft.world.level.pathfinder.PathComputationType;
 import net.minecraft.world.phys.BlockHitResult;
-import net.minecraftforge.fml.util.ObfuscationReflectionHelper;
 import xfacthd.framedblocks.common.blockentity.FramedFlowerPotBlockEntity;
 import xfacthd.framedblocks.common.data.BlockType;
 
-import java.lang.reflect.Field;
 import java.util.Map;
 import java.util.function.Supplier;
 
-@SuppressWarnings("deprecation")
 public class FramedFlowerPotBlock extends FramedBlock
 {
     public FramedFlowerPotBlock() { super(BlockType.FRAMED_FLOWER_POT); }
@@ -93,18 +90,9 @@ public class FramedFlowerPotBlock extends FramedBlock
 
 
 
-    private static final Field FULL_POTS_FIELD = ObfuscationReflectionHelper.findField(FlowerPotBlock.class, "fullPots");
-    public static BlockState getFlowerPotState(Block flower) //TODO: PR an accessor to an unmodifiable view of the fullPots map to Forge
+    public static BlockState getFlowerPotState(Block flower)
     {
-        try
-        {
-            //noinspection unchecked
-            Map<ResourceLocation, Supplier<? extends Block>> fullPots = (Map<ResourceLocation, Supplier<? extends Block>>) FULL_POTS_FIELD.get(Blocks.FLOWER_POT);
-            return fullPots.getOrDefault(flower.getRegistryName(), Blocks.AIR.delegate).get().defaultBlockState();
-        }
-        catch (IllegalAccessException e)
-        {
-            throw new RuntimeException("Failed to access FlowerPotBlock#fullPots", e);
-        }
+        Map<ResourceLocation, Supplier<? extends Block>> fullPots = ((FlowerPotBlock) Blocks.FLOWER_POT).getFullPotsView();
+        return fullPots.getOrDefault(flower.getRegistryName(), Blocks.AIR.delegate).get().defaultBlockState();
     }
 }

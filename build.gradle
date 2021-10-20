@@ -99,12 +99,14 @@ repositories {
 }
 
 dependencies {
-    minecraft 'net.minecraftforge:forge:1.17.1-37.0.83'
+    minecraft 'net.minecraftforge:forge:1.17.1-37.0.103'
 
     //implementation fg.deobf("curse.maven:ctm-267602:3137659")
 
     //runtimeOnly fg.deobf("curse.maven:puzzleslib-495476:3374786") //Only needed when Diagonal Fences is switched to implementation
     //compileOnly fg.deobf("curse.maven:diagonalfences-458048:3364147")
+
+    runtimeOnly fg.deobf("curse.maven:jei-238222:3486421")
 
     annotationProcessor 'org.spongepowered:mixin:0.8.4:processor'
 }
