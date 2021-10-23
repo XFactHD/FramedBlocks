@@ -69,10 +69,13 @@ public class FramedChestBlock extends FramedBlock
     {
         super.onReplaced(state, world, pos, newState, isMoving);
 
-        TileEntity te = world.getTileEntity(pos);
-        if (te instanceof FramedChestTileEntity)
+        if (newState.getBlock() != state.getBlock())
         {
-            ((FramedChestTileEntity) te).getDrops().forEach(stack -> spawnAsEntity(world, pos, stack));
+            TileEntity te = world.getTileEntity(pos);
+            if (te instanceof FramedChestTileEntity)
+            {
+                ((FramedChestTileEntity) te).getDrops().forEach(stack -> spawnAsEntity(world, pos, stack));
+            }
         }
     }
 
