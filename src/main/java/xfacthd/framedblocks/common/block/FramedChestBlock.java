@@ -70,7 +70,7 @@ public class FramedChestBlock extends FramedBlock
     {
         super.onRemove(state, level, pos, newState, isMoving);
 
-        if (level.getBlockEntity(pos) instanceof FramedChestBlockEntity be)
+        if (newState.getBlock() != state.getBlock() && level.getBlockEntity(pos) instanceof FramedChestBlockEntity be)
         {
             be.getDrops().forEach(stack -> popResource(level, pos, stack));
         }

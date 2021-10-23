@@ -22,6 +22,14 @@ public class FramedChestScreen extends AbstractContainerScreen<FramedChestMenu>
     }
 
     @Override
+    public void render(PoseStack poseStack, int mouseX, int mouseY, float partialTicks)
+    {
+        this.renderBackground(poseStack);
+        super.render(poseStack, mouseX, mouseY, partialTicks);
+        this.renderTooltip(poseStack, mouseX, mouseY);
+    }
+
+    @Override
     protected void renderBg(PoseStack poseStack, float partialTicks, int x, int y)
     {
         RenderSystem.setShader(GameRenderer::getPositionTexShader);
