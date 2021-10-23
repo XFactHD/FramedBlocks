@@ -21,6 +21,14 @@ public class FramedChestScreen extends ContainerScreen<FramedChestContainer>
     }
 
     @Override
+    public void render(MatrixStack matrixStack, int mouseX, int mouseY, float partialTicks)
+    {
+        this.renderBackground(matrixStack);
+        super.render(matrixStack, mouseX, mouseY, partialTicks);
+        this.renderHoveredTooltip(matrixStack, mouseX, mouseY);
+    }
+
+    @Override
     protected void drawGuiContainerBackgroundLayer(MatrixStack matrixStack, float partialTicks, int x, int y)
     {
         //noinspection deprecation
