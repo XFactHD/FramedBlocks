@@ -303,6 +303,36 @@ public class FramedRecipeProvider extends RecipeProvider
                 .addCriterion("hasFramedBlock", HAS_FRAMED_BLOCK)
                 .build(consumer);
 
+        ShapelessRecipeBuilder.shapelessRecipe(FBContent.blockFramedPillar.get(), 1)
+                .addIngredient(FBContent.blockFramedCornerPillar.get())
+                .addCriterion("hasFramedCornerPillar", hasItem(FBContent.blockFramedCornerPillar.get()))
+                .build(consumer);
+
+        ShapelessRecipeBuilder.shapelessRecipe(FBContent.blockFramedCornerPillar.get(), 1)
+                .addIngredient(FBContent.blockFramedPillar.get())
+                .addCriterion("hasFramedPillar", hasItem(FBContent.blockFramedPillar.get()))
+                .build(consumer, FramedBlocks.MODID + ":framed_corner_pillar_from_pillar");
+
+        ShapelessRecipeBuilder.shapelessRecipe(FBContent.blockFramedHalfPillar.get(), 1)
+                .addIngredient(FBContent.blockFramedSlabCorner.get())
+                .addCriterion("hasFramedSlabCorner", hasItem(FBContent.blockFramedSlabCorner.get()))
+                .build(consumer);
+
+        ShapelessRecipeBuilder.shapelessRecipe(FBContent.blockFramedSlabCorner.get(), 1)
+                .addIngredient(FBContent.blockFramedHalfPillar.get())
+                .addCriterion("hasFramedHalfPillar", hasItem(FBContent.blockFramedHalfPillar.get()))
+                .build(consumer, FramedBlocks.MODID + ":framed_slab_corner_from_half_pillar");
+
+        ShapelessRecipeBuilder.shapelessRecipe(FBContent.blockFramedPost.get(), 1)
+                .addIngredient(FBContent.blockFramedFence.get())
+                .addCriterion("hasFramedFence", hasItem(FBContent.blockFramedFence.get()))
+                .build(consumer);
+
+        ShapelessRecipeBuilder.shapelessRecipe(FBContent.blockFramedFence.get(), 1)
+                .addIngredient(FBContent.blockFramedPost.get())
+                .addCriterion("hasFramedPost", hasItem(FBContent.blockFramedPost.get()))
+                .build(consumer, FramedBlocks.MODID + ":framed_fence_from_post");
+
         /*ShapedRecipeBuilder.shapedRecipe(FBContent.blockFramedCollapsibleBlock.get(), 4)
                 .patternLine("FF")
                 .patternLine("FF")

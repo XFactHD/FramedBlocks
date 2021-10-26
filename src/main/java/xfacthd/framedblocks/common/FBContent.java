@@ -79,6 +79,9 @@ public class FBContent
     public static final RegistryObject<Block> blockFramedPane = registerBlock(FramedPaneBlock::new, BlockType.FRAMED_PANE);
     public static final RegistryObject<Block> blockFramedRailSlope = registerBlock(FramedRailSlopeBlock::new, BlockType.FRAMED_RAIL_SLOPE);
     public static final RegistryObject<Block> blockFramedFlowerPot = registerBlock(FramedFlowerPotBlock::new, BlockType.FRAMED_FLOWER_POT);
+    public static final RegistryObject<Block> blockFramedPillar = registerBlock(FramedPillarBlock::new, BlockType.FRAMED_PILLAR);
+    public static final RegistryObject<Block> blockFramedHalfPillar = registerBlock(FramedHalfPillarBlock::new, BlockType.FRAMED_HALF_PILLAR);
+    public static final RegistryObject<Block> blockFramedPost = registerBlock(FramedPillarBlock::new, BlockType.FRAMED_POST);
     //public static final RegistryObject<Block> blockFramedCollapsibleBlock = register(FramedCollapsibleBlock::new, BlockType.FRAMED_COLLAPSIBLE_BLOCK); //STATUS: Not implemented
     public static final RegistryObject<Block> blockFramedGhostBlock = BLOCKS.register("framed_ghost_block", FramedGhostBlock::new);
 
@@ -88,7 +91,11 @@ public class FBContent
     public static final RegistryObject<Item> itemFramedBlueprint = registerToolItem(FramedBlueprintItem::new, FramedToolType.BLUEPRINT);
 
     /** TILE ENTITY TYPES */
-    public static final RegistryObject<TileEntityType<FramedTileEntity>> tileTypeFramedBlock = createTileType(FramedTileEntity::new, "framed_tile", getDefaultTileBlocks());
+    public static final RegistryObject<TileEntityType<FramedTileEntity>> tileTypeFramedBlock = createTileType(
+            FramedTileEntity::new,
+            "framed_tile",
+            getDefaultTileBlocks()
+    );
     public static final RegistryObject<TileEntityType<FramedSignTileEntity>> tileTypeFramedSign = createTileType(
             FramedSignTileEntity::new,
             "framed_sign",
@@ -119,7 +126,11 @@ public class FBContent
             "framed_double_threeway_corner",
             blockFramedDoublePrismCorner, blockFramedDoubleThreewayCorner
     );
-    public static final RegistryObject<TileEntityType<FramedChestTileEntity>> tileTypeFramedChest = createTileType(FramedChestTileEntity::new, "framed_chest", blockFramedChest);
+    public static final RegistryObject<TileEntityType<FramedChestTileEntity>> tileTypeFramedChest = createTileType(
+            FramedChestTileEntity::new,
+            "framed_chest",
+            blockFramedChest
+    );
     public static final RegistryObject<TileEntityType<FramedFlowerPotTileEntity>> blockEntityTypeFramedFlowerPot = createTileType(
             FramedFlowerPotTileEntity::new,
             "framed_flower_pot",
