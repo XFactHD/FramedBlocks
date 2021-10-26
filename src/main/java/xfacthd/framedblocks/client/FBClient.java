@@ -134,6 +134,9 @@ public class FBClient
         ClientUtils.replaceModels(FBContent.blockFramedPane, registry, FramedPaneModel::new);
         ClientUtils.replaceModels(FBContent.blockFramedRailSlope, registry, FramedRailSlopeModel::new, FramedRailSlopeModel::new);
         ClientUtils.replaceModels(FBContent.blockFramedFlowerPot, registry, FramedFlowerPotModel::new);
+        ClientUtils.replaceModels(FBContent.blockFramedPillar, registry, FramedPillarModel::new);
+        ClientUtils.replaceModels(FBContent.blockFramedHalfPillar, registry, FramedHalfPillarModel::new);
+        ClientUtils.replaceModels(FBContent.blockFramedPost, registry, FramedPillarModel::new);
         //ClientUtils.replaceModels(FBContent.blockFramedCollapsibleBlock, registry, FramedCollapsibleBlockModel::new);
     }
 

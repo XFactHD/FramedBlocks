@@ -82,6 +82,9 @@ public class FBContent
     public static final RegistryObject<Block> blockFramedPane = registerBlock(FramedPaneBlock::new, BlockType.FRAMED_PANE);
     public static final RegistryObject<Block> blockFramedRailSlope = registerBlock(FramedRailSlopeBlock::new, BlockType.FRAMED_RAIL_SLOPE);
     public static final RegistryObject<Block> blockFramedFlowerPot = registerBlock(FramedFlowerPotBlock::new, BlockType.FRAMED_FLOWER_POT);
+    public static final RegistryObject<Block> blockFramedPillar = registerBlock(FramedPillarBlock::new, BlockType.FRAMED_PILLAR);
+    public static final RegistryObject<Block> blockFramedHalfPillar = registerBlock(FramedHalfPillarBlock::new, BlockType.FRAMED_HALF_PILLAR);
+    public static final RegistryObject<Block> blockFramedPost = registerBlock(FramedPillarBlock::new, BlockType.FRAMED_POST);
     //public static final RegistryObject<Block> blockFramedCollapsibleBlock = register(FramedCollapsibleBlock::new, BlockType.FRAMED_COLLAPSIBLE_BLOCK); //STATUS: Not implemented
 
     /** ITEMS */
@@ -90,7 +93,11 @@ public class FBContent
     public static final RegistryObject<Item> itemFramedBlueprint = registerToolItem(FramedBlueprintItem::new, FramedToolType.BLUEPRINT);
 
     /** TILE ENTITY TYPES */
-    public static final RegistryObject<BlockEntityType<FramedBlockEntity>> blockEntityTypeFramedBlock = createBlockEntityType(FramedBlockEntity::new, "framed_tile", getDefaultEntityBlocks());
+    public static final RegistryObject<BlockEntityType<FramedBlockEntity>> blockEntityTypeFramedBlock = createBlockEntityType(
+            FramedBlockEntity::new,
+            "framed_tile",
+            getDefaultEntityBlocks()
+    );
     public static final RegistryObject<BlockEntityType<FramedSignBlockEntity>> blockEntityTypeFramedSign = createBlockEntityType(
             FramedSignBlockEntity::new,
             "framed_sign",
@@ -121,12 +128,21 @@ public class FBContent
             "framed_double_threeway_corner",
             blockFramedDoublePrismCorner, blockFramedDoubleThreewayCorner
     );
-    public static final RegistryObject<BlockEntityType<FramedChestBlockEntity>> blockEntityTypeFramedChest = createBlockEntityType(FramedChestBlockEntity::new, "framed_chest", blockFramedChest);
+    public static final RegistryObject<BlockEntityType<FramedChestBlockEntity>> blockEntityTypeFramedChest = createBlockEntityType(
+            FramedChestBlockEntity::new,
+            "framed_chest",
+            blockFramedChest
+    );
     public static final RegistryObject<BlockEntityType<FramedFlowerPotBlockEntity>> blockEntityTypeFramedFlowerPot = createBlockEntityType(
             FramedFlowerPotBlockEntity::new,
             "framed_flower_pot",
             blockFramedFlowerPot
     );
+    public static final RegistryObject<BlockEntityType<FramedCollapsibleBlockEntity>> blockEntityTypeFramedCollapsibleBlock = null/*createBlockEntityType(
+            FramedCollapsibleBlockEntity::new,
+            "framed_collapsible_block",
+            blockFramedCollapsibleBlock
+    )*/;
 
     /** CONTAINER TYPES */
     public static final RegistryObject<MenuType<FramedChestMenu>> menuTypeFramedChest = createMenuType(FramedChestMenu::new, "framed_chest");
@@ -183,12 +199,16 @@ public class FBContent
     }
 
     @SafeVarargs
-    private static <T extends BlockEntity> RegistryObject<BlockEntityType<T>> createBlockEntityType(BlockEntityType.BlockEntitySupplier<T> factory, String name, RegistryObject<Block>... roBlocks)
+    private static <T extends BlockEntity> RegistryObject<BlockEntityType<T>> createBlockEntityType(
+            BlockEntityType.BlockEntitySupplier<T> factory, String name, RegistryObject<Block>... roBlocks
+    )
     {
         return createBlockEntityType(factory, name, () -> Arrays.stream(roBlocks).map(RegistryObject::get).toArray(Block[]::new));
     }
 
-    private static <T extends BlockEntity> RegistryObject<BlockEntityType<T>> createBlockEntityType(BlockEntityType.BlockEntitySupplier<T> factory, String name, Supplier<Block[]> blocks)
+    private static <T extends BlockEntity> RegistryObject<BlockEntityType<T>> createBlockEntityType(
+            BlockEntityType.BlockEntitySupplier<T> factory, String name, Supplier<Block[]> blocks
+    )
     {
         return BE_TYPES.register(name, () ->
         {

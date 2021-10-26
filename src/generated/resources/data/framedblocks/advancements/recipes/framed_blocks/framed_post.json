@@ -1,0 +1,34 @@
+{
+  "parent": "minecraft:recipes/root",
+  "rewards": {
+    "recipes": [
+      "framedblocks:framed_post"
+    ]
+  },
+  "criteria": {
+    "hasFramedFence": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "framedblocks:framed_fence"
+            ]
+          }
+        ]
+      }
+    },
+    "has_the_recipe": {
+      "trigger": "minecraft:recipe_unlocked",
+      "conditions": {
+        "recipe": "framedblocks:framed_post"
+      }
+    }
+  },
+  "requirements": [
+    [
+      "hasFramedFence",
+      "has_the_recipe"
+    ]
+  ]
+}

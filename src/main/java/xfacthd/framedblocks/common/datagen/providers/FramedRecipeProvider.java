@@ -304,6 +304,36 @@ public class FramedRecipeProvider extends RecipeProvider
                 .unlockedBy("hasFramedBlock", HAS_FRAMED_BLOCK)
                 .save(consumer);
 
+        ShapelessRecipeBuilder.shapeless(FBContent.blockFramedPillar.get(), 1)
+                .requires(FBContent.blockFramedCornerPillar.get())
+                .unlockedBy("hasFramedCornerPillar", has(FBContent.blockFramedCornerPillar.get()))
+                .save(consumer);
+
+        ShapelessRecipeBuilder.shapeless(FBContent.blockFramedCornerPillar.get(), 1)
+                .requires(FBContent.blockFramedPillar.get())
+                .unlockedBy("hasFramedPillar", has(FBContent.blockFramedPillar.get()))
+                .save(consumer, FramedBlocks.MODID + ":framed_corner_pillar_from_pillar");
+
+        ShapelessRecipeBuilder.shapeless(FBContent.blockFramedHalfPillar.get(), 1)
+                .requires(FBContent.blockFramedSlabCorner.get())
+                .unlockedBy("hasFramedSlabCorner", has(FBContent.blockFramedSlabCorner.get()))
+                .save(consumer);
+
+        ShapelessRecipeBuilder.shapeless(FBContent.blockFramedSlabCorner.get(), 1)
+                .requires(FBContent.blockFramedHalfPillar.get())
+                .unlockedBy("hasFramedHalfPillar", has(FBContent.blockFramedHalfPillar.get()))
+                .save(consumer, FramedBlocks.MODID + ":framed_slab_corner_from_half_pillar");
+
+        ShapelessRecipeBuilder.shapeless(FBContent.blockFramedPost.get(), 1)
+                .requires(FBContent.blockFramedFence.get())
+                .unlockedBy("hasFramedFence", has(FBContent.blockFramedFence.get()))
+                .save(consumer);
+
+        ShapelessRecipeBuilder.shapeless(FBContent.blockFramedFence.get(), 1)
+                .requires(FBContent.blockFramedPost.get())
+                .unlockedBy("hasFramedPost", has(FBContent.blockFramedPost.get()))
+                .save(consumer, FramedBlocks.MODID + ":framed_fence_from_post");
+
         /*ShapedRecipeBuilder.shaped(FBContent.blockFramedCollapsibleBlock.get(), 4)
                 .pattern("FF")
                 .pattern("FF")

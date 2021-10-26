@@ -43,6 +43,9 @@
     "framedblocks:framed_bars",
     "framedblocks:framed_pane",
     "framedblocks:framed_rail_slope",
-    "framedblocks:framed_flower_pot"
+    "framedblocks:framed_flower_pot",
+    "framedblocks:framed_pillar",
+    "framedblocks:framed_half_pillar",
+    "framedblocks:framed_post"
   ]
 }
