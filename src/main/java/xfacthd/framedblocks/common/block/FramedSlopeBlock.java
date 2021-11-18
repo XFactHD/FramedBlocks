@@ -76,7 +76,6 @@ public class FramedSlopeBlock extends FramedBlock
             {
                 Block railSlope = FBContent.blockFramedRailSlope.get();
                 BlockState newState = railSlope.defaultBlockState()
-                        .setValue(PropertyHolder.FACING_HOR, dir)
                         .setValue(PropertyHolder.ASCENDING_RAIL_SHAPE, FramedRailSlopeBlock.shapeFromDirection(dir))
                         .setValue(BlockStateProperties.WATERLOGGED, state.getValue(BlockStateProperties.WATERLOGGED));
 
