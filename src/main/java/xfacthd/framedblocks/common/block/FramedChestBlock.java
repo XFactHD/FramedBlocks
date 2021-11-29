@@ -67,8 +67,6 @@ public class FramedChestBlock extends FramedBlock
     @SuppressWarnings("deprecation")
     public void onReplaced(BlockState state, World world, BlockPos pos, BlockState newState, boolean isMoving)
     {
-        super.onReplaced(state, world, pos, newState, isMoving);
-
         if (newState.getBlock() != state.getBlock())
         {
             TileEntity te = world.getTileEntity(pos);
@@ -77,6 +75,8 @@ public class FramedChestBlock extends FramedBlock
                 ((FramedChestTileEntity) te).getDrops().forEach(stack -> spawnAsEntity(world, pos, stack));
             }
         }
+
+        super.onReplaced(state, world, pos, newState, isMoving);
     }
 
     @Override
