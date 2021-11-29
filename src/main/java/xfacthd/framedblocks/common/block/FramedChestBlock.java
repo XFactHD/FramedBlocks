@@ -68,12 +68,12 @@ public class FramedChestBlock extends FramedBlock
     @SuppressWarnings("deprecation")
     public void onRemove(BlockState state, Level level, BlockPos pos, BlockState newState, boolean isMoving)
     {
-        super.onRemove(state, level, pos, newState, isMoving);
-
         if (newState.getBlock() != state.getBlock() && level.getBlockEntity(pos) instanceof FramedChestBlockEntity be)
         {
             be.getDrops().forEach(stack -> popResource(level, pos, stack));
         }
+
+        super.onRemove(state, level, pos, newState, isMoving);
     }
 
     @Override
