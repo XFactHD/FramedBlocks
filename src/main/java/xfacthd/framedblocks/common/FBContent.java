@@ -6,13 +6,13 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
-import net.minecraftforge.common.extensions.IForgeContainerType;
+import net.minecraftforge.common.extensions.IForgeMenuType;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
-import net.minecraftforge.fmllegacy.RegistryObject;
-import net.minecraftforge.fmllegacy.network.IContainerFactory;
+import net.minecraftforge.registries.RegistryObject;
+import net.minecraftforge.network.IContainerFactory;
 import net.minecraftforge.registries.*;
 import xfacthd.framedblocks.FramedBlocks;
 import xfacthd.framedblocks.api.block.FramedBlockEntity;
@@ -138,11 +138,11 @@ public class FBContent
             "framed_flower_pot",
             blockFramedFlowerPot
     );
-    public static final RegistryObject<BlockEntityType<FramedCollapsibleBlockEntity>> blockEntityTypeFramedCollapsibleBlock = null/*createBlockEntityType(
+    /*public static final RegistryObject<BlockEntityType<FramedCollapsibleBlockEntity>> blockEntityTypeFramedCollapsibleBlock = nullcreateBlockEntityType(
             FramedCollapsibleBlockEntity::new,
             "framed_collapsible_block",
             blockFramedCollapsibleBlock
-    )*/;
+    );*/
 
     /** CONTAINER TYPES */
     public static final RegistryObject<MenuType<FramedChestMenu>> menuTypeFramedChest = createMenuType(FramedChestMenu::new, "framed_chest");
@@ -220,6 +220,6 @@ public class FBContent
     @SuppressWarnings("SameParameterValue")
     private static <T extends AbstractContainerMenu> RegistryObject<MenuType<T>> createMenuType(IContainerFactory<T> factory, String name)
     {
-        return CONTAINER_TYPES.register(name, () -> IForgeContainerType.create(factory));
+        return CONTAINER_TYPES.register(name, () -> IForgeMenuType.create(factory));
     }
 }

@@ -100,11 +100,11 @@ public class FramedFlowerPotBlockEntity extends FramedBlockEntity
     }
 
     @Override
-    public CompoundTag save(CompoundTag nbt)
+    public void saveAdditional(CompoundTag nbt)
     {
         //noinspection ConstantConditions
         nbt.putString("flower", flowerBlock.getRegistryName().toString());
-        return super.save(nbt);
+        super.saveAdditional(nbt);
     }
 
     @Override

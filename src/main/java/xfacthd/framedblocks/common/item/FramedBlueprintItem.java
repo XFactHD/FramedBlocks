@@ -3,6 +3,7 @@ package xfacthd.framedblocks.common.item;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.Tag;
 import net.minecraft.network.chat.*;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.*;
@@ -19,7 +20,6 @@ import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.block.state.properties.DoubleBlockHalf;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraftforge.common.Tags;
-import net.minecraftforge.common.util.Constants;
 import net.minecraftforge.registries.ForgeRegistries;
 import xfacthd.framedblocks.common.FBContent;
 import xfacthd.framedblocks.api.block.IFramedBlock;
@@ -212,7 +212,7 @@ public class FramedBlueprintItem extends FramedToolItem
         {
             if (item == FBContent.blockFramedDoor.get().asItem())
             {
-                if (context.getLevel().getBlockEntity(topPos) instanceof FramedBlockEntity && tag.contains("camo_data_two", Constants.NBT.TAG_COMPOUND))
+                if (context.getLevel().getBlockEntity(topPos) instanceof FramedBlockEntity && tag.contains("camo_data_two", Tag.TAG_COMPOUND))
                 {
                     //noinspection ConstantConditions
                     dummyStack.getOrCreateTag().put("BlockEntityTag", tag.get("camo_data_two"));

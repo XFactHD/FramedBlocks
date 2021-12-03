@@ -391,16 +391,14 @@ public class FramedBlockEntity extends BlockEntity
     @Override
     public final ClientboundBlockEntityDataPacket getUpdatePacket()
     {
-        CompoundTag nbt = new CompoundTag();
-        writeToDataPacket(nbt);
-        return new ClientboundBlockEntityDataPacket(worldPosition, -1, nbt);
+        return ClientboundBlockEntityDataPacket.create(this);
     }
 
     @Override
     public final void onDataPacket(Connection net, ClientboundBlockEntityDataPacket pkt)
     {
         CompoundTag nbt = pkt.getTag();
-        if (readFromDataPacket(nbt))
+        if (nbt != null && readFromDataPacket(nbt))
         {
             //noinspection ConstantConditions
             level.sendBlockUpdated(worldPosition, getBlockState(), getBlockState(), 3);
@@ -486,16 +484,16 @@ public class FramedBlockEntity extends BlockEntity
      * NBT stuff
      */
 
-    public CompoundTag writeToBlueprint() { return save(new CompoundTag()); }
+    public CompoundTag writeToBlueprint() { return saveWithoutMetadata(); }
 
     @Override
-    public CompoundTag save(CompoundTag nbt)
+    public void saveAdditional(CompoundTag nbt)
     {
         nbt.put("camo_stack", camoStack.save(new CompoundTag()));
         nbt.put("camo_state", NbtUtils.writeBlockState(camoState));
         nbt.putBoolean("glowing", glowing);
 
-        return super.save(nbt);
+        super.saveAdditional(nbt);
     }
 
     @Override

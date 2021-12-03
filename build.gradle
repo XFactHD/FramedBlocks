@@ -18,16 +18,17 @@ apply plugin: 'eclipse'
 apply plugin: 'maven-publish'
 apply plugin: 'org.spongepowered.mixin'
 
-version = '3.1.1'
+version = '4.0.0'
 group = 'xfacthd.framedblocks'
 archivesBaseName = 'FramedBlocks'
 
-java.toolchain.languageVersion = JavaLanguageVersion.of(16)
+java.toolchain.languageVersion = JavaLanguageVersion.of(17)
 //Print out JVM information so that we know what version is running. Extreamly useful for people to know when helping you.
 println('Java: ' + System.getProperty('java.version') + ' JVM: ' + System.getProperty('java.vm.version') + '(' + System.getProperty('java.vendor') + ') Arch: ' + System.getProperty('os.arch'))
 
 minecraft {
-    mappings channel: 'parchment', version: '2021.08.15-1.17.1'
+    //mappings channel: 'parchment', version: '2021.08.15-1.17.1'
+    mappings channel: 'official', version: '1.18'
     
     accessTransformer = file('src/main/resources/META-INF/accesstransformer.cfg')
 
@@ -96,19 +97,20 @@ repositories {
     maven {
         url "https://www.cursemaven.com"
     }
+    mavenLocal()
 }
 
 dependencies {
-    minecraft 'net.minecraftforge:forge:1.17.1-37.0.103'
+    minecraft 'net.minecraftforge:forge:1.18-38.0.12'
 
     //implementation fg.deobf("curse.maven:ctm-267602:3137659")
 
     //runtimeOnly fg.deobf("curse.maven:puzzleslib-495476:3374786") //Only needed when Diagonal Fences is switched to implementation
     //compileOnly fg.deobf("curse.maven:diagonalfences-458048:3364147")
 
-    runtimeOnly fg.deobf("curse.maven:jei-238222:3486421")
+    //runtimeOnly fg.deobf("curse.maven:jei-238222:3486421")
 
-    annotationProcessor 'org.spongepowered:mixin:0.8.4:processor'
+    annotationProcessor 'org.spongepowered:mixin:0.8.5:processor'
 }
 
 mixin {

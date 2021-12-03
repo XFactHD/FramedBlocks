@@ -78,7 +78,7 @@ public class FramedChestRenderer implements BlockEntityRenderer<FramedChestBlock
 
         for (RenderType type : RENDER_TYPES)
         {
-            ForgeHooksClient.setRenderLayer(type);
+            ForgeHooksClient.setRenderType(type);
 
             //noinspection ConstantConditions
             renderer.tesselateWithAO(
@@ -95,7 +95,7 @@ public class FramedChestRenderer implements BlockEntityRenderer<FramedChestBlock
                     data
             );
         }
-        ForgeHooksClient.setRenderLayer(null);
+        ForgeHooksClient.setRenderType(null);
     }
 
     private static float calculateAngle(FramedChestBlockEntity be, ChestState chestState, Direction dir, long lastChange, float partialTicks)

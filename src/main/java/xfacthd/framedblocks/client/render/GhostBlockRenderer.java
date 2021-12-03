@@ -187,7 +187,7 @@ public class GhostBlockRenderer
         }
 
         ((MultiBufferSource.BufferSource) buffers).endBatch(RenderType.translucent());
-        ForgeHooksClient.setRenderLayer(null);
+        ForgeHooksClient.setRenderType(null);
     }
 
     private static boolean canRenderInLayer(BlockState camoState, RenderType layer)
@@ -198,7 +198,7 @@ public class GhostBlockRenderer
 
     private static void doRenderGhostBlockInLayer(PoseStack mstack, VertexConsumer builder, BlockPos renderPos, BlockState renderState, RenderType layer, Vec3 offset)
     {
-        ForgeHooksClient.setRenderLayer(layer);
+        ForgeHooksClient.setRenderType(layer);
 
         mstack.pushPose();
         mstack.translate(offset.x, offset.y, offset.z);

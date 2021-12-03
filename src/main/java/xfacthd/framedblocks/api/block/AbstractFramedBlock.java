@@ -61,7 +61,7 @@ public abstract class AbstractFramedBlock extends Block implements IFramedBlock,
     {
         if (isWaterLoggable() && state.getValue(BlockStateProperties.WATERLOGGED))
         {
-            level.getLiquidTicks().scheduleTick(pos, Fluids.WATER, Fluids.WATER.getTickDelay(level));
+            level.scheduleTick(pos, Fluids.WATER, Fluids.WATER.getTickDelay(level));
         }
 
         return super.updateShape(state, facing, facingState, level, pos, facingPos);

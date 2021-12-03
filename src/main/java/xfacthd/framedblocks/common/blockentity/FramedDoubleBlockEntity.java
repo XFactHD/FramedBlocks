@@ -214,12 +214,12 @@ public abstract class FramedDoubleBlockEntity extends FramedBlockEntity
      */
 
     @Override
-    public CompoundTag save(CompoundTag nbt)
+    public void saveAdditional(CompoundTag nbt)
     {
         nbt.put("camo_stack_two", camoStack.save(new CompoundTag()));
         nbt.put("camo_state_two", NbtUtils.writeBlockState(camoState));
 
-        return super.save(nbt);
+        super.saveAdditional(nbt);
     }
 
     @Override

@@ -180,7 +180,7 @@ public class FramedRailSlopeBlock extends BaseRailBlock implements IFramedBlock
     @Override //The default implementation defers to the AbstractBlock#getShape() overload without ISelectionContext argument
     public VoxelShape getCollisionShape(BlockState state, BlockGetter worldIn, BlockPos pos, CollisionContext context)
     {
-        if (context instanceof EntityCollisionContext ctx && ctx.getEntity().orElse(null) instanceof AbstractMinecart)
+        if (context instanceof EntityCollisionContext ctx && ctx.getEntity() instanceof AbstractMinecart)
         {
             return Shapes.empty();
         }

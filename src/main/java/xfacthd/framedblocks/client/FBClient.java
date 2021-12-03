@@ -13,7 +13,7 @@ import net.minecraftforge.client.event.*;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
-import net.minecraftforge.fmllegacy.RegistryObject;
+import net.minecraftforge.registries.RegistryObject;
 import xfacthd.framedblocks.FramedBlocks;
 import xfacthd.framedblocks.api.FramedBlocksClientAPI;
 import xfacthd.framedblocks.api.block.IFramedBlock;

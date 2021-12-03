@@ -42,9 +42,9 @@ public class BlockOutlineRenderer
         IBlockType type = block.getBlockType();
         if (type.hasSpecialHitbox())
         {
-            PoseStack mstack = event.getMatrix();
-            Vec3 offset = Vec3.atLowerCornerOf(result.getBlockPos()).subtract(event.getInfo().getPosition());
-            VertexConsumer builder = event.getBuffers().getBuffer(RenderType.lines());
+            PoseStack mstack = event.getPoseStack();
+            Vec3 offset = Vec3.atLowerCornerOf(result.getBlockPos()).subtract(event.getCamera().getPosition());
+            VertexConsumer builder = event.getMultiBufferSource().getBuffer(RenderType.lines());
 
             Direction dir = FramedUtils.getBlockFacing(state);
 

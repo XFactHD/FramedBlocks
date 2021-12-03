@@ -11,10 +11,10 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.util.FormattedCharSequence;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.DyeColor;
+import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.Vec2;
 import net.minecraft.world.phys.Vec3;
-import net.minecraftforge.common.util.Constants;
 import xfacthd.framedblocks.api.block.FramedBlockEntity;
 import xfacthd.framedblocks.common.FBContent;
 
@@ -90,7 +90,7 @@ public class FramedSignBlockEntity extends FramedBlockEntity
 
             setChanged();
             //noinspection ConstantConditions
-            level.sendBlockUpdated(getBlockPos(), getBlockState(), getBlockState(), Constants.BlockFlags.DEFAULT);
+            level.sendBlockUpdated(getBlockPos(), getBlockState(), getBlockState(), Block.UPDATE_ALL);
 
             return true;
         }
@@ -107,7 +107,7 @@ public class FramedSignBlockEntity extends FramedBlockEntity
 
             setChanged();
             //noinspection ConstantConditions
-            level.sendBlockUpdated(getBlockPos(), getBlockState(), getBlockState(), Constants.BlockFlags.DEFAULT);
+            level.sendBlockUpdated(getBlockPos(), getBlockState(), getBlockState(), Block.UPDATE_ALL);
 
             return true;
         }
@@ -195,13 +195,23 @@ public class FramedSignBlockEntity extends FramedBlockEntity
     }
 
     @Override //Prevent writing sign data
-    public CompoundTag writeToBlueprint() { return super.save(new CompoundTag()); }
+    public CompoundTag writeToBlueprint()
+    {
+        CompoundTag tag = saveWithoutMetadata();
+        tag.remove("text0");
+        tag.remove("text1");
+        tag.remove("text2");
+        tag.remove("text3");
+        tag.remove("glowingText");
+        tag.remove("color");
+        return tag;
+    }
 
     @Override
-    public CompoundTag save(CompoundTag nbt)
+    public void saveAdditional(CompoundTag nbt)
     {
         writeToNbt(nbt);
-        return super.save(nbt);
+        super.saveAdditional(nbt);
     }
 
     @Override

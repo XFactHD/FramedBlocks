@@ -144,13 +144,18 @@ public class FramedChestBlockEntity extends FramedBlockEntity implements MenuPro
 
 
     @Override //Prevent writing inventory contents
-    public CompoundTag writeToBlueprint() { return super.save(new CompoundTag()); }
+    public CompoundTag writeToBlueprint()
+    {
+        CompoundTag tag = saveWithoutMetadata();
+        tag.remove("inventory");
+        return tag;
+    }
 
     @Override
-    public CompoundTag save(CompoundTag nbt)
+    public void saveAdditional(CompoundTag nbt)
     {
         nbt.put("inventory", itemHandler.serializeNBT());
-        return super.save(nbt);
+        super.saveAdditional(nbt);
     }
 
     @Override

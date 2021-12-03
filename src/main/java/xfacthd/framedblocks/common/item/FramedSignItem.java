@@ -7,7 +7,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.StandingAndWallBlockItem;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraftforge.fmllegacy.network.PacketDistributor;
+import net.minecraftforge.network.PacketDistributor;
 import xfacthd.framedblocks.FramedBlocks;
 import xfacthd.framedblocks.common.FBContent;
 import xfacthd.framedblocks.common.net.OpenSignScreenPacket;

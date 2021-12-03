@@ -8,7 +8,7 @@ import net.minecraft.data.DataGenerator;
 import net.minecraft.tags.BlockTags;
 import net.minecraftforge.common.Tags;
 import net.minecraftforge.common.data.ExistingFileHelper;
-import net.minecraftforge.fmllegacy.RegistryObject;
+import net.minecraftforge.registries.RegistryObject;
 import xfacthd.framedblocks.FramedBlocks;
 import xfacthd.framedblocks.common.FBContent;
 import xfacthd.framedblocks.api.block.IFramedBlock;

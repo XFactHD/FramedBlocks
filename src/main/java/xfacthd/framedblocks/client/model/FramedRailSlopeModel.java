@@ -58,7 +58,7 @@ public class FramedRailSlopeModel extends BakedModelProxy
     {
         List<BakedQuad> quads = new ArrayList<>(getSlopeQuads(side, rand, extraData));
 
-        RenderType layer = MinecraftForgeClient.getRenderLayer();
+        RenderType layer = MinecraftForgeClient.getRenderType();
         if (layer == RenderType.cutout() || layer == null)
         {
             quads.addAll(getRailQuads(side, rand));

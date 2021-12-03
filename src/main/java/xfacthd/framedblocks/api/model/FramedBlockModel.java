@@ -28,7 +28,6 @@ import xfacthd.framedblocks.api.block.FramedBlockEntity;
 
 import javax.annotation.Nonnull;
 import java.util.*;
-import java.util.stream.Collectors;
 
 @SuppressWarnings("deprecation")
 public abstract class FramedBlockModel extends BakedModelProxy
@@ -48,7 +47,7 @@ public abstract class FramedBlockModel extends BakedModelProxy
     @Override
     public List<BakedQuad> getQuads(BlockState state, Direction side, Random rand, IModelData extraData)
     {
-        RenderType layer = MinecraftForgeClient.getRenderLayer();
+        RenderType layer = MinecraftForgeClient.getRenderType();
         BlockState camoState = Blocks.AIR.defaultBlockState();
 
         if (extraData instanceof FramedBlockData data && layer != null)
@@ -130,7 +129,7 @@ public abstract class FramedBlockModel extends BakedModelProxy
                     getAllQuads(camoModel, camoState, rand)
                             .stream()
                             .filter(q -> !type.getCtmPredicate().test(state, q.getDirection()))
-                            .collect(Collectors.toList());
+                            .toList();
 
             for (BakedQuad quad : quads)
             {
