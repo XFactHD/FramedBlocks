@@ -268,7 +268,8 @@ public class FramedBlockStateProvider extends BlockStateProvider
 
     private void registerFramedCollapsibleBlock()
     {
-
+        ModelFile block = models().cubeAll("framed_collapsible_block", modLoc("block/framed_collapsible_block"));
+        simpleBlockWithItem(FBContent.blockFramedCollapsibleBlock, block);
     }
 
 

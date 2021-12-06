@@ -20,6 +20,8 @@ import xfacthd.framedblocks.api.block.IFramedBlock;
 import xfacthd.framedblocks.api.util.client.ClientUtils;
 import xfacthd.framedblocks.client.model.*;
 import xfacthd.framedblocks.client.render.*;
+import xfacthd.framedblocks.client.render.outline.CollapsibleBlockOutlineRenderer;
+import xfacthd.framedblocks.client.render.outline.RailSlopeOutlineRenderer;
 import xfacthd.framedblocks.client.screen.FramedChestScreen;
 import xfacthd.framedblocks.client.screen.FramedSignScreen;
 import xfacthd.framedblocks.client.util.*;
@@ -62,7 +64,8 @@ public class FBClient
         BlockOutlineRenderer.registerOutlineRender(BlockType.FRAMED_INNER_PRISM_CORNER, BlockOutlineRenderer::drawInnerPrismCornerBox);
         BlockOutlineRenderer.registerOutlineRender(BlockType.FRAMED_THREEWAY_CORNER, BlockOutlineRenderer::drawThreewayCornerBox);
         BlockOutlineRenderer.registerOutlineRender(BlockType.FRAMED_INNER_THREEWAY_CORNER, BlockOutlineRenderer::drawInnerThreewayCornerBox);
-        BlockOutlineRenderer.registerOutlineRender(BlockType.FRAMED_RAIL_SLOPE, BlockOutlineRenderer::drawSlopeBox);
+        BlockOutlineRenderer.registerOutlineRender(BlockType.FRAMED_RAIL_SLOPE, new RailSlopeOutlineRenderer());
+        BlockOutlineRenderer.registerOutlineRender(BlockType.FRAMED_COLLAPSIBLE_BLOCK, new CollapsibleBlockOutlineRenderer());
     }
 
     @SubscribeEvent
@@ -137,7 +140,7 @@ public class FBClient
         ClientUtils.replaceModels(FBContent.blockFramedPillar, registry, FramedPillarModel::new);
         ClientUtils.replaceModels(FBContent.blockFramedHalfPillar, registry, FramedHalfPillarModel::new);
         ClientUtils.replaceModels(FBContent.blockFramedPost, registry, FramedPillarModel::new);
-        //ClientUtils.replaceModels(FBContent.blockFramedCollapsibleBlock, registry, FramedCollapsibleBlockModel::new);
+        ClientUtils.replaceModels(FBContent.blockFramedCollapsibleBlock, registry, FramedCollapsibleBlockModel::new);
     }
 
 

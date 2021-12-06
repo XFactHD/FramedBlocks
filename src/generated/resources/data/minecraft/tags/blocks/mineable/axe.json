@@ -46,6 +46,7 @@
     "framedblocks:framed_flower_pot",
     "framedblocks:framed_pillar",
     "framedblocks:framed_half_pillar",
-    "framedblocks:framed_post"
+    "framedblocks:framed_post",
+    "framedblocks:framed_collapsible_block"
   ]
 }

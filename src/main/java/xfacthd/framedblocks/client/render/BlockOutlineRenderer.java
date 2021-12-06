@@ -2,10 +2,8 @@ package xfacthd.framedblocks.client.render;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
-import com.mojang.math.Vector3f;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.RenderType;
-import net.minecraft.core.Direction;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.Vec3;
@@ -45,16 +43,15 @@ public class BlockOutlineRenderer
             PoseStack mstack = event.getPoseStack();
             Vec3 offset = Vec3.atLowerCornerOf(result.getBlockPos()).subtract(event.getCamera().getPosition());
             VertexConsumer builder = event.getMultiBufferSource().getBuffer(RenderType.lines());
-
-            Direction dir = FramedUtils.getBlockFacing(state);
+            OutlineRender render = OUTLINE_RENDERERS.get(type);
 
             mstack.pushPose();
             mstack.translate(offset.x, offset.y, offset.z);
             mstack.translate(.5, .5, .5);
-            mstack.mulPose(Vector3f.YP.rotationDegrees(-dir.toYRot()));
+            render.rotateMatrix(mstack, state);
             mstack.translate(-.5, -.5, -.5);
 
-            OUTLINE_RENDERERS.get(type).draw(state, mstack, builder);
+            render.draw(state, Minecraft.getInstance().level, result.getBlockPos(), mstack, builder);
 
             mstack.popPose();
 
