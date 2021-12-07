@@ -4,6 +4,7 @@ import com.google.common.base.Preconditions;
 import com.mojang.math.*;
 import net.minecraft.client.renderer.block.model.BakedQuad;
 import net.minecraft.core.Direction;
+import net.minecraft.util.Mth;
 
 public class BakedQuadTransformer
 {
@@ -376,10 +377,30 @@ public class BakedQuadTransformer
      */
     public static boolean createHorizontalSideQuad(BakedQuad quad, boolean top, float height)
     {
+        return createHorizontalSideQuad(quad, top, height, height);
+    }
+
+    /**
+     * Creates a quad starting at the top or bottom edge and cut off at a given height
+     * @param quad The BakedQuad to manipulate, must be a copy of the original quad
+     * @param top Wether the quad starts from the top or bottom edge
+     * @param heightR The target height from the starting edge for the right vertex
+     * @param heightL The target height from the starting edge for the left vertex
+     */
+    public static boolean createHorizontalSideQuad(BakedQuad quad, boolean top, float heightR, float heightL)
+    {
         return ModelUtils.modifyQuad(quad, (pos, color, uv, light, normal) ->
         {
-            float target = top ? 1F - height : height;
-            if ((top && pos[0][1] > target) || (!top && pos[1][1] < target))
+            Direction quadDirRot = quad.getDirection().getCounterClockWise();
+            boolean x = quadDirRot.getAxis() == Direction.Axis.X;
+            boolean positive = quadDirRot.getAxisDirection() == Direction.AxisDirection.POSITIVE;
+
+            float factorR = positive ? pos[0][x ? 0 : 2] : (1F - pos[0][x ? 0 : 2]);
+            float factorL = positive ? pos[3][x ? 0 : 2] : (1F - pos[3][x ? 0 : 2]);
+
+            float targetR = Mth.lerp(factorR, top ? 1F - heightR : heightR, top ? 1F - heightL : heightL);
+            float targetL = Mth.lerp(factorL, top ? 1F - heightR : heightR, top ? 1F - heightL : heightL);
+            if ((top && pos[0][1] >= targetR && pos[3][1] >= targetL) || (!top && pos[1][1] <= targetR && pos[2][1] <= targetL))
             {
                 int idx1 = top ? 1 : 0;
                 int idx2 = top ? 2 : 3;
@@ -387,8 +408,8 @@ public class BakedQuadTransformer
                 float y1 = pos[idx1][1];
                 float y2 = pos[idx2][1];
 
-                float toY1 = top ? Math.max(y1, target) : Math.min(y1, target);
-                float toY2 = top ? Math.max(y2, target) : Math.min(y2, target);
+                float toY1 = top ? Math.max(y1, targetR) : Math.min(y1, targetR);
+                float toY2 = top ? Math.max(y2, targetL) : Math.min(y2, targetL);
 
                 boolean rotated = ModelUtils.isQuadRotated(uv);
                 boolean mirrored = ModelUtils.isQuadMirrored(uv);
@@ -420,13 +441,38 @@ public class BakedQuadTransformer
      */
     public static boolean createVerticalSideQuad(BakedQuad quad, boolean positive, float length)
     {
+        return createVerticalSideQuad(quad, positive, length, length);
+    }
+
+    public static boolean createVerticalSideQuad(BakedQuad quad, Direction dir, float lengthTop, float lengthBot)
+    {
+        Preconditions.checkArgument(dir == quad.getDirection().getClockWise() || dir == quad.getDirection().getCounterClockWise(),
+                "Direction dir must be in the quad's plane!"
+        );
+        return createVerticalSideQuad(quad, dir.getAxisDirection() == Direction.AxisDirection.NEGATIVE, lengthTop, lengthBot);
+    }
+
+    /**
+     * Creates a quad starting at the positive or negative x/z edge and cut off at a given length
+     * @param quad The BakedQuad to manipulate, must be a copy of the original quad
+     * @param positive Wether to start from the positive edge x/z in the quad's plane
+     * @param lengthTop The target length from the starting edge for the top vertex
+     * @param lengthBot The target length from the starting edge for the bottom vertex
+     */
+    public static boolean createVerticalSideQuad(BakedQuad quad, boolean positive, float lengthTop, float lengthBot)
+    {
         return ModelUtils.modifyQuad(quad, (pos, color, uv, light, normal) ->
         {
             int coordIdx = quad.getDirection().getAxis() == Direction.Axis.X ? 2 : 0;
             boolean right = (quad.getDirection().getCounterClockWise().getAxisDirection() == Direction.AxisDirection.POSITIVE) == positive;
-            int vertIdx = right ? 3 : 0;
-            float target = positive ? 1F - length : length;
-            if ((positive && pos[vertIdx][coordIdx] > target) || (!positive && pos[vertIdx][coordIdx] < target))
+            int vertIdxTop = right ? 3 : 0;
+            int vertIdxBot = right ? 2 : 1;
+
+            float targetTop = Mth.lerp(1F - pos[vertIdxTop][1], positive ? 1F - lengthTop : lengthTop, positive ? 1F - lengthBot : lengthBot);
+            float targetBot = Mth.lerp(1F - pos[vertIdxBot][1], positive ? 1F - lengthTop : lengthTop, positive ? 1F - lengthBot : lengthBot);
+            if ((positive && pos[vertIdxTop][coordIdx] >= targetTop && pos[vertIdxBot][coordIdx] >= targetBot) ||
+                (!positive && pos[vertIdxTop][coordIdx] <= targetTop && pos[vertIdxBot][coordIdx] <= targetBot)
+            )
             {
                 int idx1 = right ? 0 : 3;
                 int idx2 = right ? 1 : 2;
@@ -434,8 +480,8 @@ public class BakedQuadTransformer
                 float xz1 = pos[idx1][coordIdx];
                 float xz2 = pos[idx2][coordIdx];
 
-                float toXZ1 = positive ? Math.max(xz1, target) : Math.min(xz1, target);
-                float toXZ2 = positive ? Math.max(xz2, target) : Math.min(xz2, target);
+                float toXZ1 = positive ? Math.max(xz1, targetTop) : Math.min(xz1, targetTop);
+                float toXZ2 = positive ? Math.max(xz2, targetBot) : Math.min(xz2, targetBot);
 
                 boolean rotated = ModelUtils.isQuadRotated(uv);
                 boolean mirrored = ModelUtils.isQuadMirrored(uv);
@@ -459,42 +505,64 @@ public class BakedQuadTransformer
      */
     public static boolean createTopBottomQuad(BakedQuad quad, Direction cutDir, float length)
     {
+        return createTopBottomQuad(quad, cutDir, length, length);
+    }
+
+    /**
+     * Creates a top/bottom quad starting at the edge opposite of the given cutDir and cut off after the given length
+     * @param quad The BakedQuad to manipulate, must be a copy of the original quad
+     * @param cutDir The direction from the starting edge to the cut edge
+     * @param lengthR The target length in the direction given by cutDir for the right vertex
+     * @param lengthL The target length in the direction given by cutDir for the left vertex
+     */
+    public static boolean createTopBottomQuad(BakedQuad quad, Direction cutDir, float lengthR, float lengthL)
+    {
         return ModelUtils.modifyQuad(quad, (pos, color, uv, light, normal) ->
         {
             boolean xAxis = cutDir.getAxis() == Direction.Axis.X;
             boolean positive = cutDir.getAxisDirection() == Direction.AxisDirection.POSITIVE;
             boolean up = quad.getDirection() == Direction.UP;
-            float target = positive ? length : 1F - length;
 
-            int vertIdx = xAxis ? (positive ? 0 : 2) : (up ? (positive ? 0 : 1) : (positive ? 1 : 0));
+            int idxR = xAxis ? (positive ? 2 : 1) : ((up == positive) ? 1 : 0);
+            int idxL = xAxis ? (positive ? 3 : 0) : ((up == positive) ? 2 : 3);
+
+            Direction perpDir = cutDir.getCounterClockWise();
+            boolean perpX = perpDir.getAxis() == Direction.Axis.X;
+            float factorR = perpX ? pos[idxR][0] : (up ? (1F - pos[idxR][2]) : pos[idxR][2]);
+            float factorL = perpX ? pos[idxL][0] : (up ? (1F - pos[idxL][2]) : pos[idxL][2]);
+
+            float targetR = Mth.lerp(factorR, positive ? lengthR : 1F - lengthR, positive ? lengthL : 1F - lengthL);
+            float targetL = Mth.lerp(factorL, positive ? lengthR : 1F - lengthR, positive ? lengthL : 1F - lengthL);
+
+            int vertIdxR = xAxis ? (positive ? 1 : 3) : (up ? (positive ? 0 : 2) : (positive ? 1 : 3));
+            int vertIdxL = xAxis ? (positive ? 0 : 2) : (up ? (positive ? 3 : 1) : (positive ? 2 : 0));
             int coordIdx = xAxis ? 0 : 2;
-            if ((positive && pos[vertIdx][coordIdx] < target) || (!positive && pos[vertIdx][coordIdx] > target))
+            if ((positive && pos[vertIdxR][coordIdx] <= targetR && pos[vertIdxL][coordIdx] <= targetL) ||
+                    (!positive && pos[vertIdxR][coordIdx] >= targetR && pos[vertIdxL][coordIdx] >= targetL)
+            )
             {
-                int idx1 = xAxis ? (positive ? 2 : 1) : ((up == positive) ? 1 : 0);
-                int idx2 = xAxis ? (positive ? 3 : 0) : ((up == positive) ? 2 : 3);
+                float xz1 = pos[idxR][coordIdx];
+                float xz2 = pos[idxL][coordIdx];
 
-                float xz1 = pos[idx1][coordIdx];
-                float xz2 = pos[idx2][coordIdx];
-
-                float toXZ1 = positive ? Math.min(xz1, target) : Math.max(xz1, target);
-                float toXZ2 = positive ? Math.min(xz2, target) : Math.max(xz2, target);
+                float toXZ1 = positive ? Math.min(xz1, targetR) : Math.max(xz1, targetR);
+                float toXZ2 = positive ? Math.min(xz2, targetL) : Math.max(xz2, targetL);
 
                 boolean rotated = ModelUtils.isQuadRotated(uv);
                 boolean mirrored = ModelUtils.isQuadMirrored(uv);
 
                 if (xAxis)
                 {
-                    ModelUtils.remapUV(quad.getDirection(), pos[1][coordIdx], pos[2][coordIdx], toXZ1, uv, 1, 2, idx1, false, false, rotated, mirrored);
-                    ModelUtils.remapUV(quad.getDirection(), pos[0][coordIdx], pos[3][coordIdx], toXZ2, uv, 0, 3, idx2, false, false, rotated, mirrored);
+                    ModelUtils.remapUV(quad.getDirection(), pos[1][coordIdx], pos[2][coordIdx], toXZ1, uv, 1, 2, idxR, false, false, rotated, mirrored);
+                    ModelUtils.remapUV(quad.getDirection(), pos[0][coordIdx], pos[3][coordIdx], toXZ2, uv, 0, 3, idxL, false, false, rotated, mirrored);
                 }
                 else
                 {
-                    ModelUtils.remapUV(quad.getDirection(), pos[1][coordIdx], pos[0][coordIdx], toXZ1, uv, 0, 1, idx1, true, !up, rotated, mirrored);
-                    ModelUtils.remapUV(quad.getDirection(), pos[2][coordIdx], pos[3][coordIdx], toXZ2, uv, 3, 2, idx2, true, !up, rotated, mirrored);
+                    ModelUtils.remapUV(quad.getDirection(), pos[1][coordIdx], pos[0][coordIdx], toXZ1, uv, 0, 1, idxR, true, !up, rotated, mirrored);
+                    ModelUtils.remapUV(quad.getDirection(), pos[2][coordIdx], pos[3][coordIdx], toXZ2, uv, 3, 2, idxL, true, !up, rotated, mirrored);
                 }
 
-                pos[idx1][coordIdx] = toXZ1;
-                pos[idx2][coordIdx] = toXZ2;
+                pos[idxR][coordIdx] = toXZ1;
+                pos[idxL][coordIdx] = toXZ2;
 
                 return true;
             }
@@ -568,6 +636,28 @@ public class BakedQuadTransformer
             for (int i = 0; i < 4; i++)
             {
                 pos[i][idx] = value;
+            }
+            return true;
+        });
+    }
+
+    /**
+     * Moves the individual vertices of the given quad to the given values in the quad's facing direction
+     * @param quad The BakedQuad to manipulate, must be a copy of the original quad if no other processing happened before
+     * @param posTarget The target positions in the quad's facing direction
+     * @implNote This does not create the same shape for all vertices when displacing a single one - TODO: check if this can be fixed
+     */
+    public static void setVertexPosInFacingDir(BakedQuad quad, float[] posTarget)
+    {
+        Preconditions.checkArgument(posTarget.length == 4, "Target position array must contain 4 elements!");
+
+        int idx = quad.getDirection().getAxis().ordinal();
+        boolean positive = quad.getDirection().getAxisDirection() == Direction.AxisDirection.POSITIVE;
+        ModelUtils.modifyQuad(quad, (pos, color, uv, light, normal) ->
+        {
+            for (int i = 0; i < 4; i++)
+            {
+                pos[i][idx] = positive ? posTarget[i] : 1F - posTarget[i];
             }
             return true;
         });

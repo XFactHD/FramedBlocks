@@ -1,15 +1,21 @@
 package xfacthd.framedblocks.api.util;
 
+import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.tags.*;
 import net.minecraft.world.item.Item;
+import net.minecraft.world.level.BlockGetter;
+import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.*;
+import net.minecraft.world.level.chunk.LevelChunk;
 import net.minecraft.world.phys.Vec3;
 import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
+import net.minecraftforge.fml.loading.FMLEnvironment;
 import xfacthd.framedblocks.api.FramedBlocksAPI;
+import xfacthd.framedblocks.api.util.client.ClientUtils;
 
 public class Utils
 {
@@ -58,5 +64,22 @@ public class Utils
     public static TranslatableComponent translate(String prefix, String postfix)
     {
         return new TranslatableComponent(prefix + "." + FramedBlocksAPI.getInstance().modid() + "." + postfix);
+    }
+
+    public static BlockEntity getBlockEntitySafe(BlockGetter blockGetter, BlockPos pos)
+    {
+        if (blockGetter instanceof Level level)
+        {
+            return level.getChunkAt(pos).getBlockEntity(pos, LevelChunk.EntityCreationType.CHECK);
+        }
+        else if (blockGetter instanceof LevelChunk chunk)
+        {
+            return chunk.getBlockEntity(pos, LevelChunk.EntityCreationType.CHECK);
+        }
+        else if (FMLEnvironment.dist.isClient())
+        {
+            return ClientUtils.getBlockEntitySafe(blockGetter, pos);
+        }
+        return null;
     }
 }

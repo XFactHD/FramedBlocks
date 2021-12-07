@@ -45,16 +45,15 @@ public class BlockOutlineRenderer
             PoseStack mstack = event.getMatrix();
             Vec3 offset = Vec3.atLowerCornerOf(result.getBlockPos()).subtract(event.getInfo().getPosition());
             VertexConsumer builder = event.getBuffers().getBuffer(RenderType.lines());
-
-            Direction dir = FramedUtils.getBlockFacing(state);
+            OutlineRender render = OUTLINE_RENDERERS.get(type);
 
             mstack.pushPose();
             mstack.translate(offset.x, offset.y, offset.z);
             mstack.translate(.5, .5, .5);
-            mstack.mulPose(Vector3f.YP.rotationDegrees(-dir.toYRot()));
+            render.rotateMatrix(mstack, state);
             mstack.translate(-.5, -.5, -.5);
 
-            OUTLINE_RENDERERS.get(type).draw(state, mstack, builder);
+            render.draw(state, Minecraft.getInstance().level, result.getBlockPos(), mstack, builder);
 
             mstack.popPose();
 

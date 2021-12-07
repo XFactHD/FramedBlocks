@@ -12,6 +12,7 @@ public class PropertyHolder
     public static final EnumProperty<StairsType> STAIRS_TYPE = EnumProperty.create("type", StairsType.class);
     public static final EnumProperty<ChestState> CHEST_STATE = EnumProperty.create("state", ChestState.class);
     public static final EnumProperty<RailShape> ASCENDING_RAIL_SHAPE = EnumProperty.create("shape", RailShape.class, RailShape::isAscending);
+    public static final EnumProperty<CollapseFace> COLLAPSED_FACE = EnumProperty.create("face", CollapseFace.class);
 
     public static final BooleanProperty TOP = FramedProperties.TOP;
     public static final BooleanProperty OFFSET = FramedProperties.OFFSET;
