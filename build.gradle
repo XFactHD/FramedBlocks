@@ -108,7 +108,7 @@ dependencies {
     //runtimeOnly fg.deobf("curse.maven:puzzleslib-495476:3374786") //Only needed when Diagonal Fences is switched to implementation
     //compileOnly fg.deobf("curse.maven:diagonalfences-458048:3364147")
 
-    //runtimeOnly fg.deobf("curse.maven:jei-238222:3486421")
+    runtimeOnly fg.deobf("curse.maven:jei-238222:3550020")
 
     annotationProcessor 'org.spongepowered:mixin:0.8.5:processor'
 }
