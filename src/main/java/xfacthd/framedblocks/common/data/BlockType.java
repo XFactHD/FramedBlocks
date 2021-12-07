@@ -59,7 +59,7 @@ public enum BlockType
     FRAMED_PILLAR                 (false, false,  true,  true, CtmPredicate.FALSE, new PillarSkipPredicate(), FramedPillarBlock::generatePillarShapes),
     FRAMED_HALF_PILLAR            (false, false,  true,  true, CtmPredicate.FALSE, new HalfPillarSkipPredicate(), FramedHalfPillarBlock::generateShapes),
     FRAMED_POST                   (false, false,  true,  true, CtmPredicate.FALSE, new PostSkipPredicate(), FramedPillarBlock::generatePostShapes),
-    FRAMED_COLLAPSIBLE_BLOCK      ( true,  true, false,  true/*, FramedCollapsibleBlock.CTM_PREDICATE, FramedCollapsibleBlock.SKIP_PREDICATE*/);
+    FRAMED_COLLAPSIBLE_BLOCK      ( true,  true, false,  true, FramedCollapsibleBlock.CTM_PREDICATE, new CollapsibleBlockSkipPredicate());
 
     private final String name = toString().toLowerCase(Locale.ROOT);
     private final boolean specialHitbox;

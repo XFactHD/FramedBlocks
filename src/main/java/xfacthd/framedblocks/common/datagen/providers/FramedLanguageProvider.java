@@ -59,7 +59,7 @@ public class FramedLanguageProvider extends LanguageProvider
         add(FBContent.blockFramedPillar.get(), "Framed Pillar");
         add(FBContent.blockFramedHalfPillar.get(), "Framed Half Pillar");
         add(FBContent.blockFramedPost.get(), "Framed Post");
-        //add(FBContent.blockFramedCollapsibleBlock.get(), "Framed Collapsible Block");
+        add(FBContent.blockFramedCollapsibleBlock.get(), "Framed Collapsible Block");
 
         add(FBContent.itemFramedHammer.get(), "Framed Hammer");
         add(FBContent.itemFramedWrench.get(), "Framed Wrench");

@@ -82,7 +82,7 @@ public class FBContent
     public static final RegistryObject<Block> blockFramedPillar = registerBlock(FramedPillarBlock::new, BlockType.FRAMED_PILLAR);
     public static final RegistryObject<Block> blockFramedHalfPillar = registerBlock(FramedHalfPillarBlock::new, BlockType.FRAMED_HALF_PILLAR);
     public static final RegistryObject<Block> blockFramedPost = registerBlock(FramedPillarBlock::new, BlockType.FRAMED_POST);
-    //public static final RegistryObject<Block> blockFramedCollapsibleBlock = register(FramedCollapsibleBlock::new, BlockType.FRAMED_COLLAPSIBLE_BLOCK); //STATUS: Not implemented
+    public static final RegistryObject<Block> blockFramedCollapsibleBlock = registerBlock(FramedCollapsibleBlock::new, BlockType.FRAMED_COLLAPSIBLE_BLOCK); //STATUS: Not implemented
     public static final RegistryObject<Block> blockFramedGhostBlock = BLOCKS.register("framed_ghost_block", FramedGhostBlock::new);
 
     /** ITEMS */
@@ -135,6 +135,11 @@ public class FBContent
             FramedFlowerPotTileEntity::new,
             "framed_flower_pot",
             blockFramedFlowerPot
+    );
+    public static final RegistryObject<TileEntityType<FramedCollapsibleTileEntity>> blockEntityTypeFramedCollapsibleBlock = createTileType(
+            FramedCollapsibleTileEntity::new,
+            "framed_collapsible_block",
+            blockFramedCollapsibleBlock
     );
 
     /** CONTAINER TYPES */
