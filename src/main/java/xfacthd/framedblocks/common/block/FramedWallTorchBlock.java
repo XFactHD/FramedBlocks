@@ -43,7 +43,7 @@ public class FramedWallTorchBlock extends WallTorchBlock implements IFramedBlock
     }
 
     @Override
-    public int getLightValue(BlockState state, IBlockReader world, BlockPos pos) { return getLight(world, pos); }
+    public int getLightValue(BlockState state, IBlockReader world, BlockPos pos) { return Math.max(super.getLightValue(state, world, pos), getLight(world, pos)); }
 
     @Override
     public SoundType getSoundType(BlockState state, IWorldReader world, BlockPos pos, Entity entity)
