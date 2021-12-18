@@ -24,6 +24,7 @@ import xfacthd.framedblocks.common.item.FramedToolItem;
 import xfacthd.framedblocks.common.net.OpenSignScreenPacket;
 import xfacthd.framedblocks.common.net.SignUpdatePacket;
 import xfacthd.framedblocks.common.util.CommonConfig;
+import xfacthd.framedblocks.common.util.ServerConfig;
 
 @Mod(FramedBlocks.MODID)
 @Mod.EventBusSubscriber(modid = FramedBlocks.MODID, bus = Mod.EventBusSubscriber.Bus.MOD)
@@ -82,6 +83,7 @@ public class FramedBlocks
         FBContent.init();
         ModLoadingContext.get().registerConfig(ModConfig.Type.CLIENT, ClientConfig.SPEC);
         ModLoadingContext.get().registerConfig(ModConfig.Type.COMMON, CommonConfig.SPEC);
+        ModLoadingContext.get().registerConfig(ModConfig.Type.SERVER, ServerConfig.SPEC);
 
         if (ModList.get().isLoaded("buildinggadgets"))
         {

@@ -1,6 +1,5 @@
 package xfacthd.framedblocks.common.tileentity;
 
-import com.google.common.collect.ImmutableList;
 import net.minecraft.block.*;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.*;
@@ -25,6 +24,7 @@ import xfacthd.framedblocks.FramedBlocks;
 import xfacthd.framedblocks.client.util.FramedBlockData;
 import xfacthd.framedblocks.common.FBContent;
 import xfacthd.framedblocks.common.block.IFramedBlock;
+import xfacthd.framedblocks.common.util.ServerConfig;
 import xfacthd.framedblocks.common.util.Utils;
 
 import java.util.List;
@@ -34,7 +34,6 @@ public class FramedTileEntity extends TileEntity
 {
     public static final TranslationTextComponent MSG_BLACKLISTED = new TranslationTextComponent("msg." + FramedBlocks.MODID + ".blacklisted");
     public static final TranslationTextComponent MSG_TILE_ENTITY = new TranslationTextComponent("msg." + FramedBlocks.MODID + ".tile_entity");
-    private static final ImmutableList<Block> TILE_ENTITY_WHITELIST = buildTileEntityWhitelist();
 
     private final FramedBlockData modelData = new FramedBlockData();
     private ItemStack camoStack = ItemStack.EMPTY;
@@ -272,12 +271,18 @@ public class FramedTileEntity extends TileEntity
 
         if (state.isIn(Utils.BLACKLIST))
         {
-            player.sendStatusMessage(MSG_BLACKLISTED, true);
+            if (player != null)
+            {
+                player.sendStatusMessage(MSG_BLACKLISTED, true);
+            }
             return false;
         }
-        if (block.hasTileEntity(state) && !TILE_ENTITY_WHITELIST.contains(block))
+        if (block.hasTileEntity(state) && !ServerConfig.allowBlockEntities)
         {
-            player.sendStatusMessage(MSG_TILE_ENTITY, true);
+            if (player != null)
+            {
+                player.sendStatusMessage(MSG_TILE_ENTITY, true);
+            }
             return false;
         }
 
@@ -501,15 +506,21 @@ public class FramedTileEntity extends TileEntity
     {
         super.read(state, nbt);
 
-        camoStack = ItemStack.read(nbt.getCompound("camo_stack"));
-        camoState = NBTUtil.readBlockState(nbt.getCompound("camo_state"));
+        BlockState camoState = NBTUtil.readBlockState(nbt.getCompound("camo_state"));
+        if (camoState.isAir() || isValidBlock(camoState, null))
+        {
+            this.camoState = camoState;
+            camoStack = ItemStack.read(nbt.getCompound("camo_stack"));
+        }
+        else
+        {
+            FramedBlocks.LOGGER.warn(
+                    "Framed Block of type \"{}\" at position {} contains an invalid camo of type \"{}\", removing camo! This might be caused by a config or tag change!",
+                    state.getBlock().getRegistryName(),
+                    pos,
+                    camoState.getBlock().getRegistryName()
+            );
+        }
         glowing = nbt.getBoolean("glowing");
-    }
-
-    private static ImmutableList<Block> buildTileEntityWhitelist()
-    {
-        return ImmutableList.<Block>builder()
-                .add(Blocks.JUKEBOX)
-                .build();
     }
 }

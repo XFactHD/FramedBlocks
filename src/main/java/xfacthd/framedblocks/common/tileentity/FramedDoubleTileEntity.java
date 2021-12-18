@@ -10,6 +10,7 @@ import net.minecraft.util.Direction;
 import net.minecraft.util.math.BlockRayTraceResult;
 import net.minecraft.world.Explosion;
 import net.minecraftforge.client.model.data.*;
+import xfacthd.framedblocks.FramedBlocks;
 import xfacthd.framedblocks.client.util.FramedBlockData;
 
 import java.util.List;
@@ -227,7 +228,20 @@ public abstract class FramedDoubleTileEntity extends FramedTileEntity
     {
         super.read(state, nbt);
 
-        camoStack = ItemStack.read(nbt.getCompound("camo_stack_two"));
-        camoState = NBTUtil.readBlockState(nbt.getCompound("camo_state_two"));
+        BlockState camoState = NBTUtil.readBlockState(nbt.getCompound("camo_state_two"));
+        if (camoState.isAir() || isValidBlock(camoState, null))
+        {
+            this.camoState = camoState;
+            camoStack = ItemStack.read(nbt.getCompound("camo_stack_two"));
+        }
+        else
+        {
+            FramedBlocks.LOGGER.warn(
+                    "Framed Block of type \"{}\" at position {} contains an invalid camo of type \"{}\", removing camo! This might be caused by a config or tag change!",
+                    state.getBlock().getRegistryName(),
+                    pos,
+                    camoState.getBlock().getRegistryName()
+            );
+        }
     }
 }
