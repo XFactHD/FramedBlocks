@@ -54,4 +54,9 @@ public interface FramedBlocksAPI
      * else only full faces should be checked against neighboring blocks
      */
     boolean detailedCullingEnabled();
+
+    /**
+     * If true, blocks with {@code BlockEntities} can be placed in Framed blocks
+     */
+    boolean allowBlockEntities();
 }

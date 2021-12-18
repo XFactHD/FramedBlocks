@@ -1,6 +1,5 @@
 package xfacthd.framedblocks.api.block;
 
-import com.google.common.collect.ImmutableList;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
@@ -24,6 +23,7 @@ import net.minecraftforge.common.Tags;
 import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.capability.*;
+import xfacthd.framedblocks.FramedBlocks;
 import xfacthd.framedblocks.api.FramedBlocksAPI;
 import xfacthd.framedblocks.api.util.FramedBlockData;
 import xfacthd.framedblocks.api.util.Utils;
@@ -35,7 +35,6 @@ public class FramedBlockEntity extends BlockEntity
 {
     public static final TranslatableComponent MSG_BLACKLISTED = Utils.translate("msg", "blacklisted");
     public static final TranslatableComponent MSG_BLOCK_ENTITY = Utils.translate("msg", "block_entity");
-    private static final ImmutableList<Block> BLOCK_ENTITY_WHITELIST = buildBlockEntityWhitelist();
 
     private final FramedBlockData modelData = new FramedBlockData();
     private ItemStack camoStack = ItemStack.EMPTY;
@@ -274,12 +273,18 @@ public class FramedBlockEntity extends BlockEntity
 
         if (state.is(Utils.BLACKLIST))
         {
-            player.displayClientMessage(MSG_BLACKLISTED, true);
+            if (player != null)
+            {
+                player.displayClientMessage(MSG_BLACKLISTED, true);
+            }
             return false;
         }
-        if (state.hasBlockEntity() && !BLOCK_ENTITY_WHITELIST.contains(block))
+        if (state.hasBlockEntity() && !FramedBlocksAPI.getInstance().allowBlockEntities())
         {
-            player.displayClientMessage(MSG_BLOCK_ENTITY, true);
+            if (player != null)
+            {
+                player.displayClientMessage(MSG_BLOCK_ENTITY, true);
+            }
             return false;
         }
 
@@ -501,15 +506,21 @@ public class FramedBlockEntity extends BlockEntity
     {
         super.load(nbt);
 
-        camoStack = ItemStack.of(nbt.getCompound("camo_stack"));
-        camoState = NbtUtils.readBlockState(nbt.getCompound("camo_state"));
+        BlockState state = NbtUtils.readBlockState(nbt.getCompound("camo_state"));
+        if (state.isAir() || isValidBlock(state, null))
+        {
+            camoStack = ItemStack.of(nbt.getCompound("camo_stack"));
+            camoState = state;
+        }
+        else
+        {
+            FramedBlocks.LOGGER.warn(
+                    "Framed Block of type \"{}\" at position {} contains an invalid camo of type \"{}\", removing camo! This might be caused by a config or tag change!",
+                    getBlockState().getBlock().getRegistryName(),
+                    worldPosition,
+                    state.getBlock().getRegistryName()
+            );
+        }
         glowing = nbt.getBoolean("glowing");
-    }
-
-    private static ImmutableList<Block> buildBlockEntityWhitelist()
-    {
-        return ImmutableList.<Block>builder()
-                .add(Blocks.JUKEBOX)
-                .build();
     }
 }

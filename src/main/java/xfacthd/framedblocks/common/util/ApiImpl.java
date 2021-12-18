@@ -36,4 +36,7 @@ public class ApiImpl implements FramedBlocksAPI
 
     @Override
     public boolean detailedCullingEnabled() { return ClientConfig.detailedCulling; }
+
+    @Override
+    public boolean allowBlockEntities() { return ServerConfig.allowBlockEntities; }
 }

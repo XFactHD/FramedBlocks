@@ -11,6 +11,7 @@ import net.minecraft.core.Direction;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.level.Explosion;
 import net.minecraftforge.client.model.data.*;
+import xfacthd.framedblocks.FramedBlocks;
 import xfacthd.framedblocks.api.block.FramedBlockEntity;
 import xfacthd.framedblocks.api.util.FramedBlockData;
 
@@ -227,7 +228,20 @@ public abstract class FramedDoubleBlockEntity extends FramedBlockEntity
     {
         super.load(nbt);
 
-        camoStack = ItemStack.of(nbt.getCompound("camo_stack_two"));
-        camoState = NbtUtils.readBlockState(nbt.getCompound("camo_state_two"));
+        BlockState state = NbtUtils.readBlockState(nbt.getCompound("camo_state_two"));
+        if (state.isAir() || isValidBlock(state, null))
+        {
+            camoStack = ItemStack.of(nbt.getCompound("camo_stack_two"));
+            camoState = state;
+        }
+        else
+        {
+            FramedBlocks.LOGGER.warn(
+                    "Framed Block of type \"{}\" at position {} contains an invalid camo of type \"{}\", removing camo! This might be caused by a config or tag change!",
+                    getBlockState().getBlock().getRegistryName(),
+                    worldPosition,
+                    state.getBlock().getRegistryName()
+            );
+        }
     }
 }
