@@ -19,6 +19,7 @@ import xfacthd.framedblocks.api.FramedBlocksAPI;
 import xfacthd.framedblocks.client.util.ClientConfig;
 import xfacthd.framedblocks.common.FBContent;
 import xfacthd.framedblocks.api.block.IFramedBlock;
+import xfacthd.framedblocks.common.compat.CompatHandler;
 import xfacthd.framedblocks.common.item.FramedToolItem;
 import xfacthd.framedblocks.common.net.OpenSignScreenPacket;
 import xfacthd.framedblocks.common.net.SignUpdatePacket;
@@ -83,6 +84,8 @@ public class FramedBlocks
         ModLoadingContext.get().registerConfig(ModConfig.Type.COMMON, CommonConfig.SPEC);
         ModLoadingContext.get().registerConfig(ModConfig.Type.SERVER, ServerConfig.SPEC);
         FramedBlocksAPI.INSTANCE.accept(new ApiImpl());
+
+        CompatHandler.init();
     }
 
     @SubscribeEvent

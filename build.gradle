@@ -27,8 +27,7 @@ java.toolchain.languageVersion = JavaLanguageVersion.of(17)
 println('Java: ' + System.getProperty('java.version') + ' JVM: ' + System.getProperty('java.vm.version') + '(' + System.getProperty('java.vendor') + ') Arch: ' + System.getProperty('os.arch'))
 
 minecraft {
-    //mappings channel: 'parchment', version: '2021.08.15-1.17.1'
-    mappings channel: 'official', version: '1.18'
+    mappings channel: 'parchment', version: '2021.12.19-1.18.1'
     
     accessTransformer = file('src/main/resources/META-INF/accesstransformer.cfg')
 
@@ -107,6 +106,8 @@ dependencies {
 
     //runtimeOnly fg.deobf("curse.maven:puzzleslib-495476:3374786") //Only needed when Diagonal Fences is switched to implementation
     //compileOnly fg.deobf("curse.maven:diagonalfences-458048:3364147")
+
+    implementation fg.deobf("curse.maven:buildinggadgets-298187:3553977")
 
     runtimeOnly fg.deobf("curse.maven:jei-238222:3550020")
 
