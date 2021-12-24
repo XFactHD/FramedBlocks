@@ -15,7 +15,6 @@ import java.util.Map;
 public class FramedDoorModel extends FramedBlockModel
 {
     private final Direction dir;
-    private final boolean top;
     private final boolean hingeRight;
     private final boolean open;
 
@@ -23,7 +22,6 @@ public class FramedDoorModel extends FramedBlockModel
     {
         super(state, baseModel);
         dir = state.getValue(BlockStateProperties.HORIZONTAL_FACING);
-        top = state.getValue(BlockStateProperties.DOUBLE_BLOCK_HALF) == DoubleBlockHalf.UPPER;
         hingeRight = state.getValue(BlockStateProperties.DOOR_HINGE) == DoorHingeSide.RIGHT;
         open = state.getValue(BlockStateProperties.OPEN);
     }
@@ -35,7 +33,7 @@ public class FramedDoorModel extends FramedBlockModel
         if (open) { faceDir = hingeRight ? faceDir.getCounterClockWise() : faceDir.getClockWise(); }
         boolean facePositive = faceDir.getAxisDirection() == Direction.AxisDirection.POSITIVE;
 
-        if ((top && quad.getDirection() == Direction.UP) || (!top && quad.getDirection() == Direction.DOWN))
+        if (quad.getDirection().getAxis() == Direction.Axis.Y)
         {
             BakedQuad topBotQuad = ModelUtils.duplicateQuad(quad);
             if (BakedQuadTransformer.createTopBottomQuad(topBotQuad, faceDir, 3F/16F))
@@ -43,7 +41,7 @@ public class FramedDoorModel extends FramedBlockModel
                 quadMap.get(quad.getDirection()).add(topBotQuad);
             }
         }
-        else if (quad.getDirection().getAxis() != Direction.Axis.Y)
+        else
         {
             if (quad.getDirection() == faceDir)
             {
