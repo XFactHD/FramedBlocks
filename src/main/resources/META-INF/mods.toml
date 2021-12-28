@@ -14,10 +14,11 @@ logoFile="logo.png"
 authors="XFactHD"
 description='''
 '''
+
 [[dependencies.framedblocks]]
     modId="forge"
     mandatory=true
-    versionRange="[36,)"
+    versionRange="[36.2.12,)"
     ordering="NONE"
     side="BOTH"
 [[dependencies.framedblocks]]

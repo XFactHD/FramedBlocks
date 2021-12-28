@@ -11,11 +11,9 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.BlockRayTraceResult;
 import net.minecraft.world.IBlockReader;
 import net.minecraft.world.World;
-import net.minecraftforge.fml.common.ObfuscationReflectionHelper;
 import xfacthd.framedblocks.common.data.BlockType;
 import xfacthd.framedblocks.common.tileentity.FramedFlowerPotTileEntity;
 
-import java.lang.reflect.Field;
 import java.util.Map;
 import java.util.function.Supplier;
 
@@ -91,18 +89,9 @@ public class FramedFlowerPotBlock extends FramedBlock
 
 
 
-    private static final Field FULL_POTS_FIELD = ObfuscationReflectionHelper.findField(FlowerPotBlock.class, "fullPots");
-    public static BlockState getFlowerPotState(Block flower) //TODO: PR an accessor to an unmodifiable view of the fullPots map to Forge
+    public static BlockState getFlowerPotState(Block flower)
     {
-        try
-        {
-            //noinspection unchecked
-            Map<ResourceLocation, Supplier<? extends Block>> fullPots = (Map<ResourceLocation, Supplier<? extends Block>>) FULL_POTS_FIELD.get(Blocks.FLOWER_POT);
-            return fullPots.getOrDefault(flower.getRegistryName(), Blocks.AIR.delegate).get().getDefaultState();
-        }
-        catch (IllegalAccessException e)
-        {
-            throw new RuntimeException("Failed to access FlowerPotBlock#fullPots", e);
-        }
+        Map<ResourceLocation, Supplier<? extends Block>> fullPots = ((FlowerPotBlock) Blocks.FLOWER_POT).getFullPotsView();
+        return fullPots.getOrDefault(flower.getRegistryName(), Blocks.AIR.delegate).get().getDefaultState();
     }
 }
