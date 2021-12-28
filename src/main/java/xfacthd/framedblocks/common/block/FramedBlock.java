@@ -132,6 +132,13 @@ public class FramedBlock extends Block implements IFramedBlock, IWaterLoggable
     }
 
     @Override
+    public boolean receiveFluid(IWorld world, BlockPos pos, BlockState state, FluidState fluid)
+    {
+        if (!isWaterLoggable()) { return false; }
+        return IWaterLoggable.super.receiveFluid(world, pos, state, fluid);
+    }
+
+    @Override
     public Fluid pickupFluid(IWorld world, BlockPos pos, BlockState state)
     {
         if (!isWaterLoggable()) { return Fluids.EMPTY; }
