@@ -7,6 +7,7 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
+import net.minecraft.util.Mth;
 import net.minecraft.world.MenuProvider;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
@@ -32,7 +33,14 @@ public class FramedChestBlockEntity extends FramedBlockEntity implements MenuPro
 {
     public static final Component TITLE = new TranslatableComponent("title.framedblocks:framed_chest");
 
-    private final ItemStackHandler itemHandler = new ItemStackHandler(9 * 4);
+    private final ItemStackHandler itemHandler = new ItemStackHandler(9 * 4)
+    {
+        @Override
+        protected void onContentsChanged(int slot)
+        {
+            FramedChestBlockEntity.this.setChanged();
+        }
+    };
     private LazyOptional<IItemHandler> lazyItemHandler = LazyOptional.empty();
     private int openCount = 0;
     private long closeStart = 0;
@@ -139,6 +147,35 @@ public class FramedChestBlockEntity extends FramedBlockEntity implements MenuPro
             }
         }
         return drops;
+    }
+
+    public void clearContents()
+    {
+        for (int i = 0; i < itemHandler.getSlots(); i++)
+        {
+            itemHandler.setStackInSlot(i, ItemStack.EMPTY);
+        }
+    }
+
+    public int getAnalogOutputSignal()
+    {
+        int stacks = 0;
+        float fullness = 0;
+
+        for(int i = 0; i < itemHandler.getSlots(); ++i)
+        {
+            ItemStack stack = itemHandler.getStackInSlot(i);
+            if (!stack.isEmpty())
+            {
+                float sizeLimit = Math.min(itemHandler.getSlotLimit(i), stack.getMaxStackSize());
+                fullness += (float)stack.getCount() / sizeLimit;
+
+                stacks++;
+            }
+        }
+
+        fullness /= (float)itemHandler.getSlots();
+        return Mth.floor(fullness * 14F) + (stacks > 0 ? 1 : 0);
     }
 
 

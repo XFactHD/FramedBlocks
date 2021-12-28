@@ -71,9 +71,26 @@ public class FramedChestBlock extends FramedBlock
         if (newState.getBlock() != state.getBlock() && level.getBlockEntity(pos) instanceof FramedChestBlockEntity be)
         {
             be.getDrops().forEach(stack -> popResource(level, pos, stack));
+            be.clearContents();
+            level.updateNeighbourForOutputSignal(pos, this);
         }
 
         super.onRemove(state, level, pos, newState, isMoving);
+    }
+
+    @Override
+    @SuppressWarnings("deprecation")
+    public boolean hasAnalogOutputSignal(BlockState state) { return true; }
+
+    @Override
+    @SuppressWarnings("deprecation")
+    public int getAnalogOutputSignal(BlockState state, Level level, BlockPos pos)
+    {
+        if (level.getBlockEntity(pos) instanceof FramedChestBlockEntity be)
+        {
+            return be.getAnalogOutputSignal();
+        }
+        return 0;
     }
 
     @Override
