@@ -72,11 +72,30 @@ public class FramedChestBlock extends FramedBlock
             TileEntity te = world.getTileEntity(pos);
             if (te instanceof FramedChestTileEntity)
             {
-                ((FramedChestTileEntity) te).getDrops().forEach(stack -> spawnAsEntity(world, pos, stack));
+                FramedChestTileEntity chest = (FramedChestTileEntity) te;
+                chest.getDrops().forEach(stack -> spawnAsEntity(world, pos, stack));
+                chest.clearContents();
+                world.updateComparatorOutputLevel(pos, this);
             }
         }
 
         super.onReplaced(state, world, pos, newState, isMoving);
+    }
+
+    @Override
+    @SuppressWarnings("deprecation")
+    public boolean hasComparatorInputOverride(BlockState state) { return true; }
+
+    @Override
+    @SuppressWarnings("deprecation")
+    public int getComparatorInputOverride(BlockState state, World world, BlockPos pos)
+    {
+        TileEntity te = world.getTileEntity(pos);
+        if (te instanceof FramedChestTileEntity)
+        {
+            return ((FramedChestTileEntity) te).getAnalogOutputSignal();
+        }
+        return 0;
     }
 
     @Override

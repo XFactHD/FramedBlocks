@@ -9,6 +9,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.tileentity.ITickableTileEntity;
 import net.minecraft.util.*;
+import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraftforge.common.capabilities.Capability;
@@ -28,7 +29,14 @@ public class FramedChestTileEntity extends FramedTileEntity implements INamedCon
 {
     public static final ITextComponent TITLE = new TranslationTextComponent("title.framedblocks:framed_chest");
 
-    private final ItemStackHandler itemHandler = new ItemStackHandler(9 * 4);
+    private final ItemStackHandler itemHandler = new ItemStackHandler(9 * 4)
+    {
+        @Override
+        protected void onContentsChanged(int slot)
+        {
+            FramedChestTileEntity.this.markDirty();
+        }
+    };
     private LazyOptional<IItemHandler> lazyItemHandler = LazyOptional.empty();
     private int openCount = 0;
     private long closeStart = 0;
@@ -137,6 +145,35 @@ public class FramedChestTileEntity extends FramedTileEntity implements INamedCon
             }
         }
         return drops;
+    }
+
+    public void clearContents()
+    {
+        for (int i = 0; i < itemHandler.getSlots(); i++)
+        {
+            itemHandler.setStackInSlot(i, ItemStack.EMPTY);
+        }
+    }
+
+    public int getAnalogOutputSignal()
+    {
+        int stacks = 0;
+        float fullness = 0;
+
+        for(int i = 0; i < itemHandler.getSlots(); ++i)
+        {
+            ItemStack stack = itemHandler.getStackInSlot(i);
+            if (!stack.isEmpty())
+            {
+                float sizeLimit = Math.min(itemHandler.getSlotLimit(i), stack.getMaxStackSize());
+                fullness += (float)stack.getCount() / sizeLimit;
+
+                stacks++;
+            }
+        }
+
+        fullness /= (float)itemHandler.getSlots();
+        return MathHelper.floor(fullness * 14F) + (stacks > 0 ? 1 : 0);
     }
 
 
