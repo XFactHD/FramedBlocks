@@ -16,7 +16,7 @@ public class FramedDoubleBlockItem extends BlockItem
         setRegistryName(block.getRegistryName());
     }
 
-    @Override //TODO: Think about removing this in 1.17 in favor of adding all four cardinal directions to the double panel
+    @Override
     protected boolean placeBlock(BlockItemUseContext context, BlockState state)
     {
         boolean success = super.placeBlock(context, state);

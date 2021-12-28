@@ -33,7 +33,7 @@ public class FramedDoubleThreewayCornerModel extends FramedDoubleBlockModel
 
         BlockState stateOne = FBContent.blockFramedInnerThreewayCorner.get().getDefaultState()
                 .with(PropertyHolder.TOP, top)
-                .with(PropertyHolder.FACING_HOR, facing.rotateYCCW()); //FIXME: remove rotation when fixing inner corner rotation
+                .with(PropertyHolder.FACING_HOR, facing.rotateYCCW());
         BlockState stateTwo = FBContent.blockFramedThreewayCorner.get().getDefaultState()
                 .with(PropertyHolder.TOP, !top)
                 .with(PropertyHolder.FACING_HOR, facing.getOpposite());

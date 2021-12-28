@@ -33,7 +33,7 @@ public class FramedDoubleCornerModel extends FramedDoubleBlockModel
 
         BlockState stateOne = FBContent.blockFramedInnerCornerSlope.get().getDefaultState()
                 .with(PropertyHolder.CORNER_TYPE, type)
-                .with(PropertyHolder.FACING_HOR, type.isHorizontal() ? facing : facing.rotateYCCW()); //FIXME: remove rotation when fixing inner corner rotation
+                .with(PropertyHolder.FACING_HOR, type.isHorizontal() ? facing : facing.rotateYCCW());
         BlockState stateTwo = FBContent.blockFramedCornerSlope.get().getDefaultState()
                 .with(PropertyHolder.CORNER_TYPE, type.verticalOpposite())
                 .with(PropertyHolder.FACING_HOR, facing.getOpposite());

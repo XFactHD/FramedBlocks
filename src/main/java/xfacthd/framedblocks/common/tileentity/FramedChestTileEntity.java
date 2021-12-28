@@ -48,7 +48,7 @@ public class FramedChestTileEntity extends FramedTileEntity implements INamedCon
     public FramedChestTileEntity() { super(FBContent.tileTypeFramedChest.get()); }
 
     @Override
-    public void tick() //TODO: replace with an intelligent tile ticker in 1.17
+    public void tick()
     {
         //noinspection ConstantConditions
         if (!world.isRemote() && (world.getGameTime() - closeStart) >= 10 && getBlockState().get(PropertyHolder.CHEST_STATE) == ChestState.CLOSING)

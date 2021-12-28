@@ -14,10 +14,6 @@ import net.minecraft.util.math.vector.Vector3d;
 import xfacthd.framedblocks.common.data.*;
 import xfacthd.framedblocks.common.util.*;
 
-/*
-FIXME: BREAKING CHANGE!!!
-FIXME: Fix inner corner top/bottom rotation discrepancy from other corners (should be rotated 90 degree clockwise)
-*/
 public class FramedCornerSlopeBlock extends FramedBlock
 {
     public static final CtmPredicate CTM_PREDICATE = (state, dir) ->
