@@ -130,6 +130,13 @@ public abstract class AbstractFramedBlock extends Block implements IFramedBlock,
     }
 
     @Override
+    public boolean placeLiquid(LevelAccessor pLevel, BlockPos pPos, BlockState pState, FluidState pFluidState)
+    {
+        if (!isWaterLoggable()) { return false; }
+        return SimpleWaterloggedBlock.super.placeLiquid(pLevel, pPos, pState, pFluidState);
+    }
+
+    @Override
     public ItemStack pickupBlock(LevelAccessor level, BlockPos pos, BlockState state)
     {
         if (!isWaterLoggable()) { return ItemStack.EMPTY; }
