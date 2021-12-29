@@ -14,6 +14,8 @@ import net.minecraftforge.client.model.data.*;
 import xfacthd.framedblocks.FramedBlocks;
 import xfacthd.framedblocks.api.block.FramedBlockEntity;
 import xfacthd.framedblocks.api.util.FramedBlockData;
+import xfacthd.framedblocks.common.util.DoubleBlockSoundType;
+import xfacthd.framedblocks.common.util.DoubleSoundMode;
 
 import java.util.List;
 
@@ -24,6 +26,7 @@ public abstract class FramedDoubleBlockEntity extends FramedBlockEntity
 
     private final IModelData multiModelData = new ModelDataMap.Builder().build();
     private final FramedBlockData modelData = new FramedBlockData();
+    private final DoubleBlockSoundType soundType = new DoubleBlockSoundType(this);
     private ItemStack camoStack = ItemStack.EMPTY;
     private BlockState camoState = Blocks.AIR.defaultBlockState();
 
@@ -133,7 +136,11 @@ public abstract class FramedDoubleBlockEntity extends FramedBlockEntity
         return Math.min(flammabilityOne, flammabilityTwo);
     }
 
+    public final DoubleBlockSoundType getSoundType() { return soundType; }
+
     protected abstract boolean hitSecondary(BlockHitResult hit);
+
+    public abstract DoubleSoundMode getSoundMode();
 
     /*
      * Sync

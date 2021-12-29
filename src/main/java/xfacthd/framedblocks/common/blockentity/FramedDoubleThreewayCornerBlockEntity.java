@@ -9,6 +9,7 @@ import net.minecraft.world.phys.Vec3;
 import xfacthd.framedblocks.common.FBContent;
 import xfacthd.framedblocks.common.data.PropertyHolder;
 import xfacthd.framedblocks.api.util.Utils;
+import xfacthd.framedblocks.common.util.DoubleSoundMode;
 
 public class FramedDoubleThreewayCornerBlockEntity extends FramedDoubleBlockEntity
 {
@@ -87,6 +88,12 @@ public class FramedDoubleThreewayCornerBlockEntity extends FramedDoubleBlockEnti
             }
         }
         return false;
+    }
+
+    @Override
+    public DoubleSoundMode getSoundMode()
+    {
+        return getBlockState().getValue(PropertyHolder.TOP) ? DoubleSoundMode.FIRST : DoubleSoundMode.EITHER;
     }
 
     @Override

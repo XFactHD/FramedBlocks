@@ -8,11 +8,12 @@ import net.minecraft.nbt.NbtUtils;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.network.chat.TextComponent;
 import net.minecraft.world.entity.Entity;
-import net.minecraft.world.level.BlockGetter;
-import net.minecraft.world.level.LevelReader;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.level.*;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.block.state.BlockState;
+import xfacthd.framedblocks.common.FBContent;
 import xfacthd.framedblocks.common.data.BlockType;
 import xfacthd.framedblocks.common.item.FramedBlueprintItem;
 import xfacthd.framedblocks.common.blockentity.FramedDoubleBlockEntity;
@@ -46,19 +47,26 @@ public abstract class AbstractFramedDoubleBlock extends FramedBlock
     {
         if (level.getBlockEntity(pos) instanceof FramedDoubleBlockEntity be)
         {
-            BlockState camoState = be.getCamoStateTwo();
-            if (!camoState.isAir())
-            {
-                return camoState.getSoundType();
-            }
-
-            camoState = be.getCamoState();
-            if (!camoState.isAir())
-            {
-                return camoState.getSoundType();
-            }
+            return be.getSoundType();
         }
         return getSoundType(state);
+    }
+
+    @Override
+    protected void spawnDestroyParticles(Level level, Player player, BlockPos pos, BlockState state)
+    {
+        if (level.isClientSide() && level.getBlockEntity(pos) instanceof FramedDoubleBlockEntity be)
+        {
+            BlockState defaultState = FBContent.blockFramedCube.get().defaultBlockState();
+            BlockState camoOne = be.getCamoState();
+            BlockState camoTwo = be.getCamoStateTwo();
+
+            level.levelEvent(player, 2001, pos, getId(camoOne.isAir() ? defaultState : camoOne));
+            if (camoOne != camoTwo)
+            {
+                level.levelEvent(player, 2001, pos, getId(camoTwo.isAir() ? defaultState : camoTwo));
+            }
+        }
     }
 
     @Override

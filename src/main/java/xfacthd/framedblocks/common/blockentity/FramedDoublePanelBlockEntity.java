@@ -9,6 +9,7 @@ import net.minecraft.world.phys.Vec3;
 import xfacthd.framedblocks.common.FBContent;
 import xfacthd.framedblocks.common.data.PropertyHolder;
 import xfacthd.framedblocks.api.util.Utils;
+import xfacthd.framedblocks.common.util.DoubleSoundMode;
 
 public class FramedDoublePanelBlockEntity extends FramedDoubleBlockEntity
 {
@@ -36,6 +37,9 @@ public class FramedDoublePanelBlockEntity extends FramedDoubleBlockEntity
             return vec.x() <= .5F;
         }
     }
+
+    @Override
+    public DoubleSoundMode getSoundMode() { return DoubleSoundMode.EITHER; }
 
     @Override
     public BlockState getCamoState(Direction side)

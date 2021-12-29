@@ -9,6 +9,7 @@ import net.minecraft.world.phys.Vec3;
 import xfacthd.framedblocks.common.FBContent;
 import xfacthd.framedblocks.common.data.*;
 import xfacthd.framedblocks.api.util.Utils;
+import xfacthd.framedblocks.common.util.DoubleSoundMode;
 
 public class FramedDoubleCornerBlockEntity extends FramedDoubleBlockEntity
 {
@@ -121,6 +122,21 @@ public class FramedDoubleCornerBlockEntity extends FramedDoubleBlockEntity
             }
         }
         return false;
+    }
+
+    @Override
+    public DoubleSoundMode getSoundMode()
+    {
+        CornerType type = getBlockState().getValue(PropertyHolder.CORNER_TYPE);
+        if (type == CornerType.BOTTOM)
+        {
+            return DoubleSoundMode.SECOND;
+        }
+        else if (type.isTop())
+        {
+            return DoubleSoundMode.FIRST;
+        }
+        return DoubleSoundMode.EITHER;
     }
 
     @Override

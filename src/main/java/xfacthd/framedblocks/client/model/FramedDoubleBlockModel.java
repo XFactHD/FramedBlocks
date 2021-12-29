@@ -10,8 +10,7 @@ import net.minecraft.core.Direction;
 import net.minecraft.util.Tuple;
 import net.minecraft.world.level.BlockAndTintGetter;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraftforge.client.model.data.EmptyModelData;
-import net.minecraftforge.client.model.data.IModelData;
+import net.minecraftforge.client.model.data.*;
 import xfacthd.framedblocks.api.model.BakedModelProxy;
 import xfacthd.framedblocks.api.util.FramedBlockData;
 import xfacthd.framedblocks.api.util.client.ModelUtils;
@@ -38,17 +37,14 @@ public abstract class FramedDoubleBlockModel extends BakedModelProxy
     @Override
     public List<BakedQuad> getQuads(@Nullable BlockState state, @Nullable Direction side, @Nonnull Random rand, @Nonnull IModelData extraData)
     {
-        if (dummyStates == null) { dummyStates = getDummyStates(); }
-        if (models == null) { models = getModels(); }
-
         IModelData dataLeft = extraData.getData(FramedDoubleBlockEntity.DATA_LEFT);
         List<BakedQuad> quads = new ArrayList<>(
-                models.getA().getQuads(dummyStates.getA(), side, rand, dataLeft != null ? dataLeft : EmptyModelData.INSTANCE)
+                getModels().getA().getQuads(dummyStates.getA(), side, rand, dataLeft != null ? dataLeft : EmptyModelData.INSTANCE)
         );
 
         IModelData dataRight = extraData.getData(FramedDoubleBlockEntity.DATA_RIGHT);
         quads.addAll(invertTintIndizes(
-                models.getB().getQuads(dummyStates.getB(), side, rand, dataRight != null ? dataRight : EmptyModelData.INSTANCE)
+                getModels().getB().getQuads(dummyStates.getB(), side, rand, dataRight != null ? dataRight : EmptyModelData.INSTANCE)
         ));
 
         return quads;
@@ -60,11 +56,8 @@ public abstract class FramedDoubleBlockModel extends BakedModelProxy
     {
         if (specialItemModel)
         {
-            if (dummyStates == null) { dummyStates = getDummyStates(); }
-            if (models == null) { models = getModels(); }
-
-            List<BakedQuad> quads = new ArrayList<>(models.getA().getQuads(state, side, rand));
-            quads.addAll(models.getB().getQuads(state, side, rand));
+            List<BakedQuad> quads = new ArrayList<>(getModels().getA().getQuads(state, side, rand));
+            quads.addAll(getModels().getB().getQuads(state, side, rand));
             return quads;
         }
         return super.getQuads(state, side, rand);
@@ -77,12 +70,12 @@ public abstract class FramedDoubleBlockModel extends BakedModelProxy
         IModelData innerData = data.getData(FramedDoubleBlockEntity.DATA_LEFT);
         if (innerData != null && !innerData.getData(FramedBlockData.CAMO).isAir())
         {
-            return models.getA().getParticleIcon(innerData);
+            return getModels().getA().getParticleIcon(innerData);
         }
         innerData = data.getData(FramedDoubleBlockEntity.DATA_RIGHT);
         if (innerData != null && !innerData.getData(FramedBlockData.CAMO).isAir())
         {
-            return models.getB().getParticleIcon(innerData);
+            return getModels().getB().getParticleIcon(innerData);
         }
         return baseModel.getParticleIcon();
     }
@@ -102,13 +95,36 @@ public abstract class FramedDoubleBlockModel extends BakedModelProxy
 
     protected abstract Tuple<BlockState, BlockState> getDummyStates();
 
-    private Tuple<BakedModel, BakedModel> getModels()
+    protected Tuple<BakedModel, BakedModel> getModels()
     {
-        BlockRenderDispatcher dispatcher = Minecraft.getInstance().getBlockRenderer();
-        return new Tuple<>(
-                dispatcher.getBlockModel(dummyStates.getA()),
-                dispatcher.getBlockModel(dummyStates.getB())
-        );
+        if (models == null)
+        {
+            if (dummyStates == null) { dummyStates = getDummyStates(); }
+
+            BlockRenderDispatcher dispatcher = Minecraft.getInstance().getBlockRenderer();
+            models = new Tuple<>(
+                    dispatcher.getBlockModel(dummyStates.getA()),
+                    dispatcher.getBlockModel(dummyStates.getB())
+            );
+        }
+        return models;
+    }
+
+    /**
+     * Returns the camo-dependent particle texture of the side given by {@code key} when the camo is not air,
+     * else returns the basic "framed block" sprite
+     */
+    protected TextureAtlasSprite getSpriteOrDefault(IModelData data, ModelProperty<IModelData> key, BakedModel model)
+    {
+        IModelData innerData = data.getData(key);
+        //noinspection ConstantConditions
+        if (innerData != null && !innerData.getData(FramedBlockData.CAMO).isAir())
+        {
+            return model.getParticleIcon(innerData);
+        }
+
+        //noinspection deprecation
+        return baseModel.getParticleIcon();
     }
 
     private static List<BakedQuad> invertTintIndizes(List<BakedQuad> quads)
