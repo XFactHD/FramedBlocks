@@ -8,6 +8,7 @@ import net.minecraft.util.math.vector.Vector3d;
 import xfacthd.framedblocks.common.FBContent;
 import xfacthd.framedblocks.common.data.PropertyHolder;
 import xfacthd.framedblocks.common.data.SlopeType;
+import xfacthd.framedblocks.common.util.DoubleSoundMode;
 import xfacthd.framedblocks.common.util.Utils;
 
 public class FramedDoubleSlopeTileEntity extends FramedDoubleTileEntity
@@ -56,6 +57,21 @@ public class FramedDoubleSlopeTileEntity extends FramedDoubleTileEntity
         }
 
         return false;
+    }
+
+    @Override
+    public DoubleSoundMode getSoundMode()
+    {
+        SlopeType type = getBlockState().get(PropertyHolder.SLOPE_TYPE);
+        if (type == SlopeType.BOTTOM)
+        {
+            return DoubleSoundMode.SECOND;
+        }
+        else if (type == SlopeType.TOP)
+        {
+            return DoubleSoundMode.FIRST;
+        }
+        return DoubleSoundMode.EITHER;
     }
 
     @Override

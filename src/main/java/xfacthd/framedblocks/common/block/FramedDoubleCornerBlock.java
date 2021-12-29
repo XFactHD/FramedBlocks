@@ -1,16 +1,15 @@
 package xfacthd.framedblocks.common.block;
 
-import net.minecraft.block.*;
+import net.minecraft.block.Block;
+import net.minecraft.block.BlockState;
 import net.minecraft.item.BlockItemUseContext;
 import net.minecraft.state.StateContainer;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.Direction;
-import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.world.IBlockReader;
-import net.minecraft.world.IWorldReader;
 import xfacthd.framedblocks.common.data.*;
-import xfacthd.framedblocks.common.tileentity.*;
+import xfacthd.framedblocks.common.tileentity.FramedDoubleCornerTileEntity;
 import xfacthd.framedblocks.common.util.CtmPredicate;
 import xfacthd.framedblocks.common.util.Utils;
 
@@ -93,30 +92,6 @@ public class FramedDoubleCornerBlock extends AbstractFramedDoubleBlock
         }
 
         return state;
-    }
-
-    @Override
-    @SuppressWarnings("deprecation")
-    public SoundType getSound(BlockState state, IWorldReader world, BlockPos pos)
-    {
-        CornerType type = state.get(PropertyHolder.CORNER_TYPE);
-        TileEntity te = world.getTileEntity(pos);
-        if (te instanceof FramedDoubleTileEntity)
-        {
-            FramedDoubleTileEntity dte = (FramedDoubleTileEntity) te;
-            BlockState camoState = (type.isHorizontal() || type.isTop()) ? dte.getCamoState() : dte.getCamoStateTwo();
-            if (!camoState.isAir())
-            {
-                return camoState.getSoundType();
-            }
-
-            camoState = (type.isHorizontal() || type.isTop()) ? dte.getCamoStateTwo() : dte.getCamoState();
-            if (!camoState.isAir())
-            {
-                return camoState.getSoundType();
-            }
-        }
-        return getSoundType(state);
     }
 
     @Override

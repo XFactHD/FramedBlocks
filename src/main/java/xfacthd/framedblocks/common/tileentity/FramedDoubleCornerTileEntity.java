@@ -7,6 +7,7 @@ import net.minecraft.util.math.BlockRayTraceResult;
 import net.minecraft.util.math.vector.Vector3d;
 import xfacthd.framedblocks.common.FBContent;
 import xfacthd.framedblocks.common.data.*;
+import xfacthd.framedblocks.common.util.DoubleSoundMode;
 import xfacthd.framedblocks.common.util.Utils;
 
 public class FramedDoubleCornerTileEntity extends FramedDoubleTileEntity
@@ -117,6 +118,21 @@ public class FramedDoubleCornerTileEntity extends FramedDoubleTileEntity
             }
         }
         return false;
+    }
+
+    @Override
+    public DoubleSoundMode getSoundMode()
+    {
+        CornerType type = getBlockState().get(PropertyHolder.CORNER_TYPE);
+        if (type == CornerType.BOTTOM)
+        {
+            return DoubleSoundMode.SECOND;
+        }
+        else if (type.isTop())
+        {
+            return DoubleSoundMode.FIRST;
+        }
+        return DoubleSoundMode.EITHER;
     }
 
     @Override

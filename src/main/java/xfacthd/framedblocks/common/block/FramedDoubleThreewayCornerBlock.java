@@ -1,16 +1,15 @@
 package xfacthd.framedblocks.common.block;
 
-import net.minecraft.block.*;
+import net.minecraft.block.Block;
+import net.minecraft.block.BlockState;
 import net.minecraft.item.BlockItemUseContext;
 import net.minecraft.state.StateContainer;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.Direction;
-import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockReader;
-import net.minecraft.world.IWorldReader;
-import xfacthd.framedblocks.common.data.*;
+import xfacthd.framedblocks.common.data.BlockType;
+import xfacthd.framedblocks.common.data.PropertyHolder;
 import xfacthd.framedblocks.common.tileentity.FramedDoubleThreewayCornerTileEntity;
-import xfacthd.framedblocks.common.tileentity.FramedDoubleTileEntity;
 import xfacthd.framedblocks.common.util.CtmPredicate;
 
 public class FramedDoubleThreewayCornerBlock extends AbstractFramedDoubleBlock
@@ -41,30 +40,6 @@ public class FramedDoubleThreewayCornerBlock extends AbstractFramedDoubleBlock
         Direction facing = context.getPlacementHorizontalFacing();
         BlockState state = getDefaultState().with(PropertyHolder.FACING_HOR, facing);
         return withTop(state, context.getFace(), context.getHitVec());
-    }
-
-    @Override
-    @SuppressWarnings("deprecation")
-    public SoundType getSound(BlockState state, IWorldReader world, BlockPos pos)
-    {
-        boolean top = state.get(PropertyHolder.TOP);
-        TileEntity te = world.getTileEntity(pos);
-        if (te instanceof FramedDoubleTileEntity)
-        {
-            FramedDoubleTileEntity dte = (FramedDoubleTileEntity) te;
-            BlockState camoState = top ? dte.getCamoState() : dte.getCamoStateTwo();
-            if (!camoState.isAir())
-            {
-                return camoState.getSoundType();
-            }
-
-            camoState = top ? dte.getCamoStateTwo() : dte.getCamoState();
-            if (!camoState.isAir())
-            {
-                return camoState.getSoundType();
-            }
-        }
-        return getSoundType(state);
     }
 
     @Override

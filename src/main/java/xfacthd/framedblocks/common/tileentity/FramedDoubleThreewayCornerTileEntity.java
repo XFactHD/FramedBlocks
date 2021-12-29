@@ -7,6 +7,7 @@ import net.minecraft.util.math.BlockRayTraceResult;
 import net.minecraft.util.math.vector.Vector3d;
 import xfacthd.framedblocks.common.FBContent;
 import xfacthd.framedblocks.common.data.PropertyHolder;
+import xfacthd.framedblocks.common.util.DoubleSoundMode;
 import xfacthd.framedblocks.common.util.Utils;
 
 public class FramedDoubleThreewayCornerTileEntity extends FramedDoubleTileEntity
@@ -83,6 +84,12 @@ public class FramedDoubleThreewayCornerTileEntity extends FramedDoubleTileEntity
             }
         }
         return false;
+    }
+
+    @Override
+    public DoubleSoundMode getSoundMode()
+    {
+        return getBlockState().get(PropertyHolder.TOP) ? DoubleSoundMode.FIRST : DoubleSoundMode.EITHER;
     }
 
     @Override

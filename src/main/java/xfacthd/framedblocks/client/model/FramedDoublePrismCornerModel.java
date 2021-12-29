@@ -2,10 +2,13 @@ package xfacthd.framedblocks.client.model;
 
 import net.minecraft.block.BlockState;
 import net.minecraft.client.renderer.model.IBakedModel;
+import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.util.Direction;
 import net.minecraft.util.Tuple;
+import net.minecraftforge.client.model.data.IModelData;
 import xfacthd.framedblocks.common.FBContent;
 import xfacthd.framedblocks.common.data.PropertyHolder;
+import xfacthd.framedblocks.common.tileentity.FramedDoubleTileEntity;
 
 public class FramedDoublePrismCornerModel extends FramedDoubleBlockModel
 {
@@ -42,5 +45,15 @@ public class FramedDoublePrismCornerModel extends FramedDoubleBlockModel
                 .with(PropertyHolder.OFFSET, !offset);
 
         return new Tuple<>(stateOne, stateTwo);
+    }
+
+    @Override
+    public TextureAtlasSprite getParticleTexture(IModelData data)
+    {
+        if (state.get(PropertyHolder.TOP))
+        {
+            return getSpriteOrDefault(data, FramedDoubleTileEntity.DATA_LEFT, getModels().getB());
+        }
+        return super.getParticleTexture(data);
     }
 }

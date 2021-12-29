@@ -2,9 +2,12 @@ package xfacthd.framedblocks.client.model;
 
 import net.minecraft.block.BlockState;
 import net.minecraft.client.renderer.model.IBakedModel;
+import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.util.Tuple;
+import net.minecraftforge.client.model.data.IModelData;
 import xfacthd.framedblocks.common.FBContent;
 import xfacthd.framedblocks.common.data.PropertyHolder;
+import xfacthd.framedblocks.common.tileentity.FramedDoubleTileEntity;
 
 public class FramedDoubleSlabModel extends FramedDoubleBlockModel
 {
@@ -16,5 +19,11 @@ public class FramedDoubleSlabModel extends FramedDoubleBlockModel
     {
         BlockState slabState = FBContent.blockFramedSlab.get().getDefaultState();
         return new Tuple<>(slabState.with(PropertyHolder.TOP, false), slabState.with(PropertyHolder.TOP, true));
+    }
+
+    @Override
+    public TextureAtlasSprite getParticleTexture(IModelData data)
+    {
+        return getSpriteOrDefault(data, FramedDoubleTileEntity.DATA_RIGHT, getModels().getA());
     }
 }

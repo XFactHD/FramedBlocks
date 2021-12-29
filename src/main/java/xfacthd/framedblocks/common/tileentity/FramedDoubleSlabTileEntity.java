@@ -6,6 +6,7 @@ import net.minecraft.util.Direction;
 import net.minecraft.util.math.BlockRayTraceResult;
 import net.minecraft.util.math.MathHelper;
 import xfacthd.framedblocks.common.FBContent;
+import xfacthd.framedblocks.common.util.DoubleSoundMode;
 
 public class FramedDoubleSlabTileEntity extends FramedDoubleTileEntity
 {
@@ -16,6 +17,9 @@ public class FramedDoubleSlabTileEntity extends FramedDoubleTileEntity
     {
         return hit.getFace() == Direction.UP || MathHelper.frac(hit.getHitVec().getY()) >= .5F;
     }
+
+    @Override
+    public DoubleSoundMode getSoundMode() { return DoubleSoundMode.SECOND; }
 
     @Override
     public BlockState getCamoState(Direction side)

@@ -1,14 +1,17 @@
 package xfacthd.framedblocks.common.block;
 
 import net.minecraft.block.*;
+import net.minecraft.entity.monster.piglin.PiglinTasks;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.nbt.NBTUtil;
+import net.minecraft.tags.BlockTags;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.Direction;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.*;
-import net.minecraft.world.IBlockReader;
-import net.minecraft.world.IWorldReader;
+import net.minecraft.world.*;
+import xfacthd.framedblocks.common.FBContent;
 import xfacthd.framedblocks.common.data.BlockType;
 import xfacthd.framedblocks.common.item.FramedBlueprintItem;
 import xfacthd.framedblocks.common.tileentity.FramedDoubleTileEntity;
@@ -43,19 +46,37 @@ public abstract class AbstractFramedDoubleBlock extends FramedBlock
         TileEntity te = world.getTileEntity(pos);
         if (te instanceof FramedDoubleTileEntity)
         {
-            BlockState camoState = ((FramedDoubleTileEntity) te).getCamoStateTwo();
-            if (!camoState.isAir())
-            {
-                return camoState.getSoundType();
-            }
-
-            camoState = ((FramedDoubleTileEntity) te).getCamoState();
-            if (!camoState.isAir())
-            {
-                return camoState.getSoundType();
-            }
+            return ((FramedDoubleTileEntity) te).getSoundType();
         }
         return getSoundType(state);
+    }
+
+    @Override
+    @SuppressWarnings("deprecation")
+    public void onBlockHarvested(World world, BlockPos pos, BlockState state, PlayerEntity player)
+    {
+        if (world.isRemote())
+        {
+            TileEntity te = world.getTileEntity(pos);
+            if (te instanceof FramedDoubleTileEntity)
+            {
+                BlockState defaultState = FBContent.blockFramedCube.get().getDefaultState();
+                BlockState camoOne = ((FramedDoubleTileEntity) te).getCamoState();
+                BlockState camoTwo = ((FramedDoubleTileEntity) te).getCamoStateTwo();
+
+                world.playEvent(player, 2001, pos, getStateId(camoOne.isAir() ? defaultState : camoOne));
+                if (camoOne != camoTwo)
+                {
+                    world.playEvent(player, 2001, pos, getStateId(camoTwo.isAir() ? defaultState : camoTwo));
+                }
+            }
+        }
+
+        //Copied from super-implementation
+        if (isIn(BlockTags.GUARDED_BY_PIGLINS))
+        {
+            PiglinTasks.func_234478_a_(player, false);
+        }
     }
 
     @Override

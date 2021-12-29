@@ -1,7 +1,6 @@
 package xfacthd.framedblocks.common.tileentity;
 
-import net.minecraft.block.BlockState;
-import net.minecraft.block.Blocks;
+import net.minecraft.block.*;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.nbt.NBTUtil;
@@ -12,6 +11,8 @@ import net.minecraft.world.Explosion;
 import net.minecraftforge.client.model.data.*;
 import xfacthd.framedblocks.FramedBlocks;
 import xfacthd.framedblocks.client.util.FramedBlockData;
+import xfacthd.framedblocks.common.util.DoubleBlockSoundType;
+import xfacthd.framedblocks.common.util.DoubleSoundMode;
 
 import java.util.List;
 
@@ -22,6 +23,7 @@ public abstract class FramedDoubleTileEntity extends FramedTileEntity
 
     private final IModelData multiModelData = new ModelDataMap.Builder().build();
     private final FramedBlockData modelData = new FramedBlockData();
+    private final DoubleBlockSoundType soundType = new DoubleBlockSoundType(this);
     private ItemStack camoStack = ItemStack.EMPTY;
     private BlockState camoState = Blocks.AIR.getDefaultState();
 
@@ -133,7 +135,11 @@ public abstract class FramedDoubleTileEntity extends FramedTileEntity
         return Math.min(flammabilityOne, flammabilityTwo);
     }
 
+    public final SoundType getSoundType() { return soundType; }
+
     protected abstract boolean hitSecondary(BlockRayTraceResult hit);
+
+    public abstract DoubleSoundMode getSoundMode();
 
     /*
      * Sync
@@ -229,6 +235,7 @@ public abstract class FramedDoubleTileEntity extends FramedTileEntity
         super.read(state, nbt);
 
         BlockState camoState = NBTUtil.readBlockState(nbt.getCompound("camo_state_two"));
+        //noinspection deprecation
         if (camoState.isAir() || isValidBlock(camoState, null))
         {
             this.camoState = camoState;
