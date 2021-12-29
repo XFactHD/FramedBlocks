@@ -158,7 +158,7 @@ public abstract class FramedBlockModel extends BakedModelProxy
     @Override
     public IModelData getModelData(@Nonnull BlockAndTintGetter world, @Nonnull BlockPos pos, @Nonnull BlockState state, @Nonnull IModelData tileData)
     {
-        if (tileData instanceof FramedBlockData && ((FramedBlockData) tileData).isGhostData())
+        if (tileData instanceof FramedBlockData data && data.isGhostData())
         {
             return tileData;
         }

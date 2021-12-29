@@ -104,11 +104,15 @@ public class GhostBlockRenderer
             BlockState state = mc().level.getBlockState(target.getBlockPos());
             if (state.getBlock() == FBContent.blockFramedSlope.get())
             {
-                doRender = true;
                 renderPos = target.getBlockPos();
 
                 RailShape shape = FramedRailSlopeBlock.shapeFromDirection(state.getValue(PropertyHolder.FACING_HOR));
                 renderState = block.defaultBlockState().setValue(BlockStateProperties.RAIL_SHAPE, shape);
+
+                BlockState railSlope = FBContent.blockFramedRailSlope.get()
+                        .defaultBlockState()
+                        .setValue(PropertyHolder.ASCENDING_RAIL_SHAPE, shape);
+                doRender = railSlope.canSurvive(mc().level, renderPos);
             }
             else
             {
