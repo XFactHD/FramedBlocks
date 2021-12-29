@@ -8,7 +8,7 @@ import net.minecraft.client.renderer.*;
 import net.minecraft.item.*;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.nbt.NBTUtil;
-import net.minecraft.state.properties.DoubleBlockHalf;
+import net.minecraft.state.properties.*;
 import net.minecraft.util.Direction;
 import net.minecraft.util.Hand;
 import net.minecraft.util.math.*;
@@ -23,8 +23,7 @@ import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import xfacthd.framedblocks.FramedBlocks;
 import xfacthd.framedblocks.client.util.*;
 import xfacthd.framedblocks.common.FBContent;
-import xfacthd.framedblocks.common.block.AbstractFramedDoubleBlock;
-import xfacthd.framedblocks.common.block.IFramedBlock;
+import xfacthd.framedblocks.common.block.*;
 import xfacthd.framedblocks.common.data.PropertyHolder;
 import xfacthd.framedblocks.common.item.FramedBlueprintItem;
 import xfacthd.framedblocks.common.tileentity.FramedDoubleTileEntity;
@@ -61,6 +60,7 @@ public class GhostBlockRenderer
 
         Block block;
         boolean blueprint = false;
+        boolean rail = false;
 
         ItemStack stack = mc().player.getHeldItemMainhand();
         if (stack.getItem() instanceof FramedBlueprintItem)
@@ -71,13 +71,14 @@ public class GhostBlockRenderer
         else if (stack.getItem() instanceof BlockItem)
         {
             block = ((BlockItem)stack.getItem()).getBlock();
+            rail = stack.getItem() == Items.RAIL;
         }
         else
         {
             return;
         }
 
-        if (!(block instanceof IFramedBlock)) { return; }
+        if (!(block instanceof IFramedBlock) && !rail) { return; }
 
         boolean doRender;
         BlockPos renderPos;
@@ -92,6 +93,24 @@ public class GhostBlockRenderer
         {
             doRender = true;
             renderPos = target.getPos();
+        }
+        else if (rail)
+        {
+            BlockState state = mc().world.getBlockState(target.getPos());
+            if (state.getBlock() == FBContent.blockFramedSlope.get())
+            {
+                doRender = true;
+                renderPos = target.getPos();
+
+                RailShape shape = FramedRailSlopeBlock.shapeFromDirection(state.get(PropertyHolder.FACING_HOR));
+                renderState = block.getDefaultState().with(BlockStateProperties.RAIL_SHAPE, shape);
+            }
+            else
+            {
+                doRender = false;
+                renderPos = BlockPos.ZERO;
+                renderState = Blocks.AIR.getDefaultState();
+            }
         }
         else
         {
