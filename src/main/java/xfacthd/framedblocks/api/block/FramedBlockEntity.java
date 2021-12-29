@@ -36,7 +36,7 @@ public class FramedBlockEntity extends BlockEntity
     public static final TranslatableComponent MSG_BLACKLISTED = Utils.translate("msg", "blacklisted");
     public static final TranslatableComponent MSG_BLOCK_ENTITY = Utils.translate("msg", "block_entity");
 
-    private final FramedBlockData modelData = new FramedBlockData();
+    private final FramedBlockData modelData = new FramedBlockData(false);
     private ItemStack camoStack = ItemStack.EMPTY;
     private BlockState camoState = Blocks.AIR.defaultBlockState();
     private boolean glowing = false;

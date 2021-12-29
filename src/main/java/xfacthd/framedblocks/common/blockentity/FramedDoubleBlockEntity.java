@@ -25,7 +25,7 @@ public abstract class FramedDoubleBlockEntity extends FramedBlockEntity
     public static final ModelProperty<IModelData> DATA_RIGHT = new ModelProperty<>();
 
     private final IModelData multiModelData = new ModelDataMap.Builder().build();
-    private final FramedBlockData modelData = new FramedBlockData();
+    private final FramedBlockData modelData = new FramedBlockData(false);
     private final DoubleBlockSoundType soundType = new DoubleBlockSoundType(this);
     private ItemStack camoStack = ItemStack.EMPTY;
     private BlockState camoState = Blocks.AIR.defaultBlockState();

@@ -39,9 +39,9 @@ import java.lang.reflect.Method;
 @Mod.EventBusSubscriber(modid = FramedBlocks.MODID, value = Dist.CLIENT, bus = Mod.EventBusSubscriber.Bus.MOD)
 public class GhostBlockRenderer
 {
-    private static final FramedBlockData GHOST_MODEL_DATA = new FramedBlockData();
-    private static final FramedBlockData GHOST_MODEL_DATA_LEFT = new FramedBlockData();
-    private static final FramedBlockData GHOST_MODEL_DATA_RIGHT = new FramedBlockData();
+    private static final FramedBlockData GHOST_MODEL_DATA = new FramedBlockData(true);
+    private static final FramedBlockData GHOST_MODEL_DATA_LEFT = new FramedBlockData(true);
+    private static final FramedBlockData GHOST_MODEL_DATA_RIGHT = new FramedBlockData(true);
 
     @SubscribeEvent
     public static void onClientSetup(final FMLClientSetupEvent event)

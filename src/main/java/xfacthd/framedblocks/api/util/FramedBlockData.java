@@ -12,9 +12,12 @@ public class FramedBlockData extends ModelDataMap
     public static final ModelProperty<BlockPos> POS = new ModelProperty<>();
     public static final ModelProperty<BlockState> CAMO = new ModelProperty<>();
 
+    private final boolean ghostData;
     private Level level = null;
     private BlockPos pos = BlockPos.ZERO;
     private BlockState camoState = Blocks.AIR.defaultBlockState();
+
+    public FramedBlockData(boolean ghostData) { this.ghostData = ghostData; }
 
     @Override
     public boolean hasProperty(ModelProperty<?> prop) { return prop == CAMO || super.hasProperty(prop); }
@@ -38,6 +41,8 @@ public class FramedBlockData extends ModelDataMap
         else { return super.setData(prop, data); }
         return data;
     }
+
+    public boolean isGhostData() { return ghostData; }
 
     public void setLevel(Level level) { this.level = level; }
 
