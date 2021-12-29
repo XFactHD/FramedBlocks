@@ -161,6 +161,10 @@ public abstract class FramedBlockModel extends BakedModelProxy
     @Override
     public IModelData getModelData(@Nonnull IBlockDisplayReader world, @Nonnull BlockPos pos, @Nonnull BlockState state, @Nonnull IModelData tileData)
     {
+        if (tileData instanceof FramedBlockData && ((FramedBlockData) tileData).isGhostData())
+        {
+            return tileData;
+        }
         TileEntity te = world.getTileEntity(pos);
         if (te instanceof FramedTileEntity)
         {

@@ -35,7 +35,7 @@ public class FramedTileEntity extends TileEntity
     public static final TranslationTextComponent MSG_BLACKLISTED = new TranslationTextComponent("msg." + FramedBlocks.MODID + ".blacklisted");
     public static final TranslationTextComponent MSG_TILE_ENTITY = new TranslationTextComponent("msg." + FramedBlocks.MODID + ".tile_entity");
 
-    private final FramedBlockData modelData = new FramedBlockData();
+    private final FramedBlockData modelData = new FramedBlockData(true);
     private ItemStack camoStack = ItemStack.EMPTY;
     private BlockState camoState = Blocks.AIR.getDefaultState();
     private boolean glowing = false;
