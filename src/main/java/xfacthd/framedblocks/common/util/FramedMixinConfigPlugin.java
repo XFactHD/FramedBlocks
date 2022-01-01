@@ -30,6 +30,20 @@ public class FramedMixinConfigPlugin implements IMixinConfigPlugin
                 return true;
             }
         }
+
+        if (mixinClassName.equals("xfacthd.framedblocks.client.util.mixin.MixinIFramedBlock"))
+        {
+            try
+            {
+                Class.forName("team.chisel.ctm.api.IFacade");
+                return true;
+            }
+            catch (ClassNotFoundException e)
+            {
+                return false;
+            }
+        }
+
         return true;
     }
 

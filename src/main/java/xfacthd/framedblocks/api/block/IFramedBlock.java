@@ -30,6 +30,10 @@ import javax.annotation.Nullable;
 import java.util.List;
 import java.util.Optional;
 
+/**
+ * The {@link team.chisel.ctm.api.IFacade} interface is not implemented directly and is instead hacked on
+ * via a mixin to allow CTM to be an optional dependency :/
+ */
 @SuppressWarnings("deprecation")
 public interface IFramedBlock extends EntityBlock//, IFacade
 {
@@ -113,25 +117,32 @@ public interface IFramedBlock extends EntityBlock//, IFacade
 
     default CtmPredicate getCtmPredicate() { return getBlockType().getCtmPredicate(); }
 
+    /**
+     * This method is overriden from {@link team.chisel.ctm.api.IFacade}. To allow CTM to be an optional dependency,
+     * the interface is not implemented directly and is instead hacked on via a mixin :/
+     */
     @Nonnull
-    //@Override //TODO: reactivate when CTM is out
+    //@Override
+    @SuppressWarnings("unused")
     @Deprecated
-    default BlockState getFacadeDisabled(@Nonnull BlockGetter level, @Nonnull BlockPos pos, @Nullable Direction side)
+    default BlockState getFacade(@Nonnull BlockGetter level, @Nonnull BlockPos pos, @Nullable Direction side)
     {
         return Blocks.AIR.defaultBlockState();
     }
 
+    /**
+     * This method is overriden from {@link team.chisel.ctm.api.IFacade}. To allow CTM to be an optional dependency,
+     * the interface is not implemented directly and is instead hacked on via a mixin :/
+     */
     @Nonnull
-    //@Override //TODO: reactivate when CTM is out
-    default BlockState getFacadeDisabled(@Nonnull BlockGetter level, @Nonnull BlockPos pos, @Nullable Direction side, @Nonnull BlockPos connection)
+    //@Override
+    @SuppressWarnings("unused")
+    default BlockState getFacade(@Nonnull BlockGetter level, @Nonnull BlockPos pos, @Nullable Direction side, @Nonnull BlockPos connection)
     {
         BlockState state = level.getBlockState(pos);
-        if (getCtmPredicate().test(state, side))
+        if (getCtmPredicate().test(state, side) && level.getBlockEntity(pos) instanceof FramedBlockEntity be)
         {
-            if (level.getBlockEntity(pos) instanceof FramedBlockEntity be)
-            {
-                return be.getCamoState();
-            }
+            return be.getCamoState();
         }
         return Blocks.AIR.defaultBlockState();
     }
