@@ -78,6 +78,7 @@ public class FBClient
     @SubscribeEvent
     public static void onBlockColors(final ColorHandlerEvent.Block event)
     {
+        //noinspection SuspiciousToArrayCall
         Block[] blocks = FBContent.getRegisteredBlocks()
                 .stream()
                 .map(RegistryObject::get)

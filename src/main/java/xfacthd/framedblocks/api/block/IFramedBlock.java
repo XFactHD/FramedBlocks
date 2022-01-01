@@ -196,6 +196,8 @@ public interface IFramedBlock extends EntityBlock//, IFacade
         return 20;
     }
 
+    default boolean handleBlockLeftClick(BlockState state, Level level, BlockPos pos, Player player) { return false; }
+
     default Optional<MutableComponent> printCamoBlock(CompoundTag beTag)
     {
         BlockState camoState = NbtUtils.readBlockState(beTag.getCompound("camo_state"));

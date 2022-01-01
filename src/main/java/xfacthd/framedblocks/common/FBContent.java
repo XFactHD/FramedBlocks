@@ -175,6 +175,7 @@ public class FBContent
 
     private static Supplier<Block[]> getDefaultEntityBlocks()
     {
+        //noinspection SuspiciousToArrayCall
         return () -> BLOCKS.getEntries()
                 .stream()
                 .map(RegistryObject::get)

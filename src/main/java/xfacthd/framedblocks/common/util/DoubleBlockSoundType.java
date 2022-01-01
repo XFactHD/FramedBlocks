@@ -24,7 +24,7 @@ public class DoubleBlockSoundType extends SoundType
     public float getPitch() { return getSoundType(be.getSoundMode()).getPitch(); }
 
     @Override
-    public SoundEvent getBreakSound() { return getEitherSoundType().getBreakSound(); }
+    public SoundEvent getBreakSound() { return be.getBlockState().getSoundType().getBreakSound(); }
 
     @Override
     public SoundEvent getStepSound() { return getSoundType(be.getSoundMode()).getStepSound(); }
@@ -53,7 +53,7 @@ public class DoubleBlockSoundType extends SoundType
             return camo.getSoundType(be.getLevel(), be.getBlockPos(), null);
         }
 
-        return FBContent.blockFramedCube.get().defaultBlockState().getSoundType();
+        return be.getBlockState().getSoundType();
     }
 
     private SoundType getEitherSoundType()
@@ -70,6 +70,6 @@ public class DoubleBlockSoundType extends SoundType
             return camo.getSoundType(be.getLevel(), be.getBlockPos(), null);
         }
 
-        return FBContent.blockFramedCube.get().defaultBlockState().getSoundType();
+        return be.getBlockState().getSoundType();
     }
 }

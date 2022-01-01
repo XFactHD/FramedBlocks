@@ -57,14 +57,14 @@ public abstract class AbstractFramedDoubleBlock extends FramedBlock
     {
         if (level.isClientSide() && level.getBlockEntity(pos) instanceof FramedDoubleBlockEntity be)
         {
-            BlockState defaultState = FBContent.blockFramedCube.get().defaultBlockState();
+            BlockState defaultState = be.getBlockState();
             BlockState camoOne = be.getCamoState();
             BlockState camoTwo = be.getCamoStateTwo();
 
-            level.levelEvent(player, 2001, pos, getId(camoOne.isAir() ? defaultState : camoOne));
+            level.levelEvent(player, LevelEvent.PARTICLES_DESTROY_BLOCK, pos, getId(camoOne.isAir() ? defaultState : camoOne));
             if (camoOne != camoTwo)
             {
-                level.levelEvent(player, 2001, pos, getId(camoTwo.isAir() ? defaultState : camoTwo));
+                level.levelEvent(player, LevelEvent.PARTICLES_DESTROY_BLOCK, pos, getId(camoTwo.isAir() ? defaultState : camoTwo));
             }
         }
     }

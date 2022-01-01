@@ -40,7 +40,8 @@ public class FramedCollapsibleBlock extends FramedBlock
         builder.add(PropertyHolder.COLLAPSED_FACE);
     }
 
-    public static boolean onLeftClick(Level level, BlockPos pos, Player player)
+    @Override
+    public boolean handleBlockLeftClick(BlockState state, Level level, BlockPos pos, Player player)
     {
         if (player.getMainHandItem().getItem() != FBContent.itemFramedHammer.get()) { return false; }
 
@@ -82,6 +83,7 @@ public class FramedCollapsibleBlock extends FramedBlock
     private static class ShapeLoader extends CacheLoader<Integer, VoxelShape>
     {
         @Override
+        @SuppressWarnings("SuspiciousNameCombination")
         public VoxelShape load(Integer packedData)
         {
             Direction face = Direction.from3DDataValue(packedData >> 20);

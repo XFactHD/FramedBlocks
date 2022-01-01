@@ -645,7 +645,7 @@ public class BakedQuadTransformer
      * Moves the individual vertices of the given quad to the given values in the quad's facing direction
      * @param quad The BakedQuad to manipulate, must be a copy of the original quad if no other processing happened before
      * @param posTarget The target positions in the quad's facing direction
-     * @implNote This does not create the same shape for all vertices when displacing a single one - TODO: check if this can be fixed
+     * @implNote This does not create the same shape for all vertices when displacing a single one, this is not fixable without extreme effort
      */
     public static void setVertexPosInFacingDir(BakedQuad quad, float[] posTarget)
     {
