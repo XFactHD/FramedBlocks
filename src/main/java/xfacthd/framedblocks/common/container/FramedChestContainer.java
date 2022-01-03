@@ -15,6 +15,7 @@ import xfacthd.framedblocks.common.tileentity.FramedChestTileEntity;
 
 public class FramedChestContainer extends Container
 {
+    private static final int MAX_SLOT_CHEST = 27;
     private final FramedChestTileEntity chest;
 
     public FramedChestContainer(int windowId, PlayerInventory inv, TileEntity chest)
@@ -66,14 +67,14 @@ public class FramedChestContainer extends Container
         {
             ItemStack stack = slot.getStack();
             remainder = stack.copy();
-            if (index < 36)
+            if (index < MAX_SLOT_CHEST)
             {
-                if (!mergeItemStack(stack, 36, inventorySlots.size(), true))
+                if (!mergeItemStack(stack, MAX_SLOT_CHEST, inventorySlots.size(), true))
                 {
                     return ItemStack.EMPTY;
                 }
             }
-            else if (!mergeItemStack(stack, 0, 36, false))
+            else if (!mergeItemStack(stack, 0, MAX_SLOT_CHEST, false))
             {
                 return ItemStack.EMPTY;
             }
