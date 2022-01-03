@@ -15,6 +15,7 @@ import xfacthd.framedblocks.common.blockentity.FramedChestBlockEntity;
 
 public class FramedChestMenu extends AbstractContainerMenu
 {
+    private static final int MAX_SLOT_CHEST = 27;
     private final FramedChestBlockEntity chest;
 
     public FramedChestMenu(int windowId, Inventory inv, BlockEntity chest)
@@ -66,14 +67,14 @@ public class FramedChestMenu extends AbstractContainerMenu
         {
             ItemStack stack = slot.getItem();
             remainder = stack.copy();
-            if (index < 36)
+            if (index < MAX_SLOT_CHEST)
             {
-                if (!moveItemStackTo(stack, 36, slots.size(), true))
+                if (!moveItemStackTo(stack, MAX_SLOT_CHEST, slots.size(), true))
                 {
                     return ItemStack.EMPTY;
                 }
             }
-            else if (!moveItemStackTo(stack, 0, 36, false))
+            else if (!moveItemStackTo(stack, 0, MAX_SLOT_CHEST, false))
             {
                 return ItemStack.EMPTY;
             }
