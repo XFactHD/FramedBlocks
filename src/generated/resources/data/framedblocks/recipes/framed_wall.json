@@ -1,12 +1,15 @@
 {
   "type": "minecraft:crafting_shaped",
   "pattern": [
-    "FFF",
-    "FFF"
+    "CFC",
+    "CFC"
   ],
   "key": {
-    "F": {
+    "C": {
       "item": "framedblocks:framed_cube"
+    },
+    "F": {
+      "item": "framedblocks:framed_fence"
     }
   },
   "result": {
