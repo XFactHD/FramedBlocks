@@ -6,8 +6,7 @@ import net.minecraft.item.*;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.ModList;
-import net.minecraftforge.fml.ModLoadingContext;
+import net.minecraftforge.fml.*;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.config.ModConfig;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
@@ -85,6 +84,8 @@ public class FramedBlocks
         ModLoadingContext.get().registerConfig(ModConfig.Type.COMMON, CommonConfig.SPEC);
         ModLoadingContext.get().registerConfig(ModConfig.Type.SERVER, ServerConfig.SPEC);
 
+        CrashReportExtender.registerCrashCallable("FramedBlocks BlockEntity Warning", FramedBlocks::getBlockEntityWarning);
+
         if (ModList.get().isLoaded("buildinggadgets"))
         {
             BuildingGadgetsCompat.init();
@@ -105,5 +106,21 @@ public class FramedBlocks
                 .decoder(OpenSignScreenPacket::new)
                 .consumer(OpenSignScreenPacket::handle)
                 .add();
+    }
+
+    private static String getBlockEntityWarning()
+    {
+        if (!ServerConfig.allowBlockEntities)
+        {
+            return "Not applicable";
+        }
+        else
+        {
+            return "\n\t\tThe 'allowBlockEntities' setting in the framedblocks-server.toml config file is enabled." +
+                   "\n\t\tIf this crash happened in FramedBlocks code, please try the following solutions before reporting:" +
+                   "\n\t\t- If you can identify the block that was used as a camo and resulted in the crash, add the block to the blacklist tag" +
+                   "\n\t\t- If you can't identify the block or the crash wasn't fixed, make a backup of the world and disable the mentioned config setting" +
+                   "\n\t\tIf the crash still happens, please report it on the FramedBlocks GitHub repository";
+        }
     }
 }
