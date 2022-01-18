@@ -6,6 +6,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.*;
 import net.minecraft.world.level.block.Block;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.minecraftforge.fml.CrashReportCallables;
 import net.minecraftforge.fml.ModLoadingContext;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.config.ModConfig;
@@ -86,6 +87,8 @@ public class FramedBlocks
         FramedBlocksAPI.INSTANCE.accept(new ApiImpl());
 
         CompatHandler.init();
+
+        CrashReportCallables.registerCrashCallable("FramedBlocks BlockEntity Warning", FramedBlocks::getBlockEntityWarning);
     }
 
     @SubscribeEvent
@@ -102,5 +105,24 @@ public class FramedBlocks
                 .decoder(OpenSignScreenPacket::new)
                 .consumer(OpenSignScreenPacket::handle)
                 .add();
+    }
+
+    private static String getBlockEntityWarning()
+    {
+        if (!ServerConfig.allowBlockEntities)
+        {
+            return "Not applicable";
+        }
+        else
+        {
+            return """
+                   
+                   \t\tThe 'allowBlockEntities' setting in the framedblocks-server.toml config file is enabled.
+                   \t\tIf this crash happened in FramedBlocks code, please try the following solutions before reporting:
+                   \t\t- If you can identify the block that was used as a camo and resulted in the crash, add the block to the blacklist tag
+                   \t\t- If you can't identify the block or the crash wasn't fixed, make a backup of the world and disable the mentioned config setting
+                   \t\tIf the crash still happens, please report it on the FramedBlocks GitHub repository
+                   """;
+        }
     }
 }
