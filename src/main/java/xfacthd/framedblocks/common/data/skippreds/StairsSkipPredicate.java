@@ -59,6 +59,10 @@ public class StairsSkipPredicate implements SideSkipPredicate
         {
             return testAgainstVerticalStairs(world, pos, dir, shape, top, adjState, side);
         }
+        else if (adjState.matchesBlock(FBContent.blockFramedHalfStairs.get()))
+        {
+            return testAgainstHalfStairs(world, pos, dir, shape, top, adjState, side);
+        }
 
         return false;
     }
@@ -192,6 +196,18 @@ public class StairsSkipPredicate implements SideSkipPredicate
             }
         }
         return false;
+    }
+
+    private static boolean testAgainstHalfStairs(IBlockReader world, BlockPos pos, Direction dir, StairsShape shape, boolean top, BlockState adjState, Direction side)
+    {
+        Direction adjDir = adjState.get(PropertyHolder.FACING_HOR);
+        boolean adjTop = adjState.get(PropertyHolder.TOP);
+        boolean adjRight = adjState.get(PropertyHolder.RIGHT);
+
+        if (!isStairSide(shape, dir, side) || top != adjTop) { return false; }
+
+        Direction adjStairFace = adjRight ? adjDir.rotateY() : adjDir.rotateYCCW();
+        return adjStairFace == side.getOpposite() && SideSkipPredicate.compareState(world, pos, side);
     }
 
 

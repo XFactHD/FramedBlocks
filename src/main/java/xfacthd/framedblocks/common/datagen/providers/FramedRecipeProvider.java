@@ -342,6 +342,18 @@ public class FramedRecipeProvider extends RecipeProvider
                 .addCriterion("hasFramedBlock", HAS_FRAMED_BLOCK)
                 .build(consumer);
 
+        ShapelessRecipeBuilder.shapelessRecipe(FBContent.blockFramedHalfStairs.get(), 2)
+                .addIngredient(FBContent.itemFramedHammer.get())
+                .addIngredient(FBContent.blockFramedStairs.get())
+                .addCriterion("hasFramedStairs", hasItem(FBContent.blockFramedStairs.get()))
+                .build(consumer);
+
+        ShapedRecipeBuilder.shapedRecipe(FBContent.blockFramedStairs.get())
+                .patternLine("SS")
+                .key('S', FBContent.blockFramedHalfStairs.get())
+                .addCriterion("hasFramedHalfStairs", hasItem(FBContent.blockFramedHalfStairs.get()))
+                .build(consumer, FramedBlocks.MODID + ":framed_stairs_from_half_stairs");
+
 
 
         ShapedRecipeBuilder.shapedRecipe(FBContent.itemFramedHammer.get())

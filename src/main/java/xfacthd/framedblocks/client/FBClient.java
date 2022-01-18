@@ -166,6 +166,7 @@ public class FBClient
         replaceModels(FBContent.blockFramedHalfPillar, registry, FramedHalfPillarModel::new);
         replaceModels(FBContent.blockFramedPost, registry, FramedPillarModel::new);
         replaceModels(FBContent.blockFramedCollapsibleBlock, registry, FramedCollapsibleBlockModel::new);
+        replaceModels(FBContent.blockFramedHalfStairs, registry, FramedHalfStairsModel::new);
     }
 
     private static void replaceModels(RegistryObject<Block> block, Map<ResourceLocation, IBakedModel> models,

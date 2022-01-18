@@ -47,6 +47,11 @@ public class CornerPillarSkipPredicate implements SideSkipPredicate
             return testAgainstVerticalStairs(world, pos, dir, adjState, side);
         }
 
+        if (adjState.matchesBlock(FBContent.blockFramedHalfStairs.get()))
+        {
+            return testAgainsHalfStairs(world, pos, dir, adjState, side);
+        }
+
         return false;
     }
 
@@ -138,6 +143,30 @@ public class CornerPillarSkipPredicate implements SideSkipPredicate
                 return SideSkipPredicate.compareState(world, pos, side);
             }
         }
+        return false;
+    }
+
+    private static boolean testAgainsHalfStairs(IBlockReader world, BlockPos pos, Direction dir, BlockState adjState, Direction side)
+    {
+        Direction adjDir = adjState.get(PropertyHolder.FACING_HOR);
+        boolean adjTop = adjState.get(PropertyHolder.TOP);
+        boolean adjRight = adjState.get(PropertyHolder.RIGHT);
+
+        if (side.getAxis() == Direction.Axis.Y && (side == Direction.UP) == adjTop)
+        {
+            if ((adjRight && adjDir == dir.rotateYCCW()) || (!adjRight && adjDir == dir))
+            {
+                return SideSkipPredicate.compareState(world, pos, side);
+            }
+        }
+        else if ((adjRight && side == dir) || (!adjRight && side == dir.rotateYCCW()))
+        {
+            if ((adjRight && adjDir == dir.getOpposite()) || ((!adjRight && adjDir == dir.rotateY())))
+            {
+                return SideSkipPredicate.compareState(world, pos, side);
+            }
+        }
+
         return false;
     }
 }

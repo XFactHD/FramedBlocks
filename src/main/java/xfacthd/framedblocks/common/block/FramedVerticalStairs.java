@@ -59,7 +59,7 @@ public class FramedVerticalStairs extends FramedBlock
         BlockState front = world.getBlockState(pos.offset(dir));
         BlockState left = world.getBlockState(pos.offset(dir.rotateYCCW()));
 
-        if (!(front.getBlock() instanceof StairsBlock) && !(left.getBlock() instanceof StairsBlock))
+        if (isNoStair(front) && isNoStair(left))
         {
             return state.with(PropertyHolder.STAIRS_TYPE, StairsType.VERTICAL);
         }
@@ -75,11 +75,31 @@ public class FramedVerticalStairs extends FramedBlock
                 topCorner = front.get(BlockStateProperties.HALF) == Half.BOTTOM;
                 bottomCorner = front.get(BlockStateProperties.HALF) == Half.TOP;
             }
+            else if (front.getBlock() instanceof FramedHalfStairsBlock && front.get(PropertyHolder.FACING_HOR) == dir.rotateYCCW())
+            {
+                boolean top = front.get(PropertyHolder.TOP);
+
+                if (!front.get(PropertyHolder.RIGHT))
+                {
+                    topCorner = !top;
+                    bottomCorner = top;
+                }
+            }
 
             if (left.getBlock() instanceof StairsBlock && left.get(BlockStateProperties.HORIZONTAL_FACING) == dir)
             {
                 topCorner |= left.get(BlockStateProperties.HALF) == Half.BOTTOM;
                 bottomCorner |= left.get(BlockStateProperties.HALF) == Half.TOP;
+            }
+            else if (left.getBlock() instanceof FramedHalfStairsBlock && left.get(PropertyHolder.FACING_HOR) == dir)
+            {
+                boolean top = left.get(PropertyHolder.TOP);
+
+                if (left.get(PropertyHolder.RIGHT))
+                {
+                    topCorner = !top;
+                    bottomCorner = top;
+                }
             }
 
             BlockState above = world.getBlockState(pos.up());
@@ -91,6 +111,11 @@ public class FramedVerticalStairs extends FramedBlock
 
             return state.with(PropertyHolder.STAIRS_TYPE, type);
         }
+    }
+
+    private static boolean isNoStair(BlockState state)
+    {
+        return !(state.getBlock() instanceof StairsBlock) && !(state.getBlock() instanceof FramedHalfStairsBlock);
     }
 
     public static ImmutableMap<BlockState, VoxelShape> generateShapes(ImmutableList<BlockState> states)
