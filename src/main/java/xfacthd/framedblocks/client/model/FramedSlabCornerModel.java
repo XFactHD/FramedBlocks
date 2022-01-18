@@ -69,8 +69,8 @@ public class FramedSlabCornerModel extends FramedBlockModel
                 BakedQuadTransformer.createTopBottomQuad(topBotQuad, dir.rotateY(), .5F)
             )
             {
-                boolean onEdge = (top && quad.getFace() == Direction.DOWN) || (!top && quad.getFace() == Direction.UP);
-                if (onEdge)
+                boolean onEdge = (top && quad.getFace() == Direction.UP) || (!top && quad.getFace() == Direction.DOWN);
+                if (!onEdge)
                 {
                     BakedQuadTransformer.setQuadPosInFacingDir(topBotQuad, .5F);
                 }
