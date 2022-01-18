@@ -343,6 +343,18 @@ public class FramedRecipeProvider extends RecipeProvider
                 .unlockedBy("hasFramedBlock", HAS_FRAMED_BLOCK)
                 .save(consumer);
 
+        ShapelessRecipeBuilder.shapeless(FBContent.blockFramedHalfStairs.get(), 2)
+                .requires(FBContent.itemFramedHammer.get())
+                .requires(FBContent.blockFramedStairs.get())
+                .unlockedBy("hasFramedStairs", has(FBContent.blockFramedStairs.get()))
+                .save(consumer);
+
+        ShapedRecipeBuilder.shaped(FBContent.blockFramedStairs.get())
+                .pattern("SS")
+                .define('S', FBContent.blockFramedHalfStairs.get())
+                .unlockedBy("hasFramedHalfStairs", has(FBContent.blockFramedHalfStairs.get()))
+                .save(consumer, FramedBlocks.MODID + ":framed_stairs_from_half_stairs");
+
 
 
         ShapedRecipeBuilder.shaped(FBContent.itemFramedHammer.get())

@@ -5,6 +5,7 @@ import net.minecraft.core.Direction;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.*;
+import xfacthd.framedblocks.api.util.FramedProperties;
 import xfacthd.framedblocks.common.FBContent;
 import xfacthd.framedblocks.common.data.PropertyHolder;
 import xfacthd.framedblocks.common.data.StairsType;
@@ -50,6 +51,11 @@ public class SlabEdgeSkipPredicate implements SideSkipPredicate
         {
             return testAgainstVerticalStairs(level, pos, dir, top, adjState, side);
         }
+        else if (adjState.is(FBContent.blockFramedHalfStairs.get()))
+        {
+            return testAgainstHalfStairs(level, pos, dir, top, adjState, side);
+        }
+
         return false;
     }
 
@@ -158,6 +164,25 @@ public class SlabEdgeSkipPredicate implements SideSkipPredicate
         {
             return top != adjType.isTop() && SideSkipPredicate.compareState(level, pos, side);
         }
+        return false;
+    }
+
+    private static boolean testAgainstHalfStairs(BlockGetter level, BlockPos pos, Direction dir, boolean top, BlockState adjState, Direction side)
+    {
+        Direction adjDir = adjState.getValue(PropertyHolder.FACING_HOR);
+        boolean adjTop = adjState.getValue(FramedProperties.TOP);
+        boolean adjRight = adjState.getValue(PropertyHolder.RIGHT);
+
+        if ((adjRight && adjDir == dir.getCounterClockWise()) || (!adjRight && adjDir == dir.getClockWise()))
+        {
+            if (side.getAxis() == Direction.Axis.Y && (side == Direction.DOWN) == adjTop && adjTop != top)
+            {
+                return SideSkipPredicate.compareState(level, pos, side);
+            }
+
+            return side == adjDir && adjTop == top && SideSkipPredicate.compareState(level, pos, side);
+        }
+
         return false;
     }
 }

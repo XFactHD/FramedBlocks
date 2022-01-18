@@ -142,6 +142,7 @@ public class FBClient
         ClientUtils.replaceModels(FBContent.blockFramedHalfPillar, registry, FramedHalfPillarModel::new);
         ClientUtils.replaceModels(FBContent.blockFramedPost, registry, FramedPillarModel::new);
         ClientUtils.replaceModels(FBContent.blockFramedCollapsibleBlock, registry, FramedCollapsibleBlockModel::new);
+        ClientUtils.replaceModels(FBContent.blockFramedHalfStairs, registry, FramedHalfStairsModel::new);
     }
 
 

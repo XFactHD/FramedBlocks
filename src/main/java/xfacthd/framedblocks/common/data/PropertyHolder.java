@@ -19,4 +19,5 @@ public class PropertyHolder
     public static final BooleanProperty X_AXIS = FramedProperties.X_AXIS;
     public static final BooleanProperty Y_AXIS = FramedProperties.Y_AXIS;
     public static final BooleanProperty Z_AXIS = FramedProperties.Z_AXIS;
+    public static final BooleanProperty RIGHT = BooleanProperty.create("right");
 }
