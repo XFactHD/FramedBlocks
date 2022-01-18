@@ -7,6 +7,7 @@ import net.minecraft.world.level.block.StairBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.Half;
 import net.minecraft.world.level.block.state.properties.StairsShape;
+import xfacthd.framedblocks.api.util.FramedProperties;
 import xfacthd.framedblocks.common.FBContent;
 import xfacthd.framedblocks.common.data.PropertyHolder;
 import xfacthd.framedblocks.common.data.StairsType;
@@ -25,7 +26,7 @@ public class StairsSkipPredicate implements SideSkipPredicate
 
         if (adjState.getBlock() == FBContent.blockFramedStairs.get())
         {
-            return testAgainstStairs(level, pos, dir, shape, adjState, side);
+            return testAgainstStairs(level, pos, dir, shape, top, adjState, side);
         }
         else if (adjState.getBlock() == FBContent.blockFramedSlab.get())
         {
@@ -63,16 +64,24 @@ public class StairsSkipPredicate implements SideSkipPredicate
         return false;
     }
 
-    private static boolean testAgainstStairs(BlockGetter level, BlockPos pos, Direction dir, StairsShape shape, BlockState adjState, Direction side)
+    private static boolean testAgainstStairs(BlockGetter level, BlockPos pos, Direction dir, StairsShape shape, boolean top, BlockState adjState, Direction side)
     {
         Direction adjDir = adjState.getValue(StairBlock.FACING);
         StairsShape adjShape = adjState.getValue(StairBlock.SHAPE);
+        boolean adjTop = adjState.getValue(StairBlock.HALF) == Half.TOP;
+
         if ((isStairSide(shape, dir, side) && isStairSide(adjShape, adjDir, side.getOpposite())) ||
             (isSlabSide(shape, dir, side) && isSlabSide(adjShape, adjDir, side.getOpposite()))
         )
         {
+            return adjTop == top && SideSkipPredicate.compareState(level, pos, side);
+        }
+
+        if (side.getAxis() == Direction.Axis.Y && adjDir == dir && adjShape == shape && adjTop != top)
+        {
             return SideSkipPredicate.compareState(level, pos, side);
         }
+
         return false;
     }
 
