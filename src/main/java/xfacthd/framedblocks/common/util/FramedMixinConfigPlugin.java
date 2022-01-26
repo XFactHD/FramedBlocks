@@ -18,7 +18,7 @@ public class FramedMixinConfigPlugin implements IMixinConfigPlugin
     @Override
     public boolean shouldApplyMixin(String targetClassName, String mixinClassName)
     {
-        if (mixinClassName.equals("xfacthd.framedblocks.client.util.mixin.MixinWorldRenderer"))
+        if (mixinClassName.equals("xfacthd.framedblocks.client.util.mixin.MixinLevelRenderer"))
         {
             try
             {

@@ -110,6 +110,8 @@ dependencies {
 
     runtimeOnly fg.deobf("curse.maven:jei-238222:3599262")
 
+    //runtimeOnly fg.deobf("curse.maven:sodium-532724:3556734")
+
     annotationProcessor 'org.spongepowered:mixin:0.8.5:processor'
 }
 
