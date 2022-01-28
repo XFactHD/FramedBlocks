@@ -71,9 +71,13 @@ public abstract class FramedBlockModel extends BakedModelProxy
         }
 
         if (layer == null) { layer = RenderType.cutout(); }
-        if ((camoState == null || camoState.isAir()) && (layer == RenderType.cutout() || hasAdditionalQuadsInLayer(layer)))
+        if (camoState == null || camoState.isAir())
         {
-            return getCamoQuads(state, FramedBlocksAPI.getInstance().defaultModelState(), side, rand, extraData, layer, layer == RenderType.cutout());
+            boolean baseModelInLayer = canRenderBaseModelInLayer(layer);
+            if (baseModelInLayer || hasAdditionalQuadsInLayer(layer))
+            {
+                return getCamoQuads(state, FramedBlocksAPI.getInstance().defaultModelState(), side, rand, extraData, layer, baseModelInLayer);
+            }
         }
 
         return Collections.emptyList();
@@ -90,18 +94,33 @@ public abstract class FramedBlockModel extends BakedModelProxy
     {
         if (type.getCtmPredicate().test(state, side))
         {
-            if (!camoInLayer) { return Collections.emptyList(); }
+            boolean additionalQuads = hasAdditionalQuadsInLayer(layer);
+            if (!camoInLayer && !additionalQuads) { return Collections.emptyList(); }
 
-            synchronized (modelCache)
+            List<BakedQuad> quads = new ArrayList<>();
+
+            if (camoInLayer)
             {
-                if (!modelCache.containsKey(camoState))
+                BakedModel model;
+                synchronized (modelCache)
                 {
-                    modelCache.put(camoState, getCamoModel(camoState));
+                    if (!modelCache.containsKey(camoState))
+                    {
+                        modelCache.put(camoState, getCamoModel(camoState));
+                    }
+                    model = modelCache.get(camoState);
                 }
-                BakedModel model = modelCache.get(camoState);
+
                 IModelData data = getCamoData(model, camoState, extraData);
-                return model.getQuads(camoState, side, rand, data);
+                quads.addAll(model.getQuads(camoState, side, rand, data));
             }
+
+            if (additionalQuads)
+            {
+                getAdditionalQuads(quads, side, state, rand, extraData, layer);
+            }
+
+            return quads;
         }
         else
         {
@@ -152,7 +171,19 @@ public abstract class FramedBlockModel extends BakedModelProxy
 
     protected boolean hasAdditionalQuadsInLayer(RenderType layer) { return false; }
 
+    /**
+     * Add additional quads to faces that return {@code true} from {@code xfacthd.framedblocks.api.util.CtmPredicate#test(BlockState, Direction)}<br>
+     * The result of this method will NOT be cached, execution should therefore be as fast as possible
+     */
+    protected void getAdditionalQuads(List<BakedQuad> quads, Direction side, BlockState state, Random rand, IModelData data, RenderType layer) {}
+
+    /**
+     * Add additional quads to faces that return {@code false} from {@code xfacthd.framedblocks.api.util.CtmPredicate#test(BlockState, Direction)}<br>
+     * The result of this method will be cached, processing time is therefore not critical
+     */
     protected void getAdditionalQuads(Map<Direction, List<BakedQuad>> quadMap, BlockState state, Random rand, IModelData data, RenderType layer) {}
+
+    protected boolean canRenderBaseModelInLayer(RenderType layer) { return layer == RenderType.cutout(); }
 
     @Nonnull
     @Override
