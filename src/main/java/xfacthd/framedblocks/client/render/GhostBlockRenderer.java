@@ -47,7 +47,7 @@ public class GhostBlockRenderer
     @SubscribeEvent
     public static void onClientSetup(final FMLClientSetupEvent event)
     {
-        GHOST_MODEL_DATA.setCamoState(FBContent.blockFramedCube.get().defaultBlockState());
+        GHOST_MODEL_DATA.setCamoState(Blocks.AIR.defaultBlockState());
 
         //Needed to render ghosts of double blocks
         GHOST_MODEL_DATA.setData(FramedDoubleBlockEntity.DATA_LEFT, GHOST_MODEL_DATA_LEFT);
@@ -196,7 +196,7 @@ public class GhostBlockRenderer
         Vec3 offset = Vec3.atLowerCornerOf(renderPos).subtract(mc().gameRenderer.getMainCamera().getPosition());
         VertexConsumer builder = new GhostVertexConsumer(buffers.getBuffer(RenderType.translucent()), 0xAA);
 
-        if (camoState.isAir())
+        if (camoState.isAir() && camoStateTwo.isAir())
         {
             doRenderGhostBlockInLayer(mstack, builder, renderPos, renderState, RenderType.cutout(), offset);
         }
