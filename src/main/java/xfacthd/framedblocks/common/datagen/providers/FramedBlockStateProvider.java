@@ -76,6 +76,7 @@ public class FramedBlockStateProvider extends BlockStateProvider
         registerFramedPaneBlock(cube);
         registerFramedFlowerPotBlock(cube);
         registerFramedCollapsibleBlock();
+        registerFramedBouncyBlock();
     }
 
     private void registerFramedSlab(ModelFile cube)
@@ -271,6 +272,24 @@ public class FramedBlockStateProvider extends BlockStateProvider
     {
         ModelFile block = models().cubeAll("framed_collapsible_block", modLoc("block/framed_collapsible_block"));
         simpleBlockWithItem(FBContent.blockFramedCollapsibleBlock, block);
+    }
+
+    private void registerFramedBouncyBlock()
+    {
+        ModelFile block = models().withExistingParent("framed_bouncy_cube", "block/block")
+                .element()
+                    .cube("#slime")
+                    .end()
+                .element()
+                    .cube("#frame")
+                    .end()
+                .texture("frame", TEXTURE)
+                .texture("slime", mcLoc("block/slime_block"))
+                .texture("particle", TEXTURE);
+
+        simpleBlockWithItem(FBContent.blockFramedBouncyCube, block);
+
+        models().cubeAll("slime_frame", modLoc("block/slime_frame"));
     }
 
 

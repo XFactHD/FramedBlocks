@@ -48,6 +48,7 @@
     "framedblocks:framed_half_pillar",
     "framedblocks:framed_post",
     "framedblocks:framed_collapsible_block",
-    "framedblocks:framed_half_stairs"
+    "framedblocks:framed_half_stairs",
+    "framedblocks:framed_bouncy_cube"
   ]
 }

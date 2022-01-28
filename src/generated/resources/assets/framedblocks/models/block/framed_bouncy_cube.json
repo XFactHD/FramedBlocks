@@ -1,0 +1,86 @@
+{
+  "parent": "minecraft:block/block",
+  "textures": {
+    "frame": "framedblocks:block/framed_block",
+    "slime": "minecraft:block/slime_block",
+    "particle": "framedblocks:block/framed_block"
+  },
+  "elements": [
+    {
+      "from": [
+        0,
+        0,
+        0
+      ],
+      "to": [
+        16,
+        16,
+        16
+      ],
+      "faces": {
+        "down": {
+          "texture": "#slime",
+          "cullface": "down"
+        },
+        "up": {
+          "texture": "#slime",
+          "cullface": "up"
+        },
+        "north": {
+          "texture": "#slime",
+          "cullface": "north"
+        },
+        "south": {
+          "texture": "#slime",
+          "cullface": "south"
+        },
+        "west": {
+          "texture": "#slime",
+          "cullface": "west"
+        },
+        "east": {
+          "texture": "#slime",
+          "cullface": "east"
+        }
+      }
+    },
+    {
+      "from": [
+        0,
+        0,
+        0
+      ],
+      "to": [
+        16,
+        16,
+        16
+      ],
+      "faces": {
+        "down": {
+          "texture": "#frame",
+          "cullface": "down"
+        },
+        "up": {
+          "texture": "#frame",
+          "cullface": "up"
+        },
+        "north": {
+          "texture": "#frame",
+          "cullface": "north"
+        },
+        "south": {
+          "texture": "#frame",
+          "cullface": "south"
+        },
+        "west": {
+          "texture": "#frame",
+          "cullface": "west"
+        },
+        "east": {
+          "texture": "#frame",
+          "cullface": "east"
+        }
+      }
+    }
+  ]
+}

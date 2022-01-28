@@ -10,6 +10,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.block.Block;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.event.*;
+import net.minecraftforge.client.model.ForgeModelBakery;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
@@ -89,6 +90,12 @@ public class FBClient
     }
 
     @SubscribeEvent
+    public static void onModelRegister(final ModelRegistryEvent event)
+    {
+        ForgeModelBakery.addSpecialModel(FramedBouncyCubeModel.FRAME_LOCATION);
+    }
+
+    @SubscribeEvent
     public static void onModelsLoaded(final ModelBakeEvent event)
     {
         Map<ResourceLocation, BakedModel> registry = event.getModelRegistry();
@@ -143,6 +150,7 @@ public class FBClient
         ClientUtils.replaceModels(FBContent.blockFramedPost, registry, FramedPillarModel::new);
         ClientUtils.replaceModels(FBContent.blockFramedCollapsibleBlock, registry, FramedCollapsibleBlockModel::new);
         ClientUtils.replaceModels(FBContent.blockFramedHalfStairs, registry, FramedHalfStairsModel::new);
+        ClientUtils.replaceModels(FBContent.blockFramedBouncyCube, registry, (state, baseModel) -> new FramedBouncyCubeModel(state, baseModel, registry));
     }
 
 

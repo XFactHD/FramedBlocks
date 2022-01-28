@@ -5,6 +5,7 @@ import net.minecraft.data.DataGenerator;
 import net.minecraft.data.recipes.*;
 import net.minecraft.tags.ItemTags;
 import net.minecraft.world.item.Items;
+import net.minecraftforge.common.Tags;
 import xfacthd.framedblocks.FramedBlocks;
 import xfacthd.framedblocks.common.FBContent;
 
@@ -353,6 +354,15 @@ public class FramedRecipeProvider extends RecipeProvider
                 .define('S', FBContent.blockFramedHalfStairs.get())
                 .unlockedBy("hasFramedHalfStairs", has(FBContent.blockFramedHalfStairs.get()))
                 .save(consumer, FramedBlocks.MODID + ":framed_stairs_from_half_stairs");
+
+        ShapedRecipeBuilder.shaped(FBContent.blockFramedBouncyCube.get())
+                .pattern(" S ")
+                .pattern("SCS")
+                .pattern(" S ")
+                .define('S', Tags.Items.SLIMEBALLS)
+                .define('C', FBContent.blockFramedCube.get())
+                .unlockedBy("hasFramedBlock", HAS_FRAMED_BLOCK)
+                .save(consumer);
 
 
 
