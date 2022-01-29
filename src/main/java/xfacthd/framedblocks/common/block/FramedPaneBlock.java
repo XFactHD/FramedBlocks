@@ -18,7 +18,9 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.storage.loot.LootContext;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.shapes.*;
+import net.minecraftforge.client.IBlockRenderProperties;
 import xfacthd.framedblocks.api.block.IFramedBlock;
+import xfacthd.framedblocks.api.util.client.FramedBlockRenderProperties;
 import xfacthd.framedblocks.common.FBContent;
 import xfacthd.framedblocks.api.block.FramedBlockEntity;
 import xfacthd.framedblocks.common.data.BlockType;
@@ -26,6 +28,7 @@ import xfacthd.framedblocks.api.util.Utils;
 
 import javax.annotation.Nullable;
 import java.util.List;
+import java.util.function.Consumer;
 
 @SuppressWarnings("deprecation")
 public class FramedPaneBlock extends IronBarsBlock implements IFramedBlock
@@ -89,6 +92,20 @@ public class FramedPaneBlock extends IronBarsBlock implements IFramedBlock
         return getCamoSlipperiness(state, level, pos, entity);
     }
 
+    @Override
+    public VoxelShape getShape(BlockState state, BlockGetter level, BlockPos pos, CollisionContext ctx)
+    {
+        if (isPassThrough(state, level, pos, ctx)) { return Shapes.empty(); }
+        return super.getShape(state, level, pos, ctx);
+    }
+
+    @Override
+    public VoxelShape getCollisionShape(BlockState state, BlockGetter level, BlockPos pos, CollisionContext ctx)
+    {
+        if (isPassThrough(state, level, pos, null)) { return Shapes.empty(); }
+        return super.getCollisionShape(state, level, pos, ctx);
+    }
+
     @Override //The pane handles this through the SideSkipPredicate instead
     public boolean skipRendering(BlockState state, BlockState adjacentState, Direction side)
     {
@@ -96,8 +113,13 @@ public class FramedPaneBlock extends IronBarsBlock implements IFramedBlock
     }
 
     @Override
-    public final BlockEntity newBlockEntity(BlockPos pos, BlockState state) { return new FramedBlockEntity(pos, state); }
+    public void initializeClient(Consumer<IBlockRenderProperties> consumer)
+    {
+        consumer.accept(new FramedBlockRenderProperties());
+    }
 
+    @Override
+    public final BlockEntity newBlockEntity(BlockPos pos, BlockState state) { return new FramedBlockEntity(pos, state); }
 
     @Override
     public BlockType getBlockType() { return type; }

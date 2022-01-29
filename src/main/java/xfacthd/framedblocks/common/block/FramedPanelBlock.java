@@ -70,12 +70,14 @@ public class FramedPanelBlock extends FramedBlock
                     BlockState camoState = Blocks.AIR.defaultBlockState();
                     ItemStack camoStack = ItemStack.EMPTY;
                     boolean glowing = false;
+                    boolean passthrough = false;
 
                     if (level.getBlockEntity(pos) instanceof FramedBlockEntity be)
                     {
                         camoState = be.getCamoState();
                         camoStack = be.getCamoStack();
                         glowing = be.isGlowing();
+                        passthrough = be.isPassThrough(null);
                     }
 
                     Direction newFacing = (facing == Direction.NORTH || facing == Direction.EAST) ? facing : facing.getOpposite();
@@ -95,6 +97,7 @@ public class FramedPanelBlock extends FramedBlock
                     {
                         be.setCamo(camoStack, camoState, facing != newFacing);
                         be.setGlowing(glowing);
+                        be.setPassThrough(passthrough);
                     }
                 }
                 return InteractionResult.sidedSuccess(level.isClientSide());

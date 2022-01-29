@@ -15,16 +15,17 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.material.*;
 import net.minecraft.world.level.storage.loot.LootContext;
-import net.minecraft.world.phys.BlockHitResult;
-import net.minecraft.world.phys.Vec3;
-import net.minecraft.world.phys.shapes.CollisionContext;
-import net.minecraft.world.phys.shapes.VoxelShape;
+import net.minecraft.world.phys.*;
+import net.minecraft.world.phys.shapes.*;
+import net.minecraftforge.client.IBlockRenderProperties;
 import xfacthd.framedblocks.api.type.IBlockType;
 import xfacthd.framedblocks.api.util.FramedProperties;
+import xfacthd.framedblocks.api.util.client.FramedBlockRenderProperties;
 
 import javax.annotation.Nullable;
 import java.util.List;
 import java.util.Map;
+import java.util.function.Consumer;
 
 @SuppressWarnings("deprecation")
 public abstract class AbstractFramedBlock extends Block implements IFramedBlock, SimpleWaterloggedBlock
@@ -79,6 +80,10 @@ public abstract class AbstractFramedBlock extends Block implements IFramedBlock,
     @Override
     public VoxelShape getShape(BlockState state, BlockGetter level, BlockPos pos, CollisionContext ctx)
     {
+        if (isPassThrough(state, level, pos, ctx))
+        {
+            return Shapes.empty();
+        }
         return shapes.get(state);
     }
 
@@ -153,6 +158,12 @@ public abstract class AbstractFramedBlock extends Block implements IFramedBlock,
     public IBlockType getBlockType() { return blockType; }
 
     protected final boolean isWaterLoggable() { return blockType.supportsWaterLogging(); }
+
+    @Override
+    public void initializeClient(Consumer<IBlockRenderProperties> consumer)
+    {
+        consumer.accept(new FramedBlockRenderProperties());
+    }
 
 
 

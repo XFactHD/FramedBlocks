@@ -20,6 +20,7 @@ import net.minecraft.world.level.storage.loot.LootContext;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.Vec3;
+import net.minecraft.world.phys.shapes.CollisionContext;
 import xfacthd.framedblocks.api.FramedBlocksAPI;
 import xfacthd.framedblocks.api.type.IBlockType;
 import xfacthd.framedblocks.api.util.CtmPredicate;
@@ -34,7 +35,7 @@ import java.util.Optional;
  * The {@link team.chisel.ctm.api.IFacade} interface is not implemented directly and is instead hacked on
  * via a mixin to allow CTM to be an optional dependency :/
  */
-@SuppressWarnings("deprecation")
+@SuppressWarnings({ "deprecation", "unused" })
 public interface IFramedBlock extends EntityBlock//, IFacade
 {
     IBlockType getBlockType();
@@ -44,7 +45,13 @@ public interface IFramedBlock extends EntityBlock//, IFacade
         return Block.Properties.of(Material.WOOD)
                 .noOcclusion()
                 .strength(2F)
-                .sound(SoundType.WOOD);
+                .sound(SoundType.WOOD)
+                .isViewBlocking(IFramedBlock::isViewBlocking);
+    }
+
+    private static boolean isViewBlocking(BlockState state, BlockGetter level, BlockPos pos)
+    {
+        return ((IFramedBlock) state.getBlock()).isViewBlocked(state, level, pos);
     }
 
     default BlockItem createItemBlock()
@@ -151,8 +158,22 @@ public interface IFramedBlock extends EntityBlock//, IFacade
     {
         if (level == null) { return false; } //Block had no camo when loaded => level in data not set
 
+        BlockPos neighborPos = pos.relative(side);
+        BlockState neighborState = level.getBlockState(neighborPos);
+
+        if (!isPassThrough(state, level, pos, null))
+        {
+            if (neighborState.getBlock() instanceof IFramedBlock block && block.getBlockType().allowPassthrough())
+            {
+                if (level.getBlockEntity(neighborPos) instanceof FramedBlockEntity be && be.isPassThrough(null))
+                {
+                    return false;
+                }
+            }
+        }
+
         SideSkipPredicate pred = FramedBlocksAPI.getInstance().detailedCullingEnabled() ? getBlockType().getSideSkipPredicate() : SideSkipPredicate.CTM;
-        return pred.test(level, pos, state, level.getBlockState(pos.relative(side)), side);
+        return pred.test(level, pos, state, neighborState, side);
     }
 
     default float getCamoSlipperiness(BlockState state, LevelReader level, BlockPos pos, @Nullable Entity entity)
@@ -208,6 +229,17 @@ public interface IFramedBlock extends EntityBlock//, IFacade
     }
 
     default boolean handleBlockLeftClick(BlockState state, Level level, BlockPos pos, Player player) { return false; }
+
+    default boolean isPassThrough(BlockState state, BlockGetter level, BlockPos pos, @Nullable CollisionContext ctx)
+    {
+        if (!getBlockType().allowPassthrough()) { return false; }
+        return level.getBlockEntity(pos) instanceof FramedBlockEntity be && be.isPassThrough(ctx);
+    }
+
+    default boolean isViewBlocked(BlockState state, BlockGetter level, BlockPos pos)
+    {
+        return getBlockType().allowPassthrough() && !isPassThrough(state, level, pos, null);
+    }
 
     default Optional<MutableComponent> printCamoBlock(CompoundTag beTag)
     {

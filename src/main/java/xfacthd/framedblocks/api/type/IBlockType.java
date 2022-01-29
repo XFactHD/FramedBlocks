@@ -23,6 +23,13 @@ public interface IBlockType
 
     boolean supportsWaterLogging();
 
+    /**
+     * @implNote If this method returns true, then the associated block must override {@link net.minecraft.world.level.block.Block#initializeClient(java.util.function.Consumer)}
+     * and pass an instance of {@link xfacthd.framedblocks.api.util.client.FramedBlockRenderProperties} to the consumer to avoid crashing when the block is
+     * hit while it can be passed through
+     */
+    default boolean allowPassthrough() { return false; }
+
     String getName();
 
     int compareTo(IBlockType other);

@@ -8,6 +8,7 @@ import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import xfacthd.framedblocks.FramedBlocks;
+import xfacthd.framedblocks.api.block.FramedBlockEntity;
 import xfacthd.framedblocks.api.block.IFramedBlock;
 
 @Mod.EventBusSubscriber(modid = FramedBlocks.MODID, bus = Mod.EventBusSubscriber.Bus.FORGE)
@@ -26,6 +27,15 @@ public class EventHandler
             {
                 event.setCanceled(true);
                 event.setCancellationResult(InteractionResult.CONSUME);
+            }
+
+            if (!event.isCanceled() && block.getBlockType().allowPassthrough())
+            {
+                if (level.getBlockEntity(pos) instanceof FramedBlockEntity be && be.isPassThrough(null))
+                {
+                    event.setCanceled(true);
+                    event.setCancellationResult(InteractionResult.FAIL);
+                }
             }
         }
     }

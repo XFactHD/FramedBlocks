@@ -18,6 +18,8 @@ import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.*;
 import net.minecraft.world.phys.BlockHitResult;
+import net.minecraft.world.phys.shapes.CollisionContext;
+import net.minecraft.world.phys.shapes.EntityCollisionContext;
 import net.minecraftforge.client.model.data.IModelData;
 import net.minecraftforge.common.Tags;
 import net.minecraftforge.common.util.LazyOptional;
@@ -27,6 +29,8 @@ import xfacthd.framedblocks.FramedBlocks;
 import xfacthd.framedblocks.api.FramedBlocksAPI;
 import xfacthd.framedblocks.api.util.FramedBlockData;
 import xfacthd.framedblocks.api.util.Utils;
+import xfacthd.framedblocks.common.FBContent;
+import xfacthd.framedblocks.common.util.ServerConfig;
 
 import java.util.List;
 
@@ -40,6 +44,7 @@ public class FramedBlockEntity extends BlockEntity
     private ItemStack camoStack = ItemStack.EMPTY;
     private BlockState camoState = Blocks.AIR.defaultBlockState();
     private boolean glowing = false;
+    private boolean passthrough = false;
 
     public FramedBlockEntity(BlockPos pos, BlockState state) { this(FramedBlocksAPI.getInstance().defaultBlockEntity(), pos, state); }
 
@@ -82,9 +87,26 @@ public class FramedBlockEntity extends BlockEntity
             }
             return InteractionResult.sidedSuccess(level.isClientSide());
         }
-        else if (!camo.isAir() && stack.is(Utils.WRENCH))
+        else if (!camo.isAir() && !player.isShiftKeyDown() && stack.is(Utils.WRENCH))
         {
             return rotateCamo(camo, hit);
+        }
+        else if (stack.is(ServerConfig.passthroughItem) && !passthrough && getBlock().getBlockType().allowPassthrough())
+        {
+            //noinspection ConstantConditions
+            if (!level.isClientSide())
+            {
+                if (!player.isCreative()) { stack.shrink(1); }
+
+                setPassThrough(true);
+            }
+            return InteractionResult.sidedSuccess(level.isClientSide());
+        }
+        else if (passthrough && player.isShiftKeyDown() && stack.is(Utils.WRENCH))
+        {
+            setPassThrough(false);
+
+            player.addItem(new ItemStack(ServerConfig.passthroughItem));
         }
 
         return InteractionResult.PASS;
@@ -360,6 +382,8 @@ public class FramedBlockEntity extends BlockEntity
             {
                 doLightUpdate();
             }
+
+            setChanged();
             //noinspection ConstantConditions
             level.sendBlockUpdated(worldPosition, getBlockState(), getBlockState(), 3);
         }
@@ -371,6 +395,31 @@ public class FramedBlockEntity extends BlockEntity
     {
         if (glowing) { return 15; }
         return camoState.getLightEmission();
+    }
+
+    public void setPassThrough(boolean passthrough)
+    {
+        if (this.passthrough != passthrough)
+        {
+            this.passthrough = passthrough;
+
+            setChanged();
+            //noinspection ConstantConditions
+            level.sendBlockUpdated(worldPosition, getBlockState(), getBlockState(), 3);
+        }
+    }
+
+    public boolean isPassThrough(CollisionContext ctx)
+    {
+        if (!passthrough) { return false; }
+
+        if (ctx instanceof EntityCollisionContext ectx && ectx.getEntity() instanceof Player player)
+        {
+            ItemStack mainItem = player.getMainHandItem();
+            return !mainItem.is(Utils.WRENCH) && !mainItem.is(FBContent.itemFramedHammer.get());
+        }
+
+        return true;
     }
 
     protected final void doLightUpdate()
@@ -415,6 +464,7 @@ public class FramedBlockEntity extends BlockEntity
         nbt.put("camo_stack", camoStack.save(new CompoundTag()));
         nbt.put("camo_state", NbtUtils.writeBlockState(camoState));
         nbt.putBoolean("glowing", glowing);
+        nbt.putBoolean("passthrough", passthrough);
     }
 
     protected boolean readFromDataPacket(CompoundTag nbt)
@@ -445,6 +495,13 @@ public class FramedBlockEntity extends BlockEntity
             doLightUpdate();
         }
 
+        boolean newPassthrough = nbt.getBoolean("passthrough");
+        if (newPassthrough != passthrough)
+        {
+            passthrough = newPassthrough;
+            needUpdate = true;
+        }
+
         return needUpdate;
     }
 
@@ -456,6 +513,7 @@ public class FramedBlockEntity extends BlockEntity
         nbt.put("camo_stack", camoStack.save(new CompoundTag()));
         nbt.put("camo_state", NbtUtils.writeBlockState(camoState));
         nbt.putBoolean("glowing", glowing);
+        nbt.putBoolean("passthrough", passthrough);
 
         return nbt;
     }
@@ -476,6 +534,7 @@ public class FramedBlockEntity extends BlockEntity
         }
 
         glowing = nbt.getBoolean("glowing");
+        passthrough = nbt.getBoolean("passthrough");
     }
 
     /*
@@ -497,6 +556,7 @@ public class FramedBlockEntity extends BlockEntity
         nbt.put("camo_stack", camoStack.save(new CompoundTag()));
         nbt.put("camo_state", NbtUtils.writeBlockState(camoState));
         nbt.putBoolean("glowing", glowing);
+        nbt.putBoolean("passthrough", passthrough);
 
         super.saveAdditional(nbt);
     }
@@ -522,5 +582,6 @@ public class FramedBlockEntity extends BlockEntity
             );
         }
         glowing = nbt.getBoolean("glowing");
+        passthrough = nbt.getBoolean("passthrough");
     }
 }

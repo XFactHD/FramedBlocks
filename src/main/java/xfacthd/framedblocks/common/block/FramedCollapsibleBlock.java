@@ -59,6 +59,8 @@ public class FramedCollapsibleBlock extends FramedBlock
     @Override
     public VoxelShape getShape(BlockState state, BlockGetter level, BlockPos pos, CollisionContext ctx)
     {
+        if (isPassThrough(state, level, pos, ctx)) { return Shapes.empty(); }
+
         CollapseFace face = state.getValue(PropertyHolder.COLLAPSED_FACE);
         if (face != CollapseFace.NONE)
         {

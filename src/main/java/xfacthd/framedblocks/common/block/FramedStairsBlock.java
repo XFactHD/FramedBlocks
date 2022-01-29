@@ -16,7 +16,10 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.*;
 import net.minecraft.world.level.storage.loot.LootContext;
 import net.minecraft.world.phys.BlockHitResult;
+import net.minecraft.world.phys.shapes.*;
+import net.minecraftforge.client.IBlockRenderProperties;
 import xfacthd.framedblocks.api.block.IFramedBlock;
+import xfacthd.framedblocks.api.util.client.FramedBlockRenderProperties;
 import xfacthd.framedblocks.common.FBContent;
 import xfacthd.framedblocks.common.data.BlockType;
 import xfacthd.framedblocks.api.block.FramedBlockEntity;
@@ -24,6 +27,7 @@ import xfacthd.framedblocks.api.util.CtmPredicate;
 
 import javax.annotation.Nullable;
 import java.util.List;
+import java.util.function.Consumer;
 
 @SuppressWarnings("deprecation")
 public class FramedStairsBlock extends StairBlock implements IFramedBlock
@@ -115,6 +119,19 @@ public class FramedStairsBlock extends StairBlock implements IFramedBlock
     public float getFriction(BlockState state, LevelReader level, BlockPos pos, @Nullable Entity entity)
     {
         return getCamoSlipperiness(state, level, pos, entity);
+    }
+
+    @Override
+    public VoxelShape getShape(BlockState state, BlockGetter level, BlockPos pos, CollisionContext ctx)
+    {
+        if (isPassThrough(state, level, pos, ctx)) { return Shapes.empty(); }
+        return super.getShape(state, level, pos, ctx);
+    }
+
+    @Override
+    public void initializeClient(Consumer<IBlockRenderProperties> consumer)
+    {
+        consumer.accept(new FramedBlockRenderProperties());
     }
 
     @Override

@@ -26,7 +26,7 @@ public abstract class MixinBlock extends BlockBehaviour
     {
         if (state.getBlock() instanceof IFramedBlock || state.isAir() || !(level instanceof RenderChunkRegion chunk)) { return; }
 
-        if (chunk.getBlockEntity(adjPos) instanceof FramedBlockEntity be)
+        if (chunk.getBlockEntity(adjPos) instanceof FramedBlockEntity be && !be.isPassThrough(null))
         {
             if (state.getBlock() instanceof HalfTransparentBlock && SideSkipPredicate.CTM.test(level, adjPos, level.getBlockState(adjPos), state, face.getOpposite()))
             {
