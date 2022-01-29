@@ -104,9 +104,18 @@ public class FramedBlockEntity extends BlockEntity
         }
         else if (passthrough && player.isShiftKeyDown() && stack.is(Utils.WRENCH))
         {
-            setPassThrough(false);
+            //noinspection ConstantConditions
+            if (!level.isClientSide())
+            {
+                setPassThrough(false);
 
-            player.addItem(new ItemStack(ServerConfig.passthroughItem));
+                ItemStack result = new ItemStack(ServerConfig.passthroughItem);
+                if (!player.getInventory().add(result))
+                {
+                    player.drop(result, false);
+                }
+            }
+            return InteractionResult.sidedSuccess(level.isClientSide());
         }
 
         return InteractionResult.PASS;

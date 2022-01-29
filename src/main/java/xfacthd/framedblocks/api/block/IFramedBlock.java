@@ -238,7 +238,7 @@ public interface IFramedBlock extends EntityBlock//, IFacade
 
     default boolean isViewBlocked(BlockState state, BlockGetter level, BlockPos pos)
     {
-        return getBlockType().allowPassthrough() && !isPassThrough(state, level, pos, null);
+        return !getBlockType().allowPassthrough() || !isPassThrough(state, level, pos, null);
     }
 
     default Optional<MutableComponent> printCamoBlock(CompoundTag beTag)
