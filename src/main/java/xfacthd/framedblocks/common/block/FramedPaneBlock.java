@@ -1,7 +1,5 @@
 package xfacthd.framedblocks.common.block;
 
-import com.google.common.collect.ImmutableList;
-import com.google.common.collect.ImmutableMap;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.world.InteractionHand;
@@ -24,7 +22,6 @@ import xfacthd.framedblocks.api.util.client.FramedBlockRenderProperties;
 import xfacthd.framedblocks.common.FBContent;
 import xfacthd.framedblocks.api.block.FramedBlockEntity;
 import xfacthd.framedblocks.common.data.BlockType;
-import xfacthd.framedblocks.api.util.Utils;
 
 import javax.annotation.Nullable;
 import java.util.List;
@@ -123,30 +120,4 @@ public class FramedPaneBlock extends IronBarsBlock implements IFramedBlock
 
     @Override
     public BlockType getBlockType() { return type; }
-
-    public static ImmutableMap<BlockState, VoxelShape> generateShapes(ImmutableList<BlockState> states)
-    {
-        VoxelShape center = box(7, 0, 7, 9, 16, 9);
-        VoxelShape wing = box(7, 0, 0, 9, 16, 7);
-
-        ImmutableMap.Builder<BlockState, VoxelShape> builder = ImmutableMap.builder();
-
-        for (BlockState state : states)
-        {
-            boolean north = state.getValue(NORTH);
-            boolean east = state.getValue(EAST);
-            boolean south = state.getValue(SOUTH);
-            boolean west = state.getValue(WEST);
-
-            VoxelShape shape = center;
-            if (north) { shape = Shapes.join(shape, wing, BooleanOp.OR); }
-            if (east) { shape = Shapes.join(shape, Utils.rotateShape(Direction.NORTH, Direction.EAST, wing), BooleanOp.OR); }
-            if (south) { shape = Shapes.join(shape, Utils.rotateShape(Direction.NORTH, Direction.SOUTH, wing), BooleanOp.OR); }
-            if (west) { shape = Shapes.join(shape, Utils.rotateShape(Direction.NORTH, Direction.WEST, wing), BooleanOp.OR); }
-
-            builder.put(state, shape.optimize());
-        }
-
-        return builder.build();
-    }
 }
