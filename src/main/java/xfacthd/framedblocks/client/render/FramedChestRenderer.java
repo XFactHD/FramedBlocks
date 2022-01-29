@@ -11,9 +11,11 @@ import net.minecraft.core.Direction;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
 import com.mojang.math.Vector3f;
+import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.client.ForgeHooksClient;
 import net.minecraftforge.client.model.data.EmptyModelData;
 import net.minecraftforge.client.model.data.IModelData;
+import xfacthd.framedblocks.api.util.client.ClientUtils;
 import xfacthd.framedblocks.client.model.FramedChestLidModel;
 import xfacthd.framedblocks.common.FBContent;
 import xfacthd.framedblocks.common.data.ChestState;
@@ -114,6 +116,14 @@ public class FramedChestRenderer implements BlockEntityRenderer<FramedChestBlock
 
         return angle;
     }
+
+    @Override
+    public boolean shouldRender(FramedChestBlockEntity be, Vec3 camera)
+    {
+        return !ClientUtils.OPTIFINE_LOADED.get() && BlockEntityRenderer.super.shouldRender(be, camera);
+    }
+
+
 
     public static void onModelsLoaded(Map<ResourceLocation, BakedModel> registry)
     {

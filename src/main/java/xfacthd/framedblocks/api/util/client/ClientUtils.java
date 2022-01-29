@@ -1,5 +1,6 @@
 package xfacthd.framedblocks.api.util.client;
 
+import com.google.common.base.Suppliers;
 import net.minecraft.client.renderer.block.BlockModelShaper;
 import net.minecraft.client.renderer.chunk.RenderChunkRegion;
 import net.minecraft.client.resources.model.BakedModel;
@@ -13,8 +14,7 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.registries.RegistryObject;
 
 import java.util.Map;
-import java.util.function.BiFunction;
-import java.util.function.Function;
+import java.util.function.*;
 
 public class ClientUtils
 {
@@ -50,4 +50,17 @@ public class ClientUtils
         }
         return null;
     }
+
+    public static final Supplier<Boolean> OPTIFINE_LOADED = Suppliers.memoize(() ->
+    {
+        try
+        {
+            Class.forName("net.optifine.Config");
+            return true;
+        }
+        catch (ClassNotFoundException ingored)
+        {
+            return false;
+        }
+    });
 }
