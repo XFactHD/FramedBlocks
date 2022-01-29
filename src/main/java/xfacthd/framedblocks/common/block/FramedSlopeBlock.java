@@ -80,6 +80,7 @@ public class FramedSlopeBlock extends FramedBlock
                     BlockState camoState = Blocks.AIR.getDefaultState();
                     ItemStack camoStack = ItemStack.EMPTY;
                     boolean glowing = false;
+                    boolean passthrough = false;
 
                     TileEntity te = world.getTileEntity(pos);
                     if (te instanceof FramedTileEntity)
@@ -87,6 +88,7 @@ public class FramedSlopeBlock extends FramedBlock
                         camoState = ((FramedTileEntity) te).getCamoState();
                         camoStack = ((FramedTileEntity) te).getCamoStack();
                         glowing = ((FramedTileEntity) te).isGlowing();
+                        passthrough = ((FramedTileEntity) te).isPassThrough(null);
                     }
 
                     world.setBlockState(pos, newState);
@@ -105,6 +107,7 @@ public class FramedSlopeBlock extends FramedBlock
                     {
                         ((FramedTileEntity) te).setCamo(camoStack, camoState, false);
                         ((FramedTileEntity) te).setGlowing(glowing);
+                        ((FramedTileEntity) te).setPassThrough(passthrough);
                     }
                 }
 

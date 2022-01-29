@@ -14,6 +14,7 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.*;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.BlockRayTraceResult;
+import net.minecraft.util.math.shapes.ISelectionContext;
 import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.util.text.IFormattableTextComponent;
 import net.minecraft.util.text.TextFormatting;
@@ -32,7 +33,7 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.List;
 
-@SuppressWarnings("deprecation")
+@SuppressWarnings({ "deprecation", "unused" })
 public interface IFramedBlock extends IFacade
 {
     BlockType getBlockType();
@@ -43,7 +44,13 @@ public interface IFramedBlock extends IFacade
                 .notSolid()
                 .harvestTool(ToolType.AXE)
                 .hardnessAndResistance(2F)
-                .sound(SoundType.WOOD);
+                .sound(SoundType.WOOD)
+                .setBlocksVision(IFramedBlock::isViewBlocking);
+    }
+
+    static boolean isViewBlocking(BlockState state, IBlockReader level, BlockPos pos)
+    {
+        return ((IFramedBlock) state.getBlock()).isViewBlocked(state, level, pos);
     }
 
     default BlockItem createItemBlock()
@@ -151,6 +158,21 @@ public interface IFramedBlock extends IFacade
     {
         if (world == null) { return false; } //Block had no camo when loaded => world in data not set
 
+        BlockPos neighborPos = pos.offset(side);
+        BlockState neighborState = world.getBlockState(neighborPos);
+
+        if (!isPassThrough(state, world, pos, null))
+        {
+            if (neighborState.getBlock() instanceof IFramedBlock && ((IFramedBlock) neighborState.getBlock()).getBlockType().allowPassthrough())
+            {
+                TileEntity te = world.getTileEntity(neighborPos);
+                if (te instanceof FramedTileEntity && ((FramedTileEntity) te).isPassThrough(null))
+                {
+                    return false;
+                }
+            }
+        }
+
         SideSkipPredicate pred = ClientConfig.detailedCulling ? getBlockType().getSideSkipPredicate() : SideSkipPredicate.CTM;
         return pred.test(world, pos, state, world.getBlockState(pos.offset(side)), side);
     }
@@ -211,9 +233,31 @@ public interface IFramedBlock extends IFacade
         return 20;
     }
 
+    default boolean isPassThrough(BlockState state, IBlockReader world, BlockPos pos, @Nullable ISelectionContext ctx)
+    {
+        if (!getBlockType().allowPassthrough()) { return false; }
+
+        TileEntity te = world.getTileEntity(pos);
+        return te instanceof FramedTileEntity && ((FramedTileEntity) te).isPassThrough(ctx);
+    }
+
+    default boolean isViewBlocked(BlockState state, IBlockReader level, BlockPos pos)
+    {
+        return !getBlockType().allowPassthrough() || !isPassThrough(state, level, pos, null);
+    }
+
     default IFormattableTextComponent printCamoBlock(CompoundNBT beTag)
     {
         BlockState camoState = NBTUtil.readBlockState(beTag.getCompound("camo_state"));
         return camoState.isAir() ? FramedBlueprintItem.BLOCK_NONE : camoState.getBlock().getTranslatedName().mergeStyle(TextFormatting.WHITE);
+    }
+
+    static boolean suppressParticles(BlockState state, World world, BlockPos pos)
+    {
+        if (state.getBlock() instanceof IFramedBlock && ((IFramedBlock) state.getBlock()).getBlockType().allowPassthrough())
+        {
+            return ((IFramedBlock) state.getBlock()).isPassThrough(state, world, pos, null);
+        }
+        return false;
     }
 }

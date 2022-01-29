@@ -13,6 +13,8 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.tileentity.TileEntityType;
 import net.minecraft.util.*;
 import net.minecraft.util.math.BlockRayTraceResult;
+import net.minecraft.util.math.shapes.EntitySelectionContext;
+import net.minecraft.util.math.shapes.ISelectionContext;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.Explosion;
 import net.minecraftforge.client.model.data.IModelData;
@@ -39,6 +41,7 @@ public class FramedTileEntity extends TileEntity
     private ItemStack camoStack = ItemStack.EMPTY;
     private BlockState camoState = Blocks.AIR.getDefaultState();
     private boolean glowing = false;
+    private boolean passthrough = false;
 
     public FramedTileEntity() { this(FBContent.tileTypeFramedBlock.get()); }
 
@@ -81,9 +84,35 @@ public class FramedTileEntity extends TileEntity
             }
             return world.isRemote() ? ActionResultType.SUCCESS : ActionResultType.CONSUME;
         }
-        else if (!camo.isAir() && stack.getItem().isIn(Utils.WRENCH))
+        else if (!camo.isAir() && !player.isSneaking() && stack.getItem().isIn(Utils.WRENCH))
         {
             return rotateCamo(camo, hit);
+        }
+        else if (stack.getItem() == ServerConfig.passthroughItem && !passthrough && getBlock().getBlockType().allowPassthrough())
+        {
+            //noinspection ConstantConditions
+            if (!world.isRemote())
+            {
+                if (!player.isCreative()) { stack.shrink(1); }
+
+                setPassThrough(true);
+            }
+            return ActionResultType.func_233537_a_(world.isRemote());
+        }
+        else if (passthrough && player.isSneaking() && stack.getItem().isIn(Utils.WRENCH))
+        {
+            //noinspection ConstantConditions
+            if (!world.isRemote())
+            {
+                setPassThrough(false);
+
+                ItemStack result = new ItemStack(ServerConfig.passthroughItem);
+                if (!player.inventory.addItemStackToInventory(result))
+                {
+                    player.dropItem(result, false);
+                }
+            }
+            return ActionResultType.func_233537_a_(world.isRemote());
         }
 
         return ActionResultType.PASS;
@@ -358,6 +387,8 @@ public class FramedTileEntity extends TileEntity
             {
                 doLightUpdate();
             }
+
+            markDirty();
             //noinspection ConstantConditions
             world.notifyBlockUpdate(pos, getBlockState(), getBlockState(), 3);
         }
@@ -369,6 +400,31 @@ public class FramedTileEntity extends TileEntity
     {
         if (glowing) { return 15; }
         return camoState.getLightValue();
+    }
+
+    public void setPassThrough(boolean passthrough)
+    {
+        if (this.passthrough != passthrough)
+        {
+            this.passthrough = passthrough;
+
+            markDirty();
+            //noinspection ConstantConditions
+            world.notifyBlockUpdate(pos, getBlockState(), getBlockState(), 3);
+        }
+    }
+
+    public boolean isPassThrough(ISelectionContext ctx)
+    {
+        if (!passthrough) { return false; }
+
+        if (ctx instanceof EntitySelectionContext && ctx.getEntity() instanceof PlayerEntity)
+        {
+            ItemStack mainItem = ((PlayerEntity) ctx.getEntity()).getHeldItemMainhand();
+            return !mainItem.getItem().isIn(Utils.WRENCH) && mainItem.getItem() != FBContent.itemFramedHammer.get();
+        }
+
+        return true;
     }
 
     protected void doLightUpdate()
@@ -415,6 +471,7 @@ public class FramedTileEntity extends TileEntity
         nbt.put("camo_stack", camoStack.write(new CompoundNBT()));
         nbt.put("camo_state", NBTUtil.writeBlockState(camoState));
         nbt.putBoolean("glowing", glowing);
+        nbt.putBoolean("passthrough", passthrough);
     }
 
     protected boolean readFromDataPacket(CompoundNBT nbt)
@@ -445,6 +502,13 @@ public class FramedTileEntity extends TileEntity
             doLightUpdate();
         }
 
+        boolean newPassthrough = nbt.getBoolean("passthrough");
+        if (newPassthrough != passthrough)
+        {
+            passthrough = newPassthrough;
+            needUpdate = true;
+        }
+
         return needUpdate;
     }
 
@@ -456,6 +520,7 @@ public class FramedTileEntity extends TileEntity
         nbt.put("camo_stack", camoStack.write(new CompoundNBT()));
         nbt.put("camo_state", NBTUtil.writeBlockState(camoState));
         nbt.putBoolean("glowing", glowing);
+        nbt.putBoolean("passthrough", passthrough);
 
         return nbt;
     }
@@ -476,6 +541,7 @@ public class FramedTileEntity extends TileEntity
         }
 
         glowing = nbt.getBoolean("glowing");
+        passthrough = nbt.getBoolean("passthrough");
     }
 
     /*
@@ -497,6 +563,7 @@ public class FramedTileEntity extends TileEntity
         nbt.put("camo_stack", camoStack.write(new CompoundNBT()));
         nbt.put("camo_state", NBTUtil.writeBlockState(camoState));
         nbt.putBoolean("glowing", glowing);
+        nbt.putBoolean("passthrough", passthrough);
 
         return super.write(nbt);
     }
@@ -522,5 +589,6 @@ public class FramedTileEntity extends TileEntity
             );
         }
         glowing = nbt.getBoolean("glowing");
+        passthrough = nbt.getBoolean("passthrough");
     }
 }

@@ -3,6 +3,7 @@ package xfacthd.framedblocks.common.util;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ActionResultType;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
@@ -12,7 +13,9 @@ import net.minecraftforge.fml.common.Mod;
 import xfacthd.framedblocks.FramedBlocks;
 import xfacthd.framedblocks.common.FBContent;
 import xfacthd.framedblocks.common.block.FramedCollapsibleBlock;
+import xfacthd.framedblocks.common.block.IFramedBlock;
 import xfacthd.framedblocks.common.data.PropertyHolder;
+import xfacthd.framedblocks.common.tileentity.FramedTileEntity;
 
 @Mod.EventBusSubscriber(modid = FramedBlocks.MODID, bus = Mod.EventBusSubscriber.Bus.FORGE)
 public class EventHandler
@@ -41,6 +44,16 @@ public class EventHandler
             {
                 world.setBlockState(pos, state.with(PropertyHolder.OFFSET, !state.get(PropertyHolder.OFFSET)));
                 success = true;
+            }
+        }
+
+        if (!success && block instanceof IFramedBlock && ((IFramedBlock) block).getBlockType().allowPassthrough())
+        {
+            TileEntity te = world.getTileEntity(pos);
+            if (te instanceof FramedTileEntity && ((FramedTileEntity) te).isPassThrough(null))
+            {
+                event.setCanceled(true);
+                event.setCancellationResult(ActionResultType.FAIL);
             }
         }
 

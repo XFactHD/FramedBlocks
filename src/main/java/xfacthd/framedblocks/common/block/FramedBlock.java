@@ -1,6 +1,7 @@
 package xfacthd.framedblocks.common.block;
 
 import net.minecraft.block.*;
+import net.minecraft.client.particle.ParticleManager;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
@@ -12,8 +13,7 @@ import net.minecraft.state.properties.BlockStateProperties;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.*;
 import net.minecraft.util.math.*;
-import net.minecraft.util.math.shapes.ISelectionContext;
-import net.minecraft.util.math.shapes.VoxelShape;
+import net.minecraft.util.math.shapes.*;
 import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.world.*;
 import xfacthd.framedblocks.common.data.*;
@@ -78,6 +78,10 @@ public class FramedBlock extends Block implements IFramedBlock, IWaterLoggable
     @Override
     public VoxelShape getShape(BlockState state, IBlockReader world, BlockPos pos, ISelectionContext ctx)
     {
+        if (isPassThrough(state, world, pos, ctx))
+        {
+            return VoxelShapes.empty();
+        }
         return shapes.get(state);
     }
 
@@ -156,6 +160,18 @@ public class FramedBlock extends Block implements IFramedBlock, IWaterLoggable
     {
         if (getBlockType() != BlockType.FRAMED_CUBE) { return false; }
         return super.allowsMovement(state, world, pos, type);
+    }
+
+    @Override
+    public boolean addHitEffects(BlockState state, World world, RayTraceResult target, ParticleManager manager)
+    {
+        return IFramedBlock.suppressParticles(state, world, ((BlockRayTraceResult) target).getPos());
+    }
+
+    @Override
+    public boolean addDestroyEffects(BlockState state, World world, BlockPos pos, ParticleManager manager)
+    {
+        return IFramedBlock.suppressParticles(state, world, pos);
     }
 
     @Override

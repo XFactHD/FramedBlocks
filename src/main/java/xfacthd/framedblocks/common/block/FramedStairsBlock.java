@@ -1,6 +1,7 @@
 package xfacthd.framedblocks.common.block;
 
 import net.minecraft.block.*;
+import net.minecraft.client.particle.ParticleManager;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
@@ -9,8 +10,8 @@ import net.minecraft.loot.LootContext;
 import net.minecraft.state.properties.*;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.*;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.BlockRayTraceResult;
+import net.minecraft.util.math.*;
+import net.minecraft.util.math.shapes.*;
 import net.minecraft.world.*;
 import xfacthd.framedblocks.common.FBContent;
 import xfacthd.framedblocks.common.data.*;
@@ -110,6 +111,25 @@ public class FramedStairsBlock extends StairsBlock implements IFramedBlock
     public float getSlipperiness(BlockState state, IWorldReader world, BlockPos pos, @Nullable Entity entity)
     {
         return getCamoSlipperiness(state, world, pos, entity);
+    }
+
+    @Override
+    public VoxelShape getShape(BlockState state, IBlockReader world, BlockPos pos, ISelectionContext ctx)
+    {
+        if (isPassThrough(state, world, pos, ctx)) { return VoxelShapes.empty(); }
+        return super.getShape(state, world, pos, ctx);
+    }
+
+    @Override
+    public boolean addHitEffects(BlockState state, World world, RayTraceResult target, ParticleManager manager)
+    {
+        return IFramedBlock.suppressParticles(state, world, ((BlockRayTraceResult) target).getPos());
+    }
+
+    @Override
+    public boolean addDestroyEffects(BlockState state, World world, BlockPos pos, ParticleManager manager)
+    {
+        return IFramedBlock.suppressParticles(state, world, pos);
     }
 
     @Override

@@ -3,6 +3,7 @@ package xfacthd.framedblocks.common.block;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
 import net.minecraft.block.*;
+import net.minecraft.client.particle.ParticleManager;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
@@ -10,8 +11,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.loot.LootContext;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.*;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.BlockRayTraceResult;
+import net.minecraft.util.math.*;
 import net.minecraft.util.math.shapes.*;
 import net.minecraft.world.*;
 import xfacthd.framedblocks.common.FBContent;
@@ -87,10 +87,36 @@ public class FramedPaneBlock extends PaneBlock implements IFramedBlock
         return getCamoSlipperiness(state, world, pos, entity);
     }
 
+    @Override
+    public VoxelShape getShape(BlockState state, IBlockReader world, BlockPos pos, ISelectionContext ctx)
+    {
+        if (isPassThrough(state, world, pos, ctx)) { return VoxelShapes.empty(); }
+        return super.getShape(state, world, pos, ctx);
+    }
+
+    @Override
+    public VoxelShape getCollisionShape(BlockState state, IBlockReader world, BlockPos pos, ISelectionContext ctx)
+    {
+        if (isPassThrough(state, world, pos, ctx)) { return VoxelShapes.empty(); }
+        return super.getCollisionShape(state, world, pos, ctx);
+    }
+
     @Override //The pane handles this through the SideSkipPredicate instead
     public boolean isSideInvisible(BlockState state, BlockState adjacentState, Direction side)
     {
         return this == FBContent.blockFramedBars.get() && super.isSideInvisible(state, adjacentState, side);
+    }
+
+    @Override
+    public boolean addHitEffects(BlockState state, World world, RayTraceResult target, ParticleManager manager)
+    {
+        return IFramedBlock.suppressParticles(state, world, ((BlockRayTraceResult) target).getPos());
+    }
+
+    @Override
+    public boolean addDestroyEffects(BlockState state, World world, BlockPos pos, ParticleManager manager)
+    {
+        return IFramedBlock.suppressParticles(state, world, pos);
     }
 
     @Override

@@ -32,13 +32,16 @@ public abstract class MixinBlock extends AbstractBlock
         {
             FramedTileEntity fte = (FramedTileEntity) te;
 
-            if (state.getBlock() instanceof BreakableBlock && SideSkipPredicate.CTM.test(world, adjPos, world.getBlockState(adjPos), state, face.getOpposite()))
+            if (!fte.isPassThrough(null))
             {
-                cir.setReturnValue(false);
-            }
-            else if (fte.isSolidSide(face.getOpposite()))
-            {
-                cir.setReturnValue(false);
+                if (state.getBlock() instanceof BreakableBlock && SideSkipPredicate.CTM.test(world, adjPos, world.getBlockState(adjPos), state, face.getOpposite()))
+                {
+                    cir.setReturnValue(false);
+                }
+                else if (fte.isSolidSide(face.getOpposite()))
+                {
+                    cir.setReturnValue(false);
+                }
             }
         }
     }
