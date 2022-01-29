@@ -1,7 +1,5 @@
 package xfacthd.framedblocks.common.block;
 
-import com.google.common.collect.ImmutableList;
-import com.google.common.collect.ImmutableMap;
 import net.minecraft.block.*;
 import net.minecraft.client.particle.ParticleManager;
 import net.minecraft.entity.Entity;
@@ -17,7 +15,6 @@ import net.minecraft.world.*;
 import xfacthd.framedblocks.common.FBContent;
 import xfacthd.framedblocks.common.data.BlockType;
 import xfacthd.framedblocks.common.tileentity.FramedTileEntity;
-import xfacthd.framedblocks.common.util.Utils;
 
 import javax.annotation.Nullable;
 import java.util.List;
@@ -127,30 +124,4 @@ public class FramedPaneBlock extends PaneBlock implements IFramedBlock
 
     @Override
     public BlockType getBlockType() { return type; }
-
-    public static ImmutableMap<BlockState, VoxelShape> generateShapes(ImmutableList<BlockState> states)
-    {
-        VoxelShape center = makeCuboidShape(7, 0, 7, 9, 16, 9);
-        VoxelShape wing = makeCuboidShape(7, 0, 0, 9, 16, 7);
-
-        ImmutableMap.Builder<BlockState, VoxelShape> builder = ImmutableMap.builder();
-
-        for (BlockState state : states)
-        {
-            boolean north = state.get(NORTH);
-            boolean east = state.get(EAST);
-            boolean south = state.get(SOUTH);
-            boolean west = state.get(WEST);
-
-            VoxelShape shape = center;
-            if (north) { shape = VoxelShapes.combine(shape, wing, IBooleanFunction.OR); }
-            if (east) { shape = VoxelShapes.combine(shape, Utils.rotateShape(Direction.NORTH, Direction.EAST, wing), IBooleanFunction.OR); }
-            if (south) { shape = VoxelShapes.combine(shape, Utils.rotateShape(Direction.NORTH, Direction.SOUTH, wing), IBooleanFunction.OR); }
-            if (west) { shape = VoxelShapes.combine(shape, Utils.rotateShape(Direction.NORTH, Direction.WEST, wing), IBooleanFunction.OR); }
-
-            builder.put(state, shape.simplify());
-        }
-
-        return builder.build();
-    }
 }
