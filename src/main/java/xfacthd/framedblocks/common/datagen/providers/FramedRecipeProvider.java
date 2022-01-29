@@ -4,6 +4,7 @@ import net.minecraft.advancements.ICriterionInstance;
 import net.minecraft.data.*;
 import net.minecraft.item.Items;
 import net.minecraft.tags.ItemTags;
+import net.minecraftforge.common.Tags;
 import xfacthd.framedblocks.FramedBlocks;
 import xfacthd.framedblocks.common.FBContent;
 
@@ -352,6 +353,15 @@ public class FramedRecipeProvider extends RecipeProvider
                 .key('S', FBContent.blockFramedHalfStairs.get())
                 .addCriterion("hasFramedHalfStairs", hasItem(FBContent.blockFramedHalfStairs.get()))
                 .build(consumer, FramedBlocks.MODID + ":framed_stairs_from_half_stairs");
+
+        ShapedRecipeBuilder.shapedRecipe(FBContent.blockFramedBouncyCube.get())
+                .patternLine(" S ")
+                .patternLine("SCS")
+                .patternLine(" S ")
+                .key('S', Tags.Items.SLIMEBALLS)
+                .key('C', FBContent.blockFramedCube.get())
+                .addCriterion("hasFramedBlock", HAS_FRAMED_BLOCK)
+                .build(consumer);
 
 
 

@@ -11,8 +11,8 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.client.event.ColorHandlerEvent;
-import net.minecraftforge.client.event.ModelBakeEvent;
+import net.minecraftforge.client.event.*;
+import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.RegistryObject;
 import net.minecraftforge.fml.client.registry.ClientRegistry;
@@ -113,6 +113,12 @@ public class FBClient
     }
 
     @SubscribeEvent
+    public static void onModelRegistry(final ModelRegistryEvent event)
+    {
+        ModelLoader.addSpecialModel(FramedBouncyCubeModel.FRAME_LOCATION);
+    }
+
+    @SubscribeEvent
     public static void onModelsLoaded(final ModelBakeEvent event)
     {
         Map<ResourceLocation, IBakedModel> registry = event.getModelRegistry();
@@ -167,6 +173,7 @@ public class FBClient
         replaceModels(FBContent.blockFramedPost, registry, FramedPillarModel::new);
         replaceModels(FBContent.blockFramedCollapsibleBlock, registry, FramedCollapsibleBlockModel::new);
         replaceModels(FBContent.blockFramedHalfStairs, registry, FramedHalfStairsModel::new);
+        replaceModels(FBContent.blockFramedBouncyCube, registry, (state, model) -> new FramedBouncyCubeModel(state, model, registry));
     }
 
     private static void replaceModels(RegistryObject<Block> block, Map<ResourceLocation, IBakedModel> models,
