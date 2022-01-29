@@ -8,8 +8,7 @@ import net.minecraft.util.Direction;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.client.model.data.IModelData;
 import xfacthd.framedblocks.FramedBlocks;
-import xfacthd.framedblocks.client.util.BakedQuadTransformer;
-import xfacthd.framedblocks.client.util.ModelUtils;
+import xfacthd.framedblocks.client.util.*;
 import xfacthd.framedblocks.common.FBContent;
 import xfacthd.framedblocks.common.data.ChestState;
 import xfacthd.framedblocks.common.data.PropertyHolder;
@@ -25,7 +24,7 @@ public class FramedChestModel extends FramedBlockModel
     public FramedChestModel(BlockState state, IBakedModel baseModel)
     {
         super(state, baseModel);
-        this.closed = state.get(PropertyHolder.CHEST_STATE) == ChestState.CLOSED;
+        this.closed = state.get(PropertyHolder.CHEST_STATE) == ChestState.CLOSED || ClientUtils.OPTIFINE_LOADED.get();
     }
 
     public FramedChestModel(IBakedModel baseModel) { this(FBContent.blockFramedChest.get().getDefaultState(), baseModel); }

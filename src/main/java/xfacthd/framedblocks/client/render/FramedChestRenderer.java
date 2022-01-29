@@ -16,6 +16,7 @@ import net.minecraftforge.client.ForgeHooksClient;
 import net.minecraftforge.client.model.data.EmptyModelData;
 import net.minecraftforge.client.model.data.IModelData;
 import xfacthd.framedblocks.client.model.FramedChestLidModel;
+import xfacthd.framedblocks.client.util.ClientUtils;
 import xfacthd.framedblocks.common.FBContent;
 import xfacthd.framedblocks.common.data.ChestState;
 import xfacthd.framedblocks.common.data.PropertyHolder;
@@ -40,6 +41,8 @@ public class FramedChestRenderer extends TileEntityRenderer<FramedChestTileEntit
     @Override
     public void render(FramedChestTileEntity te, float partialTicks, MatrixStack matrix, IRenderTypeBuffer buffer, int light, int overlay)
     {
+        if (ClientUtils.OPTIFINE_LOADED.get()) { return; }
+
         BlockState state = te.getBlockState();
 
         ChestState chestState = state.get(PropertyHolder.CHEST_STATE);
@@ -111,6 +114,8 @@ public class FramedChestRenderer extends TileEntityRenderer<FramedChestTileEntit
 
         return angle;
     }
+
+
 
     public static void onModelsLoaded(Map<ResourceLocation, IBakedModel> registry)
     {
