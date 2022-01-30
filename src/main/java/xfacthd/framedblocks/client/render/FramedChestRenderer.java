@@ -1,5 +1,7 @@
 package xfacthd.framedblocks.client.render;
 
+import com.google.common.collect.HashBasedTable;
+import com.google.common.collect.Table;
 import com.mojang.blaze3d.matrix.MatrixStack;
 import net.minecraft.block.BlockState;
 import net.minecraft.client.Minecraft;
@@ -18,11 +20,9 @@ import net.minecraftforge.client.model.data.IModelData;
 import xfacthd.framedblocks.client.model.FramedChestLidModel;
 import xfacthd.framedblocks.client.util.ClientUtils;
 import xfacthd.framedblocks.common.FBContent;
-import xfacthd.framedblocks.common.data.ChestState;
-import xfacthd.framedblocks.common.data.PropertyHolder;
+import xfacthd.framedblocks.common.data.*;
 import xfacthd.framedblocks.common.tileentity.FramedChestTileEntity;
 
-import java.util.EnumMap;
 import java.util.Map;
 
 public class FramedChestRenderer extends TileEntityRenderer<FramedChestTileEntity>
@@ -34,7 +34,7 @@ public class FramedChestRenderer extends TileEntityRenderer<FramedChestTileEntit
                     RenderType.getCutoutMipped(),
                     RenderType.getTranslucent()
             };
-    private static final Map<Direction, IBakedModel> LID_MODELS = new EnumMap<>(Direction.class);
+    private static final Table<Direction, LatchType, IBakedModel> LID_MODELS = HashBasedTable.create(4, 3);
 
     public FramedChestRenderer(TileEntityRendererDispatcher dispatcher) { super(dispatcher); }
 
@@ -52,7 +52,7 @@ public class FramedChestRenderer extends TileEntityRenderer<FramedChestTileEntit
 
         if (chestState == ChestState.CLOSED) { return; }
 
-        IBakedModel model = LID_MODELS.get(dir);
+        IBakedModel model = LID_MODELS.get(dir, state.get(PropertyHolder.LATCH_TYPE));
         //noinspection ConstantConditions
         IModelData data = model.getModelData(te.getWorld(), te.getPos(), state, EmptyModelData.INSTANCE);
 
@@ -121,14 +121,19 @@ public class FramedChestRenderer extends TileEntityRenderer<FramedChestTileEntit
     {
         for (Direction dir : Direction.Plane.HORIZONTAL)
         {
-            BlockState state = FBContent.blockFramedChest.get().getDefaultState().with(PropertyHolder.FACING_HOR, dir);
+            for (LatchType latch : LatchType.values())
+            {
+                BlockState state = FBContent.blockFramedChest.get().getDefaultState()
+                        .with(PropertyHolder.FACING_HOR, dir)
+                        .with(PropertyHolder.LATCH_TYPE, latch);
 
-            ResourceLocation location = BlockModelShapes.getModelLocation(state);
+                ResourceLocation location = BlockModelShapes.getModelLocation(state);
 
-            LID_MODELS.put(dir, new FramedChestLidModel(
-                    state,
-                    registry.get(location)
-            ));
+                LID_MODELS.put(dir, latch, new FramedChestLidModel(
+                        state,
+                        registry.get(location)
+                ));
+            }
         }
     }
 }

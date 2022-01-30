@@ -10,8 +10,7 @@ import net.minecraftforge.client.model.data.IModelData;
 import xfacthd.framedblocks.FramedBlocks;
 import xfacthd.framedblocks.client.util.*;
 import xfacthd.framedblocks.common.FBContent;
-import xfacthd.framedblocks.common.data.ChestState;
-import xfacthd.framedblocks.common.data.PropertyHolder;
+import xfacthd.framedblocks.common.data.*;
 
 import java.util.*;
 
@@ -19,12 +18,16 @@ public class FramedChestModel extends FramedBlockModel
 {
     private static final ResourceLocation TEXTURE = new ResourceLocation(FramedBlocks.MODID, "block/framed_chest_lock");
 
+    private final Direction facing;
     private final boolean closed;
+    private final LatchType latch;
 
     public FramedChestModel(BlockState state, IBakedModel baseModel)
     {
         super(state, baseModel);
+        this.facing = state.get(PropertyHolder.FACING_HOR);
         this.closed = state.get(PropertyHolder.CHEST_STATE) == ChestState.CLOSED || ClientUtils.OPTIFINE_LOADED.get();
+        this.latch = state.get(PropertyHolder.LATCH_TYPE);
     }
 
     public FramedChestModel(IBakedModel baseModel) { this(FBContent.blockFramedChest.get().getDefaultState(), baseModel); }
@@ -57,15 +60,63 @@ public class FramedChestModel extends FramedBlockModel
                 quadMap.get(null).add(sideQuad);
             }
         }
+
+        if (latch == LatchType.CAMO)
+        {
+            makeChestLatch(quadMap, quad, facing);
+        }
+    }
+
+    public static void makeChestLatch(Map<Direction, List<BakedQuad>> quadMap, BakedQuad quad, Direction facing)
+    {
+        Direction face = quad.getFace();
+        BakedQuad copy = ModelUtils.duplicateQuad(quad);
+
+        if (face == facing || face == facing.getOpposite())
+        {
+            if (BakedQuadTransformer.createSideQuad(copy, 7F/16F, 7F/16F, 9F/16F, 11F/16F))
+            {
+                if (face == facing)
+                {
+                    quadMap.get(facing).add(copy);
+                }
+                else
+                {
+                    BakedQuadTransformer.setQuadPosInFacingDir(copy, 1F/16F);
+                    quadMap.get(null).add(copy);
+                }
+            }
+        }
+        else if (face.getAxis() == Direction.Axis.Y)
+        {
+            if (BakedQuadTransformer.createTopBottomQuad(copy, facing.getOpposite(), 1F/16F) &&
+                    BakedQuadTransformer.createTopBottomQuad(copy, facing.rotateY(), 9F/16F) &&
+                    BakedQuadTransformer.createTopBottomQuad(copy, facing.rotateYCCW(), 9F/16F)
+            )
+            {
+                BakedQuadTransformer.setQuadPosInFacingDir(copy, face == Direction.UP ? 11F/16F : 9F/16F);
+                quadMap.get(null).add(copy);
+            }
+        }
+        else
+        {
+            if (BakedQuadTransformer.createSideQuad(copy, 0, 7F/16F, 1, 11F/16F) &&
+                    BakedQuadTransformer.createVerticalSideQuad(copy, facing.getOpposite(), 1F/16F)
+            )
+            {
+                BakedQuadTransformer.setQuadPosInFacingDir(copy, 9F/16F);
+                quadMap.get(null).add(copy);
+            }
+        }
     }
 
     @Override
-    protected boolean hasAdditionalQuadsInLayer(RenderType layer) { return layer == RenderType.getCutout(); }
+    protected boolean hasAdditionalQuadsInLayer(RenderType layer) { return latch == LatchType.DEFAULT && layer == RenderType.getCutout(); }
 
     @Override
     protected void getAdditionalQuads(Map<Direction, List<BakedQuad>> quadMap, BlockState state, Random rand, IModelData data, RenderType layer)
     {
-        if (!closed) { return; }
+        if (!closed || latch != LatchType.DEFAULT) { return; }
 
         List<BakedQuad> quads = baseModel.getQuads(state, null, rand, data);
         for (BakedQuad quad : quads)

@@ -14,6 +14,7 @@ public class PropertyHolder
     public static final EnumProperty<ChestState> CHEST_STATE = EnumProperty.create("state", ChestState.class);
     public static final EnumProperty<RailShape> ASCENDING_RAIL_SHAPE = EnumProperty.create("shape", RailShape.class, RailShape::isAscending);
     public static final EnumProperty<CollapseFace> COLLAPSED_FACE = EnumProperty.create("face", CollapseFace.class);
+    public static final EnumProperty<LatchType> LATCH_TYPE = EnumProperty.create("latch", LatchType.class);
 
     public static final BooleanProperty TOP = BooleanProperty.create("top");
     public static final BooleanProperty OFFSET = BooleanProperty.create("offset");
