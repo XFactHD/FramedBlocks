@@ -4,6 +4,7 @@ import net.minecraft.data.DataGenerator;
 import net.minecraftforge.common.data.LanguageProvider;
 import xfacthd.framedblocks.FramedBlocks;
 import xfacthd.framedblocks.common.FBContent;
+import xfacthd.framedblocks.common.blockentity.FramedStorageBlockEntity;
 import xfacthd.framedblocks.common.item.FramedBlueprintItem;
 import xfacthd.framedblocks.common.blockentity.FramedChestBlockEntity;
 import xfacthd.framedblocks.api.block.FramedBlockEntity;
@@ -62,6 +63,7 @@ public class FramedLanguageProvider extends LanguageProvider
         add(FBContent.blockFramedCollapsibleBlock.get(), "Framed Collapsible Block");
         add(FBContent.blockFramedHalfStairs.get(), "Framed Half Stairs");
         add(FBContent.blockFramedBouncyCube.get(), "Framed Bouncy Cube");
+        add(FBContent.blockFramedSecretStorage.get(), "Framed Secret Storage");
 
         add(FBContent.itemFramedHammer.get(), "Framed Hammer");
         add(FBContent.itemFramedWrench.get(), "Framed Wrench");
@@ -71,6 +73,7 @@ public class FramedLanguageProvider extends LanguageProvider
         add(FramedBlockEntity.MSG_BLACKLISTED.getKey(), "This block is blacklisted!");
         add(FramedBlockEntity.MSG_BLOCK_ENTITY.getKey(), "Blocks with BlockEntities cannot be inserted into framed blocks!");
         add(FramedChestBlockEntity.TITLE.getString(), "Framed Chest");
+        add(FramedStorageBlockEntity.TITLE.getString(), "Framed Secret Storage");
         add(FramedBlueprintItem.CONTAINED_BLOCK, "Contained Block: %s");
         add(FramedBlueprintItem.CAMO_BLOCK, "Camo Block: %s");
         add(FramedBlueprintItem.IS_ILLUMINATED, "Illuminated: %s");

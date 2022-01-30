@@ -18,7 +18,7 @@ import xfacthd.framedblocks.FramedBlocks;
 import xfacthd.framedblocks.api.block.FramedBlockEntity;
 import xfacthd.framedblocks.api.block.IFramedBlock;
 import xfacthd.framedblocks.common.block.*;
-import xfacthd.framedblocks.common.menu.FramedChestMenu;
+import xfacthd.framedblocks.common.menu.FramedStorageMenu;
 import xfacthd.framedblocks.common.data.BlockType;
 import xfacthd.framedblocks.common.data.FramedToolType;
 import xfacthd.framedblocks.common.item.FramedBlueprintItem;
@@ -88,6 +88,7 @@ public class FBContent
     public static final RegistryObject<Block> blockFramedCollapsibleBlock = registerBlock(FramedCollapsibleBlock::new, BlockType.FRAMED_COLLAPSIBLE_BLOCK);
     public static final RegistryObject<Block> blockFramedHalfStairs = registerBlock(FramedHalfStairsBlock::new, BlockType.FRAMED_HALF_STAIRS);
     public static final RegistryObject<Block> blockFramedBouncyCube = registerBlock(FramedBouncyCubeBlock::new, BlockType.FRAMED_BOUNCY_CUBE);
+    public static final RegistryObject<Block> blockFramedSecretStorage = registerBlock(FramedStorageBlock::new, BlockType.FRAMED_SECRET_STORAGE);
 
     /** ITEMS */
     public static final RegistryObject<Item> itemFramedHammer = registerToolItem(FramedToolItem::new, FramedToolType.HAMMER);
@@ -145,9 +146,14 @@ public class FBContent
             "framed_collapsible_block",
             blockFramedCollapsibleBlock
     );
+    public static final RegistryObject<BlockEntityType<FramedStorageBlockEntity>> blockEntityTypeFramedSecretStorage = createBlockEntityType(
+            FramedStorageBlockEntity::new,
+            "framed_secret_storage",
+            blockFramedSecretStorage
+    );
 
     /** CONTAINER TYPES */
-    public static final RegistryObject<MenuType<FramedChestMenu>> menuTypeFramedChest = createMenuType(FramedChestMenu::new, "framed_chest");
+    public static final RegistryObject<MenuType<FramedStorageMenu>> menuTypeFramedStorage = createMenuType(FramedStorageMenu::new, "framed_chest");
 
 
 
@@ -170,8 +176,9 @@ public class FBContent
                 .stream()
                 .map(RegistryObject::get)
                 .filter(block -> block instanceof IFramedBlock)
-                .filter(block -> ((IFramedBlock)block).getBlockType().hasBlockItem())
-                .map(block -> ((IFramedBlock)block).createItemBlock())
+                .map(IFramedBlock.class::cast)
+                .filter(block -> block.getBlockType().hasBlockItem())
+                .map(IFramedBlock::createItemBlock)
                 .forEach(registry::register);
     }
 
@@ -182,7 +189,8 @@ public class FBContent
                 .stream()
                 .map(RegistryObject::get)
                 .filter(block -> block instanceof IFramedBlock)
-                .filter(block -> !((IFramedBlock)block).getBlockType().hasSpecialTile())
+                .map(IFramedBlock.class::cast)
+                .filter(block -> !block.getBlockType().hasSpecialTile())
                 .toArray(Block[]::new);
     }
 

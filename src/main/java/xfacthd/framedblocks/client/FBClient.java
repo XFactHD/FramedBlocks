@@ -23,7 +23,7 @@ import xfacthd.framedblocks.client.model.*;
 import xfacthd.framedblocks.client.render.*;
 import xfacthd.framedblocks.client.render.outline.CollapsibleBlockOutlineRenderer;
 import xfacthd.framedblocks.client.render.outline.RailSlopeOutlineRenderer;
-import xfacthd.framedblocks.client.screen.FramedChestScreen;
+import xfacthd.framedblocks.client.screen.FramedStorageScreen;
 import xfacthd.framedblocks.client.screen.FramedSignScreen;
 import xfacthd.framedblocks.client.util.*;
 import xfacthd.framedblocks.common.FBContent;
@@ -53,7 +53,7 @@ public class FBClient
 
         event.enqueueWork(() ->
         {
-            MenuScreens.register(FBContent.menuTypeFramedChest.get(), FramedChestScreen::new);
+            MenuScreens.register(FBContent.menuTypeFramedStorage.get(), FramedStorageScreen::new);
 
             BlueprintPropertyOverride.register();
         });
@@ -151,6 +151,7 @@ public class FBClient
         ClientUtils.replaceModels(FBContent.blockFramedCollapsibleBlock, registry, FramedCollapsibleBlockModel::new);
         ClientUtils.replaceModels(FBContent.blockFramedHalfStairs, registry, FramedHalfStairsModel::new);
         ClientUtils.replaceModels(FBContent.blockFramedBouncyCube, registry, (state, baseModel) -> new FramedBouncyCubeModel(state, baseModel, registry));
+        ClientUtils.replaceModels(FBContent.blockFramedSecretStorage, registry, FramedCubeModel::new);
     }
 
 

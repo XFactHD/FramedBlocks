@@ -7,13 +7,13 @@ import net.minecraft.client.renderer.GameRenderer;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.network.chat.Component;
-import xfacthd.framedblocks.common.menu.FramedChestMenu;
+import xfacthd.framedblocks.common.menu.FramedStorageMenu;
 
-public class FramedChestScreen extends AbstractContainerScreen<FramedChestMenu>
+public class FramedStorageScreen extends AbstractContainerScreen<FramedStorageMenu>
 {
     private static final ResourceLocation CHEST_GUI_TEXTURE = new ResourceLocation("textures/gui/container/generic_54.png");
 
-    public FramedChestScreen(FramedChestMenu container, Inventory inv, Component title)
+    public FramedStorageScreen(FramedStorageMenu container, Inventory inv, Component title)
     {
         super(container, inv, title);
 

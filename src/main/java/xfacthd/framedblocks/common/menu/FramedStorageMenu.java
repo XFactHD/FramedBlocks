@@ -12,20 +12,21 @@ import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.SlotItemHandler;
 import xfacthd.framedblocks.common.FBContent;
 import xfacthd.framedblocks.common.blockentity.FramedChestBlockEntity;
+import xfacthd.framedblocks.common.blockentity.FramedStorageBlockEntity;
 
-public class FramedChestMenu extends AbstractContainerMenu
+public class FramedStorageMenu extends AbstractContainerMenu
 {
     private static final int MAX_SLOT_CHEST = 27;
-    private final FramedChestBlockEntity chest;
+    private final FramedStorageBlockEntity blockEntity;
 
-    public FramedChestMenu(int windowId, Inventory inv, BlockEntity chest)
+    public FramedStorageMenu(int windowId, Inventory inv, BlockEntity blockEntity)
     {
-        super(FBContent.menuTypeFramedChest.get(), windowId);
+        super(FBContent.menuTypeFramedStorage.get(), windowId);
 
-        Preconditions.checkArgument(chest instanceof FramedChestBlockEntity);
-        this.chest = (FramedChestBlockEntity) chest;
+        Preconditions.checkArgument(blockEntity instanceof FramedStorageBlockEntity);
+        this.blockEntity = (FramedStorageBlockEntity) blockEntity;
 
-        this.chest.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY).ifPresent(handler ->
+        this.blockEntity.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY).ifPresent(handler ->
         {
             for (int row = 0; row < 3; ++row)
             {
@@ -50,13 +51,13 @@ public class FramedChestMenu extends AbstractContainerMenu
         }
     }
 
-    public FramedChestMenu(int windowId, Inventory inv, FriendlyByteBuf extraData)
+    public FramedStorageMenu(int windowId, Inventory inv, FriendlyByteBuf extraData)
     {
         this(windowId, inv, inv.player.level.getBlockEntity(extraData.readBlockPos()));
     }
 
     @Override
-    public boolean stillValid(Player player) { return chest.isUsableByPlayer(player); }
+    public boolean stillValid(Player player) { return blockEntity.isUsableByPlayer(player); }
 
     @Override
     public ItemStack quickMoveStack(Player player, int index)
@@ -98,7 +99,7 @@ public class FramedChestMenu extends AbstractContainerMenu
         super.removed(player);
 
         //noinspection ConstantConditions
-        if (!chest.getLevel().isClientSide())
+        if (!blockEntity.getLevel().isClientSide() && blockEntity instanceof FramedChestBlockEntity chest)
         {
             chest.close();
         }

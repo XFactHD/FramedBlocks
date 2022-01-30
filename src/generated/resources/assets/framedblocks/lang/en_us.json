@@ -33,6 +33,7 @@
   "block.framedblocks.framed_pressure_plate": "Framed Pressure Plate",
   "block.framedblocks.framed_prism_corner": "Framed Prism Corner",
   "block.framedblocks.framed_rail_slope": "Framed Rail Slope",
+  "block.framedblocks.framed_secret_storage": "Framed Secret Storage",
   "block.framedblocks.framed_sign": "Framed Sign",
   "block.framedblocks.framed_slab": "Framed Slab",
   "block.framedblocks.framed_slab_corner": "Framed Slab Corner",
@@ -60,5 +61,6 @@
   "itemGroup.framed_blocks": "FramedBlocks",
   "msg.framedblocks.blacklisted": "This block is blacklisted!",
   "msg.framedblocks.block_entity": "Blocks with BlockEntities cannot be inserted into framed blocks!",
-  "title.framedblocks:framed_chest": "Framed Chest"
+  "title.framedblocks:framed_chest": "Framed Chest",
+  "title.framedblocks:framed_secret_storage": "Framed Secret Storage"
 }

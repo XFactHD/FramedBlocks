@@ -62,7 +62,8 @@ public enum BlockType implements IBlockType
     FRAMED_POST                   (false, false,  true,  true,  true, CtmPredicate.FALSE, new PostSkipPredicate(), FramedPillarBlock::generatePostShapes),
     FRAMED_COLLAPSIBLE_BLOCK      ( true,  true, false,  true,  true, FramedCollapsibleBlock.CTM_PREDICATE, new CollapsibleBlockSkipPredicate()),
     FRAMED_HALF_STAIRS            (false, false,  true,  true,  true, CtmPredicate.FALSE, new HalfStairsSkipPredicate(), FramedHalfStairsBlock::generateShapes),
-    FRAMED_BOUNCY_CUBE            (false, false, false,  true, false, CtmPredicate.TRUE, SideSkipPredicate.CTM, Shapes.block());
+    FRAMED_BOUNCY_CUBE            (false, false, false,  true, false, CtmPredicate.TRUE, SideSkipPredicate.CTM, Shapes.block()),
+    FRAMED_SECRET_STORAGE         (false,  true, false,  true, false, CtmPredicate.TRUE, SideSkipPredicate.CTM, Shapes.block());
 
     private final String name = toString().toLowerCase(Locale.ROOT);
     private final boolean specialHitbox;
