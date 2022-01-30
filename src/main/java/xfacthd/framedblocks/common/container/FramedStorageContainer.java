@@ -12,20 +12,21 @@ import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.SlotItemHandler;
 import xfacthd.framedblocks.common.FBContent;
 import xfacthd.framedblocks.common.tileentity.FramedChestTileEntity;
+import xfacthd.framedblocks.common.tileentity.FramedStorageTileEntity;
 
-public class FramedChestContainer extends Container
+public class FramedStorageContainer extends Container
 {
     private static final int MAX_SLOT_CHEST = 27;
-    private final FramedChestTileEntity chest;
+    private final FramedStorageTileEntity tileEntity;
 
-    public FramedChestContainer(int windowId, PlayerInventory inv, TileEntity chest)
+    public FramedStorageContainer(int windowId, PlayerInventory inv, TileEntity tileEntity)
     {
         super(FBContent.containerTypeFramedChest.get(), windowId);
 
-        Preconditions.checkArgument(chest instanceof FramedChestTileEntity);
-        this.chest = (FramedChestTileEntity) chest;
+        Preconditions.checkArgument(tileEntity instanceof FramedStorageTileEntity);
+        this.tileEntity = (FramedStorageTileEntity) tileEntity;
 
-        this.chest.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY).ifPresent(handler ->
+        this.tileEntity.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY).ifPresent(handler ->
         {
             for (int row = 0; row < 3; ++row)
             {
@@ -50,13 +51,13 @@ public class FramedChestContainer extends Container
         }
     }
 
-    public FramedChestContainer(int windowId, PlayerInventory inv, PacketBuffer extraData)
+    public FramedStorageContainer(int windowId, PlayerInventory inv, PacketBuffer extraData)
     {
         this(windowId, inv, inv.player.world.getTileEntity(extraData.readBlockPos()));
     }
 
     @Override
-    public boolean canInteractWith(PlayerEntity player) { return chest.isUsableByPlayer(player); }
+    public boolean canInteractWith(PlayerEntity player) { return tileEntity.isUsableByPlayer(player); }
 
     @Override
     public ItemStack transferStackInSlot(PlayerEntity player, int index)
@@ -98,9 +99,9 @@ public class FramedChestContainer extends Container
         super.onContainerClosed(player);
 
         //noinspection ConstantConditions
-        if (!chest.getWorld().isRemote())
+        if (!tileEntity.getWorld().isRemote() && tileEntity instanceof FramedChestTileEntity)
         {
-            chest.close();
+            ((FramedChestTileEntity) tileEntity).close();
         }
     }
 }

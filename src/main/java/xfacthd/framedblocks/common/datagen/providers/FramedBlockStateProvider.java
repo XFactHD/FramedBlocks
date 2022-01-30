@@ -77,6 +77,7 @@ public class FramedBlockStateProvider extends BlockStateProvider
         registerFramedCollapsibleBlock();
         registerFramedGhostBlock();
         registerFramedBouncyBlock();
+        registerFramedSecretStorage();
     }
 
     private void registerFramedSlab(ModelFile cube)
@@ -296,6 +297,30 @@ public class FramedBlockStateProvider extends BlockStateProvider
         simpleBlockWithItem(FBContent.blockFramedBouncyCube, block);
 
         models().cubeAll("slime_frame", modLoc("block/slime_frame"));
+    }
+
+    private void registerFramedSecretStorage()
+    {
+        ModelFile block = models().withExistingParent("framed_secret_storage", "block/block")
+                .element()
+                .cube("#barrel")
+                .face(Direction.UP)
+                .texture("#barrel_top")
+                .end()
+                .face(Direction.DOWN)
+                .texture("#barrel_bottom")
+                .end()
+                .end()
+                .element()
+                .cube("#frame")
+                .end()
+                .texture("barrel", mcLoc("block/barrel_side"))
+                .texture("barrel_top", mcLoc("block/barrel_top"))
+                .texture("barrel_bottom", mcLoc("block/barrel_bottom"))
+                .texture("frame", TEXTURE)
+                .texture("particle", TEXTURE);
+
+        simpleBlockWithItem(FBContent.blockFramedSecretStorage, block);
     }
 
 

@@ -16,7 +16,7 @@ public class FramedFlowerPotTileEntity extends FramedTileEntity
 
     private Block flowerBlock = Blocks.AIR;
 
-    public FramedFlowerPotTileEntity() { super(FBContent.blockEntityTypeFramedFlowerPot.get()); }
+    public FramedFlowerPotTileEntity() { super(FBContent.tileTypeFramedFlowerPot.get()); }
 
     public void setFlowerBlock(Block flowerBlock)
     {

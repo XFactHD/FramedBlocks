@@ -25,7 +25,7 @@ public class FramedCollapsibleTileEntity extends FramedTileEntity
     private Direction collapsedFace = null;
     private byte[] vertexOffsets = new byte[4];
 
-    public FramedCollapsibleTileEntity() { super(FBContent.blockEntityTypeFramedCollapsibleBlock.get()); }
+    public FramedCollapsibleTileEntity() { super(FBContent.tileTypeFramedCollapsibleBlock.get()); }
 
     public void handleDeform(PlayerEntity player)
     {

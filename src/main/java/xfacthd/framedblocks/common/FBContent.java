@@ -16,7 +16,7 @@ import net.minecraftforge.fml.network.IContainerFactory;
 import net.minecraftforge.registries.*;
 import xfacthd.framedblocks.FramedBlocks;
 import xfacthd.framedblocks.common.block.*;
-import xfacthd.framedblocks.common.container.FramedChestContainer;
+import xfacthd.framedblocks.common.container.FramedStorageContainer;
 import xfacthd.framedblocks.common.data.BlockType;
 import xfacthd.framedblocks.common.data.FramedToolType;
 import xfacthd.framedblocks.common.item.*;
@@ -86,6 +86,7 @@ public class FBContent
     public static final RegistryObject<Block> blockFramedGhostBlock = BLOCKS.register("framed_ghost_block", FramedGhostBlock::new);
     public static final RegistryObject<Block> blockFramedHalfStairs = registerBlock(FramedHalfStairsBlock::new, BlockType.FRAMED_HALF_STAIRS);
     public static final RegistryObject<Block> blockFramedBouncyCube = registerBlock(FramedBouncyCubeBlock::new, BlockType.FRAMED_BOUNCY_CUBE);
+    public static final RegistryObject<Block> blockFramedSecretStorage = registerBlock(FramedStorageBlock::new, BlockType.FRAMED_SECRET_STORAGE);
 
     /** ITEMS */
     public static final RegistryObject<Item> itemFramedHammer = registerToolItem(FramedToolItem::new, FramedToolType.HAMMER);
@@ -133,19 +134,24 @@ public class FBContent
             "framed_chest",
             blockFramedChest
     );
-    public static final RegistryObject<TileEntityType<FramedFlowerPotTileEntity>> blockEntityTypeFramedFlowerPot = createTileType(
+    public static final RegistryObject<TileEntityType<FramedFlowerPotTileEntity>> tileTypeFramedFlowerPot = createTileType(
             FramedFlowerPotTileEntity::new,
             "framed_flower_pot",
             blockFramedFlowerPot
     );
-    public static final RegistryObject<TileEntityType<FramedCollapsibleTileEntity>> blockEntityTypeFramedCollapsibleBlock = createTileType(
+    public static final RegistryObject<TileEntityType<FramedCollapsibleTileEntity>> tileTypeFramedCollapsibleBlock = createTileType(
             FramedCollapsibleTileEntity::new,
             "framed_collapsible_block",
             blockFramedCollapsibleBlock
     );
+    public static final RegistryObject<TileEntityType<FramedStorageTileEntity>> tileTypeFramedSecretStorage = createTileType(
+            FramedStorageTileEntity::new,
+            "framed_secret_storage",
+            blockFramedSecretStorage
+    );
 
     /** CONTAINER TYPES */
-    public static final RegistryObject<ContainerType<FramedChestContainer>> containerTypeFramedChest = createContainerType(FramedChestContainer::new, "framed_chest");
+    public static final RegistryObject<ContainerType<FramedStorageContainer>> containerTypeFramedChest = createContainerType(FramedStorageContainer::new, "framed_chest");
 
 
 
@@ -168,18 +174,21 @@ public class FBContent
                 .stream()
                 .map(RegistryObject::get)
                 .filter(block -> block instanceof IFramedBlock)
-                .filter(block -> ((IFramedBlock)block).getBlockType().hasBlockItem())
-                .map(block -> ((IFramedBlock)block).createItemBlock())
+                .map(IFramedBlock.class::cast)
+                .filter(block -> block.getBlockType().hasBlockItem())
+                .map(IFramedBlock::createItemBlock)
                 .forEach(registry::register);
     }
 
     private static Supplier<Block[]> getDefaultTileBlocks()
     {
+        //noinspection SuspiciousToArrayCall
         return () -> BLOCKS.getEntries()
                 .stream()
                 .map(RegistryObject::get)
                 .filter(block -> block instanceof IFramedBlock)
-                .filter(block -> !((IFramedBlock)block).getBlockType().hasSpecialTile())
+                .map(IFramedBlock.class::cast)
+                .filter(block -> !block.getBlockType().hasSpecialTile())
                 .toArray(Block[]::new);
     }
 

@@ -22,7 +22,7 @@ import xfacthd.framedblocks.FramedBlocks;
 import xfacthd.framedblocks.client.model.*;
 import xfacthd.framedblocks.client.render.FramedChestRenderer;
 import xfacthd.framedblocks.client.render.FramedSignRenderer;
-import xfacthd.framedblocks.client.screen.FramedChestScreen;
+import xfacthd.framedblocks.client.screen.FramedStorageScreen;
 import xfacthd.framedblocks.client.screen.FramedSignScreen;
 import xfacthd.framedblocks.client.util.BlueprintPropertyOverride;
 import xfacthd.framedblocks.client.util.ModelUtils;
@@ -57,7 +57,7 @@ public class FBClient
 
         event.enqueueWork(() ->
         {
-            ScreenManager.registerFactory(FBContent.containerTypeFramedChest.get(), FramedChestScreen::new);
+            ScreenManager.registerFactory(FBContent.containerTypeFramedChest.get(), FramedStorageScreen::new);
 
             BlueprintPropertyOverride.register();
         });
@@ -174,6 +174,7 @@ public class FBClient
         replaceModels(FBContent.blockFramedCollapsibleBlock, registry, FramedCollapsibleBlockModel::new);
         replaceModels(FBContent.blockFramedHalfStairs, registry, FramedHalfStairsModel::new);
         replaceModels(FBContent.blockFramedBouncyCube, registry, (state, model) -> new FramedBouncyCubeModel(state, model, registry));
+        replaceModels(FBContent.blockFramedSecretStorage, registry, FramedCubeModel::new);
     }
 
     private static void replaceModels(RegistryObject<Block> block, Map<ResourceLocation, IBakedModel> models,

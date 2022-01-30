@@ -6,13 +6,13 @@ import net.minecraft.client.gui.screen.inventory.ContainerScreen;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.ITextComponent;
-import xfacthd.framedblocks.common.container.FramedChestContainer;
+import xfacthd.framedblocks.common.container.FramedStorageContainer;
 
-public class FramedChestScreen extends ContainerScreen<FramedChestContainer>
+public class FramedStorageScreen extends ContainerScreen<FramedStorageContainer>
 {
     private static final ResourceLocation CHEST_GUI_TEXTURE = new ResourceLocation("textures/gui/container/generic_54.png");
 
-    public FramedChestScreen(FramedChestContainer container, PlayerInventory inv, ITextComponent title)
+    public FramedStorageScreen(FramedStorageContainer container, PlayerInventory inv, ITextComponent title)
     {
         super(container, inv, title);
 
