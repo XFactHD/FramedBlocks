@@ -11,6 +11,8 @@ import xfacthd.framedblocks.FramedBlocks;
 import xfacthd.framedblocks.api.model.FramedBlockModel;
 import xfacthd.framedblocks.api.util.client.BakedQuadTransformer;
 import xfacthd.framedblocks.api.util.client.ModelUtils;
+import xfacthd.framedblocks.common.data.LatchType;
+import xfacthd.framedblocks.common.data.PropertyHolder;
 
 import java.util.*;
 
@@ -18,7 +20,15 @@ public class FramedChestLidModel extends FramedBlockModel
 {
     private static final ResourceLocation TEXTURE = new ResourceLocation(FramedBlocks.MODID, "block/framed_chest_lock");
 
-    public FramedChestLidModel(BlockState state, BakedModel baseModel) { super(state, baseModel); }
+    private final Direction facing;
+    private final LatchType latch;
+
+    public FramedChestLidModel(BlockState state, BakedModel baseModel)
+    {
+        super(state, baseModel);
+        this.facing = state.getValue(PropertyHolder.FACING_HOR);
+        this.latch = state.getValue(PropertyHolder.LATCH_TYPE);
+    }
 
     @Override
     protected void transformQuad(Map<Direction, List<BakedQuad>> quadMap, BakedQuad quad)
@@ -41,10 +51,15 @@ public class FramedChestLidModel extends FramedBlockModel
                 quadMap.get(null).add(sideQuad);
             }
         }
+
+        if (latch == LatchType.CAMO)
+        {
+            FramedChestModel.makeChestLatch(quadMap, quad, facing);
+        }
     }
 
     @Override
-    protected boolean hasAdditionalQuadsInLayer(RenderType layer) { return layer == RenderType.cutout(); }
+    protected boolean hasAdditionalQuadsInLayer(RenderType layer) { return latch == LatchType.DEFAULT && layer == RenderType.cutout(); }
 
     @Override
     protected void getAdditionalQuads(Map<Direction, List<BakedQuad>> quadMap, BlockState state, Random rand, IModelData data, RenderType layer)
