@@ -91,7 +91,7 @@ public class FramedBlockEntity extends BlockEntity
         {
             return rotateCamo(camo, hit);
         }
-        else if (stack.is(ServerConfig.passthroughItem) && !passthrough && getBlock().getBlockType().allowPassthrough())
+        else if (ServerConfig.enablePassthrough && stack.is(ServerConfig.passthroughItem) && !passthrough && getBlock().getBlockType().allowPassthrough())
         {
             //noinspection ConstantConditions
             if (!level.isClientSide())
@@ -420,7 +420,7 @@ public class FramedBlockEntity extends BlockEntity
 
     public boolean isPassThrough(CollisionContext ctx)
     {
-        if (!passthrough) { return false; }
+        if (!ServerConfig.enablePassthrough || !passthrough) { return false; }
 
         if (ctx instanceof EntityCollisionContext ectx && ectx.getEntity() instanceof Player player)
         {

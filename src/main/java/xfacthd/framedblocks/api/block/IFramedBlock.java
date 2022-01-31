@@ -25,6 +25,7 @@ import xfacthd.framedblocks.api.FramedBlocksAPI;
 import xfacthd.framedblocks.api.type.IBlockType;
 import xfacthd.framedblocks.api.util.CtmPredicate;
 import xfacthd.framedblocks.api.util.SideSkipPredicate;
+import xfacthd.framedblocks.common.util.ServerConfig;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -162,11 +163,11 @@ public interface IFramedBlock extends EntityBlock//, IFacade
         BlockPos neighborPos = pos.relative(side);
         BlockState neighborState = level.getBlockState(neighborPos);
 
-        if (!isPassThrough(state, level, pos, null))
+        if (ServerConfig.enablePassthrough && !isPassThrough(state, level, pos, null))
         {
             if (neighborState.getBlock() instanceof IFramedBlock block && block.getBlockType().allowPassthrough())
             {
-                if (level.getBlockEntity(neighborPos) instanceof FramedBlockEntity be && be.isPassThrough(null))
+                if (block.isPassThrough(neighborState, level, neighborPos, null))
                 {
                     return false;
                 }
@@ -233,13 +234,13 @@ public interface IFramedBlock extends EntityBlock//, IFacade
 
     default boolean isPassThrough(BlockState state, BlockGetter level, BlockPos pos, @Nullable CollisionContext ctx)
     {
-        if (!getBlockType().allowPassthrough()) { return false; }
+        if (!ServerConfig.enablePassthrough || !getBlockType().allowPassthrough()) { return false; }
         return level.getBlockEntity(pos) instanceof FramedBlockEntity be && be.isPassThrough(ctx);
     }
 
     default boolean isSuffocating(BlockState state, BlockGetter level, BlockPos pos)
     {
-        if (getBlockType().allowPassthrough())
+        if (ServerConfig.enablePassthrough && getBlockType().allowPassthrough())
         {
             // The given BlockPos may be a neighboring block due to how Entity#isInWall() calls this
             BlockState stateAtPos = level.getBlockState(pos);
@@ -248,6 +249,8 @@ public interface IFramedBlock extends EntityBlock//, IFacade
                 return false;
             }
         }
+
+        // Copy of the default suffocation check
         return state.getMaterial().blocksMotion() && state.isCollisionShapeFullBlock(level, pos);
     }
 

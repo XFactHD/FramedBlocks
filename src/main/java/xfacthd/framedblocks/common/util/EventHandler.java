@@ -29,7 +29,7 @@ public class EventHandler
                 event.setCancellationResult(InteractionResult.CONSUME);
             }
 
-            if (!event.isCanceled() && block.getBlockType().allowPassthrough())
+            if (ServerConfig.enablePassthrough && !event.isCanceled() && block.getBlockType().allowPassthrough())
             {
                 if (level.getBlockEntity(pos) instanceof FramedBlockEntity be && be.isPassThrough(null))
                 {

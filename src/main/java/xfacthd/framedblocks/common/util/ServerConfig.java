@@ -18,9 +18,11 @@ public class ServerConfig
     public static final ServerConfig INSTANCE;
 
     public static boolean allowBlockEntities;
+    public static boolean enablePassthrough;
     public static Item passthroughItem;
 
     private final ForgeConfigSpec.BooleanValue allowBlockEntitiesValue;
+    private final ForgeConfigSpec.BooleanValue enablePassthroughValue;
     private final ForgeConfigSpec.ConfigValue<String> passthroughItemValue;
 
     static
@@ -37,9 +39,13 @@ public class ServerConfig
 
         builder.push("general");
         allowBlockEntitiesValue = builder
-                .comment("Wether blocks with block entities can be placed in Framed Blocks")
+                .comment("Whether blocks with block entities can be placed in Framed Blocks")
                 .translation("config." + FramedBlocks.MODID + ".allowBlockEntities")
                 .define("allowBlockEntities", false);
+        enablePassthroughValue = builder
+                .comment("Enables the passthrough feature. Disabling this prevents passing through already marked blocks as well")
+                .translation("config." + FramedBlocks.MODID + ".enablePassthrough")
+                .define("enablePassthrough", false);
         passthroughItemValue = builder
                 .comment("The item to use for making Framed Blocks passthrough. The value must be a valid item registry name")
                 .translation("config." + FramedBlocks.MODID + ".passThroughItem")
@@ -66,6 +72,7 @@ public class ServerConfig
         if (event.getConfig().getType() == ModConfig.Type.SERVER && event.getConfig().getModId().equals(FramedBlocks.MODID))
         {
             allowBlockEntities = allowBlockEntitiesValue.get();
+            enablePassthrough = enablePassthroughValue.get();
             passthroughItem = ForgeRegistries.ITEMS.getValue(new ResourceLocation(passthroughItemValue.get()));
         }
     }
