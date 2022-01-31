@@ -553,6 +553,8 @@ public class FramedBlockEntity extends BlockEntity
     @Override
     public IModelData getModelData() { return modelData; }
 
+    protected final FramedBlockData getModelDataInternal() { return modelData; }
+
     /*
      * NBT stuff
      */

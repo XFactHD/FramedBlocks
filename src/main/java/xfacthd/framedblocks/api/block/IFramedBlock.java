@@ -46,12 +46,13 @@ public interface IFramedBlock extends EntityBlock//, IFacade
                 .noOcclusion()
                 .strength(2F)
                 .sound(SoundType.WOOD)
-                .isViewBlocking(IFramedBlock::isViewBlocking);
+                .isViewBlocking(IFramedBlock::isBlockSuffocating)
+                .isSuffocating(IFramedBlock::isBlockSuffocating);
     }
 
-    private static boolean isViewBlocking(BlockState state, BlockGetter level, BlockPos pos)
+    private static boolean isBlockSuffocating(BlockState state, BlockGetter level, BlockPos pos)
     {
-        return ((IFramedBlock) state.getBlock()).isViewBlocked(state, level, pos);
+        return ((IFramedBlock) state.getBlock()).isSuffocating(state, level, pos);
     }
 
     default BlockItem createItemBlock()
@@ -236,9 +237,18 @@ public interface IFramedBlock extends EntityBlock//, IFacade
         return level.getBlockEntity(pos) instanceof FramedBlockEntity be && be.isPassThrough(ctx);
     }
 
-    default boolean isViewBlocked(BlockState state, BlockGetter level, BlockPos pos)
+    default boolean isSuffocating(BlockState state, BlockGetter level, BlockPos pos)
     {
-        return !getBlockType().allowPassthrough() || !isPassThrough(state, level, pos, null);
+        if (getBlockType().allowPassthrough())
+        {
+            // The given BlockPos may be a neighboring block due to how Entity#isInWall() calls this
+            BlockState stateAtPos = level.getBlockState(pos);
+            if (state != stateAtPos || isPassThrough(state, level, pos, null))
+            {
+                return false;
+            }
+        }
+        return state.getMaterial().blocksMotion() && state.isCollisionShapeFullBlock(level, pos);
     }
 
     default Optional<MutableComponent> printCamoBlock(CompoundTag beTag)

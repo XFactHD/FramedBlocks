@@ -3,6 +3,8 @@ package xfacthd.framedblocks.client.render;
 import com.google.common.collect.HashBasedTable;
 import com.google.common.collect.Table;
 import com.mojang.blaze3d.vertex.PoseStack;
+import net.minecraft.client.renderer.block.BlockModelShaper;
+import net.minecraft.client.renderer.block.ModelBlockRenderer;
 import net.minecraft.client.renderer.blockentity.*;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.client.Minecraft;
@@ -24,9 +26,6 @@ import xfacthd.framedblocks.common.data.*;
 import xfacthd.framedblocks.common.blockentity.FramedChestBlockEntity;
 
 import java.util.*;
-
-import net.minecraft.client.renderer.block.BlockModelShaper;
-import net.minecraft.client.renderer.block.ModelBlockRenderer;
 
 public class FramedChestRenderer implements BlockEntityRenderer<FramedChestBlockEntity>
 {

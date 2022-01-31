@@ -203,7 +203,7 @@ public class FramedCollapsibleBlockEntity extends FramedBlockEntity
         if (!Arrays.equals(offsets, vertexOffsets))
         {
             vertexOffsets = offsets;
-            getModelData().setData(OFFSETS, packed);
+            getModelDataInternal().setData(OFFSETS, packed);
 
             needUpdate = true;
         }
@@ -213,7 +213,7 @@ public class FramedCollapsibleBlockEntity extends FramedBlockEntity
         if (collapsedFace != face)
         {
             collapsedFace = face;
-            getModelData().setData(COLLAPSED_FACE, collapsedFace);
+            getModelDataInternal().setData(COLLAPSED_FACE, collapsedFace);
 
             needUpdate = true;
         }
@@ -237,11 +237,11 @@ public class FramedCollapsibleBlockEntity extends FramedBlockEntity
 
         int packed = nbt.getInt("offsets");
         vertexOffsets = unpackOffsets(packed);
-        getModelData().setData(OFFSETS, packed);
+        getModelDataInternal().setData(OFFSETS, packed);
 
         int face = nbt.getInt("face");
         collapsedFace = face == -1 ? null : Direction.from3DDataValue(face);
-        getModelData().setData(COLLAPSED_FACE, collapsedFace);
+        getModelDataInternal().setData(COLLAPSED_FACE, collapsedFace);
     }
 
     @Override

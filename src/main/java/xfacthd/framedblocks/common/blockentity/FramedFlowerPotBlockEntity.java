@@ -69,7 +69,7 @@ public class FramedFlowerPotBlockEntity extends FramedBlockEntity
         if (update)
         {
             flowerBlock = flower;
-            getModelData().setData(FLOWER_BLOCK, flower);
+            getModelDataInternal().setData(FLOWER_BLOCK, flower);
         }
 
         return super.readFromDataPacket(nbt) || update;
@@ -95,7 +95,7 @@ public class FramedFlowerPotBlockEntity extends FramedBlockEntity
         if (flower != flowerBlock)
         {
             flowerBlock = flower;
-            getModelData().setData(FLOWER_BLOCK, flower);
+            getModelDataInternal().setData(FLOWER_BLOCK, flower);
         }
     }
 
