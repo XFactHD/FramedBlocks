@@ -45,12 +45,13 @@ public interface IFramedBlock extends IFacade
                 .harvestTool(ToolType.AXE)
                 .hardnessAndResistance(2F)
                 .sound(SoundType.WOOD)
-                .setBlocksVision(IFramedBlock::isViewBlocking);
+                .setBlocksVision(IFramedBlock::isBlockSuffocating)
+                .setSuffocates(IFramedBlock::isBlockSuffocating);
     }
 
-    static boolean isViewBlocking(BlockState state, IBlockReader level, BlockPos pos)
+    static boolean isBlockSuffocating(BlockState state, IBlockReader level, BlockPos pos)
     {
-        return ((IFramedBlock) state.getBlock()).isViewBlocked(state, level, pos);
+        return ((IFramedBlock) state.getBlock()).isSuffocating(state, level, pos);
     }
 
     default BlockItem createItemBlock()
@@ -241,9 +242,17 @@ public interface IFramedBlock extends IFacade
         return te instanceof FramedTileEntity && ((FramedTileEntity) te).isPassThrough(ctx);
     }
 
-    default boolean isViewBlocked(BlockState state, IBlockReader level, BlockPos pos)
+    default boolean isSuffocating(BlockState state, IBlockReader world, BlockPos pos)
     {
-        return !getBlockType().allowPassthrough() || !isPassThrough(state, level, pos, null);
+        if (getBlockType().allowPassthrough())
+        {
+            BlockState stateAtPos = world.getBlockState(pos);
+            if (state != stateAtPos || isPassThrough(state, world, pos, null))
+            {
+                return false;
+            }
+        }
+        return state.getMaterial().blocksMovement() && state.hasOpaqueCollisionShape(world, pos);
     }
 
     default IFormattableTextComponent printCamoBlock(CompoundNBT beTag)
