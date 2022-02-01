@@ -163,11 +163,11 @@ public interface IFramedBlock extends EntityBlock//, IFacade
         BlockPos neighborPos = pos.relative(side);
         BlockState neighborState = level.getBlockState(neighborPos);
 
-        if (ServerConfig.enablePassthrough && !isPassThrough(state, level, pos, null))
+        if (ServerConfig.enableIntangibleFeature && !isIntangible(state, level, pos, null))
         {
-            if (neighborState.getBlock() instanceof IFramedBlock block && block.getBlockType().allowPassthrough())
+            if (neighborState.getBlock() instanceof IFramedBlock block && block.getBlockType().allowMakingIntangible())
             {
-                if (block.isPassThrough(neighborState, level, neighborPos, null))
+                if (block.isIntangible(neighborState, level, neighborPos, null))
                 {
                     return false;
                 }
@@ -232,19 +232,19 @@ public interface IFramedBlock extends EntityBlock//, IFacade
 
     default boolean handleBlockLeftClick(BlockState state, Level level, BlockPos pos, Player player) { return false; }
 
-    default boolean isPassThrough(BlockState state, BlockGetter level, BlockPos pos, @Nullable CollisionContext ctx)
+    default boolean isIntangible(BlockState state, BlockGetter level, BlockPos pos, @Nullable CollisionContext ctx)
     {
-        if (!ServerConfig.enablePassthrough || !getBlockType().allowPassthrough()) { return false; }
-        return level.getBlockEntity(pos) instanceof FramedBlockEntity be && be.isPassThrough(ctx);
+        if (!ServerConfig.enableIntangibleFeature || !getBlockType().allowMakingIntangible()) { return false; }
+        return level.getBlockEntity(pos) instanceof FramedBlockEntity be && be.isIntangible(ctx);
     }
 
     default boolean isSuffocating(BlockState state, BlockGetter level, BlockPos pos)
     {
-        if (ServerConfig.enablePassthrough && getBlockType().allowPassthrough())
+        if (ServerConfig.enableIntangibleFeature && getBlockType().allowMakingIntangible())
         {
             // The given BlockPos may be a neighboring block due to how Entity#isInWall() calls this
             BlockState stateAtPos = level.getBlockState(pos);
-            if (state != stateAtPos || isPassThrough(state, level, pos, null))
+            if (state != stateAtPos || isIntangible(state, level, pos, null))
             {
                 return false;
             }

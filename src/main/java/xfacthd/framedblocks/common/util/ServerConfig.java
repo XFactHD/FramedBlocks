@@ -18,12 +18,12 @@ public class ServerConfig
     public static final ServerConfig INSTANCE;
 
     public static boolean allowBlockEntities;
-    public static boolean enablePassthrough;
-    public static Item passthroughItem;
+    public static boolean enableIntangibleFeature;
+    public static Item intangibleMarkerItem;
 
     private final ForgeConfigSpec.BooleanValue allowBlockEntitiesValue;
-    private final ForgeConfigSpec.BooleanValue enablePassthroughValue;
-    private final ForgeConfigSpec.ConfigValue<String> passthroughItemValue;
+    private final ForgeConfigSpec.BooleanValue enableIntangibleFeatureValue;
+    private final ForgeConfigSpec.ConfigValue<String> intangibleMarkerItemValue;
 
     static
     {
@@ -42,14 +42,14 @@ public class ServerConfig
                 .comment("Whether blocks with block entities can be placed in Framed Blocks")
                 .translation("config." + FramedBlocks.MODID + ".allowBlockEntities")
                 .define("allowBlockEntities", false);
-        enablePassthroughValue = builder
-                .comment("Enables the passthrough feature. Disabling this prevents passing through already marked blocks as well")
-                .translation("config." + FramedBlocks.MODID + ".enablePassthrough")
-                .define("enablePassthrough", false);
-        passthroughItemValue = builder
-                .comment("The item to use for making Framed Blocks passthrough. The value must be a valid item registry name")
-                .translation("config." + FramedBlocks.MODID + ".passThroughItem")
-                .define("passThroughItem", Items.PHANTOM_MEMBRANE.getRegistryName().toString(), ServerConfig::validateItemName);
+        enableIntangibleFeatureValue = builder
+                .comment("Enables the intangbility feature. Disabling this also prevents moving through blocks that are already marked as intangible")
+                .translation("config." + FramedBlocks.MODID + ".enableIntangibleFeature")
+                .define("enableIntangibleFeature", false);
+        intangibleMarkerItemValue = builder
+                .comment("The item to use for making Framed Blocks intangible. The value must be a valid item registry name")
+                .translation("config." + FramedBlocks.MODID + ".intangibleMarkerItem")
+                .define("intangibleMarkerItem", Items.PHANTOM_MEMBRANE.getRegistryName().toString(), ServerConfig::validateItemName);
         builder.pop();
     }
 
@@ -72,8 +72,8 @@ public class ServerConfig
         if (event.getConfig().getType() == ModConfig.Type.SERVER && event.getConfig().getModId().equals(FramedBlocks.MODID))
         {
             allowBlockEntities = allowBlockEntitiesValue.get();
-            enablePassthrough = enablePassthroughValue.get();
-            passthroughItem = ForgeRegistries.ITEMS.getValue(new ResourceLocation(passthroughItemValue.get()));
+            enableIntangibleFeature = enableIntangibleFeatureValue.get();
+            intangibleMarkerItem = ForgeRegistries.ITEMS.getValue(new ResourceLocation(intangibleMarkerItemValue.get()));
         }
     }
 }

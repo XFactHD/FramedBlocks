@@ -124,7 +124,7 @@ public class FramedStairsBlock extends StairBlock implements IFramedBlock
     @Override
     public VoxelShape getShape(BlockState state, BlockGetter level, BlockPos pos, CollisionContext ctx)
     {
-        if (isPassThrough(state, level, pos, ctx)) { return Shapes.empty(); }
+        if (isIntangible(state, level, pos, ctx)) { return Shapes.empty(); }
         return super.getShape(state, level, pos, ctx);
     }
 

@@ -29,9 +29,9 @@ public class EventHandler
                 event.setCancellationResult(InteractionResult.CONSUME);
             }
 
-            if (ServerConfig.enablePassthrough && !event.isCanceled() && block.getBlockType().allowPassthrough())
+            if (ServerConfig.enableIntangibleFeature && !event.isCanceled() && block.getBlockType().allowMakingIntangible())
             {
-                if (level.getBlockEntity(pos) instanceof FramedBlockEntity be && be.isPassThrough(null))
+                if (level.getBlockEntity(pos) instanceof FramedBlockEntity be && be.isIntangible(null))
                 {
                     event.setCanceled(true);
                     event.setCancellationResult(InteractionResult.FAIL);

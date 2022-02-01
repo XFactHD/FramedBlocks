@@ -67,14 +67,14 @@ public class FramedSlabBlock extends FramedBlock
                     BlockState camoState = Blocks.AIR.defaultBlockState();
                     ItemStack camoStack = ItemStack.EMPTY;
                     boolean glowing = false;
-                    boolean passthrough = false;
+                    boolean intangible = false;
 
                     if (level.getBlockEntity(pos) instanceof FramedBlockEntity be)
                     {
                         camoState = be.getCamoState();
                         camoStack = be.getCamoStack();
                         glowing = be.isGlowing();
-                        passthrough = be.isPassThrough(null);
+                        intangible = be.isIntangible(null);
                     }
 
                     level.setBlockAndUpdate(pos, FBContent.blockFramedDoubleSlab.get().defaultBlockState());
@@ -92,7 +92,7 @@ public class FramedSlabBlock extends FramedBlock
                     {
                         be.setCamo(camoStack, camoState, top);
                         be.setGlowing(glowing);
-                        be.setPassThrough(passthrough);
+                        be.setIntangible(intangible);
                     }
                 }
                 return InteractionResult.sidedSuccess(level.isClientSide());

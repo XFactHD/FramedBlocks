@@ -25,9 +25,9 @@ public class FramedBlockRenderProperties implements IBlockRenderProperties
 
     private static boolean suppressParticles(BlockState state, Level level, BlockPos pos)
     {
-        if (state.getBlock() instanceof IFramedBlock block && block.getBlockType().allowPassthrough())
+        if (state.getBlock() instanceof IFramedBlock block && block.getBlockType().allowMakingIntangible())
         {
-            return block.isPassThrough(state, level, pos, null);
+            return block.isIntangible(state, level, pos, null);
         }
         return false;
     }

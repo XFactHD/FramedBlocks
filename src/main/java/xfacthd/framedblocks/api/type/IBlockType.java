@@ -28,7 +28,7 @@ public interface IBlockType
      * and pass an instance of {@link xfacthd.framedblocks.api.util.client.FramedBlockRenderProperties} to the consumer to avoid crashing when the block is
      * hit while it can be passed through
      */
-    default boolean allowPassthrough() { return false; }
+    default boolean allowMakingIntangible() { return false; }
 
     String getName();
 

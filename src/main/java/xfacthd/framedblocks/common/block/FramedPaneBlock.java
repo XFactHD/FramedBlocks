@@ -92,14 +92,14 @@ public class FramedPaneBlock extends IronBarsBlock implements IFramedBlock
     @Override
     public VoxelShape getShape(BlockState state, BlockGetter level, BlockPos pos, CollisionContext ctx)
     {
-        if (isPassThrough(state, level, pos, ctx)) { return Shapes.empty(); }
+        if (isIntangible(state, level, pos, ctx)) { return Shapes.empty(); }
         return super.getShape(state, level, pos, ctx);
     }
 
     @Override
     public VoxelShape getCollisionShape(BlockState state, BlockGetter level, BlockPos pos, CollisionContext ctx)
     {
-        if (isPassThrough(state, level, pos, null)) { return Shapes.empty(); }
+        if (isIntangible(state, level, pos, null)) { return Shapes.empty(); }
         return super.getCollisionShape(state, level, pos, ctx);
     }
 
