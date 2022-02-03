@@ -9,6 +9,11 @@ import java.util.Set;
 
 public class FramedMixinConfigPlugin implements IMixinConfigPlugin
 {
+    private static final String[] SODIUM_NAMES = new String[] {
+            "me.jellysquid.mods.sodium.common.config.Option", // Magnesium
+            "me.jellysquid.mods.sodium.config.mixin.MixinOption" // Rubidium
+    };
+
     @Override
     public void onLoad(String mixinPackage) { }
 
@@ -20,28 +25,19 @@ public class FramedMixinConfigPlugin implements IMixinConfigPlugin
     {
         if (mixinClassName.equals("xfacthd.framedblocks.client.util.mixin.MixinLevelRenderer"))
         {
-            try
+            for (String className : SODIUM_NAMES)
             {
-                Class.forName("me.jellysquid.mods.sodium.common.config.Option");
-                return false;
+                if (checkClassExists(className))
+                {
+                    return false;
+                }
             }
-            catch (ClassNotFoundException e)
-            {
-                return true;
-            }
+            return true;
         }
 
         if (mixinClassName.equals("xfacthd.framedblocks.client.util.mixin.MixinIFramedBlock"))
         {
-            try
-            {
-                Class.forName("team.chisel.ctm.api.IFacade");
-                return true;
-            }
-            catch (ClassNotFoundException e)
-            {
-                return false;
-            }
+            return checkClassExists("team.chisel.ctm.api.IFacade");
         }
 
         return true;
@@ -58,4 +54,19 @@ public class FramedMixinConfigPlugin implements IMixinConfigPlugin
 
     @Override
     public void postApply(String targetClassName, ClassNode targetClass, String mixinClassName, IMixinInfo mixinInfo) { }
+
+
+
+    private static boolean checkClassExists(String className)
+    {
+        try
+        {
+            Class.forName(className);
+            return true;
+        }
+        catch (ClassNotFoundException e)
+        {
+            return false;
+        }
+    }
 }
