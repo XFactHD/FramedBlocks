@@ -162,12 +162,12 @@ public interface IFramedBlock extends IFacade
         BlockPos neighborPos = pos.offset(side);
         BlockState neighborState = world.getBlockState(neighborPos);
 
-        if (!isPassThrough(state, world, pos, null))
+        if (ServerConfig.enableIntangibleFeature && !isIntangible(state, world, pos, null))
         {
-            if (neighborState.getBlock() instanceof IFramedBlock && ((IFramedBlock) neighborState.getBlock()).getBlockType().allowPassthrough())
+            if (neighborState.getBlock() instanceof IFramedBlock)
             {
-                TileEntity te = world.getTileEntity(neighborPos);
-                if (te instanceof FramedTileEntity && ((FramedTileEntity) te).isPassThrough(null))
+                IFramedBlock fb = (IFramedBlock) neighborState.getBlock();
+                if (fb.getBlockType().allowMakingIntangible() && fb.isIntangible(neighborState, world, neighborPos, null))
                 {
                     return false;
                 }
@@ -234,24 +234,26 @@ public interface IFramedBlock extends IFacade
         return 20;
     }
 
-    default boolean isPassThrough(BlockState state, IBlockReader world, BlockPos pos, @Nullable ISelectionContext ctx)
+    default boolean isIntangible(BlockState state, IBlockReader world, BlockPos pos, @Nullable ISelectionContext ctx)
     {
-        if (!getBlockType().allowPassthrough()) { return false; }
+        if (!ServerConfig.enableIntangibleFeature || !getBlockType().allowMakingIntangible()) { return false; }
 
         TileEntity te = world.getTileEntity(pos);
-        return te instanceof FramedTileEntity && ((FramedTileEntity) te).isPassThrough(ctx);
+        return te instanceof FramedTileEntity && ((FramedTileEntity) te).isIntangible(ctx);
     }
 
     default boolean isSuffocating(BlockState state, IBlockReader world, BlockPos pos)
     {
-        if (getBlockType().allowPassthrough())
+        if (ServerConfig.enableIntangibleFeature && getBlockType().allowMakingIntangible())
         {
             BlockState stateAtPos = world.getBlockState(pos);
-            if (state != stateAtPos || isPassThrough(state, world, pos, null))
+            if (state != stateAtPos || isIntangible(state, world, pos, null))
             {
                 return false;
             }
         }
+
+        // Copy of the default suffocation check
         return state.getMaterial().blocksMovement() && state.hasOpaqueCollisionShape(world, pos);
     }
 
@@ -263,9 +265,9 @@ public interface IFramedBlock extends IFacade
 
     static boolean suppressParticles(BlockState state, World world, BlockPos pos)
     {
-        if (state.getBlock() instanceof IFramedBlock && ((IFramedBlock) state.getBlock()).getBlockType().allowPassthrough())
+        if (state.getBlock() instanceof IFramedBlock && ((IFramedBlock) state.getBlock()).getBlockType().allowMakingIntangible())
         {
-            return ((IFramedBlock) state.getBlock()).isPassThrough(state, world, pos, null);
+            return ((IFramedBlock) state.getBlock()).isIntangible(state, world, pos, null);
         }
         return false;
     }

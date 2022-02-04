@@ -64,7 +64,7 @@ public class FramedSlabBlock extends FramedBlock
                     BlockState camoState = Blocks.AIR.getDefaultState();
                     ItemStack camoStack = ItemStack.EMPTY;
                     boolean glowing = false;
-                    boolean passthrough = false;
+                    boolean intangible = false;
 
                     TileEntity te = world.getTileEntity(pos);
                     if (te instanceof FramedTileEntity)
@@ -72,7 +72,7 @@ public class FramedSlabBlock extends FramedBlock
                         camoState = ((FramedTileEntity) te).getCamoState();
                         camoStack = ((FramedTileEntity) te).getCamoStack();
                         glowing = ((FramedTileEntity) te).isGlowing();
-                        passthrough = ((FramedTileEntity) te).isPassThrough(null);
+                        intangible = ((FramedTileEntity) te).isIntangible(null);
                     }
 
                     world.setBlockState(pos, FBContent.blockFramedDoubleSlab.get().getDefaultState());
@@ -91,7 +91,7 @@ public class FramedSlabBlock extends FramedBlock
                     {
                         ((FramedDoubleTileEntity) te).setCamo(camoStack, camoState, top);
                         ((FramedDoubleTileEntity) te).setGlowing(glowing);
-                        ((FramedDoubleTileEntity) te).setPassThrough(passthrough);
+                        ((FramedDoubleTileEntity) te).setIntangible(intangible);
                     }
                 }
                 return ActionResultType.func_233537_a_(world.isRemote());

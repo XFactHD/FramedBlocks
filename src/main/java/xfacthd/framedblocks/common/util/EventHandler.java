@@ -47,10 +47,10 @@ public class EventHandler
             }
         }
 
-        if (!success && block instanceof IFramedBlock && ((IFramedBlock) block).getBlockType().allowPassthrough())
+        if (ServerConfig.enableIntangibleFeature && !success && block instanceof IFramedBlock && ((IFramedBlock) block).getBlockType().allowMakingIntangible())
         {
             TileEntity te = world.getTileEntity(pos);
-            if (te instanceof FramedTileEntity && ((FramedTileEntity) te).isPassThrough(null))
+            if (te instanceof FramedTileEntity && ((FramedTileEntity) te).isIntangible(null))
             {
                 event.setCanceled(true);
                 event.setCancellationResult(ActionResultType.FAIL);

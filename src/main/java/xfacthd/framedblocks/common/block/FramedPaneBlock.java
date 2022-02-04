@@ -87,14 +87,14 @@ public class FramedPaneBlock extends PaneBlock implements IFramedBlock
     @Override
     public VoxelShape getShape(BlockState state, IBlockReader world, BlockPos pos, ISelectionContext ctx)
     {
-        if (isPassThrough(state, world, pos, ctx)) { return VoxelShapes.empty(); }
+        if (isIntangible(state, world, pos, ctx)) { return VoxelShapes.empty(); }
         return super.getShape(state, world, pos, ctx);
     }
 
     @Override
     public VoxelShape getCollisionShape(BlockState state, IBlockReader world, BlockPos pos, ISelectionContext ctx)
     {
-        if (isPassThrough(state, world, pos, ctx)) { return VoxelShapes.empty(); }
+        if (isIntangible(state, world, pos, ctx)) { return VoxelShapes.empty(); }
         return super.getCollisionShape(state, world, pos, ctx);
     }
 

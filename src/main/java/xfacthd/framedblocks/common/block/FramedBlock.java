@@ -78,7 +78,7 @@ public class FramedBlock extends Block implements IFramedBlock, IWaterLoggable
     @Override
     public VoxelShape getShape(BlockState state, IBlockReader world, BlockPos pos, ISelectionContext ctx)
     {
-        if (isPassThrough(state, world, pos, ctx))
+        if (isIntangible(state, world, pos, ctx))
         {
             return VoxelShapes.empty();
         }

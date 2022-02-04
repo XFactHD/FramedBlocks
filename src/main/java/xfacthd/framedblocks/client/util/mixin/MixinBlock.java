@@ -32,7 +32,7 @@ public abstract class MixinBlock extends AbstractBlock
         {
             FramedTileEntity fte = (FramedTileEntity) te;
 
-            if (!fte.isPassThrough(null))
+            if (!fte.isIntangible(null))
             {
                 if (state.getBlock() instanceof BreakableBlock && SideSkipPredicate.CTM.test(world, adjPos, world.getBlockState(adjPos), state, face.getOpposite()))
                 {

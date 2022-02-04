@@ -69,33 +69,33 @@ public enum BlockType
     private final boolean specialTile;
     private final boolean waterloggable;
     private final boolean blockItem;
-    private final boolean allowPassthrough; //If this is true, the block must suppress hit and destroy particles to avoid crashing when hit
+    private final boolean allowIntangible; //If this is true, the block must suppress hit and destroy particles to avoid crashing when hit
     private final CtmPredicate ctmPredicate;
     private final SideSkipPredicate skipPredicate;
     private final VoxelShapeGenerator shapeGen;
 
-    BlockType(boolean specialHitbox, boolean specialTile, boolean waterloggable, boolean blockItem, boolean allowPassthrough)
+    BlockType(boolean specialHitbox, boolean specialTile, boolean waterloggable, boolean blockItem, boolean allowIntangible)
     {
-        this(specialHitbox, specialTile, waterloggable, blockItem, allowPassthrough, CtmPredicate.FALSE, SideSkipPredicate.FALSE, VoxelShapeGenerator.EMTPTY);
+        this(specialHitbox, specialTile, waterloggable, blockItem, allowIntangible, CtmPredicate.FALSE, SideSkipPredicate.FALSE, VoxelShapeGenerator.EMTPTY);
     }
 
-    BlockType(boolean specialHitbox, boolean specialTile, boolean waterloggable, boolean blockItem, boolean allowPassthrough, CtmPredicate ctmPredicate, SideSkipPredicate skipPredicate)
+    BlockType(boolean specialHitbox, boolean specialTile, boolean waterloggable, boolean blockItem, boolean allowIntangible, CtmPredicate ctmPredicate, SideSkipPredicate skipPredicate)
     {
-        this(specialHitbox, specialTile, waterloggable, blockItem, allowPassthrough, ctmPredicate, skipPredicate, VoxelShapeGenerator.EMTPTY);
+        this(specialHitbox, specialTile, waterloggable, blockItem, allowIntangible, ctmPredicate, skipPredicate, VoxelShapeGenerator.EMTPTY);
     }
 
-    BlockType(boolean specialHitbox, boolean specialTile, boolean waterloggable, boolean blockItem, boolean allowPassthrough, CtmPredicate ctmPredicate, SideSkipPredicate skipPredicate, VoxelShape shape)
+    BlockType(boolean specialHitbox, boolean specialTile, boolean waterloggable, boolean blockItem, boolean allowIntangible, CtmPredicate ctmPredicate, SideSkipPredicate skipPredicate, VoxelShape shape)
     {
-        this(specialHitbox, specialTile, waterloggable, blockItem, allowPassthrough, ctmPredicate, skipPredicate, VoxelShapeGenerator.singleShape(shape));
+        this(specialHitbox, specialTile, waterloggable, blockItem, allowIntangible, ctmPredicate, skipPredicate, VoxelShapeGenerator.singleShape(shape));
     }
 
-    BlockType(boolean specialHitbox, boolean specialTile, boolean waterloggable, boolean blockItem, boolean allowPassthrough, CtmPredicate ctmPredicate, SideSkipPredicate skipPredicate, VoxelShapeGenerator shapeGen)
+    BlockType(boolean specialHitbox, boolean specialTile, boolean waterloggable, boolean blockItem, boolean allowIntangible, CtmPredicate ctmPredicate, SideSkipPredicate skipPredicate, VoxelShapeGenerator shapeGen)
     {
         this.specialHitbox = specialHitbox;
         this.specialTile = specialTile;
         this.waterloggable = waterloggable;
         this.blockItem = blockItem;
-        this.allowPassthrough = allowPassthrough;
+        this.allowIntangible = allowIntangible;
         this.ctmPredicate = ctmPredicate;
         this.skipPredicate = skipPredicate;
         this.shapeGen = shapeGen;
@@ -118,7 +118,7 @@ public enum BlockType
 
     public boolean supportsWaterLogging() { return waterloggable; }
 
-    public boolean allowPassthrough() { return allowPassthrough; }
+    public boolean allowMakingIntangible() { return allowIntangible; }
 
     public String getName() { return name; }
 }

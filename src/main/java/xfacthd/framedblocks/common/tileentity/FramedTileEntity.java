@@ -41,7 +41,7 @@ public class FramedTileEntity extends TileEntity
     private ItemStack camoStack = ItemStack.EMPTY;
     private BlockState camoState = Blocks.AIR.getDefaultState();
     private boolean glowing = false;
-    private boolean passthrough = false;
+    private boolean intangible = false;
 
     public FramedTileEntity() { this(FBContent.tileTypeFramedBlock.get()); }
 
@@ -88,25 +88,25 @@ public class FramedTileEntity extends TileEntity
         {
             return rotateCamo(camo, hit);
         }
-        else if (stack.getItem() == ServerConfig.passthroughItem && !passthrough && getBlock().getBlockType().allowPassthrough())
+        else if (ServerConfig.enableIntangibleFeature && stack.getItem() == ServerConfig.intangibleMarkerItem && !intangible && getBlock().getBlockType().allowMakingIntangible())
         {
             //noinspection ConstantConditions
             if (!world.isRemote())
             {
                 if (!player.isCreative()) { stack.shrink(1); }
 
-                setPassThrough(true);
+                setIntangible(true);
             }
             return ActionResultType.func_233537_a_(world.isRemote());
         }
-        else if (passthrough && player.isSneaking() && stack.getItem().isIn(Utils.WRENCH))
+        else if (intangible && player.isSneaking() && stack.getItem().isIn(Utils.WRENCH))
         {
             //noinspection ConstantConditions
             if (!world.isRemote())
             {
-                setPassThrough(false);
+                setIntangible(false);
 
-                ItemStack result = new ItemStack(ServerConfig.passthroughItem);
+                ItemStack result = new ItemStack(ServerConfig.intangibleMarkerItem);
                 if (!player.inventory.addItemStackToInventory(result))
                 {
                     player.dropItem(result, false);
@@ -402,11 +402,11 @@ public class FramedTileEntity extends TileEntity
         return camoState.getLightValue();
     }
 
-    public void setPassThrough(boolean passthrough)
+    public void setIntangible(boolean intangible)
     {
-        if (this.passthrough != passthrough)
+        if (this.intangible != intangible)
         {
-            this.passthrough = passthrough;
+            this.intangible = intangible;
 
             markDirty();
             //noinspection ConstantConditions
@@ -414,9 +414,9 @@ public class FramedTileEntity extends TileEntity
         }
     }
 
-    public boolean isPassThrough(ISelectionContext ctx)
+    public boolean isIntangible(ISelectionContext ctx)
     {
-        if (!passthrough) { return false; }
+        if (!ServerConfig.enableIntangibleFeature || !intangible) { return false; }
 
         if (ctx instanceof EntitySelectionContext && ctx.getEntity() instanceof PlayerEntity)
         {
@@ -471,7 +471,7 @@ public class FramedTileEntity extends TileEntity
         nbt.put("camo_stack", camoStack.write(new CompoundNBT()));
         nbt.put("camo_state", NBTUtil.writeBlockState(camoState));
         nbt.putBoolean("glowing", glowing);
-        nbt.putBoolean("passthrough", passthrough);
+        nbt.putBoolean("intangible", intangible);
     }
 
     protected boolean readFromDataPacket(CompoundNBT nbt)
@@ -502,10 +502,10 @@ public class FramedTileEntity extends TileEntity
             doLightUpdate();
         }
 
-        boolean newPassthrough = nbt.getBoolean("passthrough");
-        if (newPassthrough != passthrough)
+        boolean newIntangible = nbt.getBoolean("intangible");
+        if (newIntangible != intangible)
         {
-            passthrough = newPassthrough;
+            intangible = newIntangible;
             needUpdate = true;
         }
 
@@ -520,7 +520,7 @@ public class FramedTileEntity extends TileEntity
         nbt.put("camo_stack", camoStack.write(new CompoundNBT()));
         nbt.put("camo_state", NBTUtil.writeBlockState(camoState));
         nbt.putBoolean("glowing", glowing);
-        nbt.putBoolean("passthrough", passthrough);
+        nbt.putBoolean("intangible", intangible);
 
         return nbt;
     }
@@ -541,7 +541,7 @@ public class FramedTileEntity extends TileEntity
         }
 
         glowing = nbt.getBoolean("glowing");
-        passthrough = nbt.getBoolean("passthrough");
+        intangible = nbt.getBoolean("intangible");
     }
 
     /*
@@ -563,7 +563,7 @@ public class FramedTileEntity extends TileEntity
         nbt.put("camo_stack", camoStack.write(new CompoundNBT()));
         nbt.put("camo_state", NBTUtil.writeBlockState(camoState));
         nbt.putBoolean("glowing", glowing);
-        nbt.putBoolean("passthrough", passthrough);
+        nbt.putBoolean("intangible", intangible);
 
         return super.write(nbt);
     }
@@ -589,6 +589,6 @@ public class FramedTileEntity extends TileEntity
             );
         }
         glowing = nbt.getBoolean("glowing");
-        passthrough = nbt.getBoolean("passthrough");
+        intangible = nbt.getBoolean("intangible");
     }
 }
