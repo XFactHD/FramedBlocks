@@ -30,7 +30,7 @@ public class FramedBlock extends Block implements IFramedBlock, IWaterLoggable
     private final BlockType blockType;
     private final Map<BlockState, VoxelShape> shapes;
 
-    public FramedBlock(BlockType blockType) { this(blockType, IFramedBlock.createProperties()); }
+    protected FramedBlock(BlockType blockType) { this(blockType, IFramedBlock.createProperties()); }
 
     protected FramedBlock(BlockType blockType, Properties props)
     {

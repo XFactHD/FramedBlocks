@@ -5,6 +5,7 @@ import net.minecraft.block.BlockState;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.*;
 import net.minecraft.state.StateContainer;
+import net.minecraft.state.properties.BlockStateProperties;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.Direction;
 import net.minecraft.util.math.BlockPos;
@@ -32,7 +33,7 @@ public class FramedDoublePanelBlock extends AbstractFramedDoubleBlock
     @Override
     protected void fillStateContainer(StateContainer.Builder<Block, BlockState> builder)
     {
-        builder.add(PropertyHolder.FACING_NE);
+        builder.add(PropertyHolder.FACING_NE, BlockStateProperties.WATERLOGGED);
     }
 
     @Nullable
@@ -41,7 +42,7 @@ public class FramedDoublePanelBlock extends AbstractFramedDoubleBlock
     {
         Direction dir = context.getPlacementHorizontalFacing();
         if (dir == Direction.SOUTH || dir == Direction.WEST) { dir = dir.getOpposite(); }
-        return getDefaultState().with(PropertyHolder.FACING_NE, dir);
+        return withWater(getDefaultState().with(PropertyHolder.FACING_NE, dir), context.getWorld(), context.getPos());
     }
 
     @Override

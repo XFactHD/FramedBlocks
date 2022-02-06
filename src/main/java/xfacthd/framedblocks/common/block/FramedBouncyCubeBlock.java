@@ -4,11 +4,15 @@ import net.minecraft.block.*;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.fluid.FluidState;
+import net.minecraft.fluid.Fluids;
+import net.minecraft.item.BlockItemUseContext;
 import net.minecraft.item.ItemStack;
 import net.minecraft.loot.LootContext;
+import net.minecraft.state.StateContainer;
+import net.minecraft.state.properties.BlockStateProperties;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.ActionResultType;
-import net.minecraft.util.Hand;
+import net.minecraft.util.*;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.BlockRayTraceResult;
 import net.minecraft.world.*;
@@ -19,9 +23,47 @@ import javax.annotation.Nullable;
 import java.util.List;
 
 @SuppressWarnings("deprecation")
-public class FramedBouncyCubeBlock extends SlimeBlock implements IFramedBlock
+public class FramedBouncyCubeBlock extends SlimeBlock implements IFramedBlock, IWaterLoggable
 {
-    public FramedBouncyCubeBlock() { super(IFramedBlock.createProperties()); }
+    public FramedBouncyCubeBlock()
+    {
+        super(IFramedBlock.createProperties());
+        setDefaultState(getDefaultState().with(BlockStateProperties.WATERLOGGED, false));
+    }
+
+    @Override
+    protected void fillStateContainer(StateContainer.Builder<Block, BlockState> builder)
+    {
+        builder.add(BlockStateProperties.WATERLOGGED);
+    }
+
+    @Nullable
+    @Override
+    public BlockState getStateForPlacement(BlockItemUseContext context)
+    {
+        FluidState fluidState = context.getWorld().getFluidState(context.getPos());
+        return getDefaultState().with(BlockStateProperties.WATERLOGGED, fluidState.getFluid() == Fluids.WATER);
+    }
+
+    @Override
+    public FluidState getFluidState(BlockState state)
+    {
+        if (state.get(BlockStateProperties.WATERLOGGED))
+        {
+            return Fluids.WATER.getDefaultState();
+        }
+        return Fluids.EMPTY.getDefaultState();
+    }
+
+    @Override
+    public BlockState updatePostPlacement(BlockState state, Direction facing, BlockState facingState, IWorld world, BlockPos pos, BlockPos facingPos)
+    {
+        if (state.get(BlockStateProperties.WATERLOGGED))
+        {
+            world.getPendingFluidTicks().scheduleTick(pos, Fluids.WATER, Fluids.WATER.getTickRate(world));
+        }
+        return super.updatePostPlacement(state, facing, facingState, world, pos, facingPos);
+    }
 
     @Override
     public final ActionResultType onBlockActivated(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockRayTraceResult hit)

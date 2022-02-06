@@ -4,6 +4,7 @@ import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.item.BlockItemUseContext;
 import net.minecraft.state.StateContainer;
+import net.minecraft.state.properties.BlockStateProperties;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.Direction;
 import net.minecraft.util.math.vector.Vector3d;
@@ -39,7 +40,7 @@ public class FramedDoubleCornerBlock extends AbstractFramedDoubleBlock
     @Override
     protected void fillStateContainer(StateContainer.Builder<Block, BlockState> builder)
     {
-        builder.add(PropertyHolder.FACING_HOR, PropertyHolder.CORNER_TYPE);
+        builder.add(PropertyHolder.FACING_HOR, PropertyHolder.CORNER_TYPE, BlockStateProperties.WATERLOGGED);
     }
 
     @Override
@@ -91,7 +92,7 @@ public class FramedDoubleCornerBlock extends AbstractFramedDoubleBlock
             state = state.with(PropertyHolder.CORNER_TYPE, type);
         }
 
-        return state;
+        return withWater(state, context.getWorld(), context.getPos());
     }
 
     @Override

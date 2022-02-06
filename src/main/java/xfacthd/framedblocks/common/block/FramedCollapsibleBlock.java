@@ -4,7 +4,9 @@ import com.google.common.cache.*;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.item.BlockItemUseContext;
 import net.minecraft.state.StateContainer;
+import net.minecraft.state.properties.BlockStateProperties;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.Direction;
 import net.minecraft.util.math.BlockPos;
@@ -18,6 +20,8 @@ import xfacthd.framedblocks.common.tileentity.FramedCollapsibleTileEntity;
 import xfacthd.framedblocks.common.util.CtmPredicate;
 import xfacthd.framedblocks.common.util.MathUtils;
 
+import javax.annotation.Nullable;
+
 public class FramedCollapsibleBlock extends FramedBlock
 {
     public static final CtmPredicate CTM_PREDICATE = (state, dir) ->
@@ -29,12 +33,23 @@ public class FramedCollapsibleBlock extends FramedBlock
 
     private static final LoadingCache<Integer, VoxelShape> SHAPE_CACHE = CacheBuilder.newBuilder().maximumSize(1024).build(new ShapeLoader());
 
-    public FramedCollapsibleBlock(BlockType blockType) { super(blockType, IFramedBlock.createProperties().variableOpacity()); }
+    public FramedCollapsibleBlock(BlockType blockType)
+    {
+        super(blockType, IFramedBlock.createProperties().variableOpacity());
+        setDefaultState(getDefaultState().with(BlockStateProperties.WATERLOGGED, false));
+    }
 
     @Override
     protected void fillStateContainer(StateContainer.Builder<Block, BlockState> builder)
     {
-        builder.add(PropertyHolder.COLLAPSED_FACE);
+        builder.add(PropertyHolder.COLLAPSED_FACE, BlockStateProperties.WATERLOGGED);
+    }
+
+    @Nullable
+    @Override
+    public BlockState getStateForPlacement(BlockItemUseContext context)
+    {
+        return withWater(getDefaultState(), context.getWorld(), context.getPos());
     }
 
     public static boolean onLeftClick(World world, BlockPos pos, PlayerEntity player)
