@@ -14,7 +14,7 @@ import java.util.Locale;
 
 public enum BlockType implements IBlockType
 {
-    FRAMED_CUBE                   (false, false, false,  true,  true, CtmPredicate.TRUE, SideSkipPredicate.CTM, Shapes.block()),
+    FRAMED_CUBE                   (false, false,  true,  true,  true, CtmPredicate.TRUE, SideSkipPredicate.CTM, Shapes.block()),
     FRAMED_SLOPE                  ( true, false,  true,  true,  true, FramedSlopeBlock.CTM_PREDICATE, new SlopeSkipPredicate(), FramedSlopeBlock::generateShapes),
     FRAMED_CORNER_SLOPE           ( true, false,  true,  true,  true, FramedCornerSlopeBlock.CTM_PREDICATE, new CornerSkipPredicate(), FramedCornerSlopeBlock::generateCornerShapes),
     FRAMED_INNER_CORNER_SLOPE     ( true, false,  true,  true,  true, FramedCornerSlopeBlock.CTM_PREDICATE_INNER, new InnerCornerSkipPredicate(), FramedCornerSlopeBlock::generateInnerCornerShapes),
@@ -39,12 +39,12 @@ public enum BlockType implements IBlockType
     FRAMED_LEVER                  (false, false, false,  true, false),
     FRAMED_SIGN                   (false,  true, false,  true, false),
     FRAMED_WALL_SIGN              (false,  true, false, false, false, CtmPredicate.FALSE, SideSkipPredicate.FALSE, FramedWallSignBlock::generateShapes),
-    FRAMED_DOUBLE_SLAB            (false,  true, false,  true,  true, CtmPredicate.Y_AXIS, SideSkipPredicate.FALSE, Shapes.block()), //Side skip is handled by the single slab
-    FRAMED_DOUBLE_PANEL           (false,  true, false,  true,  true, FramedDoublePanelBlock.CTM_PREDICATE, SideSkipPredicate.FALSE, Shapes.block()), //Side skip is handled by the single panel
-    FRAMED_DOUBLE_SLOPE           (false,  true, false,  true,  true, FramedDoubleSlopeBlock.CTM_PREDICATE, SideSkipPredicate.FALSE, Shapes.block()), //Side skip is handled by the single slope
-    FRAMED_DOUBLE_CORNER          (false,  true, false,  true,  true, FramedDoubleCornerBlock.CTM_PREDICATE, SideSkipPredicate.FALSE, Shapes.block()),
-    FRAMED_DOUBLE_PRISM_CORNER    (false,  true, false,  true,  true, FramedDoubleThreewayCornerBlock.CTM_PREDICATE, SideSkipPredicate.FALSE, Shapes.block()),
-    FRAMED_DOUBLE_THREEWAY_CORNER (false,  true, false,  true,  true, FramedDoubleThreewayCornerBlock.CTM_PREDICATE, SideSkipPredicate.FALSE, Shapes.block()),
+    FRAMED_DOUBLE_SLAB            (false,  true,  true,  true,  true, CtmPredicate.Y_AXIS, SideSkipPredicate.FALSE, Shapes.block()), //Side skip is handled by the single slab
+    FRAMED_DOUBLE_PANEL           (false,  true,  true,  true,  true, FramedDoublePanelBlock.CTM_PREDICATE, SideSkipPredicate.FALSE, Shapes.block()), //Side skip is handled by the single panel
+    FRAMED_DOUBLE_SLOPE           (false,  true,  true,  true,  true, FramedDoubleSlopeBlock.CTM_PREDICATE, SideSkipPredicate.FALSE, Shapes.block()), //Side skip is handled by the single slope
+    FRAMED_DOUBLE_CORNER          (false,  true,  true,  true,  true, FramedDoubleCornerBlock.CTM_PREDICATE, SideSkipPredicate.FALSE, Shapes.block()),
+    FRAMED_DOUBLE_PRISM_CORNER    (false,  true,  true,  true,  true, FramedDoubleThreewayCornerBlock.CTM_PREDICATE, SideSkipPredicate.FALSE, Shapes.block()),
+    FRAMED_DOUBLE_THREEWAY_CORNER (false,  true,  true,  true,  true, FramedDoubleThreewayCornerBlock.CTM_PREDICATE, SideSkipPredicate.FALSE, Shapes.block()),
     FRAMED_TORCH                  (false, false, false,  true, false),
     FRAMED_WALL_TORCH             (false, false, false, false, false),
     FRAMED_SOUL_TORCH             (false, false, false,  true, false),
@@ -60,10 +60,10 @@ public enum BlockType implements IBlockType
     FRAMED_PILLAR                 (false, false,  true,  true,  true, CtmPredicate.FALSE, new PillarSkipPredicate(), FramedPillarBlock::generatePillarShapes),
     FRAMED_HALF_PILLAR            (false, false,  true,  true,  true, CtmPredicate.FALSE, new HalfPillarSkipPredicate(), FramedHalfPillarBlock::generateShapes),
     FRAMED_POST                   (false, false,  true,  true,  true, CtmPredicate.FALSE, new PostSkipPredicate(), FramedPillarBlock::generatePostShapes),
-    FRAMED_COLLAPSIBLE_BLOCK      ( true,  true, false,  true,  true, FramedCollapsibleBlock.CTM_PREDICATE, new CollapsibleBlockSkipPredicate()),
+    FRAMED_COLLAPSIBLE_BLOCK      ( true,  true,  true,  true,  true, FramedCollapsibleBlock.CTM_PREDICATE, new CollapsibleBlockSkipPredicate()),
     FRAMED_HALF_STAIRS            (false, false,  true,  true,  true, CtmPredicate.FALSE, new HalfStairsSkipPredicate(), FramedHalfStairsBlock::generateShapes),
-    FRAMED_BOUNCY_CUBE            (false, false, false,  true, false, CtmPredicate.TRUE, SideSkipPredicate.CTM, Shapes.block()),
-    FRAMED_SECRET_STORAGE         (false,  true, false,  true, false, CtmPredicate.TRUE, SideSkipPredicate.CTM, Shapes.block());
+    FRAMED_BOUNCY_CUBE            (false, false,  true,  true, false, CtmPredicate.TRUE, SideSkipPredicate.CTM, Shapes.block()),
+    FRAMED_SECRET_STORAGE         (false,  true,  true,  true, false, CtmPredicate.TRUE, SideSkipPredicate.CTM, Shapes.block());
 
     private final String name = toString().toLowerCase(Locale.ROOT);
     private final boolean specialHitbox;

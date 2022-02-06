@@ -5,13 +5,16 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
+import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.phys.shapes.*;
+import org.jetbrains.annotations.Nullable;
 import xfacthd.framedblocks.api.block.IFramedBlock;
 import xfacthd.framedblocks.api.util.CtmPredicate;
 import xfacthd.framedblocks.common.FBContent;
@@ -32,12 +35,20 @@ public class FramedCollapsibleBlock extends FramedBlock
     public FramedCollapsibleBlock(BlockType blockType)
     {
         super(blockType, IFramedBlock.createProperties().dynamicShape());
+        registerDefaultState(defaultBlockState().setValue(BlockStateProperties.WATERLOGGED, false));
     }
 
     @Override
     protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder)
     {
-        builder.add(PropertyHolder.COLLAPSED_FACE);
+        builder.add(PropertyHolder.COLLAPSED_FACE, BlockStateProperties.WATERLOGGED);
+    }
+
+    @Nullable
+    @Override
+    public BlockState getStateForPlacement(BlockPlaceContext context)
+    {
+        return withWater(defaultBlockState(), context.getLevel(), context.getClickedPos());
     }
 
     @Override

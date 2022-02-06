@@ -9,6 +9,7 @@ import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
+import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import xfacthd.framedblocks.common.data.BlockType;
 import xfacthd.framedblocks.common.data.PropertyHolder;
 import xfacthd.framedblocks.common.blockentity.FramedDoubleThreewayCornerBlockEntity;
@@ -34,7 +35,7 @@ public class FramedDoubleThreewayCornerBlock extends AbstractFramedDoubleBlock
     @Override
     protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder)
     {
-        builder.add(PropertyHolder.FACING_HOR, PropertyHolder.TOP);
+        builder.add(PropertyHolder.FACING_HOR, PropertyHolder.TOP, BlockStateProperties.WATERLOGGED);
     }
 
     @Override
@@ -42,6 +43,7 @@ public class FramedDoubleThreewayCornerBlock extends AbstractFramedDoubleBlock
     {
         Direction facing = context.getHorizontalDirection();
         BlockState state = defaultBlockState().setValue(PropertyHolder.FACING_HOR, facing);
+        state = withWater(state, context.getLevel(), context.getClickedPos());
         return withTop(state, context.getClickedFace(), context.getClickLocation());
     }
 

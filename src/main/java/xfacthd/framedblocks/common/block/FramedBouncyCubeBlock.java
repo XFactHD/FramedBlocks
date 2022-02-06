@@ -1,17 +1,22 @@
 package xfacthd.framedblocks.common.block;
 
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.*;
-import net.minecraft.world.level.block.SlimeBlock;
-import net.minecraft.world.level.block.SoundType;
+import net.minecraft.world.level.block.*;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.state.StateDefinition;
+import net.minecraft.world.level.block.state.properties.BlockStateProperties;
+import net.minecraft.world.level.material.FluidState;
+import net.minecraft.world.level.material.Fluids;
 import net.minecraft.world.level.storage.loot.LootContext;
 import net.minecraft.world.phys.BlockHitResult;
 import xfacthd.framedblocks.api.block.FramedBlockEntity;
@@ -23,9 +28,47 @@ import javax.annotation.Nullable;
 import java.util.List;
 
 @SuppressWarnings("deprecation")
-public class FramedBouncyCubeBlock extends SlimeBlock implements IFramedBlock
+public class FramedBouncyCubeBlock extends SlimeBlock implements IFramedBlock, SimpleWaterloggedBlock
 {
-    public FramedBouncyCubeBlock() { super(IFramedBlock.createProperties()); }
+    public FramedBouncyCubeBlock()
+    {
+        super(IFramedBlock.createProperties());
+        registerDefaultState(defaultBlockState().setValue(BlockStateProperties.WATERLOGGED, false));
+    }
+
+    @Override
+    protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder)
+    {
+        builder.add(BlockStateProperties.WATERLOGGED);
+    }
+
+    @Override
+    public BlockState getStateForPlacement(BlockPlaceContext context)
+    {
+        FluidState fluidState = context.getLevel().getFluidState(context.getClickedPos());
+        return defaultBlockState().setValue(BlockStateProperties.WATERLOGGED, fluidState.is(Fluids.WATER));
+    }
+
+    @Override
+    public FluidState getFluidState(BlockState state)
+    {
+        if (state.getValue(BlockStateProperties.WATERLOGGED))
+        {
+            return Fluids.WATER.getSource(false);
+        }
+        return Fluids.EMPTY.defaultFluidState();
+    }
+
+    @Override
+    public BlockState updateShape(BlockState state, Direction facing, BlockState facingState, LevelAccessor level, BlockPos pos, BlockPos facingPos)
+    {
+        if (state.getValue(BlockStateProperties.WATERLOGGED))
+        {
+            level.scheduleTick(pos, Fluids.WATER, Fluids.WATER.getTickDelay(level));
+        }
+
+        return super.updateShape(state, facing, facingState, level, pos, facingPos);
+    }
 
     @Override
     public final InteractionResult use(BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hit)

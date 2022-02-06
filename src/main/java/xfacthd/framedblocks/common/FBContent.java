@@ -39,7 +39,7 @@ public class FBContent
     private static final DeferredRegister<MenuType<?>> CONTAINER_TYPES = DeferredRegister.create(ForgeRegistries.CONTAINERS, FramedBlocks.MODID);
 
     /** BLOCKS */
-    public static final RegistryObject<Block> blockFramedCube = registerBlock(FramedBlock::new, BlockType.FRAMED_CUBE);
+    public static final RegistryObject<Block> blockFramedCube = registerBlock(FramedCube::new, BlockType.FRAMED_CUBE);
     public static final RegistryObject<Block> blockFramedSlope = registerBlock(FramedSlopeBlock::new, BlockType.FRAMED_SLOPE);
     public static final RegistryObject<Block> blockFramedCornerSlope = registerBlock(FramedCornerSlopeBlock::new, BlockType.FRAMED_CORNER_SLOPE);
     public static final RegistryObject<Block> blockFramedInnerCornerSlope = registerBlock(FramedCornerSlopeBlock::new, BlockType.FRAMED_INNER_CORNER_SLOPE);

@@ -9,6 +9,7 @@ import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
+import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.phys.Vec3;
 import xfacthd.framedblocks.api.util.*;
 import xfacthd.framedblocks.common.data.*;
@@ -40,7 +41,7 @@ public class FramedDoubleCornerBlock extends AbstractFramedDoubleBlock
     @Override
     protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder)
     {
-        builder.add(PropertyHolder.FACING_HOR, PropertyHolder.CORNER_TYPE);
+        builder.add(PropertyHolder.FACING_HOR, PropertyHolder.CORNER_TYPE, BlockStateProperties.WATERLOGGED);
     }
 
     @Override
@@ -62,6 +63,7 @@ public class FramedDoubleCornerBlock extends AbstractFramedDoubleBlock
             }
         }
 
+        state = withWater(state, context.getLevel(), context.getClickedPos());
         return withCornerType(state, context, side, hitPoint, context.getHorizontalDirection());
     }
 

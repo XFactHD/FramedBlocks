@@ -11,6 +11,7 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
+import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.phys.HitResult;
 import xfacthd.framedblocks.common.FBContent;
 import xfacthd.framedblocks.common.data.BlockType;
@@ -32,7 +33,7 @@ public class FramedDoublePanelBlock extends AbstractFramedDoubleBlock
     @Override
     protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder)
     {
-        builder.add(PropertyHolder.FACING_NE);
+        builder.add(PropertyHolder.FACING_NE, BlockStateProperties.WATERLOGGED);
     }
 
     @Override //Used by the blueprint
@@ -40,7 +41,7 @@ public class FramedDoublePanelBlock extends AbstractFramedDoubleBlock
     {
         Direction dir = context.getHorizontalDirection();
         if (dir == Direction.SOUTH || dir == Direction.WEST) { dir = dir.getOpposite(); }
-        return defaultBlockState().setValue(PropertyHolder.FACING_NE, dir);
+        return withWater(defaultBlockState().setValue(PropertyHolder.FACING_NE, dir), context.getLevel(), context.getClickedPos());
     }
 
     @Override
