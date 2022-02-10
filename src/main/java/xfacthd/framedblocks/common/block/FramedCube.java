@@ -5,6 +5,7 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
+import xfacthd.framedblocks.api.util.FramedProperties;
 import xfacthd.framedblocks.common.data.BlockType;
 
 public class FramedCube extends FramedBlock
@@ -14,7 +15,7 @@ public class FramedCube extends FramedBlock
     @Override
     protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder)
     {
-        builder.add(BlockStateProperties.WATERLOGGED);
+        builder.add(BlockStateProperties.WATERLOGGED, FramedProperties.SOLID);
     }
 
     @Override

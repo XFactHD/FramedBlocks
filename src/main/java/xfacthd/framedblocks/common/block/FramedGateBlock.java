@@ -38,7 +38,7 @@ public class FramedGateBlock extends FenceGateBlock implements IFramedBlock
         return false;
     };
 
-    public FramedGateBlock() { super(IFramedBlock.createProperties()); }
+    public FramedGateBlock() { super(IFramedBlock.createProperties(BlockType.FRAMED_GATE)); }
 
     @Override
     public final InteractionResult use(BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hit)

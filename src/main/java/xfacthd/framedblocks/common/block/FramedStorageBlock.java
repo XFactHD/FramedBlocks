@@ -5,14 +5,13 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
-import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.phys.BlockHitResult;
+import xfacthd.framedblocks.api.util.FramedProperties;
 import xfacthd.framedblocks.common.blockentity.FramedStorageBlockEntity;
 import xfacthd.framedblocks.common.data.BlockType;
 
@@ -23,13 +22,7 @@ public class FramedStorageBlock extends FramedBlock
     @Override
     protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder)
     {
-        builder.add(BlockStateProperties.WATERLOGGED);
-    }
-
-    @Override
-    public BlockState getStateForPlacement(BlockPlaceContext context)
-    {
-        return withWater(defaultBlockState(), context.getLevel(), context.getClickedPos());
+        builder.add(FramedProperties.SOLID);
     }
 
     @Override

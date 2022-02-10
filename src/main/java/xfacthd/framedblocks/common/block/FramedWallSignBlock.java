@@ -22,7 +22,7 @@ public class FramedWallSignBlock extends AbstractFramedSignBlock
 {
     public FramedWallSignBlock()
     {
-        super(BlockType.FRAMED_WALL_SIGN, IFramedBlock.createProperties().noCollission());
+        super(BlockType.FRAMED_WALL_SIGN, IFramedBlock.createProperties(BlockType.FRAMED_WALL_SIGN).noCollission());
     }
 
     @Override

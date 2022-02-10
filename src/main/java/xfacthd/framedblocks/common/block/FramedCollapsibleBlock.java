@@ -34,7 +34,7 @@ public class FramedCollapsibleBlock extends FramedBlock
 
     public FramedCollapsibleBlock(BlockType blockType)
     {
-        super(blockType, IFramedBlock.createProperties().dynamicShape());
+        super(blockType, IFramedBlock.createProperties(BlockType.FRAMED_COLLAPSIBLE_BLOCK).dynamicShape());
         registerDefaultState(defaultBlockState().setValue(BlockStateProperties.WATERLOGGED, false));
     }
 

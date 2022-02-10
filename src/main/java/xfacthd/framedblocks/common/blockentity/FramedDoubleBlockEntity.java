@@ -101,6 +101,13 @@ public abstract class FramedDoubleBlockEntity extends FramedBlockEntity
     }
 
     @Override
+    protected boolean isCamoSolid()
+    {
+        //noinspection ConstantConditions
+        return super.isCamoSolid() && !camoState.isAir() && camoState.isSolidRender(level, worldPosition);
+    }
+
+    @Override
     public float getCamoExplosionResistance(Explosion explosion)
     {
         return Math.max(

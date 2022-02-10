@@ -9,7 +9,6 @@ import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
-import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import xfacthd.framedblocks.common.data.*;
 import xfacthd.framedblocks.common.blockentity.FramedDoubleSlopeBlockEntity;
 import xfacthd.framedblocks.common.blockentity.FramedDoubleBlockEntity;
@@ -37,15 +36,15 @@ public class FramedDoubleSlopeBlock extends AbstractFramedDoubleBlock
     @Override
     protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder)
     {
-        builder.add(PropertyHolder.FACING_HOR, PropertyHolder.SLOPE_TYPE, BlockStateProperties.WATERLOGGED);
+        super.createBlockStateDefinition(builder);
+        builder.add(PropertyHolder.FACING_HOR, PropertyHolder.SLOPE_TYPE);
     }
 
     @Nullable
     @Override
     public BlockState getStateForPlacement(BlockPlaceContext context)
     {
-        BlockState state = withWater(defaultBlockState(), context.getLevel(), context.getClickedPos());
-        return withSlopeType(state, context.getClickedFace(), context.getHorizontalDirection(), context.getClickLocation());
+        return withSlopeType(defaultBlockState(), context.getClickedFace(), context.getHorizontalDirection(), context.getClickLocation());
     }
 
     @Override

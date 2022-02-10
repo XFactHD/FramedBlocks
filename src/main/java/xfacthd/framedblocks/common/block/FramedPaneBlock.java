@@ -34,7 +34,7 @@ public class FramedPaneBlock extends IronBarsBlock implements IFramedBlock
 
     public FramedPaneBlock(BlockType type)
     {
-        super(IFramedBlock.createProperties());
+        super(IFramedBlock.createProperties(type));
         this.type = type;
     }
 

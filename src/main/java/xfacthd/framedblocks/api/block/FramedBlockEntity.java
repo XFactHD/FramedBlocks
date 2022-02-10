@@ -27,8 +27,7 @@ import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.capability.*;
 import xfacthd.framedblocks.FramedBlocks;
 import xfacthd.framedblocks.api.FramedBlocksAPI;
-import xfacthd.framedblocks.api.util.FramedBlockData;
-import xfacthd.framedblocks.api.util.Utils;
+import xfacthd.framedblocks.api.util.*;
 import xfacthd.framedblocks.common.FBContent;
 import xfacthd.framedblocks.common.util.ServerConfig;
 
@@ -98,7 +97,7 @@ public class FramedBlockEntity extends BlockEntity
             {
                 if (!player.isCreative()) { stack.shrink(1); }
 
-                setIntangible(true);
+                wrapInSolidCheck(() -> setIntangible(true));
             }
             return InteractionResult.sidedSuccess(level.isClientSide());
         }
@@ -107,7 +106,7 @@ public class FramedBlockEntity extends BlockEntity
             //noinspection ConstantConditions
             if (!level.isClientSide())
             {
-                setIntangible(false);
+                wrapInSolidCheck(() -> setIntangible(false));
 
                 ItemStack result = new ItemStack(ServerConfig.intangibleMarkerItem);
                 if (!player.getInventory().add(result))
@@ -134,7 +133,7 @@ public class FramedBlockEntity extends BlockEntity
                 player.drop(camoStack, false);
             }
 
-            applyCamo(ItemStack.EMPTY, Blocks.AIR.defaultBlockState(), hit);
+            wrapInSolidCheck(() -> applyCamo(ItemStack.EMPTY, Blocks.AIR.defaultBlockState(), hit));
 
             boolean lightUpdate = getLightValue() != light;
 
@@ -199,8 +198,11 @@ public class FramedBlockEntity extends BlockEntity
             {
                 int light = getLightValue();
 
-                applyCamo(stack.split(1), state, hit);
-                if (player.isCreative()) { stack.grow(1); }
+                wrapInSolidCheck(() ->
+                {
+                    applyCamo(stack.split(1), state, hit);
+                    if (player.isCreative()) { stack.grow(1); }
+                });
 
                 setChanged();
                 if (getLightValue() != light) { doLightUpdate(); }
@@ -363,6 +365,35 @@ public class FramedBlockEntity extends BlockEntity
     protected ItemStack getCamoStack(BlockHitResult hit) { return camoStack; }
 
     public final ItemStack getCamoStack() { return camoStack; }
+
+    protected boolean isCamoSolid()
+    {
+        //noinspection ConstantConditions
+        return !camoState.isAir() && camoState.isSolidRender(level, worldPosition);
+    }
+
+    public final void checkCamoSolidOnPlace()
+    {
+        if (getBlock().getBlockType().canOccludeWithSolidCamo() && !camoState.isAir())
+        {
+            wrapInSolidCheck(() -> {});
+        }
+    }
+
+    protected final void wrapInSolidCheck(Runnable task)
+    {
+        boolean canOcclude = getBlock().getBlockType().canOccludeWithSolidCamo();
+        boolean wasSolid = canOcclude && getBlockState().getValue(FramedProperties.SOLID);
+
+        task.run();
+
+        boolean solid = canOcclude && !intangible && isCamoSolid();
+        if (solid != wasSolid)
+        {
+            //noinspection ConstantConditions
+            level.setBlock(worldPosition, getBlockState().setValue(FramedProperties.SOLID, solid), Block.UPDATE_ALL);
+        }
+    }
 
     public float getCamoExplosionResistance(Explosion explosion)
     {

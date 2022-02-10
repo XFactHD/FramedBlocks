@@ -22,6 +22,7 @@ import net.minecraft.world.level.storage.loot.LootContext;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.shapes.*;
 import xfacthd.framedblocks.api.block.IFramedBlock;
+import xfacthd.framedblocks.api.util.FramedProperties;
 import xfacthd.framedblocks.common.data.BlockType;
 import xfacthd.framedblocks.common.data.PropertyHolder;
 import xfacthd.framedblocks.api.block.FramedBlockEntity;
@@ -37,15 +38,18 @@ public class FramedRailSlopeBlock extends BaseRailBlock implements IFramedBlock
 
     public FramedRailSlopeBlock()
     {
-        super(true, IFramedBlock.createProperties());
+        super(true, IFramedBlock.createProperties(BlockType.FRAMED_RAIL_SLOPE));
         shapes = getBlockType().generateShapes(getStateDefinition().getPossibleStates());
-        registerDefaultState(defaultBlockState().setValue(BlockStateProperties.WATERLOGGED, false));
+        registerDefaultState(defaultBlockState()
+                .setValue(BlockStateProperties.WATERLOGGED, false)
+                .setValue(FramedProperties.SOLID, false)
+        );
     }
 
     @Override
     protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder)
     {
-        builder.add(PropertyHolder.ASCENDING_RAIL_SHAPE, BlockStateProperties.WATERLOGGED);
+        builder.add(PropertyHolder.ASCENDING_RAIL_SHAPE, BlockStateProperties.WATERLOGGED, FramedProperties.SOLID);
     }
 
     @Override
@@ -130,6 +134,21 @@ public class FramedRailSlopeBlock extends BaseRailBlock implements IFramedBlock
     public void setPlacedBy(Level level, BlockPos pos, BlockState state, @Nullable LivingEntity placer, ItemStack stack)
     {
         tryApplyCamoImmediately(level, pos, placer, stack);
+    }
+
+    @Override
+    public boolean useShapeForLightOcclusion(BlockState state) { return state.getValue(FramedProperties.SOLID); }
+
+    @Override
+    public VoxelShape getOcclusionShape(BlockState state, BlockGetter level, BlockPos pos)
+    {
+        return getCamoOcclusionShape(state, level, pos);
+    }
+
+    @Override
+    public VoxelShape getVisualShape(BlockState state, BlockGetter level, BlockPos pos, CollisionContext ctx)
+    {
+        return getCamoVisualShape(state, level, pos, ctx);
     }
 
     @Override

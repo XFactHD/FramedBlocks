@@ -12,6 +12,8 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.*;
 import net.minecraft.world.level.block.*;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.state.StateDefinition;
+import xfacthd.framedblocks.api.util.FramedProperties;
 import xfacthd.framedblocks.common.data.BlockType;
 import xfacthd.framedblocks.common.item.FramedBlueprintItem;
 import xfacthd.framedblocks.common.blockentity.FramedDoubleBlockEntity;
@@ -23,6 +25,12 @@ import java.util.Optional;
 public abstract class AbstractFramedDoubleBlock extends FramedBlock
 {
     public AbstractFramedDoubleBlock(BlockType blockType) { super(blockType); }
+
+    @Override
+    protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder)
+    {
+        builder.add(FramedProperties.SOLID);
+    }
 
     @Nonnull
     @Override

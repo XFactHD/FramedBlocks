@@ -20,11 +20,10 @@ import net.minecraft.world.level.storage.loot.LootContext;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.Vec3;
-import net.minecraft.world.phys.shapes.CollisionContext;
+import net.minecraft.world.phys.shapes.*;
 import xfacthd.framedblocks.api.FramedBlocksAPI;
 import xfacthd.framedblocks.api.type.IBlockType;
-import xfacthd.framedblocks.api.util.CtmPredicate;
-import xfacthd.framedblocks.api.util.SideSkipPredicate;
+import xfacthd.framedblocks.api.util.*;
 import xfacthd.framedblocks.common.util.ServerConfig;
 
 import javax.annotation.Nonnull;
@@ -41,6 +40,8 @@ public interface IFramedBlock extends EntityBlock//, IFacade
 {
     IBlockType getBlockType();
 
+    /** @deprecated Use overload with {@link IBlockType} parameter instead */
+    @Deprecated(forRemoval = true)
     static Block.Properties createProperties()
     {
         return Block.Properties.of(Material.WOOD)
@@ -49,6 +50,22 @@ public interface IFramedBlock extends EntityBlock//, IFacade
                 .sound(SoundType.WOOD)
                 .isViewBlocking(IFramedBlock::isBlockSuffocating)
                 .isSuffocating(IFramedBlock::isBlockSuffocating);
+    }
+
+    static Block.Properties createProperties(IBlockType type)
+    {
+        Block.Properties props = Block.Properties.of(Material.WOOD)
+                .strength(2F)
+                .sound(SoundType.WOOD)
+                .isViewBlocking(IFramedBlock::isBlockSuffocating)
+                .isSuffocating(IFramedBlock::isBlockSuffocating);
+
+        if (!type.canOccludeWithSolidCamo())
+        {
+            props.noOcclusion();
+        }
+
+        return props;
     }
 
     private static boolean isBlockSuffocating(BlockState state, BlockGetter level, BlockPos pos)
@@ -67,7 +84,19 @@ public interface IFramedBlock extends EntityBlock//, IFacade
 
     default void tryApplyCamoImmediately(Level level, BlockPos pos, @Nullable LivingEntity placer, ItemStack stack)
     {
-        if (!level.isClientSide() && placer instanceof Player player)
+        if (level.isClientSide()) { return; }
+
+        //noinspection ConstantConditions
+        if (stack.hasTag() && stack.getTag().contains("BlockEntityTag"))
+        {
+            if (level.getBlockEntity(pos) instanceof FramedBlockEntity be)
+            {
+                be.checkCamoSolidOnPlace();
+            }
+            return;
+        }
+
+        if (placer instanceof Player player)
         {
             if (player.getMainHandItem() != stack) { return; }
 
@@ -252,6 +281,24 @@ public interface IFramedBlock extends EntityBlock//, IFacade
 
         // Copy of the default suffocation check
         return state.getMaterial().blocksMotion() && state.isCollisionShapeFullBlock(level, pos);
+    }
+
+    default VoxelShape getCamoOcclusionShape(BlockState state, BlockGetter level, BlockPos pos)
+    {
+        if (getBlockType().canOccludeWithSolidCamo() && !state.getValue(FramedProperties.SOLID))
+        {
+            return Shapes.empty();
+        }
+        return state.getShape(level, pos);
+    }
+
+    default VoxelShape getCamoVisualShape(BlockState state, BlockGetter level, BlockPos pos, CollisionContext ctx)
+    {
+        if (getBlockType().canOccludeWithSolidCamo() && !state.getValue(FramedProperties.SOLID))
+        {
+            return Shapes.empty();
+        }
+        return state.getCollisionShape(level, pos, ctx);
     }
 
     default Optional<MutableComponent> printCamoBlock(CompoundTag beTag)

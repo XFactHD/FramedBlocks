@@ -26,7 +26,7 @@ public class FramedPressurePlateBlock extends PressurePlateBlock implements IFra
 {
     public FramedPressurePlateBlock()
     {
-        super(Sensitivity.EVERYTHING, IFramedBlock.createProperties()
+        super(Sensitivity.EVERYTHING, IFramedBlock.createProperties(BlockType.FRAMED_PRESSURE_PLATE)
                 .noCollission()
                 .strength(0.5F)
         );

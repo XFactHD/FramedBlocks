@@ -11,6 +11,7 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.*;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
+import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.phys.BlockHitResult;
 import xfacthd.framedblocks.api.util.Utils;
 import xfacthd.framedblocks.common.FBContent;
@@ -26,15 +27,15 @@ public class FramedChestBlock extends FramedStorageBlock
     @Override
     protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder)
     {
-        super.createBlockStateDefinition(builder);
-        builder.add(PropertyHolder.FACING_HOR, PropertyHolder.CHEST_STATE, PropertyHolder.LATCH_TYPE);
+        //Don't call super, this block doesn't need the SOLID property
+        builder.add(PropertyHolder.FACING_HOR, PropertyHolder.CHEST_STATE, PropertyHolder.LATCH_TYPE, BlockStateProperties.WATERLOGGED);
     }
 
     @Override
     public BlockState getStateForPlacement(BlockPlaceContext context)
     {
-        //noinspection ConstantConditions
-        return super.getStateForPlacement(context).setValue(PropertyHolder.FACING_HOR, context.getHorizontalDirection().getOpposite());
+        BlockState state = defaultBlockState().setValue(PropertyHolder.FACING_HOR, context.getHorizontalDirection().getOpposite());
+        return withWater(state, context.getLevel(), context.getClickedPos());
     }
 
     @Override

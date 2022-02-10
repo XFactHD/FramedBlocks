@@ -9,6 +9,8 @@ import xfacthd.framedblocks.api.util.SideSkipPredicate;
 
 public interface IBlockType
 {
+    default boolean canOccludeWithSolidCamo() { return false; }
+
     boolean hasSpecialHitbox();
 
     CtmPredicate getCtmPredicate();

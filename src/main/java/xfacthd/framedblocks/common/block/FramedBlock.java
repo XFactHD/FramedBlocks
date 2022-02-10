@@ -14,7 +14,7 @@ import xfacthd.framedblocks.api.util.Utils;
 
 public class FramedBlock extends AbstractFramedBlock
 {
-    protected FramedBlock(BlockType blockType) { this(blockType, IFramedBlock.createProperties()); }
+    protected FramedBlock(BlockType blockType) { this(blockType, IFramedBlock.createProperties(blockType)); }
 
     protected FramedBlock(BlockType blockType, Properties props) { super(blockType, props); }
 

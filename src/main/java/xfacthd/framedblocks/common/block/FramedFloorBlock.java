@@ -9,10 +9,9 @@ import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
+import xfacthd.framedblocks.api.util.*;
 import xfacthd.framedblocks.common.FBContent;
 import xfacthd.framedblocks.common.data.BlockType;
-import xfacthd.framedblocks.api.util.CtmPredicate;
-import xfacthd.framedblocks.api.util.SideSkipPredicate;
 
 @SuppressWarnings("deprecation")
 public class FramedFloorBlock extends FramedBlock
@@ -36,7 +35,7 @@ public class FramedFloorBlock extends FramedBlock
     @Override
     protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder)
     {
-        builder.add(BlockStateProperties.WATERLOGGED);
+        builder.add(BlockStateProperties.WATERLOGGED, FramedProperties.SOLID);
     }
 
     @Override

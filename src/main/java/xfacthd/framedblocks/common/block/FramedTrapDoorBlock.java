@@ -9,15 +9,18 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.*;
-import net.minecraft.world.level.block.SoundType;
-import net.minecraft.world.level.block.TrapDoorBlock;
+import net.minecraft.world.level.block.*;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.block.state.properties.Half;
 import net.minecraft.world.level.storage.loot.LootContext;
 import net.minecraft.world.phys.BlockHitResult;
+import net.minecraft.world.phys.shapes.CollisionContext;
+import net.minecraft.world.phys.shapes.VoxelShape;
 import xfacthd.framedblocks.api.block.IFramedBlock;
+import xfacthd.framedblocks.api.util.FramedProperties;
 import xfacthd.framedblocks.common.data.BlockType;
 import xfacthd.framedblocks.api.block.FramedBlockEntity;
 import xfacthd.framedblocks.api.util.CtmPredicate;
@@ -43,7 +46,15 @@ public class FramedTrapDoorBlock extends TrapDoorBlock implements IFramedBlock
 
     public FramedTrapDoorBlock()
     {
-        super(IFramedBlock.createProperties());
+        super(IFramedBlock.createProperties(BlockType.FRAMED_TRAPDOOR));
+        registerDefaultState(defaultBlockState().setValue(FramedProperties.SOLID, false));
+    }
+
+    @Override
+    protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder)
+    {
+        super.createBlockStateDefinition(builder);
+        builder.add(FramedProperties.SOLID);
     }
 
     @Override
@@ -59,6 +70,21 @@ public class FramedTrapDoorBlock extends TrapDoorBlock implements IFramedBlock
     public void setPlacedBy(Level level, BlockPos pos, BlockState state, @Nullable LivingEntity placer, ItemStack stack)
     {
         tryApplyCamoImmediately(level, pos, placer, stack);
+    }
+
+    @Override
+    public boolean useShapeForLightOcclusion(BlockState state) { return state.getValue(FramedProperties.SOLID); }
+
+    @Override
+    public VoxelShape getOcclusionShape(BlockState state, BlockGetter level, BlockPos pos)
+    {
+        return getCamoOcclusionShape(state, level, pos);
+    }
+
+    @Override
+    public VoxelShape getVisualShape(BlockState state, BlockGetter level, BlockPos pos, CollisionContext ctx)
+    {
+        return getCamoVisualShape(state, level, pos, ctx);
     }
 
     @Override
