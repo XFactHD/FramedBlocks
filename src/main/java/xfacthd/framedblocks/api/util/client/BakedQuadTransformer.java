@@ -369,6 +369,77 @@ public class BakedQuadTransformer
         return true;
     }
 
+    public static boolean createTopBottomSmallTriangleQuad(BakedQuad quad, Direction dir)
+    {
+        if (!createTopBottomQuad(quad, dir, .5F))
+        {
+            return false;
+        }
+
+        return ModelUtils.modifyQuad(quad, (pos, color, uv, light, normal) ->
+        {
+            boolean dirPos = dir.getAxisDirection() == Direction.AxisDirection.POSITIVE;
+            boolean xAxis = dir.getAxis() == Direction.Axis.X;
+
+            boolean rotated = ModelUtils.isQuadRotated(uv);
+            boolean mirrored = ModelUtils.isQuadMirrored(uv);
+
+            int coordSource = xAxis ? 0 : 2;
+            int coordTarget = xAxis ? 2 : 0;
+
+            float[][] uvSrc = new float[4][2];
+            for (int i = 0; i < 4; i++) { System.arraycopy(uv[i], 0, uvSrc[i], 0, 2); }
+
+            if (xAxis)
+            {
+                float xz0Src = dirPos ? 1F - pos[0][coordSource] : pos[0][coordSource];
+                float xz1Src = dirPos ? pos[1][coordSource] : 1F - pos[1][coordSource];
+                float xz2Src = dirPos ? pos[2][coordSource] : 1F - pos[2][coordSource];
+                float xz3Src = dirPos ? 1F - pos[3][coordSource] : pos[3][coordSource];
+
+                boolean up = quad.getDirection() == Direction.UP;
+                float xz0 = up ? Math.max(Math.min(1F - xz0Src, pos[1][coordTarget]), pos[0][coordTarget]) : Math.min(Math.max(xz0Src, pos[1][coordTarget]), pos[0][coordTarget]);
+                float xz1 = up ? Math.min(Math.max(1F - xz1Src, pos[0][coordTarget]), pos[1][coordTarget]) : Math.max(Math.min(xz1Src, pos[0][coordTarget]), pos[1][coordTarget]);
+                float xz2 = up ? Math.min(Math.max(1F - xz2Src, pos[3][coordTarget]), pos[2][coordTarget]) : Math.max(Math.min(xz2Src, pos[3][coordTarget]), pos[2][coordTarget]);
+                float xz3 = up ? Math.max(Math.min(1F - xz3Src, pos[2][coordTarget]), pos[3][coordTarget]) : Math.min(Math.max(xz3Src, pos[2][coordTarget]), pos[3][coordTarget]);
+
+                ModelUtils.remapUV(quad.getDirection(), pos[0][coordTarget], pos[1][coordTarget], xz0, uvSrc, uv, 0, 1, 0, true, false, rotated, mirrored);
+                ModelUtils.remapUV(quad.getDirection(), pos[0][coordTarget], pos[1][coordTarget], xz1, uvSrc, uv, 0, 1, 1, true, false, rotated, mirrored);
+                ModelUtils.remapUV(quad.getDirection(), pos[2][coordTarget], pos[3][coordTarget], xz2, uvSrc, uv, 2, 3, 2, true, false, rotated, mirrored);
+                ModelUtils.remapUV(quad.getDirection(), pos[2][coordTarget], pos[3][coordTarget], xz3, uvSrc, uv, 2, 3, 3, true, false, rotated, mirrored);
+
+                pos[0][coordTarget] = xz0;
+                pos[1][coordTarget] = xz1;
+                pos[2][coordTarget] = xz2;
+                pos[3][coordTarget] = xz3;
+            }
+            else
+            {
+                float xz0Src = dirPos ? pos[0][coordSource] : 1F - pos[0][coordSource];
+                float xz1Src = dirPos ? pos[1][coordSource] : 1F - pos[1][coordSource];
+                float xz2Src = dirPos ? 1F - pos[2][coordSource] : pos[2][coordSource];
+                float xz3Src = dirPos ? 1F - pos[3][coordSource] : pos[3][coordSource];
+
+                float xz0 = Math.max(Math.min(xz0Src, pos[3][coordTarget]), pos[0][coordTarget]);
+                float xz1 = Math.max(Math.min(xz1Src, pos[2][coordTarget]), pos[1][coordTarget]);
+                float xz2 = Math.min(Math.max(xz2Src, pos[1][coordTarget]), pos[2][coordTarget]);
+                float xz3 = Math.min(Math.max(xz3Src, pos[0][coordTarget]), pos[3][coordTarget]);
+
+                ModelUtils.remapUV(quad.getDirection(), pos[0][coordTarget], pos[3][coordTarget], xz0, uvSrc, uv, 0, 3, 0, false, true, rotated, mirrored);
+                ModelUtils.remapUV(quad.getDirection(), pos[1][coordTarget], pos[2][coordTarget], xz1, uvSrc, uv, 1, 2, 1, false, true, rotated, mirrored);
+                ModelUtils.remapUV(quad.getDirection(), pos[1][coordTarget], pos[2][coordTarget], xz2, uvSrc, uv, 1, 2, 2, false, true, rotated, mirrored);
+                ModelUtils.remapUV(quad.getDirection(), pos[0][coordTarget], pos[3][coordTarget], xz3, uvSrc, uv, 0, 3, 3, false, true, rotated, mirrored);
+
+                pos[0][coordTarget] = xz0;
+                pos[1][coordTarget] = xz1;
+                pos[2][coordTarget] = xz2;
+                pos[3][coordTarget] = xz3;
+            }
+
+            return true;
+        });
+    }
+
     /**
      * Creates a quad starting at the top or bottom edge and cut off at a given height
      * @param quad The BakedQuad to manipulate, must be a copy of the original quad

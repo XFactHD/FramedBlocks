@@ -7,6 +7,7 @@ public class PropertyHolder
 {
     public static final DirectionProperty FACING_HOR = FramedProperties.FACING_HOR;
     public static final DirectionProperty FACING_NE = FramedProperties.FACING_NE;
+    public static final DirectionProperty ORIENTATION = DirectionProperty.create("orientation");
     public static final EnumProperty<SlopeType> SLOPE_TYPE = EnumProperty.create("type", SlopeType.class);
     public static final EnumProperty<CornerType> CORNER_TYPE = EnumProperty.create("type", CornerType.class);
     public static final EnumProperty<StairsType> STAIRS_TYPE = EnumProperty.create("type", StairsType.class);

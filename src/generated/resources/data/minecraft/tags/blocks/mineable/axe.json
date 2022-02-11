@@ -50,6 +50,8 @@
     "framedblocks:framed_collapsible_block",
     "framedblocks:framed_half_stairs",
     "framedblocks:framed_bouncy_cube",
-    "framedblocks:framed_secret_storage"
+    "framedblocks:framed_secret_storage",
+    "framedblocks:framed_prism",
+    "framedblocks:framed_sloped_prism"
   ]
 }

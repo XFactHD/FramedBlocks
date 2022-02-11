@@ -63,7 +63,9 @@ public enum BlockType implements IBlockType
     FRAMED_COLLAPSIBLE_BLOCK      (false,  true,  true,  true,  true,  true, FramedCollapsibleBlock.CTM_PREDICATE, new CollapsibleBlockSkipPredicate()),
     FRAMED_HALF_STAIRS            (false, false, false,  true,  true,  true, CtmPredicate.FALSE, new HalfStairsSkipPredicate(), FramedHalfStairsBlock::generateShapes),
     FRAMED_BOUNCY_CUBE            ( true, false, false, false,  true, false, CtmPredicate.TRUE, SideSkipPredicate.CTM, Shapes.block()),
-    FRAMED_SECRET_STORAGE         ( true, false,  true, false,  true, false, CtmPredicate.TRUE, SideSkipPredicate.CTM, Shapes.block());
+    FRAMED_SECRET_STORAGE         ( true, false,  true, false,  true, false, CtmPredicate.TRUE, SideSkipPredicate.CTM, Shapes.block()),
+    FRAMED_PRISM                  ( true,  true, false,  true,  true,  true, FramedPrismBlock.CTM_PREDICATE, FramedPrismBlock.SKIP_PREDICATE, FramedPrismBlock::generateShapes),
+    FRAMED_SLOPED_PRISM           ( true,  true, false,  true,  true,  true, FramedSlopedPrismBlock.CTM_PREDICATE, FramedSlopedPrismBlock.SKIP_PREDICATE, FramedSlopedPrismBlock::generateShapes);
 
     private final String name = toString().toLowerCase(Locale.ROOT);
     private final boolean canOcclude;
