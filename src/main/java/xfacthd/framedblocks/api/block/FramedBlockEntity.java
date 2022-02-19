@@ -44,6 +44,7 @@ public class FramedBlockEntity extends BlockEntity
     private BlockState camoState = Blocks.AIR.defaultBlockState();
     private boolean glowing = false;
     private boolean intangible = false;
+    private boolean recheckSolid = false;
 
     public FramedBlockEntity(BlockPos pos, BlockState state) { this(FramedBlocksAPI.getInstance().defaultBlockEntity(), pos, state); }
 
@@ -97,7 +98,8 @@ public class FramedBlockEntity extends BlockEntity
             {
                 if (!player.isCreative()) { stack.shrink(1); }
 
-                wrapInSolidCheck(() -> setIntangible(true));
+                setIntangible(true);
+                updateSolidState();
             }
             return InteractionResult.sidedSuccess(level.isClientSide());
         }
@@ -106,7 +108,8 @@ public class FramedBlockEntity extends BlockEntity
             //noinspection ConstantConditions
             if (!level.isClientSide())
             {
-                wrapInSolidCheck(() -> setIntangible(false));
+                setIntangible(false);
+                updateSolidState();
 
                 ItemStack result = new ItemStack(ServerConfig.intangibleMarkerItem);
                 if (!player.getInventory().add(result))
@@ -133,7 +136,8 @@ public class FramedBlockEntity extends BlockEntity
                 player.drop(camoStack, false);
             }
 
-            wrapInSolidCheck(() -> applyCamo(ItemStack.EMPTY, Blocks.AIR.defaultBlockState(), hit));
+            applyCamo(ItemStack.EMPTY, Blocks.AIR.defaultBlockState(), hit);
+            updateSolidState();
 
             boolean lightUpdate = getLightValue() != light;
 
@@ -198,11 +202,9 @@ public class FramedBlockEntity extends BlockEntity
             {
                 int light = getLightValue();
 
-                wrapInSolidCheck(() ->
-                {
-                    applyCamo(stack.split(1), state, hit);
-                    if (player.isCreative()) { stack.grow(1); }
-                });
+                applyCamo(stack.split(1), state, hit);
+                updateSolidState();
+                if (player.isCreative()) { stack.grow(1); }
 
                 setChanged();
                 if (getLightValue() != light) { doLightUpdate(); }
@@ -372,21 +374,18 @@ public class FramedBlockEntity extends BlockEntity
         return !camoState.isAir() && camoState.isSolidRender(level, worldPosition);
     }
 
-    public final void checkCamoSolidOnPlace()
+    public final void checkCamoSolid()
     {
         if (getBlock().getBlockType().canOccludeWithSolidCamo() && !camoState.isAir())
         {
-            wrapInSolidCheck(() -> {});
+            updateSolidState();
         }
     }
 
-    protected final void wrapInSolidCheck(Runnable task)
+    protected final void updateSolidState()
     {
         boolean canOcclude = getBlock().getBlockType().canOccludeWithSolidCamo();
         boolean wasSolid = canOcclude && getBlockState().getValue(FramedProperties.SOLID);
-
-        task.run();
-
         boolean solid = canOcclude && !intangible && isCamoSolid();
         if (solid != wasSolid)
         {
@@ -476,6 +475,17 @@ public class FramedBlockEntity extends BlockEntity
         {
             drops.add(camoStack);
         }
+    }
+
+    @Override
+    public void onLoad()
+    {
+        //noinspection ConstantConditions
+        if (!level.isClientSide() && recheckSolid)
+        {
+            checkCamoSolid();
+        }
+        super.onLoad();
     }
 
     /*
@@ -599,6 +609,7 @@ public class FramedBlockEntity extends BlockEntity
         nbt.put("camo_state", NbtUtils.writeBlockState(camoState));
         nbt.putBoolean("glowing", glowing);
         nbt.putBoolean("intangible", intangible);
+        nbt.putBoolean("updated", true);
 
         super.saveAdditional(nbt);
     }
@@ -611,11 +622,13 @@ public class FramedBlockEntity extends BlockEntity
         BlockState state = NbtUtils.readBlockState(nbt.getCompound("camo_state"));
         if (state.isAir() || isValidBlock(state, null))
         {
+            recheckSolid = !nbt.getBoolean("updated");
             camoStack = ItemStack.of(nbt.getCompound("camo_stack"));
             camoState = state;
         }
         else
         {
+            recheckSolid = true;
             FramedBlocks.LOGGER.warn(
                     "Framed Block of type \"{}\" at position {} contains an invalid camo of type \"{}\", removing camo! This might be caused by a config or tag change!",
                     getBlockState().getBlock().getRegistryName(),

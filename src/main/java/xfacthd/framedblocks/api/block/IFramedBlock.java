@@ -91,7 +91,7 @@ public interface IFramedBlock extends EntityBlock//, IFacade
         {
             if (level.getBlockEntity(pos) instanceof FramedBlockEntity be)
             {
-                be.checkCamoSolidOnPlace();
+                be.checkCamoSolid();
             }
             return;
         }
