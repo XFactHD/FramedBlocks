@@ -10,7 +10,7 @@ import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import xfacthd.framedblocks.api.util.client.OutlineRender;
 import xfacthd.framedblocks.common.data.PropertyHolder;
 
-public class SlopeEndCapOutlineRenderer extends SlopeCapOutlineRenderer
+public class SlopedPrismOutlineRenderer extends PrismOutlineRenderer
 {
     @Override
     public void drawCenterAndTriangle(PoseStack pstack, VertexConsumer builder)

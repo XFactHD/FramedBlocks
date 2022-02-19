@@ -10,7 +10,7 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import xfacthd.framedblocks.api.util.client.OutlineRender;
 
-public class SlopeCapOutlineRenderer implements OutlineRender
+public class PrismOutlineRenderer implements OutlineRender
 {
     protected static final Quaternion ZP_180 = Vector3f.ZP.rotation(Mth.PI);
     protected static final Quaternion XP_90 = Vector3f.XP.rotation(Mth.PI / 2F);
