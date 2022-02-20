@@ -10,6 +10,7 @@ import net.minecraftforge.common.data.ExistingFileHelper;
 import net.minecraftforge.fml.RegistryObject;
 import xfacthd.framedblocks.FramedBlocks;
 import xfacthd.framedblocks.common.FBContent;
+import xfacthd.framedblocks.common.data.PropertyHolder;
 
 public class FramedBlockStateProvider extends BlockStateProvider
 {
@@ -248,7 +249,7 @@ public class FramedBlockStateProvider extends BlockStateProvider
             Direction dir = state.get(BlockStateProperties.HORIZONTAL_FACING);
             int rotY = ((int)dir.getHorizontalAngle() + 180) % 360;
             return ConfiguredModel.builder().modelFile(chest).rotationY(rotY).build();
-        }, BlockStateProperties.WATERLOGGED);
+        }, BlockStateProperties.WATERLOGGED, PropertyHolder.LATCH_TYPE);
 
         simpleBlockItem(FBContent.blockFramedChest.get(), chest);
     }
