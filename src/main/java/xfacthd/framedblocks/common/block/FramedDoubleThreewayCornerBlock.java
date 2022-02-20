@@ -4,7 +4,6 @@ import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.item.BlockItemUseContext;
 import net.minecraft.state.StateContainer;
-import net.minecraft.state.properties.BlockStateProperties;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.Direction;
 import net.minecraft.world.IBlockReader;
@@ -32,7 +31,8 @@ public class FramedDoubleThreewayCornerBlock extends AbstractFramedDoubleBlock
     @Override
     protected void fillStateContainer(StateContainer.Builder<Block, BlockState> builder)
     {
-        builder.add(PropertyHolder.FACING_HOR, PropertyHolder.TOP, BlockStateProperties.WATERLOGGED);
+        super.fillStateContainer(builder);
+        builder.add(PropertyHolder.FACING_HOR, PropertyHolder.TOP);
     }
 
     @Override
@@ -40,7 +40,6 @@ public class FramedDoubleThreewayCornerBlock extends AbstractFramedDoubleBlock
     {
         Direction facing = context.getPlacementHorizontalFacing();
         BlockState state = getDefaultState().with(PropertyHolder.FACING_HOR, facing);
-        state = withWater(state, context.getWorld(), context.getPos());
         return withTop(state, context.getFace(), context.getHitVec());
     }
 

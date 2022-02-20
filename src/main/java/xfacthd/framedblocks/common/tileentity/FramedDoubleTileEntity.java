@@ -98,6 +98,14 @@ public abstract class FramedDoubleTileEntity extends FramedTileEntity
     }
 
     @Override
+    @SuppressWarnings("deprecation")
+    protected boolean isCamoSolid()
+    {
+        //noinspection ConstantConditions
+        return super.isCamoSolid() && !camoState.isAir() && camoState.isOpaqueCube(world, pos);
+    }
+
+    @Override
     public float getCamoBlastResistance(Explosion explosion)
     {
         return Math.max(

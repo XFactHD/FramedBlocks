@@ -14,7 +14,7 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.*;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.BlockRayTraceResult;
-import net.minecraft.util.math.shapes.ISelectionContext;
+import net.minecraft.util.math.shapes.*;
 import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.util.text.IFormattableTextComponent;
 import net.minecraft.util.text.TextFormatting;
@@ -24,6 +24,7 @@ import team.chisel.ctm.api.IFacade;
 import xfacthd.framedblocks.FramedBlocks;
 import xfacthd.framedblocks.client.util.ClientConfig;
 import xfacthd.framedblocks.common.data.BlockType;
+import xfacthd.framedblocks.common.data.PropertyHolder;
 import xfacthd.framedblocks.common.item.FramedBlueprintItem;
 import xfacthd.framedblocks.common.tileentity.FramedDoubleTileEntity;
 import xfacthd.framedblocks.common.tileentity.FramedTileEntity;
@@ -38,15 +39,21 @@ public interface IFramedBlock extends IFacade
 {
     BlockType getBlockType();
 
-    static Block.Properties createProperties()
+    static Block.Properties createProperties(BlockType type)
     {
-        return Block.Properties.create(Material.WOOD)
-                .notSolid()
+        Block.Properties props = Block.Properties.create(Material.WOOD)
                 .harvestTool(ToolType.AXE)
                 .hardnessAndResistance(2F)
                 .sound(SoundType.WOOD)
                 .setBlocksVision(IFramedBlock::isBlockSuffocating)
                 .setSuffocates(IFramedBlock::isBlockSuffocating);
+
+        if (!type.canOccludeWithSolidCamo())
+        {
+            props.notSolid();
+        }
+
+        return props;
     }
 
     static boolean isBlockSuffocating(BlockState state, IBlockReader level, BlockPos pos)
@@ -65,7 +72,20 @@ public interface IFramedBlock extends IFacade
 
     default void tryApplyCamoImmediately(World world, BlockPos pos, @Nullable LivingEntity placer, ItemStack stack)
     {
-        if (!world.isRemote() && placer instanceof PlayerEntity)
+        if (world.isRemote()) { return; }
+
+        //noinspection ConstantConditions
+        if (stack.hasTag() && stack.getTag().contains("BlockEntityTag"))
+        {
+            TileEntity te = world.getTileEntity(pos);
+            if (te instanceof FramedTileEntity)
+            {
+                ((FramedTileEntity) te).checkCamoSolid();
+            }
+            return;
+        }
+
+        if (placer instanceof PlayerEntity)
         {
             PlayerEntity player = (PlayerEntity) placer;
 
@@ -255,6 +275,24 @@ public interface IFramedBlock extends IFacade
 
         // Copy of the default suffocation check
         return state.getMaterial().blocksMovement() && state.hasOpaqueCollisionShape(world, pos);
+    }
+
+    default VoxelShape getCamoOcclusionShape(BlockState state, IBlockReader level, BlockPos pos)
+    {
+        if (getBlockType().canOccludeWithSolidCamo() && !state.get(PropertyHolder.SOLID))
+        {
+            return VoxelShapes.empty();
+        }
+        return state.getShape(level, pos);
+    }
+
+    default VoxelShape getCamoVisualShape(BlockState state, IBlockReader level, BlockPos pos, ISelectionContext ctx)
+    {
+        if (getBlockType().canOccludeWithSolidCamo() && !state.get(PropertyHolder.SOLID))
+        {
+            return VoxelShapes.empty();
+        }
+        return state.getCollisionShape(level, pos, ctx);
     }
 
     default IFormattableTextComponent printCamoBlock(CompoundNBT beTag)

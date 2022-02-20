@@ -26,7 +26,7 @@ public class FramedPaneBlock extends PaneBlock implements IFramedBlock
 
     public FramedPaneBlock(BlockType type)
     {
-        super(IFramedBlock.createProperties());
+        super(IFramedBlock.createProperties(type));
         this.type = type;
     }
 

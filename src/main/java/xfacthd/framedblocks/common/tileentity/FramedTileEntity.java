@@ -19,15 +19,17 @@ import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.Explosion;
 import net.minecraftforge.client.model.data.IModelData;
 import net.minecraftforge.common.Tags;
+import net.minecraftforge.common.util.Constants;
 import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.capability.*;
+import net.minecraftforge.fml.common.thread.EffectiveSide;
 import xfacthd.framedblocks.FramedBlocks;
 import xfacthd.framedblocks.client.util.FramedBlockData;
 import xfacthd.framedblocks.common.FBContent;
 import xfacthd.framedblocks.common.block.IFramedBlock;
-import xfacthd.framedblocks.common.util.ServerConfig;
-import xfacthd.framedblocks.common.util.Utils;
+import xfacthd.framedblocks.common.data.PropertyHolder;
+import xfacthd.framedblocks.common.util.*;
 
 import java.util.List;
 
@@ -42,6 +44,7 @@ public class FramedTileEntity extends TileEntity
     private BlockState camoState = Blocks.AIR.getDefaultState();
     private boolean glowing = false;
     private boolean intangible = false;
+    private boolean recheckSolid = false;
 
     public FramedTileEntity() { this(FBContent.tileTypeFramedBlock.get()); }
 
@@ -96,6 +99,7 @@ public class FramedTileEntity extends TileEntity
                 if (!player.isCreative()) { stack.shrink(1); }
 
                 setIntangible(true);
+                updateSolidState();
             }
             return ActionResultType.func_233537_a_(world.isRemote());
         }
@@ -105,6 +109,7 @@ public class FramedTileEntity extends TileEntity
             if (!world.isRemote())
             {
                 setIntangible(false);
+                updateSolidState();
 
                 ItemStack result = new ItemStack(ServerConfig.intangibleMarkerItem);
                 if (!player.inventory.addItemStackToInventory(result))
@@ -132,6 +137,7 @@ public class FramedTileEntity extends TileEntity
             }
 
             applyCamo(ItemStack.EMPTY, Blocks.AIR.getDefaultState(), hit);
+            updateSolidState();
 
             boolean lightUpdate = getLightValue() != light;
 
@@ -197,6 +203,7 @@ public class FramedTileEntity extends TileEntity
                 int light = getLightValue();
 
                 applyCamo(stack.split(1), state, hit);
+                updateSolidState();
                 if (player.isCreative()) { stack.grow(1); }
 
                 markDirty();
@@ -360,6 +367,32 @@ public class FramedTileEntity extends TileEntity
 
     public ItemStack getCamoStack() { return camoStack; }
 
+    protected boolean isCamoSolid()
+    {
+        //noinspection ConstantConditions
+        return !camoState.isAir() && camoState.isOpaqueCube(world, pos);
+    }
+
+    public final void checkCamoSolid()
+    {
+        if (getBlock().getBlockType().canOccludeWithSolidCamo() && !camoState.isAir())
+        {
+            updateSolidState();
+        }
+    }
+
+    protected final void updateSolidState()
+    {
+        boolean canOcclude = getBlock().getBlockType().canOccludeWithSolidCamo();
+        boolean wasSolid = canOcclude && getBlockState().get(PropertyHolder.SOLID);
+        boolean solid = canOcclude && !intangible && isCamoSolid();
+        if (solid != wasSolid)
+        {
+            //noinspection ConstantConditions
+            world.setBlockState(pos, getBlockState().with(PropertyHolder.SOLID, solid), Constants.BlockFlags.DEFAULT);
+        }
+    }
+
     public float getCamoBlastResistance(Explosion explosion)
     {
         return camoState.getExplosionResistance(world, pos, explosion);
@@ -440,6 +473,15 @@ public class FramedTileEntity extends TileEntity
         if (!camoStack.isEmpty())
         {
             drops.add(camoStack);
+        }
+    }
+
+    public void checkSolidStateOnLoad()
+    {
+        //noinspection ConstantConditions
+        if (!world.isRemote() && recheckSolid)
+        {
+            checkCamoSolid();
         }
     }
 
@@ -564,6 +606,7 @@ public class FramedTileEntity extends TileEntity
         nbt.put("camo_state", NBTUtil.writeBlockState(camoState));
         nbt.putBoolean("glowing", glowing);
         nbt.putBoolean("intangible", intangible);
+        nbt.putBoolean("updated", true);
 
         return super.write(nbt);
     }
@@ -576,11 +619,13 @@ public class FramedTileEntity extends TileEntity
         BlockState camoState = NBTUtil.readBlockState(nbt.getCompound("camo_state"));
         if (camoState.isAir() || isValidBlock(camoState, null))
         {
+            recheckSolid = !nbt.getBoolean("updated");
             this.camoState = camoState;
             camoStack = ItemStack.read(nbt.getCompound("camo_stack"));
         }
         else
         {
+            recheckSolid = true;
             FramedBlocks.LOGGER.warn(
                     "Framed Block of type \"{}\" at position {} contains an invalid camo of type \"{}\", removing camo! This might be caused by a config or tag change!",
                     state.getBlock().getRegistryName(),
@@ -590,5 +635,10 @@ public class FramedTileEntity extends TileEntity
         }
         glowing = nbt.getBoolean("glowing");
         intangible = nbt.getBoolean("intangible");
+
+        if (EffectiveSide.get().isServer())
+        {
+            EventHandler.addNewTileEntity(this);
+        }
     }
 }

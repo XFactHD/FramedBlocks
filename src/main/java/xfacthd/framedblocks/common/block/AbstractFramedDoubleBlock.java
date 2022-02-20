@@ -5,6 +5,7 @@ import net.minecraft.entity.monster.piglin.PiglinTasks;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.nbt.NBTUtil;
+import net.minecraft.state.StateContainer;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.Direction;
@@ -13,6 +14,7 @@ import net.minecraft.util.text.*;
 import net.minecraft.world.*;
 import xfacthd.framedblocks.common.FBContent;
 import xfacthd.framedblocks.common.data.BlockType;
+import xfacthd.framedblocks.common.data.PropertyHolder;
 import xfacthd.framedblocks.common.item.FramedBlueprintItem;
 import xfacthd.framedblocks.common.tileentity.FramedDoubleTileEntity;
 
@@ -22,6 +24,12 @@ import javax.annotation.Nullable;
 public abstract class AbstractFramedDoubleBlock extends FramedBlock
 {
     public AbstractFramedDoubleBlock(BlockType blockType) { super(blockType); }
+
+    @Override
+    protected void fillStateContainer(StateContainer.Builder<Block, BlockState> builder)
+    {
+        builder.add(PropertyHolder.SOLID);
+    }
 
     @Nonnull
     @Override

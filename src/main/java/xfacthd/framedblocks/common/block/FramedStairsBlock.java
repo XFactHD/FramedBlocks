@@ -7,6 +7,7 @@ import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.loot.LootContext;
+import net.minecraft.state.StateContainer;
 import net.minecraft.state.properties.*;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.*;
@@ -59,7 +60,15 @@ public class FramedStairsBlock extends StairsBlock implements IFramedBlock
 
     public FramedStairsBlock()
     {
-        super(() -> FBContent.blockFramedCube.get().getDefaultState(), IFramedBlock.createProperties());
+        super(() -> FBContent.blockFramedCube.get().getDefaultState(), IFramedBlock.createProperties(BlockType.FRAMED_STAIRS));
+        setDefaultState(getDefaultState().with(PropertyHolder.SOLID, false));
+    }
+
+    @Override
+    protected void fillStateContainer(StateContainer.Builder<Block, BlockState> builder)
+    {
+        super.fillStateContainer(builder);
+        builder.add(PropertyHolder.SOLID);
     }
 
     @Override
@@ -72,6 +81,21 @@ public class FramedStairsBlock extends StairsBlock implements IFramedBlock
     public void onBlockPlacedBy(World world, BlockPos pos, BlockState state, @Nullable LivingEntity placer, ItemStack stack)
     {
         tryApplyCamoImmediately(world, pos, placer, stack);
+    }
+
+    @Override
+    public boolean isTransparent(BlockState state) { return state.get(PropertyHolder.SOLID); }
+
+    @Override
+    public VoxelShape getRenderShape(BlockState state, IBlockReader world, BlockPos pos)
+    {
+        return getCamoOcclusionShape(state, world, pos);
+    }
+
+    @Override
+    public VoxelShape getRayTraceShape(BlockState state, IBlockReader world, BlockPos pos, ISelectionContext ctx)
+    {
+        return getCamoVisualShape(state, world, pos, ctx);
     }
 
     @Override

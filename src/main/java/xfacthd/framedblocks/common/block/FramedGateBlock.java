@@ -35,7 +35,7 @@ public class FramedGateBlock extends FenceGateBlock implements IFramedBlock
 
     public FramedGateBlock()
     {
-        super(IFramedBlock.createProperties());
+        super(IFramedBlock.createProperties(BlockType.FRAMED_GATE));
     }
 
     @Override

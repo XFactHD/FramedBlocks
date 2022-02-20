@@ -9,6 +9,7 @@ import net.minecraft.world.IWorld;
 import net.minecraft.world.IWorldReader;
 import xfacthd.framedblocks.common.FBContent;
 import xfacthd.framedblocks.common.data.BlockType;
+import xfacthd.framedblocks.common.data.PropertyHolder;
 import xfacthd.framedblocks.common.util.CtmPredicate;
 import xfacthd.framedblocks.common.util.SideSkipPredicate;
 
@@ -34,7 +35,7 @@ public class FramedFloorBlock extends FramedBlock
     @Override
     protected void fillStateContainer(StateContainer.Builder<Block, BlockState> builder)
     {
-        builder.add(BlockStateProperties.WATERLOGGED);
+        builder.add(BlockStateProperties.WATERLOGGED, PropertyHolder.SOLID);
     }
 
     @Override

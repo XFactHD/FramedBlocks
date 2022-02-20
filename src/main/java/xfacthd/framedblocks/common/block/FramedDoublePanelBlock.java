@@ -33,6 +33,7 @@ public class FramedDoublePanelBlock extends AbstractFramedDoubleBlock
     @Override
     protected void fillStateContainer(StateContainer.Builder<Block, BlockState> builder)
     {
+        super.fillStateContainer(builder);
         builder.add(PropertyHolder.FACING_NE, BlockStateProperties.WATERLOGGED);
     }
 
@@ -42,7 +43,7 @@ public class FramedDoublePanelBlock extends AbstractFramedDoubleBlock
     {
         Direction dir = context.getPlacementHorizontalFacing();
         if (dir == Direction.SOUTH || dir == Direction.WEST) { dir = dir.getOpposite(); }
-        return withWater(getDefaultState().with(PropertyHolder.FACING_NE, dir), context.getWorld(), context.getPos());
+        return getDefaultState().with(PropertyHolder.FACING_NE, dir);
     }
 
     @Override

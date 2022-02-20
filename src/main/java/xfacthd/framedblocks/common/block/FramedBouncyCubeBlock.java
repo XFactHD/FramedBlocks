@@ -5,64 +5,36 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.fluid.FluidState;
-import net.minecraft.fluid.Fluids;
-import net.minecraft.item.BlockItemUseContext;
 import net.minecraft.item.ItemStack;
 import net.minecraft.loot.LootContext;
 import net.minecraft.state.StateContainer;
-import net.minecraft.state.properties.BlockStateProperties;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.*;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.BlockRayTraceResult;
+import net.minecraft.util.math.shapes.ISelectionContext;
+import net.minecraft.util.math.shapes.VoxelShape;
 import net.minecraft.world.*;
 import xfacthd.framedblocks.common.data.BlockType;
+import xfacthd.framedblocks.common.data.PropertyHolder;
 import xfacthd.framedblocks.common.tileentity.FramedTileEntity;
 
 import javax.annotation.Nullable;
 import java.util.List;
 
 @SuppressWarnings("deprecation")
-public class FramedBouncyCubeBlock extends SlimeBlock implements IFramedBlock, IWaterLoggable
+public class FramedBouncyCubeBlock extends SlimeBlock implements IFramedBlock
 {
     public FramedBouncyCubeBlock()
     {
-        super(IFramedBlock.createProperties());
-        setDefaultState(getDefaultState().with(BlockStateProperties.WATERLOGGED, false));
+        super(IFramedBlock.createProperties(BlockType.FRAMED_BOUNCY_CUBE));
+        setDefaultState(getDefaultState().with(PropertyHolder.SOLID, false));
     }
 
     @Override
     protected void fillStateContainer(StateContainer.Builder<Block, BlockState> builder)
     {
-        builder.add(BlockStateProperties.WATERLOGGED);
-    }
-
-    @Nullable
-    @Override
-    public BlockState getStateForPlacement(BlockItemUseContext context)
-    {
-        FluidState fluidState = context.getWorld().getFluidState(context.getPos());
-        return getDefaultState().with(BlockStateProperties.WATERLOGGED, fluidState.getFluid() == Fluids.WATER);
-    }
-
-    @Override
-    public FluidState getFluidState(BlockState state)
-    {
-        if (state.get(BlockStateProperties.WATERLOGGED))
-        {
-            return Fluids.WATER.getDefaultState();
-        }
-        return Fluids.EMPTY.getDefaultState();
-    }
-
-    @Override
-    public BlockState updatePostPlacement(BlockState state, Direction facing, BlockState facingState, IWorld world, BlockPos pos, BlockPos facingPos)
-    {
-        if (state.get(BlockStateProperties.WATERLOGGED))
-        {
-            world.getPendingFluidTicks().scheduleTick(pos, Fluids.WATER, Fluids.WATER.getTickRate(world));
-        }
-        return super.updatePostPlacement(state, facing, facingState, world, pos, facingPos);
+        builder.add(PropertyHolder.SOLID);
     }
 
     @Override
@@ -75,6 +47,27 @@ public class FramedBouncyCubeBlock extends SlimeBlock implements IFramedBlock, I
     public void onBlockPlacedBy(World world, BlockPos pos, BlockState state, @Nullable LivingEntity placer, ItemStack stack)
     {
         tryApplyCamoImmediately(world, pos, placer, stack);
+    }
+
+    @Override
+    public boolean isTransparent(BlockState state) { return state.get(PropertyHolder.SOLID); }
+
+    @Override
+    public VoxelShape getRenderShape(BlockState state, IBlockReader world, BlockPos pos)
+    {
+        return getCamoOcclusionShape(state, world, pos);
+    }
+
+    @Override
+    public VoxelShape getRayTraceShape(BlockState state, IBlockReader world, BlockPos pos, ISelectionContext ctx)
+    {
+        return getCamoVisualShape(state, world, pos, ctx);
+    }
+
+    @Override
+    public boolean shouldDisplayFluidOverlay(BlockState state, IBlockDisplayReader world, BlockPos pos, FluidState fluidState)
+    {
+        return false;
     }
 
     @Override
@@ -102,6 +95,13 @@ public class FramedBouncyCubeBlock extends SlimeBlock implements IFramedBlock, I
     public float getSlipperiness(BlockState state, IWorldReader world, BlockPos pos, @Nullable Entity entity)
     {
         return getCamoSlipperiness(state, world, pos, entity);
+    }
+
+    @Override
+    public boolean isSideInvisible(BlockState state, BlockState adjacentBlockState, Direction side)
+    {
+        // This is managed by the SideSkipPredicate
+        return false;
     }
 
     @Override

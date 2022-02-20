@@ -44,7 +44,7 @@ public class FramedFenceBlock extends FenceBlock implements IFramedBlock
 
     public FramedFenceBlock()
     {
-        super(IFramedBlock.createProperties());
+        super(IFramedBlock.createProperties(BlockType.FRAMED_FENCE));
     }
 
     @Override

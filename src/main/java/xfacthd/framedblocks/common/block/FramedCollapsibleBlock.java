@@ -35,7 +35,7 @@ public class FramedCollapsibleBlock extends FramedBlock
 
     public FramedCollapsibleBlock(BlockType blockType)
     {
-        super(blockType, IFramedBlock.createProperties().variableOpacity());
+        super(blockType, IFramedBlock.createProperties(BlockType.FRAMED_COLLAPSIBLE_BLOCK).variableOpacity());
         setDefaultState(getDefaultState().with(BlockStateProperties.WATERLOGGED, false));
     }
 

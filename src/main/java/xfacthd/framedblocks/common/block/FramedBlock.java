@@ -30,7 +30,7 @@ public class FramedBlock extends Block implements IFramedBlock, IWaterLoggable
     private final BlockType blockType;
     private final Map<BlockState, VoxelShape> shapes;
 
-    protected FramedBlock(BlockType blockType) { this(blockType, IFramedBlock.createProperties()); }
+    protected FramedBlock(BlockType blockType) { this(blockType, IFramedBlock.createProperties(blockType)); }
 
     protected FramedBlock(BlockType blockType, Properties props)
     {
@@ -38,6 +38,11 @@ public class FramedBlock extends Block implements IFramedBlock, IWaterLoggable
 
         this.blockType = blockType;
         shapes = blockType.generateShapes(getStateContainer().getValidStates());
+
+        if (blockType.canOccludeWithSolidCamo())
+        {
+            setDefaultState(getDefaultState().with(PropertyHolder.SOLID, false));
+        }
         if (blockType.supportsWaterLogging())
         {
             setDefaultState(getDefaultState().with(BlockStateProperties.WATERLOGGED, false));
@@ -83,6 +88,25 @@ public class FramedBlock extends Block implements IFramedBlock, IWaterLoggable
             return VoxelShapes.empty();
         }
         return shapes.get(state);
+    }
+
+    @Override
+    public boolean isTransparent(BlockState state)
+    {
+        if (blockType != null && !blockType.canOccludeWithSolidCamo()) { return false; }
+        return state.hasProperty(PropertyHolder.SOLID) && state.get(PropertyHolder.SOLID);
+    }
+
+    @Override
+    public VoxelShape getRenderShape(BlockState state, IBlockReader world, BlockPos pos)
+    {
+        return getCamoOcclusionShape(state, world, pos);
+    }
+
+    @Override
+    public VoxelShape getRayTraceShape(BlockState state, IBlockReader world, BlockPos pos, ISelectionContext ctx)
+    {
+        return getCamoVisualShape(state, world, pos, ctx);
     }
 
     @Override

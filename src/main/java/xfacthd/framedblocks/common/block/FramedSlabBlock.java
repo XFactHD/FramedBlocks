@@ -40,7 +40,7 @@ public class FramedSlabBlock extends FramedBlock
     @Override
     protected void fillStateContainer(StateContainer.Builder<Block, BlockState> builder)
     {
-        builder.add(PropertyHolder.TOP, BlockStateProperties.WATERLOGGED);
+        builder.add(PropertyHolder.TOP, BlockStateProperties.WATERLOGGED, PropertyHolder.SOLID);
     }
 
     @Override

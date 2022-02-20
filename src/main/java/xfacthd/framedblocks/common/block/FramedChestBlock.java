@@ -6,6 +6,7 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.BlockItemUseContext;
 import net.minecraft.item.ItemStack;
 import net.minecraft.state.StateContainer;
+import net.minecraft.state.properties.BlockStateProperties;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ActionResultType;
 import net.minecraft.util.Hand;
@@ -27,16 +28,16 @@ public class FramedChestBlock extends FramedStorageBlock
     @Override
     protected void fillStateContainer(StateContainer.Builder<Block, BlockState> builder)
     {
-        super.fillStateContainer(builder);
-        builder.add(PropertyHolder.FACING_HOR, PropertyHolder.CHEST_STATE, PropertyHolder.LATCH_TYPE);
+        //Don't call super, this block doesn't need the SOLID property
+        builder.add(PropertyHolder.FACING_HOR, PropertyHolder.CHEST_STATE, PropertyHolder.LATCH_TYPE, BlockStateProperties.WATERLOGGED);
     }
 
     @Nullable
     @Override
     public BlockState getStateForPlacement(BlockItemUseContext context)
     {
-        //noinspection ConstantConditions
-        return super.getStateForPlacement(context).with(PropertyHolder.FACING_HOR, context.getPlacementHorizontalFacing().getOpposite());
+        BlockState state = getDefaultState().with(PropertyHolder.FACING_HOR, context.getPlacementHorizontalFacing().getOpposite());
+        return withWater(state, context.getWorld(), context.getPos());
     }
 
     @Override

@@ -34,7 +34,7 @@ public class FramedWallBlock extends WallBlock implements IFramedBlock
 
     public FramedWallBlock()
     {
-        super(IFramedBlock.createProperties());
+        super(IFramedBlock.createProperties(BlockType.FRAMED_WALL));
     }
 
     @Override

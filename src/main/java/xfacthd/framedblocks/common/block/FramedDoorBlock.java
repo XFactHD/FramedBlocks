@@ -6,14 +6,18 @@ import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.loot.LootContext;
+import net.minecraft.state.StateContainer;
 import net.minecraft.state.properties.BlockStateProperties;
 import net.minecraft.state.properties.DoorHingeSide;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.*;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.BlockRayTraceResult;
+import net.minecraft.util.math.shapes.ISelectionContext;
+import net.minecraft.util.math.shapes.VoxelShape;
 import net.minecraft.world.*;
 import xfacthd.framedblocks.common.data.BlockType;
+import xfacthd.framedblocks.common.data.PropertyHolder;
 import xfacthd.framedblocks.common.tileentity.FramedTileEntity;
 import xfacthd.framedblocks.common.util.CtmPredicate;
 
@@ -45,7 +49,15 @@ public class FramedDoorBlock extends DoorBlock implements IFramedBlock
 
     public FramedDoorBlock()
     {
-        super(IFramedBlock.createProperties());
+        super(IFramedBlock.createProperties(BlockType.FRAMED_DOOR));
+        setDefaultState(getDefaultState().with(PropertyHolder.SOLID, false));
+    }
+
+    @Override
+    protected void fillStateContainer(StateContainer.Builder<Block, BlockState> builder)
+    {
+        super.fillStateContainer(builder);
+        builder.add(PropertyHolder.SOLID);
     }
 
     @Override
@@ -65,6 +77,21 @@ public class FramedDoorBlock extends DoorBlock implements IFramedBlock
 
         tryApplyCamoImmediately(world, pos, placer, stack);
         tryApplyCamoImmediately(world, pos.up(), placer, stack); //Apply to upper half as well
+    }
+
+    @Override
+    public boolean isTransparent(BlockState state) { return state.get(PropertyHolder.SOLID); }
+
+    @Override
+    public VoxelShape getRenderShape(BlockState state, IBlockReader world, BlockPos pos)
+    {
+        return getCamoOcclusionShape(state, world, pos);
+    }
+
+    @Override
+    public VoxelShape getRayTraceShape(BlockState state, IBlockReader world, BlockPos pos, ISelectionContext ctx)
+    {
+        return getCamoVisualShape(state, world, pos, ctx);
     }
 
     @Override

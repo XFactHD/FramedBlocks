@@ -35,15 +35,18 @@ public class FramedRailSlopeBlock extends AbstractRailBlock implements IFramedBl
 
     public FramedRailSlopeBlock()
     {
-        super(true, IFramedBlock.createProperties());
+        super(true, IFramedBlock.createProperties(BlockType.FRAMED_RAIL_SLOPE));
         shapes = getBlockType().generateShapes(getStateContainer().getValidStates());
-        setDefaultState(getDefaultState().with(BlockStateProperties.WATERLOGGED, false));
+        setDefaultState(getDefaultState()
+                .with(BlockStateProperties.WATERLOGGED, false)
+                .with(PropertyHolder.SOLID, false)
+        );
     }
 
     @Override
     protected void fillStateContainer(StateContainer.Builder<Block, BlockState> builder)
     {
-        builder.add(PropertyHolder.ASCENDING_RAIL_SHAPE, BlockStateProperties.WATERLOGGED);
+        builder.add(PropertyHolder.ASCENDING_RAIL_SHAPE, BlockStateProperties.WATERLOGGED, PropertyHolder.SOLID);
     }
 
     @Override
@@ -128,6 +131,21 @@ public class FramedRailSlopeBlock extends AbstractRailBlock implements IFramedBl
     public void onBlockPlacedBy(World world, BlockPos pos, BlockState state, @Nullable LivingEntity placer, ItemStack stack)
     {
         tryApplyCamoImmediately(world, pos, placer, stack);
+    }
+
+    @Override
+    public boolean isTransparent(BlockState state) { return state.get(PropertyHolder.SOLID); }
+
+    @Override
+    public VoxelShape getRenderShape(BlockState state, IBlockReader world, BlockPos pos)
+    {
+        return getCamoOcclusionShape(state, world, pos);
+    }
+
+    @Override
+    public VoxelShape getRayTraceShape(BlockState state, IBlockReader world, BlockPos pos, ISelectionContext ctx)
+    {
+        return getCamoVisualShape(state, world, pos, ctx);
     }
 
     @Override
