@@ -30,11 +30,13 @@ import xfacthd.framedblocks.common.tileentity.FramedDoubleTileEntity;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.util.Random;
 
 @SuppressWarnings("ConstantConditions")
 @Mod.EventBusSubscriber(modid = FramedBlocks.MODID, value = Dist.CLIENT, bus = Mod.EventBusSubscriber.Bus.MOD)
 public class GhostBlockRenderer
 {
+    private static final Random RANDOM = new Random();
     private static final FramedBlockData GHOST_MODEL_DATA = new FramedBlockData(true);
     private static final FramedBlockData GHOST_MODEL_DATA_LEFT = new FramedBlockData(true);
     private static final FramedBlockData GHOST_MODEL_DATA_RIGHT = new FramedBlockData(true);
@@ -232,7 +234,7 @@ public class GhostBlockRenderer
                 mstack,
                 builder,
                 false,
-                mc().world.getRandom(),
+                RANDOM,
                 GHOST_MODEL_DATA
         );
 
