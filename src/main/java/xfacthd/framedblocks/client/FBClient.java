@@ -72,6 +72,8 @@ public class FBClient
         BlockOutlineRenderer.registerOutlineRender(BlockType.FRAMED_INNER_THREEWAY_CORNER, BlockOutlineRenderer::drawInnerThreewayCornerBox);
         BlockOutlineRenderer.registerOutlineRender(BlockType.FRAMED_RAIL_SLOPE, new RailSlopeOutlineRenderer());
         BlockOutlineRenderer.registerOutlineRender(BlockType.FRAMED_COLLAPSIBLE_BLOCK, new CollapsibleBlockOutlineRenderer());
+        BlockOutlineRenderer.registerOutlineRender(BlockType.FRAMED_PRISM, new PrismOutlineRenderer());
+        BlockOutlineRenderer.registerOutlineRender(BlockType.FRAMED_SLOPED_PRISM, new SlopedPrismOutlineRenderer());
     }
 
     @SubscribeEvent
@@ -186,6 +188,8 @@ public class FBClient
         replaceModels(FBContent.blockFramedHalfStairs, registry, FramedHalfStairsModel::new);
         replaceModels(FBContent.blockFramedBouncyCube, registry, (state, model) -> new FramedBouncyCubeModel(state, model, registry));
         replaceModels(FBContent.blockFramedSecretStorage, registry, FramedCubeModel::new);
+        replaceModels(FBContent.blockFramedPrism, registry, FramedPrismModel::new, FramedPrismModel::new);
+        replaceModels(FBContent.blockFramedSlopedPrism, registry, FramedSlopedPrismModel::new, FramedSlopedPrismModel::new);
     }
 
     private static void replaceModels(RegistryObject<Block> block, Map<ResourceLocation, IBakedModel> models,

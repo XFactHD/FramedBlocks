@@ -1,47 +1,137 @@
 {
   "variants": {
-    "facing=north,state=closed": {
+    "facing=north,latch=default,state=closed": {
       "model": "framedblocks:block/framed_chest"
     },
-    "facing=south,state=closed": {
+    "facing=south,latch=default,state=closed": {
       "model": "framedblocks:block/framed_chest",
       "y": 180
     },
-    "facing=west,state=closed": {
+    "facing=west,latch=default,state=closed": {
       "model": "framedblocks:block/framed_chest",
       "y": 270
     },
-    "facing=east,state=closed": {
+    "facing=east,latch=default,state=closed": {
       "model": "framedblocks:block/framed_chest",
       "y": 90
     },
-    "facing=north,state=opening": {
+    "facing=north,latch=camo,state=closed": {
       "model": "framedblocks:block/framed_chest"
     },
-    "facing=south,state=opening": {
+    "facing=south,latch=camo,state=closed": {
       "model": "framedblocks:block/framed_chest",
       "y": 180
     },
-    "facing=west,state=opening": {
+    "facing=west,latch=camo,state=closed": {
       "model": "framedblocks:block/framed_chest",
       "y": 270
     },
-    "facing=east,state=opening": {
+    "facing=east,latch=camo,state=closed": {
       "model": "framedblocks:block/framed_chest",
       "y": 90
     },
-    "facing=north,state=closing": {
+    "facing=north,latch=none,state=closed": {
       "model": "framedblocks:block/framed_chest"
     },
-    "facing=south,state=closing": {
+    "facing=south,latch=none,state=closed": {
       "model": "framedblocks:block/framed_chest",
       "y": 180
     },
-    "facing=west,state=closing": {
+    "facing=west,latch=none,state=closed": {
       "model": "framedblocks:block/framed_chest",
       "y": 270
     },
-    "facing=east,state=closing": {
+    "facing=east,latch=none,state=closed": {
+      "model": "framedblocks:block/framed_chest",
+      "y": 90
+    },
+    "facing=north,latch=default,state=opening": {
+      "model": "framedblocks:block/framed_chest"
+    },
+    "facing=south,latch=default,state=opening": {
+      "model": "framedblocks:block/framed_chest",
+      "y": 180
+    },
+    "facing=west,latch=default,state=opening": {
+      "model": "framedblocks:block/framed_chest",
+      "y": 270
+    },
+    "facing=east,latch=default,state=opening": {
+      "model": "framedblocks:block/framed_chest",
+      "y": 90
+    },
+    "facing=north,latch=camo,state=opening": {
+      "model": "framedblocks:block/framed_chest"
+    },
+    "facing=south,latch=camo,state=opening": {
+      "model": "framedblocks:block/framed_chest",
+      "y": 180
+    },
+    "facing=west,latch=camo,state=opening": {
+      "model": "framedblocks:block/framed_chest",
+      "y": 270
+    },
+    "facing=east,latch=camo,state=opening": {
+      "model": "framedblocks:block/framed_chest",
+      "y": 90
+    },
+    "facing=north,latch=none,state=opening": {
+      "model": "framedblocks:block/framed_chest"
+    },
+    "facing=south,latch=none,state=opening": {
+      "model": "framedblocks:block/framed_chest",
+      "y": 180
+    },
+    "facing=west,latch=none,state=opening": {
+      "model": "framedblocks:block/framed_chest",
+      "y": 270
+    },
+    "facing=east,latch=none,state=opening": {
+      "model": "framedblocks:block/framed_chest",
+      "y": 90
+    },
+    "facing=north,latch=default,state=closing": {
+      "model": "framedblocks:block/framed_chest"
+    },
+    "facing=south,latch=default,state=closing": {
+      "model": "framedblocks:block/framed_chest",
+      "y": 180
+    },
+    "facing=west,latch=default,state=closing": {
+      "model": "framedblocks:block/framed_chest",
+      "y": 270
+    },
+    "facing=east,latch=default,state=closing": {
+      "model": "framedblocks:block/framed_chest",
+      "y": 90
+    },
+    "facing=north,latch=camo,state=closing": {
+      "model": "framedblocks:block/framed_chest"
+    },
+    "facing=south,latch=camo,state=closing": {
+      "model": "framedblocks:block/framed_chest",
+      "y": 180
+    },
+    "facing=west,latch=camo,state=closing": {
+      "model": "framedblocks:block/framed_chest",
+      "y": 270
+    },
+    "facing=east,latch=camo,state=closing": {
+      "model": "framedblocks:block/framed_chest",
+      "y": 90
+    },
+    "facing=north,latch=none,state=closing": {
+      "model": "framedblocks:block/framed_chest"
+    },
+    "facing=south,latch=none,state=closing": {
+      "model": "framedblocks:block/framed_chest",
+      "y": 180
+    },
+    "facing=west,latch=none,state=closing": {
+      "model": "framedblocks:block/framed_chest",
+      "y": 270
+    },
+    "facing=east,latch=none,state=closing": {
       "model": "framedblocks:block/framed_chest",
       "y": 90
     }
