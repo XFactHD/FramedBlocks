@@ -77,10 +77,23 @@ public class BakedQuadTransformer
     /**
      * Creates a triangle quad
      * @param quad The BakedQuad to manipulate, must be a copy of the original quad
-     * @param rightSide Wether the quad is on the right side of the block looking at it from the front
-     * @param top Wether the block is placed downwards
+     * @param rightSide Wether the vertical edge should be on the right side
+     * @param top Wether the baseline of the triangle should be at the top
      */
     public static boolean createSideTriangleQuad(BakedQuad quad, boolean rightSide, boolean top)
+    {
+        return createSideTriangleQuad(quad, rightSide, top, 1F, 0F);
+    }
+
+    /**
+     * Creates a triangle quad
+     * @param quad The BakedQuad to manipulate, must be a copy of the original quad
+     * @param rightSide Wether the vertical edge should be on the right side
+     * @param top Wether the baseline of the triangle should be at the top
+     * @param height The height of the vertical edge
+     * @param baseOffset The vertical offset of the lower corner from the baseline
+     */
+    public static boolean createSideTriangleQuad(BakedQuad quad, boolean rightSide, boolean top, float height, float baseOffset)
     {
         return ModelUtils.modifyQuad(quad, (pos, color, uv, light, normal) ->
         {
@@ -99,7 +112,8 @@ public class BakedQuadTransformer
             float xz = xAxis ? pos[top ? idxTopBack : idxBotBack][0] : pos[top ? idxTopBack : idxBotBack][2];
             if (neg) { xz = 1F - xz; }
 
-            if ((top && pos[idxTopBack][1] >= (1F - xz)) || (!top && pos[idxBotBack][1] <= xz))
+            float heightOffset = 1F - height;
+            if ((top && pos[idxTopBack][1] >= (1F - (xz + baseOffset - heightOffset))) || (!top && pos[idxBotBack][1] <= (xz + baseOffset - heightOffset)))
             {
                 float[][] uvSrc = new float[4][2];
                 for (int i = 0; i < 4; i++) { System.arraycopy(uv[i], 0, uvSrc[i], 0, 2); }
@@ -109,13 +123,17 @@ public class BakedQuadTransformer
 
                 xz = xAxis ? pos[idxBotFront][0] : pos[idxBotFront][2];
                 if (neg) { xz = 1F - xz; }
+                xz -= heightOffset;
                 float toY = top ? Math.min(Math.max(pos[idxBotFront][1], 1F - xz), pos[idxTopFront][1]) : Math.max(Math.min(pos[idxTopFront][1], xz), pos[idxBotFront][1]);
+                toY += top ? -baseOffset : baseOffset;
                 ModelUtils.remapUV(quad.getDirection(), pos[idxBotFront][1], pos[idxTopFront][1], toY, uvSrc, uv, idxTopFront, idxBotFront, idxTargetFront, true, true, rotated, mirrored);
                 pos[idxTargetFront][1] = toY;
 
                 xz = xAxis ? pos[idxBotBack][0] : pos[idxBotBack][2];
                 if (neg) { xz = 1F - xz; }
+                xz -= heightOffset;
                 toY = top ? Math.min(Math.max(pos[idxBotBack][1], 1F - xz), pos[idxTopBack][1]) : Math.max(Math.min(pos[idxTopBack][1], xz), pos[idxBotBack][1]);
+                toY += top ? -baseOffset : baseOffset;
                 ModelUtils.remapUV(quad.getDirection(), pos[idxTopBack][1], pos[idxBotBack][1], toY, uvSrc, uv, idxTopBack, idxBotBack, idxTargetBack, true, true, rotated, mirrored);
                 pos[idxTargetBack][1] = toY;
 
