@@ -7,6 +7,7 @@ import net.minecraft.world.level.block.state.properties.AttachFace;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.core.Direction;
 import xfacthd.framedblocks.api.model.FramedBlockModel;
+import xfacthd.framedblocks.api.util.Utils;
 import xfacthd.framedblocks.api.util.client.BakedQuadTransformer;
 import xfacthd.framedblocks.api.util.client.ModelUtils;
 
@@ -34,9 +35,9 @@ public class FramedButtonModel extends FramedBlockModel
         if (face == AttachFace.CEILING) { facing = Direction.DOWN; }
         else if (face == AttachFace.FLOOR) { facing = Direction.UP; }
 
-        if (facing.getAxis() == Direction.Axis.Y)
+        if (Utils.isY(facing))
         {
-            boolean rotX = dir.getAxis() == Direction.Axis.X;
+            boolean rotX = Utils.isX(dir);
             float minX = rotX ? 6F/16F : 5F/16F;
             float minZ = rotX ? 5F/16F : 6F/16F;
             float maxX = rotX ? 10F/16F : 11F/16F;
@@ -60,7 +61,7 @@ public class FramedButtonModel extends FramedBlockModel
             }
             else
             {
-                boolean largeSide = rotX == (quad.getDirection().getAxis() == Direction.Axis.X);
+                boolean largeSide = rotX == Utils.isX(quad.getDirection());
                 float minXZ = largeSide ? 5F/16F : 6F/16F;
                 float maxXZ = largeSide ? 11F/16F : 10F/16F;
                 float minY = (facing == Direction.DOWN) ? (pressed ? 15F/16F : 14F/16F) : 0F;
@@ -94,8 +95,8 @@ public class FramedButtonModel extends FramedBlockModel
             }
             else
             {
-                boolean xAxis = facing.getAxis() == Direction.Axis.X;
-                boolean negative = facing.getAxisDirection() == Direction.AxisDirection.NEGATIVE;
+                boolean xAxis = Utils.isX(facing);
+                boolean negative = !Utils.isPositive(facing);
                 float minX;
                 float maxX;
                 float minZ;
@@ -115,7 +116,7 @@ public class FramedButtonModel extends FramedBlockModel
                     maxZ = xAxis ? 11F/16F : (negative ? 1F :  2F/16F);
                 }
 
-                if (quad.getDirection().getAxis() == Direction.Axis.Y)
+                if (Utils.isY(quad.getDirection()))
                 {
                     BakedQuad topBotQuad = ModelUtils.duplicateQuad(quad);
                     if (BakedQuadTransformer.createTopBottomQuad(topBotQuad, minX, minZ, maxX, maxZ))

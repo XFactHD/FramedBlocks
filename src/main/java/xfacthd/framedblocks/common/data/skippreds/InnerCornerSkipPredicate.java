@@ -6,6 +6,7 @@ import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.block.state.BlockState;
 import xfacthd.framedblocks.api.block.IFramedBlock;
 import xfacthd.framedblocks.api.type.IBlockType;
+import xfacthd.framedblocks.api.util.Utils;
 import xfacthd.framedblocks.common.data.*;
 import xfacthd.framedblocks.api.util.SideSkipPredicate;
 import xfacthd.framedblocks.common.util.FramedUtils;
@@ -220,7 +221,7 @@ public class InnerCornerSkipPredicate implements SideSkipPredicate
             {
                 return ((!type.isRight() && adjDir == dir) || (type.isRight() && adjDir == dir.getClockWise())) && SideSkipPredicate.compareState(level, pos, side);
             }
-            else if (side.getAxis() != Direction.Axis.Y && adjDir == dir && (adjType == SlopeType.TOP) == type.isTop())
+            else if (!Utils.isY(side) && adjDir == dir && (adjType == SlopeType.TOP) == type.isTop())
             {
                 return ((!type.isRight() && side == dir.getClockWise()) || (type.isRight() && side == dir.getCounterClockWise())) &&
                         SideSkipPredicate.compareState(level, pos, side);

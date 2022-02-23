@@ -31,7 +31,7 @@ public class FramedDoubleCornerBlock extends AbstractFramedDoubleBlock
         }
         else
         {
-            return (side != null && side.getAxis() == Direction.Axis.Y) || side == dir || side == dir.getCounterClockWise();
+            return (side != null && Utils.isY(side)) || side == dir || side == dir.getCounterClockWise();
         }
     };
 
@@ -51,7 +51,7 @@ public class FramedDoubleCornerBlock extends AbstractFramedDoubleBlock
 
         Direction side = context.getClickedFace();
         Vec3 hitPoint = Utils.fraction(context.getClickLocation());
-        if (side.getAxis() != Direction.Axis.Y)
+        if (!Utils.isY(side))
         {
             if (hitPoint.y() < (3D / 16D))
             {

@@ -33,15 +33,15 @@ public class FramedDoubleSlopeBlockEntity extends FramedDoubleBlockEntity
             if (side == facing || side == facing.getCounterClockWise()) { return false; }
             if (side == facing.getOpposite() || side == facing.getClockWise()) { return true; }
 
-            boolean secondary = facing.getAxis() == Direction.Axis.X ? vec.x() >= vec.z() : vec.z() >= (1D - vec.x());
+            boolean secondary = Utils.isX(facing) ? vec.x() >= vec.z() : vec.z() >= (1D - vec.x());
 
-            if (facing.getAxisDirection() == Direction.AxisDirection.POSITIVE) { secondary = !secondary; }
+            if (Utils.isPositive(facing)) { secondary = !secondary; }
             return secondary;
         }
         else
         {
-            double hor = facing.getAxis() == Direction.Axis.X ? vec.x() : vec.z();
-            if (facing.getAxisDirection() == Direction.AxisDirection.NEGATIVE)
+            double hor = Utils.isX(facing) ? vec.x() : vec.z();
+            if (!Utils.isPositive(facing))
             {
                 hor = 1D - hor;
             }

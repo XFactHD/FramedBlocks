@@ -9,6 +9,7 @@ import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
+import xfacthd.framedblocks.api.util.Utils;
 import xfacthd.framedblocks.common.data.*;
 import xfacthd.framedblocks.common.blockentity.FramedDoubleSlopeBlockEntity;
 import xfacthd.framedblocks.common.blockentity.FramedDoubleBlockEntity;
@@ -22,12 +23,12 @@ public class FramedDoubleSlopeBlock extends AbstractFramedDoubleBlock
     {
         if (state.getValue(PropertyHolder.SLOPE_TYPE) == SlopeType.HORIZONTAL)
         {
-            return dir != null && dir.getAxis() != Direction.Axis.Y;
+            return dir != null && !Utils.isY(dir);
         }
         else
         {
             Direction facing = state.getValue(PropertyHolder.FACING_HOR);
-            return (dir != null && dir.getAxis() == Direction.Axis.Y) || dir == facing || dir == facing.getOpposite();
+            return (dir != null && Utils.isY(dir)) || dir == facing || dir == facing.getOpposite();
         }
     };
 

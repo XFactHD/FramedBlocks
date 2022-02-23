@@ -4,6 +4,7 @@ import net.minecraft.client.renderer.block.model.BakedQuad;
 import net.minecraft.client.resources.model.BakedModel;
 import net.minecraft.core.Direction;
 import net.minecraft.world.level.block.state.BlockState;
+import xfacthd.framedblocks.api.util.Utils;
 import xfacthd.framedblocks.api.util.client.BakedQuadTransformer;
 import xfacthd.framedblocks.api.util.client.ModelUtils;
 
@@ -18,7 +19,7 @@ public class FramedBarsModel extends FramedPaneModel
     protected void transformQuad(Map<Direction, List<BakedQuad>> quadMap, BakedQuad quad)
     {
         Direction face = quad.getDirection();
-        if (face.getAxis() == Direction.Axis.Y)
+        if (Utils.isY(face))
         {
             createTopBottomCenterQuad(quadMap, quad, false);
             createTopBottomCenterQuad(quadMap, quad, true);
@@ -49,7 +50,7 @@ public class FramedBarsModel extends FramedPaneModel
             if (!isSideInset(face)) { createSideEdgeQuad(quadMap, quad, false, false); }
             if (!isSideInset(face.getOpposite())) { createSideEdgeQuad(quadMap, quad, false, true); }
 
-            if (face.getAxis() == Direction.Axis.X)
+            if (Utils.isX(face))
             {
                 createCenterPillarQuad(quadMap.get(null), quad, east, west, south, north);
 
@@ -65,7 +66,7 @@ public class FramedBarsModel extends FramedPaneModel
                 }
             }
 
-            if (face.getAxis() == Direction.Axis.Z)
+            if (Utils.isZ(face))
             {
                 createCenterPillarQuad(quadMap.get(null), quad, south, north, east, west);
 
@@ -108,7 +109,7 @@ public class FramedBarsModel extends FramedPaneModel
         {
             offset = perpNeg ? 9F/16F : (perpPos ? 7F/16F : .5F);
 
-            if (quad.getDirection().getAxisDirection() == Direction.AxisDirection.POSITIVE)
+            if (Utils.isPositive(quad.getDirection()))
             {
                 offset = 1F - offset;
             }
@@ -124,9 +125,9 @@ public class FramedBarsModel extends FramedPaneModel
 
     private static void createPillarQuad(List<BakedQuad> quadList, BakedQuad quad, Direction dir)
     {
-        if (dir.getAxis() == Direction.Axis.Y) { throw new IllegalArgumentException(String.format("Invalid direction: %s!", dir)); }
+        if (Utils.isY(dir)) { throw new IllegalArgumentException(String.format("Invalid direction: %s!", dir)); }
 
-        boolean positive = dir.getAxisDirection() == Direction.AxisDirection.POSITIVE;
+        boolean positive = Utils.isPositive(dir);
         float minXZ = positive ? 12F/16F : 2F/16F;
         float maxXZ = positive ? 14F/16F : 4F/16F;
 
@@ -140,9 +141,9 @@ public class FramedBarsModel extends FramedPaneModel
 
     private static void createBarQuads(List<BakedQuad> quadList, BakedQuad quad, Direction dir)
     {
-        if (dir.getAxis() == Direction.Axis.Y) { throw new IllegalArgumentException(String.format("Invalid direction: %s!", dir)); }
+        if (Utils.isY(dir)) { throw new IllegalArgumentException(String.format("Invalid direction: %s!", dir)); }
 
-        boolean positive = dir.getAxisDirection() == Direction.AxisDirection.POSITIVE;
+        boolean positive = Utils.isPositive(dir);
         boolean northeast = dir == Direction.NORTH || dir == Direction.EAST;
 
         float minXZ = positive ?  9F/16F : 4F/16F;

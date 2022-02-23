@@ -31,7 +31,7 @@ public class FramedBlock extends AbstractFramedBlock
         state = state.setValue(PropertyHolder.FACING_HOR, facing);
 
         Vec3 hitPoint = Utils.fraction(hitVec);
-        if (side.getAxis() != Direction.Axis.Y)
+        if (!Utils.isY(side))
         {
             if (hitPoint.y() < (3D / 16D))
             {
@@ -55,8 +55,8 @@ public class FramedBlock extends AbstractFramedBlock
         {
             state = state.setValue(PropertyHolder.SLOPE_TYPE, SlopeType.HORIZONTAL);
 
-            boolean xAxis = side.getAxis() == Direction.Axis.X;
-            boolean positive = side.getCounterClockWise().getAxisDirection() == Direction.AxisDirection.POSITIVE;
+            boolean xAxis = Utils.isX(side);
+            boolean positive = Utils.isPositive(side.getCounterClockWise());
             double xz = xAxis ? hitPoint.z() : hitPoint.x();
 
             if ((xz > .5D) == positive)
@@ -86,8 +86,8 @@ public class FramedBlock extends AbstractFramedBlock
         }
         else
         {
-            boolean xAxis = context.getClickedFace().getAxis() == Direction.Axis.X;
-            boolean positive = context.getClickedFace().getCounterClockWise().getAxisDirection() == Direction.AxisDirection.POSITIVE;
+            boolean xAxis = Utils.isX(context.getClickedFace());
+            boolean positive = Utils.isPositive(context.getClickedFace().getCounterClockWise());
             double xz = xAxis ? hitPoint.z() : hitPoint.x();
             double y = hitPoint.y();
 

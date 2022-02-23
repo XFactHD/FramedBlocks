@@ -5,11 +5,10 @@ import net.minecraft.core.Direction;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.*;
-import xfacthd.framedblocks.api.util.FramedProperties;
+import xfacthd.framedblocks.api.util.*;
 import xfacthd.framedblocks.common.FBContent;
 import xfacthd.framedblocks.common.data.PropertyHolder;
 import xfacthd.framedblocks.common.data.StairsType;
-import xfacthd.framedblocks.api.util.SideSkipPredicate;
 
 public class VerticalStairsSkipPredicate implements SideSkipPredicate
 {
@@ -45,7 +44,7 @@ public class VerticalStairsSkipPredicate implements SideSkipPredicate
         {
             return testAgainstPillar(level, pos, dir, type, adjState, side);
         }
-        else if (adjState.getBlock() == FBContent.blockFramedSlabEdge.get() && type != StairsType.VERTICAL && side.getAxis() != Direction.Axis.Y)
+        else if (adjState.getBlock() == FBContent.blockFramedSlabEdge.get() && type != StairsType.VERTICAL && !Utils.isY(side))
         {
             return testAgainstEdge(level, pos, dir, type, adjState, side);
         }
@@ -133,7 +132,7 @@ public class VerticalStairsSkipPredicate implements SideSkipPredicate
         Direction adjDir = adjState.getValue(PropertyHolder.FACING_HOR);
         boolean adjTop = adjState.getValue(PropertyHolder.TOP);
 
-        if ((side.getAxis() == Direction.Axis.Y || side == dir.getOpposite() || side == dir.getClockWise()) && type.isTop() != adjTop && dir == adjDir)
+        if ((Utils.isY(side) || side == dir.getOpposite() || side == dir.getClockWise()) && type.isTop() != adjTop && dir == adjDir)
         {
             return SideSkipPredicate.compareState(level, pos, side);
         }
@@ -150,7 +149,7 @@ public class VerticalStairsSkipPredicate implements SideSkipPredicate
                 return SideSkipPredicate.compareState(level, pos, side);
             }
         }
-        else if (side.getAxis() == Direction.Axis.Y)
+        else if (Utils.isY(side))
         {
             if ((side == Direction.UP) == type.isTop() && adjDir == dir)
             {

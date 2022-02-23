@@ -100,7 +100,7 @@ repositories {
 }
 
 dependencies {
-    minecraft 'net.minecraftforge:forge:1.18.1-39.0.14'
+    minecraft 'net.minecraftforge:forge:1.18.1-39.0.85'
 
     implementation fg.deobf("curse.maven:ctm-267602:3586556")
 

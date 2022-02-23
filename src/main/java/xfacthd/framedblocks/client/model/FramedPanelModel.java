@@ -5,6 +5,7 @@ import net.minecraft.client.renderer.block.model.BakedQuad;
 import net.minecraft.client.resources.model.BakedModel;
 import net.minecraft.core.Direction;
 import xfacthd.framedblocks.api.model.FramedBlockModel;
+import xfacthd.framedblocks.api.util.Utils;
 import xfacthd.framedblocks.api.util.client.BakedQuadTransformer;
 import xfacthd.framedblocks.api.util.client.ModelUtils;
 import xfacthd.framedblocks.common.data.PropertyHolder;
@@ -31,7 +32,7 @@ public class FramedPanelModel extends FramedBlockModel
             BakedQuadTransformer.setQuadPosInFacingDir(frontQuad, .5F);
             quadMap.get(null).add(frontQuad);
         }
-        else if (quad.getDirection().getAxis() == Direction.Axis.Y)
+        else if (Utils.isY(quad.getDirection()))
         {
             BakedQuad topBotQuad = ModelUtils.duplicateQuad(quad);
             if (BakedQuadTransformer.createTopBottomQuad(topBotQuad, dir.getOpposite(), .5F))
@@ -42,7 +43,7 @@ public class FramedPanelModel extends FramedBlockModel
         else
         {
             BakedQuad sideQuad = ModelUtils.duplicateQuad(quad);
-            boolean dirPositive = dir.getAxisDirection() == Direction.AxisDirection.POSITIVE;
+            boolean dirPositive = Utils.isPositive(dir);
             if (BakedQuadTransformer.createVerticalSideQuad(sideQuad, dirPositive, .5F))
             {
                 quadMap.get(quad.getDirection()).add(sideQuad);

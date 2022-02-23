@@ -7,6 +7,7 @@ import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.block.state.properties.Half;
 import net.minecraft.core.Direction;
 import xfacthd.framedblocks.api.model.FramedBlockModel;
+import xfacthd.framedblocks.api.util.Utils;
 import xfacthd.framedblocks.api.util.client.BakedQuadTransformer;
 import xfacthd.framedblocks.api.util.client.ModelUtils;
 
@@ -38,7 +39,7 @@ public class FramedTrapDoorModel extends FramedBlockModel
                 BakedQuadTransformer.setQuadPosInFacingDir(frontQuad, 3F/16F);
                 quadMap.get(null).add(frontQuad);
             }
-            else if (quad.getDirection().getAxis() == Direction.Axis.Y)
+            else if (Utils.isY(quad.getDirection()))
             {
                 BakedQuad topBotQuad = ModelUtils.duplicateQuad(quad);
                 if (BakedQuadTransformer.createTopBottomQuad(topBotQuad, dir, 3F/16F))
@@ -49,7 +50,7 @@ public class FramedTrapDoorModel extends FramedBlockModel
             else
             {
                 BakedQuad sideQuad = ModelUtils.duplicateQuad(quad);
-                boolean facePositive = dir.getAxisDirection() == Direction.AxisDirection.POSITIVE;
+                boolean facePositive = Utils.isPositive(dir);
                 if (BakedQuadTransformer.createVerticalSideQuad(sideQuad, !facePositive, 3F/16F))
                 {
                     quadMap.get(quad.getDirection()).add(sideQuad);
@@ -64,7 +65,7 @@ public class FramedTrapDoorModel extends FramedBlockModel
                 BakedQuadTransformer.setQuadPosInFacingDir(topBotQuad, 3F/16F);
                 quadMap.get(null).add(topBotQuad);
             }
-            else if (quad.getDirection().getAxis() != Direction.Axis.Y)
+            else if (!Utils.isY(quad.getDirection()))
             {
                 BakedQuad sideQuad = ModelUtils.duplicateQuad(quad);
                 if (BakedQuadTransformer.createHorizontalSideQuad(sideQuad, top, 3F/16F))

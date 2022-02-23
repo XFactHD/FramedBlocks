@@ -71,7 +71,7 @@ public class FramedSlopedPrismBlock extends FramedBlock
         state = state.setValue(BlockStateProperties.FACING, face);
 
         Direction orientation;
-        if (face.getAxis() == Direction.Axis.Y)
+        if (Utils.isY(face))
         {
             orientation = context.getHorizontalDirection();
         }
@@ -79,12 +79,12 @@ public class FramedSlopedPrismBlock extends FramedBlock
         {
             Vec3 subHit = Utils.fraction(context.getClickLocation());
 
-            double xz = (face.getAxis() == Direction.Axis.X ? subHit.z() : subHit.x()) - .5;
+            double xz = (Utils.isX(face) ? subHit.z() : subHit.x()) - .5;
             double y = subHit.y() - .5;
 
             if (Math.max(Math.abs(xz), Math.abs(y)) == Math.abs(xz))
             {
-                if (face.getAxis() == Direction.Axis.X)
+                if (Utils.isX(face))
                 {
                     orientation = xz < 0 ? Direction.SOUTH : Direction.NORTH;
                 }
@@ -150,7 +150,7 @@ public class FramedSlopedPrismBlock extends FramedBlock
                 continue;
             }
 
-            if (facing.getAxis() == Direction.Axis.Y)
+            if (Utils.isY(facing))
             {
                 builder.put(
                         state,

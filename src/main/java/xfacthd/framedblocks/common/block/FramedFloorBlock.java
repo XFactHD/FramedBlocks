@@ -22,7 +22,7 @@ public class FramedFloorBlock extends FramedBlock
     {
         if (side == Direction.DOWN) { return SideSkipPredicate.CTM.test(level, pos, state, adjState, side); }
 
-        if (side.getAxis() != Direction.Axis.Y && adjState.getBlock() == FBContent.blockFramedFloor.get())
+        if (!Utils.isY(side) && adjState.getBlock() == FBContent.blockFramedFloor.get())
         {
             return SideSkipPredicate.compareState(level, pos, side);
         }

@@ -5,6 +5,7 @@ import com.mojang.math.*;
 import net.minecraft.client.renderer.block.model.BakedQuad;
 import net.minecraft.core.Direction;
 import net.minecraft.util.Mth;
+import xfacthd.framedblocks.api.util.Utils;
 
 public class BakedQuadTransformer
 {
@@ -35,8 +36,8 @@ public class BakedQuadTransformer
         ModelUtils.modifyQuad(quad, (pos, color, uv, light, normal) ->
         {
             Direction dir = quad.getDirection();
-            int idx = dir.getAxis() == Direction.Axis.X ? 0 : 2;
-            boolean invert = (dir.getAxisDirection() == Direction.AxisDirection.POSITIVE) == up;
+            int idx = Utils.isX(dir) ? 0 : 2;
+            boolean invert = Utils.isPositive(dir) == up;
 
             pos[1][idx] = invert ? 1F - pos[1][1] : pos[1][1];
             pos[2][idx] = invert ? 1F - pos[2][1] : pos[2][1];
@@ -58,8 +59,8 @@ public class BakedQuadTransformer
         ModelUtils.modifyQuad(quad, (pos, color, uv, light, normal) ->
         {
             Direction dir = quad.getDirection();
-            boolean xAxis = dir.getAxis() == Direction.Axis.X;
-            boolean invert = (dir.getAxis() == Direction.Axis.Z) == rightEdge;
+            boolean xAxis = Utils.isX(dir);
+            boolean invert = Utils.isZ(dir) == rightEdge;
 
             int srcCoord =  xAxis ? 2 : 0;
             int destCoord = xAxis ? 0 : 2;
@@ -106,8 +107,8 @@ public class BakedQuadTransformer
             int idxTargetBack = top ? idxBotBack : idxTopBack;
 
             Direction dir = rightSide ? quad.getDirection().getCounterClockWise() : quad.getDirection().getClockWise();
-            boolean xAxis = dir.getAxis() == Direction.Axis.X;
-            boolean neg = dir.getAxisDirection() == Direction.AxisDirection.NEGATIVE;
+            boolean xAxis = Utils.isX(dir);
+            boolean neg = !Utils.isPositive(dir);
 
             float xz = xAxis ? pos[top ? idxTopBack : idxBotBack][0] : pos[top ? idxTopBack : idxBotBack][2];
             if (neg) { xz = 1F - xz; }
@@ -146,16 +147,16 @@ public class BakedQuadTransformer
     /**
      * Creates a triangle quad pointing to the left corner in the given direction
      * @param quad The BakedQuad to manipulate, must be a copy of the original quad
-     * @param dir The placement direction of the block
+     * @param dir The direction towards the edge whose left corner will be the tip of the triangle
      */
     public static boolean createTopBottomTriangleQuad(BakedQuad quad, Direction dir)
     {
         return ModelUtils.modifyQuad(quad, (pos, color, uv, light, normal) ->
         {
-            boolean xAxis = dir.getAxis() == Direction.Axis.X;
+            boolean xAxis = Utils.isX(dir);
             boolean up = quad.getDirection() == Direction.UP;
-            boolean negTarget = dir.getAxisDirection() == Direction.AxisDirection.NEGATIVE;
-            boolean negModifier = dir.getClockWise().getAxisDirection() == Direction.AxisDirection.NEGATIVE;
+            boolean negTarget = !Utils.isPositive(dir);
+            boolean negModifier = !Utils.isPositive(dir.getClockWise());
             int coordTarget = xAxis ? 0 : 2;
             int coordModifier = xAxis ? 2 : 0;
 
@@ -225,11 +226,11 @@ public class BakedQuadTransformer
     {
         boolean useQuad = ModelUtils.modifyQuad(quad, (pos, color, uv, light, normal) ->
         {
-            int coord = quad.getDirection().getAxis() == Direction.Axis.X ? 2 : 0;
+            int coord = Utils.isX(quad.getDirection()) ? 2 : 0;
             int checkVert1 = up ? 2 : 3;
             int checkVert2 = up ? 1 : 0;
 
-            boolean vertPos = quad.getDirection().getCounterClockWise().getAxisDirection() == Direction.AxisDirection.POSITIVE;
+            boolean vertPos = Utils.isPositive(quad.getDirection().getCounterClockWise());
             float h1 = (up ? pos[checkVert1][1] : 1F - pos[checkVert1][1]) / 2F;
             float h2 = 1F - ((up ? pos[checkVert2][1] : 1F - pos[checkVert2][1]) / 2F);
             float xz1 = vertPos ? pos[checkVert1][coord] : 1F - pos[checkVert1][coord];
@@ -322,8 +323,8 @@ public class BakedQuadTransformer
         ModelUtils.modifyQuad(quad, (pos, color, uv, light, normal) ->
         {
             Direction perpDir = quad.getDirection().getCounterClockWise();
-            boolean perpPos = perpDir.getAxisDirection() == Direction.AxisDirection.POSITIVE;
-            boolean perpXAxis = perpDir.getAxis() == Direction.Axis.X;
+            boolean perpPos = Utils.isPositive(perpDir);
+            boolean perpXAxis = Utils.isX(perpDir);
 
             boolean rotated = ModelUtils.isQuadRotated(uv);
             boolean mirrored = ModelUtils.isQuadMirrored(uv);
@@ -387,6 +388,11 @@ public class BakedQuadTransformer
         return true;
     }
 
+    /**
+     * Creates a triangle quad on the top or bottom face with the tip centered and pointing towards {@code dir}.
+     * @param quad The BakedQuad to manipulate, must be a copy of the original quad
+     * @param dir The direction the triangle should point
+     */
     public static boolean createTopBottomSmallTriangleQuad(BakedQuad quad, Direction dir)
     {
         if (!createTopBottomQuad(quad, dir, .5F))
@@ -396,8 +402,8 @@ public class BakedQuadTransformer
 
         return ModelUtils.modifyQuad(quad, (pos, color, uv, light, normal) ->
         {
-            boolean dirPos = dir.getAxisDirection() == Direction.AxisDirection.POSITIVE;
-            boolean xAxis = dir.getAxis() == Direction.Axis.X;
+            boolean dirPos = Utils.isPositive(dir);
+            boolean xAxis = Utils.isX(dir);
 
             boolean rotated = ModelUtils.isQuadRotated(uv);
             boolean mirrored = ModelUtils.isQuadMirrored(uv);
@@ -461,44 +467,44 @@ public class BakedQuadTransformer
     /**
      * Creates a quad starting at the top or bottom edge and cut off at a given height
      * @param quad The BakedQuad to manipulate, must be a copy of the original quad
-     * @param top Wether the quad starts from the top or bottom edge
+     * @param fromTop Wether the quad starts from the top or bottom edge
      * @param height The target height from the starting edge
      */
-    public static boolean createHorizontalSideQuad(BakedQuad quad, boolean top, float height)
+    public static boolean createHorizontalSideQuad(BakedQuad quad, boolean fromTop, float height)
     {
-        return createHorizontalSideQuad(quad, top, height, height);
+        return createHorizontalSideQuad(quad, fromTop, height, height);
     }
 
     /**
      * Creates a quad starting at the top or bottom edge and cut off at a given height
      * @param quad The BakedQuad to manipulate, must be a copy of the original quad
-     * @param top Wether the quad starts from the top or bottom edge
+     * @param fromTop Wether the quad starts from the top or bottom edge
      * @param heightR The target height from the starting edge for the right vertex
      * @param heightL The target height from the starting edge for the left vertex
      */
-    public static boolean createHorizontalSideQuad(BakedQuad quad, boolean top, float heightR, float heightL)
+    public static boolean createHorizontalSideQuad(BakedQuad quad, boolean fromTop, float heightR, float heightL)
     {
         return ModelUtils.modifyQuad(quad, (pos, color, uv, light, normal) ->
         {
             Direction quadDirRot = quad.getDirection().getCounterClockWise();
-            boolean x = quadDirRot.getAxis() == Direction.Axis.X;
-            boolean positive = quadDirRot.getAxisDirection() == Direction.AxisDirection.POSITIVE;
+            boolean x = Utils.isX(quadDirRot);
+            boolean positive = Utils.isPositive(quadDirRot);
 
             float factorR = positive ? pos[0][x ? 0 : 2] : (1F - pos[0][x ? 0 : 2]);
             float factorL = positive ? pos[3][x ? 0 : 2] : (1F - pos[3][x ? 0 : 2]);
 
-            float targetR = Mth.lerp(factorR, top ? 1F - heightR : heightR, top ? 1F - heightL : heightL);
-            float targetL = Mth.lerp(factorL, top ? 1F - heightR : heightR, top ? 1F - heightL : heightL);
-            if ((top && pos[0][1] >= targetR && pos[3][1] >= targetL) || (!top && pos[1][1] <= targetR && pos[2][1] <= targetL))
+            float targetR = Mth.lerp(factorR, fromTop ? 1F - heightR : heightR, fromTop ? 1F - heightL : heightL);
+            float targetL = Mth.lerp(factorL, fromTop ? 1F - heightR : heightR, fromTop ? 1F - heightL : heightL);
+            if ((fromTop && pos[0][1] >= targetR && pos[3][1] >= targetL) || (!fromTop && pos[1][1] <= targetR && pos[2][1] <= targetL))
             {
-                int idx1 = top ? 1 : 0;
-                int idx2 = top ? 2 : 3;
+                int idx1 = fromTop ? 1 : 0;
+                int idx2 = fromTop ? 2 : 3;
 
                 float y1 = pos[idx1][1];
                 float y2 = pos[idx2][1];
 
-                float toY1 = top ? Math.max(y1, targetR) : Math.min(y1, targetR);
-                float toY2 = top ? Math.max(y2, targetL) : Math.min(y2, targetL);
+                float toY1 = fromTop ? Math.max(y1, targetR) : Math.min(y1, targetR);
+                float toY2 = fromTop ? Math.max(y2, targetL) : Math.min(y2, targetL);
 
                 boolean rotated = ModelUtils.isQuadRotated(uv);
                 boolean mirrored = ModelUtils.isQuadMirrored(uv);
@@ -514,18 +520,24 @@ public class BakedQuadTransformer
         });
     }
 
+    /**
+     * Creates a quad starting at the edge opposite to the given {@code dir} and cut off at a given length
+     * @param quad The BakedQuad to manipulate, must be a copy of the original quad
+     * @param dir The direction pointing away from the starting edge, must be in the quad's plane
+     * @param length The target length from the starting edge
+     */
     public static boolean createVerticalSideQuad(BakedQuad quad, Direction dir, float length)
     {
         Preconditions.checkArgument(dir == quad.getDirection().getClockWise() || dir == quad.getDirection().getCounterClockWise(),
                 "Direction dir must be in the quad's plane!"
         );
-        return createVerticalSideQuad(quad, dir.getAxisDirection() == Direction.AxisDirection.NEGATIVE, length);
+        return createVerticalSideQuad(quad, !Utils.isPositive(dir), length);
     }
 
     /**
      * Creates a quad starting at the positive or negative x/z edge and cut off at a given length
      * @param quad The BakedQuad to manipulate, must be a copy of the original quad
-     * @param positive Wether to start from the positive edge x/z in the quad's plane
+     * @param positive Wether to start from the positive x/z edge in the quad's plane
      * @param length The target length from the starting edge
      */
     public static boolean createVerticalSideQuad(BakedQuad quad, boolean positive, float length)
@@ -533,12 +545,19 @@ public class BakedQuadTransformer
         return createVerticalSideQuad(quad, positive, length, length);
     }
 
+    /**
+     * Creates a quad starting at the edge opposite to the given {@code dir} and cut off at a given length
+     * @param quad The BakedQuad to manipulate, must be a copy of the original quad
+     * @param dir The direction pointing away from the starting edge, must be in the quad's plane
+     * @param lengthTop The target length from the starting edge for the top vertex
+     * @param lengthBot The target length from the starting edge for the bottom vertex
+     */
     public static boolean createVerticalSideQuad(BakedQuad quad, Direction dir, float lengthTop, float lengthBot)
     {
         Preconditions.checkArgument(dir == quad.getDirection().getClockWise() || dir == quad.getDirection().getCounterClockWise(),
                 "Direction dir must be in the quad's plane!"
         );
-        return createVerticalSideQuad(quad, dir.getAxisDirection() == Direction.AxisDirection.NEGATIVE, lengthTop, lengthBot);
+        return createVerticalSideQuad(quad, !Utils.isPositive(dir), lengthTop, lengthBot);
     }
 
     /**
@@ -552,8 +571,8 @@ public class BakedQuadTransformer
     {
         return ModelUtils.modifyQuad(quad, (pos, color, uv, light, normal) ->
         {
-            int coordIdx = quad.getDirection().getAxis() == Direction.Axis.X ? 2 : 0;
-            boolean right = (quad.getDirection().getCounterClockWise().getAxisDirection() == Direction.AxisDirection.POSITIVE) == positive;
+            int coordIdx = Utils.isX(quad.getDirection()) ? 2 : 0;
+            boolean right = Utils.isPositive(quad.getDirection().getCounterClockWise()) == positive;
             int vertIdxTop = right ? 3 : 0;
             int vertIdxBot = right ? 2 : 1;
 
@@ -608,15 +627,15 @@ public class BakedQuadTransformer
     {
         return ModelUtils.modifyQuad(quad, (pos, color, uv, light, normal) ->
         {
-            boolean xAxis = cutDir.getAxis() == Direction.Axis.X;
-            boolean positive = cutDir.getAxisDirection() == Direction.AxisDirection.POSITIVE;
+            boolean xAxis = Utils.isX(cutDir);
+            boolean positive = Utils.isPositive(cutDir);
             boolean up = quad.getDirection() == Direction.UP;
 
             int idxR = xAxis ? (positive ? 2 : 1) : ((up == positive) ? 1 : 0);
             int idxL = xAxis ? (positive ? 3 : 0) : ((up == positive) ? 2 : 3);
 
             Direction perpDir = cutDir.getCounterClockWise();
-            boolean perpX = perpDir.getAxis() == Direction.Axis.X;
+            boolean perpX = Utils.isX(perpDir);
             float factorR = perpX ? pos[idxR][0] : (up ? (1F - pos[idxR][2]) : pos[idxR][2]);
             float factorL = perpX ? pos[idxL][0] : (up ? (1F - pos[idxL][2]) : pos[idxL][2]);
 
@@ -713,13 +732,13 @@ public class BakedQuadTransformer
 
     /**
      * Moves the given quad to the given value in the quad's facing direction
-     * @param quad The BakedQuad to manipulate, must be a copy of the original quad if no other processing happened before
+     * @param quad The BakedQuad to manipulate, must be a copy of the original quad
      * @param posTarget The target position in the quad's facing direction
      */
     public static void setQuadPosInFacingDir(BakedQuad quad, float posTarget)
     {
         int idx = quad.getDirection().getAxis().ordinal();
-        float value = quad.getDirection().getAxisDirection() == Direction.AxisDirection.POSITIVE ? posTarget : 1F - posTarget;
+        float value = Utils.isPositive(quad.getDirection()) ? posTarget : 1F - posTarget;
         ModelUtils.modifyQuad(quad, (pos, color, uv, light, normal) ->
         {
             for (int i = 0; i < 4; i++)
@@ -732,7 +751,7 @@ public class BakedQuadTransformer
 
     /**
      * Moves the individual vertices of the given quad to the given values in the quad's facing direction
-     * @param quad The BakedQuad to manipulate, must be a copy of the original quad if no other processing happened before
+     * @param quad The BakedQuad to manipulate, must be a copy of the original quad
      * @param posTarget The target positions in the quad's facing direction
      * @implNote This does not create the same shape for all vertices when displacing a single one, this is not fixable without extreme effort
      */
@@ -741,7 +760,7 @@ public class BakedQuadTransformer
         Preconditions.checkArgument(posTarget.length == 4, "Target position array must contain 4 elements!");
 
         int idx = quad.getDirection().getAxis().ordinal();
-        boolean positive = quad.getDirection().getAxisDirection() == Direction.AxisDirection.POSITIVE;
+        boolean positive = Utils.isPositive(quad.getDirection());
         ModelUtils.modifyQuad(quad, (pos, color, uv, light, normal) ->
         {
             for (int i = 0; i < 4; i++)
@@ -754,14 +773,14 @@ public class BakedQuadTransformer
 
     /**
      * Offsets the given quad by the given amount in the given direction
-     * @param quad The BakedQuad to manipulate, must be a copy of the original quad if no other processing happened before
+     * @param quad The BakedQuad to manipulate, must be a copy of the original quad
      * @param dir The direction to offset the quad in
      * @param amount The amount the quad should be offset by
      */
     public static void offsetQuadInDir(BakedQuad quad, Direction dir, float amount)
     {
         int idx = dir.getAxis().ordinal();
-        float value = dir.getAxisDirection() == Direction.AxisDirection.POSITIVE ? amount : (-1F * amount);
+        float value = Utils.isPositive(dir) ? amount : (-1F * amount);
         ModelUtils.modifyQuad(quad, (pos, color, uv, light, normal) ->
         {
             for (int i = 0; i < 4; i++)
@@ -790,7 +809,7 @@ public class BakedQuadTransformer
      * @param axis The axis to rotate around
      * @param angle The angle of rotation in degrees
      * @param rescale Wether the quad should be rescaled or retain its dimensions
-     * @param scaleMult Modifier for the scale vector, can be used to inhibit scaling on selected axes
+     * @param scaleMult Modifier for the scale vector, can be used to inhibit scaling on selected axis
      */
     public static void rotateQuadAroundAxisCentered(BakedQuad quad, Direction.Axis axis, float angle, boolean rescale, Vector3f scaleMult)
     {

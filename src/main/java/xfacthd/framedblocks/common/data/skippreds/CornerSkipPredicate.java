@@ -6,6 +6,7 @@ import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.block.state.BlockState;
 import xfacthd.framedblocks.api.block.IFramedBlock;
 import xfacthd.framedblocks.api.type.IBlockType;
+import xfacthd.framedblocks.api.util.Utils;
 import xfacthd.framedblocks.common.data.*;
 import xfacthd.framedblocks.api.util.SideSkipPredicate;
 import xfacthd.framedblocks.common.util.FramedUtils;
@@ -269,7 +270,7 @@ public class CornerSkipPredicate implements SideSkipPredicate
             {
                 return SideSkipPredicate.compareState(level, pos, side, dir);
             }
-            else if (side.getAxis() == Direction.Axis.Y && type.isTop() != adjTop && (side == Direction.DOWN) == !type.isTop() &&
+            else if (Utils.isY(side) && type.isTop() != adjTop && (side == Direction.DOWN) == !type.isTop() &&
                     ((type.isRight() && adjDir == dir.getClockWise()) || (!type.isRight() && adjDir == dir))
             )
             {
@@ -290,7 +291,7 @@ public class CornerSkipPredicate implements SideSkipPredicate
         }
         else if (type.isHorizontal())
         {
-            if (side.getAxis() == Direction.Axis.Y && ((!type.isRight() && adjDir == dir) || (type.isRight() && adjDir == dir.getClockWise())))
+            if (Utils.isY(side) && ((!type.isRight() && adjDir == dir) || (type.isRight() && adjDir == dir.getClockWise())))
             {
                 return type.isTop() == adjTop && SideSkipPredicate.compareState(level, pos, side, dir);
             }

@@ -36,9 +36,8 @@ public class FramedCornerPillarBlock extends FramedBlock
         Vec3 hitPoint = Utils.fraction(context.getClickLocation());
         if (face.getAxis().isHorizontal())
         {
-            boolean xAxis = face.getAxis() == Direction.Axis.X;
-            boolean positive = face.getCounterClockWise().getAxisDirection() == Direction.AxisDirection.POSITIVE;
-            double xz = xAxis ? hitPoint.z() : hitPoint.x();
+            boolean positive = Utils.isPositive(face.getCounterClockWise());
+            double xz = Utils.isX(face) ? hitPoint.z() : hitPoint.x();
 
             Direction dir = face.getOpposite();
             if ((xz > .5D) == positive)
@@ -53,7 +52,7 @@ public class FramedCornerPillarBlock extends FramedBlock
             double z = hitPoint.z();
 
             Direction dir = z > .5D ? Direction.SOUTH : Direction.NORTH;
-            if ((x > .5D) == (dir.getAxisDirection() == Direction.AxisDirection.NEGATIVE)) { dir = dir.getClockWise(); }
+            if ((x > .5D) != Utils.isPositive(dir)) { dir = dir.getClockWise(); }
             state = state.setValue(PropertyHolder.FACING_HOR, dir);
         }
 

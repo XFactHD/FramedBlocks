@@ -41,7 +41,7 @@ public class FramedHalfStairsBlock extends FramedBlock
         Vec3 hit = Utils.fraction(context.getClickLocation());
 
         Direction facing;
-        if (face.getAxis() != Direction.Axis.Y)
+        if (!Utils.isY(face))
         {
             facing = face.getOpposite();
         }
@@ -54,8 +54,8 @@ public class FramedHalfStairsBlock extends FramedBlock
         boolean top = face == Direction.DOWN || hit.y > .5;
         state = state.setValue(FramedProperties.TOP, top);
 
-        double xz = facing.getAxis() == Direction.Axis.X ? hit.z() : hit.x();
-        boolean rightPlus = facing.getCounterClockWise().getAxisDirection() == Direction.AxisDirection.POSITIVE;
+        double xz = Utils.isX(facing) ? hit.z() : hit.x();
+        boolean rightPlus = Utils.isPositive(facing.getCounterClockWise());
         boolean right = (xz <= .5) == rightPlus;
         state = state.setValue(PropertyHolder.RIGHT, right);
 

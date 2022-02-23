@@ -7,6 +7,7 @@ import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.core.Direction;
 import net.minecraftforge.fml.ModList;
 import xfacthd.framedblocks.api.model.FramedBlockModel;
+import xfacthd.framedblocks.api.util.Utils;
 import xfacthd.framedblocks.api.util.client.BakedQuadTransformer;
 import xfacthd.framedblocks.api.util.client.ModelUtils;
 
@@ -32,7 +33,7 @@ public class FramedFenceModel extends FramedBlockModel
     @Override
     protected void transformQuad(Map<Direction, List<BakedQuad>> quadMap, BakedQuad quad)
     {
-        if (quad.getDirection().getAxis() == Direction.Axis.Y)
+        if (Utils.isY(quad.getDirection()))
         {
             BakedQuad topBotQuad = ModelUtils.duplicateQuad(quad);
             if (BakedQuadTransformer.createTopBottomQuad(topBotQuad, 6F/16F, 6F/16F, 10F/16F, 10F/16F))
@@ -62,7 +63,7 @@ public class FramedFenceModel extends FramedBlockModel
     {
         if (active)
         {
-            if (quad.getDirection().getAxis() == Direction.Axis.Y)
+            if (Utils.isY(quad.getDirection()))
             {
                 BakedQuad topBotQuad = ModelUtils.duplicateQuad(quad);
                 if (BakedQuadTransformer.createTopBottomQuad(topBotQuad, dir.getOpposite(), 6F/16F) &&
@@ -80,7 +81,7 @@ public class FramedFenceModel extends FramedBlockModel
             }
             else if (quad.getDirection() == dir.getClockWise() || quad.getDirection() == dir.getCounterClockWise())
             {
-                boolean neg = dir.getAxisDirection() == Direction.AxisDirection.NEGATIVE;
+                boolean neg = !Utils.isPositive(dir);
                 BakedQuad sideQuad = ModelUtils.duplicateQuad(quad);
                 if (BakedQuadTransformer.createSideQuad(sideQuad, neg ? 0F : 10F/16F, 6F/16F, neg ? 6F/16F : 1F, 9F/16F))
                 {

@@ -8,6 +8,7 @@ import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import xfacthd.framedblocks.api.block.IFramedBlock;
 import xfacthd.framedblocks.api.model.FramedBlockModel;
 import xfacthd.framedblocks.api.type.IBlockType;
+import xfacthd.framedblocks.api.util.Utils;
 import xfacthd.framedblocks.api.util.client.BakedQuadTransformer;
 import xfacthd.framedblocks.api.util.client.ModelUtils;
 import xfacthd.framedblocks.common.data.BlockType;
@@ -75,7 +76,7 @@ public class FramedPillarModel extends FramedBlockModel
                     return true;
                 }
             }
-            else if (quad.getDirection().getAxis() == Direction.Axis.Y)
+            else if (Utils.isY(quad.getDirection()))
             {
                 if (BakedQuadTransformer.createTopBottomQuad(quad, axisToDir(axis, true).getClockWise(), sideCut) &&
                     BakedQuadTransformer.createTopBottomQuad(quad, axisToDir(axis, false).getClockWise(), sideCut)

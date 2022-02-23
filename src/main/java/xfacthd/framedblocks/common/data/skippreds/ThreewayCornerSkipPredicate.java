@@ -6,6 +6,7 @@ import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.block.state.BlockState;
 import xfacthd.framedblocks.api.block.IFramedBlock;
 import xfacthd.framedblocks.api.type.IBlockType;
+import xfacthd.framedblocks.api.util.Utils;
 import xfacthd.framedblocks.common.data.*;
 import xfacthd.framedblocks.api.util.SideSkipPredicate;
 import xfacthd.framedblocks.common.util.FramedUtils;
@@ -63,7 +64,7 @@ public class ThreewayCornerSkipPredicate implements SideSkipPredicate
         Direction adjDir = adjState.getValue(PropertyHolder.FACING_HOR);
         boolean adjTop = adjState.getValue(PropertyHolder.TOP);
 
-        if (side.getAxis() == Direction.Axis.Y && adjTop != top && adjDir == dir && (side == Direction.UP) == top)
+        if (Utils.isY(side) && adjTop != top && adjDir == dir && (side == Direction.UP) == top)
         {
             return SideSkipPredicate.compareState(level, pos, side, side);
         }
@@ -221,8 +222,7 @@ public class ThreewayCornerSkipPredicate implements SideSkipPredicate
                     return SideSkipPredicate.compareState(level, pos, side, adjDir);
                 }
             }
-            else if (side.getAxis() == Direction.Axis.Y && ((!adjType.isRight() && adjDir == dir.getOpposite()) ||
-                                                            (adjType.isRight() && adjDir == dir.getClockWise()))
+            else if (Utils.isY(side) && ((!adjType.isRight() && adjDir == dir.getOpposite()) || (adjType.isRight() && adjDir == dir.getClockWise()))
             )
             {
                 if ((side == Direction.DOWN && !top) || (side == Direction.UP && top))

@@ -5,11 +5,10 @@ import net.minecraft.core.Direction;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.*;
-import xfacthd.framedblocks.api.util.FramedProperties;
+import xfacthd.framedblocks.api.util.*;
 import xfacthd.framedblocks.common.FBContent;
 import xfacthd.framedblocks.common.data.PropertyHolder;
 import xfacthd.framedblocks.common.data.StairsType;
-import xfacthd.framedblocks.api.util.SideSkipPredicate;
 
 public class SlabEdgeSkipPredicate implements SideSkipPredicate
 {
@@ -72,7 +71,7 @@ public class SlabEdgeSkipPredicate implements SideSkipPredicate
         {
             return dir == adjDir && top == adjTop && SideSkipPredicate.compareState(level, pos, side);
         }
-        else if (side.getAxis() == Direction.Axis.Y && dir == adjDir)
+        else if (Utils.isY(side) && dir == adjDir)
         {
             return top != adjTop && SideSkipPredicate.compareState(level, pos, side);
         }
@@ -109,7 +108,7 @@ public class SlabEdgeSkipPredicate implements SideSkipPredicate
 
     private static boolean testAgainstPanel(BlockGetter level, BlockPos pos, Direction dir, boolean top, BlockState adjState, Direction side)
     {
-        if (side.getAxis() != Direction.Axis.Y) { return false; }
+        if (!Utils.isY(side)) { return false; }
 
         Direction adjDir = adjState.getValue(PropertyHolder.FACING_HOR);
         if (dir != adjDir) { return false; }
@@ -123,7 +122,7 @@ public class SlabEdgeSkipPredicate implements SideSkipPredicate
 
     private static boolean testAgainstDoublePanel(BlockGetter level, BlockPos pos, Direction dir, boolean top, BlockState adjState, Direction side)
     {
-        if (side.getAxis() != Direction.Axis.Y) { return false; }
+        if (!Utils.isY(side)) { return false; }
 
         Direction adjDir = adjState.getValue(PropertyHolder.FACING_NE);
         if (dir != adjDir && dir != adjDir.getOpposite()) { return false; }
@@ -175,7 +174,7 @@ public class SlabEdgeSkipPredicate implements SideSkipPredicate
 
         if ((adjRight && adjDir == dir.getCounterClockWise()) || (!adjRight && adjDir == dir.getClockWise()))
         {
-            if (side.getAxis() == Direction.Axis.Y && (side == Direction.DOWN) == adjTop && adjTop != top)
+            if (Utils.isY(side) && (side == Direction.DOWN) == adjTop && adjTop != top)
             {
                 return SideSkipPredicate.compareState(level, pos, side);
             }

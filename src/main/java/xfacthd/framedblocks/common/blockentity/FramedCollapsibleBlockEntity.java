@@ -106,7 +106,7 @@ public class FramedCollapsibleBlockEntity extends FramedBlockEntity
     {
         BlockPos[] neighbors = new BlockPos[3];
         Vec3[] hitVecs = new Vec3[3];
-        if (faceHit.getAxis() == Direction.Axis.Y)
+        if (Utils.isY(faceHit))
         {
             Direction dirX = hitLoc.x > .5 ? Direction.EAST : Direction.WEST;
             Direction dirZ = hitLoc.z > .5 ? Direction.SOUTH : Direction.NORTH;
@@ -124,7 +124,7 @@ public class FramedCollapsibleBlockEntity extends FramedBlockEntity
             Direction dirY = hitLoc.y > .5 ? Direction.UP : Direction.DOWN;
             Direction dirXZ;
 
-            if (faceHit.getAxis() == Direction.Axis.X)
+            if (Utils.isX(faceHit))
             {
                 dirXZ = hitLoc.z > .5 ? Direction.SOUTH : Direction.NORTH;
             }
@@ -155,7 +155,7 @@ public class FramedCollapsibleBlockEntity extends FramedBlockEntity
 
     private static int vertexFromHit(Direction faceHit, Vec3 loc)
     {
-        if (faceHit.getAxis() == Direction.Axis.Y)
+        if (Utils.isY(faceHit))
         {
             if ((loc.z < .5F) == (faceHit == Direction.UP))
             {
@@ -169,7 +169,7 @@ public class FramedCollapsibleBlockEntity extends FramedBlockEntity
         else
         {
             boolean positive = faceHit == Direction.SOUTH || faceHit == Direction.WEST;
-            double xz = faceHit.getAxis() == Direction.Axis.X ? loc.z : loc.x;
+            double xz = Utils.isX(faceHit) ? loc.z : loc.x;
             if (loc.y < .5F)
             {
                 return (xz < .5F) == positive ? 1 : 2;

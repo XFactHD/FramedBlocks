@@ -29,7 +29,7 @@ public class MixinRailShape
     )
     private void framedblocks_connectToFilterInvalidState(RailState state, CallbackInfo ci, BlockPos blockpos, BlockPos blockpos1, BlockPos blockpos2, BlockPos blockpos3, boolean flag, boolean flag1, boolean flag2, boolean flag3, RailShape railshape)
     {
-        if (this.block.getShapeProperty().getAllValues().noneMatch(value -> value.pValue() == railshape))
+        if (this.block.getShapeProperty().getAllValues().noneMatch(value -> value.value() == railshape))
         {
             ci.cancel();
         }

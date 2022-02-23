@@ -6,6 +6,7 @@ import net.minecraft.core.Direction;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import xfacthd.framedblocks.api.model.FramedBlockModel;
+import xfacthd.framedblocks.api.util.Utils;
 import xfacthd.framedblocks.api.util.client.BakedQuadTransformer;
 import xfacthd.framedblocks.api.util.client.ModelUtils;
 
@@ -33,7 +34,7 @@ public class FramedPaneModel extends FramedBlockModel
     protected void transformQuad(Map<Direction, List<BakedQuad>> quadMap, BakedQuad quad)
     {
         Direction face = quad.getDirection();
-        if (face.getAxis() == Direction.Axis.Y)
+        if (Utils.isY(face))
         {
             createTopBottomCenterQuad(quadMap, quad, false);
 
@@ -46,13 +47,13 @@ public class FramedPaneModel extends FramedBlockModel
         {
             createSideEdgeQuad(quadMap, quad, isSideInset(face), false);
 
-            if (face.getAxis() == Direction.Axis.X)
+            if (Utils.isX(face))
             {
                 if (north) { createSideQuad(quadMap.get(null), quad, false); }
                 if (south) { createSideQuad(quadMap.get(null), quad, true); }
             }
 
-            if (face.getAxis() == Direction.Axis.Z)
+            if (Utils.isZ(face))
             {
                 if (east) { createSideQuad(quadMap.get(null), quad, true); }
                 if (west) { createSideQuad(quadMap.get(null), quad, false); }
@@ -79,16 +80,16 @@ public class FramedPaneModel extends FramedBlockModel
 
     protected static void createTopBottomEdgeQuad(Map<Direction, List<BakedQuad>> quadMap, BakedQuad quad, Direction dir, boolean mirrored)
     {
-        if (dir.getAxis() == Direction.Axis.Y) { throw new IllegalArgumentException(String.format("Invalid direction: %s!", dir)); }
+        if (Utils.isY(dir)) { throw new IllegalArgumentException(String.format("Invalid direction: %s!", dir)); }
 
-        boolean positive = dir.getAxisDirection() == Direction.AxisDirection.POSITIVE;
+        boolean positive = Utils.isPositive(dir);
 
         float minX;
         float minZ;
         float maxX;
         float maxZ;
 
-        if (dir.getAxis() == Direction.Axis.X)
+        if (Utils.isX(dir))
         {
             minX = positive ? 9F/16F : 0;
             maxX = positive ? 1 : 7F/16F;

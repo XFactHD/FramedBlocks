@@ -5,6 +5,7 @@ import net.minecraft.client.renderer.block.model.BakedQuad;
 import net.minecraft.client.resources.model.BakedModel;
 import net.minecraft.core.Direction;
 import xfacthd.framedblocks.api.model.FramedBlockModel;
+import xfacthd.framedblocks.api.util.Utils;
 import xfacthd.framedblocks.api.util.client.BakedQuadTransformer;
 import xfacthd.framedblocks.api.util.client.ModelUtils;
 
@@ -24,7 +25,7 @@ public class FramedFloorModel extends FramedBlockModel
             BakedQuadTransformer.setQuadPosInFacingDir(topBotQuad, 1F/16F);
             quadMap.get(null).add(topBotQuad);
         }
-        else if (quad.getDirection().getAxis() != Direction.Axis.Y)
+        else if (!Utils.isY(quad.getDirection()))
         {
             BakedQuad sideQuad = ModelUtils.duplicateQuad(quad);
             if (BakedQuadTransformer.createHorizontalSideQuad(sideQuad, false, 1F/16F))

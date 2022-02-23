@@ -68,7 +68,7 @@ public class FramedCornerSlopeBlock extends FramedBlock
 
         Direction side = context.getClickedFace();
         Vec3 hitPoint = Utils.fraction(context.getClickLocation());
-        if (side.getAxis() != Direction.Axis.Y)
+        if (!Utils.isY(side))
         {
             if (hitPoint.y() < (3D / 16D))
             {

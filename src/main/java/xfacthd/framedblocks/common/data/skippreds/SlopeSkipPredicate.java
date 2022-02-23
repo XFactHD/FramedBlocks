@@ -6,6 +6,7 @@ import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.block.state.BlockState;
 import xfacthd.framedblocks.api.block.IFramedBlock;
 import xfacthd.framedblocks.api.type.IBlockType;
+import xfacthd.framedblocks.api.util.Utils;
 import xfacthd.framedblocks.common.data.*;
 import xfacthd.framedblocks.api.util.SideSkipPredicate;
 import xfacthd.framedblocks.common.util.FramedUtils;
@@ -63,7 +64,7 @@ public class SlopeSkipPredicate implements SideSkipPredicate
         Direction adjDir = FramedUtils.getBlockFacing(adjState);
         SlopeType adjType = FramedUtils.getSlopeType(adjState);
 
-        if (type == SlopeType.HORIZONTAL && side.getAxis() == Direction.Axis.Y)
+        if (type == SlopeType.HORIZONTAL && Utils.isY(side))
         {
             return dir == adjDir && type == adjType && SideSkipPredicate.compareState(level, pos, side, dir);
         }
@@ -79,7 +80,7 @@ public class SlopeSkipPredicate implements SideSkipPredicate
         Direction adjDir = adjState.getValue(PropertyHolder.FACING_HOR);
         SlopeType adjType = adjState.getValue(PropertyHolder.SLOPE_TYPE);
 
-        if (type == SlopeType.HORIZONTAL && adjType == SlopeType.HORIZONTAL && side.getAxis() == Direction.Axis.Y)
+        if (type == SlopeType.HORIZONTAL && adjType == SlopeType.HORIZONTAL && Utils.isY(side))
         {
             return (dir == adjDir || adjDir == dir.getOpposite()) && SideSkipPredicate.compareState(level, pos, side, dir);
         }
@@ -131,7 +132,7 @@ public class SlopeSkipPredicate implements SideSkipPredicate
                 }
             }
         }
-        else if (side.getAxis() == Direction.Axis.Y && type == SlopeType.HORIZONTAL && ((side == Direction.UP) != (adjType.isTop())))
+        else if (Utils.isY(side) && type == SlopeType.HORIZONTAL && ((side == Direction.UP) != (adjType.isTop())))
         {
             if (adjType.isRight())
             {
@@ -257,7 +258,7 @@ public class SlopeSkipPredicate implements SideSkipPredicate
                 return SideSkipPredicate.compareState(level, pos, side, dir);
             }
         }
-        else if (side.getAxis() == Direction.Axis.Y && type == SlopeType.HORIZONTAL && ((side == Direction.UP) == (adjType.isTop())))
+        else if (Utils.isY(side) && type == SlopeType.HORIZONTAL && ((side == Direction.UP) == (adjType.isTop())))
         {
             if (adjType.isRight())
             {
@@ -287,7 +288,7 @@ public class SlopeSkipPredicate implements SideSkipPredicate
                 return adjDir == dir.getClockWise() && SideSkipPredicate.compareState(level, pos, side, dir);
             }
         }
-        else if (type == SlopeType.HORIZONTAL && side.getAxis() == Direction.Axis.Y && adjTop == (side == Direction.DOWN))
+        else if (type == SlopeType.HORIZONTAL && Utils.isY(side) && adjTop == (side == Direction.DOWN))
         {
             return dir == adjDir && SideSkipPredicate.compareState(level, pos, side, dir);
         }
@@ -310,7 +311,7 @@ public class SlopeSkipPredicate implements SideSkipPredicate
                 return dir == adjDir && SideSkipPredicate.compareState(level, pos, side, dir);
             }
         }
-        else if (type == SlopeType.HORIZONTAL && side.getAxis() == Direction.Axis.Y && adjTop == (side == Direction.UP))
+        else if (type == SlopeType.HORIZONTAL && Utils.isY(side) && adjTop == (side == Direction.UP))
         {
             return dir == adjDir && SideSkipPredicate.compareState(level, pos, side, dir);
         }

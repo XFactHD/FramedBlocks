@@ -33,8 +33,8 @@ public class FramedDoubleThreewayCornerBlockEntity extends FramedDoubleBlockEnti
 
             if (side == facing.getClockWise())
             {
-                double hor = facing.getAxis() == Direction.Axis.X ? vec.x() : vec.z();
-                if (facing.getAxisDirection() == Direction.AxisDirection.NEGATIVE)
+                double hor = Utils.isX(facing) ? vec.x() : vec.z();
+                if (!Utils.isPositive(facing))
                 {
                     hor = 1D - hor;
                 }
@@ -43,8 +43,8 @@ public class FramedDoubleThreewayCornerBlockEntity extends FramedDoubleBlockEnti
             else if (side == facing.getOpposite())
             {
                 Direction dir = facing.getCounterClockWise();
-                double hor = dir.getAxis() == Direction.Axis.X ? vec.x() : vec.z();
-                if (dir.getAxisDirection() == Direction.AxisDirection.NEGATIVE)
+                double hor = Utils.isX(dir) ? vec.x() : vec.z();
+                if (!Utils.isPositive(dir))
                 {
                     hor = 1D - hor;
                 }
@@ -52,8 +52,8 @@ public class FramedDoubleThreewayCornerBlockEntity extends FramedDoubleBlockEnti
             }
             else if (side == Direction.DOWN)
             {
-                boolean secondary = facing.getAxis() == Direction.Axis.X ? vec.x() >= vec.z() : vec.z() >= (1D - vec.x());
-                if (facing.getAxisDirection() == Direction.AxisDirection.POSITIVE) { secondary = !secondary; }
+                boolean secondary = Utils.isX(facing) ? vec.x() >= vec.z() : vec.z() >= (1D - vec.x());
+                if (Utils.isPositive(facing)) { secondary = !secondary; }
                 return secondary;
             }
         }
@@ -63,8 +63,8 @@ public class FramedDoubleThreewayCornerBlockEntity extends FramedDoubleBlockEnti
 
             if (side == facing.getClockWise())
             {
-                double hor = facing.getAxis() == Direction.Axis.X ? vec.x() : vec.z();
-                if (facing.getAxisDirection() == Direction.AxisDirection.NEGATIVE)
+                double hor = Utils.isX(facing) ? vec.x() : vec.z();
+                if (!Utils.isPositive(facing))
                 {
                     hor = 1D - hor;
                 }
@@ -73,8 +73,8 @@ public class FramedDoubleThreewayCornerBlockEntity extends FramedDoubleBlockEnti
             else if (side == facing.getOpposite())
             {
                 Direction dir = facing.getCounterClockWise();
-                double hor = dir.getAxis() == Direction.Axis.X ? vec.x() : vec.z();
-                if (dir.getAxisDirection() == Direction.AxisDirection.NEGATIVE)
+                double hor = Utils.isX(dir) ? vec.x() : vec.z();
+                if (!Utils.isPositive(dir))
                 {
                     hor = 1D - hor;
                 }
@@ -82,8 +82,8 @@ public class FramedDoubleThreewayCornerBlockEntity extends FramedDoubleBlockEnti
             }
             else if (side == Direction.UP)
             {
-                boolean secondary = facing.getAxis() == Direction.Axis.X ? vec.x() >= vec.z() : vec.z() >= (1D - vec.x());
-                if (facing.getAxisDirection() == Direction.AxisDirection.POSITIVE) { secondary = !secondary; }
+                boolean secondary = Utils.isX(facing) ? vec.x() >= vec.z() : vec.z() >= (1D - vec.x());
+                if (Utils.isPositive(facing)) { secondary = !secondary; }
                 return secondary;
             }
         }

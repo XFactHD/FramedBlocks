@@ -21,7 +21,7 @@ public interface SideSkipPredicate
                 return false;
             }
 
-            if (level.getBlockEntity(pos.relative(side)) instanceof FramedBlockEntity be)
+            if (Utils.getBlockEntitySafe(level, pos.relative(side)) instanceof FramedBlockEntity be)
             {
                 adjState = be.getCamoState(side.getOpposite());
             }
@@ -52,9 +52,14 @@ public interface SideSkipPredicate
 
     static boolean compareState(BlockGetter level, BlockPos pos, Direction side, Direction camoSide)
     {
-        if (level.getBlockEntity(pos.relative(side)) instanceof FramedBlockEntity be)
+        return compareState(level, pos, side, camoSide, camoSide);
+    }
+
+    static boolean compareState(BlockGetter level, BlockPos pos, Direction side, Direction camoSide, Direction adjCamoSide)
+    {
+        if (Utils.getBlockEntitySafe(level, pos.relative(side)) instanceof FramedBlockEntity be)
         {
-            BlockState adjState = be.getCamoState(camoSide);
+            BlockState adjState = be.getCamoState(adjCamoSide);
             if (adjState.isAir()) { return false; }
 
             return compareState(level, pos, adjState, camoSide);
@@ -64,7 +69,7 @@ public interface SideSkipPredicate
 
     static boolean compareState(BlockGetter level, BlockPos pos, BlockState adjState, Direction side)
     {
-        if (level.getBlockEntity(pos) instanceof FramedBlockEntity be)
+        if (Utils.getBlockEntitySafe(level, pos) instanceof FramedBlockEntity be)
         {
             BlockState state = be.getCamoState(side);
             return (state == adjState && !state.is(BlockTags.LEAVES)) || (state.isSolidRender(level, pos) && adjState.isSolidRender(level, pos.relative(side)));

@@ -5,11 +5,10 @@ import net.minecraft.core.Direction;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.*;
-import xfacthd.framedblocks.api.util.FramedProperties;
+import xfacthd.framedblocks.api.util.*;
 import xfacthd.framedblocks.common.FBContent;
 import xfacthd.framedblocks.common.data.PropertyHolder;
 import xfacthd.framedblocks.common.data.StairsType;
-import xfacthd.framedblocks.api.util.SideSkipPredicate;
 
 public class SlabCornerSkipPredicate implements SideSkipPredicate
 {
@@ -85,7 +84,7 @@ public class SlabCornerSkipPredicate implements SideSkipPredicate
 
     private static boolean testAgainstStairs(BlockGetter level, BlockPos pos, Direction dir, boolean top, BlockState adjState, Direction side)
     {
-        if (side.getAxis() != Direction.Axis.Y) { return false; }
+        if (!Utils.isY(side)) { return false; }
 
         Direction adjDir = adjState.getValue(BlockStateProperties.HORIZONTAL_FACING);
         StairsShape adjShape = adjState.getValue(BlockStateProperties.STAIRS_SHAPE);
@@ -111,7 +110,7 @@ public class SlabCornerSkipPredicate implements SideSkipPredicate
 
         if (adjType.isTop() == top || dir != adjDir) { return false; }
 
-        if (side.getAxis() == Direction.Axis.Y || side == dir || side == dir.getCounterClockWise())
+        if (Utils.isY(side) || side == dir || side == dir.getCounterClockWise())
         {
             return SideSkipPredicate.compareState(level, pos, side);
         }
@@ -127,7 +126,7 @@ public class SlabCornerSkipPredicate implements SideSkipPredicate
         if (adjTop != top) { return false; }
         if ((adjRight && adjDir != dir.getCounterClockWise()) || (!adjRight && adjDir != dir)) { return false; }
 
-        if ((adjRight && side == dir.getCounterClockWise()) || (!adjRight && side == dir) || (side.getAxis() == Direction.Axis.Y && (side == Direction.UP) == adjTop))
+        if ((adjRight && side == dir.getCounterClockWise()) || (!adjRight && side == dir) || (Utils.isY(side) && (side == Direction.UP) == adjTop))
         {
             return SideSkipPredicate.compareState(level, pos, side);
         }

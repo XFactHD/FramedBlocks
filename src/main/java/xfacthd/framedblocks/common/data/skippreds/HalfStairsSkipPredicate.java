@@ -7,8 +7,7 @@ import net.minecraft.world.level.block.StairBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.Half;
 import net.minecraft.world.level.block.state.properties.StairsShape;
-import xfacthd.framedblocks.api.util.FramedProperties;
-import xfacthd.framedblocks.api.util.SideSkipPredicate;
+import xfacthd.framedblocks.api.util.*;
 import xfacthd.framedblocks.common.FBContent;
 import xfacthd.framedblocks.common.data.PropertyHolder;
 import xfacthd.framedblocks.common.data.StairsType;
@@ -78,7 +77,7 @@ public class HalfStairsSkipPredicate implements SideSkipPredicate
         {
             return adjDir == dir && adjTop == top && adjRight != right && SideSkipPredicate.compareState(level, pos, side);
         }
-        else if (side.getAxis() == Direction.Axis.Y)
+        else if (Utils.isY(side))
         {
             return adjDir == dir && adjTop != top && adjRight == right && SideSkipPredicate.compareState(level, pos, side);
         }

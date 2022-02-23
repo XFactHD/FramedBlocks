@@ -5,6 +5,7 @@ import net.minecraft.client.renderer.block.model.BakedQuad;
 import net.minecraft.client.resources.model.BakedModel;
 import net.minecraft.core.Direction;
 import xfacthd.framedblocks.api.model.FramedBlockModel;
+import xfacthd.framedblocks.api.util.Utils;
 import xfacthd.framedblocks.api.util.client.BakedQuadTransformer;
 import xfacthd.framedblocks.api.util.client.ModelUtils;
 import xfacthd.framedblocks.common.data.PropertyHolder;
@@ -79,16 +80,16 @@ public class FramedLatticeModel extends FramedBlockModel
                 }
             }
         }
-        else if (quad.getDirection().getAxis() == Direction.Axis.X)
+        else if (Utils.isX(quad.getDirection()))
         {
             createHorizontalStrutSideQuads(quadMap, quad, xAxis, zAxis);
         }
-        else if (quad.getDirection().getAxis() == Direction.Axis.Z)
+        else if (Utils.isZ(quad.getDirection()))
         {
             createHorizontalStrutSideQuads(quadMap, quad, zAxis, xAxis);
         }
 
-        if (quad.getDirection().getAxis() != Direction.Axis.Y && yAxis)
+        if (!Utils.isY(quad.getDirection()) && yAxis)
         {
             BakedQuad sideQuad = ModelUtils.duplicateQuad(quad);
             if (BakedQuadTransformer.createSideQuad(sideQuad, 6F/16F, 0, 10F/16F, 6F/16F))

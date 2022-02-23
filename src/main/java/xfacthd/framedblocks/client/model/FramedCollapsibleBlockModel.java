@@ -13,6 +13,7 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.client.model.data.IModelData;
 import xfacthd.framedblocks.api.model.BakedModelProxy;
 import xfacthd.framedblocks.api.model.FramedBlockModel;
+import xfacthd.framedblocks.api.util.Utils;
 import xfacthd.framedblocks.api.util.client.BakedQuadTransformer;
 import xfacthd.framedblocks.api.util.client.ModelUtils;
 import xfacthd.framedblocks.common.FBContent;
@@ -105,7 +106,7 @@ public class FramedCollapsibleBlockModel extends BakedModelProxy
             else
             {
                 BakedQuad cutQuad = ModelUtils.duplicateQuad(quad);
-                if (collapsedFace.getAxis() == Direction.Axis.Y)
+                if (Utils.isY(collapsedFace))
                 {
                     boolean top = collapsedFace == Direction.UP;
                     int idxOff = getYCollapsedIndexOffset(quad.getDirection());
@@ -127,7 +128,7 @@ public class FramedCollapsibleBlockModel extends BakedModelProxy
                         quadMap.get(quad.getDirection()).add(cutQuad);
                     }
                 }
-                else if (quad.getDirection().getAxis() == Direction.Axis.Y)
+                else if (Utils.isY(quad.getDirection()))
                 {
                     boolean top = quad.getDirection() == Direction.UP;
                     float posOne = vertexPos[top ? 0 : 1];

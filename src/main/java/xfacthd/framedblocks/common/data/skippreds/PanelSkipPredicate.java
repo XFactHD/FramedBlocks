@@ -5,11 +5,10 @@ import net.minecraft.core.Direction;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.*;
-import xfacthd.framedblocks.api.util.FramedProperties;
+import xfacthd.framedblocks.api.util.*;
 import xfacthd.framedblocks.common.FBContent;
 import xfacthd.framedblocks.common.data.PropertyHolder;
 import xfacthd.framedblocks.common.data.StairsType;
-import xfacthd.framedblocks.api.util.SideSkipPredicate;
 
 public class PanelSkipPredicate implements SideSkipPredicate
 {
@@ -97,7 +96,7 @@ public class PanelSkipPredicate implements SideSkipPredicate
 
     private static boolean testAgainstStairs(BlockGetter level, BlockPos pos, Direction dir, BlockState adjState, Direction side)
     {
-        if (side.getAxis() != Direction.Axis.Y) { return false; }
+        if (!Utils.isY(side)) { return false; }
 
         Direction adjDir = adjState.getValue(BlockStateProperties.HORIZONTAL_FACING);
         StairsShape adjShape = adjState.getValue(BlockStateProperties.STAIRS_SHAPE);
@@ -134,7 +133,7 @@ public class PanelSkipPredicate implements SideSkipPredicate
 
         if ((adjRight && adjDir == dir.getCounterClockWise()) || (!adjRight && adjDir == dir.getClockWise()))
         {
-            if (side.getAxis() == Direction.Axis.Y)
+            if (Utils.isY(side))
             {
                 return (side == Direction.DOWN) == adjTop && SideSkipPredicate.compareState(level, pos, side, dir);
             }

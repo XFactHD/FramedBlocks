@@ -8,6 +8,7 @@ import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.core.Direction;
 import com.mojang.math.Vector4f;
 import xfacthd.framedblocks.api.model.FramedBlockModel;
+import xfacthd.framedblocks.api.util.Utils;
 import xfacthd.framedblocks.api.util.client.BakedQuadTransformer;
 import xfacthd.framedblocks.api.util.client.ModelUtils;
 
@@ -76,7 +77,7 @@ public class FramedWallModel extends FramedBlockModel
     {
         if (height != WallSide.NONE)
         {
-            if (quad.getDirection().getAxis() == Direction.Axis.Y)
+            if (Utils.isY(quad.getDirection()))
             {
                 Vector4f rect = rects[dir.ordinal() - 2 + (center ? 4 : 0)];
                 BakedQuad topBotQuad = ModelUtils.duplicateQuad(quad);
@@ -123,7 +124,7 @@ public class FramedWallModel extends FramedBlockModel
     {
         if (center)
         {
-            if (quad.getDirection().getAxis() == Direction.Axis.Y)
+            if (Utils.isY(quad.getDirection()))
             {
                 BakedQuad pillarQuad = ModelUtils.duplicateQuad(quad);
                 if (BakedQuadTransformer.createTopBottomQuad(pillarQuad, 4F/16F, 4F/16F, 12F/16F, 12F/16F))
@@ -145,7 +146,7 @@ public class FramedWallModel extends FramedBlockModel
         {
             boolean tall = north == WallSide.TALL || east == WallSide.TALL || south == WallSide.TALL || west == WallSide.TALL;
 
-            if (quad.getDirection().getAxis() == Direction.Axis.Y)
+            if (Utils.isY(quad.getDirection()))
             {
                 BakedQuad pillarQuad = ModelUtils.duplicateQuad(quad);
                 if (BakedQuadTransformer.createTopBottomQuad(pillarQuad, 5F/16F, 5F/16F, 11F/16F, 11F/16F))

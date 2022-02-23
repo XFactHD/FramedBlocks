@@ -19,6 +19,7 @@ import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.client.ForgeHooksClient;
 import net.minecraftforge.client.model.data.EmptyModelData;
 import net.minecraftforge.client.model.data.IModelData;
+import xfacthd.framedblocks.api.util.Utils;
 import xfacthd.framedblocks.api.util.client.ClientUtils;
 import xfacthd.framedblocks.client.model.FramedChestLidModel;
 import xfacthd.framedblocks.common.FBContent;
@@ -59,13 +60,13 @@ public class FramedChestRenderer implements BlockEntityRenderer<FramedChestBlock
 
         float angle = calculateAngle(be, chestState, dir, lastChange, partialTicks);
 
-        float xOff = dir.getAxis() == Direction.Axis.X ? (dir.getAxisDirection() == Direction.AxisDirection.POSITIVE ? 1F/16F : 15F/16F) : 0;
-        float zOff = dir.getAxis() == Direction.Axis.Z ? (dir.getAxisDirection() == Direction.AxisDirection.POSITIVE ? 1F/16F : 15F/16F) : 0;
+        float xOff = Utils.isX(dir) ? (Utils.isPositive(dir) ? 1F/16F : 15F/16F) : 0;
+        float zOff = Utils.isZ(dir) ? (Utils.isPositive(dir) ? 1F/16F : 15F/16F) : 0;
 
         matrix.pushPose();
 
         matrix.translate(xOff, 9F/16F, zOff);
-        matrix.mulPose(dir.getAxis() == Direction.Axis.X ? Vector3f.ZP.rotationDegrees(angle) : Vector3f.XN.rotationDegrees(angle));
+        matrix.mulPose(Utils.isX(dir) ? Vector3f.ZP.rotationDegrees(angle) : Vector3f.XN.rotationDegrees(angle));
         matrix.translate(-xOff, -9F/16F, -zOff);
 
         renderLidModel(be, state, matrix, buffer, model, data);
@@ -111,7 +112,7 @@ public class FramedChestRenderer implements BlockEntityRenderer<FramedChestBlock
         factor = 1.0F - factor * factor * factor;
 
         float angle = Mth.clamp(factor * 90F, 0F, 90F);
-        if (dir.getAxisDirection() == Direction.AxisDirection.NEGATIVE) { angle *= -1F; }
+        if (!Utils.isPositive(dir)) { angle *= -1F; }
 
         return angle;
     }

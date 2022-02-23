@@ -6,6 +6,7 @@ import net.minecraft.core.Direction;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import xfacthd.framedblocks.api.model.FramedBlockModel;
+import xfacthd.framedblocks.api.util.Utils;
 import xfacthd.framedblocks.api.util.client.*;
 import xfacthd.framedblocks.common.FBContent;
 import xfacthd.framedblocks.common.data.PropertyHolder;
@@ -39,10 +40,10 @@ public class FramedSlopedPrismModel extends FramedBlockModel
     protected void transformQuad(Map<Direction, List<BakedQuad>> quadMap, BakedQuad quad)
     {
         Direction quadFace = quad.getDirection();
-        if (quadFace == orientation.getOpposite() && orientation.getAxis() != Direction.Axis.Y)
+        if (quadFace == orientation.getOpposite() && !Utils.isY(orientation))
         {
             BakedQuad triangle = ModelUtils.duplicateQuad(quad);
-            if (facing.getAxis() == Direction.Axis.Y)
+            if (Utils.isY(facing))
             {
                 TriangleDirection triDir = facing == Direction.UP ? TriangleDirection.UP : TriangleDirection.DOWN;
                 if (BakedQuadTransformer.createSmallTriangleQuad(triangle, triDir))
@@ -61,7 +62,7 @@ public class FramedSlopedPrismModel extends FramedBlockModel
                 }
             }
         }
-        else if (quadFace == facing && orientation.getAxis() == Direction.Axis.Y)
+        else if (quadFace == facing && Utils.isY(orientation))
         {
             TriangleDirection triDir = orientation == Direction.UP ? TriangleDirection.UP : TriangleDirection.DOWN;
 
@@ -75,11 +76,11 @@ public class FramedSlopedPrismModel extends FramedBlockModel
         else if (quadFace == orientation)
         {
             TriangleDirection triDir;
-            if (facing.getAxis() == Direction.Axis.Y)
+            if (Utils.isY(facing))
             {
                 triDir = facing == Direction.UP ? TriangleDirection.UP : TriangleDirection.DOWN;
             }
-            else if (orientation.getAxis() != Direction.Axis.Y)
+            else if (!Utils.isY(orientation))
             {
                 triDir = quadFace == facing.getClockWise() ? TriangleDirection.RIGHT : TriangleDirection.LEFT;
             }
@@ -99,7 +100,7 @@ public class FramedSlopedPrismModel extends FramedBlockModel
                 quadMap.get(quadFace).add(triangle);
             }
         }
-        else if (facing.getAxis() == Direction.Axis.Y && quadFace.getAxis() != facing.getAxis() && quadFace.getAxis() != orientation.getAxis())
+        else if (Utils.isY(facing) && quadFace.getAxis() != facing.getAxis() && quadFace.getAxis() != orientation.getAxis())
         {
             BakedQuad slope = ModelUtils.duplicateQuad(quad);
             if (BakedQuadTransformer.createHorizontalSideQuad(slope, facing == Direction.DOWN, .5F)
@@ -121,7 +122,7 @@ public class FramedSlopedPrismModel extends FramedBlockModel
                 }
             }
         }
-        else if (orientation.getAxis() == Direction.Axis.Y && quadFace.getAxis() != facing.getAxis() && quadFace.getAxis() != orientation.getAxis())
+        else if (Utils.isY(orientation) && quadFace.getAxis() != facing.getAxis() && quadFace.getAxis() != orientation.getAxis())
         {
             BakedQuad slope = ModelUtils.duplicateQuad(quad);
             if (BakedQuadTransformer.createVerticalSideQuad(slope, facing, .5F))
@@ -142,7 +143,7 @@ public class FramedSlopedPrismModel extends FramedBlockModel
                 }
             }
         }
-        else if (orientation.getAxis() != Direction.Axis.Y && facing.getAxis() != Direction.Axis.Y && quadFace == facing)
+        else if (!Utils.isY(orientation) && !Utils.isY(facing) && quadFace == facing)
         {
             BakedQuad slope = ModelUtils.duplicateQuad(quad);
             if (BakedQuadTransformer.createHorizontalSideQuad(slope, false, .5F))

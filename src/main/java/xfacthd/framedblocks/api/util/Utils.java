@@ -25,7 +25,7 @@ public class Utils
 
     public static VoxelShape rotateShape(Direction from, Direction to, VoxelShape shape)
     {
-        if (from.getAxis() == Direction.Axis.Y || to.getAxis() == Direction.Axis.Y) { throw new IllegalArgumentException("Invalid Direction!"); }
+        if (isY(from) || isY(to)) { throw new IllegalArgumentException("Invalid Direction!"); }
         if (from == to) { return shape; }
 
         VoxelShape[] buffer = new VoxelShape[] { shape, Shapes.empty() };
@@ -82,4 +82,12 @@ public class Utils
         }
         return null;
     }
+
+    public static boolean isPositive(Direction dir) { return dir.getAxisDirection() == Direction.AxisDirection.POSITIVE; }
+
+    public static boolean isX(Direction dir) { return dir.getAxis() == Direction.Axis.X; }
+
+    public static boolean isY(Direction dir) { return dir.getAxis() == Direction.Axis.Y; }
+
+    public static boolean isZ(Direction dir) { return dir.getAxis() == Direction.Axis.Z; }
 }

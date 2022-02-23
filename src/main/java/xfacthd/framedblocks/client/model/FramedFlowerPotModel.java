@@ -20,6 +20,7 @@ import net.minecraftforge.client.model.data.IModelData;
 import xfacthd.framedblocks.api.model.BakedModelProxy;
 import xfacthd.framedblocks.api.model.FramedBlockModel;
 import xfacthd.framedblocks.api.util.FramedBlockData;
+import xfacthd.framedblocks.api.util.Utils;
 import xfacthd.framedblocks.api.util.client.BakedQuadTransformer;
 import xfacthd.framedblocks.api.util.client.ModelUtils;
 import xfacthd.framedblocks.common.FBContent;
@@ -121,7 +122,7 @@ public class FramedFlowerPotModel extends BakedModelProxy
                     quadMap.get(null).add(topQuad);
                 }
             }
-            else if (quad.getDirection().getAxis() != Direction.Axis.Y)
+            else if (!Utils.isY(quad.getDirection()))
             {
                 BakedQuad sideQuad = ModelUtils.duplicateQuad(quad);
                 if (BakedQuadTransformer.createSideQuad(sideQuad, 5F/16F, 0, 11F/16F, 6F/16F))

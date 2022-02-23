@@ -6,6 +6,7 @@ import net.minecraft.client.resources.model.BakedModel;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.core.Direction;
 import xfacthd.framedblocks.api.model.FramedBlockModel;
+import xfacthd.framedblocks.api.util.Utils;
 import xfacthd.framedblocks.api.util.client.BakedQuadTransformer;
 import xfacthd.framedblocks.api.util.client.ModelUtils;
 
@@ -53,7 +54,7 @@ public class FramedWallSignModel extends FramedBlockModel
         else
         {
             BakedQuad sideQuad = ModelUtils.duplicateQuad(quad);
-            boolean dirPositive = dir.getAxisDirection() == Direction.AxisDirection.POSITIVE;
+            boolean dirPositive = Utils.isPositive(dir);
 
             float minXZ = dirPositive ? 0F : 14F/16F;
             float maxXZ = dirPositive ? 2F/16F : 1F;

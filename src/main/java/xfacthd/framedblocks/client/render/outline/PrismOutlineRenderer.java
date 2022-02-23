@@ -8,6 +8,7 @@ import net.minecraft.core.Direction;
 import net.minecraft.util.Mth;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
+import xfacthd.framedblocks.api.util.Utils;
 import xfacthd.framedblocks.api.util.client.OutlineRender;
 
 public class PrismOutlineRenderer implements OutlineRender
@@ -43,7 +44,7 @@ public class PrismOutlineRenderer implements OutlineRender
         Direction facing = state.getValue(BlockStateProperties.FACING);
         Direction.Axis axis = state.getValue(BlockStateProperties.AXIS);
 
-        if (facing.getAxis() == Direction.Axis.Y)
+        if (Utils.isY(facing))
         {
             if (facing == Direction.DOWN)
             {

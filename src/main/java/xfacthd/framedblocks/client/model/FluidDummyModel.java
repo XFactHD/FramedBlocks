@@ -17,6 +17,7 @@ import net.minecraft.world.level.material.Fluid;
 import net.minecraft.world.phys.Vec2;
 import net.minecraftforge.client.model.pipeline.BakedQuadBuilder;
 import net.minecraftforge.client.model.pipeline.IVertexConsumer;
+import xfacthd.framedblocks.api.util.Utils;
 
 import javax.annotation.Nullable;
 import java.util.*;
@@ -72,10 +73,10 @@ public class FluidDummyModel implements BakedModel
 
         for (Direction dir : Direction.values())
         {
-            boolean isX = dir.getAxis() == Direction.Axis.X;
-            boolean isY = dir.getAxis() == Direction.Axis.Y;
-            boolean isZ = dir.getAxis() == Direction.Axis.Z;
-            boolean isPos = dir.getAxisDirection() == Direction.AxisDirection.POSITIVE;
+            boolean isX = Utils.isX(dir);
+            boolean isY = Utils.isY(dir);
+            boolean isZ = Utils.isZ(dir);
+            boolean isPos = Utils.isPositive(dir);
 
             BakedQuadBuilder builder = new BakedQuadBuilder();
             builder.setQuadOrientation(dir);

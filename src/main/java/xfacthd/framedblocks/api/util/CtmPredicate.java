@@ -9,5 +9,5 @@ public interface CtmPredicate extends BiPredicate<BlockState, Direction>
 {
     CtmPredicate TRUE = (state, dir) -> true;
     CtmPredicate FALSE = (state, dir) -> false;
-    CtmPredicate Y_AXIS = (state, dir) -> dir.getAxis() == Direction.Axis.Y;
+    CtmPredicate Y_AXIS = (state, dir) -> Utils.isY(dir);
 }

@@ -71,7 +71,7 @@ public class FramedPrismBlock extends FramedBlock
         state = state.setValue(BlockStateProperties.FACING, face);
 
         Direction.Axis axis;
-        if (face.getAxis() == Direction.Axis.Y)
+        if (Utils.isY(face))
         {
             axis = context.getHorizontalDirection().getAxis();
         }
@@ -79,7 +79,7 @@ public class FramedPrismBlock extends FramedBlock
         {
             Vec3 subHit = Utils.fraction(context.getClickLocation());
 
-            double xz = (face.getAxis() == Direction.Axis.X ? subHit.z() : subHit.x()) - .5;
+            double xz = (Utils.isX(face) ? subHit.z() : subHit.x()) - .5;
             double y = subHit.y() - .5;
 
             if (Math.max(Math.abs(xz), Math.abs(y)) == Math.abs(xz))
@@ -133,7 +133,7 @@ public class FramedPrismBlock extends FramedBlock
                 continue;
             }
 
-            if (facing.getAxis() == Direction.Axis.Y)
+            if (Utils.isY(facing))
             {
                 builder.put(
                         state,

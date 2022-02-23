@@ -5,6 +5,7 @@ import net.minecraft.client.renderer.block.model.BakedQuad;
 import net.minecraft.client.resources.model.BakedModel;
 import net.minecraft.core.Direction;
 import net.minecraft.world.level.block.state.BlockState;
+import xfacthd.framedblocks.api.util.Utils;
 import xfacthd.framedblocks.api.util.client.BakedQuadTransformer;
 import xfacthd.framedblocks.api.util.client.ModelUtils;
 
@@ -45,7 +46,7 @@ public class FramedDiagonalFenceModel extends FramedFenceModel
     {
         if (active)
         {
-            if (quad.getDirection().getAxis() == Direction.Axis.Y)
+            if (Utils.isY(quad.getDirection()))
             {
                 BakedQuad topBotQuad = ModelUtils.duplicateQuad(quad);
                 if (BakedQuadTransformer.createTopBottomQuad(topBotQuad, dir.getOpposite(), 7F/16F) &&
@@ -64,7 +65,7 @@ public class FramedDiagonalFenceModel extends FramedFenceModel
             }
             else if (quad.getDirection() == dir.getClockWise() || quad.getDirection() == dir.getCounterClockWise())
             {
-                boolean neg = dir.getAxisDirection() == Direction.AxisDirection.NEGATIVE;
+                boolean neg = !Utils.isPositive(dir);
                 BakedQuad sideQuad = ModelUtils.duplicateQuad(quad);
                 if (BakedQuadTransformer.createSideQuad(sideQuad, neg ? 0F : 9F/16F, 6F/16F, neg ? 7F/16F : 1F, 9F/16F))
                 {

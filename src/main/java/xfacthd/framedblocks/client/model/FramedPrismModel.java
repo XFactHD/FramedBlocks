@@ -6,6 +6,7 @@ import net.minecraft.core.Direction;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import xfacthd.framedblocks.api.model.FramedBlockModel;
+import xfacthd.framedblocks.api.util.Utils;
 import xfacthd.framedblocks.api.util.client.*;
 import xfacthd.framedblocks.common.FBContent;
 
@@ -36,7 +37,7 @@ public class FramedPrismModel extends FramedBlockModel
     protected void transformQuad(Map<Direction, List<BakedQuad>> quadMap, BakedQuad quad)
     {
         Direction quadFace = quad.getDirection();
-        if (facing.getAxis() == Direction.Axis.Y && quadFace.getAxis() != axis && quadFace.getAxis() != facing.getAxis())
+        if (Utils.isY(facing) && quadFace.getAxis() != axis && quadFace.getAxis() != facing.getAxis())
         {
             BakedQuad slope = ModelUtils.duplicateQuad(quad);
             if (BakedQuadTransformer.createHorizontalSideQuad(slope, facing == Direction.DOWN, .5F))
@@ -45,7 +46,7 @@ public class FramedPrismModel extends FramedBlockModel
                 quadMap.get(null).add(slope);
             }
         }
-        else if (facing.getAxis() != Direction.Axis.Y && axis != Direction.Axis.Y && quadFace == facing)
+        else if (!Utils.isY(facing) && axis != Direction.Axis.Y && quadFace == facing)
         {
             BakedQuad slope = ModelUtils.duplicateQuad(quad);
             if (BakedQuadTransformer.createHorizontalSideQuad(slope, false, .5F))
@@ -61,7 +62,7 @@ public class FramedPrismModel extends FramedBlockModel
                 quadMap.get(null).add(slope);
             }
         }
-        else if (facing.getAxis() != Direction.Axis.Y && axis == Direction.Axis.Y && quadFace.getAxis() != axis && quadFace.getAxis() != facing.getAxis())
+        else if (!Utils.isY(facing) && axis == Direction.Axis.Y && quadFace.getAxis() != axis && quadFace.getAxis() != facing.getAxis())
         {
             BakedQuad slope = ModelUtils.duplicateQuad(quad);
             if (BakedQuadTransformer.createVerticalSideQuad(slope, facing, .5F))
@@ -73,7 +74,7 @@ public class FramedPrismModel extends FramedBlockModel
         else if (quadFace.getAxis() == axis)
         {
             TriangleDirection triDir;
-            if (facing.getAxis() == Direction.Axis.Y)
+            if (Utils.isY(facing))
             {
                 triDir = facing == Direction.UP ? TriangleDirection.UP : TriangleDirection.DOWN;
             }

@@ -6,6 +6,7 @@ import net.minecraft.core.Direction;
 import net.minecraft.world.level.block.state.BlockState;
 import xfacthd.framedblocks.api.model.FramedBlockModel;
 import xfacthd.framedblocks.api.util.FramedProperties;
+import xfacthd.framedblocks.api.util.Utils;
 import xfacthd.framedblocks.api.util.client.BakedQuadTransformer;
 import xfacthd.framedblocks.api.util.client.ModelUtils;
 import xfacthd.framedblocks.common.data.PropertyHolder;
@@ -60,7 +61,7 @@ public class FramedHalfStairsModel extends FramedBlockModel
                 }
             }
         }
-        else if (face.getAxis() != Direction.Axis.Y && face.getAxis() != dir.getAxis())
+        else if (!Utils.isY(face) && face.getAxis() != dir.getAxis())
         {
             BakedQuad copy = ModelUtils.duplicateQuad(quad);
             if (BakedQuadTransformer.createVerticalSideQuad(copy, dir.getOpposite(), .5F))

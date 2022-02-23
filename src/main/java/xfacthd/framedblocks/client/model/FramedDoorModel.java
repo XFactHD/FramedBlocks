@@ -6,6 +6,7 @@ import net.minecraft.core.Direction;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.*;
 import xfacthd.framedblocks.api.model.FramedBlockModel;
+import xfacthd.framedblocks.api.util.Utils;
 import xfacthd.framedblocks.api.util.client.BakedQuadTransformer;
 import xfacthd.framedblocks.api.util.client.ModelUtils;
 
@@ -31,9 +32,9 @@ public class FramedDoorModel extends FramedBlockModel
     {
         Direction faceDir = dir;
         if (open) { faceDir = hingeRight ? faceDir.getCounterClockWise() : faceDir.getClockWise(); }
-        boolean facePositive = faceDir.getAxisDirection() == Direction.AxisDirection.POSITIVE;
+        boolean facePositive = Utils.isPositive(faceDir);
 
-        if (quad.getDirection().getAxis() == Direction.Axis.Y)
+        if (Utils.isY(quad.getDirection()))
         {
             BakedQuad topBotQuad = ModelUtils.duplicateQuad(quad);
             if (BakedQuadTransformer.createTopBottomQuad(topBotQuad, faceDir, 3F/16F))

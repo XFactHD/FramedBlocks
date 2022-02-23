@@ -17,6 +17,7 @@ import net.minecraft.world.phys.shapes.*;
 import org.jetbrains.annotations.Nullable;
 import xfacthd.framedblocks.api.block.IFramedBlock;
 import xfacthd.framedblocks.api.util.CtmPredicate;
+import xfacthd.framedblocks.api.util.Utils;
 import xfacthd.framedblocks.common.FBContent;
 import xfacthd.framedblocks.common.blockentity.FramedCollapsibleBlockEntity;
 import xfacthd.framedblocks.common.data.*;
@@ -102,7 +103,7 @@ public class FramedCollapsibleBlock extends FramedBlock
             Direction face = Direction.from3DDataValue(packedData >> 20);
             byte[] offsets = FramedCollapsibleBlockEntity.unpackOffsets(packedData & 0xFFFFF);
 
-            boolean positive = face.getAxisDirection() == Direction.AxisDirection.POSITIVE;
+            boolean positive = Utils.isPositive(face);
             boolean flipX = face == Direction.NORTH || face == Direction.EAST;
             boolean flipZ = face != Direction.UP;
 

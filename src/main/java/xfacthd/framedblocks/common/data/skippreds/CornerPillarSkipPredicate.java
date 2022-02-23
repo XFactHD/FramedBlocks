@@ -5,11 +5,10 @@ import net.minecraft.core.Direction;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.*;
-import xfacthd.framedblocks.api.util.FramedProperties;
+import xfacthd.framedblocks.api.util.*;
 import xfacthd.framedblocks.common.FBContent;
 import xfacthd.framedblocks.common.data.PropertyHolder;
 import xfacthd.framedblocks.common.data.StairsType;
-import xfacthd.framedblocks.api.util.SideSkipPredicate;
 
 public class CornerPillarSkipPredicate implements SideSkipPredicate
 {
@@ -38,7 +37,7 @@ public class CornerPillarSkipPredicate implements SideSkipPredicate
             return testAgainstDoublePanel(level, pos, dir, adjState, side);
         }
 
-        if (adjState.getBlock() == FBContent.blockFramedStairs.get() && side.getAxis() == Direction.Axis.Y)
+        if (adjState.getBlock() == FBContent.blockFramedStairs.get() && Utils.isY(side))
         {
             return testAgainstStairs(level, pos, dir, adjState, side);
         }
@@ -137,7 +136,7 @@ public class CornerPillarSkipPredicate implements SideSkipPredicate
                 return SideSkipPredicate.compareState(level, pos, side);
             }
         }
-        else if (side.getAxis() == Direction.Axis.Y)
+        else if (Utils.isY(side))
         {
             if ((side == Direction.DOWN) == adjType.isTop() && adjDir == dir)
             {
@@ -153,7 +152,7 @@ public class CornerPillarSkipPredicate implements SideSkipPredicate
         boolean adjTop = adjState.getValue(FramedProperties.TOP);
         boolean adjRight = adjState.getValue(PropertyHolder.RIGHT);
 
-        if (side.getAxis() == Direction.Axis.Y && (side == Direction.UP) == adjTop)
+        if (Utils.isY(side) && (side == Direction.UP) == adjTop)
         {
             if ((adjRight && adjDir == dir.getCounterClockWise()) || (!adjRight && adjDir == dir))
             {

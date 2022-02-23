@@ -6,6 +6,7 @@ import net.minecraft.client.resources.model.BakedModel;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.core.Direction;
 import xfacthd.framedblocks.api.model.FramedBlockModel;
+import xfacthd.framedblocks.api.util.Utils;
 import xfacthd.framedblocks.api.util.client.BakedQuadTransformer;
 import xfacthd.framedblocks.api.util.client.ModelUtils;
 
@@ -30,7 +31,7 @@ public class FramedFenceGateModel extends FramedBlockModel
     protected void transformQuad(Map<Direction, List<BakedQuad>> quadMap, BakedQuad quad)
     {
         float yOff = inWall ? 3F/16F : 0F;
-        if (quad.getDirection().getAxis() == Direction.Axis.Y)
+        if (Utils.isY(quad.getDirection()))
         {
             BakedQuad topBotQuad = ModelUtils.duplicateQuad(quad);
             if (BakedQuadTransformer.createTopBottomQuad(topBotQuad, dir.getClockWise(), 2F/16F) &&
@@ -148,7 +149,7 @@ public class FramedFenceGateModel extends FramedBlockModel
                 }
             }
         }
-        else if (quad.getDirection().getAxis() == Direction.Axis.Y)
+        else if (Utils.isY(quad.getDirection()))
         {
             BakedQuad topBotQuad = ModelUtils.duplicateQuad(quad);
             if (BakedQuadTransformer.createTopBottomQuad(topBotQuad, dir, 9F/16F) &&
@@ -234,7 +235,7 @@ public class FramedFenceGateModel extends FramedBlockModel
                 }
             }
         }
-        else if (quad.getDirection().getAxis() == Direction.Axis.Y)
+        else if (Utils.isY(quad.getDirection()))
         {
             BakedQuad topBotQuad = ModelUtils.duplicateQuad(quad);
             if (BakedQuadTransformer.createTopBottomQuad(topBotQuad, dir, 15F/16F) &&

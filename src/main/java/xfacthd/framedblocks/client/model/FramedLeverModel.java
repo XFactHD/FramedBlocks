@@ -13,6 +13,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.client.model.data.IModelData;
 import xfacthd.framedblocks.FramedBlocks;
 import xfacthd.framedblocks.api.model.FramedBlockModel;
+import xfacthd.framedblocks.api.util.Utils;
 import xfacthd.framedblocks.api.util.client.BakedQuadTransformer;
 import xfacthd.framedblocks.api.util.client.ModelUtils;
 
@@ -58,9 +59,9 @@ public class FramedLeverModel extends FramedBlockModel
         if (face == AttachFace.CEILING) { facing = Direction.DOWN; }
         else if (face == AttachFace.FLOOR) { facing = Direction.UP; }
 
-        if (facing.getAxis() == Direction.Axis.Y)
+        if (Utils.isY(facing))
         {
-            boolean rotX = dir.getAxis() == Direction.Axis.X;
+            boolean rotX = Utils.isX(dir);
             float minX = rotX ? 4F/16F : 5F/16F;
             float minZ = rotX ? 5F/16F : 4F/16F;
             float maxX = rotX ? 12F/16F : 11F/16F;
@@ -84,7 +85,7 @@ public class FramedLeverModel extends FramedBlockModel
             }
             else
             {
-                boolean smallSide = rotX == (quad.getDirection().getAxis() == Direction.Axis.X);
+                boolean smallSide = rotX == Utils.isX(quad.getDirection());
                 float minXZ = smallSide ? 5F/16F : 4F/16F;
                 float maxXZ = smallSide ? 11F/16F : 12F/16F;
                 float minY = (facing == Direction.DOWN) ? 13F/16F : 0F;
@@ -118,15 +119,15 @@ public class FramedLeverModel extends FramedBlockModel
             }
             else
             {
-                boolean xAxis = facing.getAxis() == Direction.Axis.X;
-                boolean negative = facing.getAxisDirection() == Direction.AxisDirection.NEGATIVE;
+                boolean xAxis = Utils.isX(facing);
+                boolean negative = !Utils.isPositive(facing);
 
                 float minX = xAxis ? (negative ? 13F/16F : 0F) :  5F/16F;
                 float maxX = xAxis ? (negative ? 1F :  3F/16F) : 11F/16F;
                 float minZ = xAxis ?  5F/16F : (negative ? 13F/16F : 0F);
                 float maxZ = xAxis ? 11F/16F : (negative ? 1F :  3F/16F);
 
-                if (quad.getDirection().getAxis() == Direction.Axis.Y)
+                if (Utils.isY(quad.getDirection()))
                 {
                     BakedQuad topBotQuad = ModelUtils.duplicateQuad(quad);
                     if (BakedQuadTransformer.createTopBottomQuad(topBotQuad, minX, minZ, maxX, maxZ))

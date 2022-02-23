@@ -7,6 +7,7 @@ import net.minecraft.core.Direction;
 import net.minecraft.util.Mth;
 import com.mojang.math.Vector3f;
 import net.minecraftforge.client.model.pipeline.LightUtil;
+import xfacthd.framedblocks.api.util.Utils;
 
 import java.util.Arrays;
 
@@ -178,7 +179,7 @@ public class ModelUtils
             {
                 invert = !mirrored;
             }
-            else if ((quadDir.getAxisDirection() == Direction.AxisDirection.POSITIVE) != vAxis)
+            else if (Utils.isPositive(quadDir) != vAxis)
             {
                 invert = !invert;
             }

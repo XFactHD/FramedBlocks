@@ -6,6 +6,7 @@ import net.minecraft.client.resources.model.BakedModel;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.core.Direction;
 import xfacthd.framedblocks.api.model.FramedBlockModel;
+import xfacthd.framedblocks.api.util.Utils;
 import xfacthd.framedblocks.api.util.client.BakedQuadTransformer;
 import xfacthd.framedblocks.api.util.client.ModelUtils;
 
@@ -40,7 +41,7 @@ public class FramedSignModel extends FramedBlockModel
                 quadMap.get(null).add(faceQuad);
             }
         }
-        else if (quad.getDirection().getAxis() == Direction.Axis.Y)
+        else if (Utils.isY(quad.getDirection()))
         {
             BakedQuad topBotQuad = ModelUtils.duplicateQuad(quad);
             if (BakedQuadTransformer.createTopBottomQuad(topBotQuad, dir, 9F/16F) &&
@@ -64,7 +65,7 @@ public class FramedSignModel extends FramedBlockModel
             }
         }
 
-        if (quad.getDirection().getAxis() != Direction.Axis.Y)
+        if (!Utils.isY(quad.getDirection()))
         {
             BakedQuad sideQuad = ModelUtils.duplicateQuad(quad);
             if (BakedQuadTransformer.createSideQuad(sideQuad, 7F/16F, 0F, 9F/16F, 9.75F/16F))

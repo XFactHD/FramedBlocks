@@ -6,6 +6,7 @@ import net.minecraft.world.level.block.Blocks;
 import net.minecraft.core.Direction;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.util.Mth;
+import xfacthd.framedblocks.api.util.Utils;
 import xfacthd.framedblocks.common.FBContent;
 import xfacthd.framedblocks.common.util.DoubleSoundMode;
 
@@ -36,7 +37,7 @@ public class FramedDoubleSlabBlockEntity extends FramedDoubleBlockEntity
     @Override
     public boolean isSolidSide(Direction side)
     {
-        if (side.getAxis() == Direction.Axis.Y)
+        if (Utils.isY(side))
         {
             //noinspection ConstantConditions
             return getCamoState(side).isSolidRender(level, worldPosition);

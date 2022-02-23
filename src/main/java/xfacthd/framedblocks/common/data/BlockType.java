@@ -144,7 +144,7 @@ public enum BlockType implements IBlockType
     {
         if (!(other instanceof BlockType type))
         {
-            return 0;
+            return 1;
         }
         return compareTo(type);
     }

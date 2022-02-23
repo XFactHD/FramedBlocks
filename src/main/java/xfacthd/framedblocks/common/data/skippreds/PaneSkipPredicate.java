@@ -6,6 +6,7 @@ import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import xfacthd.framedblocks.api.util.SideSkipPredicate;
+import xfacthd.framedblocks.api.util.Utils;
 
 public class PaneSkipPredicate implements SideSkipPredicate
 {
@@ -24,7 +25,7 @@ public class PaneSkipPredicate implements SideSkipPredicate
         boolean adjSouth = adjState.getValue(BlockStateProperties.SOUTH);
         boolean adjWest = adjState.getValue(BlockStateProperties.WEST);
 
-        if (side.getAxis() == Direction.Axis.Y && north == adjNorth && east == adjEast && south == adjSouth && west == adjWest)
+        if (Utils.isY(side) && north == adjNorth && east == adjEast && south == adjSouth && west == adjWest)
         {
             return SideSkipPredicate.compareState(level, pos, side);
         }

@@ -35,25 +35,25 @@ public class FramedDoubleCornerBlockEntity extends FramedDoubleBlockEntity
 
             if (side == facing.getOpposite()) { return true; }
 
-            if (side == Direction.UP || side == Direction.DOWN)
+            if (Utils.isY(side))
             {
                 boolean secondary;
                 if (type.isRight())
                 {
-                    secondary = facing.getAxis() == Direction.Axis.X ? vec.x() >= (1D - vec.z()) : vec.z() >= vec.x();
+                    secondary = Utils.isX(facing) ? vec.x() >= (1D - vec.z()) : vec.z() >= vec.x();
                 }
                 else
                 {
-                   secondary = facing.getAxis() == Direction.Axis.X ? vec.x() >= vec.z() : vec.z() >= (1D - vec.x());
+                   secondary = Utils.isX(facing) ? vec.x() >= vec.z() : vec.z() >= (1D - vec.x());
                 }
 
-                if (facing.getAxisDirection() == Direction.AxisDirection.POSITIVE) { secondary = !secondary; }
+                if (Utils.isPositive(facing)) { secondary = !secondary; }
                 return secondary;
             }
             else if (side == facing.getClockWise() || side == facing.getCounterClockWise())
             {
-                double hor = facing.getAxis() == Direction.Axis.X ? vec.x() : vec.z();
-                if (facing.getAxisDirection() == Direction.AxisDirection.NEGATIVE)
+                double hor = Utils.isX(facing) ? vec.x() : vec.z();
+                if (!Utils.isPositive(facing))
                 {
                     hor = 1D - hor;
                 }
@@ -78,8 +78,8 @@ public class FramedDoubleCornerBlockEntity extends FramedDoubleBlockEntity
 
             if (side == facing.getClockWise())
             {
-                double hor = facing.getAxis() == Direction.Axis.X ? vec.x() : vec.z();
-                if (facing.getAxisDirection() == Direction.AxisDirection.NEGATIVE)
+                double hor = Utils.isX(facing) ? vec.x() : vec.z();
+                if (!Utils.isPositive(facing))
                 {
                     hor = 1D - hor;
                 }
@@ -88,8 +88,8 @@ public class FramedDoubleCornerBlockEntity extends FramedDoubleBlockEntity
             else if (side == facing.getOpposite())
             {
                 Direction dir = facing.getCounterClockWise();
-                double hor = dir.getAxis() == Direction.Axis.X ? vec.x() : vec.z();
-                if (dir.getAxisDirection() == Direction.AxisDirection.NEGATIVE)
+                double hor = Utils.isX(dir) ? vec.x() : vec.z();
+                if (!Utils.isPositive(dir))
                 {
                     hor = 1D - hor;
                 }
@@ -103,8 +103,8 @@ public class FramedDoubleCornerBlockEntity extends FramedDoubleBlockEntity
 
             if (side == facing.getClockWise())
             {
-                double hor = facing.getAxis() == Direction.Axis.X ? vec.x() : vec.z();
-                if (facing.getAxisDirection() == Direction.AxisDirection.NEGATIVE)
+                double hor = Utils.isX(facing) ? vec.x() : vec.z();
+                if (!Utils.isPositive(facing))
                 {
                     hor = 1D - hor;
                 }
@@ -113,8 +113,8 @@ public class FramedDoubleCornerBlockEntity extends FramedDoubleBlockEntity
             else if (side == facing.getOpposite())
             {
                 Direction dir = facing.getCounterClockWise();
-                double hor = dir.getAxis() == Direction.Axis.X ? vec.x() : vec.z();
-                if (dir.getAxisDirection() == Direction.AxisDirection.NEGATIVE)
+                double hor = Utils.isX(dir) ? vec.x() : vec.z();
+                if (!Utils.isPositive(dir))
                 {
                     hor = 1D - hor;
                 }
@@ -192,7 +192,7 @@ public class FramedDoubleCornerBlockEntity extends FramedDoubleBlockEntity
                 return getCamoState(side).isSolidRender(level, worldPosition);
             }
         }
-        else if ((side == dir || side == dir.getCounterClockWise() || side.getAxis() == Direction.Axis.Y))
+        else if (side == dir || side == dir.getCounterClockWise() || Utils.isY(side))
         {
             //noinspection ConstantConditions
             return getCamoState(side).isSolidRender(level, worldPosition);
