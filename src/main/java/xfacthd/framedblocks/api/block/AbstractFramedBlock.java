@@ -13,6 +13,7 @@ import net.minecraft.world.level.block.*;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
+import net.minecraft.world.level.block.state.properties.Property;
 import net.minecraft.world.level.material.*;
 import net.minecraft.world.level.storage.loot.LootContext;
 import net.minecraft.world.phys.*;
@@ -192,20 +193,25 @@ public abstract class AbstractFramedBlock extends Block implements IFramedBlock,
 
     protected static BlockState withTop(BlockState state, Direction side, Vec3 hitVec)
     {
+        return withTop(state, FramedProperties.TOP, side, hitVec);
+    }
+
+    protected static BlockState withTop(BlockState state, Property<Boolean> prop, Direction side, Vec3 hitVec)
+    {
         if (side == Direction.DOWN)
         {
-            state = state.setValue(FramedProperties.TOP, true);
+            state = state.setValue(prop, true);
         }
         else if (side == Direction.UP)
         {
-            state = state.setValue(FramedProperties.TOP, false);
+            state = state.setValue(prop, false);
         }
         else
         {
             double y = hitVec.y;
             y -= Math.floor(y);
 
-            state = state.setValue(FramedProperties.TOP, y >= .5D);
+            state = state.setValue(prop, y >= .5D);
         }
         return state;
     }

@@ -65,7 +65,11 @@ public enum BlockType implements IBlockType
     FRAMED_BOUNCY_CUBE            ( true, false, false, false,  true, false, CtmPredicate.TRUE, SideSkipPredicate.CTM, Shapes.block()),
     FRAMED_SECRET_STORAGE         ( true, false,  true, false,  true, false, CtmPredicate.TRUE, SideSkipPredicate.CTM, Shapes.block()),
     FRAMED_PRISM                  ( true,  true, false,  true,  true,  true, FramedPrismBlock.CTM_PREDICATE, FramedPrismBlock.SKIP_PREDICATE, FramedPrismBlock::generateShapes),
-    FRAMED_SLOPED_PRISM           ( true,  true, false,  true,  true,  true, FramedSlopedPrismBlock.CTM_PREDICATE, FramedSlopedPrismBlock.SKIP_PREDICATE, FramedSlopedPrismBlock::generateShapes);
+    FRAMED_SLOPED_PRISM           ( true,  true, false,  true,  true,  true, FramedSlopedPrismBlock.CTM_PREDICATE, FramedSlopedPrismBlock.SKIP_PREDICATE, FramedSlopedPrismBlock::generateShapes),
+    FRAMED_SLOPE_SLAB             ( true,  true, false,  true,  true,  true, FramedSlopeSlabBlock.CTM_PREDICATE, new SlopeSlabSkipPredicate(), FramedSlopeSlabBlock::generateShapes),
+    FRAMED_ELEVATED_SLOPE_SLAB    ( true,  true,  true,  true,  true,  true, FramedElevatedSlopeSlabBlock.CTM_PREDICATE, new ElevatedSlopeSlabSkipPredicate(), FramedElevatedSlopeSlabBlock::generateShapes),
+    FRAMED_DOUBLE_SLOPE_SLAB      ( true, false,  true,  true,  true,  true, FramedDoubleSlopeSlabBlock.CTM_PREDICATE, SideSkipPredicate.FALSE), //Side skip is handled by the single slope slab
+    FRAMED_INV_DOUBLE_SLOPE_SLAB  ( true,  true,  true,  true,  true,  true, CtmPredicate.FALSE, SideSkipPredicate.FALSE, FramedInverseDoubleSlopeSlabBlock::generateShapes); //Side skip is handled by the single slope slab
 
     private final String name = toString().toLowerCase(Locale.ROOT);
     private final boolean canOcclude;

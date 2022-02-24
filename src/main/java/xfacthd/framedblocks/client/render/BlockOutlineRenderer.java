@@ -14,6 +14,7 @@ import net.minecraftforge.fml.common.Mod;
 import xfacthd.framedblocks.FramedBlocks;
 import xfacthd.framedblocks.api.block.IFramedBlock;
 import xfacthd.framedblocks.api.type.IBlockType;
+import xfacthd.framedblocks.api.util.FramedProperties;
 import xfacthd.framedblocks.api.util.client.OutlineRender;
 import xfacthd.framedblocks.client.util.ClientConfig;
 import xfacthd.framedblocks.common.data.*;
@@ -340,5 +341,101 @@ public class BlockOutlineRenderer
         OutlineRender.drawLine(builder, mstack, 0, 0, 0, .5, .5, .5);
         OutlineRender.drawLine(builder, mstack, .5, .5, .5, 0, 1, 1);
         OutlineRender.drawLine(builder, mstack, 1, 1, 0, .5, .5, .5);
+    }
+
+    public static void drawSlopeSlabBox(BlockState state, PoseStack pstack, VertexConsumer builder)
+    {
+        boolean top = state.getValue(FramedProperties.TOP);
+        boolean topHalf = state.getValue(PropertyHolder.TOP_HALF);
+
+        if (top)
+        {
+            pstack.translate(.5, .5, .5);
+            pstack.scale(1, -1, 1);
+            pstack.translate(-.5, -.5, -.5);
+        }
+
+        if (topHalf != top)
+        {
+            pstack.translate(0, .5, 0);
+        }
+
+        //Back edges
+        OutlineRender.drawLine(builder, pstack, 0, 0, 1, 0, .5, 1);
+        OutlineRender.drawLine(builder, pstack, 1, 0, 1, 1, .5, 1);
+
+        //Bottom face
+        OutlineRender.drawLine(builder, pstack, 0, 0, 0, 0, 0, 1);
+        OutlineRender.drawLine(builder, pstack, 0, 0, 0, 1, 0, 0);
+        OutlineRender.drawLine(builder, pstack, 1, 0, 0, 1, 0, 1);
+        OutlineRender.drawLine(builder, pstack, 0, 0, 1, 1, 0, 1);
+
+        //Top edge
+        OutlineRender.drawLine(builder, pstack, 0, .5, 1, 1, .5, 1);
+
+        //Slope
+        OutlineRender.drawLine(builder, pstack, 0, 0, 0, 0, .5, 1);
+        OutlineRender.drawLine(builder, pstack, 1, 0, 0, 1, .5, 1);
+    }
+
+    public static void drawElevatedSlopeSlabBox(BlockState state, PoseStack pstack, VertexConsumer builder)
+    {
+        if (state.getValue(FramedProperties.TOP))
+        {
+            pstack.translate(.5, .5, .5);
+            pstack.scale(1, -1, 1);
+            pstack.translate(-.5, -.5, -.5);
+        }
+
+        //Back edges
+        OutlineRender.drawLine(builder, pstack, 0, 0, 1, 0, 1, 1);
+        OutlineRender.drawLine(builder, pstack, 1, 0, 1, 1, 1, 1);
+
+        //Front edges
+        OutlineRender.drawLine(builder, pstack, 0, 0, 0, 0, .5, 0);
+        OutlineRender.drawLine(builder, pstack, 1, 0, 0, 1, .5, 0);
+        OutlineRender.drawLine(builder, pstack, 0, .5, 0, 1, .5, 0);
+
+        //Bottom face
+        OutlineRender.drawLine(builder, pstack, 0, 0, 0, 0, 0, 1);
+        OutlineRender.drawLine(builder, pstack, 0, 0, 0, 1, 0, 0);
+        OutlineRender.drawLine(builder, pstack, 1, 0, 0, 1, 0, 1);
+        OutlineRender.drawLine(builder, pstack, 0, 0, 1, 1, 0, 1);
+
+        //Top edge
+        OutlineRender.drawLine(builder, pstack, 0, 1, 1, 1, 1, 1);
+
+        //Slope
+        OutlineRender.drawLine(builder, pstack, 0, .5, 0, 0, 1, 1);
+        OutlineRender.drawLine(builder, pstack, 1, .5, 0, 1, 1, 1);
+    }
+
+    public static void drawInverseDoubleSlopeSlabBox(@SuppressWarnings("unused") BlockState state, PoseStack pstack, VertexConsumer builder)
+    {
+        //Back vertical edges
+        OutlineRender.drawLine(builder, pstack, 0, .5, 1, 0, 1, 1);
+        OutlineRender.drawLine(builder, pstack, 1, .5, 1, 1, 1, 1);
+
+        //Center horizontal edges
+        OutlineRender.drawLine(builder, pstack, 0, .5, 0, 1, .5, 0);
+        OutlineRender.drawLine(builder, pstack, 0, .5, 1, 1, .5, 1);
+
+        //Top edge
+        OutlineRender.drawLine(builder, pstack, 0, 1, 1, 1, 1, 1);
+
+        //Top slope
+        OutlineRender.drawLine(builder, pstack, 0, .5, 0, 0, 1, 1);
+        OutlineRender.drawLine(builder, pstack, 1, .5, 0, 1, 1, 1);
+
+        //Bottom edge
+        OutlineRender.drawLine(builder, pstack, 0, 0, 0, 1, 0, 0);
+
+        //Bottom slope
+        OutlineRender.drawLine(builder, pstack, 0, 0, 0, 0, .5, 1);
+        OutlineRender.drawLine(builder, pstack, 1, 0, 0, 1, .5, 1);
+
+        //Front vertical edges
+        OutlineRender.drawLine(builder, pstack, 0, 0, 0, 0, .5, 0);
+        OutlineRender.drawLine(builder, pstack, 1, 0, 0, 1, .5, 0);
     }
 }

@@ -52,6 +52,10 @@
     "framedblocks:framed_bouncy_cube",
     "framedblocks:framed_secret_storage",
     "framedblocks:framed_prism",
-    "framedblocks:framed_sloped_prism"
+    "framedblocks:framed_sloped_prism",
+    "framedblocks:framed_slope_slab",
+    "framedblocks:framed_elevated_slope_slab",
+    "framedblocks:framed_double_slope_slab",
+    "framedblocks:framed_inv_double_slope_slab"
   ]
 }

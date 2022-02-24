@@ -1,0 +1,11 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "ingredients": [
+    {
+      "item": "framedblocks:framed_inv_double_slope_slab"
+    }
+  ],
+  "result": {
+    "item": "framedblocks:framed_double_slope_slab"
+  }
+}

@@ -54,6 +54,22 @@ public class SlabEdgeSkipPredicate implements SideSkipPredicate
         {
             return testAgainstHalfStairs(level, pos, dir, top, adjState, side);
         }
+        else if (adjState.is(FBContent.blockFramedSlopeSlab.get()))
+        {
+            return testAgainstSlopeSlab(level, pos, dir, top, adjState, side);
+        }
+        else if (adjState.is(FBContent.blockFramedElevatedSlopeSlab.get()))
+        {
+            return testAgainstElevatedSlopeSlab(level, pos, dir, top, adjState, side);
+        }
+        else if (adjState.is(FBContent.blockFramedDoubleSlopeSlab.get()))
+        {
+            return testAgainstDoubleSlopeSlab(level, pos, dir, top, adjState, side);
+        }
+        else if (adjState.is(FBContent.blockFramedInverseDoubleSlopeSlab.get()))
+        {
+            return testAgainstInverseDoubleSlopeSlab(level, pos, dir, top, adjState, side);
+        }
 
         return false;
     }
@@ -183,5 +199,44 @@ public class SlabEdgeSkipPredicate implements SideSkipPredicate
         }
 
         return false;
+    }
+
+    private static boolean testAgainstSlopeSlab(BlockGetter level, BlockPos pos, Direction dir, boolean top, BlockState adjState, Direction side)
+    {
+        Direction adjDir = adjState.getValue(FramedProperties.FACING_HOR);
+        boolean adjTopHalf = adjState.getValue(PropertyHolder.TOP_HALF);
+
+        if (side != dir) { return false; }
+
+        return adjDir == dir.getOpposite() && adjTopHalf == top && SideSkipPredicate.compareState(level, pos, side);
+    }
+
+    private static boolean testAgainstElevatedSlopeSlab(BlockGetter level, BlockPos pos, Direction dir, boolean top, BlockState adjState, Direction side)
+    {
+        Direction adjDir = adjState.getValue(FramedProperties.FACING_HOR);
+        boolean adjTop = adjState.getValue(FramedProperties.TOP);
+
+        if (side != dir) { return false; }
+
+        return adjDir == dir && adjTop == top && SideSkipPredicate.compareState(level, pos, side);
+    }
+
+    private static boolean testAgainstDoubleSlopeSlab(BlockGetter level, BlockPos pos, Direction dir, boolean top, BlockState adjState, Direction side)
+    {
+        Direction adjDir = adjState.getValue(FramedProperties.FACING_HOR);
+        boolean adjTopHalf = adjState.getValue(PropertyHolder.TOP_HALF);
+
+        if (side != dir) { return false; }
+
+        return (adjDir == dir || adjDir == dir.getOpposite()) && adjTopHalf == top && SideSkipPredicate.compareState(level, pos, side);
+    }
+
+    private static boolean testAgainstInverseDoubleSlopeSlab(BlockGetter level, BlockPos pos, Direction dir, boolean top, BlockState adjState, Direction side)
+    {
+        Direction adjDir = adjState.getValue(FramedProperties.FACING_HOR);
+
+        if (side != dir) { return false; }
+
+        return ((adjDir == dir && !top) || (adjDir == dir.getOpposite() && top)) && SideSkipPredicate.compareState(level, pos, side);
     }
 }

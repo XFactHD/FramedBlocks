@@ -1,0 +1,18 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "S",
+    "F"
+  ],
+  "key": {
+    "S": {
+      "item": "framedblocks:framed_slope_slab"
+    },
+    "F": {
+      "item": "framedblocks:framed_slab"
+    }
+  },
+  "result": {
+    "item": "framedblocks:framed_elevated_slope_slab"
+  }
+}
