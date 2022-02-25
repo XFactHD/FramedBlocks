@@ -9,8 +9,7 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.phys.Vec3;
-import net.minecraft.world.phys.shapes.Shapes;
-import net.minecraft.world.phys.shapes.VoxelShape;
+import net.minecraft.world.phys.shapes.*;
 import xfacthd.framedblocks.api.util.*;
 import xfacthd.framedblocks.common.data.*;
 
@@ -88,6 +87,42 @@ public class FramedCornerSlopeBlock extends FramedBlock
 
     public static ImmutableMap<BlockState, VoxelShape> generateCornerShapes(ImmutableList<BlockState> states)
     {
+        VoxelShape shapeTop = Shapes.join(
+                FramedSlopeBlock.SHAPE_TOP,
+                Utils.rotateShape(Direction.NORTH, Direction.WEST, FramedSlopeBlock.SHAPE_TOP),
+                BooleanOp.AND
+        );
+
+        VoxelShape shapeBottom = Shapes.join(
+                FramedSlopeBlock.SHAPE_BOTTOM,
+                Utils.rotateShape(Direction.NORTH, Direction.WEST, FramedSlopeBlock.SHAPE_BOTTOM),
+                BooleanOp.AND
+        );
+
+        VoxelShape shapeBottomLeft = Shapes.join(
+                FramedSlopeBlock.SHAPE_BOTTOM,
+                FramedSlopeBlock.SHAPE_HORIZONTAL,
+                BooleanOp.AND
+        );
+
+        VoxelShape shapeBottomRight = Shapes.join(
+                FramedSlopeBlock.SHAPE_BOTTOM,
+                Utils.rotateShape(Direction.NORTH, Direction.EAST, FramedSlopeBlock.SHAPE_HORIZONTAL),
+                BooleanOp.AND
+        );
+
+        VoxelShape shapeTopLeft = Shapes.join(
+                FramedSlopeBlock.SHAPE_TOP,
+                FramedSlopeBlock.SHAPE_HORIZONTAL,
+                BooleanOp.AND
+        );
+
+        VoxelShape shapeTopRight = Shapes.join(
+                FramedSlopeBlock.SHAPE_TOP,
+                Utils.rotateShape(Direction.NORTH, Direction.EAST, FramedSlopeBlock.SHAPE_HORIZONTAL),
+                BooleanOp.AND
+        );
+
         ImmutableMap.Builder<BlockState, VoxelShape> builder = ImmutableMap.builder();
 
         for (BlockState state : states)
@@ -97,34 +132,6 @@ public class FramedCornerSlopeBlock extends FramedBlock
 
             if (type.isHorizontal())
             {
-                VoxelShape shapeBottomLeft = Shapes.or(
-                        box(0, 0, 0,  4,  4, 16),
-                        box(0, 0, 0,  8,  8, 12),
-                        box(0, 0, 0, 12, 12,  8),
-                        box(0, 0, 0, 16, 16,  4)
-                ).optimize();
-
-                VoxelShape shapeBottomRight = Shapes.or(
-                        box( 0, 0, 0, 16, 16,  4),
-                        box( 4, 0, 0, 16, 12,  8),
-                        box( 8, 0, 0, 16,  8, 12),
-                        box(12, 0, 0, 16,  4, 16)
-                ).optimize();
-
-                VoxelShape shapeTopLeft = Shapes.or(
-                        box(0,  0, 0, 16, 16,  4),
-                        box(0,  4, 0, 12, 16,  8),
-                        box(0,  8, 0,  8, 16, 12),
-                        box(0, 12, 0,  4, 16, 16)
-                ).optimize();
-
-                VoxelShape shapeTopRight = Shapes.or(
-                        box( 0,  0, 0, 16, 16,  4),
-                        box( 4,  4, 0, 16, 16,  8),
-                        box( 8,  8, 0, 16, 16, 12),
-                        box(12, 12, 0, 16, 16, 16)
-                ).optimize();
-
                 VoxelShape shape = switch (type)
                 {
                     case HORIZONTAL_BOTTOM_LEFT -> shapeBottomLeft;
@@ -135,27 +142,9 @@ public class FramedCornerSlopeBlock extends FramedBlock
                 };
                 builder.put(state, Utils.rotateShape(Direction.NORTH, dir, shape));
             }
-            else if (type.isTop())
-            {
-                VoxelShape shapeTop = Shapes.or(
-                        box(0,  0, 0,  4,  4,  4),
-                        box(0,  4, 0,  8,  8,  8),
-                        box(0,  8, 0, 12, 12, 12),
-                        box(0, 12, 0, 16, 16, 16)
-                ).optimize();
-
-                builder.put(state, Utils.rotateShape(Direction.NORTH, dir, shapeTop));
-            }
             else
             {
-                VoxelShape shapeBottom = Shapes.or(
-                        box(0,  0, 0, 16,  4, 16),
-                        box(0,  4, 0, 12,  8, 12),
-                        box(0,  8, 0,  8, 12,  8),
-                        box(0, 12, 0,  4, 16,  4)
-                ).optimize();
-
-                builder.put(state, Utils.rotateShape(Direction.NORTH, dir, shapeBottom));
+                builder.put(state, Utils.rotateShape(Direction.NORTH, dir, type.isTop() ? shapeTop : shapeBottom));
             }
         }
 
@@ -164,6 +153,36 @@ public class FramedCornerSlopeBlock extends FramedBlock
 
     public static ImmutableMap<BlockState, VoxelShape> generateInnerCornerShapes(ImmutableList<BlockState> states)
     {
+        VoxelShape shapeTop = Shapes.or(
+                FramedSlopeBlock.SHAPE_TOP,
+                Utils.rotateShape(Direction.NORTH, Direction.WEST, FramedSlopeBlock.SHAPE_TOP)
+        );
+
+        VoxelShape shapeBottom = Shapes.or(
+                FramedSlopeBlock.SHAPE_BOTTOM,
+                Utils.rotateShape(Direction.NORTH, Direction.WEST, FramedSlopeBlock.SHAPE_BOTTOM)
+        );
+
+        VoxelShape shapeBottomLeft = Shapes.or(
+                FramedSlopeBlock.SHAPE_BOTTOM,
+                FramedSlopeBlock.SHAPE_HORIZONTAL
+        );
+
+        VoxelShape shapeBottomRight = Shapes.or(
+                FramedSlopeBlock.SHAPE_BOTTOM,
+                Utils.rotateShape(Direction.NORTH, Direction.EAST, FramedSlopeBlock.SHAPE_HORIZONTAL)
+        );
+
+        VoxelShape shapeTopLeft = Shapes.or(
+                FramedSlopeBlock.SHAPE_TOP,
+                FramedSlopeBlock.SHAPE_HORIZONTAL
+        );
+
+        VoxelShape shapeTopRight = Shapes.or(
+                FramedSlopeBlock.SHAPE_TOP,
+                Utils.rotateShape(Direction.NORTH, Direction.EAST, FramedSlopeBlock.SHAPE_HORIZONTAL)
+        );
+
         ImmutableMap.Builder<BlockState, VoxelShape> builder = ImmutableMap.builder();
 
         for (BlockState state : states)
@@ -173,46 +192,6 @@ public class FramedCornerSlopeBlock extends FramedBlock
 
             if (type.isHorizontal())
             {
-                VoxelShape shapeBottomLeft = Shapes.or(
-                        box(0, 0, 0, 16, 16, 4),
-                        box(0, 0, 4, 16, 12, 8),
-                        box(0, 0, 8, 16, 8, 12),
-                        box(0, 0, 12, 16, 4, 16),
-                        box(0, 8, 8, 8, 16, 12),
-                        box(0, 4, 12, 4, 16, 16),
-                        box(0, 12, 4, 12, 16, 8)
-                ).optimize();
-
-                VoxelShape shapeBottomRight = Shapes.or(
-                        box(0, 0, 0, 16, 16, 4),
-                        box(0, 0, 4, 16, 12, 8),
-                        box(0, 0, 8, 16, 8, 12),
-                        box(0, 0, 12, 16, 4, 16),
-                        box(8, 8, 8, 16, 16, 12),
-                        box(12, 4, 12, 16, 16, 16),
-                        box(4, 12, 4, 16, 16, 8)
-                ).optimize();
-
-                VoxelShape shapeTopLeft = Shapes.or(
-                        box(0, 0, 0, 16, 16, 4),
-                        box(0, 4, 4, 16, 16, 8),
-                        box(0, 8, 8, 16, 16, 12),
-                        box(0, 12, 12, 16, 16, 16),
-                        box(0, 0, 8, 8, 8, 12),
-                        box(0, 0, 12, 4, 12, 16),
-                        box(0, 0, 4, 12, 4, 8)
-                ).optimize();
-
-                VoxelShape shapeTopRight = Shapes.or(
-                        box(0, 0, 0, 16, 16, 4),
-                        box(0, 4, 4, 16, 16, 8),
-                        box(0, 8, 8, 16, 16, 12),
-                        box(0, 12, 12, 16, 16, 16),
-                        box(8, 0, 8, 16, 8, 12),
-                        box(12, 0, 12, 16, 12, 16),
-                        box(4, 0, 4, 16, 4, 8)
-                ).optimize();
-
                 VoxelShape shape = switch (type)
                 {
                     case HORIZONTAL_BOTTOM_LEFT -> shapeBottomLeft;
@@ -223,33 +202,9 @@ public class FramedCornerSlopeBlock extends FramedBlock
                 };
                 builder.put(state, Utils.rotateShape(Direction.NORTH, dir, shape));
             }
-            else if (type.isTop())
-            {
-                VoxelShape shapeTop = Shapes.or(
-                        box( 0, 12,  0, 16, 16, 16),
-                        box( 0,  8,  0, 16, 12, 12),
-                        box( 0,  8, 12, 12, 12, 16),
-                        box( 0,  4,  0, 16,  8,  8),
-                        box( 0,  4,  8,  8,  8, 16),
-                        box( 0,  0,  0, 16,  4,  4),
-                        box( 0,  0,  4,  4,  4, 16)
-                ).optimize();
-
-                builder.put(state, Utils.rotateShape(Direction.NORTH, dir, shapeTop));
-            }
             else
             {
-                VoxelShape shapeBottom = Shapes.or(
-                        box( 0,  0,  0, 16,  4, 16),
-                        box( 0,  4,  0, 16,  8, 12),
-                        box( 0,  4, 12, 12,  8, 16),
-                        box( 0,  8,  0, 16, 12,  8),
-                        box( 0,  8,  8,  8, 12, 16),
-                        box( 0, 12,  0, 16, 16,  4),
-                        box( 0, 12,  4,  4, 16, 16)
-                ).optimize();
-
-                builder.put(state, Utils.rotateShape(Direction.NORTH, dir, shapeBottom));
+                builder.put(state, Utils.rotateShape(Direction.NORTH, dir, type.isTop() ? shapeTop : shapeBottom));
             }
         }
 

@@ -59,17 +59,21 @@ public class FramedSlopeSlabBlock extends FramedBlock
 
 
     public static final VoxelShape SHAPE_BOTTOM = Shapes.or(
-            box(0, 0, 0, 16, 2, 16),
-            box(0, 2, 0, 16, 4, 12),
-            box(0, 4, 0, 16, 6,  8),
-            box(0, 6, 0, 16, 8,  4)
+            box(0, 0, 0, 16,   .5, 16),
+            box(0, 0, 0, 16,    2, 15),
+            box(0, 2, 0, 16,    4, 12),
+            box(0, 4, 0, 16,    6,  8),
+            box(0, 6, 0, 16, 7.75,  4),
+            box(0, 6, 0, 16,    8, .5)
     ).optimize();
 
     public static final VoxelShape SHAPE_TOP = Shapes.or(
-            box(0, 0, 0, 16, 2,  4),
-            box(0, 2, 0, 16, 4,  8),
-            box(0, 4, 0, 16, 6, 12),
-            box(0, 6, 0, 16, 8, 16)
+            box(0,   0, 0, 16, 2, .5),
+            box(0, .25, 0, 16, 2,  4),
+            box(0,   2, 0, 16, 4,  8),
+            box(0,   4, 0, 16, 6, 12),
+            box(0,   6, 0, 16, 8, 15),
+            box(0, 7.5, 0, 16, 8, 16)
     ).optimize();
 
     public static ImmutableMap<BlockState, VoxelShape> generateShapes(ImmutableList<BlockState> states)
