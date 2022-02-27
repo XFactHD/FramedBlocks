@@ -17,7 +17,7 @@ import xfacthd.framedblocks.api.util.Utils;
 import xfacthd.framedblocks.common.blockentity.FramedInverseDoubleSlopeSlabBlockEntity;
 import xfacthd.framedblocks.common.data.BlockType;
 
-public class FramedInverseDoubleSlopeSlabBlock extends AbstractFramedDoubleBlock
+public class FramedInverseDoubleSlopeSlabBlock extends AbstractFramedDoubleBlock //TODO: check why light occlusion doesn't work
 {
     public FramedInverseDoubleSlopeSlabBlock() { super(BlockType.FRAMED_INV_DOUBLE_SLOPE_SLAB); }
 

@@ -44,15 +44,6 @@ public class FramedRailSlopeModel extends BakedModelProxy
         railState = Blocks.RAIL.defaultBlockState().setValue(BlockStateProperties.RAIL_SHAPE, shape);
     }
 
-    public FramedRailSlopeModel(BakedModel baseModel)
-    {
-        this(
-                FBContent.blockFramedRailSlope.get().defaultBlockState()
-                        .setValue(PropertyHolder.ASCENDING_RAIL_SHAPE, RailShape.ASCENDING_SOUTH),
-                baseModel
-        );
-    }
-
     @Override
     public List<BakedQuad> getQuads(@Nullable BlockState state, @Nullable Direction side, @Nonnull Random rand, @Nonnull IModelData extraData)
     {
@@ -114,5 +105,15 @@ public class FramedRailSlopeModel extends BakedModelProxy
             railModel = dispatcher.getBlockModel(railState);
         }
         return railModel.getQuads(railState, side, rand, EmptyModelData.INSTANCE);
+    }
+
+
+
+    public static BlockState itemSource()
+    {
+        return FBContent.blockFramedRailSlope.get().defaultBlockState().setValue(
+                PropertyHolder.ASCENDING_RAIL_SHAPE,
+                RailShape.ASCENDING_SOUTH
+        );
     }
 }

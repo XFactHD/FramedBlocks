@@ -99,4 +99,11 @@ public class FramedPrismModel extends FramedBlockModel
             }
         }
     }
+
+
+
+    public static BlockState itemSource()
+    {
+        return FBContent.blockFramedPrism.get().defaultBlockState().setValue(BlockStateProperties.FACING, Direction.UP);
+    }
 }

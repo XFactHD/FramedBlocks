@@ -21,14 +21,6 @@ public class FramedDoubleCornerModel extends FramedDoubleBlockModel
         this.state = state;
     }
 
-    public FramedDoubleCornerModel(BakedModel baseModel)
-    {
-        this(
-                FBContent.blockFramedDoubleCorner.get().defaultBlockState().setValue(PropertyHolder.FACING_HOR, Direction.WEST),
-                baseModel
-        );
-    }
-
     @Override
     protected Tuple<BlockState, BlockState> getDummyStates()
     {
@@ -58,5 +50,12 @@ public class FramedDoubleCornerModel extends FramedDoubleBlockModel
             return getSpriteOrDefault(data, FramedDoubleBlockEntity.DATA_LEFT, getModels().getB());
         }
         return super.getParticleIcon(data);
+    }
+
+
+
+    public static BlockState itemSource()
+    {
+        return FBContent.blockFramedDoubleCorner.get().defaultBlockState().setValue(PropertyHolder.FACING_HOR, Direction.WEST);
     }
 }

@@ -25,14 +25,6 @@ public class FramedElevatedSlopeSlabModel extends FramedBlockModel
         this.top = state.getValue(FramedProperties.TOP);
     }
 
-    public FramedElevatedSlopeSlabModel(BakedModel baseModel)
-    {
-        this(
-                FBContent.blockFramedElevatedSlopeSlab.get().defaultBlockState().setValue(FramedProperties.FACING_HOR, Direction.SOUTH),
-                baseModel
-        );
-    }
-
     @Override
     protected void transformQuad(Map<Direction, List<BakedQuad>> quadMap, BakedQuad quad)
     {
@@ -57,5 +49,12 @@ public class FramedElevatedSlopeSlabModel extends FramedBlockModel
                 quadMap.get(face).add(triangle);
             }
         }
+    }
+
+
+
+    public static BlockState itemSource()
+    {
+        return FBContent.blockFramedElevatedSlopeSlab.get().defaultBlockState().setValue(FramedProperties.FACING_HOR, Direction.SOUTH);
     }
 }

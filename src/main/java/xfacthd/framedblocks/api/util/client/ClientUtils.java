@@ -11,35 +11,125 @@ import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.state.properties.Property;
 import net.minecraftforge.registries.RegistryObject;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+import org.jetbrains.annotations.Nullable;
 
-import java.util.Map;
+import java.util.*;
 import java.util.function.*;
 
 public class ClientUtils
 {
+    private static final Logger LOGGER = LogManager.getLogger();
+
+    /**
+     * Replace the {@link BakedModel}s for all {@link BlockState}s of the given {@link Block} via the given block model
+     * factory
+     * @param block The block whose models are to be replaced
+     * @param models The location->model map given by the {@link net.minecraftforge.client.event.ModelBakeEvent}
+     * @param blockModelGen The block model factory
+     * @deprecated Use {@link ClientUtils#replaceModels(RegistryObject, Map, BiFunction, List)} instead
+     */
+    @Deprecated(forRemoval = true)
     public static void replaceModels(RegistryObject<Block> block, Map<ResourceLocation, BakedModel> models,
                                      BiFunction<BlockState, BakedModel, BakedModel> blockModelGen)
     {
-        replaceModels(block, models, blockModelGen, model -> model);
+        replaceModels(block, models, blockModelGen, model -> model, null);
     }
 
+    /**
+     * Replace the {@link BakedModel}s for all {@link BlockState}s of the given {@link Block} via the given block model
+     * factory
+     * @param block The block whose models are to be replaced
+     * @param models The location->model map given by the {@link net.minecraftforge.client.event.ModelBakeEvent}
+     * @param blockModelGen The block model factory
+     * @param ignoredProps The list of {@link Property}s to ignore, allows for deduplication of models when certain
+     *                     properties don't influence the model (i.e. waterlogging).
+     */
     public static void replaceModels(RegistryObject<Block> block, Map<ResourceLocation, BakedModel> models,
                                      BiFunction<BlockState, BakedModel, BakedModel> blockModelGen,
-                                     Function<BakedModel, BakedModel> itemModelGen)
+                                     @Nullable List<Property<?>> ignoredProps)
     {
+        replaceModels(block, models, blockModelGen, model -> model, ignoredProps);
+    }
+
+    /**
+     * Replace the {@link BakedModel}s for all {@link BlockState}s of the given {@link Block} via the given block model
+     * factory
+     * @param block The block whose models are to be replaced
+     * @param models The location->model map given by the {@link net.minecraftforge.client.event.ModelBakeEvent}
+     * @param blockModelGen The block model factory
+     * @param itemModelSource The {@link BlockState} whose model should be used as the item model
+     * @param ignoredProps The list of {@link Property}s to ignore, allows for deduplication of models when certain
+     *                     properties don't influence the model (i.e. waterlogging).
+     */
+    public static void replaceModels(RegistryObject<Block> block, Map<ResourceLocation, BakedModel> models,
+                                     BiFunction<BlockState, BakedModel, BakedModel> blockModelGen,
+                                     BlockState itemModelSource,
+                                     @Nullable List<Property<?>> ignoredProps)
+    {
+        replaceModels(block, models, blockModelGen, model -> models.get(BlockModelShaper.stateToModelLocation(itemModelSource)), ignoredProps);
+    }
+
+    /**
+     * Replace the {@link BakedModel}s for all {@link BlockState}s of the given {@link Block} via the given block model
+     * factory and the {@link BakedModel} for the {@link net.minecraft.world.item.BlockItem} of the given {@link Block}
+     * via the given item model factory
+     * @param block The block whose models are to be replaced
+     * @param models The location->model map given by the {@link net.minecraftforge.client.event.ModelBakeEvent}
+     * @param blockModelGen The block model factory
+     * @param itemModelGen The item model factory
+     * @param ignoredProps The list of {@link Property}s to ignore, allows for deduplication of models when certain
+     *                     properties don't influence the model (i.e. waterlogging).
+     * @deprecated Use {@link ClientUtils#replaceModels(RegistryObject, Map, BiFunction, BlockState, List)} instead
+     */
+    @Deprecated(forRemoval = true)
+    public static void replaceModels(RegistryObject<Block> block, Map<ResourceLocation, BakedModel> models,
+                                     BiFunction<BlockState, BakedModel, BakedModel> blockModelGen,
+                                     @Nullable Function<BakedModel, BakedModel> itemModelGen,
+                                     @Nullable List<Property<?>> ignoredProps)
+    {
+        Map<BlockState, BakedModel> visitedStates = new HashMap<>();
+
         for (BlockState state : block.get().getStateDefinition().getPossibleStates())
         {
             ResourceLocation location = BlockModelShaper.stateToModelLocation(state);
             BakedModel baseModel = models.get(location);
-            BakedModel replacement = blockModelGen.apply(state, baseModel);
+            BakedModel replacement = visitedStates.computeIfAbsent(
+                    ignoreProps(state, ignoredProps),
+                    key -> blockModelGen.apply(key, baseModel)
+            );
             models.put(location, replacement);
         }
 
-        //noinspection ConstantConditions
-        ResourceLocation location = new ModelResourceLocation(block.get().getRegistryName(), "inventory");
-        BakedModel replacement = itemModelGen.apply(models.get(location));
-        models.put(location, replacement);
+        if (itemModelGen != null)
+        {
+            //noinspection ConstantConditions
+            ResourceLocation location = new ModelResourceLocation(block.get().getRegistryName(), "inventory");
+            BakedModel replacement = itemModelGen.apply(models.get(location));
+            models.put(location, replacement);
+        }
+    }
+
+    @SuppressWarnings({ "unchecked", "rawtypes" })
+    private static BlockState ignoreProps(BlockState state, @Nullable List<Property<?>> ignoredProps)
+    {
+        if (ignoredProps == null || ignoredProps.isEmpty()) { return state; }
+
+        BlockState defaultState = state.getBlock().defaultBlockState();
+        for (Property prop : ignoredProps)
+        {
+            if (!state.hasProperty(prop))
+            {
+                LOGGER.warn("Found invalid ignored property {} for block {}!", prop, state.getBlock());
+                continue;
+            }
+            state = state.setValue(prop, defaultState.getValue(prop));
+        }
+
+        return state;
     }
 
     public static BlockEntity getBlockEntitySafe(BlockGetter blockGetter, BlockPos pos)

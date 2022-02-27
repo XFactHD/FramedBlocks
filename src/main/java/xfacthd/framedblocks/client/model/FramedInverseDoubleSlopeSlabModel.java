@@ -22,14 +22,6 @@ public class FramedInverseDoubleSlopeSlabModel extends FramedDoubleBlockModel
         this.facing = state.getValue(FramedProperties.FACING_HOR);
     }
 
-    public FramedInverseDoubleSlopeSlabModel(BakedModel baseModel)
-    {
-        this(
-                FBContent.blockFramedInverseDoubleSlopeSlab.get().defaultBlockState(),
-                baseModel
-        );
-    }
-
     @Override
     protected Tuple<BlockState, BlockState> getDummyStates()
     {
@@ -49,4 +41,8 @@ public class FramedInverseDoubleSlopeSlabModel extends FramedDoubleBlockModel
     {
         return getSpriteOrDefault(data, FramedDoubleBlockEntity.DATA_RIGHT, getModels().getB());
     }
+
+
+
+    public static BlockState itemSource() { return FBContent.blockFramedInverseDoubleSlopeSlab.get().defaultBlockState(); }
 }

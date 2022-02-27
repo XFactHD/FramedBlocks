@@ -9,7 +9,6 @@ import net.minecraftforge.client.model.data.IModelData;
 import org.jetbrains.annotations.NotNull;
 import xfacthd.framedblocks.api.util.FramedProperties;
 import xfacthd.framedblocks.common.FBContent;
-import xfacthd.framedblocks.common.block.FramedDoubleSlopeSlabBlock;
 import xfacthd.framedblocks.common.blockentity.FramedDoubleBlockEntity;
 import xfacthd.framedblocks.common.data.PropertyHolder;
 
@@ -23,14 +22,6 @@ public class FramedDoubleSlopeSlabModel extends FramedDoubleBlockModel
         super(baseModel, true);
         this.facing = state.getValue(FramedProperties.FACING_HOR);
         this.topHalf = state.getValue(PropertyHolder.TOP_HALF);
-    }
-
-    public FramedDoubleSlopeSlabModel(BakedModel baseModel)
-    {
-        this(
-                FBContent.blockFramedDoubleSlopeSlab.get().defaultBlockState(),
-                baseModel
-        );
     }
 
     @Override
@@ -52,4 +43,8 @@ public class FramedDoubleSlopeSlabModel extends FramedDoubleBlockModel
     {
         return getSpriteOrDefault(data, FramedDoubleBlockEntity.DATA_RIGHT, getModels().getB());
     }
+
+
+
+    public static BlockState itemSource() { return FBContent.blockFramedDoubleSlopeSlab.get().defaultBlockState(); }
 }
