@@ -57,7 +57,7 @@ public class FramedCollapsibleBlockModel extends BakedModelProxy
     @Override
     public IModelData getModelData(@Nonnull IBlockDisplayReader world, @Nonnull BlockPos pos, @Nonnull BlockState state, @Nonnull IModelData tileData)
     {
-        TileEntity te = world.getTileEntity(pos);
+        TileEntity te = world.getBlockEntity(pos);
         if (te instanceof FramedCollapsibleTileEntity)
         {
             return te.getModelData();
@@ -78,7 +78,7 @@ public class FramedCollapsibleBlockModel extends BakedModelProxy
         public CollapsibleModel(BlockState state, IBakedModel baseModel, int packedOffsets)
         {
             super(state, baseModel);
-            this.collapsedFace = state.get(PropertyHolder.COLLAPSED_FACE).toDirection();
+            this.collapsedFace = state.getValue(PropertyHolder.COLLAPSED_FACE).toDirection();
 
             byte[] vertexOffsets = FramedCollapsibleTileEntity.unpackOffsets(packedOffsets);
             for (int i = 0; i < 4; i++)
@@ -90,13 +90,13 @@ public class FramedCollapsibleBlockModel extends BakedModelProxy
         @Override
         protected void transformQuad(Map<Direction, List<BakedQuad>> quadMap, BakedQuad quad)
         {
-            if (collapsedFace == null || quad.getFace() == collapsedFace.getOpposite())
+            if (collapsedFace == null || quad.getDirection() == collapsedFace.getOpposite())
             {
-                quadMap.get(quad.getFace()).add(quad);
+                quadMap.get(quad.getDirection()).add(quad);
                 return;
             }
 
-            if (quad.getFace() == collapsedFace)
+            if (quad.getDirection() == collapsedFace)
             {
                 BakedQuad collapsedQuad = ModelUtils.duplicateQuad(quad);
                 BakedQuadTransformer.setVertexPosInFacingDir(collapsedQuad, vertexPos);
@@ -108,7 +108,7 @@ public class FramedCollapsibleBlockModel extends BakedModelProxy
                 if (collapsedFace.getAxis() == Direction.Axis.Y)
                 {
                     boolean top = collapsedFace == Direction.UP;
-                    int idxOff = getYCollapsedIndexOffset(quad.getFace());
+                    int idxOff = getYCollapsedIndexOffset(quad.getDirection());
                     float posOne = vertexPos[idxOff];
                     float posTwo;
                     if (top)
@@ -124,12 +124,12 @@ public class FramedCollapsibleBlockModel extends BakedModelProxy
 
                     if (BakedQuadTransformer.createHorizontalSideQuad(cutQuad, !top, posOne, posTwo))
                     {
-                        quadMap.get(quad.getFace()).add(cutQuad);
+                        quadMap.get(quad.getDirection()).add(cutQuad);
                     }
                 }
-                else if (quad.getFace().getAxis() == Direction.Axis.Y)
+                else if (quad.getDirection().getAxis() == Direction.Axis.Y)
                 {
-                    boolean top = quad.getFace() == Direction.UP;
+                    boolean top = quad.getDirection() == Direction.UP;
                     float posOne = vertexPos[top ? 0 : 1];
                     float posTwo = vertexPos[top ? 3 : 2];
 
@@ -142,18 +142,18 @@ public class FramedCollapsibleBlockModel extends BakedModelProxy
 
                     if (BakedQuadTransformer.createTopBottomQuad(cutQuad, collapsedFace, posOne, posTwo))
                     {
-                        quadMap.get(quad.getFace()).add(cutQuad);
+                        quadMap.get(quad.getDirection()).add(cutQuad);
                     }
                 }
                 else
                 {
-                    boolean right = collapsedFace == cutQuad.getFace().rotateY();
+                    boolean right = collapsedFace == cutQuad.getDirection().getClockWise();
                     float posTop = vertexPos[right ? 3 : 0];
                     float posBot = vertexPos[right ? 2 : 1];
 
                     if (BakedQuadTransformer.createVerticalSideQuad(cutQuad, collapsedFace, posTop, posBot))
                     {
-                        quadMap.get(quad.getFace()).add(cutQuad);
+                        quadMap.get(quad.getDirection()).add(cutQuad);
                     }
                 }
             }
@@ -162,12 +162,12 @@ public class FramedCollapsibleBlockModel extends BakedModelProxy
         @Override
         protected IBakedModel getCamoModel(BlockState camoState)
         {
-            if (camoState == FBContent.blockFramedCube.get().getDefaultState()) { return baseModel; }
+            if (camoState == FBContent.blockFramedCube.get().defaultBlockState()) { return baseModel; }
             return super.getCamoModel(camoState);
         }
 
         @Override
-        protected boolean canRenderBaseModelInLayer(RenderType layer) { return layer == RenderType.getSolid(); }
+        protected boolean canRenderBaseModelInLayer(RenderType layer) { return layer == RenderType.solid(); }
 
         private int getYCollapsedIndexOffset(Direction quadFace)
         {

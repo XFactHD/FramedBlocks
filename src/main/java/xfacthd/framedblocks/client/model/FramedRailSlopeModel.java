@@ -37,18 +37,18 @@ public class FramedRailSlopeModel extends BakedModelProxy
     {
         super(baseModel);
 
-        RailShape shape = state.get(PropertyHolder.ASCENDING_RAIL_SHAPE);
+        RailShape shape = state.getValue(PropertyHolder.ASCENDING_RAIL_SHAPE);
         Direction dir = FramedRailSlopeBlock.directionFromShape(shape);
 
-        slopeState = FBContent.blockFramedSlope.get().getDefaultState().with(PropertyHolder.FACING_HOR, dir);
-        railState = Blocks.RAIL.getDefaultState().with(BlockStateProperties.RAIL_SHAPE, shape);
+        slopeState = FBContent.blockFramedSlope.get().defaultBlockState().setValue(PropertyHolder.FACING_HOR, dir);
+        railState = Blocks.RAIL.defaultBlockState().setValue(BlockStateProperties.RAIL_SHAPE, shape);
     }
 
     public FramedRailSlopeModel(IBakedModel baseModel)
     {
         this(
-                FBContent.blockFramedRailSlope.get().getDefaultState()
-                        .with(PropertyHolder.ASCENDING_RAIL_SHAPE, RailShape.ASCENDING_SOUTH),
+                FBContent.blockFramedRailSlope.get().defaultBlockState()
+                        .setValue(PropertyHolder.ASCENDING_RAIL_SHAPE, RailShape.ASCENDING_SOUTH),
                 baseModel
         );
     }
@@ -59,7 +59,7 @@ public class FramedRailSlopeModel extends BakedModelProxy
         List<BakedQuad> quads = new ArrayList<>(getSlopeQuads(side, rand, extraData));
 
         RenderType layer = MinecraftForgeClient.getRenderLayer();
-        if (layer == RenderType.getCutout() || layer == null)
+        if (layer == RenderType.cutout() || layer == null)
         {
             quads.addAll(getRailQuads(side, rand));
         }
@@ -77,7 +77,7 @@ public class FramedRailSlopeModel extends BakedModelProxy
     @Override
     public IModelData getModelData(@Nonnull IBlockDisplayReader world, @Nonnull BlockPos pos, @Nonnull BlockState state, @Nonnull IModelData tileData)
     {
-        TileEntity te = world.getTileEntity(pos);
+        TileEntity te = world.getBlockEntity(pos);
         if (te instanceof FramedTileEntity)
         {
             return te.getModelData();
@@ -90,14 +90,14 @@ public class FramedRailSlopeModel extends BakedModelProxy
 
     @Override
     @SuppressWarnings("deprecation")
-    public TextureAtlasSprite getParticleTexture() { return getSlopeModel().getParticleTexture(); }
+    public TextureAtlasSprite getParticleIcon() { return getSlopeModel().getParticleIcon(); }
 
     private IBakedModel getSlopeModel()
     {
         if (slopeModel == null)
         {
-            BlockRendererDispatcher dispatcher = Minecraft.getInstance().getBlockRendererDispatcher();
-            slopeModel = dispatcher.getModelForState(slopeState);
+            BlockRendererDispatcher dispatcher = Minecraft.getInstance().getBlockRenderer();
+            slopeModel = dispatcher.getBlockModel(slopeState);
         }
         return slopeModel;
     }
@@ -111,8 +111,8 @@ public class FramedRailSlopeModel extends BakedModelProxy
     {
         if (railModel == null)
         {
-            BlockRendererDispatcher dispatcher = Minecraft.getInstance().getBlockRendererDispatcher();
-            railModel = dispatcher.getModelForState(railState);
+            BlockRendererDispatcher dispatcher = Minecraft.getInstance().getBlockRenderer();
+            railModel = dispatcher.getBlockModel(railState);
         }
         return railModel.getQuads(railState, side, rand, EmptyModelData.INSTANCE);
     }

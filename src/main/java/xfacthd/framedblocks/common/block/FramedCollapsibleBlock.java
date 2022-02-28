@@ -26,7 +26,7 @@ public class FramedCollapsibleBlock extends FramedBlock
 {
     public static final CtmPredicate CTM_PREDICATE = (state, dir) ->
     {
-        CollapseFace face = state.get(PropertyHolder.COLLAPSED_FACE);
+        CollapseFace face = state.getValue(PropertyHolder.COLLAPSED_FACE);
         if (face == CollapseFace.NONE) { return true; }
         return dir == face.toDirection().getOpposite();
     };
@@ -35,12 +35,12 @@ public class FramedCollapsibleBlock extends FramedBlock
 
     public FramedCollapsibleBlock(BlockType blockType)
     {
-        super(blockType, IFramedBlock.createProperties(BlockType.FRAMED_COLLAPSIBLE_BLOCK).variableOpacity());
-        setDefaultState(getDefaultState().with(BlockStateProperties.WATERLOGGED, false));
+        super(blockType, IFramedBlock.createProperties(BlockType.FRAMED_COLLAPSIBLE_BLOCK).dynamicShape());
+        registerDefaultState(defaultBlockState().setValue(BlockStateProperties.WATERLOGGED, false));
     }
 
     @Override
-    protected void fillStateContainer(StateContainer.Builder<Block, BlockState> builder)
+    protected void createBlockStateDefinition(StateContainer.Builder<Block, BlockState> builder)
     {
         builder.add(PropertyHolder.COLLAPSED_FACE, BlockStateProperties.WATERLOGGED);
     }
@@ -49,17 +49,17 @@ public class FramedCollapsibleBlock extends FramedBlock
     @Override
     public BlockState getStateForPlacement(BlockItemUseContext context)
     {
-        return withWater(getDefaultState(), context.getWorld(), context.getPos());
+        return withWater(defaultBlockState(), context.getLevel(), context.getClickedPos());
     }
 
     public static boolean onLeftClick(World world, BlockPos pos, PlayerEntity player)
     {
-        if (player.getHeldItemMainhand().getItem() != FBContent.itemFramedHammer.get()) { return false; }
+        if (player.getMainHandItem().getItem() != FBContent.itemFramedHammer.get()) { return false; }
 
-        TileEntity te = world.getTileEntity(pos);
+        TileEntity te = world.getBlockEntity(pos);
         if (te instanceof FramedCollapsibleTileEntity)
         {
-            if (!world.isRemote())
+            if (!world.isClientSide())
             {
                 ((FramedCollapsibleTileEntity) te).handleDeform(player);
             }
@@ -73,18 +73,18 @@ public class FramedCollapsibleBlock extends FramedBlock
     {
         if (isIntangible(state, world, pos, ctx)) { return VoxelShapes.empty(); }
 
-        CollapseFace face = state.get(PropertyHolder.COLLAPSED_FACE);
+        CollapseFace face = state.getValue(PropertyHolder.COLLAPSED_FACE);
         if (face != CollapseFace.NONE)
         {
-            TileEntity te = world.getTileEntity(pos);
+            TileEntity te = world.getBlockEntity(pos);
             if (te instanceof FramedCollapsibleTileEntity)
             {
                 int offsets = ((FramedCollapsibleTileEntity) te).getPackedOffsets();
-                offsets |= (face.toDirection().getIndex() << 20);
+                offsets |= (face.toDirection().get3DDataValue() << 20);
                 return SHAPE_CACHE.getUnchecked(offsets);
             }
         }
-        return VoxelShapes.fullCube();
+        return VoxelShapes.block();
     }
 
     @Override
@@ -100,7 +100,7 @@ public class FramedCollapsibleBlock extends FramedBlock
         @Override
         public VoxelShape load(Integer packedData)
         {
-            Direction face = Direction.byIndex(packedData >> 20);
+            Direction face = Direction.from3DDataValue(packedData >> 20);
             byte[] offsets = FramedCollapsibleTileEntity.unpackOffsets(packedData & 0xFFFFF);
 
             boolean positive = face.getAxisDirection() == Direction.AxisDirection.POSITIVE;
@@ -129,42 +129,42 @@ public class FramedCollapsibleBlock extends FramedBlock
                     {
                         case NORTH:
                         {
-                            shape = makeCuboidShape(x * 4, z * 4, y, (x + 1) * 4, (z + 1) * 4, 16);
+                            shape = box(x * 4, z * 4, y, (x + 1) * 4, (z + 1) * 4, 16);
                             break;
                         }
                         case EAST:
                         {
-                            shape = makeCuboidShape(0, z * 4, x * 4, y, (z + 1) * 4, (x + 1) * 4);
+                            shape = box(0, z * 4, x * 4, y, (z + 1) * 4, (x + 1) * 4);
                             break;
                         }
                         case SOUTH:
                         {
-                            shape = makeCuboidShape(x * 4, z * 4, 0, (x + 1) * 4, (z + 1) * 4, y);
+                            shape = box(x * 4, z * 4, 0, (x + 1) * 4, (z + 1) * 4, y);
                             break;
                         }
                         case WEST:
                         {
-                            shape = makeCuboidShape(y, z * 4, x * 4, 16, (z + 1) * 4, (x + 1) * 4);
+                            shape = box(y, z * 4, x * 4, 16, (z + 1) * 4, (x + 1) * 4);
                             break;
                         }
                         case UP:
                         {
-                            shape = makeCuboidShape(x * 4, 0, z * 4, (x + 1) * 4, y, (z + 1) * 4);
+                            shape = box(x * 4, 0, z * 4, (x + 1) * 4, y, (z + 1) * 4);
                             break;
                         }
                         case DOWN:
                         {
-                            shape = makeCuboidShape(x * 4, y, z * 4, (x + 1) * 4, 16, (z + 1) * 4);
+                            shape = box(x * 4, y, z * 4, (x + 1) * 4, 16, (z + 1) * 4);
                             break;
                         }
                         default: throw new IncompatibleClassChangeError("Direction enum was tampered with!");
                     };
 
-                    result = VoxelShapes.combine(result, shape, IBooleanFunction.OR);
+                    result = VoxelShapes.joinUnoptimized(result, shape, IBooleanFunction.OR);
                 }
             }
 
-            result = result.simplify();
+            result = result.optimize();
 
             return result;
         }

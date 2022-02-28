@@ -33,15 +33,15 @@ public class FramedLatticeBlock extends FramedBlock
     public FramedLatticeBlock()
     {
         super(BlockType.FRAMED_LATTICE_BLOCK);
-        setDefaultState(getDefaultState()
-                .with(PropertyHolder.X_AXIS, false)
-                .with(PropertyHolder.Y_AXIS, false)
-                .with(PropertyHolder.Z_AXIS, false)
+        registerDefaultState(defaultBlockState()
+                .setValue(PropertyHolder.X_AXIS, false)
+                .setValue(PropertyHolder.Y_AXIS, false)
+                .setValue(PropertyHolder.Z_AXIS, false)
         );
     }
 
     @Override
-    protected void fillStateContainer(StateContainer.Builder<Block, BlockState> builder)
+    protected void createBlockStateDefinition(StateContainer.Builder<Block, BlockState> builder)
     {
         builder.add(PropertyHolder.X_AXIS, PropertyHolder.Y_AXIS, PropertyHolder.Z_AXIS, BlockStateProperties.WATERLOGGED);
     }
@@ -49,45 +49,45 @@ public class FramedLatticeBlock extends FramedBlock
     @Override
     public BlockState getStateForPlacement(BlockItemUseContext context)
     {
-        World world = context.getWorld();
-        BlockPos pos = context.getPos();
+        World world = context.getLevel();
+        BlockPos pos = context.getClickedPos();
 
-        BlockState state = getDefaultState();
-        state = state.with(PropertyHolder.X_AXIS, world.getBlockState(pos.east()).matchesBlock(this) || world.getBlockState(pos.west()).matchesBlock(this));
-        state = state.with(PropertyHolder.Y_AXIS, world.getBlockState(pos.up()).matchesBlock(this) || world.getBlockState(pos.down()).matchesBlock(this));
-        state = state.with(PropertyHolder.Z_AXIS, world.getBlockState(pos.north()).matchesBlock(this) || world.getBlockState(pos.south()).matchesBlock(this));
+        BlockState state = defaultBlockState();
+        state = state.setValue(PropertyHolder.X_AXIS, world.getBlockState(pos.east()).is(this) || world.getBlockState(pos.west()).is(this));
+        state = state.setValue(PropertyHolder.Y_AXIS, world.getBlockState(pos.above()).is(this) || world.getBlockState(pos.below()).is(this));
+        state = state.setValue(PropertyHolder.Z_AXIS, world.getBlockState(pos.north()).is(this) || world.getBlockState(pos.south()).is(this));
 
         return withWater(state, world, pos);
     }
 
     @Override
-    public BlockState updatePostPlacement(BlockState state, Direction facing, BlockState facingState, IWorld world, BlockPos pos, BlockPos facingPos)
+    public BlockState updateShape(BlockState state, Direction facing, BlockState facingState, IWorld world, BlockPos pos, BlockPos facingPos)
     {
-        state = state.with(
+        state = state.setValue(
                 getPropFromAxis(facing),
-                facingState.matchesBlock(this) || world.getBlockState(pos.offset(facing.getOpposite())).matchesBlock(this)
+                facingState.is(this) || world.getBlockState(pos.relative(facing.getOpposite())).is(this)
         );
 
-        return super.updatePostPlacement(state, facing, facingState, world, pos, facingPos);
+        return super.updateShape(state, facing, facingState, world, pos, facingPos);
     }
 
     public static ImmutableMap<BlockState, VoxelShape> generateShapes(ImmutableList<BlockState> states)
     {
         ImmutableMap.Builder<BlockState, VoxelShape> builder = ImmutableMap.builder();
 
-        VoxelShape xShape = makeCuboidShape(0, 6, 6, 16, 10, 10);
-        VoxelShape yShape = makeCuboidShape(6, 0, 6, 10, 16, 10);
-        VoxelShape zShape = makeCuboidShape(6, 6, 0, 10, 10, 16);
+        VoxelShape xShape = box(0, 6, 6, 16, 10, 10);
+        VoxelShape yShape = box(6, 0, 6, 10, 16, 10);
+        VoxelShape zShape = box(6, 6, 0, 10, 10, 16);
 
         for (BlockState state : states)
         {
-            VoxelShape shape = makeCuboidShape(6, 6, 6, 10, 10, 10);
+            VoxelShape shape = box(6, 6, 6, 10, 10, 10);
 
-            if (state.get(PropertyHolder.X_AXIS)) { shape = VoxelShapes.or(shape, xShape); }
-            if (state.get(PropertyHolder.Y_AXIS)) { shape = VoxelShapes.or(shape, yShape); }
-            if (state.get(PropertyHolder.Z_AXIS)) { shape = VoxelShapes.or(shape, zShape); }
+            if (state.getValue(PropertyHolder.X_AXIS)) { shape = VoxelShapes.or(shape, xShape); }
+            if (state.getValue(PropertyHolder.Y_AXIS)) { shape = VoxelShapes.or(shape, yShape); }
+            if (state.getValue(PropertyHolder.Z_AXIS)) { shape = VoxelShapes.or(shape, zShape); }
 
-            builder.put(state, shape.simplify());
+            builder.put(state, shape.optimize());
         }
 
         return builder.build();

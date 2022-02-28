@@ -13,7 +13,7 @@ public enum SlopeType implements IStringSerializable
     private final String name = toString().toLowerCase(Locale.ENGLISH);
 
     @Override
-    public String getString() { return name; }
+    public String getSerializedName() { return name; }
 
     public SlopeType getOpposite()
     {
@@ -21,7 +21,7 @@ public enum SlopeType implements IStringSerializable
         {
             case TOP: return BOTTOM;
             case BOTTOM: return TOP;
-            default: throw new IllegalArgumentException("Can't get opposite of '" + getString() + "'!");
+            default: throw new IllegalArgumentException("Can't get opposite of '" + getSerializedName() + "'!");
         }
     }
 }

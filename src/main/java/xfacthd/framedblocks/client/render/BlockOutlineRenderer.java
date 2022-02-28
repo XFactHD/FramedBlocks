@@ -33,26 +33,26 @@ public class BlockOutlineRenderer
 
         BlockRayTraceResult result = event.getTarget();
         //noinspection ConstantConditions
-        BlockState state = Minecraft.getInstance().world.getBlockState(result.getPos());
+        BlockState state = Minecraft.getInstance().level.getBlockState(result.getBlockPos());
         if (!(state.getBlock() instanceof IFramedBlock)) { return; }
 
         BlockType type = ((IFramedBlock) state.getBlock()).getBlockType();
         if (type.hasSpecialHitbox())
         {
             MatrixStack mstack = event.getMatrix();
-            Vector3d offset = Vector3d.copy(result.getPos()).subtract(event.getInfo().getProjectedView());
-            IVertexBuilder builder = event.getBuffers().getBuffer(RenderType.getLines());
+            Vector3d offset = Vector3d.atLowerCornerOf(result.getBlockPos()).subtract(event.getInfo().getPosition());
+            IVertexBuilder builder = event.getBuffers().getBuffer(RenderType.lines());
             OutlineRender render = OUTLINE_RENDERERS.get(type);
 
-            mstack.push();
+            mstack.pushPose();
             mstack.translate(offset.x, offset.y, offset.z);
             mstack.translate(.5, .5, .5);
             render.rotateMatrix(mstack, state);
             mstack.translate(-.5, -.5, -.5);
 
-            render.draw(state, Minecraft.getInstance().world, result.getPos(), mstack, builder);
+            render.draw(state, Minecraft.getInstance().level, result.getBlockPos(), mstack, builder);
 
-            mstack.pop();
+            mstack.popPose();
 
             event.setCanceled(true);
         }
@@ -121,7 +121,7 @@ public class BlockOutlineRenderer
 
     public static void drawCornerSlopeBox(BlockState state, MatrixStack mstack, IVertexBuilder builder)
     {
-        CornerType type = state.get(PropertyHolder.CORNER_TYPE);
+        CornerType type = state.getValue(PropertyHolder.CORNER_TYPE);
         if (!type.isHorizontal())
         {
             if (type.isTop())
@@ -172,7 +172,7 @@ public class BlockOutlineRenderer
 
     public static void drawInnerCornerSlopeBox(BlockState state, MatrixStack mstack, IVertexBuilder builder)
     {
-        CornerType type = state.get(PropertyHolder.CORNER_TYPE);
+        CornerType type = state.getValue(PropertyHolder.CORNER_TYPE);
 
         if (!type.isHorizontal())
         {
@@ -233,7 +233,7 @@ public class BlockOutlineRenderer
 
     public static void drawPrismCornerBox(BlockState state, MatrixStack mstack, IVertexBuilder builder)
     {
-        boolean top = state.get(PropertyHolder.TOP);
+        boolean top = state.getValue(PropertyHolder.TOP);
 
         mstack.translate(.5, .5, .5);
         if (top) { mstack.scale(1, -1, 1); }
@@ -256,7 +256,7 @@ public class BlockOutlineRenderer
 
     public static void drawInnerPrismCornerBox(BlockState state, MatrixStack mstack, IVertexBuilder builder)
     {
-        boolean top = state.get(PropertyHolder.TOP);
+        boolean top = state.getValue(PropertyHolder.TOP);
 
         mstack.translate(.5, .5, .5);
         if (top) { mstack.scale(1, -1, 1); }
@@ -285,7 +285,7 @@ public class BlockOutlineRenderer
 
     public static void drawThreewayCornerBox(BlockState state, MatrixStack mstack, IVertexBuilder builder)
     {
-        boolean top = state.get(PropertyHolder.TOP);
+        boolean top = state.getValue(PropertyHolder.TOP);
 
         mstack.translate(.5, .5, .5);
         if (top) { mstack.scale(1, -1, 1); }
@@ -309,7 +309,7 @@ public class BlockOutlineRenderer
 
     public static void drawInnerThreewayCornerBox(BlockState state, MatrixStack mstack, IVertexBuilder builder)
     {
-        boolean top = state.get(PropertyHolder.TOP);
+        boolean top = state.getValue(PropertyHolder.TOP);
 
         mstack.translate(.5, .5, .5);
         if (top) { mstack.scale(1, -1, 1); }

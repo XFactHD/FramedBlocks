@@ -26,7 +26,7 @@ public class FramedChestBlock extends FramedStorageBlock
     public FramedChestBlock() { super(BlockType.FRAMED_CHEST); }
 
     @Override
-    protected void fillStateContainer(StateContainer.Builder<Block, BlockState> builder)
+    protected void createBlockStateDefinition(StateContainer.Builder<Block, BlockState> builder)
     {
         //Don't call super, this block doesn't need the SOLID property
         builder.add(PropertyHolder.FACING_HOR, PropertyHolder.CHEST_STATE, PropertyHolder.LATCH_TYPE, BlockStateProperties.WATERLOGGED);
@@ -36,24 +36,24 @@ public class FramedChestBlock extends FramedStorageBlock
     @Override
     public BlockState getStateForPlacement(BlockItemUseContext context)
     {
-        BlockState state = getDefaultState().with(PropertyHolder.FACING_HOR, context.getPlacementHorizontalFacing().getOpposite());
-        return withWater(state, context.getWorld(), context.getPos());
+        BlockState state = defaultBlockState().setValue(PropertyHolder.FACING_HOR, context.getHorizontalDirection().getOpposite());
+        return withWater(state, context.getLevel(), context.getClickedPos());
     }
 
     @Override
-    public ActionResultType onBlockActivated(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockRayTraceResult hit)
+    public ActionResultType use(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockRayTraceResult hit)
     {
-        ItemStack stack = player.getHeldItem(hand);
-        if (stack.getItem().isIn(Utils.WRENCH) && player.isSneaking())
+        ItemStack stack = player.getItemInHand(hand);
+        if (stack.getItem().is(Utils.WRENCH) && player.isShiftKeyDown())
         {
-            if (!world.isRemote())
+            if (!world.isClientSide())
             {
-                state = state.with(PropertyHolder.LATCH_TYPE, state.get(PropertyHolder.LATCH_TYPE).next());
-                world.setBlockState(pos, state);
+                state = state.setValue(PropertyHolder.LATCH_TYPE, state.getValue(PropertyHolder.LATCH_TYPE).next());
+                world.setBlockAndUpdate(pos, state);
             }
-            return ActionResultType.func_233537_a_(world.isRemote());
+            return ActionResultType.sidedSuccess(world.isClientSide());
         }
-        return super.onBlockActivated(state, world, pos, player, hand, hit);
+        return super.use(state, world, pos, player, hand, hit);
     }
 
     @Override

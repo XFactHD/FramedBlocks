@@ -25,19 +25,19 @@ public class FramedChestLidModel extends FramedBlockModel
     public FramedChestLidModel(BlockState state, IBakedModel baseModel)
     {
         super(state, baseModel);
-        this.facing = state.get(PropertyHolder.FACING_HOR);
-        this.latch = state.get(PropertyHolder.LATCH_TYPE);
+        this.facing = state.getValue(PropertyHolder.FACING_HOR);
+        this.latch = state.getValue(PropertyHolder.LATCH_TYPE);
     }
 
     @Override
     protected void transformQuad(Map<Direction, List<BakedQuad>> quadMap, BakedQuad quad)
     {
-        if (quad.getFace().getAxis() == Direction.Axis.Y)
+        if (quad.getDirection().getAxis() == Direction.Axis.Y)
         {
             BakedQuad topBotQuad = ModelUtils.duplicateQuad(quad);
             if (BakedQuadTransformer.createTopBottomQuad(topBotQuad, 1F/16F, 1F/16F, 15F/16F, 15F/16F))
             {
-                BakedQuadTransformer.setQuadPosInFacingDir(topBotQuad, quad.getFace() == Direction.UP ? 14F/16F : 7F/16F);
+                BakedQuadTransformer.setQuadPosInFacingDir(topBotQuad, quad.getDirection() == Direction.UP ? 14F/16F : 7F/16F);
                 quadMap.get(null).add(topBotQuad);
             }
         }
@@ -58,7 +58,7 @@ public class FramedChestLidModel extends FramedBlockModel
     }
 
     @Override
-    protected boolean hasAdditionalQuadsInLayer(RenderType layer) { return latch == LatchType.DEFAULT && layer == RenderType.getCutout(); }
+    protected boolean hasAdditionalQuadsInLayer(RenderType layer) { return latch == LatchType.DEFAULT && layer == RenderType.cutout(); }
 
     @Override
     protected void getAdditionalQuads(Map<Direction, List<BakedQuad>> quadMap, BlockState state, Random rand, IModelData data, RenderType layer)

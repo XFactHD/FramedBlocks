@@ -12,12 +12,12 @@ public class BlueprintPropertyOverride
 
     public static void register()
     {
-        ItemModelsProperties.registerProperty(
+        ItemModelsProperties.register(
                 FBContent.itemFramedBlueprint.get(),
                 HAS_DATA,
                 (stack, level, entity) ->
                 {
-                    CompoundNBT tag = stack.getChildTag("blueprint_data");
+                    CompoundNBT tag = stack.getTagElement("blueprint_data");
                     return tag != null && !tag.isEmpty() ? 1 : 0;
                 }
         );

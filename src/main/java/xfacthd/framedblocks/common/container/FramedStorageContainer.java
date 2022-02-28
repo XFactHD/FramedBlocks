@@ -53,40 +53,40 @@ public class FramedStorageContainer extends Container
 
     public FramedStorageContainer(int windowId, PlayerInventory inv, PacketBuffer extraData)
     {
-        this(windowId, inv, inv.player.world.getTileEntity(extraData.readBlockPos()));
+        this(windowId, inv, inv.player.level.getBlockEntity(extraData.readBlockPos()));
     }
 
     @Override
-    public boolean canInteractWith(PlayerEntity player) { return tileEntity.isUsableByPlayer(player); }
+    public boolean stillValid(PlayerEntity player) { return tileEntity.isUsableByPlayer(player); }
 
     @Override
-    public ItemStack transferStackInSlot(PlayerEntity player, int index)
+    public ItemStack quickMoveStack(PlayerEntity player, int index)
     {
         ItemStack remainder = ItemStack.EMPTY;
-        Slot slot = inventorySlots.get(index);
-        if (slot != null && slot.getHasStack())
+        Slot slot = slots.get(index);
+        if (slot != null && slot.hasItem())
         {
-            ItemStack stack = slot.getStack();
+            ItemStack stack = slot.getItem();
             remainder = stack.copy();
             if (index < MAX_SLOT_CHEST)
             {
-                if (!mergeItemStack(stack, MAX_SLOT_CHEST, inventorySlots.size(), true))
+                if (!moveItemStackTo(stack, MAX_SLOT_CHEST, slots.size(), true))
                 {
                     return ItemStack.EMPTY;
                 }
             }
-            else if (!mergeItemStack(stack, 0, MAX_SLOT_CHEST, false))
+            else if (!moveItemStackTo(stack, 0, MAX_SLOT_CHEST, false))
             {
                 return ItemStack.EMPTY;
             }
 
             if (stack.isEmpty())
             {
-                slot.putStack(ItemStack.EMPTY);
+                slot.set(ItemStack.EMPTY);
             }
             else
             {
-                slot.onSlotChanged();
+                slot.setChanged();
             }
         }
 
@@ -94,12 +94,12 @@ public class FramedStorageContainer extends Container
     }
 
     @Override
-    public void onContainerClosed(PlayerEntity player)
+    public void removed(PlayerEntity player)
     {
-        super.onContainerClosed(player);
+        super.removed(player);
 
         //noinspection ConstantConditions
-        if (!tileEntity.getWorld().isRemote() && tileEntity instanceof FramedChestTileEntity)
+        if (!tileEntity.getLevel().isClientSide() && tileEntity instanceof FramedChestTileEntity)
         {
             ((FramedChestTileEntity) tileEntity).close();
         }

@@ -19,11 +19,11 @@ public class FramedWallSignBlock extends AbstractFramedSignBlock
 {
     public FramedWallSignBlock()
     {
-        super(BlockType.FRAMED_WALL_SIGN, IFramedBlock.createProperties(BlockType.FRAMED_WALL_SIGN).doesNotBlockMovement());
+        super(BlockType.FRAMED_WALL_SIGN, IFramedBlock.createProperties(BlockType.FRAMED_WALL_SIGN).noCollission());
     }
 
     @Override
-    protected void fillStateContainer(StateContainer.Builder<Block, BlockState> builder)
+    protected void createBlockStateDefinition(StateContainer.Builder<Block, BlockState> builder)
     {
         builder.add(PropertyHolder.FACING_HOR, BlockStateProperties.WATERLOGGED);
     }
@@ -31,9 +31,9 @@ public class FramedWallSignBlock extends AbstractFramedSignBlock
     @Override
     public BlockState getStateForPlacement(BlockItemUseContext context)
     {
-        BlockState state = getDefaultState();
-        IWorldReader world = context.getWorld();
-        BlockPos pos = context.getPos();
+        BlockState state = defaultBlockState();
+        IWorldReader world = context.getLevel();
+        BlockPos pos = context.getClickedPos();
         Direction[] dirs = context.getNearestLookingDirections();
 
         for(Direction direction : dirs)
@@ -41,8 +41,8 @@ public class FramedWallSignBlock extends AbstractFramedSignBlock
             if (direction.getAxis().isHorizontal())
             {
                 Direction dir = direction.getOpposite();
-                state = state.with(PropertyHolder.FACING_HOR, dir);
-                if (state.isValidPosition(world, pos))
+                state = state.setValue(PropertyHolder.FACING_HOR, dir);
+                if (state.canSurvive(world, pos))
                 {
                     return withWater(state, world, pos);
                 }
@@ -53,20 +53,20 @@ public class FramedWallSignBlock extends AbstractFramedSignBlock
     }
 
     @Override
-    public BlockState updatePostPlacement(BlockState state, Direction facing, BlockState facingState, IWorld world, BlockPos pos, BlockPos facingPos)
+    public BlockState updateShape(BlockState state, Direction facing, BlockState facingState, IWorld world, BlockPos pos, BlockPos facingPos)
     {
-        if (facing.getOpposite() == state.get(PropertyHolder.FACING_HOR) && !state.isValidPosition(world, pos))
+        if (facing.getOpposite() == state.getValue(PropertyHolder.FACING_HOR) && !state.canSurvive(world, pos))
         {
-            return Blocks.AIR.getDefaultState();
+            return Blocks.AIR.defaultBlockState();
         }
-        return super.updatePostPlacement(state, facing, facingState, world, pos, facingPos);
+        return super.updateShape(state, facing, facingState, world, pos, facingPos);
     }
 
     @Override
-    public boolean isValidPosition(BlockState state, IWorldReader world, BlockPos pos)
+    public boolean canSurvive(BlockState state, IWorldReader world, BlockPos pos)
     {
-        Direction dir = state.get(PropertyHolder.FACING_HOR).getOpposite();
-        return world.getBlockState(pos.offset(dir)).getMaterial().isSolid();
+        Direction dir = state.getValue(PropertyHolder.FACING_HOR).getOpposite();
+        return world.getBlockState(pos.relative(dir)).getMaterial().isSolid();
     }
 
     public static ImmutableMap<BlockState, VoxelShape> generateShapes(ImmutableList<BlockState> states)
@@ -75,26 +75,26 @@ public class FramedWallSignBlock extends AbstractFramedSignBlock
 
         for (BlockState state : states)
         {
-            switch (state.get(PropertyHolder.FACING_HOR))
+            switch (state.getValue(PropertyHolder.FACING_HOR))
             {
                 case NORTH:
                 {
-                    builder.put(state, makeCuboidShape(0.0D, 4.5D, 14.0D, 16.0D, 12.5D, 16.0D));
+                    builder.put(state, box(0.0D, 4.5D, 14.0D, 16.0D, 12.5D, 16.0D));
                     break;
                 }
                 case EAST:
                 {
-                    builder.put(state, makeCuboidShape(0.0D, 4.5D, 0.0D, 2.0D, 12.5D, 16.0D));
+                    builder.put(state, box(0.0D, 4.5D, 0.0D, 2.0D, 12.5D, 16.0D));
                     break;
                 }
                 case SOUTH:
                 {
-                    builder.put(state, makeCuboidShape(0.0D, 4.5D, 0.0D, 16.0D, 12.5D, 2.0D));
+                    builder.put(state, box(0.0D, 4.5D, 0.0D, 16.0D, 12.5D, 2.0D));
                     break;
                 }
                 case WEST:
                 {
-                    builder.put(state, makeCuboidShape(14.0D, 4.5D, 0.0D, 16.0D, 12.5D, 16.0D));
+                    builder.put(state, box(14.0D, 4.5D, 0.0D, 16.0D, 12.5D, 16.0D));
                     break;
                 }
             }

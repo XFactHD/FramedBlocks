@@ -27,21 +27,21 @@ public class FramedChestTileEntity extends FramedStorageTileEntity implements IT
     public void tick()
     {
         //noinspection ConstantConditions
-        if (!world.isRemote() && (world.getGameTime() - closeStart) >= 10 && getBlockState().get(PropertyHolder.CHEST_STATE) == ChestState.CLOSING)
+        if (!level.isClientSide() && (level.getGameTime() - closeStart) >= 10 && getBlockState().getValue(PropertyHolder.CHEST_STATE) == ChestState.CLOSING)
         {
             closeStart = 0;
-            world.setBlockState(pos, getBlockState().with(PropertyHolder.CHEST_STATE, ChestState.CLOSED));
+            level.setBlockAndUpdate(worldPosition, getBlockState().setValue(PropertyHolder.CHEST_STATE, ChestState.CLOSED));
         }
     }
 
     @Override
     public void open(ServerPlayerEntity player)
     {
-        if (getBlockState().get(PropertyHolder.CHEST_STATE) != ChestState.OPENING)
+        if (getBlockState().getValue(PropertyHolder.CHEST_STATE) != ChestState.OPENING)
         {
             //noinspection ConstantConditions
-            world.setBlockState(pos, getBlockState().with(PropertyHolder.CHEST_STATE, ChestState.OPENING));
-            world.playSound(null, pos, SoundEvents.BLOCK_CHEST_OPEN, SoundCategory.BLOCKS, 0.5F, world.rand.nextFloat() * 0.1F + 0.9F);
+            level.setBlockAndUpdate(worldPosition, getBlockState().setValue(PropertyHolder.CHEST_STATE, ChestState.OPENING));
+            level.playSound(null, worldPosition, SoundEvents.CHEST_OPEN, SoundCategory.BLOCKS, 0.5F, level.random.nextFloat() * 0.1F + 0.9F);
         }
 
         openCount++;
@@ -57,10 +57,10 @@ public class FramedChestTileEntity extends FramedStorageTileEntity implements IT
             if (openCount == 0)
             {
                 //noinspection ConstantConditions
-                world.playSound(null, pos, SoundEvents.BLOCK_CHEST_CLOSE, SoundCategory.BLOCKS, 0.5F, world.rand.nextFloat() * 0.1F + 0.9F);
-                world.setBlockState(pos, getBlockState().with(PropertyHolder.CHEST_STATE, ChestState.CLOSING));
+                level.playSound(null, worldPosition, SoundEvents.CHEST_CLOSE, SoundCategory.BLOCKS, 0.5F, level.random.nextFloat() * 0.1F + 0.9F);
+                level.setBlockAndUpdate(worldPosition, getBlockState().setValue(PropertyHolder.CHEST_STATE, ChestState.CLOSING));
 
-                closeStart = world.getGameTime();
+                closeStart = level.getGameTime();
             }
         }
     }
@@ -72,13 +72,13 @@ public class FramedChestTileEntity extends FramedStorageTileEntity implements IT
             if ((lastState == ChestState.CLOSING && state == ChestState.OPENING) || (lastState == ChestState.OPENING && state == ChestState.CLOSING))
             {
                 //noinspection ConstantConditions
-                long diff = world.getGameTime() - lastChangeTime;
-                lastChangeTime = world.getGameTime() - (diff < 10 ? 10 - diff : 0);
+                long diff = level.getGameTime() - lastChangeTime;
+                lastChangeTime = level.getGameTime() - (diff < 10 ? 10 - diff : 0);
             }
             else
             {
                 //noinspection ConstantConditions
-                lastChangeTime = world.getGameTime();
+                lastChangeTime = level.getGameTime();
             }
             lastState = state;
         }

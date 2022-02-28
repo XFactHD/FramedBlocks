@@ -18,7 +18,7 @@ public class FramedHalfPillarModel extends FramedBlockModel
     public FramedHalfPillarModel(BlockState state, IBakedModel baseModel)
     {
         super(state, baseModel);
-        face = state.get(BlockStateProperties.FACING);
+        face = state.getValue(BlockStateProperties.FACING);
     }
 
     @Override
@@ -27,11 +27,11 @@ public class FramedHalfPillarModel extends FramedBlockModel
         BakedQuad copy = ModelUtils.duplicateQuad(quad);
         if (FramedPillarModel.createPillarQuad(copy, face.getAxis(), 4F / 16F, 12F / 16F, 12F / 16F))
         {
-            if (quad.getFace() == face)
+            if (quad.getDirection() == face)
             {
                 quadMap.get(face).add(copy);
             }
-            else if (quad.getFace() == face.getOpposite())
+            else if (quad.getDirection() == face.getOpposite())
             {
                 BakedQuadTransformer.setQuadPosInFacingDir(copy, .5F);
                 quadMap.get(null).add(copy);
@@ -43,7 +43,7 @@ public class FramedHalfPillarModel extends FramedBlockModel
                     quadMap.get(null).add(copy);
                 }
             }
-            else if (quad.getFace().getAxis() == Direction.Axis.Y)
+            else if (quad.getDirection().getAxis() == Direction.Axis.Y)
             {
                 if (BakedQuadTransformer.createTopBottomQuad(copy, face.getOpposite(), .5F))
                 {

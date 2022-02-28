@@ -32,7 +32,7 @@ public class FramedStorageTileEntity extends FramedTileEntity implements INamedC
         @Override
         protected void onContentsChanged(int slot)
         {
-            FramedStorageTileEntity.this.markDirty();
+            FramedStorageTileEntity.this.setChanged();
         }
     };
     private LazyOptional<IItemHandler> lazyItemHandler = LazyOptional.empty();
@@ -41,7 +41,7 @@ public class FramedStorageTileEntity extends FramedTileEntity implements INamedC
 
     protected FramedStorageTileEntity(TileEntityType<?> type) { super(type); }
 
-    public void open(ServerPlayerEntity player) { NetworkHooks.openGui(player, this, pos); }
+    public void open(ServerPlayerEntity player) { NetworkHooks.openGui(player, this, worldPosition); }
 
     @Nonnull
     @Override
@@ -71,11 +71,11 @@ public class FramedStorageTileEntity extends FramedTileEntity implements INamedC
     public boolean isUsableByPlayer(PlayerEntity player)
     {
         //noinspection ConstantConditions
-        if (world.getTileEntity(pos) != this)
+        if (level.getBlockEntity(worldPosition) != this)
         {
             return false;
         }
-        return !(player.getDistanceSq((double)pos.getX() + 0.5D, (double)pos.getY() + 0.5D, (double)pos.getZ() + 0.5D) > 64.0D);
+        return !(player.distanceToSqr((double)worldPosition.getX() + 0.5D, (double)worldPosition.getY() + 0.5D, (double)worldPosition.getZ() + 0.5D) > 64.0D);
     }
 
     public List<ItemStack> getDrops()
@@ -124,19 +124,19 @@ public class FramedStorageTileEntity extends FramedTileEntity implements INamedC
 
 
     @Override //Prevent writing inventory contents
-    public CompoundNBT writeToBlueprint() { return super.write(new CompoundNBT()); }
+    public CompoundNBT writeToBlueprint() { return super.save(new CompoundNBT()); }
 
     @Override
-    public CompoundNBT write(CompoundNBT nbt)
+    public CompoundNBT save(CompoundNBT nbt)
     {
         nbt.put("inventory", itemHandler.serializeNBT());
-        return super.write(nbt);
+        return super.save(nbt);
     }
 
     @Override
-    public void read(BlockState state, CompoundNBT nbt)
+    public void load(BlockState state, CompoundNBT nbt)
     {
-        super.read(state, nbt);
+        super.load(state, nbt);
         itemHandler.deserializeNBT(nbt.getCompound("inventory"));
     }
 

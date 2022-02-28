@@ -11,5 +11,5 @@ public enum ChestState implements IStringSerializable
     CLOSING;
 
     @Override
-    public String getString() { return toString().toLowerCase(Locale.ROOT); }
+    public String getSerializedName() { return toString().toLowerCase(Locale.ROOT); }
 }

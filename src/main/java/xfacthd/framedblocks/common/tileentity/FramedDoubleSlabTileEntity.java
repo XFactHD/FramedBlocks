@@ -15,7 +15,7 @@ public class FramedDoubleSlabTileEntity extends FramedDoubleTileEntity
     @Override
     protected boolean hitSecondary(BlockRayTraceResult hit)
     {
-        return hit.getFace() == Direction.UP || MathHelper.frac(hit.getHitVec().getY()) >= .5F;
+        return hit.getDirection() == Direction.UP || MathHelper.frac(hit.getLocation().y()) >= .5F;
     }
 
     @Override
@@ -26,7 +26,7 @@ public class FramedDoubleSlabTileEntity extends FramedDoubleTileEntity
     {
         if (side == Direction.UP) { return getCamoStateTwo(); }
         if (side == Direction.DOWN) { return getCamoState(); }
-        return Blocks.AIR.getDefaultState();
+        return Blocks.AIR.defaultBlockState();
     }
 
     @Override
@@ -34,8 +34,8 @@ public class FramedDoubleSlabTileEntity extends FramedDoubleTileEntity
     {
         if (side.getAxis() == Direction.Axis.Y)
         {
-            return getCamoState(side).isSolid();
+            return getCamoState(side).canOcclude();
         }
-        return getCamoState().isSolid() && getCamoStateTwo().isSolid();
+        return getCamoState().canOcclude() && getCamoStateTwo().canOcclude();
     }
 }

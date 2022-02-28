@@ -14,15 +14,15 @@ public class PaneSkipPredicate implements SideSkipPredicate
     {
         if (adjState.getBlock() != state.getBlock()) { return false; }
 
-        boolean north = state.get(BlockStateProperties.NORTH);
-        boolean east = state.get(BlockStateProperties.EAST);
-        boolean south = state.get(BlockStateProperties.SOUTH);
-        boolean west = state.get(BlockStateProperties.WEST);
+        boolean north = state.getValue(BlockStateProperties.NORTH);
+        boolean east = state.getValue(BlockStateProperties.EAST);
+        boolean south = state.getValue(BlockStateProperties.SOUTH);
+        boolean west = state.getValue(BlockStateProperties.WEST);
 
-        boolean adjNorth = adjState.get(BlockStateProperties.NORTH);
-        boolean adjEast = adjState.get(BlockStateProperties.EAST);
-        boolean adjSouth = adjState.get(BlockStateProperties.SOUTH);
-        boolean adjWest = adjState.get(BlockStateProperties.WEST);
+        boolean adjNorth = adjState.getValue(BlockStateProperties.NORTH);
+        boolean adjEast = adjState.getValue(BlockStateProperties.EAST);
+        boolean adjSouth = adjState.getValue(BlockStateProperties.SOUTH);
+        boolean adjWest = adjState.getValue(BlockStateProperties.WEST);
 
         if (side.getAxis() == Direction.Axis.Y && north == adjNorth && east == adjEast && south == adjSouth && west == adjWest)
         {

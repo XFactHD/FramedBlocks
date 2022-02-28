@@ -36,15 +36,15 @@ public class FramedRailSlopeBlock extends AbstractRailBlock implements IFramedBl
     public FramedRailSlopeBlock()
     {
         super(true, IFramedBlock.createProperties(BlockType.FRAMED_RAIL_SLOPE));
-        shapes = getBlockType().generateShapes(getStateContainer().getValidStates());
-        setDefaultState(getDefaultState()
-                .with(BlockStateProperties.WATERLOGGED, false)
-                .with(PropertyHolder.SOLID, false)
+        shapes = getBlockType().generateShapes(getStateDefinition().getPossibleStates());
+        registerDefaultState(defaultBlockState()
+                .setValue(BlockStateProperties.WATERLOGGED, false)
+                .setValue(PropertyHolder.SOLID, false)
         );
     }
 
     @Override
-    protected void fillStateContainer(StateContainer.Builder<Block, BlockState> builder)
+    protected void createBlockStateDefinition(StateContainer.Builder<Block, BlockState> builder)
     {
         builder.add(PropertyHolder.ASCENDING_RAIL_SHAPE, BlockStateProperties.WATERLOGGED, PropertyHolder.SOLID);
     }
@@ -52,32 +52,32 @@ public class FramedRailSlopeBlock extends AbstractRailBlock implements IFramedBl
     @Override
     public BlockState getStateForPlacement(BlockItemUseContext context)
     {
-        RailShape shape = shapeFromDirection(context.getPlacementHorizontalFacing());
+        RailShape shape = shapeFromDirection(context.getHorizontalDirection());
 
-        FluidState fluidState = context.getWorld().getFluidState(context.getPos());
-        boolean waterlogged = fluidState.getFluid() == Fluids.WATER;
+        FluidState fluidState = context.getLevel().getFluidState(context.getClickedPos());
+        boolean waterlogged = fluidState.getType() == Fluids.WATER;
 
-        return getDefaultState()
-                .with(PropertyHolder.ASCENDING_RAIL_SHAPE, shape)
-                .with(BlockStateProperties.WATERLOGGED, waterlogged);
+        return defaultBlockState()
+                .setValue(PropertyHolder.ASCENDING_RAIL_SHAPE, shape)
+                .setValue(BlockStateProperties.WATERLOGGED, waterlogged);
     }
 
     @Override
-    public boolean isValidPosition(BlockState state, IWorldReader world, BlockPos pos)
+    public boolean canSurvive(BlockState state, IWorldReader world, BlockPos pos)
     {
-        Direction dir = directionFromShape(state.get(PropertyHolder.ASCENDING_RAIL_SHAPE));
-        return hasSolidSideOnTop(world, pos.offset(dir));
+        Direction dir = directionFromShape(state.getValue(PropertyHolder.ASCENDING_RAIL_SHAPE));
+        return canSupportRigidBlock(world, pos.relative(dir));
     }
 
     @Override //Copy of AbstractRailBlock#neighborChanged() to use our own check for removal
     public void neighborChanged(BlockState state, World world, BlockPos pos, Block block, BlockPos fromPos, boolean isMoving)
     {
-        if (!world.isRemote && world.getBlockState(pos).matchesBlock(this))
+        if (!world.isClientSide && world.getBlockState(pos).is(this))
         {
             RailShape shape = getRailDirection(state, world, pos, null);
             if (isInvalidRailDirection(pos, world, shape))
             {
-                spawnDrops(state, world, pos);
+                dropResources(state, world, pos);
                 world.removeBlock(pos, isMoving);
             }
             else
@@ -91,7 +91,7 @@ public class FramedRailSlopeBlock extends AbstractRailBlock implements IFramedBl
     private static boolean isInvalidRailDirection(BlockPos pos, World world, RailShape shape)
     {
         if (!shape.isAscending()) { throw new IllegalArgumentException("Invalid shape " + shape); }
-        return !hasSolidSideOnTop(world, pos.offset(directionFromShape(shape)));
+        return !canSupportRigidBlock(world, pos.relative(directionFromShape(shape)));
     }
 
     public static RailShape shapeFromDirection(Direction dir)
@@ -122,28 +122,28 @@ public class FramedRailSlopeBlock extends AbstractRailBlock implements IFramedBl
     public Property<RailShape> getShapeProperty() { return PropertyHolder.ASCENDING_RAIL_SHAPE; }
 
     @Override
-    public final ActionResultType onBlockActivated(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockRayTraceResult hit)
+    public final ActionResultType use(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockRayTraceResult hit)
     {
         return handleBlockActivated(world, pos, player, hand, hit);
     }
 
     @Override
-    public void onBlockPlacedBy(World world, BlockPos pos, BlockState state, @Nullable LivingEntity placer, ItemStack stack)
+    public void setPlacedBy(World world, BlockPos pos, BlockState state, @Nullable LivingEntity placer, ItemStack stack)
     {
         tryApplyCamoImmediately(world, pos, placer, stack);
     }
 
     @Override
-    public boolean isTransparent(BlockState state) { return state.get(PropertyHolder.SOLID); }
+    public boolean useShapeForLightOcclusion(BlockState state) { return state.getValue(PropertyHolder.SOLID); }
 
     @Override
-    public VoxelShape getRenderShape(BlockState state, IBlockReader world, BlockPos pos)
+    public VoxelShape getOcclusionShape(BlockState state, IBlockReader world, BlockPos pos)
     {
         return getCamoOcclusionShape(state, world, pos);
     }
 
     @Override
-    public VoxelShape getRayTraceShape(BlockState state, IBlockReader world, BlockPos pos, ISelectionContext ctx)
+    public VoxelShape getVisualShape(BlockState state, IBlockReader world, BlockPos pos, ISelectionContext ctx)
     {
         return getCamoVisualShape(state, world, pos, ctx);
     }
@@ -204,24 +204,24 @@ public class FramedRailSlopeBlock extends AbstractRailBlock implements IFramedBl
     }
 
     @Override
-    public BlockState updatePostPlacement(BlockState state, Direction facing, BlockState facingState, IWorld world, BlockPos pos, BlockPos facingPos)
+    public BlockState updateShape(BlockState state, Direction facing, BlockState facingState, IWorld world, BlockPos pos, BlockPos facingPos)
     {
-        if (state.get(BlockStateProperties.WATERLOGGED))
+        if (state.getValue(BlockStateProperties.WATERLOGGED))
         {
-            world.getPendingFluidTicks().scheduleTick(pos, Fluids.WATER, Fluids.WATER.getTickRate(world));
+            world.getLiquidTicks().scheduleTick(pos, Fluids.WATER, Fluids.WATER.getTickDelay(world));
         }
 
-        return super.updatePostPlacement(state, facing, facingState, world, pos, facingPos);
+        return super.updateShape(state, facing, facingState, world, pos, facingPos);
     }
 
     @Override
     public FluidState getFluidState(BlockState state)
     {
-        if (state.get(BlockStateProperties.WATERLOGGED))
+        if (state.getValue(BlockStateProperties.WATERLOGGED))
         {
-            return Fluids.WATER.getStillFluidState(false);
+            return Fluids.WATER.getSource(false);
         }
-        return Fluids.EMPTY.getDefaultState();
+        return Fluids.EMPTY.defaultFluidState();
     }
 
     @Override

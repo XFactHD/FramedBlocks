@@ -9,9 +9,9 @@ public class MathUtils
     public static Vector3d wrapVector(Vector3d vec, double min, double max)
     {
         return new Vector3d(
-                wrap(vec.getX(), min, max),
-                wrap(vec.getY(), min, max),
-                wrap(vec.getZ(), min, max)
+                wrap(vec.x(), min, max),
+                wrap(vec.y(), min, max),
+                wrap(vec.z(), min, max)
         );
     }
 

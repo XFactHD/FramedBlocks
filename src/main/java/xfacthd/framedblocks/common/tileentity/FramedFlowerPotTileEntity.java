@@ -24,10 +24,10 @@ public class FramedFlowerPotTileEntity extends FramedTileEntity
         {
             this.flowerBlock = flowerBlock;
 
-            markDirty();
+            setChanged();
 
             //noinspection ConstantConditions
-            world.notifyBlockUpdate(pos, getBlockState(), getBlockState(), 3);
+            level.sendBlockUpdated(worldPosition, getBlockState(), getBlockState(), 3);
         }
     }
 
@@ -93,17 +93,17 @@ public class FramedFlowerPotTileEntity extends FramedTileEntity
     }
 
     @Override
-    public CompoundNBT write(CompoundNBT nbt)
+    public CompoundNBT save(CompoundNBT nbt)
     {
         //noinspection ConstantConditions
         nbt.putString("flower", flowerBlock.getRegistryName().toString());
-        return super.write(nbt);
+        return super.save(nbt);
     }
 
     @Override
-    public void read(BlockState state, CompoundNBT nbt)
+    public void load(BlockState state, CompoundNBT nbt)
     {
-        super.read(state, nbt);
+        super.load(state, nbt);
         flowerBlock = ForgeRegistries.BLOCKS.getValue(new ResourceLocation(nbt.getString("flower")));
     }
 }

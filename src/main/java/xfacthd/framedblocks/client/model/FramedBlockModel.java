@@ -50,7 +50,7 @@ public abstract class FramedBlockModel extends BakedModelProxy
     public List<BakedQuad> getQuads(BlockState state, Direction side, Random rand, IModelData extraData)
     {
         RenderType layer = MinecraftForgeClient.getRenderLayer();
-        BlockState camoState = Blocks.AIR.getDefaultState();
+        BlockState camoState = Blocks.AIR.defaultBlockState();
 
         if (extraData instanceof FramedBlockData && layer != null)
         {
@@ -73,13 +73,13 @@ public abstract class FramedBlockModel extends BakedModelProxy
             }
         }
 
-        if (layer == null) { layer = RenderType.getCutout(); }
+        if (layer == null) { layer = RenderType.cutout(); }
         if (camoState == null || camoState.isAir())
         {
             boolean baseModelInLayer = canRenderBaseModelInLayer(layer);
             if (baseModelInLayer || hasAdditionalQuadsInLayer(layer))
             {
-                return getCamoQuads(state, FBContent.blockFramedCube.get().getDefaultState(), side, rand, extraData, layer, baseModelInLayer);
+                return getCamoQuads(state, FBContent.blockFramedCube.get().defaultBlockState(), side, rand, extraData, layer, baseModelInLayer);
             }
         }
 
@@ -90,7 +90,7 @@ public abstract class FramedBlockModel extends BakedModelProxy
     public List<BakedQuad> getQuads(BlockState state, Direction side, Random rand)
     {
         if (state == null) { state = this.state; }
-        return getCamoQuads(state, FBContent.blockFramedCube.get().getDefaultState(), side, rand, EmptyModelData.INSTANCE, RenderType.getCutout(), true);
+        return getCamoQuads(state, FBContent.blockFramedCube.get().defaultBlockState(), side, rand, EmptyModelData.INSTANCE, RenderType.cutout(), true);
     }
 
     private List<BakedQuad> getCamoQuads(BlockState state, BlockState camoState, Direction side, Random rand, IModelData extraData, RenderType layer, boolean camoInLayer)
@@ -150,7 +150,7 @@ public abstract class FramedBlockModel extends BakedModelProxy
             List<BakedQuad> quads =
                     getAllQuads(camoModel, camoState, rand, getCamoData(camoModel, camoState, data))
                             .stream()
-                            .filter(q -> !type.getCtmPredicate().test(state, q.getFace()))
+                            .filter(q -> !type.getCtmPredicate().test(state, q.getDirection()))
                             .collect(Collectors.toList());
 
             for (BakedQuad quad : quads)
@@ -186,7 +186,7 @@ public abstract class FramedBlockModel extends BakedModelProxy
      */
     protected void getAdditionalQuads(Map<Direction, List<BakedQuad>> quadMap, BlockState state, Random rand, IModelData data, RenderType layer) {}
 
-    protected boolean canRenderBaseModelInLayer(RenderType layer) { return layer == RenderType.getCutout(); }
+    protected boolean canRenderBaseModelInLayer(RenderType layer) { return layer == RenderType.cutout(); }
 
     @Nonnull
     @Override
@@ -196,7 +196,7 @@ public abstract class FramedBlockModel extends BakedModelProxy
         {
             return tileData;
         }
-        TileEntity te = world.getTileEntity(pos);
+        TileEntity te = world.getBlockEntity(pos);
         if (te instanceof FramedTileEntity)
         {
             return te.getModelData();
@@ -216,11 +216,11 @@ public abstract class FramedBlockModel extends BakedModelProxy
                 {
                     return modelCache.computeIfAbsent(camoState, state ->
                             getCamoModel(camoState)
-                    ).getParticleTexture();
+                    ).getParticleIcon();
                 }
             }
         }
-        return baseModel.getParticleTexture();
+        return baseModel.getParticleIcon();
     }
 
 
@@ -232,7 +232,7 @@ public abstract class FramedBlockModel extends BakedModelProxy
         {
             return fluidModels.computeIfAbsent(camoState, state -> new FluidDummyModel(((FlowingFluidBlock) state.getBlock()).getFluid()));
         }
-        return Minecraft.getInstance().getBlockRendererDispatcher().getModelForState(camoState);
+        return Minecraft.getInstance().getBlockRenderer().getBlockModel(camoState);
     }
 
     private static IModelData getCamoData(IBakedModel model, BlockState state, IModelData data)

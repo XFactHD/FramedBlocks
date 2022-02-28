@@ -19,14 +19,14 @@ public class FramedThreewayCornerModel extends FramedBlockModel
     public FramedThreewayCornerModel(BlockState state, IBakedModel baseModel)
     {
         super(state, baseModel);
-        dir = state.get(PropertyHolder.FACING_HOR);
-        top = state.get(PropertyHolder.TOP);
+        dir = state.getValue(PropertyHolder.FACING_HOR);
+        top = state.getValue(PropertyHolder.TOP);
     }
 
     public FramedThreewayCornerModel(IBakedModel baseModel)
     {
         this(
-                FBContent.blockFramedThreewayCorner.get().getDefaultState().with(PropertyHolder.FACING_HOR, Direction.SOUTH),
+                FBContent.blockFramedThreewayCorner.get().defaultBlockState().setValue(PropertyHolder.FACING_HOR, Direction.SOUTH),
                 baseModel
         );
     }
@@ -34,23 +34,23 @@ public class FramedThreewayCornerModel extends FramedBlockModel
     @Override
     protected void transformQuad(Map<Direction, List<BakedQuad>> quadMap, BakedQuad quad)
     {
-        if ((quad.getFace() == Direction.UP && top) || (quad.getFace() == Direction.DOWN && !top))
+        if ((quad.getDirection() == Direction.UP && top) || (quad.getDirection() == Direction.DOWN && !top))
         {
             BakedQuad triQuad = ModelUtils.duplicateQuad(quad);
             if (BakedQuadTransformer.createTopBottomTriangleQuad(triQuad, dir))
             {
-                quadMap.get(quad.getFace()).add(triQuad);
+                quadMap.get(quad.getDirection()).add(triQuad);
             }
         }
-        else if (quad.getFace() == dir || quad.getFace() == dir.rotateYCCW())
+        else if (quad.getDirection() == dir || quad.getDirection() == dir.getCounterClockWise())
         {
             BakedQuad triQuad = ModelUtils.duplicateQuad(quad);
-            if (BakedQuadTransformer.createSideTriangleQuad(triQuad, quad.getFace() == dir, top))
+            if (BakedQuadTransformer.createSideTriangleQuad(triQuad, quad.getDirection() == dir, top))
             {
-                quadMap.get(quad.getFace()).add(triQuad);
+                quadMap.get(quad.getDirection()).add(triQuad);
             }
         }
-        else if (quad.getFace() == dir.getOpposite())
+        else if (quad.getDirection() == dir.getOpposite())
         {
             BakedQuad triQuad = ModelUtils.duplicateQuad(quad);
             if (BakedQuadTransformer.createSmallTriangleQuad(triQuad, TriangleDirection.RIGHT))
@@ -66,7 +66,7 @@ public class FramedThreewayCornerModel extends FramedBlockModel
                 quadMap.get(null).add(triQuad);
             }
         }
-        else if (quad.getFace() == dir.rotateY())
+        else if (quad.getDirection() == dir.getClockWise())
         {
             BakedQuad triQuad = ModelUtils.duplicateQuad(quad);
             if (BakedQuadTransformer.createSmallTriangleQuad(triQuad, TriangleDirection.LEFT))

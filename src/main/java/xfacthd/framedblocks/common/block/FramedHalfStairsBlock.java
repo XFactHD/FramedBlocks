@@ -19,14 +19,14 @@ public class FramedHalfStairsBlock extends FramedBlock
     public FramedHalfStairsBlock()
     {
         super(BlockType.FRAMED_HALF_STAIRS);
-        setDefaultState(getDefaultState()
-                .with(PropertyHolder.TOP, false)
-                .with(PropertyHolder.RIGHT, false)
+        registerDefaultState(defaultBlockState()
+                .setValue(PropertyHolder.TOP, false)
+                .setValue(PropertyHolder.RIGHT, false)
         );
     }
 
     @Override
-    protected void fillStateContainer(StateContainer.Builder<Block, BlockState> builder)
+    protected void createBlockStateDefinition(StateContainer.Builder<Block, BlockState> builder)
     {
         builder.add(PropertyHolder.FACING_HOR, PropertyHolder.TOP, PropertyHolder.RIGHT, BlockStateProperties.WATERLOGGED);
     }
@@ -34,10 +34,10 @@ public class FramedHalfStairsBlock extends FramedBlock
     @Override
     public BlockState getStateForPlacement(BlockItemUseContext context)
     {
-        BlockState state = getDefaultState();
+        BlockState state = defaultBlockState();
 
-        Direction face = context.getFace();
-        Vector3d hit = Utils.fraction(context.getHitVec());
+        Direction face = context.getClickedFace();
+        Vector3d hit = Utils.fraction(context.getClickLocation());
 
         Direction facing;
         if (face.getAxis() != Direction.Axis.Y)
@@ -46,17 +46,17 @@ public class FramedHalfStairsBlock extends FramedBlock
         }
         else
         {
-            facing = context.getPlacementHorizontalFacing();
+            facing = context.getHorizontalDirection();
         }
-        state = state.with(PropertyHolder.FACING_HOR, facing);
+        state = state.setValue(PropertyHolder.FACING_HOR, facing);
 
-        boolean top = face == Direction.DOWN || hit.getY() > .5;
-        state = state.with(PropertyHolder.TOP, top);
+        boolean top = face == Direction.DOWN || hit.y() > .5;
+        state = state.setValue(PropertyHolder.TOP, top);
 
-        double xz = facing.getAxis() == Direction.Axis.X ? hit.getZ() : hit.getX();
-        boolean rightPlus = facing.rotateYCCW().getAxisDirection() == Direction.AxisDirection.POSITIVE;
+        double xz = facing.getAxis() == Direction.Axis.X ? hit.z() : hit.x();
+        boolean rightPlus = facing.getCounterClockWise().getAxisDirection() == Direction.AxisDirection.POSITIVE;
         boolean right = (xz <= .5) == rightPlus;
-        state = state.with(PropertyHolder.RIGHT, right);
+        state = state.setValue(PropertyHolder.RIGHT, right);
 
         return state;
     }
@@ -65,35 +65,35 @@ public class FramedHalfStairsBlock extends FramedBlock
     {
         ImmutableMap.Builder<BlockState, VoxelShape> builder = ImmutableMap.builder();
 
-        VoxelShape bottomLeft = VoxelShapes.combine(
-                makeCuboidShape(8, 0, 0, 16, 8, 16),
-                makeCuboidShape(8, 8, 8, 16, 16, 16),
+        VoxelShape bottomLeft = VoxelShapes.joinUnoptimized(
+                box(8, 0, 0, 16, 8, 16),
+                box(8, 8, 8, 16, 16, 16),
                 IBooleanFunction.OR
         );
 
-        VoxelShape bottomRight = VoxelShapes.combine(
-                makeCuboidShape(0, 0, 0, 8, 8, 16),
-                makeCuboidShape(0, 8, 8, 8, 16, 16),
+        VoxelShape bottomRight = VoxelShapes.joinUnoptimized(
+                box(0, 0, 0, 8, 8, 16),
+                box(0, 8, 8, 8, 16, 16),
                 IBooleanFunction.OR
         );
 
-        VoxelShape topLeft = VoxelShapes.combine(
-                makeCuboidShape(8, 8, 0, 16, 16, 16),
-                makeCuboidShape(8, 0, 8, 16, 8, 16),
+        VoxelShape topLeft = VoxelShapes.joinUnoptimized(
+                box(8, 8, 0, 16, 16, 16),
+                box(8, 0, 8, 16, 8, 16),
                 IBooleanFunction.OR
         );
 
-        VoxelShape topRight = VoxelShapes.combine(
-                makeCuboidShape(0, 8, 0, 8, 16, 16),
-                makeCuboidShape(0, 0, 8, 8, 8, 16),
+        VoxelShape topRight = VoxelShapes.joinUnoptimized(
+                box(0, 8, 0, 8, 16, 16),
+                box(0, 0, 8, 8, 8, 16),
                 IBooleanFunction.OR
         );
 
         for (BlockState state : states)
         {
-            Direction dir = state.get(PropertyHolder.FACING_HOR);
-            boolean top = state.get(PropertyHolder.TOP);
-            boolean right = state.get(PropertyHolder.RIGHT);
+            Direction dir = state.getValue(PropertyHolder.FACING_HOR);
+            boolean top = state.getValue(PropertyHolder.TOP);
+            boolean right = state.getValue(PropertyHolder.RIGHT);
 
             VoxelShape shape;
             if (top)

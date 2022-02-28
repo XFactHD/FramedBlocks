@@ -31,16 +31,16 @@ public class FramedPaneBlock extends PaneBlock implements IFramedBlock
     }
 
     @Override
-    public final ActionResultType onBlockActivated(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockRayTraceResult hit)
+    public final ActionResultType use(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockRayTraceResult hit)
     {
         ActionResultType result = handleBlockActivated(world, pos, player, hand, hit);
-        if (result.isSuccessOrConsume()) { return result; }
+        if (result.consumesAction()) { return result; }
 
-        return super.onBlockActivated(state, world, pos, player, hand, hit);
+        return super.use(state, world, pos, player, hand, hit);
     }
 
     @Override
-    public void onBlockPlacedBy(World world, BlockPos pos, BlockState state, @Nullable LivingEntity placer, ItemStack stack)
+    public void setPlacedBy(World world, BlockPos pos, BlockState state, @Nullable LivingEntity placer, ItemStack stack)
     {
         tryApplyCamoImmediately(world, pos, placer, stack);
     }
@@ -99,15 +99,15 @@ public class FramedPaneBlock extends PaneBlock implements IFramedBlock
     }
 
     @Override //The pane handles this through the SideSkipPredicate instead
-    public boolean isSideInvisible(BlockState state, BlockState adjacentState, Direction side)
+    public boolean skipRendering(BlockState state, BlockState adjacentState, Direction side)
     {
-        return this == FBContent.blockFramedBars.get() && super.isSideInvisible(state, adjacentState, side);
+        return this == FBContent.blockFramedBars.get() && super.skipRendering(state, adjacentState, side);
     }
 
     @Override
     public boolean addHitEffects(BlockState state, World world, RayTraceResult target, ParticleManager manager)
     {
-        return IFramedBlock.suppressParticles(state, world, ((BlockRayTraceResult) target).getPos());
+        return IFramedBlock.suppressParticles(state, world, ((BlockRayTraceResult) target).getBlockPos());
     }
 
     @Override

@@ -34,7 +34,7 @@ public class BakedQuadTransformer
     {
         ModelUtils.modifyQuad(quad, (pos, color, uv, light, normal) ->
         {
-            Direction dir = quad.getFace();
+            Direction dir = quad.getDirection();
             int idx = dir.getAxis() == Direction.Axis.X ? 0 : 2;
             boolean invert = (dir.getAxisDirection() == Direction.AxisDirection.POSITIVE) == up;
 
@@ -57,7 +57,7 @@ public class BakedQuadTransformer
     {
         ModelUtils.modifyQuad(quad, (pos, color, uv, light, normal) ->
         {
-            Direction dir = quad.getFace();
+            Direction dir = quad.getDirection();
             boolean xAxis = dir.getAxis() == Direction.Axis.X;
             boolean invert = (dir.getAxis() == Direction.Axis.Z) == rightEdge;
 
@@ -92,7 +92,7 @@ public class BakedQuadTransformer
             int idxTargetFront = top ? idxBotFront : idxTopFront;
             int idxTargetBack = top ? idxBotBack : idxTopBack;
 
-            Direction dir = rightSide ? quad.getFace().rotateYCCW() : quad.getFace().rotateY();
+            Direction dir = rightSide ? quad.getDirection().getCounterClockWise() : quad.getDirection().getClockWise();
             boolean xAxis = dir.getAxis() == Direction.Axis.X;
             boolean neg = dir.getAxisDirection() == Direction.AxisDirection.NEGATIVE;
 
@@ -110,13 +110,13 @@ public class BakedQuadTransformer
                 xz = xAxis ? pos[idxBotFront][0] : pos[idxBotFront][2];
                 if (neg) { xz = 1F - xz; }
                 float toY = top ? Math.min(Math.max(pos[idxBotFront][1], 1F - xz), pos[idxTopFront][1]) : Math.max(Math.min(pos[idxTopFront][1], xz), pos[idxBotFront][1]);
-                ModelUtils.remapUV(quad.getFace(), pos[idxBotFront][1], pos[idxTopFront][1], toY, uvSrc, uv, idxTopFront, idxBotFront, idxTargetFront, true, true, rotated, mirrored);
+                ModelUtils.remapUV(quad.getDirection(), pos[idxBotFront][1], pos[idxTopFront][1], toY, uvSrc, uv, idxTopFront, idxBotFront, idxTargetFront, true, true, rotated, mirrored);
                 pos[idxTargetFront][1] = toY;
 
                 xz = xAxis ? pos[idxBotBack][0] : pos[idxBotBack][2];
                 if (neg) { xz = 1F - xz; }
                 toY = top ? Math.min(Math.max(pos[idxBotBack][1], 1F - xz), pos[idxTopBack][1]) : Math.max(Math.min(pos[idxTopBack][1], xz), pos[idxBotBack][1]);
-                ModelUtils.remapUV(quad.getFace(), pos[idxTopBack][1], pos[idxBotBack][1], toY, uvSrc, uv, idxTopBack, idxBotBack, idxTargetBack, true, true, rotated, mirrored);
+                ModelUtils.remapUV(quad.getDirection(), pos[idxTopBack][1], pos[idxBotBack][1], toY, uvSrc, uv, idxTopBack, idxBotBack, idxTargetBack, true, true, rotated, mirrored);
                 pos[idxTargetBack][1] = toY;
 
                 return true;
@@ -135,9 +135,9 @@ public class BakedQuadTransformer
         return ModelUtils.modifyQuad(quad, (pos, color, uv, light, normal) ->
         {
             boolean xAxis = dir.getAxis() == Direction.Axis.X;
-            boolean up = quad.getFace() == Direction.UP;
+            boolean up = quad.getDirection() == Direction.UP;
             boolean negTarget = dir.getAxisDirection() == Direction.AxisDirection.NEGATIVE;
-            boolean negModifier = dir.rotateY().getAxisDirection() == Direction.AxisDirection.NEGATIVE;
+            boolean negModifier = dir.getClockWise().getAxisDirection() == Direction.AxisDirection.NEGATIVE;
             int coordTarget = xAxis ? 0 : 2;
             int coordModifier = xAxis ? 2 : 0;
 
@@ -147,10 +147,10 @@ public class BakedQuadTransformer
             // E | 0->3 | 1->2
             // S | 3->2 | 0->1
             // W | 2->1 | 3->0
-            int idxFromRight = xAxis ? dir.getOpposite().getHorizontalIndex() : dir.getHorizontalIndex();
-            int idxFromLeft = xAxis ? dir.rotateY().getHorizontalIndex() : dir.rotateYCCW().getHorizontalIndex();
-            int idxToRight = xAxis ? dir.rotateYCCW().getHorizontalIndex() : dir.rotateY().getHorizontalIndex();
-            int idxToLeft = !xAxis ? dir.getOpposite().getHorizontalIndex() : dir.getHorizontalIndex();
+            int idxFromRight = xAxis ? dir.getOpposite().get2DDataValue() : dir.get2DDataValue();
+            int idxFromLeft = xAxis ? dir.getClockWise().get2DDataValue() : dir.getCounterClockWise().get2DDataValue();
+            int idxToRight = xAxis ? dir.getCounterClockWise().get2DDataValue() : dir.getClockWise().get2DDataValue();
+            int idxToLeft = !xAxis ? dir.getOpposite().get2DDataValue() : dir.get2DDataValue();
 
             if (!up && !xAxis)
             {
@@ -180,14 +180,14 @@ public class BakedQuadTransformer
                 if (negModifier) { mod = 1F - mod; }
                 float xz = pos[idxFromLeft][coordTarget];
                 float toXZ = negTarget ? Math.min(xz, Math.max(pos[idxToLeft][coordTarget], 1F - mod)) : Math.max(xz, Math.min(pos[idxToLeft][coordTarget], mod));
-                ModelUtils.remapUV(quad.getFace(), xz, pos[idxToLeft][coordTarget], toXZ, uvSrc, uv, idxFromLeft, idxToLeft, idxFromLeft, !xAxis, !xAxis && !up, rotated, mirrored);
+                ModelUtils.remapUV(quad.getDirection(), xz, pos[idxToLeft][coordTarget], toXZ, uvSrc, uv, idxFromLeft, idxToLeft, idxFromLeft, !xAxis, !xAxis && !up, rotated, mirrored);
                 pos[idxFromLeft][coordTarget] = toXZ;
 
                 mod = pos[idxFromRight][coordModifier];
                 if (negModifier) { mod = 1F - mod; }
                 xz = pos[idxFromRight][coordTarget];
                 toXZ = negTarget ? Math.min(xz, Math.max(pos[idxToRight][coordTarget], 1F - mod)) : Math.max(xz, Math.min(pos[idxToRight][coordTarget], mod));
-                ModelUtils.remapUV(quad.getFace(), xz, pos[idxToRight][coordTarget], toXZ, uvSrc, uv, idxFromRight, idxToRight, idxFromRight, !xAxis, !xAxis && !up, rotated, mirrored);
+                ModelUtils.remapUV(quad.getDirection(), xz, pos[idxToRight][coordTarget], toXZ, uvSrc, uv, idxFromRight, idxToRight, idxFromRight, !xAxis, !xAxis && !up, rotated, mirrored);
                 pos[idxFromRight][coordTarget] = toXZ;
 
                 return true;
@@ -207,18 +207,18 @@ public class BakedQuadTransformer
     {
         boolean useQuad = ModelUtils.modifyQuad(quad, (pos, color, uv, light, normal) ->
         {
-            int coord = quad.getFace().getAxis() == Direction.Axis.X ? 2 : 0;
+            int coord = quad.getDirection().getAxis() == Direction.Axis.X ? 2 : 0;
             int checkVert1 = up ? 2 : 3;
             int checkVert2 = up ? 1 : 0;
 
-            boolean vertPos = quad.getFace().rotateYCCW().getAxisDirection() == Direction.AxisDirection.POSITIVE;
+            boolean vertPos = quad.getDirection().getCounterClockWise().getAxisDirection() == Direction.AxisDirection.POSITIVE;
             float h1 = (up ? pos[checkVert1][1] : 1F - pos[checkVert1][1]) / 2F;
             float h2 = 1F - ((up ? pos[checkVert2][1] : 1F - pos[checkVert2][1]) / 2F);
             float xz1 = vertPos ? pos[checkVert1][coord] : 1F - pos[checkVert1][coord];
             float xz2 = vertPos ? pos[checkVert2][coord] : 1F - pos[checkVert2][coord];
             if (xz1 >= h1 && xz2 <= h2)
             {
-                boolean northeast = quad.getFace() == Direction.NORTH || quad.getFace() == Direction.EAST;
+                boolean northeast = quad.getDirection() == Direction.NORTH || quad.getDirection() == Direction.EAST;
 
                 int idxTip1 = up ? 0 : 1;
                 int idxTip2 = up ? 3 : 2;
@@ -252,10 +252,10 @@ public class BakedQuadTransformer
                 float[][] uvSrc = new float[4][2];
                 for (int i = 0; i < 4; i++) { System.arraycopy(uv[i], 0, uvSrc[i], 0, 2); }
 
-                ModelUtils.remapUV(quad.getFace(), pos[idxTip1 ][coord], pos[idxTip2 ][coord], yTip1,  uvSrc, uv, idxTip1,  idxTip2,  idxTip1,  false, northeast, rotated, mirrored);
-                ModelUtils.remapUV(quad.getFace(), pos[idxTip1 ][coord], pos[idxTip2 ][coord], yTip2,  uvSrc, uv, idxTip1,  idxTip2,  idxTip2,  false, northeast, rotated, mirrored);
-                ModelUtils.remapUV(quad.getFace(), pos[idxBase1][coord], pos[idxBase2][coord], yBase1, uvSrc, uv, idxBase1, idxBase2, idxBase1, false, northeast, rotated, mirrored);
-                ModelUtils.remapUV(quad.getFace(), pos[idxBase1][coord], pos[idxBase2][coord], yBase2, uvSrc, uv, idxBase1, idxBase2, idxBase2, false, northeast, rotated, mirrored);
+                ModelUtils.remapUV(quad.getDirection(), pos[idxTip1 ][coord], pos[idxTip2 ][coord], yTip1,  uvSrc, uv, idxTip1,  idxTip2,  idxTip1,  false, northeast, rotated, mirrored);
+                ModelUtils.remapUV(quad.getDirection(), pos[idxTip1 ][coord], pos[idxTip2 ][coord], yTip2,  uvSrc, uv, idxTip1,  idxTip2,  idxTip2,  false, northeast, rotated, mirrored);
+                ModelUtils.remapUV(quad.getDirection(), pos[idxBase1][coord], pos[idxBase2][coord], yBase1, uvSrc, uv, idxBase1, idxBase2, idxBase1, false, northeast, rotated, mirrored);
+                ModelUtils.remapUV(quad.getDirection(), pos[idxBase1][coord], pos[idxBase2][coord], yBase2, uvSrc, uv, idxBase1, idxBase2, idxBase2, false, northeast, rotated, mirrored);
 
                 pos[idxTip1][coord] = yTip1;
                 pos[idxTip2][coord] = yTip2;
@@ -268,11 +268,11 @@ public class BakedQuadTransformer
         });
         if (!useQuad) { return false; }
 
-        Vector3f origin = DIR_TO_ORIGIN_VECS[quad.getFace().ordinal() - 2 + (up ? 0 : 4)];
-        boolean northeast = quad.getFace() == Direction.NORTH || quad.getFace() == Direction.EAST;
+        Vector3f origin = DIR_TO_ORIGIN_VECS[quad.getDirection().ordinal() - 2 + (up ? 0 : 4)];
+        boolean northeast = quad.getDirection() == Direction.NORTH || quad.getDirection() == Direction.EAST;
         float angle = back ? PRISM_TILT_ANGLE : -PRISM_TILT_ANGLE;
         if (northeast != up) { angle *= -1F; }
-        rotateQuadAroundAxis(quad, quad.getFace().rotateY().getAxis(), origin, angle, true);
+        rotateQuadAroundAxis(quad, quad.getDirection().getClockWise().getAxis(), origin, angle, true);
         rotateQuadAroundAxis(quad, Direction.Axis.Y, origin, 45, true);
 
         return true;
@@ -294,7 +294,7 @@ public class BakedQuadTransformer
         }
         else
         {
-            Direction cutDir = dir == TriangleDirection.RIGHT ? quad.getFace().rotateYCCW() : quad.getFace().rotateY();
+            Direction cutDir = dir == TriangleDirection.RIGHT ? quad.getDirection().getCounterClockWise() : quad.getDirection().getClockWise();
             if (!createVerticalSideQuad(quad, cutDir, .5F))
             {
                 return false;
@@ -303,7 +303,7 @@ public class BakedQuadTransformer
 
         ModelUtils.modifyQuad(quad, (pos, color, uv, light, normal) ->
         {
-            Direction perpDir = quad.getFace().rotateYCCW();
+            Direction perpDir = quad.getDirection().getCounterClockWise();
             boolean perpPos = perpDir.getAxisDirection() == Direction.AxisDirection.POSITIVE;
             boolean perpXAxis = perpDir.getAxis() == Direction.Axis.X;
 
@@ -328,10 +328,10 @@ public class BakedQuadTransformer
                 float xz2 = perpPos ? Math.min(Math.max(y2, pos[1][coordTarget]), pos[2][coordTarget]) : Math.max(Math.min(1F - y2, pos[1][coordTarget]), pos[2][coordTarget]);
                 float xz3 = perpPos ? Math.min(Math.max(y3, pos[0][coordTarget]), pos[3][coordTarget]) : Math.max(Math.min(1F - y3, pos[0][coordTarget]), pos[3][coordTarget]);
 
-                ModelUtils.remapUV(quad.getFace(), pos[0][coordTarget], pos[3][coordTarget], xz0, uvSrc, uv, 0, 3, 0, false, !perpPos, rotated, mirrored);
-                ModelUtils.remapUV(quad.getFace(), pos[1][coordTarget], pos[2][coordTarget], xz1, uvSrc, uv, 1, 2, 1, false, !perpPos, rotated, mirrored);
-                ModelUtils.remapUV(quad.getFace(), pos[1][coordTarget], pos[2][coordTarget], xz2, uvSrc, uv, 1, 2, 2, false, !perpPos, rotated, mirrored);
-                ModelUtils.remapUV(quad.getFace(), pos[0][coordTarget], pos[3][coordTarget], xz3, uvSrc, uv, 0, 3, 3, false, !perpPos, rotated, mirrored);
+                ModelUtils.remapUV(quad.getDirection(), pos[0][coordTarget], pos[3][coordTarget], xz0, uvSrc, uv, 0, 3, 0, false, !perpPos, rotated, mirrored);
+                ModelUtils.remapUV(quad.getDirection(), pos[1][coordTarget], pos[2][coordTarget], xz1, uvSrc, uv, 1, 2, 1, false, !perpPos, rotated, mirrored);
+                ModelUtils.remapUV(quad.getDirection(), pos[1][coordTarget], pos[2][coordTarget], xz2, uvSrc, uv, 1, 2, 2, false, !perpPos, rotated, mirrored);
+                ModelUtils.remapUV(quad.getDirection(), pos[0][coordTarget], pos[3][coordTarget], xz3, uvSrc, uv, 0, 3, 3, false, !perpPos, rotated, mirrored);
 
                 pos[0][coordTarget] = xz0;
                 pos[1][coordTarget] = xz1;
@@ -353,10 +353,10 @@ public class BakedQuadTransformer
                 float y2 = Math.max(Math.min(xz2, pos[3][1]), pos[2][1]);
                 float y3 = Math.min(Math.max(xz3, pos[2][1]), pos[3][1]);
 
-                ModelUtils.remapUV(quad.getFace(), pos[0][1], pos[1][1], y0, uvSrc, uv, 0, 1, 0, true, true, rotated, mirrored);
-                ModelUtils.remapUV(quad.getFace(), pos[0][1], pos[1][1], y1, uvSrc, uv, 0, 1, 1, true, true, rotated, mirrored);
-                ModelUtils.remapUV(quad.getFace(), pos[2][1], pos[3][1], y2, uvSrc, uv, 2, 3, 2, true, true, rotated, mirrored);
-                ModelUtils.remapUV(quad.getFace(), pos[2][1], pos[3][1], y3, uvSrc, uv, 2, 3, 3, true, true, rotated, mirrored);
+                ModelUtils.remapUV(quad.getDirection(), pos[0][1], pos[1][1], y0, uvSrc, uv, 0, 1, 0, true, true, rotated, mirrored);
+                ModelUtils.remapUV(quad.getDirection(), pos[0][1], pos[1][1], y1, uvSrc, uv, 0, 1, 1, true, true, rotated, mirrored);
+                ModelUtils.remapUV(quad.getDirection(), pos[2][1], pos[3][1], y2, uvSrc, uv, 2, 3, 2, true, true, rotated, mirrored);
+                ModelUtils.remapUV(quad.getDirection(), pos[2][1], pos[3][1], y3, uvSrc, uv, 2, 3, 3, true, true, rotated, mirrored);
 
                 pos[0][1] = y0;
                 pos[1][1] = y1;
@@ -402,16 +402,16 @@ public class BakedQuadTransformer
                 float xz2Src = dirPos ? pos[2][coordSource] : 1F - pos[2][coordSource];
                 float xz3Src = dirPos ? 1F - pos[3][coordSource] : pos[3][coordSource];
 
-                boolean up = quad.getFace() == Direction.UP;
+                boolean up = quad.getDirection() == Direction.UP;
                 float xz0 = up ? Math.max(Math.min(1F - xz0Src, pos[1][coordTarget]), pos[0][coordTarget]) : Math.min(Math.max(xz0Src, pos[1][coordTarget]), pos[0][coordTarget]);
                 float xz1 = up ? Math.min(Math.max(1F - xz1Src, pos[0][coordTarget]), pos[1][coordTarget]) : Math.max(Math.min(xz1Src, pos[0][coordTarget]), pos[1][coordTarget]);
                 float xz2 = up ? Math.min(Math.max(1F - xz2Src, pos[3][coordTarget]), pos[2][coordTarget]) : Math.max(Math.min(xz2Src, pos[3][coordTarget]), pos[2][coordTarget]);
                 float xz3 = up ? Math.max(Math.min(1F - xz3Src, pos[2][coordTarget]), pos[3][coordTarget]) : Math.min(Math.max(xz3Src, pos[2][coordTarget]), pos[3][coordTarget]);
 
-                ModelUtils.remapUV(quad.getFace(), pos[0][coordTarget], pos[1][coordTarget], xz0, uvSrc, uv, 0, 1, 0, true, false, rotated, mirrored);
-                ModelUtils.remapUV(quad.getFace(), pos[0][coordTarget], pos[1][coordTarget], xz1, uvSrc, uv, 0, 1, 1, true, false, rotated, mirrored);
-                ModelUtils.remapUV(quad.getFace(), pos[2][coordTarget], pos[3][coordTarget], xz2, uvSrc, uv, 2, 3, 2, true, false, rotated, mirrored);
-                ModelUtils.remapUV(quad.getFace(), pos[2][coordTarget], pos[3][coordTarget], xz3, uvSrc, uv, 2, 3, 3, true, false, rotated, mirrored);
+                ModelUtils.remapUV(quad.getDirection(), pos[0][coordTarget], pos[1][coordTarget], xz0, uvSrc, uv, 0, 1, 0, true, false, rotated, mirrored);
+                ModelUtils.remapUV(quad.getDirection(), pos[0][coordTarget], pos[1][coordTarget], xz1, uvSrc, uv, 0, 1, 1, true, false, rotated, mirrored);
+                ModelUtils.remapUV(quad.getDirection(), pos[2][coordTarget], pos[3][coordTarget], xz2, uvSrc, uv, 2, 3, 2, true, false, rotated, mirrored);
+                ModelUtils.remapUV(quad.getDirection(), pos[2][coordTarget], pos[3][coordTarget], xz3, uvSrc, uv, 2, 3, 3, true, false, rotated, mirrored);
 
                 pos[0][coordTarget] = xz0;
                 pos[1][coordTarget] = xz1;
@@ -430,10 +430,10 @@ public class BakedQuadTransformer
                 float xz2 = Math.min(Math.max(xz2Src, pos[1][coordTarget]), pos[2][coordTarget]);
                 float xz3 = Math.min(Math.max(xz3Src, pos[0][coordTarget]), pos[3][coordTarget]);
 
-                ModelUtils.remapUV(quad.getFace(), pos[0][coordTarget], pos[3][coordTarget], xz0, uvSrc, uv, 0, 3, 0, false, true, rotated, mirrored);
-                ModelUtils.remapUV(quad.getFace(), pos[1][coordTarget], pos[2][coordTarget], xz1, uvSrc, uv, 1, 2, 1, false, true, rotated, mirrored);
-                ModelUtils.remapUV(quad.getFace(), pos[1][coordTarget], pos[2][coordTarget], xz2, uvSrc, uv, 1, 2, 2, false, true, rotated, mirrored);
-                ModelUtils.remapUV(quad.getFace(), pos[0][coordTarget], pos[3][coordTarget], xz3, uvSrc, uv, 0, 3, 3, false, true, rotated, mirrored);
+                ModelUtils.remapUV(quad.getDirection(), pos[0][coordTarget], pos[3][coordTarget], xz0, uvSrc, uv, 0, 3, 0, false, true, rotated, mirrored);
+                ModelUtils.remapUV(quad.getDirection(), pos[1][coordTarget], pos[2][coordTarget], xz1, uvSrc, uv, 1, 2, 1, false, true, rotated, mirrored);
+                ModelUtils.remapUV(quad.getDirection(), pos[1][coordTarget], pos[2][coordTarget], xz2, uvSrc, uv, 1, 2, 2, false, true, rotated, mirrored);
+                ModelUtils.remapUV(quad.getDirection(), pos[0][coordTarget], pos[3][coordTarget], xz3, uvSrc, uv, 0, 3, 3, false, true, rotated, mirrored);
 
                 pos[0][coordTarget] = xz0;
                 pos[1][coordTarget] = xz1;
@@ -467,7 +467,7 @@ public class BakedQuadTransformer
     {
         return ModelUtils.modifyQuad(quad, (pos, color, uv, light, normal) ->
         {
-            Direction quadDirRot = quad.getFace().rotateYCCW();
+            Direction quadDirRot = quad.getDirection().getCounterClockWise();
             boolean x = quadDirRot.getAxis() == Direction.Axis.X;
             boolean positive = quadDirRot.getAxisDirection() == Direction.AxisDirection.POSITIVE;
 
@@ -489,8 +489,8 @@ public class BakedQuadTransformer
 
                 boolean rotated = ModelUtils.isQuadRotated(uv);
                 boolean mirrored = ModelUtils.isQuadMirrored(uv);
-                ModelUtils.remapUV(quad.getFace(), pos[1][1], pos[0][1], toY1, uv, 0, 1, idx1, true, true, rotated, mirrored);
-                ModelUtils.remapUV(quad.getFace(), pos[2][1], pos[3][1], toY2, uv, 3, 2, idx2, true, true, rotated, mirrored);
+                ModelUtils.remapUV(quad.getDirection(), pos[1][1], pos[0][1], toY1, uv, 0, 1, idx1, true, true, rotated, mirrored);
+                ModelUtils.remapUV(quad.getDirection(), pos[2][1], pos[3][1], toY2, uv, 3, 2, idx2, true, true, rotated, mirrored);
 
                 pos[idx1][1] = toY1;
                 pos[idx2][1] = toY2;
@@ -503,7 +503,7 @@ public class BakedQuadTransformer
 
     public static boolean createVerticalSideQuad(BakedQuad quad, Direction dir, float length)
     {
-        Preconditions.checkArgument(dir == quad.getFace().rotateY() || dir == quad.getFace().rotateYCCW(), "Direction dir must be in the quad's plane!");
+        Preconditions.checkArgument(dir == quad.getDirection().getClockWise() || dir == quad.getDirection().getCounterClockWise(), "Direction dir must be in the quad's plane!");
         return createVerticalSideQuad(quad, dir.getAxisDirection() == Direction.AxisDirection.NEGATIVE, length);
     }
 
@@ -520,7 +520,7 @@ public class BakedQuadTransformer
 
     public static boolean createVerticalSideQuad(BakedQuad quad, Direction dir, float lengthTop, float lengthBot)
     {
-        Preconditions.checkArgument(dir == quad.getFace().rotateY() || dir == quad.getFace().rotateYCCW(),
+        Preconditions.checkArgument(dir == quad.getDirection().getClockWise() || dir == quad.getDirection().getCounterClockWise(),
                 "Direction dir must be in the quad's plane!"
         );
         return createVerticalSideQuad(quad, dir.getAxisDirection() == Direction.AxisDirection.NEGATIVE, lengthTop, lengthBot);
@@ -537,8 +537,8 @@ public class BakedQuadTransformer
     {
         return ModelUtils.modifyQuad(quad, (pos, color, uv, light, normal) ->
         {
-            int coordIdx = quad.getFace().getAxis() == Direction.Axis.X ? 2 : 0;
-            boolean right = (quad.getFace().rotateYCCW().getAxisDirection() == Direction.AxisDirection.POSITIVE) == positive;
+            int coordIdx = quad.getDirection().getAxis() == Direction.Axis.X ? 2 : 0;
+            boolean right = (quad.getDirection().getCounterClockWise().getAxisDirection() == Direction.AxisDirection.POSITIVE) == positive;
             int vertIdxTop = right ? 3 : 0;
             int vertIdxBot = right ? 2 : 1;
 
@@ -559,8 +559,8 @@ public class BakedQuadTransformer
 
                 boolean rotated = ModelUtils.isQuadRotated(uv);
                 boolean mirrored = ModelUtils.isQuadMirrored(uv);
-                ModelUtils.remapUV(quad.getFace(), pos[0][coordIdx], pos[3][coordIdx], toXZ1, uv, 0, 3, idx1, false, positive != right, rotated, mirrored);
-                ModelUtils.remapUV(quad.getFace(), pos[1][coordIdx], pos[2][coordIdx], toXZ2, uv, 1, 2, idx2, false, positive != right, rotated, mirrored);
+                ModelUtils.remapUV(quad.getDirection(), pos[0][coordIdx], pos[3][coordIdx], toXZ1, uv, 0, 3, idx1, false, positive != right, rotated, mirrored);
+                ModelUtils.remapUV(quad.getDirection(), pos[1][coordIdx], pos[2][coordIdx], toXZ2, uv, 1, 2, idx2, false, positive != right, rotated, mirrored);
 
                 pos[idx1][coordIdx] = toXZ1;
                 pos[idx2][coordIdx] = toXZ2;
@@ -595,12 +595,12 @@ public class BakedQuadTransformer
         {
             boolean xAxis = cutDir.getAxis() == Direction.Axis.X;
             boolean positive = cutDir.getAxisDirection() == Direction.AxisDirection.POSITIVE;
-            boolean up = quad.getFace() == Direction.UP;
+            boolean up = quad.getDirection() == Direction.UP;
 
             int idxR = xAxis ? (positive ? 2 : 1) : ((up == positive) ? 1 : 0);
             int idxL = xAxis ? (positive ? 3 : 0) : ((up == positive) ? 2 : 3);
 
-            Direction perpDir = cutDir.rotateYCCW();
+            Direction perpDir = cutDir.getCounterClockWise();
             boolean perpX = perpDir.getAxis() == Direction.Axis.X;
             float factorR = perpX ? pos[idxR][0] : (up ? (1F - pos[idxR][2]) : pos[idxR][2]);
             float factorL = perpX ? pos[idxL][0] : (up ? (1F - pos[idxL][2]) : pos[idxL][2]);
@@ -626,13 +626,13 @@ public class BakedQuadTransformer
 
                 if (xAxis)
                 {
-                    ModelUtils.remapUV(quad.getFace(), pos[1][coordIdx], pos[2][coordIdx], toXZ1, uv, 1, 2, idxR, false, false, rotated, mirrored);
-                    ModelUtils.remapUV(quad.getFace(), pos[0][coordIdx], pos[3][coordIdx], toXZ2, uv, 0, 3, idxL, false, false, rotated, mirrored);
+                    ModelUtils.remapUV(quad.getDirection(), pos[1][coordIdx], pos[2][coordIdx], toXZ1, uv, 1, 2, idxR, false, false, rotated, mirrored);
+                    ModelUtils.remapUV(quad.getDirection(), pos[0][coordIdx], pos[3][coordIdx], toXZ2, uv, 0, 3, idxL, false, false, rotated, mirrored);
                 }
                 else
                 {
-                    ModelUtils.remapUV(quad.getFace(), pos[1][coordIdx], pos[0][coordIdx], toXZ1, uv, 0, 1, idxR, true, !up, rotated, mirrored);
-                    ModelUtils.remapUV(quad.getFace(), pos[2][coordIdx], pos[3][coordIdx], toXZ2, uv, 3, 2, idxL, true, !up, rotated, mirrored);
+                    ModelUtils.remapUV(quad.getDirection(), pos[1][coordIdx], pos[0][coordIdx], toXZ1, uv, 0, 1, idxR, true, !up, rotated, mirrored);
+                    ModelUtils.remapUV(quad.getDirection(), pos[2][coordIdx], pos[3][coordIdx], toXZ2, uv, 3, 2, idxL, true, !up, rotated, mirrored);
                 }
 
                 pos[idxR][coordIdx] = toXZ1;
@@ -703,8 +703,8 @@ public class BakedQuadTransformer
      */
     public static void setQuadPosInFacingDir(BakedQuad quad, float posTarget)
     {
-        int idx = quad.getFace().getAxis().ordinal();
-        float value = quad.getFace().getAxisDirection() == Direction.AxisDirection.POSITIVE ? posTarget : 1F - posTarget;
+        int idx = quad.getDirection().getAxis().ordinal();
+        float value = quad.getDirection().getAxisDirection() == Direction.AxisDirection.POSITIVE ? posTarget : 1F - posTarget;
         ModelUtils.modifyQuad(quad, (pos, color, uv, light, normal) ->
         {
             for (int i = 0; i < 4; i++)
@@ -725,8 +725,8 @@ public class BakedQuadTransformer
     {
         Preconditions.checkArgument(posTarget.length == 4, "Target position array must contain 4 elements!");
 
-        int idx = quad.getFace().getAxis().ordinal();
-        boolean positive = quad.getFace().getAxisDirection() == Direction.AxisDirection.POSITIVE;
+        int idx = quad.getDirection().getAxis().ordinal();
+        boolean positive = quad.getDirection().getAxisDirection() == Direction.AxisDirection.POSITIVE;
         ModelUtils.modifyQuad(quad, (pos, color, uv, light, normal) ->
         {
             for (int i = 0; i < 4; i++)
@@ -844,20 +844,20 @@ public class BakedQuadTransformer
                     float scaleFactor = 1.0F / (float)Math.cos(Math.PI / (180D / (double)angle)) - 1.0F;
                     scaleVec.mul(scaleFactor);
                 }
-                scaleMult.apply(Math::abs);
-                scaleVec.mul(scaleMult.getX(), scaleMult.getY(), scaleMult.getZ());
+                scaleMult.map(Math::abs);
+                scaleVec.mul(scaleMult.x(), scaleMult.y(), scaleMult.z());
                 scaleVec.add(1.0F, 1.0F, 1.0F);
             }
 
             for (int i = 0; i < 4; i++)
             {
-                Vector4f vector4f = new Vector4f(pos[i][0] - origin.getX(), pos[i][1] - origin.getY(), pos[i][2] - origin.getZ(), 1.0F);
-                if (rescale) { vector4f.scale(scaleVec); }
+                Vector4f vector4f = new Vector4f(pos[i][0] - origin.x(), pos[i][1] - origin.y(), pos[i][2] - origin.z(), 1.0F);
+                if (rescale) { vector4f.mul(scaleVec); }
                 vector4f.transform(transform);
 
-                pos[i][0] = vector4f.getX() + origin.getX();
-                pos[i][1] = vector4f.getY() + origin.getY();
-                pos[i][2] = vector4f.getZ() + origin.getZ();
+                pos[i][0] = vector4f.x() + origin.x();
+                pos[i][1] = vector4f.y() + origin.y();
+                pos[i][2] = vector4f.z() + origin.z();
             }
 
             return true;

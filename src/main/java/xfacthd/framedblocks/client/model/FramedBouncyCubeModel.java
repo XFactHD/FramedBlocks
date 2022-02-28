@@ -24,7 +24,7 @@ public class FramedBouncyCubeModel extends FramedCubeModel
     }
 
     @Override
-    protected boolean hasAdditionalQuadsInLayer(RenderType layer) { return layer == RenderType.getCutout(); }
+    protected boolean hasAdditionalQuadsInLayer(RenderType layer) { return layer == RenderType.cutout(); }
 
     @Override
     protected void getAdditionalQuads(List<BakedQuad> quads, Direction side, BlockState state, Random rand, IModelData data, RenderType layer)

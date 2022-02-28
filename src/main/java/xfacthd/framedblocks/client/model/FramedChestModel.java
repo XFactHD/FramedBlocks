@@ -25,29 +25,29 @@ public class FramedChestModel extends FramedBlockModel
     public FramedChestModel(BlockState state, IBakedModel baseModel)
     {
         super(state, baseModel);
-        this.facing = state.get(PropertyHolder.FACING_HOR);
-        this.closed = state.get(PropertyHolder.CHEST_STATE) == ChestState.CLOSED || ClientUtils.OPTIFINE_LOADED.get();
-        this.latch = state.get(PropertyHolder.LATCH_TYPE);
+        this.facing = state.getValue(PropertyHolder.FACING_HOR);
+        this.closed = state.getValue(PropertyHolder.CHEST_STATE) == ChestState.CLOSED || ClientUtils.OPTIFINE_LOADED.get();
+        this.latch = state.getValue(PropertyHolder.LATCH_TYPE);
     }
 
-    public FramedChestModel(IBakedModel baseModel) { this(FBContent.blockFramedChest.get().getDefaultState(), baseModel); }
+    public FramedChestModel(IBakedModel baseModel) { this(FBContent.blockFramedChest.get().defaultBlockState(), baseModel); }
 
     @Override
     protected void transformQuad(Map<Direction, List<BakedQuad>> quadMap, BakedQuad quad)
     {
-        if (quad.getFace().getAxis() == Direction.Axis.Y)
+        if (quad.getDirection().getAxis() == Direction.Axis.Y)
         {
             BakedQuad topBotQuad = ModelUtils.duplicateQuad(quad);
             if (BakedQuadTransformer.createTopBottomQuad(topBotQuad, 1F/16F, 1F/16F, 15F/16F, 15F/16F))
             {
-                if (topBotQuad.getFace() == Direction.UP)
+                if (topBotQuad.getDirection() == Direction.UP)
                 {
                     BakedQuadTransformer.setQuadPosInFacingDir(topBotQuad, closed ? 14F/16F : 10F/16F);
                     quadMap.get(null).add(topBotQuad);
                 }
                 else
                 {
-                    quadMap.get(quad.getFace()).add(topBotQuad);
+                    quadMap.get(quad.getDirection()).add(topBotQuad);
                 }
             }
         }
@@ -69,7 +69,7 @@ public class FramedChestModel extends FramedBlockModel
 
     public static void makeChestLatch(Map<Direction, List<BakedQuad>> quadMap, BakedQuad quad, Direction facing)
     {
-        Direction face = quad.getFace();
+        Direction face = quad.getDirection();
         BakedQuad copy = ModelUtils.duplicateQuad(quad);
 
         if (face == facing || face == facing.getOpposite())
@@ -90,8 +90,8 @@ public class FramedChestModel extends FramedBlockModel
         else if (face.getAxis() == Direction.Axis.Y)
         {
             if (BakedQuadTransformer.createTopBottomQuad(copy, facing.getOpposite(), 1F/16F) &&
-                    BakedQuadTransformer.createTopBottomQuad(copy, facing.rotateY(), 9F/16F) &&
-                    BakedQuadTransformer.createTopBottomQuad(copy, facing.rotateYCCW(), 9F/16F)
+                    BakedQuadTransformer.createTopBottomQuad(copy, facing.getClockWise(), 9F/16F) &&
+                    BakedQuadTransformer.createTopBottomQuad(copy, facing.getCounterClockWise(), 9F/16F)
             )
             {
                 BakedQuadTransformer.setQuadPosInFacingDir(copy, face == Direction.UP ? 11F/16F : 9F/16F);
@@ -111,7 +111,7 @@ public class FramedChestModel extends FramedBlockModel
     }
 
     @Override
-    protected boolean hasAdditionalQuadsInLayer(RenderType layer) { return latch == LatchType.DEFAULT && layer == RenderType.getCutout(); }
+    protected boolean hasAdditionalQuadsInLayer(RenderType layer) { return latch == LatchType.DEFAULT && layer == RenderType.cutout(); }
 
     @Override
     protected void getAdditionalQuads(Map<Direction, List<BakedQuad>> quadMap, BlockState state, Random rand, IModelData data, RenderType layer)

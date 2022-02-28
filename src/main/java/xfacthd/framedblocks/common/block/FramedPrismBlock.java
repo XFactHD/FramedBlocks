@@ -18,28 +18,28 @@ import xfacthd.framedblocks.common.util.*;
 
 public class FramedPrismBlock extends FramedBlock
 {
-    public static final CtmPredicate CTM_PREDICATE = (state, side) -> side == state.get(BlockStateProperties.FACING).getOpposite();
+    public static final CtmPredicate CTM_PREDICATE = (state, side) -> side == state.getValue(BlockStateProperties.FACING).getOpposite();
 
     public static final SideSkipPredicate SKIP_PREDICATE = (level, pos, state, adjState, side) ->
     {
-        Direction facing = state.get(BlockStateProperties.FACING);
-        Direction.Axis axis = state.get(BlockStateProperties.AXIS);
+        Direction facing = state.getValue(BlockStateProperties.FACING);
+        Direction.Axis axis = state.getValue(BlockStateProperties.AXIS);
         if (side.getAxis() != axis)
         {
             return false;
         }
 
-        if (adjState.matchesBlock(FBContent.blockFramedPrism.get()))
+        if (adjState.is(FBContent.blockFramedPrism.get()))
         {
-            Direction adjFacing = adjState.get(BlockStateProperties.FACING);
-            Direction.Axis adjAxis = adjState.get(BlockStateProperties.AXIS);
+            Direction adjFacing = adjState.getValue(BlockStateProperties.FACING);
+            Direction.Axis adjAxis = adjState.getValue(BlockStateProperties.AXIS);
 
             return adjFacing == facing && adjAxis == axis && SideSkipPredicate.compareState(level, pos, side);
         }
-        else if (adjState.matchesBlock(FBContent.blockFramedSlopedPrism.get()))
+        else if (adjState.is(FBContent.blockFramedSlopedPrism.get()))
         {
-            Direction adjFacing = adjState.get(BlockStateProperties.FACING);
-            Direction adjOrientation = adjState.get(PropertyHolder.ORIENTATION);
+            Direction adjFacing = adjState.getValue(BlockStateProperties.FACING);
+            Direction adjOrientation = adjState.getValue(PropertyHolder.ORIENTATION);
 
             return adjFacing == facing && adjOrientation == side.getOpposite() && SideSkipPredicate.compareState(level, pos, side);
         }
@@ -50,14 +50,14 @@ public class FramedPrismBlock extends FramedBlock
     public FramedPrismBlock()
     {
         super(BlockType.FRAMED_PRISM);
-        setDefaultState(getDefaultState()
-                .with(BlockStateProperties.WATERLOGGED, false)
-                .with(PropertyHolder.SOLID, false)
+        registerDefaultState(defaultBlockState()
+                .setValue(BlockStateProperties.WATERLOGGED, false)
+                .setValue(PropertyHolder.SOLID, false)
         );
     }
 
     @Override
-    protected void fillStateContainer(StateContainer.Builder<Block, BlockState> builder)
+    protected void createBlockStateDefinition(StateContainer.Builder<Block, BlockState> builder)
     {
         builder.add(BlockStateProperties.FACING, BlockStateProperties.AXIS, BlockStateProperties.WATERLOGGED, PropertyHolder.SOLID);
     }
@@ -65,35 +65,35 @@ public class FramedPrismBlock extends FramedBlock
     @Override
     public BlockState getStateForPlacement(BlockItemUseContext context)
     {
-        BlockState state = getDefaultState();
+        BlockState state = defaultBlockState();
 
-        Direction face = context.getFace();
-        state = state.with(BlockStateProperties.FACING, face);
+        Direction face = context.getClickedFace();
+        state = state.setValue(BlockStateProperties.FACING, face);
 
         Direction.Axis axis;
         if (face.getAxis() == Direction.Axis.Y)
         {
-            axis = context.getPlacementHorizontalFacing().getAxis();
+            axis = context.getHorizontalDirection().getAxis();
         }
         else
         {
-            Vector3d subHit = Utils.fraction(context.getHitVec());
+            Vector3d subHit = Utils.fraction(context.getClickLocation());
 
-            double xz = (face.getAxis() == Direction.Axis.X ? subHit.getZ() : subHit.getX()) - .5;
-            double y = subHit.getY() - .5;
+            double xz = (face.getAxis() == Direction.Axis.X ? subHit.z() : subHit.x()) - .5;
+            double y = subHit.y() - .5;
 
             if (Math.max(Math.abs(xz), Math.abs(y)) == Math.abs(xz))
             {
-                axis = face.rotateY().getAxis();
+                axis = face.getClockWise().getAxis();
             }
             else
             {
                 axis = Direction.Axis.Y;
             }
         }
-        state = state.with(BlockStateProperties.AXIS, axis);
+        state = state.setValue(BlockStateProperties.AXIS, axis);
 
-        return withWater(state, context.getWorld(), context.getPos());
+        return withWater(state, context.getLevel(), context.getClickedPos());
     }
 
 
@@ -103,33 +103,33 @@ public class FramedPrismBlock extends FramedBlock
         ImmutableMap.Builder<BlockState, VoxelShape> builder = ImmutableMap.builder();
 
         VoxelShape shapeBottom = VoxelShapes.or(
-                makeCuboidShape(0, 0, 0, 16, 4, 16),
-                makeCuboidShape(4, 0, 0, 12, 8, 16)
-        ).simplify();
+                box(0, 0, 0, 16, 4, 16),
+                box(4, 0, 0, 12, 8, 16)
+        ).optimize();
 
         VoxelShape shapeTop = VoxelShapes.or(
-                makeCuboidShape(0, 12, 0, 16, 16, 16),
-                makeCuboidShape(4,  8, 0, 12, 16, 16)
-        ).simplify();
+                box(0, 12, 0, 16, 16, 16),
+                box(4,  8, 0, 12, 16, 16)
+        ).optimize();
 
         VoxelShape shapeXZ = VoxelShapes.or(
-                makeCuboidShape(0, 0, 12, 16, 16, 16),
-                makeCuboidShape(0, 4,  8, 16, 12, 16)
-        ).simplify();
+                box(0, 0, 12, 16, 16, 16),
+                box(0, 4,  8, 16, 12, 16)
+        ).optimize();
 
         VoxelShape shapeY = VoxelShapes.or(
-                makeCuboidShape(0, 0, 12, 16, 16, 16),
-                makeCuboidShape(4, 0,  8, 12, 16, 16)
-        ).simplify();
+                box(0, 0, 12, 16, 16, 16),
+                box(4, 0,  8, 12, 16, 16)
+        ).optimize();
 
         for (BlockState state : states)
         {
-            Direction facing = state.get(BlockStateProperties.FACING);
-            Direction.Axis axis = state.get(BlockStateProperties.AXIS);
+            Direction facing = state.getValue(BlockStateProperties.FACING);
+            Direction.Axis axis = state.getValue(BlockStateProperties.AXIS);
 
             if (axis == facing.getAxis()) //Invalid combination
             {
-                builder.put(state, VoxelShapes.fullCube());
+                builder.put(state, VoxelShapes.block());
                 continue;
             }
 
@@ -139,7 +139,7 @@ public class FramedPrismBlock extends FramedBlock
                         state,
                         Utils.rotateShape(
                                 Direction.NORTH,
-                                Direction.getFacingFromAxisDirection(axis, Direction.AxisDirection.POSITIVE),
+                                Direction.fromAxisAndDirection(axis, Direction.AxisDirection.POSITIVE),
                                 facing == Direction.UP ? shapeBottom : shapeTop
                         )
                 );

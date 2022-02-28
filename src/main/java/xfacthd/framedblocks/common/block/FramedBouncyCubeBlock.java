@@ -28,38 +28,38 @@ public class FramedBouncyCubeBlock extends SlimeBlock implements IFramedBlock
     public FramedBouncyCubeBlock()
     {
         super(IFramedBlock.createProperties(BlockType.FRAMED_BOUNCY_CUBE));
-        setDefaultState(getDefaultState().with(PropertyHolder.SOLID, false));
+        registerDefaultState(defaultBlockState().setValue(PropertyHolder.SOLID, false));
     }
 
     @Override
-    protected void fillStateContainer(StateContainer.Builder<Block, BlockState> builder)
+    protected void createBlockStateDefinition(StateContainer.Builder<Block, BlockState> builder)
     {
         builder.add(PropertyHolder.SOLID);
     }
 
     @Override
-    public final ActionResultType onBlockActivated(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockRayTraceResult hit)
+    public final ActionResultType use(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockRayTraceResult hit)
     {
         return handleBlockActivated(world, pos, player, hand, hit);
     }
 
     @Override
-    public void onBlockPlacedBy(World world, BlockPos pos, BlockState state, @Nullable LivingEntity placer, ItemStack stack)
+    public void setPlacedBy(World world, BlockPos pos, BlockState state, @Nullable LivingEntity placer, ItemStack stack)
     {
         tryApplyCamoImmediately(world, pos, placer, stack);
     }
 
     @Override
-    public boolean isTransparent(BlockState state) { return state.get(PropertyHolder.SOLID); }
+    public boolean useShapeForLightOcclusion(BlockState state) { return state.getValue(PropertyHolder.SOLID); }
 
     @Override
-    public VoxelShape getRenderShape(BlockState state, IBlockReader world, BlockPos pos)
+    public VoxelShape getOcclusionShape(BlockState state, IBlockReader world, BlockPos pos)
     {
         return getCamoOcclusionShape(state, world, pos);
     }
 
     @Override
-    public VoxelShape getRayTraceShape(BlockState state, IBlockReader world, BlockPos pos, ISelectionContext ctx)
+    public VoxelShape getVisualShape(BlockState state, IBlockReader world, BlockPos pos, ISelectionContext ctx)
     {
         return getCamoVisualShape(state, world, pos, ctx);
     }
@@ -98,7 +98,7 @@ public class FramedBouncyCubeBlock extends SlimeBlock implements IFramedBlock
     }
 
     @Override
-    public boolean isSideInvisible(BlockState state, BlockState adjacentBlockState, Direction side)
+    public boolean skipRendering(BlockState state, BlockState adjacentBlockState, Direction side)
     {
         // This is managed by the SideSkipPredicate
         return false;

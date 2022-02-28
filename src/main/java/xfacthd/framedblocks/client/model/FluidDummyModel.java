@@ -29,7 +29,7 @@ public class FluidDummyModel implements IBakedModel
         this.fluid = fluid;
 
         //noinspection deprecation
-        Function<ResourceLocation, TextureAtlasSprite> spriteGetter = Minecraft.getInstance().getAtlasSpriteGetter(AtlasTexture.LOCATION_BLOCKS_TEXTURE);
+        Function<ResourceLocation, TextureAtlasSprite> spriteGetter = Minecraft.getInstance().getTextureAtlas(AtlasTexture.LOCATION_BLOCKS);
         particles = spriteGetter.apply(fluid.getAttributes().getStillTexture());
         buildQuads(spriteGetter);
     }
@@ -41,19 +41,19 @@ public class FluidDummyModel implements IBakedModel
     }
 
     @Override
-    public boolean isAmbientOcclusion() { return false; }
+    public boolean useAmbientOcclusion() { return false; }
 
     @Override
     public boolean isGui3d() { return false; }
 
     @Override
-    public boolean isSideLit() { return false; }
+    public boolean usesBlockLight() { return false; }
 
     @Override
-    public boolean isBuiltInRenderer() { return false; }
+    public boolean isCustomRenderer() { return false; }
 
     @Override
-    public TextureAtlasSprite getParticleTexture() { return particles; }
+    public TextureAtlasSprite getParticleIcon() { return particles; }
 
     @Override
     public ItemOverrideList getOverrides() { return null; }
@@ -116,7 +116,7 @@ public class FluidDummyModel implements IBakedModel
                 putVertexData(builder,
                         new Vector4f(x, y, z, 1F),
                         new Vector2f(u, v),
-                        dir.toVector3f(),
+                        dir.step(),
                         new Vector4f(1F, 1F, 1F, 1F),
                         new Vector2f(0xF0, 0xF0),
                         sprite
@@ -140,12 +140,12 @@ public class FluidDummyModel implements IBakedModel
             {
                 case POSITION:
                 {
-                    consumer.put(elem, pos.getX(), pos.getY(), pos.getZ(), pos.getW());
+                    consumer.put(elem, pos.x(), pos.y(), pos.z(), pos.w());
                     break;
                 }
                 case COLOR:
                 {
-                    consumer.put(elem, color.getX(), color.getY(), color.getZ(), color.getW());
+                    consumer.put(elem, color.x(), color.y(), color.z(), color.w());
                     break;
                 }
                 case UV:
@@ -154,8 +154,8 @@ public class FluidDummyModel implements IBakedModel
                     {
                         case 0:
                             consumer.put(elem,
-                                    texture.getInterpolatedU(tex.x * 16),
-                                    texture.getInterpolatedV(tex.y * 16)
+                                    texture.getU(tex.x * 16),
+                                    texture.getV(tex.y * 16)
                             );
                             break;
                         case 2:
@@ -169,7 +169,7 @@ public class FluidDummyModel implements IBakedModel
                 }
                 case NORMAL:
                 {
-                    consumer.put(elem, normal.getX(), normal.getY(), normal.getZ());
+                    consumer.put(elem, normal.x(), normal.y(), normal.z());
                     break;
                 }
                 default:

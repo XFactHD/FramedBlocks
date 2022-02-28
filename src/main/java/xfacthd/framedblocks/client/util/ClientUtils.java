@@ -15,7 +15,7 @@ public class ClientUtils
     {
         if (blockGetter instanceof ChunkRenderCache)
         {
-            return ((ChunkRenderCache) blockGetter).getTileEntity(pos, Chunk.CreateEntityType.CHECK);
+            return ((ChunkRenderCache) blockGetter).getBlockEntity(pos, Chunk.CreateEntityType.CHECK);
         }
         return null;
     }

@@ -15,7 +15,7 @@ public class FramedBlockData extends ModelDataMap
     private final boolean ghostData;
     private World world = null;
     private BlockPos pos = BlockPos.ZERO;
-    private BlockState camoState = Blocks.AIR.getDefaultState();
+    private BlockState camoState = Blocks.AIR.defaultBlockState();
 
     public FramedBlockData(boolean ghostData) { this.ghostData = ghostData; }
 

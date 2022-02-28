@@ -41,16 +41,16 @@ public interface IFramedBlock extends IFacade
 
     static Block.Properties createProperties(BlockType type)
     {
-        Block.Properties props = Block.Properties.create(Material.WOOD)
+        Block.Properties props = Block.Properties.of(Material.WOOD)
                 .harvestTool(ToolType.AXE)
-                .hardnessAndResistance(2F)
+                .strength(2F)
                 .sound(SoundType.WOOD)
-                .setBlocksVision(IFramedBlock::isBlockSuffocating)
-                .setSuffocates(IFramedBlock::isBlockSuffocating);
+                .isViewBlocking(IFramedBlock::isBlockSuffocating)
+                .isSuffocating(IFramedBlock::isBlockSuffocating);
 
         if (!type.canOccludeWithSolidCamo())
         {
-            props.notSolid();
+            props.noOcclusion();
         }
 
         return props;
@@ -64,7 +64,7 @@ public interface IFramedBlock extends IFacade
     default BlockItem createItemBlock()
     {
         Block block = (Block)this;
-        BlockItem item = new BlockItem(block, new Item.Properties().group(FramedBlocks.FRAMED_GROUP));
+        BlockItem item = new BlockItem(block, new Item.Properties().tab(FramedBlocks.FRAMED_GROUP));
         //noinspection ConstantConditions
         item.setRegistryName(block.getRegistryName());
         return item;
@@ -72,12 +72,12 @@ public interface IFramedBlock extends IFacade
 
     default void tryApplyCamoImmediately(World world, BlockPos pos, @Nullable LivingEntity placer, ItemStack stack)
     {
-        if (world.isRemote()) { return; }
+        if (world.isClientSide()) { return; }
 
         //noinspection ConstantConditions
         if (stack.hasTag() && stack.getTag().contains("BlockEntityTag"))
         {
-            TileEntity te = world.getTileEntity(pos);
+            TileEntity te = world.getBlockEntity(pos);
             if (te instanceof FramedTileEntity)
             {
                 ((FramedTileEntity) te).checkCamoSolid();
@@ -89,12 +89,12 @@ public interface IFramedBlock extends IFacade
         {
             PlayerEntity player = (PlayerEntity) placer;
 
-            if (player.getHeldItemMainhand() != stack) { return; }
+            if (player.getMainHandItem() != stack) { return; }
 
-            ItemStack otherStack = player.getHeldItemOffhand();
+            ItemStack otherStack = player.getOffhandItem();
             if (otherStack.getItem() instanceof BlockItem && !(((BlockItem) otherStack.getItem()).getBlock() instanceof IFramedBlock))
             {
-                TileEntity te = world.getTileEntity(pos);
+                TileEntity te = world.getBlockEntity(pos);
                 if (te instanceof FramedTileEntity && !(te instanceof FramedDoubleTileEntity))
                 {
                     Vector3d hitVec = new Vector3d(pos.getX(), pos.getY(), pos.getZ());
@@ -106,7 +106,7 @@ public interface IFramedBlock extends IFacade
 
     default ActionResultType handleBlockActivated(World world, BlockPos pos, PlayerEntity player, Hand hand, BlockRayTraceResult hit)
     {
-        TileEntity te = world.getTileEntity(pos);
+        TileEntity te = world.getBlockEntity(pos);
         if (te instanceof FramedTileEntity)
         {
             return ((FramedTileEntity) te).handleInteraction(player, hand, hit);
@@ -116,7 +116,7 @@ public interface IFramedBlock extends IFacade
 
     default int getLight(IBlockReader world, BlockPos pos)
     {
-        TileEntity te = world.getTileEntity(pos);
+        TileEntity te = world.getBlockEntity(pos);
         if (te instanceof FramedTileEntity)
         {
             return ((FramedTileEntity) te).getLightValue();
@@ -126,7 +126,7 @@ public interface IFramedBlock extends IFacade
 
     default SoundType getSound(BlockState state, IWorldReader world, BlockPos pos)
     {
-        TileEntity te = world.getTileEntity(pos);
+        TileEntity te = world.getBlockEntity(pos);
         if (te instanceof FramedTileEntity)
         {
             BlockState camoState = ((FramedTileEntity) te).getCamoState();
@@ -140,7 +140,7 @@ public interface IFramedBlock extends IFacade
 
     default List<ItemStack> getDrops(List<ItemStack> drops, LootContext.Builder builder)
     {
-        TileEntity te = builder.get(LootParameters.BLOCK_ENTITY);
+        TileEntity te = builder.getOptionalParameter(LootParameters.BLOCK_ENTITY);
         if (te instanceof FramedTileEntity)
         {
             ((FramedTileEntity) te).addCamoDrops(drops);
@@ -156,7 +156,7 @@ public interface IFramedBlock extends IFacade
     @Deprecated
     default BlockState getFacade(@Nonnull IBlockReader world, @Nonnull BlockPos pos, @Nullable Direction side)
     {
-        return Blocks.AIR.getDefaultState();
+        return Blocks.AIR.defaultBlockState();
     }
 
     @Nonnull
@@ -166,20 +166,20 @@ public interface IFramedBlock extends IFacade
         BlockState state = world.getBlockState(pos);
         if (getCtmPredicate().test(state, side))
         {
-            TileEntity te = world.getTileEntity(pos);
+            TileEntity te = world.getBlockEntity(pos);
             if (te instanceof FramedTileEntity)
             {
                 return ((FramedTileEntity) te).getCamoState();
             }
         }
-        return Blocks.AIR.getDefaultState();
+        return Blocks.AIR.defaultBlockState();
     }
 
     default boolean isSideHidden(IBlockReader world, BlockPos pos, BlockState state, Direction side)
     {
         if (world == null) { return false; } //Block had no camo when loaded => world in data not set
 
-        BlockPos neighborPos = pos.offset(side);
+        BlockPos neighborPos = pos.relative(side);
         BlockState neighborState = world.getBlockState(neighborPos);
 
         if (ServerConfig.enableIntangibleFeature && !isIntangible(state, world, pos, null))
@@ -195,12 +195,12 @@ public interface IFramedBlock extends IFacade
         }
 
         SideSkipPredicate pred = ClientConfig.detailedCulling ? getBlockType().getSideSkipPredicate() : SideSkipPredicate.CTM;
-        return pred.test(world, pos, state, world.getBlockState(pos.offset(side)), side);
+        return pred.test(world, pos, state, world.getBlockState(pos.relative(side)), side);
     }
 
     default float getCamoSlipperiness(BlockState state, IWorldReader world, BlockPos pos, @Nullable Entity entity)
     {
-        TileEntity te = world.getTileEntity(pos);
+        TileEntity te = world.getBlockEntity(pos);
         if (te instanceof FramedTileEntity)
         {
             BlockState camoState = ((FramedTileEntity) te).getCamoState(Direction.UP);
@@ -209,12 +209,12 @@ public interface IFramedBlock extends IFacade
                 return camoState.getSlipperiness(world, pos, entity);
             }
         }
-        return state.getBlock().getSlipperiness();
+        return state.getBlock().getFriction();
     }
 
     default float getCamoBlastResistance(BlockState state, IBlockReader world, BlockPos pos, Explosion explosion)
     {
-        TileEntity te = world.getTileEntity(pos);
+        TileEntity te = world.getBlockEntity(pos);
         if (te instanceof FramedTileEntity)
         {
             float resistance = ((FramedTileEntity) te).getCamoBlastResistance(explosion);
@@ -230,7 +230,7 @@ public interface IFramedBlock extends IFacade
     {
         if (CommonConfig.fireproofBlocks) { return false; }
 
-        TileEntity te = world.getTileEntity(pos);
+        TileEntity te = world.getBlockEntity(pos);
         if (te instanceof FramedTileEntity)
         {
             return ((FramedTileEntity) te).isCamoFlammable(face);
@@ -242,7 +242,7 @@ public interface IFramedBlock extends IFacade
     {
         if (CommonConfig.fireproofBlocks) { return 0; }
 
-        TileEntity te = world.getTileEntity(pos);
+        TileEntity te = world.getBlockEntity(pos);
         if (te instanceof FramedTileEntity)
         {
             int flammability = ((FramedTileEntity) te).getCamoFlammability(face);
@@ -258,7 +258,7 @@ public interface IFramedBlock extends IFacade
     {
         if (!ServerConfig.enableIntangibleFeature || !getBlockType().allowMakingIntangible()) { return false; }
 
-        TileEntity te = world.getTileEntity(pos);
+        TileEntity te = world.getBlockEntity(pos);
         return te instanceof FramedTileEntity && ((FramedTileEntity) te).isIntangible(ctx);
     }
 
@@ -274,12 +274,12 @@ public interface IFramedBlock extends IFacade
         }
 
         // Copy of the default suffocation check
-        return state.getMaterial().blocksMovement() && state.hasOpaqueCollisionShape(world, pos);
+        return state.getMaterial().blocksMotion() && state.isCollisionShapeFullBlock(world, pos);
     }
 
     default VoxelShape getCamoOcclusionShape(BlockState state, IBlockReader level, BlockPos pos)
     {
-        if (getBlockType().canOccludeWithSolidCamo() && !state.get(PropertyHolder.SOLID))
+        if (getBlockType().canOccludeWithSolidCamo() && !state.getValue(PropertyHolder.SOLID))
         {
             return VoxelShapes.empty();
         }
@@ -288,7 +288,7 @@ public interface IFramedBlock extends IFacade
 
     default VoxelShape getCamoVisualShape(BlockState state, IBlockReader level, BlockPos pos, ISelectionContext ctx)
     {
-        if (getBlockType().canOccludeWithSolidCamo() && !state.get(PropertyHolder.SOLID))
+        if (getBlockType().canOccludeWithSolidCamo() && !state.getValue(PropertyHolder.SOLID))
         {
             return VoxelShapes.empty();
         }
@@ -298,7 +298,7 @@ public interface IFramedBlock extends IFacade
     default IFormattableTextComponent printCamoBlock(CompoundNBT beTag)
     {
         BlockState camoState = NBTUtil.readBlockState(beTag.getCompound("camo_state"));
-        return camoState.isAir() ? FramedBlueprintItem.BLOCK_NONE : camoState.getBlock().getTranslatedName().mergeStyle(TextFormatting.WHITE);
+        return camoState.isAir() ? FramedBlueprintItem.BLOCK_NONE : camoState.getBlock().getName().withStyle(TextFormatting.WHITE);
     }
 
     static boolean suppressParticles(BlockState state, World world, BlockPos pos)

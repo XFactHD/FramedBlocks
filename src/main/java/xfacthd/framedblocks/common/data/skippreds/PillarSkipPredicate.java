@@ -13,7 +13,7 @@ public class PillarSkipPredicate implements SideSkipPredicate
     @Override
     public boolean test(IBlockReader world, BlockPos pos, BlockState state, BlockState adjState, Direction side)
     {
-        Direction.Axis axis = state.get(BlockStateProperties.AXIS);
+        Direction.Axis axis = state.getValue(BlockStateProperties.AXIS);
         if (side == null || side.getAxis() != axis)
         {
             return false;
@@ -21,12 +21,12 @@ public class PillarSkipPredicate implements SideSkipPredicate
 
         if (adjState.getBlock() == state.getBlock())
         {
-            Direction.Axis adjAxis = adjState.get(BlockStateProperties.AXIS);
+            Direction.Axis adjAxis = adjState.getValue(BlockStateProperties.AXIS);
             return axis == adjAxis && SideSkipPredicate.compareState(world, pos, side);
         }
         else if (adjState.getBlock() == FBContent.blockFramedHalfPillar.get())
         {
-            Direction adjFace = adjState.get(BlockStateProperties.FACING);
+            Direction adjFace = adjState.getValue(BlockStateProperties.FACING);
             return adjFace == side.getOpposite() && SideSkipPredicate.compareState(world, pos, side);
         }
 

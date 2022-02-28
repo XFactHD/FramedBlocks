@@ -24,9 +24,9 @@ import xfacthd.framedblocks.common.data.SlopeType;
 
 public class Utils
 {
-    public static final ITag.INamedTag<Block> FRAMEABLE = BlockTags.makeWrapperTag(FramedBlocks.MODID + ":frameable");
-    public static final ITag.INamedTag<Block> BLACKLIST = BlockTags.makeWrapperTag(FramedBlocks.MODID + ":blacklisted");
-    public static final ITag.INamedTag<Item> WRENCH = ItemTags.makeWrapperTag("forge:tools/wrench");
+    public static final ITag.INamedTag<Block> FRAMEABLE = BlockTags.bind(FramedBlocks.MODID + ":frameable");
+    public static final ITag.INamedTag<Block> BLACKLIST = BlockTags.bind(FramedBlocks.MODID + ":blacklisted");
+    public static final ITag.INamedTag<Item> WRENCH = ItemTags.bind("forge:tools/wrench");
 
     public static VoxelShape rotateShape(Direction from, Direction to, VoxelShape shape)
     {
@@ -35,12 +35,12 @@ public class Utils
 
         VoxelShape[] buffer = new VoxelShape[] { shape, VoxelShapes.empty() };
 
-        int times = (to.getHorizontalIndex() - from.getHorizontalIndex() + 4) % 4;
+        int times = (to.get2DDataValue() - from.get2DDataValue() + 4) % 4;
         for (int i = 0; i < times; i++)
         {
-            buffer[0].forEachBox((minX, minY, minZ, maxX, maxY, maxZ) -> buffer[1] = VoxelShapes.or(
+            buffer[0].forAllBoxes((minX, minY, minZ, maxX, maxY, maxZ) -> buffer[1] = VoxelShapes.or(
                     buffer[1],
-                    VoxelShapes.create(1 - maxZ, minY, minX, 1 - minZ, maxY, maxX)
+                    VoxelShapes.box(1 - maxZ, minY, minX, 1 - minZ, maxY, maxX)
             ));
             buffer[0] = buffer[1];
             buffer[1] = VoxelShapes.empty();
@@ -52,15 +52,15 @@ public class Utils
     public static Vector3d fraction(Vector3d vec)
     {
         return new Vector3d(
-                vec.getX() - Math.floor(vec.getX()),
-                vec.getY() - Math.floor(vec.getY()),
-                vec.getZ() - Math.floor(vec.getZ())
+                vec.x() - Math.floor(vec.x()),
+                vec.y() - Math.floor(vec.y()),
+                vec.z() - Math.floor(vec.z())
         );
     }
 
     public static void enqueueImmediateTask(IWorld world, Runnable task, boolean allowClient)
     {
-        if (world.isRemote() && allowClient)
+        if (world.isClientSide() && allowClient)
         {
             task.run();
         }
@@ -78,16 +78,16 @@ public class Utils
         }
 
         MinecraftServer server = ((ServerWorld) world).getServer();
-        server.enqueue(new TickDelayedTask(server.getTickCounter() + delay, task));
+        server.tell(new TickDelayedTask(server.getTickCount() + delay, task));
     }
 
     public static Direction getBlockFacing(BlockState state)
     {
         if (state.getBlock() instanceof FramedRailSlopeBlock)
         {
-            return FramedRailSlopeBlock.directionFromShape(state.get(PropertyHolder.ASCENDING_RAIL_SHAPE));
+            return FramedRailSlopeBlock.directionFromShape(state.getValue(PropertyHolder.ASCENDING_RAIL_SHAPE));
         }
-        return state.get(PropertyHolder.FACING_HOR);
+        return state.getValue(PropertyHolder.FACING_HOR);
     }
 
     public static SlopeType getSlopeType(BlockState state)
@@ -96,18 +96,18 @@ public class Utils
         {
             return SlopeType.BOTTOM;
         }
-        return state.get(PropertyHolder.SLOPE_TYPE);
+        return state.getValue(PropertyHolder.SLOPE_TYPE);
     }
 
     public static TileEntity getTileEntitySafe(IBlockReader blockGetter, BlockPos pos)
     {
         if (blockGetter instanceof World)
         {
-            return ((World) blockGetter).getChunkAt(pos).getTileEntity(pos, Chunk.CreateEntityType.CHECK);
+            return ((World) blockGetter).getChunkAt(pos).getBlockEntity(pos, Chunk.CreateEntityType.CHECK);
         }
         else if (blockGetter instanceof Chunk)
         {
-            return ((Chunk) blockGetter).getTileEntity(pos, Chunk.CreateEntityType.CHECK);
+            return ((Chunk) blockGetter).getBlockEntity(pos, Chunk.CreateEntityType.CHECK);
         }
         else if (FMLEnvironment.dist.isClient())
         {

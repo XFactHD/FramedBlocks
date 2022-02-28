@@ -22,7 +22,7 @@ public enum CollapseFace implements IStringSerializable
     public Direction toDirection() { return dir; }
 
     @Override
-    public String getString() { return toString().toLowerCase(Locale.ROOT); }
+    public String getSerializedName() { return toString().toLowerCase(Locale.ROOT); }
 
 
 

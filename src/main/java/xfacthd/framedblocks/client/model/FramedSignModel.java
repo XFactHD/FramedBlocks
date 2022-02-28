@@ -20,15 +20,15 @@ public class FramedSignModel extends FramedBlockModel
     public FramedSignModel(BlockState state, IBakedModel baseModel)
     {
         super(state, baseModel);
-        int rotation = state.get(BlockStateProperties.ROTATION_0_15);
-        dir = Direction.byHorizontalIndex(rotation / 4);
+        int rotation = state.getValue(BlockStateProperties.ROTATION_16);
+        dir = Direction.from2DDataValue(rotation / 4);
         rotDegrees = (float)(rotation % 4) * -22.5F;
     }
 
     @Override
     protected void transformQuad(Map<Direction, List<BakedQuad>> quadMap, BakedQuad quad)
     {
-        if (quad.getFace() == dir || quad.getFace() == dir.getOpposite())
+        if (quad.getDirection() == dir || quad.getDirection() == dir.getOpposite())
         {
             BakedQuad faceQuad = ModelUtils.duplicateQuad(quad);
             if (BakedQuadTransformer.createHorizontalSideQuad(faceQuad, true, .5F))
@@ -39,14 +39,14 @@ public class FramedSignModel extends FramedBlockModel
                 quadMap.get(null).add(faceQuad);
             }
         }
-        else if (quad.getFace().getAxis() == Direction.Axis.Y)
+        else if (quad.getDirection().getAxis() == Direction.Axis.Y)
         {
             BakedQuad topBotQuad = ModelUtils.duplicateQuad(quad);
             if (BakedQuadTransformer.createTopBottomQuad(topBotQuad, dir, 9F/16F) &&
                 BakedQuadTransformer.createTopBottomQuad(topBotQuad, dir.getOpposite(), 9F/16F)
             )
             {
-                if (quad.getFace() == Direction.DOWN) { BakedQuadTransformer.setQuadPosInFacingDir(topBotQuad, .5F); }
+                if (quad.getDirection() == Direction.DOWN) { BakedQuadTransformer.setQuadPosInFacingDir(topBotQuad, .5F); }
                 BakedQuadTransformer.offsetQuadInDir(topBotQuad, Direction.UP, Y_OFF);
                 BakedQuadTransformer.rotateQuadAroundAxisCentered(topBotQuad, Direction.Axis.Y, rotDegrees, false);
                 quadMap.get(null).add(topBotQuad);
@@ -63,7 +63,7 @@ public class FramedSignModel extends FramedBlockModel
             }
         }
 
-        if (quad.getFace().getAxis() != Direction.Axis.Y)
+        if (quad.getDirection().getAxis() != Direction.Axis.Y)
         {
             BakedQuad sideQuad = ModelUtils.duplicateQuad(quad);
             if (BakedQuadTransformer.createSideQuad(sideQuad, 7F/16F, 0F, 9F/16F, 9.75F/16F))
@@ -73,7 +73,7 @@ public class FramedSignModel extends FramedBlockModel
                 quadMap.get(null).add(sideQuad);
             }
         }
-        else if (quad.getFace() == Direction.DOWN)
+        else if (quad.getDirection() == Direction.DOWN)
         {
             BakedQuad botQuad = ModelUtils.duplicateQuad(quad);
             if (BakedQuadTransformer.createTopBottomQuad(botQuad, 7F/16F, 7F/16F, 9F/16F, 9F/16F))

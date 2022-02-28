@@ -11,7 +11,7 @@ public class FramedCube extends FramedBlock
     public FramedCube() { super(BlockType.FRAMED_CUBE); }
 
     @Override
-    protected void fillStateContainer(StateContainer.Builder<Block, BlockState> builder)
+    protected void createBlockStateDefinition(StateContainer.Builder<Block, BlockState> builder)
     {
         builder.add(PropertyHolder.SOLID);
     }

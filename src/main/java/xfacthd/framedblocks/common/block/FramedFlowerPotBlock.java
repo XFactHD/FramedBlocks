@@ -23,30 +23,30 @@ public class FramedFlowerPotBlock extends FramedBlock
     public FramedFlowerPotBlock() { super(BlockType.FRAMED_FLOWER_POT); }
 
     @Override
-    public ActionResultType onBlockActivated(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockRayTraceResult hit)
+    public ActionResultType use(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockRayTraceResult hit)
     {
-        ActionResultType result = super.onBlockActivated(state, world, pos, player, hand, hit);
+        ActionResultType result = super.use(state, world, pos, player, hand, hit);
         if (result != ActionResultType.PASS) { return result; }
 
-        TileEntity te = world.getTileEntity(pos);
+        TileEntity te = world.getBlockEntity(pos);
         if (te instanceof FramedFlowerPotTileEntity)
         {
             FramedFlowerPotTileEntity pot = (FramedFlowerPotTileEntity) te;
 
-            ItemStack stack = player.getHeldItem(hand);
+            ItemStack stack = player.getItemInHand(hand);
             Item item = stack.getItem();
             boolean isFlower = item instanceof BlockItem && !getFlowerPotState(((BlockItem) item).getBlock()).isAir();
 
             if (isFlower != pot.hasFlowerBlock())
             {
-                if (!world.isRemote())
+                if (!world.isClientSide())
                 {
                     if (isFlower && !pot.hasFlowerBlock())
                     {
                         pot.setFlowerBlock(((BlockItem) stack.getItem()).getBlock());
 
-                        player.addStat(Stats.POT_FLOWER);
-                        if (!player.abilities.isCreativeMode)
+                        player.awardStat(Stats.POT_FLOWER);
+                        if (!player.abilities.instabuild)
                         {
                             stack.shrink(1);
                         }
@@ -56,18 +56,18 @@ public class FramedFlowerPotBlock extends FramedBlock
                         ItemStack flowerStack = new ItemStack(pot.getFlowerBlock());
                         if (stack.isEmpty())
                         {
-                            player.setHeldItem(hand, flowerStack);
+                            player.setItemInHand(hand, flowerStack);
                         }
-                        else if (!player.addItemStackToInventory(flowerStack))
+                        else if (!player.addItem(flowerStack))
                         {
-                            player.dropItem(flowerStack, false);
+                            player.drop(flowerStack, false);
                         }
 
                         pot.setFlowerBlock(Blocks.AIR);
                     }
                 }
 
-                return ActionResultType.func_233537_a_(world.isRemote());
+                return ActionResultType.sidedSuccess(world.isClientSide());
             }
             else
             {
@@ -79,7 +79,7 @@ public class FramedFlowerPotBlock extends FramedBlock
     }
 
     @Override
-    public boolean allowsMovement(BlockState state, IBlockReader world, BlockPos pos, PathType type)
+    public boolean isPathfindable(BlockState state, IBlockReader world, BlockPos pos, PathType type)
     {
         return false;
     }
@@ -92,6 +92,6 @@ public class FramedFlowerPotBlock extends FramedBlock
     public static BlockState getFlowerPotState(Block flower)
     {
         Map<ResourceLocation, Supplier<? extends Block>> fullPots = ((FlowerPotBlock) Blocks.FLOWER_POT).getFullPotsView();
-        return fullPots.getOrDefault(flower.getRegistryName(), Blocks.AIR.delegate).get().getDefaultState();
+        return fullPots.getOrDefault(flower.getRegistryName(), Blocks.AIR.delegate).get().defaultBlockState();
     }
 }

@@ -23,7 +23,7 @@ public class FramedDoubleCornerModel extends FramedDoubleBlockModel
     public FramedDoubleCornerModel(IBakedModel baseModel)
     {
         this(
-                FBContent.blockFramedDoubleCorner.get().getDefaultState().with(PropertyHolder.FACING_HOR, Direction.WEST),
+                FBContent.blockFramedDoubleCorner.get().defaultBlockState().setValue(PropertyHolder.FACING_HOR, Direction.WEST),
                 baseModel
         );
     }
@@ -31,15 +31,15 @@ public class FramedDoubleCornerModel extends FramedDoubleBlockModel
     @Override
     protected Tuple<BlockState, BlockState> getDummyStates()
     {
-        CornerType type = state.get(PropertyHolder.CORNER_TYPE);
-        Direction facing = state.get(PropertyHolder.FACING_HOR);
+        CornerType type = state.getValue(PropertyHolder.CORNER_TYPE);
+        Direction facing = state.getValue(PropertyHolder.FACING_HOR);
 
-        BlockState stateOne = FBContent.blockFramedInnerCornerSlope.get().getDefaultState()
-                .with(PropertyHolder.CORNER_TYPE, type)
-                .with(PropertyHolder.FACING_HOR, type.isHorizontal() ? facing : facing.rotateYCCW());
-        BlockState stateTwo = FBContent.blockFramedCornerSlope.get().getDefaultState()
-                .with(PropertyHolder.CORNER_TYPE, type.verticalOpposite())
-                .with(PropertyHolder.FACING_HOR, facing.getOpposite());
+        BlockState stateOne = FBContent.blockFramedInnerCornerSlope.get().defaultBlockState()
+                .setValue(PropertyHolder.CORNER_TYPE, type)
+                .setValue(PropertyHolder.FACING_HOR, type.isHorizontal() ? facing : facing.getCounterClockWise());
+        BlockState stateTwo = FBContent.blockFramedCornerSlope.get().defaultBlockState()
+                .setValue(PropertyHolder.CORNER_TYPE, type.verticalOpposite())
+                .setValue(PropertyHolder.FACING_HOR, facing.getOpposite());
 
         return new Tuple<>(stateOne, stateTwo);
     }
@@ -47,7 +47,7 @@ public class FramedDoubleCornerModel extends FramedDoubleBlockModel
     @Override
     public TextureAtlasSprite getParticleTexture(IModelData data)
     {
-        CornerType type = state.get(PropertyHolder.CORNER_TYPE);
+        CornerType type = state.getValue(PropertyHolder.CORNER_TYPE);
         if (type == CornerType.BOTTOM)
         {
             return getSpriteOrDefault(data, FramedDoubleTileEntity.DATA_RIGHT, getModels().getA());

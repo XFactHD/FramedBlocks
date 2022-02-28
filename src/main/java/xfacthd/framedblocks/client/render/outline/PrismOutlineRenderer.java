@@ -39,31 +39,31 @@ public class PrismOutlineRenderer implements OutlineRender
     @Override
     public void rotateMatrix(MatrixStack pstack, BlockState state)
     {
-        Direction facing = state.get(BlockStateProperties.FACING);
-        Direction.Axis axis = state.get(BlockStateProperties.AXIS);
+        Direction facing = state.getValue(BlockStateProperties.FACING);
+        Direction.Axis axis = state.getValue(BlockStateProperties.AXIS);
 
         if (facing.getAxis() == Direction.Axis.Y)
         {
             if (facing == Direction.DOWN)
             {
-                pstack.rotate(ZP_180);
+                pstack.mulPose(ZP_180);
             }
             if (axis == Direction.Axis.X)
             {
-                pstack.rotate(YP_90);
+                pstack.mulPose(YP_90);
             }
         }
         else
         {
             if (facing != Direction.SOUTH)
             {
-                pstack.rotate(Vector3f.YN.rotation(PI / 2F * facing.getHorizontalIndex()));
+                pstack.mulPose(Vector3f.YN.rotation(PI / 2F * facing.get2DDataValue()));
             }
             if (axis != Direction.Axis.Y)
             {
-                pstack.rotate(ZP_90);
+                pstack.mulPose(ZP_90);
             }
-            pstack.rotate(XP_90);
+            pstack.mulPose(XP_90);
         }
     }
 }

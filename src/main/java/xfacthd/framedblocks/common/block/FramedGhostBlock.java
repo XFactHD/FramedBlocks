@@ -9,9 +9,9 @@ public class FramedGhostBlock extends Block
 {
     public FramedGhostBlock()
     {
-        super(Properties.create(Material.WOOD)
-                .notSolid()
-                .doesNotBlockMovement()
+        super(Properties.of(Material.WOOD)
+                .noOcclusion()
+                .noCollission()
                 .noDrops()
         );
     }

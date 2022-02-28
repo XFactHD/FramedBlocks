@@ -23,7 +23,7 @@ public class FramedPillarModel extends FramedBlockModel
     public FramedPillarModel(BlockState state, IBakedModel baseModel)
     {
         super(state, baseModel);
-        axis = state.get(BlockStateProperties.AXIS);
+        axis = state.getValue(BlockStateProperties.AXIS);
 
         BlockType type = ((IFramedBlock)state.getBlock()).getBlockType();
         capStart = type == BlockType.FRAMED_POST ? (6F / 16F) : (4F / 16F);
@@ -37,9 +37,9 @@ public class FramedPillarModel extends FramedBlockModel
         BakedQuad copy = ModelUtils.duplicateQuad(quad);
         if (createPillarQuad(copy, axis, capStart, capEnd, sideCut))
         {
-            if (quad.getFace().getAxis() == axis)
+            if (quad.getDirection().getAxis() == axis)
             {
-                quadMap.get(quad.getFace()).add(copy);
+                quadMap.get(quad.getDirection()).add(copy);
             }
             else
             {
@@ -50,7 +50,7 @@ public class FramedPillarModel extends FramedBlockModel
 
     public static boolean createPillarQuad(BakedQuad quad, Direction.Axis axis, float capStart, float capEnd, float sideCut)
     {
-        if (quad.getFace().getAxis() == axis)
+        if (quad.getDirection().getAxis() == axis)
         {
             if (axis == Direction.Axis.Y)
             {
@@ -65,18 +65,18 @@ public class FramedPillarModel extends FramedBlockModel
         {
             if (axis == Direction.Axis.Y)
             {
-                if (BakedQuadTransformer.createVerticalSideQuad(quad, quad.getFace().rotateY(), sideCut) &&
-                    BakedQuadTransformer.createVerticalSideQuad(quad, quad.getFace().rotateYCCW(), sideCut)
+                if (BakedQuadTransformer.createVerticalSideQuad(quad, quad.getDirection().getClockWise(), sideCut) &&
+                    BakedQuadTransformer.createVerticalSideQuad(quad, quad.getDirection().getCounterClockWise(), sideCut)
                 )
                 {
                     BakedQuadTransformer.setQuadPosInFacingDir(quad, sideCut);
                     return true;
                 }
             }
-            else if (quad.getFace().getAxis() == Direction.Axis.Y)
+            else if (quad.getDirection().getAxis() == Direction.Axis.Y)
             {
-                if (BakedQuadTransformer.createTopBottomQuad(quad, axisToDir(axis, true).rotateY(), sideCut) &&
-                    BakedQuadTransformer.createTopBottomQuad(quad, axisToDir(axis, false).rotateY(), sideCut)
+                if (BakedQuadTransformer.createTopBottomQuad(quad, axisToDir(axis, true).getClockWise(), sideCut) &&
+                    BakedQuadTransformer.createTopBottomQuad(quad, axisToDir(axis, false).getClockWise(), sideCut)
                 )
                 {
                     BakedQuadTransformer.setQuadPosInFacingDir(quad, sideCut);

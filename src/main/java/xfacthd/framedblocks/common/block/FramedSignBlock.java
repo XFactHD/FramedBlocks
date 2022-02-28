@@ -17,23 +17,23 @@ import xfacthd.framedblocks.common.item.FramedSignItem;
 @SuppressWarnings("deprecation")
 public class FramedSignBlock extends AbstractFramedSignBlock
 {
-    private static final VoxelShape SHAPE = Block.makeCuboidShape(4.0D, 0.0D, 4.0D, 12.0D, 16.0D, 12.0D);
+    private static final VoxelShape SHAPE = Block.box(4.0D, 0.0D, 4.0D, 12.0D, 16.0D, 12.0D);
 
     public FramedSignBlock()
     {
-        super(BlockType.FRAMED_SIGN, IFramedBlock.createProperties(BlockType.FRAMED_SIGN).doesNotBlockMovement());
+        super(BlockType.FRAMED_SIGN, IFramedBlock.createProperties(BlockType.FRAMED_SIGN).noCollission());
     }
 
     @Override
-    protected void fillStateContainer(StateContainer.Builder<Block, BlockState> builder)
+    protected void createBlockStateDefinition(StateContainer.Builder<Block, BlockState> builder)
     {
-        builder.add(BlockStateProperties.ROTATION_0_15, BlockStateProperties.WATERLOGGED);
+        builder.add(BlockStateProperties.ROTATION_16, BlockStateProperties.WATERLOGGED);
     }
 
     public BlockState getStateForPlacement(BlockItemUseContext context)
     {
-        int rotation = MathHelper.floor((double) ((180.0F + context.getPlacementYaw()) * 16.0F / 360.0F) + 0.5D) & 15;
-        return withWater(getDefaultState().with(BlockStateProperties.ROTATION_0_15, rotation), context.getWorld(), context.getPos());
+        int rotation = MathHelper.floor((double) ((180.0F + context.getRotation()) * 16.0F / 360.0F) + 0.5D) & 15;
+        return withWater(defaultBlockState().setValue(BlockStateProperties.ROTATION_16, rotation), context.getLevel(), context.getClickedPos());
     }
 
     @Override
@@ -42,19 +42,19 @@ public class FramedSignBlock extends AbstractFramedSignBlock
         return SHAPE;
     }
 
-    public BlockState updatePostPlacement(BlockState state, Direction facing, BlockState facingState, IWorld world, BlockPos pos, BlockPos facingPos)
+    public BlockState updateShape(BlockState state, Direction facing, BlockState facingState, IWorld world, BlockPos pos, BlockPos facingPos)
     {
-        if (facing == Direction.DOWN && !isValidPosition(state, world, pos))
+        if (facing == Direction.DOWN && !canSurvive(state, world, pos))
         {
-            return Blocks.AIR.getDefaultState();
+            return Blocks.AIR.defaultBlockState();
         }
-        return super.updatePostPlacement(state, facing, facingState, world, pos, facingPos);
+        return super.updateShape(state, facing, facingState, world, pos, facingPos);
     }
 
     @Override
-    public boolean isValidPosition(BlockState state, IWorldReader world, BlockPos pos)
+    public boolean canSurvive(BlockState state, IWorldReader world, BlockPos pos)
     {
-        return world.getBlockState(pos.down()).getMaterial().isSolid();
+        return world.getBlockState(pos.below()).getMaterial().isSolid();
     }
 
     @Override

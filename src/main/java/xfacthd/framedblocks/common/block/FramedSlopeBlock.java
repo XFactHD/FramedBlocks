@@ -35,8 +35,8 @@ public class FramedSlopeBlock extends FramedBlock
         }
         else if (type == SlopeType.HORIZONTAL)
         {
-            Direction facing = state.get(PropertyHolder.FACING_HOR);
-            return dir == facing || dir == facing.rotateYCCW();
+            Direction facing = state.getValue(PropertyHolder.FACING_HOR);
+            return dir == facing || dir == facing.getCounterClockWise();
         }
         return Utils.getBlockFacing(state) == dir;
     };
@@ -44,7 +44,7 @@ public class FramedSlopeBlock extends FramedBlock
     public FramedSlopeBlock() { super(BlockType.FRAMED_SLOPE); }
 
     @Override
-    protected void fillStateContainer(StateContainer.Builder<Block, BlockState> builder)
+    protected void createBlockStateDefinition(StateContainer.Builder<Block, BlockState> builder)
     {
         builder.add(PropertyHolder.FACING_HOR, PropertyHolder.SLOPE_TYPE, BlockStateProperties.WATERLOGGED, PropertyHolder.SOLID);
     }
@@ -52,37 +52,37 @@ public class FramedSlopeBlock extends FramedBlock
     @Override
     public BlockState getStateForPlacement(BlockItemUseContext context)
     {
-        BlockState state = withSlopeType(getDefaultState(), context.getFace(), context.getPlacementHorizontalFacing(), context.getHitVec());
-        return withWater(state, context.getWorld(), context.getPos());
+        BlockState state = withSlopeType(defaultBlockState(), context.getClickedFace(), context.getHorizontalDirection(), context.getClickLocation());
+        return withWater(state, context.getLevel(), context.getClickedPos());
     }
 
     @Override
-    public ActionResultType onBlockActivated(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockRayTraceResult hit)
+    public ActionResultType use(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockRayTraceResult hit)
     {
-        ItemStack stack = player.getHeldItem(hand);
+        ItemStack stack = player.getItemInHand(hand);
         if (!stack.isEmpty() && stack.getItem() == Items.RAIL)
         {
-            Direction dir = state.get(PropertyHolder.FACING_HOR);
-            SlopeType type = state.get(PropertyHolder.SLOPE_TYPE);
-            Direction face = hit.getFace();
+            Direction dir = state.getValue(PropertyHolder.FACING_HOR);
+            SlopeType type = state.getValue(PropertyHolder.SLOPE_TYPE);
+            Direction face = hit.getDirection();
 
             if (type == SlopeType.BOTTOM && (face == dir.getOpposite() || face == Direction.UP))
             {
                 Block railSlope = FBContent.blockFramedRailSlope.get();
-                BlockState newState = railSlope.getDefaultState()
-                        .with(PropertyHolder.ASCENDING_RAIL_SHAPE, FramedRailSlopeBlock.shapeFromDirection(dir))
-                        .with(BlockStateProperties.WATERLOGGED, state.get(BlockStateProperties.WATERLOGGED));
+                BlockState newState = railSlope.defaultBlockState()
+                        .setValue(PropertyHolder.ASCENDING_RAIL_SHAPE, FramedRailSlopeBlock.shapeFromDirection(dir))
+                        .setValue(BlockStateProperties.WATERLOGGED, state.getValue(BlockStateProperties.WATERLOGGED));
 
-                if (!railSlope.isValidPosition(newState, world, pos)) { return ActionResultType.FAIL; }
+                if (!railSlope.canSurvive(newState, world, pos)) { return ActionResultType.FAIL; }
 
-                if (!world.isRemote())
+                if (!world.isClientSide())
                 {
-                    BlockState camoState = Blocks.AIR.getDefaultState();
+                    BlockState camoState = Blocks.AIR.defaultBlockState();
                     ItemStack camoStack = ItemStack.EMPTY;
                     boolean glowing = false;
                     boolean intangible = false;
 
-                    TileEntity te = world.getTileEntity(pos);
+                    TileEntity te = world.getBlockEntity(pos);
                     if (te instanceof FramedTileEntity)
                     {
                         camoState = ((FramedTileEntity) te).getCamoState();
@@ -91,18 +91,18 @@ public class FramedSlopeBlock extends FramedBlock
                         intangible = ((FramedTileEntity) te).isIntangible(null);
                     }
 
-                    world.setBlockState(pos, newState);
+                    world.setBlockAndUpdate(pos, newState);
 
-                    SoundType sound = Blocks.RAIL.getSoundType(Blocks.RAIL.getDefaultState());
+                    SoundType sound = Blocks.RAIL.getSoundType(Blocks.RAIL.defaultBlockState());
                     world.playSound(null, pos, sound.getPlaceSound(), SoundCategory.BLOCKS, (sound.getVolume() + 1.0F) / 2.0F, sound.getPitch() * 0.8F);
 
                     if (!player.isCreative())
                     {
                         stack.shrink(1);
-                        player.inventory.markDirty();
+                        player.inventory.setChanged();
                     }
 
-                    te = world.getTileEntity(pos);
+                    te = world.getBlockEntity(pos);
                     if (te instanceof FramedTileEntity)
                     {
                         ((FramedTileEntity) te).setCamo(camoStack, camoState, false);
@@ -111,34 +111,34 @@ public class FramedSlopeBlock extends FramedBlock
                     }
                 }
 
-                return ActionResultType.func_233537_a_(world.isRemote());
+                return ActionResultType.sidedSuccess(world.isClientSide());
             }
         }
-        return super.onBlockActivated(state, world, pos, player, hand, hit);
+        return super.use(state, world, pos, player, hand, hit);
     }
 
     public static ImmutableMap<BlockState, VoxelShape> generateShapes(ImmutableList<BlockState> states)
     {
         VoxelShape shapeBottom = VoxelShapes.or(
-                makeCuboidShape(0,  0, 0, 16,  4, 16),
-                makeCuboidShape(0,  4, 0, 16,  8, 12),
-                makeCuboidShape(0,  8, 0, 16, 12,  8),
-                makeCuboidShape(0, 12, 0, 16, 16,  4)
-        ).simplify();
+                box(0,  0, 0, 16,  4, 16),
+                box(0,  4, 0, 16,  8, 12),
+                box(0,  8, 0, 16, 12,  8),
+                box(0, 12, 0, 16, 16,  4)
+        ).optimize();
 
         VoxelShape shapeTop = VoxelShapes.or(
-                makeCuboidShape(0,  0, 0, 16,  4,  4),
-                makeCuboidShape(0,  4, 0, 16,  8,  8),
-                makeCuboidShape(0,  8, 0, 16, 12, 12),
-                makeCuboidShape(0, 12, 0, 16, 16, 16)
-        ).simplify();
+                box(0,  0, 0, 16,  4,  4),
+                box(0,  4, 0, 16,  8,  8),
+                box(0,  8, 0, 16, 12, 12),
+                box(0, 12, 0, 16, 16, 16)
+        ).optimize();
 
         VoxelShape shapeHorizontal = VoxelShapes.or(
-                makeCuboidShape( 0, 0, 0,  4, 16, 16),
-                makeCuboidShape( 4, 0, 0,  8, 16, 12),
-                makeCuboidShape( 8, 0, 0, 12, 16,  8),
-                makeCuboidShape(12, 0, 0, 16, 16,  4)
-        ).simplify();
+                box( 0, 0, 0,  4, 16, 16),
+                box( 4, 0, 0,  8, 16, 12),
+                box( 8, 0, 0, 12, 16,  8),
+                box(12, 0, 0, 16, 16,  4)
+        ).optimize();
 
         ImmutableMap.Builder<BlockState, VoxelShape> builder = ImmutableMap.builder();
 

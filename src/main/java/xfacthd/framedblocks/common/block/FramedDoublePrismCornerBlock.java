@@ -12,13 +12,13 @@ public class FramedDoublePrismCornerBlock extends FramedDoubleThreewayCornerBloc
     public FramedDoublePrismCornerBlock()
     {
         super(BlockType.FRAMED_DOUBLE_PRISM_CORNER);
-        setDefaultState(getDefaultState().with(PropertyHolder.OFFSET, false));
+        registerDefaultState(defaultBlockState().setValue(PropertyHolder.OFFSET, false));
     }
 
     @Override
-    protected void fillStateContainer(StateContainer.Builder<Block, BlockState> builder)
+    protected void createBlockStateDefinition(StateContainer.Builder<Block, BlockState> builder)
     {
-        super.fillStateContainer(builder);
+        super.createBlockStateDefinition(builder);
         builder.add(PropertyHolder.OFFSET);
     }
 
@@ -28,7 +28,7 @@ public class FramedDoublePrismCornerBlock extends FramedDoubleThreewayCornerBloc
         BlockState state = super.getStateForPlacement(context);
         if (state == null) { return null; }
 
-        state = state.with(PropertyHolder.OFFSET, context.getPos().getY() % 2 == 0);
+        state = state.setValue(PropertyHolder.OFFSET, context.getClickedPos().getY() % 2 == 0);
         return state;
     }
 }

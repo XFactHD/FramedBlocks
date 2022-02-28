@@ -17,20 +17,20 @@ public class FramedDoublePanelTileEntity extends FramedDoubleTileEntity
     @Override
     protected boolean hitSecondary(BlockRayTraceResult hit)
     {
-        Direction facing = getBlockState().get(PropertyHolder.FACING_NE);
-        Direction side = hit.getFace();
-        Vector3d vec = Utils.fraction(hit.getHitVec());
+        Direction facing = getBlockState().getValue(PropertyHolder.FACING_NE);
+        Direction side = hit.getDirection();
+        Vector3d vec = Utils.fraction(hit.getLocation());
 
         if (side == facing) { return false; }
         if (side == facing.getOpposite()) { return true; }
 
         if (facing == Direction.NORTH)
         {
-            return vec.getZ() > .5F;
+            return vec.z() > .5F;
         }
         else
         {
-            return vec.getX() <= .5F;
+            return vec.x() <= .5F;
         }
     }
 
@@ -40,20 +40,20 @@ public class FramedDoublePanelTileEntity extends FramedDoubleTileEntity
     @Override
     public BlockState getCamoState(Direction side)
     {
-        Direction facing = getBlockState().get(PropertyHolder.FACING_NE);
+        Direction facing = getBlockState().getValue(PropertyHolder.FACING_NE);
         if (side == facing) { return getCamoState(); }
         if (side == facing.getOpposite()) { return getCamoStateTwo(); }
-        return Blocks.AIR.getDefaultState();
+        return Blocks.AIR.defaultBlockState();
     }
 
     @Override
     public boolean isSolidSide(Direction side)
     {
-        Direction facing = getBlockState().get(PropertyHolder.FACING_NE);
+        Direction facing = getBlockState().getValue(PropertyHolder.FACING_NE);
         if (side == facing || side == facing.getOpposite())
         {
-            return getCamoState(side).isSolid();
+            return getCamoState(side).canOcclude();
         }
-        return getCamoState().isSolid() && getCamoStateTwo().isSolid();
+        return getCamoState().canOcclude() && getCamoStateTwo().canOcclude();
     }
 }

@@ -80,14 +80,14 @@ public abstract class FramedDoubleBlockModel extends BakedModelProxy
         {
             return getModels().getB().getParticleTexture(innerData);
         }
-        return baseModel.getParticleTexture();
+        return baseModel.getParticleIcon();
     }
 
     @Nonnull
     @Override
     public IModelData getModelData(@Nonnull IBlockDisplayReader world, @Nonnull BlockPos pos, @Nonnull BlockState state, @Nonnull IModelData tileData)
     {
-        TileEntity te = world.getTileEntity(pos);
+        TileEntity te = world.getBlockEntity(pos);
         if (te instanceof FramedDoubleTileEntity)
         {
             return te.getModelData();
@@ -105,10 +105,10 @@ public abstract class FramedDoubleBlockModel extends BakedModelProxy
         {
             if (dummyStates == null) { dummyStates = getDummyStates(); }
 
-            BlockRendererDispatcher dispatcher = Minecraft.getInstance().getBlockRendererDispatcher();
+            BlockRendererDispatcher dispatcher = Minecraft.getInstance().getBlockRenderer();
             models = new Tuple<>(
-                    dispatcher.getModelForState(dummyStates.getA()),
-                    dispatcher.getModelForState(dummyStates.getB())
+                    dispatcher.getBlockModel(dummyStates.getA()),
+                    dispatcher.getBlockModel(dummyStates.getB())
             );
         }
         return models;
@@ -128,7 +128,7 @@ public abstract class FramedDoubleBlockModel extends BakedModelProxy
         }
 
         //noinspection deprecation
-        return baseModel.getParticleTexture();
+        return baseModel.getParticleIcon();
     }
 
     private List<BakedQuad> invertTintIndizes(List<BakedQuad> quads)

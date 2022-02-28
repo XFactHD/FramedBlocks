@@ -19,14 +19,14 @@ public class FramedPrismModel extends FramedBlockModel
     public FramedPrismModel(BlockState state, IBakedModel baseModel)
     {
         super(state, baseModel);
-        this.facing = state.get(BlockStateProperties.FACING);
-        this.axis = state.get(BlockStateProperties.AXIS);
+        this.facing = state.getValue(BlockStateProperties.FACING);
+        this.axis = state.getValue(BlockStateProperties.AXIS);
     }
 
     public FramedPrismModel(IBakedModel baseModel)
     {
         this(
-                FBContent.blockFramedPrism.get().getDefaultState().with(BlockStateProperties.FACING, Direction.UP),
+                FBContent.blockFramedPrism.get().defaultBlockState().setValue(BlockStateProperties.FACING, Direction.UP),
                 baseModel
         );
     }
@@ -34,7 +34,7 @@ public class FramedPrismModel extends FramedBlockModel
     @Override
     protected void transformQuad(Map<Direction, List<BakedQuad>> quadMap, BakedQuad quad)
     {
-        Direction quadFace = quad.getFace();
+        Direction quadFace = quad.getDirection();
         if (facing.getAxis() == Direction.Axis.Y && quadFace.getAxis() != axis && quadFace.getAxis() != facing.getAxis())
         {
             BakedQuad slope = ModelUtils.duplicateQuad(quad);
@@ -65,7 +65,7 @@ public class FramedPrismModel extends FramedBlockModel
             BakedQuad slope = ModelUtils.duplicateQuad(quad);
             if (BakedQuadTransformer.createVerticalSideQuad(slope, facing, .5F))
             {
-                BakedQuadTransformer.createSideSlopeQuad(slope, quadFace == facing.rotateY());
+                BakedQuadTransformer.createSideSlopeQuad(slope, quadFace == facing.getClockWise());
                 quadMap.get(null).add(slope);
             }
         }
@@ -78,7 +78,7 @@ public class FramedPrismModel extends FramedBlockModel
             }
             else if (axis != Direction.Axis.Y)
             {
-                triDir = quadFace == facing.rotateY() ? TriangleDirection.RIGHT : TriangleDirection.LEFT;
+                triDir = quadFace == facing.getClockWise() ? TriangleDirection.RIGHT : TriangleDirection.LEFT;
             }
             else
             {

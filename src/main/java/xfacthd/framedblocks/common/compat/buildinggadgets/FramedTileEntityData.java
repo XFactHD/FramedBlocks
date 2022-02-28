@@ -27,11 +27,11 @@ class FramedTileEntityData extends NBTTileEntityData
     public boolean placeIn(BuildContext context, BlockState state, BlockPos pos)
     {
         BuildingGadgets.LOG.trace("Placing {} with Tile NBT at {}.", state, pos);
-        context.getWorld().setBlockState(pos, state, 0);
+        context.getWorld().setBlock(pos, state, 0);
 
         Utils.enqueueImmediateTask(context.getWorld(), () ->
         {
-            TileEntity te = context.getWorld().getTileEntity(pos);
+            TileEntity te = context.getWorld().getBlockEntity(pos);
             if (te != null)
             {
                 CompoundNBT nbt = getNBT();
@@ -41,7 +41,7 @@ class FramedTileEntityData extends NBTTileEntityData
 
                 try
                 {
-                    te.read(state, nbt);
+                    te.load(state, nbt);
                 }
                 catch (Exception e)
                 {

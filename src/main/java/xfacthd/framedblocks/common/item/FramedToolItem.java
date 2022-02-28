@@ -14,8 +14,8 @@ public class FramedToolItem extends Item
     public FramedToolItem(FramedToolType type)
     {
         super(new Properties()
-                .maxStackSize(1)
-                .group(FramedBlocks.FRAMED_GROUP)
+                .stacksTo(1)
+                .tab(FramedBlocks.FRAMED_GROUP)
         );
         this.type = type;
     }

@@ -26,7 +26,7 @@ public abstract class AbstractFramedDoubleBlock extends FramedBlock
     public AbstractFramedDoubleBlock(BlockType blockType) { super(blockType); }
 
     @Override
-    protected void fillStateContainer(StateContainer.Builder<Block, BlockState> builder)
+    protected void createBlockStateDefinition(StateContainer.Builder<Block, BlockState> builder)
     {
         builder.add(PropertyHolder.SOLID);
     }
@@ -38,20 +38,20 @@ public abstract class AbstractFramedDoubleBlock extends FramedBlock
         BlockState state = world.getBlockState(pos);
         if (getCtmPredicate().test(state, side))
         {
-            TileEntity te = world.getTileEntity(pos);
+            TileEntity te = world.getBlockEntity(pos);
             if (te instanceof FramedDoubleTileEntity)
             {
                 return ((FramedDoubleTileEntity) te).getCamoState(side);
             }
         }
-        return Blocks.AIR.getDefaultState();
+        return Blocks.AIR.defaultBlockState();
     }
 
     @Override
     @SuppressWarnings("deprecation")
     public SoundType getSound(BlockState state, IWorldReader world, BlockPos pos)
     {
-        TileEntity te = world.getTileEntity(pos);
+        TileEntity te = world.getBlockEntity(pos);
         if (te instanceof FramedDoubleTileEntity)
         {
             return ((FramedDoubleTileEntity) te).getSoundType();
@@ -61,29 +61,29 @@ public abstract class AbstractFramedDoubleBlock extends FramedBlock
 
     @Override
     @SuppressWarnings("deprecation")
-    public void onBlockHarvested(World world, BlockPos pos, BlockState state, PlayerEntity player)
+    public void playerWillDestroy(World world, BlockPos pos, BlockState state, PlayerEntity player)
     {
-        if (world.isRemote())
+        if (world.isClientSide())
         {
-            TileEntity te = world.getTileEntity(pos);
+            TileEntity te = world.getBlockEntity(pos);
             if (te instanceof FramedDoubleTileEntity)
             {
-                BlockState defaultState = FBContent.blockFramedCube.get().getDefaultState();
+                BlockState defaultState = FBContent.blockFramedCube.get().defaultBlockState();
                 BlockState camoOne = ((FramedDoubleTileEntity) te).getCamoState();
                 BlockState camoTwo = ((FramedDoubleTileEntity) te).getCamoStateTwo();
 
-                world.playEvent(player, 2001, pos, getStateId(camoOne.isAir() ? defaultState : camoOne));
+                world.levelEvent(player, 2001, pos, getId(camoOne.isAir() ? defaultState : camoOne));
                 if (camoOne != camoTwo)
                 {
-                    world.playEvent(player, 2001, pos, getStateId(camoTwo.isAir() ? defaultState : camoTwo));
+                    world.levelEvent(player, 2001, pos, getId(camoTwo.isAir() ? defaultState : camoTwo));
                 }
             }
         }
 
         //Copied from super-implementation
-        if (isIn(BlockTags.GUARDED_BY_PIGLINS))
+        if (is(BlockTags.GUARDED_BY_PIGLINS))
         {
-            PiglinTasks.func_234478_a_(player, false);
+            PiglinTasks.angerNearbyPiglins(player, false);
         }
     }
 
@@ -94,9 +94,9 @@ public abstract class AbstractFramedDoubleBlock extends FramedBlock
         BlockState camoState = NBTUtil.readBlockState(beTag.getCompound("camo_state"));
         BlockState camoStateTwo = NBTUtil.readBlockState(beTag.getCompound("camo_state_two"));
 
-        IFormattableTextComponent component = camoState.isAir() ? FramedBlueprintItem.BLOCK_NONE : camoState.getBlock().getTranslatedName().mergeStyle(TextFormatting.WHITE);
-        component = component.deepCopy().appendSibling(new StringTextComponent(" | ").mergeStyle(TextFormatting.GOLD));
-        component.appendSibling(camoStateTwo.isAir() ? FramedBlueprintItem.BLOCK_NONE : camoStateTwo.getBlock().getTranslatedName().mergeStyle(TextFormatting.WHITE));
+        IFormattableTextComponent component = camoState.isAir() ? FramedBlueprintItem.BLOCK_NONE : camoState.getBlock().getName().withStyle(TextFormatting.WHITE);
+        component = component.copy().append(new StringTextComponent(" | ").withStyle(TextFormatting.GOLD));
+        component.append(camoStateTwo.isAir() ? FramedBlueprintItem.BLOCK_NONE : camoStateTwo.getBlock().getName().withStyle(TextFormatting.WHITE));
 
         return component;
     }

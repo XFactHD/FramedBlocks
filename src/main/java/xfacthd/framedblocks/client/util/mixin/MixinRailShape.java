@@ -18,18 +18,19 @@ public class MixinRailShape
     private AbstractRailBlock block;
 
     @Inject(
-            method = "connect",
+            method = "connectTo",
             at = @At(
                     value = "INVOKE",
                     shift = At.Shift.BEFORE,
-                    target = "Lnet/minecraft/block/BlockState;with(Lnet/minecraft/state/Property;Ljava/lang/Comparable;)Ljava/lang/Object;"
+                    target = "Lnet/minecraft/block/BlockState;setValue(Lnet/minecraft/state/Property;Ljava/lang/Comparable;)Ljava/lang/Object;"
             ),
             cancellable = true,
             locals = LocalCapture.CAPTURE_FAILHARD
     )
     private void framedblocks_connectFilterInvalidState(RailState state, CallbackInfo ci, BlockPos blockpos, BlockPos blockpos1, BlockPos blockpos2, BlockPos blockpos3, boolean flag, boolean flag1, boolean flag2, boolean flag3, RailShape railshape)
     {
-        if (this.block.getShapeProperty().func_241491_c_().noneMatch(value -> value.getValue() == railshape))
+        //noinspection deprecation
+        if (this.block.getShapeProperty().getAllValues().noneMatch(value -> value.value() == railshape))
         {
             ci.cancel();
         }

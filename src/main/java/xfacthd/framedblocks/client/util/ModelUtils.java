@@ -20,7 +20,7 @@ public class ModelUtils
         int elemLight = findElement(VertexFormatElement.Usage.UV, 2);
         int elemNormal = findElement(VertexFormatElement.Usage.NORMAL, 0);
 
-        int[] vertexData = quad.getVertexData();
+        int[] vertexData = quad.getVertices();
 
         float[][] pos = new float[4][3];
         float[][] color = new float[4][4];
@@ -61,7 +61,7 @@ public class ModelUtils
         float[][] data = new float[4][4];
         for (int vert = 0; vert < 4; vert++)
         {
-            LightUtil.unpack(quad.getVertexData(), data[vert], DefaultVertexFormats.BLOCK, vert, elemPos);
+            LightUtil.unpack(quad.getVertices(), data[vert], DefaultVertexFormats.BLOCK, vert, elemPos);
         }
         return data;
     }
@@ -77,20 +77,20 @@ public class ModelUtils
             }
             idx++;
         }
-        throw new IllegalArgumentException("Format doesn't have a " + usage.getDisplayName() + " element");
+        throw new IllegalArgumentException("Format doesn't have a " + usage.getName() + " element");
     }
 
     public static BakedQuad duplicateQuad(BakedQuad quad)
     {
-        int[] vertexData = quad.getVertexData();
+        int[] vertexData = quad.getVertices();
         vertexData = Arrays.copyOf(vertexData, vertexData.length);
 
         return new BakedQuad(
                 vertexData,
                 quad.getTintIndex(),
-                quad.getFace(),
+                quad.getDirection(),
                 quad.getSprite(),
-                quad.applyDiffuseLighting()
+                quad.isShade()
         );
     }
 
@@ -112,13 +112,13 @@ public class ModelUtils
         v2.cross(v1);
         v2.normalize();
 
-        int x = ((byte) Math.round(v2.getX() * 127)) & 0xFF;
-        int y = ((byte) Math.round(v2.getY() * 127)) & 0xFF;
-        int z = ((byte) Math.round(v2.getZ() * 127)) & 0xFF;
+        int x = ((byte) Math.round(v2.x() * 127)) & 0xFF;
+        int y = ((byte) Math.round(v2.y() * 127)) & 0xFF;
+        int z = ((byte) Math.round(v2.z() * 127)) & 0xFF;
 
         int normal = x | (y << 0x08) | (z << 0x10);
 
-        int[] vertexData = quad.getVertexData();
+        int[] vertexData = quad.getVertices();
         int step = vertexData.length / 4; //This is needed to support the extended vertex formats used by shaders in OptiFine
         for(int vert = 0; vert < 4; vert++)
         {
@@ -225,8 +225,8 @@ public class ModelUtils
 
     public static boolean isQuadRotated(float[][] uv)
     {
-        return (MathHelper.epsilonEquals(uv[0][1], uv[1][1]) || MathHelper.epsilonEquals(uv[3][1], uv[2][1])) &&
-                (MathHelper.epsilonEquals(uv[1][0], uv[2][0]) || MathHelper.epsilonEquals(uv[0][0], uv[3][0]));
+        return (MathHelper.equal(uv[0][1], uv[1][1]) || MathHelper.equal(uv[3][1], uv[2][1])) &&
+                (MathHelper.equal(uv[1][0], uv[2][0]) || MathHelper.equal(uv[0][0], uv[3][0]));
     }
 
     public static boolean isQuadMirrored(float[][] uv)
@@ -252,11 +252,11 @@ public class ModelUtils
     public static BakedQuad invertTintIndex(BakedQuad quad)
     {
         return new BakedQuad(
-                quad.getVertexData(), //Don't need to copy the vertex data, it won't be modified by the caller
+                quad.getVertices(), //Don't need to copy the vertex data, it won't be modified by the caller
                 encodeSecondaryTintIndex(quad.getTintIndex()),
-                quad.getFace(),
+                quad.getDirection(),
                 quad.getSprite(),
-                quad.applyDiffuseLighting()
+                quad.isShade()
         );
     }
 

@@ -46,19 +46,19 @@ public class FBClient
                 .map(RegistryObject::get)
                 .filter(block -> block instanceof IFramedBlock)
                 .forEach(block -> RenderTypeLookup.setRenderLayer(block, type ->
-                        type == RenderType.getSolid() ||
-                        type == RenderType.getCutout() ||
-                        type == RenderType.getCutoutMipped() ||
-                        type == RenderType.getTranslucent()
+                        type == RenderType.solid() ||
+                        type == RenderType.cutout() ||
+                        type == RenderType.cutoutMipped() ||
+                        type == RenderType.translucent()
                 ));
-        RenderTypeLookup.setRenderLayer(FBContent.blockFramedGhostBlock.get(), RenderType.getTranslucent());
+        RenderTypeLookup.setRenderLayer(FBContent.blockFramedGhostBlock.get(), RenderType.translucent());
 
         ClientRegistry.bindTileEntityRenderer(FBContent.tileTypeFramedSign.get(), FramedSignRenderer::new);
         ClientRegistry.bindTileEntityRenderer(FBContent.tileTypeFramedChest.get(), FramedChestRenderer::new);
 
         event.enqueueWork(() ->
         {
-            ScreenManager.registerFactory(FBContent.containerTypeFramedChest.get(), FramedStorageScreen::new);
+            ScreenManager.register(FBContent.containerTypeFramedChest.get(), FramedStorageScreen::new);
 
             BlueprintPropertyOverride.register();
         });
@@ -90,7 +90,7 @@ public class FBClient
         {
             if (world != null && pos != null)
             {
-                TileEntity te = world.getTileEntity(pos);
+                TileEntity te = world.getBlockEntity(pos);
                 if (tintIndex < -1)
                 {
                     tintIndex = ModelUtils.decodeSecondaryTintIndex(tintIndex);
@@ -105,7 +105,7 @@ public class FBClient
                     }
                     else if (te instanceof FramedFlowerPotTileEntity)
                     {
-                        BlockState plantState = ((FramedFlowerPotTileEntity) te).getFlowerBlock().getDefaultState();
+                        BlockState plantState = ((FramedFlowerPotTileEntity) te).getFlowerBlock().defaultBlockState();
                         if (!plantState.isAir())
                         {
                             return event.getBlockColors().getColor(plantState, world, pos, tintIndex);
@@ -202,9 +202,9 @@ public class FBClient
                                       BiFunction<BlockState, IBakedModel, IBakedModel> blockModelGen,
                                       Function<IBakedModel, IBakedModel> itemModelGen)
     {
-        for (BlockState state : block.get().getStateContainer().getValidStates())
+        for (BlockState state : block.get().getStateDefinition().getPossibleStates())
         {
-            ResourceLocation location = BlockModelShapes.getModelLocation(state);
+            ResourceLocation location = BlockModelShapes.stateToModelLocation(state);
             IBakedModel baseModel = models.get(location);
             IBakedModel replacement = blockModelGen.apply(state, baseModel);
             models.put(location, replacement);
@@ -221,10 +221,10 @@ public class FBClient
     public static void openSignScreen(BlockPos pos)
     {
         //noinspection ConstantConditions
-        TileEntity te = Minecraft.getInstance().world.getTileEntity(pos);
+        TileEntity te = Minecraft.getInstance().level.getBlockEntity(pos);
         if (te instanceof FramedSignTileEntity)
         {
-            Minecraft.getInstance().displayGuiScreen(new FramedSignScreen((FramedSignTileEntity)te));
+            Minecraft.getInstance().setScreen(new FramedSignScreen((FramedSignTileEntity)te));
         }
     }
 }

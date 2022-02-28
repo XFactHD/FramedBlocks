@@ -12,13 +12,13 @@ public class PostSkipPredicate implements SideSkipPredicate
     @Override
     public boolean test(IBlockReader world, BlockPos pos, BlockState state, BlockState adjState, Direction side)
     {
-        Direction.Axis axis = state.get(BlockStateProperties.AXIS);
+        Direction.Axis axis = state.getValue(BlockStateProperties.AXIS);
         if (side == null || side.getAxis() != axis || adjState.getBlock() != state.getBlock())
         {
             return false;
         }
 
-        Direction.Axis adjAxis = adjState.get(BlockStateProperties.AXIS);
+        Direction.Axis adjAxis = adjState.getValue(BlockStateProperties.AXIS);
         return axis == adjAxis && SideSkipPredicate.compareState(world, pos, side);
     }
 }

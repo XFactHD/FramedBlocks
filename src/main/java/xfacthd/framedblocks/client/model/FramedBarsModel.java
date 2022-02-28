@@ -17,7 +17,7 @@ public class FramedBarsModel extends FramedPaneModel
     @Override
     protected void transformQuad(Map<Direction, List<BakedQuad>> quadMap, BakedQuad quad)
     {
-        Direction face = quad.getFace();
+        Direction face = quad.getDirection();
         if (face.getAxis() == Direction.Axis.Y)
         {
             createTopBottomCenterQuad(quadMap, quad, false);
@@ -108,7 +108,7 @@ public class FramedBarsModel extends FramedPaneModel
         {
             offset = perpNeg ? 9F/16F : (perpPos ? 7F/16F : .5F);
 
-            if (quad.getFace().getAxisDirection() == Direction.AxisDirection.POSITIVE)
+            if (quad.getDirection().getAxisDirection() == Direction.AxisDirection.POSITIVE)
             {
                 offset = 1F - offset;
             }

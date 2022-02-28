@@ -28,12 +28,12 @@ public class FramedTorchBlock extends TorchBlock implements IFramedBlock
 {
     public FramedTorchBlock()
     {
-        super(Properties.create(Material.MISCELLANEOUS)
-                .doesNotBlockMovement()
-                .hardnessAndResistance(0.5F)
+        super(Properties.of(Material.DECORATION)
+                .noCollission()
+                .strength(0.5F)
                 .sound(SoundType.WOOD)
-                .setLightLevel(state -> 14)
-                .notSolid(),
+                .lightLevel(state -> 14)
+                .noOcclusion(),
                 ParticleTypes.FLAME
         );
     }
@@ -41,13 +41,13 @@ public class FramedTorchBlock extends TorchBlock implements IFramedBlock
     public FramedTorchBlock(Properties props, IParticleData particle) { super(props, particle); }
 
     @Override
-    public final ActionResultType onBlockActivated(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockRayTraceResult hit)
+    public final ActionResultType use(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockRayTraceResult hit)
     {
         return handleBlockActivated(world, pos, player, hand, hit);
     }
 
     @Override
-    public void onBlockPlacedBy(World world, BlockPos pos, BlockState state, @Nullable LivingEntity placer, ItemStack stack)
+    public void setPlacedBy(World world, BlockPos pos, BlockState state, @Nullable LivingEntity placer, ItemStack stack)
     {
         tryApplyCamoImmediately(world, pos, placer, stack);
     }
@@ -88,7 +88,7 @@ public class FramedTorchBlock extends TorchBlock implements IFramedBlock
         BlockItem item = new WallOrFloorItem(
                 FBContent.blockFramedTorch.get(),
                 FBContent.blockFramedWallTorch.get(),
-                new Item.Properties().group(FramedBlocks.FRAMED_GROUP)
+                new Item.Properties().tab(FramedBlocks.FRAMED_GROUP)
         );
         //noinspection ConstantConditions
         item.setRegistryName(getRegistryName());

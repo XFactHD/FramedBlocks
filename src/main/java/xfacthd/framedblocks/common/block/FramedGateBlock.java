@@ -24,8 +24,8 @@ public class FramedGateBlock extends FenceGateBlock implements IFramedBlock
 {
     public static final SideSkipPredicate SKIP_PREDICATE = (world, pos, state, adjState, side) ->
     {
-        Direction dir = state.get(HORIZONTAL_FACING);
-        if ((side == dir.rotateY() || side == dir.rotateYCCW()) && adjState.getBlock() == FBContent.blockFramedWall.get())
+        Direction dir = state.getValue(FACING);
+        if ((side == dir.getClockWise() || side == dir.getCounterClockWise()) && adjState.getBlock() == FBContent.blockFramedWall.get())
         {
             return SideSkipPredicate.compareState(world, pos, side);
         }
@@ -39,16 +39,16 @@ public class FramedGateBlock extends FenceGateBlock implements IFramedBlock
     }
 
     @Override
-    public final ActionResultType onBlockActivated(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockRayTraceResult hit)
+    public final ActionResultType use(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockRayTraceResult hit)
     {
         ActionResultType result = handleBlockActivated(world, pos, player, hand, hit);
-        if (result.isSuccessOrConsume()) { return result; }
+        if (result.consumesAction()) { return result; }
 
-        return super.onBlockActivated(state, world, pos, player, hand, hit);
+        return super.use(state, world, pos, player, hand, hit);
     }
 
     @Override
-    public void onBlockPlacedBy(World world, BlockPos pos, BlockState state, @Nullable LivingEntity placer, ItemStack stack)
+    public void setPlacedBy(World world, BlockPos pos, BlockState state, @Nullable LivingEntity placer, ItemStack stack)
     {
         tryApplyCamoImmediately(world, pos, placer, stack);
     }

@@ -22,7 +22,7 @@ public class FramedSoulTorchModel extends FramedTorchModel
     @Override
     protected boolean hasAdditionalQuadsInLayer(RenderType layer)
     {
-        return RenderTypeLookup.canRenderInLayer(Blocks.SOUL_TORCH.getDefaultState(), layer);
+        return RenderTypeLookup.canRenderInLayer(Blocks.SOUL_TORCH.defaultBlockState(), layer);
     }
 
     @Override

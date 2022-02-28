@@ -24,25 +24,25 @@ public class FramedLeverBlock extends LeverBlock implements IFramedBlock
 {
     public FramedLeverBlock()
     {
-        super(Properties.create(Material.MISCELLANEOUS)
-                .doesNotBlockMovement()
-                .hardnessAndResistance(.5F)
-                .notSolid()
+        super(Properties.of(Material.DECORATION)
+                .noCollission()
+                .strength(.5F)
+                .noOcclusion()
                 .sound(SoundType.WOOD)
         );
     }
 
     @Override
-    public final ActionResultType onBlockActivated(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockRayTraceResult hit)
+    public final ActionResultType use(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockRayTraceResult hit)
     {
         ActionResultType result = handleBlockActivated(world, pos, player, hand, hit);
-        if (result.isSuccessOrConsume()) { return result; }
+        if (result.consumesAction()) { return result; }
 
-        return super.onBlockActivated(state, world, pos, player, hand, hit);
+        return super.use(state, world, pos, player, hand, hit);
     }
 
     @Override
-    public void onBlockPlacedBy(World world, BlockPos pos, BlockState state, @Nullable LivingEntity placer, ItemStack stack)
+    public void setPlacedBy(World world, BlockPos pos, BlockState state, @Nullable LivingEntity placer, ItemStack stack)
     {
         tryApplyCamoImmediately(world, pos, placer, stack);
     }

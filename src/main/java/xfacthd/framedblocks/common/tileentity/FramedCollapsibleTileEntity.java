@@ -33,20 +33,20 @@ public class FramedCollapsibleTileEntity extends FramedTileEntity
         if (!(hit instanceof BlockRayTraceResult)) { return; }
 
         BlockRayTraceResult blockHit = (BlockRayTraceResult) hit;
-        Direction faceHit = blockHit.getFace();
-        Vector3d hitLoc = Utils.fraction(hit.getHitVec());
+        Direction faceHit = blockHit.getDirection();
+        Vector3d hitLoc = Utils.fraction(hit.getLocation());
 
         if (collapsedFace != null && faceHit != collapsedFace) { return; }
 
         int vert = vertexFromHit(faceHit, hitLoc);
-        if (player.isSneaking() && collapsedFace != null && vertexOffsets[vert] > 0)
+        if (player.isShiftKeyDown() && collapsedFace != null && vertexOffsets[vert] > 0)
         {
             byte target = (byte) (vertexOffsets[vert] - 1);
 
             applyDeformation(vert, target, faceHit);
             deformNeighbors(faceHit, hitLoc, target);
         }
-        else if (!player.isSneaking() && vertexOffsets[vert] < 16)
+        else if (!player.isShiftKeyDown() && vertexOffsets[vert] < 16)
         {
             byte target = (byte) (vertexOffsets[vert] + 1);
 
@@ -79,24 +79,24 @@ public class FramedCollapsibleTileEntity extends FramedTileEntity
             if (noOffsets)
             {
                 collapsedFace = null;
-                world.setBlockState(pos, getBlockState().with(PropertyHolder.COLLAPSED_FACE, CollapseFace.NONE), Constants.BlockFlags.DEFAULT);
+                level.setBlock(worldPosition, getBlockState().setValue(PropertyHolder.COLLAPSED_FACE, CollapseFace.NONE), Constants.BlockFlags.DEFAULT);
             }
             else
             {
-                world.notifyBlockUpdate(pos, getBlockState(), getBlockState(), 3);
+                level.sendBlockUpdated(worldPosition, getBlockState(), getBlockState(), 3);
             }
         }
         else if (collapsedFace == null)
         {
             collapsedFace = faceHit;
-            world.setBlockState(pos, getBlockState().with(PropertyHolder.COLLAPSED_FACE, CollapseFace.fromDirection(collapsedFace)), Constants.BlockFlags.DEFAULT);
+            level.setBlock(worldPosition, getBlockState().setValue(PropertyHolder.COLLAPSED_FACE, CollapseFace.fromDirection(collapsedFace)), Constants.BlockFlags.DEFAULT);
         }
         else
         {
-            world.notifyBlockUpdate(pos, getBlockState(), getBlockState(), 3);
+            level.sendBlockUpdated(worldPosition, getBlockState(), getBlockState(), 3);
         }
 
-        markDirty();
+        setChanged();
     }
 
     private void deformNeighbors(Direction faceHit, Vector3d hitLoc, byte offset)
@@ -108,13 +108,13 @@ public class FramedCollapsibleTileEntity extends FramedTileEntity
             Direction dirX = hitLoc.x > .5 ? Direction.EAST : Direction.WEST;
             Direction dirZ = hitLoc.z > .5 ? Direction.SOUTH : Direction.NORTH;
 
-            neighbors[0] = pos.offset(dirX);
-            neighbors[1] = pos.offset(dirZ);
-            neighbors[2] = neighbors[0].offset(dirZ);
+            neighbors[0] = worldPosition.relative(dirX);
+            neighbors[1] = worldPosition.relative(dirZ);
+            neighbors[2] = neighbors[0].relative(dirZ);
 
-            hitVecs[0] = hitLoc.add(dirX.getXOffset() * .5, 0, 0);
-            hitVecs[1] = hitLoc.add(0, 0, dirZ.getZOffset() * .5);
-            hitVecs[2] = hitVecs[0].add(0, 0, dirZ.getZOffset() * .5);
+            hitVecs[0] = hitLoc.add(dirX.getStepX() * .5, 0, 0);
+            hitVecs[1] = hitLoc.add(0, 0, dirZ.getStepZ() * .5);
+            hitVecs[2] = hitVecs[0].add(0, 0, dirZ.getStepZ() * .5);
         }
         else
         {
@@ -130,19 +130,19 @@ public class FramedCollapsibleTileEntity extends FramedTileEntity
                 dirXZ = hitLoc.x > .5 ? Direction.EAST : Direction.WEST;
             }
 
-            neighbors[0] = pos.offset(dirY);
-            neighbors[1] = pos.offset(dirXZ);
-            neighbors[2] = neighbors[0].offset(dirXZ);
+            neighbors[0] = worldPosition.relative(dirY);
+            neighbors[1] = worldPosition.relative(dirXZ);
+            neighbors[2] = neighbors[0].relative(dirXZ);
 
-            hitVecs[0] = hitLoc.add(0, dirY.getYOffset() * .5, 0);
-            hitVecs[1] = hitLoc.add(dirXZ.getXOffset() * .5, 0, dirXZ.getZOffset() * .5);
-            hitVecs[2] = hitVecs[0].add(dirXZ.getXOffset() * .5, 0, dirXZ.getZOffset() * .5);
+            hitVecs[0] = hitLoc.add(0, dirY.getStepY() * .5, 0);
+            hitVecs[1] = hitLoc.add(dirXZ.getStepX() * .5, 0, dirXZ.getStepZ() * .5);
+            hitVecs[2] = hitVecs[0].add(dirXZ.getStepX() * .5, 0, dirXZ.getStepZ() * .5);
         }
 
         for (int i = 0; i < 3; i++)
         {
             //noinspection ConstantConditions
-            TileEntity te = world.getTileEntity(neighbors[i]);
+            TileEntity te = level.getBlockEntity(neighbors[i]);
             if (te instanceof FramedCollapsibleTileEntity)
             {
                 int vert = vertexFromHit(faceHit, MathUtils.wrapVector(hitVecs[i], 0, 1));
@@ -188,7 +188,7 @@ public class FramedCollapsibleTileEntity extends FramedTileEntity
     {
         super.writeToDataPacket(nbt);
         nbt.putInt("offsets", packOffsets(vertexOffsets));
-        nbt.putInt("face", collapsedFace == null ? -1 : collapsedFace.getIndex());
+        nbt.putInt("face", collapsedFace == null ? -1 : collapsedFace.get3DDataValue());
     }
 
     @Override
@@ -207,7 +207,7 @@ public class FramedCollapsibleTileEntity extends FramedTileEntity
         }
 
         int faceIdx = nbt.getInt("face");
-        Direction face = faceIdx == -1 ? null : Direction.byIndex(faceIdx);
+        Direction face = faceIdx == -1 ? null : Direction.from3DDataValue(faceIdx);
         if (collapsedFace != face)
         {
             collapsedFace = face;
@@ -224,7 +224,7 @@ public class FramedCollapsibleTileEntity extends FramedTileEntity
     {
         CompoundNBT nbt = super.getUpdateTag();
         nbt.putInt("offsets", packOffsets(vertexOffsets));
-        nbt.putInt("face", collapsedFace == null ? -1 : collapsedFace.getIndex());
+        nbt.putInt("face", collapsedFace == null ? -1 : collapsedFace.get3DDataValue());
         return nbt;
     }
 
@@ -238,25 +238,25 @@ public class FramedCollapsibleTileEntity extends FramedTileEntity
         getModelData().setData(OFFSETS, packed);
 
         int face = nbt.getInt("face");
-        collapsedFace = face == -1 ? null : Direction.byIndex(face);
+        collapsedFace = face == -1 ? null : Direction.from3DDataValue(face);
         getModelData().setData(COLLAPSED_FACE, collapsedFace);
     }
 
     @Override
-    public CompoundNBT write(CompoundNBT nbt)
+    public CompoundNBT save(CompoundNBT nbt)
     {
         nbt.putInt("offsets", packOffsets(vertexOffsets));
-        nbt.putInt("face", collapsedFace == null ? -1 : collapsedFace.getIndex());
-        return super.write(nbt);
+        nbt.putInt("face", collapsedFace == null ? -1 : collapsedFace.get3DDataValue());
+        return super.save(nbt);
     }
 
     @Override
-    public void read(BlockState state, CompoundNBT nbt)
+    public void load(BlockState state, CompoundNBT nbt)
     {
-        super.read(state, nbt);
+        super.load(state, nbt);
         vertexOffsets = unpackOffsets(nbt.getInt("offsets"));
         int face = nbt.getInt("face");
-        collapsedFace = face == -1 ? null : Direction.byIndex(face);
+        collapsedFace = face == -1 ? null : Direction.from3DDataValue(face);
     }
 
 

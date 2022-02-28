@@ -24,10 +24,10 @@ public class FramedDoubleBlockItem extends BlockItem
 
         if (this != FBContent.blockFramedDoublePanel.get().asItem()) { return true; }
 
-        Direction dir = context.getPlacementHorizontalFacing();
+        Direction dir = context.getHorizontalDirection();
         if (dir == Direction.SOUTH || dir == Direction.WEST)
         {
-            CompoundNBT teTag = context.getItem().getOrCreateChildTag("BlockEntityTag");
+            CompoundNBT teTag = context.getItemInHand().getOrCreateTagElement("BlockEntityTag");
 
             CompoundNBT stateTag = teTag.getCompound("camo_state");
             teTag.put("camo_state", teTag.getCompound("camo_state_two"));
@@ -42,5 +42,5 @@ public class FramedDoubleBlockItem extends BlockItem
     }
 
     @Override
-    protected boolean isInGroup(ItemGroup group) { return false; }
+    protected boolean allowdedIn(ItemGroup group) { return false; }
 }

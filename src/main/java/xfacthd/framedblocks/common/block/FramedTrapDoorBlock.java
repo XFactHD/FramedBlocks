@@ -28,11 +28,11 @@ public class FramedTrapDoorBlock extends TrapDoorBlock implements IFramedBlock
 {
     public static final CtmPredicate CTM_PREDICATE = (state, dir) ->
     {
-        if (state.get(BlockStateProperties.OPEN))
+        if (state.getValue(BlockStateProperties.OPEN))
         {
-            return state.get(BlockStateProperties.HORIZONTAL_FACING).getOpposite() == dir;
+            return state.getValue(BlockStateProperties.HORIZONTAL_FACING).getOpposite() == dir;
         }
-        else if (state.get(BlockStateProperties.HALF) == Half.TOP)
+        else if (state.getValue(BlockStateProperties.HALF) == Half.TOP)
         {
             return dir == Direction.UP;
         }
@@ -42,42 +42,42 @@ public class FramedTrapDoorBlock extends TrapDoorBlock implements IFramedBlock
     public FramedTrapDoorBlock()
     {
         super(IFramedBlock.createProperties(BlockType.FRAMED_TRAPDOOR));
-        setDefaultState(getDefaultState().with(PropertyHolder.SOLID, false));
+        registerDefaultState(defaultBlockState().setValue(PropertyHolder.SOLID, false));
     }
 
     @Override
-    protected void fillStateContainer(StateContainer.Builder<Block, BlockState> builder)
+    protected void createBlockStateDefinition(StateContainer.Builder<Block, BlockState> builder)
     {
-        super.fillStateContainer(builder);
+        super.createBlockStateDefinition(builder);
         builder.add(PropertyHolder.SOLID);
     }
 
     @Override
-    public final ActionResultType onBlockActivated(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockRayTraceResult hit)
+    public final ActionResultType use(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockRayTraceResult hit)
     {
         ActionResultType result = handleBlockActivated(world, pos, player, hand, hit);
-        if (result.isSuccessOrConsume()) { return result; }
+        if (result.consumesAction()) { return result; }
 
-        return super.onBlockActivated(state, world, pos, player, hand, hit);
+        return super.use(state, world, pos, player, hand, hit);
     }
 
     @Override
-    public void onBlockPlacedBy(World world, BlockPos pos, BlockState state, @Nullable LivingEntity placer, ItemStack stack)
+    public void setPlacedBy(World world, BlockPos pos, BlockState state, @Nullable LivingEntity placer, ItemStack stack)
     {
         tryApplyCamoImmediately(world, pos, placer, stack);
     }
 
     @Override
-    public boolean isTransparent(BlockState state) { return state.get(PropertyHolder.SOLID); }
+    public boolean useShapeForLightOcclusion(BlockState state) { return state.getValue(PropertyHolder.SOLID); }
 
     @Override
-    public VoxelShape getRenderShape(BlockState state, IBlockReader world, BlockPos pos)
+    public VoxelShape getOcclusionShape(BlockState state, IBlockReader world, BlockPos pos)
     {
         return getCamoOcclusionShape(state, world, pos);
     }
 
     @Override
-    public VoxelShape getRayTraceShape(BlockState state, IBlockReader world, BlockPos pos, ISelectionContext ctx)
+    public VoxelShape getVisualShape(BlockState state, IBlockReader world, BlockPos pos, ISelectionContext ctx)
     {
         return getCamoVisualShape(state, world, pos, ctx);
     }

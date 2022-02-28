@@ -9,12 +9,12 @@ public class FramedSoulWallTorchBlock extends FramedWallTorchBlock
 {
     public FramedSoulWallTorchBlock()
     {
-        super(Properties.create(Material.MISCELLANEOUS)
-                .doesNotBlockMovement()
-                .hardnessAndResistance(0.5F)
+        super(Properties.of(Material.DECORATION)
+                .noCollission()
+                .strength(0.5F)
                 .sound(SoundType.WOOD)
-                .setLightLevel(state -> 14)
-                .notSolid(),
+                .lightLevel(state -> 14)
+                .noOcclusion(),
                 ParticleTypes.SOUL_FIRE_FLAME
         );
     }

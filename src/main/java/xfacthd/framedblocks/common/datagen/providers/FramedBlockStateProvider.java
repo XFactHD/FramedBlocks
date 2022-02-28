@@ -169,11 +169,11 @@ public class FramedBlockStateProvider extends BlockStateProvider
 
         getVariantBuilder(FBContent.blockFramedLever.get()).forAllStates(state ->
         {
-            Direction facing = state.get(HorizontalBlock.HORIZONTAL_FACING);
-            AttachFace face = state.get(HorizontalFaceBlock.FACE);
-            boolean powered = state.get(LeverBlock.POWERED);
+            Direction facing = state.getValue(HorizontalBlock.FACING);
+            AttachFace face = state.getValue(HorizontalFaceBlock.FACE);
+            boolean powered = state.getValue(LeverBlock.POWERED);
 
-            int rotY = (int)(facing.getHorizontalAngle() + 180F) % 360;
+            int rotY = (int)(facing.toYRot() + 180F) % 360;
             int rotX = face.ordinal() * 90;
             ModelFile model = powered ? leverOn : lever;
             return ConfiguredModel.builder()
@@ -204,8 +204,8 @@ public class FramedBlockStateProvider extends BlockStateProvider
         ModelFile wallTorch = models().getExistingFile(modLoc("framed_wall_torch"));
         getVariantBuilder(FBContent.blockFramedWallTorch.get()).forAllStates(state ->
         {
-            Direction dir = state.get(BlockStateProperties.HORIZONTAL_FACING);
-            int rotY = ((int)dir.getHorizontalAngle() + 90) % 360;
+            Direction dir = state.getValue(BlockStateProperties.HORIZONTAL_FACING);
+            int rotY = ((int)dir.toYRot() + 90) % 360;
             return ConfiguredModel.builder().modelFile(wallTorch).rotationY(rotY).build();
         });
     }
@@ -228,8 +228,8 @@ public class FramedBlockStateProvider extends BlockStateProvider
                 .texture("top", mcLoc("block/soul_torch"));
         getVariantBuilder(FBContent.blockFramedSoulWallTorch.get()).forAllStates(state ->
         {
-            Direction dir = state.get(BlockStateProperties.HORIZONTAL_FACING);
-            int rotY = ((int)dir.getHorizontalAngle() + 90) % 360;
+            Direction dir = state.getValue(BlockStateProperties.HORIZONTAL_FACING);
+            int rotY = ((int)dir.toYRot() + 90) % 360;
             return ConfiguredModel.builder().modelFile(wallTorch).rotationY(rotY).build();
         });
     }
@@ -246,8 +246,8 @@ public class FramedBlockStateProvider extends BlockStateProvider
 
         getVariantBuilder(FBContent.blockFramedChest.get()).forAllStatesExcept(state ->
         {
-            Direction dir = state.get(BlockStateProperties.HORIZONTAL_FACING);
-            int rotY = ((int)dir.getHorizontalAngle() + 180) % 360;
+            Direction dir = state.getValue(BlockStateProperties.HORIZONTAL_FACING);
+            int rotY = ((int)dir.toYRot() + 180) % 360;
             return ConfiguredModel.builder().modelFile(chest).rotationY(rotY).build();
         }, BlockStateProperties.WATERLOGGED, PropertyHolder.LATCH_TYPE);
 

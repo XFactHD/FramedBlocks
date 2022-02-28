@@ -24,16 +24,16 @@ public class FramedDoublePanelBlock extends AbstractFramedDoubleBlock
 {
     public static final CtmPredicate CTM_PREDICATE = (state, dir) ->
     {
-        Direction facing = state.get(PropertyHolder.FACING_NE);
+        Direction facing = state.getValue(PropertyHolder.FACING_NE);
         return dir == facing || dir == facing.getOpposite();
     };
 
     public FramedDoublePanelBlock() { super(BlockType.FRAMED_DOUBLE_PANEL); }
 
     @Override
-    protected void fillStateContainer(StateContainer.Builder<Block, BlockState> builder)
+    protected void createBlockStateDefinition(StateContainer.Builder<Block, BlockState> builder)
     {
-        super.fillStateContainer(builder);
+        super.createBlockStateDefinition(builder);
         builder.add(PropertyHolder.FACING_NE, BlockStateProperties.WATERLOGGED);
     }
 
@@ -41,9 +41,9 @@ public class FramedDoublePanelBlock extends AbstractFramedDoubleBlock
     @Override //Used by the blueprint
     public BlockState getStateForPlacement(BlockItemUseContext context)
     {
-        Direction dir = context.getPlacementHorizontalFacing();
+        Direction dir = context.getHorizontalDirection();
         if (dir == Direction.SOUTH || dir == Direction.WEST) { dir = dir.getOpposite(); }
-        return getDefaultState().with(PropertyHolder.FACING_NE, dir);
+        return defaultBlockState().setValue(PropertyHolder.FACING_NE, dir);
     }
 
     @Override

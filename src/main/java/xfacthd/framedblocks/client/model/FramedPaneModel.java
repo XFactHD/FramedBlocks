@@ -22,16 +22,16 @@ public class FramedPaneModel extends FramedBlockModel
     {
         super(state, baseModel);
 
-        north = state.get(BlockStateProperties.NORTH);
-        east = state.get(BlockStateProperties.EAST);
-        south = state.get(BlockStateProperties.SOUTH);
-        west = state.get(BlockStateProperties.WEST);
+        north = state.getValue(BlockStateProperties.NORTH);
+        east = state.getValue(BlockStateProperties.EAST);
+        south = state.getValue(BlockStateProperties.SOUTH);
+        west = state.getValue(BlockStateProperties.WEST);
     }
 
     @Override
     protected void transformQuad(Map<Direction, List<BakedQuad>> quadMap, BakedQuad quad)
     {
-        Direction face = quad.getFace();
+        Direction face = quad.getDirection();
         if (face.getAxis() == Direction.Axis.Y)
         {
             createTopBottomCenterQuad(quadMap, quad, false);
@@ -71,7 +71,7 @@ public class FramedPaneModel extends FramedBlockModel
             }
             else
             {
-                quadMap.get(quad.getFace()).add(topBotQuad);
+                quadMap.get(quad.getDirection()).add(topBotQuad);
             }
         }
     }
@@ -112,7 +112,7 @@ public class FramedPaneModel extends FramedBlockModel
             }
             else
             {
-                quadMap.get(quad.getFace()).add(topBotQuad);
+                quadMap.get(quad.getDirection()).add(topBotQuad);
             }
         }
     }
@@ -134,11 +134,11 @@ public class FramedPaneModel extends FramedBlockModel
                 if (mirrored)
                 {
                     BakedQuadTransformer.setQuadPosInFacingDir(edgeQuad, .001F);
-                    quadMap.get(quad.getFace().getOpposite()).add(edgeQuad);
+                    quadMap.get(quad.getDirection().getOpposite()).add(edgeQuad);
                 }
                 else
                 {
-                    quadMap.get(quad.getFace()).add(edgeQuad);
+                    quadMap.get(quad.getDirection()).add(edgeQuad);
                 }
             }
         }

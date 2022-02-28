@@ -19,34 +19,34 @@ public class CollapsibleBlockOutlineRenderer implements OutlineRender
     private static final Quaternion ROTATION = Vector3f.YN.rotationDegrees(180);
 
     @Override
-    public void rotateMatrix(MatrixStack mstack, BlockState state) { mstack.rotate(ROTATION); }
+    public void rotateMatrix(MatrixStack mstack, BlockState state) { mstack.mulPose(ROTATION); }
 
     @Override
     public void draw(BlockState state, World world, BlockPos pos, MatrixStack mstack, IVertexBuilder builder)
     {
-        CollapseFace face = state.get(PropertyHolder.COLLAPSED_FACE);
+        CollapseFace face = state.getValue(PropertyHolder.COLLAPSED_FACE);
         if (face == CollapseFace.NONE)
         {
-            VoxelShapes.fullCube().forEachEdge((pMinX, pMinY, pMinZ, pMaxX, pMaxY, pMaxZ) -> OutlineRender.drawLine(builder, mstack, pMinX, pMinY, pMinZ, pMaxX, pMaxY, pMaxZ));
+            VoxelShapes.block().forAllEdges((pMinX, pMinY, pMinZ, pMaxX, pMaxY, pMaxZ) -> OutlineRender.drawLine(builder, mstack, pMinX, pMinY, pMinZ, pMaxX, pMaxY, pMaxZ));
         }
         else
         {
-            TileEntity te = world.getTileEntity(pos);
+            TileEntity te = world.getBlockEntity(pos);
             if (!(te instanceof FramedCollapsibleTileEntity)) { return; }
 
             byte[] offets = ((FramedCollapsibleTileEntity) te).getVertexOffsets();
             Direction faceDir = face.toDirection().getOpposite();
 
-            mstack.push();
+            mstack.pushPose();
             mstack.translate(.5, .5, .5);
             if (faceDir == Direction.UP)
             {
-                mstack.rotate(Vector3f.XP.rotationDegrees(180));
+                mstack.mulPose(Vector3f.XP.rotationDegrees(180));
             }
             else if (faceDir != Direction.DOWN)
             {
-                mstack.rotate(Vector3f.YN.rotationDegrees(faceDir.getHorizontalAngle() + 180F));
-                mstack.rotate(Vector3f.XN.rotationDegrees(90));
+                mstack.mulPose(Vector3f.YN.rotationDegrees(faceDir.toYRot() + 180F));
+                mstack.mulPose(Vector3f.XN.rotationDegrees(90));
             }
             mstack.translate(-.5, -.5, -.5);
 
@@ -68,7 +68,7 @@ public class CollapsibleBlockOutlineRenderer implements OutlineRender
             OutlineRender.drawLine(builder, mstack, 0, 0, 0, 0, 1D - (offets[2] / 16D), 0);
             OutlineRender.drawLine(builder, mstack, 0, 0, 1, 0, 1D - (offets[3] / 16D), 1);
 
-            mstack.pop();
+            mstack.popPose();
         }
     }
 

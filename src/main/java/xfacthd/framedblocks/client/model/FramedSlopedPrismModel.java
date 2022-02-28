@@ -20,16 +20,16 @@ public class FramedSlopedPrismModel extends FramedBlockModel
     public FramedSlopedPrismModel(BlockState state, IBakedModel baseModel)
     {
         super(state, baseModel);
-        this.facing = state.get(BlockStateProperties.FACING);
-        this.orientation = state.get(PropertyHolder.ORIENTATION);
+        this.facing = state.getValue(BlockStateProperties.FACING);
+        this.orientation = state.getValue(PropertyHolder.ORIENTATION);
     }
 
     public FramedSlopedPrismModel(IBakedModel baseModel)
     {
         this(
-                FBContent.blockFramedSlopedPrism.get().getDefaultState()
-                        .with(BlockStateProperties.FACING, Direction.UP)
-                        .with(PropertyHolder.ORIENTATION, Direction.WEST),
+                FBContent.blockFramedSlopedPrism.get().defaultBlockState()
+                        .setValue(BlockStateProperties.FACING, Direction.UP)
+                        .setValue(PropertyHolder.ORIENTATION, Direction.WEST),
                 baseModel
         );
     }
@@ -37,7 +37,7 @@ public class FramedSlopedPrismModel extends FramedBlockModel
     @Override
     protected void transformQuad(Map<Direction, List<BakedQuad>> quadMap, BakedQuad quad)
     {
-        Direction quadFace = quad.getFace();
+        Direction quadFace = quad.getDirection();
         if (quadFace == orientation.getOpposite() && orientation.getAxis() != Direction.Axis.Y)
         {
             BakedQuad triangle = ModelUtils.duplicateQuad(quad);
@@ -52,7 +52,7 @@ public class FramedSlopedPrismModel extends FramedBlockModel
             }
             else
             {
-                TriangleDirection triDir = orientation == facing.rotateYCCW() ? TriangleDirection.RIGHT : TriangleDirection.LEFT;
+                TriangleDirection triDir = orientation == facing.getCounterClockWise() ? TriangleDirection.RIGHT : TriangleDirection.LEFT;
                 if (BakedQuadTransformer.createSmallTriangleQuad(triangle, triDir))
                 {
                     BakedQuadTransformer.createSideSlopeQuad(triangle, triDir == TriangleDirection.RIGHT);
@@ -80,7 +80,7 @@ public class FramedSlopedPrismModel extends FramedBlockModel
             }
             else if (orientation.getAxis() != Direction.Axis.Y)
             {
-                triDir = quadFace == facing.rotateY() ? TriangleDirection.RIGHT : TriangleDirection.LEFT;
+                triDir = quadFace == facing.getClockWise() ? TriangleDirection.RIGHT : TriangleDirection.LEFT;
             }
             else
             {
@@ -106,7 +106,7 @@ public class FramedSlopedPrismModel extends FramedBlockModel
             {
                 BakedQuad corner = ModelUtils.duplicateQuad(slope);
                 if (BakedQuadTransformer.createVerticalSideQuad(corner, orientation, .5F) &&
-                    BakedQuadTransformer.createSideTriangleQuad(corner, quadFace == orientation.rotateY(), facing == Direction.DOWN)
+                    BakedQuadTransformer.createSideTriangleQuad(corner, quadFace == orientation.getClockWise(), facing == Direction.DOWN)
                 )
                 {
                     BakedQuadTransformer.createTopBottomSlopeQuad(corner, facing == Direction.UP);
@@ -127,16 +127,16 @@ public class FramedSlopedPrismModel extends FramedBlockModel
             {
                 BakedQuad corner = ModelUtils.duplicateQuad(slope);
                 if (BakedQuadTransformer.createHorizontalSideQuad(corner, orientation == Direction.DOWN, .5F) &&
-                    BakedQuadTransformer.createSideTriangleQuad(corner, quadFace == facing.rotateYCCW(), orientation == Direction.UP)
+                    BakedQuadTransformer.createSideTriangleQuad(corner, quadFace == facing.getCounterClockWise(), orientation == Direction.UP)
                 )
                 {
-                    BakedQuadTransformer.createSideSlopeQuad(corner, quadFace == facing.rotateY());
+                    BakedQuadTransformer.createSideSlopeQuad(corner, quadFace == facing.getClockWise());
                     quadMap.get(null).add(corner);
                 }
 
                 if (BakedQuadTransformer.createHorizontalSideQuad(slope, orientation == Direction.UP, .5F))
                 {
-                    BakedQuadTransformer.createSideSlopeQuad(slope, quadFace == facing.rotateY());
+                    BakedQuadTransformer.createSideSlopeQuad(slope, quadFace == facing.getClockWise());
                     quadMap.get(null).add(slope);
                 }
             }
@@ -148,7 +148,7 @@ public class FramedSlopedPrismModel extends FramedBlockModel
             {
                 BakedQuad corner = ModelUtils.duplicateQuad(slope);
                 if (BakedQuadTransformer.createVerticalSideQuad(corner, orientation, .5F) &&
-                    BakedQuadTransformer.createSideTriangleQuad(corner, orientation == facing.rotateYCCW(), false)
+                    BakedQuadTransformer.createSideTriangleQuad(corner, orientation == facing.getCounterClockWise(), false)
                 )
                 {
                     BakedQuadTransformer.createTopBottomSlopeQuad(corner, false);
@@ -167,7 +167,7 @@ public class FramedSlopedPrismModel extends FramedBlockModel
             {
                 BakedQuad corner = ModelUtils.duplicateQuad(slope);
                 if (BakedQuadTransformer.createVerticalSideQuad(corner, orientation, .5F) &&
-                    BakedQuadTransformer.createSideTriangleQuad(corner, orientation == facing.rotateYCCW(), true)
+                    BakedQuadTransformer.createSideTriangleQuad(corner, orientation == facing.getCounterClockWise(), true)
                 )
                 {
                     BakedQuadTransformer.createTopBottomSlopeQuad(corner, true);

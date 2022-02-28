@@ -220,7 +220,7 @@ public class FBContent
         return TILE_TYPES.register(name, () ->
         {
             //noinspection ConstantConditions
-            return TileEntityType.Builder.create(factory, blocks.get()).build(null);
+            return TileEntityType.Builder.of(factory, blocks.get()).build(null);
         });
     }
 

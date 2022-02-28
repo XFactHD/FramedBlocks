@@ -18,13 +18,13 @@ public class FramedPressurePlateModel extends FramedBlockModel
     public FramedPressurePlateModel(BlockState state, IBakedModel baseModel)
     {
         super(state, baseModel);
-        pressed = state.get(BlockStateProperties.POWERED);
+        pressed = state.getValue(BlockStateProperties.POWERED);
     }
 
     @Override
     protected void transformQuad(Map<Direction, List<BakedQuad>> quadMap, BakedQuad quad)
     {
-        if (quad.getFace() == Direction.UP)
+        if (quad.getDirection() == Direction.UP)
         {
             BakedQuad topQuad = ModelUtils.duplicateQuad(quad);
             if (BakedQuadTransformer.createTopBottomQuad(topQuad, 1F/16F, 1F/16F, 15F/16F, 15F/16F))
@@ -33,7 +33,7 @@ public class FramedPressurePlateModel extends FramedBlockModel
                 quadMap.get(null).add(topQuad);
             }
         }
-        else if (quad.getFace() != Direction.DOWN)
+        else if (quad.getDirection() != Direction.DOWN)
         {
             BakedQuad sideQuad = ModelUtils.duplicateQuad(quad);
             if (BakedQuadTransformer.createSideQuad(sideQuad, 1F/16F, 0F, 15F/16F, pressed ? .5F/16F : 1F/16F))

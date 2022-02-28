@@ -22,7 +22,7 @@ public interface SideSkipPredicate
                 return false;
             }
 
-            TileEntity te = world.getTileEntity(pos.offset(side));
+            TileEntity te = world.getBlockEntity(pos.relative(side));
             if (te instanceof FramedTileEntity)
             {
                 adjState = ((FramedTileEntity) te).getCamoState(side.getOpposite());
@@ -55,7 +55,7 @@ public interface SideSkipPredicate
 
     static boolean compareState(IBlockReader world, BlockPos pos, Direction side, Direction camoSide)
     {
-        TileEntity te = world.getTileEntity(pos.offset(side));
+        TileEntity te = world.getBlockEntity(pos.relative(side));
         if (te instanceof FramedTileEntity)
         {
             BlockState adjState = ((FramedTileEntity) te).getCamoState(camoSide);
@@ -69,11 +69,11 @@ public interface SideSkipPredicate
 
     static boolean compareState(IBlockReader world, BlockPos pos, BlockState adjState, Direction side)
     {
-        TileEntity te = world.getTileEntity(pos);
+        TileEntity te = world.getBlockEntity(pos);
         if (te instanceof FramedTileEntity)
         {
             BlockState state = ((FramedTileEntity) te).getCamoState(side);
-            return (state == adjState && !state.isIn(BlockTags.LEAVES)) || (state.isOpaqueCube(world, pos) && adjState.isOpaqueCube(world, pos.offset(side)));
+            return (state == adjState && !state.is(BlockTags.LEAVES)) || (state.isSolidRender(world, pos) && adjState.isSolidRender(world, pos.relative(side)));
         }
 
         return false;

@@ -21,7 +21,7 @@ public class CollapsibleBlockSkipPredicate implements SideSkipPredicate
     @Override
     public boolean test(IBlockReader world, BlockPos pos, BlockState state, BlockState adjState, Direction side)
     {
-        CollapseFace face = state.get(PropertyHolder.COLLAPSED_FACE);
+        CollapseFace face = state.getValue(PropertyHolder.COLLAPSED_FACE);
         if (face == CollapseFace.NONE || side == face.toDirection().getOpposite())
         {
             return SideSkipPredicate.CTM.test(world, pos, state, adjState, side);
@@ -32,7 +32,7 @@ public class CollapsibleBlockSkipPredicate implements SideSkipPredicate
         }
 
         TileEntity te = Utils.getTileEntitySafe(world, pos);
-        TileEntity adjTe = Utils.getTileEntitySafe(world, pos.offset(side));
+        TileEntity adjTe = Utils.getTileEntitySafe(world, pos.relative(side));
 
         if (te instanceof FramedCollapsibleTileEntity && adjTe instanceof FramedCollapsibleTileEntity)
         {

@@ -29,27 +29,27 @@ public class FramedStairsBlock extends StairsBlock implements IFramedBlock
     {
         if (dir == Direction.UP)
         {
-            return state.get(BlockStateProperties.HALF) == Half.TOP;
+            return state.getValue(BlockStateProperties.HALF) == Half.TOP;
         }
         else if (dir == Direction.DOWN)
         {
-            return state.get(BlockStateProperties.HALF) == Half.BOTTOM;
+            return state.getValue(BlockStateProperties.HALF) == Half.BOTTOM;
         }
         else
         {
-            Direction facing = state.get(BlockStateProperties.HORIZONTAL_FACING);
-            StairsShape shape = state.get(BlockStateProperties.STAIRS_SHAPE);
+            Direction facing = state.getValue(BlockStateProperties.HORIZONTAL_FACING);
+            StairsShape shape = state.getValue(BlockStateProperties.STAIRS_SHAPE);
             if (shape == StairsShape.STRAIGHT)
             {
                 return facing == dir;
             }
             else if (shape == StairsShape.INNER_LEFT)
             {
-                return facing == dir || facing.rotateYCCW() == dir;
+                return facing == dir || facing.getCounterClockWise() == dir;
             }
             else if (shape == StairsShape.INNER_RIGHT)
             {
-                return facing == dir || facing.rotateY() == dir;
+                return facing == dir || facing.getClockWise() == dir;
             }
             else
             {
@@ -60,40 +60,40 @@ public class FramedStairsBlock extends StairsBlock implements IFramedBlock
 
     public FramedStairsBlock()
     {
-        super(() -> FBContent.blockFramedCube.get().getDefaultState(), IFramedBlock.createProperties(BlockType.FRAMED_STAIRS));
-        setDefaultState(getDefaultState().with(PropertyHolder.SOLID, false));
+        super(() -> FBContent.blockFramedCube.get().defaultBlockState(), IFramedBlock.createProperties(BlockType.FRAMED_STAIRS));
+        registerDefaultState(defaultBlockState().setValue(PropertyHolder.SOLID, false));
     }
 
     @Override
-    protected void fillStateContainer(StateContainer.Builder<Block, BlockState> builder)
+    protected void createBlockStateDefinition(StateContainer.Builder<Block, BlockState> builder)
     {
-        super.fillStateContainer(builder);
+        super.createBlockStateDefinition(builder);
         builder.add(PropertyHolder.SOLID);
     }
 
     @Override
-    public final ActionResultType onBlockActivated(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockRayTraceResult hit)
+    public final ActionResultType use(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockRayTraceResult hit)
     {
         return handleBlockActivated(world, pos, player, hand, hit);
     }
 
     @Override
-    public void onBlockPlacedBy(World world, BlockPos pos, BlockState state, @Nullable LivingEntity placer, ItemStack stack)
+    public void setPlacedBy(World world, BlockPos pos, BlockState state, @Nullable LivingEntity placer, ItemStack stack)
     {
         tryApplyCamoImmediately(world, pos, placer, stack);
     }
 
     @Override
-    public boolean isTransparent(BlockState state) { return state.get(PropertyHolder.SOLID); }
+    public boolean useShapeForLightOcclusion(BlockState state) { return state.getValue(PropertyHolder.SOLID); }
 
     @Override
-    public VoxelShape getRenderShape(BlockState state, IBlockReader world, BlockPos pos)
+    public VoxelShape getOcclusionShape(BlockState state, IBlockReader world, BlockPos pos)
     {
         return getCamoOcclusionShape(state, world, pos);
     }
 
     @Override
-    public VoxelShape getRayTraceShape(BlockState state, IBlockReader world, BlockPos pos, ISelectionContext ctx)
+    public VoxelShape getVisualShape(BlockState state, IBlockReader world, BlockPos pos, ISelectionContext ctx)
     {
         return getCamoVisualShape(state, world, pos, ctx);
     }
@@ -147,7 +147,7 @@ public class FramedStairsBlock extends StairsBlock implements IFramedBlock
     @Override
     public boolean addHitEffects(BlockState state, World world, RayTraceResult target, ParticleManager manager)
     {
-        return IFramedBlock.suppressParticles(state, world, ((BlockRayTraceResult) target).getPos());
+        return IFramedBlock.suppressParticles(state, world, ((BlockRayTraceResult) target).getBlockPos());
     }
 
     @Override

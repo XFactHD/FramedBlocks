@@ -19,12 +19,12 @@ public interface OutlineRender
 
     void draw(BlockState state, MatrixStack poseStack, IVertexBuilder builder);
 
-    default Direction getRotationDir(BlockState state) { return state.get(PropertyHolder.FACING_HOR); }
+    default Direction getRotationDir(BlockState state) { return state.getValue(PropertyHolder.FACING_HOR); }
 
     default void rotateMatrix(MatrixStack poseStack, BlockState state)
     {
         Direction dir = getRotationDir(state);
-        poseStack.rotate(Vector3f.YN.rotationDegrees(dir.getHorizontalAngle()));
+        poseStack.mulPose(Vector3f.YN.rotationDegrees(dir.toYRot()));
     }
 
     static void drawLine(IVertexBuilder builder, MatrixStack mstack, double x1, double y1, double z1, double x2, double y2, double z2)
@@ -38,7 +38,7 @@ public interface OutlineRender
         nY = nY / nLen;
         nZ = nZ / nLen;
 
-        builder.pos(mstack.getLast().getMatrix(), (float)x1, (float)y1, (float)z1).color(0.0F, 0.0F, 0.0F, 0.4F).normal(mstack.getLast().getNormal(), nX, nY, nZ).endVertex();
-        builder.pos(mstack.getLast().getMatrix(), (float)x2, (float)y2, (float)z2).color(0.0F, 0.0F, 0.0F, 0.4F).normal(mstack.getLast().getNormal(), nX, nY, nZ).endVertex();
+        builder.vertex(mstack.last().pose(), (float)x1, (float)y1, (float)z1).color(0.0F, 0.0F, 0.0F, 0.4F).normal(mstack.last().normal(), nX, nY, nZ).endVertex();
+        builder.vertex(mstack.last().pose(), (float)x2, (float)y2, (float)z2).color(0.0F, 0.0F, 0.0F, 0.4F).normal(mstack.last().normal(), nX, nY, nZ).endVertex();
     }
 }

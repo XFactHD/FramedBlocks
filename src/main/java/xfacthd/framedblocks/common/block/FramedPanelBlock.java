@@ -23,12 +23,12 @@ import xfacthd.framedblocks.common.util.*;
 @SuppressWarnings("deprecation")
 public class FramedPanelBlock extends FramedBlock
 {
-    public static final CtmPredicate CTM_PREDICATE = (state, dir) -> state.get(PropertyHolder.FACING_HOR) == dir;
+    public static final CtmPredicate CTM_PREDICATE = (state, dir) -> state.getValue(PropertyHolder.FACING_HOR) == dir;
 
     public FramedPanelBlock(){ super(BlockType.FRAMED_PANEL); }
 
     @Override
-    protected void fillStateContainer(StateContainer.Builder<Block, BlockState> builder)
+    protected void createBlockStateDefinition(StateContainer.Builder<Block, BlockState> builder)
     {
         builder.add(PropertyHolder.FACING_HOR, BlockStateProperties.WATERLOGGED, PropertyHolder.SOLID);
     }
@@ -36,38 +36,38 @@ public class FramedPanelBlock extends FramedBlock
     @Override
     public BlockState getStateForPlacement(BlockItemUseContext context)
     {
-        BlockState state = getDefaultState();
+        BlockState state = defaultBlockState();
 
-        Direction face = context.getFace();
+        Direction face = context.getClickedFace();
         if (face.getAxis().isHorizontal())
         {
-            state = state.with(PropertyHolder.FACING_HOR, face.getOpposite());
+            state = state.setValue(PropertyHolder.FACING_HOR, face.getOpposite());
         }
         else
         {
-            state = state.with(PropertyHolder.FACING_HOR, context.getPlacementHorizontalFacing());
+            state = state.setValue(PropertyHolder.FACING_HOR, context.getHorizontalDirection());
         }
 
-        return withWater(state, context.getWorld(), context.getPos());
+        return withWater(state, context.getLevel(), context.getClickedPos());
     }
 
     @Override
-    public ActionResultType onBlockActivated(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockRayTraceResult hit)
+    public ActionResultType use(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockRayTraceResult hit)
     {
-        ItemStack stack = player.getHeldItem(hand);
+        ItemStack stack = player.getItemInHand(hand);
         if (stack.getItem() == FBContent.blockFramedPanel.get().asItem())
         {
-            Direction facing = state.get(PropertyHolder.FACING_HOR);
-            if (hit.getFace() == facing.getOpposite())
+            Direction facing = state.getValue(PropertyHolder.FACING_HOR);
+            if (hit.getDirection() == facing.getOpposite())
             {
-                if (!world.isRemote())
+                if (!world.isClientSide())
                 {
-                    BlockState camoState = Blocks.AIR.getDefaultState();
+                    BlockState camoState = Blocks.AIR.defaultBlockState();
                     ItemStack camoStack = ItemStack.EMPTY;
                     boolean glowing = false;
                     boolean intangible = false;
 
-                    TileEntity te = world.getTileEntity(pos);
+                    TileEntity te = world.getBlockEntity(pos);
                     if (te instanceof FramedTileEntity)
                     {
                         camoState = ((FramedTileEntity) te).getCamoState();
@@ -77,19 +77,19 @@ public class FramedPanelBlock extends FramedBlock
                     }
 
                     Direction newFacing = (facing == Direction.NORTH || facing == Direction.EAST) ? facing : facing.getOpposite();
-                    BlockState newState = FBContent.blockFramedDoublePanel.get().getDefaultState();
-                    world.setBlockState(pos, newState.with(PropertyHolder.FACING_NE, newFacing));
+                    BlockState newState = FBContent.blockFramedDoublePanel.get().defaultBlockState();
+                    world.setBlockAndUpdate(pos, newState.setValue(PropertyHolder.FACING_NE, newFacing));
 
-                    SoundType sound = FBContent.blockFramedCube.get().getSoundType(FBContent.blockFramedCube.get().getDefaultState());
+                    SoundType sound = FBContent.blockFramedCube.get().getSoundType(FBContent.blockFramedCube.get().defaultBlockState());
                     world.playSound(null, pos, sound.getPlaceSound(), SoundCategory.BLOCKS, (sound.getVolume() + 1.0F) / 2.0F, sound.getPitch() * 0.8F);
 
                     if (!player.isCreative())
                     {
                         stack.shrink(1);
-                        player.inventory.markDirty();
+                        player.inventory.setChanged();
                     }
 
-                    te = world.getTileEntity(pos);
+                    te = world.getBlockEntity(pos);
                     if (te instanceof FramedDoubleTileEntity)
                     {
                         ((FramedDoubleTileEntity) te).setCamo(camoStack, camoState, facing != newFacing);
@@ -97,21 +97,21 @@ public class FramedPanelBlock extends FramedBlock
                         ((FramedDoubleTileEntity) te).setIntangible(intangible);
                     }
                 }
-                return ActionResultType.func_233537_a_(world.isRemote());
+                return ActionResultType.sidedSuccess(world.isClientSide());
             }
         }
-        return super.onBlockActivated(state, world, pos, player, hand, hit);
+        return super.use(state, world, pos, player, hand, hit);
     }
 
     public static ImmutableMap<BlockState, VoxelShape> generateShapes(ImmutableList<BlockState> states)
     {
-        VoxelShape shape = makeCuboidShape(0, 0, 0, 16, 16, 8);
+        VoxelShape shape = box(0, 0, 0, 16, 16, 8);
 
         ImmutableMap.Builder<BlockState, VoxelShape> builder = ImmutableMap.builder();
 
         for (BlockState state : states)
         {
-            Direction dir = state.get(PropertyHolder.FACING_HOR);
+            Direction dir = state.getValue(PropertyHolder.FACING_HOR);
             builder.put(state, Utils.rotateShape(Direction.NORTH, dir, shape));
         }
 

@@ -21,40 +21,40 @@ public class SlopedPrismOutlineRenderer extends PrismOutlineRenderer
     @Override
     public void rotateMatrix(MatrixStack pstack, BlockState state)
     {
-        Direction facing = state.get(BlockStateProperties.FACING);
-        Direction orientation = state.get(PropertyHolder.ORIENTATION);
+        Direction facing = state.getValue(BlockStateProperties.FACING);
+        Direction orientation = state.getValue(PropertyHolder.ORIENTATION);
 
         if (facing.getAxis() == Direction.Axis.Y)
         {
             if (orientation != Direction.SOUTH)
             {
-                pstack.rotate(Vector3f.YN.rotation(PI / 2F * orientation.getHorizontalIndex()));
+                pstack.mulPose(Vector3f.YN.rotation(PI / 2F * orientation.get2DDataValue()));
             }
             if (facing == Direction.DOWN)
             {
-                pstack.rotate(ZP_180);
+                pstack.mulPose(ZP_180);
             }
         }
         else
         {
             if (facing != Direction.SOUTH)
             {
-                pstack.rotate(Vector3f.YN.rotation(PI / 2F * facing.getHorizontalIndex()));
+                pstack.mulPose(Vector3f.YN.rotation(PI / 2F * facing.get2DDataValue()));
             }
             if (orientation != Direction.DOWN)
             {
                 int mult = 2;
-                if (orientation == facing.rotateYCCW())
+                if (orientation == facing.getCounterClockWise())
                 {
                     mult = 1;
                 }
-                else if (orientation == facing.rotateY())
+                else if (orientation == facing.getClockWise())
                 {
                     mult = 3;
                 }
-                pstack.rotate(Vector3f.ZP.rotation(PI / 2F * mult));
+                pstack.mulPose(Vector3f.ZP.rotation(PI / 2F * mult));
             }
-            pstack.rotate(XP_90);
+            pstack.mulPose(XP_90);
         }
     }
 }

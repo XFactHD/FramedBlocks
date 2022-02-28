@@ -23,53 +23,53 @@ public class FramedStorageBlock extends FramedBlock
     public FramedStorageBlock(BlockType type) { super(type); }
 
     @Override
-    protected void fillStateContainer(StateContainer.Builder<Block, BlockState> builder)
+    protected void createBlockStateDefinition(StateContainer.Builder<Block, BlockState> builder)
     {
         builder.add(PropertyHolder.SOLID);
     }
 
     @Override
-    public ActionResultType onBlockActivated(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockRayTraceResult hit)
+    public ActionResultType use(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockRayTraceResult hit)
     {
-        ActionResultType result = super.onBlockActivated(state, world, pos, player, hand, hit);
+        ActionResultType result = super.use(state, world, pos, player, hand, hit);
         if (result != ActionResultType.PASS) { return result; }
 
-        if (!world.isRemote())
+        if (!world.isClientSide())
         {
-            TileEntity te = world.getTileEntity(pos);
+            TileEntity te = world.getBlockEntity(pos);
             if (te instanceof FramedStorageTileEntity)
             {
                 ((FramedStorageTileEntity) te).open((ServerPlayerEntity) player);
             }
         }
-        return ActionResultType.func_233537_a_(world.isRemote());
+        return ActionResultType.sidedSuccess(world.isClientSide());
     }
 
     @Override
-    public void onReplaced(BlockState state, World world, BlockPos pos, BlockState newState, boolean isMoving)
+    public void onRemove(BlockState state, World world, BlockPos pos, BlockState newState, boolean isMoving)
     {
         if (newState.getBlock() != state.getBlock())
         {
-            TileEntity te = world.getTileEntity(pos);
+            TileEntity te = world.getBlockEntity(pos);
             if (te instanceof FramedChestTileEntity)
             {
                 FramedChestTileEntity chest = (FramedChestTileEntity) te;
-                chest.getDrops().forEach(stack -> spawnAsEntity(world, pos, stack));
+                chest.getDrops().forEach(stack -> popResource(world, pos, stack));
                 chest.clearContents();
-                world.updateComparatorOutputLevel(pos, this);
+                world.updateNeighbourForOutputSignal(pos, this);
             }
         }
 
-        super.onReplaced(state, world, pos, newState, isMoving);
+        super.onRemove(state, world, pos, newState, isMoving);
     }
 
     @Override
-    public boolean hasComparatorInputOverride(BlockState state) { return true; }
+    public boolean hasAnalogOutputSignal(BlockState state) { return true; }
 
     @Override
-    public int getComparatorInputOverride(BlockState state, World world, BlockPos pos)
+    public int getAnalogOutputSignal(BlockState state, World world, BlockPos pos)
     {
-        TileEntity te = world.getTileEntity(pos);
+        TileEntity te = world.getBlockEntity(pos);
         if (te instanceof FramedChestTileEntity)
         {
             return ((FramedChestTileEntity) te).getAnalogOutputSignal();

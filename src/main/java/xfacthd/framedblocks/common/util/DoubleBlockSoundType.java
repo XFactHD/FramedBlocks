@@ -32,7 +32,7 @@ public class DoubleBlockSoundType extends SoundType
     @Override
     public SoundEvent getPlaceSound()
     {
-        return FBContent.blockFramedCube.get().getDefaultState().getSoundType().getPlaceSound();
+        return FBContent.blockFramedCube.get().defaultBlockState().getSoundType().getPlaceSound();
     }
 
     @Override
@@ -51,10 +51,10 @@ public class DoubleBlockSoundType extends SoundType
         //noinspection deprecation
         if (!camo.isAir())
         {
-            return camo.getSoundType(te.getWorld(), te.getPos(), null);
+            return camo.getSoundType(te.getLevel(), te.getBlockPos(), null);
         }
 
-        return FBContent.blockFramedCube.get().getDefaultState().getSoundType();
+        return FBContent.blockFramedCube.get().defaultBlockState().getSoundType();
     }
 
     private SoundType getEitherSoundType()
@@ -63,16 +63,16 @@ public class DoubleBlockSoundType extends SoundType
         //noinspection deprecation
         if (!camo.isAir())
         {
-            return camo.getSoundType(te.getWorld(), te.getPos(), null);
+            return camo.getSoundType(te.getLevel(), te.getBlockPos(), null);
         }
 
         camo = te.getCamoStateTwo();
         //noinspection deprecation
         if (!camo.isAir())
         {
-            return camo.getSoundType(te.getWorld(), te.getPos(), null);
+            return camo.getSoundType(te.getLevel(), te.getBlockPos(), null);
         }
 
-        return FBContent.blockFramedCube.get().getDefaultState().getSoundType();
+        return FBContent.blockFramedCube.get().defaultBlockState().getSoundType();
     }
 }

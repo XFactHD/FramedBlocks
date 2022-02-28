@@ -21,17 +21,17 @@ public class FramedSignItem extends WallOrFloorItem
     public FramedSignItem()
     {
         super(FBContent.blockFramedSign.get(), FBContent.blockFramedWallSign.get(),
-                new Properties().group(FramedBlocks.FRAMED_GROUP).maxStackSize(16));
+                new Properties().tab(FramedBlocks.FRAMED_GROUP).stacksTo(16));
         setRegistryName(FramedBlocks.MODID, "framed_sign");
     }
 
     @Override
-    protected boolean onBlockPlaced(BlockPos pos, World world, @Nullable PlayerEntity player, ItemStack stack, BlockState state)
+    protected boolean updateCustomBlockEntityTag(BlockPos pos, World world, @Nullable PlayerEntity player, ItemStack stack, BlockState state)
     {
-        boolean hadNBT = super.onBlockPlaced(pos, world, player, stack, state);
-        if (!world.isRemote() && !hadNBT && player != null)
+        boolean hadNBT = super.updateCustomBlockEntityTag(pos, world, player, stack, state);
+        if (!world.isClientSide() && !hadNBT && player != null)
         {
-            TileEntity te = world.getTileEntity(pos);
+            TileEntity te = world.getBlockEntity(pos);
             if (te instanceof FramedSignTileEntity)
             {
                 ((FramedSignTileEntity)te).setEditingPlayer(player);

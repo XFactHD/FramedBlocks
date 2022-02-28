@@ -17,13 +17,13 @@ public class FramedDoubleSlopeBlock extends AbstractFramedDoubleBlock
 {
     public static final CtmPredicate CTM_PREDICATE = (state, dir) ->
     {
-        if (state.get(PropertyHolder.SLOPE_TYPE) == SlopeType.HORIZONTAL)
+        if (state.getValue(PropertyHolder.SLOPE_TYPE) == SlopeType.HORIZONTAL)
         {
             return dir != null && dir.getAxis() != Direction.Axis.Y;
         }
         else
         {
-            Direction facing = state.get(PropertyHolder.FACING_HOR);
+            Direction facing = state.getValue(PropertyHolder.FACING_HOR);
             return (dir != null && dir.getAxis() == Direction.Axis.Y) || dir == facing || dir == facing.getOpposite();
         }
     };
@@ -31,9 +31,9 @@ public class FramedDoubleSlopeBlock extends AbstractFramedDoubleBlock
     public FramedDoubleSlopeBlock() { super(BlockType.FRAMED_DOUBLE_SLOPE); }
 
     @Override
-    protected void fillStateContainer(StateContainer.Builder<Block, BlockState> builder)
+    protected void createBlockStateDefinition(StateContainer.Builder<Block, BlockState> builder)
     {
-        super.fillStateContainer(builder);
+        super.createBlockStateDefinition(builder);
         builder.add(PropertyHolder.FACING_HOR, PropertyHolder.SLOPE_TYPE);
     }
 
@@ -41,7 +41,7 @@ public class FramedDoubleSlopeBlock extends AbstractFramedDoubleBlock
     @Override
     public BlockState getStateForPlacement(BlockItemUseContext context)
     {
-        return withSlopeType(getDefaultState(), context.getFace(), context.getPlacementHorizontalFacing(), context.getHitVec());
+        return withSlopeType(defaultBlockState(), context.getClickedFace(), context.getHorizontalDirection(), context.getClickLocation());
     }
 
     @Override

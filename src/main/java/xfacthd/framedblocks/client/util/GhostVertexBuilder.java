@@ -14,7 +14,7 @@ public class GhostVertexBuilder implements IVertexBuilder
     }
 
     @Override
-    public IVertexBuilder pos(double x, double y, double z) { return wrapped.pos(x, y, z); }
+    public IVertexBuilder vertex(double x, double y, double z) { return wrapped.vertex(x, y, z); }
 
     @Override
     public IVertexBuilder color(int red, int green, int blue, int alpha)
@@ -23,13 +23,13 @@ public class GhostVertexBuilder implements IVertexBuilder
     }
 
     @Override
-    public IVertexBuilder tex(float u, float v) { return wrapped.tex(u, v); }
+    public IVertexBuilder uv(float u, float v) { return wrapped.uv(u, v); }
 
     @Override
-    public IVertexBuilder overlay(int u, int v) { return wrapped.overlay(u, v); }
+    public IVertexBuilder overlayCoords(int u, int v) { return wrapped.overlayCoords(u, v); }
 
     @Override
-    public IVertexBuilder lightmap(int u, int v) { return wrapped.lightmap(u, v); }
+    public IVertexBuilder uv2(int u, int v) { return wrapped.uv2(u, v); }
 
     @Override
     public IVertexBuilder normal(float x, float y, float z) { return wrapped.normal(x, y, z); }

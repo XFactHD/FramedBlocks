@@ -39,7 +39,7 @@ public class FramedFlowerPotModel extends BakedModelProxy
     @Override
     public TextureAtlasSprite getParticleTexture(@Nonnull IModelData data)
     {
-        return getOrCreatePotModel(FBContent.blockFramedFlowerPot.get().getDefaultState(), data).getParticleTexture(data);
+        return getOrCreatePotModel(FBContent.blockFramedFlowerPot.get().defaultBlockState(), data).getParticleTexture(data);
     }
 
     private PotModel getOrCreatePotModel(BlockState state, IModelData extraData)
@@ -52,7 +52,7 @@ public class FramedFlowerPotModel extends BakedModelProxy
     @Override
     public IModelData getModelData(@Nonnull IBlockDisplayReader world, @Nonnull BlockPos pos, @Nonnull BlockState state, @Nonnull IModelData tileData)
     {
-        TileEntity te = world.getTileEntity(pos);
+        TileEntity te = world.getBlockEntity(pos);
         if (te instanceof FramedFlowerPotTileEntity)
         {
             return te.getModelData();
@@ -73,7 +73,7 @@ public class FramedFlowerPotModel extends BakedModelProxy
         @Override
         protected void transformQuad(Map<Direction, List<BakedQuad>> quadMap, BakedQuad quad)
         {
-            if (quad.getFace() == Direction.DOWN)
+            if (quad.getDirection() == Direction.DOWN)
             {
                 BakedQuad botQuad = ModelUtils.duplicateQuad(quad);
                 if (BakedQuadTransformer.createTopBottomQuad(botQuad, 5F/16F, 5F/16F, 11F/16F, 11F/16F))
@@ -81,7 +81,7 @@ public class FramedFlowerPotModel extends BakedModelProxy
                     quadMap.get(Direction.DOWN).add(botQuad);
                 }
             }
-            else if (quad.getFace() == Direction.UP)
+            else if (quad.getDirection() == Direction.UP)
             {
                 BakedQuad topQuad = ModelUtils.duplicateQuad(quad);
                 if (BakedQuadTransformer.createTopBottomQuad(topQuad, 5F/16F, 5F/16F, 11F/16F, 6F/16F))
@@ -111,7 +111,7 @@ public class FramedFlowerPotModel extends BakedModelProxy
                     quadMap.get(null).add(topQuad);
                 }
             }
-            else if (quad.getFace().getAxis() != Direction.Axis.Y)
+            else if (quad.getDirection().getAxis() != Direction.Axis.Y)
             {
                 BakedQuad sideQuad = ModelUtils.duplicateQuad(quad);
                 if (BakedQuadTransformer.createSideQuad(sideQuad, 5F/16F, 0, 11F/16F, 6F/16F))
@@ -132,19 +132,19 @@ public class FramedFlowerPotModel extends BakedModelProxy
         @Override
         protected boolean hasAdditionalQuadsInLayer(RenderType layer)
         {
-            return RenderTypeLookup.canRenderInLayer(Blocks.DIRT.getDefaultState(), layer) ||
-                   RenderTypeLookup.canRenderInLayer(flower.getDefaultState(), layer);
+            return RenderTypeLookup.canRenderInLayer(Blocks.DIRT.defaultBlockState(), layer) ||
+                   RenderTypeLookup.canRenderInLayer(flower.defaultBlockState(), layer);
         }
 
         @Override
         @SuppressWarnings("deprecation")
         protected void getAdditionalQuads(Map<Direction, List<BakedQuad>> quadMap, BlockState state, Random rand, IModelData data, RenderType layer)
         {
-            BlockRendererDispatcher dispatcher = Minecraft.getInstance().getBlockRendererDispatcher();
+            BlockRendererDispatcher dispatcher = Minecraft.getInstance().getBlockRenderer();
             BlockState potState = FramedFlowerPotBlock.getFlowerPotState(flower);
-            if (!potState.isAir() && RenderTypeLookup.canRenderInLayer(flower.getDefaultState(), layer))
+            if (!potState.isAir() && RenderTypeLookup.canRenderInLayer(flower.defaultBlockState(), layer))
             {
-                IBakedModel potModel = dispatcher.getModelForState(potState);
+                IBakedModel potModel = dispatcher.getBlockModel(potState);
 
                 Arrays.stream(Direction.values())
                         .map(dir -> Pair.of(dir, getFilteredPlantQuads(potState, potModel, dir, rand)))
@@ -153,10 +153,10 @@ public class FramedFlowerPotModel extends BakedModelProxy
                 quadMap.get(null).addAll(getFilteredPlantQuads(potState, potModel, null, rand));
             }
 
-            if (RenderTypeLookup.canRenderInLayer(Blocks.DIRT.getDefaultState(), layer))
+            if (RenderTypeLookup.canRenderInLayer(Blocks.DIRT.defaultBlockState(), layer))
             {
-                IBakedModel dirtModel = dispatcher.getModelForState(Blocks.DIRT.getDefaultState());
-                dirtModel.getQuads(Blocks.DIRT.getDefaultState(), Direction.UP, rand, EmptyModelData.INSTANCE).forEach(q ->
+                IBakedModel dirtModel = dispatcher.getBlockModel(Blocks.DIRT.defaultBlockState());
+                dirtModel.getQuads(Blocks.DIRT.defaultBlockState(), Direction.UP, rand, EmptyModelData.INSTANCE).forEach(q ->
                 {
                     BakedQuad topQuad = ModelUtils.duplicateQuad(q);
                     if (BakedQuadTransformer.createTopBottomQuad(topQuad, 6F / 16F, 6F / 16F, 10F / 16F, 10F / 16F))
@@ -166,10 +166,10 @@ public class FramedFlowerPotModel extends BakedModelProxy
                     }
                 });
 
-                BlockState camoState = data instanceof FramedBlockData ? ((FramedBlockData) data).getCamoState() : Blocks.AIR.getDefaultState();
-                if (!camoState.isSolid())
+                BlockState camoState = data instanceof FramedBlockData ? ((FramedBlockData) data).getCamoState() : Blocks.AIR.defaultBlockState();
+                if (!camoState.canOcclude())
                 {
-                    dirtModel.getQuads(Blocks.DIRT.getDefaultState(), Direction.DOWN, rand, EmptyModelData.INSTANCE).forEach(q ->
+                    dirtModel.getQuads(Blocks.DIRT.defaultBlockState(), Direction.DOWN, rand, EmptyModelData.INSTANCE).forEach(q ->
                     {
                         BakedQuad botQuad = ModelUtils.duplicateQuad(q);
                         if (BakedQuadTransformer.createTopBottomQuad(botQuad, 6F / 16F, 6F / 16F, 10F / 16F, 10F / 16F))
@@ -179,8 +179,8 @@ public class FramedFlowerPotModel extends BakedModelProxy
                         }
                     });
 
-                    Direction.Plane.HORIZONTAL.getDirectionValues()
-                            .flatMap(face -> dirtModel.getQuads(Blocks.AIR.getDefaultState(), face, rand, EmptyModelData.INSTANCE).stream())
+                    Direction.Plane.HORIZONTAL.stream()
+                            .flatMap(face -> dirtModel.getQuads(Blocks.AIR.defaultBlockState(), face, rand, EmptyModelData.INSTANCE).stream())
                             .forEach(q ->
                             {
                                 BakedQuad sideQuad = ModelUtils.duplicateQuad(q);

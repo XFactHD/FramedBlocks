@@ -22,23 +22,23 @@ public abstract class BakedModelProxy implements IBakedModel
     }
 
     @Override
-    public boolean isAmbientOcclusion() { return baseModel.isAmbientOcclusion(); }
+    public boolean useAmbientOcclusion() { return baseModel.useAmbientOcclusion(); }
 
     @Override
     public boolean isGui3d() { return true; }
 
     @Override
-    public boolean isSideLit() { return baseModel.isSideLit(); }
+    public boolean usesBlockLight() { return baseModel.usesBlockLight(); }
 
     @Override
-    public boolean isBuiltInRenderer() { return false; }
+    public boolean isCustomRenderer() { return false; }
 
     @Override
-    public TextureAtlasSprite getParticleTexture() { return baseModel.getParticleTexture(); }
+    public TextureAtlasSprite getParticleIcon() { return baseModel.getParticleIcon(); }
 
     @Override
     public ItemOverrideList getOverrides() { return baseModel.getOverrides(); }
 
     @Override
-    public ItemCameraTransforms getItemCameraTransforms() { return baseModel.getItemCameraTransforms(); }
+    public ItemCameraTransforms getTransforms() { return baseModel.getTransforms(); }
 }

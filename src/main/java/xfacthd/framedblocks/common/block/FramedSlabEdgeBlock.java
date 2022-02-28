@@ -21,11 +21,11 @@ public class FramedSlabEdgeBlock extends FramedBlock
     public FramedSlabEdgeBlock()
     {
         super(BlockType.FRAMED_SLAB_EDGE);
-        setDefaultState(getDefaultState().with(PropertyHolder.TOP, false));
+        registerDefaultState(defaultBlockState().setValue(PropertyHolder.TOP, false));
     }
 
     @Override
-    protected void fillStateContainer(StateContainer.Builder<Block, BlockState> builder)
+    protected void createBlockStateDefinition(StateContainer.Builder<Block, BlockState> builder)
     {
         builder.add(PropertyHolder.FACING_HOR, PropertyHolder.TOP, BlockStateProperties.WATERLOGGED);
     }
@@ -33,21 +33,21 @@ public class FramedSlabEdgeBlock extends FramedBlock
     @Override
     public BlockState getStateForPlacement(BlockItemUseContext context)
     {
-        BlockState state = withTop(getDefaultState(), context.getFace(), context.getHitVec());
-        state = state.with(PropertyHolder.FACING_HOR, context.getPlacementHorizontalFacing());
-        return withWater(state, context.getWorld(), context.getPos());
+        BlockState state = withTop(defaultBlockState(), context.getClickedFace(), context.getClickLocation());
+        state = state.setValue(PropertyHolder.FACING_HOR, context.getHorizontalDirection());
+        return withWater(state, context.getLevel(), context.getClickedPos());
     }
 
     @Override
-    public boolean allowsMovement(BlockState state, IBlockReader world, BlockPos pos, PathType type)
+    public boolean isPathfindable(BlockState state, IBlockReader world, BlockPos pos, PathType type)
     {
-        return type == PathType.WATER && world.getFluidState(pos).isTagged(FluidTags.WATER);
+        return type == PathType.WATER && world.getFluidState(pos).is(FluidTags.WATER);
     }
 
     public static ImmutableMap<BlockState, VoxelShape> generateShapes(ImmutableList<BlockState> states)
     {
-        VoxelShape bottomShape = makeCuboidShape(0.0D, 0.0D, 0.0D, 16.0D, 8.0D, 8.0D);
-        VoxelShape topShape = makeCuboidShape(0.0D, 8.0D, 0.0D, 16.0D, 16.0D, 8.0D);
+        VoxelShape bottomShape = box(0.0D, 0.0D, 0.0D, 16.0D, 8.0D, 8.0D);
+        VoxelShape topShape = box(0.0D, 8.0D, 0.0D, 16.0D, 16.0D, 8.0D);
 
         ImmutableMap.Builder<BlockState, VoxelShape> builder = ImmutableMap.builder();
 
@@ -55,8 +55,8 @@ public class FramedSlabEdgeBlock extends FramedBlock
         {
             VoxelShape shape = Utils.rotateShape(
                     Direction.NORTH,
-                    state.get(PropertyHolder.FACING_HOR),
-                    state.get(PropertyHolder.TOP) ? topShape : bottomShape
+                    state.getValue(PropertyHolder.FACING_HOR),
+                    state.getValue(PropertyHolder.TOP) ? topShape : bottomShape
             );
             builder.put(state, shape);
         }

@@ -19,15 +19,15 @@ public class FramedItemTagProvider extends ItemTagsProvider
     public String getName() { return super.getName() + ": " + FramedBlocks.MODID; }
 
     @Override
-    protected void registerTags()
+    protected void addTags()
     {
-        getOrCreateBuilder(ItemTags.SLABS).add(FBContent.blockFramedSlab.get().asItem());
-        getOrCreateBuilder(ItemTags.STAIRS).add(FBContent.blockFramedStairs.get().asItem());
-        getOrCreateBuilder(ItemTags.WALLS).add(FBContent.blockFramedWall.get().asItem());
-        getOrCreateBuilder(ItemTags.FENCES).add(FBContent.blockFramedFence.get().asItem());
-        getOrCreateBuilder(ItemTags.DOORS).add(FBContent.blockFramedDoor.get().asItem());
-        getOrCreateBuilder(ItemTags.TRAPDOORS).add(FBContent.blockFramedTrapDoor.get().asItem());
-        getOrCreateBuilder(Tags.Items.CHESTS).add(FBContent.blockFramedChest.get().asItem());
-        getOrCreateBuilder(Utils.WRENCH).add(FBContent.itemFramedWrench.get());
+        tag(ItemTags.SLABS).add(FBContent.blockFramedSlab.get().asItem());
+        tag(ItemTags.STAIRS).add(FBContent.blockFramedStairs.get().asItem());
+        tag(ItemTags.WALLS).add(FBContent.blockFramedWall.get().asItem());
+        tag(ItemTags.FENCES).add(FBContent.blockFramedFence.get().asItem());
+        tag(ItemTags.DOORS).add(FBContent.blockFramedDoor.get().asItem());
+        tag(ItemTags.TRAPDOORS).add(FBContent.blockFramedTrapDoor.get().asItem());
+        tag(Tags.Items.CHESTS).add(FBContent.blockFramedChest.get().asItem());
+        tag(Utils.WRENCH).add(FBContent.itemFramedWrench.get());
     }
 }

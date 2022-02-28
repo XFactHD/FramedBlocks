@@ -20,14 +20,14 @@ public abstract class MixinBlock extends AbstractBlock
 {
     public MixinBlock(Properties properties) { super(properties); }
 
-    @Inject(method = {"shouldSideBeRendered"}, at = @At("HEAD"), cancellable = true)
+    @Inject(method = "shouldRenderFace", at = @At("HEAD"), cancellable = true)
     private static void framedblocks_shouldSideBeRendered(BlockState state, IBlockReader world, BlockPos pos, Direction face, CallbackInfoReturnable<Boolean> cir)
     {
         //noinspection deprecation
         if (state.getBlock() instanceof IFramedBlock || state.isAir() || !(world instanceof ChunkRenderCache)) { return; }
 
-        BlockPos adjPos = pos.offset(face);
-        TileEntity te = ((ChunkRenderCache)world).getTileEntity(adjPos, Chunk.CreateEntityType.CHECK);
+        BlockPos adjPos = pos.relative(face);
+        TileEntity te = ((ChunkRenderCache)world).getBlockEntity(adjPos, Chunk.CreateEntityType.CHECK);
         if (te instanceof FramedTileEntity)
         {
             FramedTileEntity fte = (FramedTileEntity) te;

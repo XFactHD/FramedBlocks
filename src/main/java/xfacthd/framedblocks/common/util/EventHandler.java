@@ -44,16 +44,16 @@ public class EventHandler
                  block == FBContent.blockFramedDoublePrismCorner.get()
         )
         {
-            if (player.getHeldItemMainhand().getItem() == FBContent.itemFramedHammer.get())
+            if (player.getMainHandItem().getItem() == FBContent.itemFramedHammer.get())
             {
-                world.setBlockState(pos, state.with(PropertyHolder.OFFSET, !state.get(PropertyHolder.OFFSET)));
+                world.setBlockAndUpdate(pos, state.setValue(PropertyHolder.OFFSET, !state.getValue(PropertyHolder.OFFSET)));
                 success = true;
             }
         }
 
         if (ServerConfig.enableIntangibleFeature && !success && block instanceof IFramedBlock && ((IFramedBlock) block).getBlockType().allowMakingIntangible())
         {
-            TileEntity te = world.getTileEntity(pos);
+            TileEntity te = world.getBlockEntity(pos);
             if (te instanceof FramedTileEntity && ((FramedTileEntity) te).isIntangible(null))
             {
                 event.setCanceled(true);

@@ -20,17 +20,17 @@ public class FramedHalfStairsModel extends FramedBlockModel
     public FramedHalfStairsModel(BlockState state, IBakedModel baseModel)
     {
         super(state, baseModel);
-        dir = state.get(PropertyHolder.FACING_HOR);
-        top = state.get(PropertyHolder.TOP);
-        right = state.get(PropertyHolder.RIGHT);
+        dir = state.getValue(PropertyHolder.FACING_HOR);
+        top = state.getValue(PropertyHolder.TOP);
+        right = state.getValue(PropertyHolder.RIGHT);
     }
 
     @Override
     @SuppressWarnings("ConstantConditions")
     protected void transformQuad(Map<Direction, List<BakedQuad>> quadMap, BakedQuad quad)
     {
-        Direction face = quad.getFace();
-        Direction vertCut = right ? dir.rotateYCCW() : dir.rotateY();
+        Direction face = quad.getDirection();
+        Direction vertCut = right ? dir.getCounterClockWise() : dir.getClockWise();
 
         if (face == dir)
         {
