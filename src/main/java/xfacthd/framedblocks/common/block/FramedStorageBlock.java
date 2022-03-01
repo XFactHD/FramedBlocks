@@ -14,7 +14,6 @@ import net.minecraft.world.IBlockReader;
 import net.minecraft.world.World;
 import xfacthd.framedblocks.common.data.BlockType;
 import xfacthd.framedblocks.common.data.PropertyHolder;
-import xfacthd.framedblocks.common.tileentity.FramedChestTileEntity;
 import xfacthd.framedblocks.common.tileentity.FramedStorageTileEntity;
 
 @SuppressWarnings("deprecation")
@@ -51,9 +50,9 @@ public class FramedStorageBlock extends FramedBlock
         if (newState.getBlock() != state.getBlock())
         {
             TileEntity te = world.getBlockEntity(pos);
-            if (te instanceof FramedChestTileEntity)
+            if (te instanceof FramedStorageTileEntity)
             {
-                FramedChestTileEntity chest = (FramedChestTileEntity) te;
+                FramedStorageTileEntity chest = (FramedStorageTileEntity) te;
                 chest.getDrops().forEach(stack -> popResource(world, pos, stack));
                 chest.clearContents();
                 world.updateNeighbourForOutputSignal(pos, this);
@@ -70,9 +69,9 @@ public class FramedStorageBlock extends FramedBlock
     public int getAnalogOutputSignal(BlockState state, World world, BlockPos pos)
     {
         TileEntity te = world.getBlockEntity(pos);
-        if (te instanceof FramedChestTileEntity)
+        if (te instanceof FramedStorageTileEntity)
         {
-            return ((FramedChestTileEntity) te).getAnalogOutputSignal();
+            return ((FramedStorageTileEntity) te).getAnalogOutputSignal();
         }
         return 0;
     }
