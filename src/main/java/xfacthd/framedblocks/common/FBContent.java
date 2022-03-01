@@ -89,6 +89,10 @@ public class FBContent
     public static final RegistryObject<Block> blockFramedSecretStorage = registerBlock(FramedStorageBlock::new, BlockType.FRAMED_SECRET_STORAGE);
     public static final RegistryObject<Block> blockFramedPrism = registerBlock(FramedPrismBlock::new, BlockType.FRAMED_PRISM);
     public static final RegistryObject<Block> blockFramedSlopedPrism = registerBlock(FramedSlopedPrismBlock::new, BlockType.FRAMED_SLOPED_PRISM);
+    public static final RegistryObject<Block> blockFramedSlopeSlab = registerBlock(FramedSlopeSlabBlock::new, BlockType.FRAMED_SLOPE_SLAB);
+    public static final RegistryObject<Block> blockFramedElevatedSlopeSlab = registerBlock(FramedElevatedSlopeSlabBlock::new, BlockType.FRAMED_ELEVATED_SLOPE_SLAB);
+    public static final RegistryObject<Block> blockFramedDoubleSlopeSlab = registerBlock(FramedDoubleSlopeSlabBlock::new, BlockType.FRAMED_DOUBLE_SLOPE_SLAB);
+    public static final RegistryObject<Block> blockFramedInverseDoubleSlopeSlab = registerBlock(FramedInverseDoubleSlopeSlabBlock::new, BlockType.FRAMED_INV_DOUBLE_SLOPE_SLAB);
 
     /** ITEMS */
     public static final RegistryObject<Item> itemFramedHammer = registerToolItem(FramedToolItem::new, FramedToolType.HAMMER);
@@ -150,6 +154,16 @@ public class FBContent
             FramedStorageTileEntity::new,
             "framed_secret_storage",
             blockFramedSecretStorage
+    );
+    public static final RegistryObject<TileEntityType<FramedDoubleSlopeSlabTileEntity>> tileTypeFramedDoubleSlopeSlab = createTileType(
+            FramedDoubleSlopeSlabTileEntity::new,
+            "framed_double_slope_slab",
+            blockFramedDoubleSlopeSlab
+    );
+    public static final RegistryObject<TileEntityType<FramedInverseDoubleSlopeSlabTileEntity>> tileTypeFramedInverseDoubleSlopeSlab = createTileType(
+            FramedInverseDoubleSlopeSlabTileEntity::new,
+            "framed_inverse_double_slope_slab",
+            blockFramedInverseDoubleSlopeSlab
     );
 
     /** CONTAINER TYPES */

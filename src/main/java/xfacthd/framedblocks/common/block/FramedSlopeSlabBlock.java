@@ -1,0 +1,101 @@
+package xfacthd.framedblocks.common.block;
+
+import com.google.common.collect.ImmutableList;
+import com.google.common.collect.ImmutableMap;
+import net.minecraft.block.Block;
+import net.minecraft.block.BlockState;
+import net.minecraft.item.BlockItemUseContext;
+import net.minecraft.state.StateContainer;
+import net.minecraft.state.properties.BlockStateProperties;
+import net.minecraft.util.Direction;
+import net.minecraft.util.math.shapes.VoxelShape;
+import net.minecraft.util.math.shapes.VoxelShapes;
+import xfacthd.framedblocks.common.data.BlockType;
+import xfacthd.framedblocks.common.data.PropertyHolder;
+import xfacthd.framedblocks.common.util.CtmPredicate;
+import xfacthd.framedblocks.common.util.Utils;
+
+public class FramedSlopeSlabBlock extends FramedBlock //TODO: check why states with top != topHalf can't occlude light
+{
+    public static final CtmPredicate CTM_PREDICATE = (state, side) ->
+    {
+        boolean topHalf = state.getValue(PropertyHolder.TOP_HALF);
+        if (state.getValue(PropertyHolder.TOP))
+        {
+            return topHalf && side == Direction.UP;
+        }
+        else
+        {
+            return !topHalf && side == Direction.DOWN;
+        }
+    };
+
+    public FramedSlopeSlabBlock()
+    {
+        super(BlockType.FRAMED_SLOPE_SLAB);
+        registerDefaultState(defaultBlockState()
+                .setValue(PropertyHolder.TOP, false)
+                .setValue(PropertyHolder.TOP_HALF, false)
+        );
+    }
+
+    @Override
+    protected void createBlockStateDefinition(StateContainer.Builder<Block, BlockState> builder)
+    {
+        builder.add(PropertyHolder.FACING_HOR, PropertyHolder.TOP, PropertyHolder.TOP_HALF, BlockStateProperties.WATERLOGGED, PropertyHolder.SOLID);
+    }
+
+    @Override
+    public BlockState getStateForPlacement(BlockItemUseContext context)
+    {
+        Direction face = context.getClickedFace();
+        Direction facing = Utils.isY(face) ? context.getHorizontalDirection() : face.getOpposite();
+
+        BlockState state = defaultBlockState().setValue(PropertyHolder.FACING_HOR, facing);
+        state = withTop(state, PropertyHolder.TOP_HALF, context.getClickedFace(), context.getClickLocation());
+        state = state.setValue(PropertyHolder.TOP, context.getPlayer() != null && context.getPlayer().isShiftKeyDown());
+        return withWater(state, context.getLevel(), context.getClickedPos());
+    }
+
+
+
+    public static final VoxelShape SHAPE_BOTTOM = VoxelShapes.or(
+            box(0, 0, 0, 16,   .5, 16),
+            box(0, 0, 0, 16,    2, 15),
+            box(0, 2, 0, 16,    4, 12),
+            box(0, 4, 0, 16,    6,  8),
+            box(0, 6, 0, 16, 7.75,  4),
+            box(0, 6, 0, 16,    8, .5)
+    ).optimize();
+
+    public static final VoxelShape SHAPE_TOP = VoxelShapes.or(
+            box(0,   0, 0, 16, 2, .5),
+            box(0, .25, 0, 16, 2,  4),
+            box(0,   2, 0, 16, 4,  8),
+            box(0,   4, 0, 16, 6, 12),
+            box(0,   6, 0, 16, 8, 15),
+            box(0, 7.5, 0, 16, 8, 16)
+    ).optimize();
+
+    public static ImmutableMap<BlockState, VoxelShape> generateShapes(ImmutableList<BlockState> states)
+    {
+        ImmutableMap.Builder<BlockState, VoxelShape> builder = ImmutableMap.builder();
+
+        for (BlockState state : states)
+        {
+            VoxelShape shape = state.getValue(PropertyHolder.TOP) ? SHAPE_TOP : SHAPE_BOTTOM;
+            if (state.getValue(PropertyHolder.TOP_HALF))
+            {
+                shape = shape.move(0, .5, 0);
+            }
+
+            Direction facing = state.getValue(PropertyHolder.FACING_HOR);
+            builder.put(
+                    state,
+                    Utils.rotateShape(Direction.NORTH, facing, shape)
+            );
+        }
+
+        return builder.build();
+    }
+}

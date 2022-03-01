@@ -341,4 +341,100 @@ public class BlockOutlineRenderer
         OutlineRender.drawLine(builder, mstack, .5, .5, .5, 1, 1, 1);
         OutlineRender.drawLine(builder, mstack, 0, 1, 0, .5, .5, .5);
     }
+
+    public static void drawSlopeSlabBox(BlockState state, MatrixStack mstack, IVertexBuilder builder)
+    {
+        boolean top = state.getValue(PropertyHolder.TOP);
+        boolean topHalf = state.getValue(PropertyHolder.TOP_HALF);
+
+        if (top)
+        {
+            mstack.translate(.5, .5, .5);
+            mstack.scale(1, -1, 1);
+            mstack.translate(-.5, -.5, -.5);
+        }
+
+        if (topHalf != top)
+        {
+            mstack.translate(0, .5, 0);
+        }
+
+        //Back edges
+        OutlineRender.drawLine(builder, mstack, 0, 0, 1, 0, .5, 1);
+        OutlineRender.drawLine(builder, mstack, 1, 0, 1, 1, .5, 1);
+
+        //Bottom face
+        OutlineRender.drawLine(builder, mstack, 0, 0, 0, 0, 0, 1);
+        OutlineRender.drawLine(builder, mstack, 0, 0, 0, 1, 0, 0);
+        OutlineRender.drawLine(builder, mstack, 1, 0, 0, 1, 0, 1);
+        OutlineRender.drawLine(builder, mstack, 0, 0, 1, 1, 0, 1);
+
+        //Top edge
+        OutlineRender.drawLine(builder, mstack, 0, .5, 1, 1, .5, 1);
+
+        //Slope
+        OutlineRender.drawLine(builder, mstack, 0, 0, 0, 0, .5, 1);
+        OutlineRender.drawLine(builder, mstack, 1, 0, 0, 1, .5, 1);
+    }
+
+    public static void drawElevatedSlopeSlabBox(BlockState state, MatrixStack mstack, IVertexBuilder builder)
+    {
+        if (state.getValue(PropertyHolder.TOP))
+        {
+            mstack.translate(.5, .5, .5);
+            mstack.scale(1, -1, 1);
+            mstack.translate(-.5, -.5, -.5);
+        }
+
+        //Back edges
+        OutlineRender.drawLine(builder, mstack, 0, 0, 1, 0, 1, 1);
+        OutlineRender.drawLine(builder, mstack, 1, 0, 1, 1, 1, 1);
+
+        //Front edges
+        OutlineRender.drawLine(builder, mstack, 0, 0, 0, 0, .5, 0);
+        OutlineRender.drawLine(builder, mstack, 1, 0, 0, 1, .5, 0);
+        OutlineRender.drawLine(builder, mstack, 0, .5, 0, 1, .5, 0);
+
+        //Bottom face
+        OutlineRender.drawLine(builder, mstack, 0, 0, 0, 0, 0, 1);
+        OutlineRender.drawLine(builder, mstack, 0, 0, 0, 1, 0, 0);
+        OutlineRender.drawLine(builder, mstack, 1, 0, 0, 1, 0, 1);
+        OutlineRender.drawLine(builder, mstack, 0, 0, 1, 1, 0, 1);
+
+        //Top edge
+        OutlineRender.drawLine(builder, mstack, 0, 1, 1, 1, 1, 1);
+
+        //Slope
+        OutlineRender.drawLine(builder, mstack, 0, .5, 0, 0, 1, 1);
+        OutlineRender.drawLine(builder, mstack, 1, .5, 0, 1, 1, 1);
+    }
+
+    public static void drawInverseDoubleSlopeSlabBox(@SuppressWarnings("unused") BlockState state, MatrixStack mstack, IVertexBuilder builder)
+    {
+        //Back vertical edges
+        OutlineRender.drawLine(builder, mstack, 0, .5, 1, 0, 1, 1);
+        OutlineRender.drawLine(builder, mstack, 1, .5, 1, 1, 1, 1);
+
+        //Center horizontal edges
+        OutlineRender.drawLine(builder, mstack, 0, .5, 0, 1, .5, 0);
+        OutlineRender.drawLine(builder, mstack, 0, .5, 1, 1, .5, 1);
+
+        //Top edge
+        OutlineRender.drawLine(builder, mstack, 0, 1, 1, 1, 1, 1);
+
+        //Top slope
+        OutlineRender.drawLine(builder, mstack, 0, .5, 0, 0, 1, 1);
+        OutlineRender.drawLine(builder, mstack, 1, .5, 0, 1, 1, 1);
+
+        //Bottom edge
+        OutlineRender.drawLine(builder, mstack, 0, 0, 0, 1, 0, 0);
+
+        //Bottom slope
+        OutlineRender.drawLine(builder, mstack, 0, 0, 0, 0, .5, 1);
+        OutlineRender.drawLine(builder, mstack, 1, 0, 0, 1, .5, 1);
+
+        //Front vertical edges
+        OutlineRender.drawLine(builder, mstack, 0, 0, 0, 0, .5, 0);
+        OutlineRender.drawLine(builder, mstack, 1, 0, 0, 1, .5, 0);
+    }
 }

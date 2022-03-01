@@ -9,6 +9,7 @@ import net.minecraft.fluid.*;
 import net.minecraft.item.ItemStack;
 import net.minecraft.loot.LootContext;
 import net.minecraft.pathfinding.PathType;
+import net.minecraft.state.Property;
 import net.minecraft.state.properties.BlockStateProperties;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.*;
@@ -249,20 +250,25 @@ public class FramedBlock extends Block implements IFramedBlock, IWaterLoggable
 
     protected BlockState withTop(BlockState state, Direction side, Vector3d hitVec)
     {
+        return withTop(state, PropertyHolder.TOP, side, hitVec);
+    }
+
+    protected static BlockState withTop(BlockState state, Property<Boolean> prop, Direction side, Vector3d hitVec)
+    {
         if (side == Direction.DOWN)
         {
-            state = state.setValue(PropertyHolder.TOP, true);
+            state = state.setValue(prop, true);
         }
         else if (side == Direction.UP)
         {
-            state = state.setValue(PropertyHolder.TOP, false);
+            state = state.setValue(prop, false);
         }
         else
         {
             double y = hitVec.y;
             y -= Math.floor(y);
 
-            state = state.setValue(PropertyHolder.TOP, y >= .5D);
+            state = state.setValue(prop, y >= .5D);
         }
         return state;
     }

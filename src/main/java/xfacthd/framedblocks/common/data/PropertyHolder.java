@@ -24,4 +24,5 @@ public class PropertyHolder
     public static final BooleanProperty Z_AXIS = BooleanProperty.create("z_axis");
     public static final BooleanProperty RIGHT = BooleanProperty.create("right");
     public static final BooleanProperty SOLID = BooleanProperty.create("solid");
+    public static final BooleanProperty TOP_HALF = BooleanProperty.create("top_half");
 }

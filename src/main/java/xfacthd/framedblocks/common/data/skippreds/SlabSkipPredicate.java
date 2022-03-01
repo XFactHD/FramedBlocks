@@ -8,6 +8,7 @@ import net.minecraft.world.IBlockReader;
 import xfacthd.framedblocks.common.FBContent;
 import xfacthd.framedblocks.common.data.PropertyHolder;
 import xfacthd.framedblocks.common.util.SideSkipPredicate;
+import xfacthd.framedblocks.common.util.Utils;
 
 public class SlabSkipPredicate implements SideSkipPredicate
 {
@@ -33,6 +34,22 @@ public class SlabSkipPredicate implements SideSkipPredicate
         else if (adjState.getBlock() == FBContent.blockFramedStairs.get())
         {
             return testAgainstStairs(world, pos, top, adjState, side);
+        }
+        else if (adjState.is(FBContent.blockFramedSlopeSlab.get()))
+        {
+            return testAgainstSlopeSlab(world, pos, top, adjState, side);
+        }
+        else if (adjState.is(FBContent.blockFramedElevatedSlopeSlab.get()))
+        {
+            return testAgainstElevatedSlopeSlab(world, pos, top, adjState, side);
+        }
+        else if (adjState.is(FBContent.blockFramedDoubleSlopeSlab.get()))
+        {
+            return testAgainstDoubleSlopeSlab(world, pos, top, adjState, side);
+        }
+        else if (adjState.is(FBContent.blockFramedInverseDoubleSlopeSlab.get()))
+        {
+            return testAgainstInverseDoubleSlopeSlab(world, pos, top, adjState, side);
         }
 
         return false;
@@ -70,5 +87,44 @@ public class SlabSkipPredicate implements SideSkipPredicate
             return SideSkipPredicate.compareState(world, pos, side);
         }
         return false;
+    }
+
+    private static boolean testAgainstSlopeSlab(IBlockReader world, BlockPos pos, boolean top, BlockState adjState, Direction side)
+    {
+        Direction adjDir = adjState.getValue(PropertyHolder.FACING_HOR);
+        boolean adjTopHalf = adjState.getValue(PropertyHolder.TOP_HALF);
+
+        if (Utils.isY(side)) { return false; }
+
+        return adjDir == side.getOpposite() && adjTopHalf == top && SideSkipPredicate.compareState(world, pos, side, top ? Direction.UP : Direction.DOWN);
+    }
+
+    private static boolean testAgainstElevatedSlopeSlab(IBlockReader world, BlockPos pos, boolean top, BlockState adjState, Direction side)
+    {
+        Direction adjDir = adjState.getValue(PropertyHolder.FACING_HOR);
+        boolean adjTop = adjState.getValue(PropertyHolder.TOP);
+
+        if (Utils.isY(side)) { return false; }
+
+        return adjDir == side && adjTop == top && SideSkipPredicate.compareState(world, pos, side, top ? Direction.UP : Direction.DOWN);
+    }
+
+    private static boolean testAgainstDoubleSlopeSlab(IBlockReader world, BlockPos pos, boolean top, BlockState adjState, Direction side)
+    {
+        Direction adjDir = adjState.getValue(PropertyHolder.FACING_HOR);
+        boolean adjTopHalf = adjState.getValue(PropertyHolder.TOP_HALF);
+
+        if (Utils.isY(side)) { return false; }
+
+        return (adjDir == side || adjDir == side.getOpposite()) && adjTopHalf == top && SideSkipPredicate.compareState(world, pos, side, top ? Direction.UP : Direction.DOWN);
+    }
+
+    private static boolean testAgainstInverseDoubleSlopeSlab(IBlockReader world, BlockPos pos, boolean top, BlockState adjState, Direction side)
+    {
+        Direction adjDir = adjState.getValue(PropertyHolder.FACING_HOR);
+
+        if (Utils.isY(side)) { return false; }
+
+        return ((adjDir == side && !top) || (adjDir == side.getOpposite() && top)) && SideSkipPredicate.compareState(world, pos, side, top ? Direction.UP : Direction.DOWN);
     }
 }

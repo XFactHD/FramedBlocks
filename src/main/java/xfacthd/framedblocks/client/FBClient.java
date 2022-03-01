@@ -74,6 +74,9 @@ public class FBClient
         BlockOutlineRenderer.registerOutlineRender(BlockType.FRAMED_COLLAPSIBLE_BLOCK, new CollapsibleBlockOutlineRenderer());
         BlockOutlineRenderer.registerOutlineRender(BlockType.FRAMED_PRISM, new PrismOutlineRenderer());
         BlockOutlineRenderer.registerOutlineRender(BlockType.FRAMED_SLOPED_PRISM, new SlopedPrismOutlineRenderer());
+        BlockOutlineRenderer.registerOutlineRender(BlockType.FRAMED_SLOPE_SLAB, BlockOutlineRenderer::drawSlopeSlabBox);
+        BlockOutlineRenderer.registerOutlineRender(BlockType.FRAMED_ELEVATED_SLOPE_SLAB, BlockOutlineRenderer::drawElevatedSlopeSlabBox);
+        BlockOutlineRenderer.registerOutlineRender(BlockType.FRAMED_INV_DOUBLE_SLOPE_SLAB, BlockOutlineRenderer::drawInverseDoubleSlopeSlabBox);
     }
 
     @SubscribeEvent
@@ -190,6 +193,10 @@ public class FBClient
         replaceModels(FBContent.blockFramedSecretStorage, registry, FramedCubeModel::new);
         replaceModels(FBContent.blockFramedPrism, registry, FramedPrismModel::new, FramedPrismModel::new);
         replaceModels(FBContent.blockFramedSlopedPrism, registry, FramedSlopedPrismModel::new, FramedSlopedPrismModel::new);
+        replaceModels(FBContent.blockFramedSlopeSlab, registry, FramedSlopeSlabModel::new, FramedSlopeSlabModel::new);
+        replaceModels(FBContent.blockFramedElevatedSlopeSlab, registry, FramedElevatedSlopeSlabModel::new, FramedElevatedSlopeSlabModel::new);
+        replaceModels(FBContent.blockFramedDoubleSlopeSlab, registry, FramedDoubleSlopeSlabModel::new, FramedDoubleSlopeSlabModel::new);
+        replaceModels(FBContent.blockFramedInverseDoubleSlopeSlab, registry, FramedInverseDoubleSlopeSlabModel::new, FramedInverseDoubleSlopeSlabModel::new);
     }
 
     private static void replaceModels(RegistryObject<Block> block, Map<ResourceLocation, IBakedModel> models,

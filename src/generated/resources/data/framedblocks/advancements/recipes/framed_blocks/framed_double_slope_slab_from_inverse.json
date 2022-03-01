@@ -1,0 +1,32 @@
+{
+  "parent": "minecraft:recipes/root",
+  "rewards": {
+    "recipes": [
+      "framedblocks:framed_double_slope_slab_from_inverse"
+    ]
+  },
+  "criteria": {
+    "hasFramedInverseDoubleSlopeSlab": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "item": "framedblocks:framed_inv_double_slope_slab"
+          }
+        ]
+      }
+    },
+    "has_the_recipe": {
+      "trigger": "minecraft:recipe_unlocked",
+      "conditions": {
+        "recipe": "framedblocks:framed_double_slope_slab_from_inverse"
+      }
+    }
+  },
+  "requirements": [
+    [
+      "hasFramedInverseDoubleSlopeSlab",
+      "has_the_recipe"
+    ]
+  ]
+}

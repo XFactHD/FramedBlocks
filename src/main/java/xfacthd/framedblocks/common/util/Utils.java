@@ -115,4 +115,12 @@ public class Utils
         }
         return null;
     }
+
+    public static boolean isPositive(Direction dir) { return dir.getAxisDirection() == Direction.AxisDirection.POSITIVE; }
+
+    public static boolean isX(Direction dir) { return dir.getAxis() == Direction.Axis.X; }
+
+    public static boolean isY(Direction dir) { return dir.getAxis() == Direction.Axis.Y; }
+
+    public static boolean isZ(Direction dir) { return dir.getAxis() == Direction.Axis.Z; }
 }
