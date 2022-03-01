@@ -110,33 +110,39 @@ public class FramedSlopedPrismBlock extends FramedBlock
         ImmutableMap.Builder<BlockState, VoxelShape> builder = ImmutableMap.builder();
 
         VoxelShape shapeBottom = VoxelShapes.or(
-                box(0, 0, 0, 16, 4, 16),
-                box(4, 0, 0, 12, 8, 12)
+                box( 0, 0, 0,   16, .5,   16),
+                box(.5, 0, 0, 15.5,  4, 15.5),
+                box( 4, 0, 0,   12,  8,   12)
         ).optimize();
 
         VoxelShape shapeTop = VoxelShapes.or(
-                box(0, 12, 0, 16, 16, 16),
-                box(4,  8, 0, 12, 16, 12)
+                box( 0, 15.5, 0,   16, 16,   16),
+                box(.5,   12, 0, 15.5, 16, 15.5),
+                box( 4,    8, 0,   12, 16,   12)
         ).optimize();
 
         VoxelShape shapeRight = VoxelShapes.or(
-                box(0, 0, 12, 16, 16, 16),
-                box(0, 4,  8, 12, 12, 16)
+                box(0,  0, 15.5,   16,   16, 16),
+                box(0, .5,   12, 15.5, 15.5, 16),
+                box(0,  4,    8,   12,   12, 16)
         ).optimize();
 
         VoxelShape shapeLeft = VoxelShapes.or(
-                box(0, 0, 12, 16, 16, 16),
-                box(4, 4,  8, 16, 12, 16)
+                box( 0,  0, 15.5, 16,   16, 16),
+                box(.5, .5,   12, 16, 15.5, 16),
+                box( 4,  4,    8, 16,   12, 16)
         ).optimize();
 
         VoxelShape shapeUp = VoxelShapes.or(
-                box(0, 0, 12, 16, 16, 16),
-                box(4, 4,  8, 12, 16, 16)
+                box( 0,  0, 15.5,   16, 16, 16),
+                box(.5, .5,   12, 15.5, 16, 16),
+                box( 4, 4,    8,   12,   16, 16)
         ).optimize();
 
         VoxelShape shapeDown = VoxelShapes.or(
-                box(0, 0, 12, 16, 16, 16),
-                box(4, 0,  8, 12, 12, 16)
+                box( 0, 0, 15.5,   16,   16, 16),
+                box(.5, 0,   12, 15.5, 15.5, 16),
+                box( 4,  0,    8,   12, 12, 16)
         ).optimize();
 
         for (BlockState state : states)

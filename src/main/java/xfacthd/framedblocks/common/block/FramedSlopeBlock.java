@@ -117,29 +117,37 @@ public class FramedSlopeBlock extends FramedBlock
         return super.use(state, world, pos, player, hand, hit);
     }
 
+
+
+    public static final VoxelShape SHAPE_BOTTOM = VoxelShapes.or(
+            box(0,    0, 0, 16,   .5,   16),
+            box(0,   .5, 0, 16,    4, 15.5),
+            box(0,    4, 0, 16,    8,   12),
+            box(0,    8, 0, 16,   12,    8),
+            box(0,   12, 0, 16, 15.5,    4),
+            box(0, 15.5, 0, 16,   16,   .5)
+    ).optimize();
+
+    public static final VoxelShape SHAPE_TOP = VoxelShapes.or(
+            box(0,    0, 0, 16,   .5,   .5),
+            box(0,   .5, 0, 16,    4,    4),
+            box(0,    4, 0, 16,    8,    8),
+            box(0,    8, 0, 16,   12,   12),
+            box(0,   12, 0, 16, 15.5, 15.5),
+            box(0, 15.5, 0, 16,   16,   16)
+    ).optimize();
+
+    public static final VoxelShape SHAPE_HORIZONTAL = VoxelShapes.or(
+            box(   0, 0, 0,   .5, 16,   16),
+            box(   0, 0, 0,    4, 16, 15.5),
+            box(   4, 0, 0,    8, 16,   12),
+            box(   8, 0, 0,   12, 16,    8),
+            box(  12, 0, 0, 15.5, 16,    4),
+            box(15.5, 0, 0,   16, 16,   .5)
+    ).optimize();
+
     public static ImmutableMap<BlockState, VoxelShape> generateShapes(ImmutableList<BlockState> states)
     {
-        VoxelShape shapeBottom = VoxelShapes.or(
-                box(0,  0, 0, 16,  4, 16),
-                box(0,  4, 0, 16,  8, 12),
-                box(0,  8, 0, 16, 12,  8),
-                box(0, 12, 0, 16, 16,  4)
-        ).optimize();
-
-        VoxelShape shapeTop = VoxelShapes.or(
-                box(0,  0, 0, 16,  4,  4),
-                box(0,  4, 0, 16,  8,  8),
-                box(0,  8, 0, 16, 12, 12),
-                box(0, 12, 0, 16, 16, 16)
-        ).optimize();
-
-        VoxelShape shapeHorizontal = VoxelShapes.or(
-                box( 0, 0, 0,  4, 16, 16),
-                box( 4, 0, 0,  8, 16, 12),
-                box( 8, 0, 0, 12, 16,  8),
-                box(12, 0, 0, 16, 16,  4)
-        ).optimize();
-
         ImmutableMap.Builder<BlockState, VoxelShape> builder = ImmutableMap.builder();
 
         for (BlockState state : states)
@@ -149,15 +157,15 @@ public class FramedSlopeBlock extends FramedBlock
 
             if (type == SlopeType.BOTTOM)
             {
-                builder.put(state, Utils.rotateShape(Direction.NORTH, dir, shapeBottom));
+                builder.put(state, Utils.rotateShape(Direction.NORTH, dir, SHAPE_BOTTOM));
             }
             else if (type == SlopeType.TOP)
             {
-                builder.put(state, Utils.rotateShape(Direction.NORTH, dir, shapeTop));
+                builder.put(state, Utils.rotateShape(Direction.NORTH, dir, SHAPE_TOP));
             }
             else
             {
-                builder.put(state, Utils.rotateShape(Direction.NORTH, dir, shapeHorizontal));
+                builder.put(state, Utils.rotateShape(Direction.NORTH, dir, SHAPE_HORIZONTAL));
             }
         }
 

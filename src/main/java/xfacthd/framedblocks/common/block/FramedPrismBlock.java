@@ -103,23 +103,27 @@ public class FramedPrismBlock extends FramedBlock
         ImmutableMap.Builder<BlockState, VoxelShape> builder = ImmutableMap.builder();
 
         VoxelShape shapeBottom = VoxelShapes.or(
-                box(0, 0, 0, 16, 4, 16),
-                box(4, 0, 0, 12, 8, 16)
+                box( 0, 0, 0,   16, .5, 16),
+                box(.5, 0, 0, 15.5,  4, 16),
+                box( 4, 0, 0,   12,  8, 16)
         ).optimize();
 
         VoxelShape shapeTop = VoxelShapes.or(
-                box(0, 12, 0, 16, 16, 16),
-                box(4,  8, 0, 12, 16, 16)
+                box( 0, 15.5, 0,   16, 16, 16),
+                box(.5,   12, 0, 15.5, 16, 16),
+                box( 4,    8, 0,   12, 16, 16)
         ).optimize();
 
         VoxelShape shapeXZ = VoxelShapes.or(
-                box(0, 0, 12, 16, 16, 16),
-                box(0, 4,  8, 16, 12, 16)
+                box(0,  0, 15.5, 16,   16, 16),
+                box(0, .5,   12, 16, 15.5, 16),
+                box(0,  4,    8, 16,   12, 16)
         ).optimize();
 
         VoxelShape shapeY = VoxelShapes.or(
-                box(0, 0, 12, 16, 16, 16),
-                box(4, 0,  8, 12, 16, 16)
+                box( 0, 0, 15.5,   16, 16, 16),
+                box(.5, 0,   12, 15.5, 16, 16),
+                box( 4, 0,    8,   12, 16, 16)
         ).optimize();
 
         for (BlockState state : states)
