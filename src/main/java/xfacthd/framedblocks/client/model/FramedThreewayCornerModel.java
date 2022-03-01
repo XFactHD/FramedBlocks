@@ -23,14 +23,6 @@ public class FramedThreewayCornerModel extends FramedBlockModel
         top = state.getValue(PropertyHolder.TOP);
     }
 
-    public FramedThreewayCornerModel(IBakedModel baseModel)
-    {
-        this(
-                FBContent.blockFramedThreewayCorner.get().defaultBlockState().setValue(PropertyHolder.FACING_HOR, Direction.SOUTH),
-                baseModel
-        );
-    }
-
     @Override
     protected void transformQuad(Map<Direction, List<BakedQuad>> quadMap, BakedQuad quad)
     {
@@ -75,5 +67,12 @@ public class FramedThreewayCornerModel extends FramedBlockModel
                 quadMap.get(null).add(triQuad);
             }
         }
+    }
+
+
+
+    public static BlockState itemSource()
+    {
+        return FBContent.blockFramedThreewayCorner.get().defaultBlockState().setValue(PropertyHolder.FACING_HOR, Direction.SOUTH);
     }
 }

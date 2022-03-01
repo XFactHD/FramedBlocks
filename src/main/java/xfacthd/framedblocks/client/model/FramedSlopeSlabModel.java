@@ -29,14 +29,6 @@ public class FramedSlopeSlabModel extends FramedBlockModel
         this.topHalf = state.getValue(PropertyHolder.TOP_HALF);
     }
 
-    public FramedSlopeSlabModel(IBakedModel baseModel)
-    {
-        this(
-                FBContent.blockFramedSlopeSlab.get().defaultBlockState().setValue(PropertyHolder.FACING_HOR, Direction.SOUTH),
-                baseModel
-        );
-    }
-
     @Override
     protected void transformQuad(Map<Direction, List<BakedQuad>> quadMap, BakedQuad quad)
     {
@@ -88,5 +80,12 @@ public class FramedSlopeSlabModel extends FramedBlockModel
         BakedQuad slope = ModelUtils.duplicateQuad(quad);
         BakedQuadTransformer.rotateQuadAroundAxis(slope, facing.getClockWise().getAxis(), origin, angle, true);
         return slope;
+    }
+
+
+
+    public static BlockState itemSource()
+    {
+        return FBContent.blockFramedSlopeSlab.get().defaultBlockState().setValue(PropertyHolder.FACING_HOR, Direction.SOUTH);
     }
 }

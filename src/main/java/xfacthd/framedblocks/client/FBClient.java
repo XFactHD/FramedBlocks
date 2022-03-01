@@ -7,6 +7,8 @@ import net.minecraft.client.gui.ScreenManager;
 import net.minecraft.client.renderer.*;
 import net.minecraft.client.renderer.model.IBakedModel;
 import net.minecraft.client.renderer.model.ModelResourceLocation;
+import net.minecraft.state.Property;
+import net.minecraft.state.properties.BlockStateProperties;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
@@ -29,11 +31,12 @@ import xfacthd.framedblocks.client.util.ModelUtils;
 import xfacthd.framedblocks.common.FBContent;
 import xfacthd.framedblocks.common.block.IFramedBlock;
 import xfacthd.framedblocks.common.data.BlockType;
+import xfacthd.framedblocks.common.data.PropertyHolder;
 import xfacthd.framedblocks.common.tileentity.*;
 
-import java.util.Map;
+import javax.annotation.Nullable;
+import java.util.*;
 import java.util.function.BiFunction;
-import java.util.function.Function;
 
 @Mod.EventBusSubscriber(modid = FramedBlocks.MODID, bus = Mod.EventBusSubscriber.Bus.MOD, value = Dist.CLIENT)
 public class FBClient
@@ -83,6 +86,7 @@ public class FBClient
     @SuppressWarnings("deprecation")
     public static void onBlockColors(final ColorHandlerEvent.Block event)
     {
+        //noinspection SuspiciousToArrayCall
         Block[] blocks = FBContent.getRegisteredBlocks()
                 .stream()
                 .map(RegistryObject::get)
@@ -141,86 +145,119 @@ public class FBClient
 
         FramedChestRenderer.onModelsLoaded(registry); //Must happen before the chest model is replaced
 
-        replaceModels(FBContent.blockFramedCube, registry, FramedCubeModel::new);
-        replaceModels(FBContent.blockFramedSlope, registry, FramedSlopeModel::new, FramedSlopeModel::new);
-        replaceModels(FBContent.blockFramedCornerSlope, registry, FramedCornerSlopeModel::new, FramedCornerSlopeModel::new);
-        replaceModels(FBContent.blockFramedInnerCornerSlope, registry, FramedInnerCornerSlopeModel::new, FramedInnerCornerSlopeModel::new);
-        replaceModels(FBContent.blockFramedPrismCorner, registry, FramedPrismCornerModel::new, FramedPrismCornerModel::new);
-        replaceModels(FBContent.blockFramedInnerPrismCorner, registry, FramedInnerPrismCornerModel::new, FramedInnerPrismCornerModel::new);
-        replaceModels(FBContent.blockFramedThreewayCorner, registry, FramedThreewayCornerModel::new, FramedThreewayCornerModel::new);
-        replaceModels(FBContent.blockFramedInnerThreewayCorner, registry, FramedInnerThreewayCornerModel::new, FramedInnerThreewayCornerModel::new);
-        replaceModels(FBContent.blockFramedSlab, registry, FramedSlabModel::new);
-        replaceModels(FBContent.blockFramedSlabEdge, registry, FramedSlabEdgeModel::new);
-        replaceModels(FBContent.blockFramedSlabCorner, registry, FramedSlabCornerModel::new);
-        replaceModels(FBContent.blockFramedPanel, registry, FramedPanelModel::new);
-        replaceModels(FBContent.blockFramedCornerPillar, registry, FramedCornerPillarModel::new);
-        replaceModels(FBContent.blockFramedStairs, registry, FramedStairsModel::new);
-        replaceModels(FBContent.blockFramedWall, registry, FramedWallModel::new);
-        replaceModels(FBContent.blockFramedFence, registry, FramedFenceModel::createFenceModel);
-        replaceModels(FBContent.blockFramedGate, registry, FramedFenceGateModel::new);
-        replaceModels(FBContent.blockFramedDoor, registry, FramedDoorModel::new);
-        replaceModels(FBContent.blockFramedTrapDoor, registry, FramedTrapDoorModel::new);
-        replaceModels(FBContent.blockFramedPressurePlate, registry, FramedPressurePlateModel::new);
-        replaceModels(FBContent.blockFramedLadder, registry, FramedLadderModel::new, FramedLadderModel::new);
-        replaceModels(FBContent.blockFramedButton, registry, FramedButtonModel::new);
-        replaceModels(FBContent.blockFramedLever, registry, FramedLeverModel::new);
-        replaceModels(FBContent.blockFramedSign, registry, FramedSignModel::new);
-        replaceModels(FBContent.blockFramedWallSign, registry, FramedWallSignModel::new);
-        replaceModels(FBContent.blockFramedDoubleSlab, registry, FramedDoubleSlabModel::new);
-        replaceModels(FBContent.blockFramedDoublePanel, registry, FramedDoublePanelModel::new);
-        replaceModels(FBContent.blockFramedDoubleSlope, registry, FramedDoubleSlopeModel::new);
-        replaceModels(FBContent.blockFramedDoubleCorner, registry, FramedDoubleCornerModel::new, FramedDoubleCornerModel::new);
-        replaceModels(FBContent.blockFramedDoublePrismCorner, registry, FramedDoublePrismCornerModel::new, FramedDoublePrismCornerModel::new);
-        replaceModels(FBContent.blockFramedDoubleThreewayCorner, registry, FramedDoubleThreewayCornerModel::new, FramedDoubleThreewayCornerModel::new);
-        replaceModels(FBContent.blockFramedTorch, registry, FramedTorchModel::new);
-        replaceModels(FBContent.blockFramedWallTorch, registry, FramedWallTorchModel::new);
-        replaceModels(FBContent.blockFramedSoulTorch, registry, FramedSoulTorchModel::new);
-        replaceModels(FBContent.blockFramedSoulWallTorch, registry, FramedSoulWallTorchModel::new);
-        replaceModels(FBContent.blockFramedFloor, registry, FramedFloorModel::new);
-        replaceModels(FBContent.blockFramedLattice, registry, FramedLatticeModel::new);
-        replaceModels(FBContent.blockFramedVerticalStairs, registry, FramedVerticalStairsModel::new);
-        replaceModels(FBContent.blockFramedChest, registry, FramedChestModel::new, FramedChestModel::new);
-        replaceModels(FBContent.blockFramedBars, registry, FramedBarsModel::new);
-        replaceModels(FBContent.blockFramedPane, registry, FramedPaneModel::new);
-        replaceModels(FBContent.blockFramedRailSlope, registry, FramedRailSlopeModel::new, FramedRailSlopeModel::new);
-        replaceModels(FBContent.blockFramedFlowerPot, registry, FramedFlowerPotModel::new);
-        replaceModels(FBContent.blockFramedPillar, registry, FramedPillarModel::new);
-        replaceModels(FBContent.blockFramedHalfPillar, registry, FramedHalfPillarModel::new);
-        replaceModels(FBContent.blockFramedPost, registry, FramedPillarModel::new);
-        replaceModels(FBContent.blockFramedCollapsibleBlock, registry, FramedCollapsibleBlockModel::new);
-        replaceModels(FBContent.blockFramedHalfStairs, registry, FramedHalfStairsModel::new);
-        replaceModels(FBContent.blockFramedBouncyCube, registry, (state, model) -> new FramedBouncyCubeModel(state, model, registry));
-        replaceModels(FBContent.blockFramedSecretStorage, registry, FramedCubeModel::new);
-        replaceModels(FBContent.blockFramedPrism, registry, FramedPrismModel::new, FramedPrismModel::new);
-        replaceModels(FBContent.blockFramedSlopedPrism, registry, FramedSlopedPrismModel::new, FramedSlopedPrismModel::new);
-        replaceModels(FBContent.blockFramedSlopeSlab, registry, FramedSlopeSlabModel::new, FramedSlopeSlabModel::new);
-        replaceModels(FBContent.blockFramedElevatedSlopeSlab, registry, FramedElevatedSlopeSlabModel::new, FramedElevatedSlopeSlabModel::new);
-        replaceModels(FBContent.blockFramedDoubleSlopeSlab, registry, FramedDoubleSlopeSlabModel::new, FramedDoubleSlopeSlabModel::new);
-        replaceModels(FBContent.blockFramedInverseDoubleSlopeSlab, registry, FramedInverseDoubleSlopeSlabModel::new, FramedInverseDoubleSlopeSlabModel::new);
-    }
+        List<Property<?>> ignoreWaterlogged = Collections.singletonList(BlockStateProperties.WATERLOGGED);
+        List<Property<?>> ignoreSolid = Collections.singletonList(PropertyHolder.SOLID);
+        List<Property<?>> ignoreDefault = Arrays.asList(BlockStateProperties.WATERLOGGED, PropertyHolder.SOLID);
 
-    private static void replaceModels(RegistryObject<Block> block, Map<ResourceLocation, IBakedModel> models,
-                                      BiFunction<BlockState, IBakedModel, IBakedModel> blockModelGen)
-    {
-        replaceModels(block, models, blockModelGen, model -> model);
+        replaceModels(FBContent.blockFramedCube, registry, FramedCubeModel::new, ignoreSolid);
+        replaceModels(FBContent.blockFramedSlope, registry, FramedSlopeModel::new, FramedSlopeModel.itemSource(), ignoreDefault);
+        replaceModels(FBContent.blockFramedCornerSlope, registry, FramedCornerSlopeModel::new, FramedCornerSlopeModel.itemSource(), ignoreDefault);
+        replaceModels(FBContent.blockFramedInnerCornerSlope, registry, FramedInnerCornerSlopeModel::new, FramedInnerCornerSlopeModel.itemSource(), ignoreDefault);
+        replaceModels(FBContent.blockFramedPrismCorner, registry, FramedPrismCornerModel::new, FramedPrismCornerModel.itemSource(), ignoreDefault);
+        replaceModels(FBContent.blockFramedInnerPrismCorner, registry, FramedInnerPrismCornerModel::new, FramedInnerPrismCornerModel.itemSource(), ignoreDefault);
+        replaceModels(FBContent.blockFramedThreewayCorner, registry, FramedThreewayCornerModel::new, FramedThreewayCornerModel.itemSource(), ignoreDefault);
+        replaceModels(FBContent.blockFramedInnerThreewayCorner, registry, FramedInnerThreewayCornerModel::new, FramedInnerThreewayCornerModel.itemSource(), ignoreDefault);
+        replaceModels(FBContent.blockFramedSlab, registry, FramedSlabModel::new, ignoreDefault);
+        replaceModels(FBContent.blockFramedSlabEdge, registry, FramedSlabEdgeModel::new, ignoreWaterlogged);
+        replaceModels(FBContent.blockFramedSlabCorner, registry, FramedSlabCornerModel::new, ignoreWaterlogged);
+        replaceModels(FBContent.blockFramedPanel, registry, FramedPanelModel::new, ignoreDefault);
+        replaceModels(FBContent.blockFramedCornerPillar, registry, FramedCornerPillarModel::new, ignoreWaterlogged);
+        replaceModels(FBContent.blockFramedStairs, registry, FramedStairsModel::new, ignoreDefault);
+        replaceModels(FBContent.blockFramedWall, registry, FramedWallModel::new, ignoreWaterlogged);
+        replaceModels(FBContent.blockFramedFence, registry, FramedFenceModel::createFenceModel, ignoreWaterlogged);
+        replaceModels(FBContent.blockFramedGate, registry, FramedFenceGateModel::new, Collections.singletonList(BlockStateProperties.POWERED));
+        replaceModels(FBContent.blockFramedDoor, registry, FramedDoorModel::new, ignoreSolid);
+        replaceModels(FBContent.blockFramedTrapDoor, registry, FramedTrapDoorModel::new, ignoreDefault);
+        replaceModels(FBContent.blockFramedPressurePlate, registry, FramedPressurePlateModel::new, null);
+        replaceModels(FBContent.blockFramedLadder, registry, FramedLadderModel::new, FramedLadderModel.itemSource(), ignoreWaterlogged);
+        replaceModels(FBContent.blockFramedButton, registry, FramedButtonModel::new, null);
+        replaceModels(FBContent.blockFramedLever, registry, FramedLeverModel::new, null);
+        replaceModels(FBContent.blockFramedSign, registry, FramedSignModel::new, ignoreWaterlogged);
+        replaceModels(FBContent.blockFramedWallSign, registry, FramedWallSignModel::new, ignoreWaterlogged);
+        replaceModels(FBContent.blockFramedDoubleSlab, registry, FramedDoubleSlabModel::new, ignoreSolid);
+        replaceModels(FBContent.blockFramedDoublePanel, registry, FramedDoublePanelModel::new, ignoreSolid);
+        replaceModels(FBContent.blockFramedDoubleSlope, registry, FramedDoubleSlopeModel::new, ignoreSolid);
+        replaceModels(FBContent.blockFramedDoubleCorner, registry, FramedDoubleCornerModel::new, FramedDoubleCornerModel.itemSource(), ignoreSolid);
+        replaceModels(FBContent.blockFramedDoublePrismCorner, registry, FramedDoublePrismCornerModel::new, FramedDoublePrismCornerModel.itemSource(), ignoreSolid);
+        replaceModels(FBContent.blockFramedDoubleThreewayCorner, registry, FramedDoubleThreewayCornerModel::new, FramedDoubleThreewayCornerModel.itemSource(), ignoreSolid);
+        replaceModels(FBContent.blockFramedTorch, registry, FramedTorchModel::new, null);
+        replaceModels(FBContent.blockFramedWallTorch, registry, FramedWallTorchModel::new, null);
+        replaceModels(FBContent.blockFramedSoulTorch, registry, FramedSoulTorchModel::new, null);
+        replaceModels(FBContent.blockFramedSoulWallTorch, registry, FramedSoulWallTorchModel::new, null);
+        replaceModels(FBContent.blockFramedFloor, registry, FramedFloorModel::new, ignoreDefault);
+        replaceModels(FBContent.blockFramedLattice, registry, FramedLatticeModel::new, ignoreWaterlogged);
+        replaceModels(FBContent.blockFramedVerticalStairs, registry, FramedVerticalStairsModel::new, ignoreDefault);
+        replaceModels(FBContent.blockFramedChest, registry, FramedChestModel::new, FramedChestModel.itemSource(), ignoreWaterlogged);
+        replaceModels(FBContent.blockFramedBars, registry, FramedBarsModel::new, ignoreWaterlogged);
+        replaceModels(FBContent.blockFramedPane, registry, FramedPaneModel::new, ignoreWaterlogged);
+        replaceModels(FBContent.blockFramedRailSlope, registry, FramedRailSlopeModel::new, FramedRailSlopeModel.itemSource(), ignoreDefault);
+        replaceModels(FBContent.blockFramedFlowerPot, registry, FramedFlowerPotModel::new, null);
+        replaceModels(FBContent.blockFramedPillar, registry, FramedPillarModel::new, ignoreWaterlogged);
+        replaceModels(FBContent.blockFramedHalfPillar, registry, FramedHalfPillarModel::new, ignoreWaterlogged);
+        replaceModels(FBContent.blockFramedPost, registry, FramedPillarModel::new, ignoreWaterlogged);
+        replaceModels(FBContent.blockFramedCollapsibleBlock, registry, FramedCollapsibleBlockModel::new, ignoreWaterlogged);
+        replaceModels(FBContent.blockFramedHalfStairs, registry, FramedHalfStairsModel::new, ignoreWaterlogged);
+        replaceModels(FBContent.blockFramedBouncyCube, registry, (state, baseModel) -> new FramedBouncyCubeModel(state, baseModel, registry), ignoreSolid);
+        replaceModels(FBContent.blockFramedSecretStorage, registry, FramedCubeModel::new, ignoreSolid);
+        replaceModels(FBContent.blockFramedPrism, registry, FramedPrismModel::new, FramedPrismModel.itemSource(), ignoreDefault);
+        replaceModels(FBContent.blockFramedSlopedPrism, registry, FramedSlopedPrismModel::new, FramedSlopedPrismModel.itemSource(), ignoreDefault);
+        replaceModels(FBContent.blockFramedSlopeSlab, registry, FramedSlopeSlabModel::new, FramedSlopeSlabModel.itemSource(), ignoreDefault);
+        replaceModels(FBContent.blockFramedElevatedSlopeSlab, registry, FramedElevatedSlopeSlabModel::new, FramedElevatedSlopeSlabModel.itemSource(), ignoreDefault);
+        replaceModels(FBContent.blockFramedDoubleSlopeSlab, registry, FramedDoubleSlopeSlabModel::new, FramedDoubleSlopeSlabModel.itemSource(), ignoreDefault);
+        replaceModels(FBContent.blockFramedInverseDoubleSlopeSlab, registry, FramedInverseDoubleSlopeSlabModel::new, FramedInverseDoubleSlopeSlabModel.itemSource(), ignoreDefault);
     }
 
     private static void replaceModels(RegistryObject<Block> block, Map<ResourceLocation, IBakedModel> models,
                                       BiFunction<BlockState, IBakedModel, IBakedModel> blockModelGen,
-                                      Function<IBakedModel, IBakedModel> itemModelGen)
+                                      @Nullable List<Property<?>> ignoredProps)
     {
+        replaceModels(block, models, blockModelGen, null, ignoredProps);
+    }
+
+    private static void replaceModels(RegistryObject<Block> block, Map<ResourceLocation, IBakedModel> models,
+                                      BiFunction<BlockState, IBakedModel, IBakedModel> blockModelGen,
+                                      @Nullable BlockState itemModelSource,
+                                      @Nullable List<Property<?>> ignoredProps)
+    {
+        Map<BlockState, IBakedModel> visitedStates = new HashMap<>();
+
         for (BlockState state : block.get().getStateDefinition().getPossibleStates())
         {
             ResourceLocation location = BlockModelShapes.stateToModelLocation(state);
             IBakedModel baseModel = models.get(location);
-            IBakedModel replacement = blockModelGen.apply(state, baseModel);
+            IBakedModel replacement = visitedStates.computeIfAbsent(
+                    ignoreProps(state, ignoredProps),
+                    key -> blockModelGen.apply(key, baseModel)
+            );
             models.put(location, replacement);
         }
 
-        //noinspection ConstantConditions
-        ResourceLocation location = new ModelResourceLocation(block.get().getRegistryName(), "inventory");
-        IBakedModel replacement = itemModelGen.apply(models.get(location));
-        models.put(location, replacement);
+        if (itemModelSource != null)
+        {
+            //noinspection ConstantConditions
+            ResourceLocation location = new ModelResourceLocation(block.get().getRegistryName(), "inventory");
+            IBakedModel replacement = models.get(BlockModelShapes.stateToModelLocation(itemModelSource));
+            models.put(location, replacement);
+        }
+    }
+
+    @SuppressWarnings({ "unchecked", "rawtypes" })
+    private static BlockState ignoreProps(BlockState state, @Nullable List<Property<?>> ignoredProps)
+    {
+        if (ignoredProps == null || ignoredProps.isEmpty()) { return state; }
+
+        BlockState defaultState = state.getBlock().defaultBlockState();
+        for (Property prop : ignoredProps)
+        {
+            if (!state.hasProperty(prop))
+            {
+                FramedBlocks.LOGGER.warn("Found invalid ignored property {} for block {}!", prop, state.getBlock());
+                continue;
+            }
+            state = state.setValue(prop, defaultState.getValue(prop));
+        }
+
+        return state;
     }
 
 

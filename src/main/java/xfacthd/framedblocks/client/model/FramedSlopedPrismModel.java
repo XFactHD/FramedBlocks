@@ -24,16 +24,6 @@ public class FramedSlopedPrismModel extends FramedBlockModel
         this.orientation = state.getValue(PropertyHolder.ORIENTATION);
     }
 
-    public FramedSlopedPrismModel(IBakedModel baseModel)
-    {
-        this(
-                FBContent.blockFramedSlopedPrism.get().defaultBlockState()
-                        .setValue(BlockStateProperties.FACING, Direction.UP)
-                        .setValue(PropertyHolder.ORIENTATION, Direction.WEST),
-                baseModel
-        );
-    }
-
     @Override
     protected void transformQuad(Map<Direction, List<BakedQuad>> quadMap, BakedQuad quad)
     {
@@ -181,5 +171,14 @@ public class FramedSlopedPrismModel extends FramedBlockModel
                 }
             }
         }
+    }
+
+
+
+    public static BlockState itemSource()
+    {
+        return FBContent.blockFramedSlopedPrism.get().defaultBlockState()
+                .setValue(BlockStateProperties.FACING, Direction.UP)
+                .setValue(PropertyHolder.ORIENTATION, Direction.WEST);
     }
 }

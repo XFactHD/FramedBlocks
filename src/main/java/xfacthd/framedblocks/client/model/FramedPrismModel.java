@@ -23,14 +23,6 @@ public class FramedPrismModel extends FramedBlockModel
         this.axis = state.getValue(BlockStateProperties.AXIS);
     }
 
-    public FramedPrismModel(IBakedModel baseModel)
-    {
-        this(
-                FBContent.blockFramedPrism.get().defaultBlockState().setValue(BlockStateProperties.FACING, Direction.UP),
-                baseModel
-        );
-    }
-
     @Override
     protected void transformQuad(Map<Direction, List<BakedQuad>> quadMap, BakedQuad quad)
     {
@@ -96,5 +88,12 @@ public class FramedPrismModel extends FramedBlockModel
                 quadMap.get(quadFace).add(triangle);
             }
         }
+    }
+
+
+
+    public static BlockState itemSource()
+    {
+        return FBContent.blockFramedPrism.get().defaultBlockState().setValue(BlockStateProperties.FACING, Direction.UP);
     }
 }

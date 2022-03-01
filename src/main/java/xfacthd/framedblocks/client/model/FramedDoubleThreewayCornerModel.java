@@ -20,14 +20,6 @@ public class FramedDoubleThreewayCornerModel extends FramedDoubleBlockModel
         this.state = state;
     }
 
-    public FramedDoubleThreewayCornerModel(IBakedModel baseModel)
-    {
-        this(
-                FBContent.blockFramedDoubleThreewayCorner.get().defaultBlockState().setValue(PropertyHolder.FACING_HOR, Direction.WEST),
-                baseModel
-        );
-    }
-
     @Override
     protected Tuple<BlockState, BlockState> getDummyStates()
     {
@@ -52,5 +44,12 @@ public class FramedDoubleThreewayCornerModel extends FramedDoubleBlockModel
             return getSpriteOrDefault(data, FramedDoubleTileEntity.DATA_LEFT, getModels().getB());
         }
         return super.getParticleTexture(data);
+    }
+
+
+
+    public static BlockState itemSource()
+    {
+        return FBContent.blockFramedDoubleThreewayCorner.get().defaultBlockState().setValue(PropertyHolder.FACING_HOR, Direction.WEST);
     }
 }

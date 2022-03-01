@@ -24,14 +24,6 @@ public class FramedDoubleSlopeSlabModel extends FramedDoubleBlockModel
         this.topHalf = state.getValue(PropertyHolder.TOP_HALF);
     }
 
-    public FramedDoubleSlopeSlabModel(IBakedModel baseModel)
-    {
-        this(
-                FBContent.blockFramedDoubleSlopeSlab.get().defaultBlockState(),
-                baseModel
-        );
-    }
-
     @Override
     protected Tuple<BlockState, BlockState> getDummyStates()
     {
@@ -51,4 +43,8 @@ public class FramedDoubleSlopeSlabModel extends FramedDoubleBlockModel
     {
         return getSpriteOrDefault(data, FramedDoubleTileEntity.DATA_RIGHT, getModels().getB());
     }
+
+
+
+    public static BlockState itemSource() { return FBContent.blockFramedDoubleSlopeSlab.get().defaultBlockState(); }
 }

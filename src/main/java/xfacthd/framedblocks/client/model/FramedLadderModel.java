@@ -31,14 +31,6 @@ public class FramedLadderModel extends FramedBlockModel
         dir = state.getValue(PropertyHolder.FACING_HOR);
     }
 
-    public FramedLadderModel(IBakedModel baseModel)
-    {
-        this(
-                FBContent.blockFramedLadder.get().defaultBlockState().setValue(PropertyHolder.FACING_HOR, Direction.SOUTH),
-                baseModel
-        );
-    }
-
     @Override
     protected void transformQuad(Map<Direction, List<BakedQuad>> quadMap, BakedQuad quad)
     {
@@ -130,5 +122,12 @@ public class FramedLadderModel extends FramedBlockModel
                 }
             }
         }
+    }
+
+
+
+    public static BlockState itemSource()
+    {
+        return FBContent.blockFramedLadder.get().defaultBlockState().setValue(PropertyHolder.FACING_HOR, Direction.SOUTH);
     }
 }

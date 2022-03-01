@@ -30,8 +30,6 @@ public class FramedChestModel extends FramedBlockModel
         this.latch = state.getValue(PropertyHolder.LATCH_TYPE);
     }
 
-    public FramedChestModel(IBakedModel baseModel) { this(FBContent.blockFramedChest.get().defaultBlockState(), baseModel); }
-
     @Override
     protected void transformQuad(Map<Direction, List<BakedQuad>> quadMap, BakedQuad quad)
     {
@@ -127,4 +125,8 @@ public class FramedChestModel extends FramedBlockModel
             }
         }
     }
+
+
+
+    public static BlockState itemSource() { return FBContent.blockFramedChest.get().defaultBlockState(); }
 }

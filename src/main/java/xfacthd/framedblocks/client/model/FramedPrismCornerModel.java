@@ -26,14 +26,6 @@ public class FramedPrismCornerModel extends FramedBlockModel
         offset = state.getValue(PropertyHolder.OFFSET);
     }
 
-    public FramedPrismCornerModel(IBakedModel baseModel)
-    {
-        this(
-                FBContent.blockFramedPrismCorner.get().defaultBlockState().setValue(PropertyHolder.FACING_HOR, Direction.SOUTH),
-                baseModel
-        );
-    }
-
     @Override
     protected void transformQuad(Map<Direction, List<BakedQuad>> quadMap, BakedQuad quad)
     {
@@ -85,5 +77,12 @@ public class FramedPrismCornerModel extends FramedBlockModel
                 }
             }
         }
+    }
+
+
+
+    public static BlockState itemSource()
+    {
+        return FBContent.blockFramedPrismCorner.get().defaultBlockState().setValue(PropertyHolder.FACING_HOR, Direction.SOUTH);
     }
 }

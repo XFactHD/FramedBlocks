@@ -25,14 +25,6 @@ public class FramedCornerSlopeModel extends FramedBlockModel
         type = state.getValue(PropertyHolder.CORNER_TYPE);
     }
 
-    public FramedCornerSlopeModel(IBakedModel baseModel)
-    {
-        this(
-                FBContent.blockFramedCornerSlope.get().defaultBlockState().setValue(PropertyHolder.FACING_HOR, Direction.SOUTH),
-                baseModel
-        );
-    }
-
     @Override
     protected void transformQuad(Map<Direction, List<BakedQuad>> quadMap, BakedQuad quad)
     {
@@ -110,5 +102,12 @@ public class FramedCornerSlopeModel extends FramedBlockModel
                 }
             }
         }
+    }
+
+
+
+    public static BlockState itemSource()
+    {
+        return FBContent.blockFramedCornerSlope.get().defaultBlockState().setValue(PropertyHolder.FACING_HOR, Direction.SOUTH);
     }
 }
