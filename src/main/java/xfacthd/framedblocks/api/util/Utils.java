@@ -3,6 +3,7 @@ package xfacthd.framedblocks.api.util;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.*;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.BlockGetter;
@@ -19,9 +20,9 @@ import xfacthd.framedblocks.api.util.client.ClientUtils;
 
 public class Utils
 {
-    public static final Tag.Named<Block> FRAMEABLE = BlockTags.bind(FramedBlocksAPI.getInstance().modid() + ":frameable");
-    public static final Tag.Named<Block> BLACKLIST = BlockTags.bind(FramedBlocksAPI.getInstance().modid() + ":blacklisted");
-    public static final Tag.Named<Item> WRENCH = ItemTags.bind("forge:tools/wrench");
+    public static final TagKey<Block> FRAMEABLE = BlockTags.create(new ResourceLocation(FramedBlocksAPI.getInstance().modid(), "frameable"));
+    public static final TagKey<Block> BLACKLIST = BlockTags.create(new ResourceLocation(FramedBlocksAPI.getInstance().modid(), "blacklisted"));
+    public static final TagKey<Item> WRENCH = ItemTags.create(new ResourceLocation("forge:tools/wrench"));
 
     public static VoxelShape rotateShape(Direction from, Direction to, VoxelShape shape)
     {

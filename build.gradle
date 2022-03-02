@@ -18,7 +18,7 @@ apply plugin: 'eclipse'
 apply plugin: 'maven-publish'
 apply plugin: 'org.spongepowered.mixin'
 
-version = '4.3.0'
+version = '5.0.0'
 group = 'xfacthd.framedblocks'
 archivesBaseName = 'FramedBlocks'
 
@@ -27,7 +27,8 @@ java.toolchain.languageVersion = JavaLanguageVersion.of(17)
 println('Java: ' + System.getProperty('java.version') + ' JVM: ' + System.getProperty('java.vm.version') + '(' + System.getProperty('java.vendor') + ') Arch: ' + System.getProperty('os.arch'))
 
 minecraft {
-    mappings channel: 'parchment', version: '2021.12.19-1.18.1'
+    //mappings channel: 'parchment', version: '2021.12.19-1.18.1'
+    mappings channel: 'official', version: '1.18.2'
     
     accessTransformer = file('src/main/resources/META-INF/accesstransformer.cfg')
 
@@ -100,16 +101,16 @@ repositories {
 }
 
 dependencies {
-    minecraft 'net.minecraftforge:forge:1.18.1-39.0.85'
+    minecraft 'net.minecraftforge:forge:1.18.2-40.0.1'
 
-    implementation fg.deobf("curse.maven:ctm-267602:3586556")
+    compileOnly fg.deobf("curse.maven:ctm-267602:3586556")
 
     //runtimeOnly fg.deobf("curse.maven:puzzleslib-495476:3374786") //Only needed when Diagonal Fences is switched to implementation
     //compileOnly fg.deobf("curse.maven:diagonalfences-458048:3364147")
 
-    implementation fg.deobf("curse.maven:buildinggadgets-298187:3553977")
+    compileOnly fg.deobf("curse.maven:buildinggadgets-298187:3553977")
 
-    runtimeOnly fg.deobf("curse.maven:jei-238222:3599262")
+    //runtimeOnly fg.deobf("curse.maven:jei-238222:3599262")
 
     //runtimeOnly fg.deobf("curse.maven:magnesium_sodium-532724:3556734")
     //runtimeOnly fg.deobf("curse.maven:rubidium_sodium-574856:3633735")
