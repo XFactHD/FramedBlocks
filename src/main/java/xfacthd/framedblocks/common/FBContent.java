@@ -11,7 +11,6 @@ import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
-import net.minecraftforge.registries.RegistryObject;
 import net.minecraftforge.network.IContainerFactory;
 import net.minecraftforge.registries.*;
 import xfacthd.framedblocks.FramedBlocks;

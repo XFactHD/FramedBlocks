@@ -870,8 +870,8 @@ public class BakedQuadTransformer
             {
                 float scaleAngle = Mth.abs(angle) > 45F ? (90F - Mth.abs(angle)) : Mth.abs(angle);
 
-                if (Math.abs(scaleAngle) == 22.5F) { scaleVec.mul(SCALE_ROTATION_22_5); }
-                else if (Math.abs(scaleAngle) == 45F) { scaleVec.mul(SCALE_ROTATION_45); }
+                if (scaleAngle == 22.5F) { scaleVec.mul(SCALE_ROTATION_22_5); }
+                else if (scaleAngle == 45F) { scaleVec.mul(SCALE_ROTATION_45); }
                 else
                 {
                     float scaleFactor = 1.0F / (float)Math.cos(Math.PI / (180D / (double)scaleAngle)) - 1.0F;
