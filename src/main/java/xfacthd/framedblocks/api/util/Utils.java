@@ -20,9 +20,9 @@ import xfacthd.framedblocks.api.util.client.ClientUtils;
 
 public class Utils
 {
-    public static final TagKey<Block> FRAMEABLE = BlockTags.create(new ResourceLocation(FramedBlocksAPI.getInstance().modid(), "frameable"));
-    public static final TagKey<Block> BLACKLIST = BlockTags.create(new ResourceLocation(FramedBlocksAPI.getInstance().modid(), "blacklisted"));
-    public static final TagKey<Item> WRENCH = ItemTags.create(new ResourceLocation("forge:tools/wrench"));
+    public static final TagKey<Block> FRAMEABLE = blockTag("frameable");
+    public static final TagKey<Block> BLACKLIST = blockTag("blacklisted");
+    public static final TagKey<Item> WRENCH = itemTag("forge", "tools/wrench");
 
     public static VoxelShape rotateShape(Direction from, Direction to, VoxelShape shape)
     {
@@ -91,4 +91,18 @@ public class Utils
     public static boolean isY(Direction dir) { return dir.getAxis() == Direction.Axis.Y; }
 
     public static boolean isZ(Direction dir) { return dir.getAxis() == Direction.Axis.Z; }
+
+    public static TagKey<Block> blockTag(String name) { return blockTag(FramedBlocksAPI.getInstance().modid(), name); }
+
+    public static TagKey<Block> blockTag(String modid, String name)
+    {
+        return BlockTags.create(new ResourceLocation(modid, name));
+    }
+
+    public static TagKey<Item> itemTag(String name) { return itemTag(FramedBlocksAPI.getInstance().modid(), name); }
+
+    public static TagKey<Item> itemTag(String modid, String name)
+    {
+        return ItemTags.create(new ResourceLocation(modid, name));
+    }
 }

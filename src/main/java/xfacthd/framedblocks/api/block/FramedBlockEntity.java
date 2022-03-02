@@ -83,7 +83,7 @@ public class FramedBlockEntity extends BlockEntity
 
                 setChanged();
                 doLightUpdate();
-                level.sendBlockUpdated(worldPosition, getBlockState(), getBlockState(), 3);
+                level.sendBlockUpdated(worldPosition, getBlockState(), getBlockState(), Block.UPDATE_ALL);
             }
             return InteractionResult.sidedSuccess(level.isClientSide());
         }
@@ -143,7 +143,7 @@ public class FramedBlockEntity extends BlockEntity
 
             setChanged();
             if (lightUpdate) { doLightUpdate(); }
-            level.sendBlockUpdated(worldPosition, getBlockState(), getBlockState(), 3);
+            level.sendBlockUpdated(worldPosition, getBlockState(), getBlockState(), Block.UPDATE_ALL);
         }
 
         return InteractionResult.sidedSuccess(level.isClientSide());
@@ -184,7 +184,7 @@ public class FramedBlockEntity extends BlockEntity
 
                     setChanged();
                     if (lightUpdate) { doLightUpdate(); }
-                    level.sendBlockUpdated(worldPosition, getBlockState(), getBlockState(), 3);
+                    level.sendBlockUpdated(worldPosition, getBlockState(), getBlockState(), Block.UPDATE_ALL);
                 }
                 return InteractionResult.sidedSuccess(level.isClientSide());
             }
@@ -208,7 +208,7 @@ public class FramedBlockEntity extends BlockEntity
 
                 setChanged();
                 if (getLightValue() != light) { doLightUpdate(); }
-                level.sendBlockUpdated(worldPosition, getBlockState(), getBlockState(), 3);
+                level.sendBlockUpdated(worldPosition, getBlockState(), getBlockState(), Block.UPDATE_ALL);
             }
 
             return InteractionResult.sidedSuccess(level.isClientSide());
@@ -258,7 +258,7 @@ public class FramedBlockEntity extends BlockEntity
 
                         setChanged();
                         if (getLightValue() != light) { doLightUpdate(); }
-                        level.sendBlockUpdated(worldPosition, getBlockState(), getBlockState(), 3);
+                        level.sendBlockUpdated(worldPosition, getBlockState(), getBlockState(), Block.UPDATE_ALL);
                     }
                     return InteractionResult.sidedSuccess(level.isClientSide());
                 }
@@ -278,7 +278,7 @@ public class FramedBlockEntity extends BlockEntity
                 applyCamo(getCamoStack(hit), camo.cycle(prop), hit);
 
                 setChanged();
-                level.sendBlockUpdated(worldPosition, getBlockState(), getBlockState(), 3);
+                level.sendBlockUpdated(worldPosition, getBlockState(), getBlockState(), Block.UPDATE_ALL);
             }
             return InteractionResult.sidedSuccess(level.isClientSide());
         }
@@ -346,7 +346,7 @@ public class FramedBlockEntity extends BlockEntity
             doLightUpdate();
         }
         //noinspection ConstantConditions
-        level.sendBlockUpdated(worldPosition, getBlockState(), getBlockState(), 3);
+        level.sendBlockUpdated(worldPosition, getBlockState(), getBlockState(), Block.UPDATE_ALL);
     }
 
     public boolean isSolidSide(Direction side)
@@ -425,7 +425,7 @@ public class FramedBlockEntity extends BlockEntity
 
             setChanged();
             //noinspection ConstantConditions
-            level.sendBlockUpdated(worldPosition, getBlockState(), getBlockState(), 3);
+            level.sendBlockUpdated(worldPosition, getBlockState(), getBlockState(), Block.UPDATE_ALL);
         }
     }
 
@@ -445,7 +445,7 @@ public class FramedBlockEntity extends BlockEntity
 
             setChanged();
             //noinspection ConstantConditions
-            level.sendBlockUpdated(worldPosition, getBlockState(), getBlockState(), 3);
+            level.sendBlockUpdated(worldPosition, getBlockState(), getBlockState(), Block.UPDATE_ALL);
         }
     }
 
@@ -506,7 +506,7 @@ public class FramedBlockEntity extends BlockEntity
         if (nbt != null && readFromDataPacket(nbt))
         {
             //noinspection ConstantConditions
-            level.sendBlockUpdated(worldPosition, getBlockState(), getBlockState(), 3);
+            level.sendBlockUpdated(worldPosition, getBlockState(), getBlockState(), Block.UPDATE_ALL);
         }
     }
 
