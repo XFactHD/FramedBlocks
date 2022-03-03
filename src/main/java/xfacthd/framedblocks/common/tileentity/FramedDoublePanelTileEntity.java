@@ -52,8 +52,11 @@ public class FramedDoublePanelTileEntity extends FramedDoubleTileEntity
         Direction facing = getBlockState().getValue(PropertyHolder.FACING_NE);
         if (side == facing || side == facing.getOpposite())
         {
-            return getCamoState(side).canOcclude();
+            //noinspection ConstantConditions
+            return getCamoState(side).isSolidRender(level, worldPosition);
         }
-        return getCamoState().canOcclude() && getCamoStateTwo().canOcclude();
+
+        //noinspection ConstantConditions
+        return getCamoState().isSolidRender(level, worldPosition) && getCamoStateTwo().isSolidRender(level, worldPosition);
     }
 }

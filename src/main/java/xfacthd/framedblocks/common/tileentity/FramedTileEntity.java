@@ -350,7 +350,8 @@ public class FramedTileEntity extends TileEntity
 
     public boolean isSolidSide(Direction side)
     {
-        return getBlock().getCtmPredicate().test(getBlockState(), side) && camoState.canOcclude();
+        //noinspection ConstantConditions
+        return getBlock().getCtmPredicate().test(getBlockState(), side) && camoState.isSolidRender(level, worldPosition);
     }
 
     /**

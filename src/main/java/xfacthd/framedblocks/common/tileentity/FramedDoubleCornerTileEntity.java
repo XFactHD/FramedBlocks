@@ -184,14 +184,17 @@ public class FramedDoubleCornerTileEntity extends FramedDoubleTileEntity
                 side == dir || side == dir.getOpposite()
             )
             {
-                return getCamoState(side).canOcclude();
+                //noinspection ConstantConditions
+                return getCamoState(side).isSolidRender(level, worldPosition);
             }
         }
         else if ((side == dir || side == dir.getCounterClockWise() || side.getAxis() == Direction.Axis.Y))
         {
-            return getCamoState(side).canOcclude();
+            //noinspection ConstantConditions
+            return getCamoState(side).isSolidRender(level, worldPosition);
         }
 
-        return getCamoState().canOcclude() && getCamoStateTwo().canOcclude();
+        //noinspection ConstantConditions
+        return getCamoState().isSolidRender(level, worldPosition) && getCamoStateTwo().isSolidRender(level, worldPosition);
     }
 }

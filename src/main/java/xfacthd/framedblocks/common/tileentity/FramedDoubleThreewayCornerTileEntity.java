@@ -120,8 +120,11 @@ public class FramedDoubleThreewayCornerTileEntity extends FramedDoubleTileEntity
 
         if (side == dir || side == dir.getCounterClockWise() || (side == Direction.DOWN && !top) || (side == Direction.UP && top))
         {
-            return getCamoState(side).canOcclude();
+            //noinspection ConstantConditions
+            return getCamoState(side).isSolidRender(level, worldPosition);
         }
-        return getCamoState().canOcclude() && getCamoStateTwo().canOcclude();
+
+        //noinspection ConstantConditions
+        return getCamoState().isSolidRender(level, worldPosition) && getCamoStateTwo().isSolidRender(level, worldPosition);
     }
 }
