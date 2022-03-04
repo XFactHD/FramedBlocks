@@ -18,7 +18,7 @@ apply plugin: 'maven-publish'
 apply plugin: 'org.parchmentmc.librarian.forgegradle'
 apply plugin: 'org.spongepowered.mixin'
 
-version = '2.13.0'
+version = '2.14.0'
 group = 'xfacthd.framedblocks'
 archivesBaseName = 'FramedBlocks'
 
