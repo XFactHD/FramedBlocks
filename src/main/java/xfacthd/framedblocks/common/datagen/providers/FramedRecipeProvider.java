@@ -374,8 +374,9 @@ public class FramedRecipeProvider extends RecipeProvider
                 .save(consumer);
 
         ShapedRecipeBuilder.shaped(FBContent.blockFramedPrism.get(), 2)
-                .pattern("FF")
+                .pattern("FFH")
                 .define('F', FBContent.blockFramedSlope.get())
+                .define('H', FBContent.itemFramedHammer.get())
                 .unlockedBy("hasFramedSlope", HAS_FRAMED_SLOPE)
                 .save(consumer);
 

@@ -1,11 +1,14 @@
 {
   "type": "minecraft:crafting_shaped",
   "pattern": [
-    "FF"
+    "FFH"
   ],
   "key": {
     "F": {
       "item": "framedblocks:framed_slope"
+    },
+    "H": {
+      "item": "framedblocks:framed_hammer"
     }
   },
   "result": {
