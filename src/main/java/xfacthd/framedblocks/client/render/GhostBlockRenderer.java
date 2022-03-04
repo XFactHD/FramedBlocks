@@ -275,7 +275,7 @@ public class GhostBlockRenderer
         return null;
     }
 
-    private static final Method BLOCKITEM_GETPLACESTATE = ObfuscationReflectionHelper.findMethod(BlockItem.class, "getPlacementState", BlockItemUseContext.class);
+    private static final Method BLOCKITEM_GETPLACESTATE = ObfuscationReflectionHelper.findMethod(BlockItem.class, "func_195945_b", BlockItemUseContext.class);
     private static BlockState getStateForPlacement(BlockItemUseContext ctx, Block block)
     {
         Item item = ctx.getItemInHand().getItem();
