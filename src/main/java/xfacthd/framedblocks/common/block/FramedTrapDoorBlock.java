@@ -47,14 +47,17 @@ public class FramedTrapDoorBlock extends TrapDoorBlock implements IFramedBlock
     public FramedTrapDoorBlock()
     {
         super(IFramedBlock.createProperties(BlockType.FRAMED_TRAPDOOR));
-        registerDefaultState(defaultBlockState().setValue(FramedProperties.SOLID, false));
+        registerDefaultState(defaultBlockState()
+                .setValue(FramedProperties.SOLID, false)
+                .setValue(FramedProperties.GLOWING, false)
+        );
     }
 
     @Override
     protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder)
     {
         super.createBlockStateDefinition(builder);
-        builder.add(FramedProperties.SOLID);
+        builder.add(FramedProperties.SOLID, FramedProperties.GLOWING);
     }
 
     @Override
@@ -73,7 +76,7 @@ public class FramedTrapDoorBlock extends TrapDoorBlock implements IFramedBlock
     }
 
     @Override
-    public boolean useShapeForLightOcclusion(BlockState state) { return state.getValue(FramedProperties.SOLID); }
+    public boolean useShapeForLightOcclusion(BlockState state) { return useCamoOcclusionShapeForLightOcclusion(state); }
 
     @Override
     public VoxelShape getOcclusionShape(BlockState state, BlockGetter level, BlockPos pos)

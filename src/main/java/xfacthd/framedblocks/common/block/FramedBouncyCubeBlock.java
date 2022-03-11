@@ -32,13 +32,16 @@ public class FramedBouncyCubeBlock extends SlimeBlock implements IFramedBlock
     public FramedBouncyCubeBlock()
     {
         super(IFramedBlock.createProperties(BlockType.FRAMED_BOUNCY_CUBE).friction(.8F));
-        registerDefaultState(defaultBlockState().setValue(FramedProperties.SOLID, false));
+        registerDefaultState(defaultBlockState()
+                .setValue(FramedProperties.SOLID, false)
+                .setValue(FramedProperties.GLOWING, false)
+        );
     }
 
     @Override
     protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder)
     {
-        builder.add(FramedProperties.SOLID);
+        builder.add(FramedProperties.SOLID, FramedProperties.GLOWING);
     }
 
     @Override
@@ -54,7 +57,7 @@ public class FramedBouncyCubeBlock extends SlimeBlock implements IFramedBlock
     }
 
     @Override
-    public boolean useShapeForLightOcclusion(BlockState state) { return state.getValue(FramedProperties.SOLID); }
+    public boolean useShapeForLightOcclusion(BlockState state) { return useCamoOcclusionShapeForLightOcclusion(state); }
 
     @Override
     public VoxelShape getOcclusionShape(BlockState state, BlockGetter level, BlockPos pos)

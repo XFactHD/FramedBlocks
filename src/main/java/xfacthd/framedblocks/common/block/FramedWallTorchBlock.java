@@ -27,7 +27,7 @@ public class FramedWallTorchBlock extends WallTorchBlock implements IFramedBlock
 {
     public FramedWallTorchBlock()
     {
-        super(Properties.of(Material.DECORATION)
+        this(Properties.of(Material.DECORATION)
                 .noCollission()
                 .strength(0.5F)
                 .sound(SoundType.WOOD)
@@ -37,7 +37,7 @@ public class FramedWallTorchBlock extends WallTorchBlock implements IFramedBlock
         );
     }
 
-    public FramedWallTorchBlock(Properties props, ParticleOptions particle) { super(props, particle); }
+    protected FramedWallTorchBlock(Properties props, ParticleOptions particle) { super(props, particle); }
 
     @Override
     public final InteractionResult use(BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hit)

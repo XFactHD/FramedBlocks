@@ -42,7 +42,10 @@ public abstract class AbstractFramedBlock extends Block implements IFramedBlock,
 
         if (blockType.canOccludeWithSolidCamo())
         {
-            registerDefaultState(defaultBlockState().setValue(FramedProperties.SOLID, false));
+            registerDefaultState(defaultBlockState()
+                    .setValue(FramedProperties.SOLID, false)
+                    .setValue(FramedProperties.GLOWING, false)
+            );
         }
         if (blockType.supportsWaterLogging())
         {
@@ -93,11 +96,7 @@ public abstract class AbstractFramedBlock extends Block implements IFramedBlock,
     }
 
     @Override
-    public boolean useShapeForLightOcclusion(BlockState state)
-    {
-        if (blockType != null && !blockType.canOccludeWithSolidCamo()) { return false; }
-        return state.hasProperty(FramedProperties.SOLID) && state.getValue(FramedProperties.SOLID);
-    }
+    public boolean useShapeForLightOcclusion(BlockState state) { return useCamoOcclusionShapeForLightOcclusion(state); }
 
     @Override
     public VoxelShape getOcclusionShape(BlockState state, BlockGetter level, BlockPos pos)

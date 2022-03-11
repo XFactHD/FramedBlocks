@@ -15,4 +15,5 @@ public class FramedProperties
     public static final BooleanProperty Y_AXIS = BooleanProperty.create("y_asix");
     public static final BooleanProperty Z_AXIS = BooleanProperty.create("z_axis");
     public static final BooleanProperty SOLID = BooleanProperty.create("solid");
+    public static final BooleanProperty GLOWING = BooleanProperty.create("glowing");
 }
