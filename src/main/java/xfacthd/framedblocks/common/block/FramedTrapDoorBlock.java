@@ -42,14 +42,17 @@ public class FramedTrapDoorBlock extends TrapDoorBlock implements IFramedBlock
     public FramedTrapDoorBlock()
     {
         super(IFramedBlock.createProperties(BlockType.FRAMED_TRAPDOOR));
-        registerDefaultState(defaultBlockState().setValue(PropertyHolder.SOLID, false));
+        registerDefaultState(defaultBlockState()
+                .setValue(PropertyHolder.SOLID, false)
+                .setValue(PropertyHolder.GLOWING, false)
+        );
     }
 
     @Override
     protected void createBlockStateDefinition(StateContainer.Builder<Block, BlockState> builder)
     {
         super.createBlockStateDefinition(builder);
-        builder.add(PropertyHolder.SOLID);
+        builder.add(PropertyHolder.SOLID, PropertyHolder.GLOWING);
     }
 
     @Override

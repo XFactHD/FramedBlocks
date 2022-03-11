@@ -59,7 +59,7 @@ public class FramedPrismBlock extends FramedBlock
     @Override
     protected void createBlockStateDefinition(StateContainer.Builder<Block, BlockState> builder)
     {
-        builder.add(BlockStateProperties.FACING, BlockStateProperties.AXIS, BlockStateProperties.WATERLOGGED, PropertyHolder.SOLID);
+        builder.add(BlockStateProperties.FACING, BlockStateProperties.AXIS, BlockStateProperties.WATERLOGGED, PropertyHolder.SOLID, PropertyHolder.GLOWING);
     }
 
     @Override

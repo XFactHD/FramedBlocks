@@ -40,13 +40,14 @@ public class FramedRailSlopeBlock extends AbstractRailBlock implements IFramedBl
         registerDefaultState(defaultBlockState()
                 .setValue(BlockStateProperties.WATERLOGGED, false)
                 .setValue(PropertyHolder.SOLID, false)
+                .setValue(PropertyHolder.GLOWING, false)
         );
     }
 
     @Override
     protected void createBlockStateDefinition(StateContainer.Builder<Block, BlockState> builder)
     {
-        builder.add(PropertyHolder.ASCENDING_RAIL_SHAPE, BlockStateProperties.WATERLOGGED, PropertyHolder.SOLID);
+        builder.add(PropertyHolder.ASCENDING_RAIL_SHAPE, BlockStateProperties.WATERLOGGED, PropertyHolder.SOLID, PropertyHolder.GLOWING);
     }
 
     @Override

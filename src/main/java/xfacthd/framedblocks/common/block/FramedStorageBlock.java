@@ -24,7 +24,7 @@ public class FramedStorageBlock extends FramedBlock
     @Override
     protected void createBlockStateDefinition(StateContainer.Builder<Block, BlockState> builder)
     {
-        builder.add(PropertyHolder.SOLID);
+        builder.add(PropertyHolder.SOLID, PropertyHolder.GLOWING);
     }
 
     @Override

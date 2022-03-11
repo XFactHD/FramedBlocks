@@ -28,7 +28,7 @@ public abstract class AbstractFramedDoubleBlock extends FramedBlock
     @Override
     protected void createBlockStateDefinition(StateContainer.Builder<Block, BlockState> builder)
     {
-        builder.add(PropertyHolder.SOLID);
+        builder.add(PropertyHolder.SOLID, PropertyHolder.GLOWING);
     }
 
     @Nonnull

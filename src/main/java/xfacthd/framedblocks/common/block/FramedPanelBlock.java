@@ -30,7 +30,7 @@ public class FramedPanelBlock extends FramedBlock
     @Override
     protected void createBlockStateDefinition(StateContainer.Builder<Block, BlockState> builder)
     {
-        builder.add(PropertyHolder.FACING_HOR, BlockStateProperties.WATERLOGGED, PropertyHolder.SOLID);
+        builder.add(PropertyHolder.FACING_HOR, BlockStateProperties.WATERLOGGED, PropertyHolder.SOLID, PropertyHolder.GLOWING);
     }
 
     @Override

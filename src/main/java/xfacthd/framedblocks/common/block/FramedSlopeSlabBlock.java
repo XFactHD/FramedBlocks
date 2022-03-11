@@ -42,7 +42,7 @@ public class FramedSlopeSlabBlock extends FramedBlock //TODO: check why states w
     @Override
     protected void createBlockStateDefinition(StateContainer.Builder<Block, BlockState> builder)
     {
-        builder.add(PropertyHolder.FACING_HOR, PropertyHolder.TOP, PropertyHolder.TOP_HALF, BlockStateProperties.WATERLOGGED, PropertyHolder.SOLID);
+        builder.add(PropertyHolder.FACING_HOR, PropertyHolder.TOP, PropertyHolder.TOP_HALF, BlockStateProperties.WATERLOGGED, PropertyHolder.SOLID, PropertyHolder.GLOWING);
     }
 
     @Override

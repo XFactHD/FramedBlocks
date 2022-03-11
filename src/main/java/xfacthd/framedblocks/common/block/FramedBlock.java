@@ -42,7 +42,10 @@ public class FramedBlock extends Block implements IFramedBlock, IWaterLoggable
 
         if (blockType.canOccludeWithSolidCamo())
         {
-            registerDefaultState(defaultBlockState().setValue(PropertyHolder.SOLID, false));
+            registerDefaultState(defaultBlockState()
+                    .setValue(PropertyHolder.SOLID, false)
+                    .setValue(PropertyHolder.GLOWING, false)
+            );
         }
         if (blockType.supportsWaterLogging())
         {
@@ -92,11 +95,7 @@ public class FramedBlock extends Block implements IFramedBlock, IWaterLoggable
     }
 
     @Override
-    public boolean useShapeForLightOcclusion(BlockState state)
-    {
-        if (blockType != null && !blockType.canOccludeWithSolidCamo()) { return false; }
-        return state.hasProperty(PropertyHolder.SOLID) && state.getValue(PropertyHolder.SOLID);
-    }
+    public boolean useShapeForLightOcclusion(BlockState state) { return useCamoOcclusionShapeForLightOcclusion(state); }
 
     @Override
     public VoxelShape getOcclusionShape(BlockState state, IBlockReader world, BlockPos pos)

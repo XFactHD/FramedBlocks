@@ -28,13 +28,16 @@ public class FramedBouncyCubeBlock extends SlimeBlock implements IFramedBlock
     public FramedBouncyCubeBlock()
     {
         super(IFramedBlock.createProperties(BlockType.FRAMED_BOUNCY_CUBE));
-        registerDefaultState(defaultBlockState().setValue(PropertyHolder.SOLID, false));
+        registerDefaultState(defaultBlockState()
+                .setValue(PropertyHolder.SOLID, false)
+                .setValue(PropertyHolder.GLOWING, false)
+        );
     }
 
     @Override
     protected void createBlockStateDefinition(StateContainer.Builder<Block, BlockState> builder)
     {
-        builder.add(PropertyHolder.SOLID);
+        builder.add(PropertyHolder.SOLID, PropertyHolder.GLOWING);
     }
 
     @Override

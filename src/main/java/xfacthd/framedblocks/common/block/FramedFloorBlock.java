@@ -35,7 +35,7 @@ public class FramedFloorBlock extends FramedBlock
     @Override
     protected void createBlockStateDefinition(StateContainer.Builder<Block, BlockState> builder)
     {
-        builder.add(BlockStateProperties.WATERLOGGED, PropertyHolder.SOLID);
+        builder.add(BlockStateProperties.WATERLOGGED, PropertyHolder.SOLID, PropertyHolder.GLOWING);
     }
 
     @Override

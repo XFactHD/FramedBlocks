@@ -277,6 +277,13 @@ public interface IFramedBlock extends IFacade
         return state.getMaterial().blocksMotion() && state.isCollisionShapeFullBlock(world, pos);
     }
 
+    default boolean useCamoOcclusionShapeForLightOcclusion(BlockState state)
+    {
+        if (getBlockType() != null && !getBlockType().canOccludeWithSolidCamo()) { return false; }
+
+        return state.hasProperty(PropertyHolder.SOLID) && state.getValue(PropertyHolder.SOLID) && !state.getValue(PropertyHolder.GLOWING);
+    }
+
     default VoxelShape getCamoOcclusionShape(BlockState state, IBlockReader level, BlockPos pos)
     {
         if (getBlockType().canOccludeWithSolidCamo() && !state.getValue(PropertyHolder.SOLID))

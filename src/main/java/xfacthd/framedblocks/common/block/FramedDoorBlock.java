@@ -50,14 +50,17 @@ public class FramedDoorBlock extends DoorBlock implements IFramedBlock
     public FramedDoorBlock()
     {
         super(IFramedBlock.createProperties(BlockType.FRAMED_DOOR));
-        registerDefaultState(defaultBlockState().setValue(PropertyHolder.SOLID, false));
+        registerDefaultState(defaultBlockState()
+                .setValue(PropertyHolder.SOLID, false)
+                .setValue(PropertyHolder.GLOWING, false)
+        );
     }
 
     @Override
     protected void createBlockStateDefinition(StateContainer.Builder<Block, BlockState> builder)
     {
         super.createBlockStateDefinition(builder);
-        builder.add(PropertyHolder.SOLID);
+        builder.add(PropertyHolder.SOLID, PropertyHolder.GLOWING);
     }
 
     @Override

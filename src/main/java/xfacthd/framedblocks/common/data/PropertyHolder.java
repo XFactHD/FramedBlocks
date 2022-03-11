@@ -25,4 +25,5 @@ public class PropertyHolder
     public static final BooleanProperty RIGHT = BooleanProperty.create("right");
     public static final BooleanProperty SOLID = BooleanProperty.create("solid");
     public static final BooleanProperty TOP_HALF = BooleanProperty.create("top_half");
+    public static final BooleanProperty GLOWING = BooleanProperty.create("glowing");
 }
