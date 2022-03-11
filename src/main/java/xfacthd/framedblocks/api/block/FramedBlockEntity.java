@@ -44,7 +44,7 @@ public class FramedBlockEntity extends BlockEntity
     private BlockState camoState = Blocks.AIR.defaultBlockState();
     private boolean glowing = false;
     private boolean intangible = false;
-    private boolean recheckSolid = false;
+    private boolean recheckStates = false;
 
     public FramedBlockEntity(BlockPos pos, BlockState state) { this(FramedBlocksAPI.getInstance().defaultBlockEntity(), pos, state); }
 
@@ -79,11 +79,17 @@ public class FramedBlockEntity extends BlockEntity
             {
                 if (!player.isCreative()) { stack.shrink(1); }
 
+                int light = getLightValue();
                 glowing = true;
+                if (!updateDynamicStates(false, true))
+                {
+                    level.sendBlockUpdated(worldPosition, getBlockState(), getBlockState(), Block.UPDATE_ALL);
+                }
+
+                boolean lightUpdate = getLightValue() != light;
 
                 setChanged();
-                doLightUpdate();
-                level.sendBlockUpdated(worldPosition, getBlockState(), getBlockState(), Block.UPDATE_ALL);
+                if (lightUpdate) { doLightUpdate(); }
             }
             return InteractionResult.sidedSuccess(level.isClientSide());
         }
@@ -99,7 +105,6 @@ public class FramedBlockEntity extends BlockEntity
                 if (!player.isCreative()) { stack.shrink(1); }
 
                 setIntangible(true);
-                updateSolidState();
             }
             return InteractionResult.sidedSuccess(level.isClientSide());
         }
@@ -109,7 +114,6 @@ public class FramedBlockEntity extends BlockEntity
             if (!level.isClientSide())
             {
                 setIntangible(false);
-                updateSolidState();
 
                 ItemStack result = new ItemStack(ServerConfig.intangibleMarkerItem);
                 if (!player.getInventory().add(result))
@@ -137,13 +141,15 @@ public class FramedBlockEntity extends BlockEntity
             }
 
             applyCamo(ItemStack.EMPTY, Blocks.AIR.defaultBlockState(), hit);
-            updateSolidState();
+            if (!updateDynamicStates(true, true))
+            {
+                level.sendBlockUpdated(worldPosition, getBlockState(), getBlockState(), Block.UPDATE_ALL);
+            }
 
             boolean lightUpdate = getLightValue() != light;
 
             setChanged();
             if (lightUpdate) { doLightUpdate(); }
-            level.sendBlockUpdated(worldPosition, getBlockState(), getBlockState(), Block.UPDATE_ALL);
         }
 
         return InteractionResult.sidedSuccess(level.isClientSide());
@@ -180,11 +186,14 @@ public class FramedBlockEntity extends BlockEntity
 
                     int light = getLightValue();
                     applyCamo(ItemStack.EMPTY, Blocks.AIR.defaultBlockState(), hit);
+                    if (!updateDynamicStates(false, true))
+                    {
+                        level.sendBlockUpdated(worldPosition, getBlockState(), getBlockState(), Block.UPDATE_ALL);
+                    }
                     boolean lightUpdate = getLightValue() != light;
 
                     setChanged();
                     if (lightUpdate) { doLightUpdate(); }
-                    level.sendBlockUpdated(worldPosition, getBlockState(), getBlockState(), Block.UPDATE_ALL);
                 }
                 return InteractionResult.sidedSuccess(level.isClientSide());
             }
@@ -203,12 +212,14 @@ public class FramedBlockEntity extends BlockEntity
                 int light = getLightValue();
 
                 applyCamo(stack.split(1), state, hit);
-                updateSolidState();
+                if (!updateDynamicStates(true, true))
+                {
+                    level.sendBlockUpdated(worldPosition, getBlockState(), getBlockState(), Block.UPDATE_ALL);
+                }
                 if (player.isCreative()) { stack.grow(1); }
 
                 setChanged();
                 if (getLightValue() != light) { doLightUpdate(); }
-                level.sendBlockUpdated(worldPosition, getBlockState(), getBlockState(), Block.UPDATE_ALL);
             }
 
             return InteractionResult.sidedSuccess(level.isClientSide());
@@ -255,10 +266,13 @@ public class FramedBlockEntity extends BlockEntity
 
                         //Setting the bucket as the camo stack would allow duping buckets
                         applyCamo(ItemStack.EMPTY, state, hit);
+                        if (!updateDynamicStates(false, true))
+                        {
+                            level.sendBlockUpdated(worldPosition, getBlockState(), getBlockState(), Block.UPDATE_ALL);
+                        }
 
                         setChanged();
                         if (getLightValue() != light) { doLightUpdate(); }
-                        level.sendBlockUpdated(worldPosition, getBlockState(), getBlockState(), Block.UPDATE_ALL);
                     }
                     return InteractionResult.sidedSuccess(level.isClientSide());
                 }
@@ -379,20 +393,46 @@ public class FramedBlockEntity extends BlockEntity
     {
         if (getBlock().getBlockType().canOccludeWithSolidCamo() && !camoState.isAir())
         {
-            updateSolidState();
+            updateDynamicStates(true, false);
         }
     }
 
-    protected final void updateSolidState()
+    protected final boolean updateDynamicStates(boolean updateSolid, boolean updateLight)
     {
-        boolean canOcclude = getBlock().getBlockType().canOccludeWithSolidCamo();
-        boolean wasSolid = canOcclude && getBlockState().getValue(FramedProperties.SOLID);
-        boolean solid = canOcclude && !intangible && isCamoSolid();
-        if (solid != wasSolid)
+        if (!getBlock().getBlockType().canOccludeWithSolidCamo()) { return false; }
+
+        BlockState state = getBlockState();
+        boolean changed = false;
+
+        if (updateSolid)
+        {
+            boolean wasSolid = getBlockState().getValue(FramedProperties.SOLID);
+            boolean solid = !intangible && isCamoSolid();
+
+            if (solid != wasSolid)
+            {
+                state = state.setValue(FramedProperties.SOLID, solid);
+                changed = true;
+            }
+        }
+
+        if (updateLight)
+        {
+            boolean isGlowing = getLightValue() > 0;
+
+            if (isGlowing != state.getValue(FramedProperties.GLOWING))
+            {
+                state = state.setValue(FramedProperties.GLOWING, isGlowing);
+                changed = true;
+            }
+        }
+
+        if (changed)
         {
             //noinspection ConstantConditions
-            level.setBlock(worldPosition, getBlockState().setValue(FramedProperties.SOLID, solid), Block.UPDATE_ALL);
+            level.setBlock(worldPosition, state, Block.UPDATE_ALL);
         }
+        return changed;
     }
 
     public float getCamoExplosionResistance(Explosion explosion)
@@ -444,8 +484,12 @@ public class FramedBlockEntity extends BlockEntity
             this.intangible = intangible;
 
             setChanged();
-            //noinspection ConstantConditions
-            level.sendBlockUpdated(worldPosition, getBlockState(), getBlockState(), Block.UPDATE_ALL);
+
+            if (!updateDynamicStates(true, false))
+            {
+                //noinspection ConstantConditions
+                level.sendBlockUpdated(worldPosition, getBlockState(), getBlockState(), Block.UPDATE_ALL);
+            }
         }
     }
 
@@ -482,7 +526,7 @@ public class FramedBlockEntity extends BlockEntity
     public void onLoad()
     {
         //noinspection ConstantConditions
-        if (!level.isClientSide() && recheckSolid)
+        if (!level.isClientSide() && recheckStates)
         {
             checkCamoSolid();
         }
@@ -610,7 +654,7 @@ public class FramedBlockEntity extends BlockEntity
         nbt.put("camo_state", NbtUtils.writeBlockState(camoState));
         nbt.putBoolean("glowing", glowing);
         nbt.putBoolean("intangible", intangible);
-        nbt.putBoolean("updated", true);
+        nbt.putByte("updated", (byte) 2);
 
         super.saveAdditional(nbt);
     }
@@ -623,13 +667,13 @@ public class FramedBlockEntity extends BlockEntity
         BlockState state = NbtUtils.readBlockState(nbt.getCompound("camo_state"));
         if (state.isAir() || isValidBlock(state, null))
         {
-            recheckSolid = !nbt.getBoolean("updated");
+            recheckStates = nbt.getByte("updated") < 2;
             camoStack = ItemStack.of(nbt.getCompound("camo_stack"));
             camoState = state;
         }
         else
         {
-            recheckSolid = true;
+            recheckStates = true;
             FramedBlocks.LOGGER.warn(
                     "Framed Block of type \"{}\" at position {} contains an invalid camo of type \"{}\", removing camo! This might be caused by a config or tag change!",
                     getBlockState().getBlock().getRegistryName(),

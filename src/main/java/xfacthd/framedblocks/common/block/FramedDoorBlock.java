@@ -53,14 +53,17 @@ public class FramedDoorBlock extends DoorBlock implements IFramedBlock
     public FramedDoorBlock()
     {
         super(IFramedBlock.createProperties(BlockType.FRAMED_DOOR));
-        registerDefaultState(defaultBlockState().setValue(FramedProperties.SOLID, false));
+        registerDefaultState(defaultBlockState()
+                .setValue(FramedProperties.SOLID, false)
+                .setValue(FramedProperties.GLOWING, false)
+        );
     }
 
     @Override
     protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder)
     {
         super.createBlockStateDefinition(builder);
-        builder.add(FramedProperties.SOLID);
+        builder.add(FramedProperties.SOLID, FramedProperties.GLOWING);
     }
 
     @Override
@@ -83,7 +86,7 @@ public class FramedDoorBlock extends DoorBlock implements IFramedBlock
     }
 
     @Override
-    public boolean useShapeForLightOcclusion(BlockState state) { return state.getValue(FramedProperties.SOLID); }
+    public boolean useShapeForLightOcclusion(BlockState state) { return useCamoOcclusionShapeForLightOcclusion(state); }
 
     @Override
     public VoxelShape getOcclusionShape(BlockState state, BlockGetter level, BlockPos pos)
