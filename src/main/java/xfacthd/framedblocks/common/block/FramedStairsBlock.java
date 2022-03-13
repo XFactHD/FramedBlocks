@@ -156,6 +156,12 @@ public class FramedStairsBlock extends StairBlock implements IFramedBlock
     }
 
     @Override
+    public boolean hidesNeighborFace(BlockGetter level, BlockPos pos, BlockState state, BlockState neighborState, Direction dir)
+    {
+        return doesHideNeighborFace(level, pos, state, neighborState, dir);
+    }
+
+    @Override
     public void initializeClient(Consumer<IBlockRenderProperties> consumer)
     {
         consumer.accept(new FramedBlockRenderProperties());

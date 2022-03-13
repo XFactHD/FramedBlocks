@@ -178,6 +178,12 @@ public abstract class AbstractFramedBlock extends Block implements IFramedBlock,
     }
 
     @Override
+    public boolean hidesNeighborFace(BlockGetter level, BlockPos pos, BlockState state, BlockState neighborState, Direction dir)
+    {
+        return doesHideNeighborFace(level, pos, state, neighborState, dir);
+    }
+
+    @Override
     public IBlockType getBlockType() { return blockType; }
 
     protected final boolean isWaterLoggable() { return blockType.supportsWaterLogging(); }

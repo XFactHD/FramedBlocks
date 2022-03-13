@@ -8,7 +8,6 @@
         "MixinRailShape"
     ],
     "client": [
-        "MixinBlock",
         "MixinLevelRenderer",
         "MixinIFramedBlock"
     ],

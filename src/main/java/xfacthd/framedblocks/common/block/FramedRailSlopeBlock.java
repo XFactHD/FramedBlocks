@@ -208,6 +208,12 @@ public class FramedRailSlopeBlock extends BaseRailBlock implements IFramedBlock
     }
 
     @Override
+    public boolean hidesNeighborFace(BlockGetter level, BlockPos pos, BlockState state, BlockState neighborState, Direction dir)
+    {
+        return doesHideNeighborFace(level, pos, state, neighborState, dir);
+    }
+
+    @Override
     public final BlockEntity newBlockEntity(BlockPos pos, BlockState state) { return new FramedBlockEntity(pos, state); }
 
     @Override

@@ -13,6 +13,8 @@ public class DoorSkipPredicate implements SideSkipPredicate
     @Override
     public boolean test(BlockGetter level, BlockPos pos, BlockState state, BlockState adjState, Direction side)
     {
+        if (SideSkipPredicate.CTM.test(level, pos, state, adjState, side)) { return true; }
+
         if (!adjState.is(FBContent.blockFramedDoor.get())) { return false; }
 
         boolean top = state.getValue(BlockStateProperties.DOUBLE_BLOCK_HALF) == DoubleBlockHalf.UPPER;

@@ -308,6 +308,21 @@ public interface IFramedBlock extends EntityBlock//, IFacade
         return state.getCollisionShape(level, pos, ctx);
     }
 
+    default boolean doesHideNeighborFace(BlockGetter level, BlockPos pos, BlockState state, BlockState neighborState, Direction dir)
+    {
+        if (neighborState.getBlock() instanceof IFramedBlock) { return false; }
+
+        if (level.getExistingBlockEntity(pos) instanceof FramedBlockEntity be)
+        {
+            if (neighborState.getBlock() instanceof HalfTransparentBlock && SideSkipPredicate.CTM.test(level, pos, state, neighborState, dir))
+            {
+                return true;
+            }
+            return be.isSolidSide(dir) && !be.isIntangible(null);
+        }
+        return false;
+    }
+
     default Optional<MutableComponent> printCamoBlock(CompoundTag beTag)
     {
         BlockState camoState = NbtUtils.readBlockState(beTag.getCompound("camo_state"));
