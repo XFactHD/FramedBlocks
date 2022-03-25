@@ -51,6 +51,7 @@ minecraft {
             mods {
                 framedblocks {
                     source sourceSets.main
+                    source sourceSets.test
                 }
             }
         }
@@ -88,10 +89,43 @@ minecraft {
                 }
             }
         }
+
+        gameTestServer {
+            workingDirectory project.file('run')
+
+            // Recommended logging data for a userdev environment
+            // property 'forge.logging.markers', 'SCAN,REGISTRIES,REGISTRYDUMP'
+
+            // Recommended logging level for the console
+            property 'forge.logging.console.level', 'debug'
+
+            // Comma-separated list of namespaces to load gametests from. Empty = all namespaces.
+            property 'forge.enabledGameTestNamespaces', 'framedblocks'
+
+            mods {
+                framedblocks {
+                    source sourceSets.main
+                    source sourceSets.test
+                }
+            }
+        }
     }
 }
 
-sourceSets.main.resources { srcDir 'src/generated/resources' }
+sourceSets {
+    main.resources {
+        srcDir 'src/generated/resources'
+    }
+
+    test {
+        java {
+            srcDir "src/test/java"
+        }
+        resources {
+            srcDir "src/test/resources"
+        }
+    }
+}
 
 repositories {
     maven {
@@ -100,7 +134,7 @@ repositories {
 }
 
 dependencies {
-    minecraft 'net.minecraftforge:forge:1.18.2-40.0.19'
+    minecraft 'net.minecraftforge:forge:1.18.2-40.0.31'
 
     compileOnly fg.deobf("curse.maven:ctm-267602:3586556")
 
@@ -119,6 +153,10 @@ dependencies {
 
 mixin {
     add sourceSets.main, "framedblocks.refmap.json"
+}
+
+processTestResources {
+    duplicatesStrategy(DuplicatesStrategy.INCLUDE)
 }
 
 // Example for how to get properties into the manifest for reading by the runtime..

@@ -20,6 +20,7 @@ public class FramedInverseDoubleSlopeSlabBlockEntity extends FramedDoubleBlockEn
     @Override
     protected boolean hitSecondary(BlockHitResult hit)
     {
+        if (hit.getDirection() == Direction.DOWN) { return false; }
         return hit.getDirection() == Direction.UP || Mth.frac(hit.getLocation().y()) >= .5F;
     }
 
