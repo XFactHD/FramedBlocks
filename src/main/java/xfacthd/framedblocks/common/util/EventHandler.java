@@ -68,7 +68,9 @@ public class EventHandler
         }
     }
 
+    private static boolean iteratingNewTEs = false;
     private static final List<FramedTileEntity> NEW_TILE_ENTITIES = new ArrayList<>();
+    private static final List<FramedTileEntity> PENDING_NEW_TILE_ENTITIES = new ArrayList<>();
 
     @SubscribeEvent
     public static void onServerTick(final TickEvent.ServerTickEvent event)
@@ -77,10 +79,30 @@ public class EventHandler
 
         if (!NEW_TILE_ENTITIES.isEmpty())
         {
+            iteratingNewTEs = true;
+
             NEW_TILE_ENTITIES.forEach(FramedTileEntity::checkSolidStateOnLoad);
             NEW_TILE_ENTITIES.clear();
+
+            iteratingNewTEs = false;
+
+            if (!PENDING_NEW_TILE_ENTITIES.isEmpty())
+            {
+                NEW_TILE_ENTITIES.addAll(PENDING_NEW_TILE_ENTITIES);
+                PENDING_NEW_TILE_ENTITIES.clear();
+            }
         }
     }
 
-    public static void addNewTileEntity(FramedTileEntity te) { NEW_TILE_ENTITIES.add(te); }
+    public static void addNewTileEntity(FramedTileEntity te)
+    {
+        if (iteratingNewTEs)
+        {
+            PENDING_NEW_TILE_ENTITIES.add(te);
+        }
+        else
+        {
+            NEW_TILE_ENTITIES.add(te);
+        }
+    }
 }
