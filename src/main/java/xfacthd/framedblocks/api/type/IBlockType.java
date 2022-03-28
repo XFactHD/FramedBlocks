@@ -32,6 +32,8 @@ public interface IBlockType
      */
     default boolean allowMakingIntangible() { return false; }
 
+    default boolean isDoubleBlock() { return false; }
+
     String getName();
 
     int compareTo(IBlockType other);
