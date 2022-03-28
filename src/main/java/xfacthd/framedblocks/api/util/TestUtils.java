@@ -8,8 +8,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.item.Item;
-import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.*;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
@@ -19,19 +18,19 @@ import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegistryObject;
 import xfacthd.framedblocks.api.FramedBlocksAPI;
 import xfacthd.framedblocks.api.block.IFramedBlock;
-import xfacthd.framedblocks.api.type.IBlockType;
 
 import java.util.*;
 
 public class TestUtils
 {
     private static final RegistryObject<Item> FRAMED_HAMMER = RegistryObject.of(new ResourceLocation(FramedBlocksAPI.getInstance().modid(), "framed_hammer"), ForgeRegistries.ITEMS);
-    private static final Set<IBlockType> TESTED_TYPES = new HashSet<>();
-    private static final BlockPos BLOCK_TOP_BOTTOM = new BlockPos(1, 3, 1);
-    private static final BlockPos BLOCK_SIDE = new BlockPos(1, 2, 2);
-    private static final BlockPos LIGHT_TOP = new BlockPos(1, 4, 1);
-    private static final BlockPos LIGHT_BOTTOM = new BlockPos(1, 2, 1);
-    private static final BlockPos LIGHT_SIDE = new BlockPos(1, 2, 3);
+    private static final BlockPos OCCLUSION_BLOCK_TOP_BOTTOM = new BlockPos(1, 3, 1);
+    private static final BlockPos OCCLUSION_BLOCK_SIDE = new BlockPos(1, 2, 2);
+    private static final BlockPos OCCLUSION_LIGHT_TOP = new BlockPos(1, 4, 1);
+    private static final BlockPos OCCLUSION_LIGHT_BOTTOM = new BlockPos(1, 2, 1);
+    private static final BlockPos OCCLUSION_LIGHT_SIDE = new BlockPos(1, 2, 3);
+    private static final BlockPos EMISSION_BLOCK = new BlockPos(1, 2, 1);
+    private static final BlockPos EMISSION_LIGHT = new BlockPos(1, 3, 1);
 
     public static boolean assertFramedBlock(GameTestHelper helper, Block block)
     {
@@ -74,6 +73,26 @@ public class TestUtils
         });
     }
 
+    public static void clickWithItem(GameTestHelper helper, BlockPos pos, Item item)
+    {
+        BlockPos absPos = helper.absolutePos(pos);
+
+        Player player = helper.makeMockPlayer();
+        player.setItemInHand(InteractionHand.MAIN_HAND, new ItemStack(item));
+
+        InteractionResult result = helper.getBlockState(pos).use(
+                helper.getLevel(),
+                player,
+                InteractionHand.MAIN_HAND,
+                new BlockHitResult(Vec3.atCenterOf(absPos), Direction.UP, absPos, true)
+        );
+
+        if (!result.shouldAwardStats())
+        {
+            helper.fail(String.format("Interaction with block %s failed", helper.getBlockState(pos)));
+        }
+    }
+
     /**
      * Chains the given task with a delay of one tick between each task
      * @param helper The GameTestHelper of the running test
@@ -108,7 +127,7 @@ public class TestUtils
      */
     public static void testBlockOccludesLightBelow(GameTestHelper helper, BlockState state)
     {
-        testBlock(helper, BLOCK_TOP_BOTTOM, LIGHT_TOP, state, List.of(Direction.UP));
+        testBlockOccludesLight(helper, OCCLUSION_BLOCK_TOP_BOTTOM, OCCLUSION_LIGHT_TOP, state, List.of(Direction.UP));
     }
 
     /**
@@ -116,7 +135,7 @@ public class TestUtils
      */
     public static void testBlockOccludesLightAbove(GameTestHelper helper, BlockState state)
     {
-        testBlock(helper, BLOCK_TOP_BOTTOM, LIGHT_BOTTOM, state, List.of(Direction.DOWN));
+        testBlockOccludesLight(helper, OCCLUSION_BLOCK_TOP_BOTTOM, OCCLUSION_LIGHT_BOTTOM, state, List.of(Direction.DOWN));
     }
 
     /**
@@ -124,7 +143,7 @@ public class TestUtils
      */
     public static void testBlockOccludesLightNorth(GameTestHelper helper, BlockState state)
     {
-        testBlock(helper, BLOCK_SIDE, LIGHT_SIDE, state, List.of(Direction.SOUTH));
+        testBlockOccludesLight(helper, OCCLUSION_BLOCK_SIDE, OCCLUSION_LIGHT_SIDE, state, List.of(Direction.SOUTH));
     }
 
     /**
@@ -132,14 +151,12 @@ public class TestUtils
      */
     public static void testDoubleBlockOccludesLightBelow(GameTestHelper helper, BlockState state, List<Direction> camoSides)
     {
-        testBlock(helper, BLOCK_TOP_BOTTOM, LIGHT_TOP, state, camoSides);
+        testBlockOccludesLight(helper, OCCLUSION_BLOCK_TOP_BOTTOM, OCCLUSION_LIGHT_TOP, state, camoSides);
     }
 
-    private static void testBlock(GameTestHelper helper, BlockPos blockPos, BlockPos lightPos, BlockState state, List<Direction> camoSides)
+    private static void testBlockOccludesLight(GameTestHelper helper, BlockPos blockPos, BlockPos lightPos, BlockState state, List<Direction> camoSides)
     {
         if (!assertCanOcclude(helper, state.getBlock())) { return; }
-
-        TESTED_TYPES.add(((IFramedBlock) state.getBlock()).getBlockType());
 
         //Indirectly validate that the correct structure is used
         helper.assertBlockPresent(Blocks.AIR, blockPos);
@@ -169,6 +186,56 @@ public class TestUtils
         ));
     }
 
+    public static void testBlockLightEmission(GameTestHelper helper, BlockState state, List<Direction> camoSides)
+    {
+        testBlockLightEmission(helper, state, camoSides, 0);
+    }
+
+    public static void testBlockLightEmission(GameTestHelper helper, BlockState state, List<Direction> camoSides, int baseEmission)
+    {
+        //noinspection deprecation
+        int glowstoneLight = Blocks.GLOWSTONE.defaultBlockState().getLightEmission();
+
+        chainTasks(helper, List.of(
+                () -> helper.setBlock(EMISSION_BLOCK, state),
+                () -> assertBlockLightEmission(helper, EMISSION_BLOCK, EMISSION_LIGHT, baseEmission), //Check base emission
+                () -> applyCamo(helper, EMISSION_BLOCK, Blocks.GLOWSTONE, camoSides),
+                () -> {}, //Light changes from BlockState changes may take two ticks to propagate, apparently
+                () -> assertBlockLightEmission(helper, EMISSION_BLOCK, EMISSION_LIGHT, glowstoneLight), //Check camo emission
+                () -> applyCamo(helper, EMISSION_BLOCK, Blocks.AIR, camoSides),
+                () -> {}, //Light changes from BlockState changes may take two ticks to propagate, apparently
+                () -> assertBlockLightEmission(helper, EMISSION_BLOCK, EMISSION_LIGHT, baseEmission), //Check camo emission reset
+                () -> clickWithItem(helper, EMISSION_BLOCK, Items.GLOWSTONE_DUST),
+                () -> assertBlockLightEmission(helper, EMISSION_BLOCK, EMISSION_LIGHT, 15), //Check glowstone dust emission without camo
+                () -> applyCamo(helper, EMISSION_BLOCK, Blocks.GLASS, camoSides),
+                () -> assertBlockLightEmission(helper, EMISSION_BLOCK, EMISSION_LIGHT, 15), //Check glowstone dust emission with non-solid camo
+                () -> applyCamo(helper, EMISSION_BLOCK, Blocks.AIR, camoSides),
+                () -> assertBlockLightEmission(helper, EMISSION_BLOCK, EMISSION_LIGHT, 15), //Check glowstone dust emission after non-solid camo removed
+                () -> applyCamo(helper, EMISSION_BLOCK, Blocks.GRANITE, camoSides),
+                () -> assertBlockLightEmission(helper, EMISSION_BLOCK, EMISSION_LIGHT, 15), //Check glowstone dust emission with solid camo
+                () -> applyCamo(helper, EMISSION_BLOCK, Blocks.AIR, camoSides),
+                () -> assertBlockLightEmission(helper, EMISSION_BLOCK, EMISSION_LIGHT, 15), //Check glowstone dust emission after solid camo removed
+                helper::succeed
+        ));
+    }
+
+    public static void assertBlockLightEmission(GameTestHelper helper, BlockPos blockPos, BlockPos lightPos, int light)
+    {
+        int emission = helper.getLevel().getLightEmission(helper.absolutePos(blockPos));
+        if (emission != light)
+        {
+            BlockState state = helper.getBlockState(blockPos);
+            throw new GameTestAssertPosException(
+                    String.format("Incorrect light emission for %s, expected %d, got %d", state, light, emission),
+                    helper.absolutePos(lightPos),
+                    lightPos,
+                    helper.getTick()
+            );
+        }
+
+        assertBlockLight(helper, blockPos, lightPos, Math.max(light - 1, 0));
+    }
+
     private static void assertBlockLight(GameTestHelper helper, BlockPos blockPos, BlockPos lightPos, int light)
     {
         int actualLight = helper.getLevel().getLightEngine().getRawBrightness(helper.absolutePos(lightPos), 15);
@@ -183,6 +250,4 @@ public class TestUtils
             );
         }
     }
-
-    public static boolean isMissingType(IBlockType type) { return !TESTED_TYPES.contains(type); }
 }
