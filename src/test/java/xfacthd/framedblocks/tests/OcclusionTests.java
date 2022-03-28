@@ -922,7 +922,8 @@ public class OcclusionTests
     {
         BlockState state = FBContent.blockFramedSlopedPrism.get()
                 .defaultBlockState()
-                .setValue(BlockStateProperties.FACING, Direction.DOWN);
+                .setValue(BlockStateProperties.FACING, Direction.DOWN)
+                .setValue(PropertyHolder.ORIENTATION, Direction.NORTH);
         TestUtils.testBlockOccludesLightBelow(helper, state);
     }
 
@@ -932,7 +933,8 @@ public class OcclusionTests
     {
         BlockState state = FBContent.blockFramedSlopedPrism.get()
                 .defaultBlockState()
-                .setValue(BlockStateProperties.FACING, Direction.UP);
+                .setValue(BlockStateProperties.FACING, Direction.UP)
+                .setValue(PropertyHolder.ORIENTATION, Direction.NORTH);
         TestUtils.testBlockOccludesLightBelow(helper, state);
     }
 
@@ -942,7 +944,8 @@ public class OcclusionTests
     {
         BlockState state = FBContent.blockFramedSlopedPrism.get()
                 .defaultBlockState()
-                .setValue(BlockStateProperties.FACING, Direction.DOWN);
+                .setValue(BlockStateProperties.FACING, Direction.DOWN)
+                .setValue(PropertyHolder.ORIENTATION, Direction.NORTH);
         TestUtils.testBlockOccludesLightAbove(helper, state);
     }
 
@@ -952,7 +955,8 @@ public class OcclusionTests
     {
         BlockState state = FBContent.blockFramedSlopedPrism.get()
                 .defaultBlockState()
-                .setValue(BlockStateProperties.FACING, Direction.UP);
+                .setValue(BlockStateProperties.FACING, Direction.UP)
+                .setValue(PropertyHolder.ORIENTATION, Direction.NORTH);
         TestUtils.testBlockOccludesLightAbove(helper, state);
     }
 

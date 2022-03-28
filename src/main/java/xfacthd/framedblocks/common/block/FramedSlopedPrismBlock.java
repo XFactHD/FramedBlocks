@@ -51,6 +51,7 @@ public class FramedSlopedPrismBlock extends FramedBlock
     {
         super(BlockType.FRAMED_SLOPED_PRISM);
         registerDefaultState(defaultBlockState()
+                .setValue(BlockStateProperties.FACING, Direction.NORTH)
                 .setValue(BlockStateProperties.WATERLOGGED, false)
                 .setValue(FramedProperties.SOLID, false)
         );
