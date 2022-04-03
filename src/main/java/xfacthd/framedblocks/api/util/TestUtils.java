@@ -9,17 +9,21 @@ import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.*;
+import net.minecraft.world.level.ItemLike;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.Vec3;
+import net.minecraftforge.common.ForgeHooks;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegistryObject;
 import xfacthd.framedblocks.api.FramedBlocksAPI;
 import xfacthd.framedblocks.api.block.IFramedBlock;
 
 import java.util.*;
+import java.util.function.Supplier;
 
 public class TestUtils
 {
@@ -73,18 +77,34 @@ public class TestUtils
         });
     }
 
-    public static void clickWithItem(GameTestHelper helper, BlockPos pos, Item item)
+    public static void clickWithItem(GameTestHelper helper, BlockPos pos, ItemLike item)
+    {
+        clickWithItem(helper, pos, item, Direction.UP, false);
+    }
+
+    public static void clickWithItem(GameTestHelper helper, BlockPos pos, ItemLike item, boolean sneak)
+    {
+        clickWithItem(helper, pos, item, Direction.UP, sneak);
+    }
+
+    public static void clickWithItem(GameTestHelper helper, BlockPos pos, ItemLike item, Direction side)
+    {
+        clickWithItem(helper, pos, item, side, false);
+    }
+
+    public static void clickWithItem(GameTestHelper helper, BlockPos pos, ItemLike item, Direction side, boolean sneak)
     {
         BlockPos absPos = helper.absolutePos(pos);
 
         Player player = helper.makeMockPlayer();
+        player.setShiftKeyDown(sneak);
         player.setItemInHand(InteractionHand.MAIN_HAND, new ItemStack(item));
 
         InteractionResult result = helper.getBlockState(pos).use(
                 helper.getLevel(),
                 player,
                 InteractionHand.MAIN_HAND,
-                new BlockHitResult(Vec3.atCenterOf(absPos), Direction.UP, absPos, true)
+                new BlockHitResult(Vec3.atCenterOf(absPos), side, absPos, true)
         );
 
         if (!result.shouldAwardStats())
@@ -93,19 +113,80 @@ public class TestUtils
         }
     }
 
+    public static void attackWithItem(GameTestHelper helper, BlockPos pos, ItemLike item)
+    {
+        Player player = helper.makeMockPlayer();
+        player.setItemInHand(InteractionHand.MAIN_HAND, new ItemStack(item));
+
+        ForgeHooks.onLeftClickBlock(player, helper.absolutePos(pos), Direction.UP);
+    }
+
     /**
      * Chains the given task with a delay of one tick between each task
      * @param helper The GameTestHelper of the running test
      * @param tasks The list of tasks to schedule
+     * @return Returns the delay of the last task + 1 tick
      */
-    public static void chainTasks(GameTestHelper helper, List<Runnable> tasks)
+    public static int chainTasks(GameTestHelper helper, List<Runnable> tasks)
     {
-        int delay = 0;
+        return chainTasks(helper, tasks, 0);
+    }
+
+    /**
+     * Chains the given task with a delay of one tick between each task
+     * @param helper The GameTestHelper of the running test
+     * @param tasks The list of tasks to schedule
+     * @param initialDelay The delay in ticks the task chain starts at
+     * @return Returns the delay of the last task + 1 tick
+     */
+    public static int chainTasks(GameTestHelper helper, List<Runnable> tasks, int initialDelay)
+    {
+        int delay = initialDelay;
         for (Runnable task : tasks)
         {
             helper.runAfterDelay(delay, task);
             delay++;
         }
+        return delay;
+    }
+
+    public static <T extends BlockEntity> T getBlockEntity(GameTestHelper helper, BlockPos relPos, Class<T> beClass)
+    {
+        BlockEntity be = helper.getBlockEntity(relPos);
+        if (be == null)
+        {
+            throw new GameTestAssertPosException(
+                    String.format("Expected %s, got null", beClass.getSimpleName()),
+                    helper.absolutePos(relPos),
+                    relPos,
+                    helper.getTick()
+            );
+        }
+
+        if (!beClass.isInstance(be))
+        {
+            throw new GameTestAssertPosException(
+                    String.format("Expected %s, got %s", beClass.getSimpleName(), be.getClass().getSimpleName()),
+                    helper.absolutePos(relPos),
+                    relPos,
+                    helper.getTick()
+            );
+        }
+
+        return beClass.cast(be);
+    }
+
+    public static void assertTrue(GameTestHelper helper, BlockPos relPos, boolean value, Supplier<String> message)
+    {
+        if (!value)
+        {
+            throw new GameTestAssertPosException(message.get(), helper.absolutePos(relPos), relPos, helper.getTick());
+        }
+    }
+
+    public static void spawnItemCentered(GameTestHelper helper, Item item, BlockPos relPos)
+    {
+        helper.spawnItem(item, relPos.getX() + .5F, relPos.getY(), relPos.getZ() + .5F);
     }
 
     // == Occlusion testing ==
@@ -164,12 +245,14 @@ public class TestUtils
 
         chainTasks(helper, List.of(
                 () -> helper.setBlock(blockPos, state),
+                () -> {}, //Light occlusion changes from BlockState changes may take two ticks to propagate, apparently
                 () ->
                 {
                     helper.assertBlockProperty(blockPos, FramedProperties.SOLID, false);
                     assertBlockLight(helper, blockPos, lightPos, 13);
                 },
                 () -> applyCamo(helper, blockPos, Blocks.GLASS, camoSides),
+                () -> {}, //Light occlusion changes from BlockState changes may take two ticks to propagate, apparently
                 () ->
                 {
                     helper.assertBlockProperty(blockPos, FramedProperties.SOLID, false);
@@ -177,6 +260,7 @@ public class TestUtils
                 },
                 () -> applyCamo(helper, blockPos, Blocks.AIR, camoSides),
                 () -> applyCamo(helper, blockPos, Blocks.GRANITE, camoSides),
+                () -> {}, //Light occlusion changes from BlockState changes may take two ticks to propagate, apparently
                 () ->
                 {
                     helper.assertBlockProperty(blockPos, FramedProperties.SOLID, true);
@@ -185,6 +269,8 @@ public class TestUtils
                 helper::succeed
         ));
     }
+
+    // == Light emission testing ==
 
     public static void testBlockLightEmission(GameTestHelper helper, BlockState state, List<Direction> camoSides)
     {

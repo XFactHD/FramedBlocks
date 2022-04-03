@@ -30,8 +30,8 @@ import xfacthd.framedblocks.common.util.*;
 @Mod.EventBusSubscriber(modid = FramedBlocks.MODID, bus = Mod.EventBusSubscriber.Bus.MOD)
 public class FramedBlocks
 {
-	public static final String MODID = "framedblocks";
-	public static final Logger LOGGER = LogManager.getLogger();
+    public static final String MODID = "framedblocks";
+    public static final Logger LOGGER = LogManager.getLogger();
 
     private static final String PROTOCOL_VERSION = "1";
     public static final SimpleChannel CHANNEL = NetworkRegistry.newSimpleChannel(
