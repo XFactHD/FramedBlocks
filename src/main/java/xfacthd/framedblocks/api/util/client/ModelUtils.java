@@ -13,11 +13,11 @@ import java.util.Arrays;
 
 public class ModelUtils
 {
-    private static final int ELEMENT_POS = findElement(VertexFormatElement.Usage.POSITION, 0);
-    private static final int ELEMENT_COLOR = findElement(VertexFormatElement.Usage.COLOR, 0);
-    private static final int ELEMENT_UV = findElement(VertexFormatElement.Usage.UV, 0);
-    private static final int ELEMENT_LIGHT = findElement(VertexFormatElement.Usage.UV, 2);
-    private static final int ELEMENT_NORMAL = findElement(VertexFormatElement.Usage.NORMAL, 0);
+    private static final int ELEMENT_POS = findElement(DefaultVertexFormat.ELEMENT_POSITION);
+    private static final int ELEMENT_COLOR = findElement(DefaultVertexFormat.ELEMENT_COLOR);
+    private static final int ELEMENT_UV = findElement(DefaultVertexFormat.ELEMENT_UV0);
+    private static final int ELEMENT_LIGHT = findElement(DefaultVertexFormat.ELEMENT_UV2);
+    private static final int ELEMENT_NORMAL = findElement(DefaultVertexFormat.ELEMENT_NORMAL);
 
     public static boolean modifyQuad(BakedQuad quad, VertexDataConsumer consumer)
     {
@@ -55,9 +55,9 @@ public class ModelUtils
         return true;
     }
 
-    public static float[][] unpackElement(BakedQuad quad, VertexFormatElement.Usage usage, int index)
+    public static float[][] unpackElement(BakedQuad quad, VertexFormatElement element)
     {
-        int elemPos = findElement(usage, index);
+        int elemPos = findElement(element);
 
         float[][] data = new float[4][4];
         for (int vert = 0; vert < 4; vert++)
@@ -67,18 +67,18 @@ public class ModelUtils
         return data;
     }
 
-    public static int findElement(VertexFormatElement.Usage usage, int index)
+    public static int findElement(VertexFormatElement targetElement)
     {
         int idx = 0;
         for (VertexFormatElement element : DefaultVertexFormat.BLOCK.getElements())
         {
-            if (element.getUsage() == usage && element.getIndex() == index)
+            if (element == targetElement)
             {
                 return idx;
             }
             idx++;
         }
-        throw new IllegalArgumentException("Format doesn't have a " + usage.getName() + " element");
+        throw new IllegalArgumentException("Format doesn't have a " + targetElement + " element");
     }
 
     public static BakedQuad duplicateQuad(BakedQuad quad)
@@ -101,7 +101,7 @@ public class ModelUtils
      */
     public static void fillNormal(BakedQuad quad)
     {
-        float[][] pos = unpackElement(quad, VertexFormatElement.Usage.POSITION, 0);
+        float[][] pos = unpackElement(quad, DefaultVertexFormat.ELEMENT_NORMAL);
 
         Vector3f v1 = new Vector3f(pos[3][0], pos[3][1], pos[3][2]);
         Vector3f t1 = new Vector3f(pos[1][0], pos[1][1], pos[1][2]);
