@@ -12,14 +12,14 @@ import java.util.Arrays;
 
 public class ModelUtils
 {
+    private static final int ELEMENT_POS = findElement(DefaultVertexFormats.ELEMENT_POSITION);
+    private static final int ELEMENT_COLOR = findElement(DefaultVertexFormats.ELEMENT_COLOR);
+    private static final int ELEMENT_UV = findElement(DefaultVertexFormats.ELEMENT_UV0);
+    private static final int ELEMENT_LIGHT = findElement(DefaultVertexFormats.ELEMENT_UV2);
+    private static final int ELEMENT_NORMAL = findElement(DefaultVertexFormats.ELEMENT_NORMAL);
+
     public static boolean modifyQuad(BakedQuad quad, VertexDataConsumer consumer)
     {
-        int elemPos = findElement(VertexFormatElement.Usage.POSITION, 0);
-        int elemColor = findElement(VertexFormatElement.Usage.COLOR, 0);
-        int elemUV = findElement(VertexFormatElement.Usage.UV, 0);
-        int elemLight = findElement(VertexFormatElement.Usage.UV, 2);
-        int elemNormal = findElement(VertexFormatElement.Usage.NORMAL, 0);
-
         int[] vertexData = quad.getVertices();
 
         float[][] pos = new float[4][3];
@@ -30,11 +30,11 @@ public class ModelUtils
 
         for (int vert = 0; vert < 4; vert++)
         {
-            LightUtil.unpack(vertexData, pos[vert], DefaultVertexFormats.BLOCK, vert, elemPos);
-            LightUtil.unpack(vertexData, color[vert], DefaultVertexFormats.BLOCK, vert, elemColor);
-            LightUtil.unpack(vertexData, uv[vert], DefaultVertexFormats.BLOCK, vert, elemUV);
-            LightUtil.unpack(vertexData, light[vert], DefaultVertexFormats.BLOCK, vert, elemLight);
-            LightUtil.unpack(vertexData, normal[vert], DefaultVertexFormats.BLOCK, vert, elemNormal);
+            LightUtil.unpack(vertexData, pos[vert], DefaultVertexFormats.BLOCK, vert, ELEMENT_POS);
+            LightUtil.unpack(vertexData, color[vert], DefaultVertexFormats.BLOCK, vert, ELEMENT_COLOR);
+            LightUtil.unpack(vertexData, uv[vert], DefaultVertexFormats.BLOCK, vert, ELEMENT_UV);
+            LightUtil.unpack(vertexData, light[vert], DefaultVertexFormats.BLOCK, vert, ELEMENT_LIGHT);
+            LightUtil.unpack(vertexData, normal[vert], DefaultVertexFormats.BLOCK, vert, ELEMENT_NORMAL);
         }
 
         boolean accept = consumer.accept(pos, color, uv, light, normal);
@@ -42,11 +42,11 @@ public class ModelUtils
 
         for (int vert = 0; vert < 4; vert++)
         {
-            LightUtil.pack(pos[vert], vertexData, DefaultVertexFormats.BLOCK, vert, elemPos);
-            LightUtil.pack(color[vert], vertexData, DefaultVertexFormats.BLOCK, vert, elemColor);
-            LightUtil.pack(uv[vert], vertexData, DefaultVertexFormats.BLOCK, vert, elemUV);
-            LightUtil.pack(light[vert], vertexData, DefaultVertexFormats.BLOCK, vert, elemLight);
-            LightUtil.pack(normal[vert], vertexData, DefaultVertexFormats.BLOCK, vert, elemNormal);
+            LightUtil.pack(pos[vert], vertexData, DefaultVertexFormats.BLOCK, vert, ELEMENT_POS);
+            LightUtil.pack(color[vert], vertexData, DefaultVertexFormats.BLOCK, vert, ELEMENT_COLOR);
+            LightUtil.pack(uv[vert], vertexData, DefaultVertexFormats.BLOCK, vert, ELEMENT_UV);
+            LightUtil.pack(light[vert], vertexData, DefaultVertexFormats.BLOCK, vert, ELEMENT_LIGHT);
+            LightUtil.pack(normal[vert], vertexData, DefaultVertexFormats.BLOCK, vert, ELEMENT_NORMAL);
         }
 
         fillNormal(quad);
@@ -54,9 +54,9 @@ public class ModelUtils
         return true;
     }
 
-    public static float[][] unpackElement(BakedQuad quad, VertexFormatElement.Usage usage, int index)
+    public static float[][] unpackElement(BakedQuad quad, VertexFormatElement element)
     {
-        int elemPos = findElement(usage, index);
+        int elemPos = findElement(element);
 
         float[][] data = new float[4][4];
         for (int vert = 0; vert < 4; vert++)
@@ -66,18 +66,18 @@ public class ModelUtils
         return data;
     }
 
-    public static int findElement(VertexFormatElement.Usage usage, int index)
+    public static int findElement(VertexFormatElement targetElement)
     {
         int idx = 0;
         for (VertexFormatElement element : DefaultVertexFormats.BLOCK.getElements())
         {
-            if (element.getUsage() == usage && element.getIndex() == index)
+            if (element == targetElement)
             {
                 return idx;
             }
             idx++;
         }
-        throw new IllegalArgumentException("Format doesn't have a " + usage.getName() + " element");
+        throw new IllegalArgumentException("Format doesn't have a " + targetElement + " element");
     }
 
     public static BakedQuad duplicateQuad(BakedQuad quad)
@@ -100,7 +100,7 @@ public class ModelUtils
      */
     public static void fillNormal(BakedQuad quad)
     {
-        float[][] pos = unpackElement(quad, VertexFormatElement.Usage.POSITION, 0);
+        float[][] pos = unpackElement(quad, DefaultVertexFormats.ELEMENT_POSITION);
 
         Vector3f v1 = new Vector3f(pos[3][0], pos[3][1], pos[3][2]);
         Vector3f t1 = new Vector3f(pos[1][0], pos[1][1], pos[1][2]);
