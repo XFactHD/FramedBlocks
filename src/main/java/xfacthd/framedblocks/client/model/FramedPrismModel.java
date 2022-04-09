@@ -36,6 +36,12 @@ public class FramedPrismModel extends FramedBlockModel
     @Override
     protected void transformQuad(Map<Direction, List<BakedQuad>> quadMap, BakedQuad quad)
     {
+        if (isStateInvalid())
+        {
+            quadMap.get(quad.getDirection()).add(quad);
+            return;
+        }
+
         Direction quadFace = quad.getDirection();
         if (Utils.isY(facing) && quadFace.getAxis() != axis && quadFace.getAxis() != facing.getAxis())
         {
@@ -99,6 +105,8 @@ public class FramedPrismModel extends FramedBlockModel
             }
         }
     }
+
+    private boolean isStateInvalid() { return axis == facing.getAxis(); }
 
 
 

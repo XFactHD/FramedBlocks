@@ -29,7 +29,11 @@ public class FramedSlopedPrismModel extends FramedBlockModel
     @Override
     protected void transformQuad(Map<Direction, List<BakedQuad>> quadMap, BakedQuad quad)
     {
-        if (isStateInvalid()) { return; }
+        if (isStateInvalid())
+        {
+            quadMap.get(quad.getDirection()).add(quad);
+            return;
+        }
 
         Direction quadFace = quad.getDirection();
         if (quadFace == orientation.getOpposite() && !Utils.isY(orientation))
