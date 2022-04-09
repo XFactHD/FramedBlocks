@@ -18,7 +18,7 @@ apply plugin: 'maven-publish'
 apply plugin: 'org.parchmentmc.librarian.forgegradle'
 apply plugin: 'org.spongepowered.mixin'
 
-version = '2.14.2'
+version = '2.14.4'
 group = 'xfacthd.framedblocks'
 archivesBaseName = 'FramedBlocks'
 
@@ -99,7 +99,7 @@ repositories {
 }
 
 dependencies {
-    minecraft 'net.minecraftforge:forge:1.16.5-36.2.29'
+    minecraft 'net.minecraftforge:forge:1.16.5-36.2.33'
 
     implementation fg.deobf("curse.maven:ctm-267602:3137659")
     runtimeOnly fg.deobf("curse.maven:chisel-235279:3376782")
