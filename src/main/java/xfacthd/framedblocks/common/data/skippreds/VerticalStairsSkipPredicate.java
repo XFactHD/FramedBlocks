@@ -9,6 +9,7 @@ import xfacthd.framedblocks.common.FBContent;
 import xfacthd.framedblocks.common.data.PropertyHolder;
 import xfacthd.framedblocks.common.data.StairsType;
 import xfacthd.framedblocks.common.util.SideSkipPredicate;
+import xfacthd.framedblocks.common.util.Utils;
 
 public class VerticalStairsSkipPredicate implements SideSkipPredicate
 {
@@ -51,6 +52,10 @@ public class VerticalStairsSkipPredicate implements SideSkipPredicate
         else if (adjState.is(FBContent.blockFramedHalfStairs.get()))
         {
             return testAgainstHalfStairs(world, pos, dir, type, adjState, side);
+        }
+        else if (adjState.is(FBContent.blockFramedVerticalHalfStairs.get()))
+        {
+            return testAgainstVerticalHalfStairs(world, pos, dir, adjState, side);
         }
 
         return false;
@@ -185,5 +190,15 @@ public class VerticalStairsSkipPredicate implements SideSkipPredicate
         }
 
         return false;
+    }
+
+    private static boolean testAgainstVerticalHalfStairs(IBlockReader world, BlockPos pos, Direction dir, BlockState adjState, Direction side)
+    {
+        Direction adjDir = adjState.getValue(PropertyHolder.FACING_HOR);
+        boolean adjTop = adjState.getValue(PropertyHolder.TOP);
+
+        if (!Utils.isY(side) || adjDir != dir || adjTop != (side == Direction.DOWN)) { return false; }
+
+        return SideSkipPredicate.compareState(world, pos, side);
     }
 }

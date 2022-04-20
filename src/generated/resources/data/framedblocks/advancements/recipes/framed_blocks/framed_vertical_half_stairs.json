@@ -1,0 +1,32 @@
+{
+  "parent": "minecraft:recipes/root",
+  "rewards": {
+    "recipes": [
+      "framedblocks:framed_vertical_half_stairs"
+    ]
+  },
+  "criteria": {
+    "hasFramedVerticalStairs": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "item": "framedblocks:framed_vertical_stairs"
+          }
+        ]
+      }
+    },
+    "has_the_recipe": {
+      "trigger": "minecraft:recipe_unlocked",
+      "conditions": {
+        "recipe": "framedblocks:framed_vertical_half_stairs"
+      }
+    }
+  },
+  "requirements": [
+    [
+      "hasFramedVerticalStairs",
+      "has_the_recipe"
+    ]
+  ]
+}

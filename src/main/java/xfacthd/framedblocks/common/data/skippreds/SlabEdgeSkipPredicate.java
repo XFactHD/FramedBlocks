@@ -9,6 +9,7 @@ import xfacthd.framedblocks.common.FBContent;
 import xfacthd.framedblocks.common.data.PropertyHolder;
 import xfacthd.framedblocks.common.data.StairsType;
 import xfacthd.framedblocks.common.util.SideSkipPredicate;
+import xfacthd.framedblocks.common.util.Utils;
 
 public class SlabEdgeSkipPredicate implements SideSkipPredicate
 {
@@ -69,6 +70,10 @@ public class SlabEdgeSkipPredicate implements SideSkipPredicate
         else if (adjState.is(FBContent.blockFramedInverseDoubleSlopeSlab.get()))
         {
             return testAgainstInverseDoubleSlopeSlab(world, pos, dir, top, adjState, side);
+        }
+        else if (adjState.is(FBContent.blockFramedVerticalHalfStairs.get()))
+        {
+            return testAgainstVerticalHalfStairs(world, pos, dir, top, adjState, side);
         }
 
         return false;
@@ -238,5 +243,24 @@ public class SlabEdgeSkipPredicate implements SideSkipPredicate
         if (side != dir) { return false; }
 
         return ((adjDir == dir && !top) || (adjDir == dir.getOpposite() && top)) && SideSkipPredicate.compareState(world, pos, side);
+    }
+
+    private static boolean testAgainstVerticalHalfStairs(IBlockReader world, BlockPos pos, Direction dir, boolean top, BlockState adjState, Direction side)
+    {
+        Direction adjDir = adjState.getValue(PropertyHolder.FACING_HOR);
+        boolean adjTop = adjState.getValue(PropertyHolder.TOP);
+
+        if (Utils.isY(side) || side == dir.getOpposite() || adjTop != top) { return false; }
+
+        if (side == dir && (adjDir == side.getOpposite() || adjDir == side.getCounterClockWise()))
+        {
+            return SideSkipPredicate.compareState(world, pos, side);
+        }
+        if ((side == dir.getClockWise() && adjDir == dir.getClockWise()) || (side == dir.getCounterClockWise() && adjDir == dir))
+        {
+            return SideSkipPredicate.compareState(world, pos, side);
+        }
+
+        return false;
     }
 }
