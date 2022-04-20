@@ -69,7 +69,8 @@ public enum BlockType implements IBlockType
     FRAMED_SLOPE_SLAB             ( true,  true, false,  true,  true,  true, false, FramedSlopeSlabBlock.CTM_PREDICATE, new SlopeSlabSkipPredicate(), FramedSlopeSlabBlock::generateShapes),
     FRAMED_ELEVATED_SLOPE_SLAB    ( true,  true,  true,  true,  true,  true, false, FramedElevatedSlopeSlabBlock.CTM_PREDICATE, new ElevatedSlopeSlabSkipPredicate(), FramedElevatedSlopeSlabBlock::generateShapes),
     FRAMED_DOUBLE_SLOPE_SLAB      ( true, false,  true,  true,  true,  true,  true, SideSkipPredicate.FALSE, FramedDoubleSlopeSlabBlock.CTM_PREDICATE), //Side skip is handled by the single slope slab
-    FRAMED_INV_DOUBLE_SLOPE_SLAB  ( true,  true,  true,  true,  true,  true,  true, CtmPredicate.FALSE, SideSkipPredicate.FALSE, FramedInverseDoubleSlopeSlabBlock::generateShapes); //Side skip is handled by the single slope slab
+    FRAMED_INV_DOUBLE_SLOPE_SLAB  ( true,  true,  true,  true,  true,  true,  true, CtmPredicate.FALSE, SideSkipPredicate.FALSE, FramedInverseDoubleSlopeSlabBlock::generateShapes), //Side skip is handled by the single slope slab
+    FRAMED_VERTICAL_HALF_STAIRS   (false, false, false,  true,  true, false, false, CtmPredicate.FALSE, new VerticalHalfStairsSkipPredicate(), FramedVerticalHalfStairsBlock::generateShapes);
 
     private final String name = toString().toLowerCase(Locale.ROOT);
     private final boolean canOcclude;

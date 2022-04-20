@@ -416,6 +416,12 @@ public class FramedRecipeProvider extends RecipeProvider
                 .unlockedBy("hasFramedInverseDoubleSlopeSlab", has(FBContent.blockFramedInverseDoubleSlopeSlab.get()))
                 .save(consumer, FramedBlocks.MODID + ":framed_double_slope_slab_from_inverse");
 
+        ShapelessRecipeBuilder.shapeless(FBContent.blockFramedVerticalHalfStairs.get(), 2)
+                .requires(FBContent.blockFramedVerticalStairs.get())
+                .requires(FBContent.itemFramedHammer.get())
+                .unlockedBy("hasFramedVerticalStairs", has(FBContent.blockFramedVerticalStairs.get()))
+                .save(consumer);
+
 
 
         ShapedRecipeBuilder.shaped(FBContent.itemFramedHammer.get())
