@@ -18,7 +18,7 @@ apply plugin: 'eclipse'
 apply plugin: 'maven-publish'
 apply plugin: 'org.spongepowered.mixin'
 
-version = '4.3.3'
+version = '4.3.4'
 group = 'xfacthd.framedblocks'
 archivesBaseName = 'FramedBlocks'
 

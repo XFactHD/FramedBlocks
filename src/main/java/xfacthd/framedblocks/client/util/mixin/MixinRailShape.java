@@ -5,10 +5,10 @@ import net.minecraft.world.level.block.BaseRailBlock;
 import net.minecraft.world.level.block.RailState;
 import net.minecraft.world.level.block.state.properties.RailShape;
 import org.spongepowered.asm.mixin.*;
-import org.spongepowered.asm.mixin.injection.At;
-import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.*;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.LocalCapture;
+import xfacthd.framedblocks.common.FBContent;
 
 @Mixin(RailState.class)
 public class MixinRailShape
@@ -29,9 +29,26 @@ public class MixinRailShape
     )
     private void framedblocks_connectToFilterInvalidState(RailState state, CallbackInfo ci, BlockPos blockpos, BlockPos blockpos1, BlockPos blockpos2, BlockPos blockpos3, boolean flag, boolean flag1, boolean flag2, boolean flag3, RailShape railshape)
     {
-        if (this.block.getShapeProperty().getAllValues().noneMatch(value -> value.value() == railshape))
+        if (this.block == FBContent.blockFramedRailSlope.get() && !railshape.isAscending())
         {
             ci.cancel();
         }
+    }
+
+    @ModifyVariable(
+            method = "place",
+            at = @At(
+                    value = "LOAD",
+                    ordinal = 3
+            ),
+            ordinal = 1
+    )
+    private RailShape framedblocks_placeFilterInvalidState(RailShape shape)
+    {
+        if (block == FBContent.blockFramedRailSlope.get() && shape != null && !shape.isAscending())
+        {
+            return null;
+        }
+        return shape;
     }
 }

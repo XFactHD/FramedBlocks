@@ -67,35 +67,15 @@ public class FramedRailSlopeBlock extends BaseRailBlock implements IFramedBlock
     }
 
     @Override
-    public boolean canSurvive(BlockState state, LevelReader level, BlockPos pos)
-    {
-        Direction dir = directionFromShape(state.getValue(PropertyHolder.ASCENDING_RAIL_SHAPE));
-        return canSupportRigidBlock(level, pos.relative(dir));
-    }
+    public boolean canSurvive(BlockState state, LevelReader level, BlockPos pos) { return true; }
 
-    @Override //Copy of AbstractRailBlock#neighborChanged() to use our own check for removal
+    @Override //Copy of AbstractRailBlock#neighborChanged() to disable removal
     public void neighborChanged(BlockState state, Level level, BlockPos pos, Block block, BlockPos pFromPos, boolean isMoving)
     {
         if (!level.isClientSide() && level.getBlockState(pos).is(this))
         {
-            RailShape shape = getRailDirection(state, level, pos, null);
-            if (shouldBeRemoved(pos, level, shape))
-            {
-                dropResources(state, level, pos);
-                level.removeBlock(pos, isMoving);
-            }
-            else
-            {
-                updateState(state, level, pos, block);
-            }
+            updateState(state, level, pos, block);
         }
-    }
-
-    //Adapted from BaseRailBlock#shouldBeRemoved() to not check the block below the rail
-    private static boolean shouldBeRemoved(BlockPos pos, Level level, RailShape shape)
-    {
-        if (!shape.isAscending()) { throw new IllegalArgumentException("Invalid shape " + shape); }
-        return !canSupportRigidBlock(level, pos.relative(directionFromShape(shape)));
     }
 
     public static RailShape shapeFromDirection(Direction dir)
