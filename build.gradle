@@ -18,7 +18,7 @@ apply plugin: 'eclipse'
 apply plugin: 'maven-publish'
 apply plugin: 'org.spongepowered.mixin'
 
-version = '5.1.0'
+version = '5.1.1'
 group = 'xfacthd.framedblocks'
 archivesBaseName = 'FramedBlocks'
 
@@ -134,7 +134,7 @@ repositories {
 }
 
 dependencies {
-    minecraft 'net.minecraftforge:forge:1.18.2-40.0.31'
+    minecraft 'net.minecraftforge:forge:1.18.2-40.1.0'
 
     compileOnly fg.deobf("curse.maven:ctm-267602:3586556")
 
