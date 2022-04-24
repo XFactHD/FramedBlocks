@@ -64,35 +64,15 @@ public class FramedRailSlopeBlock extends AbstractRailBlock implements IFramedBl
     }
 
     @Override
-    public boolean canSurvive(BlockState state, IWorldReader world, BlockPos pos)
-    {
-        Direction dir = directionFromShape(state.getValue(PropertyHolder.ASCENDING_RAIL_SHAPE));
-        return canSupportRigidBlock(world, pos.relative(dir));
-    }
+    public boolean canSurvive(BlockState state, IWorldReader world, BlockPos pos) { return true; }
 
-    @Override //Copy of AbstractRailBlock#neighborChanged() to use our own check for removal
+    @Override //Copy of AbstractRailBlock#neighborChanged() to disable removal
     public void neighborChanged(BlockState state, World world, BlockPos pos, Block block, BlockPos fromPos, boolean isMoving)
     {
         if (!world.isClientSide && world.getBlockState(pos).is(this))
         {
-            RailShape shape = getRailDirection(state, world, pos, null);
-            if (isInvalidRailDirection(pos, world, shape))
-            {
-                dropResources(state, world, pos);
-                world.removeBlock(pos, isMoving);
-            }
-            else
-            {
-                updateState(state, world, pos, block);
-            }
+            updateState(state, world, pos, block);
         }
-    }
-
-    //Adapted from AbstractRailBlock#isValidRailDirection() (the MCP name is inverted) to not check the block below the rail
-    private static boolean isInvalidRailDirection(BlockPos pos, World world, RailShape shape)
-    {
-        if (!shape.isAscending()) { throw new IllegalArgumentException("Invalid shape " + shape); }
-        return !canSupportRigidBlock(world, pos.relative(directionFromShape(shape)));
     }
 
     public static RailShape shapeFromDirection(Direction dir)
