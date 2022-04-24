@@ -53,6 +53,10 @@ public class SlopeSlabSkipPredicate implements SideSkipPredicate
         {
             return testAgainstStairs(level, pos, dir, topHalf, adjState, side);
         }
+        else if (adjState.is(FBContent.blockFramedVerticalHalfStairs.get()))
+        {
+            return testAgainstVerticalHalfStairs(level, pos, dir, topHalf, adjState, side);
+        }
 
         return false;
     }
@@ -148,6 +152,21 @@ public class SlopeSlabSkipPredicate implements SideSkipPredicate
         {
             return side == dir && SideSkipPredicate.compareState(level, pos, side, dir);
         }
+        return false;
+    }
+
+    private static boolean testAgainstVerticalHalfStairs(BlockGetter level, BlockPos pos, Direction dir, boolean topHalf, BlockState adjState, Direction side)
+    {
+        Direction adjDir = adjState.getValue(FramedProperties.FACING_HOR);
+        boolean adjTop = adjState.getValue(FramedProperties.TOP);
+
+        if (adjTop != topHalf || side != dir) { return false; }
+
+        if (adjDir == dir.getOpposite() || adjDir == dir.getCounterClockWise())
+        {
+            return SideSkipPredicate.compareState(level, pos, side, dir);
+        }
+
         return false;
     }
 }
