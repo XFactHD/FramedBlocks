@@ -16,10 +16,8 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.storage.loot.LootContext;
 import net.minecraft.world.phys.BlockHitResult;
 import xfacthd.framedblocks.api.block.IFramedBlock;
-import xfacthd.framedblocks.common.FBContent;
 import xfacthd.framedblocks.common.data.BlockType;
 import xfacthd.framedblocks.api.block.FramedBlockEntity;
-import xfacthd.framedblocks.api.util.SideSkipPredicate;
 
 import javax.annotation.Nullable;
 import java.util.List;
@@ -27,16 +25,6 @@ import java.util.List;
 @SuppressWarnings("deprecation")
 public class FramedWallBlock extends WallBlock implements IFramedBlock
 {
-    public static final SideSkipPredicate SKIP_PREDICATE = (level, pos, state, adjState, side) ->
-    {
-        if (adjState.getBlock() == FBContent.blockFramedWall.get())
-        {
-            return SideSkipPredicate.compareState(level, pos, side);
-        }
-
-        return false;
-    };
-
     public FramedWallBlock()
     {
         super(IFramedBlock.createProperties(BlockType.FRAMED_WALL));

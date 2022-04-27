@@ -28,7 +28,7 @@ public enum BlockType implements IBlockType
     FRAMED_PANEL                  ( true, false, false,  true,  true,  true, false, FramedPanelBlock.CTM_PREDICATE, new PanelSkipPredicate(), FramedPanelBlock::generateShapes),
     FRAMED_CORNER_PILLAR          (false, false, false,  true,  true,  true, false, CtmPredicate.FALSE, new CornerPillarSkipPredicate(), FramedCornerPillarBlock::generateShapes),
     FRAMED_STAIRS                 ( true, false, false,  true,  true,  true, false, new StairsSkipPredicate(), FramedStairsBlock.CTM_PREDICATE),
-    FRAMED_WALL                   (false, false, false,  true,  true, false, false, FramedWallBlock.SKIP_PREDICATE, CtmPredicate.FALSE),
+    FRAMED_WALL                   (false, false, false,  true,  true, false, false, new WallSkipPredicate(), CtmPredicate.FALSE),
     FRAMED_FENCE                  (false, false, false,  true,  true, false, false, FramedFenceBlock.SKIP_PREDICATE, CtmPredicate.FALSE),
     FRAMED_GATE                   (false, false, false,  true,  true, false, false, FramedGateBlock.SKIP_PREDICATE, CtmPredicate.FALSE),
     FRAMED_DOOR                   ( true, false, false, false,  true, false, false, new DoorSkipPredicate(), FramedDoorBlock.CTM_PREDICATE),
