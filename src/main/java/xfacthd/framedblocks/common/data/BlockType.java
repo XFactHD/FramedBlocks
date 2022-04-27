@@ -27,7 +27,7 @@ public enum BlockType
     FRAMED_PANEL                  ( true, false, false,  true,  true,  true, FramedPanelBlock.CTM_PREDICATE, new PanelSkipPredicate(), FramedPanelBlock::generateShapes),
     FRAMED_CORNER_PILLAR          (false, false, false,  true,  true,  true, CtmPredicate.FALSE, new CornerPillarSkipPredicate(), FramedCornerPillarBlock::generateShapes),
     FRAMED_STAIRS                 ( true, false, false,  true,  true,  true, FramedStairsBlock.CTM_PREDICATE, new StairsSkipPredicate()),
-    FRAMED_WALL                   (false, false, false,  true,  true, false, CtmPredicate.FALSE, FramedWallBlock.SKIP_PREDICATE),
+    FRAMED_WALL                   (false, false, false,  true,  true, false, CtmPredicate.FALSE, new WallSkipPredicate()),
     FRAMED_FENCE                  (false, false, false,  true,  true, false, CtmPredicate.FALSE, FramedFenceBlock.SKIP_PREDICATE),
     FRAMED_GATE                   (false, false, false,  true,  true, false, CtmPredicate.FALSE, FramedGateBlock.SKIP_PREDICATE),
     FRAMED_DOOR                   ( true, false, false, false,  true, false, FramedDoorBlock.CTM_PREDICATE, new DoorSkipPredicate()),

@@ -149,8 +149,15 @@ public class FramedWallModel extends FramedBlockModel
                 BakedQuad pillarQuad = ModelUtils.duplicateQuad(quad);
                 if (BakedQuadTransformer.createTopBottomQuad(pillarQuad, 5F/16F, 5F/16F, 11F/16F, 11F/16F))
                 {
-                    BakedQuadTransformer.setQuadPosInFacingDir(pillarQuad, tall ? 1F : 14F/16F);
-                    quadMap.get(tall ? quad.getDirection() : null).add(pillarQuad);
+                    if (!tall && quad.getDirection() == Direction.UP)
+                    {
+                        BakedQuadTransformer.setQuadPosInFacingDir(pillarQuad, 14F / 16F);
+                        quadMap.get(null).add(pillarQuad);
+                    }
+                    else
+                    {
+                        quadMap.get(quad.getDirection()).add(pillarQuad);
+                    }
                 }
             }
             else if (quad.getDirection() == Direction.NORTH) { buildSmallCenterSide(quadMap.get(null), quad, north, tall); }
