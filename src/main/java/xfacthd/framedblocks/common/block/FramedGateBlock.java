@@ -56,6 +56,13 @@ public class FramedGateBlock extends FenceGateBlock implements IFramedBlock
     }
 
     @Override
+    public BlockState updateShape(BlockState state, Direction facing, BlockState facingState, LevelAccessor level, BlockPos currentPos, BlockPos facingPos)
+    {
+        updateCullingDeferred(level, currentPos, facingState, facing);
+        return super.updateShape(state, facing, facingState, level, currentPos, facingPos);
+    }
+
+    @Override
     public int getLightEmission(BlockState state, BlockGetter level, BlockPos pos) { return getLight(level, pos); }
 
     @Override

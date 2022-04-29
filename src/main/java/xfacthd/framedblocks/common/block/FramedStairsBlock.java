@@ -95,6 +95,13 @@ public class FramedStairsBlock extends StairBlock implements IFramedBlock
     }
 
     @Override
+    public BlockState updateShape(BlockState state, Direction facing, BlockState facingState, LevelAccessor level, BlockPos currentPos, BlockPos facingPos)
+    {
+        updateCullingDeferred(level, currentPos, facingState, null);
+        return super.updateShape(state, facing, facingState, level, currentPos, facingPos);
+    }
+
+    @Override
     public boolean useShapeForLightOcclusion(BlockState state) { return useCamoOcclusionShapeForLightOcclusion(state); }
 
     @Override

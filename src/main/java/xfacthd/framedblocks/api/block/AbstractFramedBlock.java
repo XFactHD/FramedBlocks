@@ -68,6 +68,7 @@ public abstract class AbstractFramedBlock extends Block implements IFramedBlock,
     @Override
     public BlockState updateShape(BlockState state, Direction facing, BlockState facingState, LevelAccessor level, BlockPos pos, BlockPos facingPos)
     {
+        updateCulling(level, pos, facingState, facing, false);
         if (isWaterLoggable() && state.getValue(BlockStateProperties.WATERLOGGED))
         {
             level.scheduleTick(pos, Fluids.WATER, Fluids.WATER.getTickDelay(level));

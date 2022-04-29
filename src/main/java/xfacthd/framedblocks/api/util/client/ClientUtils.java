@@ -1,6 +1,7 @@
 package xfacthd.framedblocks.api.util.client;
 
 import com.google.common.base.Suppliers;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.block.BlockModelShaper;
 import net.minecraft.client.renderer.chunk.RenderChunkRegion;
 import net.minecraft.client.resources.model.BakedModel;
@@ -153,4 +154,6 @@ public class ClientUtils
             return false;
         }
     });
+
+    public static void enqueueClientTask(Runnable task) { Minecraft.getInstance().tell(task); }
 }

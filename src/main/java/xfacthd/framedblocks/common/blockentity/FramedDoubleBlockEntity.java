@@ -173,8 +173,6 @@ public abstract class FramedDoubleBlockEntity extends FramedBlockEntity
         {
             camoState = newState;
 
-            modelData.setLevel(level);
-            modelData.setPos(worldPosition);
             modelData.setCamoState(camoState);
 
             needUpdate = true;
@@ -206,8 +204,6 @@ public abstract class FramedDoubleBlockEntity extends FramedBlockEntity
         {
             camoState = newState;
 
-            modelData.setLevel(level);
-            modelData.setPos(worldPosition);
             modelData.setCamoState(camoState);
         }
     }

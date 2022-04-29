@@ -12,7 +12,6 @@ import net.minecraft.client.resources.model.BakedModel;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.world.level.BlockAndTintGetter;
-import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.LiquidBlock;
 import net.minecraft.world.level.block.state.BlockState;
@@ -52,12 +51,7 @@ public abstract class FramedBlockModel extends BakedModelProxy
 
         if (extraData instanceof FramedBlockData data && layer != null)
         {
-            if (side != null && ((IFramedBlock)state.getBlock()).isSideHidden(
-                    data.getLevel(),
-                    data.getPos(),
-                    state,
-                    side
-            )) { return Collections.emptyList(); }
+            if (side != null && data.isSideHidden(side)) { return Collections.emptyList(); }
 
             camoState = data.getCamoState();
             if (camoState != null && !camoState.isAir())
@@ -189,14 +183,13 @@ public abstract class FramedBlockModel extends BakedModelProxy
     @Override
     public IModelData getModelData(@Nonnull BlockAndTintGetter world, @Nonnull BlockPos pos, @Nonnull BlockState state, @Nonnull IModelData tileData)
     {
-        if (tileData instanceof FramedBlockData data && data.isGhostData())
+        boolean ghostData = tileData instanceof FramedBlockData data && data.isGhostData();
+        if (!ghostData && world.getBlockEntity(pos) instanceof FramedBlockEntity be)
         {
-            return tileData;
+            tileData = be.getModelData();
         }
-        if (world.getBlockEntity(pos) instanceof FramedBlockEntity be)
-        {
-            return be.getModelData();
-        }
+        tileData.setData(FramedBlockData.LEVEL, world);
+        tileData.setData(FramedBlockData.POS, pos);
         return tileData;
     }
 
@@ -233,7 +226,7 @@ public abstract class FramedBlockModel extends BakedModelProxy
 
     private static IModelData getCamoData(BakedModel model, BlockState state, IModelData data)
     {
-        Level level = data.getData(FramedBlockData.LEVEL);
+        BlockAndTintGetter level = data.getData(FramedBlockData.LEVEL);
         BlockPos pos = data.getData(FramedBlockData.POS);
 
         if (level == null || pos == null || pos.equals(BlockPos.ZERO)) { return data; }

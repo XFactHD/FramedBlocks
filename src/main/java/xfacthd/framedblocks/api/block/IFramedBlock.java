@@ -24,6 +24,7 @@ import net.minecraft.world.phys.shapes.*;
 import xfacthd.framedblocks.api.FramedBlocksAPI;
 import xfacthd.framedblocks.api.type.IBlockType;
 import xfacthd.framedblocks.api.util.*;
+import xfacthd.framedblocks.api.util.client.ClientUtils;
 import xfacthd.framedblocks.common.util.ServerConfig;
 
 import javax.annotation.Nonnull;
@@ -321,6 +322,32 @@ public interface IFramedBlock extends EntityBlock//, IFacade
             return be.isSolidSide(dir) && !be.isIntangible(null);
         }
         return false;
+    }
+
+    default void onStateChangeClient(Level level, BlockPos pos, BlockState state) { }
+
+    default void updateCullingDeferred(LevelAccessor level, BlockPos pos, BlockState neighborState, Direction side)
+    {
+        if (level.isClientSide())
+        {
+            BlockPos imPos = pos.immutable();
+            ClientUtils.enqueueClientTask(() -> updateCulling(level, imPos, neighborState, side, true));
+        }
+    }
+
+    default void updateCulling(LevelAccessor level, BlockPos pos, BlockState neighborState, Direction side, boolean rerender)
+    {
+        if (level.isClientSide() && (side == null || !(neighborState.getBlock() instanceof IFramedBlock)) && level.getBlockEntity(pos) instanceof FramedBlockEntity be)
+        {
+            if (side != null)
+            {
+                be.updateCulling(side, rerender);
+            }
+            else
+            {
+                be.updateCulling(true, rerender);
+            }
+        }
     }
 
     default Optional<MutableComponent> printCamoBlock(CompoundTag beTag)

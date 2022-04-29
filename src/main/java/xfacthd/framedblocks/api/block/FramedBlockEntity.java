@@ -28,6 +28,7 @@ import net.minecraftforge.fluids.capability.*;
 import xfacthd.framedblocks.FramedBlocks;
 import xfacthd.framedblocks.api.FramedBlocksAPI;
 import xfacthd.framedblocks.api.util.*;
+import xfacthd.framedblocks.api.util.client.ClientUtils;
 import xfacthd.framedblocks.common.FBContent;
 import xfacthd.framedblocks.common.util.ServerConfig;
 
@@ -38,6 +39,7 @@ public class FramedBlockEntity extends BlockEntity
 {
     public static final TranslatableComponent MSG_BLACKLISTED = Utils.translate("msg", "blacklisted");
     public static final TranslatableComponent MSG_BLOCK_ENTITY = Utils.translate("msg", "block_entity");
+    private static final Direction[] DIRECTIONS = Direction.values();
 
     private final FramedBlockData modelData = new FramedBlockData(false);
     private ItemStack camoStack = ItemStack.EMPTY;
@@ -435,6 +437,42 @@ public class FramedBlockEntity extends BlockEntity
         return changed;
     }
 
+    @SuppressWarnings("ConstantConditions")
+    public final void updateCulling(boolean neighbors, boolean rerender)
+    {
+        boolean changed = false;
+        for (Direction dir : DIRECTIONS)
+        {
+            changed |= updateCulling(dir, false);
+            if (neighbors && level.getBlockEntity(worldPosition.relative(dir)) instanceof FramedBlockEntity be)
+            {
+                be.updateCulling(dir.getOpposite(), true);
+            }
+        }
+
+        if (rerender && changed)
+        {
+            level.sendBlockUpdated(worldPosition, getBlockState(), getBlockState(), Block.UPDATE_ALL);
+        }
+    }
+
+    public final boolean updateCulling(Direction side, boolean rerender)
+    {
+        boolean wasHidden = modelData.isSideHidden(side);
+        boolean hidden = getBlock().isSideHidden(level, worldPosition, getBlockState(), side);
+        if (wasHidden != hidden)
+        {
+            modelData.setSideHidden(side, hidden);
+            if (rerender)
+            {
+                //noinspection ConstantConditions
+                level.sendBlockUpdated(worldPosition, getBlockState(), getBlockState(), Block.UPDATE_ALL);
+            }
+            return true;
+        }
+        return false;
+    }
+
     public float getCamoExplosionResistance(Explosion explosion)
     {
         return camoState.getExplosionResistance(level, worldPosition, explosion);
@@ -567,6 +605,7 @@ public class FramedBlockEntity extends BlockEntity
         camoStack = ItemStack.of(nbt.getCompound("camo_stack"));
 
         boolean needUpdate = false;
+        boolean needCullingUpdate = false;
         BlockState newState = NbtUtils.readBlockState(nbt.getCompound("camo_state"));
         if (newState != camoState)
         {
@@ -574,11 +613,10 @@ public class FramedBlockEntity extends BlockEntity
             camoState = newState;
             if (oldLight != getLightValue()) { doLightUpdate(); }
 
-            modelData.setLevel(level);
-            modelData.setPos(worldPosition);
             modelData.setCamoState(camoState);
 
             needUpdate = true;
+            needCullingUpdate = true;
         }
 
         boolean newGlow = nbt.getBoolean("glowing");
@@ -595,6 +633,12 @@ public class FramedBlockEntity extends BlockEntity
         {
             intangible = newIntangible;
             needUpdate = true;
+            needCullingUpdate = true;
+        }
+
+        if (needCullingUpdate)
+        {
+            updateCulling(true, false);
         }
 
         return needUpdate;
@@ -623,9 +667,9 @@ public class FramedBlockEntity extends BlockEntity
         {
             camoState = newState;
 
-            modelData.setLevel(level);
-            modelData.setPos(worldPosition);
             modelData.setCamoState(camoState);
+
+            ClientUtils.enqueueClientTask(() -> updateCulling(true, true));
         }
 
         glowing = nbt.getBoolean("glowing");

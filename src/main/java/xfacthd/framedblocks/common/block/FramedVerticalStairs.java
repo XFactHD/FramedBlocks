@@ -49,6 +49,8 @@ public class FramedVerticalStairs extends FramedBlock
     @Override
     public BlockState updateShape(BlockState state, Direction facing, BlockState facingState, LevelAccessor level, BlockPos pos, BlockPos facingPos)
     {
+        updateCullingDeferred(level, pos, facingState, null);
+
         Direction dir = state.getValue(PropertyHolder.FACING_HOR);
         if (facing == dir.getOpposite() || facing == dir.getClockWise()) { return state; }
 

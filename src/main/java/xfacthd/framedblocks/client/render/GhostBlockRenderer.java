@@ -188,13 +188,6 @@ public class GhostBlockRenderer
 
     private static void doRenderGhostBlock(PoseStack mstack, MultiBufferSource buffers, BlockPos renderPos, BlockState renderState, BlockState camoState, BlockState camoStateTwo)
     {
-        GHOST_MODEL_DATA.setLevel(mc().level);
-        GHOST_MODEL_DATA.setPos(renderPos);
-        GHOST_MODEL_DATA_LEFT.setLevel(mc().level);
-        GHOST_MODEL_DATA_LEFT.setPos(renderPos);
-        GHOST_MODEL_DATA_RIGHT.setLevel(mc().level);
-        GHOST_MODEL_DATA_RIGHT.setPos(renderPos);
-
         Vec3 offset = Vec3.atLowerCornerOf(renderPos).subtract(mc().gameRenderer.getMainCamera().getPosition());
         VertexConsumer builder = new GhostVertexConsumer(buffers.getBuffer(RenderType.translucent()), 0xAA);
 
