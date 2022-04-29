@@ -5,10 +5,9 @@ import net.minecraft.core.Direction;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.*;
+import xfacthd.framedblocks.api.block.IFramedBlock;
 import xfacthd.framedblocks.api.util.*;
-import xfacthd.framedblocks.common.FBContent;
-import xfacthd.framedblocks.common.data.PropertyHolder;
-import xfacthd.framedblocks.common.data.StairsType;
+import xfacthd.framedblocks.common.data.*;
 
 public class VerticalStairsSkipPredicate implements SideSkipPredicate
 {
@@ -17,44 +16,24 @@ public class VerticalStairsSkipPredicate implements SideSkipPredicate
     {
         if (SideSkipPredicate.CTM.test(level, pos, state, adjState, side)) { return true; }
 
-        Direction dir = state.getValue(PropertyHolder.FACING_HOR);
-        StairsType type = state.getValue(PropertyHolder.STAIRS_TYPE);
+        if (adjState.getBlock() instanceof IFramedBlock block && block.getBlockType() instanceof BlockType blockType)
+        {
+            Direction dir = state.getValue(PropertyHolder.FACING_HOR);
+            StairsType type = state.getValue(PropertyHolder.STAIRS_TYPE);
 
-        if (adjState.getBlock() == FBContent.blockFramedVerticalStairs.get())
-        {
-            return testAgainstVerticalStairs(level, pos, dir, type, adjState, side);
-        }
-        else if (adjState.getBlock() == FBContent.blockFramedStairs.get())
-        {
-            return testAgainstStairs(level, pos, dir, type, adjState, side);
-        }
-        else if (adjState.getBlock() == FBContent.blockFramedPanel.get())
-        {
-            return testAgainstPanel(level, pos, dir, type, adjState, side);
-        }
-        else if (adjState.getBlock() == FBContent.blockFramedDoublePanel.get())
-        {
-            return testAgainstDoublePanel(level, pos, dir, type, adjState, side);
-        }
-        else if (adjState.getBlock() == FBContent.blockFramedSlabCorner.get())
-        {
-            return testAgainstCorner(level, pos, dir, type, adjState, side);
-        }
-        else if (adjState.getBlock() == FBContent.blockFramedCornerPillar.get())
-        {
-            return testAgainstPillar(level, pos, dir, type, adjState, side);
-        }
-        else if (adjState.getBlock() == FBContent.blockFramedSlabEdge.get() && type != StairsType.VERTICAL && !Utils.isY(side))
-        {
-            return testAgainstEdge(level, pos, dir, type, adjState, side);
-        }
-        else if (adjState.is(FBContent.blockFramedHalfStairs.get()))
-        {
-            return testAgainstHalfStairs(level, pos, dir, type, adjState, side);
-        }
-        else if (adjState.is(FBContent.blockFramedVerticalHalfStairs.get()))
-        {
-            return testAgainstVerticalHalfStairs(level, pos, dir, adjState, side);
+            return switch (blockType)
+            {
+                case FRAMED_VERTICAL_STAIRS -> testAgainstVerticalStairs(level, pos, dir, type, adjState, side);
+                case FRAMED_STAIRS -> testAgainstStairs(level, pos, dir, type, adjState, side);
+                case FRAMED_PANEL -> testAgainstPanel(level, pos, dir, type, adjState, side);
+                case FRAMED_DOUBLE_PANEL -> testAgainstDoublePanel(level, pos, dir, type, adjState, side);
+                case FRAMED_SLAB_CORNER -> testAgainstCorner(level, pos, dir, type, adjState, side);
+                case FRAMED_CORNER_PILLAR -> testAgainstPillar(level, pos, dir, type, adjState, side);
+                case FRAMED_SLAB_EDGE -> testAgainstEdge(level, pos, dir, type, adjState, side);
+                case FRAMED_HALF_STAIRS -> testAgainstHalfStairs(level, pos, dir, type, adjState, side);
+                case FRAMED_VERTICAL_HALF_STAIRS -> testAgainstVerticalHalfStairs(level, pos, dir, adjState, side);
+                default -> false;
+            };
         }
 
         return false;
@@ -165,6 +144,8 @@ public class VerticalStairsSkipPredicate implements SideSkipPredicate
 
     private static boolean testAgainstEdge(BlockGetter level, BlockPos pos, Direction dir, StairsType type, BlockState adjState, Direction side)
     {
+        if (type == StairsType.VERTICAL || Utils.isY(side)) { return false; }
+
         Direction adjDir = adjState.getValue(PropertyHolder.FACING_HOR);
         boolean adjTop = adjState.getValue(PropertyHolder.TOP);
 

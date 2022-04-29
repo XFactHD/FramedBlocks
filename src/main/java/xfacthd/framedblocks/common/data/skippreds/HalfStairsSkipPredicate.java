@@ -7,64 +7,50 @@ import net.minecraft.world.level.block.StairBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.Half;
 import net.minecraft.world.level.block.state.properties.StairsShape;
+import xfacthd.framedblocks.api.block.IFramedBlock;
 import xfacthd.framedblocks.api.util.*;
-import xfacthd.framedblocks.common.FBContent;
-import xfacthd.framedblocks.common.data.PropertyHolder;
-import xfacthd.framedblocks.common.data.StairsType;
+import xfacthd.framedblocks.common.data.*;
 
 public class HalfStairsSkipPredicate implements SideSkipPredicate
 {
     @Override
     public boolean test(BlockGetter level, BlockPos pos, BlockState state, BlockState adjState, Direction side)
     {
-        Direction dir = state.getValue(FramedProperties.FACING_HOR);
-        boolean top = state.getValue(FramedProperties.TOP);
-        boolean right = state.getValue(PropertyHolder.RIGHT);
-
-        Direction stairFace = right ? dir.getClockWise() : dir.getCounterClockWise();
-        Direction baseFace = top ? Direction.UP : Direction.DOWN;
-
-        if (adjState.is(FBContent.blockFramedHalfStairs.get()))
+        if (adjState.getBlock() instanceof IFramedBlock block && block.getBlockType() instanceof BlockType type)
         {
-            return testAgainstHalfStairs(level, pos, dir, top, right, stairFace, adjState, side);
-        }
+            Direction dir = state.getValue(FramedProperties.FACING_HOR);
+            boolean top = state.getValue(FramedProperties.TOP);
+            boolean right = state.getValue(PropertyHolder.RIGHT);
 
-        if (side == stairFace)
-        {
-            if (adjState.is(FBContent.blockFramedStairs.get()))
+            Direction stairFace = right ? dir.getClockWise() : dir.getCounterClockWise();
+            Direction baseFace = top ? Direction.UP : Direction.DOWN;
+
+            if (type == BlockType.FRAMED_HALF_STAIRS)
             {
-                return testAgainstStairs(level, pos, top, adjState, side);
+                return testAgainstHalfStairs(level, pos, dir, top, right, stairFace, adjState, side);
             }
-            else if (adjState.is(FBContent.blockFramedVerticalStairs.get()))
+
+            if (side == stairFace)
             {
-                return testAgainstVerticalStairs(level, pos, dir, top, right, adjState, side);
+                return switch (type)
+                {
+                    case FRAMED_STAIRS -> testAgainstStairs(level, pos, top, adjState, side);
+                    case FRAMED_VERTICAL_STAIRS -> testAgainstVerticalStairs(level, pos, dir, top, right, adjState, side);
+                    default -> false;
+                };
             }
-        }
-        else
-        {
-            if (adjState.is(FBContent.blockFramedSlabEdge.get()))
+            else
             {
-                return testAgainstSlabEdge(level, pos, dir, top, right, baseFace, adjState, side);
-            }
-            else if (adjState.is(FBContent.blockFramedCornerPillar.get()))
-            {
-                return testAgainstCornerPillar(level, pos, dir, right, baseFace, adjState, side);
-            }
-            else if (adjState.is(FBContent.blockFramedSlabCorner.get()))
-            {
-                return testAgainstSlabCorner(level, pos, dir, top, right, baseFace, adjState, side);
-            }
-            else if (adjState.is(FBContent.blockFramedPanel.get()))
-            {
-                return testAgainstPanel(level, pos, dir, right, baseFace, adjState, side);
-            }
-            else if (adjState.is(FBContent.blockFramedDoublePanel.get()))
-            {
-                return testAgainstDoublePanel(level, pos, dir, stairFace, baseFace, adjState, side);
-            }
-            else if (adjState.is(FBContent.blockFramedVerticalHalfStairs.get()))
-            {
-                return testAgainstVerticalHalfStairs(level, pos, dir, top, right, adjState, side);
+                return switch (type)
+                {
+                    case FRAMED_SLAB_EDGE -> testAgainstSlabEdge(level, pos, dir, top, right, baseFace, adjState, side);
+                    case FRAMED_CORNER_PILLAR -> testAgainstCornerPillar(level, pos, dir, right, baseFace, adjState, side);
+                    case FRAMED_SLAB_CORNER -> testAgainstSlabCorner(level, pos, dir, top, right, baseFace, adjState, side);
+                    case FRAMED_PANEL -> testAgainstPanel(level, pos, dir, right, baseFace, adjState, side);
+                    case FRAMED_DOUBLE_PANEL -> testAgainstDoublePanel(level, pos, dir, stairFace, baseFace, adjState, side);
+                    case FRAMED_VERTICAL_HALF_STAIRS -> testAgainstVerticalHalfStairs(level, pos, dir, top, right, adjState, side);
+                    default -> false;
+                };
             }
         }
 

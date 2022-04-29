@@ -5,51 +5,30 @@ import net.minecraft.core.Direction;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.*;
+import xfacthd.framedblocks.api.block.IFramedBlock;
 import xfacthd.framedblocks.api.util.*;
-import xfacthd.framedblocks.common.FBContent;
-import xfacthd.framedblocks.common.data.PropertyHolder;
-import xfacthd.framedblocks.common.data.StairsType;
+import xfacthd.framedblocks.common.data.*;
 
 public class CornerPillarSkipPredicate implements SideSkipPredicate
 {
     @Override
     public boolean test(BlockGetter level, BlockPos pos, BlockState state, BlockState adjState, Direction side)
     {
-        Direction dir = state.getValue(PropertyHolder.FACING_HOR);
-
-        if (adjState.getBlock() == FBContent.blockFramedPanel.get())
+        if (adjState.getBlock() instanceof IFramedBlock block && block.getBlockType() instanceof BlockType type)
         {
-            return testAgainstPanel(level, pos, dir, adjState, side);
-        }
+            Direction dir = state.getValue(PropertyHolder.FACING_HOR);
 
-        if (adjState.getBlock() == FBContent.blockFramedCornerPillar.get())
-        {
-            return testAgainstPillar(level, pos, dir, adjState, side);
-        }
-
-        if (adjState.getBlock() == FBContent.blockFramedSlabCorner.get())
-        {
-            return testAgainstCorner(level, pos, dir, adjState, side);
-        }
-
-        if (adjState.getBlock() == FBContent.blockFramedDoublePanel.get())
-        {
-            return testAgainstDoublePanel(level, pos, dir, adjState, side);
-        }
-
-        if (adjState.getBlock() == FBContent.blockFramedStairs.get() && Utils.isY(side))
-        {
-            return testAgainstStairs(level, pos, dir, adjState, side);
-        }
-
-        if (adjState.getBlock() == FBContent.blockFramedVerticalStairs.get())
-        {
-            return testAgainstVerticalStairs(level, pos, dir, adjState, side);
-        }
-
-        if (adjState.is(FBContent.blockFramedHalfStairs.get()))
-        {
-            return testAgainsHalfStairs(level, pos, dir, adjState, side);
+            return switch (type)
+            {
+                case FRAMED_PANEL -> testAgainstPanel(level, pos, dir, adjState, side);
+                case FRAMED_CORNER_PILLAR -> testAgainstPillar(level, pos, dir, adjState, side);
+                case FRAMED_SLAB_CORNER -> testAgainstCorner(level, pos, dir, adjState, side);
+                case FRAMED_DOUBLE_PANEL -> testAgainstDoublePanel(level, pos, dir, adjState, side);
+                case FRAMED_STAIRS -> testAgainstStairs(level, pos, dir, adjState, side);
+                case FRAMED_VERTICAL_STAIRS -> testAgainstVerticalStairs(level, pos, dir, adjState, side);
+                case FRAMED_VERTICAL_HALF_STAIRS -> testAgainsHalfStairs(level, pos, dir, adjState, side);
+                default -> false;
+            };
         }
 
         return false;

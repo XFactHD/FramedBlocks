@@ -5,7 +5,6 @@ import net.minecraft.core.Direction;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.block.state.BlockState;
 import xfacthd.framedblocks.api.block.IFramedBlock;
-import xfacthd.framedblocks.api.type.IBlockType;
 import xfacthd.framedblocks.common.data.*;
 import xfacthd.framedblocks.api.util.SideSkipPredicate;
 import xfacthd.framedblocks.common.util.FramedUtils;
@@ -16,43 +15,24 @@ public class InnerThreewayCornerSkipPredicate implements SideSkipPredicate
     public boolean test(BlockGetter level, BlockPos pos, BlockState state, BlockState adjState, Direction side)
     {
         if (SideSkipPredicate.CTM.test(level, pos, state, adjState, side)) { return true; }
-        if (!(adjState.getBlock() instanceof IFramedBlock block)) { return false; }
 
-        IBlockType adjBlock = block.getBlockType();
-        Direction dir = state.getValue(PropertyHolder.FACING_HOR);
-        boolean top = state.getValue(PropertyHolder.TOP);
+        if (adjState.getBlock() instanceof IFramedBlock block && block.getBlockType() instanceof BlockType type)
+        {
+            Direction dir = state.getValue(PropertyHolder.FACING_HOR);
+            boolean top = state.getValue(PropertyHolder.TOP);
 
-        if (adjBlock == BlockType.FRAMED_INNER_PRISM_CORNER || adjBlock == BlockType.FRAMED_INNER_THREEWAY_CORNER)
-        {
-            return testAgainstInnerThreewayCorner(level, pos, dir, top, adjState, side);
-        }
-        else if (adjBlock == BlockType.FRAMED_PRISM_CORNER || adjBlock == BlockType.FRAMED_THREEWAY_CORNER)
-        {
-            return testAgainstThreewayCorner(level, pos, dir, top, adjState, side);
-        }
-        else if (adjBlock == BlockType.FRAMED_DOUBLE_PRISM_CORNER || adjBlock == BlockType.FRAMED_DOUBLE_THREEWAY_CORNER)
-        {
-            return testAgainstDoubleThreewayCorner(level, pos, dir, top, adjState, side);
-        }
-        else if (adjBlock == BlockType.FRAMED_SLOPE || adjBlock == BlockType.FRAMED_RAIL_SLOPE)
-        {
-            return testAgainstSlope(level, pos, dir, top, adjState, side);
-        }
-        else if (adjBlock == BlockType.FRAMED_DOUBLE_SLOPE)
-        {
-            return testAgainstDoubleSlope(level, pos, dir, top, adjState, side);
-        }
-        else if (adjBlock == BlockType.FRAMED_CORNER_SLOPE)
-        {
-            return testAgainstCorner(level, pos, dir, top, adjState, side);
-        }
-        else if (adjBlock == BlockType.FRAMED_INNER_CORNER_SLOPE)
-        {
-            return testAgainstInnerCorner(level, pos, dir, top, adjState, side);
-        }
-        else if (adjBlock == BlockType.FRAMED_DOUBLE_CORNER)
-        {
-            return testAgainstDoubleCorner(level, pos, dir, top, adjState, side);
+            return switch (type)
+            {
+                case FRAMED_INNER_PRISM_CORNER, FRAMED_INNER_THREEWAY_CORNER -> testAgainstInnerThreewayCorner(level, pos, dir, top, adjState, side);
+                case FRAMED_PRISM_CORNER, FRAMED_THREEWAY_CORNER -> testAgainstThreewayCorner(level, pos, dir, top, adjState, side);
+                case FRAMED_DOUBLE_PRISM_CORNER, FRAMED_DOUBLE_THREEWAY_CORNER -> testAgainstDoubleThreewayCorner(level, pos, dir, top, adjState, side);
+                case FRAMED_SLOPE, FRAMED_RAIL_SLOPE -> testAgainstSlope(level, pos, dir, top, adjState, side);
+                case FRAMED_DOUBLE_SLOPE -> testAgainstDoubleSlope(level, pos, dir, top, adjState, side);
+                case FRAMED_CORNER_SLOPE -> testAgainstCorner(level, pos, dir, top, adjState, side);
+                case FRAMED_INNER_CORNER_SLOPE -> testAgainstInnerCorner(level, pos, dir, top, adjState, side);
+                case FRAMED_DOUBLE_CORNER -> testAgainstDoubleCorner(level, pos, dir, top, adjState, side);
+                default -> false;
+            };
         }
 
         return false;
