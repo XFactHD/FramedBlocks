@@ -229,9 +229,17 @@ public class StairsSkipPredicate implements SideSkipPredicate
         Direction adjDir = adjState.getValue(FramedProperties.FACING_HOR);
         boolean adjTop = adjState.getValue(FramedProperties.TOP);
 
-        if (!isSlabSide(shape, dir, side) || adjTop != top) { return false; }
+        if (adjTop != top) { return false; }
 
-        if (adjDir == side.getOpposite() || adjDir == side.getCounterClockWise())
+        if ((side == Direction.DOWN && top) || (side == Direction.UP && !top))
+        {
+            if ((shape == StairsShape.INNER_LEFT && adjDir == dir) || (shape == StairsShape.INNER_RIGHT && adjDir == dir.getClockWise()))
+            {
+                return SideSkipPredicate.compareState(level, pos, side);
+            }
+        }
+
+        if (isSlabSide(shape, dir, side) && (adjDir == side.getOpposite() || adjDir == side.getCounterClockWise()))
         {
             return SideSkipPredicate.compareState(level, pos, side);
         }

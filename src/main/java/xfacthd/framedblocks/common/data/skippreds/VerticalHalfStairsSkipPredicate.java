@@ -142,12 +142,16 @@ public class VerticalHalfStairsSkipPredicate implements SideSkipPredicate
         boolean adjTop = adjState.getValue(StairBlock.HALF) == Half.TOP;
         StairsShape adjShape = adjState.getValue(StairBlock.SHAPE);
 
-        if (adjTop != top || !StairsSkipPredicate.isSlabSide(adjShape, adjDir, side.getOpposite()))
-        {
-            return false;
-        }
+        if (adjTop != top) { return false; }
 
-        if (side == dir || side == dir.getCounterClockWise())
+        if ((side == Direction.UP && top) || (side == Direction.DOWN && !top))
+        {
+            if ((adjDir == dir && adjShape == StairsShape.INNER_LEFT) || (adjDir == dir.getCounterClockWise() && adjShape == StairsShape.INNER_RIGHT))
+            {
+                return SideSkipPredicate.compareState(level, pos, side);
+            }
+        }
+        else if (StairsSkipPredicate.isSlabSide(adjShape, adjDir, side.getOpposite()) && (side == dir || side == dir.getCounterClockWise()))
         {
             return SideSkipPredicate.compareState(level, pos, side);
         }
