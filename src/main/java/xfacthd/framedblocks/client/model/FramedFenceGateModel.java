@@ -205,7 +205,7 @@ public class FramedFenceGateModel extends FramedBlockModel
                 BakedQuad topSideQuad = ModelUtils.duplicateQuad(sideQuad);
                 if (BakedQuadTransformer.createHorizontalSideQuad(topSideQuad, true, 4F/16F + yOff))
                 {
-                    quadMap.get(quad.getDirection()).add(topSideQuad);
+                    quadMap.get(null).add(topSideQuad);
 
                     topSideQuad = ModelUtils.duplicateQuad(topSideQuad);
                     BakedQuadTransformer.setQuadPosInFacingDir(topSideQuad, 2F/16F);
@@ -215,7 +215,7 @@ public class FramedFenceGateModel extends FramedBlockModel
                 BakedQuad botSideQuad = ModelUtils.duplicateQuad(sideQuad);
                 if (BakedQuadTransformer.createHorizontalSideQuad(botSideQuad, false, 9F/16F - yOff))
                 {
-                    quadMap.get(quad.getDirection()).add(botSideQuad);
+                    quadMap.get(null).add(botSideQuad);
 
                     botSideQuad = ModelUtils.duplicateQuad(botSideQuad);
                     BakedQuadTransformer.setQuadPosInFacingDir(botSideQuad, 2F/16F);
@@ -227,7 +227,7 @@ public class FramedFenceGateModel extends FramedBlockModel
                     BakedQuadTransformer.createVerticalSideQuad(sideQuad, dir.getOpposite(), 3F/16F)
                 )
                 {
-                    quadMap.get(quad.getDirection()).add(sideQuad);
+                    quadMap.get(null).add(sideQuad);
 
                     sideQuad = ModelUtils.duplicateQuad(sideQuad);
                     BakedQuadTransformer.setQuadPosInFacingDir(sideQuad, 2F/16F);
