@@ -83,9 +83,10 @@ public class FramedTrapDoorBlock extends TrapDoorBlock implements IFramedBlock
     }
 
     @Override
-    public void onStateChangeClient(Level level, BlockPos pos, BlockState state)
+    public void onStateChangeClient(Level level, BlockPos pos, BlockState oldState, BlockState newState)
     {
-        if (level.getBlockEntity(pos) instanceof FramedBlockEntity be)
+        // Only check here when the block didn't change (i.e. by opening the door), everything else is handled in the BE packet handlers
+        if (oldState.getBlock() == newState.getBlock() && level.getBlockEntity(pos) instanceof FramedBlockEntity be)
         {
             be.updateCulling(false, false);
         }

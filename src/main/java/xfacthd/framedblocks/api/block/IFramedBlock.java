@@ -324,7 +324,7 @@ public interface IFramedBlock extends EntityBlock//, IFacade
         return false;
     }
 
-    default void onStateChangeClient(Level level, BlockPos pos, BlockState state) { }
+    default void onStateChangeClient(Level level, BlockPos pos, BlockState oldState, BlockState newState) { }
 
     default void updateCullingDeferred(LevelAccessor level, BlockPos pos, BlockState neighborState, Direction side)
     {

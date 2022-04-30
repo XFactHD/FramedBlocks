@@ -30,7 +30,7 @@ public abstract class MixinLevel
     {
         if (isClientSide() && pState.getBlock() instanceof IFramedBlock block)
         {
-            block.onStateChangeClient(levelchunk.getLevel(), pPos, pState);
+            block.onStateChangeClient(levelchunk.getLevel(), pPos, blockstate, pState);
         }
     }
 }
