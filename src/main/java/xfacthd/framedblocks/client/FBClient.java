@@ -135,7 +135,8 @@ public class FBClient
     @SubscribeEvent
     public static void onModelRegistry(final ModelRegistryEvent event)
     {
-        ModelLoader.addSpecialModel(FramedBouncyCubeModel.FRAME_LOCATION);
+        ModelLoader.addSpecialModel(FramedMarkedCubeModel.SLIME_FRAME_LOCATION);
+        ModelLoader.addSpecialModel(FramedMarkedCubeModel.REDSTONE_FRAME_LOCATION);
     }
 
     @SubscribeEvent
@@ -197,8 +198,9 @@ public class FBClient
         replaceModels(FBContent.blockFramedPost, registry, FramedPillarModel::new, ignoreWaterlogged);
         replaceModels(FBContent.blockFramedCollapsibleBlock, registry, FramedCollapsibleBlockModel::new, ignoreWaterlogged);
         replaceModels(FBContent.blockFramedHalfStairs, registry, FramedHalfStairsModel::new, ignoreWaterlogged);
-        replaceModels(FBContent.blockFramedBouncyCube, registry, (state, baseModel) -> new FramedBouncyCubeModel(state, baseModel, registry), ignoreSolid);
+        replaceModels(FBContent.blockFramedBouncyCube, registry, (state, baseModel) -> FramedMarkedCubeModel.slime(state, baseModel, registry), ignoreSolid);
         replaceModels(FBContent.blockFramedSecretStorage, registry, FramedCubeModel::new, ignoreSolid);
+        replaceModels(FBContent.blockFramedRedstoneBlock, registry, (state, baseModel) -> FramedMarkedCubeModel.redstone(state, baseModel, registry), ignoreSolid);
         replaceModels(FBContent.blockFramedPrism, registry, FramedPrismModel::new, FramedPrismModel.itemSource(), ignoreDefault);
         replaceModels(FBContent.blockFramedSlopedPrism, registry, FramedSlopedPrismModel::new, FramedSlopedPrismModel.itemSource(), ignoreDefault);
         replaceModels(FBContent.blockFramedSlopeSlab, registry, FramedSlopeSlabModel::new, FramedSlopeSlabModel.itemSource(), ignoreDefault);

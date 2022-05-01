@@ -63,6 +63,7 @@ public enum BlockType
     FRAMED_HALF_STAIRS            (false, false, false,  true,  true,  true, CtmPredicate.FALSE, new HalfStairsSkipPredicate(), FramedHalfStairsBlock::generateShapes),
     FRAMED_BOUNCY_CUBE            ( true, false, false, false,  true, false, CtmPredicate.TRUE, SideSkipPredicate.CTM, VoxelShapes.block()),
     FRAMED_SECRET_STORAGE         ( true, false,  true, false,  true, false, CtmPredicate.TRUE, SideSkipPredicate.CTM, VoxelShapes.block()),
+    FRAMED_REDSTONE_BLOCK         ( true, false, false, false,  true,  true, CtmPredicate.TRUE, SideSkipPredicate.CTM, VoxelShapes.block()),
     FRAMED_PRISM                  ( true,  true, false,  true,  true,  true, FramedPrismBlock.CTM_PREDICATE, FramedPrismBlock.SKIP_PREDICATE, FramedPrismBlock::generateShapes),
     FRAMED_SLOPED_PRISM           ( true,  true, false,  true,  true,  true, FramedSlopedPrismBlock.CTM_PREDICATE, FramedSlopedPrismBlock.SKIP_PREDICATE, FramedSlopedPrismBlock::generateShapes),
     FRAMED_SLOPE_SLAB             ( true,  true, false,  true,  true,  true, FramedSlopeSlabBlock.CTM_PREDICATE, new SlopeSlabSkipPredicate(), FramedSlopeSlabBlock::generateShapes),
