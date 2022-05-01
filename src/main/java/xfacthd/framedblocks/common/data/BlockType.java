@@ -64,6 +64,7 @@ public enum BlockType implements IBlockType
     FRAMED_HALF_STAIRS            (false, false, false,  true,  true,  true, false, CtmPredicate.FALSE, new HalfStairsSkipPredicate(), FramedHalfStairsBlock::generateShapes),
     FRAMED_BOUNCY_CUBE            ( true, false, false, false,  true, false, false, CtmPredicate.TRUE, SideSkipPredicate.CTM, Shapes.block()),
     FRAMED_SECRET_STORAGE         ( true, false,  true, false,  true, false, false, CtmPredicate.TRUE, SideSkipPredicate.CTM, Shapes.block()),
+    FRAMED_REDSTONE_BLOCK         ( true, false, false, false,  true,  true, false, CtmPredicate.TRUE, SideSkipPredicate.CTM, Shapes.block()),
     FRAMED_PRISM                  ( true,  true, false,  true,  true,  true, false, FramedPrismBlock.CTM_PREDICATE, FramedPrismBlock.SKIP_PREDICATE, FramedPrismBlock::generateShapes),
     FRAMED_SLOPED_PRISM           ( true,  true, false,  true,  true,  true, false, FramedSlopedPrismBlock.CTM_PREDICATE, FramedSlopedPrismBlock.SKIP_PREDICATE, FramedSlopedPrismBlock::generateShapes),
     FRAMED_SLOPE_SLAB             ( true,  true, false,  true,  true,  true, false, FramedSlopeSlabBlock.CTM_PREDICATE, new SlopeSlabSkipPredicate(), FramedSlopeSlabBlock::generateShapes),

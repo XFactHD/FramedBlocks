@@ -57,6 +57,7 @@
     "framedblocks:framed_elevated_slope_slab",
     "framedblocks:framed_double_slope_slab",
     "framedblocks:framed_inv_double_slope_slab",
-    "framedblocks:framed_vertical_half_stairs"
+    "framedblocks:framed_vertical_half_stairs",
+    "framedblocks:framed_redstone_block"
   ]
 }

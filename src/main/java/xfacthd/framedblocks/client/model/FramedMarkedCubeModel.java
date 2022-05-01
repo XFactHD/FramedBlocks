@@ -12,15 +12,16 @@ import xfacthd.framedblocks.api.util.FramedBlockData;
 
 import java.util.*;
 
-public class FramedBouncyCubeModel extends FramedCubeModel
+public class FramedMarkedCubeModel extends FramedCubeModel
 {
-    public static final ResourceLocation FRAME_LOCATION = new ResourceLocation(FramedBlocks.MODID, "block/slime_frame");
+    public static final ResourceLocation SLIME_FRAME_LOCATION = new ResourceLocation(FramedBlocks.MODID, "block/slime_frame");
+    public static final ResourceLocation REDSTONE_FRAME_LOCATION = new ResourceLocation(FramedBlocks.MODID, "block/redstone_frame");
     private final BakedModel frameModel;
 
-    public FramedBouncyCubeModel(BlockState state, BakedModel baseModel, Map<ResourceLocation, BakedModel> registry)
+    public FramedMarkedCubeModel(BlockState state, BakedModel baseModel, Map<ResourceLocation, BakedModel> registry, ResourceLocation frameLocation)
     {
         super(state, baseModel);
-        frameModel = registry.get(FRAME_LOCATION);
+        frameModel = registry.get(frameLocation);
     }
 
     @Override
@@ -34,5 +35,17 @@ public class FramedBouncyCubeModel extends FramedCubeModel
         {
             quads.addAll(frameModel.getQuads(state, side, rand, data));
         }
+    }
+
+
+
+    public static FramedMarkedCubeModel slime(BlockState state, BakedModel baseModel, Map<ResourceLocation, BakedModel> registry)
+    {
+        return new FramedMarkedCubeModel(state, baseModel, registry, SLIME_FRAME_LOCATION);
+    }
+
+    public static FramedMarkedCubeModel redstone(BlockState state, BakedModel baseModel, Map<ResourceLocation, BakedModel> registry)
+    {
+        return new FramedMarkedCubeModel(state, baseModel, registry, REDSTONE_FRAME_LOCATION);
     }
 }

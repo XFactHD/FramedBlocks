@@ -1118,6 +1118,14 @@ public class OcclusionTests
         TestUtils.testDoubleBlockOccludesLightBelow(helper, state, List.of(Direction.UP, Direction.DOWN));
     }
 
+    @GameTest(template = "box_top", batch = "occlusion")
+    @TestedType(type = BlockType.FRAMED_REDSTONE_BLOCK)
+    public static void test_RedstoneBlock(GameTestHelper helper)
+    {
+        BlockState state = FBContent.blockFramedRedstoneBlock.get().defaultBlockState();
+        TestUtils.testBlockOccludesLightBelow(helper, state);
+    }
+
 
 
     private static boolean firstBatch = true;

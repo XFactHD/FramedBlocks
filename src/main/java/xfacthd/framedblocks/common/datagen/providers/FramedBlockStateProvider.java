@@ -86,6 +86,7 @@ public class FramedBlockStateProvider extends BlockStateProvider
         registerFramedCollapsibleBlock();
         registerFramedBouncyBlock();
         registerFramedSecretStorage();
+        registerFramedRedstoneBlock();
     }
 
     private void registerFramedSlab(ModelFile cube)
@@ -323,6 +324,24 @@ public class FramedBlockStateProvider extends BlockStateProvider
                 .texture("particle", TEXTURE);
 
         simpleBlockWithItem(FBContent.blockFramedSecretStorage, block);
+    }
+
+    private void registerFramedRedstoneBlock()
+    {
+        ModelFile block = models().withExistingParent("framed_redstone_block", "block/block")
+                .element()
+                .cube("#redstone")
+                .end()
+                .element()
+                .cube("#frame")
+                .end()
+                .texture("frame", TEXTURE)
+                .texture("redstone", mcLoc("block/redstone_block"))
+                .texture("particle", TEXTURE);
+
+        simpleBlockWithItem(FBContent.blockFramedRedstoneBlock, block);
+
+        models().cubeAll("redstone_frame", modLoc("block/redstone_frame"));
     }
 
 
