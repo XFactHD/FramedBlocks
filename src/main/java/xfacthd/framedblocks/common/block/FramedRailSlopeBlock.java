@@ -113,6 +113,9 @@ public class FramedRailSlopeBlock extends BaseRailBlock implements IFramedBlock
     public Property<RailShape> getShapeProperty() { return PropertyHolder.ASCENDING_RAIL_SHAPE; }
 
     @Override
+    public boolean isValidRailShape(RailShape shape) { return shape.isAscending(); }
+
+    @Override
     public final InteractionResult use(BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hit)
     {
         return handleUse(level, pos, player, hand, hit);

@@ -5,8 +5,7 @@
     "refmap": "framedblocks.refmap.json",
     "plugin": "xfacthd.framedblocks.common.util.FramedMixinConfigPlugin",
     "mixins": [
-        "MixinLevel",
-        "MixinRailShape"
+        "MixinLevel"
     ],
     "client": [
         "MixinLevelRenderer",
