@@ -97,8 +97,21 @@ public class FramedStairsBlock extends StairBlock implements IFramedBlock
     @Override
     public BlockState updateShape(BlockState state, Direction facing, BlockState facingState, LevelAccessor level, BlockPos currentPos, BlockPos facingPos)
     {
-        updateCullingDeferred(level, currentPos, facingState, null);
-        return super.updateShape(state, facing, facingState, level, currentPos, facingPos);
+        BlockState newState = super.updateShape(state, facing, facingState, level, currentPos, facingPos);
+        if (newState == state)
+        {
+            updateCulling(level, currentPos, facingState, facing, false);
+        }
+        return newState;
+    }
+
+    @Override
+    public void onStateChangeClient(Level level, BlockPos pos, BlockState oldState, BlockState newState)
+    {
+        if (needCullingUpdateAfterStateChange(level, oldState, newState) && level.getBlockEntity(pos) instanceof FramedBlockEntity be)
+        {
+            be.updateCulling(false, false);
+        }
     }
 
     @Override

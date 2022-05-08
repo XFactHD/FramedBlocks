@@ -78,8 +78,12 @@ public class FramedTrapDoorBlock extends TrapDoorBlock implements IFramedBlock
     @Override
     public BlockState updateShape(BlockState state, Direction facing, BlockState facingState, LevelAccessor level, BlockPos currentPos, BlockPos facingPos)
     {
-        updateCulling(level, currentPos, facingState, facing, false);
-        return super.updateShape(state, facing, facingState, level, currentPos, facingPos);
+        BlockState newState = super.updateShape(state, facing, facingState, level, currentPos, facingPos);
+        if (newState == state)
+        {
+            updateCulling(level, currentPos, facingState, facing, false);
+        }
+        return newState;
     }
 
     @Override

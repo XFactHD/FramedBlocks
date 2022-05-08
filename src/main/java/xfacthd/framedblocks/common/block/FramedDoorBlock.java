@@ -88,15 +88,19 @@ public class FramedDoorBlock extends DoorBlock implements IFramedBlock
     @Override
     public BlockState updateShape(BlockState state, Direction facing, BlockState facingState, LevelAccessor level, BlockPos currentPos, BlockPos facingPos)
     {
-        updateCullingDeferred(level, currentPos, facingState, facing);
-        return super.updateShape(state, facing, facingState, level, currentPos, facingPos);
+        BlockState newState = super.updateShape(state, facing, facingState, level, currentPos, facingPos);
+        if (newState == state)
+        {
+            updateCulling(level, currentPos, facingState, facing, false);
+        }
+        return newState;
     }
 
     @Override
     public void onStateChangeClient(Level level, BlockPos pos, BlockState oldState, BlockState newState)
     {
         // Only check here when the block didn't change (i.e. by opening the door), everything else is handled in the BE packet handlers
-        if (oldState.getBlock() == newState.getBlock() && level.getBlockEntity(pos) instanceof FramedBlockEntity be)
+        if (needCullingUpdateAfterStateChange(level, oldState, newState) && level.getBlockEntity(pos) instanceof FramedBlockEntity be)
         {
             be.updateCulling(false, false);
         }

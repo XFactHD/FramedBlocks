@@ -5,6 +5,7 @@ import com.google.common.collect.ImmutableMap;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.world.item.context.BlockPlaceContext;
+import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.StairBlock;
@@ -49,12 +50,23 @@ public class FramedVerticalStairs extends FramedBlock
     @Override
     public BlockState updateShape(BlockState state, Direction facing, BlockState facingState, LevelAccessor level, BlockPos pos, BlockPos facingPos)
     {
-        updateCullingDeferred(level, pos, facingState, null);
-
         Direction dir = state.getValue(PropertyHolder.FACING_HOR);
-        if (facing == dir.getOpposite() || facing == dir.getClockWise()) { return state; }
+        if (facing == dir.getOpposite() || facing == dir.getClockWise())
+        {
+            updateCulling(level, pos, facingState, facing, false);
+            return state;
+        }
 
         return getStateFromContext(state, level, pos);
+    }
+
+    @Override
+    public void onStateChangeClient(Level level, BlockPos pos, BlockState oldState, BlockState newState)
+    {
+        if (needCullingUpdateAfterStateChange(level, oldState, newState) && level.getBlockEntity(pos) instanceof FramedBlockEntity be)
+        {
+            be.updateCulling(false, false);
+        }
     }
 
     private BlockState getStateFromContext(BlockState state, LevelAccessor level, BlockPos pos)

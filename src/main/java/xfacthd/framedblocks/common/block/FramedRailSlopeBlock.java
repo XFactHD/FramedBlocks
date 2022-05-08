@@ -69,8 +69,21 @@ public class FramedRailSlopeBlock extends BaseRailBlock implements IFramedBlock
     @Override
     public BlockState updateShape(BlockState state, Direction direction, BlockState neighborState, LevelAccessor level, BlockPos currentPos, BlockPos neighborPos)
     {
-        updateCullingDeferred(level, currentPos, neighborState, direction);
-        return super.updateShape(state, direction, neighborState, level, currentPos, neighborPos);
+        BlockState newState = super.updateShape(state, direction, neighborState, level, currentPos, neighborPos);
+        if (newState == state)
+        {
+            updateCulling(level, currentPos, neighborState, direction, false);
+        }
+        return newState;
+    }
+
+    @Override
+    public void onStateChangeClient(Level level, BlockPos pos, BlockState oldState, BlockState newState)
+    {
+        if (needCullingUpdateAfterStateChange(level, oldState, newState) && level.getBlockEntity(pos) instanceof FramedBlockEntity be)
+        {
+            be.updateCulling(false, false);
+        }
     }
 
     @Override

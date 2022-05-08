@@ -1,5 +1,6 @@
 package xfacthd.framedblocks.api.block;
 
+import com.google.common.base.Preconditions;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -24,7 +25,6 @@ import net.minecraft.world.phys.shapes.*;
 import xfacthd.framedblocks.api.FramedBlocksAPI;
 import xfacthd.framedblocks.api.type.IBlockType;
 import xfacthd.framedblocks.api.util.*;
-import xfacthd.framedblocks.api.util.client.ClientUtils;
 import xfacthd.framedblocks.common.util.ServerConfig;
 
 import javax.annotation.Nonnull;
@@ -326,17 +326,9 @@ public interface IFramedBlock extends EntityBlock//, IFacade
 
     default void onStateChangeClient(Level level, BlockPos pos, BlockState oldState, BlockState newState) { }
 
-    default void updateCullingDeferred(LevelAccessor level, BlockPos pos, BlockState neighborState, Direction side)
+    default void updateCulling(LevelAccessor level, BlockPos pos, @Nullable BlockState neighborState, @Nullable Direction side, boolean rerender)
     {
-        if (level.isClientSide())
-        {
-            BlockPos imPos = pos.immutable();
-            ClientUtils.enqueueClientTask(() -> updateCulling(level, imPos, neighborState, side, true));
-        }
-    }
-
-    default void updateCulling(LevelAccessor level, BlockPos pos, BlockState neighborState, Direction side, boolean rerender)
-    {
+        Preconditions.checkArgument(side == null || neighborState != null, "Neighbor BlockState cannot be null when a side is provided");
         if (level.isClientSide() && (side == null || !(neighborState.getBlock() instanceof IFramedBlock)) && level.getBlockEntity(pos) instanceof FramedBlockEntity be)
         {
             if (side != null)
@@ -348,6 +340,28 @@ public interface IFramedBlock extends EntityBlock//, IFacade
                 be.updateCulling(true, rerender);
             }
         }
+    }
+
+    @SuppressWarnings("RedundantIfStatement")
+    default boolean needCullingUpdateAfterStateChange(LevelReader level, BlockState oldState, BlockState newState)
+    {
+        if (!level.isClientSide() || oldState.getBlock() != newState.getBlock()) { return false; }
+
+        // Camo-based BlockState property changes should not update culling because the BlockEntity handles these data changes
+        if (getBlockType().canOccludeWithSolidCamo())
+        {
+            if (oldState.setValue(FramedProperties.SOLID, !oldState.getValue(FramedProperties.SOLID)) == newState)
+            {
+                return false;
+            }
+
+            if (oldState.setValue(FramedProperties.GLOWING, !oldState.getValue(FramedProperties.GLOWING)) == newState)
+            {
+                return false;
+            }
+        }
+
+        return true;
     }
 
     default Optional<MutableComponent> printCamoBlock(CompoundTag beTag)
