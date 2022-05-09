@@ -9,6 +9,7 @@ import net.minecraftforge.client.model.data.IModelData;
 import org.jetbrains.annotations.NotNull;
 import xfacthd.framedblocks.common.FBContent;
 import xfacthd.framedblocks.common.blockentity.FramedDoubleBlockEntity;
+import xfacthd.framedblocks.common.blockentity.FramedDoubleCornerBlockEntity;
 import xfacthd.framedblocks.common.data.*;
 
 public class FramedDoubleCornerModel extends FramedDoubleBlockModel
@@ -27,14 +28,7 @@ public class FramedDoubleCornerModel extends FramedDoubleBlockModel
         CornerType type = state.getValue(PropertyHolder.CORNER_TYPE);
         Direction facing = state.getValue(PropertyHolder.FACING_HOR);
 
-        BlockState stateOne = FBContent.blockFramedInnerCornerSlope.get().defaultBlockState()
-                .setValue(PropertyHolder.CORNER_TYPE, type)
-                .setValue(PropertyHolder.FACING_HOR, facing);
-        BlockState stateTwo = FBContent.blockFramedCornerSlope.get().defaultBlockState()
-                .setValue(PropertyHolder.CORNER_TYPE, type.verticalOpposite())
-                .setValue(PropertyHolder.FACING_HOR, facing.getOpposite());
-
-        return new Tuple<>(stateOne, stateTwo);
+        return FramedDoubleCornerBlockEntity.getBlockPair(type, facing);
     }
 
     @Override

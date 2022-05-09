@@ -456,10 +456,15 @@ public class FramedBlockEntity extends BlockEntity
         }
     }
 
-    public final boolean updateCulling(Direction side, boolean rerender)
+    public boolean updateCulling(Direction side, boolean rerender)
+    {
+        return updateCulling(modelData, getBlockState(), side, rerender);
+    }
+
+    protected final boolean updateCulling(FramedBlockData modelData, BlockState testState, Direction side, boolean rerender)
     {
         boolean wasHidden = modelData.isSideHidden(side);
-        boolean hidden = getBlock().isSideHidden(level, worldPosition, getBlockState(), side);
+        boolean hidden = ((IFramedBlock) testState.getBlock()).isSideHidden(level, worldPosition, testState, side);
         if (wasHidden != hidden)
         {
             modelData.setSideHidden(side, hidden);

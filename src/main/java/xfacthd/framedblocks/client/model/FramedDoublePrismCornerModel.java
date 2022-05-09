@@ -9,6 +9,7 @@ import net.minecraftforge.client.model.data.IModelData;
 import org.jetbrains.annotations.NotNull;
 import xfacthd.framedblocks.common.FBContent;
 import xfacthd.framedblocks.common.blockentity.FramedDoubleBlockEntity;
+import xfacthd.framedblocks.common.blockentity.FramedDoubleThreewayCornerBlockEntity;
 import xfacthd.framedblocks.common.data.PropertyHolder;
 
 public class FramedDoublePrismCornerModel extends FramedDoubleBlockModel
@@ -28,16 +29,7 @@ public class FramedDoublePrismCornerModel extends FramedDoubleBlockModel
         boolean top = state.getValue(PropertyHolder.TOP);
         boolean offset = state.getValue(PropertyHolder.OFFSET);
 
-        BlockState stateOne = FBContent.blockFramedInnerPrismCorner.get().defaultBlockState()
-                .setValue(PropertyHolder.TOP, top)
-                .setValue(PropertyHolder.FACING_HOR, facing)
-                .setValue(PropertyHolder.OFFSET, offset);
-        BlockState stateTwo = FBContent.blockFramedPrismCorner.get().defaultBlockState()
-                .setValue(PropertyHolder.TOP, !top)
-                .setValue(PropertyHolder.FACING_HOR, facing.getOpposite())
-                .setValue(PropertyHolder.OFFSET, !offset);
-
-        return new Tuple<>(stateOne, stateTwo);
+        return FramedDoubleThreewayCornerBlockEntity.getPrismBlockPair(facing, top, offset);
     }
 
     @Override

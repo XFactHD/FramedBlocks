@@ -9,6 +9,7 @@ import net.minecraftforge.client.model.data.IModelData;
 import org.jetbrains.annotations.NotNull;
 import xfacthd.framedblocks.common.FBContent;
 import xfacthd.framedblocks.common.blockentity.FramedDoubleBlockEntity;
+import xfacthd.framedblocks.common.blockentity.FramedDoubleThreewayCornerBlockEntity;
 import xfacthd.framedblocks.common.data.PropertyHolder;
 
 public class FramedDoubleThreewayCornerModel extends FramedDoubleBlockModel
@@ -27,14 +28,7 @@ public class FramedDoubleThreewayCornerModel extends FramedDoubleBlockModel
         Direction facing = state.getValue(PropertyHolder.FACING_HOR);
         boolean top = state.getValue(PropertyHolder.TOP);
 
-        BlockState stateOne = FBContent.blockFramedInnerThreewayCorner.get().defaultBlockState()
-                .setValue(PropertyHolder.TOP, top)
-                .setValue(PropertyHolder.FACING_HOR, facing);
-        BlockState stateTwo = FBContent.blockFramedThreewayCorner.get().defaultBlockState()
-                .setValue(PropertyHolder.TOP, !top)
-                .setValue(PropertyHolder.FACING_HOR, facing.getOpposite());
-
-        return new Tuple<>(stateOne, stateTwo);
+        return FramedDoubleThreewayCornerBlockEntity.getThreewayBlockPair(facing, top);
     }
 
     @Override

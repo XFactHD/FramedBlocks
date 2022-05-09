@@ -1,12 +1,15 @@
 package xfacthd.framedblocks.common.blockentity;
 
 import net.minecraft.core.BlockPos;
+import net.minecraft.util.Tuple;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.core.Direction;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.Vec3;
+import xfacthd.framedblocks.api.util.FramedProperties;
 import xfacthd.framedblocks.common.FBContent;
+import xfacthd.framedblocks.common.data.BlockType;
 import xfacthd.framedblocks.common.data.PropertyHolder;
 import xfacthd.framedblocks.api.util.Utils;
 import xfacthd.framedblocks.common.util.DoubleSoundMode;
@@ -129,5 +132,51 @@ public class FramedDoubleThreewayCornerBlockEntity extends FramedDoubleBlockEnti
         }
         //noinspection ConstantConditions
         return getCamoState().isSolidRender(level, worldPosition) && getCamoStateTwo().isSolidRender(level, worldPosition);
+    }
+
+    @Override
+    protected Tuple<BlockState, BlockState> getBlockPair(BlockState state)
+    {
+        if (getBlock().getBlockType() == BlockType.FRAMED_DOUBLE_PRISM_CORNER)
+        {
+            return getPrismBlockPair(
+                    state.getValue(FramedProperties.FACING_HOR),
+                    state.getValue(FramedProperties.TOP),
+                    state.getValue(FramedProperties.OFFSET)
+            );
+        }
+        else
+        {
+            return getThreewayBlockPair(
+                    state.getValue(FramedProperties.FACING_HOR),
+                    state.getValue(FramedProperties.TOP)
+            );
+        }
+    }
+
+    public static Tuple<BlockState, BlockState> getPrismBlockPair(Direction facing, boolean top, boolean offset)
+    {
+        return new Tuple<>(
+                FBContent.blockFramedInnerPrismCorner.get().defaultBlockState()
+                        .setValue(FramedProperties.FACING_HOR, facing)
+                        .setValue(FramedProperties.TOP, top)
+                        .setValue(FramedProperties.OFFSET, offset),
+                FBContent.blockFramedPrismCorner.get().defaultBlockState()
+                        .setValue(FramedProperties.FACING_HOR, facing.getOpposite())
+                        .setValue(FramedProperties.TOP, !top)
+                        .setValue(FramedProperties.OFFSET, !offset)
+        );
+    }
+
+    public static Tuple<BlockState, BlockState> getThreewayBlockPair(Direction facing, boolean top)
+    {
+        return new Tuple<>(
+                FBContent.blockFramedInnerThreewayCorner.get().defaultBlockState()
+                        .setValue(FramedProperties.FACING_HOR, facing)
+                        .setValue(FramedProperties.TOP, top),
+                FBContent.blockFramedThreewayCorner.get().defaultBlockState()
+                        .setValue(FramedProperties.FACING_HOR, facing.getOpposite())
+                        .setValue(FramedProperties.TOP, !top)
+        );
     }
 }

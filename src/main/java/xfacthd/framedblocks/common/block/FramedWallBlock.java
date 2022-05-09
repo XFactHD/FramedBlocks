@@ -56,6 +56,8 @@ public class FramedWallBlock extends WallBlock implements IFramedBlock
     @Override
     public void onStateChangeClient(Level level, BlockPos pos, BlockState oldState, BlockState newState)
     {
+        IFramedBlock.super.onStateChangeClient(level, pos, oldState, newState);
+
         if (needCullingUpdateAfterStateChange(level, oldState, newState) && level.getBlockEntity(pos) instanceof FramedBlockEntity be)
         {
             be.updateCulling(false, false);

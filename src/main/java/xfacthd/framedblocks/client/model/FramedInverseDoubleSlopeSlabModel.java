@@ -10,7 +10,7 @@ import org.jetbrains.annotations.NotNull;
 import xfacthd.framedblocks.api.util.FramedProperties;
 import xfacthd.framedblocks.common.FBContent;
 import xfacthd.framedblocks.common.blockentity.FramedDoubleBlockEntity;
-import xfacthd.framedblocks.common.data.PropertyHolder;
+import xfacthd.framedblocks.common.blockentity.FramedInverseDoubleSlopeSlabBlockEntity;
 
 public class FramedInverseDoubleSlopeSlabModel extends FramedDoubleBlockModel
 {
@@ -25,15 +25,7 @@ public class FramedInverseDoubleSlopeSlabModel extends FramedDoubleBlockModel
     @Override
     protected Tuple<BlockState, BlockState> getDummyStates()
     {
-        BlockState defState = FBContent.blockFramedSlopeSlab.get().defaultBlockState();
-        return new Tuple<>(
-                defState.setValue(FramedProperties.FACING_HOR, facing.getOpposite())
-                        .setValue(PropertyHolder.TOP_HALF, false)
-                        .setValue(FramedProperties.TOP, true),
-                defState.setValue(FramedProperties.FACING_HOR, facing)
-                        .setValue(PropertyHolder.TOP_HALF, true)
-                        .setValue(FramedProperties.TOP, false)
-        );
+        return FramedInverseDoubleSlopeSlabBlockEntity.getBlockPair(facing);
     }
 
     @Override

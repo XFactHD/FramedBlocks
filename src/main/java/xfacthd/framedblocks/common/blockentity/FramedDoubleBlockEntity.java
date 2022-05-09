@@ -1,6 +1,7 @@
 package xfacthd.framedblocks.common.blockentity;
 
 import net.minecraft.core.BlockPos;
+import net.minecraft.util.Tuple;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.item.ItemStack;
@@ -14,6 +15,7 @@ import net.minecraftforge.client.model.data.*;
 import xfacthd.framedblocks.FramedBlocks;
 import xfacthd.framedblocks.api.block.FramedBlockEntity;
 import xfacthd.framedblocks.api.util.FramedBlockData;
+import xfacthd.framedblocks.api.util.client.ClientUtils;
 import xfacthd.framedblocks.common.util.DoubleBlockSoundType;
 import xfacthd.framedblocks.common.util.DoubleSoundMode;
 
@@ -27,10 +29,15 @@ public abstract class FramedDoubleBlockEntity extends FramedBlockEntity
     private final IModelData multiModelData = new ModelDataMap.Builder().build();
     private final FramedBlockData modelData = new FramedBlockData(false);
     private final DoubleBlockSoundType soundType = new DoubleBlockSoundType(this);
+    private Tuple<BlockState, BlockState> blockPair;
     private ItemStack camoStack = ItemStack.EMPTY;
     private BlockState camoState = Blocks.AIR.defaultBlockState();
 
-    public FramedDoubleBlockEntity(BlockEntityType<?> type, BlockPos pos, BlockState state) { super(type, pos, state); }
+    public FramedDoubleBlockEntity(BlockEntityType<?> type, BlockPos pos, BlockState state)
+    {
+        super(type, pos, state);
+        blockPair = getBlockPair(state);
+    }
 
     @Override
     public void setCamo(ItemStack camoStack, BlockState camoState, boolean secondary)
@@ -145,9 +152,27 @@ public abstract class FramedDoubleBlockEntity extends FramedBlockEntity
 
     public final DoubleBlockSoundType getSoundType() { return soundType; }
 
+    protected abstract Tuple<BlockState, BlockState> getBlockPair(BlockState state);
+
     protected abstract boolean hitSecondary(BlockHitResult hit);
 
     public abstract DoubleSoundMode getSoundMode();
+
+    @Override
+    public boolean updateCulling(Direction side, boolean rerender)
+    {
+        boolean changed = updateCulling(getModelDataInternal(), blockPair.getA(), side, rerender);
+        changed |= updateCulling(modelData, blockPair.getB(), side, rerender);
+        return changed;
+    }
+
+    @Override
+    @SuppressWarnings("deprecation")
+    public void setBlockState(BlockState state)
+    {
+        super.setBlockState(state);
+        blockPair = getBlockPair(state);
+    }
 
     /*
      * Sync
@@ -176,6 +201,7 @@ public abstract class FramedDoubleBlockEntity extends FramedBlockEntity
             modelData.setCamoState(camoState);
 
             needUpdate = true;
+            updateCulling(true, false);
         }
 
         return super.readFromDataPacket(nbt) || needUpdate;
@@ -205,6 +231,8 @@ public abstract class FramedDoubleBlockEntity extends FramedBlockEntity
             camoState = newState;
 
             modelData.setCamoState(camoState);
+
+            ClientUtils.enqueueClientTask(() -> updateCulling(true, true));
         }
     }
 
