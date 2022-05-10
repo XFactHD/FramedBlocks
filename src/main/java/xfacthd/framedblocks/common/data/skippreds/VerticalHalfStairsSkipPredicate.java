@@ -163,6 +163,9 @@ public class VerticalHalfStairsSkipPredicate implements SideSkipPredicate
     {
         Direction adjDir = adjState.getValue(FramedProperties.FACING_HOR);
         boolean adjTop = adjState.getValue(FramedProperties.TOP);
+        StairsType type = adjState.getValue(PropertyHolder.STAIRS_TYPE);
+
+        if ((!top && type == StairsType.TOP_CORNER) || (top && type == StairsType.BOTTOM_CORNER)) { return false; }
 
         if (adjTop == top && (side == dir.getOpposite() || side == dir.getClockWise()) && adjDir == side)
         {

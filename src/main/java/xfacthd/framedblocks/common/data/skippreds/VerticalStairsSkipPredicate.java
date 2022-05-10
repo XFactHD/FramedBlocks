@@ -31,7 +31,7 @@ public class VerticalStairsSkipPredicate implements SideSkipPredicate
                 case FRAMED_CORNER_PILLAR -> testAgainstPillar(level, pos, dir, type, adjState, side);
                 case FRAMED_SLAB_EDGE -> testAgainstEdge(level, pos, dir, type, adjState, side);
                 case FRAMED_HALF_STAIRS -> testAgainstHalfStairs(level, pos, dir, type, adjState, side);
-                case FRAMED_VERTICAL_HALF_STAIRS -> testAgainstVerticalHalfStairs(level, pos, dir, adjState, side);
+                case FRAMED_VERTICAL_HALF_STAIRS -> testAgainstVerticalHalfStairs(level, pos, dir, type, adjState, side);
                 default -> false;
             };
         }
@@ -172,12 +172,17 @@ public class VerticalStairsSkipPredicate implements SideSkipPredicate
         return false;
     }
 
-    private static boolean testAgainstVerticalHalfStairs(BlockGetter level, BlockPos pos, Direction dir, BlockState adjState, Direction side)
+    private static boolean testAgainstVerticalHalfStairs(BlockGetter level, BlockPos pos, Direction dir, StairsType type, BlockState adjState, Direction side)
     {
+        if (!Utils.isY(side) || (side == Direction.UP && type == StairsType.TOP_CORNER) || (side == Direction.DOWN && type == StairsType.BOTTOM_CORNER))
+        {
+            return false;
+        }
+
         Direction adjDir = adjState.getValue(FramedProperties.FACING_HOR);
         boolean adjTop = adjState.getValue(FramedProperties.TOP);
 
-        if (!Utils.isY(side) || adjDir != dir || adjTop != (side == Direction.DOWN)) { return false; }
+        if (adjDir != dir || adjTop != (side == Direction.DOWN)) { return false; }
 
         return SideSkipPredicate.compareState(level, pos, side);
     }
