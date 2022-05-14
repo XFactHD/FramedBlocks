@@ -145,6 +145,20 @@ public class BakedQuadTransformer
     }
 
     /**
+     * Creates a triangle quad
+     * @param quad The BakedQuad to manipulate, must be a copy of the original quad
+     * @param rightSide Wether the vertical edge should be on the right side
+     * @param top Wether the baseline of the triangle should be at the top
+     * @param depth The depth of the vertical edge
+     * @param baseOffset The horizontal offset of the lower corner from the baseline
+     */
+    public static boolean createVerticalSideTriangleQuad(BakedQuad quad, boolean rightSide, boolean top, float depth, float baseOffset)
+    {
+        Direction dir = rightSide ? quad.getDirection().getClockWise() : quad.getDirection().getCounterClockWise();
+        return createVerticalSideQuad(quad, dir, top ? depth : baseOffset, !top ? depth : baseOffset);
+    }
+
+    /**
      * Creates a triangle quad pointing to the left corner in the given direction
      * @param quad The BakedQuad to manipulate, must be a copy of the original quad
      * @param dir The direction towards the edge whose left corner will be the tip of the triangle
@@ -213,6 +227,24 @@ public class BakedQuadTransformer
             }
             return false;
         });
+    }
+
+    /**
+     * Creates a triangle quad pointing in the given direction with the left or right corner
+     * @param quad The BakedQuad to manipulate, must be a copy of the original quad
+     * @param dir The direction in which the tip of the triangle points
+     * @param right Whether the left or right corner should be the tip
+     * @param depth The depth of the edge with the tip
+     * @param baseOffset The offset of the lower corner from the baseline
+     */
+    public static boolean createTopBottomTriangleQuad(BakedQuad quad, Direction dir, boolean right, float depth, float baseOffset)
+    {
+        Direction face = quad.getDirection();
+        if ((face == Direction.UP && !Utils.isPositive(dir)) || (face == Direction.DOWN && Utils.isPositive(dir.getClockWise())))
+        {
+            right = !right;
+        }
+        return createTopBottomQuad(quad, dir, right ? depth : baseOffset, right ? baseOffset : depth);
     }
 
     /**

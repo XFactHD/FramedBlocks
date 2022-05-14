@@ -1,0 +1,34 @@
+{
+  "parent": "minecraft:recipes/root",
+  "rewards": {
+    "recipes": [
+      "framedblocks:framed_elevated_slope_slab_from_extended_slope_panel"
+    ]
+  },
+  "criteria": {
+    "hasFramedExtendedSlopePanel": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "framedblocks:framed_extended_slope_panel"
+            ]
+          }
+        ]
+      }
+    },
+    "has_the_recipe": {
+      "trigger": "minecraft:recipe_unlocked",
+      "conditions": {
+        "recipe": "framedblocks:framed_elevated_slope_slab_from_extended_slope_panel"
+      }
+    }
+  },
+  "requirements": [
+    [
+      "hasFramedExtendedSlopePanel",
+      "has_the_recipe"
+    ]
+  ]
+}

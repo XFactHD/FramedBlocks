@@ -69,7 +69,10 @@ public class LightSourceTests
             return List.of(Direction.UP);
         }
 
-        if (block == FBContent.blockFramedDoublePanel.get())
+        if (block == FBContent.blockFramedDoublePanel.get() ||
+            block == FBContent.blockFramedDoubleSlopePanel.get() ||
+            block == FBContent.blockFramedInverseDoubleSlopePanel.get()
+        )
         {
             return List.of(Direction.NORTH, Direction.SOUTH);
         }

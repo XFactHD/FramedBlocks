@@ -71,7 +71,11 @@ public enum BlockType implements IBlockType
     FRAMED_ELEVATED_SLOPE_SLAB    ( true,  true,  true,  true,  true,  true, false, FramedElevatedSlopeSlabBlock.CTM_PREDICATE, new ElevatedSlopeSlabSkipPredicate(), FramedElevatedSlopeSlabBlock::generateShapes),
     FRAMED_DOUBLE_SLOPE_SLAB      ( true, false,  true,  true,  true,  true,  true, FramedDoubleSlopeSlabBlock.CTM_PREDICATE, SideSkipPredicate.FALSE), //Side skip is handled by the single slope slab
     FRAMED_INV_DOUBLE_SLOPE_SLAB  ( true,  true,  true,  true,  true,  true,  true, CtmPredicate.FALSE, SideSkipPredicate.FALSE, FramedInverseDoubleSlopeSlabBlock::generateShapes), //Side skip is handled by the single slope slab
-    FRAMED_VERTICAL_HALF_STAIRS   (false, false, false,  true,  true, false, false, CtmPredicate.FALSE, new VerticalHalfStairsSkipPredicate(), FramedVerticalHalfStairsBlock::generateShapes);
+    FRAMED_VERTICAL_HALF_STAIRS   (false, false, false,  true,  true, false, false, CtmPredicate.FALSE, new VerticalHalfStairsSkipPredicate(), FramedVerticalHalfStairsBlock::generateShapes),
+    FRAMED_SLOPE_PANEL            ( true,  true, false,  true,  true,  true, false, FramedSlopePanelBlock.CTM_PREDICATE, new SlopePanelSkipPredicate(), FramedSlopePanelBlock::generateShapes),
+    FRAMED_EXTENDED_SLOPE_PANEL   ( true,  true,  true,  true,  true,  true, false, FramedExtendedSlopePanelBlock.CTM_PREDICATE, new ExtendedSlopePanelSkipPredicate(), FramedExtendedSlopePanelBlock::generateShapes),
+    FRAMED_DOUBLE_SLOPE_PANEL     ( true, false,  true,  true,  true,  true,  true, FramedDoubleSlopePanelBlock.CTM_PREDICATE, SideSkipPredicate.FALSE, FramedDoubleSlopePanelBlock::generateShapes), //Side skip is handled by the single vertical slope slab
+    FRAMED_INV_DOUBLE_SLOPE_PANEL ( true,  true,  true,  true,  true,  true,  true, CtmPredicate.FALSE, SideSkipPredicate.FALSE, FramedInverseDoubleSlopePanelBlock::generateShapes); //Side skip is handled by the single vertical slope slab
 
     private final String name = toString().toLowerCase(Locale.ROOT);
     private final boolean canOcclude;
