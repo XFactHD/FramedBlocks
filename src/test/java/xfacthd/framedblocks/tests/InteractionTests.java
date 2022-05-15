@@ -12,7 +12,7 @@ import net.minecraftforge.registries.RegistryObject;
 import xfacthd.framedblocks.FramedBlocks;
 import xfacthd.framedblocks.api.block.FramedBlockEntity;
 import xfacthd.framedblocks.api.util.FramedProperties;
-import xfacthd.framedblocks.api.util.TestUtils;
+import xfacthd.framedblocks.api.util.test.TestUtils;
 import xfacthd.framedblocks.common.FBContent;
 import xfacthd.framedblocks.common.blockentity.FramedFlowerPotBlockEntity;
 import xfacthd.framedblocks.common.blockentity.FramedSignBlockEntity;

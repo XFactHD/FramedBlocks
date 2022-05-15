@@ -1,9 +1,8 @@
-package xfacthd.framedblocks.api.util;
+package xfacthd.framedblocks.api.util.test;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
-import net.minecraft.gametest.framework.GameTestAssertPosException;
-import net.minecraft.gametest.framework.GameTestHelper;
+import net.minecraft.gametest.framework.*;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
@@ -21,6 +20,7 @@ import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegistryObject;
 import xfacthd.framedblocks.api.FramedBlocksAPI;
 import xfacthd.framedblocks.api.block.IFramedBlock;
+import xfacthd.framedblocks.api.util.FramedProperties;
 
 import java.util.*;
 import java.util.function.Supplier;
@@ -72,7 +72,7 @@ public class TestUtils
 
             if (!result.shouldAwardStats())
             {
-                helper.fail(String.format("Interaction with block %s failed", helper.getBlockState(pos)));
+                helper.fail(String.format("Camo application on block %s failed", helper.getBlockState(pos)));
             }
         });
     }
@@ -127,7 +127,7 @@ public class TestUtils
      * @param tasks The list of tasks to schedule
      * @return Returns the delay of the last task + 1 tick
      */
-    public static int chainTasks(GameTestHelper helper, List<Runnable> tasks)
+    public static int chainTasks(GameTestHelper helper, List<TestRunnable> tasks)
     {
         return chainTasks(helper, tasks, 0);
     }
@@ -139,13 +139,13 @@ public class TestUtils
      * @param initialDelay The delay in ticks the task chain starts at
      * @return Returns the delay of the last task + 1 tick
      */
-    public static int chainTasks(GameTestHelper helper, List<Runnable> tasks, int initialDelay)
+    public static int chainTasks(GameTestHelper helper, List<TestRunnable> tasks, int initialDelay)
     {
         int delay = initialDelay;
-        for (Runnable task : tasks)
+        for (TestRunnable task : tasks)
         {
             helper.runAfterDelay(delay, task);
-            delay++;
+            delay += task.getDuration();
         }
         return delay;
     }
@@ -228,6 +228,14 @@ public class TestUtils
     }
 
     /**
+     * Test whether the given {@link BlockState} occludes the light source placed on the north side of the block
+     */
+    public static void testBlockOccludesLightNorth(GameTestHelper helper, BlockState state, List<Direction> camoSides)
+    {
+        testBlockOccludesLight(helper, OCCLUSION_BLOCK_SIDE, OCCLUSION_LIGHT_SIDE, state, camoSides);
+    }
+
+    /**
      * Test whether the given double block {@link BlockState} occludes the light source placed belowthe block
      */
     public static void testDoubleBlockOccludesLightBelow(GameTestHelper helper, BlockState state, List<Direction> camoSides)
@@ -245,14 +253,14 @@ public class TestUtils
 
         chainTasks(helper, List.of(
                 () -> helper.setBlock(blockPos, state),
-                () -> {}, //Light occlusion changes from BlockState changes may take two ticks to propagate, apparently
+                new TestDelay(5), //Light occlusion changes from BlockState changes may take a few ticks to propagate, apparently
                 () ->
                 {
                     helper.assertBlockProperty(blockPos, FramedProperties.SOLID, false);
                     assertBlockLight(helper, blockPos, lightPos, 13);
                 },
                 () -> applyCamo(helper, blockPos, Blocks.GLASS, camoSides),
-                () -> {}, //Light occlusion changes from BlockState changes may take two ticks to propagate, apparently
+                new TestDelay(5), //() -> {}, //Light occlusion changes from BlockState changes may take a few ticks to propagate, apparently
                 () ->
                 {
                     helper.assertBlockProperty(blockPos, FramedProperties.SOLID, false);
@@ -260,7 +268,7 @@ public class TestUtils
                 },
                 () -> applyCamo(helper, blockPos, Blocks.AIR, camoSides),
                 () -> applyCamo(helper, blockPos, Blocks.GRANITE, camoSides),
-                () -> {}, //Light occlusion changes from BlockState changes may take two ticks to propagate, apparently
+                new TestDelay(5), //() -> {}, //Light occlusion changes from BlockState changes may take a few ticks to propagate, apparently
                 () ->
                 {
                     helper.assertBlockProperty(blockPos, FramedProperties.SOLID, true);
@@ -286,10 +294,10 @@ public class TestUtils
                 () -> helper.setBlock(EMISSION_BLOCK, state),
                 () -> assertBlockLightEmission(helper, EMISSION_BLOCK, EMISSION_LIGHT, baseEmission), //Check base emission
                 () -> applyCamo(helper, EMISSION_BLOCK, Blocks.GLOWSTONE, camoSides),
-                () -> {}, //Light changes from BlockState changes may take two ticks to propagate, apparently
+                new TestDelay(5), //() -> {}, //Light changes from BlockState changes may take a few ticks to propagate, apparently
                 () -> assertBlockLightEmission(helper, EMISSION_BLOCK, EMISSION_LIGHT, glowstoneLight), //Check camo emission
                 () -> applyCamo(helper, EMISSION_BLOCK, Blocks.AIR, camoSides),
-                () -> {}, //Light changes from BlockState changes may take two ticks to propagate, apparently
+                new TestDelay(5), //() -> {}, //Light changes from BlockState changes may take a few ticks to propagate, apparently
                 () -> assertBlockLightEmission(helper, EMISSION_BLOCK, EMISSION_LIGHT, baseEmission), //Check camo emission reset
                 () -> clickWithItem(helper, EMISSION_BLOCK, Items.GLOWSTONE_DUST),
                 () -> assertBlockLightEmission(helper, EMISSION_BLOCK, EMISSION_LIGHT, 15), //Check glowstone dust emission without camo
