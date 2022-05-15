@@ -79,8 +79,8 @@ public class FramedSlopePanelBlock extends FramedBlock
     public static final Map<Rotation, VoxelShape> SHAPES = Util.make(new EnumMap<>(Rotation.class), map ->
     {
         map.put(Rotation.UP, Shapes.or(
-                box(0, 0, 0, 16, 1, 8),
-                box(0, 1, 0, 16, 4, 7.5),
+                box(0, 0, 0, 16, .5, 8),
+                box(0, .5, 0, 16, 4, 7.75),
                 box(0, 4, 0, 16, 8, 6),
                 box(0, 8, 0, 16, 12, 4),
                 box(0, 12, 0, 16, 15, 2),
@@ -88,8 +88,8 @@ public class FramedSlopePanelBlock extends FramedBlock
         ).optimize());
 
         map.put(Rotation.RIGHT, Shapes.or(
-                box(0, 0, 0, 1, 16, 8),
-                box(1, 0, 0, 4, 16, 7.5),
+                box(0, 0, 0, .5, 16, 8),
+                box(.5, 0, 0, 4, 16, 7.75),
                 box(4, 0, 0, 8, 16, 6),
                 box(8, 0, 0, 12, 16, 4),
                 box(12, 0, 0, 15, 16, 2),
@@ -97,8 +97,8 @@ public class FramedSlopePanelBlock extends FramedBlock
         ).optimize());
 
         map.put(Rotation.DOWN, Shapes.or(
-                box(0, 15, 0, 16, 16, 8),
-                box(0, 12, 0, 16, 15, 7.5),
+                box(0, 15.5, 0, 16, 16, 8),
+                box(0, 12, 0, 16, 15.5, 7.75),
                 box(0, 8, 0, 16, 12, 6),
                 box(0, 4, 0, 16, 8, 4),
                 box(0, 1, 0, 16, 4, 2),
@@ -106,8 +106,8 @@ public class FramedSlopePanelBlock extends FramedBlock
         ).optimize());
 
         map.put(Rotation.LEFT, Shapes.or(
-                box(15, 0, 0, 16, 16, 8),
-                box(12, 0, 0, 15, 16, 7.5),
+                box(15.5, 0, 0, 16, 16, 8),
+                box(12, 0, 0, 15.5, 16, 7.75),
                 box(8, 0, 0, 12, 16, 6),
                 box(4, 0, 0, 8, 16, 4),
                 box(1, 0, 0, 4, 16, 2),
