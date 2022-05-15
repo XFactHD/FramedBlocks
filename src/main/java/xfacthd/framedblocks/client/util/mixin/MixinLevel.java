@@ -22,9 +22,12 @@ public abstract class MixinLevel
             at = @At(
                     value = "INVOKE",
                     target = "Lnet/minecraft/world/level/Level;onBlockStateChange(Lnet/minecraft/core/BlockPos;Lnet/minecraft/world/level/block/state/BlockState;Lnet/minecraft/world/level/block/state/BlockState;)V",
-                    shift = At.Shift.AFTER
-            )
+                    shift = At.Shift.AFTER,
+                    remap = true
+            ),
+            remap = false
     )
+    @SuppressWarnings("DefaultAnnotationParam")
     private void framedblocks_postNeighborUpdate(BlockPos pPos, LevelChunk levelchunk, BlockState blockstate, BlockState pState, int pFlags, int pRecursionLeft, CallbackInfo ci)
     {
         if (isClientSide() && pState.getBlock() instanceof IFramedBlock block)

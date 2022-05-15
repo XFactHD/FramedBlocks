@@ -136,14 +136,15 @@ repositories {
 dependencies {
     minecraft 'net.minecraftforge:forge:1.18.2-40.1.13'
 
-    compileOnly fg.deobf("curse.maven:ctm-267602:3586556")
+    compileOnly fg.deobf("curse.maven:ctm-267602:3737369")
 
     //runtimeOnly fg.deobf("curse.maven:puzzleslib-495476:3681966") //Only needed when Diagonal Fences is switched to implementation
     compileOnly fg.deobf("curse.maven:diagonalfences-458048:3768260")
 
-    compileOnly fg.deobf("curse.maven:buildinggadgets-298187:3553977")
+    compileOnly fg.deobf("curse.maven:buildinggadgets-298187:3725903")
 
-    runtimeOnly fg.deobf("curse.maven:jei-238222:3671596")
+    runtimeOnly fg.deobf("curse.maven:jei-238222:3773518")
+    runtimeOnly fg.deobf("curse.maven:spark-361579:3767286")
 
     //runtimeOnly fg.deobf("curse.maven:magnesium_sodium-532724:3556734")
     //runtimeOnly fg.deobf("curse.maven:rubidium_sodium-574856:3633735")

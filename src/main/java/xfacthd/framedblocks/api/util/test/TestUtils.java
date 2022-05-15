@@ -25,9 +25,9 @@ import xfacthd.framedblocks.api.util.FramedProperties;
 import java.util.*;
 import java.util.function.Supplier;
 
-public class TestUtils
+public final class TestUtils
 {
-    private static final RegistryObject<Item> FRAMED_HAMMER = RegistryObject.of(new ResourceLocation(FramedBlocksAPI.getInstance().modid(), "framed_hammer"), ForgeRegistries.ITEMS);
+    private static final RegistryObject<Item> FRAMED_HAMMER = RegistryObject.create(new ResourceLocation(FramedBlocksAPI.getInstance().modid(), "framed_hammer"), ForgeRegistries.ITEMS);
     private static final BlockPos OCCLUSION_BLOCK_TOP_BOTTOM = new BlockPos(1, 3, 1);
     private static final BlockPos OCCLUSION_BLOCK_SIDE = new BlockPos(1, 2, 2);
     private static final BlockPos OCCLUSION_LIGHT_TOP = new BlockPos(1, 4, 1);
@@ -344,4 +344,8 @@ public class TestUtils
             );
         }
     }
+
+
+
+    private TestUtils() { }
 }

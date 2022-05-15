@@ -11,6 +11,7 @@ import xfacthd.framedblocks.client.util.ClientConfig;
 import xfacthd.framedblocks.common.FBContent;
 import xfacthd.framedblocks.common.blockentity.FramedDoubleBlockEntity;
 
+@SuppressWarnings("unused")
 public class ApiImpl implements FramedBlocksAPI
 {
     @Override

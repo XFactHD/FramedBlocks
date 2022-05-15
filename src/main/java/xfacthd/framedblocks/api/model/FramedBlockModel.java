@@ -124,6 +124,7 @@ public abstract class FramedBlockModel extends BakedModelProxy
                 {
                     quadCacheTable.put(camoState, layer, makeQuads(state, camoState, rand, extraData, layer, camoInLayer));
                 }
+                //noinspection ConstantConditions
                 return quadCacheTable.get(camoState, layer).get(side);
             }
         }

@@ -1,5 +1,6 @@
 package xfacthd.framedblocks.common;
 
+import com.google.common.base.Preconditions;
 import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.inventory.MenuType;
 import net.minecraft.world.item.Item;
@@ -30,7 +31,7 @@ import java.util.function.Function;
 import java.util.function.Supplier;
 
 @Mod.EventBusSubscriber(modid = FramedBlocks.MODID, bus = Mod.EventBusSubscriber.Bus.MOD)
-public class FBContent
+public final class FBContent
 {
     private static final DeferredRegister<Block> BLOCKS = DeferredRegister.create(ForgeRegistries.BLOCKS, FramedBlocks.MODID);
     private static final DeferredRegister<Item> ITEMS = DeferredRegister.create(ForgeRegistries.ITEMS, FramedBlocks.MODID);
@@ -225,14 +226,19 @@ public class FBContent
                 .toArray(Block[]::new);
     }
 
-    private static RegistryObject<Block> registerBlock(Function<BlockType, Block> blockFactory, BlockType type)
+    private static <T extends Block & IFramedBlock> RegistryObject<Block> registerBlock(Function<BlockType, T> blockFactory, BlockType type)
     {
         return registerBlock(() -> blockFactory.apply(type), type);
     }
 
-    private static RegistryObject<Block> registerBlock(Supplier<Block> blockFactory, BlockType type)
+    private static <T extends Block & IFramedBlock> RegistryObject<Block> registerBlock(Supplier<T> blockFactory, BlockType type)
     {
-        return BLOCKS.register(type.getName(), blockFactory);
+        return BLOCKS.register(type.getName(), () ->
+        {
+            T block = blockFactory.get();
+            Preconditions.checkArgument(block.getBlockType() == type);
+            return block;
+        });
     }
 
     private static RegistryObject<Item> registerToolItem(Function<FramedToolType, Item> itemFactory, FramedToolType type)
@@ -264,4 +270,8 @@ public class FBContent
     {
         return CONTAINER_TYPES.register(name, () -> IForgeMenuType.create(factory));
     }
+
+
+
+    private FBContent() { }
 }

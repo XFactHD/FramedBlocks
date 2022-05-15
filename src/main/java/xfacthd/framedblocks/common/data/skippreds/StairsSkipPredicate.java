@@ -86,7 +86,8 @@ public class StairsSkipPredicate implements SideSkipPredicate
     {
         if (!isSlabSide(shape, dir, side)) { return false; }
 
-        return SideSkipPredicate.compareState(level, pos, side, top ? Direction.UP : Direction.DOWN);
+        Direction camoSide = top ? Direction.UP : Direction.DOWN;
+        return SideSkipPredicate.compareState(level, pos, side, camoSide, camoSide);
     }
 
     private static boolean testAgainstEdge(BlockGetter level, BlockPos pos, Direction dir, StairsShape shape, boolean top, BlockState adjState, Direction side)
@@ -127,7 +128,7 @@ public class StairsSkipPredicate implements SideSkipPredicate
         Direction adjDir = adjState.getValue(PropertyHolder.FACING_NE);
         if (dir == adjDir || dir.getOpposite() == adjDir)
         {
-            return SideSkipPredicate.compareState(level, pos, side, dir);
+            return SideSkipPredicate.compareState(level, pos, side, dir, dir);
         }
         return false;
     }

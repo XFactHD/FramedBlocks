@@ -10,7 +10,7 @@ import xfacthd.framedblocks.common.block.FramedRailSlopeBlock;
 import xfacthd.framedblocks.common.data.PropertyHolder;
 import xfacthd.framedblocks.common.data.SlopeType;
 
-public class FramedUtils
+public final class FramedUtils
 {
     public static Direction getBlockFacing(BlockState state)
     {
@@ -53,4 +53,7 @@ public class FramedUtils
         server.tell(new TickTask(server.getTickCount() + delay, task));
     }
 
+
+
+    private FramedUtils() { }
 }

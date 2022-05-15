@@ -9,6 +9,7 @@ import xfacthd.framedblocks.api.util.client.OutlineRender;
 import xfacthd.framedblocks.client.model.FluidDummyModel;
 import xfacthd.framedblocks.client.render.BlockOutlineRenderer;
 
+@SuppressWarnings("unused")
 public class ClientApiImpl implements FramedBlocksClientAPI
 {
     @Override

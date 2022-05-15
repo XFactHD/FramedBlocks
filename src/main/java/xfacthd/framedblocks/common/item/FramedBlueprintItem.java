@@ -117,7 +117,7 @@ public class FramedBlueprintItem extends FramedToolItem
         return InteractionResult.sidedSuccess(level.isClientSide());
     }
 
-    private InteractionResult readBlueprint(UseOnContext context, Player player, CompoundTag tag)
+    private static InteractionResult readBlueprint(UseOnContext context, Player player, CompoundTag tag)
     {
         Block block = getTargetBlock(context.getItemInHand());
 
@@ -192,7 +192,7 @@ public class FramedBlueprintItem extends FramedToolItem
         return glowstone && !player.getInventory().contains(Tags.Items.DUSTS_GLOWSTONE);
     }
 
-    private InteractionResult tryPlace(UseOnContext context, Player player, Item item, CompoundTag tag)
+    private static InteractionResult tryPlace(UseOnContext context, Player player, Item item, CompoundTag tag)
     {
         ItemStack dummyStack = new ItemStack(item, 1);
         dummyStack.getOrCreateTag().put("BlockEntityTag", tag.getCompound("camo_data").copy());

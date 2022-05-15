@@ -39,7 +39,7 @@ import java.util.Random;
 
 @SuppressWarnings("ConstantConditions")
 @Mod.EventBusSubscriber(modid = FramedBlocks.MODID, value = Dist.CLIENT, bus = Mod.EventBusSubscriber.Bus.MOD)
-public class GhostBlockRenderer
+public final class GhostBlockRenderer
 {
     private static final Random RANDOM = new Random();
     private static final FramedBlockData GHOST_MODEL_DATA = new FramedBlockData(true);
@@ -292,4 +292,8 @@ public class GhostBlockRenderer
 
 
     private static Minecraft mc() { return Minecraft.getInstance(); }
+
+
+
+    private GhostBlockRenderer() { }
 }

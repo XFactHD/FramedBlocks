@@ -173,7 +173,7 @@ public class HalfStairsSkipPredicate implements SideSkipPredicate
 
         Direction adjDir = adjState.getValue(PropertyHolder.FACING_NE);
 
-        return adjDir.getAxis() != dir.getAxis() && SideSkipPredicate.compareState(level, pos, side, stairFace);
+        return adjDir.getAxis() != dir.getAxis() && SideSkipPredicate.compareState(level, pos, side, stairFace, stairFace);
     }
 
     private static boolean testAgainstVerticalHalfStairs(BlockGetter level, BlockPos pos, Direction dir, boolean top, boolean right, BlockState adjState, Direction side)

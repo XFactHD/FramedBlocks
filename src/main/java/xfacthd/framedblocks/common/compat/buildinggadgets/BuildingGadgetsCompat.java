@@ -2,6 +2,7 @@ package xfacthd.framedblocks.common.compat.buildinggadgets;
 
 import com.direwolf20.buildinggadgets.common.tainted.building.tilesupport.*;
 import com.direwolf20.buildinggadgets.common.tainted.registry.TopologicalRegistryBuilder;
+import com.direwolf20.buildinggadgets.common.util.ref.Reference;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.fml.InterModComms;
 import net.minecraftforge.fml.event.lifecycle.InterModEnqueueEvent;
@@ -13,9 +14,12 @@ import xfacthd.framedblocks.api.block.FramedBlockEntity;
 
 import java.util.function.Supplier;
 
-public class BuildingGadgetsCompat
+public final class BuildingGadgetsCompat
 {
-    private static final DeferredRegister<ITileDataSerializer> SERIALIZERS = DeferredRegister.create(ITileDataSerializer.class, FramedBlocks.MODID);
+    private static final DeferredRegister<ITileDataSerializer> SERIALIZERS = DeferredRegister.create(
+            Reference.TileDataSerializerReference.REGISTRY_ID_TILE_DATA_SERIALIZER,
+            FramedBlocks.MODID
+    );
     static final RegistryObject<ITileDataSerializer> FRAMED_SERIALIZER = SERIALIZERS.register("framed_serializer", FramedBlockEntityDataSerializer::new);
 
     public static void init()
@@ -42,4 +46,7 @@ public class BuildingGadgetsCompat
         };
     }
 
+
+
+    private BuildingGadgetsCompat() { }
 }

@@ -46,11 +46,11 @@ public class SlopeSkipPredicate implements SideSkipPredicate
 
         if (type == SlopeType.HORIZONTAL && Utils.isY(side))
         {
-            return dir == adjDir && type == adjType && SideSkipPredicate.compareState(level, pos, side, dir);
+            return dir == adjDir && type == adjType && SideSkipPredicate.compareState(level, pos, side, dir, dir);
         }
         else if (type != SlopeType.HORIZONTAL && (side == dir.getClockWise() || side == dir.getCounterClockWise()))
         {
-            return dir == adjDir && type == adjType && SideSkipPredicate.compareState(level, pos, side, dir);
+            return dir == adjDir && type == adjType && SideSkipPredicate.compareState(level, pos, side, dir, dir);
         }
         return false;
     }
@@ -62,11 +62,11 @@ public class SlopeSkipPredicate implements SideSkipPredicate
 
         if (type == SlopeType.HORIZONTAL && adjType == SlopeType.HORIZONTAL && Utils.isY(side))
         {
-            return (dir == adjDir || adjDir == dir.getOpposite()) && SideSkipPredicate.compareState(level, pos, side, dir);
+            return (dir == adjDir || adjDir == dir.getOpposite()) && SideSkipPredicate.compareState(level, pos, side, dir, dir);
         }
         else if (type != SlopeType.HORIZONTAL && adjType != SlopeType.HORIZONTAL && (side == dir.getClockWise() || side == dir.getCounterClockWise()))
         {
-            return (dir == adjDir && type == adjType) || (dir.getOpposite() == adjDir && type != adjType) && SideSkipPredicate.compareState(level, pos, side, dir);
+            return (dir == adjDir && type == adjType) || (dir.getOpposite() == adjDir && type != adjType) && SideSkipPredicate.compareState(level, pos, side, dir, dir);
         }
         return false;
     }
@@ -80,11 +80,11 @@ public class SlopeSkipPredicate implements SideSkipPredicate
         {
             if (type == SlopeType.BOTTOM && (adjType == CornerType.BOTTOM || adjType == CornerType.HORIZONTAL_BOTTOM_LEFT))
             {
-                return SideSkipPredicate.compareState(level, pos, side, dir);
+                return SideSkipPredicate.compareState(level, pos, side, dir, dir);
             }
             else if (type == SlopeType.TOP && (adjType == CornerType.TOP || adjType == CornerType.HORIZONTAL_TOP_LEFT))
             {
-                return SideSkipPredicate.compareState(level, pos, side, dir);
+                return SideSkipPredicate.compareState(level, pos, side, dir, dir);
             }
         }
         else if (side == dir.getCounterClockWise())
@@ -93,22 +93,22 @@ public class SlopeSkipPredicate implements SideSkipPredicate
             {
                 if (type == SlopeType.BOTTOM && adjType == CornerType.HORIZONTAL_BOTTOM_RIGHT)
                 {
-                    return SideSkipPredicate.compareState(level, pos, side, dir);
+                    return SideSkipPredicate.compareState(level, pos, side, dir, dir);
                 }
                 else if (type == SlopeType.TOP && adjType == CornerType.HORIZONTAL_TOP_RIGHT)
                 {
-                    return SideSkipPredicate.compareState(level, pos, side, dir);
+                    return SideSkipPredicate.compareState(level, pos, side, dir, dir);
                 }
             }
             else if (adjDir == dir.getClockWise())
             {
                 if (type == SlopeType.BOTTOM && adjType == CornerType.BOTTOM)
                 {
-                    return SideSkipPredicate.compareState(level, pos, side, dir);
+                    return SideSkipPredicate.compareState(level, pos, side, dir, dir);
                 }
                 else if (type == SlopeType.TOP && adjType == CornerType.TOP)
                 {
-                    return SideSkipPredicate.compareState(level, pos, side, dir);
+                    return SideSkipPredicate.compareState(level, pos, side, dir, dir);
                 }
             }
         }
@@ -116,11 +116,11 @@ public class SlopeSkipPredicate implements SideSkipPredicate
         {
             if (adjType.isRight())
             {
-                return dir == adjDir.getClockWise() && SideSkipPredicate.compareState(level, pos, side, dir);
+                return dir == adjDir.getClockWise() && SideSkipPredicate.compareState(level, pos, side, dir, dir);
             }
             else
             {
-                return dir == adjDir && SideSkipPredicate.compareState(level, pos, side, dir);
+                return dir == adjDir && SideSkipPredicate.compareState(level, pos, side, dir, dir);
             }
         }
         return false;
@@ -137,34 +137,35 @@ public class SlopeSkipPredicate implements SideSkipPredicate
             {
                 if ((adjDir == dir || adjDir == dir.getOpposite()) && !adjType.isRight())
                 {
-                    return SideSkipPredicate.compareState(level, pos, side, dir);
+                    return SideSkipPredicate.compareState(level, pos, side, dir, dir);
                 }
                 else if ((adjDir == dir.getClockWise() || adjDir == dir.getCounterClockWise()) && adjType.isRight())
                 {
-                    return SideSkipPredicate.compareState(level, pos, side, adjDir == dir.getClockWise() ? adjDir.getOpposite() : dir);
+                    Direction camoSide = adjDir == dir.getClockWise() ? adjDir.getOpposite() : dir;
+                    return SideSkipPredicate.compareState(level, pos, side, camoSide, camoSide);
                 }
             }
             else if (type != SlopeType.HORIZONTAL && adjDir == dir && ((side == dir.getCounterClockWise() && !adjType.isRight()) ||
                                                                        (side == dir.getClockWise() && adjType.isRight()))
             )
             {
-                return (type == SlopeType.TOP) == adjType.isTop() && SideSkipPredicate.compareState(level, pos, side, dir);
+                return (type == SlopeType.TOP) == adjType.isTop() && SideSkipPredicate.compareState(level, pos, side, dir, dir);
             }
             else if (type != SlopeType.HORIZONTAL && ((side == dir.getClockWise() && !adjType.isRight()) || (side == dir.getCounterClockWise() && adjType.isRight())))
             {
-                return adjDir == dir.getOpposite() && (type == SlopeType.TOP) != adjType.isTop() && SideSkipPredicate.compareState(level, pos, side, dir);
+                return adjDir == dir.getOpposite() && (type == SlopeType.TOP) != adjType.isTop() && SideSkipPredicate.compareState(level, pos, side, dir, dir);
             }
         }
         else
         {
             if ((side == dir.getCounterClockWise() && adjDir == dir) || (side == dir.getClockWise() && adjDir == dir.getClockWise()))
             {
-                return (type == SlopeType.TOP) == adjType.isTop() && SideSkipPredicate.compareState(level, pos, side, dir);
+                return (type == SlopeType.TOP) == adjType.isTop() && SideSkipPredicate.compareState(level, pos, side, dir, dir);
             }
             else if ((side == dir.getClockWise() && adjDir == dir.getOpposite()) || (side == dir.getCounterClockWise() && adjDir == dir.getCounterClockWise()))
             {
                 Direction face = adjType.isTop() ? Direction.DOWN : Direction.UP;
-                return (type == SlopeType.TOP) != adjType.isTop() && SideSkipPredicate.compareState(level, pos, side, face);
+                return (type == SlopeType.TOP) != adjType.isTop() && SideSkipPredicate.compareState(level, pos, side, face, face);
             }
         }
         return false;
@@ -181,18 +182,18 @@ public class SlopeSkipPredicate implements SideSkipPredicate
                                                       (side == dir.getClockWise() && adjDir == dir.getClockWise()))
             )
             {
-                return SideSkipPredicate.compareState(level, pos, side, dir);
+                return SideSkipPredicate.compareState(level, pos, side, dir, dir);
             }
             else if ((type == SlopeType.TOP) != adjTop && ((side == dir.getCounterClockWise() && adjDir == dir.getCounterClockWise()) ||
                                                            (side == dir.getClockWise() && adjDir == dir.getOpposite()))
             )
             {
-                return SideSkipPredicate.compareState(level, pos, side, dir);
+                return SideSkipPredicate.compareState(level, pos, side, dir, dir);
             }
         }
         else if ((adjDir == dir || adjDir == dir.getOpposite()) && ((side == Direction.DOWN && !adjTop) || (side == Direction.UP && adjTop)))
         {
-            return SideSkipPredicate.compareState(level, pos, side, dir);
+            return SideSkipPredicate.compareState(level, pos, side, dir, dir);
         }
         return false;
     }
@@ -208,22 +209,22 @@ public class SlopeSkipPredicate implements SideSkipPredicate
             {
                 if (type == SlopeType.BOTTOM && adjType == CornerType.HORIZONTAL_BOTTOM_RIGHT)
                 {
-                    return SideSkipPredicate.compareState(level, pos, side, dir);
+                    return SideSkipPredicate.compareState(level, pos, side, dir, dir);
                 }
                 else if (type == SlopeType.TOP && adjType == CornerType.HORIZONTAL_TOP_RIGHT)
                 {
-                    return SideSkipPredicate.compareState(level, pos, side, dir);
+                    return SideSkipPredicate.compareState(level, pos, side, dir, dir);
                 }
             }
             else if (adjDir == dir.getClockWise())
             {
                 if (type == SlopeType.BOTTOM && adjType == CornerType.BOTTOM)
                 {
-                    return SideSkipPredicate.compareState(level, pos, side, dir);
+                    return SideSkipPredicate.compareState(level, pos, side, dir, dir);
                 }
                 else if (type == SlopeType.TOP && adjType == CornerType.TOP)
                 {
-                    return SideSkipPredicate.compareState(level, pos, side, dir);
+                    return SideSkipPredicate.compareState(level, pos, side, dir, dir);
                 }
             }
         }
@@ -231,22 +232,22 @@ public class SlopeSkipPredicate implements SideSkipPredicate
         {
             if (type == SlopeType.BOTTOM && (adjType == CornerType.BOTTOM || adjType == CornerType.HORIZONTAL_BOTTOM_LEFT))
             {
-                return SideSkipPredicate.compareState(level, pos, side, dir);
+                return SideSkipPredicate.compareState(level, pos, side, dir, dir);
             }
             else if (type == SlopeType.TOP && (adjType == CornerType.TOP || adjType == CornerType.HORIZONTAL_TOP_LEFT))
             {
-                return SideSkipPredicate.compareState(level, pos, side, dir);
+                return SideSkipPredicate.compareState(level, pos, side, dir, dir);
             }
         }
         else if (Utils.isY(side) && type == SlopeType.HORIZONTAL && ((side == Direction.UP) == (adjType.isTop())))
         {
             if (adjType.isRight())
             {
-                return dir == adjDir.getClockWise() && SideSkipPredicate.compareState(level, pos, side, dir);
+                return dir == adjDir.getClockWise() && SideSkipPredicate.compareState(level, pos, side, dir, dir);
             }
             else
             {
-                return dir == adjDir && SideSkipPredicate.compareState(level, pos, side, dir);
+                return dir == adjDir && SideSkipPredicate.compareState(level, pos, side, dir, dir);
             }
         }
         return false;
@@ -261,16 +262,16 @@ public class SlopeSkipPredicate implements SideSkipPredicate
         {
             if (side == dir.getClockWise())
             {
-                return dir == adjDir && SideSkipPredicate.compareState(level, pos, side, dir);
+                return dir == adjDir && SideSkipPredicate.compareState(level, pos, side, dir, dir);
             }
             else if (side == dir.getCounterClockWise())
             {
-                return adjDir == dir.getClockWise() && SideSkipPredicate.compareState(level, pos, side, dir);
+                return adjDir == dir.getClockWise() && SideSkipPredicate.compareState(level, pos, side, dir, dir);
             }
         }
         else if (type == SlopeType.HORIZONTAL && Utils.isY(side) && adjTop == (side == Direction.DOWN))
         {
-            return dir == adjDir && SideSkipPredicate.compareState(level, pos, side, dir);
+            return dir == adjDir && SideSkipPredicate.compareState(level, pos, side, dir, dir);
         }
         return false;
     }
@@ -284,16 +285,16 @@ public class SlopeSkipPredicate implements SideSkipPredicate
         {
             if (side == dir.getClockWise())
             {
-                return adjDir == dir.getClockWise() && SideSkipPredicate.compareState(level, pos, side, dir);
+                return adjDir == dir.getClockWise() && SideSkipPredicate.compareState(level, pos, side, dir, dir);
             }
             else if (side == dir.getCounterClockWise())
             {
-                return dir == adjDir && SideSkipPredicate.compareState(level, pos, side, dir);
+                return dir == adjDir && SideSkipPredicate.compareState(level, pos, side, dir, dir);
             }
         }
         else if (type == SlopeType.HORIZONTAL && Utils.isY(side) && adjTop == (side == Direction.UP))
         {
-            return dir == adjDir && SideSkipPredicate.compareState(level, pos, side, dir);
+            return dir == adjDir && SideSkipPredicate.compareState(level, pos, side, dir, dir);
         }
         return false;
     }

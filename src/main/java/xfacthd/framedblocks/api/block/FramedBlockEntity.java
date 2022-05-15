@@ -137,7 +137,7 @@ public class FramedBlockEntity extends BlockEntity
             int light = getLightValue();
 
             ItemStack camoStack = getCamoStack(hit);
-            if (!player.getInventory().add(camoStack))
+            if ((!player.isCreative() || !player.getInventory().contains(camoStack)) && !player.getInventory().add(camoStack))
             {
                 player.drop(camoStack, false);
             }

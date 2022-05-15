@@ -22,7 +22,7 @@ import xfacthd.framedblocks.common.data.PropertyHolder;
 import java.util.List;
 
 @GameTestHolder(FramedBlocks.MODID)
-public class InteractionTests
+public final class InteractionTests
 {
     private static final BlockPos POS_ABOVE_FLOOR = new BlockPos(0, 2, 0);
 
@@ -352,4 +352,6 @@ public class InteractionTests
                 helper::succeed
         ));
     }
+
+    private InteractionTests() { }
 }

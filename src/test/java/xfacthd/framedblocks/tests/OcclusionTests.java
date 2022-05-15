@@ -17,8 +17,24 @@ import xfacthd.framedblocks.util.TestedType;
 import java.util.*;
 import java.util.stream.Collectors;
 
+/**
+ * Tests that are known to fail should be marked as optional.
+ *
+ * Known failing tests:
+ * {@link OcclusionTests#testTop_SlopeSlab_BottomHalfTop(GameTestHelper)}
+ * {@link OcclusionTests#testTop_SlopeSlab_TopHalfBottom(GameTestHelper)}
+ * {@link OcclusionTests#testTop_SlopeSlab_TopHalfTop(GameTestHelper)}
+ * {@link OcclusionTests#testBottom_SlopeSlab_BottomHalfTop(GameTestHelper)}
+ * {@link OcclusionTests#testBottom_SlopeSlab_TopHalfBottom(GameTestHelper)}
+ * {@link OcclusionTests#testBottom_SlopeSlab_TopHalfTop(GameTestHelper)}
+ * {@link OcclusionTests#test_InvDoubleSlopeSlab(GameTestHelper)}
+ * {@link OcclusionTests#test_SlopePanel_FrontHalfNorth(GameTestHelper)}
+ * {@link OcclusionTests#test_SlopePanel_FrontHalfSouth(GameTestHelper)}
+ * {@link OcclusionTests#test_InvDoubleSlopePanel(GameTestHelper)}
+ */
+
 @GameTestHolder(FramedBlocks.MODID)
-public class OcclusionTests
+public final class OcclusionTests
 {
     @GameTest(template = "box_top", batch = "occlusion")
     @TestedType(type = BlockType.FRAMED_CUBE)
@@ -986,7 +1002,7 @@ public class OcclusionTests
         TestUtils.testBlockOccludesLightBelow(helper, state);
     }
 
-    @GameTest(template = "box_top", batch = "occlusion", required = false) //TODO: known to fail
+    @GameTest(template = "box_top", batch = "occlusion", required = false)
     @TestedType(type = BlockType.FRAMED_SLOPE_SLAB)
     public static void testTop_SlopeSlab_BottomHalfTop(GameTestHelper helper)
     {
@@ -996,7 +1012,7 @@ public class OcclusionTests
         TestUtils.testBlockOccludesLightBelow(helper, state);
     }
 
-    @GameTest(template = "box_top", batch = "occlusion", required = false) //TODO: known to fail
+    @GameTest(template = "box_top", batch = "occlusion", required = false)
     @TestedType(type = BlockType.FRAMED_SLOPE_SLAB)
     public static void testTop_SlopeSlab_TopHalfBottom(GameTestHelper helper)
     {
@@ -1006,7 +1022,7 @@ public class OcclusionTests
         TestUtils.testBlockOccludesLightBelow(helper, state);
     }
 
-    @GameTest(template = "box_top", batch = "occlusion", required = false) //TODO: known to fail
+    @GameTest(template = "box_top", batch = "occlusion", required = false)
     @TestedType(type = BlockType.FRAMED_SLOPE_SLAB)
     public static void testTop_SlopeSlab_TopHalfTop(GameTestHelper helper)
     {
@@ -1025,7 +1041,7 @@ public class OcclusionTests
         TestUtils.testBlockOccludesLightAbove(helper, state);
     }
 
-    @GameTest(template = "box_bottom", batch = "occlusion", required = false) //TODO: known to fail
+    @GameTest(template = "box_bottom", batch = "occlusion", required = false)
     @TestedType(type = BlockType.FRAMED_SLOPE_SLAB)
     public static void testBottom_SlopeSlab_BottomHalfTop(GameTestHelper helper)
     {
@@ -1035,7 +1051,7 @@ public class OcclusionTests
         TestUtils.testBlockOccludesLightAbove(helper, state);
     }
 
-    @GameTest(template = "box_bottom", batch = "occlusion", required = false) //TODO: known to fail
+    @GameTest(template = "box_bottom", batch = "occlusion", required = false)
     @TestedType(type = BlockType.FRAMED_SLOPE_SLAB)
     public static void testBottom_SlopeSlab_TopHalfBottom(GameTestHelper helper)
     {
@@ -1045,7 +1061,7 @@ public class OcclusionTests
         TestUtils.testBlockOccludesLightAbove(helper, state);
     }
 
-    @GameTest(template = "box_bottom", batch = "occlusion", required = false) //TODO: known to fail
+    @GameTest(template = "box_bottom", batch = "occlusion", required = false)
     @TestedType(type = BlockType.FRAMED_SLOPE_SLAB)
     public static void testBottom_SlopeSlab_TopHalfTop(GameTestHelper helper)
     {
@@ -1110,7 +1126,7 @@ public class OcclusionTests
         TestUtils.testDoubleBlockOccludesLightBelow(helper, state, List.of(Direction.UP, Direction.DOWN));
     }
 
-    @GameTest(template = "box_top", batch = "occlusion", required = false) //TODO: known to fail
+    @GameTest(template = "box_top", batch = "occlusion", required = false)
     @TestedType(type = BlockType.FRAMED_INV_DOUBLE_SLOPE_SLAB)
     public static void test_InvDoubleSlopeSlab(GameTestHelper helper)
     {
@@ -1144,7 +1160,7 @@ public class OcclusionTests
         TestUtils.testBlockOccludesLightNorth(helper, state);
     }
 
-    @GameTest(template = "box_side", batch = "occlusion", required = false) //TODO: known to fail
+    @GameTest(template = "box_side", batch = "occlusion", required = false)
     @TestedType(type = BlockType.FRAMED_SLOPE_PANEL)
     public static void test_SlopePanel_FrontHalfNorth(GameTestHelper helper)
     {
@@ -1154,7 +1170,7 @@ public class OcclusionTests
         TestUtils.testBlockOccludesLightNorth(helper, state);
     }
 
-    @GameTest(template = "box_side", batch = "occlusion", required = false) //TODO: known to fail
+    @GameTest(template = "box_side", batch = "occlusion", required = false)
     @TestedType(type = BlockType.FRAMED_SLOPE_PANEL)
     public static void test_SlopePanel_FrontHalfSouth(GameTestHelper helper)
     {
@@ -1191,7 +1207,7 @@ public class OcclusionTests
         TestUtils.testBlockOccludesLightNorth(helper, state, List.of(Direction.NORTH, Direction.SOUTH));
     }
 
-    @GameTest(template = "box_side", batch = "occlusion", required = false) //TODO: known to fail
+    @GameTest(template = "box_side", batch = "occlusion", required = false)
     @TestedType(type = BlockType.FRAMED_INV_DOUBLE_SLOPE_PANEL)
     public static void test_InvDoubleSlopePanel(GameTestHelper helper)
     {
@@ -1225,4 +1241,6 @@ public class OcclusionTests
             FramedBlocks.LOGGER.warn("Found blocks missing occlusion test {}", missing);
         }
     }
+
+    private OcclusionTests() { }
 }

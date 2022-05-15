@@ -46,11 +46,11 @@ public class ThreewayCornerSkipPredicate implements SideSkipPredicate
 
         if (Utils.isY(side) && adjTop != top && adjDir == dir && (side == Direction.UP) == top)
         {
-            return SideSkipPredicate.compareState(level, pos, side, side);
+            return SideSkipPredicate.compareState(level, pos, side, side, side);
         }
         else if (adjTop == top && ((side == dir && adjDir == dir.getCounterClockWise()) || (side == dir.getCounterClockWise() && adjDir == dir.getClockWise())))
         {
-            return SideSkipPredicate.compareState(level, pos, side, side);
+            return SideSkipPredicate.compareState(level, pos, side, side, side);
         }
         return false;
     }
@@ -62,7 +62,8 @@ public class ThreewayCornerSkipPredicate implements SideSkipPredicate
 
         if (adjTop == top && adjDir == dir && (side == dir || side == dir.getCounterClockWise() || (side == Direction.DOWN && !top) || (side == Direction.UP && top)))
         {
-            return SideSkipPredicate.compareState(level, pos, side, top ? Direction.UP : Direction.DOWN);
+            Direction camoSide = top ? Direction.UP : Direction.DOWN;
+            return SideSkipPredicate.compareState(level, pos, side, camoSide, camoSide);
         }
         return false;
     }
@@ -74,15 +75,15 @@ public class ThreewayCornerSkipPredicate implements SideSkipPredicate
 
         if (adjTop == top && adjDir == dir && (side == dir || side == dir.getCounterClockWise() || (side == Direction.UP && top) || (side == Direction.DOWN && !top)))
         {
-            return SideSkipPredicate.compareState(level, pos, side, dir);
+            return SideSkipPredicate.compareState(level, pos, side, dir, dir);
         }
         else if (adjTop == top && adjDir == dir.getOpposite() && ((side == Direction.UP && top) || (side == Direction.DOWN || !top)))
         {
-            return SideSkipPredicate.compareState(level, pos, side, dir);
+            return SideSkipPredicate.compareState(level, pos, side, dir, dir);
         }
         else if (adjTop != top && ((side == dir.getCounterClockWise() && adjDir == dir.getCounterClockWise()) || (side == dir && adjDir == dir.getClockWise())))
         {
-            return SideSkipPredicate.compareState(level, pos, side, adjDir.getOpposite());
+            return SideSkipPredicate.compareState(level, pos, side, adjDir.getOpposite(), adjDir.getOpposite());
         }
         return false;
     }
@@ -94,11 +95,11 @@ public class ThreewayCornerSkipPredicate implements SideSkipPredicate
 
         if ((side == dir && adjDir == dir.getCounterClockWise()) || (side == dir.getCounterClockWise() && adjDir == dir))
         {
-            return adjType != SlopeType.HORIZONTAL && (adjType == SlopeType.TOP) == top && SideSkipPredicate.compareState(level, pos, side, side);
+            return adjType != SlopeType.HORIZONTAL && (adjType == SlopeType.TOP) == top && SideSkipPredicate.compareState(level, pos, side, side, side);
         }
         else if ((!top && side == Direction.DOWN) || (top && side == Direction.UP))
         {
-            return adjType == SlopeType.HORIZONTAL && adjDir == dir && SideSkipPredicate.compareState(level, pos, side, side);
+            return adjType == SlopeType.HORIZONTAL && adjDir == dir && SideSkipPredicate.compareState(level, pos, side, side, side);
         }
         return false;
     }
@@ -112,16 +113,16 @@ public class ThreewayCornerSkipPredicate implements SideSkipPredicate
         {
             if ((side == dir.getCounterClockWise() && adjDir == dir) || (side == dir && adjDir == dir.getCounterClockWise()))
             {
-                return (adjType == SlopeType.TOP) == top && SideSkipPredicate.compareState(level, pos, side, adjDir.getOpposite());
+                return (adjType == SlopeType.TOP) == top && SideSkipPredicate.compareState(level, pos, side, adjDir.getOpposite(), adjDir.getOpposite());
             }
             else if ((side == dir.getCounterClockWise() && adjDir == dir.getOpposite()) || (side == dir && adjDir == dir.getClockWise()))
             {
-                return (adjType == SlopeType.TOP) != top && SideSkipPredicate.compareState(level, pos, side, adjDir.getOpposite());
+                return (adjType == SlopeType.TOP) != top && SideSkipPredicate.compareState(level, pos, side, adjDir.getOpposite(), adjDir.getOpposite());
             }
         }
         else if ((!top && side == Direction.DOWN || top && side == Direction.UP) && (adjDir == dir || adjDir == dir.getOpposite()))
         {
-            return SideSkipPredicate.compareState(level, pos, side, dir);
+            return SideSkipPredicate.compareState(level, pos, side, dir, dir);
         }
         return false;
     }
@@ -133,19 +134,19 @@ public class ThreewayCornerSkipPredicate implements SideSkipPredicate
 
         if (((side == dir && adjDir == dir.getCounterClockWise()) || (side == dir.getCounterClockWise() && adjDir == dir.getClockWise())) && !adjType.isHorizontal())
         {
-            return adjType.isTop() == top && SideSkipPredicate.compareState(level, pos, side, side);
+            return adjType.isTop() == top && SideSkipPredicate.compareState(level, pos, side, side, side);
         }
         else if ((side == dir && adjDir == dir.getCounterClockWise() && !adjType.isRight()) ||
                  (side == dir.getCounterClockWise() && adjDir == dir && adjType.isRight())
         )
         {
-            return adjType.isTop() == top && adjType.isHorizontal() && SideSkipPredicate.compareState(level, pos, side, side);
+            return adjType.isTop() == top && adjType.isHorizontal() && SideSkipPredicate.compareState(level, pos, side, side, side);
         }
         else if (((!top && side == Direction.DOWN) || (top && side == Direction.UP)) &&
                 ((adjDir == dir.getCounterClockWise() && adjType.isRight()) || (adjDir == dir && !adjType.isRight()))
         )
         {
-            return adjType.isTop() != top && adjType.isHorizontal() && SideSkipPredicate.compareState(level, pos, side, side);
+            return adjType.isTop() != top && adjType.isHorizontal() && SideSkipPredicate.compareState(level, pos, side, side, side);
         }
         return false;
     }
@@ -157,16 +158,19 @@ public class ThreewayCornerSkipPredicate implements SideSkipPredicate
 
         if (!adjType.isHorizontal() && adjDir == dir && (side == dir || side == dir.getCounterClockWise()) && adjType.isTop() == top)
         {
-            return SideSkipPredicate.compareState(level, pos, side, top ? Direction.UP : Direction.DOWN);
+            Direction camoSide = top ? Direction.UP : Direction.DOWN;
+            return SideSkipPredicate.compareState(level, pos, side, camoSide, camoSide);
         }
         else if (adjType.isHorizontal() && ((side == dir && adjType.isRight()) || (side == dir.getCounterClockWise() && !adjType.isRight())) && adjType.isTop() == top)
         {
-            return SideSkipPredicate.compareState(level, pos, side, top ? Direction.UP : Direction.DOWN);
+            Direction camoSide = top ? Direction.UP : Direction.DOWN;
+            return SideSkipPredicate.compareState(level, pos, side, camoSide, camoSide);
         }
         else if (adjType.isHorizontal() && ((side == Direction.DOWN && !top) || (side == Direction.UP && top)) && adjType.isTop() == top)
         {
+            Direction camoSide = top ? Direction.UP : Direction.DOWN;
             return ((!adjType.isRight() && adjDir == dir) || (adjType.isRight() && adjDir == dir.getCounterClockWise())) &&
-                    SideSkipPredicate.compareState(level, pos, side, top ? Direction.UP : Direction.DOWN);
+                    SideSkipPredicate.compareState(level, pos, side, camoSide, camoSide);
         }
         return false;
     }
@@ -180,13 +184,15 @@ public class ThreewayCornerSkipPredicate implements SideSkipPredicate
         {
             if (adjDir == dir && adjType.isTop() == top && (side == dir || side == dir.getCounterClockWise()))
             {
-                return SideSkipPredicate.compareState(level, pos, side, top ? Direction.UP : Direction.DOWN);
+                Direction camoSide = top ? Direction.UP : Direction.DOWN;
+                return SideSkipPredicate.compareState(level, pos, side, camoSide, camoSide);
             }
             else if (adjType.isTop() != top && ((side == dir && adjDir == dir.getClockWise()) ||
                                                 (side == dir.getCounterClockWise() && adjDir == dir.getCounterClockWise()))
             )
             {
-                return SideSkipPredicate.compareState(level, pos, side, top ? Direction.UP : Direction.DOWN);
+                Direction camoSide = top ? Direction.UP : Direction.DOWN;
+                return SideSkipPredicate.compareState(level, pos, side, camoSide, camoSide);
             }
         }
         else if (adjType.isTop() == top)
@@ -195,11 +201,11 @@ public class ThreewayCornerSkipPredicate implements SideSkipPredicate
             {
                 if ((side == Direction.DOWN && !top) || (side == Direction.UP && top))
                 {
-                    return SideSkipPredicate.compareState(level, pos, side, adjDir);
+                    return SideSkipPredicate.compareState(level, pos, side, adjDir, adjDir);
                 }
                 else if ((side == dir && adjType.isRight()) || (side == dir.getCounterClockWise() && !adjType.isRight()))
                 {
-                    return SideSkipPredicate.compareState(level, pos, side, adjDir);
+                    return SideSkipPredicate.compareState(level, pos, side, adjDir, adjDir);
                 }
             }
             else if (Utils.isY(side) && ((!adjType.isRight() && adjDir == dir.getOpposite()) || (adjType.isRight() && adjDir == dir.getClockWise()))
@@ -207,7 +213,7 @@ public class ThreewayCornerSkipPredicate implements SideSkipPredicate
             {
                 if ((side == Direction.DOWN && !top) || (side == Direction.UP && top))
                 {
-                    return SideSkipPredicate.compareState(level, pos, side, adjDir.getOpposite());
+                    return SideSkipPredicate.compareState(level, pos, side, adjDir.getOpposite(), adjDir.getOpposite());
                 }
             }
         }
@@ -215,7 +221,7 @@ public class ThreewayCornerSkipPredicate implements SideSkipPredicate
                  (side == dir.getCounterClockWise() && adjDir == dir.getOpposite() && adjType.isRight())
         )
         {
-            return SideSkipPredicate.compareState(level, pos, side, adjDir.getOpposite());
+            return SideSkipPredicate.compareState(level, pos, side, adjDir.getOpposite(), adjDir.getOpposite());
         }
         return false;
     }

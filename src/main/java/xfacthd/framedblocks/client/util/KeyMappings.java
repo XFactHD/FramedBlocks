@@ -17,7 +17,7 @@ import xfacthd.framedblocks.FramedBlocks;
 import xfacthd.framedblocks.api.block.FramedBlockEntity;
 
 @Mod.EventBusSubscriber(modid = FramedBlocks.MODID, value = Dist.CLIENT)
-public class KeyMappings
+public final class KeyMappings
 {
     private static final String KEY_CATEGORY = FramedBlocks.MODID + ".key.categories.framedblocks";
     private static final Lazy<KeyMapping> KEYMAPPING_UPDATE_CULLING = makeKeyMapping("update_cull", GLFW.GLFW_KEY_F9);
@@ -51,4 +51,8 @@ public class KeyMappings
             }
         }
     }
+
+
+
+    private KeyMappings() { }
 }

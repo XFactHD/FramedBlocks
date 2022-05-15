@@ -38,7 +38,6 @@ public enum CornerType implements StringRepresentable
         };
     }
 
-    @SuppressWarnings("DuplicatedCode") //Switch over enum cannot be deduplicated
     public boolean isHorizontalAdjacent(Direction dir, Direction side, CornerType adjType)
     {
         if (!isHorizontal() || !adjType.isHorizontal()) { return false; }
@@ -73,7 +72,6 @@ public enum CornerType implements StringRepresentable
         return false;
     }
 
-    @SuppressWarnings("DuplicatedCode")
     public boolean isHorizontalAdjacentInner(Direction dir, Direction side, CornerType adjType)
     {
         if (!isHorizontal() || !adjType.isHorizontal()) { return false; }

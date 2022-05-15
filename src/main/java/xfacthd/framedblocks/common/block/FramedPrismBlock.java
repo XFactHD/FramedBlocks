@@ -16,6 +16,8 @@ import xfacthd.framedblocks.common.FBContent;
 import xfacthd.framedblocks.common.data.BlockType;
 import xfacthd.framedblocks.common.data.PropertyHolder;
 
+//TODO: move from two Direction properties to one Direction property and the Rotation property (needs to be adapted to handle y as rotation axis)
+//      to eliminate the possibility of invalid state in 1.19
 public class FramedPrismBlock extends FramedBlock
 {
     public static final CtmPredicate CTM_PREDICATE = (state, side) -> side == state.getValue(BlockStateProperties.FACING).getOpposite();

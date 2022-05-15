@@ -79,7 +79,7 @@ public class SlabEdgeSkipPredicate implements SideSkipPredicate
         if (side != dir) { return false; }
 
         Direction face = top ? Direction.UP : Direction.DOWN;
-        return SideSkipPredicate.compareState(level, pos, side, face);
+        return SideSkipPredicate.compareState(level, pos, side, face, face);
     }
 
     private static boolean testAgainstCorner(BlockGetter level, BlockPos pos, Direction dir, boolean top, BlockState adjState, Direction side)
@@ -117,7 +117,7 @@ public class SlabEdgeSkipPredicate implements SideSkipPredicate
 
         if ((side == Direction.UP && top) || (side == Direction.DOWN && !top))
         {
-            return SideSkipPredicate.compareState(level, pos, side, dir);
+            return SideSkipPredicate.compareState(level, pos, side, dir, dir);
         }
         return false;
     }

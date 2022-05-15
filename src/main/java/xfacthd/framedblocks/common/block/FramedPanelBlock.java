@@ -105,6 +105,8 @@ public class FramedPanelBlock extends FramedBlock
         return super.use(state, level, pos, player, hand, hit);
     }
 
+
+
     public static ImmutableMap<BlockState, VoxelShape> generateShapes(ImmutableList<BlockState> states)
     {
         VoxelShape shape = box(0, 0, 0, 16, 16, 8);

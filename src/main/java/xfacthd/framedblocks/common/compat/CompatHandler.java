@@ -4,7 +4,7 @@ import net.minecraftforge.fml.ModList;
 import xfacthd.framedblocks.FramedBlocks;
 import xfacthd.framedblocks.common.compat.buildinggadgets.BuildingGadgetsCompat;
 
-public class CompatHandler
+public final class CompatHandler
 {
     public static void init()
     {
@@ -25,4 +25,8 @@ public class CompatHandler
             }
         }
     }
+
+
+
+    private CompatHandler() { }
 }

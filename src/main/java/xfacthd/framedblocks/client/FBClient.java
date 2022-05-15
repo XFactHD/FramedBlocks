@@ -36,7 +36,7 @@ import java.util.List;
 import java.util.Map;
 
 @Mod.EventBusSubscriber(modid = FramedBlocks.MODID, bus = Mod.EventBusSubscriber.Bus.MOD, value = Dist.CLIENT)
-public class FBClient
+public final class FBClient
 {
     static { FramedBlocksClientAPI.INSTANCE.accept(new ClientApiImpl()); }
 
@@ -194,4 +194,8 @@ public class FBClient
             Minecraft.getInstance().setScreen(new FramedSignScreen(be));
         }
     }
+
+
+
+    private FBClient() { }
 }

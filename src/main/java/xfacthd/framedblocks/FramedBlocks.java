@@ -1,10 +1,8 @@
 package xfacthd.framedblocks;
 
-import com.google.common.base.Preconditions;
-import net.minecraft.core.NonNullList;
+import com.mojang.logging.LogUtils;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.*;
-import net.minecraft.world.level.block.Block;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.CrashReportCallables;
 import net.minecraftforge.fml.ModLoadingContext;
@@ -14,24 +12,21 @@ import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.network.NetworkDirection;
 import net.minecraftforge.network.NetworkRegistry;
 import net.minecraftforge.network.simple.SimpleChannel;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import org.slf4j.Logger;
 import xfacthd.framedblocks.api.FramedBlocksAPI;
 import xfacthd.framedblocks.client.util.ClientConfig;
 import xfacthd.framedblocks.common.FBContent;
-import xfacthd.framedblocks.api.block.IFramedBlock;
 import xfacthd.framedblocks.common.compat.CompatHandler;
-import xfacthd.framedblocks.common.item.FramedToolItem;
 import xfacthd.framedblocks.common.net.OpenSignScreenPacket;
 import xfacthd.framedblocks.common.net.SignUpdatePacket;
 import xfacthd.framedblocks.common.util.*;
 
 @Mod(FramedBlocks.MODID)
 @Mod.EventBusSubscriber(modid = FramedBlocks.MODID, bus = Mod.EventBusSubscriber.Bus.MOD)
-public class FramedBlocks
+public final class FramedBlocks
 {
     public static final String MODID = "framedblocks";
-    public static final Logger LOGGER = LogManager.getLogger();
+    public static final Logger LOGGER = LogUtils.getLogger();
 
     private static final String PROTOCOL_VERSION = "1";
     public static final SimpleChannel CHANNEL = NetworkRegistry.newSimpleChannel(
@@ -41,42 +36,7 @@ public class FramedBlocks
             PROTOCOL_VERSION::equals
     );
 	
-    public static final CreativeModeTab FRAMED_TAB = new CreativeModeTab("framed_blocks")
-    {
-        @Override
-        public ItemStack makeIcon() { return new ItemStack(FBContent.blockFramedCube.get()); }
-
-        @Override
-        public void fillItemList(NonNullList<ItemStack> items)
-        {
-            super.fillItemList(items);
-            items.sort((s1, s2) ->
-            {
-                Item itemOne = s1.getItem();
-                Item itemTwo = s2.getItem();
-
-                if (itemOne instanceof FramedToolItem toolOne && itemTwo instanceof FramedToolItem toolTwo)
-                {
-                    return toolOne.getType().compareTo(toolTwo.getType());
-                }
-                else if (itemOne instanceof FramedToolItem) { return 1; }
-                else if (itemTwo instanceof FramedToolItem) { return -1; }
-
-                Preconditions.checkArgument(
-                        itemOne instanceof BlockItem bi && bi.getBlock() instanceof IFramedBlock,
-                        String.format("Invalid item in FramedBlocks creative tab: %s", itemOne.getRegistryName())
-                );
-                Preconditions.checkArgument(
-                        itemTwo instanceof BlockItem bi && bi.getBlock() instanceof IFramedBlock,
-                        String.format("Invalid item in FramedBlocks creative tab: %s", itemOne.getRegistryName())
-                );
-
-                Block b1 = ((BlockItem) itemOne).getBlock();
-                Block b2 = ((BlockItem) itemTwo).getBlock();
-                return ((IFramedBlock)b1).getBlockType().compareTo(((IFramedBlock)b2).getBlockType());
-            });
-        }
-    };
+    public static final CreativeModeTab FRAMED_TAB = new FramedCreativeTab();
 
     public FramedBlocks()
     {

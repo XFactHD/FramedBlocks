@@ -103,11 +103,11 @@ public class VerticalStairsSkipPredicate implements SideSkipPredicate
         Direction adjDir = adjState.getValue(PropertyHolder.FACING_NE);
         if (side == dir.getClockWise() && (adjDir == dir || adjDir == dir.getOpposite()))
         {
-            return SideSkipPredicate.compareState(level, pos, side, dir);
+            return SideSkipPredicate.compareState(level, pos, side, dir, dir);
         }
         if (side == dir.getOpposite() && (adjDir == dir.getCounterClockWise() || adjDir == dir.getClockWise()))
         {
-            return SideSkipPredicate.compareState(level, pos, side, dir.getCounterClockWise());
+            return SideSkipPredicate.compareState(level, pos, side, dir.getCounterClockWise(), dir.getCounterClockWise());
         }
         return false;
     }

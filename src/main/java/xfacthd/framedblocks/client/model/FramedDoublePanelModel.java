@@ -9,18 +9,17 @@ import xfacthd.framedblocks.common.data.PropertyHolder;
 
 public class FramedDoublePanelModel extends FramedDoubleBlockModel
 {
-    private final BlockState state;
+    private final Direction facing;
 
     public FramedDoublePanelModel(BlockState state, BakedModel baseModel)
     {
         super(baseModel, false);
-        this.state = state;
+        this.facing = state.getValue(PropertyHolder.FACING_NE);
     }
 
     @Override
     protected Tuple<BlockState, BlockState> getDummyStates()
     {
-        Direction facing = state.getValue(PropertyHolder.FACING_NE);
         return FramedDoublePanelBlockEntity.getBlockPair(facing);
     }
 }

@@ -96,7 +96,8 @@ public class VerticalHalfStairsSkipPredicate implements SideSkipPredicate
     {
         if (side == dir || side == dir.getCounterClockWise())
         {
-            return SideSkipPredicate.compareState(level, pos, side, top ? Direction.UP : Direction.DOWN);
+            Direction camoSide = top ? Direction.UP : Direction.DOWN;
+            return SideSkipPredicate.compareState(level, pos, side, camoSide, camoSide);
         }
 
         return false;

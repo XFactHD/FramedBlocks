@@ -7,7 +7,7 @@ import net.minecraft.core.Direction;
 import net.minecraft.util.Mth;
 import xfacthd.framedblocks.api.util.Utils;
 
-public class BakedQuadTransformer
+public final class BakedQuadTransformer
 {
     private static final float SCALE_ROTATION_45 = 1.0F / (float)Math.cos(Math.PI / 4D) - 1.0F;
     private static final float SCALE_ROTATION_22_5 = 1.0F / (float)Math.cos(Math.PI / 8F) - 1.0F;
@@ -928,4 +928,8 @@ public class BakedQuadTransformer
             return true;
         });
     }
+
+
+
+    private BakedQuadTransformer() { }
 }

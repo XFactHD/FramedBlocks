@@ -43,13 +43,14 @@ public class SlabSkipPredicate implements SideSkipPredicate
     {
         if (top != adjState.getValue(PropertyHolder.TOP)) { return false; }
 
-        return SideSkipPredicate.compareState(level, pos, side, top ? Direction.UP : Direction.DOWN);
+        Direction camoSide = top ? Direction.UP : Direction.DOWN;
+        return SideSkipPredicate.compareState(level, pos, side, camoSide, camoSide);
     }
 
     private static boolean testAgainstDoubleSlab(BlockGetter level, BlockPos pos, boolean top, Direction side)
     {
         Direction face = top ? Direction.UP : Direction.DOWN;
-        return SideSkipPredicate.compareState(level, pos, side, face);
+        return SideSkipPredicate.compareState(level, pos, side, face, face);
     }
 
     private static boolean testAgainstEdge(BlockGetter level, BlockPos pos, boolean top, BlockState adjState, Direction side)
@@ -57,7 +58,8 @@ public class SlabSkipPredicate implements SideSkipPredicate
         if (top != adjState.getValue(PropertyHolder.TOP)) { return false; }
         if (adjState.getValue(PropertyHolder.FACING_HOR) != side.getOpposite()) { return false; }
 
-        return SideSkipPredicate.compareState(level, pos, side, top ? Direction.UP : Direction.DOWN);
+        Direction camoSide = top ? Direction.UP : Direction.DOWN;
+        return SideSkipPredicate.compareState(level, pos, side, camoSide, camoSide);
     }
 
     private static boolean testAgainstStairs(BlockGetter level, BlockPos pos, boolean top, BlockState adjState, Direction side)
@@ -80,7 +82,8 @@ public class SlabSkipPredicate implements SideSkipPredicate
 
         if (Utils.isY(side)) { return false; }
 
-        return adjDir == side.getOpposite() && adjTopHalf == top && SideSkipPredicate.compareState(level, pos, side, top ? Direction.UP : Direction.DOWN);
+        Direction camoSide = top ? Direction.UP : Direction.DOWN;
+        return adjDir == side.getOpposite() && adjTopHalf == top && SideSkipPredicate.compareState(level, pos, side, camoSide, camoSide);
     }
 
     private static boolean testAgainstElevatedSlopeSlab(BlockGetter level, BlockPos pos, boolean top, BlockState adjState, Direction side)
@@ -90,7 +93,8 @@ public class SlabSkipPredicate implements SideSkipPredicate
 
         if (Utils.isY(side)) { return false; }
 
-        return adjDir == side && adjTop == top && SideSkipPredicate.compareState(level, pos, side, top ? Direction.UP : Direction.DOWN);
+        Direction camoSide = top ? Direction.UP : Direction.DOWN;
+        return adjDir == side && adjTop == top && SideSkipPredicate.compareState(level, pos, side, camoSide, camoSide);
     }
 
     private static boolean testAgainstDoubleSlopeSlab(BlockGetter level, BlockPos pos, boolean top, BlockState adjState, Direction side)
@@ -100,7 +104,8 @@ public class SlabSkipPredicate implements SideSkipPredicate
 
         if (Utils.isY(side)) { return false; }
 
-        return (adjDir == side || adjDir == side.getOpposite()) && adjTopHalf == top && SideSkipPredicate.compareState(level, pos, side, top ? Direction.UP : Direction.DOWN);
+        Direction camoSide = top ? Direction.UP : Direction.DOWN;
+        return (adjDir == side || adjDir == side.getOpposite()) && adjTopHalf == top && SideSkipPredicate.compareState(level, pos, side, camoSide, camoSide);
     }
 
     private static boolean testAgainstInverseDoubleSlopeSlab(BlockGetter level, BlockPos pos, boolean top, BlockState adjState, Direction side)
@@ -109,7 +114,8 @@ public class SlabSkipPredicate implements SideSkipPredicate
 
         if (Utils.isY(side)) { return false; }
 
-        return ((adjDir == side && !top) || (adjDir == side.getOpposite() && top)) && SideSkipPredicate.compareState(level, pos, side, top ? Direction.UP : Direction.DOWN);
+        Direction camoSide = top ? Direction.UP : Direction.DOWN;
+        return ((adjDir == side && !top) || (adjDir == side.getOpposite() && top)) && SideSkipPredicate.compareState(level, pos, side, camoSide, camoSide);
     }
 
     private static boolean testAgainstVerticalHalfStairs(BlockGetter level, BlockPos pos, boolean top, BlockState adjState, Direction side)
@@ -121,7 +127,8 @@ public class SlabSkipPredicate implements SideSkipPredicate
 
         if (adjTop == top && (adjDir == side.getOpposite() || adjDir == side.getCounterClockWise()))
         {
-            return SideSkipPredicate.compareState(level, pos, side, top ? Direction.UP : Direction.DOWN);
+            Direction camoSide = top ? Direction.UP : Direction.DOWN;
+            return SideSkipPredicate.compareState(level, pos, side, camoSide, camoSide);
         }
 
         return false;

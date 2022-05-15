@@ -10,7 +10,7 @@ import xfacthd.framedblocks.FramedBlocks;
 import xfacthd.framedblocks.common.datagen.providers.*;
 
 @Mod.EventBusSubscriber(modid = FramedBlocks.MODID, bus = Mod.EventBusSubscriber.Bus.MOD)
-public class GeneratorHandler
+public final class GeneratorHandler
 {
     @SubscribeEvent
     public static void onGatherData(final GatherDataEvent event)
@@ -27,4 +27,8 @@ public class GeneratorHandler
         gen.addProvider(new FramedItemTagProvider(gen, tagProvider, fileHelper));
         gen.addProvider(new FramedLanguageProvider(gen));
     }
+
+
+
+    private GeneratorHandler() { }
 }

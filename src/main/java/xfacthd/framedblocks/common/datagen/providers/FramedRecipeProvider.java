@@ -313,7 +313,7 @@ public class FramedRecipeProvider extends RecipeProvider
         ShapelessRecipeBuilder.shapeless(FBContent.blockFramedCornerPillar.get(), 1)
                 .requires(FBContent.blockFramedPillar.get())
                 .unlockedBy("hasFramedPillar", has(FBContent.blockFramedPillar.get()))
-                .save(consumer, FramedBlocks.MODID + ":framed_corner_pillar_from_pillar");
+                .save(consumer, rl("framed_corner_pillar_from_pillar"));
 
         ShapelessRecipeBuilder.shapeless(FBContent.blockFramedHalfPillar.get(), 1)
                 .requires(FBContent.blockFramedSlabCorner.get())
@@ -323,7 +323,7 @@ public class FramedRecipeProvider extends RecipeProvider
         ShapelessRecipeBuilder.shapeless(FBContent.blockFramedSlabCorner.get(), 1)
                 .requires(FBContent.blockFramedHalfPillar.get())
                 .unlockedBy("hasFramedHalfPillar", has(FBContent.blockFramedHalfPillar.get()))
-                .save(consumer, FramedBlocks.MODID + ":framed_slab_corner_from_half_pillar");
+                .save(consumer, rl("framed_slab_corner_from_half_pillar"));
 
         ShapelessRecipeBuilder.shapeless(FBContent.blockFramedPost.get(), 1)
                 .requires(FBContent.blockFramedFence.get())
@@ -333,7 +333,7 @@ public class FramedRecipeProvider extends RecipeProvider
         ShapelessRecipeBuilder.shapeless(FBContent.blockFramedFence.get(), 1)
                 .requires(FBContent.blockFramedPost.get())
                 .unlockedBy("hasFramedPost", has(FBContent.blockFramedPost.get()))
-                .save(consumer, FramedBlocks.MODID + ":framed_fence_from_post");
+                .save(consumer, rl("framed_fence_from_post"));
 
         ShapedRecipeBuilder.shaped(FBContent.blockFramedCollapsibleBlock.get(), 4)
                 .pattern("FFF")
@@ -353,7 +353,7 @@ public class FramedRecipeProvider extends RecipeProvider
                 .pattern("SS")
                 .define('S', FBContent.blockFramedHalfStairs.get())
                 .unlockedBy("hasFramedHalfStairs", has(FBContent.blockFramedHalfStairs.get()))
-                .save(consumer, FramedBlocks.MODID + ":framed_stairs_from_half_stairs");
+                .save(consumer, rl("framed_stairs_from_half_stairs"));
 
         ShapedRecipeBuilder.shaped(FBContent.blockFramedBouncyCube.get())
                 .pattern(" S ")
@@ -423,7 +423,7 @@ public class FramedRecipeProvider extends RecipeProvider
         ShapelessRecipeBuilder.shapeless(FBContent.blockFramedDoubleSlopeSlab.get())
                 .requires(FBContent.blockFramedInverseDoubleSlopeSlab.get())
                 .unlockedBy("hasFramedInverseDoubleSlopeSlab", has(FBContent.blockFramedInverseDoubleSlopeSlab.get()))
-                .save(consumer, FramedBlocks.MODID + ":framed_double_slope_slab_from_inverse");
+                .save(consumer, rl("framed_double_slope_slab_from_inverse"));
 
         ShapelessRecipeBuilder.shapeless(FBContent.blockFramedVerticalHalfStairs.get(), 2)
                 .requires(FBContent.blockFramedVerticalStairs.get())
@@ -459,25 +459,25 @@ public class FramedRecipeProvider extends RecipeProvider
                 .requires(FBContent.blockFramedSlopePanel.get())
                 .requires(FBContent.itemFramedWrench.get())
                 .unlockedBy("hasFramedSlopePanel", has(FBContent.blockFramedSlopePanel.get()))
-                .save(consumer, FramedBlocks.MODID + ":framed_slope_slab_from_slope_panel");
+                .save(consumer, rl("framed_slope_slab_from_slope_panel"));
 
         ShapelessRecipeBuilder.shapeless(FBContent.blockFramedElevatedSlopeSlab.get())
                 .requires(FBContent.blockFramedExtendedSlopePanel.get())
                 .requires(FBContent.itemFramedWrench.get())
                 .unlockedBy("hasFramedExtendedSlopePanel", has(FBContent.blockFramedExtendedSlopePanel.get()))
-                .save(consumer, FramedBlocks.MODID + ":framed_elevated_slope_slab_from_extended_slope_panel");
+                .save(consumer, rl("framed_elevated_slope_slab_from_extended_slope_panel"));
 
         ShapelessRecipeBuilder.shapeless(FBContent.blockFramedDoubleSlopeSlab.get())
                 .requires(FBContent.blockFramedDoubleSlopePanel.get())
                 .requires(FBContent.itemFramedWrench.get())
                 .unlockedBy("hasFramedDoubleSlopePanel", has(FBContent.blockFramedDoubleSlopePanel.get()))
-                .save(consumer, FramedBlocks.MODID + ":framed_double_slope_slab_from_double_slope_panel");
+                .save(consumer, rl("framed_double_slope_slab_from_double_slope_panel"));
 
         ShapelessRecipeBuilder.shapeless(FBContent.blockFramedInverseDoubleSlopeSlab.get())
                 .requires(FBContent.blockFramedInverseDoubleSlopePanel.get())
                 .requires(FBContent.itemFramedWrench.get())
                 .unlockedBy("hasFramedInverseDoubleSlopePanel", has(FBContent.blockFramedInverseDoubleSlopePanel.get()))
-                .save(consumer, FramedBlocks.MODID + ":framed_inverse_double_slope_slab_from_inverse_double_slope_panel");
+                .save(consumer, rl("framed_inverse_double_slope_slab_from_inverse_double_slope_panel"));
 
 
 
@@ -508,4 +508,6 @@ public class FramedRecipeProvider extends RecipeProvider
                 .unlockedBy("hasFramedBlock", HAS_FRAMED_BLOCK)
                 .save(consumer);
     }
+
+    private static String rl(String path) { return FramedBlocks.MODID + ":" + path; }
 }

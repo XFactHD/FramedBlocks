@@ -18,7 +18,7 @@ import xfacthd.framedblocks.common.data.BlockType;
 import java.util.*;
 
 @GameTestHolder(FramedBlocks.MODID)
-public class LightSourceTests
+public final class LightSourceTests
 {
     private static final String BATCH_NAME = "lightsource";
     private static final String STRUCTURE_NAME = FramedBlocks.MODID + ":lightsourcetests.box";
@@ -79,4 +79,6 @@ public class LightSourceTests
 
         return List.of(Direction.UP, Direction.DOWN);
     }
+
+    private LightSourceTests() { }
 }

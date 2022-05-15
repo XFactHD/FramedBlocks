@@ -21,7 +21,7 @@ import org.jetbrains.annotations.Nullable;
 import java.util.*;
 import java.util.function.*;
 
-public class ClientUtils
+public final class ClientUtils
 {
     private static final Logger LOGGER = LogManager.getLogger();
 
@@ -156,4 +156,8 @@ public class ClientUtils
     });
 
     public static void enqueueClientTask(Runnable task) { Minecraft.getInstance().tell(task); }
+
+
+
+    private ClientUtils() { }
 }

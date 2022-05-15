@@ -85,7 +85,8 @@ public class ElevatedSlopeSlabSkipPredicate implements SideSkipPredicate
 
     private static boolean testAgainstDoubleSlab(BlockGetter level, BlockPos pos, Direction dir, boolean top, Direction side)
     {
-        return side == dir.getOpposite() && SideSkipPredicate.compareState(level, pos, side, top ? Direction.UP : Direction.DOWN);
+        Direction camoSide = top ? Direction.UP : Direction.DOWN;
+        return side == dir.getOpposite() && SideSkipPredicate.compareState(level, pos, side, camoSide, camoSide);
     }
 
     private static boolean testAgainstSlabEdge(BlockGetter level, BlockPos pos, Direction dir, boolean top, BlockState adjState, Direction side)

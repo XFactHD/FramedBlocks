@@ -12,7 +12,7 @@ import xfacthd.framedblocks.api.block.FramedBlockEntity;
 import xfacthd.framedblocks.api.block.IFramedBlock;
 
 @Mod.EventBusSubscriber(modid = FramedBlocks.MODID, bus = Mod.EventBusSubscriber.Bus.FORGE)
-public class EventHandler
+public final class EventHandler
 {
     @SubscribeEvent
     public static void onBlockLeftClick(final PlayerInteractEvent.LeftClickBlock event)
@@ -39,4 +39,8 @@ public class EventHandler
             }
         }
     }
+
+
+
+    private EventHandler() { }
 }

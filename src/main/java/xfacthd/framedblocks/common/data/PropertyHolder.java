@@ -3,7 +3,7 @@ package xfacthd.framedblocks.common.data;
 import net.minecraft.world.level.block.state.properties.*;
 import xfacthd.framedblocks.api.util.FramedProperties;
 
-public class PropertyHolder
+public final class PropertyHolder
 {
     public static final DirectionProperty FACING_HOR = FramedProperties.FACING_HOR;
     public static final DirectionProperty FACING_NE = FramedProperties.FACING_NE;
@@ -25,4 +25,8 @@ public class PropertyHolder
     public static final BooleanProperty RIGHT = BooleanProperty.create("right");
     public static final BooleanProperty TOP_HALF = BooleanProperty.create("top_half");
     public static final BooleanProperty FRONT = BooleanProperty.create("front");
+
+
+
+    private PropertyHolder() { }
 }

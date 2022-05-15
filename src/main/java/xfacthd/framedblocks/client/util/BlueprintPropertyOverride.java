@@ -6,9 +6,11 @@ import net.minecraft.resources.ResourceLocation;
 import xfacthd.framedblocks.FramedBlocks;
 import xfacthd.framedblocks.common.FBContent;
 
-public class BlueprintPropertyOverride
+public final class BlueprintPropertyOverride
 {
     public static final ResourceLocation HAS_DATA = new ResourceLocation(FramedBlocks.MODID, "blueprint_override");
+
+    private BlueprintPropertyOverride() { }
 
     public static void register()
     {

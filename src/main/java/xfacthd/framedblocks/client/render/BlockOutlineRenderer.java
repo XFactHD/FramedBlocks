@@ -20,13 +20,13 @@ import xfacthd.framedblocks.client.util.ClientConfig;
 import xfacthd.framedblocks.common.data.*;
 import xfacthd.framedblocks.common.util.FramedUtils;
 
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 @Mod.EventBusSubscriber(modid = FramedBlocks.MODID, value = Dist.CLIENT)
-public class BlockOutlineRenderer
+public final class BlockOutlineRenderer
 {
     private static final Map<IBlockType, OutlineRender> OUTLINE_RENDERERS = new HashMap<>();
+    private static final Set<IBlockType> ERRORED_TYPES = new HashSet<>();
 
     @SubscribeEvent
     public static void onRenderBlockHighlight(final DrawSelectionEvent.HighlightBlock event)
@@ -44,7 +44,16 @@ public class BlockOutlineRenderer
             PoseStack mstack = event.getPoseStack();
             Vec3 offset = Vec3.atLowerCornerOf(result.getBlockPos()).subtract(event.getCamera().getPosition());
             VertexConsumer builder = event.getMultiBufferSource().getBuffer(RenderType.lines());
+
             OutlineRender render = OUTLINE_RENDERERS.get(type);
+            if (render == null)
+            {
+                if (ERRORED_TYPES.add(type))
+                {
+                    FramedBlocks.LOGGER.error("IBlockType '{}' requests custom outline rendering but no OutlineRender was registered!", type.getName());
+                }
+                return;
+            }
 
             mstack.pushPose();
             mstack.translate(offset.x, offset.y, offset.z);
@@ -438,4 +447,8 @@ public class BlockOutlineRenderer
         OutlineRender.drawLine(builder, pstack, 0, 0, 0, 0, .5, 0);
         OutlineRender.drawLine(builder, pstack, 1, 0, 0, 1, .5, 0);
     }
+
+
+
+    private BlockOutlineRenderer() { }
 }

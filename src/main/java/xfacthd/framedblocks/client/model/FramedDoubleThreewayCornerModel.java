@@ -14,27 +14,26 @@ import xfacthd.framedblocks.common.data.PropertyHolder;
 
 public class FramedDoubleThreewayCornerModel extends FramedDoubleBlockModel
 {
-    private final BlockState state;
+    private final Direction facing;
+    private final boolean top;
 
     public FramedDoubleThreewayCornerModel(BlockState state, BakedModel baseModel)
     {
         super(baseModel, true);
-        this.state = state;
+        this.facing = state.getValue(PropertyHolder.FACING_HOR);
+        this.top = state.getValue(PropertyHolder.TOP);
     }
 
     @Override
     protected Tuple<BlockState, BlockState> getDummyStates()
     {
-        Direction facing = state.getValue(PropertyHolder.FACING_HOR);
-        boolean top = state.getValue(PropertyHolder.TOP);
-
         return FramedDoubleThreewayCornerBlockEntity.getThreewayBlockPair(facing, top);
     }
 
     @Override
     public TextureAtlasSprite getParticleIcon(@NotNull IModelData data)
     {
-        if (state.getValue(PropertyHolder.TOP))
+        if (top)
         {
             return getSpriteOrDefault(data, FramedDoubleBlockEntity.DATA_LEFT, getModels().getB());
         }

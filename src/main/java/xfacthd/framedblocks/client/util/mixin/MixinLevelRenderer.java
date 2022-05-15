@@ -10,7 +10,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import xfacthd.framedblocks.client.render.GhostBlockRenderer;
 
 /**
- * Inspired by https://github.com/MinecraftForge/MinecraftForge/pull/7225/
+ * Inspired by <a href="https://github.com/MinecraftForge/MinecraftForge/pull/7225/">MinecraftForge#7225</a>
  */
 
 @Mixin(LevelRenderer.class)

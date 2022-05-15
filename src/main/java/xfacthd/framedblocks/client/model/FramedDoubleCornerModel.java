@@ -14,27 +14,25 @@ import xfacthd.framedblocks.common.data.*;
 
 public class FramedDoubleCornerModel extends FramedDoubleBlockModel
 {
-    private final BlockState state;
+    private final CornerType type;
+    private final Direction facing;
 
     public FramedDoubleCornerModel(BlockState state, BakedModel baseModel)
     {
         super(baseModel, true);
-        this.state = state;
+        this.type = state.getValue(PropertyHolder.CORNER_TYPE);
+        this.facing = state.getValue(PropertyHolder.FACING_HOR);
     }
 
     @Override
     protected Tuple<BlockState, BlockState> getDummyStates()
     {
-        CornerType type = state.getValue(PropertyHolder.CORNER_TYPE);
-        Direction facing = state.getValue(PropertyHolder.FACING_HOR);
-
         return FramedDoubleCornerBlockEntity.getBlockPair(type, facing);
     }
 
     @Override
     public TextureAtlasSprite getParticleIcon(@NotNull IModelData data)
     {
-        CornerType type = state.getValue(PropertyHolder.CORNER_TYPE);
         if (type == CornerType.BOTTOM)
         {
             return getSpriteOrDefault(data, FramedDoubleBlockEntity.DATA_RIGHT, getModels().getA());

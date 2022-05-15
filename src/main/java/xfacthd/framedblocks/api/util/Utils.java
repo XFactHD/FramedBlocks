@@ -18,7 +18,7 @@ import net.minecraftforge.fml.loading.FMLEnvironment;
 import xfacthd.framedblocks.api.FramedBlocksAPI;
 import xfacthd.framedblocks.api.util.client.ClientUtils;
 
-public class Utils
+public final class Utils
 {
     public static final TagKey<Block> FRAMEABLE = blockTag("frameable");
     public static final TagKey<Block> BLACKLIST = blockTag("blacklisted");
@@ -105,4 +105,8 @@ public class Utils
     {
         return ItemTags.create(new ResourceLocation(modid, name));
     }
+
+
+
+    private Utils() { }
 }

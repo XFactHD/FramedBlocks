@@ -17,7 +17,7 @@ import java.util.*;
 
 @GameTestHolder(FramedBlocks.MODID)
 @PrefixGameTestTemplate(value = false)
-public class NonWorldTests
+public final class NonWorldTests
 {
     //static { GlobalTestReporter.replaceWith(new VerboseLogTestReporter()); }
 
@@ -94,4 +94,8 @@ public class NonWorldTests
             helper.succeed();
         }
     }
+
+
+
+    private NonWorldTests() { }
 }

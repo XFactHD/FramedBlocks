@@ -11,7 +11,7 @@ import xfacthd.framedblocks.api.util.Utils;
 
 import java.util.Arrays;
 
-public class ModelUtils
+public final class ModelUtils
 {
     private static final int ELEMENT_POS = findElement(DefaultVertexFormat.ELEMENT_POSITION);
     private static final int ELEMENT_COLOR = findElement(DefaultVertexFormat.ELEMENT_COLOR);
@@ -271,4 +271,8 @@ public class ModelUtils
     {
         boolean accept(float[][] pos, float[][] color, float[][] uv, float[][] light, float[][] normal);
     }
+
+
+
+    private ModelUtils() { }
 }

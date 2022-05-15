@@ -12,6 +12,7 @@ import xfacthd.framedblocks.common.data.skippreds.*;
 
 import java.util.Locale;
 
+@SuppressWarnings("SameParameterValue")
 public enum BlockType implements IBlockType
 {
     FRAMED_CUBE                   ( true, false, false, false,  true,  true, false, CtmPredicate.TRUE, SideSkipPredicate.CTM, Shapes.block()),
