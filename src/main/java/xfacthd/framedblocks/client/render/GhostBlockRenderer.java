@@ -189,7 +189,7 @@ public final class GhostBlockRenderer
     private static void doRenderGhostBlock(PoseStack mstack, MultiBufferSource buffers, BlockPos renderPos, BlockState renderState, BlockState camoState, BlockState camoStateTwo)
     {
         Vec3 offset = Vec3.atLowerCornerOf(renderPos).subtract(mc().gameRenderer.getMainCamera().getPosition());
-        VertexConsumer builder = new GhostVertexConsumer(buffers.getBuffer(RenderType.translucent()), 0xAA);
+        VertexConsumer builder = new GhostVertexConsumer(buffers.getBuffer(CustomRenderType.GHOST_BLOCK), 0xAA);
 
         if (camoState.isAir() && camoStateTwo.isAir())
         {
@@ -206,7 +206,7 @@ public final class GhostBlockRenderer
             }
         }
 
-        ((MultiBufferSource.BufferSource) buffers).endBatch(RenderType.translucent());
+        ((MultiBufferSource.BufferSource) buffers).endBatch(CustomRenderType.GHOST_BLOCK);
         ForgeHooksClient.setRenderType(null);
     }
 
