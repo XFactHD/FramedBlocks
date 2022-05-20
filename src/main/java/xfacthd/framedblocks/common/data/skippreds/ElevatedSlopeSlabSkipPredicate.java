@@ -16,13 +16,16 @@ public class ElevatedSlopeSlabSkipPredicate implements SideSkipPredicate
     @Override
     public boolean test(BlockGetter level, BlockPos pos, BlockState state, BlockState adjState, Direction side)
     {
-        if (SideSkipPredicate.CTM.test(level, pos, state, adjState, side)) { return true; }
+        Direction dir = state.getValue(FramedProperties.FACING_HOR);
+        boolean top = state.getValue(FramedProperties.TOP);
+
+        if (side == dir || (top && side == Direction.UP) || (!top && side == Direction.DOWN))
+        {
+            return SideSkipPredicate.CTM.test(level, pos, state, adjState, side);
+        }
 
         if (adjState.getBlock() instanceof IFramedBlock block && block.getBlockType() instanceof BlockType type)
         {
-            Direction dir = state.getValue(FramedProperties.FACING_HOR);
-            boolean top = state.getValue(FramedProperties.TOP);
-
             return switch (type)
             {
                 case FRAMED_ELEVATED_SLOPE_SLAB -> testAgainstElevatedSlopeSlab(level, pos, dir, top, adjState, side);

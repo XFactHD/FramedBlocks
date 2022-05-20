@@ -14,13 +14,16 @@ public class VerticalStairsSkipPredicate implements SideSkipPredicate
     @Override
     public boolean test(BlockGetter level, BlockPos pos, BlockState state, BlockState adjState, Direction side)
     {
-        if (SideSkipPredicate.CTM.test(level, pos, state, adjState, side)) { return true; }
+        Direction dir = state.getValue(PropertyHolder.FACING_HOR);
+        StairsType type = state.getValue(PropertyHolder.STAIRS_TYPE);
+
+        if (type == StairsType.VERTICAL && (side == dir || side == dir.getCounterClockWise()))
+        {
+            return SideSkipPredicate.CTM.test(level, pos, state, adjState, side);
+        }
 
         if (adjState.getBlock() instanceof IFramedBlock block && block.getBlockType() instanceof BlockType blockType)
         {
-            Direction dir = state.getValue(PropertyHolder.FACING_HOR);
-            StairsType type = state.getValue(PropertyHolder.STAIRS_TYPE);
-
             return switch (blockType)
             {
                 case FRAMED_VERTICAL_STAIRS -> testAgainstVerticalStairs(level, pos, dir, type, adjState, side);

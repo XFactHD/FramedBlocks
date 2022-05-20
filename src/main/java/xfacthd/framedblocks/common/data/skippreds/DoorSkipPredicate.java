@@ -13,7 +13,12 @@ public class DoorSkipPredicate implements SideSkipPredicate
     @Override
     public boolean test(BlockGetter level, BlockPos pos, BlockState state, BlockState adjState, Direction side)
     {
-        if (SideSkipPredicate.CTM.test(level, pos, state, adjState, side)) { return true; }
+        Direction facing = getDoorFacing(state);
+
+        if (side == facing.getOpposite())
+        {
+            return SideSkipPredicate.CTM.test(level, pos, state, adjState, side);
+        }
 
         if (!adjState.is(FBContent.blockFramedDoor.get())) { return false; }
 
@@ -23,7 +28,6 @@ public class DoorSkipPredicate implements SideSkipPredicate
             return SideSkipPredicate.compareState(level, pos, side);
         }
 
-        Direction facing = getDoorFacing(state);
         Direction adjFacing = getDoorFacing(adjState);
         if (facing == adjFacing && (side == facing.getClockWise() || side == facing.getCounterClockWise()))
         {
