@@ -20,7 +20,7 @@ import xfacthd.framedblocks.common.data.*;
 
 import java.util.stream.Stream;
 
-public class FramedVerticalStairs extends FramedBlock
+public class FramedVerticalStairsBlock extends FramedBlock
 {
     public static final CtmPredicate CTM_PREDICATE = (state, side) ->
     {
@@ -33,7 +33,7 @@ public class FramedVerticalStairs extends FramedBlock
         return false;
     };
 
-    public FramedVerticalStairs() { super(BlockType.FRAMED_VERTICAL_STAIRS); }
+    public FramedVerticalStairsBlock() { super(BlockType.FRAMED_VERTICAL_STAIRS); }
 
     @Override
     protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder)
@@ -58,7 +58,9 @@ public class FramedVerticalStairs extends FramedBlock
             return state;
         }
 
-        return getStateFromContext(state, level, pos);
+        state = getStateFromContext(state, level, pos);
+        updateCulling(level, pos, facingState, facing, false);
+        return state;
     }
 
     @Override
