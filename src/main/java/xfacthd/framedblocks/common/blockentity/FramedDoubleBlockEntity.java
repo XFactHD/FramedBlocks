@@ -9,6 +9,7 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.NbtUtils;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.core.Direction;
+import net.minecraft.world.level.material.MaterialColor;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.level.Explosion;
 import net.minecraftforge.client.model.data.*;
@@ -93,6 +94,17 @@ public abstract class FramedDoubleBlockEntity extends FramedBlockEntity
         {
             drops.add(camoStack);
         }
+    }
+
+    @Override
+    public MaterialColor getMapColor()
+    {
+        if (!camoState.isAir())
+        {
+            //noinspection ConstantConditions
+            return camoState.getMapColor(level, worldPosition);
+        }
+        return super.getMapColor();
     }
 
     @Override

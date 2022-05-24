@@ -17,6 +17,7 @@ import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.*;
+import net.minecraft.world.level.material.MaterialColor;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.EntityCollisionContext;
@@ -563,6 +564,16 @@ public class FramedBlockEntity extends BlockEntity
         {
             drops.add(camoStack);
         }
+    }
+
+    public MaterialColor getMapColor()
+    {
+        if (!camoState.isAir())
+        {
+            //noinspection ConstantConditions
+            return camoState.getMapColor(level, worldPosition);
+        }
+        return null;
     }
 
     @Override
