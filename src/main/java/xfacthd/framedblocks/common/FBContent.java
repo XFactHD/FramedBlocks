@@ -95,6 +95,10 @@ public class FBContent
     public static final RegistryObject<Block> blockFramedDoubleSlopeSlab = registerBlock(FramedDoubleSlopeSlabBlock::new, BlockType.FRAMED_DOUBLE_SLOPE_SLAB);
     public static final RegistryObject<Block> blockFramedInverseDoubleSlopeSlab = registerBlock(FramedInverseDoubleSlopeSlabBlock::new, BlockType.FRAMED_INV_DOUBLE_SLOPE_SLAB);
     public static final RegistryObject<Block> blockFramedVerticalHalfStairs = registerBlock(FramedVerticalHalfStairsBlock::new, BlockType.FRAMED_VERTICAL_HALF_STAIRS);
+    public static final RegistryObject<Block> blockFramedSlopePanel = registerBlock(FramedSlopePanelBlock::new, BlockType.FRAMED_SLOPE_PANEL);
+    public static final RegistryObject<Block> blockFramedExtendedSlopePanel = registerBlock(FramedExtendedSlopePanelBlock::new, BlockType.FRAMED_EXTENDED_SLOPE_PANEL);
+    public static final RegistryObject<Block> blockFramedDoubleSlopePanel = registerBlock(FramedDoubleSlopePanelBlock::new, BlockType.FRAMED_DOUBLE_SLOPE_PANEL);
+    public static final RegistryObject<Block> blockFramedInverseDoubleSlopePanel = registerBlock(FramedInverseDoubleSlopePanelBlock::new, BlockType.FRAMED_INV_DOUBLE_SLOPE_PANEL);
 
     /** ITEMS */
     public static final RegistryObject<Item> itemFramedHammer = registerToolItem(FramedToolItem::new, FramedToolType.HAMMER);
@@ -166,6 +170,16 @@ public class FBContent
             FramedInverseDoubleSlopeSlabTileEntity::new,
             "framed_inverse_double_slope_slab",
             blockFramedInverseDoubleSlopeSlab
+    );
+    public static final RegistryObject<TileEntityType<FramedDoubleSlopePanelTileEntity>> blockEntityTypeFramedDoubleSlopePanel = createTileType(
+            FramedDoubleSlopePanelTileEntity::new,
+            "framed_double_slope_panel",
+            blockFramedDoubleSlopePanel
+    );
+    public static final RegistryObject<TileEntityType<FramedInverseDoubleSlopePanelTileEntity>> blockEntityTypeFramedInverseDoubleSlopePanel = createTileType(
+            FramedInverseDoubleSlopePanelTileEntity::new,
+            "framed_inverse_double_slope_panel",
+            blockFramedInverseDoubleSlopePanel
     );
 
     /** CONTAINER TYPES */

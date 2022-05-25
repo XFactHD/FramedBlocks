@@ -6,8 +6,7 @@ import net.minecraft.util.Direction;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockReader;
 import xfacthd.framedblocks.common.FBContent;
-import xfacthd.framedblocks.common.data.PropertyHolder;
-import xfacthd.framedblocks.common.data.StairsType;
+import xfacthd.framedblocks.common.data.*;
 import xfacthd.framedblocks.common.util.SideSkipPredicate;
 
 public class CornerPillarSkipPredicate implements SideSkipPredicate
@@ -50,6 +49,26 @@ public class CornerPillarSkipPredicate implements SideSkipPredicate
         if (adjState.is(FBContent.blockFramedHalfStairs.get()))
         {
             return testAgainsHalfStairs(world, pos, dir, adjState, side);
+        }
+        
+        if (adjState.is(FBContent.blockFramedSlopePanel.get()))
+        {
+            return testAgainstSlopePanel(world, pos, dir, adjState, side);
+        }
+        
+        if (adjState.is(FBContent.blockFramedExtendedSlopePanel.get()))
+        {
+            return testAgainstExtendedSlopePanel(world, pos, dir, adjState, side);
+        }
+        
+        if (adjState.is(FBContent.blockFramedInverseDoubleSlopePanel.get()))
+        {
+            return testAgainstDoubleSlopePanel(world, pos, dir, adjState, side);
+        }
+        
+        if (adjState.is(FBContent.blockFramedInverseDoubleSlopePanel.get()))
+        {
+            return testAgainstInverseDoubleSlopePanel(world, pos, dir, adjState, side);
         }
 
         return false;
@@ -165,6 +184,76 @@ public class CornerPillarSkipPredicate implements SideSkipPredicate
             {
                 return SideSkipPredicate.compareState(world, pos, side);
             }
+        }
+
+        return false;
+    }
+
+    private static boolean testAgainstSlopePanel(IBlockReader world, BlockPos pos, Direction dir, BlockState adjState, Direction side)
+    {
+        if (side != dir && side != dir.getCounterClockWise()) { return false; }
+
+        Direction adjDir = adjState.getValue(PropertyHolder.FACING_HOR);
+        Rotation adjRot = adjState.getValue(PropertyHolder.ROTATION);
+        boolean adjFront = adjState.getValue(PropertyHolder.FRONT);
+
+        if (adjRot.isVertical() || side != adjRot.withFacing(adjDir)) { return false; }
+
+        if ((!adjFront && (adjDir == dir || adjDir == dir.getCounterClockWise())) || (adjFront && (adjDir == dir.getOpposite() || adjDir == dir.getClockWise())))
+        {
+            return SideSkipPredicate.compareState(world, pos, side);
+        }
+
+        return false;
+    }
+
+    private static boolean testAgainstExtendedSlopePanel(IBlockReader world, BlockPos pos, Direction dir, BlockState adjState, Direction side)
+    {
+        if (side != dir && side != dir.getCounterClockWise()) { return false; }
+
+        Direction adjDir = adjState.getValue(PropertyHolder.FACING_HOR);
+        Rotation adjRot = adjState.getValue(PropertyHolder.ROTATION);
+
+        if (adjRot.isVertical()) { return false; }
+
+        if (side == dir && adjDir == dir.getCounterClockWise() && adjRot == Rotation.LEFT)
+        {
+            return SideSkipPredicate.compareState(world, pos, side);
+        }
+        else if (side == dir.getCounterClockWise() && adjDir == dir && adjRot == Rotation.RIGHT)
+        {
+            return SideSkipPredicate.compareState(world, pos, side);
+        }
+
+        return false;
+    }
+
+    private static boolean testAgainstDoubleSlopePanel(IBlockReader world, BlockPos pos, Direction dir, BlockState adjState, Direction side)
+    {
+        Direction adjDir = adjState.getValue(PropertyHolder.FACING_HOR);
+        Rotation adjRot = adjState.getValue(PropertyHolder.ROTATION);
+        boolean adjFront = adjState.getValue(PropertyHolder.FRONT);
+
+        if (adjRot.isVertical() || side.getAxis() != adjRot.withFacing(adjDir).getAxis()) { return false; }
+
+        if ((!adjFront && (adjDir == dir || adjDir == dir.getCounterClockWise())) || (adjFront && (adjDir == dir.getOpposite() || adjDir == dir.getClockWise())))
+        {
+            return SideSkipPredicate.compareState(world, pos, side);
+        }
+
+        return false;
+    }
+
+    private static boolean testAgainstInverseDoubleSlopePanel(IBlockReader world, BlockPos pos, Direction dir, BlockState adjState, Direction side)
+    {
+        Direction adjDir = adjState.getValue(PropertyHolder.FACING_HOR);
+        Rotation adjRot = adjState.getValue(PropertyHolder.ROTATION);
+
+        if (adjRot.isVertical() || side.getAxis() != adjRot.withFacing(adjDir).getAxis()) { return false; }
+
+        if ((side == dir && adjRot == Rotation.LEFT) || (side == dir.getCounterClockWise() && adjRot == Rotation.RIGHT))
+        {
+            return SideSkipPredicate.compareState(world, pos, side);
         }
 
         return false;

@@ -272,7 +272,7 @@ public class FramedBlock extends Block implements IFramedBlock, IWaterLoggable
         return state;
     }
 
-    protected BlockState withWater(BlockState state, IWorldReader world, BlockPos pos)
+    protected static BlockState withWater(BlockState state, IWorldReader world, BlockPos pos)
     {
         FluidState fluidState = world.getFluidState(pos);
         return state.setValue(BlockStateProperties.WATERLOGGED, fluidState.getType() == Fluids.WATER);
