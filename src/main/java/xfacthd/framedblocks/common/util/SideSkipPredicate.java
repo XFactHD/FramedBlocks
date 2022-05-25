@@ -15,6 +15,8 @@ public interface SideSkipPredicate
 
     SideSkipPredicate CTM = (world, pos, state, adjState, side) ->
     {
+        if (!((IFramedBlock) state.getBlock()).getCtmPredicate().test(state, side)) { return false; }
+
         if (adjState.getBlock() instanceof IFramedBlock)
         {
             if (!((IFramedBlock) adjState.getBlock()).getCtmPredicate().test(adjState, side.getOpposite()))
@@ -32,9 +34,7 @@ public interface SideSkipPredicate
         //noinspection deprecation
         if (adjState.isAir()) { return false; }
 
-        if (!((IFramedBlock) state.getBlock()).getCtmPredicate().test(state, side)) { return false; }
-
-        return compareState(world, pos, adjState, side);
+        return compareState(world, pos, adjState, side, side);
     };
 
     /**
@@ -50,7 +50,7 @@ public interface SideSkipPredicate
 
     static boolean compareState(IBlockReader world, BlockPos pos, Direction side)
     {
-        return compareState(world, pos, side, side.getOpposite());
+        return compareState(world, pos, side, side, side.getOpposite());
     }
 
     static boolean compareState(IBlockReader world, BlockPos pos, Direction side, Direction camoSide)
@@ -67,18 +67,22 @@ public interface SideSkipPredicate
             //noinspection deprecation
             if (adjState.isAir()) { return false; }
 
-            return compareState(world, pos, adjState, camoSide);
+            return compareState(world, pos, adjState, side, camoSide);
         }
         return false;
     }
 
-    static boolean compareState(IBlockReader world, BlockPos pos, BlockState adjState, Direction side)
+    static boolean compareState(IBlockReader world, BlockPos pos, BlockState adjState, Direction side, Direction camoSide)
     {
         TileEntity te = Utils.getTileEntitySafe(world, pos);
         if (te instanceof FramedTileEntity)
         {
-            BlockState state = ((FramedTileEntity) te).getCamoState(side);
-            return (state == adjState && !state.is(BlockTags.LEAVES)) || (state.isSolidRender(world, pos) && adjState.isSolidRender(world, pos.relative(side)));
+            BlockState state = ((FramedTileEntity) te).getCamoState(camoSide);
+            if (state == adjState)
+            {
+                return !state.is(BlockTags.LEAVES);
+            }
+            return state.isSolidRender(world, pos) && adjState.isSolidRender(world, pos.relative(side));
         }
 
         return false;
