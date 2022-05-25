@@ -191,7 +191,7 @@ public class GhostBlockRenderer
         GHOST_MODEL_DATA_RIGHT.setPos(renderPos);
 
         Vector3d offset = Vector3d.atLowerCornerOf(renderPos).subtract(mc().gameRenderer.getMainCamera().getPosition());
-        IVertexBuilder builder = new GhostVertexBuilder(buffers.getBuffer(RenderType.translucent()), 0xAA);
+        IVertexBuilder builder = new GhostVertexBuilder(buffers.getBuffer(CustomRenderType.GHOST_BLOCK), 0xAA);
 
         //noinspection deprecation
         if (camoState.isAir() && camoStateTwo.isAir())
@@ -209,7 +209,7 @@ public class GhostBlockRenderer
             }
         }
 
-        ((IRenderTypeBuffer.Impl) buffers).endBatch(RenderType.translucent());
+        ((IRenderTypeBuffer.Impl) buffers).endBatch(CustomRenderType.GHOST_BLOCK);
         ForgeHooksClient.setRenderLayer(null);
     }
 
