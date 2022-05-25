@@ -1,6 +1,7 @@
 package xfacthd.framedblocks.common.tileentity;
 
 import net.minecraft.block.*;
+import net.minecraft.block.material.MaterialColor;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.nbt.NBTUtil;
@@ -83,6 +84,18 @@ public abstract class FramedDoubleTileEntity extends FramedTileEntity
         {
             drops.add(camoStack);
         }
+    }
+
+    @Override
+    public MaterialColor getMapColor()
+    {
+        //noinspection deprecation
+        if (!camoState.isAir())
+        {
+            //noinspection ConstantConditions
+            return camoState.getMapColor(level, worldPosition);
+        }
+        return super.getMapColor();
     }
 
     @Override
