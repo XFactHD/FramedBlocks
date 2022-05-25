@@ -14,10 +14,15 @@ public class ElevatedSlopeSlabSkipPredicate implements SideSkipPredicate
     @Override
     public boolean test(IBlockReader world, BlockPos pos, BlockState state, BlockState adjState, Direction side)
     {
-        if (SideSkipPredicate.CTM.test(world, pos, state, adjState, side)) { return true; }
-
         Direction dir = state.getValue(PropertyHolder.FACING_HOR);
         boolean top = state.getValue(PropertyHolder.TOP);
+
+        if (side == dir || (top && side == Direction.UP) || (!top && side == Direction.DOWN))
+        {
+            return SideSkipPredicate.CTM.test(world, pos, state, adjState, side);
+        }
+
+        if (SideSkipPredicate.CTM.test(world, pos, state, adjState, side)) { return true; }
 
         if (adjState.is(FBContent.blockFramedElevatedSlopeSlab.get()))
         {
