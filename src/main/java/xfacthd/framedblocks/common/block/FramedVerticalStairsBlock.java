@@ -15,7 +15,7 @@ import xfacthd.framedblocks.common.util.*;
 
 import java.util.stream.Stream;
 
-public class FramedVerticalStairs extends FramedBlock
+public class FramedVerticalStairsBlock extends FramedBlock
 {
     public static final CtmPredicate CTM_PREDICATE = (state, side) ->
     {
@@ -28,7 +28,7 @@ public class FramedVerticalStairs extends FramedBlock
         return false;
     };
 
-    public FramedVerticalStairs() { super(BlockType.FRAMED_VERTICAL_STAIRS); }
+    public FramedVerticalStairsBlock() { super(BlockType.FRAMED_VERTICAL_STAIRS); }
 
     @Override
     protected void createBlockStateDefinition(StateContainer.Builder<Block, BlockState> builder)

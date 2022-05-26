@@ -50,7 +50,7 @@ public enum BlockType
     FRAMED_SOUL_WALL_TORCH        (false, false, false, false, false, false),
 	FRAMED_FLOOR_BOARD            ( true, false, false,  true,  true,  true, FramedFloorBlock.CTM_PREDICATE, FramedFloorBlock.SKIP_PREDICATE, VoxelShapes.box(0, 0, 0, 1, 1D/16D, 1)),
     FRAMED_LATTICE_BLOCK          (false, false, false,  true,  true,  true, CtmPredicate.FALSE, FramedLatticeBlock.SKIP_PREDICATE, FramedLatticeBlock::generateShapes),
-    FRAMED_VERTICAL_STAIRS        ( true, false, false,  true,  true,  true, FramedVerticalStairs.CTM_PREDICATE, new VerticalStairsSkipPredicate(), FramedVerticalStairs::generateShapes),
+    FRAMED_VERTICAL_STAIRS        ( true, false, false,  true,  true,  true, FramedVerticalStairsBlock.CTM_PREDICATE, new VerticalStairsSkipPredicate(), FramedVerticalStairsBlock::generateShapes),
     FRAMED_CHEST                  (false, false,  true,  true,  true, false, CtmPredicate.FALSE, SideSkipPredicate.FALSE, VoxelShapes.box(1D/16D, 0, 1D/16D, 15D/16D, 14D/16D, 15D/16D)),
     FRAMED_BARS                   (false, false, false,  true,  true,  true, CtmPredicate.FALSE, SideSkipPredicate.FALSE),
     FRAMED_PANE                   (false, false, false,  true,  true,  true, CtmPredicate.FALSE, new PaneSkipPredicate()),
