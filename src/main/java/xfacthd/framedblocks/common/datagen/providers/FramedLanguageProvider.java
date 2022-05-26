@@ -3,6 +3,7 @@ package xfacthd.framedblocks.common.datagen.providers;
 import net.minecraft.data.DataGenerator;
 import net.minecraftforge.common.data.LanguageProvider;
 import xfacthd.framedblocks.FramedBlocks;
+import xfacthd.framedblocks.client.util.KeyMappings;
 import xfacthd.framedblocks.common.FBContent;
 import xfacthd.framedblocks.common.blockentity.FramedStorageBlockEntity;
 import xfacthd.framedblocks.common.item.FramedBlueprintItem;
@@ -80,6 +81,9 @@ public class FramedLanguageProvider extends LanguageProvider
         add(FBContent.itemFramedHammer.get(), "Framed Hammer");
         add(FBContent.itemFramedWrench.get(), "Framed Wrench");
         add(FBContent.itemFramedBlueprint.get(), "Framed Blueprint");
+
+        add(KeyMappings.KEY_CATEGORY, "FramedBlocks");
+        add(KeyMappings.KEYMAPPING_UPDATE_CULLING.get().getName(), "Update culling cache");
 
         add(FramedBlocks.FRAMED_TAB.getDisplayName().getString(), "FramedBlocks");
         add(FramedBlockEntity.MSG_BLACKLISTED.getKey(), "This block is blacklisted!");

@@ -67,6 +67,8 @@
   "desc.framed_blocks:blueprint_illuminated_true": "true",
   "desc.framed_blocks:blueprint_invalid": "Invalid",
   "desc.framed_blocks:blueprint_none": "None",
+  "framedblocks.key.categories.framedblocks": "FramedBlocks",
+  "framedblocks.key.update_cull": "Update culling cache",
   "item.framedblocks.framed_blueprint": "Framed Blueprint",
   "item.framedblocks.framed_hammer": "Framed Hammer",
   "item.framedblocks.framed_wrench": "Framed Wrench",
