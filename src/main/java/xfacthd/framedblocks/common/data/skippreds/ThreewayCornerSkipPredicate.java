@@ -21,37 +21,20 @@ public class ThreewayCornerSkipPredicate implements SideSkipPredicate
         Direction dir = state.getValue(PropertyHolder.FACING_HOR);
         boolean top = state.getValue(PropertyHolder.TOP);
 
-        if (adjBlock == BlockType.FRAMED_PRISM_CORNER || adjBlock == BlockType.FRAMED_THREEWAY_CORNER)
+        switch (adjBlock)
         {
-            return testAgainstThreewayCorner(world, pos, dir, top, adjState, side);
-        }
-        else if (adjBlock == BlockType.FRAMED_INNER_PRISM_CORNER || adjBlock == BlockType.FRAMED_INNER_THREEWAY_CORNER)
-        {
-            return testAgainstInnerThreewayCorner(world, pos, dir, top, adjBlock, adjState, side);
-        }
-        else if (adjBlock == BlockType.FRAMED_DOUBLE_PRISM_CORNER || adjBlock == BlockType.FRAMED_DOUBLE_THREEWAY_CORNER)
-        {
-            return testAgainstDoubleThreewayCorner(world, pos, dir, top, adjState, side);
-        }
-        else if (adjBlock == BlockType.FRAMED_SLOPE || adjBlock == BlockType.FRAMED_RAIL_SLOPE)
-        {
-            return testAgainstSlope(world, pos, dir, top, adjState, side);
-        }
-        else if (adjBlock == BlockType.FRAMED_DOUBLE_SLOPE)
-        {
-            return testAgainstDoubleSlope(world, pos, dir, top, adjState, side);
-        }
-        else if (adjBlock == BlockType.FRAMED_CORNER_SLOPE)
-        {
-            return testAgainstCorner(world, pos, dir, top, adjState, side);
-        }
-        else if (adjBlock == BlockType.FRAMED_INNER_CORNER_SLOPE)
-        {
-            return testAgainstInnerCorner(world, pos, dir, top, adjState, side);
-        }
-        else if (adjBlock == BlockType.FRAMED_DOUBLE_CORNER)
-        {
-            return testAgainstDoubleCorner(world, pos, dir, top, adjState, side);
+            case FRAMED_PRISM_CORNER:
+            case FRAMED_THREEWAY_CORNER: return testAgainstThreewayCorner(world, pos, dir, top, adjState, side);
+            case FRAMED_INNER_PRISM_CORNER:
+            case FRAMED_INNER_THREEWAY_CORNER: return testAgainstInnerThreewayCorner(world, pos, dir, top, adjBlock, adjState, side);
+            case FRAMED_DOUBLE_PRISM_CORNER:
+            case FRAMED_DOUBLE_THREEWAY_CORNER: return testAgainstDoubleThreewayCorner(world, pos, dir, top, adjState, side);
+            case FRAMED_SLOPE:
+            case FRAMED_RAIL_SLOPE: return testAgainstSlope(world, pos, dir, top, adjState, side);
+            case FRAMED_DOUBLE_SLOPE: return testAgainstDoubleSlope(world, pos, dir, top, adjState, side);
+            case FRAMED_CORNER_SLOPE: return testAgainstCorner(world, pos, dir, top, adjState, side);
+            case FRAMED_INNER_CORNER_SLOPE: return testAgainstInnerCorner(world, pos, dir, top, adjState, side);
+            case FRAMED_DOUBLE_CORNER: return testAgainstDoubleCorner(world, pos, dir, top, adjState, side);
         }
 
         return false;

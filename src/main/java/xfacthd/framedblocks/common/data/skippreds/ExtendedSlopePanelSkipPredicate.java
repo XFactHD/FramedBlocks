@@ -24,27 +24,24 @@ public class ExtendedSlopePanelSkipPredicate implements SideSkipPredicate
             return SideSkipPredicate.CTM.test(world, pos, state, adjState, side);
         }
 
-        Block block = adjState.getBlock();
-        if (block instanceof IFramedBlock)
-        {
-            switch (((IFramedBlock) block).getBlockType())
-            {
-                case FRAMED_EXTENDED_SLOPE_PANEL: return testAgainstExtendedSlopePanel(world, pos, adjState, side, dir, rot, rotDir);
-                case FRAMED_SLOPE_PANEL: return testAgainstSlopePanel(world, pos, adjState, side, dir, rot, rotDir);
-                case FRAMED_DOUBLE_SLOPE_PANEL: return testAgainstDoubleSlopePanel(world, pos, adjState, side, dir, rot, rotDir);
-                case FRAMED_INV_DOUBLE_SLOPE_PANEL: return testAgainstInverseDoubleSlopePanel(world, pos, adjState, side, dir, rot, rotDir);
-                case FRAMED_SLAB_EDGE: return testAgainstSlabEdge(world, pos, adjState, side, dir, rot, rotDir);
-                case FRAMED_PANEL: return testAgainstPanel(world, pos, adjState, side, dir, rotDir);
-                case FRAMED_DOUBLE_PANEL: return testAgainstDoublePanel(world, pos, adjState, side, dir, rotDir);
-                case FRAMED_CORNER_PILLAR: return testAgainstCornerPillar(world, pos, adjState, side, dir, rot, rotDir);
-                case FRAMED_STAIRS: return testAgainstStairs(world, pos, adjState, side, dir, rot, rotDir);
-                case FRAMED_VERTICAL_STAIRS: return testAgainstVerticalStairs(world, pos, adjState, side, dir, rot, rotDir);
-                case FRAMED_HALF_STAIRS: return testAgainstHalfStairs(world, pos, adjState, side, dir, rot, rotDir);
-                default: return false;
-            }
-        }
+        if (!(adjState.getBlock() instanceof IFramedBlock)) { return false; }
+        BlockType adjBlock = ((IFramedBlock) adjState.getBlock()).getBlockType();
 
-        return false;
+        switch (adjBlock)
+        {
+            case FRAMED_EXTENDED_SLOPE_PANEL: return testAgainstExtendedSlopePanel(world, pos, adjState, side, dir, rot, rotDir);
+            case FRAMED_SLOPE_PANEL: return testAgainstSlopePanel(world, pos, adjState, side, dir, rot, rotDir);
+            case FRAMED_DOUBLE_SLOPE_PANEL: return testAgainstDoubleSlopePanel(world, pos, adjState, side, dir, rot, rotDir);
+            case FRAMED_INV_DOUBLE_SLOPE_PANEL: return testAgainstInverseDoubleSlopePanel(world, pos, adjState, side, dir, rot, rotDir);
+            case FRAMED_SLAB_EDGE: return testAgainstSlabEdge(world, pos, adjState, side, dir, rot, rotDir);
+            case FRAMED_PANEL: return testAgainstPanel(world, pos, adjState, side, dir, rotDir);
+            case FRAMED_DOUBLE_PANEL: return testAgainstDoublePanel(world, pos, adjState, side, dir, rotDir);
+            case FRAMED_CORNER_PILLAR: return testAgainstCornerPillar(world, pos, adjState, side, dir, rot, rotDir);
+            case FRAMED_STAIRS: return testAgainstStairs(world, pos, adjState, side, dir, rot, rotDir);
+            case FRAMED_VERTICAL_STAIRS: return testAgainstVerticalStairs(world, pos, adjState, side, dir, rot, rotDir);
+            case FRAMED_HALF_STAIRS: return testAgainstHalfStairs(world, pos, adjState, side, dir, rot, rotDir);
+            default: return false;
+        }
     }
 
     private static boolean testAgainstExtendedSlopePanel(IBlockReader world, BlockPos pos, BlockState adjState, Direction side, Direction dir, Rotation rot, Direction rotDir)

@@ -6,8 +6,8 @@ import net.minecraft.util.Direction;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockReader;
 import xfacthd.framedblocks.common.FBContent;
-import xfacthd.framedblocks.common.data.PropertyHolder;
-import xfacthd.framedblocks.common.data.StairsType;
+import xfacthd.framedblocks.common.block.IFramedBlock;
+import xfacthd.framedblocks.common.data.*;
 import xfacthd.framedblocks.common.util.SideSkipPredicate;
 
 public class PanelSkipPredicate implements SideSkipPredicate
@@ -18,62 +18,24 @@ public class PanelSkipPredicate implements SideSkipPredicate
         Direction dir = state.getValue(PropertyHolder.FACING_HOR);
         if (side == dir) { return SideSkipPredicate.CTM.test(world, pos, state, adjState, side); }
 
-        if (adjState.getBlock() == FBContent.blockFramedPanel.get())
-        {
-            return testAgainstPanel(world, pos, dir, adjState, side);
-        }
+        if (!(adjState.getBlock() instanceof IFramedBlock)) { return false; }
+        BlockType adjBlock = ((IFramedBlock) adjState.getBlock()).getBlockType();
 
-        if (adjState.getBlock() == FBContent.blockFramedDoublePanel.get())
+        switch (adjBlock)
         {
-            return testAgainstDoublePanel(world, pos, dir, adjState, side);
+            case FRAMED_PANEL: return testAgainstPanel(world, pos, dir, adjState, side);
+            case FRAMED_DOUBLE_PANEL: return testAgainstDoublePanel(world, pos, dir, adjState, side);
+            case FRAMED_CORNER_PILLAR: return testAgainstPillar(world, pos, dir, adjState, side);
+            case FRAMED_SLAB_EDGE: return testAgainstEdge(world, pos, dir, adjState, side);
+            case FRAMED_STAIRS: return testAgainstStairs(world, pos, dir, adjState, side);
+            case FRAMED_VERTICAL_STAIRS: return testAgainstVerticalStairs(world, pos, dir, adjState, side);
+            case FRAMED_HALF_STAIRS: return testAgainstHalfStairs(world, pos, dir, adjState, side);
+            case FRAMED_SLOPE_PANEL: return testAgainstSlopePanel(world, pos, dir, adjState, side);
+            case FRAMED_EXTENDED_SLOPE_PANEL: return testAgainstExtendedSlopePanel(world, pos, dir, adjState, side);
+            case FRAMED_DOUBLE_SLOPE_PANEL: return testAgainstDoubleSlopePanel(world, pos, dir, adjState, side);
+            case FRAMED_INV_DOUBLE_SLOPE_PANEL: return testAgainstInverseDoubleSlopePanel(world, pos, dir, adjState, side);
+            default: return false;
         }
-
-        if (adjState.getBlock() == FBContent.blockFramedCornerPillar.get())
-        {
-            return testAgainstPillar(world, pos, dir, adjState, side);
-        }
-
-        if (adjState.getBlock() == FBContent.blockFramedSlabEdge.get())
-        {
-            return testAgainstEdge(world, pos, dir, adjState, side);
-        }
-
-        if (adjState.getBlock() == FBContent.blockFramedStairs.get())
-        {
-            return testAgainstStairs(world, pos, dir, adjState, side);
-        }
-
-        if (adjState.getBlock() == FBContent.blockFramedVerticalStairs.get())
-        {
-            return testAgainstVerticalStairs(world, pos, dir, adjState, side);
-        }
-
-        if (adjState.is(FBContent.blockFramedHalfStairs.get()))
-        {
-            return testAgainstHalfStairs(world, pos, dir, adjState, side);
-        }
-
-        if (adjState.is(FBContent.blockFramedSlopePanel.get()))
-        {
-            return testAgainstSlopePanel(world, pos, dir, adjState, side);
-        }
-        
-        if (adjState.is(FBContent.blockFramedExtendedSlopePanel.get()))
-        {
-            return testAgainstExtendedSlopePanel(world, pos, dir, adjState, side);
-        }
-        
-        if (adjState.is(FBContent.blockFramedDoubleSlopePanel.get()))
-        {
-            return testAgainstDoubleSlopePanel(world, pos, dir, adjState, side);
-        }
-        
-        if (adjState.is(FBContent.blockFramedInverseDoubleSlopePanel.get()))
-        {
-            return testAgainstInverseDoubleSlopePanel(world, pos, dir, adjState, side);
-        } 
-
-        return false;
     }
 
     private boolean testAgainstPanel(IBlockReader world, BlockPos pos, Direction dir, BlockState adjState, Direction side)

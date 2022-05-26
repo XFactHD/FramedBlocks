@@ -7,7 +7,7 @@ import net.minecraft.state.properties.StairsShape;
 import net.minecraft.util.Direction;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockReader;
-import xfacthd.framedblocks.common.FBContent;
+import xfacthd.framedblocks.common.block.IFramedBlock;
 import xfacthd.framedblocks.common.data.*;
 import xfacthd.framedblocks.common.util.SideSkipPredicate;
 
@@ -18,88 +18,37 @@ public class StairsSkipPredicate implements SideSkipPredicate
     {
         if (SideSkipPredicate.CTM.test(world, pos, state, adjState, side)) { return true; }
 
+        if (!(adjState.getBlock() instanceof IFramedBlock)) { return false; }
+
+        BlockType adjBlock = ((IFramedBlock) adjState.getBlock()).getBlockType();
+        
         Direction dir = state.getValue(StairsBlock.FACING);
         StairsShape shape = state.getValue(StairsBlock.SHAPE);
         boolean top = state.getValue(StairsBlock.HALF) == Half.TOP;
 
-        if (adjState.getBlock() == FBContent.blockFramedStairs.get())
+        switch (adjBlock)
         {
-            return testAgainstStairs(world, pos, dir, shape, top, adjState, side);
+            case FRAMED_STAIRS: return testAgainstStairs(world, pos, dir, shape, top, adjState, side);
+            case FRAMED_SLAB: return testAgainstSlab(world, pos, dir, shape, top, adjState, side);
+            case FRAMED_DOUBLE_SLAB: return testAgainstDoubleSlab(world, pos, dir, shape, top, side);
+            case FRAMED_SLAB_EDGE: return testAgainstEdge(world, pos, dir, shape, top, adjState, side);
+            case FRAMED_PANEL: return testAgainstPanel(world, pos, dir, shape, top, adjState, side);
+            case FRAMED_DOUBLE_PANEL: return testAgainstDoublePanel(world, pos, dir, shape, top, adjState, side);
+            case FRAMED_CORNER_PILLAR: return testAgainstPillar(world, pos, dir, shape, top, adjState, side);
+            case FRAMED_SLAB_CORNER: return testAgainstCorner(world, pos, dir, shape, top, adjState, side);
+            case FRAMED_VERTICAL_STAIRS: return testAgainstVerticalStairs(world, pos, dir, shape, top, adjState, side);
+            case FRAMED_HALF_STAIRS: return testAgainstHalfStairs(world, pos, dir, shape, top, adjState, side);
+            case FRAMED_SLOPE_SLAB: return testAgainstSlopeSlab(world, pos, dir, shape, top, adjState, side);
+            case FRAMED_ELEVATED_SLOPE_SLAB: return testAgainstElevatedSlopeSlab(world, pos, dir, shape, top, adjState, side);
+            case FRAMED_DOUBLE_SLOPE_SLAB: return testAgainstDoubleSlopeSlab(world, pos, dir, shape, top, adjState, side);
+            case FRAMED_INV_DOUBLE_SLOPE_SLAB: return testAgainstInverseDoubleSlopeSlab(world, pos, dir, shape, top, adjState, side);
+            case FRAMED_VERTICAL_HALF_STAIRS: return testAgainstVerticalHalfStairs(world, pos, dir, shape, top, adjState, side);
+            case FRAMED_SLOPE_PANEL: return testAgainstSlopePanel(world, pos, dir, shape, top, adjState, side);
+            case FRAMED_EXTENDED_SLOPE_PANEL: return testAgainstExtendedSlopePanel(world, pos, dir, shape, top, adjState, side);
+            case FRAMED_DOUBLE_SLOPE_PANEL: return testAgainstDoubleSlopePanel(world, pos, dir, shape, top, adjState, side);
+            case FRAMED_INV_DOUBLE_SLOPE_PANEL: return testAgainstInverseDoubleSlopePanel(world, pos, dir, shape, top, adjState, side);
+            default: return false;
         }
-        else if (adjState.getBlock() == FBContent.blockFramedSlab.get())
-        {
-            return testAgainstSlab(world, pos, dir, shape, top, adjState, side);
-        }
-        else if (adjState.getBlock() == FBContent.blockFramedDoubleSlab.get())
-        {
-            return testAgainstDoubleSlab(world, pos, dir, shape, top, side);
-        }
-        else if (adjState.getBlock() == FBContent.blockFramedSlabEdge.get())
-        {
-            return testAgainstEdge(world, pos, dir, shape, top, adjState, side);
-        }
-        else if (adjState.getBlock() == FBContent.blockFramedPanel.get())
-        {
-            return testAgainstPanel(world, pos, dir, shape, top, adjState, side);
-        }
-        else if (adjState.getBlock() == FBContent.blockFramedDoublePanel.get())
-        {
-            return testAgainstDoublePanel(world, pos, dir, shape, top, adjState, side);
-        }
-        else if (adjState.getBlock() == FBContent.blockFramedCornerPillar.get())
-        {
-            return testAgainstPillar(world, pos, dir, shape, top, adjState, side);
-        }
-        else if (adjState.getBlock() == FBContent.blockFramedSlabCorner.get())
-        {
-            return testAgainstCorner(world, pos, dir, shape, top, adjState, side);
-        }
-        else if (adjState.getBlock() == FBContent.blockFramedVerticalStairs.get())
-        {
-            return testAgainstVerticalStairs(world, pos, dir, shape, top, adjState, side);
-        }
-        else if (adjState.is(FBContent.blockFramedHalfStairs.get()))
-        {
-            return testAgainstHalfStairs(world, pos, dir, shape, top, adjState, side);
-        }
-        else if (adjState.is(FBContent.blockFramedSlopeSlab.get()))
-        {
-            return testAgainstSlopeSlab(world, pos, dir, shape, top, adjState, side);
-        }
-        else if (adjState.is(FBContent.blockFramedElevatedSlopeSlab.get()))
-        {
-            return testAgainstElevatedSlopeSlab(world, pos, dir, shape, top, adjState, side);
-        }
-        else if (adjState.is(FBContent.blockFramedDoubleSlopeSlab.get()))
-        {
-            return testAgainstDoubleSlopeSlab(world, pos, dir, shape, top, adjState, side);
-        }
-        else if (adjState.is(FBContent.blockFramedInverseDoubleSlopeSlab.get()))
-        {
-            return testAgainstInverseDoubleSlopeSlab(world, pos, dir, shape, top, adjState, side);
-        }
-        else if (adjState.is(FBContent.blockFramedVerticalHalfStairs.get()))
-        {
-            return testAgainstVerticalHalfStairs(world, pos, dir, shape, top, adjState, side);
-        }
-        else if (adjState.is(FBContent.blockFramedSlopePanel.get()))
-        {
-            return testAgainstSlopePanel(world, pos, dir, shape, top, adjState, side);
-        }
-        else if (adjState.is(FBContent.blockFramedExtendedSlopePanel.get()))
-        {
-            return testAgainstExtendedSlopePanel(world, pos, dir, shape, top, adjState, side);
-        }
-        else if (adjState.is(FBContent.blockFramedDoubleSlopePanel.get()))
-        {
-            return testAgainstDoubleSlopePanel(world, pos, dir, shape, top, adjState, side);
-        }
-        else if (adjState.is(FBContent.blockFramedInverseDoubleSlopePanel.get()))
-        {
-            return testAgainstInverseDoubleSlopePanel(world, pos, dir, shape, top, adjState, side);
-        }
-
-        return false;
     }
 
     private boolean testAgainstStairs(IBlockReader world, BlockPos pos, Direction dir, StairsShape shape, boolean top, BlockState adjState, Direction side)

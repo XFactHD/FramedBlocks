@@ -5,9 +5,8 @@ import net.minecraft.state.properties.*;
 import net.minecraft.util.Direction;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockReader;
-import xfacthd.framedblocks.common.FBContent;
-import xfacthd.framedblocks.common.data.PropertyHolder;
-import xfacthd.framedblocks.common.data.StairsType;
+import xfacthd.framedblocks.common.block.IFramedBlock;
+import xfacthd.framedblocks.common.data.*;
 import xfacthd.framedblocks.common.util.SideSkipPredicate;
 
 public class SlabCornerSkipPredicate implements SideSkipPredicate
@@ -15,39 +14,23 @@ public class SlabCornerSkipPredicate implements SideSkipPredicate
     @Override
     public boolean test(IBlockReader world, BlockPos pos, BlockState state, BlockState adjState, Direction side)
     {
+        if (!(adjState.getBlock() instanceof IFramedBlock)) { return false; }
+        BlockType adjBlock = ((IFramedBlock) adjState.getBlock()).getBlockType();
+        
         Direction dir = state.getValue(PropertyHolder.FACING_HOR);
         boolean top = state.getValue(PropertyHolder.TOP);
 
-        if (adjState.getBlock() == FBContent.blockFramedSlabCorner.get())
+        switch (adjBlock)
         {
-            return testAgainstCorner(world, pos, dir, top, adjState, side);
+            case FRAMED_SLAB_CORNER: return testAgainstCorner(world, pos, dir, top, adjState, side);
+            case FRAMED_SLAB_EDGE: return testAgainstEdge(world, pos, dir, top, adjState, side);
+            case FRAMED_CORNER_PILLAR: return testAgainstPillar(world, pos, dir, top, adjState, side);
+            case FRAMED_STAIRS: return testAgainstStairs(world, pos, dir, top, adjState, side);
+            case FRAMED_VERTICAL_STAIRS: return testAgainstVerticalStairs(world, pos, dir, top, adjState, side);
+            case FRAMED_HALF_STAIRS: return testAgainstHalfStairs(world, pos, dir, top, adjState, side);
+            case FRAMED_VERTICAL_HALF_STAIRS: return testAgainstVerticalHalfStairs(world, pos, dir, top, adjState, side);
+            default: return false;
         }
-        else if (adjState.getBlock() == FBContent.blockFramedSlabEdge.get())
-        {
-            return testAgainstEdge(world, pos, dir, top, adjState, side);
-        }
-        else if (adjState.getBlock() == FBContent.blockFramedCornerPillar.get())
-        {
-            return testAgainstPillar(world, pos, dir, top, adjState, side);
-        }
-        else if (adjState.getBlock() == FBContent.blockFramedStairs.get())
-        {
-            return testAgainstStairs(world, pos, dir, top, adjState, side);
-        }
-        else if (adjState.getBlock() == FBContent.blockFramedVerticalStairs.get())
-        {
-            return testAgainstVerticalStairs(world, pos, dir, top, adjState, side);
-        }
-        else if (adjState.is(FBContent.blockFramedHalfStairs.get()))
-        {
-            return testAgainstHalfStairs(world, pos, dir, top, adjState, side);
-        }
-        else if (adjState.is(FBContent.blockFramedVerticalHalfStairs.get()))
-        {
-            return testAgainstVerticalHalfStairs(world, pos, dir, top, adjState, side);
-        }
-
-        return false;
     }
 
     private boolean testAgainstCorner(IBlockReader world, BlockPos pos, Direction dir, boolean top, BlockState adjState, Direction side)

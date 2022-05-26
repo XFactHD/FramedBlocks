@@ -5,7 +5,8 @@ import net.minecraft.state.properties.*;
 import net.minecraft.util.Direction;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockReader;
-import xfacthd.framedblocks.common.FBContent;
+import xfacthd.framedblocks.common.block.IFramedBlock;
+import xfacthd.framedblocks.common.data.BlockType;
 import xfacthd.framedblocks.common.data.PropertyHolder;
 import xfacthd.framedblocks.common.util.SideSkipPredicate;
 import xfacthd.framedblocks.common.util.Utils;
@@ -17,46 +18,24 @@ public class SlabSkipPredicate implements SideSkipPredicate
     {
         if (side.getAxis() == Direction.Axis.Y) { return SideSkipPredicate.CTM.test(world, pos, state, adjState, side); }
 
+        if (!(adjState.getBlock() instanceof IFramedBlock)) { return false; }
+        BlockType adjBlock = ((IFramedBlock) adjState.getBlock()).getBlockType();
+        
         boolean top = state.getValue(PropertyHolder.TOP);
 
-        if (adjState.getBlock() == FBContent.blockFramedSlab.get())
+        switch (adjBlock)
         {
-            return testAgainstSlab(world, pos, top, adjState, side);
+            case FRAMED_SLAB: return testAgainstSlab(world, pos, top, adjState, side);
+            case FRAMED_DOUBLE_SLAB: return testAgainstDoubleSlab(world, pos, top, side);
+            case FRAMED_SLAB_EDGE: return testAgainstEdge(world, pos, top, adjState, side);
+            case FRAMED_STAIRS: return testAgainstStairs(world, pos, top, adjState, side);
+            case FRAMED_SLOPE_SLAB: return testAgainstSlopeSlab(world, pos, top, adjState, side);
+            case FRAMED_ELEVATED_SLOPE_SLAB: return testAgainstElevatedSlopeSlab(world, pos, top, adjState, side);
+            case FRAMED_DOUBLE_SLOPE_SLAB: return testAgainstDoubleSlopeSlab(world, pos, top, adjState, side);
+            case FRAMED_INV_DOUBLE_SLOPE_SLAB: return testAgainstInverseDoubleSlopeSlab(world, pos, top, adjState, side);
+            case FRAMED_VERTICAL_HALF_STAIRS: return testAgainstVerticalHalfStairs(world, pos, top, adjState, side);
+            default: return false;
         }
-        else if (adjState.getBlock() == FBContent.blockFramedDoubleSlab.get())
-        {
-            return testAgainstDoubleSlab(world, pos, top, side);
-        }
-        else if (adjState.getBlock() == FBContent.blockFramedSlabEdge.get())
-        {
-            return testAgainstEdge(world, pos, top, adjState, side);
-        }
-        else if (adjState.getBlock() == FBContent.blockFramedStairs.get())
-        {
-            return testAgainstStairs(world, pos, top, adjState, side);
-        }
-        else if (adjState.is(FBContent.blockFramedSlopeSlab.get()))
-        {
-            return testAgainstSlopeSlab(world, pos, top, adjState, side);
-        }
-        else if (adjState.is(FBContent.blockFramedElevatedSlopeSlab.get()))
-        {
-            return testAgainstElevatedSlopeSlab(world, pos, top, adjState, side);
-        }
-        else if (adjState.is(FBContent.blockFramedDoubleSlopeSlab.get()))
-        {
-            return testAgainstDoubleSlopeSlab(world, pos, top, adjState, side);
-        }
-        else if (adjState.is(FBContent.blockFramedInverseDoubleSlopeSlab.get()))
-        {
-            return testAgainstInverseDoubleSlopeSlab(world, pos, top, adjState, side);
-        }
-        else if (adjState.is(FBContent.blockFramedVerticalHalfStairs.get()))
-        {
-            return testAgainstVerticalHalfStairs(world, pos, top, adjState, side);
-        }
-
-        return false;
     }
 
     private boolean testAgainstSlab(IBlockReader world, BlockPos pos, boolean top, BlockState adjState, Direction side)
