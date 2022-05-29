@@ -12,12 +12,14 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.phys.shapes.CollisionContext;
 import xfacthd.framedblocks.api.block.FramedBlockEntity;
 import xfacthd.framedblocks.common.FBContent;
 import xfacthd.framedblocks.common.blockentity.FramedDoubleBlockEntity;
 import xfacthd.framedblocks.common.util.FramedUtils;
+import xfacthd.framedblocks.common.util.ServerConfig;
 
-class FramedBlockEntityData extends NBTTileEntityData
+class FramedBlockEntityData extends NBTTileEntityData //FIXME: this can't handle fluid camos in the material serialization
 {
     public FramedBlockEntityData(FramedBlockEntity te) { super(te.writeToBlueprint(), buildMaterialList(te)); }
 
@@ -81,21 +83,27 @@ class FramedBlockEntityData extends NBTTileEntityData
         }
 
         //Add main camo stack
-        if (!be.getCamoState().isAir())
+        if (!be.getCamo().isEmpty())
         {
-            builder.add(UniqueItem.ofStack(be.getCamoStack().copy()));
+            builder.add(UniqueItem.ofStack(be.getCamo().toItemStack(ItemStack.EMPTY)));
         }
 
         //Add secondary camo stack
-        if (be instanceof FramedDoubleBlockEntity dbe && !dbe.getCamoStateTwo().isAir())
+        if (be instanceof FramedDoubleBlockEntity dbe && !dbe.getCamoTwo().isEmpty())
         {
-            builder.add(UniqueItem.ofStack(dbe.getCamoStackTwo().copy()));
+            builder.add(UniqueItem.ofStack(dbe.getCamoTwo().toItemStack(ItemStack.EMPTY)));
         }
 
         //Add glowstone
         if (be.isGlowing())
         {
             builder.add(UniqueItem.ofStack(new ItemStack(Items.GLOWSTONE_DUST)));
+        }
+
+        //Add intangible marker item
+        if (be.isIntangible(CollisionContext.empty()))
+        {
+            builder.add(UniqueItem.ofStack(new ItemStack(ServerConfig.intangibleMarkerItem)));
         }
 
         return builder.build();

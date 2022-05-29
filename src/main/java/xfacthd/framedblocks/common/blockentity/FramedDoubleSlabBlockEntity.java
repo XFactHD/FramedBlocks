@@ -3,10 +3,11 @@ package xfacthd.framedblocks.common.blockentity;
 import net.minecraft.core.BlockPos;
 import net.minecraft.util.Tuple;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.level.block.Blocks;
 import net.minecraft.core.Direction;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.util.Mth;
+import xfacthd.framedblocks.api.data.CamoContainer;
+import xfacthd.framedblocks.api.data.EmptyCamoContainer;
 import xfacthd.framedblocks.api.util.FramedProperties;
 import xfacthd.framedblocks.api.util.Utils;
 import xfacthd.framedblocks.common.FBContent;
@@ -30,11 +31,11 @@ public class FramedDoubleSlabBlockEntity extends FramedDoubleBlockEntity
     public DoubleSoundMode getSoundMode() { return DoubleSoundMode.SECOND; }
 
     @Override
-    public BlockState getCamoState(Direction side)
+    public CamoContainer getCamo(Direction side)
     {
-        if (side == Direction.UP) { return getCamoStateTwo(); }
-        if (side == Direction.DOWN) { return getCamoState(); }
-        return Blocks.AIR.defaultBlockState();
+        if (side == Direction.UP) { return getCamoTwo(); }
+        if (side == Direction.DOWN) { return getCamo(); }
+        return EmptyCamoContainer.EMPTY;
     }
 
     @Override
@@ -43,10 +44,10 @@ public class FramedDoubleSlabBlockEntity extends FramedDoubleBlockEntity
         if (Utils.isY(side))
         {
             //noinspection ConstantConditions
-            return getCamoState(side).isSolidRender(level, worldPosition);
+            return getCamo(side).getState().isSolidRender(level, worldPosition);
         }
         //noinspection ConstantConditions
-        return getCamoState().isSolidRender(level, worldPosition) && getCamoStateTwo().isSolidRender(level, worldPosition);
+        return getCamo().getState().isSolidRender(level, worldPosition) && getCamoTwo().getState().isSolidRender(level, worldPosition);
     }
 
     @Override

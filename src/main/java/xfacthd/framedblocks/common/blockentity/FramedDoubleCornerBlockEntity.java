@@ -3,10 +3,11 @@ package xfacthd.framedblocks.common.blockentity;
 import net.minecraft.core.BlockPos;
 import net.minecraft.util.Tuple;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.level.block.Blocks;
 import net.minecraft.core.Direction;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.Vec3;
+import xfacthd.framedblocks.api.data.CamoContainer;
+import xfacthd.framedblocks.api.data.EmptyCamoContainer;
 import xfacthd.framedblocks.api.util.FramedProperties;
 import xfacthd.framedblocks.common.FBContent;
 import xfacthd.framedblocks.common.data.*;
@@ -142,7 +143,7 @@ public class FramedDoubleCornerBlockEntity extends FramedDoubleBlockEntity
     }
 
     @Override
-    public BlockState getCamoState(Direction side)
+    public CamoContainer getCamo(Direction side)
     {
         CornerType type = getBlockState().getValue(PropertyHolder.CORNER_TYPE);
         Direction dir = getBlockState().getValue(PropertyHolder.FACING_HOR);
@@ -153,28 +154,28 @@ public class FramedDoubleCornerBlockEntity extends FramedDoubleBlockEntity
                 (!type.isRight() && side == dir.getCounterClockWise()) || (type.isRight() && side == dir.getClockWise())
             )
             {
-                return getCamoState();
+                return getCamo();
             }
 
             if (side == dir.getOpposite() || (!type.isTop() && side == Direction.UP) || (type.isTop() && side == Direction.DOWN) ||
                 (!type.isRight() && side == dir.getClockWise()) || (type.isRight() && side == dir.getCounterClockWise())
             )
             {
-                return getCamoStateTwo();
+                return getCamoTwo();
             }
         }
         else if (type == CornerType.TOP)
         {
-            if (side == dir || side == Direction.UP || side == dir.getCounterClockWise()) { return getCamoState(); }
-            if (side == dir.getOpposite() || side == Direction.DOWN || side == dir.getClockWise()) { return getCamoStateTwo(); }
+            if (side == dir || side == Direction.UP || side == dir.getCounterClockWise()) { return getCamo(); }
+            if (side == dir.getOpposite() || side == Direction.DOWN || side == dir.getClockWise()) { return getCamoTwo(); }
         }
         else if (type == CornerType.BOTTOM)
         {
-            if (side == dir || side == Direction.DOWN || side == dir.getCounterClockWise()) { return getCamoState(); }
-            if (side == dir.getOpposite() || side == Direction.UP || side == dir.getClockWise()) { return getCamoStateTwo(); }
+            if (side == dir || side == Direction.DOWN || side == dir.getCounterClockWise()) { return getCamo(); }
+            if (side == dir.getOpposite() || side == Direction.UP || side == dir.getClockWise()) { return getCamoTwo(); }
         }
 
-        return Blocks.AIR.defaultBlockState();
+        return EmptyCamoContainer.EMPTY;
     }
 
     @Override
@@ -191,17 +192,17 @@ public class FramedDoubleCornerBlockEntity extends FramedDoubleBlockEntity
             )
             {
                 //noinspection ConstantConditions
-                return getCamoState(side).isSolidRender(level, worldPosition);
+                return getCamo(side).getState().isSolidRender(level, worldPosition);
             }
         }
         else if (side == dir || side == dir.getCounterClockWise() || Utils.isY(side))
         {
             //noinspection ConstantConditions
-            return getCamoState(side).isSolidRender(level, worldPosition);
+            return getCamo(side).getState().isSolidRender(level, worldPosition);
         }
 
         //noinspection ConstantConditions
-        return getCamoState().isSolidRender(level, worldPosition) && getCamoStateTwo().isSolidRender(level, worldPosition);
+        return getCamo().getState().isSolidRender(level, worldPosition) && getCamoTwo().getState().isSolidRender(level, worldPosition);
     }
 
     @Override

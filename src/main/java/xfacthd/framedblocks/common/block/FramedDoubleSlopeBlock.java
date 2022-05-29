@@ -9,6 +9,7 @@ import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
+import xfacthd.framedblocks.api.data.CamoContainer;
 import xfacthd.framedblocks.api.util.Utils;
 import xfacthd.framedblocks.common.data.*;
 import xfacthd.framedblocks.common.blockentity.FramedDoubleSlopeBlockEntity;
@@ -57,16 +58,16 @@ public class FramedDoubleSlopeBlock extends AbstractFramedDoubleBlock
         {
             if (level.getBlockEntity(pos) instanceof FramedDoubleBlockEntity dbe)
             {
-                BlockState camoState = type == SlopeType.TOP ? dbe.getCamoState() : dbe.getCamoStateTwo();
-                if (!camoState.isAir())
+                CamoContainer camo = type == SlopeType.TOP ? dbe.getCamo() : dbe.getCamoTwo();
+                if (!camo.isEmpty())
                 {
-                    return camoState.getSoundType();
+                    return camo.getState().getSoundType();
                 }
 
-                camoState = type == SlopeType.TOP ? dbe.getCamoStateTwo() : dbe.getCamoState();
-                if (!camoState.isAir())
+                camo = type == SlopeType.TOP ? dbe.getCamoTwo() : dbe.getCamo();
+                if (!camo.isEmpty())
                 {
-                    return camoState.getSoundType();
+                    return camo.getState().getSoundType();
                 }
             }
             return getSoundType(state);

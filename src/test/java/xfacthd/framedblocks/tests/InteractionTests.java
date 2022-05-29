@@ -235,8 +235,8 @@ public final class InteractionTests
                     TestUtils.assertTrue(
                             helper,
                             POS_ABOVE_FLOOR,
-                            be.getCamoState() == Blocks.OAK_LOG.defaultBlockState(),
-                            () -> String.format("Expected oak log default state as camo, got %s", be.getCamoState())
+                            be.getCamo().getState() == Blocks.OAK_LOG.defaultBlockState(),
+                            () -> String.format("Expected oak log default state as camo, got %s", be.getCamo().getState())
                     );
                 },
                 () -> TestUtils.clickWithItem(helper, POS_ABOVE_FLOOR, FBContent.itemFramedWrench.get()),
@@ -246,8 +246,8 @@ public final class InteractionTests
                     TestUtils.assertTrue(
                             helper,
                             POS_ABOVE_FLOOR,
-                            be.getCamoState() == Blocks.OAK_LOG.defaultBlockState().cycle(RotatedPillarBlock.AXIS),
-                            () -> String.format("Expected oak log rotated once as camo, got %s", be.getCamoState())
+                            be.getCamo().getState() == Blocks.OAK_LOG.defaultBlockState().cycle(RotatedPillarBlock.AXIS),
+                            () -> String.format("Expected oak log rotated once as camo, got %s", be.getCamo().getState())
                     );
                 },
                 helper::succeed

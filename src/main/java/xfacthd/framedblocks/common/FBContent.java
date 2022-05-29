@@ -1,6 +1,7 @@
 package xfacthd.framedblocks.common;
 
 import com.google.common.base.Preconditions;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.inventory.MenuType;
 import net.minecraft.world.item.Item;
@@ -17,7 +18,11 @@ import net.minecraftforge.registries.*;
 import xfacthd.framedblocks.FramedBlocks;
 import xfacthd.framedblocks.api.block.FramedBlockEntity;
 import xfacthd.framedblocks.api.block.IFramedBlock;
+import xfacthd.framedblocks.api.data.EmptyCamoContainer;
+import xfacthd.framedblocks.api.data.CamoContainer;
 import xfacthd.framedblocks.common.block.*;
+import xfacthd.framedblocks.common.data.camo.BlockCamoContainer;
+import xfacthd.framedblocks.common.data.camo.FluidCamoContainer;
 import xfacthd.framedblocks.common.menu.FramedStorageMenu;
 import xfacthd.framedblocks.common.data.BlockType;
 import xfacthd.framedblocks.common.data.FramedToolType;
@@ -37,6 +42,21 @@ public final class FBContent
     private static final DeferredRegister<Item> ITEMS = DeferredRegister.create(ForgeRegistries.ITEMS, FramedBlocks.MODID);
     private static final DeferredRegister<BlockEntityType<?>> BE_TYPES = DeferredRegister.create(ForgeRegistries.BLOCK_ENTITIES, FramedBlocks.MODID);
     private static final DeferredRegister<MenuType<?>> CONTAINER_TYPES = DeferredRegister.create(ForgeRegistries.CONTAINERS, FramedBlocks.MODID);
+
+    public static final ResourceLocation CAMO_CONTAINER_FACTORY_REG_NAME = new ResourceLocation(FramedBlocks.MODID, "camo_containers");
+    private static final DeferredRegister<CamoContainer.Factory> CAMO_CONTAINER_FACTORIES = DeferredRegister.create(
+            CAMO_CONTAINER_FACTORY_REG_NAME,
+            FramedBlocks.MODID
+    );
+    public static final Supplier<IForgeRegistry<CamoContainer.Factory>> CAMO_CONTAINER_FACTORY_REGISTRY = CAMO_CONTAINER_FACTORIES.makeRegistry(
+            CamoContainer.Factory.class,
+            () ->
+            {
+                RegistryBuilder<CamoContainer.Factory> builder = new RegistryBuilder<>();
+                builder.disableOverrides().setDefaultKey(new ResourceLocation(FramedBlocks.MODID, "empty"));
+                return builder;
+            }
+    );
 
     /** BLOCKS */
     public static final RegistryObject<Block> blockFramedCube = registerBlock(FramedCube::new, BlockType.FRAMED_CUBE);
@@ -187,6 +207,20 @@ public final class FBContent
     /** CONTAINER TYPES */
     public static final RegistryObject<MenuType<FramedStorageMenu>> menuTypeFramedStorage = createMenuType(FramedStorageMenu::new, "framed_chest");
 
+    /** CAMO CONTAINER FACTORIES */
+    public static final RegistryObject<CamoContainer.Factory> factoryEmpty = CAMO_CONTAINER_FACTORIES.register(
+            "empty",
+            EmptyCamoContainer.Factory::new
+    );
+    public static final RegistryObject<CamoContainer.Factory> factoryBlock = CAMO_CONTAINER_FACTORIES.register(
+            "block",
+            BlockCamoContainer.Factory::new
+    );
+    public static final RegistryObject<CamoContainer.Factory> factoryFluid = CAMO_CONTAINER_FACTORIES.register(
+            "fluid",
+            FluidCamoContainer.Factory::new
+    );
+
 
 
     public static void init()
@@ -195,6 +229,7 @@ public final class FBContent
         ITEMS.register(FMLJavaModLoadingContext.get().getModEventBus());
         BE_TYPES.register(FMLJavaModLoadingContext.get().getModEventBus());
         CONTAINER_TYPES.register(FMLJavaModLoadingContext.get().getModEventBus());
+        CAMO_CONTAINER_FACTORIES.register(FMLJavaModLoadingContext.get().getModEventBus());
     }
 
     public static Collection<RegistryObject<Block>> getRegisteredBlocks() { return BLOCKS.getEntries(); }

@@ -2,7 +2,7 @@ package xfacthd.framedblocks.common.util;
 
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.world.level.block.SoundType;
-import net.minecraft.world.level.block.state.BlockState;
+import xfacthd.framedblocks.api.data.CamoContainer;
 import xfacthd.framedblocks.common.FBContent;
 import xfacthd.framedblocks.common.blockentity.FramedDoubleBlockEntity;
 
@@ -47,10 +47,10 @@ public class DoubleBlockSoundType extends SoundType
     {
         if (mode == DoubleSoundMode.EITHER) { return getEitherSoundType(); }
 
-        BlockState camo = mode == DoubleSoundMode.SECOND ? be.getCamoStateTwo() : be.getCamoState();
-        if (!camo.isAir())
+        CamoContainer camo = mode == DoubleSoundMode.SECOND ? be.getCamoTwo() : be.getCamo();
+        if (!camo.isEmpty())
         {
-            return camo.getSoundType(be.getLevel(), be.getBlockPos(), null);
+            return camo.getState().getSoundType(be.getLevel(), be.getBlockPos(), null);
         }
 
         return be.getBlockState().getSoundType();
@@ -58,16 +58,16 @@ public class DoubleBlockSoundType extends SoundType
 
     private SoundType getEitherSoundType()
     {
-        BlockState camo = be.getCamoState();
-        if (!camo.isAir())
+        CamoContainer camo = be.getCamo();
+        if (!camo.isEmpty())
         {
-            return camo.getSoundType(be.getLevel(), be.getBlockPos(), null);
+            return camo.getState().getSoundType(be.getLevel(), be.getBlockPos(), null);
         }
 
-        camo = be.getCamoStateTwo();
-        if (!camo.isAir())
+        camo = be.getCamoTwo();
+        if (!camo.isEmpty())
         {
-            return camo.getSoundType(be.getLevel(), be.getBlockPos(), null);
+            return camo.getState().getSoundType(be.getLevel(), be.getBlockPos(), null);
         }
 
         return be.getBlockState().getSoundType();

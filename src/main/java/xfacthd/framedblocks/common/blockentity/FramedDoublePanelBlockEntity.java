@@ -3,10 +3,11 @@ package xfacthd.framedblocks.common.blockentity;
 import net.minecraft.core.BlockPos;
 import net.minecraft.util.Tuple;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.level.block.Blocks;
 import net.minecraft.core.Direction;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.Vec3;
+import xfacthd.framedblocks.api.data.CamoContainer;
+import xfacthd.framedblocks.api.data.EmptyCamoContainer;
 import xfacthd.framedblocks.api.util.FramedProperties;
 import xfacthd.framedblocks.common.FBContent;
 import xfacthd.framedblocks.common.data.PropertyHolder;
@@ -44,12 +45,12 @@ public class FramedDoublePanelBlockEntity extends FramedDoubleBlockEntity
     public DoubleSoundMode getSoundMode() { return DoubleSoundMode.EITHER; }
 
     @Override
-    public BlockState getCamoState(Direction side)
+    public CamoContainer getCamo(Direction side)
     {
         Direction facing = getBlockState().getValue(PropertyHolder.FACING_NE);
-        if (side == facing) { return getCamoState(); }
-        if (side == facing.getOpposite()) { return getCamoStateTwo(); }
-        return Blocks.AIR.defaultBlockState();
+        if (side == facing) { return getCamo(); }
+        if (side == facing.getOpposite()) { return getCamoTwo(); }
+        return EmptyCamoContainer.EMPTY;
     }
 
     @Override
@@ -59,10 +60,10 @@ public class FramedDoublePanelBlockEntity extends FramedDoubleBlockEntity
         if (side == facing || side == facing.getOpposite())
         {
             //noinspection ConstantConditions
-            return getCamoState(side).isSolidRender(level, worldPosition);
+            return getCamo(side).getState().isSolidRender(level, worldPosition);
         }
         //noinspection ConstantConditions
-        return getCamoState().isSolidRender(level, worldPosition) && getCamoStateTwo().isSolidRender(level, worldPosition);
+        return getCamo().getState().isSolidRender(level, worldPosition) && getCamoTwo().getState().isSolidRender(level, worldPosition);
     }
 
     @Override

@@ -9,6 +9,7 @@ import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
+import xfacthd.framedblocks.api.data.CamoContainer;
 import xfacthd.framedblocks.common.data.BlockType;
 import xfacthd.framedblocks.common.data.PropertyHolder;
 import xfacthd.framedblocks.common.blockentity.FramedDoubleThreewayCornerBlockEntity;
@@ -53,16 +54,16 @@ public class FramedDoubleThreewayCornerBlock extends AbstractFramedDoubleBlock
         boolean top = state.getValue(PropertyHolder.TOP);
         if (level.getBlockEntity(pos) instanceof FramedDoubleBlockEntity dbe)
         {
-            BlockState camoState = top ? dbe.getCamoState() : dbe.getCamoStateTwo();
-            if (!camoState.isAir())
+            CamoContainer camo = top ? dbe.getCamo() : dbe.getCamoTwo();
+            if (!camo.isEmpty())
             {
-                return camoState.getSoundType();
+                return camo.getState().getSoundType();
             }
 
-            camoState = top ? dbe.getCamoStateTwo() : dbe.getCamoState();
-            if (!camoState.isAir())
+            camo = top ? dbe.getCamoTwo() : dbe.getCamo();
+            if (!camo.isEmpty())
             {
-                return camoState.getSoundType();
+                return camo.getState().getSoundType();
             }
         }
         return getSoundType(state);

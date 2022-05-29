@@ -8,6 +8,7 @@ import net.minecraft.client.resources.model.BakedModel;
 import net.minecraft.client.resources.model.ModelResourceLocation;
 import net.minecraft.core.BlockPos;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.level.BlockAndTintGetter;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntity;
@@ -120,6 +121,11 @@ public final class ClientUtils
     });
 
     public static void enqueueClientTask(Runnable task) { Minecraft.getInstance().tell(task); }
+
+    public static int getBlockColor(BlockAndTintGetter level, BlockPos pos, BlockState state, int tintIdx)
+    {
+        return Minecraft.getInstance().getBlockColors().getColor(state, level, pos, tintIdx);
+    }
 
 
 

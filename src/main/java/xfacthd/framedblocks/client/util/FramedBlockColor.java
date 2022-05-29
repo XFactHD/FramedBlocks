@@ -29,11 +29,7 @@ public class FramedBlockColor implements BlockColor
 
                 if (be instanceof FramedDoubleBlockEntity dbe)
                 {
-                    BlockState camoState = dbe.getCamoStateTwo();
-                    if (!camoState.isAir())
-                    {
-                        return Minecraft.getInstance().getBlockColors().getColor(camoState, level, pos, tintIndex);
-                    }
+                    return dbe.getCamoTwo().getColor(level, pos, tintIndex);
                 }
                 else if (be instanceof FramedFlowerPotBlockEntity pbe)
                 {
@@ -46,11 +42,7 @@ public class FramedBlockColor implements BlockColor
             }
             else if (be instanceof FramedBlockEntity fbe)
             {
-                BlockState camoState = fbe.getCamoState();
-                if (!camoState.isAir())
-                {
-                    return Minecraft.getInstance().getBlockColors().getColor(camoState, level, pos, tintIndex);
-                }
+                return fbe.getCamo().getColor(level, pos, tintIndex);
             }
         }
         return -1;

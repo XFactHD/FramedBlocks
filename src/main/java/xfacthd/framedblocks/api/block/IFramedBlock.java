@@ -23,6 +23,7 @@ import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.Vec3;
 import net.minecraft.world.phys.shapes.*;
 import xfacthd.framedblocks.api.FramedBlocksAPI;
+import xfacthd.framedblocks.api.data.CamoContainer;
 import xfacthd.framedblocks.api.type.IBlockType;
 import xfacthd.framedblocks.api.util.*;
 import xfacthd.framedblocks.common.util.ServerConfig;
@@ -123,10 +124,10 @@ public interface IFramedBlock extends EntityBlock//, IFacade
     {
         if (level.getBlockEntity(pos) instanceof FramedBlockEntity be)
         {
-            BlockState camoState = be.getCamoState();
-            if (!camoState.isAir())
+            CamoContainer camo = be.getCamo();
+            if (!camo.isEmpty())
             {
-                return camoState.getSoundType();
+                return camo.getState().getSoundType();
             }
         }
         return ((Block) this).getSoundType(state);
@@ -168,7 +169,7 @@ public interface IFramedBlock extends EntityBlock//, IFacade
         BlockState state = level.getBlockState(pos);
         if (getCtmPredicate().test(state, side) && level.getBlockEntity(pos) instanceof FramedBlockEntity be)
         {
-            return be.getCamoState();
+            return be.getCamo().getState();
         }
         return Blocks.AIR.defaultBlockState();
     }
@@ -199,10 +200,10 @@ public interface IFramedBlock extends EntityBlock//, IFacade
     {
         if (level.getBlockEntity(pos) instanceof FramedBlockEntity be)
         {
-            BlockState camoState = be.getCamoState(Direction.UP);
-            if (!camoState.isAir())
+            CamoContainer camo = be.getCamo(Direction.UP);
+            if (!camo.isEmpty())
             {
-                return camoState.getFriction(level, pos, entity);
+                return camo.getState().getFriction(level, pos, entity);
             }
         }
         return state.getBlock().getFriction();

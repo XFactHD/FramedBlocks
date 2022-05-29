@@ -10,6 +10,7 @@ import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.phys.Vec3;
+import xfacthd.framedblocks.api.data.CamoContainer;
 import xfacthd.framedblocks.api.util.*;
 import xfacthd.framedblocks.common.data.*;
 import xfacthd.framedblocks.common.blockentity.*;
@@ -73,16 +74,16 @@ public class FramedDoubleCornerBlock extends AbstractFramedDoubleBlock
         CornerType type = state.getValue(PropertyHolder.CORNER_TYPE);
         if (level.getBlockEntity(pos) instanceof FramedDoubleBlockEntity dbe)
         {
-            BlockState camoState = (type.isHorizontal() || type.isTop()) ? dbe.getCamoState() : dbe.getCamoStateTwo();
-            if (!camoState.isAir())
+            CamoContainer camo = (type.isHorizontal() || type.isTop()) ? dbe.getCamo() : dbe.getCamoTwo();
+            if (!camo.isEmpty())
             {
-                return camoState.getSoundType();
+                return camo.getState().getSoundType();
             }
 
-            camoState = (type.isHorizontal() || type.isTop()) ? dbe.getCamoStateTwo() : dbe.getCamoState();
-            if (!camoState.isAir())
+            camo = (type.isHorizontal() || type.isTop()) ? dbe.getCamoTwo() : dbe.getCamo();
+            if (!camo.isEmpty())
             {
-                return camoState.getSoundType();
+                return camo.getState().getSoundType();
             }
         }
         return getSoundType(state);

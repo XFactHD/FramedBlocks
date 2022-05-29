@@ -3,10 +3,11 @@ package xfacthd.framedblocks.common.blockentity;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.util.Tuple;
-import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.Vec3;
+import xfacthd.framedblocks.api.data.CamoContainer;
+import xfacthd.framedblocks.api.data.EmptyCamoContainer;
 import xfacthd.framedblocks.api.util.FramedProperties;
 import xfacthd.framedblocks.api.util.Utils;
 import xfacthd.framedblocks.common.FBContent;
@@ -49,20 +50,20 @@ public class FramedDoubleSlopeSlabBlockEntity extends FramedDoubleBlockEntity
     public DoubleSoundMode getSoundMode() { return DoubleSoundMode.SECOND; }
 
     @Override
-    public BlockState getCamoState(Direction side)
+    public CamoContainer getCamo(Direction side)
     {
         Direction facing = getBlockState().getValue(PropertyHolder.FACING_HOR);
 
         if (side == Direction.UP || side == facing.getOpposite())
         {
-            return getCamoStateTwo();
+            return getCamoTwo();
         }
         else if (side == Direction.DOWN || side == facing)
         {
-            return getCamoState();
+            return getCamo();
         }
 
-        return Blocks.AIR.defaultBlockState();
+        return EmptyCamoContainer.EMPTY;
     }
 
     @Override
@@ -72,12 +73,12 @@ public class FramedDoubleSlopeSlabBlockEntity extends FramedDoubleBlockEntity
         if (topHalf && side == Direction.UP)
         {
             //noinspection ConstantConditions
-            return getCamoStateTwo().isSolidRender(level, worldPosition);
+            return getCamoTwo().getState().isSolidRender(level, worldPosition);
         }
         else if (!topHalf && side == Direction.DOWN)
         {
             //noinspection ConstantConditions
-            return getCamoState().isSolidRender(level, worldPosition);
+            return getCamo().getState().isSolidRender(level, worldPosition);
         }
         return false;
     }

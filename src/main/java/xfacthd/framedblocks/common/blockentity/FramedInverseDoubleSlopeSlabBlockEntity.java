@@ -4,9 +4,10 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.util.Mth;
 import net.minecraft.util.Tuple;
-import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.BlockHitResult;
+import xfacthd.framedblocks.api.data.CamoContainer;
+import xfacthd.framedblocks.api.data.EmptyCamoContainer;
 import xfacthd.framedblocks.api.util.FramedProperties;
 import xfacthd.framedblocks.common.FBContent;
 import xfacthd.framedblocks.common.data.PropertyHolder;
@@ -30,20 +31,20 @@ public class FramedInverseDoubleSlopeSlabBlockEntity extends FramedDoubleBlockEn
     public DoubleSoundMode getSoundMode() { return DoubleSoundMode.SECOND; }
 
     @Override
-    public BlockState getCamoState(Direction side)
+    public CamoContainer getCamo(Direction side)
     {
         Direction facing = getBlockState().getValue(PropertyHolder.FACING_HOR);
 
         if (side == Direction.UP || side == facing)
         {
-            return getCamoStateTwo();
+            return getCamoTwo();
         }
         if (side == Direction.DOWN || side == facing.getOpposite())
         {
-            return getCamoState();
+            return getCamo();
         }
 
-        return Blocks.AIR.defaultBlockState();
+        return EmptyCamoContainer.EMPTY;
     }
 
     @Override

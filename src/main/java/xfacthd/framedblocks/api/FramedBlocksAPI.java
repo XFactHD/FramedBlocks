@@ -1,10 +1,12 @@
 package xfacthd.framedblocks.api;
 
-import net.minecraft.world.item.CreativeModeTab;
-import net.minecraft.world.item.ItemStack;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.item.*;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraftforge.registries.IForgeRegistry;
 import xfacthd.framedblocks.api.block.FramedBlockEntity;
+import xfacthd.framedblocks.api.data.CamoContainer;
 import xfacthd.framedblocks.api.util.WriteOnceHolder;
 
 @SuppressWarnings({ "unused", "SameReturnValue" })
@@ -59,4 +61,24 @@ public interface FramedBlocksAPI
      * If true, blocks with {@code BlockEntities} can be placed in Framed blocks
      */
     boolean allowBlockEntities();
+
+    /**
+     * Returns the name of the registry of camo container factories
+     */
+    ResourceLocation getCamoContainerFactoryRegistryName();
+
+    /**
+     * Returns the registry of camo container factories
+     */
+    IForgeRegistry<CamoContainer.Factory> getCamoContainerFactoryRegistry();
+
+    /**
+     * Register the given factory to be used when the given item is used to apply a camo
+     */
+    void registerCamoContainerFactory(Item item, CamoContainer.Factory factory);
+
+    /**
+     * Returns the camo container factory to use for the given {@link ItemStack}
+     */
+    CamoContainer.Factory getCamoContainerFactory(ItemStack stack);
 }

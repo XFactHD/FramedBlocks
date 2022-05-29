@@ -41,7 +41,7 @@ public abstract class AbstractFramedDoubleBlock extends FramedBlock
         {
             if (level.getBlockEntity(pos) instanceof FramedDoubleBlockEntity be)
             {
-                return be.getCamoState(side);
+                return be.getCamo(side).getState();
             }
         }
         return Blocks.AIR.defaultBlockState();
@@ -64,8 +64,8 @@ public abstract class AbstractFramedDoubleBlock extends FramedBlock
         if (level.isClientSide() && level.getBlockEntity(pos) instanceof FramedDoubleBlockEntity be)
         {
             BlockState defaultState = be.getBlockState();
-            BlockState camoOne = be.getCamoState();
-            BlockState camoTwo = be.getCamoStateTwo();
+            BlockState camoOne = be.getCamo().getState();
+            BlockState camoTwo = be.getCamoTwo().getState();
 
             level.levelEvent(player, LevelEvent.PARTICLES_DESTROY_BLOCK, pos, getId(camoOne.isAir() ? defaultState : camoOne));
             if (camoOne != camoTwo)

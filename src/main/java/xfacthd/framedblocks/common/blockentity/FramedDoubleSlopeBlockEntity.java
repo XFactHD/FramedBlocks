@@ -3,10 +3,11 @@ package xfacthd.framedblocks.common.blockentity;
 import net.minecraft.core.BlockPos;
 import net.minecraft.util.Tuple;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.level.block.Blocks;
 import net.minecraft.core.Direction;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.Vec3;
+import xfacthd.framedblocks.api.data.CamoContainer;
+import xfacthd.framedblocks.api.data.EmptyCamoContainer;
 import xfacthd.framedblocks.api.util.FramedProperties;
 import xfacthd.framedblocks.common.FBContent;
 import xfacthd.framedblocks.common.data.PropertyHolder;
@@ -81,41 +82,41 @@ public class FramedDoubleSlopeBlockEntity extends FramedDoubleBlockEntity
     }
 
     @Override
-    public BlockState getCamoState(Direction side)
+    public CamoContainer getCamo(Direction side)
     {
         SlopeType type = getBlockState().getValue(PropertyHolder.SLOPE_TYPE);
         Direction facing = getBlockState().getValue(PropertyHolder.FACING_HOR);
 
         if (type == SlopeType.HORIZONTAL)
         {
-            if (side == facing || side == facing.getCounterClockWise()) { return getCamoState(); }
-            if (side == facing.getOpposite() || side == facing.getClockWise()) { return getCamoStateTwo(); }
+            if (side == facing || side == facing.getCounterClockWise()) { return getCamo(); }
+            if (side == facing.getOpposite() || side == facing.getClockWise()) { return getCamoTwo(); }
         }
         else if (type == SlopeType.TOP)
         {
-            if (side == facing || side == Direction.UP) { return getCamoState(); }
-            if (side == facing.getOpposite() || side == Direction.DOWN) { return getCamoStateTwo(); }
+            if (side == facing || side == Direction.UP) { return getCamo(); }
+            if (side == facing.getOpposite() || side == Direction.DOWN) { return getCamoTwo(); }
         }
         else if (type == SlopeType.BOTTOM)
         {
-            if (side == facing || side == Direction.DOWN) { return getCamoState(); }
-            if (side == facing.getOpposite() || side == Direction.UP) { return getCamoStateTwo(); }
+            if (side == facing || side == Direction.DOWN) { return getCamo(); }
+            if (side == facing.getOpposite() || side == Direction.UP) { return getCamoTwo(); }
         }
 
-        return Blocks.AIR.defaultBlockState();
+        return EmptyCamoContainer.EMPTY;
     }
 
     @Override
     public boolean isSolidSide(Direction side)
     {
-        BlockState state = getCamoState(side);
+        BlockState state = getCamo(side).getState();
         if (!state.isAir())
         {
             //noinspection ConstantConditions
             return state.isSolidRender(level, worldPosition);
         }
         //noinspection ConstantConditions
-        return getCamoState().isSolidRender(level, worldPosition) && getCamoStateTwo().isSolidRender(level, worldPosition);
+        return getCamo().getState().isSolidRender(level, worldPosition) && getCamoTwo().getState().isSolidRender(level, worldPosition);
     }
 
     @Override

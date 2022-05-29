@@ -25,7 +25,7 @@ public interface SideSkipPredicate
 
             if (Utils.getBlockEntitySafe(level, pos.relative(side)) instanceof FramedBlockEntity be)
             {
-                adjState = be.getCamoState(side.getOpposite());
+                adjState = be.getCamo(side.getOpposite()).getState();
             }
         }
 
@@ -74,7 +74,7 @@ public interface SideSkipPredicate
     {
         if (Utils.getBlockEntitySafe(level, pos.relative(side)) instanceof FramedBlockEntity be)
         {
-            BlockState adjState = be.getCamoState(adjCamoSide);
+            BlockState adjState = be.getCamo(adjCamoSide).getState();
             if (adjState.isAir()) { return false; }
 
             return compareState(level, pos, adjState, side, camoSide);
@@ -96,7 +96,7 @@ public interface SideSkipPredicate
     {
         if (Utils.getBlockEntitySafe(level, pos) instanceof FramedBlockEntity be)
         {
-            BlockState state = be.getCamoState(camoSide);
+            BlockState state = be.getCamo(camoSide).getState();
             if (state.isAir()) { return false; }
 
             if (state == adjState)

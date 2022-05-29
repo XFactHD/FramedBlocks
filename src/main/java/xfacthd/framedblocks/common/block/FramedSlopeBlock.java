@@ -19,6 +19,8 @@ import net.minecraft.core.Direction;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import net.minecraft.world.phys.shapes.Shapes;
+import xfacthd.framedblocks.api.data.CamoContainer;
+import xfacthd.framedblocks.api.data.EmptyCamoContainer;
 import xfacthd.framedblocks.api.util.*;
 import xfacthd.framedblocks.common.FBContent;
 import xfacthd.framedblocks.api.block.FramedBlockEntity;
@@ -83,15 +85,13 @@ public class FramedSlopeBlock extends FramedBlock
 
                 if (!level.isClientSide())
                 {
-                    BlockState camoState = Blocks.AIR.defaultBlockState();
-                    ItemStack camoStack = ItemStack.EMPTY;
+                    CamoContainer camo = EmptyCamoContainer.EMPTY;
                     boolean glowing = false;
                     boolean intangible = false;
 
                     if (level.getBlockEntity(pos) instanceof FramedBlockEntity be)
                     {
-                        camoState = be.getCamoState();
-                        camoStack = be.getCamoStack();
+                        camo = be.getCamo();
                         glowing = be.isGlowing();
                         intangible = be.isIntangible(null);
                     }
@@ -109,7 +109,7 @@ public class FramedSlopeBlock extends FramedBlock
 
                     if (level.getBlockEntity(pos) instanceof FramedBlockEntity be)
                     {
-                        be.setCamo(camoStack, camoState, false);
+                        be.setCamo(camo, false);
                         be.setGlowing(glowing);
                         be.setIntangible(intangible);
                     }

@@ -19,7 +19,6 @@ import net.minecraft.client.resources.model.BakedModel;
 import net.minecraft.core.Direction;
 import net.minecraft.network.chat.*;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraftforge.api.distmarker.Dist;
@@ -266,8 +265,8 @@ public class FramedSignScreen extends Screen
             front = Direction.fromYRot(angle);
         }
 
-        BlockState camoState = sign.getCamoState();
-        if (camoState == Blocks.AIR.defaultBlockState())
+        BlockState camoState = sign.getCamo().getState();
+        if (camoState.isAir())
         {
             camoState = FBContent.blockFramedCube.get().defaultBlockState();
         }

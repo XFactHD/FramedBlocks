@@ -2,11 +2,10 @@ package xfacthd.framedblocks.common.blockentity;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.util.Tuple;
+import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.nbt.NbtUtils;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.core.Direction;
 import net.minecraft.world.level.material.MaterialColor;
@@ -15,6 +14,8 @@ import net.minecraft.world.level.Explosion;
 import net.minecraftforge.client.model.data.*;
 import xfacthd.framedblocks.FramedBlocks;
 import xfacthd.framedblocks.api.block.FramedBlockEntity;
+import xfacthd.framedblocks.api.data.EmptyCamoContainer;
+import xfacthd.framedblocks.api.data.CamoContainer;
 import xfacthd.framedblocks.api.util.FramedBlockData;
 import xfacthd.framedblocks.api.util.client.ClientUtils;
 import xfacthd.framedblocks.common.util.DoubleBlockSoundType;
@@ -31,8 +32,7 @@ public abstract class FramedDoubleBlockEntity extends FramedBlockEntity
     private final FramedBlockData modelData = new FramedBlockData(false);
     private final DoubleBlockSoundType soundType = new DoubleBlockSoundType(this);
     private Tuple<BlockState, BlockState> blockPair;
-    private ItemStack camoStack = ItemStack.EMPTY;
-    private BlockState camoState = Blocks.AIR.defaultBlockState();
+    private CamoContainer camoContainer = EmptyCamoContainer.EMPTY;
 
     public FramedDoubleBlockEntity(BlockEntityType<?> type, BlockPos pos, BlockState state)
     {
@@ -41,112 +41,92 @@ public abstract class FramedDoubleBlockEntity extends FramedBlockEntity
     }
 
     @Override
-    public void setCamo(ItemStack camoStack, BlockState camoState, boolean secondary)
+    public void setCamo(CamoContainer camo, boolean secondary)
     {
         if (secondary)
         {
             int light = getLightValue();
 
-            this.camoStack = camoStack;
-            this.camoState = camoState;
+            this.camoContainer = camo;
 
             setChanged();
             if (getLightValue() != light)
             {
                 doLightUpdate();
             }
-            //noinspection ConstantConditions
-            level.sendBlockUpdated(worldPosition, getBlockState(), getBlockState(), 3);
+
+            if (!updateDynamicStates(true, true))
+            {
+                //noinspection ConstantConditions
+                level.sendBlockUpdated(worldPosition, getBlockState(), getBlockState(), Block.UPDATE_ALL);
+            }
         }
         else
         {
-            super.setCamo(camoStack, camoState, false);
+            super.setCamo(camo, false);
         }
     }
 
     @Override
-    protected void applyCamo(ItemStack camoStack, BlockState camoState, BlockHitResult hit)
-    {
-        if (hitSecondary(hit))
-        {
-            this.camoStack = camoStack;
-            this.camoState = camoState;
-        }
-        else
-        {
-            super.applyCamo(camoStack, camoState, hit);
-        }
-    }
+    protected CamoContainer getCamo(boolean secondary) { return secondary ? camoContainer : getCamo(); }
 
-    public BlockState getCamoStateTwo() { return camoState; }
-
-    public ItemStack getCamoStackTwo() { return camoStack; }
+    public final CamoContainer getCamoTwo() { return camoContainer; }
 
     @Override
     @SuppressWarnings("deprecation")
-    public int getLightValue() { return Math.max(camoState.getLightEmission(), super.getLightValue()); }
+    public int getLightValue() { return Math.max(camoContainer.getState().getLightEmission(), super.getLightValue()); }
 
     @Override
     public void addCamoDrops(List<ItemStack> drops)
     {
         super.addCamoDrops(drops);
-        if (!camoStack.isEmpty())
+        if (!camoContainer.isEmpty())
         {
-            drops.add(camoStack);
+            drops.add(camoContainer.toItemStack(ItemStack.EMPTY));
         }
     }
 
     @Override
     public MaterialColor getMapColor()
     {
-        if (!camoState.isAir())
+        if (!camoContainer.isEmpty())
         {
             //noinspection ConstantConditions
-            return camoState.getMapColor(level, worldPosition);
+            return camoContainer.getState().getMapColor(level, worldPosition);
         }
         return super.getMapColor();
     }
 
     @Override
-    protected BlockState getCamoState(BlockHitResult hit)
-    {
-        return hitSecondary(hit) ? getCamoStateTwo() : getCamoState();
-    }
-
-    @Override
-    protected ItemStack getCamoStack(BlockHitResult hit)
-    {
-        return hitSecondary(hit) ? getCamoStackTwo() : getCamoStack();
-    }
-
-    @Override
     protected boolean isCamoSolid()
     {
+        if (camoContainer.isEmpty()) { return false; }
+
         //noinspection ConstantConditions
-        return super.isCamoSolid() && !camoState.isAir() && camoState.isSolidRender(level, worldPosition);
+        return super.isCamoSolid() && camoContainer.getState().isSolidRender(level, worldPosition);
     }
 
     @Override
     public float getCamoExplosionResistance(Explosion explosion)
     {
         return Math.max(
-                getCamoState().getExplosionResistance(level, worldPosition, explosion),
-                getCamoStateTwo().getExplosionResistance(level, worldPosition, explosion)
+                getCamo().getState().getExplosionResistance(level, worldPosition, explosion),
+                camoContainer.getState().getExplosionResistance(level, worldPosition, explosion)
         );
     }
 
     @Override
     public boolean isCamoFlammable(Direction face)
     {
-        BlockState camo = getCamoState(face);
-        if (camo.isAir() && (!getCamoState().isAir() || !getCamoStateTwo().isAir()))
+        CamoContainer camo = getCamo(face);
+        if (camo.isEmpty() && (!getCamo().isEmpty() || !camoContainer.isEmpty()))
         {
-            return (getCamoState().isAir() || getCamoState().isFlammable(level, worldPosition, face)) &&
-                   (getCamoStateTwo().isAir() || getCamoStateTwo().isFlammable(level, worldPosition, face));
+            return (getCamo().isEmpty() || getCamo().getState().isFlammable(level, worldPosition, face)) &&
+                   (camoContainer.isEmpty() || camoContainer.getState().isFlammable(level, worldPosition, face));
         }
-        else if (!camo.isAir())
+        else if (!camo.isEmpty())
         {
-            return camo.isFlammable(level, worldPosition, face);
+            return camo.getState().isFlammable(level, worldPosition, face);
         }
         return true;
     }
@@ -155,7 +135,7 @@ public abstract class FramedDoubleBlockEntity extends FramedBlockEntity
     public int getCamoFlammability(Direction face)
     {
         int flammabilityOne = super.getCamoFlammability(face);
-        int flammabilityTwo = getCamoStateTwo().isAir() ? -1 : getCamoStateTwo().getFlammability(level, worldPosition, face);
+        int flammabilityTwo = camoContainer.isEmpty() ? -1 : camoContainer.getState().getFlammability(level, worldPosition, face);
 
         if (flammabilityOne == -1) { return flammabilityTwo; }
         if (flammabilityTwo == -1) { return flammabilityOne; }
@@ -166,6 +146,7 @@ public abstract class FramedDoubleBlockEntity extends FramedBlockEntity
 
     protected abstract Tuple<BlockState, BlockState> getBlockPair(BlockState state);
 
+    @Override
     protected abstract boolean hitSecondary(BlockHitResult hit);
 
     public abstract DoubleSoundMode getSoundMode();
@@ -195,22 +176,21 @@ public abstract class FramedDoubleBlockEntity extends FramedBlockEntity
     {
         super.writeToDataPacket(nbt);
 
-        nbt.put("camo_stack_two", camoStack.save(new CompoundTag()));
-        nbt.put("camo_state_two", NbtUtils.writeBlockState(camoState));
+        nbt.put("camo_two", CamoContainer.save(camoContainer));
     }
 
     @Override
     protected boolean readFromDataPacket(CompoundTag nbt)
     {
-        camoStack = ItemStack.of(nbt.getCompound("camo_stack_two"));
-
         boolean needUpdate = false;
-        BlockState newState = NbtUtils.readBlockState(nbt.getCompound("camo_state_two"));
-        if (newState != camoState)
+        CamoContainer newCamo = CamoContainer.load(nbt.getCompound("camo_two"));
+        if (!newCamo.equals(camoContainer))
         {
-            camoState = newState;
+            int oldLight = getLightValue();
+            camoContainer = newCamo;
+            if (oldLight != getLightValue()) { doLightUpdate(); }
 
-            modelData.setCamoState(camoState);
+            modelData.setCamoState(camoContainer.getState());
 
             needUpdate = true;
             updateCulling(true, false);
@@ -224,8 +204,7 @@ public abstract class FramedDoubleBlockEntity extends FramedBlockEntity
     {
         CompoundTag nbt = super.getUpdateTag();
 
-        nbt.put("camo_stack_two", camoStack.save(new CompoundTag()));
-        nbt.put("camo_state_two", NbtUtils.writeBlockState(camoState));
+        nbt.put("camo_two", CamoContainer.save(camoContainer));
 
         return nbt;
     }
@@ -235,14 +214,12 @@ public abstract class FramedDoubleBlockEntity extends FramedBlockEntity
     {
         super.handleUpdateTag(nbt);
 
-        camoStack = ItemStack.of(nbt.getCompound("camo_stack_two"));
-
-        BlockState newState = NbtUtils.readBlockState(nbt.getCompound("camo_state_two"));
-        if (newState != camoState)
+        CamoContainer newCamo = CamoContainer.load(nbt.getCompound("camo_two"));
+        if (!newCamo.equals(camoContainer))
         {
-            camoState = newState;
+            camoContainer = newCamo;
 
-            modelData.setCamoState(camoState);
+            modelData.setCamoState(camoContainer.getState());
 
             ClientUtils.enqueueClientTask(() -> updateCulling(true, true));
         }
@@ -267,8 +244,7 @@ public abstract class FramedDoubleBlockEntity extends FramedBlockEntity
     @Override
     public void saveAdditional(CompoundTag nbt)
     {
-        nbt.put("camo_stack_two", camoStack.save(new CompoundTag()));
-        nbt.put("camo_state_two", NbtUtils.writeBlockState(camoState));
+        nbt.put("camo_two", CamoContainer.save(camoContainer));
 
         super.saveAdditional(nbt);
     }
@@ -278,11 +254,10 @@ public abstract class FramedDoubleBlockEntity extends FramedBlockEntity
     {
         super.load(nbt);
 
-        BlockState state = NbtUtils.readBlockState(nbt.getCompound("camo_state_two"));
-        if (state.isAir() || isValidBlock(state, null))
+        CamoContainer camo = CamoContainer.load(nbt.getCompound("camo_two"));
+        if (camo.isEmpty() || isValidBlock(camo.getState(), null))
         {
-            camoStack = ItemStack.of(nbt.getCompound("camo_stack_two"));
-            camoState = state;
+            camoContainer = camo;
         }
         else
         {
@@ -290,7 +265,7 @@ public abstract class FramedDoubleBlockEntity extends FramedBlockEntity
                     "Framed Block of type \"{}\" at position {} contains an invalid camo of type \"{}\", removing camo! This might be caused by a config or tag change!",
                     getBlockState().getBlock().getRegistryName(),
                     worldPosition,
-                    state.getBlock().getRegistryName()
+                    camo.getState().getBlock().getRegistryName()
             );
         }
     }

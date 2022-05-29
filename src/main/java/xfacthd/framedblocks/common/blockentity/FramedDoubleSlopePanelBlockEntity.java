@@ -3,10 +3,11 @@ package xfacthd.framedblocks.common.blockentity;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.util.Tuple;
-import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.Vec3;
+import xfacthd.framedblocks.api.data.CamoContainer;
+import xfacthd.framedblocks.api.data.EmptyCamoContainer;
 import xfacthd.framedblocks.api.util.FramedProperties;
 import xfacthd.framedblocks.api.util.Utils;
 import xfacthd.framedblocks.common.FBContent;
@@ -55,18 +56,18 @@ public class FramedDoubleSlopePanelBlockEntity extends FramedDoubleBlockEntity
     }
 
     @Override
-    public BlockState getCamoState(Direction side)
+    public CamoContainer getCamo(Direction side)
     {
         Direction facing = getBlockState().getValue(FramedProperties.FACING_HOR);
 
-        if (side == facing) { return getCamoState(); }
-        if (side == facing.getOpposite()) { return getCamoStateTwo(); }
+        if (side == facing) { return getCamo(); }
+        if (side == facing.getOpposite()) { return getCamoTwo(); }
 
         Direction orientation = getBlockState().getValue(PropertyHolder.ROTATION).withFacing(facing);
-        if (side == orientation) { return getCamoStateTwo(); }
-        if (side == orientation.getOpposite()) { return getCamoState(); }
+        if (side == orientation) { return getCamoTwo(); }
+        if (side == orientation.getOpposite()) { return getCamo(); }
 
-        return Blocks.AIR.defaultBlockState();
+        return EmptyCamoContainer.EMPTY;
     }
 
     @Override

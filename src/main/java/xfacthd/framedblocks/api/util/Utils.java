@@ -1,7 +1,9 @@
 package xfacthd.framedblocks.api.util;
 
-import net.minecraft.core.BlockPos;
-import net.minecraft.core.Direction;
+import com.google.common.base.Preconditions;
+import net.minecraft.core.*;
+import net.minecraft.nbt.*;
+import net.minecraft.nbt.Tag;
 import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.*;
@@ -10,11 +12,17 @@ import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.*;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.state.StateDefinition;
+import net.minecraft.world.level.block.state.properties.DirectionProperty;
+import net.minecraft.world.level.block.state.properties.Property;
 import net.minecraft.world.level.chunk.LevelChunk;
+import net.minecraft.world.level.material.*;
 import net.minecraft.world.phys.Vec3;
 import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import net.minecraftforge.fml.loading.FMLEnvironment;
+import net.minecraftforge.registries.ForgeRegistries;
 import xfacthd.framedblocks.api.FramedBlocksAPI;
 import xfacthd.framedblocks.api.util.client.ClientUtils;
 
@@ -104,6 +112,51 @@ public final class Utils
     public static TagKey<Item> itemTag(String modid, String name)
     {
         return ItemTags.create(new ResourceLocation(modid, name));
+    }
+
+    public static FluidState readFluidStateFromNbt(CompoundTag tag)
+    {
+        if (!tag.contains("Name", Tag.TAG_STRING))
+        {
+            return Fluids.EMPTY.defaultFluidState();
+        }
+
+        Fluid fluid = ForgeRegistries.FLUIDS.getValue(new ResourceLocation(tag.getString("Name")));
+        Preconditions.checkNotNull(fluid);
+
+        FluidState fluidState = fluid.defaultFluidState();
+        if (tag.contains("Properties", Tag.TAG_COMPOUND))
+        {
+            CompoundTag compoundtag = tag.getCompound("Properties");
+            StateDefinition<Fluid, FluidState> statedefinition = fluid.getStateDefinition();
+
+            for(String s : compoundtag.getAllKeys())
+            {
+                Property<?> property = statedefinition.getProperty(s);
+                if (property != null)
+                {
+                    fluidState = NbtUtils.setValueHelper(fluidState, property, s, compoundtag, tag);
+                }
+            }
+        }
+
+        return fluidState;
+    }
+
+    public static Property<?> getRotatableProperty(BlockState state)
+    {
+        for (Property<?> prop : state.getProperties())
+        {
+            if (prop.getValueClass() == Direction.Axis.class)
+            {
+                return prop;
+            }
+            else if (prop instanceof DirectionProperty)
+            {
+                return prop;
+            }
+        }
+        return null;
     }
 
 
