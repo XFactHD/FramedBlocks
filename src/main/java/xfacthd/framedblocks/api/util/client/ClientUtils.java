@@ -113,7 +113,7 @@ public final class ClientUtils
             Class.forName("net.optifine.Config");
             return true;
         }
-        catch (ClassNotFoundException ingored)
+        catch (ClassNotFoundException ignored)
         {
             return false;
         }

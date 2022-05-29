@@ -129,7 +129,7 @@ public interface IFramedBlock extends EntityBlock//, IFacade
                 return camoState.getSoundType();
             }
         }
-        return ((Block)this).getSoundType(state);
+        return ((Block) this).getSoundType(state);
     }
 
     default List<ItemStack> getCamoDrops(List<ItemStack> drops, LootContext.Builder builder)
@@ -151,7 +151,6 @@ public interface IFramedBlock extends EntityBlock//, IFacade
     @Nonnull
     //@Override
     @SuppressWarnings("unused")
-    @Deprecated
     default BlockState getFacade(@Nonnull BlockGetter level, @Nonnull BlockPos pos, @Nullable Direction side)
     {
         return Blocks.AIR.defaultBlockState();

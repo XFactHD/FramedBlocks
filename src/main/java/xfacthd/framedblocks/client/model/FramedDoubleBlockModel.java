@@ -51,7 +51,7 @@ public abstract class FramedDoubleBlockModel extends BakedModelProxy
     }
 
     @Override
-    @Deprecated
+    @SuppressWarnings("deprecation")
     public List<BakedQuad> getQuads(BlockState state, Direction side, Random rand)
     {
         if (specialItemModel)
