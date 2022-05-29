@@ -48,6 +48,8 @@ public class FramedBlockTagProvider extends BlockTagsProvider
                 Blocks.COMPOSTER
         );
 
+        tag(Utils.BE_WHITELIST);
+
         TagsProvider.TagAppender<Block> axeTag = tag(BlockTags.MINEABLE_WITH_AXE);
         FBContent.getRegisteredBlocks()
                 .stream()

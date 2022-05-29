@@ -272,7 +272,7 @@ public class FramedBlockEntity extends BlockEntity
             }
             return false;
         }
-        if (state.hasBlockEntity() && !FramedBlocksAPI.getInstance().allowBlockEntities())
+        if (state.hasBlockEntity() && !FramedBlocksAPI.getInstance().allowBlockEntities() && !state.is(Utils.BE_WHITELIST))
         {
             if (player != null)
             {

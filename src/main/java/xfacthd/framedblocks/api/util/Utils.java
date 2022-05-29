@@ -30,6 +30,8 @@ public final class Utils
 {
     public static final TagKey<Block> FRAMEABLE = blockTag("frameable");
     public static final TagKey<Block> BLACKLIST = blockTag("blacklisted");
+    /**Allow other mods to whitelist their BEs, circumventing the config setting*/
+    public static final TagKey<Block> BE_WHITELIST = blockTag("blockentity_whitelisted");
     public static final TagKey<Item> WRENCH = itemTag("forge", "tools/wrench");
 
     public static VoxelShape rotateShape(Direction from, Direction to, VoxelShape shape)
