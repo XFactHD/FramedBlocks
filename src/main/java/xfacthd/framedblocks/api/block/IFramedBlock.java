@@ -41,18 +41,6 @@ public interface IFramedBlock extends EntityBlock//, IFacade
 {
     IBlockType getBlockType();
 
-    /** @deprecated Use overload with {@link IBlockType} parameter instead */
-    @Deprecated(forRemoval = true)
-    static Block.Properties createProperties()
-    {
-        return Block.Properties.of(Material.WOOD)
-                .noOcclusion()
-                .strength(2F)
-                .sound(SoundType.WOOD)
-                .isViewBlocking(IFramedBlock::isBlockSuffocating)
-                .isSuffocating(IFramedBlock::isBlockSuffocating);
-    }
-
     static Block.Properties createProperties(IBlockType type)
     {
         Block.Properties props = Block.Properties.of(Material.WOOD)

@@ -63,24 +63,6 @@ public interface SideSkipPredicate
     /**
      * Compares the camo state of the {@link FramedBlockEntity} at the given position against the camo state of the
      * FramedBlockEntity at the given position offset by the given {@link Direction side}.
-     * On the FramedBlockEntity at the given position, the given side will be used for the camo lookup, on the
-     * neighboring FramedBlockEntity the opposite of the given side will be used for the camo lookup
-     * @param level The Level
-     * @param pos The position of the block being tested
-     * @param side The side on which the neighbor to be tested against is located
-     * @param camoSide The side on which to look up the camo state in both FramedBlockEntities
-     * @return true if the camo states either match (with certain exclusions) or occlude each other by being solid
-     * @deprecated Use the overload with two camo side parameters to specify non-standard camo lookup sides
-     */
-    @Deprecated(forRemoval = true)
-    static boolean compareState(BlockGetter level, BlockPos pos, Direction side, Direction camoSide)
-    {
-        return compareState(level, pos, side, camoSide, camoSide);
-    }
-
-    /**
-     * Compares the camo state of the {@link FramedBlockEntity} at the given position against the camo state of the
-     * FramedBlockEntity at the given position offset by the given {@link Direction side}.
      * @param level The Level
      * @param pos The position of the block being tested
      * @param side The side on which the neighbor to be tested against is located
