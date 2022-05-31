@@ -182,8 +182,12 @@ public abstract class FramedDoubleBlockEntity extends FramedBlockEntity
     @SuppressWarnings("deprecation")
     public void setBlockState(BlockState state)
     {
+        BlockState oldState = getBlockState();
         super.setBlockState(state);
-        blockPair = getBlockPair(state);
+        if (state != oldState)
+        {
+            blockPair = getBlockPair(state);
+        }
     }
 
     /*

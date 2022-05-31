@@ -64,6 +64,12 @@ public class FramedRedstoneBlock extends PoweredBlock implements IFramedBlock
     }
 
     @Override
+    public void updateIndirectNeighbourShapes(BlockState state, LevelAccessor level, BlockPos pos, int flags, int recursionLeft)
+    {
+        onStateChange(level, pos, state);
+    }
+
+    @Override
     public boolean useShapeForLightOcclusion(BlockState state) { return useCamoOcclusionShapeForLightOcclusion(state); }
 
     @Override

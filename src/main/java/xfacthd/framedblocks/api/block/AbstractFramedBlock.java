@@ -78,6 +78,12 @@ public abstract class AbstractFramedBlock extends Block implements IFramedBlock,
     }
 
     @Override
+    public void updateIndirectNeighbourShapes(BlockState state, LevelAccessor level, BlockPos pos, int flags, int recursionLeft)
+    {
+        onStateChange(level, pos, state);
+    }
+
+    @Override
     public int getLightEmission(BlockState state, BlockGetter level, BlockPos pos) { return getLight(level, pos); }
 
     @Override

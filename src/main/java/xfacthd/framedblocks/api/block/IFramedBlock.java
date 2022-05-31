@@ -324,13 +324,20 @@ public interface IFramedBlock extends EntityBlock//, IFacade
         return false;
     }
 
-    default void onStateChangeClient(Level level, BlockPos pos, BlockState oldState, BlockState newState)
+    default void onStateChange(LevelAccessor level, BlockPos pos, BlockState newState)
     {
+        if (!level.isClientSide()) { return; }
+
         if (level.getBlockEntity(pos) instanceof FramedBlockEntity be)
         {
+            BlockState oldState = be.getBlockState();
             be.setBlockState(newState);
+
+            onStateChangeClient(level, pos, oldState, newState, be);
         }
     }
+
+    default void onStateChangeClient(LevelAccessor level, BlockPos pos, BlockState oldState, BlockState newState, FramedBlockEntity be) { }
 
     default void updateCulling(LevelAccessor level, BlockPos pos, @Nullable BlockState neighborState, @Nullable Direction side, boolean rerender)
     {
@@ -351,7 +358,7 @@ public interface IFramedBlock extends EntityBlock//, IFacade
     @SuppressWarnings("RedundantIfStatement")
     default boolean needCullingUpdateAfterStateChange(LevelReader level, BlockState oldState, BlockState newState)
     {
-        if (!level.isClientSide() || oldState.getBlock() != newState.getBlock()) { return false; }
+        if (!level.isClientSide() || oldState.getBlock() != newState.getBlock() || oldState == newState) { return false; }
 
         // Camo-based BlockState property changes should not update culling because the BlockEntity handles these data changes
         if (getBlockType().canOccludeWithSolidCamo())
