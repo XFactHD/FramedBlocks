@@ -19,7 +19,7 @@ public class CamoFactories
     private static final Map<Item, CamoContainer.Factory> itemToFactory = new HashMap<>();
     private static boolean locked = false;
 
-    public static void registerCamoFactory(Item item, CamoContainer.Factory factory)
+    public static synchronized void registerCamoFactory(Item item, CamoContainer.Factory factory)
     {
         if (locked)
         {
