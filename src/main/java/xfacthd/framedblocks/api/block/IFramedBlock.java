@@ -25,6 +25,7 @@ import net.minecraft.world.phys.shapes.*;
 import xfacthd.framedblocks.api.FramedBlocksAPI;
 import xfacthd.framedblocks.api.type.IBlockType;
 import xfacthd.framedblocks.api.util.*;
+import xfacthd.framedblocks.common.compat.flywheel.FlywheelCompat;
 import xfacthd.framedblocks.common.util.ServerConfig;
 
 import javax.annotation.Nonnull;
@@ -311,6 +312,7 @@ public interface IFramedBlock extends EntityBlock//, IFacade
 
     default boolean doesHideNeighborFace(BlockGetter level, BlockPos pos, BlockState state, BlockState neighborState, Direction dir)
     {
+        if (FlywheelCompat.isVirtualLevel(level)) { return false; }
         if (neighborState.getBlock() instanceof IFramedBlock) { return false; }
 
         if (level.getExistingBlockEntity(pos) instanceof FramedBlockEntity be)
