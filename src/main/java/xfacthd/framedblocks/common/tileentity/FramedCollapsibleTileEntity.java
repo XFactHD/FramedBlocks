@@ -145,8 +145,12 @@ public class FramedCollapsibleTileEntity extends FramedTileEntity
             TileEntity te = level.getBlockEntity(neighbors[i]);
             if (te instanceof FramedCollapsibleTileEntity)
             {
-                int vert = vertexFromHit(faceHit, MathUtils.wrapVector(hitVecs[i], 0, 1));
-                ((FramedCollapsibleTileEntity) te).applyDeformation(vert, offset, faceHit);
+                Direction otherFace = ((FramedCollapsibleTileEntity) te).collapsedFace;
+                if (otherFace== null || otherFace == faceHit)
+                {
+                    int vert = vertexFromHit(faceHit, MathUtils.wrapVector(hitVecs[i], 0, 1));
+                    ((FramedCollapsibleTileEntity) te).applyDeformation(vert, offset, faceHit);
+                }
             }
         }
     }
