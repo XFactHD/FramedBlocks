@@ -320,6 +320,11 @@ public class FramedBlockEntity extends BlockEntity
      */
     public CamoContainer getCamo(Direction side) { return camoContainer; }
 
+    /**
+     * Used to return a different camo depending on the exact interaction location
+     */
+    public CamoContainer getCamo(BlockHitResult hit) { return getCamo(hitSecondary(hit)); }
+
     protected CamoContainer getCamo(boolean secondary) { return camoContainer; }
 
     public final CamoContainer getCamo() { return camoContainer; }

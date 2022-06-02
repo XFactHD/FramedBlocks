@@ -13,13 +13,13 @@ import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import org.lwjgl.glfw.GLFW;
-import xfacthd.framedblocks.FramedBlocks;
 import xfacthd.framedblocks.api.block.FramedBlockEntity;
+import xfacthd.framedblocks.api.util.FramedConstants;
 
-@Mod.EventBusSubscriber(modid = FramedBlocks.MODID, value = Dist.CLIENT)
+@Mod.EventBusSubscriber(modid = FramedConstants.MOD_ID, value = Dist.CLIENT)
 public final class KeyMappings
 {
-    public static final String KEY_CATEGORY = FramedBlocks.MODID + ".key.categories.framedblocks";
+    public static final String KEY_CATEGORY = FramedConstants.MOD_ID + ".key.categories.framedblocks";
     public static final Lazy<KeyMapping> KEYMAPPING_UPDATE_CULLING = makeKeyMapping("update_cull", GLFW.GLFW_KEY_F9);
 
     public static void register()
@@ -30,7 +30,7 @@ public final class KeyMappings
     private static Lazy<KeyMapping> makeKeyMapping(String name, int key)
     {
         return Lazy.of(() ->
-                new KeyMapping(FramedBlocks.MODID + ".key." + name, key, KEY_CATEGORY)
+                new KeyMapping(FramedConstants.MOD_ID + ".key." + name, key, KEY_CATEGORY)
         );
     }
 

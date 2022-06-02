@@ -1,6 +1,5 @@
 package xfacthd.framedblocks.api;
 
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.*;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
@@ -17,8 +16,6 @@ public interface FramedBlocksAPI
     static FramedBlocksAPI getInstance() { return INSTANCE.get(); }
 
 
-
-    String modid();
 
     /**
      * Returns the {@link BlockEntityType} used for all basic {@link xfacthd.framedblocks.api.block.AbstractFramedBlock}
@@ -61,11 +58,6 @@ public interface FramedBlocksAPI
      * If true, blocks with {@code BlockEntities} can be placed in Framed blocks
      */
     boolean allowBlockEntities();
-
-    /**
-     * Returns the name of the registry of camo container factories
-     */
-    ResourceLocation getCamoContainerFactoryRegistryName();
 
     /**
      * Returns the registry of camo container factories

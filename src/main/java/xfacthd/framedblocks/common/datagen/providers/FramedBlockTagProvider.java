@@ -9,17 +9,17 @@ import net.minecraft.tags.BlockTags;
 import net.minecraftforge.common.Tags;
 import net.minecraftforge.common.data.ExistingFileHelper;
 import net.minecraftforge.registries.RegistryObject;
-import xfacthd.framedblocks.FramedBlocks;
+import xfacthd.framedblocks.api.util.FramedConstants;
 import xfacthd.framedblocks.common.FBContent;
 import xfacthd.framedblocks.api.block.IFramedBlock;
 import xfacthd.framedblocks.api.util.Utils;
 
 public class FramedBlockTagProvider extends BlockTagsProvider
 {
-    public FramedBlockTagProvider(DataGenerator gen, ExistingFileHelper fileHelper) { super(gen, FramedBlocks.MODID, fileHelper); }
+    public FramedBlockTagProvider(DataGenerator gen, ExistingFileHelper fileHelper) { super(gen, FramedConstants.MOD_ID, fileHelper); }
 
     @Override
-    public String getName() { return super.getName() + ": " + FramedBlocks.MODID; }
+    public String getName() { return super.getName() + ": " + FramedConstants.MOD_ID; }
 
     @Override
     @SuppressWarnings("unchecked")

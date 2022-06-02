@@ -3,12 +3,12 @@ package xfacthd.framedblocks.client.util;
 import net.minecraft.client.renderer.item.ItemProperties;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.ResourceLocation;
-import xfacthd.framedblocks.FramedBlocks;
+import xfacthd.framedblocks.api.util.FramedConstants;
 import xfacthd.framedblocks.common.FBContent;
 
 public final class BlueprintPropertyOverride
 {
-    public static final ResourceLocation HAS_DATA = new ResourceLocation(FramedBlocks.MODID, "blueprint_override");
+    public static final ResourceLocation HAS_DATA = new ResourceLocation(FramedConstants.MOD_ID, "blueprint_override");
 
     private BlueprintPropertyOverride() { }
 

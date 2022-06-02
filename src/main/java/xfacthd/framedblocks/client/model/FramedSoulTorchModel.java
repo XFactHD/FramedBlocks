@@ -9,13 +9,13 @@ import net.minecraft.client.resources.model.BakedModel;
 import net.minecraft.core.Direction;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.client.model.data.IModelData;
-import xfacthd.framedblocks.FramedBlocks;
+import xfacthd.framedblocks.api.util.FramedConstants;
 
 import java.util.*;
 
 public class FramedSoulTorchModel extends FramedTorchModel
 {
-    private static final ResourceLocation TEXTURE = new ResourceLocation(FramedBlocks.MODID, "block/framed_soul_torch");
+    private static final ResourceLocation TEXTURE = new ResourceLocation(FramedConstants.MOD_ID, "block/framed_soul_torch");
 
     public FramedSoulTorchModel(BlockState state, BakedModel baseModel) { super(state, baseModel); }
 

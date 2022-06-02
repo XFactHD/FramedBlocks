@@ -15,7 +15,7 @@ import net.minecraft.world.level.storage.loot.parameters.LootContextParamSet;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParamSets;
 import net.minecraft.world.level.storage.loot.providers.number.ConstantValue;
 import net.minecraftforge.registries.RegistryObject;
-import xfacthd.framedblocks.FramedBlocks;
+import xfacthd.framedblocks.api.util.FramedConstants;
 import xfacthd.framedblocks.common.FBContent;
 
 import java.util.*;
@@ -27,7 +27,7 @@ public class FramedLootTableProvider extends LootTableProvider
     public FramedLootTableProvider(DataGenerator gen) { super(gen); }
 
     @Override
-    public String getName() { return super.getName() + ": " + FramedBlocks.MODID; }
+    public String getName() { return super.getName() + ": " + FramedConstants.MOD_ID; }
 
     @Override
     protected void validate(Map<ResourceLocation, LootTable> map, ValidationContext tracker) { /*NOOP*/ }

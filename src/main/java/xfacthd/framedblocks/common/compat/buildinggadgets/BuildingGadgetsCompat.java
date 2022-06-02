@@ -9,8 +9,8 @@ import net.minecraftforge.fml.event.lifecycle.InterModEnqueueEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.RegistryObject;
-import xfacthd.framedblocks.FramedBlocks;
 import xfacthd.framedblocks.api.block.FramedBlockEntity;
+import xfacthd.framedblocks.api.util.FramedConstants;
 
 import java.util.function.Supplier;
 
@@ -18,7 +18,7 @@ public final class BuildingGadgetsCompat
 {
     private static final DeferredRegister<ITileDataSerializer> SERIALIZERS = DeferredRegister.create(
             Reference.TileDataSerializerReference.REGISTRY_ID_TILE_DATA_SERIALIZER,
-            FramedBlocks.MODID
+            FramedConstants.MOD_ID
     );
     static final RegistryObject<ITileDataSerializer> FRAMED_SERIALIZER = SERIALIZERS.register("framed_serializer", FramedBlockEntityDataSerializer::new);
 
@@ -39,7 +39,7 @@ public final class BuildingGadgetsCompat
         {
             TopologicalRegistryBuilder<ITileDataFactory> factory = TopologicalRegistryBuilder.create();
             factory.addValue(
-                    new ResourceLocation(FramedBlocks.MODID, "framed_block_data_factory"),
+                    new ResourceLocation(FramedConstants.MOD_ID, "framed_block_data_factory"),
                     te -> te instanceof FramedBlockEntity ? new FramedBlockEntityData((FramedBlockEntity) te) : null
             );
             return factory;

@@ -4,12 +4,12 @@ import com.mojang.blaze3d.vertex.DefaultVertexFormat;
 import com.mojang.blaze3d.vertex.VertexFormat;
 import net.minecraft.client.renderer.RenderStateShard;
 import net.minecraft.client.renderer.RenderType;
-import xfacthd.framedblocks.FramedBlocks;
+import xfacthd.framedblocks.api.util.FramedConstants;
 
 public abstract class CustomRenderType extends RenderType
 {
     public static final RenderType GHOST_BLOCK = create(
-            FramedBlocks.MODID + ":ghost_block",
+            FramedConstants.MOD_ID + ":ghost_block",
             DefaultVertexFormat.BLOCK,
             VertexFormat.Mode.QUADS,
             2097152,

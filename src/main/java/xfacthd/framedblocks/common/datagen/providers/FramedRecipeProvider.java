@@ -6,7 +6,7 @@ import net.minecraft.data.recipes.*;
 import net.minecraft.tags.ItemTags;
 import net.minecraft.world.item.Items;
 import net.minecraftforge.common.Tags;
-import xfacthd.framedblocks.FramedBlocks;
+import xfacthd.framedblocks.api.util.FramedConstants;
 import xfacthd.framedblocks.common.FBContent;
 
 import java.util.function.Consumer;
@@ -19,7 +19,7 @@ public class FramedRecipeProvider extends RecipeProvider
     public FramedRecipeProvider(DataGenerator gen) { super(gen); }
 
     @Override
-    public String getName() { return super.getName() + ": " + FramedBlocks.MODID; }
+    public String getName() { return super.getName() + ": " + FramedConstants.MOD_ID; }
 
     @Override
     protected void buildCraftingRecipes(Consumer<FinishedRecipe> consumer)
@@ -509,5 +509,5 @@ public class FramedRecipeProvider extends RecipeProvider
                 .save(consumer);
     }
 
-    private static String rl(String path) { return FramedBlocks.MODID + ":" + path; }
+    private static String rl(String path) { return FramedConstants.MOD_ID + ":" + path; }
 }

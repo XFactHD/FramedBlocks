@@ -9,14 +9,14 @@ import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.material.MaterialColor;
 import net.minecraftforge.registries.RegistryObject;
-import xfacthd.framedblocks.api.FramedBlocksAPI;
+import xfacthd.framedblocks.api.util.FramedConstants;
 
 public class EmptyCamoContainer extends CamoContainer
 {
     private static final RegistryObject<CamoContainer.Factory> EMPTY_FACTORY = RegistryObject.create(
-            new ResourceLocation(FramedBlocksAPI.getInstance().modid(), "empty"),
-            FramedBlocksAPI.getInstance().getCamoContainerFactoryRegistryName(),
-            FramedBlocksAPI.getInstance().modid()
+            new ResourceLocation(FramedConstants.MOD_ID, "empty"),
+            FramedConstants.CAMO_CONTAINER_FACTORY_REGISTRY_NAME,
+            FramedConstants.MOD_ID
     );
     public static final EmptyCamoContainer EMPTY = new EmptyCamoContainer();
 

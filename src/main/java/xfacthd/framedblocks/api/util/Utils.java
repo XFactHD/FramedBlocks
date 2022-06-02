@@ -23,7 +23,6 @@ import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import net.minecraftforge.fml.loading.FMLEnvironment;
 import net.minecraftforge.registries.ForgeRegistries;
-import xfacthd.framedblocks.api.FramedBlocksAPI;
 import xfacthd.framedblocks.api.util.client.ClientUtils;
 
 public final class Utils
@@ -74,7 +73,7 @@ public final class Utils
 
     public static TranslatableComponent translate(String prefix, String postfix)
     {
-        return new TranslatableComponent(prefix + "." + FramedBlocksAPI.getInstance().modid() + "." + postfix);
+        return new TranslatableComponent(prefix + "." + FramedConstants.MOD_ID + "." + postfix);
     }
 
     public static BlockEntity getBlockEntitySafe(BlockGetter blockGetter, BlockPos pos)
@@ -102,14 +101,14 @@ public final class Utils
 
     public static boolean isZ(Direction dir) { return dir.getAxis() == Direction.Axis.Z; }
 
-    public static TagKey<Block> blockTag(String name) { return blockTag(FramedBlocksAPI.getInstance().modid(), name); }
+    public static TagKey<Block> blockTag(String name) { return blockTag(FramedConstants.MOD_ID, name); }
 
     public static TagKey<Block> blockTag(String modid, String name)
     {
         return BlockTags.create(new ResourceLocation(modid, name));
     }
 
-    public static TagKey<Item> itemTag(String name) { return itemTag(FramedBlocksAPI.getInstance().modid(), name); }
+    public static TagKey<Item> itemTag(String name) { return itemTag(FramedConstants.MOD_ID, name); }
 
     public static TagKey<Item> itemTag(String modid, String name)
     {

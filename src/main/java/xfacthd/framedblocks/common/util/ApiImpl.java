@@ -1,6 +1,5 @@
 package xfacthd.framedblocks.common.util;
 
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.*;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
@@ -17,9 +16,6 @@ import xfacthd.framedblocks.common.data.camo.CamoFactories;
 @SuppressWarnings("unused")
 public class ApiImpl implements FramedBlocksAPI
 {
-    @Override
-    public String modid() { return FramedBlocks.MODID; }
-
     @Override
     public BlockEntityType<FramedBlockEntity> defaultBlockEntity() { return FBContent.blockEntityTypeFramedBlock.get(); }
 
@@ -43,9 +39,6 @@ public class ApiImpl implements FramedBlocksAPI
 
     @Override
     public boolean allowBlockEntities() { return ServerConfig.allowBlockEntities; }
-
-    @Override
-    public ResourceLocation getCamoContainerFactoryRegistryName() { return FBContent.CAMO_CONTAINER_FACTORY_REG_NAME; }
 
     @Override
     public IForgeRegistry<CamoContainer.Factory> getCamoContainerFactoryRegistry()

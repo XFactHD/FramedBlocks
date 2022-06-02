@@ -7,15 +7,15 @@ import net.minecraft.core.Direction;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.client.model.data.IModelData;
-import xfacthd.framedblocks.FramedBlocks;
 import xfacthd.framedblocks.api.util.FramedBlockData;
+import xfacthd.framedblocks.api.util.FramedConstants;
 
 import java.util.*;
 
 public class FramedMarkedCubeModel extends FramedCubeModel
 {
-    public static final ResourceLocation SLIME_FRAME_LOCATION = new ResourceLocation(FramedBlocks.MODID, "block/slime_frame");
-    public static final ResourceLocation REDSTONE_FRAME_LOCATION = new ResourceLocation(FramedBlocks.MODID, "block/redstone_frame");
+    public static final ResourceLocation SLIME_FRAME_LOCATION = new ResourceLocation(FramedConstants.MOD_ID, "block/slime_frame");
+    public static final ResourceLocation REDSTONE_FRAME_LOCATION = new ResourceLocation(FramedConstants.MOD_ID, "block/redstone_frame");
     private final BakedModel frameModel;
 
     public FramedMarkedCubeModel(BlockState state, BakedModel baseModel, Map<ResourceLocation, BakedModel> registry, ResourceLocation frameLocation)

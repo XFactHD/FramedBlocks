@@ -8,6 +8,7 @@ import net.minecraft.world.level.block.state.properties.*;
 import net.minecraftforge.gametest.GameTestHolder;
 import xfacthd.framedblocks.FramedBlocks;
 import xfacthd.framedblocks.api.type.IBlockType;
+import xfacthd.framedblocks.api.util.FramedConstants;
 import xfacthd.framedblocks.api.util.FramedProperties;
 import xfacthd.framedblocks.common.FBContent;
 import xfacthd.framedblocks.common.data.*;
@@ -33,7 +34,7 @@ import java.util.stream.Collectors;
  * {@link OcclusionTests#test_InvDoubleSlopePanel(GameTestHelper)}
  */
 
-@GameTestHolder(FramedBlocks.MODID)
+@GameTestHolder(FramedConstants.MOD_ID)
 public final class OcclusionTests
 {
     @GameTest(template = "box_top", batch = "occlusion")

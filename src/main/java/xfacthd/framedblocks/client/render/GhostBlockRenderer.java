@@ -24,6 +24,7 @@ import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import net.minecraftforge.fml.util.ObfuscationReflectionHelper;
 import xfacthd.framedblocks.FramedBlocks;
 import xfacthd.framedblocks.api.util.FramedBlockData;
+import xfacthd.framedblocks.api.util.FramedConstants;
 import xfacthd.framedblocks.client.util.*;
 import xfacthd.framedblocks.common.FBContent;
 import xfacthd.framedblocks.common.block.AbstractFramedDoubleBlock;
@@ -38,7 +39,7 @@ import java.lang.reflect.Method;
 import java.util.Random;
 
 @SuppressWarnings("ConstantConditions")
-@Mod.EventBusSubscriber(modid = FramedBlocks.MODID, value = Dist.CLIENT, bus = Mod.EventBusSubscriber.Bus.MOD)
+@Mod.EventBusSubscriber(modid = FramedConstants.MOD_ID, value = Dist.CLIENT, bus = Mod.EventBusSubscriber.Bus.MOD)
 public final class GhostBlockRenderer
 {
     private static final Random RANDOM = new Random();

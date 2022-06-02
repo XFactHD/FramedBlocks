@@ -15,11 +15,11 @@ import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import net.minecraftforge.network.IContainerFactory;
 import net.minecraftforge.registries.*;
-import xfacthd.framedblocks.FramedBlocks;
 import xfacthd.framedblocks.api.block.FramedBlockEntity;
 import xfacthd.framedblocks.api.block.IFramedBlock;
 import xfacthd.framedblocks.api.data.EmptyCamoContainer;
 import xfacthd.framedblocks.api.data.CamoContainer;
+import xfacthd.framedblocks.api.util.FramedConstants;
 import xfacthd.framedblocks.common.block.*;
 import xfacthd.framedblocks.common.data.camo.BlockCamoContainer;
 import xfacthd.framedblocks.common.data.camo.FluidCamoContainer;
@@ -35,30 +35,29 @@ import java.util.Collection;
 import java.util.function.Function;
 import java.util.function.Supplier;
 
-@Mod.EventBusSubscriber(modid = FramedBlocks.MODID, bus = Mod.EventBusSubscriber.Bus.MOD)
+@Mod.EventBusSubscriber(modid = FramedConstants.MOD_ID, bus = Mod.EventBusSubscriber.Bus.MOD)
 public final class FBContent
 {
-    private static final DeferredRegister<Block> BLOCKS = DeferredRegister.create(ForgeRegistries.BLOCKS, FramedBlocks.MODID);
-    private static final DeferredRegister<Item> ITEMS = DeferredRegister.create(ForgeRegistries.ITEMS, FramedBlocks.MODID);
-    private static final DeferredRegister<BlockEntityType<?>> BE_TYPES = DeferredRegister.create(ForgeRegistries.BLOCK_ENTITIES, FramedBlocks.MODID);
-    private static final DeferredRegister<MenuType<?>> CONTAINER_TYPES = DeferredRegister.create(ForgeRegistries.CONTAINERS, FramedBlocks.MODID);
+    private static final DeferredRegister<Block> BLOCKS = DeferredRegister.create(ForgeRegistries.BLOCKS, FramedConstants.MOD_ID);
+    private static final DeferredRegister<Item> ITEMS = DeferredRegister.create(ForgeRegistries.ITEMS, FramedConstants.MOD_ID);
+    private static final DeferredRegister<BlockEntityType<?>> BE_TYPES = DeferredRegister.create(ForgeRegistries.BLOCK_ENTITIES, FramedConstants.MOD_ID);
+    private static final DeferredRegister<MenuType<?>> CONTAINER_TYPES = DeferredRegister.create(ForgeRegistries.CONTAINERS, FramedConstants.MOD_ID);
 
-    public static final ResourceLocation CAMO_CONTAINER_FACTORY_REG_NAME = new ResourceLocation(FramedBlocks.MODID, "camo_containers");
     private static final DeferredRegister<CamoContainer.Factory> CAMO_CONTAINER_FACTORIES = DeferredRegister.create(
-            CAMO_CONTAINER_FACTORY_REG_NAME,
-            FramedBlocks.MODID
+            FramedConstants.CAMO_CONTAINER_FACTORY_REGISTRY_NAME,
+            FramedConstants.MOD_ID
     );
     public static final Supplier<IForgeRegistry<CamoContainer.Factory>> CAMO_CONTAINER_FACTORY_REGISTRY = CAMO_CONTAINER_FACTORIES.makeRegistry(
             CamoContainer.Factory.class,
             () ->
             {
                 RegistryBuilder<CamoContainer.Factory> builder = new RegistryBuilder<>();
-                builder.disableOverrides().setDefaultKey(new ResourceLocation(FramedBlocks.MODID, "empty"));
+                builder.disableOverrides().setDefaultKey(new ResourceLocation(FramedConstants.MOD_ID, "empty"));
                 return builder;
             }
     );
 
-    /** BLOCKS */
+    // region Blocks
     public static final RegistryObject<Block> blockFramedCube = registerBlock(FramedCube::new, BlockType.FRAMED_CUBE);
     public static final RegistryObject<Block> blockFramedSlope = registerBlock(FramedSlopeBlock::new, BlockType.FRAMED_SLOPE);
     public static final RegistryObject<Block> blockFramedCornerSlope = registerBlock(FramedCornerSlopeBlock::new, BlockType.FRAMED_CORNER_SLOPE);
@@ -121,13 +120,15 @@ public final class FBContent
     public static final RegistryObject<Block> blockFramedExtendedSlopePanel = registerBlock(FramedExtendedSlopePanelBlock::new, BlockType.FRAMED_EXTENDED_SLOPE_PANEL);
     public static final RegistryObject<Block> blockFramedDoubleSlopePanel = registerBlock(FramedDoubleSlopePanelBlock::new, BlockType.FRAMED_DOUBLE_SLOPE_PANEL);
     public static final RegistryObject<Block> blockFramedInverseDoubleSlopePanel = registerBlock(FramedInverseDoubleSlopePanelBlock::new, BlockType.FRAMED_INV_DOUBLE_SLOPE_PANEL);
+    // endregion
 
-    /** ITEMS */
+    // region Items
     public static final RegistryObject<Item> itemFramedHammer = registerToolItem(FramedToolItem::new, FramedToolType.HAMMER);
     public static final RegistryObject<Item> itemFramedWrench = registerToolItem(FramedToolItem::new, FramedToolType.WRENCH);
     public static final RegistryObject<Item> itemFramedBlueprint = registerToolItem(FramedBlueprintItem::new, FramedToolType.BLUEPRINT);
+    // endregion
 
-    /** TILE ENTITY TYPES */
+    // region BlockEntityTypes
     public static final RegistryObject<BlockEntityType<FramedBlockEntity>> blockEntityTypeFramedBlock = createBlockEntityType(
             FramedBlockEntity::new,
             "framed_tile",
@@ -203,11 +204,13 @@ public final class FBContent
             "framed_inverse_double_slope_panel",
             blockFramedInverseDoubleSlopePanel
     );
+    // endregion
 
-    /** CONTAINER TYPES */
+    // region MenuTypes
     public static final RegistryObject<MenuType<FramedStorageMenu>> menuTypeFramedStorage = createMenuType(FramedStorageMenu::new, "framed_chest");
+    // endregion
 
-    /** CAMO CONTAINER FACTORIES */
+    // region CamoContainer.Factories
     public static final RegistryObject<CamoContainer.Factory> factoryEmpty = CAMO_CONTAINER_FACTORIES.register(
             "empty",
             EmptyCamoContainer.Factory::new
@@ -220,6 +223,7 @@ public final class FBContent
             "fluid",
             FluidCamoContainer.Factory::new
     );
+    // endregion
 
 
 
