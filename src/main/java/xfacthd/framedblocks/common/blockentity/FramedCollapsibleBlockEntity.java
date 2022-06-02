@@ -147,8 +147,11 @@ public class FramedCollapsibleBlockEntity extends FramedBlockEntity
             //noinspection ConstantConditions
             if (level.getBlockEntity(neighbors[i]) instanceof FramedCollapsibleBlockEntity be)
             {
-                int vert = vertexFromHit(faceHit, MathUtils.wrapVector(hitVecs[i], 0, 1));
-                be.applyDeformation(vert, offset, faceHit);
+                if (be.collapsedFace == null || be.collapsedFace == faceHit)
+                {
+                    int vert = vertexFromHit(faceHit, MathUtils.wrapVector(hitVecs[i], 0, 1));
+                    be.applyDeformation(vert, offset, faceHit);
+                }
             }
         }
     }
