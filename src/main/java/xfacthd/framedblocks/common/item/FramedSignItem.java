@@ -9,7 +9,6 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.network.PacketDistributor;
 import xfacthd.framedblocks.FramedBlocks;
-import xfacthd.framedblocks.api.util.FramedConstants;
 import xfacthd.framedblocks.common.FBContent;
 import xfacthd.framedblocks.common.net.OpenSignScreenPacket;
 import xfacthd.framedblocks.common.blockentity.FramedSignBlockEntity;
@@ -22,7 +21,6 @@ public class FramedSignItem extends StandingAndWallBlockItem
     {
         super(FBContent.blockFramedSign.get(), FBContent.blockFramedWallSign.get(),
                 new Properties().tab(FramedBlocks.FRAMED_TAB).stacksTo(16));
-        setRegistryName(FramedConstants.MOD_ID, "framed_sign");
     }
 
     @Override

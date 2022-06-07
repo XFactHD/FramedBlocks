@@ -11,12 +11,7 @@ import xfacthd.framedblocks.common.block.AbstractFramedDoubleBlock;
 
 public class FramedDoubleBlockItem extends BlockItem
 {
-    public FramedDoubleBlockItem(AbstractFramedDoubleBlock block)
-    {
-        super(block, new Properties());
-        //noinspection ConstantConditions
-        setRegistryName(block.getRegistryName());
-    }
+    public FramedDoubleBlockItem(AbstractFramedDoubleBlock block) { super(block, new Properties()); }
 
     @Override
     protected boolean placeBlock(BlockPlaceContext context, BlockState state)
@@ -43,5 +38,5 @@ public class FramedDoubleBlockItem extends BlockItem
     }
 
     @Override
-    protected boolean allowdedIn(CreativeModeTab group) { return false; }
+    protected boolean allowedIn(CreativeModeTab group) { return false; }
 }

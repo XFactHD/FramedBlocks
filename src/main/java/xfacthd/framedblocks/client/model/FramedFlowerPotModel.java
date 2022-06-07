@@ -11,6 +11,7 @@ import net.minecraft.client.resources.model.BakedModel;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.BlockAndTintGetter;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
@@ -40,7 +41,7 @@ public class FramedFlowerPotModel extends BakedModelProxy
 
     @Nonnull
     @Override
-    public List<BakedQuad> getQuads(@Nullable BlockState state, @Nullable Direction side, @Nonnull Random rand, @Nonnull IModelData extraData)
+    public List<BakedQuad> getQuads(@Nullable BlockState state, @Nullable Direction side, @Nonnull RandomSource rand, @Nonnull IModelData extraData)
     {
         return getOrCreatePotModel(state, extraData).getQuads(state, side, rand, extraData);
     }
@@ -148,7 +149,7 @@ public class FramedFlowerPotModel extends BakedModelProxy
         }
 
         @Override
-        protected void getAdditionalQuads(Map<Direction, List<BakedQuad>> quadMap, BlockState state, Random rand, IModelData data, RenderType layer)
+        protected void getAdditionalQuads(Map<Direction, List<BakedQuad>> quadMap, BlockState state, RandomSource rand, IModelData data, RenderType layer)
         {
             BlockRenderDispatcher dispatcher = Minecraft.getInstance().getBlockRenderer();
             BlockState potState = FramedFlowerPotBlock.getFlowerPotState(flower);
@@ -203,7 +204,7 @@ public class FramedFlowerPotModel extends BakedModelProxy
             }
         }
 
-        private static List<BakedQuad> getFilteredPlantQuads(BlockState potState, BakedModel potModel, Direction face, Random rand)
+        private static List<BakedQuad> getFilteredPlantQuads(BlockState potState, BakedModel potModel, Direction face, RandomSource rand)
         {
             return potModel.getQuads(potState, face, rand, EmptyModelData.INSTANCE)
                     .stream()

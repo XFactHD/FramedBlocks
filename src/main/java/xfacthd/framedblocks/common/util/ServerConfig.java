@@ -49,7 +49,7 @@ public class ServerConfig
         intangibleMarkerItemValue = builder
                 .comment("The item to use for making Framed Blocks intangible. The value must be a valid item registry name")
                 .translation("config." + FramedConstants.MOD_ID + ".intangibleMarkerItem")
-                .define("intangibleMarkerItem", Items.PHANTOM_MEMBRANE.getRegistryName().toString(), ServerConfig::validateItemName);
+                .define("intangibleMarkerItem", ForgeRegistries.ITEMS.getKey(Items.PHANTOM_MEMBRANE).toString(), ServerConfig::validateItemName);
         builder.pop();
     }
 

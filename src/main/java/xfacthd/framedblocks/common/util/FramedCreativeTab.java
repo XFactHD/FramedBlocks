@@ -4,6 +4,7 @@ import com.google.common.base.Preconditions;
 import net.minecraft.core.NonNullList;
 import net.minecraft.world.item.*;
 import net.minecraft.world.level.block.Block;
+import net.minecraftforge.registries.ForgeRegistries;
 import xfacthd.framedblocks.api.block.IFramedBlock;
 import xfacthd.framedblocks.common.FBContent;
 import xfacthd.framedblocks.common.item.FramedToolItem;
@@ -33,11 +34,11 @@ public class FramedCreativeTab extends CreativeModeTab
 
             Preconditions.checkArgument(
                     itemOne instanceof BlockItem bi && bi.getBlock() instanceof IFramedBlock,
-                    String.format("Invalid item in FramedBlocks creative tab: %s", itemOne.getRegistryName())
+                    String.format("Invalid item in FramedBlocks creative tab: %s", ForgeRegistries.ITEMS.getKey(itemOne))
             );
             Preconditions.checkArgument(
                     itemTwo instanceof BlockItem bi && bi.getBlock() instanceof IFramedBlock,
-                    String.format("Invalid item in FramedBlocks creative tab: %s", itemOne.getRegistryName())
+                    String.format("Invalid item in FramedBlocks creative tab: %s", ForgeRegistries.ITEMS.getKey(itemOne))
             );
 
             Block b1 = ((BlockItem) itemOne).getBlock();

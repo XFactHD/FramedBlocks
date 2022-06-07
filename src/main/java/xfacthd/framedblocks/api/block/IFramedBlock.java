@@ -1,6 +1,7 @@
 package xfacthd.framedblocks.api.block;
 
 import com.google.common.base.Preconditions;
+import com.mojang.datafixers.util.Pair;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -34,7 +35,7 @@ import java.util.List;
 import java.util.Optional;
 
 /**
- * The {@link team.chisel.ctm.api.IFacade} interface is not implemented directly and is instead hacked on
+ * The {@code team.chisel.ctm.api.IFacade} interface is not implemented directly and is instead hacked on
  * via a mixin to allow CTM to be an optional dependency :/
  */
 @SuppressWarnings({ "deprecation", "unused" })
@@ -63,13 +64,15 @@ public interface IFramedBlock extends EntityBlock//, IFacade
         return ((IFramedBlock) state.getBlock()).isSuffocating(state, level, pos);
     }
 
-    default BlockItem createItemBlock()
+    default Pair<IFramedBlock, BlockItem> createItemBlock()
     {
-        Block block = (Block)this;
-        BlockItem item = new BlockItem(block, new Item.Properties().tab(FramedBlocksAPI.getInstance().defaultCreativeTab()));
-        //noinspection ConstantConditions
-        item.setRegistryName(block.getRegistryName());
-        return item;
+        return Pair.of(
+                this,
+                new BlockItem(
+                        (Block)this,
+                        new Item.Properties().tab(FramedBlocksAPI.getInstance().defaultCreativeTab())
+                )
+        );
     }
 
     default void tryApplyCamoImmediately(Level level, BlockPos pos, @Nullable LivingEntity placer, ItemStack stack)
@@ -146,7 +149,7 @@ public interface IFramedBlock extends EntityBlock//, IFacade
     default CtmPredicate getCtmPredicate() { return getBlockType().getCtmPredicate(); }
 
     /**
-     * This method is overriden from {@link team.chisel.ctm.api.IFacade}. To allow CTM to be an optional dependency,
+     * This method is overriden from {@code team.chisel.ctm.api.IFacade}. To allow CTM to be an optional dependency,
      * the interface is not implemented directly and is instead hacked on via a mixin :/
      */
     @Nonnull
@@ -158,7 +161,7 @@ public interface IFramedBlock extends EntityBlock//, IFacade
     }
 
     /**
-     * This method is overriden from {@link team.chisel.ctm.api.IFacade}. To allow CTM to be an optional dependency,
+     * This method is overriden from {@code team.chisel.ctm.api.IFacade}. To allow CTM to be an optional dependency,
      * the interface is not implemented directly and is instead hacked on via a mixin :/
      */
     @Nonnull

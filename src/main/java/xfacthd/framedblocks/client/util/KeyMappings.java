@@ -2,7 +2,7 @@ package xfacthd.framedblocks.client.util;
 
 import net.minecraft.client.KeyMapping;
 import net.minecraft.client.Minecraft;
-import net.minecraft.network.chat.TextComponent;
+import net.minecraft.network.chat.Component;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.HitResult;
@@ -47,7 +47,7 @@ public final class KeyMappings
             {
                 be.updateCulling(true, true);
                 //noinspection ConstantConditions
-                Minecraft.getInstance().player.displayClientMessage(new TextComponent("Culling updated"), true);
+                Minecraft.getInstance().player.displayClientMessage(Component.literal("Culling updated"), true);
             }
         }
     }

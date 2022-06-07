@@ -18,14 +18,14 @@ public final class GeneratorHandler
         DataGenerator gen = event.getGenerator();
         ExistingFileHelper fileHelper = event.getExistingFileHelper();
 
-        gen.addProvider(new FramedBlockStateProvider(gen, fileHelper));
-        gen.addProvider(new FramedItemModelProvider(gen, fileHelper));
-        gen.addProvider(new FramedLootTableProvider(gen));
-        gen.addProvider(new FramedRecipeProvider(gen));
+        gen.addProvider(event.includeClient(), new FramedBlockStateProvider(gen, fileHelper));
+        gen.addProvider(event.includeClient(), new FramedItemModelProvider(gen, fileHelper));
+        gen.addProvider(event.includeServer(), new FramedLootTableProvider(gen));
+        gen.addProvider(event.includeServer(), new FramedRecipeProvider(gen));
         BlockTagsProvider tagProvider = new FramedBlockTagProvider(gen, fileHelper);
-        gen.addProvider(tagProvider);
-        gen.addProvider(new FramedItemTagProvider(gen, tagProvider, fileHelper));
-        gen.addProvider(new FramedLanguageProvider(gen));
+        gen.addProvider(event.includeServer(), tagProvider);
+        gen.addProvider(event.includeServer(), new FramedItemTagProvider(gen, tagProvider, fileHelper));
+        gen.addProvider(event.includeClient(), new FramedLanguageProvider(gen));
     }
 
 

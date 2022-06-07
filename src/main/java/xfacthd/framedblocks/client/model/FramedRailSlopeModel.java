@@ -8,6 +8,7 @@ import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.resources.model.BakedModel;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.BlockAndTintGetter;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
@@ -45,7 +46,7 @@ public class FramedRailSlopeModel extends BakedModelProxy
     }
 
     @Override
-    public List<BakedQuad> getQuads(@Nullable BlockState state, @Nullable Direction side, @Nonnull Random rand, @Nonnull IModelData extraData)
+    public List<BakedQuad> getQuads(@Nullable BlockState state, @Nullable Direction side, @Nonnull RandomSource rand, @Nonnull IModelData extraData)
     {
         List<BakedQuad> quads = new ArrayList<>(getSlopeQuads(side, rand, extraData));
 
@@ -59,7 +60,7 @@ public class FramedRailSlopeModel extends BakedModelProxy
     }
 
     @Override
-    public List<BakedQuad> getQuads(BlockState state, Direction side, Random rand)
+    public List<BakedQuad> getQuads(BlockState state, Direction side, RandomSource rand)
     {
         return getQuads(state, side, rand, EmptyModelData.INSTANCE);
     }
@@ -92,12 +93,12 @@ public class FramedRailSlopeModel extends BakedModelProxy
         return slopeModel;
     }
 
-    private List<BakedQuad> getSlopeQuads(@Nullable Direction side, @Nonnull Random rand, @Nonnull IModelData extraData)
+    private List<BakedQuad> getSlopeQuads(@Nullable Direction side, @Nonnull RandomSource rand, @Nonnull IModelData extraData)
     {
         return getSlopeModel().getQuads(slopeState, side, rand, extraData);
     }
 
-    private List<BakedQuad> getRailQuads(@Nullable Direction side, Random rand)
+    private List<BakedQuad> getRailQuads(@Nullable Direction side, RandomSource rand)
     {
         if (railModel == null)
         {

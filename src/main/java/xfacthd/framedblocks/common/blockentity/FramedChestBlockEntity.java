@@ -2,19 +2,19 @@ package xfacthd.framedblocks.common.blockentity;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
+import xfacthd.framedblocks.api.util.Utils;
 import xfacthd.framedblocks.common.FBContent;
 import xfacthd.framedblocks.common.data.ChestState;
 import xfacthd.framedblocks.common.data.PropertyHolder;
 
 public class FramedChestBlockEntity extends FramedStorageBlockEntity
 {
-    public static final Component TITLE = new TranslatableComponent("title.framedblocks:framed_chest");
+    public static final Component TITLE = Utils.translate("title", "framed_chest");
 
     private int openCount = 0;
     private long closeStart = 0;

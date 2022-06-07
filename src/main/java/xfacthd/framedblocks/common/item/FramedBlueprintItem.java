@@ -21,6 +21,7 @@ import net.minecraft.world.level.block.state.properties.DoubleBlockHalf;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraftforge.common.Tags;
 import net.minecraftforge.registries.ForgeRegistries;
+import xfacthd.framedblocks.api.util.Utils;
 import xfacthd.framedblocks.common.FBContent;
 import xfacthd.framedblocks.api.block.IFramedBlock;
 import xfacthd.framedblocks.common.data.FramedToolType;
@@ -31,14 +32,14 @@ import java.util.*;
 
 public class FramedBlueprintItem extends FramedToolItem
 {
-    public static final String CONTAINED_BLOCK = "desc.framed_blocks:blueprint_block";
-    public static final String CAMO_BLOCK = "desc.framed_blocks:blueprint_camo";
-    public static final String IS_ILLUMINATED = "desc.framed_blocks:blueprint_illuminated";
-    public static final MutableComponent BLOCK_NONE = new TranslatableComponent("desc.framed_blocks:blueprint_none").withStyle(ChatFormatting.RED);
-    public static final MutableComponent BLOCK_INVALID = new TranslatableComponent("desc.framed_blocks:blueprint_invalid").withStyle(ChatFormatting.RED);
-    public static final MutableComponent ILLUMINATED_FALSE = new TranslatableComponent("desc.framed_blocks:blueprint_illuminated_false").withStyle(ChatFormatting.RED);
-    public static final MutableComponent ILLUMINATED_TRUE = new TranslatableComponent("desc.framed_blocks:blueprint_illuminated_true").withStyle(ChatFormatting.GREEN);
-    public static final MutableComponent CANT_COPY = new TranslatableComponent("desc.framed_blocks:blueprint_cant_copy").withStyle(ChatFormatting.RED);
+    public static final String CONTAINED_BLOCK = "desc.framed_blocks.blueprint_block";
+    public static final String CAMO_BLOCK = "desc.framed_blocks.blueprint_camo";
+    public static final String IS_ILLUMINATED = "desc.framed_blocks.blueprint_illuminated";
+    public static final MutableComponent BLOCK_NONE = Utils.translate("desc", "blueprint_none").withStyle(ChatFormatting.RED);
+    public static final MutableComponent BLOCK_INVALID = Utils.translate("desc", "blueprint_invalid").withStyle(ChatFormatting.RED);
+    public static final MutableComponent ILLUMINATED_FALSE = Utils.translate("desc", "blueprint_illuminated_false").withStyle(ChatFormatting.RED);
+    public static final MutableComponent ILLUMINATED_TRUE = Utils.translate("desc", "blueprint_illuminated_true").withStyle(ChatFormatting.GREEN);
+    public static final MutableComponent CANT_COPY = Utils.translate("desc", "blueprint_cant_copy").withStyle(ChatFormatting.RED);
 
     public FramedBlueprintItem(FramedToolType type) { super(type); }
 
@@ -96,7 +97,7 @@ public class FramedBlueprintItem extends FramedToolItem
         {
             BlockState state = level.getBlockState(pos);
             //noinspection ConstantConditions
-            String block = state.getBlock().getRegistryName().toString();
+            String block = ForgeRegistries.BLOCKS.getKey(state.getBlock()).toString();
             tag.putString("framed_block", block);
 
             CompoundTag nbt = be.writeToBlueprint();
@@ -315,7 +316,7 @@ public class FramedBlueprintItem extends FramedToolItem
         CompoundTag tag = stack.getOrCreateTagElement("blueprint_data");
         if (tag.isEmpty())
         {
-            components.add(new TranslatableComponent("desc.framed_blocks:blueprint_block", BLOCK_NONE).withStyle(ChatFormatting.GOLD));
+            components.add(Component.translatable(CONTAINED_BLOCK, BLOCK_NONE).withStyle(ChatFormatting.GOLD));
         }
         else
         {
@@ -326,9 +327,9 @@ public class FramedBlueprintItem extends FramedToolItem
             Component camoName = !(block instanceof IFramedBlock fb) ? BLOCK_NONE : fb.printCamoBlock(beTag).orElse(BLOCK_NONE);
             Component illuminated = beTag.getBoolean("glowing") ? ILLUMINATED_TRUE : ILLUMINATED_FALSE;
 
-            Component lineOne = new TranslatableComponent(CONTAINED_BLOCK, blockName).withStyle(ChatFormatting.GOLD);
-            Component lineTwo = new TranslatableComponent(CAMO_BLOCK, camoName).withStyle(ChatFormatting.GOLD);
-            Component lineThree = new TranslatableComponent(IS_ILLUMINATED, illuminated).withStyle(ChatFormatting.GOLD);
+            Component lineOne = Component.translatable(CONTAINED_BLOCK, blockName).withStyle(ChatFormatting.GOLD);
+            Component lineTwo = Component.translatable(CAMO_BLOCK, camoName).withStyle(ChatFormatting.GOLD);
+            Component lineThree = Component.translatable(IS_ILLUMINATED, illuminated).withStyle(ChatFormatting.GOLD);
 
             components.addAll(Arrays.asList(lineOne, lineTwo, lineThree));
         }

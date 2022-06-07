@@ -4,7 +4,7 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.Connection;
-import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.network.chat.Component;
 import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
@@ -24,6 +24,7 @@ import net.minecraftforge.common.Tags;
 import net.minecraftforge.fluids.FluidAttributes;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.capability.*;
+import net.minecraftforge.registries.ForgeRegistries;
 import xfacthd.framedblocks.FramedBlocks;
 import xfacthd.framedblocks.api.FramedBlocksAPI;
 import xfacthd.framedblocks.api.data.EmptyCamoContainer;
@@ -38,8 +39,8 @@ import java.util.List;
 @SuppressWarnings("deprecation")
 public class FramedBlockEntity extends BlockEntity
 {
-    public static final TranslatableComponent MSG_BLACKLISTED = Utils.translate("msg", "blacklisted");
-    public static final TranslatableComponent MSG_BLOCK_ENTITY = Utils.translate("msg", "block_entity");
+    public static final Component MSG_BLACKLISTED = Utils.translate("msg", "blacklisted");
+    public static final Component MSG_BLOCK_ENTITY = Utils.translate("msg", "block_entity");
     private static final Direction[] DIRECTIONS = Direction.values();
     private static final int DATA_VERSION = 2;
 
@@ -664,9 +665,9 @@ public class FramedBlockEntity extends BlockEntity
             recheckStates = true;
             FramedBlocks.LOGGER.warn(
                     "Framed Block of type \"{}\" at position {} contains an invalid camo of type \"{}\", removing camo! This might be caused by a config or tag change!",
-                    getBlockState().getBlock().getRegistryName(),
+                    ForgeRegistries.BLOCKS.getKey(getBlockState().getBlock()),
                     worldPosition,
-                    camo.getState().getBlock().getRegistryName()
+                    ForgeRegistries.BLOCKS.getKey(camo.getState().getBlock())
             );
         }
         glowing = nbt.getBoolean("glowing");

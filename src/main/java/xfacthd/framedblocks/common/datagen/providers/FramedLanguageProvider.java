@@ -87,8 +87,8 @@ public class FramedLanguageProvider extends LanguageProvider
         add(KeyMappings.KEYMAPPING_UPDATE_CULLING.get().getName(), "Update culling cache");
 
         add(FramedBlocks.FRAMED_TAB.getDisplayName().getString(), "FramedBlocks");
-        add(FramedBlockEntity.MSG_BLACKLISTED.getKey(), "This block is blacklisted!");
-        add(FramedBlockEntity.MSG_BLOCK_ENTITY.getKey(), "Blocks with BlockEntities cannot be inserted into framed blocks!");
+        add(FramedBlockEntity.MSG_BLACKLISTED.getString(), "This block is blacklisted!");
+        add(FramedBlockEntity.MSG_BLOCK_ENTITY.getString(), "Blocks with BlockEntities cannot be inserted into framed blocks!");
         add(FramedChestBlockEntity.TITLE.getString(), "Framed Chest");
         add(FramedStorageBlockEntity.TITLE.getString(), "Framed Secret Storage");
         add(FramedBlueprintItem.CONTAINED_BLOCK, "Contained Block: %s");

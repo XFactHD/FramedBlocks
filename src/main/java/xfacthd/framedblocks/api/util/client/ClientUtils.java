@@ -14,6 +14,7 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.Property;
+import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegistryObject;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -73,7 +74,7 @@ public final class ClientUtils
         if (itemModelSource != null)
         {
             //noinspection ConstantConditions
-            ResourceLocation location = new ModelResourceLocation(block.get().getRegistryName(), "inventory");
+            ResourceLocation location = new ModelResourceLocation(ForgeRegistries.BLOCKS.getKey(block.get()), "inventory");
             BakedModel replacement = models.get(BlockModelShaper.stateToModelLocation(itemModelSource));
             models.put(location, replacement);
         }

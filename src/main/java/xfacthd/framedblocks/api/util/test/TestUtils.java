@@ -40,7 +40,7 @@ public final class TestUtils
     {
         if (!(block instanceof IFramedBlock))
         {
-            helper.fail(String.format("Expected instance of IFramedBlock, got %s", block.getRegistryName()));
+            helper.fail(String.format("Expected instance of IFramedBlock, got %s", ForgeRegistries.BLOCKS.getKey(block)));
             return false;
         }
         return true;
@@ -197,7 +197,7 @@ public final class TestUtils
 
         if (!((IFramedBlock) block).getBlockType().canOccludeWithSolidCamo())
         {
-            helper.fail(String.format("Block %s can not occlude with a solid camo", block.getRegistryName()));
+            helper.fail(String.format("Block %s can not occlude with a solid camo", ForgeRegistries.BLOCKS.getKey(block)));
             return false;
         }
         return true;

@@ -11,7 +11,6 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.Property;
 import net.minecraft.world.level.material.Fluid;
 import net.minecraft.world.level.material.MaterialColor;
-import net.minecraftforge.registries.ForgeRegistryEntry;
 import org.slf4j.Logger;
 import xfacthd.framedblocks.api.FramedBlocksAPI;
 import xfacthd.framedblocks.api.util.Utils;
@@ -126,7 +125,7 @@ public abstract class CamoContainer
 
 
 
-    public static abstract class Factory extends ForgeRegistryEntry<Factory>
+    public static abstract class Factory
     {
         private String id;
 

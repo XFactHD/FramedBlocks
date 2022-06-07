@@ -20,6 +20,7 @@ import xfacthd.framedblocks.common.FBContent;
 
 import java.util.function.Function;
 
+//TODO: rewrite to fit the current vanilla sign implementation (for the most part at least :D)
 public class FramedSignBlockEntity extends FramedBlockEntity
 {
     private final Component[] lines = new Component[4];
@@ -31,7 +32,7 @@ public class FramedSignBlockEntity extends FramedBlockEntity
     public FramedSignBlockEntity(BlockPos pos, BlockState state)
     {
         super(FBContent.blockEntityTypeFramedSign.get(), pos, state);
-        for (int i = 0; i < 4; i++) { lines[i] = new TextComponent(""); }
+        for (int i = 0; i < 4; i++) { lines[i] = Component.literal(""); }
     }
 
     public void setLine(int line, Component text)
@@ -73,7 +74,7 @@ public class FramedSignBlockEntity extends FramedBlockEntity
     private CommandSourceStack getCommandSource(ServerPlayer player)
     {
         String nameString = player == null ? "Sign" : player.getName().getString();
-        Component name = player == null ? new TextComponent("Sign") : player.getDisplayName();
+        Component name = player == null ? Component.literal("Sign") : player.getDisplayName();
         Vec3 posVec = new Vec3(worldPosition.getX() + 0.5D, worldPosition.getY() + 0.5D, worldPosition.getZ() + 0.5D);
 
         //noinspection ConstantConditions

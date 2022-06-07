@@ -29,6 +29,7 @@ import net.minecraftforge.fml.common.Mod;
 import org.lwjgl.glfw.GLFW;
 import xfacthd.framedblocks.FramedBlocks;
 import xfacthd.framedblocks.api.util.FramedConstants;
+import xfacthd.framedblocks.api.util.Utils;
 import xfacthd.framedblocks.common.FBContent;
 import xfacthd.framedblocks.common.data.PropertyHolder;
 import xfacthd.framedblocks.common.net.SignUpdatePacket;
@@ -36,13 +37,14 @@ import xfacthd.framedblocks.common.blockentity.FramedSignBlockEntity;
 
 import java.util.List;
 
+//TODO: update to match current vanilla sign screen and fix wrong button position
 @SuppressWarnings("deprecation")
 @Mod.EventBusSubscriber(modid = FramedConstants.MOD_ID, bus = Mod.EventBusSubscriber.Bus.MOD, value = Dist.CLIENT)
 public class FramedSignScreen extends Screen
 {
     private static final Table<BlockState, Direction, TextureAtlasSprite> SPRITE_CACHE = HashBasedTable.create();
     private static final ResourceLocation DEFAULT_TEXTURE = new ResourceLocation(FramedConstants.MOD_ID, "block/framed_block");
-    private static final Component DONE = new TranslatableComponent("gui.done");
+    private static final Component DONE = Utils.translate("button", "gui.done");
 
     private final FramedSignBlockEntity sign;
     private final String[] lines = new String[4];
@@ -52,7 +54,7 @@ public class FramedSignScreen extends Screen
 
     public FramedSignScreen(FramedSignBlockEntity sign)
     {
-        super(new TranslatableComponent("sign.edit"));
+        super(Utils.translate("title", "sign.edit"));
         this.sign = sign;
 
         for (int i = 0; i < 4; i++) { lines[i] = sign.getLine(i).getString(); }
@@ -69,7 +71,7 @@ public class FramedSignScreen extends Screen
                 (line) ->
                 {
                     lines[currLine] = line;
-                    sign.setLine(currLine, new TextComponent(line));
+                    sign.setLine(currLine, Component.literal(line));
                 },
                 TextFieldHelper.createClipboardGetter(minecraft), TextFieldHelper.createClipboardSetter(minecraft),
                 (line) -> minecraft.font.width(line) <= 90);
@@ -238,7 +240,7 @@ public class FramedSignScreen extends Screen
                     tessBuffer.vertex(matrix,   xEnd, y - 1F, 0.0F).color(0, 0, 255, 255).endVertex();
                     tessBuffer.vertex(matrix, xStart, y - 1F, 0.0F).color(0, 0, 255, 255).endVertex();
                     tessBuffer.end();
-                    BufferUploader.end(tessBuffer);
+                    BufferUploader.drawWithShader(tessBuffer.end());
 
                     RenderSystem.disableColorLogicOp();
                     RenderSystem.enableTexture();

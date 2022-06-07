@@ -7,6 +7,7 @@ import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.resources.model.BakedModel;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.util.RandomSource;
 import net.minecraft.util.Tuple;
 import net.minecraft.world.level.BlockAndTintGetter;
 import net.minecraft.world.level.block.state.BlockState;
@@ -35,7 +36,7 @@ public abstract class FramedDoubleBlockModel extends BakedModelProxy
 
     @Nonnull
     @Override
-    public List<BakedQuad> getQuads(@Nullable BlockState state, @Nullable Direction side, @Nonnull Random rand, @Nonnull IModelData extraData)
+    public List<BakedQuad> getQuads(@Nullable BlockState state, @Nullable Direction side, @Nonnull RandomSource rand, @Nonnull IModelData extraData)
     {
         IModelData dataLeft = extraData.getData(FramedDoubleBlockEntity.DATA_LEFT);
         List<BakedQuad> quads = new ArrayList<>(
@@ -52,7 +53,7 @@ public abstract class FramedDoubleBlockModel extends BakedModelProxy
 
     @Override
     @SuppressWarnings("deprecation")
-    public List<BakedQuad> getQuads(BlockState state, Direction side, Random rand)
+    public List<BakedQuad> getQuads(BlockState state, Direction side, RandomSource rand)
     {
         if (specialItemModel)
         {

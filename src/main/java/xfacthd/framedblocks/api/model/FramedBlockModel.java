@@ -11,6 +11,7 @@ import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.resources.model.BakedModel;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.BlockAndTintGetter;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.LiquidBlock;
@@ -44,7 +45,7 @@ public abstract class FramedBlockModel extends BakedModelProxy
     }
 
     @Override
-    public List<BakedQuad> getQuads(BlockState state, Direction side, Random rand, IModelData extraData)
+    public List<BakedQuad> getQuads(BlockState state, Direction side, RandomSource rand, IModelData extraData)
     {
         RenderType layer = MinecraftForgeClient.getRenderType();
         BlockState camoState = Blocks.AIR.defaultBlockState();
@@ -78,13 +79,13 @@ public abstract class FramedBlockModel extends BakedModelProxy
     }
 
     @Override
-    public List<BakedQuad> getQuads(BlockState state, Direction side, Random rand)
+    public List<BakedQuad> getQuads(BlockState state, Direction side, RandomSource rand)
     {
         if (state == null) { state = this.state; }
         return getCamoQuads(state, FramedBlocksAPI.getInstance().defaultModelState(), side, rand, EmptyModelData.INSTANCE, RenderType.cutout(), true);
     }
 
-    private List<BakedQuad> getCamoQuads(BlockState state, BlockState camoState, Direction side, Random rand, IModelData extraData, RenderType layer, boolean camoInLayer)
+    private List<BakedQuad> getCamoQuads(BlockState state, BlockState camoState, Direction side, RandomSource rand, IModelData extraData, RenderType layer, boolean camoInLayer)
     {
         if (type.getCtmPredicate().test(state, side))
         {
@@ -130,7 +131,7 @@ public abstract class FramedBlockModel extends BakedModelProxy
         }
     }
 
-    private Map<Direction, List<BakedQuad>> makeQuads(BlockState state, BlockState camoState, Random rand, IModelData data, RenderType layer, boolean camoInLayer)
+    private Map<Direction, List<BakedQuad>> makeQuads(BlockState state, BlockState camoState, RandomSource rand, IModelData data, RenderType layer, boolean camoInLayer)
     {
         Map<Direction, List<BakedQuad>> quadMap = new Object2ObjectArrayMap<>(7);
         quadMap.put(null, new ArrayList<>());
@@ -170,13 +171,13 @@ public abstract class FramedBlockModel extends BakedModelProxy
      * Add additional quads to faces that return {@code true} from {@code xfacthd.framedblocks.api.util.CtmPredicate#test(BlockState, Direction)}<br>
      * The result of this method will NOT be cached, execution should therefore be as fast as possible
      */
-    protected void getAdditionalQuads(List<BakedQuad> quads, Direction side, BlockState state, Random rand, IModelData data, RenderType layer) {}
+    protected void getAdditionalQuads(List<BakedQuad> quads, Direction side, BlockState state, RandomSource rand, IModelData data, RenderType layer) {}
 
     /**
      * Add additional quads to faces that return {@code false} from {@code xfacthd.framedblocks.api.util.CtmPredicate#test(BlockState, Direction)}<br>
      * The result of this method will be cached, processing time is therefore not critical
      */
-    protected void getAdditionalQuads(Map<Direction, List<BakedQuad>> quadMap, BlockState state, Random rand, IModelData data, RenderType layer) {}
+    protected void getAdditionalQuads(Map<Direction, List<BakedQuad>> quadMap, BlockState state, RandomSource rand, IModelData data, RenderType layer) {}
 
     protected boolean canRenderBaseModelInLayer(RenderType layer) { return layer == RenderType.cutout(); }
 
@@ -235,7 +236,7 @@ public abstract class FramedBlockModel extends BakedModelProxy
         return model.getModelData(level, pos, state, data);
     }
 
-    protected static List<BakedQuad> getAllQuads(BakedModel model, BlockState state, Random rand)
+    protected static List<BakedQuad> getAllQuads(BakedModel model, BlockState state, RandomSource rand)
     {
         List<BakedQuad> quads = new ArrayList<>();
         for (Direction dir : Direction.values())

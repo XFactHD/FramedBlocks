@@ -5,8 +5,8 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.NbtUtils;
+import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
-import net.minecraft.network.chat.TextComponent;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.*;
@@ -82,7 +82,7 @@ public abstract class AbstractFramedDoubleBlock extends FramedBlock
         BlockState camoStateTwo = NbtUtils.readBlockState(beTag.getCompound("camo_state_two"));
 
         MutableComponent component = camoState.isAir() ? FramedBlueprintItem.BLOCK_NONE : camoState.getBlock().getName().withStyle(ChatFormatting.WHITE);
-        component = component.copy().append(new TextComponent(" | ").withStyle(ChatFormatting.GOLD));
+        component = component.copy().append(Component.literal(" | ").withStyle(ChatFormatting.GOLD));
         component.append(camoStateTwo.isAir() ? FramedBlueprintItem.BLOCK_NONE : camoStateTwo.getBlock().getName().withStyle(ChatFormatting.WHITE));
 
         return Optional.of(component);

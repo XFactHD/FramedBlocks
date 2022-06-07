@@ -70,6 +70,11 @@ public interface FramedBlocksAPI
     void registerCamoContainerFactory(Item item, CamoContainer.Factory factory);
 
     /**
+     * Returns the camo container factory for the empty container
+     */
+    CamoContainer.Factory emptyCamoContainerFactory();
+
+    /**
      * Returns the camo container factory to use for the given {@link ItemStack}
      */
     CamoContainer.Factory getCamoContainerFactory(ItemStack stack);

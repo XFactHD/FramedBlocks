@@ -2,22 +2,15 @@ package xfacthd.framedblocks.api.data;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.BlockAndTintGetter;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.material.MaterialColor;
-import net.minecraftforge.registries.RegistryObject;
-import xfacthd.framedblocks.api.util.FramedConstants;
+import xfacthd.framedblocks.api.FramedBlocksAPI;
 
 public class EmptyCamoContainer extends CamoContainer
 {
-    private static final RegistryObject<CamoContainer.Factory> EMPTY_FACTORY = RegistryObject.create(
-            new ResourceLocation(FramedConstants.MOD_ID, "empty"),
-            FramedConstants.CAMO_CONTAINER_FACTORY_REGISTRY_NAME,
-            FramedConstants.MOD_ID
-    );
     public static final EmptyCamoContainer EMPTY = new EmptyCamoContainer();
 
     private EmptyCamoContainer() { super(Blocks.AIR.defaultBlockState()); }
@@ -38,7 +31,7 @@ public class EmptyCamoContainer extends CamoContainer
     public ContainerType getType() { return ContainerType.EMPTY; }
 
     @Override
-    public CamoContainer.Factory getFactory() { return EMPTY_FACTORY.get(); }
+    public CamoContainer.Factory getFactory() { return FramedBlocksAPI.getInstance().emptyCamoContainerFactory(); }
 
     @Override
     public void save(CompoundTag tag) { }

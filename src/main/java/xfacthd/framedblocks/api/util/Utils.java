@@ -4,7 +4,8 @@ import com.google.common.base.Preconditions;
 import net.minecraft.core.*;
 import net.minecraft.nbt.*;
 import net.minecraft.nbt.Tag;
-import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.*;
 import net.minecraft.world.item.Item;
@@ -71,9 +72,14 @@ public final class Utils
         return actualType == type ? (BlockEntityTicker<A>)ticker : null;
     }
 
-    public static TranslatableComponent translate(String prefix, String postfix)
+    public static MutableComponent translate(String prefix, String postfix, Object... arguments)
     {
-        return new TranslatableComponent(prefix + "." + FramedConstants.MOD_ID + "." + postfix);
+        return Component.translatable(prefix + "." + FramedConstants.MOD_ID + "." + postfix, arguments);
+    }
+
+    public static MutableComponent translate(String prefix, String postfix)
+    {
+        return Component.translatable(prefix + "." + FramedConstants.MOD_ID + "." + postfix);
     }
 
     public static BlockEntity getBlockEntitySafe(BlockGetter blockGetter, BlockPos pos)
@@ -159,6 +165,8 @@ public final class Utils
         }
         return null;
     }
+
+    public static ResourceLocation rl(String path) { return new ResourceLocation(FramedConstants.MOD_ID, path); }
 
 
 

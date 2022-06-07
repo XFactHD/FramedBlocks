@@ -54,7 +54,7 @@ public final class LightSourceTests
 
     private static String getTestName(BlockState state)
     {
-        ResourceLocation regName = state.getBlock().getRegistryName();
+        ResourceLocation regName = ForgeRegistries.BLOCKS.getKey(state.getBlock());
         Preconditions.checkState(regName != null);
         return String.format("lightsourcetests.test_%s", regName.getPath());
     }

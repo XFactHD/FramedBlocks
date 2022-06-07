@@ -1,15 +1,16 @@
 package xfacthd.framedblocks.common;
 
 import com.google.common.base.Preconditions;
+import com.mojang.datafixers.util.Pair;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.inventory.MenuType;
+import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraftforge.common.extensions.IForgeMenuType;
-import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
@@ -20,6 +21,7 @@ import xfacthd.framedblocks.api.block.IFramedBlock;
 import xfacthd.framedblocks.api.data.EmptyCamoContainer;
 import xfacthd.framedblocks.api.data.CamoContainer;
 import xfacthd.framedblocks.api.util.FramedConstants;
+import xfacthd.framedblocks.api.util.Utils;
 import xfacthd.framedblocks.common.block.*;
 import xfacthd.framedblocks.common.data.camo.BlockCamoContainer;
 import xfacthd.framedblocks.common.data.camo.FluidCamoContainer;
@@ -48,7 +50,6 @@ public final class FBContent
             FramedConstants.MOD_ID
     );
     public static final Supplier<IForgeRegistry<CamoContainer.Factory>> CAMO_CONTAINER_FACTORY_REGISTRY = CAMO_CONTAINER_FACTORIES.makeRegistry(
-            CamoContainer.Factory.class,
             () ->
             {
                 RegistryBuilder<CamoContainer.Factory> builder = new RegistryBuilder<>();
@@ -239,9 +240,9 @@ public final class FBContent
     public static Collection<RegistryObject<Block>> getRegisteredBlocks() { return BLOCKS.getEntries(); }
 
     @SubscribeEvent
-    public static void onRegisterItems(final RegistryEvent.Register<Item> event)
+    public static void onRegisterItems(final RegisterEvent event)
     {
-        IForgeRegistry<Item> registry = event.getRegistry();
+        if (event.getRegistryKey() != ForgeRegistries.Keys.ITEMS) { return; }
 
         BLOCKS.getEntries()
                 .stream()
@@ -250,7 +251,18 @@ public final class FBContent
                 .map(IFramedBlock.class::cast)
                 .filter(block -> block.getBlockType().hasBlockItem())
                 .map(IFramedBlock::createItemBlock)
-                .forEach(registry::register);
+                .forEach(item -> registerBlockItem(event, item));
+    }
+
+    private static void registerBlockItem(RegisterEvent event, Pair<IFramedBlock, BlockItem> item)
+    {
+        event.register(
+                ForgeRegistries.Keys.ITEMS,
+                helper -> helper.register(
+                        Utils.rl(item.getFirst().getBlockType().getName()),
+                        item.getSecond()
+                )
+        );
     }
 
     private static Supplier<Block[]> getDefaultEntityBlocks()

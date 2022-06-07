@@ -3,7 +3,7 @@ package xfacthd.framedblocks.common.net;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.FriendlyByteBuf;
-import net.minecraft.network.chat.TextComponent;
+import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.level.Level;
 import net.minecraftforge.network.NetworkEvent;
@@ -68,7 +68,7 @@ public class SignUpdatePacket
                     for (int i = 0; i < lines.length; i++)
                     {
                         String line = ChatFormatting.stripFormatting(lines[i]);
-                        sign.setLine(i, new TextComponent(line != null ? line : ""));
+                        sign.setLine(i, Component.literal(line != null ? line : ""));
                     }
                 }
             }

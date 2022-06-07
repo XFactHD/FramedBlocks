@@ -16,6 +16,7 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.gameevent.GameEvent;
 import net.minecraft.world.level.pathfinder.PathComputationType;
 import net.minecraft.world.phys.BlockHitResult;
+import net.minecraftforge.registries.ForgeRegistries;
 import xfacthd.framedblocks.common.blockentity.FramedFlowerPotBlockEntity;
 import xfacthd.framedblocks.common.data.BlockType;
 
@@ -93,6 +94,9 @@ public class FramedFlowerPotBlock extends FramedBlock
     public static BlockState getFlowerPotState(Block flower)
     {
         Map<ResourceLocation, Supplier<? extends Block>> fullPots = ((FlowerPotBlock) Blocks.FLOWER_POT).getFullPotsView();
-        return fullPots.getOrDefault(flower.getRegistryName(), Blocks.AIR.delegate).get().defaultBlockState();
+        return fullPots.getOrDefault(
+                ForgeRegistries.BLOCKS.getKey(flower),
+                ForgeRegistries.BLOCKS.getDelegateOrThrow(Blocks.AIR)
+        ).get().defaultBlockState();
     }
 }

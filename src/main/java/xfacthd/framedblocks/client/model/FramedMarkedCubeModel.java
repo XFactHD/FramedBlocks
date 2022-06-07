@@ -5,6 +5,7 @@ import net.minecraft.client.renderer.block.model.BakedQuad;
 import net.minecraft.client.resources.model.BakedModel;
 import net.minecraft.core.Direction;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.client.model.data.IModelData;
 import xfacthd.framedblocks.api.util.FramedBlockData;
@@ -28,7 +29,7 @@ public class FramedMarkedCubeModel extends FramedCubeModel
     protected boolean hasAdditionalQuadsInLayer(RenderType layer) { return layer == RenderType.cutout(); }
 
     @Override
-    protected void getAdditionalQuads(List<BakedQuad> quads, Direction side, BlockState state, Random rand, IModelData data, RenderType layer)
+    protected void getAdditionalQuads(List<BakedQuad> quads, Direction side, BlockState state, RandomSource rand, IModelData data, RenderType layer)
     {
         BlockState camo = data.getData(FramedBlockData.CAMO);
         if (camo != null && !camo.isAir())

@@ -1,6 +1,7 @@
 package xfacthd.framedblocks.common.compat.buildinggadgets;
 
-import com.direwolf20.buildinggadgets.common.tainted.building.tilesupport.*;
+//TODO: reactivate when BuildingGadgets is ported
+/*import com.direwolf20.buildinggadgets.common.tainted.building.tilesupport.*;
 import com.direwolf20.buildinggadgets.common.tainted.registry.TopologicalRegistryBuilder;
 import com.direwolf20.buildinggadgets.common.util.ref.Reference;
 import net.minecraft.resources.ResourceLocation;
@@ -49,4 +50,4 @@ public final class BuildingGadgetsCompat
 
 
     private BuildingGadgetsCompat() { }
-}
+}*/

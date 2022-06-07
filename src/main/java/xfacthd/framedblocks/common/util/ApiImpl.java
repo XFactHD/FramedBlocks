@@ -53,5 +53,8 @@ public class ApiImpl implements FramedBlocksAPI
     }
 
     @Override
+    public CamoContainer.Factory emptyCamoContainerFactory() { return FBContent.factoryEmpty.get(); }
+
+    @Override
     public CamoContainer.Factory getCamoContainerFactory(ItemStack stack) { return CamoFactories.getFactory(stack); }
 }

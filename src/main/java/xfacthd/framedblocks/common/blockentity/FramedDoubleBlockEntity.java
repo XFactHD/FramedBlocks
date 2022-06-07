@@ -12,6 +12,7 @@ import net.minecraft.world.level.material.MaterialColor;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.level.Explosion;
 import net.minecraftforge.client.model.data.*;
+import net.minecraftforge.registries.ForgeRegistries;
 import xfacthd.framedblocks.FramedBlocks;
 import xfacthd.framedblocks.api.block.FramedBlockEntity;
 import xfacthd.framedblocks.api.data.EmptyCamoContainer;
@@ -263,9 +264,9 @@ public abstract class FramedDoubleBlockEntity extends FramedBlockEntity
         {
             FramedBlocks.LOGGER.warn(
                     "Framed Block of type \"{}\" at position {} contains an invalid camo of type \"{}\", removing camo! This might be caused by a config or tag change!",
-                    getBlockState().getBlock().getRegistryName(),
+                    ForgeRegistries.BLOCKS.getKey(getBlockState().getBlock()),
                     worldPosition,
-                    camo.getState().getBlock().getRegistryName()
+                    ForgeRegistries.BLOCKS.getKey(camo.getState().getBlock())
             );
         }
     }

@@ -8,6 +8,7 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.NbtUtils;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.item.*;
 import net.minecraft.world.item.context.BlockPlaceContext;
@@ -36,13 +37,12 @@ import xfacthd.framedblocks.common.blockentity.FramedDoubleBlockEntity;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
-import java.util.Random;
 
 @SuppressWarnings("ConstantConditions")
 @Mod.EventBusSubscriber(modid = FramedConstants.MOD_ID, value = Dist.CLIENT, bus = Mod.EventBusSubscriber.Bus.MOD)
 public final class GhostBlockRenderer
 {
-    private static final Random RANDOM = new Random();
+    private static final RandomSource RANDOM = RandomSource.create();
     private static final FramedBlockData GHOST_MODEL_DATA = new FramedBlockData(true);
     private static final FramedBlockData GHOST_MODEL_DATA_LEFT = new FramedBlockData(true);
     private static final FramedBlockData GHOST_MODEL_DATA_RIGHT = new FramedBlockData(true);

@@ -9,8 +9,7 @@
         "MixinLevel"
     ],
     "client": [
-        "MixinLevelRenderer",
-        "MixinIFramedBlock"
+        "MixinLevelRenderer"
     ],
     "injectors": {
         "defaultRequire": 1
