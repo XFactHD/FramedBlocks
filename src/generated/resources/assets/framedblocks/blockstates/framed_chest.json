@@ -1,9 +1,35 @@
 {
   "variants": {
+    "facing=east,state=closed": {
+      "model": "framedblocks:block/framed_chest",
+      "y": 90
+    },
+    "facing=east,state=closing": {
+      "model": "framedblocks:block/framed_chest",
+      "y": 90
+    },
+    "facing=east,state=opening": {
+      "model": "framedblocks:block/framed_chest",
+      "y": 90
+    },
     "facing=north,state=closed": {
       "model": "framedblocks:block/framed_chest"
     },
+    "facing=north,state=closing": {
+      "model": "framedblocks:block/framed_chest"
+    },
+    "facing=north,state=opening": {
+      "model": "framedblocks:block/framed_chest"
+    },
     "facing=south,state=closed": {
+      "model": "framedblocks:block/framed_chest",
+      "y": 180
+    },
+    "facing=south,state=closing": {
+      "model": "framedblocks:block/framed_chest",
+      "y": 180
+    },
+    "facing=south,state=opening": {
       "model": "framedblocks:block/framed_chest",
       "y": 180
     },
@@ -11,39 +37,13 @@
       "model": "framedblocks:block/framed_chest",
       "y": 270
     },
-    "facing=east,state=closed": {
-      "model": "framedblocks:block/framed_chest",
-      "y": 90
-    },
-    "facing=north,state=opening": {
-      "model": "framedblocks:block/framed_chest"
-    },
-    "facing=south,state=opening": {
-      "model": "framedblocks:block/framed_chest",
-      "y": 180
-    },
-    "facing=west,state=opening": {
-      "model": "framedblocks:block/framed_chest",
-      "y": 270
-    },
-    "facing=east,state=opening": {
-      "model": "framedblocks:block/framed_chest",
-      "y": 90
-    },
-    "facing=north,state=closing": {
-      "model": "framedblocks:block/framed_chest"
-    },
-    "facing=south,state=closing": {
-      "model": "framedblocks:block/framed_chest",
-      "y": 180
-    },
     "facing=west,state=closing": {
       "model": "framedblocks:block/framed_chest",
       "y": 270
     },
-    "facing=east,state=closing": {
+    "facing=west,state=opening": {
       "model": "framedblocks:block/framed_chest",
-      "y": 90
+      "y": 270
     }
   }
 }

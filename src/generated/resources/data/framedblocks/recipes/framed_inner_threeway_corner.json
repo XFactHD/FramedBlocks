@@ -1,14 +1,14 @@
 {
   "type": "minecraft:crafting_shaped",
-  "pattern": [
-    "FF",
-    "F "
-  ],
   "key": {
     "F": {
       "item": "framedblocks:framed_slope"
     }
   },
+  "pattern": [
+    "FF",
+    "F "
+  ],
   "result": {
     "item": "framedblocks:framed_inner_threeway_corner"
   }

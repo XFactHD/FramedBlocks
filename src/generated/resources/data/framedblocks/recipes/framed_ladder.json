@@ -1,10 +1,5 @@
 {
   "type": "minecraft:crafting_shaped",
-  "pattern": [
-    "F F",
-    "FSF",
-    "F F"
-  ],
   "key": {
     "F": {
       "item": "framedblocks:framed_cube"
@@ -13,8 +8,13 @@
       "item": "minecraft:stick"
     }
   },
+  "pattern": [
+    "F F",
+    "FSF",
+    "F F"
+  ],
   "result": {
-    "item": "framedblocks:framed_ladder",
-    "count": 3
+    "count": 3,
+    "item": "framedblocks:framed_ladder"
   }
 }

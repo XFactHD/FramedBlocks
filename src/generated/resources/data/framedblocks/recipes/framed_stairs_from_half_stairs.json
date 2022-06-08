@@ -1,13 +1,13 @@
 {
   "type": "minecraft:crafting_shaped",
-  "pattern": [
-    "SS"
-  ],
   "key": {
     "S": {
       "item": "framedblocks:framed_half_stairs"
     }
   },
+  "pattern": [
+    "SS"
+  ],
   "result": {
     "item": "framedblocks:framed_stairs"
   }

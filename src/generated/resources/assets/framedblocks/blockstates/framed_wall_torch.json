@@ -1,5 +1,8 @@
 {
   "variants": {
+    "facing=east": {
+      "model": "framedblocks:block/framed_wall_torch"
+    },
     "facing=north": {
       "model": "framedblocks:block/framed_wall_torch",
       "y": 270
@@ -11,9 +14,6 @@
     "facing=west": {
       "model": "framedblocks:block/framed_wall_torch",
       "y": 180
-    },
-    "facing=east": {
-      "model": "framedblocks:block/framed_wall_torch"
     }
   }
 }

@@ -1,15 +1,15 @@
 {
   "type": "minecraft:crafting_shaped",
-  "pattern": [
-    "FF"
-  ],
   "key": {
     "F": {
       "item": "framedblocks:framed_corner_slope"
     }
   },
+  "pattern": [
+    "FF"
+  ],
   "result": {
-    "item": "framedblocks:framed_sloped_prism",
-    "count": 2
+    "count": 2,
+    "item": "framedblocks:framed_sloped_prism"
   }
 }

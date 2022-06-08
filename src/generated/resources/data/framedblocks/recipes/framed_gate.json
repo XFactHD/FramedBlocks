@@ -1,9 +1,5 @@
 {
   "type": "minecraft:crafting_shaped",
-  "pattern": [
-    "SFS",
-    "SFS"
-  ],
   "key": {
     "F": {
       "item": "framedblocks:framed_cube"
@@ -12,6 +8,10 @@
       "item": "minecraft:stick"
     }
   },
+  "pattern": [
+    "SFS",
+    "SFS"
+  ],
   "result": {
     "item": "framedblocks:framed_gate"
   }

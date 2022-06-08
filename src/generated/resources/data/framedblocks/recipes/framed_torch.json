@@ -1,9 +1,5 @@
 {
   "type": "minecraft:crafting_shaped",
-  "pattern": [
-    "C",
-    "F"
-  ],
   "key": {
     "C": {
       "tag": "minecraft:coals"
@@ -12,8 +8,12 @@
       "item": "framedblocks:framed_cube"
     }
   },
+  "pattern": [
+    "C",
+    "F"
+  ],
   "result": {
-    "item": "framedblocks:framed_torch",
-    "count": 4
+    "count": 4,
+    "item": "framedblocks:framed_torch"
   }
 }

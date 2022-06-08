@@ -1,8 +1,5 @@
 {
   "type": "minecraft:crafting_shaped",
-  "pattern": [
-    "FFH"
-  ],
   "key": {
     "F": {
       "item": "framedblocks:framed_cube"
@@ -11,8 +8,11 @@
       "item": "framedblocks:framed_hammer"
     }
   },
+  "pattern": [
+    "FFH"
+  ],
   "result": {
-    "item": "framedblocks:framed_floor_board",
-    "count": 3
+    "count": 3,
+    "item": "framedblocks:framed_floor_board"
   }
 }

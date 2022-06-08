@@ -1,17 +1,17 @@
 {
   "type": "minecraft:crafting_shaped",
-  "pattern": [
-    "F  ",
-    "FF ",
-    "FFF"
-  ],
   "key": {
     "F": {
       "item": "framedblocks:framed_cube"
     }
   },
+  "pattern": [
+    "F  ",
+    "FF ",
+    "FFF"
+  ],
   "result": {
-    "item": "framedblocks:framed_stairs",
-    "count": 4
+    "count": 4,
+    "item": "framedblocks:framed_stairs"
   }
 }

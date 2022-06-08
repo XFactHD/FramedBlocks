@@ -1,10 +1,5 @@
 {
   "type": "minecraft:crafting_shaped",
-  "pattern": [
-    " F ",
-    "FPF",
-    " F "
-  ],
   "key": {
     "F": {
       "item": "framedblocks:framed_cube"
@@ -13,6 +8,11 @@
       "item": "minecraft:paper"
     }
   },
+  "pattern": [
+    " F ",
+    "FPF",
+    " F "
+  ],
   "result": {
     "item": "framedblocks:framed_blueprint"
   }

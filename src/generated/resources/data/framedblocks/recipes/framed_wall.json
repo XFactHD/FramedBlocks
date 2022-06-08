@@ -1,16 +1,16 @@
 {
   "type": "minecraft:crafting_shaped",
-  "pattern": [
-    "FFF",
-    "FFF"
-  ],
   "key": {
     "F": {
       "item": "framedblocks:framed_cube"
     }
   },
+  "pattern": [
+    "FFF",
+    "FFF"
+  ],
   "result": {
-    "item": "framedblocks:framed_wall",
-    "count": 6
+    "count": 6,
+    "item": "framedblocks:framed_wall"
   }
 }

@@ -1,10 +1,5 @@
 {
   "type": "minecraft:crafting_shaped",
-  "pattern": [
-    "PSP",
-    "S S",
-    "PSP"
-  ],
   "key": {
     "P": {
       "tag": "minecraft:planks"
@@ -13,8 +8,13 @@
       "item": "minecraft:stick"
     }
   },
+  "pattern": [
+    "PSP",
+    "S S",
+    "PSP"
+  ],
   "result": {
-    "item": "framedblocks:framed_cube",
-    "count": 4
+    "count": 4,
+    "item": "framedblocks:framed_cube"
   }
 }

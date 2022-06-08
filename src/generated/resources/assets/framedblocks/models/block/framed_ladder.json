@@ -1,11 +1,15 @@
 {
   "parent": "minecraft:block/cube",
-  "textures": {
-    "0": "framedblocks:block/framed_block",
-    "particle": "framedblocks:block/framed_block"
-  },
   "elements": [
     {
+      "faces": {
+        "north": {
+          "texture": "#0"
+        },
+        "south": {
+          "texture": "#0"
+        }
+      },
       "from": [
         0,
         0,
@@ -15,15 +19,11 @@
         16,
         16,
         16
-      ],
-      "faces": {
-        "north": {
-          "texture": "#0"
-        },
-        "south": {
-          "texture": "#0"
-        }
-      }
+      ]
     }
-  ]
+  ],
+  "textures": {
+    "0": "framedblocks:block/framed_block",
+    "particle": "framedblocks:block/framed_block"
+  }
 }

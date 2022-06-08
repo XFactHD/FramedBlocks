@@ -1,8 +1,8 @@
 {
   "parent": "framedblocks:block/framed_torch",
   "textures": {
-    "torch": "framedblocks:block/framed_soul_torch",
     "particle": "framedblocks:block/framed_soul_torch",
-    "top": "minecraft:block/soul_torch"
+    "top": "minecraft:block/soul_torch",
+    "torch": "framedblocks:block/framed_soul_torch"
   }
 }

@@ -1,14 +1,14 @@
 {
   "type": "minecraft:crafting_shaped",
-  "pattern": [
-    "FFF",
-    "FFF"
-  ],
   "key": {
     "F": {
       "item": "framedblocks:framed_slab"
     }
   },
+  "pattern": [
+    "FFF",
+    "FFF"
+  ],
   "result": {
     "item": "framedblocks:framed_trapdoor"
   }
