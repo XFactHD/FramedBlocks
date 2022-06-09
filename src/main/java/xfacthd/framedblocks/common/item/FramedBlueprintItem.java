@@ -23,6 +23,7 @@ import net.minecraftforge.common.Tags;
 import net.minecraftforge.registries.ForgeRegistries;
 import xfacthd.framedblocks.common.FBContent;
 import xfacthd.framedblocks.api.block.IFramedBlock;
+import xfacthd.framedblocks.common.block.FramedDoorBlock;
 import xfacthd.framedblocks.common.data.FramedToolType;
 import xfacthd.framedblocks.api.block.FramedBlockEntity;
 
@@ -100,7 +101,7 @@ public class FramedBlueprintItem extends FramedToolItem
             tag.putString("framed_block", block);
 
             CompoundTag nbt = be.writeToBlueprint();
-            if (state.getBlock() == FBContent.blockFramedDoor.get())
+            if (state.getBlock() instanceof FramedDoorBlock)
             {
                 boolean top = state.getValue(BlockStateProperties.DOUBLE_BLOCK_HALF) == DoubleBlockHalf.UPPER;
                 BlockPos posTwo = top ? pos.below() : pos.above();
@@ -151,7 +152,7 @@ public class FramedBlueprintItem extends FramedToolItem
         boolean glowstone = tag.getCompound("camo_data").getBoolean("glowing");
 
         boolean doubleBlock = false;
-        if (item == FBContent.blockFramedDoor.get().asItem() && tag.contains("camo_data_two"))
+        if (isDoorItem(item) && tag.contains("camo_data_two"))
         {
             camoTwo = ItemStack.of(tag.getCompound("camo_data_two").getCompound("camo_stack"));
         }
@@ -210,7 +211,7 @@ public class FramedBlueprintItem extends FramedToolItem
 
         if (!context.getLevel().isClientSide() && result.consumesAction())
         {
-            if (item == FBContent.blockFramedDoor.get().asItem())
+            if (isDoorItem(item))
             {
                 if (context.getLevel().getBlockEntity(topPos) instanceof FramedBlockEntity && tag.contains("camo_data_two", Tag.TAG_COMPOUND))
                 {
@@ -238,7 +239,7 @@ public class FramedBlueprintItem extends FramedToolItem
         boolean glowstone = camoData.getBoolean("glowing");
 
         boolean doubleBlock = false;
-        if (item == FBContent.blockFramedDoor.get().asItem() && tag.contains("camo_data_two"))
+        if (isDoorItem(item) && tag.contains("camo_data_two"))
         {
             camoTwo = ItemStack.of(tag.getCompound("camo_data_two").getCompound("camo_stack"));
         }
@@ -299,6 +300,11 @@ public class FramedBlueprintItem extends FramedToolItem
                 break;
             }
         }
+    }
+
+    private static boolean isDoorItem(Item item)
+    {
+        return item == FBContent.blockFramedDoor.get().asItem() || item == FBContent.blockFramedIronDoor.get().asItem();
     }
 
     public static Block getTargetBlock(ItemStack stack)

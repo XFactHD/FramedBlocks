@@ -26,7 +26,7 @@ import xfacthd.framedblocks.FramedBlocks;
 import xfacthd.framedblocks.api.util.FramedBlockData;
 import xfacthd.framedblocks.client.util.*;
 import xfacthd.framedblocks.common.FBContent;
-import xfacthd.framedblocks.common.block.AbstractFramedDoubleBlock;
+import xfacthd.framedblocks.common.block.*;
 import xfacthd.framedblocks.api.block.IFramedBlock;
 import xfacthd.framedblocks.common.block.FramedRailSlopeBlock;
 import xfacthd.framedblocks.common.data.PropertyHolder;
@@ -165,7 +165,7 @@ public final class GhostBlockRenderer
 
             doRenderGhostBlock(mstack, buffers, renderPos, renderState, camoState, camoStateTwo);
 
-            if (renderState.getBlock() == FBContent.blockFramedDoor.get())
+            if (renderState.getBlock() instanceof FramedDoorBlock)
             {
                 if (blueprint)
                 {

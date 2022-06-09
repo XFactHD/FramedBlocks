@@ -57,13 +57,15 @@ public class FramedLootTableProvider extends LootTableProvider
                     .map(RegistryObject::get)
                     .filter(block -> block != FBContent.blockFramedDoor.get() &&
                             block != FBContent.blockFramedDoubleSlab.get() &&
-                            block != FBContent.blockFramedDoublePanel.get()
+                            block != FBContent.blockFramedDoublePanel.get() &&
+                            block != FBContent.blockFramedIronDoor.get()
                     )
                     .forEach(this::dropSelf);
 
             add(FBContent.blockFramedDoor.get(), block -> createSinglePropConditionTable(block, DoorBlock.HALF, DoubleBlockHalf.LOWER));
             add(FBContent.blockFramedDoubleSlab.get(), block -> droppingTwo(block, FBContent.blockFramedSlab.get()));
             add(FBContent.blockFramedDoublePanel.get(), block -> droppingTwo(block, FBContent.blockFramedPanel.get()));
+            add(FBContent.blockFramedIronDoor.get(), block -> createSinglePropConditionTable(block, DoorBlock.HALF, DoubleBlockHalf.LOWER));
         }
 
         protected static LootTable.Builder droppingTwo(Block block, Block drop) {

@@ -56,7 +56,12 @@ public interface IFramedBlock extends EntityBlock//, IFacade
 
     static Block.Properties createProperties(IBlockType type)
     {
-        Block.Properties props = Block.Properties.of(Material.WOOD)
+        return createProperties(type, Material.WOOD);
+    }
+
+    static Block.Properties createProperties(IBlockType type, Material material)
+    {
+        Block.Properties props = Block.Properties.of(material)
                 .strength(2F)
                 .sound(SoundType.WOOD)
                 .isViewBlocking(IFramedBlock::isBlockSuffocating)

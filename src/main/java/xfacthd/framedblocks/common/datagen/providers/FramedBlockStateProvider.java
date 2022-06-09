@@ -91,6 +91,8 @@ public class FramedBlockStateProvider extends BlockStateProvider
         registerFramedBouncyBlock();
         registerFramedSecretStorage();
         registerFramedRedstoneBlock();
+        registerFramedIronDoor();
+        registerFramedIronTrapDoor();
     }
 
     private void registerFramedSlab(ModelFile cube)
@@ -346,6 +348,31 @@ public class FramedBlockStateProvider extends BlockStateProvider
         simpleBlockWithItem(FBContent.blockFramedRedstoneBlock, block);
 
         models().cubeAll("redstone_frame", modLoc("block/redstone_frame"));
+    }
+
+    private void registerFramedIronDoor()
+    {
+        ModelFile door = models().getExistingFile(modLoc("block/framed_iron_door"));
+        doorBlock(
+                (DoorBlock) FBContent.blockFramedIronDoor.get(),
+                door, door, door, door
+        );
+        itemModels().singleTexture("framed_iron_door", mcLoc("item/generated"), "layer0", modLoc("item/framed_iron_door"));
+    }
+
+    private void registerFramedIronTrapDoor()
+    {
+        ModelFile trapdoorBot = models().getExistingFile(modLoc("block/framed_iron_trapdoor_bot"));
+        ModelFile trapdoorTop = models().getExistingFile(modLoc("block/framed_iron_trapdoor_top"));
+        ModelFile trapdoorOpen = models().getExistingFile(modLoc("block/framed_iron_trapdoor_open"));
+        trapdoorBlock(
+                (TrapDoorBlock) FBContent.blockFramedIronTrapDoor.get(),
+                trapdoorBot,
+                trapdoorTop,
+                trapdoorOpen,
+                true
+        );
+        simpleBlockItem(FBContent.blockFramedIronTrapDoor.get(), trapdoorBot);
     }
 
 

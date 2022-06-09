@@ -1,0 +1,34 @@
+{
+  "parent": "minecraft:recipes/root",
+  "rewards": {
+    "recipes": [
+      "framedblocks:framed_iron_trapdoor"
+    ]
+  },
+  "criteria": {
+    "hasFramedTrapdoor": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "framedblocks:framed_trapdoor"
+            ]
+          }
+        ]
+      }
+    },
+    "has_the_recipe": {
+      "trigger": "minecraft:recipe_unlocked",
+      "conditions": {
+        "recipe": "framedblocks:framed_iron_trapdoor"
+      }
+    }
+  },
+  "requirements": [
+    [
+      "hasFramedTrapdoor",
+      "has_the_recipe"
+    ]
+  ]
+}

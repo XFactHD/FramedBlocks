@@ -59,7 +59,7 @@ public abstract class FramedBlockModel extends BakedModelProxy
                 boolean camoInLayer = canRenderInLayer(camoState, layer);
                 if (camoInLayer || hasAdditionalQuadsInLayer(layer))
                 {
-                    return getCamoQuads(state, camoState, side, rand, extraData, layer, camoInLayer);
+                    return getCamoQuads(state, camoState, side, rand, extraData, layer, camoInLayer, false);
                 }
             }
         }
@@ -70,7 +70,8 @@ public abstract class FramedBlockModel extends BakedModelProxy
             boolean baseModelInLayer = canRenderBaseModelInLayer(layer);
             if (baseModelInLayer || hasAdditionalQuadsInLayer(layer))
             {
-                return getCamoQuads(state, FramedBlocksAPI.getInstance().defaultModelState(), side, rand, extraData, layer, baseModelInLayer);
+                boolean forceUngenerated = baseModelInLayer && forceUngeneratedBaseModel();
+                return getCamoQuads(state, FramedBlocksAPI.getInstance().defaultModelState(), side, rand, extraData, layer, baseModelInLayer, forceUngenerated);
             }
         }
 
@@ -81,12 +82,12 @@ public abstract class FramedBlockModel extends BakedModelProxy
     public List<BakedQuad> getQuads(BlockState state, Direction side, Random rand)
     {
         if (state == null) { state = this.state; }
-        return getCamoQuads(state, FramedBlocksAPI.getInstance().defaultModelState(), side, rand, EmptyModelData.INSTANCE, RenderType.cutout(), true);
+        return getCamoQuads(state, FramedBlocksAPI.getInstance().defaultModelState(), side, rand, EmptyModelData.INSTANCE, RenderType.cutout(), true, false);
     }
 
-    private List<BakedQuad> getCamoQuads(BlockState state, BlockState camoState, Direction side, Random rand, IModelData extraData, RenderType layer, boolean camoInLayer)
+    private List<BakedQuad> getCamoQuads(BlockState state, BlockState camoState, Direction side, Random rand, IModelData extraData, RenderType layer, boolean camoInLayer, boolean noProcessing)
     {
-        if (type.getCtmPredicate().test(state, side))
+        if (noProcessing || type.getCtmPredicate().test(state, side))
         {
             boolean additionalQuads = hasAdditionalQuadsInLayer(layer);
             if (!camoInLayer && !additionalQuads) { return Collections.emptyList(); }
@@ -165,6 +166,12 @@ public abstract class FramedBlockModel extends BakedModelProxy
     protected void postProcessQuads(Map<Direction, List<BakedQuad>> quadMap) {}
 
     protected boolean hasAdditionalQuadsInLayer(RenderType layer) { return false; }
+
+    /**
+     * Return true if the base model loaded from JSON should be rendered when no camo is applied instead of going
+     * through the quad manipulation process
+     */
+    protected boolean forceUngeneratedBaseModel() { return false; }
 
     /**
      * Add additional quads to faces that return {@code true} from {@code xfacthd.framedblocks.api.util.CtmPredicate#test(BlockState, Direction)}<br>
