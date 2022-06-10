@@ -254,7 +254,7 @@ public class FramedBlueprintItem extends FramedToolItem
             doubleBlock = true;
         }
 
-        int foundBlock = doubleBlock ? 2 : 1;
+        int remainingBlock = doubleBlock ? 2 : 1;
         boolean foundCamo = false;
         boolean foundCamoTwo = false;
         boolean foundGlowstone = false;
@@ -263,11 +263,11 @@ public class FramedBlueprintItem extends FramedToolItem
         for (int i = 0; i < inv.getContainerSize(); i++)
         {
             ItemStack stack = inv.getItem(i);
-            if (foundBlock > 0 && stack.is(item))
+            if (remainingBlock > 0 && stack.is(item))
             {
                 int size = stack.getCount();
-                stack.shrink(foundBlock);
-                foundBlock -= size - stack.getCount();
+                stack.shrink(Math.min(remainingBlock, size));
+                remainingBlock -= size - stack.getCount();
 
                 inv.setChanged();
             }
@@ -295,7 +295,7 @@ public class FramedBlueprintItem extends FramedToolItem
                 inv.setChanged();
             }
 
-            if (foundBlock <= 0 && (camo.isEmpty() || foundCamo) && (camoTwo.isEmpty() || foundCamoTwo) && (!glowstone || foundGlowstone))
+            if (remainingBlock <= 0 && (camo.isEmpty() || foundCamo) && (camoTwo.isEmpty() || foundCamoTwo) && (!glowstone || foundGlowstone))
             {
                 break;
             }
