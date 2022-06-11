@@ -86,5 +86,5 @@ public class FramedChestBlockEntity extends FramedStorageBlockEntity
     }
 
     @Override
-    public Component getDisplayName() { return TITLE; }
+    protected Component getDefaultName() { return TITLE; }
 }
