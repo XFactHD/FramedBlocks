@@ -14,9 +14,7 @@ import java.util.Arrays;
 public final class ModelUtils
 {
     private static final int ELEMENT_POS = findElement(DefaultVertexFormat.ELEMENT_POSITION);
-    private static final int ELEMENT_COLOR = findElement(DefaultVertexFormat.ELEMENT_COLOR);
     private static final int ELEMENT_UV = findElement(DefaultVertexFormat.ELEMENT_UV0);
-    private static final int ELEMENT_LIGHT = findElement(DefaultVertexFormat.ELEMENT_UV2);
     private static final int ELEMENT_NORMAL = findElement(DefaultVertexFormat.ELEMENT_NORMAL);
 
     public static boolean modifyQuad(BakedQuad quad, VertexDataConsumer consumer)
@@ -24,29 +22,23 @@ public final class ModelUtils
         int[] vertexData = quad.getVertices();
 
         float[][] pos = new float[4][3];
-        float[][] color = new float[4][4];
         float[][] uv = new float[4][2];
-        float[][] light = new float[4][2];
         float[][] normal = new float[4][3];
 
         for (int vert = 0; vert < 4; vert++)
         {
             LightUtil.unpack(vertexData, pos[vert], DefaultVertexFormat.BLOCK, vert, ELEMENT_POS);
-            LightUtil.unpack(vertexData, color[vert], DefaultVertexFormat.BLOCK, vert, ELEMENT_COLOR);
             LightUtil.unpack(vertexData, uv[vert], DefaultVertexFormat.BLOCK, vert, ELEMENT_UV);
-            LightUtil.unpack(vertexData, light[vert], DefaultVertexFormat.BLOCK, vert, ELEMENT_LIGHT);
             LightUtil.unpack(vertexData, normal[vert], DefaultVertexFormat.BLOCK, vert, ELEMENT_NORMAL);
         }
 
-        boolean success = consumer.accept(pos, color, uv, light, normal);
+        boolean success = consumer.accept(pos, uv, normal);
         if (!success) { return false; }
 
         for (int vert = 0; vert < 4; vert++)
         {
             LightUtil.pack(pos[vert], vertexData, DefaultVertexFormat.BLOCK, vert, ELEMENT_POS);
-            LightUtil.pack(color[vert], vertexData, DefaultVertexFormat.BLOCK, vert, ELEMENT_COLOR);
             LightUtil.pack(uv[vert], vertexData, DefaultVertexFormat.BLOCK, vert, ELEMENT_UV);
-            LightUtil.pack(light[vert], vertexData, DefaultVertexFormat.BLOCK, vert, ELEMENT_LIGHT);
             LightUtil.pack(normal[vert], vertexData, DefaultVertexFormat.BLOCK, vert, ELEMENT_NORMAL);
         }
 
@@ -269,7 +261,7 @@ public final class ModelUtils
 
     public interface VertexDataConsumer
     {
-        boolean accept(float[][] pos, float[][] color, float[][] uv, float[][] light, float[][] normal);
+        boolean accept(float[][] pos, float[][] uv, float[][] normal);
     }
 
 
