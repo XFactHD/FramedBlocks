@@ -37,7 +37,6 @@ import xfacthd.framedblocks.common.blockentity.FramedSignBlockEntity;
 
 import java.util.List;
 
-//TODO: update to match current vanilla sign screen and fix wrong button position
 @SuppressWarnings("deprecation")
 @Mod.EventBusSubscriber(modid = FramedConstants.MOD_ID, bus = Mod.EventBusSubscriber.Bus.MOD, value = Dist.CLIENT)
 public class FramedSignScreen extends Screen
@@ -65,7 +64,7 @@ public class FramedSignScreen extends Screen
     {
         //noinspection ConstantConditions
         minecraft.keyboardHandler.setSendRepeatsToGui(true);
-        addRenderableWidget(new Button(width / 2 - 100, height / 4 + 120, 200, 20, DONE, btn -> onClose()));
+        addRenderableWidget(new Button(width / 2 - 100, height / 2 + 60, 200, 20, DONE, btn -> onClose()));
 
         inputUtil = new TextFieldHelper(() -> lines[currLine],
                 (line) ->
