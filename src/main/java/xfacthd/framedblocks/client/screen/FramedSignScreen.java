@@ -63,7 +63,7 @@ public class FramedSignScreen extends Screen
     {
         //noinspection ConstantConditions
         minecraft.keyboardHandler.setSendRepeatsToGui(true);
-        addRenderableWidget(new Button(width / 2 - 100, height / 4 + 120, 200, 20, DONE, btn -> onClose()));
+        addRenderableWidget(new Button(width / 2 - 100, height / 2 + 60, 200, 20, DONE, btn -> onClose()));
 
         inputUtil = new TextFieldHelper(() -> lines[currLine],
                 (line) ->
