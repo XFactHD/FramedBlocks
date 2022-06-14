@@ -2,8 +2,10 @@ package xfacthd.framedblocks.common.block;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
+import net.minecraft.item.ItemStack;
 import net.minecraft.state.StateContainer;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ActionResultType;
@@ -15,6 +17,8 @@ import net.minecraft.world.World;
 import xfacthd.framedblocks.common.data.BlockType;
 import xfacthd.framedblocks.common.data.PropertyHolder;
 import xfacthd.framedblocks.common.tileentity.FramedStorageTileEntity;
+
+import javax.annotation.Nullable;
 
 @SuppressWarnings("deprecation")
 public class FramedStorageBlock extends FramedBlock
@@ -60,6 +64,18 @@ public class FramedStorageBlock extends FramedBlock
         }
 
         super.onRemove(state, world, pos, newState, isMoving);
+    }
+
+    @Override
+    public void setPlacedBy(World world, BlockPos pos, BlockState state, @Nullable LivingEntity placer, ItemStack stack)
+    {
+        super.setPlacedBy(world, pos, state, placer, stack);
+
+        TileEntity te = world.getBlockEntity(pos);
+        if (stack.hasCustomHoverName() && te instanceof FramedStorageTileEntity)
+        {
+            ((FramedStorageTileEntity) te).setCustomName(stack.getHoverName());
+        }
     }
 
     @Override

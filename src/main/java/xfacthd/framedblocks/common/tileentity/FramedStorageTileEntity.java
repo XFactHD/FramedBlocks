@@ -8,10 +8,12 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.tileentity.TileEntityType;
 import net.minecraft.util.Direction;
+import net.minecraft.util.INameable;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraftforge.common.capabilities.Capability;
+import net.minecraftforge.common.util.Constants;
 import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.fml.network.NetworkHooks;
 import net.minecraftforge.items.*;
@@ -23,7 +25,7 @@ import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.List;
 
-public class FramedStorageTileEntity extends FramedTileEntity implements INamedContainerProvider
+public class FramedStorageTileEntity extends FramedTileEntity implements INamedContainerProvider, INameable
 {
     public static final ITextComponent TITLE = new TranslationTextComponent("title.framedblocks:framed_secret_storage");
 
@@ -36,6 +38,7 @@ public class FramedStorageTileEntity extends FramedTileEntity implements INamedC
         }
     };
     private LazyOptional<IItemHandler> lazyItemHandler = LazyOptional.empty();
+    private ITextComponent customName = null;
 
     public FramedStorageTileEntity() { super(FBContent.tileTypeFramedSecretStorage.get()); }
 
@@ -121,6 +124,18 @@ public class FramedStorageTileEntity extends FramedTileEntity implements INamedC
         return MathHelper.floor(fullness * 14F) + (stacks > 0 ? 1 : 0);
     }
 
+    public void setCustomName(ITextComponent customName)
+    {
+        this.customName = customName;
+        setChanged();
+    }
+
+    @Override
+    public ITextComponent getName() { return customName != null ? customName : getDefaultName(); }
+
+    @Override
+    public ITextComponent getCustomName() { return customName; }
+
 
 
     @Override //Prevent writing inventory contents
@@ -130,6 +145,10 @@ public class FramedStorageTileEntity extends FramedTileEntity implements INamedC
     public CompoundNBT save(CompoundNBT nbt)
     {
         nbt.put("inventory", itemHandler.serializeNBT());
+        if (customName != null)
+        {
+            nbt.putString("custom_name", ITextComponent.Serializer.toJson(customName));
+        }
         return super.save(nbt);
     }
 
@@ -138,12 +157,18 @@ public class FramedStorageTileEntity extends FramedTileEntity implements INamedC
     {
         super.load(state, nbt);
         itemHandler.deserializeNBT(nbt.getCompound("inventory"));
+        if (nbt.contains("custom_name", Constants.NBT.TAG_STRING))
+        {
+            customName = ITextComponent.Serializer.fromJson(nbt.getString("custom_name"));
+        }
     }
 
 
 
+    protected ITextComponent getDefaultName() { return TITLE; }
+
     @Override
-    public ITextComponent getDisplayName() { return TITLE; }
+    public final ITextComponent getDisplayName() { return getName(); }
 
     @Override
     public Container createMenu(int windowId, PlayerInventory inv, PlayerEntity player)

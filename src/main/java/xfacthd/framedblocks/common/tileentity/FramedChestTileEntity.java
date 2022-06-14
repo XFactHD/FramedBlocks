@@ -86,5 +86,5 @@ public class FramedChestTileEntity extends FramedStorageTileEntity implements IT
     }
 
     @Override
-    public ITextComponent getDisplayName() { return TITLE; }
+    public ITextComponent getDefaultName() { return TITLE; }
 }
