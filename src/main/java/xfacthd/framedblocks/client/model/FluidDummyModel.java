@@ -16,6 +16,8 @@ import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.material.Fluid;
 import net.minecraft.world.phys.Vec2;
+import net.minecraftforge.client.IFluidTypeRenderProperties;
+import net.minecraftforge.client.RenderProperties;
 import net.minecraftforge.client.model.pipeline.BakedQuadBuilder;
 import net.minecraftforge.client.model.pipeline.IVertexConsumer;
 import xfacthd.framedblocks.api.util.Utils;
@@ -26,17 +28,20 @@ import java.util.function.Function;
 
 public class FluidDummyModel implements BakedModel
 {
-    private final Fluid fluid;
+    private final ResourceLocation flowingTexture;
+    private final ResourceLocation stillTexture;
     private final TextureAtlasSprite particles;
     private final Map<Direction, List<BakedQuad>> quads = new HashMap<>();
 
     public FluidDummyModel(Fluid fluid)
     {
-        this.fluid = fluid;
+        IFluidTypeRenderProperties props = RenderProperties.get(fluid);
+        flowingTexture = props.getFlowingTexture();
+        stillTexture = props.getStillTexture();
 
         //noinspection deprecation
         Function<ResourceLocation, TextureAtlasSprite> spriteGetter = Minecraft.getInstance().getTextureAtlas(TextureAtlas.LOCATION_BLOCKS);
-        particles = spriteGetter.apply(fluid.getAttributes().getStillTexture());
+        particles = spriteGetter.apply(stillTexture);
         buildQuads(spriteGetter);
     }
 
@@ -69,8 +74,8 @@ public class FluidDummyModel implements BakedModel
     //FIXME: quad modifications break on these quads (maybe look into generating these in a custom loader)
     private void buildQuads(Function<ResourceLocation, TextureAtlasSprite> spriteGetter)
     {
-        TextureAtlasSprite stillSprite = spriteGetter.apply(fluid.getAttributes().getStillTexture());
-        TextureAtlasSprite flowingSprite = spriteGetter.apply(fluid.getAttributes().getFlowingTexture());
+        TextureAtlasSprite stillSprite = spriteGetter.apply(stillTexture);
+        TextureAtlasSprite flowingSprite = spriteGetter.apply(flowingTexture);
 
         for (Direction dir : Direction.values())
         {
@@ -124,7 +129,6 @@ public class FluidDummyModel implements BakedModel
                         new Vector4f(x, y, z, 1F),
                         new Vec2(u, v),
                         dir.step(),
-                        fluid.getAttributes().getColor(),
                         new Vec2(0xF0, 0xF0),
                         sprite
                 );
@@ -137,7 +141,7 @@ public class FluidDummyModel implements BakedModel
     }
 
     /** Copied from { @link net.minecraftforge.client.model.obj.OBJModel } */
-    private static void putVertexData(IVertexConsumer consumer, Vector4f pos, Vec2 tex, Vector3f normal, int color, Vec2 light, TextureAtlasSprite texture)
+    private static void putVertexData(IVertexConsumer consumer, Vector4f pos, Vec2 tex, Vector3f normal, Vec2 light, TextureAtlasSprite texture)
     {
         ImmutableList<VertexFormatElement> elements = consumer.getVertexFormat().getElements();
         for(int elem = 0; elem < elements.size(); elem++)
@@ -146,15 +150,7 @@ public class FluidDummyModel implements BakedModel
             switch (e.getUsage())
             {
                 case POSITION -> consumer.put(elem, pos.x(), pos.y(), pos.z(), pos.w());
-                case COLOR ->
-                {
-                    float r = ((color >> 16) & 0xFF) / 255F;
-                    float g = ((color >>  8) & 0xFF) / 255F;
-                    float b = ( color        & 0xFF) / 255F;
-                    float a = ((color >> 24) & 0xFF) / 255F;
-
-                    consumer.put(elem, r, g, b, a);
-                }
+                case COLOR -> consumer.put(elem, 1F, 1F, 1F, 1F);
                 case UV ->
                 {
                     switch (e.getIndex())

@@ -14,6 +14,8 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.Property;
+import net.minecraft.world.level.material.FluidState;
+import net.minecraftforge.client.RenderProperties;
 import net.minecraftforge.registries.RegistryObject;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -124,6 +126,11 @@ public final class ClientUtils
     public static int getBlockColor(BlockAndTintGetter level, BlockPos pos, BlockState state, int tintIdx)
     {
         return Minecraft.getInstance().getBlockColors().getColor(state, level, pos, tintIdx);
+    }
+
+    public static int getFluidColor(BlockAndTintGetter level, BlockPos pos, FluidState fluid)
+    {
+        return RenderProperties.get(fluid).getColorTint(fluid, level, pos);
     }
 
 

@@ -21,8 +21,8 @@ import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.EntityCollisionContext;
 import net.minecraftforge.client.model.data.IModelData;
 import net.minecraftforge.common.Tags;
-import net.minecraftforge.fluids.FluidAttributes;
 import net.minecraftforge.fluids.FluidStack;
+import net.minecraftforge.fluids.FluidType;
 import net.minecraftforge.fluids.capability.*;
 import net.minecraftforge.registries.ForgeRegistries;
 import xfacthd.framedblocks.FramedBlocks;
@@ -173,7 +173,7 @@ public class FramedBlockEntity extends BlockEntity
                     {
                         stack.getCapability(CapabilityFluidHandler.FLUID_HANDLER_ITEM_CAPABILITY).ifPresent(handler ->
                         {
-                            FluidStack fluid = new FluidStack(camo.getFluid(), FluidAttributes.BUCKET_VOLUME);
+                            FluidStack fluid = new FluidStack(camo.getFluid(), FluidType.BUCKET_VOLUME);
                             handler.fill(fluid, IFluidHandler.FluidAction.EXECUTE);
                         });
                     }

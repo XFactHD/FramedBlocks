@@ -9,11 +9,13 @@ import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.material.Fluid;
 import net.minecraft.world.level.material.FluidState;
 import net.minecraftforge.common.util.LazyOptional;
-import net.minecraftforge.fluids.FluidAttributes;
 import net.minecraftforge.fluids.FluidStack;
+import net.minecraftforge.fluids.FluidType;
 import net.minecraftforge.fluids.capability.*;
+import net.minecraftforge.fml.loading.FMLEnvironment;
 import xfacthd.framedblocks.api.data.*;
 import xfacthd.framedblocks.api.util.Utils;
+import xfacthd.framedblocks.api.util.client.ClientUtils;
 import xfacthd.framedblocks.common.FBContent;
 
 public class FluidCamoContainer extends CamoContainer
@@ -29,7 +31,11 @@ public class FluidCamoContainer extends CamoContainer
     @Override
     public int getColor(BlockAndTintGetter level, BlockPos pos, int tintIdx)
     {
-        return fluidState.getType().getAttributes().getColor(level, pos);
+        if (FMLEnvironment.dist.isClient())
+        {
+            return ClientUtils.getFluidColor(level, pos, fluidState);
+        }
+        throw new UnsupportedOperationException("Block color is not available on the server!");
     }
 
     @Override
@@ -43,8 +49,8 @@ public class FluidCamoContainer extends CamoContainer
         LazyOptional<IFluidHandlerItem> cap = stack.getCapability(CapabilityFluidHandler.FLUID_HANDLER_ITEM_CAPABILITY);
         return cap.map(handler ->
         {
-            FluidStack fluid = new FluidStack(fluidState.getType(), FluidAttributes.BUCKET_VOLUME);
-            if (handler.fill(fluid, IFluidHandler.FluidAction.SIMULATE) == FluidAttributes.BUCKET_VOLUME)
+            FluidStack fluid = new FluidStack(fluidState.getType(), FluidType.BUCKET_VOLUME);
+            if (handler.fill(fluid, IFluidHandler.FluidAction.SIMULATE) == FluidType.BUCKET_VOLUME)
             {
                 if (stack.getItem() == Items.BUCKET)
                 {
@@ -96,7 +102,7 @@ public class FluidCamoContainer extends CamoContainer
                 FluidState state = fluid.getFluid().defaultFluidState();
                 if (!state.isEmpty())
                 {
-                    int amount = FluidAttributes.BUCKET_VOLUME;
+                    int amount = FluidType.BUCKET_VOLUME;
                     if (fluid.getAmount() >= amount && handler.drain(amount, IFluidHandler.FluidAction.SIMULATE).getAmount() == amount)
                     {
                         return new FluidCamoContainer(state);
