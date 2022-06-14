@@ -315,7 +315,9 @@ public class FramedBlueprintItem extends FramedToolItem
                 inv.setChanged();
             }
 
-            if (remainingBlock <= 0 && (camo.isEmpty() || foundCamo) && (camoTwo.isEmpty() || foundCamoTwo) && (!glowstone || foundGlowstone))
+            if (remainingBlock <= 0 && (camo.isEmpty() || foundCamo) && (camoTwo.isEmpty() || foundCamoTwo) &&
+                (!glowstone || foundGlowstone) && (!intangible || foundIntangibleMarker)
+            )
             {
                 break;
             }
