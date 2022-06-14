@@ -6,7 +6,6 @@ import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.nbt.NbtUtils;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
@@ -363,7 +362,7 @@ public interface IFramedBlock extends EntityBlock//, IFacade
 
     default Optional<MutableComponent> printCamoBlock(CompoundTag beTag)
     {
-        BlockState camoState = NbtUtils.readBlockState(beTag.getCompound("camo_state"));
+        BlockState camoState = CamoContainer.load(beTag.getCompound("camo")).getState();
 
         if (camoState.isAir()) { return Optional.empty(); }
         return Optional.of(camoState.getBlock().getName().withStyle(ChatFormatting.WHITE));

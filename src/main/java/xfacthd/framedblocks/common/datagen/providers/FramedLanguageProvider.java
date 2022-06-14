@@ -99,5 +99,6 @@ public class FramedLanguageProvider extends LanguageProvider
         add(FramedBlueprintItem.ILLUMINATED_FALSE.getString(), "false");
         add(FramedBlueprintItem.ILLUMINATED_TRUE.getString(), "true");
         add(FramedBlueprintItem.CANT_COPY.getString(), "This block can currently not be copied!");
+        add(FramedBlueprintItem.CANT_PLACE_FLUID_CAMO.getString(), "Copying blocks with fluid camos is currently not possible!");
     }
 }

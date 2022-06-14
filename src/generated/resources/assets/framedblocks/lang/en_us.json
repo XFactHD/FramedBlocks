@@ -63,6 +63,7 @@
   "desc.framed_blocks.blueprint_camo": "Camo Block: %s",
   "desc.framed_blocks.blueprint_illuminated": "Illuminated: %s",
   "desc.framedblocks.blueprint_cant_copy": "This block can currently not be copied!",
+  "desc.framedblocks.blueprint_cant_place_fluid_camo": "Copying blocks with fluid camos is currently not possible!",
   "desc.framedblocks.blueprint_illuminated_false": "false",
   "desc.framedblocks.blueprint_illuminated_true": "true",
   "desc.framedblocks.blueprint_invalid": "Invalid",

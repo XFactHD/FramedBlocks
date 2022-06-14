@@ -7,7 +7,6 @@ import net.minecraft.client.renderer.*;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.nbt.NbtUtils;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.item.*;
@@ -24,6 +23,7 @@ import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import net.minecraftforge.fml.util.ObfuscationReflectionHelper;
 import xfacthd.framedblocks.FramedBlocks;
+import xfacthd.framedblocks.api.data.CamoContainer;
 import xfacthd.framedblocks.api.util.FramedBlockData;
 import xfacthd.framedblocks.api.util.FramedConstants;
 import xfacthd.framedblocks.client.util.*;
@@ -142,11 +142,11 @@ public final class GhostBlockRenderer
             if (blueprint)
             {
                 CompoundTag beTag = stack.getOrCreateTagElement("blueprint_data").getCompound("camo_data");
-                camoState = NbtUtils.readBlockState(beTag.getCompound("camo_state"));
+                camoState = CamoContainer.load(beTag.getCompound("camo")).getState();
 
                 if (renderState.getBlock() instanceof AbstractFramedDoubleBlock)
                 {
-                    camoStateTwo = NbtUtils.readBlockState(beTag.getCompound("camo_state_two"));
+                    camoStateTwo = CamoContainer.load(beTag.getCompound("camo_two")).getState();
 
                     if (block == FBContent.blockFramedDoublePanel.get() && renderState.getValue(PropertyHolder.FACING_NE) != mc().player.getDirection())
                     {
@@ -171,7 +171,7 @@ public final class GhostBlockRenderer
                 if (blueprint)
                 {
                     CompoundTag beTag = stack.getOrCreateTagElement("blueprint_data").getCompound("camo_data_two");
-                    camoState = NbtUtils.readBlockState(beTag.getCompound("camo_state"));
+                    camoState = CamoContainer.load(beTag.getCompound("camo")).getState();
                     GHOST_MODEL_DATA.setCamoState(camoState);
                 }
 

@@ -4,7 +4,6 @@ import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.nbt.NbtUtils;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.world.entity.Entity;
@@ -13,6 +12,7 @@ import net.minecraft.world.level.*;
 import net.minecraft.world.level.block.*;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
+import xfacthd.framedblocks.api.data.CamoContainer;
 import xfacthd.framedblocks.api.util.FramedProperties;
 import xfacthd.framedblocks.common.data.BlockType;
 import xfacthd.framedblocks.common.item.FramedBlueprintItem;
@@ -78,8 +78,8 @@ public abstract class AbstractFramedDoubleBlock extends FramedBlock
     @Override
     public Optional<MutableComponent> printCamoBlock(CompoundTag beTag)
     {
-        BlockState camoState = NbtUtils.readBlockState(beTag.getCompound("camo_state"));
-        BlockState camoStateTwo = NbtUtils.readBlockState(beTag.getCompound("camo_state_two"));
+        BlockState camoState = CamoContainer.load(beTag.getCompound("camo")).getState();
+        BlockState camoStateTwo = CamoContainer.load(beTag.getCompound("camo_two")).getState();
 
         MutableComponent component = camoState.isAir() ? FramedBlueprintItem.BLOCK_NONE : camoState.getBlock().getName().withStyle(ChatFormatting.WHITE);
         component = component.copy().append(Component.literal(" | ").withStyle(ChatFormatting.GOLD));

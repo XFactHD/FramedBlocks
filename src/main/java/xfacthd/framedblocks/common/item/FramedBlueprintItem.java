@@ -21,6 +21,8 @@ import net.minecraft.world.level.block.state.properties.DoubleBlockHalf;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraftforge.common.Tags;
 import net.minecraftforge.registries.ForgeRegistries;
+import xfacthd.framedblocks.api.data.CamoContainer;
+import xfacthd.framedblocks.api.data.EmptyCamoContainer;
 import xfacthd.framedblocks.api.util.Utils;
 import xfacthd.framedblocks.common.FBContent;
 import xfacthd.framedblocks.api.block.IFramedBlock;
@@ -40,6 +42,7 @@ public class FramedBlueprintItem extends FramedToolItem
     public static final MutableComponent ILLUMINATED_FALSE = Utils.translate("desc", "blueprint_illuminated_false").withStyle(ChatFormatting.RED);
     public static final MutableComponent ILLUMINATED_TRUE = Utils.translate("desc", "blueprint_illuminated_true").withStyle(ChatFormatting.GREEN);
     public static final MutableComponent CANT_COPY = Utils.translate("desc", "blueprint_cant_copy").withStyle(ChatFormatting.RED);
+    public static final Component CANT_PLACE_FLUID_CAMO = Utils.translate("desc", "blueprint_cant_place_fluid_camo").withStyle(ChatFormatting.RED);
 
     public FramedBlueprintItem(FramedToolType type) { super(type); }
 
@@ -147,16 +150,26 @@ public class FramedBlueprintItem extends FramedToolItem
 
         CompoundTag camoData = tag.getCompound("camo_data");
 
-        ItemStack camo = ItemStack.of(camoData.getCompound("camo_stack"));
-        ItemStack camoTwo = camoData.contains("camo_stack_two") ? ItemStack.of(camoData.getCompound("camo_stack_two")) : ItemStack.EMPTY;
-        boolean glowstone = tag.getCompound("camo_data").getBoolean("glowing");
-
-        boolean doubleBlock = false;
+        CamoContainer camo = CamoContainer.load(camoData.getCompound("camo"));
+        CamoContainer camoTwo = camoData.contains("camo_two") ? CamoContainer.load(camoData.getCompound("camo_two")) : EmptyCamoContainer.EMPTY;
         if (item == FBContent.blockFramedDoor.get().asItem() && tag.contains("camo_data_two"))
         {
-            camoTwo = ItemStack.of(tag.getCompound("camo_data_two").getCompound("camo_stack"));
+            camoTwo = CamoContainer.load(tag.getCompound("camo_data_two").getCompound("camo"));
         }
-        else if (item == FBContent.blockFramedDoublePanel.get().asItem())
+
+        //Copying fluid camos is currently not possible
+        if (camo.getType().isFluid() || camoTwo.getType().isFluid())
+        {
+            player.sendSystemMessage(CANT_PLACE_FLUID_CAMO);
+            return true;
+        }
+
+        ItemStack camoStack = camo.toItemStack(ItemStack.EMPTY);
+        ItemStack camoStackTwo = camoTwo.toItemStack(ItemStack.EMPTY);
+        boolean glowstone = camoData.getBoolean("glowing");
+
+        boolean doubleBlock = false;
+        if (item == FBContent.blockFramedDoublePanel.get().asItem())
         {
             item = FBContent.blockFramedPanel.get().asItem();
             doubleBlock = true;
@@ -166,8 +179,6 @@ public class FramedBlueprintItem extends FramedToolItem
             item = FBContent.blockFramedSlab.get().asItem();
             doubleBlock = true;
         }
-
-
 
         if (doubleBlock)
         {
@@ -179,15 +190,15 @@ public class FramedBlueprintItem extends FramedToolItem
             if (!player.getInventory().contains(new ItemStack(item))) { return true; }
         }
 
-        if (!camo.isEmpty() && camo.is(camoTwo.getItem()))
+        if (!camoStack.isEmpty() && camoStack.is(camoStackTwo.getItem()))
         {
-            int count = player.getInventory().countItem(camo.getItem());
+            int count = player.getInventory().countItem(camoStack.getItem());
             if (count < 2) { return true; }
         }
         else
         {
-            if (!camo.isEmpty() && !player.getInventory().contains(camo)) { return true; }
-            if (!camoTwo.isEmpty() && !player.getInventory().contains(camoTwo)) { return true; }
+            if (!camoStack.isEmpty() && !player.getInventory().contains(camoStack)) { return true; }
+            if (!camoStackTwo.isEmpty() && !player.getInventory().contains(camoStackTwo)) { return true; }
         }
 
         return glowstone && !player.getInventory().contains(Tags.Items.DUSTS_GLOWSTONE);
@@ -234,16 +245,22 @@ public class FramedBlueprintItem extends FramedToolItem
     {
         CompoundTag camoData = tag.getCompound("camo_data");
 
-        ItemStack camo = ItemStack.of(camoData.getCompound("camo_stack"));
-        ItemStack camoTwo = camoData.contains("camo_stack_two") ? ItemStack.of(camoData.getCompound("camo_stack_two")) : ItemStack.EMPTY;
+        CamoContainer camo = CamoContainer.load(camoData.getCompound("camo"));
+        CamoContainer camoTwo = camoData.contains("camo_two") ? CamoContainer.load(camoData.getCompound("camo_two")) : EmptyCamoContainer.EMPTY;
+        if (item == FBContent.blockFramedDoor.get().asItem() && tag.contains("camo_data_two"))
+        {
+            camoTwo = CamoContainer.load(tag.getCompound("camo_data_two").getCompound("camo"));
+        }
+
+        //Copying fluid camos is currently not possible
+        if (camo.getType().isFluid() || camoTwo.getType().isFluid()) { return; }
+
+        ItemStack camoStack = camo.toItemStack(ItemStack.EMPTY);
+        ItemStack camoStackTwo = camoTwo.toItemStack(ItemStack.EMPTY);
         boolean glowstone = camoData.getBoolean("glowing");
 
         boolean doubleBlock = false;
-        if (item == FBContent.blockFramedDoor.get().asItem() && tag.contains("camo_data_two"))
-        {
-            camoTwo = ItemStack.of(tag.getCompound("camo_data_two").getCompound("camo_stack"));
-        }
-        else if (item == FBContent.blockFramedDoublePanel.get().asItem())
+        if (item == FBContent.blockFramedDoublePanel.get().asItem())
         {
             item = FBContent.blockFramedPanel.get().asItem();
             doubleBlock = true;
@@ -272,14 +289,14 @@ public class FramedBlueprintItem extends FramedToolItem
                 inv.setChanged();
             }
 
-            if (!foundCamo && !camo.isEmpty() && stack.is(camo.getItem()))
+            if (!foundCamo && !camo.isEmpty() && stack.is(camoStack.getItem()))
             {
                 foundCamo = true;
 
                 stack.shrink(1);
                 inv.setChanged();
             }
-            if (!foundCamoTwo && !camoTwo.isEmpty() && stack.is(camoTwo.getItem()))
+            if (!foundCamoTwo && !camoTwo.isEmpty() && stack.is(camoStackTwo.getItem()))
             {
                 foundCamoTwo = true;
 
