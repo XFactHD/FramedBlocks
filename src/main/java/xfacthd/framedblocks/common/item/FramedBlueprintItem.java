@@ -28,6 +28,7 @@ import xfacthd.framedblocks.common.FBContent;
 import xfacthd.framedblocks.api.block.IFramedBlock;
 import xfacthd.framedblocks.common.data.FramedToolType;
 import xfacthd.framedblocks.api.block.FramedBlockEntity;
+import xfacthd.framedblocks.common.util.ServerConfig;
 
 import javax.annotation.Nullable;
 import java.util.*;
@@ -167,6 +168,7 @@ public class FramedBlueprintItem extends FramedToolItem
         ItemStack camoStack = camo.toItemStack(ItemStack.EMPTY);
         ItemStack camoStackTwo = camoTwo.toItemStack(ItemStack.EMPTY);
         boolean glowstone = camoData.getBoolean("glowing");
+        boolean intangible = camoData.getBoolean("intangible");
 
         boolean doubleBlock = false;
         if (item == FBContent.blockFramedDoublePanel.get().asItem())
@@ -201,7 +203,17 @@ public class FramedBlueprintItem extends FramedToolItem
             if (!camoStackTwo.isEmpty() && !player.getInventory().contains(camoStackTwo)) { return true; }
         }
 
-        return glowstone && !player.getInventory().contains(Tags.Items.DUSTS_GLOWSTONE);
+        if (glowstone && !player.getInventory().contains(Tags.Items.DUSTS_GLOWSTONE))
+        {
+            return true;
+        }
+
+        if (intangible && !player.getInventory().contains(new ItemStack(ServerConfig.intangibleMarkerItem)))
+        {
+            return true;
+        }
+
+        return false;
     }
 
     private static InteractionResult tryPlace(UseOnContext context, Player player, Item item, CompoundTag tag)
@@ -258,6 +270,7 @@ public class FramedBlueprintItem extends FramedToolItem
         ItemStack camoStack = camo.toItemStack(ItemStack.EMPTY);
         ItemStack camoStackTwo = camoTwo.toItemStack(ItemStack.EMPTY);
         boolean glowstone = camoData.getBoolean("glowing");
+        boolean intangible = camoData.getBoolean("intangible");
 
         boolean doubleBlock = false;
         if (item == FBContent.blockFramedDoublePanel.get().asItem())
@@ -271,20 +284,21 @@ public class FramedBlueprintItem extends FramedToolItem
             doubleBlock = true;
         }
 
-        int foundBlock = doubleBlock ? 2 : 1;
+        int remainingBlock = doubleBlock ? 2 : 1;
         boolean foundCamo = false;
         boolean foundCamoTwo = false;
         boolean foundGlowstone = false;
+        boolean foundIntangibleMarker = false;
 
         Inventory inv = player.getInventory();
         for (int i = 0; i < inv.getContainerSize(); i++)
         {
             ItemStack stack = inv.getItem(i);
-            if (foundBlock > 0 && stack.is(item))
+            if (remainingBlock > 0 && stack.is(item))
             {
                 int size = stack.getCount();
-                stack.shrink(foundBlock);
-                foundBlock -= size - stack.getCount();
+                stack.shrink(Math.min(remainingBlock, size));
+                remainingBlock -= size - stack.getCount();
 
                 inv.setChanged();
             }
@@ -312,7 +326,17 @@ public class FramedBlueprintItem extends FramedToolItem
                 inv.setChanged();
             }
 
-            if (foundBlock <= 0 && (camo.isEmpty() || foundCamo) && (camoTwo.isEmpty() || foundCamoTwo) && (!glowstone || foundGlowstone))
+            if (!foundIntangibleMarker && intangible && stack.is(ServerConfig.intangibleMarkerItem))
+            {
+                foundIntangibleMarker = true;
+
+                stack.shrink(1);
+                inv.setChanged();
+            }
+
+            if (remainingBlock <= 0 && (camo.isEmpty() || foundCamo) && (camoTwo.isEmpty() || foundCamoTwo) &&
+                (!glowstone || foundGlowstone) && (!intangible || foundIntangibleMarker)
+            )
             {
                 break;
             }
