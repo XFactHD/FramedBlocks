@@ -20,6 +20,8 @@ build
 # other
 eclipse
 run
+run_server
+run_gametest
 
 # Files from Forge MDK
 forge*changelog.txt

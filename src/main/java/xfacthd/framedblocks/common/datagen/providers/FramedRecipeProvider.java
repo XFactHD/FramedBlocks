@@ -486,7 +486,7 @@ public class FramedRecipeProvider extends RecipeProvider
                 .save(consumer);
 
         ShapelessRecipeBuilder.shapeless(FBContent.blockFramedIronTrapDoor.get())
-                .requires(FBContent.blockFramedDoor.get())
+                .requires(FBContent.blockFramedTrapDoor.get())
                 .requires(Items.IRON_INGOT)
                 .unlockedBy("hasFramedTrapdoor", has(FBContent.blockFramedTrapDoor.get()))
                 .save(consumer);
