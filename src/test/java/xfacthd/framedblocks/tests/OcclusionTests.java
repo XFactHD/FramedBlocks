@@ -1216,6 +1216,107 @@ public final class OcclusionTests
         TestUtils.testBlockOccludesLightNorth(helper, state, List.of(Direction.NORTH, Direction.SOUTH));
     }
 
+    @GameTest(template = "box_side", batch = "occlusion")
+    @TestedType(type = BlockType.FRAMED_IRON_DOOR)
+    public static void test_IronDoor_Closed(GameTestHelper helper)
+    {
+        BlockState state = FBContent.blockFramedIronDoor.get()
+                .defaultBlockState()
+                .setValue(BlockStateProperties.HORIZONTAL_FACING, Direction.SOUTH);
+        TestUtils.testBlockOccludesLightNorth(helper, state);
+    }
+
+    @GameTest(template = "box_side", batch = "occlusion")
+    @TestedType(type = BlockType.FRAMED_IRON_DOOR)
+    public static void test_IronDoor_Open(GameTestHelper helper)
+    {
+        BlockState state = FBContent.blockFramedIronDoor.get()
+                .defaultBlockState()
+                .setValue(BlockStateProperties.HORIZONTAL_FACING, Direction.EAST)
+                .setValue(BlockStateProperties.OPEN, true);
+        TestUtils.testBlockOccludesLightNorth(helper, state);
+    }
+
+    @GameTest(template = "box_top", batch = "occlusion")
+    @TestedType(type = BlockType.FRAMED_IRON_TRAPDOOR)
+    public static void testTop_IronTrapdoor_BottomClosed(GameTestHelper helper)
+    {
+        BlockState state = FBContent.blockFramedIronTrapDoor.get().defaultBlockState();
+        TestUtils.testBlockOccludesLightBelow(helper, state);
+    }
+
+    @GameTest(template = "box_top", batch = "occlusion")
+    @TestedType(type = BlockType.FRAMED_IRON_TRAPDOOR)
+    public static void testTop_IronTrapdoor_TopClosed(GameTestHelper helper)
+    {
+        BlockState state = FBContent.blockFramedIronTrapDoor.get()
+                .defaultBlockState()
+                .setValue(BlockStateProperties.HALF, Half.TOP);
+        TestUtils.testBlockOccludesLightBelow(helper, state);
+    }
+
+    @GameTest(template = "box_bottom", batch = "occlusion")
+    @TestedType(type = BlockType.FRAMED_IRON_TRAPDOOR)
+    public static void testBottom_IronTrapdoor_BottomClosed(GameTestHelper helper)
+    {
+        BlockState state = FBContent.blockFramedIronTrapDoor.get().defaultBlockState();
+        TestUtils.testBlockOccludesLightAbove(helper, state);
+    }
+
+    @GameTest(template = "box_bottom", batch = "occlusion")
+    @TestedType(type = BlockType.FRAMED_IRON_TRAPDOOR)
+    public static void testBottom_IronTrapdoor_TopClosed(GameTestHelper helper)
+    {
+        BlockState state = FBContent.blockFramedIronTrapDoor.get()
+                .defaultBlockState()
+                .setValue(BlockStateProperties.HALF, Half.TOP);
+        TestUtils.testBlockOccludesLightAbove(helper, state);
+    }
+
+    @GameTest(template = "box_side", batch = "occlusion")
+    @TestedType(type = BlockType.FRAMED_IRON_TRAPDOOR)
+    public static void test_IronTrapdoor_NorthBottomOpen(GameTestHelper helper)
+    {
+        BlockState state = FBContent.blockFramedIronTrapDoor.get()
+                .defaultBlockState()
+                .setValue(BlockStateProperties.OPEN, true);
+        TestUtils.testBlockOccludesLightNorth(helper, state);
+    }
+
+    @GameTest(template = "box_side", batch = "occlusion")
+    @TestedType(type = BlockType.FRAMED_IRON_TRAPDOOR)
+    public static void test_IronTrapdoor_NorthTopOpen(GameTestHelper helper)
+    {
+        BlockState state = FBContent.blockFramedIronTrapDoor.get()
+                .defaultBlockState()
+                .setValue(BlockStateProperties.OPEN, true)
+                .setValue(BlockStateProperties.HALF, Half.TOP);
+        TestUtils.testBlockOccludesLightNorth(helper, state);
+    }
+
+    @GameTest(template = "box_side", batch = "occlusion")
+    @TestedType(type = BlockType.FRAMED_IRON_TRAPDOOR)
+    public static void test_IronTrapdoorSouthBottomOpen(GameTestHelper helper)
+    {
+        BlockState state = FBContent.blockFramedIronTrapDoor.get()
+                .defaultBlockState()
+                .setValue(BlockStateProperties.OPEN, true)
+                .setValue(BlockStateProperties.HORIZONTAL_FACING, Direction.SOUTH);
+        TestUtils.testBlockOccludesLightNorth(helper, state);
+    }
+
+    @GameTest(template = "box_side", batch = "occlusion")
+    @TestedType(type = BlockType.FRAMED_IRON_TRAPDOOR)
+    public static void test_IronTrapdoor_SouthTopOpen(GameTestHelper helper)
+    {
+        BlockState state = FBContent.blockFramedIronTrapDoor.get()
+                .defaultBlockState()
+                .setValue(BlockStateProperties.OPEN, true)
+                .setValue(BlockStateProperties.HORIZONTAL_FACING, Direction.SOUTH)
+                .setValue(BlockStateProperties.HALF, Half.BOTTOM);
+        TestUtils.testBlockOccludesLightNorth(helper, state);
+    }
+
 
 
     private static boolean firstBatch = true;

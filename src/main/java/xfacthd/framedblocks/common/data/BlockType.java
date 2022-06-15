@@ -33,7 +33,7 @@ public enum BlockType implements IBlockType
     FRAMED_FENCE                  (false, false, false,  true,  true, false, false, CtmPredicate.FALSE, FramedFenceBlock.SKIP_PREDICATE),
     FRAMED_GATE                   (false, false, false,  true,  true, false, false, CtmPredicate.FALSE, FramedGateBlock.SKIP_PREDICATE),
     FRAMED_DOOR                   ( true, false, false, false,  true, false, false, FramedDoorBlock.CTM_PREDICATE, new DoorSkipPredicate()),
-    FRAMED_TRAPDOOR               ( true, false, false,  true,  true, false, false, FramedTrapDoorBlock.CTM_PREDICATE, SideSkipPredicate.CTM),
+    FRAMED_TRAPDOOR               ( true, false, false, true, true, false, false, FramedTrapDoorBlock.CTM_PREDICATE, new TrapdoorSkipPredicate()),
     FRAMED_PRESSURE_PLATE         (false, false, false, false,  true, false, false),
     FRAMED_LADDER                 (false, false, false,  true,  true, false, false),
     FRAMED_BUTTON                 (false, false, false, false,  true, false, false),
@@ -76,7 +76,10 @@ public enum BlockType implements IBlockType
     FRAMED_SLOPE_PANEL            ( true,  true, false,  true,  true,  true, false, FramedSlopePanelBlock.CTM_PREDICATE, new SlopePanelSkipPredicate(), FramedSlopePanelBlock::generateShapes),
     FRAMED_EXTENDED_SLOPE_PANEL   ( true,  true,  true,  true,  true,  true, false, FramedExtendedSlopePanelBlock.CTM_PREDICATE, new ExtendedSlopePanelSkipPredicate(), FramedExtendedSlopePanelBlock::generateShapes),
     FRAMED_DOUBLE_SLOPE_PANEL     ( true, false,  true,  true,  true,  true,  true, FramedDoubleSlopePanelBlock.CTM_PREDICATE, SideSkipPredicate.FALSE, FramedDoubleSlopePanelBlock::generateShapes), //Side skip is handled by the single vertical slope slab
-    FRAMED_INV_DOUBLE_SLOPE_PANEL ( true,  true,  true,  true,  true,  true,  true, CtmPredicate.FALSE, SideSkipPredicate.FALSE, FramedInverseDoubleSlopePanelBlock::generateShapes); //Side skip is handled by the single vertical slope slab
+    FRAMED_INV_DOUBLE_SLOPE_PANEL ( true,  true,  true,  true,  true,  true,  true, CtmPredicate.FALSE, SideSkipPredicate.FALSE, FramedInverseDoubleSlopePanelBlock::generateShapes), //Side skip is handled by the single vertical slope slab
+    FRAMED_IRON_DOOR              ( true, false, false, false,  true, false, false, FramedDoorBlock.CTM_PREDICATE, new DoorSkipPredicate()),
+    FRAMED_IRON_TRAPDOOR          ( true, false, false,  true,  true, false, false, FramedTrapDoorBlock.CTM_PREDICATE, new TrapdoorSkipPredicate()),
+    ;
 
     private final String name = toString().toLowerCase(Locale.ROOT);
     private final boolean canOcclude;

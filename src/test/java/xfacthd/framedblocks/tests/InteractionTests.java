@@ -353,5 +353,33 @@ public final class InteractionTests
         ));
     }
 
+    @GameTest(template = "floor_1x1", batch = "interaction")
+    public static void testIronDoorInteract(GameTestHelper helper)
+    {
+        TestUtils.chainTasks(helper, List.of(
+                () -> helper.setBlock(POS_ABOVE_FLOOR, FBContent.blockFramedIronDoor.get()),
+                () -> helper.assertBlockProperty(POS_ABOVE_FLOOR, DoorBlock.OPEN, false),
+                () -> helper.useBlock(POS_ABOVE_FLOOR),
+                //No, this is not a typo, the door must not budge ;)
+                () -> helper.assertBlockProperty(POS_ABOVE_FLOOR, DoorBlock.OPEN, false),
+                helper::succeed
+        ));
+    }
+
+    @GameTest(template = "floor_1x1", batch = "interaction")
+    public static void testIronTrapDoorInteract(GameTestHelper helper)
+    {
+        TestUtils.chainTasks(helper, List.of(
+                () -> helper.setBlock(POS_ABOVE_FLOOR, FBContent.blockFramedIronTrapDoor.get()),
+                () -> helper.assertBlockProperty(POS_ABOVE_FLOOR, TrapDoorBlock.OPEN, false),
+                () -> helper.useBlock(POS_ABOVE_FLOOR),
+                //No, this is not a typo, the trapdoor must not budge ;)
+                () -> helper.assertBlockProperty(POS_ABOVE_FLOOR, TrapDoorBlock.OPEN, false),
+                helper::succeed
+        ));
+    }
+
+
+
     private InteractionTests() { }
 }

@@ -29,8 +29,8 @@ public class FramedBlockTagProvider extends BlockTagsProvider
         tag(BlockTags.STAIRS).add(FBContent.blockFramedStairs.get());
         tag(BlockTags.WALLS).add(FBContent.blockFramedWall.get());
         tag(BlockTags.FENCES).add(FBContent.blockFramedFence.get());
-        tag(BlockTags.DOORS).add(FBContent.blockFramedDoor.get());
-        tag(BlockTags.TRAPDOORS).add(FBContent.blockFramedTrapDoor.get());
+        tag(BlockTags.DOORS).add(FBContent.blockFramedDoor.get(), FBContent.blockFramedIronDoor.get());
+        tag(BlockTags.TRAPDOORS).add(FBContent.blockFramedTrapDoor.get(), FBContent.blockFramedIronTrapDoor.get());
         tag(BlockTags.CLIMBABLE).add(FBContent.blockFramedLadder.get());
         tag(Tags.Blocks.CHESTS).add(FBContent.blockFramedChest.get());
         tag(BlockTags.RAILS).add(FBContent.blockFramedRailSlope.get());
@@ -55,6 +55,15 @@ public class FramedBlockTagProvider extends BlockTagsProvider
                 .stream()
                 .map(RegistryObject::get)
                 .filter(b -> b instanceof IFramedBlock)
+                .filter(b ->
+                        b != FBContent.blockFramedIronDoor.get() &&
+                                b != FBContent.blockFramedIronTrapDoor.get()
+                )
                 .forEach(axeTag::add);
+
+        tag(BlockTags.MINEABLE_WITH_PICKAXE).add(
+                FBContent.blockFramedIronDoor.get(),
+                FBContent.blockFramedIronTrapDoor.get()
+        );
     }
 }

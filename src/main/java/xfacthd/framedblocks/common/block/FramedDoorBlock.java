@@ -13,19 +13,20 @@ import net.minecraft.world.level.block.*;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
-import net.minecraft.world.level.block.state.properties.BlockStateProperties;
-import net.minecraft.world.level.block.state.properties.DoorHingeSide;
+import net.minecraft.world.level.block.state.properties.*;
+import net.minecraft.world.level.material.Material;
 import net.minecraft.world.level.storage.loot.LootContext;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.shapes.*;
 import xfacthd.framedblocks.api.block.IFramedBlock;
 import xfacthd.framedblocks.api.util.FramedProperties;
+import xfacthd.framedblocks.api.util.client.ClientUtils;
 import xfacthd.framedblocks.common.data.BlockType;
 import xfacthd.framedblocks.api.block.FramedBlockEntity;
 import xfacthd.framedblocks.api.util.CtmPredicate;
 
 import javax.annotation.Nullable;
-import java.util.List;
+import java.util.*;
 
 @SuppressWarnings("deprecation")
 public class FramedDoorBlock extends DoorBlock implements IFramedBlock
@@ -50,9 +51,12 @@ public class FramedDoorBlock extends DoorBlock implements IFramedBlock
         }
     };
 
-    public FramedDoorBlock()
+    private final BlockType type;
+
+    private FramedDoorBlock(BlockType type, Properties props)
     {
-        super(IFramedBlock.createProperties(BlockType.FRAMED_DOOR));
+        super(props);
+        this.type = type;
         registerDefaultState(defaultBlockState()
                 .setValue(FramedProperties.SOLID, false)
                 .setValue(FramedProperties.GLOWING, false)
@@ -72,7 +76,7 @@ public class FramedDoorBlock extends DoorBlock implements IFramedBlock
         InteractionResult result = handleUse(level, pos, player, hand, hit);
         if (result.consumesAction()) { return result; }
 
-        return super.use(state, level, pos, player, hand, hit);
+        return material == IRON_WOOD ? InteractionResult.PASS : super.use(state, level, pos, player, hand, hit);
     }
 
     @Override
@@ -89,9 +93,32 @@ public class FramedDoorBlock extends DoorBlock implements IFramedBlock
     public BlockState updateShape(BlockState state, Direction facing, BlockState facingState, LevelAccessor level, BlockPos currentPos, BlockPos facingPos)
     {
         BlockState newState = super.updateShape(state, facing, facingState, level, currentPos, facingPos);
-        if (newState == state)
+        if (level.isClientSide())
         {
-            updateCulling(level, currentPos, facingState, facing, false);
+            if (newState == state)
+            {
+                updateCulling(level, currentPos, facingState, facing, false);
+            }
+            else if (newState.isAir())
+            {
+                BlockPos pos = currentPos.immutable();
+                Direction dir = state.getValue(FACING);
+                Set<Direction> faces = EnumSet.of(
+                        dir.getClockWise(),
+                        dir.getCounterClockWise(),
+                        state.getValue(HALF) == DoubleBlockHalf.UPPER ? Direction.UP : Direction.DOWN
+                );
+                ClientUtils.enqueueClientTask(3, () ->
+                {
+                    for (Direction face : faces)
+                    {
+                        if (level.getBlockEntity(pos.relative(face)) instanceof FramedBlockEntity be)
+                        {
+                            be.updateCulling(face.getOpposite(), true);
+                        }
+                    }
+                });
+            }
         }
         return newState;
     }
@@ -104,7 +131,7 @@ public class FramedDoorBlock extends DoorBlock implements IFramedBlock
         // Only check here when the block didn't change (i.e. by opening the door), everything else is handled in the BE packet handlers
         if (needCullingUpdateAfterStateChange(level, oldState, newState) && level.getBlockEntity(pos) instanceof FramedBlockEntity be)
         {
-            be.updateCulling(false, false);
+            be.updateCulling(true, false);
         }
     }
 
@@ -160,5 +187,36 @@ public class FramedDoorBlock extends DoorBlock implements IFramedBlock
     public final BlockEntity newBlockEntity(BlockPos pos, BlockState state) { return new FramedBlockEntity(pos, state); }
 
     @Override
-    public BlockType getBlockType() { return BlockType.FRAMED_DOOR; }
+    public BlockType getBlockType() { return type; }
+
+
+
+    // Fake wooden material to satisfy the hard-coded wooden door check while staying wooden
+    public static final Material IRON_WOOD = new Material(
+            Material.WOOD.getColor(),
+            Material.WOOD.isLiquid(),
+            Material.WOOD.isSolid(),
+            Material.WOOD.blocksMotion(),
+            Material.WOOD.isSolidBlocking(),
+            Material.WOOD.isFlammable(),
+            Material.WOOD.isReplaceable(),
+            Material.WOOD.getPushReaction()
+    );
+
+    public static FramedDoorBlock wood()
+    {
+        return new FramedDoorBlock(
+                BlockType.FRAMED_DOOR,
+                IFramedBlock.createProperties(BlockType.FRAMED_DOOR)
+        );
+    }
+
+    public static FramedDoorBlock iron()
+    {
+        return new FramedDoorBlock(
+                BlockType.FRAMED_IRON_DOOR,
+                IFramedBlock.createProperties(BlockType.FRAMED_IRON_DOOR, IRON_WOOD)
+                        .requiresCorrectToolForDrops()
+        );
+    }
 }

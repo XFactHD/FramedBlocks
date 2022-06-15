@@ -26,6 +26,7 @@ import xfacthd.framedblocks.api.data.EmptyCamoContainer;
 import xfacthd.framedblocks.api.util.Utils;
 import xfacthd.framedblocks.common.FBContent;
 import xfacthd.framedblocks.api.block.IFramedBlock;
+import xfacthd.framedblocks.common.block.FramedDoorBlock;
 import xfacthd.framedblocks.common.data.FramedToolType;
 import xfacthd.framedblocks.api.block.FramedBlockEntity;
 import xfacthd.framedblocks.common.util.ServerConfig;
@@ -105,7 +106,7 @@ public class FramedBlueprintItem extends FramedToolItem
             tag.putString("framed_block", block);
 
             CompoundTag nbt = be.writeToBlueprint();
-            if (state.getBlock() == FBContent.blockFramedDoor.get())
+            if (state.getBlock() instanceof FramedDoorBlock)
             {
                 boolean top = state.getValue(BlockStateProperties.DOUBLE_BLOCK_HALF) == DoubleBlockHalf.UPPER;
                 BlockPos posTwo = top ? pos.below() : pos.above();
@@ -153,7 +154,7 @@ public class FramedBlueprintItem extends FramedToolItem
 
         CamoContainer camo = CamoContainer.load(camoData.getCompound("camo"));
         CamoContainer camoTwo = camoData.contains("camo_two") ? CamoContainer.load(camoData.getCompound("camo_two")) : EmptyCamoContainer.EMPTY;
-        if (item == FBContent.blockFramedDoor.get().asItem() && tag.contains("camo_data_two"))
+        if (isDoorItem(item) && tag.contains("camo_data_two"))
         {
             camoTwo = CamoContainer.load(tag.getCompound("camo_data_two").getCompound("camo"));
         }
@@ -341,6 +342,11 @@ public class FramedBlueprintItem extends FramedToolItem
                 break;
             }
         }
+    }
+
+    private static boolean isDoorItem(Item item)
+    {
+        return item == FBContent.blockFramedDoor.get().asItem() || item == FBContent.blockFramedIronDoor.get().asItem();
     }
 
     public static Block getTargetBlock(ItemStack stack)

@@ -6,7 +6,7 @@ import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.*;
 import xfacthd.framedblocks.api.util.SideSkipPredicate;
-import xfacthd.framedblocks.common.FBContent;
+import xfacthd.framedblocks.common.block.FramedDoorBlock;
 
 public class DoorSkipPredicate implements SideSkipPredicate
 {
@@ -20,7 +20,7 @@ public class DoorSkipPredicate implements SideSkipPredicate
             return SideSkipPredicate.CTM.test(level, pos, state, adjState, side);
         }
 
-        if (!adjState.is(FBContent.blockFramedDoor.get())) { return false; }
+        if (!(adjState.getBlock() instanceof FramedDoorBlock)) { return false; }
 
         boolean top = state.getValue(BlockStateProperties.DOUBLE_BLOCK_HALF) == DoubleBlockHalf.UPPER;
         if ((top && side == Direction.DOWN) || (!top && side ==  Direction.UP))

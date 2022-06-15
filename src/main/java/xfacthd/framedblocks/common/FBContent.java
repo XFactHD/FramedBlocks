@@ -76,8 +76,8 @@ public final class FBContent
     public static final RegistryObject<Block> blockFramedWall = registerBlock(FramedWallBlock::new, BlockType.FRAMED_WALL);
     public static final RegistryObject<Block> blockFramedFence = registerBlock(FramedFenceBlock::new, BlockType.FRAMED_FENCE);
     public static final RegistryObject<Block> blockFramedGate = registerBlock(FramedGateBlock::new, BlockType.FRAMED_GATE);
-    public static final RegistryObject<Block> blockFramedDoor = registerBlock(FramedDoorBlock::new, BlockType.FRAMED_DOOR);
-    public static final RegistryObject<Block> blockFramedTrapDoor = registerBlock(FramedTrapDoorBlock::new, BlockType.FRAMED_TRAPDOOR);
+    public static final RegistryObject<Block> blockFramedDoor = registerBlock(FramedDoorBlock::wood, BlockType.FRAMED_DOOR);
+    public static final RegistryObject<Block> blockFramedTrapDoor = registerBlock(FramedTrapDoorBlock::wood, BlockType.FRAMED_TRAPDOOR);
     public static final RegistryObject<Block> blockFramedPressurePlate = registerBlock(FramedPressurePlateBlock::new, BlockType.FRAMED_PRESSURE_PLATE);
     public static final RegistryObject<Block> blockFramedLadder = registerBlock(FramedLadderBlock::new, BlockType.FRAMED_LADDER);
     public static final RegistryObject<Block> blockFramedButton = registerBlock(FramedButtonBlock::new, BlockType.FRAMED_BUTTON);
@@ -121,6 +121,8 @@ public final class FBContent
     public static final RegistryObject<Block> blockFramedExtendedSlopePanel = registerBlock(FramedExtendedSlopePanelBlock::new, BlockType.FRAMED_EXTENDED_SLOPE_PANEL);
     public static final RegistryObject<Block> blockFramedDoubleSlopePanel = registerBlock(FramedDoubleSlopePanelBlock::new, BlockType.FRAMED_DOUBLE_SLOPE_PANEL);
     public static final RegistryObject<Block> blockFramedInverseDoubleSlopePanel = registerBlock(FramedInverseDoubleSlopePanelBlock::new, BlockType.FRAMED_INV_DOUBLE_SLOPE_PANEL);
+    public static final RegistryObject<Block> blockFramedIronDoor = registerBlock(FramedDoorBlock::iron, BlockType.FRAMED_IRON_DOOR);
+    public static final RegistryObject<Block> blockFramedIronTrapDoor = registerBlock(FramedTrapDoorBlock::iron, BlockType.FRAMED_IRON_TRAPDOOR);
     // endregion
 
     // region Items

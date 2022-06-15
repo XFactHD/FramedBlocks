@@ -44,9 +44,12 @@ public class FramedTrapDoorBlock extends TrapDoorBlock implements IFramedBlock
         return dir == Direction.DOWN;
     };
 
-    public FramedTrapDoorBlock()
+    private final BlockType type;
+
+    private FramedTrapDoorBlock(BlockType type, Properties props)
     {
-        super(IFramedBlock.createProperties(BlockType.FRAMED_TRAPDOOR));
+        super(props);
+        this.type = type;
         registerDefaultState(defaultBlockState()
                 .setValue(FramedProperties.SOLID, false)
                 .setValue(FramedProperties.GLOWING, false)
@@ -66,7 +69,7 @@ public class FramedTrapDoorBlock extends TrapDoorBlock implements IFramedBlock
         InteractionResult result = handleUse(level, pos, player, hand, hit);
         if (result.consumesAction()) { return result; }
 
-        return super.use(state, level, pos, player, hand, hit);
+        return material == FramedDoorBlock.IRON_WOOD ? InteractionResult.PASS :super.use(state, level, pos, player, hand, hit);
     }
 
     @Override
@@ -79,7 +82,7 @@ public class FramedTrapDoorBlock extends TrapDoorBlock implements IFramedBlock
     public BlockState updateShape(BlockState state, Direction facing, BlockState facingState, LevelAccessor level, BlockPos currentPos, BlockPos facingPos)
     {
         BlockState newState = super.updateShape(state, facing, facingState, level, currentPos, facingPos);
-        if (newState == state)
+        if (level.isClientSide() && newState == state)
         {
             updateCulling(level, currentPos, facingState, facing, false);
         }
@@ -92,9 +95,9 @@ public class FramedTrapDoorBlock extends TrapDoorBlock implements IFramedBlock
         IFramedBlock.super.onStateChangeClient(level, pos, oldState, newState);
 
         // Only check here when the block didn't change (i.e. by opening the door), everything else is handled in the BE packet handlers
-        if (oldState.getBlock() == newState.getBlock() && level.getBlockEntity(pos) instanceof FramedBlockEntity be)
+        if (needCullingUpdateAfterStateChange(level, oldState, newState) && level.getBlockEntity(pos) instanceof FramedBlockEntity be)
         {
-            be.updateCulling(false, false);
+            be.updateCulling(true, false);
         }
     }
 
@@ -150,5 +153,24 @@ public class FramedTrapDoorBlock extends TrapDoorBlock implements IFramedBlock
     public final BlockEntity newBlockEntity(BlockPos pos, BlockState state) { return new FramedBlockEntity(pos, state); }
 
     @Override
-    public BlockType getBlockType() { return BlockType.FRAMED_TRAPDOOR; }
+    public BlockType getBlockType() { return type; }
+
+
+
+    public static FramedTrapDoorBlock wood()
+    {
+        return new FramedTrapDoorBlock(
+                BlockType.FRAMED_TRAPDOOR,
+                IFramedBlock.createProperties(BlockType.FRAMED_TRAPDOOR)
+        );
+    }
+
+    public static FramedTrapDoorBlock iron()
+    {
+        return new FramedTrapDoorBlock(
+                BlockType.FRAMED_IRON_TRAPDOOR,
+                IFramedBlock.createProperties(BlockType.FRAMED_IRON_TRAPDOOR, FramedDoorBlock.IRON_WOOD)
+                        .requiresCorrectToolForDrops()
+        );
+    }
 }
