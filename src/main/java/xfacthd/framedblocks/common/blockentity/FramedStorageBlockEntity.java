@@ -3,10 +3,12 @@ package xfacthd.framedblocks.common.blockentity;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.Tag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.util.Mth;
 import net.minecraft.world.MenuProvider;
+import net.minecraft.world.Nameable;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
@@ -27,7 +29,7 @@ import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.List;
 
-public class FramedStorageBlockEntity extends FramedBlockEntity implements MenuProvider
+public class FramedStorageBlockEntity extends FramedBlockEntity implements MenuProvider, Nameable
 {
     public static final Component TITLE = Utils.translate("title", "framed_secret_storage");
 
@@ -40,6 +42,7 @@ public class FramedStorageBlockEntity extends FramedBlockEntity implements MenuP
         }
     };
     private LazyOptional<IItemHandler> lazyItemHandler = LazyOptional.empty();
+    private Component customName = null;
 
     public FramedStorageBlockEntity(BlockPos pos, BlockState state)
     {
@@ -128,6 +131,18 @@ public class FramedStorageBlockEntity extends FramedBlockEntity implements MenuP
         return Mth.floor(fullness * 14F) + (stacks > 0 ? 1 : 0);
     }
 
+    public void setCustomName(Component customName)
+    {
+        this.customName = customName;
+        setChanged();
+    }
+
+    @Override
+    public Component getName() { return customName != null ? customName : getDefaultName(); }
+
+    @Override
+    public Component getCustomName() { return customName; }
+
 
 
     @Override //Prevent writing inventory contents
@@ -135,6 +150,7 @@ public class FramedStorageBlockEntity extends FramedBlockEntity implements MenuP
     {
         CompoundTag tag = saveWithoutMetadata();
         tag.remove("inventory");
+        tag.remove("custom_name");
         return tag;
     }
 
@@ -142,6 +158,10 @@ public class FramedStorageBlockEntity extends FramedBlockEntity implements MenuP
     public void saveAdditional(CompoundTag nbt)
     {
         nbt.put("inventory", itemHandler.serializeNBT());
+        if (customName != null)
+        {
+            nbt.putString("custom_name", Component.Serializer.toJson(customName));
+        }
         super.saveAdditional(nbt);
     }
 
@@ -150,12 +170,18 @@ public class FramedStorageBlockEntity extends FramedBlockEntity implements MenuP
     {
         super.load(nbt);
         itemHandler.deserializeNBT(nbt.getCompound("inventory"));
+        if (nbt.contains("custom_name", Tag.TAG_STRING))
+        {
+            customName = Component.Serializer.fromJson(nbt.getString("custom_name"));
+        }
     }
 
 
 
+    protected Component getDefaultName() { return TITLE; }
+
     @Override
-    public Component getDisplayName() { return TITLE; }
+    public final Component getDisplayName() { return getName(); }
 
     @Override
     public AbstractContainerMenu createMenu(int windowId, Inventory inv, Player player)
