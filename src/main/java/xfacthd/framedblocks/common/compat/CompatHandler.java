@@ -3,6 +3,7 @@ package xfacthd.framedblocks.common.compat;
 import net.minecraftforge.fml.ModList;
 import xfacthd.framedblocks.FramedBlocks;
 //import xfacthd.framedblocks.common.compat.buildinggadgets.BuildingGadgetsCompat;
+//import xfacthd.framedblocks.common.compat.flywheel.FlywheelCompat;
 
 public final class CompatHandler
 {
@@ -24,6 +25,8 @@ public final class CompatHandler
         //        FramedBlocks.LOGGER.warn("An error occured while initializing Building Gadgets integration!", e);
         //    }
         //}
+
+        //FlywheelCompat.init();
     }
 
 
