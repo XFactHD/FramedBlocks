@@ -20,6 +20,8 @@ build
 # other
 eclipse
 run
+run_server
+run_gametest
 .cache
 
 # Files from Forge MDK
