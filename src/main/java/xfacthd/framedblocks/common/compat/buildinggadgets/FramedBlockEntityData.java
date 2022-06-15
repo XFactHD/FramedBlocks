@@ -12,10 +12,12 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.phys.shapes.CollisionContext;
 import xfacthd.framedblocks.api.block.FramedBlockEntity;
 import xfacthd.framedblocks.common.FBContent;
 import xfacthd.framedblocks.common.blockentity.FramedDoubleBlockEntity;
 import xfacthd.framedblocks.common.util.FramedUtils;
+import xfacthd.framedblocks.common.util.ServerConfig;
 
 class FramedBlockEntityData extends NBTTileEntityData
 {
@@ -96,6 +98,12 @@ class FramedBlockEntityData extends NBTTileEntityData
         if (be.isGlowing())
         {
             builder.add(UniqueItem.ofStack(new ItemStack(Items.GLOWSTONE_DUST)));
+        }
+
+        //Add intangible marker item
+        if (be.isIntangible(CollisionContext.empty()))
+        {
+            builder.add(UniqueItem.ofStack(new ItemStack(ServerConfig.intangibleMarkerItem)));
         }
 
         return builder.build();

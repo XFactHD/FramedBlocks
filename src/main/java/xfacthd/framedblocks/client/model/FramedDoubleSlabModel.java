@@ -20,6 +20,6 @@ public class FramedDoubleSlabModel extends FramedDoubleBlockModel
     @Override
     public TextureAtlasSprite getParticleIcon(@NotNull IModelData data)
     {
-        return getSpriteOrDefault(data, FramedDoubleBlockEntity.DATA_RIGHT, getModels().getA());
+        return getSpriteOrDefault(data, FramedDoubleBlockEntity.DATA_RIGHT, getModels().getB());
     }
 }

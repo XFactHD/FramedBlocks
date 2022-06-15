@@ -117,8 +117,8 @@ public final class FBClient
         FramedChestRenderer.onModelsLoaded(registry); //Must happen before the chest model is replaced
 
         List<Property<?>> ignoreWaterlogged = List.of(BlockStateProperties.WATERLOGGED);
-        List<Property<?>> ignoreSolid = List.of(FramedProperties.SOLID);
-        List<Property<?>> ignoreDefault = List.of(BlockStateProperties.WATERLOGGED, FramedProperties.SOLID);
+        List<Property<?>> ignoreSolid = List.of(FramedProperties.SOLID, FramedProperties.GLOWING);
+        List<Property<?>> ignoreDefault = List.of(BlockStateProperties.WATERLOGGED, FramedProperties.SOLID, FramedProperties.GLOWING);
 
         ClientUtils.replaceModels(FBContent.blockFramedCube, registry, FramedCubeModel::new, ignoreSolid);
         ClientUtils.replaceModels(FBContent.blockFramedSlope, registry, FramedSlopeModel::new, FramedSlopeModel.itemSource(), ignoreDefault);
