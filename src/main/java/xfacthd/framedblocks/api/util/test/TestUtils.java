@@ -260,7 +260,7 @@ public final class TestUtils
                     assertBlockLight(helper, blockPos, lightPos, 13);
                 },
                 () -> applyCamo(helper, blockPos, Blocks.GLASS, camoSides),
-                new TestDelay(5), //() -> {}, //Light occlusion changes from BlockState changes may take a few ticks to propagate, apparently
+                new TestDelay(5), //Light occlusion changes from BlockState changes may take a few ticks to propagate, apparently
                 () ->
                 {
                     helper.assertBlockProperty(blockPos, FramedProperties.SOLID, false);
@@ -268,7 +268,7 @@ public final class TestUtils
                 },
                 () -> applyCamo(helper, blockPos, Blocks.AIR, camoSides),
                 () -> applyCamo(helper, blockPos, Blocks.GRANITE, camoSides),
-                new TestDelay(5), //() -> {}, //Light occlusion changes from BlockState changes may take a few ticks to propagate, apparently
+                new TestDelay(5), //Light occlusion changes from BlockState changes may take a few ticks to propagate, apparently
                 () ->
                 {
                     helper.assertBlockProperty(blockPos, FramedProperties.SOLID, true);
@@ -294,10 +294,10 @@ public final class TestUtils
                 () -> helper.setBlock(EMISSION_BLOCK, state),
                 () -> assertBlockLightEmission(helper, EMISSION_BLOCK, EMISSION_LIGHT, baseEmission), //Check base emission
                 () -> applyCamo(helper, EMISSION_BLOCK, Blocks.GLOWSTONE, camoSides),
-                new TestDelay(5), //() -> {}, //Light changes from BlockState changes may take a few ticks to propagate, apparently
+                new TestDelay(5), //Light changes from BlockState changes may take a few ticks to propagate, apparently
                 () -> assertBlockLightEmission(helper, EMISSION_BLOCK, EMISSION_LIGHT, glowstoneLight), //Check camo emission
                 () -> applyCamo(helper, EMISSION_BLOCK, Blocks.AIR, camoSides),
-                new TestDelay(5), //() -> {}, //Light changes from BlockState changes may take a few ticks to propagate, apparently
+                new TestDelay(5), //Light changes from BlockState changes may take a few ticks to propagate, apparently
                 () -> assertBlockLightEmission(helper, EMISSION_BLOCK, EMISSION_LIGHT, baseEmission), //Check camo emission reset
                 () -> clickWithItem(helper, EMISSION_BLOCK, Items.GLOWSTONE_DUST),
                 () -> assertBlockLightEmission(helper, EMISSION_BLOCK, EMISSION_LIGHT, 15), //Check glowstone dust emission without camo
