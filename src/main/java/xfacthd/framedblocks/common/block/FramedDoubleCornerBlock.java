@@ -77,13 +77,13 @@ public class FramedDoubleCornerBlock extends AbstractFramedDoubleBlock
             CamoContainer camo = (type.isHorizontal() || type.isTop()) ? dbe.getCamo() : dbe.getCamoTwo();
             if (!camo.isEmpty())
             {
-                return camo.getState().getSoundType();
+                return camo.getSoundType();
             }
 
             camo = (type.isHorizontal() || type.isTop()) ? dbe.getCamoTwo() : dbe.getCamo();
             if (!camo.isEmpty())
             {
-                return camo.getState().getSoundType();
+                return camo.getSoundType();
             }
         }
         return getSoundType(state);

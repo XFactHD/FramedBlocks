@@ -61,13 +61,13 @@ public class FramedDoubleSlopeBlock extends AbstractFramedDoubleBlock
                 CamoContainer camo = type == SlopeType.TOP ? dbe.getCamo() : dbe.getCamoTwo();
                 if (!camo.isEmpty())
                 {
-                    return camo.getState().getSoundType();
+                    return camo.getSoundType();
                 }
 
                 camo = type == SlopeType.TOP ? dbe.getCamoTwo() : dbe.getCamo();
                 if (!camo.isEmpty())
                 {
-                    return camo.getState().getSoundType();
+                    return camo.getSoundType();
                 }
             }
             return getSoundType(state);

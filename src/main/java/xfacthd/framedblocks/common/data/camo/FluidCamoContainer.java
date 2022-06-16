@@ -5,6 +5,7 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.NbtUtils;
 import net.minecraft.world.item.*;
 import net.minecraft.world.level.BlockAndTintGetter;
+import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.material.Fluid;
 import net.minecraft.world.level.material.FluidState;
@@ -67,6 +68,13 @@ public class FluidCamoContainer extends CamoContainer
 
     @Override
     public Fluid getFluid() { return fluidState.getType(); }
+
+    @Override
+    public SoundType getSoundType()
+    {
+        //TODO: build custom sound type suitable for the contained fluid
+        return super.getSoundType();
+    }
 
     @Override
     public ContainerType getType() { return ContainerType.FLUID; }

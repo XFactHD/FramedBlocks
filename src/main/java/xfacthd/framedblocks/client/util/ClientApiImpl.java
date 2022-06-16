@@ -6,7 +6,7 @@ import net.minecraft.world.level.material.Fluid;
 import xfacthd.framedblocks.api.FramedBlocksClientAPI;
 import xfacthd.framedblocks.api.type.IBlockType;
 import xfacthd.framedblocks.api.util.client.OutlineRender;
-import xfacthd.framedblocks.client.model.FluidDummyModel;
+import xfacthd.framedblocks.client.model.FluidModel;
 import xfacthd.framedblocks.client.render.BlockOutlineRenderer;
 
 @SuppressWarnings("unused")
@@ -16,7 +16,7 @@ public class ClientApiImpl implements FramedBlocksClientAPI
     public BlockColor defaultBlockColor() { return FramedBlockColor.INSTANCE; }
 
     @Override
-    public BakedModel createFluidModel(Fluid fluid) { return new FluidDummyModel(fluid); }
+    public BakedModel createFluidModel(Fluid fluid) { return FluidModel.create(fluid); }
 
     @Override
     public void registerOutlineRender(IBlockType type, OutlineRender render)

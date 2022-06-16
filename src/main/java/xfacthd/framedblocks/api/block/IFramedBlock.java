@@ -135,7 +135,7 @@ public interface IFramedBlock extends EntityBlock//, IFacade
             CamoContainer camo = be.getCamo();
             if (!camo.isEmpty())
             {
-                return camo.getState().getSoundType();
+                return camo.getSoundType();
             }
         }
         return ((Block) this).getSoundType(state);

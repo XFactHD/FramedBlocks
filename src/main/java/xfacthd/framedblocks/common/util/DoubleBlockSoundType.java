@@ -24,7 +24,7 @@ public class DoubleBlockSoundType extends SoundType
     public float getPitch() { return getSoundType(be.getSoundMode()).getPitch(); }
 
     @Override
-    public SoundEvent getBreakSound() { return be.getBlockState().getSoundType().getBreakSound(); }
+    public SoundEvent getBreakSound() { return be.getCamo().getSoundType().getBreakSound(); }
 
     @Override
     public SoundEvent getStepSound() { return getSoundType(be.getSoundMode()).getStepSound(); }
@@ -50,10 +50,10 @@ public class DoubleBlockSoundType extends SoundType
         CamoContainer camo = mode == DoubleSoundMode.SECOND ? be.getCamoTwo() : be.getCamo();
         if (!camo.isEmpty())
         {
-            return camo.getState().getSoundType(be.getLevel(), be.getBlockPos(), null);
+            return camo.getSoundType();
         }
 
-        return be.getBlockState().getSoundType();
+        return be.getCamo().getSoundType();
     }
 
     private SoundType getEitherSoundType()
@@ -61,15 +61,15 @@ public class DoubleBlockSoundType extends SoundType
         CamoContainer camo = be.getCamo();
         if (!camo.isEmpty())
         {
-            return camo.getState().getSoundType(be.getLevel(), be.getBlockPos(), null);
+            return camo.getSoundType();
         }
 
         camo = be.getCamoTwo();
         if (!camo.isEmpty())
         {
-            return camo.getState().getSoundType(be.getLevel(), be.getBlockPos(), null);
+            return camo.getSoundType();
         }
 
-        return be.getBlockState().getSoundType();
+        return be.getCamo().getSoundType();
     }
 }

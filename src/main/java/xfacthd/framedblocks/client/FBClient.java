@@ -23,6 +23,7 @@ import xfacthd.framedblocks.api.util.FramedConstants;
 import xfacthd.framedblocks.api.util.FramedProperties;
 import xfacthd.framedblocks.api.util.client.ClientUtils;
 import xfacthd.framedblocks.client.model.*;
+import xfacthd.framedblocks.client.model.FluidModel;
 import xfacthd.framedblocks.client.render.*;
 import xfacthd.framedblocks.client.render.outline.*;
 import xfacthd.framedblocks.client.screen.FramedStorageScreen;
@@ -107,6 +108,7 @@ public final class FBClient
     {
         ForgeModelBakery.addSpecialModel(FramedMarkedCubeModel.SLIME_FRAME_LOCATION);
         ForgeModelBakery.addSpecialModel(FramedMarkedCubeModel.REDSTONE_FRAME_LOCATION);
+        ForgeModelBakery.addSpecialModel(FluidModel.BARE_MODEL);
     }
 
     @SubscribeEvent

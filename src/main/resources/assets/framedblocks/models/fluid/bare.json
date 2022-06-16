@@ -1,0 +1,22 @@
+{
+  "parent": "minecraft:block/block",
+  "textures": {
+    "end": "minecraft:block/water_still",
+    "side": "minecraft:block/water_flow",
+    "particle": "#end"
+  },
+  "elements": [
+    {
+      "from": [ 0, 0, 0 ],
+      "to": [ 16, 16, 16 ],
+      "faces": {
+        "down":  { "texture": "#end",  "tintindex": 0, "cullface": "down" },
+        "up":    { "texture": "#end",  "tintindex": 0, "cullface": "up" },
+        "north": { "texture": "#side", "uv": [ 0, 0, 8, 8 ], "tintindex": 0, "cullface": "north" },
+        "south": { "texture": "#side", "uv": [ 0, 0, 8, 8 ], "tintindex": 0, "cullface": "south" },
+        "west":  { "texture": "#side", "uv": [ 0, 0, 8, 8 ], "tintindex": 0, "cullface": "west" },
+        "east":  { "texture": "#side", "uv": [ 0, 0, 8, 8 ], "tintindex": 0, "cullface": "east" }
+      }
+    }
+  ]
+}

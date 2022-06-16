@@ -57,13 +57,13 @@ public class FramedDoubleThreewayCornerBlock extends AbstractFramedDoubleBlock
             CamoContainer camo = top ? dbe.getCamo() : dbe.getCamoTwo();
             if (!camo.isEmpty())
             {
-                return camo.getState().getSoundType();
+                return camo.getSoundType();
             }
 
             camo = top ? dbe.getCamoTwo() : dbe.getCamo();
             if (!camo.isEmpty())
             {
-                return camo.getState().getSoundType();
+                return camo.getSoundType();
             }
         }
         return getSoundType(state);

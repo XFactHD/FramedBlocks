@@ -66,7 +66,6 @@ public class FramedBlockEntity extends BlockEntity
         }
         else if (camo.getType().isFluid() && stack.getCapability(CapabilityFluidHandler.FLUID_HANDLER_ITEM_CAPABILITY).isPresent())
         {
-            if (true) { return InteractionResult.PASS; }
             return clearFluidCamo(player, camo, stack, secondary);
         }
         else if (camo.isEmpty() && stack.getItem() instanceof BlockItem)
@@ -75,7 +74,6 @@ public class FramedBlockEntity extends BlockEntity
         }
         else if (camo.isEmpty() && stack.getCapability(CapabilityFluidHandler.FLUID_HANDLER_ITEM_CAPABILITY).isPresent())
         {
-            if (true) { return InteractionResult.PASS; }
             return setFluidCamo(player, stack, secondary);
         }
         else if (stack.is(Tags.Items.DUSTS_GLOWSTONE) && !glowing)

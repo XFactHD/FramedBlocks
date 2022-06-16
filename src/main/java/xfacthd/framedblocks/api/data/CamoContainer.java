@@ -7,6 +7,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.BlockAndTintGetter;
 import net.minecraft.world.level.BlockGetter;
+import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.Property;
 import net.minecraft.world.level.material.Fluid;
@@ -80,6 +81,11 @@ public abstract class CamoContainer
         state = state.cycle(prop);
         return true;
     }
+
+    /**
+     * Returns the {@link SoundType} to use for the camo this container holds
+     */
+    public SoundType getSoundType() { return state.getSoundType(); }
 
     /**
      * Returns true if this container is empty
