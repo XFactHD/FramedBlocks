@@ -29,12 +29,12 @@ description='''
     ordering="NONE"
     side="BOTH"
 
-#[[dependencies.framedblocks]]
-#    modId="buildinggadgets"
-#    mandatory=false
-#    versionRange="[3.9.0,)"
-#    ordering="AFTER"
-#    side="BOTH"
+[[dependencies.framedblocks]]
+    modId="buildinggadgets"
+    mandatory=false
+    versionRange="[3.14.0,)"
+    ordering="AFTER"
+    side="BOTH"
 
 #[[dependencies.framedblocks]]
 #    modId="ctm"

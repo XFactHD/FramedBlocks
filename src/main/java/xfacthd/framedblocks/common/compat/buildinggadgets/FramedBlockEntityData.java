@@ -1,7 +1,6 @@
 package xfacthd.framedblocks.common.compat.buildinggadgets;
 
-//TODO: reactivate when BuildingGadgets is ported
-/*import com.direwolf20.buildinggadgets.common.BuildingGadgets;
+import com.direwolf20.buildinggadgets.common.BuildingGadgets;
 import com.direwolf20.buildinggadgets.common.tainted.building.tilesupport.ITileDataSerializer;
 import com.direwolf20.buildinggadgets.common.tainted.building.tilesupport.NBTTileEntityData;
 import com.direwolf20.buildinggadgets.common.tainted.building.view.BuildContext;
@@ -20,9 +19,9 @@ import xfacthd.framedblocks.common.blockentity.FramedDoubleBlockEntity;
 import xfacthd.framedblocks.common.util.FramedUtils;
 import xfacthd.framedblocks.common.util.ServerConfig;
 
-class FramedBlockEntityData extends NBTTileEntityData //FIXME: this can't handle fluid camos in the material serialization
+class FramedBlockEntityData extends NBTTileEntityData
 {
-    public FramedBlockEntityData(FramedBlockEntity te) { super(te.writeToBlueprint(), buildMaterialList(te)); }
+    public FramedBlockEntityData(FramedBlockEntity be) { super(writeBlockEntityTag(be), buildMaterialList(be)); }
 
     public FramedBlockEntityData(CompoundTag data, MaterialList materials) { super(data, materials); }
 
@@ -59,6 +58,22 @@ class FramedBlockEntityData extends NBTTileEntityData //FIXME: this can't handle
     @Override
     public ITileDataSerializer getSerializer() { return BuildingGadgetsCompat.FRAMED_SERIALIZER.get(); }
 
+    private static CompoundTag writeBlockEntityTag(FramedBlockEntity be)
+    {
+        CompoundTag tag = be.writeToBlueprint();
+
+        if (be.getCamo().getType().isFluid())
+        {
+            tag.remove("camo");
+        }
+        if (be instanceof FramedDoubleBlockEntity dbe && dbe.getCamoTwo().getType().isFluid())
+        {
+            tag.remove("camo_two");
+        }
+
+        return tag;
+    }
+
     private static MaterialList buildMaterialList(FramedBlockEntity be)
     {
         MaterialList.SimpleBuilder builder = MaterialList.simpleBuilder();
@@ -84,13 +99,13 @@ class FramedBlockEntityData extends NBTTileEntityData //FIXME: this can't handle
         }
 
         //Add main camo stack
-        if (!be.getCamo().isEmpty())
+        if (!be.getCamo().isEmpty() && !be.getCamo().getType().isFluid())
         {
             builder.add(UniqueItem.ofStack(be.getCamo().toItemStack(ItemStack.EMPTY)));
         }
 
         //Add secondary camo stack
-        if (be instanceof FramedDoubleBlockEntity dbe && !dbe.getCamoTwo().isEmpty())
+        if (be instanceof FramedDoubleBlockEntity dbe && !dbe.getCamoTwo().isEmpty() && !dbe.getCamoTwo().getType().isFluid())
         {
             builder.add(UniqueItem.ofStack(dbe.getCamoTwo().toItemStack(ItemStack.EMPTY)));
         }
@@ -109,4 +124,4 @@ class FramedBlockEntityData extends NBTTileEntityData //FIXME: this can't handle
 
         return builder.build();
     }
-}*/
+}

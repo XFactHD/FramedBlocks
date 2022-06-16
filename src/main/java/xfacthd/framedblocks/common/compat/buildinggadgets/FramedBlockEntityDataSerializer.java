@@ -1,15 +1,13 @@
 package xfacthd.framedblocks.common.compat.buildinggadgets;
 
-//TODO: reactivate when BuildingGadgets is ported
-/*import com.direwolf20.buildinggadgets.common.tainted.building.tilesupport.ITileDataSerializer;
+import com.direwolf20.buildinggadgets.common.tainted.building.tilesupport.ITileDataSerializer;
 import com.direwolf20.buildinggadgets.common.tainted.building.tilesupport.ITileEntityData;
 import com.direwolf20.buildinggadgets.common.tainted.inventory.materials.MaterialList;
 import com.google.common.base.Preconditions;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.Tag;
-import net.minecraftforge.registries.ForgeRegistryEntry;
 
-class FramedBlockEntityDataSerializer extends ForgeRegistryEntry<ITileDataSerializer> implements ITileDataSerializer
+class FramedBlockEntityDataSerializer implements ITileDataSerializer
 {
     FramedBlockEntityDataSerializer() { }
 
@@ -46,4 +44,4 @@ class FramedBlockEntityDataSerializer extends ForgeRegistryEntry<ITileDataSerial
 
         return new FramedBlockEntityData(data, materialList);
     }
-}*/
+}

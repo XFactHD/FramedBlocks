@@ -141,7 +141,7 @@ dependencies {
     //runtimeOnly fg.deobf("curse.maven:puzzleslib-495476:3681966") //Only needed when Diagonal Fences is switched to implementation
     //compileOnly fg.deobf("curse.maven:diagonalfences-458048:3768260")
 
-    //compileOnly fg.deobf("curse.maven:buildinggadgets-298187:3725903")
+    compileOnly fg.deobf("curse.maven:buildinggadgets-298187:3829297")
 
     //runtimeOnly fg.deobf("curse.maven:jei-238222:3773518")
     //runtimeOnly fg.deobf("curse.maven:spark-361579:3767286")
