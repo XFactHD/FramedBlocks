@@ -25,8 +25,9 @@ public class CornerPillarSkipPredicate implements SideSkipPredicate
                 case FRAMED_SLAB_CORNER -> testAgainstCorner(level, pos, dir, adjState, side);
                 case FRAMED_DOUBLE_PANEL -> testAgainstDoublePanel(level, pos, dir, adjState, side);
                 case FRAMED_STAIRS -> testAgainstStairs(level, pos, dir, adjState, side);
+                case FRAMED_HALF_STAIRS -> testAgainstHalfStairs(level, pos, dir, adjState, side);
                 case FRAMED_VERTICAL_STAIRS -> testAgainstVerticalStairs(level, pos, dir, adjState, side);
-                case FRAMED_VERTICAL_HALF_STAIRS -> testAgainstHalfStairs(level, pos, dir, adjState, side);
+                case FRAMED_VERTICAL_DOUBLE_STAIRS -> testAgainstVerticalDoubleStairs(level, pos, dir, adjState, side);
                 case FRAMED_SLOPE_PANEL -> testAgainstSlopePanel(level, pos, dir, adjState, side);
                 case FRAMED_EXTENDED_SLOPE_PANEL -> testAgainstExtendedSlopePanel(level, pos, dir, adjState, side);
                 case FRAMED_DOUBLE_SLOPE_PANEL -> testAgainstDoubleSlopePanel(level, pos, dir, adjState, side);
@@ -57,6 +58,10 @@ public class CornerPillarSkipPredicate implements SideSkipPredicate
         {
             return SideSkipPredicate.compareState(level, pos, side);
         }
+        else if (Utils.isY(side) && adjDir == dir)
+        {
+            return SideSkipPredicate.compareState(level, pos, side, dir, side.getOpposite());
+        }
         return false;
     }
 
@@ -66,7 +71,7 @@ public class CornerPillarSkipPredicate implements SideSkipPredicate
         boolean adjTop = adjState.getValue(PropertyHolder.TOP);
         if ((adjTop && side == Direction.DOWN) || (!adjTop && side == Direction.UP))
         {
-            return dir == adjDir && SideSkipPredicate.compareState(level, pos, side);
+            return dir == adjDir && SideSkipPredicate.compareState(level, pos, side, dir, side.getOpposite());
         }
         return false;
     }
@@ -97,11 +102,11 @@ public class CornerPillarSkipPredicate implements SideSkipPredicate
         {
             if (adjShape == StairsShape.OUTER_LEFT)
             {
-                return dir == adjDir && SideSkipPredicate.compareState(level, pos, side);
+                return dir == adjDir && SideSkipPredicate.compareState(level, pos, side, dir, side.getOpposite());
             }
             if (adjShape == StairsShape.OUTER_RIGHT)
             {
-                return dir.getCounterClockWise() == adjDir && SideSkipPredicate.compareState(level, pos, side);
+                return dir.getCounterClockWise() == adjDir && SideSkipPredicate.compareState(level, pos, side, dir, side.getOpposite());
             }
         }
         return false;
@@ -116,15 +121,34 @@ public class CornerPillarSkipPredicate implements SideSkipPredicate
         {
             if ((side == dir.getCounterClockWise() || side == dir) && adjDir == dir)
             {
-                return SideSkipPredicate.compareState(level, pos, side);
+                return SideSkipPredicate.compareState(level, pos, side, dir, side.getOpposite());
             }
         }
         else if (Utils.isY(side))
         {
             if ((side == Direction.DOWN) == adjType.isTop() && adjDir == dir)
             {
-                return SideSkipPredicate.compareState(level, pos, side);
+                return SideSkipPredicate.compareState(level, pos, side, dir, side.getOpposite());
             }
+        }
+        return false;
+    }
+
+    private static boolean testAgainstVerticalDoubleStairs(BlockGetter level, BlockPos pos, Direction dir, BlockState adjState, Direction side)
+    {
+        Direction adjDir = adjState.getValue(PropertyHolder.FACING_HOR);
+
+        if (Utils.isY(side) && adjDir == dir.getOpposite())
+        {
+            return SideSkipPredicate.compareState(level, pos, side, dir, dir);
+        }
+        else if (adjDir == dir && (side == dir || side == dir.getCounterClockWise()))
+        {
+            return SideSkipPredicate.compareState(level, pos, side, dir, dir);
+        }
+        else if ((adjDir == dir.getCounterClockWise() && side == dir.getCounterClockWise()) || (adjDir == dir.getClockWise() && side == dir))
+        {
+            return SideSkipPredicate.compareState(level, pos, side);
         }
         return false;
     }
@@ -139,7 +163,7 @@ public class CornerPillarSkipPredicate implements SideSkipPredicate
         {
             if ((adjRight && adjDir == dir.getCounterClockWise()) || (!adjRight && adjDir == dir))
             {
-                return SideSkipPredicate.compareState(level, pos, side);
+                return SideSkipPredicate.compareState(level, pos, side, dir, side.getOpposite());
             }
         }
         else if ((adjRight && side == dir) || (!adjRight && side == dir.getCounterClockWise()))

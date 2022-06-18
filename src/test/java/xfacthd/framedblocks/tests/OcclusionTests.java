@@ -1316,6 +1316,37 @@ public final class OcclusionTests
         TestUtils.testBlockOccludesLightNorth(helper, state);
     }
 
+    @GameTest(template = "box_top", batch = "occlusion")
+    @TestedType(type = BlockType.FRAMED_DOUBLE_STAIRS)
+    public static void test_DoubleStairs_Bottom(GameTestHelper helper)
+    {
+        BlockState state = FBContent.blockFramedDoubleStairs.get()
+                .defaultBlockState()
+                .setValue(FramedProperties.FACING_HOR, Direction.SOUTH);
+        TestUtils.testDoubleBlockOccludesLightBelow(helper, state, List.of(Direction.DOWN, Direction.UP));
+    }
+
+    @GameTest(template = "box_top", batch = "occlusion")
+    @TestedType(type = BlockType.FRAMED_DOUBLE_STAIRS)
+    public static void test_DoubleStairs_Top(GameTestHelper helper)
+    {
+        BlockState state = FBContent.blockFramedDoubleStairs.get()
+                .defaultBlockState()
+                .setValue(FramedProperties.FACING_HOR, Direction.SOUTH)
+                .setValue(FramedProperties.TOP, true);
+        TestUtils.testDoubleBlockOccludesLightBelow(helper, state, List.of(Direction.DOWN, Direction.UP));
+    }
+
+    @GameTest(template = "box_top", batch = "occlusion")
+    @TestedType(type = BlockType.FRAMED_VERTICAL_DOUBLE_STAIRS)
+    public static void test_VerticalDoubleStairs(GameTestHelper helper)
+    {
+        BlockState state = FBContent.blockFramedVerticalDoubleStairs.get()
+                .defaultBlockState()
+                .setValue(FramedProperties.FACING_HOR, Direction.SOUTH);
+        TestUtils.testDoubleBlockOccludesLightBelow(helper, state, List.of(Direction.EAST, Direction.WEST));
+    }
+
 
 
     private static boolean firstBatch = true;

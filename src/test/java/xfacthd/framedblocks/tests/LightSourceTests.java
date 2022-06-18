@@ -11,8 +11,8 @@ import net.minecraftforge.registries.ForgeRegistries;
 import xfacthd.framedblocks.FramedBlocks;
 import xfacthd.framedblocks.api.block.IFramedBlock;
 import xfacthd.framedblocks.api.type.IBlockType;
+import xfacthd.framedblocks.api.util.FramedProperties;
 import xfacthd.framedblocks.api.util.test.TestUtils;
-import xfacthd.framedblocks.common.FBContent;
 import xfacthd.framedblocks.common.data.BlockType;
 
 import java.util.*;
@@ -31,7 +31,7 @@ public final class LightSourceTests
                 .map(type -> new ResourceLocation(FramedBlocks.MODID, type.getName()))
                 .map(ForgeRegistries.BLOCKS::getValue)
                 .filter(Objects::nonNull)
-                .map(Block::defaultBlockState)
+                .map(LightSourceTests::getTestState)
                 .map(state -> new TestFunction(
                         BATCH_NAME,
                         getTestName(state),
@@ -52,6 +52,22 @@ public final class LightSourceTests
                 type != BlockType.FRAMED_SOUL_WALL_TORCH;
     }
 
+    private static BlockState getTestState(Block block)
+    {
+        Preconditions.checkArgument(block instanceof IFramedBlock);
+
+        IBlockType type = ((IFramedBlock) block).getBlockType();
+        if (type == BlockType.FRAMED_DOUBLE_STAIRS)
+        {
+            return block.defaultBlockState().setValue(FramedProperties.FACING_HOR, Direction.SOUTH);
+        }
+        if (type == BlockType.FRAMED_VERTICAL_DOUBLE_STAIRS)
+        {
+            return block.defaultBlockState().setValue(FramedProperties.FACING_HOR, Direction.SOUTH);
+        }
+        return block.defaultBlockState();
+    }
+
     private static String getTestName(BlockState state)
     {
         ResourceLocation regName = state.getBlock().getRegistryName();
@@ -69,12 +85,16 @@ public final class LightSourceTests
             return List.of(Direction.UP);
         }
 
-        if (block == FBContent.blockFramedDoublePanel.get() ||
-            block == FBContent.blockFramedDoubleSlopePanel.get() ||
-            block == FBContent.blockFramedInverseDoubleSlopePanel.get()
+        if (type == BlockType.FRAMED_DOUBLE_PANEL ||
+            type == BlockType.FRAMED_DOUBLE_SLOPE_PANEL ||
+            type == BlockType.FRAMED_INV_DOUBLE_SLOPE_PANEL
         )
         {
             return List.of(Direction.NORTH, Direction.SOUTH);
+        }
+        else if (type == BlockType.FRAMED_VERTICAL_DOUBLE_STAIRS)
+        {
+            return List.of(Direction.EAST, Direction.WEST);
         }
 
         return List.of(Direction.UP, Direction.DOWN);

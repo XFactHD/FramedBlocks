@@ -62,6 +62,8 @@
     "framedblocks:framed_slope_panel",
     "framedblocks:framed_extended_slope_panel",
     "framedblocks:framed_double_slope_panel",
-    "framedblocks:framed_inv_double_slope_panel"
+    "framedblocks:framed_inv_double_slope_panel",
+    "framedblocks:framed_double_stairs",
+    "framedblocks:framed_vertical_double_stairs"
   ]
 }

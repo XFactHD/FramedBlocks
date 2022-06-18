@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "SE"
+  ],
+  "key": {
+    "S": {
+      "item": "framedblocks:framed_stairs"
+    },
+    "E": {
+      "item": "framedblocks:framed_slab_edge"
+    }
+  },
+  "result": {
+    "item": "framedblocks:framed_double_stairs"
+  }
+}

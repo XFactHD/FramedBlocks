@@ -25,7 +25,9 @@ public class SlabCornerSkipPredicate implements SideSkipPredicate
                 case FRAMED_SLAB_EDGE -> testAgainstEdge(level, pos, dir, top, adjState, side);
                 case FRAMED_CORNER_PILLAR -> testAgainstPillar(level, pos, dir, top, adjState, side);
                 case FRAMED_STAIRS -> testAgainstStairs(level, pos, dir, top, adjState, side);
+                case FRAMED_DOUBLE_STAIRS -> testAgainstDoubleStairs(level, pos, dir, top, adjState, side);
                 case FRAMED_VERTICAL_STAIRS -> testAgainstVerticalStairs(level, pos, dir, top, adjState, side);
+                case FRAMED_VERTICAL_DOUBLE_STAIRS -> testAgainstVerticalDoubleStairs(level, pos, dir, top, adjState, side);
                 case FRAMED_HALF_STAIRS -> testAgainstHalfStairs(level, pos, dir, top, adjState, side);
                 case FRAMED_VERTICAL_HALF_STAIRS -> testAgainstVerticalHalfStairs(level, pos, dir, top, adjState, side);
                 default -> false;
@@ -92,6 +94,20 @@ public class SlabCornerSkipPredicate implements SideSkipPredicate
         return false;
     }
 
+    private static boolean testAgainstDoubleStairs(BlockGetter level, BlockPos pos, Direction dir, boolean top, BlockState adjState, Direction side)
+    {
+        if (Utils.isY(side)) { return false; }
+
+        Direction adjDir = adjState.getValue(PropertyHolder.FACING_HOR);
+        boolean adjTop = adjState.getValue(PropertyHolder.TOP);
+
+        if ((side == dir && adjDir == dir.getClockWise()) || (side == dir.getCounterClockWise() && adjDir == dir.getOpposite()))
+        {
+            return top != adjTop && SideSkipPredicate.compareState(level, pos, side, side, adjDir.getOpposite());
+        }
+        return false;
+    }
+
     private static boolean testAgainstVerticalStairs(BlockGetter level, BlockPos pos, Direction dir, boolean top, BlockState adjState, Direction side)
     {
         Direction adjDir = adjState.getValue(PropertyHolder.FACING_HOR);
@@ -102,6 +118,19 @@ public class SlabCornerSkipPredicate implements SideSkipPredicate
         if (Utils.isY(side) || side == dir || side == dir.getCounterClockWise())
         {
             return SideSkipPredicate.compareState(level, pos, side);
+        }
+        return false;
+    }
+
+    private static boolean testAgainstVerticalDoubleStairs(BlockGetter level, BlockPos pos, Direction dir, boolean top, BlockState adjState, Direction side)
+    {
+        Direction adjDir = adjState.getValue(PropertyHolder.FACING_HOR);
+
+        if (!(adjDir == dir.getOpposite())) { return false; }
+
+        if ((top && side == Direction.UP) || (!top && side == Direction.DOWN))
+        {
+            return SideSkipPredicate.compareState(level, pos, side, side, dir);
         }
         return false;
     }
