@@ -43,7 +43,8 @@ public class FramedSignScreen extends Screen
 {
     private static final Table<BlockState, Direction, TextureAtlasSprite> SPRITE_CACHE = HashBasedTable.create();
     private static final ResourceLocation DEFAULT_TEXTURE = new ResourceLocation(FramedConstants.MOD_ID, "block/framed_block");
-    private static final Component DONE = Utils.translate("button", "gui.done");
+    public static final Component TITLE = Utils.translate("title", "sign.edit");
+    public static final Component DONE = Utils.translate("button", "gui.done");
 
     private final FramedSignBlockEntity sign;
     private final String[] lines = new String[4];
@@ -53,7 +54,7 @@ public class FramedSignScreen extends Screen
 
     public FramedSignScreen(FramedSignBlockEntity sign)
     {
-        super(Utils.translate("title", "sign.edit"));
+        super(TITLE);
         this.sign = sign;
 
         for (int i = 0; i < 4; i++) { lines[i] = sign.getLine(i).getString(); }

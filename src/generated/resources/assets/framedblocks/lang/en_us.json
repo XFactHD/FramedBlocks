@@ -61,6 +61,7 @@
   "block.framedblocks.framed_vertical_stairs": "Framed Vertical Stairs",
   "block.framedblocks.framed_wall": "Framed Wall",
   "block.framedblocks.framed_wall_sign": "Framed Sign",
+  "button.framedblocks.gui.done": "Done",
   "desc.framed_blocks.blueprint_block": "Contained Block: %s",
   "desc.framed_blocks.blueprint_camo": "Camo Block: %s",
   "desc.framed_blocks.blueprint_illuminated": "Illuminated: %s",
@@ -79,5 +80,6 @@
   "msg.framedblocks.blacklisted": "This block is blacklisted!",
   "msg.framedblocks.block_entity": "Blocks with BlockEntities cannot be inserted into framed blocks!",
   "title.framedblocks.framed_chest": "Framed Chest",
-  "title.framedblocks.framed_secret_storage": "Framed Secret Storage"
+  "title.framedblocks.framed_secret_storage": "Framed Secret Storage",
+  "title.framedblocks.sign.edit": "Edit sign"
 }

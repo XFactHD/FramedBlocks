@@ -1,9 +1,13 @@
 package xfacthd.framedblocks.common.datagen.providers;
 
 import net.minecraft.data.DataGenerator;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.ComponentContents;
+import net.minecraft.network.chat.contents.TranslatableContents;
 import net.minecraftforge.common.data.LanguageProvider;
 import xfacthd.framedblocks.FramedBlocks;
 import xfacthd.framedblocks.api.util.FramedConstants;
+import xfacthd.framedblocks.client.screen.FramedSignScreen;
 import xfacthd.framedblocks.client.util.KeyMappings;
 import xfacthd.framedblocks.common.FBContent;
 import xfacthd.framedblocks.common.blockentity.FramedStorageBlockEntity;
@@ -88,19 +92,34 @@ public class FramedLanguageProvider extends LanguageProvider
         add(KeyMappings.KEY_CATEGORY, "FramedBlocks");
         add(KeyMappings.KEYMAPPING_UPDATE_CULLING.get().getName(), "Update culling cache");
 
-        add(FramedBlocks.FRAMED_TAB.getDisplayName().getString(), "FramedBlocks");
-        add(FramedBlockEntity.MSG_BLACKLISTED.getString(), "This block is blacklisted!");
-        add(FramedBlockEntity.MSG_BLOCK_ENTITY.getString(), "Blocks with BlockEntities cannot be inserted into framed blocks!");
-        add(FramedChestBlockEntity.TITLE.getString(), "Framed Chest");
-        add(FramedStorageBlockEntity.TITLE.getString(), "Framed Secret Storage");
+        add(FramedBlocks.FRAMED_TAB.getDisplayName(), "FramedBlocks");
+        add(FramedBlockEntity.MSG_BLACKLISTED, "This block is blacklisted!");
+        add(FramedBlockEntity.MSG_BLOCK_ENTITY, "Blocks with BlockEntities cannot be inserted into framed blocks!");
+        add(FramedChestBlockEntity.TITLE, "Framed Chest");
+        add(FramedStorageBlockEntity.TITLE, "Framed Secret Storage");
         add(FramedBlueprintItem.CONTAINED_BLOCK, "Contained Block: %s");
         add(FramedBlueprintItem.CAMO_BLOCK, "Camo Block: %s");
         add(FramedBlueprintItem.IS_ILLUMINATED, "Illuminated: %s");
-        add(FramedBlueprintItem.BLOCK_NONE.getString(), "None");
-        add(FramedBlueprintItem.BLOCK_INVALID.getString(), "Invalid");
-        add(FramedBlueprintItem.ILLUMINATED_FALSE.getString(), "false");
-        add(FramedBlueprintItem.ILLUMINATED_TRUE.getString(), "true");
-        add(FramedBlueprintItem.CANT_COPY.getString(), "This block can currently not be copied!");
-        add(FramedBlueprintItem.CANT_PLACE_FLUID_CAMO.getString(), "Copying blocks with fluid camos is currently not possible!");
+        add(FramedBlueprintItem.BLOCK_NONE, "None");
+        add(FramedBlueprintItem.BLOCK_INVALID, "Invalid");
+        add(FramedBlueprintItem.ILLUMINATED_FALSE, "false");
+        add(FramedBlueprintItem.ILLUMINATED_TRUE, "true");
+        add(FramedBlueprintItem.CANT_COPY, "This block can currently not be copied!");
+        add(FramedBlueprintItem.CANT_PLACE_FLUID_CAMO, "Copying blocks with fluid camos is currently not possible!");
+        add(FramedSignScreen.TITLE, "Edit sign");
+        add(FramedSignScreen.DONE, "Done");
+    }
+
+    private void add(Component key, String value)
+    {
+        ComponentContents contents = key.getContents();
+        if (contents instanceof TranslatableContents translatable)
+        {
+            add(translatable.getKey(), value);
+        }
+        else
+        {
+            add(key.getString(), value);
+        }
     }
 }
