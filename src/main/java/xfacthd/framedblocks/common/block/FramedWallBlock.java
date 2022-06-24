@@ -1,5 +1,7 @@
 package xfacthd.framedblocks.common.block;
 
+import com.google.common.base.Preconditions;
+import com.google.common.collect.ImmutableMap;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.world.InteractionHand;
@@ -9,18 +11,22 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.*;
-import net.minecraft.world.level.block.SoundType;
-import net.minecraft.world.level.block.WallBlock;
+import net.minecraft.world.level.block.*;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.storage.loot.LootContext;
 import net.minecraft.world.phys.BlockHitResult;
+import net.minecraft.world.phys.shapes.VoxelShape;
+import net.minecraftforge.fml.util.ObfuscationReflectionHelper;
 import xfacthd.framedblocks.api.block.IFramedBlock;
+import xfacthd.framedblocks.api.util.FramedProperties;
 import xfacthd.framedblocks.common.data.BlockType;
 import xfacthd.framedblocks.api.block.FramedBlockEntity;
 
 import javax.annotation.Nullable;
 import java.util.List;
+import java.util.Map;
 
 @SuppressWarnings("deprecation")
 public class FramedWallBlock extends WallBlock implements IFramedBlock
@@ -28,6 +34,15 @@ public class FramedWallBlock extends WallBlock implements IFramedBlock
     public FramedWallBlock()
     {
         super(IFramedBlock.createProperties(BlockType.FRAMED_WALL));
+        registerDefaultState(defaultBlockState().setValue(FramedProperties.STATE_LOCKED, false));
+        fixShapeMaps();
+    }
+
+    @Override
+    protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder)
+    {
+        super.createBlockStateDefinition(builder);
+        builder.add(FramedProperties.STATE_LOCKED);
     }
 
     @Override
@@ -45,7 +60,11 @@ public class FramedWallBlock extends WallBlock implements IFramedBlock
     @Override
     public BlockState updateShape(BlockState state, Direction facing, BlockState facingState, LevelAccessor level, BlockPos currentPos, BlockPos facingPos)
     {
-        BlockState newState = super.updateShape(state, facing, facingState, level, currentPos, facingPos);
+        BlockState newState = updateShapeLockable(
+                state, level, currentPos,
+                () -> super.updateShape(state, facing, facingState, level, currentPos, facingPos)
+        );
+
         if (newState == state)
         {
             updateCulling(level, currentPos, facingState, facing, false);
@@ -108,4 +127,32 @@ public class FramedWallBlock extends WallBlock implements IFramedBlock
 
     @Override
     public BlockType getBlockType() { return BlockType.FRAMED_WALL; }
+
+
+
+    private void fixShapeMaps()
+    {
+        Map<BlockState, VoxelShape> shapeByIndex = ObfuscationReflectionHelper.getPrivateValue(WallBlock.class, this, "f_57955_");
+        shapeByIndex = fixShapeMap(shapeByIndex);
+        ObfuscationReflectionHelper.setPrivateValue(WallBlock.class, this, shapeByIndex, "f_57955_");
+
+        Map<BlockState, VoxelShape> collisionShapeByIndex = ObfuscationReflectionHelper.getPrivateValue(WallBlock.class, this, "f_57956_");
+        collisionShapeByIndex = fixShapeMap(collisionShapeByIndex);
+        ObfuscationReflectionHelper.setPrivateValue(WallBlock.class, this, collisionShapeByIndex, "f_57956_");
+    }
+
+    private Map<BlockState, VoxelShape> fixShapeMap(Map<BlockState, VoxelShape> map)
+    {
+        Preconditions.checkNotNull(map, "Got a null map?!");
+
+        ImmutableMap.Builder<BlockState, VoxelShape> builder = ImmutableMap.builder();
+        builder.putAll(map);
+
+        for (BlockState state : map.keySet())
+        {
+            builder.put(state.cycle(FramedProperties.STATE_LOCKED), map.get(state));
+        }
+
+        return builder.build();
+    }
 }

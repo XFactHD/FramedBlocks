@@ -24,6 +24,7 @@ import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import net.minecraftforge.fml.loading.FMLEnvironment;
 import net.minecraftforge.registries.ForgeRegistries;
+import net.minecraftforge.registries.RegistryObject;
 import xfacthd.framedblocks.api.util.client.ClientUtils;
 
 public final class Utils
@@ -33,6 +34,11 @@ public final class Utils
     /**Allow other mods to whitelist their BEs, circumventing the config setting*/
     public static final TagKey<Block> BE_WHITELIST = blockTag("blockentity_whitelisted");
     public static final TagKey<Item> WRENCH = itemTag("forge", "tools/wrench");
+
+    public static final RegistryObject<Item> FRAMED_KEY = RegistryObject.create(
+            new ResourceLocation(FramedConstants.MOD_ID, "framed_key"),
+            ForgeRegistries.ITEMS
+    );
 
     public static VoxelShape rotateShape(Direction from, Direction to, VoxelShape shape)
     {

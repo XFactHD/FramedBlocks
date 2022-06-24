@@ -9,15 +9,16 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.*;
-import net.minecraft.world.level.block.IronBarsBlock;
-import net.minecraft.world.level.block.SoundType;
+import net.minecraft.world.level.block.*;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.storage.loot.LootContext;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.shapes.*;
 import net.minecraftforge.client.IBlockRenderProperties;
 import xfacthd.framedblocks.api.block.IFramedBlock;
+import xfacthd.framedblocks.api.util.FramedProperties;
 import xfacthd.framedblocks.api.util.client.FramedBlockRenderProperties;
 import xfacthd.framedblocks.common.FBContent;
 import xfacthd.framedblocks.api.block.FramedBlockEntity;
@@ -36,6 +37,14 @@ public class FramedPaneBlock extends IronBarsBlock implements IFramedBlock
     {
         super(IFramedBlock.createProperties(type));
         this.type = type;
+        registerDefaultState(defaultBlockState().setValue(FramedProperties.STATE_LOCKED, false));
+    }
+
+    @Override
+    protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder)
+    {
+        super.createBlockStateDefinition(builder);
+        builder.add(FramedProperties.STATE_LOCKED);
     }
 
     @Override
@@ -53,7 +62,11 @@ public class FramedPaneBlock extends IronBarsBlock implements IFramedBlock
     @Override
     public BlockState updateShape(BlockState state, Direction facing, BlockState facingState, LevelAccessor level, BlockPos currentPos, BlockPos facingPos)
     {
-        BlockState newState = super.updateShape(state, facing, facingState, level, currentPos, facingPos);
+        BlockState newState = updateShapeLockable(
+                state, level, currentPos,
+                () -> super.updateShape(state, facing, facingState, level, currentPos, facingPos)
+        );
+
         if (newState == state)
         {
             updateCulling(level, currentPos, facingState, facing, false);

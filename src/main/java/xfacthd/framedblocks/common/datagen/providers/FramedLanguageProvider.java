@@ -6,8 +6,10 @@ import net.minecraft.network.chat.ComponentContents;
 import net.minecraft.network.chat.contents.TranslatableContents;
 import net.minecraftforge.common.data.LanguageProvider;
 import xfacthd.framedblocks.FramedBlocks;
+import xfacthd.framedblocks.api.block.IFramedBlock;
 import xfacthd.framedblocks.api.util.FramedConstants;
 import xfacthd.framedblocks.client.screen.FramedSignScreen;
+import xfacthd.framedblocks.client.screen.StateLockOverlay;
 import xfacthd.framedblocks.client.util.KeyMappings;
 import xfacthd.framedblocks.common.FBContent;
 import xfacthd.framedblocks.common.blockentity.FramedStorageBlockEntity;
@@ -88,6 +90,7 @@ public class FramedLanguageProvider extends LanguageProvider
         add(FBContent.itemFramedHammer.get(), "Framed Hammer");
         add(FBContent.itemFramedWrench.get(), "Framed Wrench");
         add(FBContent.itemFramedBlueprint.get(), "Framed Blueprint");
+        add(FBContent.itemFramedKey.get(), "Framed Key");
 
         add(KeyMappings.KEY_CATEGORY, "FramedBlocks");
         add(KeyMappings.KEYMAPPING_UPDATE_CULLING.get().getName(), "Update culling cache");
@@ -108,6 +111,10 @@ public class FramedLanguageProvider extends LanguageProvider
         add(FramedBlueprintItem.CANT_PLACE_FLUID_CAMO, "Copying blocks with fluid camos is currently not possible!");
         add(FramedSignScreen.TITLE, "Edit sign");
         add(FramedSignScreen.DONE, "Done");
+        add(IFramedBlock.LOCK_MESSAGE, "The state of this block is now %s");
+        add(StateLockOverlay.LOCK_MESSAGE, "State %s");
+        add(IFramedBlock.STATE_LOCKED, "locked");
+        add(IFramedBlock.STATE_UNLOCKED, "unlocked");
     }
 
     private void add(Component key, String value)

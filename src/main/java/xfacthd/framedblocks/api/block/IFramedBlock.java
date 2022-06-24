@@ -6,6 +6,7 @@ import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
@@ -16,6 +17,8 @@ import net.minecraft.world.item.*;
 import net.minecraft.world.level.*;
 import net.minecraft.world.level.block.*;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.state.properties.BlockStateProperties;
+import net.minecraft.world.level.material.Fluids;
 import net.minecraft.world.level.material.Material;
 import net.minecraft.world.level.storage.loot.LootContext;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
@@ -33,6 +36,7 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.List;
 import java.util.Optional;
+import java.util.function.Supplier;
 
 /**
  * The {@code team.chisel.ctm.api.IFacade} interface is not implemented directly and is instead hacked on
@@ -41,6 +45,10 @@ import java.util.Optional;
 @SuppressWarnings({ "deprecation", "unused" })
 public interface IFramedBlock extends EntityBlock//, IFacade
 {
+    String LOCK_MESSAGE = "msg." + FramedConstants.MOD_ID + ".lock_state";
+    Component STATE_LOCKED = Utils.translate("msg", ".lock_state.locked").withStyle(ChatFormatting.RED);
+    Component STATE_UNLOCKED = Utils.translate("msg", ".lock_state.unlocked").withStyle(ChatFormatting.GREEN);
+
     IBlockType getBlockType();
 
     static Block.Properties createProperties(IBlockType type)
@@ -112,6 +120,11 @@ public interface IFramedBlock extends EntityBlock//, IFacade
 
     default InteractionResult handleUse(Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hit)
     {
+        if (getBlockType().canLockState() && hand == InteractionHand.MAIN_HAND && lockState(level, pos, player, player.getItemInHand(hand)))
+        {
+            return InteractionResult.sidedSuccess(level.isClientSide());
+        }
+
         if (level.getBlockEntity(pos) instanceof FramedBlockEntity be)
         {
             return be.handleInteraction(player, hand, hit);
@@ -365,6 +378,35 @@ public interface IFramedBlock extends EntityBlock//, IFacade
         }
 
         return true;
+    }
+
+    default boolean lockState(Level level, BlockPos pos, Player player, ItemStack stack)
+    {
+        if (stack.getItem() != Utils.FRAMED_KEY.get()) { return false; }
+
+        if (!level.isClientSide())
+        {
+            BlockState state = level.getBlockState(pos);
+            boolean locked = state.getValue(FramedProperties.STATE_LOCKED);
+            player.displayClientMessage(Component.translatable(LOCK_MESSAGE, locked ? STATE_UNLOCKED : STATE_LOCKED), true);
+
+            level.setBlockAndUpdate(pos, state.cycle(FramedProperties.STATE_LOCKED));
+        }
+        return true;
+    }
+
+    default BlockState updateShapeLockable(BlockState state, LevelAccessor level, BlockPos pos, Supplier<BlockState> updateShape)
+    {
+        if (!state.getValue(FramedProperties.STATE_LOCKED))
+        {
+            return updateShape.get();
+        }
+
+        if (getBlockType().supportsWaterLogging() && state.getValue(BlockStateProperties.WATERLOGGED))
+        {
+            level.scheduleTick(pos, Fluids.WATER, Fluids.WATER.getTickDelay(level));
+        }
+        return state;
     }
 
     default Optional<MutableComponent> printCamoBlock(CompoundTag beTag)
