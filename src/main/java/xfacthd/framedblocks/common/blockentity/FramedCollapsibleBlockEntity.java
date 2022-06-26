@@ -184,6 +184,8 @@ public class FramedCollapsibleBlockEntity extends FramedBlockEntity
         }
     }
 
+    public Direction getCollapsedFace() { return collapsedFace; }
+
     public byte[] getVertexOffsets() { return vertexOffsets; }
 
     public int getPackedOffsets() { return packOffsets(vertexOffsets); }

@@ -119,6 +119,8 @@ public abstract class CamoContainer
 
     public static CamoContainer load(CompoundTag tag)
     {
+        if (tag.isEmpty()) { return EmptyCamoContainer.EMPTY; }
+
         ResourceLocation id = ResourceLocation.tryParse(tag.getString("type"));
         Factory factory = FramedBlocksAPI.getInstance().getCamoContainerFactoryRegistry().getValue(id);
         if (factory == null)

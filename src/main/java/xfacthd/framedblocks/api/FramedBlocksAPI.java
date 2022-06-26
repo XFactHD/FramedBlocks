@@ -1,10 +1,12 @@
 package xfacthd.framedblocks.api;
 
 import net.minecraft.world.item.*;
+import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.registries.IForgeRegistry;
 import xfacthd.framedblocks.api.block.FramedBlockEntity;
+import xfacthd.framedblocks.api.blueprint.BlueprintCopyBehaviour;
 import xfacthd.framedblocks.api.data.CamoContainer;
 import xfacthd.framedblocks.api.util.WriteOnceHolder;
 
@@ -78,4 +80,9 @@ public interface FramedBlocksAPI
      * Returns the camo container factory to use for the given {@link ItemStack}
      */
     CamoContainer.Factory getCamoContainerFactory(ItemStack stack);
+
+    /**
+     * Register a custom {@link BlueprintCopyBehaviour} for the given {@link Block}s
+     */
+    void registerBlueprintCopyBehaviour(BlueprintCopyBehaviour behaviour, Block... blocks);
 }

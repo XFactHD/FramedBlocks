@@ -1,17 +1,20 @@
 package xfacthd.framedblocks.common.util;
 
 import net.minecraft.world.item.*;
+import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.registries.IForgeRegistry;
 import xfacthd.framedblocks.FramedBlocks;
 import xfacthd.framedblocks.api.FramedBlocksAPI;
 import xfacthd.framedblocks.api.block.FramedBlockEntity;
+import xfacthd.framedblocks.api.blueprint.BlueprintCopyBehaviour;
 import xfacthd.framedblocks.api.data.CamoContainer;
 import xfacthd.framedblocks.client.util.ClientConfig;
 import xfacthd.framedblocks.common.FBContent;
 import xfacthd.framedblocks.common.blockentity.FramedDoubleBlockEntity;
 import xfacthd.framedblocks.common.data.camo.CamoFactories;
+import xfacthd.framedblocks.common.item.FramedBlueprintItem;
 
 @SuppressWarnings("unused")
 public class ApiImpl implements FramedBlocksAPI
@@ -57,4 +60,10 @@ public class ApiImpl implements FramedBlocksAPI
 
     @Override
     public CamoContainer.Factory getCamoContainerFactory(ItemStack stack) { return CamoFactories.getFactory(stack); }
+
+    @Override
+    public void registerBlueprintCopyBehaviour(BlueprintCopyBehaviour behaviour, Block... blocks)
+    {
+        FramedBlueprintItem.registerBehaviour(behaviour, blocks);
+    }
 }

@@ -486,7 +486,7 @@ public class FramedBlockEntity extends BlockEntity
         if (ctx instanceof EntityCollisionContext ectx && ectx.getEntity() instanceof Player player)
         {
             ItemStack mainItem = player.getMainHandItem();
-            return !mainItem.is(Utils.WRENCH) && !mainItem.is(FBContent.itemFramedHammer.get());
+            return !mainItem.is(Utils.WRENCH) && !mainItem.is(FBContent.itemFramedHammer.get()) && !mainItem.is(FBContent.itemFramedBlueprint.get());
         }
 
         return true;
