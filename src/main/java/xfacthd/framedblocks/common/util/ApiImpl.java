@@ -1,6 +1,7 @@
 package xfacthd.framedblocks.common.util;
 
 import net.minecraft.world.item.*;
+import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
@@ -44,6 +45,12 @@ public class ApiImpl implements FramedBlocksAPI
     public boolean allowBlockEntities() { return ServerConfig.allowBlockEntities; }
 
     @Override
+    public boolean enableIntangibility() { return ServerConfig.enableIntangibleFeature; }
+
+    @Override
+    public Item getIntangibilityMarkerItem() { return ServerConfig.intangibleMarkerItem; }
+
+    @Override
     public IForgeRegistry<CamoContainer.Factory> getCamoContainerFactoryRegistry()
     {
         return FBContent.CAMO_CONTAINER_FACTORY_REGISTRY.get();
@@ -65,5 +72,12 @@ public class ApiImpl implements FramedBlocksAPI
     public void registerBlueprintCopyBehaviour(BlueprintCopyBehaviour behaviour, Block... blocks)
     {
         FramedBlueprintItem.registerBehaviour(behaviour, blocks);
+    }
+
+    @Override
+    public boolean canHideNeighborFaceInLevel(BlockGetter level)
+    {
+        //TODO: activate when Flywheel is ported
+        return true;//!FlywheelCompat.isVirtualLevel(level);
     }
 }

@@ -1,5 +1,6 @@
 package xfacthd.framedblocks.api.block;
 
+import com.mojang.logging.LogUtils;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
@@ -25,20 +26,19 @@ import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidType;
 import net.minecraftforge.fluids.capability.*;
 import net.minecraftforge.registries.ForgeRegistries;
-import xfacthd.framedblocks.FramedBlocks;
+import org.slf4j.Logger;
 import xfacthd.framedblocks.api.FramedBlocksAPI;
 import xfacthd.framedblocks.api.data.EmptyCamoContainer;
 import xfacthd.framedblocks.api.data.CamoContainer;
 import xfacthd.framedblocks.api.util.*;
 import xfacthd.framedblocks.api.util.client.ClientUtils;
-import xfacthd.framedblocks.common.FBContent;
-import xfacthd.framedblocks.common.util.ServerConfig;
 
 import java.util.List;
 
 @SuppressWarnings("deprecation")
 public class FramedBlockEntity extends BlockEntity
 {
+    private static final Logger LOGGER = LogUtils.getLogger();
     public static final Component MSG_BLACKLISTED = Utils.translate("msg", "blacklisted");
     public static final Component MSG_BLOCK_ENTITY = Utils.translate("msg", "block_entity");
     private static final Direction[] DIRECTIONS = Direction.values();
@@ -101,7 +101,7 @@ public class FramedBlockEntity extends BlockEntity
         {
             return rotateCamo(camo);
         }
-        else if (ServerConfig.enableIntangibleFeature && stack.is(ServerConfig.intangibleMarkerItem) && !intangible && getBlock().getBlockType().allowMakingIntangible())
+        else if (FramedBlocksAPI.getInstance().enableIntangibility() && stack.is(FramedBlocksAPI.getInstance().getIntangibilityMarkerItem()) && !intangible && getBlock().getBlockType().allowMakingIntangible())
         {
             //noinspection ConstantConditions
             if (!level.isClientSide())
@@ -119,7 +119,7 @@ public class FramedBlockEntity extends BlockEntity
             {
                 setIntangible(false);
 
-                ItemStack result = new ItemStack(ServerConfig.intangibleMarkerItem);
+                ItemStack result = new ItemStack(FramedBlocksAPI.getInstance().getIntangibilityMarkerItem());
                 if (!player.getInventory().add(result))
                 {
                     player.drop(result, false);
@@ -481,12 +481,12 @@ public class FramedBlockEntity extends BlockEntity
 
     public boolean isIntangible(CollisionContext ctx)
     {
-        if (!ServerConfig.enableIntangibleFeature || !intangible) { return false; }
+        if (!FramedBlocksAPI.getInstance().enableIntangibility() || !intangible) { return false; }
 
         if (ctx instanceof EntityCollisionContext ectx && ectx.getEntity() instanceof Player player)
         {
             ItemStack mainItem = player.getMainHandItem();
-            return !mainItem.is(Utils.WRENCH) && !mainItem.is(FBContent.itemFramedHammer.get()) && !mainItem.is(FBContent.itemFramedBlueprint.get());
+            return !mainItem.is(Utils.DISABLE_INTANGIBLE);
         }
 
         return true;
@@ -661,7 +661,7 @@ public class FramedBlockEntity extends BlockEntity
         else
         {
             recheckStates = true;
-            FramedBlocks.LOGGER.warn(
+            LOGGER.warn(
                     "Framed Block of type \"{}\" at position {} contains an invalid camo of type \"{}\", removing camo! This might be caused by a config or tag change!",
                     ForgeRegistries.BLOCKS.getKey(getBlockState().getBlock()),
                     worldPosition,

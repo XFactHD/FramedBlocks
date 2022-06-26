@@ -34,6 +34,8 @@ public final class Utils
     /**Allow other mods to whitelist their BEs, circumventing the config setting*/
     public static final TagKey<Block> BE_WHITELIST = blockTag("blockentity_whitelisted");
     public static final TagKey<Item> WRENCH = itemTag("forge", "tools/wrench");
+    /** Allow other mods to add items that temporarily disable intangibility to allow interaction with the targetted block */
+    public static final TagKey<Item> DISABLE_INTANGIBLE = itemTag("disable_intangible");
 
     public static final RegistryObject<Item> FRAMED_KEY = RegistryObject.create(
             new ResourceLocation(FramedConstants.MOD_ID, "framed_key"),

@@ -29,8 +29,6 @@ import xfacthd.framedblocks.api.FramedBlocksAPI;
 import xfacthd.framedblocks.api.data.CamoContainer;
 import xfacthd.framedblocks.api.type.IBlockType;
 import xfacthd.framedblocks.api.util.*;
-//import xfacthd.framedblocks.common.compat.flywheel.FlywheelCompat; //TODO: activate when Flywheel is ported
-import xfacthd.framedblocks.common.util.ServerConfig;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -202,7 +200,7 @@ public interface IFramedBlock extends EntityBlock//, IFacade
         BlockPos neighborPos = pos.relative(side);
         BlockState neighborState = level.getBlockState(neighborPos);
 
-        if (ServerConfig.enableIntangibleFeature && !isIntangible(state, level, pos, null))
+        if (FramedBlocksAPI.getInstance().enableIntangibility() && !isIntangible(state, level, pos, null))
         {
             if (neighborState.getBlock() instanceof IFramedBlock block && block.getBlockType().allowMakingIntangible())
             {
@@ -273,13 +271,13 @@ public interface IFramedBlock extends EntityBlock//, IFacade
 
     default boolean isIntangible(BlockState state, BlockGetter level, BlockPos pos, @Nullable CollisionContext ctx)
     {
-        if (!ServerConfig.enableIntangibleFeature || !getBlockType().allowMakingIntangible()) { return false; }
+        if (!FramedBlocksAPI.getInstance().enableIntangibility() || !getBlockType().allowMakingIntangible()) { return false; }
         return level.getBlockEntity(pos) instanceof FramedBlockEntity be && be.isIntangible(ctx);
     }
 
     default boolean isSuffocating(BlockState state, BlockGetter level, BlockPos pos)
     {
-        if (ServerConfig.enableIntangibleFeature && getBlockType().allowMakingIntangible())
+        if (FramedBlocksAPI.getInstance().enableIntangibility() && getBlockType().allowMakingIntangible())
         {
             // The given BlockPos may be a neighboring block due to how Entity#isInWall() calls this
             BlockState stateAtPos = level.getBlockState(pos);
@@ -320,7 +318,7 @@ public interface IFramedBlock extends EntityBlock//, IFacade
 
     default boolean doesHideNeighborFace(BlockGetter level, BlockPos pos, BlockState state, BlockState neighborState, Direction dir)
     {
-        //if (FlywheelCompat.isVirtualLevel(level)) { return false; }
+        if (!FramedBlocksAPI.getInstance().canHideNeighborFaceInLevel(level)) { return false; }
         if (neighborState.getBlock() instanceof IFramedBlock) { return false; }
 
         if (level.getExistingBlockEntity(pos) instanceof FramedBlockEntity be)
