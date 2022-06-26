@@ -45,12 +45,17 @@ public class FramedSignScreen extends Screen
     private static final ResourceLocation DEFAULT_TEXTURE = new ResourceLocation(FramedConstants.MOD_ID, "block/framed_block");
     public static final Component TITLE = Utils.translate("title", "sign.edit");
     public static final Component DONE = Utils.translate("button", "gui.done");
+    private static final int TEX_W = 128;
+    private static final int TEX_H = 64;
+    private static final int TEX_MAX_V = 8;
 
     private final FramedSignBlockEntity sign;
     private final String[] lines = new String[4];
     private int blinkCounter = 0;
     private int currLine = 0;
     private TextFieldHelper inputUtil;
+    private int texX;
+    private int texY;
 
     public FramedSignScreen(FramedSignBlockEntity sign)
     {
@@ -75,6 +80,9 @@ public class FramedSignScreen extends Screen
                 },
                 TextFieldHelper.createClipboardGetter(minecraft), TextFieldHelper.createClipboardSetter(minecraft),
                 (line) -> minecraft.font.width(line) <= 90);
+
+        texX = width / 2 - TEX_W / 2;
+        texY = height / 2 - TEX_H / 2 - 20;
     }
 
     @Override
@@ -143,16 +151,12 @@ public class FramedSignScreen extends Screen
         RenderSystem.setShaderTexture(0, TextureAtlas.LOCATION_BLOCKS);
         TextureAtlasSprite sprite = getFrontSprite();
 
-        int w = 128;
-        int h = 64;
-        int x = width / 2 - w / 2;
-        int y = height / 2 - h / 2 - 20;
         innerBlit(mstack.last().pose(),
-                x, x + w, y, y + h, getBlitOffset(),
+                texX, texX + TEX_W, texY, texY + TEX_H, getBlitOffset(),
                 sprite.getU0(),
                 sprite.getU1(),
                 sprite.getV0(),
-                sprite.getV(8)
+                sprite.getV(TEX_MAX_V)
         );
 
         mstack.pushPose();
@@ -239,7 +243,6 @@ public class FramedSignScreen extends Screen
                     tessBuffer.vertex(matrix,   xEnd, y + 9F, 0.0F).color(0, 0, 255, 255).endVertex();
                     tessBuffer.vertex(matrix,   xEnd, y - 1F, 0.0F).color(0, 0, 255, 255).endVertex();
                     tessBuffer.vertex(matrix, xStart, y - 1F, 0.0F).color(0, 0, 255, 255).endVertex();
-                    tessBuffer.end();
                     BufferUploader.drawWithShader(tessBuffer.end());
 
                     RenderSystem.disableColorLogicOp();
