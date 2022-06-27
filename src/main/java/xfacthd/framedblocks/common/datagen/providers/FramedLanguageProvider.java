@@ -3,7 +3,9 @@ package xfacthd.framedblocks.common.datagen.providers;
 import net.minecraft.data.DataGenerator;
 import net.minecraftforge.common.data.LanguageProvider;
 import xfacthd.framedblocks.FramedBlocks;
+import xfacthd.framedblocks.api.block.IFramedBlock;
 import xfacthd.framedblocks.api.util.FramedConstants;
+import xfacthd.framedblocks.client.screen.StateLockOverlay;
 import xfacthd.framedblocks.client.util.KeyMappings;
 import xfacthd.framedblocks.common.FBContent;
 import xfacthd.framedblocks.common.blockentity.FramedStorageBlockEntity;
@@ -86,6 +88,7 @@ public class FramedLanguageProvider extends LanguageProvider
         add(FBContent.itemFramedHammer.get(), "Framed Hammer");
         add(FBContent.itemFramedWrench.get(), "Framed Wrench");
         add(FBContent.itemFramedBlueprint.get(), "Framed Blueprint");
+        add(FBContent.itemFramedKey.get(), "Framed Key");
 
         add(KeyMappings.KEY_CATEGORY, "FramedBlocks");
         add(KeyMappings.KEYMAPPING_UPDATE_CULLING.get().getName(), "Update culling cache");
@@ -103,5 +106,9 @@ public class FramedLanguageProvider extends LanguageProvider
         add(FramedBlueprintItem.ILLUMINATED_FALSE.getString(), "false");
         add(FramedBlueprintItem.ILLUMINATED_TRUE.getString(), "true");
         add(FramedBlueprintItem.CANT_COPY.getString(), "This block can currently not be copied!");
+        add(IFramedBlock.LOCK_MESSAGE, "The state of this block is now %s");
+        add(StateLockOverlay.LOCK_MESSAGE, "State %s");
+        add(IFramedBlock.STATE_LOCKED.getString(), "locked");
+        add(IFramedBlock.STATE_UNLOCKED.getString(), "unlocked");
     }
 }

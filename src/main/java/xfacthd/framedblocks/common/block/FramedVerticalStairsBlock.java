@@ -32,12 +32,16 @@ public class FramedVerticalStairsBlock extends FramedBlock
         return false;
     };
 
-    public FramedVerticalStairsBlock() { super(BlockType.FRAMED_VERTICAL_STAIRS); }
+    public FramedVerticalStairsBlock()
+    {
+        super(BlockType.FRAMED_VERTICAL_STAIRS);
+        registerDefaultState(defaultBlockState().setValue(FramedProperties.STATE_LOCKED, false));
+    }
 
     @Override
     protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder)
     {
-        builder.add(PropertyHolder.FACING_HOR, PropertyHolder.STAIRS_TYPE, BlockStateProperties.WATERLOGGED, FramedProperties.SOLID, FramedProperties.GLOWING);
+        builder.add(PropertyHolder.FACING_HOR, PropertyHolder.STAIRS_TYPE, BlockStateProperties.WATERLOGGED, FramedProperties.SOLID, FramedProperties.GLOWING, FramedProperties.STATE_LOCKED);
     }
 
     @Override
@@ -51,12 +55,10 @@ public class FramedVerticalStairsBlock extends FramedBlock
     public BlockState updateShape(BlockState state, Direction facing, BlockState facingState, LevelAccessor level, BlockPos pos, BlockPos facingPos)
     {
         Direction dir = state.getValue(PropertyHolder.FACING_HOR);
-        if (facing == dir.getOpposite() || facing == dir.getClockWise())
+        if (facing != dir.getOpposite() && facing != dir.getClockWise())
         {
-            return super.updateShape(state, facing, facingState, level, pos, facingPos);
+            state = getStateFromContext(state, level, pos);
         }
-
-        state = getStateFromContext(state, level, pos);
         return super.updateShape(state, facing, facingState, level, pos, facingPos);
     }
 
@@ -77,6 +79,8 @@ public class FramedVerticalStairsBlock extends FramedBlock
 
     private BlockState getStateFromContext(BlockState state, LevelAccessor level, BlockPos pos)
     {
+        if (state.getValue(FramedProperties.STATE_LOCKED)) { return state; }
+
         Direction dir = state.getValue(PropertyHolder.FACING_HOR);
 
         BlockState front = level.getBlockState(pos.relative(dir));

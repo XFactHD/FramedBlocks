@@ -75,10 +75,15 @@
   "framedblocks.key.update_cull": "Update culling cache",
   "item.framedblocks.framed_blueprint": "Framed Blueprint",
   "item.framedblocks.framed_hammer": "Framed Hammer",
+  "item.framedblocks.framed_key": "Framed Key",
   "item.framedblocks.framed_wrench": "Framed Wrench",
   "itemGroup.framed_blocks": "FramedBlocks",
+  "msg.framedblocks..lock_state.locked": "locked",
+  "msg.framedblocks..lock_state.unlocked": "unlocked",
   "msg.framedblocks.blacklisted": "This block is blacklisted!",
   "msg.framedblocks.block_entity": "Blocks with BlockEntities cannot be inserted into framed blocks!",
+  "msg.framedblocks.lock_state": "The state of this block is now %s",
   "title.framedblocks:framed_chest": "Framed Chest",
-  "title.framedblocks:framed_secret_storage": "Framed Secret Storage"
+  "title.framedblocks:framed_secret_storage": "Framed Secret Storage",
+  "tooltip.framedblocks.lock_state": "State %s"
 }

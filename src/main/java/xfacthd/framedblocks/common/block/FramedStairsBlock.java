@@ -72,6 +72,7 @@ public class FramedStairsBlock extends StairBlock implements IFramedBlock
         registerDefaultState(defaultBlockState()
                 .setValue(FramedProperties.SOLID, false)
                 .setValue(FramedProperties.GLOWING, false)
+                .setValue(FramedProperties.STATE_LOCKED, false)
         );
     }
 
@@ -79,7 +80,7 @@ public class FramedStairsBlock extends StairBlock implements IFramedBlock
     protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder)
     {
         super.createBlockStateDefinition(builder);
-        builder.add(FramedProperties.SOLID, FramedProperties.GLOWING);
+        builder.add(FramedProperties.SOLID, FramedProperties.GLOWING, FramedProperties.STATE_LOCKED);
     }
 
     @Override
@@ -97,7 +98,11 @@ public class FramedStairsBlock extends StairBlock implements IFramedBlock
     @Override
     public BlockState updateShape(BlockState state, Direction facing, BlockState facingState, LevelAccessor level, BlockPos currentPos, BlockPos facingPos)
     {
-        BlockState newState = super.updateShape(state, facing, facingState, level, currentPos, facingPos);
+        BlockState newState = updateShapeLockable(
+                state, level, currentPos,
+                () -> super.updateShape(state, facing, facingState, level, currentPos, facingPos)
+        );
+
         if (newState == state)
         {
             updateCulling(level, currentPos, facingState, facing, false);

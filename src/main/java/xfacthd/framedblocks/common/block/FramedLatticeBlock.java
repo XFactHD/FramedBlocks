@@ -14,6 +14,7 @@ import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.block.state.properties.BooleanProperty;
 import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
+import xfacthd.framedblocks.api.util.FramedProperties;
 import xfacthd.framedblocks.common.FBContent;
 import xfacthd.framedblocks.common.data.BlockType;
 import xfacthd.framedblocks.common.data.PropertyHolder;
@@ -37,13 +38,14 @@ public class FramedLatticeBlock extends FramedBlock
                 .setValue(PropertyHolder.X_AXIS, false)
                 .setValue(PropertyHolder.Y_AXIS, false)
                 .setValue(PropertyHolder.Z_AXIS, false)
+                .setValue(FramedProperties.STATE_LOCKED, false)
         );
     }
 
     @Override
     protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder)
     {
-        builder.add(PropertyHolder.X_AXIS, PropertyHolder.Y_AXIS, PropertyHolder.Z_AXIS, BlockStateProperties.WATERLOGGED);
+        builder.add(PropertyHolder.X_AXIS, PropertyHolder.Y_AXIS, PropertyHolder.Z_AXIS, BlockStateProperties.WATERLOGGED, FramedProperties.STATE_LOCKED);
     }
 
     @Override
@@ -63,10 +65,13 @@ public class FramedLatticeBlock extends FramedBlock
     @Override
     public BlockState updateShape(BlockState state, Direction facing, BlockState facingState, LevelAccessor level, BlockPos pos, BlockPos facingPos)
     {
-        state = state.setValue(
-                getPropFromAxis(facing),
-                facingState.is(this) || level.getBlockState(pos.relative(facing.getOpposite())).is(this)
-        );
+        if (!state.getValue(FramedProperties.STATE_LOCKED))
+        {
+            state = state.setValue(
+                    getPropFromAxis(facing),
+                    facingState.is(this) || level.getBlockState(pos.relative(facing.getOpposite())).is(this)
+            );
+        }
 
         return super.updateShape(state, facing, facingState, level, pos, facingPos);
     }

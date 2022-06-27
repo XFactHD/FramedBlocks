@@ -4,7 +4,9 @@ public enum FramedToolType
 {
     HAMMER("framed_hammer"),
     WRENCH("framed_wrench"),
-    BLUEPRINT("framed_blueprint");
+    BLUEPRINT("framed_blueprint"),
+    KEY("framed_key"),
+    ;
 
     private final String name;
 
