@@ -141,7 +141,7 @@ public class FramedWallBlock extends WallBlock implements IFramedBlock
         ObfuscationReflectionHelper.setPrivateValue(WallBlock.class, this, collisionShapeByIndex, "f_57956_");
     }
 
-    private Map<BlockState, VoxelShape> fixShapeMap(Map<BlockState, VoxelShape> map)
+    private static Map<BlockState, VoxelShape> fixShapeMap(Map<BlockState, VoxelShape> map)
     {
         Preconditions.checkNotNull(map, "Got a null map?!");
 
