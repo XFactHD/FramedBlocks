@@ -27,6 +27,7 @@ public class VerticalStairsSkipPredicate implements SideSkipPredicate
             return switch (blockType)
             {
                 case FRAMED_VERTICAL_STAIRS -> testAgainstVerticalStairs(level, pos, dir, type, adjState, side);
+                case FRAMED_VERTICAL_DOUBLE_STAIRS -> testAgainstVerticalDoubleStairs(level, pos, dir, type, adjState, side);
                 case FRAMED_STAIRS -> testAgainstStairs(level, pos, dir, type, adjState, side);
                 case FRAMED_PANEL -> testAgainstPanel(level, pos, dir, type, adjState, side);
                 case FRAMED_DOUBLE_PANEL -> testAgainstDoublePanel(level, pos, dir, type, adjState, side);
@@ -53,12 +54,34 @@ public class VerticalStairsSkipPredicate implements SideSkipPredicate
 
         if ((!type.isBottom() && !adjType.isTop() && side == Direction.DOWN) || (!type.isTop() && !adjType.isBottom() && side == Direction.UP))
         {
-            return dir == adjDir && SideSkipPredicate.compareState(level, pos, side);
+            return dir == adjDir && SideSkipPredicate.compareState(level, pos, side, dir, side.getOpposite());
         }
 
-        if ((side == dir && adjDir == dir.getCounterClockWise()) || (side == dir.getCounterClockWise() && adjDir == dir.getClockWise()))
+        if ((side == dir.getOpposite() && adjDir == dir.getCounterClockWise()) || (side == dir.getClockWise() && adjDir == dir.getClockWise()))
         {
-            return SideSkipPredicate.compareState(level, pos, side);
+            return SideSkipPredicate.compareState(level, pos, side, dir, side.getOpposite());
+        }
+
+        return false;
+    }
+
+    private static boolean testAgainstVerticalDoubleStairs(BlockGetter level, BlockPos pos, Direction dir, StairsType type, BlockState adjState, Direction side)
+    {
+        Direction adjDir = adjState.getValue(PropertyHolder.FACING_HOR);
+
+        if ((!type.isBottom() && side == Direction.DOWN) || (!type.isTop() && side == Direction.UP))
+        {
+            return dir == adjDir && SideSkipPredicate.compareState(level, pos, side, dir, dir);
+        }
+
+        if ((side == dir.getOpposite() && adjDir == dir.getCounterClockWise()) || (side == dir.getClockWise() && adjDir == dir.getClockWise()))
+        {
+            return SideSkipPredicate.compareState(level, pos, side, dir, adjDir);
+        }
+
+        if (dir == adjDir.getOpposite() && (side == dir.getOpposite() || side == dir.getClockWise()))
+        {
+            return SideSkipPredicate.compareState(level, pos, side, dir, dir);
         }
 
         return false;
@@ -74,7 +97,7 @@ public class VerticalStairsSkipPredicate implements SideSkipPredicate
             StairsShape adjShape = adjState.getValue(BlockStateProperties.STAIRS_SHAPE);
             if ((adjDir == dir && adjShape == StairsShape.INNER_LEFT) || (adjDir == dir.getCounterClockWise() && adjShape == StairsShape.INNER_RIGHT))
             {
-                return SideSkipPredicate.compareState(level, pos, side);
+                return SideSkipPredicate.compareState(level, pos, side, dir, side.getOpposite());
             }
         }
         else
@@ -94,7 +117,7 @@ public class VerticalStairsSkipPredicate implements SideSkipPredicate
         Direction adjDir = adjState.getValue(PropertyHolder.FACING_HOR);
         if ((side == dir.getClockWise() && adjDir == dir) || (side == dir.getOpposite() && adjDir == dir.getCounterClockWise()))
         {
-            return SideSkipPredicate.compareState(level, pos, side);
+            return SideSkipPredicate.compareState(level, pos, side, dir, side.getOpposite());
         }
         return false;
     }
@@ -136,14 +159,14 @@ public class VerticalStairsSkipPredicate implements SideSkipPredicate
         {
             if ((side == dir.getClockWise() || side == dir.getOpposite()) && adjDir == dir)
             {
-                return SideSkipPredicate.compareState(level, pos, side);
+                return SideSkipPredicate.compareState(level, pos, side, dir, side.getOpposite());
             }
         }
         else if (Utils.isY(side))
         {
             if ((side == Direction.UP) == type.isTop() && adjDir == dir)
             {
-                return SideSkipPredicate.compareState(level, pos, side);
+                return SideSkipPredicate.compareState(level, pos, side, dir, side.getOpposite());
             }
         }
         return false;
@@ -169,11 +192,19 @@ public class VerticalStairsSkipPredicate implements SideSkipPredicate
         boolean adjTop = adjState.getValue(FramedProperties.TOP);
         boolean adjRight = adjState.getValue(PropertyHolder.RIGHT);
 
-        if (adjTop == type.isTop()) { return false; }
-
-        if ((adjRight && adjDir == dir && side == dir.getCounterClockWise()) || (!adjRight && adjDir == dir.getCounterClockWise() && side == dir))
+        if (type == StairsType.VERTICAL)
         {
-            return SideSkipPredicate.compareState(level, pos, side);
+            if ((!adjRight && adjDir == dir && side == dir.getOpposite()) || (adjRight && adjDir == dir.getCounterClockWise() && side == dir.getClockWise()))
+            {
+                return SideSkipPredicate.compareState(level, pos, side, dir, side.getOpposite());
+            }
+        }
+        else if (adjTop != type.isTop())
+        {
+            if ((adjRight && adjDir == dir && side == dir.getCounterClockWise()) || (!adjRight && adjDir == dir.getCounterClockWise() && side == dir))
+            {
+                return SideSkipPredicate.compareState(level, pos, side);
+            }
         }
 
         return false;
@@ -191,7 +222,7 @@ public class VerticalStairsSkipPredicate implements SideSkipPredicate
 
         if (adjDir != dir || adjTop != (side == Direction.DOWN)) { return false; }
 
-        return SideSkipPredicate.compareState(level, pos, side);
+        return SideSkipPredicate.compareState(level, pos, side, dir, side.getOpposite());
     }
 
     private static boolean testAgainstSlopePanel(BlockGetter level, BlockPos pos, Direction dir, StairsType type, BlockState adjState, Direction side)
@@ -204,11 +235,11 @@ public class VerticalStairsSkipPredicate implements SideSkipPredicate
 
         if (!adjFront && ((adjDir == dir && adjRot == Rotation.RIGHT) || (adjDir == dir.getCounterClockWise() && adjRot == Rotation.LEFT)))
         {
-            return SideSkipPredicate.compareState(level, pos, side);
+            return SideSkipPredicate.compareState(level, pos, side, dir, side.getOpposite());
         }
         else if (adjFront && ((adjDir == dir.getOpposite() && adjRot == Rotation.LEFT) || (adjDir == dir.getClockWise() && adjRot == Rotation.RIGHT)))
         {
-            return SideSkipPredicate.compareState(level, pos, side);
+            return SideSkipPredicate.compareState(level, pos, side, dir, side.getOpposite());
         }
 
         return false;
@@ -223,11 +254,11 @@ public class VerticalStairsSkipPredicate implements SideSkipPredicate
 
         if (side == dir.getOpposite() && adjDir == dir.getCounterClockWise() && adjRot == Rotation.RIGHT)
         {
-            return SideSkipPredicate.compareState(level, pos, side);
+            return SideSkipPredicate.compareState(level, pos, side, dir, side.getOpposite());
         }
         else if (side == dir.getClockWise() && adjDir == dir && adjRot == Rotation.LEFT)
         {
-            return SideSkipPredicate.compareState(level, pos, side);
+            return SideSkipPredicate.compareState(level, pos, side, dir, side.getOpposite());
         }
 
         return false;
@@ -245,11 +276,11 @@ public class VerticalStairsSkipPredicate implements SideSkipPredicate
 
         if (!adjFront && (adjDir == dir || adjDir == dir.getCounterClockWise()))
         {
-            return SideSkipPredicate.compareState(level, pos, side);
+            return SideSkipPredicate.compareState(level, pos, side, dir, side.getOpposite());
         }
         else if (adjFront && (adjDir == dir.getOpposite() || adjDir == dir.getClockWise()))
         {
-            return SideSkipPredicate.compareState(level, pos, side);
+            return SideSkipPredicate.compareState(level, pos, side, dir, side.getOpposite());
         }
 
         return false;
@@ -264,11 +295,11 @@ public class VerticalStairsSkipPredicate implements SideSkipPredicate
 
         if (adjDir.getAxis() == dir.getAxis() && adjRot == Rotation.LEFT)
         {
-            return SideSkipPredicate.compareState(level, pos, side);
+            return SideSkipPredicate.compareState(level, pos, side, dir, side.getOpposite());
         }
         else if (adjDir.getAxis() == dir.getClockWise().getAxis() && adjRot == Rotation.RIGHT)
         {
-            return SideSkipPredicate.compareState(level, pos, side);
+            return SideSkipPredicate.compareState(level, pos, side, dir, side.getOpposite());
         }
 
         return false;

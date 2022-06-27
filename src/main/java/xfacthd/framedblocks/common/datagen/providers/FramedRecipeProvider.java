@@ -479,6 +479,20 @@ public class FramedRecipeProvider extends RecipeProvider
                 .unlockedBy("hasFramedInverseDoubleSlopePanel", has(FBContent.blockFramedInverseDoubleSlopePanel.get()))
                 .save(consumer, rl("framed_inverse_double_slope_slab_from_inverse_double_slope_panel"));
 
+        ShapedRecipeBuilder.shaped(FBContent.blockFramedDoubleStairs.get())
+                .pattern("SE")
+                .define('S', FBContent.blockFramedStairs.get())
+                .define('E', FBContent.blockFramedSlabEdge.get())
+                .unlockedBy("hasFramedStairs", has(FBContent.blockFramedStairs.get()))
+                .save(consumer);
+
+        ShapedRecipeBuilder.shaped(FBContent.blockFramedVerticalDoubleStairs.get())
+                .pattern("SE")
+                .define('S', FBContent.blockFramedVerticalStairs.get())
+                .define('E', FBContent.blockFramedCornerPillar.get())
+                .unlockedBy("hasFramedStairs", has(FBContent.blockFramedVerticalStairs.get()))
+                .save(consumer);
+
         ShapelessRecipeBuilder.shapeless(FBContent.blockFramedIronDoor.get())
                 .requires(FBContent.blockFramedDoor.get())
                 .requires(Items.IRON_INGOT)

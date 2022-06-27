@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "key": {
+    "E": {
+      "item": "framedblocks:framed_corner_pillar"
+    },
+    "S": {
+      "item": "framedblocks:framed_vertical_stairs"
+    }
+  },
+  "pattern": [
+    "SE"
+  ],
+  "result": {
+    "item": "framedblocks:framed_vertical_double_stairs"
+  }
+}

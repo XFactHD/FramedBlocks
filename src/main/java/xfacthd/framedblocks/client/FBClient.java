@@ -188,6 +188,8 @@ public final class FBClient
         ClientUtils.replaceModels(FBContent.blockFramedExtendedSlopePanel, registry, FramedExtendedSlopePanelModel::new, FramedExtendedSlopePanelModel.itemSource(), ignoreDefault);
         ClientUtils.replaceModels(FBContent.blockFramedDoubleSlopePanel, registry, FramedDoubleSlopePanelModel::new, FramedDoubleSlopePanelModel.itemSource(), ignoreDefault);
         ClientUtils.replaceModels(FBContent.blockFramedInverseDoubleSlopePanel, registry, FramedInverseDoubleSlopePanelModel::new, FramedInverseDoubleSlopePanelModel.itemSource(), ignoreDefault);
+        ClientUtils.replaceModels(FBContent.blockFramedDoubleStairs, registry, FramedDoubleStairsModel::new, FramedDoubleStairsModel.itemSource(), ignoreSolid);
+        ClientUtils.replaceModels(FBContent.blockFramedVerticalDoubleStairs, registry, FramedVerticalDoubleStairsModel::new, FramedVerticalDoubleStairsModel.itemSource(), ignoreSolid);
         ClientUtils.replaceModels(FBContent.blockFramedIronDoor, registry, FramedIronDoorModel::new, ignoreSolid);
         ClientUtils.replaceModels(FBContent.blockFramedIronTrapDoor, registry, FramedIronTrapDoorModel::new, ignoreDefault);
     }
