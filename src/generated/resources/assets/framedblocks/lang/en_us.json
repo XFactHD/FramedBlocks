@@ -71,6 +71,7 @@
   "desc.framed_blocks:blueprint_illuminated_true": "true",
   "desc.framed_blocks:blueprint_invalid": "Invalid",
   "desc.framed_blocks:blueprint_none": "None",
+  "desc.framedblocks.blueprint_cant_place_fluid_camo": "Copying blocks with fluid camos is currently not possible!",
   "framedblocks.key.categories.framedblocks": "FramedBlocks",
   "framedblocks.key.update_cull": "Update culling cache",
   "item.framedblocks.framed_blueprint": "Framed Blueprint",

@@ -2,9 +2,11 @@ package xfacthd.framedblocks.api;
 
 import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import xfacthd.framedblocks.api.block.FramedBlockEntity;
+import xfacthd.framedblocks.api.blueprint.BlueprintCopyBehaviour;
 import xfacthd.framedblocks.api.util.WriteOnceHolder;
 
 @SuppressWarnings({ "unused", "SameReturnValue" })
@@ -63,4 +65,9 @@ public interface FramedBlocksAPI
      * If true, blocks with {@code BlockEntities} can be placed in Framed blocks
      */
     boolean allowBlockEntities();
+
+    /**
+     * Register a custom {@link BlueprintCopyBehaviour} for the given {@link Block}s
+     */
+    void registerBlueprintCopyBehaviour(BlueprintCopyBehaviour behaviour, Block... blocks);
 }

@@ -2,15 +2,18 @@ package xfacthd.framedblocks.common.util;
 
 import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import xfacthd.framedblocks.FramedBlocks;
 import xfacthd.framedblocks.api.FramedBlocksAPI;
 import xfacthd.framedblocks.api.block.FramedBlockEntity;
+import xfacthd.framedblocks.api.blueprint.BlueprintCopyBehaviour;
 import xfacthd.framedblocks.api.util.FramedConstants;
 import xfacthd.framedblocks.client.util.ClientConfig;
 import xfacthd.framedblocks.common.FBContent;
 import xfacthd.framedblocks.common.blockentity.FramedDoubleBlockEntity;
+import xfacthd.framedblocks.common.item.FramedBlueprintItem;
 
 @SuppressWarnings("unused")
 public class ApiImpl implements FramedBlocksAPI
@@ -42,4 +45,10 @@ public class ApiImpl implements FramedBlocksAPI
 
     @Override
     public boolean allowBlockEntities() { return ServerConfig.allowBlockEntities; }
+
+    @Override
+    public void registerBlueprintCopyBehaviour(BlueprintCopyBehaviour behaviour, Block... blocks)
+    {
+        FramedBlueprintItem.registerBehaviour(behaviour, blocks);
+    }
 }
