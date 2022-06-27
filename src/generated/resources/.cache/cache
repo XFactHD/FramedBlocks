@@ -351,6 +351,7 @@ e8a9291a98759a08164736bfc3f348c94686ad0a data/framedblocks/recipes/framed_wall.j
 80b64f80e09310ce9e3ac43f0d19d855f52ef7b6 data/framedblocks/recipes/framed_wrench.json
 2547623b2e29bf21e647fbe7bf43bcf17fc0777a data/framedblocks/tags/blocks/blacklisted.json
 ded698d407a1e35b5ebff718170ed3f3a042f4bf data/framedblocks/tags/blocks/frameable.json
+5138d67e47c70c775772e8b642a4e2caa0d51616 data/framedblocks/tags/items/disable_intangible.json
 def53fe2e88a4349d61c7a377cc550483c07eed4 data/minecraft/tags/blocks/climbable.json
 4898014d8889303d019b0e1eddb68ac3c3b98209 data/minecraft/tags/blocks/doors.json
 3e2d88c1ebe0fd8046c865d8fc6f821ff71d4a46 data/minecraft/tags/blocks/fences.json

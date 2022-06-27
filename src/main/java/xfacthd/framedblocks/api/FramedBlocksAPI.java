@@ -1,7 +1,7 @@
 package xfacthd.framedblocks.api;
 
-import net.minecraft.world.item.CreativeModeTab;
-import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.*;
+import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
@@ -67,7 +67,22 @@ public interface FramedBlocksAPI
     boolean allowBlockEntities();
 
     /**
+     * If true, certain blocks can be made intangible
+     */
+    boolean enableIntangibility();
+
+    /**
+     * Get the item used to make blocks intangible
+     */
+    Item getIntangibilityMarkerItem();
+
+    /**
      * Register a custom {@link BlueprintCopyBehaviour} for the given {@link Block}s
      */
     void registerBlueprintCopyBehaviour(BlueprintCopyBehaviour behaviour, Block... blocks);
+
+    /**
+     * Returns true if hiding faces on a neighboring block is allowed in the given {@linkplain BlockGetter level}
+     */
+    boolean canHideNeighborFaceInLevel(BlockGetter level);
 }

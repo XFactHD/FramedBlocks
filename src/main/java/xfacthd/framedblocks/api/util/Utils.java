@@ -24,6 +24,8 @@ public final class Utils
     public static final TagKey<Block> FRAMEABLE = blockTag("frameable");
     public static final TagKey<Block> BLACKLIST = blockTag("blacklisted");
     public static final TagKey<Item> WRENCH = itemTag("forge", "tools/wrench");
+    /** Allow other mods to add items that temporarily disable intangibility to allow interaction with the targetted block */
+    public static final TagKey<Item> DISABLE_INTANGIBLE = itemTag("disable_intangible");
 
     public static final RegistryObject<Item> FRAMED_KEY = RegistryObject.create(
             new ResourceLocation(FramedConstants.MOD_ID, "framed_key"),
