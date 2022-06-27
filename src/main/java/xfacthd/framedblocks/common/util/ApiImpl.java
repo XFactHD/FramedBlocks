@@ -7,6 +7,7 @@ import net.minecraft.world.level.block.state.BlockState;
 import xfacthd.framedblocks.FramedBlocks;
 import xfacthd.framedblocks.api.FramedBlocksAPI;
 import xfacthd.framedblocks.api.block.FramedBlockEntity;
+import xfacthd.framedblocks.api.util.FramedConstants;
 import xfacthd.framedblocks.client.util.ClientConfig;
 import xfacthd.framedblocks.common.FBContent;
 import xfacthd.framedblocks.common.blockentity.FramedDoubleBlockEntity;
@@ -15,7 +16,8 @@ import xfacthd.framedblocks.common.blockentity.FramedDoubleBlockEntity;
 public class ApiImpl implements FramedBlocksAPI
 {
     @Override
-    public String modid() { return FramedBlocks.MODID; }
+    @SuppressWarnings("removal")
+    public String modid() { return FramedConstants.MOD_ID; }
 
     @Override
     public BlockEntityType<FramedBlockEntity> defaultBlockEntity() { return FBContent.blockEntityTypeFramedBlock.get(); }

@@ -11,6 +11,7 @@ import net.minecraftforge.gametest.GameTestHolder;
 import net.minecraftforge.registries.RegistryObject;
 import xfacthd.framedblocks.FramedBlocks;
 import xfacthd.framedblocks.api.block.FramedBlockEntity;
+import xfacthd.framedblocks.api.util.FramedConstants;
 import xfacthd.framedblocks.api.util.FramedProperties;
 import xfacthd.framedblocks.api.util.test.TestUtils;
 import xfacthd.framedblocks.common.FBContent;
@@ -21,7 +22,7 @@ import xfacthd.framedblocks.common.data.PropertyHolder;
 
 import java.util.List;
 
-@GameTestHolder(FramedBlocks.MODID)
+@GameTestHolder(FramedConstants.MOD_ID)
 public final class InteractionTests
 {
     private static final BlockPos POS_ABOVE_FLOOR = new BlockPos(0, 2, 0);

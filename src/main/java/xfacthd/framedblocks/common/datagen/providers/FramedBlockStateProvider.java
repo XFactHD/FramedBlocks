@@ -9,7 +9,7 @@ import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraftforge.client.model.generators.*;
 import net.minecraftforge.common.data.ExistingFileHelper;
 import net.minecraftforge.registries.RegistryObject;
-import xfacthd.framedblocks.FramedBlocks;
+import xfacthd.framedblocks.api.util.FramedConstants;
 import xfacthd.framedblocks.common.FBContent;
 import xfacthd.framedblocks.common.data.PropertyHolder;
 
@@ -19,7 +19,7 @@ public class FramedBlockStateProvider extends BlockStateProvider
 
     public FramedBlockStateProvider(DataGenerator gen, ExistingFileHelper fileHelper)
     {
-        super(gen, FramedBlocks.MODID, fileHelper);
+        super(gen, FramedConstants.MOD_ID, fileHelper);
         TEXTURE = modLoc("block/framed_block");
     }
 

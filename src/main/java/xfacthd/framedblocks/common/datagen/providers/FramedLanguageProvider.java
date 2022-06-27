@@ -3,6 +3,7 @@ package xfacthd.framedblocks.common.datagen.providers;
 import net.minecraft.data.DataGenerator;
 import net.minecraftforge.common.data.LanguageProvider;
 import xfacthd.framedblocks.FramedBlocks;
+import xfacthd.framedblocks.api.util.FramedConstants;
 import xfacthd.framedblocks.client.util.KeyMappings;
 import xfacthd.framedblocks.common.FBContent;
 import xfacthd.framedblocks.common.blockentity.FramedStorageBlockEntity;
@@ -12,7 +13,7 @@ import xfacthd.framedblocks.api.block.FramedBlockEntity;
 
 public class FramedLanguageProvider extends LanguageProvider
 {
-    public FramedLanguageProvider(DataGenerator gen) { super(gen, FramedBlocks.MODID, "en_us"); }
+    public FramedLanguageProvider(DataGenerator gen) { super(gen, FramedConstants.MOD_ID, "en_us"); }
 
     @Override
     protected void addTranslations()

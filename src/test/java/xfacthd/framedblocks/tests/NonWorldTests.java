@@ -11,11 +11,11 @@ import net.minecraft.world.item.crafting.*;
 import net.minecraftforge.fml.util.ObfuscationReflectionHelper;
 import net.minecraftforge.gametest.GameTestHolder;
 import net.minecraftforge.gametest.PrefixGameTestTemplate;
-import xfacthd.framedblocks.FramedBlocks;
+import xfacthd.framedblocks.api.util.FramedConstants;
 
 import java.util.*;
 
-@GameTestHolder(FramedBlocks.MODID)
+@GameTestHolder(FramedConstants.MOD_ID)
 @PrefixGameTestTemplate(value = false)
 public final class NonWorldTests
 {
@@ -26,7 +26,7 @@ public final class NonWorldTests
     {
         RecipeManager recipeManager = helper.getLevel().getRecipeManager();
         List<? extends Recipe<CraftingContainer>> recipes = recipeManager.getRecipeIds()
-                .filter(id -> id.getNamespace().equals(FramedBlocks.MODID))
+                .filter(id -> id.getNamespace().equals(FramedConstants.MOD_ID))
                 .map(recipeManager::byKey)
                 .filter(Optional::isPresent)
                 .map(Optional::get)

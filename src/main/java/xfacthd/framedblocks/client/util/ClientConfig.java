@@ -6,7 +6,7 @@ import net.minecraftforge.fml.config.ModConfig;
 import net.minecraftforge.fml.event.config.ModConfigEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import org.apache.commons.lang3.tuple.Pair;
-import xfacthd.framedblocks.FramedBlocks;
+import xfacthd.framedblocks.api.util.FramedConstants;
 
 public class ClientConfig
 {
@@ -35,15 +35,15 @@ public class ClientConfig
         builder.push("general");
         showGhostBlocksValue = builder
                 .comment("Wether ghost blocks are shown when you are holding a framed block")
-                .translation("config." + FramedBlocks.MODID + ".showGhostBlocks")
+                .translation("config." + FramedConstants.MOD_ID + ".showGhostBlocks")
                 .define("showGhostBlocks", true);
         fancyHitboxesValue = builder
                 .comment("Wether certain framed blocks should show fancy hitboxes")
-                .translation("config." + FramedBlocks.MODID + ".fancyHitboxes")
+                .translation("config." + FramedConstants.MOD_ID + ".fancyHitboxes")
                 .define("fancyHitboxes", true);
         detailedCullingValue = builder
                 .comment("If false only full block faces of framed blocks will be culled, if true all outer faces of famed blocks can be culled")
-                .translation("config." + FramedBlocks.MODID + ".detailedCulling")
+                .translation("config." + FramedConstants.MOD_ID + ".detailedCulling")
                 .define("detailedCulling", true);
         builder.pop();
     }
@@ -51,7 +51,7 @@ public class ClientConfig
     @SubscribeEvent
     public void onConfigReloaded(ModConfigEvent event)
     {
-        if (event.getConfig().getType() == ModConfig.Type.CLIENT && event.getConfig().getModId().equals(FramedBlocks.MODID))
+        if (event.getConfig().getType() == ModConfig.Type.CLIENT && event.getConfig().getModId().equals(FramedConstants.MOD_ID))
         {
             showGhostBlocks = showGhostBlocksValue.get();
             fancyHitboxes = fancyHitboxesValue.get();

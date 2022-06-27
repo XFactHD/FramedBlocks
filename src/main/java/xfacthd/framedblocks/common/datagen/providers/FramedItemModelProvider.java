@@ -3,14 +3,14 @@ package xfacthd.framedblocks.common.datagen.providers;
 import net.minecraft.data.DataGenerator;
 import net.minecraftforge.client.model.generators.*;
 import net.minecraftforge.common.data.ExistingFileHelper;
-import xfacthd.framedblocks.FramedBlocks;
+import xfacthd.framedblocks.api.util.FramedConstants;
 import xfacthd.framedblocks.client.util.BlueprintPropertyOverride;
 
 public class FramedItemModelProvider extends ItemModelProvider
 {
     public FramedItemModelProvider(DataGenerator gen, ExistingFileHelper fileHelper)
     {
-        super(gen, FramedBlocks.MODID, fileHelper);
+        super(gen, FramedConstants.MOD_ID, fileHelper);
     }
 
     @Override

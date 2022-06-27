@@ -24,11 +24,11 @@ import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import net.minecraftforge.fml.util.ObfuscationReflectionHelper;
 import xfacthd.framedblocks.FramedBlocks;
 import xfacthd.framedblocks.api.util.FramedBlockData;
+import xfacthd.framedblocks.api.util.FramedConstants;
 import xfacthd.framedblocks.client.util.*;
 import xfacthd.framedblocks.common.FBContent;
 import xfacthd.framedblocks.common.block.*;
 import xfacthd.framedblocks.api.block.IFramedBlock;
-import xfacthd.framedblocks.common.block.FramedRailSlopeBlock;
 import xfacthd.framedblocks.common.data.PropertyHolder;
 import xfacthd.framedblocks.common.item.FramedBlueprintItem;
 import xfacthd.framedblocks.common.blockentity.FramedDoubleBlockEntity;
@@ -38,13 +38,14 @@ import java.lang.reflect.Method;
 import java.util.Random;
 
 @SuppressWarnings("ConstantConditions")
-@Mod.EventBusSubscriber(modid = FramedBlocks.MODID, value = Dist.CLIENT, bus = Mod.EventBusSubscriber.Bus.MOD)
+@Mod.EventBusSubscriber(modid = FramedConstants.MOD_ID, value = Dist.CLIENT, bus = Mod.EventBusSubscriber.Bus.MOD)
 public final class GhostBlockRenderer
 {
     private static final Random RANDOM = new Random();
     private static final FramedBlockData GHOST_MODEL_DATA = new FramedBlockData(true);
     private static final FramedBlockData GHOST_MODEL_DATA_LEFT = new FramedBlockData(true);
     private static final FramedBlockData GHOST_MODEL_DATA_RIGHT = new FramedBlockData(true);
+    private static final String PROFILER_KEY = FramedConstants.MOD_ID + "_ghost_block";
 
     @SubscribeEvent
     public static void onClientSetup(final FMLClientSetupEvent event)
@@ -54,8 +55,31 @@ public final class GhostBlockRenderer
         //Needed to render ghosts of double blocks
         GHOST_MODEL_DATA.setData(FramedDoubleBlockEntity.DATA_LEFT, GHOST_MODEL_DATA_LEFT);
         GHOST_MODEL_DATA.setData(FramedDoubleBlockEntity.DATA_RIGHT, GHOST_MODEL_DATA_RIGHT);
+
+        //MinecraftForge.EVENT_BUS.addListener(GhostBlockRenderer::onRenderStage);
+        //MinecraftForge.EVENT_BUS.addListener(GhostBlockRenderer::onGatherLevelGeometry);
     }
 
+    // TODO: activate when RenderLevelStageEvent is merged
+    //public static void onRenderStage(final RenderLevelStageEvent event)
+    //{
+    //    if (event.getStage() == RenderLevelStageEvent.Stage.AFTER_PARTICLES)
+    //    {
+    //        mc().getProfiler().push(PROFILER_KEY);
+    //        drawGhostBlock(mc().renderBuffers().bufferSource(), event.getPoseStack());
+    //        mc().getProfiler().pop();
+    //    }
+    //}
+
+    // TODO: activate when GatherGeometryEvent is merged
+    //public static void onGatherLevelGeometry(final GatherGeometryEvent.LevelDynamic event)
+    //{
+    //    mc().getProfiler().push(PROFILER_KEY);
+    //    drawGhostBlock(event.getBufferSource(), event.getPoseStack());
+    //    mc().getProfiler().pop();
+    //}
+
+    //TODO: modularize this system and add a way to register additional renderers for things like a placement aid
     public static void drawGhostBlock(MultiBufferSource buffers, PoseStack mstack)
     {
         if (!ClientConfig.showGhostBlocks) { return; }
@@ -190,6 +214,9 @@ public final class GhostBlockRenderer
     {
         Vec3 offset = Vec3.atLowerCornerOf(renderPos).subtract(mc().gameRenderer.getMainCamera().getPosition());
         VertexConsumer builder = new GhostVertexConsumer(buffers.getBuffer(CustomRenderType.GHOST_BLOCK), 0xAA);
+        // TODO: switch over to this builder creation when GatherGeometryEvent is merged and no other workaround was found
+        //RenderType bufferType = Minecraft.useShaderTransparency() ? RenderType.translucentMovingBlock() : RenderType.translucentNoCrumbling();
+        //VertexConsumer builder = new GhostVertexConsumer(buffers.getBuffer(bufferType), 0xAA);
 
         if (camoState.isAir() && camoStateTwo.isAir())
         {
@@ -205,9 +232,9 @@ public final class GhostBlockRenderer
                 }
             }
         }
-
+        // TODO: remove endBatch() call when GatherGeometryEvent is merged
         ((MultiBufferSource.BufferSource) buffers).endBatch(CustomRenderType.GHOST_BLOCK);
-        ForgeHooksClient.setRenderType(null);
+        ForgeHooksClient.setRenderType(null); //TODO: check if this is also supposed to be null when GatherGeometryEvent is merged
     }
 
     private static boolean canRenderInLayer(BlockState camoState, RenderType layer)

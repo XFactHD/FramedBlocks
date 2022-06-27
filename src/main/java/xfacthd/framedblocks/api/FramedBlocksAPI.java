@@ -16,6 +16,10 @@ public interface FramedBlocksAPI
 
 
 
+    /**
+     * @deprecated Use {@link xfacthd.framedblocks.api.util.FramedConstants#MOD_ID} instead
+     */
+    @Deprecated(forRemoval = true)
     String modid();
 
     /**

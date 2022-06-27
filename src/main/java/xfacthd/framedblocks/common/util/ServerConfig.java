@@ -10,7 +10,7 @@ import net.minecraftforge.fml.event.config.ModConfigEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import net.minecraftforge.registries.ForgeRegistries;
 import org.apache.commons.lang3.tuple.Pair;
-import xfacthd.framedblocks.FramedBlocks;
+import xfacthd.framedblocks.api.util.FramedConstants;
 
 public class ServerConfig
 {
@@ -40,15 +40,15 @@ public class ServerConfig
         builder.push("general");
         allowBlockEntitiesValue = builder
                 .comment("Whether blocks with block entities can be placed in Framed Blocks")
-                .translation("config." + FramedBlocks.MODID + ".allowBlockEntities")
+                .translation("config." + FramedConstants.MOD_ID + ".allowBlockEntities")
                 .define("allowBlockEntities", false);
         enableIntangibleFeatureValue = builder
                 .comment("Enables the intangbility feature. Disabling this also prevents moving through blocks that are already marked as intangible")
-                .translation("config." + FramedBlocks.MODID + ".enableIntangibleFeature")
+                .translation("config." + FramedConstants.MOD_ID + ".enableIntangibleFeature")
                 .define("enableIntangibleFeature", false);
         intangibleMarkerItemValue = builder
                 .comment("The item to use for making Framed Blocks intangible. The value must be a valid item registry name")
-                .translation("config." + FramedBlocks.MODID + ".intangibleMarkerItem")
+                .translation("config." + FramedConstants.MOD_ID + ".intangibleMarkerItem")
                 .define("intangibleMarkerItem", Items.PHANTOM_MEMBRANE.getRegistryName().toString(), ServerConfig::validateItemName);
         builder.pop();
     }
@@ -69,7 +69,7 @@ public class ServerConfig
     @SubscribeEvent
     public void onConfigReloaded(ModConfigEvent event)
     {
-        if (event.getConfig().getType() == ModConfig.Type.SERVER && event.getConfig().getModId().equals(FramedBlocks.MODID))
+        if (event.getConfig().getType() == ModConfig.Type.SERVER && event.getConfig().getModId().equals(FramedConstants.MOD_ID))
         {
             allowBlockEntities = allowBlockEntitiesValue.get();
             enableIntangibleFeature = enableIntangibleFeatureValue.get();

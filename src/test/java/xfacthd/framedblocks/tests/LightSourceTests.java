@@ -8,27 +8,27 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.gametest.GameTestHolder;
 import net.minecraftforge.registries.ForgeRegistries;
-import xfacthd.framedblocks.FramedBlocks;
 import xfacthd.framedblocks.api.block.IFramedBlock;
 import xfacthd.framedblocks.api.type.IBlockType;
+import xfacthd.framedblocks.api.util.FramedConstants;
 import xfacthd.framedblocks.api.util.FramedProperties;
 import xfacthd.framedblocks.api.util.test.TestUtils;
 import xfacthd.framedblocks.common.data.BlockType;
 
 import java.util.*;
 
-@GameTestHolder(FramedBlocks.MODID)
+@GameTestHolder(FramedConstants.MOD_ID)
 public final class LightSourceTests
 {
     private static final String BATCH_NAME = "lightsource";
-    private static final String STRUCTURE_NAME = FramedBlocks.MODID + ":lightsourcetests.box";
+    private static final String STRUCTURE_NAME = FramedConstants.MOD_ID + ":lightsourcetests.box";
 
     @GameTestGenerator
     public static Collection<TestFunction> generateLightSourceTests()
     {
         return Arrays.stream(BlockType.values())
                 .filter(LightSourceTests::isNotSelfEmitting)
-                .map(type -> new ResourceLocation(FramedBlocks.MODID, type.getName()))
+                .map(type -> new ResourceLocation(FramedConstants.MOD_ID, type.getName()))
                 .map(ForgeRegistries.BLOCKS::getValue)
                 .filter(Objects::nonNull)
                 .map(LightSourceTests::getTestState)

@@ -6,7 +6,7 @@ import net.minecraft.data.tags.ItemTagsProvider;
 import net.minecraft.tags.ItemTags;
 import net.minecraftforge.common.Tags;
 import net.minecraftforge.common.data.ExistingFileHelper;
-import xfacthd.framedblocks.FramedBlocks;
+import xfacthd.framedblocks.api.util.FramedConstants;
 import xfacthd.framedblocks.common.FBContent;
 import xfacthd.framedblocks.api.util.Utils;
 
@@ -14,11 +14,11 @@ public class FramedItemTagProvider extends ItemTagsProvider
 {
     public FramedItemTagProvider(DataGenerator gen, BlockTagsProvider provider, ExistingFileHelper existingFileHelper)
     {
-        super(gen, provider, FramedBlocks.MODID, existingFileHelper);
+        super(gen, provider, FramedConstants.MOD_ID, existingFileHelper);
     }
 
     @Override
-    public String getName() { return super.getName() + ": " + FramedBlocks.MODID; }
+    public String getName() { return super.getName() + ": " + FramedConstants.MOD_ID; }
 
     @Override
     protected void addTags()
