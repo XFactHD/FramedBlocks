@@ -332,7 +332,7 @@ public interface IFramedBlock extends EntityBlock//, IFacade
         return false;
     }
 
-    default void onStateChangeClient(Level level, BlockPos pos, BlockState oldState, BlockState newState)
+    default void onStateChangeClient(LevelReader level, BlockPos pos, BlockState oldState, BlockState newState)
     {
         if (level.getBlockEntity(pos) instanceof FramedBlockEntity be)
         {

@@ -90,7 +90,16 @@ public class FramedTrapDoorBlock extends TrapDoorBlock implements IFramedBlock
     }
 
     @Override
-    public void onStateChangeClient(Level level, BlockPos pos, BlockState oldState, BlockState newState)
+    public void onBlockStateChange(LevelReader level, BlockPos pos, BlockState oldState, BlockState newState)
+    {
+        if (level.isClientSide())
+        {
+            onStateChangeClient(level, pos, oldState, newState);
+        }
+    }
+
+    @Override
+    public void onStateChangeClient(LevelReader level, BlockPos pos, BlockState oldState, BlockState newState)
     {
         IFramedBlock.super.onStateChangeClient(level, pos, oldState, newState);
 

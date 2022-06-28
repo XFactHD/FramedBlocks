@@ -64,6 +64,15 @@ public class FramedBouncyCubeBlock extends SlimeBlock implements IFramedBlock
     }
 
     @Override
+    public void onBlockStateChange(LevelReader level, BlockPos pos, BlockState oldState, BlockState newState)
+    {
+        if (level.isClientSide())
+        {
+            onStateChangeClient(level, pos, oldState, newState);
+        }
+    }
+
+    @Override
     public boolean useShapeForLightOcclusion(BlockState state) { return useCamoOcclusionShapeForLightOcclusion(state); }
 
     @Override

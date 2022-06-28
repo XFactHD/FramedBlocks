@@ -5,8 +5,7 @@ import com.google.common.collect.ImmutableMap;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.world.item.context.BlockPlaceContext;
-import net.minecraft.world.level.Level;
-import net.minecraft.world.level.LevelAccessor;
+import net.minecraft.world.level.*;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.StairBlock;
 import net.minecraft.world.level.block.state.BlockState;
@@ -64,7 +63,7 @@ public class FramedVerticalStairsBlock extends FramedBlock
     }
 
     @Override
-    public void onStateChangeClient(Level level, BlockPos pos, BlockState oldState, BlockState newState)
+    public void onStateChangeClient(LevelReader level, BlockPos pos, BlockState oldState, BlockState newState)
     {
         super.onStateChangeClient(level, pos, oldState, newState);
 
