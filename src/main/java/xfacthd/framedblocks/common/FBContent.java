@@ -32,8 +32,7 @@ import xfacthd.framedblocks.common.item.FramedBlueprintItem;
 import xfacthd.framedblocks.common.item.FramedToolItem;
 import xfacthd.framedblocks.common.blockentity.*;
 
-import java.util.Arrays;
-import java.util.Collection;
+import java.util.*;
 import java.util.function.Function;
 import java.util.function.Supplier;
 
@@ -57,6 +56,8 @@ public final class FBContent
                 return builder;
             }
     );
+
+    private static final Map<BlockType, RegistryObject<Block>> BLOCKS_BY_TYPE = new EnumMap<>(BlockType.class);
 
     // region Blocks
     public static final RegistryObject<Block> blockFramedCube = registerBlock(FramedCube::new, BlockType.FRAMED_CUBE);
@@ -146,83 +147,69 @@ public final class FBContent
     );
     public static final RegistryObject<BlockEntityType<FramedSignBlockEntity>> blockEntityTypeFramedSign = createBlockEntityType(
             FramedSignBlockEntity::new,
-            "framed_sign",
-            blockFramedSign, blockFramedWallSign
+            BlockType.FRAMED_SIGN, BlockType.FRAMED_WALL_SIGN
     );
     public static final RegistryObject<BlockEntityType<FramedDoubleSlabBlockEntity>> blockEntityTypeDoubleFramedSlab = createBlockEntityType(
             FramedDoubleSlabBlockEntity::new,
-            "framed_double_slab",
-            blockFramedDoubleSlab
+            BlockType.FRAMED_DOUBLE_SLAB
     );
     public static final RegistryObject<BlockEntityType<FramedDoublePanelBlockEntity>> blockEntityTypeDoubleFramedPanel = createBlockEntityType(
             FramedDoublePanelBlockEntity::new,
-            "framed_double_panel",
-            blockFramedDoublePanel
+            BlockType.FRAMED_DOUBLE_PANEL
     );
     public static final RegistryObject<BlockEntityType<FramedDoubleSlopeBlockEntity>> blockEntityTypeDoubleFramedSlope = createBlockEntityType(
             FramedDoubleSlopeBlockEntity::new,
-            "framed_double_slope",
-            blockFramedDoubleSlope
+            BlockType.FRAMED_DOUBLE_SLOPE
     );
     public static final RegistryObject<BlockEntityType<FramedDoubleCornerBlockEntity>> blockEntityTypeDoubleFramedCorner = createBlockEntityType(
             FramedDoubleCornerBlockEntity::new,
-            "framed_double_corner",
-            blockFramedDoubleCorner
+            BlockType.FRAMED_DOUBLE_CORNER
     );
     public static final RegistryObject<BlockEntityType<FramedDoubleThreewayCornerBlockEntity>> blockEntityTypeDoubleFramedThreewayCorner = createBlockEntityType(
             FramedDoubleThreewayCornerBlockEntity::new,
-            "framed_double_threeway_corner",
-            blockFramedDoublePrismCorner, blockFramedDoubleThreewayCorner
+            BlockType.FRAMED_DOUBLE_THREEWAY_CORNER, BlockType.FRAMED_DOUBLE_PRISM_CORNER
     );
     public static final RegistryObject<BlockEntityType<FramedChestBlockEntity>> blockEntityTypeFramedChest = createBlockEntityType(
             FramedChestBlockEntity::new,
-            "framed_chest",
-            blockFramedChest
+            BlockType.FRAMED_CHEST
     );
     public static final RegistryObject<BlockEntityType<FramedFlowerPotBlockEntity>> blockEntityTypeFramedFlowerPot = createBlockEntityType(
             FramedFlowerPotBlockEntity::new,
-            "framed_flower_pot",
-            blockFramedFlowerPot
+            BlockType.FRAMED_FLOWER_POT
     );
     public static final RegistryObject<BlockEntityType<FramedCollapsibleBlockEntity>> blockEntityTypeFramedCollapsibleBlock = createBlockEntityType(
             FramedCollapsibleBlockEntity::new,
-            "framed_collapsible_block",
-            blockFramedCollapsibleBlock
+            BlockType.FRAMED_COLLAPSIBLE_BLOCK
     );
     public static final RegistryObject<BlockEntityType<FramedStorageBlockEntity>> blockEntityTypeFramedSecretStorage = createBlockEntityType(
             FramedStorageBlockEntity::new,
-            "framed_secret_storage",
-            blockFramedSecretStorage
+            BlockType.FRAMED_SECRET_STORAGE
     );
     public static final RegistryObject<BlockEntityType<FramedDoubleSlopeSlabBlockEntity>> blockEntityTypeFramedDoubleSlopeSlab = createBlockEntityType(
             FramedDoubleSlopeSlabBlockEntity::new,
-            "framed_double_slope_slab",
-            blockFramedDoubleSlopeSlab
+            BlockType.FRAMED_DOUBLE_SLOPE_SLAB
     );
     public static final RegistryObject<BlockEntityType<FramedInverseDoubleSlopeSlabBlockEntity>> blockEntityTypeFramedInverseDoubleSlopeSlab = createBlockEntityType(
             FramedInverseDoubleSlopeSlabBlockEntity::new,
             "framed_inverse_double_slope_slab",
-            blockFramedInverseDoubleSlopeSlab
+            () -> new Block[] { blockFramedInverseDoubleSlopeSlab.get() } //TODO: switch to by-type registration in breaking window
     );
     public static final RegistryObject<BlockEntityType<FramedDoubleSlopePanelBlockEntity>> blockEntityTypeFramedDoubleSlopePanel = createBlockEntityType(
             FramedDoubleSlopePanelBlockEntity::new,
-            "framed_double_slope_panel",
-            blockFramedDoubleSlopePanel
+            BlockType.FRAMED_DOUBLE_SLOPE_PANEL
     );
     public static final RegistryObject<BlockEntityType<FramedInverseDoubleSlopePanelBlockEntity>> blockEntityTypeFramedInverseDoubleSlopePanel = createBlockEntityType(
             FramedInverseDoubleSlopePanelBlockEntity::new,
             "framed_inverse_double_slope_panel",
-            blockFramedInverseDoubleSlopePanel
+            () -> new Block[] { blockFramedInverseDoubleSlopePanel.get() } //TODO: switch to by-type registration in breaking window
     );
     public static final RegistryObject<BlockEntityType<FramedDoubleStairsBlockEntity>> blockEntityTypeFramedDoubleStairs = createBlockEntityType(
             FramedDoubleStairsBlockEntity::new,
-            "framed_double_stairs",
-            blockFramedDoubleStairs
+           BlockType.FRAMED_DOUBLE_STAIRS
     );
     public static final RegistryObject<BlockEntityType<FramedVerticalDoubleStairsBlockEntity>> blockEntityTypeFramedVerticalDoubleStairs = createBlockEntityType(
             FramedVerticalDoubleStairsBlockEntity::new,
-            "framed_vertical_double_stairs",
-            blockFramedVerticalDoubleStairs
+            BlockType.FRAMED_VERTICAL_DOUBLE_STAIRS
     );
     // endregion
 
@@ -303,12 +290,14 @@ public final class FBContent
 
     private static <T extends Block & IFramedBlock> RegistryObject<Block> registerBlock(Supplier<T> blockFactory, BlockType type)
     {
-        return BLOCKS.register(type.getName(), () ->
+        RegistryObject<Block> result = BLOCKS.register(type.getName(), () ->
         {
             T block = blockFactory.get();
             Preconditions.checkArgument(block.getBlockType() == type);
             return block;
         });
+        BLOCKS_BY_TYPE.put(type, result);
+        return result;
     }
 
     private static RegistryObject<Item> registerToolItem(Function<FramedToolType, Item> itemFactory, FramedToolType type)
@@ -316,12 +305,15 @@ public final class FBContent
         return ITEMS.register(type.getName(), () -> itemFactory.apply(type));
     }
 
-    @SafeVarargs
     private static <T extends BlockEntity> RegistryObject<BlockEntityType<T>> createBlockEntityType(
-            BlockEntityType.BlockEntitySupplier<T> factory, String name, RegistryObject<Block>... roBlocks
+            BlockEntityType.BlockEntitySupplier<T> factory, BlockType... types
     )
     {
-        return createBlockEntityType(factory, name, () -> Arrays.stream(roBlocks).map(RegistryObject::get).toArray(Block[]::new));
+        Supplier<Block[]> blocks = () -> Arrays.stream(types)
+                .map(BLOCKS_BY_TYPE::get)
+                .map(RegistryObject::get)
+                .toArray(Block[]::new);
+        return createBlockEntityType(factory, types[0].getName(), blocks);
     }
 
     private static <T extends BlockEntity> RegistryObject<BlockEntityType<T>> createBlockEntityType(
