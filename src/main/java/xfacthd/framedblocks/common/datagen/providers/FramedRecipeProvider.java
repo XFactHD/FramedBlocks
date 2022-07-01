@@ -170,6 +170,30 @@ public class FramedRecipeProvider extends RecipeProvider
                 .unlockedBy("hasFramedBlock", HAS_FRAMED_BLOCK)
                 .save(consumer);
 
+        ShapedRecipeBuilder.shaped(FBContent.blockFramedStonePressurePlate.get())
+                .pattern("FF")
+                .pattern("SS")
+                .define('F', FBContent.blockFramedCube.get())
+                .define('S', Tags.Items.STONE)
+                .unlockedBy("hasFramedBlock", HAS_FRAMED_BLOCK)
+                .save(consumer);
+
+        ShapedRecipeBuilder.shaped(FBContent.blockFramedGoldPressurePlate.get())
+                .pattern("FF")
+                .pattern("GG")
+                .define('F', FBContent.blockFramedCube.get())
+                .define('G', Tags.Items.INGOTS_GOLD)
+                .unlockedBy("hasFramedBlock", HAS_FRAMED_BLOCK)
+                .save(consumer);
+
+        ShapedRecipeBuilder.shaped(FBContent.blockFramedIronPressurePlate.get())
+                .pattern("FF")
+                .pattern("II")
+                .define('F', FBContent.blockFramedCube.get())
+                .define('I', Tags.Items.INGOTS_IRON)
+                .unlockedBy("hasFramedBlock", HAS_FRAMED_BLOCK)
+                .save(consumer);
+
         ShapedRecipeBuilder.shaped(FBContent.blockFramedLadder.get(), 3)
                 .pattern("F F")
                 .pattern("FSF")
@@ -181,6 +205,12 @@ public class FramedRecipeProvider extends RecipeProvider
 
         ShapelessRecipeBuilder.shapeless(FBContent.blockFramedButton.get())
                 .requires(FBContent.blockFramedCube.get())
+                .unlockedBy("hasFramedBlock", has(FBContent.blockFramedCube.get()))
+                .save(consumer);
+
+        ShapelessRecipeBuilder.shapeless(FBContent.blockFramedStoneButton.get())
+                .requires(FBContent.blockFramedCube.get())
+                .requires(Tags.Items.STONE)
                 .unlockedBy("hasFramedBlock", has(FBContent.blockFramedCube.get()))
                 .save(consumer);
 

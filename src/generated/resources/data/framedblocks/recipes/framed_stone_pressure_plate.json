@@ -1,0 +1,18 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "key": {
+    "F": {
+      "item": "framedblocks:framed_cube"
+    },
+    "S": {
+      "tag": "forge:stone"
+    }
+  },
+  "pattern": [
+    "FF",
+    "SS"
+  ],
+  "result": {
+    "item": "framedblocks:framed_stone_pressure_plate"
+  }
+}

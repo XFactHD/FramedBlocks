@@ -8,27 +8,26 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.*;
-import net.minecraft.world.level.block.PressurePlateBlock;
-import net.minecraft.world.level.block.SoundType;
+import net.minecraft.world.level.block.*;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.storage.loot.LootContext;
 import net.minecraft.world.phys.BlockHitResult;
+import xfacthd.framedblocks.api.block.FramedBlockEntity;
 import xfacthd.framedblocks.api.block.IFramedBlock;
 import xfacthd.framedblocks.common.data.BlockType;
-import xfacthd.framedblocks.api.block.FramedBlockEntity;
 
 import javax.annotation.Nullable;
 import java.util.List;
 
 @SuppressWarnings("deprecation")
-public class FramedPressurePlateBlock extends PressurePlateBlock implements IFramedBlock
+public class FramedWeightedPressurePlateBlock extends WeightedPressurePlateBlock implements IFramedBlock
 {
     private final BlockType type;
 
-    private FramedPressurePlateBlock(BlockType type, Sensitivity sensitivity, Properties props)
+    private FramedWeightedPressurePlateBlock(BlockType type, int maxWeight, Properties props)
     {
-        super(sensitivity, props);
+        super(maxWeight, props);
         this.type = type;
     }
 
@@ -88,23 +87,33 @@ public class FramedPressurePlateBlock extends PressurePlateBlock implements IFra
 
 
 
-    public static FramedPressurePlateBlock wood()
+    // Merge states with power > 0 to avoid unnecessary model duplication
+    public static BlockState mergeWeightedState(BlockState state)
     {
-        return new FramedPressurePlateBlock(
-                BlockType.FRAMED_PRESSURE_PLATE,
-                Sensitivity.EVERYTHING,
-                IFramedBlock.createProperties(BlockType.FRAMED_PRESSURE_PLATE)
+        if (state.getValue(WeightedPressurePlateBlock.POWER) > 1)
+        {
+            return state.setValue(WeightedPressurePlateBlock.POWER, 1);
+        }
+        return state;
+    }
+
+    public static FramedWeightedPressurePlateBlock gold()
+    {
+        return new FramedWeightedPressurePlateBlock(
+                BlockType.FRAMED_GOLD_PRESSURE_PLATE,
+                15,
+                IFramedBlock.createProperties(BlockType.FRAMED_GOLD_PRESSURE_PLATE)
                         .noCollission()
                         .strength(0.5F)
         );
     }
 
-    public static FramedPressurePlateBlock stone()
+    public static FramedWeightedPressurePlateBlock iron()
     {
-        return new FramedPressurePlateBlock(
-                BlockType.FRAMED_STONE_PRESSURE_PLATE,
-                Sensitivity.MOBS,
-                IFramedBlock.createProperties(BlockType.FRAMED_STONE_PRESSURE_PLATE)
+        return new FramedWeightedPressurePlateBlock(
+                BlockType.FRAMED_IRON_PRESSURE_PLATE,
+                150,
+                IFramedBlock.createProperties(BlockType.FRAMED_IRON_PRESSURE_PLATE)
                         .requiresCorrectToolForDrops()
                         .noCollission()
                         .strength(0.5F)

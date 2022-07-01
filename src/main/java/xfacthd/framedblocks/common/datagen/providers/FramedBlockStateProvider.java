@@ -10,6 +10,7 @@ import net.minecraftforge.client.model.generators.*;
 import net.minecraftforge.common.data.ExistingFileHelper;
 import net.minecraftforge.registries.RegistryObject;
 import xfacthd.framedblocks.api.util.FramedConstants;
+import xfacthd.framedblocks.client.model.FramedMarkedPressurePlateModel;
 import xfacthd.framedblocks.common.FBContent;
 import xfacthd.framedblocks.common.data.PropertyHolder;
 
@@ -76,8 +77,12 @@ public class FramedBlockStateProvider extends BlockStateProvider
         registerFramedGate(cube);
         registerFramedDoor(cube);
         registerFramedPressurePlate(cube);
+        registerFramedStonePressurePlate();
+        registerFramedGoldPressurePlate();
+        registerFramedIronPressurePlate();
         registerFramedLadder();
         registerFramedButton(cube);
+        registerFramedStoneButton();
         registerFramedLever();
         registerFramedSign(cube);
         registerFramedTorch();
@@ -148,6 +153,99 @@ public class FramedBlockStateProvider extends BlockStateProvider
                 .texture("texture", TEXTURE);
     }
 
+    private void registerFramedStonePressurePlate()
+    {
+        ModelFile modelUp = models().withExistingParent(
+                "framed_stone_pressure_plate_up",
+                modLoc("block/framed_pressure_plate_up")
+        ).texture("background", mcLoc("block/stone"));
+        ModelFile modelDown = models().withExistingParent(
+                "framed_stone_pressure_plate_down",
+                modLoc("block/framed_pressure_plate_down")
+        ).texture("background", mcLoc("block/stone"));
+
+        getVariantBuilder(FBContent.blockFramedStonePressurePlate.get()).forAllStates(state ->
+        {
+            boolean pressed = state.getValue(PressurePlateBlock.POWERED);
+            return ConfiguredModel.builder()
+                    .modelFile(pressed ? modelDown : modelUp)
+                    .build();
+        });
+
+        models().withExistingParent(
+                FramedMarkedPressurePlateModel.STONE_FRAME_LOCATION.getPath(),
+                modLoc("block/framed_pressure_plate_frame_up")
+        ).texture("texture", modLoc("block/stone_plate_frame"));
+        models().withExistingParent(
+                FramedMarkedPressurePlateModel.STONE_FRAME_DOWN_LOCATION.getPath(),
+                modLoc("block/framed_pressure_plate_frame_down")
+        ).texture("texture", modLoc("block/stone_plate_frame"));
+
+        itemModels().withExistingParent("framed_stone_pressure_plate", modLoc("block/framed_stone_pressure_plate_up"));
+    }
+
+    private void registerFramedGoldPressurePlate()
+    {
+        ModelFile modelUp = models().withExistingParent(
+                "framed_gold_pressure_plate_up",
+                modLoc("block/framed_pressure_plate_up")
+        ).texture("background", mcLoc("block/gold_block"));
+        ModelFile modelDown = models().withExistingParent(
+                "framed_gold_pressure_plate_down",
+                modLoc("block/framed_pressure_plate_down")
+        ).texture("background", mcLoc("block/gold_block"));
+
+        getVariantBuilder(FBContent.blockFramedGoldPressurePlate.get()).forAllStates(state ->
+        {
+            boolean pressed = state.getValue(WeightedPressurePlateBlock.POWER) > 0;
+            return ConfiguredModel.builder()
+                    .modelFile(pressed ? modelDown : modelUp)
+                    .build();
+        });
+
+        models().withExistingParent(
+                FramedMarkedPressurePlateModel.GOLD_FRAME_LOCATION.getPath(),
+                modLoc("block/framed_pressure_plate_frame_up")
+        ).texture("texture", modLoc("block/gold_plate_frame"));
+        models().withExistingParent(
+                FramedMarkedPressurePlateModel.GOLD_FRAME_DOWN_LOCATION.getPath(),
+                modLoc("block/framed_pressure_plate_frame_down")
+        ).texture("texture", modLoc("block/gold_plate_frame"));
+
+        itemModels().withExistingParent("framed_gold_pressure_plate", modLoc("block/framed_gold_pressure_plate_up"));
+    }
+
+    private void registerFramedIronPressurePlate()
+    {
+        ModelFile modelUp = models().withExistingParent(
+                "framed_iron_pressure_plate_up",
+                modLoc("block/framed_pressure_plate_up")
+        ).texture("background", mcLoc("block/iron_block"));
+        ModelFile modelDown = models().withExistingParent(
+                "framed_iron_pressure_plate_down",
+                modLoc("block/framed_pressure_plate_down")
+        ).texture("background", mcLoc("block/iron_block"));
+
+        getVariantBuilder(FBContent.blockFramedIronPressurePlate.get()).forAllStates(state ->
+        {
+            boolean pressed = state.getValue(WeightedPressurePlateBlock.POWER) > 0;
+            return ConfiguredModel.builder()
+                    .modelFile(pressed ? modelDown : modelUp)
+                    .build();
+        });
+
+        models().withExistingParent(
+                FramedMarkedPressurePlateModel.IRON_FRAME_LOCATION.getPath(),
+                modLoc("block/framed_pressure_plate_frame_up")
+        ).texture("texture", modLoc("block/iron_plate_frame"));
+        models().withExistingParent(
+                FramedMarkedPressurePlateModel.IRON_FRAME_DOWN_LOCATION.getPath(),
+                modLoc("block/framed_pressure_plate_frame_down")
+        ).texture("texture", modLoc("block/iron_plate_frame"));
+
+        itemModels().withExistingParent("framed_iron_pressure_plate", modLoc("block/framed_iron_pressure_plate_up"));
+    }
+
     private void registerFramedLadder()
     {
         ModelFile ladder = models()
@@ -168,6 +266,39 @@ public class FramedBlockStateProvider extends BlockStateProvider
         itemModels().getBuilder("framed_button")
                 .parent(models().getExistingFile(mcLoc("block/button_inventory")))
                 .texture("texture", TEXTURE);
+    }
+
+    private void registerFramedStoneButton()
+    {
+        ModelFile button = models().getExistingFile(modLoc("framed_stone_button"));
+        ModelFile buttonPressed = models().getExistingFile(modLoc("framed_stone_button_pressed"));
+
+        getVariantBuilder(FBContent.blockFramedStoneButton.get()).forAllStates(state ->
+        {
+            Direction facing = state.getValue(ButtonBlock.FACING);
+            AttachFace face = state.getValue(ButtonBlock.FACE);
+            boolean pressed = state.getValue(ButtonBlock.POWERED);
+
+            int rotX;
+            int rotY;
+
+            if (face == AttachFace.WALL)
+            {
+                rotX = 90;
+                rotY = (int)(facing.toYRot() + 180) % 360;
+            }
+            else
+            {
+                rotX = face == AttachFace.CEILING ? 180 : 0;
+                rotY = (int)facing.toYRot();
+            }
+
+            return ConfiguredModel.builder()
+                    .modelFile(pressed ? buttonPressed : button)
+                    .rotationX(rotX)
+                    .rotationY(rotY)
+                    .build();
+        });
     }
 
     private void registerFramedLever()

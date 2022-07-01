@@ -1,0 +1,6 @@
+{
+  "parent": "framedblocks:block/framed_pressure_plate_down",
+  "textures": {
+    "background": "minecraft:block/gold_block"
+  }
+}

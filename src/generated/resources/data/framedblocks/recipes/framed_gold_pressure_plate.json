@@ -1,0 +1,18 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "key": {
+    "F": {
+      "item": "framedblocks:framed_cube"
+    },
+    "G": {
+      "tag": "forge:ingots/gold"
+    }
+  },
+  "pattern": [
+    "FF",
+    "GG"
+  ],
+  "result": {
+    "item": "framedblocks:framed_gold_pressure_plate"
+  }
+}

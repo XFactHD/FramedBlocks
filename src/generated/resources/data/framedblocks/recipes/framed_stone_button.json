@@ -1,0 +1,14 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "ingredients": [
+    {
+      "item": "framedblocks:framed_cube"
+    },
+    {
+      "tag": "forge:stone"
+    }
+  ],
+  "result": {
+    "item": "framedblocks:framed_stone_button"
+  }
+}
