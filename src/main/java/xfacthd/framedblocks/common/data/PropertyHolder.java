@@ -16,7 +16,7 @@ public final class PropertyHolder
     public static final EnumProperty<RailShape> ASCENDING_RAIL_SHAPE = EnumProperty.create("shape", RailShape.class, RailShape::isAscending);
     public static final EnumProperty<CollapseFace> COLLAPSED_FACE = EnumProperty.create("face", CollapseFace.class);
     public static final EnumProperty<LatchType> LATCH_TYPE = EnumProperty.create("latch", LatchType.class);
-    public static final EnumProperty<Rotation> ROTATION = EnumProperty.create("rotation", Rotation.class);
+    public static final EnumProperty<HorizontalRotation> ROTATION = EnumProperty.create("rotation", HorizontalRotation.class);
 
     public static final BooleanProperty TOP = FramedProperties.TOP;
     public static final BooleanProperty OFFSET = FramedProperties.OFFSET;

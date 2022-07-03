@@ -22,13 +22,12 @@ import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import xfacthd.framedblocks.api.data.CamoContainer;
 import xfacthd.framedblocks.api.data.EmptyCamoContainer;
-import xfacthd.framedblocks.api.util.FramedProperties;
+import xfacthd.framedblocks.api.util.*;
 import xfacthd.framedblocks.common.FBContent;
 import xfacthd.framedblocks.common.data.BlockType;
 import xfacthd.framedblocks.common.data.PropertyHolder;
 import xfacthd.framedblocks.common.blockentity.FramedDoubleBlockEntity;
 import xfacthd.framedblocks.api.block.FramedBlockEntity;
-import xfacthd.framedblocks.api.util.CtmPredicate;
 
 @SuppressWarnings("deprecation")
 public class FramedSlabBlock extends FramedBlock
@@ -107,6 +106,18 @@ public class FramedSlabBlock extends FramedBlock
     {
         return type == PathComputationType.WATER && level.getFluidState(pos).is(FluidTags.WATER);
     }
+
+    @Override
+    public BlockState rotate(BlockState state, Rotation rot)
+    {
+        if (rot != Rotation.NONE)
+        {
+            return state.cycle(PropertyHolder.TOP);
+        }
+        return state;
+    }
+
+
 
     public static ImmutableMap<BlockState, VoxelShape> generateShapes(ImmutableList<BlockState> states)
     {

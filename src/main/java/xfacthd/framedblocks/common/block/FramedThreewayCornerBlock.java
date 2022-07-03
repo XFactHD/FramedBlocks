@@ -3,6 +3,7 @@ package xfacthd.framedblocks.common.block;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
 import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.Rotation;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.block.state.StateDefinition;
@@ -56,6 +57,25 @@ public class FramedThreewayCornerBlock extends FramedBlock
         state = withWater(state, context.getLevel(), context.getClickedPos());
         return withTop(state, context.getClickedFace(), context.getClickLocation());
     }
+
+    @Override
+    public BlockState rotate(BlockState state, Direction face, Rotation rot)
+    {
+        Direction dir = state.getValue(PropertyHolder.FACING_HOR);
+        if (Utils.isY(face) || face == dir.getOpposite() || face == dir.getClockWise())
+        {
+            return state.setValue(PropertyHolder.FACING_HOR, rot.rotate(dir));
+        }
+        else if ((face == dir || face == dir.getCounterClockWise()) && rot != Rotation.NONE)
+        {
+            return state.cycle(PropertyHolder.TOP);
+        }
+        return state;
+    }
+
+    @Override
+    @SuppressWarnings("deprecation")
+    public BlockState rotate(BlockState state, Rotation rot) { return rotate(state, Direction.UP, rot); }
 
 
 

@@ -9,6 +9,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.Rotation;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
@@ -50,6 +51,15 @@ public class FramedDoublePanelBlock extends AbstractFramedDoubleBlock
     public ItemStack getCloneItemStack(BlockState state, HitResult target, BlockGetter level, BlockPos pos, Player player)
     {
         return new ItemStack(FBContent.blockFramedPanel.get());
+    }
+
+    @Override
+    @SuppressWarnings("deprecation")
+    public BlockState rotate(BlockState state, Rotation rotation)
+    {
+        Direction dir = state.getValue(PropertyHolder.FACING_NE);
+        dir = dir == Direction.NORTH ? Direction.EAST : Direction.NORTH;
+        return state.setValue(PropertyHolder.FACING_NE, dir);
     }
 
     @Override

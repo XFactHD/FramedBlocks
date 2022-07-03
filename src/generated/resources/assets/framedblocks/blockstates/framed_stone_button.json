@@ -71,22 +71,20 @@
     "face=wall,facing=east,powered=false": {
       "model": "framedblocks:block/framed_stone_button",
       "x": 90,
-      "y": 450
+      "y": 90
     },
     "face=wall,facing=east,powered=true": {
       "model": "framedblocks:block/framed_stone_button_pressed",
       "x": 90,
-      "y": 450
+      "y": 90
     },
     "face=wall,facing=north,powered=false": {
       "model": "framedblocks:block/framed_stone_button",
-      "x": 90,
-      "y": 360
+      "x": 90
     },
     "face=wall,facing=north,powered=true": {
       "model": "framedblocks:block/framed_stone_button_pressed",
-      "x": 90,
-      "y": 360
+      "x": 90
     },
     "face=wall,facing=south,powered=false": {
       "model": "framedblocks:block/framed_stone_button",

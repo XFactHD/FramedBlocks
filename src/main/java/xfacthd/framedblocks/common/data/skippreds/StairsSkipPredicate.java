@@ -10,7 +10,7 @@ import net.minecraft.world.level.block.state.properties.StairsShape;
 import xfacthd.framedblocks.api.block.IFramedBlock;
 import xfacthd.framedblocks.api.util.*;
 import xfacthd.framedblocks.common.data.*;
-import xfacthd.framedblocks.common.data.property.Rotation;
+import xfacthd.framedblocks.common.data.property.HorizontalRotation;
 import xfacthd.framedblocks.common.data.property.StairsType;
 
 public class StairsSkipPredicate implements SideSkipPredicate
@@ -282,10 +282,10 @@ public class StairsSkipPredicate implements SideSkipPredicate
         if (shape != StairsShape.STRAIGHT || (!top && side != Direction.UP) || (top && side != Direction.DOWN)) { return false; }
 
         Direction adjDir = adjState.getValue(FramedProperties.FACING_HOR);
-        Rotation adjRot = adjState.getValue(PropertyHolder.ROTATION);
+        HorizontalRotation adjRot = adjState.getValue(PropertyHolder.ROTATION);
         boolean adjFront = adjState.getValue(PropertyHolder.FRONT);
 
-        if (!adjRot.isVertical() || (adjRot == Rotation.DOWN) != top) { return false; }
+        if (!adjRot.isVertical() || (adjRot == HorizontalRotation.DOWN) != top) { return false; }
 
         if ((adjDir == dir && !adjFront) || (adjDir == dir.getOpposite() && adjFront))
         {
@@ -300,9 +300,9 @@ public class StairsSkipPredicate implements SideSkipPredicate
         if (shape != StairsShape.STRAIGHT || (!top && side != Direction.UP) || (top && side != Direction.DOWN)) { return false; }
 
         Direction adjDir = adjState.getValue(FramedProperties.FACING_HOR);
-        Rotation adjRot = adjState.getValue(PropertyHolder.ROTATION);
+        HorizontalRotation adjRot = adjState.getValue(PropertyHolder.ROTATION);
 
-        if (adjDir == dir && ((!top && adjRot == Rotation.DOWN) || (top && adjRot == Rotation.UP)))
+        if (adjDir == dir && ((!top && adjRot == HorizontalRotation.DOWN) || (top && adjRot == HorizontalRotation.UP)))
         {
             return SideSkipPredicate.compareState(level, pos, side, dir, side.getOpposite());
         }
@@ -315,7 +315,7 @@ public class StairsSkipPredicate implements SideSkipPredicate
         if (shape != StairsShape.STRAIGHT || (!top && side != Direction.UP) || (top && side != Direction.DOWN)) { return false; }
 
         Direction adjDir = adjState.getValue(FramedProperties.FACING_HOR);
-        Rotation adjRot = adjState.getValue(PropertyHolder.ROTATION);
+        HorizontalRotation adjRot = adjState.getValue(PropertyHolder.ROTATION);
         boolean adjFront = adjState.getValue(PropertyHolder.FRONT);
 
         if (!adjRot.isVertical()) { return false; }
@@ -333,11 +333,11 @@ public class StairsSkipPredicate implements SideSkipPredicate
         if (shape != StairsShape.STRAIGHT || (!top && side != Direction.UP) || (top && side != Direction.DOWN)) { return false; }
 
         Direction adjDir = adjState.getValue(FramedProperties.FACING_HOR);
-        Rotation adjRot = adjState.getValue(PropertyHolder.ROTATION);
+        HorizontalRotation adjRot = adjState.getValue(PropertyHolder.ROTATION);
 
         if (!adjRot.isVertical()) { return false; }
 
-        boolean sameOrientation = top == (adjRot == Rotation.UP);
+        boolean sameOrientation = top == (adjRot == HorizontalRotation.UP);
         if ((adjDir == dir && sameOrientation) || (adjDir == dir.getOpposite() && !sameOrientation))
         {
             return SideSkipPredicate.compareState(level, pos, side, dir, side.getOpposite());

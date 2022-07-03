@@ -2,6 +2,7 @@ package xfacthd.framedblocks.common.data.property;
 
 import net.minecraft.core.Direction;
 import net.minecraft.util.StringRepresentable;
+import net.minecraft.world.level.block.Rotation;
 
 import java.util.Locale;
 
@@ -35,6 +36,42 @@ public enum CornerType implements StringRepresentable
             case HORIZONTAL_BOTTOM_LEFT -> HORIZONTAL_TOP_LEFT;
             case HORIZONTAL_TOP_RIGHT -> HORIZONTAL_BOTTOM_RIGHT;
             case HORIZONTAL_TOP_LEFT -> HORIZONTAL_BOTTOM_LEFT;
+        };
+    }
+
+    public CornerType rotate(Rotation rot)
+    {
+        return switch (this)
+        {
+            case HORIZONTAL_TOP_LEFT -> switch (rot)
+            {
+                case NONE -> this;
+                case CLOCKWISE_90 -> HORIZONTAL_TOP_RIGHT;
+                case CLOCKWISE_180 -> HORIZONTAL_BOTTOM_RIGHT;
+                case COUNTERCLOCKWISE_90 -> HORIZONTAL_BOTTOM_LEFT;
+            };
+            case HORIZONTAL_TOP_RIGHT -> switch (rot)
+            {
+                case NONE -> this;
+                case CLOCKWISE_90 -> HORIZONTAL_BOTTOM_RIGHT;
+                case CLOCKWISE_180 -> HORIZONTAL_BOTTOM_LEFT;
+                case COUNTERCLOCKWISE_90 -> HORIZONTAL_TOP_LEFT;
+            };
+            case HORIZONTAL_BOTTOM_LEFT -> switch (rot)
+            {
+                case NONE -> this;
+                case CLOCKWISE_90 -> HORIZONTAL_TOP_LEFT;
+                case CLOCKWISE_180 -> HORIZONTAL_TOP_RIGHT;
+                case COUNTERCLOCKWISE_90 -> HORIZONTAL_BOTTOM_RIGHT;
+            };
+            case HORIZONTAL_BOTTOM_RIGHT -> switch (rot)
+            {
+                case NONE -> this;
+                case CLOCKWISE_90 -> HORIZONTAL_BOTTOM_LEFT;
+                case CLOCKWISE_180 -> HORIZONTAL_TOP_LEFT;
+                case COUNTERCLOCKWISE_90 -> HORIZONTAL_TOP_RIGHT;
+            };
+            case TOP, BOTTOM -> throw new IllegalStateException("Non-horizontal CornerTypes cannot be rotated");
         };
     }
 

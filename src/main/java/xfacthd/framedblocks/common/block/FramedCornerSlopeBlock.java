@@ -5,6 +5,7 @@ import com.google.common.collect.ImmutableMap;
 import net.minecraft.core.Direction;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.Rotation;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
@@ -84,6 +85,20 @@ public class FramedCornerSlopeBlock extends FramedBlock
         state = withCornerType(state, context, side, hitPoint, facing);
 
         return withWater(state, context.getLevel(), context.getClickedPos());
+    }
+
+    @Override
+    @SuppressWarnings("deprecation")
+    public BlockState rotate(BlockState state, Rotation rot)
+    {
+        CornerType type = state.getValue(PropertyHolder.CORNER_TYPE);
+        if (type.isHorizontal())
+        {
+            return state.setValue(PropertyHolder.CORNER_TYPE, type.rotate(rot));
+        }
+
+        Direction dir = rot.rotate(state.getValue(PropertyHolder.FACING_HOR));
+        return state.setValue(PropertyHolder.FACING_HOR, dir);
     }
 
     public static ImmutableMap<BlockState, VoxelShape> generateCornerShapes(ImmutableList<BlockState> states)

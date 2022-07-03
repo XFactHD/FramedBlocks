@@ -572,6 +572,14 @@ public class FramedRecipeProvider extends RecipeProvider
                 .define('N', Tags.Items.NUGGETS_IRON)
                 .unlockedBy("hasFramedBlock", HAS_FRAMED_BLOCK)
                 .save(consumer);
+
+        ShapedRecipeBuilder.shaped(FBContent.itemFramedScrewdriver.get())
+                .pattern("S ")
+                .pattern(" F")
+                .define('S', Tags.Items.RODS_WOODEN)
+                .define('F', FBContent.blockFramedCube.get())
+                .unlockedBy("hasFramedBlock", HAS_FRAMED_BLOCK)
+                .save(consumer);
     }
 
     private static String rl(String path) { return FramedConstants.MOD_ID + ":" + path; }

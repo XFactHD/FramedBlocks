@@ -30,6 +30,7 @@ import org.slf4j.Logger;
 import xfacthd.framedblocks.api.FramedBlocksAPI;
 import xfacthd.framedblocks.api.data.EmptyCamoContainer;
 import xfacthd.framedblocks.api.data.CamoContainer;
+import xfacthd.framedblocks.api.type.IBlockType;
 import xfacthd.framedblocks.api.util.*;
 import xfacthd.framedblocks.api.util.client.ClientUtils;
 
@@ -60,7 +61,7 @@ public class FramedBlockEntity extends BlockEntity
         boolean secondary = hitSecondary(hit);
         CamoContainer camo = getCamo(secondary);
 
-        if (camo.getType().isBlock() && FramedBlocksAPI.getInstance().isFramedHammer(stack))
+        if (camo.getType().isBlock() && stack.is(Utils.FRAMED_HAMMER.get()))
         {
             return clearBlockCamo(player, camo, stack, secondary);
         }
@@ -97,11 +98,11 @@ public class FramedBlockEntity extends BlockEntity
             }
             return InteractionResult.sidedSuccess(level.isClientSide());
         }
-        else if (!camo.isEmpty() && !player.isShiftKeyDown() && stack.is(Utils.WRENCH))
+        else if (!camo.isEmpty() && !player.isShiftKeyDown() && stack.is(Utils.FRAMED_SCREWDRIVER.get()))
         {
             return rotateCamo(camo);
         }
-        else if (FramedBlocksAPI.getInstance().enableIntangibility() && stack.is(FramedBlocksAPI.getInstance().getIntangibilityMarkerItem()) && !intangible && getBlock().getBlockType().allowMakingIntangible())
+        else if (!intangible && canMakeIntangible(stack))
         {
             //noinspection ConstantConditions
             if (!level.isClientSide())
@@ -112,7 +113,7 @@ public class FramedBlockEntity extends BlockEntity
             }
             return InteractionResult.sidedSuccess(level.isClientSide());
         }
-        else if (intangible && player.isShiftKeyDown() && stack.is(Utils.WRENCH))
+        else if (intangible && player.isShiftKeyDown() && stack.is(Utils.FRAMED_SCREWDRIVER.get()))
         {
             //noinspection ConstantConditions
             if (!level.isClientSide())
@@ -129,6 +130,15 @@ public class FramedBlockEntity extends BlockEntity
         }
 
         return InteractionResult.PASS;
+    }
+
+    private boolean canMakeIntangible(ItemStack stack)
+    {
+        if (!FramedBlocksAPI.getInstance().enableIntangibility())
+        {
+            return false;
+        }
+        return stack.is(FramedBlocksAPI.getInstance().getIntangibilityMarkerItem()) && getBlockType().allowMakingIntangible();
     }
 
     private InteractionResult clearBlockCamo(Player player, CamoContainer camo, ItemStack stack, boolean secondary)
@@ -499,6 +509,8 @@ public class FramedBlockEntity extends BlockEntity
     }
 
     public final IFramedBlock getBlock() { return (IFramedBlock) getBlockState().getBlock(); }
+
+    public final IBlockType getBlockType() { return getBlock().getBlockType(); }
 
     public void addCamoDrops(List<ItemStack> drops)
     {

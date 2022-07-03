@@ -82,6 +82,7 @@
   "item.framedblocks.framed_blueprint": "Framed Blueprint",
   "item.framedblocks.framed_hammer": "Framed Hammer",
   "item.framedblocks.framed_key": "Framed Key",
+  "item.framedblocks.framed_screwdriver": "Framed Screwdriver",
   "item.framedblocks.framed_wrench": "Framed Wrench",
   "itemGroup.framed_blocks": "FramedBlocks",
   "msg.framedblocks..lock_state.locked": "locked",

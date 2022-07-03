@@ -4,6 +4,7 @@ import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.Rotation;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
@@ -29,6 +30,17 @@ public class FramedHalfPillarBlock extends FramedBlock
         BlockState state = defaultBlockState();
         state = state.setValue(BlockStateProperties.FACING, context.getClickedFace().getOpposite());
         return withWater(state, context.getLevel(), context.getClickedPos());
+    }
+
+    @Override
+    @SuppressWarnings("deprecation")
+    public BlockState rotate(BlockState state, Rotation rot)
+    {
+        if (rot != Rotation.NONE)
+        {
+            return state.cycle(BlockStateProperties.FACING);
+        }
+        return state;
     }
 
     public static ImmutableMap<BlockState, VoxelShape> generateShapes(ImmutableList<BlockState> states)

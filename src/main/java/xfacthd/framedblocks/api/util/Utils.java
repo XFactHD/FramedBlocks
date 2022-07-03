@@ -37,8 +37,16 @@ public final class Utils
     /** Allow other mods to add items that temporarily disable intangibility to allow interaction with the targetted block */
     public static final TagKey<Item> DISABLE_INTANGIBLE = itemTag("disable_intangible");
 
+    public static final RegistryObject<Item> FRAMED_HAMMER = RegistryObject.create(
+            new ResourceLocation(FramedConstants.MOD_ID, "framed_hammer"),
+            ForgeRegistries.ITEMS
+    );
     public static final RegistryObject<Item> FRAMED_KEY = RegistryObject.create(
             new ResourceLocation(FramedConstants.MOD_ID, "framed_key"),
+            ForgeRegistries.ITEMS
+    );
+    public static final RegistryObject<Item> FRAMED_SCREWDRIVER = RegistryObject.create(
+            new ResourceLocation(FramedConstants.MOD_ID, "framed_screwdriver"),
             ForgeRegistries.ITEMS
     );
 
@@ -70,6 +78,21 @@ public final class Utils
                 vec.y() - Math.floor(vec.y()),
                 vec.z() - Math.floor(vec.z())
         );
+    }
+
+    /**
+     * Calculate how far into the block the coordinate of the given direction points in the given direction
+     */
+    public static double fractionInDir(Vec3 vec, Direction dir)
+    {
+        vec = fraction(vec);
+        double coord = switch (dir.getAxis())
+        {
+            case X -> vec.x;
+            case Y -> vec.y;
+            case Z -> vec.z;
+        };
+        return isPositive(dir) ? coord : (1D - coord);
     }
 
     @SuppressWarnings("unchecked")

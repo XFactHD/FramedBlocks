@@ -97,6 +97,7 @@ public class FramedLanguageProvider extends LanguageProvider
         add(FBContent.itemFramedWrench.get(), "Framed Wrench");
         add(FBContent.itemFramedBlueprint.get(), "Framed Blueprint");
         add(FBContent.itemFramedKey.get(), "Framed Key");
+        add(FBContent.itemFramedScrewdriver.get(), "Framed Screwdriver");
 
         add(KeyMappings.KEY_CATEGORY, "FramedBlocks");
         add(KeyMappings.KEYMAPPING_UPDATE_CULLING.get().getName(), "Update culling cache");

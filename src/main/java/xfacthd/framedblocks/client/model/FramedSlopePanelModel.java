@@ -13,7 +13,7 @@ import xfacthd.framedblocks.api.util.client.BakedQuadTransformer;
 import xfacthd.framedblocks.api.util.client.ModelUtils;
 import xfacthd.framedblocks.common.FBContent;
 import xfacthd.framedblocks.common.data.PropertyHolder;
-import xfacthd.framedblocks.common.data.property.Rotation;
+import xfacthd.framedblocks.common.data.property.HorizontalRotation;
 
 import java.util.List;
 import java.util.Map;
@@ -23,7 +23,7 @@ public class FramedSlopePanelModel extends FramedBlockModel
     private static final float ANGLE = (float) Math.toDegrees(Math.atan(.5));
 
     private final Direction facing;
-    private final Rotation rotation;
+    private final HorizontalRotation rotation;
     private final Direction orientation;
     private final boolean front;
 
@@ -78,7 +78,7 @@ public class FramedSlopePanelModel extends FramedBlockModel
             BakedQuad triQuad = ModelUtils.duplicateQuad(quad);
             if (yAxis)
             {
-                if (BakedQuadTransformer.createVerticalSideTriangleQuad(triQuad, face == facing.getClockWise(), rotation == Rotation.DOWN, depth, offset))
+                if (BakedQuadTransformer.createVerticalSideTriangleQuad(triQuad, face == facing.getClockWise(), rotation == HorizontalRotation.DOWN, depth, offset))
                 {
                     if (front)
                     {
@@ -89,7 +89,7 @@ public class FramedSlopePanelModel extends FramedBlockModel
             }
             else
             {
-                if (BakedQuadTransformer.createTopBottomTriangleQuad(triQuad, facing.getOpposite(), rotation == Rotation.RIGHT, depth, offset))
+                if (BakedQuadTransformer.createTopBottomTriangleQuad(triQuad, facing.getOpposite(), rotation == HorizontalRotation.RIGHT, depth, offset))
                 {
                     if (front)
                     {

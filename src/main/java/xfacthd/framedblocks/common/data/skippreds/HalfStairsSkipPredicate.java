@@ -10,7 +10,7 @@ import net.minecraft.world.level.block.state.properties.StairsShape;
 import xfacthd.framedblocks.api.block.IFramedBlock;
 import xfacthd.framedblocks.api.util.*;
 import xfacthd.framedblocks.common.data.*;
-import xfacthd.framedblocks.common.data.property.Rotation;
+import xfacthd.framedblocks.common.data.property.HorizontalRotation;
 import xfacthd.framedblocks.common.data.property.StairsType;
 
 public class HalfStairsSkipPredicate implements SideSkipPredicate
@@ -219,10 +219,10 @@ public class HalfStairsSkipPredicate implements SideSkipPredicate
     private static boolean testAgainstSlopePanel(BlockGetter level, BlockPos pos, Direction dir, boolean top, boolean right, BlockState adjState, Direction side)
     {
         Direction adjDir = adjState.getValue(FramedProperties.FACING_HOR);
-        Rotation adjRot = adjState.getValue(PropertyHolder.ROTATION);
+        HorizontalRotation adjRot = adjState.getValue(PropertyHolder.ROTATION);
         boolean adjFront = adjState.getValue(PropertyHolder.FRONT);
 
-        if (side != adjRot.withFacing(adjDir) || (adjRot.isVertical() && top != (adjRot == Rotation.UP))) { return false; }
+        if (side != adjRot.withFacing(adjDir) || (adjRot.isVertical() && top != (adjRot == HorizontalRotation.UP))) { return false; }
 
         if (!right && ((adjDir == dir.getCounterClockWise() && !adjFront) || (adjDir == dir.getClockWise() && adjFront)))
         {
@@ -239,17 +239,17 @@ public class HalfStairsSkipPredicate implements SideSkipPredicate
     private static boolean testAgainstExtendedSlopePanel(BlockGetter level, BlockPos pos, Direction dir, boolean top, boolean right, BlockState adjState, Direction side)
     {
         Direction adjDir = adjState.getValue(FramedProperties.FACING_HOR);
-        Rotation adjRot = adjState.getValue(PropertyHolder.ROTATION);
+        HorizontalRotation adjRot = adjState.getValue(PropertyHolder.ROTATION);
 
         if (adjRot.withFacing(adjDir) != side.getOpposite()) { return false; }
 
-        if (adjRot.isVertical() && top == (adjRot == Rotation.DOWN) && ((!right && adjDir == dir.getCounterClockWise()) || (right && adjDir == dir.getClockWise())))
+        if (adjRot.isVertical() && top == (adjRot == HorizontalRotation.DOWN) && ((!right && adjDir == dir.getCounterClockWise()) || (right && adjDir == dir.getClockWise())))
         {
             return SideSkipPredicate.compareState(level, pos, side);
         }
         else if (!adjRot.isVertical() && ((!right && adjDir == dir.getCounterClockWise()) || (right && adjDir == dir.getClockWise())))
         {
-            return right == (adjRot == Rotation.RIGHT) && SideSkipPredicate.compareState(level, pos, side);
+            return right == (adjRot == HorizontalRotation.RIGHT) && SideSkipPredicate.compareState(level, pos, side);
         }
 
         return false;
@@ -258,7 +258,7 @@ public class HalfStairsSkipPredicate implements SideSkipPredicate
     private static boolean testAgainstDoubleSlopePanel(BlockGetter level, BlockPos pos, Direction dir, boolean top, boolean right, BlockState adjState, Direction side)
     {
         Direction adjDir = adjState.getValue(FramedProperties.FACING_HOR);
-        Rotation adjRot = adjState.getValue(PropertyHolder.ROTATION);
+        HorizontalRotation adjRot = adjState.getValue(PropertyHolder.ROTATION);
         boolean adjFront = adjState.getValue(PropertyHolder.FRONT);
 
         if (side.getAxis() != adjRot.withFacing(adjDir).getAxis() || (adjRot.isVertical() && top != (side == Direction.UP))) { return false; }
@@ -278,13 +278,13 @@ public class HalfStairsSkipPredicate implements SideSkipPredicate
     private static boolean testAgainstInverseDoubleSlopePanel(BlockGetter level, BlockPos pos, Direction dir, boolean top, boolean right, BlockState adjState, Direction side)
     {
         Direction adjDir = adjState.getValue(FramedProperties.FACING_HOR);
-        Rotation adjRot = adjState.getValue(PropertyHolder.ROTATION);
+        HorizontalRotation adjRot = adjState.getValue(PropertyHolder.ROTATION);
 
         if (side.getAxis() != adjRot.withFacing(adjDir).getAxis() || (adjRot.isVertical() && top != (side == Direction.UP))) { return false; }
 
         if (adjRot.isVertical())
         {
-            boolean sameOrientation = top == (adjRot == Rotation.UP);
+            boolean sameOrientation = top == (adjRot == HorizontalRotation.UP);
             if (!right && ((adjDir == dir.getCounterClockWise() && !sameOrientation) || (adjDir == dir.getClockWise() && sameOrientation)))
             {
                 return SideSkipPredicate.compareState(level, pos, side);
@@ -296,7 +296,7 @@ public class HalfStairsSkipPredicate implements SideSkipPredicate
         }
         else
         {
-            if (right == (adjRot == Rotation.RIGHT) && (adjDir == dir.getClockWise() || adjDir == dir.getCounterClockWise()))
+            if (right == (adjRot == HorizontalRotation.RIGHT) && (adjDir == dir.getClockWise() || adjDir == dir.getCounterClockWise()))
             {
                 return SideSkipPredicate.compareState(level, pos, side);
             }

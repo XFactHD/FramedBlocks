@@ -6,6 +6,7 @@ public enum FramedToolType
     WRENCH("framed_wrench"),
     BLUEPRINT("framed_blueprint"),
     KEY("framed_key"),
+    SCREWDRIVER("framed_screwdriver"),
     ;
 
     private final String name;

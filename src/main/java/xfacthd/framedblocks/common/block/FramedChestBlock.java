@@ -1,18 +1,18 @@
 package xfacthd.framedblocks.common.block;
 
 import net.minecraft.core.BlockPos;
-import net.minecraft.world.InteractionHand;
-import net.minecraft.world.InteractionResult;
+import net.minecraft.core.Direction;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.Rotation;
 import net.minecraft.world.level.block.entity.*;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
-import net.minecraft.world.phys.BlockHitResult;
+import xfacthd.framedblocks.api.util.FramedProperties;
 import xfacthd.framedblocks.api.util.Utils;
 import xfacthd.framedblocks.common.FBContent;
 import xfacthd.framedblocks.common.blockentity.FramedChestBlockEntity;
@@ -40,19 +40,27 @@ public class FramedChestBlock extends FramedStorageBlock
     }
 
     @Override
-    public InteractionResult use(BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hit)
+    public boolean handleBlockLeftClick(BlockState state, Level level, BlockPos pos, Player player)
     {
-        ItemStack stack = player.getItemInHand(hand);
-        if (stack.is(Utils.WRENCH) && player.isShiftKeyDown())
+        ItemStack stack = player.getMainHandItem();
+        if (stack.is(Utils.FRAMED_HAMMER.get()))
         {
             if (!level.isClientSide())
             {
                 state = state.setValue(PropertyHolder.LATCH_TYPE, state.getValue(PropertyHolder.LATCH_TYPE).next());
                 level.setBlock(pos, state, Block.UPDATE_ALL);
             }
-            return InteractionResult.sidedSuccess(level.isClientSide());
+            return true;
         }
-        return super.use(state, level, pos, player, hand, hit);
+        return false;
+    }
+
+    @Override
+    @SuppressWarnings("deprecation")
+    public BlockState rotate(BlockState state, Rotation rot)
+    {
+        Direction dir = rot.rotate(state.getValue(FramedProperties.FACING_HOR));
+        return state.setValue(FramedProperties.FACING_HOR, dir);
     }
 
     @Override

@@ -122,6 +122,26 @@ public class FramedSlopeBlock extends FramedBlock
         return super.use(state, level, pos, player, hand, hit);
     }
 
+    @Override
+    public BlockState rotate(BlockState state, Direction face, Rotation rot)
+    {
+        Direction dir = state.getValue(PropertyHolder.FACING_HOR);
+        SlopeType type = state.getValue(PropertyHolder.SLOPE_TYPE);
+        if (Utils.isY(face) || (type != SlopeType.HORIZONTAL && face == dir.getOpposite()))
+        {
+            return state.setValue(PropertyHolder.FACING_HOR, rot.rotate(dir));
+        }
+        else if (rot != Rotation.NONE)
+        {
+            return state.cycle(PropertyHolder.SLOPE_TYPE);
+        }
+        return state;
+    }
+
+    @Override
+    @SuppressWarnings("deprecation")
+    public BlockState rotate(BlockState state, Rotation rot) { return rotate(state, Direction.UP, rot); }
+
 
 
     public static final VoxelShape SHAPE_BOTTOM = Shapes.or(

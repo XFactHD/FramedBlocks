@@ -7,8 +7,7 @@ import net.minecraft.util.Mth;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.*;
-import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.*;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
@@ -61,6 +60,13 @@ public class FramedSignBlock extends AbstractFramedSignBlock
     public boolean canSurvive(BlockState state, LevelReader level, BlockPos pos)
     {
         return level.getBlockState(pos.below()).getMaterial().isSolid();
+    }
+
+    @Override
+    public BlockState rotate(BlockState state, Rotation rot)
+    {
+        int rotation = state.getValue(BlockStateProperties.ROTATION_16);
+        return state.setValue(BlockStateProperties.ROTATION_16, rot.rotate(rotation, 16));
     }
 
     @Override

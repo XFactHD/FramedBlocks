@@ -12,12 +12,12 @@ import xfacthd.framedblocks.common.FBContent;
 import xfacthd.framedblocks.common.blockentity.FramedDoubleBlockEntity;
 import xfacthd.framedblocks.common.blockentity.FramedDoubleSlopePanelBlockEntity;
 import xfacthd.framedblocks.common.data.PropertyHolder;
-import xfacthd.framedblocks.common.data.property.Rotation;
+import xfacthd.framedblocks.common.data.property.HorizontalRotation;
 
 public class FramedDoubleSlopePanelModel extends FramedDoubleBlockModel
 {
     private final Direction facing;
-    private final Rotation rotation;
+    private final HorizontalRotation rotation;
     private final boolean front;
 
     public FramedDoubleSlopePanelModel(BlockState state, BakedModel baseModel)
@@ -37,12 +37,12 @@ public class FramedDoubleSlopePanelModel extends FramedDoubleBlockModel
     @Override
     public TextureAtlasSprite getParticleIcon(@NotNull IModelData data)
     {
-        if (rotation == Rotation.LEFT || rotation == Rotation.RIGHT)
+        if (rotation == HorizontalRotation.LEFT || rotation == HorizontalRotation.RIGHT)
         {
             return super.getParticleIcon(data);
         }
 
-        if (rotation == Rotation.UP)
+        if (rotation == HorizontalRotation.UP)
         {
             return getSpriteOrDefault(data, FramedDoubleBlockEntity.DATA_RIGHT, getModels().getB());
         }

@@ -5,6 +5,7 @@ import net.minecraft.core.Direction;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.Rotation;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
@@ -52,6 +53,21 @@ public class FramedDoubleSlopeSlabBlock extends AbstractFramedDoubleBlock
     public VoxelShape getShape(BlockState state, BlockGetter level, BlockPos pos, CollisionContext ctx)
     {
         return state.getValue(PropertyHolder.TOP_HALF) ? SHAPE_TOP : SHAPE_BOTTOM;
+    }
+
+    @Override
+    public BlockState rotate(BlockState state, Direction face, Rotation rot)
+    {
+        if (Utils.isY(face))
+        {
+            Direction dir = state.getValue(PropertyHolder.FACING_HOR);
+            return state.setValue(PropertyHolder.FACING_HOR, rot.rotate(dir));
+        }
+        else if (rot != Rotation.NONE)
+        {
+            return state.cycle(PropertyHolder.TOP_HALF);
+        }
+        return state;
     }
 
     @Override

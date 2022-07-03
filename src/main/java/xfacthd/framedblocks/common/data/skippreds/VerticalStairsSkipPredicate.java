@@ -8,7 +8,7 @@ import net.minecraft.world.level.block.state.properties.*;
 import xfacthd.framedblocks.api.block.IFramedBlock;
 import xfacthd.framedblocks.api.util.*;
 import xfacthd.framedblocks.common.data.*;
-import xfacthd.framedblocks.common.data.property.Rotation;
+import xfacthd.framedblocks.common.data.property.HorizontalRotation;
 import xfacthd.framedblocks.common.data.property.StairsType;
 
 public class VerticalStairsSkipPredicate implements SideSkipPredicate
@@ -232,14 +232,14 @@ public class VerticalStairsSkipPredicate implements SideSkipPredicate
         if (type != StairsType.VERTICAL || (side != dir.getOpposite() && side != dir.getClockWise())) { return false; }
 
         Direction adjDir = adjState.getValue(FramedProperties.FACING_HOR);
-        Rotation adjRot = adjState.getValue(PropertyHolder.ROTATION);
+        HorizontalRotation adjRot = adjState.getValue(PropertyHolder.ROTATION);
         boolean adjFront = adjState.getValue(PropertyHolder.FRONT);
 
-        if (!adjFront && ((adjDir == dir && adjRot == Rotation.RIGHT) || (adjDir == dir.getCounterClockWise() && adjRot == Rotation.LEFT)))
+        if (!adjFront && ((adjDir == dir && adjRot == HorizontalRotation.RIGHT) || (adjDir == dir.getCounterClockWise() && adjRot == HorizontalRotation.LEFT)))
         {
             return SideSkipPredicate.compareState(level, pos, side, dir, side.getOpposite());
         }
-        else if (adjFront && ((adjDir == dir.getOpposite() && adjRot == Rotation.LEFT) || (adjDir == dir.getClockWise() && adjRot == Rotation.RIGHT)))
+        else if (adjFront && ((adjDir == dir.getOpposite() && adjRot == HorizontalRotation.LEFT) || (adjDir == dir.getClockWise() && adjRot == HorizontalRotation.RIGHT)))
         {
             return SideSkipPredicate.compareState(level, pos, side, dir, side.getOpposite());
         }
@@ -252,13 +252,13 @@ public class VerticalStairsSkipPredicate implements SideSkipPredicate
         if (type != StairsType.VERTICAL || (side != dir.getOpposite() && side != dir.getClockWise())) { return false; }
 
         Direction adjDir = adjState.getValue(FramedProperties.FACING_HOR);
-        Rotation adjRot = adjState.getValue(PropertyHolder.ROTATION);
+        HorizontalRotation adjRot = adjState.getValue(PropertyHolder.ROTATION);
 
-        if (side == dir.getOpposite() && adjDir == dir.getCounterClockWise() && adjRot == Rotation.RIGHT)
+        if (side == dir.getOpposite() && adjDir == dir.getCounterClockWise() && adjRot == HorizontalRotation.RIGHT)
         {
             return SideSkipPredicate.compareState(level, pos, side, dir, side.getOpposite());
         }
-        else if (side == dir.getClockWise() && adjDir == dir && adjRot == Rotation.LEFT)
+        else if (side == dir.getClockWise() && adjDir == dir && adjRot == HorizontalRotation.LEFT)
         {
             return SideSkipPredicate.compareState(level, pos, side, dir, side.getOpposite());
         }
@@ -271,7 +271,7 @@ public class VerticalStairsSkipPredicate implements SideSkipPredicate
         if (type != StairsType.VERTICAL || (side != dir.getOpposite() && side != dir.getClockWise())) { return false; }
 
         Direction adjDir = adjState.getValue(FramedProperties.FACING_HOR);
-        Rotation adjRot = adjState.getValue(PropertyHolder.ROTATION);
+        HorizontalRotation adjRot = adjState.getValue(PropertyHolder.ROTATION);
         boolean adjFront = adjState.getValue(PropertyHolder.FRONT);
 
         if (adjRot.isVertical()) { return false; }
@@ -293,13 +293,13 @@ public class VerticalStairsSkipPredicate implements SideSkipPredicate
         if (type != StairsType.VERTICAL || (side != dir.getOpposite() && side != dir.getClockWise())) { return false; }
 
         Direction adjDir = adjState.getValue(FramedProperties.FACING_HOR);
-        Rotation adjRot = adjState.getValue(PropertyHolder.ROTATION);
+        HorizontalRotation adjRot = adjState.getValue(PropertyHolder.ROTATION);
 
-        if (adjDir.getAxis() == dir.getAxis() && adjRot == Rotation.LEFT)
+        if (adjDir.getAxis() == dir.getAxis() && adjRot == HorizontalRotation.LEFT)
         {
             return SideSkipPredicate.compareState(level, pos, side, dir, side.getOpposite());
         }
-        else if (adjDir.getAxis() == dir.getClockWise().getAxis() && adjRot == Rotation.RIGHT)
+        else if (adjDir.getAxis() == dir.getClockWise().getAxis() && adjRot == HorizontalRotation.RIGHT)
         {
             return SideSkipPredicate.compareState(level, pos, side, dir, side.getOpposite());
         }

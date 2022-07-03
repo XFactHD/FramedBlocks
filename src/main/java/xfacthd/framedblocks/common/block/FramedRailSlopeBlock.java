@@ -219,6 +219,14 @@ public class FramedRailSlopeBlock extends BaseRailBlock implements IFramedBlock
     }
 
     @Override
+    public BlockState rotate(BlockState state, Rotation rot)
+    {
+        Direction dir = directionFromShape(state.getValue(PropertyHolder.ASCENDING_RAIL_SHAPE));
+        dir = rot.rotate(dir);
+        return state.setValue(PropertyHolder.ASCENDING_RAIL_SHAPE, shapeFromDirection(dir));
+    }
+
+    @Override
     public final BlockEntity newBlockEntity(BlockPos pos, BlockState state) { return new FramedBlockEntity(pos, state); }
 
     @Override
