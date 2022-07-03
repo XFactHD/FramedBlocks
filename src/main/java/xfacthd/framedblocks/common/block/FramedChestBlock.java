@@ -29,13 +29,13 @@ public class FramedChestBlock extends FramedStorageBlock
     protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder)
     {
         //Don't call super, this block doesn't need the SOLID property
-        builder.add(PropertyHolder.FACING_HOR, PropertyHolder.CHEST_STATE, PropertyHolder.LATCH_TYPE, BlockStateProperties.WATERLOGGED);
+        builder.add(FramedProperties.FACING_HOR, PropertyHolder.CHEST_STATE, PropertyHolder.LATCH_TYPE, BlockStateProperties.WATERLOGGED);
     }
 
     @Override
     public BlockState getStateForPlacement(BlockPlaceContext context)
     {
-        BlockState state = defaultBlockState().setValue(PropertyHolder.FACING_HOR, context.getHorizontalDirection().getOpposite());
+        BlockState state = defaultBlockState().setValue(FramedProperties.FACING_HOR, context.getHorizontalDirection().getOpposite());
         return withWater(state, context.getLevel(), context.getClickedPos());
     }
 

@@ -10,7 +10,6 @@ import xfacthd.framedblocks.api.data.CamoContainer;
 import xfacthd.framedblocks.api.data.EmptyCamoContainer;
 import xfacthd.framedblocks.api.util.FramedProperties;
 import xfacthd.framedblocks.common.FBContent;
-import xfacthd.framedblocks.common.data.PropertyHolder;
 import xfacthd.framedblocks.api.util.Utils;
 import xfacthd.framedblocks.common.util.DoubleSoundMode;
 
@@ -24,7 +23,7 @@ public class FramedDoublePanelBlockEntity extends FramedDoubleBlockEntity
     @Override
     protected boolean hitSecondary(BlockHitResult hit)
     {
-        Direction facing = getBlockState().getValue(PropertyHolder.FACING_NE);
+        Direction facing = getBlockState().getValue(FramedProperties.FACING_NE);
         Direction side = hit.getDirection();
         Vec3 vec = Utils.fraction(hit.getLocation());
 
@@ -47,7 +46,7 @@ public class FramedDoublePanelBlockEntity extends FramedDoubleBlockEntity
     @Override
     public CamoContainer getCamo(Direction side)
     {
-        Direction facing = getBlockState().getValue(PropertyHolder.FACING_NE);
+        Direction facing = getBlockState().getValue(FramedProperties.FACING_NE);
         if (side == facing) { return getCamo(); }
         if (side == facing.getOpposite()) { return getCamoTwo(); }
         return EmptyCamoContainer.EMPTY;
@@ -56,7 +55,7 @@ public class FramedDoublePanelBlockEntity extends FramedDoubleBlockEntity
     @Override
     public boolean isSolidSide(Direction side)
     {
-        Direction facing = getBlockState().getValue(PropertyHolder.FACING_NE);
+        Direction facing = getBlockState().getValue(FramedProperties.FACING_NE);
         if (side == facing || side == facing.getOpposite())
         {
             //noinspection ConstantConditions

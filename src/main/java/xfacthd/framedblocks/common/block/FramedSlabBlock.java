@@ -25,7 +25,6 @@ import xfacthd.framedblocks.api.data.EmptyCamoContainer;
 import xfacthd.framedblocks.api.util.*;
 import xfacthd.framedblocks.common.FBContent;
 import xfacthd.framedblocks.common.data.BlockType;
-import xfacthd.framedblocks.common.data.PropertyHolder;
 import xfacthd.framedblocks.common.blockentity.FramedDoubleBlockEntity;
 import xfacthd.framedblocks.api.block.FramedBlockEntity;
 
@@ -33,19 +32,19 @@ import xfacthd.framedblocks.api.block.FramedBlockEntity;
 public class FramedSlabBlock extends FramedBlock
 {
     public static final CtmPredicate CTM_PREDICATE = (state, dir) ->
-            (state.getValue(PropertyHolder.TOP) && dir == Direction.UP) ||
-            (!state.getValue(PropertyHolder.TOP) && dir == Direction.DOWN);
+            (state.getValue(FramedProperties.TOP) && dir == Direction.UP) ||
+            (!state.getValue(FramedProperties.TOP) && dir == Direction.DOWN);
 
     public FramedSlabBlock()
     {
         super(BlockType.FRAMED_SLAB);
-        registerDefaultState(defaultBlockState().setValue(PropertyHolder.TOP, false));
+        registerDefaultState(defaultBlockState().setValue(FramedProperties.TOP, false));
     }
 
     @Override
     protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder)
     {
-        builder.add(PropertyHolder.TOP, BlockStateProperties.WATERLOGGED, FramedProperties.SOLID, FramedProperties.GLOWING);
+        builder.add(FramedProperties.TOP, BlockStateProperties.WATERLOGGED, FramedProperties.SOLID, FramedProperties.GLOWING);
     }
 
     @Override
@@ -60,7 +59,7 @@ public class FramedSlabBlock extends FramedBlock
         ItemStack stack = player.getItemInHand(hand);
         if (stack.getItem() == FBContent.blockFramedSlab.get().asItem())
         {
-            boolean top = state.getValue(PropertyHolder.TOP);
+            boolean top = state.getValue(FramedProperties.TOP);
             Direction face = hit.getDirection();
             if ((face == Direction.UP && !top) || (face == Direction.DOWN && top))
             {
@@ -112,7 +111,7 @@ public class FramedSlabBlock extends FramedBlock
     {
         if (rot != Rotation.NONE)
         {
-            return state.cycle(PropertyHolder.TOP);
+            return state.cycle(FramedProperties.TOP);
         }
         return state;
     }
@@ -128,7 +127,7 @@ public class FramedSlabBlock extends FramedBlock
 
         for (BlockState state : states)
         {
-            builder.put(state, state.getValue(PropertyHolder.TOP) ? topShape : bottomShape);
+            builder.put(state, state.getValue(FramedProperties.TOP) ? topShape : bottomShape);
         }
 
         return builder.build();

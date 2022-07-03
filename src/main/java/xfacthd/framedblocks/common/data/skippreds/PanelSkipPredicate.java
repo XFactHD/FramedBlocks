@@ -15,7 +15,7 @@ public class PanelSkipPredicate implements SideSkipPredicate
     @Override
     public boolean test(BlockGetter level, BlockPos pos, BlockState state, BlockState adjState, Direction side)
     {
-        Direction dir = state.getValue(PropertyHolder.FACING_HOR);
+        Direction dir = state.getValue(FramedProperties.FACING_HOR);
         if (side == dir) { return SideSkipPredicate.CTM.test(level, pos, state, adjState, side); }
 
         if (adjState.getBlock() instanceof IFramedBlock block && block.getBlockType() instanceof BlockType type)
@@ -46,20 +46,20 @@ public class PanelSkipPredicate implements SideSkipPredicate
     {
         if (side == dir.getOpposite()) { return false; }
 
-        return dir == adjState.getValue(PropertyHolder.FACING_HOR) && SideSkipPredicate.compareState(level, pos, side, dir, dir);
+        return dir == adjState.getValue(FramedProperties.FACING_HOR) && SideSkipPredicate.compareState(level, pos, side, dir, dir);
     }
 
     private static boolean testAgainstDoublePanel(BlockGetter level, BlockPos pos, Direction dir, BlockState adjState, Direction side)
     {
         if (side == dir.getOpposite()) { return false; }
 
-        Direction adjDir = adjState.getValue(PropertyHolder.FACING_NE);
+        Direction adjDir = adjState.getValue(FramedProperties.FACING_NE);
         return (dir == adjDir || dir == adjDir.getOpposite()) && SideSkipPredicate.compareState(level, pos, side, dir, dir);
     }
 
     private static boolean testAgainstPillar(BlockGetter level, BlockPos pos, Direction dir, BlockState adjState, Direction side)
     {
-        Direction adjDir = adjState.getValue(PropertyHolder.FACING_HOR);
+        Direction adjDir = adjState.getValue(FramedProperties.FACING_HOR);
         if ((side == dir.getClockWise() && adjDir == dir) || (side == dir.getCounterClockWise() && adjDir == dir.getClockWise()))
         {
             return SideSkipPredicate.compareState(level, pos, side, dir, dir);
@@ -69,10 +69,10 @@ public class PanelSkipPredicate implements SideSkipPredicate
 
     private static boolean testAgainstEdge(BlockGetter level, BlockPos pos, Direction dir, BlockState adjState, Direction side)
     {
-        Direction adjDir = adjState.getValue(PropertyHolder.FACING_HOR);
+        Direction adjDir = adjState.getValue(FramedProperties.FACING_HOR);
         if (adjDir != dir) { return false; }
 
-        boolean adjTop = adjState.getValue(PropertyHolder.TOP);
+        boolean adjTop = adjState.getValue(FramedProperties.TOP);
         if ((side == Direction.UP && !adjTop) || (side == Direction.DOWN && adjTop))
         {
             return SideSkipPredicate.compareState(level, pos, side, dir, dir);
@@ -115,7 +115,7 @@ public class PanelSkipPredicate implements SideSkipPredicate
 
     private static boolean testAgainstVerticalStairs(BlockGetter level, BlockPos pos, Direction dir, BlockState adjState, Direction side)
     {
-        Direction adjDir = adjState.getValue(PropertyHolder.FACING_HOR);
+        Direction adjDir = adjState.getValue(FramedProperties.FACING_HOR);
         StairsType adjType = adjState.getValue(PropertyHolder.STAIRS_TYPE);
 
         if ((side == dir.getCounterClockWise() && adjDir == dir) || (side == dir.getClockWise() && adjDir == dir.getClockWise()))
@@ -127,7 +127,7 @@ public class PanelSkipPredicate implements SideSkipPredicate
 
     private static boolean testAgainstVerticalDoubleStairs(BlockGetter level, BlockPos pos, Direction dir, BlockState adjState, Direction side)
     {
-        Direction adjDir = adjState.getValue(PropertyHolder.FACING_HOR);
+        Direction adjDir = adjState.getValue(FramedProperties.FACING_HOR);
 
         if ((side == dir.getCounterClockWise() && adjDir == dir) || (side == dir.getClockWise() && adjDir == dir.getClockWise()))
         {
@@ -144,7 +144,7 @@ public class PanelSkipPredicate implements SideSkipPredicate
     {
         if (side.getAxis() == dir.getAxis()) { return false; }
 
-        Direction adjDir = adjState.getValue(PropertyHolder.FACING_HOR);
+        Direction adjDir = adjState.getValue(FramedProperties.FACING_HOR);
         boolean adjTop = adjState.getValue(FramedProperties.TOP);
         boolean adjRight = adjState.getValue(PropertyHolder.RIGHT);
 
@@ -183,7 +183,7 @@ public class PanelSkipPredicate implements SideSkipPredicate
     {
         if (side.getAxis() == dir.getAxis()) { return false; }
 
-        Direction adjDir = adjState.getValue(PropertyHolder.FACING_HOR);
+        Direction adjDir = adjState.getValue(FramedProperties.FACING_HOR);
         Direction adjRotDir = adjState.getValue(PropertyHolder.ROTATION).withFacing(adjDir);
 
         return adjDir == dir && adjRotDir == side.getOpposite() && SideSkipPredicate.compareState(level, pos, side, dir, dir);

@@ -9,19 +9,17 @@ import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import xfacthd.framedblocks.api.data.CamoContainer;
-import xfacthd.framedblocks.api.util.Utils;
+import xfacthd.framedblocks.api.util.*;
 import xfacthd.framedblocks.common.data.BlockType;
-import xfacthd.framedblocks.common.data.PropertyHolder;
 import xfacthd.framedblocks.common.blockentity.FramedDoubleThreewayCornerBlockEntity;
 import xfacthd.framedblocks.common.blockentity.FramedDoubleBlockEntity;
-import xfacthd.framedblocks.api.util.CtmPredicate;
 
 public class FramedDoubleThreewayCornerBlock extends AbstractFramedDoubleBlock
 {
     public static final CtmPredicate CTM_PREDICATE = (state, side) ->
     {
-        Direction dir = state.getValue(PropertyHolder.FACING_HOR);
-        boolean top = state.getValue(PropertyHolder.TOP);
+        Direction dir = state.getValue(FramedProperties.FACING_HOR);
+        boolean top = state.getValue(FramedProperties.TOP);
 
         return side == dir || side == dir.getCounterClockWise() || (dir == Direction.DOWN && !top) || (dir == Direction.UP && top);
     };
@@ -29,21 +27,21 @@ public class FramedDoubleThreewayCornerBlock extends AbstractFramedDoubleBlock
     public FramedDoubleThreewayCornerBlock(BlockType blockType)
     {
         super(blockType);
-        registerDefaultState(defaultBlockState().setValue(PropertyHolder.TOP, false));
+        registerDefaultState(defaultBlockState().setValue(FramedProperties.TOP, false));
     }
 
     @Override
     protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder)
     {
         super.createBlockStateDefinition(builder);
-        builder.add(PropertyHolder.FACING_HOR, PropertyHolder.TOP);
+        builder.add(FramedProperties.FACING_HOR, FramedProperties.TOP);
     }
 
     @Override
     public BlockState getStateForPlacement(BlockPlaceContext context)
     {
         Direction facing = context.getHorizontalDirection();
-        BlockState state = defaultBlockState().setValue(PropertyHolder.FACING_HOR, facing);
+        BlockState state = defaultBlockState().setValue(FramedProperties.FACING_HOR, facing);
         return withTop(state, context.getClickedFace(), context.getClickLocation());
     }
 
@@ -51,7 +49,7 @@ public class FramedDoubleThreewayCornerBlock extends AbstractFramedDoubleBlock
     @SuppressWarnings("deprecation")
     public SoundType getCamoSound(BlockState state, LevelReader level, BlockPos pos)
     {
-        boolean top = state.getValue(PropertyHolder.TOP);
+        boolean top = state.getValue(FramedProperties.TOP);
         if (level.getBlockEntity(pos) instanceof FramedDoubleBlockEntity dbe)
         {
             CamoContainer camo = top ? dbe.getCamo() : dbe.getCamoTwo();
@@ -74,12 +72,12 @@ public class FramedDoubleThreewayCornerBlock extends AbstractFramedDoubleBlock
     {
         if (Utils.isY(face))
         {
-            Direction dir = state.getValue(PropertyHolder.FACING_HOR);
-            return state.setValue(PropertyHolder.FACING_HOR, rot.rotate(dir));
+            Direction dir = state.getValue(FramedProperties.FACING_HOR);
+            return state.setValue(FramedProperties.FACING_HOR, rot.rotate(dir));
         }
         else if (rot != Rotation.NONE)
         {
-            return state.cycle(PropertyHolder.TOP);
+            return state.cycle(FramedProperties.TOP);
         }
         return state;
     }

@@ -9,8 +9,7 @@ import net.minecraft.core.Direction;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.client.model.data.IModelData;
 import xfacthd.framedblocks.api.model.FramedBlockModel;
-import xfacthd.framedblocks.api.util.FramedConstants;
-import xfacthd.framedblocks.api.util.Utils;
+import xfacthd.framedblocks.api.util.*;
 import xfacthd.framedblocks.api.util.client.BakedQuadTransformer;
 import xfacthd.framedblocks.api.util.client.ModelUtils;
 import xfacthd.framedblocks.common.data.property.LatchType;
@@ -28,7 +27,7 @@ public class FramedChestLidModel extends FramedBlockModel
     public FramedChestLidModel(BlockState state, BakedModel baseModel)
     {
         super(state, baseModel);
-        this.facing = state.getValue(PropertyHolder.FACING_HOR);
+        this.facing = state.getValue(FramedProperties.FACING_HOR);
         this.latch = state.getValue(PropertyHolder.LATCH_TYPE);
     }
 

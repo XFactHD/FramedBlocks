@@ -19,7 +19,7 @@ public class FramedDoubleCornerBlock extends AbstractFramedDoubleBlock
 {
     public static final CtmPredicate CTM_PREDICATE = (state, side) ->
     {
-        Direction dir = state.getValue(PropertyHolder.FACING_HOR);
+        Direction dir = state.getValue(FramedProperties.FACING_HOR);
         CornerType type = state.getValue(PropertyHolder.CORNER_TYPE);
 
         if (type.isHorizontal())
@@ -42,7 +42,7 @@ public class FramedDoubleCornerBlock extends AbstractFramedDoubleBlock
     protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder)
     {
         super.createBlockStateDefinition(builder);
-        builder.add(PropertyHolder.FACING_HOR, PropertyHolder.CORNER_TYPE);
+        builder.add(FramedProperties.FACING_HOR, PropertyHolder.CORNER_TYPE);
     }
 
     @Override
@@ -93,13 +93,13 @@ public class FramedDoubleCornerBlock extends AbstractFramedDoubleBlock
     @SuppressWarnings("deprecation")
     public BlockState rotate(BlockState state, Rotation rot)
     {
-        Direction dir = state.getValue(PropertyHolder.FACING_HOR);
+        Direction dir = state.getValue(FramedProperties.FACING_HOR);
         CornerType type = state.getValue(PropertyHolder.CORNER_TYPE);
         if (type.isHorizontal())
         {
             return state.setValue(PropertyHolder.CORNER_TYPE, type.rotate(rot));
         }
-        return state.setValue(PropertyHolder.FACING_HOR, rot.rotate(dir));
+        return state.setValue(FramedProperties.FACING_HOR, rot.rotate(dir));
     }
 
     @Override

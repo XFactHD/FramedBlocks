@@ -82,7 +82,7 @@ public class FramedDoubleSlopePanelBlock extends AbstractFramedDoubleBlock
 
         for (BlockState state : states)
         {
-            Direction dir = state.getValue(PropertyHolder.FACING_HOR);
+            Direction dir = state.getValue(FramedProperties.FACING_HOR);
             if (state.getValue(PropertyHolder.FRONT))
             {
                 dir = dir.getOpposite();

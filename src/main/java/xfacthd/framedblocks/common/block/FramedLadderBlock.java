@@ -13,9 +13,9 @@ import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
+import xfacthd.framedblocks.api.util.FramedProperties;
 import xfacthd.framedblocks.api.util.Utils;
 import xfacthd.framedblocks.common.data.BlockType;
-import xfacthd.framedblocks.common.data.PropertyHolder;
 
 public class FramedLadderBlock extends FramedBlock
 {
@@ -38,27 +38,27 @@ public class FramedLadderBlock extends FramedBlock
     @Override
     protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder)
     {
-        builder.add(PropertyHolder.FACING_HOR, BlockStateProperties.WATERLOGGED);
+        builder.add(FramedProperties.FACING_HOR, BlockStateProperties.WATERLOGGED);
     }
 
     @Override
     public BlockState getStateForPlacement(BlockPlaceContext context)
     {
-        BlockState state = defaultBlockState().setValue(PropertyHolder.FACING_HOR, context.getHorizontalDirection());
+        BlockState state = defaultBlockState().setValue(FramedProperties.FACING_HOR, context.getHorizontalDirection());
         return withWater(state, context.getLevel(), context.getClickedPos());
     }
 
     @Override
     public VoxelShape getShape(BlockState state, BlockGetter level, BlockPos pos, CollisionContext context)
     {
-        return SHAPES[state.getValue(PropertyHolder.FACING_HOR).get2DDataValue()];
+        return SHAPES[state.getValue(FramedProperties.FACING_HOR).get2DDataValue()];
     }
 
     @Override
     @SuppressWarnings("deprecation")
     public VoxelShape getCollisionShape(BlockState state, BlockGetter level, BlockPos pos, CollisionContext context)
     {
-        return COLLISION_SHAPES[state.getValue(PropertyHolder.FACING_HOR).get2DDataValue()];
+        return COLLISION_SHAPES[state.getValue(FramedProperties.FACING_HOR).get2DDataValue()];
     }
 
     @Override
@@ -67,14 +67,14 @@ public class FramedLadderBlock extends FramedBlock
     @Override
     public boolean makesOpenTrapdoorAboveClimbable(BlockState state, LevelReader level, BlockPos pos, BlockState trapdoorState)
     {
-        return state.getValue(PropertyHolder.FACING_HOR) == trapdoorState.getValue(TrapDoorBlock.FACING).getOpposite();
+        return state.getValue(FramedProperties.FACING_HOR) == trapdoorState.getValue(TrapDoorBlock.FACING).getOpposite();
     }
 
     @Override
     @SuppressWarnings("deprecation")
     public BlockState rotate(BlockState state, Rotation rot)
     {
-        Direction dir = state.getValue(PropertyHolder.FACING_HOR);
-        return state.setValue(PropertyHolder.FACING_HOR, rot.rotate(dir));
+        Direction dir = state.getValue(FramedProperties.FACING_HOR);
+        return state.setValue(FramedProperties.FACING_HOR, rot.rotate(dir));
     }
 }

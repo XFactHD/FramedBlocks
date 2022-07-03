@@ -24,7 +24,7 @@ public class FramedDoubleSlopeSlabBlockEntity extends FramedDoubleBlockEntity
     @Override
     protected boolean hitSecondary(BlockHitResult hit)
     {
-        Direction facing = getBlockState().getValue(PropertyHolder.FACING_HOR);
+        Direction facing = getBlockState().getValue(FramedProperties.FACING_HOR);
         Direction side = hit.getDirection();
 
         if (side == facing.getOpposite() || side == Direction.UP) { return true; }
@@ -52,7 +52,7 @@ public class FramedDoubleSlopeSlabBlockEntity extends FramedDoubleBlockEntity
     @Override
     public CamoContainer getCamo(Direction side)
     {
-        Direction facing = getBlockState().getValue(PropertyHolder.FACING_HOR);
+        Direction facing = getBlockState().getValue(FramedProperties.FACING_HOR);
 
         if (side == Direction.UP || side == facing.getOpposite())
         {

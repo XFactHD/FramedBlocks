@@ -19,7 +19,7 @@ public class SlabSkipPredicate implements SideSkipPredicate
 
         if (adjState.getBlock() instanceof IFramedBlock block && block.getBlockType() instanceof BlockType type)
         {
-            boolean top = state.getValue(PropertyHolder.TOP);
+            boolean top = state.getValue(FramedProperties.TOP);
 
             return switch (type)
             {
@@ -42,7 +42,7 @@ public class SlabSkipPredicate implements SideSkipPredicate
 
     private static boolean testAgainstSlab(BlockGetter level, BlockPos pos, boolean top, BlockState adjState, Direction side)
     {
-        if (top != adjState.getValue(PropertyHolder.TOP)) { return false; }
+        if (top != adjState.getValue(FramedProperties.TOP)) { return false; }
 
         Direction camoSide = top ? Direction.UP : Direction.DOWN;
         return SideSkipPredicate.compareState(level, pos, side, camoSide, camoSide);
@@ -56,8 +56,8 @@ public class SlabSkipPredicate implements SideSkipPredicate
 
     private static boolean testAgainstEdge(BlockGetter level, BlockPos pos, boolean top, BlockState adjState, Direction side)
     {
-        if (top != adjState.getValue(PropertyHolder.TOP)) { return false; }
-        if (adjState.getValue(PropertyHolder.FACING_HOR) != side.getOpposite()) { return false; }
+        if (top != adjState.getValue(FramedProperties.TOP)) { return false; }
+        if (adjState.getValue(FramedProperties.FACING_HOR) != side.getOpposite()) { return false; }
 
         Direction camoSide = top ? Direction.UP : Direction.DOWN;
         return SideSkipPredicate.compareState(level, pos, side, camoSide, camoSide);

@@ -14,8 +14,8 @@ import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import xfacthd.framedblocks.api.block.IFramedBlock;
+import xfacthd.framedblocks.api.util.FramedProperties;
 import xfacthd.framedblocks.common.data.BlockType;
-import xfacthd.framedblocks.common.data.PropertyHolder;
 
 @SuppressWarnings("deprecation")
 public class FramedWallSignBlock extends AbstractFramedSignBlock
@@ -28,7 +28,7 @@ public class FramedWallSignBlock extends AbstractFramedSignBlock
     @Override
     protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder)
     {
-        builder.add(PropertyHolder.FACING_HOR, BlockStateProperties.WATERLOGGED);
+        builder.add(FramedProperties.FACING_HOR, BlockStateProperties.WATERLOGGED);
     }
 
     @Override
@@ -44,7 +44,7 @@ public class FramedWallSignBlock extends AbstractFramedSignBlock
             if (direction.getAxis().isHorizontal())
             {
                 Direction dir = direction.getOpposite();
-                state = state.setValue(PropertyHolder.FACING_HOR, dir);
+                state = state.setValue(FramedProperties.FACING_HOR, dir);
                 if (state.canSurvive(level, pos))
                 {
                     return withWater(state, level, pos);
@@ -58,7 +58,7 @@ public class FramedWallSignBlock extends AbstractFramedSignBlock
     @Override
     public BlockState updateShape(BlockState state, Direction facing, BlockState facingState, LevelAccessor level, BlockPos pos, BlockPos facingPos)
     {
-        if (facing.getOpposite() == state.getValue(PropertyHolder.FACING_HOR) && !state.canSurvive(level, pos))
+        if (facing.getOpposite() == state.getValue(FramedProperties.FACING_HOR) && !state.canSurvive(level, pos))
         {
             return Blocks.AIR.defaultBlockState();
         }
@@ -68,7 +68,7 @@ public class FramedWallSignBlock extends AbstractFramedSignBlock
     @Override
     public boolean canSurvive(BlockState state, LevelReader level, BlockPos pos)
     {
-        Direction dir = state.getValue(PropertyHolder.FACING_HOR).getOpposite();
+        Direction dir = state.getValue(FramedProperties.FACING_HOR).getOpposite();
         return level.getBlockState(pos.relative(dir)).getMaterial().isSolid();
     }
 
@@ -78,7 +78,7 @@ public class FramedWallSignBlock extends AbstractFramedSignBlock
 
         for (BlockState state : states)
         {
-            switch (state.getValue(PropertyHolder.FACING_HOR))
+            switch (state.getValue(FramedProperties.FACING_HOR))
             {
                 case NORTH -> builder.put(state, box(0.0D, 4.5D, 14.0D, 16.0D, 12.5D, 16.0D));
                 case EAST -> builder.put(state, box(0.0D, 4.5D, 0.0D, 2.0D, 12.5D, 16.0D));

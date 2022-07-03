@@ -14,8 +14,8 @@ import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.util.FormattedCharSequence;
 import com.mojang.math.Vector3f;
 import net.minecraft.world.phys.Vec3;
+import xfacthd.framedblocks.api.util.FramedProperties;
 import xfacthd.framedblocks.common.block.FramedSignBlock;
-import xfacthd.framedblocks.common.data.PropertyHolder;
 import xfacthd.framedblocks.common.blockentity.FramedSignBlockEntity;
 
 import java.util.List;
@@ -43,7 +43,7 @@ public class FramedSignRenderer implements BlockEntityRenderer<FramedSignBlockEn
         else
         {
             matrix.translate(0.5D, 0.5D, 0.5D);
-            float rot = -state.getValue(PropertyHolder.FACING_HOR).toYRot();
+            float rot = -state.getValue(FramedProperties.FACING_HOR).toYRot();
             matrix.mulPose(Vector3f.YP.rotationDegrees(rot));
             matrix.translate(0.0D, -0.3125D, -0.4375D);
         }

@@ -247,7 +247,7 @@ public final class BlockOutlineRenderer
 
     public static void drawPrismCornerBox(BlockState state, PoseStack mstack, VertexConsumer builder)
     {
-        boolean top = state.getValue(PropertyHolder.TOP);
+        boolean top = state.getValue(FramedProperties.TOP);
 
         mstack.translate(.5, .5, .5);
         if (top) { mstack.scale(1, -1, 1); }
@@ -270,7 +270,7 @@ public final class BlockOutlineRenderer
 
     public static void drawInnerPrismCornerBox(BlockState state, PoseStack mstack, VertexConsumer builder)
     {
-        boolean top = state.getValue(PropertyHolder.TOP);
+        boolean top = state.getValue(FramedProperties.TOP);
 
         mstack.translate(.5, .5, .5);
         if (top) { mstack.scale(1, -1, 1); }
@@ -299,7 +299,7 @@ public final class BlockOutlineRenderer
 
     public static void drawThreewayCornerBox(BlockState state, PoseStack mstack, VertexConsumer builder)
     {
-        boolean top = state.getValue(PropertyHolder.TOP);
+        boolean top = state.getValue(FramedProperties.TOP);
 
         mstack.translate(.5, .5, .5);
         if (top) { mstack.scale(1, -1, 1); }
@@ -323,7 +323,7 @@ public final class BlockOutlineRenderer
 
     public static void drawInnerThreewayCornerBox(BlockState state, PoseStack mstack, VertexConsumer builder)
     {
-        boolean top = state.getValue(PropertyHolder.TOP);
+        boolean top = state.getValue(FramedProperties.TOP);
 
         mstack.translate(.5, .5, .5);
         if (top) { mstack.scale(1, -1, 1); }

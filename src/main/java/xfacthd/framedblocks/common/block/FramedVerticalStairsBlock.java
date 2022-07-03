@@ -26,7 +26,7 @@ public class FramedVerticalStairsBlock extends FramedBlock
         StairsType type = state.getValue(PropertyHolder.STAIRS_TYPE);
         if (type == StairsType.VERTICAL)
         {
-            Direction dir = state.getValue(PropertyHolder.FACING_HOR);
+            Direction dir = state.getValue(FramedProperties.FACING_HOR);
             return side == dir || side == dir.getCounterClockWise();
         }
         return false;
@@ -41,20 +41,20 @@ public class FramedVerticalStairsBlock extends FramedBlock
     @Override
     protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder)
     {
-        builder.add(PropertyHolder.FACING_HOR, PropertyHolder.STAIRS_TYPE, BlockStateProperties.WATERLOGGED, FramedProperties.SOLID, FramedProperties.GLOWING, FramedProperties.STATE_LOCKED);
+        builder.add(FramedProperties.FACING_HOR, PropertyHolder.STAIRS_TYPE, BlockStateProperties.WATERLOGGED, FramedProperties.SOLID, FramedProperties.GLOWING, FramedProperties.STATE_LOCKED);
     }
 
     @Override
     public BlockState getStateForPlacement(BlockPlaceContext context)
     {
-        BlockState state = defaultBlockState().setValue(PropertyHolder.FACING_HOR, context.getHorizontalDirection());
+        BlockState state = defaultBlockState().setValue(FramedProperties.FACING_HOR, context.getHorizontalDirection());
         return getStateFromContext(state, context.getLevel(), context.getClickedPos());
     }
 
     @Override
     public BlockState updateShape(BlockState state, Direction facing, BlockState facingState, LevelAccessor level, BlockPos pos, BlockPos facingPos)
     {
-        Direction dir = state.getValue(PropertyHolder.FACING_HOR);
+        Direction dir = state.getValue(FramedProperties.FACING_HOR);
         if (facing != dir.getOpposite() && facing != dir.getClockWise())
         {
             state = getStateFromContext(state, level, pos);
@@ -77,7 +77,7 @@ public class FramedVerticalStairsBlock extends FramedBlock
     {
         if (state.getValue(FramedProperties.STATE_LOCKED)) { return state; }
 
-        Direction dir = state.getValue(PropertyHolder.FACING_HOR);
+        Direction dir = state.getValue(FramedProperties.FACING_HOR);
 
         BlockState front = level.getBlockState(pos.relative(dir));
         BlockState left = level.getBlockState(pos.relative(dir.getCounterClockWise()));
@@ -176,7 +176,7 @@ public class FramedVerticalStairsBlock extends FramedBlock
         for (BlockState state : states)
         {
             StairsType type = state.getValue(PropertyHolder.STAIRS_TYPE);
-            Direction dir = state.getValue(PropertyHolder.FACING_HOR).getOpposite();
+            Direction dir = state.getValue(FramedProperties.FACING_HOR).getOpposite();
 
             if (type == StairsType.TOP_CORNER)
             {

@@ -7,23 +7,23 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
+import xfacthd.framedblocks.api.util.FramedProperties;
 import xfacthd.framedblocks.common.FBContent;
 import xfacthd.framedblocks.common.data.BlockType;
-import xfacthd.framedblocks.common.data.PropertyHolder;
 
 public class FramedDoublePrismCornerBlock extends FramedDoubleThreewayCornerBlock
 {
     public FramedDoublePrismCornerBlock()
     {
         super(BlockType.FRAMED_DOUBLE_PRISM_CORNER);
-        registerDefaultState(defaultBlockState().setValue(PropertyHolder.OFFSET, false));
+        registerDefaultState(defaultBlockState().setValue(FramedProperties.OFFSET, false));
     }
 
     @Override
     protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder)
     {
         super.createBlockStateDefinition(builder);
-        builder.add(PropertyHolder.OFFSET);
+        builder.add(FramedProperties.OFFSET);
     }
 
     @Override
@@ -32,7 +32,7 @@ public class FramedDoublePrismCornerBlock extends FramedDoubleThreewayCornerBloc
         BlockState state = super.getStateForPlacement(context);
         if (state == null) { return null; }
 
-        state = state.setValue(PropertyHolder.OFFSET, context.getClickedPos().getY() % 2 == 0);
+        state = state.setValue(FramedProperties.OFFSET, context.getClickedPos().getY() % 2 == 0);
         return state;
     }
 
@@ -41,7 +41,7 @@ public class FramedDoublePrismCornerBlock extends FramedDoubleThreewayCornerBloc
     {
         if (player.getMainHandItem().getItem() == FBContent.itemFramedHammer.get())
         {
-            level.setBlockAndUpdate(pos, state.setValue(PropertyHolder.OFFSET, !state.getValue(PropertyHolder.OFFSET)));
+            level.setBlockAndUpdate(pos, state.setValue(FramedProperties.OFFSET, !state.getValue(FramedProperties.OFFSET)));
             return true;
         }
         return false;

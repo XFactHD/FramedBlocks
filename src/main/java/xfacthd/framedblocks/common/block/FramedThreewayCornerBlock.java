@@ -18,7 +18,7 @@ public class FramedThreewayCornerBlock extends FramedBlock
 {
     public static final CtmPredicate CTM_PREDICATE = (state, dir) ->
     {
-        boolean top = state.getValue(PropertyHolder.TOP);
+        boolean top = state.getValue(FramedProperties.TOP);
         if (top && dir == Direction.UP)
         {
             return true;
@@ -28,7 +28,7 @@ public class FramedThreewayCornerBlock extends FramedBlock
             return true;
         }
 
-        Direction facing = state.getValue(PropertyHolder.FACING_HOR);
+        Direction facing = state.getValue(FramedProperties.FACING_HOR);
         if (facing == dir) { return true; }
 
         return facing.getCounterClockWise() == dir;
@@ -37,13 +37,13 @@ public class FramedThreewayCornerBlock extends FramedBlock
     public FramedThreewayCornerBlock(BlockType type)
     {
         super(type);
-        registerDefaultState(defaultBlockState().setValue(PropertyHolder.TOP, false));
+        registerDefaultState(defaultBlockState().setValue(FramedProperties.TOP, false));
     }
 
     @Override
     protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder)
     {
-        builder.add(PropertyHolder.FACING_HOR, PropertyHolder.TOP, BlockStateProperties.WATERLOGGED, FramedProperties.SOLID, FramedProperties.GLOWING);
+        builder.add(FramedProperties.FACING_HOR, FramedProperties.TOP, BlockStateProperties.WATERLOGGED, FramedProperties.SOLID, FramedProperties.GLOWING);
     }
 
     @Override
@@ -52,7 +52,7 @@ public class FramedThreewayCornerBlock extends FramedBlock
         BlockState state = defaultBlockState();
 
         Direction facing = context.getHorizontalDirection();
-        state = state.setValue(PropertyHolder.FACING_HOR, facing);
+        state = state.setValue(FramedProperties.FACING_HOR, facing);
 
         state = withWater(state, context.getLevel(), context.getClickedPos());
         return withTop(state, context.getClickedFace(), context.getClickLocation());
@@ -61,14 +61,14 @@ public class FramedThreewayCornerBlock extends FramedBlock
     @Override
     public BlockState rotate(BlockState state, Direction face, Rotation rot)
     {
-        Direction dir = state.getValue(PropertyHolder.FACING_HOR);
+        Direction dir = state.getValue(FramedProperties.FACING_HOR);
         if (Utils.isY(face) || face == dir.getOpposite() || face == dir.getClockWise())
         {
-            return state.setValue(PropertyHolder.FACING_HOR, rot.rotate(dir));
+            return state.setValue(FramedProperties.FACING_HOR, rot.rotate(dir));
         }
         else if ((face == dir || face == dir.getCounterClockWise()) && rot != Rotation.NONE)
         {
-            return state.cycle(PropertyHolder.TOP);
+            return state.cycle(FramedProperties.TOP);
         }
         return state;
     }
@@ -85,9 +85,9 @@ public class FramedThreewayCornerBlock extends FramedBlock
 
         for (BlockState state : states)
         {
-            Direction dir = state.getValue(PropertyHolder.FACING_HOR);
+            Direction dir = state.getValue(FramedProperties.FACING_HOR);
 
-            if (state.getValue(PropertyHolder.TOP))
+            if (state.getValue(FramedProperties.TOP))
             {
                 VoxelShape shapeTop = Shapes.or(
                         box( 0, 15.5, 0,   .5, 16,   16),
@@ -136,9 +136,9 @@ public class FramedThreewayCornerBlock extends FramedBlock
 
         for (BlockState state : states)
         {
-            Direction dir = state.getValue(PropertyHolder.FACING_HOR);
+            Direction dir = state.getValue(FramedProperties.FACING_HOR);
 
-            if (state.getValue(PropertyHolder.TOP))
+            if (state.getValue(FramedProperties.TOP))
             {
                 VoxelShape shapeTop = Shapes.or(
                         box(   0, 15.5,    0,   16, 16,   16),

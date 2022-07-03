@@ -26,7 +26,7 @@ public class FramedDoubleCornerBlockEntity extends FramedDoubleBlockEntity
     protected boolean hitSecondary(BlockHitResult hit)
     {
         CornerType type = getBlockState().getValue(PropertyHolder.CORNER_TYPE);
-        Direction facing = getBlockState().getValue(PropertyHolder.FACING_HOR);
+        Direction facing = getBlockState().getValue(FramedProperties.FACING_HOR);
         Direction side = hit.getDirection();
 
         Vec3 vec = Utils.fraction(hit.getLocation());
@@ -147,7 +147,7 @@ public class FramedDoubleCornerBlockEntity extends FramedDoubleBlockEntity
     public CamoContainer getCamo(Direction side)
     {
         CornerType type = getBlockState().getValue(PropertyHolder.CORNER_TYPE);
-        Direction dir = getBlockState().getValue(PropertyHolder.FACING_HOR);
+        Direction dir = getBlockState().getValue(FramedProperties.FACING_HOR);
 
         if (type.isHorizontal())
         {
@@ -183,7 +183,7 @@ public class FramedDoubleCornerBlockEntity extends FramedDoubleBlockEntity
     public boolean isSolidSide(Direction side)
     {
         CornerType type = getBlockState().getValue(PropertyHolder.CORNER_TYPE);
-        Direction dir = getBlockState().getValue(PropertyHolder.FACING_HOR);
+        Direction dir = getBlockState().getValue(FramedProperties.FACING_HOR);
 
         if (type.isHorizontal())
         {

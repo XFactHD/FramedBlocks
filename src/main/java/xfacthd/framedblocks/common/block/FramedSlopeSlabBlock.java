@@ -53,7 +53,7 @@ public class FramedSlopeSlabBlock extends FramedBlock //TODO: check why states w
 
         BlockState state = defaultBlockState().setValue(FramedProperties.FACING_HOR, facing);
         state = withTop(state, PropertyHolder.TOP_HALF, context.getClickedFace(), context.getClickLocation());
-        state = state.setValue(PropertyHolder.TOP, context.getPlayer() != null && context.getPlayer().isShiftKeyDown());
+        state = state.setValue(FramedProperties.TOP, context.getPlayer() != null && context.getPlayer().isShiftKeyDown());
         return withWater(state, context.getLevel(), context.getClickedPos());
     }
 

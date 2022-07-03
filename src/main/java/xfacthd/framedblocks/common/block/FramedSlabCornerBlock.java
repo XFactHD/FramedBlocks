@@ -15,8 +15,8 @@ import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.pathfinder.PathComputationType;
 import net.minecraft.world.phys.Vec3;
 import net.minecraft.world.phys.shapes.VoxelShape;
+import xfacthd.framedblocks.api.util.FramedProperties;
 import xfacthd.framedblocks.common.data.BlockType;
-import xfacthd.framedblocks.common.data.PropertyHolder;
 import xfacthd.framedblocks.api.util.Utils;
 
 public class FramedSlabCornerBlock extends FramedBlock
@@ -24,13 +24,13 @@ public class FramedSlabCornerBlock extends FramedBlock
     public FramedSlabCornerBlock()
     {
         super(BlockType.FRAMED_SLAB_CORNER);
-        registerDefaultState(defaultBlockState().setValue(PropertyHolder.TOP, false));
+        registerDefaultState(defaultBlockState().setValue(FramedProperties.TOP, false));
     }
 
     @Override
     protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder)
     {
-        builder.add(PropertyHolder.FACING_HOR, PropertyHolder.TOP, BlockStateProperties.WATERLOGGED);
+        builder.add(FramedProperties.FACING_HOR, FramedProperties.TOP, BlockStateProperties.WATERLOGGED);
     }
 
     @Override
@@ -50,7 +50,7 @@ public class FramedSlabCornerBlock extends FramedBlock
             {
                 dir = dir.getClockWise();
             }
-            state = state.setValue(PropertyHolder.FACING_HOR, dir);
+            state = state.setValue(FramedProperties.FACING_HOR, dir);
         }
         else
         {
@@ -59,7 +59,7 @@ public class FramedSlabCornerBlock extends FramedBlock
 
             Direction dir = z > .5D ? Direction.SOUTH : Direction.NORTH;
             if ((x > .5D) != Utils.isPositive(dir)) { dir = dir.getClockWise(); }
-            state = state.setValue(PropertyHolder.FACING_HOR, dir);
+            state = state.setValue(FramedProperties.FACING_HOR, dir);
         }
 
         state = withTop(state, face, context.getClickLocation());
@@ -77,12 +77,12 @@ public class FramedSlabCornerBlock extends FramedBlock
     {
         if (Utils.isY(face))
         {
-            Direction dir = state.getValue(PropertyHolder.FACING_HOR);
-            return state.setValue(PropertyHolder.FACING_HOR, rot.rotate(dir));
+            Direction dir = state.getValue(FramedProperties.FACING_HOR);
+            return state.setValue(FramedProperties.FACING_HOR, rot.rotate(dir));
         }
         else if (rot != Rotation.NONE)
         {
-            return state.cycle(PropertyHolder.TOP);
+            return state.cycle(FramedProperties.TOP);
         }
         return state;
     }
@@ -102,8 +102,8 @@ public class FramedSlabCornerBlock extends FramedBlock
 
         for (BlockState state : states)
         {
-            Direction dir = state.getValue(PropertyHolder.FACING_HOR);
-            boolean top = state.getValue(PropertyHolder.TOP);
+            Direction dir = state.getValue(FramedProperties.FACING_HOR);
+            boolean top = state.getValue(FramedProperties.TOP);
             builder.put(state, Utils.rotateShape(Direction.NORTH, dir, top ? shapeTop : shapeBot));
         }
 

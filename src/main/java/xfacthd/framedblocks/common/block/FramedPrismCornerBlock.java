@@ -12,24 +12,24 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
+import xfacthd.framedblocks.api.util.FramedProperties;
 import xfacthd.framedblocks.api.util.Utils;
 import xfacthd.framedblocks.common.FBContent;
 import xfacthd.framedblocks.common.data.BlockType;
-import xfacthd.framedblocks.common.data.PropertyHolder;
 
 public class FramedPrismCornerBlock extends FramedThreewayCornerBlock
 {
     public FramedPrismCornerBlock(BlockType type)
     {
         super(type);
-        registerDefaultState(defaultBlockState().setValue(PropertyHolder.TOP, false).setValue(PropertyHolder.OFFSET, false));
+        registerDefaultState(defaultBlockState().setValue(FramedProperties.TOP, false).setValue(FramedProperties.OFFSET, false));
     }
 
     @Override
     protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder)
     {
         super.createBlockStateDefinition(builder);
-        builder.add(PropertyHolder.OFFSET);
+        builder.add(FramedProperties.OFFSET);
     }
 
     @Override
@@ -40,11 +40,11 @@ public class FramedPrismCornerBlock extends FramedThreewayCornerBlock
 
         if (getBlockType() == BlockType.FRAMED_PRISM_CORNER)
         {
-            state = state.setValue(PropertyHolder.OFFSET, context.getClickedPos().getY() % 2 != 0);
+            state = state.setValue(FramedProperties.OFFSET, context.getClickedPos().getY() % 2 != 0);
         }
         else if (getBlockType() == BlockType.FRAMED_INNER_PRISM_CORNER)
         {
-            state = state.setValue(PropertyHolder.OFFSET, context.getClickedPos().getY() % 2 == 0);
+            state = state.setValue(FramedProperties.OFFSET, context.getClickedPos().getY() % 2 == 0);
         }
 
         return state;
@@ -55,7 +55,7 @@ public class FramedPrismCornerBlock extends FramedThreewayCornerBlock
     {
         if (player.getMainHandItem().getItem() == FBContent.itemFramedHammer.get())
         {
-            level.setBlockAndUpdate(pos, state.setValue(PropertyHolder.OFFSET, !state.getValue(PropertyHolder.OFFSET)));
+            level.setBlockAndUpdate(pos, state.setValue(FramedProperties.OFFSET, !state.getValue(FramedProperties.OFFSET)));
             return true;
         }
         return false;
@@ -69,9 +69,9 @@ public class FramedPrismCornerBlock extends FramedThreewayCornerBlock
 
         for (BlockState state : states)
         {
-            Direction dir = state.getValue(PropertyHolder.FACING_HOR);
+            Direction dir = state.getValue(FramedProperties.FACING_HOR);
 
-            if (state.getValue(PropertyHolder.TOP))
+            if (state.getValue(FramedProperties.TOP))
             {
                 VoxelShape shapeTop = Shapes.or(
                         box( 0, 15.5, 0,   .5, 16,   16),
@@ -122,9 +122,9 @@ public class FramedPrismCornerBlock extends FramedThreewayCornerBlock
 
         for (BlockState state : states)
         {
-            Direction dir = state.getValue(PropertyHolder.FACING_HOR);
+            Direction dir = state.getValue(FramedProperties.FACING_HOR);
 
-            if (state.getValue(PropertyHolder.TOP))
+            if (state.getValue(FramedProperties.TOP))
             {
                 VoxelShape shapeTop = Shapes.or(
                         box(   0, 15.5,    0,   16, 16,   16),

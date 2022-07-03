@@ -28,10 +28,8 @@ import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import org.lwjgl.glfw.GLFW;
 import xfacthd.framedblocks.FramedBlocks;
-import xfacthd.framedblocks.api.util.FramedConstants;
-import xfacthd.framedblocks.api.util.Utils;
+import xfacthd.framedblocks.api.util.*;
 import xfacthd.framedblocks.common.FBContent;
-import xfacthd.framedblocks.common.data.PropertyHolder;
 import xfacthd.framedblocks.common.net.SignUpdatePacket;
 import xfacthd.framedblocks.common.blockentity.FramedSignBlockEntity;
 
@@ -262,7 +260,7 @@ public class FramedSignScreen extends Screen
         BlockState state = sign.getBlockState();
         if (state.getBlock() == FBContent.blockFramedWallSign.get())
         {
-            front = state.getValue(PropertyHolder.FACING_HOR);
+            front = state.getValue(FramedProperties.FACING_HOR);
         }
         else
         {

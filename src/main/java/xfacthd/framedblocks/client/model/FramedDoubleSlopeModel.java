@@ -7,6 +7,7 @@ import net.minecraft.core.Direction;
 import net.minecraft.util.Tuple;
 import net.minecraftforge.client.model.data.IModelData;
 import org.jetbrains.annotations.NotNull;
+import xfacthd.framedblocks.api.util.FramedProperties;
 import xfacthd.framedblocks.common.blockentity.FramedDoubleBlockEntity;
 import xfacthd.framedblocks.common.blockentity.FramedDoubleSlopeBlockEntity;
 import xfacthd.framedblocks.common.data.PropertyHolder;
@@ -21,7 +22,7 @@ public class FramedDoubleSlopeModel extends FramedDoubleBlockModel
     {
         super(baseModel, false);
         this.type = state.getValue(PropertyHolder.SLOPE_TYPE);
-        this.facing = state.getValue(PropertyHolder.FACING_HOR);
+        this.facing = state.getValue(FramedProperties.FACING_HOR);
     }
 
     @Override

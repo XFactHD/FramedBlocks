@@ -11,7 +11,6 @@ import xfacthd.framedblocks.api.data.EmptyCamoContainer;
 import xfacthd.framedblocks.api.util.FramedProperties;
 import xfacthd.framedblocks.common.FBContent;
 import xfacthd.framedblocks.common.data.BlockType;
-import xfacthd.framedblocks.common.data.PropertyHolder;
 import xfacthd.framedblocks.api.util.Utils;
 import xfacthd.framedblocks.common.util.DoubleSoundMode;
 
@@ -25,8 +24,8 @@ public class FramedDoubleThreewayCornerBlockEntity extends FramedDoubleBlockEnti
     @Override
     protected boolean hitSecondary(BlockHitResult hit)
     {
-        Direction facing = getBlockState().getValue(PropertyHolder.FACING_HOR);
-        boolean top = getBlockState().getValue(PropertyHolder.TOP);
+        Direction facing = getBlockState().getValue(FramedProperties.FACING_HOR);
+        boolean top = getBlockState().getValue(FramedProperties.TOP);
         Direction side = hit.getDirection();
 
         Vec3 vec = Utils.fraction(hit.getLocation());
@@ -97,14 +96,14 @@ public class FramedDoubleThreewayCornerBlockEntity extends FramedDoubleBlockEnti
     @Override
     public DoubleSoundMode getSoundMode()
     {
-        return getBlockState().getValue(PropertyHolder.TOP) ? DoubleSoundMode.FIRST : DoubleSoundMode.EITHER;
+        return getBlockState().getValue(FramedProperties.TOP) ? DoubleSoundMode.FIRST : DoubleSoundMode.EITHER;
     }
 
     @Override
     public CamoContainer getCamo(Direction side)
     {
-        Direction dir = getBlockState().getValue(PropertyHolder.FACING_HOR);
-        boolean top = getBlockState().getValue(PropertyHolder.TOP);
+        Direction dir = getBlockState().getValue(FramedProperties.FACING_HOR);
+        boolean top = getBlockState().getValue(FramedProperties.TOP);
 
         if (top)
         {
@@ -123,8 +122,8 @@ public class FramedDoubleThreewayCornerBlockEntity extends FramedDoubleBlockEnti
     @Override
     public boolean isSolidSide(Direction side)
     {
-        Direction dir = getBlockState().getValue(PropertyHolder.FACING_HOR);
-        boolean top = getBlockState().getValue(PropertyHolder.TOP);
+        Direction dir = getBlockState().getValue(FramedProperties.FACING_HOR);
+        boolean top = getBlockState().getValue(FramedProperties.TOP);
 
         if (side == dir || side == dir.getCounterClockWise() || (side == Direction.DOWN && !top) || (side == Direction.UP && top))
         {

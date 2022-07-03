@@ -101,7 +101,7 @@ public class StairsSkipPredicate implements SideSkipPredicate
 
     private static boolean testAgainstSlab(BlockGetter level, BlockPos pos, Direction dir, StairsShape shape, boolean top, BlockState adjState, Direction side)
     {
-        boolean adjTop = adjState.getValue(PropertyHolder.TOP);
+        boolean adjTop = adjState.getValue(FramedProperties.TOP);
         if (top != adjTop) { return false; }
         if (!isSlabSide(shape, dir, side)) { return false; }
 
@@ -117,8 +117,8 @@ public class StairsSkipPredicate implements SideSkipPredicate
 
     private static boolean testAgainstEdge(BlockGetter level, BlockPos pos, Direction dir, StairsShape shape, boolean top, BlockState adjState, Direction side)
     {
-        Direction adjDir = adjState.getValue(PropertyHolder.FACING_HOR);
-        boolean adjTop = adjState.getValue(PropertyHolder.TOP);
+        Direction adjDir = adjState.getValue(FramedProperties.FACING_HOR);
+        boolean adjTop = adjState.getValue(FramedProperties.TOP);
         if (top != adjTop) { return false; }
 
         if (adjDir == side.getOpposite())
@@ -141,7 +141,7 @@ public class StairsSkipPredicate implements SideSkipPredicate
         if (shape != StairsShape.STRAIGHT) { return false; }
         if ((top && side != Direction.DOWN) || (!top && side != Direction.UP)) { return false; }
 
-        Direction adjDir = adjState.getValue(PropertyHolder.FACING_HOR);
+        Direction adjDir = adjState.getValue(FramedProperties.FACING_HOR);
         return dir == adjDir && SideSkipPredicate.compareState(level, pos, side, dir, side.getOpposite());
     }
 
@@ -150,7 +150,7 @@ public class StairsSkipPredicate implements SideSkipPredicate
         if (shape != StairsShape.STRAIGHT) { return false; }
         if ((top && side != Direction.DOWN) || (!top && side != Direction.UP)) { return false; }
 
-        Direction adjDir = adjState.getValue(PropertyHolder.FACING_NE);
+        Direction adjDir = adjState.getValue(FramedProperties.FACING_NE);
         if (dir == adjDir || dir.getOpposite() == adjDir)
         {
             return SideSkipPredicate.compareState(level, pos, side, dir, dir);
@@ -163,7 +163,7 @@ public class StairsSkipPredicate implements SideSkipPredicate
         if (shape != StairsShape.OUTER_LEFT && shape != StairsShape.OUTER_RIGHT) { return false; }
         if ((top && side != Direction.DOWN) || (!top && side != Direction.UP)) { return false; }
 
-        Direction adjDir = adjState.getValue(PropertyHolder.FACING_HOR);
+        Direction adjDir = adjState.getValue(FramedProperties.FACING_HOR);
         if ((shape == StairsShape.OUTER_LEFT && dir == adjDir) || (shape == StairsShape.OUTER_RIGHT && dir.getClockWise() == adjDir))
         {
             return SideSkipPredicate.compareState(level, pos, side, dir, side.getOpposite());
@@ -176,8 +176,8 @@ public class StairsSkipPredicate implements SideSkipPredicate
         if (shape != StairsShape.OUTER_LEFT && shape != StairsShape.OUTER_RIGHT) { return false; }
         if ((top && side != Direction.DOWN) || (!top && side != Direction.UP)) { return false; }
 
-        Direction adjDir = adjState.getValue(PropertyHolder.FACING_HOR);
-        boolean adjTop = adjState.getValue(PropertyHolder.TOP);
+        Direction adjDir = adjState.getValue(FramedProperties.FACING_HOR);
+        boolean adjTop = adjState.getValue(FramedProperties.TOP);
         if ((shape == StairsShape.OUTER_LEFT && dir == adjDir) || (shape == StairsShape.OUTER_RIGHT && dir.getClockWise() == adjDir))
         {
             return adjTop == top && SideSkipPredicate.compareState(level, pos, side, dir, side.getOpposite());
@@ -187,7 +187,7 @@ public class StairsSkipPredicate implements SideSkipPredicate
 
     private static boolean testAgainstVerticalStairs(BlockGetter level, BlockPos pos, Direction dir, StairsShape shape, boolean top, BlockState adjState, Direction side)
     {
-        Direction adjDir = adjState.getValue(PropertyHolder.FACING_HOR);
+        Direction adjDir = adjState.getValue(FramedProperties.FACING_HOR);
         StairsType adjType = adjState.getValue(PropertyHolder.STAIRS_TYPE);
 
         if (adjType == StairsType.VERTICAL)

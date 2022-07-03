@@ -9,11 +9,10 @@ import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import xfacthd.framedblocks.api.data.CamoContainer;
-import xfacthd.framedblocks.api.util.Utils;
+import xfacthd.framedblocks.api.util.*;
 import xfacthd.framedblocks.common.data.*;
 import xfacthd.framedblocks.common.blockentity.FramedDoubleSlopeBlockEntity;
 import xfacthd.framedblocks.common.blockentity.FramedDoubleBlockEntity;
-import xfacthd.framedblocks.api.util.CtmPredicate;
 import xfacthd.framedblocks.common.data.property.SlopeType;
 
 import javax.annotation.Nullable;
@@ -28,7 +27,7 @@ public class FramedDoubleSlopeBlock extends AbstractFramedDoubleBlock
         }
         else
         {
-            Direction facing = state.getValue(PropertyHolder.FACING_HOR);
+            Direction facing = state.getValue(FramedProperties.FACING_HOR);
             return (dir != null && Utils.isY(dir)) || dir == facing || dir == facing.getOpposite();
         }
     };
@@ -39,7 +38,7 @@ public class FramedDoubleSlopeBlock extends AbstractFramedDoubleBlock
     protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder)
     {
         super.createBlockStateDefinition(builder);
-        builder.add(PropertyHolder.FACING_HOR, PropertyHolder.SLOPE_TYPE);
+        builder.add(FramedProperties.FACING_HOR, PropertyHolder.SLOPE_TYPE);
     }
 
     @Nullable
@@ -78,10 +77,10 @@ public class FramedDoubleSlopeBlock extends AbstractFramedDoubleBlock
     @Override
     public BlockState rotate(BlockState state, Direction face, Rotation rot)
     {
-        Direction dir = state.getValue(PropertyHolder.FACING_HOR);
+        Direction dir = state.getValue(FramedProperties.FACING_HOR);
         if (Utils.isY(face))
         {
-            return state.setValue(PropertyHolder.FACING_HOR, rot.rotate(dir));
+            return state.setValue(FramedProperties.FACING_HOR, rot.rotate(dir));
         }
         else if (rot != Rotation.NONE)
         {
