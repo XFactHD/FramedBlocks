@@ -1,4 +1,4 @@
-package xfacthd.framedblocks.common.data;
+package xfacthd.framedblocks.common.data.property;
 
 import com.google.common.base.Preconditions;
 import net.minecraft.core.Direction;

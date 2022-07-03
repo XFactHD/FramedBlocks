@@ -16,6 +16,7 @@ import net.minecraft.world.phys.shapes.*;
 import xfacthd.framedblocks.api.block.FramedBlockEntity;
 import xfacthd.framedblocks.api.util.*;
 import xfacthd.framedblocks.common.data.*;
+import xfacthd.framedblocks.common.data.property.StairsType;
 
 import java.util.stream.Stream;
 

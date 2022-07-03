@@ -16,6 +16,7 @@ import xfacthd.framedblocks.api.util.FramedProperties;
 import xfacthd.framedblocks.api.util.Utils;
 import xfacthd.framedblocks.common.blockentity.FramedInverseDoubleSlopePanelBlockEntity;
 import xfacthd.framedblocks.common.data.*;
+import xfacthd.framedblocks.common.data.property.Rotation;
 
 public class FramedInverseDoubleSlopePanelBlock extends AbstractFramedDoubleBlock
 {

@@ -11,7 +11,7 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.shapes.*;
 import xfacthd.framedblocks.api.util.client.OutlineRender;
 import xfacthd.framedblocks.common.blockentity.FramedCollapsibleBlockEntity;
-import xfacthd.framedblocks.common.data.CollapseFace;
+import xfacthd.framedblocks.common.data.property.CollapseFace;
 import xfacthd.framedblocks.common.data.PropertyHolder;
 
 public class CollapsibleBlockOutlineRenderer implements OutlineRender

@@ -9,7 +9,7 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
 import xfacthd.framedblocks.api.util.Utils;
 import xfacthd.framedblocks.common.FBContent;
-import xfacthd.framedblocks.common.data.ChestState;
+import xfacthd.framedblocks.common.data.property.ChestState;
 import xfacthd.framedblocks.common.data.PropertyHolder;
 
 public class FramedChestBlockEntity extends FramedStorageBlockEntity

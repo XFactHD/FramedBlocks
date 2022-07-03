@@ -15,6 +15,7 @@ import xfacthd.framedblocks.common.data.*;
 import xfacthd.framedblocks.common.blockentity.FramedDoubleSlopeBlockEntity;
 import xfacthd.framedblocks.common.blockentity.FramedDoubleBlockEntity;
 import xfacthd.framedblocks.api.util.CtmPredicate;
+import xfacthd.framedblocks.common.data.property.SlopeType;
 
 import javax.annotation.Nullable;
 

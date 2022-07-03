@@ -11,6 +11,7 @@ import xfacthd.framedblocks.common.FBContent;
 import xfacthd.framedblocks.common.blockentity.FramedDoubleBlockEntity;
 import xfacthd.framedblocks.common.blockentity.FramedDoubleCornerBlockEntity;
 import xfacthd.framedblocks.common.data.*;
+import xfacthd.framedblocks.common.data.property.CornerType;
 
 public class FramedDoubleCornerModel extends FramedDoubleBlockModel
 {

@@ -25,6 +25,8 @@ import xfacthd.framedblocks.client.model.FramedChestLidModel;
 import xfacthd.framedblocks.common.FBContent;
 import xfacthd.framedblocks.common.data.*;
 import xfacthd.framedblocks.common.blockentity.FramedChestBlockEntity;
+import xfacthd.framedblocks.common.data.property.ChestState;
+import xfacthd.framedblocks.common.data.property.LatchType;
 
 import java.util.*;
 

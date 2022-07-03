@@ -12,7 +12,7 @@ import xfacthd.framedblocks.common.FBContent;
 import xfacthd.framedblocks.common.blockentity.FramedDoubleBlockEntity;
 import xfacthd.framedblocks.common.blockentity.FramedDoubleSlopePanelBlockEntity;
 import xfacthd.framedblocks.common.data.PropertyHolder;
-import xfacthd.framedblocks.common.data.Rotation;
+import xfacthd.framedblocks.common.data.property.Rotation;
 
 public class FramedDoubleSlopePanelModel extends FramedDoubleBlockModel
 {

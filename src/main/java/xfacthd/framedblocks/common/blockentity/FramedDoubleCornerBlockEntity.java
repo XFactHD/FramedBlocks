@@ -12,6 +12,7 @@ import xfacthd.framedblocks.api.util.FramedProperties;
 import xfacthd.framedblocks.common.FBContent;
 import xfacthd.framedblocks.common.data.*;
 import xfacthd.framedblocks.api.util.Utils;
+import xfacthd.framedblocks.common.data.property.CornerType;
 import xfacthd.framedblocks.common.util.DoubleSoundMode;
 
 public class FramedDoubleCornerBlockEntity extends FramedDoubleBlockEntity

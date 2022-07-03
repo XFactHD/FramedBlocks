@@ -13,7 +13,7 @@ import xfacthd.framedblocks.api.util.FramedConstants;
 import xfacthd.framedblocks.api.util.Utils;
 import xfacthd.framedblocks.api.util.client.BakedQuadTransformer;
 import xfacthd.framedblocks.api.util.client.ModelUtils;
-import xfacthd.framedblocks.common.data.LatchType;
+import xfacthd.framedblocks.common.data.property.LatchType;
 import xfacthd.framedblocks.common.data.PropertyHolder;
 
 import java.util.*;

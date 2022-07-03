@@ -14,6 +14,7 @@ import xfacthd.framedblocks.api.data.CamoContainer;
 import xfacthd.framedblocks.api.util.*;
 import xfacthd.framedblocks.common.data.*;
 import xfacthd.framedblocks.common.blockentity.*;
+import xfacthd.framedblocks.common.data.property.CornerType;
 
 public class FramedDoubleCornerBlock extends AbstractFramedDoubleBlock
 {

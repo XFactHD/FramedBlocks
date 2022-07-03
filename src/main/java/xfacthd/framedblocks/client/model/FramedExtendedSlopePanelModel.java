@@ -11,7 +11,7 @@ import xfacthd.framedblocks.api.util.client.BakedQuadTransformer;
 import xfacthd.framedblocks.api.util.client.ModelUtils;
 import xfacthd.framedblocks.common.FBContent;
 import xfacthd.framedblocks.common.data.PropertyHolder;
-import xfacthd.framedblocks.common.data.Rotation;
+import xfacthd.framedblocks.common.data.property.Rotation;
 
 import java.util.List;
 import java.util.Map;

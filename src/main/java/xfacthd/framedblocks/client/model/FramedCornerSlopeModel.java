@@ -8,7 +8,7 @@ import xfacthd.framedblocks.api.model.FramedBlockModel;
 import xfacthd.framedblocks.api.util.client.BakedQuadTransformer;
 import xfacthd.framedblocks.api.util.client.ModelUtils;
 import xfacthd.framedblocks.common.FBContent;
-import xfacthd.framedblocks.common.data.CornerType;
+import xfacthd.framedblocks.common.data.property.CornerType;
 import xfacthd.framedblocks.common.data.PropertyHolder;
 
 import java.util.List;
