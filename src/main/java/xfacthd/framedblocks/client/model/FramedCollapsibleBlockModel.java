@@ -1,7 +1,7 @@
 package xfacthd.framedblocks.client.model;
 
-import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
-import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
+import com.github.benmanes.caffeine.cache.Cache;
+import com.github.benmanes.caffeine.cache.Caffeine;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.block.model.BakedQuad;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
@@ -11,13 +11,13 @@ import net.minecraft.core.Direction;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.BlockAndTintGetter;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraftforge.client.model.data.IModelData;
+import net.minecraftforge.client.ChunkRenderTypeSet;
+import net.minecraftforge.client.model.data.ModelData;
+import org.jetbrains.annotations.NotNull;
 import xfacthd.framedblocks.api.model.BakedModelProxy;
 import xfacthd.framedblocks.api.model.FramedBlockModel;
 import xfacthd.framedblocks.api.util.Utils;
-import xfacthd.framedblocks.api.util.client.BakedQuadTransformer;
-import xfacthd.framedblocks.api.util.client.ModelUtils;
-import xfacthd.framedblocks.common.FBContent;
+import xfacthd.framedblocks.api.util.client.*;
 import xfacthd.framedblocks.common.blockentity.FramedCollapsibleBlockEntity;
 import xfacthd.framedblocks.common.data.PropertyHolder;
 
@@ -28,7 +28,9 @@ import java.util.*;
 public class FramedCollapsibleBlockModel extends BakedModelProxy
 {
     private final BlockState state;
-    private final Int2ObjectMap<CollapsibleModel> MODEL_CACHE = new Int2ObjectOpenHashMap<>();
+    private final Cache<Integer, CollapsibleModel> MODEL_CACHE = Caffeine.newBuilder()
+            .expireAfterAccess(ModelCache.DEFAULT_CACHE_DURATION)
+            .build();
 
     public FramedCollapsibleBlockModel(BlockState state, BakedModel baseModel)
     {
@@ -36,29 +38,35 @@ public class FramedCollapsibleBlockModel extends BakedModelProxy
         this.state = state;
     }
 
+    @Override
+    public ChunkRenderTypeSet getRenderTypes(@NotNull BlockState state, @NotNull RandomSource rand, @NotNull ModelData data)
+    {
+        return getModel(data).getRenderTypes(state, rand, data);
+    }
+
     @Nonnull
     @Override
-    public List<BakedQuad> getQuads(@Nullable BlockState state, @Nullable Direction side, @Nonnull RandomSource rand, @Nonnull IModelData extraData)
+    public List<BakedQuad> getQuads(@Nullable BlockState state, @Nullable Direction side, @Nonnull RandomSource rand, @Nonnull ModelData extraData, RenderType layer)
     {
-        return getModel(extraData).getQuads(state, side, rand, extraData);
+        return getModel(extraData).getQuads(state, side, rand, extraData, layer);
     }
 
     @Override
-    public TextureAtlasSprite getParticleIcon(@Nonnull IModelData data)
+    public TextureAtlasSprite getParticleIcon(@Nonnull ModelData data)
     {
         return getModel(data).getParticleIcon(data);
     }
 
-    private CollapsibleModel getModel(IModelData extraData)
+    private CollapsibleModel getModel(ModelData extraData)
     {
-        Integer offsets = extraData.getData(FramedCollapsibleBlockEntity.OFFSETS);
+        Integer offsets = extraData.get(FramedCollapsibleBlockEntity.OFFSETS);
         int packed = offsets == null ? 0 : offsets;
-        return MODEL_CACHE.computeIfAbsent(packed, key -> new CollapsibleModel(state, baseModel, key));
+        return MODEL_CACHE.get(packed, key -> new CollapsibleModel(state, baseModel, key));
     }
 
     @Nonnull
     @Override
-    public IModelData getModelData(@Nonnull BlockAndTintGetter world, @Nonnull BlockPos pos, @Nonnull BlockState state, @Nonnull IModelData tileData)
+    public ModelData getModelData(@Nonnull BlockAndTintGetter world, @Nonnull BlockPos pos, @Nonnull BlockState state, @Nonnull ModelData tileData)
     {
         if (world.getBlockEntity(pos) instanceof FramedCollapsibleBlockEntity be)
         {
@@ -162,14 +170,10 @@ public class FramedCollapsibleBlockModel extends BakedModelProxy
         }
 
         @Override
-        protected BakedModel getCamoModel(BlockState camoState)
-        {
-            if (camoState == FBContent.blockFramedCube.get().defaultBlockState()) { return baseModel; }
-            return super.getCamoModel(camoState);
-        }
+        protected boolean useBaseModel() { return true; }
 
         @Override
-        protected boolean canRenderBaseModelInLayer(RenderType layer) { return layer == RenderType.solid(); }
+        protected ChunkRenderTypeSet getBaseModelRenderTypes() { return ModelUtils.SOLID; }
 
         private int getYCollapsedIndexOffset(Direction quadFace)
         {

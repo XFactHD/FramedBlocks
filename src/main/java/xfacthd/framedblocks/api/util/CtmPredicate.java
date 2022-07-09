@@ -10,4 +10,7 @@ public interface CtmPredicate extends BiPredicate<BlockState, Direction>
     CtmPredicate TRUE = (state, dir) -> true;
     CtmPredicate FALSE = (state, dir) -> false;
     CtmPredicate Y_AXIS = (state, dir) -> Utils.isY(dir);
+
+    @Override
+    boolean test(BlockState state, Direction direction);
 }

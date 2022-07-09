@@ -1,10 +1,9 @@
 package xfacthd.framedblocks.client.model;
 
+import com.github.benmanes.caffeine.cache.Cache;
+import com.github.benmanes.caffeine.cache.Caffeine;
 import com.mojang.datafixers.util.Pair;
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.ItemBlockRenderTypes;
 import net.minecraft.client.renderer.RenderType;
-import net.minecraft.client.renderer.block.BlockRenderDispatcher;
 import net.minecraft.client.renderer.block.model.BakedQuad;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.resources.model.BakedModel;
@@ -16,14 +15,14 @@ import net.minecraft.world.level.BlockAndTintGetter;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraftforge.client.model.data.EmptyModelData;
-import net.minecraftforge.client.model.data.IModelData;
+import net.minecraftforge.client.ChunkRenderTypeSet;
+import net.minecraftforge.client.model.data.ModelData;
+import org.jetbrains.annotations.NotNull;
 import xfacthd.framedblocks.api.model.BakedModelProxy;
 import xfacthd.framedblocks.api.model.FramedBlockModel;
 import xfacthd.framedblocks.api.util.FramedBlockData;
 import xfacthd.framedblocks.api.util.Utils;
-import xfacthd.framedblocks.api.util.client.BakedQuadTransformer;
-import xfacthd.framedblocks.api.util.client.ModelUtils;
+import xfacthd.framedblocks.api.util.client.*;
 import xfacthd.framedblocks.common.FBContent;
 import xfacthd.framedblocks.common.block.FramedFlowerPotBlock;
 import xfacthd.framedblocks.common.blockentity.FramedFlowerPotBlockEntity;
@@ -35,32 +34,38 @@ import java.util.stream.Collectors;
 
 public class FramedFlowerPotModel extends BakedModelProxy
 {
-    private final Map<Block, PotModel> CACHE_BY_PLANT = new HashMap<>();
+    private final Cache<Block, PotModel> CACHE_BY_PLANT = Caffeine.newBuilder().build();
 
     public FramedFlowerPotModel(@SuppressWarnings("unused") BlockState state, BakedModel baseModel) { super(baseModel); }
 
+    @Override
+    public ChunkRenderTypeSet getRenderTypes(@NotNull BlockState state, @NotNull RandomSource rand, @NotNull ModelData data)
+    {
+        return getOrCreatePotModel(state, data).getRenderTypes(state, rand, data);
+    }
+
     @Nonnull
     @Override
-    public List<BakedQuad> getQuads(@Nullable BlockState state, @Nullable Direction side, @Nonnull RandomSource rand, @Nonnull IModelData extraData)
+    public List<BakedQuad> getQuads(@Nullable BlockState state, @Nullable Direction side, @Nonnull RandomSource rand, @Nonnull ModelData extraData, RenderType layer)
     {
-        return getOrCreatePotModel(state, extraData).getQuads(state, side, rand, extraData);
+        return getOrCreatePotModel(state, extraData).getQuads(state, side, rand, extraData, layer);
     }
 
     @Override
-    public TextureAtlasSprite getParticleIcon(@Nonnull IModelData data)
+    public TextureAtlasSprite getParticleIcon(@Nonnull ModelData data)
     {
         return getOrCreatePotModel(FBContent.blockFramedFlowerPot.get().defaultBlockState(), data).getParticleIcon(data);
     }
 
-    private PotModel getOrCreatePotModel(BlockState state, IModelData extraData)
+    private PotModel getOrCreatePotModel(BlockState state, ModelData extraData)
     {
-        Block flower = Optional.ofNullable(extraData.getData(FramedFlowerPotBlockEntity.FLOWER_BLOCK)).orElse(Blocks.AIR);
-        return CACHE_BY_PLANT.computeIfAbsent(flower, block -> new PotModel(state, baseModel, flower));
+        Block flower = Optional.ofNullable(extraData.get(FramedFlowerPotBlockEntity.FLOWER_BLOCK)).orElse(Blocks.AIR);
+        return CACHE_BY_PLANT.get(flower, block -> new PotModel(state, baseModel, flower));
     }
 
     @Nonnull
     @Override
-    public IModelData getModelData(@Nonnull BlockAndTintGetter level, @Nonnull BlockPos pos, @Nonnull BlockState state, @Nonnull IModelData tileData)
+    public ModelData getModelData(@Nonnull BlockAndTintGetter level, @Nonnull BlockPos pos, @Nonnull BlockState state, @Nonnull ModelData tileData)
     {
         if (level.getBlockEntity(pos) instanceof FramedFlowerPotBlockEntity be)
         {
@@ -142,32 +147,32 @@ public class FramedFlowerPotModel extends BakedModelProxy
         }
 
         @Override
-        protected boolean hasAdditionalQuadsInLayer(RenderType layer)
+        protected ChunkRenderTypeSet getAdditionalRenderTypes(RandomSource rand, ModelData extraData)
         {
-            return ItemBlockRenderTypes.canRenderInLayer(Blocks.DIRT.defaultBlockState(), layer) ||
-                   ItemBlockRenderTypes.canRenderInLayer(flower.defaultBlockState(), layer);
+            return ChunkRenderTypeSet.union(
+                    ModelCache.getRenderTypes(Blocks.DIRT.defaultBlockState(), rand, ModelData.EMPTY),
+                    ModelCache.getRenderTypes(flower.defaultBlockState(), rand, ModelData.EMPTY)
+            );
         }
 
         @Override
-        protected void getAdditionalQuads(Map<Direction, List<BakedQuad>> quadMap, BlockState state, RandomSource rand, IModelData data, RenderType layer)
+        protected void getAdditionalQuads(Map<Direction, List<BakedQuad>> quadMap, BlockState state, RandomSource rand, ModelData data, RenderType layer)
         {
-            BlockRenderDispatcher dispatcher = Minecraft.getInstance().getBlockRenderer();
             BlockState potState = FramedFlowerPotBlock.getFlowerPotState(flower);
-            if (!potState.isAir() && ItemBlockRenderTypes.canRenderInLayer(flower.defaultBlockState(), layer))
+            BakedModel potModel = ModelCache.getModel(potState);
+            if (!potState.isAir() && potModel.getRenderTypes(potState, rand, ModelData.EMPTY).contains(layer))
             {
-                BakedModel potModel = dispatcher.getBlockModel(potState);
-
                 Arrays.stream(Direction.values())
-                        .map(dir -> Pair.of(dir, getFilteredPlantQuads(potState, potModel, dir, rand)))
+                        .map(dir -> Pair.of(dir, getFilteredPlantQuads(potState, potModel, dir, rand, layer)))
                         .forEach(pair -> quadMap.get(pair.getFirst()).addAll(pair.getSecond()));
 
-                quadMap.get(null).addAll(getFilteredPlantQuads(potState, potModel, null, rand));
+                quadMap.get(null).addAll(getFilteredPlantQuads(potState, potModel, null, rand, layer));
             }
 
-            if (ItemBlockRenderTypes.canRenderInLayer(Blocks.DIRT.defaultBlockState(), layer))
+            BakedModel dirtModel = ModelCache.getModel(Blocks.DIRT.defaultBlockState());
+            if (dirtModel.getRenderTypes(Blocks.DIRT.defaultBlockState(), rand, ModelData.EMPTY).contains(layer))
             {
-                BakedModel dirtModel = dispatcher.getBlockModel(Blocks.DIRT.defaultBlockState());
-                dirtModel.getQuads(Blocks.DIRT.defaultBlockState(), Direction.UP, rand, EmptyModelData.INSTANCE).forEach(q ->
+                dirtModel.getQuads(Blocks.DIRT.defaultBlockState(), Direction.UP, rand, ModelData.EMPTY, layer).forEach(q ->
                 {
                     BakedQuad topQuad = ModelUtils.duplicateQuad(q);
                     if (BakedQuadTransformer.createTopBottomQuad(topQuad, 6F / 16F, 6F / 16F, 10F / 16F, 10F / 16F))
@@ -177,9 +182,10 @@ public class FramedFlowerPotModel extends BakedModelProxy
                     }
                 });
 
-                if (data instanceof FramedBlockData framedData && !framedData.getCamoState().canOcclude())
+                FramedBlockData fbData = data.get(FramedBlockData.PROPERTY);
+                if (fbData != null && !fbData.getCamoState().canOcclude())
                 {
-                    dirtModel.getQuads(Blocks.DIRT.defaultBlockState(), Direction.DOWN, rand, EmptyModelData.INSTANCE).forEach(q ->
+                    dirtModel.getQuads(Blocks.DIRT.defaultBlockState(), Direction.DOWN, rand, ModelData.EMPTY, layer).forEach(q ->
                     {
                         BakedQuad botQuad = ModelUtils.duplicateQuad(q);
                         if (BakedQuadTransformer.createTopBottomQuad(botQuad, 6F / 16F, 6F / 16F, 10F / 16F, 10F / 16F))
@@ -190,7 +196,7 @@ public class FramedFlowerPotModel extends BakedModelProxy
                     });
 
                     Direction.Plane.HORIZONTAL.stream()
-                            .flatMap(face -> dirtModel.getQuads(Blocks.AIR.defaultBlockState(), face, rand, EmptyModelData.INSTANCE).stream())
+                            .flatMap(face -> dirtModel.getQuads(Blocks.AIR.defaultBlockState(), face, rand, ModelData.EMPTY, layer).stream())
                             .forEach(q ->
                             {
                                 BakedQuad sideQuad = ModelUtils.duplicateQuad(q);
@@ -204,9 +210,9 @@ public class FramedFlowerPotModel extends BakedModelProxy
             }
         }
 
-        private static List<BakedQuad> getFilteredPlantQuads(BlockState potState, BakedModel potModel, Direction face, RandomSource rand)
+        private static List<BakedQuad> getFilteredPlantQuads(BlockState potState, BakedModel potModel, Direction face, RandomSource rand, RenderType layer)
         {
-            return potModel.getQuads(potState, face, rand, EmptyModelData.INSTANCE)
+            return potModel.getQuads(potState, face, rand, ModelData.EMPTY, layer)
                     .stream()
                     .filter(q -> !q.getSprite().getName().equals(POT_TEXTURE))
                     .filter(q -> !q.getSprite().getName().equals(DIRT_TEXTURE))

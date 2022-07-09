@@ -8,12 +8,12 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.AttachFace;
-import net.minecraftforge.client.model.ForgeModelBakery;
-import net.minecraftforge.client.model.data.IModelData;
+import net.minecraftforge.client.ChunkRenderTypeSet;
+import net.minecraftforge.client.event.ModelEvent;
+import net.minecraftforge.client.model.data.ModelData;
 import xfacthd.framedblocks.api.util.*;
 import xfacthd.framedblocks.api.util.client.BakedQuadTransformer;
 import xfacthd.framedblocks.api.util.client.ModelUtils;
-import xfacthd.framedblocks.common.FBContent;
 
 import java.util.*;
 
@@ -34,20 +34,28 @@ public class FramedStoneButtonModel extends FramedButtonModel
     }
 
     @Override
-    protected boolean hasAdditionalQuadsInLayer(RenderType layer) { return layer == RenderType.cutout(); }
+    protected ChunkRenderTypeSet getAdditionalRenderTypes(RandomSource rand, ModelData extraData)
+    {
+        FramedBlockData fbData = extraData.get(FramedBlockData.PROPERTY);
+        if (fbData != null && !fbData.getCamoState().isAir())
+        {
+            return ModelUtils.CUTOUT;
+        }
+        return ChunkRenderTypeSet.none();
+    }
 
     @Override
-    protected void getAdditionalQuads(Map<Direction, List<BakedQuad>> quadMap, BlockState state, RandomSource rand, IModelData data, RenderType layer)
+    protected void getAdditionalQuads(Map<Direction, List<BakedQuad>> quadMap, BlockState state, RandomSource rand, ModelData data, RenderType layer)
     {
-        BlockState camo = data.getData(FramedBlockData.CAMO);
-        if (camo == null || camo.isAir()) { return; }
+        FramedBlockData fbData = data.get(FramedBlockData.PROPERTY);
+        if (fbData != null && fbData.getCamoState().isAir()) { return; }
 
-        List<BakedQuad> quads = frameModel.getQuads(state, null, rand, data);
+        List<BakedQuad> quads = frameModel.getQuads(state, null, rand, data, layer);
         addRotatedQuads(quads, quadMap.get(null));
 
         for (Direction side : Direction.values())
         {
-            quads = frameModel.getQuads(state, side, rand, data);
+            quads = frameModel.getQuads(state, side, rand, data, layer);
             addRotatedQuads(quads, quadMap.get(side));
         }
     }
@@ -93,24 +101,14 @@ public class FramedStoneButtonModel extends FramedButtonModel
     }
 
     @Override
-    protected BakedModel getCamoModel(BlockState camoState)
-    {
-        if (camoState.is(FBContent.blockFramedCube.get()))
-        {
-            return baseModel;
-        }
-        return super.getCamoModel(camoState);
-    }
-
-    @Override
     protected boolean forceUngeneratedBaseModel() { return true; }
 
 
 
-    public static void registerFrameModels()
+    public static void registerFrameModels(ModelEvent.RegisterAdditional event)
     {
-        ForgeModelBakery.addSpecialModel(FRAME_LOCATION);
-        ForgeModelBakery.addSpecialModel(FRAME_PRESSED_LOCATION);
+        event.register(FRAME_LOCATION);
+        event.register(FRAME_PRESSED_LOCATION);
     }
 
     public static void cacheFrameModels(Map<ResourceLocation, BakedModel> registry)

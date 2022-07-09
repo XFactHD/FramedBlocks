@@ -13,19 +13,19 @@ import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.HitResult;
-import net.minecraftforge.client.gui.ForgeIngameGui;
-import net.minecraftforge.client.gui.IIngameOverlay;
+import net.minecraftforge.client.gui.overlay.ForgeGui;
+import net.minecraftforge.client.gui.overlay.IGuiOverlay;
 import xfacthd.framedblocks.api.block.IFramedBlock;
 import xfacthd.framedblocks.api.util.FramedConstants;
 import xfacthd.framedblocks.api.util.FramedProperties;
 import xfacthd.framedblocks.common.FBContent;
 
-public class StateLockOverlay implements IIngameOverlay
+public class StateLockOverlay implements IGuiOverlay
 {
     public static final String LOCK_MESSAGE = "tooltip." + FramedConstants.MOD_ID + ".lock_state";
 
     @Override
-    public void render(ForgeIngameGui gui, PoseStack poseStack, float partialTick, int width, int height)
+    public void render(ForgeGui gui, PoseStack poseStack, float partialTick, int width, int height)
     {
         ItemStack stack = player().getMainHandItem();
         if (!stack.is(FBContent.itemFramedKey.get())) { return; }

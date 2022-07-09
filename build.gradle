@@ -18,7 +18,9 @@ apply plugin: 'eclipse'
 apply plugin: 'maven-publish'
 apply plugin: 'org.spongepowered.mixin'
 
-version = '6.1.0'
+jarJar.enable()
+
+version = '6.2.0'
 group = 'xfacthd.framedblocks'
 archivesBaseName = 'FramedBlocks'
 
@@ -131,10 +133,22 @@ repositories {
     maven {
         url "https://www.cursemaven.com"
     }
+    mavenCentral()
+}
+
+configurations {
+    library
+    implementation.extendsFrom library
+}
+
+minecraft.runs.all {
+    lazyToken('minecraft_classpath') {
+        configurations.library.copyRecursive().resolve().collect { it.absolutePath }.join(File.pathSeparator)
+    }
 }
 
 dependencies {
-    minecraft 'net.minecraftforge:forge:1.19-41.0.62'
+    minecraft 'net.minecraftforge:forge:1.19-41.0.85'
 
     //compileOnly fg.deobf("curse.maven:ctm-267602:3737369")
 
@@ -143,7 +157,7 @@ dependencies {
 
     compileOnly fg.deobf("curse.maven:buildinggadgets-298187:3829297")
 
-    runtimeOnly fg.deobf("curse.maven:jei-238222:3835406")
+    //runtimeOnly fg.deobf("curse.maven:jei-238222:3835406")
     //runtimeOnly fg.deobf("curse.maven:spark-361579:3767286")
 
     //runtimeOnly fg.deobf("curse.maven:magnesium_sodium-532724:3556734")
@@ -151,6 +165,11 @@ dependencies {
 
     //compileOnly fg.deobf("curse.maven:flywheel-486392:3737402")
     //runtimeOnly fg.deobf("curse.maven:create-328085:3737418") //Only needed when Flywheel is switched to implementation
+
+    library(group: 'com.github.ben-manes.caffeine', name: 'caffeine', version: '3.1.1')
+    jarJar(group: 'com.github.ben-manes.caffeine', name: 'caffeine', version: '[3.1.1,4.0.0)') {
+        transitive(false)
+    }
 
     annotationProcessor 'org.spongepowered:mixin:0.8.5:processor'
 }
@@ -163,8 +182,14 @@ processTestResources {
     duplicatesStrategy(DuplicatesStrategy.INCLUDE)
 }
 
+tasks.jarJar.configure {
+    classifier ''
+}
+
 // Example for how to get properties into the manifest for reading by the runtime..
 jar {
+    classifier 'slim'
+
     manifest {
         attributes([
             "Specification-Title": "framedblocks",

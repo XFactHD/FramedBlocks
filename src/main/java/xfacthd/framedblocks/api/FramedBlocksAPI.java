@@ -37,13 +37,6 @@ public interface FramedBlocksAPI
     CreativeModeTab defaultCreativeTab();
 
     /**
-     * Checks if the given {@link ItemStack} is a framed hammer
-     * @deprecated check against {@link xfacthd.framedblocks.api.util.Utils#FRAMED_HAMMER} instead
-     */
-    @Deprecated(forRemoval = true, since = "1.19")
-    boolean isFramedHammer(ItemStack stack);
-
-    /**
      * Checks if the give {@link FramedBlockEntity} is a double block (i.e. a Framed Double Slab)
      */
     boolean isFramedDoubleBlockEntity(FramedBlockEntity be);

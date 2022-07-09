@@ -18,7 +18,7 @@ import net.minecraft.world.level.material.*;
 import net.minecraft.world.level.storage.loot.LootContext;
 import net.minecraft.world.phys.*;
 import net.minecraft.world.phys.shapes.*;
-import net.minecraftforge.client.IBlockRenderProperties;
+import net.minecraftforge.client.extensions.common.IClientBlockExtensions;
 import xfacthd.framedblocks.api.type.IBlockType;
 import xfacthd.framedblocks.api.util.FramedProperties;
 import xfacthd.framedblocks.api.util.client.FramedBlockRenderProperties;
@@ -56,7 +56,7 @@ public abstract class AbstractFramedBlock extends Block implements IFramedBlock,
     @Override
     public InteractionResult use(BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hit)
     {
-        return handleUse(level, pos, player, hand, hit);
+        return handleUse(state, level, pos, player, hand, hit);
     }
 
     @Override
@@ -194,12 +194,18 @@ public abstract class AbstractFramedBlock extends Block implements IFramedBlock,
     }
 
     @Override
+    public MaterialColor getMapColor(BlockState state, BlockGetter level, BlockPos pos, MaterialColor defaultColor)
+    {
+        return getCamoMapColor(level, pos, defaultColor);
+    }
+
+    @Override
     public IBlockType getBlockType() { return blockType; }
 
     protected final boolean isWaterLoggable() { return blockType.supportsWaterLogging(); }
 
     @Override
-    public void initializeClient(Consumer<IBlockRenderProperties> consumer)
+    public void initializeClient(Consumer<IClientBlockExtensions> consumer)
     {
         consumer.accept(new FramedBlockRenderProperties());
     }

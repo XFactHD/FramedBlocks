@@ -8,7 +8,6 @@ import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.block.state.BlockState;
 
 import java.util.List;
-import java.util.Random;
 
 @SuppressWarnings("deprecation")
 public abstract class BakedModelProxy implements BakedModel

@@ -30,9 +30,6 @@ public class ApiImpl implements FramedBlocksAPI
     public CreativeModeTab defaultCreativeTab() { return FramedBlocks.FRAMED_TAB; }
 
     @Override
-    public boolean isFramedHammer(ItemStack stack) { return stack.getItem() == FBContent.itemFramedHammer.get(); }
-
-    @Override
     public boolean isFramedDoubleBlockEntity(FramedBlockEntity be) { return be instanceof FramedDoubleBlockEntity; }
 
     @Override

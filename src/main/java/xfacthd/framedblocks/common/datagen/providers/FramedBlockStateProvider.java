@@ -488,7 +488,7 @@ public class FramedBlockStateProvider extends BlockStateProvider
         ModelFile door = models().getExistingFile(modLoc("block/framed_iron_door"));
         doorBlock(
                 (DoorBlock) FBContent.blockFramedIronDoor.get(),
-                door, door, door, door
+                door, door, door, door, door, door, door, door
         );
         itemModels().singleTexture("framed_iron_door", mcLoc("item/generated"), "layer0", modLoc("item/framed_iron_door"));
     }

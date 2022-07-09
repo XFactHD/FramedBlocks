@@ -1,6 +1,5 @@
 package xfacthd.framedblocks.client.model;
 
-import net.minecraft.client.renderer.ItemBlockRenderTypes;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.block.Blocks;
@@ -9,12 +8,12 @@ import net.minecraft.client.renderer.block.model.BakedQuad;
 import net.minecraft.client.resources.model.BakedModel;
 import net.minecraft.core.Direction;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraftforge.client.model.data.IModelData;
+import net.minecraftforge.client.ChunkRenderTypeSet;
+import net.minecraftforge.client.model.data.ModelData;
 import xfacthd.framedblocks.api.model.FramedBlockModel;
 import xfacthd.framedblocks.api.util.FramedConstants;
 import xfacthd.framedblocks.api.util.Utils;
-import xfacthd.framedblocks.api.util.client.BakedQuadTransformer;
-import xfacthd.framedblocks.api.util.client.ModelUtils;
+import xfacthd.framedblocks.api.util.client.*;
 
 import java.util.*;
 
@@ -25,15 +24,15 @@ public class FramedTorchModel extends FramedBlockModel
     public FramedTorchModel(BlockState state, BakedModel baseModel) { super(state, baseModel); }
 
     @Override
-    protected boolean hasAdditionalQuadsInLayer(RenderType layer)
+    protected ChunkRenderTypeSet getAdditionalRenderTypes(RandomSource rand, ModelData extraData)
     {
-        return ItemBlockRenderTypes.canRenderInLayer(Blocks.TORCH.defaultBlockState(), layer);
+        return ModelCache.getRenderTypes(Blocks.TORCH.defaultBlockState(), rand, ModelData.EMPTY);
     }
 
     @Override
-    protected void getAdditionalQuads(Map<Direction, List<BakedQuad>> quadMap, BlockState state, RandomSource rand, IModelData extraData, RenderType layer)
+    protected void getAdditionalQuads(Map<Direction, List<BakedQuad>> quadMap, BlockState state, RandomSource rand, ModelData extraData, RenderType layer)
     {
-        List<BakedQuad> quads = baseModel.getQuads(state, null, rand, extraData);
+        List<BakedQuad> quads = baseModel.getQuads(state, null, rand, extraData, layer);
         for (BakedQuad quad : quads)
         {
             if (!quad.getSprite().getName().equals(TEXTURE))

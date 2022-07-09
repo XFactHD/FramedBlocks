@@ -9,11 +9,6 @@ import java.util.Set;
 
 public class FramedMixinConfigPlugin implements IMixinConfigPlugin
 {
-    private static final String[] SODIUM_NAMES = new String[] {
-            "me.jellysquid.mods.sodium.common.config.Option", // Magnesium
-            "me.jellysquid.mods.sodium.config.mixin.MixinOption" // Rubidium
-    };
-
     @Override
     public void onLoad(String mixinPackage) { }
 
@@ -23,18 +18,6 @@ public class FramedMixinConfigPlugin implements IMixinConfigPlugin
     @Override
     public boolean shouldApplyMixin(String targetClassName, String mixinClassName)
     {
-        if (mixinClassName.equals("xfacthd.framedblocks.client.util.mixin.MixinLevelRenderer"))
-        {
-            for (String className : SODIUM_NAMES)
-            {
-                if (checkClassExists(className))
-                {
-                    return false;
-                }
-            }
-            return true;
-        }
-
         if (mixinClassName.equals("xfacthd.framedblocks.client.util.mixin.MixinIFramedBlock"))
         {
             return checkClassExists("team.chisel.ctm.api.IFacade");
@@ -57,6 +40,7 @@ public class FramedMixinConfigPlugin implements IMixinConfigPlugin
 
 
 
+    @SuppressWarnings("SameParameterValue")
     private static boolean checkClassExists(String className)
     {
         try

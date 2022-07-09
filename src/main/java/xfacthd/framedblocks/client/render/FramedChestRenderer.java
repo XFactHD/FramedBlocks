@@ -16,9 +16,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
 import com.mojang.math.Vector3f;
 import net.minecraft.world.phys.Vec3;
-import net.minecraftforge.client.ForgeHooksClient;
-import net.minecraftforge.client.model.data.EmptyModelData;
-import net.minecraftforge.client.model.data.IModelData;
+import net.minecraftforge.client.model.data.ModelData;
 import xfacthd.framedblocks.api.util.FramedProperties;
 import xfacthd.framedblocks.api.util.Utils;
 import xfacthd.framedblocks.api.util.client.ClientUtils;
@@ -59,7 +57,7 @@ public class FramedChestRenderer implements BlockEntityRenderer<FramedChestBlock
 
         BakedModel model = LID_MODELS.get(dir, state.getValue(PropertyHolder.LATCH_TYPE));
         //noinspection ConstantConditions
-        IModelData data = model.getModelData(be.getLevel(), be.getBlockPos(), state, EmptyModelData.INSTANCE);
+        ModelData data = model.getModelData(be.getLevel(), be.getBlockPos(), state, ModelData.EMPTY);
 
         float angle = calculateAngle(be, chestState, dir, lastChange, partialTicks);
 
@@ -77,14 +75,12 @@ public class FramedChestRenderer implements BlockEntityRenderer<FramedChestBlock
         matrix.popPose();
     }
 
-    private static void renderLidModel(FramedChestBlockEntity be, BlockState state, PoseStack matrix, MultiBufferSource buffer, BakedModel model, IModelData data)
+    private static void renderLidModel(FramedChestBlockEntity be, BlockState state, PoseStack matrix, MultiBufferSource buffer, BakedModel model, ModelData data)
     {
         ModelBlockRenderer renderer = Minecraft.getInstance().getBlockRenderer().getModelRenderer();
 
         for (RenderType type : RENDER_TYPES)
         {
-            ForgeHooksClient.setRenderType(type);
-
             //noinspection ConstantConditions
             renderer.tesselateWithAO(
                     be.getLevel(),
@@ -97,10 +93,10 @@ public class FramedChestRenderer implements BlockEntityRenderer<FramedChestBlock
                     be.getLevel().getRandom(),
                     be.getBlockPos().asLong(),
                     OverlayTexture.NO_OVERLAY,
-                    data
+                    data,
+                    type
             );
         }
-        ForgeHooksClient.setRenderType(null);
     }
 
     private static float calculateAngle(FramedChestBlockEntity be, ChestState chestState, Direction dir, long lastChange, float partialTicks)

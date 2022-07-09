@@ -6,10 +6,10 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.HitResult;
-import net.minecraftforge.client.IBlockRenderProperties;
+import net.minecraftforge.client.extensions.common.IClientBlockExtensions;
 import xfacthd.framedblocks.api.block.IFramedBlock;
 
-public class FramedBlockRenderProperties implements IBlockRenderProperties
+public class FramedBlockRenderProperties implements IClientBlockExtensions
 {
     @Override
     public boolean addHitEffects(BlockState state, Level level, HitResult target, ParticleEngine manager)

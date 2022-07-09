@@ -7,7 +7,8 @@ import net.minecraft.client.renderer.block.model.BakedQuad;
 import net.minecraft.client.resources.model.BakedModel;
 import net.minecraft.core.Direction;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraftforge.client.model.data.IModelData;
+import net.minecraftforge.client.ChunkRenderTypeSet;
+import net.minecraftforge.client.model.data.ModelData;
 import xfacthd.framedblocks.api.model.FramedBlockModel;
 import xfacthd.framedblocks.api.util.*;
 import xfacthd.framedblocks.api.util.client.BakedQuadTransformer;
@@ -23,12 +24,14 @@ public class FramedChestLidModel extends FramedBlockModel
 
     private final Direction facing;
     private final LatchType latch;
+    private final ChunkRenderTypeSet addLayers;
 
     public FramedChestLidModel(BlockState state, BakedModel baseModel)
     {
         super(state, baseModel);
         this.facing = state.getValue(FramedProperties.FACING_HOR);
         this.latch = state.getValue(PropertyHolder.LATCH_TYPE);
+        this.addLayers = latch == LatchType.DEFAULT ? ModelUtils.CUTOUT : ChunkRenderTypeSet.none();
     }
 
     @Override
@@ -60,12 +63,12 @@ public class FramedChestLidModel extends FramedBlockModel
     }
 
     @Override
-    protected boolean hasAdditionalQuadsInLayer(RenderType layer) { return latch == LatchType.DEFAULT && layer == RenderType.cutout(); }
+    protected ChunkRenderTypeSet getAdditionalRenderTypes(RandomSource rand, ModelData extraData) { return addLayers; }
 
     @Override
-    protected void getAdditionalQuads(Map<Direction, List<BakedQuad>> quadMap, BlockState state, RandomSource rand, IModelData data, RenderType layer)
+    protected void getAdditionalQuads(Map<Direction, List<BakedQuad>> quadMap, BlockState state, RandomSource rand, ModelData data, RenderType layer)
     {
-        List<BakedQuad> quads = baseModel.getQuads(state, null, rand, data);
+        List<BakedQuad> quads = baseModel.getQuads(state, null, rand, data, layer);
         for (BakedQuad quad : quads)
         {
             if (quad.getSprite().getName().equals(TEXTURE))

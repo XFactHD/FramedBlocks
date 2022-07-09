@@ -26,11 +26,10 @@ import java.util.List;
 
 public abstract class FramedDoubleBlockEntity extends FramedBlockEntity
 {
-    public static final ModelProperty<IModelData> DATA_LEFT = new ModelProperty<>();
-    public static final ModelProperty<IModelData> DATA_RIGHT = new ModelProperty<>();
+    public static final ModelProperty<ModelData> DATA_LEFT = new ModelProperty<>();
+    public static final ModelProperty<ModelData> DATA_RIGHT = new ModelProperty<>();
 
-    private final IModelData multiModelData = new ModelDataMap.Builder().build();
-    private final FramedBlockData modelData = new FramedBlockData(false);
+    private final FramedBlockData modelData = new FramedBlockData();
     private final DoubleBlockSoundType soundType = new DoubleBlockSoundType(this);
     private Tuple<BlockState, BlockState> blockPair;
     private CamoContainer camoContainer = EmptyCamoContainer.EMPTY;
@@ -231,11 +230,15 @@ public abstract class FramedDoubleBlockEntity extends FramedBlockEntity
      */
 
     @Override
-    public IModelData getModelData()
+    public ModelData getModelData()
     {
-        multiModelData.setData(DATA_LEFT, super.getModelData());
-        multiModelData.setData(DATA_RIGHT, modelData);
-        return multiModelData;
+        return ModelData.builder()
+                .with(DATA_LEFT, super.getModelData())
+                .with(DATA_RIGHT, ModelData.builder()
+                        .with(FramedBlockData.PROPERTY, modelData)
+                        .build()
+                )
+                .build();
     }
 
     /*

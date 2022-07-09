@@ -14,6 +14,7 @@ import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
+import net.minecraft.world.level.material.MaterialColor;
 import net.minecraft.world.level.storage.loot.LootContext;
 import net.minecraft.world.phys.BlockHitResult;
 import xfacthd.framedblocks.api.block.IFramedBlock;
@@ -64,7 +65,7 @@ public class FramedFenceBlock extends FenceBlock implements IFramedBlock
     @Override
     public final InteractionResult use(BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hit)
     {
-        InteractionResult result = handleUse(level, pos, player, hand, hit);
+        InteractionResult result = handleUse(state, level, pos, player, hand, hit);
         if (result.consumesAction()) { return result; }
 
         return super.use(state, level, pos, player, hand, hit);
@@ -148,6 +149,12 @@ public class FramedFenceBlock extends FenceBlock implements IFramedBlock
     public float getFriction(BlockState state, LevelReader level, BlockPos pos, @Nullable Entity entity)
     {
         return getCamoSlipperiness(state, level, pos, entity);
+    }
+
+    @Override
+    public MaterialColor getMapColor(BlockState state, BlockGetter level, BlockPos pos, MaterialColor defaultColor)
+    {
+        return getCamoMapColor(level, pos, defaultColor);
     }
 
     @Override

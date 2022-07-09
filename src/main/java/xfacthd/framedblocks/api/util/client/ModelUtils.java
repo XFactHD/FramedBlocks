@@ -1,21 +1,27 @@
 package xfacthd.framedblocks.api.util.client;
 
+import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.block.model.BakedQuad;
-import com.mojang.blaze3d.vertex.DefaultVertexFormat;
-import com.mojang.blaze3d.vertex.VertexFormatElement;
+import net.minecraft.client.resources.model.BakedModel;
+import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.util.Mth;
 import com.mojang.math.Vector3f;
-import net.minecraftforge.client.model.pipeline.LightUtil;
+import net.minecraft.util.RandomSource;
+import net.minecraft.world.level.BlockAndTintGetter;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraftforge.client.ChunkRenderTypeSet;
+import net.minecraftforge.client.model.IQuadTransformer;
+import net.minecraftforge.client.model.data.ModelData;
+import xfacthd.framedblocks.api.util.FramedBlockData;
 import xfacthd.framedblocks.api.util.Utils;
 
-import java.util.Arrays;
+import java.util.*;
 
 public final class ModelUtils
 {
-    private static final int ELEMENT_POS = findElement(DefaultVertexFormat.ELEMENT_POSITION);
-    private static final int ELEMENT_UV = findElement(DefaultVertexFormat.ELEMENT_UV0);
-    private static final int ELEMENT_NORMAL = findElement(DefaultVertexFormat.ELEMENT_NORMAL);
+    public static final ChunkRenderTypeSet SOLID = ChunkRenderTypeSet.of(RenderType.solid());
+    public static final ChunkRenderTypeSet CUTOUT = ChunkRenderTypeSet.of(RenderType.cutout());
 
     public static boolean modifyQuad(BakedQuad quad, VertexDataConsumer consumer)
     {
@@ -27,9 +33,9 @@ public final class ModelUtils
 
         for (int vert = 0; vert < 4; vert++)
         {
-            LightUtil.unpack(vertexData, pos[vert], DefaultVertexFormat.BLOCK, vert, ELEMENT_POS);
-            LightUtil.unpack(vertexData, uv[vert], DefaultVertexFormat.BLOCK, vert, ELEMENT_UV);
-            LightUtil.unpack(vertexData, normal[vert], DefaultVertexFormat.BLOCK, vert, ELEMENT_NORMAL);
+            unpackPosition(vertexData, pos[vert], vert);
+            unpackUV(vertexData, uv[vert], vert);
+            unpackNormals(vertexData, normal[vert], vert);
         }
 
         boolean success = consumer.accept(pos, uv, normal);
@@ -37,9 +43,9 @@ public final class ModelUtils
 
         for (int vert = 0; vert < 4; vert++)
         {
-            LightUtil.pack(pos[vert], vertexData, DefaultVertexFormat.BLOCK, vert, ELEMENT_POS);
-            LightUtil.pack(uv[vert], vertexData, DefaultVertexFormat.BLOCK, vert, ELEMENT_UV);
-            LightUtil.pack(normal[vert], vertexData, DefaultVertexFormat.BLOCK, vert, ELEMENT_NORMAL);
+            packPosition(pos[vert], vertexData, vert);
+            packUV(uv[vert], vertexData, vert);
+            packNormals(normal[vert], vertexData, vert);
         }
 
         fillNormal(quad);
@@ -47,30 +53,56 @@ public final class ModelUtils
         return true;
     }
 
-    public static float[][] unpackElement(BakedQuad quad, VertexFormatElement element)
+    public static void unpackPosition(int[] vertexData, float[] pos, int vert)
     {
-        int elemPos = findElement(element);
-
-        float[][] data = new float[4][4];
-        for (int vert = 0; vert < 4; vert++)
-        {
-            LightUtil.unpack(quad.getVertices(), data[vert], DefaultVertexFormat.BLOCK, vert, elemPos);
-        }
-        return data;
+        int offset = vert * IQuadTransformer.STRIDE + IQuadTransformer.POSITION;
+        pos[0] = Float.intBitsToFloat(vertexData[offset]);
+        pos[1] = Float.intBitsToFloat(vertexData[offset + 1]);
+        pos[2] = Float.intBitsToFloat(vertexData[offset + 2]);
     }
 
-    public static int findElement(VertexFormatElement targetElement)
+    public static void unpackUV(int[] vertexData, float[] uv, int vert)
     {
-        int idx = 0;
-        for (VertexFormatElement element : DefaultVertexFormat.BLOCK.getElements())
-        {
-            if (element == targetElement)
-            {
-                return idx;
-            }
-            idx++;
-        }
-        throw new IllegalArgumentException("Format doesn't have a " + targetElement + " element");
+        int offset = vert * IQuadTransformer.STRIDE + IQuadTransformer.UV0;
+        uv[0] = Float.intBitsToFloat(vertexData[offset]);
+        uv[1] = Float.intBitsToFloat(vertexData[offset + 1]);
+    }
+
+    public static void unpackNormals(int[] vertexData, float[] normal, int vert)
+    {
+        int offset = vert * IQuadTransformer.STRIDE + IQuadTransformer.NORMAL;
+        int packedNormal = vertexData[offset];
+
+        normal[0] = ((byte) (packedNormal & 0xFF)) / 127F;
+        normal[1] = ((byte) ((packedNormal >> 8) & 0xFF)) / 127F;
+        normal[2] = ((byte) ((packedNormal >> 16) & 0xFF)) / 127F;
+    }
+
+    public static void packPosition(float[] pos, int[] vertexData, int vert)
+    {
+        int offset = vert * IQuadTransformer.STRIDE + IQuadTransformer.POSITION;
+        vertexData[offset    ] = Float.floatToRawIntBits(pos[0]);
+        vertexData[offset + 1] = Float.floatToRawIntBits(pos[1]);
+        vertexData[offset + 2] = Float.floatToRawIntBits(pos[2]);
+    }
+
+    public static void packUV(float[] uv, int[] vertexData, int vert)
+    {
+        int offset = vert * IQuadTransformer.STRIDE + IQuadTransformer.UV0;
+        vertexData[offset    ] = Float.floatToRawIntBits(uv[0]);
+        vertexData[offset + 1] = Float.floatToRawIntBits(uv[1]);
+    }
+
+    public static void packNormals(float[] normal, int[] vertexData, int vert)
+    {
+        int offset = vert * IQuadTransformer.STRIDE + IQuadTransformer.NORMAL;
+
+        int packedNormal = vertexData[offset];
+        vertexData[offset] =
+                (((byte)  (normal[0] * 127F)) & 0xFF) |
+                ((((byte) (normal[1] * 127F)) & 0xFF) << 8) |
+                ((((byte) (normal[2] * 127F)) & 0xFF) << 16) |
+                (packedNormal & 0xFF000000);
     }
 
     public static BakedQuad duplicateQuad(BakedQuad quad)
@@ -93,7 +125,11 @@ public final class ModelUtils
      */
     public static void fillNormal(BakedQuad quad)
     {
-        float[][] pos = unpackElement(quad, DefaultVertexFormat.ELEMENT_POSITION);
+        float[][] pos = new float[4][3];
+        for (int i = 0; i < 4; i++)
+        {
+            unpackPosition(quad.getVertices(), pos[i], i);
+        }
 
         Vector3f v1 = new Vector3f(pos[3][0], pos[3][1], pos[3][2]);
         Vector3f t1 = new Vector3f(pos[1][0], pos[1][1], pos[1][2]);
@@ -112,10 +148,9 @@ public final class ModelUtils
         int normal = x | (y << 0x08) | (z << 0x10);
 
         int[] vertexData = quad.getVertices();
-        int step = vertexData.length / 4; //This is needed to support the extended vertex formats used by shaders in OptiFine
         for (int vert = 0; vert < 4; vert++)
         {
-            vertexData[vert * step + 7] = normal;
+            vertexData[vert * IQuadTransformer.STRIDE + IQuadTransformer.NORMAL] = normal;
         }
     }
 
@@ -256,6 +291,26 @@ public final class ModelUtils
     public static int encodeSecondaryTintIndex(int tintIndex) { return (tintIndex + 2) * -1; }
 
     public static int decodeSecondaryTintIndex(int tintIndex) { return (tintIndex * -1) - 2; }
+
+    public static ModelData getCamoModelData(BakedModel model, BlockState state, ModelData data)
+    {
+        BlockAndTintGetter level = data.get(FramedBlockData.LEVEL);
+        BlockPos pos = data.get(FramedBlockData.POS);
+
+        if (level == null || pos == null || pos == BlockPos.ZERO) { return ModelData.EMPTY; }
+
+        return model.getModelData(level, pos, state, data);
+    }
+
+    public static List<BakedQuad> getAllCullableQuads(BakedModel model, BlockState state, RandomSource rand, RenderType renderType)
+    {
+        List<BakedQuad> quads = new ArrayList<>();
+        for (Direction dir : Direction.values())
+        {
+            quads.addAll(model.getQuads(state, dir, rand, ModelData.EMPTY, renderType));
+        }
+        return quads;
+    }
 
 
 

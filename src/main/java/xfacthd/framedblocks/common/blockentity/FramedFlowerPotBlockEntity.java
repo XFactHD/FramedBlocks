@@ -7,6 +7,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraftforge.client.model.data.ModelData;
 import net.minecraftforge.client.model.data.ModelProperty;
 import net.minecraftforge.registries.ForgeRegistries;
 import xfacthd.framedblocks.api.block.FramedBlockEntity;
@@ -53,6 +54,15 @@ public class FramedFlowerPotBlockEntity extends FramedBlockEntity
     }
 
     @Override
+    public ModelData getModelData()
+    {
+        return super.getModelData()
+                .derive()
+                .with(FLOWER_BLOCK, flowerBlock)
+                .build();
+    }
+
+    @Override
     protected void writeToDataPacket(CompoundTag nbt)
     {
         super.writeToDataPacket(nbt);
@@ -69,7 +79,6 @@ public class FramedFlowerPotBlockEntity extends FramedBlockEntity
         if (update)
         {
             flowerBlock = flower;
-            getModelDataInternal().setData(FLOWER_BLOCK, flower);
         }
 
         return super.readFromDataPacket(nbt) || update;
@@ -95,7 +104,6 @@ public class FramedFlowerPotBlockEntity extends FramedBlockEntity
         if (flower != flowerBlock)
         {
             flowerBlock = flower;
-            getModelDataInternal().setData(FLOWER_BLOCK, flower);
         }
     }
 

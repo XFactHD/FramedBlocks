@@ -20,7 +20,7 @@ import net.minecraft.world.level.material.MaterialColor;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.EntityCollisionContext;
-import net.minecraftforge.client.model.data.IModelData;
+import net.minecraftforge.client.model.data.ModelData;
 import net.minecraftforge.common.Tags;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidType;
@@ -45,7 +45,7 @@ public class FramedBlockEntity extends BlockEntity
     private static final Direction[] DIRECTIONS = Direction.values();
     private static final int DATA_VERSION = 2;
 
-    private final FramedBlockData modelData = new FramedBlockData(false);
+    private final FramedBlockData modelData = new FramedBlockData();
     private CamoContainer camoContainer = EmptyCamoContainer.EMPTY;
     private boolean glowing = false;
     private boolean intangible = false;
@@ -551,6 +551,7 @@ public class FramedBlockEntity extends BlockEntity
         {
             //noinspection ConstantConditions
             level.sendBlockUpdated(worldPosition, getBlockState(), getBlockState(), Block.UPDATE_ALL);
+            requestModelDataUpdate();
         }
     }
 
@@ -631,6 +632,8 @@ public class FramedBlockEntity extends BlockEntity
 
         glowing = nbt.getBoolean("glowing");
         intangible = nbt.getBoolean("intangible");
+
+        requestModelDataUpdate();
     }
 
     /*
@@ -638,7 +641,12 @@ public class FramedBlockEntity extends BlockEntity
      */
 
     @Override
-    public IModelData getModelData() { return modelData; }
+    public ModelData getModelData()
+    {
+        return ModelData.builder()
+                .with(FramedBlockData.PROPERTY, modelData)
+                .build();
+    }
 
     protected final FramedBlockData getModelDataInternal() { return modelData; }
 

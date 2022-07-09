@@ -16,8 +16,7 @@ import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.*;
-import net.minecraft.world.level.material.FluidState;
-import net.minecraft.world.level.material.Fluids;
+import net.minecraft.world.level.material.*;
 import net.minecraft.world.level.storage.loot.LootContext;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.shapes.*;
@@ -133,7 +132,7 @@ public class FramedRailSlopeBlock extends BaseRailBlock implements IFramedBlock
     @Override
     public final InteractionResult use(BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hit)
     {
-        return handleUse(level, pos, player, hand, hit);
+        return handleUse(state, level, pos, player, hand, hit);
     }
 
     @Override
@@ -224,6 +223,12 @@ public class FramedRailSlopeBlock extends BaseRailBlock implements IFramedBlock
         Direction dir = directionFromShape(state.getValue(PropertyHolder.ASCENDING_RAIL_SHAPE));
         dir = rot.rotate(dir);
         return state.setValue(PropertyHolder.ASCENDING_RAIL_SHAPE, shapeFromDirection(dir));
+    }
+
+    @Override
+    public MaterialColor getMapColor(BlockState state, BlockGetter level, BlockPos pos, MaterialColor defaultColor)
+    {
+        return getCamoMapColor(level, pos, defaultColor);
     }
 
     @Override

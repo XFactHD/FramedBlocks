@@ -22,8 +22,9 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.client.ChunkRenderTypeSet;
 import net.minecraftforge.client.event.TextureStitchEvent;
-import net.minecraftforge.client.model.data.EmptyModelData;
+import net.minecraftforge.client.model.data.ModelData;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import org.lwjgl.glfw.GLFW;
@@ -278,7 +279,8 @@ public class FramedSignScreen extends Screen
         if (!SPRITE_CACHE.contains(camoState, front))
         {
             BakedModel model = minecraft.getBlockRenderer().getBlockModel(camoState);
-            List<BakedQuad> quads = model.getQuads(camoState, front, minecraft.level.getRandom(), EmptyModelData.INSTANCE);
+            ChunkRenderTypeSet layers = model.getRenderTypes(camoState, minecraft.level.getRandom(), ModelData.EMPTY);
+            List<BakedQuad> quads = model.getQuads(camoState, front, minecraft.level.getRandom(), ModelData.EMPTY, layers.iterator().next());
 
             TextureAtlasSprite sprite;
             if (!quads.isEmpty())

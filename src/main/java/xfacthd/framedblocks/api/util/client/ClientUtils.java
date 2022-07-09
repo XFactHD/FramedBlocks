@@ -16,7 +16,7 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.Property;
 import net.minecraft.world.level.material.FluidState;
 import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.client.RenderProperties;
+import net.minecraftforge.client.extensions.common.IClientFluidTypeExtensions;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
@@ -38,7 +38,7 @@ public final class ClientUtils
      * Replace the {@link BakedModel}s for all {@link BlockState}s of the given {@link Block} via the given block model
      * factory
      * @param block The block whose models are to be replaced
-     * @param models The location->model map given by the {@link net.minecraftforge.client.event.ModelBakeEvent}
+     * @param models The location->model map given by the {@link net.minecraftforge.client.event.ModelEvent.BakingCompleted}
      * @param blockModelGen The block model factory
      * @param ignoredProps The list of {@link Property}s to ignore, allows for deduplication of models when certain
      *                     properties don't influence the model (i.e. waterlogging).
@@ -54,7 +54,7 @@ public final class ClientUtils
      * Replace the {@link BakedModel}s for all {@link BlockState}s of the given {@link Block} via the given block model
      * factory
      * @param block The block whose models are to be replaced
-     * @param models The location->model map given by the {@link net.minecraftforge.client.event.ModelBakeEvent}
+     * @param models The location->model map given by the {@link net.minecraftforge.client.event.ModelEvent.BakingCompleted}
      * @param blockModelGen The block model factory
      * @param itemModelSource The {@link BlockState} whose model should be used as the item model
      * @param ignoredProps The list of {@link Property}s to ignore, allows for deduplication of models when certain
@@ -72,7 +72,7 @@ public final class ClientUtils
      * Replace the {@link BakedModel}s for all {@link BlockState}s of the given {@link Block} via the given block model
      * factory
      * @param block The block whose models are to be replaced
-     * @param models The location->model map given by the {@link net.minecraftforge.client.event.ModelBakeEvent}
+     * @param models The location->model map given by the {@link net.minecraftforge.client.event.ModelEvent.BakingCompleted}
      * @param blockModelGen The block model factory
      * @param stateMerger Custom BlockState merging function, allows for fine-grained deduplication of models when certain
      *                    properties or specific value ranges of a property don't influence the model (i.e. redstone power
@@ -89,7 +89,7 @@ public final class ClientUtils
      * Replace the {@link BakedModel}s for all {@link BlockState}s of the given {@link Block} via the given block model
      * factory
      * @param block The block whose models are to be replaced
-     * @param models The location->model map given by the {@link net.minecraftforge.client.event.ModelBakeEvent}
+     * @param models The location->model map given by the {@link net.minecraftforge.client.event.ModelEvent.BakingCompleted}
      * @param blockModelGen The block model factory
      * @param itemModelSource The {@link BlockState} whose model should be used as the item model
      * @param stateMerger Custom BlockState merging function, allows for fine-grained deduplication of models when certain
@@ -172,7 +172,7 @@ public final class ClientUtils
 
     public static int getFluidColor(BlockAndTintGetter level, BlockPos pos, FluidState fluid)
     {
-        return RenderProperties.get(fluid).getColorTint(fluid, level, pos);
+        return IClientFluidTypeExtensions.of(fluid).getTintColor(fluid, level, pos);
     }
 
     private static final List<ClientTask> tasks = new ArrayList<>();

@@ -16,6 +16,7 @@ import net.minecraft.world.level.block.TorchBlock;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.material.Material;
+import net.minecraft.world.level.material.MaterialColor;
 import net.minecraft.world.level.storage.loot.LootContext;
 import net.minecraft.world.phys.BlockHitResult;
 import xfacthd.framedblocks.FramedBlocks;
@@ -47,7 +48,7 @@ public class FramedTorchBlock extends TorchBlock implements IFramedBlock
     @Override
     public final InteractionResult use(BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hit)
     {
-        return handleUse(level, pos, player, hand, hit);
+        return handleUse(state, level, pos, player, hand, hit);
     }
 
     @Override
@@ -84,6 +85,12 @@ public class FramedTorchBlock extends TorchBlock implements IFramedBlock
     public List<ItemStack> getDrops(BlockState state, LootContext.Builder builder)
     {
         return getCamoDrops(super.getDrops(state, builder), builder);
+    }
+
+    @Override
+    public MaterialColor getMapColor(BlockState state, BlockGetter level, BlockPos pos, MaterialColor defaultColor)
+    {
+        return getCamoMapColor(level, pos, defaultColor);
     }
 
     @Override

@@ -5,7 +5,7 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.client.resources.model.BakedModel;
 import net.minecraft.core.Direction;
 import net.minecraft.util.Tuple;
-import net.minecraftforge.client.model.data.IModelData;
+import net.minecraftforge.client.model.data.ModelData;
 import org.jetbrains.annotations.NotNull;
 import xfacthd.framedblocks.api.util.FramedProperties;
 import xfacthd.framedblocks.common.FBContent;
@@ -33,7 +33,7 @@ public class FramedDoublePrismCornerModel extends FramedDoubleBlockModel
     }
 
     @Override
-    public TextureAtlasSprite getParticleIcon(@NotNull IModelData data)
+    public TextureAtlasSprite getParticleIcon(@NotNull ModelData data)
     {
         if (top)
         {

@@ -1,7 +1,6 @@
 package xfacthd.framedblocks.client.util;
 
 import com.mojang.blaze3d.vertex.VertexConsumer;
-import com.mojang.blaze3d.vertex.VertexFormat;
 
 public record GhostVertexConsumer(VertexConsumer wrapped, int alpha) implements VertexConsumer
 {
@@ -34,7 +33,4 @@ public record GhostVertexConsumer(VertexConsumer wrapped, int alpha) implements 
 
     @Override
     public void unsetDefaultColor() { wrapped.unsetDefaultColor(); }
-
-    @Override
-    public VertexFormat getVertexFormat() { return wrapped.getVertexFormat(); }
 }

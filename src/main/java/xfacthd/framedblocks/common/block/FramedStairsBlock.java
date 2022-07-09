@@ -14,10 +14,11 @@ import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.*;
+import net.minecraft.world.level.material.MaterialColor;
 import net.minecraft.world.level.storage.loot.LootContext;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.shapes.*;
-import net.minecraftforge.client.IBlockRenderProperties;
+import net.minecraftforge.client.extensions.common.IClientBlockExtensions;
 import xfacthd.framedblocks.api.block.IFramedBlock;
 import xfacthd.framedblocks.api.util.FramedProperties;
 import xfacthd.framedblocks.api.util.client.FramedBlockRenderProperties;
@@ -86,7 +87,7 @@ public class FramedStairsBlock extends StairBlock implements IFramedBlock
     @Override
     public final InteractionResult use(BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hit)
     {
-        return handleUse(level, pos, player, hand, hit);
+        return handleUse(state, level, pos, player, hand, hit);
     }
 
     @Override
@@ -198,7 +199,13 @@ public class FramedStairsBlock extends StairBlock implements IFramedBlock
     }
 
     @Override
-    public void initializeClient(Consumer<IBlockRenderProperties> consumer)
+    public MaterialColor getMapColor(BlockState state, BlockGetter level, BlockPos pos, MaterialColor defaultColor)
+    {
+        return getCamoMapColor(level, pos, defaultColor);
+    }
+
+    @Override
+    public void initializeClient(Consumer<IClientBlockExtensions> consumer)
     {
         consumer.accept(new FramedBlockRenderProperties());
     }

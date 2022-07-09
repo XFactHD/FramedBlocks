@@ -7,9 +7,11 @@ import net.minecraft.core.Direction;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraftforge.client.model.data.IModelData;
+import net.minecraftforge.client.ChunkRenderTypeSet;
+import net.minecraftforge.client.model.data.ModelData;
 import xfacthd.framedblocks.api.util.FramedBlockData;
 import xfacthd.framedblocks.api.util.FramedConstants;
+import xfacthd.framedblocks.api.util.client.ModelUtils;
 
 import java.util.*;
 
@@ -26,15 +28,23 @@ public class FramedMarkedCubeModel extends FramedCubeModel
     }
 
     @Override
-    protected boolean hasAdditionalQuadsInLayer(RenderType layer) { return layer == RenderType.cutout(); }
+    protected ChunkRenderTypeSet getAdditionalRenderTypes(RandomSource rand, ModelData extraData)
+    {
+        FramedBlockData fbData = extraData.get(FramedBlockData.PROPERTY);
+        if (fbData != null && !fbData.getCamoState().isAir())
+        {
+            return ModelUtils.CUTOUT;
+        }
+        return ChunkRenderTypeSet.none();
+    }
 
     @Override
-    protected void getAdditionalQuads(List<BakedQuad> quads, Direction side, BlockState state, RandomSource rand, IModelData data, RenderType layer)
+    protected void getAdditionalQuads(List<BakedQuad> quads, Direction side, BlockState state, RandomSource rand, ModelData data, RenderType renderType)
     {
-        BlockState camo = data.getData(FramedBlockData.CAMO);
-        if (camo != null && !camo.isAir())
+        FramedBlockData fbData = data.get(FramedBlockData.PROPERTY);
+        if (fbData != null && !fbData.getCamoState().isAir())
         {
-            quads.addAll(frameModel.getQuads(state, side, rand, data));
+            quads.addAll(frameModel.getQuads(state, side, rand, data, renderType));
         }
     }
 

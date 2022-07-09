@@ -8,7 +8,7 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.client.event.DrawSelectionEvent;
+import net.minecraftforge.client.event.RenderHighlightEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import xfacthd.framedblocks.FramedBlocks;
@@ -32,7 +32,7 @@ public final class BlockOutlineRenderer
     private static final Set<IBlockType> ERRORED_TYPES = new HashSet<>();
 
     @SubscribeEvent
-    public static void onRenderBlockHighlight(final DrawSelectionEvent.HighlightBlock event)
+    public static void onRenderBlockHighlight(final RenderHighlightEvent.Block event)
     {
         if (!ClientConfig.fancyHitboxes) { return; }
 

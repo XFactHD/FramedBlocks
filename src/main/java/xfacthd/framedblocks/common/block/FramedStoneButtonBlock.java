@@ -14,6 +14,7 @@ import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.AttachFace;
 import net.minecraft.world.level.material.Material;
+import net.minecraft.world.level.material.MaterialColor;
 import net.minecraft.world.level.storage.loot.LootContext;
 import net.minecraft.world.phys.BlockHitResult;
 import xfacthd.framedblocks.api.block.FramedBlockEntity;
@@ -39,7 +40,7 @@ public class FramedStoneButtonBlock extends StoneButtonBlock implements IFramedB
     @Override
     public final InteractionResult use(BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hit)
     {
-        InteractionResult result = handleUse(level, pos, player, hand, hit);
+        InteractionResult result = handleUse(state, level, pos, player, hand, hit);
         if (result.consumesAction()) { return result; }
 
         return super.use(state, level, pos, player, hand, hit);
@@ -90,6 +91,12 @@ public class FramedStoneButtonBlock extends StoneButtonBlock implements IFramedB
             return state.setValue(FACING, dir);
         }
         return state;
+    }
+
+    @Override
+    public MaterialColor getMapColor(BlockState state, BlockGetter level, BlockPos pos, MaterialColor defaultColor)
+    {
+        return getCamoMapColor(level, pos, defaultColor);
     }
 
     @Override

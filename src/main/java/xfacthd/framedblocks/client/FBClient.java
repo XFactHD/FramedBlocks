@@ -2,8 +2,6 @@ package xfacthd.framedblocks.client;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screens.MenuScreens;
-import net.minecraft.client.renderer.ItemBlockRenderTypes;
-import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.resources.model.BakedModel;
 import net.minecraft.core.BlockPos;
 import net.minecraft.resources.ResourceLocation;
@@ -12,8 +10,6 @@ import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.block.state.properties.Property;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.event.*;
-import net.minecraftforge.client.gui.OverlayRegistry;
-import net.minecraftforge.client.model.ForgeModelBakery;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
@@ -23,6 +19,7 @@ import xfacthd.framedblocks.api.block.IFramedBlock;
 import xfacthd.framedblocks.api.util.FramedConstants;
 import xfacthd.framedblocks.api.util.FramedProperties;
 import xfacthd.framedblocks.api.util.client.ClientUtils;
+import xfacthd.framedblocks.api.util.client.ModelCache;
 import xfacthd.framedblocks.client.model.*;
 import xfacthd.framedblocks.client.model.FluidModel;
 import xfacthd.framedblocks.client.render.*;
@@ -45,27 +42,12 @@ public final class FBClient
     @SubscribeEvent
     public static void onClientSetup(final FMLClientSetupEvent event)
     {
-        FBContent.getRegisteredBlocks()
-                .stream()
-                .map(RegistryObject::get)
-                .filter(block -> block instanceof IFramedBlock)
-                .forEach(block -> ItemBlockRenderTypes.setRenderLayer(block, type ->
-                        type == RenderType.solid() ||
-                        type == RenderType.cutout() ||
-                        type == RenderType.cutoutMipped() ||
-                        type == RenderType.translucent()
-                ));
-
         event.enqueueWork(() ->
         {
             MenuScreens.register(FBContent.menuTypeFramedStorage.get(), FramedStorageScreen::new);
 
             BlueprintPropertyOverride.register();
         });
-
-        OverlayRegistry.registerOverlayTop("framedblocks:state_lock", new StateLockOverlay());
-
-        KeyMappings.register();
 
         BlockOutlineRenderer.registerOutlineRender(BlockType.FRAMED_SLOPE, BlockOutlineRenderer::drawSlopeBox);
         BlockOutlineRenderer.registerOutlineRender(BlockType.FRAMED_CORNER_SLOPE, BlockOutlineRenderer::drawCornerSlopeBox);
@@ -94,7 +76,7 @@ public final class FBClient
     }
 
     @SubscribeEvent
-    public static void onBlockColors(final ColorHandlerEvent.Block event)
+    public static void onBlockColors(final RegisterColorHandlersEvent.Block event)
     {
         //noinspection SuspiciousToArrayCall
         Block[] blocks = FBContent.getRegisteredBlocks()
@@ -103,24 +85,31 @@ public final class FBClient
                 .filter(block -> block instanceof IFramedBlock)
                 .toArray(Block[]::new);
 
-        event.getBlockColors().register(FramedBlockColor.INSTANCE, blocks);
+        event.register(FramedBlockColor.INSTANCE, blocks);
     }
 
     @SubscribeEvent
-    public static void onModelRegister(final ModelRegistryEvent event)
+    public static void onOverlayRegister(final RegisterGuiOverlaysEvent event)
     {
-        ForgeModelBakery.addSpecialModel(FramedMarkedCubeModel.SLIME_FRAME_LOCATION);
-        ForgeModelBakery.addSpecialModel(FramedMarkedCubeModel.REDSTONE_FRAME_LOCATION);
-        FramedMarkedPressurePlateModel.registerFrameModels();
-        FramedStoneButtonModel.registerFrameModels();
-        ForgeModelBakery.addSpecialModel(FluidModel.BARE_MODEL);
+        event.registerAboveAll("state_lock", new StateLockOverlay());
     }
 
     @SubscribeEvent
-    public static void onModelsLoaded(final ModelBakeEvent event)
+    public static void onModelRegister(final ModelEvent.RegisterAdditional event)
     {
-        Map<ResourceLocation, BakedModel> registry = event.getModelRegistry();
+        event.register(FramedMarkedCubeModel.SLIME_FRAME_LOCATION);
+        event.register(FramedMarkedCubeModel.REDSTONE_FRAME_LOCATION);
+        FramedMarkedPressurePlateModel.registerFrameModels(event);
+        FramedStoneButtonModel.registerFrameModels(event);
+        event.register(FluidModel.BARE_MODEL);
+    }
 
+    @SubscribeEvent
+    public static void onModelsLoaded(final ModelEvent.BakingCompleted event)
+    {
+        Map<ResourceLocation, BakedModel> registry = event.getModels();
+
+        ModelCache.clear(event.getModelBakery());
         FramedChestRenderer.onModelsLoaded(registry); //Must happen before the chest model is replaced
         FramedMarkedPressurePlateModel.cacheFrameModels(registry);
         FramedStoneButtonModel.cacheFrameModels(registry);

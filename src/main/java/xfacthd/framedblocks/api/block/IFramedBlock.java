@@ -18,8 +18,7 @@ import net.minecraft.world.level.*;
 import net.minecraft.world.level.block.*;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
-import net.minecraft.world.level.material.Fluids;
-import net.minecraft.world.level.material.Material;
+import net.minecraft.world.level.material.*;
 import net.minecraft.world.level.storage.loot.LootContext;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
 import net.minecraft.world.phys.BlockHitResult;
@@ -116,8 +115,7 @@ public interface IFramedBlock extends EntityBlock//, IFacade
         }
     }
 
-    //TODO: add BlockState parameter in next breaking window
-    default InteractionResult handleUse(Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hit)
+    default InteractionResult handleUse(BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hit)
     {
         if (getBlockType().canLockState() && hand == InteractionHand.MAIN_HAND && lockState(level, pos, player, player.getItemInHand(hand)))
         {
@@ -126,7 +124,6 @@ public interface IFramedBlock extends EntityBlock//, IFacade
 
         if (player.getItemInHand(hand).is(Utils.WRENCH))
         {
-            BlockState state = level.getBlockState(pos);
             Rotation rot = player.isCrouching() ? Rotation.COUNTERCLOCKWISE_90 : Rotation.CLOCKWISE_90;
             BlockState newState = rotate(state, hit, rot);
             if (newState != state)
@@ -431,6 +428,19 @@ public interface IFramedBlock extends EntityBlock//, IFacade
     }
 
     default BlockState rotate(BlockState state, Direction face, Rotation rot) { return state.rotate(rot); }
+
+    default MaterialColor getCamoMapColor(BlockGetter level, BlockPos pos, MaterialColor defaultColor)
+    {
+        if (level.getBlockEntity(pos) instanceof FramedBlockEntity be)
+        {
+            MaterialColor color = be.getMapColor();
+            if (color != null)
+            {
+                return color;
+            }
+        }
+        return defaultColor;
+    }
 
     default Optional<MutableComponent> printCamoBlock(CompoundTag beTag)
     {

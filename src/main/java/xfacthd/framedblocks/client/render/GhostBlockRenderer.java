@@ -4,6 +4,7 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.*;
+import net.minecraft.client.resources.model.BakedModel;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
@@ -17,7 +18,9 @@ import net.minecraft.world.level.block.state.properties.*;
 import net.minecraft.world.phys.*;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.client.ForgeHooksClient;
+import net.minecraftforge.client.event.RenderLevelStageEvent;
+import net.minecraftforge.client.model.data.ModelData;
+import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
@@ -25,6 +28,7 @@ import net.minecraftforge.fml.util.ObfuscationReflectionHelper;
 import xfacthd.framedblocks.FramedBlocks;
 import xfacthd.framedblocks.api.data.CamoContainer;
 import xfacthd.framedblocks.api.util.*;
+import xfacthd.framedblocks.api.util.client.ModelCache;
 import xfacthd.framedblocks.client.util.*;
 import xfacthd.framedblocks.common.FBContent;
 import xfacthd.framedblocks.common.block.*;
@@ -41,23 +45,37 @@ import java.lang.reflect.Method;
 public final class GhostBlockRenderer
 {
     private static final RandomSource RANDOM = RandomSource.create();
-    private static final FramedBlockData GHOST_MODEL_DATA = new FramedBlockData(true);
-    private static final FramedBlockData GHOST_MODEL_DATA_LEFT = new FramedBlockData(true);
-    private static final FramedBlockData GHOST_MODEL_DATA_RIGHT = new FramedBlockData(true);
+    private static ModelData MODEL_DATA;
+    private static final FramedBlockData GHOST_MODEL_DATA = new FramedBlockData();
+    private static final FramedBlockData GHOST_MODEL_DATA_TWO = new FramedBlockData();
 
     @SubscribeEvent
     public static void onClientSetup(final FMLClientSetupEvent event)
     {
-        GHOST_MODEL_DATA.setCamoState(Blocks.AIR.defaultBlockState());
+        MODEL_DATA = ModelData.builder()
+                .with(FramedBlockData.PROPERTY, GHOST_MODEL_DATA)
+                .with(FramedDoubleBlockEntity.DATA_LEFT, ModelData.builder()
+                        .with(FramedBlockData.PROPERTY, GHOST_MODEL_DATA)
+                        .build()
+                )
+                .with(FramedDoubleBlockEntity.DATA_RIGHT, ModelData.builder()
+                        .with(FramedBlockData.PROPERTY, GHOST_MODEL_DATA_TWO)
+                        .build()
+                )
+                .build();
 
-        //Needed to render ghosts of double blocks
-        GHOST_MODEL_DATA.setData(FramedDoubleBlockEntity.DATA_LEFT, GHOST_MODEL_DATA_LEFT);
-        GHOST_MODEL_DATA.setData(FramedDoubleBlockEntity.DATA_RIGHT, GHOST_MODEL_DATA_RIGHT);
+        GHOST_MODEL_DATA.setCamoState(Blocks.AIR.defaultBlockState());
+        GHOST_MODEL_DATA_TWO.setCamoState(Blocks.AIR.defaultBlockState());
+
+        MinecraftForge.EVENT_BUS.addListener(GhostBlockRenderer::drawGhostBlock);
     }
 
-    public static void drawGhostBlock(MultiBufferSource buffers, PoseStack mstack)
+    public static void drawGhostBlock(final RenderLevelStageEvent event)
     {
-        if (!ClientConfig.showGhostBlocks) { return; }
+        if (!ClientConfig.showGhostBlocks || event.getStage() != RenderLevelStageEvent.Stage.AFTER_PARTICLES) { return; }
+
+        MultiBufferSource buffers = mc().renderBuffers().bufferSource();
+        PoseStack mstack = event.getPoseStack();
 
         HitResult mouseOver = mc().hitResult;
         if (mouseOver == null || mouseOver.getType() != HitResult.Type.BLOCK) { return; }
@@ -135,8 +153,8 @@ public final class GhostBlockRenderer
 
         if (doRender)
         {
-            BlockState camoState = Blocks.AIR.defaultBlockState();
-            BlockState camoStateTwo = Blocks.AIR.defaultBlockState();
+            BlockState camoState;
+            BlockState camoStateTwo;
             if (blueprint)
             {
                 CompoundTag beTag = stack.getOrCreateTagElement("blueprint_data").getCompound("camo_data");
@@ -153,8 +171,8 @@ public final class GhostBlockRenderer
                         camoStateTwo = temp;
                     }
 
-                    GHOST_MODEL_DATA_LEFT.setCamoState(camoState);
-                    GHOST_MODEL_DATA_RIGHT.setCamoState(camoStateTwo);
+                    GHOST_MODEL_DATA.setCamoState(camoState);
+                    GHOST_MODEL_DATA_TWO.setCamoState(camoStateTwo);
                 }
                 else
                 {
@@ -162,7 +180,7 @@ public final class GhostBlockRenderer
                 }
             }
 
-            doRenderGhostBlock(mstack, buffers, renderPos, renderState, camoState, camoStateTwo);
+            doRenderGhostBlock(mstack, buffers, renderPos, renderState);
 
             if (renderState.getBlock() instanceof FramedDoorBlock)
             {
@@ -173,52 +191,33 @@ public final class GhostBlockRenderer
                     GHOST_MODEL_DATA.setCamoState(camoState);
                 }
 
-                doRenderGhostBlock(mstack, buffers, renderPos.above(), renderState.setValue(DoorBlock.HALF, DoubleBlockHalf.UPPER), camoState, camoStateTwo);
+                doRenderGhostBlock(mstack, buffers, renderPos.above(), renderState.setValue(DoorBlock.HALF, DoubleBlockHalf.UPPER));
             }
 
             if (blueprint)
             {
                 GHOST_MODEL_DATA.setCamoState(Blocks.AIR.defaultBlockState());
-                GHOST_MODEL_DATA_LEFT.setCamoState(Blocks.AIR.defaultBlockState());
-                GHOST_MODEL_DATA_RIGHT.setCamoState(Blocks.AIR.defaultBlockState());
+                GHOST_MODEL_DATA_TWO.setCamoState(Blocks.AIR.defaultBlockState());
             }
         }
     }
 
-    private static void doRenderGhostBlock(PoseStack mstack, MultiBufferSource buffers, BlockPos renderPos, BlockState renderState, BlockState camoState, BlockState camoStateTwo)
+    private static void doRenderGhostBlock(PoseStack mstack, MultiBufferSource buffers, BlockPos renderPos, BlockState renderState)
     {
         Vec3 offset = Vec3.atLowerCornerOf(renderPos).subtract(mc().gameRenderer.getMainCamera().getPosition());
         VertexConsumer builder = new GhostVertexConsumer(buffers.getBuffer(CustomRenderType.GHOST_BLOCK), 0xAA);
 
-        if (camoState.isAir() && camoStateTwo.isAir())
+        BakedModel model = ModelCache.getModel(renderState);
+        for (RenderType type : model.getRenderTypes(renderState, RANDOM, MODEL_DATA))
         {
-            doRenderGhostBlockInLayer(mstack, builder, renderPos, renderState, RenderType.cutout(), offset);
-        }
-        else
-        {
-            for (RenderType type : RenderType.chunkBufferLayers())
-            {
-                if (canRenderInLayer(camoState, type) || canRenderInLayer(camoStateTwo, type))
-                {
-                    doRenderGhostBlockInLayer(mstack, builder, renderPos, renderState, type, offset);
-                }
-            }
+            doRenderGhostBlockInLayer(mstack, builder, renderPos, renderState, type, offset);
         }
 
         ((MultiBufferSource.BufferSource) buffers).endBatch(CustomRenderType.GHOST_BLOCK);
-        ForgeHooksClient.setRenderType(null);
-    }
-
-    private static boolean canRenderInLayer(BlockState camoState, RenderType layer)
-    {
-        if (camoState.isAir()) { return layer == RenderType.cutout(); }
-        return ItemBlockRenderTypes.canRenderInLayer(camoState, layer);
     }
 
     private static void doRenderGhostBlockInLayer(PoseStack mstack, VertexConsumer builder, BlockPos renderPos, BlockState renderState, RenderType layer, Vec3 offset)
     {
-        ForgeHooksClient.setRenderType(layer);
-
         mstack.pushPose();
         mstack.translate(offset.x, offset.y, offset.z);
 
@@ -230,7 +229,8 @@ public final class GhostBlockRenderer
                 builder,
                 false,
                 RANDOM,
-                GHOST_MODEL_DATA
+                MODEL_DATA,
+                layer
         );
 
         mstack.popPose();

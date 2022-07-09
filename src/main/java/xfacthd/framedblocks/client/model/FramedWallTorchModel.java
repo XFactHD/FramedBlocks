@@ -1,6 +1,5 @@
 package xfacthd.framedblocks.client.model;
 
-import net.minecraft.client.renderer.ItemBlockRenderTypes;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.block.Blocks;
@@ -11,12 +10,12 @@ import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.core.Direction;
 import net.minecraft.resources.ResourceLocation;
 import com.mojang.math.Vector3f;
-import net.minecraftforge.client.model.data.IModelData;
+import net.minecraftforge.client.ChunkRenderTypeSet;
+import net.minecraftforge.client.model.data.ModelData;
 import xfacthd.framedblocks.api.model.FramedBlockModel;
 import xfacthd.framedblocks.api.util.FramedConstants;
 import xfacthd.framedblocks.api.util.Utils;
-import xfacthd.framedblocks.api.util.client.BakedQuadTransformer;
-import xfacthd.framedblocks.api.util.client.ModelUtils;
+import xfacthd.framedblocks.api.util.client.*;
 
 import java.util.*;
 
@@ -34,15 +33,15 @@ public class FramedWallTorchModel extends FramedBlockModel
     }
 
     @Override
-    protected boolean hasAdditionalQuadsInLayer(RenderType layer)
+    protected ChunkRenderTypeSet getAdditionalRenderTypes(RandomSource rand, ModelData extraData)
     {
-        return ItemBlockRenderTypes.canRenderInLayer(Blocks.TORCH.defaultBlockState(), layer);
+        return ModelCache.getRenderTypes(Blocks.WALL_TORCH.defaultBlockState(), rand, extraData);
     }
 
     @Override
-    protected void getAdditionalQuads(Map<Direction, List<BakedQuad>> quadMap, BlockState state, RandomSource rand, IModelData extraData, RenderType layer)
+    protected void getAdditionalQuads(Map<Direction, List<BakedQuad>> quadMap, BlockState state, RandomSource rand, ModelData extraData, RenderType renderType)
     {
-        List<BakedQuad> quads = baseModel.getQuads(state, null, rand, extraData);
+        List<BakedQuad> quads = baseModel.getQuads(state, null, rand, extraData, renderType);
         for (BakedQuad quad : quads)
         {
             if (!quad.getSprite().getName().equals(TEXTURE))

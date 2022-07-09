@@ -9,11 +9,12 @@ import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.block.PressurePlateBlock;
 import net.minecraft.world.level.block.WeightedPressurePlateBlock;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraftforge.client.model.ForgeModelBakery;
-import net.minecraftforge.client.model.data.IModelData;
+import net.minecraftforge.client.ChunkRenderTypeSet;
+import net.minecraftforge.client.event.ModelEvent;
+import net.minecraftforge.client.model.data.ModelData;
 import xfacthd.framedblocks.api.util.FramedBlockData;
 import xfacthd.framedblocks.api.util.FramedConstants;
-import xfacthd.framedblocks.common.FBContent;
+import xfacthd.framedblocks.api.util.client.ModelUtils;
 
 import java.util.*;
 
@@ -36,29 +37,27 @@ public class FramedMarkedPressurePlateModel extends FramedPressurePlateModel
     }
 
     @Override
-    protected boolean hasAdditionalQuadsInLayer(RenderType layer) { return layer == RenderType.cutout(); }
-
-    @Override
-    protected void getAdditionalQuads(Map<Direction, List<BakedQuad>> quadMap, BlockState state, RandomSource rand, IModelData data, RenderType layer)
+    protected ChunkRenderTypeSet getAdditionalRenderTypes(RandomSource rand, ModelData extraData)
     {
-        BlockState camo = data.getData(FramedBlockData.CAMO);
-        if (camo == null || camo.isAir()) { return; }
-
-        quadMap.get(null).addAll(frameModel.getQuads(state, null, rand, data));
-        for (Direction side : Direction.values())
+        FramedBlockData fbData = extraData.get(FramedBlockData.PROPERTY);
+        if (fbData != null && !fbData.getCamoState().isAir())
         {
-            quadMap.get(side).addAll(frameModel.getQuads(state, side, rand, data));
+            return ModelUtils.CUTOUT;
         }
+        return ChunkRenderTypeSet.none();
     }
 
     @Override
-    protected BakedModel getCamoModel(BlockState camoState)
+    protected void getAdditionalQuads(Map<Direction, List<BakedQuad>> quadMap, BlockState state, RandomSource rand, ModelData data, RenderType layer)
     {
-        if (camoState.is(FBContent.blockFramedCube.get()))
+        FramedBlockData fbData = data.get(FramedBlockData.PROPERTY);
+        if (fbData == null || fbData.getCamoState().isAir()) { return; }
+
+        quadMap.get(null).addAll(frameModel.getQuads(state, null, rand, data, layer));
+        for (Direction side : Direction.values())
         {
-            return baseModel;
+            quadMap.get(side).addAll(frameModel.getQuads(state, side, rand, data, layer));
         }
-        return super.getCamoModel(camoState);
     }
 
     @Override
@@ -87,14 +86,14 @@ public class FramedMarkedPressurePlateModel extends FramedPressurePlateModel
         return new FramedMarkedPressurePlateModel(state, baseModel, frame, powered);
     }
 
-    public static void registerFrameModels()
+    public static void registerFrameModels(ModelEvent.RegisterAdditional event)
     {
-        ForgeModelBakery.addSpecialModel(FramedMarkedPressurePlateModel.STONE_FRAME_LOCATION);
-        ForgeModelBakery.addSpecialModel(FramedMarkedPressurePlateModel.STONE_FRAME_DOWN_LOCATION);
-        ForgeModelBakery.addSpecialModel(FramedMarkedPressurePlateModel.GOLD_FRAME_LOCATION);
-        ForgeModelBakery.addSpecialModel(FramedMarkedPressurePlateModel.GOLD_FRAME_DOWN_LOCATION);
-        ForgeModelBakery.addSpecialModel(FramedMarkedPressurePlateModel.IRON_FRAME_LOCATION);
-        ForgeModelBakery.addSpecialModel(FramedMarkedPressurePlateModel.IRON_FRAME_DOWN_LOCATION);
+        event.register(FramedMarkedPressurePlateModel.STONE_FRAME_LOCATION);
+        event.register(FramedMarkedPressurePlateModel.STONE_FRAME_DOWN_LOCATION);
+        event.register(FramedMarkedPressurePlateModel.GOLD_FRAME_LOCATION);
+        event.register(FramedMarkedPressurePlateModel.GOLD_FRAME_DOWN_LOCATION);
+        event.register(FramedMarkedPressurePlateModel.IRON_FRAME_LOCATION);
+        event.register(FramedMarkedPressurePlateModel.IRON_FRAME_DOWN_LOCATION);
     }
 
     public static void cacheFrameModels(Map<ResourceLocation, BakedModel> registry)
