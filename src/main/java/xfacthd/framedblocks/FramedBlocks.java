@@ -58,13 +58,13 @@ public final class FramedBlocks
         CHANNEL.messageBuilder(SignUpdatePacket.class, 0, NetworkDirection.PLAY_TO_SERVER)
                 .encoder(SignUpdatePacket::encode)
                 .decoder(SignUpdatePacket::new)
-                .consumer(SignUpdatePacket::handle)
+                .consumerNetworkThread(SignUpdatePacket::handle)
                 .add();
 
         CHANNEL.messageBuilder(OpenSignScreenPacket.class, 1, NetworkDirection.PLAY_TO_CLIENT)
                 .encoder(OpenSignScreenPacket::encode)
                 .decoder(OpenSignScreenPacket::new)
-                .consumer(OpenSignScreenPacket::handle)
+                .consumerNetworkThread(OpenSignScreenPacket::handle)
                 .add();
 
         BlueprintBehaviours.register();
