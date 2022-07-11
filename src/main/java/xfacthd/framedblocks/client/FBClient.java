@@ -30,6 +30,7 @@ import xfacthd.framedblocks.common.FBContent;
 import xfacthd.framedblocks.common.block.FramedWeightedPressurePlateBlock;
 import xfacthd.framedblocks.common.blockentity.FramedSignBlockEntity;
 import xfacthd.framedblocks.common.data.BlockType;
+import xfacthd.framedblocks.client.data.GhostRenderBehaviours;
 
 import java.util.List;
 import java.util.Map;
@@ -66,6 +67,8 @@ public final class FBClient
         BlockOutlineRenderer.registerOutlineRender(BlockType.FRAMED_SLOPE_PANEL, new SlopePanelOutlineRenderer());
         BlockOutlineRenderer.registerOutlineRender(BlockType.FRAMED_EXTENDED_SLOPE_PANEL, new ExtendedSlopePanelOutlineRenderer());
         BlockOutlineRenderer.registerOutlineRender(BlockType.FRAMED_INV_DOUBLE_SLOPE_PANEL, new InverseDoubleSlopePanelOutlineRenderer());
+
+        GhostRenderBehaviours.register();
     }
 
     @SubscribeEvent

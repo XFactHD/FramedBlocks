@@ -1,5 +1,6 @@
 package xfacthd.framedblocks.common.data.blueprint;
 
+import it.unimi.dsi.fastutil.objects.ObjectArraySet;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.Tag;
@@ -38,7 +39,7 @@ public class DoorCopyBehaviour implements BlueprintCopyBehaviour
     @Override
     public Optional<Set<CamoContainer>> getCamos(CompoundTag blueprintData)
     {
-        Set<CamoContainer> camos = new HashSet<>();
+        Set<CamoContainer> camos = new ObjectArraySet<>(2);
         camos.add(CamoContainer.load(blueprintData.getCompound(MAIN_CAMO_KEY).getCompound(CAMO_CONTAINER_KEY)));
         camos.add(CamoContainer.load(blueprintData.getCompound(SECOND_CAMO_KEY).getCompound(CAMO_CONTAINER_KEY)));
         return Optional.of(camos);

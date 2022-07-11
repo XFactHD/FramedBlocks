@@ -1,22 +1,19 @@
 package xfacthd.framedblocks.client.render;
 
+import com.google.common.base.Preconditions;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.*;
 import net.minecraft.client.resources.model.BakedModel;
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.Direction;
-import net.minecraft.nbt.CompoundTag;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.item.*;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.block.*;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.level.block.state.properties.*;
 import net.minecraft.world.phys.*;
-import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.ForgeRenderTypes;
 import net.minecraftforge.client.event.RenderLevelStageEvent;
@@ -25,21 +22,15 @@ import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
-import net.minecraftforge.fml.util.ObfuscationReflectionHelper;
-import xfacthd.framedblocks.FramedBlocks;
-import xfacthd.framedblocks.api.data.CamoContainer;
+import xfacthd.framedblocks.api.ghost.CamoPair;
+import xfacthd.framedblocks.api.ghost.GhostRenderBehaviour;
 import xfacthd.framedblocks.api.util.*;
 import xfacthd.framedblocks.api.util.client.ModelCache;
 import xfacthd.framedblocks.client.util.*;
-import xfacthd.framedblocks.common.FBContent;
-import xfacthd.framedblocks.common.block.*;
-import xfacthd.framedblocks.api.block.IFramedBlock;
-import xfacthd.framedblocks.common.data.PropertyHolder;
-import xfacthd.framedblocks.common.item.FramedBlueprintItem;
 import xfacthd.framedblocks.common.blockentity.FramedDoubleBlockEntity;
 
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
+import java.util.IdentityHashMap;
+import java.util.Map;
 
 @SuppressWarnings("ConstantConditions")
 @Mod.EventBusSubscriber(modid = FramedConstants.MOD_ID, value = Dist.CLIENT, bus = Mod.EventBusSubscriber.Bus.MOD)
@@ -49,6 +40,8 @@ public final class GhostBlockRenderer
     private static ModelData MODEL_DATA;
     private static final FramedBlockData GHOST_MODEL_DATA = new FramedBlockData();
     private static final FramedBlockData GHOST_MODEL_DATA_TWO = new FramedBlockData();
+    private static final Map<Item, GhostRenderBehaviour> RENDER_BEHAVIOURS = new IdentityHashMap<>();
+    private static final GhostRenderBehaviour DEFAULT_BEHAVIOUR = new GhostRenderBehaviour() {};
 
     @SubscribeEvent
     public static void onClientSetup(final FMLClientSetupEvent event)
@@ -68,156 +61,85 @@ public final class GhostBlockRenderer
         GHOST_MODEL_DATA.setCamoState(Blocks.AIR.defaultBlockState());
         GHOST_MODEL_DATA_TWO.setCamoState(Blocks.AIR.defaultBlockState());
 
-        MinecraftForge.EVENT_BUS.addListener(GhostBlockRenderer::drawGhostBlock);
+        MinecraftForge.EVENT_BUS.addListener(GhostBlockRenderer::onRenderLevelStage);
     }
 
-    public static void drawGhostBlock(final RenderLevelStageEvent event)
+    private static void onRenderLevelStage(final RenderLevelStageEvent event)
     {
-        if (!ClientConfig.showGhostBlocks || event.getStage() != RenderLevelStageEvent.Stage.AFTER_PARTICLES) { return; }
-
-        MultiBufferSource buffers = mc().renderBuffers().bufferSource();
-        PoseStack mstack = event.getPoseStack();
-
-        HitResult mouseOver = mc().hitResult;
-        if (mouseOver == null || mouseOver.getType() != HitResult.Type.BLOCK) { return; }
-
-        BlockHitResult target = (BlockHitResult) mouseOver;
-
-        Block block;
-        boolean blueprint = false;
-        boolean rail = false;
-
-        ItemStack stack = mc().player.getMainHandItem();
-        if (stack.getItem() instanceof FramedBlueprintItem)
-        {
-            block = FramedBlueprintItem.getTargetBlock(stack);
-            blueprint = true;
-        }
-        else if (stack.getItem() instanceof BlockItem item)
-        {
-            block = item.getBlock();
-            rail = item == Items.RAIL;
-        }
-        else
+        if (!ClientConfig.showGhostBlocks || event.getStage() != RenderLevelStageEvent.Stage.AFTER_PARTICLES)
         {
             return;
         }
 
-        if (!(block instanceof IFramedBlock) && !rail) { return; }
+        if (!(mc().hitResult instanceof BlockHitResult hit) || hit.getType() != HitResult.Type.BLOCK) { return; }
 
-        boolean doRender;
-        BlockPos renderPos;
-        BlockState renderState;
+        ItemStack stack = mc().player.getMainHandItem();
+        if (stack.isEmpty()) { return; }
 
-        if (!blueprint && (renderState = tryBuildDoublePanel(target, block)) != null)
+        GhostRenderBehaviour behaviour = RENDER_BEHAVIOURS.getOrDefault(stack.getItem(), DEFAULT_BEHAVIOUR);
+
+        ItemStack proxiedStack = behaviour.getProxiedStack(stack);
+        if (!behaviour.mayRender(stack, proxiedStack)) { return; }
+
+        BlockPlaceContext context = new BlockPlaceContext(mc().player, InteractionHand.MAIN_HAND, stack, hit);
+        BlockState hitState = mc().level.getBlockState(hit.getBlockPos());
+
+        drawGhostBlock(event, behaviour, stack, proxiedStack, hit, context, hitState, false);
+    }
+
+    private static void drawGhostBlock(
+            RenderLevelStageEvent event,
+            GhostRenderBehaviour behaviour,
+            ItemStack stack,
+            ItemStack proxiedStack,
+            BlockHitResult hit,
+            BlockPlaceContext context,
+            BlockState hitState,
+            boolean secondPass
+    )
+    {
+        BlockState renderState = behaviour.getRenderState(stack, proxiedStack, hit, context, hitState, secondPass);
+        if (renderState == null) { return; }
+
+        BlockPos renderPos = behaviour.getRenderPos(stack, proxiedStack, hit, context, hitState, context.getClickedPos(), secondPass);
+        if (!secondPass && !behaviour.canRenderAt(stack, proxiedStack, hit, context, hitState, renderState, renderPos)) { return; }
+
+        CamoPair camo = behaviour.readCamo(stack, proxiedStack, secondPass);
+        camo = behaviour.postProcessCamo(stack, proxiedStack, context, renderState, secondPass, camo);
+        GHOST_MODEL_DATA.setCamoState(camo.getCamoOne());
+        GHOST_MODEL_DATA_TWO.setCamoState(camo.getCamoTwo());
+
+        ModelData modelData = behaviour.appendModelData(stack, proxiedStack, context, renderState, secondPass, MODEL_DATA);
+
+        MultiBufferSource buffers = mc().renderBuffers().bufferSource();
+        PoseStack mstack = event.getPoseStack();
+
+        doRenderGhostBlock(mstack, buffers, renderPos, renderState, modelData);
+
+        GHOST_MODEL_DATA.setCamoState(Blocks.AIR.defaultBlockState());
+        GHOST_MODEL_DATA_TWO.setCamoState(Blocks.AIR.defaultBlockState());
+
+        if (!secondPass && behaviour.hasSecondBlock(stack, proxiedStack))
         {
-            doRender = true;
-            renderPos = target.getBlockPos();
-        }
-        else if (!blueprint && (renderState = tryBuildDoubleSlab(target, block)) != null)
-        {
-            doRender = true;
-            renderPos = target.getBlockPos();
-        }
-        else if (rail)
-        {
-            BlockState state = mc().level.getBlockState(target.getBlockPos());
-            if (state.getBlock() == FBContent.blockFramedSlope.get())
-            {
-                renderPos = target.getBlockPos();
-
-                RailShape shape = FramedRailSlopeBlock.shapeFromDirection(state.getValue(FramedProperties.FACING_HOR));
-                renderState = block.defaultBlockState().setValue(BlockStateProperties.RAIL_SHAPE, shape);
-
-                BlockState railSlope = FBContent.blockFramedRailSlope.get()
-                        .defaultBlockState()
-                        .setValue(PropertyHolder.ASCENDING_RAIL_SHAPE, shape);
-                doRender = railSlope.canSurvive(mc().level, renderPos);
-            }
-            else
-            {
-                doRender = false;
-                renderPos = BlockPos.ZERO;
-                renderState = Blocks.AIR.defaultBlockState();
-            }
-        }
-        else
-        {
-            BlockPlaceContext context = new BlockPlaceContext(mc().player, InteractionHand.MAIN_HAND, stack, target);
-
-            renderPos = context.getClickedPos();
-            renderState = getStateForPlacement(context, block);
-            doRender = renderState != null &&
-                    mc().level.isUnobstructed(renderState, renderPos, CollisionContext.of(mc().player)) &&
-                    mc().level.getBlockState(renderPos).canBeReplaced(context);
-        }
-
-        if (doRender)
-        {
-            BlockState camoState;
-            BlockState camoStateTwo;
-            if (blueprint)
-            {
-                CompoundTag beTag = stack.getOrCreateTagElement("blueprint_data").getCompound("camo_data");
-                camoState = CamoContainer.load(beTag.getCompound("camo")).getState();
-
-                if (renderState.getBlock() instanceof AbstractFramedDoubleBlock)
-                {
-                    camoStateTwo = CamoContainer.load(beTag.getCompound("camo_two")).getState();
-
-                    if (block == FBContent.blockFramedDoublePanel.get() && renderState.getValue(FramedProperties.FACING_NE) != mc().player.getDirection())
-                    {
-                        BlockState temp = camoState;
-                        camoState = camoStateTwo;
-                        camoStateTwo = temp;
-                    }
-
-                    GHOST_MODEL_DATA.setCamoState(camoState);
-                    GHOST_MODEL_DATA_TWO.setCamoState(camoStateTwo);
-                }
-                else
-                {
-                    GHOST_MODEL_DATA.setCamoState(camoState);
-                }
-            }
-
-            doRenderGhostBlock(mstack, buffers, renderPos, renderState);
-
-            if (renderState.getBlock() instanceof FramedDoorBlock)
-            {
-                if (blueprint)
-                {
-                    CompoundTag beTag = stack.getOrCreateTagElement("blueprint_data").getCompound("camo_data_two");
-                    camoState = CamoContainer.load(beTag.getCompound("camo")).getState();
-                    GHOST_MODEL_DATA.setCamoState(camoState);
-                }
-
-                doRenderGhostBlock(mstack, buffers, renderPos.above(), renderState.setValue(DoorBlock.HALF, DoubleBlockHalf.UPPER));
-            }
-
-            if (blueprint)
-            {
-                GHOST_MODEL_DATA.setCamoState(Blocks.AIR.defaultBlockState());
-                GHOST_MODEL_DATA_TWO.setCamoState(Blocks.AIR.defaultBlockState());
-            }
+            drawGhostBlock(event, behaviour, stack, proxiedStack, hit, context, hitState, true);
         }
     }
 
-    private static void doRenderGhostBlock(PoseStack mstack, MultiBufferSource buffers, BlockPos renderPos, BlockState renderState)
+    private static void doRenderGhostBlock(PoseStack mstack, MultiBufferSource buffers, BlockPos renderPos, BlockState renderState, ModelData modelData)
     {
         Vec3 offset = Vec3.atLowerCornerOf(renderPos).subtract(mc().gameRenderer.getMainCamera().getPosition());
         VertexConsumer builder = new GhostVertexConsumer(buffers.getBuffer(ForgeRenderTypes.TRANSLUCENT_ON_PARTICLES_TARGET.get()), 0xAA);
 
         BakedModel model = ModelCache.getModel(renderState);
-        for (RenderType type : model.getRenderTypes(renderState, RANDOM, MODEL_DATA))
+        for (RenderType type : model.getRenderTypes(renderState, RANDOM, modelData))
         {
-            doRenderGhostBlockInLayer(mstack, builder, renderPos, renderState, type, offset);
+            doRenderGhostBlockInLayer(mstack, builder, renderPos, renderState, type, offset, modelData);
         }
 
         ((MultiBufferSource.BufferSource) buffers).endBatch(ForgeRenderTypes.TRANSLUCENT_ON_PARTICLES_TARGET.get());
     }
 
-    private static void doRenderGhostBlockInLayer(PoseStack mstack, VertexConsumer builder, BlockPos renderPos, BlockState renderState, RenderType layer, Vec3 offset)
+    private static void doRenderGhostBlockInLayer(PoseStack mstack, VertexConsumer builder, BlockPos renderPos, BlockState renderState, RenderType layer, Vec3 offset, ModelData modelData)
     {
         mstack.pushPose();
         mstack.translate(offset.x, offset.y, offset.z);
@@ -230,7 +152,7 @@ public final class GhostBlockRenderer
                 builder,
                 false,
                 RANDOM,
-                MODEL_DATA,
+                modelData,
                 layer
         );
 
@@ -239,57 +161,36 @@ public final class GhostBlockRenderer
 
 
 
-    private static BlockState tryBuildDoubleSlab(BlockHitResult trace, Block heldBlock)
+    public static synchronized void registerBehaviour(GhostRenderBehaviour behaviour, Block... blocks)
     {
-        if (heldBlock != FBContent.blockFramedSlab.get()) { return null; }
+        Preconditions.checkNotNull(behaviour, "GhostRenderBehaviour must be non-null");
+        Preconditions.checkNotNull(blocks, "Blocks array must be non-null to register a GhostRenderBehaviour");
+        Preconditions.checkState(blocks.length > 0, "At least one block must be provided to register a GhostRenderBehaviour");
 
-        BlockState target = mc().level.getBlockState(trace.getBlockPos());
-        if (target.getBlock() == heldBlock)
+        for (Block block : blocks)
         {
-            boolean top = target.getValue(FramedProperties.TOP);
-            if ((top && trace.getDirection() == Direction.DOWN) || (!top && trace.getDirection() == Direction.UP))
-            {
-                return target.setValue(FramedProperties.TOP, !top);
-            }
+            Item item = block.asItem();
+            Preconditions.checkState(item instanceof BlockItem, "Block must have an associated BlockItem");
+            registerBehaviour(behaviour, item);
         }
-        return null;
     }
 
-    private static BlockState tryBuildDoublePanel(BlockHitResult trace, Block heldBlock)
+    public static synchronized void registerBehaviour(GhostRenderBehaviour behaviour, Item... items)
     {
-        if (heldBlock != FBContent.blockFramedPanel.get()) { return null; }
+        Preconditions.checkNotNull(behaviour, "GhostRenderBehaviour must be non-null");
+        Preconditions.checkNotNull(items, "Items array must be non-null to register a GhostRenderBehaviour");
+        Preconditions.checkState(items.length > 0, "At least one item must be provided to register a GhostRenderBehaviour");
 
-        BlockState target = mc().level.getBlockState(trace.getBlockPos());
-        if (target.getBlock() == heldBlock)
+        for (Item item : items)
         {
-            Direction dir = target.getValue(FramedProperties.FACING_HOR);
-            if (dir.getOpposite() == trace.getDirection())
-            {
-                return target.setValue(FramedProperties.FACING_HOR, dir.getOpposite());
-            }
+            RENDER_BEHAVIOURS.put(item, behaviour);
         }
-        return null;
     }
 
-    private static final Method BLOCKITEM_GETPLACESTATE = ObfuscationReflectionHelper.findMethod(BlockItem.class, "m_5965_", BlockPlaceContext.class);
-    private static BlockState getStateForPlacement(BlockPlaceContext ctx, Block block)
+    public static GhostRenderBehaviour getBehaviour(Item item)
     {
-        Item item = ctx.getItemInHand().getItem();
-        if (item instanceof StandingAndWallBlockItem)
-        {
-            try
-            {
-                return (BlockState) BLOCKITEM_GETPLACESTATE.invoke(item, ctx);
-            }
-            catch (IllegalAccessException | InvocationTargetException e)
-            {
-                FramedBlocks.LOGGER.error("Encountered an error while getting placement state of ", e);
-            }
-        }
-        return block.getStateForPlacement(ctx);
+        return RENDER_BEHAVIOURS.getOrDefault(item, DEFAULT_BEHAVIOUR);
     }
-
-
 
     private static Minecraft mc() { return Minecraft.getInstance(); }
 
