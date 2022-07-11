@@ -21,7 +21,6 @@ import xfacthd.framedblocks.common.util.MathUtils;
 public class FramedCollapsibleBlockEntity extends FramedBlockEntity
 {
     public static final ModelProperty<Integer> OFFSETS = new ModelProperty<>();
-    public static final ModelProperty<Direction> COLLAPSED_FACE = new ModelProperty<>();
 
     private Direction collapsedFace = null;
     private int packedOffsets = 0;
@@ -198,7 +197,6 @@ public class FramedCollapsibleBlockEntity extends FramedBlockEntity
         return ModelData.builder()
                 .with(FramedBlockData.PROPERTY, getModelDataInternal())
                 .with(OFFSETS, getPackedOffsets())
-                .with(COLLAPSED_FACE, collapsedFace)
                 .build();
     }
 

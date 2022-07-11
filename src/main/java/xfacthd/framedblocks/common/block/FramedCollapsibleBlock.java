@@ -4,7 +4,9 @@ import com.google.common.cache.*;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.util.Mth;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
@@ -85,6 +87,26 @@ public class FramedCollapsibleBlock extends FramedBlock
             }
         }
         return Shapes.block();
+    }
+
+    @Override
+    public void setPlacedBy(Level level, BlockPos pos, BlockState state, @Nullable LivingEntity placer, ItemStack stack)
+    {
+        super.setPlacedBy(level, pos, state, placer, stack);
+
+        //noinspection ConstantConditions
+        if (!level.isClientSide() && stack.hasTag() && stack.getTag().contains("BlockEntityTag"))
+        {
+            //Properly set collapsed face when placed from a stack with BE NBT data
+            if (level.getBlockEntity(pos) instanceof FramedCollapsibleBlockEntity be)
+            {
+                Direction collapseFace = be.getCollapsedFace();
+                if (state.getValue(PropertyHolder.COLLAPSED_FACE).toDirection() != collapseFace)
+                {
+                    level.setBlockAndUpdate(pos, state.setValue(PropertyHolder.COLLAPSED_FACE, CollapseFace.fromDirection(collapseFace)));
+                }
+            }
+        }
     }
 
     @Override
