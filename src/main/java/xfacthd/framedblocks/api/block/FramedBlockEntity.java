@@ -13,6 +13,7 @@ import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.*;
 import net.minecraft.world.level.Explosion;
+import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.*;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
@@ -700,6 +701,19 @@ public class FramedBlockEntity extends BlockEntity
     public IModelData getModelData() { return modelData; }
 
     protected final FramedBlockData getModelDataInternal() { return modelData; }
+
+    protected void initModelData() { modelData.setCamoState(camoState); }
+
+    @Override
+    public void setLevel(Level level)
+    {
+        super.setLevel(level);
+        if (level.isClientSide())
+        {
+            //Try initializing model data early to make it work on Create contraptions
+            initModelData();
+        }
+    }
 
     /*
      * NBT stuff

@@ -250,6 +250,13 @@ public class FramedCollapsibleBlockEntity extends FramedBlockEntity
     }
 
     @Override
+    protected void initModelData()
+    {
+        super.initModelData();
+        getModelDataInternal().setData(OFFSETS, packOffsets(vertexOffsets));
+    }
+
+    @Override
     public void saveAdditional(CompoundTag nbt)
     {
         super.saveAdditional(nbt);

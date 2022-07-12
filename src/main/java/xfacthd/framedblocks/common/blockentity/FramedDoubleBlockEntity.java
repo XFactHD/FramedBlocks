@@ -264,6 +264,13 @@ public abstract class FramedDoubleBlockEntity extends FramedBlockEntity
         return multiModelData;
     }
 
+    @Override
+    protected void initModelData()
+    {
+        super.initModelData();
+        modelData.setCamoState(camoState);
+    }
+
     /*
      * NBT stuff
      */
