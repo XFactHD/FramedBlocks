@@ -1,3 +1,4 @@
 {
-  "parent": "framedblocks:block/framed_ladder"
+  "parent": "framedblocks:block/framed_ladder",
+  "render_type": "framedblocks:cutout"
 }

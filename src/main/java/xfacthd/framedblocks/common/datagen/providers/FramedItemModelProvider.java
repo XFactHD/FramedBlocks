@@ -1,10 +1,13 @@
 package xfacthd.framedblocks.common.datagen.providers;
 
 import net.minecraft.data.DataGenerator;
+import net.minecraft.world.item.Item;
 import net.minecraftforge.client.model.generators.*;
 import net.minecraftforge.common.data.ExistingFileHelper;
+import net.minecraftforge.registries.RegistryObject;
 import xfacthd.framedblocks.api.util.FramedConstants;
 import xfacthd.framedblocks.client.util.BlueprintPropertyOverride;
+import xfacthd.framedblocks.common.FBContent;
 
 public class FramedItemModelProvider extends ItemModelProvider
 {
@@ -16,13 +19,13 @@ public class FramedItemModelProvider extends ItemModelProvider
     @Override
     protected void registerModels()
     {
-        singleTexture("framed_hammer", mcLoc("item/generated"), "layer0", modLoc("item/framed_hammer"));
-        singleTexture("framed_wrench", mcLoc("item/generated"), "layer0", modLoc("item/framed_wrench"));
-        singleTexture("framed_key", mcLoc("item/generated"), "layer0", modLoc("item/framed_key"));
-        singleTexture("framed_screwdriver", mcLoc("item/generated"), "layer0", modLoc("item/framed_screwdriver"));
+        simpleItem(FBContent.itemFramedHammer, "cutout");
+        simpleItem(FBContent.itemFramedWrench, "cutout");
+        simpleItem(FBContent.itemFramedKey, "cutout");
+        simpleItem(FBContent.itemFramedScrewdriver, "cutout");
 
-        ItemModelBuilder modelNormal = singleTexture("framed_blueprint", mcLoc("item/generated"), "layer0", modLoc("item/framed_blueprint"));
-        ModelFile modelWritten = singleTexture("framed_blueprint_written", mcLoc("item/generated"), "layer0", modLoc("item/framed_blueprint_written"));
+        ItemModelBuilder modelNormal = simpleItem(FBContent.itemFramedBlueprint, "cutout");
+        ModelFile modelWritten = simpleItem("framed_blueprint_written", "cutout");
 
         modelNormal.override()
                     .predicate(BlueprintPropertyOverride.HAS_DATA, 0)
@@ -32,5 +35,16 @@ public class FramedItemModelProvider extends ItemModelProvider
                     .predicate(BlueprintPropertyOverride.HAS_DATA, 1)
                     .model(modelWritten)
                     .end();
+    }
+
+    @SuppressWarnings("SameParameterValue")
+    private ItemModelBuilder simpleItem(RegistryObject<Item> item, String renderType)
+    {
+        return simpleItem(item.getId().getPath(), renderType);
+    }
+
+    private ItemModelBuilder simpleItem(String name, String renderType)
+    {
+        return singleTexture(name, mcLoc("item/generated"), "layer0", modLoc("item/" + name)).renderType(renderType);
     }
 }

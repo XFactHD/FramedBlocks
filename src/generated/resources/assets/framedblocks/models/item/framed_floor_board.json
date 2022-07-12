@@ -1,5 +1,6 @@
 {
   "parent": "minecraft:block/carpet",
+  "render_type": "framedblocks:cutout",
   "textures": {
     "wool": "framedblocks:block/framed_block"
   }

@@ -1,3 +1,4 @@
 {
-  "parent": "framedblocks:block/framed_redstone_block"
+  "parent": "framedblocks:block/framed_redstone_block",
+  "render_type": "framedblocks:cutout"
 }

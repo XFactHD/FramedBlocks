@@ -1,3 +1,4 @@
 {
-  "parent": "framedblocks:block/framed_cube"
+  "parent": "framedblocks:block/framed_cube",
+  "render_type": "framedblocks:cutout"
 }

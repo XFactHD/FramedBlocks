@@ -1,5 +1,6 @@
 {
   "parent": "minecraft:item/generated",
+  "render_type": "framedblocks:cutout",
   "textures": {
     "layer0": "framedblocks:item/framed_lever"
   }

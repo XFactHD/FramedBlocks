@@ -1,5 +1,6 @@
 {
   "parent": "minecraft:block/pressure_plate_up",
+  "render_type": "framedblocks:cutout",
   "textures": {
     "texture": "framedblocks:block/framed_block"
   }

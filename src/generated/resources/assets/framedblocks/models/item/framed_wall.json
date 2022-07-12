@@ -1,5 +1,6 @@
 {
   "parent": "minecraft:block/wall_inventory",
+  "render_type": "framedblocks:cutout",
   "textures": {
     "wall": "framedblocks:block/framed_block"
   }

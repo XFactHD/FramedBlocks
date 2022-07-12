@@ -1,5 +1,6 @@
 {
   "parent": "minecraft:block/fence_inventory",
+  "render_type": "framedblocks:cutout",
   "textures": {
     "texture": "framedblocks:block/framed_block"
   }

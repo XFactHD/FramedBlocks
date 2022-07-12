@@ -1,5 +1,6 @@
 {
   "parent": "minecraft:block/cube_all",
+  "render_type": "framedblocks:solid",
   "textures": {
     "all": "framedblocks:block/framed_collapsible_block"
   }
