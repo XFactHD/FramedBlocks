@@ -6,6 +6,7 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.LevelAccessor;
+import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.StairBlock;
 import net.minecraft.world.level.block.state.BlockState;
@@ -63,14 +64,10 @@ public class FramedVerticalStairsBlock extends FramedBlock
     }
 
     @Override
-    public void updateIndirectNeighbourShapes(BlockState state, LevelAccessor level, BlockPos pos, int flags, int recursionLeft)
+    public void onStateChangeClient(LevelReader level, BlockPos pos, BlockState oldState, BlockState newState, FramedBlockEntity be)
     {
-        onStateChange(level, pos, state);
-    }
+        super.onStateChangeClient(level, pos, oldState, newState, be);
 
-    @Override
-    public void onStateChangeClient(LevelAccessor level, BlockPos pos, BlockState oldState, BlockState newState, FramedBlockEntity be)
-    {
         if (needCullingUpdateAfterStateChange(level, oldState, newState))
         {
             be.updateCulling(false, false);

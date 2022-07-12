@@ -67,14 +67,16 @@ public class FramedGateBlock extends FenceGateBlock implements IFramedBlock
     }
 
     @Override
-    public void updateIndirectNeighbourShapes(BlockState state, LevelAccessor level, BlockPos pos, int flags, int recursionLeft)
+    public void onBlockStateChange(LevelReader level, BlockPos pos, BlockState oldState, BlockState newState)
     {
-        onStateChange(level, pos, state);
+        onStateChange(level, pos, oldState, newState);
     }
 
     @Override
-    public void onStateChangeClient(LevelAccessor level, BlockPos pos, BlockState oldState, BlockState newState, FramedBlockEntity be)
+    public void onStateChangeClient(LevelReader level, BlockPos pos, BlockState oldState, BlockState newState, FramedBlockEntity be)
     {
+        IFramedBlock.super.onStateChangeClient(level, pos, oldState, newState, be);
+
         if (needCullingUpdateAfterStateChange(level, oldState, newState))
         {
             be.updateCulling(false, false);

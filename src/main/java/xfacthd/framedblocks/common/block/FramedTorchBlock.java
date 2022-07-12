@@ -56,6 +56,12 @@ public class FramedTorchBlock extends TorchBlock implements IFramedBlock
     }
 
     @Override
+    public void onBlockStateChange(LevelReader level, BlockPos pos, BlockState oldState, BlockState newState)
+    {
+        onStateChange(level, pos, oldState, newState);
+    }
+
+    @Override
     public int getLightEmission(BlockState state, BlockGetter level, BlockPos pos) { return Math.max(super.getLightEmission(state, level, pos), getLight(level, pos)); }
 
     @Override

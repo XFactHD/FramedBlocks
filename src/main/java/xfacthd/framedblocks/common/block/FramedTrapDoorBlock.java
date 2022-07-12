@@ -89,16 +89,17 @@ public class FramedTrapDoorBlock extends TrapDoorBlock implements IFramedBlock
         return newState;
     }
 
-    //TODO: replace with hook when merged
-    //@Override
-    //public void updateIndirectNeighbourShapes(BlockState state, LevelAccessor level, BlockPos pos, int flags, int recursionLeft)
-    //{
-    //    onStateChange(level, pos, state);
-    //}
+    @Override
+    public void onBlockStateChange(LevelReader level, BlockPos pos, BlockState oldState, BlockState newState)
+    {
+        onStateChange(level, pos, oldState, newState);
+    }
 
     @Override
-    public void onStateChangeClient(LevelAccessor level, BlockPos pos, BlockState oldState, BlockState newState, FramedBlockEntity be)
+    public void onStateChangeClient(LevelReader level, BlockPos pos, BlockState oldState, BlockState newState, FramedBlockEntity be)
     {
+        IFramedBlock.super.onStateChangeClient(level, pos, oldState, newState, be);
+
         // Only check here when the block didn't change (i.e. by opening the door), everything else is handled in the BE packet handlers
         if (needCullingUpdateAfterStateChange(level, oldState, newState))
         {
