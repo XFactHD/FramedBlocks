@@ -6,6 +6,7 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.renderer.block.BlockModelShaper;
 import net.minecraft.client.renderer.block.ModelBlockRenderer;
 import net.minecraft.client.renderer.blockentity.*;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.*;
@@ -31,14 +32,8 @@ import java.util.*;
 
 public class FramedChestRenderer implements BlockEntityRenderer<FramedChestBlockEntity>
 {
-    private static final RenderType[] RENDER_TYPES = new RenderType[]
-            {
-                    RenderType.solid(),
-                    RenderType.cutout(),
-                    RenderType.cutoutMipped(),
-                    RenderType.translucent()
-            };
     private static final Table<Direction, LatchType, BakedModel> LID_MODELS = HashBasedTable.create(4, 3);
+    private static final RenderType[] BUFFER_TYPE_LOOKUP = makeBufferTypeLookup();
 
     @SuppressWarnings("unused")
     public FramedChestRenderer(BlockEntityRendererProvider.Context ctx) { }
@@ -49,15 +44,14 @@ public class FramedChestRenderer implements BlockEntityRenderer<FramedChestBlock
         BlockState state = be.getBlockState();
 
         ChestState chestState = state.getValue(PropertyHolder.CHEST_STATE);
-        Direction dir = state.getValue(FramedProperties.FACING_HOR);
-
-        long lastChange = be.getLastChangeTime(chestState);
-
         if (chestState == ChestState.CLOSED) { return; }
+
+        Direction dir = state.getValue(FramedProperties.FACING_HOR);
+        long lastChange = be.getLastChangeTime(chestState);
 
         BakedModel model = LID_MODELS.get(dir, state.getValue(PropertyHolder.LATCH_TYPE));
         //noinspection ConstantConditions
-        ModelData data = model.getModelData(be.getLevel(), be.getBlockPos(), state, ModelData.EMPTY);
+        ModelData data = model.getModelData(be.getLevel(), be.getBlockPos(), state, be.getModelData());
 
         float angle = calculateAngle(be, chestState, dir, lastChange, partialTicks);
 
@@ -78,20 +72,27 @@ public class FramedChestRenderer implements BlockEntityRenderer<FramedChestBlock
     private static void renderLidModel(FramedChestBlockEntity be, BlockState state, PoseStack matrix, MultiBufferSource buffer, BakedModel model, ModelData data)
     {
         ModelBlockRenderer renderer = Minecraft.getInstance().getBlockRenderer().getModelRenderer();
+        //noinspection ConstantConditions
+        RandomSource rand = be.getLevel().getRandom();
 
-        for (RenderType type : RENDER_TYPES)
+        int color = Minecraft.getInstance().getBlockColors().getColor(state, be.getLevel(), be.getBlockPos(), 0);
+        float red = (float)(color >> 16 & 255) / 255.0F;
+        float green = (float)(color >> 8 & 255) / 255.0F;
+        float blue = (float)(color & 255) / 255.0F;
+
+        int light = LevelRenderer.getLightColor(be.getLevel(), be.getBlockPos());
+
+        for (RenderType type : model.getRenderTypes(state, rand, data))
         {
-            //noinspection ConstantConditions
-            renderer.tesselateWithAO(
-                    be.getLevel(),
-                    model,
+            RenderType bufferType = BUFFER_TYPE_LOOKUP[type.getChunkLayerId()];
+
+            renderer.renderModel(
+                    matrix.last(),
+                    buffer.getBuffer(bufferType),
                     state,
-                    be.getBlockPos(),
-                    matrix,
-                    buffer.getBuffer(type),
-                    false,
-                    be.getLevel().getRandom(),
-                    be.getBlockPos().asLong(),
+                    model,
+                    red, green, blue,
+                    light,
                     OverlayTexture.NO_OVERLAY,
                     data,
                     type
@@ -123,6 +124,39 @@ public class FramedChestRenderer implements BlockEntityRenderer<FramedChestBlock
     }
 
 
+
+    private static RenderType[] makeBufferTypeLookup()
+    {
+        RenderType[] types = new RenderType[RenderType.chunkBufferLayers().size()];
+
+        for (RenderType type : RenderType.chunkBufferLayers())
+        {
+            RenderType bufferType;
+            if (type == RenderType.solid())
+            {
+                bufferType = Sheets.solidBlockSheet();
+            }
+            else if (type == RenderType.cutout() || type == RenderType.cutoutMipped())
+            {
+                bufferType = Sheets.cutoutBlockSheet();
+            }
+            else if (type == RenderType.translucent())
+            {
+                bufferType = Sheets.translucentItemSheet();
+            }
+            else if (type == RenderType.tripwire())
+            {
+                bufferType = type;
+            }
+            else
+            {
+                throw new IllegalArgumentException("Unknown chunk render type, this should not be possible: " + type);
+            }
+            types[type.getChunkLayerId()] = bufferType;
+        }
+
+        return types;
+    }
 
     public static void onModelsLoaded(Map<ResourceLocation, BakedModel> registry)
     {
