@@ -17,13 +17,13 @@ public final class EventHandler
     @SubscribeEvent
     public static void onBlockLeftClick(final PlayerInteractEvent.LeftClickBlock event)
     {
-        Level level = event.getWorld();
+        Level level = event.getLevel();
         BlockPos pos = event.getPos();
         BlockState state = level.getBlockState(pos);
 
         if (state.getBlock() instanceof IFramedBlock block)
         {
-            if (block.handleBlockLeftClick(state, level, pos, event.getPlayer()))
+            if (block.handleBlockLeftClick(state, level, pos, event.getEntity()))
             {
                 event.setCanceled(true);
                 event.setCancellationResult(InteractionResult.CONSUME);

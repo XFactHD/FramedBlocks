@@ -51,7 +51,7 @@ public class FramedStorageBlockEntity extends FramedBlockEntity implements MenuP
 
     protected FramedStorageBlockEntity(BlockEntityType<?> type, BlockPos pos, BlockState state) { super(type, pos, state); }
 
-    public void open(ServerPlayer player) { NetworkHooks.openGui(player, this, worldPosition); }
+    public void open(ServerPlayer player) { NetworkHooks.openScreen(player, this, worldPosition); }
 
     @Nonnull
     @Override

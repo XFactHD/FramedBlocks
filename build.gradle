@@ -148,7 +148,7 @@ minecraft.runs.all {
 }
 
 dependencies {
-    minecraft 'net.minecraftforge:forge:1.19-41.0.85'
+    minecraft 'net.minecraftforge:forge:1.19-41.0.94'
 
     //compileOnly fg.deobf("curse.maven:ctm-267602:3737369")
 
