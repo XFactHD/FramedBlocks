@@ -42,7 +42,9 @@ public interface FramedBlocksAPI
 
     /**
      * Checks if the given {@link ItemStack} is a framed hammer
+     * @deprecated check against {@link xfacthd.framedblocks.api.util.Utils#FRAMED_HAMMER} instead
      */
+    @Deprecated(forRemoval = true, since = "1.18")
     boolean isFramedHammer(ItemStack stack);
 
     /**

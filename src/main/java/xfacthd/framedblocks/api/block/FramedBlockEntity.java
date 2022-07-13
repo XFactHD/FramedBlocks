@@ -30,6 +30,7 @@ import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.capability.*;
 import org.slf4j.Logger;
 import xfacthd.framedblocks.api.FramedBlocksAPI;
+import xfacthd.framedblocks.api.type.IBlockType;
 import xfacthd.framedblocks.api.util.*;
 import xfacthd.framedblocks.api.util.client.ClientUtils;
 
@@ -58,7 +59,7 @@ public class FramedBlockEntity extends BlockEntity
     {
         ItemStack stack = player.getItemInHand(hand);
         BlockState camo = getCamoState(hit);
-        if (!camo.isAir() && !(camo.getBlock() instanceof LiquidBlock) && FramedBlocksAPI.getInstance().isFramedHammer(stack))
+        if (!camo.isAir() && !(camo.getBlock() instanceof LiquidBlock) && stack.is(Utils.FRAMED_HAMMER.get()))
         {
             return clearBlockCamo(player, hit);
         }
@@ -97,11 +98,11 @@ public class FramedBlockEntity extends BlockEntity
             }
             return InteractionResult.sidedSuccess(level.isClientSide());
         }
-        else if (!camo.isAir() && !player.isShiftKeyDown() && stack.is(Utils.WRENCH))
+        else if (!camo.isAir() && !player.isShiftKeyDown() && stack.is(Utils.FRAMED_SCREWDRIVER.get()))
         {
             return rotateCamo(camo, hit);
         }
-        else if (FramedBlocksAPI.getInstance().enableIntangibility() && stack.is(FramedBlocksAPI.getInstance().getIntangibilityMarkerItem()) && !intangible && getBlock().getBlockType().allowMakingIntangible())
+        else if (!intangible && canMakeIntangible(stack))
         {
             //noinspection ConstantConditions
             if (!level.isClientSide())
@@ -129,6 +130,15 @@ public class FramedBlockEntity extends BlockEntity
         }
 
         return InteractionResult.PASS;
+    }
+
+    private boolean canMakeIntangible(ItemStack stack)
+    {
+        if (!FramedBlocksAPI.getInstance().enableIntangibility())
+        {
+            return false;
+        }
+        return stack.is(FramedBlocksAPI.getInstance().getIntangibilityMarkerItem()) && getBlockType().allowMakingIntangible();
     }
 
     private InteractionResult clearBlockCamo(Player player, BlockHitResult hit)
@@ -558,6 +568,8 @@ public class FramedBlockEntity extends BlockEntity
     }
 
     public final IFramedBlock getBlock() { return (IFramedBlock) getBlockState().getBlock(); }
+
+    public final IBlockType getBlockType() { return getBlock().getBlockType(); }
 
     public void addCamoDrops(List<ItemStack> drops)
     {

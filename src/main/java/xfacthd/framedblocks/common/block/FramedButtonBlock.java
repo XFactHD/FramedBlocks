@@ -1,6 +1,7 @@
 package xfacthd.framedblocks.common.block;
 
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.Entity;
@@ -8,10 +9,10 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.*;
-import net.minecraft.world.level.block.SoundType;
-import net.minecraft.world.level.block.WoodButtonBlock;
+import net.minecraft.world.level.block.*;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.state.properties.AttachFace;
 import net.minecraft.world.level.material.Material;
 import net.minecraft.world.level.storage.loot.LootContext;
 import net.minecraft.world.phys.BlockHitResult;
@@ -75,6 +76,17 @@ public class FramedButtonBlock extends WoodButtonBlock implements IFramedBlock
     public List<ItemStack> getDrops(BlockState state, LootContext.Builder builder)
     {
         return getCamoDrops(super.getDrops(state, builder), builder);
+    }
+
+    @Override
+    public BlockState rotate(BlockState state, Rotation rot)
+    {
+        if (state.getValue(FACE) != AttachFace.WALL)
+        {
+            Direction dir = rot.rotate(state.getValue(FACING));
+            return state.setValue(FACING, dir);
+        }
+        return state;
     }
 
     @Override

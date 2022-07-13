@@ -7,8 +7,7 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.LevelReader;
-import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.TrapDoorBlock;
+import net.minecraft.world.level.block.*;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
@@ -69,5 +68,13 @@ public class FramedLadderBlock extends FramedBlock
     public boolean makesOpenTrapdoorAboveClimbable(BlockState state, LevelReader level, BlockPos pos, BlockState trapdoorState)
     {
         return state.getValue(PropertyHolder.FACING_HOR) == trapdoorState.getValue(TrapDoorBlock.FACING).getOpposite();
+    }
+
+    @Override
+    @SuppressWarnings("deprecation")
+    public BlockState rotate(BlockState state, Rotation rot)
+    {
+        Direction dir = state.getValue(PropertyHolder.FACING_HOR);
+        return state.setValue(PropertyHolder.FACING_HOR, rot.rotate(dir));
     }
 }

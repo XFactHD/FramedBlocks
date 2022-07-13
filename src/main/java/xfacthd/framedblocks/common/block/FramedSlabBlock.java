@@ -108,6 +108,18 @@ public class FramedSlabBlock extends FramedBlock
         return type == PathComputationType.WATER && level.getFluidState(pos).is(FluidTags.WATER);
     }
 
+    @Override
+    public BlockState rotate(BlockState state, Rotation rot)
+    {
+        if (rot != Rotation.NONE)
+        {
+            return state.cycle(PropertyHolder.TOP);
+        }
+        return state;
+    }
+
+
+
     public static ImmutableMap<BlockState, VoxelShape> generateShapes(ImmutableList<BlockState> states)
     {
         VoxelShape bottomShape = box(0.0D, 0.0D, 0.0D, 16.0D, 8.0D, 16.0D);

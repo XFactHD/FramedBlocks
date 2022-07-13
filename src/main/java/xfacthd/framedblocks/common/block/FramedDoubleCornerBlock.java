@@ -4,8 +4,7 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.LevelReader;
-import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.SoundType;
+import net.minecraft.world.level.block.*;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
@@ -87,6 +86,19 @@ public class FramedDoubleCornerBlock extends AbstractFramedDoubleBlock
             }
         }
         return getSoundType(state);
+    }
+
+    @Override
+    @SuppressWarnings("deprecation")
+    public BlockState rotate(BlockState state, Rotation rot)
+    {
+        Direction dir = state.getValue(PropertyHolder.FACING_HOR);
+        CornerType type = state.getValue(PropertyHolder.CORNER_TYPE);
+        if (type.isHorizontal())
+        {
+            return state.setValue(PropertyHolder.CORNER_TYPE, type.rotate(rot));
+        }
+        return state.setValue(PropertyHolder.FACING_HOR, rot.rotate(dir));
     }
 
     @Override

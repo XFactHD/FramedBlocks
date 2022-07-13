@@ -3,6 +3,7 @@
   "values": [
     "#forge:tools/wrench",
     "framedblocks:framed_hammer",
-    "framedblocks:framed_blueprint"
+    "framedblocks:framed_blueprint",
+    "framedblocks:framed_screwdriver"
   ]
 }

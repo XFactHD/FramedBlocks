@@ -4,8 +4,7 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.LevelReader;
-import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.SoundType;
+import net.minecraft.world.level.block.*;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
@@ -74,6 +73,25 @@ public class FramedDoubleSlopeBlock extends AbstractFramedDoubleBlock
         }
         return super.getCamoSound(state, level, pos);
     }
+
+    @Override
+    public BlockState rotate(BlockState state, Direction face, Rotation rot)
+    {
+        Direction dir = state.getValue(PropertyHolder.FACING_HOR);
+        if (Utils.isY(face))
+        {
+            return state.setValue(PropertyHolder.FACING_HOR, rot.rotate(dir));
+        }
+        else if (rot != Rotation.NONE)
+        {
+            return state.cycle(PropertyHolder.SLOPE_TYPE);
+        }
+        return state;
+    }
+
+    @Override
+    @SuppressWarnings("deprecation")
+    public BlockState rotate(BlockState state, Rotation rot) { return rotate(state, Direction.UP, rot); }
 
     @Override
     public final BlockEntity newBlockEntity(BlockPos pos, BlockState state)

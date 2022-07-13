@@ -6,17 +6,19 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.Rotation;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
+import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import xfacthd.framedblocks.api.util.FramedProperties;
 import xfacthd.framedblocks.api.util.Utils;
 import xfacthd.framedblocks.common.blockentity.FramedInverseDoubleSlopePanelBlockEntity;
 import xfacthd.framedblocks.common.data.*;
-import xfacthd.framedblocks.common.data.property.Rotation;
+import xfacthd.framedblocks.common.data.property.HorizontalRotation;
 
 public class FramedInverseDoubleSlopePanelBlock extends AbstractFramedDoubleBlock
 {
@@ -35,14 +37,14 @@ public class FramedInverseDoubleSlopePanelBlock extends AbstractFramedDoubleBloc
         Direction facing = context.getHorizontalDirection();
 
         Direction side = context.getClickedFace();
-        Rotation rotation;
+        HorizontalRotation rotation;
         if (side == facing.getOpposite())
         {
-            rotation = Rotation.fromWallCross(context.getClickLocation(), side);
+            rotation = HorizontalRotation.fromWallCross(context.getClickLocation(), side);
         }
         else
         {
-            rotation = Rotation.fromDirection(facing, side);
+            rotation = HorizontalRotation.fromDirection(facing, side);
         }
 
         BlockState state = defaultBlockState()
@@ -50,6 +52,53 @@ public class FramedInverseDoubleSlopePanelBlock extends AbstractFramedDoubleBloc
                 .setValue(PropertyHolder.ROTATION, rotation);
         return withWater(state, context.getLevel(), context.getClickedPos());
     }
+
+    @Override
+    public BlockState rotate(BlockState state, BlockHitResult hit, Rotation rot)
+    {
+        Direction face = hit.getDirection();
+
+        Direction dir = state.getValue(FramedProperties.FACING_HOR);
+        HorizontalRotation rotation = state.getValue(PropertyHolder.ROTATION);
+        if (face == rotation.withFacing(dir))
+        {
+            double xz = Utils.fractionInDir(hit.getLocation(), dir.getOpposite());
+            if (xz > .5)
+            {
+                face = dir.getOpposite();
+            }
+        }
+        else if (face == rotation.withFacing(dir).getOpposite())
+        {
+            double xz = Utils.fractionInDir(hit.getLocation(), dir);
+            if (xz > .5)
+            {
+                face = dir;
+            }
+        }
+
+        return rotate(state, face, rot);
+    }
+
+    @Override
+    public BlockState rotate(BlockState state, Direction face, Rotation rot)
+    {
+        Direction dir = state.getValue(FramedProperties.FACING_HOR);
+        if (face.getAxis() == dir.getAxis())
+        {
+            HorizontalRotation rotation = state.getValue(PropertyHolder.ROTATION);
+            return state.setValue(PropertyHolder.ROTATION, rotation.rotate(rot));
+        }
+        else if (Utils.isY(face))
+        {
+            return state.setValue(FramedProperties.FACING_HOR, rot.rotate(dir));
+        }
+        return state;
+    }
+
+    @Override
+    @SuppressWarnings("deprecation")
+    public BlockState rotate(BlockState state, Rotation rot) { return rotate(state, Direction.UP, rot); }
 
     @Override
     public BlockEntity newBlockEntity(BlockPos pos, BlockState state)
@@ -66,7 +115,7 @@ public class FramedInverseDoubleSlopePanelBlock extends AbstractFramedDoubleBloc
         for (BlockState state : states)
         {
             Direction facing = state.getValue(FramedProperties.FACING_HOR);
-            Rotation rotation = state.getValue(PropertyHolder.ROTATION);
+            HorizontalRotation rotation = state.getValue(PropertyHolder.ROTATION);
 
             VoxelShape shapeOne = FramedSlopePanelBlock.SHAPES.get(rotation.isVertical() ? rotation.getOpposite() : rotation);
             VoxelShape shape = Shapes.or(

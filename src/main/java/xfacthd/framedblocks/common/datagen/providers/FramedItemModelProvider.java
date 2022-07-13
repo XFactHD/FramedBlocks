@@ -19,6 +19,7 @@ public class FramedItemModelProvider extends ItemModelProvider
         singleTexture("framed_hammer", mcLoc("item/generated"), "layer0", modLoc("item/framed_hammer"));
         singleTexture("framed_wrench", mcLoc("item/generated"), "layer0", modLoc("item/framed_wrench"));
         singleTexture("framed_key", mcLoc("item/generated"), "layer0", modLoc("item/framed_key"));
+        singleTexture("framed_screwdriver", mcLoc("item/generated"), "layer0", modLoc("item/framed_screwdriver"));
 
         ItemModelBuilder modelNormal = singleTexture("framed_blueprint", mcLoc("item/generated"), "layer0", modLoc("item/framed_blueprint"));
         ModelFile modelWritten = singleTexture("framed_blueprint_written", mcLoc("item/generated"), "layer0", modLoc("item/framed_blueprint_written"));

@@ -6,6 +6,7 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.Rotation;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
@@ -15,6 +16,7 @@ import xfacthd.framedblocks.api.util.*;
 import xfacthd.framedblocks.common.blockentity.FramedDoubleSlopePanelBlockEntity;
 import xfacthd.framedblocks.common.data.BlockType;
 import xfacthd.framedblocks.common.data.PropertyHolder;
+import xfacthd.framedblocks.common.data.property.HorizontalRotation;
 
 public class FramedDoubleSlopePanelBlock extends AbstractFramedDoubleBlock
 {
@@ -42,6 +44,33 @@ public class FramedDoubleSlopePanelBlock extends AbstractFramedDoubleBlock
     public BlockState getStateForPlacement(BlockPlaceContext context)
     {
         return FramedSlopePanelBlock.getStateForPlacement(this, context);
+    }
+
+    @Override
+    public BlockState rotate(BlockState state, Direction face, Rotation rot)
+    {
+        Direction dir = state.getValue(FramedProperties.FACING_HOR);
+        if (face.getAxis() == dir.getAxis())
+        {
+            HorizontalRotation blockRot = state.getValue(PropertyHolder.ROTATION);
+            return state.setValue(PropertyHolder.ROTATION, blockRot.rotate(rot));
+        }
+        else if (Utils.isY(face))
+        {
+            return state.setValue(FramedProperties.FACING_HOR, rot.rotate(dir));
+        }
+        else if (rot != Rotation.NONE)
+        {
+            return state.cycle(PropertyHolder.FRONT);
+        }
+        return state;
+    }
+
+    @Override
+    @SuppressWarnings("deprecation")
+    public BlockState rotate(BlockState state, Rotation rot)
+    {
+        return rotate(state, Direction.UP, rot);
     }
 
     @Override

@@ -11,7 +11,7 @@ import xfacthd.framedblocks.api.util.FramedProperties;
 import xfacthd.framedblocks.api.util.Utils;
 import xfacthd.framedblocks.common.FBContent;
 import xfacthd.framedblocks.common.data.PropertyHolder;
-import xfacthd.framedblocks.common.data.property.Rotation;
+import xfacthd.framedblocks.common.data.property.HorizontalRotation;
 import xfacthd.framedblocks.common.util.DoubleSoundMode;
 
 public class FramedInverseDoubleSlopePanelBlockEntity extends FramedDoubleBlockEntity
@@ -73,7 +73,7 @@ public class FramedInverseDoubleSlopePanelBlockEntity extends FramedDoubleBlockE
         return getBlockPair(state.getValue(FramedProperties.FACING_HOR), state.getValue(PropertyHolder.ROTATION));
     }
 
-    public static Tuple<BlockState, BlockState> getBlockPair(Direction facing, Rotation rotation)
+    public static Tuple<BlockState, BlockState> getBlockPair(Direction facing, HorizontalRotation rotation)
     {
         BlockState defState = FBContent.blockFramedSlopePanel.get().defaultBlockState();
         return new Tuple<>(

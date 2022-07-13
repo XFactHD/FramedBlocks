@@ -5,7 +5,7 @@ import com.mojang.blaze3d.vertex.VertexConsumer;
 import net.minecraft.world.level.block.state.BlockState;
 import xfacthd.framedblocks.api.util.client.OutlineRender;
 import xfacthd.framedblocks.common.data.PropertyHolder;
-import xfacthd.framedblocks.common.data.property.Rotation;
+import xfacthd.framedblocks.common.data.property.HorizontalRotation;
 
 public class InverseDoubleSlopePanelOutlineRenderer implements OutlineRender
 {
@@ -32,7 +32,7 @@ public class InverseDoubleSlopePanelOutlineRenderer implements OutlineRender
     {
         OutlineRender.super.rotateMatrix(poseStack, state);
 
-        Rotation rotation = state.getValue(PropertyHolder.ROTATION);
+        HorizontalRotation rotation = state.getValue(PropertyHolder.ROTATION);
         poseStack.mulPose(SlopePanelOutlineRenderer.ROTATIONS.get(rotation));
     }
 }

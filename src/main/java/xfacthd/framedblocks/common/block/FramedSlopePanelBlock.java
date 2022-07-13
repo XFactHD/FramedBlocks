@@ -6,6 +6,7 @@ import net.minecraft.Util;
 import net.minecraft.core.Direction;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.Rotation;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
@@ -14,7 +15,7 @@ import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import xfacthd.framedblocks.api.util.*;
 import xfacthd.framedblocks.common.data.*;
-import xfacthd.framedblocks.common.data.property.Rotation;
+import xfacthd.framedblocks.common.data.property.HorizontalRotation;
 
 import java.util.EnumMap;
 import java.util.Map;
@@ -50,14 +51,14 @@ public class FramedSlopePanelBlock extends FramedBlock
         Direction facing = context.getHorizontalDirection();
 
         Direction side = context.getClickedFace();
-        Rotation rotation;
+        HorizontalRotation rotation;
         if (side == facing.getOpposite())
         {
-            rotation = Rotation.fromWallCross(context.getClickLocation(), side);
+            rotation = HorizontalRotation.fromWallCross(context.getClickLocation(), side);
         }
         else
         {
-            rotation = Rotation.fromDirection(facing, side);
+            rotation = HorizontalRotation.fromDirection(facing, side);
         }
 
         boolean front = false;
@@ -75,11 +76,35 @@ public class FramedSlopePanelBlock extends FramedBlock
         return withWater(state, context.getLevel(), context.getClickedPos());
     }
 
-
-
-    public static final Map<Rotation, VoxelShape> SHAPES = Util.make(new EnumMap<>(Rotation.class), map ->
+    @Override
+    public BlockState rotate(BlockState state, Direction face, Rotation rot)
     {
-        map.put(Rotation.UP, Shapes.or(
+        Direction dir = state.getValue(FramedProperties.FACING_HOR);
+        HorizontalRotation rotation = state.getValue(PropertyHolder.ROTATION);
+        if (face.getAxis() == dir.getAxis() || face == rotation.withFacing(dir))
+        {
+            return state.setValue(PropertyHolder.ROTATION, rotation.rotate(rot));
+        }
+        else if (Utils.isY(face))
+        {
+            return state.setValue(FramedProperties.FACING_HOR, rot.rotate(dir));
+        }
+        else if (rot != Rotation.NONE)
+        {
+            return state.cycle(PropertyHolder.FRONT);
+        }
+        return state;
+    }
+
+    @Override
+    @SuppressWarnings("deprecation")
+    public BlockState rotate(BlockState state, Rotation rot) { return rotate(state, Direction.UP, rot); }
+
+
+
+    public static final Map<HorizontalRotation, VoxelShape> SHAPES = Util.make(new EnumMap<>(HorizontalRotation.class), map ->
+    {
+        map.put(HorizontalRotation.UP, Shapes.or(
                 box(0, 0, 0, 16, .5, 8),
                 box(0, .5, 0, 16, 4, 7.75),
                 box(0, 4, 0, 16, 8, 6),
@@ -88,7 +113,7 @@ public class FramedSlopePanelBlock extends FramedBlock
                 box(0, 15, 0, 16, 16, 0.5)
         ).optimize());
 
-        map.put(Rotation.RIGHT, Shapes.or(
+        map.put(HorizontalRotation.RIGHT, Shapes.or(
                 box(0, 0, 0, .5, 16, 8),
                 box(.5, 0, 0, 4, 16, 7.75),
                 box(4, 0, 0, 8, 16, 6),
@@ -97,7 +122,7 @@ public class FramedSlopePanelBlock extends FramedBlock
                 box(15, 0, 0, 16, 16, 0.5)
         ).optimize());
 
-        map.put(Rotation.DOWN, Shapes.or(
+        map.put(HorizontalRotation.DOWN, Shapes.or(
                 box(0, 15.5, 0, 16, 16, 8),
                 box(0, 12, 0, 16, 15.5, 7.75),
                 box(0, 8, 0, 16, 12, 6),
@@ -106,7 +131,7 @@ public class FramedSlopePanelBlock extends FramedBlock
                 box(0, 0, 0, 16, 1, 0.5)
         ).optimize());
 
-        map.put(Rotation.LEFT, Shapes.or(
+        map.put(HorizontalRotation.LEFT, Shapes.or(
                 box(15.5, 0, 0, 16, 16, 8),
                 box(12, 0, 0, 15.5, 16, 7.75),
                 box(8, 0, 0, 12, 16, 6),

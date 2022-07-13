@@ -5,6 +5,7 @@ import com.google.common.collect.ImmutableMap;
 import net.minecraft.core.Direction;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.Rotation;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
@@ -55,6 +56,25 @@ public class FramedSlopeSlabBlock extends FramedBlock //TODO: check why states w
         state = state.setValue(PropertyHolder.TOP, context.getPlayer() != null && context.getPlayer().isShiftKeyDown());
         return withWater(state, context.getLevel(), context.getClickedPos());
     }
+
+    @Override
+    public BlockState rotate(BlockState state, Direction face, Rotation rot)
+    {
+        Direction dir = state.getValue(FramedProperties.FACING_HOR);
+        if (Utils.isY(face) || face == dir.getOpposite())
+        {
+            return state.setValue(FramedProperties.FACING_HOR, rot.rotate(dir));
+        }
+        else if (rot != Rotation.NONE)
+        {
+            return state.cycle(PropertyHolder.TOP_HALF);
+        }
+        return state;
+    }
+
+    @Override
+    @SuppressWarnings("deprecation")
+    public BlockState rotate(BlockState state, Rotation rot) { return rotate(state, Direction.UP, rot); }
 
 
 

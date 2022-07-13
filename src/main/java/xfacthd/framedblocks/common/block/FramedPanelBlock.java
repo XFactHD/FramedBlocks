@@ -105,6 +105,13 @@ public class FramedPanelBlock extends FramedBlock
         return super.use(state, level, pos, player, hand, hit);
     }
 
+    @Override
+    public BlockState rotate(BlockState state, Rotation rot)
+    {
+        Direction dir = state.getValue(PropertyHolder.FACING_HOR);
+        return state.setValue(PropertyHolder.FACING_HOR, rot.rotate(dir));
+    }
+
 
 
     public static ImmutableMap<BlockState, VoxelShape> generateShapes(ImmutableList<BlockState> states)

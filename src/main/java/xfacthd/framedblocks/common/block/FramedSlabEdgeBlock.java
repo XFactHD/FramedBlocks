@@ -6,6 +6,7 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.tags.FluidTags;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.Rotation;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.block.state.StateDefinition;
@@ -44,6 +45,27 @@ public class FramedSlabEdgeBlock extends FramedBlock
     {
         return type == PathComputationType.WATER && level.getFluidState(pos).is(FluidTags.WATER);
     }
+
+    @Override
+    public BlockState rotate(BlockState state, Direction face, Rotation rot)
+    {
+        if (Utils.isY(face))
+        {
+            Direction dir = state.getValue(PropertyHolder.FACING_HOR);
+            return state.setValue(PropertyHolder.FACING_HOR, rot.rotate(dir));
+        }
+        else if (rot != Rotation.NONE)
+        {
+            return state.cycle(PropertyHolder.TOP);
+        }
+        return state;
+    }
+
+    @Override
+    @SuppressWarnings("deprecation")
+    public BlockState rotate(BlockState state, Rotation rot) { return rotate(state, Direction.UP, rot); }
+
+
 
     public static ImmutableMap<BlockState, VoxelShape> generateShapes(ImmutableList<BlockState> states)
     {

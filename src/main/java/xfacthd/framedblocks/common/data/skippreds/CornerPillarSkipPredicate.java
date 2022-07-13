@@ -8,7 +8,7 @@ import net.minecraft.world.level.block.state.properties.*;
 import xfacthd.framedblocks.api.block.IFramedBlock;
 import xfacthd.framedblocks.api.util.*;
 import xfacthd.framedblocks.common.data.*;
-import xfacthd.framedblocks.common.data.property.Rotation;
+import xfacthd.framedblocks.common.data.property.HorizontalRotation;
 import xfacthd.framedblocks.common.data.property.StairsType;
 
 public class CornerPillarSkipPredicate implements SideSkipPredicate
@@ -184,7 +184,7 @@ public class CornerPillarSkipPredicate implements SideSkipPredicate
         if (side != dir && side != dir.getCounterClockWise()) { return false; }
 
         Direction adjDir = adjState.getValue(FramedProperties.FACING_HOR);
-        Rotation adjRot = adjState.getValue(PropertyHolder.ROTATION);
+        HorizontalRotation adjRot = adjState.getValue(PropertyHolder.ROTATION);
         boolean adjFront = adjState.getValue(PropertyHolder.FRONT);
 
         if (adjRot.isVertical() || side != adjRot.withFacing(adjDir)) { return false; }
@@ -202,15 +202,15 @@ public class CornerPillarSkipPredicate implements SideSkipPredicate
         if (side != dir && side != dir.getCounterClockWise()) { return false; }
 
         Direction adjDir = adjState.getValue(FramedProperties.FACING_HOR);
-        Rotation adjRot = adjState.getValue(PropertyHolder.ROTATION);
+        HorizontalRotation adjRot = adjState.getValue(PropertyHolder.ROTATION);
 
         if (adjRot.isVertical()) { return false; }
 
-        if (side == dir && adjDir == dir.getCounterClockWise() && adjRot == Rotation.LEFT)
+        if (side == dir && adjDir == dir.getCounterClockWise() && adjRot == HorizontalRotation.LEFT)
         {
             return SideSkipPredicate.compareState(level, pos, side);
         }
-        else if (side == dir.getCounterClockWise() && adjDir == dir && adjRot == Rotation.RIGHT)
+        else if (side == dir.getCounterClockWise() && adjDir == dir && adjRot == HorizontalRotation.RIGHT)
         {
             return SideSkipPredicate.compareState(level, pos, side);
         }
@@ -221,7 +221,7 @@ public class CornerPillarSkipPredicate implements SideSkipPredicate
     private static boolean testAgainstDoubleSlopePanel(BlockGetter level, BlockPos pos, Direction dir, BlockState adjState, Direction side)
     {
         Direction adjDir = adjState.getValue(FramedProperties.FACING_HOR);
-        Rotation adjRot = adjState.getValue(PropertyHolder.ROTATION);
+        HorizontalRotation adjRot = adjState.getValue(PropertyHolder.ROTATION);
         boolean adjFront = adjState.getValue(PropertyHolder.FRONT);
 
         if (adjRot.isVertical() || side.getAxis() != adjRot.withFacing(adjDir).getAxis()) { return false; }
@@ -237,11 +237,11 @@ public class CornerPillarSkipPredicate implements SideSkipPredicate
     private static boolean testAgainstInverseDoubleSlopePanel(BlockGetter level, BlockPos pos, Direction dir, BlockState adjState, Direction side)
     {
         Direction adjDir = adjState.getValue(FramedProperties.FACING_HOR);
-        Rotation adjRot = adjState.getValue(PropertyHolder.ROTATION);
+        HorizontalRotation adjRot = adjState.getValue(PropertyHolder.ROTATION);
 
         if (adjRot.isVertical() || side.getAxis() != adjRot.withFacing(adjDir).getAxis()) { return false; }
 
-        if ((side == dir && adjRot == Rotation.LEFT) || (side == dir.getCounterClockWise() && adjRot == Rotation.RIGHT))
+        if ((side == dir && adjRot == HorizontalRotation.LEFT) || (side == dir.getCounterClockWise() && adjRot == HorizontalRotation.RIGHT))
         {
             return SideSkipPredicate.compareState(level, pos, side);
         }

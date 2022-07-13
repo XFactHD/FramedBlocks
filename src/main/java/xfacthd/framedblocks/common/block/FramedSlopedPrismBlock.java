@@ -5,6 +5,7 @@ import com.google.common.collect.ImmutableMap;
 import net.minecraft.core.Direction;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.Rotation;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
@@ -104,6 +105,38 @@ public class FramedSlopedPrismBlock extends FramedBlock
         state = state.setValue(PropertyHolder.ORIENTATION, orientation);
 
         return withWater(state, context.getLevel(), context.getClickedPos());
+    }
+
+    @Override
+    @SuppressWarnings("deprecation")
+    public BlockState rotate(BlockState state, Rotation rot)
+    {
+        if (rot == Rotation.NONE) { return state; }
+
+        Direction dir = state.getValue(BlockStateProperties.FACING);
+        Direction orientation = state.getValue(PropertyHolder.ORIENTATION);
+
+        Direction[] dirs = Direction.values();
+        do
+        {
+            int idx;
+            if (rot == Rotation.COUNTERCLOCKWISE_90)
+            {
+                idx = orientation.ordinal() - 1;
+                if (idx < 0)
+                {
+                    idx = dirs.length - 1;
+                }
+            }
+            else
+            {
+                idx = (orientation.ordinal() + 1) % dirs.length;
+            }
+            orientation = dirs[idx];
+        }
+        while (orientation.getAxis() == dir.getAxis());
+
+        return state.setValue(PropertyHolder.ORIENTATION, orientation);
     }
 
 

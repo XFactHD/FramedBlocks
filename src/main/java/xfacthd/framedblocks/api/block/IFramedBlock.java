@@ -131,6 +131,23 @@ public interface IFramedBlock extends EntityBlock//, IFacade
             return InteractionResult.sidedSuccess(level.isClientSide());
         }
 
+        if (player.getItemInHand(hand).is(Utils.WRENCH))
+        {
+            BlockState state = level.getBlockState(pos);
+            Rotation rot = player.isCrouching() ? Rotation.COUNTERCLOCKWISE_90 : Rotation.CLOCKWISE_90;
+            BlockState newState = rotate(state, hit, rot);
+            if (newState != state)
+            {
+                if (!level.isClientSide())
+                {
+                    level.setBlockAndUpdate(pos, newState);
+                }
+                return InteractionResult.sidedSuccess(level.isClientSide());
+            }
+
+            return InteractionResult.FAIL;
+        }
+
         if (level.getBlockEntity(pos) instanceof FramedBlockEntity be)
         {
             return be.handleInteraction(player, hand, hit);
@@ -420,6 +437,13 @@ public interface IFramedBlock extends EntityBlock//, IFacade
         }
         return state;
     }
+
+    default BlockState rotate(BlockState state, BlockHitResult hit, Rotation rot)
+    {
+        return rotate(state, hit.getDirection(), rot);
+    }
+
+    default BlockState rotate(BlockState state, Direction face, Rotation rot) { return state.rotate(rot); }
 
     default Optional<MutableComponent> printCamoBlock(CompoundTag beTag)
     {

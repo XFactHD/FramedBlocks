@@ -8,19 +8,19 @@ import net.minecraft.Util;
 import net.minecraft.world.level.block.state.BlockState;
 import xfacthd.framedblocks.api.util.client.OutlineRender;
 import xfacthd.framedblocks.common.data.PropertyHolder;
-import xfacthd.framedblocks.common.data.property.Rotation;
+import xfacthd.framedblocks.common.data.property.HorizontalRotation;
 
 import java.util.EnumMap;
 import java.util.Map;
 
 public class SlopePanelOutlineRenderer implements OutlineRender
 {
-    public static final Map<Rotation, Quaternion> ROTATIONS = Util.make(new EnumMap<>(Rotation.class), map ->
+    public static final Map<HorizontalRotation, Quaternion> ROTATIONS = Util.make(new EnumMap<>(HorizontalRotation.class), map ->
     {
-        map.put(Rotation.UP, Quaternion.ONE);
-        map.put(Rotation.DOWN, Vector3f.ZP.rotationDegrees(180));
-        map.put(Rotation.RIGHT, Vector3f.ZP.rotationDegrees(90));
-        map.put(Rotation.LEFT, Vector3f.ZP.rotationDegrees(-90));
+        map.put(HorizontalRotation.UP, Quaternion.ONE);
+        map.put(HorizontalRotation.DOWN, Vector3f.ZP.rotationDegrees(180));
+        map.put(HorizontalRotation.RIGHT, Vector3f.ZP.rotationDegrees(90));
+        map.put(HorizontalRotation.LEFT, Vector3f.ZP.rotationDegrees(-90));
     });
 
     @Override
@@ -42,7 +42,7 @@ public class SlopePanelOutlineRenderer implements OutlineRender
     {
         OutlineRender.super.rotateMatrix(poseStack, state);
 
-        Rotation rotation = state.getValue(PropertyHolder.ROTATION);
+        HorizontalRotation rotation = state.getValue(PropertyHolder.ROTATION);
         poseStack.mulPose(ROTATIONS.get(rotation));
 
         if (!state.getValue(PropertyHolder.FRONT))
