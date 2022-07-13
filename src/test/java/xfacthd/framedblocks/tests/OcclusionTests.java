@@ -13,6 +13,8 @@ import xfacthd.framedblocks.api.util.FramedProperties;
 import xfacthd.framedblocks.common.FBContent;
 import xfacthd.framedblocks.common.data.*;
 import xfacthd.framedblocks.api.util.test.TestUtils;
+import xfacthd.framedblocks.common.data.property.CornerType;
+import xfacthd.framedblocks.common.data.property.SlopeType;
 import xfacthd.framedblocks.util.TestedType;
 
 import java.util.*;

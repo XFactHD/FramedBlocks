@@ -2,6 +2,7 @@ package xfacthd.framedblocks.common.data;
 
 import net.minecraft.world.level.block.state.properties.*;
 import xfacthd.framedblocks.api.util.FramedProperties;
+import xfacthd.framedblocks.common.data.property.*;
 
 public final class PropertyHolder
 {

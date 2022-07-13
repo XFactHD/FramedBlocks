@@ -10,7 +10,7 @@ import org.jetbrains.annotations.NotNull;
 import xfacthd.framedblocks.common.blockentity.FramedDoubleBlockEntity;
 import xfacthd.framedblocks.common.blockentity.FramedDoubleSlopeBlockEntity;
 import xfacthd.framedblocks.common.data.PropertyHolder;
-import xfacthd.framedblocks.common.data.SlopeType;
+import xfacthd.framedblocks.common.data.property.SlopeType;
 
 public class FramedDoubleSlopeModel extends FramedDoubleBlockModel
 {

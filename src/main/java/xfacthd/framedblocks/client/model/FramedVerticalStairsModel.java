@@ -8,7 +8,7 @@ import xfacthd.framedblocks.api.model.FramedBlockModel;
 import xfacthd.framedblocks.api.util.client.BakedQuadTransformer;
 import xfacthd.framedblocks.api.util.client.ModelUtils;
 import xfacthd.framedblocks.common.data.PropertyHolder;
-import xfacthd.framedblocks.common.data.StairsType;
+import xfacthd.framedblocks.common.data.property.StairsType;
 
 import java.util.List;
 import java.util.Map;

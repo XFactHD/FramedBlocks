@@ -13,6 +13,8 @@ import xfacthd.framedblocks.api.util.Utils;
 import xfacthd.framedblocks.api.util.client.*;
 import xfacthd.framedblocks.common.FBContent;
 import xfacthd.framedblocks.common.data.*;
+import xfacthd.framedblocks.common.data.property.ChestState;
+import xfacthd.framedblocks.common.data.property.LatchType;
 
 import java.util.*;
 

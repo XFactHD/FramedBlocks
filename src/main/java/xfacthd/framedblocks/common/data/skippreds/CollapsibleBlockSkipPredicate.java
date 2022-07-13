@@ -12,7 +12,7 @@ import xfacthd.framedblocks.api.util.SideSkipPredicate;
 import xfacthd.framedblocks.api.util.Utils;
 import xfacthd.framedblocks.common.FBContent;
 import xfacthd.framedblocks.common.blockentity.FramedCollapsibleBlockEntity;
-import xfacthd.framedblocks.common.data.CollapseFace;
+import xfacthd.framedblocks.common.data.property.CollapseFace;
 import xfacthd.framedblocks.common.data.PropertyHolder;
 
 public class CollapsibleBlockSkipPredicate implements SideSkipPredicate

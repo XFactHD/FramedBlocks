@@ -23,6 +23,7 @@ import xfacthd.framedblocks.api.util.*;
 import xfacthd.framedblocks.common.FBContent;
 import xfacthd.framedblocks.api.block.FramedBlockEntity;
 import xfacthd.framedblocks.common.data.*;
+import xfacthd.framedblocks.common.data.property.SlopeType;
 import xfacthd.framedblocks.common.util.FramedUtils;
 
 @SuppressWarnings("deprecation")

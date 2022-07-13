@@ -9,7 +9,6 @@ import net.minecraft.world.level.block.*;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.gametest.GameTestHolder;
 import net.minecraftforge.registries.RegistryObject;
-import xfacthd.framedblocks.FramedBlocks;
 import xfacthd.framedblocks.api.block.FramedBlockEntity;
 import xfacthd.framedblocks.api.util.FramedConstants;
 import xfacthd.framedblocks.api.util.FramedProperties;
@@ -17,7 +16,7 @@ import xfacthd.framedblocks.api.util.test.TestUtils;
 import xfacthd.framedblocks.common.FBContent;
 import xfacthd.framedblocks.common.blockentity.FramedFlowerPotBlockEntity;
 import xfacthd.framedblocks.common.blockentity.FramedSignBlockEntity;
-import xfacthd.framedblocks.common.data.LatchType;
+import xfacthd.framedblocks.common.data.property.LatchType;
 import xfacthd.framedblocks.common.data.PropertyHolder;
 
 import java.util.List;

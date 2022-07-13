@@ -14,6 +14,7 @@ import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import xfacthd.framedblocks.api.util.*;
 import xfacthd.framedblocks.common.data.*;
+import xfacthd.framedblocks.common.data.property.Rotation;
 
 import java.util.EnumMap;
 import java.util.Map;

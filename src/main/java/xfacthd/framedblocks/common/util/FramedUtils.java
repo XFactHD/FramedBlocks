@@ -8,7 +8,7 @@ import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.block.state.BlockState;
 import xfacthd.framedblocks.common.block.FramedRailSlopeBlock;
 import xfacthd.framedblocks.common.data.PropertyHolder;
-import xfacthd.framedblocks.common.data.SlopeType;
+import xfacthd.framedblocks.common.data.property.SlopeType;
 
 public final class FramedUtils
 {

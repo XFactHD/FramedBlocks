@@ -17,6 +17,7 @@ import xfacthd.framedblocks.api.util.Utils;
 import xfacthd.framedblocks.common.FBContent;
 import xfacthd.framedblocks.common.blockentity.FramedChestBlockEntity;
 import xfacthd.framedblocks.common.data.*;
+import xfacthd.framedblocks.common.data.property.ChestState;
 
 import javax.annotation.Nullable;
 

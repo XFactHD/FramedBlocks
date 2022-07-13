@@ -1,4 +1,4 @@
-package xfacthd.framedblocks.common.data;
+package xfacthd.framedblocks.common.data.property;
 
 import net.minecraft.util.StringRepresentable;
 

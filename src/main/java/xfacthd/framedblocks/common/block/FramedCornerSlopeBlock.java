@@ -12,6 +12,7 @@ import net.minecraft.world.phys.Vec3;
 import net.minecraft.world.phys.shapes.*;
 import xfacthd.framedblocks.api.util.*;
 import xfacthd.framedblocks.common.data.*;
+import xfacthd.framedblocks.common.data.property.CornerType;
 
 public class FramedCornerSlopeBlock extends FramedBlock
 {

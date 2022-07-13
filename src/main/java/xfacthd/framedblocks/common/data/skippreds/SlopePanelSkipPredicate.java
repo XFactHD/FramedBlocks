@@ -11,6 +11,8 @@ import xfacthd.framedblocks.api.block.IFramedBlock;
 import xfacthd.framedblocks.api.util.FramedProperties;
 import xfacthd.framedblocks.api.util.SideSkipPredicate;
 import xfacthd.framedblocks.common.data.*;
+import xfacthd.framedblocks.common.data.property.Rotation;
+import xfacthd.framedblocks.common.data.property.StairsType;
 
 public class SlopePanelSkipPredicate implements SideSkipPredicate
 {

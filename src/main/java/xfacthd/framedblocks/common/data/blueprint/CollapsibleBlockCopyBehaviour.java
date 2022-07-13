@@ -7,7 +7,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import xfacthd.framedblocks.api.blueprint.BlueprintCopyBehaviour;
 import xfacthd.framedblocks.common.blockentity.FramedCollapsibleBlockEntity;
-import xfacthd.framedblocks.common.data.CollapseFace;
+import xfacthd.framedblocks.common.data.property.CollapseFace;
 import xfacthd.framedblocks.common.data.PropertyHolder;
 
 public class CollapsibleBlockCopyBehaviour implements BlueprintCopyBehaviour

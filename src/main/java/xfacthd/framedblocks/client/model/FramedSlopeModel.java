@@ -9,7 +9,7 @@ import xfacthd.framedblocks.api.util.client.BakedQuadTransformer;
 import xfacthd.framedblocks.api.util.client.ModelUtils;
 import xfacthd.framedblocks.common.FBContent;
 import xfacthd.framedblocks.common.data.PropertyHolder;
-import xfacthd.framedblocks.common.data.SlopeType;
+import xfacthd.framedblocks.common.data.property.SlopeType;
 
 import java.util.List;
 import java.util.Map;
