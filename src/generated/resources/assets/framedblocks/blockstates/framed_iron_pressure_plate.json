@@ -1,0 +1,52 @@
+{
+  "variants": {
+    "power=0": {
+      "model": "framedblocks:block/framed_iron_pressure_plate_up"
+    },
+    "power=1": {
+      "model": "framedblocks:block/framed_iron_pressure_plate_down"
+    },
+    "power=2": {
+      "model": "framedblocks:block/framed_iron_pressure_plate_down"
+    },
+    "power=3": {
+      "model": "framedblocks:block/framed_iron_pressure_plate_down"
+    },
+    "power=4": {
+      "model": "framedblocks:block/framed_iron_pressure_plate_down"
+    },
+    "power=5": {
+      "model": "framedblocks:block/framed_iron_pressure_plate_down"
+    },
+    "power=6": {
+      "model": "framedblocks:block/framed_iron_pressure_plate_down"
+    },
+    "power=7": {
+      "model": "framedblocks:block/framed_iron_pressure_plate_down"
+    },
+    "power=8": {
+      "model": "framedblocks:block/framed_iron_pressure_plate_down"
+    },
+    "power=9": {
+      "model": "framedblocks:block/framed_iron_pressure_plate_down"
+    },
+    "power=10": {
+      "model": "framedblocks:block/framed_iron_pressure_plate_down"
+    },
+    "power=11": {
+      "model": "framedblocks:block/framed_iron_pressure_plate_down"
+    },
+    "power=12": {
+      "model": "framedblocks:block/framed_iron_pressure_plate_down"
+    },
+    "power=13": {
+      "model": "framedblocks:block/framed_iron_pressure_plate_down"
+    },
+    "power=14": {
+      "model": "framedblocks:block/framed_iron_pressure_plate_down"
+    },
+    "power=15": {
+      "model": "framedblocks:block/framed_iron_pressure_plate_down"
+    }
+  }
+}

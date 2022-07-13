@@ -1,0 +1,10 @@
+{
+  "variants": {
+    "powered=false": {
+      "model": "framedblocks:block/framed_stone_pressure_plate_up"
+    },
+    "powered=true": {
+      "model": "framedblocks:block/framed_stone_pressure_plate_down"
+    }
+  }
+}

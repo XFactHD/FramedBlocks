@@ -16,9 +16,9 @@ import java.util.Map;
 
 public class FramedButtonModel extends FramedBlockModel
 {
-    private final Direction dir;
-    private final AttachFace face;
-    private final boolean pressed;
+    protected final Direction dir;
+    protected final AttachFace face;
+    protected final boolean pressed;
 
     public FramedButtonModel(BlockState state, BakedModel baseModel)
     {

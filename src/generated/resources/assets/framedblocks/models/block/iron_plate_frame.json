@@ -1,0 +1,6 @@
+{
+  "parent": "framedblocks:block/framed_pressure_plate_frame_up",
+  "textures": {
+    "texture": "framedblocks:block/iron_plate_frame"
+  }
+}

@@ -42,7 +42,7 @@ public final class ClientUtils
     public static void replaceModels(RegistryObject<Block> block, Map<ResourceLocation, BakedModel> models,
                                      BiFunction<BlockState, BakedModel, BakedModel> blockModelGen)
     {
-        replaceModels(block, models, blockModelGen, model -> model, null);
+        replaceModels(block, models, blockModelGen, null);
     }
 
     /**
@@ -58,7 +58,7 @@ public final class ClientUtils
                                      BiFunction<BlockState, BakedModel, BakedModel> blockModelGen,
                                      @Nullable List<Property<?>> ignoredProps)
     {
-        replaceModels(block, models, blockModelGen, model -> model, ignoredProps);
+        replaceModelsSpecial(block, models, blockModelGen, testState -> ignoreProps(testState, ignoredProps));
     }
 
     /**
@@ -76,7 +76,7 @@ public final class ClientUtils
                                      BlockState itemModelSource,
                                      @Nullable List<Property<?>> ignoredProps)
     {
-        replaceModels(block, models, blockModelGen, model -> models.get(BlockModelShaper.stateToModelLocation(itemModelSource)), ignoredProps);
+        replaceModelsSpecial(block, models, blockModelGen, itemModelSource, testState -> ignoreProps(testState, ignoredProps));
     }
 
     /**
@@ -97,6 +97,61 @@ public final class ClientUtils
                                      @Nullable Function<BakedModel, BakedModel> itemModelGen,
                                      @Nullable List<Property<?>> ignoredProps)
     {
+        replaceModelsSpecial(block, models, blockModelGen, itemModelGen, testState -> ignoreProps(testState, ignoredProps));
+    }
+
+    /**
+     * Replace the {@link BakedModel}s for all {@link BlockState}s of the given {@link Block} via the given block model
+     * factory
+     * @param block The block whose models are to be replaced
+     * @param models The location->model map given by the {@link net.minecraftforge.client.event.ModelBakeEvent}
+     * @param blockModelGen The block model factory
+     * @param stateMerger Custom BlockState merging function, allows for fine-grained deduplication of models when certain
+     *                    properties or specific value ranges of a property don't influence the model (i.e. redstone power
+     *                    of weighted pressure plates).
+     */
+    public static void replaceModelsSpecial(RegistryObject<Block> block, Map<ResourceLocation, BakedModel> models,
+                                            BiFunction<BlockState, BakedModel, BakedModel> blockModelGen,
+                                            Function<BlockState, BlockState> stateMerger)
+    {
+        replaceModelsSpecial(block, models, blockModelGen, model -> model, stateMerger);
+    }
+
+    /**
+     * Replace the {@link BakedModel}s for all {@link BlockState}s of the given {@link Block} via the given block model
+     * factory
+     * @param block The block whose models are to be replaced
+     * @param models The location->model map given by the {@link net.minecraftforge.client.event.ModelBakeEvent}
+     * @param blockModelGen The block model factory
+     * @param itemModelSource The {@link BlockState} whose model should be used as the item model
+     * @param stateMerger Custom BlockState merging function, allows for fine-grained deduplication of models when certain
+     *                    properties or specific value ranges of a property don't influence the model (i.e. redstone power
+     *                    of weighted pressure plates).
+     */
+    public static void replaceModelsSpecial(RegistryObject<Block> block, Map<ResourceLocation, BakedModel> models,
+                                            BiFunction<BlockState, BakedModel, BakedModel> blockModelGen,
+                                            BlockState itemModelSource,
+                                            Function<BlockState, BlockState> stateMerger)
+    {
+        replaceModelsSpecial(block, models, blockModelGen, model -> models.get(BlockModelShaper.stateToModelLocation(itemModelSource)), stateMerger);
+    }
+
+    /**
+     * Replace the {@link BakedModel}s for all {@link BlockState}s of the given {@link Block} via the given block model
+     * factory
+     * @param block The block whose models are to be replaced
+     * @param models The location->model map given by the {@link net.minecraftforge.client.event.ModelBakeEvent}
+     * @param blockModelGen The block model factory
+     * @param itemModelGen The item model factory
+     * @param stateMerger Custom BlockState merging function, allows for fine-grained deduplication of models when certain
+     *                    properties or specific value ranges of a property don't influence the model (i.e. redstone power
+     *                    of weighted pressure plates).
+     */
+    public static void replaceModelsSpecial(RegistryObject<Block> block, Map<ResourceLocation, BakedModel> models,
+                                            BiFunction<BlockState, BakedModel, BakedModel> blockModelGen,
+                                            @Nullable Function<BakedModel, BakedModel> itemModelGen,
+                                            Function<BlockState, BlockState> stateMerger)
+    {
         Map<BlockState, BakedModel> visitedStates = new HashMap<>();
 
         for (BlockState state : block.get().getStateDefinition().getPossibleStates())
@@ -104,7 +159,7 @@ public final class ClientUtils
             ResourceLocation location = BlockModelShaper.stateToModelLocation(state);
             BakedModel baseModel = models.get(location);
             BakedModel replacement = visitedStates.computeIfAbsent(
-                    ignoreProps(state, ignoredProps),
+                    stateMerger.apply(state),
                     key -> blockModelGen.apply(key, baseModel)
             );
             models.put(location, replacement);

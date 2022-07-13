@@ -18,8 +18,13 @@ public class FramedPressurePlateModel extends FramedBlockModel
 
     public FramedPressurePlateModel(BlockState state, BakedModel baseModel)
     {
+        this(state, baseModel, state.getValue(BlockStateProperties.POWERED));
+    }
+
+    protected FramedPressurePlateModel(BlockState state, BakedModel baseModel, boolean powered)
+    {
         super(state, baseModel);
-        pressed = state.getValue(BlockStateProperties.POWERED);
+        this.pressed = powered;
     }
 
     @Override
