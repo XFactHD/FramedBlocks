@@ -10,6 +10,7 @@ import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
+import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import xfacthd.framedblocks.api.util.*;
@@ -68,6 +69,12 @@ public class FramedDoubleSlopeSlabBlock extends AbstractFramedDoubleBlock
             return state.cycle(PropertyHolder.TOP_HALF);
         }
         return state;
+    }
+
+    @Override
+    public BlockState rotate(BlockState state, BlockHitResult hit, Rotation rot)
+    {
+        return rotate(state, Direction.UP, rot);
     }
 
     @Override

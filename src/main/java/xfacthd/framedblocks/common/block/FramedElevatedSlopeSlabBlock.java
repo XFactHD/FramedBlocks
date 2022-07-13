@@ -76,6 +76,13 @@ public class FramedElevatedSlopeSlabBlock extends FramedBlock
         return state;
     }
 
+    @Override
+    @SuppressWarnings("deprecation")
+    public BlockState rotate(BlockState state, Rotation rot)
+    {
+        return rotate(state, Direction.UP, rot);
+    }
+
 
     public static ImmutableMap<BlockState, VoxelShape> generateShapes(ImmutableList<BlockState> states)
     {

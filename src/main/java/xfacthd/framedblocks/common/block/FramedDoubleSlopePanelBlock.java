@@ -67,6 +67,13 @@ public class FramedDoubleSlopePanelBlock extends AbstractFramedDoubleBlock
     }
 
     @Override
+    @SuppressWarnings("deprecation")
+    public BlockState rotate(BlockState state, Rotation rot)
+    {
+        return rotate(state, Direction.UP, rot);
+    }
+
+    @Override
     public BlockEntity newBlockEntity(BlockPos pos, BlockState state)
     {
         return new FramedDoubleSlopePanelBlockEntity(pos, state);

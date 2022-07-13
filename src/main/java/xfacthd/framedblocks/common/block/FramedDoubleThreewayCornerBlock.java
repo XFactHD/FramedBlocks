@@ -83,6 +83,13 @@ public class FramedDoubleThreewayCornerBlock extends AbstractFramedDoubleBlock
     }
 
     @Override
+    @SuppressWarnings("deprecation")
+    public BlockState rotate(BlockState state, Rotation rot)
+    {
+        return rotate(state, Direction.UP, rot);
+    }
+
+    @Override
     public final BlockEntity newBlockEntity(BlockPos pos, BlockState state)
     {
         return new FramedDoubleThreewayCornerBlockEntity(pos, state);
