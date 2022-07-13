@@ -21,7 +21,6 @@ import java.util.Arrays;
 public class FramedCollapsibleBlockEntity extends FramedBlockEntity
 {
     public static final ModelProperty<Integer> OFFSETS = new ModelProperty<>();
-    public static final ModelProperty<Direction> COLLAPSED_FACE = new ModelProperty<>();
 
     private Direction collapsedFace = null;
     private byte[] vertexOffsets = new byte[4];
@@ -218,7 +217,6 @@ public class FramedCollapsibleBlockEntity extends FramedBlockEntity
         if (collapsedFace != face)
         {
             collapsedFace = face;
-            getModelDataInternal().setData(COLLAPSED_FACE, collapsedFace);
 
             needUpdate = true;
         }
@@ -246,7 +244,6 @@ public class FramedCollapsibleBlockEntity extends FramedBlockEntity
 
         int face = nbt.getInt("face");
         collapsedFace = face == -1 ? null : Direction.from3DDataValue(face);
-        getModelDataInternal().setData(COLLAPSED_FACE, collapsedFace);
     }
 
     @Override
