@@ -5,10 +5,10 @@ import net.minecraft.client.renderer.block.model.BakedQuad;
 import net.minecraft.client.resources.model.BakedModel;
 import net.minecraft.core.Direction;
 import xfacthd.framedblocks.api.model.FramedBlockModel;
+import xfacthd.framedblocks.api.util.FramedProperties;
 import xfacthd.framedblocks.api.util.Utils;
 import xfacthd.framedblocks.api.util.client.BakedQuadTransformer;
 import xfacthd.framedblocks.api.util.client.ModelUtils;
-import xfacthd.framedblocks.common.data.PropertyHolder;
 
 import java.util.List;
 import java.util.Map;
@@ -20,7 +20,7 @@ public class FramedSlabModel extends FramedBlockModel
     public FramedSlabModel(BlockState state, BakedModel baseModel)
     {
         super(state, baseModel);
-        top = state.getValue(PropertyHolder.TOP);
+        top = state.getValue(FramedProperties.TOP);
     }
 
     @Override

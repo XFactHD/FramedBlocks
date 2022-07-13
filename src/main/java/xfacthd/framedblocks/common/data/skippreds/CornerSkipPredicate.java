@@ -5,9 +5,8 @@ import net.minecraft.core.Direction;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.block.state.BlockState;
 import xfacthd.framedblocks.api.block.IFramedBlock;
-import xfacthd.framedblocks.api.util.Utils;
+import xfacthd.framedblocks.api.util.*;
 import xfacthd.framedblocks.common.data.*;
-import xfacthd.framedblocks.api.util.SideSkipPredicate;
 import xfacthd.framedblocks.common.data.property.CornerType;
 import xfacthd.framedblocks.common.data.property.SlopeType;
 import xfacthd.framedblocks.common.util.FramedUtils;
@@ -21,7 +20,7 @@ public class CornerSkipPredicate implements SideSkipPredicate
 
         if (adjState.getBlock() instanceof IFramedBlock block && block.getBlockType() instanceof BlockType blockType)
         {
-            Direction dir = state.getValue(PropertyHolder.FACING_HOR);
+            Direction dir = state.getValue(FramedProperties.FACING_HOR);
             CornerType type = state.getValue(PropertyHolder.CORNER_TYPE);
 
             return switch (blockType)
@@ -43,7 +42,7 @@ public class CornerSkipPredicate implements SideSkipPredicate
 
     private static boolean testAgainstCorner(BlockGetter level, BlockPos pos, Direction dir, CornerType type, BlockState adjState, Direction side)
     {
-        Direction adjDir = adjState.getValue(PropertyHolder.FACING_HOR);
+        Direction adjDir = adjState.getValue(FramedProperties.FACING_HOR);
         CornerType adjType = adjState.getValue(PropertyHolder.CORNER_TYPE);
 
         if (!type.isHorizontal() && adjType == type && ((side == dir && adjDir == dir.getCounterClockWise()) ||
@@ -75,7 +74,7 @@ public class CornerSkipPredicate implements SideSkipPredicate
 
     private static boolean testAgainstDoubleCorner(BlockGetter level, BlockPos pos, Direction dir, CornerType type, BlockState adjState, Direction side)
     {
-        Direction adjDir = adjState.getValue(PropertyHolder.FACING_HOR);
+        Direction adjDir = adjState.getValue(FramedProperties.FACING_HOR);
         CornerType adjType = adjState.getValue(PropertyHolder.CORNER_TYPE);
 
         if (!adjType.isHorizontal() && !type.isHorizontal())
@@ -174,7 +173,7 @@ public class CornerSkipPredicate implements SideSkipPredicate
 
     private static boolean testAgainstDoubleSlope(BlockGetter level, BlockPos pos, Direction dir, CornerType type, BlockState adjState, Direction side)
     {
-        Direction adjDir = adjState.getValue(PropertyHolder.FACING_HOR);
+        Direction adjDir = adjState.getValue(FramedProperties.FACING_HOR);
         SlopeType adjType = adjState.getValue(PropertyHolder.SLOPE_TYPE);
         boolean adjTop = adjType == SlopeType.TOP;
 
@@ -207,7 +206,7 @@ public class CornerSkipPredicate implements SideSkipPredicate
 
     private static boolean testAgainstInnerCorner(BlockGetter level, BlockPos pos, Direction dir, CornerType type, BlockState adjState, Direction side)
     {
-        Direction adjDir = adjState.getValue(PropertyHolder.FACING_HOR);
+        Direction adjDir = adjState.getValue(FramedProperties.FACING_HOR);
         CornerType adjType = adjState.getValue(PropertyHolder.CORNER_TYPE);
 
         if (!type.isHorizontal() && adjType == type && adjDir == dir && (side == dir || side == dir.getCounterClockWise()))
@@ -240,8 +239,8 @@ public class CornerSkipPredicate implements SideSkipPredicate
 
     private static boolean testAgainstThreewayCorner(BlockGetter level, BlockPos pos, Direction dir, CornerType type, BlockState adjState, Direction side)
     {
-        Direction adjDir = adjState.getValue(PropertyHolder.FACING_HOR);
-        boolean adjTop = adjState.getValue(PropertyHolder.TOP);
+        Direction adjDir = adjState.getValue(FramedProperties.FACING_HOR);
+        boolean adjTop = adjState.getValue(FramedProperties.TOP);
 
         if (!type.isHorizontal() && type.isTop() == adjTop)
         {
@@ -271,8 +270,8 @@ public class CornerSkipPredicate implements SideSkipPredicate
 
     private static boolean testAgainstInnerThreewayCorner(BlockGetter level, BlockPos pos, Direction dir, CornerType type, BlockState adjState, Direction side)
     {
-        Direction adjDir = adjState.getValue(PropertyHolder.FACING_HOR);
-        boolean adjTop = adjState.getValue(PropertyHolder.TOP);
+        Direction adjDir = adjState.getValue(FramedProperties.FACING_HOR);
+        boolean adjTop = adjState.getValue(FramedProperties.TOP);
 
         if (!type.isHorizontal() && type.isTop() == adjTop && adjDir == dir)
         {
@@ -297,8 +296,8 @@ public class CornerSkipPredicate implements SideSkipPredicate
 
     private static boolean testAgainstDoubleThreewayCorner(BlockGetter level, BlockPos pos, Direction dir, CornerType type, BlockState adjState, Direction side)
     {
-        Direction adjDir = adjState.getValue(PropertyHolder.FACING_HOR);
-        boolean adjTop = adjState.getValue(PropertyHolder.TOP);
+        Direction adjDir = adjState.getValue(FramedProperties.FACING_HOR);
+        boolean adjTop = adjState.getValue(FramedProperties.TOP);
 
         if (!type.isHorizontal())
         {

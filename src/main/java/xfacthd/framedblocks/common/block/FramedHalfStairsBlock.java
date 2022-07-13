@@ -83,7 +83,7 @@ public class FramedHalfStairsBlock extends FramedBlock
         }
         else
         {
-            return state.cycle(PropertyHolder.TOP);
+            return state.cycle(FramedProperties.TOP);
         }
     }
 

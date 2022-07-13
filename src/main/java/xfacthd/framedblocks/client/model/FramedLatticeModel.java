@@ -5,10 +5,10 @@ import net.minecraft.client.renderer.block.model.BakedQuad;
 import net.minecraft.client.resources.model.BakedModel;
 import net.minecraft.core.Direction;
 import xfacthd.framedblocks.api.model.FramedBlockModel;
+import xfacthd.framedblocks.api.util.FramedProperties;
 import xfacthd.framedblocks.api.util.Utils;
 import xfacthd.framedblocks.api.util.client.BakedQuadTransformer;
 import xfacthd.framedblocks.api.util.client.ModelUtils;
-import xfacthd.framedblocks.common.data.PropertyHolder;
 
 import java.util.List;
 import java.util.Map;
@@ -22,9 +22,9 @@ public class FramedLatticeModel extends FramedBlockModel
     public FramedLatticeModel(BlockState state, BakedModel baseModel)
     {
         super(state, baseModel);
-        xAxis = state.getValue(PropertyHolder.X_AXIS);
-        yAxis = state.getValue(PropertyHolder.Y_AXIS);
-        zAxis = state.getValue(PropertyHolder.Z_AXIS);
+        xAxis = state.getValue(FramedProperties.X_AXIS);
+        yAxis = state.getValue(FramedProperties.Y_AXIS);
+        zAxis = state.getValue(FramedProperties.Z_AXIS);
     }
 
     @Override

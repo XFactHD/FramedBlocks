@@ -5,10 +5,10 @@ import net.minecraft.client.renderer.block.model.BakedQuad;
 import net.minecraft.client.resources.model.BakedModel;
 import net.minecraft.core.Direction;
 import xfacthd.framedblocks.api.model.FramedBlockModel;
+import xfacthd.framedblocks.api.util.FramedProperties;
 import xfacthd.framedblocks.api.util.client.BakedQuadTransformer;
 import xfacthd.framedblocks.api.util.client.ModelUtils;
 import xfacthd.framedblocks.common.FBContent;
-import xfacthd.framedblocks.common.data.PropertyHolder;
 
 import java.util.List;
 import java.util.Map;
@@ -29,7 +29,7 @@ public class FramedLadderModel extends FramedBlockModel
     public FramedLadderModel(BlockState state, BakedModel baseModel)
     {
         super(state, baseModel);
-        dir = state.getValue(PropertyHolder.FACING_HOR);
+        dir = state.getValue(FramedProperties.FACING_HOR);
     }
 
     @Override
@@ -129,6 +129,6 @@ public class FramedLadderModel extends FramedBlockModel
 
     public static BlockState itemSource()
     {
-        return FBContent.blockFramedLadder.get().defaultBlockState().setValue(PropertyHolder.FACING_HOR, Direction.SOUTH);
+        return FBContent.blockFramedLadder.get().defaultBlockState().setValue(FramedProperties.FACING_HOR, Direction.SOUTH);
     }
 }

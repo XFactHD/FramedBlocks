@@ -28,7 +28,7 @@ public class FramedCornerSlopeBlock extends FramedBlock
         {
             return dir == Direction.DOWN;
         }
-        return state.getValue(PropertyHolder.FACING_HOR) == dir;
+        return state.getValue(FramedProperties.FACING_HOR) == dir;
     };
 
     public static final CtmPredicate CTM_PREDICATE_INNER = (state, dir) ->
@@ -43,7 +43,7 @@ public class FramedCornerSlopeBlock extends FramedBlock
             return true;
         }
 
-        Direction facing = state.getValue(PropertyHolder.FACING_HOR);
+        Direction facing = state.getValue(FramedProperties.FACING_HOR);
         if (type.isHorizontal())
         {
             return facing == dir || (type.isRight() && facing.getClockWise() == dir) || (!type.isRight() && facing.getCounterClockWise() == dir);
@@ -59,7 +59,7 @@ public class FramedCornerSlopeBlock extends FramedBlock
     @Override
     protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder)
     {
-        builder.add(PropertyHolder.FACING_HOR, PropertyHolder.CORNER_TYPE, BlockStateProperties.WATERLOGGED, FramedProperties.SOLID, FramedProperties.GLOWING);
+        builder.add(FramedProperties.FACING_HOR, PropertyHolder.CORNER_TYPE, BlockStateProperties.WATERLOGGED, FramedProperties.SOLID, FramedProperties.GLOWING);
     }
 
     @Override
@@ -97,9 +97,11 @@ public class FramedCornerSlopeBlock extends FramedBlock
             return state.setValue(PropertyHolder.CORNER_TYPE, type.rotate(rot));
         }
 
-        Direction dir = rot.rotate(state.getValue(PropertyHolder.FACING_HOR));
-        return state.setValue(PropertyHolder.FACING_HOR, dir);
+        Direction dir = rot.rotate(state.getValue(FramedProperties.FACING_HOR));
+        return state.setValue(FramedProperties.FACING_HOR, dir);
     }
+
+
 
     public static ImmutableMap<BlockState, VoxelShape> generateCornerShapes(ImmutableList<BlockState> states)
     {
@@ -144,7 +146,7 @@ public class FramedCornerSlopeBlock extends FramedBlock
         for (BlockState state : states)
         {
             CornerType type = state.getValue(PropertyHolder.CORNER_TYPE);
-            Direction dir = state.getValue(PropertyHolder.FACING_HOR);
+            Direction dir = state.getValue(FramedProperties.FACING_HOR);
 
             if (type.isHorizontal())
             {
@@ -204,7 +206,7 @@ public class FramedCornerSlopeBlock extends FramedBlock
         for (BlockState state : states)
         {
             CornerType type = state.getValue(PropertyHolder.CORNER_TYPE);
-            Direction dir = state.getValue(PropertyHolder.FACING_HOR);
+            Direction dir = state.getValue(FramedProperties.FACING_HOR);
 
             if (type.isHorizontal())
             {

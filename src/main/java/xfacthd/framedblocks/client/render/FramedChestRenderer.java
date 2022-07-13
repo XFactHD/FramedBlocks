@@ -19,6 +19,7 @@ import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.client.ForgeHooksClient;
 import net.minecraftforge.client.model.data.EmptyModelData;
 import net.minecraftforge.client.model.data.IModelData;
+import xfacthd.framedblocks.api.util.FramedProperties;
 import xfacthd.framedblocks.api.util.Utils;
 import xfacthd.framedblocks.api.util.client.ClientUtils;
 import xfacthd.framedblocks.client.model.FramedChestLidModel;
@@ -50,7 +51,7 @@ public class FramedChestRenderer implements BlockEntityRenderer<FramedChestBlock
         BlockState state = be.getBlockState();
 
         ChestState chestState = state.getValue(PropertyHolder.CHEST_STATE);
-        Direction dir = state.getValue(PropertyHolder.FACING_HOR);
+        Direction dir = state.getValue(FramedProperties.FACING_HOR);
 
         long lastChange = be.getLastChangeTime(chestState);
 
@@ -134,7 +135,7 @@ public class FramedChestRenderer implements BlockEntityRenderer<FramedChestBlock
             for (LatchType latch : LatchType.values())
             {
                 BlockState state = FBContent.blockFramedChest.get().defaultBlockState()
-                        .setValue(PropertyHolder.FACING_HOR, dir)
+                        .setValue(FramedProperties.FACING_HOR, dir)
                         .setValue(PropertyHolder.LATCH_TYPE, latch);
 
                 ResourceLocation location = BlockModelShaper.stateToModelLocation(state);

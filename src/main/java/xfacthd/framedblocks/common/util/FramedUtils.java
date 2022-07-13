@@ -6,6 +6,7 @@ import net.minecraft.server.TickTask;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.block.state.BlockState;
+import xfacthd.framedblocks.api.util.FramedProperties;
 import xfacthd.framedblocks.common.block.FramedRailSlopeBlock;
 import xfacthd.framedblocks.common.data.PropertyHolder;
 import xfacthd.framedblocks.common.data.property.SlopeType;
@@ -18,7 +19,7 @@ public final class FramedUtils
         {
             return FramedRailSlopeBlock.directionFromShape(state.getValue(PropertyHolder.ASCENDING_RAIL_SHAPE));
         }
-        return state.getValue(PropertyHolder.FACING_HOR);
+        return state.getValue(FramedProperties.FACING_HOR);
     }
 
     public static SlopeType getSlopeType(BlockState state)

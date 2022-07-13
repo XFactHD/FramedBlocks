@@ -1,13 +1,10 @@
 package xfacthd.framedblocks.common.data;
 
 import net.minecraft.world.level.block.state.properties.*;
-import xfacthd.framedblocks.api.util.FramedProperties;
 import xfacthd.framedblocks.common.data.property.*;
 
 public final class PropertyHolder
 {
-    public static final DirectionProperty FACING_HOR = FramedProperties.FACING_HOR;
-    public static final DirectionProperty FACING_NE = FramedProperties.FACING_NE;
     public static final DirectionProperty ORIENTATION = DirectionProperty.create("orientation");
     public static final EnumProperty<SlopeType> SLOPE_TYPE = EnumProperty.create("type", SlopeType.class);
     public static final EnumProperty<CornerType> CORNER_TYPE = EnumProperty.create("type", CornerType.class);
@@ -18,11 +15,6 @@ public final class PropertyHolder
     public static final EnumProperty<LatchType> LATCH_TYPE = EnumProperty.create("latch", LatchType.class);
     public static final EnumProperty<HorizontalRotation> ROTATION = EnumProperty.create("rotation", HorizontalRotation.class);
 
-    public static final BooleanProperty TOP = FramedProperties.TOP;
-    public static final BooleanProperty OFFSET = FramedProperties.OFFSET;
-    public static final BooleanProperty X_AXIS = FramedProperties.X_AXIS;
-    public static final BooleanProperty Y_AXIS = FramedProperties.Y_AXIS;
-    public static final BooleanProperty Z_AXIS = FramedProperties.Z_AXIS;
     public static final BooleanProperty RIGHT = BooleanProperty.create("right");
     public static final BooleanProperty TOP_HALF = BooleanProperty.create("top_half");
     public static final BooleanProperty FRONT = BooleanProperty.create("front");

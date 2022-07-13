@@ -17,6 +17,7 @@ import net.minecraftforge.client.MinecraftForgeClient;
 import net.minecraftforge.client.model.data.EmptyModelData;
 import net.minecraftforge.client.model.data.IModelData;
 import xfacthd.framedblocks.api.model.BakedModelProxy;
+import xfacthd.framedblocks.api.util.FramedProperties;
 import xfacthd.framedblocks.common.FBContent;
 import xfacthd.framedblocks.api.block.FramedBlockEntity;
 import xfacthd.framedblocks.common.block.FramedRailSlopeBlock;
@@ -40,7 +41,7 @@ public class FramedRailSlopeModel extends BakedModelProxy
         RailShape shape = state.getValue(PropertyHolder.ASCENDING_RAIL_SHAPE);
         Direction dir = FramedRailSlopeBlock.directionFromShape(shape);
 
-        slopeState = FBContent.blockFramedSlope.get().defaultBlockState().setValue(PropertyHolder.FACING_HOR, dir);
+        slopeState = FBContent.blockFramedSlope.get().defaultBlockState().setValue(FramedProperties.FACING_HOR, dir);
         railState = Blocks.RAIL.defaultBlockState().setValue(BlockStateProperties.RAIL_SHAPE, shape);
     }
 

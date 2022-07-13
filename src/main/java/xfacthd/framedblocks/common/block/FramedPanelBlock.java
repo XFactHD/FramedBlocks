@@ -20,21 +20,20 @@ import net.minecraft.world.phys.shapes.VoxelShape;
 import xfacthd.framedblocks.api.util.*;
 import xfacthd.framedblocks.common.FBContent;
 import xfacthd.framedblocks.common.data.BlockType;
-import xfacthd.framedblocks.common.data.PropertyHolder;
 import xfacthd.framedblocks.common.blockentity.FramedDoubleBlockEntity;
 import xfacthd.framedblocks.api.block.FramedBlockEntity;
 
 @SuppressWarnings("deprecation")
 public class FramedPanelBlock extends FramedBlock
 {
-    public static final CtmPredicate CTM_PREDICATE = (state, dir) -> state.getValue(PropertyHolder.FACING_HOR) == dir;
+    public static final CtmPredicate CTM_PREDICATE = (state, dir) -> state.getValue(FramedProperties.FACING_HOR) == dir;
 
     public FramedPanelBlock(){ super(BlockType.FRAMED_PANEL); }
 
     @Override
     protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder)
     {
-        builder.add(PropertyHolder.FACING_HOR, BlockStateProperties.WATERLOGGED, FramedProperties.SOLID, FramedProperties.GLOWING);
+        builder.add(FramedProperties.FACING_HOR, BlockStateProperties.WATERLOGGED, FramedProperties.SOLID, FramedProperties.GLOWING);
     }
 
     @Override
@@ -45,11 +44,11 @@ public class FramedPanelBlock extends FramedBlock
         Direction face = context.getClickedFace();
         if (face.getAxis().isHorizontal())
         {
-            state = state.setValue(PropertyHolder.FACING_HOR, face.getOpposite());
+            state = state.setValue(FramedProperties.FACING_HOR, face.getOpposite());
         }
         else
         {
-            state = state.setValue(PropertyHolder.FACING_HOR, context.getHorizontalDirection());
+            state = state.setValue(FramedProperties.FACING_HOR, context.getHorizontalDirection());
         }
 
         return withWater(state, context.getLevel(), context.getClickedPos());
@@ -61,7 +60,7 @@ public class FramedPanelBlock extends FramedBlock
         ItemStack stack = player.getItemInHand(hand);
         if (stack.getItem() == FBContent.blockFramedPanel.get().asItem())
         {
-            Direction facing = state.getValue(PropertyHolder.FACING_HOR);
+            Direction facing = state.getValue(FramedProperties.FACING_HOR);
             if (hit.getDirection() == facing.getOpposite())
             {
                 if (!level.isClientSide())
@@ -81,7 +80,7 @@ public class FramedPanelBlock extends FramedBlock
 
                     Direction newFacing = (facing == Direction.NORTH || facing == Direction.EAST) ? facing : facing.getOpposite();
                     BlockState newState = FBContent.blockFramedDoublePanel.get().defaultBlockState();
-                    level.setBlockAndUpdate(pos, newState.setValue(PropertyHolder.FACING_NE, newFacing));
+                    level.setBlockAndUpdate(pos, newState.setValue(FramedProperties.FACING_NE, newFacing));
 
                     SoundType sound = FBContent.blockFramedCube.get().getSoundType(FBContent.blockFramedCube.get().defaultBlockState());
                     level.playSound(null, pos, sound.getPlaceSound(), SoundSource.BLOCKS, (sound.getVolume() + 1.0F) / 2.0F, sound.getPitch() * 0.8F);
@@ -108,8 +107,8 @@ public class FramedPanelBlock extends FramedBlock
     @Override
     public BlockState rotate(BlockState state, Rotation rot)
     {
-        Direction dir = state.getValue(PropertyHolder.FACING_HOR);
-        return state.setValue(PropertyHolder.FACING_HOR, rot.rotate(dir));
+        Direction dir = state.getValue(FramedProperties.FACING_HOR);
+        return state.setValue(FramedProperties.FACING_HOR, rot.rotate(dir));
     }
 
 
@@ -122,7 +121,7 @@ public class FramedPanelBlock extends FramedBlock
 
         for (BlockState state : states)
         {
-            Direction dir = state.getValue(PropertyHolder.FACING_HOR);
+            Direction dir = state.getValue(FramedProperties.FACING_HOR);
             builder.put(state, Utils.rotateShape(Direction.NORTH, dir, shape));
         }
 

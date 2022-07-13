@@ -7,6 +7,7 @@ import net.minecraft.core.Direction;
 import net.minecraft.util.Tuple;
 import net.minecraftforge.client.model.data.IModelData;
 import org.jetbrains.annotations.NotNull;
+import xfacthd.framedblocks.api.util.FramedProperties;
 import xfacthd.framedblocks.common.FBContent;
 import xfacthd.framedblocks.common.blockentity.FramedDoubleBlockEntity;
 import xfacthd.framedblocks.common.blockentity.FramedDoubleCornerBlockEntity;
@@ -22,7 +23,7 @@ public class FramedDoubleCornerModel extends FramedDoubleBlockModel
     {
         super(baseModel, true);
         this.type = state.getValue(PropertyHolder.CORNER_TYPE);
-        this.facing = state.getValue(PropertyHolder.FACING_HOR);
+        this.facing = state.getValue(FramedProperties.FACING_HOR);
     }
 
     @Override
@@ -49,6 +50,6 @@ public class FramedDoubleCornerModel extends FramedDoubleBlockModel
 
     public static BlockState itemSource()
     {
-        return FBContent.blockFramedDoubleCorner.get().defaultBlockState().setValue(PropertyHolder.FACING_HOR, Direction.WEST);
+        return FBContent.blockFramedDoubleCorner.get().defaultBlockState().setValue(FramedProperties.FACING_HOR, Direction.WEST);
     }
 }

@@ -13,7 +13,6 @@ import net.minecraft.world.phys.Vec3;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import xfacthd.framedblocks.api.util.FramedProperties;
 import xfacthd.framedblocks.common.data.BlockType;
-import xfacthd.framedblocks.common.data.PropertyHolder;
 import xfacthd.framedblocks.api.util.Utils;
 
 public class FramedCornerPillarBlock extends FramedBlock
@@ -26,7 +25,7 @@ public class FramedCornerPillarBlock extends FramedBlock
     @Override
     protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder)
     {
-        builder.add(PropertyHolder.FACING_HOR, BlockStateProperties.WATERLOGGED);
+        builder.add(FramedProperties.FACING_HOR, BlockStateProperties.WATERLOGGED);
     }
 
     @Override
@@ -46,7 +45,7 @@ public class FramedCornerPillarBlock extends FramedBlock
             {
                 dir = dir.getClockWise();
             }
-            state = state.setValue(PropertyHolder.FACING_HOR, dir);
+            state = state.setValue(FramedProperties.FACING_HOR, dir);
         }
         else
         {
@@ -55,7 +54,7 @@ public class FramedCornerPillarBlock extends FramedBlock
 
             Direction dir = z > .5D ? Direction.SOUTH : Direction.NORTH;
             if ((x > .5D) != Utils.isPositive(dir)) { dir = dir.getClockWise(); }
-            state = state.setValue(PropertyHolder.FACING_HOR, dir);
+            state = state.setValue(FramedProperties.FACING_HOR, dir);
         }
 
         return withWater(state, context.getLevel(), context.getClickedPos());
@@ -69,6 +68,8 @@ public class FramedCornerPillarBlock extends FramedBlock
         return state.setValue(FramedProperties.FACING_HOR, dir);
     }
 
+
+
     public static ImmutableMap<BlockState, VoxelShape> generateShapes(ImmutableList<BlockState> states)
     {
         VoxelShape shape = box(0, 0, 0, 8, 16, 8);
@@ -77,7 +78,7 @@ public class FramedCornerPillarBlock extends FramedBlock
 
         for (BlockState state : states)
         {
-            Direction dir = state.getValue(PropertyHolder.FACING_HOR);
+            Direction dir = state.getValue(FramedProperties.FACING_HOR);
             builder.put(state, Utils.rotateShape(Direction.NORTH, dir, shape));
         }
 

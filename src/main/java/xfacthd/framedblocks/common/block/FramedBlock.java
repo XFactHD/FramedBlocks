@@ -9,6 +9,7 @@ import net.minecraft.world.level.pathfinder.PathComputationType;
 import net.minecraft.world.phys.Vec3;
 import xfacthd.framedblocks.api.block.AbstractFramedBlock;
 import xfacthd.framedblocks.api.block.IFramedBlock;
+import xfacthd.framedblocks.api.util.FramedProperties;
 import xfacthd.framedblocks.common.data.*;
 import xfacthd.framedblocks.api.util.Utils;
 import xfacthd.framedblocks.common.data.property.CornerType;
@@ -30,7 +31,7 @@ public class FramedBlock extends AbstractFramedBlock
 
     protected static BlockState withSlopeType(BlockState state, Direction side, Direction facing, Vec3 hitVec)
     {
-        state = state.setValue(PropertyHolder.FACING_HOR, facing);
+        state = state.setValue(FramedProperties.FACING_HOR, facing);
 
         Vec3 hitPoint = Utils.fraction(hitVec);
         if (!Utils.isY(side))
@@ -63,11 +64,11 @@ public class FramedBlock extends AbstractFramedBlock
 
             if ((xz > .5D) == positive)
             {
-                state = state.setValue(PropertyHolder.FACING_HOR, side.getOpposite().getClockWise());
+                state = state.setValue(FramedProperties.FACING_HOR, side.getOpposite().getClockWise());
             }
             else
             {
-                state = state.setValue(PropertyHolder.FACING_HOR, side.getOpposite());
+                state = state.setValue(FramedProperties.FACING_HOR, side.getOpposite());
             }
         }
 
@@ -76,7 +77,7 @@ public class FramedBlock extends AbstractFramedBlock
 
     protected static BlockState withCornerType(BlockState state, BlockPlaceContext context, Direction side, Vec3 hitPoint, Direction facing)
     {
-        state = state.setValue(PropertyHolder.FACING_HOR, facing);
+        state = state.setValue(FramedProperties.FACING_HOR, facing);
 
         if (side == Direction.DOWN)
         {

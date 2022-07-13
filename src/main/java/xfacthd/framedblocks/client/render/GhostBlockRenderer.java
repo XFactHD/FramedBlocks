@@ -23,8 +23,7 @@ import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import net.minecraftforge.fml.util.ObfuscationReflectionHelper;
 import xfacthd.framedblocks.FramedBlocks;
-import xfacthd.framedblocks.api.util.FramedBlockData;
-import xfacthd.framedblocks.api.util.FramedConstants;
+import xfacthd.framedblocks.api.util.*;
 import xfacthd.framedblocks.client.util.*;
 import xfacthd.framedblocks.common.FBContent;
 import xfacthd.framedblocks.common.block.*;
@@ -132,7 +131,7 @@ public final class GhostBlockRenderer
             {
                 renderPos = target.getBlockPos();
 
-                RailShape shape = FramedRailSlopeBlock.shapeFromDirection(state.getValue(PropertyHolder.FACING_HOR));
+                RailShape shape = FramedRailSlopeBlock.shapeFromDirection(state.getValue(FramedProperties.FACING_HOR));
                 renderState = block.defaultBlockState().setValue(BlockStateProperties.RAIL_SHAPE, shape);
 
                 BlockState railSlope = FBContent.blockFramedRailSlope.get()
@@ -171,7 +170,7 @@ public final class GhostBlockRenderer
                 {
                     camoStateTwo = NbtUtils.readBlockState(beTag.getCompound("camo_state_two"));
 
-                    if (block == FBContent.blockFramedDoublePanel.get() && renderState.getValue(PropertyHolder.FACING_NE) != mc().player.getDirection())
+                    if (block == FBContent.blockFramedDoublePanel.get() && renderState.getValue(FramedProperties.FACING_NE) != mc().player.getDirection())
                     {
                         BlockState temp = camoState;
                         camoState = camoStateTwo;
@@ -273,10 +272,10 @@ public final class GhostBlockRenderer
         BlockState target = mc().level.getBlockState(trace.getBlockPos());
         if (target.getBlock() == heldBlock)
         {
-            boolean top = target.getValue(PropertyHolder.TOP);
+            boolean top = target.getValue(FramedProperties.TOP);
             if ((top && trace.getDirection() == Direction.DOWN) || (!top && trace.getDirection() == Direction.UP))
             {
-                return target.setValue(PropertyHolder.TOP, !top);
+                return target.setValue(FramedProperties.TOP, !top);
             }
         }
         return null;
@@ -289,10 +288,10 @@ public final class GhostBlockRenderer
         BlockState target = mc().level.getBlockState(trace.getBlockPos());
         if (target.getBlock() == heldBlock)
         {
-            Direction dir = target.getValue(PropertyHolder.FACING_HOR);
+            Direction dir = target.getValue(FramedProperties.FACING_HOR);
             if (dir.getOpposite() == trace.getDirection())
             {
-                return target.setValue(PropertyHolder.FACING_HOR, dir.getOpposite());
+                return target.setValue(FramedProperties.FACING_HOR, dir.getOpposite());
             }
         }
         return null;

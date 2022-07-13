@@ -5,10 +5,10 @@ import net.minecraft.client.renderer.block.model.BakedQuad;
 import net.minecraft.client.resources.model.BakedModel;
 import net.minecraft.core.Direction;
 import xfacthd.framedblocks.api.model.FramedBlockModel;
+import xfacthd.framedblocks.api.util.FramedProperties;
 import xfacthd.framedblocks.api.util.client.BakedQuadTransformer;
 import xfacthd.framedblocks.api.util.client.ModelUtils;
 import xfacthd.framedblocks.common.FBContent;
-import xfacthd.framedblocks.common.data.PropertyHolder;
 
 import java.util.List;
 import java.util.Map;
@@ -22,9 +22,9 @@ public class FramedInnerPrismCornerModel extends FramedBlockModel
     public FramedInnerPrismCornerModel(BlockState state, BakedModel baseModel)
     {
         super(state, baseModel);
-        dir = state.getValue(PropertyHolder.FACING_HOR);
-        top = state.getValue(PropertyHolder.TOP);
-        offset = state.getValue(PropertyHolder.OFFSET);
+        dir = state.getValue(FramedProperties.FACING_HOR);
+        top = state.getValue(FramedProperties.TOP);
+        offset = state.getValue(FramedProperties.OFFSET);
     }
 
     @Override
@@ -85,6 +85,6 @@ public class FramedInnerPrismCornerModel extends FramedBlockModel
 
     public static BlockState itemSource()
     {
-        return FBContent.blockFramedInnerPrismCorner.get().defaultBlockState().setValue(PropertyHolder.FACING_HOR, Direction.SOUTH);
+        return FBContent.blockFramedInnerPrismCorner.get().defaultBlockState().setValue(FramedProperties.FACING_HOR, Direction.SOUTH);
     }
 }

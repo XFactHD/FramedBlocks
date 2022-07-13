@@ -14,8 +14,8 @@ import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.core.Direction;
 import net.minecraft.world.level.pathfinder.PathComputationType;
 import net.minecraft.world.phys.shapes.VoxelShape;
+import xfacthd.framedblocks.api.util.FramedProperties;
 import xfacthd.framedblocks.common.data.BlockType;
-import xfacthd.framedblocks.common.data.PropertyHolder;
 import xfacthd.framedblocks.api.util.Utils;
 
 public class FramedSlabEdgeBlock extends FramedBlock
@@ -23,20 +23,20 @@ public class FramedSlabEdgeBlock extends FramedBlock
     public FramedSlabEdgeBlock()
     {
         super(BlockType.FRAMED_SLAB_EDGE);
-        registerDefaultState(defaultBlockState().setValue(PropertyHolder.TOP, false));
+        registerDefaultState(defaultBlockState().setValue(FramedProperties.TOP, false));
     }
 
     @Override
     protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder)
     {
-        builder.add(PropertyHolder.FACING_HOR, PropertyHolder.TOP, BlockStateProperties.WATERLOGGED);
+        builder.add(FramedProperties.FACING_HOR, FramedProperties.TOP, BlockStateProperties.WATERLOGGED);
     }
 
     @Override
     public BlockState getStateForPlacement(BlockPlaceContext context)
     {
         BlockState state = withTop(defaultBlockState(), context.getClickedFace(), context.getClickLocation());
-        state = state.setValue(PropertyHolder.FACING_HOR, context.getHorizontalDirection());
+        state = state.setValue(FramedProperties.FACING_HOR, context.getHorizontalDirection());
         return withWater(state, context.getLevel(), context.getClickedPos());
     }
 
@@ -51,12 +51,12 @@ public class FramedSlabEdgeBlock extends FramedBlock
     {
         if (Utils.isY(face))
         {
-            Direction dir = state.getValue(PropertyHolder.FACING_HOR);
-            return state.setValue(PropertyHolder.FACING_HOR, rot.rotate(dir));
+            Direction dir = state.getValue(FramedProperties.FACING_HOR);
+            return state.setValue(FramedProperties.FACING_HOR, rot.rotate(dir));
         }
         else if (rot != Rotation.NONE)
         {
-            return state.cycle(PropertyHolder.TOP);
+            return state.cycle(FramedProperties.TOP);
         }
         return state;
     }
@@ -78,8 +78,8 @@ public class FramedSlabEdgeBlock extends FramedBlock
         {
             VoxelShape shape = Utils.rotateShape(
                     Direction.NORTH,
-                    state.getValue(PropertyHolder.FACING_HOR),
-                    state.getValue(PropertyHolder.TOP) ? topShape : bottomShape
+                    state.getValue(FramedProperties.FACING_HOR),
+                    state.getValue(FramedProperties.TOP) ? topShape : bottomShape
             );
             builder.put(state, shape);
         }

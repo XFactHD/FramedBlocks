@@ -61,8 +61,8 @@ public class FramedDoubleSlopeSlabBlock extends AbstractFramedDoubleBlock
     {
         if (Utils.isY(face))
         {
-            Direction dir = state.getValue(PropertyHolder.FACING_HOR);
-            return state.setValue(PropertyHolder.FACING_HOR, rot.rotate(dir));
+            Direction dir = state.getValue(FramedProperties.FACING_HOR);
+            return state.setValue(FramedProperties.FACING_HOR, rot.rotate(dir));
         }
         else if (rot != Rotation.NONE)
         {

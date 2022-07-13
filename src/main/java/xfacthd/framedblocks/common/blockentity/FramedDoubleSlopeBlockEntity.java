@@ -25,7 +25,7 @@ public class FramedDoubleSlopeBlockEntity extends FramedDoubleBlockEntity
     protected boolean hitSecondary(BlockHitResult hit)
     {
         SlopeType type = getBlockState().getValue(PropertyHolder.SLOPE_TYPE);
-        Direction facing = getBlockState().getValue(PropertyHolder.FACING_HOR);
+        Direction facing = getBlockState().getValue(FramedProperties.FACING_HOR);
         Direction side = hit.getDirection();
 
         Vec3 vec = Utils.fraction(hit.getLocation());
@@ -84,7 +84,7 @@ public class FramedDoubleSlopeBlockEntity extends FramedDoubleBlockEntity
     public BlockState getCamoState(Direction side)
     {
         SlopeType type = getBlockState().getValue(PropertyHolder.SLOPE_TYPE);
-        Direction facing = getBlockState().getValue(PropertyHolder.FACING_HOR);
+        Direction facing = getBlockState().getValue(FramedProperties.FACING_HOR);
 
         if (type == SlopeType.HORIZONTAL)
         {
@@ -129,9 +129,9 @@ public class FramedDoubleSlopeBlockEntity extends FramedDoubleBlockEntity
         BlockState defState = FBContent.blockFramedSlope.get().defaultBlockState();
         return new Tuple<>(
                 defState.setValue(PropertyHolder.SLOPE_TYPE, type)
-                        .setValue(PropertyHolder.FACING_HOR, facing),
+                        .setValue(FramedProperties.FACING_HOR, facing),
                 defState.setValue(PropertyHolder.SLOPE_TYPE, type == SlopeType.HORIZONTAL ? type : type.getOpposite())
-                        .setValue(PropertyHolder.FACING_HOR, facing.getOpposite())
+                        .setValue(FramedProperties.FACING_HOR, facing.getOpposite())
         );
     }
 }

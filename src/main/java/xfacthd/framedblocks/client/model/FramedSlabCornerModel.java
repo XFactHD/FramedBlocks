@@ -5,9 +5,9 @@ import net.minecraft.client.renderer.block.model.BakedQuad;
 import net.minecraft.client.resources.model.BakedModel;
 import net.minecraft.core.Direction;
 import xfacthd.framedblocks.api.model.FramedBlockModel;
+import xfacthd.framedblocks.api.util.FramedProperties;
 import xfacthd.framedblocks.api.util.client.BakedQuadTransformer;
 import xfacthd.framedblocks.api.util.client.ModelUtils;
-import xfacthd.framedblocks.common.data.PropertyHolder;
 
 import java.util.List;
 import java.util.Map;
@@ -20,8 +20,8 @@ public class FramedSlabCornerModel extends FramedBlockModel
     public FramedSlabCornerModel(BlockState state, BakedModel baseModel)
     {
         super(state, baseModel);
-        dir = state.getValue(PropertyHolder.FACING_HOR);
-        top = state.getValue(PropertyHolder.TOP);
+        dir = state.getValue(FramedProperties.FACING_HOR);
+        top = state.getValue(FramedProperties.TOP);
     }
 
     @Override

@@ -23,7 +23,7 @@ public class FramedDoublePanelBlockEntity extends FramedDoubleBlockEntity
     @Override
     protected boolean hitSecondary(BlockHitResult hit)
     {
-        Direction facing = getBlockState().getValue(PropertyHolder.FACING_NE);
+        Direction facing = getBlockState().getValue(FramedProperties.FACING_NE);
         Direction side = hit.getDirection();
         Vec3 vec = Utils.fraction(hit.getLocation());
 
@@ -46,7 +46,7 @@ public class FramedDoublePanelBlockEntity extends FramedDoubleBlockEntity
     @Override
     public BlockState getCamoState(Direction side)
     {
-        Direction facing = getBlockState().getValue(PropertyHolder.FACING_NE);
+        Direction facing = getBlockState().getValue(FramedProperties.FACING_NE);
         if (side == facing) { return getCamoState(); }
         if (side == facing.getOpposite()) { return getCamoStateTwo(); }
         return Blocks.AIR.defaultBlockState();
@@ -55,7 +55,7 @@ public class FramedDoublePanelBlockEntity extends FramedDoubleBlockEntity
     @Override
     public boolean isSolidSide(Direction side)
     {
-        Direction facing = getBlockState().getValue(PropertyHolder.FACING_NE);
+        Direction facing = getBlockState().getValue(FramedProperties.FACING_NE);
         if (side == facing || side == facing.getOpposite())
         {
             //noinspection ConstantConditions

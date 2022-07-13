@@ -18,8 +18,8 @@ public class SlabEdgeSkipPredicate implements SideSkipPredicate
     {
         if (adjState.getBlock() instanceof IFramedBlock block && block.getBlockType() instanceof BlockType type)
         {
-            Direction dir = state.getValue(PropertyHolder.FACING_HOR);
-            boolean top = state.getValue(PropertyHolder.TOP);
+            Direction dir = state.getValue(FramedProperties.FACING_HOR);
+            boolean top = state.getValue(FramedProperties.TOP);
 
             return switch (type)
             {
@@ -51,8 +51,8 @@ public class SlabEdgeSkipPredicate implements SideSkipPredicate
 
     private static boolean testAgainstEdge(BlockGetter level, BlockPos pos, Direction dir, boolean top, BlockState adjState, Direction side)
     {
-        Direction adjDir = adjState.getValue(PropertyHolder.FACING_HOR);
-        boolean adjTop = adjState.getValue(PropertyHolder.TOP);
+        Direction adjDir = adjState.getValue(FramedProperties.FACING_HOR);
+        boolean adjTop = adjState.getValue(FramedProperties.TOP);
 
         if (side == dir && adjDir == side.getOpposite())
         {
@@ -72,7 +72,7 @@ public class SlabEdgeSkipPredicate implements SideSkipPredicate
 
     private static boolean testAgainstSlab(BlockGetter level, BlockPos pos, Direction dir, boolean top, BlockState adjState, Direction side)
     {
-        if (side != dir || top != adjState.getValue(PropertyHolder.TOP)) { return false; }
+        if (side != dir || top != adjState.getValue(FramedProperties.TOP)) { return false; }
 
         return SideSkipPredicate.compareState(level, pos, side, dir, side.getOpposite());
     }
@@ -86,8 +86,8 @@ public class SlabEdgeSkipPredicate implements SideSkipPredicate
 
     private static boolean testAgainstCorner(BlockGetter level, BlockPos pos, Direction dir, boolean top, BlockState adjState, Direction side)
     {
-        Direction adjDir = adjState.getValue(PropertyHolder.FACING_HOR);
-        boolean adjTop = adjState.getValue(PropertyHolder.TOP);
+        Direction adjDir = adjState.getValue(FramedProperties.FACING_HOR);
+        boolean adjTop = adjState.getValue(FramedProperties.TOP);
 
         if ((side == dir.getClockWise() && adjDir == dir) || (side == dir.getCounterClockWise() && adjDir == dir.getClockWise()))
         {
@@ -100,7 +100,7 @@ public class SlabEdgeSkipPredicate implements SideSkipPredicate
     {
         if (!Utils.isY(side)) { return false; }
 
-        Direction adjDir = adjState.getValue(PropertyHolder.FACING_HOR);
+        Direction adjDir = adjState.getValue(FramedProperties.FACING_HOR);
         if (dir != adjDir) { return false; }
 
         if ((side == Direction.UP && top) || (side == Direction.DOWN && !top))
@@ -114,7 +114,7 @@ public class SlabEdgeSkipPredicate implements SideSkipPredicate
     {
         if (!Utils.isY(side)) { return false; }
 
-        Direction adjDir = adjState.getValue(PropertyHolder.FACING_NE);
+        Direction adjDir = adjState.getValue(FramedProperties.FACING_NE);
         if (dir != adjDir && dir != adjDir.getOpposite()) { return false; }
 
         if ((side == Direction.UP && top) || (side == Direction.DOWN && !top))
@@ -166,7 +166,7 @@ public class SlabEdgeSkipPredicate implements SideSkipPredicate
 
     private static boolean testAgainstVerticalStairs(BlockGetter level, BlockPos pos, Direction dir, boolean top, BlockState adjState, Direction side)
     {
-        Direction adjDir = adjState.getValue(PropertyHolder.FACING_HOR);
+        Direction adjDir = adjState.getValue(FramedProperties.FACING_HOR);
         StairsType adjType = adjState.getValue(PropertyHolder.STAIRS_TYPE);
 
         if (adjType == StairsType.VERTICAL) { return false; }
@@ -179,7 +179,7 @@ public class SlabEdgeSkipPredicate implements SideSkipPredicate
 
     private static boolean testAgainstHalfStairs(BlockGetter level, BlockPos pos, Direction dir, boolean top, BlockState adjState, Direction side)
     {
-        Direction adjDir = adjState.getValue(PropertyHolder.FACING_HOR);
+        Direction adjDir = adjState.getValue(FramedProperties.FACING_HOR);
         boolean adjTop = adjState.getValue(FramedProperties.TOP);
         boolean adjRight = adjState.getValue(PropertyHolder.RIGHT);
 
@@ -274,7 +274,7 @@ public class SlabEdgeSkipPredicate implements SideSkipPredicate
     {
         if (!Utils.isY(side) || (!top && side != Direction.DOWN) || (top && side != Direction.UP)) { return false; }
 
-        Direction adjDir = adjState.getValue(PropertyHolder.FACING_HOR);
+        Direction adjDir = adjState.getValue(FramedProperties.FACING_HOR);
         HorizontalRotation adjRot = adjState.getValue(PropertyHolder.ROTATION);
 
         return adjDir == dir && top == (adjRot == HorizontalRotation.DOWN) && SideSkipPredicate.compareState(level, pos, side, dir, side.getOpposite());

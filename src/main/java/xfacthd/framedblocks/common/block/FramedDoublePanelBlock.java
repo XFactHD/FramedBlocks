@@ -13,9 +13,9 @@ import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.phys.HitResult;
+import xfacthd.framedblocks.api.util.FramedProperties;
 import xfacthd.framedblocks.common.FBContent;
 import xfacthd.framedblocks.common.data.BlockType;
-import xfacthd.framedblocks.common.data.PropertyHolder;
 import xfacthd.framedblocks.common.blockentity.FramedDoublePanelBlockEntity;
 import xfacthd.framedblocks.common.item.FramedDoubleBlockItem;
 import xfacthd.framedblocks.api.util.CtmPredicate;
@@ -24,7 +24,7 @@ public class FramedDoublePanelBlock extends AbstractFramedDoubleBlock
 {
     public static final CtmPredicate CTM_PREDICATE = (state, dir) ->
     {
-        Direction facing = state.getValue(PropertyHolder.FACING_NE);
+        Direction facing = state.getValue(FramedProperties.FACING_NE);
         return dir == facing || dir == facing.getOpposite();
     };
 
@@ -34,7 +34,7 @@ public class FramedDoublePanelBlock extends AbstractFramedDoubleBlock
     protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder)
     {
         super.createBlockStateDefinition(builder);
-        builder.add(PropertyHolder.FACING_NE);
+        builder.add(FramedProperties.FACING_NE);
     }
 
     @Override //Used by the blueprint
@@ -42,7 +42,7 @@ public class FramedDoublePanelBlock extends AbstractFramedDoubleBlock
     {
         Direction dir = context.getHorizontalDirection();
         if (dir == Direction.SOUTH || dir == Direction.WEST) { dir = dir.getOpposite(); }
-        return defaultBlockState().setValue(PropertyHolder.FACING_NE, dir);
+        return defaultBlockState().setValue(FramedProperties.FACING_NE, dir);
     }
 
     @Override
@@ -55,9 +55,9 @@ public class FramedDoublePanelBlock extends AbstractFramedDoubleBlock
     @SuppressWarnings("deprecation")
     public BlockState rotate(BlockState state, Rotation rotation)
     {
-        Direction dir = state.getValue(PropertyHolder.FACING_NE);
+        Direction dir = state.getValue(FramedProperties.FACING_NE);
         dir = dir == Direction.NORTH ? Direction.EAST : Direction.NORTH;
-        return state.setValue(PropertyHolder.FACING_NE, dir);
+        return state.setValue(FramedProperties.FACING_NE, dir);
     }
 
     @Override

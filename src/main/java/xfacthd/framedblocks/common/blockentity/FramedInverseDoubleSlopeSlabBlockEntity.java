@@ -32,7 +32,7 @@ public class FramedInverseDoubleSlopeSlabBlockEntity extends FramedDoubleBlockEn
     @Override
     public BlockState getCamoState(Direction side)
     {
-        Direction facing = getBlockState().getValue(PropertyHolder.FACING_HOR);
+        Direction facing = getBlockState().getValue(FramedProperties.FACING_HOR);
 
         if (side == Direction.UP || side == facing)
         {

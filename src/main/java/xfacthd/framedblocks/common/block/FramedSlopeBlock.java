@@ -42,7 +42,7 @@ public class FramedSlopeBlock extends FramedBlock
         }
         else if (type == SlopeType.HORIZONTAL)
         {
-            Direction facing = state.getValue(PropertyHolder.FACING_HOR);
+            Direction facing = state.getValue(FramedProperties.FACING_HOR);
             return dir == facing || dir == facing.getCounterClockWise();
         }
         return FramedUtils.getBlockFacing(state) == dir;
@@ -53,7 +53,7 @@ public class FramedSlopeBlock extends FramedBlock
     @Override
     protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder)
     {
-        builder.add(PropertyHolder.FACING_HOR, PropertyHolder.SLOPE_TYPE, BlockStateProperties.WATERLOGGED, FramedProperties.SOLID, FramedProperties.GLOWING);
+        builder.add(FramedProperties.FACING_HOR, PropertyHolder.SLOPE_TYPE, BlockStateProperties.WATERLOGGED, FramedProperties.SOLID, FramedProperties.GLOWING);
     }
 
     @Override
@@ -69,7 +69,7 @@ public class FramedSlopeBlock extends FramedBlock
         ItemStack stack = player.getItemInHand(hand);
         if (!stack.isEmpty() && stack.getItem() == Items.RAIL)
         {
-            Direction dir = state.getValue(PropertyHolder.FACING_HOR);
+            Direction dir = state.getValue(FramedProperties.FACING_HOR);
             SlopeType type = state.getValue(PropertyHolder.SLOPE_TYPE);
             Direction face = hit.getDirection();
 
@@ -125,11 +125,11 @@ public class FramedSlopeBlock extends FramedBlock
     @Override
     public BlockState rotate(BlockState state, Direction face, Rotation rot)
     {
-        Direction dir = state.getValue(PropertyHolder.FACING_HOR);
+        Direction dir = state.getValue(FramedProperties.FACING_HOR);
         SlopeType type = state.getValue(PropertyHolder.SLOPE_TYPE);
         if (Utils.isY(face) || (type != SlopeType.HORIZONTAL && face == dir.getOpposite()))
         {
-            return state.setValue(PropertyHolder.FACING_HOR, rot.rotate(dir));
+            return state.setValue(FramedProperties.FACING_HOR, rot.rotate(dir));
         }
         else if (rot != Rotation.NONE)
         {
