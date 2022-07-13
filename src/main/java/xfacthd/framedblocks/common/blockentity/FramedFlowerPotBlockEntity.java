@@ -100,6 +100,13 @@ public class FramedFlowerPotBlockEntity extends FramedBlockEntity
     }
 
     @Override
+    protected void initModelData()
+    {
+        super.initModelData();
+        getModelDataInternal().setData(FLOWER_BLOCK, flowerBlock);
+    }
+
+    @Override
     public void saveAdditional(CompoundTag nbt)
     {
         //noinspection ConstantConditions
