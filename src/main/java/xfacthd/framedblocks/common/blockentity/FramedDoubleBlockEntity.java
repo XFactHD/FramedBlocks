@@ -241,6 +241,13 @@ public abstract class FramedDoubleBlockEntity extends FramedBlockEntity
                 .build();
     }
 
+    @Override
+    protected void initModelData()
+    {
+        super.initModelData();
+        modelData.setCamoState(camoContainer.getState());
+    }
+
     /*
      * NBT stuff
      */
