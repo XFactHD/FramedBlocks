@@ -54,10 +54,7 @@ public class FramedLeverBlock extends LeverBlock implements IFramedBlock
     @Override
     public void onBlockStateChange(LevelReader level, BlockPos pos, BlockState oldState, BlockState newState)
     {
-        if (level.isClientSide())
-        {
-            onStateChangeClient(level, pos, oldState, newState);
-        }
+        onStateChange(level, pos, oldState, newState);
     }
 
     @Override

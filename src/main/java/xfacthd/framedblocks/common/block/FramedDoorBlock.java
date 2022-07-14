@@ -127,22 +127,7 @@ public class FramedDoorBlock extends DoorBlock implements IFramedBlock
     @Override
     public void onBlockStateChange(LevelReader level, BlockPos pos, BlockState oldState, BlockState newState)
     {
-        if (level.isClientSide())
-        {
-            onStateChangeClient(level, pos, oldState, newState);
-        }
-    }
-
-    @Override
-    public void onStateChangeClient(LevelReader level, BlockPos pos, BlockState oldState, BlockState newState)
-    {
-        IFramedBlock.super.onStateChangeClient(level, pos, oldState, newState);
-
-        // Only check here when the block didn't change (i.e. by opening the door), everything else is handled in the BE packet handlers
-        if (needCullingUpdateAfterStateChange(level, oldState, newState) && level.getBlockEntity(pos) instanceof FramedBlockEntity be)
-        {
-            be.updateCulling(true, false);
-        }
+        onStateChange(level, pos, oldState, newState);
     }
 
     @Override

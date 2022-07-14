@@ -347,11 +347,20 @@ public interface IFramedBlock extends EntityBlock//, IFacade
         return false;
     }
 
-    default void onStateChangeClient(LevelReader level, BlockPos pos, BlockState oldState, BlockState newState)
+    default void onStateChange(LevelReader level, BlockPos pos, BlockState oldState, BlockState newState)
     {
-        if (level.getBlockEntity(pos) instanceof FramedBlockEntity be)
+        if (level.isClientSide() && level.getBlockEntity(pos) instanceof FramedBlockEntity be)
         {
-            be.setBlockState(newState);
+            onStateChangeClient(level, pos, oldState, newState, be);
+        }
+    }
+
+    default void onStateChangeClient(LevelReader level, BlockPos pos, BlockState oldState, BlockState newState, FramedBlockEntity be)
+    {
+        be.setBlockState(newState);
+        if (needCullingUpdateAfterStateChange(level, oldState, newState))
+        {
+            be.updateCulling(true, false);
         }
     }
 

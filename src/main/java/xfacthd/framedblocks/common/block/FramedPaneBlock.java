@@ -78,21 +78,7 @@ public class FramedPaneBlock extends IronBarsBlock implements IFramedBlock
     @Override
     public void onBlockStateChange(LevelReader level, BlockPos pos, BlockState oldState, BlockState newState)
     {
-        if (level.isClientSide())
-        {
-            onStateChangeClient(level, pos, oldState, newState);
-        }
-    }
-
-    @Override
-    public void onStateChangeClient(LevelReader level, BlockPos pos, BlockState oldState, BlockState newState)
-    {
-        IFramedBlock.super.onStateChangeClient(level, pos, oldState, newState);
-
-        if (needCullingUpdateAfterStateChange(level, oldState, newState) && level.getBlockEntity(pos) instanceof FramedBlockEntity be)
-        {
-            be.updateCulling(false, false);
-        }
+        onStateChange(level, pos, oldState, newState);
     }
 
     @Override
