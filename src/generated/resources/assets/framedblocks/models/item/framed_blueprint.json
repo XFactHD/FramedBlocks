@@ -14,7 +14,7 @@
       }
     }
   ],
-  "render_type": "framedblocks:cutout",
+  "render_type": "minecraft:cutout",
   "textures": {
     "layer0": "framedblocks:item/framed_blueprint"
   }

@@ -1,6 +1,6 @@
 {
   "parent": "minecraft:item/generated",
-  "render_type": "framedblocks:cutout",
+  "render_type": "minecraft:cutout",
   "textures": {
     "layer0": "framedblocks:item/framed_flower_pot"
   }

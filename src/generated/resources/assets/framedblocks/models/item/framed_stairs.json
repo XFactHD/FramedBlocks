@@ -1,6 +1,6 @@
 {
   "parent": "minecraft:block/stairs",
-  "render_type": "framedblocks:cutout",
+  "render_type": "minecraft:cutout",
   "textures": {
     "bottom": "framedblocks:block/framed_block",
     "side": "framedblocks:block/framed_block",

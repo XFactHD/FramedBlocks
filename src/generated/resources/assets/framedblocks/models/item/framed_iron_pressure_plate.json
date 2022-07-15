@@ -1,4 +1,4 @@
 {
   "parent": "framedblocks:block/framed_iron_pressure_plate_up",
-  "render_type": "framedblocks:cutout"
+  "render_type": "minecraft:cutout"
 }

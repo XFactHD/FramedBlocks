@@ -1,6 +1,6 @@
 {
   "parent": "minecraft:block/template_fence_gate",
-  "render_type": "framedblocks:cutout",
+  "render_type": "minecraft:cutout",
   "textures": {
     "texture": "framedblocks:block/framed_block"
   }

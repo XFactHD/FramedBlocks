@@ -1,4 +1,4 @@
 {
   "parent": "framedblocks:block/framed_iron_trapdoor_bot",
-  "render_type": "framedblocks:cutout"
+  "render_type": "minecraft:cutout"
 }
