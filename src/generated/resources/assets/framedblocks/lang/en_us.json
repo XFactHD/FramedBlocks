@@ -66,6 +66,7 @@
   "block.framedblocks.framed_vertical_half_stairs": "Framed Vertical Half Stairs",
   "block.framedblocks.framed_vertical_stairs": "Framed Vertical Stairs",
   "block.framedblocks.framed_wall": "Framed Wall",
+  "block.framedblocks.framed_wall_board": "Framed Wall Board",
   "block.framedblocks.framed_wall_sign": "Framed Sign",
   "button.framedblocks.gui.done": "Done",
   "desc.framed_blocks.blueprint_block": "Contained Block: %s",

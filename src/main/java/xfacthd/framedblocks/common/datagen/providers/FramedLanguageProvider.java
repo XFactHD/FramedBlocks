@@ -42,6 +42,8 @@ public class FramedLanguageProvider extends LanguageProvider
         add(FBContent.blockFramedFence.get(), "Framed Fence");
         add(FBContent.blockFramedGate.get(), "Framed Fence Gate");
         add(FBContent.blockFramedDoor.get(), "Framed Door");
+        add(FBContent.blockFramedIronDoor.get(), "Framed Iron Door");
+        add(FBContent.blockFramedIronTrapDoor.get(), "Framed Iron Trapdoor");
         add(FBContent.blockFramedTrapDoor.get(), "Framed Trapdoor");
         add(FBContent.blockFramedPressurePlate.get(), "Framed Pressure Plate");
         add(FBContent.blockFramedStonePressurePlate.get(), "Framed Stone Pressure Plate");
@@ -90,8 +92,7 @@ public class FramedLanguageProvider extends LanguageProvider
         add(FBContent.blockFramedInverseDoubleSlopePanel.get(), "Framed Inverted Double Slope Panel");
         add(FBContent.blockFramedDoubleStairs.get(), "Framed Double Stairs");
         add(FBContent.blockFramedVerticalDoubleStairs.get(), "Framed Vertical Double Stairs");
-        add(FBContent.blockFramedIronDoor.get(), "Framed Iron Door");
-        add(FBContent.blockFramedIronTrapDoor.get(), "Framed Iron Trapdoor");
+        add(FBContent.blockFramedWallBoard.get(), "Framed Wall Board");
 
         add(FBContent.itemFramedHammer.get(), "Framed Hammer");
         add(FBContent.itemFramedWrench.get(), "Framed Wrench");
