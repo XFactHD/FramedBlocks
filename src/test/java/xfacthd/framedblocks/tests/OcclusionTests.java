@@ -1350,6 +1350,24 @@ public final class OcclusionTests
         TestUtils.testBlockOccludesLightNorth(helper, state);
     }
 
+    @GameTest(template = "box_side", batch = "occlusion")
+    @TestedType(type = BlockType.FRAMED_WALL_BOARD)
+    public static void test_WallBoard_North(GameTestHelper helper)
+    {
+        BlockState state = FBContent.blockFramedWallBoard.get().defaultBlockState();
+        TestUtils.testBlockOccludesLightNorth(helper, state);
+    }
+
+    @GameTest(template = "box_side", batch = "occlusion")
+    @TestedType(type = BlockType.FRAMED_WALL_BOARD)
+    public static void test_WallBoard_South(GameTestHelper helper)
+    {
+        BlockState state = FBContent.blockFramedWallBoard.get()
+                .defaultBlockState()
+                .setValue(FramedProperties.FACING_HOR, Direction.SOUTH);
+        TestUtils.testBlockOccludesLightNorth(helper, state);
+    }
+
 
 
     private static boolean firstBatch = true;
