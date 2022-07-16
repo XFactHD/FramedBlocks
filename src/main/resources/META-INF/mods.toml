@@ -43,9 +43,9 @@ description='''
 #    ordering="AFTER"
 #    side="CLIENT"
 
-#[[dependencies.framedblocks]]
-#    modId="diagonalfences"
-#    mandatory=false
-#    versionRange="[3.0.0,)"
-#    ordering="NONE"
-#    side="BOTH"
+[[dependencies.framedblocks]]
+    modId="diagonalfences"
+    mandatory=false
+    versionRange="[4.0.1,)"
+    ordering="NONE"
+    side="BOTH"

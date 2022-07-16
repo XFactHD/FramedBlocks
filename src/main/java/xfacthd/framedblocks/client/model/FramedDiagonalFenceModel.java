@@ -1,6 +1,7 @@
 package xfacthd.framedblocks.client.model;
 
 import com.mojang.math.Vector3f;
+import fuzs.diagonalfences.api.world.level.block.DiagonalBlock;
 import net.minecraft.client.renderer.block.model.BakedQuad;
 import net.minecraft.client.resources.model.BakedModel;
 import net.minecraft.core.Direction;
@@ -23,12 +24,11 @@ public class FramedDiagonalFenceModel extends FramedFenceModel
     {
         super(state, baseModel);
 
-        //TODO: reactivate when DiagonalFences is ported
-        //boolean hasProps = state.getBlock() instanceof IDiagonalBlock && ((IDiagonalBlock)state.getBlock()).hasProperties();
-        northEast = false;//hasProps && state.getValue(IDiagonalBlock.NORTH_EAST);
-        southEast = false;//hasProps && state.getValue(IDiagonalBlock.SOUTH_EAST);
-        northWest = false;//hasProps && state.getValue(IDiagonalBlock.NORTH_WEST);
-        southWest = false;//hasProps && state.getValue(IDiagonalBlock.SOUTH_WEST);
+        boolean hasProps = state.getBlock() instanceof DiagonalBlock && ((DiagonalBlock) state.getBlock()).hasProperties();
+        northEast = hasProps && state.getValue(DiagonalBlock.NORTH_EAST);
+        southEast = hasProps && state.getValue(DiagonalBlock.SOUTH_EAST);
+        northWest = hasProps && state.getValue(DiagonalBlock.NORTH_WEST);
+        southWest = hasProps && state.getValue(DiagonalBlock.SOUTH_WEST);
     }
 
     @Override
