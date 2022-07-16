@@ -239,7 +239,7 @@ public final class InteractionTests
                             () -> String.format("Expected oak log default state as camo, got %s", be.getCamo().getState())
                     );
                 },
-                () -> TestUtils.clickWithItem(helper, POS_ABOVE_FLOOR, FBContent.itemFramedWrench.get()),
+                () -> TestUtils.clickWithItem(helper, POS_ABOVE_FLOOR, FBContent.itemFramedScrewdriver.get()),
                 () ->
                 {
                     FramedBlockEntity be = TestUtils.getBlockEntity(helper, POS_ABOVE_FLOOR, FramedBlockEntity.class);
@@ -260,11 +260,11 @@ public final class InteractionTests
         TestUtils.chainTasks(helper, List.of(
                 () -> helper.setBlock(POS_ABOVE_FLOOR, FBContent.blockFramedChest.get()),
                 () -> helper.assertBlockProperty(POS_ABOVE_FLOOR, PropertyHolder.LATCH_TYPE, LatchType.DEFAULT),
-                () -> TestUtils.clickWithItem(helper, POS_ABOVE_FLOOR, FBContent.itemFramedWrench.get(), true),
+                () -> TestUtils.attackWithItem(helper, POS_ABOVE_FLOOR, FBContent.itemFramedHammer.get()),
                 () -> helper.assertBlockProperty(POS_ABOVE_FLOOR, PropertyHolder.LATCH_TYPE, LatchType.CAMO),
-                () -> TestUtils.clickWithItem(helper, POS_ABOVE_FLOOR, FBContent.itemFramedWrench.get(), true),
+                () -> TestUtils.attackWithItem(helper, POS_ABOVE_FLOOR, FBContent.itemFramedHammer.get()),
                 () -> helper.assertBlockProperty(POS_ABOVE_FLOOR, PropertyHolder.LATCH_TYPE, LatchType.NONE),
-                () -> TestUtils.clickWithItem(helper, POS_ABOVE_FLOOR, FBContent.itemFramedWrench.get(), true),
+                () -> TestUtils.attackWithItem(helper, POS_ABOVE_FLOOR, FBContent.itemFramedHammer.get()),
                 () -> helper.assertBlockProperty(POS_ABOVE_FLOOR, PropertyHolder.LATCH_TYPE, LatchType.DEFAULT),
                 helper::succeed
         ));
