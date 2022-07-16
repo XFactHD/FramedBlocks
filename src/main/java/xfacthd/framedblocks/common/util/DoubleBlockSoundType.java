@@ -23,8 +23,9 @@ public class DoubleBlockSoundType extends SoundType
     @Override
     public float getPitch() { return getSoundType(be.getSoundMode()).getPitch(); }
 
+    // This is only called when no camo is applied and should therefore return the default break sound
     @Override
-    public SoundEvent getBreakSound() { return be.getCamo().getSoundType().getBreakSound(); }
+    public SoundEvent getBreakSound() { return be.getBlockState().getSoundType().getBreakSound(); }
 
     @Override
     public SoundEvent getStepSound() { return getSoundType(be.getSoundMode()).getStepSound(); }
@@ -53,7 +54,8 @@ public class DoubleBlockSoundType extends SoundType
             return camo.getSoundType();
         }
 
-        return be.getCamo().getSoundType();
+        // Default to no-camo sound
+        return be.getBlockState().getSoundType();
     }
 
     private SoundType getEitherSoundType()
@@ -70,6 +72,7 @@ public class DoubleBlockSoundType extends SoundType
             return camo.getSoundType();
         }
 
-        return be.getCamo().getSoundType();
+        // Default to no-camo sound
+        return be.getBlockState().getSoundType();
     }
 }
