@@ -69,6 +69,7 @@ public class FramedBlockStateProvider extends BlockStateProvider
         simpleBlockWithItem(FBContent.blockFramedInverseDoubleSlopePanel, cube);
         simpleBlockWithItem(FBContent.blockFramedDoubleStairs, cube);
         simpleBlockWithItem(FBContent.blockFramedVerticalDoubleStairs, cube);
+        simpleBlock(FBContent.blockFramedWallBoard.get(), cube);
 
         registerFramedSlab(cube);
         registerFramedStairs(cube);

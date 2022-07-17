@@ -5,14 +5,14 @@
   ],
   "key": {
     "F": {
-      "item": "framedblocks:framed_slab"
+      "item": "framedblocks:framed_panel"
     },
     "H": {
       "item": "framedblocks:framed_hammer"
     }
   },
   "result": {
-    "item": "framedblocks:framed_floor_board",
+    "item": "framedblocks:framed_wall_board",
     "count": 4
   }
 }

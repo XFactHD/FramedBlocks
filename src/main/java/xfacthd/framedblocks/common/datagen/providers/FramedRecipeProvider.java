@@ -157,11 +157,23 @@ public class FramedRecipeProvider extends RecipeProvider
                 .unlockedBy("hasFramedBlock", HAS_FRAMED_BLOCK)
                 .save(consumer);
 
+        ShapelessRecipeBuilder.shapeless(FBContent.blockFramedIronDoor.get())
+                .requires(FBContent.blockFramedDoor.get())
+                .requires(Items.IRON_INGOT)
+                .unlockedBy("hasFramedDoor", has(FBContent.blockFramedDoor.get()))
+                .save(consumer);
+
         ShapedRecipeBuilder.shaped(FBContent.blockFramedTrapDoor.get())
                 .pattern("FFF")
                 .pattern("FFF")
                 .define('F', FBContent.blockFramedSlab.get())
                 .unlockedBy("hasFramedSlab", has(FBContent.blockFramedSlab.get()))
+                .save(consumer);
+
+        ShapelessRecipeBuilder.shapeless(FBContent.blockFramedIronTrapDoor.get())
+                .requires(FBContent.blockFramedTrapDoor.get())
+                .requires(Items.IRON_INGOT)
+                .unlockedBy("hasFramedTrapdoor", has(FBContent.blockFramedTrapDoor.get()))
                 .save(consumer);
 
         ShapedRecipeBuilder.shaped(FBContent.blockFramedPressurePlate.get())
@@ -276,11 +288,11 @@ public class FramedRecipeProvider extends RecipeProvider
                 .unlockedBy("hasFramedBlock", HAS_FRAMED_BLOCK)
                 .save(consumer);
 
-        ShapedRecipeBuilder.shaped(FBContent.blockFramedFloor.get(), 3)
+        ShapedRecipeBuilder.shaped(FBContent.blockFramedFloor.get(), 4)
                 .pattern("FFH")
-                .define('F', FBContent.blockFramedCube.get())
+                .define('F', FBContent.blockFramedSlab.get())
                 .define('H', FBContent.itemFramedHammer.get())
-                .unlockedBy("hasFramedBlock", HAS_FRAMED_BLOCK)
+                .unlockedBy("hasFramedSlab", has(FBContent.blockFramedSlab.get()))
                 .save(consumer);
 
         ShapedRecipeBuilder.shaped(FBContent.blockFramedLattice.get(), 3)
@@ -523,16 +535,11 @@ public class FramedRecipeProvider extends RecipeProvider
                 .unlockedBy("hasFramedStairs", has(FBContent.blockFramedVerticalStairs.get()))
                 .save(consumer);
 
-        ShapelessRecipeBuilder.shapeless(FBContent.blockFramedIronDoor.get())
-                .requires(FBContent.blockFramedDoor.get())
-                .requires(Items.IRON_INGOT)
-                .unlockedBy("hasFramedDoor", has(FBContent.blockFramedDoor.get()))
-                .save(consumer);
-
-        ShapelessRecipeBuilder.shapeless(FBContent.blockFramedIronTrapDoor.get())
-                .requires(FBContent.blockFramedTrapDoor.get())
-                .requires(Items.IRON_INGOT)
-                .unlockedBy("hasFramedTrapdoor", has(FBContent.blockFramedTrapDoor.get()))
+        ShapedRecipeBuilder.shaped(FBContent.blockFramedWallBoard.get(), 4)
+                .pattern("FFH")
+                .define('F', FBContent.blockFramedPanel.get())
+                .define('H', FBContent.itemFramedHammer.get())
+                .unlockedBy("hasFramedPanel", has(FBContent.blockFramedPanel.get()))
                 .save(consumer);
 
 
