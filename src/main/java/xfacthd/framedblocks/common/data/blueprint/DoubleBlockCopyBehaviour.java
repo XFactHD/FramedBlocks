@@ -1,6 +1,7 @@
 package xfacthd.framedblocks.common.data.blueprint;
 
 import com.mojang.datafixers.util.Pair;
+import it.unimi.dsi.fastutil.objects.ObjectArraySet;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.NbtUtils;
 import net.minecraft.world.item.ItemStack;
@@ -17,7 +18,7 @@ public class DoubleBlockCopyBehaviour implements BlueprintCopyBehaviour
     @Override
     public Optional<Set<Pair<BlockState, ItemStack>>> getCamos(CompoundTag blueprintData)
     {
-        Set<Pair<BlockState, ItemStack>> camos = new HashSet<>();
+        Set<Pair<BlockState, ItemStack>> camos = new ObjectArraySet<>(2);
         camos.add(Pair.of(
                 NbtUtils.readBlockState(blueprintData.getCompound(MAIN_CAMO_KEY).getCompound(CAMO_STATE_KEY)),
                 ItemStack.of(blueprintData.getCompound(MAIN_CAMO_KEY).getCompound(CAMO_STACK_KEY))

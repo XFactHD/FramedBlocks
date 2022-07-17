@@ -258,7 +258,7 @@ public class FramedBlueprintItem extends FramedToolItem
         return COPY_BEHAVIOURS.getOrDefault(block, NO_OP_BEHAVIOUR);
     }
 
-    private static Set<Pair<BlockState, ItemStack>> getCamos(BlockItem item, CompoundTag tag)
+    public static Set<Pair<BlockState, ItemStack>> getCamos(BlockItem item, CompoundTag tag)
     {
         return getBehaviour(item.getBlock())
                 .getCamos(tag)

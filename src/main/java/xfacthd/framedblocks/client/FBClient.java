@@ -23,6 +23,7 @@ import xfacthd.framedblocks.api.block.IFramedBlock;
 import xfacthd.framedblocks.api.util.FramedConstants;
 import xfacthd.framedblocks.api.util.FramedProperties;
 import xfacthd.framedblocks.api.util.client.ClientUtils;
+import xfacthd.framedblocks.client.data.GhostRenderBehaviours;
 import xfacthd.framedblocks.client.model.*;
 import xfacthd.framedblocks.client.render.*;
 import xfacthd.framedblocks.client.render.outline.*;
@@ -83,6 +84,8 @@ public final class FBClient
         BlockOutlineRenderer.registerOutlineRender(BlockType.FRAMED_SLOPE_PANEL, new SlopePanelOutlineRenderer());
         BlockOutlineRenderer.registerOutlineRender(BlockType.FRAMED_EXTENDED_SLOPE_PANEL, new ExtendedSlopePanelOutlineRenderer());
         BlockOutlineRenderer.registerOutlineRender(BlockType.FRAMED_INV_DOUBLE_SLOPE_PANEL, new InverseDoubleSlopePanelOutlineRenderer());
+
+        GhostRenderBehaviours.register();
     }
 
     @SubscribeEvent

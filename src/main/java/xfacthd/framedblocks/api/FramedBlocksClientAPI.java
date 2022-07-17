@@ -2,7 +2,10 @@ package xfacthd.framedblocks.api;
 
 import net.minecraft.client.color.block.BlockColor;
 import net.minecraft.client.resources.model.BakedModel;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.material.Fluid;
+import xfacthd.framedblocks.api.ghost.GhostRenderBehaviour;
 import xfacthd.framedblocks.api.type.IBlockType;
 import xfacthd.framedblocks.api.util.WriteOnceHolder;
 import xfacthd.framedblocks.api.util.client.OutlineRender;
@@ -31,4 +34,14 @@ public interface FramedBlocksClientAPI
      * @param type The {@link IBlockType}, must return true for {@link IBlockType#hasSpecialHitbox()}
      */
     void registerOutlineRender(IBlockType type, OutlineRender render);
+
+    /**
+     * Register a custom {@link GhostRenderBehaviour} for the given {@link Block}s
+     */
+    void registerGhostRenderBehaviour(GhostRenderBehaviour behaviour, Block... blocks);
+
+    /**
+     * Register a custom {@link GhostRenderBehaviour} for the given {@link Item}s
+     */
+    void registerGhostRenderBehaviour(GhostRenderBehaviour behaviour, Item... items);
 }

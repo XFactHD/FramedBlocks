@@ -61,7 +61,8 @@ public interface BlueprintCopyBehaviour
      * @param blueprintData The {@link CompoundTag} containing the full blueprint data (block to place, camo data as
      *                      written from {@link FramedBlockEntity#writeToBlueprint()}, any custom data added in
      *                      {@link BlueprintCopyBehaviour#writeToBlueprint(Level, BlockPos, BlockState, FramedBlockEntity, CompoundTag)})
-     * @return The Set of CamoContainers to consume when the {@link Block} is placed
+     * @return The Set of CamoContainers to consume when the {@link Block} is placed. The set must contain at least one
+     *         entry when a non-empty optional is returned. The returned set should retain insertion order.
      */
     default Optional<Set<Pair<BlockState, ItemStack>>> getCamos(CompoundTag blueprintData)
     {

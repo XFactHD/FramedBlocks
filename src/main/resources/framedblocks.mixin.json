@@ -8,7 +8,6 @@
         "MixinBlockStateBase"
     ],
     "client": [
-        "MixinLevelRenderer",
         "MixinIFramedBlock"
     ],
     "injectors": {
