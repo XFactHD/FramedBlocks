@@ -42,6 +42,16 @@ public class DoorGhostRenderBehaviour implements GhostRenderBehaviour
     }
 
     @Override
+    public CamoPair readCamo(ItemStack stack, @Nullable ItemStack proxiedStack, boolean secondPass)
+    {
+        if (secondPass)
+        {
+            return CamoPair.EMPTY;
+        }
+        return GhostRenderBehaviour.super.readCamo(stack, proxiedStack, false);
+    }
+
+    @Override
     public CamoPair postProcessCamo(ItemStack stack, ItemStack proxiedStack, BlockPlaceContext ctx, BlockState renderState, boolean secondPass, CamoPair camo)
     {
         return secondPass ? camo.swap() : camo;
