@@ -369,6 +369,10 @@ public interface IFramedBlock extends EntityBlock//, IFacade
     default void onStateChangeClient(LevelReader level, BlockPos pos, BlockState oldState, BlockState newState, FramedBlockEntity be)
     {
         be.setBlockState(newState);
+        if (needCullingUpdateAfterStateChange(level, oldState, newState))
+        {
+            be.updateCulling(true, false);
+        }
     }
 
     default void updateCulling(LevelAccessor level, BlockPos pos, @Nullable BlockState neighborState, @Nullable Direction side, boolean rerender)

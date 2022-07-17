@@ -82,7 +82,7 @@ public class FramedTrapDoorBlock extends TrapDoorBlock implements IFramedBlock
     public BlockState updateShape(BlockState state, Direction facing, BlockState facingState, LevelAccessor level, BlockPos currentPos, BlockPos facingPos)
     {
         BlockState newState = super.updateShape(state, facing, facingState, level, currentPos, facingPos);
-        if (level.isClientSide() && newState == state)
+        if (newState == state)
         {
             updateCulling(level, currentPos, facingState, facing, false);
         }
@@ -93,18 +93,6 @@ public class FramedTrapDoorBlock extends TrapDoorBlock implements IFramedBlock
     public void onBlockStateChange(LevelReader level, BlockPos pos, BlockState oldState, BlockState newState)
     {
         onStateChange(level, pos, oldState, newState);
-    }
-
-    @Override
-    public void onStateChangeClient(LevelReader level, BlockPos pos, BlockState oldState, BlockState newState, FramedBlockEntity be)
-    {
-        IFramedBlock.super.onStateChangeClient(level, pos, oldState, newState, be);
-
-        // Only check here when the block didn't change (i.e. by opening the door), everything else is handled in the BE packet handlers
-        if (needCullingUpdateAfterStateChange(level, oldState, newState))
-        {
-            be.updateCulling(true, false);
-        }
     }
 
     @Override

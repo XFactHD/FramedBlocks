@@ -73,17 +73,6 @@ public class FramedGateBlock extends FenceGateBlock implements IFramedBlock
     }
 
     @Override
-    public void onStateChangeClient(LevelReader level, BlockPos pos, BlockState oldState, BlockState newState, FramedBlockEntity be)
-    {
-        IFramedBlock.super.onStateChangeClient(level, pos, oldState, newState, be);
-
-        if (needCullingUpdateAfterStateChange(level, oldState, newState))
-        {
-            be.updateCulling(false, false);
-        }
-    }
-
-    @Override
     public int getLightEmission(BlockState state, BlockGetter level, BlockPos pos) { return getLight(level, pos); }
 
     @Override

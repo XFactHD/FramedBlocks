@@ -6,14 +6,12 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.LevelAccessor;
-import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.block.*;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.block.state.properties.Half;
 import net.minecraft.world.phys.shapes.*;
-import xfacthd.framedblocks.api.block.FramedBlockEntity;
 import xfacthd.framedblocks.api.util.*;
 import xfacthd.framedblocks.common.data.*;
 import xfacthd.framedblocks.common.data.property.StairsType;
@@ -61,17 +59,6 @@ public class FramedVerticalStairsBlock extends FramedBlock
             state = getStateFromContext(state, level, pos);
         }
         return super.updateShape(state, facing, facingState, level, pos, facingPos);
-    }
-
-    @Override
-    public void onStateChangeClient(LevelReader level, BlockPos pos, BlockState oldState, BlockState newState, FramedBlockEntity be)
-    {
-        super.onStateChangeClient(level, pos, oldState, newState, be);
-
-        if (needCullingUpdateAfterStateChange(level, oldState, newState))
-        {
-            be.updateCulling(false, false);
-        }
     }
 
     private BlockState getStateFromContext(BlockState state, LevelAccessor level, BlockPos pos)
