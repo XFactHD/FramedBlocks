@@ -17,8 +17,7 @@ import net.minecraft.world.level.*;
 import net.minecraft.world.level.block.*;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
-import net.minecraft.world.level.material.Fluids;
-import net.minecraft.world.level.material.Material;
+import net.minecraft.world.level.material.*;
 import net.minecraft.world.level.storage.loot.LootContext;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
 import net.minecraft.world.phys.BlockHitResult;
@@ -448,6 +447,19 @@ public interface IFramedBlock extends EntityBlock//, IFacade
     }
 
     default BlockState rotate(BlockState state, Direction face, Rotation rot) { return state.rotate(rot); }
+
+    default MaterialColor getCamoMapColor(BlockGetter level, BlockPos pos, MaterialColor defaultColor)
+    {
+        if (level.getBlockEntity(pos) instanceof FramedBlockEntity be)
+        {
+            MaterialColor color = be.getMapColor();
+            if (color != null)
+            {
+                return color;
+            }
+        }
+        return defaultColor;
+    }
 
     default Optional<MutableComponent> printCamoBlock(CompoundTag beTag)
     {

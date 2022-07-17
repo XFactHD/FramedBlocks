@@ -191,6 +191,12 @@ public abstract class AbstractFramedBlock extends Block implements IFramedBlock,
     }
 
     @Override
+    public MaterialColor getMapColor(BlockState state, BlockGetter level, BlockPos pos, MaterialColor defaultColor)
+    {
+        return getCamoMapColor(level, pos, defaultColor);
+    }
+
+    @Override
     public IBlockType getBlockType() { return blockType; }
 
     protected final boolean isWaterLoggable() { return blockType.supportsWaterLogging(); }

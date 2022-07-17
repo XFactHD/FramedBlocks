@@ -14,6 +14,7 @@ import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.material.FluidState;
+import net.minecraft.world.level.material.MaterialColor;
 import net.minecraft.world.level.storage.loot.LootContext;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.shapes.*;
@@ -128,6 +129,12 @@ public class FramedBouncyCubeBlock extends SlimeBlock implements IFramedBlock
     public boolean hidesNeighborFace(BlockGetter level, BlockPos pos, BlockState state, BlockState neighborState, Direction dir)
     {
         return doesHideNeighborFace(level, pos, state, neighborState, dir);
+    }
+
+    @Override
+    public MaterialColor getMapColor(BlockState state, BlockGetter level, BlockPos pos, MaterialColor defaultColor)
+    {
+        return getCamoMapColor(level, pos, defaultColor);
     }
 
     @Override

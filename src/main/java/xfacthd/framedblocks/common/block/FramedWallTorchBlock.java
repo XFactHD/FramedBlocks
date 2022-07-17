@@ -14,6 +14,7 @@ import net.minecraft.world.level.block.WallTorchBlock;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.material.Material;
+import net.minecraft.world.level.material.MaterialColor;
 import net.minecraft.world.level.storage.loot.LootContext;
 import net.minecraft.world.phys.BlockHitResult;
 import xfacthd.framedblocks.api.block.IFramedBlock;
@@ -64,6 +65,12 @@ public class FramedWallTorchBlock extends WallTorchBlock implements IFramedBlock
     public List<ItemStack> getDrops(BlockState state, LootContext.Builder builder)
     {
         return getCamoDrops(super.getDrops(state, builder), builder);
+    }
+
+    @Override
+    public MaterialColor getMapColor(BlockState state, BlockGetter level, BlockPos pos, MaterialColor defaultColor)
+    {
+        return getCamoMapColor(level, pos, defaultColor);
     }
 
     @Override

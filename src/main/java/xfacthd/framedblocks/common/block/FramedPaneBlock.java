@@ -13,6 +13,7 @@ import net.minecraft.world.level.block.*;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
+import net.minecraft.world.level.material.MaterialColor;
 import net.minecraft.world.level.storage.loot.LootContext;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.shapes.*;
@@ -137,6 +138,12 @@ public class FramedPaneBlock extends IronBarsBlock implements IFramedBlock
     public boolean skipRendering(BlockState state, BlockState adjacentState, Direction side)
     {
         return this == FBContent.blockFramedBars.get() && super.skipRendering(state, adjacentState, side);
+    }
+
+    @Override
+    public MaterialColor getMapColor(BlockState state, BlockGetter level, BlockPos pos, MaterialColor defaultColor)
+    {
+        return getCamoMapColor(level, pos, defaultColor);
     }
 
     @Override
