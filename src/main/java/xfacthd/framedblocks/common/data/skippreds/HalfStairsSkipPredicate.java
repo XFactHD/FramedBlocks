@@ -40,7 +40,7 @@ public class HalfStairsSkipPredicate implements SideSkipPredicate
             {
                 return switch (type)
                 {
-                    case FRAMED_STAIRS -> testAgainstStairs(level, pos, top, adjState, side);
+                    case FRAMED_STAIRS -> testAgainstStairs(level, pos, dir, top, adjState, side);
                     case FRAMED_DOUBLE_STAIRS -> testAgainstDoubleStairs(level, pos, dir, top, adjState, side);
                     default -> false;
                 };
@@ -90,13 +90,15 @@ public class HalfStairsSkipPredicate implements SideSkipPredicate
         return false;
     }
 
-    private static boolean testAgainstStairs(BlockGetter level, BlockPos pos, boolean top, BlockState adjState, Direction side)
+    private static boolean testAgainstStairs(BlockGetter level, BlockPos pos, Direction dir, boolean top, BlockState adjState, Direction side)
     {
         Direction adjDir = adjState.getValue(StairBlock.FACING);
         StairsShape adjShape = adjState.getValue(StairBlock.SHAPE);
         boolean adjTop = adjState.getValue(StairBlock.HALF) == Half.TOP;
 
-        return top == adjTop && StairsSkipPredicate.isStairSide(adjShape, adjDir, side.getOpposite()) && SideSkipPredicate.compareState(level, pos, side);
+        if (top != adjTop || !StairsSkipPredicate.isStairSide(adjShape, adjDir, side.getOpposite())) { return false; }
+
+        return StairsSkipPredicate.isStairDirection(adjShape, adjDir, dir.getOpposite()) && SideSkipPredicate.compareState(level, pos, side);
     }
 
     private static boolean testAgainstDoubleStairs(BlockGetter level, BlockPos pos, Direction dir, boolean top, BlockState adjState, Direction side)
