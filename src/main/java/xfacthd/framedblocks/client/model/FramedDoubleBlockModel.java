@@ -14,6 +14,7 @@ import net.minecraft.world.level.BlockAndTintGetter;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.client.ChunkRenderTypeSet;
 import net.minecraftforge.client.model.data.*;
+import net.minecraftforge.common.util.ConcatenatedListView;
 import org.jetbrains.annotations.NotNull;
 import xfacthd.framedblocks.api.model.BakedModelProxy;
 import xfacthd.framedblocks.api.util.FramedBlockData;
@@ -60,9 +61,12 @@ public abstract class FramedDoubleBlockModel extends BakedModelProxy
     {
         if (specialItemModel)
         {
-            List<BakedQuad> quads = new ArrayList<>(getModels().getA().getQuads(state, side, rand));
-            quads.addAll(getModels().getB().getQuads(state, side, rand));
-            return quads;
+            Tuple<BakedModel, BakedModel> models = getModels();
+
+            List<List<BakedQuad>> quads = new ArrayList<>(2);
+            quads.add(models.getA().getQuads(dummyStates.getA(), side, rand));
+            quads.add(models.getB().getQuads(dummyStates.getB(), side, rand));
+            return ConcatenatedListView.of(quads);
         }
         return super.getQuads(state, side, rand);
     }
