@@ -56,8 +56,14 @@ public abstract class FramedDoubleBlockModel extends BakedModelProxy
     {
         if (specialItemModel)
         {
-            List<BakedQuad> quads = new ArrayList<>(getModels().getA().getQuads(state, side, rand));
-            quads.addAll(getModels().getB().getQuads(state, side, rand));
+            Tuple<BakedModel, BakedModel> models = getModels();
+
+            List<BakedQuad> quads = new ArrayList<>(
+                    models.getA().getQuads(dummyStates.getA(), side, rand)
+            );
+            quads.addAll(
+                    models.getB().getQuads(dummyStates.getB(), side, rand)
+            );
             return quads;
         }
         return super.getQuads(state, side, rand);
