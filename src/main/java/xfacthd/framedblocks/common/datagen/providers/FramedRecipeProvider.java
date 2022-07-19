@@ -190,6 +190,14 @@ public class FramedRecipeProvider extends RecipeProvider
                 .unlockedBy("hasFramedBlock", HAS_FRAMED_BLOCK)
                 .save(consumer);
 
+        ShapedRecipeBuilder.shaped(FBContent.blockFramedObsidianPressurePlate.get())
+                .pattern("FF")
+                .pattern("OO")
+                .define('F', FBContent.blockFramedCube.get())
+                .define('O', Tags.Items.OBSIDIAN)
+                .unlockedBy("hasFramedBlock", HAS_FRAMED_BLOCK)
+                .save(consumer);
+
         ShapedRecipeBuilder.shaped(FBContent.blockFramedGoldPressurePlate.get())
                 .pattern("FF")
                 .pattern("GG")
