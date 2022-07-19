@@ -37,14 +37,16 @@ public abstract class FramedDoubleBlockModel extends BakedModelProxy
     @Override
     public List<BakedQuad> getQuads(@Nullable BlockState state, @Nullable Direction side, @Nonnull Random rand, @Nonnull IModelData extraData)
     {
+        Tuple<BakedModel, BakedModel> models = getModels();
+
         IModelData dataLeft = extraData.getData(FramedDoubleBlockEntity.DATA_LEFT);
         List<BakedQuad> quads = new ArrayList<>(
-                getModels().getA().getQuads(dummyStates.getA(), side, rand, dataLeft != null ? dataLeft : EmptyModelData.INSTANCE)
+                models.getA().getQuads(dummyStates.getA(), side, rand, dataLeft != null ? dataLeft : EmptyModelData.INSTANCE)
         );
 
         IModelData dataRight = extraData.getData(FramedDoubleBlockEntity.DATA_RIGHT);
         quads.addAll(invertTintIndizes(
-                getModels().getB().getQuads(dummyStates.getB(), side, rand, dataRight != null ? dataRight : EmptyModelData.INSTANCE)
+                models.getB().getQuads(dummyStates.getB(), side, rand, dataRight != null ? dataRight : EmptyModelData.INSTANCE)
         ));
 
         return quads;
@@ -73,15 +75,17 @@ public abstract class FramedDoubleBlockModel extends BakedModelProxy
     @SuppressWarnings({"deprecation", "ConstantConditions"})
     public TextureAtlasSprite getParticleIcon(@Nonnull IModelData data)
     {
+        Tuple<BakedModel, BakedModel> models = getModels();
+
         IModelData innerData = data.getData(FramedDoubleBlockEntity.DATA_LEFT);
         if (innerData != null && !innerData.getData(FramedBlockData.CAMO).isAir())
         {
-            return getModels().getA().getParticleIcon(innerData);
+            return models.getA().getParticleIcon(innerData);
         }
         innerData = data.getData(FramedDoubleBlockEntity.DATA_RIGHT);
         if (innerData != null && !innerData.getData(FramedBlockData.CAMO).isAir())
         {
-            return getModels().getB().getParticleIcon(innerData);
+            return models.getB().getParticleIcon(innerData);
         }
         return baseModel.getParticleIcon();
     }
