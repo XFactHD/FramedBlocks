@@ -79,6 +79,7 @@ public class FramedBlockStateProvider extends BlockStateProvider
         registerFramedDoor(cube);
         registerFramedPressurePlate(cube);
         registerFramedStonePressurePlate();
+        registerFramedObsidianPressurePlate();
         registerFramedGoldPressurePlate();
         registerFramedIronPressurePlate();
         registerFramedLadder();
@@ -185,6 +186,37 @@ public class FramedBlockStateProvider extends BlockStateProvider
         ).texture("texture", modLoc("block/stone_plate_frame"));
 
         itemModels().withExistingParent("framed_stone_pressure_plate", modLoc("block/framed_stone_pressure_plate_up")).renderType("cutout");
+    }
+
+    private void registerFramedObsidianPressurePlate()
+    {
+        ModelFile modelUp = models().withExistingParent(
+                "framed_obsidian_pressure_plate_up",
+                modLoc("block/framed_pressure_plate_up")
+        ).texture("background", mcLoc("block/obsidian"));
+        ModelFile modelDown = models().withExistingParent(
+                "framed_obsidian_pressure_plate_down",
+                modLoc("block/framed_pressure_plate_down")
+        ).texture("background", mcLoc("block/obsidian"));
+
+        getVariantBuilder(FBContent.blockFramedObsidianPressurePlate.get()).forAllStates(state ->
+        {
+            boolean pressed = state.getValue(PressurePlateBlock.POWERED);
+            return ConfiguredModel.builder()
+                    .modelFile(pressed ? modelDown : modelUp)
+                    .build();
+        });
+
+        models().withExistingParent(
+                FramedMarkedPressurePlateModel.OBSIDIAN_FRAME_LOCATION.getPath(),
+                modLoc("block/framed_pressure_plate_frame_up")
+        ).texture("texture", modLoc("block/obsidian_plate_frame"));
+        models().withExistingParent(
+                FramedMarkedPressurePlateModel.OBSIDIAN_FRAME_DOWN_LOCATION.getPath(),
+                modLoc("block/framed_pressure_plate_frame_down")
+        ).texture("texture", modLoc("block/obsidian_plate_frame"));
+
+        itemModels().withExistingParent("framed_obsidian_pressure_plate", modLoc("block/framed_obsidian_pressure_plate_up")).renderType("cutout");
     }
 
     private void registerFramedGoldPressurePlate()

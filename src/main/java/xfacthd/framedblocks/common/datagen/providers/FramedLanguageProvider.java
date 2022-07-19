@@ -47,6 +47,7 @@ public class FramedLanguageProvider extends LanguageProvider
         add(FBContent.blockFramedTrapDoor.get(), "Framed Trapdoor");
         add(FBContent.blockFramedPressurePlate.get(), "Framed Pressure Plate");
         add(FBContent.blockFramedStonePressurePlate.get(), "Framed Stone Pressure Plate");
+        add(FBContent.blockFramedObsidianPressurePlate.get(), "Framed Obsidian Pressure Plate");
         add(FBContent.blockFramedGoldPressurePlate.get(), "Framed Light Weighted Pressure Plate");
         add(FBContent.blockFramedIronPressurePlate.get(), "Framed Heavy Weighted Pressure Plate");
         add(FBContent.blockFramedLadder.get(), "Framed Ladder");

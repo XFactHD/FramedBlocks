@@ -27,6 +27,7 @@ public class FramedPressurePlateBlock extends PressurePlateBlock implements IFra
 {
     private final BlockType type;
 
+    @SuppressWarnings("ConstantConditions")
     private FramedPressurePlateBlock(BlockType type, Sensitivity sensitivity, Properties props)
     {
         super(sensitivity, props);
@@ -85,6 +86,29 @@ public class FramedPressurePlateBlock extends PressurePlateBlock implements IFra
     }
 
     @Override
+    protected int getSignalStrength(Level level, BlockPos pos)
+    {
+        //noinspection ConstantConditions
+        if (sensitivity == null)
+        {
+            List<Player> players = level.getEntitiesOfClass(Player.class, TOUCH_AABB.move(pos));
+            if (!players.isEmpty())
+            {
+                for(Player player : players)
+                {
+                    if (!player.isIgnoringBlockTriggers())
+                    {
+                        return 15;
+                    }
+                }
+            }
+
+            return 0;
+        }
+        return super.getSignalStrength(level, pos);
+    }
+
+    @Override
     public final BlockEntity newBlockEntity(BlockPos pos, BlockState state) { return new FramedBlockEntity(pos, state); }
 
     @Override
@@ -109,6 +133,18 @@ public class FramedPressurePlateBlock extends PressurePlateBlock implements IFra
                 BlockType.FRAMED_STONE_PRESSURE_PLATE,
                 Sensitivity.MOBS,
                 IFramedBlock.createProperties(BlockType.FRAMED_STONE_PRESSURE_PLATE)
+                        .requiresCorrectToolForDrops()
+                        .noCollission()
+                        .strength(0.5F)
+        );
+    }
+
+    public static FramedPressurePlateBlock obsidian() // Player-only
+    {
+        return new FramedPressurePlateBlock(
+                BlockType.FRAMED_OBSIDIAN_PRESSURE_PLATE,
+                null, //Abuse null for player-only sensitivity
+                IFramedBlock.createProperties(BlockType.FRAMED_OBSIDIAN_PRESSURE_PLATE)
                         .requiresCorrectToolForDrops()
                         .noCollission()
                         .strength(0.5F)

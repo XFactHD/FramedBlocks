@@ -38,6 +38,7 @@ public enum BlockType implements IBlockType
     FRAMED_IRON_TRAPDOOR          ( true, false, false,  true,  true, false, false, false, FramedTrapDoorBlock.CTM_PREDICATE, new TrapdoorSkipPredicate()),
     FRAMED_PRESSURE_PLATE         (false, false, false, false,  true, false, false, false),
     FRAMED_STONE_PRESSURE_PLATE   (false, false, false, false,  true, false, false, false),
+    FRAMED_OBSIDIAN_PRESSURE_PLATE(false, false, false, false,  true, false, false, false),
     FRAMED_GOLD_PRESSURE_PLATE    (false, false, false, false,  true, false, false, false),
     FRAMED_IRON_PRESSURE_PLATE    (false, false, false, false,  true, false, false, false),
     FRAMED_LADDER                 (false, false, false,  true,  true, false, false, false),

@@ -22,6 +22,8 @@ public class FramedMarkedPressurePlateModel extends FramedPressurePlateModel
 {
     public static final ResourceLocation STONE_FRAME_LOCATION = new ResourceLocation(FramedConstants.MOD_ID, "block/stone_plate_frame");
     public static final ResourceLocation STONE_FRAME_DOWN_LOCATION = new ResourceLocation(FramedConstants.MOD_ID, "block/stone_plate_down_frame");
+    public static final ResourceLocation OBSIDIAN_FRAME_LOCATION = new ResourceLocation(FramedConstants.MOD_ID, "block/obsidian_plate_frame");
+    public static final ResourceLocation OBSIDIAN_FRAME_DOWN_LOCATION = new ResourceLocation(FramedConstants.MOD_ID, "block/obsidian_plate_down_frame");
     public static final ResourceLocation GOLD_FRAME_LOCATION = new ResourceLocation(FramedConstants.MOD_ID, "block/gold_plate_frame");
     public static final ResourceLocation GOLD_FRAME_DOWN_LOCATION = new ResourceLocation(FramedConstants.MOD_ID, "block/gold_plate_down_frame");
     public static final ResourceLocation IRON_FRAME_LOCATION = new ResourceLocation(FramedConstants.MOD_ID, "block/iron_plate_frame");
@@ -72,6 +74,13 @@ public class FramedMarkedPressurePlateModel extends FramedPressurePlateModel
         return new FramedMarkedPressurePlateModel(state, baseModel, frame, powered);
     }
 
+    public static FramedMarkedPressurePlateModel obsidian(BlockState state, BakedModel baseModel)
+    {
+        boolean powered = state.getValue(PressurePlateBlock.POWERED);
+        ResourceLocation frame = powered ? OBSIDIAN_FRAME_DOWN_LOCATION : OBSIDIAN_FRAME_LOCATION;
+        return new FramedMarkedPressurePlateModel(state, baseModel, frame, powered);
+    }
+
     public static FramedMarkedPressurePlateModel gold(BlockState state, BakedModel baseModel)
     {
         boolean powered = state.getValue(WeightedPressurePlateBlock.POWER) > 0;
@@ -90,6 +99,8 @@ public class FramedMarkedPressurePlateModel extends FramedPressurePlateModel
     {
         event.register(FramedMarkedPressurePlateModel.STONE_FRAME_LOCATION);
         event.register(FramedMarkedPressurePlateModel.STONE_FRAME_DOWN_LOCATION);
+        event.register(FramedMarkedPressurePlateModel.OBSIDIAN_FRAME_LOCATION);
+        event.register(FramedMarkedPressurePlateModel.OBSIDIAN_FRAME_DOWN_LOCATION);
         event.register(FramedMarkedPressurePlateModel.GOLD_FRAME_LOCATION);
         event.register(FramedMarkedPressurePlateModel.GOLD_FRAME_DOWN_LOCATION);
         event.register(FramedMarkedPressurePlateModel.IRON_FRAME_LOCATION);
@@ -102,6 +113,8 @@ public class FramedMarkedPressurePlateModel extends FramedPressurePlateModel
 
         FRAME_MODELS.put(STONE_FRAME_LOCATION, registry.get(STONE_FRAME_LOCATION));
         FRAME_MODELS.put(STONE_FRAME_DOWN_LOCATION, registry.get(STONE_FRAME_DOWN_LOCATION));
+        FRAME_MODELS.put(OBSIDIAN_FRAME_LOCATION, registry.get(OBSIDIAN_FRAME_LOCATION));
+        FRAME_MODELS.put(OBSIDIAN_FRAME_DOWN_LOCATION, registry.get(OBSIDIAN_FRAME_DOWN_LOCATION));
         FRAME_MODELS.put(GOLD_FRAME_LOCATION, registry.get(GOLD_FRAME_LOCATION));
         FRAME_MODELS.put(GOLD_FRAME_DOWN_LOCATION, registry.get(GOLD_FRAME_DOWN_LOCATION));
         FRAME_MODELS.put(IRON_FRAME_LOCATION, registry.get(IRON_FRAME_LOCATION));
