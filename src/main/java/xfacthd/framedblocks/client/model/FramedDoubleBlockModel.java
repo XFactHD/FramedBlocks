@@ -24,7 +24,6 @@ import xfacthd.framedblocks.common.blockentity.FramedDoubleBlockEntity;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.*;
-import java.util.stream.Collectors;
 
 public abstract class FramedDoubleBlockModel extends BakedModelProxy
 {
@@ -42,17 +41,20 @@ public abstract class FramedDoubleBlockModel extends BakedModelProxy
     @Override
     public List<BakedQuad> getQuads(@Nullable BlockState state, @Nullable Direction side, @Nonnull RandomSource rand, @Nonnull ModelData extraData, RenderType layer)
     {
+        List<List<BakedQuad>> quads = new ArrayList<>(2);
+        Tuple<BakedModel, BakedModel> models = getModels();
+
         ModelData dataLeft = extraData.get(FramedDoubleBlockEntity.DATA_LEFT);
-        List<BakedQuad> quads = new ArrayList<>(
-                getModels().getA().getQuads(dummyStates.getA(), side, rand, dataLeft != null ? dataLeft : ModelData.EMPTY, layer)
+        quads.add(
+                models.getA().getQuads(dummyStates.getA(), side, rand, dataLeft != null ? dataLeft : ModelData.EMPTY, layer)
         );
 
         ModelData dataRight = extraData.get(FramedDoubleBlockEntity.DATA_RIGHT);
-        quads.addAll(invertTintIndizes(
-                getModels().getB().getQuads(dummyStates.getB(), side, rand, dataRight != null ? dataRight : ModelData.EMPTY, layer)
+        quads.add(invertTintIndizes(
+                models.getB().getQuads(dummyStates.getB(), side, rand, dataRight != null ? dataRight : ModelData.EMPTY, layer)
         ));
 
-        return quads;
+        return ConcatenatedListView.of(quads);
     }
 
     @Override
@@ -162,8 +164,11 @@ public abstract class FramedDoubleBlockModel extends BakedModelProxy
 
     private static List<BakedQuad> invertTintIndizes(List<BakedQuad> quads)
     {
-        return quads.stream()
-                .map(ModelUtils::invertTintIndex)
-                .collect(Collectors.toList());
+        List<BakedQuad> inverted = new ArrayList<>(quads.size());
+        for (BakedQuad quad : quads)
+        {
+            inverted.add(ModelUtils.invertTintIndex(quad));
+        }
+        return inverted;
     }
 }
