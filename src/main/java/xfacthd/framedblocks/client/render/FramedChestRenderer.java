@@ -17,6 +17,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
 import com.mojang.math.Vector3f;
 import net.minecraft.world.phys.Vec3;
+import net.minecraftforge.client.RenderTypeHelper;
 import net.minecraftforge.client.model.data.ModelData;
 import xfacthd.framedblocks.api.util.FramedProperties;
 import xfacthd.framedblocks.api.util.Utils;
@@ -33,7 +34,6 @@ import java.util.*;
 public class FramedChestRenderer implements BlockEntityRenderer<FramedChestBlockEntity>
 {
     private static final Table<Direction, LatchType, BakedModel> LID_MODELS = HashBasedTable.create(4, 3);
-    private static final RenderType[] BUFFER_TYPE_LOOKUP = makeBufferTypeLookup();
 
     @SuppressWarnings("unused")
     public FramedChestRenderer(BlockEntityRendererProvider.Context ctx) { }
@@ -84,7 +84,7 @@ public class FramedChestRenderer implements BlockEntityRenderer<FramedChestBlock
 
         for (RenderType type : model.getRenderTypes(state, rand, data))
         {
-            RenderType bufferType = BUFFER_TYPE_LOOKUP[type.getChunkLayerId()];
+            RenderType bufferType = RenderTypeHelper.getEntityRenderType(type, false);
 
             renderer.renderModel(
                     matrix.last(),
@@ -124,39 +124,6 @@ public class FramedChestRenderer implements BlockEntityRenderer<FramedChestBlock
     }
 
 
-
-    private static RenderType[] makeBufferTypeLookup()
-    {
-        RenderType[] types = new RenderType[RenderType.chunkBufferLayers().size()];
-
-        for (RenderType type : RenderType.chunkBufferLayers())
-        {
-            RenderType bufferType;
-            if (type == RenderType.solid())
-            {
-                bufferType = Sheets.solidBlockSheet();
-            }
-            else if (type == RenderType.cutout() || type == RenderType.cutoutMipped())
-            {
-                bufferType = Sheets.cutoutBlockSheet();
-            }
-            else if (type == RenderType.translucent())
-            {
-                bufferType = Sheets.translucentItemSheet();
-            }
-            else if (type == RenderType.tripwire())
-            {
-                bufferType = type;
-            }
-            else
-            {
-                throw new IllegalArgumentException("Unknown chunk render type, this should not be possible: " + type);
-            }
-            types[type.getChunkLayerId()] = bufferType;
-        }
-
-        return types;
-    }
 
     public static void onModelsLoaded(Map<ResourceLocation, BakedModel> registry)
     {
