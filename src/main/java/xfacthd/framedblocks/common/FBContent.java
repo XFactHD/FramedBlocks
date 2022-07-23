@@ -60,7 +60,7 @@ public final class FBContent
     private static final Map<BlockType, RegistryObject<Block>> BLOCKS_BY_TYPE = new EnumMap<>(BlockType.class);
 
     // region Blocks
-    public static final RegistryObject<Block> blockFramedCube = registerBlock(FramedCube::new, BlockType.FRAMED_CUBE);
+    public static final RegistryObject<Block> blockFramedCube = registerBlock(FramedCube::cube, BlockType.FRAMED_CUBE);
     public static final RegistryObject<Block> blockFramedSlope = registerBlock(FramedSlopeBlock::new, BlockType.FRAMED_SLOPE);
     public static final RegistryObject<Block> blockFramedCornerSlope = registerBlock(FramedCornerSlopeBlock::new, BlockType.FRAMED_CORNER_SLOPE);
     public static final RegistryObject<Block> blockFramedInnerCornerSlope = registerBlock(FramedCornerSlopeBlock::new, BlockType.FRAMED_INNER_CORNER_SLOPE);
@@ -132,6 +132,7 @@ public final class FBContent
     public static final RegistryObject<Block> blockFramedDoubleStairs = registerBlock(FramedDoubleStairsBlock::new, BlockType.FRAMED_DOUBLE_STAIRS);
     public static final RegistryObject<Block> blockFramedVerticalDoubleStairs = registerBlock(FramedVerticalDoubleStairsBlock::new, BlockType.FRAMED_VERTICAL_DOUBLE_STAIRS);
     public static final RegistryObject<Block> blockFramedWallBoard = registerBlock(FramedWallBoardBlock::new, BlockType.FRAMED_WALL_BOARD);
+    public static final RegistryObject<Block> blockFramedGlowingCube = registerBlock(FramedCube::glowingCube, BlockType.FRAMED_GLOWING_CUBE);
     // endregion
 
     // region Items

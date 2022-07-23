@@ -102,6 +102,7 @@ public class FramedBlockStateProvider extends BlockStateProvider
         registerFramedRedstoneBlock();
         registerFramedIronDoor();
         registerFramedIronTrapDoor();
+        registerFramedGlowingCube();
     }
 
     private void registerFramedSlab(ModelFile cube)
@@ -542,6 +543,23 @@ public class FramedBlockStateProvider extends BlockStateProvider
                 true
         );
         simpleBlockItem(FBContent.blockFramedIronTrapDoor, trapdoorBot, "cutout");
+    }
+
+    private void registerFramedGlowingCube()
+    {
+        ModelFile block = models().withExistingParent("framed_glowing_cube", "block/block")
+                .element()
+                .cube("#white")
+                .end()
+                .element()
+                .cube("#frame")
+                .end()
+                .texture("frame", TEXTURE)
+                .texture("white", new ResourceLocation("forge", "white"))
+                .texture("particle", TEXTURE)
+                .renderType("cutout");
+
+        simpleBlockWithItem(FBContent.blockFramedGlowingCube, block);
     }
 
 

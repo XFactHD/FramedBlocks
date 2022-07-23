@@ -69,6 +69,7 @@
     "framedblocks:framed_inv_double_slope_panel",
     "framedblocks:framed_double_stairs",
     "framedblocks:framed_vertical_double_stairs",
-    "framedblocks:framed_wall_board"
+    "framedblocks:framed_wall_board",
+    "framedblocks:framed_glowing_cube"
   ]
 }
