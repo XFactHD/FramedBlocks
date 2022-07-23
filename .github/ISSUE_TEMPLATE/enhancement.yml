@@ -1,5 +1,9 @@
 name: Feature Request
 description: Request a new block or other feature to be added to FramedBlocks
+assignees:
+  - XFactHD
+labels:
+  - enhancement
 body:
   - type: markdown
     attributes:
