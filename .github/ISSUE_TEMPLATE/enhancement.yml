@@ -1,0 +1,20 @@
+name: Feature Request
+description: Request a new block or other feature to be added to FramedBlocks
+title: "[Feature]: "
+assignees:
+  - XFactHD
+labels:
+  - enhancement
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Provide a summary of the suggestion in the title.
+  - type: textarea
+    id: description
+    attributes:
+      label: Describe the feature
+      description: |
+        Please provide a detailed description of the block or feature. Feel free to include pictures to illustrate your idea.
+    validations:
+      required: true

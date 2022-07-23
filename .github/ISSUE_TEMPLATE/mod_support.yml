@@ -1,0 +1,29 @@
+name: Mod Support
+description: Request integration with another mod
+title: "[Mod Support]: "
+assignees:
+  - XFactHD
+labels:
+  - enhancement
+  - mod support
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Provide a summary of the suggestion in the title.
+  - type: input
+    id: other_mod
+    attributes:
+      label: The mod to integrate with
+      description: |
+        Please provide a link to the mod you are requesting integration with
+    validations:
+      required: true
+  - type: textarea
+    id: description
+    attributes:
+      label: Describe the feature
+      description: |
+        Please provide a detailed description of the integration with the other mod.
+    validations:
+      required: true
