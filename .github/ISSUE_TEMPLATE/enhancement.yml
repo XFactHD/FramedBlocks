@@ -1,5 +1,6 @@
 name: Feature Request
 description: Request a new block or other feature to be added to FramedBlocks
+title: "[Feature]: "
 assignees:
   - XFactHD
 labels:
