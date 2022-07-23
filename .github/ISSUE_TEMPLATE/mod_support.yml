@@ -1,5 +1,10 @@
 name: Mod Support
 description: Request integration with another mod
+assignees:
+  - XFactHD
+labels:
+  - enhancement
+  - mod support
 body:
   - type: markdown
     attributes:
