@@ -1,0 +1,13 @@
+name: Question
+description: If you have a problem that does not fit the other categories, please report it here.
+title: "[Question]: "
+assignees:
+  - XFactHD
+labels:
+  - question
+body:
+  - type: textarea
+    attributes:
+      label: Question
+    validations:
+      required: true

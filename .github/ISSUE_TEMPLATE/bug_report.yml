@@ -1,0 +1,71 @@
+name: Bug Report
+description: If you found a bug or encountered a crash, please report it here.
+title: "[Bug]: "
+labels: ["bug"]
+assignees:
+  - XFactHD
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Please provide a summary of the issue in the title.
+  - type: dropdown
+    id: mc_version
+    attributes:
+      label: Minecraft version
+      options:
+        - 1.19
+        - 1.18
+        - 1.17 - UNSUPPORTED
+        - 1.16 - UNSUPPORTED
+        - 1.15 - UNSUPPORTED
+    validations:
+      required: true
+  - type: input
+    id: forge_version
+    attributes:
+      label: Forge version
+    validations:
+      required: true
+  - type: input
+    id: framedblocks_version
+    attributes:
+      label: FramedBlocks version
+    validations:
+      required: true
+  - type: textarea
+    id: description
+    attributes:
+      label: Describe the bug
+      description: |
+        Please provide a detailed description of the bug.
+    validations:
+      required: true
+  - type: textarea
+    id: reproduction
+    attributes:
+      label: How to reproduce the bug
+      description: |
+        Please provide detailed steps to reproduce the issue.
+    validations:
+      required: true
+  - type: textarea
+    id: expected
+    attributes:
+      label: Expected behavior
+      description: |
+        Please provide a detailed description of what you expected to happen.
+    validations:
+      required: true
+  - type: textarea
+    id: additional
+    attributes:
+      label: Additional details
+      description: |
+        Provide any additional details which do not fit anywhere else
+  - type: input
+    id: crashlog
+    attributes:
+      label: Crash log
+      description: |
+        If the game crashed, please provide a link to the crashlog, preferably on [Gist](https://gist.github.com/).
