@@ -23,9 +23,14 @@ import net.minecraft.world.phys.Vec3;
 import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import net.minecraftforge.fml.loading.FMLEnvironment;
+import net.minecraftforge.fml.util.ObfuscationReflectionHelper;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegistryObject;
 import xfacthd.framedblocks.api.util.client.ClientUtils;
+
+import java.lang.invoke.*;
+import java.lang.reflect.Field;
+import java.lang.reflect.Method;
 
 public final class Utils
 {
@@ -198,6 +203,45 @@ public final class Utils
     }
 
     public static ResourceLocation rl(String path) { return new ResourceLocation(FramedConstants.MOD_ID, path); }
+
+    public static MethodHandle unreflectMethod(Class<?> clazz, String srgMethodName, Class<?>... paramTypes)
+    {
+        Method method = ObfuscationReflectionHelper.findMethod(clazz, srgMethodName, paramTypes);
+        try
+        {
+            return MethodHandles.publicLookup().unreflect(method);
+        }
+        catch (IllegalAccessException e)
+        {
+            throw new RuntimeException("Failed to unreflect method '%s#%s()'".formatted(clazz.getName(), srgMethodName), e);
+        }
+    }
+
+    public static MethodHandle unreflectField(Class<?> clazz, String srgFieldName)
+    {
+        Field field = ObfuscationReflectionHelper.findField(clazz, srgFieldName);
+        try
+        {
+            return MethodHandles.publicLookup().unreflectGetter(field);
+        }
+        catch (IllegalAccessException e)
+        {
+            throw new RuntimeException("Failed to unreflect field '%s#%s'".formatted(clazz.getName(), srgFieldName), e);
+        }
+    }
+
+    @SuppressWarnings("unchecked")
+    public static <T> T invokeMethodHandle(MethodHandle method, Object... args)
+    {
+        try
+        {
+            return (T) method.invokeExact(args);
+        }
+        catch (Throwable e)
+        {
+            throw new RuntimeException("Failed to invoke MethodHandle '%s'".formatted(method.toString()), e);
+        }
+    }
 
 
 

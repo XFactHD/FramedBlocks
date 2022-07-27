@@ -3,6 +3,7 @@ package xfacthd.framedblocks.api.util.client;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.block.model.BakedQuad;
 import net.minecraft.client.resources.model.BakedModel;
+import net.minecraft.client.resources.model.WeightedBakedModel;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.util.Mth;
@@ -16,6 +17,7 @@ import net.minecraftforge.client.model.data.ModelData;
 import xfacthd.framedblocks.api.util.FramedBlockData;
 import xfacthd.framedblocks.api.util.Utils;
 
+import java.lang.invoke.MethodHandle;
 import java.util.*;
 
 public final class ModelUtils
@@ -338,8 +340,17 @@ public final class ModelUtils
         return model.getModelData(level, pos, state, data);
     }
 
+    private static final MethodHandle WBM_WRAPPED_MODEL = Utils.unreflectField(WeightedBakedModel.class, "f_119542_");
+
     public static List<BakedQuad> getAllCullableQuads(BakedModel model, BlockState state, RandomSource rand, RenderType renderType)
     {
+        if (model instanceof WeightedBakedModel weighted)
+        {
+            // Use wrapped model for consistency and to avoid issues with invisible faces
+            model = Utils.invokeMethodHandle(WBM_WRAPPED_MODEL, weighted);
+            Objects.requireNonNull(model, "Wrapped model of WeightedBakedModel is null?!");
+        }
+
         List<BakedQuad> quads = new ArrayList<>();
         for (Direction dir : Direction.values())
         {
