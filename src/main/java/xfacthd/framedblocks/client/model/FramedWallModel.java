@@ -1,16 +1,16 @@
 package xfacthd.framedblocks.client.model;
 
-import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.level.block.state.properties.WallSide;
+import com.mojang.math.Vector4f;
 import net.minecraft.client.renderer.block.model.BakedQuad;
 import net.minecraft.client.resources.model.BakedModel;
-import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.core.Direction;
-import com.mojang.math.Vector4f;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.state.properties.BlockStateProperties;
+import net.minecraft.world.level.block.state.properties.WallSide;
 import xfacthd.framedblocks.api.model.FramedBlockModel;
+import xfacthd.framedblocks.api.model.quad.Modifiers;
+import xfacthd.framedblocks.api.model.quad.QuadModifier;
 import xfacthd.framedblocks.api.util.Utils;
-import xfacthd.framedblocks.api.util.client.BakedQuadTransformer;
-import xfacthd.framedblocks.api.util.client.ModelUtils;
 
 import java.util.List;
 import java.util.Map;
@@ -27,6 +27,11 @@ public class FramedWallModel extends FramedBlockModel
             new Vector4f(     0F,  5F/16F,  4F/16F, 11F/16F), //West, with center pillar
             new Vector4f(12F/16F,  5F/16F,      1F, 11F/16F)  //East, with center pillar
     };
+    private static final float LOW_HEIGHT = 14F/16F;
+    private static final float SMALL_MIN = 5F/16F;
+    private static final float SMALL_MAX = 11F/16F;
+    private static final float LARGE_MIN = 4F/16F;
+    private static final float LARGE_MAX = 12F/16F;
 
     private final boolean center;
     private final WallSide north;
@@ -77,33 +82,23 @@ public class FramedWallModel extends FramedBlockModel
     {
         if (height != WallSide.NONE)
         {
-            if (Utils.isY(quad.getDirection()))
+            Direction quadDir = quad.getDirection();
+            if (Utils.isY(quadDir))
             {
                 Vector4f rect = rects[dir.ordinal() - 2 + (center ? 4 : 0)];
-                BakedQuad topBotQuad = ModelUtils.duplicateQuad(quad);
-                if (BakedQuadTransformer.createTopBottomQuad(topBotQuad, rect.x(), rect.y(), rect.z(), rect.w()))
-                {
-                    if (height == WallSide.TALL || quad.getDirection() == Direction.DOWN)
-                    {
-                        quadMap.get(quad.getDirection()).add(topBotQuad);
-                    }
-                    else
-                    {
-                        BakedQuadTransformer.setQuadPosInFacingDir(topBotQuad, 14F / 16F);
-                        quadMap.get(null).add(topBotQuad);
-                    }
-                }
+                boolean inset = height != WallSide.TALL && quadDir != Direction.DOWN;
+                QuadModifier.geometry(quad)
+                        .apply(Modifiers.cutTopBottom(rect.x(), rect.y(), rect.z(), rect.w()))
+                        .applyIf(Modifiers.setPosition(LOW_HEIGHT), inset)
+                        .export(quadMap.get(inset ? null : quadDir));
             }
-            else if (quad.getDirection() == dir.getClockWise() || quad.getDirection() == dir.getCounterClockWise())
+            else if (quadDir.getAxis() != dir.getAxis())
             {
-                BakedQuad sideQuad = ModelUtils.duplicateQuad(quad);
-                if ((height == WallSide.TALL || BakedQuadTransformer.createHorizontalSideQuad(sideQuad, false, 14F/16F)) &&
-                    BakedQuadTransformer.createVerticalSideQuad(sideQuad, dir.getOpposite(), center ? 4F/16F : 5F/16F)
-                )
-                {
-                    BakedQuadTransformer.setQuadPosInFacingDir(sideQuad, 11F/16F);
-                    quadMap.get(null).add(sideQuad);
-                }
+                QuadModifier.geometry(quad)
+                        .apply(Modifiers.cutSideLeftRight(dir.getOpposite(), center ? LARGE_MIN : SMALL_MIN))
+                        .applyIf(Modifiers.cutSideUpDown(false, LOW_HEIGHT), height != WallSide.TALL)
+                        .apply(Modifiers.setPosition(SMALL_MAX))
+                        .export(quadMap.get(null));
             }
         }
     }
@@ -112,60 +107,50 @@ public class FramedWallModel extends FramedBlockModel
     {
         if (quad.getDirection() == dir && height != WallSide.NONE)
         {
-            BakedQuad sideQuad = ModelUtils.duplicateQuad(quad);
-            if (BakedQuadTransformer.createSideQuad(sideQuad, 5F / 16F, 0F, 11F / 16F, height == WallSide.TALL ? 1F : 14F / 16F))
-            {
-                quadMap.get(dir).add(sideQuad);
-            }
+            QuadModifier.geometry(quad)
+                    .apply(Modifiers.cutSide(SMALL_MIN, 0, SMALL_MAX, height == WallSide.TALL ? 1F : LOW_HEIGHT))
+                    .export(quadMap.get(dir));
         }
     }
 
     private void buildCenterPillar(Map<Direction, List<BakedQuad>> quadMap, BakedQuad quad)
     {
+        Direction quadDir = quad.getDirection();
         if (center)
         {
-            if (Utils.isY(quad.getDirection()))
+            if (Utils.isY(quadDir))
             {
-                BakedQuad pillarQuad = ModelUtils.duplicateQuad(quad);
-                if (BakedQuadTransformer.createTopBottomQuad(pillarQuad, 4F/16F, 4F/16F, 12F/16F, 12F/16F))
-                {
-                    quadMap.get(quad.getDirection()).add(pillarQuad);
-                }
+                QuadModifier.geometry(quad)
+                        .apply(Modifiers.cutTopBottom(LARGE_MIN, LARGE_MIN, LARGE_MAX, LARGE_MAX))
+                        .export(quadMap.get(quadDir));
             }
             else
             {
-                BakedQuad pillarQuad = ModelUtils.duplicateQuad(quad);
-                if (BakedQuadTransformer.createSideQuad(pillarQuad, 4F / 16F, 0F, 12F / 16F, 1F))
-                {
-                    BakedQuadTransformer.setQuadPosInFacingDir(pillarQuad, 12F / 16F);
-                    quadMap.get(null).add(pillarQuad);
-                }
+                QuadModifier.geometry(quad)
+                        .apply(Modifiers.cutSide(LARGE_MIN, 0, LARGE_MAX, 1))
+                        .apply(Modifiers.setPosition(LARGE_MAX))
+                        .export(quadMap.get(null));
             }
         }
         else
         {
             boolean tall = north == WallSide.TALL || east == WallSide.TALL || south == WallSide.TALL || west == WallSide.TALL;
 
-            if (Utils.isY(quad.getDirection()))
+            switch (quadDir)
             {
-                BakedQuad pillarQuad = ModelUtils.duplicateQuad(quad);
-                if (BakedQuadTransformer.createTopBottomQuad(pillarQuad, 5F/16F, 5F/16F, 11F/16F, 11F/16F))
+                case UP, DOWN ->
                 {
-                    if (!tall && quad.getDirection() == Direction.UP)
-                    {
-                        BakedQuadTransformer.setQuadPosInFacingDir(pillarQuad, 14F / 16F);
-                        quadMap.get(null).add(pillarQuad);
-                    }
-                    else
-                    {
-                        quadMap.get(quad.getDirection()).add(pillarQuad);
-                    }
+                    boolean inset = !tall && quadDir == Direction.UP;
+                    QuadModifier.geometry(quad)
+                            .apply(Modifiers.cutTopBottom(SMALL_MIN, SMALL_MIN, SMALL_MAX, SMALL_MAX))
+                            .applyIf(Modifiers.setPosition(LOW_HEIGHT), inset)
+                            .export(quadMap.get(inset ? null : quadDir));
                 }
+                case NORTH -> buildSmallCenterSide(quadMap.get(null), quad, north, tall);
+                case EAST -> buildSmallCenterSide(quadMap.get(null), quad, east , tall);
+                case SOUTH -> buildSmallCenterSide(quadMap.get(null), quad, south, tall);
+                case WEST -> buildSmallCenterSide(quadMap.get(null), quad, west , tall);
             }
-            else if (quad.getDirection() == Direction.NORTH) { buildSmallCenterSide(quadMap.get(null), quad, north, tall); }
-            else if (quad.getDirection() == Direction.EAST ) { buildSmallCenterSide(quadMap.get(null), quad, east , tall); }
-            else if (quad.getDirection() == Direction.SOUTH) { buildSmallCenterSide(quadMap.get(null), quad, south, tall); }
-            else if (quad.getDirection() == Direction.WEST ) { buildSmallCenterSide(quadMap.get(null), quad, west , tall); }
         }
     }
 
@@ -173,21 +158,17 @@ public class FramedWallModel extends FramedBlockModel
     {
         if (height == WallSide.NONE)
         {
-            BakedQuad pillarQuad = ModelUtils.duplicateQuad(quad);
-            if (BakedQuadTransformer.createSideQuad(pillarQuad, 5F / 16F, 0F, 11F / 16F, tall ? 1F : 14F/16F))
-            {
-                BakedQuadTransformer.setQuadPosInFacingDir(pillarQuad, 11F / 16F);
-                quadList.add(pillarQuad);
-            }
+            QuadModifier.geometry(quad)
+                    .apply(Modifiers.cutSide(SMALL_MIN, 0, SMALL_MAX, tall ? 1 : LOW_HEIGHT))
+                    .apply(Modifiers.setPosition(SMALL_MAX))
+                    .export(quadList);
         }
         else if (tall && height == WallSide.LOW)
         {
-            BakedQuad pillarQuad = ModelUtils.duplicateQuad(quad);
-            if (BakedQuadTransformer.createSideQuad(pillarQuad, 5F / 16F, 14F/16F, 11F / 16F, 1F))
-            {
-                BakedQuadTransformer.setQuadPosInFacingDir(pillarQuad, 11F / 16F);
-                quadList.add(pillarQuad);
-            }
+            QuadModifier.geometry(quad)
+                    .apply(Modifiers.cutSide(SMALL_MIN, LOW_HEIGHT, SMALL_MAX, 1))
+                    .apply(Modifiers.setPosition(SMALL_MAX))
+                    .export(quadList);
         }
     }
 }

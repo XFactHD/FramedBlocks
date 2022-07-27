@@ -16,14 +16,18 @@ import net.minecraftforge.client.model.data.ModelData;
 import org.jetbrains.annotations.NotNull;
 import xfacthd.framedblocks.api.model.BakedModelProxy;
 import xfacthd.framedblocks.api.model.FramedBlockModel;
+import xfacthd.framedblocks.api.model.quad.Modifiers;
+import xfacthd.framedblocks.api.model.quad.QuadModifier;
 import xfacthd.framedblocks.api.util.Utils;
-import xfacthd.framedblocks.api.util.client.*;
+import xfacthd.framedblocks.api.util.client.ModelCache;
+import xfacthd.framedblocks.api.util.client.ModelUtils;
 import xfacthd.framedblocks.common.blockentity.FramedCollapsibleBlockEntity;
 import xfacthd.framedblocks.common.data.PropertyHolder;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-import java.util.*;
+import java.util.List;
+import java.util.Map;
 
 public class FramedCollapsibleBlockModel extends BakedModelProxy
 {
@@ -100,25 +104,25 @@ public class FramedCollapsibleBlockModel extends BakedModelProxy
         @Override
         protected void transformQuad(Map<Direction, List<BakedQuad>> quadMap, BakedQuad quad)
         {
-            if (collapsedFace == null || quad.getDirection() == collapsedFace.getOpposite())
+            Direction quadDir = quad.getDirection();
+            if (collapsedFace == null || quadDir == collapsedFace.getOpposite())
             {
-                quadMap.get(quad.getDirection()).add(quad);
+                quadMap.get(quadDir).add(quad);
                 return;
             }
 
-            if (quad.getDirection() == collapsedFace)
+            if (quadDir == collapsedFace)
             {
-                BakedQuad collapsedQuad = ModelUtils.duplicateQuad(quad);
-                BakedQuadTransformer.setVertexPosInFacingDir(collapsedQuad, vertexPos);
-                quadMap.get(null).add(collapsedQuad);
+                QuadModifier.geometry(quad)
+                        .apply(Modifiers.setPosition(vertexPos, true))
+                        .export(quadMap.get(null));
             }
             else
             {
-                BakedQuad cutQuad = ModelUtils.duplicateQuad(quad);
                 if (Utils.isY(collapsedFace))
                 {
                     boolean top = collapsedFace == Direction.UP;
-                    int idxOff = getYCollapsedIndexOffset(quad.getDirection());
+                    int idxOff = getYCollapsedIndexOffset(quadDir);
                     float posOne = vertexPos[idxOff];
                     float posTwo;
                     if (top)
@@ -132,12 +136,11 @@ public class FramedCollapsibleBlockModel extends BakedModelProxy
                         posTwo = vertexPos[idxTwo % 4];
                     }
 
-                    if (BakedQuadTransformer.createHorizontalSideQuad(cutQuad, !top, posOne, posTwo))
-                    {
-                        quadMap.get(quad.getDirection()).add(cutQuad);
-                    }
+                    QuadModifier.geometry(quad)
+                            .apply(Modifiers.cutSideUpDown(!top, posOne, posTwo))
+                            .export(quadMap.get(quadDir));
                 }
-                else if (Utils.isY(quad.getDirection()))
+                else if (Utils.isY(quadDir))
                 {
                     boolean top = quad.getDirection() == Direction.UP;
                     float posOne = vertexPos[top ? 0 : 1];
@@ -150,21 +153,19 @@ public class FramedCollapsibleBlockModel extends BakedModelProxy
                         posTwo = temp;
                     }
 
-                    if (BakedQuadTransformer.createTopBottomQuad(cutQuad, collapsedFace, posOne, posTwo))
-                    {
-                        quadMap.get(quad.getDirection()).add(cutQuad);
-                    }
+                    QuadModifier.geometry(quad)
+                            .apply(Modifiers.cutTopBottom(collapsedFace, posOne, posTwo))
+                            .export(quadMap.get(quadDir));
                 }
                 else
                 {
-                    boolean right = collapsedFace == cutQuad.getDirection().getClockWise();
+                    boolean right = collapsedFace == quadDir.getClockWise();
                     float posTop = vertexPos[right ? 3 : 0];
                     float posBot = vertexPos[right ? 2 : 1];
 
-                    if (BakedQuadTransformer.createVerticalSideQuad(cutQuad, collapsedFace, posTop, posBot))
-                    {
-                        quadMap.get(quad.getDirection()).add(cutQuad);
-                    }
+                    QuadModifier.geometry(quad)
+                            .apply(Modifiers.cutSideLeftRight(collapsedFace, posTop, posBot))
+                            .export(quadMap.get(quadDir));
                 }
             }
         }

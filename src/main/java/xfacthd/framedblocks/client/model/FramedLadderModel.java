@@ -1,15 +1,15 @@
 package xfacthd.framedblocks.client.model;
 
-import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.client.renderer.block.model.BakedQuad;
 import net.minecraft.client.resources.model.BakedModel;
 import net.minecraft.core.Direction;
+import net.minecraft.world.level.block.state.BlockState;
 import xfacthd.framedblocks.api.model.FramedBlockModel;
+import xfacthd.framedblocks.api.model.quad.Modifiers;
+import xfacthd.framedblocks.api.model.quad.QuadModifier;
 import xfacthd.framedblocks.api.util.FramedProperties;
-import xfacthd.framedblocks.api.util.client.BakedQuadTransformer;
-import xfacthd.framedblocks.api.util.client.ModelUtils;
+import xfacthd.framedblocks.api.util.Utils;
 import xfacthd.framedblocks.common.FBContent;
-import xfacthd.framedblocks.common.data.PropertyHolder;
 
 import java.util.List;
 import java.util.Map;
@@ -17,6 +17,7 @@ import java.util.Map;
 public class FramedLadderModel extends FramedBlockModel
 {
     private static final float RUNG_DEPTH = 1F/16F;
+    private static final float LEG_DEPTH = RUNG_DEPTH * 2F;
     private static final float RUNG_OFFSET = .5F/16F;
     private static final float[] RUNGS = new float[] {
             1.5F/16F,
@@ -36,93 +37,65 @@ public class FramedLadderModel extends FramedBlockModel
     @Override
     protected void transformQuad(Map<Direction, List<BakedQuad>> quadMap, BakedQuad quad)
     {
-        if (quad.getDirection() == Direction.UP || quad.getDirection() == Direction.DOWN)
+        Direction quadDir = quad.getDirection();
+        if (Utils.isY(quadDir))
         {
-            BakedQuad topBotQuad = ModelUtils.duplicateQuad(quad);
-            if (BakedQuadTransformer.createTopBottomQuad(topBotQuad, dir.getOpposite(), RUNG_DEPTH * 2F) &&
-                BakedQuadTransformer.createTopBottomQuad(topBotQuad, dir.getClockWise(), RUNG_DEPTH * 2F)
-            )
-            {
-                quadMap.get(quad.getDirection()).add(topBotQuad);
-            }
+            QuadModifier capMod = QuadModifier.geometry(quad)
+                    .apply(Modifiers.cutTopBottom(dir.getOpposite(), LEG_DEPTH));
 
-            topBotQuad = ModelUtils.duplicateQuad(quad);
-            if (BakedQuadTransformer.createTopBottomQuad(topBotQuad, dir.getOpposite(), RUNG_DEPTH * 2F) &&
-                BakedQuadTransformer.createTopBottomQuad(topBotQuad, dir.getCounterClockWise(), RUNG_DEPTH * 2F)
-            )
-            {
-                quadMap.get(quad.getDirection()).add(topBotQuad);
-            }
+            capMod.derive().apply(Modifiers.cutTopBottom(dir.getClockWise(), LEG_DEPTH))
+                    .export(quadMap.get(quadDir));
+
+            capMod.apply(Modifiers.cutTopBottom(dir.getCounterClockWise(), LEG_DEPTH))
+                    .export(quadMap.get(quadDir));
+
+            QuadModifier rungMod = QuadModifier.geometry(quad)
+                    .apply(Modifiers.cutTopBottom(dir, 1F - RUNG_OFFSET))
+                    .apply(Modifiers.cutTopBottom(dir.getOpposite(), RUNG_DEPTH + RUNG_OFFSET))
+                    .apply(Modifiers.cutTopBottom(dir.getClockWise(), 1F - LEG_DEPTH))
+                    .apply(Modifiers.cutTopBottom(dir.getCounterClockWise(), 1F - LEG_DEPTH));
 
             for (int i = 0; i < 4; i++)
             {
-                topBotQuad = ModelUtils.duplicateQuad(quad);
-                if (BakedQuadTransformer.createTopBottomQuad(topBotQuad, dir, 1F - RUNG_OFFSET) &&
-                    BakedQuadTransformer.createTopBottomQuad(topBotQuad, dir.getOpposite(), RUNG_DEPTH + RUNG_OFFSET)
-                )
-                {
-                    float height = quad.getDirection() == Direction.DOWN ? 1F - RUNGS[i] : RUNGS[i] + RUNG_DEPTH;
-                    BakedQuadTransformer.setQuadPosInFacingDir(topBotQuad, height);
-                    quadMap.get(null).add(topBotQuad);
-                }
+                // Don't need to derive since the quad is only moved
+                float height = quad.getDirection() == Direction.DOWN ? 1F - RUNGS[i] : RUNGS[i] + RUNG_DEPTH;
+                rungMod.apply(Modifiers.setPosition(height))
+                        .export(quadMap.get(null));
             }
         }
-        else if (quad.getDirection() == dir.getClockWise() || quad.getDirection() == dir.getCounterClockWise())
+        else if (quadDir.getAxis() == dir.getAxis())
         {
-            BakedQuad sideQuad = ModelUtils.duplicateQuad(quad);
-            if (BakedQuadTransformer.createVerticalSideQuad(sideQuad, dir.getOpposite(), RUNG_DEPTH * 2F))
-            {
-                quadMap.get(quad.getDirection()).add(sideQuad);
+            boolean opposite = quadDir == dir.getOpposite();
 
-                sideQuad = ModelUtils.duplicateQuad(sideQuad);
-                BakedQuadTransformer.setQuadPosInFacingDir(sideQuad, RUNG_DEPTH * 2F);
-                quadMap.get(null).add(sideQuad);
-            }
-        }
-        else if (quad.getDirection() == dir || quad.getDirection() == dir.getOpposite())
-        {
-            boolean opposite = quad.getDirection() == dir.getOpposite();
+            QuadModifier.geometry(quad)
+                    .apply(Modifiers.cutSideLeftRight(dir.getClockWise(), LEG_DEPTH))
+                    .applyIf(Modifiers.setPosition(LEG_DEPTH), opposite)
+                    .export(quadMap.get(opposite ? null : quadDir));
 
-            BakedQuad sideQuad = ModelUtils.duplicateQuad(quad);
-            if (BakedQuadTransformer.createVerticalSideQuad(sideQuad, dir.getClockWise(), RUNG_DEPTH * 2F))
-            {
-                if (opposite)
-                {
-                    BakedQuadTransformer.setQuadPosInFacingDir(sideQuad, RUNG_DEPTH * 2F);
-                    quadMap.get(null).add(sideQuad);
-                }
-                else
-                {
-                    quadMap.get(quad.getDirection()).add(sideQuad);
-                }
-            }
+            QuadModifier.geometry(quad)
+                    .apply(Modifiers.cutSideLeftRight(dir.getCounterClockWise(), LEG_DEPTH))
+                    .applyIf(Modifiers.setPosition(LEG_DEPTH), opposite)
+                    .export(quadMap.get(opposite ? null : quadDir));
 
-            sideQuad = ModelUtils.duplicateQuad(quad);
-            if (BakedQuadTransformer.createVerticalSideQuad(sideQuad, dir.getCounterClockWise(), RUNG_DEPTH * 2F))
-            {
-                if (opposite)
-                {
-                    BakedQuadTransformer.setQuadPosInFacingDir(sideQuad, RUNG_DEPTH * 2F);
-                    quadMap.get(null).add(sideQuad);
-                }
-                else
-                {
-                    quadMap.get(quad.getDirection()).add(sideQuad);
-                }
-            }
+            float pos = quad.getDirection() == dir ? (1F - RUNG_OFFSET) : (RUNG_DEPTH + RUNG_OFFSET);
 
             for (int i = 0; i < 4; i++)
             {
-                sideQuad = ModelUtils.duplicateQuad(quad);
-                if (BakedQuadTransformer.createHorizontalSideQuad(sideQuad, false, RUNGS[i] + RUNG_DEPTH) &&
-                    BakedQuadTransformer.createHorizontalSideQuad(sideQuad, true, 1F - RUNGS[i])
-                )
-                {
-                    float pos = quad.getDirection() == dir ? 1F - RUNG_OFFSET : RUNG_DEPTH + RUNG_OFFSET;
-                    BakedQuadTransformer.setQuadPosInFacingDir(sideQuad, pos);
-                    quadMap.get(null).add(sideQuad);
-                }
+                QuadModifier.geometry(quad)
+                        .apply(Modifiers.cutSide(LEG_DEPTH, RUNGS[i], 1F - LEG_DEPTH, RUNGS[i] + RUNG_DEPTH))
+                        .apply(Modifiers.setPosition(pos))
+                        .export(quadMap.get(null));
             }
+        }
+        else
+        {
+            QuadModifier mod = QuadModifier.geometry(quad)
+                    .apply(Modifiers.cutSideLeftRight(dir.getOpposite(), RUNG_DEPTH * 2F));
+
+            mod.export(quadMap.get(quadDir));
+
+            mod.apply(Modifiers.setPosition(RUNG_DEPTH * 2F))
+                    .export(quadMap.get(null));
         }
     }
 

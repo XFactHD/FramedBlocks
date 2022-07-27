@@ -5,16 +5,18 @@ import net.minecraft.client.resources.model.BakedModel;
 import net.minecraft.core.Direction;
 import net.minecraft.world.level.block.state.BlockState;
 import xfacthd.framedblocks.api.model.FramedBlockModel;
+import xfacthd.framedblocks.api.model.quad.Modifiers;
+import xfacthd.framedblocks.api.model.quad.QuadModifier;
 import xfacthd.framedblocks.api.util.FramedProperties;
 import xfacthd.framedblocks.api.util.Utils;
-import xfacthd.framedblocks.api.util.client.BakedQuadTransformer;
-import xfacthd.framedblocks.api.util.client.ModelUtils;
 
 import java.util.List;
 import java.util.Map;
 
 public class FramedWallBoardModel extends FramedBlockModel
 {
+    private static final float DEPTH = 1F/16F;
+
     private final Direction dir;
 
     public FramedWallBoardModel(BlockState state, BakedModel baseModel)
@@ -26,25 +28,25 @@ public class FramedWallBoardModel extends FramedBlockModel
     @Override
     protected void transformQuad(Map<Direction, List<BakedQuad>> quadMap, BakedQuad quad)
     {
-        BakedQuad copy = ModelUtils.duplicateQuad(quad);
-        if (quad.getDirection() == dir.getOpposite())
+        Direction quadDir = quad.getDirection();
+        if (quadDir == dir.getOpposite())
         {
-            BakedQuadTransformer.setQuadPosInFacingDir(copy, 1F/16F);
-            quadMap.get(null).add(copy);
+            QuadModifier.geometry(quad)
+                    .apply(Modifiers.setPosition(DEPTH))
+                    .export(quadMap.get(null));
+
         }
-        else if (Utils.isY(quad.getDirection()))
+        else if (Utils.isY(quadDir))
         {
-            if (BakedQuadTransformer.createTopBottomQuad(copy, dir.getOpposite(), 1F/16F))
-            {
-                quadMap.get(quad.getDirection()).add(copy);
-            }
+            QuadModifier.geometry(quad)
+                    .apply(Modifiers.cutTopBottom(dir.getOpposite(), DEPTH))
+                    .export(quadMap.get(quadDir));
         }
-        else if (quad.getDirection() != dir)
+        else if (quadDir != dir)
         {
-            if (BakedQuadTransformer.createVerticalSideQuad(copy, dir.getOpposite(), 1F/16F))
-            {
-                quadMap.get(quad.getDirection()).add(copy);
-            }
+            QuadModifier.geometry(quad)
+                    .apply(Modifiers.cutSideLeftRight(dir.getOpposite(), DEPTH))
+                    .export(quadMap.get(quadDir));
         }
     }
 }

@@ -11,11 +11,13 @@ import net.minecraft.world.level.block.state.properties.AttachFace;
 import net.minecraftforge.client.ChunkRenderTypeSet;
 import net.minecraftforge.client.event.ModelEvent;
 import net.minecraftforge.client.model.data.ModelData;
+import xfacthd.framedblocks.api.model.quad.Modifiers;
+import xfacthd.framedblocks.api.model.quad.QuadModifier;
 import xfacthd.framedblocks.api.util.*;
-import xfacthd.framedblocks.api.util.client.BakedQuadTransformer;
 import xfacthd.framedblocks.api.util.client.ModelUtils;
 
-import java.util.*;
+import java.util.List;
+import java.util.Map;
 
 public class FramedStoneButtonModel extends FramedButtonModel
 {
@@ -26,11 +28,21 @@ public class FramedStoneButtonModel extends FramedButtonModel
     private static BakedModel framePressedModel;
 
     private final BakedModel frameModel;
+    private final int rotX;
+    private final int rotY;
 
     public FramedStoneButtonModel(BlockState state, BakedModel baseModel)
     {
         super(state, baseModel);
         this.frameModel = pressed ? framePressedModel : frameNormalModel;
+
+        this.rotX = switch (face)
+        {
+            case FLOOR -> 0;
+            case WALL -> 90;
+            case CEILING -> 180;
+        };
+        this.rotY = (int)-dir.toYRot();
     }
 
     @Override
@@ -68,35 +80,12 @@ public class FramedStoneButtonModel extends FramedButtonModel
             return;
         }
 
-        int rotX;
-        int rotY;
-
-        if (face == AttachFace.WALL)
-        {
-            rotX = 90;
-            if (Utils.isX(dir))
-            {
-                rotY = (int) (dir.toYRot() + 180) % 360;
-            }
-            else
-            {
-                rotY = (int)dir.toYRot();
-            }
-        }
-        else
-        {
-            rotX = face == AttachFace.CEILING ? 180 : 0;
-            rotY = (int)dir.toYRot();
-        }
-
         for (BakedQuad quad : source)
         {
-            quad = ModelUtils.duplicateQuad(quad);
-
-            BakedQuadTransformer.rotateQuadAroundAxisCentered(quad, Direction.Axis.X, rotX, false);
-            BakedQuadTransformer.rotateQuadAroundAxisCentered(quad, Direction.Axis.Y, rotY, false);
-
-            dest.add(quad);
+            QuadModifier.geometry(quad)
+                    .apply(Modifiers.rotateCentered(Direction.Axis.X, rotX, false))
+                    .apply(Modifiers.rotateCentered(Direction.Axis.Y, rotY, false))
+                    .export(dest);
         }
     }
 
