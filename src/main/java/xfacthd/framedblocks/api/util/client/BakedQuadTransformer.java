@@ -7,6 +7,7 @@ import net.minecraft.core.Direction;
 import net.minecraft.util.Mth;
 import xfacthd.framedblocks.api.util.Utils;
 
+@Deprecated(forRemoval = true, since = "1.19")
 public final class BakedQuadTransformer
 {
     private static final float SCALE_ROTATION_45 = 1.0F / (float)Math.cos(Math.PI / 4D) - 1.0F;
