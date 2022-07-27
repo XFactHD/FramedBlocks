@@ -106,6 +106,15 @@ public final class Modifiers
         boolean positive = Utils.isPositive(cutDir);
         boolean up = quadDir == Direction.UP;
 
+        // Mirror targets so left and right are actually left and right of the cut direction
+        // TODO: this is a bandaid fix, needs reworking
+        if (cutDir == Direction.NORTH || (!up && cutDir == Direction.EAST) || (up && cutDir == Direction.WEST))
+        {
+            float temp = lengthR;
+            lengthR = lengthL;
+            lengthL = temp;
+        }
+
         int idxR = xAxis ? (positive ? 2 : 1) : ((up == positive) ? 1 : 0);
         int idxL = xAxis ? (positive ? 3 : 0) : ((up == positive) ? 2 : 3);
 
