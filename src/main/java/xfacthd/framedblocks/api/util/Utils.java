@@ -230,19 +230,6 @@ public final class Utils
         }
     }
 
-    @SuppressWarnings("unchecked")
-    public static <T> T invokeMethodHandle(MethodHandle method, Object... args)
-    {
-        try
-        {
-            return (T) method.invokeExact(args);
-        }
-        catch (Throwable e)
-        {
-            throw new RuntimeException("Failed to invoke MethodHandle '%s'".formatted(method.toString()), e);
-        }
-    }
-
 
 
     private Utils() { }

@@ -346,8 +346,15 @@ public final class ModelUtils
     {
         if (model instanceof WeightedBakedModel weighted)
         {
-            // Use wrapped model for consistency and to avoid issues with invisible faces
-            model = Utils.invokeMethodHandle(WBM_WRAPPED_MODEL, weighted);
+            try
+            {
+                // Use wrapped model for consistency and to avoid issues with invisible faces
+                model = (BakedModel) WBM_WRAPPED_MODEL.invokeExact(weighted);
+            }
+            catch (Throwable e)
+            {
+                throw new RuntimeException("Failed to access field 'WeightedBakedModel#wrapped'", e);
+            }
             Objects.requireNonNull(model, "Wrapped model of WeightedBakedModel is null?!");
         }
 

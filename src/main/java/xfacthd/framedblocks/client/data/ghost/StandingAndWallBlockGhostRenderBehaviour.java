@@ -17,9 +17,15 @@ public class StandingAndWallBlockGhostRenderBehaviour implements GhostRenderBeha
 
     @Override
     @Nullable
-    @SuppressWarnings("RedundantCast") //Cast is needed for invokeExact()
     public BlockState getRenderState(ItemStack stack, ItemStack proxiedStack, BlockHitResult hit, BlockPlaceContext ctx, BlockState hitState, boolean secondPass)
     {
-        return Utils.invokeMethodHandle(BLOCKITEM_GETPLACESTATE, (BlockItem) stack.getItem(), ctx);
+        try
+        {
+            return (BlockState) BLOCKITEM_GETPLACESTATE.invokeExact((BlockItem) stack.getItem(), ctx);
+        }
+        catch (Throwable e)
+        {
+            throw new RuntimeException("Failed to invoke BlockItem#getPlacementState '%s'", e);
+        }
     }
 }
