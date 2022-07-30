@@ -1,16 +1,16 @@
 package xfacthd.framedblocks.client.model;
 
-import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.client.renderer.block.model.BakedQuad;
 import net.minecraft.client.resources.model.BakedModel;
 import net.minecraft.core.Direction;
+import net.minecraft.world.level.block.state.BlockState;
 import xfacthd.framedblocks.api.model.FramedBlockModel;
+import xfacthd.framedblocks.api.model.quad.Modifiers;
+import xfacthd.framedblocks.api.model.quad.QuadModifier;
 import xfacthd.framedblocks.api.util.FramedProperties;
-import xfacthd.framedblocks.api.util.client.BakedQuadTransformer;
-import xfacthd.framedblocks.api.util.client.ModelUtils;
 import xfacthd.framedblocks.common.FBContent;
-import xfacthd.framedblocks.common.data.property.CornerType;
 import xfacthd.framedblocks.common.data.PropertyHolder;
+import xfacthd.framedblocks.common.data.property.CornerType;
 
 import java.util.List;
 import java.util.Map;
@@ -32,71 +32,73 @@ public class FramedInnerCornerSlopeModel extends FramedBlockModel
     {
         if (type.isHorizontal())
         {
-            if ((quad.getDirection() == Direction.UP && !type.isTop()) || (quad.getDirection() == Direction.DOWN && type.isTop()))
-            {
-                BakedQuad triQuad = ModelUtils.duplicateQuad(quad);
-                if (BakedQuadTransformer.createTopBottomTriangleQuad(triQuad, type.isRight() ? dir.getClockWise() : dir))
-                {
-                    quadMap.get(quad.getDirection()).add(triQuad);
-                }
-            }
-            else if (quad.getDirection() == dir.getOpposite())
-            {
-                BakedQuad slopeQuad = ModelUtils.duplicateQuad(quad);
-                if (BakedQuadTransformer.createSideTriangleQuad(slopeQuad, !type.isRight(), type.isTop()))
-                {
-                    BakedQuadTransformer.createTopBottomSlopeQuad(slopeQuad, !type.isTop());
-                    quadMap.get(null).add(slopeQuad);
-                }
-
-                slopeQuad = ModelUtils.duplicateQuad(quad);
-                if (BakedQuadTransformer.createSideTriangleQuad(slopeQuad, type.isRight(), !type.isTop()))
-                {
-                    BakedQuadTransformer.createSideSlopeQuad(slopeQuad, !type.isRight());
-                    quadMap.get(null).add(slopeQuad);
-                }
-            }
-            else if ((quad.getDirection() == dir.getClockWise() && !type.isRight()) || (quad.getDirection() == dir.getCounterClockWise() && type.isRight()))
-            {
-                BakedQuad triQuad = ModelUtils.duplicateQuad(quad);
-                if (BakedQuadTransformer.createSideTriangleQuad(triQuad, !type.isRight(), type.isTop()))
-                {
-                    quadMap.get(quad.getDirection()).add(triQuad);
-                }
-            }
+            createHorizontalCorner(quadMap, quad);
         }
         else
         {
-            if (quad.getDirection() == dir.getClockWise())
-            {
-                BakedQuad triQuad = ModelUtils.duplicateQuad(quad);
-                if (BakedQuadTransformer.createSideTriangleQuad(triQuad, true, type == CornerType.TOP))
-                {
-                    quadMap.get(quad.getDirection()).add(triQuad);
-                }
+            createVerticalCorner(quadMap, quad);
+        }
+    }
 
-                BakedQuad slopeQuad = ModelUtils.duplicateQuad(quad);
-                if (BakedQuadTransformer.createSideTriangleQuad(slopeQuad, false, type != CornerType.TOP))
-                {
-                    BakedQuadTransformer.createTopBottomSlopeQuad(slopeQuad, type != CornerType.TOP);
-                    quadMap.get(null).add(slopeQuad);
-                }
-            }
-            else if (quad.getDirection() == dir.getOpposite())
-            {
-                BakedQuad triQuad = ModelUtils.duplicateQuad(quad);
-                if (BakedQuadTransformer.createSideTriangleQuad(triQuad, false, type == CornerType.TOP))
-                {
-                    quadMap.get(quad.getDirection()).add(triQuad);
-                }
+    private void createHorizontalCorner(Map<Direction, List<BakedQuad>> quadMap, BakedQuad quad)
+    {
+        Direction quadDir = quad.getDirection();
+        boolean top = type.isTop();
+        boolean right = type.isRight();
 
-                BakedQuad slopeQuad = ModelUtils.duplicateQuad(quad);
-                if (BakedQuadTransformer.createSideTriangleQuad(slopeQuad, true, type != CornerType.TOP))
-                {
-                    BakedQuadTransformer.createTopBottomSlopeQuad(slopeQuad, type != CornerType.TOP);
-                    quadMap.get(null).add(slopeQuad);
-                }
-            }
+        if ((quadDir == Direction.UP && !top) || (quadDir == Direction.DOWN && top))
+        {
+            QuadModifier.geometry(quad)
+                    .apply(Modifiers.cutTopBottom(dir.getOpposite(), right ? 0 : 1, right ? 1 : 0))
+                    .export(quadMap.get(quadDir));
+        }
+        else if (quadDir == dir.getOpposite())
+        {
+            Direction cutDir = right ? dir.getCounterClockWise() : dir.getClockWise();
+            QuadModifier.geometry(quad)
+                    .apply(Modifiers.cutSideLeftRight(cutDir, top ? 0 : 1, top ? 1 : 0))
+                    .apply(Modifiers.makeHorizontalSlope(right, 45))
+                    .export(quadMap.get(null));
+
+            QuadModifier.geometry(quad)
+                    .apply(Modifiers.cutSideUpDown(top, right ? 1 : 0, right ? 0 : 1))
+                    .apply(Modifiers.makeVerticalSlope(!top, 45))
+                    .export(quadMap.get(null));
+        }
+        else if ((quadDir == dir.getClockWise() && !right) || (quadDir == dir.getCounterClockWise() && right))
+        {
+            QuadModifier.geometry(quad)
+                    .apply(Modifiers.cutSideLeftRight(dir.getOpposite(), top ? 1 : 0, top ? 0 : 1))
+                    .export(quadMap.get(quadDir));
+        }
+    }
+
+    private void createVerticalCorner(Map<Direction, List<BakedQuad>> quadMap, BakedQuad quad)
+    {
+        Direction quadDir = quad.getDirection();
+        boolean top = type.isTop();
+
+        if (quadDir == dir.getClockWise())
+        {
+            QuadModifier.geometry(quad)
+                    .apply(Modifiers.cutSideLeftRight(dir.getOpposite(), top ? 1 : 0, top ? 0 : 1))
+                    .export(quadMap.get(quadDir));
+
+            QuadModifier.geometry(quad)
+                    .apply(Modifiers.cutSideLeftRight(dir, top ? 0 : 1, top ? 1 : 0))
+                    .apply(Modifiers.makeVerticalSlope(!top, 45))
+                    .export(quadMap.get(null));
+        }
+        else if (quadDir == dir.getOpposite())
+        {
+            QuadModifier.geometry(quad)
+                    .apply(Modifiers.cutSideLeftRight(dir.getClockWise(), top ? 1 : 0, top ? 0 : 1))
+                    .export(quadMap.get(quadDir));
+
+            QuadModifier.geometry(quad)
+                    .apply(Modifiers.cutSideLeftRight(dir.getCounterClockWise(), top ? 0 : 1, top ? 1 : 0))
+                    .apply(Modifiers.makeVerticalSlope(!top, 45))
+                    .export(quadMap.get(null));
         }
     }
 

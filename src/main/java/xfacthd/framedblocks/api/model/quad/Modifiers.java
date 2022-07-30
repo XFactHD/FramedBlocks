@@ -407,64 +407,12 @@ public final class Modifiers
     {
         return data ->
         {
+            boolean leftCut = cutSideLeftRight(data, false, up ? .5F : 1, up ? 1 : .5F);
+            boolean rightCut = cutSideLeftRight(data, true, up ? .5F : 1, up ? 1 : .5F);
+            if (!leftCut && !rightCut) { return false; }
+
             Direction quadDir = data.quad().getDirection();
-            float[][] pos = data.pos();
-            float[][] uv = data.uv();
-
-            int coord = Utils.isX(quadDir) ? 2 : 0;
-            int checkVert1 = up ? 2 : 3;
-            int checkVert2 = up ? 1 : 0;
-
-            boolean vertPos = Utils.isPositive(quadDir.getCounterClockWise());
-            float h1 = (up ? pos[checkVert1][1] : 1F - pos[checkVert1][1]) / 2F;
-            float h2 = 1F - ((up ? pos[checkVert2][1] : 1F - pos[checkVert2][1]) / 2F);
-            float xz1 = vertPos ? pos[checkVert1][coord] : 1F - pos[checkVert1][coord];
-            float xz2 = vertPos ? pos[checkVert2][coord] : 1F - pos[checkVert2][coord];
-
-            if (xz1 < h1 || xz2 > h2) { return false; }
-
-            int idxTip1 = up ? 0 : 1;
-            int idxTip2 = up ? 3 : 2;
-            int idxBase1 = up ? 1 : 0;
-            int idxBase2 = up ? 2 : 3;
-
-            float yTip1 =  (up ? pos[idxTip1][1] :  1F - pos[idxTip1][1]) / 2F;
-            float yTip2 =  (up ? pos[idxTip2][1] :  1F - pos[idxTip2][1]) / 2F;
-            float yBase1 = (up ? pos[idxBase1][1] : 1F - pos[idxBase1][1]) / 2F;
-            float yBase2 = (up ? pos[idxBase2][1] : 1F - pos[idxBase2][1]) / 2F;
-
             boolean northeast = quadDir == Direction.NORTH || quadDir == Direction.EAST;
-            if (northeast)
-            {
-                yTip1 = 1F - yTip1;
-                yBase1 = 1F - yBase1;
-            }
-            else
-            {
-                yTip2 = 1F - yTip2;
-                yBase2 = 1F - yBase2;
-            }
-
-            yTip1 =  northeast ? Math.min(yTip1,  pos[idxTip1 ][coord]) : Math.max(yTip1,  pos[idxTip1 ][coord]);
-            yTip2 =  northeast ? Math.max(yTip2,  pos[idxTip2 ][coord]) : Math.min(yTip2,  pos[idxTip2 ][coord]);
-            yBase1 = northeast ? Math.min(yBase1, pos[idxBase1][coord]) : Math.max(yBase1, pos[idxBase1][coord]);
-            yBase2 = northeast ? Math.max(yBase2, pos[idxBase2][coord]) : Math.min(yBase2, pos[idxBase2][coord]);
-
-            boolean rotated = ModelUtils.isQuadRotated(uv);
-            boolean mirrored = ModelUtils.isQuadMirrored(uv);
-
-            float[][] uvSrc = new float[4][2];
-            for (int i = 0; i < 4; i++) { System.arraycopy(uv[i], 0, uvSrc[i], 0, 2); }
-
-            ModelUtils.remapUV(quadDir, pos[idxTip1 ][coord], pos[idxTip2 ][coord], yTip1,  uvSrc, uv, idxTip1,  idxTip2,  idxTip1,  false, northeast, rotated, mirrored);
-            ModelUtils.remapUV(quadDir, pos[idxTip1 ][coord], pos[idxTip2 ][coord], yTip2,  uvSrc, uv, idxTip1,  idxTip2,  idxTip2,  false, northeast, rotated, mirrored);
-            ModelUtils.remapUV(quadDir, pos[idxBase1][coord], pos[idxBase2][coord], yBase1, uvSrc, uv, idxBase1, idxBase2, idxBase1, false, northeast, rotated, mirrored);
-            ModelUtils.remapUV(quadDir, pos[idxBase1][coord], pos[idxBase2][coord], yBase2, uvSrc, uv, idxBase1, idxBase2, idxBase2, false, northeast, rotated, mirrored);
-
-            pos[idxTip1][coord] = yTip1;
-            pos[idxTip2][coord] = yTip2;
-            pos[idxBase1][coord] = yBase1;
-            pos[idxBase2][coord] = yBase2;
 
             Vector3f origin = PRISM_DIR_TO_ORIGIN_VECS[quadDir.ordinal() - 2 + (up ? 0 : 4)];
             float angle = back ? PRISM_TILT_ANGLE : -PRISM_TILT_ANGLE;
@@ -477,40 +425,130 @@ public final class Modifiers
     }
 
     /**
-     * Cuts a quarter face size triangle quad with the tip centered on the base edge and the diagonal edge pointing
-     * towards the left/bottom or right/top
+     * Cuts a triangle quad with the tip centered on the base edge and half a block above it
      * @param cutDir The direction the triangle should point
-     * @param rightUp Wether the diagonal edge of the triangle should point to the right in case of vertical quad
-     *                direction or vertical cut direction or upwards for horizontal quad direction and cut direction
      */
-    public static QuadModifier.Modifier cutSmallTriangle(Direction cutDir, boolean rightUp)
+    public static QuadModifier.Modifier cutSmallTriangle(Direction cutDir)
     {
         return data ->
         {
             Direction quadDir = data.quad().getDirection();
+            Preconditions.checkArgument(!Utils.isY(quadDir) || !Utils.isY(cutDir), "Cut direction cannot be along the Y axis for quads pointing along the Y axis");
 
-            Direction triDir;
-            if (Utils.isY(quadDir))
+            if (!cut(data, cutDir, .5F, .5F)) { return false; }
+
+            boolean left;
+            boolean right;
+            if (Utils.isY(cutDir))
             {
-                triDir = rightUp ? cutDir.getClockWise() : cutDir.getCounterClockWise();
+                boolean up = cutDir == Direction.UP;
+                left = cutSideLeftRight(data, false, up ? 0 : 1, up ? 1 : 0);
+                right = cutSideLeftRight(data, true, up ? 0 : 1, up ? 1 : 0);
             }
-            else if (Utils.isY(cutDir))
+            else if (Utils.isY(quadDir))
             {
-                triDir = rightUp ? quadDir.getClockWise() : quadDir.getCounterClockWise();
+                left = cutTopBottom(data, cutDir.getCounterClockWise(), 0, 1);
+                right = cutTopBottom(data, cutDir.getClockWise(), 1, 0);
             }
             else
             {
-                triDir = rightUp ? Direction.UP : Direction.DOWN;
+                boolean cutRight = cutDir == quadDir.getClockWise();
+                left = cutSideUpDown(data, false, cutRight ? 0 : 1, cutRight ? 1 : 0);
+                right = cutSideUpDown(data, true, cutRight ? 0 : 1, cutRight ? 1 : 0);
+            }
+            return left || right;
+        };
+    }
+
+    private static final Vector3f SCALE_HORIZONTAL = new Vector3f(1, 0, 1);
+    private static final Vector3f[] HORIZONTAL_ORIGINS = new Vector3f[] {
+            new Vector3f(0, 0, 0),
+            new Vector3f(1, 0, 1),
+            new Vector3f(0, 0, 1),
+            new Vector3f(1, 0, 0)
+    };
+
+    /**
+     * Rotates the quad's edge given by {@code rightEdge}) backwards by the given angle and rescales the quad
+     * on the appropriate axis
+     * @param rightEdge Whether the right or left edge should be rotated back
+     * @param angle The amount the edge should be rotated by
+     */
+    public static QuadModifier.Modifier makeHorizontalSlope(boolean rightEdge, float angle)
+    {
+        return data ->
+        {
+            Direction dir = data.quad().getDirection();
+            if (!rightEdge)
+            {
+                dir = dir.getClockWise();
             }
 
-            float lengthLeftBottom = rightUp ? .5F : 0F;
-            float lengthRightTop = rightUp ? 0F : .5F;
+            Vector3f origin = HORIZONTAL_ORIGINS[dir.ordinal() - 2];
+            float rotAngle = rightEdge ? -angle : angle;
 
-            // Cut triangle shape
-            if (!cut(data, triDir, lengthLeftBottom, lengthRightTop)) { return false; }
+            rotate(data, Direction.Axis.Y, origin, rotAngle, true, SCALE_HORIZONTAL);
+            return true;
+        };
+    }
 
-            // Cut to quarter size
-            return cut(data, cutDir, .5F, .5F) && cut(data, triDir.getOpposite(), .5F, .5F);
+    private static final Vector3f SCALE_VERT_X = new Vector3f(1, 1, 0);
+    private static final Vector3f SCALE_VERT_Z = new Vector3f(0, 1, 1);
+    private static final Vector3f[] VERTICAL_ORIGINS = new Vector3f[] {
+            new Vector3f(0, 1, 0),
+            new Vector3f(0, 1, 1),
+            new Vector3f(0, 1, 0),
+            new Vector3f(1, 1, 0),
+            new Vector3f(0, 0, 0),
+            new Vector3f(0, 0, 1),
+            new Vector3f(0, 0, 0),
+            new Vector3f(1, 0, 0),
+    };
+
+    /**
+     * Rotates the quad's edge given by {@code rightEdge}) backwards by the given angle and rescales the quad
+     * on the appropriate axis
+     * @param topEdge Whether the top or bottom edge should be rotated back
+     * @param angle The amount the edge should be rotated by
+     */
+    public static QuadModifier.Modifier makeVerticalSlope(boolean topEdge, float angle)
+    {
+        return data ->
+        {
+            Direction dir = data.quad().getDirection();
+
+            Direction.Axis axis = dir.getClockWise().getAxis();
+            Vector3f origin = VERTICAL_ORIGINS[dir.ordinal() - 2 + (topEdge ? 4 : 0)];
+            float rotAngle = Utils.isPositive(dir.getClockWise()) != topEdge ? -angle : angle;
+            Vector3f scaleVec = Utils.isX(dir) ? SCALE_VERT_X : SCALE_VERT_Z;
+
+            rotate(data, axis, origin, rotAngle, true, scaleVec);
+            return true;
+        };
+    }
+
+    /**
+     * Rotates the quad's edge pointed towards by {@code edge} downwards by the given angle and rescales the quad
+     * on the appropriate axis
+     * @param edge The direction towards the edge that should be rotated downwards
+     * @param angle The amount the edge should be rotated by
+     */
+    public static QuadModifier.Modifier makeVerticalSlope(Direction edge, float angle)
+    {
+        return data ->
+        {
+            Direction dir = data.quad().getDirection();
+            boolean top = dir == Direction.UP;
+            Preconditions.checkArgument(Utils.isY(dir), "Quad direction must be on the Y axis");
+            Preconditions.checkArgument(!Utils.isY(edge), "Edge direction must be horizontal");
+
+            Direction.Axis axis = edge.getClockWise().getAxis();
+            Vector3f origin = VERTICAL_ORIGINS[edge.getOpposite().ordinal() - 2 + (top ? 0 : 4)];
+            float rotAngle = Utils.isPositive(edge.getClockWise()) != top ? angle : -angle;
+            Vector3f scaleVec = Utils.isX(edge) ? SCALE_VERT_X : SCALE_VERT_Z;
+
+            rotate(data, axis, origin, rotAngle, true, scaleVec);
+            return true;
         };
     }
 

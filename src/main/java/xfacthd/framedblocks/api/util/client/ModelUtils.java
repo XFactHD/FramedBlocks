@@ -25,6 +25,7 @@ public final class ModelUtils
     public static final ChunkRenderTypeSet SOLID = ChunkRenderTypeSet.of(RenderType.solid());
     public static final ChunkRenderTypeSet CUTOUT = ChunkRenderTypeSet.of(RenderType.cutout());
 
+    @Deprecated(forRemoval = true, since = "1.19")
     public static boolean modifyQuad(BakedQuad quad, VertexDataConsumer consumer)
     {
         int[] vertexData = quad.getVertices();

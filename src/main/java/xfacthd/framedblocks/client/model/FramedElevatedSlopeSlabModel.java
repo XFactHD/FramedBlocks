@@ -5,9 +5,9 @@ import net.minecraft.client.resources.model.BakedModel;
 import net.minecraft.core.Direction;
 import net.minecraft.world.level.block.state.BlockState;
 import xfacthd.framedblocks.api.model.FramedBlockModel;
+import xfacthd.framedblocks.api.model.quad.Modifiers;
+import xfacthd.framedblocks.api.model.quad.QuadModifier;
 import xfacthd.framedblocks.api.util.FramedProperties;
-import xfacthd.framedblocks.api.util.client.BakedQuadTransformer;
-import xfacthd.framedblocks.api.util.client.ModelUtils;
 import xfacthd.framedblocks.common.FBContent;
 
 import java.util.List;
@@ -31,23 +31,21 @@ public class FramedElevatedSlopeSlabModel extends FramedBlockModel
         Direction face = quad.getDirection();
         if (face == facing.getOpposite())
         {
-            BakedQuad slope = FramedSlopeSlabModel.createSlope(quad, facing, top);
-            BakedQuadTransformer.offsetQuadInDir(slope, top ? Direction.DOWN : Direction.UP, .5F);
-            quadMap.get(null).add(slope);
+            QuadModifier.geometry(quad)
+                    .apply(Modifiers.makeVerticalSlope(!top, FramedSlopeSlabModel.SLOPE_ANGLE))
+                    .apply(Modifiers.offset(top ? Direction.DOWN : Direction.UP, .5F))
+                    .export(quadMap.get(null));
 
-            BakedQuad slab = ModelUtils.duplicateQuad(quad);
-            if (BakedQuadTransformer.createHorizontalSideQuad(slab, top, .5F))
-            {
-                quadMap.get(face).add(slab);
-            }
+            QuadModifier.geometry(quad)
+                    .apply(Modifiers.cutSideUpDown(top, .5F))
+                    .export(quadMap.get(face));
         }
         else if (face == facing.getClockWise() || face == facing.getCounterClockWise())
         {
-            BakedQuad triangle = ModelUtils.duplicateQuad(quad);
-            if (BakedQuadTransformer.createSideTriangleQuad(triangle, face == facing.getClockWise(), top, .5F, .5F))
-            {
-                quadMap.get(face).add(triangle);
-            }
+            boolean rightFace = face == facing.getClockWise();
+            QuadModifier.geometry(quad)
+                    .apply(Modifiers.cutSideUpDown(top, rightFace ? .5F : 1, rightFace ? 1 : .5F))
+                    .export(quadMap.get(face));
         }
     }
 

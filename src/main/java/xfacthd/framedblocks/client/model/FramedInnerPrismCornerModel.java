@@ -1,13 +1,13 @@
 package xfacthd.framedblocks.client.model;
 
-import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.client.renderer.block.model.BakedQuad;
 import net.minecraft.client.resources.model.BakedModel;
 import net.minecraft.core.Direction;
+import net.minecraft.world.level.block.state.BlockState;
 import xfacthd.framedblocks.api.model.FramedBlockModel;
+import xfacthd.framedblocks.api.model.quad.Modifiers;
+import xfacthd.framedblocks.api.model.quad.QuadModifier;
 import xfacthd.framedblocks.api.util.FramedProperties;
-import xfacthd.framedblocks.api.util.client.BakedQuadTransformer;
-import xfacthd.framedblocks.api.util.client.ModelUtils;
 import xfacthd.framedblocks.common.FBContent;
 
 import java.util.List;
@@ -30,53 +30,42 @@ public class FramedInnerPrismCornerModel extends FramedBlockModel
     @Override
     protected void transformQuad(Map<Direction, List<BakedQuad>> quadMap, BakedQuad quad)
     {
-        if ((quad.getDirection() == Direction.DOWN && top) || (quad.getDirection() == Direction.UP && !top))
+        Direction quadDir = quad.getDirection();
+        if ((quadDir == Direction.DOWN && top) || (quadDir == Direction.UP && !top))
         {
-            BakedQuad triQuad = ModelUtils.duplicateQuad(quad);
-            if (BakedQuadTransformer.createTopBottomTriangleQuad(triQuad, dir))
-            {
-                quadMap.get(quad.getDirection()).add(triQuad);
-            }
+            QuadModifier.geometry(quad)
+                    .apply(Modifiers.cutTopBottom(dir.getOpposite(), 1, 0))
+                    .export(quadMap.get(quadDir));
         }
-        else if (quad.getDirection() == dir.getOpposite() || quad.getDirection() == dir.getClockWise())
+        else if (quadDir == dir.getOpposite() || quadDir == dir.getClockWise())
         {
-            BakedQuad triQuad = ModelUtils.duplicateQuad(quad);
-            if (BakedQuadTransformer.createSideTriangleQuad(triQuad, quad.getDirection() == dir.getClockWise(), top))
-            {
-                quadMap.get(quad.getDirection()).add(triQuad);
-            }
+            Direction cutDir = quadDir == dir.getOpposite() ? dir.getClockWise() : dir.getOpposite();
+            QuadModifier.geometry(quad)
+                    .apply(Modifiers.cutSideLeftRight(cutDir, top ? 1 : 0, top ? 0 : 1))
+                    .export(quadMap.get(quadDir));
         }
 
-        if (quad.getDirection() == dir.getOpposite())
+        if (quadDir == dir.getOpposite())
         {
-            BakedQuad prismQuad = ModelUtils.duplicateQuad(quad);
-            if (!offset)
+            if (offset)
             {
-                if (BakedQuadTransformer.createPrismTriangleQuad(prismQuad, top, false))
-                {
-                    quadMap.get(null).add(prismQuad);
-                }
+                QuadModifier.geometry(quad)
+                        .apply(Modifiers.cutSideLeftRight(dir.getClockWise(), .5F))
+                        .apply(Modifiers.offset(dir.getClockWise(), .5F))
+                        .apply(Modifiers.cutPrismTriangle(top, false))
+                        .export(quadMap.get(null));
+
+                QuadModifier.geometry(quad)
+                        .apply(Modifiers.cutSideLeftRight(dir.getCounterClockWise(), .5F))
+                        .apply(Modifiers.offset(dir.getCounterClockWise(), .5F))
+                        .apply(Modifiers.cutPrismTriangle(top, false))
+                        .export(quadMap.get(null));
             }
             else
             {
-                if (BakedQuadTransformer.createVerticalSideQuad(prismQuad, dir.getClockWise(), .5F))
-                {
-                    BakedQuadTransformer.offsetQuadInDir(prismQuad, dir.getClockWise(), .5F);
-                    if (BakedQuadTransformer.createPrismTriangleQuad(prismQuad, top, false))
-                    {
-                        quadMap.get(null).add(prismQuad);
-                    }
-                }
-
-                prismQuad = ModelUtils.duplicateQuad(quad);
-                if (BakedQuadTransformer.createVerticalSideQuad(prismQuad, dir.getCounterClockWise(), .5F))
-                {
-                    BakedQuadTransformer.offsetQuadInDir(prismQuad, dir.getCounterClockWise(), .5F);
-                    if (BakedQuadTransformer.createPrismTriangleQuad(prismQuad, top, false))
-                    {
-                        quadMap.get(null).add(prismQuad);
-                    }
-                }
+                QuadModifier.geometry(quad)
+                        .apply(Modifiers.cutPrismTriangle(top, false))
+                        .export(quadMap.get(null));
             }
         }
     }
