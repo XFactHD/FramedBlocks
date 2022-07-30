@@ -15,7 +15,7 @@ import xfacthd.framedblocks.api.util.*;
 import xfacthd.framedblocks.common.data.BlockType;
 import xfacthd.framedblocks.common.data.PropertyHolder;
 
-public class FramedSlopeSlabBlock extends FramedBlock //TODO: check why states with top != topHalf can't occlude light
+public class FramedSlopeSlabBlock extends FramedBlock
 {
     public static final CtmPredicate CTM_PREDICATE = (state, side) ->
     {

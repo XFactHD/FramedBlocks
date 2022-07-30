@@ -209,7 +209,7 @@ public final class FBContent
     );
     public static final RegistryObject<BlockEntityType<FramedDoubleStairsBlockEntity>> blockEntityTypeFramedDoubleStairs = createBlockEntityType(
             FramedDoubleStairsBlockEntity::new,
-           BlockType.FRAMED_DOUBLE_STAIRS
+            BlockType.FRAMED_DOUBLE_STAIRS
     );
     public static final RegistryObject<BlockEntityType<FramedVerticalDoubleStairsBlockEntity>> blockEntityTypeFramedVerticalDoubleStairs = createBlockEntityType(
             FramedVerticalDoubleStairsBlockEntity::new,

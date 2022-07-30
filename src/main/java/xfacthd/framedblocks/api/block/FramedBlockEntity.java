@@ -217,7 +217,6 @@ public class FramedBlockEntity extends BlockEntity
         return InteractionResult.FAIL;
     }
 
-    //TODO: sides are not hidden when next to a "falling" fluid block
     private InteractionResult setFluidCamo(Player player, ItemStack stack, boolean secondary)
     {
         CamoContainer.Factory factory = FramedBlocksAPI.getInstance().getCamoContainerFactory(stack);

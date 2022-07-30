@@ -160,7 +160,7 @@ public final class ModelUtils
 
     /**
      * Calculate face normals from vertex positions
-     * Adapted from {@link net.minecraftforge.client.ForgeHooksClient#fillNormal(int[], Direction)}
+     * Adapted from {@code net.minecraftforge.client.ForgeHooksClient#fillNormal(int[], Direction)}
      */
     public static void fillNormal(BakedQuad quad)
     {

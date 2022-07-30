@@ -43,6 +43,8 @@ public class FramedHalfPillarBlock extends FramedBlock
         return state;
     }
 
+
+
     public static ImmutableMap<BlockState, VoxelShape> generateShapes(ImmutableList<BlockState> states)
     {
         ImmutableMap.Builder<BlockState, VoxelShape> builder = ImmutableMap.builder();
