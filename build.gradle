@@ -150,7 +150,7 @@ dependencies {
     //runtimeOnly fg.deobf("curse.maven:rubidium_sodium-574856:3633735")
 
     compileOnly fg.deobf("curse.maven:flywheel-486392:3871082")
-    //runtimeOnly fg.deobf("curse.maven:create-328085:3872145") //Only needed when Flywheel is switched to implementation
+    compileOnly fg.deobf("curse.maven:create-328085:3872145")
 
     annotationProcessor 'org.spongepowered:mixin:0.8.5:processor'
 }

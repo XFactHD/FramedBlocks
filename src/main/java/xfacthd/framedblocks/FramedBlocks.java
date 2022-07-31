@@ -68,6 +68,8 @@ public final class FramedBlocks
                 .add();
 
         BlueprintBehaviours.register();
+
+        CompatHandler.commonSetup();
     }
 
     private static String getBlockEntityWarning()

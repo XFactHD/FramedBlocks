@@ -409,6 +409,8 @@ a96598eb3c4949f09548db20e43649235d13e02a data/minecraft/tags/blocks/rails.json
 c421d2908d17f42e1f49df963f37242ce2090eec data/minecraft/tags/blocks/stairs.json
 f4cf0fac3f800b3839819cf165ceae386804b62e data/minecraft/tags/blocks/trapdoors.json
 99b8097a17a53cceed233d5c901cc04e4c7045af data/minecraft/tags/blocks/walls.json
+22ce3458b3b504fc92a471dfc7f17afa2955e3a3 data/minecraft/tags/blocks/wooden_doors.json
+73ce3cb68522fced5298b48113f69e48f2168bee data/minecraft/tags/blocks/wooden_trapdoors.json
 4898014d8889303d019b0e1eddb68ac3c3b98209 data/minecraft/tags/items/doors.json
 3e2d88c1ebe0fd8046c865d8fc6f821ff71d4a46 data/minecraft/tags/items/fences.json
 347fe311fec6423bc5cb12c4545d90159ff187d3 data/minecraft/tags/items/slabs.json
