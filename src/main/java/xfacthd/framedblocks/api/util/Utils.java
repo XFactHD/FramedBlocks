@@ -8,6 +8,7 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.*;
+import net.minecraft.util.Mth;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
@@ -98,6 +99,38 @@ public final class Utils
             case Z -> vec.z;
         };
         return isPositive(dir) ? coord : (1D - coord);
+    }
+
+    /**
+     * Check if the left hand value is lower than the right hand value.
+     * If the difference between the two values is smaller than {@code 1.0E-5F},
+     * the result will be {@code false}
+     * @return Returns true when the left hand value is lower than the right hand value,
+     *         accounting for floating point precision issues
+     */
+    public static boolean isLower(float lhs, float rhs)
+    {
+        if (Mth.equal(lhs, rhs))
+        {
+            return false;
+        }
+        return lhs < rhs;
+    }
+
+    /**
+     * Check if the left hand value is higher than the right hand value.
+     * If the difference between the two values is smaller than {@code 1.0E-5F},
+     * the result will be {@code false}
+     * @return Returns true when the left hand value is higher than the right hand value,
+     *         accounting for floating point precision issues
+     */
+    public static boolean isHigher(float lhs, float rhs)
+    {
+        if (Mth.equal(lhs, rhs))
+        {
+            return false;
+        }
+        return lhs > rhs;
     }
 
     @SuppressWarnings("unchecked")

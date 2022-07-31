@@ -131,8 +131,8 @@ public final class Modifiers
         int vertIdxL = xAxis ? (positive ? 0 : 2) : (up ? (positive ? 3 : 1) : (positive ? 2 : 0));
         int coordIdx = xAxis ? 0 : 2;
 
-        if (positive && (pos[vertIdxR][coordIdx] > targetR || pos[vertIdxL][coordIdx] > targetL)) { return false; }
-        if (!positive && (pos[vertIdxR][coordIdx] < targetR || pos[vertIdxL][coordIdx] < targetL)) { return false; }
+        if (positive && (Utils.isHigher(pos[vertIdxR][coordIdx], targetR) || Utils.isHigher(pos[vertIdxL][coordIdx], targetL))) { return false; }
+        if (!positive && (Utils.isLower(pos[vertIdxR][coordIdx], targetR) || Utils.isLower(pos[vertIdxL][coordIdx], targetL))) { return false; }
 
         float xz1 = pos[idxR][coordIdx];
         float xz2 = pos[idxL][coordIdx];
@@ -209,8 +209,8 @@ public final class Modifiers
         float targetR = Mth.lerp(factorR, downwards ? 1F - lengthRight : lengthRight, downwards ? 1F - lengthLeft : lengthLeft);
         float targetL = Mth.lerp(factorL, downwards ? 1F - lengthRight : lengthRight, downwards ? 1F - lengthLeft : lengthLeft);
 
-        if (downwards && (pos[0][1] < targetR || pos[3][1] < targetL)) { return false; }
-        if (!downwards && (pos[1][1] > targetR && pos[2][1] > targetL)) { return false; }
+        if (downwards && (Utils.isLower(pos[0][1], targetR) || Utils.isLower(pos[3][1], targetL))) { return false; }
+        if (!downwards && (Utils.isHigher(pos[1][1], targetR) || Utils.isHigher(pos[2][1], targetL))) { return false; }
 
         int idx1 = downwards ? 1 : 0;
         int idx2 = downwards ? 2 : 3;
@@ -304,8 +304,8 @@ public final class Modifiers
         float targetTop = Mth.lerp(1F - pos[vertIdxTop][1], positive ? 1F - lengthTop : lengthTop, positive ? 1F - lengthBot : lengthBot);
         float targetBot = Mth.lerp(1F - pos[vertIdxBot][1], positive ? 1F - lengthTop : lengthTop, positive ? 1F - lengthBot : lengthBot);
 
-        if (positive && (pos[vertIdxTop][coordIdx] < targetTop || pos[vertIdxBot][coordIdx] < targetBot)) { return false; }
-        if (!positive && (pos[vertIdxTop][coordIdx] > targetTop || pos[vertIdxBot][coordIdx] > targetBot)) { return false; }
+        if (positive && (Utils.isLower(pos[vertIdxTop][coordIdx], targetTop) || Utils.isLower(pos[vertIdxBot][coordIdx], targetBot))) { return false; }
+        if (!positive && (Utils.isHigher(pos[vertIdxTop][coordIdx], targetTop) || Utils.isHigher(pos[vertIdxBot][coordIdx], targetBot))) { return false; }
 
         int idx1 = towardsRight ? 0 : 3;
         int idx2 = towardsRight ? 1 : 2;
