@@ -7,7 +7,11 @@ import net.minecraft.core.Direction;
 import net.minecraft.util.Mth;
 import xfacthd.framedblocks.api.util.Utils;
 
+/**
+ * @deprecated Use the {@link xfacthd.framedblocks.api.model.quad.QuadModifier} system instead
+ */
 @Deprecated(forRemoval = true, since = "1.19")
+@SuppressWarnings({"unused", "removal"})
 public final class BakedQuadTransformer
 {
     private static final float SCALE_ROTATION_45 = 1.0F / (float)Math.cos(Math.PI / 4D) - 1.0F;

@@ -1,13 +1,13 @@
 package xfacthd.framedblocks.client.model;
 
-import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.client.renderer.block.model.BakedQuad;
 import net.minecraft.client.resources.model.BakedModel;
 import net.minecraft.core.Direction;
+import net.minecraft.world.level.block.state.BlockState;
 import xfacthd.framedblocks.api.model.FramedBlockModel;
+import xfacthd.framedblocks.api.model.quad.Modifiers;
+import xfacthd.framedblocks.api.model.quad.QuadModifier;
 import xfacthd.framedblocks.api.util.FramedProperties;
-import xfacthd.framedblocks.api.util.client.BakedQuadTransformer;
-import xfacthd.framedblocks.api.util.client.ModelUtils;
 import xfacthd.framedblocks.common.data.PropertyHolder;
 import xfacthd.framedblocks.common.data.property.StairsType;
 
@@ -29,117 +29,89 @@ public class FramedVerticalStairsModel extends FramedBlockModel
     @Override
     protected void transformQuad(Map<Direction, List<BakedQuad>> quadMap, BakedQuad quad)
     {
-        if (type == StairsType.VERTICAL && (quad.getDirection() == dir.getOpposite() || quad.getDirection() == dir.getClockWise()))
+        Direction quadDir = quad.getDirection();
+        if (type == StairsType.VERTICAL && (quadDir == dir.getOpposite() || quadDir == dir.getClockWise()))
         {
-            BakedQuad sideQuad = ModelUtils.duplicateQuad(quad);
-            if (BakedQuadTransformer.createVerticalSideQuad(sideQuad, quad.getDirection() == dir.getOpposite() ? dir.getClockWise() : dir.getOpposite(), .5F))
-            {
-                quadMap.get(quad.getDirection()).add(sideQuad);
-            }
+            Direction cutDir = quadDir == dir.getOpposite() ? dir.getClockWise() : dir.getOpposite();
 
-            sideQuad = ModelUtils.duplicateQuad(quad);
-            if (BakedQuadTransformer.createVerticalSideQuad(sideQuad, quad.getDirection() == dir.getOpposite() ? dir.getCounterClockWise() : dir, .5F))
-            {
-                BakedQuadTransformer.setQuadPosInFacingDir(sideQuad, .5F);
-                quadMap.get(null).add(sideQuad);
-            }
+            QuadModifier.geometry(quad)
+                    .apply(Modifiers.cutSideLeftRight(cutDir, .5F))
+                    .export(quadMap.get(quadDir));
+
+            QuadModifier.geometry(quad)
+                    .apply(Modifiers.cutSideLeftRight(cutDir.getOpposite(), .5F))
+                    .apply(Modifiers.setPosition(.5F))
+                    .export(quadMap.get(null));
         }
 
-        if ((quad.getDirection() == Direction.UP && !type.isTop()) || (quad.getDirection() == Direction.DOWN && !type.isBottom())
-        )
+        if ((quadDir == Direction.UP && !type.isTop()) || (quadDir == Direction.DOWN && !type.isBottom()))
         {
-            BakedQuad topBotQuad = ModelUtils.duplicateQuad(quad);
-            if (BakedQuadTransformer.createTopBottomQuad(topBotQuad, dir.getOpposite(), .5F))
-            {
-                quadMap.get(quad.getDirection()).add(topBotQuad);
-            }
+            QuadModifier.geometry(quad)
+                    .apply(Modifiers.cutTopBottom(dir.getOpposite(), .5F))
+                    .export(quadMap.get(quadDir));
 
-            topBotQuad = ModelUtils.duplicateQuad(quad);
-            if (BakedQuadTransformer.createTopBottomQuad(topBotQuad, dir, .5F) &&
-                BakedQuadTransformer.createTopBottomQuad(topBotQuad, dir.getClockWise(), .5F)
-            )
-            {
-                quadMap.get(quad.getDirection()).add(topBotQuad);
-            }
+            QuadModifier.geometry(quad)
+                    .apply(Modifiers.cutTopBottom(dir, .5F))
+                    .apply(Modifiers.cutTopBottom(dir.getClockWise(), .5F))
+                    .export(quadMap.get(quadDir));
         }
 
-        if ((quad.getDirection() == dir.getOpposite() || quad.getDirection() == dir.getClockWise()) && type != StairsType.VERTICAL)
+        if ((quadDir == dir.getOpposite() || quadDir == dir.getClockWise()) && type != StairsType.VERTICAL)
         {
-            boolean opposite = quad.getDirection() == dir.getOpposite();
+            boolean opposite = quadDir == dir.getOpposite();
+            Direction cutDir = opposite ? dir.getClockWise() : dir.getOpposite();
 
-            BakedQuad sideQuad = ModelUtils.duplicateQuad(quad);
-            if (BakedQuadTransformer.createVerticalSideQuad(sideQuad, opposite ? dir.getClockWise() : dir.getOpposite(), .5F) &&
-                BakedQuadTransformer.createHorizontalSideQuad(sideQuad, !type.isTop(), .5F)
-            )
-            {
-                quadMap.get(quad.getDirection()).add(sideQuad);
-            }
+            QuadModifier.geometry(quad)
+                    .apply(Modifiers.cutSideLeftRight(cutDir, .5F))
+                    .apply(Modifiers.cutSideUpDown(!type.isTop(), .5F))
+                    .export(quadMap.get(quadDir));
 
-            sideQuad = ModelUtils.duplicateQuad(quad);
-            if (BakedQuadTransformer.createVerticalSideQuad(sideQuad, opposite ? dir.getCounterClockWise() : dir, .5F) &&
-                BakedQuadTransformer.createHorizontalSideQuad(sideQuad, !type.isTop(), .5F)
-            )
-            {
-                BakedQuadTransformer.setQuadPosInFacingDir(sideQuad, .5F);
-                quadMap.get(null).add(sideQuad);
-            }
+            QuadModifier.geometry(quad)
+                    .apply(Modifiers.cutSideLeftRight(cutDir, .5F))
+                    .apply(Modifiers.cutSideUpDown(type.isTop(), .5F))
+                    .apply(Modifiers.setPosition(.5F))
+                    .export(quadMap.get(quadDir));
 
-            sideQuad = ModelUtils.duplicateQuad(quad);
-            if (BakedQuadTransformer.createVerticalSideQuad(sideQuad, opposite ? dir.getClockWise() : dir.getOpposite(), .5F) &&
-                BakedQuadTransformer.createHorizontalSideQuad(sideQuad, type.isTop(), .5F)
-            )
-            {
-                BakedQuadTransformer.setQuadPosInFacingDir(sideQuad, .5F);
-                quadMap.get(null).add(sideQuad);
-            }
+            cutDir = opposite ? dir.getCounterClockWise() : dir;
+            QuadModifier.geometry(quad)
+                    .apply(Modifiers.cutSideLeftRight(cutDir, .5F))
+                    .apply(Modifiers.cutSideUpDown(!type.isTop(), .5F))
+                    .apply(Modifiers.setPosition(.5F))
+                    .export(quadMap.get(quadDir));
         }
 
-        if ((quad.getDirection() == Direction.UP && type.isTop()) || (quad.getDirection() == Direction.DOWN && type.isBottom()))
+        if ((quadDir == Direction.UP && type.isTop()) || (quadDir == Direction.DOWN && type.isBottom()))
         {
-            BakedQuad topBotQuad = ModelUtils.duplicateQuad(quad);
-            if (BakedQuadTransformer.createTopBottomQuad(topBotQuad, dir.getOpposite(), .5F) &&
-                BakedQuadTransformer.createTopBottomQuad(topBotQuad, dir.getClockWise(), .5F)
-            )
-            {
-                quadMap.get(quad.getDirection()).add(topBotQuad);
-            }
+            QuadModifier.geometry(quad)
+                    .apply(Modifiers.cutTopBottom(dir.getOpposite(), .5F))
+                    .apply(Modifiers.cutTopBottom(dir.getClockWise(), .5F))
+                    .export(quadMap.get(quadDir));
 
-            topBotQuad = ModelUtils.duplicateQuad(quad);
-            if (BakedQuadTransformer.createTopBottomQuad(topBotQuad, dir.getOpposite(), .5F) &&
-                BakedQuadTransformer.createTopBottomQuad(topBotQuad, dir.getCounterClockWise(), .5F)
-            )
-            {
-                BakedQuadTransformer.setQuadPosInFacingDir(topBotQuad, .5F);
-                quadMap.get(null).add(topBotQuad);
-            }
+            QuadModifier.geometry(quad)
+                    .apply(Modifiers.cutTopBottom(dir.getOpposite(), .5F))
+                    .apply(Modifiers.cutTopBottom(dir.getCounterClockWise(), .5F))
+                    .apply(Modifiers.setPosition(.5F))
+                    .export(quadMap.get(quadDir));
 
-            topBotQuad = ModelUtils.duplicateQuad(quad);
-            if (BakedQuadTransformer.createTopBottomQuad(topBotQuad, dir, .5F) &&
-                BakedQuadTransformer.createTopBottomQuad(topBotQuad, dir.getClockWise(), .5F)
-            )
-            {
-                BakedQuadTransformer.setQuadPosInFacingDir(topBotQuad, .5F);
-                quadMap.get(null).add(topBotQuad);
-            }
+            QuadModifier.geometry(quad)
+                    .apply(Modifiers.cutTopBottom(dir, .5F))
+                    .apply(Modifiers.cutTopBottom(dir.getClockWise(), .5F))
+                    .apply(Modifiers.setPosition(.5F))
+                    .export(quadMap.get(quadDir));
         }
 
-        if ((quad.getDirection() == dir || quad.getDirection() == dir.getCounterClockWise()) && type != StairsType.VERTICAL)
+        if ((quadDir == dir || quadDir == dir.getCounterClockWise()) && type != StairsType.VERTICAL)
         {
-            boolean ccw = quad.getDirection() == dir.getCounterClockWise();
+            boolean ccw = quadDir == dir.getCounterClockWise();
 
-            BakedQuad sideQuad = ModelUtils.duplicateQuad(quad);
-            if (BakedQuadTransformer.createHorizontalSideQuad(sideQuad, !type.isTop(), .5F))
-            {
-                quadMap.get(quad.getDirection()).add(sideQuad);
-            }
+            QuadModifier.geometry(quad)
+                    .apply(Modifiers.cutSideUpDown(!type.isTop(), .5F))
+                    .export(quadMap.get(quadDir));
 
-            sideQuad = ModelUtils.duplicateQuad(quad);
-            if (BakedQuadTransformer.createHorizontalSideQuad(sideQuad, type.isTop(), .5F) &&
-                BakedQuadTransformer.createVerticalSideQuad(sideQuad, ccw ? dir.getOpposite() : dir.getClockWise(), .5F)
-            )
-            {
-                quadMap.get(quad.getDirection()).add(sideQuad);
-            }
+            QuadModifier.geometry(quad)
+                    .apply(Modifiers.cutSideUpDown(type.isTop(), .5F))
+                    .apply(Modifiers.cutSideLeftRight(ccw ? dir.getOpposite() : dir.getClockWise(), .5F))
+                    .export(quadMap.get(quadDir));
         }
     }
 }
