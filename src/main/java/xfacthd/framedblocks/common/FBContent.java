@@ -133,6 +133,7 @@ public final class FBContent
     public static final RegistryObject<Block> blockFramedVerticalDoubleStairs = registerBlock(FramedVerticalDoubleStairsBlock::new, BlockType.FRAMED_VERTICAL_DOUBLE_STAIRS);
     public static final RegistryObject<Block> blockFramedWallBoard = registerBlock(FramedWallBoardBlock::new, BlockType.FRAMED_WALL_BOARD);
     public static final RegistryObject<Block> blockFramedGlowingCube = registerBlock(FramedCube::glowingCube, BlockType.FRAMED_GLOWING_CUBE);
+    public static final RegistryObject<Block> blockFramedTarget = registerBlock(FramedTargetBlock::new, BlockType.FRAMED_TARGET);
     // endregion
 
     // region Items
@@ -214,6 +215,10 @@ public final class FBContent
     public static final RegistryObject<BlockEntityType<FramedVerticalDoubleStairsBlockEntity>> blockEntityTypeFramedVerticalDoubleStairs = createBlockEntityType(
             FramedVerticalDoubleStairsBlockEntity::new,
             BlockType.FRAMED_VERTICAL_DOUBLE_STAIRS
+    );
+    public static final RegistryObject<BlockEntityType<FramedTargetBlockEntity>> blockEntityTypeFramedTarget = createBlockEntityType(
+            FramedTargetBlockEntity::new,
+            BlockType.FRAMED_TARGET
     );
     // endregion
 

@@ -11,6 +11,7 @@ import net.minecraftforge.common.data.ExistingFileHelper;
 import net.minecraftforge.registries.RegistryObject;
 import xfacthd.framedblocks.api.util.FramedConstants;
 import xfacthd.framedblocks.client.model.FramedMarkedPressurePlateModel;
+import xfacthd.framedblocks.client.model.FramedTargetModel;
 import xfacthd.framedblocks.common.FBContent;
 import xfacthd.framedblocks.common.data.PropertyHolder;
 
@@ -103,6 +104,7 @@ public class FramedBlockStateProvider extends BlockStateProvider
         registerFramedIronDoor();
         registerFramedIronTrapDoor();
         registerFramedGlowingCube();
+        registerFramedTarget(cube);
     }
 
     private void registerFramedSlab(ModelFile cube)
@@ -560,6 +562,18 @@ public class FramedBlockStateProvider extends BlockStateProvider
                 .renderType("cutout");
 
         simpleBlockWithItem(FBContent.blockFramedGlowingCube, block);
+    }
+
+    private void registerFramedTarget(ModelFile cube)
+    {
+        simpleBlockWithItem(FBContent.blockFramedTarget, cube, "cutout");
+        models().withExistingParent("target_overlay", "block/block")
+                .element()
+                    .cube("#overlay")
+                    .faces((dir, face) -> face.tintindex(FramedTargetModel.OVERLAY_TINT_IDX))
+                    .end()
+                .texture("overlay", modLoc("block/target_overlay"))
+                .renderType("cutout");
     }
 
 

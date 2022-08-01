@@ -70,6 +70,7 @@
     "framedblocks:framed_double_stairs",
     "framedblocks:framed_vertical_double_stairs",
     "framedblocks:framed_wall_board",
-    "framedblocks:framed_glowing_cube"
+    "framedblocks:framed_glowing_cube",
+    "framedblocks:framed_target"
   ]
 }
