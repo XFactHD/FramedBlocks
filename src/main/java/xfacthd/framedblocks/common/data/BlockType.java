@@ -90,7 +90,7 @@ public enum BlockType implements IBlockType
     FRAMED_GLOWING_CUBE           ( true, false, false, false,  true,  true, false, false, CtmPredicate.TRUE, SideSkipPredicate.CTM, Shapes.block()),
     FRAMED_LARGE_BUTTON           (false, false, false, false,  true, false, false, false),
     FRAMED_LARGE_STONE_BUTTON     (false, false, false, false,  true, false, false, false),
-    FRAMED_TARGET                 ( true, false, false, false,  true,  true, false, false, CtmPredicate.TRUE, SideSkipPredicate.CTM, Shapes.block()),
+    FRAMED_TARGET                 ( true, false,  true, false,  true,  true, false, false, CtmPredicate.TRUE, SideSkipPredicate.CTM, Shapes.block()),
     ;
 
     private final String name = toString().toLowerCase(Locale.ROOT);

@@ -21,14 +21,17 @@ import net.minecraft.world.level.material.MaterialColor;
 import net.minecraft.world.level.storage.loot.LootContext;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.shapes.*;
+import net.minecraftforge.client.extensions.common.IClientBlockExtensions;
 import xfacthd.framedblocks.api.block.IFramedBlock;
 import xfacthd.framedblocks.api.type.IBlockType;
 import xfacthd.framedblocks.api.util.FramedProperties;
+import xfacthd.framedblocks.api.util.client.FramedBlockRenderProperties;
 import xfacthd.framedblocks.common.blockentity.FramedTargetBlockEntity;
 import xfacthd.framedblocks.common.data.BlockType;
 
 import javax.annotation.Nullable;
 import java.util.List;
+import java.util.function.Consumer;
 
 @SuppressWarnings("deprecation")
 public class FramedTargetBlock extends TargetBlock implements IFramedBlock
@@ -155,6 +158,12 @@ public class FramedTargetBlock extends TargetBlock implements IFramedBlock
 
     @Override
     public BlockEntity newBlockEntity(BlockPos pos, BlockState state) { return new FramedTargetBlockEntity(pos, state); }
+
+    @Override
+    public void initializeClient(Consumer<IClientBlockExtensions> consumer)
+    {
+        consumer.accept(new FramedBlockRenderProperties());
+    }
 
     @Override
     public IBlockType getBlockType() { return BlockType.FRAMED_TARGET; }
