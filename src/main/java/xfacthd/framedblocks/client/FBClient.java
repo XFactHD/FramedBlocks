@@ -113,11 +113,12 @@ public final class FBClient
     @SubscribeEvent
     public static void onModelRegister(final ModelEvent.RegisterAdditional event)
     {
+        event.register(FluidModel.BARE_MODEL);
         event.register(FramedMarkedCubeModel.SLIME_FRAME_LOCATION);
         event.register(FramedMarkedCubeModel.REDSTONE_FRAME_LOCATION);
         FramedMarkedPressurePlateModel.registerFrameModels(event);
         FramedStoneButtonModel.registerFrameModels(event);
-        event.register(FluidModel.BARE_MODEL);
+        FramedLargeStoneButtonModel.registerFrameModels(event);
         event.register(FramedTargetModel.OVERLAY_LOCATION);
     }
 
@@ -130,6 +131,7 @@ public final class FBClient
         FramedChestRenderer.onModelsLoaded(registry); //Must happen before the chest model is replaced
         FramedMarkedPressurePlateModel.cacheFrameModels(registry);
         FramedStoneButtonModel.cacheFrameModels(registry);
+        FramedLargeStoneButtonModel.cacheFrameModels(registry);
         FramedTargetModel.cacheOverlayModel(registry);
 
         List<Property<?>> ignoreWaterlogged = List.of(BlockStateProperties.WATERLOGGED);
@@ -212,6 +214,8 @@ public final class FBClient
         ClientUtils.replaceModels(FBContent.blockFramedVerticalDoubleStairs, registry, FramedVerticalDoubleStairsModel::new, FramedVerticalDoubleStairsModel.itemSource(), ignoreSolid);
         ClientUtils.replaceModels(FBContent.blockFramedWallBoard, registry, FramedWallBoardModel::new, ignoreDefault);
         ClientUtils.replaceModels(FBContent.blockFramedGlowingCube, registry, FramedGlowingCubeModel::new, ignoreSolid);
+        ClientUtils.replaceModelsSpecial(FBContent.blockFramedLargeButton, registry, FramedLargeButtonModel::new, FramedLargeButtonModel::mergeStates);
+        ClientUtils.replaceModelsSpecial(FBContent.blockFramedLargeStoneButton, registry, FramedLargeStoneButtonModel::new, FramedLargeButtonModel::mergeStates);
         ClientUtils.replaceModelsSpecial(FBContent.blockFramedTarget, registry, FramedTargetModel::new, FramedTargetModel.itemSource(), ignoreAll);
     }
 

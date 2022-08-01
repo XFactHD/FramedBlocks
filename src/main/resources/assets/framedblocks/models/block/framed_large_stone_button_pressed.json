@@ -1,0 +1,34 @@
+{
+	"credit": "Made with Blockbench",
+	"textures": {
+		"frame": "framedblocks:block/framed_block",
+		"background": "minecraft:block/stone",
+		"particle": "framedblocks:block/framed_block"
+	},
+	"elements": [
+		{
+			"from": [1, 0, 1],
+			"to": [15, 1, 15],
+			"faces": {
+				"north": {"uv": [1, 15, 15, 16], "texture": "#background"},
+				"east": {"uv": [0, 1, 1, 15], "rotation": 270, "texture": "#background"},
+				"south": {"uv": [1, 0, 15, 1], "rotation": 180, "texture": "#background"},
+				"west": {"uv": [15, 1, 16, 15], "rotation": 90, "texture": "#background"},
+				"up": {"uv": [1, 1, 15, 15], "texture": "#background"},
+				"down": {"uv": [1, 1, 15, 15], "texture": "#background", "cullface": "down"}
+			}
+		},
+		{
+			"from": [1, 0, 1],
+			"to": [15, 1, 15],
+			"faces": {
+				"north": {"uv": [1, 15, 15, 16], "texture": "#frame"},
+				"east": {"uv": [0, 1, 1, 15], "rotation": 270, "texture": "#frame"},
+				"south": {"uv": [1, 0, 15, 1], "rotation": 180, "texture": "#frame"},
+				"west": {"uv": [15, 1, 16, 15], "rotation": 90, "texture": "#frame"},
+				"up": {"uv": [1, 1, 15, 15], "texture": "#frame"},
+				"down": {"uv": [1, 1, 15, 15], "texture": "#frame", "cullface": "down"}
+			}
+		}
+	]
+}

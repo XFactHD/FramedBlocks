@@ -71,6 +71,7 @@ public class FramedBlockStateProvider extends BlockStateProvider
         simpleBlockWithItem(FBContent.blockFramedDoubleStairs, cube, "cutout");
         simpleBlockWithItem(FBContent.blockFramedVerticalDoubleStairs, cube, "cutout");
         simpleBlock(FBContent.blockFramedWallBoard.get(), cube);
+        simpleBlock(FBContent.blockFramedLargeButton.get(), cube);
 
         registerFramedSlab(cube);
         registerFramedStairs(cube);
@@ -104,6 +105,7 @@ public class FramedBlockStateProvider extends BlockStateProvider
         registerFramedIronDoor();
         registerFramedIronTrapDoor();
         registerFramedGlowingCube();
+        registerFramedLargeStoneButton();
         registerFramedTarget(cube);
     }
 
@@ -562,6 +564,39 @@ public class FramedBlockStateProvider extends BlockStateProvider
                 .renderType("cutout");
 
         simpleBlockWithItem(FBContent.blockFramedGlowingCube, block);
+    }
+
+    private void registerFramedLargeStoneButton()
+    {
+        ModelFile button = models().getExistingFile(modLoc("framed_large_stone_button"));
+        ModelFile buttonPressed = models().getExistingFile(modLoc("framed_large_stone_button_pressed"));
+
+        getVariantBuilder(FBContent.blockFramedLargeStoneButton.get()).forAllStates(state ->
+        {
+            Direction facing = state.getValue(ButtonBlock.FACING);
+            AttachFace face = state.getValue(ButtonBlock.FACE);
+            boolean pressed = state.getValue(ButtonBlock.POWERED);
+
+            int rotX;
+            int rotY;
+
+            if (face == AttachFace.WALL)
+            {
+                rotX = 90;
+                rotY = (int)(facing.toYRot() + 180) % 360;
+            }
+            else
+            {
+                rotX = face == AttachFace.CEILING ? 180 : 0;
+                rotY = 0;
+            }
+
+            return ConfiguredModel.builder()
+                    .modelFile(pressed ? buttonPressed : button)
+                    .rotationX(rotX)
+                    .rotationY(rotY)
+                    .build();
+        });
     }
 
     private void registerFramedTarget(ModelFile cube)

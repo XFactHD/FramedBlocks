@@ -133,6 +133,8 @@ public final class FBContent
     public static final RegistryObject<Block> blockFramedVerticalDoubleStairs = registerBlock(FramedVerticalDoubleStairsBlock::new, BlockType.FRAMED_VERTICAL_DOUBLE_STAIRS);
     public static final RegistryObject<Block> blockFramedWallBoard = registerBlock(FramedWallBoardBlock::new, BlockType.FRAMED_WALL_BOARD);
     public static final RegistryObject<Block> blockFramedGlowingCube = registerBlock(FramedCube::glowingCube, BlockType.FRAMED_GLOWING_CUBE);
+    public static final RegistryObject<Block> blockFramedLargeButton = registerBlock(FramedLargeButtonBlock::new, BlockType.FRAMED_LARGE_BUTTON);
+    public static final RegistryObject<Block> blockFramedLargeStoneButton = registerBlock(FramedLargeStoneButtonBlock::new, BlockType.FRAMED_LARGE_STONE_BUTTON);
     public static final RegistryObject<Block> blockFramedTarget = registerBlock(FramedTargetBlock::new, BlockType.FRAMED_TARGET);
     // endregion
 
