@@ -17,6 +17,7 @@ public class PrismOutlineRenderer implements OutlineRender
     protected static final Quaternion XP_90 = Vector3f.XP.rotation(Mth.PI / 2F);
     protected static final Quaternion YP_90 = Vector3f.YP.rotation(Mth.PI / 2F);
     protected static final Quaternion ZP_90 = Vector3f.ZP.rotation(Mth.PI / 2F);
+    protected static final Quaternion[] YN_DIR = makeQuaternionArray();
 
     @Override
     public void draw(BlockState state, PoseStack pstack, VertexConsumer builder)
@@ -59,7 +60,7 @@ public class PrismOutlineRenderer implements OutlineRender
         {
             if (facing != Direction.SOUTH)
             {
-                pstack.mulPose(Vector3f.YN.rotation(Mth.PI / 2F * facing.get2DDataValue()));
+                pstack.mulPose(YN_DIR[facing.get2DDataValue()]);
             }
             if (axis != Direction.Axis.Y)
             {
@@ -67,5 +68,17 @@ public class PrismOutlineRenderer implements OutlineRender
             }
             pstack.mulPose(XP_90);
         }
+    }
+
+
+
+    private static Quaternion[] makeQuaternionArray()
+    {
+        Quaternion[] array = new Quaternion[4];
+        for (Direction dir : Direction.Plane.HORIZONTAL)
+        {
+            array[dir.get2DDataValue()] = Vector3f.YN.rotation(Mth.PI / 2F * dir.get2DDataValue());
+        }
+        return array;
     }
 }
