@@ -559,6 +559,20 @@ public class FramedRecipeProvider extends RecipeProvider
                 .unlockedBy("hasFramedCube", HAS_FRAMED_BLOCK)
                 .save(consumer);
 
+        ShapedRecipeBuilder.shaped(FBContent.blockFramedPyramid.get(), 4)
+                .pattern("SS")
+                .pattern("SS")
+                .define('S', FBContent.blockFramedSlopePanel.get())
+                .unlockedBy("hasFramedSlopePanel", has(FBContent.blockFramedSlopePanel.get()))
+                .save(consumer);
+
+        ShapedRecipeBuilder.shaped(FBContent.blockFramedPyramidSlab.get(), 4)
+                .pattern("SS")
+                .pattern("SS")
+                .define('S', FBContent.blockFramedSlope.get())
+                .unlockedBy("hasFramedSlope", has(FBContent.blockFramedSlope.get()))
+                .save(consumer);
+
         ShapedRecipeBuilder.shaped(FBContent.blockFramedHorizontalPane.get(), 4)
                 .pattern("PP")
                 .pattern("PP")

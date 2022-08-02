@@ -19,7 +19,7 @@ import java.util.Map;
 
 public class FramedSlopePanelModel extends FramedBlockModel
 {
-    private static final float SLOPE_ANGLE = (float) Math.toDegrees(Math.atan(.5));
+    public static final float SLOPE_ANGLE = (float) Math.toDegrees(Math.atan(.5));
 
     private final Direction facing;
     private final HorizontalRotation rotation;
