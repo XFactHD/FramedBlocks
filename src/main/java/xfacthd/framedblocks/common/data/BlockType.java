@@ -90,6 +90,7 @@ public enum BlockType implements IBlockType
     FRAMED_GLOWING_CUBE           ( true, false, false, false,  true,  true, false, false, CtmPredicate.TRUE, SideSkipPredicate.CTM, Shapes.block()),
     FRAMED_LARGE_BUTTON           (false, false, false, false,  true, false, false, false),
     FRAMED_LARGE_STONE_BUTTON     (false, false, false, false,  true, false, false, false),
+    FRAMED_HORIZONTAL_PANE        (false, false, false,  true,  true,  true, false, false, CtmPredicate.FALSE, FramedHorizontalPaneBlock.SKIP_PREDICATE, Shapes.box(0, 7D/16D, 0, 1, 9D/16D, 1)),
     FRAMED_TARGET                 ( true, false,  true, false,  true,  true, false, false, CtmPredicate.TRUE, SideSkipPredicate.CTM, Shapes.block()),
     ;
 
