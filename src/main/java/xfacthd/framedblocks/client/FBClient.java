@@ -22,6 +22,7 @@ import xfacthd.framedblocks.api.util.FramedConstants;
 import xfacthd.framedblocks.api.util.FramedProperties;
 import xfacthd.framedblocks.api.util.client.ClientUtils;
 import xfacthd.framedblocks.api.util.client.ModelCache;
+import xfacthd.framedblocks.client.loader.overlay.OverlayLoader;
 import xfacthd.framedblocks.client.model.*;
 import xfacthd.framedblocks.client.model.FluidModel;
 import xfacthd.framedblocks.client.render.*;
@@ -110,6 +111,12 @@ public final class FBClient
     public static void onOverlayRegister(final RegisterGuiOverlaysEvent event)
     {
         event.registerAboveAll("state_lock", new StateLockOverlay());
+    }
+
+    @SubscribeEvent
+    public static void onGeometryLoaderRegister(final ModelEvent.RegisterGeometryLoaders event)
+    {
+        event.register(OverlayLoader.ID.getPath(), new OverlayLoader());
     }
 
     @SubscribeEvent

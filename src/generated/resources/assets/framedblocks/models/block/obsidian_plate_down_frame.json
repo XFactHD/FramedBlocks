@@ -1,6 +1,14 @@
 {
-  "parent": "framedblocks:block/framed_pressure_plate_frame_down",
-  "textures": {
-    "texture": "framedblocks:block/obsidian_plate_frame"
+  "center": [
+    8.0,
+    0.25,
+    8.0
+  ],
+  "loader": "framedblocks:overlay",
+  "model": {
+    "parent": "framedblocks:block/framed_pressure_plate_frame_down",
+    "textures": {
+      "texture": "framedblocks:block/obsidian_plate_frame"
+    }
   }
 }

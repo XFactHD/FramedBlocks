@@ -1,53 +1,56 @@
 {
-  "parent": "minecraft:block/block",
-  "elements": [
-    {
-      "faces": {
-        "down": {
-          "cullface": "down",
-          "texture": "#overlay",
-          "tintindex": 1024
+  "loader": "framedblocks:overlay",
+  "model": {
+    "parent": "minecraft:block/block",
+    "elements": [
+      {
+        "faces": {
+          "down": {
+            "cullface": "down",
+            "texture": "#overlay",
+            "tintindex": 1024
+          },
+          "east": {
+            "cullface": "east",
+            "texture": "#overlay",
+            "tintindex": 1024
+          },
+          "north": {
+            "cullface": "north",
+            "texture": "#overlay",
+            "tintindex": 1024
+          },
+          "south": {
+            "cullface": "south",
+            "texture": "#overlay",
+            "tintindex": 1024
+          },
+          "up": {
+            "cullface": "up",
+            "texture": "#overlay",
+            "tintindex": 1024
+          },
+          "west": {
+            "cullface": "west",
+            "texture": "#overlay",
+            "tintindex": 1024
+          }
         },
-        "east": {
-          "cullface": "east",
-          "texture": "#overlay",
-          "tintindex": 1024
-        },
-        "north": {
-          "cullface": "north",
-          "texture": "#overlay",
-          "tintindex": 1024
-        },
-        "south": {
-          "cullface": "south",
-          "texture": "#overlay",
-          "tintindex": 1024
-        },
-        "up": {
-          "cullface": "up",
-          "texture": "#overlay",
-          "tintindex": 1024
-        },
-        "west": {
-          "cullface": "west",
-          "texture": "#overlay",
-          "tintindex": 1024
-        }
-      },
-      "from": [
-        0,
-        0,
-        0
-      ],
-      "to": [
-        16,
-        16,
-        16
-      ]
+        "from": [
+          0,
+          0,
+          0
+        ],
+        "to": [
+          16,
+          16,
+          16
+        ]
+      }
+    ],
+    "render_type": "minecraft:cutout",
+    "textures": {
+      "overlay": "framedblocks:block/target_overlay"
     }
-  ],
-  "render_type": "minecraft:cutout",
-  "textures": {
-    "overlay": "framedblocks:block/target_overlay"
   }
 }

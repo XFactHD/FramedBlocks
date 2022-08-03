@@ -1,6 +1,9 @@
 {
-  "parent": "minecraft:block/cube_all",
-  "textures": {
-    "all": "framedblocks:block/slime_frame"
+  "loader": "framedblocks:overlay",
+  "model": {
+    "parent": "minecraft:block/cube_all",
+    "textures": {
+      "all": "framedblocks:block/slime_frame"
+    }
   }
 }
