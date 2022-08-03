@@ -1,6 +1,8 @@
 package xfacthd.framedblocks.client.model;
 
+import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.renderer.block.model.BakedQuad;
+import net.minecraft.client.renderer.block.model.ItemTransforms;
 import net.minecraft.client.resources.model.BakedModel;
 import net.minecraft.core.Direction;
 import net.minecraft.world.level.block.state.BlockState;
@@ -65,6 +67,12 @@ public class FramedSlopeSlabModel extends FramedBlockModel
                     .apply(Modifiers.setPosition(.5F))
                     .export(quadMap.get(null));
         }
+    }
+
+    @Override
+    protected void applyInHandTransformation(PoseStack poseStack, ItemTransforms.TransformType type)
+    {
+        poseStack.translate(0, .5, 0);
     }
 
 

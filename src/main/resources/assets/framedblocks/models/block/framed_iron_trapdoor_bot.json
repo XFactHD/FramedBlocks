@@ -1,6 +1,6 @@
 {
     "credit": "Made with Blockbench",
-    "parent": "block/cube",
+    "parent": "block/template_orientable_trapdoor_bottom",
     "textures": {
         "0": "minecraft:block/iron_block",
         "1": "framedblocks:block/framed_block",

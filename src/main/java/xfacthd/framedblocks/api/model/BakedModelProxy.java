@@ -1,5 +1,6 @@
 package xfacthd.framedblocks.api.model;
 
+import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.renderer.block.model.*;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.resources.model.BakedModel;
@@ -42,4 +43,20 @@ public abstract class BakedModelProxy implements BakedModel
 
     @Override
     public ItemTransforms getTransforms() { return baseModel.getTransforms(); }
+
+    @Override
+    public BakedModel applyTransform(ItemTransforms.TransformType type, PoseStack poseStack, boolean applyLeftHandTransform)
+    {
+        BakedModel model = BakedModel.super.applyTransform(type, poseStack, applyLeftHandTransform);
+        if (type.firstPerson() || type == ItemTransforms.TransformType.THIRD_PERSON_LEFT_HAND || type == ItemTransforms.TransformType.THIRD_PERSON_RIGHT_HAND)
+        {
+            applyInHandTransformation(poseStack, type);
+        }
+        return model;
+    }
+
+    /**
+     * Apply transformations to the item model when it is rendered in hand
+     */
+    protected void applyInHandTransformation(PoseStack poseStack, ItemTransforms.TransformType type) { }
 }

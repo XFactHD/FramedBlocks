@@ -1,5 +1,7 @@
 package xfacthd.framedblocks.client.model;
 
+import com.mojang.blaze3d.vertex.PoseStack;
+import net.minecraft.client.renderer.block.model.ItemTransforms;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.resources.model.BakedModel;
 import net.minecraft.core.Direction;
@@ -35,6 +37,12 @@ public class FramedDoubleSlopeSlabModel extends FramedDoubleBlockModel
     public TextureAtlasSprite getParticleIcon(@NotNull ModelData data)
     {
         return getSpriteOrDefault(data, FramedDoubleBlockEntity.DATA_RIGHT, getModels().getB());
+    }
+
+    @Override
+    protected void applyInHandTransformation(PoseStack poseStack, ItemTransforms.TransformType type)
+    {
+        poseStack.translate(0, .5, 0);
     }
 
 
