@@ -63,7 +63,7 @@ public class FramedSignBlockEntity extends FramedBlockEntity
                 if (clickevent.getAction() == ClickEvent.Action.RUN_COMMAND)
                 {
                     //noinspection ConstantConditions
-                    player.getServer().getCommands().performCommand(getCommandSource(player), clickevent.getValue());
+                    player.getServer().getCommands().performPrefixedCommand(getCommandSource(player), clickevent.getValue());
                 }
             }
         }
