@@ -10,8 +10,7 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.client.model.IQuadTransformer;
 import net.minecraftforge.client.model.data.ModelData;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 public class FramedGlowingCubeModel extends FramedCubeModel
 {
@@ -36,14 +35,27 @@ public class FramedGlowingCubeModel extends FramedCubeModel
         return applyFullbright(quads);
     }
 
+    @Override
+    public boolean useAmbientOcclusion() { return false; }
+
 
 
     private static List<BakedQuad> applyFullbright(List<BakedQuad> quads)
     {
         List<BakedQuad> fullbrightQuads = new ArrayList<>(quads.size());
         quads.forEach(quad ->
-                fullbrightQuads.add(FULLBRIGHT_TRANSFORMER.process(quad))
-        );
+        {
+            int[] vertexData = quad.getVertices();
+            BakedQuad newQuad = new BakedQuad(
+                    Arrays.copyOf(vertexData, vertexData.length),
+                    quad.getTintIndex(),
+                    quad.getDirection(),
+                    quad.getSprite(),
+                    false
+            );
+            FULLBRIGHT_TRANSFORMER.processInPlace(newQuad);
+            fullbrightQuads.add(newQuad);
+        });
         return fullbrightQuads;
     }
 }
