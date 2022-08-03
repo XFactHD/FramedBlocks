@@ -34,6 +34,9 @@ public class FramedBlockTagProvider extends BlockTagsProvider
         tag(BlockTags.TRAPDOORS).add(FBContent.blockFramedTrapDoor.get(), FBContent.blockFramedIronTrapDoor.get());
         tag(BlockTags.WOODEN_TRAPDOORS).add(FBContent.blockFramedTrapDoor.get());
         tag(BlockTags.CLIMBABLE).add(FBContent.blockFramedLadder.get());
+        tag(BlockTags.SIGNS).add(FBContent.blockFramedSign.get(), FBContent.blockFramedWallSign.get());
+        tag(BlockTags.STANDING_SIGNS).add(FBContent.blockFramedSign.get());
+        tag(BlockTags.WALL_SIGNS).add(FBContent.blockFramedWallSign.get());
         tag(Tags.Blocks.CHESTS).add(FBContent.blockFramedChest.get());
         tag(BlockTags.RAILS).add(FBContent.blockFramedRailSlope.get());
 

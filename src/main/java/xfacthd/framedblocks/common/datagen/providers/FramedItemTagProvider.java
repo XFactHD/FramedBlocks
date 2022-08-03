@@ -29,6 +29,7 @@ public class FramedItemTagProvider extends ItemTagsProvider
         tag(ItemTags.FENCES).add(FBContent.blockFramedFence.get().asItem());
         tag(ItemTags.DOORS).add(FBContent.blockFramedDoor.get().asItem(), FBContent.blockFramedIronDoor.get().asItem());
         tag(ItemTags.TRAPDOORS).add(FBContent.blockFramedTrapDoor.get().asItem(), FBContent.blockFramedIronTrapDoor.get().asItem());
+        tag(ItemTags.SIGNS).add(FBContent.blockFramedSign.get().asItem());
         tag(Tags.Items.CHESTS).add(FBContent.blockFramedChest.get().asItem());
         tag(Utils.WRENCH).add(FBContent.itemFramedWrench.get());
         tag(Utils.DISABLE_INTANGIBLE).addTag(Utils.WRENCH).add(
