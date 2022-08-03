@@ -55,7 +55,7 @@ public class FramedTargetBlock extends TargetBlock implements IFramedBlock
     @Override
     public final InteractionResult use(BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hit)
     {
-        InteractionResult result = super.use(state, level, pos, player, hand, hit);
+        InteractionResult result = handleUse(state, level, pos, player, hand, hit);
         if (result != InteractionResult.PASS || !player.mayBuild()) { return result; }
 
         ItemStack stack = player.getItemInHand(hand);
