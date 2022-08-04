@@ -13,12 +13,17 @@ import java.util.Arrays;
 
 public final class ModelUtils
 {
-    private static final int ELEMENT_POS = findElement(DefaultVertexFormat.ELEMENT_POSITION);
-    private static final int ELEMENT_COLOR = findElement(DefaultVertexFormat.ELEMENT_COLOR);
-    private static final int ELEMENT_UV = findElement(DefaultVertexFormat.ELEMENT_UV0);
-    private static final int ELEMENT_LIGHT = findElement(DefaultVertexFormat.ELEMENT_UV2);
-    private static final int ELEMENT_NORMAL = findElement(DefaultVertexFormat.ELEMENT_NORMAL);
+    public static final int ELEMENT_POS = findElement(DefaultVertexFormat.ELEMENT_POSITION);
+    public static final int ELEMENT_COLOR = findElement(DefaultVertexFormat.ELEMENT_COLOR);
+    public static final int ELEMENT_UV = findElement(DefaultVertexFormat.ELEMENT_UV0);
+    public static final int ELEMENT_LIGHT = findElement(DefaultVertexFormat.ELEMENT_UV2);
+    public static final int ELEMENT_NORMAL = findElement(DefaultVertexFormat.ELEMENT_NORMAL);
 
+    /**
+     * @deprecated Use {@link xfacthd.framedblocks.api.model.quad.QuadModifier} system instead
+     */
+    @Deprecated
+    @SuppressWarnings("DeprecatedIsStillUsed")
     public static boolean modifyQuad(BakedQuad quad, VertexDataConsumer consumer)
     {
         int[] vertexData = quad.getVertices();

@@ -1,5 +1,6 @@
 package xfacthd.framedblocks.api.util.client;
 
+@Deprecated
 public enum TriangleDirection
 {
     RIGHT,
