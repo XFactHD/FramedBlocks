@@ -1,7 +1,9 @@
 package xfacthd.framedblocks.client.model;
 
 import com.google.common.base.Preconditions;
+import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.renderer.block.model.BakedQuad;
+import net.minecraft.client.renderer.block.model.ItemTransforms;
 import net.minecraft.client.resources.model.BakedModel;
 import net.minecraft.core.Direction;
 import net.minecraft.world.level.block.state.BlockState;
@@ -95,6 +97,12 @@ public class FramedSlopePanelModel extends FramedBlockModel
                         .export(quadMap.get(face));
             }
         }
+    }
+
+    @Override
+    protected void applyInHandTransformation(PoseStack poseStack, ItemTransforms.TransformType type)
+    {
+        poseStack.translate(0, .5, 0);
     }
 
 

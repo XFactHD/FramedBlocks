@@ -43,7 +43,6 @@ public class FramedBlockStateProvider extends BlockStateProvider
         simpleBlock(FBContent.blockFramedSlabCorner.get(), cube);
         simpleBlock(FBContent.blockFramedPanel.get(), cube);
         simpleBlock(FBContent.blockFramedCornerPillar.get(), cube);
-        simpleBlock(FBContent.blockFramedTrapDoor.get(), cube);
         simpleBlock(FBContent.blockFramedWallSign.get(), cube);
         simpleBlock(FBContent.blockFramedLattice.get(), cube);
         simpleBlock(FBContent.blockFramedVerticalStairs.get(), cube);
@@ -81,6 +80,7 @@ public class FramedBlockStateProvider extends BlockStateProvider
         registerFramedFence(cube);
         registerFramedGate(cube);
         registerFramedDoor(cube);
+        registerFramedTrapDoor(cube);
         registerFramedIronDoor();
         registerFramedIronTrapDoor();
         registerFramedPressurePlate(cube);
@@ -152,6 +152,13 @@ public class FramedBlockStateProvider extends BlockStateProvider
     {
         simpleBlock(FBContent.blockFramedDoor.get(), cube);
         itemModels().singleTexture("framed_door", mcLoc("item/generated"), "layer0", modLoc("item/framed_door"));
+    }
+
+    private void registerFramedTrapDoor(ModelFile cube)
+    {
+        simpleBlock(FBContent.blockFramedTrapDoor.get(), cube);
+        itemModels().withExistingParent("framed_trapdoor", mcLoc("block/template_orientable_trapdoor_bottom"))
+                .texture("texture", TEXTURE);
     }
 
     private void registerFramedIronDoor()

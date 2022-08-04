@@ -1,6 +1,6 @@
 {
 	"credit": "Made with Blockbench",
-	"parent": "block/cube",
+	"parent": "block/thin_block",
 	"textures": {
 		"0": "framedblocks:block/framed_block",
 		"particle": "framedblocks:block/framed_block"
