@@ -51,7 +51,7 @@ public class FramedTrapDoorModel extends FramedBlockModel
             else
             {
                 QuadModifier.geometry(quad)
-                        .apply(Modifiers.cutSideUpDown(!Utils.isPositive(dir), DEPTH))
+                        .apply(Modifiers.cutSideLeftRight(dir, DEPTH))
                         .export(quadMap.get(quadDir));
             }
         }
