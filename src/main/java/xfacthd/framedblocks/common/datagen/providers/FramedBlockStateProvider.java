@@ -72,6 +72,7 @@ public class FramedBlockStateProvider extends BlockStateProvider
         simpleBlockWithItem(FBContent.blockFramedDoubleStairs, cube);
         simpleBlockWithItem(FBContent.blockFramedVerticalDoubleStairs, cube);
         simpleBlock(FBContent.blockFramedWallBoard.get(), cube);
+        simpleBlock(FBContent.blockFramedLargeButton.get(), cube);
 
         registerFramedSlab(cube);
         registerFramedStairs(cube);
@@ -79,6 +80,8 @@ public class FramedBlockStateProvider extends BlockStateProvider
         registerFramedFence(cube);
         registerFramedGate(cube);
         registerFramedDoor(cube);
+        registerFramedIronDoor();
+        registerFramedIronTrapDoor();
         registerFramedPressurePlate(cube);
         registerFramedStonePressurePlate();
         registerFramedObsidianPressurePlate();
@@ -102,8 +105,7 @@ public class FramedBlockStateProvider extends BlockStateProvider
         registerFramedBouncyBlock();
         registerFramedSecretStorage();
         registerFramedRedstoneBlock();
-        registerFramedIronDoor();
-        registerFramedIronTrapDoor();
+        registerFramedLargeStoneButton();
         registerFramedTarget(cube);
     }
 
@@ -149,6 +151,31 @@ public class FramedBlockStateProvider extends BlockStateProvider
     {
         simpleBlock(FBContent.blockFramedDoor.get(), cube);
         itemModels().singleTexture("framed_door", mcLoc("item/generated"), "layer0", modLoc("item/framed_door"));
+    }
+
+    private void registerFramedIronDoor()
+    {
+        ModelFile door = models().getExistingFile(modLoc("block/framed_iron_door"));
+        doorBlock(
+                (DoorBlock) FBContent.blockFramedIronDoor.get(),
+                door, door, door, door
+        );
+        itemModels().singleTexture("framed_iron_door", mcLoc("item/generated"), "layer0", modLoc("item/framed_iron_door"));
+    }
+
+    private void registerFramedIronTrapDoor()
+    {
+        ModelFile trapdoorBot = models().getExistingFile(modLoc("block/framed_iron_trapdoor_bot"));
+        ModelFile trapdoorTop = models().getExistingFile(modLoc("block/framed_iron_trapdoor_top"));
+        ModelFile trapdoorOpen = models().getExistingFile(modLoc("block/framed_iron_trapdoor_open"));
+        trapdoorBlock(
+                (TrapDoorBlock) FBContent.blockFramedIronTrapDoor.get(),
+                trapdoorBot,
+                trapdoorTop,
+                trapdoorOpen,
+                true
+        );
+        simpleBlockItem(FBContent.blockFramedIronTrapDoor.get(), trapdoorBot);
     }
 
     private void registerFramedPressurePlate(ModelFile cube)
@@ -567,29 +594,37 @@ public class FramedBlockStateProvider extends BlockStateProvider
                 );
     }
 
-    private void registerFramedIronDoor()
+    private void registerFramedLargeStoneButton()
     {
-        ModelFile door = models().getExistingFile(modLoc("block/framed_iron_door"));
-        doorBlock(
-                (DoorBlock) FBContent.blockFramedIronDoor.get(),
-                door, door, door, door
-        );
-        itemModels().singleTexture("framed_iron_door", mcLoc("item/generated"), "layer0", modLoc("item/framed_iron_door"));
-    }
+        ModelFile button = models().getExistingFile(modLoc("framed_large_stone_button"));
+        ModelFile buttonPressed = models().getExistingFile(modLoc("framed_large_stone_button_pressed"));
 
-    private void registerFramedIronTrapDoor()
-    {
-        ModelFile trapdoorBot = models().getExistingFile(modLoc("block/framed_iron_trapdoor_bot"));
-        ModelFile trapdoorTop = models().getExistingFile(modLoc("block/framed_iron_trapdoor_top"));
-        ModelFile trapdoorOpen = models().getExistingFile(modLoc("block/framed_iron_trapdoor_open"));
-        trapdoorBlock(
-                (TrapDoorBlock) FBContent.blockFramedIronTrapDoor.get(),
-                trapdoorBot,
-                trapdoorTop,
-                trapdoorOpen,
-                true
-        );
-        simpleBlockItem(FBContent.blockFramedIronTrapDoor.get(), trapdoorBot);
+        getVariantBuilder(FBContent.blockFramedLargeStoneButton.get()).forAllStates(state ->
+        {
+            Direction facing = state.getValue(ButtonBlock.FACING);
+            AttachFace face = state.getValue(ButtonBlock.FACE);
+            boolean pressed = state.getValue(ButtonBlock.POWERED);
+
+            int rotX;
+            int rotY;
+
+            if (face == AttachFace.WALL)
+            {
+                rotX = 90;
+                rotY = (int)(facing.toYRot() + 180) % 360;
+            }
+            else
+            {
+                rotX = face == AttachFace.CEILING ? 180 : 0;
+                rotY = 0;
+            }
+
+            return ConfiguredModel.builder()
+                    .modelFile(pressed ? buttonPressed : button)
+                    .rotationX(rotX)
+                    .rotationY(rotY)
+                    .build();
+        });
     }
 
     private void registerFramedTarget(ModelFile cube)

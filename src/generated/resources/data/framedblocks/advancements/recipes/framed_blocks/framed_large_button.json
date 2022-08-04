@@ -1,0 +1,34 @@
+{
+  "parent": "minecraft:recipes/root",
+  "rewards": {
+    "recipes": [
+      "framedblocks:framed_large_button"
+    ]
+  },
+  "criteria": {
+    "hasFramedButton": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "framedblocks:framed_button"
+            ]
+          }
+        ]
+      }
+    },
+    "has_the_recipe": {
+      "trigger": "minecraft:recipe_unlocked",
+      "conditions": {
+        "recipe": "framedblocks:framed_large_button"
+      }
+    }
+  },
+  "requirements": [
+    [
+      "hasFramedButton",
+      "has_the_recipe"
+    ]
+  ]
+}

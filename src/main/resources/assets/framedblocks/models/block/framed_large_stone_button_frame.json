@@ -1,0 +1,23 @@
+{
+	"loader": "framedblocks:overlay",
+	"model": {
+		"textures": {
+			"texture": "framedblocks:block/large_stone_button_frame"
+		},
+		"elements": [
+			{
+				"from": [ 1, 0, 1 ],
+				"to": [ 15, 2, 15 ],
+				"faces": {
+					"north": { "uv": [  1, 13, 15, 15 ], "texture": "#texture" },
+					"east":  { "uv": [  1,  1,  3, 15 ], "texture": "#texture", "rotation": 270 },
+					"south": { "uv": [  1,  1, 15,  3 ], "texture": "#texture", "rotation": 180 },
+					"west":  { "uv": [ 13,  1, 15, 15 ], "texture": "#texture", "rotation":  90 },
+					"up":    { "uv": [  1,  1, 15, 15 ], "texture": "#texture" },
+					"down":  { "uv": [  1,  1, 15, 15 ], "texture": "#texture", "cullface": "down" }
+				}
+			}
+		]
+	},
+	"center": [ 8, 1, 8 ]
+}

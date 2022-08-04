@@ -132,6 +132,7 @@ public final class FBClient
         ForgeModelBakery.addSpecialModel(FramedMarkedCubeModel.REDSTONE_FRAME_LOCATION);
         FramedMarkedPressurePlateModel.registerFrameModels();
         FramedStoneButtonModel.registerFrameModels();
+        FramedLargeStoneButtonModel.registerFrameModels();
         ForgeModelBakery.addSpecialModel(FramedTargetModel.OVERLAY_LOCATION);
     }
 
@@ -143,6 +144,7 @@ public final class FBClient
         FramedChestRenderer.onModelsLoaded(registry); //Must happen before the chest model is replaced
         FramedMarkedPressurePlateModel.cacheFrameModels(registry);
         FramedStoneButtonModel.cacheFrameModels(registry);
+        FramedLargeStoneButtonModel.cacheFrameModels(registry);
         FramedTargetModel.cacheOverlayModel(registry);
 
         List<Property<?>> ignoreWaterlogged = List.of(BlockStateProperties.WATERLOGGED);
@@ -224,6 +226,8 @@ public final class FBClient
         ClientUtils.replaceModels(FBContent.blockFramedDoubleStairs, registry, FramedDoubleStairsModel::new, FramedDoubleStairsModel.itemSource(), ignoreSolid);
         ClientUtils.replaceModels(FBContent.blockFramedVerticalDoubleStairs, registry, FramedVerticalDoubleStairsModel::new, FramedVerticalDoubleStairsModel.itemSource(), ignoreSolid);
         ClientUtils.replaceModels(FBContent.blockFramedWallBoard, registry, FramedWallBoardModel::new, ignoreDefault);
+        ClientUtils.replaceModelsSpecial(FBContent.blockFramedLargeButton, registry, FramedLargeButtonModel::new, FramedLargeButtonModel::mergeStates);
+        ClientUtils.replaceModelsSpecial(FBContent.blockFramedLargeStoneButton, registry, FramedLargeStoneButtonModel::new, FramedLargeButtonModel::mergeStates);
         ClientUtils.replaceModelsSpecial(FBContent.blockFramedTarget, registry, FramedTargetModel::new, FramedTargetModel.itemSource(), ignoreAll);
     }
 

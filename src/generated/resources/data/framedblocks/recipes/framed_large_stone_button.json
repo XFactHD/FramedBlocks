@@ -1,0 +1,15 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "BB",
+    "BB"
+  ],
+  "key": {
+    "B": {
+      "item": "framedblocks:framed_stone_button"
+    }
+  },
+  "result": {
+    "item": "framedblocks:framed_large_stone_button"
+  }
+}

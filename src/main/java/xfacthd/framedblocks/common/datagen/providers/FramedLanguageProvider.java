@@ -90,6 +90,8 @@ public class FramedLanguageProvider extends LanguageProvider
         add(FBContent.blockFramedDoubleStairs.get(), "Framed Double Stairs");
         add(FBContent.blockFramedVerticalDoubleStairs.get(), "Framed Vertical Double Stairs");
         add(FBContent.blockFramedWallBoard.get(), "Framed Wall Board");
+        add(FBContent.blockFramedLargeButton.get(), "Large Framed Button");
+        add(FBContent.blockFramedLargeStoneButton.get(), "Large Framed Stone Button");
         add(FBContent.blockFramedTarget.get(), "Framed Target");
 
         add(FBContent.itemFramedHammer.get(), "Framed Hammer");

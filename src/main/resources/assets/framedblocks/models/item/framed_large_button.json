@@ -1,0 +1,22 @@
+{
+	"parent": "block/block",
+	"textures": {
+		"texture": "framedblocks:block/framed_block",
+		"particle": "#texture"
+	},
+    "render_type": "minecraft:cutout",
+    "elements": [
+		{
+			"from": [ 1, 7, 1 ],
+			"to": [ 15, 10, 15 ],
+			"faces": {
+                "down":  { "uv": [ 1,  1, 15, 15 ], "texture": "#texture" },
+                "up":    { "uv": [ 1, 15, 15,  1 ], "texture": "#texture" },
+				"north": { "uv": [ 1, 12, 15, 15 ], "texture": "#texture" },
+                "south": { "uv": [ 1, 12, 15, 15 ], "texture": "#texture" },
+                "west":  { "uv": [ 1, 12, 15, 15 ], "texture": "#texture" },
+				"east":  { "uv": [ 1, 12, 15, 15 ], "texture": "#texture" }
+			}
+		}
+	]
+}
