@@ -1,6 +1,9 @@
 {
-  "parent": "minecraft:block/cube_all",
-  "textures": {
-    "all": "framedblocks:block/redstone_frame"
-  }
+  "model": {
+    "parent": "minecraft:block/cube_all",
+    "textures": {
+      "all": "framedblocks:block/redstone_frame"
+    }
+  },
+  "loader": "framedblocks:overlay"
 }

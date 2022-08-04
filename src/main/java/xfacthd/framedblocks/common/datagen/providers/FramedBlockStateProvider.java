@@ -1,5 +1,6 @@
 package xfacthd.framedblocks.common.datagen.providers;
 
+import com.mojang.math.Vector3f;
 import net.minecraft.core.Direction;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.resources.ResourceLocation;
@@ -10,8 +11,8 @@ import net.minecraftforge.client.model.generators.*;
 import net.minecraftforge.common.data.ExistingFileHelper;
 import net.minecraftforge.registries.RegistryObject;
 import xfacthd.framedblocks.api.util.FramedConstants;
-import xfacthd.framedblocks.client.model.FramedMarkedPressurePlateModel;
-import xfacthd.framedblocks.client.model.FramedTargetModel;
+import xfacthd.framedblocks.client.loader.overlay.OverlayLoaderBuilder;
+import xfacthd.framedblocks.client.model.*;
 import xfacthd.framedblocks.common.FBContent;
 import xfacthd.framedblocks.common.data.PropertyHolder;
 
@@ -176,14 +177,23 @@ public class FramedBlockStateProvider extends BlockStateProvider
                     .build();
         });
 
-        models().withExistingParent(
-                FramedMarkedPressurePlateModel.STONE_FRAME_LOCATION.getPath(),
-                modLoc("block/framed_pressure_plate_frame_up")
-        ).texture("texture", modLoc("block/stone_plate_frame"));
-        models().withExistingParent(
-                FramedMarkedPressurePlateModel.STONE_FRAME_DOWN_LOCATION.getPath(),
-                modLoc("block/framed_pressure_plate_frame_down")
-        ).texture("texture", modLoc("block/stone_plate_frame"));
+        models().getBuilder(FramedMarkedPressurePlateModel.STONE_FRAME_LOCATION.getPath())
+                .customLoader(OverlayLoaderBuilder::new)
+                .model(models()
+                        .nested()
+                        .parent(models().getExistingFile(modLoc("block/framed_pressure_plate_frame_up")))
+                        .texture("texture", modLoc("block/stone_plate_frame"))
+                )
+                .center(new Vector3f(8F, 0.5F, 8F));
+
+        models().getBuilder(FramedMarkedPressurePlateModel.STONE_FRAME_DOWN_LOCATION.getPath())
+                .customLoader(OverlayLoaderBuilder::new)
+                .model(models()
+                        .nested()
+                        .parent(models().getExistingFile(modLoc("block/framed_pressure_plate_frame_down")))
+                        .texture("texture", modLoc("block/stone_plate_frame"))
+                )
+                .center(new Vector3f(8F, 0.25F, 8F));
 
         itemModels().withExistingParent("framed_stone_pressure_plate", modLoc("block/framed_stone_pressure_plate_up"));
     }
@@ -207,14 +217,23 @@ public class FramedBlockStateProvider extends BlockStateProvider
                     .build();
         });
 
-        models().withExistingParent(
-                FramedMarkedPressurePlateModel.OBSIDIAN_FRAME_LOCATION.getPath(),
-                modLoc("block/framed_pressure_plate_frame_up")
-        ).texture("texture", modLoc("block/obsidian_plate_frame"));
-        models().withExistingParent(
-                FramedMarkedPressurePlateModel.OBSIDIAN_FRAME_DOWN_LOCATION.getPath(),
-                modLoc("block/framed_pressure_plate_frame_down")
-        ).texture("texture", modLoc("block/obsidian_plate_frame"));
+        models().getBuilder(FramedMarkedPressurePlateModel.OBSIDIAN_FRAME_LOCATION.getPath())
+                .customLoader(OverlayLoaderBuilder::new)
+                .model(models()
+                        .nested()
+                        .parent(models().getExistingFile(modLoc("block/framed_pressure_plate_frame_up")))
+                        .texture("texture", modLoc("block/obsidian_plate_frame"))
+                )
+                .center(new Vector3f(8F, 0.5F, 8F));
+
+        models().getBuilder(FramedMarkedPressurePlateModel.OBSIDIAN_FRAME_DOWN_LOCATION.getPath())
+                .customLoader(OverlayLoaderBuilder::new)
+                .model(models()
+                        .nested()
+                        .parent(models().getExistingFile(modLoc("block/framed_pressure_plate_frame_down")))
+                        .texture("texture", modLoc("block/obsidian_plate_frame"))
+                )
+                .center(new Vector3f(8F, 0.25F, 8F));
 
         itemModels().withExistingParent("framed_obsidian_pressure_plate", modLoc("block/framed_obsidian_pressure_plate_up"));
     }
@@ -238,14 +257,23 @@ public class FramedBlockStateProvider extends BlockStateProvider
                     .build();
         });
 
-        models().withExistingParent(
-                FramedMarkedPressurePlateModel.GOLD_FRAME_LOCATION.getPath(),
-                modLoc("block/framed_pressure_plate_frame_up")
-        ).texture("texture", modLoc("block/gold_plate_frame"));
-        models().withExistingParent(
-                FramedMarkedPressurePlateModel.GOLD_FRAME_DOWN_LOCATION.getPath(),
-                modLoc("block/framed_pressure_plate_frame_down")
-        ).texture("texture", modLoc("block/gold_plate_frame"));
+        models().getBuilder(FramedMarkedPressurePlateModel.GOLD_FRAME_LOCATION.getPath())
+                .customLoader(OverlayLoaderBuilder::new)
+                .model(models()
+                        .nested()
+                        .parent(models().getExistingFile(modLoc("block/framed_pressure_plate_frame_up")))
+                        .texture("texture", modLoc("block/gold_plate_frame"))
+                )
+                .center(new Vector3f(8F, 0.5F, 8F));
+
+        models().getBuilder(FramedMarkedPressurePlateModel.GOLD_FRAME_DOWN_LOCATION.getPath())
+                .customLoader(OverlayLoaderBuilder::new)
+                .model(models()
+                        .nested()
+                        .parent(models().getExistingFile(modLoc("block/framed_pressure_plate_frame_down")))
+                        .texture("texture", modLoc("block/gold_plate_frame"))
+                )
+                .center(new Vector3f(8F, 0.25F, 8F));
 
         itemModels().withExistingParent("framed_gold_pressure_plate", modLoc("block/framed_gold_pressure_plate_up"));
     }
@@ -269,14 +297,23 @@ public class FramedBlockStateProvider extends BlockStateProvider
                     .build();
         });
 
-        models().withExistingParent(
-                FramedMarkedPressurePlateModel.IRON_FRAME_LOCATION.getPath(),
-                modLoc("block/framed_pressure_plate_frame_up")
-        ).texture("texture", modLoc("block/iron_plate_frame"));
-        models().withExistingParent(
-                FramedMarkedPressurePlateModel.IRON_FRAME_DOWN_LOCATION.getPath(),
-                modLoc("block/framed_pressure_plate_frame_down")
-        ).texture("texture", modLoc("block/iron_plate_frame"));
+        models().getBuilder(FramedMarkedPressurePlateModel.IRON_FRAME_LOCATION.getPath())
+                .customLoader(OverlayLoaderBuilder::new)
+                .model(models()
+                        .nested()
+                        .parent(models().getExistingFile(modLoc("block/framed_pressure_plate_frame_up")))
+                        .texture("texture", modLoc("block/iron_plate_frame"))
+                )
+                .center(new Vector3f(8F, 0.5F, 8F));
+
+        models().getBuilder(FramedMarkedPressurePlateModel.IRON_FRAME_DOWN_LOCATION.getPath())
+                .customLoader(OverlayLoaderBuilder::new)
+                .model(models()
+                        .nested()
+                        .parent(models().getExistingFile(modLoc("block/framed_pressure_plate_frame_down")))
+                        .texture("texture", modLoc("block/iron_plate_frame"))
+                )
+                .center(new Vector3f(8F, 0.25F, 8F));
 
         itemModels().withExistingParent("framed_iron_pressure_plate", modLoc("block/framed_iron_pressure_plate_up"));
     }
@@ -473,7 +510,13 @@ public class FramedBlockStateProvider extends BlockStateProvider
 
         simpleBlockWithItem(FBContent.blockFramedBouncyCube, block);
 
-        models().cubeAll("slime_frame", modLoc("block/slime_frame"));
+        models().getBuilder(FramedMarkedCubeModel.SLIME_FRAME_LOCATION.getPath())
+                .customLoader(OverlayLoaderBuilder::new)
+                .model(models()
+                        .nested()
+                        .parent(models().getExistingFile(mcLoc("block/cube_all")))
+                        .texture("all", modLoc("block/slime_frame"))
+                );
     }
 
     private void registerFramedSecretStorage()
@@ -515,7 +558,13 @@ public class FramedBlockStateProvider extends BlockStateProvider
 
         simpleBlockWithItem(FBContent.blockFramedRedstoneBlock, block);
 
-        models().cubeAll("redstone_frame", modLoc("block/redstone_frame"));
+        models().getBuilder(FramedMarkedCubeModel.REDSTONE_FRAME_LOCATION.getPath())
+                .customLoader(OverlayLoaderBuilder::new)
+                .model(models()
+                        .nested()
+                        .parent(models().getExistingFile(mcLoc("block/cube_all")))
+                        .texture("all", modLoc("block/redstone_frame"))
+                );
     }
 
     private void registerFramedIronDoor()
@@ -546,12 +595,16 @@ public class FramedBlockStateProvider extends BlockStateProvider
     private void registerFramedTarget(ModelFile cube)
     {
         simpleBlockWithItem(FBContent.blockFramedTarget, cube);
-        models().withExistingParent("target_overlay", "block/block")
-                .element()
-                .cube("#overlay")
-                .faces((dir, face) -> face.tintindex(FramedTargetModel.OVERLAY_TINT_IDX))
-                .end()
-                .texture("overlay", modLoc("block/target_overlay"));
+
+        models().getBuilder("target_overlay")
+                .customLoader(OverlayLoaderBuilder::new)
+                .model(models().nested().parent(models().getExistingFile(mcLoc("block/block")))
+                        .element()
+                        .cube("#overlay")
+                        .faces((dir, face) -> face.tintindex(FramedTargetModel.OVERLAY_TINT_IDX))
+                        .end()
+                        .texture("overlay", modLoc("block/target_overlay"))
+                );
     }
 
 

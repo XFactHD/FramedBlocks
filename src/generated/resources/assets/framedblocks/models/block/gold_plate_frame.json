@@ -1,6 +1,14 @@
 {
-  "parent": "framedblocks:block/framed_pressure_plate_frame_up",
-  "textures": {
-    "texture": "framedblocks:block/gold_plate_frame"
-  }
+  "model": {
+    "parent": "framedblocks:block/framed_pressure_plate_frame_up",
+    "textures": {
+      "texture": "framedblocks:block/gold_plate_frame"
+    }
+  },
+  "center": [
+    8.0,
+    0.5,
+    8.0
+  ],
+  "loader": "framedblocks:overlay"
 }

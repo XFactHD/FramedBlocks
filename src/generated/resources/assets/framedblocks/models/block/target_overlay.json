@@ -1,52 +1,55 @@
 {
-  "parent": "minecraft:block/block",
-  "textures": {
-    "overlay": "framedblocks:block/target_overlay"
-  },
-  "elements": [
-    {
-      "from": [
-        0,
-        0,
-        0
-      ],
-      "to": [
-        16,
-        16,
-        16
-      ],
-      "faces": {
-        "down": {
-          "texture": "#overlay",
-          "cullface": "down",
-          "tintindex": 1024
-        },
-        "up": {
-          "texture": "#overlay",
-          "cullface": "up",
-          "tintindex": 1024
-        },
-        "north": {
-          "texture": "#overlay",
-          "cullface": "north",
-          "tintindex": 1024
-        },
-        "south": {
-          "texture": "#overlay",
-          "cullface": "south",
-          "tintindex": 1024
-        },
-        "west": {
-          "texture": "#overlay",
-          "cullface": "west",
-          "tintindex": 1024
-        },
-        "east": {
-          "texture": "#overlay",
-          "cullface": "east",
-          "tintindex": 1024
+  "model": {
+    "parent": "minecraft:block/block",
+    "textures": {
+      "overlay": "framedblocks:block/target_overlay"
+    },
+    "elements": [
+      {
+        "from": [
+          0,
+          0,
+          0
+        ],
+        "to": [
+          16,
+          16,
+          16
+        ],
+        "faces": {
+          "down": {
+            "texture": "#overlay",
+            "cullface": "down",
+            "tintindex": 1024
+          },
+          "up": {
+            "texture": "#overlay",
+            "cullface": "up",
+            "tintindex": 1024
+          },
+          "north": {
+            "texture": "#overlay",
+            "cullface": "north",
+            "tintindex": 1024
+          },
+          "south": {
+            "texture": "#overlay",
+            "cullface": "south",
+            "tintindex": 1024
+          },
+          "west": {
+            "texture": "#overlay",
+            "cullface": "west",
+            "tintindex": 1024
+          },
+          "east": {
+            "texture": "#overlay",
+            "cullface": "east",
+            "tintindex": 1024
+          }
         }
       }
-    }
-  ]
+    ]
+  },
+  "loader": "framedblocks:overlay"
 }
