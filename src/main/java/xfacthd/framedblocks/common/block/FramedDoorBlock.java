@@ -125,6 +125,18 @@ public class FramedDoorBlock extends DoorBlock implements IFramedBlock
     }
 
     @Override
+    protected int getCloseSound()
+    {
+        return material == IRON_WOOD ? LevelEvent.SOUND_CLOSE_IRON_DOOR : LevelEvent.SOUND_CLOSE_WOODEN_DOOR;
+    }
+
+    @Override
+    protected int getOpenSound()
+    {
+        return material == IRON_WOOD ? LevelEvent.SOUND_OPEN_IRON_DOOR : LevelEvent.SOUND_OPEN_WOODEN_DOOR;
+    }
+
+    @Override
     public void onBlockStateChange(LevelReader level, BlockPos pos, BlockState oldState, BlockState newState)
     {
         onStateChange(level, pos, oldState, newState);

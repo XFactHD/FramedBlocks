@@ -15,6 +15,7 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.block.state.properties.Half;
+import net.minecraft.world.level.gameevent.GameEvent;
 import net.minecraft.world.level.material.MaterialColor;
 import net.minecraft.world.level.storage.loot.LootContext;
 import net.minecraft.world.phys.BlockHitResult;
@@ -44,6 +45,12 @@ public class FramedTrapDoorBlock extends TrapDoorBlock implements IFramedBlock
         }
         return dir == Direction.DOWN;
     };
+    private static final int[] SOUNDS = new int[] {
+            LevelEvent.SOUND_OPEN_WOODEN_TRAP_DOOR,
+            LevelEvent.SOUND_CLOSE_WOODEN_TRAP_DOOR,
+            LevelEvent.SOUND_OPEN_IRON_TRAP_DOOR,
+            LevelEvent.SOUND_CLOSE_IRON_TRAP_DOOR
+    };
 
     private final BlockType type;
 
@@ -71,6 +78,15 @@ public class FramedTrapDoorBlock extends TrapDoorBlock implements IFramedBlock
         if (result.consumesAction()) { return result; }
 
         return material == FramedDoorBlock.IRON_WOOD ? InteractionResult.PASS : super.use(state, level, pos, player, hand, hit);
+    }
+
+    @Override
+    protected void playSound(@Nullable Player player, Level level, BlockPos pos, boolean isOpened)
+    {
+        int sound = (isOpened ? 0 : 1) + (material == FramedDoorBlock.IRON_WOOD ? 2 : 0);
+        level.levelEvent(player, SOUNDS[sound], pos, 0);
+
+        level.gameEvent(player, isOpened ? GameEvent.BLOCK_OPEN : GameEvent.BLOCK_CLOSE, pos);
     }
 
     @Override
