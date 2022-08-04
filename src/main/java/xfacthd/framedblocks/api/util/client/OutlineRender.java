@@ -2,6 +2,7 @@ package xfacthd.framedblocks.api.util.client;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
+import com.mojang.math.Quaternion;
 import com.mojang.math.Vector3f;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -12,6 +13,8 @@ import xfacthd.framedblocks.api.util.FramedProperties;
 
 public interface OutlineRender
 {
+    Quaternion[] YN_DIR = makeQuaternionArray();
+
     default void draw(BlockState state, Level level, BlockPos pos, PoseStack poseStack, VertexConsumer builder)
     {
         draw(state, poseStack, builder);
@@ -24,7 +27,7 @@ public interface OutlineRender
     default void rotateMatrix(PoseStack poseStack, BlockState state)
     {
         Direction dir = getRotationDir(state);
-        poseStack.mulPose(Vector3f.YN.rotationDegrees(dir.toYRot()));
+        poseStack.mulPose(YN_DIR[dir.get2DDataValue()]);
     }
 
     static void drawLine(VertexConsumer builder, PoseStack mstack, double x1, double y1, double z1, double x2, double y2, double z2)
@@ -40,5 +43,17 @@ public interface OutlineRender
 
         builder.vertex(mstack.last().pose(), (float)x1, (float)y1, (float)z1).color(0.0F, 0.0F, 0.0F, 0.4F).normal(mstack.last().normal(), nX, nY, nZ).endVertex();
         builder.vertex(mstack.last().pose(), (float)x2, (float)y2, (float)z2).color(0.0F, 0.0F, 0.0F, 0.4F).normal(mstack.last().normal(), nX, nY, nZ).endVertex();
+    }
+
+
+
+    static Quaternion[] makeQuaternionArray()
+    {
+        Quaternion[] array = new Quaternion[4];
+        for (Direction dir : Direction.Plane.HORIZONTAL)
+        {
+            array[dir.get2DDataValue()] = Vector3f.YN.rotationDegrees(dir.toYRot());
+        }
+        return array;
     }
 }

@@ -2,6 +2,7 @@ package xfacthd.framedblocks.client.render.outline;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
+import com.mojang.math.Quaternion;
 import com.mojang.math.Vector3f;
 import net.minecraft.core.Direction;
 import net.minecraft.util.Mth;
@@ -13,6 +14,8 @@ import xfacthd.framedblocks.common.data.PropertyHolder;
 
 public class SlopedPrismOutlineRenderer extends PrismOutlineRenderer
 {
+    protected static final Quaternion[][] ZP_DIR = makeQuaternionArray();
+
     @Override
     public void drawCenterAndTriangle(PoseStack pstack, VertexConsumer builder)
     {
@@ -31,7 +34,7 @@ public class SlopedPrismOutlineRenderer extends PrismOutlineRenderer
         {
             if (orientation != Direction.SOUTH)
             {
-                pstack.mulPose(Vector3f.YN.rotation(Mth.PI / 2F * orientation.get2DDataValue()));
+                pstack.mulPose(YN_DIR[orientation.get2DDataValue()]);
             }
             if (facing == Direction.DOWN)
             {
@@ -42,22 +45,38 @@ public class SlopedPrismOutlineRenderer extends PrismOutlineRenderer
         {
             if (facing != Direction.SOUTH)
             {
-                pstack.mulPose(Vector3f.YN.rotation(Mth.PI / 2F * facing.get2DDataValue()));
+                pstack.mulPose(YN_DIR[facing.get2DDataValue()]);
             }
             if (orientation != Direction.DOWN)
             {
-                int mult = 2;
-                if (orientation == facing.getCounterClockWise())
-                {
-                    mult = 1;
-                }
-                else if (orientation == facing.getClockWise())
-                {
-                    mult = 3;
-                }
-                pstack.mulPose(Vector3f.ZP.rotation(Mth.PI / 2F * mult));
+                pstack.mulPose(ZP_DIR[facing.get2DDataValue()][orientation.ordinal()]);
             }
             pstack.mulPose(XP_90);
         }
+    }
+
+
+
+    private static Quaternion[][] makeQuaternionArray()
+    {
+        Quaternion[][] array = new Quaternion[4][6];
+        for (Direction dir : Direction.Plane.HORIZONTAL)
+        {
+            array[dir.get2DDataValue()] = new Quaternion[6];
+            for (Direction orientation : Direction.values())
+            {
+                int mult = 2;
+                if (orientation == dir.getCounterClockWise())
+                {
+                    mult = 1;
+                }
+                else if (orientation == dir.getClockWise())
+                {
+                    mult = 3;
+                }
+                array[dir.get2DDataValue()][orientation.ordinal()] = Vector3f.ZP.rotation(Mth.PI / 2F * mult);
+            }
+        }
+        return array;
     }
 }
