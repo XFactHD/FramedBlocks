@@ -5,10 +5,10 @@ import net.minecraft.client.resources.model.BakedModel;
 import net.minecraft.core.Direction;
 import net.minecraft.world.level.block.state.BlockState;
 import xfacthd.framedblocks.api.model.FramedBlockModel;
+import xfacthd.framedblocks.api.model.quad.Modifiers;
+import xfacthd.framedblocks.api.model.quad.QuadModifier;
 import xfacthd.framedblocks.api.util.FramedProperties;
 import xfacthd.framedblocks.api.util.Utils;
-import xfacthd.framedblocks.api.util.client.BakedQuadTransformer;
-import xfacthd.framedblocks.api.util.client.ModelUtils;
 import xfacthd.framedblocks.common.data.PropertyHolder;
 
 import java.util.List;
@@ -29,7 +29,6 @@ public class FramedHalfStairsModel extends FramedBlockModel
     }
 
     @Override
-    @SuppressWarnings("ConstantConditions")
     protected void transformQuad(Map<Direction, List<BakedQuad>> quadMap, BakedQuad quad)
     {
         Direction face = quad.getDirection();
@@ -37,87 +36,51 @@ public class FramedHalfStairsModel extends FramedBlockModel
 
         if (face == dir)
         {
-            BakedQuad copy = ModelUtils.duplicateQuad(quad);
-            if (BakedQuadTransformer.createVerticalSideQuad(copy, vertCut, .5F))
-            {
-                quadMap.get(face).add(copy);
-            }
+            QuadModifier.geometry(quad)
+                    .apply(Modifiers.cutSideLeftRight(vertCut, .5F))
+                    .export(quadMap.get(face));
         }
         else if (face == dir.getOpposite())
         {
-            BakedQuad copy = ModelUtils.duplicateQuad(quad);
-            if (BakedQuadTransformer.createVerticalSideQuad(copy, vertCut, .5F))
-            {
-                BakedQuad copyTwo = ModelUtils.duplicateQuad(copy);
-                if (BakedQuadTransformer.createHorizontalSideQuad(copyTwo, !top, .5F))
-                {
-                    BakedQuadTransformer.setQuadPosInFacingDir(copyTwo, .5F);
-                    quadMap.get(null).add(copyTwo);
-                }
+            QuadModifier mod = QuadModifier.geometry(quad)
+                    .apply(Modifiers.cutSideLeftRight(vertCut, .5F));
 
-                if (BakedQuadTransformer.createHorizontalSideQuad(copy, top, .5F))
-                {
-                    quadMap.get(face).add(copy);
-                }
-            }
+            mod.derive().apply(Modifiers.cutSideUpDown(!top, .5F))
+                    .apply(Modifiers.setPosition(.5F))
+                    .export(quadMap.get(null));
+
+            mod.apply(Modifiers.cutSideUpDown(top, .5F))
+                    .export(quadMap.get(face));
         }
         else if (!Utils.isY(face) && face.getAxis() != dir.getAxis())
         {
-            BakedQuad copy = ModelUtils.duplicateQuad(quad);
-            if (BakedQuadTransformer.createVerticalSideQuad(copy, dir.getOpposite(), .5F))
+            QuadModifier.geometry(quad)
+                    .apply(Modifiers.cutSideLeftRight(dir.getOpposite(), .5F))
+                    .applyIf(Modifiers.setPosition(.5F), face == vertCut)
+                    .export(quadMap.get(face == vertCut ? null : face));
+
+            QuadModifier.geometry(quad)
+                    .apply(Modifiers.cutSideLeftRight(dir, .5F))
+                    .apply(Modifiers.cutSideUpDown(top, .5F))
+                    .applyIf(Modifiers.setPosition(.5F), face == vertCut)
+                    .export(quadMap.get(face == vertCut ? null : face));
+        }
+        else if (Utils.isY(face))
+        {
+            boolean base = (face == Direction.UP && top) || (face == Direction.DOWN && !top);
+
+            QuadModifier mod = QuadModifier.geometry(quad)
+                    .apply(Modifiers.cutTopBottom(vertCut, .5F));
+
+            if (!base)
             {
-                if (face == vertCut)
-                {
-                    BakedQuadTransformer.setQuadPosInFacingDir(copy, .5F);
-                    quadMap.get(null).add(copy);
-                }
-                else
-                {
-                    quadMap.get(face).add(copy);
-                }
+                mod.derive().apply(Modifiers.cutTopBottom(dir, .5F))
+                        .apply(Modifiers.setPosition(.5F))
+                        .export(quadMap.get(null));
             }
 
-            copy = ModelUtils.duplicateQuad(quad);
-            if (BakedQuadTransformer.createVerticalSideQuad(copy, dir, .5F) &&
-                BakedQuadTransformer.createHorizontalSideQuad(copy, top, .5F)
-            )
-            {
-                if (face == vertCut)
-                {
-                    BakedQuadTransformer.setQuadPosInFacingDir(copy, .5F);
-                    quadMap.get(null).add(copy);
-                }
-                else
-                {
-                    quadMap.get(face).add(copy);
-                }
-            }
-        }
-        else if ((face == Direction.UP && top) || (face == Direction.DOWN && !top))
-        {
-            BakedQuad copy = ModelUtils.duplicateQuad(quad);
-            if (BakedQuadTransformer.createTopBottomQuad(copy, vertCut, .5F))
-            {
-                quadMap.get(face).add(copy);
-            }
-        }
-        else if ((face == Direction.UP && !top) || (face == Direction.DOWN && top))
-        {
-            BakedQuad copy = ModelUtils.duplicateQuad(quad);
-            if (BakedQuadTransformer.createTopBottomQuad(copy, vertCut, .5F))
-            {
-                BakedQuad copyTwo = ModelUtils.duplicateQuad(copy);
-                if (BakedQuadTransformer.createTopBottomQuad(copyTwo, dir, .5F))
-                {
-                    BakedQuadTransformer.setQuadPosInFacingDir(copyTwo, .5F);
-                    quadMap.get(null).add(copyTwo);
-                }
-
-                if (BakedQuadTransformer.createTopBottomQuad(copy, dir.getOpposite(), .5F))
-                {
-                    quadMap.get(face).add(copy);
-                }
-            }
+            mod.applyIf(Modifiers.cutTopBottom(dir.getOpposite(), .5F), !base)
+                    .export(quadMap.get(face));
         }
     }
 }

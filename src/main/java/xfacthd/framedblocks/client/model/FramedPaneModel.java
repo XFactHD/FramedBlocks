@@ -1,14 +1,15 @@
 package xfacthd.framedblocks.client.model;
 
+import com.google.common.base.Preconditions;
 import net.minecraft.client.renderer.block.model.BakedQuad;
 import net.minecraft.client.resources.model.BakedModel;
 import net.minecraft.core.Direction;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import xfacthd.framedblocks.api.model.FramedBlockModel;
+import xfacthd.framedblocks.api.model.quad.Modifiers;
+import xfacthd.framedblocks.api.model.quad.QuadModifier;
 import xfacthd.framedblocks.api.util.Utils;
-import xfacthd.framedblocks.api.util.client.BakedQuadTransformer;
-import xfacthd.framedblocks.api.util.client.ModelUtils;
 
 import java.util.List;
 import java.util.Map;
@@ -49,122 +50,68 @@ public class FramedPaneModel extends FramedBlockModel
 
             if (Utils.isX(face))
             {
-                if (north) { createSideQuad(quadMap.get(null), quad, false); }
-                if (south) { createSideQuad(quadMap.get(null), quad, true); }
+                if (north) { createSideQuad(quadMap.get(null), quad, Direction.NORTH); }
+                if (south) { createSideQuad(quadMap.get(null), quad, Direction.SOUTH); }
             }
 
             if (Utils.isZ(face))
             {
-                if (east) { createSideQuad(quadMap.get(null), quad, true); }
-                if (west) { createSideQuad(quadMap.get(null), quad, false); }
+                if (east) { createSideQuad(quadMap.get(null), quad, Direction.EAST); }
+                if (west) { createSideQuad(quadMap.get(null), quad, Direction.WEST); }
             }
         }
     }
 
     protected static void createTopBottomCenterQuad(Map<Direction, List<BakedQuad>> quadMap, BakedQuad quad, boolean mirrored)
     {
-        BakedQuad topBotQuad = ModelUtils.duplicateQuad(quad);
-        if (BakedQuadTransformer.createTopBottomQuad(topBotQuad, 7F/16F, 7F/16F, 9F/16F, 9F/16F))
-        {
-            if (mirrored)
-            {
-                BakedQuadTransformer.setQuadPosInFacingDir(topBotQuad, .001F);
-                quadMap.get(null).add(topBotQuad);
-            }
-            else
-            {
-                quadMap.get(quad.getDirection()).add(topBotQuad);
-            }
-        }
+        QuadModifier.geometry(quad)
+                .apply(Modifiers.cutTopBottom(7F/16F, 7F/16F, 9F/16F, 9F/16F))
+                .applyIf(Modifiers.setPosition(.001F), mirrored)
+                .export(quadMap.get(mirrored ? null : quad.getDirection()));
     }
 
     protected static void createTopBottomEdgeQuad(Map<Direction, List<BakedQuad>> quadMap, BakedQuad quad, Direction dir, boolean mirrored)
     {
-        if (Utils.isY(dir)) { throw new IllegalArgumentException(String.format("Invalid direction: %s!", dir)); }
+        Preconditions.checkArgument(!Utils.isY(dir), String.format("Invalid direction: %s!", dir));
 
-        boolean positive = Utils.isPositive(dir);
-
-        float minX;
-        float minZ;
-        float maxX;
-        float maxZ;
-
-        if (Utils.isX(dir))
-        {
-            minX = positive ? 9F/16F : 0;
-            maxX = positive ? 1 : 7F/16F;
-            minZ = 7F/16F;
-            maxZ = 9F/16F;
-        }
-        else
-        {
-            minX = 7F/16F;
-            maxX = 9F/16F;
-            minZ = positive ? 9F/16F : 0;
-            maxZ = positive ? 1 : 7F/16F;
-        }
-
-        BakedQuad topBotQuad = ModelUtils.duplicateQuad(quad);
-        if (BakedQuadTransformer.createTopBottomQuad(topBotQuad, minX, minZ, maxX, maxZ))
-        {
-            if (mirrored)
-            {
-                BakedQuadTransformer.setQuadPosInFacingDir(topBotQuad, .001F);
-                quadMap.get(null).add(topBotQuad);
-            }
-            else
-            {
-                quadMap.get(quad.getDirection()).add(topBotQuad);
-            }
-        }
+        QuadModifier.geometry(quad)
+                .apply(Modifiers.cutTopBottom(dir.getOpposite(), 7F/16F))
+                .apply(Modifiers.cutTopBottom(dir.getClockWise().getAxis(), 9F/16F))
+                .applyIf(Modifiers.setPosition(.001F), mirrored)
+                .export(quadMap.get(mirrored ? null : quad.getDirection()));
     }
 
     protected static void createSideEdgeQuad(Map<Direction, List<BakedQuad>> quadMap, BakedQuad quad, boolean inset, boolean mirrored)
     {
         if (inset && mirrored) { throw new IllegalArgumentException("Quad can't be mirrored and inset!"); }
 
-        BakedQuad edgeQuad = ModelUtils.duplicateQuad(quad);
-        if (BakedQuadTransformer.createSideQuad(edgeQuad, 7F/16F, 0, 9F/16F, 1))
-        {
-            if (inset)
-            {
-                BakedQuadTransformer.setQuadPosInFacingDir(edgeQuad, 9F/16F);
-                quadMap.get(null).add(edgeQuad);
-            }
-            else
-            {
-                if (mirrored)
-                {
-                    BakedQuadTransformer.setQuadPosInFacingDir(edgeQuad, .001F);
-                    quadMap.get(quad.getDirection().getOpposite()).add(edgeQuad);
-                }
-                else
-                {
-                    quadMap.get(quad.getDirection()).add(edgeQuad);
-                }
-            }
-        }
+        Direction quadDir = quad.getDirection();
+        Direction exportSide = inset ? null : (mirrored ? quadDir.getOpposite() : quadDir);
+
+        QuadModifier.geometry(quad)
+                .apply(Modifiers.cutSideLeftRight(9F/16F))
+                .applyIf(Modifiers.setPosition(9F/16F), inset)
+                .applyIf(Modifiers.setPosition(.001F), !inset && mirrored)
+                .export(quadMap.get(exportSide));
     }
 
-    private static void createSideQuad(List<BakedQuad> quadList, BakedQuad quad, boolean positive)
+    private static void createSideQuad(List<BakedQuad> quadList, BakedQuad quad, Direction dir)
     {
-        float minXZ = positive ? 9F/16F : 0;
-        float maxXZ = positive ? 1 : 7F/16F;
-
-        BakedQuad sideQuad = ModelUtils.duplicateQuad(quad);
-        if (BakedQuadTransformer.createSideQuad(sideQuad, minXZ, 0, maxXZ, 1))
-        {
-            BakedQuadTransformer.setQuadPosInFacingDir(sideQuad, 9F/16F);
-            quadList.add(sideQuad);
-        }
+        QuadModifier.geometry(quad)
+                .apply(Modifiers.cutSideLeftRight(dir.getOpposite(), 7F/16F))
+                .apply(Modifiers.setPosition(9F/16F))
+                .export(quadList);
     }
 
     protected boolean isSideInset(Direction face)
     {
-        if (face == Direction.NORTH) { return !north; }
-        if (face == Direction.EAST) { return !east; }
-        if (face == Direction.SOUTH) { return !south; }
-        if (face == Direction.WEST) { return !west; }
-        throw new IllegalArgumentException(String.format("Invalid face: %s!", face));
+        return switch (face)
+        {
+            case NORTH -> !north;
+            case EAST -> !east;
+            case SOUTH -> !south;
+            case WEST -> !west;
+            default -> throw new IllegalArgumentException(String.format("Invalid face: %s!", face));
+        };
     }
 }

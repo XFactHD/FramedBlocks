@@ -5,10 +5,10 @@ import net.minecraft.client.resources.model.BakedModel;
 import net.minecraft.core.Direction;
 import net.minecraft.world.level.block.state.BlockState;
 import xfacthd.framedblocks.api.model.FramedBlockModel;
+import xfacthd.framedblocks.api.model.quad.Modifiers;
+import xfacthd.framedblocks.api.model.quad.QuadModifier;
 import xfacthd.framedblocks.api.util.FramedProperties;
 import xfacthd.framedblocks.api.util.Utils;
-import xfacthd.framedblocks.api.util.client.BakedQuadTransformer;
-import xfacthd.framedblocks.api.util.client.ModelUtils;
 
 import java.util.List;
 import java.util.Map;
@@ -28,58 +28,40 @@ public class FramedVerticalHalfStairsModel extends FramedBlockModel
     @Override
     protected void transformQuad(Map<Direction, List<BakedQuad>> quadMap, BakedQuad quad)
     {
-        if (quad.getDirection() == dir.getOpposite() || quad.getDirection() == dir.getClockWise())
+        Direction quadDir = quad.getDirection();
+        if (quadDir == dir.getOpposite() || quadDir == dir.getClockWise())
         {
-            BakedQuad sideQuad = ModelUtils.duplicateQuad(quad);
-            if (BakedQuadTransformer.createVerticalSideQuad(sideQuad, quad.getDirection() == dir.getOpposite() ? dir.getClockWise() : dir.getOpposite(), .5F) &&
-                BakedQuadTransformer.createHorizontalSideQuad(sideQuad, top, .5F)
-            )
-            {
-                quadMap.get(quad.getDirection()).add(sideQuad);
-            }
+            QuadModifier.geometry(quad)
+                    .apply(Modifiers.cutSideLeftRight(quadDir == dir.getOpposite() ? dir.getClockWise() : dir.getOpposite(), .5F))
+                    .apply(Modifiers.cutSideUpDown(top, .5F))
+                    .export(quadMap.get(quadDir));
 
-            sideQuad = ModelUtils.duplicateQuad(quad);
-            if (BakedQuadTransformer.createVerticalSideQuad(sideQuad, quad.getDirection() == dir.getOpposite() ? dir.getCounterClockWise() : dir, .5F) &&
-                BakedQuadTransformer.createHorizontalSideQuad(sideQuad, top, .5F)
-            )
-            {
-                BakedQuadTransformer.setQuadPosInFacingDir(sideQuad, .5F);
-                quadMap.get(null).add(sideQuad);
-            }
+            QuadModifier.geometry(quad)
+                    .apply(Modifiers.cutSideLeftRight(quadDir == dir.getOpposite() ? dir.getCounterClockWise() : dir, .5F))
+                    .apply(Modifiers.cutSideUpDown(top, .5F))
+                    .apply(Modifiers.setPosition(.5F))
+                    .export(quadMap.get(null));
         }
-
-        if (quad.getDirection() == dir || quad.getDirection() == dir.getCounterClockWise())
+        else if (quadDir == dir || quadDir == dir.getCounterClockWise())
         {
-            BakedQuad sideQuad = ModelUtils.duplicateQuad(quad);
-            if (BakedQuadTransformer.createHorizontalSideQuad(sideQuad, top, .5F))
-            {
-                quadMap.get(quad.getDirection()).add(sideQuad);
-            }
+            QuadModifier.geometry(quad)
+                    .apply(Modifiers.cutSideUpDown(top, .5F))
+                    .export(quadMap.get(quadDir));
         }
-
-        if (Utils.isY(quad.getDirection()))
+        else if (Utils.isY(quadDir))
         {
-            BakedQuad topBotQuad = ModelUtils.duplicateQuad(quad);
-            if (BakedQuadTransformer.createTopBottomQuad(topBotQuad, dir.getOpposite(), .5F))
-            {
-                if (quad.getDirection() == Direction.UP != top)
-                {
-                    BakedQuadTransformer.setQuadPosInFacingDir(topBotQuad, .5F);
-                }
-                quadMap.get(quad.getDirection()).add(topBotQuad);
-            }
+            boolean inset = (quadDir == Direction.UP) != top;
 
-            topBotQuad = ModelUtils.duplicateQuad(quad);
-            if (BakedQuadTransformer.createTopBottomQuad(topBotQuad, dir, .5F) &&
-                    BakedQuadTransformer.createTopBottomQuad(topBotQuad, dir.getClockWise(), .5F)
-            )
-            {
-                if (quad.getDirection() == Direction.UP != top)
-                {
-                    BakedQuadTransformer.setQuadPosInFacingDir(topBotQuad, .5F);
-                }
-                quadMap.get(quad.getDirection()).add(topBotQuad);
-            }
+            QuadModifier.geometry(quad)
+                    .apply(Modifiers.cutTopBottom(dir.getOpposite(), .5F))
+                    .applyIf(Modifiers.setPosition(.5F), inset)
+                    .export(quadMap.get(inset ? null : quadDir));
+
+            QuadModifier.geometry(quad)
+                    .apply(Modifiers.cutTopBottom(dir, .5F))
+                    .apply(Modifiers.cutTopBottom(dir.getClockWise(), .5F))
+                    .applyIf(Modifiers.setPosition(.5F), inset)
+                    .export(quadMap.get(inset ? null : quadDir));
         }
     }
 }

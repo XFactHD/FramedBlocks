@@ -10,16 +10,19 @@ import net.minecraft.core.Direction;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.client.model.data.IModelData;
 import xfacthd.framedblocks.api.model.FramedBlockModel;
+import xfacthd.framedblocks.api.model.quad.Modifiers;
+import xfacthd.framedblocks.api.model.quad.QuadModifier;
 import xfacthd.framedblocks.api.util.FramedConstants;
 import xfacthd.framedblocks.api.util.Utils;
-import xfacthd.framedblocks.api.util.client.BakedQuadTransformer;
-import xfacthd.framedblocks.api.util.client.ModelUtils;
 
 import java.util.*;
 
 public class FramedTorchModel extends FramedBlockModel
 {
     private static final ResourceLocation TEXTURE = new ResourceLocation(FramedConstants.MOD_ID, "block/framed_torch");
+    private static final float MIN = 7F/16F;
+    private static final float MAX = 9F/16F;
+    private static final float TOP = 8F/16F;
 
     public FramedTorchModel(BlockState state, BakedModel baseModel) { super(state, baseModel); }
 
@@ -45,30 +48,21 @@ public class FramedTorchModel extends FramedBlockModel
     @Override
     protected void transformQuad(Map<Direction, List<BakedQuad>> quadMap, BakedQuad quad)
     {
-        if (Utils.isY(quad.getDirection()))
+        Direction quadDir = quad.getDirection();
+        if (Utils.isY(quadDir))
         {
-            BakedQuad topBotQuad = ModelUtils.duplicateQuad(quad);
-            if (BakedQuadTransformer.createTopBottomQuad(topBotQuad, 7F/16F, 7F/16F, 9F/16F, 9F/16F))
-            {
-                if (quad.getDirection() == Direction.UP)
-                {
-                    BakedQuadTransformer.setQuadPosInFacingDir(topBotQuad, 8F/16F);
-                    quadMap.get(null).add(topBotQuad);
-                }
-                else
-                {
-                    quadMap.get(quad.getDirection()).add(topBotQuad);
-                }
-            }
+            boolean top = quadDir == Direction.UP;
+            QuadModifier.geometry(quad)
+                    .apply(Modifiers.cutTopBottom(MIN, MIN, MAX, MAX))
+                    .applyIf(Modifiers.setPosition(TOP), top)
+                    .export(quadMap.get(top ? null : quadDir));
         }
         else
         {
-            BakedQuad sideQuad = ModelUtils.duplicateQuad(quad);
-            if (BakedQuadTransformer.createSideQuad(sideQuad, 7F/16F, 0F, 9F/16F, 8F/16F))
-            {
-                BakedQuadTransformer.setQuadPosInFacingDir(sideQuad, 9F/16F);
-                quadMap.get(null).add(sideQuad);
-            }
+            QuadModifier.geometry(quad)
+                    .apply(Modifiers.cutSide(MIN, 0, MAX, TOP))
+                    .apply(Modifiers.setPosition(MAX))
+                    .export(quadMap.get(null));
         }
     }
 

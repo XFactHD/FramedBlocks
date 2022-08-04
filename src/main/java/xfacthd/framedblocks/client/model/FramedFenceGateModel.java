@@ -6,9 +6,9 @@ import net.minecraft.client.resources.model.BakedModel;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.core.Direction;
 import xfacthd.framedblocks.api.model.FramedBlockModel;
+import xfacthd.framedblocks.api.model.quad.Modifiers;
+import xfacthd.framedblocks.api.model.quad.QuadModifier;
 import xfacthd.framedblocks.api.util.Utils;
-import xfacthd.framedblocks.api.util.client.BakedQuadTransformer;
-import xfacthd.framedblocks.api.util.client.ModelUtils;
 
 import java.util.List;
 import java.util.Map;
@@ -30,62 +30,51 @@ public class FramedFenceGateModel extends FramedBlockModel
     @Override
     protected void transformQuad(Map<Direction, List<BakedQuad>> quadMap, BakedQuad quad)
     {
+        Direction quadDir = quad.getDirection();
         float yOff = inWall ? 3F/16F : 0F;
-        if (Utils.isY(quad.getDirection()))
+        if (Utils.isY(quadDir))
         {
-            BakedQuad topBotQuad = ModelUtils.duplicateQuad(quad);
-            if (BakedQuadTransformer.createTopBottomQuad(topBotQuad, dir.getClockWise(), 2F/16F) &&
-                BakedQuadTransformer.createTopBottomQuad(topBotQuad, dir, 9F/16F) &&
-                BakedQuadTransformer.createTopBottomQuad(topBotQuad, dir.getOpposite(), 9F/16F)
-            )
-            {
-                BakedQuadTransformer.setQuadPosInFacingDir(topBotQuad, quad.getDirection() == Direction.UP ? 1F - yOff : 11F/16F + yOff);
-                quadMap.get(inWall || quad.getDirection() == Direction.DOWN ? null : quad.getDirection()).add(topBotQuad);
-            }
+            float quadInset = quadDir == Direction.UP ? 1F - yOff : 11F/16F + yOff;
 
-            topBotQuad = ModelUtils.duplicateQuad(quad);
-            if (BakedQuadTransformer.createTopBottomQuad(topBotQuad, dir.getCounterClockWise(), 2F/16F) &&
-                BakedQuadTransformer.createTopBottomQuad(topBotQuad, dir, 9F/16F) &&
-                BakedQuadTransformer.createTopBottomQuad(topBotQuad, dir.getOpposite(), 9F/16F)
-            )
-            {
-                BakedQuadTransformer.setQuadPosInFacingDir(topBotQuad, quad.getDirection() == Direction.UP ? 1F - yOff : 11F/16F + yOff);
-                quadMap.get(inWall || quad.getDirection() == Direction.DOWN ? null : quad.getDirection()).add(topBotQuad);
-            }
+            QuadModifier.geometry(quad)
+                    .apply(Modifiers.cutTopBottom(dir.getClockWise(), 2F/16F))
+                    .apply(Modifiers.cutTopBottom(dir, 9F/16F))
+                    .apply(Modifiers.cutTopBottom(dir.getOpposite(), 9F/16F))
+                    .apply(Modifiers.setPosition(quadInset))
+                    .export(quadMap.get(inWall || quadDir == Direction.DOWN ? null : quadDir));
+
+            QuadModifier.geometry(quad)
+                    .apply(Modifiers.cutTopBottom(dir.getCounterClockWise(), 2F/16F))
+                    .apply(Modifiers.cutTopBottom(dir, 9F/16F))
+                    .apply(Modifiers.cutTopBottom(dir.getOpposite(), 9F/16F))
+                    .apply(Modifiers.setPosition(quadInset))
+                    .export(quadMap.get(inWall || quadDir == Direction.DOWN ? null : quadDir));
         }
-        else if (quad.getDirection() == dir || quad.getDirection() == dir.getOpposite())
+        else if (quadDir == dir || quadDir == dir.getOpposite())
         {
-            BakedQuad sideQuad = ModelUtils.duplicateQuad(quad);
-            if (BakedQuadTransformer.createVerticalSideQuad(sideQuad, dir.getClockWise(), 2F/16F) &&
-                BakedQuadTransformer.createHorizontalSideQuad(sideQuad, true, 11F/16F + yOff) &&
-                BakedQuadTransformer.createHorizontalSideQuad(sideQuad, false, 1F - yOff)
-            )
-            {
-                BakedQuadTransformer.setQuadPosInFacingDir(sideQuad, 9F/16F);
-                quadMap.get(null).add(sideQuad);
-            }
+            QuadModifier.geometry(quad)
+                    .apply(Modifiers.cutSideLeftRight(dir.getClockWise(), 2F/16F))
+                    .apply(Modifiers.cutSideUpDown(true, 11F/16F + yOff))
+                    .apply(Modifiers.cutSideUpDown(false, 1F - yOff))
+                    .apply(Modifiers.setPosition(9F/16F))
+                    .export(quadMap.get(null));
 
-            sideQuad = ModelUtils.duplicateQuad(quad);
-            if (BakedQuadTransformer.createVerticalSideQuad(sideQuad, dir.getCounterClockWise(), 2F/16F) &&
-                BakedQuadTransformer.createHorizontalSideQuad(sideQuad, true, 11F/16F + yOff) &&
-                BakedQuadTransformer.createHorizontalSideQuad(sideQuad, false, 1F - yOff)
-            )
-            {
-                BakedQuadTransformer.setQuadPosInFacingDir(sideQuad, 9F/16F);
-                quadMap.get(null).add(sideQuad);
-            }
+            QuadModifier.geometry(quad)
+                    .apply(Modifiers.cutSideLeftRight(dir.getCounterClockWise(), 2F/16F))
+                    .apply(Modifiers.cutSideUpDown(true, 11F/16F + yOff))
+                    .apply(Modifiers.cutSideUpDown(false, 1F - yOff))
+                    .apply(Modifiers.setPosition(9F/16F))
+                    .export(quadMap.get(null));
         }
-        else if (quad.getDirection() == dir.getClockWise() || quad.getDirection() == dir.getCounterClockWise())
+        else if (quadDir == dir.getClockWise() || quadDir == dir.getCounterClockWise())
         {
-            BakedQuad sideQuad = ModelUtils.duplicateQuad(quad);
-            if (BakedQuadTransformer.createSideQuad(sideQuad, 7F/16F, 5F/16F - yOff, 9F/16F, 1F - yOff))
-            {
-                quadMap.get(quad.getDirection()).add(sideQuad);
+            QuadModifier mod = QuadModifier.geometry(quad)
+                    .apply(Modifiers.cutSide(7F/16F, 5F/16F - yOff, 9F/16F, 1F - yOff));
 
-                sideQuad = ModelUtils.duplicateQuad(sideQuad);
-                BakedQuadTransformer.setQuadPosInFacingDir(sideQuad, 2F/16F);
-                quadMap.get(null).add(sideQuad);
-            }
+            mod.export(quadMap.get(quadDir));
+
+            mod.apply(Modifiers.setPosition(2F/16F))
+                    .export(quadMap.get(null));
         }
 
         if (open) { createGateOpen(quadMap, quad, yOff); }
@@ -94,218 +83,141 @@ public class FramedFenceGateModel extends FramedBlockModel
 
     private void createGateClosed(List<BakedQuad> quadList, BakedQuad quad, float yOff)
     {
-        if (quad.getDirection() == dir || quad.getDirection() == dir.getOpposite())
+        Direction quadDir = quad.getDirection();
+        if (quadDir == dir || quadDir == dir.getOpposite())
         {
-            BakedQuad sideQuad = ModelUtils.duplicateQuad(quad);
-            if (BakedQuadTransformer.createSideQuad(sideQuad, 6F/16F, 6F/16F - yOff, 10F/16F, 15F/16F - yOff))
-            {
-                BakedQuadTransformer.setQuadPosInFacingDir(sideQuad, 9F/16F);
-                quadList.add(sideQuad);
-            }
+            QuadModifier.geometry(quad)
+                    .apply(Modifiers.cutSide(2F/16F, 12F/16F - yOff, 14F/16F, 15F/16F - yOff))
+                    .apply(Modifiers.setPosition(9F/16F))
+                    .export(quadList);
 
-            sideQuad = ModelUtils.duplicateQuad(quad);
-            if (BakedQuadTransformer.createHorizontalSideQuad(sideQuad, false, 9F/16F - yOff) &&
-                BakedQuadTransformer.createHorizontalSideQuad(sideQuad, true, 10F/16F + yOff)
-            )
-            {
-                BakedQuad sideQuadDup = ModelUtils.duplicateQuad(sideQuad);
-                if (BakedQuadTransformer.createVerticalSideQuad(sideQuadDup, dir.getClockWise(), 6F/16F) &&
-                    BakedQuadTransformer.createVerticalSideQuad(sideQuadDup, dir.getCounterClockWise(), 14F/16F)
-                )
-                {
-                    BakedQuadTransformer.setQuadPosInFacingDir(sideQuadDup, 9F/16F);
-                    quadList.add(sideQuadDup);
-                }
+            QuadModifier.geometry(quad)
+                    .apply(Modifiers.cutSide(2F/16F, 6F/16F - yOff, 14F/16F, 9F/16F - yOff))
+                    .apply(Modifiers.setPosition(9F/16F))
+                    .export(quadList);
 
-                if (BakedQuadTransformer.createVerticalSideQuad(sideQuad, dir.getCounterClockWise(), 6F/16F) &&
-                    BakedQuadTransformer.createVerticalSideQuad(sideQuad, dir.getClockWise(), 14F/16F)
-                )
-                {
-                    BakedQuadTransformer.setQuadPosInFacingDir(sideQuad, 9F/16F);
-                    quadList.add(sideQuad);
-                }
-            }
-
-            sideQuad = ModelUtils.duplicateQuad(quad);
-            if (BakedQuadTransformer.createHorizontalSideQuad(sideQuad, false, 15F/16F - yOff) &&
-                BakedQuadTransformer.createHorizontalSideQuad(sideQuad, true, 4F/16F + yOff)
-            )
-            {
-                BakedQuad sideQuadDup = ModelUtils.duplicateQuad(sideQuad);
-                if (BakedQuadTransformer.createVerticalSideQuad(sideQuadDup, dir.getClockWise(), 6F/16F) &&
-                    BakedQuadTransformer.createVerticalSideQuad(sideQuadDup, dir.getCounterClockWise(), 14F/16F)
-                )
-                {
-                    BakedQuadTransformer.setQuadPosInFacingDir(sideQuadDup, 9F/16F);
-                    quadList.add(sideQuadDup);
-                }
-
-                if (BakedQuadTransformer.createVerticalSideQuad(sideQuad, dir.getCounterClockWise(), 6F/16F) &&
-                    BakedQuadTransformer.createVerticalSideQuad(sideQuad, dir.getClockWise(), 14F/16F)
-                )
-                {
-                    BakedQuadTransformer.setQuadPosInFacingDir(sideQuad, 9F/16F);
-                    quadList.add(sideQuad);
-                }
-            }
+            QuadModifier.geometry(quad)
+                    .apply(Modifiers.cutSide(6F/16F, 9F/16F - yOff, 10F/16F, 12F/16F - yOff))
+                    .apply(Modifiers.setPosition(9F/16F))
+                    .export(quadList);
         }
-        else if (Utils.isY(quad.getDirection()))
+        else if (Utils.isY(quadDir))
         {
-            BakedQuad topBotQuad = ModelUtils.duplicateQuad(quad);
-            if (BakedQuadTransformer.createTopBottomQuad(topBotQuad, dir, 9F/16F) &&
-                BakedQuadTransformer.createTopBottomQuad(topBotQuad, dir.getOpposite(), 9F/16F) &&
-                BakedQuadTransformer.createTopBottomQuad(topBotQuad, dir.getClockWise(), 14F/16F) &&
-                BakedQuadTransformer.createTopBottomQuad(topBotQuad, dir.getCounterClockWise(), 14F/16F)
-            )
-            {
-                boolean up = quad.getDirection() == Direction.UP;
+            QuadModifier mod = QuadModifier.geometry(quad)
+                    .apply(Modifiers.cutTopBottom(dir, 9F/16F))
+                    .apply(Modifiers.cutTopBottom(dir.getOpposite(), 9F/16F))
+                    .apply(Modifiers.cutTopBottom(dir.getClockWise(), 14F/16F))
+                    .apply(Modifiers.cutTopBottom(dir.getCounterClockWise(), 14F/16F));
 
-                BakedQuadTransformer.setQuadPosInFacingDir(topBotQuad, up ? 15F/16F - yOff : 10F/16F + yOff);
-                quadList.add(topBotQuad);
+            if (mod.hasFailed()) { return; }
 
-                float height = up ? 9F / 16F - yOff : 4F / 16F + yOff;
+            boolean up = quadDir == Direction.UP;
+            float height = up ? 9F / 16F - yOff : 4F / 16F + yOff;
 
-                BakedQuad topBotQuadDup = ModelUtils.duplicateQuad(topBotQuad);
-                if (BakedQuadTransformer.createTopBottomQuad(topBotQuadDup, dir.getClockWise(), 6F/16F))
-                {
-                    BakedQuadTransformer.setQuadPosInFacingDir(topBotQuadDup, height);
-                    quadList.add(topBotQuadDup);
-                }
+            mod.derive().apply(Modifiers.setPosition(up ? 15F/16F - yOff : 10F/16F + yOff))
+                    .export(quadList);
 
-                topBotQuadDup = ModelUtils.duplicateQuad(topBotQuad);
-                if (BakedQuadTransformer.createTopBottomQuad(topBotQuadDup, dir.getCounterClockWise(), 6F/16F))
-                {
-                    BakedQuadTransformer.setQuadPosInFacingDir(topBotQuadDup, height);
-                    quadList.add(topBotQuadDup);
-                }
-            }
+            mod.derive().apply(Modifiers.cutTopBottom(dir.getClockWise(), 6F/16F))
+                    .apply(Modifiers.setPosition(height))
+                    .export(quadList);
+
+            mod.apply(Modifiers.cutTopBottom(dir.getCounterClockWise(), 6F/16F))
+                    .apply(Modifiers.setPosition(height))
+                    .export(quadList);
         }
-        else if (quad.getDirection() == dir.getClockWise() || quad.getDirection() == dir.getCounterClockWise())
+        else if (quadDir == dir.getClockWise() || quadDir == dir.getCounterClockWise())
         {
-            BakedQuad sideQuad = ModelUtils.duplicateQuad(quad);
-            if (BakedQuadTransformer.createSideQuad(sideQuad, 7F/16F, 9F/16F - yOff, 9F/16F, 12F/16F - yOff))
-            {
-                BakedQuadTransformer.setQuadPosInFacingDir(sideQuad, 10F/16F);
-                quadList.add(sideQuad);
-            }
+            QuadModifier.geometry(quad)
+                    .apply(Modifiers.cutSide(7F/16F, 9F/16F - yOff, 9F/16F, 12F/16F - yOff))
+                    .apply(Modifiers.setPosition(10F/16F))
+                    .export(quadList);
         }
     }
 
     private void createGateOpen(Map<Direction, List<BakedQuad>> quadMap, BakedQuad quad, float yOff)
     {
-        if (quad.getDirection() == dir.getClockWise() || quad.getDirection() == dir.getCounterClockWise())
+        Direction quadDir = quad.getDirection();
+        if (quadDir == dir.getClockWise() || quadDir == dir.getCounterClockWise())
         {
-            BakedQuad sideQuad = ModelUtils.duplicateQuad(quad);
-            if (BakedQuadTransformer.createVerticalSideQuad(sideQuad, dir.getOpposite(), 7F/16F) &&
-                BakedQuadTransformer.createVerticalSideQuad(sideQuad, dir, 15F/16F) &&
-                BakedQuadTransformer.createHorizontalSideQuad(sideQuad, false, 15F/16F - yOff) &&
-                BakedQuadTransformer.createHorizontalSideQuad(sideQuad, true, 10F/16F + yOff)
-            )
-            {
-                BakedQuad topSideQuad = ModelUtils.duplicateQuad(sideQuad);
-                if (BakedQuadTransformer.createHorizontalSideQuad(topSideQuad, true, 4F/16F + yOff))
-                {
-                    quadMap.get(null).add(topSideQuad);
+            QuadModifier mod = QuadModifier.geometry(quad)
+                    .apply(Modifiers.cutSideLeftRight(dir.getOpposite(), 7F/16F))
+                    .apply(Modifiers.cutSideLeftRight(dir, 15F/16F))
+                    .apply(Modifiers.cutSideUpDown(false, 15F/16F - yOff))
+                    .apply(Modifiers.cutSideUpDown(true, 10F/16F + yOff));
 
-                    topSideQuad = ModelUtils.duplicateQuad(topSideQuad);
-                    BakedQuadTransformer.setQuadPosInFacingDir(topSideQuad, 2F/16F);
-                    quadMap.get(null).add(topSideQuad);
-                }
+            QuadModifier topMod = mod.derive()
+                    .apply(Modifiers.cutSideUpDown(true, 4F/16F + yOff));
 
-                BakedQuad botSideQuad = ModelUtils.duplicateQuad(sideQuad);
-                if (BakedQuadTransformer.createHorizontalSideQuad(botSideQuad, false, 9F/16F - yOff))
-                {
-                    quadMap.get(null).add(botSideQuad);
+            topMod.export(quadMap.get(null));
+            topMod.apply(Modifiers.setPosition(2F/16F))
+                    .export(quadMap.get(null));
 
-                    botSideQuad = ModelUtils.duplicateQuad(botSideQuad);
-                    BakedQuadTransformer.setQuadPosInFacingDir(botSideQuad, 2F/16F);
-                    quadMap.get(null).add(botSideQuad);
-                }
+            QuadModifier botMod = mod.derive()
+                    .apply(Modifiers.cutSideUpDown(false, 9F/16F - yOff));
 
-                if (BakedQuadTransformer.createHorizontalSideQuad(sideQuad, false, 12F/16F - yOff) &&
-                    BakedQuadTransformer.createHorizontalSideQuad(sideQuad, true, 7F/16F + yOff) &&
-                    BakedQuadTransformer.createVerticalSideQuad(sideQuad, dir.getOpposite(), 3F/16F)
-                )
-                {
-                    quadMap.get(null).add(sideQuad);
+            botMod.export(quadMap.get(null));
+            botMod.apply(Modifiers.setPosition(2F/16F))
+                    .export(quadMap.get(null));
 
-                    sideQuad = ModelUtils.duplicateQuad(sideQuad);
-                    BakedQuadTransformer.setQuadPosInFacingDir(sideQuad, 2F/16F);
-                    quadMap.get(null).add(sideQuad);
-                }
-            }
+            mod.apply(Modifiers.cutSideUpDown(false, 12F/16F - yOff))
+                    .apply(Modifiers.cutSideUpDown(true, 7F/16F + yOff))
+                    .apply(Modifiers.cutSideLeftRight(dir.getOpposite(), 3F/16F))
+                    .export(quadMap.get(null));
+
+            mod.apply(Modifiers.setPosition(2F/16F))
+                    .export(quadMap.get(null));
         }
-        else if (Utils.isY(quad.getDirection()))
+        else if (Utils.isY(quadDir))
         {
-            BakedQuad topBotQuad = ModelUtils.duplicateQuad(quad);
-            if (BakedQuadTransformer.createTopBottomQuad(topBotQuad, dir, 15F/16F) &&
-                BakedQuadTransformer.createTopBottomQuad(topBotQuad, dir.getOpposite(), 7F/16F)
-            )
-            {
-                boolean up = quad.getDirection() == Direction.UP;
-                float heightOuter = up ? 15F/16F - yOff : 10F/16F + yOff;
-                float heightInner = up ? 9F/16F - yOff : 4F/16F + yOff;
+            boolean up = quadDir == Direction.UP;
+            float heightOuter = up ? 15F/16F - yOff : 10F/16F + yOff;
+            float heightInner = up ? 9F/16F - yOff : 4F/16F + yOff;
 
-                BakedQuad leftTopBotQuad = ModelUtils.duplicateQuad(topBotQuad);
-                if (BakedQuadTransformer.createTopBottomQuad(leftTopBotQuad, dir.getClockWise(), 2F/16F))
-                {
-                    BakedQuadTransformer.setQuadPosInFacingDir(leftTopBotQuad, heightOuter);
-                    quadMap.get(null).add(leftTopBotQuad);
+            QuadModifier mod = QuadModifier.geometry(quad)
+                    .apply(Modifiers.cutTopBottom(dir, 15F/16F))
+                    .apply(Modifiers.cutTopBottom(dir.getOpposite(), 7F/16F));
 
-                    leftTopBotQuad = ModelUtils.duplicateQuad(leftTopBotQuad);
-                    if (BakedQuadTransformer.createTopBottomQuad(leftTopBotQuad, dir, 13F/16F))
-                    {
-                        BakedQuadTransformer.setQuadPosInFacingDir(leftTopBotQuad, heightInner);
-                        quadMap.get(null).add(leftTopBotQuad);
-                    }
-                }
+            QuadModifier leftMod = mod.derive()
+                    .apply(Modifiers.cutTopBottom(dir.getClockWise(), 2F/16F))
+                    .apply(Modifiers.setPosition(heightOuter));
 
-                BakedQuad rightTopBotQuad = ModelUtils.duplicateQuad(topBotQuad);
-                if (BakedQuadTransformer.createTopBottomQuad(rightTopBotQuad, dir.getCounterClockWise(), 2F/16F))
-                {
-                    BakedQuadTransformer.setQuadPosInFacingDir(rightTopBotQuad, heightOuter);
-                    quadMap.get(null).add(rightTopBotQuad);
+            leftMod.export(quadMap.get(null));
+            leftMod.apply(Modifiers.cutTopBottom(dir, 13F/16F))
+                    .apply(Modifiers.setPosition(heightInner))
+                    .export(quadMap.get(null));
 
-                    rightTopBotQuad = ModelUtils.duplicateQuad(rightTopBotQuad);
-                    if (BakedQuadTransformer.createTopBottomQuad(rightTopBotQuad, dir, 13F/16F))
-                    {
-                        BakedQuadTransformer.setQuadPosInFacingDir(rightTopBotQuad, heightInner);
-                        quadMap.get(null).add(rightTopBotQuad);
-                    }
-                }
-            }
+            QuadModifier rightMod = mod
+                    .apply(Modifiers.cutTopBottom(dir.getCounterClockWise(), 2F/16F))
+                    .apply(Modifiers.setPosition(heightOuter));
+
+            rightMod.export(quadMap.get(null));
+            rightMod.apply(Modifiers.cutTopBottom(dir, 13F/16F))
+                    .apply(Modifiers.setPosition(heightInner))
+                    .export(quadMap.get(null));
         }
-        else if (quad.getDirection() == dir)
+        else if (quadDir == dir)
         {
-            BakedQuad frontQuad = ModelUtils.duplicateQuad(quad);
-            if (BakedQuadTransformer.createSideQuad(frontQuad, 0F, 6F/16F - yOff, 2F/16F, 15F/16F - yOff))
-            {
-                BakedQuadTransformer.setQuadPosInFacingDir(frontQuad, 15F/16F);
-                quadMap.get(null).add(frontQuad);
-            }
+            QuadModifier.geometry(quad)
+                    .apply(Modifiers.cutSide(0F, 6F/16F - yOff, 2F/16F, 15F/16F - yOff))
+                    .apply(Modifiers.setPosition(15F/16F))
+                    .export(quadMap.get(null));
 
-            frontQuad = ModelUtils.duplicateQuad(quad);
-            if (BakedQuadTransformer.createSideQuad(frontQuad, 14F/16F, 6F/16F - yOff, 1F, 15F/16F - yOff))
-            {
-                BakedQuadTransformer.setQuadPosInFacingDir(frontQuad, 15F/16F);
-                quadMap.get(null).add(frontQuad);
-            }
+            QuadModifier.geometry(quad)
+                    .apply(Modifiers.cutSide(14F/16F, 6F/16F - yOff, 1F, 15F/16F - yOff))
+                    .apply(Modifiers.setPosition(15F/16F))
+                    .export(quadMap.get(null));
         }
-        else if (quad.getDirection() == dir.getOpposite())
+        else if (quadDir == dir.getOpposite())
         {
-            BakedQuad backQuad = ModelUtils.duplicateQuad(quad);
-            if (BakedQuadTransformer.createSideQuad(backQuad, 0F, 9F/16F - yOff, 2F/16F, 12F/16F - yOff))
-            {
-                BakedQuadTransformer.setQuadPosInFacingDir(backQuad, 3F/16F);
-                quadMap.get(null).add(backQuad);
-            }
+            QuadModifier.geometry(quad)
+                    .apply(Modifiers.cutSide(0F, 9F/16F - yOff, 2F/16F, 12F/16F - yOff))
+                    .apply(Modifiers.setPosition(3F/16F))
+                    .export(quadMap.get(null));
 
-            backQuad = ModelUtils.duplicateQuad(quad);
-            if (BakedQuadTransformer.createSideQuad(backQuad, 14F/16F, 9F/16F - yOff, 1F, 12F/16F - yOff))
-            {
-                BakedQuadTransformer.setQuadPosInFacingDir(backQuad, 3F/16F);
-                quadMap.get(null).add(backQuad);
-            }
+            QuadModifier.geometry(quad)
+                    .apply(Modifiers.cutSide(14F/16F, 9F/16F - yOff, 1F, 12F/16F - yOff))
+                    .apply(Modifiers.setPosition(3F/16F))
+                    .export(quadMap.get(null));
         }
     }
 }

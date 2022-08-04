@@ -8,6 +8,8 @@ import net.minecraft.core.Direction;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.client.model.data.IModelData;
 import xfacthd.framedblocks.api.model.FramedBlockModel;
+import xfacthd.framedblocks.api.model.quad.Modifiers;
+import xfacthd.framedblocks.api.model.quad.QuadModifier;
 import xfacthd.framedblocks.api.util.*;
 import xfacthd.framedblocks.api.util.client.*;
 import xfacthd.framedblocks.common.FBContent;
@@ -36,30 +38,20 @@ public class FramedChestModel extends FramedBlockModel
     @Override
     protected void transformQuad(Map<Direction, List<BakedQuad>> quadMap, BakedQuad quad)
     {
+        Direction quadDir = quad.getDirection();
         if (Utils.isY(quad.getDirection()))
         {
-            BakedQuad topBotQuad = ModelUtils.duplicateQuad(quad);
-            if (BakedQuadTransformer.createTopBottomQuad(topBotQuad, 1F/16F, 1F/16F, 15F/16F, 15F/16F))
-            {
-                if (topBotQuad.getDirection() == Direction.UP)
-                {
-                    BakedQuadTransformer.setQuadPosInFacingDir(topBotQuad, closed ? 14F/16F : 10F/16F);
-                    quadMap.get(null).add(topBotQuad);
-                }
-                else
-                {
-                    quadMap.get(quad.getDirection()).add(topBotQuad);
-                }
-            }
+            QuadModifier.geometry(quad)
+                    .apply(Modifiers.cutTopBottom(1F/16F, 1F/16F, 15F/16F, 15F/16F))
+                    .applyIf(Modifiers.setPosition(closed ? 14F/16F : 10F/16F), quadDir == Direction.UP)
+                    .export(quadMap.get(quadDir == Direction.UP ? null : quadDir));
         }
         else
         {
-            BakedQuad sideQuad = ModelUtils.duplicateQuad(quad);
-            if (BakedQuadTransformer.createSideQuad(sideQuad, 1F/16F, 0, 15F/16F, closed ? 14F/16F : 10F/16F))
-            {
-                BakedQuadTransformer.setQuadPosInFacingDir(sideQuad, 15F/16F);
-                quadMap.get(null).add(sideQuad);
-            }
+            QuadModifier.geometry(quad)
+                    .apply(Modifiers.cutSide(1F/16F, 0, 15F/16F, closed ? 14F/16F : 10F/16F))
+                    .apply(Modifiers.setPosition(15F/16F))
+                    .export(quadMap.get(null));
         }
 
         if (latch == LatchType.CAMO)
@@ -71,43 +63,30 @@ public class FramedChestModel extends FramedBlockModel
     public static void makeChestLatch(Map<Direction, List<BakedQuad>> quadMap, BakedQuad quad, Direction facing)
     {
         Direction face = quad.getDirection();
-        BakedQuad copy = ModelUtils.duplicateQuad(quad);
 
         if (face == facing || face == facing.getOpposite())
         {
-            if (BakedQuadTransformer.createSideQuad(copy, 7F/16F, 7F/16F, 9F/16F, 11F/16F))
-            {
-                if (face == facing)
-                {
-                    quadMap.get(facing).add(copy);
-                }
-                else
-                {
-                    BakedQuadTransformer.setQuadPosInFacingDir(copy, 1F/16F);
-                    quadMap.get(null).add(copy);
-                }
-            }
+            QuadModifier.geometry(quad)
+                    .apply(Modifiers.cutSide(7F/16F, 7F/16F, 9F/16F, 11F/16F))
+                    .applyIf(Modifiers.setPosition(1F/16F), face != facing)
+                    .export(quadMap.get(face == facing ? facing : null));
         }
         else if (Utils.isY(face))
         {
-            if (BakedQuadTransformer.createTopBottomQuad(copy, facing.getOpposite(), 1F/16F) &&
-                BakedQuadTransformer.createTopBottomQuad(copy, facing.getClockWise(), 9F/16F) &&
-                BakedQuadTransformer.createTopBottomQuad(copy, facing.getCounterClockWise(), 9F/16F)
-            )
-            {
-                BakedQuadTransformer.setQuadPosInFacingDir(copy, face == Direction.UP ? 11F/16F : 9F/16F);
-                quadMap.get(null).add(copy);
-            }
+            QuadModifier.geometry(quad)
+                    .apply(Modifiers.cutTopBottom(facing.getOpposite(), 1F/16F))
+                    .apply(Modifiers.cutTopBottom(facing.getClockWise(), 9F/16F))
+                    .apply(Modifiers.cutTopBottom(facing.getCounterClockWise(), 9F/16F))
+                    .apply(Modifiers.setPosition(face == Direction.UP ? 11F/16F : 9F/16F))
+                    .export(quadMap.get(null));
         }
         else
         {
-            if (BakedQuadTransformer.createSideQuad(copy, 0, 7F/16F, 1, 11F/16F) &&
-                BakedQuadTransformer.createVerticalSideQuad(copy, facing.getOpposite(), 1F/16F)
-            )
-            {
-                BakedQuadTransformer.setQuadPosInFacingDir(copy, 9F/16F);
-                quadMap.get(null).add(copy);
-            }
+            QuadModifier.geometry(quad)
+                    .apply(Modifiers.cutSide(0, 7F/16F, 1, 11F/16F))
+                    .apply(Modifiers.cutSideLeftRight(facing.getOpposite(), 1F/16F))
+                    .apply(Modifiers.setPosition(9F/16F))
+                    .export(quadMap.get(null));
         }
     }
 

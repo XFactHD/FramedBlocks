@@ -7,9 +7,9 @@ import net.minecraft.world.level.block.state.properties.AttachFace;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.core.Direction;
 import xfacthd.framedblocks.api.model.FramedBlockModel;
+import xfacthd.framedblocks.api.model.quad.Modifiers;
+import xfacthd.framedblocks.api.model.quad.QuadModifier;
 import xfacthd.framedblocks.api.util.Utils;
-import xfacthd.framedblocks.api.util.client.BakedQuadTransformer;
-import xfacthd.framedblocks.api.util.client.ModelUtils;
 
 import java.util.List;
 import java.util.Map;
@@ -18,6 +18,7 @@ public class FramedButtonModel extends FramedBlockModel
 {
     protected final Direction dir;
     protected final AttachFace face;
+    protected final Direction facing;
     protected final boolean pressed;
 
     public FramedButtonModel(BlockState state, BakedModel baseModel)
@@ -25,119 +26,83 @@ public class FramedButtonModel extends FramedBlockModel
         super(state, baseModel);
         dir = state.getValue(BlockStateProperties.HORIZONTAL_FACING);
         face = state.getValue(BlockStateProperties.ATTACH_FACE);
+        facing = getFacing(dir, face);
         pressed = state.getValue(BlockStateProperties.POWERED);
     }
 
     @Override
     protected void transformQuad(Map<Direction, List<BakedQuad>> quadMap, BakedQuad quad)
     {
-        Direction facing = dir;
-        if (face == AttachFace.CEILING) { facing = Direction.DOWN; }
-        else if (face == AttachFace.FLOOR) { facing = Direction.UP; }
-
+        Direction quadDir = quad.getDirection();
         if (Utils.isY(facing))
         {
-            boolean rotX = Utils.isX(dir);
-            float minX = rotX ? 6F/16F : 5F/16F;
-            float minZ = rotX ? 5F/16F : 6F/16F;
-            float maxX = rotX ? 10F/16F : 11F/16F;
-            float maxZ = rotX ? 11F/16F : 10F/16F;
-
-            if (quad.getDirection() == facing || quad.getDirection() == facing.getOpposite())
-            {
-                BakedQuad topBotQuad = ModelUtils.duplicateQuad(quad);
-                if (BakedQuadTransformer.createTopBottomQuad(topBotQuad, minX, minZ, maxX, maxZ))
-                {
-                    if (quad.getDirection() == facing)
-                    {
-                        BakedQuadTransformer.setQuadPosInFacingDir(topBotQuad, pressed ? 1F / 16F : 2F / 16F);
-                        quadMap.get(null).add(topBotQuad);
-                    }
-                    else
-                    {
-                        quadMap.get(quad.getDirection()).add(topBotQuad);
-                    }
-                }
-            }
-            else
-            {
-                boolean largeSide = rotX == Utils.isX(quad.getDirection());
-                float minXZ = largeSide ? 5F/16F : 6F/16F;
-                float maxXZ = largeSide ? 11F/16F : 10F/16F;
-                float minY = (facing == Direction.DOWN) ? (pressed ? 15F/16F : 14F/16F) : 0F;
-                float maxY = (facing == Direction.DOWN) ? 1F : (pressed ? 1F/16F : 2F/16F);
-
-                BakedQuad sideQuad = ModelUtils.duplicateQuad(quad);
-                if (BakedQuadTransformer.createSideQuad(sideQuad, minXZ, minY, maxXZ, maxY))
-                {
-                    BakedQuadTransformer.setQuadPosInFacingDir(sideQuad, largeSide ? 10F/16F : 11F/16F);
-                    quadMap.get(null).add(sideQuad);
-                }
-            }
+            generateVerticalButton(quadMap, quad, quadDir);
         }
         else
         {
-            if (quad.getDirection() == facing || quad.getDirection() == facing.getOpposite())
-            {
-                BakedQuad faceQuad = ModelUtils.duplicateQuad(quad);
-                if (BakedQuadTransformer.createSideQuad(faceQuad, 5F/16F, 6F/16F, 11F/16F, 10F/16F))
-                {
-                    if (quad.getDirection() == facing)
-                    {
-                        BakedQuadTransformer.setQuadPosInFacingDir(faceQuad, pressed ? 1F/16F : 2F/16F);
-                        quadMap.get(null).add(faceQuad);
-                    }
-                    else
-                    {
-                        quadMap.get(quad.getDirection()).add(faceQuad);
-                    }
-                }
-            }
-            else
-            {
-                boolean xAxis = Utils.isX(facing);
-                boolean negative = !Utils.isPositive(facing);
-                float minX;
-                float maxX;
-                float minZ;
-                float maxZ;
-                if (pressed)
-                {
-                    minX = xAxis ? (negative ? 15F/16F : 0F) :  5F/16F;
-                    maxX = xAxis ? (negative ? 1F :  1F/16F) : 11F/16F;
-                    minZ = xAxis ?  5F/16F : (negative ? 15F/16F : 0F);
-                    maxZ = xAxis ? 11F/16F : (negative ? 1F :  1F/16F);
-                }
-                else
-                {
-                    minX = xAxis ? (negative ? 14F/16F : 0F) :  5F/16F;
-                    maxX = xAxis ? (negative ? 1F :  2F/16F) : 11F/16F;
-                    minZ = xAxis ?  5F/16F : (negative ? 14F/16F : 0F);
-                    maxZ = xAxis ? 11F/16F : (negative ? 1F :  2F/16F);
-                }
-
-                if (Utils.isY(quad.getDirection()))
-                {
-                    BakedQuad topBotQuad = ModelUtils.duplicateQuad(quad);
-                    if (BakedQuadTransformer.createTopBottomQuad(topBotQuad, minX, minZ, maxX, maxZ))
-                    {
-                        BakedQuadTransformer.setQuadPosInFacingDir(topBotQuad, 10F / 16F);
-                        quadMap.get(null).add(topBotQuad);
-                    }
-                }
-                else
-                {
-                    float minXZ = xAxis ? minX : minZ;
-                    float maxXZ = xAxis ? maxX : maxZ;
-
-                    BakedQuad sideQuad = ModelUtils.duplicateQuad(quad);
-                    if (BakedQuadTransformer.createSideQuad(sideQuad, minXZ, 6F/16F, maxXZ, 10F/16F))
-                    {
-                        BakedQuadTransformer.setQuadPosInFacingDir(sideQuad, 11F/16F);
-                        quadMap.get(null).add(sideQuad);
-                    }
-                }
-            }
+            generateHorizontalButton(quadMap, quad, quadDir);
         }
+    }
+
+    private void generateVerticalButton(Map<Direction, List<BakedQuad>> quadMap, BakedQuad quad, Direction quadDir)
+    {
+        if (quadDir.getAxis() == facing.getAxis())
+        {
+            QuadModifier.geometry(quad)
+                    .apply(Modifiers.cutTopBottom(dir.getAxis(), 10F/16F))
+                    .apply(Modifiers.cutTopBottom(dir.getClockWise().getAxis(), 11F/16F))
+                    .applyIf(Modifiers.setPosition(pressed ? 1F/16F : 2F/16F), quadDir == facing)
+                    .export(quadMap.get(quadDir == facing ? null : quadDir));
+        }
+        else
+        {
+            boolean largeSide = dir.getAxis() == quadDir.getAxis();
+
+            QuadModifier.geometry(quad)
+                    .apply(Modifiers.cutSideUpDown(facing == Direction.DOWN, pressed ? 1F/16F : 2F/16F))
+                    .apply(Modifiers.cutSideLeftRight(largeSide ? 11F/16F : 10F/16F))
+                    .apply(Modifiers.setPosition(largeSide ? 10F/16F : 11F/16F))
+                    .export(quadMap.get(null));
+        }
+    }
+
+    private void generateHorizontalButton(Map<Direction, List<BakedQuad>> quadMap, BakedQuad quad, Direction quadDir)
+    {
+        float height = pressed ? 1F/16F : 2F/16F;
+        if (quadDir.getAxis() == facing.getAxis())
+        {
+            QuadModifier.geometry(quad)
+                    .apply(Modifiers.cutSide(5F/16F, 6F/16F, 11F/16F, 10F/16F))
+                    .applyIf(Modifiers.setPosition(height), quadDir == facing)
+                    .export(quadMap.get(quadDir == facing ? null : quadDir));
+        }
+        else if (Utils.isY(quadDir))
+        {
+            QuadModifier.geometry(quad)
+                    .apply(Modifiers.cutTopBottom(dir, height))
+                    .apply(Modifiers.cutTopBottom(dir.getClockWise().getAxis(), 11F/16F))
+                    .apply(Modifiers.setPosition(10F / 16F))
+                    .export(quadMap.get(null));
+        }
+        else
+        {
+            QuadModifier.geometry(quad)
+                    .apply(Modifiers.cutSideLeftRight(dir, height))
+                    .apply(Modifiers.cutSideUpDown(10F/16F))
+                    .apply(Modifiers.setPosition(11F / 16F))
+                    .export(quadMap.get(null));
+        }
+    }
+
+
+
+    private static Direction getFacing(Direction dir, AttachFace face)
+    {
+        return switch (face)
+                {
+                    case FLOOR -> Direction.UP;
+                    case CEILING -> Direction.DOWN;
+                    case WALL -> dir;
+                };
     }
 }

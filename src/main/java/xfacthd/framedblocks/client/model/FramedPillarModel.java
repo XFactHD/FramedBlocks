@@ -7,10 +7,10 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import xfacthd.framedblocks.api.block.IFramedBlock;
 import xfacthd.framedblocks.api.model.FramedBlockModel;
+import xfacthd.framedblocks.api.model.quad.Modifiers;
+import xfacthd.framedblocks.api.model.quad.QuadModifier;
 import xfacthd.framedblocks.api.type.IBlockType;
 import xfacthd.framedblocks.api.util.Utils;
-import xfacthd.framedblocks.api.util.client.BakedQuadTransformer;
-import xfacthd.framedblocks.api.util.client.ModelUtils;
 import xfacthd.framedblocks.common.data.BlockType;
 
 import java.util.List;
@@ -37,67 +37,49 @@ public class FramedPillarModel extends FramedBlockModel
     @Override
     protected void transformQuad(Map<Direction, List<BakedQuad>> quadMap, BakedQuad quad)
     {
-        BakedQuad copy = ModelUtils.duplicateQuad(quad);
-        if (createPillarQuad(copy, axis, capStart, capEnd, sideCut))
-        {
-            if (quad.getDirection().getAxis() == axis)
-            {
-                quadMap.get(quad.getDirection()).add(copy);
-            }
-            else
-            {
-                quadMap.get(null).add(copy);
-            }
-        }
+        Direction quadDir = quad.getDirection();
+        createPillarQuad(quad, axis, capStart, capEnd, sideCut)
+                .export(quadMap.get(quadDir.getAxis() == axis ? quadDir : null));
     }
 
-    public static boolean createPillarQuad(BakedQuad quad, Direction.Axis axis, float capStart, float capEnd, float sideCut)
+    public static QuadModifier createPillarQuad(BakedQuad quad, Direction.Axis axis, float capStart, float capEnd, float sideCut)
     {
-        if (quad.getDirection().getAxis() == axis)
+        Direction quadDir = quad.getDirection();
+        if (quadDir.getAxis() == axis)
         {
             if (axis == Direction.Axis.Y)
             {
-                return BakedQuadTransformer.createTopBottomQuad(quad, capStart, capStart, capEnd, capEnd);
+                return QuadModifier.geometry(quad).apply(Modifiers.cutTopBottom(capStart, capStart, capEnd, capEnd));
             }
             else
             {
-                return BakedQuadTransformer.createSideQuad(quad, capStart, capStart, capEnd, capEnd);
+                return QuadModifier.geometry(quad).apply(Modifiers.cutSide(capStart, capStart, capEnd, capEnd));
             }
         }
         else
         {
             if (axis == Direction.Axis.Y)
             {
-                if (BakedQuadTransformer.createVerticalSideQuad(quad, quad.getDirection().getClockWise(), sideCut) &&
-                    BakedQuadTransformer.createVerticalSideQuad(quad, quad.getDirection().getCounterClockWise(), sideCut)
-                )
-                {
-                    BakedQuadTransformer.setQuadPosInFacingDir(quad, sideCut);
-                    return true;
-                }
+                return QuadModifier.geometry(quad)
+                        .apply(Modifiers.cutSideLeftRight(quadDir.getClockWise(), sideCut))
+                        .apply(Modifiers.cutSideLeftRight(quadDir.getCounterClockWise(), sideCut))
+                        .apply(Modifiers.setPosition(sideCut));
             }
-            else if (Utils.isY(quad.getDirection()))
+            else if (Utils.isY(quadDir))
             {
-                if (BakedQuadTransformer.createTopBottomQuad(quad, axisToDir(axis, true).getClockWise(), sideCut) &&
-                    BakedQuadTransformer.createTopBottomQuad(quad, axisToDir(axis, false).getClockWise(), sideCut)
-                )
-                {
-                    BakedQuadTransformer.setQuadPosInFacingDir(quad, sideCut);
-                    return true;
-                }
+                return QuadModifier.geometry(quad)
+                        .apply(Modifiers.cutTopBottom(axisToDir(axis, true).getClockWise(), sideCut))
+                        .apply(Modifiers.cutTopBottom(axisToDir(axis, false).getClockWise(), sideCut))
+                        .apply(Modifiers.setPosition(sideCut));
             }
             else
             {
-                if (BakedQuadTransformer.createHorizontalSideQuad(quad, true, sideCut) &&
-                    BakedQuadTransformer.createHorizontalSideQuad(quad, false, sideCut)
-                )
-                {
-                    BakedQuadTransformer.setQuadPosInFacingDir(quad, sideCut);
-                    return true;
-                }
+                return QuadModifier.geometry(quad)
+                        .apply(Modifiers.cutSideUpDown(true, sideCut))
+                        .apply(Modifiers.cutSideUpDown(false, sideCut))
+                        .apply(Modifiers.setPosition(sideCut));
             }
         }
-        return false;
     }
 
     private static Direction axisToDir(Direction.Axis axis, boolean positive)

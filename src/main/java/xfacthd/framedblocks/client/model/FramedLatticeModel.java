@@ -5,16 +5,19 @@ import net.minecraft.client.renderer.block.model.BakedQuad;
 import net.minecraft.client.resources.model.BakedModel;
 import net.minecraft.core.Direction;
 import xfacthd.framedblocks.api.model.FramedBlockModel;
+import xfacthd.framedblocks.api.model.quad.Modifiers;
+import xfacthd.framedblocks.api.model.quad.QuadModifier;
 import xfacthd.framedblocks.api.util.FramedProperties;
 import xfacthd.framedblocks.api.util.Utils;
-import xfacthd.framedblocks.api.util.client.BakedQuadTransformer;
-import xfacthd.framedblocks.api.util.client.ModelUtils;
 
 import java.util.List;
 import java.util.Map;
 
 public class FramedLatticeModel extends FramedBlockModel
 {
+    private static final float MIN_COORD = 6F/16F;
+    private static final float MAX_COORD = 10F/16F;
+
     private final boolean xAxis;
     private final boolean yAxis;
     private final boolean zAxis;
@@ -30,114 +33,81 @@ public class FramedLatticeModel extends FramedBlockModel
     @Override
     protected void transformQuad(Map<Direction, List<BakedQuad>> quadMap, BakedQuad quad)
     {
-        if (quad.getDirection() == Direction.UP || quad.getDirection() == Direction.DOWN)
+        Direction quadDir = quad.getDirection();
+        if (Utils.isY(quadDir))
         {
-            BakedQuad topBotQuad = ModelUtils.duplicateQuad(quad);
-            if (BakedQuadTransformer.createTopBottomQuad(topBotQuad, 6F/16F, 6F/16F, 10F/16F, 10F/16F))
-            {
-                if (yAxis)
-                {
-                    quadMap.get(quad.getDirection()).add(topBotQuad);
-                }
-                else
-                {
-                    BakedQuadTransformer.setQuadPosInFacingDir(topBotQuad, 10F/16F);
-                    quadMap.get(null).add(topBotQuad);
-                }
-            }
+            QuadModifier.geometry(quad)
+                    .apply(Modifiers.cutTopBottom(MIN_COORD, MIN_COORD, MAX_COORD, MAX_COORD))
+                    .applyIf(Modifiers.setPosition(MAX_COORD), !yAxis)
+                    .export(quadMap.get(yAxis ? quadDir : null));
 
             if (xAxis)
             {
-                topBotQuad = ModelUtils.duplicateQuad(quad);
-                if (BakedQuadTransformer.createTopBottomQuad(topBotQuad, 0, 6F/16F, 6F/16F, 10F/16F))
-                {
-                    BakedQuadTransformer.setQuadPosInFacingDir(topBotQuad, 10F/16F);
-                    quadMap.get(null).add(topBotQuad);
-                }
+                QuadModifier.geometry(quad)
+                        .apply(Modifiers.cutTopBottom(0F, MIN_COORD, MIN_COORD, MAX_COORD))
+                        .apply(Modifiers.setPosition(MAX_COORD))
+                        .export(quadMap.get(null));
 
-                topBotQuad = ModelUtils.duplicateQuad(quad);
-                if (BakedQuadTransformer.createTopBottomQuad(topBotQuad, 10F/16F, 6F/16F, 1, 10F/16F))
-                {
-                    BakedQuadTransformer.setQuadPosInFacingDir(topBotQuad, 10F/16F);
-                    quadMap.get(null).add(topBotQuad);
-                }
+                QuadModifier.geometry(quad)
+                        .apply(Modifiers.cutTopBottom(MAX_COORD, MIN_COORD, 1F, MAX_COORD))
+                        .apply(Modifiers.setPosition(MAX_COORD))
+                        .export(quadMap.get(null));
             }
 
             if (zAxis)
             {
-                topBotQuad = ModelUtils.duplicateQuad(quad);
-                if (BakedQuadTransformer.createTopBottomQuad(topBotQuad, 6F/16F, 0, 10F/16F, 6F/16F))
-                {
-                    BakedQuadTransformer.setQuadPosInFacingDir(topBotQuad, 10F/16F);
-                    quadMap.get(null).add(topBotQuad);
-                }
+                QuadModifier.geometry(quad)
+                        .apply(Modifiers.cutTopBottom(MIN_COORD, 0F, MAX_COORD, MIN_COORD))
+                        .apply(Modifiers.setPosition(MAX_COORD))
+                        .export(quadMap.get(null));
 
-                topBotQuad = ModelUtils.duplicateQuad(quad);
-                if (BakedQuadTransformer.createTopBottomQuad(topBotQuad, 6F/16F, 10F/16F, 10F/16F, 1))
-                {
-                    BakedQuadTransformer.setQuadPosInFacingDir(topBotQuad, 10F/16F);
-                    quadMap.get(null).add(topBotQuad);
-                }
+                QuadModifier.geometry(quad)
+                        .apply(Modifiers.cutTopBottom(MIN_COORD, MAX_COORD, MAX_COORD, 1F))
+                        .apply(Modifiers.setPosition(MAX_COORD))
+                        .export(quadMap.get(null));
             }
         }
-        else if (Utils.isX(quad.getDirection()))
+        else if (Utils.isX(quadDir))
         {
             createHorizontalStrutSideQuads(quadMap, quad, xAxis, zAxis);
         }
-        else if (Utils.isZ(quad.getDirection()))
+        else if (Utils.isZ(quadDir))
         {
             createHorizontalStrutSideQuads(quadMap, quad, zAxis, xAxis);
         }
 
-        if (!Utils.isY(quad.getDirection()) && yAxis)
+        if (!Utils.isY(quadDir) && yAxis)
         {
-            BakedQuad sideQuad = ModelUtils.duplicateQuad(quad);
-            if (BakedQuadTransformer.createSideQuad(sideQuad, 6F/16F, 0, 10F/16F, 6F/16F))
-            {
-                BakedQuadTransformer.setQuadPosInFacingDir(sideQuad, 10F/16F);
-                quadMap.get(null).add(sideQuad);
-            }
+            QuadModifier.geometry(quad)
+                    .apply(Modifiers.cutSide(MIN_COORD, 0F, MAX_COORD, MIN_COORD))
+                    .apply(Modifiers.setPosition(MAX_COORD))
+                    .export(quadMap.get(null));
 
-            sideQuad = ModelUtils.duplicateQuad(quad);
-            if (BakedQuadTransformer.createSideQuad(sideQuad, 6F/16F, 10F/16F, 10F/16F, 1))
-            {
-                BakedQuadTransformer.setQuadPosInFacingDir(sideQuad, 10F/16F);
-                quadMap.get(null).add(sideQuad);
-            }
+            QuadModifier.geometry(quad)
+                    .apply(Modifiers.cutSide(MIN_COORD, MAX_COORD, MAX_COORD, 1F))
+                    .apply(Modifiers.setPosition(MAX_COORD))
+                    .export(quadMap.get(null));
         }
     }
 
     private static void createHorizontalStrutSideQuads(Map<Direction, List<BakedQuad>> quadMap, BakedQuad quad, boolean frontAxis, boolean sideAxis)
     {
-        BakedQuad sideQuad = ModelUtils.duplicateQuad(quad);
-        if (BakedQuadTransformer.createSideQuad(sideQuad, 6F/16F, 6F/16F, 10F/16F, 10F/16F))
-        {
-            if (frontAxis)
-            {
-                quadMap.get(quad.getDirection()).add(sideQuad);
-            }
-            else
-            {
-                BakedQuadTransformer.setQuadPosInFacingDir(sideQuad, 10F/16F);
-                quadMap.get(null).add(sideQuad);
-            }
-        }
+        QuadModifier.geometry(quad)
+                .apply(Modifiers.cutSide(MIN_COORD, MIN_COORD, MAX_COORD, MAX_COORD))
+                .applyIf(Modifiers.setPosition(MAX_COORD), !frontAxis)
+                .export(quadMap.get(frontAxis ? quad.getDirection() : null));
 
         if (sideAxis)
         {
-            sideQuad = ModelUtils.duplicateQuad(quad);
-            if (BakedQuadTransformer.createSideQuad(sideQuad, 0, 6F/16F, 6F/16F, 10F/16F))
-            {
-                BakedQuadTransformer.setQuadPosInFacingDir(sideQuad, 10F/16F);
-                quadMap.get(null).add(sideQuad);
-            }
+            QuadModifier.geometry(quad)
+                    .apply(Modifiers.cutSide(0F, MIN_COORD, MIN_COORD, MAX_COORD))
+                    .apply(Modifiers.setPosition(MAX_COORD))
+                    .export(quadMap.get(null));
 
-            sideQuad = ModelUtils.duplicateQuad(quad);
-            if (BakedQuadTransformer.createSideQuad(sideQuad, 10F/16F, 6F/16F, 1, 10F/16F))
-            {
-                BakedQuadTransformer.setQuadPosInFacingDir(sideQuad, 10F/16F);
-                quadMap.get(null).add(sideQuad);
-            }
+            QuadModifier.geometry(quad)
+                    .apply(Modifiers.cutSide(MAX_COORD, MIN_COORD, 1F, MAX_COORD))
+                    .apply(Modifiers.setPosition(MAX_COORD))
+                    .export(quadMap.get(null));
         }
     }
 }

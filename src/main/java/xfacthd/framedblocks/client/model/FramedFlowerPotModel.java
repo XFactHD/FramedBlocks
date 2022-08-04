@@ -19,9 +19,10 @@ import net.minecraftforge.client.model.data.EmptyModelData;
 import net.minecraftforge.client.model.data.IModelData;
 import xfacthd.framedblocks.api.model.BakedModelProxy;
 import xfacthd.framedblocks.api.model.FramedBlockModel;
+import xfacthd.framedblocks.api.model.quad.Modifiers;
+import xfacthd.framedblocks.api.model.quad.QuadModifier;
 import xfacthd.framedblocks.api.util.FramedBlockData;
 import xfacthd.framedblocks.api.util.Utils;
-import xfacthd.framedblocks.api.util.client.BakedQuadTransformer;
 import xfacthd.framedblocks.api.util.client.ModelUtils;
 import xfacthd.framedblocks.common.FBContent;
 import xfacthd.framedblocks.common.block.FramedFlowerPotBlock;
@@ -86,57 +87,43 @@ public class FramedFlowerPotModel extends BakedModelProxy
         {
             if (quad.getDirection() == Direction.DOWN)
             {
-                BakedQuad botQuad = ModelUtils.duplicateQuad(quad);
-                if (BakedQuadTransformer.createTopBottomQuad(botQuad, 5F/16F, 5F/16F, 11F/16F, 11F/16F))
-                {
-                    quadMap.get(Direction.DOWN).add(botQuad);
-                }
+                QuadModifier.geometry(quad)
+                        .apply(Modifiers.cutTopBottom(5F/16F, 5F/16F, 11F/16F, 11F/16F))
+                        .export(quadMap.get(Direction.DOWN));
             }
             else if (quad.getDirection() == Direction.UP)
             {
-                BakedQuad topQuad = ModelUtils.duplicateQuad(quad);
-                if (BakedQuadTransformer.createTopBottomQuad(topQuad, 5F/16F, 5F/16F, 11F/16F, 6F/16F))
-                {
-                    BakedQuadTransformer.setQuadPosInFacingDir(topQuad, 6F/16F);
-                    quadMap.get(null).add(topQuad);
-                }
+                QuadModifier.geometry(quad)
+                        .apply(Modifiers.cutTopBottom(5F/16F, 5F/16F, 11F/16F, 6F/16F))
+                        .apply(Modifiers.setPosition(6F/16F))
+                        .export(quadMap.get(null));
 
-                topQuad = ModelUtils.duplicateQuad(quad);
-                if (BakedQuadTransformer.createTopBottomQuad(topQuad, 5F/16F, 10F/16F, 11F/16F, 11F/16F))
-                {
-                    BakedQuadTransformer.setQuadPosInFacingDir(topQuad, 6F/16F);
-                    quadMap.get(null).add(topQuad);
-                }
+                QuadModifier.geometry(quad)
+                        .apply(Modifiers.cutTopBottom(5F/16F, 10F/16F, 11F/16F, 11F/16F))
+                        .apply(Modifiers.setPosition(6F/16F))
+                        .export(quadMap.get(null));
 
-                topQuad = ModelUtils.duplicateQuad(quad);
-                if (BakedQuadTransformer.createTopBottomQuad(topQuad, 5F/16F, 6F/16F, 6F/16F, 10F/16F))
-                {
-                    BakedQuadTransformer.setQuadPosInFacingDir(topQuad, 6F/16F);
-                    quadMap.get(null).add(topQuad);
-                }
+                QuadModifier.geometry(quad)
+                        .apply(Modifiers.cutTopBottom(5F/16F, 6F/16F, 6F/16F, 10F/16F))
+                        .apply(Modifiers.setPosition(6F/16F))
+                        .export(quadMap.get(null));
 
-                topQuad = ModelUtils.duplicateQuad(quad);
-                if (BakedQuadTransformer.createTopBottomQuad(topQuad, 10F/16F, 6F/16F, 11F/16F, 10F/16F))
-                {
-                    BakedQuadTransformer.setQuadPosInFacingDir(topQuad, 6F/16F);
-                    quadMap.get(null).add(topQuad);
-                }
+                QuadModifier.geometry(quad)
+                        .apply(Modifiers.cutTopBottom(10F/16F, 6F/16F, 11F/16F, 10F/16F))
+                        .apply(Modifiers.setPosition(6F/16F))
+                        .export(quadMap.get(null));
             }
             else if (!Utils.isY(quad.getDirection()))
             {
-                BakedQuad sideQuad = ModelUtils.duplicateQuad(quad);
-                if (BakedQuadTransformer.createSideQuad(sideQuad, 5F/16F, 0, 11F/16F, 6F/16F))
-                {
-                    BakedQuadTransformer.setQuadPosInFacingDir(sideQuad, 11F/16F);
-                    quadMap.get(null).add(sideQuad);
-                }
+                QuadModifier.geometry(quad)
+                        .apply(Modifiers.cutSide(5F/16F, 0, 11F/16F, 6F/16F))
+                        .apply(Modifiers.setPosition(11F/16F))
+                        .export(quadMap.get(null));
 
-                sideQuad = ModelUtils.duplicateQuad(quad);
-                if (BakedQuadTransformer.createSideQuad(sideQuad, 6F/16F, 1F/16F, 10F/16F, 6F/16F))
-                {
-                    BakedQuadTransformer.setQuadPosInFacingDir(sideQuad, 6F/16F);
-                    quadMap.get(null).add(sideQuad);
-                }
+                QuadModifier.geometry(quad)
+                        .apply(Modifiers.cutSide(6F/16F, 1F/16F, 10F/16F, 6F/16F))
+                        .apply(Modifiers.setPosition(6F/16F))
+                        .export(quadMap.get(null));
             }
         }
 
@@ -167,38 +154,28 @@ public class FramedFlowerPotModel extends BakedModelProxy
             {
                 BakedModel dirtModel = dispatcher.getBlockModel(Blocks.DIRT.defaultBlockState());
                 dirtModel.getQuads(Blocks.DIRT.defaultBlockState(), Direction.UP, rand, EmptyModelData.INSTANCE).forEach(q ->
-                {
-                    BakedQuad topQuad = ModelUtils.duplicateQuad(q);
-                    if (BakedQuadTransformer.createTopBottomQuad(topQuad, 6F / 16F, 6F / 16F, 10F / 16F, 10F / 16F))
-                    {
-                        BakedQuadTransformer.setQuadPosInFacingDir(topQuad, 4F / 16F);
-                        quadMap.get(null).add(topQuad);
-                    }
-                });
+                        QuadModifier.geometry(q)
+                                .apply(Modifiers.cutTopBottom(6F/16F, 6F/16F, 10F/16F, 10F/16F))
+                                .apply(Modifiers.setPosition(4F/16F))
+                                .export(quadMap.get(null))
+                );
 
                 if (data instanceof FramedBlockData framedData && !framedData.getCamoState().canOcclude())
                 {
                     dirtModel.getQuads(Blocks.DIRT.defaultBlockState(), Direction.DOWN, rand, EmptyModelData.INSTANCE).forEach(q ->
-                    {
-                        BakedQuad botQuad = ModelUtils.duplicateQuad(q);
-                        if (BakedQuadTransformer.createTopBottomQuad(botQuad, 6F / 16F, 6F / 16F, 10F / 16F, 10F / 16F))
-                        {
-                            BakedQuadTransformer.setQuadPosInFacingDir(botQuad, 15F / 16F);
-                            quadMap.get(null).add(botQuad);
-                        }
-                    });
+                            QuadModifier.geometry(q)
+                                    .apply(Modifiers.cutTopBottom(6F/16F, 6F/16F, 10F/16F, 10F/16F))
+                                    .apply(Modifiers.setPosition(15F/16F))
+                                    .export(quadMap.get(null))
+                    );
 
                     Direction.Plane.HORIZONTAL.stream()
                             .flatMap(face -> dirtModel.getQuads(Blocks.AIR.defaultBlockState(), face, rand, EmptyModelData.INSTANCE).stream())
-                            .forEach(q ->
-                            {
-                                BakedQuad sideQuad = ModelUtils.duplicateQuad(q);
-                                if (BakedQuadTransformer.createSideQuad(sideQuad, 6F / 16F, 1F / 16F, 10F / 16F, 4F / 16F))
-                                {
-                                    BakedQuadTransformer.setQuadPosInFacingDir(sideQuad, 10F / 16F);
-                                    quadMap.get(null).add(sideQuad);
-                                }
-                            });
+                            .forEach(q -> QuadModifier.geometry(q)
+                                    .apply(Modifiers.cutSide(6F/16F, 1F/16F, 10F/16F, 4F/16F))
+                                    .apply(Modifiers.setPosition(10F/16F))
+                                    .export(quadMap.get(null))
+                            );
                 }
             }
         }

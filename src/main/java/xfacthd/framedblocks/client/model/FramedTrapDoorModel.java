@@ -7,15 +7,17 @@ import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.block.state.properties.Half;
 import net.minecraft.core.Direction;
 import xfacthd.framedblocks.api.model.FramedBlockModel;
+import xfacthd.framedblocks.api.model.quad.Modifiers;
+import xfacthd.framedblocks.api.model.quad.QuadModifier;
 import xfacthd.framedblocks.api.util.Utils;
-import xfacthd.framedblocks.api.util.client.BakedQuadTransformer;
-import xfacthd.framedblocks.api.util.client.ModelUtils;
 
 import java.util.List;
 import java.util.Map;
 
 public class FramedTrapDoorModel extends FramedBlockModel
 {
+    private static final float DEPTH = 3F/16F;
+
     private final Direction dir;
     private final boolean top;
     private final boolean open;
@@ -31,47 +33,41 @@ public class FramedTrapDoorModel extends FramedBlockModel
     @Override
     protected void transformQuad(Map<Direction, List<BakedQuad>> quadMap, BakedQuad quad)
     {
+        Direction quadDir = quad.getDirection();
         if (open)
         {
-            if (quad.getDirection() == dir)
+            if (quadDir == dir)
             {
-                BakedQuad frontQuad = ModelUtils.duplicateQuad(quad);
-                BakedQuadTransformer.setQuadPosInFacingDir(frontQuad, 3F/16F);
-                quadMap.get(null).add(frontQuad);
+                QuadModifier.geometry(quad)
+                        .apply(Modifiers.setPosition(DEPTH))
+                        .export(quadMap.get(null));
             }
-            else if (Utils.isY(quad.getDirection()))
+            else if (Utils.isY(quadDir))
             {
-                BakedQuad topBotQuad = ModelUtils.duplicateQuad(quad);
-                if (BakedQuadTransformer.createTopBottomQuad(topBotQuad, dir, 3F/16F))
-                {
-                    quadMap.get(quad.getDirection()).add(topBotQuad);
-                }
+                QuadModifier.geometry(quad)
+                        .apply(Modifiers.cutTopBottom(dir, DEPTH))
+                        .export(quadMap.get(quadDir));
             }
             else
             {
-                BakedQuad sideQuad = ModelUtils.duplicateQuad(quad);
-                boolean facePositive = Utils.isPositive(dir);
-                if (BakedQuadTransformer.createVerticalSideQuad(sideQuad, !facePositive, 3F/16F))
-                {
-                    quadMap.get(quad.getDirection()).add(sideQuad);
-                }
+                QuadModifier.geometry(quad)
+                        .apply(Modifiers.cutSideUpDown(!Utils.isPositive(dir), DEPTH))
+                        .export(quadMap.get(quadDir));
             }
         }
         else
         {
             if ((top && quad.getDirection() == Direction.DOWN) || (!top && quad.getDirection() == Direction.UP))
             {
-                BakedQuad topBotQuad = ModelUtils.duplicateQuad(quad);
-                BakedQuadTransformer.setQuadPosInFacingDir(topBotQuad, 3F/16F);
-                quadMap.get(null).add(topBotQuad);
+                QuadModifier.geometry(quad)
+                        .apply(Modifiers.setPosition(DEPTH))
+                        .export(quadMap.get(null));
             }
             else if (!Utils.isY(quad.getDirection()))
             {
-                BakedQuad sideQuad = ModelUtils.duplicateQuad(quad);
-                if (BakedQuadTransformer.createHorizontalSideQuad(sideQuad, top, 3F/16F))
-                {
-                    quadMap.get(quad.getDirection()).add(sideQuad);
-                }
+                QuadModifier.geometry(quad)
+                        .apply(Modifiers.cutSideUpDown(top, DEPTH))
+                        .export(quadMap.get(quadDir));
             }
         }
     }

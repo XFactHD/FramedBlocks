@@ -6,9 +6,9 @@ import net.minecraft.core.Direction;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.*;
 import xfacthd.framedblocks.api.model.FramedBlockModel;
+import xfacthd.framedblocks.api.model.quad.Modifiers;
+import xfacthd.framedblocks.api.model.quad.QuadModifier;
 import xfacthd.framedblocks.api.util.Utils;
-import xfacthd.framedblocks.api.util.client.BakedQuadTransformer;
-import xfacthd.framedblocks.api.util.client.ModelUtils;
 
 import java.util.List;
 import java.util.Map;
@@ -32,31 +32,27 @@ public class FramedDoorModel extends FramedBlockModel
     {
         Direction faceDir = dir;
         if (open) { faceDir = hingeRight ? faceDir.getCounterClockWise() : faceDir.getClockWise(); }
-        boolean facePositive = Utils.isPositive(faceDir);
 
-        if (Utils.isY(quad.getDirection()))
+        Direction quadDir = quad.getDirection();
+        if (Utils.isY(quadDir))
         {
-            BakedQuad topBotQuad = ModelUtils.duplicateQuad(quad);
-            if (BakedQuadTransformer.createTopBottomQuad(topBotQuad, faceDir, 3F/16F))
-            {
-                quadMap.get(quad.getDirection()).add(topBotQuad);
-            }
+            QuadModifier.geometry(quad)
+                    .apply(Modifiers.cutTopBottom(faceDir, 3F/16F))
+                    .export(quadMap.get(quadDir));
         }
         else
         {
-            if (quad.getDirection() == faceDir)
+            if (quadDir == faceDir)
             {
-                BakedQuad faceQuad = ModelUtils.duplicateQuad(quad);
-                BakedQuadTransformer.setQuadPosInFacingDir(faceQuad, 3F/16F);
-                quadMap.get(null).add(faceQuad);
+                QuadModifier.geometry(quad)
+                        .apply(Modifiers.setPosition(3F/16F))
+                        .export(quadMap.get(null));
             }
             else
             {
-                BakedQuad sideQuad = ModelUtils.duplicateQuad(quad);
-                if (BakedQuadTransformer.createVerticalSideQuad(sideQuad, !facePositive, 3F/16F))
-                {
-                    quadMap.get(quad.getDirection()).add(sideQuad);
-                }
+                QuadModifier.geometry(quad)
+                        .apply(Modifiers.cutSideLeftRight(faceDir, 3F/16F))
+                        .export(quadMap.get(quadDir));
             }
         }
     }
