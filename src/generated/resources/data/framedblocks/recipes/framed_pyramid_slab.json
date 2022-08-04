@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "SS",
+    "SS"
+  ],
+  "key": {
+    "S": {
+      "item": "framedblocks:framed_slope"
+    }
+  },
+  "result": {
+    "item": "framedblocks:framed_pyramid_slab",
+    "count": 4
+  }
+}
