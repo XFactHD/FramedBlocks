@@ -6,8 +6,9 @@ import net.minecraft.core.Direction;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import xfacthd.framedblocks.api.model.FramedBlockModel;
+import xfacthd.framedblocks.api.model.quad.Modifiers;
+import xfacthd.framedblocks.api.model.quad.QuadModifier;
 import xfacthd.framedblocks.api.util.Utils;
-import xfacthd.framedblocks.api.util.client.*;
 import xfacthd.framedblocks.common.FBContent;
 import xfacthd.framedblocks.common.data.PropertyHolder;
 
@@ -29,155 +30,96 @@ public class FramedSlopedPrismModel extends FramedBlockModel
     @Override
     protected void transformQuad(Map<Direction, List<BakedQuad>> quadMap, BakedQuad quad)
     {
+        Direction quadFace = quad.getDirection();
         if (isStateInvalid())
         {
-            quadMap.get(quad.getDirection()).add(quad);
+            quadMap.get(quadFace).add(quad);
             return;
         }
 
-        Direction quadFace = quad.getDirection();
         if (quadFace == orientation.getOpposite() && !Utils.isY(orientation))
         {
-            BakedQuad triangle = ModelUtils.duplicateQuad(quad);
             if (Utils.isY(facing))
             {
-                TriangleDirection triDir = facing == Direction.UP ? TriangleDirection.UP : TriangleDirection.DOWN;
-                if (BakedQuadTransformer.createSmallTriangleQuad(triangle, triDir))
-                {
-                    BakedQuadTransformer.createTopBottomSlopeQuad(triangle, facing == Direction.UP);
-                    quadMap.get(null).add(triangle);
-                }
+                QuadModifier.geometry(quad)
+                        .apply(Modifiers.cutSmallTriangle(facing))
+                        .apply(Modifiers.makeVerticalSlope(facing == Direction.UP, 45))
+                        .export(quadMap.get(null));
             }
             else
             {
-                TriangleDirection triDir = orientation == facing.getCounterClockWise() ? TriangleDirection.RIGHT : TriangleDirection.LEFT;
-                if (BakedQuadTransformer.createSmallTriangleQuad(triangle, triDir))
-                {
-                    BakedQuadTransformer.createSideSlopeQuad(triangle, triDir == TriangleDirection.RIGHT);
-                    quadMap.get(null).add(triangle);
-                }
+                QuadModifier.geometry(quad)
+                        .apply(Modifiers.cutSmallTriangle(facing))
+                        .apply(Modifiers.makeHorizontalSlope(orientation == facing.getClockWise(), 45))
+                        .export(quadMap.get(null));
             }
         }
         else if (quadFace == facing && Utils.isY(orientation))
         {
-            TriangleDirection triDir = orientation == Direction.UP ? TriangleDirection.UP : TriangleDirection.DOWN;
-
-            BakedQuad triangle = ModelUtils.duplicateQuad(quad);
-            if (BakedQuadTransformer.createSmallTriangleQuad(triangle, triDir))
-            {
-                BakedQuadTransformer.createTopBottomSlopeQuad(triangle, orientation == Direction.DOWN);
-                quadMap.get(null).add(triangle);
-            }
+            QuadModifier.geometry(quad)
+                    .apply(Modifiers.cutSmallTriangle(orientation))
+                    .apply(Modifiers.makeVerticalSlope(orientation == Direction.DOWN, 45))
+                    .export(quadMap.get(null));
         }
         else if (quadFace == orientation)
         {
-            TriangleDirection triDir;
-            if (Utils.isY(facing))
-            {
-                triDir = facing == Direction.UP ? TriangleDirection.UP : TriangleDirection.DOWN;
-            }
-            else if (!Utils.isY(orientation))
-            {
-                triDir = quadFace == facing.getClockWise() ? TriangleDirection.RIGHT : TriangleDirection.LEFT;
-            }
-            else
-            {
-                BakedQuad triangle = ModelUtils.duplicateQuad(quad);
-                if (BakedQuadTransformer.createTopBottomSmallTriangleQuad(triangle, facing))
-                {
-                    quadMap.get(quadFace).add(triangle);
-                }
-                return;
-            }
-
-            BakedQuad triangle = ModelUtils.duplicateQuad(quad);
-            if (BakedQuadTransformer.createSmallTriangleQuad(triangle, triDir))
-            {
-                quadMap.get(quadFace).add(triangle);
-            }
+            QuadModifier.geometry(quad)
+                    .apply(Modifiers.cutSmallTriangle(facing))
+                    .export(quadMap.get(quadFace));
         }
-        else if (Utils.isY(facing) && quadFace.getAxis() != facing.getAxis() && quadFace.getAxis() != orientation.getAxis())
+        else if (Utils.isY(facing) && quadFace.getAxis() == orientation.getClockWise().getAxis())
         {
-            BakedQuad slope = ModelUtils.duplicateQuad(quad);
-            if (BakedQuadTransformer.createHorizontalSideQuad(slope, facing == Direction.DOWN, .5F)
-            )
-            {
-                BakedQuad corner = ModelUtils.duplicateQuad(slope);
-                if (BakedQuadTransformer.createVerticalSideQuad(corner, orientation, .5F) &&
-                    BakedQuadTransformer.createSideTriangleQuad(corner, quadFace == orientation.getClockWise(), facing == Direction.DOWN)
-                )
-                {
-                    BakedQuadTransformer.createTopBottomSlopeQuad(corner, facing == Direction.UP);
-                    quadMap.get(null).add(corner);
-                }
+            QuadModifier mod = QuadModifier.geometry(quad)
+                    .apply(Modifiers.cutSideUpDown(facing == Direction.DOWN, .5F));
 
-                if (BakedQuadTransformer.createVerticalSideQuad(slope, orientation.getOpposite(), .5F))
-                {
-                    BakedQuadTransformer.createTopBottomSlopeQuad(slope, facing == Direction.UP);
-                    quadMap.get(null).add(slope);
-                }
-            }
+            mod.derive().apply(Modifiers.cutSideLeftRight(orientation, .5F))
+                    .apply(Modifiers.cutSmallTriangle(facing))
+                    .apply(Modifiers.makeVerticalSlope(facing == Direction.UP, 45))
+                    .export(quadMap.get(null));
+
+            mod.apply(Modifiers.cutSideLeftRight(orientation.getOpposite(), .5F))
+                    .apply(Modifiers.makeVerticalSlope(facing == Direction.UP, 45))
+                    .export(quadMap.get(null));
         }
-        else if (Utils.isY(orientation) && quadFace.getAxis() != facing.getAxis() && quadFace.getAxis() != orientation.getAxis())
+        else if (Utils.isY(orientation) && quadFace.getAxis() == facing.getClockWise().getAxis())
         {
-            BakedQuad slope = ModelUtils.duplicateQuad(quad);
-            if (BakedQuadTransformer.createVerticalSideQuad(slope, facing, .5F))
-            {
-                BakedQuad corner = ModelUtils.duplicateQuad(slope);
-                if (BakedQuadTransformer.createHorizontalSideQuad(corner, orientation == Direction.DOWN, .5F) &&
-                    BakedQuadTransformer.createSideTriangleQuad(corner, quadFace == facing.getCounterClockWise(), orientation == Direction.UP)
-                )
-                {
-                    BakedQuadTransformer.createSideSlopeQuad(corner, quadFace == facing.getClockWise());
-                    quadMap.get(null).add(corner);
-                }
+            QuadModifier mod = QuadModifier.geometry(quad)
+                    .apply(Modifiers.cutSideLeftRight(facing, .5F));
 
-                if (BakedQuadTransformer.createHorizontalSideQuad(slope, orientation == Direction.UP, .5F))
-                {
-                    BakedQuadTransformer.createSideSlopeQuad(slope, quadFace == facing.getClockWise());
-                    quadMap.get(null).add(slope);
-                }
-            }
+            mod.derive().apply(Modifiers.cutSideUpDown(orientation == Direction.DOWN, .5F))
+                    .apply(Modifiers.cutSmallTriangle(facing))
+                    .apply(Modifiers.makeHorizontalSlope(quadFace == facing.getCounterClockWise(), 45))
+                    .export(quadMap.get(null));
+
+            mod.apply(Modifiers.cutSideUpDown(orientation == Direction.UP, .5F))
+                    .apply(Modifiers.makeHorizontalSlope(quadFace == facing.getCounterClockWise(), 45))
+                    .export(quadMap.get(null));
         }
         else if (!Utils.isY(orientation) && !Utils.isY(facing) && quadFace == facing)
         {
-            BakedQuad slope = ModelUtils.duplicateQuad(quad);
-            if (BakedQuadTransformer.createHorizontalSideQuad(slope, false, .5F))
-            {
-                BakedQuad corner = ModelUtils.duplicateQuad(slope);
-                if (BakedQuadTransformer.createVerticalSideQuad(corner, orientation, .5F) &&
-                    BakedQuadTransformer.createSideTriangleQuad(corner, orientation == facing.getCounterClockWise(), false)
-                )
-                {
-                    BakedQuadTransformer.createTopBottomSlopeQuad(corner, false);
-                    quadMap.get(null).add(corner);
-                }
+            QuadModifier mod = QuadModifier.geometry(quad)
+                    .apply(Modifiers.cutSideUpDown(false, .5F));
 
-                if (BakedQuadTransformer.createVerticalSideQuad(slope, orientation.getOpposite(), .5F))
-                {
-                    BakedQuadTransformer.createTopBottomSlopeQuad(slope, false);
-                    quadMap.get(null).add(slope);
-                }
-            }
+            mod.derive().apply(Modifiers.cutSideLeftRight(orientation, .5F))
+                    .apply(Modifiers.cutSmallTriangle(Direction.UP))
+                    .apply(Modifiers.makeVerticalSlope(false, 45))
+                    .export(quadMap.get(null));
 
-            slope = ModelUtils.duplicateQuad(quad);
-            if (BakedQuadTransformer.createHorizontalSideQuad(slope, true, .5F))
-            {
-                BakedQuad corner = ModelUtils.duplicateQuad(slope);
-                if (BakedQuadTransformer.createVerticalSideQuad(corner, orientation, .5F) &&
-                    BakedQuadTransformer.createSideTriangleQuad(corner, orientation == facing.getCounterClockWise(), true)
-                )
-                {
-                    BakedQuadTransformer.createTopBottomSlopeQuad(corner, true);
-                    quadMap.get(null).add(corner);
-                }
+            mod.apply(Modifiers.cutSideLeftRight(orientation.getOpposite(), .5F))
+                    .apply(Modifiers.makeVerticalSlope(false, 45))
+                    .export(quadMap.get(null));
 
-                if (BakedQuadTransformer.createVerticalSideQuad(slope, orientation.getOpposite(), .5F))
-                {
-                    BakedQuadTransformer.createTopBottomSlopeQuad(slope, true);
-                    quadMap.get(null).add(slope);
-                }
-            }
+            mod = QuadModifier.geometry(quad)
+                    .apply(Modifiers.cutSideUpDown(true, .5F));
+
+            mod.derive().apply(Modifiers.cutSideLeftRight(orientation, .5F))
+                    .apply(Modifiers.cutSmallTriangle(Direction.DOWN))
+                    .apply(Modifiers.makeVerticalSlope(true, 45))
+                    .export(quadMap.get(null));
+
+            mod.apply(Modifiers.cutSideLeftRight(orientation.getOpposite(), .5F))
+                    .apply(Modifiers.makeVerticalSlope(true, 45))
+                    .export(quadMap.get(null));
         }
     }
 

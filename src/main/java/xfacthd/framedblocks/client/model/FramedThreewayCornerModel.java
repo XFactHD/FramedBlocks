@@ -5,8 +5,9 @@ import net.minecraft.client.renderer.block.model.BakedQuad;
 import net.minecraft.client.resources.model.BakedModel;
 import net.minecraft.core.Direction;
 import xfacthd.framedblocks.api.model.FramedBlockModel;
+import xfacthd.framedblocks.api.model.quad.Modifiers;
+import xfacthd.framedblocks.api.model.quad.QuadModifier;
 import xfacthd.framedblocks.api.util.FramedProperties;
-import xfacthd.framedblocks.api.util.client.*;
 import xfacthd.framedblocks.common.FBContent;
 
 import java.util.List;
@@ -27,46 +28,38 @@ public class FramedThreewayCornerModel extends FramedBlockModel
     @Override
     protected void transformQuad(Map<Direction, List<BakedQuad>> quadMap, BakedQuad quad)
     {
-        if ((quad.getDirection() == Direction.UP && top) || (quad.getDirection() == Direction.DOWN && !top))
+        Direction quadDir = quad.getDirection();
+        if ((quadDir == Direction.UP && top) || (quadDir == Direction.DOWN && !top))
         {
-            BakedQuad triQuad = ModelUtils.duplicateQuad(quad);
-            if (BakedQuadTransformer.createTopBottomTriangleQuad(triQuad, dir))
-            {
-                quadMap.get(quad.getDirection()).add(triQuad);
-            }
+            QuadModifier.geometry(quad)
+                    .apply(Modifiers.cutTopBottom(dir.getOpposite(), 1, 0))
+                    .export(quadMap.get(quadDir));
         }
-        else if (quad.getDirection() == dir || quad.getDirection() == dir.getCounterClockWise())
+        else if (quadDir == dir || quadDir == dir.getCounterClockWise())
         {
-            BakedQuad triQuad = ModelUtils.duplicateQuad(quad);
-            if (BakedQuadTransformer.createSideTriangleQuad(triQuad, quad.getDirection() == dir, top))
-            {
-                quadMap.get(quad.getDirection()).add(triQuad);
-            }
+            Direction cutDir = quadDir == dir ? dir.getClockWise() : dir.getOpposite();
+            QuadModifier.geometry(quad)
+                    .apply(Modifiers.cutSideLeftRight(cutDir, top ? 1 : 0, top ? 0 : 1))
+                    .export(quadMap.get(quadDir));
         }
-        else if (quad.getDirection() == dir.getOpposite())
+        else if (quadDir == dir.getOpposite())
         {
-            BakedQuad triQuad = ModelUtils.duplicateQuad(quad);
-            if (BakedQuadTransformer.createSmallTriangleQuad(triQuad, TriangleDirection.RIGHT))
-            {
-                BakedQuadTransformer.createTopBottomSlopeQuad(triQuad, !top);
-                quadMap.get(null).add(triQuad);
-            }
+            QuadModifier.geometry(quad)
+                    .apply(Modifiers.cutSmallTriangle(dir.getClockWise()))
+                    .apply(Modifiers.makeVerticalSlope(!top, 45))
+                    .export(quadMap.get(null));
 
-            triQuad = ModelUtils.duplicateQuad(quad);
-            if (BakedQuadTransformer.createSmallTriangleQuad(triQuad, top ? TriangleDirection.DOWN : TriangleDirection.UP))
-            {
-                BakedQuadTransformer.createSideSlopeQuad(triQuad, true);
-                quadMap.get(null).add(triQuad);
-            }
+            QuadModifier.geometry(quad)
+                    .apply(Modifiers.cutSmallTriangle(top ? Direction.DOWN : Direction.UP))
+                    .apply(Modifiers.makeHorizontalSlope(false, 45))
+                    .export(quadMap.get(null));
         }
-        else if (quad.getDirection() == dir.getClockWise())
+        else if (quadDir == dir.getClockWise())
         {
-            BakedQuad triQuad = ModelUtils.duplicateQuad(quad);
-            if (BakedQuadTransformer.createSmallTriangleQuad(triQuad, TriangleDirection.LEFT))
-            {
-                BakedQuadTransformer.createTopBottomSlopeQuad(triQuad, !top);
-                quadMap.get(null).add(triQuad);
-            }
+            QuadModifier.geometry(quad)
+                    .apply(Modifiers.cutSmallTriangle(dir.getOpposite()))
+                    .apply(Modifiers.makeVerticalSlope(!top, 45))
+                    .export(quadMap.get(null));
         }
     }
 

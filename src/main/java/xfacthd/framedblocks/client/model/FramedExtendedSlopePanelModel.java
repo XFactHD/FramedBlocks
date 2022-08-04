@@ -5,10 +5,10 @@ import net.minecraft.client.resources.model.BakedModel;
 import net.minecraft.core.Direction;
 import net.minecraft.world.level.block.state.BlockState;
 import xfacthd.framedblocks.api.model.FramedBlockModel;
+import xfacthd.framedblocks.api.model.quad.Modifiers;
+import xfacthd.framedblocks.api.model.quad.QuadModifier;
 import xfacthd.framedblocks.api.util.FramedProperties;
 import xfacthd.framedblocks.api.util.Utils;
-import xfacthd.framedblocks.api.util.client.BakedQuadTransformer;
-import xfacthd.framedblocks.api.util.client.ModelUtils;
 import xfacthd.framedblocks.common.FBContent;
 import xfacthd.framedblocks.common.data.PropertyHolder;
 import xfacthd.framedblocks.common.data.property.HorizontalRotation;
@@ -37,36 +37,40 @@ public class FramedExtendedSlopePanelModel extends FramedBlockModel
         boolean yAxis = Utils.isY(orientation);
         if (face == orientation)
         {
-            Direction cutDir = facing.getOpposite();
-            BakedQuad slabQuad = ModelUtils.duplicateQuad(quad);
-            if ((yAxis && BakedQuadTransformer.createTopBottomQuad(slabQuad, cutDir, .5F)) ||
-                (!yAxis && BakedQuadTransformer.createVerticalSideQuad(slabQuad, cutDir, .5F))
-            )
+            if (Utils.isY(orientation))
             {
-                quadMap.get(face).add(slabQuad);
+                QuadModifier.geometry(quad)
+                        .apply(Modifiers.cutTopBottom(facing.getOpposite(), .5F))
+                        .export(quadMap.get(face));
+            }
+            else
+            {
+                QuadModifier.geometry(quad)
+                        .apply(Modifiers.cutSideLeftRight(facing.getOpposite(), .5F))
+                        .export(quadMap.get(face));
             }
         }
         else if (face == facing.getOpposite())
         {
-            BakedQuad slopeQuad = FramedSlopePanelModel.createSlope(quad, facing, orientation);
-            quadMap.get(null).add(slopeQuad);
+            QuadModifier.geometry(quad)
+                    .apply(FramedSlopePanelModel.createSlope(facing, orientation))
+                    .export(quadMap.get(null));
         }
         else if (face.getAxis() != facing.getAxis() && face.getAxis() != orientation.getAxis())
         {
-            BakedQuad triQuad = ModelUtils.duplicateQuad(quad);
             if (yAxis)
             {
-                if (BakedQuadTransformer.createVerticalSideTriangleQuad(triQuad, face == facing.getClockWise(), rotation == HorizontalRotation.DOWN, 1F, .5F))
-                {
-                    quadMap.get(face).add(triQuad);
-                }
+                boolean up = orientation == Direction.UP;
+                QuadModifier.geometry(quad)
+                        .apply(Modifiers.cutSideLeftRight(facing.getOpposite(), up ? .5F :  1F, up ?  1F : .5F))
+                        .export(quadMap.get(face));
             }
             else
             {
-                if (BakedQuadTransformer.createTopBottomTriangleQuad(triQuad, facing.getOpposite(), rotation == HorizontalRotation.RIGHT, 1F, .5F))
-                {
-                    quadMap.get(face).add(triQuad);
-                }
+                boolean rightRot = rotation == HorizontalRotation.RIGHT;
+                QuadModifier.geometry(quad)
+                        .apply(Modifiers.cutTopBottom(facing.getOpposite(), rightRot ?  1F : .5F, rightRot ? .5F :  1F))
+                        .export(quadMap.get(face));
             }
         }
     }

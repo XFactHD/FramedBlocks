@@ -5,9 +5,10 @@ import net.minecraft.client.renderer.block.model.BakedQuad;
 import net.minecraft.client.resources.model.BakedModel;
 import net.minecraft.core.Direction;
 import xfacthd.framedblocks.api.model.FramedBlockModel;
+import xfacthd.framedblocks.api.model.quad.Modifiers;
+import xfacthd.framedblocks.api.model.quad.QuadModifier;
 import xfacthd.framedblocks.api.util.FramedProperties;
-import xfacthd.framedblocks.api.util.client.BakedQuadTransformer;
-import xfacthd.framedblocks.api.util.client.ModelUtils;
+import xfacthd.framedblocks.api.util.Utils;
 import xfacthd.framedblocks.common.FBContent;
 import xfacthd.framedblocks.common.data.PropertyHolder;
 import xfacthd.framedblocks.common.data.property.SlopeType;
@@ -30,38 +31,36 @@ public class FramedSlopeModel extends FramedBlockModel
     @Override
     protected void transformQuad(Map<Direction, List<BakedQuad>> quadMap, BakedQuad quad)
     {
+        Direction quadDir = quad.getDirection();
         if (type == SlopeType.HORIZONTAL)
         {
             if (quad.getDirection() == dir.getOpposite())
             {
-                BakedQuad slopeQuad = ModelUtils.duplicateQuad(quad);
-                BakedQuadTransformer.createSideSlopeQuad(slopeQuad, true);
-                quadMap.get(null).add(slopeQuad);
+                QuadModifier.geometry(quad)
+                        .apply(Modifiers.makeHorizontalSlope(false, 45))
+                        .export(quadMap.get(null));
             }
-            else if (quad.getDirection() == Direction.UP || quad.getDirection() == Direction.DOWN)
+            else if (Utils.isY(quadDir))
             {
-                BakedQuad triQuad = ModelUtils.duplicateQuad(quad);
-                if (BakedQuadTransformer.createTopBottomTriangleQuad(triQuad, dir))
-                {
-                    quadMap.get(quad.getDirection()).add(triQuad);
-                }
+                QuadModifier.geometry(quad)
+                        .apply(Modifiers.cutTopBottom(dir.getOpposite(), 1, 0))
+                        .export(quadMap.get(quadDir));
             }
         }
         else
         {
-            if (quad.getDirection() == dir.getOpposite())
+            boolean top = type == SlopeType.TOP;
+            if (quadDir == dir.getOpposite())
             {
-                BakedQuad slopeQuad = ModelUtils.duplicateQuad(quad);
-                BakedQuadTransformer.createTopBottomSlopeQuad(slopeQuad, type == SlopeType.BOTTOM);
-                quadMap.get(null).add(slopeQuad);
+                QuadModifier.geometry(quad)
+                        .apply(Modifiers.makeVerticalSlope(!top, 45))
+                        .export(quadMap.get(null));
             }
-            else if (quad.getDirection() == dir.getClockWise() || quad.getDirection() == dir.getCounterClockWise())
+            else if (quadDir == dir.getClockWise() || quadDir == dir.getCounterClockWise())
             {
-                BakedQuad triQuad = ModelUtils.duplicateQuad(quad);
-                if (BakedQuadTransformer.createSideTriangleQuad(triQuad, quad.getDirection() == dir.getClockWise(), type == SlopeType.TOP))
-                {
-                    quadMap.get(quad.getDirection()).add(triQuad);
-                }
+                QuadModifier.geometry(quad)
+                        .apply(Modifiers.cutSideLeftRight(dir.getOpposite(), top ? 1 : 0, top ? 0 : 1))
+                        .export(quadMap.get(quadDir));
             }
         }
     }
