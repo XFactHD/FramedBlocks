@@ -9,6 +9,7 @@ import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.block.model.BakedQuad;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.resources.model.BakedModel;
+import net.minecraft.client.resources.model.WeightedBakedModel;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.world.level.BlockAndTintGetter;
@@ -24,8 +25,10 @@ import xfacthd.framedblocks.api.type.IBlockType;
 import xfacthd.framedblocks.api.util.FramedBlockData;
 import xfacthd.framedblocks.api.block.IFramedBlock;
 import xfacthd.framedblocks.api.block.FramedBlockEntity;
+import xfacthd.framedblocks.api.util.Utils;
 
 import javax.annotation.Nonnull;
+import java.lang.invoke.MethodHandle;
 import java.util.*;
 
 @SuppressWarnings("deprecation")
@@ -242,8 +245,24 @@ public abstract class FramedBlockModel extends BakedModelProxy
         return model.getModelData(level, pos, state, data);
     }
 
+    private static final MethodHandle WBM_WRAPPED_MODEL = Utils.unreflectField(WeightedBakedModel.class, "f_119542_");
+
     protected static List<BakedQuad> getAllQuads(BakedModel model, BlockState state, Random rand)
     {
+        if (model instanceof WeightedBakedModel weighted)
+        {
+            try
+            {
+                // Use wrapped model for consistency and to avoid issues with invisible faces
+                model = (BakedModel) WBM_WRAPPED_MODEL.invokeExact(weighted);
+            }
+            catch (Throwable e)
+            {
+                throw new RuntimeException("Failed to access field 'WeightedBakedModel#wrapped'", e);
+            }
+            Objects.requireNonNull(model, "Wrapped model of WeightedBakedModel is null?!");
+        }
+
         List<BakedQuad> quads = new ArrayList<>();
         for (Direction dir : Direction.values())
         {

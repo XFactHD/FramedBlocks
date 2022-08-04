@@ -5,18 +5,16 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.BlockHitResult;
-import net.minecraftforge.fml.util.ObfuscationReflectionHelper;
 import org.jetbrains.annotations.Nullable;
 import xfacthd.framedblocks.FramedBlocks;
 import xfacthd.framedblocks.api.ghost.GhostRenderBehaviour;
+import xfacthd.framedblocks.api.util.Utils;
 
 import java.lang.invoke.MethodHandle;
-import java.lang.invoke.MethodHandles;
-import java.lang.reflect.Method;
 
 public class StandingAndWallBlockGhostRenderBehaviour implements GhostRenderBehaviour
 {
-    private static final MethodHandle BLOCKITEM_GETPLACESTATE;
+    private static final MethodHandle BLOCKITEM_GETPLACESTATE = Utils.unreflectMethod(BlockItem.class, "m_5965_", BlockPlaceContext.class);
 
     @Override
     @Nullable
@@ -30,19 +28,6 @@ public class StandingAndWallBlockGhostRenderBehaviour implements GhostRenderBeha
         {
             FramedBlocks.LOGGER.error("Encountered an error while getting placement state of ", e);
             return null;
-        }
-    }
-
-    static
-    {
-        Method method = ObfuscationReflectionHelper.findMethod(BlockItem.class, "m_5965_", BlockPlaceContext.class);
-        try
-        {
-            BLOCKITEM_GETPLACESTATE = MethodHandles.publicLookup().unreflect(method);
-        }
-        catch (IllegalAccessException e)
-        {
-            throw new RuntimeException("Failed to unreflect 'BlockItem#getStateForPlacement'", e);
         }
     }
 }

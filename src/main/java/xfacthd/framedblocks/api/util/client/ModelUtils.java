@@ -23,7 +23,6 @@ public final class ModelUtils
      * @deprecated Use {@link xfacthd.framedblocks.api.model.quad.QuadModifier} system instead
      */
     @Deprecated
-    @SuppressWarnings("DeprecatedIsStillUsed")
     public static boolean modifyQuad(BakedQuad quad, VertexDataConsumer consumer)
     {
         int[] vertexData = quad.getVertices();
