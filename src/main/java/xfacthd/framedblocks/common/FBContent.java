@@ -112,6 +112,7 @@ public final class FBContent
     public static final RegistryObject<Block> blockFramedDoubleStairs = registerBlock(FramedDoubleStairsBlock::new, BlockType.FRAMED_DOUBLE_STAIRS);
     public static final RegistryObject<Block> blockFramedVerticalDoubleStairs = registerBlock(FramedVerticalDoubleStairsBlock::new, BlockType.FRAMED_VERTICAL_DOUBLE_STAIRS);
     public static final RegistryObject<Block> blockFramedWallBoard = registerBlock(FramedWallBoardBlock::new, BlockType.FRAMED_WALL_BOARD);
+    public static final RegistryObject<Block> blockFramedTarget = registerBlock(FramedTargetBlock::new, BlockType.FRAMED_TARGET);
 
     /** ITEMS */
     public static final RegistryObject<Item> itemFramedHammer = registerToolItem(FramedToolItem::new, FramedToolType.HAMMER);
@@ -191,6 +192,10 @@ public final class FBContent
     public static final RegistryObject<BlockEntityType<FramedVerticalDoubleStairsBlockEntity>> blockEntityTypeFramedVerticalDoubleStairs = createBlockEntityType(
             FramedVerticalDoubleStairsBlockEntity::new,
             BlockType.FRAMED_VERTICAL_DOUBLE_STAIRS
+    );
+    public static final RegistryObject<BlockEntityType<FramedTargetBlockEntity>> blockEntityTypeFramedTarget = createBlockEntityType(
+            FramedTargetBlockEntity::new,
+            BlockType.FRAMED_TARGET
     );
 
     /** CONTAINER TYPES */

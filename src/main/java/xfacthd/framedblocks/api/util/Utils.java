@@ -176,6 +176,8 @@ public final class Utils
         return ItemTags.create(new ResourceLocation(modid, name));
     }
 
+    public static ResourceLocation rl(String path) { return new ResourceLocation(FramedConstants.MOD_ID, path); }
+
     public static MethodHandle unreflectMethod(Class<?> clazz, String srgMethodName, Class<?>... paramTypes)
     {
         Method method = ObfuscationReflectionHelper.findMethod(clazz, srgMethodName, paramTypes);

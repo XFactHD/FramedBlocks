@@ -8,6 +8,7 @@ import net.minecraft.client.resources.model.BakedModel;
 import net.minecraft.core.BlockPos;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.block.state.properties.Property;
 import net.minecraftforge.api.distmarker.Dist;
@@ -20,6 +21,7 @@ import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import net.minecraftforge.registries.RegistryObject;
 import xfacthd.framedblocks.api.FramedBlocksClientAPI;
 import xfacthd.framedblocks.api.block.IFramedBlock;
+import xfacthd.framedblocks.api.type.IBlockType;
 import xfacthd.framedblocks.api.util.FramedConstants;
 import xfacthd.framedblocks.api.util.FramedProperties;
 import xfacthd.framedblocks.api.util.client.ClientUtils;
@@ -36,6 +38,7 @@ import xfacthd.framedblocks.common.data.BlockType;
 
 import java.util.List;
 import java.util.Map;
+import java.util.function.Function;
 
 @Mod.EventBusSubscriber(modid = FramedConstants.MOD_ID, bus = Mod.EventBusSubscriber.Bus.MOD, value = Dist.CLIENT)
 public final class FBClient
@@ -102,10 +105,20 @@ public final class FBClient
         Block[] blocks = FBContent.getRegisteredBlocks()
                 .stream()
                 .map(RegistryObject::get)
-                .filter(block -> block instanceof IFramedBlock)
+                .filter(IFramedBlock.class::isInstance)
+                .map(IFramedBlock.class::cast)
+                .filter(FBClient::useDefaultColorHandler)
                 .toArray(Block[]::new);
 
         event.getBlockColors().register(FramedBlockColor.INSTANCE, blocks);
+
+        event.getBlockColors().register(FramedTargetBlockColor.INSTANCE, FBContent.blockFramedTarget.get());
+    }
+
+    @SubscribeEvent
+    public static void onItemColors(final ColorHandlerEvent.Item event)
+    {
+        event.getItemColors().register(FramedTargetBlockColor.INSTANCE, FBContent.blockFramedTarget.get());
     }
 
     @SubscribeEvent
@@ -115,6 +128,7 @@ public final class FBClient
         ForgeModelBakery.addSpecialModel(FramedMarkedCubeModel.REDSTONE_FRAME_LOCATION);
         FramedMarkedPressurePlateModel.registerFrameModels();
         FramedStoneButtonModel.registerFrameModels();
+        ForgeModelBakery.addSpecialModel(FramedTargetModel.OVERLAY_LOCATION);
     }
 
     @SubscribeEvent
@@ -125,12 +139,14 @@ public final class FBClient
         FramedChestRenderer.onModelsLoaded(registry); //Must happen before the chest model is replaced
         FramedMarkedPressurePlateModel.cacheFrameModels(registry);
         FramedStoneButtonModel.cacheFrameModels(registry);
+        FramedTargetModel.cacheOverlayModel(registry);
 
         List<Property<?>> ignoreWaterlogged = List.of(BlockStateProperties.WATERLOGGED);
         List<Property<?>> ignoreWaterloggedLock = List.of(BlockStateProperties.WATERLOGGED, FramedProperties.STATE_LOCKED);
         List<Property<?>> ignoreSolid = List.of(FramedProperties.SOLID, FramedProperties.GLOWING);
         List<Property<?>> ignoreDefault = List.of(BlockStateProperties.WATERLOGGED, FramedProperties.SOLID, FramedProperties.GLOWING);
         List<Property<?>> ignoreDefaultLock = List.of(BlockStateProperties.WATERLOGGED, FramedProperties.SOLID, FramedProperties.GLOWING, FramedProperties.STATE_LOCKED);
+        Function<BlockState, BlockState> ignoreAll = state -> state.getBlock().defaultBlockState();
 
         ClientUtils.replaceModels(FBContent.blockFramedCube, registry, FramedCubeModel::new, ignoreSolid);
         ClientUtils.replaceModels(FBContent.blockFramedSlope, registry, FramedSlopeModel::new, FramedSlopeModel.itemSource(), ignoreDefault);
@@ -204,9 +220,16 @@ public final class FBClient
         ClientUtils.replaceModels(FBContent.blockFramedDoubleStairs, registry, FramedDoubleStairsModel::new, FramedDoubleStairsModel.itemSource(), ignoreSolid);
         ClientUtils.replaceModels(FBContent.blockFramedVerticalDoubleStairs, registry, FramedVerticalDoubleStairsModel::new, FramedVerticalDoubleStairsModel.itemSource(), ignoreSolid);
         ClientUtils.replaceModels(FBContent.blockFramedWallBoard, registry, FramedWallBoardModel::new, ignoreDefault);
+        ClientUtils.replaceModelsSpecial(FBContent.blockFramedTarget, registry, FramedTargetModel::new, FramedTargetModel.itemSource(), ignoreAll);
     }
 
 
+
+    private static boolean useDefaultColorHandler(IFramedBlock block)
+    {
+        IBlockType type = block.getBlockType();
+        return type != BlockType.FRAMED_TARGET;
+    }
 
     public static void openSignScreen(BlockPos pos)
     {
