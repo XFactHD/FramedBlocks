@@ -109,19 +109,10 @@ public class FramedCollapsibleBlockModel extends BakedModelProxy
                 if (Utils.isY(collapsedFace))
                 {
                     boolean top = collapsedFace == Direction.UP;
-                    int idxOff = getYCollapsedIndexOffset(quadDir);
-                    float posOne = vertexPos[idxOff];
-                    float posTwo;
-                    if (top)
-                    {
-                        posTwo = vertexPos[(idxOff + 1) % 4];
-                    }
-                    else
-                    {
-                        int idxTwo = idxOff - 1;
-                        if (idxTwo < 0) { idxTwo = 4 + idxTwo; }
-                        posTwo = vertexPos[idxTwo % 4];
-                    }
+                    int idxOne = getYCollapsedIndexOffset(quadDir);
+                    int idxTwo = Math.floorMod(idxOne + (top ? 1 : -1), 4);
+                    float posOne = vertexPos[idxOne];
+                    float posTwo = vertexPos[idxTwo];
 
                     QuadModifier.geometry(quad)
                             .apply(Modifiers.cutSideUpDown(!top, posOne, posTwo))
@@ -132,13 +123,6 @@ public class FramedCollapsibleBlockModel extends BakedModelProxy
                     boolean top = quad.getDirection() == Direction.UP;
                     float posOne = vertexPos[top ? 0 : 1];
                     float posTwo = vertexPos[top ? 3 : 2];
-
-                    if (collapsedFace == Direction.NORTH || (top && collapsedFace == Direction.WEST) || (!top && collapsedFace == Direction.EAST))
-                    {
-                        float temp = posOne;
-                        posOne = posTwo;
-                        posTwo = temp;
-                    }
 
                     QuadModifier.geometry(quad)
                             .apply(Modifiers.cutTopBottom(collapsedFace, posOne, posTwo))
