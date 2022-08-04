@@ -92,6 +92,7 @@ public class FramedLanguageProvider extends LanguageProvider
         add(FBContent.blockFramedWallBoard.get(), "Framed Wall Board");
         add(FBContent.blockFramedLargeButton.get(), "Large Framed Button");
         add(FBContent.blockFramedLargeStoneButton.get(), "Large Framed Stone Button");
+        add(FBContent.blockFramedHorizontalPane.get(), "Framed Horizontal Pane");
         add(FBContent.blockFramedTarget.get(), "Framed Target");
 
         add(FBContent.itemFramedHammer.get(), "Framed Hammer");

@@ -228,6 +228,7 @@ public final class FBClient
         ClientUtils.replaceModels(FBContent.blockFramedWallBoard, registry, FramedWallBoardModel::new, ignoreDefault);
         ClientUtils.replaceModelsSpecial(FBContent.blockFramedLargeButton, registry, FramedLargeButtonModel::new, FramedLargeButtonModel::mergeStates);
         ClientUtils.replaceModelsSpecial(FBContent.blockFramedLargeStoneButton, registry, FramedLargeStoneButtonModel::new, FramedLargeButtonModel::mergeStates);
+        ClientUtils.replaceModels(FBContent.blockFramedHorizontalPane, registry, FramedHorizontalPaneModel::new, ignoreWaterlogged);
         ClientUtils.replaceModelsSpecial(FBContent.blockFramedTarget, registry, FramedTargetModel::new, FramedTargetModel.itemSource(), ignoreAll);
     }
 

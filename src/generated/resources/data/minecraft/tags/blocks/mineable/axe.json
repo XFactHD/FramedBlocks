@@ -73,6 +73,7 @@
     "framedblocks:framed_wall_board",
     "framedblocks:framed_large_button",
     "framedblocks:framed_large_stone_button",
+    "framedblocks:framed_horizontal_pane",
     "framedblocks:framed_target"
   ]
 }

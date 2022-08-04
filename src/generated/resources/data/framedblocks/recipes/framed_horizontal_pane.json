@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "PP",
+    "PP"
+  ],
+  "key": {
+    "P": {
+      "item": "framedblocks:framed_pane"
+    }
+  },
+  "result": {
+    "item": "framedblocks:framed_horizontal_pane",
+    "count": 4
+  }
+}
