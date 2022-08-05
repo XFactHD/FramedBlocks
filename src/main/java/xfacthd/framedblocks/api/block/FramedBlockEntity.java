@@ -113,7 +113,7 @@ public class FramedBlockEntity extends BlockEntity
             }
             return InteractionResult.sidedSuccess(level.isClientSide());
         }
-        else if (intangible && player.isShiftKeyDown() && stack.is(Utils.WRENCH))
+        else if (intangible && player.isShiftKeyDown() && stack.is(Utils.FRAMED_SCREWDRIVER.get()))
         {
             //noinspection ConstantConditions
             if (!level.isClientSide())
