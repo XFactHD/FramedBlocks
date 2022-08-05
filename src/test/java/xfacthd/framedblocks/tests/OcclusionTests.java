@@ -1368,6 +1368,46 @@ public final class OcclusionTests
         TestUtils.testBlockOccludesLightNorth(helper, state);
     }
 
+    @GameTest(template = "box_top", batch = "occlusion")
+    @TestedType(type = BlockType.FRAMED_GLOWING_CUBE)
+    public static void test_GlowingCube(GameTestHelper helper)
+    {
+        BlockState state = FBContent.blockFramedGlowingCube.get().defaultBlockState();
+        TestUtils.testBlockOccludesLightBelow(helper, state);
+    }
+
+    @GameTest(template = "box_top", batch = "occlusion")
+    @TestedType(type = BlockType.FRAMED_PYRAMID)
+    public static void test_Pyramid(GameTestHelper helper)
+    {
+        BlockState state = FBContent.blockFramedPyramid.get().defaultBlockState();
+        TestUtils.testBlockOccludesLightBelow(helper, state);
+    }
+
+    @GameTest(template = "box_top", batch = "occlusion")
+    @TestedType(type = BlockType.FRAMED_PYRAMID_SLAB)
+    public static void test_PyramidSlab(GameTestHelper helper)
+    {
+        BlockState state = FBContent.blockFramedPyramidSlab.get().defaultBlockState();
+        TestUtils.testBlockOccludesLightBelow(helper, state);
+    }
+
+    @GameTest(template = "box_top", batch = "occlusion", required = false)
+    @TestedType(type = BlockType.FRAMED_HORIZONTAL_PANE)
+    public static void test_HorizontalPane(GameTestHelper helper)
+    {
+        BlockState state = FBContent.blockFramedHorizontalPane.get().defaultBlockState();
+        TestUtils.testBlockOccludesLightBelow(helper, state);
+    }
+
+    @GameTest(template = "box_top", batch = "occlusion")
+    @TestedType(type = BlockType.FRAMED_TARGET)
+    public static void test_Target(GameTestHelper helper)
+    {
+        BlockState state = FBContent.blockFramedTarget.get().defaultBlockState();
+        TestUtils.testBlockOccludesLightBelow(helper, state);
+    }
+
 
 
     private static boolean firstBatch = true;

@@ -1,5 +1,6 @@
 package xfacthd.framedblocks.api.util.test;
 
+import com.mojang.logging.LogUtils;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.gametest.framework.*;
@@ -15,18 +16,25 @@ import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.Vec3;
+import net.minecraft.world.phys.shapes.CollisionContext;
+import net.minecraftforge.client.extensions.common.IClientBlockExtensions;
 import net.minecraftforge.common.ForgeHooks;
+import net.minecraftforge.fml.loading.FMLEnvironment;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegistryObject;
+import org.slf4j.Logger;
+import xfacthd.framedblocks.api.FramedBlocksAPI;
+import xfacthd.framedblocks.api.block.FramedBlockEntity;
 import xfacthd.framedblocks.api.block.IFramedBlock;
-import xfacthd.framedblocks.api.util.FramedConstants;
-import xfacthd.framedblocks.api.util.FramedProperties;
+import xfacthd.framedblocks.api.util.*;
+import xfacthd.framedblocks.api.util.client.FramedBlockRenderProperties;
 
 import java.util.*;
 import java.util.function.Supplier;
 
 public final class TestUtils
 {
+    private static final Logger LOGGER = LogUtils.getLogger();
     private static final RegistryObject<Item> FRAMED_HAMMER = RegistryObject.create(new ResourceLocation(FramedConstants.MOD_ID, "framed_hammer"), ForgeRegistries.ITEMS);
     private static final BlockPos OCCLUSION_BLOCK_TOP_BOTTOM = new BlockPos(1, 3, 1);
     private static final BlockPos OCCLUSION_BLOCK_SIDE = new BlockPos(1, 2, 2);
@@ -35,6 +43,7 @@ public final class TestUtils
     private static final BlockPos OCCLUSION_LIGHT_SIDE = new BlockPos(1, 2, 3);
     private static final BlockPos EMISSION_BLOCK = new BlockPos(1, 2, 1);
     private static final BlockPos EMISSION_LIGHT = new BlockPos(1, 3, 1);
+    private static final BlockPos INTANGIBILITY_BLOCK = new BlockPos(0, 1, 0);
 
     public static boolean assertFramedBlock(GameTestHelper helper, Block block)
     {
@@ -109,7 +118,7 @@ public final class TestUtils
 
         if (!result.shouldAwardStats())
         {
-            helper.fail(String.format("Interaction with block %s failed", helper.getBlockState(pos)));
+            helper.fail(String.format("Interaction with block %s failed", helper.getBlockState(pos)), pos);
         }
     }
 
@@ -342,6 +351,154 @@ public final class TestUtils
                     lightPos,
                     helper.getTick()
             );
+        }
+    }
+
+    // == Intangibility testing ==
+
+    public static void testBlockIntangibility(GameTestHelper helper, BlockState state)
+    {
+        if (!FramedBlocksAPI.getInstance().enableIntangibility())
+        {
+            helper.fail("Intangibility is not enabled in the ServerConfig");
+        }
+
+        chainTasks(helper, List.of(
+                () -> helper.setBlock(INTANGIBILITY_BLOCK, state),
+                () ->
+                {
+                    FramedBlockEntity be = getBlockEntity(helper, INTANGIBILITY_BLOCK, FramedBlockEntity.class);
+                    assertTrue(
+                            helper,
+                            INTANGIBILITY_BLOCK,
+                            !be.isIntangible(CollisionContext.empty()),
+                            () -> String.format("Block '%s' is intangible without interaction", state.getBlock())
+                    );
+
+                    BlockPos pos = helper.absolutePos(INTANGIBILITY_BLOCK);
+                    BlockState currState = helper.getBlockState(INTANGIBILITY_BLOCK);
+                    assertTrue(
+                            helper,
+                            INTANGIBILITY_BLOCK,
+                            !currState.getShape(helper.getLevel(), pos, CollisionContext.empty()).isEmpty(),
+                            () -> String.format("Block '%s' returns an empty shape when not intangible", state.getBlock())
+                    );
+                },
+                () -> clickWithItem(helper, INTANGIBILITY_BLOCK, FramedBlocksAPI.getInstance().getIntangibilityMarkerItem()),
+                () ->
+                {
+                    FramedBlockEntity be = getBlockEntity(helper, INTANGIBILITY_BLOCK, FramedBlockEntity.class);
+                    assertTrue(
+                            helper,
+                            INTANGIBILITY_BLOCK,
+                            be.isIntangible(CollisionContext.empty()),
+                            () -> String.format("Block '%s' is not intangible after interaction", state.getBlock())
+                    );
+
+                    BlockPos pos = helper.absolutePos(INTANGIBILITY_BLOCK);
+                    BlockState currState = helper.getBlockState(INTANGIBILITY_BLOCK);
+                    assertTrue(
+                            helper,
+                            INTANGIBILITY_BLOCK,
+                            currState.getShape(helper.getLevel(), pos, CollisionContext.empty()).isEmpty(),
+                            () -> String.format("Block '%s' does not return an empty shape when intangible", state.getBlock())
+                    );
+
+                    Player player = helper.makeMockPlayer();
+                    CollisionContext ctx = CollisionContext.of(player);
+                    //noinspection ConstantConditions
+                    ForgeRegistries.ITEMS.tags()
+                            .getTag(Utils.DISABLE_INTANGIBLE)
+                            .stream()
+                            .forEach(item ->
+                            {
+                                player.setItemInHand(InteractionHand.MAIN_HAND, new ItemStack(item));
+
+                                assertTrue(
+                                        helper,
+                                        INTANGIBILITY_BLOCK,
+                                        !be.isIntangible(ctx),
+                                        () -> String.format(
+                                                "Block '%s' is intangible when targetted by item '%s' which is tagged with 'framedblocks:disable_intangible'",
+                                                state.getBlock(),
+                                                item
+                                        )
+                                );
+
+                                assertTrue(
+                                        helper,
+                                        INTANGIBILITY_BLOCK,
+                                        !currState.getShape(helper.getLevel(), pos, ctx).isEmpty(),
+                                        () -> String.format(
+                                                "Block '%s' is intangible when targetted by item '%s' which is tagged with 'framedblocks:disable_intangible'",
+                                                state.getBlock(),
+                                                item
+                                        )
+                                );
+                            });
+
+                    if (FMLEnvironment.dist.isClient())
+                    {
+                        ClientGuard.testHasParticleOverride(helper, state);
+                    }
+                    else
+                    {
+                        LOGGER.warn("Can't test particle override of block '{}', running on dedicated server", state.getBlock());
+                    }
+                },
+                () -> clickWithItem(helper, INTANGIBILITY_BLOCK, Utils.FRAMED_SCREWDRIVER.get(), true),
+                () ->
+                {
+                    FramedBlockEntity be = getBlockEntity(helper, INTANGIBILITY_BLOCK, FramedBlockEntity.class);
+                    assertTrue(
+                            helper,
+                            INTANGIBILITY_BLOCK,
+                            !be.isIntangible(CollisionContext.empty()),
+                            () -> String.format("Block '%s' is intangible after removing marker", state.getBlock())
+                    );
+
+                    BlockPos pos = helper.absolutePos(INTANGIBILITY_BLOCK);
+                    BlockState currState = helper.getBlockState(INTANGIBILITY_BLOCK);
+                    assertTrue(
+                            helper,
+                            INTANGIBILITY_BLOCK,
+                            !currState.getShape(helper.getLevel(), pos, CollisionContext.empty()).isEmpty(),
+                            () -> String.format("Block '%s' does returns an empty shape after removing marker", state.getBlock())
+                    );
+                },
+                helper::succeed
+        ));
+    }
+
+    private static class ClientGuard
+    {
+        public static void testHasParticleOverride(GameTestHelper helper, BlockState state)
+        {
+            IClientBlockExtensions blockExt = IClientBlockExtensions.of(state);
+            assertTrue(
+                    helper,
+                    INTANGIBILITY_BLOCK,
+                    blockExt instanceof FramedBlockRenderProperties,
+                    () -> String.format("Block '%s' doesn't have required IClientBlockExtensions", state.getBlock())
+            );
+
+            BlockPos pos = helper.absolutePos(INTANGIBILITY_BLOCK);
+            BlockHitResult miss = BlockHitResult.miss(Vec3.ZERO, Direction.UP, pos);
+            boolean hit = false;
+            boolean destroy = false;
+
+            try
+            {
+                hit = blockExt.addHitEffects(state, helper.getLevel(), miss, null);
+                destroy = blockExt.addDestroyEffects(state, helper.getLevel(), pos, null);
+            }
+            catch (Throwable e)
+            {
+                helper.fail(String.format("Error while testing particle overrides, likely caused by a misconfigured particle override:\n%s", e));
+            }
+
+            assertTrue(helper, INTANGIBILITY_BLOCK, hit, () -> String.format("Block '%s' doesn't handle hit particles", state.getBlock()));
+            assertTrue(helper, INTANGIBILITY_BLOCK, destroy, () -> String.format("Block '%s' doesn't handle destroy particles", state.getBlock()));
         }
     }
 

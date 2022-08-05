@@ -14,8 +14,7 @@ import xfacthd.framedblocks.api.util.FramedConstants;
 import xfacthd.framedblocks.api.util.FramedProperties;
 import xfacthd.framedblocks.api.util.test.TestUtils;
 import xfacthd.framedblocks.common.FBContent;
-import xfacthd.framedblocks.common.blockentity.FramedFlowerPotBlockEntity;
-import xfacthd.framedblocks.common.blockentity.FramedSignBlockEntity;
+import xfacthd.framedblocks.common.blockentity.*;
 import xfacthd.framedblocks.common.data.property.LatchType;
 import xfacthd.framedblocks.common.data.PropertyHolder;
 
@@ -97,6 +96,20 @@ public final class InteractionTests
 
         helper.runAfterDelay(33, () -> helper.assertBlockProperty(POS_ABOVE_FLOOR, ButtonBlock.POWERED, false));
         helper.runAfterDelay(34, helper::succeed);
+    }
+
+    @GameTest(template = "floor_1x1", batch = "interaction")
+    public static void testStoneButtonPress(GameTestHelper helper)
+    {
+        TestUtils.chainTasks(helper, List.of(
+                () -> helper.setBlock(POS_ABOVE_FLOOR, FBContent.blockFramedStoneButton.get()),
+                () -> helper.assertBlockProperty(POS_ABOVE_FLOOR, ButtonBlock.POWERED, false),
+                () -> helper.useBlock(POS_ABOVE_FLOOR),
+                () -> helper.assertBlockProperty(POS_ABOVE_FLOOR, ButtonBlock.POWERED, true)
+        ));
+
+        helper.runAfterDelay(23, () -> helper.assertBlockProperty(POS_ABOVE_FLOOR, ButtonBlock.POWERED, false));
+        helper.runAfterDelay(24, helper::succeed);
     }
 
     @GameTest(template = "floor_1x1", batch = "interaction")
@@ -375,6 +388,64 @@ public final class InteractionTests
                 () -> helper.useBlock(POS_ABOVE_FLOOR),
                 //No, this is not a typo, the trapdoor must not budge ;)
                 () -> helper.assertBlockProperty(POS_ABOVE_FLOOR, TrapDoorBlock.OPEN, false),
+                helper::succeed
+        ));
+    }
+
+    @GameTest(template = "floor_1x1", batch = "interaction")
+    public static void testLargeButtonPress(GameTestHelper helper)
+    {
+        TestUtils.chainTasks(helper, List.of(
+                () -> helper.setBlock(POS_ABOVE_FLOOR, FBContent.blockFramedLargeButton.get()),
+                () -> helper.assertBlockProperty(POS_ABOVE_FLOOR, ButtonBlock.POWERED, false),
+                () -> helper.useBlock(POS_ABOVE_FLOOR),
+                () -> helper.assertBlockProperty(POS_ABOVE_FLOOR, ButtonBlock.POWERED, true)
+        ));
+
+        helper.runAfterDelay(33, () -> helper.assertBlockProperty(POS_ABOVE_FLOOR, ButtonBlock.POWERED, false));
+        helper.runAfterDelay(34, helper::succeed);
+    }
+
+    @GameTest(template = "floor_1x1", batch = "interaction")
+    public static void testLargeStoneButtonPress(GameTestHelper helper)
+    {
+        TestUtils.chainTasks(helper, List.of(
+                () -> helper.setBlock(POS_ABOVE_FLOOR, FBContent.blockFramedLargeStoneButton.get()),
+                () -> helper.assertBlockProperty(POS_ABOVE_FLOOR, ButtonBlock.POWERED, false),
+                () -> helper.useBlock(POS_ABOVE_FLOOR),
+                () -> helper.assertBlockProperty(POS_ABOVE_FLOOR, ButtonBlock.POWERED, true)
+        ));
+
+        helper.runAfterDelay(23, () -> helper.assertBlockProperty(POS_ABOVE_FLOOR, ButtonBlock.POWERED, false));
+        helper.runAfterDelay(24, helper::succeed);
+    }
+
+    @GameTest(template = "floor_1x1", batch = "interaction")
+    public static void testTargetColoring(GameTestHelper helper)
+    {
+        TestUtils.chainTasks(helper, List.of(
+                () -> helper.setBlock(POS_ABOVE_FLOOR, FBContent.blockFramedTarget.get()),
+                () ->
+                {
+                    FramedTargetBlockEntity be = TestUtils.getBlockEntity(helper, POS_ABOVE_FLOOR, FramedTargetBlockEntity.class);
+                    TestUtils.assertTrue(
+                            helper,
+                            POS_ABOVE_FLOOR,
+                            be.getOverlayColor() == DyeColor.RED.getTextColor(),
+                            () -> String.format("Expected target color to be '16711680' (red), got '%s'", be.getOverlayColor())
+                    );
+                },
+                () -> TestUtils.clickWithItem(helper, POS_ABOVE_FLOOR, Items.LIME_DYE),
+                () ->
+                {
+                    FramedTargetBlockEntity be = TestUtils.getBlockEntity(helper, POS_ABOVE_FLOOR, FramedTargetBlockEntity.class);
+                    TestUtils.assertTrue(
+                            helper,
+                            POS_ABOVE_FLOOR,
+                            be.getOverlayColor() == DyeColor.LIME.getTextColor(),
+                            () -> String.format("Expected target color to be '12582656' (lime), got '%s'", be.getOverlayColor())
+                    );
+                },
                 helper::succeed
         ));
     }
