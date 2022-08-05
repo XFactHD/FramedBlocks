@@ -22,7 +22,7 @@ public class FramedTargetBlockEntity extends FramedBlockEntity
         if (this.overlayColor != overlayColor)
         {
             //noinspection ConstantConditions
-            if (level.isClientSide())
+            if (!level.isClientSide())
             {
                 this.overlayColor = overlayColor;
 
@@ -49,22 +49,33 @@ public class FramedTargetBlockEntity extends FramedBlockEntity
     public void handleUpdateTag(CompoundTag nbt)
     {
         super.handleUpdateTag(nbt);
+        if (nbt.contains("overlay_color"))
+        {
+            overlayColor = DyeColor.byId(nbt.getInt("overlay_color"));
+        }
     }
 
     @Override
     protected void writeToDataPacket(CompoundTag tag)
     {
         super.writeToDataPacket(tag);
-        if (tag.contains("overlay_color"))
-        {
-            overlayColor = DyeColor.byId(tag.getInt("overlay_color"));
-        }
+        tag.putInt("overlay_color", overlayColor.getId());
     }
 
     @Override
     protected boolean readFromDataPacket(CompoundTag nbt)
     {
-        return super.readFromDataPacket(nbt);
+        boolean colored = false;
+        if (nbt.contains("overlay_color"))
+        {
+            DyeColor color = DyeColor.byId(nbt.getInt("overlay_color"));
+            if (overlayColor != color)
+            {
+                overlayColor = color;
+                colored = true;
+            }
+        }
+        return super.readFromDataPacket(nbt) || colored;
     }
 
     @Override
