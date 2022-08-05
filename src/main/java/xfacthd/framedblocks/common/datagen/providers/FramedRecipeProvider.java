@@ -550,6 +550,15 @@ public class FramedRecipeProvider extends RecipeProvider
                 .unlockedBy("hasFramedPanel", has(FBContent.blockFramedPanel.get()))
                 .save(consumer);
 
+        ShapedRecipeBuilder.shaped(FBContent.blockFramedGlowingCube.get())
+                .pattern(" G ")
+                .pattern("GCG")
+                .pattern(" G ")
+                .define('G', Tags.Items.DUSTS_GLOWSTONE)
+                .define('C', FBContent.blockFramedCube.get())
+                .unlockedBy("hasFramedCube", HAS_FRAMED_BLOCK)
+                .save(consumer);
+
         ShapedRecipeBuilder.shaped(FBContent.blockFramedPyramid.get(), 4)
                 .pattern("SS")
                 .pattern("SS")

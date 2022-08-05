@@ -108,6 +108,7 @@ public class FramedBlockStateProvider extends BlockStateProvider
         registerFramedBouncyBlock();
         registerFramedSecretStorage();
         registerFramedRedstoneBlock();
+        registerFramedGlowingCube();
         registerFramedLargeStoneButton();
         registerFramedTarget(cube);
     }
@@ -602,6 +603,22 @@ public class FramedBlockStateProvider extends BlockStateProvider
                         .parent(models().getExistingFile(mcLoc("block/cube_all")))
                         .texture("all", modLoc("block/redstone_frame"))
                 );
+    }
+
+    private void registerFramedGlowingCube()
+    {
+        ModelFile block = models().withExistingParent("framed_glowing_cube", "block/block")
+                .element()
+                .cube("#white")
+                .end()
+                .element()
+                .cube("#frame")
+                .end()
+                .texture("frame", TEXTURE)
+                .texture("white", new ResourceLocation("forge", "white"))
+                .texture("particle", TEXTURE);
+
+        simpleBlockWithItem(FBContent.blockFramedGlowingCube, block);
     }
 
     private void registerFramedLargeStoneButton()
