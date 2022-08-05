@@ -11,8 +11,7 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.phys.BlockHitResult;
-import net.minecraft.world.phys.shapes.CollisionContext;
-import net.minecraft.world.phys.shapes.VoxelShape;
+import net.minecraft.world.phys.shapes.*;
 import xfacthd.framedblocks.api.util.*;
 import xfacthd.framedblocks.common.blockentity.FramedDoubleSlopeSlabBlockEntity;
 import xfacthd.framedblocks.common.data.BlockType;
@@ -53,6 +52,10 @@ public class FramedDoubleSlopeSlabBlock extends AbstractFramedDoubleBlock
     @Override
     public VoxelShape getShape(BlockState state, BlockGetter level, BlockPos pos, CollisionContext ctx)
     {
+        if (isIntangible(state, level, pos, ctx))
+        {
+            return Shapes.empty();
+        }
         return state.getValue(PropertyHolder.TOP_HALF) ? SHAPE_TOP : SHAPE_BOTTOM;
     }
 
