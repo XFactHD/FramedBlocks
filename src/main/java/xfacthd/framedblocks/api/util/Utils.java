@@ -204,6 +204,19 @@ public final class Utils
         }
     }
 
+    public static MethodHandle unreflectFieldSetter(Class<?> clazz, String srgFieldName)
+    {
+        Field field = ObfuscationReflectionHelper.findField(clazz, srgFieldName);
+        try
+        {
+            return MethodHandles.publicLookup().unreflectSetter(field);
+        }
+        catch (IllegalAccessException e)
+        {
+            throw new RuntimeException("Failed to unreflect field '%s#%s'".formatted(clazz.getName(), srgFieldName), e);
+        }
+    }
+
 
 
     private Utils() { }

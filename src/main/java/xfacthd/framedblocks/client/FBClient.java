@@ -1,11 +1,9 @@
 package xfacthd.framedblocks.client;
 
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screens.MenuScreens;
 import net.minecraft.client.renderer.ItemBlockRenderTypes;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.resources.model.BakedModel;
-import net.minecraft.core.BlockPos;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
@@ -35,7 +33,6 @@ import xfacthd.framedblocks.client.screen.*;
 import xfacthd.framedblocks.client.util.*;
 import xfacthd.framedblocks.common.FBContent;
 import xfacthd.framedblocks.common.block.FramedWeightedPressurePlateBlock;
-import xfacthd.framedblocks.common.blockentity.FramedSignBlockEntity;
 import xfacthd.framedblocks.common.data.BlockType;
 
 import java.util.List;
@@ -243,15 +240,6 @@ public final class FBClient
     {
         IBlockType type = block.getBlockType();
         return type != BlockType.FRAMED_TARGET;
-    }
-
-    public static void openSignScreen(BlockPos pos)
-    {
-        //noinspection ConstantConditions
-        if (Minecraft.getInstance().level.getBlockEntity(pos) instanceof FramedSignBlockEntity be)
-        {
-            Minecraft.getInstance().setScreen(new FramedSignScreen(be));
-        }
     }
 
 

@@ -7,9 +7,11 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
+import net.minecraftforge.fml.loading.FMLEnvironment;
 import xfacthd.framedblocks.api.block.FramedBlockEntity;
 import xfacthd.framedblocks.api.block.IFramedBlock;
 import xfacthd.framedblocks.api.util.FramedConstants;
+import xfacthd.framedblocks.client.util.ClientAccess;
 
 @Mod.EventBusSubscriber(modid = FramedConstants.MOD_ID, bus = Mod.EventBusSubscriber.Bus.FORGE)
 public final class EventHandler
@@ -27,6 +29,11 @@ public final class EventHandler
             {
                 event.setCanceled(true);
                 event.setCancellationResult(InteractionResult.CONSUME);
+
+                if (FMLEnvironment.dist.isClient() && level.isClientSide())
+                {
+                    ClientAccess.resetDestroyDelay();
+                }
             }
 
             if (ServerConfig.enableIntangibleFeature && !event.isCanceled() && block.getBlockType().allowMakingIntangible())
