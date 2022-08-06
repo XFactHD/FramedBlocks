@@ -1,9 +1,7 @@
 package xfacthd.framedblocks.client;
 
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screens.MenuScreens;
 import net.minecraft.client.resources.model.BakedModel;
-import net.minecraft.core.BlockPos;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
@@ -18,8 +16,7 @@ import net.minecraftforge.registries.RegistryObject;
 import xfacthd.framedblocks.api.FramedBlocksClientAPI;
 import xfacthd.framedblocks.api.block.IFramedBlock;
 import xfacthd.framedblocks.api.type.IBlockType;
-import xfacthd.framedblocks.api.util.FramedConstants;
-import xfacthd.framedblocks.api.util.FramedProperties;
+import xfacthd.framedblocks.api.util.*;
 import xfacthd.framedblocks.api.util.client.ClientUtils;
 import xfacthd.framedblocks.api.util.client.ModelCache;
 import xfacthd.framedblocks.client.loader.overlay.OverlayLoader;
@@ -31,7 +28,6 @@ import xfacthd.framedblocks.client.screen.*;
 import xfacthd.framedblocks.client.util.*;
 import xfacthd.framedblocks.common.FBContent;
 import xfacthd.framedblocks.common.block.FramedWeightedPressurePlateBlock;
-import xfacthd.framedblocks.common.blockentity.FramedSignBlockEntity;
 import xfacthd.framedblocks.common.data.BlockType;
 import xfacthd.framedblocks.client.data.GhostRenderBehaviours;
 
@@ -237,15 +233,6 @@ public final class FBClient
     {
         IBlockType type = block.getBlockType();
         return type != BlockType.FRAMED_TARGET;
-    }
-
-    public static void openSignScreen(BlockPos pos)
-    {
-        //noinspection ConstantConditions
-        if (Minecraft.getInstance().level.getBlockEntity(pos) instanceof FramedSignBlockEntity be)
-        {
-            Minecraft.getInstance().setScreen(new FramedSignScreen(be));
-        }
     }
 
 
