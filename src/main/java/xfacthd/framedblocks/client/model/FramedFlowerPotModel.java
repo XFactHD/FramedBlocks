@@ -54,8 +54,12 @@ public class FramedFlowerPotModel extends BakedModelProxy
 
     private PotModel getOrCreatePotModel(BlockState state, IModelData extraData)
     {
-        Block flower = Optional.ofNullable(extraData.getData(FramedFlowerPotBlockEntity.FLOWER_BLOCK)).orElse(Blocks.AIR);
-        return CACHE_BY_PLANT.computeIfAbsent(flower, block -> new PotModel(state, baseModel, flower));
+        Block flower = extraData.getData(FramedFlowerPotBlockEntity.FLOWER_BLOCK);
+        Block finalFlower = flower != null ? flower : Blocks.AIR;
+        synchronized (CACHE_BY_PLANT)
+        {
+            return CACHE_BY_PLANT.computeIfAbsent(flower, block -> new PotModel(state, baseModel, finalFlower));
+        }
     }
 
     @Nonnull
