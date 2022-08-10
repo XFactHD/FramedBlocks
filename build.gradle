@@ -166,6 +166,9 @@ dependencies {
     //compileOnly fg.deobf("curse.maven:flywheel-486392:3737402")
     //runtimeOnly fg.deobf("curse.maven:create-328085:3737418") //Only needed when Flywheel is switched to implementation
 
+    compileOnly fg.deobf("curse.maven:moonlight-499980:3920391")
+    compileOnly fg.deobf("curse.maven:supplementaries-412082:3920399")
+
     library(group: 'com.github.ben-manes.caffeine', name: 'caffeine', version: '3.1.1')
     jarJar(group: 'com.github.ben-manes.caffeine', name: 'caffeine', version: '[3.1.1,4.0.0)') {
         transitive(false)

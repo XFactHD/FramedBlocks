@@ -29,6 +29,8 @@ import xfacthd.framedblocks.api.util.client.ModelUtils;
 import xfacthd.framedblocks.common.FBContent;
 import xfacthd.framedblocks.common.block.FramedFlowerPotBlock;
 import xfacthd.framedblocks.common.blockentity.FramedFlowerPotBlockEntity;
+import xfacthd.framedblocks.common.compat.supplementaries.SupplementariesCompat;
+import xfacthd.framedblocks.common.data.PropertyHolder;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -37,9 +39,16 @@ import java.util.stream.Collectors;
 
 public class FramedFlowerPotModel extends BakedModelProxy
 {
-    private final Cache<Block, PotModel> CACHE_BY_PLANT = Caffeine.newBuilder().build();
+    private static BakedModel hangingPotModel;
 
-    public FramedFlowerPotModel(@SuppressWarnings("unused") BlockState state, BakedModel baseModel) { super(baseModel); }
+    private final Cache<Block, PotModel> CACHE_BY_PLANT = Caffeine.newBuilder().build();
+    private final boolean hanging;
+
+    public FramedFlowerPotModel(BlockState state, BakedModel baseModel)
+    {
+        super(baseModel);
+        this.hanging = state.getValue(PropertyHolder.HANGING) && SupplementariesCompat.isLoaded();
+    }
 
     @Override
     public ChunkRenderTypeSet getRenderTypes(@NotNull BlockState state, @NotNull RandomSource rand, @NotNull ModelData data)
@@ -63,7 +72,9 @@ public class FramedFlowerPotModel extends BakedModelProxy
     private PotModel getOrCreatePotModel(BlockState state, ModelData extraData)
     {
         Block flower = Optional.ofNullable(extraData.get(FramedFlowerPotBlockEntity.FLOWER_BLOCK)).orElse(Blocks.AIR);
-        return CACHE_BY_PLANT.get(flower, block -> new PotModel(state, baseModel, flower));
+        return CACHE_BY_PLANT.get(flower, block ->
+                hanging ? new HangingPotModel(state, baseModel, flower) : new PotModel(state, baseModel, flower)
+        );
     }
 
     @Nonnull
@@ -76,6 +87,13 @@ public class FramedFlowerPotModel extends BakedModelProxy
         }
         return tileData;
     }
+
+    public static void cacheHangingModel(Map<ResourceLocation, BakedModel> registry)
+    {
+        hangingPotModel = registry.get(SupplementariesCompat.HANGING_MODEL_LOCATION);
+    }
+
+
 
     private static class PotModel extends FramedBlockModel
     {
@@ -197,6 +215,43 @@ public class FramedFlowerPotModel extends BakedModelProxy
                     .filter(q -> !q.getSprite().getName().equals(DIRT_TEXTURE))
                     .map(ModelUtils::invertTintIndex)
                     .collect(Collectors.toList());
+        }
+    }
+
+    private static class HangingPotModel extends PotModel
+    {
+        public HangingPotModel(BlockState state, BakedModel baseModel, Block flower)
+        {
+            super(state, baseModel, flower);
+        }
+
+        @Override
+        protected ChunkRenderTypeSet getAdditionalRenderTypes(RandomSource rand, ModelData extraData)
+        {
+            return ChunkRenderTypeSet.union(
+                    super.getAdditionalRenderTypes(rand, extraData),
+                    ModelUtils.CUTOUT
+            );
+        }
+
+        @Override
+        protected void getAdditionalQuads(Map<Direction, List<BakedQuad>> quadMap, BlockState state, RandomSource rand, ModelData data, RenderType layer)
+        {
+            super.getAdditionalQuads(quadMap, state, rand, data, layer);
+
+            if (layer == RenderType.cutout())
+            {
+                quadMap.get(null).addAll(hangingPotModel.getQuads(
+                        null, null, rand, data, null
+                ));
+
+                for (Direction side : Direction.values())
+                {
+                    quadMap.get(side).addAll(hangingPotModel.getQuads(
+                            null, side, rand, data, null
+                    ));
+                }
+            }
         }
     }
 }
