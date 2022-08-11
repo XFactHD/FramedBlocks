@@ -149,7 +149,7 @@ public class FramedBlockStateProvider extends BlockStateProvider
 
     private void registerFramedGate(ModelFile cube)
     {
-        simpleBlock(FBContent.blockFramedGate.get(), cube);
+        simpleBlock(FBContent.blockFramedFenceGate.get(), cube);
         itemModels().fenceGate("framed_gate", TEXTURE).renderType("cutout");
     }
 

@@ -158,7 +158,7 @@ public final class InteractionTests
     public static void testFenceGateInteract(GameTestHelper helper)
     {
         TestUtils.chainTasks(helper, List.of(
-                () -> helper.setBlock(POS_ABOVE_FLOOR, FBContent.blockFramedGate.get()),
+                () -> helper.setBlock(POS_ABOVE_FLOOR, FBContent.blockFramedFenceGate.get()),
                 () -> helper.assertBlockProperty(POS_ABOVE_FLOOR, FenceGateBlock.OPEN, false),
                 () -> helper.useBlock(POS_ABOVE_FLOOR),
                 () -> helper.assertBlockProperty(POS_ABOVE_FLOOR, FenceGateBlock.OPEN, true),
