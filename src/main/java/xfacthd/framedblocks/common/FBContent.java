@@ -139,6 +139,8 @@ public final class FBContent
     public static final RegistryObject<Block> blockFramedLargeButton = registerBlock(FramedLargeButtonBlock::new, BlockType.FRAMED_LARGE_BUTTON);
     public static final RegistryObject<Block> blockFramedLargeStoneButton = registerBlock(FramedLargeStoneButtonBlock::new, BlockType.FRAMED_LARGE_STONE_BUTTON);
     public static final RegistryObject<Block> blockFramedTarget = registerBlock(FramedTargetBlock::new, BlockType.FRAMED_TARGET);
+    public static final RegistryObject<Block> blockFramedGate = registerBlock(FramedGateBlock::wood, BlockType.FRAMED_GATE_DOOR);
+    public static final RegistryObject<Block> blockFramedIronGate = registerBlock(FramedGateBlock::iron, BlockType.FRAMED_IRON_GATE_DOOR);
     // endregion
 
     // region Items

@@ -94,6 +94,8 @@ public enum BlockType implements IBlockType
     FRAMED_LARGE_STONE_BUTTON     (false, false, false, false,  true, false, false, false),
     FRAMED_HORIZONTAL_PANE        ( true, false, false,  true,  true,  true, false, false, CtmPredicate.FALSE, FramedHorizontalPaneBlock.SKIP_PREDICATE, Shapes.box(0, 7D/16D, 0, 1, 9D/16D, 1)),
     FRAMED_TARGET                 ( true, false,  true, false,  true,  true, false, false, CtmPredicate.TRUE, SideSkipPredicate.CTM, Shapes.block()),
+    FRAMED_GATE_DOOR              ( true, false, false, false,  true, false, false, false, FramedDoorBlock.CTM_PREDICATE, new GateSkipPredicate()), //TODO: rename to FRAMED_GATE in 1.20
+    FRAMED_IRON_GATE_DOOR         ( true, false, false, false,  true, false, false, false, FramedDoorBlock.CTM_PREDICATE, new GateSkipPredicate()), //TODO: rename to FRAMED_IRON_GATE in 1.20
     ;
 
     private final String name = toString().toLowerCase(Locale.ROOT);

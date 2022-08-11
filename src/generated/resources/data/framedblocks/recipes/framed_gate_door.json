@@ -3,15 +3,14 @@
   "key": {
     "D": {
       "item": "framedblocks:framed_door"
-    },
-    "I": {
-      "item": "minecraft:iron_ingot"
     }
   },
   "pattern": [
-    "IDI"
+    "DD",
+    "DD"
   ],
   "result": {
-    "item": "framedblocks:framed_iron_door"
+    "count": 4,
+    "item": "framedblocks:framed_gate_door"
   }
 }

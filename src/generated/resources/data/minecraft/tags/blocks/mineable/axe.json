@@ -76,6 +76,8 @@
     "framedblocks:framed_horizontal_pane",
     "framedblocks:framed_large_button",
     "framedblocks:framed_large_stone_button",
-    "framedblocks:framed_target"
+    "framedblocks:framed_target",
+    "framedblocks:framed_gate_door",
+    "framedblocks:framed_iron_gate_door"
   ]
 }

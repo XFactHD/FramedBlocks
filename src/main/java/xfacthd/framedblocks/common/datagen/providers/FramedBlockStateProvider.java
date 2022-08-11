@@ -5,12 +5,12 @@ import net.minecraft.core.Direction;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.block.*;
-import net.minecraft.world.level.block.state.properties.AttachFace;
-import net.minecraft.world.level.block.state.properties.BlockStateProperties;
+import net.minecraft.world.level.block.state.properties.*;
 import net.minecraftforge.client.model.generators.*;
 import net.minecraftforge.common.data.ExistingFileHelper;
 import net.minecraftforge.registries.RegistryObject;
 import xfacthd.framedblocks.api.util.FramedConstants;
+import xfacthd.framedblocks.api.util.FramedProperties;
 import xfacthd.framedblocks.client.loader.overlay.OverlayLoaderBuilder;
 import xfacthd.framedblocks.client.model.*;
 import xfacthd.framedblocks.common.FBContent;
@@ -75,6 +75,7 @@ public class FramedBlockStateProvider extends BlockStateProvider
         simpleBlockWithItem(FBContent.blockFramedPyramidSlab, cube);
         simpleBlock(FBContent.blockFramedHorizontalPane.get(), cube);
         simpleBlock(FBContent.blockFramedLargeButton.get(), cube);
+        simpleBlock(FBContent.blockFramedGate.get(), cube);
 
         registerFramedSlab(cube);
         registerFramedStairs(cube);
@@ -111,6 +112,7 @@ public class FramedBlockStateProvider extends BlockStateProvider
         registerFramedGlowingCube();
         registerFramedLargeStoneButton();
         registerFramedTarget(cube);
+        registerFramedIronGate();
     }
 
     private void registerFramedSlab(ModelFile cube)
@@ -673,6 +675,30 @@ public class FramedBlockStateProvider extends BlockStateProvider
                         .texture("overlay", modLoc("block/target_overlay"))
                         .renderType("cutout")
                 );
+    }
+
+    private void registerFramedIronGate()
+    {
+        ModelFile door = models().getExistingFile(modLoc("block/framed_iron_door"));
+        getVariantBuilder(FBContent.blockFramedIronGate.get()).forAllStatesExcept(state ->
+        {
+            int yRot = ((int) state.getValue(DoorBlock.FACING).toYRot()) + 90;
+            boolean right = state.getValue(DoorBlock.HINGE) == DoorHingeSide.RIGHT;
+            boolean open = state.getValue(DoorBlock.OPEN);
+            if (open)
+            {
+                yRot += 90;
+            }
+            if (right && open)
+            {
+                yRot += 180;
+            }
+            yRot %= 360;
+
+            return ConfiguredModel.builder().modelFile(door)
+                    .rotationY(yRot)
+                    .build();
+        }, DoorBlock.POWERED, FramedProperties.SOLID, FramedProperties.GLOWING);
     }
 
 
