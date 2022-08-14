@@ -134,6 +134,10 @@ repositories {
         url "https://www.cursemaven.com"
     }
     mavenCentral()
+    flatDir {
+        //TODO: remove when NoCubes can be pulled from CurseMaven
+        dirs 'libs'
+    }
 }
 
 configurations {
@@ -168,6 +172,9 @@ dependencies {
 
     compileOnly fg.deobf("curse.maven:moonlight-499980:3920391")
     compileOnly fg.deobf("curse.maven:supplementaries-412082:3920399")
+
+    //compileOnly fg.deobf("curse.maven:nocubes-309664:") //TODO: move to cursemaven when available
+    compileOnly fg.deobf("blank:NoCubes:1.19.1-0.5.0")
 
     library(group: 'com.github.ben-manes.caffeine', name: 'caffeine', version: '3.1.1')
     jarJar(group: 'com.github.ben-manes.caffeine', name: 'caffeine', version: '[3.1.1,4.0.0)') {

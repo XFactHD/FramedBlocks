@@ -4,6 +4,7 @@ import net.minecraftforge.fml.ModList;
 import xfacthd.framedblocks.FramedBlocks;
 import xfacthd.framedblocks.common.compat.buildinggadgets.BuildingGadgetsCompat;
 //import xfacthd.framedblocks.common.compat.flywheel.FlywheelCompat;
+import xfacthd.framedblocks.common.compat.nocubes.NoCubesCompat;
 import xfacthd.framedblocks.common.compat.supplementaries.SupplementariesCompat;
 
 public final class CompatHandler
@@ -29,6 +30,7 @@ public final class CompatHandler
 
         //FlywheelCompat.init();
         SupplementariesCompat.init();
+        NoCubesCompat.init();
     }
 
 

@@ -96,4 +96,11 @@ public interface FramedBlocksAPI
      * Returns true if hiding faces on a neighboring block is allowed in the given {@linkplain BlockGetter level}
      */
     boolean canHideNeighborFaceInLevel(BlockGetter level);
+
+    /**
+     * Returns true of if faces on the given block can be culled with the given adjacent block
+     * @param state The block whose face is to be culled
+     * @param adjState The adjacent block
+     */
+    boolean canCullBlockNextTo(BlockState state, BlockState adjState);
 }

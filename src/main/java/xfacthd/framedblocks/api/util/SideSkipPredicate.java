@@ -1,10 +1,10 @@
 package xfacthd.framedblocks.api.util;
 
-import net.minecraft.tags.BlockTags;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.core.Direction;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.BlockGetter;
+import xfacthd.framedblocks.api.FramedBlocksAPI;
 import xfacthd.framedblocks.api.block.IFramedBlock;
 import xfacthd.framedblocks.api.block.FramedBlockEntity;
 
@@ -101,7 +101,7 @@ public interface SideSkipPredicate
 
             if (state == adjState)
             {
-                return !state.is(BlockTags.LEAVES);
+                return FramedBlocksAPI.getInstance().canCullBlockNextTo(state, adjState);
             }
             return state.isSolidRender(level, pos) && adjState.isSolidRender(level, pos.relative(side));
         }
