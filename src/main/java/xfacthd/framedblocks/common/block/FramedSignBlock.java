@@ -63,6 +63,9 @@ public class FramedSignBlock extends AbstractFramedSignBlock
     }
 
     @Override
+    protected boolean doesBlockOccludeBeaconBeam(BlockState state, LevelReader level, BlockPos pos) { return false; }
+
+    @Override
     public BlockState rotate(BlockState state, Rotation rot)
     {
         int rotation = state.getValue(BlockStateProperties.ROTATION_16);

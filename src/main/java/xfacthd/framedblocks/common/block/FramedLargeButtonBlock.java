@@ -3,7 +3,9 @@ package xfacthd.framedblocks.common.block;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.world.level.BlockGetter;
+import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.state.properties.AttachFace;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import xfacthd.framedblocks.api.util.Utils;
@@ -21,6 +23,16 @@ public class FramedLargeButtonBlock extends FramedButtonBlock
     public VoxelShape getShape(BlockState state, BlockGetter level, BlockPos pos, CollisionContext context)
     {
         return getShape(state);
+    }
+
+    @Override
+    public float[] getBeaconColorMultiplier(BlockState state, LevelReader level, BlockPos pos, BlockPos beaconPos)
+    {
+        if (state.getValue(FACE) != AttachFace.WALL)
+        {
+            return getCamoBeaconColorMultiplier(level, pos, beaconPos);
+        }
+        return null;
     }
 
     @Override

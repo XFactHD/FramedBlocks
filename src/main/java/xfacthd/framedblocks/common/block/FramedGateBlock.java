@@ -6,8 +6,7 @@ import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.context.BlockPlaceContext;
-import net.minecraft.world.level.BlockGetter;
-import net.minecraft.world.level.Level;
+import net.minecraft.world.level.*;
 import net.minecraft.world.level.block.*;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
@@ -153,6 +152,9 @@ public class FramedGateBlock extends FramedBlock
             default -> SHAPE_NORTH;
         };
     }
+
+    @Override
+    protected boolean doesBlockOccludeBeaconBeam(BlockState state, LevelReader level, BlockPos pos) { return false; }
 
     @Override
     public PushReaction getPistonPushReaction(BlockState state) { return PushReaction.DESTROY; }

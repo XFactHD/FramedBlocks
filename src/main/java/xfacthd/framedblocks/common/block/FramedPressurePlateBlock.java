@@ -86,6 +86,12 @@ public class FramedPressurePlateBlock extends PressurePlateBlock implements IFra
     }
 
     @Override
+    public float[] getBeaconColorMultiplier(BlockState state, LevelReader level, BlockPos pos, BlockPos beaconPos)
+    {
+        return getCamoBeaconColorMultiplier(level, pos, beaconPos);
+    }
+
+    @Override
     protected int getSignalStrength(Level level, BlockPos pos)
     {
         //noinspection ConstantConditions

@@ -451,6 +451,15 @@ public interface IFramedBlock extends EntityBlock//, IFacade
         return defaultColor;
     }
 
+    default float[] getCamoBeaconColorMultiplier(LevelReader level, BlockPos pos, BlockPos beaconPos)
+    {
+        if (level.getBlockEntity(pos) instanceof FramedBlockEntity be)
+        {
+            return be.getCamoBeaconColorMultiplier(level, pos, beaconPos);
+        }
+        return null;
+    }
+
     default Optional<MutableComponent> printCamoBlock(CompoundTag beTag)
     {
         BlockState camoState = CamoContainer.load(beTag.getCompound("camo")).getState();

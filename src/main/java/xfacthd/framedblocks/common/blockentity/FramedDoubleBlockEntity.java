@@ -2,6 +2,7 @@ package xfacthd.framedblocks.common.blockentity;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.util.Tuple;
+import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.item.ItemStack;
@@ -95,6 +96,28 @@ public abstract class FramedDoubleBlockEntity extends FramedBlockEntity
             return camoContainer.getState().getMapColor(level, worldPosition);
         }
         return super.getMapColor();
+    }
+
+    @Override
+    public float[] getCamoBeaconColorMultiplier(LevelReader level, BlockPos pos, BlockPos beaconPos)
+    {
+        float[] superMult = super.getCamoBeaconColorMultiplier(level, pos, beaconPos);
+        float[] localMult = camoContainer.isEmpty() ? null : camoContainer.getBeaconColorMultiplier(level, pos, beaconPos);
+
+        if (superMult == null)
+        {
+            return localMult;
+        }
+        if (localMult == null)
+        {
+            return superMult;
+        }
+
+        return new float[] {
+                (superMult[0] + localMult[0]) / 2F,
+                (superMult[1] + localMult[1]) / 2F,
+                (superMult[2] + localMult[2]) / 2F
+        };
     }
 
     @Override

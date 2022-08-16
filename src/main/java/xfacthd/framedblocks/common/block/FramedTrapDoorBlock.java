@@ -167,6 +167,16 @@ public class FramedTrapDoorBlock extends TrapDoorBlock implements IFramedBlock
     }
 
     @Override
+    public float[] getBeaconColorMultiplier(BlockState state, LevelReader level, BlockPos pos, BlockPos beaconPos)
+    {
+        if (!state.getValue(OPEN))
+        {
+            return getCamoBeaconColorMultiplier(level, pos, beaconPos);
+        }
+        return null;
+    }
+
+    @Override
     public final BlockEntity newBlockEntity(BlockPos pos, BlockState state) { return new FramedBlockEntity(pos, state); }
 
     @Override

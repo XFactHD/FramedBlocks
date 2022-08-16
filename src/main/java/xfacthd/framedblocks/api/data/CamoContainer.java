@@ -5,8 +5,7 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.level.BlockAndTintGetter;
-import net.minecraft.world.level.BlockGetter;
+import net.minecraft.world.level.*;
 import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.Property;
@@ -45,6 +44,18 @@ public abstract class CamoContainer
      * @return The map color
      */
     public MaterialColor getMapColor(BlockGetter level, BlockPos pos) { return state.getMapColor(level, pos); }
+
+    /**
+     * Returns the color multipliers to apply to a beacon beam
+     * @param level The current level
+     * @param pos The position of the framed block
+     * @param beaconPos The position of the beacon where the beam originates from
+     * @return An array of R, G and B values to be used as the color multiplier
+     */
+    public float[] getBeaconColorMultiplier(LevelReader level, BlockPos pos, BlockPos beaconPos)
+    {
+        return state.getBeaconColorMultiplier(level, pos, beaconPos);
+    }
 
     /**
      * Returns the tint color for use in {@link net.minecraft.client.color.block.BlockColor}
