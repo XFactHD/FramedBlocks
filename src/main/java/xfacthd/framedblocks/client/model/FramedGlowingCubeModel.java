@@ -1,25 +1,19 @@
 package xfacthd.framedblocks.client.model;
 
-import net.minecraft.client.renderer.LightTexture;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.block.model.BakedQuad;
 import net.minecraft.client.resources.model.BakedModel;
 import net.minecraft.core.Direction;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraftforge.client.model.IQuadTransformer;
+import net.minecraftforge.client.model.QuadTransformers;
 import net.minecraftforge.client.model.data.ModelData;
 
 import java.util.*;
 
 public class FramedGlowingCubeModel extends FramedCubeModel
 {
-    private static final IQuadTransformer FULLBRIGHT_TRANSFORMER = IQuadTransformer.applyingLightmap(LightTexture.FULL_BRIGHT);
-
-    public FramedGlowingCubeModel(BlockState state, BakedModel baseModel)
-    {
-        super(state, baseModel);
-    }
+    public FramedGlowingCubeModel(BlockState state, BakedModel baseModel) { super(state, baseModel); }
 
     @Override
     public List<BakedQuad> getQuads(BlockState state, Direction side, RandomSource rand, ModelData extraData, RenderType renderType)
@@ -53,7 +47,7 @@ public class FramedGlowingCubeModel extends FramedCubeModel
                     quad.getSprite(),
                     false
             );
-            FULLBRIGHT_TRANSFORMER.processInPlace(newQuad);
+            QuadTransformers.settingMaxEmissivity().processInPlace(newQuad);
             fullbrightQuads.add(newQuad);
         });
         return fullbrightQuads;

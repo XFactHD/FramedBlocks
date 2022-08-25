@@ -34,6 +34,7 @@ import java.util.stream.Collectors;
  * {@link OcclusionTests#test_SlopePanel_FrontHalfNorth(GameTestHelper)}
  * {@link OcclusionTests#test_SlopePanel_FrontHalfSouth(GameTestHelper)}
  * {@link OcclusionTests#test_InvDoubleSlopePanel(GameTestHelper)}
+ * {@link OcclusionTests#test_HorizontalPane(GameTestHelper)}
  */
 
 @GameTestHolder(FramedConstants.MOD_ID)

@@ -2,6 +2,7 @@ package xfacthd.framedblocks.client.util;
 
 import net.minecraft.client.KeyMapping;
 import net.minecraft.client.Minecraft;
+import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.BlockHitResult;
@@ -49,8 +50,12 @@ public final class KeyMappings
             if (hit instanceof BlockHitResult blockHit && level.getBlockEntity(blockHit.getBlockPos()) instanceof FramedBlockEntity be)
             {
                 be.updateCulling(true, true);
+
+                BlockPos pos = blockHit.getBlockPos();
+                String msg = String.format("Culling updated at {x=%d, y=%d, z=%d}", pos.getX(), pos.getY(), pos.getZ());
+
                 //noinspection ConstantConditions
-                Minecraft.getInstance().player.displayClientMessage(Component.literal("Culling updated"), true);
+                Minecraft.getInstance().player.displayClientMessage(Component.literal(msg), true);
             }
         }
     }

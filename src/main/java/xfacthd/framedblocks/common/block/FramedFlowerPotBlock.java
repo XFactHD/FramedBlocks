@@ -55,6 +55,7 @@ public class FramedFlowerPotBlock extends FramedBlock
         return state;
     }
 
+    @Override
     public BlockState updateShape(BlockState state, Direction side, BlockState sideState, LevelAccessor level, BlockPos pos, BlockPos sidePos)
     {
         if (state.getValue(PropertyHolder.HANGING) && side == Direction.UP && !state.canSurvive(level, pos))

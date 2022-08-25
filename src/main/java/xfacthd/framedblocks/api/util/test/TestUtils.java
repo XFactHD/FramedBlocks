@@ -81,7 +81,7 @@ public final class TestUtils
 
             if (!result.shouldAwardStats())
             {
-                helper.fail(String.format("Camo application on block %s failed", helper.getBlockState(pos)));
+                helper.fail(String.format("Camo application on block %s failed", helper.getBlockState(pos)), pos);
             }
         });
     }
