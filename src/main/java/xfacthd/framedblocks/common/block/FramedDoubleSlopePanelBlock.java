@@ -18,6 +18,7 @@ import xfacthd.framedblocks.common.data.BlockType;
 import xfacthd.framedblocks.common.data.PropertyHolder;
 import xfacthd.framedblocks.common.data.property.HorizontalRotation;
 
+//TODO - 1.20: remove FRONT property and mirror facing and rotation instead and replace CTM_PREDICATE with predefined one
 public class FramedDoubleSlopePanelBlock extends AbstractFramedDoubleBlock
 {
     public static final CtmPredicate CTM_PREDICATE = (state, side) ->
