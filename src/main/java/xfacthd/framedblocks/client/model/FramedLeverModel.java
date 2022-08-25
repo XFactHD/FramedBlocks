@@ -4,7 +4,6 @@ import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.block.model.BakedQuad;
 import net.minecraft.client.resources.model.BakedModel;
 import net.minecraft.core.Direction;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
@@ -15,8 +14,8 @@ import net.minecraftforge.client.model.data.ModelData;
 import xfacthd.framedblocks.api.model.FramedBlockModel;
 import xfacthd.framedblocks.api.model.quad.Modifiers;
 import xfacthd.framedblocks.api.model.quad.QuadModifier;
-import xfacthd.framedblocks.api.util.FramedConstants;
 import xfacthd.framedblocks.api.util.Utils;
+import xfacthd.framedblocks.api.util.client.ClientUtils;
 import xfacthd.framedblocks.api.util.client.ModelCache;
 
 import java.util.List;
@@ -24,7 +23,6 @@ import java.util.Map;
 
 public class FramedLeverModel extends FramedBlockModel
 {
-    private static final ResourceLocation TEXTURE = new ResourceLocation(FramedConstants.MOD_ID, "block/framed_block");
     private static final float MIN_SMALL = 5F/16F;
     private static final float MAX_SMALL = 11F/16F;
     private static final float MIN_LARGE = 4F/16F;
@@ -53,7 +51,7 @@ public class FramedLeverModel extends FramedBlockModel
         List<BakedQuad> quads = baseModel.getQuads(state, null, rand, data, renderType);
         for (BakedQuad quad : quads)
         {
-            if (!quad.getSprite().getName().equals(TEXTURE))
+            if (!quad.getSprite().getName().equals(ClientUtils.DUMMY_TEXTURE))
             {
                 quadMap.get(null).add(quad);
             }

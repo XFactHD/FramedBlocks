@@ -33,6 +33,7 @@ import java.util.function.*;
 public final class ClientUtils
 {
     private static final Logger LOGGER = LogManager.getLogger();
+    public static final ResourceLocation DUMMY_TEXTURE = new ResourceLocation("forge", "white");
 
     /**
      * Replace the {@link BakedModel}s for all {@link BlockState}s of the given {@link Block} via the given block model

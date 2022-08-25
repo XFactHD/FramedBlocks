@@ -1,8 +1,6 @@
 package xfacthd.framedblocks.client.model;
 
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.RenderType;
-import net.minecraft.client.renderer.block.BlockRenderDispatcher;
 import net.minecraft.client.renderer.block.model.BakedQuad;
 import net.minecraft.client.resources.model.BakedModel;
 import net.minecraft.core.Direction;
@@ -14,7 +12,7 @@ import net.minecraft.world.level.block.state.properties.RailShape;
 import net.minecraftforge.client.ChunkRenderTypeSet;
 import net.minecraftforge.client.model.data.ModelData;
 import xfacthd.framedblocks.api.util.FramedProperties;
-import xfacthd.framedblocks.api.util.client.ModelUtils;
+import xfacthd.framedblocks.api.util.client.ModelCache;
 import xfacthd.framedblocks.common.FBContent;
 import xfacthd.framedblocks.common.block.FramedRailSlopeBlock;
 import xfacthd.framedblocks.common.data.PropertyHolder;
@@ -25,7 +23,6 @@ import java.util.*;
 public class FramedRailSlopeModel extends FramedSlopeModel
 {
     private final BlockState railState;
-    private BakedModel railModel = null;
 
     public FramedRailSlopeModel(BlockState state, BakedModel baseModel)
     {
@@ -47,16 +44,14 @@ public class FramedRailSlopeModel extends FramedSlopeModel
     }
 
     @Override
-    protected ChunkRenderTypeSet getAdditionalRenderTypes(RandomSource rand, ModelData extraData) { return ModelUtils.CUTOUT; }
+    protected ChunkRenderTypeSet getAdditionalRenderTypes(RandomSource rand, ModelData extraData)
+    {
+        return ModelCache.getRenderTypes(railState, rand, ModelData.EMPTY);
+    }
 
     private List<BakedQuad> getRailQuads(@Nullable Direction side, RandomSource rand, RenderType layer)
     {
-        if (railModel == null)
-        {
-            BlockRenderDispatcher dispatcher = Minecraft.getInstance().getBlockRenderer();
-            railModel = dispatcher.getBlockModel(railState);
-        }
-        return railModel.getQuads(railState, side, rand, ModelData.EMPTY, layer);
+        return ModelCache.getModel(railState).getQuads(railState, side, rand, ModelData.EMPTY, layer);
     }
 
     private static BlockState getSlopeState(BlockState state)

@@ -4,7 +4,6 @@ import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.block.model.BakedQuad;
 import net.minecraft.client.resources.model.BakedModel;
 import net.minecraft.core.Direction;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.client.ChunkRenderTypeSet;
@@ -22,8 +21,6 @@ import java.util.Map;
 
 public class FramedChestLidModel extends FramedBlockModel
 {
-    private static final ResourceLocation TEXTURE = new ResourceLocation(FramedConstants.MOD_ID, "block/framed_chest_lock");
-
     private final Direction facing;
     private final LatchType latch;
     private final ChunkRenderTypeSet addLayers;
@@ -70,10 +67,7 @@ public class FramedChestLidModel extends FramedBlockModel
         List<BakedQuad> quads = baseModel.getQuads(state, null, rand, data, layer);
         for (BakedQuad quad : quads)
         {
-            if (quad.getSprite().getName().equals(TEXTURE))
-            {
-                quadMap.get(null).add(quad);
-            }
+            quadMap.get(null).add(quad);
         }
     }
 }
