@@ -34,6 +34,7 @@ public class CornerPillarSkipPredicate implements SideSkipPredicate
                 case FRAMED_EXTENDED_SLOPE_PANEL -> testAgainstExtendedSlopePanel(level, pos, dir, adjState, side);
                 case FRAMED_DOUBLE_SLOPE_PANEL -> testAgainstDoubleSlopePanel(level, pos, dir, adjState, side);
                 case FRAMED_INV_DOUBLE_SLOPE_PANEL -> testAgainstInverseDoubleSlopePanel(level, pos, dir, adjState, side);
+                case FRAMED_EXTENDED_DOUBLE_SLOPE_PANEL -> testAgainstExtendedDoubleSlopePanel(level, pos, dir, adjState, side);
                 default -> false;
             };
         }
@@ -244,6 +245,36 @@ public class CornerPillarSkipPredicate implements SideSkipPredicate
         if ((side == dir && adjRot == HorizontalRotation.LEFT) || (side == dir.getCounterClockWise() && adjRot == HorizontalRotation.RIGHT))
         {
             return SideSkipPredicate.compareState(level, pos, side);
+        }
+
+        return false;
+    }
+
+    private static boolean testAgainstExtendedDoubleSlopePanel(BlockGetter level, BlockPos pos, Direction dir, BlockState adjState, Direction side)
+    {
+        if (side != dir && side != dir.getCounterClockWise()) { return false; }
+
+        Direction adjDir = adjState.getValue(FramedProperties.FACING_HOR);
+        HorizontalRotation adjRot = adjState.getValue(PropertyHolder.ROTATION);
+
+        if (adjRot.isVertical()) { return false; }
+
+        if (side == dir && adjDir == dir.getCounterClockWise() && adjRot == HorizontalRotation.LEFT)
+        {
+            return SideSkipPredicate.compareState(level, pos, side, adjDir, adjDir);
+        }
+        else if (side == dir && adjDir == dir.getClockWise() && adjRot == HorizontalRotation.RIGHT)
+        {
+            Direction camoDir = adjDir.getOpposite();
+            return SideSkipPredicate.compareState(level, pos, side, camoDir, camoDir);
+        }
+        else if (side == dir.getCounterClockWise() && adjDir == dir && adjRot == HorizontalRotation.RIGHT)
+        {
+            return SideSkipPredicate.compareState(level, pos, side, dir, dir);
+        }
+        else if (side == dir.getCounterClockWise() && adjDir == dir.getOpposite() && adjRot == HorizontalRotation.LEFT)
+        {
+            return SideSkipPredicate.compareState(level, pos, side, dir, dir);
         }
 
         return false;

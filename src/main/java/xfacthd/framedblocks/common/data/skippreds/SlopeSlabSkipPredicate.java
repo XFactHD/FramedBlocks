@@ -29,6 +29,7 @@ public class SlopeSlabSkipPredicate implements SideSkipPredicate
                 case FRAMED_ELEVATED_SLOPE_SLAB -> testAgainstElevatedSlopeSlab(level, pos, dir, topHalf, adjState, side);
                 case FRAMED_DOUBLE_SLOPE_SLAB -> testAgainstDoubleSlopeSlab(level, pos, dir, topHalf, adjState, side);
                 case FRAMED_INV_DOUBLE_SLOPE_SLAB -> testAgainstInverseDoubleSlopeSlab(level, pos, dir, top, topHalf, adjState, side);
+                case FRAMED_ELEVATED_DOUBLE_SLOPE_SLAB -> testAgainstElevatedDoubleSlopeSlab(level, pos, dir, top, topHalf, adjState, side);
                 case FRAMED_SLAB -> testAgainstSlab(level, pos, dir, topHalf, adjState, side);
                 case FRAMED_DOUBLE_SLAB -> testAgainstDoubleSlab(level, pos, dir, topHalf, side);
                 case FRAMED_SLAB_EDGE -> testAgainstSlabEdge(level, pos, dir, topHalf, adjState, side);
@@ -56,7 +57,7 @@ public class SlopeSlabSkipPredicate implements SideSkipPredicate
         }
         if (side == dir)
         {
-            return adjDir == dir.getOpposite() && SideSkipPredicate.compareState(level, pos, side, dir, dir);
+            return adjDir == dir.getOpposite() && SideSkipPredicate.compareState(level, pos, side, dir, dir.getOpposite());
         }
 
         return false;
@@ -100,6 +101,23 @@ public class SlopeSlabSkipPredicate implements SideSkipPredicate
         if (side == dir && ((adjDir == dir && !topHalf) || (adjDir == dir.getOpposite() && topHalf)))
         {
             return SideSkipPredicate.compareState(level, pos, side, dir, dir.getOpposite());
+        }
+
+        return false;
+    }
+
+    private static boolean testAgainstElevatedDoubleSlopeSlab(BlockGetter level, BlockPos pos, Direction dir, boolean top, boolean topHalf, BlockState adjState, Direction side)
+    {
+        Direction adjDir = adjState.getValue(FramedProperties.FACING_HOR);
+        boolean adjTop = adjState.getValue(FramedProperties.TOP);
+
+        if (side.getAxis() == dir.getClockWise().getAxis() && adjDir == dir.getOpposite() && top != adjTop && topHalf != adjTop)
+        {
+            return SideSkipPredicate.compareState(level, pos, side, dir, dir);
+        }
+        else if (side == dir && adjDir == dir)
+        {
+            return SideSkipPredicate.compareState(level, pos, side, dir, topHalf ? Direction.UP : Direction.DOWN);
         }
 
         return false;

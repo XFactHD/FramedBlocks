@@ -30,7 +30,8 @@ public class HalfStairsSkipPredicate implements SideSkipPredicate
             if (type == BlockType.FRAMED_HALF_STAIRS)
             {
                 return testAgainstHalfStairs(level, pos, dir, top, right, stairFace, adjState, side);
-            }else if (type == BlockType.FRAMED_VERTICAL_STAIRS)
+            }
+            else if (type == BlockType.FRAMED_VERTICAL_STAIRS)
             {
                 return testAgainstVerticalStairs(level, pos, dir, top, right, adjState, side);
             }
@@ -58,6 +59,7 @@ public class HalfStairsSkipPredicate implements SideSkipPredicate
                     case FRAMED_EXTENDED_SLOPE_PANEL -> testAgainstExtendedSlopePanel(level, pos, dir, top, right, adjState, side);
                     case FRAMED_DOUBLE_SLOPE_PANEL -> testAgainstDoubleSlopePanel(level, pos, dir, top, right, adjState, side);
                     case FRAMED_INV_DOUBLE_SLOPE_PANEL -> testAgainstInverseDoubleSlopePanel(level, pos, dir, top, right, adjState, side);
+                    case FRAMED_EXTENDED_DOUBLE_SLOPE_PANEL -> testAgainstExtendedDoubleSlopePanel(level, pos, dir, top, right, adjState, side);
                     case FRAMED_VERTICAL_DOUBLE_STAIRS -> testAgainstVerticalDoubleStairs(level, pos, dir, right, adjState, side);
                     default -> false;
                 };
@@ -302,6 +304,22 @@ public class HalfStairsSkipPredicate implements SideSkipPredicate
             {
                 return SideSkipPredicate.compareState(level, pos, side);
             }
+        }
+
+        return false;
+    }
+
+    private static boolean testAgainstExtendedDoubleSlopePanel(BlockGetter level, BlockPos pos, Direction dir, boolean top, boolean right, BlockState adjState, Direction side)
+    {
+        Direction adjDir = adjState.getValue(FramedProperties.FACING_HOR);
+        HorizontalRotation adjRot = adjState.getValue(PropertyHolder.ROTATION);
+
+        if (adjRot.withFacing(adjDir) != side.getOpposite()) { return false; }
+
+        if ((!adjRot.isVertical() || top == (adjRot == HorizontalRotation.DOWN)) && adjDir.getAxis() == dir.getClockWise().getAxis())
+        {
+            Direction camoDir = right ? dir.getClockWise() : dir.getCounterClockWise();
+            return SideSkipPredicate.compareState(level, pos, side, camoDir, camoDir);
         }
 
         return false;
