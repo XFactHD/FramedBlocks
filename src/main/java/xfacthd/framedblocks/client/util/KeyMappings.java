@@ -52,10 +52,15 @@ public final class KeyMappings
                 be.updateCulling(true, true);
 
                 BlockPos pos = blockHit.getBlockPos();
-                String msg = String.format("Culling updated at {x=%d, y=%d, z=%d}", pos.getX(), pos.getY(), pos.getZ());
+                Component blockName = be.getBlockState().getBlock().getName();
+
+                Component msg = Component.literal("Culling updated for '")
+                        .append(blockName)
+                        .append("' at ")
+                        .append(Component.literal(String.format("{x=%d, y=%d, z=%d}", pos.getX(), pos.getY(), pos.getZ())));
 
                 //noinspection ConstantConditions
-                Minecraft.getInstance().player.displayClientMessage(Component.literal(msg), true);
+                Minecraft.getInstance().player.displayClientMessage(msg, true);
             }
         }
     }
