@@ -152,6 +152,9 @@ dependencies {
     compileOnly fg.deobf("curse.maven:flywheel-486392:3871082")
     compileOnly fg.deobf("curse.maven:create-328085:3872145")
 
+    compileOnly fg.deobf("curse.maven:moonlight-499980:3842421")
+    compileOnly fg.deobf("curse.maven:supplementaries-412082:3947959")
+
     annotationProcessor 'org.spongepowered:mixin:0.8.5:processor'
 }
 

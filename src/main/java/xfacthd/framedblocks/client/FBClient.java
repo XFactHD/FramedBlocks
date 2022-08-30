@@ -33,6 +33,7 @@ import xfacthd.framedblocks.client.screen.*;
 import xfacthd.framedblocks.client.util.*;
 import xfacthd.framedblocks.common.FBContent;
 import xfacthd.framedblocks.common.block.FramedWeightedPressurePlateBlock;
+import xfacthd.framedblocks.common.compat.supplementaries.SupplementariesCompat;
 import xfacthd.framedblocks.common.data.BlockType;
 
 import java.util.List;
@@ -133,6 +134,11 @@ public final class FBClient
         FramedStoneButtonModel.registerFrameModels();
         FramedLargeStoneButtonModel.registerFrameModels();
         ForgeModelBakery.addSpecialModel(FramedTargetModel.OVERLAY_LOCATION);
+
+        if (SupplementariesCompat.isLoaded())
+        {
+            ForgeModelBakery.addSpecialModel(SupplementariesCompat.HANGING_MODEL_LOCATION);
+        }
     }
 
     @SubscribeEvent
@@ -145,6 +151,11 @@ public final class FBClient
         FramedStoneButtonModel.cacheFrameModels(registry);
         FramedLargeStoneButtonModel.cacheFrameModels(registry);
         FramedTargetModel.cacheOverlayModel(registry);
+
+        if (SupplementariesCompat.isLoaded())
+        {
+            FramedFlowerPotModel.cacheHangingModel(registry);
+        }
 
         List<Property<?>> ignoreWaterlogged = List.of(BlockStateProperties.WATERLOGGED);
         List<Property<?>> ignoreWaterloggedLock = List.of(BlockStateProperties.WATERLOGGED, FramedProperties.STATE_LOCKED);

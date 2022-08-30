@@ -1,6 +1,7 @@
 package xfacthd.framedblocks.common.block;
 
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.stats.Stats;
 import net.minecraft.world.InteractionHand;
@@ -8,23 +9,36 @@ import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.level.BlockGetter;
-import net.minecraft.world.level.Level;
+import net.minecraft.world.item.context.BlockPlaceContext;
+import net.minecraft.world.level.*;
 import net.minecraft.world.level.block.*;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.gameevent.GameEvent;
 import net.minecraft.world.level.pathfinder.PathComputationType;
 import net.minecraft.world.phys.BlockHitResult;
 import xfacthd.framedblocks.common.blockentity.FramedFlowerPotBlockEntity;
+import xfacthd.framedblocks.common.compat.supplementaries.SupplementariesCompat;
 import xfacthd.framedblocks.common.data.BlockType;
+import xfacthd.framedblocks.common.data.PropertyHolder;
 
 import java.util.Map;
 import java.util.function.Supplier;
 
 public class FramedFlowerPotBlock extends FramedBlock
 {
-    public FramedFlowerPotBlock() { super(BlockType.FRAMED_FLOWER_POT); }
+    public FramedFlowerPotBlock()
+    {
+        super(BlockType.FRAMED_FLOWER_POT);
+        registerDefaultState(defaultBlockState().setValue(PropertyHolder.HANGING, false));
+    }
+
+    @Override
+    protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder)
+    {
+        builder.add(PropertyHolder.HANGING);
+    }
 
     @Override
     public InteractionResult use(BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hit)
@@ -77,6 +91,41 @@ public class FramedFlowerPotBlock extends FramedBlock
         }
 
         return InteractionResult.PASS;
+    }
+
+    @Override
+    public BlockState getStateForPlacement(BlockPlaceContext context)
+    {
+        BlockState state = super.getStateForPlacement(context);
+        if (state != null && SupplementariesCompat.isLoaded())
+        {
+            state = state.setValue(
+                    PropertyHolder.HANGING,
+                    context.getClickedFace() == Direction.DOWN
+            );
+        }
+        return state;
+    }
+
+    @Override
+    public BlockState updateShape(BlockState state, Direction side, BlockState sideState, LevelAccessor level, BlockPos pos, BlockPos sidePos)
+    {
+        if (state.getValue(PropertyHolder.HANGING) && side == Direction.UP && !state.canSurvive(level, pos))
+        {
+            return Blocks.AIR.defaultBlockState();
+        }
+        return super.updateShape(state, side, sideState, level, pos, sidePos);
+    }
+
+    @Override
+    @SuppressWarnings("deprecation")
+    public boolean canSurvive(BlockState state, LevelReader level, BlockPos pos)
+    {
+        if (state.getValue(PropertyHolder.HANGING))
+        {
+            return SupplementariesCompat.canSurviveHanging(level, pos.relative(Direction.UP));
+        }
+        return true;
     }
 
     @Override

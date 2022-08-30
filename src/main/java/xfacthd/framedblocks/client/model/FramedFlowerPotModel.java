@@ -27,6 +27,8 @@ import xfacthd.framedblocks.api.util.client.ModelUtils;
 import xfacthd.framedblocks.common.FBContent;
 import xfacthd.framedblocks.common.block.FramedFlowerPotBlock;
 import xfacthd.framedblocks.common.blockentity.FramedFlowerPotBlockEntity;
+import xfacthd.framedblocks.common.compat.supplementaries.SupplementariesCompat;
+import xfacthd.framedblocks.common.data.PropertyHolder;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -35,9 +37,16 @@ import java.util.stream.Collectors;
 
 public class FramedFlowerPotModel extends BakedModelProxy
 {
-    private final Map<Block, PotModel> CACHE_BY_PLANT = new HashMap<>();
+    private static BakedModel hangingPotModel;
 
-    public FramedFlowerPotModel(@SuppressWarnings("unused") BlockState state, BakedModel baseModel) { super(baseModel); }
+    private final Map<Block, PotModel> CACHE_BY_PLANT = new HashMap<>();
+    private final boolean hanging;
+
+    public FramedFlowerPotModel(BlockState state, BakedModel baseModel)
+    {
+        super(baseModel);
+        this.hanging = state.getValue(PropertyHolder.HANGING) && SupplementariesCompat.isLoaded();
+    }
 
     @Nonnull
     @Override
@@ -58,7 +67,9 @@ public class FramedFlowerPotModel extends BakedModelProxy
         Block finalFlower = flower != null ? flower : Blocks.AIR;
         synchronized (CACHE_BY_PLANT)
         {
-            return CACHE_BY_PLANT.computeIfAbsent(flower, block -> new PotModel(state, baseModel, finalFlower));
+            return CACHE_BY_PLANT.computeIfAbsent(flower, block ->
+                    hanging ? new HangingPotModel(state, baseModel, finalFlower) : new PotModel(state, baseModel, finalFlower)
+            );
         }
     }
 
@@ -72,6 +83,13 @@ public class FramedFlowerPotModel extends BakedModelProxy
         }
         return tileData;
     }
+
+    public static void cacheHangingModel(Map<ResourceLocation, BakedModel> registry)
+    {
+        hangingPotModel = registry.get(SupplementariesCompat.HANGING_MODEL_LOCATION);
+    }
+
+
 
     private static class PotModel extends FramedBlockModel
     {
@@ -192,6 +210,37 @@ public class FramedFlowerPotModel extends BakedModelProxy
                     .filter(q -> !q.getSprite().getName().equals(DIRT_TEXTURE))
                     .map(ModelUtils::invertTintIndex)
                     .collect(Collectors.toList());
+        }
+    }
+
+    private static class HangingPotModel extends PotModel
+    {
+        public HangingPotModel(BlockState state, BakedModel baseModel, Block flower)
+        {
+            super(state, baseModel, flower);
+        }
+
+        @Override
+        protected boolean hasAdditionalQuadsInLayer(RenderType layer) { return layer == RenderType.cutout(); }
+
+        @Override
+        protected void getAdditionalQuads(Map<Direction, List<BakedQuad>> quadMap, BlockState state, Random rand, IModelData data, RenderType layer)
+        {
+            super.getAdditionalQuads(quadMap, state, rand, data, layer);
+
+            if (layer == RenderType.cutout())
+            {
+                quadMap.get(null).addAll(hangingPotModel.getQuads(
+                        null, null, rand, data
+                ));
+
+                for (Direction side : Direction.values())
+                {
+                    quadMap.get(side).addAll(hangingPotModel.getQuads(
+                            null, side, rand, data
+                    ));
+                }
+            }
         }
     }
 }
