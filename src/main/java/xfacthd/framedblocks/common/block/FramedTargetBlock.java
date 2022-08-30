@@ -10,8 +10,7 @@ import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.item.DyeItem;
-import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.*;
 import net.minecraft.world.level.*;
 import net.minecraft.world.level.block.*;
 import net.minecraft.world.level.block.entity.BlockEntity;
@@ -59,9 +58,10 @@ public class FramedTargetBlock extends TargetBlock implements IFramedBlock
         if (result != InteractionResult.PASS || !player.mayBuild()) { return result; }
 
         ItemStack stack = player.getItemInHand(hand);
-        if (stack.getItem() instanceof DyeItem dye && level.getBlockEntity(pos) instanceof FramedTargetBlockEntity be)
+        if (!stack.isEmpty() && level.getBlockEntity(pos) instanceof FramedTargetBlockEntity be)
         {
-            if (be.setOverlayColor(dye.getDyeColor()))
+            DyeColor dye = DyeColor.getColor(stack);
+            if (dye != null && be.setOverlayColor(dye))
             {
                 level.playSound(player, pos, SoundEvents.DYE_USE, SoundSource.BLOCKS, 1.0F, 1.0F);
                 player.awardStat(Stats.ITEM_USED.get(stack.getItem()));
