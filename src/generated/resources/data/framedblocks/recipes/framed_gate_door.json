@@ -1,17 +1,16 @@
 {
   "type": "minecraft:crafting_shaped",
   "pattern": [
-    "IDI"
+    "DD",
+    "DD"
   ],
   "key": {
     "D": {
       "item": "framedblocks:framed_door"
-    },
-    "I": {
-      "item": "minecraft:iron_ingot"
     }
   },
   "result": {
-    "item": "framedblocks:framed_iron_door"
+    "item": "framedblocks:framed_gate_door",
+    "count": 4
   }
 }

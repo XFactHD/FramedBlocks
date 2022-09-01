@@ -149,7 +149,7 @@ public class FramedRecipeProvider extends RecipeProvider
                 .unlockedBy("hasFramedBlock", HAS_FRAMED_BLOCK)
                 .save(consumer);
 
-        ShapedRecipeBuilder.shaped(FBContent.blockFramedDoor.get())
+        ShapedRecipeBuilder.shaped(FBContent.blockFramedDoor.get(), 3)
                 .pattern("FF")
                 .pattern("FF")
                 .pattern("FF")
@@ -157,9 +157,10 @@ public class FramedRecipeProvider extends RecipeProvider
                 .unlockedBy("hasFramedBlock", HAS_FRAMED_BLOCK)
                 .save(consumer);
 
-        ShapelessRecipeBuilder.shapeless(FBContent.blockFramedIronDoor.get())
-                .requires(FBContent.blockFramedDoor.get())
-                .requires(Items.IRON_INGOT)
+        ShapedRecipeBuilder.shaped(FBContent.blockFramedIronDoor.get())
+                .pattern("IDI")
+                .define('D', FBContent.blockFramedDoor.get())
+                .define('I', Items.IRON_INGOT)
                 .unlockedBy("hasFramedDoor", has(FBContent.blockFramedDoor.get()))
                 .save(consumer);
 
@@ -602,6 +603,20 @@ public class FramedRecipeProvider extends RecipeProvider
                 .define('R', Tags.Items.DUSTS_REDSTONE)
                 .define('H', Items.HAY_BLOCK)
                 .unlockedBy("hasFramedCube", HAS_FRAMED_BLOCK)
+                .save(consumer);
+
+        ShapedRecipeBuilder.shaped(FBContent.blockFramedGate.get(), 4)
+                .pattern("DD")
+                .pattern("DD")
+                .define('D', FBContent.blockFramedDoor.get())
+                .unlockedBy("hasFramedDoor", has(FBContent.blockFramedDoor.get()))
+                .save(consumer);
+
+        ShapedRecipeBuilder.shaped(FBContent.blockFramedIronGate.get(), 4)
+                .pattern("DD")
+                .pattern("DD")
+                .define('D', FBContent.blockFramedIronDoor.get())
+                .unlockedBy("hasFramedIronDoor", has(FBContent.blockFramedIronDoor.get()))
                 .save(consumer);
 
 
