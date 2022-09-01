@@ -31,7 +31,7 @@ public enum BlockType implements IBlockType
     FRAMED_STAIRS                 ( true, false, false,  true,  true,  true, false,  true, FramedStairsBlock.CTM_PREDICATE, new StairsSkipPredicate()),
     FRAMED_WALL                   (false, false, false,  true,  true, false, false,  true, CtmPredicate.FALSE, new WallSkipPredicate()),
     FRAMED_FENCE                  (false, false, false,  true,  true, false, false,  true, CtmPredicate.FALSE, FramedFenceBlock.SKIP_PREDICATE),
-    FRAMED_GATE                   (false, false, false,  true,  true, false, false, false, CtmPredicate.FALSE, FramedGateBlock.SKIP_PREDICATE),
+    FRAMED_GATE                   (false, false, false,  true,  true, false, false, false, CtmPredicate.FALSE, FramedFenceGateBlock.SKIP_PREDICATE),
     FRAMED_DOOR                   ( true, false, false, false,  true, false, false, false, FramedDoorBlock.CTM_PREDICATE, new DoorSkipPredicate()),
     FRAMED_IRON_DOOR              ( true, false, false, false,  true, false, false, false, FramedDoorBlock.CTM_PREDICATE, new DoorSkipPredicate()),
     FRAMED_TRAPDOOR               ( true, false, false,  true,  true, false, false, false, FramedTrapDoorBlock.CTM_PREDICATE, new TrapdoorSkipPredicate()),

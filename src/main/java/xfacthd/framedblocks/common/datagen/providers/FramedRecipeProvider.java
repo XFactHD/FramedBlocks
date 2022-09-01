@@ -141,7 +141,7 @@ public class FramedRecipeProvider extends RecipeProvider
                 .unlockedBy("hasFramedBlock", HAS_FRAMED_BLOCK)
                 .save(consumer);
 
-        ShapedRecipeBuilder.shaped(FBContent.blockFramedGate.get())
+        ShapedRecipeBuilder.shaped(FBContent.blockFramedFenceGate.get())
                 .pattern("SFS")
                 .pattern("SFS")
                 .define('F', FBContent.blockFramedCube.get())

@@ -37,7 +37,7 @@ public class FramedFenceBlock extends FenceBlock implements IFramedBlock
             return SideSkipPredicate.compareState(level, pos, side);
         }
 
-        if (adjState.getBlock() == FBContent.blockFramedGate.get())
+        if (adjState.getBlock() == FBContent.blockFramedFenceGate.get())
         {
             Direction adjDir = adjState.getValue(BlockStateProperties.HORIZONTAL_FACING);
             if (adjDir.getCounterClockWise() == side || adjDir.getClockWise() == side)

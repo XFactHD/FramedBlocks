@@ -26,7 +26,7 @@ import javax.annotation.Nullable;
 import java.util.List;
 
 @SuppressWarnings("deprecation")
-public class FramedGateBlock extends FenceGateBlock implements IFramedBlock
+public class FramedFenceGateBlock extends FenceGateBlock implements IFramedBlock
 {
     public static final SideSkipPredicate SKIP_PREDICATE = (level, pos, state, adjState, side) ->
     {
@@ -39,7 +39,7 @@ public class FramedGateBlock extends FenceGateBlock implements IFramedBlock
         return false;
     };
 
-    public FramedGateBlock() { super(IFramedBlock.createProperties(BlockType.FRAMED_GATE)); }
+    public FramedFenceGateBlock() { super(IFramedBlock.createProperties(BlockType.FRAMED_GATE)); }
 
     @Override
     public final InteractionResult use(BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hit)

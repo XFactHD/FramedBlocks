@@ -180,7 +180,7 @@ public final class FBClient
         ClientUtils.replaceModels(FBContent.blockFramedStairs, registry, FramedStairsModel::new, ignoreDefaultLock);
         ClientUtils.replaceModels(FBContent.blockFramedWall, registry, FramedWallModel::new, ignoreWaterloggedLock);
         ClientUtils.replaceModels(FBContent.blockFramedFence, registry, FramedFenceModel::createFenceModel, ignoreWaterloggedLock);
-        ClientUtils.replaceModels(FBContent.blockFramedGate, registry, FramedFenceGateModel::new, List.of(BlockStateProperties.POWERED));
+        ClientUtils.replaceModels(FBContent.blockFramedFenceGate, registry, FramedFenceGateModel::new, List.of(BlockStateProperties.POWERED));
         ClientUtils.replaceModels(FBContent.blockFramedDoor, registry, FramedDoorModel::new, ignoreSolid);
         ClientUtils.replaceModels(FBContent.blockFramedIronDoor, registry, FramedIronDoorModel::new, ignoreSolid);
         ClientUtils.replaceModels(FBContent.blockFramedTrapDoor, registry, FramedTrapDoorModel::new, ignoreDefault);
