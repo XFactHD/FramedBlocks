@@ -136,17 +136,6 @@ repositories {
     mavenCentral()
 }
 
-configurations {
-    library
-    implementation.extendsFrom library
-}
-
-minecraft.runs.all {
-    lazyToken('minecraft_classpath') {
-        configurations.library.copyRecursive().resolve().collect { it.absolutePath }.join(File.pathSeparator)
-    }
-}
-
 dependencies {
     minecraft 'net.minecraftforge:forge:1.19.2-43.0.7'
 
@@ -171,7 +160,7 @@ dependencies {
 
     compileOnly fg.deobf("curse.maven:nocubes-309664:3944569")
 
-    library(group: 'com.github.ben-manes.caffeine', name: 'caffeine', version: '3.1.1')
+    minecraftLibrary(group: 'com.github.ben-manes.caffeine', name: 'caffeine', version: '3.1.1')
     jarJar(group: 'com.github.ben-manes.caffeine', name: 'caffeine', version: '[3.1.1,4.0.0)') {
         transitive(false)
     }
