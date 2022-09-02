@@ -105,7 +105,7 @@ public class SlopePanelSkipPredicate implements SideSkipPredicate
         {
             return SideSkipPredicate.compareState(level, pos, side);
         }
-        else if (side.getAxis() != dir.getAxis() && side.getAxis() != rotDir.getAxis() && adjRot == rot)
+        else if (side.getAxis() != dir.getAxis() && side.getAxis() != rotDir.getAxis() && ((adjFront == front && adjRot == rot) || (adjFront != front && adjRot == rot.getOpposite())))
         {
             if ((adjDir == dir && adjFront == front) || (adjDir == dir.getOpposite() && adjFront != front))
             {
