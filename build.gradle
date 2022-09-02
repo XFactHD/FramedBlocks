@@ -143,6 +143,8 @@ dependencies {
 
     compileOnly fg.deobf("curse.maven:buildinggadgets-298187:3725903")
 
+    compileOnly fg.deobf("curse.maven:nocubes-309664:3944354")
+
     runtimeOnly fg.deobf("curse.maven:jei-238222:3773518")
     runtimeOnly fg.deobf("curse.maven:spark-361579:3767286")
 

@@ -1,5 +1,6 @@
 package xfacthd.framedblocks.common.util;
 
+import net.minecraft.tags.BlockTags;
 import net.minecraft.world.item.*;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.block.Block;
@@ -14,6 +15,7 @@ import xfacthd.framedblocks.client.util.ClientConfig;
 import xfacthd.framedblocks.common.FBContent;
 import xfacthd.framedblocks.common.blockentity.FramedDoubleBlockEntity;
 import xfacthd.framedblocks.common.compat.flywheel.FlywheelCompat;
+import xfacthd.framedblocks.common.compat.nocubes.NoCubesCompat;
 import xfacthd.framedblocks.common.item.FramedBlueprintItem;
 
 @SuppressWarnings("unused")
@@ -62,4 +64,10 @@ public class ApiImpl implements FramedBlocksAPI
 
     @Override
     public boolean canHideNeighborFaceInLevel(BlockGetter level) { return !FlywheelCompat.isVirtualLevel(level); }
+
+    @Override
+    public boolean canCullBlockNextTo(BlockState state, BlockState adjState)
+    {
+        return !state.is(BlockTags.LEAVES) && NoCubesCompat.mayCullNextTo(adjState);
+    }
 }
