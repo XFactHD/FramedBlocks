@@ -70,6 +70,22 @@ public class FramedDoubleSlopePanelBlockEntity extends FramedDoubleBlockEntity
     }
 
     @Override
+    public boolean isSolidSide(Direction side)
+    {
+        Direction facing = getBlockState().getValue(FramedProperties.FACING_HOR);
+        boolean front = getBlockState().getValue(PropertyHolder.FRONT);
+
+        if ((!front && side == facing) || (front && side == facing.getOpposite()))
+        {
+            BlockState camo = front ? getCamoStateTwo() : getCamoState();
+            //noinspection ConstantConditions
+            return camo.isSolidRender(level, worldPosition);
+        }
+
+        return false;
+    }
+
+    @Override
     public DoubleSoundMode getSoundMode() { return DoubleSoundMode.EITHER; }
 
     @Override

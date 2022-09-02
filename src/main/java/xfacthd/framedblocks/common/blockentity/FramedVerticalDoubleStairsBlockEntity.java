@@ -78,6 +78,20 @@ public class FramedVerticalDoubleStairsBlockEntity extends FramedDoubleBlockEnti
     }
 
     @Override
+    public boolean isSolidSide(Direction side)
+    {
+        Direction facing = getBlockState().getValue(FramedProperties.FACING_HOR);
+
+        if (side == facing || side == facing.getCounterClockWise())
+        {
+            //noinspection ConstantConditions
+            return getCamoState().isSolidRender(level, worldPosition);
+        }
+
+        return false;
+    }
+
+    @Override
     protected Tuple<BlockState, BlockState> getBlockPair(BlockState state)
     {
         return getBlockPair(state.getValue(FramedProperties.FACING_HOR));

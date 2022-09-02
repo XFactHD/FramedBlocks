@@ -65,6 +65,9 @@ public class FramedInverseDoubleSlopePanelBlockEntity extends FramedDoubleBlockE
     }
 
     @Override
+    public boolean isSolidSide(Direction side) { return false; }
+
+    @Override
     public DoubleSoundMode getSoundMode() { return DoubleSoundMode.EITHER; }
 
     @Override
