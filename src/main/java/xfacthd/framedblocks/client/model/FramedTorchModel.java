@@ -7,19 +7,17 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.client.renderer.block.model.BakedQuad;
 import net.minecraft.client.resources.model.BakedModel;
 import net.minecraft.core.Direction;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.client.model.data.IModelData;
 import xfacthd.framedblocks.api.model.FramedBlockModel;
 import xfacthd.framedblocks.api.model.quad.Modifiers;
 import xfacthd.framedblocks.api.model.quad.QuadModifier;
-import xfacthd.framedblocks.api.util.FramedConstants;
 import xfacthd.framedblocks.api.util.Utils;
+import xfacthd.framedblocks.api.util.client.ClientUtils;
 
 import java.util.*;
 
 public class FramedTorchModel extends FramedBlockModel
 {
-    private static final ResourceLocation TEXTURE = new ResourceLocation(FramedConstants.MOD_ID, "block/framed_torch");
     private static final float MIN = 7F/16F;
     private static final float MAX = 9F/16F;
     private static final float TOP = 8F/16F;
@@ -38,7 +36,7 @@ public class FramedTorchModel extends FramedBlockModel
         List<BakedQuad> quads = baseModel.getQuads(state, null, rand, extraData);
         for (BakedQuad quad : quads)
         {
-            if (!quad.getSprite().getName().equals(TEXTURE))
+            if (!quad.getSprite().getName().equals(ClientUtils.DUMMY_TEXTURE))
             {
                 quadMap.get(null).add(quad);
             }

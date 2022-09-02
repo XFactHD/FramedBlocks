@@ -7,16 +7,13 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.client.renderer.block.model.BakedQuad;
 import net.minecraft.client.resources.model.BakedModel;
 import net.minecraft.core.Direction;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.client.model.data.IModelData;
-import xfacthd.framedblocks.api.util.FramedConstants;
+import xfacthd.framedblocks.api.util.client.ClientUtils;
 
 import java.util.*;
 
 public class FramedSoulTorchModel extends FramedTorchModel
 {
-    private static final ResourceLocation TEXTURE = new ResourceLocation(FramedConstants.MOD_ID, "block/framed_soul_torch");
-
     public FramedSoulTorchModel(BlockState state, BakedModel baseModel) { super(state, baseModel); }
 
     @Override
@@ -31,7 +28,7 @@ public class FramedSoulTorchModel extends FramedTorchModel
         List<BakedQuad> quads = baseModel.getQuads(state, null, rand, extraData);
         for (BakedQuad quad : quads)
         {
-            if (!quad.getSprite().getName().equals(TEXTURE))
+            if (!quad.getSprite().getName().equals(ClientUtils.DUMMY_TEXTURE))
             {
                 quadMap.get(null).add(quad);
             }

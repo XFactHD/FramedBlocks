@@ -5,7 +5,6 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.client.renderer.block.model.BakedQuad;
 import net.minecraft.client.resources.model.BakedModel;
 import net.minecraft.core.Direction;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.client.model.data.IModelData;
 import xfacthd.framedblocks.api.model.FramedBlockModel;
 import xfacthd.framedblocks.api.model.quad.Modifiers;
@@ -21,8 +20,6 @@ import java.util.*;
 
 public class FramedChestModel extends FramedBlockModel
 {
-    private static final ResourceLocation TEXTURE = new ResourceLocation(FramedConstants.MOD_ID, "block/framed_chest_lock");
-
     private final Direction facing;
     private final boolean closed;
     private final LatchType latch;
@@ -101,10 +98,7 @@ public class FramedChestModel extends FramedBlockModel
         List<BakedQuad> quads = baseModel.getQuads(state, null, rand, data);
         for (BakedQuad quad : quads)
         {
-            if (quad.getSprite().getName().equals(TEXTURE))
-            {
-                quadMap.get(null).add(quad);
-            }
+            quadMap.get(null).add(quad);
         }
     }
 

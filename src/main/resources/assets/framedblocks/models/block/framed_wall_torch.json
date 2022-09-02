@@ -3,7 +3,7 @@
 	"ambientocclusion": false,
 	"textures": {
 		"particle": "framedblocks:block/framed_torch",
-		"torch": "framedblocks:block/framed_torch",
+		"torch": "forge:white",
 		"top": "minecraft:block/torch"
 	},
 	"elements": [

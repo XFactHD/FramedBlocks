@@ -11,6 +11,7 @@ import net.minecraftforge.common.data.ExistingFileHelper;
 import net.minecraftforge.registries.RegistryObject;
 import xfacthd.framedblocks.api.util.FramedConstants;
 import xfacthd.framedblocks.api.util.FramedProperties;
+import xfacthd.framedblocks.api.util.client.ClientUtils;
 import xfacthd.framedblocks.client.loader.overlay.OverlayLoaderBuilder;
 import xfacthd.framedblocks.client.model.*;
 import xfacthd.framedblocks.common.FBContent;
@@ -419,11 +420,11 @@ public class FramedBlockStateProvider extends BlockStateProvider
     {
         ModelFile lever = models()
                 .withExistingParent("framed_lever", mcLoc("block/lever"))
-                .texture("base", TEXTURE)
+                .texture("base", ClientUtils.DUMMY_TEXTURE)
                 .texture("particle", TEXTURE);
         ModelFile leverOn = models()
                 .withExistingParent("framed_lever_on", mcLoc("block/lever_on"))
-                .texture("base", TEXTURE)
+                .texture("base", ClientUtils.DUMMY_TEXTURE)
                 .texture("particle", TEXTURE);
 
         getVariantBuilder(FBContent.blockFramedLever.get()).forAllStates(state ->
@@ -472,7 +473,6 @@ public class FramedBlockStateProvider extends BlockStateProvider
     private void registerFramedSoulTorch()
     {
         ModelFile torch = models().withExistingParent("framed_soul_torch", modLoc("framed_torch"))
-                .texture("torch", modLoc("block/framed_soul_torch"))
                 .texture("particle", modLoc("block/framed_soul_torch"))
                 .texture("top", mcLoc("block/soul_torch"));
         simpleBlock(FBContent.blockFramedSoulTorch.get(), torch);
@@ -482,7 +482,6 @@ public class FramedBlockStateProvider extends BlockStateProvider
     private void registerFramedSoulWallTorch()
     {
         ModelFile wallTorch = models().withExistingParent("framed_soul_wall_torch", modLoc("framed_wall_torch"))
-                .texture("torch", modLoc("block/framed_soul_torch"))
                 .texture("particle", modLoc("block/framed_soul_torch"))
                 .texture("top", mcLoc("block/soul_torch"));
         getVariantBuilder(FBContent.blockFramedSoulWallTorch.get()).forAllStates(state ->
