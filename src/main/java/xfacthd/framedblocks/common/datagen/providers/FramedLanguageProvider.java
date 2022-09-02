@@ -82,11 +82,13 @@ public class FramedLanguageProvider extends LanguageProvider
         add(FBContent.blockFramedElevatedSlopeSlab.get(), "Framed Elevated Slope Slab");
         add(FBContent.blockFramedDoubleSlopeSlab.get(), "Framed Double Slope Slab");
         add(FBContent.blockFramedInverseDoubleSlopeSlab.get(), "Framed Inverted Double Slope Slab");
+        add(FBContent.blockFramedElevatedDoubleSlopeSlab.get(), "Framed Elevated Double Slope Slab");
         add(FBContent.blockFramedVerticalHalfStairs.get(), "Framed Vertical Half Stairs");
         add(FBContent.blockFramedSlopePanel.get(), "Framed Slope Panel");
-        add(FBContent.blockFramedExtendedSlopePanel.get(), "Framed Elevated Slope Panel");
+        add(FBContent.blockFramedExtendedSlopePanel.get(), "Framed Extended Slope Panel");
         add(FBContent.blockFramedDoubleSlopePanel.get(), "Framed Double Slope Panel");
         add(FBContent.blockFramedInverseDoubleSlopePanel.get(), "Framed Inverted Double Slope Panel");
+        add(FBContent.blockFramedExtendedDoubleSlopePanel.get(), "Framed Extended Double Slope Panel");
         add(FBContent.blockFramedDoubleStairs.get(), "Framed Double Stairs");
         add(FBContent.blockFramedVerticalDoubleStairs.get(), "Framed Vertical Double Stairs");
         add(FBContent.blockFramedWallBoard.get(), "Framed Wall Board");

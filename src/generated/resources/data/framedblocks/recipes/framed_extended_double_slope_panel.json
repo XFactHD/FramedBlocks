@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "SE"
+  ],
+  "key": {
+    "S": {
+      "item": "framedblocks:framed_slope_panel"
+    },
+    "E": {
+      "item": "framedblocks:framed_extended_slope_panel"
+    }
+  },
+  "result": {
+    "item": "framedblocks:framed_extended_double_slope_panel"
+  }
+}

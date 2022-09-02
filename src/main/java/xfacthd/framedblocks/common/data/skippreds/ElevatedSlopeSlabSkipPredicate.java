@@ -31,6 +31,7 @@ public class ElevatedSlopeSlabSkipPredicate implements SideSkipPredicate
                 case FRAMED_ELEVATED_SLOPE_SLAB -> testAgainstElevatedSlopeSlab(level, pos, dir, top, adjState, side);
                 case FRAMED_SLOPE_SLAB, FRAMED_DOUBLE_SLOPE_SLAB -> testAgainstSlopeSlab(level, pos, dir, top, adjState, side);
                 case FRAMED_INV_DOUBLE_SLOPE_SLAB -> testAgainstInverseDoubleSlopeSlab(level, pos, dir, top, adjState, side);
+                case FRAMED_ELEVATED_DOUBLE_SLOPE_SLAB -> testAgainstElevatedDoubleSlopeSlab(level, pos, dir, top, adjState, side);
                 case FRAMED_SLAB -> testAgainstSlab(level, pos, dir, top, adjState, side);
                 case FRAMED_DOUBLE_SLAB -> testAgainstDoubleSlab(level, pos, dir, top, side);
                 case FRAMED_SLAB_EDGE -> testAgainstSlabEdge(level, pos, dir, top, adjState, side);
@@ -51,13 +52,15 @@ public class ElevatedSlopeSlabSkipPredicate implements SideSkipPredicate
 
         if (adjTop != top) { return false; }
 
-        if (side == dir.getClockWise() || side == dir.getCounterClockWise())
+        if (side.getAxis() == dir.getClockWise().getAxis() && adjDir == dir)
         {
-            return adjDir == dir && SideSkipPredicate.compareState(level, pos, side);
+            Direction camoDir = top ? Direction.UP : Direction.DOWN;
+            return SideSkipPredicate.compareState(level, pos, side, camoDir, camoDir);
         }
-        if (side == dir.getOpposite())
+        else if (side == dir.getOpposite() && adjDir == dir.getOpposite())
         {
-            return adjDir == dir.getOpposite() && SideSkipPredicate.compareState(level, pos, side);
+            Direction camoDir = top ? Direction.UP : Direction.DOWN;
+            return SideSkipPredicate.compareState(level, pos, side, camoDir, camoDir);
         }
 
         return false;
@@ -68,23 +71,60 @@ public class ElevatedSlopeSlabSkipPredicate implements SideSkipPredicate
         Direction adjDir = adjState.getValue(FramedProperties.FACING_HOR);
         boolean adjTopHalf = adjState.getValue(PropertyHolder.TOP_HALF);
 
-        return side == dir.getOpposite() && adjDir == dir && adjTopHalf == top && SideSkipPredicate.compareState(level, pos, side);
+        if (side == dir.getOpposite() && adjDir == dir && adjTopHalf == top)
+        {
+            Direction camoDir = top ? Direction.UP : Direction.DOWN;
+            return SideSkipPredicate.compareState(level, pos, side, camoDir, side.getOpposite());
+        }
+
+        return false;
     }
 
     private static boolean testAgainstInverseDoubleSlopeSlab(BlockGetter level, BlockPos pos, Direction dir, boolean top, BlockState adjState, Direction side)
     {
-        Direction adjDir = adjState.getValue(FramedProperties.FACING_HOR);
-
         if (side != dir.getOpposite()) { return false; }
 
-        return ((adjDir == dir && top) || (adjDir == dir.getOpposite() && !top)) && SideSkipPredicate.compareState(level, pos, side);
+        Direction adjDir = adjState.getValue(FramedProperties.FACING_HOR);
+
+        if ((adjDir == dir && top) || (adjDir == dir.getOpposite() && !top))
+        {
+            Direction camoDir = top ? Direction.UP : Direction.DOWN;
+            return SideSkipPredicate.compareState(level, pos, side, camoDir, side.getOpposite());
+        }
+
+        return false;
+    }
+
+    private static boolean testAgainstElevatedDoubleSlopeSlab(BlockGetter level, BlockPos pos, Direction dir, boolean top, BlockState adjState, Direction side)
+    {
+        Direction adjDir = adjState.getValue(FramedProperties.FACING_HOR);
+        boolean adjTop = adjState.getValue(FramedProperties.TOP);
+
+        if (adjTop == top && side.getAxis() == dir.getClockWise().getAxis() && adjDir == dir)
+        {
+            Direction camoDir = top ? Direction.UP : Direction.DOWN;
+            return SideSkipPredicate.compareState(level, pos, side, camoDir, camoDir);
+        }
+        else if (side == dir.getOpposite() && adjDir == dir.getOpposite())
+        {
+            Direction camoDir = top ? Direction.UP : Direction.DOWN;
+            return SideSkipPredicate.compareState(level, pos, side, camoDir, camoDir);
+        }
+
+        return false;
     }
 
     private static boolean testAgainstSlab(BlockGetter level, BlockPos pos, Direction dir, boolean top, BlockState adjState, Direction side)
     {
         boolean adjTop = adjState.getValue(FramedProperties.TOP);
 
-        return adjTop == top && side == dir.getOpposite() && SideSkipPredicate.compareState(level, pos, side);
+        if (adjTop == top && side == dir.getOpposite())
+        {
+            Direction camoDir = top ? Direction.UP : Direction.DOWN;
+            return SideSkipPredicate.compareState(level, pos, side, camoDir, camoDir);
+        }
+
+        return false;
     }
 
     private static boolean testAgainstDoubleSlab(BlockGetter level, BlockPos pos, Direction dir, boolean top, Direction side)
@@ -98,7 +138,13 @@ public class ElevatedSlopeSlabSkipPredicate implements SideSkipPredicate
         Direction adjDir = adjState.getValue(FramedProperties.FACING_HOR);
         boolean adjTop = adjState.getValue(FramedProperties.TOP);
 
-        return adjDir == dir && adjTop == top && side == dir.getOpposite() && SideSkipPredicate.compareState(level, pos, side);
+        if (adjDir == dir && adjTop == top && side == dir.getOpposite())
+        {
+            Direction camoDir = top ? Direction.UP : Direction.DOWN;
+            return SideSkipPredicate.compareState(level, pos, side, camoDir, camoDir);
+        }
+
+        return false;
     }
 
     private static boolean testAgainstStairs(BlockGetter level, BlockPos pos, Direction dir, boolean top, BlockState adjState, Direction side)
@@ -109,7 +155,13 @@ public class ElevatedSlopeSlabSkipPredicate implements SideSkipPredicate
 
         if (adjTop != top || side != dir.getOpposite()) { return false; }
 
-        return StairsSkipPredicate.isSlabSide(adjShape, adjDir, side.getOpposite()) && SideSkipPredicate.compareState(level, pos, side);
+        if (StairsSkipPredicate.isSlabSide(adjShape, adjDir, side.getOpposite()))
+        {
+            Direction camoDir = top ? Direction.UP : Direction.DOWN;
+            return SideSkipPredicate.compareState(level, pos, side, camoDir, camoDir);
+        }
+
+        return false;
     }
 
     private static boolean testAgainstDoubleStairs(BlockGetter level, BlockPos pos, Direction dir, boolean top, BlockState adjState, Direction side)
@@ -131,7 +183,8 @@ public class ElevatedSlopeSlabSkipPredicate implements SideSkipPredicate
 
         if (adjDir == dir || adjDir == dir.getClockWise())
         {
-            return SideSkipPredicate.compareState(level, pos, side);
+            Direction camoDir = top ? Direction.UP : Direction.DOWN;
+            return SideSkipPredicate.compareState(level, pos, side, camoDir, camoDir);
         }
 
         return false;

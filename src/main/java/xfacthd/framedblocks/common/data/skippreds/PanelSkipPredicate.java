@@ -35,6 +35,7 @@ public class PanelSkipPredicate implements SideSkipPredicate
                 case FRAMED_EXTENDED_SLOPE_PANEL -> testAgainstExtendedSlopePanel(level, pos, dir, adjState, side);
                 case FRAMED_DOUBLE_SLOPE_PANEL -> testAgainstDoubleSlopePanel(level, pos, dir, adjState, side);
                 case FRAMED_INV_DOUBLE_SLOPE_PANEL -> testAgainstInverseDoubleSlopePanel(level, pos, dir, adjState, side);
+                case FRAMED_EXTENDED_DOUBLE_SLOPE_PANEL -> testAgainstExtendedDoubleSlopePanel(level, pos, dir, adjState, side);
                 default -> false;
             };
         }
@@ -218,5 +219,17 @@ public class PanelSkipPredicate implements SideSkipPredicate
         }
 
         return false;
+    }
+
+    private boolean testAgainstExtendedDoubleSlopePanel(BlockGetter level, BlockPos pos, Direction dir, BlockState adjState, Direction side)
+    {
+        if (side.getAxis() == dir.getAxis()) { return false; }
+
+        Direction adjDir = adjState.getValue(FramedProperties.FACING_HOR);
+        Direction adjRotDir = adjState.getValue(PropertyHolder.ROTATION).withFacing(adjDir);
+
+        if (adjRotDir != side.getOpposite()) { return false; }
+
+        return adjDir.getAxis() == dir.getAxis() && SideSkipPredicate.compareState(level, pos, side, dir, dir);
     }
 }

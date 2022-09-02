@@ -104,11 +104,13 @@ public final class FBContent
     public static final RegistryObject<Block> blockFramedElevatedSlopeSlab = registerBlock(FramedElevatedSlopeSlabBlock::new, BlockType.FRAMED_ELEVATED_SLOPE_SLAB);
     public static final RegistryObject<Block> blockFramedDoubleSlopeSlab = registerBlock(FramedDoubleSlopeSlabBlock::new, BlockType.FRAMED_DOUBLE_SLOPE_SLAB);
     public static final RegistryObject<Block> blockFramedInverseDoubleSlopeSlab = registerBlock(FramedInverseDoubleSlopeSlabBlock::new, BlockType.FRAMED_INV_DOUBLE_SLOPE_SLAB);
+    public static final RegistryObject<Block> blockFramedElevatedDoubleSlopeSlab = registerBlock(FramedElevatedDoubleSlopeSlabBlock::new, BlockType.FRAMED_ELEVATED_DOUBLE_SLOPE_SLAB);
     public static final RegistryObject<Block> blockFramedVerticalHalfStairs = registerBlock(FramedVerticalHalfStairsBlock::new, BlockType.FRAMED_VERTICAL_HALF_STAIRS);
     public static final RegistryObject<Block> blockFramedSlopePanel = registerBlock(FramedSlopePanelBlock::new, BlockType.FRAMED_SLOPE_PANEL);
     public static final RegistryObject<Block> blockFramedExtendedSlopePanel = registerBlock(FramedExtendedSlopePanelBlock::new, BlockType.FRAMED_EXTENDED_SLOPE_PANEL);
     public static final RegistryObject<Block> blockFramedDoubleSlopePanel = registerBlock(FramedDoubleSlopePanelBlock::new, BlockType.FRAMED_DOUBLE_SLOPE_PANEL);
     public static final RegistryObject<Block> blockFramedInverseDoubleSlopePanel = registerBlock(FramedInverseDoubleSlopePanelBlock::new, BlockType.FRAMED_INV_DOUBLE_SLOPE_PANEL);
+    public static final RegistryObject<Block> blockFramedExtendedDoubleSlopePanel = registerBlock(FramedExtendedDoubleSlopePanelBlock::new, BlockType.FRAMED_EXTENDED_DOUBLE_SLOPE_PANEL);
     public static final RegistryObject<Block> blockFramedDoubleStairs = registerBlock(FramedDoubleStairsBlock::new, BlockType.FRAMED_DOUBLE_STAIRS);
     public static final RegistryObject<Block> blockFramedVerticalDoubleStairs = registerBlock(FramedVerticalDoubleStairsBlock::new, BlockType.FRAMED_VERTICAL_DOUBLE_STAIRS);
     public static final RegistryObject<Block> blockFramedWallBoard = registerBlock(FramedWallBoardBlock::new, BlockType.FRAMED_WALL_BOARD);
@@ -184,6 +186,10 @@ public final class FBContent
             "framed_inverse_double_slope_slab",
             () -> new Block[] { blockFramedInverseDoubleSlopeSlab.get() }
     );
+    public static final RegistryObject<BlockEntityType<FramedElevatedDoubleSlopeSlabBlockEntity>> blockEntityTypeFramedElevatedDoubleSlopeSlab = createBlockEntityType(
+            FramedElevatedDoubleSlopeSlabBlockEntity::new,
+            BlockType.FRAMED_ELEVATED_DOUBLE_SLOPE_SLAB
+    );
     public static final RegistryObject<BlockEntityType<FramedDoubleSlopePanelBlockEntity>> blockEntityTypeFramedDoubleSlopePanel = createBlockEntityType(
             FramedDoubleSlopePanelBlockEntity::new,
             BlockType.FRAMED_DOUBLE_SLOPE_PANEL
@@ -192,6 +198,10 @@ public final class FBContent
             FramedInverseDoubleSlopePanelBlockEntity::new,
             "framed_inverse_double_slope_panel",
             () -> new Block[] { blockFramedInverseDoubleSlopePanel.get() }
+    );
+    public static final RegistryObject<BlockEntityType<FramedExtendedDoubleSlopePanelBlockEntity>> blockEntityTypeFramedExtendedDoubleSlopePanel = createBlockEntityType(
+            FramedExtendedDoubleSlopePanelBlockEntity::new,
+            BlockType.FRAMED_EXTENDED_DOUBLE_SLOPE_PANEL
     );
     public static final RegistryObject<BlockEntityType<FramedDoubleStairsBlockEntity>> blockEntityTypeFramedDoubleStairs = createBlockEntityType(
             FramedDoubleStairsBlockEntity::new,

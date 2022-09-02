@@ -124,7 +124,7 @@ public abstract class FramedDoubleBlockModel extends BakedModelProxy
      * Returns the camo-dependent particle texture of the side given by {@code key} when the camo is not air,
      * else returns the basic "framed block" sprite
      */
-    protected TextureAtlasSprite getSpriteOrDefault(IModelData data, ModelProperty<IModelData> key, BakedModel model)
+    protected final TextureAtlasSprite getSpriteOrDefault(IModelData data, ModelProperty<IModelData> key, BakedModel model)
     {
         IModelData innerData = data.getData(key);
         //noinspection ConstantConditions
