@@ -1,5 +1,7 @@
 package xfacthd.framedblocks.api.block;
 
+import it.unimi.dsi.fastutil.objects.Object2BooleanMap;
+import it.unimi.dsi.fastutil.objects.Object2BooleanOpenHashMap;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.world.InteractionHand;
@@ -19,6 +21,7 @@ import net.minecraft.world.level.storage.loot.LootContext;
 import net.minecraft.world.phys.*;
 import net.minecraft.world.phys.shapes.*;
 import net.minecraftforge.client.IBlockRenderProperties;
+import xfacthd.framedblocks.FramedBlocks;
 import xfacthd.framedblocks.api.type.IBlockType;
 import xfacthd.framedblocks.api.util.FramedProperties;
 import xfacthd.framedblocks.api.util.client.FramedBlockRenderProperties;
@@ -31,14 +34,17 @@ import java.util.function.Consumer;
 @SuppressWarnings("deprecation")
 public abstract class AbstractFramedBlock extends Block implements IFramedBlock, SimpleWaterloggedBlock
 {
+    private static final VoxelShape BEACON_BEAM_SHAPE = box(5, 0, 5, 11, 16, 11);
     private final IBlockType blockType;
     private final Map<BlockState, VoxelShape> shapes;
+    private final Object2BooleanMap<BlockState> beaconBeamOcclusion;
 
     public AbstractFramedBlock(IBlockType blockType, Properties props)
     {
         super(props);
         this.blockType = blockType;
         this.shapes = blockType.generateShapes(getStateDefinition().getPossibleStates());
+        this.beaconBeamOcclusion = computeBeaconBeamOcclusion(shapes);
 
         if (blockType.canOccludeWithSolidCamo())
         {
@@ -197,6 +203,30 @@ public abstract class AbstractFramedBlock extends Block implements IFramedBlock,
     }
 
     @Override
+    public float[] getBeaconColorMultiplier(BlockState state, LevelReader level, BlockPos pos, BlockPos beaconPos)
+    {
+        if (doesBlockOccludeBeaconBeam(state, level, pos))
+        {
+            return getCamoBeaconColorMultiplier(level, pos, beaconPos);
+        }
+        return null;
+    }
+
+    /**
+     * Return true if the given {@link BlockState} occludes the full area of the beacon beam and
+     * can therefore tint the beam
+     */
+    protected boolean doesBlockOccludeBeaconBeam(BlockState state, LevelReader level, BlockPos pos)
+    {
+        if (beaconBeamOcclusion == null)
+        {
+            FramedBlocks.LOGGER.warn("Block '{}' handles shapes itself but doesn't override AbstractFramedBlock#doesBlockMaskBeaconBeam()", this);
+            return false;
+        }
+        return beaconBeamOcclusion.getBoolean(state);
+    }
+
+    @Override
     public IBlockType getBlockType() { return blockType; }
 
     protected final boolean isWaterLoggable() { return blockType.supportsWaterLogging(); }
@@ -238,5 +268,30 @@ public abstract class AbstractFramedBlock extends Block implements IFramedBlock,
     {
         FluidState fluidState = level.getFluidState(pos);
         return state.setValue(BlockStateProperties.WATERLOGGED, fluidState.getType() == Fluids.WATER);
+    }
+
+    private static Object2BooleanMap<BlockState> computeBeaconBeamOcclusion(Map<BlockState, VoxelShape> shapes)
+    {
+        if (shapes.isEmpty())
+        {
+            return null;
+        }
+
+        Object2BooleanMap<BlockState> beamColorMasking = new Object2BooleanOpenHashMap<>();
+
+        shapes.forEach((state, shape) ->
+        {
+            VoxelShape intersection = Shapes.join(shape, BEACON_BEAM_SHAPE, BooleanOp.AND);
+
+            beamColorMasking.put(
+                    state,
+                    intersection.min(Direction.Axis.X) <= BEACON_BEAM_SHAPE.min(Direction.Axis.X) &&
+                            intersection.min(Direction.Axis.Z) <= BEACON_BEAM_SHAPE.min(Direction.Axis.Z) &&
+                            intersection.max(Direction.Axis.X) >= BEACON_BEAM_SHAPE.max(Direction.Axis.X) &&
+                            intersection.max(Direction.Axis.Z) >= BEACON_BEAM_SHAPE.max(Direction.Axis.Z)
+            );
+        });
+
+        return beamColorMasking;
     }
 }

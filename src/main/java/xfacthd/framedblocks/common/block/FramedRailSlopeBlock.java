@@ -227,6 +227,12 @@ public class FramedRailSlopeBlock extends BaseRailBlock implements IFramedBlock
     }
 
     @Override
+    public float[] getBeaconColorMultiplier(BlockState state, LevelReader level, BlockPos pos, BlockPos beaconPos)
+    {
+        return getCamoBeaconColorMultiplier(level, pos, beaconPos);
+    }
+
+    @Override
     public final BlockEntity newBlockEntity(BlockPos pos, BlockState state) { return new FramedBlockEntity(pos, state); }
 
     @Override

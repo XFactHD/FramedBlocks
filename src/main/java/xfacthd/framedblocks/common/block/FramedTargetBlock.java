@@ -157,6 +157,12 @@ public class FramedTargetBlock extends TargetBlock implements IFramedBlock
     }
 
     @Override
+    public float[] getBeaconColorMultiplier(BlockState state, LevelReader level, BlockPos pos, BlockPos beaconPos)
+    {
+        return getCamoBeaconColorMultiplier(level, pos, beaconPos);
+    }
+
+    @Override
     public BlockEntity newBlockEntity(BlockPos pos, BlockState state) { return new FramedTargetBlockEntity(pos, state); }
 
     @Override

@@ -191,6 +191,12 @@ public class FramedStairsBlock extends StairBlock implements IFramedBlock
     }
 
     @Override
+    public float[] getBeaconColorMultiplier(BlockState state, LevelReader level, BlockPos pos, BlockPos beaconPos)
+    {
+        return getCamoBeaconColorMultiplier(level, pos, beaconPos);
+    }
+
+    @Override
     public void initializeClient(Consumer<IBlockRenderProperties> consumer)
     {
         consumer.accept(new FramedBlockRenderProperties());

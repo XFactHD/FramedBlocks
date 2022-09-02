@@ -8,8 +8,7 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.context.BlockPlaceContext;
-import net.minecraft.world.level.BlockGetter;
-import net.minecraft.world.level.Level;
+import net.minecraft.world.level.*;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
@@ -107,6 +106,13 @@ public class FramedCollapsibleBlock extends FramedBlock
                 }
             }
         }
+    }
+
+    @Override
+    protected boolean doesBlockOccludeBeaconBeam(BlockState state, LevelReader level, BlockPos pos)
+    {
+        CollapseFace face = state.getValue(PropertyHolder.COLLAPSED_FACE);
+        return face == CollapseFace.NONE || Utils.isY(face.toDirection());
     }
 
     @Override

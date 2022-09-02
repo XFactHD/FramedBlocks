@@ -12,8 +12,7 @@ import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.*;
-import net.minecraft.world.level.Explosion;
-import net.minecraft.world.level.Level;
+import net.minecraft.world.level.*;
 import net.minecraft.world.level.block.*;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
@@ -585,6 +584,15 @@ public class FramedBlockEntity extends BlockEntity
         {
             //noinspection ConstantConditions
             return camoState.getMapColor(level, worldPosition);
+        }
+        return null;
+    }
+
+    public float[] getCamoBeaconColorMultiplier(LevelReader level, BlockPos pos, BlockPos beaconPos)
+    {
+        if (!camoState.isAir())
+        {
+            return camoState.getBeaconColorMultiplier(level, pos, beaconPos);
         }
         return null;
     }

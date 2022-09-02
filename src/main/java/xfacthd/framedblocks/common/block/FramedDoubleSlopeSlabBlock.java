@@ -4,6 +4,7 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.BlockGetter;
+import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Rotation;
 import net.minecraft.world.level.block.entity.BlockEntity;
@@ -58,6 +59,9 @@ public class FramedDoubleSlopeSlabBlock extends AbstractFramedDoubleBlock
         }
         return state.getValue(PropertyHolder.TOP_HALF) ? SHAPE_TOP : SHAPE_BOTTOM;
     }
+
+    @Override
+    protected boolean doesBlockOccludeBeaconBeam(BlockState state, LevelReader level, BlockPos pos) { return true; }
 
     @Override
     public BlockState rotate(BlockState state, Direction face, Rotation rot)
