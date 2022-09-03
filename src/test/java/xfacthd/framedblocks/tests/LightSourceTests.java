@@ -80,24 +80,22 @@ public final class LightSourceTests
         Preconditions.checkArgument(block instanceof IFramedBlock);
 
         IBlockType type = ((IFramedBlock) block).getBlockType();
-        if (!type.isDoubleBlock())
+        if (!type.isDoubleBlock() || !(type instanceof BlockType))
         {
             return List.of(Direction.UP);
         }
 
-        if (type == BlockType.FRAMED_DOUBLE_PANEL ||
-            type == BlockType.FRAMED_DOUBLE_SLOPE_PANEL ||
-            type == BlockType.FRAMED_INV_DOUBLE_SLOPE_PANEL
-        )
+        return switch ((BlockType) type)
         {
-            return List.of(Direction.NORTH, Direction.SOUTH);
-        }
-        else if (type == BlockType.FRAMED_VERTICAL_DOUBLE_STAIRS)
-        {
-            return List.of(Direction.EAST, Direction.WEST);
-        }
+            case FRAMED_DOUBLE_PANEL,
+                 FRAMED_DOUBLE_SLOPE_PANEL,
+                 FRAMED_INV_DOUBLE_SLOPE_PANEL,
+                 FRAMED_EXTENDED_DOUBLE_SLOPE_PANEL -> List.of(Direction.NORTH, Direction.SOUTH);
 
-        return List.of(Direction.UP, Direction.DOWN);
+            case FRAMED_VERTICAL_DOUBLE_STAIRS -> List.of(Direction.EAST, Direction.WEST);
+
+            default -> List.of(Direction.UP, Direction.DOWN);
+        };
     }
 
     private LightSourceTests() { }

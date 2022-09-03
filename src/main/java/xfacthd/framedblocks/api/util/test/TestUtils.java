@@ -30,6 +30,7 @@ import xfacthd.framedblocks.api.util.*;
 import xfacthd.framedblocks.api.util.client.FramedBlockRenderProperties;
 
 import java.util.*;
+import java.util.function.Predicate;
 import java.util.function.Supplier;
 
 public final class TestUtils
@@ -44,6 +45,10 @@ public final class TestUtils
     private static final BlockPos EMISSION_BLOCK = new BlockPos(1, 2, 1);
     private static final BlockPos EMISSION_LIGHT = new BlockPos(1, 3, 1);
     private static final BlockPos INTANGIBILITY_BLOCK = new BlockPos(0, 1, 0);
+    private static final BlockPos BEACON_TINT_BLOCK = new BlockPos(0, 1, 0);
+    private static final BlockPos BEACON_TINT_BEACON = new BlockPos(0, 0, 0);
+    private static final Predicate<float[]> BEACON_PREDICATE_RED = arr -> Arrays.equals(arr, DyeColor.RED.getTextureDiffuseColors());
+    private static final String BEACON_COLOR_TEXT_RED = Arrays.toString(DyeColor.RED.getTextureDiffuseColors());
 
     public static boolean assertFramedBlock(GameTestHelper helper, Block block)
     {
@@ -81,7 +86,7 @@ public final class TestUtils
 
             if (!result.shouldAwardStats())
             {
-                helper.fail(String.format("Camo application on block %s failed", helper.getBlockState(pos)), pos);
+                helper.fail(String.format("Camo application on side '%s' of block '%s' failed", side, helper.getBlockState(pos)), pos);
             }
         });
     }
@@ -500,6 +505,35 @@ public final class TestUtils
             assertTrue(helper, INTANGIBILITY_BLOCK, hit, () -> String.format("Block '%s' doesn't handle hit particles", state.getBlock()));
             assertTrue(helper, INTANGIBILITY_BLOCK, destroy, () -> String.format("Block '%s' doesn't handle destroy particles", state.getBlock()));
         }
+    }
+
+    // == Beacon beam tint testing ==
+
+    public static void testBeaconBeamTinting(GameTestHelper helper, BlockState state, List<Direction> camoSides)
+    {
+        chainTasks(helper, List.of(
+                () -> helper.setBlock(BEACON_TINT_BLOCK, state),
+                () -> assertBeaconTint(helper, Blocks.AIR, Objects::isNull, "null"),
+                () -> applyCamo(helper, BEACON_TINT_BLOCK, Blocks.RED_STAINED_GLASS, camoSides),
+                () -> assertBeaconTint(helper, Blocks.RED_STAINED_GLASS, BEACON_PREDICATE_RED, BEACON_COLOR_TEXT_RED),
+                helper::succeed
+        ));
+    }
+
+    private static void assertBeaconTint(GameTestHelper helper, Block camo, Predicate<float[]> predicate, String expected)
+    {
+        BlockState state = helper.getBlockState(BEACON_TINT_BLOCK);
+        assertFramedBlock(helper, state.getBlock());
+
+        float[] tint = state.getBeaconColorMultiplier(
+                helper.getLevel(),
+                helper.absolutePos(BEACON_TINT_BLOCK),
+                helper.absolutePos(BEACON_TINT_BEACON)
+        );
+        assertTrue(helper, BEACON_TINT_BLOCK, predicate.test(tint), () -> String.format(
+                "Block '%s' applies incorrect beacon color multiplier for camo '%s', expected %s, got %s",
+                state.getBlock(), camo, expected, Arrays.toString(tint)
+        ));
     }
 
 
