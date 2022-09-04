@@ -198,6 +198,9 @@ jar {
     }
 }
 
+// TODO: remove when JarJar fat-jars not being reobfed and not being built through gradlew build is fixed in FG
+reobf { jarJar { } }
+
 jar.finalizedBy('reobfJar') 
 
 publishing {
