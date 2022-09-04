@@ -5,7 +5,6 @@ import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.Tag;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.util.Mth;
 import net.minecraft.world.MenuProvider;
@@ -21,6 +20,7 @@ import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.items.*;
 import net.minecraftforge.network.NetworkHooks;
 import xfacthd.framedblocks.api.block.FramedBlockEntity;
+import xfacthd.framedblocks.api.util.Utils;
 import xfacthd.framedblocks.common.FBContent;
 import xfacthd.framedblocks.common.menu.FramedStorageMenu;
 
@@ -31,7 +31,7 @@ import java.util.List;
 
 public class FramedStorageBlockEntity extends FramedBlockEntity implements MenuProvider, Nameable
 {
-    public static final Component TITLE = new TranslatableComponent("title.framedblocks:framed_secret_storage");
+    public static final Component TITLE = Utils.translate("title", "framed_secret_storage");
 
     private final ItemStackHandler itemHandler = new ItemStackHandler(9 * 4)
     {

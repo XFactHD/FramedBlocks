@@ -33,14 +33,14 @@ import java.util.*;
 
 public class FramedBlueprintItem extends FramedToolItem
 {
-    public static final String CONTAINED_BLOCK = "desc.framed_blocks:blueprint_block";
-    public static final String CAMO_BLOCK = "desc.framed_blocks:blueprint_camo";
-    public static final String IS_ILLUMINATED = "desc.framed_blocks:blueprint_illuminated";
-    public static final MutableComponent BLOCK_NONE = new TranslatableComponent("desc.framed_blocks:blueprint_none").withStyle(ChatFormatting.RED);
-    public static final MutableComponent BLOCK_INVALID = new TranslatableComponent("desc.framed_blocks:blueprint_invalid").withStyle(ChatFormatting.RED);
-    public static final MutableComponent ILLUMINATED_FALSE = new TranslatableComponent("desc.framed_blocks:blueprint_illuminated_false").withStyle(ChatFormatting.RED);
-    public static final MutableComponent ILLUMINATED_TRUE = new TranslatableComponent("desc.framed_blocks:blueprint_illuminated_true").withStyle(ChatFormatting.GREEN);
-    public static final MutableComponent CANT_COPY = new TranslatableComponent("desc.framed_blocks:blueprint_cant_copy").withStyle(ChatFormatting.RED);
+    public static final String CONTAINED_BLOCK = "desc.framedblocks.blueprint_block";
+    public static final String CAMO_BLOCK = "desc.framedblocks.blueprint_camo";
+    public static final String IS_ILLUMINATED = "desc.framedblocks.blueprint_illuminated";
+    public static final MutableComponent BLOCK_NONE = Utils.translate("desc", "blueprint_none").withStyle(ChatFormatting.RED);
+    public static final MutableComponent BLOCK_INVALID = Utils.translate("desc", "blueprint_invalid").withStyle(ChatFormatting.RED);
+    public static final MutableComponent ILLUMINATED_FALSE = Utils.translate("desc", "blueprint_illuminated_false").withStyle(ChatFormatting.RED);
+    public static final MutableComponent ILLUMINATED_TRUE = Utils.translate("desc", "blueprint_illuminated_true").withStyle(ChatFormatting.GREEN);
+    public static final MutableComponent CANT_COPY = Utils.translate("desc", "blueprint_cant_copy").withStyle(ChatFormatting.RED);
     public static final Component CANT_PLACE_FLUID_CAMO = Utils.translate("desc", "blueprint_cant_place_fluid_camo").withStyle(ChatFormatting.RED);
 
     private static final Map<Block, BlueprintCopyBehaviour> COPY_BEHAVIOURS = new IdentityHashMap<>();
@@ -330,7 +330,7 @@ public class FramedBlueprintItem extends FramedToolItem
         CompoundTag tag = stack.getOrCreateTagElement("blueprint_data");
         if (tag.isEmpty())
         {
-            components.add(new TranslatableComponent("desc.framed_blocks:blueprint_block", BLOCK_NONE).withStyle(ChatFormatting.GOLD));
+            components.add(new TranslatableComponent(CONTAINED_BLOCK, BLOCK_NONE).withStyle(ChatFormatting.GOLD));
         }
         else
         {
