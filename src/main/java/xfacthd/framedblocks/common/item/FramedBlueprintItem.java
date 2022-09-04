@@ -31,9 +31,9 @@ import java.util.*;
 
 public class FramedBlueprintItem extends FramedToolItem
 {
-    public static final String CONTAINED_BLOCK = "desc.framed_blocks.blueprint_block";
-    public static final String CAMO_BLOCK = "desc.framed_blocks.blueprint_camo";
-    public static final String IS_ILLUMINATED = "desc.framed_blocks.blueprint_illuminated";
+    public static final String CONTAINED_BLOCK = "desc.framedblocks.blueprint_block";
+    public static final String CAMO_BLOCK = "desc.framedblocks.blueprint_camo";
+    public static final String IS_ILLUMINATED = "desc.framedblocks.blueprint_illuminated";
     public static final MutableComponent BLOCK_NONE = Utils.translate("desc", "blueprint_none").withStyle(ChatFormatting.RED);
     public static final MutableComponent BLOCK_INVALID = Utils.translate("desc", "blueprint_invalid").withStyle(ChatFormatting.RED);
     public static final MutableComponent ILLUMINATED_FALSE = Utils.translate("desc", "blueprint_illuminated_false").withStyle(ChatFormatting.RED);
