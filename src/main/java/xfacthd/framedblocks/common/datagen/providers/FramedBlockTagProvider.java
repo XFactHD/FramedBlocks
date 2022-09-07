@@ -60,13 +60,15 @@ public class FramedBlockTagProvider extends BlockTagsProvider
                 .filter(b -> b instanceof IFramedBlock)
                 .filter(b ->
                         b != FBContent.blockFramedIronDoor.get() &&
-                                b != FBContent.blockFramedIronTrapDoor.get()
+                        b != FBContent.blockFramedIronTrapDoor.get() &&
+                        b != FBContent.blockFramedIronGate.get()
                 )
                 .forEach(axeTag::add);
 
         tag(BlockTags.MINEABLE_WITH_PICKAXE).add(
                 FBContent.blockFramedIronDoor.get(),
-                FBContent.blockFramedIronTrapDoor.get()
+                FBContent.blockFramedIronTrapDoor.get(),
+                FBContent.blockFramedIronGate.get()
         );
     }
 }
