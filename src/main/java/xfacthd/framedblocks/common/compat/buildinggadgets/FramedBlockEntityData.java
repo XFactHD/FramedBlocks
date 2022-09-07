@@ -56,7 +56,7 @@ class FramedBlockEntityData extends NBTTileEntityData
     }
 
     @Override
-    public ITileDataSerializer getSerializer() { return BuildingGadgetsCompat.FRAMED_SERIALIZER.get(); }
+    public ITileDataSerializer getSerializer() { return BuildingGadgetsCompat.GuardedAccess.FRAMED_SERIALIZER.get(); }
 
     private static CompoundTag writeBlockEntityTag(FramedBlockEntity be)
     {
