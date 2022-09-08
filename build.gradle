@@ -25,7 +25,7 @@ group = 'xfacthd.framedblocks'
 archivesBaseName = 'FramedBlocks'
 
 java.toolchain.languageVersion = JavaLanguageVersion.of(17)
-//Print out JVM information so that we know what version is running. Extreamly useful for people to know when helping you.
+//Print out JVM information so that we know what version is running. Extremely useful for people to know when helping you.
 println('Java: ' + System.getProperty('java.version') + ' JVM: ' + System.getProperty('java.vm.version') + '(' + System.getProperty('java.vendor') + ') Arch: ' + System.getProperty('os.arch'))
 
 minecraft {
@@ -165,11 +165,16 @@ dependencies {
         transitive(false)
     }
 
-    annotationProcessor 'org.spongepowered:mixin:0.8.5:processor'
+    //annotationProcessor 'org.spongepowered:mixin:0.8.5:processor'
 }
 
 mixin {
-    add sourceSets.main, "framedblocks.refmap.json"
+    //add sourceSets.main, "framedblocks.refmap.json"
+}
+
+processResources {
+    // Don't include mixin config in JAR, it is currently not needed
+    exclude("framedblocks.mixin.json")
 }
 
 processTestResources {
@@ -193,7 +198,7 @@ jar {
             "Implementation-Version": "${project.version}",
             "Implementation-Vendor" : "XFactHD",
             "Implementation-Timestamp": new Date().format("yyyy-MM-dd'T'HH:mm:ssZ"),
-            "MixinConfigs": "framedblocks.mixin.json"
+            //"MixinConfigs": "framedblocks.mixin.json"
         ])
     }
 }
