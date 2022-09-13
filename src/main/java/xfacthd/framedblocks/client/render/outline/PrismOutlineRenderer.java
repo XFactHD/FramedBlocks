@@ -8,15 +8,12 @@ import net.minecraft.core.Direction;
 import net.minecraft.util.Mth;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
+import xfacthd.framedblocks.api.render.Quaternions;
 import xfacthd.framedblocks.api.util.Utils;
 import xfacthd.framedblocks.api.util.client.OutlineRender;
 
 public class PrismOutlineRenderer implements OutlineRender
 {
-    protected static final Quaternion ZP_180 = Vector3f.ZP.rotation(Mth.PI);
-    protected static final Quaternion XP_90 = Vector3f.XP.rotation(Mth.PI / 2F);
-    protected static final Quaternion YP_90 = Vector3f.YP.rotation(Mth.PI / 2F);
-    protected static final Quaternion ZP_90 = Vector3f.ZP.rotation(Mth.PI / 2F);
     protected static final Quaternion[] YN_DIR = makeQuaternionArray();
 
     @Override
@@ -49,11 +46,11 @@ public class PrismOutlineRenderer implements OutlineRender
         {
             if (facing == Direction.DOWN)
             {
-                pstack.mulPose(ZP_180);
+                pstack.mulPose(Quaternions.ZP_180);
             }
             if (axis == Direction.Axis.X)
             {
-                pstack.mulPose(YP_90);
+                pstack.mulPose(Quaternions.YP_90);
             }
         }
         else
@@ -64,9 +61,9 @@ public class PrismOutlineRenderer implements OutlineRender
             }
             if (axis != Direction.Axis.Y)
             {
-                pstack.mulPose(ZP_90);
+                pstack.mulPose(Quaternions.ZP_90);
             }
-            pstack.mulPose(XP_90);
+            pstack.mulPose(Quaternions.XP_90);
         }
     }
 

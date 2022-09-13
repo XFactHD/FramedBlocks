@@ -9,6 +9,7 @@ import net.minecraft.core.Direction;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.shapes.*;
+import xfacthd.framedblocks.api.render.Quaternions;
 import xfacthd.framedblocks.api.util.client.OutlineRender;
 import xfacthd.framedblocks.common.blockentity.FramedCollapsibleBlockEntity;
 import xfacthd.framedblocks.common.data.property.CollapseFace;
@@ -40,12 +41,12 @@ public class CollapsibleBlockOutlineRenderer implements OutlineRender
             poseStack.translate(.5, .5, .5);
             if (faceDir == Direction.UP)
             {
-                poseStack.mulPose(Vector3f.XP.rotationDegrees(180));
+                poseStack.mulPose(Quaternions.XP_180);
             }
             else if (faceDir != Direction.DOWN)
             {
-                poseStack.mulPose(Vector3f.YN.rotationDegrees(faceDir.toYRot() + 180F));
-                poseStack.mulPose(Vector3f.XN.rotationDegrees(90));
+                poseStack.mulPose(OutlineRender.YN_DIR[faceDir.getOpposite().ordinal()]);
+                poseStack.mulPose(Quaternions.XN_90);
             }
             poseStack.translate(-.5, -.5, -.5);
 

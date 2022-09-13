@@ -8,6 +8,7 @@ import net.minecraft.core.Direction;
 import net.minecraft.util.Mth;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
+import xfacthd.framedblocks.api.render.Quaternions;
 import xfacthd.framedblocks.api.util.Utils;
 import xfacthd.framedblocks.api.util.client.OutlineRender;
 import xfacthd.framedblocks.common.data.PropertyHolder;
@@ -38,7 +39,7 @@ public class SlopedPrismOutlineRenderer extends PrismOutlineRenderer
             }
             if (facing == Direction.DOWN)
             {
-                pstack.mulPose(ZP_180);
+                pstack.mulPose(Quaternions.ZP_180);
             }
         }
         else
@@ -51,7 +52,7 @@ public class SlopedPrismOutlineRenderer extends PrismOutlineRenderer
             {
                 pstack.mulPose(ZP_DIR[facing.get2DDataValue()][orientation.ordinal()]);
             }
-            pstack.mulPose(XP_90);
+            pstack.mulPose(Quaternions.XP_90);
         }
     }
 
