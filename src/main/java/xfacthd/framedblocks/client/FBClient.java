@@ -65,6 +65,8 @@ public final class FBClient
         BlockOutlineRenderer.registerOutlineRender(BlockType.FRAMED_SLOPE_SLAB, BlockOutlineRenderer::drawSlopeSlabBox);
         BlockOutlineRenderer.registerOutlineRender(BlockType.FRAMED_ELEVATED_SLOPE_SLAB, BlockOutlineRenderer::drawElevatedSlopeSlabBox);
         BlockOutlineRenderer.registerOutlineRender(BlockType.FRAMED_INV_DOUBLE_SLOPE_SLAB, BlockOutlineRenderer::drawInverseDoubleSlopeSlabBox);
+        BlockOutlineRenderer.registerOutlineRender(BlockType.FRAMED_FLAT_SLOPE_SLAB_CORNER, BlockOutlineRenderer::drawFlatSlopeSlabCornerBox);
+        BlockOutlineRenderer.registerOutlineRender(BlockType.FRAMED_FLAT_INNER_SLOPE_SLAB_CORNER, BlockOutlineRenderer::drawFlatInnerSlopeSlabCornerBox);
         BlockOutlineRenderer.registerOutlineRender(BlockType.FRAMED_SLOPE_PANEL, new SlopePanelOutlineRenderer());
         BlockOutlineRenderer.registerOutlineRender(BlockType.FRAMED_EXTENDED_SLOPE_PANEL, new ExtendedSlopePanelOutlineRenderer());
         BlockOutlineRenderer.registerOutlineRender(BlockType.FRAMED_INV_DOUBLE_SLOPE_PANEL, new InverseDoubleSlopePanelOutlineRenderer());
@@ -222,6 +224,8 @@ public final class FBClient
         ClientUtils.replaceModels(FBContent.blockFramedDoubleSlopeSlab, registry, FramedDoubleSlopeSlabModel::new, FramedDoubleSlopeSlabModel.itemSource(), ignoreDefault);
         ClientUtils.replaceModels(FBContent.blockFramedInverseDoubleSlopeSlab, registry, FramedInverseDoubleSlopeSlabModel::new, FramedInverseDoubleSlopeSlabModel.itemSource(), ignoreDefault);
         ClientUtils.replaceModels(FBContent.blockFramedElevatedDoubleSlopeSlab, registry, FramedElevatedDoubleSlopeSlabModel::new, FramedElevatedDoubleSlopeSlabModel.itemSource(), ignoreSolid);
+        ClientUtils.replaceModels(FBContent.blockFramedFlatSlopeSlabCorner, registry, FramedFlatSlopeSlabCornerModel::new, FramedFlatSlopeSlabCornerModel.itemSource(), ignoreDefault);
+        ClientUtils.replaceModels(FBContent.blockFramedFlatInnerSlopeSlabCorner, registry, FramedFlatInnerSlopeSlabCornerModel::new, FramedFlatInnerSlopeSlabCornerModel.itemSource(), ignoreDefault);
         ClientUtils.replaceModels(FBContent.blockFramedVerticalHalfStairs, registry, FramedVerticalHalfStairsModel::new, ignoreWaterlogged);
         ClientUtils.replaceModels(FBContent.blockFramedSlopePanel, registry, FramedSlopePanelModel::new, FramedSlopePanelModel.itemSource(), ignoreDefault);
         ClientUtils.replaceModels(FBContent.blockFramedExtendedSlopePanel, registry, FramedExtendedSlopePanelModel::new, FramedExtendedSlopePanelModel.itemSource(), ignoreDefault);

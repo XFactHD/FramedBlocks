@@ -38,6 +38,7 @@ public class VerticalHalfStairsSkipPredicate implements SideSkipPredicate
                 case FRAMED_DOUBLE_SLOPE_SLAB -> testAgainstDoubleSlopeSlab(level, pos, dir, top, adjState, side);
                 case FRAMED_INV_DOUBLE_SLOPE_SLAB -> testAgainstInverseDoubleSlopeSlab(level, pos, dir, top, adjState, side);
                 case FRAMED_ELEVATED_DOUBLE_SLOPE_SLAB -> testAgainstElevatedDoubleSlopeSlab(level, pos, dir, top, adjState, side);
+                case FRAMED_FLAT_INNER_SLOPE_SLAB_CORNER -> testAgainstFlatInnerSlopeSlabCorner(level, pos, dir, top, adjState, side);
                 default -> false;
             };
         }
@@ -270,5 +271,26 @@ public class VerticalHalfStairsSkipPredicate implements SideSkipPredicate
         }
 
         return false;
+    }
+
+    private boolean testAgainstFlatInnerSlopeSlabCorner(BlockGetter level, BlockPos pos, Direction dir, boolean top, BlockState adjState, Direction side)
+    {
+        Direction adjDir = adjState.getValue(FramedProperties.FACING_HOR);
+        boolean adjTopHalf = adjState.getValue(PropertyHolder.TOP_HALF);
+
+        if (adjTopHalf != top || !isSlabSide(dir, side) || !FlatInnerSlopeSlabCornerSkipPredicate.isSlabSide(adjDir, side.getOpposite()))
+        {
+            return false;
+        }
+
+        Direction camoSide = top ? Direction.UP : Direction.DOWN;
+        return SideSkipPredicate.compareState(level, pos, side, camoSide, adjDir);
+    }
+
+
+
+    public static boolean isSlabSide(Direction dir, Direction side)
+    {
+        return side == dir || side == dir.getCounterClockWise();
     }
 }

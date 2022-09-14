@@ -64,6 +64,8 @@
     "framedblocks:framed_inv_double_slope_slab",
     "framedblocks:framed_elevated_double_slope_slab",
     "framedblocks:framed_vertical_half_stairs",
+    "framedblocks:framed_flat_slope_slab_corner",
+    "framedblocks:framed_flat_inner_slope_slab_corner",
     "framedblocks:framed_slope_panel",
     "framedblocks:framed_extended_slope_panel",
     "framedblocks:framed_double_slope_panel",
@@ -79,7 +81,6 @@
     "framedblocks:framed_large_button",
     "framedblocks:framed_large_stone_button",
     "framedblocks:framed_target",
-    "framedblocks:framed_gate_door",
-    "framedblocks:framed_iron_gate_door"
+    "framedblocks:framed_gate_door"
   ]
 }
