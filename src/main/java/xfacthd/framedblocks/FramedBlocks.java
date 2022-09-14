@@ -57,7 +57,7 @@ public final class FramedBlocks
     {
         CHANNEL.messageBuilder(SignUpdatePacket.class, 0, NetworkDirection.PLAY_TO_SERVER)
                 .encoder(SignUpdatePacket::encode)
-                .decoder(SignUpdatePacket::new)
+                .decoder(SignUpdatePacket::decode)
                 .consumerNetworkThread(SignUpdatePacket::handle)
                 .add();
 

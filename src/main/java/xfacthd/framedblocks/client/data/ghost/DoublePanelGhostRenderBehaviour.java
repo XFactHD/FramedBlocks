@@ -6,7 +6,7 @@ import net.minecraft.world.level.block.state.BlockState;
 import xfacthd.framedblocks.api.ghost.CamoPair;
 import xfacthd.framedblocks.api.util.FramedProperties;
 
-public class DoublePanelGhostRenderBehaviour extends DoubleBlockGhostRenderBehaviour
+public final class DoublePanelGhostRenderBehaviour extends DoubleBlockGhostRenderBehaviour
 {
     @Override
     public CamoPair postProcessCamo(ItemStack stack, ItemStack proxiedStack, BlockPlaceContext ctx, BlockState renderState, boolean secondPass, CamoPair camo)

@@ -11,7 +11,7 @@ import xfacthd.framedblocks.api.util.SideSkipPredicate;
 import xfacthd.framedblocks.common.data.BlockType;
 import xfacthd.framedblocks.common.data.PropertyHolder;
 
-public class ElevatedSlopeSlabSkipPredicate implements SideSkipPredicate
+public final class ElevatedSlopeSlabSkipPredicate implements SideSkipPredicate
 {
     @Override
     public boolean test(BlockGetter level, BlockPos pos, BlockState state, BlockState adjState, Direction side)

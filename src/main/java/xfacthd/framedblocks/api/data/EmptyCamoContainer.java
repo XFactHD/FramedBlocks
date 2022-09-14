@@ -9,7 +9,7 @@ import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.material.MaterialColor;
 import xfacthd.framedblocks.api.FramedBlocksAPI;
 
-public class EmptyCamoContainer extends CamoContainer
+public final class EmptyCamoContainer extends CamoContainer
 {
     public static final EmptyCamoContainer EMPTY = new EmptyCamoContainer();
 

@@ -20,7 +20,7 @@ import xfacthd.framedblocks.api.util.FramedConstants;
 import xfacthd.framedblocks.api.util.FramedProperties;
 import xfacthd.framedblocks.common.FBContent;
 
-public class StateLockOverlay implements IGuiOverlay
+public final class StateLockOverlay implements IGuiOverlay
 {
     public static final String LOCK_MESSAGE = "tooltip." + FramedConstants.MOD_ID + ".lock_state";
 

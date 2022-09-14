@@ -15,7 +15,7 @@ import xfacthd.framedblocks.api.util.FramedProperties;
 import xfacthd.framedblocks.common.FBContent;
 import xfacthd.framedblocks.common.block.FramedRailSlopeBlock;
 
-public class RailSlopeGhostRenderBehaviour implements GhostRenderBehaviour
+public final class RailSlopeGhostRenderBehaviour implements GhostRenderBehaviour
 {
     @Override
     public boolean mayRender(ItemStack stack, @Nullable ItemStack proxiedStack)

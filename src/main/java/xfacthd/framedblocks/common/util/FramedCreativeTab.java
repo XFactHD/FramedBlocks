@@ -9,7 +9,7 @@ import xfacthd.framedblocks.api.block.IFramedBlock;
 import xfacthd.framedblocks.common.FBContent;
 import xfacthd.framedblocks.common.item.FramedToolItem;
 
-public class FramedCreativeTab extends CreativeModeTab
+public final class FramedCreativeTab extends CreativeModeTab
 {
     public FramedCreativeTab() { super("framed_blocks"); }
 

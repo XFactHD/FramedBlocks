@@ -10,7 +10,7 @@ import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import xfacthd.framedblocks.api.render.Quaternions;
 import xfacthd.framedblocks.api.util.client.OutlineRender;
 
-public class PyramidOutlineRenderer implements OutlineRender
+public final class PyramidOutlineRenderer implements OutlineRender
 {
     private static final Quaternion[] XN_DIR = makeQuaternionArray();
 

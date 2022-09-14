@@ -8,7 +8,7 @@ import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import org.apache.commons.lang3.tuple.Pair;
 import xfacthd.framedblocks.api.util.FramedConstants;
 
-public class CommonConfig
+public final class CommonConfig
 {
     public static final ForgeConfigSpec SPEC;
     public static final CommonConfig INSTANCE;

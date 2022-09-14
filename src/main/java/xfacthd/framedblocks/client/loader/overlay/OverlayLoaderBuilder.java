@@ -8,7 +8,7 @@ import net.minecraftforge.client.model.generators.BlockModelBuilder;
 import net.minecraftforge.client.model.generators.CustomLoaderBuilder;
 import net.minecraftforge.common.data.ExistingFileHelper;
 
-public class OverlayLoaderBuilder extends CustomLoaderBuilder<BlockModelBuilder>
+public final class OverlayLoaderBuilder extends CustomLoaderBuilder<BlockModelBuilder>
 {
     private BlockModelBuilder model;
     private Vector3f center;

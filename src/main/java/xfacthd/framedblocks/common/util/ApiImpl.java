@@ -20,7 +20,7 @@ import xfacthd.framedblocks.common.data.camo.CamoFactories;
 import xfacthd.framedblocks.common.item.FramedBlueprintItem;
 
 @SuppressWarnings("unused")
-public class ApiImpl implements FramedBlocksAPI
+public final class ApiImpl implements FramedBlocksAPI
 {
     @Override
     public BlockEntityType<FramedBlockEntity> defaultBlockEntity() { return FBContent.blockEntityTypeFramedBlock.get(); }

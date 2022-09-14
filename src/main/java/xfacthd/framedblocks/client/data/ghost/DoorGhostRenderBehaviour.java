@@ -11,7 +11,7 @@ import org.jetbrains.annotations.Nullable;
 import xfacthd.framedblocks.api.ghost.CamoPair;
 import xfacthd.framedblocks.api.ghost.GhostRenderBehaviour;
 
-public class DoorGhostRenderBehaviour implements GhostRenderBehaviour
+public final class DoorGhostRenderBehaviour implements GhostRenderBehaviour
 {
     @Override
     public boolean hasSecondBlock(ItemStack stack, ItemStack proxiedStack) { return true; }

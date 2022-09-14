@@ -17,7 +17,7 @@ import xfacthd.framedblocks.client.model.*;
 import xfacthd.framedblocks.common.FBContent;
 import xfacthd.framedblocks.common.data.PropertyHolder;
 
-public class FramedBlockStateProvider extends BlockStateProvider
+public final class FramedBlockStateProvider extends BlockStateProvider
 {
     private final ResourceLocation TEXTURE;
 

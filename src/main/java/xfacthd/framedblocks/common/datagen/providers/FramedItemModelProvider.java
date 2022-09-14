@@ -9,7 +9,7 @@ import xfacthd.framedblocks.api.util.FramedConstants;
 import xfacthd.framedblocks.client.util.BlueprintPropertyOverride;
 import xfacthd.framedblocks.common.FBContent;
 
-public class FramedItemModelProvider extends ItemModelProvider
+public final class FramedItemModelProvider extends ItemModelProvider
 {
     public FramedItemModelProvider(DataGenerator gen, ExistingFileHelper fileHelper)
     {

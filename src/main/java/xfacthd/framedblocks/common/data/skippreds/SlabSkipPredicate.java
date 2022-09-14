@@ -10,7 +10,7 @@ import xfacthd.framedblocks.api.util.*;
 import xfacthd.framedblocks.common.data.BlockType;
 import xfacthd.framedblocks.common.data.PropertyHolder;
 
-public class SlabSkipPredicate implements SideSkipPredicate
+public final class SlabSkipPredicate implements SideSkipPredicate
 {
     @Override
     public boolean test(BlockGetter level, BlockPos pos, BlockState state, BlockState adjState, Direction side)

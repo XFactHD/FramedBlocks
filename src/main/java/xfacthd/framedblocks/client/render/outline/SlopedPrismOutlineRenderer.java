@@ -13,9 +13,9 @@ import xfacthd.framedblocks.api.util.Utils;
 import xfacthd.framedblocks.api.util.client.OutlineRender;
 import xfacthd.framedblocks.common.data.PropertyHolder;
 
-public class SlopedPrismOutlineRenderer extends PrismOutlineRenderer
+public final class SlopedPrismOutlineRenderer extends PrismOutlineRenderer
 {
-    protected static final Quaternion[][] ZP_DIR = makeQuaternionArray();
+    private static final Quaternion[][] ZP_DIR = makeQuaternionArray();
 
     @Override
     public void drawCenterAndTriangle(PoseStack pstack, VertexConsumer builder)

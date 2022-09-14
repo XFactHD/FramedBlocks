@@ -14,7 +14,7 @@ import xfacthd.framedblocks.client.render.BlockOutlineRenderer;
 import xfacthd.framedblocks.client.render.GhostBlockRenderer;
 
 @SuppressWarnings("unused")
-public class ClientApiImpl implements FramedBlocksClientAPI
+public final class ClientApiImpl implements FramedBlocksClientAPI
 {
     @Override
     public BlockColor defaultBlockColor() { return FramedBlockColor.INSTANCE; }

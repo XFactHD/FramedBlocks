@@ -6,7 +6,7 @@ import xfacthd.framedblocks.api.data.CamoContainer;
 import xfacthd.framedblocks.common.FBContent;
 import xfacthd.framedblocks.common.blockentity.FramedDoubleBlockEntity;
 
-public class DoubleBlockSoundType extends SoundType
+public final class DoubleBlockSoundType extends SoundType
 {
     private final FramedDoubleBlockEntity be;
 

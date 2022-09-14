@@ -8,13 +8,9 @@ import xfacthd.framedblocks.client.util.ClientAccess;
 
 import java.util.function.Supplier;
 
-public class OpenSignScreenPacket
+public record OpenSignScreenPacket(BlockPos pos)
 {
-    private final BlockPos pos;
-
-    public OpenSignScreenPacket(BlockPos pos) { this.pos = pos; }
-
-    public OpenSignScreenPacket(FriendlyByteBuf buffer) { this.pos = buffer.readBlockPos(); }
+    public OpenSignScreenPacket(FriendlyByteBuf buffer) { this(buffer.readBlockPos()); }
 
     public void encode(FriendlyByteBuf buffer) { buffer.writeBlockPos(pos); }
 

@@ -22,7 +22,7 @@ import java.util.*;
 import java.util.function.*;
 import java.util.stream.Collectors;
 
-public class FramedLootTableProvider extends LootTableProvider
+public final class FramedLootTableProvider extends LootTableProvider
 {
     public FramedLootTableProvider(DataGenerator gen) { super(gen); }
 

@@ -7,7 +7,7 @@ import com.google.common.base.Preconditions;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.Tag;
 
-class FramedBlockEntityDataSerializer implements ITileDataSerializer
+final class FramedBlockEntityDataSerializer implements ITileDataSerializer
 {
     FramedBlockEntityDataSerializer() { }
 

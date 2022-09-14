@@ -30,7 +30,7 @@ public abstract class CamoContainer
 
     /**
      * Returns the fluid contained in this camo container, if applicable
-     * @apiNote Must be overriden by CamoContainers returning {@link ContainerType#FLUID} from {@link CamoContainer#getType()}
+     * @apiNote Must be overridden by CamoContainers returning {@link ContainerType#FLUID} from {@link CamoContainer#getType()}
      */
     public Fluid getFluid()
     {

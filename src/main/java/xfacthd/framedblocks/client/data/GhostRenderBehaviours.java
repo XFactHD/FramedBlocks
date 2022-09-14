@@ -8,7 +8,7 @@ import xfacthd.framedblocks.client.data.ghost.*;
 import xfacthd.framedblocks.client.render.GhostBlockRenderer;
 import xfacthd.framedblocks.common.FBContent;
 
-public class GhostRenderBehaviours
+public final class GhostRenderBehaviours
 {
     public static void register()
     {
@@ -72,4 +72,8 @@ public class GhostRenderBehaviours
                 FBContent.itemFramedBlueprint.get()
         );
     }
+
+
+
+    private GhostRenderBehaviours() { }
 }

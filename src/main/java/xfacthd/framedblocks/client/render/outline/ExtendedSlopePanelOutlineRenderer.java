@@ -7,7 +7,7 @@ import xfacthd.framedblocks.api.util.client.OutlineRender;
 import xfacthd.framedblocks.common.data.PropertyHolder;
 import xfacthd.framedblocks.common.data.property.HorizontalRotation;
 
-public class ExtendedSlopePanelOutlineRenderer implements OutlineRender
+public final class ExtendedSlopePanelOutlineRenderer implements OutlineRender
 {
     @Override
     public void draw(BlockState state, PoseStack poseStack, VertexConsumer builder)

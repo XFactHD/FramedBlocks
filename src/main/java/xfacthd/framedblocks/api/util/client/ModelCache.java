@@ -15,7 +15,7 @@ import xfacthd.framedblocks.api.FramedBlocksClientAPI;
 
 import java.time.Duration;
 
-public class ModelCache
+public final class ModelCache
 {
     public static final Duration DEFAULT_CACHE_DURATION = Duration.ofMinutes(10);
     private static final LoadingCache<BlockState, BakedModel> modelCache = CacheBuilder.newBuilder()
@@ -71,4 +71,6 @@ public class ModelCache
             return Minecraft.getInstance().getBlockRenderer().getBlockModel(key);
         }
     }
+
+    private ModelCache() { }
 }

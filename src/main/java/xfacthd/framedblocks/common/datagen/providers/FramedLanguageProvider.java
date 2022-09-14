@@ -17,7 +17,7 @@ import xfacthd.framedblocks.common.item.FramedBlueprintItem;
 import xfacthd.framedblocks.common.blockentity.FramedChestBlockEntity;
 import xfacthd.framedblocks.api.block.FramedBlockEntity;
 
-public class FramedLanguageProvider extends LanguageProvider
+public final class FramedLanguageProvider extends LanguageProvider
 {
     public FramedLanguageProvider(DataGenerator gen) { super(gen, FramedConstants.MOD_ID, "en_us"); }
 

@@ -10,7 +10,7 @@ import org.jetbrains.annotations.Nullable;
 import xfacthd.framedblocks.client.model.FramedTargetModel;
 import xfacthd.framedblocks.common.blockentity.FramedTargetBlockEntity;
 
-public class FramedTargetBlockColor extends FramedBlockColor implements ItemColor
+public final class FramedTargetBlockColor extends FramedBlockColor implements ItemColor
 {
     public static final FramedTargetBlockColor INSTANCE = new FramedTargetBlockColor();
 

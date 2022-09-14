@@ -13,7 +13,7 @@ import xfacthd.framedblocks.common.data.*;
 import xfacthd.framedblocks.common.data.property.HorizontalRotation;
 import xfacthd.framedblocks.common.data.property.StairsType;
 
-public class HalfStairsSkipPredicate implements SideSkipPredicate
+public final class HalfStairsSkipPredicate implements SideSkipPredicate
 {
     @Override
     public boolean test(BlockGetter level, BlockPos pos, BlockState state, BlockState adjState, Direction side)

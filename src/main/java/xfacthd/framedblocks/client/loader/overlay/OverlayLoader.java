@@ -9,7 +9,7 @@ import net.minecraft.util.Mth;
 import net.minecraftforge.client.model.geometry.IGeometryLoader;
 import xfacthd.framedblocks.api.util.Utils;
 
-public class OverlayLoader implements IGeometryLoader<OverlayGeometry>
+public final class OverlayLoader implements IGeometryLoader<OverlayGeometry>
 {
     public static final ResourceLocation ID = Utils.rl("overlay");
     private static final Vector3f CENTER = new Vector3f(.5F, .5F, .5F);

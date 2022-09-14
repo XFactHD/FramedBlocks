@@ -9,7 +9,7 @@ import xfacthd.framedblocks.api.util.client.OutlineRender;
 import xfacthd.framedblocks.common.data.PropertyHolder;
 import xfacthd.framedblocks.common.data.property.HorizontalRotation;
 
-public class SlopePanelOutlineRenderer implements OutlineRender
+public final class SlopePanelOutlineRenderer implements OutlineRender
 {
     public static final Quaternion[] ROTATIONS = new Quaternion[] {
             Quaternion.ONE,

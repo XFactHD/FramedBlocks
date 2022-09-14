@@ -12,7 +12,7 @@ import xfacthd.framedblocks.common.blockentity.FramedCollapsibleBlockEntity;
 import xfacthd.framedblocks.common.data.PropertyHolder;
 import xfacthd.framedblocks.common.data.property.CollapseFace;
 
-public class CollapsibleBlockGhostRenderBehaviour implements GhostRenderBehaviour
+public final class CollapsibleBlockGhostRenderBehaviour implements GhostRenderBehaviour
 {
     @Override
     @Nullable

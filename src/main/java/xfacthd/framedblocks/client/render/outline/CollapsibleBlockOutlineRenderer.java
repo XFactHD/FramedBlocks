@@ -15,7 +15,7 @@ import xfacthd.framedblocks.common.blockentity.FramedCollapsibleBlockEntity;
 import xfacthd.framedblocks.common.data.property.CollapseFace;
 import xfacthd.framedblocks.common.data.PropertyHolder;
 
-public class CollapsibleBlockOutlineRenderer implements OutlineRender
+public final class CollapsibleBlockOutlineRenderer implements OutlineRender
 {
     private static final Quaternion ROTATION = Vector3f.YN.rotationDegrees(180);
 

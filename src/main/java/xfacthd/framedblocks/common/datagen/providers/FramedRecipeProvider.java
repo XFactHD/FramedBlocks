@@ -11,7 +11,7 @@ import xfacthd.framedblocks.common.FBContent;
 
 import java.util.function.Consumer;
 
-public class FramedRecipeProvider extends RecipeProvider
+public final class FramedRecipeProvider extends RecipeProvider
 {
     private final CriterionTriggerInstance HAS_FRAMED_BLOCK = has(FBContent.blockFramedCube.get());
     private final CriterionTriggerInstance HAS_FRAMED_SLOPE = has(FBContent.blockFramedSlope.get());

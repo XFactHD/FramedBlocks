@@ -13,7 +13,7 @@ import xfacthd.framedblocks.common.blockentity.FramedDoubleBlockEntity;
 
 import java.util.Optional;
 
-public class DoublePanelCopyBehaviour extends DoubleBlockCopyBehaviour
+public final class DoublePanelCopyBehaviour extends DoubleBlockCopyBehaviour
 {
     @Override
     public Optional<ItemStack> getBlockItem()

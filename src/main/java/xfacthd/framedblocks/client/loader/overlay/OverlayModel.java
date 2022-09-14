@@ -16,7 +16,7 @@ import xfacthd.framedblocks.api.model.quad.QuadModifier;
 
 import java.util.*;
 
-class OverlayModel extends BakedModelWrapper<BakedModel>
+final class OverlayModel extends BakedModelWrapper<BakedModel>
 {
     private final List<BakedQuad> unculledQuads;
     private final Map<Direction, List<BakedQuad>> culledQuads;

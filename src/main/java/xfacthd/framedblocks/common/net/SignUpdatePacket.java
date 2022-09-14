@@ -12,27 +12,20 @@ import xfacthd.framedblocks.common.blockentity.FramedSignBlockEntity;
 
 import java.util.function.Supplier;
 
-public class SignUpdatePacket
+public record SignUpdatePacket(BlockPos pos, String[] lines)
 {
-    private final BlockPos pos;
-    private final String[] lines;
-
-    public SignUpdatePacket(BlockPos pos, String[] lines)
+    public static SignUpdatePacket decode(FriendlyByteBuf buffer)
     {
-        this.pos = pos;
-        this.lines = lines;
-    }
-
-    public SignUpdatePacket(FriendlyByteBuf buffer)
-    {
-        pos = buffer.readBlockPos();
+        BlockPos pos = buffer.readBlockPos();
 
         int count = buffer.readByte();
-        lines = new String[count];
+        String[] lines = new String[count];
         for (int i = 0; i < count; i++)
         {
             lines[i] = buffer.readUtf(384);
         }
+
+        return new SignUpdatePacket(pos, lines);
     }
 
     public void encode(FriendlyByteBuf buffer)

@@ -14,7 +14,7 @@ import xfacthd.framedblocks.common.FBContent;
 import xfacthd.framedblocks.api.block.IFramedBlock;
 import xfacthd.framedblocks.api.util.Utils;
 
-public class FramedBlockTagProvider extends BlockTagsProvider
+public final class FramedBlockTagProvider extends BlockTagsProvider
 {
     public FramedBlockTagProvider(DataGenerator gen, ExistingFileHelper fileHelper) { super(gen, FramedConstants.MOD_ID, fileHelper); }
 

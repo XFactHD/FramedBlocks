@@ -17,7 +17,7 @@ import xfacthd.framedblocks.common.item.FramedBlueprintItem;
 import java.util.Iterator;
 import java.util.Set;
 
-public class BlueprintGhostRenderBehaviour implements GhostRenderBehaviour
+public final class BlueprintGhostRenderBehaviour implements GhostRenderBehaviour
 {
     @Override
     @Nullable

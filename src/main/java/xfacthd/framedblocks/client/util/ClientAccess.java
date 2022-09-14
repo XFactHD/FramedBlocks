@@ -10,7 +10,7 @@ import xfacthd.framedblocks.common.blockentity.FramedSignBlockEntity;
 import java.lang.invoke.MethodHandle;
 import java.util.Objects;
 
-public class ClientAccess
+public final class ClientAccess
 {
     private static final MethodHandle MPGM_DESTROY_DELAY = Utils.unreflectFieldSetter(MultiPlayerGameMode.class, "f_105195_");
 
@@ -38,4 +38,8 @@ public class ClientAccess
             throw new RuntimeException("An error occured while resetting destroy delay", e);
         }
     }
+
+
+
+    private ClientAccess() { }
 }

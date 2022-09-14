@@ -48,7 +48,7 @@ minecraft {
             property 'mixin.env.remapRefMap', 'true'
             property 'mixin.env.refMapRemappingFile', "${buildDir}/createSrgToMcp/output.srg"
 
-            arg "-mixin.config=framedblocks.mixin.json"
+            //arg "-mixin.config=framedblocks.mixin.json"
 
             mods {
                 framedblocks {

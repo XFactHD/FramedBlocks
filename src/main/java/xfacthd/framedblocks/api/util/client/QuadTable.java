@@ -6,7 +6,7 @@ import net.minecraft.core.Direction;
 
 import java.util.*;
 
-public class QuadTable
+public final class QuadTable
 {
     private static final int LAYER_COUNT = RenderType.chunkBufferLayers().size();
     private static final int SIDE_COUNT = Direction.values().length + 1;

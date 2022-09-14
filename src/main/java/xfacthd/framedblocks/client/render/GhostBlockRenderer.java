@@ -143,7 +143,7 @@ public final class GhostBlockRenderer
         ModelData modelData = behaviour.appendModelData(stack, proxiedStack, context, renderState, secondPass, MODEL_DATA);
         mc().getProfiler().pop(); //append_modeldata
 
-        MultiBufferSource buffers = mc().renderBuffers().bufferSource();
+        MultiBufferSource.BufferSource buffers = mc().renderBuffers().bufferSource();
 
         doRenderGhostBlock(poseStack, buffers, renderPos, renderState, modelData);
 
@@ -156,7 +156,7 @@ public final class GhostBlockRenderer
         }
     }
 
-    private static void doRenderGhostBlock(PoseStack mstack, MultiBufferSource buffers, BlockPos renderPos, BlockState renderState, ModelData modelData)
+    private static void doRenderGhostBlock(PoseStack mstack, MultiBufferSource.BufferSource buffers, BlockPos renderPos, BlockState renderState, ModelData modelData)
     {
         mc().getProfiler().push("buffer");
         Vec3 offset = Vec3.atLowerCornerOf(renderPos).subtract(mc().gameRenderer.getMainCamera().getPosition());
@@ -172,7 +172,7 @@ public final class GhostBlockRenderer
         mc().getProfiler().pop(); //draw
 
         mc().getProfiler().push("upload");
-        ((MultiBufferSource.BufferSource) buffers).endBatch(ForgeRenderTypes.TRANSLUCENT_ON_PARTICLES_TARGET.get());
+        buffers.endBatch(ForgeRenderTypes.TRANSLUCENT_ON_PARTICLES_TARGET.get());
         mc().getProfiler().pop(); //upload
     }
 

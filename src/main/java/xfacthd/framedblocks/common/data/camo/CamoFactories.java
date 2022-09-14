@@ -14,7 +14,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 @Mod.EventBusSubscriber(modid = FramedConstants.MOD_ID, bus = Mod.EventBusSubscriber.Bus.FORGE)
-public class CamoFactories
+public final class CamoFactories
 {
     private static final Map<Item, CamoContainer.Factory> itemToFactory = new HashMap<>();
     private static boolean locked = false;
@@ -49,4 +49,8 @@ public class CamoFactories
 
     @SubscribeEvent
     public static void onLoadComplete(final FMLLoadCompleteEvent event) { locked = true; }
+
+
+
+    private CamoFactories() { }
 }

@@ -10,7 +10,7 @@ import xfacthd.framedblocks.api.util.*;
 import xfacthd.framedblocks.common.data.*;
 import xfacthd.framedblocks.common.data.property.StairsType;
 
-public class PanelSkipPredicate implements SideSkipPredicate
+public final class PanelSkipPredicate implements SideSkipPredicate
 {
     @Override
     public boolean test(BlockGetter level, BlockPos pos, BlockState state, BlockState adjState, Direction side)

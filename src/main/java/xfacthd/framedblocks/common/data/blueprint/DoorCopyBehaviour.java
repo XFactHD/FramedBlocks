@@ -17,9 +17,9 @@ import xfacthd.framedblocks.api.data.CamoContainer;
 
 import java.util.*;
 
-public class DoorCopyBehaviour implements BlueprintCopyBehaviour
+public final class DoorCopyBehaviour implements BlueprintCopyBehaviour
 {
-    String SECOND_CAMO_KEY = "camo_data_two";
+    private static final String SECOND_CAMO_KEY = "camo_data_two";
 
     @Override
     public boolean writeToBlueprint(Level level, BlockPos pos, BlockState state, FramedBlockEntity be, CompoundTag blueprintData)

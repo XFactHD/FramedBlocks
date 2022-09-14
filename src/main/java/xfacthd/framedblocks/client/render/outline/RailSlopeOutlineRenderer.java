@@ -9,7 +9,7 @@ import xfacthd.framedblocks.client.render.BlockOutlineRenderer;
 import xfacthd.framedblocks.common.block.FramedRailSlopeBlock;
 import xfacthd.framedblocks.common.data.PropertyHolder;
 
-public class RailSlopeOutlineRenderer implements OutlineRender
+public final class RailSlopeOutlineRenderer implements OutlineRender
 {
     @Override
     public void draw(BlockState state, PoseStack poseStack, VertexConsumer builder)

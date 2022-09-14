@@ -15,7 +15,7 @@ import xfacthd.framedblocks.common.blockentity.FramedCollapsibleBlockEntity;
 import xfacthd.framedblocks.common.data.property.CollapseFace;
 import xfacthd.framedblocks.common.data.PropertyHolder;
 
-public class CollapsibleBlockSkipPredicate implements SideSkipPredicate
+public final class CollapsibleBlockSkipPredicate implements SideSkipPredicate
 {
     private static final Table<CollapseFace, Direction, VertexPair> EDGE_MAPPING = makeEdgeMappings();
 

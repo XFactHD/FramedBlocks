@@ -8,7 +8,7 @@ import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import xfacthd.framedblocks.api.util.SideSkipPredicate;
 import xfacthd.framedblocks.common.FBContent;
 
-public class HalfPillarSkipPredicate implements SideSkipPredicate
+public final class HalfPillarSkipPredicate implements SideSkipPredicate
 {
     @Override
     public boolean test(BlockGetter level, BlockPos pos, BlockState state, BlockState adjState, Direction side)

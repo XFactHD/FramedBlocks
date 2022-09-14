@@ -12,7 +12,7 @@ import net.minecraftforge.registries.ForgeRegistries;
 import org.apache.commons.lang3.tuple.Pair;
 import xfacthd.framedblocks.api.util.FramedConstants;
 
-public class ServerConfig
+public final class ServerConfig
 {
     public static final ForgeConfigSpec SPEC;
     public static final ServerConfig INSTANCE;

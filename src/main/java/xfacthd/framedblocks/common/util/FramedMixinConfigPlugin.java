@@ -7,7 +7,7 @@ import org.spongepowered.asm.mixin.extensibility.IMixinInfo;
 import java.util.List;
 import java.util.Set;
 
-public class FramedMixinConfigPlugin implements IMixinConfigPlugin
+public final class FramedMixinConfigPlugin implements IMixinConfigPlugin
 {
     @Override
     public void onLoad(String mixinPackage) { }

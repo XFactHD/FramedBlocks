@@ -5,7 +5,7 @@ import xfacthd.framedblocks.common.FBContent;
 
 import java.util.Optional;
 
-public class DoubleSlabCopyBehaviour extends DoubleBlockCopyBehaviour
+public final class DoubleSlabCopyBehaviour extends DoubleBlockCopyBehaviour
 {
     @Override
     public Optional<ItemStack> getBlockItem()

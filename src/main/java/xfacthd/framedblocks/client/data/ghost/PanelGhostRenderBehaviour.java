@@ -11,7 +11,7 @@ import xfacthd.framedblocks.api.ghost.GhostRenderBehaviour;
 import xfacthd.framedblocks.api.util.FramedProperties;
 import xfacthd.framedblocks.common.FBContent;
 
-public class PanelGhostRenderBehaviour implements GhostRenderBehaviour
+public final class PanelGhostRenderBehaviour implements GhostRenderBehaviour
 {
     @Override
     @Nullable

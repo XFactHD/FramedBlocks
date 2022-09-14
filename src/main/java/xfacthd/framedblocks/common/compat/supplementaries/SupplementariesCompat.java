@@ -7,7 +7,7 @@ import net.minecraft.world.level.LevelReader;
 import net.minecraftforge.fml.ModList;
 import xfacthd.framedblocks.FramedBlocks;
 
-public class SupplementariesCompat
+public final class SupplementariesCompat
 {
     public static final ResourceLocation HANGING_MODEL_LOCATION = new ResourceLocation("supplementaries", "block/hanging_flower_pot_rope");
     private static boolean loaded = false;
