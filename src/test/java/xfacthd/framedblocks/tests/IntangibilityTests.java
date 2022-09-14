@@ -18,7 +18,7 @@ import xfacthd.framedblocks.common.util.ServerConfig;
 import java.util.*;
 
 @GameTestHolder(FramedConstants.MOD_ID)
-public class IntangibilityTests
+public final class IntangibilityTests
 {
     private static final String BATCH_NAME = "intangibility";
     private static final String STRUCTURE_NAME = FramedConstants.MOD_ID + ":empty";

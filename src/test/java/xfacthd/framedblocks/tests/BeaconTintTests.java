@@ -22,7 +22,7 @@ import xfacthd.framedblocks.common.data.PropertyHolder;
 import java.util.*;
 
 @GameTestHolder(FramedConstants.MOD_ID)
-public class BeaconTintTests
+public final class BeaconTintTests
 {
     private static final String BATCH_NAME = "beacon_tint";
     private static final String STRUCTURE_NAME = FramedConstants.MOD_ID + ":empty";
