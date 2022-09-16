@@ -527,6 +527,66 @@ public final class BlockOutlineRenderer
         OutlineRender.drawLine(builder, pstack, 0, 0, 0, 0, .5, 1);
     }
 
+    public static void drawFlatElevatedSlopeSlabCornerBox(BlockState state, PoseStack pstack, VertexConsumer builder)
+    {
+        boolean top = state.getValue(FramedProperties.TOP);
+        if (top)
+        {
+            OutlineRender.mirrorHorizontally(pstack, true);
+        }
+
+        //Bottom face
+        OutlineRender.drawLine(builder, pstack, 0, 0, 0, 0, 0, 1);
+        OutlineRender.drawLine(builder, pstack, 0, 0, 0, 1, 0, 0);
+        OutlineRender.drawLine(builder, pstack, 1, 0, 0, 1, 0, 1);
+        OutlineRender.drawLine(builder, pstack, 0, 0, 1, 1, 0, 1);
+
+        //Middle edges
+        OutlineRender.drawLine(builder, pstack, 0, .5, 0, 0, .5, 1);
+        OutlineRender.drawLine(builder, pstack, 0, .5, 0, 1, .5, 0);
+
+        //Vertical edges
+        OutlineRender.drawLine(builder, pstack, 1, 0, 1, 1, 1, 1);
+        OutlineRender.drawLine(builder, pstack, 0, 0, 0, 0, .5, 0);
+        OutlineRender.drawLine(builder, pstack, 0, 0, 1, 0, .5, 1);
+        OutlineRender.drawLine(builder, pstack, 1, 0, 0, 1, .5, 0);
+
+        //Slope
+        OutlineRender.drawLine(builder, pstack, 0, .5, 1, 1, 1, 1);
+        OutlineRender.drawLine(builder, pstack, 0, .5, 0, 1, 1, 1);
+        OutlineRender.drawLine(builder, pstack, 1, .5, 0, 1, 1, 1);
+    }
+
+    public static void drawFlatElevatedInnerSlopeSlabCornerBox(BlockState state, PoseStack pstack, VertexConsumer builder)
+    {
+        boolean top = state.getValue(FramedProperties.TOP);
+        if (top)
+        {
+            OutlineRender.mirrorHorizontally(pstack, true);
+        }
+
+        //Bottom face
+        OutlineRender.drawLine(builder, pstack, 0, 0, 0, 0, 0, 1);
+        OutlineRender.drawLine(builder, pstack, 0, 0, 0, 1, 0, 0);
+        OutlineRender.drawLine(builder, pstack, 1, 0, 0, 1, 0, 1);
+        OutlineRender.drawLine(builder, pstack, 0, 0, 1, 1, 0, 1);
+
+        //Edges
+        OutlineRender.drawLine(builder, pstack, 1, 0, 1, 1, 1, 1);
+        OutlineRender.drawLine(builder, pstack, 0, 0, 0, 0, .5, 0);
+        OutlineRender.drawLine(builder, pstack, 0, 0, 1, 0, 1, 1);
+        OutlineRender.drawLine(builder, pstack, 1, 0, 0, 1, 1, 0);
+
+        //Top edges
+        OutlineRender.drawLine(builder, pstack, 0, 1, 1, 1, 1, 1);
+        OutlineRender.drawLine(builder, pstack, 1, 1, 0, 1, 1, 1);
+
+        //Slope
+        OutlineRender.drawLine(builder, pstack, 0, .5, 0, 1, 1, 0);
+        OutlineRender.drawLine(builder, pstack, 0, .5, 0, 1, 1, 1);
+        OutlineRender.drawLine(builder, pstack, 0, .5, 0, 0, 1, 1);
+    }
+
 
 
     private BlockOutlineRenderer() { }

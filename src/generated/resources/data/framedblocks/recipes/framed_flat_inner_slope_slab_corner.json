@@ -2,7 +2,7 @@
   "type": "minecraft:crafting_shaped",
   "key": {
     "F": {
-      "item": "framedblocks:framed_slope"
+      "item": "framedblocks:framed_slope_slab"
     },
     "H": {
       "item": "framedblocks:framed_hammer"

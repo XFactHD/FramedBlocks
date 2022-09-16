@@ -501,9 +501,25 @@ public final class FramedRecipeProvider extends RecipeProvider
         ShapedRecipeBuilder.shaped(FBContent.blockFramedFlatInnerSlopeSlabCorner.get())
                 .pattern("H F")
                 .pattern(" F ")
-                .define('F', FBContent.blockFramedSlope.get())
+                .define('F', FBContent.blockFramedSlopeSlab.get())
                 .define('H', FBContent.itemFramedHammer.get())
                 .unlockedBy("hasFramedSlopeSlab", has(FBContent.blockFramedSlopeSlab.get()))
+                .save(consumer);
+
+        ShapedRecipeBuilder.shaped(FBContent.blockFramedFlatElevatedSlopeSlabCorner.get())
+                .pattern("C")
+                .pattern("S")
+                .define('C', FBContent.blockFramedFlatSlopeSlabCorner.get())
+                .define('S', FBContent.blockFramedSlab.get())
+                .unlockedBy("hasFramedFlatSlopeSlabCorner", has(FBContent.blockFramedFlatSlopeSlabCorner.get()))
+                .save(consumer);
+
+        ShapedRecipeBuilder.shaped(FBContent.blockFramedFlatElevatedInnerSlopeSlabCorner.get())
+                .pattern("C")
+                .pattern("S")
+                .define('C', FBContent.blockFramedFlatInnerSlopeSlabCorner.get())
+                .define('S', FBContent.blockFramedSlab.get())
+                .unlockedBy("hasFramedFlatInnerSlopeSlabCorner", has(FBContent.blockFramedFlatInnerSlopeSlabCorner.get()))
                 .save(consumer);
 
         ShapelessRecipeBuilder.shapeless(FBContent.blockFramedSlopePanel.get())
