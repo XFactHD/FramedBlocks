@@ -33,6 +33,7 @@ public final class SlopeSlabSkipPredicate implements SideSkipPredicate
                 case FRAMED_FLAT_SLOPE_SLAB_CORNER -> testAgainstFlatSlopeSlabCorner(level, pos, dir, top, topHalf, adjState, side);
                 case FRAMED_FLAT_INNER_SLOPE_SLAB_CORNER -> testAgainstFlatInnerSlopeSlabCorner(level, pos, dir, top, topHalf, adjState, side);
                 case FRAMED_FLAT_ELEV_SLOPE_SLAB_CORNER -> testAgainstFlatElevatedSlopeSlabCorner(level, pos, dir, topHalf, adjState, side);
+                case FRAMED_FLAT_DOUBLE_SLOPE_SLAB_CORNER -> testAgainstFlatDoubleSlopeSlabCorner(level, pos, dir, top, topHalf, adjState, side);
                 case FRAMED_SLAB -> testAgainstSlab(level, pos, dir, topHalf, adjState, side);
                 case FRAMED_DOUBLE_SLAB -> testAgainstDoubleSlab(level, pos, dir, topHalf, side);
                 case FRAMED_SLAB_EDGE -> testAgainstSlabEdge(level, pos, dir, topHalf, adjState, side);
@@ -173,6 +174,36 @@ public final class SlopeSlabSkipPredicate implements SideSkipPredicate
         if (adjTop == topHalf && side == dir && FlatElevatedSlopeSlabCornerSkipPredicate.isSlabSide(adjDir, side.getOpposite()))
         {
             return SideSkipPredicate.compareState(level, pos, side);
+        }
+
+        return false;
+    }
+
+    private boolean testAgainstFlatDoubleSlopeSlabCorner(BlockGetter level, BlockPos pos, Direction dir, boolean top, boolean topHalf, BlockState adjState, Direction side)
+    {
+        if (Utils.isY(side)) { return false; }
+
+        Direction adjDir = adjState.getValue(FramedProperties.FACING_HOR);
+        boolean adjTop = adjState.getValue(FramedProperties.TOP);
+        boolean adjTopHalf = adjState.getValue(PropertyHolder.TOP_HALF);
+
+        if (adjTopHalf != topHalf) { return false; }
+
+        if (FlatInnerSlopeSlabCornerSkipPredicate.isSlabSide(adjDir, side.getOpposite()) && side == dir)
+        {
+            return SideSkipPredicate.compareState(level, pos, side);
+        }
+
+        boolean sameTop = adjTop == top;
+        if (side == dir.getCounterClockWise() && ((sameTop && adjDir == dir) || (!sameTop && adjDir == dir.getCounterClockWise())))
+        {
+            Direction camoSide = sameTop ? adjDir : side.getOpposite();
+            return SideSkipPredicate.compareState(level, pos, side, dir, camoSide);
+        }
+        else if (side == dir.getClockWise() && ((sameTop && adjDir == dir.getClockWise()) || (!sameTop && adjDir == dir.getOpposite())))
+        {
+            Direction camoSide = sameTop ? adjDir : side.getOpposite();
+            return SideSkipPredicate.compareState(level, pos, side, dir, camoSide);
         }
 
         return false;

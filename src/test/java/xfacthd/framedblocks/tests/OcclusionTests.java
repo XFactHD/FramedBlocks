@@ -1267,6 +1267,24 @@ public final class OcclusionTests
     }
 
     @GameTest(template = "box_top", batch = "occlusion")
+    @TestedType(type = BlockType.FRAMED_FLAT_DOUBLE_SLOPE_SLAB_CORNER)
+    public static void test_FlatDoubleSlopeSlabCorner_BottomHalf(GameTestHelper helper)
+    {
+        BlockState state = FBContent.blockFramedFlatDoubleSlopeSlabCorner.get().defaultBlockState();
+        TestUtils.testDoubleBlockOccludesLightBelow(helper, state, List.of(Direction.UP, Direction.DOWN));
+    }
+
+    @GameTest(template = "box_top", batch = "occlusion")
+    @TestedType(type = BlockType.FRAMED_FLAT_DOUBLE_SLOPE_SLAB_CORNER)
+    public static void test_FlatDoubleSlopeSlabCorner_TopHalf(GameTestHelper helper)
+    {
+        BlockState state = FBContent.blockFramedFlatDoubleSlopeSlabCorner.get()
+                .defaultBlockState()
+                .setValue(PropertyHolder.TOP_HALF, true);
+        TestUtils.testDoubleBlockOccludesLightBelow(helper, state, List.of(Direction.UP, Direction.DOWN));
+    }
+
+    @GameTest(template = "box_top", batch = "occlusion")
     @TestedType(type = BlockType.FRAMED_REDSTONE_BLOCK)
     public static void test_RedstoneBlock(GameTestHelper helper)
     {

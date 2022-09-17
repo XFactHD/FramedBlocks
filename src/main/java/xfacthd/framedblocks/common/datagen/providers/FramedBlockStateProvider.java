@@ -69,6 +69,7 @@ public final class FramedBlockStateProvider extends BlockStateProvider
         simpleBlockWithItem(FBContent.blockFramedFlatInnerSlopeSlabCorner, cube, "cutout");
         simpleBlockWithItem(FBContent.blockFramedFlatElevatedSlopeSlabCorner, cube, "cutout");
         simpleBlockWithItem(FBContent.blockFramedFlatElevatedInnerSlopeSlabCorner, cube, "cutout");
+        simpleBlockWithItem(FBContent.blockFramedFlatDoubleSlopeSlabCorner, cube, "cutout");
         simpleBlock(FBContent.blockFramedVerticalHalfStairs.get(), cube);
         simpleBlockWithItem(FBContent.blockFramedSlopePanel, cube, "cutout");
         simpleBlockWithItem(FBContent.blockFramedExtendedSlopePanel, cube, "cutout");

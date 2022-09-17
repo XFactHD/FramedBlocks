@@ -35,6 +35,7 @@ public final class FlatSlopeSlabCornerSkipPredicate implements SideSkipPredicate
                 case FRAMED_DOUBLE_SLOPE_SLAB -> testAgainstDoubleSlopeSlab(level, pos, dir, top, topHalf, adjState, side);
                 case FRAMED_INV_DOUBLE_SLOPE_SLAB -> testAgainstInverseDoubleSlopeSlab(level, pos, dir, top, topHalf, adjState, side);
                 case FRAMED_ELEVATED_DOUBLE_SLOPE_SLAB -> testAgainstElevatedDoubleSlopeSlab(level, pos, dir, top, topHalf, adjState, side);
+                case FRAMED_FLAT_DOUBLE_SLOPE_SLAB_CORNER -> testAgainstFlatDoubleSlopeSlabCorner(level, pos, dir, top, topHalf, adjState, side);
                 default -> false;
             };
         }
@@ -142,6 +143,29 @@ public final class FlatSlopeSlabCornerSkipPredicate implements SideSkipPredicate
         {
             Direction camoSide = top ? Direction.UP : Direction.DOWN;
             return SideSkipPredicate.compareState(level, pos, side, side, camoSide);
+        }
+
+        return false;
+    }
+
+    private boolean testAgainstFlatDoubleSlopeSlabCorner(BlockGetter level, BlockPos pos, Direction dir, boolean top, boolean topHalf, BlockState adjState, Direction side)
+    {
+        Direction adjDir = adjState.getValue(FramedProperties.FACING_HOR);
+        boolean adjTop = adjState.getValue(FramedProperties.TOP);
+        boolean adjTopHalf = adjState.getValue(PropertyHolder.TOP_HALF);
+
+        if (adjTopHalf != topHalf) { return false; }
+
+        boolean sameTop = adjTop == top;
+        if (side == dir && ((sameTop && adjDir == dir) || (!sameTop && adjDir == dir.getClockWise())))
+        {
+            Direction camoSide = sameTop ? adjDir : side.getOpposite();
+            return SideSkipPredicate.compareState(level, pos, side, dir, camoSide);
+        }
+        else if (side == dir.getCounterClockWise() && ((sameTop && adjDir == dir) || (!sameTop && adjDir == dir.getCounterClockWise())))
+        {
+            Direction camoSide = sameTop ? adjDir : side.getOpposite();
+            return SideSkipPredicate.compareState(level, pos, side, dir, camoSide);
         }
 
         return false;
