@@ -14,14 +14,14 @@ public class CreateCompat
 {
     public static void init()
     {
-        if (ModList.get().isLoaded("flywheel"))
+        if (ModList.get().isLoaded("create"))
         {
             // Safeguard against potential changes in Create since the interaction behaviours are not exposed as API
             try
             {
                 GuardedAccess.init();
             }
-            catch (Exception e)
+            catch (Throwable e)
             {
                 FramedBlocks.LOGGER.warn("An error occured while initializing Create integration!", e);
             }
