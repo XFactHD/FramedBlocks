@@ -131,6 +131,7 @@ public final class FBContent
     public static final RegistryObject<Block> blockFramedFlatElevatedSlopeSlabCorner = registerBlock(FramedFlatElevatedSlopeSlabCornerBlock::new, BlockType.FRAMED_FLAT_ELEV_SLOPE_SLAB_CORNER);
     public static final RegistryObject<Block> blockFramedFlatElevatedInnerSlopeSlabCorner = registerBlock(FramedFlatElevatedSlopeSlabCornerBlock::new, BlockType.FRAMED_FLAT_ELEV_INNER_SLOPE_SLAB_CORNER);
     public static final RegistryObject<Block> blockFramedFlatDoubleSlopeSlabCorner = registerBlock(FramedFlatDoubleSlopeSlabCornerBlock::new, BlockType.FRAMED_FLAT_DOUBLE_SLOPE_SLAB_CORNER);
+    public static final RegistryObject<Block> blockFramedFlatInverseDoubleSlopeSlabCorner = registerBlock(FramedFlatInverseDoubleSlopeSlabCornerBlock::new, BlockType.FRAMED_FLAT_INV_DOUBLE_SLOPE_SLAB_CORNER);
     public static final RegistryObject<Block> blockFramedSlopePanel = registerBlock(FramedSlopePanelBlock::new, BlockType.FRAMED_SLOPE_PANEL);
     public static final RegistryObject<Block> blockFramedExtendedSlopePanel = registerBlock(FramedExtendedSlopePanelBlock::new, BlockType.FRAMED_EXTENDED_SLOPE_PANEL);
     public static final RegistryObject<Block> blockFramedDoubleSlopePanel = registerBlock(FramedDoubleSlopePanelBlock::new, BlockType.FRAMED_DOUBLE_SLOPE_PANEL);
@@ -220,6 +221,10 @@ public final class FBContent
     public static final RegistryObject<BlockEntityType<FramedFlatDoubleSlopeSlabCornerBlockEntity>> blockEntityTypeFramedFlatDoubleSlopeSlabCorner = createBlockEntityType(
             FramedFlatDoubleSlopeSlabCornerBlockEntity::new,
             BlockType.FRAMED_FLAT_DOUBLE_SLOPE_SLAB_CORNER
+    );
+    public static final RegistryObject<BlockEntityType<FramedFlatInverseDoubleSlopeSlabCornerBlockEntity>> blockEntityTypeFramedFlatInverseDoubleSlopeSlabCorner = createBlockEntityType(
+            FramedFlatInverseDoubleSlopeSlabCornerBlockEntity::new,
+            BlockType.FRAMED_FLAT_INV_DOUBLE_SLOPE_SLAB_CORNER
     );
     public static final RegistryObject<BlockEntityType<FramedDoubleSlopePanelBlockEntity>> blockEntityTypeFramedDoubleSlopePanel = createBlockEntityType(
             FramedDoubleSlopePanelBlockEntity::new,

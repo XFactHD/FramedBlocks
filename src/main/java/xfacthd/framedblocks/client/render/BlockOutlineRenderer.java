@@ -587,6 +587,39 @@ public final class BlockOutlineRenderer
         OutlineRender.drawLine(builder, pstack, 0, .5, 0, 0, 1, 1);
     }
 
+    public static void drawFlatInverseSlopeSlabCornerBox(BlockState state, PoseStack pstack, VertexConsumer builder)
+    {
+        boolean top = state.getValue(FramedProperties.TOP);
+        if (top)
+        {
+            OutlineRender.mirrorHorizontally(pstack, true);
+        }
+
+        //Vertical edges
+        OutlineRender.drawLine(builder, pstack, 1, .5, 1, 1, 1, 1);
+        OutlineRender.drawLine(builder, pstack, 0, 0, 0, 0, .5, 0);
+        OutlineRender.drawLine(builder, pstack, 0, 0, 1, 0, .5, 1);
+        OutlineRender.drawLine(builder, pstack, 1, 0, 0, 1, .5, 0);
+
+        //Horizontal bottom edges
+        OutlineRender.drawLine(builder, pstack, 0, 0, 1, 0, 0, 0);
+        OutlineRender.drawLine(builder, pstack, 1, 0, 0, 0, 0, 0);
+
+        //Horizontal middle edges
+        OutlineRender.drawLine(builder, pstack, 0, .5, 1, 0, .5, 0);
+        OutlineRender.drawLine(builder, pstack, 1, .5, 0, 0, .5, 0);
+
+        //Bottom slopes
+        OutlineRender.drawLine(builder, pstack, 0, 0, 0, 1, .5, 1);
+        OutlineRender.drawLine(builder, pstack, 0, 0, 1, 1, .5, 1);
+        OutlineRender.drawLine(builder, pstack, 1, 0, 0, 1, .5, 1);
+
+        //Top slopes
+        OutlineRender.drawLine(builder, pstack, 0, .5, 0, 1, 1, 1);
+        OutlineRender.drawLine(builder, pstack, 0, .5, 1, 1, 1, 1);
+        OutlineRender.drawLine(builder, pstack, 1, .5, 0, 1, 1, 1);
+    }
+
 
 
     private BlockOutlineRenderer() { }

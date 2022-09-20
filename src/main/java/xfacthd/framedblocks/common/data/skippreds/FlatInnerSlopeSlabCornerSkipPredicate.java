@@ -41,6 +41,7 @@ public final class FlatInnerSlopeSlabCornerSkipPredicate implements SideSkipPred
                 case FRAMED_ELEVATED_DOUBLE_SLOPE_SLAB -> testAgainstElevatedDoubleSlopeSlab(level, pos, dir, top, topHalf, adjState, side);
                 case FRAMED_FLAT_ELEV_SLOPE_SLAB_CORNER -> testAgainstFlatElevatedSlopeSlabCorner(level, pos, dir, topHalf, adjState, side);
                 case FRAMED_FLAT_DOUBLE_SLOPE_SLAB_CORNER -> testAgainstFlatDoubleSlopeSlabCorner(level, pos, dir, top, topHalf, adjState, side);
+                case FRAMED_FLAT_INV_DOUBLE_SLOPE_SLAB_CORNER -> testAgainstFlatInverseDoubleSlopeSlabCorner(level, pos, dir, top, topHalf, adjState, side);
                 case FRAMED_SLAB -> testAgainstSlab(level, pos, dir, topHalf, adjState, side);
                 case FRAMED_DOUBLE_SLAB -> testAgainstDoubleSlab(level, pos, dir, topHalf, side);
                 case FRAMED_SLAB_EDGE -> testAgainstSlabEdge(level, pos, dir, topHalf, adjState, side);
@@ -242,6 +243,31 @@ public final class FlatInnerSlopeSlabCornerSkipPredicate implements SideSkipPred
         return false;
     }
 
+    private boolean testAgainstFlatInverseDoubleSlopeSlabCorner(BlockGetter level, BlockPos pos, Direction dir, boolean top, boolean topHalf, BlockState adjState, Direction side)
+    {
+        Direction adjDir = adjState.getValue(FramedProperties.FACING_HOR);
+        boolean adjTop = adjState.getValue(FramedProperties.TOP);
+
+        if (adjTop == topHalf && isSlabSide(dir, side) && FlatInnerSlopeSlabCornerSkipPredicate.isInverseSlabSide(adjDir, side.getOpposite()))
+        {
+            return SideSkipPredicate.compareState(level, pos, side, dir, adjDir.getOpposite());
+        }
+
+        if (adjTop == topHalf && adjTop != top && (
+                (side == dir.getClockWise() && adjDir == dir.getCounterClockWise()) ||
+                (side == dir.getOpposite() && adjDir == dir.getClockWise())
+        ))
+        {
+            return SideSkipPredicate.compareState(level, pos, side, dir, adjDir.getOpposite());
+        }
+        else if (adjTop == top && adjTop != topHalf && adjDir == dir && (side == dir.getClockWise() || side == dir.getOpposite()))
+        {
+            return SideSkipPredicate.compareState(level, pos, side, dir, adjDir);
+        }
+
+        return false;
+    }
+
     private boolean testAgainstSlab(BlockGetter level, BlockPos pos, Direction dir, boolean topHalf, BlockState adjState, Direction side)
     {
         boolean adjTop = adjState.getValue(FramedProperties.TOP);
@@ -317,5 +343,13 @@ public final class FlatInnerSlopeSlabCornerSkipPredicate implements SideSkipPred
     public static boolean isSlabSide(Direction dir, Direction side)
     {
         return side == dir || side == dir.getCounterClockWise();
+    }
+
+    /**
+     * Check for slab side on a Framed Flat Inverse Double Slope Slab Corner
+     */
+    public static boolean isInverseSlabSide(Direction dir, Direction side)
+    {
+        return isSlabSide(dir.getOpposite(), side);
     }
 }
