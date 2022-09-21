@@ -540,6 +540,22 @@ public final class FramedRecipeProvider extends RecipeProvider
                 .unlockedBy("hasFramedFlatInverseDoubleSlopeSlabCorner", has(FBContent.blockFramedFlatInverseDoubleSlopeSlabCorner.get()))
                 .save(consumer, rl("framed_flat_double_slope_slab_corner_from_inverse"));
 
+        ShapedRecipeBuilder.shaped(FBContent.blockFramedFlatElevatedDoubleSlopeSlabCorner.get())
+                .pattern("C")
+                .pattern("E")
+                .define('C', FBContent.blockFramedFlatInnerSlopeSlabCorner.get())
+                .define('E', FBContent.blockFramedFlatElevatedSlopeSlabCorner.get())
+                .unlockedBy("hasFramedFlatElevatedSlopeSlabCorner", has(FBContent.blockFramedFlatElevatedSlopeSlabCorner.get()))
+                .save(consumer);
+
+        ShapedRecipeBuilder.shaped(FBContent.blockFramedFlatElevatedInnerDoubleSlopeSlabCorner.get())
+                .pattern("C")
+                .pattern("E")
+                .define('C', FBContent.blockFramedFlatSlopeSlabCorner.get())
+                .define('E', FBContent.blockFramedFlatElevatedInnerSlopeSlabCorner.get())
+                .unlockedBy("hasFramedFlatElevatedInnerSlopeSlabCorner", has(FBContent.blockFramedFlatElevatedInnerSlopeSlabCorner.get()))
+                .save(consumer);
+
         ShapelessRecipeBuilder.shapeless(FBContent.blockFramedSlopePanel.get())
                 .requires(FBContent.blockFramedSlopeSlab.get())
                 .requires(FBContent.itemFramedWrench.get())
