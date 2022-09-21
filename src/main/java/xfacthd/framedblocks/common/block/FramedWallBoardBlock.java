@@ -16,8 +16,6 @@ import xfacthd.framedblocks.common.data.BlockType;
 
 public class FramedWallBoardBlock extends FramedBlock
 {
-    public static final CtmPredicate CTM_PREDICATE = (state, dir) -> dir == state.getValue(FramedProperties.FACING_HOR);
-
     public static final SideSkipPredicate SKIP_PREDICATE = (level, pos, state, adjState, side) ->
     {
         Direction dir = state.getValue(FramedProperties.FACING_HOR);
