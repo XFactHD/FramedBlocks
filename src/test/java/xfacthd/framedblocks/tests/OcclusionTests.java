@@ -1410,6 +1410,14 @@ public final class OcclusionTests
         TestUtils.testBlockOccludesLightNorth(helper, state, List.of(Direction.NORTH, Direction.SOUTH));
     }
 
+    @GameTest(template = "box_side", batch = "occlusion")
+    @TestedType(type = BlockType.FRAMED_EXTENDED_DOUBLE_SLOPE_PANEL)
+    public static void test_ExtendedDoubleSlopePanel(GameTestHelper helper)
+    {
+        BlockState state = FBContent.blockFramedExtendedDoubleSlopePanel.get().defaultBlockState();
+        TestUtils.testBlockOccludesLightNorth(helper, state, List.of(Direction.NORTH, Direction.SOUTH));
+    }
+
     @GameTest(template = "box_top", batch = "occlusion")
     @TestedType(type = BlockType.FRAMED_DOUBLE_STAIRS)
     public static void test_DoubleStairs_Bottom(GameTestHelper helper)
