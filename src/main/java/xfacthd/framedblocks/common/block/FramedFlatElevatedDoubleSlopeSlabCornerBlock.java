@@ -7,7 +7,6 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
-import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import xfacthd.framedblocks.api.util.*;
 import xfacthd.framedblocks.common.blockentity.FramedFlatElevatedDoubleSlopeSlabCornerBlockEntity;
 import xfacthd.framedblocks.common.data.BlockType;
@@ -30,7 +29,7 @@ public class FramedFlatElevatedDoubleSlopeSlabCornerBlock extends AbstractFramed
     protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder)
     {
         super.createBlockStateDefinition(builder);
-        builder.add(FramedProperties.FACING_HOR, FramedProperties.TOP, BlockStateProperties.WATERLOGGED);
+        builder.add(FramedProperties.FACING_HOR, FramedProperties.TOP);
     }
 
     @Override
@@ -41,8 +40,7 @@ public class FramedFlatElevatedDoubleSlopeSlabCornerBlock extends AbstractFramed
 
         BlockState state = defaultBlockState().setValue(FramedProperties.FACING_HOR, facing);
 
-        state = withTop(state, context.getClickedFace(), context.getClickLocation());
-        return withWater(state, context.getLevel(), context.getClickedPos());
+        return withTop(state, context.getClickedFace(), context.getClickLocation());
     }
 
     @Override
