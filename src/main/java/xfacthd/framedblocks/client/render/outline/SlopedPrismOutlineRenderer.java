@@ -20,7 +20,10 @@ public final class SlopedPrismOutlineRenderer extends PrismOutlineRenderer
     @Override
     public void drawCenterAndTriangle(PoseStack pstack, VertexConsumer builder)
     {
+        // Center line
         OutlineRender.drawLine(builder, pstack, .5F, .5F, .5F, .5F, .5F, 1);
+
+        // Front sloped triangle
         OutlineRender.drawLine(builder, pstack, 0, 0, 0, .5F, .5F, .5F);
         OutlineRender.drawLine(builder, pstack, .5F, .5F, .5F, 1, 0, 0);
     }
