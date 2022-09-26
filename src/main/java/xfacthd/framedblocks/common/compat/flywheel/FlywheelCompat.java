@@ -1,4 +1,4 @@
-/*package xfacthd.framedblocks.common.compat.flywheel;
+package xfacthd.framedblocks.common.compat.flywheel;
 
 import com.jozufozu.flywheel.core.virtual.VirtualRenderWorld;
 import net.minecraft.world.level.BlockGetter;
@@ -34,4 +34,3 @@ public final class FlywheelCompat
 
     private FlywheelCompat() { }
 }
-*/

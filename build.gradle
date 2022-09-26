@@ -133,6 +133,9 @@ repositories {
     maven {
         url "https://www.cursemaven.com"
     }
+    maven {
+        url = "https://maven.tterrag.com/"
+    }
     mavenCentral()
 }
 
@@ -152,8 +155,9 @@ dependencies {
     //runtimeOnly fg.deobf("curse.maven:magnesium_sodium-532724:3556734")
     //runtimeOnly fg.deobf("curse.maven:rubidium_sodium-574856:3633735")
 
-    //compileOnly fg.deobf("curse.maven:flywheel-486392:3737402")
-    //runtimeOnly fg.deobf("curse.maven:create-328085:3737418") //Only needed when Flywheel is switched to implementation
+    compileOnly fg.deobf("com.simibubi.create:create-1.19.2:0.5.0.e-13:slim") { transitive = false }
+    compileOnly fg.deobf("com.jozufozu.flywheel:flywheel-forge-1.19.2:0.6.6-7")
+    //runtimeOnly fg.deobf("com.tterrag.registrate:Registrate:MC1.19-1.1.5") //Only needed when Create and/or Flywheel are switched to implementation
 
     compileOnly fg.deobf("curse.maven:moonlight-499980:3920391")
     compileOnly fg.deobf("curse.maven:supplementaries-412082:3920399")
