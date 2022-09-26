@@ -1,0 +1,4 @@
+{
+  "parent": "framedblocks:block/framed_cube",
+  "render_type": "minecraft:cutout"
+}

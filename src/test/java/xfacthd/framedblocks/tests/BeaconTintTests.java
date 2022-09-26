@@ -56,6 +56,8 @@ public final class BeaconTintTests
             BlockType.FRAMED_HALF_STAIRS,
             BlockType.FRAMED_SLOPE_PANEL,
             BlockType.FRAMED_DOUBLE_SLOPE_PANEL,
+            BlockType.FRAMED_FLAT_SLOPE_PANEL_CORNER,
+            BlockType.FRAMED_FLAT_INNER_SLOPE_SLAB_CORNER,
             BlockType.FRAMED_WALL_BOARD,
             BlockType.FRAMED_GATE_DOOR,
             BlockType.FRAMED_IRON_GATE_DOOR

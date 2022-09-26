@@ -611,6 +611,36 @@ public final class FramedRecipeProvider extends RecipeProvider
                 .unlockedBy("hasFramedSlopePanel", has(FBContent.blockFramedSlopePanel.get()))
                 .save(consumer);
 
+        ShapedRecipeBuilder.shaped(FBContent.blockFramedFlatSlopePanelCorner.get())
+                .pattern("HF ")
+                .pattern("  F")
+                .define('F', FBContent.blockFramedSlopePanel.get())
+                .define('H', FBContent.itemFramedHammer.get())
+                .unlockedBy("hasFramedSlopePanel", has(FBContent.blockFramedSlopePanel.get()))
+                .save(consumer);
+
+        ShapedRecipeBuilder.shaped(FBContent.blockFramedFlatInnerSlopePanelCorner.get())
+                .pattern("H F")
+                .pattern(" F ")
+                .define('F', FBContent.blockFramedSlopePanel.get())
+                .define('H', FBContent.itemFramedHammer.get())
+                .unlockedBy("hasFramedSlopePanel", has(FBContent.blockFramedSlopePanel.get()))
+                .save(consumer);
+
+        ShapedRecipeBuilder.shaped(FBContent.blockFramedFlatExtendedSlopePanelCorner.get())
+                .pattern("PC")
+                .define('C', FBContent.blockFramedFlatSlopePanelCorner.get())
+                .define('P', FBContent.blockFramedPanel.get())
+                .unlockedBy("hasFramedFlatSlopePanelCorner", has(FBContent.blockFramedFlatSlopePanelCorner.get()))
+                .save(consumer);
+
+        ShapedRecipeBuilder.shaped(FBContent.blockFramedFlatExtendedInnerSlopePanelCorner.get())
+                .pattern("PC")
+                .define('C', FBContent.blockFramedFlatInnerSlopePanelCorner.get())
+                .define('P', FBContent.blockFramedPanel.get())
+                .unlockedBy("hasFramedFlatInnerSlopePanelCorner", has(FBContent.blockFramedFlatInnerSlopePanelCorner.get()))
+                .save(consumer);
+
         ShapedRecipeBuilder.shaped(FBContent.blockFramedDoubleStairs.get())
                 .pattern("SE")
                 .define('S', FBContent.blockFramedStairs.get())

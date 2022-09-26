@@ -60,6 +60,18 @@ public enum HorizontalRotation implements StringRepresentable
 
     public boolean isVertical() { return this == UP || this == DOWN; }
 
+    /**
+     * Returns true if the {@link Direction} this rotation resolves to with the given {@code dir} is the
+     * same as the {@code Direction} the given {@code adjRot} resolves to with the given {@code adjDir}
+     * @param dir The {@code Direction} of the block with this rotation
+     * @param adjRot The rotation of the adjacent block
+     * @param adjDir The {@code Direction} of the block with the {@code adjRot} rotation
+     */
+    public boolean isSameDir(Direction dir, HorizontalRotation adjRot, Direction adjDir)
+    {
+        return withFacing(dir) == adjRot.withFacing(adjDir);
+    }
+
     @Override
     public String getSerializedName() { return name; }
 
@@ -102,6 +114,28 @@ public enum HorizontalRotation implements StringRepresentable
         else
         {
             return y < 0 ? HorizontalRotation.UP : HorizontalRotation.DOWN;
+        }
+    }
+
+    public static HorizontalRotation fromWallCorner(Vec3 hitVec, Direction hitFace)
+    {
+        Preconditions.checkArgument(!Utils.isY(hitFace), "Hit face must not be on the Y axis");
+
+        hitVec = Utils.fraction(hitVec);
+
+        double xz = (Utils.isX(hitFace) ? hitVec.z() : hitVec.x());
+        if (!Utils.isPositive(hitFace.getCounterClockWise()))
+        {
+            xz = 1D - xz;
+        }
+
+        if (hitVec.y() > .5D)
+        {
+            return xz > .5D ? LEFT : DOWN;
+        }
+        else
+        {
+            return xz > .5D ? UP : RIGHT;
         }
     }
 }
