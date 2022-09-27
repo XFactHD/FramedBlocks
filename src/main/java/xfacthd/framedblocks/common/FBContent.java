@@ -143,6 +143,7 @@ public final class FBContent
     public static final RegistryObject<Block> blockFramedFlatInnerSlopePanelCorner = registerBlock(FramedFlatSlopePanelCornerBlock::new, BlockType.FRAMED_FLAT_INNER_SLOPE_PANEL_CORNER);
     public static final RegistryObject<Block> blockFramedFlatExtendedSlopePanelCorner = registerBlock(FramedFlatExtendedSlopePanelCornerBlock::new, BlockType.FRAMED_FLAT_EXT_SLOPE_PANEL_CORNER);
     public static final RegistryObject<Block> blockFramedFlatExtendedInnerSlopePanelCorner = registerBlock(FramedFlatExtendedSlopePanelCornerBlock::new, BlockType.FRAMED_FLAT_EXT_INNER_SLOPE_PANEL_CORNER);
+    public static final RegistryObject<Block> blockFramedFlatDoubleSlopePanelCorner = registerBlock(FramedFlatDoubleSlopePanelCornerBlock::new, BlockType.FRAMED_FLAT_DOUBLE_SLOPE_PANEL_CORNER);
     public static final RegistryObject<Block> blockFramedDoubleStairs = registerBlock(FramedDoubleStairsBlock::new, BlockType.FRAMED_DOUBLE_STAIRS);
     public static final RegistryObject<Block> blockFramedVerticalDoubleStairs = registerBlock(FramedVerticalDoubleStairsBlock::new, BlockType.FRAMED_VERTICAL_DOUBLE_STAIRS);
     public static final RegistryObject<Block> blockFramedWallBoard = registerBlock(FramedWallBoardBlock::new, BlockType.FRAMED_WALL_BOARD);
@@ -248,6 +249,10 @@ public final class FBContent
     public static final RegistryObject<BlockEntityType<FramedExtendedDoubleSlopePanelBlockEntity>> blockEntityTypeFramedExtendedDoubleSlopePanel = createBlockEntityType(
             FramedExtendedDoubleSlopePanelBlockEntity::new,
             BlockType.FRAMED_EXTENDED_DOUBLE_SLOPE_PANEL
+    );
+    public static final RegistryObject<BlockEntityType<FramedFlatDoubleSlopePanelCornerBlockEntity>> blockEntityTypeFramedFlatDoubleSlopePanelCorner = createBlockEntityType(
+            FramedFlatDoubleSlopePanelCornerBlockEntity::new,
+            BlockType.FRAMED_FLAT_DOUBLE_SLOPE_PANEL_CORNER
     );
     public static final RegistryObject<BlockEntityType<FramedDoubleStairsBlockEntity>> blockEntityTypeFramedDoubleStairs = createBlockEntityType(
             FramedDoubleStairsBlockEntity::new,

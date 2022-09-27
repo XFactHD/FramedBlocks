@@ -1516,6 +1516,25 @@ public final class OcclusionTests
         TestUtils.testBlockOccludesLightNorth(helper, state);
     }
 
+    @GameTest(template = "box_side", batch = "occlusion")
+    @TestedType(type = BlockType.FRAMED_FLAT_DOUBLE_SLOPE_PANEL_CORNER)
+    public static void test_FlatDoubleSlopePanelCorner_BackHalf(GameTestHelper helper)
+    {
+        BlockState state = FBContent.blockFramedFlatDoubleSlopePanelCorner.get()
+                .defaultBlockState();
+        TestUtils.testBlockOccludesLightNorth(helper, state, List.of(Direction.NORTH, Direction.SOUTH));
+    }
+
+    @GameTest(template = "box_side", batch = "occlusion")
+    @TestedType(type = BlockType.FRAMED_FLAT_DOUBLE_SLOPE_PANEL_CORNER)
+    public static void test_FlatDoubleSlopePanelCorner_FrontHalf(GameTestHelper helper)
+    {
+        BlockState state = FBContent.blockFramedFlatDoubleSlopePanelCorner.get()
+                .defaultBlockState()
+                .setValue(PropertyHolder.FRONT, true);
+        TestUtils.testBlockOccludesLightNorth(helper, state, List.of(Direction.NORTH, Direction.SOUTH));
+    }
+
     @GameTest(template = "box_top", batch = "occlusion")
     @TestedType(type = BlockType.FRAMED_DOUBLE_STAIRS)
     public static void test_DoubleStairs_Bottom(GameTestHelper helper)

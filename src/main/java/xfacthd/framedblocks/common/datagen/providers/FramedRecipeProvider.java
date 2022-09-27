@@ -641,6 +641,13 @@ public final class FramedRecipeProvider extends RecipeProvider
                 .unlockedBy("hasFramedFlatInnerSlopePanelCorner", has(FBContent.blockFramedFlatInnerSlopePanelCorner.get()))
                 .save(consumer);
 
+        ShapedRecipeBuilder.shaped(FBContent.blockFramedFlatDoubleSlopePanelCorner.get())
+                .pattern("IC")
+                .define('C', FBContent.blockFramedFlatSlopePanelCorner.get())
+                .define('I', FBContent.blockFramedFlatInnerSlopePanelCorner.get())
+                .unlockedBy("hasFramedFlatSlopePanelCorner", has(FBContent.blockFramedFlatSlopePanelCorner.get()))
+                .save(consumer);
+
         ShapedRecipeBuilder.shaped(FBContent.blockFramedDoubleStairs.get())
                 .pattern("SE")
                 .define('S', FBContent.blockFramedStairs.get())

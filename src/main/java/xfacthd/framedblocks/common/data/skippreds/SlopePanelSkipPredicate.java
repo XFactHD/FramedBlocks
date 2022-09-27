@@ -42,6 +42,7 @@ public final class SlopePanelSkipPredicate implements SideSkipPredicate
                 case FRAMED_FLAT_SLOPE_PANEL_CORNER -> testAgainstFlatSlopePanelCorner(level, pos, dir, rot, rotDir, front, adjState, side);
                 case FRAMED_FLAT_INNER_SLOPE_PANEL_CORNER -> testAgainstFlatInnerSlopePanelCorner(level, pos, dir, rot, rotDir, front, adjState, side);
                 case FRAMED_FLAT_EXT_SLOPE_PANEL_CORNER -> testAgainstFlatExtendedSlopePanelCorner(level, pos, dir, rotDir, front, adjState, side);
+                case FRAMED_FLAT_DOUBLE_SLOPE_PANEL_CORNER -> testAgainstFlatDoubleSlopePanelCorner(level, pos, dir, rot, rotDir, front, adjState, side);
                 case FRAMED_SLAB_EDGE -> testAgainstSlabEdge(level, pos, dir, rot, rotDir, front, adjState, side);
                 case FRAMED_PANEL -> testAgainstPanel(level, pos, dir, rotDir, front, adjState, side);
                 case FRAMED_DOUBLE_PANEL -> testAgainstDoublePanel(level, pos, dir, rotDir, front, adjState, side);
@@ -242,6 +243,52 @@ public final class SlopePanelSkipPredicate implements SideSkipPredicate
         if (FlatExtendedSlopePanelCornerSkipPredicate.isPanelSide(adjDir, adjRot, side.getOpposite()))
         {
             return ((adjDir == dir && !front) || (adjDir == dir.getOpposite() && front)) && SideSkipPredicate.compareState(level, pos, side, side, adjDir);
+        }
+
+        return false;
+    }
+
+    private static boolean testAgainstFlatDoubleSlopePanelCorner(
+            BlockGetter level, BlockPos pos, Direction dir, HorizontalRotation rot, Direction rotDir, boolean front, BlockState adjState, Direction side
+    )
+    {
+        Direction adjDir = adjState.getValue(FramedProperties.FACING_HOR);
+        boolean adjFront = adjState.getValue(PropertyHolder.FRONT);
+        HorizontalRotation adjRot = adjState.getValue(PropertyHolder.ROTATION);
+
+        if (side == rotDir.getOpposite() && FlatInnerSlopePanelCornerSkipPredicate.isPanelSide(adjDir, adjRot, side.getOpposite()))
+        {
+            if ((adjDir == dir && adjFront == front) || (adjDir == dir.getOpposite() && adjFront != front))
+            {
+                return SideSkipPredicate.compareState(level, pos, side);
+            }
+        }
+
+        if (side == rot.rotate(Rotation.CLOCKWISE_90).withFacing(dir))
+        {
+            if (adjDir == dir && adjFront == front && adjRot == rot)
+            {
+                Direction camoSide = rotDir.getOpposite();
+                return SideSkipPredicate.compareState(level, pos, side, camoSide, adjDir);
+            }
+            else if (adjDir == dir.getOpposite() && adjFront != front && rot.isSameDir(dir, adjRot.getOpposite(), adjDir))
+            {
+                Direction camoSide = rotDir.getOpposite();
+                return SideSkipPredicate.compareState(level, pos, side, camoSide, adjDir.getOpposite());
+            }
+        }
+        else if (side == rot.rotate(Rotation.COUNTERCLOCKWISE_90).withFacing(dir))
+        {
+            if (adjDir == dir && adjFront == front && adjRot == rot.rotate(Rotation.CLOCKWISE_90))
+            {
+                Direction camoSide = rotDir.getOpposite();
+                return SideSkipPredicate.compareState(level, pos, side, camoSide, adjDir);
+            }
+            else if (adjDir == dir.getOpposite() && adjFront != front && rot.rotate(Rotation.CLOCKWISE_90).isSameDir(dir, adjRot, adjDir))
+            {
+                Direction camoSide = rotDir.getOpposite();
+                return SideSkipPredicate.compareState(level, pos, side, camoSide, adjDir.getOpposite());
+            }
         }
 
         return false;

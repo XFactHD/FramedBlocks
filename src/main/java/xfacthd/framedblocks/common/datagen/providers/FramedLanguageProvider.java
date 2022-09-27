@@ -105,6 +105,7 @@ public final class FramedLanguageProvider extends LanguageProvider
         add(FBContent.blockFramedFlatInnerSlopePanelCorner.get(), "Framed Flat Inner Slope Panel Corner");
         add(FBContent.blockFramedFlatExtendedSlopePanelCorner.get(), "Framed Flat Extended Slope Panel Corner");
         add(FBContent.blockFramedFlatExtendedInnerSlopePanelCorner.get(), "Framed Flat Extended Inner Slope Panel Corner");
+        add(FBContent.blockFramedFlatDoubleSlopePanelCorner.get(), "Framed Flat Double Slope Panel Corner");
         add(FBContent.blockFramedDoubleStairs.get(), "Framed Double Stairs");
         add(FBContent.blockFramedVerticalDoubleStairs.get(), "Framed Vertical Double Stairs");
         add(FBContent.blockFramedWallBoard.get(), "Framed Wall Board");
