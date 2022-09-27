@@ -62,6 +62,8 @@ public abstract class FramedBlockModel extends BakedModelProxy
     {
         BlockState camoState = Blocks.AIR.defaultBlockState();
 
+        if (state == null) { state = this.state; }
+
         FramedBlockData data = extraData.get(FramedBlockData.PROPERTY);
         if (data != null && renderType != null)
         {
