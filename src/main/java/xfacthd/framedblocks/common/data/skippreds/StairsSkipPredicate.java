@@ -58,6 +58,7 @@ public final class StairsSkipPredicate implements SideSkipPredicate
                 case FRAMED_FLAT_INNER_SLOPE_PANEL_CORNER -> testAgainstFlatInnerSlopePanelCorner(level, pos, dir, shape, top, adjState, side);
                 case FRAMED_FLAT_EXT_SLOPE_PANEL_CORNER -> testAgainstFlatExtendedSlopePanelCorner(level, pos, dir, shape, top, adjState, side);
                 case FRAMED_FLAT_DOUBLE_SLOPE_PANEL_CORNER -> testAgainstFlatDoubleSlopePanelCorner(level, pos, dir, shape, top, adjState, side);
+                case FRAMED_FLAT_INV_DOUBLE_SLOPE_PANEL_CORNER -> testAgainstFlatInverseDoubleSlopePanelCorner(level, pos, dir, shape, top, adjState, side);
                 default -> false;
             };
         }
@@ -519,6 +520,21 @@ public final class StairsSkipPredicate implements SideSkipPredicate
         if (!FlatInnerSlopePanelCornerSkipPredicate.isPanelSide(adjDir, adjRot, side.getOpposite())) { return false; }
 
         if ((!adjFront && adjDir == dir) || (adjFront && adjDir == dir.getOpposite()))
+        {
+            return SideSkipPredicate.compareState(level, pos, side, dir, side.getOpposite());
+        }
+
+        return false;
+    }
+
+    private static boolean testAgainstFlatInverseDoubleSlopePanelCorner(BlockGetter level, BlockPos pos, Direction dir, StairsShape shape, boolean top, BlockState adjState, Direction side)
+    {
+        if (shape != StairsShape.STRAIGHT || (top && side != Direction.DOWN) || (!top && side != Direction.UP)) { return false; }
+
+        Direction adjDir = adjState.getValue(FramedProperties.FACING_HOR);
+        HorizontalRotation adjRot = adjState.getValue(PropertyHolder.ROTATION);
+
+        if (adjDir == dir && FlatInnerSlopePanelCornerSkipPredicate.isPanelSide(adjDir, adjRot, side.getOpposite()))
         {
             return SideSkipPredicate.compareState(level, pos, side, dir, side.getOpposite());
         }

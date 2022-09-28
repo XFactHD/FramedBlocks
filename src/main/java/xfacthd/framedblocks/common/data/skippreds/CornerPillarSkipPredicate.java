@@ -38,6 +38,7 @@ public final class CornerPillarSkipPredicate implements SideSkipPredicate
                 case FRAMED_FLAT_INNER_SLOPE_PANEL_CORNER -> testAgainstFlatInnerSlopePanelCorner(level, pos, dir, adjState, side);
                 case FRAMED_FLAT_EXT_SLOPE_PANEL_CORNER -> testAgainstFlatExtendedSlopePanelCorner(level, pos, dir, adjState, side);
                 case FRAMED_FLAT_DOUBLE_SLOPE_PANEL_CORNER -> testAgainstFlatDoubleSlopePanelCorner(level, pos, dir, adjState, side);
+                case FRAMED_FLAT_INV_DOUBLE_SLOPE_PANEL_CORNER -> testAgainstFlatInverseDoubleSlopePanelCorner(level, pos, dir, adjState, side);
                 default -> false;
             };
         }
@@ -323,6 +324,19 @@ public final class CornerPillarSkipPredicate implements SideSkipPredicate
         {
             Direction secondPanelSide = adjFront ? adjDir.getOpposite() : adjDir;
             return isPanelSide(dir, secondPanelSide) && SideSkipPredicate.compareState(level, pos, side, dir, side.getOpposite());
+        }
+
+        return false;
+    }
+
+    private static boolean testAgainstFlatInverseDoubleSlopePanelCorner(BlockGetter level, BlockPos pos, Direction dir, BlockState adjState, Direction side)
+    {
+        Direction adjDir = adjState.getValue(FramedProperties.FACING_HOR);
+        HorizontalRotation adjRot = adjState.getValue(PropertyHolder.ROTATION);
+
+        if (isPanelSide(dir, side) && FlatInnerSlopePanelCornerSkipPredicate.isPanelSide(adjDir, adjRot, side.getOpposite()))
+        {
+            return isPanelSide(dir, adjDir) && SideSkipPredicate.compareState(level, pos, side, dir, side.getOpposite());
         }
 
         return false;

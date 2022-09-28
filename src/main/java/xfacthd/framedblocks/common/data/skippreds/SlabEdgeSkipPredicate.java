@@ -52,6 +52,7 @@ public final class SlabEdgeSkipPredicate implements SideSkipPredicate
                 case FRAMED_FLAT_INNER_SLOPE_PANEL_CORNER -> testAgainstFlatInnerSlopePanelCorner(level, pos, dir, top, adjState, side);
                 case FRAMED_FLAT_EXT_SLOPE_PANEL_CORNER -> testAgainstFlatExtendedSlopePanelCorner(level, pos, dir, top, adjState, side);
                 case FRAMED_FLAT_DOUBLE_SLOPE_PANEL_CORNER -> testAgainstFlatDoubleSlopePanelCorner(level, pos, dir, top, adjState, side);
+                case FRAMED_FLAT_INV_DOUBLE_SLOPE_PANEL_CORNER -> testAgainstFlatInverseDoubleSlopePanelCorner(level, pos, dir, top, adjState, side);
                 default -> false;
             };
         }
@@ -465,9 +466,25 @@ public final class SlabEdgeSkipPredicate implements SideSkipPredicate
         boolean adjFront = adjState.getValue(PropertyHolder.FRONT);
         HorizontalRotation adjRot = adjState.getValue(PropertyHolder.ROTATION);
 
-        if ((adjDir == dir && adjFront) || (adjDir == dir.getOpposite() && !adjFront)) { return false; }
-
         if (FlatInnerSlopePanelCornerSkipPredicate.isPanelSide(adjDir, adjRot, side.getOpposite()))
+        {
+            if ((adjDir == dir && !adjFront) || (adjDir == dir.getOpposite() && adjFront))
+            {
+                return SideSkipPredicate.compareState(level, pos, side, dir, side.getOpposite());
+            }
+        }
+
+        return false;
+    }
+
+    private static boolean testAgainstFlatInverseDoubleSlopePanelCorner(BlockGetter level, BlockPos pos, Direction dir, boolean top, BlockState adjState, Direction side)
+    {
+        if ((!top && side != Direction.DOWN) || (top && side != Direction.UP)) { return false; }
+
+        Direction adjDir = adjState.getValue(FramedProperties.FACING_HOR);
+        HorizontalRotation adjRot = adjState.getValue(PropertyHolder.ROTATION);
+
+        if (adjDir == dir && FlatInnerSlopePanelCornerSkipPredicate.isPanelSide(adjDir, adjRot, side.getOpposite()))
         {
             return SideSkipPredicate.compareState(level, pos, side, dir, side.getOpposite());
         }

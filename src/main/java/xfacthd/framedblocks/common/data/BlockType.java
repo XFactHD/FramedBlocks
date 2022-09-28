@@ -99,6 +99,7 @@ public enum BlockType implements IBlockType
     FRAMED_FLAT_EXT_SLOPE_PANEL_CORNER              ( true,  true, false,  true,  true,  true, false, false, CtmPredicate.HOR_DIR, new FlatExtendedSlopePanelCornerSkipPredicate(), FramedFlatExtendedSlopePanelCornerBlock::generateShapes),
     FRAMED_FLAT_EXT_INNER_SLOPE_PANEL_CORNER        ( true,  true, false,  true,  true,  true, false, false, FramedFlatExtendedSlopePanelCornerBlock.CTM_PREDICATE, new FlatExtendedInnerSlopePanelCornerSkipPredicate(), FramedFlatExtendedSlopePanelCornerBlock::generateInnerShapes),
     FRAMED_FLAT_DOUBLE_SLOPE_PANEL_CORNER           ( true, false,  true,  true,  true,  true,  true, false, FramedFlatDoubleSlopePanelCornerBlock.CTM_PREDICATE, FramedFlatDoubleSlopePanelCornerBlock::generateShapes),
+    FRAMED_FLAT_INV_DOUBLE_SLOPE_PANEL_CORNER       ( true,  true,  true,  true,  true,  true,  true, false, FramedFlatInverseDoubleSlopePanelCornerBlock::generateShapes),
     FRAMED_DOUBLE_STAIRS                            ( true, false,  true, false,  true,  true,  true, false, FramedDoubleStairsBlock.CTM_PREDICATE, SideSkipPredicate.FALSE, Shapes.block()),
     FRAMED_VERTICAL_DOUBLE_STAIRS                   ( true, false,  true, false,  true,  true,  true, false, FramedVerticalDoubleStairsBlock.CTM_PREDICATE, SideSkipPredicate.FALSE, Shapes.block()),
     FRAMED_WALL_BOARD                               ( true, false, false,  true,  true,  true, false, false, CtmPredicate.HOR_DIR, FramedWallBoardBlock.SKIP_PREDICATE, FramedWallBoardBlock::generateShapes),

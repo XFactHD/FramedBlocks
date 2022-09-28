@@ -44,6 +44,7 @@ import java.util.stream.Collectors;
  * <li>{@link OcclusionTests#test_FlatSlopePanelCorner_FrontHalfSouth(GameTestHelper)}</li>
  * <li>{@link OcclusionTests#test_FlatInnerSlopePanelCorner_FrontHalfNorth(GameTestHelper)}</li>
  * <li>{@link OcclusionTests#test_FlatInnerSlopePanelCorner_FrontHalfSouth(GameTestHelper)}</li>
+ * <li>{@link OcclusionTests#test_FlatInverseDoubleSlopePanelCorner(GameTestHelper)}</li>
  * <li>{@link OcclusionTests#test_HorizontalPane(GameTestHelper)}</li>
  * </ul>
  */
@@ -1533,6 +1534,14 @@ public final class OcclusionTests
                 .defaultBlockState()
                 .setValue(PropertyHolder.FRONT, true);
         TestUtils.testBlockOccludesLightNorth(helper, state, List.of(Direction.NORTH, Direction.SOUTH));
+    }
+
+    @GameTest(template = "box_top", batch = "occlusion", required = false)
+    @TestedType(type = BlockType.FRAMED_FLAT_INV_DOUBLE_SLOPE_PANEL_CORNER)
+    public static void test_FlatInverseDoubleSlopePanelCorner(GameTestHelper helper)
+    {
+        BlockState state = FBContent.blockFramedFlatInverseDoubleSlopePanelCorner.get().defaultBlockState();
+        TestUtils.testDoubleBlockOccludesLightBelow(helper, state, List.of(Direction.NORTH, Direction.SOUTH));
     }
 
     @GameTest(template = "box_top", batch = "occlusion")
