@@ -1536,12 +1536,28 @@ public final class OcclusionTests
         TestUtils.testBlockOccludesLightNorth(helper, state, List.of(Direction.NORTH, Direction.SOUTH));
     }
 
-    @GameTest(template = "box_top", batch = "occlusion", required = false)
+    @GameTest(template = "box_side", batch = "occlusion", required = false)
     @TestedType(type = BlockType.FRAMED_FLAT_INV_DOUBLE_SLOPE_PANEL_CORNER)
     public static void test_FlatInverseDoubleSlopePanelCorner(GameTestHelper helper)
     {
         BlockState state = FBContent.blockFramedFlatInverseDoubleSlopePanelCorner.get().defaultBlockState();
-        TestUtils.testDoubleBlockOccludesLightBelow(helper, state, List.of(Direction.NORTH, Direction.SOUTH));
+        TestUtils.testBlockOccludesLightNorth(helper, state, List.of(Direction.NORTH, Direction.SOUTH));
+    }
+
+    @GameTest(template = "box_side", batch = "occlusion")
+    @TestedType(type = BlockType.FRAMED_FLAT_EXT_DOUBLE_SLOPE_PANEL_CORNER)
+    public static void test_FlatExtendedDoubleSlopePanelCorner(GameTestHelper helper)
+    {
+        BlockState state = FBContent.blockFramedFlatExtendedDoubleSlopePanelCorner.get().defaultBlockState();
+        TestUtils.testBlockOccludesLightNorth(helper, state, List.of(Direction.NORTH, Direction.SOUTH));
+    }
+
+    @GameTest(template = "box_side", batch = "occlusion")
+    @TestedType(type = BlockType.FRAMED_FLAT_EXT_INNER_DOUBLE_SLOPE_PANEL_CORNER)
+    public static void test_FlatExtendedInnerDoubleSlopePanelCorner(GameTestHelper helper)
+    {
+        BlockState state = FBContent.blockFramedFlatExtendedInnerDoubleSlopePanelCorner.get().defaultBlockState();
+        TestUtils.testBlockOccludesLightNorth(helper, state, List.of(Direction.NORTH, Direction.SOUTH));
     }
 
     @GameTest(template = "box_top", batch = "occlusion")

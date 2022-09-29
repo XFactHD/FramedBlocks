@@ -44,6 +44,12 @@ public final class FlatExtendedInnerSlopePanelCornerSkipPredicate implements Sid
                 case FRAMED_EXTENDED_DOUBLE_SLOPE_PANEL -> testAgainstExtendedDoubleSlopePanel(
                         level, pos, dir, rot, perpRot, rotDir, perpRotDir, adjState, side
                 );
+                case FRAMED_FLAT_EXT_DOUBLE_SLOPE_PANEL_CORNER -> testAgainstFlatExtendedDoubleSlopePanelCorner(
+                        level, pos, dir, rot, rotDir, perpRotDir, adjState, side
+                );
+                case FRAMED_FLAT_EXT_INNER_DOUBLE_SLOPE_PANEL_CORNER -> testAgainstFlatExtendedInnerDoubleSlopePanelCorner(
+                        level, pos, dir, rot, perpRot, rotDir, perpRotDir, adjState, side
+                );
                 default -> false;
             };
         }
@@ -126,6 +132,44 @@ public final class FlatExtendedInnerSlopePanelCornerSkipPredicate implements Sid
             return SideSkipPredicate.compareState(level, pos, side, dir, dir);
         }
         else if (side == perpRotDir && adjRot == rot)
+        {
+            return SideSkipPredicate.compareState(level, pos, side, dir, dir);
+        }
+
+        return false;
+    }
+
+    private static boolean testAgainstFlatExtendedDoubleSlopePanelCorner(
+            BlockGetter level, BlockPos pos, Direction dir, HorizontalRotation rot,
+            Direction rotDir, Direction perpRotDir, BlockState adjState, Direction side
+    )
+    {
+        Direction adjDir = adjState.getValue(FramedProperties.FACING_HOR);
+        HorizontalRotation adjRot = adjState.getValue(PropertyHolder.ROTATION);
+
+        if (adjDir == dir && adjRot == rot && (side == rotDir || side == perpRotDir))
+        {
+            return SideSkipPredicate.compareState(level, pos, side, dir, dir);
+        }
+
+        return false;
+    }
+
+    private static boolean testAgainstFlatExtendedInnerDoubleSlopePanelCorner(
+            BlockGetter level, BlockPos pos, Direction dir, HorizontalRotation rot, HorizontalRotation perpRot,
+            Direction rotDir, Direction perpRotDir, BlockState adjState, Direction side
+    )
+    {
+        Direction adjDir = adjState.getValue(FramedProperties.FACING_HOR);
+        HorizontalRotation adjRot = adjState.getValue(PropertyHolder.ROTATION);
+
+        if (adjDir != dir) { return false; }
+
+        if (side == rotDir && adjRot == perpRot)
+        {
+            return SideSkipPredicate.compareState(level, pos, side, dir, dir);
+        }
+        else if (side == perpRotDir && adjRot == rot.rotate(Rotation.CLOCKWISE_90))
         {
             return SideSkipPredicate.compareState(level, pos, side, dir, dir);
         }

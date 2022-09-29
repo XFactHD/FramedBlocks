@@ -90,7 +90,11 @@ public final class LightSourceTests
             case FRAMED_DOUBLE_PANEL,
                  FRAMED_DOUBLE_SLOPE_PANEL,
                  FRAMED_INV_DOUBLE_SLOPE_PANEL,
-                 FRAMED_EXTENDED_DOUBLE_SLOPE_PANEL -> List.of(Direction.NORTH, Direction.SOUTH);
+                 FRAMED_EXTENDED_DOUBLE_SLOPE_PANEL,
+                 FRAMED_FLAT_DOUBLE_SLOPE_PANEL_CORNER,
+                 FRAMED_FLAT_INV_DOUBLE_SLOPE_PANEL_CORNER,
+                 FRAMED_FLAT_EXT_DOUBLE_SLOPE_PANEL_CORNER,
+                 FRAMED_FLAT_EXT_INNER_DOUBLE_SLOPE_PANEL_CORNER -> List.of(Direction.NORTH, Direction.SOUTH);
 
             case FRAMED_VERTICAL_DOUBLE_STAIRS -> List.of(Direction.EAST, Direction.WEST);
 

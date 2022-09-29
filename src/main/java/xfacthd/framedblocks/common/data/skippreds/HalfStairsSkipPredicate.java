@@ -64,6 +64,7 @@ public final class HalfStairsSkipPredicate implements SideSkipPredicate
                     case FRAMED_FLAT_EXT_SLOPE_PANEL_CORNER -> testAgainstFlatExtendedSlopePanelCorner(level, pos, dir, top, right, adjState, side);
                     case FRAMED_FLAT_DOUBLE_SLOPE_PANEL_CORNER -> testAgainstFlatDoubleSlopePanelCorner(level, pos, dir, top, right, adjState, side);
                     case FRAMED_FLAT_INV_DOUBLE_SLOPE_PANEL_CORNER -> testAgainstFlatInverseDoubleSlopePanelCorner(level, pos, dir, top, right, adjState, side);
+                    case FRAMED_FLAT_EXT_DOUBLE_SLOPE_PANEL_CORNER -> testAgainstFlatExtendedDoubleSlopePanelCorner(level, pos, dir, top, right, adjState, side);
                     case FRAMED_VERTICAL_DOUBLE_STAIRS -> testAgainstVerticalDoubleStairs(level, pos, dir, right, adjState, side);
                     default -> false;
                 };
@@ -399,6 +400,25 @@ public final class HalfStairsSkipPredicate implements SideSkipPredicate
             {
                 Direction camoDir = right ? dir.getClockWise() : dir.getCounterClockWise();
                 return SideSkipPredicate.compareState(level, pos, side, camoDir, side.getOpposite());
+            }
+        }
+
+        return false;
+    }
+
+    private static boolean testAgainstFlatExtendedDoubleSlopePanelCorner(
+            BlockGetter level, BlockPos pos, Direction dir, boolean top, boolean right, BlockState adjState, Direction side
+    )
+    {
+        Direction adjDir = adjState.getValue(FramedProperties.FACING_HOR);
+        HorizontalRotation adjRot = adjState.getValue(PropertyHolder.ROTATION);
+
+        Direction checkDir = right ? dir.getClockWise() : dir.getCounterClockWise();
+        if (FlatExtendedSlopePanelCornerSkipPredicate.isPanelSide(adjDir, adjRot, side.getOpposite()) && adjDir.getAxis() == checkDir.getAxis())
+        {
+            if (side == dir || (!top && side == Direction.DOWN) || (top && side == Direction.UP))
+            {
+                return SideSkipPredicate.compareState(level, pos, side, adjDir, checkDir);
             }
         }
 

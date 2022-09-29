@@ -41,6 +41,11 @@ public class FramedFlatSlopePanelCornerBlock extends FramedBlock
 
     public static BlockState getStateForPlacement(Block block, boolean hasFront, BlockPlaceContext context)
     {
+        return getStateForPlacement(block, hasFront, true, context);
+    }
+
+    public static BlockState getStateForPlacement(Block block, boolean hasFront, boolean hasWater, BlockPlaceContext context)
+    {
         Direction facing = context.getHorizontalDirection();
 
         Direction side = context.getClickedFace();
@@ -54,22 +59,26 @@ public class FramedFlatSlopePanelCornerBlock extends FramedBlock
             rotation = HorizontalRotation.fromDirection(facing, side);
         }
 
-        boolean front = false;
-        if (hasFront && side.getAxis() != facing.getAxis())
-        {
-            Vec3 subHit = Utils.fraction(context.getClickLocation());
-            double xz = Utils.isX(facing) ? subHit.x : subHit.z;
-            front = (xz < .5) == Utils.isPositive(facing);
-        }
-
         BlockState state = block.defaultBlockState()
                 .setValue(FramedProperties.FACING_HOR, facing)
                 .setValue(PropertyHolder.ROTATION, rotation);
         if (hasFront)
         {
+            boolean front = false;
+            if (side.getAxis() != facing.getAxis())
+            {
+                Vec3 subHit = Utils.fraction(context.getClickLocation());
+                double xz = Utils.isX(facing) ? subHit.x : subHit.z;
+                front = (xz < .5) == Utils.isPositive(facing);
+            }
+
             state = state.setValue(PropertyHolder.FRONT, front);
         }
-        return withWater(state, context.getLevel(), context.getClickedPos());
+        if (hasWater)
+        {
+            state = withWater(state, context.getLevel(), context.getClickedPos());
+        }
+        return state;
     }
 
 

@@ -241,6 +241,8 @@ public final class FBClient
         ClientUtils.replaceModels(FBContent.blockFramedFlatElevatedDoubleSlopeSlabCorner, registry, FramedFlatElevatedDoubleSlopeSlabCornerModel::new, FramedFlatElevatedDoubleSlopeSlabCornerModel.itemSource(), ignoreSolid);
         ClientUtils.replaceModels(FBContent.blockFramedFlatElevatedInnerDoubleSlopeSlabCorner, registry, FramedFlatElevatedInnerDoubleSlopeSlabCornerModel::new, FramedFlatElevatedInnerDoubleSlopeSlabCornerModel.itemSource(), ignoreSolid);
         ClientUtils.replaceModels(FBContent.blockFramedFlatInverseDoubleSlopePanelCorner, registry, FramedFlatInverseDoubleSlopePanelCornerModel::new, FramedFlatInverseDoubleSlopePanelCornerModel.itemSource(), ignoreDefault);
+        ClientUtils.replaceModels(FBContent.blockFramedFlatExtendedDoubleSlopePanelCorner, registry, FramedFlatExtendedDoubleSlopePanelCornerModel::new, FramedFlatExtendedDoubleSlopePanelCornerModel.itemSource(), ignoreSolid);
+        ClientUtils.replaceModels(FBContent.blockFramedFlatExtendedInnerDoubleSlopePanelCorner, registry, FramedFlatExtendedInnerDoubleSlopePanelCornerModel::new, FramedFlatExtendedInnerDoubleSlopePanelCornerModel.itemSource(), ignoreSolid);
         ClientUtils.replaceModels(FBContent.blockFramedVerticalHalfStairs, registry, FramedVerticalHalfStairsModel::new, ignoreWaterlogged);
         ClientUtils.replaceModels(FBContent.blockFramedSlopePanel, registry, FramedSlopePanelModel::new, FramedSlopePanelModel.itemSource(), ignoreDefault);
         ClientUtils.replaceModels(FBContent.blockFramedExtendedSlopePanel, registry, FramedExtendedSlopePanelModel::new, FramedExtendedSlopePanelModel.itemSource(), ignoreDefault);

@@ -542,6 +542,23 @@ public final class StairsSkipPredicate implements SideSkipPredicate
         return false;
     }
 
+    private static boolean testAgainstFlatExtendedDoubleSlopePanelCorner(
+            BlockGetter level, BlockPos pos, Direction dir, StairsShape shape, boolean top, BlockState adjState, Direction side
+    )
+    {
+        if (shape != StairsShape.STRAIGHT || (top && side != Direction.DOWN) || (!top && side != Direction.UP)) { return false; }
+
+        Direction adjDir = adjState.getValue(FramedProperties.FACING_HOR);
+        HorizontalRotation adjRot = adjState.getValue(PropertyHolder.ROTATION);
+
+        if (adjDir.getAxis() == dir.getAxis() && FlatExtendedSlopePanelCornerSkipPredicate.isPanelSide(adjDir, adjRot, side.getOpposite()))
+        {
+            return SideSkipPredicate.compareState(level, pos, side, dir, dir);
+        }
+
+        return false;
+    }
+
 
 
     public static boolean isStairSide(StairsShape shape, Direction dir, Direction side)

@@ -7,19 +7,24 @@ import net.minecraft.world.level.block.Rotation;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.Vec3;
+import xfacthd.framedblocks.api.block.IFramedBlock;
 import xfacthd.framedblocks.api.data.CamoContainer;
 import xfacthd.framedblocks.api.util.FramedProperties;
 import xfacthd.framedblocks.api.util.Utils;
 import xfacthd.framedblocks.common.FBContent;
+import xfacthd.framedblocks.common.data.BlockType;
 import xfacthd.framedblocks.common.data.PropertyHolder;
 import xfacthd.framedblocks.common.data.property.HorizontalRotation;
 import xfacthd.framedblocks.common.util.DoubleSoundMode;
 
-public class FramedFlatDoubleSlopePanelCornerBlockEntity extends FramedDoubleBlockEntity
+public class FramedFlatExtendedDoubleSlopePanelCornerBlockEntity extends FramedDoubleBlockEntity
 {
-    public FramedFlatDoubleSlopePanelCornerBlockEntity(BlockPos pos, BlockState state)
+    private final boolean isInner;
+
+    public FramedFlatExtendedDoubleSlopePanelCornerBlockEntity(BlockPos pos, BlockState state)
     {
-        super(FBContent.blockEntityTypeFramedFlatDoubleSlopePanelCorner.get(), pos, state);
+        super(FBContent.blockEntityTypeFramedFlatExtendedDoubleSlopePanelCorner.get(), pos, state);
+        this.isInner = getBlockType() == BlockType.FRAMED_FLAT_EXT_INNER_DOUBLE_SLOPE_PANEL_CORNER;
     }
 
     @Override
@@ -34,7 +39,8 @@ public class FramedFlatDoubleSlopePanelCornerBlockEntity extends FramedDoubleBlo
         HorizontalRotation rotation = getBlockState().getValue(PropertyHolder.ROTATION);
         Direction rotDir = rotation.withFacing(facing);
         Direction perpRotDir = rotation.rotate(Rotation.COUNTERCLOCKWISE_90).withFacing(facing);
-        if (side == rotDir.getOpposite() || side == perpRotDir.getOpposite())
+
+        if (isInner && (side == rotDir.getOpposite() || side == perpRotDir.getOpposite()))
         {
             return false;
         }
@@ -46,27 +52,35 @@ public class FramedFlatDoubleSlopePanelCornerBlockEntity extends FramedDoubleBlo
         {
             hor = 1D - hor;
         }
-        if (!getBlockState().getValue(PropertyHolder.FRONT))
+
+        Direction perpDir;
+        if (isInner)
         {
-            hor -= .5D;
+            perpDir = side == rotDir ? perpRotDir : rotDir;
+        }
+        else
+        {
+            perpDir = side == rotDir.getOpposite() ? perpRotDir.getOpposite() : rotDir.getOpposite();
         }
 
-        Direction perpDir = side == rotDir ? perpRotDir : rotDir;
-        double vert = Utils.isY(perpDir) ? vec.y() : (Utils.isX(facing) ? vec.z() : vec.x());
-        if (perpDir == Direction.DOWN || (!Utils.isY(perpDir) && !Utils.isPositive(perpDir)))
+        double perpHor = Utils.isY(perpDir) ? vec.y() : (Utils.isX(facing) ? vec.z() : vec.x());
+        if ((perpDir == Direction.DOWN || (!Utils.isY(perpDir) && !Utils.isPositive(perpDir))) == isInner)
         {
-            vert = 1F - vert;
+            perpHor = 1F - perpHor;
         }
-        return (hor * 2D) < vert;
+        return (hor * 2D) < perpHor;
     }
 
     @Override
     public DoubleSoundMode getSoundMode()
     {
-        HorizontalRotation rotation = getBlockState().getValue(PropertyHolder.ROTATION);
-        if (rotation == HorizontalRotation.UP || rotation == HorizontalRotation.RIGHT)
+        if (isInner)
         {
-            return DoubleSoundMode.FIRST;
+            HorizontalRotation rotation = getBlockState().getValue(PropertyHolder.ROTATION);
+            if (rotation == HorizontalRotation.UP || rotation == HorizontalRotation.RIGHT)
+            {
+                return DoubleSoundMode.FIRST;
+            }
         }
         return DoubleSoundMode.EITHER;
     }
@@ -92,16 +106,28 @@ public class FramedFlatDoubleSlopePanelCornerBlockEntity extends FramedDoubleBlo
     public boolean isSolidSide(Direction side)
     {
         Direction facing = getBlockState().getValue(FramedProperties.FACING_HOR);
-        boolean front = getBlockState().getValue(PropertyHolder.FRONT);
-        if (side == facing && !front)
+
+        if (side == facing)
         {
             //noinspection ConstantConditions
             return getCamo().getState().isSolidRender(level, worldPosition);
         }
-        if (side == facing.getOpposite() && front)
+        if (side == facing.getOpposite())
         {
             //noinspection ConstantConditions
             return getCamoTwo().getState().isSolidRender(level, worldPosition);
+        }
+
+        if (isInner)
+        {
+            HorizontalRotation rotation = getBlockState().getValue(PropertyHolder.ROTATION);
+            Direction rotDir = rotation.withFacing(facing);
+            Direction perpRotDir = rotation.rotate(Rotation.COUNTERCLOCKWISE_90).withFacing(facing);
+            if (side == rotDir.getOpposite() || side == perpRotDir.getOpposite())
+            {
+                //noinspection ConstantConditions
+                return getCamo().getState().isSolidRender(level, worldPosition);
+            }
         }
 
         return false;
@@ -110,27 +136,43 @@ public class FramedFlatDoubleSlopePanelCornerBlockEntity extends FramedDoubleBlo
     @Override
     protected Tuple<BlockState, BlockState> getBlockPair(BlockState state)
     {
-        return getBlockPair(
-                state.getValue(FramedProperties.FACING_HOR),
-                state.getValue(PropertyHolder.ROTATION),
-                state.getValue(PropertyHolder.FRONT)
-        );
+        if (((IFramedBlock) state.getBlock()).getBlockType() == BlockType.FRAMED_FLAT_EXT_INNER_DOUBLE_SLOPE_PANEL_CORNER)
+        {
+            return getInnerBlockPair(state.getValue(FramedProperties.FACING_HOR), state.getValue(PropertyHolder.ROTATION));
+        }
+        else
+        {
+            return getBlockPair(state.getValue(FramedProperties.FACING_HOR), state.getValue(PropertyHolder.ROTATION));
+        }
     }
 
-    public static Tuple<BlockState, BlockState> getBlockPair(Direction facing, HorizontalRotation rotation, boolean front)
+    public static Tuple<BlockState, BlockState> getBlockPair(Direction facing, HorizontalRotation rotation)
     {
         HorizontalRotation backRot = rotation.rotate(rotation.isVertical() ? Rotation.COUNTERCLOCKWISE_90 : Rotation.CLOCKWISE_90);
         return new Tuple<>(
-                FBContent.blockFramedFlatInnerSlopePanelCorner.get()
+                FBContent.blockFramedFlatExtendedSlopePanelCorner.get()
                         .defaultBlockState()
                         .setValue(FramedProperties.FACING_HOR, facing)
-                        .setValue(PropertyHolder.ROTATION, rotation)
-                        .setValue(PropertyHolder.FRONT, front),
+                        .setValue(PropertyHolder.ROTATION, rotation),
+                FBContent.blockFramedFlatInnerSlopePanelCorner.get()
+                        .defaultBlockState()
+                        .setValue(FramedProperties.FACING_HOR, facing.getOpposite())
+                        .setValue(PropertyHolder.ROTATION, backRot)
+        );
+    }
+
+    public static Tuple<BlockState, BlockState> getInnerBlockPair(Direction facing, HorizontalRotation rotation)
+    {
+        HorizontalRotation backRot = rotation.rotate(rotation.isVertical() ? Rotation.COUNTERCLOCKWISE_90 : Rotation.CLOCKWISE_90);
+        return new Tuple<>(
+                FBContent.blockFramedFlatExtendedInnerSlopePanelCorner.get()
+                        .defaultBlockState()
+                        .setValue(FramedProperties.FACING_HOR, facing)
+                        .setValue(PropertyHolder.ROTATION, rotation),
                 FBContent.blockFramedFlatSlopePanelCorner.get()
                         .defaultBlockState()
                         .setValue(FramedProperties.FACING_HOR, facing.getOpposite())
                         .setValue(PropertyHolder.ROTATION, backRot)
-                        .setValue(PropertyHolder.FRONT, !front)
         );
     }
 }
