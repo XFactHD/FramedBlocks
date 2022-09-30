@@ -209,6 +209,8 @@ public final class FBClient
         ClientUtils.replaceModels(FBContent.blockFramedWallTorch, registry, FramedWallTorchModel::new, null);
         ClientUtils.replaceModels(FBContent.blockFramedSoulTorch, registry, FramedSoulTorchModel::new, null);
         ClientUtils.replaceModels(FBContent.blockFramedSoulWallTorch, registry, FramedSoulWallTorchModel::new, null);
+        ClientUtils.replaceModels(FBContent.blockFramedRedstoneTorch, registry, FramedRedstoneTorchModel::new, null);
+        ClientUtils.replaceModels(FBContent.blockFramedRedstoneWallTorch, registry, FramedRedstoneWallTorchModel::new, null);
         ClientUtils.replaceModels(FBContent.blockFramedFloor, registry, FramedFloorModel::new, ignoreDefault);
         ClientUtils.replaceModels(FBContent.blockFramedLattice, registry, FramedLatticeModel::new, ignoreWaterloggedLock);
         ClientUtils.replaceModels(FBContent.blockFramedVerticalStairs, registry, FramedVerticalStairsModel::new, ignoreDefaultLock);

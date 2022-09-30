@@ -1,0 +1,10 @@
+{
+  "variants": {
+    "lit=false": {
+      "model": "framedblocks:block/framed_redstone_torch_off"
+    },
+    "lit=true": {
+      "model": "framedblocks:block/framed_redstone_torch"
+    }
+  }
+}

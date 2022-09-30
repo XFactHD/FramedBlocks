@@ -64,6 +64,7 @@ public final class FramedLanguageProvider extends LanguageProvider
         add(FBContent.blockFramedDoubleThreewayCorner.get(), "Framed Double Threeway Corner");
         add(FBContent.blockFramedTorch.get(), "Framed Torch"); //Wall torch name is handled through WallTorchBlock
         add(FBContent.blockFramedSoulTorch.get(), "Framed Soul Torch"); //See above
+        add(FBContent.blockFramedRedstoneTorch.get(), "Framed Redstone Torch"); //See above
         add(FBContent.blockFramedFloor.get(), "Framed Floor Board");
         add(FBContent.blockFramedLattice.get(), "Framed Lattice");
         add(FBContent.blockFramedVerticalStairs.get(), "Framed Vertical Stairs");

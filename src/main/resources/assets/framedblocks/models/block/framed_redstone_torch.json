@@ -1,0 +1,50 @@
+{
+	"credit": "Made with Blockbench",
+	"ambientocclusion": false,
+	"textures": {
+		"particle": "framedblocks:block/framed_redstone_torch",
+		"torch": "forge:white",
+		"top": "framedblocks:block/framed_redstone_torch"
+	},
+	"elements": [
+		{
+			"from": [7, 8, 7],
+			"to": [9, 10, 9],
+			"shade": false,
+			"faces": {
+				"up": {"uv": [7, 6, 9, 8], "texture": "#top"},
+				"down": {"uv": [7, 6, 9, 8], "texture": "#top"}
+			}
+		},
+		{
+			"from": [7, 7, 6],
+			"to": [9, 11, 10],
+			"shade": false,
+			"faces": {
+				"east": {"uv": [6, 5, 10, 9], "texture": "#top"},
+				"west": {"uv": [6, 5, 10, 9], "texture": "#top"}
+			}
+		},
+		{
+			"from": [6, 7, 7],
+			"to": [10, 11, 9],
+			"shade": false,
+			"faces": {
+				"north": {"uv": [6, 5, 10, 9], "texture": "#top"},
+				"south": {"uv": [6, 5, 10, 9], "texture": "#top"}
+			}
+		},
+		{
+			"from": [7, 0, 7],
+			"to": [9, 7, 9],
+			"shade": false,
+			"faces": {
+				"north": {"uv": [7, 9, 9, 16], "texture": "#torch"},
+				"east": {"uv": [7, 9, 9, 16], "texture": "#torch"},
+				"south": {"uv": [7, 9, 9, 16], "texture": "#torch"},
+				"west": {"uv": [7, 9, 9, 16], "texture": "#torch"},
+				"down": {"uv": [7, 7, 9, 9], "texture": "#torch"}
+			}
+		}
+	]
+}

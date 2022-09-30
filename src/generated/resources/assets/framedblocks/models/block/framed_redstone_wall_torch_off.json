@@ -1,0 +1,7 @@
+{
+  "parent": "framedblocks:block/framed_wall_torch",
+  "textures": {
+    "particle": "framedblocks:block/framed_redstone_torch_off",
+    "top": "minecraft:block/redstone_torch_off"
+  }
+}
