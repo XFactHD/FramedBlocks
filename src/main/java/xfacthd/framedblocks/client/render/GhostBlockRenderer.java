@@ -14,14 +14,10 @@ import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.block.*;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.*;
-import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.ForgeRenderTypes;
 import net.minecraftforge.client.event.RenderLevelStageEvent;
 import net.minecraftforge.client.model.data.ModelData;
 import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import xfacthd.framedblocks.api.ghost.CamoPair;
 import xfacthd.framedblocks.api.ghost.GhostRenderBehaviour;
 import xfacthd.framedblocks.api.util.*;
@@ -33,7 +29,6 @@ import java.util.IdentityHashMap;
 import java.util.Map;
 
 @SuppressWarnings("ConstantConditions")
-@Mod.EventBusSubscriber(modid = FramedConstants.MOD_ID, value = Dist.CLIENT, bus = Mod.EventBusSubscriber.Bus.MOD)
 public final class GhostBlockRenderer
 {
     private static final RandomSource RANDOM = RandomSource.create();
@@ -44,8 +39,7 @@ public final class GhostBlockRenderer
     private static final GhostRenderBehaviour DEFAULT_BEHAVIOUR = new GhostRenderBehaviour() {};
     private static final String PROFILER_KEY = FramedConstants.MOD_ID + "_ghost_block";
 
-    @SubscribeEvent
-    public static void onClientSetup(final FMLClientSetupEvent event)
+    public static void init()
     {
         MODEL_DATA = ModelData.builder()
                 .with(FramedBlockData.PROPERTY, GHOST_MODEL_DATA)

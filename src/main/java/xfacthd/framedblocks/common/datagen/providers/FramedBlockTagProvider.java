@@ -55,22 +55,20 @@ public final class FramedBlockTagProvider extends BlockTagsProvider
 
         tag(Utils.BE_WHITELIST);
 
+        Set<Block> pickaxeBlocks = Set.of(
+                FBContent.blockFramedIronDoor.get(),
+                FBContent.blockFramedIronTrapDoor.get(),
+                FBContent.blockFramedIronGate.get()
+        );
+
         TagsProvider.TagAppender<Block> axeTag = tag(BlockTags.MINEABLE_WITH_AXE);
         FBContent.getRegisteredBlocks()
                 .stream()
                 .map(RegistryObject::get)
                 .filter(b -> b instanceof IFramedBlock)
-                .filter(b ->
-                        b != FBContent.blockFramedIronDoor.get() &&
-                        b != FBContent.blockFramedIronTrapDoor.get() &&
-                        b != FBContent.blockFramedIronGate.get()
-                )
+                .filter(b -> !pickaxeBlocks.contains(b))
                 .forEach(axeTag::add);
 
-        tag(BlockTags.MINEABLE_WITH_PICKAXE).add(
-                FBContent.blockFramedIronDoor.get(),
-                FBContent.blockFramedIronTrapDoor.get(),
-                FBContent.blockFramedIronGate.get()
-        );
+        tag(BlockTags.MINEABLE_WITH_PICKAXE).add(pickaxeBlocks.toArray(Block[]::new));
     }
 }

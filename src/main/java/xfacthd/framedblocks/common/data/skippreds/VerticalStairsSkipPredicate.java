@@ -334,7 +334,9 @@ public final class VerticalStairsSkipPredicate implements SideSkipPredicate
         return false;
     }
 
-    private static boolean testAgainstFlatInnerSlopePanelCorner(BlockGetter level, BlockPos pos, Direction dir, StairsType type, BlockState adjState, Direction side)
+    private static boolean testAgainstFlatInnerSlopePanelCorner(
+            BlockGetter level, BlockPos pos, Direction dir, StairsType type, BlockState adjState, Direction side
+    )
     {
         if (type != StairsType.VERTICAL) { return false; }
 
@@ -356,7 +358,9 @@ public final class VerticalStairsSkipPredicate implements SideSkipPredicate
         return false;
     }
 
-    private static boolean testAgainstFlatExtendedSlopePanelCorner(BlockGetter level, BlockPos pos, Direction dir, StairsType type, BlockState adjState, Direction side)
+    private static boolean testAgainstFlatExtendedSlopePanelCorner(
+            BlockGetter level, BlockPos pos, Direction dir, StairsType type, BlockState adjState, Direction side
+    )
     {
         if (type != StairsType.VERTICAL) { return false; }
 
@@ -373,7 +377,9 @@ public final class VerticalStairsSkipPredicate implements SideSkipPredicate
         return false;
     }
 
-    private static boolean testAgainstFlatDoubleSlopePanelCorner(BlockGetter level, BlockPos pos, Direction dir, StairsType type, BlockState adjState, Direction side)
+    private static boolean testAgainstFlatDoubleSlopePanelCorner(
+            BlockGetter level, BlockPos pos, Direction dir, StairsType type, BlockState adjState, Direction side
+    )
     {
         if (type != StairsType.VERTICAL) { return false; }
 
@@ -395,7 +401,9 @@ public final class VerticalStairsSkipPredicate implements SideSkipPredicate
         return false;
     }
 
-    private static boolean testAgainstFlatInverseDoubleSlopePanelCorner(BlockGetter level, BlockPos pos, Direction dir, StairsType type, BlockState adjState, Direction side)
+    private static boolean testAgainstFlatInverseDoubleSlopePanelCorner(
+            BlockGetter level, BlockPos pos, Direction dir, StairsType type, BlockState adjState, Direction side
+    )
     {
         if (type != StairsType.VERTICAL) { return false; }
 
