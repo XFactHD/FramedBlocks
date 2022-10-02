@@ -59,7 +59,7 @@ public enum BlockType implements IBlockType
     FRAMED_SOUL_WALL_TORCH                          (false, false, false, false, false, false, false, false),
     FRAMED_REDSTONE_TORCH                           (false, false, false, false,  true, false, false, false),
     FRAMED_REDSTONE_WALL_TORCH                      (false, false, false, false, false, false, false, false),
-    FRAMED_FLOOR_BOARD                              ( true, false, false,  true,  true,  true, false, false, FramedFloorBlock.CTM_PREDICATE, FramedFloorBlock.SKIP_PREDICATE, Shapes.box(0, 0, 0, 1, 1D/16D, 1)),
+    FRAMED_FLOOR_BOARD                              ( true, false, false,  true,  true,  true, false, false, CtmPredicate.TOP, FramedFloorBlock.SKIP_PREDICATE, FramedFloorBlock::generateShapes),
     FRAMED_LATTICE_BLOCK                            (false, false, false,  true,  true,  true, false,  true, CtmPredicate.FALSE, FramedLatticeBlock.SKIP_PREDICATE, FramedLatticeBlock::generateShapes),
     FRAMED_VERTICAL_STAIRS                          ( true, false, false,  true,  true,  true, false,  true, FramedVerticalStairsBlock.CTM_PREDICATE, new VerticalStairsSkipPredicate(), FramedVerticalStairsBlock::generateShapes),
     FRAMED_CHEST                                    (false, false,  true,  true,  true, false, false, false, Shapes.box(1D/16D, 0, 1D/16D, 15D/16D, 14D/16D, 15D/16D)),
