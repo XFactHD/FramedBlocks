@@ -1,12 +1,12 @@
 {
   "parent": "minecraft:recipes/root",
   "criteria": {
-    "hasFramedInverseDoubleSlopeSlab": {
+    "hasFramedDoubleSlopePanel": {
       "conditions": {
         "items": [
           {
             "items": [
-              "framedblocks:framed_inv_double_slope_slab"
+              "framedblocks:framed_double_slope_panel"
             ]
           }
         ]
@@ -22,7 +22,7 @@
   },
   "requirements": [
     [
-      "hasFramedInverseDoubleSlopeSlab",
+      "hasFramedDoubleSlopePanel",
       "has_the_recipe"
     ]
   ],

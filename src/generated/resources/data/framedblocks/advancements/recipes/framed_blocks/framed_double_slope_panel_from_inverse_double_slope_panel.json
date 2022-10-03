@@ -1,12 +1,12 @@
 {
   "parent": "minecraft:recipes/root",
   "criteria": {
-    "hasFramedSlopePanel": {
+    "hasFramedInverseDoubleSlopePanel": {
       "conditions": {
         "items": [
           {
             "items": [
-              "framedblocks:framed_slope_panel"
+              "framedblocks:framed_inv_double_slope_panel"
             ]
           }
         ]
@@ -15,20 +15,20 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "framedblocks:framed_extended_slope_panel"
+        "recipe": "framedblocks:framed_double_slope_panel_from_inverse_double_slope_panel"
       },
       "trigger": "minecraft:recipe_unlocked"
     }
   },
   "requirements": [
     [
-      "hasFramedSlopePanel",
+      "hasFramedInverseDoubleSlopePanel",
       "has_the_recipe"
     ]
   ],
   "rewards": {
     "recipes": [
-      "framedblocks:framed_extended_slope_panel"
+      "framedblocks:framed_double_slope_panel_from_inverse_double_slope_panel"
     ]
   }
 }

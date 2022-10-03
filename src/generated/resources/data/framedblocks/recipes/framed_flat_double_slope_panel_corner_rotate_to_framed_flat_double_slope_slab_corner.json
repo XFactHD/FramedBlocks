@@ -3,9 +3,12 @@
   "ingredients": [
     {
       "item": "framedblocks:framed_flat_double_slope_panel_corner"
+    },
+    {
+      "item": "framedblocks:framed_wrench"
     }
   ],
   "result": {
-    "item": "framedblocks:framed_flat_inv_double_slope_panel_corner"
+    "item": "framedblocks:framed_flat_double_slope_slab_corner"
   }
 }

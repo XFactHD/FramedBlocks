@@ -1,12 +1,12 @@
 {
-  "type": "minecraft:crafting_shapeless",
-  "ingredients": [
-    {
-      "item": "framedblocks:framed_double_slope_slab"
-    },
-    {
-      "item": "framedblocks:framed_wrench"
+  "type": "minecraft:crafting_shaped",
+  "key": {
+    "P": {
+      "item": "framedblocks:framed_slope_panel"
     }
+  },
+  "pattern": [
+    "PP"
   ],
   "result": {
     "item": "framedblocks:framed_double_slope_panel"

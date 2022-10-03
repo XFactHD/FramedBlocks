@@ -1,12 +1,12 @@
 {
   "parent": "minecraft:recipes/root",
   "criteria": {
-    "hasFramedSlopeSlab": {
+    "hasFramedSlope": {
       "conditions": {
         "items": [
           {
             "items": [
-              "framedblocks:framed_slope_slab"
+              "framedblocks:framed_slope"
             ]
           }
         ]
@@ -22,7 +22,7 @@
   },
   "requirements": [
     [
-      "hasFramedSlopeSlab",
+      "hasFramedSlope",
       "has_the_recipe"
     ]
   ],

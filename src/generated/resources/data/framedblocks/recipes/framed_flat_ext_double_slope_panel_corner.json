@@ -9,7 +9,7 @@
     }
   },
   "pattern": [
-    "IC"
+    "CI"
   ],
   "result": {
     "item": "framedblocks:framed_flat_ext_double_slope_panel_corner"
