@@ -8,8 +8,7 @@ import net.minecraft.world.level.block.Rotation;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
-import xfacthd.framedblocks.api.util.CtmPredicate;
-import xfacthd.framedblocks.api.util.FramedProperties;
+import xfacthd.framedblocks.api.util.*;
 import xfacthd.framedblocks.common.blockentity.FramedFlatExtendedDoubleSlopePanelCornerBlockEntity;
 import xfacthd.framedblocks.common.data.BlockType;
 import xfacthd.framedblocks.common.data.PropertyHolder;
@@ -42,6 +41,28 @@ public class FramedFlatExtendedDoubleSlopePanelCornerBlock extends AbstractFrame
     {
         return FramedFlatSlopePanelCornerBlock.getStateForPlacement(this, false, false, context);
     }
+
+    @Override
+    public BlockState rotate(BlockState state, Direction face, Rotation rot)
+    {
+        Direction dir = state.getValue(FramedProperties.FACING_HOR);
+
+        if (Utils.isY(face))
+        {
+            return state.setValue(FramedProperties.FACING_HOR, rot.rotate(dir));
+        }
+        else if (face.getAxis() == dir.getAxis())
+        {
+            HorizontalRotation rotation = state.getValue(PropertyHolder.ROTATION);
+            return state.setValue(PropertyHolder.ROTATION, rotation.rotate(rot));
+        }
+
+        return state;
+    }
+
+    @Override
+    @SuppressWarnings("deprecation")
+    public BlockState rotate(BlockState state, Rotation rotation) { return rotate(state, Direction.UP, rotation); }
 
     @Override
     public BlockEntity newBlockEntity(BlockPos pos, BlockState state)

@@ -6,10 +6,13 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.Rotation;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
+import net.minecraft.world.phys.BlockHitResult;
+import net.minecraft.world.phys.Vec3;
 import net.minecraft.world.phys.shapes.*;
 import xfacthd.framedblocks.api.util.FramedProperties;
 import xfacthd.framedblocks.api.util.Utils;
@@ -41,6 +44,72 @@ public class FramedFlatInverseDoubleSlopeSlabCornerBlock extends AbstractFramedD
 
         state = withTop(state, context.getClickedFace(), context.getClickLocation());
         return withWater(state, context.getLevel(), context.getClickedPos());
+    }
+
+    @Override
+    public BlockState rotate(BlockState state, BlockHitResult hit, Rotation rot)
+    {
+        Direction face = hit.getDirection();
+
+        Direction dir = state.getValue(FramedProperties.FACING_HOR);
+        boolean top = state.getValue(FramedProperties.TOP);
+        if (face == dir.getOpposite() || face == dir.getClockWise())
+        {
+            Vec3 vec = Utils.fraction(hit.getLocation());
+            if ((vec.y > .5) != top)
+            {
+                face = top ? Direction.DOWN : Direction.UP;
+            }
+        }
+        else if (face == dir || face == dir.getCounterClockWise())
+        {
+            Vec3 vec = Utils.fraction(hit.getLocation());
+
+            Direction perpDir = face == dir.getClockWise() ? dir : dir.getCounterClockWise();
+            double hor = Utils.isX(perpDir) ? vec.x() : vec.z();
+            if (!Utils.isPositive(perpDir))
+            {
+                hor = 1D - hor;
+            }
+
+            double y = vec.y();
+            if (top)
+            {
+                y -= .5;
+            }
+            else
+            {
+                y = .5 - y;
+            }
+            if ((y * 2D) >= hor)
+            {
+                face = top ? Direction.DOWN : Direction.UP;
+            }
+        }
+
+        return rotate(state, face, rot);
+    }
+
+    @Override
+    public BlockState rotate(BlockState state, Direction face, Rotation rot)
+    {
+        if (Utils.isY(face))
+        {
+            Direction dir = state.getValue(FramedProperties.FACING_HOR);
+            return state.setValue(FramedProperties.FACING_HOR, rot.rotate(dir));
+        }
+        else if (rot != Rotation.NONE)
+        {
+            return state.cycle(FramedProperties.TOP);
+        }
+        return state;
+    }
+
+    @Override
+    @SuppressWarnings("deprecation")
+    public BlockState rotate(BlockState state, Rotation rotation)
+    {
+        return rotate(state, Direction.UP, rotation);
     }
 
     @Override
