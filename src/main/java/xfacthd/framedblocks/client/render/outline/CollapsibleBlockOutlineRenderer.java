@@ -45,7 +45,7 @@ public class CollapsibleBlockOutlineRenderer implements OutlineRender
             }
             else if (faceDir != Direction.DOWN)
             {
-                poseStack.mulPose(OutlineRender.YN_DIR[faceDir.getOpposite().ordinal()]);
+                poseStack.mulPose(OutlineRender.YN_DIR[faceDir.getOpposite().get2DDataValue()]);
                 poseStack.mulPose(Quaternions.XN_90);
             }
             poseStack.translate(-.5, -.5, -.5);

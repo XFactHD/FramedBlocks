@@ -98,14 +98,11 @@ public class VerticalHalfStairsSkipPredicate implements SideSkipPredicate
 
     private static boolean testAgainstSlab(BlockGetter level, BlockPos pos, Direction dir, boolean top, BlockState adjState, Direction side)
     {
+        if (!isSlabSide(dir, side)) { return false; }
+
         boolean adjTop = adjState.getValue(FramedProperties.TOP);
 
-        if (adjTop == top && (side == dir || side == dir.getCounterClockWise()))
-        {
-            return SideSkipPredicate.compareState(level, pos, side);
-        }
-
-        return false;
+        return adjTop == top && SideSkipPredicate.compareState(level, pos, side);
     }
 
     private static boolean testAgainstDoubleSlab(BlockGetter level, BlockPos pos, Direction dir, boolean top, Direction side)
@@ -270,5 +267,12 @@ public class VerticalHalfStairsSkipPredicate implements SideSkipPredicate
         }
 
         return false;
+    }
+
+
+
+    public static boolean isSlabSide(Direction dir, Direction side)
+    {
+        return side == dir || side == dir.getCounterClockWise();
     }
 }

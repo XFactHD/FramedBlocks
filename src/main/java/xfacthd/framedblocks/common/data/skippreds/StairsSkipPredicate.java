@@ -112,8 +112,7 @@ public class StairsSkipPredicate implements SideSkipPredicate
     private static boolean testAgainstSlab(BlockGetter level, BlockPos pos, Direction dir, StairsShape shape, boolean top, BlockState adjState, Direction side)
     {
         boolean adjTop = adjState.getValue(FramedProperties.TOP);
-        if (top != adjTop) { return false; }
-        if (!isSlabSide(shape, dir, side)) { return false; }
+        if (top != adjTop || !isSlabSide(shape, dir, side)) { return false; }
 
         return SideSkipPredicate.compareState(level, pos, side, dir, side.getOpposite());
     }
