@@ -10,7 +10,7 @@ import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import xfacthd.framedblocks.api.render.Quaternions;
 import xfacthd.framedblocks.api.util.client.OutlineRender;
 
-public class PyramidOutlineRenderer implements OutlineRender
+public final class PyramidOutlineRenderer implements OutlineRender
 {
     private static final Quaternion[] XN_DIR = makeQuaternionArray();
 
@@ -21,11 +21,13 @@ public class PyramidOutlineRenderer implements OutlineRender
     @Override
     public void draw(BlockState state, PoseStack pstack, VertexConsumer builder)
     {
+        // Base edges
         OutlineRender.drawLine(builder, pstack, 0, 0, 0, 1, 0, 0);
         OutlineRender.drawLine(builder, pstack, 0, 0, 1, 1, 0, 1);
         OutlineRender.drawLine(builder, pstack, 0, 0, 0, 0, 0, 1);
         OutlineRender.drawLine(builder, pstack, 1, 0, 0, 1, 0, 1);
 
+        // Slopes
         OutlineRender.drawLine(builder, pstack, 0, 0, 0, .5F, height, .5F);
         OutlineRender.drawLine(builder, pstack, 1, 0, 0, .5F, height, .5F);
         OutlineRender.drawLine(builder, pstack, 0, 0, 1, .5F, height, .5F);

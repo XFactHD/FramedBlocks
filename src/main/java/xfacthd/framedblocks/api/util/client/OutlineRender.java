@@ -1,5 +1,6 @@
 package xfacthd.framedblocks.api.util.client;
 
+import com.google.common.base.Preconditions;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.mojang.math.Quaternion;
@@ -14,20 +15,37 @@ import xfacthd.framedblocks.api.util.FramedProperties;
 
 public interface OutlineRender
 {
+    /**
+     * Array of {@link Quaternion}s for rotating around the Y axis according to the horizontal direction.<br>
+     * Must be indexed with {@link Direction#get2DDataValue()}
+     */
     Quaternion[] YN_DIR = makeQuaternionArray();
 
+    /**
+     * Draw the outlines of the block. Provides access to the {@link BlockState}, {@link Level} and {@link BlockPos}
+     * of the block being targeted for cases that require access to the block's
+     * {@link net.minecraft.world.level.block.entity.BlockEntity}
+     */
     default void draw(BlockState state, Level level, BlockPos pos, PoseStack poseStack, VertexConsumer builder)
     {
         draw(state, poseStack, builder);
     }
 
+    /**
+     * Draw the outlines of the block. Provides access to the {@link BlockState} of the block being targeted,
+     * sufficient for most blocks
+     */
     void draw(BlockState state, PoseStack poseStack, VertexConsumer builder);
 
+    /**
+     * Get the horizontal {@link Direction} the block is facing in
+     */
     default Direction getRotationDir(BlockState state) { return state.getValue(FramedProperties.FACING_HOR); }
 
     default void rotateMatrix(PoseStack poseStack, BlockState state)
     {
         Direction dir = getRotationDir(state);
+        Preconditions.checkState(dir.getAxis().isHorizontal(), "Rotation direction must be horizontal");
         poseStack.mulPose(YN_DIR[dir.get2DDataValue()]);
     }
 
@@ -39,15 +57,16 @@ public interface OutlineRender
      */
     static void mirrorHorizontally(PoseStack pstack, boolean rotY90)
     {
-        pstack.translate(.5, .5, .5);
         pstack.mulPose(Quaternions.ZP_180);
         if (rotY90)
         {
             pstack.mulPose(Quaternions.YN_90);
         }
-        pstack.translate(-.5, -.5, -.5);
     }
 
+    /**
+     * Draw a line between the two points given by the two sets of 3D coordinates
+     */
     static void drawLine(VertexConsumer builder, PoseStack mstack, double x1, double y1, double z1, double x2, double y2, double z2)
     {
         float nX = (float)(x2 - x1);

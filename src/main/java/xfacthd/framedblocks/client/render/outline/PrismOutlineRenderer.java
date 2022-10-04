@@ -19,10 +19,13 @@ public class PrismOutlineRenderer implements OutlineRender
     @Override
     public void draw(BlockState state, PoseStack pstack, VertexConsumer builder)
     {
+        // Base edges
         OutlineRender.drawLine(builder, pstack, 0, 0, 0, 0, 0, 1);
         OutlineRender.drawLine(builder, pstack, 1, 0, 0, 1, 0, 1);
         OutlineRender.drawLine(builder, pstack, 0, 0, 0, 1, 0, 0);
         OutlineRender.drawLine(builder, pstack, 0, 0, 1, 1, 0, 1);
+
+        // Back triangle
         OutlineRender.drawLine(builder, pstack, 0, 0, 1, .5F, .5F, 1);
         OutlineRender.drawLine(builder, pstack, .5F, .5F, 1, 1, 0, 1);
 
@@ -31,7 +34,10 @@ public class PrismOutlineRenderer implements OutlineRender
 
     protected void drawCenterAndTriangle(PoseStack pstack, VertexConsumer builder)
     {
+        // Center line
         OutlineRender.drawLine(builder, pstack, .5F, .5F, 0, .5F, .5F, 1);
+
+        // Front triangle
         OutlineRender.drawLine(builder, pstack, 0, 0, 0, .5F, .5F, 0);
         OutlineRender.drawLine(builder, pstack, .5F, .5F, 0, 1, 0, 0);
     }

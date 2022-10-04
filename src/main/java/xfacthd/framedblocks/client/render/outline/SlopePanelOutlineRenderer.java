@@ -9,7 +9,7 @@ import xfacthd.framedblocks.api.util.client.OutlineRender;
 import xfacthd.framedblocks.common.data.PropertyHolder;
 import xfacthd.framedblocks.common.data.property.HorizontalRotation;
 
-public class SlopePanelOutlineRenderer implements OutlineRender
+public final class SlopePanelOutlineRenderer implements OutlineRender
 {
     public static final Quaternion[] ROTATIONS = new Quaternion[] {
             Quaternion.ONE,
@@ -21,15 +21,22 @@ public class SlopePanelOutlineRenderer implements OutlineRender
     @Override
     public void draw(BlockState state, PoseStack poseStack, VertexConsumer builder)
     {
+        // Bottom edges
         OutlineRender.drawLine(builder, poseStack, 0, 0,  0, 1, 0,  0);
         OutlineRender.drawLine(builder, poseStack, 0, 0, .5, 1, 0, .5);
         OutlineRender.drawLine(builder, poseStack, 0, 0,  0, 0, 0, .5);
         OutlineRender.drawLine(builder, poseStack, 1, 0,  0, 1, 0, .5);
+
+        // Back edges
         OutlineRender.drawLine(builder, poseStack, 0, 0, .5, 0, 1, .5);
         OutlineRender.drawLine(builder, poseStack, 1, 0, .5, 1, 1, .5);
+
+        // Top edge
+        OutlineRender.drawLine(builder, poseStack, 0, 1, .5, 1, 1, .5);
+
+        // Slopes
         OutlineRender.drawLine(builder, poseStack, 0, 0,  0, 0, 1, .5);
         OutlineRender.drawLine(builder, poseStack, 1, 0,  0, 1, 1, .5);
-        OutlineRender.drawLine(builder, poseStack, 0, 1, .5, 1, 1, .5);
     }
 
     @Override

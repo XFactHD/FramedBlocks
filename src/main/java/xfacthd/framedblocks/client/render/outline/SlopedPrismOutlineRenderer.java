@@ -13,14 +13,17 @@ import xfacthd.framedblocks.api.util.Utils;
 import xfacthd.framedblocks.api.util.client.OutlineRender;
 import xfacthd.framedblocks.common.data.PropertyHolder;
 
-public class SlopedPrismOutlineRenderer extends PrismOutlineRenderer
+public final class SlopedPrismOutlineRenderer extends PrismOutlineRenderer
 {
-    protected static final Quaternion[][] ZP_DIR = makeQuaternionArray();
+    private static final Quaternion[][] ZP_DIR = makeQuaternionArray();
 
     @Override
     public void drawCenterAndTriangle(PoseStack pstack, VertexConsumer builder)
     {
+        // Center line
         OutlineRender.drawLine(builder, pstack, .5F, .5F, .5F, .5F, .5F, 1);
+
+        // Front sloped triangle
         OutlineRender.drawLine(builder, pstack, 0, 0, 0, .5F, .5F, .5F);
         OutlineRender.drawLine(builder, pstack, .5F, .5F, .5F, 1, 0, 0);
     }

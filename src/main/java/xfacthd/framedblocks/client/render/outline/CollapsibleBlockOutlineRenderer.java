@@ -8,14 +8,14 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.phys.shapes.*;
+import net.minecraft.world.phys.shapes.Shapes;
 import xfacthd.framedblocks.api.render.Quaternions;
 import xfacthd.framedblocks.api.util.client.OutlineRender;
 import xfacthd.framedblocks.common.blockentity.FramedCollapsibleBlockEntity;
-import xfacthd.framedblocks.common.data.property.CollapseFace;
 import xfacthd.framedblocks.common.data.PropertyHolder;
+import xfacthd.framedblocks.common.data.property.CollapseFace;
 
-public class CollapsibleBlockOutlineRenderer implements OutlineRender
+public final class CollapsibleBlockOutlineRenderer implements OutlineRender
 {
     private static final Quaternion ROTATION = Vector3f.YN.rotationDegrees(180);
 
