@@ -12,6 +12,7 @@ public interface CtmPredicate extends BiPredicate<BlockState, Direction>
     CtmPredicate TRUE = (state, dir) -> true;
     CtmPredicate FALSE = (state, dir) -> false;
     CtmPredicate Y_AXIS = (state, dir) -> Utils.isY(dir);
+    CtmPredicate TOP = (state, dir) -> state.getValue(FramedProperties.TOP) ? dir == Direction.UP : dir == Direction.DOWN;
     CtmPredicate DIR = (state, dir) -> dir == state.getValue(BlockStateProperties.FACING);
     CtmPredicate DIR_OPPOSITE = (state, dir) -> dir == state.getValue(BlockStateProperties.FACING).getOpposite();
     CtmPredicate DIR_AXIS = (state, dir) -> dir.getAxis() == state.getValue(BlockStateProperties.FACING).getAxis();

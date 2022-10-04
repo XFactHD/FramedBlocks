@@ -25,15 +25,10 @@ import xfacthd.framedblocks.common.FBContent;
 import xfacthd.framedblocks.common.data.BlockType;
 import xfacthd.framedblocks.common.blockentity.FramedDoubleBlockEntity;
 import xfacthd.framedblocks.api.block.FramedBlockEntity;
-import xfacthd.framedblocks.api.util.CtmPredicate;
 
 @SuppressWarnings("deprecation")
 public class FramedSlabBlock extends FramedBlock
 {
-    public static final CtmPredicate CTM_PREDICATE = (state, dir) ->
-            (state.getValue(FramedProperties.TOP) && dir == Direction.UP) ||
-            (!state.getValue(FramedProperties.TOP) && dir == Direction.DOWN);
-
     public FramedSlabBlock()
     {
         super(BlockType.FRAMED_SLAB);

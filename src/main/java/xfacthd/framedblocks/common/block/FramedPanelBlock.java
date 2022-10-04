@@ -26,8 +26,6 @@ import xfacthd.framedblocks.api.block.FramedBlockEntity;
 @SuppressWarnings("deprecation")
 public class FramedPanelBlock extends FramedBlock
 {
-    public static final CtmPredicate CTM_PREDICATE = (state, dir) -> state.getValue(FramedProperties.FACING_HOR) == dir;
-
     public FramedPanelBlock(){ super(BlockType.FRAMED_PANEL); }
 
     @Override
