@@ -1,0 +1,34 @@
+{
+  "parent": "minecraft:recipes/root",
+  "rewards": {
+    "recipes": [
+      "framedblocks:framed_flat_elev_inner_double_slope_slab_corner_rotate_to_framed_flat_ext_inner_double_slope_panel_corner"
+    ]
+  },
+  "criteria": {
+    "has_framed_flat_elev_inner_double_slope_slab_corner": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "framedblocks:framed_flat_elev_inner_double_slope_slab_corner"
+            ]
+          }
+        ]
+      }
+    },
+    "has_the_recipe": {
+      "trigger": "minecraft:recipe_unlocked",
+      "conditions": {
+        "recipe": "framedblocks:framed_flat_elev_inner_double_slope_slab_corner_rotate_to_framed_flat_ext_inner_double_slope_panel_corner"
+      }
+    }
+  },
+  "requirements": [
+    [
+      "has_framed_flat_elev_inner_double_slope_slab_corner",
+      "has_the_recipe"
+    ]
+  ]
+}

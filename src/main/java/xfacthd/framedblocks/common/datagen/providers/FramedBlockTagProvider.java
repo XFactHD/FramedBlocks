@@ -14,6 +14,7 @@ import xfacthd.framedblocks.common.FBContent;
 import xfacthd.framedblocks.api.block.IFramedBlock;
 import xfacthd.framedblocks.api.util.Utils;
 
+import java.util.LinkedHashSet;
 import java.util.Set;
 
 public class FramedBlockTagProvider extends BlockTagsProvider
@@ -55,11 +56,11 @@ public class FramedBlockTagProvider extends BlockTagsProvider
                 Blocks.COMPOSTER
         );
 
-        Set<Block> pickaxeBlocks = Set.of(
-                FBContent.blockFramedIronDoor.get(),
-                FBContent.blockFramedIronTrapDoor.get(),
-                FBContent.blockFramedIronGate.get()
-        );
+        Set<Block> pickaxeBlocks = new LinkedHashSet<>();
+
+        pickaxeBlocks.add(FBContent.blockFramedIronDoor.get());
+        pickaxeBlocks.add(FBContent.blockFramedIronTrapDoor.get());
+        pickaxeBlocks.add(FBContent.blockFramedIronGate.get());
 
         TagsProvider.TagAppender<Block> axeTag = tag(BlockTags.MINEABLE_WITH_AXE);
         FBContent.getRegisteredBlocks()

@@ -2,7 +2,10 @@
   "type": "minecraft:crafting_shapeless",
   "ingredients": [
     {
-      "item": "framedblocks:framed_double_slope_panel"
+      "item": "framedblocks:framed_inv_double_slope_slab"
+    },
+    {
+      "item": "framedblocks:framed_wrench"
     }
   ],
   "result": {

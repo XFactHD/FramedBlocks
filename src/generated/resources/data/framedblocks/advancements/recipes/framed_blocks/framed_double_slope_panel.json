@@ -6,13 +6,13 @@
     ]
   },
   "criteria": {
-    "hasFramedDoubleSlopeSlab": {
+    "hasFramedSlopePanel": {
       "trigger": "minecraft:inventory_changed",
       "conditions": {
         "items": [
           {
             "items": [
-              "framedblocks:framed_double_slope_slab"
+              "framedblocks:framed_slope_panel"
             ]
           }
         ]
@@ -27,7 +27,7 @@
   },
   "requirements": [
     [
-      "hasFramedDoubleSlopeSlab",
+      "hasFramedSlopePanel",
       "has_the_recipe"
     ]
   ]

@@ -1,0 +1,14 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "ingredients": [
+    {
+      "item": "framedblocks:framed_flat_ext_double_slope_panel_corner"
+    },
+    {
+      "item": "framedblocks:framed_wrench"
+    }
+  ],
+  "result": {
+    "item": "framedblocks:framed_flat_elev_double_slope_slab_corner"
+  }
+}

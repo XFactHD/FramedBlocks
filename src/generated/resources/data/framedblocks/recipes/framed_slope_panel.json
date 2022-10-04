@@ -1,14 +1,17 @@
 {
-  "type": "minecraft:crafting_shapeless",
-  "ingredients": [
-    {
-      "item": "framedblocks:framed_slope_slab"
-    },
-    {
-      "item": "framedblocks:framed_wrench"
-    }
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "S",
+    "S",
+    "S"
   ],
+  "key": {
+    "S": {
+      "item": "framedblocks:framed_slope"
+    }
+  },
   "result": {
-    "item": "framedblocks:framed_slope_panel"
+    "item": "framedblocks:framed_slope_panel",
+    "count": 6
   }
 }
