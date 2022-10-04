@@ -14,6 +14,8 @@ import xfacthd.framedblocks.common.FBContent;
 import xfacthd.framedblocks.api.block.IFramedBlock;
 import xfacthd.framedblocks.api.util.Utils;
 
+import java.util.Set;
+
 public class FramedBlockTagProvider extends BlockTagsProvider
 {
     public FramedBlockTagProvider(DataGenerator gen, ExistingFileHelper fileHelper) { super(gen, FramedConstants.MOD_ID, fileHelper); }
@@ -53,20 +55,20 @@ public class FramedBlockTagProvider extends BlockTagsProvider
                 Blocks.COMPOSTER
         );
 
+        Set<Block> pickaxeBlocks = Set.of(
+                FBContent.blockFramedIronDoor.get(),
+                FBContent.blockFramedIronTrapDoor.get(),
+                FBContent.blockFramedIronGate.get()
+        );
+
         TagsProvider.TagAppender<Block> axeTag = tag(BlockTags.MINEABLE_WITH_AXE);
         FBContent.getRegisteredBlocks()
                 .stream()
                 .map(RegistryObject::get)
                 .filter(b -> b instanceof IFramedBlock)
-                .filter(b ->
-                        b != FBContent.blockFramedIronDoor.get() &&
-                        b != FBContent.blockFramedIronTrapDoor.get()
-                )
+                .filter(b -> !pickaxeBlocks.contains(b))
                 .forEach(axeTag::add);
 
-        tag(BlockTags.MINEABLE_WITH_PICKAXE).add(
-                FBContent.blockFramedIronDoor.get(),
-                FBContent.blockFramedIronTrapDoor.get()
-        );
+        tag(BlockTags.MINEABLE_WITH_PICKAXE).add(pickaxeBlocks.toArray(Block[]::new));
     }
 }
