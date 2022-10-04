@@ -2,7 +2,8 @@ package xfacthd.framedblocks.tests;
 
 import com.google.common.base.Preconditions;
 import net.minecraft.core.Direction;
-import net.minecraft.gametest.framework.*;
+import net.minecraft.gametest.framework.GameTestGenerator;
+import net.minecraft.gametest.framework.TestFunction;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
@@ -70,7 +71,7 @@ public final class LightSourceTests
 
     private static String getTestName(BlockState state)
     {
-        ResourceLocation regName = state.getBlock().getRegistryName();
+        ResourceLocation regName = ForgeRegistries.BLOCKS.getKey(state.getBlock());
         Preconditions.checkState(regName != null);
         return String.format("lightsourcetests.test_%s", regName.getPath());
     }
@@ -88,9 +89,13 @@ public final class LightSourceTests
         return switch ((BlockType) type)
         {
             case FRAMED_DOUBLE_PANEL,
-                    FRAMED_DOUBLE_SLOPE_PANEL,
-                    FRAMED_INV_DOUBLE_SLOPE_PANEL,
-                    FRAMED_EXTENDED_DOUBLE_SLOPE_PANEL -> List.of(Direction.NORTH, Direction.SOUTH);
+                 FRAMED_DOUBLE_SLOPE_PANEL,
+                 FRAMED_INV_DOUBLE_SLOPE_PANEL,
+                 FRAMED_EXTENDED_DOUBLE_SLOPE_PANEL,
+                 FRAMED_FLAT_DOUBLE_SLOPE_PANEL_CORNER,
+                 FRAMED_FLAT_INV_DOUBLE_SLOPE_PANEL_CORNER,
+                 FRAMED_FLAT_EXT_DOUBLE_SLOPE_PANEL_CORNER,
+                 FRAMED_FLAT_EXT_INNER_DOUBLE_SLOPE_PANEL_CORNER -> List.of(Direction.NORTH, Direction.SOUTH);
 
             case FRAMED_VERTICAL_DOUBLE_STAIRS -> List.of(Direction.EAST, Direction.WEST);
 

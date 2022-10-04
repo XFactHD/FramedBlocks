@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "PC"
+  ],
+  "key": {
+    "C": {
+      "item": "framedblocks:framed_flat_slope_panel_corner"
+    },
+    "P": {
+      "item": "framedblocks:framed_panel"
+    }
+  },
+  "result": {
+    "item": "framedblocks:framed_flat_ext_slope_panel_corner"
+  }
+}

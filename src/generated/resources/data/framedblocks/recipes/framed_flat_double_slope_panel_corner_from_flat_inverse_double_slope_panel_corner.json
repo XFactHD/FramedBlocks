@@ -1,0 +1,11 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "ingredients": [
+    {
+      "item": "framedblocks:framed_flat_inv_double_slope_panel_corner"
+    }
+  ],
+  "result": {
+    "item": "framedblocks:framed_flat_double_slope_panel_corner"
+  }
+}

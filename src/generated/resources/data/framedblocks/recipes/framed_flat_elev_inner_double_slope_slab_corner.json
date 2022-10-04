@@ -1,0 +1,18 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "C",
+    "E"
+  ],
+  "key": {
+    "C": {
+      "item": "framedblocks:framed_flat_slope_slab_corner"
+    },
+    "E": {
+      "item": "framedblocks:framed_flat_elev_inner_slope_slab_corner"
+    }
+  },
+  "result": {
+    "item": "framedblocks:framed_flat_elev_inner_double_slope_slab_corner"
+  }
+}
