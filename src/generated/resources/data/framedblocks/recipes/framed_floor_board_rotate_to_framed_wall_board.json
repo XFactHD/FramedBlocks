@@ -1,0 +1,14 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "ingredients": [
+    {
+      "item": "framedblocks:framed_floor_board"
+    },
+    {
+      "item": "framedblocks:framed_wrench"
+    }
+  ],
+  "result": {
+    "item": "framedblocks:framed_wall_board"
+  }
+}

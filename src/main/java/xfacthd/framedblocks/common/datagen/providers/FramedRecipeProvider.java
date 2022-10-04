@@ -803,6 +803,9 @@ public final class FramedRecipeProvider extends RecipeProvider
 
 
         makeRotationRecipe(FBContent.blockFramedSlab, FBContent.blockFramedPanel, consumer);
+        makeRotationRecipe(FBContent.blockFramedStairs, FBContent.blockFramedVerticalStairs, consumer);
+        makeRotationRecipe(FBContent.blockFramedDoubleStairs, FBContent.blockFramedVerticalDoubleStairs, consumer);
+        makeRotationRecipe(FBContent.blockFramedFloor, FBContent.blockFramedWallBoard, consumer);
         makeRotationRecipe(FBContent.blockFramedSlopeSlab, FBContent.blockFramedSlopePanel, consumer);
         makeRotationRecipe(FBContent.blockFramedElevatedSlopeSlab, FBContent.blockFramedExtendedSlopePanel, consumer);
         makeRotationRecipe(FBContent.blockFramedDoubleSlopeSlab, FBContent.blockFramedDoubleSlopePanel, consumer);
