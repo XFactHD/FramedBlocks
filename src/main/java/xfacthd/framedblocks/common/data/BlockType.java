@@ -46,13 +46,13 @@ public enum BlockType implements IBlockType
     FRAMED_STONE_BUTTON                             (false, false, false, false,  true, false, false, false),
     FRAMED_LEVER                                    (false, false, false, false,  true, false, false, false),
     FRAMED_SIGN                                     (false, false,  true, false,  true, false, false, false),
-    FRAMED_WALL_SIGN                                (false, false,  true, false, false, false, false, false, CtmPredicate.FALSE, SideSkipPredicate.FALSE, FramedWallSignBlock::generateShapes),
-    FRAMED_DOUBLE_SLAB                              ( true, false,  true, false,  true,  true,  true, false, CtmPredicate.Y_AXIS, SideSkipPredicate.FALSE, Shapes.block()), //Side skip is handled by the single slab
-    FRAMED_DOUBLE_PANEL                             ( true, false,  true, false,  true,  true,  true, false, FramedDoublePanelBlock.CTM_PREDICATE, SideSkipPredicate.FALSE, Shapes.block()), //Side skip is handled by the single panel
-    FRAMED_DOUBLE_SLOPE                             ( true, false,  true, false,  true,  true,  true, false, FramedDoubleSlopeBlock.CTM_PREDICATE, SideSkipPredicate.FALSE, Shapes.block()), //Side skip is handled by the single slope
-    FRAMED_DOUBLE_CORNER                            ( true, false,  true, false,  true,  true,  true, false, FramedDoubleCornerBlock.CTM_PREDICATE, SideSkipPredicate.FALSE, Shapes.block()),
-    FRAMED_DOUBLE_PRISM_CORNER                      ( true, false,  true, false,  true,  true,  true, false, FramedDoubleThreewayCornerBlock.CTM_PREDICATE, SideSkipPredicate.FALSE, Shapes.block()),
-    FRAMED_DOUBLE_THREEWAY_CORNER                   ( true, false,  true, false,  true,  true,  true, false, FramedDoubleThreewayCornerBlock.CTM_PREDICATE, SideSkipPredicate.FALSE, Shapes.block()),
+    FRAMED_WALL_SIGN                                (false, false,  true, false, false, false, false, false, FramedWallSignBlock::generateShapes),
+    FRAMED_DOUBLE_SLAB                              ( true, false,  true, false,  true,  true,  true, false, CtmPredicate.Y_AXIS, Shapes.block()),
+    FRAMED_DOUBLE_PANEL                             ( true, false,  true, false,  true,  true,  true, false, FramedDoublePanelBlock.CTM_PREDICATE, Shapes.block()),
+    FRAMED_DOUBLE_SLOPE                             ( true, false,  true, false,  true,  true,  true, false, FramedDoubleSlopeBlock.CTM_PREDICATE, Shapes.block()),
+    FRAMED_DOUBLE_CORNER                            ( true, false,  true, false,  true,  true,  true, false, FramedDoubleCornerBlock.CTM_PREDICATE, Shapes.block()),
+    FRAMED_DOUBLE_PRISM_CORNER                      ( true, false,  true, false,  true,  true,  true, false, FramedDoubleThreewayCornerBlock.CTM_PREDICATE, Shapes.block()),
+    FRAMED_DOUBLE_THREEWAY_CORNER                   ( true, false,  true, false,  true,  true,  true, false, FramedDoubleThreewayCornerBlock.CTM_PREDICATE, Shapes.block()),
     FRAMED_TORCH                                    (false, false, false, false,  true, false, false, false),
     FRAMED_WALL_TORCH                               (false, false, false, false, false, false, false, false),
     FRAMED_SOUL_TORCH                               (false, false, false, false,  true, false, false, false),
@@ -60,11 +60,11 @@ public enum BlockType implements IBlockType
 	FRAMED_FLOOR_BOARD                              ( true, false, false,  true,  true,  true, false, false, FramedFloorBlock.CTM_PREDICATE, FramedFloorBlock.SKIP_PREDICATE, Shapes.box(0, 0, 0, 1, 1D/16D, 1)),
     FRAMED_LATTICE_BLOCK                            (false, false, false,  true,  true,  true, false,  true, CtmPredicate.FALSE, FramedLatticeBlock.SKIP_PREDICATE, FramedLatticeBlock::generateShapes),
     FRAMED_VERTICAL_STAIRS                          ( true, false, false,  true,  true,  true, false,  true, FramedVerticalStairsBlock.CTM_PREDICATE, new VerticalStairsSkipPredicate(), FramedVerticalStairsBlock::generateShapes),
-    FRAMED_CHEST                                    (false, false,  true,  true,  true, false, false, false, CtmPredicate.FALSE, SideSkipPredicate.FALSE, Shapes.box(1D/16D, 0, 1D/16D, 15D/16D, 14D/16D, 15D/16D)),
-    FRAMED_BARS                                     (false, false, false,  true,  true,  true, false,  true, CtmPredicate.FALSE, SideSkipPredicate.FALSE),
+    FRAMED_CHEST                                    (false, false,  true,  true,  true, false, false, false,  Shapes.box(1D/16D, 0, 1D/16D, 15D/16D, 14D/16D, 15D/16D)),
+    FRAMED_BARS                                     (false, false, false,  true,  true,  true, false,  true),
     FRAMED_PANE                                     (false, false, false,  true,  true,  true, false,  true, CtmPredicate.FALSE, new PaneSkipPredicate()),
     FRAMED_RAIL_SLOPE                               ( true,  true, false,  true,  true, false, false, false, FramedSlopeBlock.CTM_PREDICATE, new SlopeSkipPredicate(), FramedSlopeBlock::generateShapes),
-    FRAMED_FLOWER_POT                               (false, false,  true, false,  true, false, false, false, CtmPredicate.FALSE, SideSkipPredicate.FALSE, Shapes.box(5D/16D, 0, 5D/16D, 11D/16D, 6D/16D, 11D/16D)),
+    FRAMED_FLOWER_POT                               (false, false,  true, false,  true, false, false, false, Shapes.box(5D/16D, 0, 5D/16D, 11D/16D, 6D/16D, 11D/16D)),
     FRAMED_PILLAR                                   (false, false, false,  true,  true,  true, false, false, CtmPredicate.FALSE, new PillarSkipPredicate(), FramedPillarBlock::generatePillarShapes),
     FRAMED_HALF_PILLAR                              (false, false, false,  true,  true,  true, false, false, CtmPredicate.FALSE, new HalfPillarSkipPredicate(), FramedHalfPillarBlock::generateShapes),
     FRAMED_POST                                     (false, false, false,  true,  true,  true, false, false, CtmPredicate.FALSE, new PostSkipPredicate(), FramedPillarBlock::generatePostShapes),
@@ -77,17 +77,17 @@ public enum BlockType implements IBlockType
     FRAMED_SLOPED_PRISM                             ( true,  true, false,  true,  true,  true, false, false, FramedSlopedPrismBlock.CTM_PREDICATE, FramedSlopedPrismBlock.SKIP_PREDICATE, FramedSlopedPrismBlock::generateShapes),
     FRAMED_SLOPE_SLAB                               ( true,  true, false,  true,  true,  true, false, false, FramedSlopeSlabBlock.CTM_PREDICATE, new SlopeSlabSkipPredicate(), FramedSlopeSlabBlock::generateShapes),
     FRAMED_ELEVATED_SLOPE_SLAB                      ( true,  true,  true,  true,  true,  true, false, false, FramedElevatedSlopeSlabBlock.CTM_PREDICATE, new ElevatedSlopeSlabSkipPredicate(), FramedElevatedSlopeSlabBlock::generateShapes),
-    FRAMED_DOUBLE_SLOPE_SLAB                        ( true, false,  true,  true,  true,  true,  true, false, FramedDoubleSlopeSlabBlock.CTM_PREDICATE, SideSkipPredicate.FALSE), //Side skip is handled by the single slope slab
-    FRAMED_INV_DOUBLE_SLOPE_SLAB                    ( true,  true,  true,  true,  true,  true,  true, false, CtmPredicate.FALSE, SideSkipPredicate.FALSE, FramedInverseDoubleSlopeSlabBlock::generateShapes), //Side skip is handled by the single slope slab
-    FRAMED_ELEVATED_DOUBLE_SLOPE_SLAB               ( true, false,  true, false,  true,  true,  true, false, FramedElevatedDoubleSlopeSlabBlock.CTM_PREDICATE, SideSkipPredicate.FALSE, Shapes.block()),
+    FRAMED_DOUBLE_SLOPE_SLAB                        ( true, false,  true,  true,  true,  true,  true, false, FramedDoubleSlopeSlabBlock.CTM_PREDICATE),
+    FRAMED_INV_DOUBLE_SLOPE_SLAB                    ( true,  true,  true,  true,  true,  true,  true, false, CtmPredicate.FALSE, FramedInverseDoubleSlopeSlabBlock::generateShapes),
+    FRAMED_ELEVATED_DOUBLE_SLOPE_SLAB               ( true, false,  true, false,  true,  true,  true, false, FramedElevatedDoubleSlopeSlabBlock.CTM_PREDICATE, Shapes.block()),
     FRAMED_VERTICAL_HALF_STAIRS                     (false, false, false,  true,  true, false, false, false, CtmPredicate.FALSE, new VerticalHalfStairsSkipPredicate(), FramedVerticalHalfStairsBlock::generateShapes),
     FRAMED_SLOPE_PANEL                              ( true,  true, false,  true,  true,  true, false, false, FramedSlopePanelBlock.CTM_PREDICATE, new SlopePanelSkipPredicate(), FramedSlopePanelBlock::generateShapes),
     FRAMED_EXTENDED_SLOPE_PANEL                     ( true,  true,  true,  true,  true,  true, false, false, FramedExtendedSlopePanelBlock.CTM_PREDICATE, new ExtendedSlopePanelSkipPredicate(), FramedExtendedSlopePanelBlock::generateShapes),
-    FRAMED_DOUBLE_SLOPE_PANEL                       ( true, false,  true,  true,  true,  true,  true, false, FramedDoubleSlopePanelBlock.CTM_PREDICATE, SideSkipPredicate.FALSE, FramedDoubleSlopePanelBlock::generateShapes), //Side skip is handled by the single vertical slope slab
-    FRAMED_INV_DOUBLE_SLOPE_PANEL                   ( true,  true,  true,  true,  true,  true,  true, false, CtmPredicate.FALSE, SideSkipPredicate.FALSE, FramedInverseDoubleSlopePanelBlock::generateShapes), //Side skip is handled by the single vertical slope slab
-    FRAMED_EXTENDED_DOUBLE_SLOPE_PANEL              ( true, false,  true, false,  true,  true,  true, false, FramedExtendedDoubleSlopePanelBlock.CTM_PREDICATE, SideSkipPredicate.FALSE, Shapes.block()),
-    FRAMED_DOUBLE_STAIRS                            ( true, false,  true, false,  true,  true,  true, false, FramedDoubleStairsBlock.CTM_PREDICATE, SideSkipPredicate.FALSE, Shapes.block()),
-    FRAMED_VERTICAL_DOUBLE_STAIRS                   ( true, false,  true, false,  true,  true,  true, false, FramedVerticalDoubleStairsBlock.CTM_PREDICATE, SideSkipPredicate.FALSE, Shapes.block()),
+    FRAMED_DOUBLE_SLOPE_PANEL                       ( true, false,  true,  true,  true,  true,  true, false, FramedDoubleSlopePanelBlock.CTM_PREDICATE, FramedDoubleSlopePanelBlock::generateShapes), //Side skip is handled by the single vertical slope slab
+    FRAMED_INV_DOUBLE_SLOPE_PANEL                   ( true,  true,  true,  true,  true,  true,  true, false, CtmPredicate.FALSE, FramedInverseDoubleSlopePanelBlock::generateShapes), //Side skip is handled by the single vertical slope slab
+    FRAMED_EXTENDED_DOUBLE_SLOPE_PANEL              ( true, false,  true, false,  true,  true,  true, false, FramedExtendedDoubleSlopePanelBlock.CTM_PREDICATE, Shapes.block()),
+    FRAMED_DOUBLE_STAIRS                            ( true, false,  true, false,  true,  true,  true, false, FramedDoubleStairsBlock.CTM_PREDICATE, Shapes.block()),
+    FRAMED_VERTICAL_DOUBLE_STAIRS                   ( true, false,  true, false,  true,  true,  true, false, FramedVerticalDoubleStairsBlock.CTM_PREDICATE, Shapes.block()),
     FRAMED_WALL_BOARD                               ( true, false, false,  true,  true,  true, false, false, CtmPredicate.TOP, FramedWallBoardBlock.SKIP_PREDICATE, FramedWallBoardBlock::generateShapes),
     FRAMED_GLOWING_CUBE                             ( true, false, false, false,  true,  true, false, false, CtmPredicate.TRUE, SideSkipPredicate.CTM, Shapes.block()),
     FRAMED_PYRAMID                                  ( true,  true, false,  true,  true,  true, false, false, CtmPredicate.DIR_OPPOSITE, SideSkipPredicate.CTM, FramedPyramidBlock::generateShapes),
@@ -116,6 +116,31 @@ public enum BlockType implements IBlockType
     BlockType(boolean canOcclude, boolean specialHitbox, boolean specialTile, boolean waterloggable, boolean blockItem, boolean allowIntangible, boolean doubleBlock, boolean lockable)
     {
         this(canOcclude, specialHitbox, specialTile, waterloggable, blockItem, allowIntangible, doubleBlock, lockable, CtmPredicate.FALSE, SideSkipPredicate.FALSE, VoxelShapeGenerator.EMTPTY);
+    }
+
+    BlockType(boolean canOcclude, boolean specialHitbox, boolean specialTile, boolean waterloggable, boolean blockItem, boolean allowIntangible, boolean doubleBlock, boolean lockable, VoxelShape shape)
+    {
+        this(canOcclude, specialHitbox, specialTile, waterloggable, blockItem, allowIntangible, doubleBlock, lockable, CtmPredicate.FALSE, SideSkipPredicate.FALSE, shape);
+    }
+
+    BlockType(boolean canOcclude, boolean specialHitbox, boolean specialTile, boolean waterloggable, boolean blockItem, boolean allowIntangible, boolean doubleBlock, boolean lockable, VoxelShapeGenerator shapeGen)
+    {
+        this(canOcclude, specialHitbox, specialTile, waterloggable, blockItem, allowIntangible, doubleBlock, lockable, CtmPredicate.FALSE, SideSkipPredicate.FALSE, shapeGen);
+    }
+
+    BlockType(boolean canOcclude, boolean specialHitbox, boolean specialTile, boolean waterloggable, boolean blockItem, boolean allowIntangible, boolean doubleBlock, boolean lockable, CtmPredicate ctmPredicate)
+    {
+        this(canOcclude, specialHitbox, specialTile, waterloggable, blockItem, allowIntangible, doubleBlock, lockable, ctmPredicate, SideSkipPredicate.FALSE, VoxelShapeGenerator.EMTPTY);
+    }
+
+    BlockType(boolean canOcclude, boolean specialHitbox, boolean specialTile, boolean waterloggable, boolean blockItem, boolean allowIntangible, boolean doubleBlock, boolean lockable, CtmPredicate ctmPredicate, VoxelShape shape)
+    {
+        this(canOcclude, specialHitbox, specialTile, waterloggable, blockItem, allowIntangible, doubleBlock, lockable, ctmPredicate, SideSkipPredicate.FALSE, shape);
+    }
+
+    BlockType(boolean canOcclude, boolean specialHitbox, boolean specialTile, boolean waterloggable, boolean blockItem, boolean allowIntangible, boolean doubleBlock, boolean lockable, CtmPredicate ctmPredicate, VoxelShapeGenerator shapeGen)
+    {
+        this(canOcclude, specialHitbox, specialTile, waterloggable, blockItem, allowIntangible, doubleBlock, lockable, ctmPredicate, SideSkipPredicate.FALSE, shapeGen);
     }
 
     BlockType(boolean canOcclude, boolean specialHitbox, boolean specialTile, boolean waterloggable, boolean blockItem, boolean allowIntangible, boolean doubleBlock, boolean lockable, CtmPredicate ctmPredicate, SideSkipPredicate skipPredicate)
