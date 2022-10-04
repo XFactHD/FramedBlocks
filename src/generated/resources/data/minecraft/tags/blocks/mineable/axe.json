@@ -41,6 +41,8 @@
     "framedblocks:framed_wall_torch",
     "framedblocks:framed_soul_torch",
     "framedblocks:framed_soul_wall_torch",
+    "framedblocks:framed_redstone_torch",
+    "framedblocks:framed_redstone_wall_torch",
     "framedblocks:framed_floor_board",
     "framedblocks:framed_lattice_block",
     "framedblocks:framed_vertical_stairs",

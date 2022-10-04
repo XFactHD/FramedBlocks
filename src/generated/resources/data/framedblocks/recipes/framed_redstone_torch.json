@@ -1,0 +1,19 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "R",
+    "F"
+  ],
+  "key": {
+    "R": {
+      "tag": "forge:dusts/redstone"
+    },
+    "F": {
+      "item": "framedblocks:framed_cube"
+    }
+  },
+  "result": {
+    "item": "framedblocks:framed_redstone_torch",
+    "count": 4
+  }
+}

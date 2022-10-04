@@ -119,6 +119,8 @@ public class FramedBlockStateProvider extends BlockStateProvider
         registerFramedWallTorch();
         registerFramedSoulTorch();
         registerFramedSoulWallTorch();
+        registerFramedRedstoneTorch();
+        registerFramedRedstoneWallTorch();
         registerFramedFloorBoard(cube);
         registerFramedChest();
         registerFramedBarsBlock(cube);
@@ -505,6 +507,38 @@ public class FramedBlockStateProvider extends BlockStateProvider
             Direction dir = state.getValue(BlockStateProperties.HORIZONTAL_FACING);
             int rotY = ((int)dir.toYRot() + 90) % 360;
             return ConfiguredModel.builder().modelFile(wallTorch).rotationY(rotY).build();
+        });
+    }
+
+    private void registerFramedRedstoneTorch()
+    {
+        ModelFile torch = models().getExistingFile(modLoc("framed_redstone_torch"));
+        ModelFile torchOff = models().withExistingParent("framed_redstone_torch_off", modLoc("framed_torch"))
+                .texture("particle", modLoc("block/framed_redstone_torch_off"))
+                .texture("top", mcLoc("block/redstone_torch_off"));
+
+        getVariantBuilder(FBContent.blockFramedRedstoneTorch.get()).forAllStates(state ->
+        {
+            ModelFile model = state.getValue(BlockStateProperties.LIT) ? torch : torchOff;
+            return ConfiguredModel.builder().modelFile(model).build();
+        });
+
+        itemModels().withExistingParent("framed_redstone_torch", "item/generated").texture("layer0", modLoc("block/framed_redstone_torch"));
+    }
+
+    private void registerFramedRedstoneWallTorch()
+    {
+        ModelFile wallTorch = models().getExistingFile(modLoc("framed_redstone_wall_torch"));
+        ModelFile wallTorchOff = models().withExistingParent("framed_redstone_wall_torch_off", modLoc("framed_wall_torch"))
+                .texture("particle", modLoc("block/framed_redstone_torch_off"))
+                .texture("top", mcLoc("block/redstone_torch_off"));
+
+        getVariantBuilder(FBContent.blockFramedRedstoneWallTorch.get()).forAllStates(state ->
+        {
+            Direction dir = state.getValue(BlockStateProperties.HORIZONTAL_FACING);
+            int rotY = ((int)dir.toYRot() + 90) % 360;
+            ModelFile model = state.getValue(BlockStateProperties.LIT) ? wallTorch : wallTorchOff;
+            return ConfiguredModel.builder().modelFile(model).rotationY(rotY).build();
         });
     }
 

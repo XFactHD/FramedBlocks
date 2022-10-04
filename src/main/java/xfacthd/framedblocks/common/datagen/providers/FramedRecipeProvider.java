@@ -297,6 +297,14 @@ public class FramedRecipeProvider extends RecipeProvider
                 .unlockedBy("hasFramedBlock", HAS_FRAMED_BLOCK)
                 .save(consumer);
 
+        ShapedRecipeBuilder.shaped(FBContent.blockFramedRedstoneTorch.get(), 4)
+                .pattern("R")
+                .pattern("F")
+                .define('R', Tags.Items.DUSTS_REDSTONE)
+                .define('F', FBContent.blockFramedCube.get())
+                .unlockedBy("hasFramedBlock", HAS_FRAMED_BLOCK)
+                .save(consumer);
+
         ShapedRecipeBuilder.shaped(FBContent.blockFramedFloor.get(), 4)
                 .pattern("FFH")
                 .define('F', FBContent.blockFramedSlab.get())
