@@ -44,4 +44,9 @@ public interface FramedBlocksClientAPI
      * Register a custom {@link GhostRenderBehaviour} for the given {@link Item}s
      */
     void registerGhostRenderBehaviour(GhostRenderBehaviour behaviour, Item... items);
+
+    /**
+     * Returns true if the UV remapping should use discrete steps instead of using the interpolated value directly
+     */
+    boolean useDiscreteUVSteps();
 }

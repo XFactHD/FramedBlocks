@@ -2,6 +2,7 @@ package xfacthd.framedblocks.api.util.client;
 
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.block.model.BakedQuad;
+import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.resources.model.BakedModel;
 import net.minecraft.client.resources.model.WeightedBakedModel;
 import net.minecraft.core.BlockPos;
@@ -14,6 +15,7 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.client.ChunkRenderTypeSet;
 import net.minecraftforge.client.model.IQuadTransformer;
 import net.minecraftforge.client.model.data.ModelData;
+import xfacthd.framedblocks.api.FramedBlocksClientAPI;
 import xfacthd.framedblocks.api.util.FramedBlockData;
 import xfacthd.framedblocks.api.util.Utils;
 
@@ -24,6 +26,7 @@ public final class ModelUtils
 {
     public static final ChunkRenderTypeSet SOLID = ChunkRenderTypeSet.of(RenderType.solid());
     public static final ChunkRenderTypeSet CUTOUT = ChunkRenderTypeSet.of(RenderType.cutout());
+    private static final double UV_SUBSTEP_COUNT = 8D;
 
     @Deprecated(forRemoval = true, since = "1.19")
     public static boolean modifyQuad(BakedQuad quad, VertexDataConsumer consumer)
@@ -205,14 +208,40 @@ public final class ModelUtils
      * @param uv The UV data (modified in place)
      * @param uv1 The first UV texture coordinate
      * @param uv2 The second UV texture coordinate
-     * @param vAxis Wether the modification should happen on the V axis or the U axis
-     * @param invert Wether the coordinates grow in the opposite direction of the texture coordinates
-     * @param rotated Wether the UVs are rotated
-     * @param mirrored Wether the UVs are mirrored
+     * @param uvTo The target UV texture coordinate
+     * @param vAxis Whether the modification should happen on the V axis or the U axis
+     * @param invert Whether the coordinates grow in the opposite direction of the texture coordinates
+     * @param rotated Whether the UVs are rotated
+     * @param mirrored Whether the UVs are mirrored
      */
+    @Deprecated(forRemoval = true, since = "1.19.2")
     public static void remapUV(Direction quadDir, float coord1, float coord2, float coordTo, float[][] uv, int uv1, int uv2, int uvTo, boolean vAxis, boolean invert, boolean rotated, boolean mirrored)
     {
-        remapUV(quadDir, coord1, coord2, coordTo, uv, uv, uv1, uv2, uvTo, vAxis, invert, rotated, mirrored);
+        remapUV(quadDir, null, coord1, coord2, coordTo, uv, uv, uv1, uv2, uvTo, vAxis, invert, rotated, mirrored);
+    }
+
+    /**
+     * Maps a coordinate 'coordTo' between the given coordinates 'coord1' and 'coord2'
+     * onto the UV range they occupy as given by the values at 'uv1' and 'uv2' in the 'uv'
+     * array, calculates the target UV coordinate corresponding to the value of 'coordTo'
+     * and places it at 'uvTo' in the 'uv' array
+     * @param quadDir The direction the quad is facing in
+     * @param sprite The quad's texture
+     * @param coord1 The first coordinate
+     * @param coord2 The second coordinate
+     * @param coordTo The target coordinate, must lie between coord1 and coord2
+     * @param uv The UV data (modified in place)
+     * @param uv1 The first UV texture coordinate
+     * @param uv2 The second UV texture coordinate
+     * @param uvTo The target UV texture coordinate
+     * @param vAxis Whether the modification should happen on the V axis or the U axis
+     * @param invert Whether the coordinates grow in the opposite direction of the texture coordinates
+     * @param rotated Whether the UVs are rotated
+     * @param mirrored Whether the UVs are mirrored
+     */
+    public static void remapUV(Direction quadDir, TextureAtlasSprite sprite, float coord1, float coord2, float coordTo, float[][] uv, int uv1, int uv2, int uvTo, boolean vAxis, boolean invert, boolean rotated, boolean mirrored)
+    {
+        remapUV(quadDir, sprite, coord1, coord2, coordTo, uv, uv, uv1, uv2, uvTo, vAxis, invert, rotated, mirrored);
     }
 
     /**
@@ -228,12 +257,39 @@ public final class ModelUtils
      * @param uvDest The UV data to modify (modified in place)
      * @param uv1 The first UV texture coordinate
      * @param uv2 The second UV texture coordinate
-     * @param vAxis Wether the modification should happen on the V axis or the U axis
-     * @param invert Wether the coordinates grow in the opposite direction of the texture coordinates
-     * @param rotated Wether the UVs are rotated
-     * @param mirrored Wether the UVs are mirrored
+     * @param uvTo The target UV texture coordinate
+     * @param vAxis Whether the modification should happen on the V axis or the U axis
+     * @param invert Whether the coordinates grow in the opposite direction of the texture coordinates
+     * @param rotated Whether the UVs are rotated
+     * @param mirrored Whether the UVs are mirrored
      */
+    @Deprecated(forRemoval = true, since = "1.19.2")
     public static void remapUV(Direction quadDir, float coord1, float coord2, float coordTo, float[][] uvSrc, float[][] uvDest, int uv1, int uv2, int uvTo, boolean vAxis, boolean invert, boolean rotated, boolean mirrored)
+    {
+        remapUV(quadDir, null, coord1, coord2, coordTo, uvSrc, uvDest, uv1, uv2, uvTo, vAxis, invert, rotated, mirrored);
+    }
+
+    /**
+     * Maps a coordinate 'coordTo' between the given coordinates 'coord1' and 'coord2'
+     * onto the UV range they occupy as given by the values at 'uv1' and 'uv2' in the 'uv'
+     * array, calculates the target UV coordinate corresponding to the value of 'coordTo'
+     * and places it at 'uvTo' in the 'uv' array
+     * @param quadDir The direction the quad is facing in
+     * @param sprite The quad's texture
+     * @param coord1 The first coordinate
+     * @param coord2 The second coordinate
+     * @param coordTo The target coordinate, must lie between coord1 and coord2
+     * @param uvSrc The source UV data (not modified)
+     * @param uvDest The UV data to modify (modified in place)
+     * @param uv1 The first UV texture coordinate
+     * @param uv2 The second UV texture coordinate
+     * @param uvTo The target UV texture coordinate
+     * @param vAxis Whether the modification should happen on the V axis or the U axis
+     * @param invert Whether the coordinates grow in the opposite direction of the texture coordinates
+     * @param rotated Whether the UVs are rotated
+     * @param mirrored Whether the UVs are mirrored
+     */
+    public static void remapUV(Direction quadDir, TextureAtlasSprite sprite, float coord1, float coord2, float coordTo, float[][] uvSrc, float[][] uvDest, int uv1, int uv2, int uvTo, boolean vAxis, boolean invert, boolean rotated, boolean mirrored)
     {
         if (rotated)
         {
@@ -284,9 +340,25 @@ public final class ModelUtils
         }
         else
         {
-            float mult = (coordTo - coordMin) / (coordMax - coordMin);
-            if (invert) { mult = 1F - mult; }
-            uvDest[uvTo][uvIdx] = Mth.lerp(mult, uvMin, uvMax);
+            //TODO: remove null check in 1.20
+            if (sprite != null && FramedBlocksClientAPI.getInstance().useDiscreteUVSteps())
+            {
+                double relMin = uvIdx == 0 ? sprite.getUOffset(uvMin) : sprite.getVOffset(uvMin);
+                double relMax = uvIdx == 0 ? sprite.getUOffset(uvMax) : sprite.getVOffset(uvMax);
+
+                double mult = (coordTo - coordMin) / (coordMax - coordMin);
+                if (invert) { mult = 1D - mult; }
+
+                double relTo = Mth.lerp(mult, relMin, relMax);
+                relTo = Math.round(relTo * UV_SUBSTEP_COUNT) / UV_SUBSTEP_COUNT;
+                uvDest[uvTo][uvIdx] = uvIdx == 0 ? sprite.getU(relTo) : sprite.getV(relTo);
+            }
+            else
+            {
+                float mult = (coordTo - coordMin) / (coordMax - coordMin);
+                if (invert) { mult = 1F - mult; }
+                uvDest[uvTo][uvIdx] = Mth.lerp(mult, uvMin, uvMax);
+            }
         }
     }
 

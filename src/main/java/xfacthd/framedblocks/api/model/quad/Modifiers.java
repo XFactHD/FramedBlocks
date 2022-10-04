@@ -2,6 +2,7 @@ package xfacthd.framedblocks.api.model.quad;
 
 import com.google.common.base.Preconditions;
 import com.mojang.math.*;
+import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.core.Direction;
 import net.minecraft.util.Mth;
 import xfacthd.framedblocks.api.util.Utils;
@@ -143,16 +144,17 @@ public final class Modifiers
         float[][] uv = data.uv();
         boolean rotated = ModelUtils.isQuadRotated(uv);
         boolean mirrored = ModelUtils.isQuadMirrored(uv);
+        TextureAtlasSprite sprite = data.quad().getSprite();
 
         if (xAxis)
         {
-            ModelUtils.remapUV(quadDir, pos[1][coordIdx], pos[2][coordIdx], toXZ1, uv, 1, 2, idxR, false, false, rotated, mirrored);
-            ModelUtils.remapUV(quadDir, pos[0][coordIdx], pos[3][coordIdx], toXZ2, uv, 0, 3, idxL, false, false, rotated, mirrored);
+            ModelUtils.remapUV(quadDir, sprite, pos[1][coordIdx], pos[2][coordIdx], toXZ1, uv, 1, 2, idxR, false, false, rotated, mirrored);
+            ModelUtils.remapUV(quadDir, sprite, pos[0][coordIdx], pos[3][coordIdx], toXZ2, uv, 0, 3, idxL, false, false, rotated, mirrored);
         }
         else
         {
-            ModelUtils.remapUV(quadDir, pos[1][coordIdx], pos[0][coordIdx], toXZ1, uv, 0, 1, idxR, true, !up, rotated, mirrored);
-            ModelUtils.remapUV(quadDir, pos[2][coordIdx], pos[3][coordIdx], toXZ2, uv, 3, 2, idxL, true, !up, rotated, mirrored);
+            ModelUtils.remapUV(quadDir, sprite, pos[1][coordIdx], pos[0][coordIdx], toXZ1, uv, 0, 1, idxR, true, !up, rotated, mirrored);
+            ModelUtils.remapUV(quadDir, sprite, pos[2][coordIdx], pos[3][coordIdx], toXZ2, uv, 3, 2, idxL, true, !up, rotated, mirrored);
         }
 
         pos[idxR][coordIdx] = toXZ1;
@@ -162,7 +164,7 @@ public final class Modifiers
     }
 
     /**
-     * Cuts the quad pointing horizontally at the top and botom edge
+     * Cuts the quad pointing horizontally at the top and bottom edge
      * @param length The target length from either starting edge
      */
     public static QuadModifier.Modifier cutSideUpDown(float length)
@@ -224,8 +226,9 @@ public final class Modifiers
         float[][] uv = data.uv();
         boolean rotated = ModelUtils.isQuadRotated(uv);
         boolean mirrored = ModelUtils.isQuadMirrored(uv);
-        ModelUtils.remapUV(quadDir, pos[1][1], pos[0][1], toY1, uv, 0, 1, idx1, true, true, rotated, mirrored);
-        ModelUtils.remapUV(quadDir, pos[2][1], pos[3][1], toY2, uv, 3, 2, idx2, true, true, rotated, mirrored);
+        TextureAtlasSprite sprite = data.quad().getSprite();
+        ModelUtils.remapUV(quadDir, sprite, pos[1][1], pos[0][1], toY1, uv, 0, 1, idx1, true, true, rotated, mirrored);
+        ModelUtils.remapUV(quadDir, sprite, pos[2][1], pos[3][1], toY2, uv, 3, 2, idx2, true, true, rotated, mirrored);
 
         pos[idx1][1] = toY1;
         pos[idx2][1] = toY2;
@@ -319,8 +322,9 @@ public final class Modifiers
         float[][] uv = data.uv();
         boolean rotated = ModelUtils.isQuadRotated(uv);
         boolean mirrored = ModelUtils.isQuadMirrored(uv);
-        ModelUtils.remapUV(quadDir, pos[0][coordIdx], pos[3][coordIdx], toXZ1, uv, 0, 3, idx1, false, positive != towardsRight, rotated, mirrored);
-        ModelUtils.remapUV(quadDir, pos[1][coordIdx], pos[2][coordIdx], toXZ2, uv, 1, 2, idx2, false, positive != towardsRight, rotated, mirrored);
+        TextureAtlasSprite sprite = data.quad().getSprite();
+        ModelUtils.remapUV(quadDir, sprite, pos[0][coordIdx], pos[3][coordIdx], toXZ1, uv, 0, 3, idx1, false, positive != towardsRight, rotated, mirrored);
+        ModelUtils.remapUV(quadDir, sprite, pos[1][coordIdx], pos[2][coordIdx], toXZ2, uv, 1, 2, idx2, false, positive != towardsRight, rotated, mirrored);
 
         pos[idx1][coordIdx] = toXZ1;
         pos[idx2][coordIdx] = toXZ2;
@@ -400,8 +404,8 @@ public final class Modifiers
     /**
      * Cuts a triangle quad with the tip centered horizontally and pointing up or down.
      * The quad will have the right edge pushed back and the tip tilted to the top or bottom left corner
-     * @param up Wether the tip should point up or down
-     * @param back Wether the tip should tilt forward or backward
+     * @param up Whether the tip should point up or down
+     * @param back Whether the tip should tilt forward or backward
      */
     public static QuadModifier.Modifier cutPrismTriangle(boolean up, boolean back)
     {
@@ -630,7 +634,7 @@ public final class Modifiers
      * Rotates the quad on the given axis around the block center
      * @param axis The axis to rotate around
      * @param angle The angle of rotation in degrees
-     * @param rescale Wether the quad should be rescaled or retain its dimensions
+     * @param rescale Whether the quad should be rescaled or retain its dimensions
      */
     public static QuadModifier.Modifier rotateCentered(Direction.Axis axis, float angle, boolean rescale)
     {
@@ -641,7 +645,7 @@ public final class Modifiers
      * Rotates the quad on the given axis around the block center
      * @param axis The axis to rotate around
      * @param angle The angle of rotation in degrees
-     * @param rescale Wether the quad should be rescaled or retain its dimensions
+     * @param rescale Whether the quad should be rescaled or retain its dimensions
      * @param scaleMult Modifier for the scale vector, can be used to inhibit scaling on selected axis
      */
     public static QuadModifier.Modifier rotateCentered(Direction.Axis axis, float angle, boolean rescale, Vector3f scaleMult)
@@ -654,7 +658,7 @@ public final class Modifiers
      * @param axis The axis to rotate around
      * @param origin The point to rotate around
      * @param angle The angle of rotation in degrees
-     * @param rescale Wether the quad should be rescaled or retain its dimensions
+     * @param rescale Whether the quad should be rescaled or retain its dimensions
      */
     public static QuadModifier.Modifier rotate(Direction.Axis axis, Vector3f origin, float angle, boolean rescale)
     {
@@ -675,7 +679,7 @@ public final class Modifiers
      * @param axis The axis to rotate around
      * @param origin The point to rotate around
      * @param angle The angle of rotation in degrees
-     * @param rescale Wether the quad should be rescaled or retain its dimensions
+     * @param rescale Whether the quad should be rescaled or retain its dimensions
      * @param scaleMult Modifier for the scale vector, can be used to inhibit scaling on selected axes
      */
     public static QuadModifier.Modifier rotate(Direction.Axis axis, Vector3f origin, float angle, boolean rescale, Vector3f scaleMult)
