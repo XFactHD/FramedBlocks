@@ -1,0 +1,34 @@
+{
+  "parent": "minecraft:recipes/root",
+  "rewards": {
+    "recipes": [
+      "framedblocks:framed_floor_board_rotate_to_framed_wall_board"
+    ]
+  },
+  "criteria": {
+    "has_framed_floor_board": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "framedblocks:framed_floor_board"
+            ]
+          }
+        ]
+      }
+    },
+    "has_the_recipe": {
+      "trigger": "minecraft:recipe_unlocked",
+      "conditions": {
+        "recipe": "framedblocks:framed_floor_board_rotate_to_framed_wall_board"
+      }
+    }
+  },
+  "requirements": [
+    [
+      "has_framed_floor_board",
+      "has_the_recipe"
+    ]
+  ]
+}

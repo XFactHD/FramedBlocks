@@ -1,0 +1,14 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "ingredients": [
+    {
+      "item": "framedblocks:framed_vertical_stairs"
+    },
+    {
+      "item": "framedblocks:framed_wrench"
+    }
+  ],
+  "result": {
+    "item": "framedblocks:framed_stairs"
+  }
+}
