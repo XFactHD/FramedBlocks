@@ -236,6 +236,12 @@ public interface IFramedBlock extends EntityBlock//, IFacade
             }
         }
 
+        //Let the game handle culling against solid surfaces automatically
+        if (neighborState.isSolidRender(level, neighborPos))
+        {
+            return false;
+        }
+
         SideSkipPredicate pred = FramedBlocksAPI.getInstance().detailedCullingEnabled() ? getBlockType().getSideSkipPredicate() : SideSkipPredicate.CTM;
         return pred.test(level, pos, state, neighborState, side);
     }
