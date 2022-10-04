@@ -49,7 +49,9 @@ public final class LightSourceTests
         return type != BlockType.FRAMED_TORCH &&
                 type != BlockType.FRAMED_WALL_TORCH &&
                 type != BlockType.FRAMED_SOUL_TORCH &&
-                type != BlockType.FRAMED_SOUL_WALL_TORCH;
+                type != BlockType.FRAMED_SOUL_WALL_TORCH &&
+                type != BlockType.FRAMED_REDSTONE_TORCH &&
+                type != BlockType.FRAMED_REDSTONE_WALL_TORCH;
     }
 
     private static BlockState getTestState(Block block)

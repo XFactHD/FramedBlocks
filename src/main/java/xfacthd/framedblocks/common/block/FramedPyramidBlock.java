@@ -35,7 +35,8 @@ public class FramedPyramidBlock extends FramedBlock
     }
 
     @Override
-    public BlockState rotate(BlockState state, Direction face, Rotation rot)
+    @SuppressWarnings("deprecation")
+    public BlockState rotate(BlockState state, Rotation rot)
     {
         return state.cycle(BlockStateProperties.FACING);
     }
