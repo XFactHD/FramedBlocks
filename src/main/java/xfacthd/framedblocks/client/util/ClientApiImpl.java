@@ -39,4 +39,7 @@ public class ClientApiImpl implements FramedBlocksClientAPI
     {
         GhostBlockRenderer.registerBehaviour(behaviour, items);
     }
+
+    @Override
+    public boolean useDiscreteUVSteps() { return ClientConfig.useDiscreteUVSteps; }
 }

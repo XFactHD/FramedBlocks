@@ -16,10 +16,12 @@ public class ClientConfig
     public static boolean showGhostBlocks = false;
     public static boolean fancyHitboxes = false;
     public static boolean detailedCulling = false;
+    public static boolean useDiscreteUVSteps = false;
 
     private final ForgeConfigSpec.BooleanValue showGhostBlocksValue;
     private final ForgeConfigSpec.BooleanValue fancyHitboxesValue;
     private final ForgeConfigSpec.BooleanValue detailedCullingValue;
+    private final ForgeConfigSpec.BooleanValue useDiscreteUVStepsValue;
 
     static
     {
@@ -45,6 +47,10 @@ public class ClientConfig
                 .comment("If false only full block faces of framed blocks will be culled, if true all outer faces of famed blocks can be culled")
                 .translation("config." + FramedConstants.MOD_ID + ".detailedCulling")
                 .define("detailedCulling", true);
+        useDiscreteUVStepsValue = builder
+                .comment("If true, the UV remapping will use discrete steps to avoid floating point errors")
+                .translation("config." + FramedConstants.MOD_ID + ".discreteUVSteps")
+                .define("discreteUVSteps", true);
         builder.pop();
     }
 
@@ -56,6 +62,7 @@ public class ClientConfig
             showGhostBlocks = showGhostBlocksValue.get();
             fancyHitboxes = fancyHitboxesValue.get();
             detailedCulling = detailedCullingValue.get();
+            useDiscreteUVSteps = useDiscreteUVStepsValue.get();
         }
     }
 }
