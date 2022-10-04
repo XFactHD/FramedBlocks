@@ -5,15 +5,13 @@ import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.mojang.math.Quaternion;
 import com.mojang.math.Vector3f;
 import net.minecraft.core.Direction;
-import net.minecraft.util.Mth;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
+import xfacthd.framedblocks.api.render.Quaternions;
 import xfacthd.framedblocks.api.util.client.OutlineRender;
 
 public class PyramidOutlineRenderer implements OutlineRender
 {
-    private static final Quaternion ZP_90 = Vector3f.ZP.rotation(Mth.PI / 2F);
-    private static final Quaternion ZP_180 = Vector3f.ZP.rotation(Mth.PI);
     private static final Quaternion[] XN_DIR = makeQuaternionArray();
 
     private final float height;
@@ -40,11 +38,11 @@ public class PyramidOutlineRenderer implements OutlineRender
         Direction dir = state.getValue(BlockStateProperties.FACING);
         if (dir == Direction.DOWN)
         {
-            poseStack.mulPose(ZP_180);
+            poseStack.mulPose(Quaternions.ZP_180);
         }
         else if (dir != Direction.UP)
         {
-            poseStack.mulPose(ZP_90);
+            poseStack.mulPose(Quaternions.ZP_90);
             poseStack.mulPose(XN_DIR[dir.get2DDataValue()]);
         }
     }

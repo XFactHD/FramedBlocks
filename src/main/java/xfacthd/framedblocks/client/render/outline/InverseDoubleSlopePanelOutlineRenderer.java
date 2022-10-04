@@ -33,6 +33,6 @@ public class InverseDoubleSlopePanelOutlineRenderer implements OutlineRender
         OutlineRender.super.rotateMatrix(poseStack, state);
 
         HorizontalRotation rotation = state.getValue(PropertyHolder.ROTATION);
-        poseStack.mulPose(SlopePanelOutlineRenderer.ROTATIONS.get(rotation));
+        poseStack.mulPose(SlopePanelOutlineRenderer.ROTATIONS[rotation.ordinal()]);
     }
 }

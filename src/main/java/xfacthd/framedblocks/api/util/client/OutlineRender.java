@@ -9,6 +9,7 @@ import net.minecraft.core.Direction;
 import net.minecraft.util.Mth;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
+import xfacthd.framedblocks.api.render.Quaternions;
 import xfacthd.framedblocks.api.util.FramedProperties;
 
 public interface OutlineRender
@@ -28,6 +29,23 @@ public interface OutlineRender
     {
         Direction dir = getRotationDir(state);
         poseStack.mulPose(YN_DIR[dir.get2DDataValue()]);
+    }
+
+    /**
+     * Mirrors the {@link PoseStack} around the horizontal plane
+     * @param pstack The {@code PoseStack} used for rendering
+     * @param rotY90 Whether the {@code PoseStack} needs to be rotated -90 degrees around the y-axis,
+     *               needed for un-symmetric shapes like corners
+     */
+    static void mirrorHorizontally(PoseStack pstack, boolean rotY90)
+    {
+        pstack.translate(.5, .5, .5);
+        pstack.mulPose(Quaternions.ZP_180);
+        if (rotY90)
+        {
+            pstack.mulPose(Quaternions.YN_90);
+        }
+        pstack.translate(-.5, -.5, -.5);
     }
 
     static void drawLine(VertexConsumer builder, PoseStack mstack, double x1, double y1, double z1, double x2, double y2, double z2)

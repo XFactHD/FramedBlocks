@@ -13,6 +13,7 @@ import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import xfacthd.framedblocks.FramedBlocks;
 import xfacthd.framedblocks.api.block.IFramedBlock;
+import xfacthd.framedblocks.api.render.Quaternions;
 import xfacthd.framedblocks.api.type.IBlockType;
 import xfacthd.framedblocks.api.util.FramedConstants;
 import xfacthd.framedblocks.api.util.FramedProperties;
@@ -92,9 +93,7 @@ public final class BlockOutlineRenderer
         {
             if (type == SlopeType.TOP)
             {
-                mstack.translate(.5, .5, .5);
-                mstack.scale(1, -1, 1);
-                mstack.translate(-.5, -.5, -.5);
+                OutlineRender.mirrorHorizontally(mstack, false);
             }
 
             //Back edges
@@ -140,9 +139,7 @@ public final class BlockOutlineRenderer
         {
             if (type.isTop())
             {
-                mstack.translate(.5, .5, .5);
-                mstack.scale(1, -1, 1);
-                mstack.translate(-.5, -.5, -.5);
+                OutlineRender.mirrorHorizontally(mstack, true);
             }
 
             //Back edge
@@ -161,10 +158,19 @@ public final class BlockOutlineRenderer
         }
         else
         {
-            mstack.translate(.5, .5, .5);
-            if (!type.isRight()) { mstack.scale(-1, 1, 1); }
-            if (type.isTop()) { mstack.scale(1, -1, 1); }
-            mstack.translate(-.5, -.5, -.5);
+            if (type.isTop() || !type.isRight())
+            {
+                mstack.translate(.5, .5, .5);
+                if (!type.isRight())
+                {
+                    mstack.mulPose(Quaternions.ZP_90);
+                }
+                if (type.isTop())
+                {
+                    mstack.mulPose(type.isRight() ? Quaternions.ZN_90 : Quaternions.ZP_90);
+                }
+                mstack.translate(-.5, -.5, -.5);
+            }
 
             //Back face
             OutlineRender.drawLine(builder, mstack, 0, 0, 1, 1, 0, 1);
@@ -190,9 +196,10 @@ public final class BlockOutlineRenderer
 
         if (!type.isHorizontal())
         {
-            mstack.translate(.5, .5, .5);
-            if (type.isTop()) { mstack.scale(1, -1, 1); }
-            mstack.translate(-.5, -.5, -.5);
+            if (type.isTop())
+            {
+                OutlineRender.mirrorHorizontally(mstack, true);
+            }
 
             //Back face
             OutlineRender.drawLine(builder, mstack, 0, 0, 1, 1, 0, 1);
@@ -216,10 +223,19 @@ public final class BlockOutlineRenderer
         }
         else
         {
-            mstack.translate(.5, .5, .5);
-            if (!type.isRight()) { mstack.scale(-1, 1, 1); }
-            if (type.isTop()) { mstack.scale(1, -1, 1); }
-            mstack.translate(-.5, -.5, -.5);
+            if (type.isTop() || !type.isRight())
+            {
+                mstack.translate(.5, .5, .5);
+                if (!type.isRight())
+                {
+                    mstack.mulPose(Quaternions.ZP_90);
+                }
+                if (type.isTop())
+                {
+                    mstack.mulPose(type.isRight() ? Quaternions.ZN_90 : Quaternions.ZP_90);
+                }
+                mstack.translate(-.5, -.5, -.5);
+            }
 
             //Top face
             OutlineRender.drawLine(builder, mstack, 0, 1, 1, 1, 1, 1);
@@ -249,9 +265,10 @@ public final class BlockOutlineRenderer
     {
         boolean top = state.getValue(FramedProperties.TOP);
 
-        mstack.translate(.5, .5, .5);
-        if (top) { mstack.scale(1, -1, 1); }
-        mstack.translate(-.5, -.5, -.5);
+        if (top)
+        {
+            OutlineRender.mirrorHorizontally(mstack, true);
+        }
 
         //Back edge
         OutlineRender.drawLine(builder, mstack, 1, 0, 1, 1, 1, 1);
@@ -272,9 +289,10 @@ public final class BlockOutlineRenderer
     {
         boolean top = state.getValue(FramedProperties.TOP);
 
-        mstack.translate(.5, .5, .5);
-        if (top) { mstack.scale(1, -1, 1); }
-        mstack.translate(-.5, -.5, -.5);
+        if (top)
+        {
+            OutlineRender.mirrorHorizontally(mstack, true);
+        }
 
         //Bottom face
         OutlineRender.drawLine(builder, mstack, 0, 0, 0, 0, 0, 1);
@@ -301,9 +319,10 @@ public final class BlockOutlineRenderer
     {
         boolean top = state.getValue(FramedProperties.TOP);
 
-        mstack.translate(.5, .5, .5);
-        if (top) { mstack.scale(1, -1, 1); }
-        mstack.translate(-.5, -.5, -.5);
+        if (top)
+        {
+            OutlineRender.mirrorHorizontally(mstack, true);
+        }
 
         //Back edges
         OutlineRender.drawLine(builder, mstack, 1, 0, 1, 1, 1, 1);
@@ -325,9 +344,10 @@ public final class BlockOutlineRenderer
     {
         boolean top = state.getValue(FramedProperties.TOP);
 
-        mstack.translate(.5, .5, .5);
-        if (top) { mstack.scale(1, -1, 1); }
-        mstack.translate(-.5, -.5, -.5);
+        if (top)
+        {
+            OutlineRender.mirrorHorizontally(mstack, true);
+        }
 
         //Bottom face
         OutlineRender.drawLine(builder, mstack, 0, 0, 0, 0, 0, 1);
@@ -362,9 +382,7 @@ public final class BlockOutlineRenderer
 
         if (top)
         {
-            pstack.translate(.5, .5, .5);
-            pstack.scale(1, -1, 1);
-            pstack.translate(-.5, -.5, -.5);
+            OutlineRender.mirrorHorizontally(pstack, false);
         }
 
         if (topHalf != top)
@@ -394,9 +412,7 @@ public final class BlockOutlineRenderer
     {
         if (state.getValue(FramedProperties.TOP))
         {
-            pstack.translate(.5, .5, .5);
-            pstack.scale(1, -1, 1);
-            pstack.translate(-.5, -.5, -.5);
+            OutlineRender.mirrorHorizontally(pstack, false);
         }
 
         //Back edges
