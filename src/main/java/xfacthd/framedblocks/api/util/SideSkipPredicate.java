@@ -35,13 +35,13 @@ public interface SideSkipPredicate
     };
 
     /**
-     * Check wether the given side should be hidden in presence of the given neighbor
+     * Check whether the given side should be hidden in presence of the given neighbor
      * @param level The level
      * @param pos The blocks position in the level
      * @param state The blocks state
      * @param adjState The neighboring blocks state
      * @param side The side to be checked
-     * @return Wether the given side should be hidden
+     * @return Whether the given side should be hidden
      */
     boolean test(BlockGetter level, BlockPos pos, BlockState state, BlockState adjState, Direction side);
 

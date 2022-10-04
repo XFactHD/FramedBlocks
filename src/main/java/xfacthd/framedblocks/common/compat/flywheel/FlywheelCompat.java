@@ -11,10 +11,6 @@ public final class FlywheelCompat
     public static void init()
     {
         loaded = ModList.get().isLoaded("flywheel");
-        if (loaded)
-        {
-            GuardedAccess.init();
-        }
     }
 
     public static boolean isVirtualLevel(BlockGetter level)
@@ -28,11 +24,6 @@ public final class FlywheelCompat
 
     private static final class GuardedAccess
     {
-        public static void init()
-        {
-            //TODO: try to find a way to allow the camo to render while on a moving contraption
-        }
-
         public static boolean isVirtualLevel(BlockGetter level)
         {
             return level instanceof VirtualRenderWorld;
