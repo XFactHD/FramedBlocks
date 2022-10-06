@@ -116,6 +116,8 @@ public enum BlockType implements IBlockType
     FRAMED_TARGET                                   ( true, false,  true, false,  true,  true, false, false, CtmPredicate.TRUE, SideSkipPredicate.CTM, Shapes.block()),
     FRAMED_GATE_DOOR                                ( true, false, false, false,  true, false, false, false, FramedDoorBlock.CTM_PREDICATE, new GateSkipPredicate()), //TODO: rename to FRAMED_GATE in 1.20
     FRAMED_IRON_GATE_DOOR                           ( true, false, false, false,  true, false, false, false, FramedDoorBlock.CTM_PREDICATE, new GateSkipPredicate()), //TODO: rename to FRAMED_IRON_GATE in 1.20
+    FRAMED_ITEM_FRAME                               (false,  true,  true, false,  true, false, false, false, FramedItemFrameBlock::generateShapes),
+    FRAMED_GLOWING_ITEM_FRAME                       (false,  true,  true, false,  true, false, false, false, FramedItemFrameBlock::generateShapes),
     ;
 
     private final String name = toString().toLowerCase(Locale.ROOT);

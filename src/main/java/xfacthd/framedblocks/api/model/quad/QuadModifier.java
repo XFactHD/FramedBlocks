@@ -1,5 +1,6 @@
 package xfacthd.framedblocks.api.model.quad;
 
+import com.google.common.base.Preconditions;
 import net.minecraft.client.renderer.block.model.BakedQuad;
 import xfacthd.framedblocks.api.util.client.ModelUtils;
 
@@ -9,11 +10,13 @@ import java.util.function.Consumer;
 
 public final class QuadModifier
 {
-    private static final QuadModifier FAILED = new QuadModifier(null, true, true);
-    private static final QuadModifier FAILED_FULL = new QuadModifier(null, false, true);
+    private static final QuadModifier FAILED = new QuadModifier(null, true, -1, false, true);
+    private static final QuadModifier FAILED_FULL = new QuadModifier(null, false, -1, false, true);
 
     private final Data data;
     private final boolean limited;
+    private int tintIndex = -1;
+    private boolean noShade;
     private boolean failed;
 
     /**
@@ -33,7 +36,7 @@ public final class QuadModifier
             ModelUtils.unpackNormals(vertexData, normal[i], i);
         }
 
-        return new QuadModifier(new Data(quad, pos, uv, normal), true, false);
+        return new QuadModifier(new Data(quad, pos, uv, normal), true, -1, false, false);
     }
 
     /**
@@ -57,13 +60,15 @@ public final class QuadModifier
             ModelUtils.unpackLight(vertexData, light[i], i);
         }
 
-        return new QuadModifier(new Data(quad, pos, uv, normal, color, light), false, false);
+        return new QuadModifier(new Data(quad, pos, uv, normal, color, light), false, -1, false, false);
     }
 
-    private QuadModifier(Data data, boolean limited, boolean failed)
+    private QuadModifier(Data data, boolean limited, int tintIndex, boolean noShade, boolean failed)
     {
         this.data = data;
         this.limited = limited;
+        this.tintIndex = tintIndex;
+        this.noShade = noShade;
         this.failed = failed;
     }
 
@@ -83,6 +88,20 @@ public final class QuadModifier
         {
             failed = !modifier.accept(data);
         }
+        return this;
+    }
+
+    public QuadModifier tintIndex(int tintIndex)
+    {
+        Preconditions.checkState(this.tintIndex == -1, "TintIndex has already been set");
+
+        this.tintIndex = tintIndex;
+        return this;
+    }
+
+    public QuadModifier noShade()
+    {
+        noShade = true;
         return this;
     }
 
@@ -106,10 +125,10 @@ public final class QuadModifier
 
         BakedQuad newQuad = new BakedQuad(
                 vertexData,
-                data.quad.getTintIndex(),
+                tintIndex == -1 ? data.quad.getTintIndex() : tintIndex,
                 data.quad.getDirection(),
                 data.quad.getSprite(),
-                data.quad.isShade()
+                !noShade && data.quad.isShade()
         );
         ModelUtils.fillNormal(newQuad);
         quadConsumer.accept(newQuad);
@@ -121,6 +140,9 @@ public final class QuadModifier
      */
     public void modifyInPlace()
     {
+        Preconditions.checkState(tintIndex == -1, "In-place modification can't change tintIndex but a tintIndex has been set");
+        Preconditions.checkState(!noShade, "In-place modification can't change shading but noShade has been set");
+
         if (failed) { return; }
 
         packVertexData(data.quad.getVertices());
@@ -158,7 +180,7 @@ public final class QuadModifier
         {
             return limited ? FAILED : FAILED_FULL;
         }
-        return new QuadModifier(new Data(data), limited, false);
+        return new QuadModifier(new Data(data), limited, tintIndex, noShade, false);
     }
 
     public boolean hasFailed() { return failed; }

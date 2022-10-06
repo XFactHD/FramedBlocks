@@ -161,6 +161,8 @@ public final class FBContent
     public static final RegistryObject<Block> blockFramedTarget = registerBlock(FramedTargetBlock::new, BlockType.FRAMED_TARGET);
     public static final RegistryObject<Block> blockFramedGate = registerBlock(FramedGateBlock::wood, BlockType.FRAMED_GATE_DOOR);
     public static final RegistryObject<Block> blockFramedIronGate = registerBlock(FramedGateBlock::iron, BlockType.FRAMED_IRON_GATE_DOOR);
+    public static final RegistryObject<Block> blockFramedItemFrame = registerBlock(FramedItemFrameBlock::new, BlockType.FRAMED_ITEM_FRAME);
+    public static final RegistryObject<Block> blockFramedGlowingItemFrame = registerBlock(FramedItemFrameBlock::new, BlockType.FRAMED_GLOWING_ITEM_FRAME);
     // endregion
 
     // region Items
@@ -278,6 +280,10 @@ public final class FBContent
     public static final RegistryObject<BlockEntityType<FramedTargetBlockEntity>> blockEntityTypeFramedTarget = createBlockEntityType(
             FramedTargetBlockEntity::new,
             BlockType.FRAMED_TARGET
+    );
+    public static final RegistryObject<BlockEntityType<FramedItemFrameBlockEntity>> blockEntityTypeFramedItemFrame = createBlockEntityType(
+            FramedItemFrameBlockEntity::new,
+            BlockType.FRAMED_ITEM_FRAME, BlockType.FRAMED_GLOWING_ITEM_FRAME
     );
     // endregion
 
