@@ -4,31 +4,93 @@ import net.minecraft.core.Direction;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.TickTask;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.Items;
 import net.minecraft.world.level.LevelAccessor;
+import net.minecraft.world.level.block.BaseRailBlock;
+import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.state.properties.RailShape;
+import xfacthd.framedblocks.api.block.IFramedBlock;
 import xfacthd.framedblocks.api.util.FramedProperties;
-import xfacthd.framedblocks.common.block.FramedRailSlopeBlock;
+import xfacthd.framedblocks.common.FBContent;
 import xfacthd.framedblocks.common.data.PropertyHolder;
 import xfacthd.framedblocks.common.data.property.SlopeType;
 
 public final class FramedUtils
 {
+    public static boolean isFramedRailBlock(BlockState state)
+    {
+        Block block = state.getBlock();
+        return block instanceof BaseRailBlock && block instanceof IFramedBlock;
+    }
+
+    public static boolean isRailItem(Item item)
+    {
+        return item == Items.RAIL || item == Items.POWERED_RAIL || item == Items.DETECTOR_RAIL || item == Items.ACTIVATOR_RAIL;
+    }
+
+    public static Block getRailSlopeBlock(Item item)
+    {
+        if (item == Items.RAIL)
+        {
+            return FBContent.blockFramedRailSlope.get();
+        }
+        if (item == Items.POWERED_RAIL)
+        {
+            return FBContent.blockFramedPoweredRailSlope.get();
+        }
+        if (item == Items.DETECTOR_RAIL)
+        {
+            return FBContent.blockFramedDetectorRailSlope.get();
+        }
+        if (item == Items.ACTIVATOR_RAIL)
+        {
+            return FBContent.blockFramedActivatorRailSlope.get();
+        }
+        throw new IllegalStateException("Invalid rail item: " + item);
+    }
+
     public static Direction getBlockFacing(BlockState state)
     {
-        if (state.getBlock() instanceof FramedRailSlopeBlock)
+        if (isFramedRailBlock(state))
         {
-            return FramedRailSlopeBlock.directionFromShape(state.getValue(PropertyHolder.ASCENDING_RAIL_SHAPE));
+            return directionFromRailShape(state.getValue(PropertyHolder.ASCENDING_RAIL_SHAPE));
         }
         return state.getValue(FramedProperties.FACING_HOR);
     }
 
     public static SlopeType getSlopeType(BlockState state)
     {
-        if (state.getBlock() instanceof FramedRailSlopeBlock)
+        if (isFramedRailBlock(state))
         {
             return SlopeType.BOTTOM;
         }
         return state.getValue(PropertyHolder.SLOPE_TYPE);
+    }
+
+    public static RailShape railShapeFromDirection(Direction dir)
+    {
+        return switch (dir)
+                {
+                    case NORTH -> RailShape.ASCENDING_NORTH;
+                    case EAST -> RailShape.ASCENDING_EAST;
+                    case SOUTH -> RailShape.ASCENDING_SOUTH;
+                    case WEST -> RailShape.ASCENDING_WEST;
+                    default -> throw new IllegalArgumentException("Invalid facing " + dir);
+                };
+    }
+
+    public static Direction directionFromRailShape(RailShape shape)
+    {
+        return switch (shape)
+                {
+                    case ASCENDING_NORTH -> Direction.NORTH;
+                    case ASCENDING_EAST -> Direction.EAST;
+                    case ASCENDING_SOUTH -> Direction.SOUTH;
+                    case ASCENDING_WEST -> Direction.WEST;
+                    default -> throw new IllegalArgumentException("Invalid shape " + shape);
+                };
     }
 
     public static void enqueueImmediateTask(LevelAccessor level, Runnable task, boolean allowClient)

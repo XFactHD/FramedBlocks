@@ -16,7 +16,7 @@ import java.util.Locale;
 public enum BlockType implements IBlockType
 {
     FRAMED_CUBE                                     ( true, false, false, false,  true,  true, false, false, CtmPredicate.TRUE, SideSkipPredicate.CTM, Shapes.block()),
-    FRAMED_SLOPE                                    ( true,  true, false,  true,  true,  true, false, false, FramedSlopeBlock.CTM_PREDICATE, new SlopeSkipPredicate(), FramedSlopeBlock::generateShapes),
+    FRAMED_SLOPE                                    ( true,  true, false,  true,  true,  true, false, false, FramedSlopeBlock.CTM_PREDICATE, SlopeSkipPredicate.INSTANCE, FramedSlopeBlock::generateShapes),
     FRAMED_CORNER_SLOPE                             ( true,  true, false,  true,  true,  true, false, false, FramedCornerSlopeBlock.CTM_PREDICATE, new CornerSkipPredicate(), FramedCornerSlopeBlock::generateCornerShapes),
     FRAMED_INNER_CORNER_SLOPE                       ( true,  true, false,  true,  true,  true, false, false, FramedCornerSlopeBlock.CTM_PREDICATE_INNER, new InnerCornerSkipPredicate(), FramedCornerSlopeBlock::generateInnerCornerShapes),
     FRAMED_PRISM_CORNER                             ( true,  true, false,  true,  true,  true, false, false, CtmPredicate.FALSE, new ThreewayCornerSkipPredicate(), FramedPrismCornerBlock::generatePrismShapes),
@@ -65,7 +65,10 @@ public enum BlockType implements IBlockType
     FRAMED_CHEST                                    (false, false,  true,  true,  true, false, false, false, Shapes.box(1D/16D, 0, 1D/16D, 15D/16D, 14D/16D, 15D/16D)),
     FRAMED_BARS                                     (false, false, false,  true,  true,  true, false,  true),
     FRAMED_PANE                                     (false, false, false,  true,  true,  true, false,  true, CtmPredicate.FALSE, new PaneSkipPredicate()),
-    FRAMED_RAIL_SLOPE                               ( true,  true, false,  true,  true, false, false, false, FramedSlopeBlock.CTM_PREDICATE, new SlopeSkipPredicate(), FramedSlopeBlock::generateShapes),
+    FRAMED_RAIL_SLOPE                               ( true,  true, false,  true,  true, false, false, false, FramedSlopeBlock.CTM_PREDICATE, SlopeSkipPredicate.INSTANCE, FramedSlopeBlock::generateShapes),
+    FRAMED_POWERED_RAIL_SLOPE                       ( true,  true, false,  true,  true, false, false, false, FramedSlopeBlock.CTM_PREDICATE, SlopeSkipPredicate.INSTANCE, FramedSlopeBlock::generateShapes),
+    FRAMED_DETECTOR_RAIL_SLOPE                      ( true,  true, false,  true,  true, false, false, false, FramedSlopeBlock.CTM_PREDICATE, SlopeSkipPredicate.INSTANCE, FramedSlopeBlock::generateShapes),
+    FRAMED_ACTIVATOR_RAIL_SLOPE                     ( true,  true, false,  true,  true, false, false, false, FramedSlopeBlock.CTM_PREDICATE, SlopeSkipPredicate.INSTANCE, FramedSlopeBlock::generateShapes),
     FRAMED_FLOWER_POT                               (false, false,  true, false,  true, false, false, false, Shapes.box(5D/16D, 0, 5D/16D, 11D/16D, 6D/16D, 11D/16D)),
     FRAMED_PILLAR                                   (false, false, false,  true,  true,  true, false, false, CtmPredicate.FALSE, new PillarSkipPredicate(), FramedPillarBlock::generatePillarShapes),
     FRAMED_HALF_PILLAR                              (false, false, false,  true,  true,  true, false, false, CtmPredicate.FALSE, new HalfPillarSkipPredicate(), FramedHalfPillarBlock::generateShapes),

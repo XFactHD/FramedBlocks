@@ -5,6 +5,8 @@
     "refmap": "framedblocks.refmap.json",
     "plugin": "xfacthd.framedblocks.common.util.FramedMixinConfigPlugin",
     "mixins": [
+        "MixinDetectorRailBlock",
+        "MixinPoweredRailBlock"
     ],
     "client": [
     ],

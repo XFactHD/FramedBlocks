@@ -1,5 +1,8 @@
 {
   "values": [
-    "framedblocks:framed_rail_slope"
+    "framedblocks:framed_rail_slope",
+    "framedblocks:framed_powered_rail_slope",
+    "framedblocks:framed_detector_rail_slope",
+    "framedblocks:framed_activator_rail_slope"
   ]
 }

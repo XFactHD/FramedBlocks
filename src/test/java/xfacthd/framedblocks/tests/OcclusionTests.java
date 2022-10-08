@@ -875,6 +875,54 @@ public final class OcclusionTests
     }
 
     @GameTest(template = "box_top", batch = "occlusion")
+    @TestedType(type = BlockType.FRAMED_POWERED_RAIL_SLOPE)
+    public static void testTop_PoweredRailSlope(GameTestHelper helper)
+    {
+        BlockState state = FBContent.blockFramedPoweredRailSlope.get().defaultBlockState();
+        TestUtils.testBlockOccludesLightBelow(helper, state);
+    }
+
+    @GameTest(template = "box_bottom", batch = "occlusion")
+    @TestedType(type = BlockType.FRAMED_POWERED_RAIL_SLOPE)
+    public static void testBottom_PoweredRailSlope(GameTestHelper helper)
+    {
+        BlockState state = FBContent.blockFramedPoweredRailSlope.get().defaultBlockState();
+        TestUtils.testBlockOccludesLightAbove(helper, state);
+    }
+
+    @GameTest(template = "box_top", batch = "occlusion")
+    @TestedType(type = BlockType.FRAMED_DETECTOR_RAIL_SLOPE)
+    public static void testTop_DetectorRailSlope(GameTestHelper helper)
+    {
+        BlockState state = FBContent.blockFramedDetectorRailSlope.get().defaultBlockState();
+        TestUtils.testBlockOccludesLightBelow(helper, state);
+    }
+
+    @GameTest(template = "box_bottom", batch = "occlusion")
+    @TestedType(type = BlockType.FRAMED_DETECTOR_RAIL_SLOPE)
+    public static void testBottom_DetectorRailSlope(GameTestHelper helper)
+    {
+        BlockState state = FBContent.blockFramedDetectorRailSlope.get().defaultBlockState();
+        TestUtils.testBlockOccludesLightAbove(helper, state);
+    }
+
+    @GameTest(template = "box_top", batch = "occlusion")
+    @TestedType(type = BlockType.FRAMED_ACTIVATOR_RAIL_SLOPE)
+    public static void testTop_ActivatorRailSlope(GameTestHelper helper)
+    {
+        BlockState state = FBContent.blockFramedActivatorRailSlope.get().defaultBlockState();
+        TestUtils.testBlockOccludesLightBelow(helper, state);
+    }
+
+    @GameTest(template = "box_bottom", batch = "occlusion")
+    @TestedType(type = BlockType.FRAMED_ACTIVATOR_RAIL_SLOPE)
+    public static void testBottom_ActivatorRailSlope(GameTestHelper helper)
+    {
+        BlockState state = FBContent.blockFramedActivatorRailSlope.get().defaultBlockState();
+        TestUtils.testBlockOccludesLightAbove(helper, state);
+    }
+
+    @GameTest(template = "box_top", batch = "occlusion")
     @TestedType(type = BlockType.FRAMED_BOUNCY_CUBE)
     public static void test_BouncyCube(GameTestHelper helper)
     {

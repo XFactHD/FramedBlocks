@@ -15,7 +15,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "framedblocks:framed_rail_slope"
+        "recipe": "framedblocks:framed_detector_rail_slope"
       },
       "trigger": "minecraft:recipe_unlocked"
     }
@@ -28,7 +28,7 @@
   ],
   "rewards": {
     "recipes": [
-      "framedblocks:framed_rail_slope"
+      "framedblocks:framed_detector_rail_slope"
     ]
   }
 }

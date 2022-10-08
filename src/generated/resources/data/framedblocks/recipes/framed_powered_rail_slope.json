@@ -1,0 +1,14 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "ingredients": [
+    {
+      "item": "framedblocks:framed_slope"
+    },
+    {
+      "item": "minecraft:powered_rail"
+    }
+  ],
+  "result": {
+    "item": "framedblocks:framed_powered_rail_slope"
+  }
+}

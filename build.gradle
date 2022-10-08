@@ -45,11 +45,6 @@ minecraft {
             // Recommended logging level for the console
             property 'forge.logging.console.level', 'debug'
 
-            property 'mixin.env.remapRefMap', 'true'
-            property 'mixin.env.refMapRemappingFile', "${buildDir}/createSrgToMcp/output.srg"
-
-            //arg "-mixin.config=framedblocks.mixin.json"
-
             mods {
                 framedblocks {
                     source sourceSets.main
@@ -169,16 +164,15 @@ dependencies {
         transitive(false)
     }
 
-    //annotationProcessor 'org.spongepowered:mixin:0.8.5:processor'
+    annotationProcessor 'org.spongepowered:mixin:0.8.5:processor'
 }
 
 mixin {
-    //add sourceSets.main, "framedblocks.refmap.json"
+    add sourceSets.main, "framedblocks.refmap.json"
+    config "framedblocks.mixin.json"
 }
 
 processResources {
-    // Don't include mixin config in JAR, it is currently not needed
-    exclude("framedblocks.mixin.json")
 }
 
 processTestResources {
@@ -202,7 +196,7 @@ jar {
             "Implementation-Version": "${project.version}",
             "Implementation-Vendor" : "XFactHD",
             "Implementation-Timestamp": new Date().format("yyyy-MM-dd'T'HH:mm:ssZ"),
-            //"MixinConfigs": "framedblocks.mixin.json"
+            "MixinConfigs": "framedblocks.mixin.json"
         ])
     }
 }

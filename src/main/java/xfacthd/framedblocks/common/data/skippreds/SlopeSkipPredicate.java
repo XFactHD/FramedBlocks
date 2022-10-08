@@ -13,6 +13,8 @@ import xfacthd.framedblocks.common.util.FramedUtils;
 
 public final class SlopeSkipPredicate implements SideSkipPredicate
 {
+    public static final SlopeSkipPredicate INSTANCE = new SlopeSkipPredicate();
+
     @Override
     public boolean test(BlockGetter level, BlockPos pos, BlockState state, BlockState adjState, Direction side)
     {
