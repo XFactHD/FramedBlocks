@@ -1,18 +1,21 @@
 package xfacthd.framedblocks.common.block;
 
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.*;
-import net.minecraft.world.level.block.PressurePlateBlock;
-import net.minecraft.world.level.block.SoundType;
+import net.minecraft.world.level.block.*;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.level.material.MaterialColor;
+import net.minecraft.world.level.block.state.StateDefinition;
+import net.minecraft.world.level.block.state.properties.BlockStateProperties;
+import net.minecraft.world.level.material.*;
 import net.minecraft.world.level.storage.loot.LootContext;
 import net.minecraft.world.phys.BlockHitResult;
 import xfacthd.framedblocks.api.block.IFramedBlock;
@@ -23,7 +26,7 @@ import javax.annotation.Nullable;
 import java.util.List;
 
 @SuppressWarnings("deprecation")
-public class FramedPressurePlateBlock extends PressurePlateBlock implements IFramedBlock
+public class FramedPressurePlateBlock extends PressurePlateBlock implements IFramedBlock, SimpleWaterloggedBlock
 {
     private final BlockType type;
 
@@ -32,6 +35,21 @@ public class FramedPressurePlateBlock extends PressurePlateBlock implements IFra
     {
         super(sensitivity, props);
         this.type = type;
+        registerDefaultState(defaultBlockState().setValue(BlockStateProperties.WATERLOGGED, false));
+    }
+
+    @Override
+    protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder)
+    {
+        super.createBlockStateDefinition(builder);
+        builder.add(BlockStateProperties.WATERLOGGED);
+    }
+
+    @Override
+    public BlockState getStateForPlacement(BlockPlaceContext context)
+    {
+        FluidState fluidState = context.getLevel().getFluidState(context.getClickedPos());
+        return defaultBlockState().setValue(BlockStateProperties.WATERLOGGED, fluidState.getType() == Fluids.WATER);
     }
 
     @Override
@@ -44,6 +62,17 @@ public class FramedPressurePlateBlock extends PressurePlateBlock implements IFra
     public void setPlacedBy(Level level, BlockPos pos, BlockState state, @Nullable LivingEntity placer, ItemStack stack)
     {
         tryApplyCamoImmediately(level, pos, placer, stack);
+    }
+
+    @Override
+    public BlockState updateShape(BlockState state, Direction facing, BlockState facingState, LevelAccessor level, BlockPos pos, BlockPos facingPos)
+    {
+        BlockState newState = super.updateShape(state, facing, facingState, level, pos, facingPos);
+        if (!newState.isAir() && state.getValue(BlockStateProperties.WATERLOGGED))
+        {
+            level.scheduleTick(pos, Fluids.WATER, Fluids.WATER.getTickDelay(level));
+        }
+        return newState;
     }
 
     @Override
@@ -112,6 +141,16 @@ public class FramedPressurePlateBlock extends PressurePlateBlock implements IFra
             return 0;
         }
         return super.getSignalStrength(level, pos);
+    }
+
+    @Override
+    public FluidState getFluidState(BlockState state)
+    {
+        if (state.getValue(BlockStateProperties.WATERLOGGED))
+        {
+            return Fluids.WATER.getSource(false);
+        }
+        return Fluids.EMPTY.defaultFluidState();
     }
 
     @Override
