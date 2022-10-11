@@ -290,7 +290,7 @@ public class FramedBlockEntity extends BlockEntity
         }
 
         //noinspection ConstantConditions
-        return state.isSolidRender(level, worldPosition) || state.is(Utils.FRAMEABLE);
+        return state.isSolidRender(level, worldPosition) || state.is(Utils.FRAMEABLE) || state.getBlock() instanceof LiquidBlock;
     }
 
     protected boolean hitSecondary(BlockHitResult hit) { return false; }
