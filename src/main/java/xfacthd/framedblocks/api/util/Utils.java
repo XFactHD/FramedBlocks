@@ -10,8 +10,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.*;
 import net.minecraft.util.Mth;
 import net.minecraft.world.item.Item;
-import net.minecraft.world.level.BlockGetter;
-import net.minecraft.world.level.Level;
+import net.minecraft.world.level.*;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.*;
 import net.minecraft.world.level.block.state.BlockState;
@@ -27,6 +26,9 @@ import net.minecraftforge.fml.loading.FMLEnvironment;
 import net.minecraftforge.fml.util.ObfuscationReflectionHelper;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegistryObject;
+import xfacthd.framedblocks.api.block.FramedBlockEntity;
+import xfacthd.framedblocks.api.data.CamoContainer;
+import xfacthd.framedblocks.api.data.EmptyCamoContainer;
 import xfacthd.framedblocks.api.util.client.ClientUtils;
 
 import java.lang.invoke.*;
@@ -233,6 +235,29 @@ public final class Utils
             }
         }
         return null;
+    }
+
+    public static void wrapInStateCopy(LevelAccessor level, BlockPos pos, boolean writeToCamoTwo, Runnable action)
+    {
+        CamoContainer camo = EmptyCamoContainer.EMPTY;
+        boolean glowing = false;
+        boolean intangible = false;
+
+        if (level.getBlockEntity(pos) instanceof FramedBlockEntity be)
+        {
+            camo = be.getCamo();
+            glowing = be.isGlowing();
+            intangible = be.isIntangible(null);
+        }
+
+        action.run();
+
+        if (level.getBlockEntity(pos) instanceof FramedBlockEntity be)
+        {
+            be.setCamo(camo, writeToCamoTwo);
+            be.setGlowing(glowing);
+            be.setIntangible(intangible);
+        }
     }
 
     public static ResourceLocation rl(String path) { return new ResourceLocation(FramedConstants.MOD_ID, path); }

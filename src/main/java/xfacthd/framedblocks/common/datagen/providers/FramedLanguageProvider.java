@@ -8,8 +8,7 @@ import net.minecraftforge.common.data.LanguageProvider;
 import xfacthd.framedblocks.FramedBlocks;
 import xfacthd.framedblocks.api.block.IFramedBlock;
 import xfacthd.framedblocks.api.util.FramedConstants;
-import xfacthd.framedblocks.client.screen.FramedSignScreen;
-import xfacthd.framedblocks.client.screen.StateLockOverlay;
+import xfacthd.framedblocks.client.screen.*;
 import xfacthd.framedblocks.client.util.KeyMappings;
 import xfacthd.framedblocks.common.FBContent;
 import xfacthd.framedblocks.common.blockentity.FramedStorageBlockEntity;
@@ -46,10 +45,15 @@ public final class FramedLanguageProvider extends LanguageProvider
         add(FBContent.blockFramedTrapDoor.get(), "Framed Trapdoor");
         add(FBContent.blockFramedIronTrapDoor.get(), "Framed Iron Trapdoor");
         add(FBContent.blockFramedPressurePlate.get(), "Framed Pressure Plate");
+        add(FBContent.blockFramedWaterloggablePressurePlate.get(), "Framed Pressure Plate");
         add(FBContent.blockFramedStonePressurePlate.get(), "Framed Stone Pressure Plate");
+        add(FBContent.blockFramedWaterloggableStonePressurePlate.get(), "Framed Stone Pressure Plate");
         add(FBContent.blockFramedObsidianPressurePlate.get(), "Framed Obsidian Pressure Plate");
+        add(FBContent.blockFramedWaterloggableObsidianPressurePlate.get(), "Framed Obsidian Pressure Plate");
         add(FBContent.blockFramedGoldPressurePlate.get(), "Framed Light Weighted Pressure Plate");
+        add(FBContent.blockFramedWaterloggableGoldPressurePlate.get(), "Framed Light Weighted Pressure Plate");
         add(FBContent.blockFramedIronPressurePlate.get(), "Framed Heavy Weighted Pressure Plate");
+        add(FBContent.blockFramedWaterloggableIronPressurePlate.get(), "Framed Heavy Weighted Pressure Plate");
         add(FBContent.blockFramedLadder.get(), "Framed Ladder");
         add(FBContent.blockFramedButton.get(), "Framed Button");
         add(FBContent.blockFramedStoneButton.get(), "Framed Stone Button");
@@ -157,6 +161,10 @@ public final class FramedLanguageProvider extends LanguageProvider
         add(StateLockOverlay.LOCK_MESSAGE, "State %s");
         add(IFramedBlock.STATE_LOCKED, "locked");
         add(IFramedBlock.STATE_UNLOCKED, "unlocked");
+        add(ToggleWaterloggableOverlay.MSG_IS_WATERLOGGABLE, "Block is waterloggable");
+        add(ToggleWaterloggableOverlay.MSG_IS_NOT_WATERLOGGABLE, "Block is not waterloggable");
+        add(ToggleWaterloggableOverlay.MSG_MAKE_WATERLOGGABLE, "Hit with a Framed Hammer to make waterloggable");
+        add(ToggleWaterloggableOverlay.MSG_MAKE_NOT_WATERLOGGABLE, "Hit with a Framed Hammer to make not waterloggable");
     }
 
     private void add(Component key, String value)

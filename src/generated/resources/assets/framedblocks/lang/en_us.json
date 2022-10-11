@@ -102,6 +102,11 @@
   "block.framedblocks.framed_wall": "Framed Wall",
   "block.framedblocks.framed_wall_board": "Framed Wall Board",
   "block.framedblocks.framed_wall_sign": "Framed Sign",
+  "block.framedblocks.framed_waterloggable_gold_pressure_plate": "Framed Light Weighted Pressure Plate",
+  "block.framedblocks.framed_waterloggable_iron_pressure_plate": "Framed Heavy Weighted Pressure Plate",
+  "block.framedblocks.framed_waterloggable_obsidian_pressure_plate": "Framed Obsidian Pressure Plate",
+  "block.framedblocks.framed_waterloggable_pressure_plate": "Framed Pressure Plate",
+  "block.framedblocks.framed_waterloggable_stone_pressure_plate": "Framed Stone Pressure Plate",
   "button.framedblocks.gui.done": "Done",
   "desc.framedblocks.blueprint_block": "Contained Block: %s",
   "desc.framedblocks.blueprint_camo": "Camo Block: %s",
@@ -128,5 +133,9 @@
   "title.framedblocks.framed_chest": "Framed Chest",
   "title.framedblocks.framed_secret_storage": "Framed Secret Storage",
   "title.framedblocks.sign.edit": "Edit sign",
-  "tooltip.framedblocks.lock_state": "State %s"
+  "tooltip.framedblocks.is_waterloggable.false": "Block is not waterloggable",
+  "tooltip.framedblocks.is_waterloggable.true": "Block is waterloggable",
+  "tooltip.framedblocks.lock_state": "State %s",
+  "tooltip.framedblocks.make_waterloggable.false": "Hit with a Framed Hammer to make not waterloggable",
+  "tooltip.framedblocks.make_waterloggable.true": "Hit with a Framed Hammer to make waterloggable"
 }

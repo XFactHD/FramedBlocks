@@ -224,6 +224,8 @@ public final class FramedBlockStateProvider extends BlockStateProvider
     private void registerFramedPressurePlate(ModelFile cube)
     {
         simpleBlock(FBContent.blockFramedPressurePlate.get(), cube);
+        simpleBlock(FBContent.blockFramedWaterloggablePressurePlate.get(), cube);
+
         itemModels().withExistingParent("framed_pressure_plate", mcLoc("block/pressure_plate_up"))
                 .texture("texture", TEXTURE).renderType("cutout");
     }
@@ -239,13 +241,16 @@ public final class FramedBlockStateProvider extends BlockStateProvider
                 modLoc("block/framed_pressure_plate_down")
         ).texture("background", mcLoc("block/stone"));
 
-        getVariantBuilder(FBContent.blockFramedStonePressurePlate.get()).forAllStates(state ->
+        Function<BlockState, ConfiguredModel[]> mapper = state ->
         {
             boolean pressed = state.getValue(PressurePlateBlock.POWERED);
             return ConfiguredModel.builder()
                     .modelFile(pressed ? modelDown : modelUp)
                     .build();
-        });
+        };
+
+        getVariantBuilder(FBContent.blockFramedStonePressurePlate.get()).forAllStates(mapper);
+        getVariantBuilder(FBContent.blockFramedWaterloggableStonePressurePlate.get()).forAllStates(mapper);
 
         models().getBuilder(FramedMarkedPressurePlateModel.STONE_FRAME_LOCATION.getPath())
                 .customLoader(OverlayLoaderBuilder::new)
@@ -279,13 +284,16 @@ public final class FramedBlockStateProvider extends BlockStateProvider
                 modLoc("block/framed_pressure_plate_down")
         ).texture("background", mcLoc("block/obsidian"));
 
-        getVariantBuilder(FBContent.blockFramedObsidianPressurePlate.get()).forAllStates(state ->
+        Function<BlockState, ConfiguredModel[]> mapper = state ->
         {
             boolean pressed = state.getValue(PressurePlateBlock.POWERED);
             return ConfiguredModel.builder()
                     .modelFile(pressed ? modelDown : modelUp)
                     .build();
-        });
+        };
+
+        getVariantBuilder(FBContent.blockFramedObsidianPressurePlate.get()).forAllStates(mapper);
+        getVariantBuilder(FBContent.blockFramedWaterloggableObsidianPressurePlate.get()).forAllStates(mapper);
 
         models().getBuilder(FramedMarkedPressurePlateModel.OBSIDIAN_FRAME_LOCATION.getPath())
                 .customLoader(OverlayLoaderBuilder::new)
@@ -319,13 +327,16 @@ public final class FramedBlockStateProvider extends BlockStateProvider
                 modLoc("block/framed_pressure_plate_down")
         ).texture("background", mcLoc("block/gold_block"));
 
-        getVariantBuilder(FBContent.blockFramedGoldPressurePlate.get()).forAllStates(state ->
+        Function<BlockState, ConfiguredModel[]> mapper = state ->
         {
             boolean pressed = state.getValue(WeightedPressurePlateBlock.POWER) > 0;
             return ConfiguredModel.builder()
                     .modelFile(pressed ? modelDown : modelUp)
                     .build();
-        });
+        };
+
+        getVariantBuilder(FBContent.blockFramedGoldPressurePlate.get()).forAllStates(mapper);
+        getVariantBuilder(FBContent.blockFramedWaterloggableGoldPressurePlate.get()).forAllStates(mapper);
 
         models().getBuilder(FramedMarkedPressurePlateModel.GOLD_FRAME_LOCATION.getPath())
                 .customLoader(OverlayLoaderBuilder::new)
@@ -359,13 +370,16 @@ public final class FramedBlockStateProvider extends BlockStateProvider
                 modLoc("block/framed_pressure_plate_down")
         ).texture("background", mcLoc("block/iron_block"));
 
-        getVariantBuilder(FBContent.blockFramedIronPressurePlate.get()).forAllStates(state ->
+        Function<BlockState, ConfiguredModel[]> mapper = state ->
         {
             boolean pressed = state.getValue(WeightedPressurePlateBlock.POWER) > 0;
             return ConfiguredModel.builder()
                     .modelFile(pressed ? modelDown : modelUp)
                     .build();
-        });
+        };
+
+        getVariantBuilder(FBContent.blockFramedIronPressurePlate.get()).forAllStates(mapper);
+        getVariantBuilder(FBContent.blockFramedWaterloggableIronPressurePlate.get()).forAllStates(mapper);
 
         models().getBuilder(FramedMarkedPressurePlateModel.IRON_FRAME_LOCATION.getPath())
                 .customLoader(OverlayLoaderBuilder::new)

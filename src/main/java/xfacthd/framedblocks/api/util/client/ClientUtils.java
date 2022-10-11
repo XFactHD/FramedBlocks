@@ -124,6 +124,33 @@ public final class ClientUtils
     }
 
     @SuppressWarnings({ "unchecked", "rawtypes" })
+    public static void reuseModels(
+            RegistryObject<Block> block, Map<ResourceLocation, BakedModel> models,
+            RegistryObject<Block> sourceBlock, @Nullable List<Property<?>> ignoredProps
+    )
+    {
+        for (BlockState state : block.get().getStateDefinition().getPossibleStates())
+        {
+            BlockState sourceState = sourceBlock.get().defaultBlockState();
+            for (Property prop : state.getProperties())
+            {
+                if (sourceState.hasProperty(prop))
+                {
+                    sourceState = sourceState.setValue(prop, state.getValue(prop));
+                }
+                else if (ignoredProps != null && !ignoredProps.contains(prop))
+                {
+                    LOGGER.warn("Found invalid ignored property {} for block {}!", prop, sourceState.getBlock());
+                }
+            }
+
+            ResourceLocation location = BlockModelShaper.stateToModelLocation(state);
+            ResourceLocation sourceLocation = BlockModelShaper.stateToModelLocation(sourceState);
+            models.put(location, models.get(sourceLocation));
+        }
+    }
+
+    @SuppressWarnings({ "unchecked", "rawtypes" })
     private static BlockState ignoreProps(BlockState state, @Nullable List<Property<?>> ignoredProps)
     {
         if (ignoredProps == null || ignoredProps.isEmpty()) { return state; }
