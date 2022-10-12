@@ -10,7 +10,12 @@ import net.minecraftforge.client.model.data.*;
 public final class FramedBlockData
 {
     public static final ModelProperty<FramedBlockData> PROPERTY = new ModelProperty<>();
+    public static final ModelProperty<ModelData> CAMO_DATA = new ModelProperty<>();
+    @SuppressWarnings("DeprecatedIsStillUsed")
+    @Deprecated(forRemoval = true, since = "1.19")
     public static final ModelProperty<BlockAndTintGetter> LEVEL = new ModelProperty<>();
+    @SuppressWarnings("DeprecatedIsStillUsed")
+    @Deprecated(forRemoval = true, since = "1.19")
     public static final ModelProperty<BlockPos> POS = new ModelProperty<>();
 
     private final boolean[] hidden = new boolean[6];

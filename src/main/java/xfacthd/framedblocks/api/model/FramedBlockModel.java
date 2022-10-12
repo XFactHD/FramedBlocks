@@ -333,6 +333,16 @@ public abstract class FramedBlockModel extends BakedModelProxy
     @Override
     public final ModelData getModelData(@Nonnull BlockAndTintGetter level, @Nonnull BlockPos pos, @Nonnull BlockState state, @Nonnull ModelData tileData)
     {
+        FramedBlockData data = tileData.get(FramedBlockData.PROPERTY);
+        if (data != null && !data.getCamoState().isAir())
+        {
+            BakedModel model = ModelCache.getModel(data.getCamoState());
+            tileData = tileData.derive()
+                    .with(FramedBlockData.CAMO_DATA, model.getModelData(level, pos, state, tileData))
+                    .build();
+        }
+
+        //noinspection removal
         return tileData.derive()
                 .with(FramedBlockData.LEVEL, level)
                 .with(FramedBlockData.POS, pos)

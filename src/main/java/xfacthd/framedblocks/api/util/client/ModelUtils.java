@@ -5,12 +5,10 @@ import net.minecraft.client.renderer.block.model.BakedQuad;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.resources.model.BakedModel;
 import net.minecraft.client.resources.model.WeightedBakedModel;
-import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.util.Mth;
 import com.mojang.math.Vector3f;
 import net.minecraft.util.RandomSource;
-import net.minecraft.world.level.BlockAndTintGetter;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.client.ChunkRenderTypeSet;
 import net.minecraftforge.client.model.IQuadTransformer;
@@ -405,12 +403,8 @@ public final class ModelUtils
 
     public static ModelData getCamoModelData(BakedModel model, BlockState state, ModelData data)
     {
-        BlockAndTintGetter level = data.get(FramedBlockData.LEVEL);
-        BlockPos pos = data.get(FramedBlockData.POS);
-
-        if (level == null || pos == null || pos == BlockPos.ZERO) { return ModelData.EMPTY; }
-
-        return model.getModelData(level, pos, state, data);
+        ModelData camoData = data.get(FramedBlockData.CAMO_DATA);
+        return camoData != null ? camoData : ModelData.EMPTY;
     }
 
     private static final MethodHandle WBM_WRAPPED_MODEL = Utils.unreflectField(WeightedBakedModel.class, "f_119542_");
