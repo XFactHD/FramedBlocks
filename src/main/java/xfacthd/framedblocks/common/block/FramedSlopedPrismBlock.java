@@ -12,8 +12,8 @@ import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.phys.Vec3;
 import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
+import xfacthd.framedblocks.api.type.IBlockType;
 import xfacthd.framedblocks.api.util.*;
-import xfacthd.framedblocks.common.FBContent;
 import xfacthd.framedblocks.common.data.BlockType;
 import xfacthd.framedblocks.common.data.PropertyHolder;
 
@@ -21,42 +21,23 @@ import xfacthd.framedblocks.common.data.PropertyHolder;
 //      to eliminate the possibility of invalid state in 1.19
 public class FramedSlopedPrismBlock extends FramedBlock
 {
-    public static final CtmPredicate CTM_PREDICATE = (state, side) -> side == state.getValue(BlockStateProperties.FACING).getOpposite();
-
-    public static final SideSkipPredicate SKIP_PREDICATE = (level, pos, state, adjState, side) ->
+    public static final CtmPredicate CTM_PREDICATE_INNER = (state, side) ->
     {
         Direction facing = state.getValue(BlockStateProperties.FACING);
         Direction orientation = state.getValue(PropertyHolder.ORIENTATION);
-        if (side != orientation)
+
+        if (side != null && side.getAxis() != facing.getAxis() && side.getAxis() != orientation.getAxis())
         {
-            return false;
+            return true;
         }
-
-        if (adjState.is(FBContent.blockFramedSlopedPrism.get()))
-        {
-            Direction adjFacing = adjState.getValue(BlockStateProperties.FACING);
-            Direction adjOrientation = adjState.getValue(PropertyHolder.ORIENTATION);
-
-            return adjFacing == facing && adjOrientation == orientation.getOpposite() && SideSkipPredicate.compareState(level, pos, side);
-        }
-        else if (adjState.is(FBContent.blockFramedPrism.get()))
-        {
-            Direction.Axis adjAxis = adjState.getValue(BlockStateProperties.AXIS);
-            Direction adjFacing = adjState.getValue(BlockStateProperties.FACING);
-
-            return adjFacing == facing && adjAxis == orientation.getAxis() && SideSkipPredicate.compareState(level, pos, side);
-        }
-
-        return false;
+        return side == facing.getOpposite() || side == orientation.getOpposite();
     };
 
-    public FramedSlopedPrismBlock()
+    public FramedSlopedPrismBlock(BlockType type)
     {
-        super(BlockType.FRAMED_SLOPED_PRISM);
+        super(type);
         registerDefaultState(defaultBlockState()
                 .setValue(BlockStateProperties.FACING, Direction.NORTH)
-                .setValue(BlockStateProperties.WATERLOGGED, false)
-                .setValue(FramedProperties.SOLID, false)
         );
     }
 
@@ -69,8 +50,11 @@ public class FramedSlopedPrismBlock extends FramedBlock
     @Override
     public BlockState getStateForPlacement(BlockPlaceContext context)
     {
-        BlockState state = defaultBlockState();
+        return getStateForPlacement(context, defaultBlockState(), getBlockType());
+    }
 
+    public static BlockState getStateForPlacement(BlockPlaceContext context, BlockState state, IBlockType blockType)
+    {
         Direction face = context.getClickedFace();
         state = state.setValue(BlockStateProperties.FACING, face);
 
@@ -78,6 +62,10 @@ public class FramedSlopedPrismBlock extends FramedBlock
         if (Utils.isY(face))
         {
             orientation = context.getHorizontalDirection();
+            if (blockType == BlockType.FRAMED_INNER_SLOPED_PRISM || blockType == BlockType.FRAMED_DOUBLE_SLOPED_PRISM)
+            {
+                orientation = orientation.getOpposite();
+            }
         }
         else
         {
@@ -104,7 +92,11 @@ public class FramedSlopedPrismBlock extends FramedBlock
         }
         state = state.setValue(PropertyHolder.ORIENTATION, orientation);
 
-        return withWater(state, context.getLevel(), context.getClickedPos());
+        if (blockType == BlockType.FRAMED_SLOPED_PRISM)
+        {
+            state = withWater(state, context.getLevel(), context.getClickedPos());
+        }
+        return state;
     }
 
     @Override
@@ -199,6 +191,111 @@ public class FramedSlopedPrismBlock extends FramedBlock
                         Utils.rotateShape(
                                 Direction.NORTH,
                                 orientation,
+                                facing == Direction.UP ? shapeBottom : shapeTop
+                        )
+                );
+            }
+            else
+            {
+                VoxelShape shape;
+                if (orientation == Direction.UP) { shape = shapeUp; }
+                else if (orientation == Direction.DOWN) { shape = shapeDown; }
+                else if (orientation == facing.getClockWise()) { shape = shapeLeft; }
+                else if (orientation == facing.getCounterClockWise()) { shape = shapeRight; }
+                else { throw new IllegalArgumentException("Invalid orientation for direction!"); }
+
+                builder.put(
+                        state,
+                        Utils.rotateShape(Direction.NORTH, facing, shape)
+                );
+            }
+        }
+
+        return builder.build();
+    }
+
+    public static ImmutableMap<BlockState, VoxelShape> generateInnerShapes(ImmutableList<BlockState> states)
+    {
+        ImmutableMap.Builder<BlockState, VoxelShape> builder = ImmutableMap.builder();
+
+        VoxelShape shapeBottom = Shapes.or(
+                box(   4, 0,    0,   12,   12,   16),
+                box(15.5, 0,    0,   16,   16,   16),
+                box(   0, 0,    0,   .5,   16,   16),
+                box(  12, 0,    0, 15.5, 15.5,   16),
+                box(  .5, 0,    0,    4, 15.5,   16),
+                box(   0, 0, 15.5,   16,   16,   16),
+                box(  .5, 0,   12, 15.5, 15.5, 15.5)
+        );
+
+        VoxelShape shapeTop = Shapes.or(
+                box(   4,  4,    0,   12, 16,   16),
+                box(15.5,  0,    0,   16, 16,   16),
+                box(   0,  0,    0,   .5, 16,   16),
+                box(  12, .5,    0, 15.5, 16,   16),
+                box(  .5, .5,    0,    4, 16,   16),
+                box(   0,  0, 15.5,   16, 16,   16),
+                box(  .5, .5,   12, 15.5, 16, 15.5)
+        );
+
+        VoxelShape shapeRight = Shapes.or(
+                box( 0,    4,  4, 16,   12, 16),
+                box( 0,    0,  0, 16,   .5, 16),
+                box( 0, 15.5,  0, 16,   16, 16),
+                box( 0,   .5, .5, 16,    4, 16),
+                box( 0,   12, .5, 16, 15.5, 16),
+                box( 0,    0,  0, .5,   16, 16),
+                box(.5,   .5, .5,  4, 15.5, 16)
+        );
+
+        VoxelShape shapeLeft = Shapes.or(
+                box(0, 4, 4, 16, 12, 16),
+                box(0, 15.5, 0, 16, 16, 16),
+                box(0, 0, 0, 16, 0.5, 16),
+                box(0, 12, 0.5, 16, 15.5, 16),
+                box(0, 0.5, 0.5, 16, 4, 16),
+                box(15.5, 0, 0, 16, 16, 16),
+                box(12, 0.5, 0.5, 15.5, 15.5, 16)
+        );
+
+        VoxelShape shapeUp = Shapes.or(
+                box(   4,  0,  4,   12, 16, 16),
+                box(15.5,  0,  0,   16, 16, 16),
+                box(   0,  0,  0,   .5, 16, 16),
+                box(  12,  0, .5, 15.5, 16, 16),
+                box(  .5,  0, .5,    4, 16, 16),
+                box(   0,  0,  0,   16, .5, 16),
+                box(  .5, .5, .5, 15.5,  4, 16)
+        );
+
+        VoxelShape shapeDown = Shapes.or(
+                box(   4,    0,  4,   12,   16, 16),
+                box(   0,    0,  0,   .5,   16, 16),
+                box(15.5,    0,  0,   16,   16, 16),
+                box(  .5,    0, .5,    4,   16, 16),
+                box(  12,    0, .5, 15.5,   16, 16),
+                box(   0, 15.5,  0,   16,   16, 16),
+                box(  .5,   12, .5, 15.5, 15.5, 16)
+        );
+
+        for (BlockState state : states)
+        {
+            Direction facing = state.getValue(BlockStateProperties.FACING);
+            Direction orientation = state.getValue(PropertyHolder.ORIENTATION);
+
+            if (orientation.getAxis() == facing.getAxis())
+            {
+                builder.put(state, Shapes.block());
+                continue;
+            }
+
+            if (Utils.isY(facing))
+            {
+                builder.put(
+                        state,
+                        Utils.rotateShape(
+                                Direction.NORTH,
+                                orientation.getOpposite(),
                                 facing == Direction.UP ? shapeBottom : shapeTop
                         )
                 );

@@ -468,10 +468,42 @@ public final class FramedRecipeProvider extends RecipeProvider
                 .unlockedBy("hasFramedSlope", HAS_FRAMED_SLOPE)
                 .save(consumer);
 
+        ShapedRecipeBuilder.shaped(FBContent.blockFramedInnerPrism.get(), 2)
+                .pattern("FF")
+                .pattern("SS")
+                .define('F', FBContent.blockFramedSlope.get())
+                .define('S', FBContent.blockFramedSlab.get())
+                .unlockedBy("hasFramedSlope", HAS_FRAMED_SLOPE)
+                .save(consumer);
+
+        ShapedRecipeBuilder.shaped(FBContent.blockFramedDoublePrism.get())
+                .pattern("P")
+                .pattern("I")
+                .define('P', FBContent.blockFramedPrism.get())
+                .define('I', FBContent.blockFramedInnerPrism.get())
+                .unlockedBy("hasFramedPrism", has(FBContent.blockFramedPrism.get()))
+                .save(consumer);
+
         ShapedRecipeBuilder.shaped(FBContent.blockFramedSlopedPrism.get(), 2)
                 .pattern("FF")
                 .define('F', FBContent.blockFramedCornerSlope.get())
                 .unlockedBy("hasFramedCorner", has(FBContent.blockFramedCornerSlope.get()))
+                .save(consumer);
+
+        ShapedRecipeBuilder.shaped(FBContent.blockFramedInnerSlopedPrism.get(), 2)
+                .pattern("FF")
+                .pattern("SS")
+                .define('F', FBContent.blockFramedCornerSlope.get())
+                .define('S', FBContent.blockFramedSlab.get())
+                .unlockedBy("hasFramedCorner", has(FBContent.blockFramedCornerSlope.get()))
+                .save(consumer);
+
+        ShapedRecipeBuilder.shaped(FBContent.blockFramedDoubleSlopedPrism.get())
+                .pattern("P")
+                .pattern("I")
+                .define('P', FBContent.blockFramedSlopedPrism.get())
+                .define('I', FBContent.blockFramedInnerSlopedPrism.get())
+                .unlockedBy("hasFramedSlopedPrism", has(FBContent.blockFramedSlopedPrism.get()))
                 .save(consumer);
 
         ShapedRecipeBuilder.shaped(FBContent.blockFramedSlopeSlab.get(), 6)

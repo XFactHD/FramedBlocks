@@ -1,0 +1,18 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "key": {
+    "I": {
+      "item": "framedblocks:framed_inner_prism"
+    },
+    "P": {
+      "item": "framedblocks:framed_prism"
+    }
+  },
+  "pattern": [
+    "P",
+    "I"
+  ],
+  "result": {
+    "item": "framedblocks:framed_double_prism"
+  }
+}

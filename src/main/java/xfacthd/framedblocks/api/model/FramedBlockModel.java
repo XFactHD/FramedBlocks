@@ -41,6 +41,7 @@ public abstract class FramedBlockModel extends BakedModelProxy
     private final boolean cacheFullRenderTypes;
     private final boolean forceUngeneratedBaseModel;
     private final boolean useBaseModel;
+    private final boolean transformAllQuads;
 
     public FramedBlockModel(BlockState state, BakedModel baseModel)
     {
@@ -51,6 +52,7 @@ public abstract class FramedBlockModel extends BakedModelProxy
         this.cacheFullRenderTypes = canFullyCacheRenderTypes();
         this.forceUngeneratedBaseModel = forceUngeneratedBaseModel();
         this.useBaseModel = useBaseModel();
+        this.transformAllQuads = transformAllQuads(state);
         Preconditions.checkState(
                 this.useBaseModel || !this.forceUngeneratedBaseModel,
                 "FramedBlockModel::useBaseModel() must return true when FramedBlockModel::forceUngeneratedBaseModel() returns true"
@@ -229,7 +231,7 @@ public abstract class FramedBlockModel extends BakedModelProxy
             BakedModel camoModel = getCamoModel(camoState, noCamo && useBaseModel);
             List<BakedQuad> quads = ModelUtils.getAllCullableQuads(camoModel, camoState, rand, renderType)
                             .stream()
-                            .filter(q -> !type.getCtmPredicate().test(state, q.getDirection()))
+                            .filter(q -> transformAllQuads || !type.getCtmPredicate().test(state, q.getDirection()))
                             .toList();
 
             for (BakedQuad quad : quads)
@@ -276,6 +278,12 @@ public abstract class FramedBlockModel extends BakedModelProxy
      * @apiNote Must return true if {@link FramedBlockModel#forceUngeneratedBaseModel()} returns true
      */
     protected boolean useBaseModel() { return forceUngeneratedBaseModel(); }
+
+    /**
+     * Return true if all quads should be submitted for transformation, even if their cull-face would be filtered
+     * by the {@link CtmPredicate}
+     */
+    protected boolean transformAllQuads(BlockState state) { return false; }
 
     /**
      * Return the set of {@link RenderType}s used for the base model without camo.

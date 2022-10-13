@@ -1,0 +1,19 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "key": {
+    "F": {
+      "item": "framedblocks:framed_slope"
+    },
+    "S": {
+      "item": "framedblocks:framed_slab"
+    }
+  },
+  "pattern": [
+    "FF",
+    "SS"
+  ],
+  "result": {
+    "count": 2,
+    "item": "framedblocks:framed_inner_prism"
+  }
+}
