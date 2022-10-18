@@ -37,11 +37,11 @@ public class FramedDoubleCornerModel extends FramedDoubleBlockModel
     {
         if (type == CornerType.BOTTOM)
         {
-            return getSpriteOrDefault(data, FramedDoubleBlockEntity.DATA_RIGHT, getModels().getA());
+            return getSpriteOrDefault(data, FramedDoubleBlockEntity.DATA_RIGHT, getModels().getB());
         }
         else if (type.isTop())
         {
-            return getSpriteOrDefault(data, FramedDoubleBlockEntity.DATA_LEFT, getModels().getB());
+            return getSpriteOrDefault(data, FramedDoubleBlockEntity.DATA_LEFT, getModels().getA());
         }
         return super.getParticleIcon(data);
     }

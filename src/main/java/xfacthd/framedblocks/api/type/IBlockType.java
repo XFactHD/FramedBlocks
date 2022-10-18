@@ -2,7 +2,9 @@ package xfacthd.framedblocks.api.type;
 
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
+import net.minecraft.client.resources.model.BakedModel;
 import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import xfacthd.framedblocks.api.util.CtmPredicate;
@@ -35,6 +37,13 @@ public interface IBlockType
      */
     default boolean allowMakingIntangible() { return false; }
 
+    /**
+     * @return true if this type represents a block that combines two models into one and allows those to have separate
+     * camos applied.
+     * @apiNote Returning true doesn't imply that the {@link Block}, {@link BlockEntity} or {@link BakedModel} extends
+     * any specific class, it should only ideally guarantee compliance with the data layout used by the reference
+     * implementation in FramedBlocks
+     */
     default boolean isDoubleBlock() { return false; }
 
     /**
