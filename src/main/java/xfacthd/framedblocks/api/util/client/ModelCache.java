@@ -1,7 +1,7 @@
 package xfacthd.framedblocks.api.util.client;
 
+import com.github.benmanes.caffeine.cache.*;
 import com.google.common.base.Preconditions;
-import com.google.common.cache.*;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.ItemBlockRenderTypes;
 import net.minecraft.client.resources.model.BakedModel;
@@ -18,7 +18,7 @@ import java.time.Duration;
 public final class ModelCache
 {
     public static final Duration DEFAULT_CACHE_DURATION = Duration.ofMinutes(10);
-    private static final LoadingCache<BlockState, BakedModel> modelCache = CacheBuilder.newBuilder()
+    private static final LoadingCache<BlockState, BakedModel> modelCache = Caffeine.newBuilder()
             .expireAfterAccess(DEFAULT_CACHE_DURATION)
             .build(new ModelCacheLoader());
     private static ModelBakery modelBakery = null;
@@ -29,7 +29,7 @@ public final class ModelCache
         modelBakery = bakery;
     }
 
-    public static BakedModel getModel(BlockState state) { return modelCache.getUnchecked(state); }
+    public static BakedModel getModel(BlockState state) { return modelCache.get(state); }
 
     public static ChunkRenderTypeSet getRenderTypes(BlockState state, RandomSource random, ModelData data)
     {
@@ -37,7 +37,7 @@ public final class ModelCache
         {
             return ChunkRenderTypeSet.of(ItemBlockRenderTypes.getRenderLayer(state.getFluidState()));
         }
-        return modelCache.getUnchecked(state).getRenderTypes(state, random, data);
+        return modelCache.get(state).getRenderTypes(state, random, data);
     }
 
     public static ChunkRenderTypeSet getCamoRenderTypes(BlockState state, RandomSource random, ModelData data)
@@ -46,7 +46,7 @@ public final class ModelCache
         {
             return ChunkRenderTypeSet.of(ItemBlockRenderTypes.getRenderLayer(state.getFluidState()));
         }
-        BakedModel model = modelCache.getUnchecked(state);
+        BakedModel model = modelCache.get(state);
         data = ModelUtils.getCamoModelData(model, state, data);
         return model.getRenderTypes(state, random, data);
     }
@@ -59,7 +59,7 @@ public final class ModelCache
 
 
 
-    private static class ModelCacheLoader extends CacheLoader<BlockState, BakedModel>
+    private static class ModelCacheLoader implements CacheLoader<BlockState, BakedModel>
     {
         @Override
         public BakedModel load(BlockState key)
