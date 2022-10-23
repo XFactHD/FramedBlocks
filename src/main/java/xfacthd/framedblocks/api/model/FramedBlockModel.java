@@ -29,6 +29,7 @@ import java.util.*;
 @SuppressWarnings("deprecation")
 public abstract class FramedBlockModel extends BakedModelProxy
 {
+    private static final Direction[] DIRECTIONS = Direction.values();
     private final Cache<BlockState, QuadTable> quadCache = Caffeine.newBuilder()
             .expireAfterAccess(ModelCache.DEFAULT_CACHE_DURATION)
             .build();
@@ -36,23 +37,25 @@ public abstract class FramedBlockModel extends BakedModelProxy
             .expireAfterAccess(ModelCache.DEFAULT_CACHE_DURATION)
             .build();
     private final BlockState state;
-    private final IBlockType type;
     private final ChunkRenderTypeSet baseModelRenderTypes;
     private final boolean cacheFullRenderTypes;
     private final boolean forceUngeneratedBaseModel;
     private final boolean useBaseModel;
     private final boolean transformAllQuads;
+    private final FullFaceCache fullFaceCache;
 
     public FramedBlockModel(BlockState state, BakedModel baseModel)
     {
         super(baseModel);
         this.state = state;
-        this.type = ((IFramedBlock) state.getBlock()).getBlockType();
         this.baseModelRenderTypes = getBaseModelRenderTypes();
         this.cacheFullRenderTypes = canFullyCacheRenderTypes();
         this.forceUngeneratedBaseModel = forceUngeneratedBaseModel();
         this.useBaseModel = useBaseModel();
         this.transformAllQuads = transformAllQuads(state);
+        IBlockType type = ((IFramedBlock) state.getBlock()).getBlockType();
+        this.fullFaceCache = new FullFaceCache(type, state);
+
         Preconditions.checkState(
                 this.useBaseModel || !this.forceUngeneratedBaseModel,
                 "FramedBlockModel::useBaseModel() must return true when FramedBlockModel::forceUngeneratedBaseModel() returns true"
@@ -149,12 +152,12 @@ public abstract class FramedBlockModel extends BakedModelProxy
         {
             camoState = FramedBlocksAPI.getInstance().defaultModelState();
             camoInRenderType = baseModelRenderTypes.contains(renderType);
-            noProcessing = (camoInRenderType && forceUngeneratedBaseModel) || type.getCtmPredicate().test(state, side);
+            noProcessing = (camoInRenderType && forceUngeneratedBaseModel) || fullFaceCache.isFullFace(side);
             model = getCamoModel(camoState, useBaseModel);
         }
         else
         {
-            noProcessing = type.getCtmPredicate().test(state, side);
+            noProcessing = fullFaceCache.isFullFace(side);
             model = getCamoModel(camoState, false);
             camoData = noProcessing ? ModelUtils.getCamoModelData(model, camoState, extraData) : ModelData.EMPTY;
             camoInRenderType = getCachedRenderTypes(camoState, rand, camoData).camoTypes.contains(renderType);
@@ -224,14 +227,14 @@ public abstract class FramedBlockModel extends BakedModelProxy
     {
         Map<Direction, List<BakedQuad>> quadMap = new IdentityHashMap<>();
         quadMap.put(null, new ArrayList<>());
-        for (Direction dir : Direction.values()) { quadMap.put(dir, new ArrayList<>()); }
+        for (Direction dir : DIRECTIONS) { quadMap.put(dir, new ArrayList<>()); }
 
         if (camoInRenderType)
         {
             BakedModel camoModel = getCamoModel(camoState, noCamo && useBaseModel);
             List<BakedQuad> quads = ModelUtils.getAllCullableQuads(camoModel, camoState, rand, renderType)
                             .stream()
-                            .filter(q -> transformAllQuads || !type.getCtmPredicate().test(state, q.getDirection()))
+                            .filter(q -> transformAllQuads || !fullFaceCache.isFullFace(q.getDirection()))
                             .toList();
 
             for (BakedQuad quad : quads)
@@ -342,7 +345,7 @@ public abstract class FramedBlockModel extends BakedModelProxy
     public final ModelData getModelData(@Nonnull BlockAndTintGetter level, @Nonnull BlockPos pos, @Nonnull BlockState state, @Nonnull ModelData tileData)
     {
         FramedBlockData data = tileData.get(FramedBlockData.PROPERTY);
-        if (data != null && !data.getCamoState().isAir())
+        if (fullFaceCache.hasAnyFullFace() && data != null && !data.getCamoState().isAir())
         {
             BlockState camoState = data.getCamoState();
             BakedModel model = ModelCache.getModel(camoState);
@@ -380,6 +383,40 @@ public abstract class FramedBlockModel extends BakedModelProxy
         public CachedRenderTypes(ChunkRenderTypeSet camoTypes, ChunkRenderTypeSet overlayTypes)
         {
             this(camoTypes, overlayTypes, ChunkRenderTypeSet.union(camoTypes, overlayTypes));
+        }
+    }
+
+    private static class FullFaceCache
+    {
+        private final boolean[] cache = new boolean[7];
+        private final boolean anyFullFace;
+
+        public FullFaceCache(IBlockType type, BlockState state)
+        {
+            CtmPredicate pred = type.getCtmPredicate();
+            boolean any = false;
+            for (Direction side : DIRECTIONS)
+            {
+                boolean full = pred.test(state, side);
+                any |= full;
+                cache[side.ordinal()] = full;
+            }
+            cache[6] = false;
+            this.anyFullFace = any;
+        }
+
+        public boolean isFullFace(Direction side)
+        {
+            if (side == null)
+            {
+                return cache[6];
+            }
+            return cache[side.ordinal()];
+        }
+
+        public boolean hasAnyFullFace()
+        {
+            return anyFullFace;
         }
     }
 }
