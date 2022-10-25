@@ -39,6 +39,18 @@ public enum CornerType implements StringRepresentable
         };
     }
 
+    public CornerType horizontalOpposite()
+    {
+        return switch (this)
+        {
+            case TOP, BOTTOM -> this;
+            case HORIZONTAL_BOTTOM_RIGHT -> HORIZONTAL_BOTTOM_LEFT;
+            case HORIZONTAL_BOTTOM_LEFT -> HORIZONTAL_BOTTOM_RIGHT;
+            case HORIZONTAL_TOP_RIGHT -> HORIZONTAL_TOP_LEFT;
+            case HORIZONTAL_TOP_LEFT -> HORIZONTAL_TOP_RIGHT;
+        };
+    }
+
     public CornerType rotate(Rotation rot)
     {
         return switch (this)

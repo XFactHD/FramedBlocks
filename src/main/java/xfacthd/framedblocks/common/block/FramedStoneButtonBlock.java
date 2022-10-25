@@ -80,12 +80,11 @@ public class FramedStoneButtonBlock extends StoneButtonBlock implements IFramedB
     }
 
     @Override
-    public BlockState rotate(BlockState state, Rotation rot)
+    public BlockState rotate(BlockState state, Direction side, Rotation rot)
     {
         if (state.getValue(FACE) != AttachFace.WALL)
         {
-            Direction dir = rot.rotate(state.getValue(FACING));
-            return state.setValue(FACING, dir);
+            return rotate(state, rot);
         }
         return state;
     }

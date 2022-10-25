@@ -124,7 +124,7 @@ public interface IFramedBlock extends EntityBlock//, IFacade
 
         if (player.getItemInHand(hand).is(Utils.WRENCH))
         {
-            Rotation rot = player.isCrouching() ? Rotation.COUNTERCLOCKWISE_90 : Rotation.CLOCKWISE_90;
+            Rotation rot = player.isShiftKeyDown() ? Rotation.COUNTERCLOCKWISE_90 : Rotation.CLOCKWISE_90;
             BlockState newState = rotate(state, hit, rot);
             if (newState != state)
             {

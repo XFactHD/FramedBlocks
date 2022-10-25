@@ -4,8 +4,7 @@ import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
 import net.minecraft.core.Direction;
 import net.minecraft.world.item.context.BlockPlaceContext;
-import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.Rotation;
+import net.minecraft.world.level.block.*;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
@@ -90,6 +89,20 @@ public class FramedHalfStairsBlock extends FramedBlock
     @Override
     @SuppressWarnings("deprecation")
     public BlockState rotate(BlockState state, Rotation rot) { return rotate(state, Direction.UP, rot); }
+
+    @Override
+    @SuppressWarnings("deprecation")
+    public BlockState mirror(BlockState state, Mirror mirror)
+    {
+        if (mirror == Mirror.NONE) { return state; }
+
+        Direction dir = state.getValue(FramedProperties.FACING_HOR);
+        if ((mirror == Mirror.FRONT_BACK && Utils.isX(dir)) || (mirror == Mirror.LEFT_RIGHT && Utils.isZ(dir)))
+        {
+            state = state.setValue(FramedProperties.FACING_HOR, dir.getOpposite());
+        }
+        return state.cycle(PropertyHolder.RIGHT);
+    }
 
 
 

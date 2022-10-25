@@ -90,16 +90,43 @@ public class FramedDoubleCornerBlock extends AbstractFramedDoubleBlock
     }
 
     @Override
-    @SuppressWarnings("deprecation")
-    public BlockState rotate(BlockState state, Rotation rot)
+    public BlockState rotate(BlockState state, Direction side, Rotation rot)
     {
-        Direction dir = state.getValue(FramedProperties.FACING_HOR);
         CornerType type = state.getValue(PropertyHolder.CORNER_TYPE);
         if (type.isHorizontal())
         {
             return state.setValue(PropertyHolder.CORNER_TYPE, type.rotate(rot));
         }
+
+        return rotate(state, rot);
+    }
+
+    @Override
+    @SuppressWarnings("deprecation")
+    public BlockState rotate(BlockState state, Rotation rot)
+    {
+        Direction dir = state.getValue(FramedProperties.FACING_HOR);
         return state.setValue(FramedProperties.FACING_HOR, rot.rotate(dir));
+    }
+
+    @Override
+    @SuppressWarnings("deprecation")
+    public BlockState mirror(BlockState state, Mirror mirror)
+    {
+        CornerType type = state.getValue(PropertyHolder.CORNER_TYPE);
+        if (type.isHorizontal())
+        {
+            BlockState newState = Utils.mirrorFaceBlock(state, mirror);
+            if (newState != state)
+            {
+                return newState.setValue(PropertyHolder.CORNER_TYPE, type.horizontalOpposite());
+            }
+            return state;
+        }
+        else
+        {
+            return Utils.mirrorCornerBlock(state, mirror);
+        }
     }
 
     @Override

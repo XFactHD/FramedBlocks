@@ -5,8 +5,7 @@ import com.google.common.collect.ImmutableMap;
 import net.minecraft.core.BlockPos;
 import net.minecraft.tags.FluidTags;
 import net.minecraft.world.level.BlockGetter;
-import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.Rotation;
+import net.minecraft.world.level.block.*;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.block.state.StateDefinition;
@@ -64,6 +63,13 @@ public class FramedSlabEdgeBlock extends FramedBlock
     @Override
     @SuppressWarnings("deprecation")
     public BlockState rotate(BlockState state, Rotation rot) { return rotate(state, Direction.UP, rot); }
+
+    @Override
+    @SuppressWarnings("deprecation")
+    public BlockState mirror(BlockState state, Mirror mirror)
+    {
+        return Utils.mirrorFaceBlock(state, mirror);
+    }
 
 
 

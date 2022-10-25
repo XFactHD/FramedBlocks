@@ -80,4 +80,11 @@ public class FramedLadderBlock extends FramedBlock
         Direction dir = state.getValue(FramedProperties.FACING_HOR);
         return state.setValue(FramedProperties.FACING_HOR, rot.rotate(dir));
     }
+
+    @Override
+    @SuppressWarnings("deprecation")
+    public BlockState mirror(BlockState state, Mirror mirror)
+    {
+        return Utils.mirrorFaceBlock(state, mirror);
+    }
 }

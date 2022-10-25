@@ -6,8 +6,7 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.Rotation;
+import net.minecraft.world.level.block.*;
 import net.minecraft.world.level.block.entity.*;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
@@ -61,6 +60,13 @@ public class FramedChestBlock extends FramedStorageBlock
     {
         Direction dir = rot.rotate(state.getValue(FramedProperties.FACING_HOR));
         return state.setValue(FramedProperties.FACING_HOR, dir);
+    }
+
+    @Override
+    @SuppressWarnings("deprecation")
+    public BlockState mirror(BlockState state, Mirror mirror)
+    {
+        return state.rotate(mirror.getRotation(state.getValue(FramedProperties.FACING_HOR)));
     }
 
     @Override

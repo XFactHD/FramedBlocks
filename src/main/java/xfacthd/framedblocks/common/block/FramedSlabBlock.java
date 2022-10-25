@@ -103,7 +103,7 @@ public class FramedSlabBlock extends FramedBlock
     }
 
     @Override
-    public BlockState rotate(BlockState state, Rotation rot)
+    public BlockState rotate(BlockState state, Direction side, Rotation rot)
     {
         if (rot != Rotation.NONE)
         {

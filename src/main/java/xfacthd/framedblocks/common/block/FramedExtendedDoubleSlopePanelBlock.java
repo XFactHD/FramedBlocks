@@ -3,8 +3,7 @@ package xfacthd.framedblocks.common.block;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.world.item.context.BlockPlaceContext;
-import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.Rotation;
+import net.minecraft.world.level.block.*;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
@@ -72,6 +71,13 @@ public class FramedExtendedDoubleSlopePanelBlock extends AbstractFramedDoubleBlo
     @Override
     @SuppressWarnings("deprecation")
     public BlockState rotate(BlockState state, Rotation rot) { return rotate(state, Direction.UP, rot); }
+
+    @Override
+    @SuppressWarnings("deprecation")
+    public BlockState mirror(BlockState state, Mirror mirror)
+    {
+        return FramedSlopePanelBlock.mirrorPanel(state, mirror);
+    }
 
     @Override
     public BlockEntity newBlockEntity(BlockPos pos, BlockState state)

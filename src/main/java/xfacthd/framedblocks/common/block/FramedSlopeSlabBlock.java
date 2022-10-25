@@ -4,8 +4,7 @@ import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
 import net.minecraft.core.Direction;
 import net.minecraft.world.item.context.BlockPlaceContext;
-import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.Rotation;
+import net.minecraft.world.level.block.*;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
@@ -75,6 +74,13 @@ public class FramedSlopeSlabBlock extends FramedBlock
     @Override
     @SuppressWarnings("deprecation")
     public BlockState rotate(BlockState state, Rotation rot) { return rotate(state, Direction.UP, rot); }
+
+    @Override
+    @SuppressWarnings("deprecation")
+    public BlockState mirror(BlockState state, Mirror mirror)
+    {
+        return Utils.mirrorFaceBlock(state, mirror);
+    }
 
 
 

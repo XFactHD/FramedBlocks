@@ -91,6 +91,20 @@ public class FramedDoubleSlopeBlock extends AbstractFramedDoubleBlock
 
     @Override
     @SuppressWarnings("deprecation")
+    public BlockState mirror(BlockState state, Mirror mirror)
+    {
+        if (state.getValue(PropertyHolder.SLOPE_TYPE) == SlopeType.HORIZONTAL)
+        {
+            return Utils.mirrorCornerBlock(state, mirror);
+        }
+        else
+        {
+            return Utils.mirrorFaceBlock(state, mirror);
+        }
+    }
+
+    @Override
+    @SuppressWarnings("deprecation")
     public BlockState rotate(BlockState state, Rotation rot) { return rotate(state, Direction.UP, rot); }
 
     @Override

@@ -109,6 +109,13 @@ public class FramedPanelBlock extends FramedBlock
         return state.setValue(FramedProperties.FACING_HOR, rot.rotate(dir));
     }
 
+    @Override
+    @SuppressWarnings("deprecation")
+    public BlockState mirror(BlockState state, Mirror mirror)
+    {
+        return Utils.mirrorFaceBlock(state, mirror);
+    }
+
 
 
     public static ImmutableMap<BlockState, VoxelShape> generateShapes(ImmutableList<BlockState> states)
