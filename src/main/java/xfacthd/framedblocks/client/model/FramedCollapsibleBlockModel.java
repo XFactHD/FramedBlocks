@@ -73,6 +73,8 @@ public class FramedCollapsibleBlockModel extends BakedModelProxy
     */
     private static class CollapsibleModel extends FramedBlockModel
     {
+        private static final float MIN_DEPTH = .001F;
+
         private final Direction collapsedFace;
         private final float[] vertexPos = new float[4];
 
@@ -84,7 +86,7 @@ public class FramedCollapsibleBlockModel extends BakedModelProxy
             byte[] vertexOffsets = FramedCollapsibleBlockEntity.unpackOffsets(packedOffsets);
             for (int i = 0; i < 4; i++)
             {
-                vertexPos[i] = 1F - ((float) vertexOffsets[i] / 16F);
+                vertexPos[i] = Math.max(1F - ((float) vertexOffsets[i] / 16F), MIN_DEPTH);
             }
         }
 
