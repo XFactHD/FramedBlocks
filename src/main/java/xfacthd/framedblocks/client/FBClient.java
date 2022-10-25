@@ -77,7 +77,10 @@ public final class FBClient
         BlockOutlineRenderer.registerOutlineRender(BlockType.FRAMED_INNER_PRISM_CORNER, new InnerPrismCornerOutlineRenderer());
         BlockOutlineRenderer.registerOutlineRender(BlockType.FRAMED_THREEWAY_CORNER, new ThreewayCornerOutlineRenderer());
         BlockOutlineRenderer.registerOutlineRender(BlockType.FRAMED_INNER_THREEWAY_CORNER, new InnerThreewayCornerOutlineRenderer());
-        BlockOutlineRenderer.registerOutlineRender(BlockType.FRAMED_RAIL_SLOPE, new RailSlopeOutlineRenderer());
+        BlockOutlineRenderer.registerOutlineRender(BlockType.FRAMED_RAIL_SLOPE, RailSlopeOutlineRenderer.INSTANCE);
+        BlockOutlineRenderer.registerOutlineRender(BlockType.FRAMED_POWERED_RAIL_SLOPE, RailSlopeOutlineRenderer.INSTANCE);
+        BlockOutlineRenderer.registerOutlineRender(BlockType.FRAMED_DETECTOR_RAIL_SLOPE, RailSlopeOutlineRenderer.INSTANCE);
+        BlockOutlineRenderer.registerOutlineRender(BlockType.FRAMED_ACTIVATOR_RAIL_SLOPE, RailSlopeOutlineRenderer.INSTANCE);
         BlockOutlineRenderer.registerOutlineRender(BlockType.FRAMED_COLLAPSIBLE_BLOCK, new CollapsibleBlockOutlineRenderer());
         BlockOutlineRenderer.registerOutlineRender(BlockType.FRAMED_PRISM, new PrismOutlineRenderer());
         BlockOutlineRenderer.registerOutlineRender(BlockType.FRAMED_SLOPED_PRISM, new SlopedPrismOutlineRenderer());
@@ -228,7 +231,10 @@ public final class FBClient
         ClientUtils.replaceModels(FBContent.blockFramedChest, registry, FramedChestModel::new, FramedChestModel.itemSource(), ignoreWaterlogged);
         ClientUtils.replaceModels(FBContent.blockFramedBars, registry, FramedBarsModel::new, ignoreWaterloggedLock);
         ClientUtils.replaceModels(FBContent.blockFramedPane, registry, FramedPaneModel::new, ignoreWaterloggedLock);
-        ClientUtils.replaceModels(FBContent.blockFramedRailSlope, registry, FramedRailSlopeModel::new, FramedRailSlopeModel.itemSource(), ignoreDefault);
+        ClientUtils.replaceModels(FBContent.blockFramedRailSlope, registry, FramedRailSlopeModel::normal, FramedRailSlopeModel.itemSourceNormal(), ignoreDefault);
+        ClientUtils.replaceModels(FBContent.blockFramedPoweredRailSlope, registry, FramedRailSlopeModel::powered, FramedRailSlopeModel.itemSourcePowered(), ignoreDefault);
+        ClientUtils.replaceModels(FBContent.blockFramedDetectorRailSlope, registry, FramedRailSlopeModel::detector, FramedRailSlopeModel.itemSourceDetector(), ignoreDefault);
+        ClientUtils.replaceModels(FBContent.blockFramedActivatorRailSlope, registry, FramedRailSlopeModel::activator, FramedRailSlopeModel.itemSourceActivator(), ignoreDefault);
         ClientUtils.replaceModels(FBContent.blockFramedFlowerPot, registry, FramedFlowerPotModel::new, null);
         ClientUtils.replaceModels(FBContent.blockFramedPillar, registry, FramedPillarModel::new, ignoreWaterlogged);
         ClientUtils.replaceModels(FBContent.blockFramedHalfPillar, registry, FramedHalfPillarModel::new, ignoreWaterlogged);

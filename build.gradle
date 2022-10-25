@@ -43,11 +43,6 @@ minecraft {
             // Recommended logging level for the console
             property 'forge.logging.console.level', 'debug'
 
-            property 'mixin.env.remapRefMap', 'true'
-            property 'mixin.env.refMapRemappingFile', "${buildDir}/createSrgToMcp/output.srg"
-
-            arg "-mixin.config=framedblocks.mixin.json"
-
             mods {
                 framedblocks {
                     source sourceSets.main
@@ -162,6 +157,7 @@ dependencies {
 
 mixin {
     add sourceSets.main, "framedblocks.refmap.json"
+    config "framedblocks.mixin.json"
 }
 
 processTestResources {

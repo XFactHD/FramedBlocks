@@ -2,7 +2,7 @@
   "parent": "minecraft:recipes/root",
   "rewards": {
     "recipes": [
-      "framedblocks:framed_rail_slope"
+      "framedblocks:framed_activator_rail_slope"
     ]
   },
   "criteria": {
@@ -21,7 +21,7 @@
     "has_the_recipe": {
       "trigger": "minecraft:recipe_unlocked",
       "conditions": {
-        "recipe": "framedblocks:framed_rail_slope"
+        "recipe": "framedblocks:framed_activator_rail_slope"
       }
     }
   },

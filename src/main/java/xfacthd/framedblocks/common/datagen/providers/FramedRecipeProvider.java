@@ -356,7 +356,25 @@ public class FramedRecipeProvider extends RecipeProvider
         ShapelessRecipeBuilder.shapeless(FBContent.blockFramedRailSlope.get(), 1)
                 .requires(FBContent.blockFramedSlope.get())
                 .requires(Items.RAIL)
-                .unlockedBy("hasFramedBlock", HAS_FRAMED_BLOCK)
+                .unlockedBy("hasFramedSlope", HAS_FRAMED_SLOPE)
+                .save(consumer);
+
+        ShapelessRecipeBuilder.shapeless(FBContent.blockFramedPoweredRailSlope.get(), 1)
+                .requires(FBContent.blockFramedSlope.get())
+                .requires(Items.POWERED_RAIL)
+                .unlockedBy("hasFramedSlope", HAS_FRAMED_SLOPE)
+                .save(consumer);
+
+        ShapelessRecipeBuilder.shapeless(FBContent.blockFramedDetectorRailSlope.get(), 1)
+                .requires(FBContent.blockFramedSlope.get())
+                .requires(Items.DETECTOR_RAIL)
+                .unlockedBy("hasFramedSlope", HAS_FRAMED_SLOPE)
+                .save(consumer);
+
+        ShapelessRecipeBuilder.shapeless(FBContent.blockFramedActivatorRailSlope.get(), 1)
+                .requires(FBContent.blockFramedSlope.get())
+                .requires(Items.ACTIVATOR_RAIL)
+                .unlockedBy("hasFramedSlope", HAS_FRAMED_SLOPE)
                 .save(consumer);
 
         ShapedRecipeBuilder.shaped(FBContent.blockFramedFlowerPot.get(), 1)

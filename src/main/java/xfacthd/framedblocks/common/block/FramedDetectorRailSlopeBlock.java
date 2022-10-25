@@ -20,12 +20,13 @@ import net.minecraft.world.level.material.*;
 import net.minecraft.world.level.storage.loot.LootContext;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.shapes.*;
+import xfacthd.framedblocks.api.block.FramedBlockEntity;
 import xfacthd.framedblocks.api.block.IFramedBlock;
+import xfacthd.framedblocks.api.type.IBlockType;
 import xfacthd.framedblocks.api.util.FramedProperties;
 import xfacthd.framedblocks.api.util.Utils;
 import xfacthd.framedblocks.common.data.BlockType;
 import xfacthd.framedblocks.common.data.PropertyHolder;
-import xfacthd.framedblocks.api.block.FramedBlockEntity;
 import xfacthd.framedblocks.common.util.FramedUtils;
 
 import javax.annotation.Nullable;
@@ -33,14 +34,16 @@ import java.util.List;
 import java.util.Map;
 
 @SuppressWarnings("deprecation")
-public class FramedRailSlopeBlock extends BaseRailBlock implements IFramedBlock
+public class FramedDetectorRailSlopeBlock extends DetectorRailBlock implements IFramedBlock
 {
+    private final BlockType type;
     private final Map<BlockState, VoxelShape> shapes;
 
-    public FramedRailSlopeBlock()
+    public FramedDetectorRailSlopeBlock(BlockType type)
     {
-        super(true, IFramedBlock.createProperties(BlockType.FRAMED_RAIL_SLOPE));
-        shapes = getBlockType().generateShapes(getStateDefinition().getPossibleStates());
+        super(IFramedBlock.createProperties(type));
+        this.type = type;
+        shapes = type.generateShapes(getStateDefinition().getPossibleStates());
         registerDefaultState(defaultBlockState()
                 .setValue(BlockStateProperties.WATERLOGGED, false)
                 .setValue(FramedProperties.SOLID, false)
@@ -51,7 +54,7 @@ public class FramedRailSlopeBlock extends BaseRailBlock implements IFramedBlock
     @Override
     protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder)
     {
-        builder.add(PropertyHolder.ASCENDING_RAIL_SHAPE, BlockStateProperties.WATERLOGGED, FramedProperties.SOLID, FramedProperties.GLOWING);
+        builder.add(PropertyHolder.ASCENDING_RAIL_SHAPE, BlockStateProperties.POWERED, BlockStateProperties.WATERLOGGED, FramedProperties.SOLID, FramedProperties.GLOWING);
     }
 
     @Override
@@ -229,5 +232,5 @@ public class FramedRailSlopeBlock extends BaseRailBlock implements IFramedBlock
     public final BlockEntity newBlockEntity(BlockPos pos, BlockState state) { return new FramedBlockEntity(pos, state); }
 
     @Override
-    public BlockType getBlockType() { return BlockType.FRAMED_RAIL_SLOPE; }
+    public IBlockType getBlockType() { return type; }
 }

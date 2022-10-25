@@ -8,7 +8,6 @@ import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.Items;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.*;
 import net.minecraft.world.level.block.state.BlockState;
@@ -20,7 +19,6 @@ import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import net.minecraft.world.phys.shapes.Shapes;
 import xfacthd.framedblocks.api.util.*;
-import xfacthd.framedblocks.common.FBContent;
 import xfacthd.framedblocks.api.block.FramedBlockEntity;
 import xfacthd.framedblocks.common.data.*;
 import xfacthd.framedblocks.common.data.property.SlopeType;
@@ -67,7 +65,7 @@ public class FramedSlopeBlock extends FramedBlock
     public InteractionResult use(BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hit)
     {
         ItemStack stack = player.getItemInHand(hand);
-        if (!stack.isEmpty() && stack.getItem() == Items.RAIL)
+        if (!stack.isEmpty() && FramedUtils.isRailItem(stack.getItem()))
         {
             Direction dir = state.getValue(FramedProperties.FACING_HOR);
             SlopeType type = state.getValue(PropertyHolder.SLOPE_TYPE);
@@ -75,9 +73,9 @@ public class FramedSlopeBlock extends FramedBlock
 
             if (type == SlopeType.BOTTOM && (face == dir.getOpposite() || face == Direction.UP))
             {
-                Block railSlope = FBContent.blockFramedRailSlope.get();
+                Block railSlope = FramedUtils.getRailSlopeBlock(stack.getItem());
                 BlockState newState = railSlope.defaultBlockState()
-                        .setValue(PropertyHolder.ASCENDING_RAIL_SHAPE, FramedRailSlopeBlock.shapeFromDirection(dir))
+                        .setValue(PropertyHolder.ASCENDING_RAIL_SHAPE, FramedUtils.railShapeFromDirection(dir))
                         .setValue(BlockStateProperties.WATERLOGGED, state.getValue(BlockStateProperties.WATERLOGGED));
 
                 if (!railSlope.canSurvive(newState, level, pos)) { return InteractionResult.FAIL; }

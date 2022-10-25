@@ -1,101 +1,53 @@
 package xfacthd.framedblocks.client.model;
 
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.renderer.ItemBlockRenderTypes;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.block.BlockRenderDispatcher;
 import net.minecraft.client.renderer.block.model.BakedQuad;
-import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.resources.model.BakedModel;
-import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
-import net.minecraft.world.level.BlockAndTintGetter;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.level.block.state.properties.BlockStateProperties;
-import net.minecraft.world.level.block.state.properties.RailShape;
-import net.minecraftforge.client.MinecraftForgeClient;
+import net.minecraft.world.level.block.state.properties.*;
 import net.minecraftforge.client.model.data.EmptyModelData;
 import net.minecraftforge.client.model.data.IModelData;
-import xfacthd.framedblocks.api.model.BakedModelProxy;
 import xfacthd.framedblocks.api.util.FramedProperties;
 import xfacthd.framedblocks.common.FBContent;
-import xfacthd.framedblocks.api.block.FramedBlockEntity;
-import xfacthd.framedblocks.common.block.FramedRailSlopeBlock;
 import xfacthd.framedblocks.common.data.PropertyHolder;
+import xfacthd.framedblocks.common.util.FramedUtils;
 
-import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.*;
 
-public class FramedRailSlopeModel extends BakedModelProxy
+public class FramedRailSlopeModel extends FramedSlopeModel
 {
-    private final BlockState slopeState;
     private final BlockState railState;
-    private BakedModel slopeModel = null;
     private BakedModel railModel = null;
 
-    public FramedRailSlopeModel(BlockState state, BakedModel baseModel)
+    private FramedRailSlopeModel(BlockState state, BakedModel baseModel, BlockState railBlock, EnumProperty<RailShape> shapeProperty)
     {
-        super(baseModel);
+        super(getSlopeState(state), baseModel);
 
         RailShape shape = state.getValue(PropertyHolder.ASCENDING_RAIL_SHAPE);
-        Direction dir = FramedRailSlopeBlock.directionFromShape(shape);
-
-        slopeState = FBContent.blockFramedSlope.get().defaultBlockState().setValue(FramedProperties.FACING_HOR, dir);
-        railState = Blocks.RAIL.defaultBlockState().setValue(BlockStateProperties.RAIL_SHAPE, shape);
+        railState = railBlock.setValue(shapeProperty, shape);
     }
 
     @Override
-    public List<BakedQuad> getQuads(@Nullable BlockState state, @Nullable Direction side, @Nonnull Random rand, @Nonnull IModelData extraData)
+    protected void getAdditionalQuads(Map<Direction, List<BakedQuad>> quadMap, BlockState state, Random rand, IModelData data, RenderType layer)
     {
-        List<BakedQuad> quads = new ArrayList<>(getSlopeQuads(side, rand, extraData));
+        quadMap.get(null).addAll(getRailQuads(null, rand));
 
-        RenderType layer = MinecraftForgeClient.getRenderType();
-        if (layer == RenderType.cutout() || layer == null)
+        for (Direction side : Direction.values())
         {
-            quads.addAll(getRailQuads(side, rand));
+            quadMap.get(side).addAll(getRailQuads(side, rand));
         }
-
-        return quads;
     }
 
     @Override
-    public List<BakedQuad> getQuads(BlockState state, Direction side, Random rand)
+    protected boolean hasAdditionalQuadsInLayer(RenderType layer)
     {
-        return getQuads(state, side, rand, EmptyModelData.INSTANCE);
-    }
-
-    @Nonnull
-    @Override
-    public IModelData getModelData(@Nonnull BlockAndTintGetter world, @Nonnull BlockPos pos, @Nonnull BlockState state, @Nonnull IModelData tileData)
-    {
-        if (world.getBlockEntity(pos) instanceof FramedBlockEntity be)
-        {
-            return be.getModelData();
-        }
-        return tileData;
-    }
-
-    @Override
-    public TextureAtlasSprite getParticleIcon(@Nonnull IModelData data) { return getSlopeModel().getParticleIcon(data); }
-
-    @Override
-    @SuppressWarnings("deprecation")
-    public TextureAtlasSprite getParticleIcon() { return getSlopeModel().getParticleIcon(); }
-
-    private BakedModel getSlopeModel()
-    {
-        if (slopeModel == null)
-        {
-            BlockRenderDispatcher dispatcher = Minecraft.getInstance().getBlockRenderer();
-            slopeModel = dispatcher.getBlockModel(slopeState);
-        }
-        return slopeModel;
-    }
-
-    private List<BakedQuad> getSlopeQuads(@Nullable Direction side, @Nonnull Random rand, @Nonnull IModelData extraData)
-    {
-        return getSlopeModel().getQuads(slopeState, side, rand, extraData);
+        return ItemBlockRenderTypes.canRenderInLayer(railState, layer);
     }
 
     private List<BakedQuad> getRailQuads(@Nullable Direction side, Random rand)
@@ -108,11 +60,81 @@ public class FramedRailSlopeModel extends BakedModelProxy
         return railModel.getQuads(railState, side, rand, EmptyModelData.INSTANCE);
     }
 
+    private static BlockState getSlopeState(BlockState state)
+    {
+        RailShape shape = state.getValue(PropertyHolder.ASCENDING_RAIL_SHAPE);
+        Direction dir = FramedUtils.directionFromRailShape(shape);
+
+        return FBContent.blockFramedSlope.get().defaultBlockState().setValue(FramedProperties.FACING_HOR, dir);
+    }
 
 
-    public static BlockState itemSource()
+
+    public static FramedRailSlopeModel normal(BlockState state, BakedModel baseModel)
+    {
+        return new FramedRailSlopeModel(state, baseModel, Blocks.RAIL.defaultBlockState(), BlockStateProperties.RAIL_SHAPE);
+    }
+
+    public static FramedRailSlopeModel powered(BlockState state, BakedModel baseModel)
+    {
+        boolean powered = state.getValue(BlockStateProperties.POWERED);
+        return new FramedRailSlopeModel(
+                state,
+                baseModel,
+                Blocks.POWERED_RAIL.defaultBlockState().setValue(BlockStateProperties.POWERED, powered),
+                BlockStateProperties.RAIL_SHAPE_STRAIGHT
+        );
+    }
+
+    public static FramedRailSlopeModel detector(BlockState state, BakedModel baseModel)
+    {
+        boolean powered = state.getValue(BlockStateProperties.POWERED);
+        return new FramedRailSlopeModel(
+                state,
+                baseModel,
+                Blocks.DETECTOR_RAIL.defaultBlockState().setValue(BlockStateProperties.POWERED, powered),
+                BlockStateProperties.RAIL_SHAPE_STRAIGHT
+        );
+    }
+
+    public static FramedRailSlopeModel activator(BlockState state, BakedModel baseModel)
+    {
+        boolean powered = state.getValue(BlockStateProperties.POWERED);
+        return new FramedRailSlopeModel(
+                state,
+                baseModel,
+                Blocks.ACTIVATOR_RAIL.defaultBlockState().setValue(BlockStateProperties.POWERED, powered),
+                BlockStateProperties.RAIL_SHAPE_STRAIGHT
+        );
+    }
+
+    public static BlockState itemSourceNormal()
     {
         return FBContent.blockFramedRailSlope.get().defaultBlockState().setValue(
+                PropertyHolder.ASCENDING_RAIL_SHAPE,
+                RailShape.ASCENDING_SOUTH
+        );
+    }
+
+    public static BlockState itemSourcePowered()
+    {
+        return FBContent.blockFramedPoweredRailSlope.get().defaultBlockState().setValue(
+                PropertyHolder.ASCENDING_RAIL_SHAPE,
+                RailShape.ASCENDING_SOUTH
+        );
+    }
+
+    public static BlockState itemSourceDetector()
+    {
+        return FBContent.blockFramedDetectorRailSlope.get().defaultBlockState().setValue(
+                PropertyHolder.ASCENDING_RAIL_SHAPE,
+                RailShape.ASCENDING_SOUTH
+        );
+    }
+
+    public static BlockState itemSourceActivator()
+    {
+        return FBContent.blockFramedActivatorRailSlope.get().defaultBlockState().setValue(
                 PropertyHolder.ASCENDING_RAIL_SHAPE,
                 RailShape.ASCENDING_SOUTH
         );

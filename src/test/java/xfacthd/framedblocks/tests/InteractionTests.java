@@ -236,6 +236,48 @@ public final class InteractionTests
         ));
     }
 
+    @GameTest(template = "floor_1x2", batch = "interaction")
+    public static void testBuildPoweredRailSlope(GameTestHelper helper)
+    {
+        helper.setBlock(POS_ABOVE_FLOOR, Blocks.STONE);
+
+        BlockPos posSouth = POS_ABOVE_FLOOR.south();
+
+        TestUtils.chainTasks(helper, List.of(
+                () -> helper.setBlock(posSouth, FBContent.blockFramedSlope.get()),
+                () -> TestUtils.clickWithItem(helper, posSouth, Items.POWERED_RAIL),
+                () -> helper.succeedWhenBlockPresent(FBContent.blockFramedPoweredRailSlope.get(), posSouth)
+        ));
+    }
+
+    @GameTest(template = "floor_1x2", batch = "interaction")
+    public static void testBuildDetectorRailSlope(GameTestHelper helper)
+    {
+        helper.setBlock(POS_ABOVE_FLOOR, Blocks.STONE);
+
+        BlockPos posSouth = POS_ABOVE_FLOOR.south();
+
+        TestUtils.chainTasks(helper, List.of(
+                () -> helper.setBlock(posSouth, FBContent.blockFramedSlope.get()),
+                () -> TestUtils.clickWithItem(helper, posSouth, Items.DETECTOR_RAIL),
+                () -> helper.succeedWhenBlockPresent(FBContent.blockFramedDetectorRailSlope.get(), posSouth)
+        ));
+    }
+
+    @GameTest(template = "floor_1x2", batch = "interaction")
+    public static void testBuildActivatorRailSlope(GameTestHelper helper)
+    {
+        helper.setBlock(POS_ABOVE_FLOOR, Blocks.STONE);
+
+        BlockPos posSouth = POS_ABOVE_FLOOR.south();
+
+        TestUtils.chainTasks(helper, List.of(
+                () -> helper.setBlock(posSouth, FBContent.blockFramedSlope.get()),
+                () -> TestUtils.clickWithItem(helper, posSouth, Items.ACTIVATOR_RAIL),
+                () -> helper.succeedWhenBlockPresent(FBContent.blockFramedActivatorRailSlope.get(), posSouth)
+        ));
+    }
+
     @GameTest(template = "floor_1x1", batch = "interaction")
     public static void testRotateCamo(GameTestHelper helper)
     {
