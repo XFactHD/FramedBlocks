@@ -9,6 +9,7 @@ import xfacthd.framedblocks.api.util.FramedConstants;
 import xfacthd.framedblocks.client.util.BlueprintPropertyOverride;
 import xfacthd.framedblocks.common.FBContent;
 
+@SuppressWarnings({ "SameParameterValue", "UnusedReturnValue" })
 public final class FramedItemModelProvider extends ItemModelProvider
 {
     public FramedItemModelProvider(DataGenerator gen, ExistingFileHelper fileHelper)
@@ -19,10 +20,10 @@ public final class FramedItemModelProvider extends ItemModelProvider
     @Override
     protected void registerModels()
     {
-        simpleItem(FBContent.itemFramedHammer, "cutout");
-        simpleItem(FBContent.itemFramedWrench, "cutout");
-        simpleItem(FBContent.itemFramedKey, "cutout");
-        simpleItem(FBContent.itemFramedScrewdriver, "cutout");
+        handheldItem(FBContent.itemFramedHammer, "cutout");
+        handheldItem(FBContent.itemFramedWrench, "cutout");
+        handheldItem(FBContent.itemFramedKey, "cutout");
+        handheldItem(FBContent.itemFramedScrewdriver, "cutout");
 
         ItemModelBuilder modelNormal = simpleItem(FBContent.itemFramedBlueprint, "cutout");
         ModelFile modelWritten = simpleItem("framed_blueprint_written", "cutout");
@@ -37,7 +38,12 @@ public final class FramedItemModelProvider extends ItemModelProvider
                     .end();
     }
 
-    @SuppressWarnings("SameParameterValue")
+    private ItemModelBuilder handheldItem(RegistryObject<Item> item, String renderType)
+    {
+        String name = item.getId().getPath();
+        return singleTexture(name, mcLoc("item/handheld"), "layer0", modLoc("item/" + name)).renderType(renderType);
+    }
+
     private ItemModelBuilder simpleItem(RegistryObject<Item> item, String renderType)
     {
         return simpleItem(item.getId().getPath(), renderType);

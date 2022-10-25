@@ -1,5 +1,5 @@
 {
-  "parent": "minecraft:item/generated",
+  "parent": "minecraft:item/handheld",
   "render_type": "minecraft:cutout",
   "textures": {
     "layer0": "framedblocks:item/framed_wrench"
