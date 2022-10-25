@@ -17,6 +17,8 @@ import net.minecraft.world.level.storage.loot.providers.number.ConstantValue;
 import net.minecraftforge.registries.RegistryObject;
 import xfacthd.framedblocks.api.util.FramedConstants;
 import xfacthd.framedblocks.common.FBContent;
+import xfacthd.framedblocks.common.block.FramedWaterloggablePressurePlateBlock;
+import xfacthd.framedblocks.common.block.FramedWaterloggableWeightedPressurePlateBlock;
 
 import java.util.*;
 import java.util.function.*;
@@ -58,9 +60,17 @@ public class FramedLootTableProvider extends LootTableProvider
                     .filter(block -> block != FBContent.blockFramedDoor.get() &&
                             block != FBContent.blockFramedDoubleSlab.get() &&
                             block != FBContent.blockFramedDoublePanel.get() &&
-                            block != FBContent.blockFramedIronDoor.get()
+                            block != FBContent.blockFramedIronDoor.get() &&
+                            !(block instanceof FramedWaterloggablePressurePlateBlock) &&
+                            !(block instanceof FramedWaterloggableWeightedPressurePlateBlock)
                     )
                     .forEach(this::dropSelf);
+
+            dropOther(FBContent.blockFramedWaterloggablePressurePlate.get(), FBContent.blockFramedPressurePlate.get());
+            dropOther(FBContent.blockFramedWaterloggableStonePressurePlate.get(), FBContent.blockFramedStonePressurePlate.get());
+            dropOther(FBContent.blockFramedWaterloggableObsidianPressurePlate.get(), FBContent.blockFramedObsidianPressurePlate.get());
+            dropOther(FBContent.blockFramedWaterloggableGoldPressurePlate.get(), FBContent.blockFramedGoldPressurePlate.get());
+            dropOther(FBContent.blockFramedWaterloggableIronPressurePlate.get(), FBContent.blockFramedIronPressurePlate.get());
 
             add(FBContent.blockFramedDoor.get(), block -> createSinglePropConditionTable(block, DoorBlock.HALF, DoubleBlockHalf.LOWER));
             add(FBContent.blockFramedDoubleSlab.get(), block -> droppingTwo(block, FBContent.blockFramedSlab.get()));

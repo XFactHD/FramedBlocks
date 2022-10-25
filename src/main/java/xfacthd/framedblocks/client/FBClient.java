@@ -67,6 +67,7 @@ public final class FBClient
         });
 
         OverlayRegistry.registerOverlayTop("framedblocks:state_lock", new StateLockOverlay());
+        OverlayRegistry.registerOverlayTop("framedblocks:toggle_waterloggable", new ToggleWaterloggableOverlay());
 
         KeyMappings.register();
 
@@ -203,10 +204,15 @@ public final class FBClient
         ClientUtils.replaceModels(FBContent.blockFramedTrapDoor, registry, FramedTrapDoorModel::new, ignoreDefault);
         ClientUtils.replaceModels(FBContent.blockFramedIronTrapDoor, registry, FramedIronTrapDoorModel::new, ignoreDefault);
         ClientUtils.replaceModels(FBContent.blockFramedPressurePlate, registry, FramedPressurePlateModel::new, null);
+        ClientUtils.reuseModels(FBContent.blockFramedWaterloggablePressurePlate, registry, FBContent.blockFramedPressurePlate, ignoreWaterlogged);
         ClientUtils.replaceModels(FBContent.blockFramedStonePressurePlate, registry, FramedMarkedPressurePlateModel::stone, null);
+        ClientUtils.reuseModels(FBContent.blockFramedWaterloggableStonePressurePlate, registry, FBContent.blockFramedStonePressurePlate, ignoreWaterlogged);
         ClientUtils.replaceModels(FBContent.blockFramedObsidianPressurePlate, registry, FramedMarkedPressurePlateModel::obsidian, null);
+        ClientUtils.reuseModels(FBContent.blockFramedWaterloggableObsidianPressurePlate, registry, FBContent.blockFramedObsidianPressurePlate, ignoreWaterlogged);
         ClientUtils.replaceModelsSpecial(FBContent.blockFramedGoldPressurePlate, registry, FramedMarkedPressurePlateModel::gold, FramedWeightedPressurePlateBlock::mergeWeightedState);
+        ClientUtils.reuseModels(FBContent.blockFramedWaterloggableGoldPressurePlate, registry, FBContent.blockFramedGoldPressurePlate, ignoreWaterlogged);
         ClientUtils.replaceModelsSpecial(FBContent.blockFramedIronPressurePlate, registry, FramedMarkedPressurePlateModel::iron, FramedWeightedPressurePlateBlock::mergeWeightedState);
+        ClientUtils.reuseModels(FBContent.blockFramedWaterloggableIronPressurePlate, registry, FBContent.blockFramedIronPressurePlate, ignoreWaterlogged);
         ClientUtils.replaceModels(FBContent.blockFramedLadder, registry, FramedLadderModel::new, FramedLadderModel.itemSource(), ignoreWaterlogged);
         ClientUtils.replaceModels(FBContent.blockFramedButton, registry, FramedButtonModel::new, null);
         ClientUtils.replaceModels(FBContent.blockFramedStoneButton, registry, FramedStoneButtonModel::new, null);

@@ -12,22 +12,33 @@ import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.block.WeightedPressurePlateBlock;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.material.MaterialColor;
 import net.minecraft.world.level.storage.loot.LootContext;
 import net.minecraft.world.phys.BlockHitResult;
 import xfacthd.framedblocks.api.block.FramedBlockEntity;
 import xfacthd.framedblocks.api.block.IFramedBlock;
+import xfacthd.framedblocks.api.util.Utils;
+import xfacthd.framedblocks.common.FBContent;
 import xfacthd.framedblocks.common.data.BlockType;
 
 import javax.annotation.Nullable;
 import java.util.List;
+import java.util.Map;
 
 @SuppressWarnings("deprecation")
 public class FramedWeightedPressurePlateBlock extends WeightedPressurePlateBlock implements IFramedBlock
 {
+    private static final Map<BlockType, BlockType> WATERLOGGING_SWITCH = Map.of(
+            BlockType.FRAMED_GOLD_PRESSURE_PLATE, BlockType.FRAMED_WATERLOGGABLE_GOLD_PRESSURE_PLATE,
+            BlockType.FRAMED_WATERLOGGABLE_GOLD_PRESSURE_PLATE, BlockType.FRAMED_GOLD_PRESSURE_PLATE,
+            BlockType.FRAMED_IRON_PRESSURE_PLATE, BlockType.FRAMED_WATERLOGGABLE_IRON_PRESSURE_PLATE,
+            BlockType.FRAMED_WATERLOGGABLE_IRON_PRESSURE_PLATE, BlockType.FRAMED_IRON_PRESSURE_PLATE
+    );
+
     private final BlockType type;
 
-    private FramedWeightedPressurePlateBlock(BlockType type, int maxWeight, Properties props)
+    protected FramedWeightedPressurePlateBlock(BlockType type, int maxWeight, Properties props)
     {
         super(maxWeight, props);
         this.type = type;
@@ -49,6 +60,24 @@ public class FramedWeightedPressurePlateBlock extends WeightedPressurePlateBlock
     public void onBlockStateChange(LevelReader level, BlockPos pos, BlockState oldState, BlockState newState)
     {
         onStateChange(level, pos, oldState, newState);
+    }
+
+    @Override
+    public boolean handleBlockLeftClick(BlockState state, Level level, BlockPos pos, Player player)
+    {
+        if (player.getMainHandItem().is(FBContent.itemFramedHammer.get()))
+        {
+            if (!level.isClientSide())
+            {
+                Utils.wrapInStateCopy(level, pos, false, () ->
+                {
+                    BlockState newState = FBContent.byType(WATERLOGGING_SWITCH.get(type)).defaultBlockState();
+                    level.setBlockAndUpdate(pos, newState);
+                });
+            }
+            return true;
+        }
+        return false;
     }
 
     @Override
@@ -101,6 +130,11 @@ public class FramedWeightedPressurePlateBlock extends WeightedPressurePlateBlock
     // Merge states with power > 0 to avoid unnecessary model duplication
     public static BlockState mergeWeightedState(BlockState state)
     {
+        if (state.hasProperty(BlockStateProperties.WATERLOGGED))
+        {
+            state = state.setValue(BlockStateProperties.WATERLOGGED, false);
+        }
+
         if (state.getValue(WeightedPressurePlateBlock.POWER) > 1)
         {
             return state.setValue(WeightedPressurePlateBlock.POWER, 1);
@@ -119,12 +153,35 @@ public class FramedWeightedPressurePlateBlock extends WeightedPressurePlateBlock
         );
     }
 
+    public static FramedWeightedPressurePlateBlock goldWaterloggable()
+    {
+        return new FramedWaterloggableWeightedPressurePlateBlock(
+                BlockType.FRAMED_WATERLOGGABLE_GOLD_PRESSURE_PLATE,
+                15,
+                IFramedBlock.createProperties(BlockType.FRAMED_WATERLOGGABLE_GOLD_PRESSURE_PLATE)
+                        .noCollission()
+                        .strength(0.5F)
+        );
+    }
+
     public static FramedWeightedPressurePlateBlock iron()
     {
         return new FramedWeightedPressurePlateBlock(
                 BlockType.FRAMED_IRON_PRESSURE_PLATE,
                 150,
                 IFramedBlock.createProperties(BlockType.FRAMED_IRON_PRESSURE_PLATE)
+                        .requiresCorrectToolForDrops()
+                        .noCollission()
+                        .strength(0.5F)
+        );
+    }
+
+    public static FramedWeightedPressurePlateBlock ironWaterloggable()
+    {
+        return new FramedWaterloggableWeightedPressurePlateBlock(
+                BlockType.FRAMED_WATERLOGGABLE_IRON_PRESSURE_PLATE,
+                150,
+                IFramedBlock.createProperties(BlockType.FRAMED_WATERLOGGABLE_IRON_PRESSURE_PLATE)
                         .requiresCorrectToolForDrops()
                         .noCollission()
                         .strength(0.5F)

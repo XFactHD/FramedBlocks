@@ -7,10 +7,12 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.*;
 import net.minecraft.util.Mth;
 import net.minecraft.world.item.Item;
-import net.minecraft.world.level.BlockGetter;
-import net.minecraft.world.level.Level;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.*;
 import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.entity.*;
+import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.chunk.LevelChunk;
 import net.minecraft.world.phys.Vec3;
 import net.minecraft.world.phys.shapes.Shapes;
@@ -19,6 +21,7 @@ import net.minecraftforge.fml.loading.FMLEnvironment;
 import net.minecraftforge.fml.util.ObfuscationReflectionHelper;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegistryObject;
+import xfacthd.framedblocks.api.block.FramedBlockEntity;
 import xfacthd.framedblocks.api.util.client.ClientUtils;
 
 import java.lang.invoke.MethodHandle;
@@ -174,6 +177,31 @@ public final class Utils
     public static TagKey<Item> itemTag(String modid, String name)
     {
         return ItemTags.create(new ResourceLocation(modid, name));
+    }
+
+    public static void wrapInStateCopy(LevelAccessor level, BlockPos pos, boolean writeToCamoTwo, Runnable action)
+    {
+        BlockState camoState = Blocks.AIR.defaultBlockState();
+        ItemStack camoStack = ItemStack.EMPTY;
+        boolean glowing = false;
+        boolean intangible = false;
+
+        if (level.getBlockEntity(pos) instanceof FramedBlockEntity be)
+        {
+            camoState = be.getCamoState();
+            camoStack = be.getCamoStack();
+            glowing = be.isGlowing();
+            intangible = be.isIntangible(null);
+        }
+
+        action.run();
+
+        if (level.getBlockEntity(pos) instanceof FramedBlockEntity be)
+        {
+            be.setCamo(camoStack, camoState, writeToCamoTwo);
+            be.setGlowing(glowing);
+            be.setIntangible(intangible);
+        }
     }
 
     public static ResourceLocation rl(String path) { return new ResourceLocation(FramedConstants.MOD_ID, path); }

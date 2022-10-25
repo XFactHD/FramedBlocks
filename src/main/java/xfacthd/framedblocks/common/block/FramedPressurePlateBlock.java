@@ -16,19 +16,31 @@ import net.minecraft.world.level.material.MaterialColor;
 import net.minecraft.world.level.storage.loot.LootContext;
 import net.minecraft.world.phys.BlockHitResult;
 import xfacthd.framedblocks.api.block.IFramedBlock;
+import xfacthd.framedblocks.api.util.Utils;
+import xfacthd.framedblocks.common.FBContent;
 import xfacthd.framedblocks.common.data.BlockType;
 import xfacthd.framedblocks.api.block.FramedBlockEntity;
 
 import javax.annotation.Nullable;
 import java.util.List;
+import java.util.Map;
 
 @SuppressWarnings("deprecation")
 public class FramedPressurePlateBlock extends PressurePlateBlock implements IFramedBlock
 {
+    private static final Map<BlockType, BlockType> WATERLOGGING_SWITCH = Map.of(
+            BlockType.FRAMED_PRESSURE_PLATE, BlockType.FRAMED_WATERLOGGABLE_PRESSURE_PLATE,
+            BlockType.FRAMED_WATERLOGGABLE_PRESSURE_PLATE, BlockType.FRAMED_PRESSURE_PLATE,
+            BlockType.FRAMED_STONE_PRESSURE_PLATE, BlockType.FRAMED_WATERLOGGABLE_STONE_PRESSURE_PLATE,
+            BlockType.FRAMED_WATERLOGGABLE_STONE_PRESSURE_PLATE, BlockType.FRAMED_STONE_PRESSURE_PLATE,
+            BlockType.FRAMED_OBSIDIAN_PRESSURE_PLATE, BlockType.FRAMED_WATERLOGGABLE_OBSIDIAN_PRESSURE_PLATE,
+            BlockType.FRAMED_WATERLOGGABLE_OBSIDIAN_PRESSURE_PLATE, BlockType.FRAMED_OBSIDIAN_PRESSURE_PLATE
+    );
+
     private final BlockType type;
 
     @SuppressWarnings("ConstantConditions") //Sensitivity doesn't like being passed null :/
-    private FramedPressurePlateBlock(BlockType type, Sensitivity sensitivity, Properties props)
+    protected FramedPressurePlateBlock(BlockType type, Sensitivity sensitivity, Properties props)
     {
         super(sensitivity, props);
         this.type = type;
@@ -50,6 +62,24 @@ public class FramedPressurePlateBlock extends PressurePlateBlock implements IFra
     public void onBlockStateChange(LevelReader level, BlockPos pos, BlockState oldState, BlockState newState)
     {
         onStateChange(level, pos, oldState, newState);
+    }
+
+    @Override
+    public boolean handleBlockLeftClick(BlockState state, Level level, BlockPos pos, Player player)
+    {
+        if (player.getMainHandItem().is(FBContent.itemFramedHammer.get()))
+        {
+            if (!level.isClientSide())
+            {
+                Utils.wrapInStateCopy(level, pos, false, () ->
+                {
+                    BlockState newState = FBContent.byType(WATERLOGGING_SWITCH.get(type)).defaultBlockState();
+                    level.setBlockAndUpdate(pos, newState);
+                });
+            }
+            return true;
+        }
+        return false;
     }
 
     @Override
@@ -133,6 +163,17 @@ public class FramedPressurePlateBlock extends PressurePlateBlock implements IFra
         );
     }
 
+    public static FramedPressurePlateBlock woodWaterloggable()
+    {
+        return new FramedWaterloggablePressurePlateBlock(
+                BlockType.FRAMED_WATERLOGGABLE_PRESSURE_PLATE,
+                Sensitivity.EVERYTHING,
+                IFramedBlock.createProperties(BlockType.FRAMED_WATERLOGGABLE_PRESSURE_PLATE)
+                        .noCollission()
+                        .strength(0.5F)
+        );
+    }
+
     public static FramedPressurePlateBlock stone()
     {
         return new FramedPressurePlateBlock(
@@ -145,12 +186,36 @@ public class FramedPressurePlateBlock extends PressurePlateBlock implements IFra
         );
     }
 
+    public static FramedPressurePlateBlock stoneWaterloggable()
+    {
+        return new FramedWaterloggablePressurePlateBlock(
+                BlockType.FRAMED_WATERLOGGABLE_STONE_PRESSURE_PLATE,
+                Sensitivity.MOBS,
+                IFramedBlock.createProperties(BlockType.FRAMED_WATERLOGGABLE_STONE_PRESSURE_PLATE)
+                        .requiresCorrectToolForDrops()
+                        .noCollission()
+                        .strength(0.5F)
+        );
+    }
+
     public static FramedPressurePlateBlock obsidian() // Player-only
     {
         return new FramedPressurePlateBlock(
                 BlockType.FRAMED_OBSIDIAN_PRESSURE_PLATE,
                 null, //Abuse null for player-only sensitivity
                 IFramedBlock.createProperties(BlockType.FRAMED_OBSIDIAN_PRESSURE_PLATE)
+                        .requiresCorrectToolForDrops()
+                        .noCollission()
+                        .strength(0.5F)
+        );
+    }
+
+    public static FramedPressurePlateBlock obsidianWaterloggable() // Player-only
+    {
+        return new FramedWaterloggablePressurePlateBlock(
+                BlockType.FRAMED_WATERLOGGABLE_OBSIDIAN_PRESSURE_PLATE,
+                null, //Abuse null for player-only sensitivity
+                IFramedBlock.createProperties(BlockType.FRAMED_WATERLOGGABLE_OBSIDIAN_PRESSURE_PLATE)
                         .requiresCorrectToolForDrops()
                         .noCollission()
                         .strength(0.5F)

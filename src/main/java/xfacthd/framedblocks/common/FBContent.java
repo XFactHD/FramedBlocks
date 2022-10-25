@@ -62,10 +62,15 @@ public final class FBContent
     public static final RegistryObject<Block> blockFramedTrapDoor = registerBlock(FramedTrapDoorBlock::wood, BlockType.FRAMED_TRAPDOOR);
     public static final RegistryObject<Block> blockFramedIronTrapDoor = registerBlock(FramedTrapDoorBlock::iron, BlockType.FRAMED_IRON_TRAPDOOR);
     public static final RegistryObject<Block> blockFramedPressurePlate = registerBlock(FramedPressurePlateBlock::wood, BlockType.FRAMED_PRESSURE_PLATE);
+    public static final RegistryObject<Block> blockFramedWaterloggablePressurePlate = registerBlock(FramedPressurePlateBlock::woodWaterloggable, BlockType.FRAMED_WATERLOGGABLE_PRESSURE_PLATE);
     public static final RegistryObject<Block> blockFramedStonePressurePlate = registerBlock(FramedPressurePlateBlock::stone, BlockType.FRAMED_STONE_PRESSURE_PLATE);
+    public static final RegistryObject<Block> blockFramedWaterloggableStonePressurePlate = registerBlock(FramedPressurePlateBlock::stoneWaterloggable, BlockType.FRAMED_WATERLOGGABLE_STONE_PRESSURE_PLATE);
     public static final RegistryObject<Block> blockFramedObsidianPressurePlate = registerBlock(FramedPressurePlateBlock::obsidian, BlockType.FRAMED_OBSIDIAN_PRESSURE_PLATE);
+    public static final RegistryObject<Block> blockFramedWaterloggableObsidianPressurePlate = registerBlock(FramedPressurePlateBlock::obsidianWaterloggable, BlockType.FRAMED_WATERLOGGABLE_OBSIDIAN_PRESSURE_PLATE);
     public static final RegistryObject<Block> blockFramedGoldPressurePlate = registerBlock(FramedWeightedPressurePlateBlock::gold, BlockType.FRAMED_GOLD_PRESSURE_PLATE);
+    public static final RegistryObject<Block> blockFramedWaterloggableGoldPressurePlate = registerBlock(FramedWeightedPressurePlateBlock::goldWaterloggable, BlockType.FRAMED_WATERLOGGABLE_GOLD_PRESSURE_PLATE);
     public static final RegistryObject<Block> blockFramedIronPressurePlate = registerBlock(FramedWeightedPressurePlateBlock::iron, BlockType.FRAMED_IRON_PRESSURE_PLATE);
+    public static final RegistryObject<Block> blockFramedWaterloggableIronPressurePlate = registerBlock(FramedWeightedPressurePlateBlock::ironWaterloggable, BlockType.FRAMED_WATERLOGGABLE_IRON_PRESSURE_PLATE);
     public static final RegistryObject<Block> blockFramedLadder = registerBlock(FramedLadderBlock::new, BlockType.FRAMED_LADDER);
     public static final RegistryObject<Block> blockFramedButton = registerBlock(FramedButtonBlock::new, BlockType.FRAMED_BUTTON);
     public static final RegistryObject<Block> blockFramedStoneButton = registerBlock(FramedStoneButtonBlock::new, BlockType.FRAMED_STONE_BUTTON);
@@ -281,6 +286,8 @@ public final class FBContent
     }
 
     public static Collection<RegistryObject<Block>> getRegisteredBlocks() { return BLOCKS.getEntries(); }
+
+    public static Block byType(BlockType type) { return BLOCKS_BY_TYPE.get(type).get(); }
 
     @SubscribeEvent
     public static void onRegisterItems(final RegistryEvent.Register<Item> event)
