@@ -639,7 +639,7 @@ def53fe2e88a4349d61c7a377cc550483c07eed4 data/minecraft/tags/blocks/climbable.js
 3e2d88c1ebe0fd8046c865d8fc6f821ff71d4a46 data/minecraft/tags/blocks/fences.json
 3399116b3c12a34c9046d887956660e88e70d084 data/minecraft/tags/blocks/mineable/axe.json
 391588a3119b24d5975fddcfa5a497f0280fac4e data/minecraft/tags/blocks/mineable/pickaxe.json
-a96598eb3c4949f09548db20e43649235d13e02a data/minecraft/tags/blocks/rails.json
+5d03ac66941f85816546fdcc0dfe90f8df94a7f2 data/minecraft/tags/blocks/rails.json
 2a8557d3b22846f9d01646c6522776a9c9fe51bd data/minecraft/tags/blocks/signs.json
 347fe311fec6423bc5cb12c4545d90159ff187d3 data/minecraft/tags/blocks/slabs.json
 c421d2908d17f42e1f49df963f37242ce2090eec data/minecraft/tags/blocks/stairs.json
