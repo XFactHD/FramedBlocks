@@ -754,6 +754,21 @@ public class FramedRecipeProvider extends RecipeProvider
                 .unlockedBy("hasFramedIronDoor", has(FBContent.blockFramedIronDoor.get()))
                 .save(consumer);
 
+        ShapedRecipeBuilder.shaped(FBContent.blockFramedItemFrame.get())
+                .pattern("FFF")
+                .pattern("FLF")
+                .pattern("FFF")
+                .define('F', FBContent.blockFramedCube.get())
+                .define('L', Tags.Items.LEATHER)
+                .unlockedBy("hasFramedCube", HAS_FRAMED_BLOCK)
+                .save(consumer);
+
+        ShapelessRecipeBuilder.shapeless(FBContent.blockFramedGlowingItemFrame.get())
+                .requires(FBContent.blockFramedItemFrame.get())
+                .requires(Items.GLOW_INK_SAC)
+                .unlockedBy("hasFramedItemFrame", has(FBContent.blockFramedItemFrame.get()))
+                .save(consumer);
+
 
 
         ShapedRecipeBuilder.shaped(FBContent.itemFramedHammer.get())

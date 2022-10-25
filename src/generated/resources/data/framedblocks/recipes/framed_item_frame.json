@@ -1,0 +1,19 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "FFF",
+    "FLF",
+    "FFF"
+  ],
+  "key": {
+    "F": {
+      "item": "framedblocks:framed_cube"
+    },
+    "L": {
+      "tag": "forge:leather"
+    }
+  },
+  "result": {
+    "item": "framedblocks:framed_item_frame"
+  }
+}

@@ -5,17 +5,19 @@ import net.minecraft.core.Direction;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.block.*;
+import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.*;
 import net.minecraftforge.client.model.generators.*;
 import net.minecraftforge.common.data.ExistingFileHelper;
 import net.minecraftforge.registries.RegistryObject;
-import xfacthd.framedblocks.api.util.FramedConstants;
-import xfacthd.framedblocks.api.util.FramedProperties;
+import xfacthd.framedblocks.api.util.*;
 import xfacthd.framedblocks.api.util.client.ClientUtils;
 import xfacthd.framedblocks.client.loader.overlay.OverlayLoaderBuilder;
 import xfacthd.framedblocks.client.model.*;
 import xfacthd.framedblocks.common.FBContent;
 import xfacthd.framedblocks.common.data.PropertyHolder;
+
+import java.util.function.Function;
 
 public class FramedBlockStateProvider extends BlockStateProvider
 {
@@ -134,6 +136,7 @@ public class FramedBlockStateProvider extends BlockStateProvider
         registerFramedLargeStoneButton();
         registerFramedTarget(cube);
         registerFramedIronGate();
+        registerFramedItemFrame();
     }
 
     private void registerFramedSlab(ModelFile cube)
@@ -744,6 +747,48 @@ public class FramedBlockStateProvider extends BlockStateProvider
                     .rotationY(yRot)
                     .build();
         }, DoorBlock.POWERED, FramedProperties.SOLID, FramedProperties.GLOWING);
+    }
+
+    private void registerFramedItemFrame()
+    {
+        ModelFile frame = models().withExistingParent("framed_item_frame", modLoc("block/template_framed_item_frame"))
+                .texture("back", ClientUtils.DUMMY_TEXTURE)
+                .texture("wood", ClientUtils.DUMMY_TEXTURE)
+                .texture("particle", TEXTURE);
+
+        ModelFile mapFrame = models().withExistingParent("framed_item_frame_map", modLoc("block/template_framed_item_frame_map"))
+                .texture("back", ClientUtils.DUMMY_TEXTURE)
+                .texture("wood", ClientUtils.DUMMY_TEXTURE)
+                .texture("particle", TEXTURE);
+
+        Function<BlockState, ConfiguredModel[]> mapper = state ->
+        {
+            int xRot = 0;
+            int yRot = 0;
+
+            Direction dir = state.getValue(BlockStateProperties.FACING);
+            if (Utils.isY(dir))
+            {
+                xRot = dir == Direction.UP ? 90 : -90;
+            }
+            else
+            {
+                yRot = (int)dir.toYRot();
+            }
+
+            boolean map = state.getValue(PropertyHolder.MAP_FRAME);
+            return ConfiguredModel.builder()
+                    .modelFile(map ? mapFrame : frame)
+                    .rotationX(xRot)
+                    .rotationY(yRot)
+                    .build();
+        };
+
+        getVariantBuilder(FBContent.blockFramedItemFrame.get()).forAllStatesExcept(mapper, PropertyHolder.LEATHER);
+        getVariantBuilder(FBContent.blockFramedGlowingItemFrame.get()).forAllStatesExcept(mapper, PropertyHolder.LEATHER);
+
+        itemModels().withExistingParent("framed_item_frame", "item/generated").texture("layer0", modLoc("item/framed_item_frame"));
+        itemModels().withExistingParent("framed_glowing_item_frame", "item/generated").texture("layer0", modLoc("item/framed_glowing_item_frame"));
     }
 
 

@@ -118,6 +118,8 @@ public class FramedLanguageProvider extends LanguageProvider
         add(FBContent.blockFramedTarget.get(), "Framed Target");
         add(FBContent.blockFramedGate.get(), "Framed Gate");
         add(FBContent.blockFramedIronGate.get(), "Framed Iron Gate");
+        add(FBContent.blockFramedItemFrame.get(), "Framed Item Frame");
+        add(FBContent.blockFramedGlowingItemFrame.get(), "Framed Glow Item Frame");
 
         add(FBContent.itemFramedHammer.get(), "Framed Hammer");
         add(FBContent.itemFramedWrench.get(), "Framed Wrench");

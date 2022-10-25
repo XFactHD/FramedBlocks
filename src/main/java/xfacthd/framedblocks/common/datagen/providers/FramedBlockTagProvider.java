@@ -56,6 +56,11 @@ public class FramedBlockTagProvider extends BlockTagsProvider
                 Blocks.COMPOSTER
         );
 
+        Set<Block> noToolBlocks = Set.of(
+                FBContent.blockFramedItemFrame.get(),
+                FBContent.blockFramedGlowingItemFrame.get()
+        );
+
         Set<Block> pickaxeBlocks = new LinkedHashSet<>();
 
         pickaxeBlocks.add(FBContent.blockFramedIronDoor.get());
@@ -67,6 +72,7 @@ public class FramedBlockTagProvider extends BlockTagsProvider
                 .stream()
                 .map(RegistryObject::get)
                 .filter(b -> b instanceof IFramedBlock)
+                .filter(b -> !noToolBlocks.contains(b))
                 .filter(b -> !pickaxeBlocks.contains(b))
                 .forEach(axeTag::add);
 

@@ -99,6 +99,8 @@ public final class FBClient
         BlockOutlineRenderer.registerOutlineRender(BlockType.FRAMED_FLAT_INV_DOUBLE_SLOPE_PANEL_CORNER, new FlatInverseDoubleSlopePanelOutlineRenderer());
         BlockOutlineRenderer.registerOutlineRender(BlockType.FRAMED_PYRAMID, new PyramidOutlineRenderer(false));
         BlockOutlineRenderer.registerOutlineRender(BlockType.FRAMED_PYRAMID_SLAB, new PyramidOutlineRenderer(true));
+        BlockOutlineRenderer.registerOutlineRender(BlockType.FRAMED_ITEM_FRAME, NoopOutlineRenderer.INSTANCE);
+        BlockOutlineRenderer.registerOutlineRender(BlockType.FRAMED_GLOWING_ITEM_FRAME, NoopOutlineRenderer.INSTANCE);
 
         GhostBlockRenderer.init();
         GhostRenderBehaviours.register();
@@ -109,6 +111,7 @@ public final class FBClient
     {
         event.registerBlockEntityRenderer(FBContent.blockEntityTypeFramedSign.get(), FramedSignRenderer::new);
         event.registerBlockEntityRenderer(FBContent.blockEntityTypeFramedChest.get(), FramedChestRenderer::new);
+        event.registerBlockEntityRenderer(FBContent.blockEntityTypeFramedItemFrame.get(), FramedItemFrameRenderer::new);
     }
 
     @SubscribeEvent
@@ -276,6 +279,8 @@ public final class FBClient
         ClientUtils.replaceModelsSpecial(FBContent.blockFramedTarget, registry, FramedTargetModel::new, FramedTargetModel.itemSource(), ignoreAll);
         ClientUtils.replaceModels(FBContent.blockFramedGate, registry, FramedDoorModel::new, ignoreSolid);
         ClientUtils.replaceModels(FBContent.blockFramedIronGate, registry, FramedIronDoorModel::new, ignoreSolid);
+        ClientUtils.replaceModels(FBContent.blockFramedItemFrame, registry, FramedItemFrameModel::normal, null);
+        ClientUtils.replaceModels(FBContent.blockFramedGlowingItemFrame, registry, FramedItemFrameModel::glowing, null);
     }
 
 
