@@ -5,8 +5,7 @@ import com.google.common.collect.ImmutableMap;
 import net.minecraft.Util;
 import net.minecraft.core.Direction;
 import net.minecraft.world.item.context.BlockPlaceContext;
-import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.Rotation;
+import net.minecraft.world.level.block.*;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
@@ -98,7 +97,35 @@ public class FramedSlopePanelBlock extends FramedBlock
 
     @Override
     @SuppressWarnings("deprecation")
-    public BlockState rotate(BlockState state, Rotation rot) { return rotate(state, Direction.UP, rot); }
+    public BlockState rotate(BlockState state, Rotation rot)
+    {
+        Direction side = Direction.UP;
+        if (state.getValue(PropertyHolder.ROTATION) == HorizontalRotation.UP)
+        {
+            side = Direction.DOWN;
+        }
+        return rotate(state, side, rot);
+    }
+
+    @Override
+    @SuppressWarnings("deprecation")
+    public BlockState mirror(BlockState state, Mirror mirror)
+    {
+        return mirrorPanel(state, mirror);
+    }
+
+    public static BlockState mirrorPanel(BlockState state, Mirror mirror)
+    {
+        BlockState newState = Utils.mirrorFaceBlock(state, mirror);
+
+        HorizontalRotation rot = state.getValue(PropertyHolder.ROTATION);
+        if (newState != state && !rot.isVertical())
+        {
+            state = state.setValue(PropertyHolder.ROTATION, rot.getOpposite());
+        }
+
+        return state;
+    }
 
 
 

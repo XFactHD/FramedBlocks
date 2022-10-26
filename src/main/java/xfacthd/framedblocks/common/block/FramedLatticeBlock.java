@@ -8,6 +8,7 @@ import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.Rotation;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
@@ -74,6 +75,31 @@ public class FramedLatticeBlock extends FramedBlock
 
         return super.updateShape(state, facing, facingState, level, pos, facingPos);
     }
+
+    @Override
+    public BlockState rotate(BlockState state, Direction face, Rotation rot)
+    {
+        //Not rotatable by wrench
+        return state;
+    }
+
+    @Override
+    @SuppressWarnings("deprecation")
+    public BlockState rotate(BlockState state, Rotation rot)
+    {
+        if (rot != Rotation.NONE && rot != Rotation.CLOCKWISE_180)
+        {
+            boolean xAxis = state.getValue(FramedProperties.Z_AXIS);
+            boolean zAxis = state.getValue(FramedProperties.X_AXIS);
+
+            return state.setValue(FramedProperties.X_AXIS, xAxis)
+                    .setValue(FramedProperties.Z_AXIS, zAxis);
+        }
+
+        return state;
+    }
+
+
 
     public static ImmutableMap<BlockState, VoxelShape> generateShapes(ImmutableList<BlockState> states)
     {

@@ -4,8 +4,7 @@ import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
 import net.minecraft.core.Direction;
 import net.minecraft.world.item.context.BlockPlaceContext;
-import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.Rotation;
+import net.minecraft.world.level.block.*;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
@@ -55,7 +54,6 @@ public class FramedSlopedPrismBlock extends FramedBlock
 
     public static BlockState getStateForPlacement(BlockPlaceContext context, BlockState state, IBlockType blockType)
     {
-
         Direction face = context.getClickedFace();
         state = state.setValue(BlockStateProperties.FACING, face);
 
@@ -109,27 +107,25 @@ public class FramedSlopedPrismBlock extends FramedBlock
         Direction dir = state.getValue(BlockStateProperties.FACING);
         Direction orientation = state.getValue(PropertyHolder.ORIENTATION);
 
-        Direction[] dirs = Direction.values();
-        do
+        if (Utils.isY(dir))
         {
-            int idx;
-            if (rot == Rotation.COUNTERCLOCKWISE_90)
-            {
-                idx = orientation.ordinal() - 1;
-                if (idx < 0)
-                {
-                    idx = dirs.length - 1;
-                }
-            }
-            else
-            {
-                idx = (orientation.ordinal() + 1) % dirs.length;
-            }
-            orientation = dirs[idx];
+            return state.setValue(PropertyHolder.ORIENTATION, rot.rotate(orientation));
         }
-        while (orientation.getAxis() == dir.getAxis());
+        else
+        {
+            if (!Utils.isY(orientation))
+            {
+                state = state.setValue(PropertyHolder.ORIENTATION, rot.rotate(orientation));
+            }
+            return state.setValue(BlockStateProperties.FACING, rot.rotate(dir));
+        }
+    }
 
-        return state.setValue(PropertyHolder.ORIENTATION, orientation);
+    @Override
+    @SuppressWarnings("deprecation")
+    public BlockState mirror(BlockState state, Mirror mirror)
+    {
+        return Utils.mirrorFaceBlock(state, BlockStateProperties.FACING, mirror);
     }
 
 

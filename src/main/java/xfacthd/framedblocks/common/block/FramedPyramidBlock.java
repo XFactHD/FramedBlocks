@@ -4,8 +4,7 @@ import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
 import net.minecraft.core.Direction;
 import net.minecraft.world.item.context.BlockPlaceContext;
-import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.Rotation;
+import net.minecraft.world.level.block.*;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
@@ -36,10 +35,24 @@ public class FramedPyramidBlock extends FramedBlock
     }
 
     @Override
+    public BlockState rotate(BlockState state, Direction side, Rotation rot)
+    {
+        return state.cycle(BlockStateProperties.FACING);
+    }
+
+    @Override
     @SuppressWarnings("deprecation")
     public BlockState rotate(BlockState state, Rotation rot)
     {
-        return state.cycle(BlockStateProperties.FACING);
+        Direction dir = rot.rotate(state.getValue(BlockStateProperties.FACING));
+        return state.setValue(BlockStateProperties.FACING, dir);
+    }
+
+    @Override
+    @SuppressWarnings("deprecation")
+    public BlockState mirror(BlockState state, Mirror mirror)
+    {
+        return Utils.mirrorFaceBlock(state, BlockStateProperties.FACING, mirror);
     }
 
 

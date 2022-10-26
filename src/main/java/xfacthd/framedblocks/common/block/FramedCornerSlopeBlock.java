@@ -4,8 +4,7 @@ import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
 import net.minecraft.core.Direction;
 import net.minecraft.world.item.context.BlockPlaceContext;
-import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.Rotation;
+import net.minecraft.world.level.block.*;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
@@ -88,8 +87,7 @@ public class FramedCornerSlopeBlock extends FramedBlock
     }
 
     @Override
-    @SuppressWarnings("deprecation")
-    public BlockState rotate(BlockState state, Rotation rot)
+    public BlockState rotate(BlockState state, Direction side, Rotation rot)
     {
         CornerType type = state.getValue(PropertyHolder.CORNER_TYPE);
         if (type.isHorizontal())
@@ -97,8 +95,35 @@ public class FramedCornerSlopeBlock extends FramedBlock
             return state.setValue(PropertyHolder.CORNER_TYPE, type.rotate(rot));
         }
 
+        return rotate(state, rot);
+    }
+
+    @Override
+    @SuppressWarnings("deprecation")
+    public BlockState rotate(BlockState state, Rotation rot)
+    {
         Direction dir = rot.rotate(state.getValue(FramedProperties.FACING_HOR));
         return state.setValue(FramedProperties.FACING_HOR, dir);
+    }
+
+    @Override
+    @SuppressWarnings("deprecation")
+    public BlockState mirror(BlockState state, Mirror mirror)
+    {
+        CornerType type = state.getValue(PropertyHolder.CORNER_TYPE);
+        if (type.isHorizontal())
+        {
+            BlockState newState = Utils.mirrorFaceBlock(state, mirror);
+            if (newState != state)
+            {
+                return newState.setValue(PropertyHolder.CORNER_TYPE, type.horizontalOpposite());
+            }
+            return state;
+        }
+        else
+        {
+            return Utils.mirrorCornerBlock(state, mirror);
+        }
     }
 
 

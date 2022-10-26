@@ -89,6 +89,13 @@ public class FramedDoubleThreewayCornerBlock extends AbstractFramedDoubleBlock
     }
 
     @Override
+    @SuppressWarnings("deprecation")
+    public BlockState mirror(BlockState state, Mirror mirror)
+    {
+        return Utils.mirrorCornerBlock(state, mirror);
+    }
+
+    @Override
     public final BlockEntity newBlockEntity(BlockPos pos, BlockState state)
     {
         return new FramedDoubleThreewayCornerBlockEntity(pos, state);

@@ -145,6 +145,27 @@ public class FramedItemFrameBlock extends FramedBlock
     }
 
     @Override
+    public BlockState rotate(BlockState state, Direction face, Rotation rot)
+    {
+        //Not rotatable by wrench
+        return state;
+    }
+
+    @Override
+    public BlockState rotate(BlockState state, Rotation rot)
+    {
+        Direction dir = state.getValue(BlockStateProperties.FACING);
+        return state.setValue(BlockStateProperties.FACING, rot.rotate(dir));
+    }
+
+    @Override
+    @SuppressWarnings("deprecation")
+    public BlockState mirror(BlockState state, Mirror mirror)
+    {
+        return Utils.mirrorFaceBlock(state, BlockStateProperties.FACING, mirror);
+    }
+
+    @Override
     public BlockEntity newBlockEntity(BlockPos pos, BlockState state)
     {
         return new FramedItemFrameBlockEntity(pos, state);

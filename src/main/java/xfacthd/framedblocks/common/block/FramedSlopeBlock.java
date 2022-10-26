@@ -129,7 +129,7 @@ public class FramedSlopeBlock extends FramedBlock
         {
             return state.setValue(FramedProperties.FACING_HOR, rot.rotate(dir));
         }
-        else if (rot != Rotation.NONE)
+        else if (rot != Rotation.NONE && face == dir)
         {
             return state.cycle(PropertyHolder.SLOPE_TYPE);
         }
@@ -139,6 +139,20 @@ public class FramedSlopeBlock extends FramedBlock
     @Override
     @SuppressWarnings("deprecation")
     public BlockState rotate(BlockState state, Rotation rot) { return rotate(state, Direction.UP, rot); }
+
+    @Override
+    @SuppressWarnings("deprecation")
+    public BlockState mirror(BlockState state, Mirror mirror)
+    {
+        if (state.getValue(PropertyHolder.SLOPE_TYPE) == SlopeType.HORIZONTAL)
+        {
+            return Utils.mirrorCornerBlock(state, mirror);
+        }
+        else
+        {
+            return Utils.mirrorFaceBlock(state, mirror);
+        }
+    }
 
 
 

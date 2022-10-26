@@ -53,8 +53,12 @@ public class FramedDoublePanelBlock extends AbstractFramedDoubleBlock
 
     @Override
     @SuppressWarnings("deprecation")
-    public BlockState rotate(BlockState state, Rotation rotation)
+    public BlockState rotate(BlockState state, Rotation rot)
     {
+        if (rot == Rotation.NONE || rot == Rotation.CLOCKWISE_180)
+        {
+            return state;
+        }
         Direction dir = state.getValue(FramedProperties.FACING_NE);
         dir = dir == Direction.NORTH ? Direction.EAST : Direction.NORTH;
         return state.setValue(FramedProperties.FACING_NE, dir);

@@ -9,10 +9,10 @@ import net.minecraft.util.Mth;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.*;
-import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.*;
 import net.minecraft.world.level.block.entity.*;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.state.properties.DirectionProperty;
 import net.minecraft.world.level.chunk.LevelChunk;
 import net.minecraft.world.phys.Vec3;
 import net.minecraft.world.phys.shapes.Shapes;
@@ -164,6 +164,108 @@ public final class Utils
     public static boolean isY(Direction dir) { return dir.getAxis() == Direction.Axis.Y; }
 
     public static boolean isZ(Direction dir) { return dir.getAxis() == Direction.Axis.Z; }
+
+    public static Direction.Axis nextAxisNotEqualTo(Direction.Axis axis, Direction.Axis except)
+    {
+        Direction.Axis[] axes = Direction.Axis.VALUES;
+        do
+        {
+            axis = axes[(axis.ordinal() + 1) % axes.length];
+        }
+        while (axis == except);
+
+        return axis;
+    }
+
+    /**
+     * Mirrors a block that is oriented towards a face of the block space.
+     * @param state The {@link BlockState} to mirror
+     * @param mirror The {@link Mirror} to apply to the state
+     * @apiNote The given state must have the {@link FramedProperties#FACING_HOR} property
+     */
+    public static BlockState mirrorFaceBlock(BlockState state, Mirror mirror)
+    {
+        return mirrorFaceBlock(state, FramedProperties.FACING_HOR, mirror);
+    }
+
+    /**
+     * Mirrors a block that is oriented towards a face of the block space
+     * @param state The {@link BlockState} to mirror
+     * @param property The {@link DirectionProperty} that should be mirrored on the given state
+     * @param mirror The {@link Mirror} to apply to the state
+     * @apiNote The given property must support at least all four cardinal directions
+     */
+    public static BlockState mirrorFaceBlock(BlockState state, DirectionProperty property, Mirror mirror)
+    {
+        if (mirror == Mirror.NONE)
+        {
+            return state;
+        }
+
+        Direction dir = state.getValue(property);
+        //Y directions are inherently ignored
+        if ((mirror == Mirror.FRONT_BACK && isX(dir)) || (mirror == Mirror.LEFT_RIGHT && isZ(dir)))
+        {
+            return state.setValue(property, dir.getOpposite());
+        }
+        return state;
+    }
+
+    /**
+     * Mirrors a block that is oriented into a corner of the block space.
+     * @param state The {@link BlockState} to mirror
+     * @param mirror The {@link Mirror} to apply to the state
+     * @apiNote The given state must have the {@link FramedProperties#FACING_HOR} property
+     */
+    public static BlockState mirrorCornerBlock(BlockState state, Mirror mirror)
+    {
+        return mirrorCornerBlock(state, FramedProperties.FACING_HOR, mirror);
+    }
+
+    /**
+     * Mirrors a block that is oriented into a corner of the block space
+     * @param state The {@link BlockState} to mirror
+     * @param property The {@link DirectionProperty} that should be mirrored on the given state
+     * @param mirror The {@link Mirror} to apply to the state
+     * @apiNote The given property must support at least all four cardinal directions
+     */
+    public static BlockState mirrorCornerBlock(BlockState state, DirectionProperty property, Mirror mirror)
+    {
+        if (mirror == Mirror.NONE)
+        {
+            return state;
+        }
+
+        Direction dir = state.getValue(property);
+        if (isY(dir))
+        {
+            return state;
+        }
+
+        if (mirror == Mirror.LEFT_RIGHT)
+        {
+            dir = switch (dir)
+                    {
+                        case NORTH -> Direction.WEST;
+                        case EAST -> Direction.SOUTH;
+                        case SOUTH -> Direction.EAST;
+                        case WEST -> Direction.NORTH;
+                        default -> throw new IllegalArgumentException("Unreachable!");
+                    };
+        }
+        else
+        {
+            dir = switch (dir)
+                    {
+                        case NORTH -> Direction.EAST;
+                        case EAST -> Direction.NORTH;
+                        case SOUTH -> Direction.WEST;
+                        case WEST -> Direction.SOUTH;
+                        default -> throw new IllegalArgumentException("Unreachable!");
+                    };
+        }
+        return state.setValue(property, dir);
+    }
 
     public static TagKey<Block> blockTag(String name) { return blockTag(FramedConstants.MOD_ID, name); }
 

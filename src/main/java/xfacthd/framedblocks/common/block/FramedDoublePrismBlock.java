@@ -9,6 +9,7 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import xfacthd.framedblocks.api.util.CtmPredicate;
+import xfacthd.framedblocks.api.util.Utils;
 import xfacthd.framedblocks.common.blockentity.FramedDoublePrismBlockEntity;
 import xfacthd.framedblocks.common.data.BlockType;
 
@@ -33,6 +34,47 @@ public class FramedDoublePrismBlock extends AbstractFramedDoubleBlock
     public BlockState getStateForPlacement(BlockPlaceContext context)
     {
         return FramedPrismBlock.getStateForPlacement(context, defaultBlockState(), getBlockType());
+    }
+
+    @Override
+    @SuppressWarnings("deprecation")
+    public BlockState rotate(BlockState state, Rotation rot)
+    {
+        if (rot == Rotation.NONE) { return state; }
+
+        Direction dir = state.getValue(BlockStateProperties.FACING);
+        Direction.Axis axis = state.getValue(BlockStateProperties.AXIS);
+
+        if (Utils.isY(dir))
+        {
+            if (rot == Rotation.CLOCKWISE_180)
+            {
+                return state;
+            }
+
+            return state.setValue(
+                    BlockStateProperties.AXIS,
+                    Utils.nextAxisNotEqualTo(axis, dir.getAxis())
+            );
+        }
+        else
+        {
+            if (!axis.isVertical())
+            {
+                state = state.setValue(
+                        BlockStateProperties.AXIS,
+                        Utils.nextAxisNotEqualTo(axis, Direction.Axis.Y)
+                );
+            }
+            return state.setValue(BlockStateProperties.FACING, rot.rotate(dir));
+        }
+    }
+
+    @Override
+    @SuppressWarnings("deprecation")
+    public BlockState mirror(BlockState state, Mirror mirror)
+    {
+        return Utils.mirrorFaceBlock(state, BlockStateProperties.FACING, mirror);
     }
 
     @Override
