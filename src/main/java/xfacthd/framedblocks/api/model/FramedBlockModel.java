@@ -33,18 +33,20 @@ import java.util.*;
 @SuppressWarnings("deprecation")
 public abstract class FramedBlockModel extends BakedModelProxy
 {
+    private static final Direction[] DIRECTIONS = Direction.values();
     private final Table<BlockState, RenderType, Map<Direction, List<BakedQuad>>> quadCacheTable = HashBasedTable.create();
     private final Map<BlockState, BakedModel> modelCache = new HashMap<>();
     private final BlockState state;
-    private final IBlockType type;
     private final boolean transformAllQuads;
+    private final FullFaceCache fullFaceCache;
 
     public FramedBlockModel(BlockState state, BakedModel baseModel)
     {
         super(baseModel);
         this.state = state;
-        this.type = ((IFramedBlock)state.getBlock()).getBlockType();
         this.transformAllQuads = transformAllQuads(state);
+        IBlockType type = ((IFramedBlock) state.getBlock()).getBlockType();
+        this.fullFaceCache = new FullFaceCache(type, state);
     }
 
     @Override
@@ -93,7 +95,7 @@ public abstract class FramedBlockModel extends BakedModelProxy
 
     private List<BakedQuad> getCamoQuads(BlockState state, BlockState camoState, Direction side, Random rand, IModelData extraData, RenderType layer, boolean camoInLayer, boolean noProcessing)
     {
-        if (noProcessing || type.getCtmPredicate().test(state, side))
+        if (noProcessing || fullFaceCache.isFullFace(side))
         {
             boolean additionalQuads = hasAdditionalQuadsInLayer(layer);
             if (!camoInLayer && !additionalQuads) { return Collections.emptyList(); }
@@ -141,7 +143,7 @@ public abstract class FramedBlockModel extends BakedModelProxy
     {
         Map<Direction, List<BakedQuad>> quadMap = new Object2ObjectArrayMap<>(7);
         quadMap.put(null, new ArrayList<>());
-        for (Direction dir : Direction.values()) { quadMap.put(dir, new ArrayList<>()); }
+        for (Direction dir : DIRECTIONS) { quadMap.put(dir, new ArrayList<>()); }
 
         if (camoInLayer)
         {
@@ -149,7 +151,7 @@ public abstract class FramedBlockModel extends BakedModelProxy
             List<BakedQuad> quads =
                     getAllQuads(camoModel, camoState, rand)
                             .stream()
-                            .filter(q -> transformAllQuads || !type.getCtmPredicate().test(state, q.getDirection()))
+                            .filter(q -> transformAllQuads || !fullFaceCache.isFullFace(q.getDirection()))
                             .toList();
 
             for (BakedQuad quad : quads)
@@ -289,5 +291,29 @@ public abstract class FramedBlockModel extends BakedModelProxy
             return ItemBlockRenderTypes.canRenderInLayer(camoState.getFluidState(), layer);
         }
         return ItemBlockRenderTypes.canRenderInLayer(camoState, layer);
+    }
+
+    private static class FullFaceCache
+    {
+        private final boolean[] cache = new boolean[7];
+
+        public FullFaceCache(IBlockType type, BlockState state)
+        {
+            CtmPredicate pred = type.getCtmPredicate();
+            for (Direction side : DIRECTIONS)
+            {
+                cache[side.ordinal()] = pred.test(state, side);
+            }
+            cache[6] = false;
+        }
+
+        public boolean isFullFace(Direction side)
+        {
+            if (side == null)
+            {
+                return cache[6];
+            }
+            return cache[side.ordinal()];
+        }
     }
 }
