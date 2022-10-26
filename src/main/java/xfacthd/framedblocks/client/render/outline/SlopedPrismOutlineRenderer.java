@@ -13,7 +13,7 @@ import xfacthd.framedblocks.api.util.Utils;
 import xfacthd.framedblocks.api.util.client.OutlineRender;
 import xfacthd.framedblocks.common.data.PropertyHolder;
 
-public final class SlopedPrismOutlineRenderer extends PrismOutlineRenderer
+public class SlopedPrismOutlineRenderer extends PrismOutlineRenderer
 {
     private static final Quaternion[][] ZP_DIR = makeQuaternionArray();
 

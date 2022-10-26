@@ -109,7 +109,11 @@ public final class FBContent
     public static final RegistryObject<Block> blockFramedSecretStorage = registerBlock(FramedStorageBlock::new, BlockType.FRAMED_SECRET_STORAGE);
     public static final RegistryObject<Block> blockFramedRedstoneBlock = registerBlock(FramedRedstoneBlock::new, BlockType.FRAMED_REDSTONE_BLOCK);
     public static final RegistryObject<Block> blockFramedPrism = registerBlock(FramedPrismBlock::new, BlockType.FRAMED_PRISM);
+    public static final RegistryObject<Block> blockFramedInnerPrism = registerBlock(FramedPrismBlock::new, BlockType.FRAMED_INNER_PRISM);
+    public static final RegistryObject<Block> blockFramedDoublePrism = registerBlock(FramedDoublePrismBlock::new, BlockType.FRAMED_DOUBLE_PRISM);
     public static final RegistryObject<Block> blockFramedSlopedPrism = registerBlock(FramedSlopedPrismBlock::new, BlockType.FRAMED_SLOPED_PRISM);
+    public static final RegistryObject<Block> blockFramedInnerSlopedPrism = registerBlock(FramedSlopedPrismBlock::new, BlockType.FRAMED_INNER_SLOPED_PRISM);
+    public static final RegistryObject<Block> blockFramedDoubleSlopedPrism = registerBlock(FramedDoubleSlopedPrismBlock::new, BlockType.FRAMED_DOUBLE_SLOPED_PRISM);
     public static final RegistryObject<Block> blockFramedSlopeSlab = registerBlock(FramedSlopeSlabBlock::new, BlockType.FRAMED_SLOPE_SLAB);
     public static final RegistryObject<Block> blockFramedElevatedSlopeSlab = registerBlock(FramedElevatedSlopeSlabBlock::new, BlockType.FRAMED_ELEVATED_SLOPE_SLAB);
     public static final RegistryObject<Block> blockFramedDoubleSlopeSlab = registerBlock(FramedDoubleSlopeSlabBlock::new, BlockType.FRAMED_DOUBLE_SLOPE_SLAB);
@@ -204,6 +208,14 @@ public final class FBContent
     public static final RegistryObject<BlockEntityType<FramedStorageBlockEntity>> blockEntityTypeFramedSecretStorage = createBlockEntityType(
             FramedStorageBlockEntity::new,
             BlockType.FRAMED_SECRET_STORAGE
+    );
+    public static final RegistryObject<BlockEntityType<FramedDoublePrismBlockEntity>> blockEntityTypeFramedDoublePrism = createBlockEntityType(
+            FramedDoublePrismBlockEntity::new,
+            BlockType.FRAMED_DOUBLE_PRISM
+    );
+    public static final RegistryObject<BlockEntityType<FramedDoubleSlopedPrismBlockEntity>> blockEntityTypeFramedDoubleSlopedPrism = createBlockEntityType(
+            FramedDoubleSlopedPrismBlockEntity::new,
+            BlockType.FRAMED_DOUBLE_SLOPED_PRISM
     );
     public static final RegistryObject<BlockEntityType<FramedDoubleSlopeSlabBlockEntity>> blockEntityTypeFramedDoubleSlopeSlab = createBlockEntityType(
             FramedDoubleSlopeSlabBlockEntity::new,

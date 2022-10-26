@@ -64,7 +64,11 @@ public class FramedBlockStateProvider extends BlockStateProvider
         simpleBlock(FBContent.blockFramedPost.get(), cube);
         simpleBlock(FBContent.blockFramedHalfStairs.get(), cube);
         simpleBlockWithItem(FBContent.blockFramedPrism, cube);
+        simpleBlockWithItem(FBContent.blockFramedInnerPrism, cube);
+        simpleBlockWithItem(FBContent.blockFramedDoublePrism, cube);
         simpleBlockWithItem(FBContent.blockFramedSlopedPrism, cube);
+        simpleBlockWithItem(FBContent.blockFramedInnerSlopedPrism, cube);
+        simpleBlockWithItem(FBContent.blockFramedDoubleSlopedPrism, cube);
         simpleBlockWithItem(FBContent.blockFramedSlopeSlab, cube);
         simpleBlockWithItem(FBContent.blockFramedElevatedSlopeSlab, cube);
         simpleBlockWithItem(FBContent.blockFramedDoubleSlopeSlab, cube);

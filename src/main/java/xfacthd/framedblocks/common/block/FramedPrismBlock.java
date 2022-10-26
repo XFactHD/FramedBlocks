@@ -12,52 +12,23 @@ import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.phys.Vec3;
 import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
+import xfacthd.framedblocks.api.type.IBlockType;
 import xfacthd.framedblocks.api.util.*;
-import xfacthd.framedblocks.common.FBContent;
 import xfacthd.framedblocks.common.data.BlockType;
-import xfacthd.framedblocks.common.data.PropertyHolder;
 
 //TODO: move from two Direction properties to one Direction property and the Rotation property (needs to be adapted to handle y as rotation axis)
 //      to eliminate the possibility of invalid state in 1.19
 public class FramedPrismBlock extends FramedBlock
 {
-    public static final CtmPredicate CTM_PREDICATE = (state, side) -> side == state.getValue(BlockStateProperties.FACING).getOpposite();
-
-    public static final SideSkipPredicate SKIP_PREDICATE = (level, pos, state, adjState, side) ->
+    public static final CtmPredicate CTM_PREDICATE_INNER = (state, side) ->
     {
         Direction facing = state.getValue(BlockStateProperties.FACING);
         Direction.Axis axis = state.getValue(BlockStateProperties.AXIS);
-        if (side.getAxis() != axis)
-        {
-            return false;
-        }
 
-        if (adjState.is(FBContent.blockFramedPrism.get()))
-        {
-            Direction adjFacing = adjState.getValue(BlockStateProperties.FACING);
-            Direction.Axis adjAxis = adjState.getValue(BlockStateProperties.AXIS);
-
-            return adjFacing == facing && adjAxis == axis && SideSkipPredicate.compareState(level, pos, side);
-        }
-        else if (adjState.is(FBContent.blockFramedSlopedPrism.get()))
-        {
-            Direction adjFacing = adjState.getValue(BlockStateProperties.FACING);
-            Direction adjOrientation = adjState.getValue(PropertyHolder.ORIENTATION);
-
-            return adjFacing == facing && adjOrientation == side.getOpposite() && SideSkipPredicate.compareState(level, pos, side);
-        }
-
-        return false;
+        return side != facing && side != null && side.getAxis() != axis;
     };
 
-    public FramedPrismBlock()
-    {
-        super(BlockType.FRAMED_PRISM);
-        registerDefaultState(defaultBlockState()
-                .setValue(BlockStateProperties.WATERLOGGED, false)
-                .setValue(FramedProperties.SOLID, false)
-        );
-    }
+    public FramedPrismBlock(BlockType type) { super(type); }
 
     @Override
     protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder)
@@ -68,8 +39,11 @@ public class FramedPrismBlock extends FramedBlock
     @Override
     public BlockState getStateForPlacement(BlockPlaceContext context)
     {
-        BlockState state = defaultBlockState();
+        return getStateForPlacement(context, defaultBlockState(), getBlockType());
+    }
 
+    public static BlockState getStateForPlacement(BlockPlaceContext context, BlockState state, IBlockType blockType)
+    {
         Direction face = context.getClickedFace();
         state = state.setValue(BlockStateProperties.FACING, face);
 
@@ -96,7 +70,11 @@ public class FramedPrismBlock extends FramedBlock
         }
         state = state.setValue(BlockStateProperties.AXIS, axis);
 
-        return withWater(state, context.getLevel(), context.getClickedPos());
+        if (blockType == BlockType.FRAMED_PRISM)
+        {
+            state = withWater(state, context.getLevel(), context.getClickedPos());
+        }
+        return state;
     }
 
     @Override
@@ -175,6 +153,80 @@ public class FramedPrismBlock extends FramedBlock
                 builder.put(
                         state,
                         Utils.rotateShape(Direction.NORTH, facing, axis == Direction.Axis.Y ? shapeY : shapeXZ)
+                );
+            }
+        }
+
+        return builder.build();
+    }
+
+    public static ImmutableMap<BlockState, VoxelShape> generateInnerShapes(ImmutableList<BlockState> states)
+    {
+        ImmutableMap.Builder<BlockState, VoxelShape> builder = ImmutableMap.builder();
+
+        VoxelShape shapeBottom = Shapes.or(
+                box(   4, 0, 0,   12,   12, 16),
+                box(15.5, 0, 0,   16,   16, 16),
+                box(   0, 0, 0,   .5,   16, 16),
+                box(  12, 0, 0, 15.5, 15.5, 16),
+                box(  .5, 0, 0,    4, 15.5, 16)
+        );
+
+        VoxelShape shapeTop = Shapes.or(
+                box(   4,  4, 0,   12, 16, 16),
+                box(15.5,  0, 0,   16, 16, 16),
+                box(   0,  0, 0,   .5, 16, 16),
+                box(  12, .5, 0, 15.5, 16, 16),
+                box(  .5, .5, 0,    4, 16, 16)
+        );
+
+        VoxelShape shapeXZ = Shapes.or(
+                box(0,    4,  4, 16,   12, 16),
+                box(0,    0,  0, 16,   .5, 16),
+                box(0, 15.5,  0, 16,   16, 16),
+                box(0,   .5, .5, 16,    4, 16),
+                box(0,   12, .5, 16, 15.5, 16)
+        );
+
+        VoxelShape shapeY = Shapes.or(
+                box(   4, 0,  4,   12, 16, 16),
+                box(15.5, 0,  0,   16, 16, 16),
+                box(   0, 0,  0,   .5, 16, 16),
+                box(  12, 0, .5, 15.5, 16, 16),
+                box(  .5, 0, .5,    4, 16, 16)
+        );
+
+        for (BlockState state : states)
+        {
+            Direction facing = state.getValue(BlockStateProperties.FACING);
+            Direction.Axis axis = state.getValue(BlockStateProperties.AXIS);
+
+            if (axis == facing.getAxis()) //Invalid combination
+            {
+                builder.put(state, Shapes.block());
+                continue;
+            }
+
+            if (Utils.isY(facing))
+            {
+                builder.put(
+                        state,
+                        Utils.rotateShape(
+                                Direction.NORTH,
+                                Direction.fromAxisAndDirection(axis, Direction.AxisDirection.NEGATIVE),
+                                facing == Direction.UP ? shapeBottom : shapeTop
+                        )
+                );
+            }
+            else
+            {
+                builder.put(
+                        state,
+                        Utils.rotateShape(
+                                Direction.NORTH,
+                                facing.getOpposite(),
+                                axis == Direction.Axis.Y ? shapeY : shapeXZ
+                        )
                 );
             }
         }

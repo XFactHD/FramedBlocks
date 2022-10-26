@@ -84,7 +84,9 @@ public final class FBClient
         BlockOutlineRenderer.registerOutlineRender(BlockType.FRAMED_ACTIVATOR_RAIL_SLOPE, RailSlopeOutlineRenderer.INSTANCE);
         BlockOutlineRenderer.registerOutlineRender(BlockType.FRAMED_COLLAPSIBLE_BLOCK, new CollapsibleBlockOutlineRenderer());
         BlockOutlineRenderer.registerOutlineRender(BlockType.FRAMED_PRISM, new PrismOutlineRenderer());
+        BlockOutlineRenderer.registerOutlineRender(BlockType.FRAMED_INNER_PRISM, new InnerPrismOutlineRenderer());
         BlockOutlineRenderer.registerOutlineRender(BlockType.FRAMED_SLOPED_PRISM, new SlopedPrismOutlineRenderer());
+        BlockOutlineRenderer.registerOutlineRender(BlockType.FRAMED_INNER_SLOPED_PRISM, new InnerSlopedPrismOutlineRenderer());
         BlockOutlineRenderer.registerOutlineRender(BlockType.FRAMED_SLOPE_SLAB, new SlopeSlabOutlineRenderer());
         BlockOutlineRenderer.registerOutlineRender(BlockType.FRAMED_ELEVATED_SLOPE_SLAB, new ElevatedSlopeSlabOutlineRenderer());
         BlockOutlineRenderer.registerOutlineRender(BlockType.FRAMED_INV_DOUBLE_SLOPE_SLAB, new InverseDoubleSlopeSlabOutlineRenderer());
@@ -251,7 +253,11 @@ public final class FBClient
         ClientUtils.replaceModels(FBContent.blockFramedSecretStorage, registry, FramedCubeModel::new, ignoreSolid);
         ClientUtils.replaceModels(FBContent.blockFramedRedstoneBlock, registry, (state, baseModel) -> FramedMarkedCubeModel.redstone(state, baseModel, registry), ignoreSolid);
         ClientUtils.replaceModels(FBContent.blockFramedPrism, registry, FramedPrismModel::new, FramedPrismModel.itemSource(), ignoreDefault);
+        ClientUtils.replaceModels(FBContent.blockFramedInnerPrism, registry, FramedInnerPrismModel::new, FramedInnerPrismModel.itemSource(), ignoreDefault);
+        ClientUtils.replaceModels(FBContent.blockFramedDoublePrism, registry, FramedDoublePrismModel::new, FramedDoublePrismModel.itemSource(), ignoreSolid);
         ClientUtils.replaceModels(FBContent.blockFramedSlopedPrism, registry, FramedSlopedPrismModel::new, FramedSlopedPrismModel.itemSource(), ignoreDefault);
+        ClientUtils.replaceModels(FBContent.blockFramedInnerSlopedPrism, registry, FramedInnerSlopedPrismModel::new, FramedInnerSlopedPrismModel.itemSource(), ignoreDefault);
+        ClientUtils.replaceModels(FBContent.blockFramedDoubleSlopedPrism, registry, FramedDoubleSlopedPrismModel::new, FramedDoubleSlopedPrismModel.itemSource(), ignoreSolid);
         ClientUtils.replaceModels(FBContent.blockFramedSlopeSlab, registry, FramedSlopeSlabModel::new, FramedSlopeSlabModel.itemSource(), ignoreDefault);
         ClientUtils.replaceModels(FBContent.blockFramedElevatedSlopeSlab, registry, FramedElevatedSlopeSlabModel::new, FramedElevatedSlopeSlabModel.itemSource(), ignoreDefault);
         ClientUtils.replaceModels(FBContent.blockFramedDoubleSlopeSlab, registry, FramedDoubleSlopeSlabModel::new, FramedDoubleSlopeSlabModel.itemSource(), ignoreDefault);

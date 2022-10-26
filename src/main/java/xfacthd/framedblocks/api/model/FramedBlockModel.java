@@ -22,10 +22,9 @@ import net.minecraftforge.client.model.data.IModelData;
 import xfacthd.framedblocks.api.FramedBlocksAPI;
 import xfacthd.framedblocks.api.FramedBlocksClientAPI;
 import xfacthd.framedblocks.api.type.IBlockType;
-import xfacthd.framedblocks.api.util.FramedBlockData;
+import xfacthd.framedblocks.api.util.*;
 import xfacthd.framedblocks.api.block.IFramedBlock;
 import xfacthd.framedblocks.api.block.FramedBlockEntity;
-import xfacthd.framedblocks.api.util.Utils;
 
 import javax.annotation.Nonnull;
 import java.lang.invoke.MethodHandle;
@@ -38,12 +37,14 @@ public abstract class FramedBlockModel extends BakedModelProxy
     private final Map<BlockState, BakedModel> modelCache = new HashMap<>();
     private final BlockState state;
     private final IBlockType type;
+    private final boolean transformAllQuads;
 
     public FramedBlockModel(BlockState state, BakedModel baseModel)
     {
         super(baseModel);
         this.state = state;
         this.type = ((IFramedBlock)state.getBlock()).getBlockType();
+        this.transformAllQuads = transformAllQuads(state);
     }
 
     @Override
@@ -148,7 +149,7 @@ public abstract class FramedBlockModel extends BakedModelProxy
             List<BakedQuad> quads =
                     getAllQuads(camoModel, camoState, rand)
                             .stream()
-                            .filter(q -> !type.getCtmPredicate().test(state, q.getDirection()))
+                            .filter(q -> transformAllQuads || !type.getCtmPredicate().test(state, q.getDirection()))
                             .toList();
 
             for (BakedQuad quad : quads)
@@ -177,6 +178,12 @@ public abstract class FramedBlockModel extends BakedModelProxy
      * through the quad manipulation process
      */
     protected boolean forceUngeneratedBaseModel() { return false; }
+
+    /**
+     * Return true if all quads should be submitted for transformation, even if their cull-face would be filtered
+     * by the {@link CtmPredicate}
+     */
+    protected boolean transformAllQuads(BlockState state) { return false; }
 
     /**
      * Add additional quads to faces that return {@code true} from {@code xfacthd.framedblocks.api.util.CtmPredicate#test(BlockState, Direction)}<br>
