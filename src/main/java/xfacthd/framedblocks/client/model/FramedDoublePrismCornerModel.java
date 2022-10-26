@@ -37,7 +37,7 @@ public class FramedDoublePrismCornerModel extends FramedDoubleBlockModel
     {
         if (top)
         {
-            return getSpriteOrDefault(data, FramedDoubleBlockEntity.DATA_LEFT, getModels().getB());
+            return getSpriteOrDefault(data, FramedDoubleBlockEntity.DATA_LEFT, getModels().getA());
         }
         return super.getParticleIcon(data);
     }

@@ -11,7 +11,6 @@ import xfacthd.framedblocks.api.util.FramedProperties;
 import xfacthd.framedblocks.common.FBContent;
 import xfacthd.framedblocks.common.blockentity.FramedDoubleBlockEntity;
 import xfacthd.framedblocks.common.blockentity.FramedDoubleThreewayCornerBlockEntity;
-import xfacthd.framedblocks.common.data.PropertyHolder;
 
 public class FramedDoubleThreewayCornerModel extends FramedDoubleBlockModel
 {
@@ -36,7 +35,7 @@ public class FramedDoubleThreewayCornerModel extends FramedDoubleBlockModel
     {
         if (top)
         {
-            return getSpriteOrDefault(data, FramedDoubleBlockEntity.DATA_LEFT, getModels().getB());
+            return getSpriteOrDefault(data, FramedDoubleBlockEntity.DATA_LEFT, getModels().getA());
         }
         return super.getParticleIcon(data);
     }
