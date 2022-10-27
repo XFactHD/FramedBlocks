@@ -20,7 +20,7 @@ apply plugin: 'org.spongepowered.mixin'
 
 jarJar.enable()
 
-version = '6.5.1'
+version = '6.6.0'
 group = 'xfacthd.framedblocks'
 archivesBaseName = 'FramedBlocks'
 
@@ -29,7 +29,7 @@ java.toolchain.languageVersion = JavaLanguageVersion.of(17)
 println('Java: ' + System.getProperty('java.version') + ' JVM: ' + System.getProperty('java.vm.version') + '(' + System.getProperty('java.vendor') + ') Arch: ' + System.getProperty('os.arch'))
 
 minecraft {
-    mappings channel: 'parchment', version: '2022.08.10-1.19.2'
+    mappings channel: 'parchment', version: '2022.10.16-1.19.2'
     
     accessTransformer = file('src/main/resources/META-INF/accesstransformer.cfg')
 
