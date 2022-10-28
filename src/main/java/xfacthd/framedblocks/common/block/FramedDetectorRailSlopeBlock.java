@@ -60,7 +60,7 @@ public class FramedDetectorRailSlopeBlock extends DetectorRailBlock implements I
     @Override
     public BlockState getStateForPlacement(BlockPlaceContext context)
     {
-        RailShape shape = FramedUtils.railShapeFromDirection(context.getHorizontalDirection());
+        RailShape shape = FramedUtils.getAscendingRailShapeFromDirection(context.getHorizontalDirection());
 
         FluidState fluidState = context.getLevel().getFluidState(context.getClickedPos());
         boolean waterlogged = fluidState.getType() == Fluids.WATER;
@@ -196,9 +196,9 @@ public class FramedDetectorRailSlopeBlock extends DetectorRailBlock implements I
     @Override
     public BlockState rotate(BlockState state, Rotation rot)
     {
-        Direction dir = FramedUtils.directionFromRailShape(state.getValue(PropertyHolder.ASCENDING_RAIL_SHAPE));
+        Direction dir = FramedUtils.getDirectionFromAscendingRailShape(state.getValue(PropertyHolder.ASCENDING_RAIL_SHAPE));
         dir = rot.rotate(dir);
-        return state.setValue(PropertyHolder.ASCENDING_RAIL_SHAPE, FramedUtils.railShapeFromDirection(dir));
+        return state.setValue(PropertyHolder.ASCENDING_RAIL_SHAPE, FramedUtils.getAscendingRailShapeFromDirection(dir));
     }
 
     @Override
@@ -206,12 +206,12 @@ public class FramedDetectorRailSlopeBlock extends DetectorRailBlock implements I
     {
         if (mirror == Mirror.NONE) { return state; }
 
-        Direction dir = FramedUtils.directionFromRailShape(state.getValue(PropertyHolder.ASCENDING_RAIL_SHAPE));
+        Direction dir = FramedUtils.getDirectionFromAscendingRailShape(state.getValue(PropertyHolder.ASCENDING_RAIL_SHAPE));
 
         if ((mirror == Mirror.FRONT_BACK && Utils.isZ(dir)) || (mirror == Mirror.LEFT_RIGHT && Utils.isX(dir)))
         {
             dir = dir.getOpposite();
-            return state.setValue(PropertyHolder.ASCENDING_RAIL_SHAPE, FramedUtils.railShapeFromDirection(dir));
+            return state.setValue(PropertyHolder.ASCENDING_RAIL_SHAPE, FramedUtils.getAscendingRailShapeFromDirection(dir));
         }
         return state;
     }

@@ -22,7 +22,7 @@ public final class SlopeSkipPredicate implements SideSkipPredicate
 
         if (adjState.getBlock() instanceof IFramedBlock block && block.getBlockType() instanceof BlockType blockType)
         {
-            Direction dir = FramedUtils.getBlockFacing(state);
+            Direction dir = FramedUtils.getSlopeBlockFacing(state);
             SlopeType type = FramedUtils.getSlopeType(state);
 
             return switch (blockType)
@@ -44,7 +44,7 @@ public final class SlopeSkipPredicate implements SideSkipPredicate
 
     private static boolean testAgainstSlope(BlockGetter level, BlockPos pos, Direction dir, SlopeType type, BlockState adjState, Direction side)
     {
-        Direction adjDir = FramedUtils.getBlockFacing(adjState);
+        Direction adjDir = FramedUtils.getSlopeBlockFacing(adjState);
         SlopeType adjType = FramedUtils.getSlopeType(adjState);
 
         if (type == SlopeType.HORIZONTAL && Utils.isY(side))

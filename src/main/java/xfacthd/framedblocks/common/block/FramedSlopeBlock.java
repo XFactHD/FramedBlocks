@@ -45,7 +45,7 @@ public class FramedSlopeBlock extends FramedBlock
             Direction facing = state.getValue(FramedProperties.FACING_HOR);
             return dir == facing || dir == facing.getCounterClockWise();
         }
-        return FramedUtils.getBlockFacing(state) == dir;
+        return FramedUtils.getSlopeBlockFacing(state) == dir;
     };
 
     public FramedSlopeBlock() { super(BlockType.FRAMED_SLOPE); }
@@ -77,7 +77,7 @@ public class FramedSlopeBlock extends FramedBlock
             {
                 Block railSlope = FramedUtils.getRailSlopeBlock(stack.getItem());
                 BlockState newState = railSlope.defaultBlockState()
-                        .setValue(PropertyHolder.ASCENDING_RAIL_SHAPE, FramedUtils.railShapeFromDirection(dir))
+                        .setValue(PropertyHolder.ASCENDING_RAIL_SHAPE, FramedUtils.getAscendingRailShapeFromDirection(dir))
                         .setValue(BlockStateProperties.WATERLOGGED, state.getValue(BlockStateProperties.WATERLOGGED));
 
                 if (!railSlope.canSurvive(newState, level, pos)) { return InteractionResult.FAIL; }
@@ -190,7 +190,7 @@ public class FramedSlopeBlock extends FramedBlock
         for (BlockState state : states)
         {
             SlopeType type = FramedUtils.getSlopeType(state);
-            Direction dir = FramedUtils.getBlockFacing(state);
+            Direction dir = FramedUtils.getSlopeBlockFacing(state);
 
             if (type == SlopeType.BOTTOM)
             {

@@ -191,7 +191,7 @@ public final class InnerCornerSkipPredicate implements SideSkipPredicate
 
     private static boolean testAgainstSlope(BlockGetter level, BlockPos pos, Direction dir, CornerType type, BlockState adjState, Direction side)
     {
-        Direction adjDir = FramedUtils.getBlockFacing(adjState);
+        Direction adjDir = FramedUtils.getSlopeBlockFacing(adjState);
         SlopeType adjType = FramedUtils.getSlopeType(adjState);
 
         if (!type.isHorizontal() && adjType != SlopeType.HORIZONTAL && ((side == dir.getClockWise() && adjDir == dir) ||

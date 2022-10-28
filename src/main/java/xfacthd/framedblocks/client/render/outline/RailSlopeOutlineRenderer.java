@@ -12,6 +12,6 @@ public final class RailSlopeOutlineRenderer extends SlopeOutlineRenderer
     @Override
     public Direction getRotationDir(BlockState state)
     {
-        return FramedUtils.directionFromRailShape(state.getValue(PropertyHolder.ASCENDING_RAIL_SHAPE));
+        return FramedUtils.getDirectionFromAscendingRailShape(state.getValue(PropertyHolder.ASCENDING_RAIL_SHAPE));
     }
 }

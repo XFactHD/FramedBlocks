@@ -91,7 +91,7 @@ public final class ThreewayCornerSkipPredicate implements SideSkipPredicate
 
     private static boolean testAgainstSlope(BlockGetter level, BlockPos pos, Direction dir, boolean top, BlockState adjState, Direction side)
     {
-        Direction adjDir = FramedUtils.getBlockFacing(adjState);
+        Direction adjDir = FramedUtils.getSlopeBlockFacing(adjState);
         SlopeType adjType = FramedUtils.getSlopeType(adjState);
 
         if ((side == dir && adjDir == dir.getCounterClockWise()) || (side == dir.getCounterClockWise() && adjDir == dir))
