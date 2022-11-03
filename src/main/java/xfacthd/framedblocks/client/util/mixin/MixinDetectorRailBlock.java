@@ -44,6 +44,6 @@ public class MixinDetectorRailBlock //TODO: Forge PR
     @Unique
     private static boolean isFramedBlock(Object self)
     {
-        return self instanceof IFramedBlock;
+        return self instanceof IFramedBlock && ((DetectorRailBlock) self).defaultBlockState().hasProperty(PropertyHolder.ASCENDING_RAIL_SHAPE);
     }
 }

@@ -35,9 +35,11 @@ import xfacthd.framedblocks.api.util.client.ClientUtils;
 import java.lang.invoke.*;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
+import java.util.function.Consumer;
 
 public final class Utils
 {
+    private static final Direction[] DIRECTIONS = Direction.values();
     public static final TagKey<Block> FRAMEABLE = blockTag("frameable");
     public static final TagKey<Block> BLACKLIST = blockTag("blacklisted");
     /**Allow other mods to whitelist their BEs, circumventing the config setting*/
@@ -338,6 +340,15 @@ public final class Utils
             }
         }
         return null;
+    }
+
+    public static void forAllDirections(Consumer<Direction> consumer)
+    {
+        consumer.accept(null);
+        for (Direction dir : DIRECTIONS)
+        {
+            consumer.accept(dir);
+        }
     }
 
     public static void wrapInStateCopy(LevelAccessor level, BlockPos pos, boolean writeToCamoTwo, Runnable action)

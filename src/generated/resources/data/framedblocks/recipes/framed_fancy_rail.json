@@ -1,0 +1,20 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "key": {
+    "F": {
+      "item": "framedblocks:framed_cube"
+    },
+    "I": {
+      "tag": "forge:ingots/iron"
+    }
+  },
+  "pattern": [
+    "I I",
+    "IFI",
+    "I I"
+  ],
+  "result": {
+    "count": 16,
+    "item": "framedblocks:framed_fancy_rail"
+  }
+}

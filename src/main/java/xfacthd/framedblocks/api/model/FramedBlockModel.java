@@ -36,7 +36,7 @@ public abstract class FramedBlockModel extends BakedModelProxy
     private final Cache<BlockState, CachedRenderTypes> renderTypeCache = Caffeine.newBuilder()
             .expireAfterAccess(ModelCache.DEFAULT_CACHE_DURATION)
             .build();
-    private final BlockState state;
+    protected final BlockState state;
     private final ChunkRenderTypeSet baseModelRenderTypes;
     private final boolean cacheFullRenderTypes;
     private final boolean forceUngeneratedBaseModel;

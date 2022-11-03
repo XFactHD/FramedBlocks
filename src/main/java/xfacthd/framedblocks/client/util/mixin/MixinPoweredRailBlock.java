@@ -68,6 +68,6 @@ public class MixinPoweredRailBlock //TODO: Forge PR
     @Unique
     private static boolean isFramedBlock(Object self)
     {
-        return self instanceof IFramedBlock;
+        return self instanceof IFramedBlock && ((PoweredRailBlock) self).defaultBlockState().hasProperty(PropertyHolder.ASCENDING_RAIL_SHAPE);
     }
 }

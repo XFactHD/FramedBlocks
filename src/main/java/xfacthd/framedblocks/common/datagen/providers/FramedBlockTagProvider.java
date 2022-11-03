@@ -39,7 +39,20 @@ public final class FramedBlockTagProvider extends BlockTagsProvider
         tag(BlockTags.STANDING_SIGNS).add(FBContent.blockFramedSign.get());
         tag(BlockTags.WALL_SIGNS).add(FBContent.blockFramedWallSign.get());
         tag(Tags.Blocks.CHESTS).add(FBContent.blockFramedChest.get());
-        tag(BlockTags.RAILS).add(FBContent.blockFramedRailSlope.get());
+        tag(BlockTags.RAILS).add(
+                FBContent.blockFramedRailSlope.get(),
+                FBContent.blockFramedPoweredRailSlope.get(),
+                FBContent.blockFramedDetectorRailSlope.get(),
+                FBContent.blockFramedActivatorRailSlope.get(),
+                FBContent.blockFramedFancyRail.get(),
+                FBContent.blockFramedFancyPoweredRail.get(),
+                FBContent.blockFramedFancyDetectorRail.get(),
+                FBContent.blockFramedFancyActivatorRail.get(),
+                FBContent.blockFramedFancyRailSlope.get(),
+                FBContent.blockFramedFancyPoweredRailSlope.get(),
+                FBContent.blockFramedFancyDetectorRailSlope.get(),
+                FBContent.blockFramedFancyActivatorRailSlope.get()
+        );
 
         tag(Utils.FRAMEABLE).addTags(
                 Tags.Blocks.GLASS,

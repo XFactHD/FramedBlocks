@@ -130,6 +130,14 @@ public enum BlockType implements IBlockType
     FRAMED_IRON_GATE_DOOR                           ( true, false, false, false,  true, false, false, false, FramedDoorBlock.CTM_PREDICATE, new GateSkipPredicate()), //TODO: rename to FRAMED_IRON_GATE in 1.20
     FRAMED_ITEM_FRAME                               (false,  true,  true, false,  true, false, false, false, FramedItemFrameBlock::generateShapes),
     FRAMED_GLOWING_ITEM_FRAME                       (false,  true,  true, false,  true, false, false, false, FramedItemFrameBlock::generateShapes),
+    FRAMED_FANCY_RAIL                               (false, false, false,  true,  true, false, false, false, CtmPredicate.FALSE, SideSkipPredicate.FALSE),
+    FRAMED_FANCY_POWERED_RAIL                       (false, false, false,  true,  true, false, false, false, CtmPredicate.FALSE, SideSkipPredicate.FALSE),
+    FRAMED_FANCY_DETECTOR_RAIL                      (false, false, false,  true,  true, false, false, false, CtmPredicate.FALSE, SideSkipPredicate.FALSE),
+    FRAMED_FANCY_ACTIVATOR_RAIL                     (false, false, false,  true,  true, false, false, false, CtmPredicate.FALSE, SideSkipPredicate.FALSE),
+    FRAMED_FANCY_RAIL_SLOPE                         (false,  true, false,  true,  true, false,  true, false, CtmPredicate.FALSE, SideSkipPredicate.FALSE, FramedSlopeBlock::generateShapes),
+    FRAMED_FANCY_POWERED_RAIL_SLOPE                 (false,  true, false,  true,  true, false,  true, false, CtmPredicate.FALSE, SideSkipPredicate.FALSE, FramedSlopeBlock::generateShapes),
+    FRAMED_FANCY_DETECTOR_RAIL_SLOPE                (false,  true, false,  true,  true, false,  true, false, CtmPredicate.FALSE, SideSkipPredicate.FALSE, FramedSlopeBlock::generateShapes),
+    FRAMED_FANCY_ACTIVATOR_RAIL_SLOPE               (false,  true, false,  true,  true, false,  true, false, CtmPredicate.FALSE, SideSkipPredicate.FALSE, FramedSlopeBlock::generateShapes),
     ;
 
     private final String name = toString().toLowerCase(Locale.ROOT);

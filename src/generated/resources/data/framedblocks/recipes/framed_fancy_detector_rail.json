@@ -1,0 +1,26 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "key": {
+    "F": {
+      "item": "framedblocks:framed_cube"
+    },
+    "I": {
+      "tag": "forge:ingots/iron"
+    },
+    "P": {
+      "item": "minecraft:stone_pressure_plate"
+    },
+    "R": {
+      "tag": "forge:dusts/redstone"
+    }
+  },
+  "pattern": [
+    "IPI",
+    "IFI",
+    "IRI"
+  ],
+  "result": {
+    "count": 6,
+    "item": "framedblocks:framed_fancy_detector_rail"
+  }
+}

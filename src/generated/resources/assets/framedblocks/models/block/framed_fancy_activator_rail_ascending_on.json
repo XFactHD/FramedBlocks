@@ -1,0 +1,7 @@
+{
+  "parent": "framedblocks:block/framed_fancy_activator_rail_ascending",
+  "textures": {
+    "particle": "minecraft:block/activator_rail_on",
+    "texture": "minecraft:block/activator_rail_on"
+  }
+}

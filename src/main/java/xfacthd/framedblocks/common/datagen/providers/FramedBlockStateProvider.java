@@ -104,6 +104,10 @@ public final class FramedBlockStateProvider extends BlockStateProvider
         simpleBlock(FBContent.blockFramedHorizontalPane.get(), cube);
         simpleBlock(FBContent.blockFramedLargeButton.get(), cube);
         simpleBlock(FBContent.blockFramedGate.get(), cube);
+        simpleBlockWithItem(FBContent.blockFramedFancyRailSlope, cube, "cutout");
+        simpleBlockWithItem(FBContent.blockFramedFancyPoweredRailSlope, cube, "cutout");
+        simpleBlockWithItem(FBContent.blockFramedFancyDetectorRailSlope, cube, "cutout");
+        simpleBlockWithItem(FBContent.blockFramedFancyActivatorRailSlope, cube, "cutout");
 
         registerFramedSlab(cube);
         registerFramedStairs(cube);
@@ -144,6 +148,10 @@ public final class FramedBlockStateProvider extends BlockStateProvider
         registerFramedTarget(cube);
         registerFramedIronGate();
         registerFramedItemFrame();
+        registerFramedFancyRail();
+        registerFramedFancyPoweredRail();
+        registerFramedFancyDetectorRail();
+        registerFramedFancyActivatorRail();
     }
 
     private void registerFramedSlab(ModelFile cube)
@@ -818,7 +826,158 @@ public final class FramedBlockStateProvider extends BlockStateProvider
         simpleItem(FBContent.blockFramedGlowingItemFrame, "cutout");
     }
 
+    private static Function<BlockState, ConfiguredModel[]> railStates(
+            EnumProperty<RailShape> shapeProp,
+            Function<BlockState, ModelFile> normalRail,
+            Function<BlockState, ModelFile> ascendingRail,
+            Function<BlockState, ModelFile> curvedRail
+    ) {
+        return state ->
+        {
+            RailShape shape = state.getValue(shapeProp);
 
+            ModelFile model;
+            int rotY = (int) FramedFancyRailModel.getDirectionFromRailShape(shape).toYRot();
+            if (shape.isAscending())
+            {
+                model = ascendingRail.apply(state);
+                rotY = (rotY + 180) % 360;
+            }
+            else if (shape == RailShape.NORTH_SOUTH || shape == RailShape.EAST_WEST)
+            {
+                model = normalRail.apply(state);
+            }
+            else
+            {
+                model = curvedRail.apply(state);
+                if (shape == RailShape.NORTH_EAST || shape == RailShape.SOUTH_WEST)
+                {
+                    rotY = (rotY + 180) % 360;
+                }
+                else
+                {
+                    rotY = (rotY + 90) % 360;
+                }
+            }
+
+            return ConfiguredModel.builder()
+                    .rotationY(rotY)
+                    .modelFile(model)
+                    .build();
+        };
+    }
+
+    private void registerFramedFancyRail()
+    {
+        ModelFile normalRail = existingBlock(FBContent.blockFramedFancyRail);
+        ModelFile ascendingRail = existingBlock(FBContent.blockFramedFancyRail, "ascending");
+        ModelFile curvedRail = existingBlock(FBContent.blockFramedFancyRail, "curved");
+
+        getVariantBuilder(FBContent.blockFramedFancyRail.get()).forAllStatesExcept(
+                railStates(BlockStateProperties.RAIL_SHAPE, state -> normalRail, state -> ascendingRail, state -> curvedRail),
+                BlockStateProperties.WATERLOGGED
+        );
+    }
+
+    private void registerFramedFancyPoweredRail()
+    {
+        ModelFile normalRail = existingBlock(FBContent.blockFramedFancyPoweredRail);
+        ModelFile normalRailOn = block(FBContent.blockFramedFancyPoweredRail, "on")
+                .parent(normalRail)
+                .texture("texture", mcLoc("block/powered_rail_on"))
+                .texture("particle", mcLoc("block/powered_rail_on"));
+        ModelFile ascendingRail = existingBlock(FBContent.blockFramedFancyPoweredRail, "ascending");
+        ModelFile ascendingRailOn = block(FBContent.blockFramedFancyPoweredRail, "ascending_on")
+                .parent(ascendingRail)
+                .texture("texture", mcLoc("block/powered_rail_on"))
+                .texture("particle", mcLoc("block/powered_rail_on"));
+
+        getVariantBuilder(FBContent.blockFramedFancyPoweredRail.get()).forAllStatesExcept(
+                railStates(
+                        BlockStateProperties.RAIL_SHAPE_STRAIGHT,
+                        state -> state.getValue(BlockStateProperties.POWERED) ? normalRailOn : normalRail,
+                        state -> state.getValue(BlockStateProperties.POWERED) ? ascendingRailOn : ascendingRail,
+                        state -> null
+                ),
+                BlockStateProperties.WATERLOGGED
+        );
+    }
+
+    private void registerFramedFancyDetectorRail()
+    {
+        ModelFile normalRail = existingBlock(FBContent.blockFramedFancyDetectorRail);
+        ModelFile normalRailOn = block(FBContent.blockFramedFancyDetectorRail, "on")
+                .parent(normalRail)
+                .texture("texture", mcLoc("block/detector_rail_on"))
+                .texture("particle", mcLoc("block/detector_rail_on"));
+        ModelFile ascendingRail = existingBlock(FBContent.blockFramedFancyDetectorRail, "ascending");
+        ModelFile ascendingRailOn = block(FBContent.blockFramedFancyDetectorRail, "ascending_on")
+                .parent(ascendingRail)
+                .texture("texture", mcLoc("block/detector_rail_on"))
+                .texture("particle", mcLoc("block/detector_rail_on"));
+
+        getVariantBuilder(FBContent.blockFramedFancyDetectorRail.get()).forAllStatesExcept(
+                railStates(
+                        BlockStateProperties.RAIL_SHAPE_STRAIGHT,
+                        state -> state.getValue(BlockStateProperties.POWERED) ? normalRailOn : normalRail,
+                        state -> state.getValue(BlockStateProperties.POWERED) ? ascendingRailOn : ascendingRail,
+                        state -> null
+                ),
+                BlockStateProperties.WATERLOGGED
+        );
+    }
+
+    private void registerFramedFancyActivatorRail()
+    {
+        ModelFile normalRail = existingBlock(FBContent.blockFramedFancyActivatorRail);
+        ModelFile normalRailOn = block(FBContent.blockFramedFancyActivatorRail, "on")
+                .parent(normalRail)
+                .texture("texture", mcLoc("block/activator_rail_on"))
+                .texture("particle", mcLoc("block/activator_rail_on"));
+        ModelFile ascendingRail = existingBlock(FBContent.blockFramedFancyActivatorRail, "ascending");
+        ModelFile ascendingRailOn = block(FBContent.blockFramedFancyActivatorRail, "ascending_on")
+                .parent(ascendingRail)
+                .texture("texture", mcLoc("block/activator_rail_on"))
+                .texture("particle", mcLoc("block/activator_rail_on"));
+
+        getVariantBuilder(FBContent.blockFramedFancyActivatorRail.get()).forAllStatesExcept(
+                railStates(
+                        BlockStateProperties.RAIL_SHAPE_STRAIGHT,
+                        state -> state.getValue(BlockStateProperties.POWERED) ? normalRailOn : normalRail,
+                        state -> state.getValue(BlockStateProperties.POWERED) ? ascendingRailOn : ascendingRail,
+                        state -> null
+                ),
+                BlockStateProperties.WATERLOGGED
+        );
+    }
+
+
+
+    private BlockModelBuilder block(RegistryObject<Block> block) { return block(block, ""); }
+
+    private BlockModelBuilder block(RegistryObject<Block> block, String suffix)
+    {
+        String name = block.getId().getPath();
+        String path = "block/" + name;
+        if (!suffix.isBlank())
+        {
+            path += "_" + suffix;
+        }
+        return models().getBuilder(path);
+    }
+
+    private ModelFile existingBlock(RegistryObject<Block> block) { return existingBlock(block, ""); }
+
+    private ModelFile existingBlock(RegistryObject<Block> block, String suffix)
+    {
+        ResourceLocation name = block.getId();
+        String path = "block/" + name.getPath();
+        if (!suffix.isBlank())
+        {
+            path += "_" + suffix;
+        }
+        return models().getExistingFile(new ResourceLocation(name.getNamespace(), path));
+    }
 
     @SuppressWarnings({ "UnusedReturnValue", "SameParameterValue" })
     private ItemModelBuilder simpleBlockWithItem(RegistryObject<Block> block, ModelFile model, String itemRenderType)

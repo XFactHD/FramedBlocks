@@ -1,0 +1,42 @@
+{
+  "variants": {
+    "shape=ascending_east": {
+      "model": "framedblocks:block/framed_fancy_rail_ascending",
+      "y": 90
+    },
+    "shape=ascending_north": {
+      "model": "framedblocks:block/framed_fancy_rail_ascending"
+    },
+    "shape=ascending_south": {
+      "model": "framedblocks:block/framed_fancy_rail_ascending",
+      "y": 180
+    },
+    "shape=ascending_west": {
+      "model": "framedblocks:block/framed_fancy_rail_ascending",
+      "y": 270
+    },
+    "shape=east_west": {
+      "model": "framedblocks:block/framed_fancy_rail",
+      "y": 270
+    },
+    "shape=north_east": {
+      "model": "framedblocks:block/framed_fancy_rail_curved"
+    },
+    "shape=north_south": {
+      "model": "framedblocks:block/framed_fancy_rail",
+      "y": 180
+    },
+    "shape=north_west": {
+      "model": "framedblocks:block/framed_fancy_rail_curved",
+      "y": 270
+    },
+    "shape=south_east": {
+      "model": "framedblocks:block/framed_fancy_rail_curved",
+      "y": 90
+    },
+    "shape=south_west": {
+      "model": "framedblocks:block/framed_fancy_rail_curved",
+      "y": 180
+    }
+  }
+}

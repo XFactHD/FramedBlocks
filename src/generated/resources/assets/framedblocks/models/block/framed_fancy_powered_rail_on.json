@@ -1,0 +1,7 @@
+{
+  "parent": "framedblocks:block/framed_fancy_powered_rail",
+  "textures": {
+    "particle": "minecraft:block/powered_rail_on",
+    "texture": "minecraft:block/powered_rail_on"
+  }
+}
