@@ -44,6 +44,7 @@ public final class Utils
     public static final TagKey<Block> BLACKLIST = blockTag("blacklisted");
     /**Allow other mods to whitelist their BEs, circumventing the config setting*/
     public static final TagKey<Block> BE_WHITELIST = blockTag("blockentity_whitelisted");
+    public static final TagKey<Block> CAMO_SUSTAIN_PLANT = blockTag("camo_sustain_plant");
     public static final TagKey<Item> WRENCH = itemTag("forge", "tools/wrench");
     /** Allow other mods to add items that temporarily disable intangibility to allow interaction with the targetted block */
     public static final TagKey<Item> DISABLE_INTANGIBLE = itemTag("disable_intangible");

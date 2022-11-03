@@ -21,6 +21,7 @@ import net.minecraft.world.level.storage.loot.LootContext;
 import net.minecraft.world.phys.*;
 import net.minecraft.world.phys.shapes.*;
 import net.minecraftforge.client.extensions.common.IClientBlockExtensions;
+import net.minecraftforge.common.IPlantable;
 import xfacthd.framedblocks.FramedBlocks;
 import xfacthd.framedblocks.api.type.IBlockType;
 import xfacthd.framedblocks.api.util.FramedProperties;
@@ -230,6 +231,12 @@ public abstract class AbstractFramedBlock extends Block implements IFramedBlock,
                 this
         );*/
         return beaconBeamOcclusion.getBoolean(state);
+    }
+
+    @Override
+    public boolean canSustainPlant(BlockState state, BlockGetter level, BlockPos pos, Direction side, IPlantable plant)
+    {
+        return canCamoSustainPlant(state, level, pos, side, plant);
     }
 
     @Override

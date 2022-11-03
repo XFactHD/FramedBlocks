@@ -21,6 +21,7 @@ import net.minecraft.world.level.storage.loot.LootContext;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
+import net.minecraftforge.common.IPlantable;
 import xfacthd.framedblocks.api.block.IFramedBlock;
 import xfacthd.framedblocks.api.util.FramedProperties;
 import xfacthd.framedblocks.common.data.BlockType;
@@ -174,6 +175,12 @@ public class FramedTrapDoorBlock extends TrapDoorBlock implements IFramedBlock
             return getCamoBeaconColorMultiplier(level, pos, beaconPos);
         }
         return null;
+    }
+
+    @Override
+    public boolean canSustainPlant(BlockState state, BlockGetter level, BlockPos pos, Direction side, IPlantable plant)
+    {
+        return canCamoSustainPlant(state, level, pos, side, plant);
     }
 
     @Override
