@@ -18,7 +18,7 @@ import xfacthd.framedblocks.common.data.PropertyHolder;
 public class MixinPoweredRailBlock //TODO: Forge PR
 {
     @ModifyArg(
-            method = "<init>(Lnet/minecraft/world/level/block/state/BlockBehaviour$Properties;Z)V",
+            method = "<init>*",
             at = @At(value = "INVOKE", target = "Lnet/minecraft/world/level/block/state/BlockState;setValue(Lnet/minecraft/world/level/block/state/properties/Property;Ljava/lang/Comparable;)Ljava/lang/Object;"),
             index = 0
     )
@@ -32,7 +32,7 @@ public class MixinPoweredRailBlock //TODO: Forge PR
     }
 
     @ModifyArg(
-            method = "<init>(Lnet/minecraft/world/level/block/state/BlockBehaviour$Properties;Z)V",
+            method = "<init>*",
             at = @At(value = "INVOKE", target = "Lnet/minecraft/world/level/block/state/BlockState;setValue(Lnet/minecraft/world/level/block/state/properties/Property;Ljava/lang/Comparable;)Ljava/lang/Object;"),
             index = 1
     )
