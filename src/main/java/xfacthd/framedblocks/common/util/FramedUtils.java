@@ -19,10 +19,14 @@ import xfacthd.framedblocks.common.data.property.SlopeType;
 
 public final class FramedUtils
 {
-    public static boolean isFramedRailBlock(BlockState state)
+    public static boolean isFramedRailSlope(BlockState state)
     {
         Block block = state.getBlock();
-        return block instanceof BaseRailBlock && block instanceof IFramedBlock;
+        if (block instanceof BaseRailBlock && block instanceof IFramedBlock)
+        {
+            return state.hasProperty(PropertyHolder.ASCENDING_RAIL_SHAPE);
+        }
+        return false;
     }
 
     public static boolean isRailItem(Item item)
@@ -51,46 +55,46 @@ public final class FramedUtils
         throw new IllegalStateException("Invalid rail item: " + item);
     }
 
-    public static Direction getBlockFacing(BlockState state)
+    public static Direction getSlopeBlockFacing(BlockState state)
     {
-        if (isFramedRailBlock(state))
+        if (isFramedRailSlope(state))
         {
-            return directionFromRailShape(state.getValue(PropertyHolder.ASCENDING_RAIL_SHAPE));
+            return getDirectionFromAscendingRailShape(state.getValue(PropertyHolder.ASCENDING_RAIL_SHAPE));
         }
         return state.getValue(FramedProperties.FACING_HOR);
     }
 
     public static SlopeType getSlopeType(BlockState state)
     {
-        if (isFramedRailBlock(state))
+        if (isFramedRailSlope(state))
         {
             return SlopeType.BOTTOM;
         }
         return state.getValue(PropertyHolder.SLOPE_TYPE);
     }
 
-    public static RailShape railShapeFromDirection(Direction dir)
+    public static RailShape getAscendingRailShapeFromDirection(Direction dir)
     {
         return switch (dir)
-                {
-                    case NORTH -> RailShape.ASCENDING_NORTH;
-                    case EAST -> RailShape.ASCENDING_EAST;
-                    case SOUTH -> RailShape.ASCENDING_SOUTH;
-                    case WEST -> RailShape.ASCENDING_WEST;
-                    default -> throw new IllegalArgumentException("Invalid facing " + dir);
-                };
+        {
+            case NORTH -> RailShape.ASCENDING_NORTH;
+            case EAST -> RailShape.ASCENDING_EAST;
+            case SOUTH -> RailShape.ASCENDING_SOUTH;
+            case WEST -> RailShape.ASCENDING_WEST;
+            default -> throw new IllegalArgumentException("Invalid facing " + dir);
+        };
     }
 
-    public static Direction directionFromRailShape(RailShape shape)
+    public static Direction getDirectionFromAscendingRailShape(RailShape shape)
     {
         return switch (shape)
-                {
-                    case ASCENDING_NORTH -> Direction.NORTH;
-                    case ASCENDING_EAST -> Direction.EAST;
-                    case ASCENDING_SOUTH -> Direction.SOUTH;
-                    case ASCENDING_WEST -> Direction.WEST;
-                    default -> throw new IllegalArgumentException("Invalid shape " + shape);
-                };
+        {
+            case ASCENDING_NORTH -> Direction.NORTH;
+            case ASCENDING_EAST -> Direction.EAST;
+            case ASCENDING_SOUTH -> Direction.SOUTH;
+            case ASCENDING_WEST -> Direction.WEST;
+            default -> throw new IllegalArgumentException("Invalid shape " + shape);
+        };
     }
 
     public static void enqueueImmediateTask(LevelAccessor level, Runnable task, boolean allowClient)
