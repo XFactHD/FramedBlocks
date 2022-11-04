@@ -95,9 +95,9 @@ public final class FBContent
     public static final RegistryObject<Block> blockFramedChest = registerBlock(FramedChestBlock::new, BlockType.FRAMED_CHEST);
     public static final RegistryObject<Block> blockFramedBars = registerBlock(FramedPaneBlock::new, BlockType.FRAMED_BARS);
     public static final RegistryObject<Block> blockFramedPane = registerBlock(FramedPaneBlock::new, BlockType.FRAMED_PANE);
-    public static final RegistryObject<Block> blockFramedRailSlope = registerBlock(FramedRailSlopeBlock::new, BlockType.FRAMED_RAIL_SLOPE);
+    public static final RegistryObject<Block> blockFramedRailSlope = registerBlock(FramedRailSlopeBlock::normal, BlockType.FRAMED_RAIL_SLOPE);
     public static final RegistryObject<Block> blockFramedPoweredRailSlope = registerBlock(FramedPoweredRailSlopeBlock::powered, BlockType.FRAMED_POWERED_RAIL_SLOPE);
-    public static final RegistryObject<Block> blockFramedDetectorRailSlope = registerBlock(FramedDetectorRailSlopeBlock::new, BlockType.FRAMED_DETECTOR_RAIL_SLOPE);
+    public static final RegistryObject<Block> blockFramedDetectorRailSlope = registerBlock(FramedDetectorRailSlopeBlock::normal, BlockType.FRAMED_DETECTOR_RAIL_SLOPE);
     public static final RegistryObject<Block> blockFramedActivatorRailSlope = registerBlock(FramedPoweredRailSlopeBlock::activator, BlockType.FRAMED_ACTIVATOR_RAIL_SLOPE);
     public static final RegistryObject<Block> blockFramedFlowerPot = registerBlock(FramedFlowerPotBlock::new, BlockType.FRAMED_FLOWER_POT);
     public static final RegistryObject<Block> blockFramedPillar = registerBlock(FramedPillarBlock::new, BlockType.FRAMED_PILLAR);
@@ -155,6 +155,14 @@ public final class FBContent
     public static final RegistryObject<Block> blockFramedIronGate = registerBlock(FramedGateBlock::iron, BlockType.FRAMED_IRON_GATE_DOOR);
     public static final RegistryObject<Block> blockFramedItemFrame = registerBlock(FramedItemFrameBlock::new, BlockType.FRAMED_ITEM_FRAME);
     public static final RegistryObject<Block> blockFramedGlowingItemFrame = registerBlock(FramedItemFrameBlock::new, BlockType.FRAMED_GLOWING_ITEM_FRAME);
+    public static final RegistryObject<Block> blockFramedFancyRail = registerBlock(FramedFancyRailBlock::new, BlockType.FRAMED_FANCY_RAIL);
+    public static final RegistryObject<Block> blockFramedFancyPoweredRail = registerBlock(FramedFancyPoweredRailBlock::powered, BlockType.FRAMED_FANCY_POWERED_RAIL);
+    public static final RegistryObject<Block> blockFramedFancyDetectorRail = registerBlock(FramedFancyDetectorRailBlock::new, BlockType.FRAMED_FANCY_DETECTOR_RAIL);
+    public static final RegistryObject<Block> blockFramedFancyActivatorRail = registerBlock(FramedFancyPoweredRailBlock::activator, BlockType.FRAMED_FANCY_ACTIVATOR_RAIL);
+    public static final RegistryObject<Block> blockFramedFancyRailSlope = registerBlock(FramedRailSlopeBlock::fancy, BlockType.FRAMED_FANCY_RAIL_SLOPE);
+    public static final RegistryObject<Block> blockFramedFancyPoweredRailSlope = registerBlock(FramedPoweredRailSlopeBlock::poweredFancy, BlockType.FRAMED_FANCY_POWERED_RAIL_SLOPE);
+    public static final RegistryObject<Block> blockFramedFancyDetectorRailSlope = registerBlock(FramedDetectorRailSlopeBlock::fancy, BlockType.FRAMED_FANCY_DETECTOR_RAIL_SLOPE);
+    public static final RegistryObject<Block> blockFramedFancyActivatorRailSlope = registerBlock(FramedPoweredRailSlopeBlock::activatorFancy, BlockType.FRAMED_FANCY_ACTIVATOR_RAIL_SLOPE);
 
     /** ITEMS */
     public static final RegistryObject<Item> itemFramedHammer = registerToolItem(FramedToolItem::new, FramedToolType.HAMMER);
@@ -282,6 +290,13 @@ public final class FBContent
     public static final RegistryObject<BlockEntityType<FramedItemFrameBlockEntity>> blockEntityTypeFramedItemFrame = createBlockEntityType(
             FramedItemFrameBlockEntity::new,
             BlockType.FRAMED_ITEM_FRAME, BlockType.FRAMED_GLOWING_ITEM_FRAME
+    );
+    public static final RegistryObject<BlockEntityType<FramedFancyRailSlopeBlockEntity>> blockEntityTypeFramedFancyRailSlope = createBlockEntityType(
+            FramedFancyRailSlopeBlockEntity::new,
+            BlockType.FRAMED_FANCY_RAIL_SLOPE,
+            BlockType.FRAMED_FANCY_POWERED_RAIL_SLOPE,
+            BlockType.FRAMED_FANCY_DETECTOR_RAIL_SLOPE,
+            BlockType.FRAMED_FANCY_ACTIVATOR_RAIL_SLOPE
     );
 
     /** CONTAINER TYPES */

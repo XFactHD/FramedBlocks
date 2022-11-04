@@ -45,7 +45,15 @@ public class FramedBlockTagProvider extends BlockTagsProvider
                 FBContent.blockFramedRailSlope.get(),
                 FBContent.blockFramedPoweredRailSlope.get(),
                 FBContent.blockFramedDetectorRailSlope.get(),
-                FBContent.blockFramedActivatorRailSlope.get()
+                FBContent.blockFramedActivatorRailSlope.get(),
+                FBContent.blockFramedFancyRail.get(),
+                FBContent.blockFramedFancyPoweredRail.get(),
+                FBContent.blockFramedFancyDetectorRail.get(),
+                FBContent.blockFramedFancyActivatorRail.get(),
+                FBContent.blockFramedFancyRailSlope.get(),
+                FBContent.blockFramedFancyPoweredRailSlope.get(),
+                FBContent.blockFramedFancyDetectorRailSlope.get(),
+                FBContent.blockFramedFancyActivatorRailSlope.get()
         );
 
         tag(Utils.FRAMEABLE).addTags(

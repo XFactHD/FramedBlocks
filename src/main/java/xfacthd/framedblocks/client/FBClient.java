@@ -107,6 +107,10 @@ public final class FBClient
         BlockOutlineRenderer.registerOutlineRender(BlockType.FRAMED_PYRAMID_SLAB, new PyramidOutlineRenderer(true));
         BlockOutlineRenderer.registerOutlineRender(BlockType.FRAMED_ITEM_FRAME, NoopOutlineRenderer.INSTANCE);
         BlockOutlineRenderer.registerOutlineRender(BlockType.FRAMED_GLOWING_ITEM_FRAME, NoopOutlineRenderer.INSTANCE);
+        BlockOutlineRenderer.registerOutlineRender(BlockType.FRAMED_FANCY_RAIL_SLOPE, RailSlopeOutlineRenderer.INSTANCE);
+        BlockOutlineRenderer.registerOutlineRender(BlockType.FRAMED_FANCY_POWERED_RAIL_SLOPE, RailSlopeOutlineRenderer.INSTANCE);
+        BlockOutlineRenderer.registerOutlineRender(BlockType.FRAMED_FANCY_DETECTOR_RAIL_SLOPE, RailSlopeOutlineRenderer.INSTANCE);
+        BlockOutlineRenderer.registerOutlineRender(BlockType.FRAMED_FANCY_ACTIVATOR_RAIL_SLOPE, RailSlopeOutlineRenderer.INSTANCE);
 
         GhostBlockRenderer.init();
         GhostRenderBehaviours.register();
@@ -299,6 +303,14 @@ public final class FBClient
         ClientUtils.replaceModels(FBContent.blockFramedIronGate, registry, FramedIronDoorModel::new, ignoreSolid);
         ClientUtils.replaceModels(FBContent.blockFramedItemFrame, registry, FramedItemFrameModel::normal, null);
         ClientUtils.replaceModels(FBContent.blockFramedGlowingItemFrame, registry, FramedItemFrameModel::glowing, null);
+        ClientUtils.replaceModels(FBContent.blockFramedFancyRail, registry, FramedFancyRailModel::normal, ignoreWaterlogged);
+        ClientUtils.replaceModels(FBContent.blockFramedFancyPoweredRail, registry, FramedFancyRailModel::straight, ignoreWaterlogged);
+        ClientUtils.replaceModels(FBContent.blockFramedFancyDetectorRail, registry, FramedFancyRailModel::straight, ignoreWaterlogged);
+        ClientUtils.replaceModels(FBContent.blockFramedFancyActivatorRail, registry, FramedFancyRailModel::straight, ignoreWaterlogged);
+        ClientUtils.replaceModels(FBContent.blockFramedFancyRailSlope, registry, FramedFancyRailSlopeModel::new, FramedFancyRailSlopeModel.itemSourceNormal(), ignoreDefault);
+        ClientUtils.replaceModels(FBContent.blockFramedFancyPoweredRailSlope, registry, FramedFancyRailSlopeModel::new, FramedFancyRailSlopeModel.itemSourcePowered(), ignoreDefault);
+        ClientUtils.replaceModels(FBContent.blockFramedFancyDetectorRailSlope, registry, FramedFancyRailSlopeModel::new, FramedFancyRailSlopeModel.itemSourceDetector(), ignoreDefault);
+        ClientUtils.replaceModels(FBContent.blockFramedFancyActivatorRailSlope, registry, FramedFancyRailSlopeModel::new, FramedFancyRailSlopeModel.itemSourceActivator(), ignoreDefault);
     }
 
 

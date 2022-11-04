@@ -1,0 +1,23 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "G G",
+    "GFG",
+    "GRG"
+  ],
+  "key": {
+    "G": {
+      "tag": "forge:ingots/gold"
+    },
+    "R": {
+      "tag": "forge:dusts/redstone"
+    },
+    "F": {
+      "item": "framedblocks:framed_cube"
+    }
+  },
+  "result": {
+    "item": "framedblocks:framed_fancy_powered_rail",
+    "count": 6
+  }
+}

@@ -25,6 +25,7 @@ import xfacthd.framedblocks.api.block.IFramedBlock;
 import xfacthd.framedblocks.api.type.IBlockType;
 import xfacthd.framedblocks.api.util.FramedProperties;
 import xfacthd.framedblocks.api.util.Utils;
+import xfacthd.framedblocks.common.blockentity.FramedFancyRailSlopeBlockEntity;
 import xfacthd.framedblocks.common.data.BlockType;
 import xfacthd.framedblocks.common.data.PropertyHolder;
 import xfacthd.framedblocks.common.util.FramedUtils;
@@ -32,18 +33,21 @@ import xfacthd.framedblocks.common.util.FramedUtils;
 import javax.annotation.Nullable;
 import java.util.List;
 import java.util.Map;
+import java.util.function.BiFunction;
 
 @SuppressWarnings("deprecation")
 public class FramedPoweredRailSlopeBlock extends PoweredRailBlock implements IFramedBlock
 {
     private final BlockType type;
     private final Map<BlockState, VoxelShape> shapes;
+    private final BiFunction<BlockPos, BlockState, FramedBlockEntity> beFactory;
 
-    protected FramedPoweredRailSlopeBlock(BlockType type, boolean isPoweredRail)
+    private FramedPoweredRailSlopeBlock(BlockType type, boolean isPoweredRail, BiFunction<BlockPos, BlockState, FramedBlockEntity> beFactory)
     {
         super(IFramedBlock.createProperties(type), isPoweredRail);
         this.type = type;
-        shapes = type.generateShapes(getStateDefinition().getPossibleStates());
+        this.shapes = type.generateShapes(getStateDefinition().getPossibleStates());
+        this.beFactory = beFactory;
         registerDefaultState(defaultBlockState()
                 .setValue(BlockStateProperties.WATERLOGGED, false)
                 .setValue(FramedProperties.SOLID, false)
@@ -242,7 +246,7 @@ public class FramedPoweredRailSlopeBlock extends PoweredRailBlock implements IFr
     }
 
     @Override
-    public final BlockEntity newBlockEntity(BlockPos pos, BlockState state) { return new FramedBlockEntity(pos, state); }
+    public final BlockEntity newBlockEntity(BlockPos pos, BlockState state) { return beFactory.apply(pos, state); }
 
     @Override
     public IBlockType getBlockType() { return type; }
@@ -251,11 +255,37 @@ public class FramedPoweredRailSlopeBlock extends PoweredRailBlock implements IFr
 
     public static FramedPoweredRailSlopeBlock powered()
     {
-        return new FramedPoweredRailSlopeBlock(BlockType.FRAMED_POWERED_RAIL_SLOPE, true);
+        return new FramedPoweredRailSlopeBlock(
+                BlockType.FRAMED_POWERED_RAIL_SLOPE,
+                true,
+                FramedBlockEntity::new
+        );
+    }
+
+    public static FramedPoweredRailSlopeBlock poweredFancy()
+    {
+        return new FramedPoweredRailSlopeBlock(
+                BlockType.FRAMED_FANCY_POWERED_RAIL_SLOPE,
+                true,
+                FramedFancyRailSlopeBlockEntity::new
+        );
     }
 
     public static FramedPoweredRailSlopeBlock activator()
     {
-        return new FramedPoweredRailSlopeBlock(BlockType.FRAMED_ACTIVATOR_RAIL_SLOPE, false);
+        return new FramedPoweredRailSlopeBlock(
+                BlockType.FRAMED_ACTIVATOR_RAIL_SLOPE,
+                false,
+                FramedBlockEntity::new
+        );
+    }
+
+    public static FramedPoweredRailSlopeBlock activatorFancy()
+    {
+        return new FramedPoweredRailSlopeBlock(
+                BlockType.FRAMED_FANCY_ACTIVATOR_RAIL_SLOPE,
+                false,
+                FramedFancyRailSlopeBlockEntity::new
+        );
     }
 }

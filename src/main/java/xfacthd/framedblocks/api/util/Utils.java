@@ -28,9 +28,11 @@ import java.lang.invoke.MethodHandle;
 import java.lang.invoke.MethodHandles;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
+import java.util.function.Consumer;
 
 public final class Utils
 {
+    private static final Direction[] DIRECTIONS = Direction.values();
     public static final TagKey<Block> FRAMEABLE = blockTag("frameable");
     public static final TagKey<Block> BLACKLIST = blockTag("blacklisted");
     public static final TagKey<Item> WRENCH = itemTag("forge", "tools/wrench");
@@ -279,6 +281,15 @@ public final class Utils
     public static TagKey<Item> itemTag(String modid, String name)
     {
         return ItemTags.create(new ResourceLocation(modid, name));
+    }
+
+    public static void forAllDirections(Consumer<Direction> consumer)
+    {
+        consumer.accept(null);
+        for (Direction dir : DIRECTIONS)
+        {
+            consumer.accept(dir);
+        }
     }
 
     public static void wrapInStateCopy(LevelAccessor level, BlockPos pos, boolean writeToCamoTwo, Runnable action)

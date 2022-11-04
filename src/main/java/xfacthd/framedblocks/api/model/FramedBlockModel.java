@@ -36,7 +36,7 @@ public abstract class FramedBlockModel extends BakedModelProxy
     private static final Direction[] DIRECTIONS = Direction.values();
     private final Table<BlockState, RenderType, Map<Direction, List<BakedQuad>>> quadCacheTable = HashBasedTable.create();
     private final Map<BlockState, BakedModel> modelCache = new HashMap<>();
-    private final BlockState state;
+    protected final BlockState state;
     private final boolean transformAllQuads;
     private final FullFaceCache fullFaceCache;
 

@@ -25,6 +25,7 @@ import xfacthd.framedblocks.api.block.IFramedBlock;
 import xfacthd.framedblocks.api.type.IBlockType;
 import xfacthd.framedblocks.api.util.FramedProperties;
 import xfacthd.framedblocks.api.util.Utils;
+import xfacthd.framedblocks.common.blockentity.FramedFancyRailSlopeBlockEntity;
 import xfacthd.framedblocks.common.data.BlockType;
 import xfacthd.framedblocks.common.data.PropertyHolder;
 import xfacthd.framedblocks.common.util.FramedUtils;
@@ -32,18 +33,21 @@ import xfacthd.framedblocks.common.util.FramedUtils;
 import javax.annotation.Nullable;
 import java.util.List;
 import java.util.Map;
+import java.util.function.BiFunction;
 
 @SuppressWarnings("deprecation")
 public class FramedDetectorRailSlopeBlock extends DetectorRailBlock implements IFramedBlock
 {
     private final BlockType type;
     private final Map<BlockState, VoxelShape> shapes;
+    private final BiFunction<BlockPos, BlockState, FramedBlockEntity> beFactory;
 
-    public FramedDetectorRailSlopeBlock(BlockType type)
+    private FramedDetectorRailSlopeBlock(BlockType type, BiFunction<BlockPos, BlockState, FramedBlockEntity> beFactory)
     {
         super(IFramedBlock.createProperties(type));
         this.type = type;
-        shapes = type.generateShapes(getStateDefinition().getPossibleStates());
+        this.shapes = type.generateShapes(getStateDefinition().getPossibleStates());
+        this.beFactory = beFactory;
         registerDefaultState(defaultBlockState()
                 .setValue(BlockStateProperties.WATERLOGGED, false)
                 .setValue(FramedProperties.SOLID, false)
@@ -229,8 +233,26 @@ public class FramedDetectorRailSlopeBlock extends DetectorRailBlock implements I
     }
 
     @Override
-    public final BlockEntity newBlockEntity(BlockPos pos, BlockState state) { return new FramedBlockEntity(pos, state); }
+    public final BlockEntity newBlockEntity(BlockPos pos, BlockState state) { return beFactory.apply(pos, state); }
 
     @Override
     public IBlockType getBlockType() { return type; }
+
+
+
+    public static FramedDetectorRailSlopeBlock normal()
+    {
+        return new FramedDetectorRailSlopeBlock(
+                BlockType.FRAMED_DETECTOR_RAIL_SLOPE,
+                FramedBlockEntity::new
+        );
+    }
+
+    public static FramedDetectorRailSlopeBlock fancy()
+    {
+        return new FramedDetectorRailSlopeBlock(
+                BlockType.FRAMED_FANCY_DETECTOR_RAIL_SLOPE,
+                FramedFancyRailSlopeBlockEntity::new
+        );
+    }
 }

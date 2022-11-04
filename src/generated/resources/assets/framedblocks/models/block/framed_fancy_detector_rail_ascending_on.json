@@ -1,0 +1,7 @@
+{
+  "parent": "framedblocks:block/framed_fancy_detector_rail_ascending",
+  "textures": {
+    "texture": "minecraft:block/detector_rail_on",
+    "particle": "minecraft:block/detector_rail_on"
+  }
+}

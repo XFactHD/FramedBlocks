@@ -31,7 +31,14 @@ public final class FramedUtils
 
     public static boolean isRailItem(Item item)
     {
-        return item == Items.RAIL || item == Items.POWERED_RAIL || item == Items.DETECTOR_RAIL || item == Items.ACTIVATOR_RAIL;
+        return item == Items.RAIL ||
+               item == Items.POWERED_RAIL ||
+               item == Items.DETECTOR_RAIL ||
+               item == Items.ACTIVATOR_RAIL ||
+               item == FBContent.blockFramedFancyRail.get().asItem() ||
+               item == FBContent.blockFramedFancyPoweredRail.get().asItem() ||
+               item == FBContent.blockFramedFancyDetectorRail.get().asItem() ||
+               item == FBContent.blockFramedFancyActivatorRail.get().asItem();
     }
 
     public static Block getRailSlopeBlock(Item item)
@@ -51,6 +58,22 @@ public final class FramedUtils
         if (item == Items.ACTIVATOR_RAIL)
         {
             return FBContent.blockFramedActivatorRailSlope.get();
+        }
+        if (item == FBContent.blockFramedFancyRail.get().asItem())
+        {
+            return FBContent.blockFramedFancyRailSlope.get();
+        }
+        if (item == FBContent.blockFramedFancyPoweredRail.get().asItem())
+        {
+            return FBContent.blockFramedFancyPoweredRailSlope.get();
+        }
+        if (item == FBContent.blockFramedFancyDetectorRail.get().asItem())
+        {
+            return FBContent.blockFramedFancyDetectorRailSlope.get();
+        }
+        if (item == FBContent.blockFramedFancyActivatorRail.get().asItem())
+        {
+            return FBContent.blockFramedFancyActivatorRailSlope.get();
         }
         throw new IllegalStateException("Invalid rail item: " + item);
     }

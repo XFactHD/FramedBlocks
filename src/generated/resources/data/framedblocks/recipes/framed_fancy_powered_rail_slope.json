@@ -1,0 +1,18 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "R",
+    "S"
+  ],
+  "key": {
+    "R": {
+      "item": "framedblocks:framed_fancy_powered_rail"
+    },
+    "S": {
+      "item": "framedblocks:framed_slope"
+    }
+  },
+  "result": {
+    "item": "framedblocks:framed_fancy_powered_rail_slope"
+  }
+}

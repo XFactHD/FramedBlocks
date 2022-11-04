@@ -819,6 +819,78 @@ public class FramedRecipeProvider extends RecipeProvider
                 .unlockedBy("hasFramedItemFrame", has(FBContent.blockFramedItemFrame.get()))
                 .save(consumer);
 
+        ShapedRecipeBuilder.shaped(FBContent.blockFramedFancyRail.get(), 16)
+                .pattern("I I")
+                .pattern("IFI")
+                .pattern("I I")
+                .define('I', Tags.Items.INGOTS_IRON)
+                .define('F', FBContent.blockFramedCube.get())
+                .unlockedBy("hasFramedBlock", HAS_FRAMED_BLOCK)
+                .save(consumer);
+
+        ShapedRecipeBuilder.shaped(FBContent.blockFramedFancyPoweredRail.get(), 6)
+                .pattern("G G")
+                .pattern("GFG")
+                .pattern("GRG")
+                .define('G', Tags.Items.INGOTS_GOLD)
+                .define('R', Tags.Items.DUSTS_REDSTONE)
+                .define('F', FBContent.blockFramedCube.get())
+                .unlockedBy("hasFramedBlock", HAS_FRAMED_BLOCK)
+                .save(consumer);
+
+        ShapedRecipeBuilder.shaped(FBContent.blockFramedFancyDetectorRail.get(), 6)
+                .pattern("IPI")
+                .pattern("IFI")
+                .pattern("IRI")
+                .define('I', Tags.Items.INGOTS_IRON)
+                .define('R', Tags.Items.DUSTS_REDSTONE)
+                .define('P', Items.STONE_PRESSURE_PLATE)
+                .define('F', FBContent.blockFramedCube.get())
+                .unlockedBy("hasFramedBlock", HAS_FRAMED_BLOCK)
+                .save(consumer);
+
+        ShapedRecipeBuilder.shaped(FBContent.blockFramedFancyActivatorRail.get(), 6)
+                .pattern("IFI")
+                .pattern("IRI")
+                .pattern("IFI")
+                .define('I', Tags.Items.INGOTS_IRON)
+                .define('R', Items.REDSTONE_TORCH)
+                .define('F', FBContent.blockFramedCube.get())
+                .unlockedBy("hasFramedBlock", HAS_FRAMED_BLOCK)
+                .save(consumer);
+
+        ShapedRecipeBuilder.shaped(FBContent.blockFramedFancyRailSlope.get())
+                .pattern("R")
+                .pattern("S")
+                .define('R', FBContent.blockFramedFancyRail.get())
+                .define('S', FBContent.blockFramedSlope.get())
+                .unlockedBy("hasFramedSlope", HAS_FRAMED_SLOPE)
+                .save(consumer);
+
+        ShapedRecipeBuilder.shaped(FBContent.blockFramedFancyPoweredRailSlope.get())
+                .pattern("R")
+                .pattern("S")
+                .define('R', FBContent.blockFramedFancyPoweredRail.get())
+                .define('S', FBContent.blockFramedSlope.get())
+                .unlockedBy("hasFramedSlope", HAS_FRAMED_SLOPE)
+                .save(consumer);
+
+        ShapedRecipeBuilder.shaped(FBContent.blockFramedFancyDetectorRailSlope.get())
+                .pattern("R")
+                .pattern("S")
+                .define('R', FBContent.blockFramedFancyDetectorRail.get())
+                .define('S', FBContent.blockFramedSlope.get())
+                .unlockedBy("hasFramedSlope", HAS_FRAMED_SLOPE)
+                .save(consumer);
+
+        ShapedRecipeBuilder.shaped(FBContent.blockFramedFancyActivatorRailSlope.get())
+                .pattern("R")
+                .pattern("S")
+                .define('R', FBContent.blockFramedFancyActivatorRail.get())
+                .define('S', FBContent.blockFramedSlope.get())
+                .unlockedBy("hasFramedSlope", HAS_FRAMED_SLOPE)
+                .save(consumer);
+
 
 
         ShapedRecipeBuilder.shaped(FBContent.itemFramedHammer.get())

@@ -23,6 +23,7 @@ import net.minecraft.world.phys.shapes.*;
 import xfacthd.framedblocks.api.block.IFramedBlock;
 import xfacthd.framedblocks.api.util.FramedProperties;
 import xfacthd.framedblocks.api.util.Utils;
+import xfacthd.framedblocks.common.blockentity.FramedFancyRailSlopeBlockEntity;
 import xfacthd.framedblocks.common.data.BlockType;
 import xfacthd.framedblocks.common.data.PropertyHolder;
 import xfacthd.framedblocks.api.block.FramedBlockEntity;
@@ -31,16 +32,21 @@ import xfacthd.framedblocks.common.util.FramedUtils;
 import javax.annotation.Nullable;
 import java.util.List;
 import java.util.Map;
+import java.util.function.BiFunction;
 
 @SuppressWarnings("deprecation")
 public class FramedRailSlopeBlock extends BaseRailBlock implements IFramedBlock
 {
+    private final BlockType type;
     private final Map<BlockState, VoxelShape> shapes;
+    private final BiFunction<BlockPos, BlockState, FramedBlockEntity> beFactory;
 
-    public FramedRailSlopeBlock()
+    private FramedRailSlopeBlock(BlockType type, BiFunction<BlockPos, BlockState, FramedBlockEntity> beFactory)
     {
-        super(true, IFramedBlock.createProperties(BlockType.FRAMED_RAIL_SLOPE));
-        shapes = getBlockType().generateShapes(getStateDefinition().getPossibleStates());
+        super(true, IFramedBlock.createProperties(type));
+        this.type = type;
+        this.shapes = type.generateShapes(getStateDefinition().getPossibleStates());
+        this.beFactory = beFactory;
         registerDefaultState(defaultBlockState()
                 .setValue(BlockStateProperties.WATERLOGGED, false)
                 .setValue(FramedProperties.SOLID, false)
@@ -226,8 +232,26 @@ public class FramedRailSlopeBlock extends BaseRailBlock implements IFramedBlock
     }
 
     @Override
-    public final BlockEntity newBlockEntity(BlockPos pos, BlockState state) { return new FramedBlockEntity(pos, state); }
+    public final BlockEntity newBlockEntity(BlockPos pos, BlockState state) { return beFactory.apply(pos, state); }
 
     @Override
-    public BlockType getBlockType() { return BlockType.FRAMED_RAIL_SLOPE; }
+    public BlockType getBlockType() { return type; }
+
+
+
+    public static FramedRailSlopeBlock normal()
+    {
+        return new FramedRailSlopeBlock(
+                BlockType.FRAMED_RAIL_SLOPE,
+                FramedBlockEntity::new
+        );
+    }
+
+    public static FramedRailSlopeBlock fancy()
+    {
+        return new FramedRailSlopeBlock(
+                BlockType.FRAMED_FANCY_RAIL_SLOPE,
+                FramedFancyRailSlopeBlockEntity::new
+        );
+    }
 }

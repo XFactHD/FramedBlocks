@@ -74,6 +74,14 @@ public class GhostRenderBehaviours
         );
 
         GhostBlockRenderer.registerBehaviour(
+                new FancyRailGhostRenderBehaviour(),
+                FBContent.blockFramedFancyRail.get().asItem(),
+                FBContent.blockFramedFancyPoweredRail.get().asItem(),
+                FBContent.blockFramedFancyDetectorRail.get().asItem(),
+                FBContent.blockFramedFancyActivatorRail.get().asItem()
+        );
+
+        GhostBlockRenderer.registerBehaviour(
                 new BlueprintGhostRenderBehaviour(),
                 FBContent.itemFramedBlueprint.get()
         );

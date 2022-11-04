@@ -1,0 +1,23 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "IFI",
+    "IRI",
+    "IFI"
+  ],
+  "key": {
+    "I": {
+      "tag": "forge:ingots/iron"
+    },
+    "R": {
+      "item": "minecraft:redstone_torch"
+    },
+    "F": {
+      "item": "framedblocks:framed_cube"
+    }
+  },
+  "result": {
+    "item": "framedblocks:framed_fancy_activator_rail",
+    "count": 6
+  }
+}

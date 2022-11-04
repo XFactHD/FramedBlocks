@@ -110,6 +110,14 @@
     "framedblocks:framed_large_stone_button",
     "framedblocks:framed_horizontal_pane",
     "framedblocks:framed_target",
-    "framedblocks:framed_gate_door"
+    "framedblocks:framed_gate_door",
+    "framedblocks:framed_fancy_rail",
+    "framedblocks:framed_fancy_powered_rail",
+    "framedblocks:framed_fancy_detector_rail",
+    "framedblocks:framed_fancy_activator_rail",
+    "framedblocks:framed_fancy_rail_slope",
+    "framedblocks:framed_fancy_powered_rail_slope",
+    "framedblocks:framed_fancy_detector_rail_slope",
+    "framedblocks:framed_fancy_activator_rail_slope"
   ]
 }
