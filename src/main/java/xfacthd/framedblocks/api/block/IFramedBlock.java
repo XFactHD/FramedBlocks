@@ -23,6 +23,7 @@ import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.Vec3;
 import net.minecraft.world.phys.shapes.*;
+import net.minecraftforge.common.IPlantable;
 import xfacthd.framedblocks.api.FramedBlocksAPI;
 import xfacthd.framedblocks.api.type.IBlockType;
 import xfacthd.framedblocks.api.util.*;
@@ -474,6 +475,21 @@ public interface IFramedBlock extends EntityBlock//, IFacade
             return be.getCamoBeaconColorMultiplier(level, pos, beaconPos);
         }
         return null;
+    }
+
+    default boolean canCamoSustainPlant(BlockState state, BlockGetter level, BlockPos pos, Direction side, IPlantable plant)
+    {
+        if (state.isFaceSturdy(level, pos, side, SupportType.FULL) && level.getBlockEntity(pos) instanceof FramedBlockEntity be)
+        {
+            if (!be.isSolidSide(side))
+            {
+                return false;
+            }
+
+            BlockState camoState = be.getCamoState(side);
+            return camoState.is(Utils.CAMO_SUSTAIN_PLANT) && camoState.canSustainPlant(level, pos, side, plant);
+        }
+        return false;
     }
 
     default Optional<MutableComponent> printCamoBlock(CompoundTag beTag)
