@@ -24,6 +24,7 @@ import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.Vec3;
 import net.minecraft.world.phys.shapes.*;
 import net.minecraftforge.common.IPlantable;
+import net.minecraftforge.common.Tags;
 import xfacthd.framedblocks.api.FramedBlocksAPI;
 import xfacthd.framedblocks.api.type.IBlockType;
 import xfacthd.framedblocks.api.util.*;
@@ -113,7 +114,7 @@ public interface IFramedBlock extends EntityBlock//, IFacade
             if (player.getMainHandItem() != stack) { return; }
 
             ItemStack otherStack = player.getOffhandItem();
-            if (otherStack.getItem() instanceof BlockItem item && !(item.getBlock() instanceof IFramedBlock))
+            if ((otherStack.getItem() instanceof BlockItem item && !(item.getBlock() instanceof IFramedBlock)) || otherStack.is(Tags.Items.DUSTS_GLOWSTONE))
             {
                 if (level.getBlockEntity(pos) instanceof FramedBlockEntity be && !FramedBlocksAPI.getInstance().isFramedDoubleBlockEntity(be))
                 {
