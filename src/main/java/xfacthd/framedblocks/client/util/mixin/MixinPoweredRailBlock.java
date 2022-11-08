@@ -15,12 +15,13 @@ import xfacthd.framedblocks.api.block.IFramedBlock;
 import xfacthd.framedblocks.common.data.PropertyHolder;
 
 @Mixin(PoweredRailBlock.class)
-public class MixinPoweredRailBlock //TODO: Forge PR
+public class MixinPoweredRailBlock
 {
     @ModifyArg(
             method = "<init>*",
             at = @At(value = "INVOKE", target = "Lnet/minecraft/world/level/block/state/BlockState;setValue(Lnet/minecraft/world/level/block/state/properties/Property;Ljava/lang/Comparable;)Ljava/lang/Object;"),
-            index = 0
+            index = 0,
+            require = 0
     )
     private Property<?> framedblocks_modifyRailShapeProperty(Property<?> property)
     {
@@ -34,9 +35,42 @@ public class MixinPoweredRailBlock //TODO: Forge PR
     @ModifyArg(
             method = "<init>*",
             at = @At(value = "INVOKE", target = "Lnet/minecraft/world/level/block/state/BlockState;setValue(Lnet/minecraft/world/level/block/state/properties/Property;Ljava/lang/Comparable;)Ljava/lang/Object;"),
-            index = 1
+            index = 1,
+            require = 0
     )
     private Comparable<?> framedblocks_modifyDefaultRailShape(Comparable<?> comparable)
+    {
+        if (isFramedBlock(this) && comparable instanceof RailShape)
+        {
+            return RailShape.ASCENDING_NORTH;
+        }
+        return comparable;
+    }
+
+    @ModifyArg(
+            method = "registerDefaultState",
+            at = @At(value = "INVOKE", target = "Lnet/minecraft/world/level/block/state/BlockState;setValue(Lnet/minecraft/world/level/block/state/properties/Property;Ljava/lang/Comparable;)Ljava/lang/Object;", remap = true),
+            index = 0,
+            require = 0,
+            remap = false
+    )
+    private Property<?> framedblocks_modifyRailShapeProperty_ForgePatch(Property<?> property)
+    {
+        if (isFramedBlock(this) && property == PoweredRailBlock.SHAPE)
+        {
+            return PropertyHolder.ASCENDING_RAIL_SHAPE;
+        }
+        return property;
+    }
+
+    @ModifyArg(
+            method = "registerDefaultState",
+            at = @At(value = "INVOKE", target = "Lnet/minecraft/world/level/block/state/BlockState;setValue(Lnet/minecraft/world/level/block/state/properties/Property;Ljava/lang/Comparable;)Ljava/lang/Object;", remap = true),
+            index = 1,
+            require = 0,
+            remap = false
+    )
+    private Comparable<?> framedblocks_modifyDefaultRailShape_ForgePatch(Comparable<?> comparable)
     {
         if (isFramedBlock(this) && comparable instanceof RailShape)
         {
