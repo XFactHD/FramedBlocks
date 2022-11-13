@@ -134,10 +134,10 @@ public enum BlockType implements IBlockType
     FRAMED_FANCY_POWERED_RAIL                       (false, false, false,  true,  true, false, false, false, CtmPredicate.FALSE, SideSkipPredicate.FALSE),
     FRAMED_FANCY_DETECTOR_RAIL                      (false, false, false,  true,  true, false, false, false, CtmPredicate.FALSE, SideSkipPredicate.FALSE),
     FRAMED_FANCY_ACTIVATOR_RAIL                     (false, false, false,  true,  true, false, false, false, CtmPredicate.FALSE, SideSkipPredicate.FALSE),
-    FRAMED_FANCY_RAIL_SLOPE                         (false,  true, false,  true,  true, false,  true, false, CtmPredicate.FALSE, SideSkipPredicate.FALSE, FramedSlopeBlock::generateShapes),
-    FRAMED_FANCY_POWERED_RAIL_SLOPE                 (false,  true, false,  true,  true, false,  true, false, CtmPredicate.FALSE, SideSkipPredicate.FALSE, FramedSlopeBlock::generateShapes),
-    FRAMED_FANCY_DETECTOR_RAIL_SLOPE                (false,  true, false,  true,  true, false,  true, false, CtmPredicate.FALSE, SideSkipPredicate.FALSE, FramedSlopeBlock::generateShapes),
-    FRAMED_FANCY_ACTIVATOR_RAIL_SLOPE               (false,  true, false,  true,  true, false,  true, false, CtmPredicate.FALSE, SideSkipPredicate.FALSE, FramedSlopeBlock::generateShapes),
+    FRAMED_FANCY_RAIL_SLOPE                         ( true,  true, false,  true,  true, false,  true, false, CtmPredicate.FALSE, SideSkipPredicate.FALSE, FramedSlopeBlock::generateShapes),
+    FRAMED_FANCY_POWERED_RAIL_SLOPE                 ( true,  true, false,  true,  true, false,  true, false, CtmPredicate.FALSE, SideSkipPredicate.FALSE, FramedSlopeBlock::generateShapes),
+    FRAMED_FANCY_DETECTOR_RAIL_SLOPE                ( true,  true, false,  true,  true, false,  true, false, CtmPredicate.FALSE, SideSkipPredicate.FALSE, FramedSlopeBlock::generateShapes),
+    FRAMED_FANCY_ACTIVATOR_RAIL_SLOPE               ( true,  true, false,  true,  true, false,  true, false, CtmPredicate.FALSE, SideSkipPredicate.FALSE, FramedSlopeBlock::generateShapes),
     ;
 
     private final String name = toString().toLowerCase(Locale.ROOT);
