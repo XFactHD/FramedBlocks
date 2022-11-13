@@ -52,6 +52,7 @@ public class FramedDetectorRailSlopeBlock extends DetectorRailBlock implements I
                 .setValue(BlockStateProperties.WATERLOGGED, false)
                 .setValue(FramedProperties.SOLID, false)
                 .setValue(FramedProperties.GLOWING, false)
+                .setValue(POWERED, false)
         );
     }
 
