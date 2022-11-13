@@ -8,7 +8,7 @@ import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.world.level.block.entity.BlockEntity;
-import net.minecraftforge.items.CapabilityItemHandler;
+import net.minecraftforge.common.capabilities.ForgeCapabilities;
 import net.minecraftforge.items.SlotItemHandler;
 import xfacthd.framedblocks.common.FBContent;
 import xfacthd.framedblocks.common.blockentity.FramedChestBlockEntity;
@@ -26,7 +26,7 @@ public class FramedStorageMenu extends AbstractContainerMenu
         Preconditions.checkArgument(blockEntity instanceof FramedStorageBlockEntity);
         this.blockEntity = (FramedStorageBlockEntity) blockEntity;
 
-        this.blockEntity.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY).ifPresent(handler ->
+        this.blockEntity.getCapability(ForgeCapabilities.ITEM_HANDLER).ifPresent(handler ->
         {
             for (int row = 0; row < 3; ++row)
             {

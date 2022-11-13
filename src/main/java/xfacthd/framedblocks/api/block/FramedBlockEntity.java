@@ -22,9 +22,10 @@ import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.EntityCollisionContext;
 import net.minecraftforge.client.model.data.ModelData;
 import net.minecraftforge.common.Tags;
+import net.minecraftforge.common.capabilities.ForgeCapabilities;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidType;
-import net.minecraftforge.fluids.capability.*;
+import net.minecraftforge.fluids.capability.IFluidHandler;
 import net.minecraftforge.registries.ForgeRegistries;
 import org.slf4j.Logger;
 import xfacthd.framedblocks.api.FramedBlocksAPI;
@@ -65,7 +66,7 @@ public class FramedBlockEntity extends BlockEntity
         {
             return clearBlockCamo(player, camo, stack, secondary);
         }
-        else if (camo.getType().isFluid() && stack.getCapability(CapabilityFluidHandler.FLUID_HANDLER_ITEM_CAPABILITY).isPresent())
+        else if (camo.getType().isFluid() && stack.getCapability(ForgeCapabilities.FLUID_HANDLER_ITEM).isPresent())
         {
             return clearFluidCamo(player, camo, stack, secondary);
         }
@@ -73,7 +74,7 @@ public class FramedBlockEntity extends BlockEntity
         {
             return setBlockCamo(player, stack, secondary);
         }
-        else if (camo.isEmpty() && stack.getCapability(CapabilityFluidHandler.FLUID_HANDLER_ITEM_CAPABILITY).isPresent())
+        else if (camo.isEmpty() && stack.getCapability(ForgeCapabilities.FLUID_HANDLER_ITEM).isPresent())
         {
             return setFluidCamo(player, stack, secondary);
         }
@@ -179,7 +180,7 @@ public class FramedBlockEntity extends BlockEntity
                     }
                     else
                     {
-                        stack.getCapability(CapabilityFluidHandler.FLUID_HANDLER_ITEM_CAPABILITY).ifPresent(handler ->
+                        stack.getCapability(ForgeCapabilities.FLUID_HANDLER_ITEM).ifPresent(handler ->
                         {
                             FluidStack fluid = new FluidStack(camo.getFluid(), FluidType.BUCKET_VOLUME);
                             handler.fill(fluid, IFluidHandler.FluidAction.EXECUTE);
@@ -239,7 +240,7 @@ public class FramedBlockEntity extends BlockEntity
                     }
                     else
                     {
-                        stack.getCapability(CapabilityFluidHandler.FLUID_HANDLER_ITEM_CAPABILITY).ifPresent(handler ->
+                        stack.getCapability(ForgeCapabilities.FLUID_HANDLER_ITEM).ifPresent(handler ->
                             handler.drain(1000, IFluidHandler.FluidAction.EXECUTE)
                         );
                     }

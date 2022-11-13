@@ -9,10 +9,12 @@ import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.material.Fluid;
 import net.minecraft.world.level.material.FluidState;
+import net.minecraftforge.common.capabilities.ForgeCapabilities;
 import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidType;
-import net.minecraftforge.fluids.capability.*;
+import net.minecraftforge.fluids.capability.IFluidHandler;
+import net.minecraftforge.fluids.capability.IFluidHandlerItem;
 import net.minecraftforge.fml.loading.FMLEnvironment;
 import xfacthd.framedblocks.api.data.*;
 import xfacthd.framedblocks.api.util.Utils;
@@ -47,7 +49,7 @@ public class FluidCamoContainer extends CamoContainer
             return ItemStack.EMPTY;
         }
 
-        LazyOptional<IFluidHandlerItem> cap = stack.getCapability(CapabilityFluidHandler.FLUID_HANDLER_ITEM_CAPABILITY);
+        LazyOptional<IFluidHandlerItem> cap = stack.getCapability(ForgeCapabilities.FLUID_HANDLER_ITEM);
         return cap.map(handler ->
         {
             FluidStack fluid = new FluidStack(fluidState.getType(), FluidType.BUCKET_VOLUME);
@@ -102,7 +104,7 @@ public class FluidCamoContainer extends CamoContainer
         @Override
         public CamoContainer fromItem(ItemStack stack)
         {
-            LazyOptional<IFluidHandlerItem> cap = stack.getCapability(CapabilityFluidHandler.FLUID_HANDLER_ITEM_CAPABILITY);
+            LazyOptional<IFluidHandlerItem> cap = stack.getCapability(ForgeCapabilities.FLUID_HANDLER_ITEM);
             return cap.map(handler ->
             {
                 FluidStack fluid = handler.getFluidInTank(0);
