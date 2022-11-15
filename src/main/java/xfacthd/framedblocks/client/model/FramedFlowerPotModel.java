@@ -7,11 +7,9 @@ import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.block.model.BakedQuad;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.resources.model.BakedModel;
-import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.RandomSource;
-import net.minecraft.world.level.BlockAndTintGetter;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
@@ -75,17 +73,6 @@ public class FramedFlowerPotModel extends BakedModelProxy
         return CACHE_BY_PLANT.get(flower, block ->
                 hanging ? new HangingPotModel(state, baseModel, flower) : new PotModel(state, baseModel, flower)
         );
-    }
-
-    @Nonnull
-    @Override
-    public ModelData getModelData(@Nonnull BlockAndTintGetter level, @Nonnull BlockPos pos, @Nonnull BlockState state, @Nonnull ModelData tileData)
-    {
-        if (level.getBlockEntity(pos) instanceof FramedFlowerPotBlockEntity be)
-        {
-            return be.getModelData();
-        }
-        return tileData;
     }
 
     public static void cacheHangingModel(Map<ResourceLocation, BakedModel> registry)

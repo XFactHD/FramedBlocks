@@ -114,13 +114,20 @@ public abstract class FramedDoubleBlockModel extends BakedModelProxy
 
     @Nonnull
     @Override
-    public ModelData getModelData(@Nonnull BlockAndTintGetter world, @Nonnull BlockPos pos, @Nonnull BlockState state, @Nonnull ModelData tileData)
+    public ModelData getModelData(@Nonnull BlockAndTintGetter level, @Nonnull BlockPos pos, @Nonnull BlockState state, @Nonnull ModelData tileData)
     {
-        if (world.getBlockEntity(pos) instanceof FramedDoubleBlockEntity be)
-        {
-            return be.getModelData();
-        }
-        return tileData;
+        Tuple<BakedModel, BakedModel> models = getModels();
+
+        ModelData dataLeft = tileData.get(FramedDoubleBlockEntity.DATA_LEFT);
+        ModelData dataRight = tileData.get(FramedDoubleBlockEntity.DATA_RIGHT);
+
+        dataLeft = models.getA().getModelData(level, pos, dummyStates.getA(), dataLeft != null ? dataLeft : ModelData.EMPTY);
+        dataRight = models.getB().getModelData(level, pos, dummyStates.getB(), dataRight != null ? dataRight : ModelData.EMPTY);
+
+        return tileData.derive()
+                .with(FramedDoubleBlockEntity.DATA_LEFT, dataLeft)
+                .with(FramedDoubleBlockEntity.DATA_RIGHT, dataRight)
+                .build();
     }
 
 

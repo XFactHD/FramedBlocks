@@ -6,10 +6,8 @@ import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.block.model.BakedQuad;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.resources.model.BakedModel;
-import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.util.RandomSource;
-import net.minecraft.world.level.BlockAndTintGetter;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.client.ChunkRenderTypeSet;
 import net.minecraftforge.client.model.data.ModelData;
@@ -66,17 +64,6 @@ public class FramedCollapsibleBlockModel extends BakedModelProxy
         Integer offsets = extraData.get(FramedCollapsibleBlockEntity.OFFSETS);
         int packed = offsets == null ? 0 : offsets;
         return MODEL_CACHE.get(packed, key -> new CollapsibleModel(state, baseModel, key));
-    }
-
-    @Nonnull
-    @Override
-    public ModelData getModelData(@Nonnull BlockAndTintGetter world, @Nonnull BlockPos pos, @Nonnull BlockState state, @Nonnull ModelData tileData)
-    {
-        if (world.getBlockEntity(pos) instanceof FramedCollapsibleBlockEntity be)
-        {
-            return be.getModelData();
-        }
-        return tileData;
     }
 
     /*TODO: this does not handle quads well that are part of a grid (like CTM models)

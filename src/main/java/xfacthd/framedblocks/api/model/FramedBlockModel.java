@@ -345,7 +345,7 @@ public abstract class FramedBlockModel extends BakedModelProxy
     public final ModelData getModelData(@Nonnull BlockAndTintGetter level, @Nonnull BlockPos pos, @Nonnull BlockState state, @Nonnull ModelData tileData)
     {
         FramedBlockData data = tileData.get(FramedBlockData.PROPERTY);
-        if (fullFaceCache.hasAnyFullFace() && data != null && !data.getCamoState().isAir())
+        if (data != null && !data.getCamoState().isAir())
         {
             BlockState camoState = data.getCamoState();
             BakedModel model = ModelCache.getModel(camoState);
@@ -389,34 +389,21 @@ public abstract class FramedBlockModel extends BakedModelProxy
     private static class FullFaceCache
     {
         private final boolean[] cache = new boolean[7];
-        private final boolean anyFullFace;
 
         public FullFaceCache(IBlockType type, BlockState state)
         {
             CtmPredicate pred = type.getCtmPredicate();
-            boolean any = false;
             for (Direction side : DIRECTIONS)
             {
                 boolean full = pred.test(state, side);
-                any |= full;
                 cache[side.ordinal()] = full;
             }
             cache[6] = false;
-            this.anyFullFace = any;
         }
 
         public boolean isFullFace(Direction side)
         {
-            if (side == null)
-            {
-                return cache[6];
-            }
-            return cache[side.ordinal()];
-        }
-
-        public boolean hasAnyFullFace()
-        {
-            return anyFullFace;
+            return side != null && cache[side.ordinal()];
         }
     }
 }
