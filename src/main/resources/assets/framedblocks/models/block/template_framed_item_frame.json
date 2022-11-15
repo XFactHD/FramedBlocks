@@ -1,7 +1,4 @@
 {
-    "textures": {
-        "front": "block/item_frame"
-    },
     "elements": [
         {   "from": [ 3, 3, 15.5 ],
             "to": [ 13, 13, 16 ],

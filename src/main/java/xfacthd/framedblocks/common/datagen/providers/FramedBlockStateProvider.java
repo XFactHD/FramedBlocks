@@ -17,6 +17,7 @@ import xfacthd.framedblocks.client.model.*;
 import xfacthd.framedblocks.common.FBContent;
 import xfacthd.framedblocks.common.data.PropertyHolder;
 
+import java.util.function.BiFunction;
 import java.util.function.Function;
 
 public final class FramedBlockStateProvider extends BlockStateProvider
@@ -786,17 +787,31 @@ public final class FramedBlockStateProvider extends BlockStateProvider
 
     private void registerFramedItemFrame()
     {
-        ModelFile frame = models().withExistingParent("framed_item_frame", modLoc("block/template_framed_item_frame"))
+        ModelFile normalFrame = models().withExistingParent("framed_item_frame", modLoc("block/template_framed_item_frame"))
+                .texture("front", mcLoc("block/item_frame"))
                 .texture("back", ClientUtils.DUMMY_TEXTURE)
                 .texture("wood", ClientUtils.DUMMY_TEXTURE)
                 .texture("particle", TEXTURE);
 
-        ModelFile mapFrame = models().withExistingParent("framed_item_frame_map", modLoc("block/template_framed_item_frame_map"))
+        ModelFile normalMapFrame = models().withExistingParent("framed_item_frame_map", modLoc("block/template_framed_item_frame_map"))
+                .texture("front", mcLoc("block/item_frame"))
                 .texture("back", ClientUtils.DUMMY_TEXTURE)
                 .texture("wood", ClientUtils.DUMMY_TEXTURE)
                 .texture("particle", TEXTURE);
 
-        Function<BlockState, ConfiguredModel[]> mapper = state ->
+        ModelFile glowFrame = models().withExistingParent("framed_glow_item_frame", modLoc("block/template_framed_item_frame"))
+                .texture("front", mcLoc("block/glow_item_frame"))
+                .texture("back", ClientUtils.DUMMY_TEXTURE)
+                .texture("wood", ClientUtils.DUMMY_TEXTURE)
+                .texture("particle", TEXTURE);
+
+        ModelFile glowMapFrame = models().withExistingParent("framed_glow_item_frame_map", modLoc("block/template_framed_item_frame_map"))
+                .texture("front", mcLoc("block/glow_item_frame"))
+                .texture("back", ClientUtils.DUMMY_TEXTURE)
+                .texture("wood", ClientUtils.DUMMY_TEXTURE)
+                .texture("particle", TEXTURE);
+
+        BiFunction<ModelFile, ModelFile, Function<BlockState, ConfiguredModel[]>> mapper = (frame, mapFrame) -> state ->
         {
             int xRot = 0;
             int yRot = 0;
@@ -819,8 +834,10 @@ public final class FramedBlockStateProvider extends BlockStateProvider
                     .build();
         };
 
-        getVariantBuilder(FBContent.blockFramedItemFrame.get()).forAllStatesExcept(mapper, PropertyHolder.LEATHER);
-        getVariantBuilder(FBContent.blockFramedGlowingItemFrame.get()).forAllStatesExcept(mapper, PropertyHolder.LEATHER);
+        getVariantBuilder(FBContent.blockFramedItemFrame.get())
+                .forAllStatesExcept(mapper.apply(normalFrame, normalMapFrame), PropertyHolder.LEATHER);
+        getVariantBuilder(FBContent.blockFramedGlowingItemFrame.get())
+                .forAllStatesExcept(mapper.apply(glowFrame, glowMapFrame), PropertyHolder.LEATHER);
 
         simpleItem(FBContent.blockFramedItemFrame, "cutout");
         simpleItem(FBContent.blockFramedGlowingItemFrame, "cutout");

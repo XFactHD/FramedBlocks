@@ -2,7 +2,7 @@
   "parent": "framedblocks:block/template_framed_item_frame_map",
   "textures": {
     "back": "forge:white",
-    "front": "minecraft:block/item_frame",
+    "front": "minecraft:block/glow_item_frame",
     "particle": "framedblocks:block/framed_block",
     "wood": "forge:white"
   }
