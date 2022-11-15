@@ -1,5 +1,6 @@
 package xfacthd.framedblocks.api.util.client;
 
+import net.minecraft.client.renderer.LightTexture;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.block.model.BakedQuad;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
@@ -98,8 +99,8 @@ public final class ModelUtils
         int offset = vert * IQuadTransformer.STRIDE + IQuadTransformer.UV2;
         int packedLight = vertexData[offset];
 
-        light[0] = packedLight & 0xFFFF;
-        light[1] = (packedLight >> 16) & 0xFFFF;
+        light[0] = LightTexture.block(packedLight);
+        light[1] = LightTexture.sky(packedLight);
     }
 
     public static void packPosition(float[] pos, int[] vertexData, int vert)
@@ -142,7 +143,7 @@ public final class ModelUtils
     public static void packLight(int[] light, int[] vertexData, int vert)
     {
         int offset = vert * IQuadTransformer.STRIDE + IQuadTransformer.UV2;
-        vertexData[offset] = (light[0] & 0xFFFF) | ((light[1] & 0xFFFF) << 16);
+        vertexData[offset] = LightTexture.pack(light[0], light[1]);
     }
 
     public static BakedQuad duplicateQuad(BakedQuad quad)
