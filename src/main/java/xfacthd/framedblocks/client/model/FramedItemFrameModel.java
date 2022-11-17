@@ -67,7 +67,7 @@ public class FramedItemFrameModel extends FramedBlockModel
         {
             QuadModifier.full(quad)
                     .applyIf(Modifiers.cutTopBottom(outerMin, outerMin, outerMax, outerMax), !mapFrame)
-                    .applyIf(Modifiers.applyLightmap(GLOWING_BRIGHTNESS), glowing)
+                    .applyIf(Modifiers.applyLightmap(GLOWING_BRIGHTNESS, 0), glowing)
                     .export(quadMap.get(quadFace));
         }
         else if (quadFace == facing.getOpposite())
@@ -76,7 +76,7 @@ public class FramedItemFrameModel extends FramedBlockModel
             {
                 QuadModifier.full(quad)
                         .apply(Modifiers.cutTopBottom(innerMin, innerMin, innerMax, innerMax))
-                        .applyIf(Modifiers.applyLightmap(GLOWING_BRIGHTNESS), glowing)
+                        .applyIf(Modifiers.applyLightmap(GLOWING_BRIGHTNESS, 0), glowing)
                         .apply(Modifiers.setPosition(.5F/16F))
                         .export(quadMap.get(null));
             }
@@ -85,25 +85,25 @@ public class FramedItemFrameModel extends FramedBlockModel
             {
                 QuadModifier.full(quad)
                         .apply(Modifiers.cutTopBottom(outerMin, outerMin, innerMin, outerMax))
-                        .applyIf(Modifiers.applyLightmap(GLOWING_BRIGHTNESS), glowing)
+                        .applyIf(Modifiers.applyLightmap(GLOWING_BRIGHTNESS, 0), glowing)
                         .apply(Modifiers.setPosition(1F / 16F))
                         .export(quadMap.get(null));
 
                 QuadModifier.full(quad)
                         .apply(Modifiers.cutTopBottom(innerMax, outerMin, outerMax, outerMax))
-                        .applyIf(Modifiers.applyLightmap(GLOWING_BRIGHTNESS), glowing)
+                        .applyIf(Modifiers.applyLightmap(GLOWING_BRIGHTNESS, 0), glowing)
                         .apply(Modifiers.setPosition(1F / 16F))
                         .export(quadMap.get(null));
 
                 QuadModifier.full(quad)
                         .apply(Modifiers.cutTopBottom(innerMin, outerMin, innerMax, innerMin))
-                        .applyIf(Modifiers.applyLightmap(GLOWING_BRIGHTNESS), glowing)
+                        .applyIf(Modifiers.applyLightmap(GLOWING_BRIGHTNESS, 0), glowing)
                         .apply(Modifiers.setPosition(1F / 16F))
                         .export(quadMap.get(null));
 
                 QuadModifier.full(quad)
                         .apply(Modifiers.cutTopBottom(innerMin, innerMax, innerMax, outerMax))
-                        .applyIf(Modifiers.applyLightmap(GLOWING_BRIGHTNESS), glowing)
+                        .applyIf(Modifiers.applyLightmap(GLOWING_BRIGHTNESS, 0), glowing)
                         .apply(Modifiers.setPosition(1F / 16F))
                         .export(quadMap.get(null));
             }
@@ -111,7 +111,7 @@ public class FramedItemFrameModel extends FramedBlockModel
             if (mapFrame && !leather)
             {
                 QuadModifier.full(quad)
-                        .applyIf(Modifiers.applyLightmap(GLOWING_BRIGHTNESS), glowing)
+                        .applyIf(Modifiers.applyLightmap(GLOWING_BRIGHTNESS, 0), glowing)
                         .apply(Modifiers.setPosition(1F/16F))
                         .export(quadMap.get(quadFace));
             }
@@ -123,7 +123,7 @@ public class FramedItemFrameModel extends FramedBlockModel
             QuadModifier.full(quad)
                     .apply(Modifiers.cutSideUpDown(down, 1F/16F))
                     .applyIf(Modifiers.cutSideLeftRight(outerMax), !mapFrame)
-                    .applyIf(Modifiers.applyLightmap(GLOWING_BRIGHTNESS), glowing)
+                    .applyIf(Modifiers.applyLightmap(GLOWING_BRIGHTNESS, 0), glowing)
                     .applyIf(Modifiers.setPosition(outerMax), !mapFrame)
                     .export(quadMap.get(null));
 
@@ -133,7 +133,7 @@ public class FramedItemFrameModel extends FramedBlockModel
                         .apply(Modifiers.cutSideUpDown(!down, 15.5F / 16F))
                         .apply(Modifiers.cutSideUpDown(down, 1F / 16F))
                         .apply(Modifiers.cutSideLeftRight(innerLength))
-                        .applyIf(Modifiers.applyLightmap(GLOWING_BRIGHTNESS), glowing)
+                        .applyIf(Modifiers.applyLightmap(GLOWING_BRIGHTNESS, 0), glowing)
                         .apply(Modifiers.setPosition(innerPos))
                         .export(quadMap.get(null));
             }
@@ -146,7 +146,7 @@ public class FramedItemFrameModel extends FramedBlockModel
         {
             QuadModifier.full(quad)
                     .applyIf(Modifiers.cutSide(outerMin, outerMin, outerMax, outerMax), !mapFrame)
-                    .applyIf(Modifiers.applyLightmap(GLOWING_BRIGHTNESS), glowing)
+                    .applyIf(Modifiers.applyLightmap(GLOWING_BRIGHTNESS, 0), glowing)
                     .export(quadMap.get(quadFace));
         }
         else if (quadFace == facing.getOpposite())
@@ -155,7 +155,7 @@ public class FramedItemFrameModel extends FramedBlockModel
             {
                 QuadModifier.full(quad)
                         .apply(Modifiers.cutSide(innerMin, innerMin, innerMax, innerMax))
-                        .applyIf(Modifiers.applyLightmap(GLOWING_BRIGHTNESS), glowing)
+                        .applyIf(Modifiers.applyLightmap(GLOWING_BRIGHTNESS, 0), glowing)
                         .apply(Modifiers.setPosition(.5F/16F))
                         .export(quadMap.get(null));
             }
@@ -164,25 +164,25 @@ public class FramedItemFrameModel extends FramedBlockModel
             {
                 QuadModifier.full(quad)
                         .apply(Modifiers.cutSide(outerMin, outerMin, innerMin, outerMax))
-                        .applyIf(Modifiers.applyLightmap(GLOWING_BRIGHTNESS), glowing)
+                        .applyIf(Modifiers.applyLightmap(GLOWING_BRIGHTNESS, 0), glowing)
                         .apply(Modifiers.setPosition(1F/16F))
                         .export(quadMap.get(null));
 
                 QuadModifier.full(quad)
                         .apply(Modifiers.cutSide(innerMax, outerMin, outerMax, outerMax))
-                        .applyIf(Modifiers.applyLightmap(GLOWING_BRIGHTNESS), glowing)
+                        .applyIf(Modifiers.applyLightmap(GLOWING_BRIGHTNESS, 0), glowing)
                         .apply(Modifiers.setPosition(1F/16F))
                         .export(quadMap.get(null));
 
                 QuadModifier.full(quad)
                         .apply(Modifiers.cutSide(innerMin, outerMin, innerMax, innerMin))
-                        .applyIf(Modifiers.applyLightmap(GLOWING_BRIGHTNESS), glowing)
+                        .applyIf(Modifiers.applyLightmap(GLOWING_BRIGHTNESS, 0), glowing)
                         .apply(Modifiers.setPosition(1F/16F))
                         .export(quadMap.get(null));
 
                 QuadModifier.full(quad)
                         .apply(Modifiers.cutSide(innerMin, innerMax, innerMax, outerMax))
-                        .applyIf(Modifiers.applyLightmap(GLOWING_BRIGHTNESS), glowing)
+                        .applyIf(Modifiers.applyLightmap(GLOWING_BRIGHTNESS, 0), glowing)
                         .apply(Modifiers.setPosition(1F/16F))
                         .export(quadMap.get(null));
             }
@@ -190,7 +190,7 @@ public class FramedItemFrameModel extends FramedBlockModel
             if (mapFrame && !leather)
             {
                 QuadModifier.full(quad)
-                        .applyIf(Modifiers.applyLightmap(GLOWING_BRIGHTNESS), glowing)
+                        .applyIf(Modifiers.applyLightmap(GLOWING_BRIGHTNESS, 0), glowing)
                         .apply(Modifiers.setPosition(1F/16F))
                         .export(quadMap.get(quadFace));
             }
@@ -200,7 +200,7 @@ public class FramedItemFrameModel extends FramedBlockModel
             QuadModifier.full(quad)
                     .apply(Modifiers.cutTopBottom(facing.getOpposite(), 1F/16F))
                     .applyIf(Modifiers.cutTopBottom(facing.getClockWise().getAxis(), outerMax), !mapFrame)
-                    .applyIf(Modifiers.applyLightmap(GLOWING_BRIGHTNESS), glowing)
+                    .applyIf(Modifiers.applyLightmap(GLOWING_BRIGHTNESS, 0), glowing)
                     .applyIf(Modifiers.setPosition(outerMax), !mapFrame)
                     .export(quadMap.get(null));
 
@@ -210,7 +210,7 @@ public class FramedItemFrameModel extends FramedBlockModel
                         .apply(Modifiers.cutTopBottom(facing, 15.5F/16F))
                         .apply(Modifiers.cutTopBottom(facing.getOpposite(), 1F/16F))
                         .apply(Modifiers.cutTopBottom(facing.getClockWise().getAxis(), innerLength))
-                        .applyIf(Modifiers.applyLightmap(GLOWING_BRIGHTNESS), glowing)
+                        .applyIf(Modifiers.applyLightmap(GLOWING_BRIGHTNESS, 0), glowing)
                         .apply(Modifiers.setPosition(innerPos))
                         .export(quadMap.get(null));
             }
@@ -220,7 +220,7 @@ public class FramedItemFrameModel extends FramedBlockModel
             QuadModifier.full(quad)
                     .apply(Modifiers.cutSideLeftRight(facing.getOpposite(), 1F/16F))
                     .applyIf(Modifiers.cutSideUpDown(outerMax), !mapFrame)
-                    .applyIf(Modifiers.applyLightmap(GLOWING_BRIGHTNESS), glowing)
+                    .applyIf(Modifiers.applyLightmap(GLOWING_BRIGHTNESS, 0), glowing)
                     .applyIf(Modifiers.setPosition(outerMax), !mapFrame)
                     .export(quadMap.get(null));
 
@@ -230,7 +230,7 @@ public class FramedItemFrameModel extends FramedBlockModel
                         .apply(Modifiers.cutSideLeftRight(facing, 15.5F/16F))
                         .apply(Modifiers.cutSideLeftRight(facing.getOpposite(), 1F/16F))
                         .apply(Modifiers.cutSideUpDown(innerLength))
-                        .applyIf(Modifiers.applyLightmap(GLOWING_BRIGHTNESS), glowing)
+                        .applyIf(Modifiers.applyLightmap(GLOWING_BRIGHTNESS, 0), glowing)
                         .apply(Modifiers.setPosition(innerPos))
                         .export(quadMap.get(null));
             }
@@ -250,6 +250,12 @@ public class FramedItemFrameModel extends FramedBlockModel
             {
                 if (!quad.getSprite().getName().equals(ClientUtils.DUMMY_TEXTURE))
                 {
+                    if (glowing)
+                    {
+                        QuadModifier.full(quad)
+                                .apply(Modifiers.applyLightmap(GLOWING_BRIGHTNESS, 0))
+                                .modifyInPlace();
+                    }
                     quadMap.get(null).add(quad);
                 }
             }
