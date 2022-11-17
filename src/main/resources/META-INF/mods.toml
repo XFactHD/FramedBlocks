@@ -19,7 +19,7 @@ description='''
 [[dependencies.framedblocks]]
     modId="forge"
     mandatory=true
-    versionRange="[42.1.52,)"
+    versionRange="[43.1.52,)"
     ordering="NONE"
     side="BOTH"
 
