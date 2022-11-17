@@ -1,49 +1,49 @@
 {
   "variants": {
     "facing=down,map_frame=false": {
-      "model": "framedblocks:block/framed_item_frame",
+      "model": "framedblocks:block/framed_glow_item_frame",
       "x": -90
     },
     "facing=up,map_frame=false": {
-      "model": "framedblocks:block/framed_item_frame",
+      "model": "framedblocks:block/framed_glow_item_frame",
       "x": 90
     },
     "facing=north,map_frame=false": {
-      "model": "framedblocks:block/framed_item_frame",
+      "model": "framedblocks:block/framed_glow_item_frame",
       "y": 180
     },
     "facing=south,map_frame=false": {
-      "model": "framedblocks:block/framed_item_frame"
+      "model": "framedblocks:block/framed_glow_item_frame"
     },
     "facing=west,map_frame=false": {
-      "model": "framedblocks:block/framed_item_frame",
+      "model": "framedblocks:block/framed_glow_item_frame",
       "y": 90
     },
     "facing=east,map_frame=false": {
-      "model": "framedblocks:block/framed_item_frame",
+      "model": "framedblocks:block/framed_glow_item_frame",
       "y": 270
     },
     "facing=down,map_frame=true": {
-      "model": "framedblocks:block/framed_item_frame_map",
+      "model": "framedblocks:block/framed_glow_item_frame_map",
       "x": -90
     },
     "facing=up,map_frame=true": {
-      "model": "framedblocks:block/framed_item_frame_map",
+      "model": "framedblocks:block/framed_glow_item_frame_map",
       "x": 90
     },
     "facing=north,map_frame=true": {
-      "model": "framedblocks:block/framed_item_frame_map",
+      "model": "framedblocks:block/framed_glow_item_frame_map",
       "y": 180
     },
     "facing=south,map_frame=true": {
-      "model": "framedblocks:block/framed_item_frame_map"
+      "model": "framedblocks:block/framed_glow_item_frame_map"
     },
     "facing=west,map_frame=true": {
-      "model": "framedblocks:block/framed_item_frame_map",
+      "model": "framedblocks:block/framed_glow_item_frame_map",
       "y": 90
     },
     "facing=east,map_frame=true": {
-      "model": "framedblocks:block/framed_item_frame_map",
+      "model": "framedblocks:block/framed_glow_item_frame_map",
       "y": 270
     }
   }
