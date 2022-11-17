@@ -15,11 +15,13 @@ import java.util.Arrays;
 
 public final class ModelUtils
 {
+    public static final int QUAD_STRIDE = DefaultVertexFormat.BLOCK.getIntegerSize();
     public static final int ELEMENT_POS = findElement(DefaultVertexFormat.ELEMENT_POSITION);
     public static final int ELEMENT_COLOR = findElement(DefaultVertexFormat.ELEMENT_COLOR);
     public static final int ELEMENT_UV = findElement(DefaultVertexFormat.ELEMENT_UV0);
     public static final int ELEMENT_LIGHT = findElement(DefaultVertexFormat.ELEMENT_UV2);
     public static final int ELEMENT_NORMAL = findElement(DefaultVertexFormat.ELEMENT_NORMAL);
+    public static final int OFFSET_LIGHT = findOffset(ELEMENT_LIGHT);
     private static final double UV_SUBSTEP_COUNT = 8D;
 
     /**
@@ -86,6 +88,12 @@ public final class ModelUtils
             idx++;
         }
         throw new IllegalArgumentException("Format doesn't have a " + targetElement + " element");
+    }
+
+    public static int findOffset(int elemIdx)
+    {
+        //Divide by 4 to get int offset
+        return DefaultVertexFormat.BLOCK.getOffset(elemIdx) / 4;
     }
 
     public static BakedQuad duplicateQuad(BakedQuad quad)

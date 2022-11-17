@@ -2,7 +2,6 @@ package xfacthd.framedblocks.api.model.quad;
 
 import com.google.common.base.Preconditions;
 import com.mojang.math.*;
-import net.minecraft.client.renderer.LightTexture;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.core.Direction;
 import net.minecraft.util.Mth;
@@ -747,28 +746,20 @@ public final class Modifiers
         }
     }
 
-    public static QuadModifier.Modifier applyFullbright()
-    {
-        return data ->
-        {
-            for (int i = 0; i < 4; i++)
-            {
-                data.light()[i][0] = 0xF0;
-                data.light()[i][1] = 0xF0;
-            }
-            return true;
-        };
-    }
+    public static QuadModifier.Modifier applyFullbright() { return applyLightmap(15, 15); }
 
-    public static QuadModifier.Modifier applyLightmap(int light)
+    public static QuadModifier.Modifier applyLightmap(int light) { return applyLightmap(light, light); }
+
+    public static QuadModifier.Modifier applyLightmap(int blockLight, int skyLight)
     {
-        Preconditions.checkArgument(light >= 0 && light < 16, "Invalid light value");
+        Preconditions.checkArgument(blockLight >= 0 && blockLight < 16, "Invalid block light value");
+        Preconditions.checkArgument(skyLight >= 0 && skyLight < 16, "Invalid sky light value");
         return data ->
         {
             for (int i = 0; i < 4; i++)
             {
-                data.light()[i][0] = LightTexture.pack(light, light);
-                data.light()[i][1] = LightTexture.pack(light, light);
+                data.light()[i][0] = blockLight;
+                data.light()[i][1] = skyLight;
             }
             return true;
         };

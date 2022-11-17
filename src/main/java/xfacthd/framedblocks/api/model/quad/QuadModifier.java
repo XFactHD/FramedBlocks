@@ -2,6 +2,7 @@ package xfacthd.framedblocks.api.model.quad;
 
 import com.google.common.base.Preconditions;
 import com.mojang.blaze3d.vertex.DefaultVertexFormat;
+import net.minecraft.client.renderer.LightTexture;
 import net.minecraft.client.renderer.block.model.BakedQuad;
 import net.minecraftforge.client.model.pipeline.LightUtil;
 import xfacthd.framedblocks.api.util.client.ModelUtils;
@@ -50,7 +51,6 @@ public final class QuadModifier
         float[][] uv = new float[4][2];
         float[][] normal = new float[4][3];
         float[] colorf = new float[4];
-        float[] lightf = new float[2];
         int[][] color = new int[4][4];
         int[][] light = new int[4][2];
 
@@ -61,15 +61,16 @@ public final class QuadModifier
             LightUtil.unpack(vertexData, uv[i], DefaultVertexFormat.BLOCK, i, ModelUtils.ELEMENT_UV);
             LightUtil.unpack(vertexData, normal[i], DefaultVertexFormat.BLOCK, i, ModelUtils.ELEMENT_NORMAL);
             LightUtil.unpack(vertexData, colorf, DefaultVertexFormat.BLOCK, i, ModelUtils.ELEMENT_COLOR);
-            LightUtil.unpack(vertexData, lightf, DefaultVertexFormat.BLOCK, i, ModelUtils.ELEMENT_LIGHT);
 
             color[i][0] = (int)colorf[0];
             color[i][1] = (int)colorf[1];
             color[i][2] = (int)colorf[2];
             color[i][3] = (int)colorf[3];
 
-            light[i][0] = (int)lightf[0];
-            light[i][1] = (int)lightf[1];
+            int offset = i * ModelUtils.QUAD_STRIDE + ModelUtils.OFFSET_LIGHT;
+            int packedLight = vertexData[offset];
+            light[i][0] = LightTexture.block(packedLight);
+            light[i][1] = LightTexture.sky(packedLight);
         }
 
         return new QuadModifier(new Data(quad, pos, uv, normal, color, light), false, -1, false, false);
@@ -164,7 +165,6 @@ public final class QuadModifier
     private void packVertexData(int[] vertexData)
     {
         float[] colorf = new float[4];
-        float[] lightf = new float[2];
 
         for (int i = 0; i < 4; i++)
         {
@@ -183,10 +183,8 @@ public final class QuadModifier
             }
             if (data.light != null)
             {
-                lightf[0] = (float)data.light[i][0];
-                lightf[1] = (float)data.light[i][1];
-
-                LightUtil.pack(lightf, vertexData, DefaultVertexFormat.BLOCK, i, ModelUtils.ELEMENT_LIGHT);
+                int offset = i * ModelUtils.QUAD_STRIDE + ModelUtils.OFFSET_LIGHT;
+                vertexData[offset] = LightTexture.pack(data.light[i][0], data.light[i][1]);
             }
         }
     }
