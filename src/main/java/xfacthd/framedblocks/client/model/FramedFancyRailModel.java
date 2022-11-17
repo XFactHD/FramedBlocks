@@ -3,7 +3,6 @@ package xfacthd.framedblocks.client.model;
 import com.mojang.datafixers.util.Pair;
 import com.mojang.math.Vector3f;
 import net.minecraft.Util;
-import net.minecraft.client.renderer.ItemBlockRenderTypes;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.block.model.BakedQuad;
 import net.minecraft.client.resources.model.BakedModel;
@@ -53,7 +52,7 @@ public class FramedFancyRailModel extends FramedBlockModel
     @Override
     protected void transformQuad(Map<Direction, List<BakedQuad>> quadMap, BakedQuad quad)
     {
-        Pair<BakedQuad[], Direction> result;
+        Pair<List<BakedQuad>, Direction> result;
         if (shape.isAscending())
         {
             result = makeAscendingRailSleepers(quad, mainDir);
@@ -66,12 +65,12 @@ public class FramedFancyRailModel extends FramedBlockModel
         {
             result = makeCurvedRailSleepers(quad, mainDir, secDir);
         }
-        quadMap.get(result.getSecond()).addAll(Arrays.asList(result.getFirst()));
+        quadMap.get(result.getSecond()).addAll(result.getFirst());
     }
 
-    private static Pair<BakedQuad[], Direction> makeStraightRailSleepers(BakedQuad quad, Direction dir)
+    private static Pair<List<BakedQuad>, Direction> makeStraightRailSleepers(BakedQuad quad, Direction dir)
     {
-        BakedQuad[] result = new BakedQuad[SLEEPER_COUNT];
+        List<BakedQuad> result = new ArrayList<>(SLEEPER_COUNT);
         Direction targetDir;
 
         Direction quadDir = quad.getDirection();
@@ -84,7 +83,7 @@ public class FramedFancyRailModel extends FramedBlockModel
                             .apply(Modifiers.cutTopBottom(dir, distDir))
                             .apply(Modifiers.cutTopBottom(dir.getOpposite(), distOpp))
                             .applyIf(Modifiers.setPosition(SLEEPER_HEIGHT), quadDir == Direction.UP)
-                            .export(q -> result[i] = q)
+                            .export(result::add)
             );
         }
         else if (quadDir.getAxis() == dir.getAxis())
@@ -95,7 +94,7 @@ public class FramedFancyRailModel extends FramedBlockModel
                     QuadModifier.geometry(quad)
                             .apply(Modifiers.cutSideUpDown(false, SLEEPER_HEIGHT))
                             .apply(Modifiers.setPosition(distDir))
-                            .export(q -> result[i] = q)
+                            .export(result::add)
             );
         }
         else
@@ -107,23 +106,23 @@ public class FramedFancyRailModel extends FramedBlockModel
                             .apply(Modifiers.cutSideUpDown(false, SLEEPER_HEIGHT))
                             .apply(Modifiers.cutSideLeftRight(dir, distDir))
                             .apply(Modifiers.cutSideLeftRight(dir.getOpposite(), distOpp))
-                            .export(q -> result[i] = q)
+                            .export(result::add)
             );
         }
 
         return Pair.of(result, targetDir);
     }
 
-    private static Pair<BakedQuad[], Direction> makeAscendingRailSleepers(BakedQuad quad, Direction dir)
+    private static Pair<List<BakedQuad>, Direction> makeAscendingRailSleepers(BakedQuad quad, Direction dir)
     {
-        Pair<BakedQuad[], Direction> result = makeStraightRailSleepers(quad, dir);
+        Pair<List<BakedQuad>, Direction> result = makeStraightRailSleepers(quad, dir);
 
         Direction.Axis axis = dir.getClockWise().getAxis();
         Vector3f origin = SLOPE_ORIGINS[dir.get2DDataValue()];
         float angle = Utils.isPositive(dir) == Utils.isX(dir) ? 45F : -45F;
         Vector3f scaleVec = Utils.isX(dir) ? SCALE_X : SCALE_Z;
 
-        BakedQuad[] quads = result.getFirst();
+        List<BakedQuad> quads = result.getFirst();
         for (BakedQuad resultQuad : quads)
         {
             QuadModifier.geometry(resultQuad)
@@ -135,9 +134,9 @@ public class FramedFancyRailModel extends FramedBlockModel
         return Pair.of(quads, targetDir);
     }
 
-    private static Pair<BakedQuad[], Direction> makeCurvedRailSleepers(BakedQuad quad, Direction dir, Direction secDir)
+    private static Pair<List<BakedQuad>, Direction> makeCurvedRailSleepers(BakedQuad quad, Direction dir, Direction secDir)
     {
-        BakedQuad[] result = new BakedQuad[SLEEPER_COUNT_CURVE];
+        List<BakedQuad> result = new ArrayList<>(SLEEPER_COUNT_CURVE);
         Direction targetDir;
 
         Direction quadDir = quad.getDirection();
@@ -156,7 +155,7 @@ public class FramedFancyRailModel extends FramedBlockModel
                         .applyIf(rotateCurveSleeper(dir, secDir, i), i < 2)
                         .applyIf(Modifiers.offset(dir, SLEEPER_DIAGONAL_OFFSET), i == 1)
                         .applyIf(Modifiers.offset(secDir, SLEEPER_DIAGONAL_OFFSET), i == 1)
-                        .export(q -> result[i] = q);
+                        .export(result::add);
             });
         }
         else if (quadDir.getAxis() == dir.getAxis())
@@ -171,7 +170,7 @@ public class FramedFancyRailModel extends FramedBlockModel
                             .applyIf(rotateCurveSleeper(dir, secDir, i), i < 2)
                             .applyIf(Modifiers.offset(dir, SLEEPER_DIAGONAL_OFFSET), i == 1)
                             .applyIf(Modifiers.offset(secDir, SLEEPER_DIAGONAL_OFFSET), i == 1)
-                            .export(q -> result[i] = q)
+                            .export(result::add)
             );
         }
         else
@@ -186,7 +185,7 @@ public class FramedFancyRailModel extends FramedBlockModel
                             .applyIf(rotateCurveSleeper(dir, secDir, i), i < 2)
                             .applyIf(Modifiers.offset(dir, SLEEPER_DIAGONAL_OFFSET), i == 1)
                             .applyIf(Modifiers.offset(secDir, SLEEPER_DIAGONAL_OFFSET), i == 1)
-                            .export(q -> result[i] = q)
+                            .export(result::add)
             );
         }
 
