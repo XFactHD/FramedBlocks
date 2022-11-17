@@ -29,7 +29,15 @@ public final class SlopeSkipPredicate implements SideSkipPredicate
 
             return switch (blockType)
             {
-                case FRAMED_SLOPE, FRAMED_RAIL_SLOPE -> testAgainstSlope(level, pos, dir, type, adjState, side);
+                case FRAMED_SLOPE,
+                     FRAMED_RAIL_SLOPE,
+                     FRAMED_POWERED_RAIL_SLOPE,
+                     FRAMED_DETECTOR_RAIL_SLOPE,
+                     FRAMED_ACTIVATOR_RAIL_SLOPE,
+                     FRAMED_FANCY_RAIL_SLOPE,
+                     FRAMED_FANCY_POWERED_RAIL_SLOPE,
+                     FRAMED_FANCY_DETECTOR_RAIL_SLOPE,
+                     FRAMED_FANCY_ACTIVATOR_RAIL_SLOPE -> testAgainstSlope(level, pos, dir, type, adjState, side);
                 case FRAMED_DOUBLE_SLOPE -> testAgainstDoubleSlope(level, pos, dir, type, adjState, side);
                 case FRAMED_CORNER_SLOPE -> testAgainstCorner(level, pos, dir, type, adjState, side);
                 case FRAMED_DOUBLE_CORNER -> testAgainstDoubleCorner(level, pos, dir, type, adjState, side);

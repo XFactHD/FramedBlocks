@@ -28,7 +28,15 @@ public final class ThreewayCornerSkipPredicate implements SideSkipPredicate
                 case FRAMED_PRISM_CORNER, FRAMED_THREEWAY_CORNER -> testAgainstThreewayCorner(level, pos, dir, top, adjState, side);
                 case FRAMED_INNER_PRISM_CORNER, FRAMED_INNER_THREEWAY_CORNER -> testAgainstInnerThreewayCorner(level, pos, dir, top, adjState, side);
                 case FRAMED_DOUBLE_PRISM_CORNER, FRAMED_DOUBLE_THREEWAY_CORNER -> testAgainstDoubleThreewayCorner(level, pos, dir, top, adjState, side);
-                case FRAMED_SLOPE, FRAMED_RAIL_SLOPE -> testAgainstSlope(level, pos, dir, top, adjState, side);
+                case FRAMED_SLOPE,
+                     FRAMED_RAIL_SLOPE,
+                     FRAMED_POWERED_RAIL_SLOPE,
+                     FRAMED_DETECTOR_RAIL_SLOPE,
+                     FRAMED_ACTIVATOR_RAIL_SLOPE,
+                     FRAMED_FANCY_RAIL_SLOPE,
+                     FRAMED_FANCY_POWERED_RAIL_SLOPE,
+                     FRAMED_FANCY_DETECTOR_RAIL_SLOPE,
+                     FRAMED_FANCY_ACTIVATOR_RAIL_SLOPE -> testAgainstSlope(level, pos, dir, top, adjState, side);
                 case FRAMED_DOUBLE_SLOPE -> testAgainstDoubleSlope(level, pos, dir, top, adjState, side);
                 case FRAMED_CORNER_SLOPE -> testAgainstCorner(level, pos, dir, top, adjState, side);
                 case FRAMED_INNER_CORNER_SLOPE -> testAgainstInnerCorner(level, pos, dir, top, adjState, side);
