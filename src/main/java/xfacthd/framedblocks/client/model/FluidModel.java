@@ -17,6 +17,7 @@ import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.material.Fluid;
 import net.minecraft.world.level.material.Fluids;
+import net.minecraftforge.client.ChunkRenderTypeSet;
 import net.minecraftforge.client.extensions.common.IClientFluidTypeExtensions;
 import net.minecraftforge.client.model.*;
 import net.minecraftforge.client.model.data.ModelData;
@@ -44,12 +45,14 @@ public final class FluidModel implements BakedModel
             IClientFluidTypeExtensions.of(Fluids.WATER).getFlowingTexture()
     );
     private final RenderType fluidLayer;
+    private final ChunkRenderTypeSet fluidLayerSet;
     private final Map<Direction, List<BakedQuad>> quads;
     private final TextureAtlasSprite particles;
 
     private FluidModel(RenderType fluidLayer, Map<Direction, List<BakedQuad>> quads, TextureAtlasSprite particles)
     {
         this.fluidLayer = fluidLayer;
+        this.fluidLayerSet = ChunkRenderTypeSet.of(fluidLayer);
         this.quads = quads;
         this.particles = particles;
     }
@@ -65,6 +68,12 @@ public final class FluidModel implements BakedModel
     {
         if (side == null || layer != fluidLayer) { return Collections.emptyList(); }
         return quads.get(side);
+    }
+
+    @Override
+    public ChunkRenderTypeSet getRenderTypes(@NotNull BlockState state, @NotNull RandomSource rand, @NotNull ModelData data)
+    {
+        return fluidLayerSet;
     }
 
     @Override
