@@ -57,6 +57,9 @@ public class FramedPoweredRailSlopeBlock extends PoweredRailBlock implements IFr
     }
 
     @Override
+    protected void registerDefaultState() { }
+
+    @Override
     protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder)
     {
         builder.add(PropertyHolder.ASCENDING_RAIL_SHAPE, BlockStateProperties.POWERED, BlockStateProperties.WATERLOGGED, FramedProperties.SOLID, FramedProperties.GLOWING);
