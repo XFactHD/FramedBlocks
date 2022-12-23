@@ -183,6 +183,13 @@ public final class FBContent
     public static final RegistryObject<Block> blockFramedFancyPoweredRailSlope = registerBlock(FramedPoweredRailSlopeBlock::poweredFancy, BlockType.FRAMED_FANCY_POWERED_RAIL_SLOPE);
     public static final RegistryObject<Block> blockFramedFancyDetectorRailSlope = registerBlock(FramedDetectorRailSlopeBlock::fancy, BlockType.FRAMED_FANCY_DETECTOR_RAIL_SLOPE);
     public static final RegistryObject<Block> blockFramedFancyActivatorRailSlope = registerBlock(FramedPoweredRailSlopeBlock::activatorFancy, BlockType.FRAMED_FANCY_ACTIVATOR_RAIL_SLOPE);
+    public static final RegistryObject<Block> blockFramedHalfSlope = registerBlock(FramedHalfSlopeBlock::new, BlockType.FRAMED_HALF_SLOPE);
+    public static final RegistryObject<Block> blockFramedVerticalHalfSlope = registerBlock(FramedVerticalHalfSlopeBlock::new, BlockType.FRAMED_VERTICAL_HALF_SLOPE);
+    public static final RegistryObject<Block> blockFramedDividedSlope = registerBlock(FramedDividedSlopeBlock::new, BlockType.FRAMED_DIVIDED_SLOPE);
+    public static final RegistryObject<Block> blockFramedDoubleHalfSlope = registerBlock(FramedDoubleHalfSlopeBlock::new, BlockType.FRAMED_DOUBLE_HALF_SLOPE);
+    public static final RegistryObject<Block> blockFramedVerticalDoubleHalfSlope = registerBlock(FramedVerticalDoubleHalfSlopeBlock::new, BlockType.FRAMED_VERTICAL_DOUBLE_HALF_SLOPE);
+    public static final RegistryObject<Block> blockFramedSlopedStairs = registerBlock(FramedSlopedStairsBlock::new, BlockType.FRAMED_SLOPED_STAIRS);
+    public static final RegistryObject<Block> blockFramedVerticalSlopedStairs = registerBlock(FramedVerticalSlopedStairsBlock::new, BlockType.FRAMED_VERTICAL_SLOPED_STAIRS);
     // endregion
 
     // region Items
@@ -319,6 +326,18 @@ public final class FBContent
             BlockType.FRAMED_FANCY_POWERED_RAIL_SLOPE,
             BlockType.FRAMED_FANCY_DETECTOR_RAIL_SLOPE,
             BlockType.FRAMED_FANCY_ACTIVATOR_RAIL_SLOPE
+    );
+    public static final RegistryObject<BlockEntityType<FramedDividedSlopeBlockEntity>> blockEntityTypeFramedDividedSlope = createBlockEntityType(
+            FramedDividedSlopeBlockEntity::new,
+            BlockType.FRAMED_DIVIDED_SLOPE
+    );
+    public static final RegistryObject<BlockEntityType<FramedDoubleHalfSlopeBlockEntity>> blockEntityTypeFramedDoubleHalfSlope = createBlockEntityType(
+            FramedDoubleHalfSlopeBlockEntity::new,
+            BlockType.FRAMED_DOUBLE_HALF_SLOPE
+    );
+    public static final RegistryObject<BlockEntityType<FramedVerticalDoubleHalfSlopeBlockEntity>> blockEntityTypeFramedVerticalDoubleHalfSlope = createBlockEntityType(
+            FramedVerticalDoubleHalfSlopeBlockEntity::new,
+            BlockType.FRAMED_VERTICAL_DOUBLE_HALF_SLOPE
     );
     // endregion
 

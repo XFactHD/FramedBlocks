@@ -138,4 +138,44 @@ public enum HorizontalRotation implements StringRepresentable
             return xz > .5D ? UP : RIGHT;
         }
     }
+
+    public static HorizontalRotation fromPerpendicularWallCorner(Direction facing, Direction hitFace, Vec3 hitVec)
+    {
+        Preconditions.checkArgument(!Utils.isY(facing), "View direction must not be on the Y axis");
+        Preconditions.checkArgument(facing.getAxis() != hitFace.getAxis(), "Directions must be perpendicular");
+
+        if (hitFace == Direction.UP)
+        {
+            if (Utils.fractionInDir(hitVec, facing.getCounterClockWise()) > .5)
+            {
+                return HorizontalRotation.RIGHT;
+            }
+            return UP;
+        }
+        if (hitFace == Direction.DOWN)
+        {
+            if (Utils.fractionInDir(hitVec, facing.getClockWise()) > .5)
+            {
+                return HorizontalRotation.LEFT;
+            }
+            return DOWN;
+        }
+        if (hitFace == facing.getClockWise())
+        {
+            if (Utils.fractionInDir(hitVec, Direction.UP) > .5)
+            {
+                return HorizontalRotation.DOWN;
+            }
+            return RIGHT;
+        }
+        if (hitFace == facing.getCounterClockWise())
+        {
+            if (Utils.fractionInDir(hitVec, Direction.DOWN) > .5)
+            {
+                return HorizontalRotation.UP;
+            }
+            return LEFT;
+        }
+        throw new IllegalStateException(String.format("How did we get here?! %s|%s", facing, hitFace));
+    }
 }

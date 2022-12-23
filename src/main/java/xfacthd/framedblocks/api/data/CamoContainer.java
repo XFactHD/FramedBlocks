@@ -99,6 +99,11 @@ public abstract class CamoContainer
     public SoundType getSoundType() { return state.getSoundType(); }
 
     /**
+     * @return True if the camo is fully solid
+     */
+    public boolean isSolid(BlockGetter level, BlockPos pos) { return getState().isSolidRender(level, pos); }
+
+    /**
      * Returns true if this container is empty
      */
     public boolean isEmpty() { return false; }

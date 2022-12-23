@@ -138,6 +138,13 @@ public enum BlockType implements IBlockType
     FRAMED_FANCY_POWERED_RAIL_SLOPE                 ( true,  true, false,  true,  true, false,  true, false, CtmPredicate.FALSE, SideSkipPredicate.FALSE, FramedSlopeBlock::generateShapes),
     FRAMED_FANCY_DETECTOR_RAIL_SLOPE                ( true,  true, false,  true,  true, false,  true, false, CtmPredicate.FALSE, SideSkipPredicate.FALSE, FramedSlopeBlock::generateShapes),
     FRAMED_FANCY_ACTIVATOR_RAIL_SLOPE               ( true,  true, false,  true,  true, false,  true, false, CtmPredicate.FALSE, SideSkipPredicate.FALSE, FramedSlopeBlock::generateShapes),
+    FRAMED_HALF_SLOPE                               (false,  true, false,  true,  true,  true, false, false, CtmPredicate.FALSE, new HalfSlopeSkipPredicate(), FramedHalfSlopeBlock::generateShapes),
+    FRAMED_VERTICAL_HALF_SLOPE                      (false,  true, false,  true, false,  true, false, false, CtmPredicate.FALSE, new VerticalHalfSlopeSkipPredicate(), FramedVerticalHalfSlopeBlock::generateShapes),
+    FRAMED_DIVIDED_SLOPE                            ( true,  true,  true,  true,  true,  true,  true, false, FramedSlopeBlock::generateShapes),
+    FRAMED_DOUBLE_HALF_SLOPE                        ( true, false,  true,  true,  true,  true,  true, false, FramedDoubleHalfSlopeBlock::generateShapes),
+    FRAMED_VERTICAL_DOUBLE_HALF_SLOPE               ( true, false,  true,  true, false,  true,  true, false, FramedVerticalDoubleHalfSlopeBlock::generateShapes),
+    FRAMED_SLOPED_STAIRS                            ( true,  true, false,  true,  true,  true, false, false, FramedSlopedStairsBlock.CTM_PREDICATE, new SlopedStairsSkipPredicate(), FramedSlopedStairsBlock::generateShapes),
+    FRAMED_VERTICAL_SLOPED_STAIRS                   ( true,  true, false,  true,  true,  true, false, false, FramedVerticalSlopedStairsBlock.CTM_PREDICATE, new VerticalSlopedStairsSkipPredicate(), FramedVerticalSlopedStairsBlock::generateShapes),
     ;
 
     private final String name = toString().toLowerCase(Locale.ROOT);

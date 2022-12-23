@@ -91,6 +91,11 @@ public final class FBClient
         BlockOutlineRenderer.registerOutlineRender(BlockType.FRAMED_FANCY_POWERED_RAIL_SLOPE, RailSlopeOutlineRenderer.INSTANCE);
         BlockOutlineRenderer.registerOutlineRender(BlockType.FRAMED_FANCY_DETECTOR_RAIL_SLOPE, RailSlopeOutlineRenderer.INSTANCE);
         BlockOutlineRenderer.registerOutlineRender(BlockType.FRAMED_FANCY_ACTIVATOR_RAIL_SLOPE, RailSlopeOutlineRenderer.INSTANCE);
+        BlockOutlineRenderer.registerOutlineRender(BlockType.FRAMED_HALF_SLOPE, new HalfSlopeOutlineRenderer());
+        BlockOutlineRenderer.registerOutlineRender(BlockType.FRAMED_VERTICAL_HALF_SLOPE, new VerticalHalfSlopeOutlineRenderer());
+        BlockOutlineRenderer.registerOutlineRender(BlockType.FRAMED_DIVIDED_SLOPE, new SlopeOutlineRenderer());
+        BlockOutlineRenderer.registerOutlineRender(BlockType.FRAMED_SLOPED_STAIRS, new SlopedStairsOutlineRenderer());
+        BlockOutlineRenderer.registerOutlineRender(BlockType.FRAMED_VERTICAL_SLOPED_STAIRS, new VerticalSlopedStairsOutlineRenderer());
 
         GhostBlockRenderer.init();
         GhostRenderBehaviours.register();
@@ -304,6 +309,13 @@ public final class FBClient
         ClientUtils.replaceModels(FBContent.blockFramedFancyPoweredRailSlope, registry, FramedFancyRailSlopeModel::new, FramedFancyRailSlopeModel.itemSourcePowered(), ignoreDefault);
         ClientUtils.replaceModels(FBContent.blockFramedFancyDetectorRailSlope, registry, FramedFancyRailSlopeModel::new, FramedFancyRailSlopeModel.itemSourceDetector(), ignoreDefault);
         ClientUtils.replaceModels(FBContent.blockFramedFancyActivatorRailSlope, registry, FramedFancyRailSlopeModel::new, FramedFancyRailSlopeModel.itemSourceActivator(), ignoreDefault);
+        ClientUtils.replaceModels(FBContent.blockFramedHalfSlope, registry, FramedHalfSlopeModel::new, FramedHalfSlopeModel.itemSource(), ignoreWaterlogged);
+        ClientUtils.replaceModels(FBContent.blockFramedVerticalHalfSlope, registry, FramedVerticalHalfSlopeModel::new, ignoreWaterlogged);
+        ClientUtils.replaceModels(FBContent.blockFramedDividedSlope, registry, FramedDividedSlopeModel::new, FramedDividedSlopeModel.itemSource(), ignoreDefault);
+        ClientUtils.replaceModels(FBContent.blockFramedDoubleHalfSlope, registry, FramedDoubleHalfSlopeModel::new, FramedDoubleHalfSlopeModel.itemSource(), ignoreDefault);
+        ClientUtils.replaceModels(FBContent.blockFramedVerticalDoubleHalfSlope, registry, FramedVerticalDoubleHalfSlopeModel::new, ignoreDefault);
+        ClientUtils.replaceModels(FBContent.blockFramedSlopedStairs, registry, FramedSlopedStairsModel::new, FramedSlopedStairsModel.itemSource(), ignoreDefault);
+        ClientUtils.replaceModels(FBContent.blockFramedVerticalSlopedStairs, registry, FramedVerticalSlopedStairsModel::new, FramedVerticalSlopedStairsModel.itemSource(), ignoreDefault);
     }
 
 

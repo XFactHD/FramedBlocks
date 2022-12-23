@@ -324,6 +324,12 @@ public class FramedBlockEntity extends BlockEntity
     }
 
     /**
+     * Returns the camo for the given {@link BlockState}. Used for cases where different double blocks
+     * with the same underlying shape(s) don't use the same side to return the camo for a given "sub-state".
+     */
+    public CamoContainer getCamo(BlockState state) { return camoContainer; }
+
+    /**
      * Used to return a different camo depending on the given side
      * @param side The blocks face, can return EMPTY if the face does not pass the CTM_PREDICATE
      */

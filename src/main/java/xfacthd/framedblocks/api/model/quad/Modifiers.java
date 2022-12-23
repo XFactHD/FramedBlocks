@@ -2,7 +2,6 @@ package xfacthd.framedblocks.api.model.quad;
 
 import com.google.common.base.Preconditions;
 import com.mojang.math.*;
-import net.minecraft.client.renderer.LightTexture;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.core.Direction;
 import net.minecraft.util.Mth;
@@ -399,6 +398,39 @@ public final class Modifiers
                    cutSideLeftRight(data, false, leftXZ, leftXZ) &&
                    cutSideUpDown(data, true, 1F - minY, 1F - minY) &&
                    cutSideUpDown(data, false, maxY, maxY);
+        };
+    }
+
+    /**
+     * Cuts the quad pointing horizontally at the edge given by {@code cutDir}
+     * @param cutDir The direction towards the cut edge
+     * @param lengthCW The target length of the right corner (cut direction rotated clockwise) from the starting edge
+     * @param lengthCCW The target length of the left corner (cut direction rotated counter-clockwise) from the starting edge
+     */
+    public static QuadModifier.Modifier cutSide(Direction cutDir, float lengthCW, float lengthCCW)
+    {
+        return data ->
+        {
+            Direction quadDir = data.quad().getDirection();
+            Preconditions.checkState(!Utils.isY(quadDir), "Quad direction must be horizontal");
+            Preconditions.checkState(quadDir.getAxis() != cutDir.getAxis(), "Cut direction must be prependicular to the quad direction");
+
+            if (Utils.isY(cutDir))
+            {
+                boolean down = cutDir == Direction.DOWN;
+                float lenRight = down ? lengthCW : lengthCCW;
+                float lenLeft = down ? lengthCCW : lengthCW;
+
+                return cutSideUpDown(data, down, lenRight, lenLeft);
+            }
+            else
+            {
+                boolean right = cutDir == quadDir.getClockWise();
+                float lenTop = right ? lengthCW : lengthCCW;
+                float lenBottom = right ? lengthCCW : lengthCW;
+
+                return cutSideLeftRight(data, right, lenTop, lenBottom);
+            }
         };
     }
 

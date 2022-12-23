@@ -1059,7 +1059,7 @@ public final class OcclusionTests
     public static void test_DoublePrism(GameTestHelper helper)
     {
         BlockState state = FBContent.blockFramedDoublePrism.get().defaultBlockState();
-        TestUtils.testDoubleBlockOccludesLightBelow(helper, state, List.of(Direction.UP, Direction.DOWN));
+        TestUtils.testDoubleBlockOccludesLightBelow(helper, state, List.of(Direction.NORTH, Direction.SOUTH));
     }
 
     @GameTest(template = "box_top", batch = "occlusion")
@@ -1190,7 +1190,9 @@ public final class OcclusionTests
     @TestedType(type = BlockType.FRAMED_DOUBLE_SLOPED_PRISM)
     public static void test_DoubleSlopedPrism(GameTestHelper helper)
     {
-        BlockState state = FBContent.blockFramedDoubleSlopedPrism.get().defaultBlockState();
+        BlockState state = FBContent.blockFramedDoubleSlopedPrism.get()
+                .defaultBlockState()
+                .setValue(BlockStateProperties.FACING, Direction.DOWN);
         TestUtils.testDoubleBlockOccludesLightBelow(helper, state, List.of(Direction.UP, Direction.DOWN));
     }
 
@@ -1578,7 +1580,7 @@ public final class OcclusionTests
     public static void test_DoubleSlopePanel_BackHalf(GameTestHelper helper)
     {
         BlockState state = FBContent.blockFramedDoubleSlopePanel.get().defaultBlockState();
-        TestUtils.testBlockOccludesLightNorth(helper, state, List.of(Direction.NORTH, Direction.SOUTH));
+        TestUtils.testDoubleBlockOccludesLightNorth(helper, state, List.of(Direction.NORTH, Direction.SOUTH));
     }
 
     @GameTest(template = "box_side", batch = "occlusion")
@@ -1588,7 +1590,7 @@ public final class OcclusionTests
         BlockState state = FBContent.blockFramedDoubleSlopePanel.get()
                 .defaultBlockState()
                 .setValue(PropertyHolder.FRONT, true);
-        TestUtils.testBlockOccludesLightNorth(helper, state, List.of(Direction.NORTH, Direction.SOUTH));
+        TestUtils.testDoubleBlockOccludesLightNorth(helper, state, List.of(Direction.NORTH, Direction.SOUTH));
     }
 
     @GameTest(template = "box_side", batch = "occlusion", required = false)
@@ -1596,7 +1598,7 @@ public final class OcclusionTests
     public static void test_InvDoubleSlopePanel(GameTestHelper helper)
     {
         BlockState state = FBContent.blockFramedInverseDoubleSlopePanel.get().defaultBlockState();
-        TestUtils.testBlockOccludesLightNorth(helper, state, List.of(Direction.NORTH, Direction.SOUTH));
+        TestUtils.testDoubleBlockOccludesLightNorth(helper, state, List.of(Direction.NORTH, Direction.SOUTH));
     }
 
     @GameTest(template = "box_side", batch = "occlusion")
@@ -1604,7 +1606,7 @@ public final class OcclusionTests
     public static void test_ExtendedDoubleSlopePanel(GameTestHelper helper)
     {
         BlockState state = FBContent.blockFramedExtendedDoubleSlopePanel.get().defaultBlockState();
-        TestUtils.testBlockOccludesLightNorth(helper, state, List.of(Direction.NORTH, Direction.SOUTH));
+        TestUtils.testDoubleBlockOccludesLightNorth(helper, state, List.of(Direction.NORTH, Direction.SOUTH));
     }
 
     @GameTest(template = "box_side", batch = "occlusion")
@@ -1707,7 +1709,7 @@ public final class OcclusionTests
     {
         BlockState state = FBContent.blockFramedFlatDoubleSlopePanelCorner.get()
                 .defaultBlockState();
-        TestUtils.testBlockOccludesLightNorth(helper, state, List.of(Direction.NORTH, Direction.SOUTH));
+        TestUtils.testDoubleBlockOccludesLightNorth(helper, state, List.of(Direction.NORTH, Direction.SOUTH));
     }
 
     @GameTest(template = "box_side", batch = "occlusion")
@@ -1717,7 +1719,7 @@ public final class OcclusionTests
         BlockState state = FBContent.blockFramedFlatDoubleSlopePanelCorner.get()
                 .defaultBlockState()
                 .setValue(PropertyHolder.FRONT, true);
-        TestUtils.testBlockOccludesLightNorth(helper, state, List.of(Direction.NORTH, Direction.SOUTH));
+        TestUtils.testDoubleBlockOccludesLightNorth(helper, state, List.of(Direction.NORTH, Direction.SOUTH));
     }
 
     @GameTest(template = "box_side", batch = "occlusion", required = false)
@@ -1725,7 +1727,7 @@ public final class OcclusionTests
     public static void test_FlatInverseDoubleSlopePanelCorner(GameTestHelper helper)
     {
         BlockState state = FBContent.blockFramedFlatInverseDoubleSlopePanelCorner.get().defaultBlockState();
-        TestUtils.testBlockOccludesLightNorth(helper, state, List.of(Direction.NORTH, Direction.SOUTH));
+        TestUtils.testDoubleBlockOccludesLightNorth(helper, state, List.of(Direction.NORTH, Direction.SOUTH));
     }
 
     @GameTest(template = "box_side", batch = "occlusion")
@@ -1733,7 +1735,7 @@ public final class OcclusionTests
     public static void test_FlatExtendedDoubleSlopePanelCorner(GameTestHelper helper)
     {
         BlockState state = FBContent.blockFramedFlatExtendedDoubleSlopePanelCorner.get().defaultBlockState();
-        TestUtils.testBlockOccludesLightNorth(helper, state, List.of(Direction.NORTH, Direction.SOUTH));
+        TestUtils.testDoubleBlockOccludesLightNorth(helper, state, List.of(Direction.NORTH, Direction.SOUTH));
     }
 
     @GameTest(template = "box_side", batch = "occlusion")
@@ -1741,7 +1743,7 @@ public final class OcclusionTests
     public static void test_FlatExtendedInnerDoubleSlopePanelCorner(GameTestHelper helper)
     {
         BlockState state = FBContent.blockFramedFlatExtendedInnerDoubleSlopePanelCorner.get().defaultBlockState();
-        TestUtils.testBlockOccludesLightNorth(helper, state, List.of(Direction.NORTH, Direction.SOUTH));
+        TestUtils.testDoubleBlockOccludesLightNorth(helper, state, List.of(Direction.NORTH, Direction.SOUTH));
     }
 
     @GameTest(template = "box_top", batch = "occlusion")
@@ -1947,6 +1949,213 @@ public final class OcclusionTests
     public static void test_IronGate(GameTestHelper helper)
     {
         BlockState state = FBContent.blockFramedIronGate.get().defaultBlockState();
+        TestUtils.testBlockOccludesLightNorth(helper, state);
+    }
+
+    @GameTest(template = "box_top", batch = "occlusion")
+    @TestedType(type = BlockType.FRAMED_FANCY_RAIL_SLOPE)
+    public static void testTop_FancyRailSlope(GameTestHelper helper)
+    {
+        BlockState state = FBContent.blockFramedFancyRailSlope.get().defaultBlockState();
+        TestUtils.testBlockOccludesLightBelow(helper, state);
+    }
+
+    @GameTest(template = "box_bottom", batch = "occlusion")
+    @TestedType(type = BlockType.FRAMED_FANCY_RAIL_SLOPE)
+    public static void testBottom_FancyRailSlope(GameTestHelper helper)
+    {
+        BlockState state = FBContent.blockFramedFancyRailSlope.get().defaultBlockState();
+        TestUtils.testBlockOccludesLightAbove(helper, state);
+    }
+
+    @GameTest(template = "box_top", batch = "occlusion")
+    @TestedType(type = BlockType.FRAMED_FANCY_POWERED_RAIL_SLOPE)
+    public static void testTop_FancyPoweredRailSlope(GameTestHelper helper)
+    {
+        BlockState state = FBContent.blockFramedFancyPoweredRailSlope.get().defaultBlockState();
+        TestUtils.testBlockOccludesLightBelow(helper, state);
+    }
+
+    @GameTest(template = "box_bottom", batch = "occlusion")
+    @TestedType(type = BlockType.FRAMED_FANCY_POWERED_RAIL_SLOPE)
+    public static void testBottom_FancyPoweredRailSlope(GameTestHelper helper)
+    {
+        BlockState state = FBContent.blockFramedFancyPoweredRailSlope.get().defaultBlockState();
+        TestUtils.testBlockOccludesLightAbove(helper, state);
+    }
+
+    @GameTest(template = "box_top", batch = "occlusion")
+    @TestedType(type = BlockType.FRAMED_FANCY_DETECTOR_RAIL_SLOPE)
+    public static void testTop_FancyDetectorRailSlope(GameTestHelper helper)
+    {
+        BlockState state = FBContent.blockFramedFancyDetectorRailSlope.get().defaultBlockState();
+        TestUtils.testBlockOccludesLightBelow(helper, state);
+    }
+
+    @GameTest(template = "box_bottom", batch = "occlusion")
+    @TestedType(type = BlockType.FRAMED_FANCY_DETECTOR_RAIL_SLOPE)
+    public static void testBottom_FancyDetectorRailSlope(GameTestHelper helper)
+    {
+        BlockState state = FBContent.blockFramedFancyDetectorRailSlope.get().defaultBlockState();
+        TestUtils.testBlockOccludesLightAbove(helper, state);
+    }
+
+    @GameTest(template = "box_top", batch = "occlusion")
+    @TestedType(type = BlockType.FRAMED_FANCY_ACTIVATOR_RAIL_SLOPE)
+    public static void testTop_FancyActivatorRailSlope(GameTestHelper helper)
+    {
+        BlockState state = FBContent.blockFramedFancyActivatorRailSlope.get().defaultBlockState();
+        TestUtils.testBlockOccludesLightBelow(helper, state);
+    }
+
+    @GameTest(template = "box_bottom", batch = "occlusion")
+    @TestedType(type = BlockType.FRAMED_FANCY_ACTIVATOR_RAIL_SLOPE)
+    public static void testBottom_FancyActivatorRailSlope(GameTestHelper helper)
+    {
+        BlockState state = FBContent.blockFramedFancyActivatorRailSlope.get().defaultBlockState();
+        TestUtils.testBlockOccludesLightAbove(helper, state);
+    }
+
+    @GameTest(template = "box_top", batch = "occlusion")
+    @TestedType(type = BlockType.FRAMED_DIVIDED_SLOPE)
+    public static void testTop_DividedSlope_Bottom(GameTestHelper helper)
+    {
+        BlockState state = FBContent.blockFramedDividedSlope.get().defaultBlockState();
+        TestUtils.testDoubleBlockOccludesLightBelow(helper, state, List.of(Direction.EAST, Direction.WEST));
+    }
+
+    @GameTest(template = "box_top", batch = "occlusion")
+    @TestedType(type = BlockType.FRAMED_DIVIDED_SLOPE)
+    public static void testTop_DividedSlope_Top(GameTestHelper helper)
+    {
+        BlockState state = FBContent.blockFramedDividedSlope.get()
+                .defaultBlockState()
+                .setValue(PropertyHolder.SLOPE_TYPE, SlopeType.TOP);
+        TestUtils.testDoubleBlockOccludesLightBelow(helper, state, List.of(Direction.EAST, Direction.WEST));
+    }
+
+    @GameTest(template = "box_bottom", batch = "occlusion")
+    @TestedType(type = BlockType.FRAMED_DIVIDED_SLOPE)
+    public static void testBottom_DividedSlope_Bottom(GameTestHelper helper)
+    {
+        BlockState state = FBContent.blockFramedDividedSlope.get().defaultBlockState();
+        TestUtils.testDoubleBlockOccludesLightAbove(helper, state, List.of(Direction.EAST, Direction.WEST));
+    }
+
+    @GameTest(template = "box_bottom", batch = "occlusion")
+    @TestedType(type = BlockType.FRAMED_DIVIDED_SLOPE)
+    public static void testBottom_DividedSlope_Top(GameTestHelper helper)
+    {
+        BlockState state = FBContent.blockFramedDividedSlope.get()
+                .defaultBlockState()
+                .setValue(PropertyHolder.SLOPE_TYPE, SlopeType.TOP);
+        TestUtils.testDoubleBlockOccludesLightAbove(helper, state, List.of(Direction.EAST, Direction.WEST));
+    }
+
+    @GameTest(template = "box_side", batch = "occlusion")
+    @TestedType(type = BlockType.FRAMED_DIVIDED_SLOPE)
+    public static void test_DividedSlope_NorthHorizontal(GameTestHelper helper)
+    {
+        BlockState state = FBContent.blockFramedDividedSlope.get()
+                .defaultBlockState()
+                .setValue(PropertyHolder.SLOPE_TYPE, SlopeType.HORIZONTAL);
+        TestUtils.testDoubleBlockOccludesLightNorth(helper, state, List.of(Direction.UP, Direction.DOWN));
+    }
+
+    @GameTest(template = "box_side", batch = "occlusion")
+    @TestedType(type = BlockType.FRAMED_DIVIDED_SLOPE)
+    public static void test_DividedSlope_SouthHorizontal(GameTestHelper helper)
+    {
+        BlockState state = FBContent.blockFramedDividedSlope.get()
+                .defaultBlockState()
+                .setValue(FramedProperties.FACING_HOR, Direction.SOUTH)
+                .setValue(PropertyHolder.SLOPE_TYPE, SlopeType.HORIZONTAL);
+        TestUtils.testDoubleBlockOccludesLightNorth(helper, state, List.of(Direction.UP, Direction.DOWN));
+    }
+
+    @GameTest(template = "box_top", batch = "occlusion")
+    @TestedType(type = BlockType.FRAMED_VERTICAL_DOUBLE_HALF_SLOPE)
+    public static void testTop_VerticalDoubleHalfSlope_Bottom(GameTestHelper helper)
+    {
+        BlockState state = FBContent.blockFramedVerticalDoubleHalfSlope.get()
+                .defaultBlockState();
+        TestUtils.testDoubleBlockOccludesLightBelow(helper, state, List.of(Direction.NORTH, Direction.SOUTH));
+    }
+
+    @GameTest(template = "box_top", batch = "occlusion")
+    @TestedType(type = BlockType.FRAMED_VERTICAL_DOUBLE_HALF_SLOPE)
+    public static void testTop_VerticalDoubleHalfSlope_Top(GameTestHelper helper)
+    {
+        BlockState state = FBContent.blockFramedVerticalDoubleHalfSlope.get()
+                .defaultBlockState()
+                .setValue(FramedProperties.TOP, true);
+        TestUtils.testDoubleBlockOccludesLightBelow(helper, state, List.of(Direction.NORTH, Direction.SOUTH));
+    }
+
+    @GameTest(template = "box_bottom", batch = "occlusion")
+    @TestedType(type = BlockType.FRAMED_VERTICAL_DOUBLE_HALF_SLOPE)
+    public static void testBottom_VerticalDoubleHalfSlope_Bottom(GameTestHelper helper)
+    {
+        BlockState state = FBContent.blockFramedVerticalDoubleHalfSlope.get()
+                .defaultBlockState();
+        TestUtils.testDoubleBlockOccludesLightAbove(helper, state, List.of(Direction.NORTH, Direction.SOUTH));
+    }
+
+    @GameTest(template = "box_bottom", batch = "occlusion")
+    @TestedType(type = BlockType.FRAMED_VERTICAL_DOUBLE_HALF_SLOPE)
+    public static void testBottom_VerticalDoubleHalfSlope_Top(GameTestHelper helper)
+    {
+        BlockState state = FBContent.blockFramedVerticalDoubleHalfSlope.get()
+                .defaultBlockState()
+                .setValue(FramedProperties.TOP, true);
+        TestUtils.testDoubleBlockOccludesLightAbove(helper, state, List.of(Direction.NORTH, Direction.SOUTH));
+    }
+
+    @GameTest(template = "box_side", batch = "occlusion")
+    @TestedType(type = BlockType.FRAMED_DOUBLE_HALF_SLOPE)
+    public static void test_DoubleHalfSlope_North(GameTestHelper helper)
+    {
+        BlockState state = FBContent.blockFramedDoubleHalfSlope.get()
+                .defaultBlockState()
+                .setValue(FramedProperties.FACING_HOR, Direction.EAST);
+        TestUtils.testDoubleBlockOccludesLightNorth(helper, state, List.of(Direction.UP, Direction.DOWN));
+    }
+
+    @GameTest(template = "box_side", batch = "occlusion")
+    @TestedType(type = BlockType.FRAMED_DOUBLE_HALF_SLOPE)
+    public static void test_DoubleHalfSlope_South(GameTestHelper helper)
+    {
+        BlockState state = FBContent.blockFramedDoubleHalfSlope.get()
+                .defaultBlockState()
+                .setValue(FramedProperties.FACING_HOR, Direction.WEST);
+        TestUtils.testDoubleBlockOccludesLightNorth(helper, state, List.of(Direction.UP, Direction.DOWN));
+    }
+
+    @GameTest(template = "box_top", batch = "occlusion")
+    @TestedType(type = BlockType.FRAMED_SLOPED_STAIRS)
+    public static void test_SlopedStairs_BottomStraight(GameTestHelper helper)
+    {
+        BlockState state = FBContent.blockFramedStairs.get()
+                .defaultBlockState();
+        TestUtils.testBlockOccludesLightBelow(helper, state);
+    }
+
+    @GameTest(template = "box_top", batch = "occlusion")
+    @TestedType(type = BlockType.FRAMED_SLOPED_STAIRS)
+    public static void test_SlopedStairs_TopStraight(GameTestHelper helper)
+    {
+        BlockState state = FBContent.blockFramedSlopedStairs.get()
+                .defaultBlockState()
+                .setValue(FramedProperties.TOP, true);
+        TestUtils.testBlockOccludesLightBelow(helper, state);
+    }
+
+    @GameTest(template = "box_side", batch = "occlusion")
+    @TestedType(type = BlockType.FRAMED_VERTICAL_SLOPED_STAIRS)
+    public static void test_VerticalSlopedStairs_Vertical(GameTestHelper helper)
+    {
+        BlockState state = FBContent.blockFramedVerticalSlopedStairs.get()
+                .defaultBlockState();
         TestUtils.testBlockOccludesLightNorth(helper, state);
     }
 
