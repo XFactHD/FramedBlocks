@@ -27,7 +27,7 @@ import xfacthd.framedblocks.client.render.outline.*;
 import xfacthd.framedblocks.client.screen.*;
 import xfacthd.framedblocks.client.util.*;
 import xfacthd.framedblocks.common.FBContent;
-import xfacthd.framedblocks.common.block.FramedWeightedPressurePlateBlock;
+import xfacthd.framedblocks.common.block.interactive.FramedWeightedPressurePlateBlock;
 import xfacthd.framedblocks.common.compat.supplementaries.SupplementariesCompat;
 import xfacthd.framedblocks.common.data.BlockType;
 import xfacthd.framedblocks.client.data.GhostRenderBehaviours;

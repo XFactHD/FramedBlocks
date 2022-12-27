@@ -15,7 +15,7 @@ import xfacthd.framedblocks.api.util.Utils;
 import xfacthd.framedblocks.common.data.property.CornerType;
 import xfacthd.framedblocks.common.data.property.SlopeType;
 
-public class FramedBlock extends AbstractFramedBlock
+public abstract class FramedBlock extends AbstractFramedBlock
 {
     protected FramedBlock(BlockType blockType) { this(blockType, IFramedBlock.createProperties(blockType)); }
 

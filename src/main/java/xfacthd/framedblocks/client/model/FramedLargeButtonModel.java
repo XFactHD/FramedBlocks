@@ -10,7 +10,7 @@ import xfacthd.framedblocks.api.model.FramedBlockModel;
 import xfacthd.framedblocks.api.model.quad.Modifiers;
 import xfacthd.framedblocks.api.model.quad.QuadModifier;
 import xfacthd.framedblocks.api.util.Utils;
-import xfacthd.framedblocks.common.block.FramedLargeButtonBlock;
+import xfacthd.framedblocks.common.block.interactive.FramedLargeButtonBlock;
 
 import java.util.List;
 import java.util.Map;
