@@ -23,8 +23,6 @@ import net.minecraft.world.phys.shapes.EntityCollisionContext;
 import net.minecraftforge.client.model.data.ModelData;
 import net.minecraftforge.common.Tags;
 import net.minecraftforge.common.capabilities.ForgeCapabilities;
-import net.minecraftforge.fluids.FluidStack;
-import net.minecraftforge.fluids.FluidType;
 import net.minecraftforge.fluids.capability.IFluidHandler;
 import net.minecraftforge.registries.ForgeRegistries;
 import org.slf4j.Logger;
@@ -161,7 +159,10 @@ public class FramedBlockEntity extends BlockEntity
 
     private InteractionResult clearFluidCamo(Player player, CamoContainer camo, ItemStack stack, boolean secondary)
     {
-        ItemStack result = camo.toItemStack(stack);
+        ItemStack input = stack.copy();
+        input.setCount(1);
+
+        ItemStack result = camo.toItemStack(input);
         if (!result.isEmpty())
         {
             //noinspection ConstantConditions
@@ -169,22 +170,18 @@ public class FramedBlockEntity extends BlockEntity
             {
                 if (!player.isCreative())
                 {
-                    if (stack.getItem() == Items.BUCKET)
+                    // Container holds fluid in NBT -> stack doesn't change
+                    if (result == input)
+                    {
+                        player.setItemInHand(InteractionHand.MAIN_HAND, result);
+                    }
+                    else // Container holds fluid by type (i.e. bucket) -> got a new stack
                     {
                         stack.shrink(1);
-
                         if (!player.getInventory().add(result))
                         {
                             player.drop(result, false);
                         }
-                    }
-                    else
-                    {
-                        stack.getCapability(ForgeCapabilities.FLUID_HANDLER_ITEM).ifPresent(handler ->
-                        {
-                            FluidStack fluid = new FluidStack(camo.getFluid(), FluidType.BUCKET_VOLUME);
-                            handler.fill(fluid, IFluidHandler.FluidAction.EXECUTE);
-                        });
                     }
                 }
 
@@ -228,21 +225,20 @@ public class FramedBlockEntity extends BlockEntity
             {
                 if (!player.isCreative())
                 {
-                    if (stack.getItem() instanceof BucketItem)
+                    ItemStack result = stack.getCapability(ForgeCapabilities.FLUID_HANDLER_ITEM).map(handler ->
+                    {
+                        handler.drain(1000, IFluidHandler.FluidAction.EXECUTE);
+                        return handler.getContainer();
+                    }).orElse(ItemStack.EMPTY);
+
+                    // Container holds fluid by type (i.e. bucket) -> got a new stack
+                    if (result != stack)
                     {
                         stack.shrink(1);
-
-                        ItemStack emptyBucket = new ItemStack(Items.BUCKET);
-                        if (!player.getInventory().add(emptyBucket))
+                        if (!result.isEmpty() && !player.getInventory().add(result))
                         {
-                            player.drop(emptyBucket, false);
+                            player.drop(result, false);
                         }
-                    }
-                    else
-                    {
-                        stack.getCapability(ForgeCapabilities.FLUID_HANDLER_ITEM).ifPresent(handler ->
-                            handler.drain(1000, IFluidHandler.FluidAction.EXECUTE)
-                        );
                     }
                 }
 

@@ -55,14 +55,8 @@ public class FluidCamoContainer extends CamoContainer
             FluidStack fluid = new FluidStack(fluidState.getType(), FluidType.BUCKET_VOLUME);
             if (handler.fill(fluid, IFluidHandler.FluidAction.SIMULATE) == FluidType.BUCKET_VOLUME)
             {
-                if (stack.getItem() == Items.BUCKET)
-                {
-                    return new ItemStack(fluid.getFluid().getBucket());
-                }
-                else
-                {
-                    return stack;
-                }
+                handler.fill(fluid, IFluidHandler.FluidAction.EXECUTE);
+                return handler.getContainer();
             }
             return ItemStack.EMPTY;
         }).orElse(ItemStack.EMPTY);
