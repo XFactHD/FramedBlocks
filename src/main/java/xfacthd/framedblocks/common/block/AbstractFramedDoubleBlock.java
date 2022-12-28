@@ -2,7 +2,6 @@ package xfacthd.framedblocks.common.block;
 
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
@@ -18,8 +17,6 @@ import xfacthd.framedblocks.common.data.BlockType;
 import xfacthd.framedblocks.common.item.FramedBlueprintItem;
 import xfacthd.framedblocks.common.blockentity.FramedDoubleBlockEntity;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
 import java.util.Optional;
 
 public abstract class AbstractFramedDoubleBlock extends FramedBlock
@@ -30,21 +27,6 @@ public abstract class AbstractFramedDoubleBlock extends FramedBlock
     protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder)
     {
         builder.add(FramedProperties.SOLID, FramedProperties.GLOWING);
-    }
-
-    @Nonnull
-    @Override
-    public BlockState getFacade(@Nonnull BlockGetter level, @Nonnull BlockPos pos, @Nullable Direction side, @Nonnull BlockPos connection)
-    {
-        BlockState state = level.getBlockState(pos);
-        if (getCtmPredicate().test(state, side))
-        {
-            if (level.getBlockEntity(pos) instanceof FramedDoubleBlockEntity be)
-            {
-                return be.getCamo(side).getState();
-            }
-        }
-        return Blocks.AIR.defaultBlockState();
     }
 
     @Override

@@ -135,7 +135,7 @@ repositories {
 }
 
 dependencies {
-    minecraft 'net.minecraftforge:forge:1.19.2-43.1.52'
+    minecraft 'net.minecraftforge:forge:1.19.2-43.1.57'
 
     //compileOnly fg.deobf("curse.maven:ctm-267602:3737369")
 

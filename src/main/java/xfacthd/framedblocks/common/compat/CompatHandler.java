@@ -11,14 +11,15 @@ public final class CompatHandler
     public static void init()
     {
         BuildingGadgetsCompat.init();
+        CreateCompat.init();
         FlywheelCompat.init();
-        SupplementariesCompat.init();
         NoCubesCompat.init();
+        SupplementariesCompat.init();
     }
 
     public static void commonSetup()
     {
-        CreateCompat.init();
+        CreateCompat.commonSetup();
     }
 
 

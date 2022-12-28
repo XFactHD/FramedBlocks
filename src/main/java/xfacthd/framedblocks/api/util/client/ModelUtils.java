@@ -410,7 +410,13 @@ public final class ModelUtils
 
     private static final MethodHandle WBM_WRAPPED_MODEL = Utils.unreflectField(WeightedBakedModel.class, "f_119542_");
 
+    @Deprecated(forRemoval = true, since = "1.19.2")
     public static List<BakedQuad> getAllCullableQuads(BakedModel model, BlockState state, RandomSource rand, RenderType renderType)
+    {
+        return getAllCullableQuads(model, state, rand, ModelData.EMPTY, renderType);
+    }
+
+    public static List<BakedQuad> getAllCullableQuads(BakedModel model, BlockState state, RandomSource rand, ModelData data, RenderType renderType)
     {
         if (model instanceof WeightedBakedModel weighted)
         {
@@ -429,7 +435,7 @@ public final class ModelUtils
         List<BakedQuad> quads = new ArrayList<>();
         for (Direction dir : Direction.values())
         {
-            quads.addAll(model.getQuads(state, dir, rand, ModelData.EMPTY, renderType));
+            quads.addAll(model.getQuads(state, dir, rand, data, renderType));
         }
         return quads;
     }

@@ -5,13 +5,16 @@ import net.minecraft.client.resources.model.BakedModel;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.material.Fluid;
+import net.minecraftforge.client.model.data.ModelData;
 import xfacthd.framedblocks.api.FramedBlocksClientAPI;
 import xfacthd.framedblocks.api.ghost.GhostRenderBehaviour;
 import xfacthd.framedblocks.api.type.IBlockType;
+import xfacthd.framedblocks.api.util.ConTexMode;
 import xfacthd.framedblocks.api.util.client.OutlineRender;
 import xfacthd.framedblocks.client.model.FluidModel;
 import xfacthd.framedblocks.client.render.BlockOutlineRenderer;
 import xfacthd.framedblocks.client.render.GhostBlockRenderer;
+import xfacthd.framedblocks.common.compat.create.CreateCompat;
 
 @SuppressWarnings("unused")
 public final class ClientApiImpl implements FramedBlocksClientAPI
@@ -42,4 +45,19 @@ public final class ClientApiImpl implements FramedBlocksClientAPI
 
     @Override
     public boolean useDiscreteUVSteps() { return ClientConfig.useDiscreteUVSteps; }
+
+    @Override
+    public ConTexMode getConTexMode() { return ClientConfig.conTexMode; }
+
+    @Override
+    public Object extractCTContext(ModelData data)
+    {
+        Object ctx = CreateCompat.tryGetCTContext(data);
+        if (ctx != null) { return ctx; }
+
+        //ctx = CtmCompat.tryGetCTContext(data);
+        //if (ctx != null) { return ctx; }
+
+        return null;
+    }
 }

@@ -6,6 +6,7 @@ import net.minecraftforge.fml.config.ModConfig;
 import net.minecraftforge.fml.event.config.ModConfigEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import org.apache.commons.lang3.tuple.Pair;
+import xfacthd.framedblocks.api.util.ConTexMode;
 import xfacthd.framedblocks.api.util.FramedConstants;
 
 public final class ClientConfig
@@ -17,11 +18,13 @@ public final class ClientConfig
     public static boolean fancyHitboxes = false;
     public static boolean detailedCulling = false;
     public static boolean useDiscreteUVSteps = false;
+    public static ConTexMode conTexMode = ConTexMode.FULL_FACE;
 
     private final ForgeConfigSpec.BooleanValue showGhostBlocksValue;
     private final ForgeConfigSpec.BooleanValue fancyHitboxesValue;
     private final ForgeConfigSpec.BooleanValue detailedCullingValue;
     private final ForgeConfigSpec.BooleanValue useDiscreteUVStepsValue;
+    private final ForgeConfigSpec.EnumValue<ConTexMode> conTexModeValue;
 
     static
     {
@@ -51,6 +54,17 @@ public final class ClientConfig
                 .comment("If true, the UV remapping will use discrete steps to avoid floating point errors")
                 .translation("config." + FramedConstants.MOD_ID + ".discreteUVSteps")
                 .define("discreteUVSteps", true);
+        conTexModeValue = builder
+                .comment(
+                        "Configures how detailed connected textures are supported.",
+                        "Use anything above FULL_FACE at your own risk (performance impact, unexpected behaviour)!",
+                        "If NONE, all connected textures support is disabled",
+                        "If FULL_FACE, connected textures are supported on full faces",
+                        "If FULL_CON_FACE, connected textures are supported as above and on faces whose connecting neighbor covers a full face",
+                        "If DETAILED, connected textures are supported as above and on most faces when interacting with other framed blocks"
+                )
+                .translation("config." + FramedConstants.MOD_ID + ".conTexMode")
+                .defineEnum("conTexMode", ConTexMode.FULL_FACE);
         builder.pop();
     }
 
@@ -63,6 +77,7 @@ public final class ClientConfig
             fancyHitboxes = fancyHitboxesValue.get();
             detailedCulling = detailedCullingValue.get();
             useDiscreteUVSteps = useDiscreteUVStepsValue.get();
+            conTexMode = conTexModeValue.get();
         }
     }
 }

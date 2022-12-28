@@ -26,23 +26,21 @@ import net.minecraft.world.phys.Vec3;
 import net.minecraft.world.phys.shapes.*;
 import net.minecraftforge.common.IPlantable;
 import net.minecraftforge.common.Tags;
+import net.minecraftforge.common.extensions.IForgeBlock;
+import net.minecraftforge.fml.loading.FMLEnvironment;
 import xfacthd.framedblocks.api.FramedBlocksAPI;
+import xfacthd.framedblocks.api.FramedBlocksClientAPI;
 import xfacthd.framedblocks.api.data.CamoContainer;
 import xfacthd.framedblocks.api.type.IBlockType;
 import xfacthd.framedblocks.api.util.*;
 
-import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.List;
 import java.util.Optional;
 import java.util.function.Supplier;
 
-/**
- * The {@code team.chisel.ctm.api.IFacade} interface is not implemented directly and is instead hacked on
- * via a mixin to allow CTM to be an optional dependency :/
- */
 @SuppressWarnings({ "deprecation", "unused" })
-public interface IFramedBlock extends EntityBlock//, IFacade
+public interface IFramedBlock extends EntityBlock, IForgeBlock
 {
     String LOCK_MESSAGE = "msg." + FramedConstants.MOD_ID + ".lock_state";
     Component STATE_LOCKED = Utils.translate("msg", "lock_state.locked").withStyle(ChatFormatting.RED);
@@ -195,33 +193,55 @@ public interface IFramedBlock extends EntityBlock//, IFacade
 
     default CtmPredicate getCtmPredicate() { return getBlockType().getCtmPredicate(); }
 
-    /**
-     * This method is overriden from {@code team.chisel.ctm.api.IFacade}. To allow CTM to be an optional dependency,
-     * the interface is not implemented directly and is instead hacked on via a mixin :/
-     */
-    @Nonnull
-    //@Override
-    @SuppressWarnings("unused")
-    default BlockState getFacade(@Nonnull BlockGetter level, @Nonnull BlockPos pos, @Nullable Direction side)
+    @Override
+    default BlockState getAppearance(BlockState state, BlockAndTintGetter level, BlockPos pos, Direction side, @Nullable BlockState queryState, @Nullable BlockPos queryPos)
     {
-        return Blocks.AIR.defaultBlockState();
+        BlockState air = Blocks.AIR.defaultBlockState();
+        if (!FMLEnvironment.dist.isClient()) { return air; }
+
+        ConTexMode mode = FramedBlocksClientAPI.getInstance().getConTexMode();
+        if (mode == ConTexMode.NONE) { return air; }
+
+        CtmPredicate pred = getCtmPredicate();
+        if (mode.atleast(ConTexMode.FULL_FACE) && pred.test(state, side))
+        {
+            return getCamo(level, pos, side, air);
+        }
+
+        if (mode.atleast(ConTexMode.FULL_CON_FACE) && queryPos != null)
+        {
+            Direction conFace = Direction.fromNormal(queryPos.subtract(pos));
+            if (pred.test(state, conFace))
+            {
+                //TODO: this successfully prevents a full block's side from connecting to a horizontally neighboring
+                //      slab but not the other way round
+                return getCamo(level, pos, conFace, air);
+            }
+        }
+
+        if (mode == ConTexMode.DETAILED && queryPos != null && !queryPos.equals(pos))
+        {
+            // Can't use query state directly as the query state may be the camo of the framed block actually in that position
+            if (level.getBlockState(queryPos).getBlock() instanceof IFramedBlock)
+            {
+                Direction conFace = Direction.fromNormal(queryPos.subtract(pos));
+                if (conFace != null && getBlockType().getSideSkipPredicate().test(level, pos, state, queryState, conFace))
+                {
+                    //TODO: improve camo retrieval on interactions with double blocks (i.e. slab next to double slab)
+                    return getCamo(level, pos, conFace, air);
+                }
+            }
+        }
+        return air;
     }
 
-    /**
-     * This method is overriden from {@code team.chisel.ctm.api.IFacade}. To allow CTM to be an optional dependency,
-     * the interface is not implemented directly and is instead hacked on via a mixin :/
-     */
-    @Nonnull
-    //@Override
-    @SuppressWarnings("unused")
-    default BlockState getFacade(@Nonnull BlockGetter level, @Nonnull BlockPos pos, @Nullable Direction side, @Nonnull BlockPos connection)
+    private static BlockState getCamo(BlockAndTintGetter level, BlockPos pos, Direction side, BlockState air)
     {
-        BlockState state = level.getBlockState(pos);
-        if (getCtmPredicate().test(state, side) && level.getBlockEntity(pos) instanceof FramedBlockEntity be)
+        if (level.getBlockEntity(pos) instanceof FramedBlockEntity be)
         {
-            return be.getCamo().getState();
+            return be.getCamo(side).getState();
         }
-        return Blocks.AIR.defaultBlockState();
+        return air;
     }
 
     default boolean isSideHidden(BlockGetter level, BlockPos pos, BlockState state, Direction side)

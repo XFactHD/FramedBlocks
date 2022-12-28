@@ -17,9 +17,9 @@ import net.minecraftforge.client.ChunkRenderTypeSet;
 import net.minecraftforge.client.model.data.ModelData;
 import org.jetbrains.annotations.NotNull;
 import xfacthd.framedblocks.api.FramedBlocksAPI;
+import xfacthd.framedblocks.api.FramedBlocksClientAPI;
 import xfacthd.framedblocks.api.type.IBlockType;
-import xfacthd.framedblocks.api.util.CtmPredicate;
-import xfacthd.framedblocks.api.util.FramedBlockData;
+import xfacthd.framedblocks.api.util.*;
 import xfacthd.framedblocks.api.block.IFramedBlock;
 import xfacthd.framedblocks.api.util.client.*;
 
@@ -30,7 +30,7 @@ import java.util.*;
 public abstract class FramedBlockModel extends BakedModelProxy
 {
     private static final Direction[] DIRECTIONS = Direction.values();
-    private final Cache<BlockState, QuadTable> quadCache = Caffeine.newBuilder()
+    private final Cache<QuadCackeKey, QuadTable> quadCache = Caffeine.newBuilder()
             .expireAfterAccess(ModelCache.DEFAULT_CACHE_DURATION)
             .build();
     private final Cache<BlockState, CachedRenderTypes> renderTypeCache = Caffeine.newBuilder()
@@ -142,24 +142,28 @@ public abstract class FramedBlockModel extends BakedModelProxy
 
     private List<BakedQuad> getCamoQuads(BlockState state, BlockState camoState, Direction side, RandomSource rand, ModelData extraData, RenderType renderType)
     {
-        ModelData camoData = ModelData.EMPTY;
+        ModelData camoData;
         BakedModel model;
         boolean noProcessing;
         boolean noCamo = camoState == null;
+        boolean needCtCtx;
         boolean camoInRenderType;
 
         if (noCamo)
         {
+            needCtCtx = false;
             camoState = FramedBlocksAPI.getInstance().defaultModelState();
             camoInRenderType = baseModelRenderTypes.contains(renderType);
             noProcessing = (camoInRenderType && forceUngeneratedBaseModel) || fullFaceCache.isFullFace(side);
             model = getCamoModel(camoState, useBaseModel);
+            camoData = ModelData.EMPTY;
         }
         else
         {
             noProcessing = fullFaceCache.isFullFace(side);
+            needCtCtx = needCtContext(noProcessing);
             model = getCamoModel(camoState, false);
-            camoData = noProcessing ? ModelUtils.getCamoModelData(model, camoState, extraData) : ModelData.EMPTY;
+            camoData = needCtCtx ? ModelUtils.getCamoModelData(model, camoState, extraData) : ModelData.EMPTY;
             camoInRenderType = getCachedRenderTypes(camoState, rand, camoData).camoTypes.contains(renderType);
         }
 
@@ -185,12 +189,20 @@ public abstract class FramedBlockModel extends BakedModelProxy
         }
         else
         {
-            ModelData finalCamoData = camoData;
+            Object ctCtx = needCtCtx ? FramedBlocksClientAPI.getInstance().extractCTContext(camoData) : null;
             return quadCache.get(
-                    camoState,
-                    key -> buildQuadCache(state, key, rand, extraData, finalCamoData, noCamo)
+                    new QuadCackeKey(camoState, ctCtx),
+                    key -> buildQuadCache(state, key.state, rand, extraData, ctCtx != null ? camoData : ModelData.EMPTY, noCamo)
             ).getQuads(renderType, side);
         }
+    }
+
+    private static boolean needCtContext(boolean noProcessing)
+    {
+        ConTexMode mode = FramedBlocksClientAPI.getInstance().getConTexMode();
+        if (mode == ConTexMode.NONE) { return false; }
+
+        return noProcessing || mode.atleast(ConTexMode.FULL_CON_FACE);
     }
 
     /**
@@ -211,6 +223,7 @@ public abstract class FramedBlockModel extends BakedModelProxy
                     camoState,
                     rand,
                     data,
+                    camoData,
                     renderType,
                     camoInRenderType,
                     noCamo
@@ -223,7 +236,7 @@ public abstract class FramedBlockModel extends BakedModelProxy
     /**
      * Builds the list of quads per side for a given {@linkplain BlockState camo state} and {@link RenderType}
      */
-    private Map<Direction, List<BakedQuad>> makeQuads(BlockState state, BlockState camoState, RandomSource rand, ModelData data, RenderType renderType, boolean camoInRenderType, boolean noCamo)
+    private Map<Direction, List<BakedQuad>> makeQuads(BlockState state, BlockState camoState, RandomSource rand, ModelData data, ModelData camoData, RenderType renderType, boolean camoInRenderType, boolean noCamo)
     {
         Map<Direction, List<BakedQuad>> quadMap = new IdentityHashMap<>();
         quadMap.put(null, new ArrayList<>());
@@ -232,7 +245,7 @@ public abstract class FramedBlockModel extends BakedModelProxy
         if (camoInRenderType)
         {
             BakedModel camoModel = getCamoModel(camoState, noCamo && useBaseModel);
-            List<BakedQuad> quads = ModelUtils.getAllCullableQuads(camoModel, camoState, rand, renderType)
+            List<BakedQuad> quads = ModelUtils.getAllCullableQuads(camoModel, camoState, rand, camoData, renderType)
                             .stream()
                             .filter(q -> transformAllQuads || !fullFaceCache.isFullFace(q.getDirection()))
                             .toList();
@@ -377,6 +390,12 @@ public abstract class FramedBlockModel extends BakedModelProxy
     }
 
 
+
+    /**
+     * @param state The {@link BlockState} of the camo applied to the block
+     * @param ctCtx The connected textures context data used by the camo model, may be null
+     */
+    private record QuadCackeKey(BlockState state, Object ctCtx) { }
 
     private record CachedRenderTypes(ChunkRenderTypeSet camoTypes, ChunkRenderTypeSet overlayTypes, ChunkRenderTypeSet allTypes)
     {
