@@ -6,6 +6,7 @@ import net.minecraft.util.Tuple;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.*;
 import net.minecraft.world.phys.BlockHitResult;
+import xfacthd.framedblocks.api.data.CamoContainer;
 import xfacthd.framedblocks.api.util.FramedProperties;
 import xfacthd.framedblocks.common.FBContent;
 import xfacthd.framedblocks.common.data.BlockType;
@@ -40,6 +41,13 @@ public class FramedFancyRailSlopeBlockEntity extends FramedDoubleBlockEntity
             return getCamo().getState().isSolidRender(level, worldPosition);
         }
         return false;
+    }
+
+    @Override
+    protected boolean isCamoSolid()
+    {
+        CamoContainer camo = getCamo();
+        return !camo.isEmpty() && camo.isSolid(level, worldPosition);
     }
 
     @Override
