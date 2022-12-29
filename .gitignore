@@ -22,6 +22,7 @@ eclipse
 run
 run_server
 run_gametest
+src/generated/resources/.cache
 
 # Files from Forge MDK
 forge*changelog.txt
