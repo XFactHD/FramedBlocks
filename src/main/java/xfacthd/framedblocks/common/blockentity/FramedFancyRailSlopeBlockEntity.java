@@ -43,6 +43,14 @@ public class FramedFancyRailSlopeBlockEntity extends FramedDoubleBlockEntity
     }
 
     @Override
+    protected boolean isCamoSolid()
+    {
+        BlockState camo = getCamoState();
+        //noinspection ConstantConditions
+        return !camo.isAir() && camo.isSolidRender(level, worldPosition);
+    }
+
+    @Override
     protected Tuple<BlockState, BlockState> getBlockPair(BlockState state)
     {
         BlockType type = (BlockType) getBlockType();
