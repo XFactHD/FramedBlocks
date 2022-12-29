@@ -1,6 +1,7 @@
 package xfacthd.framedblocks.common.datagen.providers;
 
 import net.minecraft.data.tags.TagsProvider;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.data.tags.BlockTagsProvider;
@@ -56,12 +57,22 @@ public class FramedBlockTagProvider extends BlockTagsProvider
                 FBContent.blockFramedFancyActivatorRailSlope.get()
         );
 
-        tag(Utils.FRAMEABLE).addTags(
+        TagsProvider.TagAppender<Block> frameable = tag(Utils.FRAMEABLE).addTags(
                 Tags.Blocks.GLASS,
                 Tags.Blocks.STAINED_GLASS,
                 BlockTags.ICE,
                 BlockTags.LEAVES
         );
+
+        frameable.addOptional(rl("create", "oak_window"))
+                 .addOptional(rl("create", "spruce_window"))
+                 .addOptional(rl("create", "birch_window"))
+                 .addOptional(rl("create", "jungle_window"))
+                 .addOptional(rl("create", "acacia_window"))
+                 .addOptional(rl("create", "dark_oak_window"))
+                 .addOptional(rl("create", "crimson_window"))
+                 .addOptional(rl("create", "warped_window"))
+                 .addOptional(rl("create", "ornate_iron_window"));
 
         tag(Utils.BLACKLIST).add(
                 Blocks.PISTON,
@@ -99,5 +110,12 @@ public class FramedBlockTagProvider extends BlockTagsProvider
                 .forEach(axeTag::add);
 
         tag(BlockTags.MINEABLE_WITH_PICKAXE).add(pickaxeBlocks.toArray(Block[]::new));
+    }
+
+
+
+    private static ResourceLocation rl(String modid, String path)
+    {
+        return new ResourceLocation(modid, path);
     }
 }

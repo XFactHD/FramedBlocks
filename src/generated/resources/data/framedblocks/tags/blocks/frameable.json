@@ -4,6 +4,42 @@
     "#forge:glass",
     "#forge:stained_glass",
     "#minecraft:ice",
-    "#minecraft:leaves"
+    "#minecraft:leaves",
+    {
+      "id": "create:oak_window",
+      "required": false
+    },
+    {
+      "id": "create:spruce_window",
+      "required": false
+    },
+    {
+      "id": "create:birch_window",
+      "required": false
+    },
+    {
+      "id": "create:jungle_window",
+      "required": false
+    },
+    {
+      "id": "create:acacia_window",
+      "required": false
+    },
+    {
+      "id": "create:dark_oak_window",
+      "required": false
+    },
+    {
+      "id": "create:crimson_window",
+      "required": false
+    },
+    {
+      "id": "create:warped_window",
+      "required": false
+    },
+    {
+      "id": "create:ornate_iron_window",
+      "required": false
+    }
   ]
 }
