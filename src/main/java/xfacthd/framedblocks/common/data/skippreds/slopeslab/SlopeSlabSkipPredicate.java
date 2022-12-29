@@ -10,7 +10,7 @@ import xfacthd.framedblocks.api.util.*;
 import xfacthd.framedblocks.common.data.BlockType;
 import xfacthd.framedblocks.common.data.PropertyHolder;
 import xfacthd.framedblocks.common.data.property.SlopeType;
-import xfacthd.framedblocks.common.data.skippreds.slope.SlopedStairsSkipPredicate;
+import xfacthd.framedblocks.common.data.skippreds.stairs.SlopedStairsSkipPredicate;
 import xfacthd.framedblocks.common.data.skippreds.slope.VerticalHalfSlopeSkipPredicate;
 import xfacthd.framedblocks.common.data.skippreds.stairs.StairsSkipPredicate;
 

@@ -14,7 +14,7 @@ import xfacthd.framedblocks.common.data.skippreds.slopepanel.FlatExtendedSlopePa
 import xfacthd.framedblocks.common.data.skippreds.slopepanel.FlatInnerSlopePanelCornerSkipPredicate;
 import xfacthd.framedblocks.common.data.skippreds.slopeslab.FlatElevatedSlopeSlabCornerSkipPredicate;
 import xfacthd.framedblocks.common.data.skippreds.slopeslab.FlatInnerSlopeSlabCornerSkipPredicate;
-import xfacthd.framedblocks.common.data.skippreds.stairs.StairsSkipPredicate;
+import xfacthd.framedblocks.common.data.skippreds.stairs.*;
 
 public final class SlabEdgeSkipPredicate implements SideSkipPredicate
 {

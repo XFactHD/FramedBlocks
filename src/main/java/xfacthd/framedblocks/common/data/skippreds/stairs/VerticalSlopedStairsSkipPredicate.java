@@ -1,4 +1,4 @@
-package xfacthd.framedblocks.common.data.skippreds.slope;
+package xfacthd.framedblocks.common.data.skippreds.stairs;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -15,6 +15,7 @@ import xfacthd.framedblocks.common.data.BlockType;
 import xfacthd.framedblocks.common.data.PropertyHolder;
 import xfacthd.framedblocks.common.data.property.*;
 import xfacthd.framedblocks.common.data.skippreds.pillar.CornerPillarSkipPredicate;
+import xfacthd.framedblocks.common.data.skippreds.slope.HalfSlopeSkipPredicate;
 import xfacthd.framedblocks.common.data.skippreds.slopepanel.FlatExtendedSlopePanelCornerSkipPredicate;
 import xfacthd.framedblocks.common.data.skippreds.slopepanel.FlatInnerSlopePanelCornerSkipPredicate;
 

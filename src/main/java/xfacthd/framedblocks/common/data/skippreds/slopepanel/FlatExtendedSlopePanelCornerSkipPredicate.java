@@ -12,7 +12,7 @@ import xfacthd.framedblocks.api.util.*;
 import xfacthd.framedblocks.common.data.BlockType;
 import xfacthd.framedblocks.common.data.PropertyHolder;
 import xfacthd.framedblocks.common.data.property.*;
-import xfacthd.framedblocks.common.data.skippreds.slope.VerticalSlopedStairsSkipPredicate;
+import xfacthd.framedblocks.common.data.skippreds.stairs.VerticalSlopedStairsSkipPredicate;
 
 public final class FlatExtendedSlopePanelCornerSkipPredicate implements SideSkipPredicate
 {
