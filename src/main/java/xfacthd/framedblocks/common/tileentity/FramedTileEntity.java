@@ -535,8 +535,8 @@ public class FramedTileEntity extends TileEntity
 
     public void checkSolidStateOnLoad()
     {
-        //noinspection ConstantConditions
-        if (!level.isClientSide() && recheckStates)
+        // Null check fixes crashes with Bukkit servers and other mods doing weird TE copy stuff
+        if (level != null && !level.isClientSide() && recheckStates)
         {
             checkCamoSolid();
         }
