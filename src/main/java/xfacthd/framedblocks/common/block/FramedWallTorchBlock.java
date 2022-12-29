@@ -55,7 +55,7 @@ public class FramedWallTorchBlock extends WallTorchBlock implements IFramedBlock
     @Override
     public int getLightEmission(BlockState state, BlockGetter level, BlockPos pos)
     {
-        return Math.max(super.getLightEmission(state, level, pos), getLight(level, pos));
+        return Math.max(super.getLightEmission(state, level, pos), getLight(state, level, pos));
     }
 
     @Override

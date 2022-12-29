@@ -156,6 +156,20 @@ public interface IFramedBlock extends EntityBlock//, IFacade
         return InteractionResult.FAIL;
     }
 
+    default int getLight(BlockState state, BlockGetter level, BlockPos pos)
+    {
+        if (getBlockType().canOccludeWithSolidCamo() && !state.getValue(FramedProperties.GLOWING))
+        {
+            return 0;
+        }
+        if (level.getBlockEntity(pos) instanceof FramedBlockEntity be)
+        {
+            return be.getLightValue();
+        }
+        return 0;
+    }
+
+    @Deprecated(forRemoval = true, since = "1.18.2")
     default int getLight(BlockGetter level, BlockPos pos)
     {
         if (level.getBlockEntity(pos) instanceof FramedBlockEntity be)
