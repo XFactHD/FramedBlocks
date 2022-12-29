@@ -7,8 +7,27 @@ import net.minecraft.world.phys.shapes.VoxelShape;
 import net.minecraft.world.phys.shapes.Shapes;
 import xfacthd.framedblocks.api.type.IBlockType;
 import xfacthd.framedblocks.api.util.*;
-import xfacthd.framedblocks.common.block.*;
-import xfacthd.framedblocks.common.data.skippreds.*;
+import xfacthd.framedblocks.common.block.cube.*;
+import xfacthd.framedblocks.common.block.door.*;
+import xfacthd.framedblocks.common.block.interactive.*;
+import xfacthd.framedblocks.common.block.pane.*;
+import xfacthd.framedblocks.common.block.pillar.*;
+import xfacthd.framedblocks.common.block.prism.*;
+import xfacthd.framedblocks.common.block.slab.*;
+import xfacthd.framedblocks.common.block.slope.*;
+import xfacthd.framedblocks.common.block.slopepanel.*;
+import xfacthd.framedblocks.common.block.slopeslab.*;
+import xfacthd.framedblocks.common.block.stairs.*;
+import xfacthd.framedblocks.common.data.skippreds.door.*;
+import xfacthd.framedblocks.common.data.skippreds.misc.*;
+import xfacthd.framedblocks.common.data.skippreds.pane.*;
+import xfacthd.framedblocks.common.data.skippreds.pillar.*;
+import xfacthd.framedblocks.common.data.skippreds.prism.*;
+import xfacthd.framedblocks.common.data.skippreds.slab.*;
+import xfacthd.framedblocks.common.data.skippreds.slope.*;
+import xfacthd.framedblocks.common.data.skippreds.slopepanel.*;
+import xfacthd.framedblocks.common.data.skippreds.slopeslab.*;
+import xfacthd.framedblocks.common.data.skippreds.stairs.*;
 
 import java.util.Locale;
 
@@ -30,8 +49,8 @@ public enum BlockType implements IBlockType
     FRAMED_CORNER_PILLAR                            (false, false, false,  true,  true,  true, false, false, CtmPredicate.FALSE, new CornerPillarSkipPredicate(), FramedCornerPillarBlock::generateShapes),
     FRAMED_STAIRS                                   ( true, false, false,  true,  true,  true, false,  true, FramedStairsBlock.CTM_PREDICATE, new StairsSkipPredicate()),
     FRAMED_WALL                                     (false, false, false,  true,  true, false, false,  true, CtmPredicate.FALSE, new WallSkipPredicate()),
-    FRAMED_FENCE                                    (false, false, false,  true,  true, false, false,  true, CtmPredicate.FALSE, FramedFenceBlock.SKIP_PREDICATE),
-    FRAMED_GATE                                     (false, false, false,  true,  true, false, false, false, CtmPredicate.FALSE, FramedFenceGateBlock.SKIP_PREDICATE),
+    FRAMED_FENCE                                    (false, false, false,  true,  true, false, false,  true, CtmPredicate.FALSE, new FenceSkipPredicate()),
+    FRAMED_GATE                                     (false, false, false,  true,  true, false, false, false, CtmPredicate.FALSE, new FenceGateSkipPredicate()),
     FRAMED_DOOR                                     ( true, false, false, false,  true, false, false, false, FramedDoorBlock.CTM_PREDICATE, new DoorSkipPredicate()),
     FRAMED_IRON_DOOR                                ( true, false, false, false,  true, false, false, false, FramedDoorBlock.CTM_PREDICATE, new DoorSkipPredicate()),
     FRAMED_TRAPDOOR                                 ( true, false, false,  true,  true, false, false, false, FramedTrapDoorBlock.CTM_PREDICATE, new TrapdoorSkipPredicate()),
@@ -64,8 +83,8 @@ public enum BlockType implements IBlockType
     FRAMED_SOUL_WALL_TORCH                          (false, false, false, false, false, false, false, false),
     FRAMED_REDSTONE_TORCH                           (false, false, false, false,  true, false, false, false),
     FRAMED_REDSTONE_WALL_TORCH                      (false, false, false, false, false, false, false, false),
-    FRAMED_FLOOR_BOARD                              ( true, false, false,  true,  true,  true, false, false, CtmPredicate.TOP, FramedFloorBlock.SKIP_PREDICATE, FramedFloorBlock::generateShapes),
-    FRAMED_LATTICE_BLOCK                            (false, false, false,  true,  true,  true, false,  true, CtmPredicate.FALSE, FramedLatticeBlock.SKIP_PREDICATE, FramedLatticeBlock::generateShapes),
+    FRAMED_FLOOR_BOARD                              ( true, false, false,  true,  true,  true, false, false, CtmPredicate.TOP, new FloorBoardSkipPredicate(), FramedFloorBlock::generateShapes),
+    FRAMED_LATTICE_BLOCK                            (false, false, false,  true,  true,  true, false,  true, CtmPredicate.FALSE, new LatticeSkipPredicate(), FramedLatticeBlock::generateShapes),
     FRAMED_VERTICAL_STAIRS                          ( true, false, false,  true,  true,  true, false,  true, FramedVerticalStairsBlock.CTM_PREDICATE, new VerticalStairsSkipPredicate(), FramedVerticalStairsBlock::generateShapes),
     FRAMED_CHEST                                    (false, false,  true,  true,  true, false, false, false, Shapes.box(1D/16D, 0, 1D/16D, 15D/16D, 14D/16D, 15D/16D)),
     FRAMED_BARS                                     (false, false, false,  true,  true,  true, false,  true),
@@ -118,13 +137,13 @@ public enum BlockType implements IBlockType
     FRAMED_FLAT_EXT_INNER_DOUBLE_SLOPE_PANEL_CORNER ( true, false,  true, false,  true,  true,  true, false, FramedFlatExtendedDoubleSlopePanelCornerBlock.CTM_PREDICATE, Shapes.block()),
     FRAMED_DOUBLE_STAIRS                            ( true, false,  true, false,  true,  true,  true, false, FramedDoubleStairsBlock.CTM_PREDICATE, Shapes.block()),
     FRAMED_VERTICAL_DOUBLE_STAIRS                   ( true, false,  true, false,  true,  true,  true, false, FramedVerticalDoubleStairsBlock.CTM_PREDICATE, Shapes.block()),
-    FRAMED_WALL_BOARD                               ( true, false, false,  true,  true,  true, false, false, CtmPredicate.HOR_DIR, FramedWallBoardBlock.SKIP_PREDICATE, FramedWallBoardBlock::generateShapes),
+    FRAMED_WALL_BOARD                               ( true, false, false,  true,  true,  true, false, false, CtmPredicate.HOR_DIR, new WallBoardSkipPredicate(), FramedWallBoardBlock::generateShapes),
     FRAMED_GLOWING_CUBE                             ( true, false, false, false,  true,  true, false, false, CtmPredicate.TRUE, SideSkipPredicate.CTM, Shapes.block()),
     FRAMED_PYRAMID                                  ( true,  true, false,  true,  true,  true, false, false, CtmPredicate.DIR_OPPOSITE, SideSkipPredicate.CTM, FramedPyramidBlock::generateShapes),
     FRAMED_PYRAMID_SLAB                             ( true,  true, false,  true,  true,  true, false, false, CtmPredicate.DIR_OPPOSITE, SideSkipPredicate.CTM, FramedPyramidBlock::generateSlabShapes),
     FRAMED_LARGE_BUTTON                             (false, false, false, false,  true, false, false, false),
     FRAMED_LARGE_STONE_BUTTON                       (false, false, false, false,  true, false, false, false),
-    FRAMED_HORIZONTAL_PANE                          ( true, false, false,  true,  true,  true, false, false, CtmPredicate.FALSE, FramedHorizontalPaneBlock.SKIP_PREDICATE, Shapes.box(0, 7D/16D, 0, 1, 9D/16D, 1)),
+    FRAMED_HORIZONTAL_PANE                          ( true, false, false,  true,  true,  true, false, false, CtmPredicate.FALSE, new HorizontalPaneSkipPredicate(), Shapes.box(0, 7D/16D, 0, 1, 9D/16D, 1)),
     FRAMED_TARGET                                   ( true, false, false, false,  true,  true, false, false, CtmPredicate.TRUE, SideSkipPredicate.CTM, Shapes.block()),
     FRAMED_GATE_DOOR                                ( true, false, false, false,  true, false, false, false, FramedDoorBlock.CTM_PREDICATE, new GateSkipPredicate()),
     FRAMED_IRON_GATE_DOOR                           ( true, false, false, false,  true, false, false, false, FramedDoorBlock.CTM_PREDICATE, new GateSkipPredicate()),

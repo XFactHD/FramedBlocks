@@ -22,7 +22,7 @@ import net.minecraftforge.client.model.data.IModelData;
 import xfacthd.framedblocks.api.util.FramedProperties;
 import xfacthd.framedblocks.api.util.Utils;
 import xfacthd.framedblocks.api.util.client.ClientUtils;
-import xfacthd.framedblocks.client.model.FramedChestLidModel;
+import xfacthd.framedblocks.client.model.cube.FramedChestLidModel;
 import xfacthd.framedblocks.common.FBContent;
 import xfacthd.framedblocks.common.data.*;
 import xfacthd.framedblocks.common.blockentity.FramedChestBlockEntity;

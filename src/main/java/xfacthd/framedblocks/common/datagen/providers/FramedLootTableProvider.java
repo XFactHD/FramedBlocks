@@ -17,8 +17,8 @@ import net.minecraft.world.level.storage.loot.providers.number.ConstantValue;
 import net.minecraftforge.registries.RegistryObject;
 import xfacthd.framedblocks.api.util.FramedConstants;
 import xfacthd.framedblocks.common.FBContent;
-import xfacthd.framedblocks.common.block.FramedWaterloggablePressurePlateBlock;
-import xfacthd.framedblocks.common.block.FramedWaterloggableWeightedPressurePlateBlock;
+import xfacthd.framedblocks.common.block.interactive.FramedWaterloggablePressurePlateBlock;
+import xfacthd.framedblocks.common.block.interactive.FramedWaterloggableWeightedPressurePlateBlock;
 
 import java.util.*;
 import java.util.function.*;

@@ -13,7 +13,10 @@ import net.minecraftforge.registries.RegistryObject;
 import xfacthd.framedblocks.api.util.*;
 import xfacthd.framedblocks.api.util.client.ClientUtils;
 import xfacthd.framedblocks.client.loader.overlay.OverlayLoaderBuilder;
-import xfacthd.framedblocks.client.model.*;
+import xfacthd.framedblocks.client.model.cube.FramedMarkedCubeModel;
+import xfacthd.framedblocks.client.model.cube.FramedTargetModel;
+import xfacthd.framedblocks.client.model.interactive.FramedMarkedPressurePlateModel;
+import xfacthd.framedblocks.client.model.rail.FramedFancyRailModel;
 import xfacthd.framedblocks.common.FBContent;
 import xfacthd.framedblocks.common.data.PropertyHolder;
 

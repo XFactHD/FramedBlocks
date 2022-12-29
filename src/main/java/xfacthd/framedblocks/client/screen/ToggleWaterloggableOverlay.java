@@ -21,8 +21,8 @@ import net.minecraftforge.client.gui.IIngameOverlay;
 import xfacthd.framedblocks.api.util.FramedConstants;
 import xfacthd.framedblocks.api.util.Utils;
 import xfacthd.framedblocks.common.FBContent;
-import xfacthd.framedblocks.common.block.FramedPressurePlateBlock;
-import xfacthd.framedblocks.common.block.FramedWeightedPressurePlateBlock;
+import xfacthd.framedblocks.common.block.interactive.FramedPressurePlateBlock;
+import xfacthd.framedblocks.common.block.interactive.FramedWeightedPressurePlateBlock;
 
 public class ToggleWaterloggableOverlay implements IIngameOverlay
 {
