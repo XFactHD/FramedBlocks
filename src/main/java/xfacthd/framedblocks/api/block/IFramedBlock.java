@@ -159,6 +159,7 @@ public interface IFramedBlock extends EntityBlock, IForgeBlock
         return 0;
     }
 
+    @Deprecated(forRemoval = true, since = "1.19.2")
     default int getLight(BlockGetter level, BlockPos pos)
     {
         if (level.getBlockEntity(pos) instanceof FramedBlockEntity be)

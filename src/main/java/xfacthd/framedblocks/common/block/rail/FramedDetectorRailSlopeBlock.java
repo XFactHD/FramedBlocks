@@ -141,7 +141,7 @@ public class FramedDetectorRailSlopeBlock extends DetectorRailBlock implements I
     }
 
     @Override
-    public int getLightEmission(BlockState state, BlockGetter level, BlockPos pos) { return getLight(level, pos); }
+    public int getLightEmission(BlockState state, BlockGetter level, BlockPos pos) { return getLight(state, level, pos); }
 
     @Override
     public SoundType getSoundType(BlockState state, LevelReader level, BlockPos pos, Entity entity)
