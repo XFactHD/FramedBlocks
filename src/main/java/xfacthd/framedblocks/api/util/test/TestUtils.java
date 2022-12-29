@@ -243,19 +243,27 @@ public final class TestUtils
     }
 
     /**
-     * Test whether the given {@link BlockState} occludes the light source placed on the north side of the block
-     */
-    public static void testBlockOccludesLightNorth(GameTestHelper helper, BlockState state, List<Direction> camoSides)
-    {
-        testBlockOccludesLight(helper, OCCLUSION_BLOCK_SIDE, OCCLUSION_LIGHT_SIDE, state, camoSides);
-    }
-
-    /**
-     * Test whether the given double block {@link BlockState} occludes the light source placed belowthe block
+     * Test whether the given double block {@link BlockState} occludes the light source placed below the block
      */
     public static void testDoubleBlockOccludesLightBelow(GameTestHelper helper, BlockState state, List<Direction> camoSides)
     {
         testBlockOccludesLight(helper, OCCLUSION_BLOCK_TOP_BOTTOM, OCCLUSION_LIGHT_TOP, state, camoSides);
+    }
+
+    /**
+     * Test whether the given double block {@link BlockState} occludes the light source placed above the block
+     */
+    public static void testDoubleBlockOccludesLightAbove(GameTestHelper helper, BlockState state, List<Direction> camoSides)
+    {
+        testBlockOccludesLight(helper, OCCLUSION_BLOCK_TOP_BOTTOM, OCCLUSION_LIGHT_BOTTOM, state, camoSides);
+    }
+
+    /**
+     * Test whether the given {@link BlockState} occludes the light source placed on the north side of the block
+     */
+    public static void testDoubleBlockOccludesLightNorth(GameTestHelper helper, BlockState state, List<Direction> camoSides)
+    {
+        testBlockOccludesLight(helper, OCCLUSION_BLOCK_SIDE, OCCLUSION_LIGHT_SIDE, state, camoSides);
     }
 
     private static void testBlockOccludesLight(GameTestHelper helper, BlockPos blockPos, BlockPos lightPos, BlockState state, List<Direction> camoSides)

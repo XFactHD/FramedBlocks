@@ -11,9 +11,8 @@ import net.minecraft.world.level.block.state.properties.StairsShape;
 import xfacthd.framedblocks.api.block.IFramedBlock;
 import xfacthd.framedblocks.common.data.BlockType;
 import xfacthd.framedblocks.common.data.PropertyHolder;
-import xfacthd.framedblocks.common.data.property.HorizontalRotation;
+import xfacthd.framedblocks.common.data.property.*;
 import xfacthd.framedblocks.api.util.*;
-import xfacthd.framedblocks.common.data.property.StairsType;
 
 public final class FlatInnerSlopePanelCornerSkipPredicate implements SideSkipPredicate
 {
@@ -97,7 +96,16 @@ public final class FlatInnerSlopePanelCornerSkipPredicate implements SideSkipPre
                 case FRAMED_VERTICAL_DOUBLE_STAIRS -> testAgainstVerticalDoubleStairs(
                         level, pos, dir, front, rot, adjState, side
                 );
-                case FRAMED_HALF_STAIRS -> testAgainstHalfStairs(
+                case FRAMED_HALF_STAIRS, FRAMED_HALF_SLOPE -> testAgainstHalfStairs(
+                        level, pos, dir, front, rot, adjState, side
+                );
+                case FRAMED_DIVIDED_SLOPE -> testAgainstDividedSlope(
+                        level, pos, dir, front, rot, adjState, side
+                );
+                case FRAMED_DOUBLE_HALF_SLOPE -> testAgainstDoubleHalfSlope(
+                        level, pos, dir, front, rot, adjState, side
+                );
+                case FRAMED_VERTICAL_SLOPED_STAIRS -> testAgainstVerticalSlopedStairs(
                         level, pos, dir, front, rot, adjState, side
                 );
                 default -> false;
@@ -642,6 +650,70 @@ public final class FlatInnerSlopePanelCornerSkipPredicate implements SideSkipPre
             {
                 return SideSkipPredicate.compareState(level, pos, side);
             }
+        }
+
+        return false;
+    }
+
+    private static boolean testAgainstDividedSlope(
+            BlockGetter level, BlockPos pos, Direction dir, boolean front, HorizontalRotation rot, BlockState adjState, Direction side
+    )
+    {
+        SlopeType adjType = adjState.getValue(PropertyHolder.SLOPE_TYPE);
+        if (adjType == SlopeType.HORIZONTAL || !isPanelSide(dir, rot, side)) { return false; }
+
+        Direction adjDir = adjState.getValue(FramedProperties.FACING_HOR);
+        boolean adjTop = adjType == SlopeType.TOP;
+
+        if (adjDir == side.getOpposite() || (adjTop && side == Direction.DOWN) || (!adjTop && side == Direction.UP))
+        {
+            if (adjDir == dir.getClockWise() || adjDir == dir.getCounterClockWise())
+            {
+                Direction camoSide = front ? dir.getOpposite() : dir;
+                return SideSkipPredicate.compareState(level, pos, side, side, camoSide);
+            }
+        }
+
+        return false;
+    }
+
+    private static boolean testAgainstDoubleHalfSlope(
+            BlockGetter level, BlockPos pos, Direction dir, boolean front, HorizontalRotation rot, BlockState adjState, Direction side
+    )
+    {
+        if (!isPanelSide(dir, rot, side)) { return false; }
+
+        Direction adjDir = adjState.getValue(FramedProperties.FACING_HOR);
+        boolean adjRight = adjState.getValue(PropertyHolder.RIGHT);
+
+        if (adjDir.getAxis() == side.getAxis() || Utils.isY(side))
+        {
+            if ((adjDir == dir.getClockWise() && adjRight == front) || (adjDir == dir.getCounterClockWise() && adjRight != front))
+            {
+                return SideSkipPredicate.compareState(level, pos, side);
+            }
+        }
+
+        return false;
+    }
+
+    private static boolean testAgainstVerticalSlopedStairs(
+            BlockGetter level, BlockPos pos, Direction dir, boolean front, HorizontalRotation rot, BlockState adjState, Direction side
+    )
+    {
+        if (!isPanelSide(dir, rot, side)) { return false; }
+
+        Direction adjDir = adjState.getValue(FramedProperties.FACING_HOR);
+        HorizontalRotation adjRot = adjState.getValue(PropertyHolder.ROTATION);
+
+        if ((!front && adjDir != dir) || (front && adjDir != dir.getOpposite()))
+        {
+            return false;
+        }
+
+        if (VerticalSlopedStairsSkipPredicate.isPanelFace(adjDir, adjRot, side.getOpposite()))
+        {
+            return SideSkipPredicate.compareState(level, pos, side);
         }
 
         return false;

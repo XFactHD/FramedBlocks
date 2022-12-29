@@ -66,6 +66,20 @@ public abstract class FramedDoubleBlockEntity extends FramedBlockEntity
     }
 
     @Override
+    public BlockState getCamoState(BlockState state)
+    {
+        if (state == blockPair.getA())
+        {
+            return getCamoState();
+        }
+        if (state == blockPair.getB())
+        {
+            return getCamoStateTwo();
+        }
+        return Blocks.AIR.defaultBlockState();
+    }
+
+    @Override
     protected void applyCamo(ItemStack camoStack, BlockState camoState, BlockHitResult hit)
     {
         if (hitSecondary(hit))

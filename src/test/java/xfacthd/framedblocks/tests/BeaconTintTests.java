@@ -47,6 +47,8 @@ public final class BeaconTintTests
             BlockType.FRAMED_WALL_TORCH,
             BlockType.FRAMED_SOUL_TORCH,
             BlockType.FRAMED_SOUL_WALL_TORCH,
+            BlockType.FRAMED_REDSTONE_TORCH,
+            BlockType.FRAMED_REDSTONE_WALL_TORCH,
             BlockType.FRAMED_LATTICE_BLOCK,
             BlockType.FRAMED_VERTICAL_STAIRS,
             BlockType.FRAMED_BARS,
@@ -62,7 +64,15 @@ public final class BeaconTintTests
             BlockType.FRAMED_FLAT_INV_DOUBLE_SLOPE_PANEL_CORNER,
             BlockType.FRAMED_WALL_BOARD,
             BlockType.FRAMED_GATE_DOOR,
-            BlockType.FRAMED_IRON_GATE_DOOR
+            BlockType.FRAMED_IRON_GATE_DOOR,
+            BlockType.FRAMED_ITEM_FRAME,
+            BlockType.FRAMED_GLOWING_ITEM_FRAME,
+            BlockType.FRAMED_FANCY_RAIL,
+            BlockType.FRAMED_FANCY_POWERED_RAIL,
+            BlockType.FRAMED_FANCY_DETECTOR_RAIL,
+            BlockType.FRAMED_FANCY_ACTIVATOR_RAIL,
+            BlockType.FRAMED_HALF_SLOPE,
+            BlockType.FRAMED_DOUBLE_HALF_SLOPE
     );
 
     @GameTestGenerator
@@ -112,7 +122,7 @@ public final class BeaconTintTests
     {
         ResourceLocation regName = ForgeRegistries.BLOCKS.getKey(state.getBlock());
         Preconditions.checkState(regName != null);
-        return String.format("intangibilitytests.test_%s", regName.getPath());
+        return String.format("beacontinttests.test_%s", regName.getPath());
     }
 
     private static List<Direction> getCamoSides(Block block)
@@ -134,9 +144,13 @@ public final class BeaconTintTests
                  FRAMED_FLAT_DOUBLE_SLOPE_PANEL_CORNER,
                  FRAMED_FLAT_INV_DOUBLE_SLOPE_PANEL_CORNER,
                  FRAMED_FLAT_EXT_DOUBLE_SLOPE_PANEL_CORNER,
-                 FRAMED_FLAT_EXT_INNER_DOUBLE_SLOPE_PANEL_CORNER -> List.of(Direction.NORTH, Direction.SOUTH);
+                 FRAMED_FLAT_EXT_INNER_DOUBLE_SLOPE_PANEL_CORNER,
+                 FRAMED_DOUBLE_PRISM,
+                 FRAMED_DOUBLE_SLOPED_PRISM,
+                 FRAMED_VERTICAL_DOUBLE_HALF_SLOPE -> List.of(Direction.NORTH, Direction.SOUTH);
 
-            case FRAMED_VERTICAL_DOUBLE_STAIRS -> List.of(Direction.EAST, Direction.WEST);
+            case FRAMED_VERTICAL_DOUBLE_STAIRS,
+                 FRAMED_DIVIDED_SLOPE -> List.of(Direction.EAST, Direction.WEST);
 
             default -> List.of(Direction.UP, Direction.DOWN);
         };

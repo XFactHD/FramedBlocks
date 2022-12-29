@@ -141,6 +141,13 @@ public class FramedLanguageProvider extends LanguageProvider
         add(FBContent.blockFramedFancyPoweredRailSlope.get(), "Framed Fancy Powered Rail Slope");
         add(FBContent.blockFramedFancyDetectorRailSlope.get(), "Framed Fancy Detector Rail Slope");
         add(FBContent.blockFramedFancyActivatorRailSlope.get(), "Framed Fancy Activator Rail Slope");
+        add(FBContent.blockFramedHalfSlope.get(), "Framed Half Slope");
+        add(FBContent.blockFramedVerticalHalfSlope.get(), "Framed Half Slope");
+        add(FBContent.blockFramedDividedSlope.get(), "Framed Divided Slope");
+        add(FBContent.blockFramedDoubleHalfSlope.get(), "Framed Double Half Slope");
+        add(FBContent.blockFramedVerticalDoubleHalfSlope.get(), "Framed Double Half Slope");
+        add(FBContent.blockFramedSlopedStairs.get(), "Framed Sloped Stairs");
+        add(FBContent.blockFramedVerticalSlopedStairs.get(), "Framed Vertical Sloped Stairs");
 
         add(FBContent.itemFramedHammer.get(), "Framed Hammer");
         add(FBContent.itemFramedWrench.get(), "Framed Wrench");

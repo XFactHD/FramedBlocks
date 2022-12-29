@@ -402,6 +402,39 @@ public final class Modifiers
     }
 
     /**
+     * Cuts the quad pointing horizontally at the edge given by {@code cutDir}
+     * @param cutDir The direction towards the cut edge
+     * @param lengthCW The target length of the right corner (cut direction rotated clockwise) from the starting edge
+     * @param lengthCCW The target length of the left corner (cut direction rotated counter-clockwise) from the starting edge
+     */
+    public static QuadModifier.Modifier cutSide(Direction cutDir, float lengthCW, float lengthCCW)
+    {
+        return data ->
+        {
+            Direction quadDir = data.quad().getDirection();
+            Preconditions.checkState(!Utils.isY(quadDir), "Quad direction must be horizontal");
+            Preconditions.checkState(quadDir.getAxis() != cutDir.getAxis(), "Cut direction must be prependicular to the quad direction");
+
+            if (Utils.isY(cutDir))
+            {
+                boolean down = cutDir == Direction.DOWN;
+                float lenRight = down ? lengthCW : lengthCCW;
+                float lenLeft = down ? lengthCCW : lengthCW;
+
+                return cutSideUpDown(data, down, lenRight, lenLeft);
+            }
+            else
+            {
+                boolean right = cutDir == quadDir.getClockWise();
+                float lenTop = right ? lengthCW : lengthCCW;
+                float lenBottom = right ? lengthCCW : lengthCW;
+
+                return cutSideLeftRight(data, right, lenTop, lenBottom);
+            }
+        };
+    }
+
+    /**
      * Cuts a triangle quad with the tip centered horizontally and pointing up or down.
      * The quad will have the right edge pushed back and the tip tilted to the top or bottom left corner
      * @param up Whether the tip should point up or down

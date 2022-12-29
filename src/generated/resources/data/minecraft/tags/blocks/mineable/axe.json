@@ -118,6 +118,13 @@
     "framedblocks:framed_fancy_rail_slope",
     "framedblocks:framed_fancy_powered_rail_slope",
     "framedblocks:framed_fancy_detector_rail_slope",
-    "framedblocks:framed_fancy_activator_rail_slope"
+    "framedblocks:framed_fancy_activator_rail_slope",
+    "framedblocks:framed_half_slope",
+    "framedblocks:framed_vertical_half_slope",
+    "framedblocks:framed_divided_slope",
+    "framedblocks:framed_double_half_slope",
+    "framedblocks:framed_vertical_double_half_slope",
+    "framedblocks:framed_sloped_stairs",
+    "framedblocks:framed_vertical_sloped_stairs"
   ]
 }

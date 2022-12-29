@@ -1,5 +1,6 @@
 package xfacthd.framedblocks.api.util;
 
+import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.core.Direction;
 import net.minecraft.core.BlockPos;
@@ -29,9 +30,7 @@ public interface SideSkipPredicate
             }
         }
 
-        if (adjState.isAir()) { return false; }
-
-        return compareState(level, pos, adjState, side, side);
+        return !adjState.isAir() && compareState(level, pos, adjState, side, side);
     };
 
     /**
@@ -93,9 +92,7 @@ public interface SideSkipPredicate
         if (Utils.getBlockEntitySafe(level, pos.relative(side)) instanceof FramedBlockEntity be)
         {
             BlockState adjState = be.getCamoState(adjCamoSide);
-            if (adjState.isAir()) { return false; }
-
-            return compareState(level, pos, adjState, side, camoSide);
+            return !adjState.isAir() && compareState(level, pos, adjState, side, camoSide);
         }
         return false;
     }
@@ -115,15 +112,58 @@ public interface SideSkipPredicate
         if (Utils.getBlockEntitySafe(level, pos) instanceof FramedBlockEntity be)
         {
             BlockState state = be.getCamoState(camoSide);
-            if (state.isAir()) { return false; }
-
-            if (state == adjState)
-            {
-                return FramedBlocksAPI.getInstance().canCullBlockNextTo(state, adjState);
-            }
-            return state.isSolidRender(level, pos) && adjState.isSolidRender(level, pos.relative(side));
+            return compareState(level, pos, state, adjState, side);
         }
 
         return false;
+    }
+
+    /**
+     * Compares the camo state of the {@link FramedBlockEntity} at the given position against the camo state of the
+     * FramedBlockEntity at the given position offset by the given {@link Direction side}.
+     * On the FramedBlockEntity at the given position, the given state will be used for the camo lookup, on the
+     * neighboring FramedBlockEntity the given adjCamoSide will be used for the camo lookup
+     * @param level The Level
+     * @param pos The position of the block being tested
+     * @param side The side on which the neighbor to be tested against is located
+     * @param testState The state used in the test, used to look up the camo on the FramedBlockEntity at the given position
+     * @param adjCamoSide The side on which to look up the camo state in the neighboring FramedBlockEntity
+     * @return true if the camo states either match (with certain exclusions) or occlude each other by being solid
+     */
+    static boolean compareState(BlockGetter level, BlockPos pos, Direction side, BlockState testState, Direction adjCamoSide)
+    {
+        BlockState adjCamoState = Blocks.AIR.defaultBlockState();
+        if (Utils.getBlockEntitySafe(level, pos.relative(side)) instanceof FramedBlockEntity be)
+        {
+            adjCamoState = be.getCamoState(adjCamoSide);
+        }
+
+        if (!adjCamoState.isAir() && Utils.getBlockEntitySafe(level, pos) instanceof FramedBlockEntity be)
+        {
+            BlockState camoState = be.getCamoState(testState);
+            return compareState(level, pos, camoState, adjCamoState, side);
+        }
+
+        return false;
+    }
+
+    /**
+     * Compares the two given camo states against each other
+     * @param level The Level
+     * @param pos The position of the block being tested
+     * @param state The camo state of the block at the given position
+     * @param adjState The camo state of the block at the neighboring position
+     * @param side The side on which the neighbor to be tested against is located
+     * @return true if the camo states either match (with certain exclusions) or occlude each other by being solid
+     */
+    static boolean compareState(BlockGetter level, BlockPos pos, BlockState state, BlockState adjState, Direction side)
+    {
+        if (state.isAir() || adjState.isAir()) { return false; }
+
+        if (state == adjState)
+        {
+            return FramedBlocksAPI.getInstance().canCullBlockNextTo(state, adjState);
+        }
+        return state.isSolidRender(level, pos) && adjState.isSolidRender(level, pos.relative(side));
     }
 }

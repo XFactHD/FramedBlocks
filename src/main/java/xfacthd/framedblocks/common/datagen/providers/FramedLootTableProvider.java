@@ -76,6 +76,9 @@ public class FramedLootTableProvider extends LootTableProvider
             add(FBContent.blockFramedDoubleSlab.get(), block -> droppingTwo(block, FBContent.blockFramedSlab.get()));
             add(FBContent.blockFramedDoublePanel.get(), block -> droppingTwo(block, FBContent.blockFramedPanel.get()));
             add(FBContent.blockFramedIronDoor.get(), block -> createSinglePropConditionTable(block, DoorBlock.HALF, DoubleBlockHalf.LOWER));
+
+            dropOther(FBContent.blockFramedVerticalHalfSlope.get(), FBContent.blockFramedHalfSlope.get());
+            dropOther(FBContent.blockFramedVerticalDoubleHalfSlope.get(), FBContent.blockFramedDoubleHalfSlope.get());
         }
 
         protected static LootTable.Builder droppingTwo(Block block, Block drop) {

@@ -1,0 +1,14 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "SS"
+  ],
+  "key": {
+    "S": {
+      "item": "framedblocks:framed_half_slope"
+    }
+  },
+  "result": {
+    "item": "framedblocks:framed_divided_slope"
+  }
+}
