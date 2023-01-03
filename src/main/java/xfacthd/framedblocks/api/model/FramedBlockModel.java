@@ -30,10 +30,10 @@ import java.util.*;
 public abstract class FramedBlockModel extends BakedModelProxy
 {
     private static final Direction[] DIRECTIONS = Direction.values();
-    private final Cache<QuadCackeKey, QuadTable> quadCache = Caffeine.newBuilder()
+    private final Cache<QuadCacheKey, QuadTable> quadCache = Caffeine.newBuilder()
             .expireAfterAccess(ModelCache.DEFAULT_CACHE_DURATION)
             .build();
-    private final Cache<BlockState, CachedRenderTypes> renderTypeCache = Caffeine.newBuilder()
+    private final Cache<QuadCacheKey, CachedRenderTypes> renderTypeCache = Caffeine.newBuilder()
             .expireAfterAccess(ModelCache.DEFAULT_CACHE_DURATION)
             .build();
     protected final BlockState state;
@@ -124,7 +124,10 @@ public abstract class FramedBlockModel extends BakedModelProxy
 
     private CachedRenderTypes getCachedRenderTypes(BlockState camoState, RandomSource rand, ModelData data)
     {
-        return renderTypeCache.get(camoState, key -> buildRenderTypeCache(key, rand, data));
+        return renderTypeCache.get(
+                makeCacheKey(camoState, null, data),
+                key -> buildRenderTypeCache(key.state(), rand, data)
+        );
     }
 
     private CachedRenderTypes buildRenderTypeCache(BlockState camoState, RandomSource rand, ModelData data)
@@ -191,8 +194,8 @@ public abstract class FramedBlockModel extends BakedModelProxy
         {
             Object ctCtx = needCtCtx ? FramedBlocksClientAPI.getInstance().extractCTContext(camoData) : null;
             return quadCache.get(
-                    new QuadCackeKey(camoState, ctCtx),
-                    key -> buildQuadCache(state, key.state, rand, extraData, ctCtx != null ? camoData : ModelData.EMPTY, noCamo)
+                    makeCacheKey(camoState, ctCtx, extraData),
+                    key -> buildQuadCache(state, key.state(), rand, extraData, ctCtx != null ? camoData : ModelData.EMPTY, noCamo)
             ).getQuads(renderType, side);
         }
     }
@@ -252,7 +255,7 @@ public abstract class FramedBlockModel extends BakedModelProxy
 
             for (BakedQuad quad : quads)
             {
-                transformQuad(quadMap, quad);
+                transformQuad(quadMap, quad, data);
             }
             postProcessQuads(quadMap);
         }
@@ -264,6 +267,19 @@ public abstract class FramedBlockModel extends BakedModelProxy
         }
 
         return quadMap;
+    }
+
+    /**
+     * Called for each {@link BakedQuad} of the camo block's model for whose side this block's
+     * {@link CtmPredicate#test(BlockState, Direction)} returns {@code false}.
+     * @param quadMap The target map to put all final quads into
+     * @param quad The source quad. Must not be modified, use {@link ModelUtils#duplicateQuad(BakedQuad)} to
+     *             deep-copy the quad before manipulating it
+     * @param data The {@link ModelData}
+     */
+    protected void transformQuad(Map<Direction, List<BakedQuad>> quadMap, BakedQuad quad, ModelData data)
+    {
+        transformQuad(quadMap, quad);
     }
 
     /**
@@ -353,6 +369,20 @@ public abstract class FramedBlockModel extends BakedModelProxy
      */
     protected void getAdditionalQuads(Map<Direction, List<BakedQuad>> quadMap, BlockState state, RandomSource rand, ModelData data, RenderType renderType) {}
 
+    /**
+     * Return a custom {@link QuadCacheKey} that holds additional metadata which influences the resulting quads.
+     * @implNote The resulting object must at least store the given {@link BlockState} and connected textures context object
+     * and should either be a record or have an otherwise properly implemented {@code hashCode()} and {@code equals()}
+     * implementation
+     * @param state The {@link BlockState} of the camo applied to the block
+     * @param ctCtx The current connected textures context object, may be null
+     * @param data The {@link ModelData} from the {@link xfacthd.framedblocks.api.block.FramedBlockEntity}
+     */
+    protected QuadCacheKey makeCacheKey(BlockState state, Object ctCtx, ModelData data)
+    {
+        return new SimpleQuadCacheKey(state, ctCtx);
+    }
+
     @Nonnull
     @Override
     public final ModelData getModelData(@Nonnull BlockAndTintGetter level, @Nonnull BlockPos pos, @Nonnull BlockState state, @Nonnull ModelData tileData)
@@ -391,11 +421,19 @@ public abstract class FramedBlockModel extends BakedModelProxy
 
 
 
+    @SuppressWarnings("unused")
+    protected interface QuadCacheKey
+    {
+        BlockState state();
+
+        Object ctCtx();
+    }
+
     /**
      * @param state The {@link BlockState} of the camo applied to the block
      * @param ctCtx The connected textures context data used by the camo model, may be null
      */
-    private record QuadCackeKey(BlockState state, Object ctCtx) { }
+    private record SimpleQuadCacheKey(BlockState state, Object ctCtx) implements QuadCacheKey { }
 
     private record CachedRenderTypes(ChunkRenderTypeSet camoTypes, ChunkRenderTypeSet overlayTypes, ChunkRenderTypeSet allTypes)
     {
