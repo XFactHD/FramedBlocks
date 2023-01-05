@@ -49,6 +49,8 @@ public abstract class FramedBlockModel extends BakedModelProxy
     @Override
     public List<BakedQuad> getQuads(BlockState state, Direction side, Random rand, IModelData extraData)
     {
+        if (state == null) { state = this.state; }
+
         RenderType layer = MinecraftForgeClient.getRenderLayer();
         BlockState camoState = Blocks.AIR.defaultBlockState();
 
