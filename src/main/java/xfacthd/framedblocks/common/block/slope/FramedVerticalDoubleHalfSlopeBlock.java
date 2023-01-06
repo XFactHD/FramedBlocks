@@ -4,6 +4,7 @@ import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.util.Tuple;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.block.*;
 import net.minecraft.world.level.block.entity.BlockEntity;
@@ -14,6 +15,7 @@ import net.minecraft.world.phys.Vec3;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import xfacthd.framedblocks.api.util.FramedProperties;
 import xfacthd.framedblocks.api.util.Utils;
+import xfacthd.framedblocks.common.FBContent;
 import xfacthd.framedblocks.common.block.AbstractFramedDoubleBlock;
 import xfacthd.framedblocks.common.blockentity.FramedVerticalDoubleHalfSlopeBlockEntity;
 import xfacthd.framedblocks.common.data.BlockType;
@@ -77,6 +79,21 @@ public class FramedVerticalDoubleHalfSlopeBlock extends AbstractFramedDoubleBloc
     public BlockState mirror(BlockState state, Mirror mirror)
     {
         return Utils.mirrorCornerBlock(state, mirror);
+    }
+
+    @Override
+    protected Tuple<BlockState, BlockState> getBlockPair(BlockState state)
+    {
+        Direction facing = state.getValue(FramedProperties.FACING_HOR);
+        boolean top = state.getValue(FramedProperties.TOP);
+
+        BlockState defState = FBContent.blockFramedVerticalHalfSlope.get().defaultBlockState();
+        return new Tuple<>(
+                defState.setValue(FramedProperties.FACING_HOR, facing)
+                        .setValue(FramedProperties.TOP, top),
+                defState.setValue(FramedProperties.FACING_HOR, facing.getOpposite())
+                        .setValue(FramedProperties.TOP, top)
+        );
     }
 
     @Override

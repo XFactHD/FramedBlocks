@@ -1,7 +1,6 @@
 package xfacthd.framedblocks.common.blockentity;
 
 import net.minecraft.core.BlockPos;
-import net.minecraft.util.Tuple;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.core.Direction;
 import net.minecraft.world.phys.BlockHitResult;
@@ -63,20 +62,5 @@ public class FramedDoublePanelBlockEntity extends FramedDoubleBlockEntity
         }
         //noinspection ConstantConditions
         return getCamo().getState().isSolidRender(level, worldPosition) && getCamoTwo().getState().isSolidRender(level, worldPosition);
-    }
-
-    @Override
-    protected Tuple<BlockState, BlockState> getBlockPair(BlockState state)
-    {
-        return getBlockPair(state.getValue(FramedProperties.FACING_NE));
-    }
-
-    public static Tuple<BlockState, BlockState> getBlockPair(Direction facing)
-    {
-        BlockState defState = FBContent.blockFramedPanel.get().defaultBlockState();
-        return new Tuple<>(
-                defState.setValue(FramedProperties.FACING_HOR, facing),
-                defState.setValue(FramedProperties.FACING_HOR, facing.getOpposite())
-        );
     }
 }

@@ -2,7 +2,6 @@ package xfacthd.framedblocks.common.blockentity;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
-import net.minecraft.util.Tuple;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.Vec3;
@@ -12,7 +11,6 @@ import xfacthd.framedblocks.api.util.FramedProperties;
 import xfacthd.framedblocks.api.util.Utils;
 import xfacthd.framedblocks.common.FBContent;
 import xfacthd.framedblocks.common.data.PropertyHolder;
-import xfacthd.framedblocks.common.data.property.HorizontalRotation;
 import xfacthd.framedblocks.common.util.DoubleSoundMode;
 
 public class FramedInverseDoubleSlopePanelBlockEntity extends FramedDoubleBlockEntity
@@ -70,23 +68,4 @@ public class FramedInverseDoubleSlopePanelBlockEntity extends FramedDoubleBlockE
 
     @Override
     public DoubleSoundMode getSoundMode() { return DoubleSoundMode.EITHER; }
-
-    @Override
-    protected Tuple<BlockState, BlockState> getBlockPair(BlockState state)
-    {
-        return getBlockPair(state.getValue(FramedProperties.FACING_HOR), state.getValue(PropertyHolder.ROTATION));
-    }
-
-    public static Tuple<BlockState, BlockState> getBlockPair(Direction facing, HorizontalRotation rotation)
-    {
-        BlockState defState = FBContent.blockFramedSlopePanel.get().defaultBlockState();
-        return new Tuple<>(
-                defState.setValue(FramedProperties.FACING_HOR, facing.getOpposite())
-                        .setValue(PropertyHolder.ROTATION, rotation.isVertical() ? rotation.getOpposite() : rotation)
-                        .setValue(PropertyHolder.FRONT, true),
-                defState.setValue(FramedProperties.FACING_HOR, facing)
-                        .setValue(PropertyHolder.ROTATION, rotation)
-                        .setValue(PropertyHolder.FRONT, true)
-        );
-    }
 }

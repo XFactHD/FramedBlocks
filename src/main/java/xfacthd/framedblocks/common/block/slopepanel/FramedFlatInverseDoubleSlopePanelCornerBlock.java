@@ -4,6 +4,7 @@ import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.util.Tuple;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.block.*;
 import net.minecraft.world.level.block.entity.BlockEntity;
@@ -15,6 +16,7 @@ import net.minecraft.world.phys.Vec3;
 import net.minecraft.world.phys.shapes.*;
 import xfacthd.framedblocks.api.util.FramedProperties;
 import xfacthd.framedblocks.api.util.Utils;
+import xfacthd.framedblocks.common.FBContent;
 import xfacthd.framedblocks.common.block.AbstractFramedDoubleBlock;
 import xfacthd.framedblocks.common.blockentity.FramedFlatInverseDoubleSlopePanelCornerBlockEntity;
 import xfacthd.framedblocks.common.data.BlockType;
@@ -110,6 +112,27 @@ public class FramedFlatInverseDoubleSlopePanelCornerBlock extends AbstractFramed
     public BlockState mirror(BlockState state, Mirror mirror)
     {
         return FramedFlatSlopePanelCornerBlock.mirrorCorner(state, mirror);
+    }
+
+    @Override
+    protected Tuple<BlockState, BlockState> getBlockPair(BlockState state)
+    {
+        Direction facing = state.getValue(FramedProperties.FACING_HOR);
+        HorizontalRotation rotation = state.getValue(PropertyHolder.ROTATION);
+        HorizontalRotation backRot = rotation.rotate(rotation.isVertical() ? Rotation.CLOCKWISE_90 : Rotation.COUNTERCLOCKWISE_90);
+
+        return new Tuple<>(
+                FBContent.blockFramedFlatInnerSlopePanelCorner.get()
+                        .defaultBlockState()
+                        .setValue(FramedProperties.FACING_HOR, facing.getOpposite())
+                        .setValue(PropertyHolder.ROTATION, backRot)
+                        .setValue(PropertyHolder.FRONT, true),
+                FBContent.blockFramedFlatSlopePanelCorner.get()
+                        .defaultBlockState()
+                        .setValue(FramedProperties.FACING_HOR, facing)
+                        .setValue(PropertyHolder.ROTATION, rotation.getOpposite())
+                        .setValue(PropertyHolder.FRONT, true)
+        );
     }
 
     @Override

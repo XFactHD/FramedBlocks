@@ -20,6 +20,7 @@ import xfacthd.framedblocks.api.data.EmptyCamoContainer;
 import xfacthd.framedblocks.api.data.CamoContainer;
 import xfacthd.framedblocks.api.util.FramedBlockData;
 import xfacthd.framedblocks.api.util.client.ClientUtils;
+import xfacthd.framedblocks.common.block.AbstractFramedDoubleBlock;
 import xfacthd.framedblocks.common.util.DoubleBlockSoundType;
 import xfacthd.framedblocks.common.util.DoubleSoundMode;
 
@@ -38,7 +39,7 @@ public abstract class FramedDoubleBlockEntity extends FramedBlockEntity
     public FramedDoubleBlockEntity(BlockEntityType<?> type, BlockPos pos, BlockState state)
     {
         super(type, pos, state);
-        blockPair = getBlockPair(state);
+        blockPair = AbstractFramedDoubleBlock.getStatePair(state);
     }
 
     @Override
@@ -181,8 +182,6 @@ public abstract class FramedDoubleBlockEntity extends FramedBlockEntity
 
     public final DoubleBlockSoundType getSoundType() { return soundType; }
 
-    protected abstract Tuple<BlockState, BlockState> getBlockPair(BlockState state);
-
     @Override
     protected abstract boolean hitSecondary(BlockHitResult hit);
 
@@ -201,7 +200,7 @@ public abstract class FramedDoubleBlockEntity extends FramedBlockEntity
     public void setBlockState(BlockState state)
     {
         super.setBlockState(state);
-        blockPair = getBlockPair(state);
+        blockPair = AbstractFramedDoubleBlock.getStatePair(state);
     }
 
     /*

@@ -2,12 +2,16 @@ package xfacthd.framedblocks.common.block.stairs;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.util.Tuple;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.block.*;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
+import net.minecraft.world.level.block.state.properties.BlockStateProperties;
+import net.minecraft.world.level.block.state.properties.Half;
 import xfacthd.framedblocks.api.util.*;
+import xfacthd.framedblocks.common.FBContent;
 import xfacthd.framedblocks.common.block.AbstractFramedDoubleBlock;
 import xfacthd.framedblocks.common.blockentity.FramedDoubleStairsBlockEntity;
 import xfacthd.framedblocks.common.data.BlockType;
@@ -72,6 +76,24 @@ public class FramedDoubleStairsBlock extends AbstractFramedDoubleBlock
     public BlockState mirror(BlockState state, Mirror mirror)
     {
         return Utils.mirrorFaceBlock(state, mirror);
+    }
+
+    @Override
+    protected Tuple<BlockState, BlockState> getBlockPair(BlockState state)
+    {
+        Direction facing = state.getValue(FramedProperties.FACING_HOR);
+        boolean top = state.getValue(FramedProperties.TOP);
+
+        return new Tuple<>(
+                FBContent.blockFramedStairs.get()
+                        .defaultBlockState()
+                        .setValue(BlockStateProperties.HORIZONTAL_FACING, facing)
+                        .setValue(BlockStateProperties.HALF, top ? Half.TOP : Half.BOTTOM),
+                FBContent.blockFramedSlabEdge.get()
+                        .defaultBlockState()
+                        .setValue(FramedProperties.FACING_HOR, facing.getOpposite())
+                        .setValue(FramedProperties.TOP, !top)
+        );
     }
 
     @Override

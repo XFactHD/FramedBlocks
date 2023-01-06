@@ -2,6 +2,7 @@ package xfacthd.framedblocks.common.block.prism;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.util.Tuple;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.block.*;
 import net.minecraft.world.level.block.entity.BlockEntity;
@@ -9,6 +10,7 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import xfacthd.framedblocks.api.util.*;
+import xfacthd.framedblocks.common.FBContent;
 import xfacthd.framedblocks.common.block.AbstractFramedDoubleBlock;
 import xfacthd.framedblocks.common.blockentity.FramedDoublePrismBlockEntity;
 import xfacthd.framedblocks.common.data.BlockType;
@@ -75,6 +77,24 @@ public class FramedDoublePrismBlock extends AbstractFramedDoubleBlock
     public BlockState mirror(BlockState state, Mirror mirror)
     {
         return Utils.mirrorFaceBlock(state, BlockStateProperties.FACING, mirror);
+    }
+
+    @Override
+    protected Tuple<BlockState, BlockState> getBlockPair(BlockState state)
+    {
+        Direction facing = state.getValue(BlockStateProperties.FACING);
+        Direction.Axis axis = state.getValue(BlockStateProperties.AXIS);
+
+        return new Tuple<>(
+                FBContent.blockFramedInnerPrism.get()
+                        .defaultBlockState()
+                        .setValue(BlockStateProperties.FACING, facing)
+                        .setValue(BlockStateProperties.AXIS, axis),
+                FBContent.blockFramedPrism.get()
+                        .defaultBlockState()
+                        .setValue(BlockStateProperties.FACING, facing.getOpposite())
+                        .setValue(BlockStateProperties.AXIS, axis)
+        );
     }
 
     @Override

@@ -2,12 +2,14 @@ package xfacthd.framedblocks.common.block.slopepanel;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.util.Tuple;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.block.*;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import xfacthd.framedblocks.api.util.*;
+import xfacthd.framedblocks.common.FBContent;
 import xfacthd.framedblocks.common.block.AbstractFramedDoubleBlock;
 import xfacthd.framedblocks.common.blockentity.FramedExtendedDoubleSlopePanelBlockEntity;
 import xfacthd.framedblocks.common.data.BlockType;
@@ -78,6 +80,23 @@ public class FramedExtendedDoubleSlopePanelBlock extends AbstractFramedDoubleBlo
     public BlockState mirror(BlockState state, Mirror mirror)
     {
         return FramedSlopePanelBlock.mirrorPanel(state, mirror);
+    }
+
+    @Override
+    protected Tuple<BlockState, BlockState> getBlockPair(BlockState state)
+    {
+        Direction facing = state.getValue(FramedProperties.FACING_HOR);
+        HorizontalRotation rotation = state.getValue(PropertyHolder.ROTATION);
+
+        return new Tuple<>(
+                FBContent.blockFramedExtendedSlopePanel.get().defaultBlockState()
+                        .setValue(FramedProperties.FACING_HOR, facing)
+                        .setValue(PropertyHolder.ROTATION, rotation),
+                FBContent.blockFramedSlopePanel.get().defaultBlockState()
+                        .setValue(FramedProperties.FACING_HOR, facing.getOpposite())
+                        .setValue(PropertyHolder.ROTATION, rotation.isVertical() ? rotation.getOpposite() : rotation)
+                        .setValue(PropertyHolder.FRONT, false)
+        );
     }
 
     @Override

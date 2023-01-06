@@ -2,7 +2,6 @@ package xfacthd.framedblocks.common.blockentity;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
-import net.minecraft.util.Tuple;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.Vec3;
@@ -97,31 +96,5 @@ public class FramedFlatDoubleSlopeSlabCornerBlockEntity extends FramedDoubleBloc
             return camo.getState().isSolidRender(level, worldPosition);
         }
         return false;
-    }
-
-    @Override
-    protected Tuple<BlockState, BlockState> getBlockPair(BlockState state)
-    {
-        return getBlockPair(
-                state.getValue(FramedProperties.FACING_HOR),
-                state.getValue(PropertyHolder.TOP_HALF),
-                state.getValue(FramedProperties.TOP)
-        );
-    }
-
-    public static Tuple<BlockState, BlockState> getBlockPair(Direction facing, boolean topHalf, boolean top)
-    {
-        return new Tuple<>(
-                FBContent.blockFramedFlatInnerSlopeSlabCorner.get()
-                        .defaultBlockState()
-                        .setValue(FramedProperties.FACING_HOR, facing)
-                        .setValue(PropertyHolder.TOP_HALF, topHalf)
-                        .setValue(FramedProperties.TOP, top),
-                FBContent.blockFramedFlatSlopeSlabCorner.get()
-                        .defaultBlockState()
-                        .setValue(FramedProperties.FACING_HOR, facing.getOpposite())
-                        .setValue(PropertyHolder.TOP_HALF, topHalf)
-                        .setValue(FramedProperties.TOP, !top)
-        );
     }
 }

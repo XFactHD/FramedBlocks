@@ -2,15 +2,18 @@ package xfacthd.framedblocks.common.block.slopeslab;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.util.Tuple;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.block.*;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import xfacthd.framedblocks.api.util.*;
+import xfacthd.framedblocks.common.FBContent;
 import xfacthd.framedblocks.common.block.AbstractFramedDoubleBlock;
 import xfacthd.framedblocks.common.blockentity.FramedElevatedDoubleSlopeSlabBlockEntity;
 import xfacthd.framedblocks.common.data.BlockType;
+import xfacthd.framedblocks.common.data.PropertyHolder;
 
 public class FramedElevatedDoubleSlopeSlabBlock extends AbstractFramedDoubleBlock
 {
@@ -65,6 +68,23 @@ public class FramedElevatedDoubleSlopeSlabBlock extends AbstractFramedDoubleBloc
     public BlockState mirror(BlockState state, Mirror mirror)
     {
         return Utils.mirrorFaceBlock(state, mirror);
+    }
+
+    @Override
+    protected Tuple<BlockState, BlockState> getBlockPair(BlockState state)
+    {
+        Direction facing = state.getValue(FramedProperties.FACING_HOR);
+        boolean top = state.getValue(FramedProperties.TOP);
+
+        return new Tuple<>(
+                FBContent.blockFramedElevatedSlopeSlab.get().defaultBlockState()
+                        .setValue(FramedProperties.FACING_HOR, facing)
+                        .setValue(FramedProperties.TOP, top),
+                FBContent.blockFramedSlopeSlab.get().defaultBlockState()
+                        .setValue(FramedProperties.FACING_HOR, facing.getOpposite())
+                        .setValue(PropertyHolder.TOP_HALF, !top)
+                        .setValue(FramedProperties.TOP, !top)
+        );
     }
 
     @Override

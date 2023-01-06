@@ -3,7 +3,6 @@ package xfacthd.framedblocks.client.model.prism;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.resources.model.BakedModel;
 import net.minecraft.core.Direction;
-import net.minecraft.util.Tuple;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraftforge.client.model.data.ModelData;
@@ -11,7 +10,6 @@ import org.jetbrains.annotations.NotNull;
 import xfacthd.framedblocks.client.model.FramedDoubleBlockModel;
 import xfacthd.framedblocks.common.FBContent;
 import xfacthd.framedblocks.common.blockentity.FramedDoubleBlockEntity;
-import xfacthd.framedblocks.common.blockentity.FramedDoubleSlopedPrismBlockEntity;
 import xfacthd.framedblocks.common.data.PropertyHolder;
 
 public class FramedDoubleSlopedPrismModel extends FramedDoubleBlockModel
@@ -21,15 +19,9 @@ public class FramedDoubleSlopedPrismModel extends FramedDoubleBlockModel
 
     public FramedDoubleSlopedPrismModel(BlockState state, BakedModel baseModel)
     {
-        super(baseModel, true);
+        super(state, baseModel, true);
         this.facing = state.getValue(BlockStateProperties.FACING);
         this.orientation = state.getValue(PropertyHolder.ORIENTATION);
-    }
-
-    @Override
-    protected Tuple<BlockState, BlockState> getDummyStates()
-    {
-        return FramedDoubleSlopedPrismBlockEntity.getBlockPair(facing, orientation);
     }
 
     @Override

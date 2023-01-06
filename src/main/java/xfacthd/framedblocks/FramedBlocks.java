@@ -17,6 +17,7 @@ import xfacthd.framedblocks.api.FramedBlocksAPI;
 import xfacthd.framedblocks.api.util.FramedConstants;
 import xfacthd.framedblocks.client.util.ClientConfig;
 import xfacthd.framedblocks.common.FBContent;
+import xfacthd.framedblocks.common.block.AbstractFramedDoubleBlock;
 import xfacthd.framedblocks.common.compat.CompatHandler;
 import xfacthd.framedblocks.common.data.BlueprintBehaviours;
 import xfacthd.framedblocks.common.net.OpenSignScreenPacket;
@@ -68,7 +69,7 @@ public final class FramedBlocks
                 .add();
 
         BlueprintBehaviours.register();
-
+        AbstractFramedDoubleBlock.cacheStatePairs();
         CompatHandler.commonSetup();
     }
 

@@ -2,10 +2,7 @@ package xfacthd.framedblocks.common.blockentity;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
-import net.minecraft.util.Tuple;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.level.block.state.properties.BlockStateProperties;
-import net.minecraft.world.level.block.state.properties.Half;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.Vec3;
 import xfacthd.framedblocks.api.data.CamoContainer;
@@ -96,25 +93,5 @@ public class FramedDoubleStairsBlockEntity extends FramedDoubleBlockEntity
         }
 
         return false;
-    }
-
-    @Override
-    protected Tuple<BlockState, BlockState> getBlockPair(BlockState state)
-    {
-        return getBlockPair(state.getValue(FramedProperties.FACING_HOR), state.getValue(FramedProperties.TOP));
-    }
-
-    public static Tuple<BlockState, BlockState> getBlockPair(Direction facing, boolean top)
-    {
-        return new Tuple<>(
-                FBContent.blockFramedStairs.get()
-                        .defaultBlockState()
-                        .setValue(BlockStateProperties.HORIZONTAL_FACING, facing)
-                        .setValue(BlockStateProperties.HALF, top ? Half.TOP : Half.BOTTOM),
-                FBContent.blockFramedSlabEdge.get()
-                        .defaultBlockState()
-                        .setValue(FramedProperties.FACING_HOR, facing.getOpposite())
-                        .setValue(FramedProperties.TOP, !top)
-        );
     }
 }

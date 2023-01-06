@@ -4,6 +4,7 @@ import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.util.Tuple;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.block.*;
 import net.minecraft.world.level.block.entity.BlockEntity;
@@ -12,13 +13,13 @@ import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import xfacthd.framedblocks.api.util.*;
+import xfacthd.framedblocks.common.FBContent;
 import xfacthd.framedblocks.common.block.AbstractFramedDoubleBlock;
 import xfacthd.framedblocks.common.blockentity.FramedDoubleSlopePanelBlockEntity;
 import xfacthd.framedblocks.common.data.BlockType;
 import xfacthd.framedblocks.common.data.PropertyHolder;
 import xfacthd.framedblocks.common.data.property.HorizontalRotation;
 
-//TODO - 1.20: remove FRONT property and mirror facing and rotation instead and replace CTM_PREDICATE with predefined one
 public class FramedDoubleSlopePanelBlock extends AbstractFramedDoubleBlock
 {
     public static final CtmPredicate CTM_PREDICATE = (state, side) ->
@@ -79,6 +80,24 @@ public class FramedDoubleSlopePanelBlock extends AbstractFramedDoubleBlock
     public BlockState mirror(BlockState state, Mirror mirror)
     {
         return FramedSlopePanelBlock.mirrorPanel(state, mirror);
+    }
+
+    @Override
+    protected Tuple<BlockState, BlockState> getBlockPair(BlockState state)
+    {
+        Direction facing = state.getValue(FramedProperties.FACING_HOR);
+        HorizontalRotation rotation = state.getValue(PropertyHolder.ROTATION);
+        boolean front = state.getValue(PropertyHolder.FRONT);
+
+        BlockState defState = FBContent.blockFramedSlopePanel.get().defaultBlockState();
+        return new Tuple<>(
+                defState.setValue(FramedProperties.FACING_HOR, facing)
+                        .setValue(PropertyHolder.ROTATION, rotation)
+                        .setValue(PropertyHolder.FRONT, front),
+                defState.setValue(FramedProperties.FACING_HOR, facing.getOpposite())
+                        .setValue(PropertyHolder.ROTATION, rotation.isVertical() ? rotation.getOpposite() : rotation)
+                        .setValue(PropertyHolder.FRONT, !front)
+        );
     }
 
     @Override

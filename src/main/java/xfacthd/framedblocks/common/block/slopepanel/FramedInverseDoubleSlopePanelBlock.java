@@ -4,6 +4,7 @@ import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.util.Tuple;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.block.*;
 import net.minecraft.world.level.block.entity.BlockEntity;
@@ -15,6 +16,7 @@ import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import xfacthd.framedblocks.api.util.FramedProperties;
 import xfacthd.framedblocks.api.util.Utils;
+import xfacthd.framedblocks.common.FBContent;
 import xfacthd.framedblocks.common.block.AbstractFramedDoubleBlock;
 import xfacthd.framedblocks.common.blockentity.FramedInverseDoubleSlopePanelBlockEntity;
 import xfacthd.framedblocks.common.data.*;
@@ -108,6 +110,23 @@ public class FramedInverseDoubleSlopePanelBlock extends AbstractFramedDoubleBloc
     }
 
     @Override
+    protected Tuple<BlockState, BlockState> getBlockPair(BlockState state)
+    {
+        Direction facing = state.getValue(FramedProperties.FACING_HOR);
+        HorizontalRotation rotation = state.getValue(PropertyHolder.ROTATION);
+
+        BlockState defState = FBContent.blockFramedSlopePanel.get().defaultBlockState();
+        return new Tuple<>(
+                defState.setValue(FramedProperties.FACING_HOR, facing.getOpposite())
+                        .setValue(PropertyHolder.ROTATION, rotation.isVertical() ? rotation.getOpposite() : rotation)
+                        .setValue(PropertyHolder.FRONT, true),
+                defState.setValue(FramedProperties.FACING_HOR, facing)
+                        .setValue(PropertyHolder.ROTATION, rotation)
+                        .setValue(PropertyHolder.FRONT, true)
+        );
+    }
+
+    @Override
     public BlockEntity newBlockEntity(BlockPos pos, BlockState state)
     {
         return new FramedInverseDoubleSlopePanelBlockEntity(pos, state);
@@ -137,5 +156,10 @@ public class FramedInverseDoubleSlopePanelBlock extends AbstractFramedDoubleBloc
         }
 
         return builder.build();
+    }
+
+    public static BlockState itemModelSource()
+    {
+        return FBContent.blockFramedInverseDoubleSlopePanel.get().defaultBlockState();
     }
 }

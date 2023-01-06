@@ -2,6 +2,7 @@ package xfacthd.framedblocks.common.block.slope;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.util.Tuple;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.block.*;
@@ -11,6 +12,7 @@ import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.phys.Vec3;
 import xfacthd.framedblocks.api.data.CamoContainer;
 import xfacthd.framedblocks.api.util.*;
+import xfacthd.framedblocks.common.FBContent;
 import xfacthd.framedblocks.common.block.AbstractFramedDoubleBlock;
 import xfacthd.framedblocks.common.data.*;
 import xfacthd.framedblocks.common.blockentity.*;
@@ -128,6 +130,22 @@ public class FramedDoubleCornerBlock extends AbstractFramedDoubleBlock
         {
             return Utils.mirrorCornerBlock(state, mirror);
         }
+    }
+
+    @Override
+    protected Tuple<BlockState, BlockState> getBlockPair(BlockState state)
+    {
+        Direction facing = state.getValue(FramedProperties.FACING_HOR);
+        CornerType type = state.getValue(PropertyHolder.CORNER_TYPE);
+
+        return new Tuple<>(
+                FBContent.blockFramedInnerCornerSlope.get().defaultBlockState()
+                        .setValue(PropertyHolder.CORNER_TYPE, type)
+                        .setValue(FramedProperties.FACING_HOR, facing),
+                FBContent.blockFramedCornerSlope.get().defaultBlockState()
+                        .setValue(PropertyHolder.CORNER_TYPE, type.verticalOpposite())
+                        .setValue(FramedProperties.FACING_HOR, facing.getOpposite())
+        );
     }
 
     @Override

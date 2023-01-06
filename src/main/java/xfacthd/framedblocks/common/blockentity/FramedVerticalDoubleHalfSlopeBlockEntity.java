@@ -2,7 +2,6 @@ package xfacthd.framedblocks.common.blockentity;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
-import net.minecraft.util.Tuple;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.Vec3;
@@ -74,25 +73,5 @@ public class FramedVerticalDoubleHalfSlopeBlockEntity extends FramedDoubleBlockE
             return getCamo().isSolid(level, worldPosition) && getCamoTwo().isSolid(level, worldPosition);
         }
         return false;
-    }
-
-    @Override
-    protected Tuple<BlockState, BlockState> getBlockPair(BlockState state)
-    {
-        return getBlockPair(
-                state.getValue(FramedProperties.FACING_HOR),
-                state.getValue(FramedProperties.TOP)
-        );
-    }
-
-    public static Tuple<BlockState, BlockState> getBlockPair(Direction facing, boolean top)
-    {
-        BlockState defState = FBContent.blockFramedVerticalHalfSlope.get().defaultBlockState();
-        return new Tuple<>(
-                defState.setValue(FramedProperties.FACING_HOR, facing)
-                        .setValue(FramedProperties.TOP, top),
-                defState.setValue(FramedProperties.FACING_HOR, facing.getOpposite())
-                        .setValue(FramedProperties.TOP, top)
-        );
     }
 }
