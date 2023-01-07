@@ -70,6 +70,7 @@ public final class FBContent
     );
 
     private static final Map<BlockType, RegistryObject<Block>> BLOCKS_BY_TYPE = new EnumMap<>(BlockType.class);
+    private static final Map<FramedToolType, RegistryObject<Item>> TOOLS_BY_TYPE = new EnumMap<>(FramedToolType.class);
 
     // region Blocks
     public static final RegistryObject<Block> blockFramedCube = registerBlock(FramedCube::cube, BlockType.FRAMED_CUBE);
@@ -387,6 +388,8 @@ public final class FBContent
 
     public static Block byType(BlockType type) { return BLOCKS_BY_TYPE.get(type).get(); }
 
+    public static Item toolByType(FramedToolType type) { return TOOLS_BY_TYPE.get(type).get(); }
+
     @SubscribeEvent
     public static void onRegisterItems(final RegisterEvent event)
     {
@@ -444,7 +447,9 @@ public final class FBContent
 
     private static RegistryObject<Item> registerToolItem(Function<FramedToolType, Item> itemFactory, FramedToolType type)
     {
-        return ITEMS.register(type.getName(), () -> itemFactory.apply(type));
+        RegistryObject<Item> result = ITEMS.register(type.getName(), () -> itemFactory.apply(type));
+        TOOLS_BY_TYPE.put(type, result);
+        return result;
     }
 
     private static <T extends BlockEntity> RegistryObject<BlockEntityType<T>> createBlockEntityType(
