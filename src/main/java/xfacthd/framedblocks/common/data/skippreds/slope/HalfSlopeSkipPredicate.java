@@ -2,6 +2,7 @@ package xfacthd.framedblocks.common.data.skippreds.slope;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.util.Tuple;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.block.StairBlock;
 import net.minecraft.world.level.block.state.BlockState;
@@ -10,11 +11,14 @@ import net.minecraft.world.level.block.state.properties.StairsShape;
 import xfacthd.framedblocks.api.block.IFramedBlock;
 import xfacthd.framedblocks.api.util.FramedProperties;
 import xfacthd.framedblocks.api.util.SideSkipPredicate;
+import xfacthd.framedblocks.common.block.AbstractFramedDoubleBlock;
 import xfacthd.framedblocks.common.data.BlockType;
 import xfacthd.framedblocks.common.data.PropertyHolder;
 import xfacthd.framedblocks.common.data.property.*;
+import xfacthd.framedblocks.common.data.skippreds.TriangleDir;
 import xfacthd.framedblocks.common.data.skippreds.slopepanel.FlatExtendedSlopePanelCornerSkipPredicate;
 import xfacthd.framedblocks.common.data.skippreds.slopepanel.FlatInnerSlopePanelCornerSkipPredicate;
+import xfacthd.framedblocks.common.data.skippreds.stairs.VerticalSlopedStairsSkipPredicate;
 import xfacthd.framedblocks.common.util.FramedUtils;
 
 public final class HalfSlopeSkipPredicate implements SideSkipPredicate
@@ -148,17 +152,12 @@ public final class HalfSlopeSkipPredicate implements SideSkipPredicate
 
         if (side == dir && adjDir == dir.getOpposite() && adjRight != right)
         {
-            return SideSkipPredicate.compareState(level, pos, side, state, side.getOpposite());
+            return SideSkipPredicate.compareState(level, pos, side, state, adjState);
         }
-        else if (isVerticalPanelFace(top, side) && isSameHorizontalHalf(dir, right, adjDir, adjRight) && adjTop != top)
+        else if (getTriDir(dir, top, right, side).isEqualTo(getTriDir(adjDir, adjTop, adjRight, side.getOpposite())))
         {
-            return SideSkipPredicate.compareState(level, pos, side, state, side.getOpposite());
+            return SideSkipPredicate.compareState(level, pos, side, state, adjState);
         }
-        else if (adjDir == dir && adjRight != right && isOuterTriangle(dir, right, side))
-        {
-            return SideSkipPredicate.compareState(level, pos, side, state, side.getOpposite());
-        }
-
         return false;
     }
 
@@ -166,19 +165,9 @@ public final class HalfSlopeSkipPredicate implements SideSkipPredicate
             BlockGetter level, BlockPos pos, BlockState state, Direction dir, boolean top, boolean right, BlockState adjState, Direction side
     )
     {
-        Direction adjDir = adjState.getValue(FramedProperties.FACING_HOR);
-        boolean adjRight = adjState.getValue(PropertyHolder.RIGHT);
-
-        if ((side == dir || isVerticalPanelFace(top, side)) && isSameHorizontalHalf(dir, right, adjDir, adjRight))
-        {
-            return SideSkipPredicate.compareState(level, pos, side, state, side.getOpposite());
-        }
-        else if (isOuterTriangle(dir, right, side) && ((adjDir == dir && !top && adjRight != right) || (adjDir == dir.getOpposite() && top && adjRight == right)))
-        {
-            return SideSkipPredicate.compareState(level, pos, side, state, dir);
-        }
-
-        return false;
+        Tuple<BlockState, BlockState> states = AbstractFramedDoubleBlock.getStatePair(adjState);
+        return testAgainstHalfSlope(level, pos, state, dir, top, right, states.getA(), side) ||
+               testAgainstHalfSlope(level, pos, state, dir, top, right, states.getB(), side);
     }
 
     private static boolean testAgainstDividedSlope(
@@ -188,22 +177,9 @@ public final class HalfSlopeSkipPredicate implements SideSkipPredicate
         SlopeType adjType = adjState.getValue(PropertyHolder.SLOPE_TYPE);
         if (adjType == SlopeType.HORIZONTAL) { return false; }
 
-        Direction adjDir = adjState.getValue(FramedProperties.FACING_HOR);
-        boolean adjTop = adjType == SlopeType.TOP;
-
-        if (adjDir == dir && adjTop == top && isOuterTriangle(dir, right, side))
-        {
-            return SideSkipPredicate.compareState(level, pos, side, state, side.getOpposite());
-        }
-        else if (side == dir && adjDir == dir.getOpposite())
-        {
-            return SideSkipPredicate.compareState(level, pos, side, state, getOuterSlopeFace(dir, right));
-        }
-        else if (adjTop != top && adjDir.getAxis() == dir.getAxis() && isVerticalPanelFace(top, side))
-        {
-            return SideSkipPredicate.compareState(level, pos, side, state, getOuterSlopeFace(dir, right));
-        }
-        return false;
+        Tuple<BlockState, BlockState> states = AbstractFramedDoubleBlock.getStatePair(adjState);
+        return testAgainstHalfSlope(level, pos, state, dir, top, right, states.getA(), side) ||
+               testAgainstHalfSlope(level, pos, state, dir, top, right, states.getB(), side);
     }
 
     private static boolean testAgainstVerticalSlopedStairs(
@@ -213,20 +189,11 @@ public final class HalfSlopeSkipPredicate implements SideSkipPredicate
         Direction adjDir = adjState.getValue(FramedProperties.FACING_HOR);
         HorizontalRotation adjRot = adjState.getValue(PropertyHolder.ROTATION);
 
-        if ((adjRot == HorizontalRotation.RIGHT || adjRot == HorizontalRotation.DOWN) != right)
+        //TODO: panel face interaction
+        if (getTriDir(dir, top, right, side).isEqualTo(VerticalSlopedStairsSkipPredicate.getTriDir(adjDir, adjRot, side.getOpposite())))
         {
-            return false;
+            return SideSkipPredicate.compareState(level, pos, side, state, adjState);
         }
-        if ((adjRot == HorizontalRotation.DOWN || adjRot == HorizontalRotation.LEFT) != top)
-        {
-            return false;
-        }
-
-        if ((!right && adjDir == dir.getCounterClockWise()) || (right && adjDir == dir.getClockWise()))
-        {
-            return SideSkipPredicate.compareState(level, pos, side, state, side.getOpposite());
-        }
-
         return false;
     }
 
@@ -234,17 +201,13 @@ public final class HalfSlopeSkipPredicate implements SideSkipPredicate
             BlockGetter level, BlockPos pos, BlockState state, Direction dir, boolean top, boolean right, BlockState adjState, Direction side
     )
     {
-        SlopeType adjType = FramedUtils.getSlopeType(adjState);
-        if (adjType == SlopeType.HORIZONTAL || !isOuterTriangle(dir, right, side)) { return false; }
-
         Direction adjDir = FramedUtils.getSlopeBlockFacing(adjState);
-        boolean adjTop = adjType == SlopeType.TOP;
+        SlopeType adjType = FramedUtils.getSlopeType(adjState);
 
-        if (adjTop == top && adjDir == dir)
+        if (getTriDir(dir, top, right, side).isEqualTo(SlopeSkipPredicate.getTriDir(adjDir, adjType, side.getOpposite())))
         {
-            return SideSkipPredicate.compareState(level, pos, side, state, side.getOpposite());
+            return SideSkipPredicate.compareState(level, pos, side, state, adjState);
         }
-
         return false;
     }
 
@@ -252,46 +215,22 @@ public final class HalfSlopeSkipPredicate implements SideSkipPredicate
             BlockGetter level, BlockPos pos, BlockState state, Direction dir, boolean top, boolean right, BlockState adjState, Direction side
     )
     {
-        SlopeType adjType = adjState.getValue(PropertyHolder.SLOPE_TYPE);
-        if (adjType == SlopeType.HORIZONTAL || !isOuterTriangle(dir, right, side)) { return false; }
-
-        Direction adjDir = adjState.getValue(FramedProperties.FACING_HOR);
-        boolean adjTop = adjType == SlopeType.TOP;
-
-        if ((adjTop == top && adjDir == dir) || (adjTop != top && adjDir == dir.getOpposite()))
-        {
-            return SideSkipPredicate.compareState(level, pos, side, state, top ? Direction.UP : Direction.DOWN);
-        }
-
-        return false;
+        Tuple<BlockState, BlockState> states = AbstractFramedDoubleBlock.getStatePair(adjState);
+        return testAgainstSlope(level, pos, state, dir, top, right, states.getA(), side) ||
+               testAgainstSlope(level, pos, state, dir, top, right, states.getB(), side);
     }
 
     private static boolean testAgainstCorner(
             BlockGetter level, BlockPos pos, BlockState state, Direction dir, boolean top, boolean right, BlockState adjState, Direction side
     )
     {
-        if (!isOuterTriangle(dir, right, side)) { return false; }
-
         Direction adjDir = adjState.getValue(FramedProperties.FACING_HOR);
         CornerType adjType = adjState.getValue(PropertyHolder.CORNER_TYPE);
 
-        if (adjType.isHorizontal())
+        if (getTriDir(dir, top, right, side).isEqualTo(CornerSkipPredicate.getTriDir(adjDir, adjType, side.getOpposite())))
         {
-            if (adjDir == dir && adjType.isTop() == top && adjType.isRight() != right)
-            {
-                return SideSkipPredicate.compareState(level, pos, side, state, side.getOpposite());
-            }
+            return SideSkipPredicate.compareState(level, pos, side, state, adjState);
         }
-        else
-        {
-            boolean adjTop = adjType == CornerType.TOP;
-
-            if (adjTop == top && ((!right && adjDir == dir.getClockWise()) || (right && adjDir == dir)))
-            {
-                return SideSkipPredicate.compareState(level, pos, side, state, side.getOpposite());
-            }
-        }
-
         return false;
     }
 
@@ -299,28 +238,13 @@ public final class HalfSlopeSkipPredicate implements SideSkipPredicate
             BlockGetter level, BlockPos pos, BlockState state, Direction dir, boolean top, boolean right, BlockState adjState, Direction side
     )
     {
-        if (!isOuterTriangle(dir, right, side)) { return false; }
-
         Direction adjDir = adjState.getValue(FramedProperties.FACING_HOR);
         CornerType adjType = adjState.getValue(PropertyHolder.CORNER_TYPE);
 
-        if (adjType.isHorizontal())
+        if (getTriDir(dir, top, right, side).isEqualTo(InnerCornerSkipPredicate.getTriDir(adjDir, adjType, side.getOpposite())))
         {
-            if (adjDir == dir && adjType.isTop() == top && adjType.isRight() == right)
-            {
-                return SideSkipPredicate.compareState(level, pos, side, state, side.getOpposite());
-            }
+            return SideSkipPredicate.compareState(level, pos, side, state, adjState);
         }
-        else
-        {
-            boolean adjTop = adjType == CornerType.TOP;
-
-            if (adjTop == top && ((!right && adjDir == dir) || (right && adjDir == dir.getClockWise())))
-            {
-                return SideSkipPredicate.compareState(level, pos, side, state, side.getOpposite());
-            }
-        }
-
         return false;
     }
 
@@ -328,56 +252,22 @@ public final class HalfSlopeSkipPredicate implements SideSkipPredicate
             BlockGetter level, BlockPos pos, BlockState state, Direction dir, boolean top, boolean right, BlockState adjState, Direction side
     )
     {
-        if (!isOuterTriangle(dir, right, side)) { return false; }
-
-        Direction adjDir = adjState.getValue(FramedProperties.FACING_HOR);
-        CornerType adjType = adjState.getValue(PropertyHolder.CORNER_TYPE);
-
-        if (adjType.isHorizontal())
-        {
-            boolean adjTop = adjType.isTop();
-            boolean adjRight = adjType.isRight();
-
-            if (adjDir == dir && adjTop == top && adjRight == right)
-            {
-                return SideSkipPredicate.compareState(level, pos, side, state, dir);
-            }
-            else if (adjDir == dir.getOpposite() && adjTop != top && adjRight != right)
-            {
-                return SideSkipPredicate.compareState(level, pos, side, state, dir);
-            }
-        }
-        else
-        {
-            boolean adjTop = adjType == CornerType.TOP;
-
-            if (adjTop == top && ((!right && adjDir == dir) || (right && adjDir == dir.getClockWise())))
-            {
-                return SideSkipPredicate.compareState(level, pos, side, state, top ? Direction.UP : Direction.DOWN);
-            }
-            else if (adjTop != top && ((!right && adjDir == dir.getCounterClockWise()) || (right && adjDir == dir.getOpposite())))
-            {
-                return SideSkipPredicate.compareState(level, pos, side, state, top ? Direction.UP : Direction.DOWN);
-            }
-        }
-
-        return false;
+        Tuple<BlockState, BlockState> states = AbstractFramedDoubleBlock.getStatePair(adjState);
+        return testAgainstInnerCorner(level, pos, state, dir, top, right, states.getA(), side) ||
+               testAgainstCorner(level, pos, state, dir, top, right, states.getB(), side);
     }
 
     private static boolean testAgainstThreewayCorner(
             BlockGetter level, BlockPos pos, BlockState state, Direction dir, boolean top, boolean right, BlockState adjState, Direction side
     )
     {
-        if (!isOuterTriangle(dir, right, side)) { return false; }
-
         Direction adjDir = adjState.getValue(FramedProperties.FACING_HOR);
         boolean adjTop = adjState.getValue(FramedProperties.TOP);
 
-        if (adjTop == top && ((!right && adjDir == dir.getClockWise()) || (right && adjDir == dir)))
+        if (getTriDir(dir, top, right, side).isEqualTo(ThreewayCornerSkipPredicate.getTriDir(adjDir, adjTop, side.getOpposite())))
         {
-            return SideSkipPredicate.compareState(level, pos, side, state, side.getOpposite());
+            return SideSkipPredicate.compareState(level, pos, side, state, adjState);
         }
-
         return false;
     }
 
@@ -385,16 +275,13 @@ public final class HalfSlopeSkipPredicate implements SideSkipPredicate
             BlockGetter level, BlockPos pos, BlockState state, Direction dir, boolean top, boolean right, BlockState adjState, Direction side
     )
     {
-        if (!isOuterTriangle(dir, right, side)) { return false; }
-
         Direction adjDir = adjState.getValue(FramedProperties.FACING_HOR);
         boolean adjTop = adjState.getValue(FramedProperties.TOP);
 
-        if (adjTop == top && ((!right && adjDir == dir) || (right && adjDir == dir.getClockWise())))
+        if (getTriDir(dir, top, right, side).isEqualTo(InnerThreewayCornerSkipPredicate.getTriDir(adjDir, adjTop, side.getOpposite())))
         {
-            return SideSkipPredicate.compareState(level, pos, side, state, side.getOpposite());
+            return SideSkipPredicate.compareState(level, pos, side, state, adjState);
         }
-
         return false;
     }
 
@@ -402,21 +289,9 @@ public final class HalfSlopeSkipPredicate implements SideSkipPredicate
             BlockGetter level, BlockPos pos, BlockState state, Direction dir, boolean top, boolean right, BlockState adjState, Direction side
     )
     {
-        if (!isOuterTriangle(dir, right, side)) { return false; }
-
-        Direction adjDir = adjState.getValue(FramedProperties.FACING_HOR);
-        boolean adjTop = adjState.getValue(FramedProperties.TOP);
-
-        if (adjTop == top && ((!right && adjDir == dir) || (right && adjDir == dir.getClockWise())))
-        {
-            return SideSkipPredicate.compareState(level, pos, side, state, top ? Direction.UP : Direction.DOWN);
-        }
-        else if (adjTop != top && ((!right && adjDir == dir.getCounterClockWise()) || (right && adjDir == dir.getOpposite())))
-        {
-            return SideSkipPredicate.compareState(level, pos, side, state, top ? Direction.UP : Direction.DOWN);
-        }
-
-        return false;
+        Tuple<BlockState, BlockState> states = AbstractFramedDoubleBlock.getStatePair(adjState);
+        return testAgainstInnerThreewayCorner(level, pos, state, dir, top, right, states.getA(), side) ||
+               testAgainstThreewayCorner(level, pos, state, dir, top, right, states.getB(), side);
     }
 
     private static boolean testAgainstSlabEdge(
@@ -793,11 +668,6 @@ public final class HalfSlopeSkipPredicate implements SideSkipPredicate
 
 
 
-    public static boolean isOuterTriangle(Direction dir, boolean right, Direction side)
-    {
-        return (!right && side == dir.getCounterClockWise()) || (right && side == dir.getClockWise());
-    }
-
     public static boolean isPanelFace(Direction dir, boolean top, Direction side)
     {
         return side == dir || isVerticalPanelFace(top, side);
@@ -808,13 +678,20 @@ public final class HalfSlopeSkipPredicate implements SideSkipPredicate
         return (!top && side == Direction.DOWN) || (top && side == Direction.UP);
     }
 
-    public static boolean isSameHorizontalHalf(Direction dir, boolean right, Direction adjDir, boolean adjRight)
-    {
-        return (adjDir == dir && adjRight == right) || (adjDir == dir.getOpposite() && adjRight != right);
-    }
-
     public static Direction getOuterSlopeFace(Direction dir, boolean right)
     {
         return right ? dir.getClockWise() : dir.getCounterClockWise();
+    }
+
+    public static TriangleDir getTriDir(Direction dir, boolean top, boolean right, Direction side)
+    {
+        if ((!right && side == dir.getCounterClockWise()) || (right && side == dir.getClockWise()))
+        {
+            return TriangleDir.fromDirections(
+                    dir,
+                    top ? Direction.UP : Direction.DOWN
+            );
+        }
+        return TriangleDir.NULL;
     }
 }
