@@ -3,11 +3,11 @@ package xfacthd.framedblocks.common.data.skippreds.pillar;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.world.level.BlockGetter;
+import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.FenceBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
-import xfacthd.framedblocks.api.util.SideSkipPredicate;
-import xfacthd.framedblocks.api.util.Utils;
+import xfacthd.framedblocks.api.util.*;
 import xfacthd.framedblocks.common.FBContent;
 
 public final class FenceSkipPredicate implements SideSkipPredicate
@@ -19,9 +19,9 @@ public final class FenceSkipPredicate implements SideSkipPredicate
 
         if (Utils.isY(side))
         {
-            if (sameBlock || isVerticalPost(adjState))
+            if (sameBlock || isVerticalPostOrLattice(adjState))
             {
-                return SideSkipPredicate.compareState(level, pos, side);
+                return SideSkipPredicate.compareState(level, pos, side, state, adjState);
             }
             return false;
         }
@@ -33,7 +33,7 @@ public final class FenceSkipPredicate implements SideSkipPredicate
 
         if (sameBlock && hasFenceArm(adjState, side.getOpposite()))
         {
-            return SideSkipPredicate.compareState(level, pos, side);
+            return SideSkipPredicate.compareState(level, pos, side, state, adjState);
         }
 
         if (adjState.getBlock() == FBContent.blockFramedFenceGate.get())
@@ -41,17 +41,25 @@ public final class FenceSkipPredicate implements SideSkipPredicate
             Direction adjDir = adjState.getValue(BlockStateProperties.HORIZONTAL_FACING);
             if (adjDir.getCounterClockWise() == side || adjDir.getClockWise() == side)
             {
-                return SideSkipPredicate.compareState(level, pos, side);
+                return SideSkipPredicate.compareState(level, pos, side, state, adjState);
             }
         }
 
         return false;
     }
 
-    private static boolean isVerticalPost(BlockState state)
+    private static boolean isVerticalPostOrLattice(BlockState state)
     {
-        return state.getBlock() == FBContent.blockFramedPost.get() &&
-               state.getValue(BlockStateProperties.AXIS) == Direction.Axis.Y;
+        Block block = state.getBlock();
+        if (block == FBContent.blockFramedLattice.get())
+        {
+            return state.getValue(FramedProperties.Y_AXIS);
+        }
+        if (block == FBContent.blockFramedPost.get())
+        {
+            return state.getValue(BlockStateProperties.AXIS) == Direction.Axis.Y;
+        }
+        return false;
     }
 
     private static boolean hasFenceArm(BlockState state, Direction side)

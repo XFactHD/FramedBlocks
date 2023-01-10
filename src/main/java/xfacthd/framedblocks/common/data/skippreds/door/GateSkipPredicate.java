@@ -25,7 +25,7 @@ public final class GateSkipPredicate implements SideSkipPredicate
         Direction adjFacing = getDoorFacing(adjState);
         if (facing == adjFacing && side.getAxis() != facing.getAxis())
         {
-            return SideSkipPredicate.compareState(level, pos, side);
+            return SideSkipPredicate.compareState(level, pos, side, state, adjState);
         }
 
         return false;

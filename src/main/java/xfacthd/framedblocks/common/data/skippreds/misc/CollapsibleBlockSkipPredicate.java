@@ -45,7 +45,7 @@ public final class CollapsibleBlockSkipPredicate implements SideSkipPredicate
 
             if (offsets[verts.v1] == adjOffsets[adjVerts.v2] && offsets[verts.v2] == adjOffsets[adjVerts.v1])
             {
-                return SideSkipPredicate.compareState(level, pos, side);
+                return SideSkipPredicate.compareState(level, pos, side, state, adjState);
             }
         }
 

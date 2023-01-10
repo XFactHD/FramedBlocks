@@ -19,7 +19,7 @@ public final class FloorBoardSkipPredicate implements SideSkipPredicate
         {
             boolean top = state.getValue(FramedProperties.TOP);
             boolean adjTop = adjState.getValue(FramedProperties.TOP);
-            return top == adjTop && SideSkipPredicate.compareState(level, pos, side);
+            return top == adjTop && SideSkipPredicate.compareState(level, pos, side, state, adjState);
         }
 
         return false;

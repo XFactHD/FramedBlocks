@@ -16,7 +16,7 @@ public final class FenceGateSkipPredicate implements SideSkipPredicate
         Direction dir = state.getValue(FenceGateBlock.FACING);
         if ((side == dir.getClockWise() || side == dir.getCounterClockWise()) && adjState.getBlock() == FBContent.blockFramedWall.get())
         {
-            return SideSkipPredicate.compareState(level, pos, side);
+            return SideSkipPredicate.compareState(level, pos, side, state, adjState);
         }
 
         return false;

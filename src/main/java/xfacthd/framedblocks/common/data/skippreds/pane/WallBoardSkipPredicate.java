@@ -6,7 +6,6 @@ import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.block.state.BlockState;
 import xfacthd.framedblocks.api.util.FramedProperties;
 import xfacthd.framedblocks.api.util.SideSkipPredicate;
-import xfacthd.framedblocks.common.FBContent;
 
 public final class WallBoardSkipPredicate implements SideSkipPredicate
 {
@@ -23,7 +22,7 @@ public final class WallBoardSkipPredicate implements SideSkipPredicate
         if (side != dir.getOpposite() && adjState.getBlock() == state.getBlock())
         {
             Direction adjDir = adjState.getValue(FramedProperties.FACING_HOR);
-            return adjDir == dir && SideSkipPredicate.compareState(level, pos, side);
+            return adjDir == dir && SideSkipPredicate.compareState(level, pos, side, state, adjState);
         }
 
         return false;

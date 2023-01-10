@@ -14,7 +14,7 @@ public final class HorizontalPaneSkipPredicate implements SideSkipPredicate
     {
         if (adjState.getBlock() == state.getBlock() && !Utils.isY(side))
         {
-            return SideSkipPredicate.compareState(level, pos, side);
+            return SideSkipPredicate.compareState(level, pos, side, state, adjState);
         }
 
         return false;
