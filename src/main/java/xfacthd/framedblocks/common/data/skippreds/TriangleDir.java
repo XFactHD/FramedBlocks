@@ -2,8 +2,6 @@ package xfacthd.framedblocks.common.data.skippreds;
 
 import net.minecraft.core.Direction;
 
-import java.util.Objects;
-
 /**
  * Indicates in which direction the corner above the baseline points
  */
@@ -58,7 +56,11 @@ public enum TriangleDir
     public static TriangleDir fromDirections(Direction dirOne, Direction dirTwo)
     {
         TriangleDir dir = FROM_DIRS[dirOne.ordinal()][dirTwo.ordinal()];
-        return Objects.requireNonNull(dir, "Invalid direction pair!");
+        if (dir == null)
+        {
+            throw new IllegalArgumentException("Invalid direction pair: edge one:" + dirOne + ", edge two: " + dirTwo);
+        }
+        return dir;
     }
 
 

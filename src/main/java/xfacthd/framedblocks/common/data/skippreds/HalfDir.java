@@ -2,8 +2,6 @@ package xfacthd.framedblocks.common.data.skippreds;
 
 import net.minecraft.core.Direction;
 
-import java.util.Objects;
-
 /**
  * Indicates the normal and outer edge of a half-block sized face
  */
@@ -91,7 +89,11 @@ public enum HalfDir
     public static HalfDir fromDirections(Direction normal, Direction edge)
     {
         HalfDir dir = FROM_DIRS[normal.ordinal()][edge.ordinal()];
-        return Objects.requireNonNull(dir, "Invalid direction pair!");
+        if (dir == null)
+        {
+            throw new IllegalArgumentException("Invalid direction pair: normal:" + normal + ", edge: " + edge);
+        }
+        return dir;
     }
 
 

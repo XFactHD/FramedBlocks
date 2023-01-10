@@ -2,8 +2,6 @@ package xfacthd.framedblocks.common.data.skippreds;
 
 import net.minecraft.core.Direction;
 
-import java.util.Objects;
-
 /**
  * Indicates the normal and two outer edges of a quarter-block sized face
  */
@@ -75,7 +73,13 @@ public enum CornerDir
     public static CornerDir fromDirections(Direction normal, Direction edgeOne, Direction edgeTwo)
     {
         CornerDir dir = FROM_DIRS[normal.ordinal()][edgeOne.ordinal()][edgeTwo.ordinal()];
-        return Objects.requireNonNull(dir, "Invalid direction triple!");
+        if (dir == null)
+        {
+            throw new IllegalArgumentException(
+                    "Invalid direction triple: normal:" + normal + ", edge one: " + edgeOne + ", edge two: " + edgeTwo
+            );
+        }
+        return dir;
     }
 
 

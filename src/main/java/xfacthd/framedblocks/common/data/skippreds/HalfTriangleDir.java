@@ -2,8 +2,6 @@ package xfacthd.framedblocks.common.data.skippreds;
 
 import net.minecraft.core.Direction;
 
-import java.util.Objects;
-
 /**
  * Indicates in which direction the corner above the baseline points and whether the long edge
  * is on the outer edge of the block
@@ -106,7 +104,14 @@ public enum HalfTriangleDir
     public static HalfTriangleDir fromDirections(Direction longEdge, Direction shortEdge, boolean outerEdge)
     {
         HalfTriangleDir dir = FROM_DIRS[longEdge.ordinal()][shortEdge.ordinal()][outerEdge ? 1 : 0];
-        return Objects.requireNonNull(dir, "Invalid dir/dir/bool triple!");
+        if (dir == null)
+        {
+            throw new IllegalArgumentException(
+                    "Invalid dir/dir/bool triple: long edge:" + longEdge + ", short edge: " +
+                            shortEdge + ", outer edge: " + outerEdge
+            );
+        }
+        return dir;
     }
 
 
