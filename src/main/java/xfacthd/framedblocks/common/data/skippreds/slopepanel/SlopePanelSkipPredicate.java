@@ -16,6 +16,7 @@ import xfacthd.framedblocks.common.block.AbstractFramedDoubleBlock;
 import xfacthd.framedblocks.common.data.*;
 import xfacthd.framedblocks.common.data.property.*;
 import xfacthd.framedblocks.common.data.skippreds.HalfDir;
+import xfacthd.framedblocks.common.data.skippreds.HalfTriangleDir;
 import xfacthd.framedblocks.common.data.skippreds.pillar.CornerPillarSkipPredicate;
 import xfacthd.framedblocks.common.data.skippreds.slab.PanelSkipPredicate;
 import xfacthd.framedblocks.common.data.skippreds.slab.SlabEdgeSkipPredicate;
@@ -74,8 +75,6 @@ public final class SlopePanelSkipPredicate implements SideSkipPredicate
             BlockGetter level, BlockPos pos, BlockState state, Direction dir, HorizontalRotation rot, boolean front, BlockState adjState, Direction side
     )
     {
-        Direction rotDir = rot.withFacing(dir);
-
         Direction adjDir = adjState.getValue(FramedProperties.FACING_HOR);
         HorizontalRotation adjRot = adjState.getValue(PropertyHolder.ROTATION);
         boolean adjFront = adjState.getValue(PropertyHolder.FRONT);
@@ -84,10 +83,9 @@ public final class SlopePanelSkipPredicate implements SideSkipPredicate
         {
             return SideSkipPredicate.compareState(level, pos, side, state, adjState);
         }
-        else if (side.getAxis() != rotDir.getAxis() && side.getAxis() != dir.getAxis())
+        else if (getTriDir(dir, rot, front, side).isEqualTo(getTriDir(adjDir, adjRot, adjFront, side.getOpposite())))
         {
-            Direction camoDir = rotDir.getOpposite();
-            return adjDir == dir && adjFront == front && adjRot == rot && SideSkipPredicate.compareState(level, pos, side, camoDir, camoDir);
+            return SideSkipPredicate.compareState(level, pos, side, state, adjState);
         }
 
         return false;
@@ -138,25 +136,14 @@ public final class SlopePanelSkipPredicate implements SideSkipPredicate
             BlockGetter level, BlockPos pos, BlockState state, Direction dir, HorizontalRotation rot, boolean front, BlockState adjState, Direction side
     )
     {
-        Direction rotDir = rot.withFacing(dir);
-
         Direction adjDir = adjState.getValue(FramedProperties.FACING_HOR);
         boolean adjFront = adjState.getValue(PropertyHolder.FRONT);
         HorizontalRotation adjRot = adjState.getValue(PropertyHolder.ROTATION);
 
-        if (adjDir != dir || adjFront != front) { return false; }
-
-        if (side == rot.rotate(Rotation.CLOCKWISE_90).withFacing(dir) && adjRot == rot.rotate(Rotation.CLOCKWISE_90))
+        if (getTriDir(dir, rot, front, side).isEqualTo(FlatSlopePanelCornerSkipPredicate.getTriDir(adjDir, adjRot, adjFront, side.getOpposite())))
         {
-            Direction camoSide = rotDir.getOpposite();
-            return SideSkipPredicate.compareState(level, pos, side, camoSide, camoSide);
+            return SideSkipPredicate.compareState(level, pos, side, state, adjState);
         }
-        else if (side == rot.rotate(Rotation.COUNTERCLOCKWISE_90).withFacing(dir) && adjRot == rot)
-        {
-            Direction camoSide = rotDir.getOpposite();
-            return SideSkipPredicate.compareState(level, pos, side, camoSide, camoSide);
-        }
-
         return false;
     }
 
@@ -164,30 +151,18 @@ public final class SlopePanelSkipPredicate implements SideSkipPredicate
             BlockGetter level, BlockPos pos, BlockState state, Direction dir, HorizontalRotation rot, boolean front, BlockState adjState, Direction side
     )
     {
-        Direction rotDir = rot.withFacing(dir);
-
         Direction adjDir = adjState.getValue(FramedProperties.FACING_HOR);
         HorizontalRotation adjRot = adjState.getValue(PropertyHolder.ROTATION);
         boolean adjFront = adjState.getValue(PropertyHolder.FRONT);
 
         if (getHalfDir(dir, rot, front, side).isEqualTo(FlatInnerSlopePanelCornerSkipPredicate.getHalfDir(adjDir, adjRot, adjFront, side.getOpposite())))
         {
-            return SideSkipPredicate.compareState(level, pos, side);
+            return SideSkipPredicate.compareState(level, pos, side, state, adjState);
         }
-
-        if (adjDir != dir || adjFront != front) { return false; }
-
-        if (side == rot.rotate(Rotation.CLOCKWISE_90).withFacing(dir) && adjRot == rot)
+        else if (getTriDir(dir, rot, front, side).isEqualTo(FlatInnerSlopePanelCornerSkipPredicate.getTriDir(adjDir, adjRot, adjFront, side.getOpposite())))
         {
-            Direction camoSide = rotDir.getOpposite();
-            return SideSkipPredicate.compareState(level, pos, side, camoSide, camoSide);
+            return SideSkipPredicate.compareState(level, pos, side, state, adjState);
         }
-        else if (side == rot.rotate(Rotation.COUNTERCLOCKWISE_90).withFacing(dir) && adjRot == rot.rotate(Rotation.CLOCKWISE_90))
-        {
-            Direction camoSide = rotDir.getOpposite();
-            return SideSkipPredicate.compareState(level, pos, side, camoSide, camoSide);
-        }
-
         return false;
     }
 
@@ -234,23 +209,8 @@ public final class SlopePanelSkipPredicate implements SideSkipPredicate
             BlockGetter level, BlockPos pos, BlockState state, Direction dir, HorizontalRotation rot, boolean front, BlockState adjState, Direction side
     )
     {
-        Direction rotDir = rot.withFacing(dir);
-
-        Direction adjDir = adjState.getValue(FramedProperties.FACING_HOR);
-        HorizontalRotation adjRot = adjState.getValue(PropertyHolder.ROTATION);
-
-        if (adjDir != dir.getOpposite() || front) { return false; }
-
-        if (side == rot.rotate(Rotation.CLOCKWISE_90).withFacing(dir) && rot.isSameDir(dir, adjRot.getOpposite(), adjDir))
-        {
-            return SideSkipPredicate.compareState(level, pos, side, rotDir.getOpposite(), adjDir.getOpposite());
-        }
-        else if (side == rot.rotate(Rotation.COUNTERCLOCKWISE_90).withFacing(dir) && rot.isSameDir(dir, adjRot.rotate(Rotation.CLOCKWISE_90), adjDir))
-        {
-            return SideSkipPredicate.compareState(level, pos, side, rotDir.getOpposite(), adjDir.getOpposite());
-        }
-
-        return false;
+        Tuple<BlockState, BlockState> states = AbstractFramedDoubleBlock.getStatePair(adjState);
+        return testAgainstFlatSlopePanelCorner(level, pos, state, dir, rot, front, states.getB(), side);
     }
 
     private static boolean testAgainstSlabEdge(
@@ -401,6 +361,17 @@ public final class SlopePanelSkipPredicate implements SideSkipPredicate
     }
 
 
+
+    public static HalfTriangleDir getTriDir(Direction dir, HorizontalRotation rot, boolean front, Direction side)
+    {
+        Direction perpRotDir = rot.rotate(Rotation.CLOCKWISE_90).withFacing(dir);
+        if (side.getAxis() == perpRotDir.getAxis())
+        {
+            Direction shortEdge = rot.getOpposite().withFacing(dir);
+            return HalfTriangleDir.fromDirections(dir, shortEdge, !front);
+        }
+        return HalfTriangleDir.NULL;
+    }
 
     public static HalfDir getHalfDir(Direction dir, HorizontalRotation rot, boolean front, Direction side)
     {

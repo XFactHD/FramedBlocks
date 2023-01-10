@@ -13,6 +13,7 @@ import xfacthd.framedblocks.common.data.BlockType;
 import xfacthd.framedblocks.common.data.PropertyHolder;
 import xfacthd.framedblocks.common.data.property.SlopeType;
 import xfacthd.framedblocks.common.data.skippreds.HalfDir;
+import xfacthd.framedblocks.common.data.skippreds.HalfTriangleDir;
 import xfacthd.framedblocks.common.data.skippreds.slab.SlabEdgeSkipPredicate;
 import xfacthd.framedblocks.common.data.skippreds.slab.SlabSkipPredicate;
 import xfacthd.framedblocks.common.data.skippreds.stairs.*;
@@ -68,10 +69,9 @@ public final class SlopeSlabSkipPredicate implements SideSkipPredicate
         boolean adjTop = adjState.getValue(FramedProperties.TOP);
         boolean adjTopHalf = adjState.getValue(PropertyHolder.TOP_HALF);
 
-        if (side == dir.getClockWise() || side == dir.getCounterClockWise())
+        if (getTriDir(dir, topHalf, top, side).isEqualTo(getTriDir(adjDir, adjTopHalf, adjTop, side.getOpposite())))
         {
-            if (adjTopHalf != topHalf) { return false; }
-            return adjDir == dir && adjTop == top && SideSkipPredicate.compareState(level, pos, side, state, adjState);
+            return SideSkipPredicate.compareState(level, pos, side, state, adjState);
         }
         else if (getHalfDir(dir, topHalf, side).isEqualTo(getHalfDir(adjDir, adjTopHalf, side.getOpposite())))
         {
@@ -129,9 +129,7 @@ public final class SlopeSlabSkipPredicate implements SideSkipPredicate
         boolean adjTop = adjState.getValue(FramedProperties.TOP);
         boolean adjTopHalf = adjState.getValue(PropertyHolder.TOP_HALF);
 
-        if (adjTop != top || adjTopHalf != topHalf) { return false; }
-
-        if ((side == dir.getClockWise() && adjDir == dir) || (side == dir.getCounterClockWise() && adjDir == dir.getClockWise()))
+        if (getTriDir(dir, topHalf, top, side).isEqualTo(FlatSlopeSlabCornerSkipPredicate.getTriDir(adjDir, adjTopHalf, adjTop, side.getOpposite())))
         {
             return SideSkipPredicate.compareState(level, pos, side, state, adjState);
         }
@@ -150,10 +148,7 @@ public final class SlopeSlabSkipPredicate implements SideSkipPredicate
         {
             return SideSkipPredicate.compareState(level, pos, side, state, adjState);
         }
-
-        if (adjTop != top || adjTopHalf != topHalf) { return false; }
-
-        if ((side == dir.getCounterClockWise() && adjDir == dir) || (side == dir.getClockWise() && adjDir == dir.getClockWise()))
+        else if (getTriDir(dir, topHalf, top, side).isEqualTo(FlatInnerSlopeSlabCornerSkipPredicate.getTriDir(adjDir, adjTopHalf, adjTop, side.getOpposite())))
         {
             return SideSkipPredicate.compareState(level, pos, side, state, adjState);
         }
@@ -314,6 +309,16 @@ public final class SlopeSlabSkipPredicate implements SideSkipPredicate
     }
 
 
+
+    public static HalfTriangleDir getTriDir(Direction dir, boolean topHalf, boolean top, Direction side)
+    {
+        if (side.getAxis() == dir.getClockWise().getAxis())
+        {
+            Direction longEdge = top ? Direction.UP : Direction.DOWN;
+            return HalfTriangleDir.fromDirections(longEdge, dir, topHalf == top);
+        }
+        return HalfTriangleDir.NULL;
+    }
 
     public static HalfDir getHalfDir(Direction dir, boolean topHalf, Direction side)
     {

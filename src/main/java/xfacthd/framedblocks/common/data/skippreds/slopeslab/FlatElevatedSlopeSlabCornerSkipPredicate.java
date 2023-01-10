@@ -16,6 +16,7 @@ import xfacthd.framedblocks.common.data.BlockType;
 import xfacthd.framedblocks.common.data.PropertyHolder;
 import xfacthd.framedblocks.common.data.property.SlopeType;
 import xfacthd.framedblocks.common.data.skippreds.HalfDir;
+import xfacthd.framedblocks.common.data.skippreds.HalfTriangleDir;
 import xfacthd.framedblocks.common.data.skippreds.slab.SlabEdgeSkipPredicate;
 import xfacthd.framedblocks.common.data.skippreds.slab.SlabSkipPredicate;
 import xfacthd.framedblocks.common.data.skippreds.stairs.SlopedStairsSkipPredicate;
@@ -67,7 +68,9 @@ public final class FlatElevatedSlopeSlabCornerSkipPredicate implements SideSkipP
         return false;
     }
 
-    private static boolean testAgainstFlatElevatedSlopeSlabCorner(BlockGetter level, BlockPos pos, BlockState state, Direction dir, boolean top, BlockState adjState, Direction side)
+    private static boolean testAgainstFlatElevatedSlopeSlabCorner(
+            BlockGetter level, BlockPos pos, BlockState state, Direction dir, boolean top, BlockState adjState, Direction side
+    )
     {
         Direction adjDir = adjState.getValue(FramedProperties.FACING_HOR);
         boolean adjTop = adjState.getValue(FramedProperties.TOP);
@@ -76,28 +79,30 @@ public final class FlatElevatedSlopeSlabCornerSkipPredicate implements SideSkipP
         {
             return SideSkipPredicate.compareState(level, pos, side, state, adjState);
         }
-        else if ((side == dir && adjDir == dir.getCounterClockWise()) || (side == dir.getCounterClockWise() && adjDir == dir.getClockWise()))
+        else if (getTriDir(dir, top, side).isEqualTo(getTriDir(adjDir, adjTop, side.getOpposite())))
         {
-            if (adjTop != top) { return false; }
-
             return SideSkipPredicate.compareState(level, pos, side, state, adjState);
         }
         return false;
     }
 
-    private static boolean testAgainstFlatElevatedInnerSlopeSlabCorner(BlockGetter level, BlockPos pos, BlockState state, Direction dir, boolean top, BlockState adjState, Direction side)
+    private static boolean testAgainstFlatElevatedInnerSlopeSlabCorner(
+            BlockGetter level, BlockPos pos, BlockState state, Direction dir, boolean top, BlockState adjState, Direction side
+    )
     {
         Direction adjDir = adjState.getValue(FramedProperties.FACING_HOR);
         boolean adjTop = adjState.getValue(FramedProperties.TOP);
 
-        if (adjTop == top && adjDir == dir && (side == dir || side == dir.getCounterClockWise()))
+        if (getTriDir(dir, top, side).isEqualTo(FlatElevatedInnerSlopeSlabCornerSkipPredicate.getTriDir(adjDir, adjTop, side.getOpposite())))
         {
             return SideSkipPredicate.compareState(level, pos, side, state, adjState);
         }
         return false;
     }
 
-    private static boolean testAgainstSlopeSlab(BlockGetter level, BlockPos pos, BlockState state, Direction dir, boolean top, BlockState adjState, Direction side)
+    private static boolean testAgainstSlopeSlab(
+            BlockGetter level, BlockPos pos, BlockState state, Direction dir, boolean top, BlockState adjState, Direction side
+    )
     {
         Direction adjDir = adjState.getValue(FramedProperties.FACING_HOR);
         boolean adjTopHalf = adjState.getValue(PropertyHolder.TOP_HALF);
@@ -109,7 +114,9 @@ public final class FlatElevatedSlopeSlabCornerSkipPredicate implements SideSkipP
         return false;
     }
 
-    private static boolean testAgainstElevatedSlopeSlab(BlockGetter level, BlockPos pos, BlockState state, Direction dir, boolean top, BlockState adjState, Direction side)
+    private static boolean testAgainstElevatedSlopeSlab(
+            BlockGetter level, BlockPos pos, BlockState state, Direction dir, boolean top, BlockState adjState, Direction side
+    )
     {
         Direction adjDir = adjState.getValue(FramedProperties.FACING_HOR);
         boolean adjTop = adjState.getValue(FramedProperties.TOP);
@@ -118,37 +125,43 @@ public final class FlatElevatedSlopeSlabCornerSkipPredicate implements SideSkipP
         {
             return SideSkipPredicate.compareState(level, pos, side, state, adjState);
         }
-        else if ((side == dir && adjDir == dir.getCounterClockWise()) || (side == dir.getCounterClockWise() && adjDir == dir))
+        else if (getTriDir(dir, top, side).isEqualTo(ElevatedSlopeSlabSkipPredicate.getTriDir(adjDir, adjTop, side.getOpposite())))
         {
-            if (adjTop != top) { return false; }
-
             return SideSkipPredicate.compareState(level, pos, side, state, adjState);
         }
         return false;
     }
 
-    private static boolean testAgainstDoubleSlopeSlab(BlockGetter level, BlockPos pos, BlockState state, Direction dir, boolean top, BlockState adjState, Direction side)
+    private static boolean testAgainstDoubleSlopeSlab(
+            BlockGetter level, BlockPos pos, BlockState state, Direction dir, boolean top, BlockState adjState, Direction side
+    )
     {
         Tuple<BlockState, BlockState> states = AbstractFramedDoubleBlock.getStatePair(adjState);
         return testAgainstSlopeSlab(level, pos, state, dir, top, states.getA(), side) ||
                testAgainstSlopeSlab(level, pos, state, dir, top, states.getB(), side);
     }
 
-    private static boolean testAgainstElevatedDoubleSlopeSlab(BlockGetter level, BlockPos pos, BlockState state, Direction dir, boolean top, BlockState adjState, Direction side)
+    private static boolean testAgainstElevatedDoubleSlopeSlab(
+            BlockGetter level, BlockPos pos, BlockState state, Direction dir, boolean top, BlockState adjState, Direction side
+    )
     {
         Tuple<BlockState, BlockState> states = AbstractFramedDoubleBlock.getStatePair(adjState);
         return testAgainstElevatedSlopeSlab(level, pos, state, dir, top, states.getA(), side) ||
                testAgainstSlopeSlab(level, pos, state, dir, top, states.getB(), side);
     }
 
-    private static boolean testAgainstInverseDoubleSlopeSlab(BlockGetter level, BlockPos pos, BlockState state, Direction dir, boolean top, BlockState adjState, Direction side)
+    private static boolean testAgainstInverseDoubleSlopeSlab(
+            BlockGetter level, BlockPos pos, BlockState state, Direction dir, boolean top, BlockState adjState, Direction side
+    )
     {
         Tuple<BlockState, BlockState> states = AbstractFramedDoubleBlock.getStatePair(adjState);
         return testAgainstSlopeSlab(level, pos, state, dir, top, states.getA(), side) ||
                testAgainstSlopeSlab(level, pos, state, dir, top, states.getB(), side);
     }
 
-    private static boolean testAgainstFlatInnerSlopeSlabCorner(BlockGetter level, BlockPos pos, BlockState state, Direction dir, boolean top, BlockState adjState, Direction side)
+    private static boolean testAgainstFlatInnerSlopeSlabCorner(
+            BlockGetter level, BlockPos pos, BlockState state, Direction dir, boolean top, BlockState adjState, Direction side
+    )
     {
         Direction adjDir = adjState.getValue(FramedProperties.FACING_HOR);
         boolean adjTopHalf = adjState.getValue(PropertyHolder.TOP_HALF);
@@ -160,26 +173,34 @@ public final class FlatElevatedSlopeSlabCornerSkipPredicate implements SideSkipP
         return false;
     }
 
-    private static boolean testAgainstFlatDoubleSlopeSlabCorner(BlockGetter level, BlockPos pos, BlockState state, Direction dir, boolean top, BlockState adjState, Direction side)
+    private static boolean testAgainstFlatDoubleSlopeSlabCorner(
+            BlockGetter level, BlockPos pos, BlockState state, Direction dir, boolean top, BlockState adjState, Direction side
+    )
     {
         Tuple<BlockState, BlockState> states = AbstractFramedDoubleBlock.getStatePair(adjState);
         return testAgainstFlatInnerSlopeSlabCorner(level, pos, state, dir, top, states.getA(), side);
     }
 
-    private static boolean testAgainstFlatElevatedDoubleSlopeSlabCorner(BlockGetter level, BlockPos pos, BlockState state, Direction dir, boolean top, BlockState adjState, Direction side)
+    private static boolean testAgainstFlatElevatedDoubleSlopeSlabCorner(
+            BlockGetter level, BlockPos pos, BlockState state, Direction dir, boolean top, BlockState adjState, Direction side
+    )
     {
         Tuple<BlockState, BlockState> states = AbstractFramedDoubleBlock.getStatePair(adjState);
         return testAgainstFlatElevatedSlopeSlabCorner(level, pos, state, dir, top, states.getA(), side) ||
                testAgainstFlatInnerSlopeSlabCorner(level, pos, state, dir, top, states.getB(), side);
     }
 
-    private static boolean testAgainstFlatElevatedInnerDoubleSlopeSlabCorner(BlockGetter level, BlockPos pos, BlockState state, Direction dir, boolean top, BlockState adjState, Direction side)
+    private static boolean testAgainstFlatElevatedInnerDoubleSlopeSlabCorner(
+            BlockGetter level, BlockPos pos, BlockState state, Direction dir, boolean top, BlockState adjState, Direction side
+    )
     {
         Tuple<BlockState, BlockState> states = AbstractFramedDoubleBlock.getStatePair(adjState);
         return testAgainstFlatElevatedInnerSlopeSlabCorner(level, pos, state, dir, top, states.getA(), side);
     }
 
-    private static boolean testAgainstSlab(BlockGetter level, BlockPos pos, BlockState state, Direction dir, boolean top, BlockState adjState, Direction side)
+    private static boolean testAgainstSlab(
+            BlockGetter level, BlockPos pos, BlockState state, Direction dir, boolean top, BlockState adjState, Direction side
+    )
     {
         boolean adjTop = adjState.getValue(FramedProperties.TOP);
 
@@ -190,14 +211,18 @@ public final class FlatElevatedSlopeSlabCornerSkipPredicate implements SideSkipP
         return false;
     }
 
-    private static boolean testAgainstDoubleSlab(BlockGetter level, BlockPos pos, BlockState state, Direction dir, boolean top, BlockState adjState, Direction side)
+    private static boolean testAgainstDoubleSlab(
+            BlockGetter level, BlockPos pos, BlockState state, Direction dir, boolean top, BlockState adjState, Direction side
+    )
     {
         Tuple<BlockState, BlockState> states = AbstractFramedDoubleBlock.getStatePair(adjState);
         return testAgainstSlab(level, pos, state, dir, top, states.getA(), side) ||
                testAgainstSlab(level, pos, state, dir, top, states.getB(), side);
     }
 
-    private static boolean testAgainstSlabEdge(BlockGetter level, BlockPos pos, BlockState state, Direction dir, boolean top, BlockState adjState, Direction side)
+    private static boolean testAgainstSlabEdge(
+            BlockGetter level, BlockPos pos, BlockState state, Direction dir, boolean top, BlockState adjState, Direction side
+    )
     {
         Direction adjDir = adjState.getValue(FramedProperties.FACING_HOR);
         boolean adjTop = adjState.getValue(FramedProperties.TOP);
@@ -209,7 +234,9 @@ public final class FlatElevatedSlopeSlabCornerSkipPredicate implements SideSkipP
         return false;
     }
 
-    private static boolean testAgainstStairs(BlockGetter level, BlockPos pos, BlockState state, Direction dir, boolean top, BlockState adjState, Direction side)
+    private static boolean testAgainstStairs(
+            BlockGetter level, BlockPos pos, BlockState state, Direction dir, boolean top, BlockState adjState, Direction side
+    )
     {
         Direction adjDir = adjState.getValue(FramedProperties.FACING_HOR);
         StairsShape adjShape = adjState.getValue(StairBlock.SHAPE);
@@ -222,14 +249,18 @@ public final class FlatElevatedSlopeSlabCornerSkipPredicate implements SideSkipP
         return false;
     }
 
-    private static boolean testAgainstDoubleStairs(BlockGetter level, BlockPos pos, BlockState state, Direction dir, boolean top, BlockState adjState, Direction side)
+    private static boolean testAgainstDoubleStairs(
+            BlockGetter level, BlockPos pos, BlockState state, Direction dir, boolean top, BlockState adjState, Direction side
+    )
     {
         Tuple<BlockState, BlockState> states = AbstractFramedDoubleBlock.getStatePair(adjState);
         return testAgainstStairs(level, pos, state, dir, top, states.getA(), side) ||
                testAgainstSlabEdge(level, pos, state, dir, top, states.getB(), side);
     }
 
-    private static boolean testAgainstVerticalHalfStairs(BlockGetter level, BlockPos pos, BlockState state, Direction dir, boolean top, BlockState adjState, Direction side)
+    private static boolean testAgainstVerticalHalfStairs(
+            BlockGetter level, BlockPos pos, BlockState state, Direction dir, boolean top, BlockState adjState, Direction side
+    )
     {
         Direction adjDir = adjState.getValue(FramedProperties.FACING_HOR);
         boolean adjTop = adjState.getValue(FramedProperties.TOP);
@@ -241,7 +272,9 @@ public final class FlatElevatedSlopeSlabCornerSkipPredicate implements SideSkipP
         return false;
     }
 
-    private static boolean testAgainstDividedSlope(BlockGetter level, BlockPos pos, BlockState state, Direction dir, boolean top, BlockState adjState, Direction side)
+    private static boolean testAgainstDividedSlope(
+            BlockGetter level, BlockPos pos, BlockState state, Direction dir, boolean top, BlockState adjState, Direction side
+    )
     {
         if (adjState.getValue(PropertyHolder.SLOPE_TYPE) != SlopeType.HORIZONTAL) { return false; }
 
@@ -251,14 +284,18 @@ public final class FlatElevatedSlopeSlabCornerSkipPredicate implements SideSkipP
                testAgainstVerticalHalfStairs(level, pos, state, dir, top, states.getB(), side);
     }
 
-    private static boolean testAgainstVerticalDoubleHalfSlope(BlockGetter level, BlockPos pos, BlockState state, Direction dir, boolean top, BlockState adjState, Direction side)
+    private static boolean testAgainstVerticalDoubleHalfSlope(
+            BlockGetter level, BlockPos pos, BlockState state, Direction dir, boolean top, BlockState adjState, Direction side
+    )
     {
         Tuple<BlockState, BlockState> states = AbstractFramedDoubleBlock.getStatePair(adjState);
         return testAgainstVerticalHalfStairs(level, pos, state, dir, top, states.getA(), side) ||
                testAgainstVerticalHalfStairs(level, pos, state, dir, top, states.getB(), side);
     }
 
-    private static boolean testAgainstSlopedStairs(BlockGetter level, BlockPos pos, BlockState state, Direction dir, boolean top, BlockState adjState, Direction side)
+    private static boolean testAgainstSlopedStairs(
+            BlockGetter level, BlockPos pos, BlockState state, Direction dir, boolean top, BlockState adjState, Direction side
+    )
     {
         Direction adjDir = adjState.getValue(FramedProperties.FACING_HOR);
         boolean adjTop = adjState.getValue(FramedProperties.TOP);
@@ -271,6 +308,16 @@ public final class FlatElevatedSlopeSlabCornerSkipPredicate implements SideSkipP
     }
 
 
+
+    public static HalfTriangleDir getTriDir(Direction dir, boolean top, Direction side)
+    {
+        if (side == dir || side == dir.getCounterClockWise())
+        {
+            Direction longEdge = top ? Direction.UP : Direction.DOWN;
+            return HalfTriangleDir.fromDirections(longEdge, dir, false);
+        }
+        return HalfTriangleDir.NULL;
+    }
 
     public static HalfDir getHalfDir(Direction dir, boolean top, Direction side)
     {
