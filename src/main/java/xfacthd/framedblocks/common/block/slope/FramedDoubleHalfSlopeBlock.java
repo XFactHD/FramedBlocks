@@ -4,6 +4,7 @@ import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.util.Tuple;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.context.BlockPlaceContext;
@@ -104,6 +105,23 @@ public class FramedDoubleHalfSlopeBlock extends AbstractFramedDoubleBlock
         //noinspection ConstantConditions
         item.setRegistryName(getRegistryName());
         return item;
+    }
+
+    @Override
+    protected Tuple<BlockState, BlockState> getBlockPair(BlockState state)
+    {
+        Direction facing = state.getValue(FramedProperties.FACING_HOR);
+        boolean right = state.getValue(PropertyHolder.RIGHT);
+
+        BlockState defState = FBContent.blockFramedHalfSlope.get().defaultBlockState();
+        return new Tuple<>(
+                defState.setValue(FramedProperties.FACING_HOR, facing)
+                        .setValue(FramedProperties.TOP, false)
+                        .setValue(PropertyHolder.RIGHT, right),
+                defState.setValue(FramedProperties.FACING_HOR, facing.getOpposite())
+                        .setValue(FramedProperties.TOP, true)
+                        .setValue(PropertyHolder.RIGHT, !right)
+        );
     }
 
     @Override

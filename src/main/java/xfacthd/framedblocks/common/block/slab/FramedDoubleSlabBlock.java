@@ -1,5 +1,6 @@
 package xfacthd.framedblocks.common.block.slab;
 
+import net.minecraft.util.Tuple;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.entity.player.Player;
@@ -8,6 +9,7 @@ import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.level.BlockGetter;
+import xfacthd.framedblocks.api.util.FramedProperties;
 import xfacthd.framedblocks.common.FBContent;
 import xfacthd.framedblocks.common.block.AbstractFramedDoubleBlock;
 import xfacthd.framedblocks.common.data.BlockType;
@@ -28,6 +30,16 @@ public class FramedDoubleSlabBlock extends AbstractFramedDoubleBlock
     public final BlockEntity newBlockEntity(BlockPos pos, BlockState state)
     {
         return new FramedDoubleSlabBlockEntity(pos, state);
+    }
+
+    @Override
+    protected Tuple<BlockState, BlockState> getBlockPair(BlockState state)
+    {
+        BlockState defState = FBContent.blockFramedSlab.get().defaultBlockState();
+        return new Tuple<>(
+                defState.setValue(FramedProperties.TOP, false),
+                defState.setValue(FramedProperties.TOP, true)
+        );
     }
 
     @Override

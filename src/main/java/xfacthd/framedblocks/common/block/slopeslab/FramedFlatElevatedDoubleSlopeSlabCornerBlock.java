@@ -2,15 +2,18 @@ package xfacthd.framedblocks.common.block.slopeslab;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.util.Tuple;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.block.*;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import xfacthd.framedblocks.api.util.*;
+import xfacthd.framedblocks.common.FBContent;
 import xfacthd.framedblocks.common.block.AbstractFramedDoubleBlock;
 import xfacthd.framedblocks.common.blockentity.FramedFlatElevatedDoubleSlopeSlabCornerBlockEntity;
 import xfacthd.framedblocks.common.data.BlockType;
+import xfacthd.framedblocks.common.data.PropertyHolder;
 
 public class FramedFlatElevatedDoubleSlopeSlabCornerBlock extends AbstractFramedDoubleBlock
 {
@@ -71,6 +74,34 @@ public class FramedFlatElevatedDoubleSlopeSlabCornerBlock extends AbstractFramed
     public BlockState mirror(BlockState state, Mirror mirror)
     {
         return Utils.mirrorCornerBlock(state, mirror);
+    }
+
+    @Override
+    protected Tuple<BlockState, BlockState> getBlockPair(BlockState state)
+    {
+        BlockState defStateOne;
+        BlockState defStateTwo;
+        if (getBlockType() == BlockType.FRAMED_FLAT_ELEV_INNER_DOUBLE_SLOPE_SLAB_CORNER)
+        {
+            defStateOne = FBContent.blockFramedFlatElevatedInnerSlopeSlabCorner.get().defaultBlockState();
+            defStateTwo = FBContent.blockFramedFlatSlopeSlabCorner.get().defaultBlockState();
+        }
+        else
+        {
+            defStateOne = FBContent.blockFramedFlatElevatedSlopeSlabCorner.get().defaultBlockState();
+            defStateTwo = FBContent.blockFramedFlatInnerSlopeSlabCorner.get().defaultBlockState();
+        }
+
+        Direction facing = state.getValue(FramedProperties.FACING_HOR);
+        boolean top = state.getValue(FramedProperties.TOP);
+
+        return new Tuple<>(
+                defStateOne.setValue(FramedProperties.FACING_HOR, facing)
+                        .setValue(FramedProperties.TOP, top),
+                defStateTwo.setValue(FramedProperties.FACING_HOR, facing.getOpposite())
+                        .setValue(FramedProperties.TOP, !top)
+                        .setValue(PropertyHolder.TOP_HALF, !top)
+        );
     }
 
     @Override

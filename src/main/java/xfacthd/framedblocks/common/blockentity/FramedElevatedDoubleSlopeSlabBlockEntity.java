@@ -2,7 +2,6 @@ package xfacthd.framedblocks.common.blockentity;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
-import net.minecraft.util.Tuple;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.BlockHitResult;
@@ -10,7 +9,6 @@ import net.minecraft.world.phys.Vec3;
 import xfacthd.framedblocks.api.util.FramedProperties;
 import xfacthd.framedblocks.api.util.Utils;
 import xfacthd.framedblocks.common.FBContent;
-import xfacthd.framedblocks.common.data.PropertyHolder;
 import xfacthd.framedblocks.common.util.DoubleSoundMode;
 
 public class FramedElevatedDoubleSlopeSlabBlockEntity extends FramedDoubleBlockEntity
@@ -99,24 +97,5 @@ public class FramedElevatedDoubleSlopeSlabBlockEntity extends FramedDoubleBlockE
             return camo.isSolidRender(level, worldPosition);
         }
         return false;
-    }
-
-    @Override
-    protected Tuple<BlockState, BlockState> getBlockPair(BlockState state)
-    {
-        return getBlockPair(state.getValue(FramedProperties.FACING_HOR), state.getValue(FramedProperties.TOP));
-    }
-
-    public static Tuple<BlockState, BlockState> getBlockPair(Direction facing, boolean top)
-    {
-        return new Tuple<>(
-                FBContent.blockFramedElevatedSlopeSlab.get().defaultBlockState()
-                        .setValue(FramedProperties.FACING_HOR, facing)
-                        .setValue(FramedProperties.TOP, top),
-                FBContent.blockFramedSlopeSlab.get().defaultBlockState()
-                        .setValue(FramedProperties.FACING_HOR, facing.getOpposite())
-                        .setValue(PropertyHolder.TOP_HALF, !top)
-                        .setValue(FramedProperties.TOP, !top)
-        );
     }
 }

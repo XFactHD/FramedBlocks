@@ -2,17 +2,14 @@ package xfacthd.framedblocks.common.blockentity;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
-import net.minecraft.util.Tuple;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.Vec3;
-import xfacthd.framedblocks.api.block.IFramedBlock;
 import xfacthd.framedblocks.api.util.FramedProperties;
 import xfacthd.framedblocks.api.util.Utils;
 import xfacthd.framedblocks.common.FBContent;
 import xfacthd.framedblocks.common.data.BlockType;
-import xfacthd.framedblocks.common.data.PropertyHolder;
 import xfacthd.framedblocks.common.util.DoubleSoundMode;
 
 public class FramedFlatElevatedDoubleSlopeSlabCornerBlockEntity extends FramedDoubleBlockEntity
@@ -124,52 +121,5 @@ public class FramedFlatElevatedDoubleSlopeSlabCornerBlockEntity extends FramedDo
             }
         }
         return false;
-    }
-
-    @Override
-    protected Tuple<BlockState, BlockState> getBlockPair(BlockState state)
-    {
-        if (((IFramedBlock) state.getBlock()).getBlockType() == BlockType.FRAMED_FLAT_ELEV_INNER_DOUBLE_SLOPE_SLAB_CORNER)
-        {
-            return getBlockPairInner(
-                    state.getValue(FramedProperties.FACING_HOR),
-                    state.getValue(FramedProperties.TOP)
-            );
-        }
-        else
-        {
-            return getBlockPair(
-                    state.getValue(FramedProperties.FACING_HOR),
-                    state.getValue(FramedProperties.TOP)
-            );
-        }
-    }
-
-    public static Tuple<BlockState, BlockState> getBlockPair(Direction facing, boolean top)
-    {
-        BlockState defStateOne = FBContent.blockFramedFlatElevatedSlopeSlabCorner.get().defaultBlockState();
-        BlockState defStateTwo = FBContent.blockFramedFlatInnerSlopeSlabCorner.get().defaultBlockState();
-
-        return new Tuple<>(
-                defStateOne.setValue(FramedProperties.FACING_HOR, facing)
-                        .setValue(FramedProperties.TOP, top),
-                defStateTwo.setValue(FramedProperties.FACING_HOR, facing.getOpposite())
-                        .setValue(FramedProperties.TOP, !top)
-                        .setValue(PropertyHolder.TOP_HALF, !top)
-        );
-    }
-
-    public static Tuple<BlockState, BlockState> getBlockPairInner(Direction facing, boolean top)
-    {
-        BlockState defStateOne = FBContent.blockFramedFlatElevatedInnerSlopeSlabCorner.get().defaultBlockState();
-        BlockState defStateTwo = FBContent.blockFramedFlatSlopeSlabCorner.get().defaultBlockState();
-
-        return new Tuple<>(
-                defStateOne.setValue(FramedProperties.FACING_HOR, facing)
-                        .setValue(FramedProperties.TOP, top),
-                defStateTwo.setValue(FramedProperties.FACING_HOR, facing.getOpposite())
-                        .setValue(FramedProperties.TOP, !top)
-                        .setValue(PropertyHolder.TOP_HALF, !top)
-        );
     }
 }

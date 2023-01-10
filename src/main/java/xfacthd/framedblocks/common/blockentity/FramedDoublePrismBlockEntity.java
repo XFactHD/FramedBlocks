@@ -2,7 +2,6 @@ package xfacthd.framedblocks.common.blockentity;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
-import net.minecraft.util.Tuple;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
@@ -100,28 +99,5 @@ public class FramedDoublePrismBlockEntity extends FramedDoubleBlockEntity
     protected boolean isDoubleSide(Direction side)
     {
         return side.getAxis() == getBlockState().getValue(BlockStateProperties.AXIS);
-    }
-
-    @Override
-    protected Tuple<BlockState, BlockState> getBlockPair(BlockState state)
-    {
-        return getBlockPair(
-                state.getValue(BlockStateProperties.FACING),
-                state.getValue(BlockStateProperties.AXIS)
-        );
-    }
-
-    public static Tuple<BlockState, BlockState> getBlockPair(Direction facing, Direction.Axis axis)
-    {
-        return new Tuple<>(
-                FBContent.blockFramedInnerPrism.get()
-                        .defaultBlockState()
-                        .setValue(BlockStateProperties.FACING, facing)
-                        .setValue(BlockStateProperties.AXIS, axis),
-                FBContent.blockFramedPrism.get()
-                        .defaultBlockState()
-                        .setValue(BlockStateProperties.FACING, facing.getOpposite())
-                        .setValue(BlockStateProperties.AXIS, axis)
-        );
     }
 }

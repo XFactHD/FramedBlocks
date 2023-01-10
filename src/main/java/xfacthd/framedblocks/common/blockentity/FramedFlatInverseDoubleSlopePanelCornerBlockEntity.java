@@ -2,7 +2,6 @@ package xfacthd.framedblocks.common.blockentity;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
-import net.minecraft.util.Tuple;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.Rotation;
 import net.minecraft.world.level.block.state.BlockState;
@@ -69,27 +68,4 @@ public class FramedFlatInverseDoubleSlopePanelCornerBlockEntity extends FramedDo
 
     @Override
     public boolean isSolidSide(Direction side) { return false; }
-
-    @Override
-    protected Tuple<BlockState, BlockState> getBlockPair(BlockState state)
-    {
-        return getBlockPair(state.getValue(FramedProperties.FACING_HOR), state.getValue(PropertyHolder.ROTATION));
-    }
-
-    public static Tuple<BlockState, BlockState> getBlockPair(Direction facing, HorizontalRotation rotation)
-    {
-        HorizontalRotation backRot = rotation.rotate(rotation.isVertical() ? Rotation.CLOCKWISE_90 : Rotation.COUNTERCLOCKWISE_90);
-        return new Tuple<>(
-                FBContent.blockFramedFlatInnerSlopePanelCorner.get()
-                        .defaultBlockState()
-                        .setValue(FramedProperties.FACING_HOR, facing.getOpposite())
-                        .setValue(PropertyHolder.ROTATION, backRot)
-                        .setValue(PropertyHolder.FRONT, true),
-                FBContent.blockFramedFlatSlopePanelCorner.get()
-                        .defaultBlockState()
-                        .setValue(FramedProperties.FACING_HOR, facing)
-                        .setValue(PropertyHolder.ROTATION, rotation.getOpposite())
-                        .setValue(PropertyHolder.FRONT, true)
-        );
-    }
 }

@@ -4,6 +4,7 @@ import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.util.Tuple;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.block.*;
 import net.minecraft.world.level.block.entity.BlockEntity;
@@ -14,9 +15,11 @@ import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import xfacthd.framedblocks.api.util.FramedProperties;
 import xfacthd.framedblocks.api.util.Utils;
+import xfacthd.framedblocks.common.FBContent;
 import xfacthd.framedblocks.common.block.AbstractFramedDoubleBlock;
 import xfacthd.framedblocks.common.blockentity.FramedInverseDoubleSlopeSlabBlockEntity;
 import xfacthd.framedblocks.common.data.BlockType;
+import xfacthd.framedblocks.common.data.PropertyHolder;
 
 public class FramedInverseDoubleSlopeSlabBlock extends AbstractFramedDoubleBlock //TODO: check why light occlusion doesn't work
 {
@@ -51,6 +54,22 @@ public class FramedInverseDoubleSlopeSlabBlock extends AbstractFramedDoubleBlock
     public BlockState mirror(BlockState state, Mirror mirror)
     {
         return Utils.mirrorFaceBlock(state, mirror);
+    }
+
+    @Override
+    protected Tuple<BlockState, BlockState> getBlockPair(BlockState state)
+    {
+        Direction facing = state.getValue(FramedProperties.FACING_HOR);
+
+        BlockState defState = FBContent.blockFramedSlopeSlab.get().defaultBlockState();
+        return new Tuple<>(
+                defState.setValue(FramedProperties.FACING_HOR, facing.getOpposite())
+                        .setValue(PropertyHolder.TOP_HALF, false)
+                        .setValue(FramedProperties.TOP, true),
+                defState.setValue(FramedProperties.FACING_HOR, facing)
+                        .setValue(PropertyHolder.TOP_HALF, true)
+                        .setValue(FramedProperties.TOP, false)
+        );
     }
 
     @Override

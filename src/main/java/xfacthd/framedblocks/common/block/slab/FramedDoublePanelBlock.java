@@ -2,6 +2,7 @@ package xfacthd.framedblocks.common.block.slab;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.util.Tuple;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.ItemStack;
@@ -63,6 +64,18 @@ public class FramedDoublePanelBlock extends AbstractFramedDoubleBlock
         Direction dir = state.getValue(FramedProperties.FACING_NE);
         dir = dir == Direction.NORTH ? Direction.EAST : Direction.NORTH;
         return state.setValue(FramedProperties.FACING_NE, dir);
+    }
+
+    @Override
+    protected Tuple<BlockState, BlockState> getBlockPair(BlockState state)
+    {
+        Direction facing = state.getValue(FramedProperties.FACING_NE);
+
+        BlockState defState = FBContent.blockFramedPanel.get().defaultBlockState();
+        return new Tuple<>(
+                defState.setValue(FramedProperties.FACING_HOR, facing),
+                defState.setValue(FramedProperties.FACING_HOR, facing.getOpposite())
+        );
     }
 
     @Override

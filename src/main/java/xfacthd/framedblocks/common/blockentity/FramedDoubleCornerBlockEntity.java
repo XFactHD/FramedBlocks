@@ -1,7 +1,6 @@
 package xfacthd.framedblocks.common.blockentity;
 
 import net.minecraft.core.BlockPos;
-import net.minecraft.util.Tuple;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.core.Direction;
@@ -203,23 +202,5 @@ public class FramedDoubleCornerBlockEntity extends FramedDoubleBlockEntity
 
         //noinspection ConstantConditions
         return getCamoState().isSolidRender(level, worldPosition) && getCamoStateTwo().isSolidRender(level, worldPosition);
-    }
-
-    @Override
-    protected Tuple<BlockState, BlockState> getBlockPair(BlockState state)
-    {
-        return getBlockPair(state.getValue(PropertyHolder.CORNER_TYPE), state.getValue(FramedProperties.FACING_HOR));
-    }
-
-    public static Tuple<BlockState, BlockState> getBlockPair(CornerType type, Direction facing)
-    {
-        return new Tuple<>(
-                FBContent.blockFramedInnerCornerSlope.get().defaultBlockState()
-                        .setValue(PropertyHolder.CORNER_TYPE, type)
-                        .setValue(FramedProperties.FACING_HOR, facing),
-                FBContent.blockFramedCornerSlope.get().defaultBlockState()
-                        .setValue(PropertyHolder.CORNER_TYPE, type.verticalOpposite())
-                        .setValue(FramedProperties.FACING_HOR, facing.getOpposite())
-        );
     }
 }

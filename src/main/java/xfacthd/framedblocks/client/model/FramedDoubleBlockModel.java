@@ -14,6 +14,7 @@ import net.minecraftforge.client.model.data.*;
 import xfacthd.framedblocks.api.model.BakedModelProxy;
 import xfacthd.framedblocks.api.util.FramedBlockData;
 import xfacthd.framedblocks.api.util.client.ModelUtils;
+import xfacthd.framedblocks.common.block.AbstractFramedDoubleBlock;
 import xfacthd.framedblocks.common.blockentity.FramedDoubleBlockEntity;
 
 import javax.annotation.Nonnull;
@@ -21,15 +22,16 @@ import javax.annotation.Nullable;
 import java.util.*;
 import java.util.stream.Collectors;
 
-public abstract class FramedDoubleBlockModel extends BakedModelProxy
+public class FramedDoubleBlockModel extends BakedModelProxy
 {
     private final boolean specialItemModel;
-    private Tuple<BlockState, BlockState> dummyStates = null;
+    private final Tuple<BlockState, BlockState> dummyStates;
     private Tuple<BakedModel, BakedModel> models = null;
 
-    protected FramedDoubleBlockModel(BakedModel baseModel, boolean specialItemModel)
+    public FramedDoubleBlockModel(BlockState state, BakedModel baseModel, boolean specialItemModel)
     {
         super(baseModel);
+        this.dummyStates = AbstractFramedDoubleBlock.getStatePair(state);
         this.specialItemModel = specialItemModel;
     }
 
@@ -103,14 +105,10 @@ public abstract class FramedDoubleBlockModel extends BakedModelProxy
 
 
 
-    protected abstract Tuple<BlockState, BlockState> getDummyStates();
-
-    protected Tuple<BakedModel, BakedModel> getModels()
+    protected final Tuple<BakedModel, BakedModel> getModels()
     {
         if (models == null)
         {
-            if (dummyStates == null) { dummyStates = getDummyStates(); }
-
             BlockRenderDispatcher dispatcher = Minecraft.getInstance().getBlockRenderer();
             models = new Tuple<>(
                     dispatcher.getBlockModel(dummyStates.getA()),

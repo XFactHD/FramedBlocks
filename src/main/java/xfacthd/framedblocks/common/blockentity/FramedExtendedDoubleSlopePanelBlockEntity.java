@@ -2,7 +2,6 @@ package xfacthd.framedblocks.common.blockentity;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
-import net.minecraft.util.Tuple;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.BlockHitResult;
@@ -11,7 +10,6 @@ import xfacthd.framedblocks.api.util.FramedProperties;
 import xfacthd.framedblocks.api.util.Utils;
 import xfacthd.framedblocks.common.FBContent;
 import xfacthd.framedblocks.common.data.PropertyHolder;
-import xfacthd.framedblocks.common.data.property.HorizontalRotation;
 import xfacthd.framedblocks.common.util.DoubleSoundMode;
 
 public class FramedExtendedDoubleSlopePanelBlockEntity extends FramedDoubleBlockEntity
@@ -84,27 +82,5 @@ public class FramedExtendedDoubleSlopePanelBlockEntity extends FramedDoubleBlock
         Direction orientation = getBlockState().getValue(PropertyHolder.ROTATION).withFacing(facing);
         //noinspection ConstantConditions
         return side == orientation.getOpposite() && getCamoState().isSolidRender(level, worldPosition);
-    }
-
-    @Override
-    protected Tuple<BlockState, BlockState> getBlockPair(BlockState state)
-    {
-        return getBlockPair(
-                state.getValue(FramedProperties.FACING_HOR),
-                state.getValue(PropertyHolder.ROTATION)
-        );
-    }
-
-    public static Tuple<BlockState, BlockState> getBlockPair(Direction facing, HorizontalRotation rotation)
-    {
-        return new Tuple<>(
-                FBContent.blockFramedExtendedSlopePanel.get().defaultBlockState()
-                        .setValue(FramedProperties.FACING_HOR, facing)
-                        .setValue(PropertyHolder.ROTATION, rotation),
-                FBContent.blockFramedSlopePanel.get().defaultBlockState()
-                        .setValue(FramedProperties.FACING_HOR, facing.getOpposite())
-                        .setValue(PropertyHolder.ROTATION, rotation.isVertical() ? rotation.getOpposite() : rotation)
-                        .setValue(PropertyHolder.FRONT, false)
-        );
     }
 }

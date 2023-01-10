@@ -2,10 +2,8 @@ package xfacthd.framedblocks.common.blockentity;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
-import net.minecraft.util.Tuple;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.Vec3;
 import xfacthd.framedblocks.api.util.FramedProperties;
@@ -89,23 +87,5 @@ public class FramedVerticalDoubleStairsBlockEntity extends FramedDoubleBlockEnti
         }
 
         return false;
-    }
-
-    @Override
-    protected Tuple<BlockState, BlockState> getBlockPair(BlockState state)
-    {
-        return getBlockPair(state.getValue(FramedProperties.FACING_HOR));
-    }
-
-    public static Tuple<BlockState, BlockState> getBlockPair(Direction facing)
-    {
-        return new Tuple<>(
-                FBContent.blockFramedVerticalStairs.get()
-                        .defaultBlockState()
-                        .setValue(BlockStateProperties.HORIZONTAL_FACING, facing),
-                FBContent.blockFramedCornerPillar.get()
-                        .defaultBlockState()
-                        .setValue(FramedProperties.FACING_HOR, facing.getOpposite())
-        );
     }
 }

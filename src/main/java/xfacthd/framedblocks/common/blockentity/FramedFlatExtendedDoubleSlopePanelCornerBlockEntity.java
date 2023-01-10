@@ -2,12 +2,10 @@ package xfacthd.framedblocks.common.blockentity;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
-import net.minecraft.util.Tuple;
 import net.minecraft.world.level.block.Rotation;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.Vec3;
-import xfacthd.framedblocks.api.block.IFramedBlock;
 import xfacthd.framedblocks.api.util.FramedProperties;
 import xfacthd.framedblocks.api.util.Utils;
 import xfacthd.framedblocks.common.FBContent;
@@ -130,48 +128,5 @@ public class FramedFlatExtendedDoubleSlopePanelCornerBlockEntity extends FramedD
         }
 
         return false;
-    }
-
-    @Override
-    protected Tuple<BlockState, BlockState> getBlockPair(BlockState state)
-    {
-        if (((IFramedBlock) state.getBlock()).getBlockType() == BlockType.FRAMED_FLAT_EXT_INNER_DOUBLE_SLOPE_PANEL_CORNER)
-        {
-            return getInnerBlockPair(state.getValue(FramedProperties.FACING_HOR), state.getValue(PropertyHolder.ROTATION));
-        }
-        else
-        {
-            return getBlockPair(state.getValue(FramedProperties.FACING_HOR), state.getValue(PropertyHolder.ROTATION));
-        }
-    }
-
-    public static Tuple<BlockState, BlockState> getBlockPair(Direction facing, HorizontalRotation rotation)
-    {
-        HorizontalRotation backRot = rotation.rotate(rotation.isVertical() ? Rotation.COUNTERCLOCKWISE_90 : Rotation.CLOCKWISE_90);
-        return new Tuple<>(
-                FBContent.blockFramedFlatExtendedSlopePanelCorner.get()
-                        .defaultBlockState()
-                        .setValue(FramedProperties.FACING_HOR, facing)
-                        .setValue(PropertyHolder.ROTATION, rotation),
-                FBContent.blockFramedFlatInnerSlopePanelCorner.get()
-                        .defaultBlockState()
-                        .setValue(FramedProperties.FACING_HOR, facing.getOpposite())
-                        .setValue(PropertyHolder.ROTATION, backRot)
-        );
-    }
-
-    public static Tuple<BlockState, BlockState> getInnerBlockPair(Direction facing, HorizontalRotation rotation)
-    {
-        HorizontalRotation backRot = rotation.rotate(rotation.isVertical() ? Rotation.COUNTERCLOCKWISE_90 : Rotation.CLOCKWISE_90);
-        return new Tuple<>(
-                FBContent.blockFramedFlatExtendedInnerSlopePanelCorner.get()
-                        .defaultBlockState()
-                        .setValue(FramedProperties.FACING_HOR, facing)
-                        .setValue(PropertyHolder.ROTATION, rotation),
-                FBContent.blockFramedFlatSlopePanelCorner.get()
-                        .defaultBlockState()
-                        .setValue(FramedProperties.FACING_HOR, facing.getOpposite())
-                        .setValue(PropertyHolder.ROTATION, backRot)
-        );
     }
 }

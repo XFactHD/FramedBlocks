@@ -2,12 +2,14 @@ package xfacthd.framedblocks.common.block.slopepanel;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.util.Tuple;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.block.*;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import xfacthd.framedblocks.api.util.*;
+import xfacthd.framedblocks.common.FBContent;
 import xfacthd.framedblocks.common.block.AbstractFramedDoubleBlock;
 import xfacthd.framedblocks.common.blockentity.FramedFlatExtendedDoubleSlopePanelCornerBlockEntity;
 import xfacthd.framedblocks.common.data.BlockType;
@@ -72,8 +74,53 @@ public class FramedFlatExtendedDoubleSlopePanelCornerBlock extends AbstractFrame
     }
 
     @Override
+    protected Tuple<BlockState, BlockState> getBlockPair(BlockState state)
+    {
+        Direction facing = state.getValue(FramedProperties.FACING_HOR);
+        HorizontalRotation rotation = state.getValue(PropertyHolder.ROTATION);
+        HorizontalRotation backRot = rotation.rotate(rotation.isVertical() ? Rotation.COUNTERCLOCKWISE_90 : Rotation.CLOCKWISE_90);
+
+        if (getBlockType() == BlockType.FRAMED_FLAT_EXT_INNER_DOUBLE_SLOPE_PANEL_CORNER)
+        {
+            return new Tuple<>(
+                    FBContent.blockFramedFlatExtendedInnerSlopePanelCorner.get()
+                            .defaultBlockState()
+                            .setValue(FramedProperties.FACING_HOR, facing)
+                            .setValue(PropertyHolder.ROTATION, rotation),
+                    FBContent.blockFramedFlatSlopePanelCorner.get()
+                            .defaultBlockState()
+                            .setValue(FramedProperties.FACING_HOR, facing.getOpposite())
+                            .setValue(PropertyHolder.ROTATION, backRot)
+            );
+        }
+        else
+        {
+            return new Tuple<>(
+                    FBContent.blockFramedFlatExtendedSlopePanelCorner.get()
+                            .defaultBlockState()
+                            .setValue(FramedProperties.FACING_HOR, facing)
+                            .setValue(PropertyHolder.ROTATION, rotation),
+                    FBContent.blockFramedFlatInnerSlopePanelCorner.get()
+                            .defaultBlockState()
+                            .setValue(FramedProperties.FACING_HOR, facing.getOpposite())
+                            .setValue(PropertyHolder.ROTATION, backRot)
+            );
+        }
+    }
+
+    @Override
     public BlockEntity newBlockEntity(BlockPos pos, BlockState state)
     {
         return new FramedFlatExtendedDoubleSlopePanelCornerBlockEntity(pos, state);
+    }
+
+
+
+    public static BlockState itemModelSource()
+    {
+        return FBContent.blockFramedFlatExtendedDoubleSlopePanelCorner.get()
+                .defaultBlockState()
+                .setValue(FramedProperties.FACING_HOR, Direction.SOUTH)
+                .setValue(PropertyHolder.ROTATION, HorizontalRotation.RIGHT);
     }
 }

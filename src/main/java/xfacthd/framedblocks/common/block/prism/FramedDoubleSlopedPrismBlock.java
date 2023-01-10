@@ -2,6 +2,7 @@ package xfacthd.framedblocks.common.block.prism;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.util.Tuple;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.block.*;
 import net.minecraft.world.level.block.entity.BlockEntity;
@@ -10,6 +11,7 @@ import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import xfacthd.framedblocks.api.util.CtmPredicate;
 import xfacthd.framedblocks.api.util.Utils;
+import xfacthd.framedblocks.common.FBContent;
 import xfacthd.framedblocks.common.block.AbstractFramedDoubleBlock;
 import xfacthd.framedblocks.common.blockentity.FramedDoubleSlopedPrismBlockEntity;
 import xfacthd.framedblocks.common.data.BlockType;
@@ -63,6 +65,24 @@ public class FramedDoubleSlopedPrismBlock extends AbstractFramedDoubleBlock
     public BlockState mirror(BlockState state, Mirror mirror)
     {
         return Utils.mirrorFaceBlock(state, BlockStateProperties.FACING, mirror);
+    }
+
+    @Override
+    protected Tuple<BlockState, BlockState> getBlockPair(BlockState state)
+    {
+        Direction facing = state.getValue(BlockStateProperties.FACING);
+        Direction orientation = state.getValue(PropertyHolder.ORIENTATION);
+
+        return new Tuple<>(
+                FBContent.blockFramedInnerSlopedPrism.get()
+                        .defaultBlockState()
+                        .setValue(BlockStateProperties.FACING, facing)
+                        .setValue(PropertyHolder.ORIENTATION, orientation),
+                FBContent.blockFramedSlopedPrism.get()
+                        .defaultBlockState()
+                        .setValue(BlockStateProperties.FACING, facing.getOpposite())
+                        .setValue(PropertyHolder.ORIENTATION, orientation)
+        );
     }
 
     @Override
