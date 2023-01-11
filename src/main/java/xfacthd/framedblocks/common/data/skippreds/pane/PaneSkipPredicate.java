@@ -27,7 +27,7 @@ public final class PaneSkipPredicate implements SideSkipPredicate
 
         if (Utils.isY(side) && north == adjNorth && east == adjEast && south == adjSouth && west == adjWest)
         {
-            return SideSkipPredicate.compareState(level, pos, side);
+            return SideSkipPredicate.compareState(level, pos, side, state, adjState);
         }
         else if
         (
@@ -37,7 +37,7 @@ public final class PaneSkipPredicate implements SideSkipPredicate
                 (side == Direction.WEST && west && adjEast)
         )
         {
-            return SideSkipPredicate.compareState(level, pos, side);
+            return SideSkipPredicate.compareState(level, pos, side, state, adjState);
         }
         return false;
     }

@@ -2,17 +2,19 @@ package xfacthd.framedblocks.common.data.skippreds.slab;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.util.Tuple;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.*;
 import xfacthd.framedblocks.api.block.IFramedBlock;
-import xfacthd.framedblocks.common.data.BlockType;
-import xfacthd.framedblocks.common.data.PropertyHolder;
-import xfacthd.framedblocks.common.data.property.*;
 import xfacthd.framedblocks.api.util.*;
-import xfacthd.framedblocks.common.data.skippreds.slopepanel.FlatExtendedSlopePanelCornerSkipPredicate;
-import xfacthd.framedblocks.common.data.skippreds.slopepanel.FlatInnerSlopePanelCornerSkipPredicate;
-import xfacthd.framedblocks.common.data.skippreds.stairs.VerticalSlopedStairsSkipPredicate;
+import xfacthd.framedblocks.common.block.AbstractFramedDoubleBlock;
+import xfacthd.framedblocks.common.data.*;
+import xfacthd.framedblocks.common.data.property.*;
+import xfacthd.framedblocks.common.data.skippreds.HalfDir;
+import xfacthd.framedblocks.common.data.skippreds.pillar.CornerPillarSkipPredicate;
+import xfacthd.framedblocks.common.data.skippreds.slopepanel.*;
+import xfacthd.framedblocks.common.data.skippreds.stairs.*;
 
 public final class PanelSkipPredicate implements SideSkipPredicate
 {
@@ -26,28 +28,28 @@ public final class PanelSkipPredicate implements SideSkipPredicate
         {
             return switch (type)
             {
-                case FRAMED_PANEL -> testAgainstPanel(level, pos, dir, adjState, side);
-                case FRAMED_DOUBLE_PANEL -> testAgainstDoublePanel(level, pos, dir, adjState, side);
-                case FRAMED_CORNER_PILLAR -> testAgainstPillar(level, pos, dir, adjState, side);
-                case FRAMED_SLAB_EDGE -> testAgainstEdge(level, pos, dir, adjState, side);
-                case FRAMED_STAIRS -> testAgainstStairs(level, pos, dir, adjState, side);
-                case FRAMED_DOUBLE_STAIRS -> testAgainstDoubleStairs(level, pos, dir, adjState, side);
-                case FRAMED_VERTICAL_STAIRS -> testAgainstVerticalStairs(level, pos, dir, adjState, side);
-                case FRAMED_VERTICAL_DOUBLE_STAIRS -> testAgainstVerticalDoubleStairs(level, pos, dir, adjState, side);
-                case FRAMED_HALF_STAIRS, FRAMED_HALF_SLOPE -> testAgainstHalfStairs(level, pos, dir, adjState, side);
-                case FRAMED_SLOPE_PANEL -> testAgainstSlopePanel(level, pos, dir, adjState, side);
-                case FRAMED_EXTENDED_SLOPE_PANEL -> testAgainstExtendedSlopePanel(level, pos, dir, adjState, side);
-                case FRAMED_DOUBLE_SLOPE_PANEL -> testAgainstDoubleSlopePanel(level, pos, dir, adjState, side);
-                case FRAMED_INV_DOUBLE_SLOPE_PANEL -> testAgainstInverseDoubleSlopePanel(level, pos, dir, adjState, side);
-                case FRAMED_EXTENDED_DOUBLE_SLOPE_PANEL -> testAgainstExtendedDoubleSlopePanel(level, pos, dir, adjState, side);
-                case FRAMED_FLAT_INNER_SLOPE_PANEL_CORNER -> testAgainstFlatInnerSlopePanelCorner(level, pos, dir, adjState, side);
-                case FRAMED_FLAT_EXT_SLOPE_PANEL_CORNER -> testAgainstFlatExtendedSlopePanelCorner(level, pos, dir, adjState, side);
-                case FRAMED_FLAT_DOUBLE_SLOPE_PANEL_CORNER -> testAgainstFlatDoubleSlopePanelCorner(level, pos, dir, adjState, side);
-                case FRAMED_FLAT_INV_DOUBLE_SLOPE_PANEL_CORNER -> testAgainstFlatInverseDoubleSlopePanelCorner(level, pos, dir, adjState, side);
-                case FRAMED_FLAT_EXT_DOUBLE_SLOPE_PANEL_CORNER -> testAgainstFlatExtendedDoubleSlopePanelCorner(level, pos, dir, adjState, side);
-                case FRAMED_DIVIDED_SLOPE -> testAgainstDividedSlope(level, pos, dir, adjState, side);
-                case FRAMED_DOUBLE_HALF_SLOPE -> testAgainstDoubleHalfSlope(level, pos, dir, adjState, side);
-                case FRAMED_VERTICAL_SLOPED_STAIRS -> testAgainstVerticalSlopedStairs(level, pos, dir, adjState, side);
+                case FRAMED_PANEL -> testAgainstPanel(level, pos, state, dir, adjState, side);
+                case FRAMED_DOUBLE_PANEL -> testAgainstDoublePanel(level, pos, state, dir, adjState, side);
+                case FRAMED_CORNER_PILLAR -> testAgainstPillar(level, pos, state, dir, adjState, side);
+                case FRAMED_SLAB_EDGE -> testAgainstEdge(level, pos, state, dir, adjState, side);
+                case FRAMED_STAIRS -> testAgainstStairs(level, pos, state, dir, adjState, side);
+                case FRAMED_DOUBLE_STAIRS -> testAgainstDoubleStairs(level, pos, state, dir, adjState, side);
+                case FRAMED_VERTICAL_STAIRS -> testAgainstVerticalStairs(level, pos, state, dir, adjState, side);
+                case FRAMED_VERTICAL_DOUBLE_STAIRS -> testAgainstVerticalDoubleStairs(level, pos, state, dir, adjState, side);
+                case FRAMED_HALF_STAIRS, FRAMED_HALF_SLOPE -> testAgainstHalfStairs(level, pos, state, dir, adjState, side);
+                case FRAMED_SLOPE_PANEL -> testAgainstSlopePanel(level, pos, state, dir, adjState, side);
+                case FRAMED_EXTENDED_SLOPE_PANEL -> testAgainstExtendedSlopePanel(level, pos, state, dir, adjState, side);
+                case FRAMED_DOUBLE_SLOPE_PANEL -> testAgainstDoubleSlopePanel(level, pos, state, dir, adjState, side);
+                case FRAMED_INV_DOUBLE_SLOPE_PANEL -> testAgainstInverseDoubleSlopePanel(level, pos, state, dir, adjState, side);
+                case FRAMED_EXTENDED_DOUBLE_SLOPE_PANEL -> testAgainstExtendedDoubleSlopePanel(level, pos, state, dir, adjState, side);
+                case FRAMED_FLAT_INNER_SLOPE_PANEL_CORNER -> testAgainstFlatInnerSlopePanelCorner(level, pos, state, dir, adjState, side);
+                case FRAMED_FLAT_EXT_SLOPE_PANEL_CORNER -> testAgainstFlatExtendedSlopePanelCorner(level, pos, state, dir, adjState, side);
+                case FRAMED_FLAT_DOUBLE_SLOPE_PANEL_CORNER -> testAgainstFlatDoubleSlopePanelCorner(level, pos, state, dir, adjState, side);
+                case FRAMED_FLAT_INV_DOUBLE_SLOPE_PANEL_CORNER -> testAgainstFlatInverseDoubleSlopePanelCorner(level, pos, state, dir, adjState, side);
+                case FRAMED_FLAT_EXT_DOUBLE_SLOPE_PANEL_CORNER -> testAgainstFlatExtendedDoubleSlopePanelCorner(level, pos, state, dir, adjState, side);
+                case FRAMED_DIVIDED_SLOPE -> testAgainstDividedSlope(level, pos, state, dir, adjState, side);
+                case FRAMED_DOUBLE_HALF_SLOPE -> testAgainstDoubleHalfSlope(level, pos, state, dir, adjState, side);
+                case FRAMED_VERTICAL_SLOPED_STAIRS -> testAgainstVerticalSlopedStairs(level, pos, state, dir, adjState, side);
                 default -> false;
             };
         }
@@ -55,323 +57,229 @@ public final class PanelSkipPredicate implements SideSkipPredicate
         return false;
     }
 
-    private static boolean testAgainstPanel(BlockGetter level, BlockPos pos, Direction dir, BlockState adjState, Direction side)
-    {
-        if (side == dir.getOpposite()) { return false; }
-
-        return dir == adjState.getValue(FramedProperties.FACING_HOR) && SideSkipPredicate.compareState(level, pos, side, dir, dir);
-    }
-
-    private static boolean testAgainstDoublePanel(BlockGetter level, BlockPos pos, Direction dir, BlockState adjState, Direction side)
-    {
-        if (side == dir.getOpposite()) { return false; }
-
-        Direction adjDir = adjState.getValue(FramedProperties.FACING_NE);
-        return (dir == adjDir || dir == adjDir.getOpposite()) && SideSkipPredicate.compareState(level, pos, side, dir, dir);
-    }
-
-    private static boolean testAgainstPillar(BlockGetter level, BlockPos pos, Direction dir, BlockState adjState, Direction side)
+    private static boolean testAgainstPanel(BlockGetter level, BlockPos pos, BlockState state, Direction dir, BlockState adjState, Direction side)
     {
         Direction adjDir = adjState.getValue(FramedProperties.FACING_HOR);
-        if ((side == dir.getClockWise() && adjDir == dir) || (side == dir.getCounterClockWise() && adjDir == dir.getClockWise()))
+
+        if (getHalfDir(dir, side).isEqualTo(getHalfDir(adjDir, side.getOpposite())))
         {
-            return SideSkipPredicate.compareState(level, pos, side, dir, dir);
+            return SideSkipPredicate.compareState(level, pos, side, state, adjState);
         }
         return false;
     }
 
-    private static boolean testAgainstEdge(BlockGetter level, BlockPos pos, Direction dir, BlockState adjState, Direction side)
+    private static boolean testAgainstDoublePanel(BlockGetter level, BlockPos pos, BlockState state, Direction dir, BlockState adjState, Direction side)
+    {
+        Tuple<BlockState, BlockState> states = AbstractFramedDoubleBlock.getStatePair(adjState);
+        return testAgainstPanel(level, pos, state, dir, states.getA(), side) ||
+               testAgainstPanel(level, pos, state, dir, states.getB(), side);
+    }
+
+    private static boolean testAgainstPillar(BlockGetter level, BlockPos pos, BlockState state, Direction dir, BlockState adjState, Direction side)
     {
         Direction adjDir = adjState.getValue(FramedProperties.FACING_HOR);
-        if (adjDir != dir) { return false; }
 
+        if (getHalfDir(dir, side).isEqualTo(CornerPillarSkipPredicate.getHalfDir(adjDir, side.getOpposite())))
+        {
+            return SideSkipPredicate.compareState(level, pos, side, state, adjState);
+        }
+        return false;
+    }
+
+    private static boolean testAgainstEdge(BlockGetter level, BlockPos pos, BlockState state, Direction dir, BlockState adjState, Direction side)
+    {
+        Direction adjDir = adjState.getValue(FramedProperties.FACING_HOR);
         boolean adjTop = adjState.getValue(FramedProperties.TOP);
-        if ((side == Direction.UP && !adjTop) || (side == Direction.DOWN && adjTop))
+
+        if (getHalfDir(dir, side).isEqualTo(SlabEdgeSkipPredicate.getHalfDir(adjDir, adjTop, side.getOpposite())))
         {
-            return SideSkipPredicate.compareState(level, pos, side, dir, dir);
+            return SideSkipPredicate.compareState(level, pos, side, state, adjState);
         }
         return false;
     }
 
-    private static boolean testAgainstStairs(BlockGetter level, BlockPos pos, Direction dir, BlockState adjState, Direction side)
+    private static boolean testAgainstStairs(BlockGetter level, BlockPos pos, BlockState state, Direction dir, BlockState adjState, Direction side)
     {
         if (!Utils.isY(side)) { return false; }
 
         Direction adjDir = adjState.getValue(BlockStateProperties.HORIZONTAL_FACING);
         StairsShape adjShape = adjState.getValue(BlockStateProperties.STAIRS_SHAPE);
-        boolean adjTop = adjState.getValue(BlockStateProperties.HALF) == Half.TOP;
+        Half adjHalf = adjState.getValue(BlockStateProperties.HALF);
 
-        if (dir != adjDir) { return false; }
-
-        if ((side == Direction.UP && adjTop) || (side == Direction.DOWN && !adjTop))
+        if (getHalfDir(dir, side).isEqualTo(StairsSkipPredicate.getHalfDir(adjDir, adjShape, adjHalf, side.getOpposite())))
         {
-            return adjShape == StairsShape.STRAIGHT && SideSkipPredicate.compareState(level, pos, side, dir, dir);
+            return SideSkipPredicate.compareState(level, pos, side, state, adjState);
         }
         return false;
     }
 
-    private static boolean testAgainstDoubleStairs(BlockGetter level, BlockPos pos, Direction dir, BlockState adjState, Direction side)
+    private static boolean testAgainstDoubleStairs(BlockGetter level, BlockPos pos, BlockState state, Direction dir, BlockState adjState, Direction side)
     {
-        if (!Utils.isY(side)) { return false; }
-
-        Direction adjDir = adjState.getValue(BlockStateProperties.HORIZONTAL_FACING);
-        boolean adjTop = adjState.getValue(FramedProperties.TOP);
-
-        if (dir.getAxis() != adjDir.getAxis()) { return false; }
-
-        if ((side == Direction.UP && adjTop) || (side == Direction.DOWN && !adjTop))
-        {
-            return SideSkipPredicate.compareState(level, pos, side, dir, dir);
-        }
-        return false;
+        Tuple<BlockState, BlockState> states = AbstractFramedDoubleBlock.getStatePair(adjState);
+        return testAgainstStairs(level, pos, state, dir, states.getA(), side) ||
+               testAgainstEdge(level, pos, state, dir, states.getB(), side);
     }
 
-    private static boolean testAgainstVerticalStairs(BlockGetter level, BlockPos pos, Direction dir, BlockState adjState, Direction side)
+    private static boolean testAgainstVerticalStairs(BlockGetter level, BlockPos pos, BlockState state, Direction dir, BlockState adjState, Direction side)
     {
         Direction adjDir = adjState.getValue(FramedProperties.FACING_HOR);
         StairsType adjType = adjState.getValue(PropertyHolder.STAIRS_TYPE);
 
-        if ((side == dir.getCounterClockWise() && adjDir == dir) || (side == dir.getClockWise() && adjDir == dir.getClockWise()))
+        if (getHalfDir(dir, side).isEqualTo(VerticalStairsSkipPredicate.getHalfDir(adjDir, adjType, side.getOpposite())))
         {
-            return adjType == StairsType.VERTICAL && SideSkipPredicate.compareState(level, pos, side, dir, dir);
+            return SideSkipPredicate.compareState(level, pos, side, state, adjState);
         }
         return false;
     }
 
-    private static boolean testAgainstVerticalDoubleStairs(BlockGetter level, BlockPos pos, Direction dir, BlockState adjState, Direction side)
+    private static boolean testAgainstVerticalDoubleStairs(BlockGetter level, BlockPos pos, BlockState state, Direction dir, BlockState adjState, Direction side)
     {
-        Direction adjDir = adjState.getValue(FramedProperties.FACING_HOR);
-
-        if ((side == dir.getCounterClockWise() && adjDir == dir) || (side == dir.getClockWise() && adjDir == dir.getClockWise()))
-        {
-            return SideSkipPredicate.compareState(level, pos, side, dir, dir);
-        }
-        else if ((side == dir.getCounterClockWise() && adjDir == dir.getCounterClockWise()) || (side == dir.getClockWise() && adjDir == dir.getOpposite()))
-        {
-            return SideSkipPredicate.compareState(level, pos, side, dir, dir);
-        }
-        return false;
+        Tuple<BlockState, BlockState> states = AbstractFramedDoubleBlock.getStatePair(adjState);
+        return testAgainstVerticalStairs(level, pos, state, dir, states.getA(), side) ||
+               testAgainstPillar(level, pos, state, dir, states.getB(), side);
     }
 
-    private static boolean testAgainstHalfStairs(BlockGetter level, BlockPos pos, Direction dir, BlockState adjState, Direction side)
+    private static boolean testAgainstHalfStairs(BlockGetter level, BlockPos pos, BlockState state, Direction dir, BlockState adjState, Direction side)
     {
-        if (side.getAxis() == dir.getAxis()) { return false; }
-
         Direction adjDir = adjState.getValue(FramedProperties.FACING_HOR);
         boolean adjTop = adjState.getValue(FramedProperties.TOP);
         boolean adjRight = adjState.getValue(PropertyHolder.RIGHT);
 
-        if ((adjRight && adjDir == dir.getCounterClockWise()) || (!adjRight && adjDir == dir.getClockWise()))
+        if (getHalfDir(dir, side).isEqualTo(HalfStairsSkipPredicate.getHalfDir(adjDir, adjTop, adjRight, side.getOpposite())))
         {
-            if (Utils.isY(side))
-            {
-                return (side == Direction.DOWN) == adjTop && SideSkipPredicate.compareState(level, pos, side, dir, dir);
-            }
-            else
-            {
-                return (side == adjDir.getOpposite()) && SideSkipPredicate.compareState(level, pos, side, dir, dir);
-            }
+            return SideSkipPredicate.compareState(level, pos, side, state, adjState);
         }
-
         return false;
     }
 
-    private static boolean testAgainstSlopePanel(BlockGetter level, BlockPos pos, Direction dir, BlockState adjState, Direction side)
+    private static boolean testAgainstSlopePanel(BlockGetter level, BlockPos pos, BlockState state, Direction dir, BlockState adjState, Direction side)
     {
         Direction adjDir = adjState.getValue(FramedProperties.FACING_HOR);
-        Direction adjRotDir = adjState.getValue(PropertyHolder.ROTATION).withFacing(adjDir);
+        HorizontalRotation adjRot = adjState.getValue(PropertyHolder.ROTATION);
         boolean adjFront = adjState.getValue(PropertyHolder.FRONT);
 
-        if (side.getAxis() == dir.getAxis() || side != adjRotDir) { return false; }
-
-        if ((adjDir == dir && !adjFront) || (adjDir == dir.getOpposite() && adjFront))
+        if (getHalfDir(dir, side).isEqualTo(SlopePanelSkipPredicate.getHalfDir(adjDir, adjRot, adjFront, side.getOpposite())))
         {
-            return SideSkipPredicate.compareState(level, pos, side, dir, side.getOpposite());
+            return SideSkipPredicate.compareState(level, pos, side, state, adjState);
         }
-
         return false;
     }
 
-    private static boolean testAgainstExtendedSlopePanel(BlockGetter level, BlockPos pos, Direction dir, BlockState adjState, Direction side)
+    private static boolean testAgainstExtendedSlopePanel(BlockGetter level, BlockPos pos, BlockState state, Direction dir, BlockState adjState, Direction side)
     {
-        if (side.getAxis() == dir.getAxis()) { return false; }
-
         Direction adjDir = adjState.getValue(FramedProperties.FACING_HOR);
-        Direction adjRotDir = adjState.getValue(PropertyHolder.ROTATION).withFacing(adjDir);
+        HorizontalRotation adjRot = adjState.getValue(PropertyHolder.ROTATION);
 
-        return adjDir == dir && adjRotDir == side.getOpposite() && SideSkipPredicate.compareState(level, pos, side, dir, dir);
+        if (getHalfDir(dir, side).isEqualTo(ExtendedSlopePanelSkipPredicate.getHalfDir(adjDir, adjRot, side.getOpposite())))
+        {
+            return SideSkipPredicate.compareState(level, pos, side, state, adjState);
+        }
+        return false;
     }
 
-    private static boolean testAgainstDoubleSlopePanel(BlockGetter level, BlockPos pos, Direction dir, BlockState adjState, Direction side)
+    private static boolean testAgainstDoubleSlopePanel(BlockGetter level, BlockPos pos, BlockState state, Direction dir, BlockState adjState, Direction side)
+    {
+        Tuple<BlockState, BlockState> states = AbstractFramedDoubleBlock.getStatePair(adjState);
+        return testAgainstSlopePanel(level, pos, state, dir, states.getA(), side) ||
+               testAgainstSlopePanel(level, pos, state, dir, states.getB(), side);
+    }
+
+    private static boolean testAgainstInverseDoubleSlopePanel(BlockGetter level, BlockPos pos, BlockState state, Direction dir, BlockState adjState, Direction side)
+    {
+        Tuple<BlockState, BlockState> states = AbstractFramedDoubleBlock.getStatePair(adjState);
+        return testAgainstSlopePanel(level, pos, state, dir, states.getA(), side) ||
+               testAgainstSlopePanel(level, pos, state, dir, states.getB(), side);
+    }
+
+    private static boolean testAgainstExtendedDoubleSlopePanel(BlockGetter level, BlockPos pos, BlockState state, Direction dir, BlockState adjState, Direction side)
+    {
+        Tuple<BlockState, BlockState> states = AbstractFramedDoubleBlock.getStatePair(adjState);
+        return testAgainstExtendedSlopePanel(level, pos, state, dir, states.getA(), side) ||
+               testAgainstSlopePanel(level, pos, state, dir, states.getB(), side);
+    }
+
+    private static boolean testAgainstFlatInnerSlopePanelCorner(BlockGetter level, BlockPos pos, BlockState state, Direction dir, BlockState adjState, Direction side)
     {
         Direction adjDir = adjState.getValue(FramedProperties.FACING_HOR);
-        Direction adjRotDir = adjState.getValue(PropertyHolder.ROTATION).withFacing(adjDir);
+        HorizontalRotation adjRot = adjState.getValue(PropertyHolder.ROTATION);
         boolean adjFront = adjState.getValue(PropertyHolder.FRONT);
 
-        if (side.getAxis() == dir.getAxis() || side.getAxis() != adjRotDir.getAxis()) { return false; }
-
-        if ((adjDir == dir && !adjFront) || (adjDir == dir.getOpposite() && adjFront))
+        if (getHalfDir(dir, side).isEqualTo(FlatInnerSlopePanelCornerSkipPredicate.getHalfDir(adjDir, adjRot, adjFront, side.getOpposite())))
         {
-            return SideSkipPredicate.compareState(level, pos, side, dir, side.getOpposite());
+            return SideSkipPredicate.compareState(level, pos, side, state, adjState);
         }
-
         return false;
     }
 
-    private static boolean testAgainstInverseDoubleSlopePanel(BlockGetter level, BlockPos pos, Direction dir, BlockState adjState, Direction side)
+    private static boolean testAgainstFlatExtendedSlopePanelCorner(BlockGetter level, BlockPos pos, BlockState state, Direction dir, BlockState adjState, Direction side)
     {
-        Direction adjDir = adjState.getValue(FramedProperties.FACING_HOR);
-        Direction adjRotDir = adjState.getValue(PropertyHolder.ROTATION).withFacing(adjDir);
-
-        if (side.getAxis() == dir.getAxis() || side.getAxis() != adjRotDir.getAxis()) { return false; }
-
-        if ((adjDir == dir && side == adjRotDir.getOpposite()) || (adjDir == dir.getOpposite() && side == adjRotDir))
-        {
-            return SideSkipPredicate.compareState(level, pos, side, dir, side.getOpposite());
-        }
-
-        return false;
-    }
-
-    private static boolean testAgainstExtendedDoubleSlopePanel(BlockGetter level, BlockPos pos, Direction dir, BlockState adjState, Direction side)
-    {
-        if (side.getAxis() == dir.getAxis()) { return false; }
-
-        Direction adjDir = adjState.getValue(FramedProperties.FACING_HOR);
-        Direction adjRotDir = adjState.getValue(PropertyHolder.ROTATION).withFacing(adjDir);
-
-        if (adjRotDir != side.getOpposite()) { return false; }
-
-        return adjDir.getAxis() == dir.getAxis() && SideSkipPredicate.compareState(level, pos, side, dir, dir);
-    }
-
-    private static boolean testAgainstFlatInnerSlopePanelCorner(BlockGetter level, BlockPos pos, Direction dir, BlockState adjState, Direction side)
-    {
-        if (side == dir.getOpposite()) { return false; }
-
-        Direction adjDir = adjState.getValue(FramedProperties.FACING_HOR);
-        boolean adjFront = adjState.getValue(PropertyHolder.FRONT);
-        HorizontalRotation adjRot = adjState.getValue(PropertyHolder.ROTATION);
-
-        if ((!adjFront && adjDir != dir) || (adjFront && adjDir != dir.getOpposite())) { return false; }
-
-        if (FlatInnerSlopePanelCornerSkipPredicate.isPanelSide(adjDir, adjRot, side.getOpposite()))
-        {
-            return SideSkipPredicate.compareState(level, pos, side, dir, side.getOpposite());
-        }
-
-        return false;
-    }
-
-    private static boolean testAgainstFlatExtendedSlopePanelCorner(BlockGetter level, BlockPos pos, Direction dir, BlockState adjState, Direction side)
-    {
-        if (side == dir.getOpposite()) { return false; }
-
         Direction adjDir = adjState.getValue(FramedProperties.FACING_HOR);
         HorizontalRotation adjRot = adjState.getValue(PropertyHolder.ROTATION);
 
-        if (adjDir == dir && FlatExtendedSlopePanelCornerSkipPredicate.isPanelSide(adjDir, adjRot, side.getOpposite()))
+        if (getHalfDir(dir, side).isEqualTo(FlatExtendedSlopePanelCornerSkipPredicate.getHalfDir(adjDir, adjRot, side.getOpposite())))
         {
-            return SideSkipPredicate.compareState(level, pos, side, dir, dir);
-        }
-
-        return false;
-    }
-
-    private static boolean testAgainstFlatDoubleSlopePanelCorner(BlockGetter level, BlockPos pos, Direction dir, BlockState adjState, Direction side)
-    {
-        if (side == dir.getOpposite()) { return false; }
-
-        Direction adjDir = adjState.getValue(FramedProperties.FACING_HOR);
-        boolean adjFront = adjState.getValue(PropertyHolder.FRONT);
-        HorizontalRotation adjRot = adjState.getValue(PropertyHolder.ROTATION);
-
-        if (FlatInnerSlopePanelCornerSkipPredicate.isPanelSide(adjDir, adjRot, side.getOpposite()))
-        {
-            if ((!adjFront && adjDir == dir) || (adjFront && adjDir == dir.getOpposite()))
-            {
-                return SideSkipPredicate.compareState(level, pos, side, dir, side.getOpposite());
-            }
-        }
-
-        return false;
-    }
-
-    private static boolean testAgainstFlatInverseDoubleSlopePanelCorner(BlockGetter level, BlockPos pos, Direction dir, BlockState adjState, Direction side)
-    {
-        if (side == dir.getOpposite()) { return false; }
-
-        Direction adjDir = adjState.getValue(FramedProperties.FACING_HOR);
-        HorizontalRotation adjRot = adjState.getValue(PropertyHolder.ROTATION);
-
-        if (adjDir == dir && FlatInnerSlopePanelCornerSkipPredicate.isPanelSide(adjDir, adjRot, side.getOpposite()))
-        {
-            return SideSkipPredicate.compareState(level, pos, side, dir, side.getOpposite());
+            return SideSkipPredicate.compareState(level, pos, side, state, adjState);
         }
         return false;
     }
 
-    private static boolean testAgainstFlatExtendedDoubleSlopePanelCorner(BlockGetter level, BlockPos pos, Direction dir, BlockState adjState, Direction side)
+    private static boolean testAgainstFlatDoubleSlopePanelCorner(BlockGetter level, BlockPos pos, BlockState state, Direction dir, BlockState adjState, Direction side)
     {
-        if (side == dir.getOpposite()) { return false; }
-
-        Direction adjDir = adjState.getValue(FramedProperties.FACING_HOR);
-        HorizontalRotation adjRot = adjState.getValue(PropertyHolder.ROTATION);
-
-        if (adjDir.getAxis() == dir.getAxis() && FlatExtendedSlopePanelCornerSkipPredicate.isPanelSide(adjDir, adjRot, side.getOpposite()))
-        {
-            return SideSkipPredicate.compareState(level, pos, side, dir, dir);
-        }
-
-        return false;
+        Tuple<BlockState, BlockState> states = AbstractFramedDoubleBlock.getStatePair(adjState);
+        return testAgainstFlatInnerSlopePanelCorner(level, pos, state, dir, states.getA(), side);
     }
 
-    private static boolean testAgainstDividedSlope(BlockGetter level, BlockPos pos, Direction dir, BlockState adjState, Direction side)
+    private static boolean testAgainstFlatInverseDoubleSlopePanelCorner(BlockGetter level, BlockPos pos, BlockState state, Direction dir, BlockState adjState, Direction side)
     {
-        if (side == dir.getOpposite()) { return false; }
-
-        Direction adjDir = adjState.getValue(FramedProperties.FACING_HOR);
-        SlopeType adjType = adjState.getValue(PropertyHolder.SLOPE_TYPE);
-
-        if (adjType == SlopeType.HORIZONTAL || adjDir.getAxis() == dir.getAxis()) { return false; }
-
-        boolean adjTop = adjType == SlopeType.TOP;
-
-        if ((!adjTop && side == Direction.UP) || (adjTop && side == Direction.DOWN) || adjDir == side.getOpposite())
-        {
-            return SideSkipPredicate.compareState(level, pos, side, dir, dir);
-        }
-
-        return false;
+        Tuple<BlockState, BlockState> states = AbstractFramedDoubleBlock.getStatePair(adjState);
+        return testAgainstFlatInnerSlopePanelCorner(level, pos, state, dir, states.getA(), side);
     }
 
-    private static boolean testAgainstDoubleHalfSlope(BlockGetter level, BlockPos pos, Direction dir, BlockState adjState, Direction side)
+    private static boolean testAgainstFlatExtendedDoubleSlopePanelCorner(BlockGetter level, BlockPos pos, BlockState state, Direction dir, BlockState adjState, Direction side)
     {
-        if (side == dir.getOpposite()) { return false; }
-
-        Direction adjDir = adjState.getValue(FramedProperties.FACING_HOR);
-        boolean adjRight = adjState.getValue(PropertyHolder.RIGHT);
-
-        if ((adjRight && adjDir == dir.getCounterClockWise()) || (!adjRight && adjDir == dir.getClockWise()))
-        {
-            return SideSkipPredicate.compareState(level, pos, side, dir, side.getOpposite());
-        }
-
-        return false;
+        Tuple<BlockState, BlockState> states = AbstractFramedDoubleBlock.getStatePair(adjState);
+        return testAgainstFlatExtendedSlopePanelCorner(level, pos, state, dir, states.getA(), side) ||
+               testAgainstFlatInnerSlopePanelCorner(level, pos, state, dir, states.getB(), side);
     }
 
-    private static boolean testAgainstVerticalSlopedStairs(BlockGetter level, BlockPos pos, Direction dir, BlockState adjState, Direction side)
+    private static boolean testAgainstDividedSlope(BlockGetter level, BlockPos pos, BlockState state, Direction dir, BlockState adjState, Direction side)
     {
-        if (side.getAxis() == dir.getAxis()) { return false; }
+        if (adjState.getValue(PropertyHolder.SLOPE_TYPE) == SlopeType.HORIZONTAL) { return false; }
 
+        Tuple<BlockState, BlockState> states = AbstractFramedDoubleBlock.getStatePair(adjState);
+        //Half slopes re-use the half stairs check
+        return testAgainstHalfStairs(level, pos, state, dir, states.getA(), side) ||
+               testAgainstHalfStairs(level, pos, state, dir, states.getB(), side);
+    }
+
+    private static boolean testAgainstDoubleHalfSlope(BlockGetter level, BlockPos pos, BlockState state, Direction dir, BlockState adjState, Direction side)
+    {
+        Tuple<BlockState, BlockState> states = AbstractFramedDoubleBlock.getStatePair(adjState);
+        //Half slopes re-use the half stairs check
+        return testAgainstHalfStairs(level, pos, state, dir, states.getA(), side) ||
+               testAgainstHalfStairs(level, pos, state, dir, states.getB(), side);
+    }
+
+    private static boolean testAgainstVerticalSlopedStairs(BlockGetter level, BlockPos pos, BlockState state, Direction dir, BlockState adjState, Direction side)
+    {
         Direction adjDir = adjState.getValue(FramedProperties.FACING_HOR);
         HorizontalRotation adjRot = adjState.getValue(PropertyHolder.ROTATION);
 
-        if (VerticalSlopedStairsSkipPredicate.isPanelFace(adjDir, adjRot, side.getOpposite()))
+        if (getHalfDir(dir, side).isEqualTo(VerticalSlopedStairsSkipPredicate.getHalfDir(adjDir, adjRot, side.getOpposite())))
         {
-            return adjDir == dir && SideSkipPredicate.compareState(level, pos, side, dir, side.getOpposite());
+            return SideSkipPredicate.compareState(level, pos, side, state, adjState);
         }
-
         return false;
+    }
+
+
+
+    public static HalfDir getHalfDir(Direction dir, Direction side)
+    {
+        if (side.getAxis() != dir.getAxis())
+        {
+            return HalfDir.fromDirections(side, dir);
+        }
+        return HalfDir.NULL;
     }
 }

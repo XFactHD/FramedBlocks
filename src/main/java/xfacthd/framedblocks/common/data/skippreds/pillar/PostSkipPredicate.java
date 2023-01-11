@@ -3,8 +3,10 @@ package xfacthd.framedblocks.common.data.skippreds.pillar;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.world.level.BlockGetter;
+import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
+import xfacthd.framedblocks.api.util.FramedProperties;
 import xfacthd.framedblocks.api.util.SideSkipPredicate;
 import xfacthd.framedblocks.common.FBContent;
 
@@ -19,15 +21,21 @@ public final class PostSkipPredicate implements SideSkipPredicate
             return false;
         }
 
-        if (adjState.getBlock() == state.getBlock())
+        Block block = adjState.getBlock();
+        if (block == state.getBlock())
         {
             Direction.Axis adjAxis = adjState.getValue(BlockStateProperties.AXIS);
-            return axis == adjAxis && SideSkipPredicate.compareState(level, pos, side);
+            return axis == adjAxis && SideSkipPredicate.compareState(level, pos, side, state, side);
         }
-        else if (adjState.getBlock() == FBContent.blockFramedFence.get())
+        else if (block == FBContent.blockFramedFence.get() || isVerticalLattice(block, adjState))
         {
-            return axis == Direction.Axis.Y && SideSkipPredicate.compareState(level, pos, side);
+            return axis == Direction.Axis.Y && SideSkipPredicate.compareState(level, pos, side, state, side);
         }
         return false;
+    }
+
+    private static boolean isVerticalLattice(Block block, BlockState state)
+    {
+        return block == FBContent.blockFramedLattice.get() && state.getValue(FramedProperties.Y_AXIS);
     }
 }

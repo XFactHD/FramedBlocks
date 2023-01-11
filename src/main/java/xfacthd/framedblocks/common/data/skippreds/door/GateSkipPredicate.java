@@ -4,8 +4,7 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.level.block.state.properties.BlockStateProperties;
-import net.minecraft.world.level.block.state.properties.DoorHingeSide;
+import net.minecraft.world.level.block.state.properties.*;
 import xfacthd.framedblocks.api.util.SideSkipPredicate;
 import xfacthd.framedblocks.common.block.door.FramedGateBlock;
 
@@ -26,7 +25,7 @@ public final class GateSkipPredicate implements SideSkipPredicate
         Direction adjFacing = getDoorFacing(adjState);
         if (facing == adjFacing && side.getAxis() != facing.getAxis())
         {
-            return SideSkipPredicate.compareState(level, pos, side);
+            return SideSkipPredicate.compareState(level, pos, side, state, adjState);
         }
 
         return false;

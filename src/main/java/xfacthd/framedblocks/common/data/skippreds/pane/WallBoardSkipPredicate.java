@@ -22,7 +22,7 @@ public final class WallBoardSkipPredicate implements SideSkipPredicate
         if (side != dir.getOpposite() && adjState.getBlock() == state.getBlock())
         {
             Direction adjDir = adjState.getValue(FramedProperties.FACING_HOR);
-            return adjDir == dir && SideSkipPredicate.compareState(level, pos, side);
+            return adjDir == dir && SideSkipPredicate.compareState(level, pos, side, state, adjState);
         }
 
         return false;
