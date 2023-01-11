@@ -18,6 +18,7 @@ import xfacthd.framedblocks.common.data.skippreds.slopepanel.FlatExtendedSlopePa
 import xfacthd.framedblocks.common.data.skippreds.slopepanel.FlatInnerSlopePanelCornerSkipPredicate;
 import xfacthd.framedblocks.common.data.skippreds.pillar.CornerPillarSkipPredicate;
 import xfacthd.framedblocks.common.data.skippreds.slope.HalfSlopeSkipPredicate;
+import xfacthd.framedblocks.common.util.FramedUtils;
 
 public final class VerticalSlopedStairsSkipPredicate implements SideSkipPredicate
 {
@@ -257,13 +258,13 @@ public final class VerticalSlopedStairsSkipPredicate implements SideSkipPredicat
             BlockGetter level, BlockPos pos, Direction dir, HorizontalRotation rot, Direction rotDir, BlockState adjState, Direction side
     )
     {
-        SlopeType adjType = adjState.getValue(PropertyHolder.SLOPE_TYPE);
+        SlopeType adjType = FramedUtils.getSlopeType(adjState);
         if (adjType == SlopeType.HORIZONTAL || side != dir.getOpposite())
         {
             return false;
         }
 
-        Direction adjDir = adjState.getValue(FramedProperties.FACING_HOR);
+        Direction adjDir = FramedUtils.getSlopeBlockFacing(adjState);
         boolean adjTop = adjType == SlopeType.TOP;
 
         Direction panelFaceVert = adjTop ? Direction.UP : Direction.DOWN;

@@ -15,12 +15,23 @@ public final class FenceSkipPredicate implements SideSkipPredicate
     @Override
     public boolean test(BlockGetter level, BlockPos pos, BlockState state, BlockState adjState, Direction side)
     {
-        if (!Utils.isY(side) && !hasFenceArm(state, side))
+        boolean sameBlock = adjState.getBlock() == state.getBlock();
+
+        if (Utils.isY(side))
+        {
+            if (sameBlock || isVerticalPost(adjState))
+            {
+                return SideSkipPredicate.compareState(level, pos, side);
+            }
+            return false;
+        }
+
+        if (!hasFenceArm(state, side))
         {
             return false;
         }
 
-        if (adjState.getBlock() == state.getBlock() && hasFenceArm(adjState, side.getOpposite()))
+        if (sameBlock && hasFenceArm(adjState, side.getOpposite()))
         {
             return SideSkipPredicate.compareState(level, pos, side);
         }
@@ -35,6 +46,12 @@ public final class FenceSkipPredicate implements SideSkipPredicate
         }
 
         return false;
+    }
+
+    private static boolean isVerticalPost(BlockState state)
+    {
+        return state.getBlock() == FBContent.blockFramedPost.get() &&
+                state.getValue(BlockStateProperties.AXIS) == Direction.Axis.Y;
     }
 
     private static boolean hasFenceArm(BlockState state, Direction side)
