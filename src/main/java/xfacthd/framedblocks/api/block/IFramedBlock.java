@@ -24,6 +24,8 @@ import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.Vec3;
 import net.minecraft.world.phys.shapes.*;
+import net.minecraftforge.client.model.data.ModelData;
+import net.minecraftforge.client.model.data.ModelDataManager;
 import net.minecraftforge.common.IPlantable;
 import net.minecraftforge.common.Tags;
 import net.minecraftforge.common.extensions.IForgeBlock;
@@ -223,10 +225,10 @@ public interface IFramedBlock extends EntityBlock, IForgeBlock
         if (mode == ConTexMode.DETAILED && queryPos != null && !queryPos.equals(pos))
         {
             // Can't use query state directly as the query state may be the camo of the framed block actually in that position
-            if (level.getBlockState(queryPos).getBlock() instanceof IFramedBlock)
+            if (level.getBlockState(queryPos).getBlock() instanceof IFramedBlock block)
             {
                 Direction conFace = Direction.fromNormal(queryPos.subtract(pos));
-                if (conFace != null && getBlockType().getSideSkipPredicate().test(level, pos, state, queryState, conFace))
+                if (conFace != null && isSideHiddenInModelData(level, pos, block, conFace))
                 {
                     //TODO: improve camo retrieval on interactions with double blocks (i.e. slab next to double slab)
                     return getCamo(level, pos, conFace, air);
@@ -234,6 +236,27 @@ public interface IFramedBlock extends EntityBlock, IForgeBlock
             }
         }
         return air;
+    }
+
+    @SuppressWarnings("UnstableApiUsage")
+    private static boolean isSideHiddenInModelData(BlockAndTintGetter level, BlockPos pos, IFramedBlock block, Direction side)
+    {
+        ModelDataManager manager = level.getModelDataManager();
+        if (manager == null) { return false; }
+
+        ModelData data = manager.getAt(pos);
+        if (data == null) { return false; }
+
+        if (block.getBlockType().isDoubleBlock())
+        {
+            //TODO: this can't handle double blocks
+            return false;
+        }
+        else
+        {
+            FramedBlockData fbData = data.get(FramedBlockData.PROPERTY);
+            return fbData != null && fbData.isSideHidden(side);
+        }
     }
 
     private static BlockState getCamo(BlockAndTintGetter level, BlockPos pos, Direction side, BlockState air)
