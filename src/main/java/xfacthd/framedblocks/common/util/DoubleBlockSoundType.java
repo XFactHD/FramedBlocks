@@ -2,7 +2,7 @@ package xfacthd.framedblocks.common.util;
 
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.world.level.block.SoundType;
-import xfacthd.framedblocks.api.data.CamoContainer;
+import xfacthd.framedblocks.api.camo.CamoContainer;
 import xfacthd.framedblocks.common.FBContent;
 import xfacthd.framedblocks.common.blockentity.FramedDoubleBlockEntity;
 

@@ -23,10 +23,10 @@ import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import net.minecraftforge.common.IPlantable;
 import xfacthd.framedblocks.api.block.IFramedBlock;
-import xfacthd.framedblocks.api.util.FramedProperties;
+import xfacthd.framedblocks.api.block.FramedProperties;
 import xfacthd.framedblocks.common.data.BlockType;
 import xfacthd.framedblocks.api.block.FramedBlockEntity;
-import xfacthd.framedblocks.api.util.CtmPredicate;
+import xfacthd.framedblocks.api.predicate.CtmPredicate;
 
 import javax.annotation.Nullable;
 import java.util.List;

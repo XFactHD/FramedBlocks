@@ -22,8 +22,9 @@ import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.shapes.*;
 import xfacthd.framedblocks.api.block.FramedBlockEntity;
 import xfacthd.framedblocks.api.block.IFramedBlock;
+import xfacthd.framedblocks.api.shapes.ShapeProvider;
 import xfacthd.framedblocks.api.type.IBlockType;
-import xfacthd.framedblocks.api.util.FramedProperties;
+import xfacthd.framedblocks.api.block.FramedProperties;
 import xfacthd.framedblocks.api.util.Utils;
 import xfacthd.framedblocks.common.blockentity.FramedFancyRailSlopeBlockEntity;
 import xfacthd.framedblocks.common.data.BlockType;
@@ -32,14 +33,13 @@ import xfacthd.framedblocks.common.util.FramedUtils;
 
 import javax.annotation.Nullable;
 import java.util.List;
-import java.util.Map;
 import java.util.function.BiFunction;
 
 @SuppressWarnings("deprecation")
 public class FramedDetectorRailSlopeBlock extends DetectorRailBlock implements IFramedBlock
 {
     private final BlockType type;
-    private final Map<BlockState, VoxelShape> shapes;
+    private final ShapeProvider shapes;
     private final BiFunction<BlockPos, BlockState, FramedBlockEntity> beFactory;
 
     private FramedDetectorRailSlopeBlock(BlockType type, BiFunction<BlockPos, BlockState, FramedBlockEntity> beFactory)

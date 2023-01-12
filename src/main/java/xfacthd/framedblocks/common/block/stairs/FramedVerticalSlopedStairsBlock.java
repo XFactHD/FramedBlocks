@@ -11,6 +11,9 @@ import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
+import xfacthd.framedblocks.api.block.FramedProperties;
+import xfacthd.framedblocks.api.predicate.CtmPredicate;
+import xfacthd.framedblocks.api.shapes.ShapeProvider;
 import xfacthd.framedblocks.api.util.*;
 import xfacthd.framedblocks.common.block.FramedBlock;
 import xfacthd.framedblocks.common.block.slope.FramedHalfSlopeBlock;
@@ -32,7 +35,8 @@ public class FramedVerticalSlopedStairsBlock extends FramedBlock
     @Override
     protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder)
     {
-        builder.add(FramedProperties.FACING_HOR, PropertyHolder.ROTATION, FramedProperties.SOLID, FramedProperties.GLOWING, BlockStateProperties.WATERLOGGED);
+        super.createBlockStateDefinition(builder);
+        builder.add(FramedProperties.FACING_HOR, PropertyHolder.ROTATION, FramedProperties.SOLID, BlockStateProperties.WATERLOGGED);
     }
 
     @Override
@@ -123,7 +127,7 @@ public class FramedVerticalSlopedStairsBlock extends FramedBlock
 
 
 
-    public static ImmutableMap<BlockState, VoxelShape> generateShapes(ImmutableList<BlockState> states)
+    public static ShapeProvider generateShapes(ImmutableList<BlockState> states)
     {
         VoxelShape panelShape = box(0, 0, 0, 16, 16, 8);
 
@@ -147,6 +151,6 @@ public class FramedVerticalSlopedStairsBlock extends FramedBlock
             ));
         }
 
-        return builder.build();
+        return ShapeProvider.of(builder.build());
     }
 }

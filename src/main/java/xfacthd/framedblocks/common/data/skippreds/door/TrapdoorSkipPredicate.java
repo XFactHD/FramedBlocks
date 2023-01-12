@@ -6,7 +6,7 @@ import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.block.TrapDoorBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.Half;
-import xfacthd.framedblocks.api.util.SideSkipPredicate;
+import xfacthd.framedblocks.api.predicate.SideSkipPredicate;
 import xfacthd.framedblocks.common.block.door.FramedTrapDoorBlock;
 
 public final class TrapdoorSkipPredicate implements SideSkipPredicate

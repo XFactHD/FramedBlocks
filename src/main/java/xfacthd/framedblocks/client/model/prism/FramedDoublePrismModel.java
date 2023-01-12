@@ -4,12 +4,13 @@ import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.resources.model.BakedModel;
 import net.minecraft.core.Direction;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraftforge.client.model.data.ModelData;
 import org.jetbrains.annotations.NotNull;
 import xfacthd.framedblocks.client.model.FramedDoubleBlockModel;
 import xfacthd.framedblocks.common.FBContent;
 import xfacthd.framedblocks.common.blockentity.FramedDoubleBlockEntity;
+import xfacthd.framedblocks.common.data.PropertyHolder;
+import xfacthd.framedblocks.common.data.property.DirectionAxis;
 
 public class FramedDoublePrismModel extends FramedDoubleBlockModel
 {
@@ -19,8 +20,9 @@ public class FramedDoublePrismModel extends FramedDoubleBlockModel
     public FramedDoublePrismModel(BlockState state, BakedModel baseModel)
     {
         super(state, baseModel, true);
-        this.facing = state.getValue(BlockStateProperties.FACING);
-        this.axis = state.getValue(BlockStateProperties.AXIS);
+        DirectionAxis dirAxis = state.getValue(PropertyHolder.FACING_AXIS);
+        this.facing = dirAxis.direction();
+        this.axis = dirAxis.axis();
     }
 
     @Override
@@ -43,6 +45,6 @@ public class FramedDoublePrismModel extends FramedDoubleBlockModel
     {
         return FBContent.blockFramedDoublePrism.get()
                 .defaultBlockState()
-                .setValue(BlockStateProperties.FACING, Direction.UP);
+                .setValue(PropertyHolder.FACING_AXIS, DirectionAxis.UP_X);
     }
 }

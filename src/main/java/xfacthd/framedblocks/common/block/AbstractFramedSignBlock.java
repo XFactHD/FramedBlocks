@@ -9,7 +9,6 @@ import net.minecraft.stats.Stats;
 import net.minecraft.tags.FluidTags;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
-import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.*;
 import net.minecraft.world.level.BlockGetter;
@@ -20,8 +19,6 @@ import net.minecraft.world.level.pathfinder.PathComputationType;
 import net.minecraft.world.phys.BlockHitResult;
 import xfacthd.framedblocks.common.data.BlockType;
 import xfacthd.framedblocks.common.blockentity.FramedSignBlockEntity;
-
-import javax.annotation.Nullable;
 
 public abstract class AbstractFramedSignBlock extends FramedBlock
 {
@@ -91,12 +88,6 @@ public abstract class AbstractFramedSignBlock extends FramedBlock
         }
 
         return InteractionResult.PASS;
-    }
-
-    @Override
-    public void setPlacedBy(Level level, BlockPos pos, BlockState state, @Nullable LivingEntity placer, ItemStack stack)
-    {
-        tryApplyCamoImmediately(level, pos, placer, stack);
     }
 
     @Override

@@ -21,7 +21,7 @@ import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import net.minecraftforge.fml.util.ObfuscationReflectionHelper;
 import xfacthd.framedblocks.api.block.IFramedBlock;
-import xfacthd.framedblocks.api.util.FramedProperties;
+import xfacthd.framedblocks.api.block.FramedProperties;
 import xfacthd.framedblocks.common.data.BlockType;
 import xfacthd.framedblocks.api.block.FramedBlockEntity;
 
@@ -35,7 +35,10 @@ public class FramedWallBlock extends WallBlock implements IFramedBlock
     public FramedWallBlock()
     {
         super(IFramedBlock.createProperties(BlockType.FRAMED_WALL));
-        registerDefaultState(defaultBlockState().setValue(FramedProperties.STATE_LOCKED, false));
+        registerDefaultState(defaultBlockState()
+                .setValue(FramedProperties.STATE_LOCKED, false)
+                .setValue(FramedProperties.GLOWING, false)
+        );
         fixShapeMaps();
     }
 
@@ -43,7 +46,7 @@ public class FramedWallBlock extends WallBlock implements IFramedBlock
     protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder)
     {
         super.createBlockStateDefinition(builder);
-        builder.add(FramedProperties.STATE_LOCKED);
+        builder.add(FramedProperties.STATE_LOCKED, FramedProperties.GLOWING);
     }
 
     @Override
@@ -159,6 +162,8 @@ public class FramedWallBlock extends WallBlock implements IFramedBlock
         for (BlockState state : map.keySet())
         {
             builder.put(state.cycle(FramedProperties.STATE_LOCKED), map.get(state));
+            builder.put(state.cycle(FramedProperties.GLOWING), map.get(state));
+            builder.put(state.cycle(FramedProperties.GLOWING).cycle(FramedProperties.STATE_LOCKED), map.get(state));
         }
 
         return builder.build();

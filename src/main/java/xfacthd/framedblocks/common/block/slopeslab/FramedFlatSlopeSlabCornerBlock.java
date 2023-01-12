@@ -11,6 +11,9 @@ import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.Vec3;
 import net.minecraft.world.phys.shapes.*;
+import xfacthd.framedblocks.api.block.FramedProperties;
+import xfacthd.framedblocks.api.predicate.CtmPredicate;
+import xfacthd.framedblocks.api.shapes.ShapeProvider;
 import xfacthd.framedblocks.api.util.*;
 import xfacthd.framedblocks.common.block.FramedBlock;
 import xfacthd.framedblocks.common.data.BlockType;
@@ -43,7 +46,8 @@ public class FramedFlatSlopeSlabCornerBlock extends FramedBlock
     @Override
     protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder)
     {
-        builder.add(FramedProperties.FACING_HOR, FramedProperties.TOP, PropertyHolder.TOP_HALF, FramedProperties.SOLID, FramedProperties.GLOWING, BlockStateProperties.WATERLOGGED);
+        super.createBlockStateDefinition(builder);
+        builder.add(FramedProperties.FACING_HOR, FramedProperties.TOP, PropertyHolder.TOP_HALF, FramedProperties.SOLID, BlockStateProperties.WATERLOGGED);
     }
 
     @Override
@@ -129,7 +133,7 @@ public class FramedFlatSlopeSlabCornerBlock extends FramedBlock
 
 
 
-    public static ImmutableMap<BlockState, VoxelShape> generateShapes(ImmutableList<BlockState> states)
+    public static ShapeProvider generateShapes(ImmutableList<BlockState> states)
     {
         ImmutableMap.Builder<BlockState, VoxelShape> builder = ImmutableMap.builder();
 
@@ -153,10 +157,10 @@ public class FramedFlatSlopeSlabCornerBlock extends FramedBlock
             );
         }
 
-        return builder.build();
+        return ShapeProvider.of(builder.build());
     }
 
-    public static ImmutableMap<BlockState, VoxelShape> generateInnerShapes(ImmutableList<BlockState> states)
+    public static ShapeProvider generateInnerShapes(ImmutableList<BlockState> states)
     {
         ImmutableMap.Builder<BlockState, VoxelShape> builder = ImmutableMap.builder();
 
@@ -179,6 +183,6 @@ public class FramedFlatSlopeSlabCornerBlock extends FramedBlock
             );
         }
 
-        return builder.build();
+        return ShapeProvider.of(builder.build());
     }
 }

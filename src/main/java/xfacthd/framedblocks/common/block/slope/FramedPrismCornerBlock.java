@@ -12,7 +12,8 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
-import xfacthd.framedblocks.api.util.FramedProperties;
+import xfacthd.framedblocks.api.block.FramedProperties;
+import xfacthd.framedblocks.api.shapes.ShapeProvider;
 import xfacthd.framedblocks.api.util.Utils;
 import xfacthd.framedblocks.common.FBContent;
 import xfacthd.framedblocks.common.data.BlockType;
@@ -63,7 +64,7 @@ public class FramedPrismCornerBlock extends FramedThreewayCornerBlock
 
 
 
-    public static ImmutableMap<BlockState, VoxelShape> generatePrismShapes(ImmutableList<BlockState> states)
+    public static ShapeProvider generatePrismShapes(ImmutableList<BlockState> states)
     {
         ImmutableMap.Builder<BlockState, VoxelShape> builder = ImmutableMap.builder();
 
@@ -113,10 +114,10 @@ public class FramedPrismCornerBlock extends FramedThreewayCornerBlock
             }
         }
 
-        return builder.build();
+        return ShapeProvider.of(builder.build());
     }
 
-    public static ImmutableMap<BlockState, VoxelShape> generateInnerPrismShapes(ImmutableList<BlockState> states)
+    public static ShapeProvider generateInnerPrismShapes(ImmutableList<BlockState> states)
     {
         ImmutableMap.Builder<BlockState, VoxelShape> builder = ImmutableMap.builder();
 
@@ -172,6 +173,6 @@ public class FramedPrismCornerBlock extends FramedThreewayCornerBlock
             }
         }
 
-        return builder.build();
+        return ShapeProvider.of(builder.build());
     }
 }

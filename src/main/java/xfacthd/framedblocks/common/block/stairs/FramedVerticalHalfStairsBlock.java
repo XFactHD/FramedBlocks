@@ -10,7 +10,8 @@ import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.phys.shapes.*;
 import org.jetbrains.annotations.Nullable;
-import xfacthd.framedblocks.api.util.FramedProperties;
+import xfacthd.framedblocks.api.block.FramedProperties;
+import xfacthd.framedblocks.api.shapes.ShapeProvider;
 import xfacthd.framedblocks.api.util.Utils;
 import xfacthd.framedblocks.common.block.FramedBlock;
 import xfacthd.framedblocks.common.data.BlockType;
@@ -22,6 +23,7 @@ public class FramedVerticalHalfStairsBlock extends FramedBlock
     @Override
     protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder)
     {
+        super.createBlockStateDefinition(builder);
         builder.add(FramedProperties.FACING_HOR, FramedProperties.TOP, BlockStateProperties.WATERLOGGED);
     }
 
@@ -62,7 +64,7 @@ public class FramedVerticalHalfStairsBlock extends FramedBlock
 
 
 
-    public static ImmutableMap<BlockState, VoxelShape> generateShapes(ImmutableList<BlockState> states)
+    public static ShapeProvider generateShapes(ImmutableList<BlockState> states)
     {
         ImmutableMap.Builder<BlockState, VoxelShape> builder = ImmutableMap.builder();
 
@@ -86,6 +88,6 @@ public class FramedVerticalHalfStairsBlock extends FramedBlock
             builder.put(state, Utils.rotateShape(Direction.NORTH, dir, top ? shapeTop : shapeBottom));
         }
 
-        return builder.build();
+        return ShapeProvider.of(builder.build());
     }
 }

@@ -10,6 +10,9 @@ import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.phys.Vec3;
 import net.minecraft.world.phys.shapes.*;
+import xfacthd.framedblocks.api.block.FramedProperties;
+import xfacthd.framedblocks.api.predicate.CtmPredicate;
+import xfacthd.framedblocks.api.shapes.ShapeProvider;
 import xfacthd.framedblocks.api.util.*;
 import xfacthd.framedblocks.common.block.FramedBlock;
 import xfacthd.framedblocks.common.data.*;
@@ -59,7 +62,8 @@ public class FramedCornerSlopeBlock extends FramedBlock
     @Override
     protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder)
     {
-        builder.add(FramedProperties.FACING_HOR, PropertyHolder.CORNER_TYPE, BlockStateProperties.WATERLOGGED, FramedProperties.SOLID, FramedProperties.GLOWING);
+        super.createBlockStateDefinition(builder);
+        builder.add(FramedProperties.FACING_HOR, PropertyHolder.CORNER_TYPE, BlockStateProperties.WATERLOGGED, FramedProperties.SOLID);
     }
 
     @Override
@@ -129,7 +133,7 @@ public class FramedCornerSlopeBlock extends FramedBlock
 
 
 
-    public static ImmutableMap<BlockState, VoxelShape> generateCornerShapes(ImmutableList<BlockState> states)
+    public static ShapeProvider generateCornerShapes(ImmutableList<BlockState> states)
     {
         VoxelShape shapeTop = Shapes.join(
                 FramedSlopeBlock.SHAPE_TOP,
@@ -192,10 +196,10 @@ public class FramedCornerSlopeBlock extends FramedBlock
             }
         }
 
-        return builder.build();
+        return ShapeProvider.of(builder.build());
     }
 
-    public static ImmutableMap<BlockState, VoxelShape> generateInnerCornerShapes(ImmutableList<BlockState> states)
+    public static ShapeProvider generateInnerCornerShapes(ImmutableList<BlockState> states)
     {
         VoxelShape shapeTop = Shapes.or(
                 FramedSlopeBlock.SHAPE_TOP,
@@ -252,6 +256,6 @@ public class FramedCornerSlopeBlock extends FramedBlock
             }
         }
 
-        return builder.build();
+        return ShapeProvider.of(builder.build());
     }
 }

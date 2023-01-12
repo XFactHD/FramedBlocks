@@ -10,6 +10,7 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.phys.shapes.VoxelShape;
+import xfacthd.framedblocks.api.shapes.ShapeProvider;
 import xfacthd.framedblocks.api.util.Utils;
 import xfacthd.framedblocks.common.block.FramedBlock;
 import xfacthd.framedblocks.common.data.BlockType;
@@ -23,6 +24,7 @@ public class FramedPillarBlock extends FramedBlock
     @Override
     protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder)
     {
+        super.createBlockStateDefinition(builder);
         builder.add(BlockStateProperties.AXIS, BlockStateProperties.WATERLOGGED);
     }
 
@@ -60,7 +62,7 @@ public class FramedPillarBlock extends FramedBlock
 
 
 
-    public static ImmutableMap<BlockState, VoxelShape> generatePillarShapes(ImmutableList<BlockState> states)
+    public static ShapeProvider generatePillarShapes(ImmutableList<BlockState> states)
     {
         ImmutableMap.Builder<BlockState, VoxelShape> builder = ImmutableMap.builder();
 
@@ -78,10 +80,10 @@ public class FramedPillarBlock extends FramedBlock
             });
         }
 
-        return builder.build();
+        return ShapeProvider.of(builder.build());
     }
 
-    public static ImmutableMap<BlockState, VoxelShape> generatePostShapes(ImmutableList<BlockState> states)
+    public static ShapeProvider generatePostShapes(ImmutableList<BlockState> states)
     {
         ImmutableMap.Builder<BlockState, VoxelShape> builder = ImmutableMap.builder();
 
@@ -99,6 +101,6 @@ public class FramedPillarBlock extends FramedBlock
                     });
         }
 
-        return builder.build();
+        return ShapeProvider.of(builder.build());
     }
 }

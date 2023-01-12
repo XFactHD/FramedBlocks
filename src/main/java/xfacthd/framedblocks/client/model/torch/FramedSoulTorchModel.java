@@ -9,8 +9,8 @@ import net.minecraft.client.resources.model.BakedModel;
 import net.minecraft.core.Direction;
 import net.minecraftforge.client.ChunkRenderTypeSet;
 import net.minecraftforge.client.model.data.ModelData;
-import xfacthd.framedblocks.api.util.client.ClientUtils;
-import xfacthd.framedblocks.api.util.client.ModelCache;
+import xfacthd.framedblocks.api.util.ClientUtils;
+import xfacthd.framedblocks.api.model.util.ModelCache;
 
 import java.util.*;
 

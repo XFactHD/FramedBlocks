@@ -15,7 +15,7 @@ import xfacthd.framedblocks.FramedBlocks;
 import xfacthd.framedblocks.api.block.IFramedBlock;
 import xfacthd.framedblocks.api.type.IBlockType;
 import xfacthd.framedblocks.api.util.FramedConstants;
-import xfacthd.framedblocks.api.util.client.OutlineRender;
+import xfacthd.framedblocks.api.render.OutlineRenderer;
 import xfacthd.framedblocks.client.util.ClientConfig;
 
 import java.util.*;
@@ -23,7 +23,7 @@ import java.util.*;
 @Mod.EventBusSubscriber(modid = FramedConstants.MOD_ID, value = Dist.CLIENT)
 public final class BlockOutlineRenderer
 {
-    private static final Map<IBlockType, OutlineRender> OUTLINE_RENDERERS = new HashMap<>();
+    private static final Map<IBlockType, OutlineRenderer> OUTLINE_RENDERERS = new HashMap<>();
     private static final Set<IBlockType> ERRORED_TYPES = new HashSet<>();
 
     @SubscribeEvent
@@ -43,7 +43,7 @@ public final class BlockOutlineRenderer
             Vec3 offset = Vec3.atLowerCornerOf(result.getBlockPos()).subtract(event.getCamera().getPosition());
             VertexConsumer builder = event.getMultiBufferSource().getBuffer(RenderType.lines());
 
-            OutlineRender render = OUTLINE_RENDERERS.get(type);
+            OutlineRenderer render = OUTLINE_RENDERERS.get(type);
             if (render == null)
             {
                 if (ERRORED_TYPES.add(type))
@@ -67,7 +67,7 @@ public final class BlockOutlineRenderer
         }
     }
 
-    public static synchronized void registerOutlineRender(IBlockType type, OutlineRender render)
+    public static synchronized void registerOutlineRender(IBlockType type, OutlineRenderer render)
     {
         if (!type.hasSpecialHitbox())
         {

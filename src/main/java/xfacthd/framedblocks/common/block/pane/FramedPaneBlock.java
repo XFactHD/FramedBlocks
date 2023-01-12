@@ -19,8 +19,8 @@ import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.shapes.*;
 import net.minecraftforge.client.extensions.common.IClientBlockExtensions;
 import xfacthd.framedblocks.api.block.IFramedBlock;
-import xfacthd.framedblocks.api.util.FramedProperties;
-import xfacthd.framedblocks.api.util.client.FramedBlockRenderProperties;
+import xfacthd.framedblocks.api.block.FramedProperties;
+import xfacthd.framedblocks.api.block.FramedBlockRenderProperties;
 import xfacthd.framedblocks.common.FBContent;
 import xfacthd.framedblocks.api.block.FramedBlockEntity;
 import xfacthd.framedblocks.common.data.BlockType;
@@ -38,14 +38,17 @@ public class FramedPaneBlock extends IronBarsBlock implements IFramedBlock
     {
         super(IFramedBlock.createProperties(type));
         this.type = type;
-        registerDefaultState(defaultBlockState().setValue(FramedProperties.STATE_LOCKED, false));
+        registerDefaultState(defaultBlockState()
+                .setValue(FramedProperties.STATE_LOCKED, false)
+                .setValue(FramedProperties.GLOWING, false)
+        );
     }
 
     @Override
     protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder)
     {
         super.createBlockStateDefinition(builder);
-        builder.add(FramedProperties.STATE_LOCKED);
+        builder.add(FramedProperties.STATE_LOCKED, FramedProperties.GLOWING);
     }
 
     @Override

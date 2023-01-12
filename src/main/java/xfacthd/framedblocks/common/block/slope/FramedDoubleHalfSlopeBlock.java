@@ -18,7 +18,8 @@ import net.minecraft.world.phys.Vec3;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import xfacthd.framedblocks.FramedBlocks;
 import xfacthd.framedblocks.api.block.IFramedBlock;
-import xfacthd.framedblocks.api.util.FramedProperties;
+import xfacthd.framedblocks.api.block.FramedProperties;
+import xfacthd.framedblocks.api.shapes.ShapeProvider;
 import xfacthd.framedblocks.api.util.Utils;
 import xfacthd.framedblocks.common.FBContent;
 import xfacthd.framedblocks.common.block.AbstractFramedDoubleBlock;
@@ -134,7 +135,7 @@ public class FramedDoubleHalfSlopeBlock extends AbstractFramedDoubleBlock
 
 
 
-    public static ImmutableMap<BlockState, VoxelShape> generateShapes(ImmutableList<BlockState> states)
+    public static ShapeProvider generateShapes(ImmutableList<BlockState> states)
     {
         VoxelShape shape = box(0, 0, 0, 8, 16, 16);
 
@@ -157,6 +158,6 @@ public class FramedDoubleHalfSlopeBlock extends AbstractFramedDoubleBlock
             );
         }
 
-        return builder.build();
+        return ShapeProvider.of(builder.build());
     }
 }

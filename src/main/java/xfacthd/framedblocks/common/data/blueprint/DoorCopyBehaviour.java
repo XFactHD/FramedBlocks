@@ -13,7 +13,7 @@ import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.block.state.properties.DoubleBlockHalf;
 import xfacthd.framedblocks.api.block.FramedBlockEntity;
 import xfacthd.framedblocks.api.blueprint.BlueprintCopyBehaviour;
-import xfacthd.framedblocks.api.data.CamoContainer;
+import xfacthd.framedblocks.api.camo.CamoContainer;
 
 import java.util.*;
 

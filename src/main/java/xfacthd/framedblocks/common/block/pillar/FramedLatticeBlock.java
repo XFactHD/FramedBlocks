@@ -15,7 +15,8 @@ import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.block.state.properties.BooleanProperty;
 import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
-import xfacthd.framedblocks.api.util.FramedProperties;
+import xfacthd.framedblocks.api.block.FramedProperties;
+import xfacthd.framedblocks.api.shapes.ShapeProvider;
 import xfacthd.framedblocks.common.block.FramedBlock;
 import xfacthd.framedblocks.common.data.BlockType;
 
@@ -35,6 +36,7 @@ public class FramedLatticeBlock extends FramedBlock
     @Override
     protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder)
     {
+        super.createBlockStateDefinition(builder);
         builder.add(FramedProperties.X_AXIS, FramedProperties.Y_AXIS, FramedProperties.Z_AXIS, BlockStateProperties.WATERLOGGED, FramedProperties.STATE_LOCKED);
     }
 
@@ -91,7 +93,7 @@ public class FramedLatticeBlock extends FramedBlock
 
 
 
-    public static ImmutableMap<BlockState, VoxelShape> generateShapes(ImmutableList<BlockState> states)
+    public static ShapeProvider generateShapes(ImmutableList<BlockState> states)
     {
         ImmutableMap.Builder<BlockState, VoxelShape> builder = ImmutableMap.builder();
 
@@ -110,7 +112,7 @@ public class FramedLatticeBlock extends FramedBlock
             builder.put(state, shape.optimize());
         }
 
-        return builder.build();
+        return ShapeProvider.of(builder.build());
     }
 
     public static BooleanProperty getPropFromAxis(Direction dir)

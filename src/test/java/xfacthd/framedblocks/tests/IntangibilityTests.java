@@ -11,7 +11,7 @@ import net.minecraftforge.registries.ForgeRegistries;
 import xfacthd.framedblocks.api.block.IFramedBlock;
 import xfacthd.framedblocks.api.type.IBlockType;
 import xfacthd.framedblocks.api.util.FramedConstants;
-import xfacthd.framedblocks.api.util.test.TestUtils;
+import xfacthd.framedblocks.api.test.TestUtils;
 import xfacthd.framedblocks.common.data.BlockType;
 import xfacthd.framedblocks.common.util.ServerConfig;
 

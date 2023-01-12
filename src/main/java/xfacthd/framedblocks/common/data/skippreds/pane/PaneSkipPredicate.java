@@ -5,7 +5,7 @@ import net.minecraft.core.Direction;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
-import xfacthd.framedblocks.api.util.SideSkipPredicate;
+import xfacthd.framedblocks.api.predicate.SideSkipPredicate;
 import xfacthd.framedblocks.api.util.Utils;
 
 public final class PaneSkipPredicate implements SideSkipPredicate

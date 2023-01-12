@@ -3,9 +3,9 @@ package xfacthd.framedblocks.client.render.outline;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import net.minecraft.world.level.block.state.BlockState;
-import xfacthd.framedblocks.api.util.client.OutlineRender;
+import xfacthd.framedblocks.api.render.OutlineRenderer;
 
-public class NoopOutlineRenderer implements OutlineRender
+public class NoopOutlineRenderer implements OutlineRenderer
 {
     public static final NoopOutlineRenderer INSTANCE = new NoopOutlineRenderer();
 

@@ -20,8 +20,9 @@ import net.minecraftforge.client.model.data.ModelData;
 import net.minecraftforge.common.MinecraftForge;
 import xfacthd.framedblocks.api.ghost.CamoPair;
 import xfacthd.framedblocks.api.ghost.GhostRenderBehaviour;
+import xfacthd.framedblocks.api.model.data.FramedBlockData;
 import xfacthd.framedblocks.api.util.*;
-import xfacthd.framedblocks.api.util.client.ModelCache;
+import xfacthd.framedblocks.api.model.util.ModelCache;
 import xfacthd.framedblocks.client.util.*;
 import xfacthd.framedblocks.common.blockentity.FramedDoubleBlockEntity;
 

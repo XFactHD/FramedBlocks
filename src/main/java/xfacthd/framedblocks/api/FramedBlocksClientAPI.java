@@ -8,9 +8,9 @@ import net.minecraft.world.level.material.Fluid;
 import net.minecraftforge.client.model.data.ModelData;
 import xfacthd.framedblocks.api.ghost.GhostRenderBehaviour;
 import xfacthd.framedblocks.api.type.IBlockType;
-import xfacthd.framedblocks.api.util.ConTexMode;
+import xfacthd.framedblocks.api.predicate.ConTexMode;
 import xfacthd.framedblocks.api.util.WriteOnceHolder;
-import xfacthd.framedblocks.api.util.client.OutlineRender;
+import xfacthd.framedblocks.api.render.OutlineRenderer;
 
 @SuppressWarnings({ "unused", "SameReturnValue" })
 public interface FramedBlocksClientAPI
@@ -32,10 +32,10 @@ public interface FramedBlocksClientAPI
     BakedModel createFluidModel(Fluid fluid);
 
     /**
-     * Register an {@link OutlineRender} for the given {@link IBlockType}
+     * Register an {@link OutlineRenderer} for the given {@link IBlockType}
      * @param type The {@link IBlockType}, must return true for {@link IBlockType#hasSpecialHitbox()}
      */
-    void registerOutlineRender(IBlockType type, OutlineRender render);
+    void registerOutlineRender(IBlockType type, OutlineRenderer render);
 
     /**
      * Register a custom {@link GhostRenderBehaviour} for the given {@link Block}s

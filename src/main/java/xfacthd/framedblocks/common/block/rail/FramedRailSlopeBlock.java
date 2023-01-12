@@ -23,7 +23,8 @@ import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.shapes.*;
 import net.minecraftforge.registries.RegistryObject;
 import xfacthd.framedblocks.api.block.IFramedBlock;
-import xfacthd.framedblocks.api.util.FramedProperties;
+import xfacthd.framedblocks.api.block.FramedProperties;
+import xfacthd.framedblocks.api.shapes.ShapeProvider;
 import xfacthd.framedblocks.api.util.Utils;
 import xfacthd.framedblocks.common.FBContent;
 import xfacthd.framedblocks.common.blockentity.FramedFancyRailSlopeBlockEntity;
@@ -43,7 +44,7 @@ import java.util.stream.Stream;
 public class FramedRailSlopeBlock extends BaseRailBlock implements IFramedBlock
 {
     private final BlockType type;
-    private final Map<BlockState, VoxelShape> shapes;
+    private final ShapeProvider shapes;
     private final BiFunction<BlockPos, BlockState, FramedBlockEntity> beFactory;
 
     private FramedRailSlopeBlock(BlockType type, BiFunction<BlockPos, BlockState, FramedBlockEntity> beFactory)

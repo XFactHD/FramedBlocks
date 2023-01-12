@@ -20,11 +20,11 @@ import net.minecraft.world.level.storage.loot.LootContext;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.shapes.*;
 import xfacthd.framedblocks.api.block.IFramedBlock;
-import xfacthd.framedblocks.api.util.FramedProperties;
-import xfacthd.framedblocks.api.util.client.ClientUtils;
+import xfacthd.framedblocks.api.block.FramedProperties;
+import xfacthd.framedblocks.api.util.ClientUtils;
 import xfacthd.framedblocks.common.data.BlockType;
 import xfacthd.framedblocks.api.block.FramedBlockEntity;
-import xfacthd.framedblocks.api.util.CtmPredicate;
+import xfacthd.framedblocks.api.predicate.CtmPredicate;
 
 import javax.annotation.Nullable;
 import java.util.*;

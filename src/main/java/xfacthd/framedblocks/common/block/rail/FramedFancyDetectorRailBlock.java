@@ -12,13 +12,13 @@ import net.minecraft.world.level.*;
 import net.minecraft.world.level.block.*;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.material.MaterialColor;
 import net.minecraft.world.level.storage.loot.LootContext;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
-import xfacthd.framedblocks.api.block.FramedBlockEntity;
-import xfacthd.framedblocks.api.block.IFramedBlock;
+import xfacthd.framedblocks.api.block.*;
 import xfacthd.framedblocks.api.type.IBlockType;
 import xfacthd.framedblocks.common.data.BlockType;
 
@@ -33,6 +33,14 @@ public class FramedFancyDetectorRailBlock extends DetectorRailBlock implements I
         super(IFramedBlock.createProperties(BlockType.FRAMED_FANCY_DETECTOR_RAIL)
                 .noCollission()
         );
+        registerDefaultState(defaultBlockState().setValue(FramedProperties.GLOWING, false));
+    }
+
+    @Override
+    protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder)
+    {
+        super.createBlockStateDefinition(builder);
+        builder.add(FramedProperties.GLOWING);
     }
 
     @Override

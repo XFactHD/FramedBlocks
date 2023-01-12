@@ -6,7 +6,7 @@ import net.minecraftforge.fml.config.ModConfig;
 import net.minecraftforge.fml.event.config.ModConfigEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import org.apache.commons.lang3.tuple.Pair;
-import xfacthd.framedblocks.api.util.ConTexMode;
+import xfacthd.framedblocks.api.predicate.ConTexMode;
 import xfacthd.framedblocks.api.util.FramedConstants;
 
 public final class ClientConfig

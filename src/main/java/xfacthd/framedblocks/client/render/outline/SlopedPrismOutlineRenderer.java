@@ -7,11 +7,11 @@ import com.mojang.math.Vector3f;
 import net.minecraft.core.Direction;
 import net.minecraft.util.Mth;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import xfacthd.framedblocks.api.render.Quaternions;
 import xfacthd.framedblocks.api.util.Utils;
-import xfacthd.framedblocks.api.util.client.OutlineRender;
+import xfacthd.framedblocks.api.render.OutlineRenderer;
 import xfacthd.framedblocks.common.data.PropertyHolder;
+import xfacthd.framedblocks.common.data.property.CompoundDirection;
 
 public class SlopedPrismOutlineRenderer extends PrismOutlineRenderer
 {
@@ -21,18 +21,19 @@ public class SlopedPrismOutlineRenderer extends PrismOutlineRenderer
     public void drawCenterAndTriangle(PoseStack pstack, VertexConsumer builder)
     {
         // Center line
-        OutlineRender.drawLine(builder, pstack, .5F, .5F, .5F, .5F, .5F, 1);
+        OutlineRenderer.drawLine(builder, pstack, .5F, .5F, .5F, .5F, .5F, 1);
 
         // Front sloped triangle
-        OutlineRender.drawLine(builder, pstack, 0, 0, 0, .5F, .5F, .5F);
-        OutlineRender.drawLine(builder, pstack, .5F, .5F, .5F, 1, 0, 0);
+        OutlineRenderer.drawLine(builder, pstack, 0, 0, 0, .5F, .5F, .5F);
+        OutlineRenderer.drawLine(builder, pstack, .5F, .5F, .5F, 1, 0, 0);
     }
 
     @Override
     public void rotateMatrix(PoseStack pstack, BlockState state)
     {
-        Direction facing = state.getValue(BlockStateProperties.FACING);
-        Direction orientation = state.getValue(PropertyHolder.ORIENTATION);
+        CompoundDirection cmpDir = state.getValue(PropertyHolder.FACING_DIR);
+        Direction facing = cmpDir.direction();
+        Direction orientation = cmpDir.orientation();
 
         if (Utils.isY(facing))
         {

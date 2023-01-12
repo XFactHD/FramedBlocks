@@ -1,0 +1,18 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "key": {
+    "F": {
+      "item": "framedblocks:framed_cube"
+    },
+    "S": {
+      "item": "minecraft:stick"
+    }
+  },
+  "pattern": [
+    "SFS",
+    "SFS"
+  ],
+  "result": {
+    "item": "framedblocks:framed_fence_gate"
+  }
+}

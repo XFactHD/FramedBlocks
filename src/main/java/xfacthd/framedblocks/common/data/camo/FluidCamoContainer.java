@@ -16,9 +16,9 @@ import net.minecraftforge.fluids.FluidType;
 import net.minecraftforge.fluids.capability.IFluidHandler;
 import net.minecraftforge.fluids.capability.IFluidHandlerItem;
 import net.minecraftforge.fml.loading.FMLEnvironment;
-import xfacthd.framedblocks.api.data.*;
+import xfacthd.framedblocks.api.camo.*;
 import xfacthd.framedblocks.api.util.Utils;
-import xfacthd.framedblocks.api.util.client.ClientUtils;
+import xfacthd.framedblocks.api.util.ClientUtils;
 import xfacthd.framedblocks.common.FBContent;
 
 public class FluidCamoContainer extends CamoContainer

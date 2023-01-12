@@ -9,7 +9,7 @@ import net.minecraft.world.level.pathfinder.PathComputationType;
 import net.minecraft.world.phys.Vec3;
 import xfacthd.framedblocks.api.block.AbstractFramedBlock;
 import xfacthd.framedblocks.api.block.IFramedBlock;
-import xfacthd.framedblocks.api.util.FramedProperties;
+import xfacthd.framedblocks.api.block.FramedProperties;
 import xfacthd.framedblocks.common.data.*;
 import xfacthd.framedblocks.api.util.Utils;
 import xfacthd.framedblocks.common.data.property.CornerType;

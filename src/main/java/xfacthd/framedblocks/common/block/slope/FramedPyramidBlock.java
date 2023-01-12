@@ -9,7 +9,8 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.phys.shapes.*;
-import xfacthd.framedblocks.api.util.FramedProperties;
+import xfacthd.framedblocks.api.block.FramedProperties;
+import xfacthd.framedblocks.api.shapes.ShapeProvider;
 import xfacthd.framedblocks.api.util.Utils;
 import xfacthd.framedblocks.common.block.FramedBlock;
 import xfacthd.framedblocks.common.data.BlockType;
@@ -25,7 +26,8 @@ public class FramedPyramidBlock extends FramedBlock
     @Override
     protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder)
     {
-        builder.add(BlockStateProperties.FACING, FramedProperties.SOLID, FramedProperties.GLOWING, BlockStateProperties.WATERLOGGED);
+        super.createBlockStateDefinition(builder);
+        builder.add(BlockStateProperties.FACING, FramedProperties.SOLID, BlockStateProperties.WATERLOGGED);
     }
 
     @Override
@@ -57,7 +59,7 @@ public class FramedPyramidBlock extends FramedBlock
 
 
 
-    public static ImmutableMap<BlockState, VoxelShape> generateShapes(ImmutableList<BlockState> states)
+    public static ShapeProvider generateShapes(ImmutableList<BlockState> states)
     {
         VoxelShape shapeUp = Shapes.or(
                 box( 0,  0,  0,   16, .5,   16),
@@ -97,10 +99,10 @@ public class FramedPyramidBlock extends FramedBlock
             builder.put(state, shape);
         }
 
-        return builder.build();
+        return ShapeProvider.of(builder.build());
     }
 
-    public static ImmutableMap<BlockState, VoxelShape> generateSlabShapes(ImmutableList<BlockState> states)
+    public static ShapeProvider generateSlabShapes(ImmutableList<BlockState> states)
     {
         VoxelShape shapeUp = Shapes.or(
                 box( 0,  0,  0,   16, .5,   16),
@@ -132,14 +134,14 @@ public class FramedPyramidBlock extends FramedBlock
         {
             Direction facing = state.getValue(BlockStateProperties.FACING);
             VoxelShape shape = switch (facing)
-                    {
-                        case UP -> shapeUp;
-                        case DOWN -> shapeDown;
-                        default -> Utils.rotateShape(Direction.NORTH, facing, shapeNorth);
-                    };
+            {
+                case UP -> shapeUp;
+                case DOWN -> shapeDown;
+                default -> Utils.rotateShape(Direction.NORTH, facing, shapeNorth);
+            };
             builder.put(state, shape);
         }
 
-        return builder.build();
+        return ShapeProvider.of(builder.build());
     }
 }

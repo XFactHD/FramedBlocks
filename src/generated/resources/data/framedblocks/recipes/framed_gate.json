@@ -1,18 +1,16 @@
 {
   "type": "minecraft:crafting_shaped",
   "key": {
-    "F": {
-      "item": "framedblocks:framed_cube"
-    },
-    "S": {
-      "item": "minecraft:stick"
+    "D": {
+      "item": "framedblocks:framed_door"
     }
   },
   "pattern": [
-    "SFS",
-    "SFS"
+    "DD",
+    "DD"
   ],
   "result": {
+    "count": 4,
     "item": "framedblocks:framed_gate"
   }
 }

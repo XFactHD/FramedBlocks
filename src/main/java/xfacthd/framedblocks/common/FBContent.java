@@ -18,8 +18,8 @@ import net.minecraftforge.network.IContainerFactory;
 import net.minecraftforge.registries.*;
 import xfacthd.framedblocks.api.block.FramedBlockEntity;
 import xfacthd.framedblocks.api.block.IFramedBlock;
-import xfacthd.framedblocks.api.data.EmptyCamoContainer;
-import xfacthd.framedblocks.api.data.CamoContainer;
+import xfacthd.framedblocks.api.camo.EmptyCamoContainer;
+import xfacthd.framedblocks.api.camo.CamoContainer;
 import xfacthd.framedblocks.api.util.FramedConstants;
 import xfacthd.framedblocks.api.util.Utils;
 import xfacthd.framedblocks.common.block.cube.*;
@@ -89,7 +89,7 @@ public final class FBContent
     public static final RegistryObject<Block> blockFramedStairs = registerBlock(FramedStairsBlock::new, BlockType.FRAMED_STAIRS);
     public static final RegistryObject<Block> blockFramedWall = registerBlock(FramedWallBlock::new, BlockType.FRAMED_WALL);
     public static final RegistryObject<Block> blockFramedFence = registerBlock(FramedFenceBlock::new, BlockType.FRAMED_FENCE);
-    public static final RegistryObject<Block> blockFramedFenceGate = registerBlock(FramedFenceGateBlock::new, BlockType.FRAMED_GATE);
+    public static final RegistryObject<Block> blockFramedFenceGate = registerBlock(FramedFenceGateBlock::new, BlockType.FRAMED_FENCE_GATE);
     public static final RegistryObject<Block> blockFramedDoor = registerBlock(FramedDoorBlock::wood, BlockType.FRAMED_DOOR);
     public static final RegistryObject<Block> blockFramedIronDoor = registerBlock(FramedDoorBlock::iron, BlockType.FRAMED_IRON_DOOR);
     public static final RegistryObject<Block> blockFramedTrapDoor = registerBlock(FramedTrapDoorBlock::wood, BlockType.FRAMED_TRAPDOOR);
@@ -184,8 +184,8 @@ public final class FBContent
     public static final RegistryObject<Block> blockFramedLargeButton = registerBlock(FramedLargeButtonBlock::new, BlockType.FRAMED_LARGE_BUTTON);
     public static final RegistryObject<Block> blockFramedLargeStoneButton = registerBlock(FramedLargeStoneButtonBlock::new, BlockType.FRAMED_LARGE_STONE_BUTTON);
     public static final RegistryObject<Block> blockFramedTarget = registerBlock(FramedTargetBlock::new, BlockType.FRAMED_TARGET);
-    public static final RegistryObject<Block> blockFramedGate = registerBlock(FramedGateBlock::wood, BlockType.FRAMED_GATE_DOOR);
-    public static final RegistryObject<Block> blockFramedIronGate = registerBlock(FramedGateBlock::iron, BlockType.FRAMED_IRON_GATE_DOOR);
+    public static final RegistryObject<Block> blockFramedGate = registerBlock(FramedGateBlock::wood, BlockType.FRAMED_GATE);
+    public static final RegistryObject<Block> blockFramedIronGate = registerBlock(FramedGateBlock::iron, BlockType.FRAMED_IRON_GATE);
     public static final RegistryObject<Block> blockFramedItemFrame = registerBlock(FramedItemFrameBlock::new, BlockType.FRAMED_ITEM_FRAME);
     public static final RegistryObject<Block> blockFramedGlowingItemFrame = registerBlock(FramedItemFrameBlock::new, BlockType.FRAMED_GLOWING_ITEM_FRAME);
     public static final RegistryObject<Block> blockFramedFancyRail = registerBlock(FramedFancyRailBlock::new, BlockType.FRAMED_FANCY_RAIL);
@@ -273,8 +273,7 @@ public final class FBContent
     );
     public static final RegistryObject<BlockEntityType<FramedInverseDoubleSlopeSlabBlockEntity>> blockEntityTypeFramedInverseDoubleSlopeSlab = createBlockEntityType(
             FramedInverseDoubleSlopeSlabBlockEntity::new,
-            "framed_inverse_double_slope_slab",
-            () -> new Block[] { blockFramedInverseDoubleSlopeSlab.get() } //TODO: switch to by-type registration in breaking window
+            BlockType.FRAMED_INV_DOUBLE_SLOPE_SLAB
     );
     public static final RegistryObject<BlockEntityType<FramedElevatedDoubleSlopeSlabBlockEntity>> blockEntityTypeFramedElevatedDoubleSlopeSlab = createBlockEntityType(
             FramedElevatedDoubleSlopeSlabBlockEntity::new,
@@ -298,8 +297,7 @@ public final class FBContent
     );
     public static final RegistryObject<BlockEntityType<FramedInverseDoubleSlopePanelBlockEntity>> blockEntityTypeFramedInverseDoubleSlopePanel = createBlockEntityType(
             FramedInverseDoubleSlopePanelBlockEntity::new,
-            "framed_inverse_double_slope_panel",
-            () -> new Block[] { blockFramedInverseDoubleSlopePanel.get() } //TODO: switch to by-type registration in breaking window
+            BlockType.FRAMED_INV_DOUBLE_SLOPE_PANEL
     );
     public static final RegistryObject<BlockEntityType<FramedExtendedDoubleSlopePanelBlockEntity>> blockEntityTypeFramedExtendedDoubleSlopePanel = createBlockEntityType(
             FramedExtendedDoubleSlopePanelBlockEntity::new,

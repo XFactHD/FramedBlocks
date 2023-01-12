@@ -16,6 +16,12 @@ public class FramedDoubleSlopedPrismBlockEntity extends FramedDoublePrismBlockEn
     @Override
     protected boolean isDoubleSide(Direction side)
     {
-        return side == getBlockState().getValue(PropertyHolder.ORIENTATION);
+        return side == getBlockState().getValue(PropertyHolder.FACING_DIR).orientation();
+    }
+
+    @Override
+    protected Direction getFacing(BlockState state)
+    {
+        return state.getValue(PropertyHolder.FACING_DIR).direction();
     }
 }

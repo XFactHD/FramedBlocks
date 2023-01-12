@@ -10,21 +10,25 @@ import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.phys.Vec3;
 import net.minecraft.world.phys.shapes.*;
+import xfacthd.framedblocks.api.block.FramedProperties;
+import xfacthd.framedblocks.api.predicate.CtmPredicate;
+import xfacthd.framedblocks.api.shapes.ShapeProvider;
 import xfacthd.framedblocks.api.type.IBlockType;
 import xfacthd.framedblocks.api.util.*;
 import xfacthd.framedblocks.common.block.FramedBlock;
 import xfacthd.framedblocks.common.data.BlockType;
+import xfacthd.framedblocks.common.data.PropertyHolder;
+import xfacthd.framedblocks.common.data.property.DirectionAxis;
 
-//TODO: move from two Direction properties to one Direction property and the Rotation property (needs to be adapted to handle y as rotation axis)
-//      to eliminate the possibility of invalid state in 1.19
 public class FramedPrismBlock extends FramedBlock
 {
+    public static final CtmPredicate CTM_PREDICATE = (state, side) ->
+            side == state.getValue(PropertyHolder.FACING_AXIS).direction().getOpposite();
+
     public static final CtmPredicate CTM_PREDICATE_INNER = (state, side) ->
     {
-        Direction facing = state.getValue(BlockStateProperties.FACING);
-        Direction.Axis axis = state.getValue(BlockStateProperties.AXIS);
-
-        return side != facing && side != null && side.getAxis() != axis;
+        DirectionAxis dirAxis = state.getValue(PropertyHolder.FACING_AXIS);
+        return side != dirAxis.direction() && side != null && side.getAxis() != dirAxis.axis();
     };
 
     public FramedPrismBlock(BlockType type) { super(type); }
@@ -32,7 +36,8 @@ public class FramedPrismBlock extends FramedBlock
     @Override
     protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder)
     {
-        builder.add(BlockStateProperties.FACING, BlockStateProperties.AXIS, BlockStateProperties.WATERLOGGED, FramedProperties.SOLID, FramedProperties.GLOWING);
+        super.createBlockStateDefinition(builder);
+        builder.add(PropertyHolder.FACING_AXIS, BlockStateProperties.WATERLOGGED, FramedProperties.SOLID);
     }
 
     @Override
@@ -44,8 +49,6 @@ public class FramedPrismBlock extends FramedBlock
     public static BlockState getStateForPlacement(BlockPlaceContext context, BlockState state, IBlockType blockType)
     {
         Direction face = context.getClickedFace();
-        state = state.setValue(BlockStateProperties.FACING, face);
-
         Direction.Axis axis;
         if (Utils.isY(face))
         {
@@ -67,7 +70,7 @@ public class FramedPrismBlock extends FramedBlock
                 axis = Direction.Axis.Y;
             }
         }
-        state = state.setValue(BlockStateProperties.AXIS, axis);
+        state = state.setValue(PropertyHolder.FACING_AXIS, DirectionAxis.of(face, axis));
 
         if (blockType == BlockType.FRAMED_PRISM)
         {
@@ -80,46 +83,21 @@ public class FramedPrismBlock extends FramedBlock
     @SuppressWarnings("deprecation")
     public BlockState rotate(BlockState state, Rotation rot)
     {
-        if (rot == Rotation.NONE) { return state; }
-
-        Direction dir = state.getValue(BlockStateProperties.FACING);
-        Direction.Axis axis = state.getValue(BlockStateProperties.AXIS);
-
-        if (Utils.isY(dir))
-        {
-            if (rot == Rotation.CLOCKWISE_180)
-            {
-                return state;
-            }
-
-            return state.setValue(
-                    BlockStateProperties.AXIS,
-                    Utils.nextAxisNotEqualTo(axis, dir.getAxis())
-            );
-        }
-        else
-        {
-            if (!axis.isVertical())
-            {
-                state = state.setValue(
-                        BlockStateProperties.AXIS,
-                        Utils.nextAxisNotEqualTo(axis, Direction.Axis.Y)
-                );
-            }
-            return state.setValue(BlockStateProperties.FACING, rot.rotate(dir));
-        }
+        DirectionAxis dirAxis = state.getValue(PropertyHolder.FACING_AXIS);
+        return state.setValue(PropertyHolder.FACING_AXIS, dirAxis.rotate(rot));
     }
 
     @Override
     @SuppressWarnings("deprecation")
     public BlockState mirror(BlockState state, Mirror mirror)
     {
-        return Utils.mirrorFaceBlock(state, BlockStateProperties.FACING, mirror);
+        DirectionAxis dirAxis = state.getValue(PropertyHolder.FACING_AXIS);
+        return state.setValue(PropertyHolder.FACING_AXIS, dirAxis.mirror(mirror));
     }
 
 
 
-    public static ImmutableMap<BlockState, VoxelShape> generateShapes(ImmutableList<BlockState> states)
+    public static ShapeProvider generateShapes(ImmutableList<BlockState> states)
     {
         ImmutableMap.Builder<BlockState, VoxelShape> builder = ImmutableMap.builder();
 
@@ -149,14 +127,9 @@ public class FramedPrismBlock extends FramedBlock
 
         for (BlockState state : states)
         {
-            Direction facing = state.getValue(BlockStateProperties.FACING);
-            Direction.Axis axis = state.getValue(BlockStateProperties.AXIS);
-
-            if (axis == facing.getAxis()) //Invalid combination
-            {
-                builder.put(state, Shapes.block());
-                continue;
-            }
+            DirectionAxis dirAxis = state.getValue(PropertyHolder.FACING_AXIS);
+            Direction facing = dirAxis.direction();
+            Direction.Axis axis = dirAxis.axis();
 
             if (Utils.isY(facing))
             {
@@ -178,10 +151,10 @@ public class FramedPrismBlock extends FramedBlock
             }
         }
 
-        return builder.build();
+        return ShapeProvider.of(builder.build());
     }
 
-    public static ImmutableMap<BlockState, VoxelShape> generateInnerShapes(ImmutableList<BlockState> states)
+    public static ShapeProvider generateInnerShapes(ImmutableList<BlockState> states)
     {
         ImmutableMap.Builder<BlockState, VoxelShape> builder = ImmutableMap.builder();
 
@@ -219,14 +192,9 @@ public class FramedPrismBlock extends FramedBlock
 
         for (BlockState state : states)
         {
-            Direction facing = state.getValue(BlockStateProperties.FACING);
-            Direction.Axis axis = state.getValue(BlockStateProperties.AXIS);
-
-            if (axis == facing.getAxis()) //Invalid combination
-            {
-                builder.put(state, Shapes.block());
-                continue;
-            }
+            DirectionAxis dirAxis = state.getValue(PropertyHolder.FACING_AXIS);
+            Direction facing = dirAxis.direction();
+            Direction.Axis axis = dirAxis.axis();
 
             if (Utils.isY(facing))
             {
@@ -252,6 +220,6 @@ public class FramedPrismBlock extends FramedBlock
             }
         }
 
-        return builder.build();
+        return ShapeProvider.of(builder.build());
     }
 }

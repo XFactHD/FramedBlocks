@@ -24,7 +24,7 @@ import net.minecraftforge.client.model.data.ModelData;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import xfacthd.framedblocks.api.util.FramedConstants;
-import xfacthd.framedblocks.api.util.client.ModelCache;
+import xfacthd.framedblocks.api.model.util.ModelCache;
 
 import java.util.*;
 import java.util.function.Function;

@@ -7,12 +7,13 @@ import com.mojang.math.Vector3f;
 import net.minecraft.core.Direction;
 import net.minecraft.util.Mth;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import xfacthd.framedblocks.api.render.Quaternions;
 import xfacthd.framedblocks.api.util.Utils;
-import xfacthd.framedblocks.api.util.client.OutlineRender;
+import xfacthd.framedblocks.api.render.OutlineRenderer;
+import xfacthd.framedblocks.common.data.PropertyHolder;
+import xfacthd.framedblocks.common.data.property.DirectionAxis;
 
-public class PrismOutlineRenderer implements OutlineRender
+public class PrismOutlineRenderer implements OutlineRenderer
 {
     protected static final Quaternion[] YN_DIR = makeQuaternionArray();
 
@@ -20,14 +21,14 @@ public class PrismOutlineRenderer implements OutlineRender
     public void draw(BlockState state, PoseStack pstack, VertexConsumer builder)
     {
         // Base edges
-        OutlineRender.drawLine(builder, pstack, 0, 0, 0, 0, 0, 1);
-        OutlineRender.drawLine(builder, pstack, 1, 0, 0, 1, 0, 1);
-        OutlineRender.drawLine(builder, pstack, 0, 0, 0, 1, 0, 0);
-        OutlineRender.drawLine(builder, pstack, 0, 0, 1, 1, 0, 1);
+        OutlineRenderer.drawLine(builder, pstack, 0, 0, 0, 0, 0, 1);
+        OutlineRenderer.drawLine(builder, pstack, 1, 0, 0, 1, 0, 1);
+        OutlineRenderer.drawLine(builder, pstack, 0, 0, 0, 1, 0, 0);
+        OutlineRenderer.drawLine(builder, pstack, 0, 0, 1, 1, 0, 1);
 
         // Back triangle
-        OutlineRender.drawLine(builder, pstack, 0, 0, 1, .5F, .5F, 1);
-        OutlineRender.drawLine(builder, pstack, .5F, .5F, 1, 1, 0, 1);
+        OutlineRenderer.drawLine(builder, pstack, 0, 0, 1, .5F, .5F, 1);
+        OutlineRenderer.drawLine(builder, pstack, .5F, .5F, 1, 1, 0, 1);
 
         drawCenterAndTriangle(pstack, builder);
     }
@@ -35,18 +36,19 @@ public class PrismOutlineRenderer implements OutlineRender
     protected void drawCenterAndTriangle(PoseStack pstack, VertexConsumer builder)
     {
         // Center line
-        OutlineRender.drawLine(builder, pstack, .5F, .5F, 0, .5F, .5F, 1);
+        OutlineRenderer.drawLine(builder, pstack, .5F, .5F, 0, .5F, .5F, 1);
 
         // Front triangle
-        OutlineRender.drawLine(builder, pstack, 0, 0, 0, .5F, .5F, 0);
-        OutlineRender.drawLine(builder, pstack, .5F, .5F, 0, 1, 0, 0);
+        OutlineRenderer.drawLine(builder, pstack, 0, 0, 0, .5F, .5F, 0);
+        OutlineRenderer.drawLine(builder, pstack, .5F, .5F, 0, 1, 0, 0);
     }
 
     @Override
     public void rotateMatrix(PoseStack pstack, BlockState state)
     {
-        Direction facing = state.getValue(BlockStateProperties.FACING);
-        Direction.Axis axis = state.getValue(BlockStateProperties.AXIS);
+        DirectionAxis dirAxis = state.getValue(PropertyHolder.FACING_AXIS);
+        Direction facing = dirAxis.direction();
+        Direction.Axis axis = dirAxis.axis();
 
         if (Utils.isY(facing))
         {

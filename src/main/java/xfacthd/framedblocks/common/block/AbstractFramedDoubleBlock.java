@@ -13,8 +13,8 @@ import net.minecraft.world.level.block.*;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraftforge.registries.RegistryObject;
-import xfacthd.framedblocks.api.data.CamoContainer;
-import xfacthd.framedblocks.api.util.FramedProperties;
+import xfacthd.framedblocks.api.camo.CamoContainer;
+import xfacthd.framedblocks.api.block.FramedProperties;
 import xfacthd.framedblocks.common.FBContent;
 import xfacthd.framedblocks.common.block.rail.FramedRailSlopeBlock;
 import xfacthd.framedblocks.common.data.BlockType;
@@ -32,7 +32,8 @@ public abstract class AbstractFramedDoubleBlock extends FramedBlock
     @Override
     protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder)
     {
-        builder.add(FramedProperties.SOLID, FramedProperties.GLOWING);
+        super.createBlockStateDefinition(builder);
+        builder.add(FramedProperties.SOLID);
     }
 
     @Override

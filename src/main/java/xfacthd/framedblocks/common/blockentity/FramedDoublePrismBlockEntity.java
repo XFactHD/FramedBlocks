@@ -4,12 +4,12 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.phys.BlockHitResult;
-import xfacthd.framedblocks.api.data.CamoContainer;
-import xfacthd.framedblocks.api.data.EmptyCamoContainer;
+import xfacthd.framedblocks.api.camo.CamoContainer;
+import xfacthd.framedblocks.api.camo.EmptyCamoContainer;
 import xfacthd.framedblocks.api.util.Utils;
 import xfacthd.framedblocks.common.FBContent;
+import xfacthd.framedblocks.common.data.PropertyHolder;
 import xfacthd.framedblocks.common.util.DoubleSoundMode;
 
 public class FramedDoublePrismBlockEntity extends FramedDoubleBlockEntity
@@ -29,7 +29,7 @@ public class FramedDoublePrismBlockEntity extends FramedDoubleBlockEntity
     {
         Direction side = hit.getDirection();
 
-        Direction facing = getBlockState().getValue(BlockStateProperties.FACING);
+        Direction facing = getFacing(getBlockState());
         if (side == facing) { return true; }
         if (side == facing.getOpposite()) { return false; }
         if (!isDoubleSide(side) && side.getAxis() != facing.getAxis())
@@ -58,7 +58,7 @@ public class FramedDoublePrismBlockEntity extends FramedDoubleBlockEntity
         {
             return DoubleSoundMode.EITHER;
         }
-        else if (getBlockState().getValue(BlockStateProperties.FACING) == Direction.DOWN)
+        else if (getFacing(getBlockState()) == Direction.DOWN)
         {
             return DoubleSoundMode.SECOND;
         }
@@ -68,7 +68,7 @@ public class FramedDoublePrismBlockEntity extends FramedDoubleBlockEntity
     @Override
     public CamoContainer getCamo(Direction side)
     {
-        Direction facing = getBlockState().getValue(BlockStateProperties.FACING);
+        Direction facing = getFacing(getBlockState());
         if (side == facing)
         {
             return getCamoTwo();
@@ -83,7 +83,7 @@ public class FramedDoublePrismBlockEntity extends FramedDoubleBlockEntity
     @Override
     public boolean isSolidSide(Direction side)
     {
-        Direction facing = getBlockState().getValue(BlockStateProperties.FACING);
+        Direction facing = getFacing(getBlockState());
         if (side == facing)
         {
             //noinspection ConstantConditions
@@ -99,6 +99,11 @@ public class FramedDoublePrismBlockEntity extends FramedDoubleBlockEntity
 
     protected boolean isDoubleSide(Direction side)
     {
-        return side.getAxis() == getBlockState().getValue(BlockStateProperties.AXIS);
+        return side.getAxis() == getBlockState().getValue(PropertyHolder.FACING_AXIS).axis();
+    }
+
+    protected Direction getFacing(BlockState state)
+    {
+        return state.getValue(PropertyHolder.FACING_AXIS).direction();
     }
 }

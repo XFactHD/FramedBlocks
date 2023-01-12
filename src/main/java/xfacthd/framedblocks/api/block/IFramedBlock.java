@@ -32,7 +32,9 @@ import net.minecraftforge.common.extensions.IForgeBlock;
 import net.minecraftforge.fml.loading.FMLEnvironment;
 import xfacthd.framedblocks.api.FramedBlocksAPI;
 import xfacthd.framedblocks.api.FramedBlocksClientAPI;
-import xfacthd.framedblocks.api.data.CamoContainer;
+import xfacthd.framedblocks.api.camo.CamoContainer;
+import xfacthd.framedblocks.api.model.data.FramedBlockData;
+import xfacthd.framedblocks.api.predicate.*;
 import xfacthd.framedblocks.api.type.IBlockType;
 import xfacthd.framedblocks.api.util.*;
 
@@ -149,21 +151,10 @@ public interface IFramedBlock extends EntityBlock, IForgeBlock
 
     default int getLight(BlockState state, BlockGetter level, BlockPos pos)
     {
-        //TODO: 1.20: require glowing state on all blocks
-        if (getBlockType().canOccludeWithSolidCamo() && !state.getValue(FramedProperties.GLOWING))
+        if (!state.getValue(FramedProperties.GLOWING))
         {
             return 0;
         }
-        if (level.getBlockEntity(pos) instanceof FramedBlockEntity be)
-        {
-            return be.getLightValue();
-        }
-        return 0;
-    }
-
-    @Deprecated(forRemoval = true, since = "1.19.2")
-    default int getLight(BlockGetter level, BlockPos pos)
-    {
         if (level.getBlockEntity(pos) instanceof FramedBlockEntity be)
         {
             return be.getLightValue();
@@ -458,11 +449,11 @@ public interface IFramedBlock extends EntityBlock, IForgeBlock
             {
                 return false;
             }
+        }
 
-            if (oldState.setValue(FramedProperties.GLOWING, !oldState.getValue(FramedProperties.GLOWING)) == newState)
-            {
-                return false;
-            }
+        if (oldState.setValue(FramedProperties.GLOWING, !oldState.getValue(FramedProperties.GLOWING)) == newState)
+        {
+            return false;
         }
 
         return true;

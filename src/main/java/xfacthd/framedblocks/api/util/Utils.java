@@ -28,14 +28,14 @@ import net.minecraftforge.fml.util.ObfuscationReflectionHelper;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegistryObject;
 import xfacthd.framedblocks.api.block.FramedBlockEntity;
-import xfacthd.framedblocks.api.data.CamoContainer;
-import xfacthd.framedblocks.api.data.EmptyCamoContainer;
-import xfacthd.framedblocks.api.util.client.ClientUtils;
+import xfacthd.framedblocks.api.block.FramedProperties;
+import xfacthd.framedblocks.api.camo.CamoContainer;
+import xfacthd.framedblocks.api.camo.EmptyCamoContainer;
 
 import java.lang.invoke.*;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
-import java.util.function.Consumer;
+import java.util.function.*;
 
 public final class Utils
 {

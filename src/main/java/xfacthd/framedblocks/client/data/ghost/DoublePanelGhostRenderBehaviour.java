@@ -4,7 +4,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.block.state.BlockState;
 import xfacthd.framedblocks.api.ghost.CamoPair;
-import xfacthd.framedblocks.api.util.FramedProperties;
+import xfacthd.framedblocks.api.block.FramedProperties;
 
 public final class DoublePanelGhostRenderBehaviour extends DoubleBlockGhostRenderBehaviour
 {

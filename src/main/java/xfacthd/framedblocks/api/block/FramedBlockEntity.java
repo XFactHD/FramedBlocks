@@ -27,11 +27,12 @@ import net.minecraftforge.fluids.capability.IFluidHandler;
 import net.minecraftforge.registries.ForgeRegistries;
 import org.slf4j.Logger;
 import xfacthd.framedblocks.api.FramedBlocksAPI;
-import xfacthd.framedblocks.api.data.EmptyCamoContainer;
-import xfacthd.framedblocks.api.data.CamoContainer;
+import xfacthd.framedblocks.api.camo.EmptyCamoContainer;
+import xfacthd.framedblocks.api.camo.CamoContainer;
+import xfacthd.framedblocks.api.model.data.FramedBlockData;
 import xfacthd.framedblocks.api.type.IBlockType;
 import xfacthd.framedblocks.api.util.*;
-import xfacthd.framedblocks.api.util.client.ClientUtils;
+import xfacthd.framedblocks.api.util.ClientUtils;
 
 import java.util.List;
 
@@ -356,12 +357,10 @@ public class FramedBlockEntity extends BlockEntity
 
     protected final boolean updateDynamicStates(boolean updateSolid, boolean updateLight)
     {
-        if (!getBlock().getBlockType().canOccludeWithSolidCamo()) { return false; }
-
         BlockState state = getBlockState();
         boolean changed = false;
 
-        if (updateSolid)
+        if (updateSolid && getBlock().getBlockType().canOccludeWithSolidCamo())
         {
             boolean wasSolid = getBlockState().getValue(FramedProperties.SOLID);
             boolean solid = !intangible && isCamoSolid();

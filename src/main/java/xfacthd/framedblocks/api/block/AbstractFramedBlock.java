@@ -1,5 +1,6 @@
 package xfacthd.framedblocks.api.block;
 
+import com.google.common.base.Preconditions;
 import it.unimi.dsi.fastutil.objects.Object2BooleanMap;
 import it.unimi.dsi.fastutil.objects.Object2BooleanOpenHashMap;
 import net.minecraft.core.BlockPos;
@@ -14,6 +15,7 @@ import net.minecraft.world.level.*;
 import net.minecraft.world.level.block.*;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.block.state.properties.Property;
 import net.minecraft.world.level.material.*;
@@ -22,14 +24,11 @@ import net.minecraft.world.phys.*;
 import net.minecraft.world.phys.shapes.*;
 import net.minecraftforge.client.extensions.common.IClientBlockExtensions;
 import net.minecraftforge.common.IPlantable;
-import xfacthd.framedblocks.FramedBlocks;
+import xfacthd.framedblocks.api.shapes.ShapeProvider;
 import xfacthd.framedblocks.api.type.IBlockType;
-import xfacthd.framedblocks.api.util.FramedProperties;
-import xfacthd.framedblocks.api.util.client.FramedBlockRenderProperties;
 
 import javax.annotation.Nullable;
 import java.util.List;
-import java.util.Map;
 import java.util.function.Consumer;
 
 @SuppressWarnings("deprecation")
@@ -37,7 +36,7 @@ public abstract class AbstractFramedBlock extends Block implements IFramedBlock,
 {
     private static final VoxelShape BEACON_BEAM_SHAPE = box(5, 0, 5, 11, 16, 11);
     private final IBlockType blockType;
-    private final Map<BlockState, VoxelShape> shapes;
+    private final ShapeProvider shapes;
     private final Object2BooleanMap<BlockState> beaconBeamOcclusion;
 
     public AbstractFramedBlock(IBlockType blockType, Properties props)
@@ -47,17 +46,24 @@ public abstract class AbstractFramedBlock extends Block implements IFramedBlock,
         this.shapes = blockType.generateShapes(getStateDefinition().getPossibleStates());
         this.beaconBeamOcclusion = computeBeaconBeamOcclusion(shapes);
 
+        registerDefaultState(defaultBlockState().setValue(FramedProperties.GLOWING, false));
+
         if (blockType.canOccludeWithSolidCamo())
         {
             registerDefaultState(defaultBlockState()
                     .setValue(FramedProperties.SOLID, false)
-                    .setValue(FramedProperties.GLOWING, false)
             );
         }
         if (blockType.supportsWaterLogging())
         {
             registerDefaultState(defaultBlockState().setValue(BlockStateProperties.WATERLOGGED, false));
         }
+    }
+
+    @Override
+    protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder)
+    {
+        builder.add(FramedProperties.GLOWING);
     }
 
     @Override
@@ -219,17 +225,11 @@ public abstract class AbstractFramedBlock extends Block implements IFramedBlock,
      */
     protected boolean doesBlockOccludeBeaconBeam(BlockState state, LevelReader level, BlockPos pos)
     {
-        if (beaconBeamOcclusion == null)
-        {
-            FramedBlocks.LOGGER.warn("Block '{}' handles shapes itself but doesn't override AbstractFramedBlock#doesBlockMaskBeaconBeam()", this);
-            return false;
-        }
-        //TODO: switch to precondition in 1.20
-        /*Preconditions.checkNotNull(
-                beamColorMasking,
+        Preconditions.checkNotNull(
+                beaconBeamOcclusion,
                 "Block '%s' handles shapes itself but doesn't override AbstractFramedBlock#doesBlockMaskBeaconBeam()",
                 this
-        );*/
+        );
         return beaconBeamOcclusion.getBoolean(state);
     }
 
@@ -283,7 +283,7 @@ public abstract class AbstractFramedBlock extends Block implements IFramedBlock,
         return state.setValue(BlockStateProperties.WATERLOGGED, fluidState.getType() == Fluids.WATER);
     }
 
-    private static Object2BooleanMap<BlockState> computeBeaconBeamOcclusion(Map<BlockState, VoxelShape> shapes)
+    private static Object2BooleanMap<BlockState> computeBeaconBeamOcclusion(ShapeProvider shapes)
     {
         if (shapes.isEmpty())
         {

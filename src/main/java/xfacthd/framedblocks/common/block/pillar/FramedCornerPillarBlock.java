@@ -10,7 +10,8 @@ import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.phys.Vec3;
 import net.minecraft.world.phys.shapes.VoxelShape;
-import xfacthd.framedblocks.api.util.FramedProperties;
+import xfacthd.framedblocks.api.block.FramedProperties;
+import xfacthd.framedblocks.api.shapes.ShapeProvider;
 import xfacthd.framedblocks.common.block.FramedBlock;
 import xfacthd.framedblocks.common.data.BlockType;
 import xfacthd.framedblocks.api.util.Utils;
@@ -25,6 +26,7 @@ public class FramedCornerPillarBlock extends FramedBlock
     @Override
     protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder)
     {
+        super.createBlockStateDefinition(builder);
         builder.add(FramedProperties.FACING_HOR, BlockStateProperties.WATERLOGGED);
     }
 
@@ -77,7 +79,7 @@ public class FramedCornerPillarBlock extends FramedBlock
 
 
 
-    public static ImmutableMap<BlockState, VoxelShape> generateShapes(ImmutableList<BlockState> states)
+    public static ShapeProvider generateShapes(ImmutableList<BlockState> states)
     {
         VoxelShape shape = box(0, 0, 0, 8, 16, 8);
 
@@ -89,6 +91,6 @@ public class FramedCornerPillarBlock extends FramedBlock
             builder.put(state, Utils.rotateShape(Direction.NORTH, dir, shape));
         }
 
-        return builder.build();
+        return ShapeProvider.of(builder.build());
     }
 }

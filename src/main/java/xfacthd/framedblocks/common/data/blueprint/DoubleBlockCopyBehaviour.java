@@ -3,7 +3,7 @@ package xfacthd.framedblocks.common.data.blueprint;
 import it.unimi.dsi.fastutil.objects.ObjectArraySet;
 import net.minecraft.nbt.CompoundTag;
 import xfacthd.framedblocks.api.blueprint.BlueprintCopyBehaviour;
-import xfacthd.framedblocks.api.data.CamoContainer;
+import xfacthd.framedblocks.api.camo.CamoContainer;
 
 import java.util.*;
 

@@ -14,7 +14,7 @@ import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.util.FormattedCharSequence;
 import com.mojang.math.Vector3f;
 import net.minecraft.world.phys.Vec3;
-import xfacthd.framedblocks.api.util.FramedProperties;
+import xfacthd.framedblocks.api.block.FramedProperties;
 import xfacthd.framedblocks.common.block.interactive.FramedSignBlock;
 import xfacthd.framedblocks.common.blockentity.FramedSignBlockEntity;
 

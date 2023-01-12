@@ -12,6 +12,9 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.phys.shapes.VoxelShape;
+import xfacthd.framedblocks.api.block.FramedProperties;
+import xfacthd.framedblocks.api.predicate.CtmPredicate;
+import xfacthd.framedblocks.api.shapes.ShapeProvider;
 import xfacthd.framedblocks.api.util.*;
 import xfacthd.framedblocks.common.FBContent;
 import xfacthd.framedblocks.common.block.AbstractFramedDoubleBlock;
@@ -44,10 +47,8 @@ public class FramedFlatDoubleSlopePanelCornerBlock extends AbstractFramedDoubleB
     @Override
     protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder)
     {
-        builder.add(
-                FramedProperties.FACING_HOR, PropertyHolder.ROTATION, PropertyHolder.FRONT,
-                FramedProperties.SOLID, FramedProperties.GLOWING, BlockStateProperties.WATERLOGGED
-        );
+        super.createBlockStateDefinition(builder);
+        builder.add(FramedProperties.FACING_HOR, PropertyHolder.ROTATION, PropertyHolder.FRONT, BlockStateProperties.WATERLOGGED);
     }
 
     @Override
@@ -120,7 +121,7 @@ public class FramedFlatDoubleSlopePanelCornerBlock extends AbstractFramedDoubleB
 
 
 
-    public static ImmutableMap<BlockState, VoxelShape> generateShapes(ImmutableList<BlockState> states)
+    public static ShapeProvider generateShapes(ImmutableList<BlockState> states)
     {
         ImmutableMap.Builder<BlockState, VoxelShape> builder = ImmutableMap.builder();
 
@@ -136,6 +137,6 @@ public class FramedFlatDoubleSlopePanelCornerBlock extends AbstractFramedDoubleB
             builder.put(state, Utils.rotateShape(Direction.NORTH, dir, shape));
         }
 
-        return builder.build();
+        return ShapeProvider.of(builder.build());
     }
 }

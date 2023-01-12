@@ -10,8 +10,9 @@ import net.minecraft.world.level.block.state.properties.*;
 import net.minecraftforge.client.model.generators.*;
 import net.minecraftforge.common.data.ExistingFileHelper;
 import net.minecraftforge.registries.RegistryObject;
+import xfacthd.framedblocks.api.block.FramedProperties;
 import xfacthd.framedblocks.api.util.*;
-import xfacthd.framedblocks.api.util.client.ClientUtils;
+import xfacthd.framedblocks.api.util.ClientUtils;
 import xfacthd.framedblocks.client.loader.overlay.OverlayLoaderBuilder;
 import xfacthd.framedblocks.client.model.cube.FramedMarkedCubeModel;
 import xfacthd.framedblocks.client.model.cube.FramedTargetModel;
@@ -124,7 +125,7 @@ public final class FramedBlockStateProvider extends BlockStateProvider
         registerFramedStairs(cube);
         registerFramedWall(cube);
         registerFramedFence(cube);
-        registerFramedGate(cube);
+        registerFramedFenceGate(cube);
         registerFramedDoor(cube);
         registerFramedIronDoor();
         registerFramedTrapDoor(cube);
@@ -199,10 +200,10 @@ public final class FramedBlockStateProvider extends BlockStateProvider
                 .renderType("cutout");
     }
 
-    private void registerFramedGate(ModelFile cube)
+    private void registerFramedFenceGate(ModelFile cube)
     {
         simpleBlock(FBContent.blockFramedFenceGate.get(), cube);
-        itemModels().fenceGate("framed_gate", TEXTURE).renderType("cutout");
+        itemModels().fenceGate("framed_fence_gate", TEXTURE).renderType("cutout");
     }
 
     private void registerFramedDoor(ModelFile cube)

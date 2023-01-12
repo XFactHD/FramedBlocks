@@ -9,8 +9,8 @@ import net.minecraftforge.client.model.data.ModelData;
 import xfacthd.framedblocks.api.FramedBlocksClientAPI;
 import xfacthd.framedblocks.api.ghost.GhostRenderBehaviour;
 import xfacthd.framedblocks.api.type.IBlockType;
-import xfacthd.framedblocks.api.util.ConTexMode;
-import xfacthd.framedblocks.api.util.client.OutlineRender;
+import xfacthd.framedblocks.api.predicate.ConTexMode;
+import xfacthd.framedblocks.api.render.OutlineRenderer;
 import xfacthd.framedblocks.client.model.FluidModel;
 import xfacthd.framedblocks.client.render.BlockOutlineRenderer;
 import xfacthd.framedblocks.client.render.GhostBlockRenderer;
@@ -26,7 +26,7 @@ public final class ClientApiImpl implements FramedBlocksClientAPI
     public BakedModel createFluidModel(Fluid fluid) { return FluidModel.create(fluid); }
 
     @Override
-    public void registerOutlineRender(IBlockType type, OutlineRender render)
+    public void registerOutlineRender(IBlockType type, OutlineRenderer render)
     {
         BlockOutlineRenderer.registerOutlineRender(type, render);
     }

@@ -2,11 +2,13 @@ package xfacthd.framedblocks.common.data;
 
 import com.google.common.base.Preconditions;
 import com.google.common.collect.ImmutableList;
-import com.google.common.collect.ImmutableMap;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.shapes.*;
+import xfacthd.framedblocks.api.predicate.CtmPredicate;
+import xfacthd.framedblocks.api.predicate.SideSkipPredicate;
+import xfacthd.framedblocks.api.shapes.ShapeProvider;
+import xfacthd.framedblocks.api.shapes.ShapeGenerator;
 import xfacthd.framedblocks.api.type.IBlockType;
-import xfacthd.framedblocks.api.util.*;
 import xfacthd.framedblocks.common.block.cube.*;
 import xfacthd.framedblocks.common.block.door.*;
 import xfacthd.framedblocks.common.block.interactive.*;
@@ -50,7 +52,7 @@ public enum BlockType implements IBlockType
     FRAMED_STAIRS                                   ( true, false, false,  true,  true,  true, false,  true, FramedStairsBlock.CTM_PREDICATE, new StairsSkipPredicate()),
     FRAMED_WALL                                     (false, false, false,  true,  true, false, false,  true, CtmPredicate.FALSE, new WallSkipPredicate()),
     FRAMED_FENCE                                    (false, false, false,  true,  true, false, false,  true, CtmPredicate.FALSE, new FenceSkipPredicate()),
-    FRAMED_GATE                                     (false, false, false,  true,  true, false, false, false, CtmPredicate.FALSE, new FenceGateSkipPredicate()), //TODO: rename to FRAMED_FENCE_GATE in 1.20
+    FRAMED_FENCE_GATE                               (false, false, false,  true,  true, false, false, false, CtmPredicate.FALSE, new FenceGateSkipPredicate()),
     FRAMED_DOOR                                     ( true, false, false, false,  true, false, false, false, FramedDoorBlock.CTM_PREDICATE, new DoorSkipPredicate()),
     FRAMED_IRON_DOOR                                ( true, false, false, false,  true, false, false, false, FramedDoorBlock.CTM_PREDICATE, new DoorSkipPredicate()),
     FRAMED_TRAPDOOR                                 ( true, false, false,  true,  true, false, false, false, FramedTrapDoorBlock.CTM_PREDICATE, new TrapdoorSkipPredicate()),
@@ -102,10 +104,10 @@ public enum BlockType implements IBlockType
     FRAMED_BOUNCY_CUBE                              ( true, false, false, false,  true, false, false, false, CtmPredicate.TRUE, SideSkipPredicate.CTM, Shapes.block()),
     FRAMED_SECRET_STORAGE                           ( true, false,  true, false,  true, false, false, false, CtmPredicate.TRUE, SideSkipPredicate.CTM, Shapes.block()),
     FRAMED_REDSTONE_BLOCK                           ( true, false, false, false,  true,  true, false, false, CtmPredicate.TRUE, SideSkipPredicate.CTM, Shapes.block()),
-    FRAMED_PRISM                                    ( true,  true, false,  true,  true,  true, false, false, CtmPredicate.DIR_OPPOSITE, new PrismSkipPredicate(), FramedPrismBlock::generateShapes),
+    FRAMED_PRISM                                    ( true,  true, false,  true,  true,  true, false, false, FramedPrismBlock.CTM_PREDICATE, new PrismSkipPredicate(), FramedPrismBlock::generateShapes),
     FRAMED_INNER_PRISM                              ( true,  true, false,  true,  true,  true, false, false, FramedPrismBlock.CTM_PREDICATE_INNER, new InnerPrismSkipPredicate(), FramedPrismBlock::generateInnerShapes),
     FRAMED_DOUBLE_PRISM                             ( true, false,  true, false,  true,  true,  true, false, FramedDoublePrismBlock.CTM_PREDICATE, Shapes.block()),
-    FRAMED_SLOPED_PRISM                             ( true,  true, false,  true,  true,  true, false, false, CtmPredicate.DIR_OPPOSITE, new SlopedPrismSkipPredicate(), FramedSlopedPrismBlock::generateShapes),
+    FRAMED_SLOPED_PRISM                             ( true,  true, false,  true,  true,  true, false, false, FramedSlopedPrismBlock.CTM_PREDICATE, new SlopedPrismSkipPredicate(), FramedSlopedPrismBlock::generateShapes),
     FRAMED_INNER_SLOPED_PRISM                       ( true,  true, false,  true,  true,  true, false, false, FramedSlopedPrismBlock.CTM_PREDICATE_INNER, new InnerSlopedPrismSkipPredicate(), FramedSlopedPrismBlock::generateInnerShapes),
     FRAMED_DOUBLE_SLOPED_PRISM                      ( true, false,  true, false,  true,  true,  true, false, FramedDoubleSlopedPrismBlock.CTM_PREDICATE, Shapes.block()),
     FRAMED_SLOPE_SLAB                               ( true,  true, false,  true,  true,  true, false, false, FramedSlopeSlabBlock.CTM_PREDICATE, new SlopeSlabSkipPredicate(), FramedSlopeSlabBlock::generateShapes),
@@ -145,8 +147,8 @@ public enum BlockType implements IBlockType
     FRAMED_LARGE_STONE_BUTTON                       (false, false, false, false,  true, false, false, false),
     FRAMED_HORIZONTAL_PANE                          ( true, false, false,  true,  true,  true, false, false, CtmPredicate.FALSE, new HorizontalPaneSkipPredicate(), Shapes.box(0, 7D/16D, 0, 1, 9D/16D, 1)),
     FRAMED_TARGET                                   ( true, false,  true, false,  true,  true, false, false, CtmPredicate.TRUE, SideSkipPredicate.CTM, Shapes.block()),
-    FRAMED_GATE_DOOR                                ( true, false, false, false,  true, false, false, false, FramedDoorBlock.CTM_PREDICATE, new GateSkipPredicate()), //TODO: rename to FRAMED_GATE in 1.20
-    FRAMED_IRON_GATE_DOOR                           ( true, false, false, false,  true, false, false, false, FramedDoorBlock.CTM_PREDICATE, new GateSkipPredicate()), //TODO: rename to FRAMED_IRON_GATE in 1.20
+    FRAMED_GATE                                     ( true, false, false, false,  true, false, false, false, FramedDoorBlock.CTM_PREDICATE, new GateSkipPredicate()),
+    FRAMED_IRON_GATE                                ( true, false, false, false,  true, false, false, false, FramedDoorBlock.CTM_PREDICATE, new GateSkipPredicate()),
     FRAMED_ITEM_FRAME                               (false,  true,  true, false,  true, false, false, false, FramedItemFrameBlock::generateShapes),
     FRAMED_GLOWING_ITEM_FRAME                       (false,  true,  true, false,  true, false, false, false, FramedItemFrameBlock::generateShapes),
     FRAMED_FANCY_RAIL                               (false, false, false,  true,  true, false, false, false, CtmPredicate.FALSE, SideSkipPredicate.FALSE),
@@ -177,11 +179,11 @@ public enum BlockType implements IBlockType
     private final boolean lockable;
     private final CtmPredicate ctmPredicate;
     private final SideSkipPredicate skipPredicate;
-    private final VoxelShapeGenerator shapeGen;
+    private final ShapeGenerator shapeGen;
 
     BlockType(boolean canOcclude, boolean specialHitbox, boolean specialTile, boolean waterloggable, boolean blockItem, boolean allowIntangible, boolean doubleBlock, boolean lockable)
     {
-        this(canOcclude, specialHitbox, specialTile, waterloggable, blockItem, allowIntangible, doubleBlock, lockable, CtmPredicate.FALSE, SideSkipPredicate.FALSE, VoxelShapeGenerator.EMTPTY);
+        this(canOcclude, specialHitbox, specialTile, waterloggable, blockItem, allowIntangible, doubleBlock, lockable, CtmPredicate.FALSE, SideSkipPredicate.FALSE, ShapeGenerator.EMPTY);
     }
 
     BlockType(boolean canOcclude, boolean specialHitbox, boolean specialTile, boolean waterloggable, boolean blockItem, boolean allowIntangible, boolean doubleBlock, boolean lockable, VoxelShape shape)
@@ -189,7 +191,7 @@ public enum BlockType implements IBlockType
         this(canOcclude, specialHitbox, specialTile, waterloggable, blockItem, allowIntangible, doubleBlock, lockable, CtmPredicate.FALSE, SideSkipPredicate.FALSE, shape);
     }
 
-    BlockType(boolean canOcclude, boolean specialHitbox, boolean specialTile, boolean waterloggable, boolean blockItem, boolean allowIntangible, boolean doubleBlock, boolean lockable, VoxelShapeGenerator shapeGen)
+    BlockType(boolean canOcclude, boolean specialHitbox, boolean specialTile, boolean waterloggable, boolean blockItem, boolean allowIntangible, boolean doubleBlock, boolean lockable, ShapeGenerator shapeGen)
     {
         this(canOcclude, specialHitbox, specialTile, waterloggable, blockItem, allowIntangible, doubleBlock, lockable, CtmPredicate.FALSE, SideSkipPredicate.FALSE, shapeGen);
     }
@@ -199,23 +201,23 @@ public enum BlockType implements IBlockType
         this(canOcclude, specialHitbox, specialTile, waterloggable, blockItem, allowIntangible, doubleBlock, lockable, ctmPredicate, SideSkipPredicate.FALSE, shape);
     }
 
-    BlockType(boolean canOcclude, boolean specialHitbox, boolean specialTile, boolean waterloggable, boolean blockItem, boolean allowIntangible, boolean doubleBlock, boolean lockable, CtmPredicate ctmPredicate, VoxelShapeGenerator shapeGen)
+    BlockType(boolean canOcclude, boolean specialHitbox, boolean specialTile, boolean waterloggable, boolean blockItem, boolean allowIntangible, boolean doubleBlock, boolean lockable, CtmPredicate ctmPredicate, ShapeGenerator shapeGen)
     {
         this(canOcclude, specialHitbox, specialTile, waterloggable, blockItem, allowIntangible, doubleBlock, lockable, ctmPredicate, SideSkipPredicate.FALSE, shapeGen);
     }
 
     BlockType(boolean canOcclude, boolean specialHitbox, boolean specialTile, boolean waterloggable, boolean blockItem, boolean allowIntangible, boolean doubleBlock, boolean lockable, CtmPredicate ctmPredicate, SideSkipPredicate skipPredicate)
     {
-        this(canOcclude, specialHitbox, specialTile, waterloggable, blockItem, allowIntangible, doubleBlock, lockable, ctmPredicate, skipPredicate, VoxelShapeGenerator.EMTPTY);
+        this(canOcclude, specialHitbox, specialTile, waterloggable, blockItem, allowIntangible, doubleBlock, lockable, ctmPredicate, skipPredicate, ShapeGenerator.EMPTY);
     }
 
     BlockType(boolean canOcclude, boolean specialHitbox, boolean specialTile, boolean waterloggable, boolean blockItem, boolean allowIntangible, boolean doubleBlock, boolean lockable, CtmPredicate ctmPredicate, SideSkipPredicate skipPredicate, VoxelShape shape)
     {
-        this(canOcclude, specialHitbox, specialTile, waterloggable, blockItem, allowIntangible, doubleBlock, lockable, ctmPredicate, skipPredicate, VoxelShapeGenerator.singleShape(shape));
+        this(canOcclude, specialHitbox, specialTile, waterloggable, blockItem, allowIntangible, doubleBlock, lockable, ctmPredicate, skipPredicate, ShapeGenerator.singleShape(shape));
         Preconditions.checkArgument(!waterloggable || !Shapes.join(shape, Shapes.block(), BooleanOp.NOT_SAME).isEmpty(), "Blocks with full cube shape can't be waterloggable");
     }
 
-    BlockType(boolean canOcclude, boolean specialHitbox, boolean specialTile, boolean waterloggable, boolean blockItem, boolean allowIntangible, boolean doubleBlock, boolean lockable, CtmPredicate ctmPredicate, SideSkipPredicate skipPredicate, VoxelShapeGenerator shapeGen)
+    BlockType(boolean canOcclude, boolean specialHitbox, boolean specialTile, boolean waterloggable, boolean blockItem, boolean allowIntangible, boolean doubleBlock, boolean lockable, CtmPredicate ctmPredicate, SideSkipPredicate skipPredicate, ShapeGenerator shapeGen)
     {
         this.canOcclude = canOcclude;
         this.specialHitbox = specialHitbox;
@@ -243,7 +245,7 @@ public enum BlockType implements IBlockType
     public SideSkipPredicate getSideSkipPredicate() { return skipPredicate; }
 
     @Override
-    public ImmutableMap<BlockState, VoxelShape> generateShapes(ImmutableList<BlockState> states)
+    public ShapeProvider generateShapes(ImmutableList<BlockState> states)
     {
         return shapeGen.generate(states);
     }

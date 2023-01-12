@@ -9,16 +9,15 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.*;
-import net.minecraft.world.level.block.FenceGateBlock;
-import net.minecraft.world.level.block.SoundType;
+import net.minecraft.world.level.block.*;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.material.MaterialColor;
 import net.minecraft.world.level.storage.loot.LootContext;
 import net.minecraft.world.phys.BlockHitResult;
-import xfacthd.framedblocks.api.block.IFramedBlock;
+import xfacthd.framedblocks.api.block.*;
 import xfacthd.framedblocks.common.data.BlockType;
-import xfacthd.framedblocks.api.block.FramedBlockEntity;
 
 import javax.annotation.Nullable;
 import java.util.List;
@@ -26,7 +25,18 @@ import java.util.List;
 @SuppressWarnings("deprecation")
 public class FramedFenceGateBlock extends FenceGateBlock implements IFramedBlock
 {
-    public FramedFenceGateBlock() { super(IFramedBlock.createProperties(BlockType.FRAMED_GATE)); }
+    public FramedFenceGateBlock()
+    {
+        super(IFramedBlock.createProperties(BlockType.FRAMED_FENCE_GATE));
+        registerDefaultState(defaultBlockState().setValue(FramedProperties.GLOWING, false));
+    }
+
+    @Override
+    protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder)
+    {
+        super.createBlockStateDefinition(builder);
+        builder.add(FramedProperties.GLOWING);
+    }
 
     @Override
     public final InteractionResult use(BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hit)
@@ -109,5 +119,5 @@ public class FramedFenceGateBlock extends FenceGateBlock implements IFramedBlock
     public final BlockEntity newBlockEntity(BlockPos pos, BlockState state) { return new FramedBlockEntity(pos, state); }
 
     @Override
-    public BlockType getBlockType() { return BlockType.FRAMED_GATE; }
+    public BlockType getBlockType() { return BlockType.FRAMED_FENCE_GATE; }
 }

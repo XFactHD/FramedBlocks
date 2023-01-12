@@ -6,7 +6,9 @@ import net.minecraft.util.Tuple;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.*;
+import xfacthd.framedblocks.api.block.FramedProperties;
 import xfacthd.framedblocks.api.block.IFramedBlock;
+import xfacthd.framedblocks.api.predicate.SideSkipPredicate;
 import xfacthd.framedblocks.api.util.*;
 import xfacthd.framedblocks.common.block.AbstractFramedDoubleBlock;
 import xfacthd.framedblocks.common.data.*;
@@ -334,11 +336,6 @@ public final class CornerPillarSkipPredicate implements SideSkipPredicate
     }
 
 
-
-    public static boolean isPanelSide(Direction dir, Direction side)
-    {
-        return side == dir || side == dir.getCounterClockWise();
-    }
 
     public static HalfDir getHalfDir(Direction dir, Direction side)
     {

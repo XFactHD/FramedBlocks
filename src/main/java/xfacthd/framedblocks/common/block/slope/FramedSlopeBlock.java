@@ -18,8 +18,11 @@ import net.minecraft.core.Direction;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import net.minecraft.world.phys.shapes.Shapes;
-import xfacthd.framedblocks.api.data.CamoContainer;
-import xfacthd.framedblocks.api.data.EmptyCamoContainer;
+import xfacthd.framedblocks.api.block.FramedProperties;
+import xfacthd.framedblocks.api.camo.CamoContainer;
+import xfacthd.framedblocks.api.camo.EmptyCamoContainer;
+import xfacthd.framedblocks.api.predicate.CtmPredicate;
+import xfacthd.framedblocks.api.shapes.ShapeProvider;
 import xfacthd.framedblocks.api.util.*;
 import xfacthd.framedblocks.api.block.FramedBlockEntity;
 import xfacthd.framedblocks.common.block.FramedBlock;
@@ -54,7 +57,8 @@ public class FramedSlopeBlock extends FramedBlock
     @Override
     protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder)
     {
-        builder.add(FramedProperties.FACING_HOR, PropertyHolder.SLOPE_TYPE, BlockStateProperties.WATERLOGGED, FramedProperties.SOLID, FramedProperties.GLOWING);
+        super.createBlockStateDefinition(builder);
+        builder.add(FramedProperties.FACING_HOR, PropertyHolder.SLOPE_TYPE, BlockStateProperties.WATERLOGGED, FramedProperties.SOLID);
     }
 
     @Override
@@ -184,7 +188,7 @@ public class FramedSlopeBlock extends FramedBlock
             box(15.5, 0, 0,   16, 16,   .5)
     ).optimize();
 
-    public static ImmutableMap<BlockState, VoxelShape> generateShapes(ImmutableList<BlockState> states)
+    public static ShapeProvider generateShapes(ImmutableList<BlockState> states)
     {
         ImmutableMap.Builder<BlockState, VoxelShape> builder = ImmutableMap.builder();
 
@@ -207,6 +211,6 @@ public class FramedSlopeBlock extends FramedBlock
             }
         }
 
-        return builder.build();
+        return ShapeProvider.of(builder.build());
     }
 }

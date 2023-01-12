@@ -14,6 +14,8 @@ import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.phys.Vec3;
 import net.minecraft.world.phys.shapes.VoxelShape;
+import xfacthd.framedblocks.api.block.FramedProperties;
+import xfacthd.framedblocks.api.shapes.ShapeProvider;
 import xfacthd.framedblocks.api.util.*;
 import xfacthd.framedblocks.common.block.FramedBlock;
 import xfacthd.framedblocks.common.data.BlockType;
@@ -30,7 +32,8 @@ public class FramedFloorBlock extends FramedBlock
     @Override
     protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder)
     {
-        builder.add(FramedProperties.TOP, BlockStateProperties.WATERLOGGED, FramedProperties.SOLID, FramedProperties.GLOWING);
+        super.createBlockStateDefinition(builder);
+        builder.add(FramedProperties.TOP, BlockStateProperties.WATERLOGGED, FramedProperties.SOLID);
     }
 
     @Override
@@ -70,7 +73,7 @@ public class FramedFloorBlock extends FramedBlock
 
 
 
-    public static ImmutableMap<BlockState, VoxelShape> generateShapes(ImmutableList<BlockState> states)
+    public static ShapeProvider generateShapes(ImmutableList<BlockState> states)
     {
         VoxelShape shapeBottom = box(0, 0, 0, 16, 1, 16);
         VoxelShape shapeTop = box(0, 15, 0, 16, 16, 16);
@@ -83,6 +86,6 @@ public class FramedFloorBlock extends FramedBlock
             builder.put(state, top ? shapeTop : shapeBottom);
         }
 
-        return builder.build();
+        return ShapeProvider.of(builder.build());
     }
 }

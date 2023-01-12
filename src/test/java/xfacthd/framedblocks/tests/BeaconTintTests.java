@@ -14,10 +14,12 @@ import net.minecraftforge.registries.ForgeRegistries;
 import xfacthd.framedblocks.api.block.IFramedBlock;
 import xfacthd.framedblocks.api.type.IBlockType;
 import xfacthd.framedblocks.api.util.FramedConstants;
-import xfacthd.framedblocks.api.util.FramedProperties;
-import xfacthd.framedblocks.api.util.test.TestUtils;
+import xfacthd.framedblocks.api.block.FramedProperties;
+import xfacthd.framedblocks.api.test.TestUtils;
 import xfacthd.framedblocks.common.data.BlockType;
 import xfacthd.framedblocks.common.data.PropertyHolder;
+import xfacthd.framedblocks.common.data.property.CompoundDirection;
+import xfacthd.framedblocks.common.data.property.DirectionAxis;
 
 import java.util.*;
 
@@ -34,7 +36,7 @@ public final class BeaconTintTests
             BlockType.FRAMED_PANEL,
             BlockType.FRAMED_CORNER_PILLAR,
             BlockType.FRAMED_FENCE,
-            BlockType.FRAMED_GATE,
+            BlockType.FRAMED_FENCE_GATE,
             BlockType.FRAMED_DOOR,
             BlockType.FRAMED_IRON_DOOR,
             BlockType.FRAMED_LADDER,
@@ -63,8 +65,8 @@ public final class BeaconTintTests
             BlockType.FRAMED_FLAT_DOUBLE_SLOPE_PANEL_CORNER,
             BlockType.FRAMED_FLAT_INV_DOUBLE_SLOPE_PANEL_CORNER,
             BlockType.FRAMED_WALL_BOARD,
-            BlockType.FRAMED_GATE_DOOR,
-            BlockType.FRAMED_IRON_GATE_DOOR,
+            BlockType.FRAMED_GATE,
+            BlockType.FRAMED_IRON_GATE,
             BlockType.FRAMED_ITEM_FRAME,
             BlockType.FRAMED_GLOWING_ITEM_FRAME,
             BlockType.FRAMED_FANCY_RAIL,
@@ -108,8 +110,8 @@ public final class BeaconTintTests
             {
                 case FRAMED_PILLAR -> state.setValue(BlockStateProperties.AXIS, Direction.Axis.Y);
                 case FRAMED_HALF_PILLAR -> state.setValue(BlockStateProperties.FACING, Direction.DOWN);
-                case FRAMED_PRISM -> state.setValue(BlockStateProperties.FACING, Direction.UP);
-                case FRAMED_SLOPED_PRISM -> state.setValue(BlockStateProperties.FACING, Direction.UP).setValue(PropertyHolder.ORIENTATION, Direction.NORTH);
+                case FRAMED_PRISM -> state.setValue(PropertyHolder.FACING_AXIS, DirectionAxis.UP_X);
+                case FRAMED_SLOPED_PRISM -> state.setValue(PropertyHolder.FACING_DIR, CompoundDirection.UP_NORTH);
                 case FRAMED_DOUBLE_STAIRS, FRAMED_VERTICAL_DOUBLE_STAIRS -> state.setValue(FramedProperties.FACING_HOR, Direction.SOUTH);
                 case FRAMED_LARGE_BUTTON, FRAMED_LARGE_STONE_BUTTON -> state.setValue(BlockStateProperties.ATTACH_FACE, AttachFace.FLOOR);
                 default -> state;

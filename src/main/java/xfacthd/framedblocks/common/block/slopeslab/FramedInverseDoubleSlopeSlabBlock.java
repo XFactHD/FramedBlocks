@@ -13,7 +13,8 @@ import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
-import xfacthd.framedblocks.api.util.FramedProperties;
+import xfacthd.framedblocks.api.block.FramedProperties;
+import xfacthd.framedblocks.api.shapes.ShapeProvider;
 import xfacthd.framedblocks.api.util.Utils;
 import xfacthd.framedblocks.common.FBContent;
 import xfacthd.framedblocks.common.block.AbstractFramedDoubleBlock;
@@ -80,7 +81,7 @@ public class FramedInverseDoubleSlopeSlabBlock extends AbstractFramedDoubleBlock
 
 
 
-    public static ImmutableMap<BlockState, VoxelShape> generateShapes(ImmutableList<BlockState> states)
+    public static ShapeProvider generateShapes(ImmutableList<BlockState> states)
     {
         VoxelShape shape = Shapes.or(
                 FramedSlopeSlabBlock.SHAPE_BOTTOM.move(0, .5, 0),
@@ -98,6 +99,6 @@ public class FramedInverseDoubleSlopeSlabBlock extends AbstractFramedDoubleBlock
             );
         }
 
-        return builder.build();
+        return ShapeProvider.of(builder.build());
     }
 }

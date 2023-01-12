@@ -6,13 +6,13 @@ import net.minecraft.client.renderer.block.model.ItemTransforms;
 import net.minecraft.client.resources.model.BakedModel;
 import net.minecraft.core.Direction;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import xfacthd.framedblocks.api.model.FramedBlockModel;
 import xfacthd.framedblocks.api.model.quad.Modifiers;
 import xfacthd.framedblocks.api.model.quad.QuadModifier;
 import xfacthd.framedblocks.api.util.Utils;
 import xfacthd.framedblocks.common.FBContent;
 import xfacthd.framedblocks.common.data.PropertyHolder;
+import xfacthd.framedblocks.common.data.property.CompoundDirection;
 
 import java.util.List;
 import java.util.Map;
@@ -25,20 +25,15 @@ public class FramedSlopedPrismModel extends FramedBlockModel
     public FramedSlopedPrismModel(BlockState state, BakedModel baseModel)
     {
         super(state, baseModel);
-        this.facing = state.getValue(BlockStateProperties.FACING);
-        this.orientation = state.getValue(PropertyHolder.ORIENTATION);
+        CompoundDirection cmpDir = state.getValue(PropertyHolder.FACING_DIR);
+        this.facing = cmpDir.direction();
+        this.orientation = cmpDir.orientation();
     }
 
     @Override
     protected void transformQuad(Map<Direction, List<BakedQuad>> quadMap, BakedQuad quad)
     {
         Direction quadFace = quad.getDirection();
-        if (isStateInvalid())
-        {
-            quadMap.get(quadFace).add(quad);
-            return;
-        }
-
         if (quadFace == orientation.getOpposite() && !Utils.isY(orientation))
         {
             if (Utils.isY(facing))
@@ -125,8 +120,6 @@ public class FramedSlopedPrismModel extends FramedBlockModel
         }
     }
 
-    private boolean isStateInvalid() { return orientation.getAxis() == facing.getAxis(); }
-
     @Override
     protected void applyInHandTransformation(PoseStack poseStack, ItemTransforms.TransformType type)
     {
@@ -138,7 +131,6 @@ public class FramedSlopedPrismModel extends FramedBlockModel
     public static BlockState itemSource()
     {
         return FBContent.blockFramedSlopedPrism.get().defaultBlockState()
-                .setValue(BlockStateProperties.FACING, Direction.UP)
-                .setValue(PropertyHolder.ORIENTATION, Direction.WEST);
+                .setValue(PropertyHolder.FACING_DIR, CompoundDirection.UP_WEST);
     }
 }

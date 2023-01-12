@@ -13,7 +13,8 @@ import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import xfacthd.framedblocks.api.block.IFramedBlock;
-import xfacthd.framedblocks.api.util.FramedProperties;
+import xfacthd.framedblocks.api.block.FramedProperties;
+import xfacthd.framedblocks.api.shapes.ShapeProvider;
 import xfacthd.framedblocks.common.block.AbstractFramedSignBlock;
 import xfacthd.framedblocks.common.data.BlockType;
 
@@ -28,6 +29,7 @@ public class FramedWallSignBlock extends AbstractFramedSignBlock
     @Override
     protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder)
     {
+        super.createBlockStateDefinition(builder);
         builder.add(FramedProperties.FACING_HOR, BlockStateProperties.WATERLOGGED);
     }
 
@@ -88,7 +90,7 @@ public class FramedWallSignBlock extends AbstractFramedSignBlock
 
 
 
-    public static ImmutableMap<BlockState, VoxelShape> generateShapes(ImmutableList<BlockState> states)
+    public static ShapeProvider generateShapes(ImmutableList<BlockState> states)
     {
         ImmutableMap.Builder<BlockState, VoxelShape> builder = ImmutableMap.builder();
 
@@ -103,6 +105,6 @@ public class FramedWallSignBlock extends AbstractFramedSignBlock
             }
         }
 
-        return builder.build();
+        return ShapeProvider.of(builder.build());
     }
 }

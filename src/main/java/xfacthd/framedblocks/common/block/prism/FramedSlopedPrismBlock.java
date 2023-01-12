@@ -11,40 +11,40 @@ import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.phys.Vec3;
 import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
+import xfacthd.framedblocks.api.block.FramedProperties;
+import xfacthd.framedblocks.api.predicate.CtmPredicate;
+import xfacthd.framedblocks.api.shapes.ShapeProvider;
 import xfacthd.framedblocks.api.type.IBlockType;
 import xfacthd.framedblocks.api.util.*;
 import xfacthd.framedblocks.common.block.FramedBlock;
 import xfacthd.framedblocks.common.data.BlockType;
 import xfacthd.framedblocks.common.data.PropertyHolder;
+import xfacthd.framedblocks.common.data.property.CompoundDirection;
 
-//TODO: move from two Direction properties to one Direction property and the Rotation property (needs to be adapted to handle y as rotation axis)
-//      to eliminate the possibility of invalid state in 1.19
 public class FramedSlopedPrismBlock extends FramedBlock
 {
+    public static final CtmPredicate CTM_PREDICATE = (state, side) ->
+            side == state.getValue(PropertyHolder.FACING_DIR).direction().getOpposite();
+
     public static final CtmPredicate CTM_PREDICATE_INNER = (state, side) ->
     {
-        Direction facing = state.getValue(BlockStateProperties.FACING);
-        Direction orientation = state.getValue(PropertyHolder.ORIENTATION);
-
-        if (side != null && side.getAxis() != facing.getAxis() && side.getAxis() != orientation.getAxis())
-        {
-            return true;
-        }
-        return side == facing.getOpposite() || side == orientation.getOpposite();
+        CompoundDirection cmpDir = state.getValue(PropertyHolder.FACING_DIR);
+        return side != cmpDir.direction() && side != cmpDir.orientation();
     };
 
     public FramedSlopedPrismBlock(BlockType type)
     {
         super(type);
         registerDefaultState(defaultBlockState()
-                .setValue(BlockStateProperties.FACING, Direction.NORTH)
+                .setValue(PropertyHolder.FACING_DIR, CompoundDirection.NORTH_UP)
         );
     }
 
     @Override
     protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder)
     {
-        builder.add(BlockStateProperties.FACING, PropertyHolder.ORIENTATION, BlockStateProperties.WATERLOGGED, FramedProperties.SOLID, FramedProperties.GLOWING);
+        super.createBlockStateDefinition(builder);
+        builder.add(PropertyHolder.FACING_DIR, BlockStateProperties.WATERLOGGED, FramedProperties.SOLID);
     }
 
     @Override
@@ -56,8 +56,6 @@ public class FramedSlopedPrismBlock extends FramedBlock
     public static BlockState getStateForPlacement(BlockPlaceContext context, BlockState state, IBlockType blockType)
     {
         Direction face = context.getClickedFace();
-        state = state.setValue(BlockStateProperties.FACING, face);
-
         Direction orientation;
         if (Utils.isY(face))
         {
@@ -90,7 +88,7 @@ public class FramedSlopedPrismBlock extends FramedBlock
                 orientation = y < 0 ? Direction.UP : Direction.DOWN;
             }
         }
-        state = state.setValue(PropertyHolder.ORIENTATION, orientation);
+        state = state.setValue(PropertyHolder.FACING_DIR, CompoundDirection.of(face, orientation));
 
         if (blockType == BlockType.FRAMED_SLOPED_PRISM)
         {
@@ -103,35 +101,21 @@ public class FramedSlopedPrismBlock extends FramedBlock
     @SuppressWarnings("deprecation")
     public BlockState rotate(BlockState state, Rotation rot)
     {
-        if (rot == Rotation.NONE) { return state; }
-
-        Direction dir = state.getValue(BlockStateProperties.FACING);
-        Direction orientation = state.getValue(PropertyHolder.ORIENTATION);
-
-        if (Utils.isY(dir))
-        {
-            return state.setValue(PropertyHolder.ORIENTATION, rot.rotate(orientation));
-        }
-        else
-        {
-            if (!Utils.isY(orientation))
-            {
-                state = state.setValue(PropertyHolder.ORIENTATION, rot.rotate(orientation));
-            }
-            return state.setValue(BlockStateProperties.FACING, rot.rotate(dir));
-        }
+        CompoundDirection cmpDir = state.getValue(PropertyHolder.FACING_DIR);
+        return state.setValue(PropertyHolder.FACING_DIR, cmpDir.rotate(rot));
     }
 
     @Override
     @SuppressWarnings("deprecation")
     public BlockState mirror(BlockState state, Mirror mirror)
     {
-        return Utils.mirrorFaceBlock(state, BlockStateProperties.FACING, mirror);
+        CompoundDirection cmpDir = state.getValue(PropertyHolder.FACING_DIR);
+        return state.setValue(PropertyHolder.FACING_DIR, cmpDir.mirror(mirror));
     }
 
 
 
-    public static ImmutableMap<BlockState, VoxelShape> generateShapes(ImmutableList<BlockState> states)
+    public static ShapeProvider generateShapes(ImmutableList<BlockState> states)
     {
         ImmutableMap.Builder<BlockState, VoxelShape> builder = ImmutableMap.builder();
 
@@ -173,14 +157,9 @@ public class FramedSlopedPrismBlock extends FramedBlock
 
         for (BlockState state : states)
         {
-            Direction facing = state.getValue(BlockStateProperties.FACING);
-            Direction orientation = state.getValue(PropertyHolder.ORIENTATION);
-
-            if (orientation == facing || orientation == facing.getOpposite())
-            {
-                builder.put(state, Shapes.block());
-                continue;
-            }
+            CompoundDirection cmpDir = state.getValue(PropertyHolder.FACING_DIR);
+            Direction facing = cmpDir.direction();
+            Direction orientation = cmpDir.orientation();
 
             if (Utils.isY(facing))
             {
@@ -209,10 +188,10 @@ public class FramedSlopedPrismBlock extends FramedBlock
             }
         }
 
-        return builder.build();
+        return ShapeProvider.of(builder.build());
     }
 
-    public static ImmutableMap<BlockState, VoxelShape> generateInnerShapes(ImmutableList<BlockState> states)
+    public static ShapeProvider generateInnerShapes(ImmutableList<BlockState> states)
     {
         ImmutableMap.Builder<BlockState, VoxelShape> builder = ImmutableMap.builder();
 
@@ -278,14 +257,9 @@ public class FramedSlopedPrismBlock extends FramedBlock
 
         for (BlockState state : states)
         {
-            Direction facing = state.getValue(BlockStateProperties.FACING);
-            Direction orientation = state.getValue(PropertyHolder.ORIENTATION);
-
-            if (orientation.getAxis() == facing.getAxis())
-            {
-                builder.put(state, Shapes.block());
-                continue;
-            }
+            CompoundDirection cmdDir = state.getValue(PropertyHolder.FACING_DIR);
+            Direction facing = cmdDir.direction();
+            Direction orientation = cmdDir.orientation();
 
             if (Utils.isY(facing))
             {
@@ -314,6 +288,6 @@ public class FramedSlopedPrismBlock extends FramedBlock
             }
         }
 
-        return builder.build();
+        return ShapeProvider.of(builder.build());
     }
 }

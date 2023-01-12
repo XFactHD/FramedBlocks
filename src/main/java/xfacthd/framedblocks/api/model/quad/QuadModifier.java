@@ -2,7 +2,7 @@ package xfacthd.framedblocks.api.model.quad;
 
 import com.google.common.base.Preconditions;
 import net.minecraft.client.renderer.block.model.BakedQuad;
-import xfacthd.framedblocks.api.util.client.ModelUtils;
+import xfacthd.framedblocks.api.model.util.ModelUtils;
 
 import java.util.Arrays;
 import java.util.List;
@@ -15,7 +15,7 @@ public final class QuadModifier
 
     private final Data data;
     private final boolean limited;
-    private int tintIndex = -1;
+    private int tintIndex;
     private boolean noShade;
     private boolean failed;
 

@@ -8,8 +8,8 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.BlockAndTintGetter;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.fml.loading.FMLEnvironment;
-import xfacthd.framedblocks.api.data.*;
-import xfacthd.framedblocks.api.util.client.ClientUtils;
+import xfacthd.framedblocks.api.camo.*;
+import xfacthd.framedblocks.api.util.ClientUtils;
 import xfacthd.framedblocks.common.FBContent;
 
 public class BlockCamoContainer extends CamoContainer

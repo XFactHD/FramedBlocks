@@ -19,7 +19,7 @@ import net.minecraft.world.phys.Vec3;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import xfacthd.framedblocks.api.block.IFramedBlock;
-import xfacthd.framedblocks.api.util.FramedProperties;
+import xfacthd.framedblocks.api.block.FramedProperties;
 import xfacthd.framedblocks.api.util.Utils;
 import xfacthd.framedblocks.common.block.FramedBlock;
 import xfacthd.framedblocks.common.data.BlockType;
@@ -39,20 +39,19 @@ public class FramedGateBlock extends FramedBlock
                 .setValue(BlockStateProperties.OPEN, false)
                 .setValue(BlockStateProperties.POWERED, false)
                 .setValue(FramedProperties.SOLID, false)
-                .setValue(FramedProperties.GLOWING, false)
         );
     }
 
     @Override
     protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder)
     {
+        super.createBlockStateDefinition(builder);
         builder.add(
                 BlockStateProperties.HORIZONTAL_FACING,
                 BlockStateProperties.DOOR_HINGE,
                 BlockStateProperties.OPEN,
                 BlockStateProperties.POWERED,
-                FramedProperties.SOLID,
-                FramedProperties.GLOWING
+                FramedProperties.SOLID
         );
     }
 
@@ -201,16 +200,16 @@ public class FramedGateBlock extends FramedBlock
     public static FramedGateBlock wood()
     {
         return new FramedGateBlock(
-                BlockType.FRAMED_GATE_DOOR,
-                IFramedBlock.createProperties(BlockType.FRAMED_GATE_DOOR)
+                BlockType.FRAMED_GATE,
+                IFramedBlock.createProperties(BlockType.FRAMED_GATE)
         );
     }
 
     public static FramedGateBlock iron()
     {
         return new FramedGateBlock(
-                BlockType.FRAMED_IRON_GATE_DOOR,
-                IFramedBlock.createProperties(BlockType.FRAMED_IRON_GATE_DOOR, FramedDoorBlock.IRON_WOOD)
+                BlockType.FRAMED_IRON_GATE,
+                IFramedBlock.createProperties(BlockType.FRAMED_IRON_GATE, FramedDoorBlock.IRON_WOOD)
                         .requiresCorrectToolForDrops()
         );
     }

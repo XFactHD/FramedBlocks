@@ -4,13 +4,13 @@ import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.resources.model.BakedModel;
 import net.minecraft.core.Direction;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraftforge.client.model.data.ModelData;
 import org.jetbrains.annotations.NotNull;
 import xfacthd.framedblocks.client.model.FramedDoubleBlockModel;
 import xfacthd.framedblocks.common.FBContent;
 import xfacthd.framedblocks.common.blockentity.FramedDoubleBlockEntity;
 import xfacthd.framedblocks.common.data.PropertyHolder;
+import xfacthd.framedblocks.common.data.property.CompoundDirection;
 
 public class FramedDoubleSlopedPrismModel extends FramedDoubleBlockModel
 {
@@ -20,8 +20,9 @@ public class FramedDoubleSlopedPrismModel extends FramedDoubleBlockModel
     public FramedDoubleSlopedPrismModel(BlockState state, BakedModel baseModel)
     {
         super(state, baseModel, true);
-        this.facing = state.getValue(BlockStateProperties.FACING);
-        this.orientation = state.getValue(PropertyHolder.ORIENTATION);
+        CompoundDirection cmpDir = state.getValue(PropertyHolder.FACING_DIR);
+        this.facing = cmpDir.direction();
+        this.orientation = cmpDir.orientation();
     }
 
     @Override
@@ -44,7 +45,6 @@ public class FramedDoubleSlopedPrismModel extends FramedDoubleBlockModel
     {
         return FBContent.blockFramedDoubleSlopedPrism.get()
                 .defaultBlockState()
-                .setValue(BlockStateProperties.FACING, Direction.UP)
-                .setValue(PropertyHolder.ORIENTATION, Direction.EAST);
+                .setValue(PropertyHolder.FACING_DIR, CompoundDirection.UP_EAST);
     }
 }

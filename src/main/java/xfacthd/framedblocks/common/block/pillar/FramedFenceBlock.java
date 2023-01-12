@@ -17,7 +17,7 @@ import net.minecraft.world.level.material.MaterialColor;
 import net.minecraft.world.level.storage.loot.LootContext;
 import net.minecraft.world.phys.BlockHitResult;
 import xfacthd.framedblocks.api.block.IFramedBlock;
-import xfacthd.framedblocks.api.util.FramedProperties;
+import xfacthd.framedblocks.api.block.FramedProperties;
 import xfacthd.framedblocks.common.data.BlockType;
 import xfacthd.framedblocks.api.block.FramedBlockEntity;
 
@@ -30,14 +30,17 @@ public class FramedFenceBlock extends FenceBlock implements IFramedBlock
     public FramedFenceBlock()
     {
         super(IFramedBlock.createProperties(BlockType.FRAMED_FENCE));
-        registerDefaultState(defaultBlockState().setValue(FramedProperties.STATE_LOCKED, false));
+        registerDefaultState(defaultBlockState()
+                .setValue(FramedProperties.STATE_LOCKED, false)
+                .setValue(FramedProperties.GLOWING, false)
+        );
     }
 
     @Override
     protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder)
     {
         super.createBlockStateDefinition(builder);
-        builder.add(FramedProperties.STATE_LOCKED);
+        builder.add(FramedProperties.GLOWING, FramedProperties.STATE_LOCKED);
     }
 
     @Override

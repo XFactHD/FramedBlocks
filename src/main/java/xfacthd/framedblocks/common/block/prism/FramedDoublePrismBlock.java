@@ -8,18 +8,19 @@ import net.minecraft.world.level.block.*;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
-import net.minecraft.world.level.block.state.properties.BlockStateProperties;
-import xfacthd.framedblocks.api.util.*;
+import xfacthd.framedblocks.api.predicate.CtmPredicate;
 import xfacthd.framedblocks.common.FBContent;
 import xfacthd.framedblocks.common.block.AbstractFramedDoubleBlock;
 import xfacthd.framedblocks.common.blockentity.FramedDoublePrismBlockEntity;
 import xfacthd.framedblocks.common.data.BlockType;
+import xfacthd.framedblocks.common.data.PropertyHolder;
+import xfacthd.framedblocks.common.data.property.DirectionAxis;
 
 public class FramedDoublePrismBlock extends AbstractFramedDoubleBlock
 {
     public static final CtmPredicate CTM_PREDICATE = (state, side) ->
     {
-        Direction.Axis axis = state.getValue(BlockStateProperties.AXIS);
+        Direction.Axis axis = state.getValue(PropertyHolder.FACING_AXIS).axis();
         return side != null && side.getAxis() != axis;
     };
 
@@ -29,7 +30,7 @@ public class FramedDoublePrismBlock extends AbstractFramedDoubleBlock
     protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder)
     {
         super.createBlockStateDefinition(builder);
-        builder.add(BlockStateProperties.FACING, BlockStateProperties.AXIS);
+        builder.add(PropertyHolder.FACING_AXIS);
     }
 
     @Override
@@ -42,58 +43,33 @@ public class FramedDoublePrismBlock extends AbstractFramedDoubleBlock
     @SuppressWarnings("deprecation")
     public BlockState rotate(BlockState state, Rotation rot)
     {
-        if (rot == Rotation.NONE) { return state; }
-
-        Direction dir = state.getValue(BlockStateProperties.FACING);
-        Direction.Axis axis = state.getValue(BlockStateProperties.AXIS);
-
-        if (Utils.isY(dir))
-        {
-            if (rot == Rotation.CLOCKWISE_180)
-            {
-                return state;
-            }
-
-            return state.setValue(
-                    BlockStateProperties.AXIS,
-                    Utils.nextAxisNotEqualTo(axis, dir.getAxis())
-            );
-        }
-        else
-        {
-            if (!axis.isVertical())
-            {
-                state = state.setValue(
-                        BlockStateProperties.AXIS,
-                        Utils.nextAxisNotEqualTo(axis, Direction.Axis.Y)
-                );
-            }
-            return state.setValue(BlockStateProperties.FACING, rot.rotate(dir));
-        }
+        DirectionAxis dirAxis = state.getValue(PropertyHolder.FACING_AXIS);
+        return state.setValue(PropertyHolder.FACING_AXIS, dirAxis.rotate(rot));
     }
 
     @Override
     @SuppressWarnings("deprecation")
     public BlockState mirror(BlockState state, Mirror mirror)
     {
-        return Utils.mirrorFaceBlock(state, BlockStateProperties.FACING, mirror);
+        DirectionAxis dirAxis = state.getValue(PropertyHolder.FACING_AXIS);
+        return state.setValue(PropertyHolder.FACING_AXIS, dirAxis.mirror(mirror));
     }
 
     @Override
     protected Tuple<BlockState, BlockState> getBlockPair(BlockState state)
     {
-        Direction facing = state.getValue(BlockStateProperties.FACING);
-        Direction.Axis axis = state.getValue(BlockStateProperties.AXIS);
+        DirectionAxis dirAxis = state.getValue(PropertyHolder.FACING_AXIS);
 
         return new Tuple<>(
                 FBContent.blockFramedInnerPrism.get()
                         .defaultBlockState()
-                        .setValue(BlockStateProperties.FACING, facing)
-                        .setValue(BlockStateProperties.AXIS, axis),
+                        .setValue(PropertyHolder.FACING_AXIS, dirAxis),
                 FBContent.blockFramedPrism.get()
                         .defaultBlockState()
-                        .setValue(BlockStateProperties.FACING, facing.getOpposite())
-                        .setValue(BlockStateProperties.AXIS, axis)
+                        .setValue(PropertyHolder.FACING_AXIS, DirectionAxis.of(
+                                dirAxis.direction().getOpposite(),
+                                dirAxis.axis()
+                        ))
         );
     }
 

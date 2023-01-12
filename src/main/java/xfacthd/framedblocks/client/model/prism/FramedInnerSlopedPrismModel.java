@@ -4,13 +4,13 @@ import net.minecraft.client.renderer.block.model.BakedQuad;
 import net.minecraft.client.resources.model.BakedModel;
 import net.minecraft.core.Direction;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import xfacthd.framedblocks.api.model.FramedBlockModel;
 import xfacthd.framedblocks.api.model.quad.Modifiers;
 import xfacthd.framedblocks.api.model.quad.QuadModifier;
 import xfacthd.framedblocks.api.util.Utils;
 import xfacthd.framedblocks.common.FBContent;
 import xfacthd.framedblocks.common.data.PropertyHolder;
+import xfacthd.framedblocks.common.data.property.CompoundDirection;
 
 import java.util.List;
 import java.util.Map;
@@ -23,20 +23,15 @@ public class FramedInnerSlopedPrismModel extends FramedBlockModel
     public FramedInnerSlopedPrismModel(BlockState state, BakedModel baseModel)
     {
         super(state, baseModel);
-        this.facing = state.getValue(BlockStateProperties.FACING);
-        this.orientation = state.getValue(PropertyHolder.ORIENTATION);
+        CompoundDirection cmpDir = state.getValue(PropertyHolder.FACING_DIR);
+        this.facing = cmpDir.direction();
+        this.orientation = cmpDir.orientation();
     }
 
     @Override
     protected void transformQuad(Map<Direction, List<BakedQuad>> quadMap, BakedQuad quad)
     {
         Direction quadFace = quad.getDirection();
-        if (isStateInvalid())
-        {
-            quadMap.get(quadFace).add(quad);
-            return;
-        }
-
         if (Utils.isY(facing) && quadFace.getAxis() != orientation.getAxis() && quadFace.getAxis() != facing.getAxis()) // Slopes for Y facing
         {
             boolean up = facing == Direction.UP;
@@ -143,14 +138,11 @@ public class FramedInnerSlopedPrismModel extends FramedBlockModel
         }
     }
 
-    private boolean isStateInvalid() { return orientation.getAxis() == facing.getAxis(); }
-
     @Override
     protected boolean transformAllQuads(BlockState state)
     {
-        Direction facing = state.getValue(BlockStateProperties.FACING);
-        Direction orientation = state.getValue(PropertyHolder.ORIENTATION);
-        return Utils.isY(facing) || Utils.isY(orientation);
+        CompoundDirection cmpDir = state.getValue(PropertyHolder.FACING_DIR);
+        return Utils.isY(cmpDir.direction()) || Utils.isY(cmpDir.orientation());
     }
 
 
@@ -159,7 +151,6 @@ public class FramedInnerSlopedPrismModel extends FramedBlockModel
     {
         return FBContent.blockFramedInnerSlopedPrism.get()
                 .defaultBlockState()
-                .setValue(BlockStateProperties.FACING, Direction.UP)
-                .setValue(PropertyHolder.ORIENTATION, Direction.EAST);
+                .setValue(PropertyHolder.FACING_DIR, CompoundDirection.UP_EAST);
     }
 }

@@ -18,10 +18,14 @@ import net.minecraftforge.client.model.data.ModelData;
 import org.jetbrains.annotations.NotNull;
 import xfacthd.framedblocks.api.FramedBlocksAPI;
 import xfacthd.framedblocks.api.FramedBlocksClientAPI;
+import xfacthd.framedblocks.api.model.data.FramedBlockData;
+import xfacthd.framedblocks.api.model.data.QuadTable;
+import xfacthd.framedblocks.api.model.util.ModelCache;
+import xfacthd.framedblocks.api.model.util.ModelUtils;
+import xfacthd.framedblocks.api.predicate.ConTexMode;
+import xfacthd.framedblocks.api.predicate.CtmPredicate;
 import xfacthd.framedblocks.api.type.IBlockType;
-import xfacthd.framedblocks.api.util.*;
 import xfacthd.framedblocks.api.block.IFramedBlock;
-import xfacthd.framedblocks.api.util.client.*;
 
 import javax.annotation.Nonnull;
 import java.util.*;
@@ -166,7 +170,7 @@ public abstract class FramedBlockModel extends BakedModelProxy
             noProcessing = fullFaceCache.isFullFace(side);
             needCtCtx = needCtContext(noProcessing);
             model = getCamoModel(camoState, false);
-            camoData = needCtCtx ? ModelUtils.getCamoModelData(model, camoState, extraData) : ModelData.EMPTY;
+            camoData = needCtCtx ? ModelUtils.getCamoModelData(extraData) : ModelData.EMPTY;
             camoInRenderType = getCachedRenderTypes(camoState, rand, camoData).camoTypes.contains(renderType);
         }
 
@@ -358,13 +362,13 @@ public abstract class FramedBlockModel extends BakedModelProxy
     protected ChunkRenderTypeSet getAdditionalRenderTypes(RandomSource rand, ModelData extraData) { return ChunkRenderTypeSet.none(); }
 
     /**
-     * Add additional quads to faces that return {@code true} from {@code xfacthd.framedblocks.api.util.CtmPredicate#test(BlockState, Direction)}<br>
+     * Add additional quads to faces that return {@code true} from {@code xfacthd.framedblocks.api.predicate.CtmPredicate#test(BlockState, Direction)}<br>
      * The result of this method will NOT be cached, execution should therefore be as fast as possible
      */
     protected void getAdditionalQuads(List<BakedQuad> quads, Direction side, BlockState state, RandomSource rand, ModelData data, RenderType renderType) {}
 
     /**
-     * Add additional quads to faces that return {@code false} from {@code xfacthd.framedblocks.api.util.CtmPredicate#test(BlockState, Direction)}<br>
+     * Add additional quads to faces that return {@code false} from {@code xfacthd.framedblocks.api.predicate.CtmPredicate#test(BlockState, Direction)}<br>
      * The result of this method will be cached, processing time is therefore not critical
      */
     protected void getAdditionalQuads(Map<Direction, List<BakedQuad>> quadMap, BlockState state, RandomSource rand, ModelData data, RenderType renderType) {}
@@ -396,12 +400,7 @@ public abstract class FramedBlockModel extends BakedModelProxy
                     .with(FramedBlockData.CAMO_DATA, model.getModelData(level, pos, camoState, tileData))
                     .build();
         }
-
-        //noinspection removal
-        return tileData.derive()
-                .with(FramedBlockData.LEVEL, level)
-                .with(FramedBlockData.POS, pos)
-                .build();
+        return tileData;
     }
 
     @Override
