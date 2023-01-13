@@ -273,8 +273,8 @@ public final class FramedBlockStateProvider extends BlockStateProvider
                     .build();
         };
 
-        getVariantBuilder(FBContent.blockFramedStonePressurePlate.get()).forAllStates(mapper);
-        getVariantBuilder(FBContent.blockFramedWaterloggableStonePressurePlate.get()).forAllStates(mapper);
+        getVariantBuilder(FBContent.blockFramedStonePressurePlate.get()).forAllStatesExcept(mapper, FramedProperties.GLOWING);
+        getVariantBuilder(FBContent.blockFramedWaterloggableStonePressurePlate.get()).forAllStatesExcept(mapper, FramedProperties.GLOWING);
 
         models().getBuilder(FramedMarkedPressurePlateModel.STONE_FRAME_LOCATION.getPath())
                 .customLoader(OverlayLoaderBuilder::new)
@@ -316,8 +316,8 @@ public final class FramedBlockStateProvider extends BlockStateProvider
                     .build();
         };
 
-        getVariantBuilder(FBContent.blockFramedObsidianPressurePlate.get()).forAllStates(mapper);
-        getVariantBuilder(FBContent.blockFramedWaterloggableObsidianPressurePlate.get()).forAllStates(mapper);
+        getVariantBuilder(FBContent.blockFramedObsidianPressurePlate.get()).forAllStatesExcept(mapper, FramedProperties.GLOWING);
+        getVariantBuilder(FBContent.blockFramedWaterloggableObsidianPressurePlate.get()).forAllStatesExcept(mapper, FramedProperties.GLOWING);
 
         models().getBuilder(FramedMarkedPressurePlateModel.OBSIDIAN_FRAME_LOCATION.getPath())
                 .customLoader(OverlayLoaderBuilder::new)
@@ -359,8 +359,8 @@ public final class FramedBlockStateProvider extends BlockStateProvider
                     .build();
         };
 
-        getVariantBuilder(FBContent.blockFramedGoldPressurePlate.get()).forAllStates(mapper);
-        getVariantBuilder(FBContent.blockFramedWaterloggableGoldPressurePlate.get()).forAllStates(mapper);
+        getVariantBuilder(FBContent.blockFramedGoldPressurePlate.get()).forAllStatesExcept(mapper, FramedProperties.GLOWING);
+        getVariantBuilder(FBContent.blockFramedWaterloggableGoldPressurePlate.get()).forAllStatesExcept(mapper, FramedProperties.GLOWING);
 
         models().getBuilder(FramedMarkedPressurePlateModel.GOLD_FRAME_LOCATION.getPath())
                 .customLoader(OverlayLoaderBuilder::new)
@@ -402,8 +402,8 @@ public final class FramedBlockStateProvider extends BlockStateProvider
                     .build();
         };
 
-        getVariantBuilder(FBContent.blockFramedIronPressurePlate.get()).forAllStates(mapper);
-        getVariantBuilder(FBContent.blockFramedWaterloggableIronPressurePlate.get()).forAllStates(mapper);
+        getVariantBuilder(FBContent.blockFramedIronPressurePlate.get()).forAllStatesExcept(mapper, FramedProperties.GLOWING);
+        getVariantBuilder(FBContent.blockFramedWaterloggableIronPressurePlate.get()).forAllStatesExcept(mapper, FramedProperties.GLOWING);
 
         models().getBuilder(FramedMarkedPressurePlateModel.IRON_FRAME_LOCATION.getPath())
                 .customLoader(OverlayLoaderBuilder::new)
@@ -454,7 +454,7 @@ public final class FramedBlockStateProvider extends BlockStateProvider
         ModelFile button = models().getExistingFile(modLoc("framed_stone_button"));
         ModelFile buttonPressed = models().getExistingFile(modLoc("framed_stone_button_pressed"));
 
-        getVariantBuilder(FBContent.blockFramedStoneButton.get()).forAllStates(state ->
+        getVariantBuilder(FBContent.blockFramedStoneButton.get()).forAllStatesExcept(state ->
         {
             Direction facing = state.getValue(ButtonBlock.FACING);
             AttachFace face = state.getValue(ButtonBlock.FACE);
@@ -479,7 +479,7 @@ public final class FramedBlockStateProvider extends BlockStateProvider
                     .rotationX(rotX)
                     .rotationY(rotY)
                     .build();
-        });
+        }, FramedProperties.GLOWING);
     }
 
     private void registerFramedLever()
@@ -493,7 +493,7 @@ public final class FramedBlockStateProvider extends BlockStateProvider
                 .texture("base", ClientUtils.DUMMY_TEXTURE)
                 .texture("particle", TEXTURE);
 
-        getVariantBuilder(FBContent.blockFramedLever.get()).forAllStates(state ->
+        getVariantBuilder(FBContent.blockFramedLever.get()).forAllStatesExcept(state ->
         {
             Direction facing = state.getValue(HorizontalDirectionalBlock.FACING);
             AttachFace face = state.getValue(FaceAttachedHorizontalDirectionalBlock.FACE);
@@ -507,7 +507,7 @@ public final class FramedBlockStateProvider extends BlockStateProvider
                     .rotationX(rotX)
                     .rotationY(rotY)
                     .build();
-        });
+        }, FramedProperties.GLOWING);
 
         simpleItem(FBContent.blockFramedLever, "cutout");
     }
@@ -528,12 +528,12 @@ public final class FramedBlockStateProvider extends BlockStateProvider
     private void registerFramedWallTorch()
     {
         ModelFile wallTorch = models().getExistingFile(modLoc("framed_wall_torch"));
-        getVariantBuilder(FBContent.blockFramedWallTorch.get()).forAllStates(state ->
+        getVariantBuilder(FBContent.blockFramedWallTorch.get()).forAllStatesExcept(state ->
         {
             Direction dir = state.getValue(BlockStateProperties.HORIZONTAL_FACING);
             int rotY = ((int)dir.toYRot() + 90) % 360;
             return ConfiguredModel.builder().modelFile(wallTorch).rotationY(rotY).build();
-        });
+        }, FramedProperties.GLOWING);
     }
 
     private void registerFramedSoulTorch()
@@ -550,12 +550,12 @@ public final class FramedBlockStateProvider extends BlockStateProvider
         ModelFile wallTorch = models().withExistingParent("framed_soul_wall_torch", modLoc("framed_wall_torch"))
                 .texture("particle", modLoc("block/framed_soul_torch"))
                 .texture("top", mcLoc("block/soul_torch"));
-        getVariantBuilder(FBContent.blockFramedSoulWallTorch.get()).forAllStates(state ->
+        getVariantBuilder(FBContent.blockFramedSoulWallTorch.get()).forAllStatesExcept(state ->
         {
             Direction dir = state.getValue(BlockStateProperties.HORIZONTAL_FACING);
             int rotY = ((int)dir.toYRot() + 90) % 360;
             return ConfiguredModel.builder().modelFile(wallTorch).rotationY(rotY).build();
-        });
+        }, FramedProperties.GLOWING);
     }
 
     private void registerFramedRedstoneTorch()
@@ -565,11 +565,11 @@ public final class FramedBlockStateProvider extends BlockStateProvider
                 .texture("particle", modLoc("block/framed_redstone_torch_off"))
                 .texture("top", mcLoc("block/redstone_torch_off"));
 
-        getVariantBuilder(FBContent.blockFramedRedstoneTorch.get()).forAllStates(state ->
+        getVariantBuilder(FBContent.blockFramedRedstoneTorch.get()).forAllStatesExcept(state ->
         {
             ModelFile model = state.getValue(BlockStateProperties.LIT) ? torch : torchOff;
             return ConfiguredModel.builder().modelFile(model).build();
-        });
+        }, FramedProperties.GLOWING);
 
         simpleItem(FBContent.blockFramedRedstoneTorch, "block/framed_redstone_torch", "cutout");
     }
@@ -581,13 +581,13 @@ public final class FramedBlockStateProvider extends BlockStateProvider
                 .texture("particle", modLoc("block/framed_redstone_torch_off"))
                 .texture("top", mcLoc("block/redstone_torch_off"));
 
-        getVariantBuilder(FBContent.blockFramedRedstoneWallTorch.get()).forAllStates(state ->
+        getVariantBuilder(FBContent.blockFramedRedstoneWallTorch.get()).forAllStatesExcept(state ->
         {
             Direction dir = state.getValue(BlockStateProperties.HORIZONTAL_FACING);
             int rotY = ((int)dir.toYRot() + 90) % 360;
             ModelFile model = state.getValue(BlockStateProperties.LIT) ? wallTorch : wallTorchOff;
             return ConfiguredModel.builder().modelFile(model).rotationY(rotY).build();
-        });
+        }, FramedProperties.GLOWING);
     }
 
     private void registerFramedFloorBoard(ModelFile cube)
@@ -605,7 +605,7 @@ public final class FramedBlockStateProvider extends BlockStateProvider
             Direction dir = state.getValue(BlockStateProperties.HORIZONTAL_FACING);
             int rotY = ((int)dir.toYRot() + 180) % 360;
             return ConfiguredModel.builder().modelFile(chest).rotationY(rotY).build();
-        }, BlockStateProperties.WATERLOGGED, PropertyHolder.LATCH_TYPE);
+        }, BlockStateProperties.WATERLOGGED, PropertyHolder.LATCH_TYPE, FramedProperties.GLOWING);
 
         simpleBlockItem(FBContent.blockFramedChest, chest, "cutout");
     }
@@ -728,7 +728,7 @@ public final class FramedBlockStateProvider extends BlockStateProvider
         ModelFile button = models().getExistingFile(modLoc("framed_large_stone_button"));
         ModelFile buttonPressed = models().getExistingFile(modLoc("framed_large_stone_button_pressed"));
 
-        getVariantBuilder(FBContent.blockFramedLargeStoneButton.get()).forAllStates(state ->
+        getVariantBuilder(FBContent.blockFramedLargeStoneButton.get()).forAllStatesExcept(state ->
         {
             Direction facing = state.getValue(ButtonBlock.FACING);
             AttachFace face = state.getValue(ButtonBlock.FACE);
@@ -753,7 +753,7 @@ public final class FramedBlockStateProvider extends BlockStateProvider
                     .rotationX(rotX)
                     .rotationY(rotY)
                     .build();
-        });
+        }, FramedProperties.GLOWING);
     }
 
     private void registerFramedTarget(ModelFile cube)
@@ -846,9 +846,9 @@ public final class FramedBlockStateProvider extends BlockStateProvider
         };
 
         getVariantBuilder(FBContent.blockFramedItemFrame.get())
-                .forAllStatesExcept(mapper.apply(normalFrame, normalMapFrame), PropertyHolder.LEATHER);
+                .forAllStatesExcept(mapper.apply(normalFrame, normalMapFrame), PropertyHolder.LEATHER, FramedProperties.GLOWING);
         getVariantBuilder(FBContent.blockFramedGlowingItemFrame.get())
-                .forAllStatesExcept(mapper.apply(glowFrame, glowMapFrame), PropertyHolder.LEATHER);
+                .forAllStatesExcept(mapper.apply(glowFrame, glowMapFrame), PropertyHolder.LEATHER, FramedProperties.GLOWING);
 
         simpleItem(FBContent.blockFramedItemFrame, "cutout");
         simpleItem(FBContent.blockFramedGlowingItemFrame, "cutout");
@@ -903,7 +903,7 @@ public final class FramedBlockStateProvider extends BlockStateProvider
 
         getVariantBuilder(FBContent.blockFramedFancyRail.get()).forAllStatesExcept(
                 railStates(BlockStateProperties.RAIL_SHAPE, state -> normalRail, state -> ascendingRail, state -> curvedRail),
-                BlockStateProperties.WATERLOGGED
+                BlockStateProperties.WATERLOGGED, FramedProperties.GLOWING
         );
     }
 
@@ -927,7 +927,7 @@ public final class FramedBlockStateProvider extends BlockStateProvider
                         state -> state.getValue(BlockStateProperties.POWERED) ? ascendingRailOn : ascendingRail,
                         state -> null
                 ),
-                BlockStateProperties.WATERLOGGED
+                BlockStateProperties.WATERLOGGED, FramedProperties.GLOWING
         );
     }
 
@@ -951,7 +951,7 @@ public final class FramedBlockStateProvider extends BlockStateProvider
                         state -> state.getValue(BlockStateProperties.POWERED) ? ascendingRailOn : ascendingRail,
                         state -> null
                 ),
-                BlockStateProperties.WATERLOGGED
+                BlockStateProperties.WATERLOGGED, FramedProperties.GLOWING
         );
     }
 
@@ -975,7 +975,7 @@ public final class FramedBlockStateProvider extends BlockStateProvider
                         state -> state.getValue(BlockStateProperties.POWERED) ? ascendingRailOn : ascendingRail,
                         state -> null
                 ),
-                BlockStateProperties.WATERLOGGED
+                BlockStateProperties.WATERLOGGED, FramedProperties.GLOWING
         );
     }
 
