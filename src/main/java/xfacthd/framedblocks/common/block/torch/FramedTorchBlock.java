@@ -2,6 +2,7 @@ package xfacthd.framedblocks.common.block.torch;
 
 import com.mojang.datafixers.util.Pair;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
 import net.minecraft.core.particles.ParticleOptions;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.world.InteractionHand;
@@ -19,7 +20,6 @@ import net.minecraft.world.level.material.Material;
 import net.minecraft.world.level.material.MaterialColor;
 import net.minecraft.world.level.storage.loot.LootContext;
 import net.minecraft.world.phys.BlockHitResult;
-import xfacthd.framedblocks.FramedBlocks;
 import xfacthd.framedblocks.api.block.*;
 import xfacthd.framedblocks.common.FBContent;
 import xfacthd.framedblocks.common.data.BlockType;
@@ -115,7 +115,8 @@ public class FramedTorchBlock extends TorchBlock implements IFramedBlock
         return Pair.of(this, new StandingAndWallBlockItem(
                 FBContent.blockFramedTorch.get(),
                 FBContent.blockFramedWallTorch.get(),
-                new Item.Properties().tab(FramedBlocks.FRAMED_TAB)
+                new Item.Properties(),
+                Direction.DOWN
         ));
     }
 }

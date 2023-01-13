@@ -21,11 +21,13 @@ public class FramedTargetModel extends FramedBlockModel
 {
     public static final ResourceLocation OVERLAY_LOCATION = Utils.rl("block/target_overlay");
     public static final int OVERLAY_TINT_IDX = 1024;
-    private static BakedModel overlayModel;
 
-    public FramedTargetModel(BlockState state, BakedModel baseModel)
+    private final BakedModel overlayModel;
+
+    public FramedTargetModel(BlockState state, BakedModel baseModel, Map<ResourceLocation, BakedModel> registry)
     {
         super(state, baseModel);
+        this.overlayModel = registry.get(OVERLAY_LOCATION);
     }
 
     @Override
@@ -46,9 +48,4 @@ public class FramedTargetModel extends FramedBlockModel
 
 
     public static BlockState itemSource() { return FBContent.blockFramedTarget.get().defaultBlockState(); }
-
-    public static void cacheOverlayModel(Map<ResourceLocation, BakedModel> registry)
-    {
-        overlayModel = registry.get(OVERLAY_LOCATION);
-    }
 }

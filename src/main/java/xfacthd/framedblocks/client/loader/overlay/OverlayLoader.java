@@ -1,12 +1,12 @@
 package xfacthd.framedblocks.client.loader.overlay;
 
 import com.google.gson.*;
-import com.mojang.math.Vector3f;
 import net.minecraft.client.renderer.block.model.BlockModel;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.GsonHelper;
 import net.minecraft.util.Mth;
 import net.minecraftforge.client.model.geometry.IGeometryLoader;
+import org.joml.Vector3f;
 import xfacthd.framedblocks.api.util.Utils;
 
 public final class OverlayLoader implements IGeometryLoader<OverlayGeometry>
@@ -20,8 +20,8 @@ public final class OverlayLoader implements IGeometryLoader<OverlayGeometry>
     {
         BlockModel model = ctx.deserialize(GsonHelper.getAsJsonObject(obj, "model"), BlockModel.class);
 
-        Vector3f offset = Vector3f.ZERO;
-        Vector3f scale = DEFAULT_SCALE.copy();
+        Vector3f offset = OverlayGeometry.VEC_ZERO;
+        Vector3f scale = new Vector3f(DEFAULT_SCALE);
 
         if (obj.has("center"))
         {
@@ -37,7 +37,7 @@ public final class OverlayLoader implements IGeometryLoader<OverlayGeometry>
                     GsonHelper.convertToFloat(arr.get(2), "center[2]") / 16F
             );
 
-            offset = CENTER.copy();
+            offset = new Vector3f(CENTER);
             offset.sub(center);
 
             // Slightly skew the scale to avoid z-fighting on off-center models

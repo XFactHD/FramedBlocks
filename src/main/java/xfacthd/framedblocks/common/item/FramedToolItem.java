@@ -5,7 +5,6 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.LevelReader;
-import xfacthd.framedblocks.FramedBlocks;
 import xfacthd.framedblocks.common.data.FramedToolType;
 
 public class FramedToolItem extends Item
@@ -14,10 +13,7 @@ public class FramedToolItem extends Item
 
     public FramedToolItem(FramedToolType type)
     {
-        super(new Properties()
-                .stacksTo(1)
-                .tab(FramedBlocks.FRAMED_TAB)
-        );
+        super(new Properties().stacksTo(1));
         this.type = type;
     }
 

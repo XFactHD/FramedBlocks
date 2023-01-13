@@ -6,7 +6,6 @@ import com.mojang.blaze3d.platform.GlStateManager;
 import com.mojang.blaze3d.platform.Lighting;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.*;
-import com.mojang.math.Matrix4f;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.font.TextFieldHelper;
@@ -27,6 +26,7 @@ import net.minecraftforge.client.event.TextureStitchEvent;
 import net.minecraftforge.client.model.data.ModelData;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
+import org.joml.Matrix4f;
 import org.lwjgl.glfw.GLFW;
 import xfacthd.framedblocks.FramedBlocks;
 import xfacthd.framedblocks.api.block.FramedProperties;
@@ -68,18 +68,23 @@ public class FramedSignScreen extends Screen
     @Override
     protected void init()
     {
-        //noinspection ConstantConditions
-        minecraft.keyboardHandler.setSendRepeatsToGui(true);
-        addRenderableWidget(new Button(width / 2 - 100, height / 2 + 60, 200, 20, DONE, btn -> onClose()));
+        addRenderableWidget(Button.builder(DONE, btn -> onClose())
+                .pos(width / 2 - 100, height / 2 + 60)
+                .size(200, 20)
+                .build()
+        );
 
-        inputUtil = new TextFieldHelper(() -> lines[currLine],
+        //noinspection ConstantConditions
+        inputUtil = new TextFieldHelper(
+                () -> lines[currLine],
                 (line) ->
                 {
                     lines[currLine] = line;
                     sign.setLine(currLine, Component.literal(line));
                 },
                 TextFieldHelper.createClipboardGetter(minecraft), TextFieldHelper.createClipboardSetter(minecraft),
-                (line) -> minecraft.font.width(line) <= 90);
+                (line) -> minecraft.font.width(line) <= 90
+        );
 
         texX = width / 2 - TEX_W / 2;
         texY = height / 2 - TEX_H / 2 - 20;
@@ -88,9 +93,6 @@ public class FramedSignScreen extends Screen
     @Override
     public void removed()
     {
-        //noinspection ConstantConditions
-        minecraft.keyboardHandler.setSendRepeatsToGui(false);
-
         FramedBlocks.CHANNEL.sendToServer(new SignUpdatePacket(sign.getBlockPos(), new String[]
                 {
                         sign.getLine(0).getString(),
@@ -299,6 +301,6 @@ public class FramedSignScreen extends Screen
         return SPRITE_CACHE.get(camoState, front);
     }
 
-    @SubscribeEvent
-    public static void onTextureStitch(final TextureStitchEvent.Pre event) { SPRITE_CACHE.clear(); }
+    @SubscribeEvent //TODO: make sure this doesn't break the cache
+    public static void onTextureStitch(final TextureStitchEvent.Post event) { SPRITE_CACHE.clear(); }
 }

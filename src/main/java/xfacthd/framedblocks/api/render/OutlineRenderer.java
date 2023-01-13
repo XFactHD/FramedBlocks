@@ -3,22 +3,22 @@ package xfacthd.framedblocks.api.render;
 import com.google.common.base.Preconditions;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
-import com.mojang.math.Quaternion;
-import com.mojang.math.Vector3f;
+import com.mojang.math.Axis;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.util.Mth;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
+import org.joml.Quaternionf;
 import xfacthd.framedblocks.api.block.FramedProperties;
 
 public interface OutlineRenderer
 {
     /**
-     * Array of {@link Quaternion}s for rotating around the Y axis according to the horizontal direction.<br>
+     * Array of {@link Quaternionf}s for rotating around the Y axis according to the horizontal direction.<br>
      * Must be indexed with {@link Direction#get2DDataValue()}
      */
-    Quaternion[] YN_DIR = makeQuaternionArray();
+    Quaternionf[] YN_DIR = makeQuaternionArray();
 
     /**
      * Draw the outlines of the block. Provides access to the {@link BlockState}, {@link Level} and {@link BlockPos}
@@ -87,12 +87,12 @@ public interface OutlineRenderer
 
 
 
-    static Quaternion[] makeQuaternionArray()
+    static Quaternionf[] makeQuaternionArray()
     {
-        Quaternion[] array = new Quaternion[4];
+        Quaternionf[] array = new Quaternionf[4];
         for (Direction dir : Direction.Plane.HORIZONTAL)
         {
-            array[dir.get2DDataValue()] = Vector3f.YN.rotationDegrees(dir.toYRot());
+            array[dir.get2DDataValue()] = Axis.YN.rotationDegrees(dir.toYRot());
         }
         return array;
     }

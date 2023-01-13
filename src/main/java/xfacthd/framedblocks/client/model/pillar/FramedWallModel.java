@@ -1,12 +1,12 @@
 package xfacthd.framedblocks.client.model.pillar;
 
-import com.mojang.math.Vector4f;
 import net.minecraft.client.renderer.block.model.BakedQuad;
 import net.minecraft.client.resources.model.BakedModel;
 import net.minecraft.core.Direction;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.block.state.properties.WallSide;
+import org.joml.Vector4f;
 import xfacthd.framedblocks.api.model.FramedBlockModel;
 import xfacthd.framedblocks.api.model.quad.Modifiers;
 import xfacthd.framedblocks.api.model.quad.QuadModifier;

@@ -3,6 +3,7 @@ package xfacthd.framedblocks.api.util;
 import com.google.common.base.Suppliers;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.block.BlockModelShaper;
+import net.minecraft.client.renderer.block.model.BakedQuad;
 import net.minecraft.client.renderer.chunk.RenderChunkRegion;
 import net.minecraft.client.resources.model.BakedModel;
 import net.minecraft.client.resources.model.ModelResourceLocation;
@@ -200,6 +201,16 @@ public final class ClientUtils
     public static int getFluidColor(BlockAndTintGetter level, BlockPos pos, FluidState fluid)
     {
         return IClientFluidTypeExtensions.of(fluid).getTintColor(fluid, level, pos);
+    }
+
+    public static boolean isDummyTexture(BakedQuad quad)
+    {
+        return isTexture(quad, DUMMY_TEXTURE);
+    }
+
+    public static boolean isTexture(BakedQuad quad, ResourceLocation texture)
+    {
+        return quad.getSprite().contents().name().equals(texture);
     }
 
     private static final List<ClientTask> tasks = new ArrayList<>();

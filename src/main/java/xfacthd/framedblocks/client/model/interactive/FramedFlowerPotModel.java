@@ -16,6 +16,7 @@ import xfacthd.framedblocks.api.model.FramedBlockModel;
 import xfacthd.framedblocks.api.model.quad.Modifiers;
 import xfacthd.framedblocks.api.model.quad.QuadModifier;
 import xfacthd.framedblocks.api.model.data.FramedBlockData;
+import xfacthd.framedblocks.api.util.ClientUtils;
 import xfacthd.framedblocks.api.util.Utils;
 import xfacthd.framedblocks.api.model.util.ModelCache;
 import xfacthd.framedblocks.api.model.util.ModelUtils;
@@ -31,14 +32,15 @@ public class FramedFlowerPotModel extends FramedBlockModel
 {
     private static final ResourceLocation POT_TEXTURE = new ResourceLocation("minecraft:block/flower_pot");
     private static final ResourceLocation DIRT_TEXTURE = new ResourceLocation("minecraft:block/dirt");
-    private static BakedModel hangingPotModel;
 
     private final boolean hanging;
+    private final BakedModel hangingPotModel;
 
-    public FramedFlowerPotModel(BlockState state, BakedModel baseModel)
+    public FramedFlowerPotModel(BlockState state, BakedModel baseModel, Map<ResourceLocation, BakedModel> registry)
     {
         super(state, baseModel);
         this.hanging = SupplementariesCompat.isLoaded() && state.getValue(PropertyHolder.HANGING);
+        this.hangingPotModel = hanging ? registry.get(SupplementariesCompat.HANGING_MODEL_LOCATION) : null;
     }
 
     @Override
@@ -146,8 +148,8 @@ public class FramedFlowerPotModel extends FramedBlockModel
     {
         return potModel.getQuads(potState, face, rand, ModelData.EMPTY, layer)
                 .stream()
-                .filter(q -> !q.getSprite().getName().equals(POT_TEXTURE))
-                .filter(q -> !q.getSprite().getName().equals(DIRT_TEXTURE))
+                .filter(q -> !ClientUtils.isTexture(q, POT_TEXTURE))
+                .filter(q -> !ClientUtils.isTexture(q, DIRT_TEXTURE))
                 .map(ModelUtils::invertTintIndex)
                 .collect(Collectors.toList());
     }
@@ -189,11 +191,6 @@ public class FramedFlowerPotModel extends FramedBlockModel
     {
         Block flower = data.get(FramedFlowerPotBlockEntity.FLOWER_BLOCK);
         return flower != null ? flower : Blocks.AIR;
-    }
-
-    public static void cacheHangingModel(Map<ResourceLocation, BakedModel> registry)
-    {
-        hangingPotModel = registry.get(SupplementariesCompat.HANGING_MODEL_LOCATION);
     }
 
     private record FlowerPotQuadCacheKey(BlockState state, Object ctCtx, Block flower) implements QuadCacheKey { }

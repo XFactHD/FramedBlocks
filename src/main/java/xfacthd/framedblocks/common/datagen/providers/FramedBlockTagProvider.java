@@ -1,13 +1,14 @@
 package xfacthd.framedblocks.common.datagen.providers;
 
+import net.minecraft.core.HolderLookup;
+import net.minecraft.data.PackOutput;
 import net.minecraft.data.tags.TagsProvider;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
-import net.minecraft.data.tags.BlockTagsProvider;
-import net.minecraft.data.DataGenerator;
 import net.minecraft.tags.BlockTags;
 import net.minecraftforge.common.Tags;
+import net.minecraftforge.common.data.BlockTagsProvider;
 import net.minecraftforge.common.data.ExistingFileHelper;
 import net.minecraftforge.registries.RegistryObject;
 import xfacthd.framedblocks.api.util.FramedConstants;
@@ -17,17 +18,21 @@ import xfacthd.framedblocks.api.util.Utils;
 
 import java.util.LinkedHashSet;
 import java.util.Set;
+import java.util.concurrent.CompletableFuture;
 
 public final class FramedBlockTagProvider extends BlockTagsProvider
 {
-    public FramedBlockTagProvider(DataGenerator gen, ExistingFileHelper fileHelper) { super(gen, FramedConstants.MOD_ID, fileHelper); }
+    public FramedBlockTagProvider(PackOutput output, CompletableFuture<HolderLookup.Provider> lookupProvider, ExistingFileHelper fileHelper)
+    {
+        super(output, lookupProvider, FramedConstants.MOD_ID, fileHelper);
+    }
 
     @Override
     public String getName() { return super.getName() + ": " + FramedConstants.MOD_ID; }
 
     @Override
     @SuppressWarnings("unchecked")
-    protected void addTags()
+    protected void addTags(HolderLookup.Provider provider)
     {
         tag(BlockTags.SLABS).add(FBContent.blockFramedSlab.get());
         tag(BlockTags.STAIRS).add(FBContent.blockFramedStairs.get());
@@ -80,13 +85,13 @@ public final class FramedBlockTagProvider extends BlockTagsProvider
 
         tag(Utils.BE_WHITELIST);
 
-        tag(Utils.CAMO_SUSTAIN_PLANT).addTags(
+        tag(Utils.CAMO_SUSTAIN_PLANT).add(
+                Blocks.SOUL_SAND,
+                Blocks.SOUL_SOIL
+        ).addTags(
                 BlockTags.DIRT,
                 BlockTags.SAND,
                 BlockTags.NYLIUM
-        ).add(
-                Blocks.SOUL_SAND,
-                Blocks.SOUL_SOIL
         );
 
         Set<Block> noToolBlocks = Set.of(
@@ -100,7 +105,7 @@ public final class FramedBlockTagProvider extends BlockTagsProvider
         pickaxeBlocks.add(FBContent.blockFramedIronTrapDoor.get());
         pickaxeBlocks.add(FBContent.blockFramedIronGate.get());
 
-        TagsProvider.TagAppender<Block> axeTag = tag(BlockTags.MINEABLE_WITH_AXE);
+        IntrinsicTagAppender<Block> axeTag = tag(BlockTags.MINEABLE_WITH_AXE);
         FBContent.getRegisteredBlocks()
                 .stream()
                 .map(RegistryObject::get)

@@ -104,11 +104,19 @@ public final class FluidModel implements BakedModel
 
         IClientFluidTypeExtensions props = IClientFluidTypeExtensions.of(fluid);
 
+        ResourceLocation modelName = new ResourceLocation(
+                FramedConstants.MOD_ID,
+                "fluid/" + fluid.getFluidType().toString().replace(":", "_")
+        );
+        Function<Material, TextureAtlasSprite> spriteGetter = matToSprite(props);
         BakedModel model = bareModel.bake(
-                modelBakery,
-                matToSprite(props),
+                modelBakery.new ModelBakerImpl(
+                        (modelLoc, material) -> spriteGetter.apply(material),
+                        modelName
+                ),
+                spriteGetter,
                 SIMPLE_STATE,
-                new ResourceLocation(FramedConstants.MOD_ID, "fluid/" + fluid.getFluidType().toString().replace(":", "_"))
+                modelName
         );
         Preconditions.checkNotNull(model, "Failed to bake fluid model");
 

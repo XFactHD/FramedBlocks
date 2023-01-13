@@ -1,8 +1,6 @@
 package xfacthd.framedblocks.common.block.slab;
 
-import com.mojang.datafixers.util.Pair;
 import net.minecraft.util.Tuple;
-import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
@@ -10,13 +8,11 @@ import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.level.BlockGetter;
-import xfacthd.framedblocks.api.block.IFramedBlock;
 import xfacthd.framedblocks.api.block.FramedProperties;
 import xfacthd.framedblocks.common.FBContent;
 import xfacthd.framedblocks.common.block.AbstractFramedDoubleBlock;
 import xfacthd.framedblocks.common.data.BlockType;
 import xfacthd.framedblocks.common.blockentity.FramedDoubleSlabBlockEntity;
-import xfacthd.framedblocks.common.item.FramedDoubleBlockItem;
 
 public class FramedDoubleSlabBlock extends AbstractFramedDoubleBlock
 {
@@ -43,7 +39,4 @@ public class FramedDoubleSlabBlock extends AbstractFramedDoubleBlock
     {
         return new FramedDoubleSlabBlockEntity(pos, state);
     }
-
-    @Override
-    public Pair<IFramedBlock, BlockItem> createItemBlock() { return Pair.of(this, new FramedDoubleBlockItem(this)); }
 }

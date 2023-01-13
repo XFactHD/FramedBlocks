@@ -1,11 +1,9 @@
 package xfacthd.framedblocks.common.block.slab;
 
-import com.mojang.datafixers.util.Pair;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.util.Tuple;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.BlockGetter;
@@ -15,13 +13,11 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.phys.HitResult;
 import xfacthd.framedblocks.api.block.FramedProperties;
-import xfacthd.framedblocks.api.block.IFramedBlock;
 import xfacthd.framedblocks.api.predicate.CtmPredicate;
 import xfacthd.framedblocks.common.FBContent;
 import xfacthd.framedblocks.common.block.AbstractFramedDoubleBlock;
 import xfacthd.framedblocks.common.data.BlockType;
 import xfacthd.framedblocks.common.blockentity.FramedDoublePanelBlockEntity;
-import xfacthd.framedblocks.common.item.FramedDoubleBlockItem;
 
 public class FramedDoublePanelBlock extends AbstractFramedDoubleBlock
 {
@@ -84,7 +80,4 @@ public class FramedDoublePanelBlock extends AbstractFramedDoubleBlock
     {
         return new FramedDoublePanelBlockEntity(pos, state);
     }
-
-    @Override
-    public Pair<IFramedBlock, BlockItem> createItemBlock() { return Pair.of(this, new FramedDoubleBlockItem(this)); }
 }

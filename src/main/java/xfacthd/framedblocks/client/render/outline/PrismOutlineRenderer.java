@@ -2,11 +2,11 @@ package xfacthd.framedblocks.client.render.outline;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
-import com.mojang.math.Quaternion;
-import com.mojang.math.Vector3f;
+import com.mojang.math.Axis;
 import net.minecraft.core.Direction;
 import net.minecraft.util.Mth;
 import net.minecraft.world.level.block.state.BlockState;
+import org.joml.Quaternionf;
 import xfacthd.framedblocks.api.render.Quaternions;
 import xfacthd.framedblocks.api.util.Utils;
 import xfacthd.framedblocks.api.render.OutlineRenderer;
@@ -15,7 +15,7 @@ import xfacthd.framedblocks.common.data.property.DirectionAxis;
 
 public class PrismOutlineRenderer implements OutlineRenderer
 {
-    protected static final Quaternion[] YN_DIR = makeQuaternionArray();
+    protected static final Quaternionf[] YN_DIR = makeQuaternionArray();
 
     @Override
     public void draw(BlockState state, PoseStack pstack, VertexConsumer builder)
@@ -77,12 +77,12 @@ public class PrismOutlineRenderer implements OutlineRenderer
 
 
 
-    private static Quaternion[] makeQuaternionArray()
+    private static Quaternionf[] makeQuaternionArray()
     {
-        Quaternion[] array = new Quaternion[4];
+        Quaternionf[] array = new Quaternionf[4];
         for (Direction dir : Direction.Plane.HORIZONTAL)
         {
-            array[dir.get2DDataValue()] = Vector3f.YN.rotation(Mth.PI / 2F * dir.get2DDataValue());
+            array[dir.get2DDataValue()] = Axis.YN.rotation(Mth.PI / 2F * dir.get2DDataValue());
         }
         return array;
     }

@@ -1,49 +1,51 @@
 package xfacthd.framedblocks.common.util;
 
-import com.google.common.base.Preconditions;
-import net.minecraft.core.NonNullList;
-import net.minecraft.world.item.*;
-import net.minecraft.world.level.block.Block;
-import net.minecraftforge.registries.ForgeRegistries;
-import xfacthd.framedblocks.api.block.IFramedBlock;
+import net.minecraft.network.chat.Component;
+import net.minecraft.world.item.CreativeModeTab;
+import net.minecraft.world.item.ItemStack;
+import net.minecraftforge.event.CreativeModeTabEvent;
+import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.minecraftforge.fml.common.Mod;
+import xfacthd.framedblocks.api.util.FramedConstants;
+import xfacthd.framedblocks.api.util.Utils;
 import xfacthd.framedblocks.common.FBContent;
-import xfacthd.framedblocks.common.item.FramedToolItem;
+import xfacthd.framedblocks.common.data.BlockType;
+import xfacthd.framedblocks.common.data.FramedToolType;
 
-public final class FramedCreativeTab extends CreativeModeTab
+import java.util.Objects;
+
+@Mod.EventBusSubscriber(modid = FramedConstants.MOD_ID, bus = Mod.EventBusSubscriber.Bus.MOD)
+public final class FramedCreativeTab
 {
-    public FramedCreativeTab() { super("framed_blocks"); }
+    private static CreativeModeTab tab = null;
 
-    @Override
-    public ItemStack makeIcon() { return new ItemStack(FBContent.blockFramedCube.get()); }
-
-    @Override
-    public void fillItemList(NonNullList<ItemStack> items)
+    @SubscribeEvent
+    public static void onRegisterCreativeTabs(final CreativeModeTabEvent.Register event)
     {
-        super.fillItemList(items);
-        items.sort((s1, s2) ->
-        {
-            Item itemOne = s1.getItem();
-            Item itemTwo = s2.getItem();
+        tab = event.registerCreativeModeTab(Utils.rl("main_tab"), builder ->
+                builder.title(Component.translatable("itemGroup.framed_blocks"))
+                        .icon(() -> new ItemStack(FBContent.blockFramedCube.get()))
+                        .displayItems((flagSet, output, opPerm) ->
+                        {
+                            for (BlockType type : BlockType.values())
+                            {
+                                if (type.hasBlockItem())
+                                {
+                                    output.accept(FBContent.byType(type));
+                                }
+                            }
 
-            if (itemOne instanceof FramedToolItem toolOne && itemTwo instanceof FramedToolItem toolTwo)
-            {
-                return toolOne.getType().compareTo(toolTwo.getType());
-            }
-            else if (itemOne instanceof FramedToolItem) { return 1; }
-            else if (itemTwo instanceof FramedToolItem) { return -1; }
+                            for (FramedToolType tool : FramedToolType.values())
+                            {
+                                output.accept(FBContent.toolByType(tool));
+                            }
+                        })
+        );
+    }
 
-            Preconditions.checkArgument(
-                    itemOne instanceof BlockItem bi && bi.getBlock() instanceof IFramedBlock,
-                    String.format("Invalid item in FramedBlocks creative tab: %s", ForgeRegistries.ITEMS.getKey(itemOne))
-            );
-            Preconditions.checkArgument(
-                    itemTwo instanceof BlockItem bi && bi.getBlock() instanceof IFramedBlock,
-                    String.format("Invalid item in FramedBlocks creative tab: %s", ForgeRegistries.ITEMS.getKey(itemOne))
-            );
-
-            Block b1 = ((BlockItem) itemOne).getBlock();
-            Block b2 = ((BlockItem) itemTwo).getBlock();
-            return ((IFramedBlock) b1).getBlockType().compareTo(((IFramedBlock) b2).getBlockType());
-        });
+    public static CreativeModeTab get()
+    {
+        Objects.requireNonNull(tab, "Creative tab not initialized yet!");
+        return tab;
     }
 }

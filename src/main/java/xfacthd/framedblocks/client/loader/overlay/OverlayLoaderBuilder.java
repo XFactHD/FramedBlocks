@@ -3,10 +3,10 @@ package xfacthd.framedblocks.client.loader.overlay;
 import com.google.common.base.Preconditions;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
-import com.mojang.math.Vector3f;
 import net.minecraftforge.client.model.generators.BlockModelBuilder;
 import net.minecraftforge.client.model.generators.CustomLoaderBuilder;
 import net.minecraftforge.common.data.ExistingFileHelper;
+import org.joml.Vector3f;
 
 public final class OverlayLoaderBuilder extends CustomLoaderBuilder<BlockModelBuilder>
 {

@@ -1,6 +1,7 @@
 package xfacthd.framedblocks.common.item;
 
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
@@ -19,8 +20,7 @@ public class FramedSignItem extends StandingAndWallBlockItem
 {
     public FramedSignItem()
     {
-        super(FBContent.blockFramedSign.get(), FBContent.blockFramedWallSign.get(),
-                new Properties().tab(FramedBlocks.FRAMED_TAB).stacksTo(16));
+        super(FBContent.blockFramedSign.get(), FBContent.blockFramedWallSign.get(), new Properties(), Direction.DOWN);
     }
 
     @Override

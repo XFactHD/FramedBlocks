@@ -1,6 +1,6 @@
 package xfacthd.framedblocks.common.datagen.providers;
 
-import net.minecraft.data.DataGenerator;
+import net.minecraft.data.PackOutput;
 import net.minecraft.world.item.Item;
 import net.minecraftforge.client.model.generators.*;
 import net.minecraftforge.common.data.ExistingFileHelper;
@@ -12,9 +12,9 @@ import xfacthd.framedblocks.common.FBContent;
 @SuppressWarnings({ "SameParameterValue", "UnusedReturnValue" })
 public final class FramedItemModelProvider extends ItemModelProvider
 {
-    public FramedItemModelProvider(DataGenerator gen, ExistingFileHelper fileHelper)
+    public FramedItemModelProvider(PackOutput output, ExistingFileHelper fileHelper)
     {
-        super(gen, FramedConstants.MOD_ID, fileHelper);
+        super(output, FramedConstants.MOD_ID, fileHelper);
     }
 
     @Override

@@ -1,20 +1,22 @@
 package xfacthd.framedblocks.api.render;
 
-import com.mojang.math.Quaternion;
-import com.mojang.math.Vector3f;
+import com.mojang.math.Axis;
+import org.joml.Quaternionf;
 
 public final class Quaternions
 {
-    public static final Quaternion XP_90 = Vector3f.XP.rotationDegrees(90);
-    public static final Quaternion XP_180 = Vector3f.XP.rotationDegrees(180);
-    public static final Quaternion XN_90 = Vector3f.XN.rotationDegrees(90);
+    public static final Quaternionf ONE = new Quaternionf();
 
-    public static final Quaternion YP_90 = Vector3f.YP.rotationDegrees(90);
-    public static final Quaternion YN_90 = Vector3f.YN.rotationDegrees(90);
+    public static final Quaternionf XP_90 = Axis.XP.rotationDegrees(90);
+    public static final Quaternionf XP_180 = Axis.XP.rotationDegrees(180);
+    public static final Quaternionf XN_90 = Axis.XN.rotationDegrees(90);
 
-    public static final Quaternion ZP_90 = Vector3f.ZP.rotationDegrees(90);
-    public static final Quaternion ZP_180 = Vector3f.ZP.rotationDegrees(180);
-    public static final Quaternion ZN_90 = Vector3f.ZN.rotationDegrees(90);
+    public static final Quaternionf YP_90 = Axis.YP.rotationDegrees(90);
+    public static final Quaternionf YN_90 = Axis.YN.rotationDegrees(90);
+
+    public static final Quaternionf ZP_90 = Axis.ZP.rotationDegrees(90);
+    public static final Quaternionf ZP_180 = Axis.ZP.rotationDegrees(180);
+    public static final Quaternionf ZN_90 = Axis.ZN.rotationDegrees(90);
 
 
 

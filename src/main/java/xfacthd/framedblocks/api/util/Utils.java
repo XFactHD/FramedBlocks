@@ -2,6 +2,8 @@ package xfacthd.framedblocks.api.util;
 
 import com.google.common.base.Preconditions;
 import net.minecraft.core.*;
+import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.nbt.*;
 import net.minecraft.nbt.Tag;
 import net.minecraft.network.chat.Component;
@@ -373,6 +375,16 @@ public final class Utils
             be.setGlowing(glowing);
             be.setIntangible(intangible);
         }
+    }
+
+    public static HolderLookup<Block> getBlockHolderLookup(Level level)
+    {
+        if (level != null)
+        {
+            return level.holderLookup(Registries.BLOCK);
+        }
+        //noinspection deprecation
+        return BuiltInRegistries.BLOCK.asLookup();
     }
 
     public static ResourceLocation rl(String path) { return new ResourceLocation(FramedConstants.MOD_ID, path); }

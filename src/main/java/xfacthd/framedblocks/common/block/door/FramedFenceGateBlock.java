@@ -2,6 +2,7 @@ package xfacthd.framedblocks.common.block.door;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.Entity;
@@ -27,7 +28,10 @@ public class FramedFenceGateBlock extends FenceGateBlock implements IFramedBlock
 {
     public FramedFenceGateBlock()
     {
-        super(IFramedBlock.createProperties(BlockType.FRAMED_FENCE_GATE));
+        super(IFramedBlock.createProperties(BlockType.FRAMED_FENCE_GATE),
+                SoundEvents.FENCE_GATE_CLOSE,
+                SoundEvents.FENCE_GATE_OPEN
+        );
         registerDefaultState(defaultBlockState().setValue(FramedProperties.GLOWING, false));
     }
 

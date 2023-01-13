@@ -47,7 +47,7 @@ public class FramedRedstoneTorchModel extends FramedBlockModel
         List<BakedQuad> quads = baseModel.getQuads(state, null, rand, extraData, layer);
         for (BakedQuad quad : quads)
         {
-            if (!quad.getSprite().getName().equals(ClientUtils.DUMMY_TEXTURE))
+            if (!ClientUtils.isDummyTexture(quad))
             {
                 quadMap.get(null).add(quad);
             }

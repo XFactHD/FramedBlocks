@@ -20,7 +20,7 @@ apply plugin: 'org.spongepowered.mixin'
 
 jarJar.enable()
 
-version = '6.7.0'
+version = '7.0.0'
 group = 'xfacthd.framedblocks'
 archivesBaseName = 'FramedBlocks'
 
@@ -29,7 +29,7 @@ java.toolchain.languageVersion = JavaLanguageVersion.of(17)
 println('Java: ' + System.getProperty('java.version') + ' JVM: ' + System.getProperty('java.vm.version') + '(' + System.getProperty('java.vendor') + ') Arch: ' + System.getProperty('os.arch'))
 
 minecraft {
-    mappings channel: 'parchment', version: '2022.10.16-1.19.2'
+    mappings channel: 'parchment', version: '2022.12.18-1.19.3'
     
     accessTransformer = file('src/main/resources/META-INF/accesstransformer.cfg')
 
@@ -135,7 +135,7 @@ repositories {
 }
 
 dependencies {
-    minecraft 'net.minecraftforge:forge:1.19.2-43.1.57'
+    minecraft 'net.minecraftforge:forge:1.19.3-44.0.29'
 
     //compileOnly fg.deobf("curse.maven:ctm-267602:3737369")
 
@@ -144,7 +144,7 @@ dependencies {
 
     compileOnly fg.deobf("curse.maven:buildinggadgets-298187:3829297")
 
-    runtimeOnly fg.deobf("curse.maven:jei-238222:4239206")
+    //runtimeOnly fg.deobf("curse.maven:jei-238222:4239206")
     //runtimeOnly fg.deobf("curse.maven:spark-361579:3767286")
 
     //runtimeOnly fg.deobf("curse.maven:magnesium_sodium-532724:3556734")

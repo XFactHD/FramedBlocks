@@ -1,6 +1,8 @@
 package xfacthd.framedblocks.common.block.interactive;
 
 import net.minecraft.core.BlockPos;
+import net.minecraft.sounds.SoundEvent;
+import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.Entity;
@@ -37,9 +39,9 @@ public class FramedWeightedPressurePlateBlock extends WeightedPressurePlateBlock
 
     private final BlockType type;
 
-    protected FramedWeightedPressurePlateBlock(BlockType type, int maxWeight, Properties props)
+    protected FramedWeightedPressurePlateBlock(BlockType type, int maxWeight, Properties props, SoundEvent soundOff, SoundEvent soundOn)
     {
-        super(maxWeight, props);
+        super(maxWeight, props, soundOff, soundOn);
         this.type = type;
         registerDefaultState(defaultBlockState().setValue(FramedProperties.GLOWING, false));
     }
@@ -156,7 +158,9 @@ public class FramedWeightedPressurePlateBlock extends WeightedPressurePlateBlock
                 15,
                 IFramedBlock.createProperties(BlockType.FRAMED_GOLD_PRESSURE_PLATE)
                         .noCollission()
-                        .strength(0.5F)
+                        .strength(0.5F),
+                SoundEvents.METAL_PRESSURE_PLATE_CLICK_OFF,
+                SoundEvents.METAL_PRESSURE_PLATE_CLICK_ON
         );
     }
 
@@ -167,7 +171,9 @@ public class FramedWeightedPressurePlateBlock extends WeightedPressurePlateBlock
                 15,
                 IFramedBlock.createProperties(BlockType.FRAMED_WATERLOGGABLE_GOLD_PRESSURE_PLATE)
                         .noCollission()
-                        .strength(0.5F)
+                        .strength(0.5F),
+                SoundEvents.METAL_PRESSURE_PLATE_CLICK_OFF,
+                SoundEvents.METAL_PRESSURE_PLATE_CLICK_ON
         );
     }
 
@@ -179,7 +185,9 @@ public class FramedWeightedPressurePlateBlock extends WeightedPressurePlateBlock
                 IFramedBlock.createProperties(BlockType.FRAMED_IRON_PRESSURE_PLATE)
                         .requiresCorrectToolForDrops()
                         .noCollission()
-                        .strength(0.5F)
+                        .strength(0.5F),
+                SoundEvents.METAL_PRESSURE_PLATE_CLICK_OFF,
+                SoundEvents.METAL_PRESSURE_PLATE_CLICK_ON
         );
     }
 
@@ -191,7 +199,9 @@ public class FramedWeightedPressurePlateBlock extends WeightedPressurePlateBlock
                 IFramedBlock.createProperties(BlockType.FRAMED_WATERLOGGABLE_IRON_PRESSURE_PLATE)
                         .requiresCorrectToolForDrops()
                         .noCollission()
-                        .strength(0.5F)
+                        .strength(0.5F),
+                SoundEvents.METAL_PRESSURE_PLATE_CLICK_OFF,
+                SoundEvents.METAL_PRESSURE_PLATE_CLICK_ON
         );
     }
 }

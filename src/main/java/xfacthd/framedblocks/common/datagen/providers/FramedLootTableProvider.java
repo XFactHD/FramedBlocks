@@ -1,47 +1,38 @@
 package xfacthd.framedblocks.common.datagen.providers;
 
-import com.mojang.datafixers.util.Pair;
-import net.minecraft.data.DataGenerator;
-import net.minecraft.data.loot.BlockLoot;
+import net.minecraft.data.PackOutput;
+import net.minecraft.data.loot.BlockLootSubProvider;
 import net.minecraft.data.loot.LootTableProvider;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.flag.FeatureFlags;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.DoorBlock;
 import net.minecraft.world.level.block.state.properties.DoubleBlockHalf;
 import net.minecraft.world.level.storage.loot.*;
 import net.minecraft.world.level.storage.loot.entries.LootItem;
 import net.minecraft.world.level.storage.loot.functions.SetItemCountFunction;
-import net.minecraft.world.level.storage.loot.parameters.LootContextParamSet;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParamSets;
 import net.minecraft.world.level.storage.loot.providers.number.ConstantValue;
 import net.minecraftforge.registries.RegistryObject;
-import xfacthd.framedblocks.api.util.FramedConstants;
 import xfacthd.framedblocks.common.FBContent;
 import xfacthd.framedblocks.common.block.interactive.FramedWaterloggablePressurePlateBlock;
 import xfacthd.framedblocks.common.block.interactive.FramedWaterloggableWeightedPressurePlateBlock;
 
 import java.util.*;
-import java.util.function.*;
 import java.util.stream.Collectors;
 
 public final class FramedLootTableProvider extends LootTableProvider
 {
-    public FramedLootTableProvider(DataGenerator gen) { super(gen); }
-
-    @Override
-    public String getName() { return super.getName() + ": " + FramedConstants.MOD_ID; }
-
-    @Override
-    protected void validate(Map<ResourceLocation, LootTable> map, ValidationContext tracker) { /*NOOP*/ }
-
-    @Override
-    protected List<Pair<Supplier<Consumer<BiConsumer<ResourceLocation, LootTable.Builder>>>, LootContextParamSet>> getTables()
+    public FramedLootTableProvider(PackOutput output)
     {
-        return Collections.singletonList(Pair.of(BlockLootTable::new, LootContextParamSets.BLOCK));
+        super(output, Set.of(), List.of(
+                new LootTableProvider.SubProviderEntry(BlockLootTable::new, LootContextParamSets.BLOCK)
+        ));
     }
 
-    private static class BlockLootTable extends BlockLoot
+    private static class BlockLootTable extends BlockLootSubProvider
     {
+        public BlockLootTable() { super(Set.of(), FeatureFlags.VANILLA_SET); }
+
         @Override
         protected Iterable<Block> getKnownBlocks()
         {
@@ -52,7 +43,7 @@ public final class FramedLootTableProvider extends LootTableProvider
         }
 
         @Override
-        protected void addTables()
+        protected void generate()
         {
             FBContent.getRegisteredBlocks()
                     .stream()
@@ -81,7 +72,7 @@ public final class FramedLootTableProvider extends LootTableProvider
             dropOther(FBContent.blockFramedVerticalDoubleHalfSlope.get(), FBContent.blockFramedDoubleHalfSlope.get());
         }
 
-        protected static LootTable.Builder droppingTwo(Block block, Block drop) {
+        protected LootTable.Builder droppingTwo(Block block, Block drop) {
             return LootTable.lootTable().withPool(
                     LootPool.lootPool().setRolls(ConstantValue.exactly(1)).add(
                             applyExplosionDecay(block, LootItem.lootTableItem(drop).apply(

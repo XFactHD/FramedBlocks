@@ -1,22 +1,24 @@
 package xfacthd.framedblocks.api.model.quad;
 
 import com.google.common.base.Preconditions;
-import com.mojang.math.*;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.core.Direction;
 import net.minecraft.util.Mth;
+import org.joml.*;
 import xfacthd.framedblocks.api.util.Utils;
 import xfacthd.framedblocks.api.model.util.ModelUtils;
+
+import java.lang.Math;
 
 @SuppressWarnings("unused")
 public final class Modifiers
 {
     private static final QuadModifier.Modifier NOOP_MODIFIER = data -> true;
-    private static final float SCALE_ROTATION_45 = 1.0F / (float)Math.cos(Math.PI / 4D) - 1.0F;
-    private static final float SCALE_ROTATION_22_5 = 1.0F / (float)Math.cos(Math.PI / 8F) - 1.0F;
+    private static final float SCALE_ROTATION_45 = 1.0F / (float) Math.cos(Math.PI / 4D) - 1.0F;
+    private static final float SCALE_ROTATION_22_5 = 1.0F / (float) Math.cos(Math.PI / 8F) - 1.0F;
     private static final Vector3f ONE = new Vector3f(1, 1, 1);
     private static final Vector3f CENTER = new Vector3f(.5F, .5F, .5F);
-    private static final float PRISM_TILT_ANGLE = (float)Math.toDegrees(Math.atan(.5D));
+    private static final float PRISM_TILT_ANGLE = (float) Math.toDegrees(Math.atan(.5D));
     private static final Vector3f[] PRISM_DIR_TO_ORIGIN_VECS = new Vector3f[]
     {
             new Vector3f(1F, 0F, 0F), //North, bottom left corner
@@ -748,7 +750,8 @@ public final class Modifiers
             default -> throw new IllegalArgumentException("Invalid axis!");
         }
 
-        Matrix4f transform = new Matrix4f(new Quaternion(axisVec, angle, true));
+        float angleRad = (float) Math.toRadians(angle);
+        Matrix4f transform = new Matrix4f().rotate(new AxisAngle4f(angleRad, axisVec));
 
         if (rescale)
         {
@@ -761,7 +764,7 @@ public final class Modifiers
                 float scaleFactor = 1.0F / (float)Math.cos(Math.PI / (180D / (double)scaleAngle)) - 1.0F;
                 scaleVec.mul(scaleFactor);
             }
-            scaleMult.map(Math::abs);
+            scaleMult.absolute();
             scaleVec.mul(scaleMult.x(), scaleMult.y(), scaleMult.z());
             scaleVec.add(1.0F, 1.0F, 1.0F);
         }
@@ -770,8 +773,8 @@ public final class Modifiers
         for (int i = 0; i < 4; i++)
         {
             Vector4f vector4f = new Vector4f(pos[i][0] - origin.x(), pos[i][1] - origin.y(), pos[i][2] - origin.z(), 1.0F);
-            if (rescale) { vector4f.mul(scaleVec); }
-            vector4f.transform(transform);
+            if (rescale) { vector4f.mul(new Vector4f(scaleVec, 1.0F)); }
+            vector4f.mul(transform);
 
             pos[i][0] = vector4f.x() + origin.x();
             pos[i][1] = vector4f.y() + origin.y();

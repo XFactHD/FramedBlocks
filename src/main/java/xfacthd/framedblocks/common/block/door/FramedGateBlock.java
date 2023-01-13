@@ -2,8 +2,10 @@ package xfacthd.framedblocks.common.block.door;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.sounds.*;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
+import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.*;
@@ -24,6 +26,8 @@ import xfacthd.framedblocks.api.util.Utils;
 import xfacthd.framedblocks.common.block.FramedBlock;
 import xfacthd.framedblocks.common.data.BlockType;
 
+import javax.annotation.Nullable;
+
 @SuppressWarnings("deprecation")
 public class FramedGateBlock extends FramedBlock
 {
@@ -32,9 +36,14 @@ public class FramedGateBlock extends FramedBlock
     private static final VoxelShape SHAPE_WEST = box(13.0D, 0.0D, 0.0D, 16.0D, 16.0D, 16.0D);
     private static final VoxelShape SHAPE_EAST = box(0.0D, 0.0D, 0.0D, 3.0D, 16.0D, 16.0D);
 
-    private FramedGateBlock(BlockType blockType, Properties props)
+    private final SoundEvent closeSound;
+    private final SoundEvent openSound;
+
+    private FramedGateBlock(BlockType blockType, Properties props, SoundEvent closeSound, SoundEvent openSound)
     {
         super(blockType, props);
+        this.closeSound = closeSound;
+        this.openSound = openSound;
         registerDefaultState(defaultBlockState()
                 .setValue(BlockStateProperties.OPEN, false)
                 .setValue(BlockStateProperties.POWERED, false)
@@ -112,7 +121,7 @@ public class FramedGateBlock extends FramedBlock
         level.setBlockAndUpdate(pos, state);
 
         boolean open = state.getValue(BlockStateProperties.OPEN);
-        level.levelEvent(player, open ? getOpenSound() : getCloseSound(), pos, 0);
+        playSound(player, level, pos, open);
         level.gameEvent(player, open ? GameEvent.BLOCK_OPEN : GameEvent.BLOCK_CLOSE, pos);
 
         return InteractionResult.sidedSuccess(level.isClientSide());
@@ -126,7 +135,7 @@ public class FramedGateBlock extends FramedBlock
         {
             if (powered != state.getValue(BlockStateProperties.OPEN))
             {
-                level.levelEvent(null, powered ? getOpenSound() : getCloseSound(), pos, 0);
+                playSound(null, level, pos, powered);
                 level.gameEvent(null, powered ? GameEvent.BLOCK_OPEN : GameEvent.BLOCK_CLOSE, pos);
             }
 
@@ -185,14 +194,9 @@ public class FramedGateBlock extends FramedBlock
         };
     }
 
-    private int getCloseSound()
+    private void playSound(@Nullable Entity entity, Level level, BlockPos pos, boolean open)
     {
-        return material == FramedDoorBlock.IRON_WOOD ? LevelEvent.SOUND_CLOSE_IRON_DOOR : LevelEvent.SOUND_CLOSE_WOODEN_DOOR;
-    }
-
-    private int getOpenSound()
-    {
-        return material == FramedDoorBlock.IRON_WOOD ? LevelEvent.SOUND_OPEN_IRON_DOOR : LevelEvent.SOUND_OPEN_WOODEN_DOOR;
+        level.playSound(entity, pos, open ? openSound : closeSound, SoundSource.BLOCKS, 1F, level.getRandom().nextFloat() * .1F + .9F);
     }
 
 
@@ -201,7 +205,9 @@ public class FramedGateBlock extends FramedBlock
     {
         return new FramedGateBlock(
                 BlockType.FRAMED_GATE,
-                IFramedBlock.createProperties(BlockType.FRAMED_GATE)
+                IFramedBlock.createProperties(BlockType.FRAMED_GATE),
+                SoundEvents.WOODEN_DOOR_CLOSE,
+                SoundEvents.WOODEN_DOOR_OPEN
         );
     }
 
@@ -210,7 +216,9 @@ public class FramedGateBlock extends FramedBlock
         return new FramedGateBlock(
                 BlockType.FRAMED_IRON_GATE,
                 IFramedBlock.createProperties(BlockType.FRAMED_IRON_GATE, FramedDoorBlock.IRON_WOOD)
-                        .requiresCorrectToolForDrops()
+                        .requiresCorrectToolForDrops(),
+                SoundEvents.IRON_DOOR_CLOSE,
+                SoundEvents.IRON_DOOR_OPEN
         );
     }
 }

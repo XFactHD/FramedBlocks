@@ -3,6 +3,7 @@ package xfacthd.framedblocks.client.render;
 import com.google.common.collect.HashBasedTable;
 import com.google.common.collect.Table;
 import com.mojang.blaze3d.vertex.PoseStack;
+import com.mojang.math.Axis;
 import net.minecraft.client.renderer.block.BlockModelShaper;
 import net.minecraft.client.renderer.block.ModelBlockRenderer;
 import net.minecraft.client.renderer.blockentity.*;
@@ -15,7 +16,6 @@ import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.core.Direction;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
-import com.mojang.math.Vector3f;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.client.RenderTypeHelper;
 import net.minecraftforge.client.model.data.ModelData;
@@ -33,6 +33,7 @@ import java.util.*;
 
 public class FramedChestRenderer implements BlockEntityRenderer<FramedChestBlockEntity>
 {
+    private static final Table<Direction, LatchType, BakedModel> LID_MODELS_PRE_CACHE = HashBasedTable.create(4, 3);
     private static final Table<Direction, LatchType, BakedModel> LID_MODELS = HashBasedTable.create(4, 3);
 
     @SuppressWarnings("unused")
@@ -61,7 +62,7 @@ public class FramedChestRenderer implements BlockEntityRenderer<FramedChestBlock
         matrix.pushPose();
 
         matrix.translate(xOff, 9F/16F, zOff);
-        matrix.mulPose(Utils.isX(dir) ? Vector3f.ZP.rotationDegrees(angle) : Vector3f.XN.rotationDegrees(angle));
+        matrix.mulPose(Utils.isX(dir) ? Axis.ZP.rotationDegrees(angle) : Axis.XN.rotationDegrees(angle));
         matrix.translate(-xOff, -9F/16F, -zOff);
 
         renderLidModel(be, state, matrix, buffer, model, data);
@@ -137,11 +138,17 @@ public class FramedChestRenderer implements BlockEntityRenderer<FramedChestBlock
 
                 ResourceLocation location = BlockModelShaper.stateToModelLocation(state);
 
-                LID_MODELS.put(dir, latch, new FramedChestLidModel(
+                LID_MODELS_PRE_CACHE.put(dir, latch, new FramedChestLidModel(
                         state,
                         registry.get(location)
                 ));
             }
         }
+    }
+
+    public static void onModelLoadingComplete()
+    {
+        LID_MODELS.putAll(LID_MODELS_PRE_CACHE);
+        LID_MODELS_PRE_CACHE.clear();
     }
 }

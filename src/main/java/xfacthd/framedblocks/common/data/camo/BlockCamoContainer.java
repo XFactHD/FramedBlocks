@@ -10,6 +10,7 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.fml.loading.FMLEnvironment;
 import xfacthd.framedblocks.api.camo.*;
 import xfacthd.framedblocks.api.util.ClientUtils;
+import xfacthd.framedblocks.api.util.Utils;
 import xfacthd.framedblocks.common.FBContent;
 
 public class BlockCamoContainer extends CamoContainer
@@ -45,7 +46,7 @@ public class BlockCamoContainer extends CamoContainer
         @Override
         public CamoContainer fromNbt(CompoundTag tag)
         {
-            BlockState state = NbtUtils.readBlockState(tag.getCompound("state"));
+            BlockState state = NbtUtils.readBlockState(Utils.getBlockHolderLookup(null), tag.getCompound("state"));
             return new BlockCamoContainer(state);
         }
 

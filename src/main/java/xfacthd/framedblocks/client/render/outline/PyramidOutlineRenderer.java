@@ -2,17 +2,17 @@ package xfacthd.framedblocks.client.render.outline;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
-import com.mojang.math.Quaternion;
-import com.mojang.math.Vector3f;
+import com.mojang.math.Axis;
 import net.minecraft.core.Direction;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
+import org.joml.Quaternionf;
 import xfacthd.framedblocks.api.render.Quaternions;
 import xfacthd.framedblocks.api.render.OutlineRenderer;
 
 public final class PyramidOutlineRenderer implements OutlineRenderer
 {
-    private static final Quaternion[] XN_DIR = makeQuaternionArray();
+    private static final Quaternionf[] XN_DIR = makeQuaternionArray();
 
     private final float height;
 
@@ -51,12 +51,12 @@ public final class PyramidOutlineRenderer implements OutlineRenderer
 
 
 
-    private static Quaternion[] makeQuaternionArray()
+    private static Quaternionf[] makeQuaternionArray()
     {
-        Quaternion[] array = new Quaternion[4];
+        Quaternionf[] array = new Quaternionf[4];
         for (Direction dir : Direction.Plane.HORIZONTAL)
         {
-            array[dir.get2DDataValue()] = Vector3f.XN.rotationDegrees(dir.toYRot() - 90F);
+            array[dir.get2DDataValue()] = Axis.XN.rotationDegrees(dir.toYRot() - 90F);
         }
         return array;
     }

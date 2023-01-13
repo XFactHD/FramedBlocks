@@ -180,21 +180,14 @@ public final class FBClient
     }
 
     @SubscribeEvent
-    public static void onModelsLoaded(final ModelEvent.BakingCompleted event)
+    public static void onModifyBakingResult(final ModelEvent.ModifyBakingResult event)
     {
         Map<ResourceLocation, BakedModel> registry = event.getModels();
 
-        ModelCache.clear(event.getModelBakery());
         FramedChestRenderer.onModelsLoaded(registry); //Must happen before the chest model is replaced
         FramedMarkedPressurePlateModel.cacheFrameModels(registry);
         FramedStoneButtonModel.cacheFrameModels(registry);
         FramedLargeStoneButtonModel.cacheFrameModels(registry);
-        FramedTargetModel.cacheOverlayModel(registry);
-
-        if (SupplementariesCompat.isLoaded())
-        {
-            FramedFlowerPotModel.cacheHangingModel(registry);
-        }
 
         List<Property<?>> ignoreWaterlogged = List.of(BlockStateProperties.WATERLOGGED);
         List<Property<?>> ignoreWaterloggedLock = List.of(BlockStateProperties.WATERLOGGED, FramedProperties.STATE_LOCKED);
@@ -262,7 +255,7 @@ public final class FBClient
         ClientUtils.replaceModels(FBContent.blockFramedPoweredRailSlope, registry, FramedRailSlopeModel::powered, FramedRailSlopeModel.itemSourcePowered(), ignoreDefault);
         ClientUtils.replaceModels(FBContent.blockFramedDetectorRailSlope, registry, FramedRailSlopeModel::detector, FramedRailSlopeModel.itemSourceDetector(), ignoreDefault);
         ClientUtils.replaceModels(FBContent.blockFramedActivatorRailSlope, registry, FramedRailSlopeModel::activator, FramedRailSlopeModel.itemSourceActivator(), ignoreDefault);
-        ClientUtils.replaceModels(FBContent.blockFramedFlowerPot, registry, FramedFlowerPotModel::new, null);
+        ClientUtils.replaceModels(FBContent.blockFramedFlowerPot, registry, (state, model) -> new FramedFlowerPotModel(state, model, registry), null);
         ClientUtils.replaceModels(FBContent.blockFramedPillar, registry, FramedPillarModel::new, ignoreWaterlogged);
         ClientUtils.replaceModels(FBContent.blockFramedHalfPillar, registry, FramedHalfPillarModel::new, ignoreWaterlogged);
         ClientUtils.replaceModels(FBContent.blockFramedPost, registry, FramedPillarModel::new, ignoreWaterlogged);
@@ -313,7 +306,7 @@ public final class FBClient
         ClientUtils.replaceModelsSpecial(FBContent.blockFramedLargeButton, registry, FramedLargeButtonModel::new, FramedLargeButtonModel::mergeStates);
         ClientUtils.replaceModelsSpecial(FBContent.blockFramedLargeStoneButton, registry, FramedLargeStoneButtonModel::new, FramedLargeButtonModel::mergeStates);
         ClientUtils.replaceModels(FBContent.blockFramedHorizontalPane, registry, FramedHorizontalPaneModel::new, ignoreDefault);
-        ClientUtils.replaceModelsSpecial(FBContent.blockFramedTarget, registry, FramedTargetModel::new, FramedTargetModel.itemSource(), ignoreAll);
+        ClientUtils.replaceModelsSpecial(FBContent.blockFramedTarget, registry, (state, model) -> new FramedTargetModel(state, model, registry), FramedTargetModel.itemSource(), ignoreAll);
         ClientUtils.replaceModels(FBContent.blockFramedGate, registry, FramedDoorModel::new, ignoreSolid);
         ClientUtils.replaceModels(FBContent.blockFramedIronGate, registry, FramedIronDoorModel::new, ignoreSolid);
         ClientUtils.replaceModels(FBContent.blockFramedItemFrame, registry, FramedItemFrameModel::normal, null);
@@ -333,6 +326,13 @@ public final class FBClient
         ClientUtils.replaceModels(FBContent.blockFramedVerticalDoubleHalfSlope, registry, (state, model) -> new FramedDoubleBlockModel(state, model, false), ignoreDefault);
         ClientUtils.replaceModels(FBContent.blockFramedSlopedStairs, registry, FramedSlopedStairsModel::new, FramedSlopedStairsModel.itemSource(), ignoreDefault);
         ClientUtils.replaceModels(FBContent.blockFramedVerticalSlopedStairs, registry, FramedVerticalSlopedStairsModel::new, FramedVerticalSlopedStairsModel.itemSource(), ignoreDefault);
+    }
+
+    @SubscribeEvent
+    public static void onModelsLoaded(final ModelEvent.BakingCompleted event)
+    {
+        ModelCache.clear(event.getModelBakery());
+        FramedChestRenderer.onModelLoadingComplete();
     }
 
 

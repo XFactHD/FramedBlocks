@@ -1,8 +1,7 @@
 package xfacthd.framedblocks.common.datagen.providers;
 
-import com.mojang.math.Vector3f;
 import net.minecraft.core.Direction;
-import net.minecraft.data.DataGenerator;
+import net.minecraft.data.PackOutput;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.block.*;
 import net.minecraft.world.level.block.state.BlockState;
@@ -10,6 +9,7 @@ import net.minecraft.world.level.block.state.properties.*;
 import net.minecraftforge.client.model.generators.*;
 import net.minecraftforge.common.data.ExistingFileHelper;
 import net.minecraftforge.registries.RegistryObject;
+import org.joml.Vector3f;
 import xfacthd.framedblocks.api.block.FramedProperties;
 import xfacthd.framedblocks.api.util.*;
 import xfacthd.framedblocks.api.util.ClientUtils;
@@ -28,9 +28,9 @@ public final class FramedBlockStateProvider extends BlockStateProvider
 {
     private final ResourceLocation TEXTURE;
 
-    public FramedBlockStateProvider(DataGenerator gen, ExistingFileHelper fileHelper)
+    public FramedBlockStateProvider(PackOutput output, ExistingFileHelper fileHelper)
     {
-        super(gen, FramedConstants.MOD_ID, fileHelper);
+        super(output, FramedConstants.MOD_ID, fileHelper);
         TEXTURE = modLoc("block/framed_block");
     }
 

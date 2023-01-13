@@ -2,6 +2,8 @@ package xfacthd.framedblocks.common.block.door;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.sounds.SoundEvent;
+import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.Entity;
@@ -15,7 +17,6 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.block.state.properties.Half;
-import net.minecraft.world.level.gameevent.GameEvent;
 import net.minecraft.world.level.material.MaterialColor;
 import net.minecraft.world.level.storage.loot.LootContext;
 import net.minecraft.world.phys.BlockHitResult;
@@ -46,18 +47,12 @@ public class FramedTrapDoorBlock extends TrapDoorBlock implements IFramedBlock
         }
         return dir == Direction.DOWN;
     };
-    private static final int[] SOUNDS = new int[] {
-            LevelEvent.SOUND_OPEN_WOODEN_TRAP_DOOR,
-            LevelEvent.SOUND_CLOSE_WOODEN_TRAP_DOOR,
-            LevelEvent.SOUND_OPEN_IRON_TRAP_DOOR,
-            LevelEvent.SOUND_CLOSE_IRON_TRAP_DOOR
-    };
 
     private final BlockType type;
 
-    private FramedTrapDoorBlock(BlockType type, Properties props)
+    private FramedTrapDoorBlock(BlockType type, Properties props, SoundEvent closeSound, SoundEvent openSound)
     {
-        super(props);
+        super(props, closeSound, openSound);
         this.type = type;
         registerDefaultState(defaultBlockState()
                 .setValue(FramedProperties.SOLID, false)
@@ -79,15 +74,6 @@ public class FramedTrapDoorBlock extends TrapDoorBlock implements IFramedBlock
         if (result.consumesAction()) { return result; }
 
         return material == FramedDoorBlock.IRON_WOOD ? InteractionResult.PASS :super.use(state, level, pos, player, hand, hit);
-    }
-
-    @Override
-    protected void playSound(@Nullable Player player, Level level, BlockPos pos, boolean isOpened)
-    {
-        int sound = (isOpened ? 0 : 1) + (material == FramedDoorBlock.IRON_WOOD ? 2 : 0);
-        level.levelEvent(player, SOUNDS[sound], pos, 0);
-
-        level.gameEvent(player, isOpened ? GameEvent.BLOCK_OPEN : GameEvent.BLOCK_CLOSE, pos);
     }
 
     @Override
@@ -195,7 +181,9 @@ public class FramedTrapDoorBlock extends TrapDoorBlock implements IFramedBlock
     {
         return new FramedTrapDoorBlock(
                 BlockType.FRAMED_TRAPDOOR,
-                IFramedBlock.createProperties(BlockType.FRAMED_TRAPDOOR)
+                IFramedBlock.createProperties(BlockType.FRAMED_TRAPDOOR),
+                SoundEvents.WOODEN_TRAPDOOR_CLOSE,
+                SoundEvents.WOODEN_TRAPDOOR_OPEN
         );
     }
 
@@ -204,7 +192,9 @@ public class FramedTrapDoorBlock extends TrapDoorBlock implements IFramedBlock
         return new FramedTrapDoorBlock(
                 BlockType.FRAMED_IRON_TRAPDOOR,
                 IFramedBlock.createProperties(BlockType.FRAMED_IRON_TRAPDOOR, FramedDoorBlock.IRON_WOOD)
-                        .requiresCorrectToolForDrops()
+                        .requiresCorrectToolForDrops(),
+                SoundEvents.IRON_TRAPDOOR_CLOSE,
+                SoundEvents.IRON_TRAPDOOR_OPEN
         );
     }
 }

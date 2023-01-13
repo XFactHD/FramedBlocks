@@ -2,11 +2,11 @@ package xfacthd.framedblocks.client.render.outline;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
-import com.mojang.math.Quaternion;
-import com.mojang.math.Vector3f;
+import com.mojang.math.Axis;
 import net.minecraft.core.Direction;
 import net.minecraft.util.Mth;
 import net.minecraft.world.level.block.state.BlockState;
+import org.joml.Quaternionf;
 import xfacthd.framedblocks.api.render.Quaternions;
 import xfacthd.framedblocks.api.util.Utils;
 import xfacthd.framedblocks.api.render.OutlineRenderer;
@@ -15,7 +15,7 @@ import xfacthd.framedblocks.common.data.property.CompoundDirection;
 
 public class SlopedPrismOutlineRenderer extends PrismOutlineRenderer
 {
-    private static final Quaternion[][] ZP_DIR = makeQuaternionArray();
+    private static final Quaternionf[][] ZP_DIR = makeQuaternionArray();
 
     @Override
     public void drawCenterAndTriangle(PoseStack pstack, VertexConsumer builder)
@@ -62,12 +62,12 @@ public class SlopedPrismOutlineRenderer extends PrismOutlineRenderer
 
 
 
-    private static Quaternion[][] makeQuaternionArray()
+    private static Quaternionf[][] makeQuaternionArray()
     {
-        Quaternion[][] array = new Quaternion[4][6];
+        Quaternionf[][] array = new Quaternionf[4][6];
         for (Direction dir : Direction.Plane.HORIZONTAL)
         {
-            array[dir.get2DDataValue()] = new Quaternion[6];
+            array[dir.get2DDataValue()] = new Quaternionf[6];
             for (Direction orientation : Direction.values())
             {
                 int mult = 2;
@@ -79,7 +79,7 @@ public class SlopedPrismOutlineRenderer extends PrismOutlineRenderer
                 {
                     mult = 3;
                 }
-                array[dir.get2DDataValue()][orientation.ordinal()] = Vector3f.ZP.rotation(Mth.PI / 2F * mult);
+                array[dir.get2DDataValue()][orientation.ordinal()] = Axis.ZP.rotation(Mth.PI / 2F * mult);
             }
         }
         return array;

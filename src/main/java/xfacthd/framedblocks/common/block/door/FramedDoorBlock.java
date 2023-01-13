@@ -2,6 +2,8 @@ package xfacthd.framedblocks.common.block.door;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.sounds.SoundEvent;
+import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.Entity;
@@ -54,9 +56,9 @@ public class FramedDoorBlock extends DoorBlock implements IFramedBlock
 
     private final BlockType type;
 
-    private FramedDoorBlock(BlockType type, Properties props)
+    private FramedDoorBlock(BlockType type, Properties props, SoundEvent closeSound, SoundEvent openSound)
     {
-        super(props);
+        super(props, closeSound, openSound);
         this.type = type;
         registerDefaultState(defaultBlockState()
                 .setValue(FramedProperties.SOLID, false)
@@ -122,18 +124,6 @@ public class FramedDoorBlock extends DoorBlock implements IFramedBlock
             }
         }
         return newState;
-    }
-
-    @Override
-    protected int getCloseSound()
-    {
-        return material == IRON_WOOD ? LevelEvent.SOUND_CLOSE_IRON_DOOR : LevelEvent.SOUND_CLOSE_WOODEN_DOOR;
-    }
-
-    @Override
-    protected int getOpenSound()
-    {
-        return material == IRON_WOOD ? LevelEvent.SOUND_OPEN_IRON_DOOR : LevelEvent.SOUND_OPEN_WOODEN_DOOR;
     }
 
     @Override
@@ -220,7 +210,9 @@ public class FramedDoorBlock extends DoorBlock implements IFramedBlock
     {
         return new FramedDoorBlock(
                 BlockType.FRAMED_DOOR,
-                IFramedBlock.createProperties(BlockType.FRAMED_DOOR)
+                IFramedBlock.createProperties(BlockType.FRAMED_DOOR),
+                SoundEvents.WOODEN_DOOR_CLOSE,
+                SoundEvents.WOODEN_DOOR_OPEN
         );
     }
 
@@ -229,7 +221,9 @@ public class FramedDoorBlock extends DoorBlock implements IFramedBlock
         return new FramedDoorBlock(
                 BlockType.FRAMED_IRON_DOOR,
                 IFramedBlock.createProperties(BlockType.FRAMED_IRON_DOOR, IRON_WOOD)
-                        .requiresCorrectToolForDrops()
+                        .requiresCorrectToolForDrops(),
+                SoundEvents.IRON_DOOR_CLOSE,
+                SoundEvents.IRON_DOOR_OPEN
         );
     }
 }

@@ -16,7 +16,6 @@ import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.phys.Vec3;
 import net.minecraft.world.phys.shapes.VoxelShape;
-import xfacthd.framedblocks.FramedBlocks;
 import xfacthd.framedblocks.api.block.IFramedBlock;
 import xfacthd.framedblocks.api.block.FramedProperties;
 import xfacthd.framedblocks.api.shapes.ShapeProvider;
@@ -105,7 +104,7 @@ public class FramedDoubleHalfSlopeBlock extends AbstractFramedDoubleBlock
                 new VerticalAndWallBlockItem(
                         this,
                         FBContent.blockFramedVerticalDoubleHalfSlope.get(),
-                        new Item.Properties().tab(FramedBlocks.FRAMED_TAB)
+                        new Item.Properties()
                 )
         );
     }

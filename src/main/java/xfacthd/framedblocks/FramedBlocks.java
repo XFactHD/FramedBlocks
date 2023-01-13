@@ -2,7 +2,6 @@ package xfacthd.framedblocks;
 
 import com.mojang.logging.LogUtils;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.item.*;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.CrashReportCallables;
 import net.minecraftforge.fml.ModLoadingContext;
@@ -37,8 +36,6 @@ public final class FramedBlocks
             PROTOCOL_VERSION::equals,
             PROTOCOL_VERSION::equals
     );
-	
-    public static final CreativeModeTab FRAMED_TAB = new FramedCreativeTab();
 
     public FramedBlocks()
     {

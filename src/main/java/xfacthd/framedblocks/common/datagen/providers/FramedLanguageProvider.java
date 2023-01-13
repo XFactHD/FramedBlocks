@@ -1,11 +1,10 @@
 package xfacthd.framedblocks.common.datagen.providers;
 
-import net.minecraft.data.DataGenerator;
+import net.minecraft.data.PackOutput;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.ComponentContents;
 import net.minecraft.network.chat.contents.TranslatableContents;
 import net.minecraftforge.common.data.LanguageProvider;
-import xfacthd.framedblocks.FramedBlocks;
 import xfacthd.framedblocks.api.block.IFramedBlock;
 import xfacthd.framedblocks.api.util.FramedConstants;
 import xfacthd.framedblocks.client.screen.*;
@@ -15,10 +14,11 @@ import xfacthd.framedblocks.common.blockentity.FramedStorageBlockEntity;
 import xfacthd.framedblocks.common.item.FramedBlueprintItem;
 import xfacthd.framedblocks.common.blockentity.FramedChestBlockEntity;
 import xfacthd.framedblocks.api.block.FramedBlockEntity;
+import xfacthd.framedblocks.common.util.FramedCreativeTab;
 
 public final class FramedLanguageProvider extends LanguageProvider
 {
-    public FramedLanguageProvider(DataGenerator gen) { super(gen, FramedConstants.MOD_ID, "en_us"); }
+    public FramedLanguageProvider(PackOutput output) { super(output, FramedConstants.MOD_ID, "en_us"); }
 
     @Override
     protected void addTranslations()
@@ -160,7 +160,7 @@ public final class FramedLanguageProvider extends LanguageProvider
         add(KeyMappings.KEY_CATEGORY, "FramedBlocks");
         add(KeyMappings.KEYMAPPING_UPDATE_CULLING.get().getName(), "Update culling cache");
 
-        add(FramedBlocks.FRAMED_TAB.getDisplayName(), "FramedBlocks");
+        add(FramedCreativeTab.get().getDisplayName(), "FramedBlocks");
         add(FramedBlockEntity.MSG_BLACKLISTED, "This block is blacklisted!");
         add(FramedBlockEntity.MSG_BLOCK_ENTITY, "Blocks with BlockEntities cannot be inserted into framed blocks!");
         add(FramedChestBlockEntity.TITLE, "Framed Chest");

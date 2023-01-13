@@ -259,7 +259,7 @@ public class FramedItemFrameModel extends FramedBlockModel
             List<BakedQuad> quads = baseModel.getQuads(state, null, rand, data, renderType);
             for (BakedQuad quad : quads)
             {
-                if (!quad.getSprite().getName().equals(ClientUtils.DUMMY_TEXTURE))
+                if (!ClientUtils.isDummyTexture(quad))
                 {
                     if (glowing)
                     {

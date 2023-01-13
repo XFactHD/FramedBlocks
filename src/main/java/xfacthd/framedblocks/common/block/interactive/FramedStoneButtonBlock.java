@@ -2,6 +2,7 @@ package xfacthd.framedblocks.common.block.interactive;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.Entity;
@@ -24,8 +25,8 @@ import xfacthd.framedblocks.common.data.BlockType;
 import javax.annotation.Nullable;
 import java.util.List;
 
-@SuppressWarnings("deprecation")
-public class FramedStoneButtonBlock extends StoneButtonBlock implements IFramedBlock
+@SuppressWarnings("deprecation") //TODO: merge with normal button
+public class FramedStoneButtonBlock extends ButtonBlock implements IFramedBlock
 {
     public FramedStoneButtonBlock()
     {
@@ -33,7 +34,11 @@ public class FramedStoneButtonBlock extends StoneButtonBlock implements IFramedB
                 .noCollission()
                 .strength(0.5F)
                 .sound(SoundType.WOOD)
-                .noOcclusion()
+                .noOcclusion(),
+                20,
+                false,
+                SoundEvents.STONE_BUTTON_CLICK_OFF,
+                SoundEvents.STONE_BUTTON_CLICK_ON
         );
         registerDefaultState(defaultBlockState().setValue(FramedProperties.GLOWING, false));
     }

@@ -1,27 +1,30 @@
 package xfacthd.framedblocks.common.datagen.providers;
 
-import net.minecraft.data.DataGenerator;
-import net.minecraft.data.tags.BlockTagsProvider;
+import net.minecraft.core.HolderLookup;
+import net.minecraft.data.PackOutput;
 import net.minecraft.data.tags.ItemTagsProvider;
 import net.minecraft.tags.ItemTags;
 import net.minecraftforge.common.Tags;
+import net.minecraftforge.common.data.BlockTagsProvider;
 import net.minecraftforge.common.data.ExistingFileHelper;
 import xfacthd.framedblocks.api.util.FramedConstants;
 import xfacthd.framedblocks.common.FBContent;
 import xfacthd.framedblocks.api.util.Utils;
 
+import java.util.concurrent.CompletableFuture;
+
 public final class FramedItemTagProvider extends ItemTagsProvider
 {
-    public FramedItemTagProvider(DataGenerator gen, BlockTagsProvider provider, ExistingFileHelper existingFileHelper)
+    public FramedItemTagProvider(PackOutput output, CompletableFuture<HolderLookup.Provider> lookupProvider, BlockTagsProvider provider, ExistingFileHelper existingFileHelper)
     {
-        super(gen, provider, FramedConstants.MOD_ID, existingFileHelper);
+        super(output, lookupProvider, provider, FramedConstants.MOD_ID, existingFileHelper);
     }
 
     @Override
     public String getName() { return super.getName() + ": " + FramedConstants.MOD_ID; }
 
     @Override
-    protected void addTags()
+    protected void addTags(HolderLookup.Provider provider)
     {
         tag(ItemTags.SLABS).add(FBContent.blockFramedSlab.get().asItem());
         tag(ItemTags.STAIRS).add(FBContent.blockFramedStairs.get().asItem());

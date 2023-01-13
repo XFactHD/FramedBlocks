@@ -80,13 +80,7 @@ public interface IFramedBlock extends EntityBlock, IForgeBlock
 
     default Pair<IFramedBlock, BlockItem> createItemBlock()
     {
-        return Pair.of(
-                this,
-                new BlockItem(
-                        (Block)this,
-                        new Item.Properties().tab(FramedBlocksAPI.getInstance().defaultCreativeTab())
-                )
-        );
+        return Pair.of(this, new BlockItem((Block) this, new Item.Properties()));
     }
 
     default void tryApplyCamoImmediately(Level level, BlockPos pos, @Nullable LivingEntity placer, ItemStack stack)

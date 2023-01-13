@@ -1,6 +1,7 @@
 package xfacthd.framedblocks.client.render;
 
 import com.mojang.blaze3d.vertex.PoseStack;
+import com.mojang.math.Axis;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.blockentity.*;
 import net.minecraft.util.Mth;
@@ -12,7 +13,6 @@ import net.minecraft.client.renderer.MultiBufferSource;
 import com.mojang.blaze3d.platform.NativeImage;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.util.FormattedCharSequence;
-import com.mojang.math.Vector3f;
 import net.minecraft.world.phys.Vec3;
 import xfacthd.framedblocks.api.block.FramedProperties;
 import xfacthd.framedblocks.common.block.interactive.FramedSignBlock;
@@ -38,13 +38,13 @@ public class FramedSignRenderer implements BlockEntityRenderer<FramedSignBlockEn
         {
             matrix.translate(0.5D, 0.5D, 0.5D);
             float rot = -((state.getValue(BlockStateProperties.ROTATION_16) * 360) / 16.0F);
-            matrix.mulPose(Vector3f.YP.rotationDegrees(rot));
+            matrix.mulPose(Axis.YP.rotationDegrees(rot));
         }
         else
         {
             matrix.translate(0.5D, 0.5D, 0.5D);
             float rot = -state.getValue(FramedProperties.FACING_HOR).toYRot();
-            matrix.mulPose(Vector3f.YP.rotationDegrees(rot));
+            matrix.mulPose(Axis.YP.rotationDegrees(rot));
             matrix.translate(0.0D, -0.3125D, -0.4375D);
         }
 

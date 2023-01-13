@@ -1,7 +1,7 @@
 package xfacthd.framedblocks.client.render;
 
 import com.mojang.blaze3d.vertex.PoseStack;
-import com.mojang.math.Vector3f;
+import com.mojang.math.Axis;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.block.model.ItemTransforms;
@@ -45,9 +45,9 @@ public class FramedItemFrameRenderer implements BlockEntityRenderer<FramedItemFr
         float yRot = vert ? 0 : dir.toYRot();
         if (vert)
         {
-            pstack.mulPose(Vector3f.XP.rotationDegrees(-90F * dir.getAxisDirection().getStep()));
+            pstack.mulPose(Axis.XP.rotationDegrees(-90F * dir.getAxisDirection().getStep()));
         }
-        pstack.mulPose(Vector3f.YP.rotationDegrees(180.0F - yRot));
+        pstack.mulPose(Axis.YP.rotationDegrees(180.0F - yRot));
 
         ItemStack item = be.getItem();
         //noinspection ConstantConditions
@@ -55,11 +55,11 @@ public class FramedItemFrameRenderer implements BlockEntityRenderer<FramedItemFr
 
         pstack.translate(0.0D, 0.0D, ITEM_Z_OFF);
         float itemRotation = mapData != null ? (be.getRotation() % 4 * 2) : be.getRotation();
-        pstack.mulPose(Vector3f.ZP.rotationDegrees(itemRotation * 360.0F / 8.0F));
+        pstack.mulPose(Axis.ZP.rotationDegrees(itemRotation * 360.0F / 8.0F));
 
         if (mapData != null)
         {
-            pstack.mulPose(Vector3f.ZP.rotationDegrees(180.0F));
+            pstack.mulPose(Axis.ZP.rotationDegrees(180.0F));
 
             pstack.scale(MAP_SCALE, MAP_SCALE, MAP_SCALE);
             pstack.translate(-64.0D, -64.0D, -1.0D);

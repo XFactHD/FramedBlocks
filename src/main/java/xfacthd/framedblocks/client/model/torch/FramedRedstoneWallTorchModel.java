@@ -1,6 +1,5 @@
 package xfacthd.framedblocks.client.model.torch;
 
-import com.mojang.math.Vector3f;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.block.model.BakedQuad;
 import net.minecraft.client.resources.model.BakedModel;
@@ -11,6 +10,7 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraftforge.client.ChunkRenderTypeSet;
 import net.minecraftforge.client.model.data.ModelData;
+import org.joml.Vector3f;
 import xfacthd.framedblocks.api.model.FramedBlockModel;
 import xfacthd.framedblocks.api.model.quad.Modifiers;
 import xfacthd.framedblocks.api.model.quad.QuadModifier;
@@ -51,7 +51,7 @@ public class FramedRedstoneWallTorchModel extends FramedBlockModel
         List<BakedQuad> quads = baseModel.getQuads(state, null, rand, extraData, renderType);
         for (BakedQuad quad : quads)
         {
-            if (!quad.getSprite().getName().equals(ClientUtils.DUMMY_TEXTURE))
+            if (!ClientUtils.isDummyTexture(quad))
             {
                 quadMap.get(null).add(quad);
             }

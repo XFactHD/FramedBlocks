@@ -2,13 +2,13 @@ package xfacthd.framedblocks.client.render.outline;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
-import com.mojang.math.Quaternion;
-import com.mojang.math.Vector3f;
+import com.mojang.math.Axis;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.shapes.*;
+import org.joml.Quaternionf;
 import xfacthd.framedblocks.api.render.Quaternions;
 import xfacthd.framedblocks.api.render.OutlineRenderer;
 import xfacthd.framedblocks.common.blockentity.FramedCollapsibleBlockEntity;
@@ -17,7 +17,7 @@ import xfacthd.framedblocks.common.data.PropertyHolder;
 
 public final class CollapsibleBlockOutlineRenderer implements OutlineRenderer
 {
-    private static final Quaternion ROTATION = Vector3f.YN.rotationDegrees(180);
+    private static final Quaternionf ROTATION = Axis.YN.rotationDegrees(180);
 
     @Override
     public void rotateMatrix(PoseStack poseStack, BlockState state) { poseStack.mulPose(ROTATION); }

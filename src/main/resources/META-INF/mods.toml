@@ -1,5 +1,5 @@
 modLoader="javafml"
-loaderVersion="[42,)"
+loaderVersion="[44,)"
 issueTrackerURL="https://www.github.com/xfacthd/framedblocks"
 license="LGPL v3"
 
@@ -19,14 +19,14 @@ description='''
 [[dependencies.framedblocks]]
     modId="forge"
     mandatory=true
-    versionRange="[43.1.55,)"
+    versionRange="[44.0.29,)"
     ordering="NONE"
     side="BOTH"
 
 [[dependencies.framedblocks]]
     modId="minecraft"
     mandatory=true
-    versionRange="[1.19.1,1.20)"
+    versionRange="[1.19.3,1.20)"
     ordering="NONE"
     side="BOTH"
 

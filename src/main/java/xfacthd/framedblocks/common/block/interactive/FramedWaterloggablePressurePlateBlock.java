@@ -2,6 +2,7 @@ package xfacthd.framedblocks.common.block.interactive;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.sounds.SoundEvent;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.block.Block;
@@ -15,9 +16,9 @@ import xfacthd.framedblocks.common.data.BlockType;
 
 public class FramedWaterloggablePressurePlateBlock extends FramedPressurePlateBlock implements SimpleWaterloggedBlock
 {
-    FramedWaterloggablePressurePlateBlock(BlockType type, Sensitivity sensitivity, Properties props)
+    FramedWaterloggablePressurePlateBlock(BlockType type, Sensitivity sensitivity, Properties props, SoundEvent soundOff, SoundEvent soundOn)
     {
-        super(type, sensitivity, props);
+        super(type, sensitivity, props, soundOff, soundOn);
         registerDefaultState(defaultBlockState().setValue(BlockStateProperties.WATERLOGGED, false));
     }
 
