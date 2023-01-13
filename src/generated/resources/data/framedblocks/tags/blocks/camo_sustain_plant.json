@@ -1,9 +1,9 @@
 {
   "values": [
+    "minecraft:soul_sand",
+    "minecraft:soul_soil",
     "#minecraft:dirt",
     "#minecraft:sand",
-    "#minecraft:nylium",
-    "minecraft:soul_sand",
-    "minecraft:soul_soil"
+    "#minecraft:nylium"
   ]
 }

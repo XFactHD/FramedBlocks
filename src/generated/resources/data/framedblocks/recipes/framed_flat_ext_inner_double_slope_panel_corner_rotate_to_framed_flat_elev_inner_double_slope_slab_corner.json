@@ -1,5 +1,6 @@
 {
   "type": "minecraft:crafting_shapeless",
+  "category": "building",
   "ingredients": [
     {
       "item": "framedblocks:framed_flat_ext_inner_double_slope_panel_corner"
