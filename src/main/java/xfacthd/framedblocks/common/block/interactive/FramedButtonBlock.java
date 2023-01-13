@@ -2,6 +2,7 @@ package xfacthd.framedblocks.common.block.interactive;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
@@ -28,18 +29,21 @@ import java.util.List;
 @SuppressWarnings("deprecation")
 public class FramedButtonBlock extends ButtonBlock implements IFramedBlock
 {
-    public FramedButtonBlock()
+    private final BlockType type;
+
+    protected FramedButtonBlock(BlockType type, int pressTime, boolean arrowsCanPress, SoundEvent soundOff, SoundEvent soundOn)
     {
         super(Properties.of(Material.DECORATION)
                 .noCollission()
                 .strength(0.5F)
                 .sound(SoundType.WOOD)
                 .noOcclusion(),
-                30,
-                true,
-                SoundEvents.WOODEN_BUTTON_CLICK_OFF,
-                SoundEvents.WOODEN_BUTTON_CLICK_ON
+                pressTime,
+                arrowsCanPress,
+                soundOff,
+                soundOn
         );
+        this.type = type;
         registerDefaultState(defaultBlockState().setValue(FramedProperties.GLOWING, false));
     }
 
@@ -112,5 +116,29 @@ public class FramedButtonBlock extends ButtonBlock implements IFramedBlock
     public BlockEntity newBlockEntity(BlockPos pos, BlockState state) { return new FramedBlockEntity(pos, state); }
 
     @Override
-    public BlockType getBlockType() { return BlockType.FRAMED_BUTTON; }
+    public BlockType getBlockType() { return type; }
+
+
+
+    public static FramedButtonBlock wood()
+    {
+        return new FramedButtonBlock(
+                BlockType.FRAMED_BUTTON,
+                30,
+                true,
+                SoundEvents.WOODEN_BUTTON_CLICK_OFF,
+                SoundEvents.WOODEN_BUTTON_CLICK_ON
+        );
+    }
+
+    public static FramedButtonBlock stone()
+    {
+        return new FramedButtonBlock(
+                BlockType.FRAMED_STONE_BUTTON,
+                20,
+                false,
+                SoundEvents.STONE_BUTTON_CLICK_OFF,
+                SoundEvents.STONE_BUTTON_CLICK_ON
+        );
+    }
 }

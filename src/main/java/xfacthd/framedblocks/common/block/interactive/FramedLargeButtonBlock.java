@@ -2,6 +2,8 @@ package xfacthd.framedblocks.common.block.interactive;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.sounds.SoundEvent;
+import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.block.state.BlockState;
@@ -19,6 +21,11 @@ public class FramedLargeButtonBlock extends FramedButtonBlock
     private static final VoxelShape SHAPE_TOP_PRESSED = box(1, 15, 1, 15, 16, 15);
     private static final VoxelShape[] SHAPES_HORIZONTAL = makeHorizontalShapes();
 
+    private FramedLargeButtonBlock(BlockType type, int pressTime, boolean arrowsCanPress, SoundEvent soundOff, SoundEvent soundOn)
+    {
+        super(type, pressTime, arrowsCanPress, soundOff, soundOn);
+    }
+
     @Override
     public VoxelShape getShape(BlockState state, BlockGetter level, BlockPos pos, CollisionContext context)
     {
@@ -34,9 +41,6 @@ public class FramedLargeButtonBlock extends FramedButtonBlock
         }
         return null;
     }
-
-    @Override
-    public BlockType getBlockType() { return BlockType.FRAMED_LARGE_BUTTON; }
 
 
 
@@ -67,5 +71,27 @@ public class FramedLargeButtonBlock extends FramedButtonBlock
             shapes[dir.get2DDataValue() + 4] = Utils.rotateShape(Direction.SOUTH, dir, shapePressed);
         }
         return shapes;
+    }
+
+    public static FramedLargeButtonBlock wood()
+    {
+        return new FramedLargeButtonBlock(
+                BlockType.FRAMED_LARGE_BUTTON,
+                30,
+                true,
+                SoundEvents.WOODEN_BUTTON_CLICK_OFF,
+                SoundEvents.WOODEN_BUTTON_CLICK_ON
+        );
+    }
+
+    public static FramedLargeButtonBlock stone()
+    {
+        return new FramedLargeButtonBlock(
+                BlockType.FRAMED_LARGE_STONE_BUTTON,
+                20,
+                false,
+                SoundEvents.STONE_BUTTON_CLICK_OFF,
+                SoundEvents.STONE_BUTTON_CLICK_ON
+        );
     }
 }
