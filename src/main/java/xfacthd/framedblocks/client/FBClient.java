@@ -1,5 +1,6 @@
 package xfacthd.framedblocks.client;
 
+import com.github.benmanes.caffeine.cache.RemovalCause;
 import net.minecraft.client.gui.screens.MenuScreens;
 import net.minecraft.client.resources.model.BakedModel;
 import net.minecraft.resources.ResourceLocation;
@@ -56,7 +57,12 @@ import java.util.function.Function;
 @Mod.EventBusSubscriber(modid = FramedConstants.MOD_ID, bus = Mod.EventBusSubscriber.Bus.MOD, value = Dist.CLIENT)
 public final class FBClient
 {
-    static { FramedBlocksClientAPI.INSTANCE.accept(new ClientApiImpl()); }
+    static
+    {
+        FramedBlocksClientAPI.INSTANCE.accept(new ClientApiImpl());
+        // Forcefully classload RemovalCause because EventBus and ThreadPools can't get their classloader shit together
+        RemovalCause.EXPLICIT.wasEvicted();
+    }
 
     @SubscribeEvent
     public static void onClientSetup(final FMLClientSetupEvent event)
