@@ -25,6 +25,7 @@ import net.minecraftforge.registries.RegistryObject;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.jetbrains.annotations.Nullable;
+import xfacthd.framedblocks.api.block.FramedProperties;
 
 import java.util.*;
 import java.util.function.*;
@@ -153,10 +154,15 @@ public final class ClientUtils
     @SuppressWarnings({ "unchecked", "rawtypes" })
     private static BlockState ignoreProps(BlockState state, @Nullable List<Property<?>> ignoredProps)
     {
-        if (ignoredProps == null || ignoredProps.isEmpty()) { return state; }
+        List<Property<?>> props = new ArrayList<>();
+        props.add(FramedProperties.GLOWING);
+        if (ignoredProps != null)
+        {
+            props.addAll(ignoredProps);
+        }
 
         BlockState defaultState = state.getBlock().defaultBlockState();
-        for (Property prop : ignoredProps)
+        for (Property prop : props)
         {
             if (!state.hasProperty(prop))
             {

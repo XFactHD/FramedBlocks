@@ -6,6 +6,7 @@ import net.minecraft.core.Direction;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.AttachFace;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
+import xfacthd.framedblocks.api.block.FramedProperties;
 import xfacthd.framedblocks.api.model.FramedBlockModel;
 import xfacthd.framedblocks.api.model.quad.Modifiers;
 import xfacthd.framedblocks.api.model.quad.QuadModifier;
@@ -112,6 +113,7 @@ public class FramedLargeButtonModel extends FramedBlockModel
             return state;
         }
 
-        return state.setValue(FramedLargeButtonBlock.FACING, Direction.NORTH);
+        return state.setValue(FramedLargeButtonBlock.FACING, Direction.NORTH)
+                .setValue(FramedProperties.GLOWING, false);
     }
 }

@@ -136,7 +136,7 @@ public class FramedWeightedPressurePlateBlock extends WeightedPressurePlateBlock
 
 
 
-    // Merge states with power > 0 and ignore waterlogging to avoid unnecessary model duplication
+    // Merge states with power > 0 and ignore waterlogging and glowing to avoid unnecessary model duplication
     public static BlockState mergeWeightedState(BlockState state)
     {
         if (state.hasProperty(BlockStateProperties.WATERLOGGED))
@@ -148,7 +148,7 @@ public class FramedWeightedPressurePlateBlock extends WeightedPressurePlateBlock
         {
             return state.setValue(WeightedPressurePlateBlock.POWER, 1);
         }
-        return state;
+        return state.setValue(FramedProperties.GLOWING, false);
     }
 
     public static FramedWeightedPressurePlateBlock gold()
