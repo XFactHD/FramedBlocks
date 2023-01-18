@@ -144,7 +144,7 @@ dependencies {
 
     compileOnly fg.deobf("curse.maven:buildinggadgets-298187:3829297")
 
-    //runtimeOnly fg.deobf("curse.maven:jei-238222:4239206")
+    runtimeOnly fg.deobf("curse.maven:jei-238222:4346825")
     //runtimeOnly fg.deobf("curse.maven:spark-361579:3767286")
 
     //runtimeOnly fg.deobf("curse.maven:magnesium_sodium-532724:3556734")

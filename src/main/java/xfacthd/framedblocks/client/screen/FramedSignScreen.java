@@ -301,6 +301,6 @@ public class FramedSignScreen extends Screen
         return SPRITE_CACHE.get(camoState, front);
     }
 
-    @SubscribeEvent //TODO: make sure this doesn't break the cache
+    @SubscribeEvent
     public static void onTextureStitch(final TextureStitchEvent.Post event) { SPRITE_CACHE.clear(); }
 }
