@@ -57,13 +57,17 @@ public class FramedRailSlopeBlock extends BaseRailBlock implements IFramedBlock
                 .setValue(BlockStateProperties.WATERLOGGED, false)
                 .setValue(FramedProperties.SOLID, false)
                 .setValue(FramedProperties.GLOWING, false)
+                .setValue(FramedProperties.Y_SLOPE, false)
         );
     }
 
     @Override
     protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder)
     {
-        builder.add(PropertyHolder.ASCENDING_RAIL_SHAPE, BlockStateProperties.WATERLOGGED, FramedProperties.SOLID, FramedProperties.GLOWING);
+        builder.add(
+                PropertyHolder.ASCENDING_RAIL_SHAPE, BlockStateProperties.WATERLOGGED, FramedProperties.SOLID,
+                FramedProperties.GLOWING, FramedProperties.Y_SLOPE
+        );
     }
 
     @Override
@@ -203,6 +207,12 @@ public class FramedRailSlopeBlock extends BaseRailBlock implements IFramedBlock
     }
 
     @Override
+    public boolean handleBlockLeftClick(BlockState state, Level level, BlockPos pos, Player player)
+    {
+        return IFramedBlock.toggleYSlope(state, level, pos, player);
+    }
+
+    @Override
     public BlockState rotate(BlockState state, Rotation rot)
     {
         Direction dir = FramedUtils.getDirectionFromAscendingRailShape(state.getValue(PropertyHolder.ASCENDING_RAIL_SHAPE));
@@ -283,6 +293,7 @@ public class FramedRailSlopeBlock extends BaseRailBlock implements IFramedBlock
         BlockType type = (BlockType) ((IFramedBlock) state.getBlock()).getBlockType();
         RailShape shape = state.getValue(PropertyHolder.ASCENDING_RAIL_SHAPE);
         boolean powered = type != BlockType.FRAMED_FANCY_RAIL_SLOPE && state.getValue(BlockStateProperties.POWERED);
+        boolean ySlope = state.getValue(FramedProperties.Y_SLOPE);
 
         BlockState slopeState = FBContent.blockFramedSlope.get().defaultBlockState();
         BlockState railState = (switch(type)
@@ -304,7 +315,8 @@ public class FramedRailSlopeBlock extends BaseRailBlock implements IFramedBlock
 
         return new Tuple<>(
                 slopeState.setValue(PropertyHolder.SLOPE_TYPE, SlopeType.BOTTOM)
-                        .setValue(FramedProperties.FACING_HOR, facing),
+                        .setValue(FramedProperties.FACING_HOR, facing)
+                        .setValue(FramedProperties.Y_SLOPE, ySlope),
                 railState.setValue(shapeProp, shape)
         );
     }

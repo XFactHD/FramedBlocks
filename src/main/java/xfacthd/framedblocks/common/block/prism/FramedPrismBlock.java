@@ -2,8 +2,11 @@ package xfacthd.framedblocks.common.block.prism;
 
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
+import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.context.BlockPlaceContext;
+import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.*;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
@@ -31,13 +34,17 @@ public class FramedPrismBlock extends FramedBlock
         return side != dirAxis.direction() && side != null && side.getAxis() != dirAxis.axis();
     };
 
-    public FramedPrismBlock(BlockType type) { super(type); }
+    public FramedPrismBlock(BlockType type)
+    {
+        super(type);
+        registerDefaultState(defaultBlockState().setValue(FramedProperties.Y_SLOPE, false));
+    }
 
     @Override
     protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder)
     {
         super.createBlockStateDefinition(builder);
-        builder.add(PropertyHolder.FACING_AXIS, BlockStateProperties.WATERLOGGED, FramedProperties.SOLID);
+        builder.add(PropertyHolder.FACING_AXIS, BlockStateProperties.WATERLOGGED, FramedProperties.SOLID, FramedProperties.Y_SLOPE);
     }
 
     @Override
@@ -77,6 +84,17 @@ public class FramedPrismBlock extends FramedBlock
             state = withWater(state, context.getLevel(), context.getClickedPos());
         }
         return state;
+    }
+
+    @Override
+    public boolean handleBlockLeftClick(BlockState state, Level level, BlockPos pos, Player player)
+    {
+        if (player.getMainHandItem().is(Utils.WRENCH))
+        {
+            level.setBlockAndUpdate(pos, state.setValue(FramedProperties.Y_SLOPE, !state.getValue(FramedProperties.Y_SLOPE)));
+            return true;
+        }
+        return false;
     }
 
     @Override

@@ -3,12 +3,15 @@ package xfacthd.framedblocks.common.block.slopepanel;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.util.Tuple;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.context.BlockPlaceContext;
+import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.*;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import xfacthd.framedblocks.api.block.FramedProperties;
+import xfacthd.framedblocks.api.block.IFramedBlock;
 import xfacthd.framedblocks.api.predicate.CtmPredicate;
 import xfacthd.framedblocks.api.util.*;
 import xfacthd.framedblocks.common.FBContent;
@@ -27,13 +30,17 @@ public class FramedExtendedDoubleSlopePanelBlock extends AbstractFramedDoubleBlo
         return side == rot.withFacing(dir).getOpposite();
     });
 
-    public FramedExtendedDoubleSlopePanelBlock() { super(BlockType.FRAMED_EXTENDED_DOUBLE_SLOPE_PANEL); }
+    public FramedExtendedDoubleSlopePanelBlock()
+    {
+        super(BlockType.FRAMED_EXTENDED_DOUBLE_SLOPE_PANEL);
+        registerDefaultState(defaultBlockState().setValue(FramedProperties.Y_SLOPE, false));
+    }
 
     @Override
     protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder)
     {
         super.createBlockStateDefinition(builder);
-        builder.add(FramedProperties.FACING_HOR, PropertyHolder.ROTATION);
+        builder.add(FramedProperties.FACING_HOR, PropertyHolder.ROTATION, FramedProperties.Y_SLOPE);
     }
 
     @Override
@@ -55,6 +62,12 @@ public class FramedExtendedDoubleSlopePanelBlock extends AbstractFramedDoubleBlo
         return defaultBlockState()
                 .setValue(FramedProperties.FACING_HOR, facing)
                 .setValue(PropertyHolder.ROTATION, rotation);
+    }
+
+    @Override
+    public boolean handleBlockLeftClick(BlockState state, Level level, BlockPos pos, Player player)
+    {
+        return IFramedBlock.toggleYSlope(state, level, pos, player);
     }
 
     @Override
@@ -89,15 +102,18 @@ public class FramedExtendedDoubleSlopePanelBlock extends AbstractFramedDoubleBlo
     {
         Direction facing = state.getValue(FramedProperties.FACING_HOR);
         HorizontalRotation rotation = state.getValue(PropertyHolder.ROTATION);
+        boolean ySlope = state.getValue(FramedProperties.Y_SLOPE);
 
         return new Tuple<>(
                 FBContent.blockFramedExtendedSlopePanel.get().defaultBlockState()
                         .setValue(FramedProperties.FACING_HOR, facing)
-                        .setValue(PropertyHolder.ROTATION, rotation),
+                        .setValue(PropertyHolder.ROTATION, rotation)
+                        .setValue(FramedProperties.Y_SLOPE, ySlope),
                 FBContent.blockFramedSlopePanel.get().defaultBlockState()
                         .setValue(FramedProperties.FACING_HOR, facing.getOpposite())
                         .setValue(PropertyHolder.ROTATION, rotation.isVertical() ? rotation.getOpposite() : rotation)
                         .setValue(PropertyHolder.FRONT, false)
+                        .setValue(FramedProperties.Y_SLOPE, ySlope)
         );
     }
 

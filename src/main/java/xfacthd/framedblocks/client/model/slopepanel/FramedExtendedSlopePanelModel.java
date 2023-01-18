@@ -21,6 +21,7 @@ public class FramedExtendedSlopePanelModel extends FramedBlockModel
     private final Direction facing;
     private final HorizontalRotation rotation;
     private final Direction orientation;
+    private final boolean ySlope;
 
     public FramedExtendedSlopePanelModel(BlockState state, BakedModel baseModel)
     {
@@ -28,6 +29,7 @@ public class FramedExtendedSlopePanelModel extends FramedBlockModel
         this.facing = state.getValue(FramedProperties.FACING_HOR);
         this.rotation = state.getValue(PropertyHolder.ROTATION);
         this.orientation = rotation.withFacing(facing);
+        this.ySlope = state.getValue(FramedProperties.Y_SLOPE);
     }
 
     @Override
@@ -42,6 +44,14 @@ public class FramedExtendedSlopePanelModel extends FramedBlockModel
                 QuadModifier.geometry(quad)
                         .apply(Modifiers.cutTopBottom(facing.getOpposite(), .5F))
                         .export(quadMap.get(face));
+
+                if (ySlope)
+                {
+                    QuadModifier.geometry(quad)
+                            .apply(FramedSlopePanelModel.createVerticalSlope(facing, orientation))
+                            .apply(Modifiers.offset(facing.getOpposite(), .5F))
+                            .export(quadMap.get(null));
+                }
             }
             else
             {
@@ -50,7 +60,7 @@ public class FramedExtendedSlopePanelModel extends FramedBlockModel
                         .export(quadMap.get(face));
             }
         }
-        else if (face == facing.getOpposite())
+        else if ((!rotation.isVertical() || !ySlope) && face == facing.getOpposite())
         {
             QuadModifier.geometry(quad)
                     .apply(FramedSlopePanelModel.createSlope(facing, orientation))

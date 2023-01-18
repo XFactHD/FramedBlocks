@@ -3,12 +3,15 @@ package xfacthd.framedblocks.common.block.slopepanel;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.util.Tuple;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.context.BlockPlaceContext;
+import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.*;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import xfacthd.framedblocks.api.block.FramedProperties;
+import xfacthd.framedblocks.api.block.IFramedBlock;
 import xfacthd.framedblocks.api.predicate.CtmPredicate;
 import xfacthd.framedblocks.api.util.*;
 import xfacthd.framedblocks.common.FBContent;
@@ -31,19 +34,26 @@ public class FramedFlatExtendedDoubleSlopePanelCornerBlock extends AbstractFrame
     public FramedFlatExtendedDoubleSlopePanelCornerBlock(BlockType blockType)
     {
         super(blockType);
+        registerDefaultState(defaultBlockState().setValue(FramedProperties.Y_SLOPE, false));
     }
 
     @Override
     protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder)
     {
         super.createBlockStateDefinition(builder);
-        builder.add(FramedProperties.FACING_HOR, PropertyHolder.ROTATION);
+        builder.add(FramedProperties.FACING_HOR, PropertyHolder.ROTATION, FramedProperties.Y_SLOPE);
     }
 
     @Override
     public BlockState getStateForPlacement(BlockPlaceContext context)
     {
         return FramedFlatSlopePanelCornerBlock.getStateForPlacement(this, false, false, context);
+    }
+
+    @Override
+    public boolean handleBlockLeftClick(BlockState state, Level level, BlockPos pos, Player player)
+    {
+        return IFramedBlock.toggleYSlope(state, level, pos, player);
     }
 
     @Override
@@ -81,6 +91,7 @@ public class FramedFlatExtendedDoubleSlopePanelCornerBlock extends AbstractFrame
         Direction facing = state.getValue(FramedProperties.FACING_HOR);
         HorizontalRotation rotation = state.getValue(PropertyHolder.ROTATION);
         HorizontalRotation backRot = rotation.rotate(rotation.isVertical() ? Rotation.COUNTERCLOCKWISE_90 : Rotation.CLOCKWISE_90);
+        boolean ySlope = state.getValue(FramedProperties.Y_SLOPE);
 
         if (getBlockType() == BlockType.FRAMED_FLAT_EXT_INNER_DOUBLE_SLOPE_PANEL_CORNER)
         {
@@ -88,11 +99,13 @@ public class FramedFlatExtendedDoubleSlopePanelCornerBlock extends AbstractFrame
                     FBContent.blockFramedFlatExtendedInnerSlopePanelCorner.get()
                             .defaultBlockState()
                             .setValue(FramedProperties.FACING_HOR, facing)
-                            .setValue(PropertyHolder.ROTATION, rotation),
+                            .setValue(PropertyHolder.ROTATION, rotation)
+                            .setValue(FramedProperties.Y_SLOPE, ySlope),
                     FBContent.blockFramedFlatSlopePanelCorner.get()
                             .defaultBlockState()
                             .setValue(FramedProperties.FACING_HOR, facing.getOpposite())
                             .setValue(PropertyHolder.ROTATION, backRot)
+                            .setValue(FramedProperties.Y_SLOPE, ySlope)
             );
         }
         else
@@ -101,11 +114,13 @@ public class FramedFlatExtendedDoubleSlopePanelCornerBlock extends AbstractFrame
                     FBContent.blockFramedFlatExtendedSlopePanelCorner.get()
                             .defaultBlockState()
                             .setValue(FramedProperties.FACING_HOR, facing)
-                            .setValue(PropertyHolder.ROTATION, rotation),
+                            .setValue(PropertyHolder.ROTATION, rotation)
+                            .setValue(FramedProperties.Y_SLOPE, ySlope),
                     FBContent.blockFramedFlatInnerSlopePanelCorner.get()
                             .defaultBlockState()
                             .setValue(FramedProperties.FACING_HOR, facing.getOpposite())
                             .setValue(PropertyHolder.ROTATION, backRot)
+                            .setValue(FramedProperties.Y_SLOPE, ySlope)
             );
         }
     }

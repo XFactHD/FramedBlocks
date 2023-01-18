@@ -2,14 +2,18 @@ package xfacthd.framedblocks.common.block.slope;
 
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
+import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.context.BlockPlaceContext;
+import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.*;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.phys.shapes.*;
 import xfacthd.framedblocks.api.block.FramedProperties;
+import xfacthd.framedblocks.api.block.IFramedBlock;
 import xfacthd.framedblocks.api.shapes.ShapeProvider;
 import xfacthd.framedblocks.api.util.Utils;
 import xfacthd.framedblocks.common.block.FramedBlock;
@@ -20,20 +24,32 @@ public class FramedPyramidBlock extends FramedBlock
     public FramedPyramidBlock(BlockType type)
     {
         super(type);
-        registerDefaultState(defaultBlockState().setValue(BlockStateProperties.FACING, Direction.UP));
+        registerDefaultState(defaultBlockState()
+                .setValue(BlockStateProperties.FACING, Direction.UP)
+                .setValue(FramedProperties.Y_SLOPE, false)
+        );
     }
 
     @Override
     protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder)
     {
         super.createBlockStateDefinition(builder);
-        builder.add(BlockStateProperties.FACING, FramedProperties.SOLID, BlockStateProperties.WATERLOGGED);
+        builder.add(
+                BlockStateProperties.FACING, FramedProperties.SOLID, BlockStateProperties.WATERLOGGED,
+                FramedProperties.Y_SLOPE
+        );
     }
 
     @Override
     public BlockState getStateForPlacement(BlockPlaceContext context)
     {
         return defaultBlockState().setValue(BlockStateProperties.FACING, context.getClickedFace());
+    }
+
+    @Override
+    public boolean handleBlockLeftClick(BlockState state, Level level, BlockPos pos, Player player)
+    {
+        return IFramedBlock.toggleYSlope(state, level, pos, player);
     }
 
     @Override

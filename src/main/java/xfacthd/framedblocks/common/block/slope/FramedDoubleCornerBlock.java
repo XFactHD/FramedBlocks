@@ -3,7 +3,9 @@ package xfacthd.framedblocks.common.block.slope;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.util.Tuple;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.context.BlockPlaceContext;
+import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.block.*;
 import net.minecraft.world.level.block.entity.BlockEntity;
@@ -11,6 +13,7 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.phys.Vec3;
 import xfacthd.framedblocks.api.block.FramedProperties;
+import xfacthd.framedblocks.api.block.IFramedBlock;
 import xfacthd.framedblocks.api.camo.CamoContainer;
 import xfacthd.framedblocks.api.predicate.CtmPredicate;
 import xfacthd.framedblocks.api.util.*;
@@ -41,13 +44,17 @@ public class FramedDoubleCornerBlock extends AbstractFramedDoubleBlock
         }
     };
 
-    public FramedDoubleCornerBlock() { super(BlockType.FRAMED_DOUBLE_CORNER); }
+    public FramedDoubleCornerBlock()
+    {
+        super(BlockType.FRAMED_DOUBLE_CORNER);
+        registerDefaultState(defaultBlockState().setValue(FramedProperties.Y_SLOPE, false));
+    }
 
     @Override
     protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder)
     {
         super.createBlockStateDefinition(builder);
-        builder.add(FramedProperties.FACING_HOR, PropertyHolder.CORNER_TYPE);
+        builder.add(FramedProperties.FACING_HOR, PropertyHolder.CORNER_TYPE, FramedProperties.Y_SLOPE);
     }
 
     @Override
@@ -95,6 +102,12 @@ public class FramedDoubleCornerBlock extends AbstractFramedDoubleBlock
     }
 
     @Override
+    public boolean handleBlockLeftClick(BlockState state, Level level, BlockPos pos, Player player)
+    {
+        return IFramedBlock.toggleYSlope(state, level, pos, player);
+    }
+
+    @Override
     public BlockState rotate(BlockState state, Direction side, Rotation rot)
     {
         CornerType type = state.getValue(PropertyHolder.CORNER_TYPE);
@@ -139,14 +152,17 @@ public class FramedDoubleCornerBlock extends AbstractFramedDoubleBlock
     {
         Direction facing = state.getValue(FramedProperties.FACING_HOR);
         CornerType type = state.getValue(PropertyHolder.CORNER_TYPE);
+        boolean ySlope = state.getValue(FramedProperties.Y_SLOPE);
 
         return new Tuple<>(
                 FBContent.blockFramedInnerCornerSlope.get().defaultBlockState()
                         .setValue(PropertyHolder.CORNER_TYPE, type)
-                        .setValue(FramedProperties.FACING_HOR, facing),
+                        .setValue(FramedProperties.FACING_HOR, facing)
+                        .setValue(FramedProperties.Y_SLOPE, ySlope),
                 FBContent.blockFramedCornerSlope.get().defaultBlockState()
                         .setValue(PropertyHolder.CORNER_TYPE, type.verticalOpposite())
                         .setValue(FramedProperties.FACING_HOR, facing.getOpposite())
+                        .setValue(FramedProperties.Y_SLOPE, ySlope)
         );
     }
 

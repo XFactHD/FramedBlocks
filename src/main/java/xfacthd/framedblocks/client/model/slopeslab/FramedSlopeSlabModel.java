@@ -19,9 +19,11 @@ import java.util.Map;
 public class FramedSlopeSlabModel extends FramedBlockModel
 {
     public static final float SLOPE_ANGLE = (float) (90D - Math.toDegrees(Math.atan(.5)));
+    public static final float SLOPE_ANGLE_VERT = (float) Math.toDegrees(Math.atan(.5));
     private final Direction facing;
     private final boolean top;
     private final boolean topHalf;
+    private final boolean ySlope;
 
     public FramedSlopeSlabModel(BlockState state, BakedModel baseModel)
     {
@@ -29,6 +31,7 @@ public class FramedSlopeSlabModel extends FramedBlockModel
         this.facing = state.getValue(FramedProperties.FACING_HOR);
         this.top = state.getValue(FramedProperties.TOP);
         this.topHalf = state.getValue(PropertyHolder.TOP_HALF);
+        this.ySlope = state.getValue(FramedProperties.Y_SLOPE);
     }
 
     @Override
@@ -37,11 +40,18 @@ public class FramedSlopeSlabModel extends FramedBlockModel
         Direction face = quad.getDirection();
         boolean offset = top != topHalf;
 
-        if (face == facing.getOpposite())
+        if (!ySlope && face == facing.getOpposite())
         {
             QuadModifier.geometry(quad)
                     .apply(Modifiers.makeVerticalSlope(!top, SLOPE_ANGLE))
                     .applyIf(Modifiers.offset(top ? Direction.DOWN : Direction.UP, .5F), offset)
+                    .export(quadMap.get(null));
+        }
+        else if (ySlope && ((!top && face == Direction.UP) || (top && face == Direction.DOWN)))
+        {
+            QuadModifier.geometry(quad)
+                    .apply(Modifiers.makeVerticalSlope(facing.getOpposite(), SLOPE_ANGLE_VERT))
+                    .applyIf(Modifiers.offset(top ? Direction.UP : Direction.DOWN, .5F), !offset)
                     .export(quadMap.get(null));
         }
         else if (face == facing)

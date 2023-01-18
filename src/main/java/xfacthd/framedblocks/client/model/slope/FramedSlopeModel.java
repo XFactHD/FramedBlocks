@@ -20,12 +20,14 @@ public class FramedSlopeModel extends FramedBlockModel
 {
     private final Direction dir;
     private final SlopeType type;
+    private final boolean ySlope;
 
     public FramedSlopeModel(BlockState state, BakedModel baseModel)
     {
         super(state, baseModel);
-        dir = state.getValue(FramedProperties.FACING_HOR);
-        type = state.getValue(PropertyHolder.SLOPE_TYPE);
+        this.dir = state.getValue(FramedProperties.FACING_HOR);
+        this.type = state.getValue(PropertyHolder.SLOPE_TYPE);
+        this.ySlope = state.getValue(FramedProperties.Y_SLOPE);
     }
 
     @Override
@@ -50,10 +52,16 @@ public class FramedSlopeModel extends FramedBlockModel
         else
         {
             boolean top = type == SlopeType.TOP;
-            if (quadDir == dir.getOpposite())
+            if (!ySlope && quadDir == dir.getOpposite())
             {
                 QuadModifier.geometry(quad)
                         .apply(Modifiers.makeVerticalSlope(!top, 45))
+                        .export(quadMap.get(null));
+            }
+            else if (ySlope && Utils.isY(quadDir))
+            {
+                QuadModifier.geometry(quad)
+                        .apply(Modifiers.makeVerticalSlope(dir.getOpposite(), 45))
                         .export(quadMap.get(null));
             }
             else if (quadDir == dir.getClockWise() || quadDir == dir.getCounterClockWise())

@@ -21,6 +21,7 @@ public class FramedFlatInnerSlopeSlabCornerModel extends FramedBlockModel
     private final Direction facing;
     private final boolean top;
     private final boolean topHalf;
+    private final boolean ySlope;
 
     public FramedFlatInnerSlopeSlabCornerModel(BlockState state, BakedModel baseModel)
     {
@@ -28,6 +29,7 @@ public class FramedFlatInnerSlopeSlabCornerModel extends FramedBlockModel
         this.facing = state.getValue(FramedProperties.FACING_HOR);
         this.top = state.getValue(FramedProperties.TOP);
         this.topHalf = state.getValue(PropertyHolder.TOP_HALF);
+        this.ySlope = state.getValue(FramedProperties.Y_SLOPE);
     }
 
     @Override
@@ -38,15 +40,18 @@ public class FramedFlatInnerSlopeSlabCornerModel extends FramedBlockModel
 
         if (face == facing.getOpposite() || face == facing.getClockWise())
         {
-            boolean right = face != facing.getClockWise();
-            float lenTop = top ? 0F : 1F;
-            float lenBot = top ? 1F : 0F;
+            if (!ySlope)
+            {
+                boolean right = face != facing.getClockWise();
+                float lenTop = top ? 0F : 1F;
+                float lenBot = top ? 1F : 0F;
 
-            QuadModifier.geometry(quad)
-                    .apply(Modifiers.cutSideLeftRight(right, lenTop, lenBot))
-                    .apply(Modifiers.makeVerticalSlope(!top, FramedSlopeSlabModel.SLOPE_ANGLE))
-                    .applyIf(Modifiers.offset(top ? Direction.DOWN : Direction.UP, .5F), offset)
-                    .export(quadMap.get(null));
+                QuadModifier.geometry(quad)
+                        .apply(Modifiers.cutSideLeftRight(right, lenTop, lenBot))
+                        .apply(Modifiers.makeVerticalSlope(!top, FramedSlopeSlabModel.SLOPE_ANGLE))
+                        .applyIf(Modifiers.offset(top ? Direction.DOWN : Direction.UP, .5F), offset)
+                        .export(quadMap.get(null));
+            }
 
             boolean rightFace = face == facing.getClockWise();
             float lenRight = rightFace ? (offset ? .5F : 0) : (offset ? 1 : .5F);
@@ -56,6 +61,20 @@ public class FramedFlatInnerSlopeSlabCornerModel extends FramedBlockModel
                     .apply(Modifiers.cutSideUpDown(top, lenRight, lenLeft))
                     .applyIf(Modifiers.cutSideUpDown(!top, .5F), offset)
                     .export(quadMap.get(face));
+        }
+        else if (ySlope && ((!top && face == Direction.UP) || (top && face == Direction.DOWN)))
+        {
+            QuadModifier.geometry(quad)
+                    .apply(Modifiers.cutTopBottom(facing.getCounterClockWise(), 1, 0))
+                    .apply(Modifiers.makeVerticalSlope(facing.getOpposite(), FramedSlopeSlabModel.SLOPE_ANGLE_VERT))
+                    .applyIf(Modifiers.offset(top ? Direction.UP : Direction.DOWN, .5F), !offset)
+                    .export(quadMap.get(null));
+
+            QuadModifier.geometry(quad)
+                    .apply(Modifiers.cutTopBottom(facing, 0, 1))
+                    .apply(Modifiers.makeVerticalSlope(facing.getClockWise(), FramedSlopeSlabModel.SLOPE_ANGLE_VERT))
+                    .applyIf(Modifiers.offset(top ? Direction.UP : Direction.DOWN, .5F), !offset)
+                    .export(quadMap.get(null));
         }
         else if (face == facing || face == facing.getCounterClockWise())
         {

@@ -3,9 +3,9 @@ package xfacthd.framedblocks.common.block.slopeslab;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.util.Tuple;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.context.BlockPlaceContext;
-import net.minecraft.world.level.BlockGetter;
-import net.minecraft.world.level.LevelReader;
+import net.minecraft.world.level.*;
 import net.minecraft.world.level.block.*;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
@@ -13,6 +13,7 @@ import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.phys.shapes.*;
 import xfacthd.framedblocks.api.block.FramedProperties;
+import xfacthd.framedblocks.api.block.IFramedBlock;
 import xfacthd.framedblocks.api.predicate.CtmPredicate;
 import xfacthd.framedblocks.api.util.*;
 import xfacthd.framedblocks.common.FBContent;
@@ -33,14 +34,20 @@ public class FramedDoubleSlopeSlabBlock extends AbstractFramedDoubleBlock
     public FramedDoubleSlopeSlabBlock()
     {
         super(BlockType.FRAMED_DOUBLE_SLOPE_SLAB);
-        registerDefaultState(defaultBlockState().setValue(PropertyHolder.TOP_HALF, false));
+        registerDefaultState(defaultBlockState()
+                .setValue(PropertyHolder.TOP_HALF, false)
+                .setValue(FramedProperties.Y_SLOPE, false)
+        );
     }
 
     @Override
     protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder)
     {
         super.createBlockStateDefinition(builder);
-        builder.add(FramedProperties.FACING_HOR, PropertyHolder.TOP_HALF, BlockStateProperties.WATERLOGGED);
+        builder.add(
+                FramedProperties.FACING_HOR, PropertyHolder.TOP_HALF, BlockStateProperties.WATERLOGGED,
+                FramedProperties.Y_SLOPE
+        );
     }
 
     @Override
@@ -65,6 +72,12 @@ public class FramedDoubleSlopeSlabBlock extends AbstractFramedDoubleBlock
 
     @Override
     protected boolean doesBlockOccludeBeaconBeam(BlockState state, LevelReader level, BlockPos pos) { return true; }
+
+    @Override
+    public boolean handleBlockLeftClick(BlockState state, Level level, BlockPos pos, Player player)
+    {
+        return IFramedBlock.toggleYSlope(state, level, pos, player);
+    }
 
     @Override
     public BlockState rotate(BlockState state, Direction face, Rotation rot)
@@ -100,15 +113,18 @@ public class FramedDoubleSlopeSlabBlock extends AbstractFramedDoubleBlock
     {
         Direction facing = state.getValue(FramedProperties.FACING_HOR);
         boolean topHalf = state.getValue(PropertyHolder.TOP_HALF);
+        boolean ySlope = state.getValue(FramedProperties.Y_SLOPE);
 
         BlockState defState = FBContent.blockFramedSlopeSlab.get().defaultBlockState();
         return new Tuple<>(
                 defState.setValue(FramedProperties.FACING_HOR, facing)
                         .setValue(PropertyHolder.TOP_HALF, topHalf)
-                        .setValue(FramedProperties.TOP, false),
+                        .setValue(FramedProperties.TOP, false)
+                        .setValue(FramedProperties.Y_SLOPE, ySlope),
                 defState.setValue(FramedProperties.FACING_HOR, facing.getOpposite())
                         .setValue(PropertyHolder.TOP_HALF, topHalf)
                         .setValue(FramedProperties.TOP, true)
+                        .setValue(FramedProperties.Y_SLOPE, ySlope)
         );
     }
 

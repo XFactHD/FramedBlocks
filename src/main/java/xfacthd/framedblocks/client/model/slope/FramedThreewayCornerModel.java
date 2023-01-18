@@ -17,12 +17,14 @@ public class FramedThreewayCornerModel extends FramedBlockModel
 {
     private final Direction dir;
     private final boolean top;
+    private final boolean ySlope;
 
     public FramedThreewayCornerModel(BlockState state, BakedModel baseModel)
     {
         super(state, baseModel);
-        dir = state.getValue(FramedProperties.FACING_HOR);
-        top = state.getValue(FramedProperties.TOP);
+        this.dir = state.getValue(FramedProperties.FACING_HOR);
+        this.top = state.getValue(FramedProperties.TOP);
+        this.ySlope = state.getValue(FramedProperties.Y_SLOPE);
     }
 
     @Override
@@ -44,21 +46,36 @@ public class FramedThreewayCornerModel extends FramedBlockModel
         }
         else if (quadDir == dir.getOpposite())
         {
-            QuadModifier.geometry(quad)
+            if (!ySlope)
+            {
+                QuadModifier.geometry(quad)
                     .apply(Modifiers.cutSmallTriangle(dir.getClockWise()))
                     .apply(Modifiers.makeVerticalSlope(!top, 45))
                     .export(quadMap.get(null));
+            }
 
             QuadModifier.geometry(quad)
                     .apply(Modifiers.cutSmallTriangle(top ? Direction.DOWN : Direction.UP))
                     .apply(Modifiers.makeHorizontalSlope(false, 45))
                     .export(quadMap.get(null));
         }
-        else if (quadDir == dir.getClockWise())
+        else if (!ySlope && quadDir == dir.getClockWise())
         {
             QuadModifier.geometry(quad)
                     .apply(Modifiers.cutSmallTriangle(dir.getOpposite()))
                     .apply(Modifiers.makeVerticalSlope(!top, 45))
+                    .export(quadMap.get(null));
+        }
+        else if (ySlope && ((!top && quadDir == Direction.UP) || (top && quadDir == Direction.DOWN)))
+        {
+            QuadModifier.geometry(quad)
+                    .apply(Modifiers.cutSmallTriangle(dir.getOpposite()))
+                    .apply(Modifiers.makeVerticalSlope(dir.getClockWise(), 45))
+                    .export(quadMap.get(null));
+
+            QuadModifier.geometry(quad)
+                    .apply(Modifiers.cutSmallTriangle(dir.getClockWise()))
+                    .apply(Modifiers.makeVerticalSlope(dir.getOpposite(), 45))
                     .export(quadMap.get(null));
         }
     }
@@ -67,6 +84,7 @@ public class FramedThreewayCornerModel extends FramedBlockModel
 
     public static BlockState itemSource()
     {
-        return FBContent.blockFramedThreewayCorner.get().defaultBlockState().setValue(FramedProperties.FACING_HOR, Direction.SOUTH);
+        return FBContent.blockFramedThreewayCorner.get().defaultBlockState()
+                .setValue(FramedProperties.FACING_HOR, Direction.SOUTH);
     }
 }

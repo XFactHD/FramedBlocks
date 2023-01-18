@@ -3,12 +3,15 @@ package xfacthd.framedblocks.common.block.slopeslab;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.util.Tuple;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.context.BlockPlaceContext;
+import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.*;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import xfacthd.framedblocks.api.block.FramedProperties;
+import xfacthd.framedblocks.api.block.IFramedBlock;
 import xfacthd.framedblocks.api.predicate.CtmPredicate;
 import xfacthd.framedblocks.api.util.*;
 import xfacthd.framedblocks.common.FBContent;
@@ -26,14 +29,17 @@ public class FramedElevatedDoubleSlopeSlabBlock extends AbstractFramedDoubleBloc
     public FramedElevatedDoubleSlopeSlabBlock()
     {
         super(BlockType.FRAMED_ELEVATED_DOUBLE_SLOPE_SLAB);
-        registerDefaultState(defaultBlockState().setValue(FramedProperties.TOP, false));
+        registerDefaultState(defaultBlockState()
+                .setValue(FramedProperties.TOP, false)
+                .setValue(FramedProperties.Y_SLOPE, false)
+        );
     }
 
     @Override
     protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder)
     {
         super.createBlockStateDefinition(builder);
-        builder.add(FramedProperties.FACING_HOR, FramedProperties.TOP);
+        builder.add(FramedProperties.FACING_HOR, FramedProperties.TOP, FramedProperties.Y_SLOPE);
     }
 
     @Override
@@ -44,6 +50,12 @@ public class FramedElevatedDoubleSlopeSlabBlock extends AbstractFramedDoubleBloc
 
         BlockState state = defaultBlockState().setValue(FramedProperties.FACING_HOR, facing);
         return withTop(state, face, context.getClickLocation());
+    }
+
+    @Override
+    public boolean handleBlockLeftClick(BlockState state, Level level, BlockPos pos, Player player)
+    {
+        return IFramedBlock.toggleYSlope(state, level, pos, player);
     }
 
     @Override
@@ -77,15 +89,18 @@ public class FramedElevatedDoubleSlopeSlabBlock extends AbstractFramedDoubleBloc
     {
         Direction facing = state.getValue(FramedProperties.FACING_HOR);
         boolean top = state.getValue(FramedProperties.TOP);
+        boolean ySlope = state.getValue(FramedProperties.Y_SLOPE);
 
         return new Tuple<>(
                 FBContent.blockFramedElevatedSlopeSlab.get().defaultBlockState()
                         .setValue(FramedProperties.FACING_HOR, facing)
-                        .setValue(FramedProperties.TOP, top),
+                        .setValue(FramedProperties.TOP, top)
+                        .setValue(FramedProperties.Y_SLOPE, ySlope),
                 FBContent.blockFramedSlopeSlab.get().defaultBlockState()
                         .setValue(FramedProperties.FACING_HOR, facing.getOpposite())
                         .setValue(PropertyHolder.TOP_HALF, !top)
                         .setValue(FramedProperties.TOP, !top)
+                        .setValue(FramedProperties.Y_SLOPE, ySlope)
         );
     }
 

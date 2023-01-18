@@ -53,6 +53,7 @@ public class FramedPoweredRailSlopeBlock extends PoweredRailBlock implements IFr
                 .setValue(FramedProperties.SOLID, false)
                 .setValue(FramedProperties.GLOWING, false)
                 .setValue(POWERED, false)
+                .setValue(FramedProperties.Y_SLOPE, false)
         );
     }
 
@@ -62,7 +63,10 @@ public class FramedPoweredRailSlopeBlock extends PoweredRailBlock implements IFr
     @Override
     protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder)
     {
-        builder.add(PropertyHolder.ASCENDING_RAIL_SHAPE, BlockStateProperties.POWERED, BlockStateProperties.WATERLOGGED, FramedProperties.SOLID, FramedProperties.GLOWING);
+        builder.add(
+                PropertyHolder.ASCENDING_RAIL_SHAPE, BlockStateProperties.POWERED, BlockStateProperties.WATERLOGGED,
+                FramedProperties.SOLID, FramedProperties.GLOWING, FramedProperties.Y_SLOPE
+        );
     }
 
     @Override
@@ -212,6 +216,12 @@ public class FramedPoweredRailSlopeBlock extends PoweredRailBlock implements IFr
     public boolean hidesNeighborFace(BlockGetter level, BlockPos pos, BlockState state, BlockState neighborState, Direction dir)
     {
         return doesHideNeighborFace(level, pos, state, neighborState, dir);
+    }
+
+    @Override
+    public boolean handleBlockLeftClick(BlockState state, Level level, BlockPos pos, Player player)
+    {
+        return IFramedBlock.toggleYSlope(state, level, pos, player);
     }
 
     @Override

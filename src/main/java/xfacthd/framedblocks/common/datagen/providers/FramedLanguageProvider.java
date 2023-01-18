@@ -184,6 +184,10 @@ public final class FramedLanguageProvider extends LanguageProvider
         add(ToggleWaterloggableOverlay.MSG_IS_NOT_WATERLOGGABLE, "Block is not waterloggable");
         add(ToggleWaterloggableOverlay.MSG_MAKE_WATERLOGGABLE, "Hit with a Framed Hammer to make waterloggable");
         add(ToggleWaterloggableOverlay.MSG_MAKE_NOT_WATERLOGGABLE, "Hit with a Framed Hammer to make not waterloggable");
+        add(ToggleYSlopeOverlay.SLOPE_MESSAGE, "Block uses %s faces for vertical sloped faces");
+        add(ToggleYSlopeOverlay.TOGGLE_MESSAGE, "Hit with a Framed Wrench to switch to %s faces");
+        add(ToggleYSlopeOverlay.SLOPE_HOR, "horizontal");
+        add(ToggleYSlopeOverlay.SLOPE_VERT, "vertical");
     }
 
     private void add(Component key, String value)

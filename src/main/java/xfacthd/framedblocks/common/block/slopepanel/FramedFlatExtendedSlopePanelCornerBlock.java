@@ -2,8 +2,11 @@ package xfacthd.framedblocks.common.block.slopepanel;
 
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
+import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.context.BlockPlaceContext;
+import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.*;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
@@ -12,6 +15,7 @@ import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.Vec3;
 import net.minecraft.world.phys.shapes.*;
 import xfacthd.framedblocks.api.block.FramedProperties;
+import xfacthd.framedblocks.api.block.IFramedBlock;
 import xfacthd.framedblocks.api.predicate.CtmPredicate;
 import xfacthd.framedblocks.api.shapes.ShapeProvider;
 import xfacthd.framedblocks.api.util.*;
@@ -44,19 +48,32 @@ public class FramedFlatExtendedSlopePanelCornerBlock extends FramedBlock
         return side == rotOrientation.getOpposite();
     });
 
-    public FramedFlatExtendedSlopePanelCornerBlock(BlockType type) { super(type); }
+    public FramedFlatExtendedSlopePanelCornerBlock(BlockType type)
+    {
+        super(type);
+        registerDefaultState(defaultBlockState().setValue(FramedProperties.Y_SLOPE, false));
+    }
 
     @Override
     protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder)
     {
         super.createBlockStateDefinition(builder);
-        builder.add(FramedProperties.FACING_HOR, PropertyHolder.ROTATION, FramedProperties.SOLID, BlockStateProperties.WATERLOGGED);
+        builder.add(
+                FramedProperties.FACING_HOR, PropertyHolder.ROTATION, FramedProperties.SOLID,
+                BlockStateProperties.WATERLOGGED, FramedProperties.Y_SLOPE
+        );
     }
 
     @Override
     public BlockState getStateForPlacement(BlockPlaceContext context)
     {
         return FramedFlatSlopePanelCornerBlock.getStateForPlacement(this, false, context);
+    }
+
+    @Override
+    public boolean handleBlockLeftClick(BlockState state, Level level, BlockPos pos, Player player)
+    {
+        return IFramedBlock.toggleYSlope(state, level, pos, player);
     }
 
     @Override

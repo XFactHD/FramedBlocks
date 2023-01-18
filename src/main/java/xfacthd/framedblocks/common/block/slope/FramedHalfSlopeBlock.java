@@ -3,10 +3,13 @@ package xfacthd.framedblocks.common.block.slope;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
 import com.mojang.datafixers.util.Pair;
+import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.context.BlockPlaceContext;
+import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.*;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
@@ -32,6 +35,7 @@ public class FramedHalfSlopeBlock extends FramedBlock
         registerDefaultState(defaultBlockState()
                 .setValue(FramedProperties.TOP, false)
                 .setValue(PropertyHolder.RIGHT, false)
+                .setValue(FramedProperties.Y_SLOPE, false)
         );
     }
 
@@ -39,7 +43,10 @@ public class FramedHalfSlopeBlock extends FramedBlock
     protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder)
     {
         super.createBlockStateDefinition(builder);
-        builder.add(FramedProperties.FACING_HOR, FramedProperties.TOP, PropertyHolder.RIGHT, BlockStateProperties.WATERLOGGED);
+        builder.add(
+                FramedProperties.FACING_HOR, FramedProperties.TOP, PropertyHolder.RIGHT,
+                BlockStateProperties.WATERLOGGED, FramedProperties.Y_SLOPE
+        );
     }
 
     @Override
@@ -56,6 +63,12 @@ public class FramedHalfSlopeBlock extends FramedBlock
 
         state = withTop(state, side, hitVec);
         return withWater(state, context.getLevel(), context.getClickedPos());
+    }
+
+    @Override
+    public boolean handleBlockLeftClick(BlockState state, Level level, BlockPos pos, Player player)
+    {
+        return IFramedBlock.toggleYSlope(state, level, pos, player);
     }
 
     @Override

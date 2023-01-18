@@ -18,13 +18,12 @@ import net.minecraft.core.Direction;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import net.minecraft.world.phys.shapes.Shapes;
-import xfacthd.framedblocks.api.block.FramedProperties;
+import xfacthd.framedblocks.api.block.*;
 import xfacthd.framedblocks.api.camo.CamoContainer;
 import xfacthd.framedblocks.api.camo.EmptyCamoContainer;
 import xfacthd.framedblocks.api.predicate.CtmPredicate;
 import xfacthd.framedblocks.api.shapes.ShapeProvider;
 import xfacthd.framedblocks.api.util.*;
-import xfacthd.framedblocks.api.block.FramedBlockEntity;
 import xfacthd.framedblocks.common.block.FramedBlock;
 import xfacthd.framedblocks.common.data.*;
 import xfacthd.framedblocks.common.data.property.SlopeType;
@@ -52,13 +51,20 @@ public class FramedSlopeBlock extends FramedBlock
         return FramedUtils.getSlopeBlockFacing(state) == dir;
     };
 
-    public FramedSlopeBlock() { super(BlockType.FRAMED_SLOPE); }
+    public FramedSlopeBlock()
+    {
+        super(BlockType.FRAMED_SLOPE);
+        registerDefaultState(defaultBlockState().setValue(FramedProperties.Y_SLOPE, false));
+    }
 
     @Override
     protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder)
     {
         super.createBlockStateDefinition(builder);
-        builder.add(FramedProperties.FACING_HOR, PropertyHolder.SLOPE_TYPE, BlockStateProperties.WATERLOGGED, FramedProperties.SOLID);
+        builder.add(
+                FramedProperties.FACING_HOR, PropertyHolder.SLOPE_TYPE, BlockStateProperties.WATERLOGGED,
+                FramedProperties.SOLID, FramedProperties.Y_SLOPE
+        );
     }
 
     @Override
@@ -123,6 +129,12 @@ public class FramedSlopeBlock extends FramedBlock
             }
         }
         return super.use(state, level, pos, player, hand, hit);
+    }
+
+    @Override
+    public boolean handleBlockLeftClick(BlockState state, Level level, BlockPos pos, Player player)
+    {
+        return IFramedBlock.toggleYSlope(state, level, pos, player);
     }
 
     @Override

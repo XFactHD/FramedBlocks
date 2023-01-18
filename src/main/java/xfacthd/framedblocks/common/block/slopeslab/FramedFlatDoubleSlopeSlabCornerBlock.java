@@ -5,7 +5,9 @@ import com.google.common.collect.ImmutableMap;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.util.Tuple;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.context.BlockPlaceContext;
+import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.*;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
@@ -13,6 +15,7 @@ import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import xfacthd.framedblocks.api.block.FramedProperties;
+import xfacthd.framedblocks.api.block.IFramedBlock;
 import xfacthd.framedblocks.api.predicate.CtmPredicate;
 import xfacthd.framedblocks.api.shapes.ShapeProvider;
 import xfacthd.framedblocks.api.util.*;
@@ -36,6 +39,7 @@ public class FramedFlatDoubleSlopeSlabCornerBlock extends AbstractFramedDoubleBl
         registerDefaultState(defaultBlockState()
                 .setValue(FramedProperties.TOP, false)
                 .setValue(PropertyHolder.TOP_HALF, false)
+                .setValue(FramedProperties.Y_SLOPE, false)
         );
     }
 
@@ -43,7 +47,10 @@ public class FramedFlatDoubleSlopeSlabCornerBlock extends AbstractFramedDoubleBl
     protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder)
     {
         super.createBlockStateDefinition(builder);
-        builder.add(FramedProperties.FACING_HOR, FramedProperties.TOP, PropertyHolder.TOP_HALF, BlockStateProperties.WATERLOGGED);
+        builder.add(
+                FramedProperties.FACING_HOR, FramedProperties.TOP, PropertyHolder.TOP_HALF,
+                BlockStateProperties.WATERLOGGED, FramedProperties.Y_SLOPE
+        );
     }
 
     @Override
@@ -57,6 +64,12 @@ public class FramedFlatDoubleSlopeSlabCornerBlock extends AbstractFramedDoubleBl
         state = withTop(state, PropertyHolder.TOP_HALF, context.getClickedFace(), context.getClickLocation());
         state = state.setValue(FramedProperties.TOP, context.getPlayer() != null && context.getPlayer().isShiftKeyDown());
         return withWater(state, context.getLevel(), context.getClickedPos());
+    }
+
+    @Override
+    public boolean handleBlockLeftClick(BlockState state, Level level, BlockPos pos, Player player)
+    {
+        return IFramedBlock.toggleYSlope(state, level, pos, player);
     }
 
     @Override
@@ -94,18 +107,21 @@ public class FramedFlatDoubleSlopeSlabCornerBlock extends AbstractFramedDoubleBl
         Direction facing = state.getValue(FramedProperties.FACING_HOR);
         boolean topHalf = state.getValue(PropertyHolder.TOP_HALF);
         boolean top = state.getValue(FramedProperties.TOP);
+        boolean ySlope = state.getValue(FramedProperties.Y_SLOPE);
 
         return new Tuple<>(
                 FBContent.blockFramedFlatInnerSlopeSlabCorner.get()
                         .defaultBlockState()
                         .setValue(FramedProperties.FACING_HOR, facing)
                         .setValue(PropertyHolder.TOP_HALF, topHalf)
-                        .setValue(FramedProperties.TOP, top),
+                        .setValue(FramedProperties.TOP, top)
+                        .setValue(FramedProperties.Y_SLOPE, ySlope),
                 FBContent.blockFramedFlatSlopeSlabCorner.get()
                         .defaultBlockState()
                         .setValue(FramedProperties.FACING_HOR, facing.getOpposite())
                         .setValue(PropertyHolder.TOP_HALF, topHalf)
                         .setValue(FramedProperties.TOP, !top)
+                        .setValue(FramedProperties.Y_SLOPE, ySlope)
         );
     }
 

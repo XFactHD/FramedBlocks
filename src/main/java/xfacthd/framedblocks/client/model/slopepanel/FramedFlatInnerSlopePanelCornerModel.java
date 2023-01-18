@@ -27,6 +27,7 @@ public class FramedFlatInnerSlopePanelCornerModel extends FramedBlockModel
     private final Direction orientation;
     private final Direction rotOrientation;
     private final boolean front;
+    private final boolean ySlope;
 
     public FramedFlatInnerSlopePanelCornerModel(BlockState state, BakedModel baseModel)
     {
@@ -37,6 +38,7 @@ public class FramedFlatInnerSlopePanelCornerModel extends FramedBlockModel
         this.orientation = rotation.withFacing(facing);
         this.rotOrientation = rotRotation.withFacing(facing);
         this.front = state.getValue(PropertyHolder.FRONT);
+        this.ySlope = state.getValue(FramedProperties.Y_SLOPE);
     }
 
     @Override
@@ -46,10 +48,28 @@ public class FramedFlatInnerSlopePanelCornerModel extends FramedBlockModel
         if (face == orientation)
         {
             FramedFlatSlopePanelCornerModel.createSideTriangle(quadMap, quad, facing, rotRotation, front, false);
+
+            if (ySlope && Utils.isY(orientation))
+            {
+                QuadModifier.geometry(quad)
+                        .apply(FramedFlatSlopePanelCornerModel.createVerticalSlopeTriangle(facing.getOpposite(), orientation, false))
+                        .apply(FramedSlopePanelModel.createVerticalSlope(facing, rotOrientation))
+                        .applyIf(Modifiers.offset(facing.getOpposite(), .5F), front)
+                        .export(quadMap.get(null));
+            }
         }
         else if (face == rotOrientation)
         {
             FramedFlatSlopePanelCornerModel.createSideTriangle(quadMap, quad, facing, rotation, front, false);
+
+            if (ySlope && Utils.isY(rotOrientation))
+            {
+                QuadModifier.geometry(quad)
+                        .apply(FramedFlatSlopePanelCornerModel.createVerticalSlopeTriangle(facing.getOpposite(), rotOrientation, true))
+                        .apply(FramedSlopePanelModel.createVerticalSlope(facing, orientation))
+                        .applyIf(Modifiers.offset(facing.getOpposite(), .5F), front)
+                        .export(quadMap.get(null));
+            }
         }
         else if (face == orientation.getOpposite() || face == rotOrientation.getOpposite())
         {
@@ -69,17 +89,23 @@ public class FramedFlatInnerSlopePanelCornerModel extends FramedBlockModel
         }
         else if (face == facing.getOpposite())
         {
-            QuadModifier.geometry(quad)
-                    .apply(FramedFlatSlopePanelCornerModel.createSlopeTriangle(facing, rotOrientation, true))
-                    .apply(FramedSlopePanelModel.createSlope(facing, orientation))
-                    .applyIf(Modifiers.offset(facing, .5F), !front)
-                    .export(quadMap.get(null));
+            if (!ySlope || !Utils.isY(orientation))
+            {
+                QuadModifier.geometry(quad)
+                        .apply(FramedFlatSlopePanelCornerModel.createSlopeTriangle(facing, rotOrientation, true))
+                        .apply(FramedSlopePanelModel.createSlope(facing, orientation))
+                        .applyIf(Modifiers.offset(facing, .5F), !front)
+                        .export(quadMap.get(null));
+            }
 
-            QuadModifier.geometry(quad)
-                    .apply(FramedFlatSlopePanelCornerModel.createSlopeTriangle(facing, orientation, false))
-                    .apply(FramedSlopePanelModel.createSlope(facing, rotOrientation))
-                    .applyIf(Modifiers.offset(facing, .5F), !front)
-                    .export(quadMap.get(null));
+            if (!ySlope || !Utils.isY(rotOrientation))
+            {
+                QuadModifier.geometry(quad)
+                        .apply(FramedFlatSlopePanelCornerModel.createSlopeTriangle(facing, orientation, false))
+                        .apply(FramedSlopePanelModel.createSlope(facing, rotOrientation))
+                        .applyIf(Modifiers.offset(facing, .5F), !front)
+                        .export(quadMap.get(null));
+            }
         }
         else if (face == facing && front)
         {
