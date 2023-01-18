@@ -701,14 +701,38 @@ public final class Modifiers
 
         return data ->
         {
-            //TODO: implement interpolation
-
+            // Interpolation is not viable as it cannot cleanly handle cases like the four corners not being on a flat plane
             int idx = data.quad().getDirection().getAxis().ordinal();
             boolean positive = Utils.isPositive(data.quad().getDirection());
             for (int i = 0; i < 4; i++)
             {
                 data.pos()[i][idx] = positive ? posTarget[i] : 1F - posTarget[i];
             }
+
+            return true;
+        };
+    }
+
+    /**
+     * Rotates the vertices of the quad by 90 degree
+     */
+    public static QuadModifier.Modifier rotateVertices()
+    {
+        return data ->
+        {
+            float[][] pos = data.pos();
+            float[][] uv = data.uv();
+            float[][] newPos = new float[4][3];
+            float[][] newUv = new float[4][2];
+
+            for (int i = 0; i < 4; i++)
+            {
+                System.arraycopy(pos[i], 0, newPos[(i + 1) % 4], 0, 3);
+                System.arraycopy(uv[i], 0, newUv[(i + 1) % 4], 0, 2);
+            }
+
+            System.arraycopy(newPos, 0, pos, 0, 4);
+            System.arraycopy(newUv, 0, uv, 0, 4);
 
             return true;
         };
