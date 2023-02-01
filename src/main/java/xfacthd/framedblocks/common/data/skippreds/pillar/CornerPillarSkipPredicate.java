@@ -33,6 +33,7 @@ public final class CornerPillarSkipPredicate implements SideSkipPredicate
             return switch (type)
             {
                 case FRAMED_CORNER_PILLAR -> testAgainstPillar(level, pos, state, dir, adjState, side);
+                case FRAMED_DIVIDED_PANEL_VERTICAL -> testAgainstDividedPanelVert(level, pos, state, dir, adjState, side);
                 case FRAMED_SLAB_CORNER -> testAgainstCorner(level, pos, state, dir, adjState, side);
                 case FRAMED_PANEL -> testAgainstPanel(level, pos, state, dir, adjState, side);
                 case FRAMED_DOUBLE_PANEL -> testAgainstDoublePanel(level, pos, state, dir, adjState, side);
@@ -75,6 +76,13 @@ public final class CornerPillarSkipPredicate implements SideSkipPredicate
             return SideSkipPredicate.compareState(level, pos, side, state, adjState);
         }
         return false;
+    }
+
+    private static boolean testAgainstDividedPanelVert(BlockGetter level, BlockPos pos, BlockState state, Direction dir, BlockState adjState, Direction side)
+    {
+        Tuple<BlockState, BlockState> states = AbstractFramedDoubleBlock.getStatePair(adjState);
+        return testAgainstPillar(level, pos, state, dir, states.getA(), side) ||
+               testAgainstPillar(level, pos, state, dir, states.getB(), side);
     }
 
     private static boolean testAgainstCorner(

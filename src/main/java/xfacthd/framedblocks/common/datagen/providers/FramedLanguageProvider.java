@@ -35,8 +35,11 @@ public final class FramedLanguageProvider extends LanguageProvider
         add(FBContent.blockFramedSlab.get(), "Framed Slab");
         add(FBContent.blockFramedSlabEdge.get(), "Framed Slab Edge");
         add(FBContent.blockFramedSlabCorner.get(), "Framed Slab Corner");
+        add(FBContent.blockFramedDividedSlab.get(), "Framed Divided Slab");
         add(FBContent.blockFramedPanel.get(), "Framed Panel");
         add(FBContent.blockFramedCornerPillar.get(), "Framed Corner Pillar");
+        add(FBContent.blockFramedDividedPanelHor.get(), "Framed Divided Panel (Horizontal)");
+        add(FBContent.blockFramedDividedPanelVert.get(), "Framed Divided Panel (Vertical)");
         add(FBContent.blockFramedStairs.get(), "Framed Stairs");
         add(FBContent.blockFramedWall.get(), "Framed Wall");
         add(FBContent.blockFramedFence.get(), "Framed Fence");

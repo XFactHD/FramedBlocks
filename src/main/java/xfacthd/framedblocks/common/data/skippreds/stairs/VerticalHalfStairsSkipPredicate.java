@@ -37,6 +37,8 @@ public final class VerticalHalfStairsSkipPredicate implements SideSkipPredicate
                 case FRAMED_SLAB -> testAgainstSlab(level, pos, state, dir, top, adjState, side);
                 case FRAMED_DOUBLE_SLAB -> testAgainstDoubleSlab(level, pos, state, dir, top, adjState, side);
                 case FRAMED_SLAB_EDGE -> testAgainstSlabEdge(level, pos, state, dir, top, adjState, side);
+                case FRAMED_DIVIDED_SLAB -> testAgainstDividedSlab(level, pos, state, dir, top, adjState, side);
+                case FRAMED_DIVIDED_PANEL_HORIZONTAL -> testAgainstDividedPanelHor(level, pos, state, dir, top, adjState, side);
                 case FRAMED_SLAB_CORNER -> testAgainstSlabCorner(level, pos, state, dir, top, adjState, side);
                 case FRAMED_STAIRS -> testAgainstStairs(level, pos, state, dir, top, adjState, side);
                 case FRAMED_DOUBLE_STAIRS -> testAgainstDoubleStairs(level, pos, state, dir, top, adjState, side);
@@ -140,6 +142,24 @@ public final class VerticalHalfStairsSkipPredicate implements SideSkipPredicate
             return SideSkipPredicate.compareState(level, pos, side, state, adjState);
         }
         return false;
+    }
+
+    private static boolean testAgainstDividedSlab(
+            BlockGetter level, BlockPos pos, BlockState state, Direction dir, boolean top, BlockState adjState, Direction side
+    )
+    {
+        Tuple<BlockState, BlockState> states = AbstractFramedDoubleBlock.getStatePair(adjState);
+        return testAgainstSlabEdge(level, pos, state, dir, top, states.getA(), side) ||
+               testAgainstSlabEdge(level, pos, state, dir, top, states.getB(), side);
+    }
+
+    private static boolean testAgainstDividedPanelHor(
+            BlockGetter level, BlockPos pos, BlockState state, Direction dir, boolean top, BlockState adjState, Direction side
+    )
+    {
+        Tuple<BlockState, BlockState> states = AbstractFramedDoubleBlock.getStatePair(adjState);
+        return testAgainstSlabEdge(level, pos, state, dir, top, states.getA(), side) ||
+               testAgainstSlabEdge(level, pos, state, dir, top, states.getB(), side);
     }
 
     private static boolean testAgainstSlabCorner(BlockGetter level, BlockPos pos, BlockState state, Direction dir, boolean top, BlockState adjState, Direction side)

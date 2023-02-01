@@ -32,6 +32,8 @@ public final class SlabEdgeSkipPredicate implements SideSkipPredicate
             return switch (type)
             {
                 case FRAMED_SLAB_EDGE -> testAgainstEdge(level, pos, state, dir, top, adjState, side);
+                case FRAMED_DIVIDED_SLAB -> testAgainstDividedSlab(level, pos, state, dir, top, adjState, side);
+                case FRAMED_DIVIDED_PANEL_HORIZONTAL -> testAgainstDividedPanelHor(level, pos, state, dir, top, adjState, side);
                 case FRAMED_SLAB -> testAgainstSlab(level, pos, state, dir, top, adjState, side);
                 case FRAMED_DOUBLE_SLAB -> testAgainstDoubleSlab(level, pos, state, dir, top, adjState, side);
                 case FRAMED_SLAB_CORNER -> testAgainstCorner(level, pos, state, dir, top, adjState, side);
@@ -90,6 +92,24 @@ public final class SlabEdgeSkipPredicate implements SideSkipPredicate
             return SideSkipPredicate.compareState(level, pos, side, state, adjState);
         }
         return false;
+    }
+
+    private static boolean testAgainstDividedSlab(
+            BlockGetter level, BlockPos pos, BlockState state, Direction dir, boolean top, BlockState adjState, Direction side
+    )
+    {
+        Tuple<BlockState, BlockState> states = AbstractFramedDoubleBlock.getStatePair(adjState);
+        return testAgainstEdge(level, pos, state, dir, top, states.getA(), side) ||
+               testAgainstEdge(level, pos, state, dir, top, states.getB(), side);
+    }
+
+    private static boolean testAgainstDividedPanelHor(
+            BlockGetter level, BlockPos pos, BlockState state, Direction dir, boolean top, BlockState adjState, Direction side
+    )
+    {
+        Tuple<BlockState, BlockState> states = AbstractFramedDoubleBlock.getStatePair(adjState);
+        return testAgainstEdge(level, pos, state, dir, top, states.getA(), side) ||
+               testAgainstEdge(level, pos, state, dir, top, states.getB(), side);
     }
 
     private static boolean testAgainstSlab(BlockGetter level, BlockPos pos, BlockState state, Direction dir, boolean top, BlockState adjState, Direction side)
