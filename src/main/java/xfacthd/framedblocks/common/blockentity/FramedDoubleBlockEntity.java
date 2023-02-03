@@ -148,7 +148,7 @@ public abstract class FramedDoubleBlockEntity extends FramedBlockEntity
     public float getCamoExplosionResistance(Explosion explosion)
     {
         return Math.max(
-                getCamo().getState().getExplosionResistance(level, worldPosition, explosion),
+                super.getCamoExplosionResistance(explosion),
                 camoContainer.getState().getExplosionResistance(level, worldPosition, explosion)
         );
     }

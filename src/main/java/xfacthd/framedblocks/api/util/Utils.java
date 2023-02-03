@@ -67,6 +67,10 @@ public final class Utils
             new ResourceLocation(FramedConstants.MOD_ID, "framed_screwdriver"),
             ForgeRegistries.ITEMS
     );
+    public static final RegistryObject<Item> FRAMED_REINFORCEMENT = RegistryObject.create(
+            new ResourceLocation(FramedConstants.MOD_ID, "framed_reinforcement"),
+            ForgeRegistries.ITEMS
+    );
 
     public static VoxelShape rotateShape(Direction from, Direction to, VoxelShape shape)
     {

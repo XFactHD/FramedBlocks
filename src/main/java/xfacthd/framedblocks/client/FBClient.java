@@ -164,6 +164,7 @@ public final class FBClient
         event.registerAboveAll("state_lock", new StateLockOverlay());
         event.registerAboveAll("toggle_waterloggable", new ToggleWaterloggableOverlay());
         event.registerAboveAll("y_slope", new ToggleYSlopeOverlay());
+        event.registerAboveAll("reinforced", new ReinforcementOverlay());
     }
 
     @SubscribeEvent

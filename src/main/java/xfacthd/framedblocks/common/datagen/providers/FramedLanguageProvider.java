@@ -160,6 +160,7 @@ public final class FramedLanguageProvider extends LanguageProvider
         add(FBContent.itemFramedBlueprint.get(), "Framed Blueprint");
         add(FBContent.itemFramedKey.get(), "Framed Key");
         add(FBContent.itemFramedScrewdriver.get(), "Framed Screwdriver");
+        add(FBContent.itemFramedReinforcement.get(), "Framed Reinforcement");
 
         add(KeyMappings.KEY_CATEGORY, "FramedBlocks");
         add(KeyMappings.KEYMAPPING_UPDATE_CULLING.get().getName(), "Update culling cache");
@@ -172,10 +173,12 @@ public final class FramedLanguageProvider extends LanguageProvider
         add(FramedBlueprintItem.CONTAINED_BLOCK, "Contained Block: %s");
         add(FramedBlueprintItem.CAMO_BLOCK, "Camo Block: %s");
         add(FramedBlueprintItem.IS_ILLUMINATED, "Illuminated: %s");
+        add(FramedBlueprintItem.IS_INTANGIBLE, "Intangible: %s");
+        add(FramedBlueprintItem.IS_REINFORCED, "Reinforced: %s");
         add(FramedBlueprintItem.BLOCK_NONE, "None");
         add(FramedBlueprintItem.BLOCK_INVALID, "Invalid");
-        add(FramedBlueprintItem.ILLUMINATED_FALSE, "false");
-        add(FramedBlueprintItem.ILLUMINATED_TRUE, "true");
+        add(FramedBlueprintItem.FALSE, "false");
+        add(FramedBlueprintItem.TRUE, "true");
         add(FramedBlueprintItem.CANT_COPY, "This block can currently not be copied!");
         add(FramedBlueprintItem.CANT_PLACE_FLUID_CAMO, "Copying blocks with fluid camos is currently not possible!");
         add(FramedSignScreen.TITLE, "Edit sign");
@@ -192,6 +195,9 @@ public final class FramedLanguageProvider extends LanguageProvider
         add(ToggleYSlopeOverlay.TOGGLE_MESSAGE, "Hit with a Framed Wrench to switch to %s faces");
         add(ToggleYSlopeOverlay.SLOPE_HOR, "horizontal");
         add(ToggleYSlopeOverlay.SLOPE_VERT, "vertical");
+        add(ReinforcementOverlay.REINFORCE_MESSAGE, "Block is %s");
+        add(ReinforcementOverlay.STATE_NOT_REINFORCED, "not reinforced");
+        add(ReinforcementOverlay.STATE_REINFORCED, "reinforced");
     }
 
     private void add(Component key, String value)

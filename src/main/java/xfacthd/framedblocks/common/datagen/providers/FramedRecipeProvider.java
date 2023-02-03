@@ -988,6 +988,16 @@ public final class FramedRecipeProvider extends RecipeProvider
                 .unlockedBy("hasFramedBlock", HAS_FRAMED_BLOCK)
                 .save(consumer);
 
+        ShapedRecipeBuilder.shaped(RecipeCategory.MISC, FBContent.itemFramedReinforcement.get(), 16)
+                .pattern("OSO")
+                .pattern("SFS")
+                .pattern("OSO")
+                .define('O', Tags.Items.OBSIDIAN)
+                .define('S', Items.STICK)
+                .define('F', FBContent.blockFramedCube.get())
+                .unlockedBy("hasFramedBlock", HAS_FRAMED_BLOCK)
+                .save(consumer);
+
 
 
         makeRotationRecipe(FBContent.blockFramedSlab, FBContent.blockFramedPanel, consumer);

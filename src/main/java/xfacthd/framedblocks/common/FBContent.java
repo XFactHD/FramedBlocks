@@ -214,6 +214,9 @@ public final class FBContent
     public static final RegistryObject<Item> itemFramedBlueprint = registerToolItem(FramedBlueprintItem::new, FramedToolType.BLUEPRINT);
     public static final RegistryObject<Item> itemFramedKey = registerToolItem(FramedToolItem::new, FramedToolType.KEY);
     public static final RegistryObject<Item> itemFramedScrewdriver = registerToolItem(FramedToolItem::new, FramedToolType.SCREWDRIVER);
+    public static final RegistryObject<Item> itemFramedReinforcement = ITEMS.register("framed_reinforcement", () ->
+            new Item(new Item.Properties())
+    );
     // endregion
 
     // region BlockEntityTypes

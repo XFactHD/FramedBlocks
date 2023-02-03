@@ -1,0 +1,24 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "F": {
+      "item": "framedblocks:framed_cube"
+    },
+    "O": {
+      "tag": "forge:obsidian"
+    },
+    "S": {
+      "item": "minecraft:stick"
+    }
+  },
+  "pattern": [
+    "OSO",
+    "SFS",
+    "OSO"
+  ],
+  "result": {
+    "count": 16,
+    "item": "framedblocks:framed_reinforcement"
+  }
+}
