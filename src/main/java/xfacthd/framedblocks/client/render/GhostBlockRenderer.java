@@ -17,7 +17,6 @@ import net.minecraft.world.phys.*;
 import net.minecraftforge.client.ForgeRenderTypes;
 import net.minecraftforge.client.event.RenderLevelStageEvent;
 import net.minecraftforge.client.model.data.ModelData;
-import net.minecraftforge.common.MinecraftForge;
 import xfacthd.framedblocks.api.ghost.CamoPair;
 import xfacthd.framedblocks.api.ghost.GhostRenderBehaviour;
 import xfacthd.framedblocks.api.model.data.FramedBlockData;
@@ -37,6 +36,7 @@ public final class GhostBlockRenderer
     private static final FramedBlockData GHOST_MODEL_DATA = new FramedBlockData();
     private static final FramedBlockData GHOST_MODEL_DATA_TWO = new FramedBlockData();
     private static final Map<Item, GhostRenderBehaviour> RENDER_BEHAVIOURS = new IdentityHashMap<>();
+    private static boolean locked = false;
     private static final GhostRenderBehaviour DEFAULT_BEHAVIOUR = new GhostRenderBehaviour() {};
     private static final String PROFILER_KEY = FramedConstants.MOD_ID + "_ghost_block";
 
@@ -56,11 +56,9 @@ public final class GhostBlockRenderer
 
         GHOST_MODEL_DATA.setCamoState(Blocks.AIR.defaultBlockState());
         GHOST_MODEL_DATA_TWO.setCamoState(Blocks.AIR.defaultBlockState());
-
-        MinecraftForge.EVENT_BUS.addListener(GhostBlockRenderer::onRenderLevelStage);
     }
 
-    private static void onRenderLevelStage(final RenderLevelStageEvent event)
+    public static void onRenderLevelStage(final RenderLevelStageEvent event)
     {
         if (!ClientConfig.showGhostBlocks || event.getStage() != RenderLevelStageEvent.Stage.AFTER_PARTICLES)
         {
@@ -195,6 +193,8 @@ public final class GhostBlockRenderer
 
     public static synchronized void registerBehaviour(GhostRenderBehaviour behaviour, Block... blocks)
     {
+        Preconditions.checkState(!locked, "GhostRenderBehaviour registry is locked!");
+
         Preconditions.checkNotNull(behaviour, "GhostRenderBehaviour must be non-null");
         Preconditions.checkNotNull(blocks, "Blocks array must be non-null to register a GhostRenderBehaviour");
         Preconditions.checkState(blocks.length > 0, "At least one block must be provided to register a GhostRenderBehaviour");
@@ -209,6 +209,8 @@ public final class GhostBlockRenderer
 
     public static synchronized void registerBehaviour(GhostRenderBehaviour behaviour, Item... items)
     {
+        Preconditions.checkState(!locked, "GhostRenderBehaviour registry is locked!");
+
         Preconditions.checkNotNull(behaviour, "GhostRenderBehaviour must be non-null");
         Preconditions.checkNotNull(items, "Items array must be non-null to register a GhostRenderBehaviour");
         Preconditions.checkState(items.length > 0, "At least one item must be provided to register a GhostRenderBehaviour");
@@ -223,6 +225,8 @@ public final class GhostBlockRenderer
     {
         return RENDER_BEHAVIOURS.getOrDefault(item, DEFAULT_BEHAVIOUR);
     }
+
+    public static void lockRegistration() { locked = true; }
 
     private static Minecraft mc() { return Minecraft.getInstance(); }
 

@@ -16,11 +16,8 @@ import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.Property;
 import net.minecraft.world.level.material.FluidState;
-import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.extensions.common.IClientFluidTypeExtensions;
 import net.minecraftforge.event.TickEvent;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.registries.RegistryObject;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -30,7 +27,6 @@ import xfacthd.framedblocks.api.block.FramedProperties;
 import java.util.*;
 import java.util.function.*;
 
-@Mod.EventBusSubscriber(modid = FramedConstants.MOD_ID, value = Dist.CLIENT)
 public final class ClientUtils
 {
     private static final Logger LOGGER = LogManager.getLogger();
@@ -228,7 +224,6 @@ public final class ClientUtils
         tasks.add(new ClientTask(time, task));
     }
 
-    @SubscribeEvent
     public static void onClientTick(TickEvent.ClientTickEvent event)
     {
         if (event.phase != TickEvent.Phase.END || tasks.isEmpty()) { return; }

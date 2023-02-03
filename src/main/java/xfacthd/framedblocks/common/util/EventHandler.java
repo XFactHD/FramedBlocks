@@ -5,18 +5,13 @@ import net.minecraft.world.InteractionResult;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.loading.FMLEnvironment;
 import xfacthd.framedblocks.api.block.FramedBlockEntity;
 import xfacthd.framedblocks.api.block.IFramedBlock;
-import xfacthd.framedblocks.api.util.FramedConstants;
 import xfacthd.framedblocks.client.util.ClientAccess;
 
-@Mod.EventBusSubscriber(modid = FramedConstants.MOD_ID, bus = Mod.EventBusSubscriber.Bus.FORGE)
 public final class EventHandler
 {
-    @SubscribeEvent
     public static void onBlockLeftClick(final PlayerInteractEvent.LeftClickBlock event)
     {
         Level level = event.getLevel();

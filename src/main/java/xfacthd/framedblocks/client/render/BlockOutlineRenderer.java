@@ -1,5 +1,6 @@
 package xfacthd.framedblocks.client.render;
 
+import com.google.common.base.Preconditions;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import net.minecraft.client.Minecraft;
@@ -7,26 +8,21 @@ import net.minecraft.client.renderer.RenderType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.Vec3;
-import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.event.RenderHighlightEvent;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.common.Mod;
 import xfacthd.framedblocks.FramedBlocks;
 import xfacthd.framedblocks.api.block.IFramedBlock;
 import xfacthd.framedblocks.api.type.IBlockType;
-import xfacthd.framedblocks.api.util.FramedConstants;
 import xfacthd.framedblocks.api.render.OutlineRenderer;
 import xfacthd.framedblocks.client.util.ClientConfig;
 
 import java.util.*;
 
-@Mod.EventBusSubscriber(modid = FramedConstants.MOD_ID, value = Dist.CLIENT)
 public final class BlockOutlineRenderer
 {
     private static final Map<IBlockType, OutlineRenderer> OUTLINE_RENDERERS = new HashMap<>();
     private static final Set<IBlockType> ERRORED_TYPES = new HashSet<>();
+    private static boolean locked = false;
 
-    @SubscribeEvent
     public static void onRenderBlockHighlight(final RenderHighlightEvent.Block event)
     {
         if (!ClientConfig.fancyHitboxes) { return; }
@@ -69,12 +65,19 @@ public final class BlockOutlineRenderer
 
     public static synchronized void registerOutlineRender(IBlockType type, OutlineRenderer render)
     {
+        Preconditions.checkState(!locked, "OutlineRenderer registry is locked!");
+
         if (!type.hasSpecialHitbox())
         {
             throw new IllegalArgumentException(String.format("Type %s doesn't return true from IBlockType#hasSpecialHitbox()", type));
         }
 
         OUTLINE_RENDERERS.put(type, render);
+    }
+
+    public static void lockRegistration()
+    {
+        locked = true;
     }
 
 

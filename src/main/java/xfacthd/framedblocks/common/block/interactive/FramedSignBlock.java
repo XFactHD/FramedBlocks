@@ -1,6 +1,5 @@
 package xfacthd.framedblocks.common.block.interactive;
 
-import com.mojang.datafixers.util.Pair;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.util.Mth;
@@ -98,5 +97,5 @@ public class FramedSignBlock extends AbstractFramedSignBlock
     }
 
     @Override
-    public Pair<IFramedBlock, BlockItem> createItemBlock() { return Pair.of(this, new FramedSignItem()); }
+    public BlockItem createBlockItem() { return new FramedSignItem(); }
 }

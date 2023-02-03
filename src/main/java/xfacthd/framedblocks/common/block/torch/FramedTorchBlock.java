@@ -1,6 +1,5 @@
 package xfacthd.framedblocks.common.block.torch;
 
-import com.mojang.datafixers.util.Pair;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.particles.ParticleOptions;
@@ -110,13 +109,13 @@ public class FramedTorchBlock extends TorchBlock implements IFramedBlock
     public BlockType getBlockType() { return BlockType.FRAMED_TORCH; }
 
     @Override
-    public Pair<IFramedBlock, BlockItem> createItemBlock()
+    public BlockItem createBlockItem()
     {
-        return Pair.of(this, new StandingAndWallBlockItem(
+        return new StandingAndWallBlockItem(
                 FBContent.blockFramedTorch.get(),
                 FBContent.blockFramedWallTorch.get(),
                 new Item.Properties(),
                 Direction.DOWN
-        ));
+        );
     }
 }
