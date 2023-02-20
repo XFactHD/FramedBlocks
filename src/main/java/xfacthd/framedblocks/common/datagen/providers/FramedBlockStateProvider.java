@@ -39,7 +39,6 @@ public final class FramedBlockStateProvider extends BlockStateProvider
     {
         ModelFile cube = models().cubeAll("framed_cube", TEXTURE).renderType("cutout");
 
-        simpleBlockWithItem(FBContent.blockFramedCube, cube, "cutout");
         simpleBlockWithItem(FBContent.blockFramedSlope, cube, "cutout");
         simpleBlockWithItem(FBContent.blockFramedCornerSlope, cube, "cutout");
         simpleBlockWithItem(FBContent.blockFramedInnerCornerSlope, cube, "cutout");
@@ -59,7 +58,7 @@ public final class FramedBlockStateProvider extends BlockStateProvider
         simpleBlock(FBContent.blockFramedVerticalStairs.get(), cube);
         simpleBlockWithItem(FBContent.blockFramedDoubleSlab, cube, "cutout");
         simpleBlockWithItem(FBContent.blockFramedDoublePanel, cube, "cutout");
-        simpleBlock(FBContent.blockFramedDoubleSlope.get(), cube);
+        simpleBlockWithItem(FBContent.blockFramedDoubleSlope.get(), cube);
         simpleBlockWithItem(FBContent.blockFramedDoubleCorner, cube, "cutout");
         simpleBlockWithItem(FBContent.blockFramedDoublePrismCorner, cube, "cutout");
         simpleBlockWithItem(FBContent.blockFramedDoubleThreewayCorner, cube, "cutout");
@@ -124,6 +123,7 @@ public final class FramedBlockStateProvider extends BlockStateProvider
         simpleBlockWithItem(FBContent.blockFramedSlopedStairs, cube, "cutout");
         simpleBlockWithItem(FBContent.blockFramedVerticalSlopedStairs, cube, "cutout");
 
+        registerFramedCube(cube);
         registerFramedSlab(cube);
         registerFramedStairs(cube);
         registerFramedWall(cube);
@@ -167,6 +167,18 @@ public final class FramedBlockStateProvider extends BlockStateProvider
         registerFramedFancyPoweredRail();
         registerFramedFancyDetectorRail();
         registerFramedFancyActivatorRail();
+    }
+
+    private void registerFramedCube(ModelFile cube)
+    {
+        ModelFile altCube = models().cubeAll("framed_cube_alt", modLoc("block/framed_block_alt"));
+        getVariantBuilder(FBContent.blockFramedCube.get())
+                .forAllStatesExcept(state -> ConfiguredModel.builder()
+                                .modelFile(state.getValue(FramedProperties.ALT) ? altCube : cube)
+                                .build()
+                        , FramedProperties.SOLID, FramedProperties.GLOWING);
+
+        simpleBlockItem(FBContent.blockFramedCube, cube);
     }
 
     private void registerFramedSlab(ModelFile cube)

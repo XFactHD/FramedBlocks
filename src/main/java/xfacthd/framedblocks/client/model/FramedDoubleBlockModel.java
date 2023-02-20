@@ -11,6 +11,7 @@ import net.minecraft.core.Direction;
 import net.minecraft.util.RandomSource;
 import net.minecraft.util.Tuple;
 import net.minecraft.world.level.BlockAndTintGetter;
+import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.client.ChunkRenderTypeSet;
 import net.minecraftforge.client.model.data.*;
@@ -28,6 +29,9 @@ import java.util.*;
 
 public class FramedDoubleBlockModel extends BakedModelProxy
 {
+    private static final ModelData EMPTY_FRAME = makeDefaultData(false);
+    private static final ModelData EMPTY_ALT_FRAME = makeDefaultData(true);
+
     private final boolean specialItemModel;
     private final Tuple<BlockState, BlockState> dummyStates;
     private Tuple<BakedModel, BakedModel> models = null;
@@ -48,29 +52,23 @@ public class FramedDoubleBlockModel extends BakedModelProxy
 
         ModelData dataLeft = extraData.get(FramedDoubleBlockEntity.DATA_LEFT);
         quads.add(
-                models.getA().getQuads(dummyStates.getA(), side, rand, dataLeft != null ? dataLeft : ModelData.EMPTY, layer)
+                models.getA().getQuads(dummyStates.getA(), side, rand, dataLeft != null ? dataLeft : EMPTY_FRAME, layer)
         );
 
         ModelData dataRight = extraData.get(FramedDoubleBlockEntity.DATA_RIGHT);
         quads.add(invertTintIndizes(
-                models.getB().getQuads(dummyStates.getB(), side, rand, dataRight != null ? dataRight : ModelData.EMPTY, layer)
+                models.getB().getQuads(dummyStates.getB(), side, rand, dataRight != null ? dataRight : EMPTY_ALT_FRAME, layer)
         ));
 
         return ConcatenatedListView.of(quads);
     }
 
     @Override
-    @SuppressWarnings("deprecation")
     public List<BakedQuad> getQuads(BlockState state, Direction side, RandomSource rand)
     {
         if (specialItemModel)
         {
-            Tuple<BakedModel, BakedModel> models = getModels();
-
-            List<List<BakedQuad>> quads = new ArrayList<>(2);
-            quads.add(models.getA().getQuads(dummyStates.getA(), side, rand));
-            quads.add(models.getB().getQuads(dummyStates.getB(), side, rand));
-            return ConcatenatedListView.of(quads);
+            return getQuads(state, side, rand, ModelData.EMPTY, RenderType.cutout());
         }
         return super.getQuads(state, side, rand);
     }
@@ -175,5 +173,13 @@ public class FramedDoubleBlockModel extends BakedModelProxy
             inverted.add(ModelUtils.invertTintIndex(quad));
         }
         return inverted;
+    }
+
+    private static ModelData makeDefaultData(boolean altModel)
+    {
+        FramedBlockData data = new FramedBlockData.Immutable(Blocks.AIR.defaultBlockState(), new boolean[6], altModel);
+        return ModelData.builder()
+                .with(FramedBlockData.PROPERTY, data)
+                .build();
     }
 }

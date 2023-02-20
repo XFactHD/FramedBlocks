@@ -56,6 +56,7 @@ public final class GhostBlockRenderer
 
         GHOST_MODEL_DATA.setCamoState(Blocks.AIR.defaultBlockState());
         GHOST_MODEL_DATA_TWO.setCamoState(Blocks.AIR.defaultBlockState());
+        GHOST_MODEL_DATA_TWO.setUseAltModel(true);
     }
 
     public static void onRenderLevelStage(final RenderLevelStageEvent event)

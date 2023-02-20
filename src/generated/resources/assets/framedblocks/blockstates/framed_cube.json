@@ -1,7 +1,10 @@
 {
   "variants": {
-    "": {
+    "alt=false": {
       "model": "framedblocks:block/framed_cube"
+    },
+    "alt=true": {
+      "model": "framedblocks:block/framed_cube_alt"
     }
   }
 }

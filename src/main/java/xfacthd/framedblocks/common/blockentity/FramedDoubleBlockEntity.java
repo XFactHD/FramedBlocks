@@ -40,6 +40,7 @@ public abstract class FramedDoubleBlockEntity extends FramedBlockEntity
     {
         super(type, pos, state);
         blockPair = AbstractFramedDoubleBlock.getStatePair(state);
+        modelData.setUseAltModel(true);
     }
 
     @Override
