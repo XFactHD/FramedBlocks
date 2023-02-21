@@ -63,7 +63,7 @@ public class FramedMarkedPressurePlateModel extends FramedPressurePlateModel
     }
 
     @Override
-    protected boolean forceUngeneratedBaseModel() { return true; }
+    protected boolean useBaseModel() { return true; }
 
 
 

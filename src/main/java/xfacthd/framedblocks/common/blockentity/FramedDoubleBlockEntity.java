@@ -233,6 +233,13 @@ public abstract class FramedDoubleBlockEntity extends FramedBlockEntity
             updateCulling(true, false);
         }
 
+        boolean newReinforced = nbt.getBoolean("reinforced");
+        if (isReinforced() != newReinforced)
+        {
+            modelData.setReinforced(newReinforced);
+            needUpdate = true;
+        }
+
         return super.readFromDataPacket(nbt) || needUpdate;
     }
 

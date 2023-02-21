@@ -23,6 +23,7 @@ import org.jetbrains.annotations.Nullable;
 import xfacthd.framedblocks.api.FramedBlocksClientAPI;
 import xfacthd.framedblocks.api.block.FramedProperties;
 import xfacthd.framedblocks.api.block.IFramedBlock;
+import xfacthd.framedblocks.api.model.FramedBlockModel;
 import xfacthd.framedblocks.api.type.IBlockType;
 import xfacthd.framedblocks.api.util.*;
 import xfacthd.framedblocks.api.util.ClientUtils;
@@ -204,6 +205,7 @@ public final class FBClient
     public static void onModelRegister(final ModelEvent.RegisterAdditional event)
     {
         event.register(FluidModel.BARE_MODEL);
+        event.register(FramedBlockModel.REINFORCEMENT_LOCATION);
         event.register(FramedMarkedCubeModel.SLIME_FRAME_LOCATION);
         event.register(FramedMarkedCubeModel.REDSTONE_FRAME_LOCATION);
         FramedMarkedPressurePlateModel.registerFrameModels(event);
@@ -303,7 +305,7 @@ public final class FBClient
         ClientUtils.replaceModels(FBContent.blockFramedCollapsibleBlock, registry, FramedCollapsibleBlockModel::new, ignoreWaterlogged);
         ClientUtils.replaceModels(FBContent.blockFramedHalfStairs, registry, FramedHalfStairsModel::new, ignoreWaterlogged);
         ClientUtils.replaceModels(FBContent.blockFramedBouncyCube, registry, (state, baseModel) -> FramedMarkedCubeModel.slime(state, baseModel, registry), ignoreSolid);
-        ClientUtils.replaceModels(FBContent.blockFramedSecretStorage, registry, FramedCubeModel::new, ignoreSolid);
+        ClientUtils.replaceModels(FBContent.blockFramedSecretStorage, registry, FramedCubeBaseModel::new, ignoreSolid);
         ClientUtils.replaceModels(FBContent.blockFramedRedstoneBlock, registry, (state, baseModel) -> FramedMarkedCubeModel.redstone(state, baseModel, registry), ignoreSolid);
         ClientUtils.replaceModels(FBContent.blockFramedPrism, registry, FramedPrismModel::new, FramedPrismModel.itemSource(), ignoreDefault);
         ClientUtils.replaceModels(FBContent.blockFramedInnerPrism, registry, FramedInnerPrismModel::new, FramedInnerPrismModel.itemSource(), ignoreDefault);
@@ -374,6 +376,7 @@ public final class FBClient
     {
         ModelCache.clear(event.getModelBakery());
         FramedChestRenderer.onModelLoadingComplete();
+        FramedBlockModel.captureReinforcementModel(event.getModels());
     }
 
     @SubscribeEvent

@@ -19,6 +19,7 @@ public final class FramedProperties
     public static final BooleanProperty STATE_LOCKED = BooleanProperty.create("locked");
     public static final BooleanProperty Y_SLOPE = BooleanProperty.create("yslope");
     public static final BooleanProperty ALT = BooleanProperty.create("alt");
+    public static final BooleanProperty REINFORCED = BooleanProperty.create("reinforced");
 
 
 

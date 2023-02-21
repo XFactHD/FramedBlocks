@@ -12,13 +12,16 @@ public class FramedCube extends FramedBlock
     public FramedCube()
     {
         super(BlockType.FRAMED_CUBE);
-        registerDefaultState(defaultBlockState().setValue(FramedProperties.ALT, false));
+        registerDefaultState(defaultBlockState()
+                .setValue(FramedProperties.ALT, false)
+                .setValue(FramedProperties.REINFORCED, false)
+        );
     }
 
     @Override
     protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder)
     {
         super.createBlockStateDefinition(builder);
-        builder.add(FramedProperties.SOLID, FramedProperties.ALT);
+        builder.add(FramedProperties.SOLID, FramedProperties.ALT, FramedProperties.REINFORCED);
     }
 }

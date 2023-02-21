@@ -11,5 +11,5 @@ public class FramedIronTrapDoorModel extends FramedTrapDoorModel
     }
 
     @Override
-    protected boolean forceUngeneratedBaseModel() { return true; }
+    protected boolean useBaseModel() { return true; }
 }

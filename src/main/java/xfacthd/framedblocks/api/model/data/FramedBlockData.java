@@ -13,6 +13,7 @@ public sealed class FramedBlockData permits FramedBlockData.Immutable
     protected final boolean[] hidden = new boolean[6];
     protected BlockState camoState = Blocks.AIR.defaultBlockState();
     protected boolean altModel = false;
+    protected boolean reinforced = false;
 
     public FramedBlockData() { }
 
@@ -22,11 +23,15 @@ public sealed class FramedBlockData permits FramedBlockData.Immutable
 
     public void setUseAltModel(boolean altModel) { this.altModel = altModel; }
 
+    public void setReinforced(boolean reinforced) { this.reinforced = reinforced; }
+
     public BlockState getCamoState() { return camoState; }
 
     public boolean isSideHidden(Direction side) { return hidden[side.ordinal()]; }
 
     public boolean useAltModel() { return altModel; }
+
+    public boolean isReinforced() { return reinforced; }
 
 
 

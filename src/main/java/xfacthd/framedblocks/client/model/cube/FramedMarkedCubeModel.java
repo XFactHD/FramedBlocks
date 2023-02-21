@@ -15,7 +15,7 @@ import xfacthd.framedblocks.api.model.util.ModelUtils;
 
 import java.util.*;
 
-public class FramedMarkedCubeModel extends FramedCubeModel
+public class FramedMarkedCubeModel extends FramedCubeBaseModel
 {
     public static final ResourceLocation SLIME_FRAME_LOCATION = new ResourceLocation(FramedConstants.MOD_ID, "block/slime_frame");
     public static final ResourceLocation REDSTONE_FRAME_LOCATION = new ResourceLocation(FramedConstants.MOD_ID, "block/redstone_frame");
