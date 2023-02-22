@@ -1,7 +1,6 @@
 package xfacthd.framedblocks.common;
 
 import com.google.common.base.Preconditions;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.inventory.*;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
@@ -66,7 +65,7 @@ public final class FBContent
             () ->
             {
                 RegistryBuilder<CamoContainer.Factory> builder = new RegistryBuilder<>();
-                builder.disableOverrides().setDefaultKey(new ResourceLocation(FramedConstants.MOD_ID, "empty"));
+                builder.disableOverrides().setDefaultKey(Utils.rl("empty"));
                 return builder;
             }
     );

@@ -7,7 +7,7 @@ import net.minecraftforge.fml.event.config.ModConfigEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import org.apache.commons.lang3.tuple.Pair;
 import xfacthd.framedblocks.api.predicate.ConTexMode;
-import xfacthd.framedblocks.api.util.FramedConstants;
+import xfacthd.framedblocks.api.util.Utils;
 
 public final class ClientConfig
 {
@@ -49,19 +49,19 @@ public final class ClientConfig
         builder.push("general");
         showGhostBlocksValue = builder
                 .comment("Wether ghost blocks are shown when you are holding a framed block")
-                .translation("config." + FramedConstants.MOD_ID + ".showGhostBlocks")
+                .translation(Utils.translationKey("config", "showGhostBlocks"))
                 .define("showGhostBlocks", true);
         fancyHitboxesValue = builder
                 .comment("Wether certain framed blocks should show fancy hitboxes")
-                .translation("config." + FramedConstants.MOD_ID + ".fancyHitboxes")
+                .translation(Utils.translationKey("config", "fancyHitboxes"))
                 .define("fancyHitboxes", true);
         detailedCullingValue = builder
                 .comment("If false only full block faces of framed blocks will be culled, if true all outer faces of famed blocks can be culled")
-                .translation("config." + FramedConstants.MOD_ID + ".detailedCulling")
+                .translation(Utils.translationKey("config", "detailedCulling"))
                 .define("detailedCulling", true);
         useDiscreteUVStepsValue = builder
                 .comment("If true, the UV remapping will use discrete steps to avoid floating point errors")
-                .translation("config." + FramedConstants.MOD_ID + ".discreteUVSteps")
+                .translation(Utils.translationKey("config", "discreteUVSteps"))
                 .define("discreteUVSteps", true);
         conTexModeValue = builder
                 .comment(
@@ -72,26 +72,26 @@ public final class ClientConfig
                         "If FULL_CON_FACE, connected textures are supported as above and on faces whose connecting neighbor covers a full face",
                         "If DETAILED, connected textures are supported as above and on most faces when interacting with other framed blocks"
                 )
-                .translation("config." + FramedConstants.MOD_ID + ".conTexMode")
+                .translation(Utils.translationKey("config", "conTexMode"))
                 .defineEnum("conTexMode", ConTexMode.FULL_FACE);
         builder.pop();
 
         builder.push("overlay");
         stateLockShowDetailsValue = builder
                 .comment("If true, the State Lock overlay will show detailed info, if false, it will only show an icon")
-                .translation("config." + FramedConstants.MOD_ID + ".stateLockShowDetails")
+                .translation(Utils.translationKey("config", "stateLockShowDetails"))
                 .define("stateLockShowDetails", true);
         toggleWaterlogShowDetailsValue = builder
                 .comment("If true, the Toggle Waterloggable overlay will show detailed info, if false, it will only show an icon")
-                .translation("config." + FramedConstants.MOD_ID + ".stateLockShowDetails")
+                .translation(Utils.translationKey("config", "toggleWaterlogShowDetails"))
                 .define("toggleWaterlogShowDetails", true);
         toggleYSlopeShowDetailsValue = builder
                 .comment("If true, the Toggle Slope Face overlay will show detailed info, if false, it will only show an icon")
-                .translation("config." + FramedConstants.MOD_ID + ".stateLockShowDetails")
+                .translation(Utils.translationKey("config", "toggleYSlopeShowDetails"))
                 .define("toggleYSlopeShowDetails", true);
         reinforcedShowDetailsValue = builder
                 .comment("If true, the Reinforcement overlay will show detailed info, if false, it will only show an icon")
-                .translation("config." + FramedConstants.MOD_ID + "stateLockShowDetails")
+                .translation(Utils.translationKey("config", "reinforcedShowDetails"))
                 .define("reinforcedShowDetails", true);
         builder.pop();
     }

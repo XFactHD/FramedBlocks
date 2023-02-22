@@ -27,7 +27,7 @@ import org.joml.Matrix4f;
 import org.lwjgl.glfw.GLFW;
 import xfacthd.framedblocks.FramedBlocks;
 import xfacthd.framedblocks.api.block.FramedProperties;
-import xfacthd.framedblocks.api.util.*;
+import xfacthd.framedblocks.api.util.Utils;
 import xfacthd.framedblocks.common.FBContent;
 import xfacthd.framedblocks.common.net.SignUpdatePacket;
 import xfacthd.framedblocks.common.blockentity.FramedSignBlockEntity;
@@ -38,7 +38,7 @@ import java.util.List;
 public class FramedSignScreen extends Screen
 {
     private static final Table<BlockState, Direction, TextureAtlasSprite> SPRITE_CACHE = HashBasedTable.create();
-    private static final ResourceLocation DEFAULT_TEXTURE = new ResourceLocation(FramedConstants.MOD_ID, "block/framed_block");
+    private static final ResourceLocation DEFAULT_TEXTURE = Utils.rl("block/framed_block");
     public static final Component TITLE = Utils.translate("title", "sign.edit");
     public static final Component DONE = Utils.translate("button", "gui.done");
     private static final int TEX_W = 128;

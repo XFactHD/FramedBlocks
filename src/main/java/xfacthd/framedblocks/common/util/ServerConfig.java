@@ -10,7 +10,7 @@ import net.minecraftforge.fml.event.config.ModConfigEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import net.minecraftforge.registries.ForgeRegistries;
 import org.apache.commons.lang3.tuple.Pair;
-import xfacthd.framedblocks.api.util.FramedConstants;
+import xfacthd.framedblocks.api.util.Utils;
 
 public final class ServerConfig
 {
@@ -40,15 +40,15 @@ public final class ServerConfig
         builder.push("general");
         allowBlockEntitiesValue = builder
                 .comment("Whether blocks with block entities can be placed in Framed Blocks")
-                .translation("config." + FramedConstants.MOD_ID + ".allowBlockEntities")
+                .translation(Utils.translationKey("config", "allowBlockEntities"))
                 .define("allowBlockEntities", false);
         enableIntangibleFeatureValue = builder
                 .comment("Enables the intangbility feature. Disabling this also prevents moving through blocks that are already marked as intangible")
-                .translation("config." + FramedConstants.MOD_ID + ".enableIntangibleFeature")
+                .translation(Utils.translationKey("config", "enableIntangibleFeature"))
                 .define("enableIntangibleFeature", false);
         intangibleMarkerItemValue = builder
                 .comment("The item to use for making Framed Blocks intangible. The value must be a valid item registry name")
-                .translation("config." + FramedConstants.MOD_ID + ".intangibleMarkerItem")
+                .translation(Utils.translationKey("config", "intangibleMarkerItem"))
                 .define("intangibleMarkerItem", ForgeRegistries.ITEMS.getKey(Items.PHANTOM_MEMBRANE).toString(), ServerConfig::validateItemName);
         builder.pop();
     }

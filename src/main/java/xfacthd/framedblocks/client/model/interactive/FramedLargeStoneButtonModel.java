@@ -14,7 +14,7 @@ import net.minecraftforge.client.model.data.ModelData;
 import xfacthd.framedblocks.api.model.data.FramedBlockData;
 import xfacthd.framedblocks.api.model.quad.Modifiers;
 import xfacthd.framedblocks.api.model.quad.QuadModifier;
-import xfacthd.framedblocks.api.util.*;
+import xfacthd.framedblocks.api.util.Utils;
 import xfacthd.framedblocks.api.model.util.ModelUtils;
 
 import java.util.List;
@@ -22,8 +22,8 @@ import java.util.Map;
 
 public class FramedLargeStoneButtonModel extends FramedLargeButtonModel
 {
-    private static final ResourceLocation FRAME_LOCATION = new ResourceLocation(FramedConstants.MOD_ID, "block/framed_large_stone_button_frame");
-    private static final ResourceLocation FRAME_PRESSED_LOCATION = new ResourceLocation(FramedConstants.MOD_ID, "block/framed_large_stone_button_pressed_frame");
+    private static final ResourceLocation FRAME_LOCATION = Utils.rl("block/framed_large_stone_button_frame");
+    private static final ResourceLocation FRAME_PRESSED_LOCATION = Utils.rl("block/framed_large_stone_button_pressed_frame");
 
     private static BakedModel frameNormalModel;
     private static BakedModel framePressedModel;

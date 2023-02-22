@@ -52,24 +52,19 @@ public final class Utils
     public static final TagKey<Item> DISABLE_INTANGIBLE = itemTag("disable_intangible");
 
     public static final RegistryObject<Item> FRAMED_HAMMER = RegistryObject.create(
-            new ResourceLocation(FramedConstants.MOD_ID, "framed_hammer"),
-            ForgeRegistries.ITEMS
+            Utils.rl("framed_hammer"), ForgeRegistries.ITEMS
     );
     public static final RegistryObject<Item> FRAMED_WRENCH = RegistryObject.create(
-            new ResourceLocation(FramedConstants.MOD_ID, "framed_wrench"),
-            ForgeRegistries.ITEMS
+            Utils.rl("framed_wrench"), ForgeRegistries.ITEMS
     );
     public static final RegistryObject<Item> FRAMED_KEY = RegistryObject.create(
-            new ResourceLocation(FramedConstants.MOD_ID, "framed_key"),
-            ForgeRegistries.ITEMS
+            Utils.rl("framed_key"), ForgeRegistries.ITEMS
     );
     public static final RegistryObject<Item> FRAMED_SCREWDRIVER = RegistryObject.create(
-            new ResourceLocation(FramedConstants.MOD_ID, "framed_screwdriver"),
-            ForgeRegistries.ITEMS
+            Utils.rl("framed_screwdriver"), ForgeRegistries.ITEMS
     );
     public static final RegistryObject<Item> FRAMED_REINFORCEMENT = RegistryObject.create(
-            new ResourceLocation(FramedConstants.MOD_ID, "framed_reinforcement"),
-            ForgeRegistries.ITEMS
+            Utils.rl("framed_reinforcement"), ForgeRegistries.ITEMS
     );
 
     public static VoxelShape rotateShape(Direction from, Direction to, VoxelShape shape)
@@ -159,12 +154,27 @@ public final class Utils
 
     public static MutableComponent translate(String prefix, String postfix, Object... arguments)
     {
-        return Component.translatable(prefix + "." + FramedConstants.MOD_ID + "." + postfix, arguments);
+        return Component.translatable(translationKey(prefix, postfix), arguments);
     }
 
     public static MutableComponent translate(String prefix, String postfix)
     {
-        return Component.translatable(prefix + "." + FramedConstants.MOD_ID + "." + postfix);
+        return Component.translatable(translationKey(prefix, postfix));
+    }
+
+    public static String translationKey(String prefix, String postfix)
+    {
+        String key = "";
+        if (prefix != null)
+        {
+            key = prefix + ".";
+        }
+        key += FramedConstants.MOD_ID;
+        if (postfix != null)
+        {
+            key += "." + postfix;
+        }
+        return key;
     }
 
     public static BlockEntity getBlockEntitySafe(BlockGetter blockGetter, BlockPos pos)

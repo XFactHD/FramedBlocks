@@ -4,7 +4,6 @@ import com.mojang.logging.LogUtils;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.gametest.framework.*;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
@@ -21,7 +20,6 @@ import net.minecraftforge.client.extensions.common.IClientBlockExtensions;
 import net.minecraftforge.common.ForgeHooks;
 import net.minecraftforge.fml.loading.FMLEnvironment;
 import net.minecraftforge.registries.ForgeRegistries;
-import net.minecraftforge.registries.RegistryObject;
 import org.slf4j.Logger;
 import xfacthd.framedblocks.api.FramedBlocksAPI;
 import xfacthd.framedblocks.api.block.*;
@@ -34,7 +32,6 @@ import java.util.function.Supplier;
 public final class TestUtils
 {
     private static final Logger LOGGER = LogUtils.getLogger();
-    private static final RegistryObject<Item> FRAMED_HAMMER = RegistryObject.create(new ResourceLocation(FramedConstants.MOD_ID, "framed_hammer"), ForgeRegistries.ITEMS);
     private static final BlockPos OCCLUSION_BLOCK_TOP_BOTTOM = new BlockPos(1, 3, 1);
     private static final BlockPos OCCLUSION_BLOCK_SIDE = new BlockPos(1, 2, 2);
     private static final BlockPos OCCLUSION_LIGHT_TOP = new BlockPos(1, 4, 1);
@@ -72,7 +69,7 @@ public final class TestUtils
 
         camos.forEach((side, camo) ->
         {
-            Item item = camo == Blocks.AIR ? FRAMED_HAMMER.get() : camo.asItem();
+            Item item = camo == Blocks.AIR ? Utils.FRAMED_HAMMER.get() : camo.asItem();
             player.setItemInHand(InteractionHand.MAIN_HAND, new ItemStack(item));
 
             InteractionResult result = helper.getBlockState(pos).use(

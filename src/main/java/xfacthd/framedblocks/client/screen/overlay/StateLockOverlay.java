@@ -7,7 +7,6 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.block.state.BlockState;
 import xfacthd.framedblocks.api.block.IFramedBlock;
-import xfacthd.framedblocks.api.util.FramedConstants;
 import xfacthd.framedblocks.api.block.FramedProperties;
 import xfacthd.framedblocks.api.util.Utils;
 import xfacthd.framedblocks.client.util.ClientConfig;
@@ -17,7 +16,7 @@ import java.util.List;
 
 public final class StateLockOverlay extends BlockInteractOverlay
 {
-    public static final String LOCK_MESSAGE = "tooltip." + FramedConstants.MOD_ID + ".lock_state";
+    public static final String LOCK_MESSAGE = Utils.translationKey("tooltip", "lock_state");
     private static final List<Component> LINES_FALSE = List.of(
             Component.translatable(LOCK_MESSAGE, IFramedBlock.STATE_UNLOCKED)
     );

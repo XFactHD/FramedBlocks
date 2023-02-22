@@ -12,6 +12,7 @@ import xfacthd.framedblocks.api.block.IFramedBlock;
 import xfacthd.framedblocks.api.type.IBlockType;
 import xfacthd.framedblocks.api.util.FramedConstants;
 import xfacthd.framedblocks.api.test.TestUtils;
+import xfacthd.framedblocks.api.util.Utils;
 import xfacthd.framedblocks.common.data.BlockType;
 import xfacthd.framedblocks.common.util.ServerConfig;
 
@@ -30,7 +31,7 @@ public final class IntangibilityTests
     {
         return Arrays.stream(BlockType.values())
                 .filter(BlockType::allowMakingIntangible)
-                .map(type -> new ResourceLocation(FramedConstants.MOD_ID, type.getName()))
+                .map(type -> Utils.rl(type.getName()))
                 .map(ForgeRegistries.BLOCKS::getValue)
                 .filter(Objects::nonNull)
                 .map(IntangibilityTests::getTestState)

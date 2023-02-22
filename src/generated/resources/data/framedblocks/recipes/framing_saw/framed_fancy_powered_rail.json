@@ -2,15 +2,15 @@
   "type": "framedblocks:frame",
   "additives": [
     {
-      "count": 1,
-      "ingredient": {
-        "tag": "forge:dusts/redstone"
-      }
-    },
-    {
       "count": 6,
       "ingredient": {
         "tag": "forge:ingots/gold"
+      }
+    },
+    {
+      "count": 1,
+      "ingredient": {
+        "tag": "forge:dusts/redstone"
       }
     }
   ],

@@ -13,6 +13,7 @@ import xfacthd.framedblocks.api.type.IBlockType;
 import xfacthd.framedblocks.api.util.FramedConstants;
 import xfacthd.framedblocks.api.block.FramedProperties;
 import xfacthd.framedblocks.api.test.TestUtils;
+import xfacthd.framedblocks.api.util.Utils;
 import xfacthd.framedblocks.common.data.BlockType;
 
 import java.util.*;
@@ -28,7 +29,7 @@ public final class LightSourceTests
     {
         return Arrays.stream(BlockType.values())
                 .filter(LightSourceTests::isNotSelfEmitting)
-                .map(type -> new ResourceLocation(FramedConstants.MOD_ID, type.getName()))
+                .map(type -> Utils.rl(type.getName()))
                 .map(ForgeRegistries.BLOCKS::getValue)
                 .filter(Objects::nonNull)
                 .map(LightSourceTests::getTestState)

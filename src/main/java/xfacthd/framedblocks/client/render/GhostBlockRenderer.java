@@ -170,7 +170,9 @@ public final class GhostBlockRenderer
         mc().getProfiler().pop(); //upload
     }
 
-    private static void doRenderGhostBlockInLayer(PoseStack mstack, VertexConsumer builder, BlockPos renderPos, BlockState renderState, RenderType layer, Vec3 offset, ModelData modelData)
+    private static void doRenderGhostBlockInLayer(
+            PoseStack mstack, VertexConsumer builder, BlockPos renderPos, BlockState renderState, RenderType layer, Vec3 offset, ModelData modelData
+    )
     {
         mstack.pushPose();
         mstack.translate(offset.x, offset.y, offset.z);

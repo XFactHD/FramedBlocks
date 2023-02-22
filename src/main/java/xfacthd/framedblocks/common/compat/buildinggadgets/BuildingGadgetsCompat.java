@@ -3,7 +3,6 @@ package xfacthd.framedblocks.common.compat.buildinggadgets;
 import com.direwolf20.buildinggadgets.common.tainted.building.tilesupport.*;
 import com.direwolf20.buildinggadgets.common.tainted.registry.TopologicalRegistryBuilder;
 import com.direwolf20.buildinggadgets.common.util.ref.Reference;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.fml.InterModComms;
 import net.minecraftforge.fml.ModList;
 import net.minecraftforge.fml.event.lifecycle.InterModEnqueueEvent;
@@ -13,6 +12,7 @@ import net.minecraftforge.registries.RegistryObject;
 import xfacthd.framedblocks.FramedBlocks;
 import xfacthd.framedblocks.api.block.FramedBlockEntity;
 import xfacthd.framedblocks.api.util.FramedConstants;
+import xfacthd.framedblocks.api.util.Utils;
 
 import java.util.function.Supplier;
 
@@ -65,7 +65,7 @@ public final class BuildingGadgetsCompat
             {
                 TopologicalRegistryBuilder<ITileDataFactory> factory = TopologicalRegistryBuilder.create();
                 factory.addValue(
-                        new ResourceLocation(FramedConstants.MOD_ID, "framed_block_data_factory"),
+                        Utils.rl("framed_block_data_factory"),
                         te -> te instanceof FramedBlockEntity ? new FramedBlockEntityData((FramedBlockEntity) te) : null
                 );
                 return factory;

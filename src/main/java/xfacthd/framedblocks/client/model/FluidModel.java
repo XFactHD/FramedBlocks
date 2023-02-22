@@ -23,8 +23,8 @@ import net.minecraftforge.client.model.*;
 import net.minecraftforge.client.model.data.ModelData;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import xfacthd.framedblocks.api.util.FramedConstants;
 import xfacthd.framedblocks.api.model.util.ModelCache;
+import xfacthd.framedblocks.api.util.Utils;
 
 import java.util.*;
 import java.util.function.Function;
@@ -34,7 +34,7 @@ import java.util.function.Supplier;
 public final class FluidModel implements BakedModel
 {
     private static final ModelState SIMPLE_STATE = new SimpleModelState(Transformation.identity());
-    public static final ResourceLocation BARE_MODEL = new ResourceLocation(FramedConstants.MOD_ID, "fluid/bare");
+    public static final ResourceLocation BARE_MODEL = Utils.rl("fluid/bare");
     private static final Function<ResourceLocation, TextureAtlasSprite> SPRITE_GETTER = (loc ->
             Minecraft.getInstance().getTextureAtlas(TextureAtlas.LOCATION_BLOCKS).apply(loc)
     );
@@ -104,10 +104,7 @@ public final class FluidModel implements BakedModel
 
         IClientFluidTypeExtensions props = IClientFluidTypeExtensions.of(fluid);
 
-        ResourceLocation modelName = new ResourceLocation(
-                FramedConstants.MOD_ID,
-                "fluid/" + fluid.getFluidType().toString().replace(":", "_")
-        );
+        ResourceLocation modelName = Utils.rl("fluid/" + fluid.getFluidType().toString().replace(":", "_"));
         Function<Material, TextureAtlasSprite> spriteGetter = matToSprite(props);
         BakedModel model = bareModel.bake(
                 modelBakery.new ModelBakerImpl(

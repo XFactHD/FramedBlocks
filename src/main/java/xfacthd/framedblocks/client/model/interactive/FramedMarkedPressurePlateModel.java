@@ -13,21 +13,21 @@ import net.minecraftforge.client.ChunkRenderTypeSet;
 import net.minecraftforge.client.event.ModelEvent;
 import net.minecraftforge.client.model.data.ModelData;
 import xfacthd.framedblocks.api.model.data.FramedBlockData;
-import xfacthd.framedblocks.api.util.FramedConstants;
 import xfacthd.framedblocks.api.model.util.ModelUtils;
+import xfacthd.framedblocks.api.util.Utils;
 
 import java.util.*;
 
 public class FramedMarkedPressurePlateModel extends FramedPressurePlateModel
 {
-    public static final ResourceLocation STONE_FRAME_LOCATION = new ResourceLocation(FramedConstants.MOD_ID, "block/stone_plate_frame");
-    public static final ResourceLocation STONE_FRAME_DOWN_LOCATION = new ResourceLocation(FramedConstants.MOD_ID, "block/stone_plate_down_frame");
-    public static final ResourceLocation OBSIDIAN_FRAME_LOCATION = new ResourceLocation(FramedConstants.MOD_ID, "block/obsidian_plate_frame");
-    public static final ResourceLocation OBSIDIAN_FRAME_DOWN_LOCATION = new ResourceLocation(FramedConstants.MOD_ID, "block/obsidian_plate_down_frame");
-    public static final ResourceLocation GOLD_FRAME_LOCATION = new ResourceLocation(FramedConstants.MOD_ID, "block/gold_plate_frame");
-    public static final ResourceLocation GOLD_FRAME_DOWN_LOCATION = new ResourceLocation(FramedConstants.MOD_ID, "block/gold_plate_down_frame");
-    public static final ResourceLocation IRON_FRAME_LOCATION = new ResourceLocation(FramedConstants.MOD_ID, "block/iron_plate_frame");
-    public static final ResourceLocation IRON_FRAME_DOWN_LOCATION = new ResourceLocation(FramedConstants.MOD_ID, "block/iron_plate_down_frame");
+    public static final ResourceLocation STONE_FRAME_LOCATION = Utils.rl("block/stone_plate_frame");
+    public static final ResourceLocation STONE_FRAME_DOWN_LOCATION = Utils.rl("block/stone_plate_down_frame");
+    public static final ResourceLocation OBSIDIAN_FRAME_LOCATION = Utils.rl("block/obsidian_plate_frame");
+    public static final ResourceLocation OBSIDIAN_FRAME_DOWN_LOCATION = Utils.rl("block/obsidian_plate_down_frame");
+    public static final ResourceLocation GOLD_FRAME_LOCATION = Utils.rl("block/gold_plate_frame");
+    public static final ResourceLocation GOLD_FRAME_DOWN_LOCATION = Utils.rl("block/gold_plate_down_frame");
+    public static final ResourceLocation IRON_FRAME_LOCATION = Utils.rl("block/iron_plate_frame");
+    public static final ResourceLocation IRON_FRAME_DOWN_LOCATION = Utils.rl("block/iron_plate_down_frame");
     private static final Map<ResourceLocation, BakedModel> FRAME_MODELS = new HashMap<>();
 
     private final BakedModel frameModel;
