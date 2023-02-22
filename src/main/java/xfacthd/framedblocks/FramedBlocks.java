@@ -21,11 +21,11 @@ import xfacthd.framedblocks.client.util.ClientConfig;
 import xfacthd.framedblocks.common.FBContent;
 import xfacthd.framedblocks.common.block.AbstractFramedDoubleBlock;
 import xfacthd.framedblocks.common.compat.CompatHandler;
+import xfacthd.framedblocks.common.crafting.FramingSawRecipeCache;
 import xfacthd.framedblocks.common.data.BlueprintBehaviours;
 import xfacthd.framedblocks.common.data.camo.CamoFactories;
 import xfacthd.framedblocks.common.item.FramedBlueprintItem;
-import xfacthd.framedblocks.common.net.OpenSignScreenPacket;
-import xfacthd.framedblocks.common.net.SignUpdatePacket;
+import xfacthd.framedblocks.common.net.*;
 import xfacthd.framedblocks.common.util.*;
 
 @Mod(FramedConstants.MOD_ID)
@@ -43,19 +43,21 @@ public final class FramedBlocks
 
     public FramedBlocks()
     {
-        FBContent.init();
+        IEventBus modBus = FMLJavaModLoadingContext.get().getModEventBus();
+
+        FBContent.init(modBus);
         ModLoadingContext.get().registerConfig(ModConfig.Type.CLIENT, ClientConfig.SPEC);
         ModLoadingContext.get().registerConfig(ModConfig.Type.COMMON, CommonConfig.SPEC);
         ModLoadingContext.get().registerConfig(ModConfig.Type.SERVER, ServerConfig.SPEC);
         FramedBlocksAPI.INSTANCE.accept(new ApiImpl());
 
-        IEventBus modBus = FMLJavaModLoadingContext.get().getModEventBus();
         modBus.addListener(FramedBlocks::onCommonSetup);
         modBus.addListener(FramedBlocks::onLoadComplete);
         modBus.addListener(FramedCreativeTab::onRegisterCreativeTabs);
 
         IEventBus forgeBus = MinecraftForge.EVENT_BUS;
         forgeBus.addListener(EventHandler::onBlockLeftClick);
+        forgeBus.addListener(FramingSawRecipeCache::onAddReloadListener);
 
         CompatHandler.init();
 

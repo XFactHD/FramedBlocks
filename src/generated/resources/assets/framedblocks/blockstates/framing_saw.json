@@ -1,0 +1,19 @@
+{
+  "variants": {
+    "facing=east": {
+      "model": "framedblocks:block/framing_saw",
+      "y": 270
+    },
+    "facing=north": {
+      "model": "framedblocks:block/framing_saw",
+      "y": 180
+    },
+    "facing=south": {
+      "model": "framedblocks:block/framing_saw"
+    },
+    "facing=west": {
+      "model": "framedblocks:block/framing_saw",
+      "y": 90
+    }
+  }
+}

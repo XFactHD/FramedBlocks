@@ -20,7 +20,7 @@ apply plugin: 'org.spongepowered.mixin'
 
 jarJar.enable()
 
-version = '7.0.0'
+version = '7.1.0'
 group = 'xfacthd.framedblocks'
 archivesBaseName = 'FramedBlocks'
 
@@ -131,11 +131,15 @@ repositories {
     maven {
         url = "https://maven.tterrag.com/"
     }
+    maven {
+        name = "Jared's maven"
+        url = "https://maven.blamejared.com/"
+    }
     mavenCentral()
 }
 
 dependencies {
-    minecraft 'net.minecraftforge:forge:1.19.3-44.0.29'
+    minecraft 'net.minecraftforge:forge:1.19.3-44.1.0'
 
     //compileOnly fg.deobf("curse.maven:ctm-267602:3737369")
 
@@ -144,7 +148,10 @@ dependencies {
 
     compileOnly fg.deobf("curse.maven:buildinggadgets-298187:3829297")
 
-    runtimeOnly fg.deobf("curse.maven:jei-238222:4346825")
+    compileOnly(fg.deobf("mezz.jei:jei-1.19.3-common-api:12.1.1.13"))
+    compileOnly(fg.deobf("mezz.jei:jei-1.19.3-forge-api:12.1.1.13"))
+    runtimeOnly(fg.deobf("mezz.jei:jei-1.19.3-forge:12.1.1.13"))
+
     //runtimeOnly fg.deobf("curse.maven:spark-361579:3767286")
 
     //runtimeOnly fg.deobf("curse.maven:magnesium_sodium-532724:3556734")

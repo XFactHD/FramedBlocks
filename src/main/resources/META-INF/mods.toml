@@ -19,7 +19,7 @@ description='''
 [[dependencies.framedblocks]]
     modId="forge"
     mandatory=true
-    versionRange="[44.0.29,)"
+    versionRange="[44.1.0,)"
     ordering="NONE"
     side="BOTH"
 
@@ -57,3 +57,10 @@ description='''
     versionRange="[1.19.1-0.5.0,)"
     ordering="NONE"
     side="CLIENT"
+
+[[dependencies.framedblocks]]
+    modId="jei"
+    mandatory=false
+    versionRange="[12.1.1.13,)"
+    ordering="NONE"
+    side="BOTH"

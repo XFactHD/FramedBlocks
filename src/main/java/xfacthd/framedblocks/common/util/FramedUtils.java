@@ -4,6 +4,8 @@ import net.minecraft.core.Direction;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.TickTask;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.LevelAccessor;
@@ -16,6 +18,8 @@ import xfacthd.framedblocks.api.block.FramedProperties;
 import xfacthd.framedblocks.common.FBContent;
 import xfacthd.framedblocks.common.data.PropertyHolder;
 import xfacthd.framedblocks.common.data.property.SlopeType;
+
+import java.util.function.Consumer;
 
 public final class FramedUtils
 {
@@ -141,6 +145,23 @@ public final class FramedUtils
 
         MinecraftServer server = slevel.getServer();
         server.tell(new TickTask(server.getTickCount() + delay, task));
+    }
+
+    public static void addPlayerInvSlots(Consumer<Slot> slotConsumer, Inventory playerInv, int x, int y)
+    {
+        for (int row = 0; row < 3; ++row)
+        {
+            for (int col = 0; col < 9; ++col)
+            {
+                slotConsumer.accept(new Slot(playerInv, col + row * 9 + 9, x + col * 18, y));
+            }
+            y += 18;
+        }
+
+        for (int col = 0; col < 9; ++col)
+        {
+            slotConsumer.accept(new Slot(playerInv, col, x + col * 18, y + 4));
+        }
     }
 
 
