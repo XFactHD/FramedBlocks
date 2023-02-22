@@ -1,0 +1,15 @@
+{
+  "type": "framedblocks:frame",
+  "additives": [
+    {
+      "count": 1,
+      "ingredient": {
+        "item": "framedblocks:framed_fancy_powered_rail"
+      }
+    }
+  ],
+  "material": 3072,
+  "result": {
+    "item": "framedblocks:framed_fancy_powered_rail_slope"
+  }
+}

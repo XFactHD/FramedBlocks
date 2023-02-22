@@ -1,0 +1,22 @@
+{
+  "type": "framedblocks:frame",
+  "additives": [
+    {
+      "count": 1,
+      "ingredient": {
+        "tag": "forge:leather"
+      }
+    },
+    {
+      "count": 1,
+      "ingredient": {
+        "item": "minecraft:glow_ink_sac"
+      }
+    }
+  ],
+  "disabled": true,
+  "material": 1536,
+  "result": {
+    "item": "framedblocks:framed_glowing_item_frame"
+  }
+}

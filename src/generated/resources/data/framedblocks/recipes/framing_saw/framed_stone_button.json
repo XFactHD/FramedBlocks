@@ -1,0 +1,15 @@
+{
+  "type": "framedblocks:frame",
+  "additives": [
+    {
+      "count": 1,
+      "ingredient": {
+        "tag": "forge:stone"
+      }
+    }
+  ],
+  "material": 768,
+  "result": {
+    "item": "framedblocks:framed_stone_button"
+  }
+}
