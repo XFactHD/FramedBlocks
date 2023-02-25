@@ -43,11 +43,14 @@ public final class SlabSkipPredicate implements SideSkipPredicate
                 case FRAMED_DOUBLE_SLOPE_SLAB -> testAgainstDoubleSlopeSlab(level, pos, state, top, adjState, side);
                 case FRAMED_INV_DOUBLE_SLOPE_SLAB -> testAgainstInverseDoubleSlopeSlab(level, pos, state, top, adjState, side);
                 case FRAMED_ELEVATED_DOUBLE_SLOPE_SLAB -> testAgainstElevatedDoubleSlopeSlab(level, pos, state, top, adjState, side);
+                case FRAMED_STACKED_SLOPE_SLAB -> testAgainstStackedSlopeSlab(level, pos, state, top, adjState, side);
                 case FRAMED_FLAT_INNER_SLOPE_SLAB_CORNER -> testAgainstFlatInnerSlopeSlabCorner(level, pos, state, top, adjState, side);
                 case FRAMED_FLAT_ELEV_SLOPE_SLAB_CORNER -> testAgainstFlatElevatedSlopeSlabCorner(level, pos, state, top, adjState, side);
                 case FRAMED_FLAT_DOUBLE_SLOPE_SLAB_CORNER -> testAgainstFlatDoubleSlopeSlabCorner(level, pos, state, top, adjState, side);
                 case FRAMED_FLAT_INV_DOUBLE_SLOPE_SLAB_CORNER -> testAgainstFlatInverseDoubleSlopeSlabCorner(level, pos, state, top, adjState, side);
                 case FRAMED_FLAT_ELEV_DOUBLE_SLOPE_SLAB_CORNER -> testAgainstFlatElevatedDoubleSlopeSlabCorner(level, pos, state, top, adjState, side);
+                case FRAMED_FLAT_STACKED_SLOPE_SLAB_CORNER -> testAgainstFlatStackedSlopeSlabCorner(level, pos, state, top, adjState, side);
+                case FRAMED_FLAT_STACKED_INNER_SLOPE_SLAB_CORNER -> testAgainstFlatStackedInnerSlopeSlabCorner(level, pos, state, top, adjState, side);
                 case FRAMED_VERTICAL_HALF_STAIRS, FRAMED_VERTICAL_HALF_SLOPE -> testAgainstVerticalHalfStairs(level, pos, state, top, adjState, side);
                 case FRAMED_DIVIDED_SLOPE -> testAgainstDividedSlope(level, pos, state, top, adjState, side);
                 case FRAMED_VERTICAL_DOUBLE_HALF_SLOPE -> testAgainstVerticalDoubleHalfSlope(level, pos, state, top, adjState, side);
@@ -168,6 +171,13 @@ public final class SlabSkipPredicate implements SideSkipPredicate
                testAgainstSlopeSlab(level, pos, state, top, states.getB(), side);
     }
 
+    private static boolean testAgainstStackedSlopeSlab(BlockGetter level, BlockPos pos, BlockState state, boolean top, BlockState adjState, Direction side)
+    {
+        Tuple<BlockState, BlockState> states = AbstractFramedDoubleBlock.getStatePair(adjState);
+        return testAgainstSlab(level, pos, state, top, states.getA(), side) ||
+               testAgainstSlopeSlab(level, pos, state, top, states.getB(), side);
+    }
+
     private static boolean testAgainstFlatInnerSlopeSlabCorner(BlockGetter level, BlockPos pos, BlockState state, boolean top, BlockState adjState, Direction side)
     {
         Direction adjDir = adjState.getValue(FramedProperties.FACING_HOR);
@@ -208,6 +218,19 @@ public final class SlabSkipPredicate implements SideSkipPredicate
     {
         Tuple<BlockState, BlockState> states = AbstractFramedDoubleBlock.getStatePair(adjState);
         return testAgainstFlatElevatedSlopeSlabCorner(level, pos, state, top, states.getA(), side) ||
+               testAgainstFlatInnerSlopeSlabCorner(level, pos, state, top, states.getB(), side);
+    }
+
+    private static boolean testAgainstFlatStackedSlopeSlabCorner(BlockGetter level, BlockPos pos, BlockState state, boolean top, BlockState adjState, Direction side)
+    {
+        Tuple<BlockState, BlockState> states = AbstractFramedDoubleBlock.getStatePair(adjState);
+        return testAgainstSlab(level, pos, state, top, states.getA(), side);
+    }
+
+    private static boolean testAgainstFlatStackedInnerSlopeSlabCorner(BlockGetter level, BlockPos pos, BlockState state, boolean top, BlockState adjState, Direction side)
+    {
+        Tuple<BlockState, BlockState> states = AbstractFramedDoubleBlock.getStatePair(adjState);
+        return testAgainstSlab(level, pos, state, top, states.getA(), side) ||
                testAgainstFlatInnerSlopeSlabCorner(level, pos, state, top, states.getB(), side);
     }
 

@@ -358,6 +358,10 @@ public final class FramingSawRecipeProvider extends RecipeProvider
                 .material(FramingSawRecipe.CUBE_MATERIAL_VALUE)
                 .save(consumer);
 
+        FramingSawRecipeBuilder.builder(FBContent.blockFramedStackedSlopeSlab)
+                .material(FramingSawRecipe.CUBE_MATERIAL_VALUE / 4 * 3)
+                .save(consumer);
+
         FramingSawRecipeBuilder.builder(FBContent.blockFramedFlatSlopeSlabCorner)
                 .material(FramingSawRecipe.CUBE_MATERIAL_VALUE / 4)
                 .save(consumer);
@@ -390,6 +394,14 @@ public final class FramingSawRecipeProvider extends RecipeProvider
                 .material(FramingSawRecipe.CUBE_MATERIAL_VALUE)
                 .save(consumer);
 
+        FramingSawRecipeBuilder.builder(FBContent.blockFramedFlatStackedSlopeSlabCorner)
+                .material(FramingSawRecipe.CUBE_MATERIAL_VALUE / 4 * 3)
+                .save(consumer);
+
+        FramingSawRecipeBuilder.builder(FBContent.blockFramedFlatStackedInnerSlopeSlabCorner)
+                .material(FramingSawRecipe.CUBE_MATERIAL_VALUE / 4 * 3)
+                .save(consumer);
+
         FramingSawRecipeBuilder.builder(FBContent.blockFramedSlopePanel)
                 .material(FramingSawRecipe.CUBE_MATERIAL_VALUE / 4)
                 .save(consumer);
@@ -408,6 +420,10 @@ public final class FramingSawRecipeProvider extends RecipeProvider
 
         FramingSawRecipeBuilder.builder(FBContent.blockFramedExtendedDoubleSlopePanel)
                 .material(FramingSawRecipe.CUBE_MATERIAL_VALUE)
+                .save(consumer);
+
+        FramingSawRecipeBuilder.builder(FBContent.blockFramedStackedSlopePanel)
+                .material(FramingSawRecipe.CUBE_MATERIAL_VALUE / 4 * 3)
                 .save(consumer);
 
         FramingSawRecipeBuilder.builder(FBContent.blockFramedFlatSlopePanelCorner)
@@ -440,6 +456,14 @@ public final class FramingSawRecipeProvider extends RecipeProvider
 
         FramingSawRecipeBuilder.builder(FBContent.blockFramedFlatExtendedInnerDoubleSlopePanelCorner)
                 .material(FramingSawRecipe.CUBE_MATERIAL_VALUE)
+                .save(consumer);
+
+        FramingSawRecipeBuilder.builder(FBContent.blockFramedFlatStackedSlopePanelCorner)
+                .material(FramingSawRecipe.CUBE_MATERIAL_VALUE / 4 * 3)
+                .save(consumer);
+
+        FramingSawRecipeBuilder.builder(FBContent.blockFramedFlatStackedInnerSlopePanelCorner)
+                .material(FramingSawRecipe.CUBE_MATERIAL_VALUE / 4 * 3)
                 .save(consumer);
 
         FramingSawRecipeBuilder.builder(FBContent.blockFramedGlowingCube)

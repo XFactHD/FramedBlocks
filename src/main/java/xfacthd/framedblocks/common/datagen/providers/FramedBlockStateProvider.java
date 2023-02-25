@@ -87,6 +87,7 @@ public final class FramedBlockStateProvider extends BlockStateProvider
         simpleBlockWithItem(FBContent.blockFramedDoubleSlopeSlab, cube, "cutout");
         simpleBlockWithItem(FBContent.blockFramedInverseDoubleSlopeSlab, cube, "cutout");
         simpleBlockWithItem(FBContent.blockFramedElevatedDoubleSlopeSlab, cube, "cutout");
+        simpleBlockWithItem(FBContent.blockFramedStackedSlopeSlab, cube, "cutout");
         simpleBlockWithItem(FBContent.blockFramedFlatSlopeSlabCorner, cube, "cutout");
         simpleBlockWithItem(FBContent.blockFramedFlatInnerSlopeSlabCorner, cube, "cutout");
         simpleBlockWithItem(FBContent.blockFramedFlatElevatedSlopeSlabCorner, cube, "cutout");
@@ -95,12 +96,15 @@ public final class FramedBlockStateProvider extends BlockStateProvider
         simpleBlockWithItem(FBContent.blockFramedFlatInverseDoubleSlopeSlabCorner, cube, "cutout");
         simpleBlockWithItem(FBContent.blockFramedFlatElevatedDoubleSlopeSlabCorner, cube, "cutout");
         simpleBlockWithItem(FBContent.blockFramedFlatElevatedInnerDoubleSlopeSlabCorner, cube, "cutout");
+        simpleBlockWithItem(FBContent.blockFramedFlatStackedSlopeSlabCorner, cube, "cutout");
+        simpleBlockWithItem(FBContent.blockFramedFlatStackedInnerSlopeSlabCorner, cube, "cutout");
         simpleBlock(FBContent.blockFramedVerticalHalfStairs.get(), cube);
         simpleBlockWithItem(FBContent.blockFramedSlopePanel, cube, "cutout");
         simpleBlockWithItem(FBContent.blockFramedExtendedSlopePanel, cube, "cutout");
         simpleBlockWithItem(FBContent.blockFramedDoubleSlopePanel, cube, "cutout");
         simpleBlockWithItem(FBContent.blockFramedInverseDoubleSlopePanel, cube, "cutout");
         simpleBlockWithItem(FBContent.blockFramedExtendedDoubleSlopePanel, cube, "cutout");
+        simpleBlockWithItem(FBContent.blockFramedStackedSlopePanel, cube, "cutout");
         simpleBlockWithItem(FBContent.blockFramedFlatSlopePanelCorner, cube, "cutout");
         simpleBlockWithItem(FBContent.blockFramedFlatInnerSlopePanelCorner, cube, "cutout");
         simpleBlockWithItem(FBContent.blockFramedFlatExtendedSlopePanelCorner, cube, "cutout");
@@ -109,6 +113,8 @@ public final class FramedBlockStateProvider extends BlockStateProvider
         simpleBlockWithItem(FBContent.blockFramedFlatInverseDoubleSlopePanelCorner, cube, "cutout");
         simpleBlockWithItem(FBContent.blockFramedFlatExtendedDoubleSlopePanelCorner, cube, "cutout");
         simpleBlockWithItem(FBContent.blockFramedFlatExtendedInnerDoubleSlopePanelCorner, cube, "cutout");
+        simpleBlockWithItem(FBContent.blockFramedFlatStackedSlopePanelCorner, cube, "cutout");
+        simpleBlockWithItem(FBContent.blockFramedFlatStackedInnerSlopePanelCorner, cube, "cutout");
         simpleBlockWithItem(FBContent.blockFramedDoubleStairs, cube, "cutout");
         simpleBlockWithItem(FBContent.blockFramedVerticalDoubleStairs, cube, "cutout");
         simpleBlock(FBContent.blockFramedWallBoard.get(), cube);
