@@ -23,6 +23,8 @@ public final class ClientConfig
     public static boolean toggleWaterlogShowDetails;
     public static boolean toggleYSlopeShowDetails;
     public static boolean reinforcedShowDetails;
+    public static boolean prismOffsetShowDetails;
+    public static boolean splitLineShowDetails;
 
     private final ForgeConfigSpec.BooleanValue showGhostBlocksValue;
     private final ForgeConfigSpec.BooleanValue fancyHitboxesValue;
@@ -34,6 +36,8 @@ public final class ClientConfig
     private final ForgeConfigSpec.BooleanValue toggleWaterlogShowDetailsValue;
     private final ForgeConfigSpec.BooleanValue toggleYSlopeShowDetailsValue;
     private final ForgeConfigSpec.BooleanValue reinforcedShowDetailsValue;
+    private final ForgeConfigSpec.BooleanValue prismOffsetShowDetailsValue;
+    private final ForgeConfigSpec.BooleanValue splitLineShowDetailsValue;
 
     static
     {
@@ -93,6 +97,14 @@ public final class ClientConfig
                 .comment("If true, the Reinforcement overlay will show detailed info, if false, it will only show an icon")
                 .translation(Utils.translationKey("config", "reinforcedShowDetails"))
                 .define("reinforcedShowDetails", true);
+        prismOffsetShowDetailsValue = builder
+                .comment("If true, the Prism Offset overlay will show detailed info, if false, it will only show an icon")
+                .translation(Utils.translationKey("config", "prismOffsetShowDetails"))
+                .define("prismOffsetShowDetails", true);
+        splitLineShowDetailsValue = builder
+                .comment("If true, the Collapsible Block Split Line overlay will show detailed info, if false, it will only show an icon")
+                .translation(Utils.translationKey("config", "splitLineShowDetails"))
+                .define("splitLineShowDetails", true);
         builder.pop();
     }
 
@@ -111,6 +123,8 @@ public final class ClientConfig
             toggleWaterlogShowDetails = toggleWaterlogShowDetailsValue.get();
             toggleYSlopeShowDetails = toggleYSlopeShowDetailsValue.get();
             reinforcedShowDetails = reinforcedShowDetailsValue.get();
+            prismOffsetShowDetails = prismOffsetShowDetailsValue.get();
+            splitLineShowDetails = splitLineShowDetailsValue.get();
         }
     }
 }

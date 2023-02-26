@@ -22,7 +22,7 @@ public final class PropertyHolder
     public static final BooleanProperty HANGING = BooleanProperty.create("haning");
     public static final BooleanProperty LEATHER = BooleanProperty.create("leather");
     public static final BooleanProperty MAP_FRAME = BooleanProperty.create("map_frame");
-    public static final BooleanProperty ROTATE_SPLIT_EDGE = BooleanProperty.create("rot_split_edge");
+    public static final BooleanProperty ROTATE_SPLIT_LINE = BooleanProperty.create("rot_split_line");
 
 
 

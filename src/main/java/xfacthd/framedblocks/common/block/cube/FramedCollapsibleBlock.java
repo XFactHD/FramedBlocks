@@ -41,7 +41,7 @@ public class FramedCollapsibleBlock extends FramedBlock
         super(blockType, IFramedBlock.createProperties(BlockType.FRAMED_COLLAPSIBLE_BLOCK).dynamicShape());
         registerDefaultState(defaultBlockState()
                 .setValue(BlockStateProperties.WATERLOGGED, false)
-                .setValue(PropertyHolder.ROTATE_SPLIT_EDGE, false)
+                .setValue(PropertyHolder.ROTATE_SPLIT_LINE, false)
         );
     }
 
@@ -49,7 +49,7 @@ public class FramedCollapsibleBlock extends FramedBlock
     protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder)
     {
         super.createBlockStateDefinition(builder);
-        builder.add(PropertyHolder.COLLAPSED_FACE, BlockStateProperties.WATERLOGGED, PropertyHolder.ROTATE_SPLIT_EDGE);
+        builder.add(PropertyHolder.COLLAPSED_FACE, BlockStateProperties.WATERLOGGED, PropertyHolder.ROTATE_SPLIT_LINE);
     }
 
     @Nullable
@@ -65,8 +65,8 @@ public class FramedCollapsibleBlock extends FramedBlock
         ItemStack heldItem = player.getMainHandItem();
         if (heldItem.is(Utils.WRENCH))
         {
-            boolean rotSplitEdge = state.getValue(PropertyHolder.ROTATE_SPLIT_EDGE);
-            level.setBlockAndUpdate(pos, state.setValue(PropertyHolder.ROTATE_SPLIT_EDGE, !rotSplitEdge));
+            boolean rotSplitEdge = state.getValue(PropertyHolder.ROTATE_SPLIT_LINE);
+            level.setBlockAndUpdate(pos, state.setValue(PropertyHolder.ROTATE_SPLIT_LINE, !rotSplitEdge));
             return true;
         }
         else if (heldItem.getItem() == FBContent.itemFramedHammer.get())

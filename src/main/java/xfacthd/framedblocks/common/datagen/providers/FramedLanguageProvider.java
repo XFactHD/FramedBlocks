@@ -209,6 +209,12 @@ public final class FramedLanguageProvider extends LanguageProvider
         add(ReinforcementOverlay.REINFORCE_MESSAGE, "Block is %s");
         add(ReinforcementOverlay.STATE_NOT_REINFORCED, "not reinforced");
         add(ReinforcementOverlay.STATE_REINFORCED, "reinforced");
+        add(PrismOffsetOverlay.PRISM_OFFSET_FALSE, "Triangle texture is not offset.");
+        add(PrismOffsetOverlay.PRISM_OFFSET_TRUE, "Triangle texture is offset by half a block.");
+        add(PrismOffsetOverlay.MSG_SWITCH_OFFSET, "Hit with a Framed Hammer to toggle the offset");
+        add(SplitLineOverlay.SPLIT_LINE_FALSE, "Split-line of the deformed face runs along the steep diagonal.");
+        add(SplitLineOverlay.SPLIT_LINE_TRUE, "Split-line of the deformed face runs along the shallow diagonal.");
+        add(SplitLineOverlay.MSG_SWITCH_SPLIT_LINE, "Hit with a Framed Hammer to switch the orientation of the split-line");
         add(FramingSawBlock.MENU_TITLE, "Framing Saw");
         add(FramingSawScreen.TOOLTIP_MATERIAL, "Material value: %s");
         add(FramingSawScreen.TOOLTIP_LOOSE_ADDITIVE, "Item was crafted with additive ingredients, these will be lost");
