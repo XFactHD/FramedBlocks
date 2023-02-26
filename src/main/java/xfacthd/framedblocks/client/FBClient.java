@@ -383,6 +383,7 @@ public final class FBClient
         replaceDoubleBlockModels(FBContent.blockFramedVerticalDoubleHalfSlope, registry, null, ignoreDefault);
         ClientUtils.replaceModels(FBContent.blockFramedSlopedStairs, registry, FramedSlopedStairsModel::new, FramedSlopedStairsModel.itemSource(), ignoreDefault);
         ClientUtils.replaceModels(FBContent.blockFramedVerticalSlopedStairs, registry, FramedVerticalSlopedStairsModel::new, FramedVerticalSlopedStairsModel.itemSource(), ignoreDefault);
+        ClientUtils.replaceModels(FBContent.blockFramedMiniCube, registry, FramedMiniCubeModel::new, ignoreWaterlogged);
     }
 
     @SubscribeEvent

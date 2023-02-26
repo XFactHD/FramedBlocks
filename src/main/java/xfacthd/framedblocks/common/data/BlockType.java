@@ -2,6 +2,7 @@ package xfacthd.framedblocks.common.data;
 
 import com.google.common.base.Preconditions;
 import com.google.common.collect.ImmutableList;
+import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.shapes.*;
 import xfacthd.framedblocks.api.predicate.CtmPredicate;
@@ -175,6 +176,7 @@ public enum BlockType implements IBlockType
     FRAMED_VERTICAL_DOUBLE_HALF_SLOPE               ( true, false,  true,  true, false,  true,  true, false, FramedVerticalDoubleHalfSlopeBlock::generateShapes),
     FRAMED_SLOPED_STAIRS                            ( true,  true, false,  true,  true,  true, false, false, FramedSlopedStairsBlock.CTM_PREDICATE, new SlopedStairsSkipPredicate(), FramedSlopedStairsBlock::generateShapes),
     FRAMED_VERTICAL_SLOPED_STAIRS                   ( true,  true, false,  true,  true,  true, false, false, FramedVerticalSlopedStairsBlock.CTM_PREDICATE, new VerticalSlopedStairsSkipPredicate(), FramedVerticalSlopedStairsBlock::generateShapes),
+    FRAMED_MINI_CUBE                                (false, false, false,  true,  true,  true, false, false, Block.box(4, 0, 4, 12, 8, 12)),
     ;
 
     private final String name = toString().toLowerCase(Locale.ROOT);
