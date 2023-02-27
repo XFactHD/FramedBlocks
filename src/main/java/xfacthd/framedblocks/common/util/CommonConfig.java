@@ -13,6 +13,10 @@ public final class CommonConfig
     public static final ForgeConfigSpec SPEC;
     public static final CommonConfig INSTANCE;
 
+    private static final String KEY_FIREPROOF_BLOCKS = "fireproofBlocks";
+
+    public static final String TRANSLATION_FIREPROOF_BLOCKS = translate(KEY_FIREPROOF_BLOCKS);
+
     public static boolean fireproofBlocks = false;
 
     private final ForgeConfigSpec.BooleanValue fireproofBlocksValue;
@@ -31,9 +35,14 @@ public final class CommonConfig
         builder.push("general");
         fireproofBlocksValue = builder
                 .comment("If true, framed blocks are completely fire proof")
-                .translation(Utils.translationKey("config", "fireproof"))
-                .define("fireproofBlocks", false);
+                .translation(TRANSLATION_FIREPROOF_BLOCKS)
+                .define(KEY_FIREPROOF_BLOCKS, false);
         builder.pop();
+    }
+
+    private static String translate(String key)
+    {
+        return Utils.translateConfig("common", key);
     }
 
     @SubscribeEvent

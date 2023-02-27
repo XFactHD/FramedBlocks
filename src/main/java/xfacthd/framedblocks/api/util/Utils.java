@@ -177,6 +177,11 @@ public final class Utils
         return key;
     }
 
+    public static String translateConfig(String type, String key)
+    {
+        return translationKey("config", type + "." + key);
+    }
+
     public static BlockEntity getBlockEntitySafe(BlockGetter blockGetter, BlockPos pos)
     {
         if (blockGetter instanceof Level level)

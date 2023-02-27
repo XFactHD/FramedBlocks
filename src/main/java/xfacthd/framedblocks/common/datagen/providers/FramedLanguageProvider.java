@@ -9,6 +9,7 @@ import xfacthd.framedblocks.api.block.IFramedBlock;
 import xfacthd.framedblocks.api.util.FramedConstants;
 import xfacthd.framedblocks.client.screen.*;
 import xfacthd.framedblocks.client.screen.overlay.*;
+import xfacthd.framedblocks.client.util.ClientConfig;
 import xfacthd.framedblocks.client.util.KeyMappings;
 import xfacthd.framedblocks.common.FBContent;
 import xfacthd.framedblocks.common.block.FramingSawBlock;
@@ -17,7 +18,7 @@ import xfacthd.framedblocks.common.crafting.FramingSawRecipe;
 import xfacthd.framedblocks.common.item.FramedBlueprintItem;
 import xfacthd.framedblocks.common.blockentity.FramedChestBlockEntity;
 import xfacthd.framedblocks.api.block.FramedBlockEntity;
-import xfacthd.framedblocks.common.util.FramedCreativeTab;
+import xfacthd.framedblocks.common.util.*;
 
 public final class FramedLanguageProvider extends LanguageProvider
 {
@@ -25,6 +26,19 @@ public final class FramedLanguageProvider extends LanguageProvider
 
     @Override
     protected void addTranslations()
+    {
+        addFramedBlockTranslations();
+        addSpecialBlockTranslations();
+        addItemTranslations();
+        addSpecialTranslations();
+        addStatusMessageTranslations();
+        addScreenTranslations();
+        addTooltipTranslations();
+        addOverlayTranslations();
+        addConfigTranslations();
+    }
+
+    private void addFramedBlockTranslations()
     {
         add(FBContent.blockFramedCube.get(), "Framed Cube");
         add(FBContent.blockFramedSlope.get(), "Framed Slope");
@@ -163,58 +177,47 @@ public final class FramedLanguageProvider extends LanguageProvider
         add(FBContent.blockFramedSlopedStairs.get(), "Framed Sloped Stairs");
         add(FBContent.blockFramedVerticalSlopedStairs.get(), "Framed Vertical Sloped Stairs");
         add(FBContent.blockFramedMiniCube.get(), "Framed Mini Cube");
+    }
 
+    private void addSpecialBlockTranslations()
+    {
         add(FBContent.blockFramingSaw.get(), "Framing Saw");
+    }
 
+    private void addItemTranslations()
+    {
         add(FBContent.itemFramedHammer.get(), "Framed Hammer");
         add(FBContent.itemFramedWrench.get(), "Framed Wrench");
         add(FBContent.itemFramedBlueprint.get(), "Framed Blueprint");
         add(FBContent.itemFramedKey.get(), "Framed Key");
         add(FBContent.itemFramedScrewdriver.get(), "Framed Screwdriver");
         add(FBContent.itemFramedReinforcement.get(), "Framed Reinforcement");
+    }
 
+    private void addSpecialTranslations()
+    {
         add(KeyMappings.KEY_CATEGORY, "FramedBlocks");
         add(KeyMappings.KEYMAPPING_UPDATE_CULLING.get().getName(), "Update culling cache");
 
         add(FramedCreativeTab.get().getDisplayName(), "FramedBlocks");
+    }
+
+    private void addStatusMessageTranslations()
+    {
         add(FramedBlockEntity.MSG_BLACKLISTED, "This block is blacklisted!");
         add(FramedBlockEntity.MSG_BLOCK_ENTITY, "Blocks with BlockEntities cannot be inserted into framed blocks!");
+
+        add(IFramedBlock.LOCK_MESSAGE, "The state of this block is now %s");
+    }
+
+    private void addScreenTranslations()
+    {
         add(FramedChestBlockEntity.TITLE, "Framed Chest");
         add(FramedStorageBlockEntity.TITLE, "Framed Secret Storage");
-        add(FramedBlueprintItem.CONTAINED_BLOCK, "Contained Block: %s");
-        add(FramedBlueprintItem.CAMO_BLOCK, "Camo Block: %s");
-        add(FramedBlueprintItem.IS_ILLUMINATED, "Illuminated: %s");
-        add(FramedBlueprintItem.IS_INTANGIBLE, "Intangible: %s");
-        add(FramedBlueprintItem.IS_REINFORCED, "Reinforced: %s");
-        add(FramedBlueprintItem.BLOCK_NONE, "None");
-        add(FramedBlueprintItem.BLOCK_INVALID, "Invalid");
-        add(FramedBlueprintItem.FALSE, "false");
-        add(FramedBlueprintItem.TRUE, "true");
-        add(FramedBlueprintItem.CANT_COPY, "This block can currently not be copied!");
-        add(FramedBlueprintItem.CANT_PLACE_FLUID_CAMO, "Copying blocks with fluid camos is currently not possible!");
+
         add(FramedSignScreen.TITLE, "Edit sign");
         add(FramedSignScreen.DONE, "Done");
-        add(IFramedBlock.LOCK_MESSAGE, "The state of this block is now %s");
-        add(StateLockOverlay.LOCK_MESSAGE, "State %s");
-        add(IFramedBlock.STATE_LOCKED, "locked");
-        add(IFramedBlock.STATE_UNLOCKED, "unlocked");
-        add(ToggleWaterloggableOverlay.MSG_IS_WATERLOGGABLE, "Block is waterloggable");
-        add(ToggleWaterloggableOverlay.MSG_IS_NOT_WATERLOGGABLE, "Block is not waterloggable");
-        add(ToggleWaterloggableOverlay.MSG_MAKE_WATERLOGGABLE, "Hit with a Framed Hammer to make waterloggable");
-        add(ToggleWaterloggableOverlay.MSG_MAKE_NOT_WATERLOGGABLE, "Hit with a Framed Hammer to make not waterloggable");
-        add(ToggleYSlopeOverlay.SLOPE_MESSAGE, "Block uses %s faces for vertical sloped faces");
-        add(ToggleYSlopeOverlay.TOGGLE_MESSAGE, "Hit with a Framed Wrench to switch to %s faces");
-        add(ToggleYSlopeOverlay.SLOPE_HOR, "horizontal");
-        add(ToggleYSlopeOverlay.SLOPE_VERT, "vertical");
-        add(ReinforcementOverlay.REINFORCE_MESSAGE, "Block is %s");
-        add(ReinforcementOverlay.STATE_NOT_REINFORCED, "not reinforced");
-        add(ReinforcementOverlay.STATE_REINFORCED, "reinforced");
-        add(PrismOffsetOverlay.PRISM_OFFSET_FALSE, "Triangle texture is not offset.");
-        add(PrismOffsetOverlay.PRISM_OFFSET_TRUE, "Triangle texture is offset by half a block.");
-        add(PrismOffsetOverlay.MSG_SWITCH_OFFSET, "Hit with a Framed Hammer to toggle the offset");
-        add(SplitLineOverlay.SPLIT_LINE_FALSE, "Split-line of the deformed face runs along the steep diagonal.");
-        add(SplitLineOverlay.SPLIT_LINE_TRUE, "Split-line of the deformed face runs along the shallow diagonal.");
-        add(SplitLineOverlay.MSG_SWITCH_SPLIT_LINE, "Hit with a Framed Hammer to switch the orientation of the split-line");
+
         add(FramingSawBlock.MENU_TITLE, "Framing Saw");
         add(FramingSawScreen.TOOLTIP_MATERIAL, "Material value: %s");
         add(FramingSawScreen.TOOLTIP_LOOSE_ADDITIVE, "Item was crafted with additive ingredients, these will be lost");
@@ -231,6 +234,71 @@ public final class FramedLanguageProvider extends LanguageProvider
         add(FramingSawRecipe.FailReason.UNEXPECTED_ADDITIVE.translation(), "Unexpected additive ingredient present");
         add(FramingSawRecipe.FailReason.INCORRECT_ADDITIVE.translation(), "Incorrect additive ingredient present");
         add(FramingSawRecipe.FailReason.INSUFFICIENT_ADDITIVE.translation(), "Insufficient amount of additive ingredient present");
+    }
+
+    private void addTooltipTranslations()
+    {
+        add(FramedBlueprintItem.CONTAINED_BLOCK, "Contained Block: %s");
+        add(FramedBlueprintItem.CAMO_BLOCK, "Camo Block: %s");
+        add(FramedBlueprintItem.IS_ILLUMINATED, "Illuminated: %s");
+        add(FramedBlueprintItem.IS_INTANGIBLE, "Intangible: %s");
+        add(FramedBlueprintItem.IS_REINFORCED, "Reinforced: %s");
+        add(FramedBlueprintItem.BLOCK_NONE, "None");
+        add(FramedBlueprintItem.BLOCK_INVALID, "Invalid");
+        add(FramedBlueprintItem.FALSE, "false");
+        add(FramedBlueprintItem.TRUE, "true");
+        add(FramedBlueprintItem.CANT_COPY, "This block can currently not be copied!");
+        add(FramedBlueprintItem.CANT_PLACE_FLUID_CAMO, "Copying blocks with fluid camos is currently not possible!");
+    }
+
+    private void addOverlayTranslations()
+    {
+        add(StateLockOverlay.LOCK_MESSAGE, "State %s");
+        add(IFramedBlock.STATE_LOCKED, "locked");
+        add(IFramedBlock.STATE_UNLOCKED, "unlocked");
+
+        add(ToggleWaterloggableOverlay.MSG_IS_WATERLOGGABLE, "Block is waterloggable.");
+        add(ToggleWaterloggableOverlay.MSG_IS_NOT_WATERLOGGABLE, "Block is not waterloggable.");
+        add(ToggleWaterloggableOverlay.MSG_MAKE_WATERLOGGABLE, "Hit with a Framed Hammer to make waterloggable");
+        add(ToggleWaterloggableOverlay.MSG_MAKE_NOT_WATERLOGGABLE, "Hit with a Framed Hammer to make not waterloggable");
+
+        add(ToggleYSlopeOverlay.SLOPE_MESSAGE, "Block uses %s faces for vertical sloped faces.");
+        add(ToggleYSlopeOverlay.TOGGLE_MESSAGE, "Hit with a Framed Wrench to switch to %s faces");
+        add(ToggleYSlopeOverlay.SLOPE_HOR, "horizontal");
+        add(ToggleYSlopeOverlay.SLOPE_VERT, "vertical");
+
+        add(ReinforcementOverlay.REINFORCE_MESSAGE, "Block is %s.");
+        add(ReinforcementOverlay.STATE_NOT_REINFORCED, "not reinforced");
+        add(ReinforcementOverlay.STATE_REINFORCED, "reinforced");
+
+        add(PrismOffsetOverlay.PRISM_OFFSET_FALSE, "Triangle texture is not offset.");
+        add(PrismOffsetOverlay.PRISM_OFFSET_TRUE, "Triangle texture is offset by half a block.");
+        add(PrismOffsetOverlay.MSG_SWITCH_OFFSET, "Hit with a Framed Hammer to toggle the offset");
+
+        add(SplitLineOverlay.SPLIT_LINE_FALSE, "Split-line of the deformed face runs along the steep diagonal.");
+        add(SplitLineOverlay.SPLIT_LINE_TRUE, "Split-line of the deformed face runs along the shallow diagonal.");
+        add(SplitLineOverlay.MSG_SWITCH_SPLIT_LINE, "Hit with a Framed Hammer to switch the orientation of the split-line");
+    }
+
+    private void addConfigTranslations()
+    {
+        add(CommonConfig.TRANSLATION_FIREPROOF_BLOCKS, "Fireproof blocks");
+
+        add(ServerConfig.TRANSLATION_ALLOW_BLOCK_ENTITIES, "Allow BlockEntities");
+        add(ServerConfig.TRANSLATION_ENABLE_INTANGIBILITY, "Enable intangibility feature");
+        add(ServerConfig.TRANSLATION_INTANGIBLE_MARKER, "Intangibility marker item");
+
+        add(ClientConfig.TRANSLATION_SHOW_GHOST_BLOCKS, "Show ghost blocks");
+        add(ClientConfig.TRANSLATION_FANCY_HITBOXES, "Fancy hitboxes");
+        add(ClientConfig.TRANSLATION_DETAILED_CULLING, "Detailed culling");
+        add(ClientConfig.TRANSLATION_USE_DISCRETE_UV_STEPS, "Use discrete UV steps");
+        add(ClientConfig.TRANSLATION_CON_TEX_MODE, "Connected textures mode");
+        add(ClientConfig.TRANSLATION_STATE_LOCK_SHOW_DETAILS, "State lock overlay: Show details");
+        add(ClientConfig.TRANSLATION_TOGGLE_WATERLOG_SHOW_DETAILS, "Toggle waterloggable overlay: Show details");
+        add(ClientConfig.TRANSLATION_TOGGLE_Y_SLOPE_SHOW_DETAILS, "Toggle Y slope overlay: Show details");
+        add(ClientConfig.TRANSLATION_REINFORCED_SHOW_DETAILS, "Reinforcement overlay: Show details");
+        add(ClientConfig.TRANSLATION_PRISM_OFFSET_SHOW_DETAILS, "Prism offset overlay: Show details");
+        add(ClientConfig.TRANSLATION_SPLIT_LINES_SHOW_DETAILS, "Collapsible block split lines overlay: Show details");
     }
 
     private void add(Component key, String value)

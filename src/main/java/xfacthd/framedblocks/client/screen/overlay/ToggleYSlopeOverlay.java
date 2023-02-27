@@ -28,7 +28,7 @@ public final class ToggleYSlopeOverlay extends BlockInteractOverlay
             Component.translatable(TOGGLE_MESSAGE, SLOPE_HOR)
     );
 
-    private static final ResourceLocation SYMBOL_TEXTURE = Utils.rl("textures/gui/yslope_symbols.png");
+    private static final ResourceLocation SYMBOL_TEXTURE = Utils.rl("textures/overlay/yslope_symbols.png");
     private static final Texture TEXTURE_FALSE = new Texture(SYMBOL_TEXTURE, 0, 0, 20, 40, 40, 40);
     private static final Texture TEXTURE_TRUE = new Texture(SYMBOL_TEXTURE, 20, 0, 20, 40, 40, 40);
 

@@ -17,6 +17,14 @@ public final class ServerConfig
     public static final ForgeConfigSpec SPEC;
     public static final ServerConfig INSTANCE;
 
+    private static final String KEY_ALLOW_BLOCK_ENTITIES = "allowBlockEntities";
+    private static final String KEY_ENABLE_INTANGIBILITY = "enableIntangibleFeature";
+    private static final String KEY_INTANGIBLE_MARKER = "intangibleMarkerItem";
+
+    public static final String TRANSLATION_ALLOW_BLOCK_ENTITIES = translate(KEY_ALLOW_BLOCK_ENTITIES);
+    public static final String TRANSLATION_ENABLE_INTANGIBILITY = translate(KEY_ENABLE_INTANGIBILITY);
+    public static final String TRANSLATION_INTANGIBLE_MARKER = translate(KEY_INTANGIBLE_MARKER);
+
     public static boolean allowBlockEntities;
     public static boolean enableIntangibleFeature;
     public static Item intangibleMarkerItem;
@@ -40,16 +48,16 @@ public final class ServerConfig
         builder.push("general");
         allowBlockEntitiesValue = builder
                 .comment("Whether blocks with block entities can be placed in Framed Blocks")
-                .translation(Utils.translationKey("config", "allowBlockEntities"))
-                .define("allowBlockEntities", false);
+                .translation(TRANSLATION_ALLOW_BLOCK_ENTITIES)
+                .define(KEY_ALLOW_BLOCK_ENTITIES, false);
         enableIntangibleFeatureValue = builder
                 .comment("Enables the intangbility feature. Disabling this also prevents moving through blocks that are already marked as intangible")
-                .translation(Utils.translationKey("config", "enableIntangibleFeature"))
-                .define("enableIntangibleFeature", false);
+                .translation(TRANSLATION_ENABLE_INTANGIBILITY)
+                .define(KEY_ENABLE_INTANGIBILITY, false);
         intangibleMarkerItemValue = builder
                 .comment("The item to use for making Framed Blocks intangible. The value must be a valid item registry name")
-                .translation(Utils.translationKey("config", "intangibleMarkerItem"))
-                .define("intangibleMarkerItem", ForgeRegistries.ITEMS.getKey(Items.PHANTOM_MEMBRANE).toString(), ServerConfig::validateItemName);
+                .translation(TRANSLATION_INTANGIBLE_MARKER)
+                .define(KEY_INTANGIBLE_MARKER, ForgeRegistries.ITEMS.getKey(Items.PHANTOM_MEMBRANE).toString(), ServerConfig::validateItemName);
         builder.pop();
     }
 
@@ -64,6 +72,11 @@ public final class ServerConfig
             }
         }
         return false;
+    }
+
+    private static String translate(String key)
+    {
+        return Utils.translateConfig("server", key);
     }
 
     @SubscribeEvent
