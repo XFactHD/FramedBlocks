@@ -1,8 +1,9 @@
 package xfacthd.framedblocks.common.compat;
 
 import xfacthd.framedblocks.common.compat.buildinggadgets.BuildingGadgetsCompat;
-import xfacthd.framedblocks.common.compat.flywheel.FlywheelCompat;
 import xfacthd.framedblocks.common.compat.create.CreateCompat;
+import xfacthd.framedblocks.common.compat.ctm.CtmCompat;
+import xfacthd.framedblocks.common.compat.flywheel.FlywheelCompat;
 import xfacthd.framedblocks.common.compat.nocubes.NoCubesCompat;
 import xfacthd.framedblocks.common.compat.supplementaries.SupplementariesCompat;
 
@@ -12,6 +13,7 @@ public final class CompatHandler
     {
         BuildingGadgetsCompat.init();
         CreateCompat.init();
+        //CtmCompat.init(); //TODO: add proper support for CTM's CT context
         FlywheelCompat.init();
         NoCubesCompat.init();
         SupplementariesCompat.init();

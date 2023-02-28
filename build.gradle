@@ -137,7 +137,7 @@ repositories {
 dependencies {
     minecraft 'net.minecraftforge:forge:1.19.2-43.1.57'
 
-    //runtimeOnly fg.deobf("curse.maven:ctm-267602:4393695")
+    compileOnly fg.deobf("curse.maven:ctm-267602:4393695")
 
     //runtimeOnly fg.deobf("curse.maven:puzzleslib-495476:3873579") //Only needed when Diagonal Fences is switched to implementation
     compileOnly fg.deobf("curse.maven:diagonalfences-458048:3876555")
