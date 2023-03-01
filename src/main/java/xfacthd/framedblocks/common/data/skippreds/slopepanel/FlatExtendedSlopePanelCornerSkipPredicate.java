@@ -121,6 +121,9 @@ public final class FlatExtendedSlopePanelCornerSkipPredicate implements SideSkip
                 case FRAMED_HALF_STAIRS, FRAMED_HALF_SLOPE -> testAgainstHalfStairs(
                         level, pos, state, dir, rot, adjState, side
                 );
+                case FRAMED_DIVIDED_STAIRS -> testAgainstDividedStairs(
+                        level, pos, state, dir, rot, adjState, side
+                );
                 case FRAMED_DIVIDED_SLOPE -> testAgainstDividedSlope(
                         level, pos, state, dir, rot, adjState, side
                 );
@@ -442,6 +445,15 @@ public final class FlatExtendedSlopePanelCornerSkipPredicate implements SideSkip
             return SideSkipPredicate.compareState(level, pos, side, state, adjState);
         }
         return false;
+    }
+
+    private static boolean testAgainstDividedStairs(
+            BlockGetter level, BlockPos pos, BlockState state, Direction dir, HorizontalRotation rot, BlockState adjState, Direction side
+    )
+    {
+        Tuple<BlockState, BlockState> states = AbstractFramedDoubleBlock.getStatePair(adjState);
+        return testAgainstHalfStairs(level, pos, state, dir, rot, states.getA(), side) ||
+               testAgainstHalfStairs(level, pos, state, dir, rot, states.getB(), side);
     }
 
     private static boolean testAgainstDividedSlope(

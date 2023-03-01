@@ -40,7 +40,9 @@ public final class SlabCornerSkipPredicate implements SideSkipPredicate
                 case FRAMED_VERTICAL_STAIRS -> testAgainstVerticalStairs(level, pos, state, dir, top, adjState, side);
                 case FRAMED_VERTICAL_DOUBLE_STAIRS -> testAgainstVerticalDoubleStairs(level, pos, state, dir, top, adjState, side);
                 case FRAMED_HALF_STAIRS -> testAgainstHalfStairs(level, pos, state, dir, top, adjState, side);
+                case FRAMED_DIVIDED_STAIRS -> testAgainstDividedStairs(level, pos, state, dir, top, adjState, side);
                 case FRAMED_VERTICAL_HALF_STAIRS -> testAgainstVerticalHalfStairs(level, pos, state, dir, top, adjState, side);
+                case FRAMED_VERTICAL_DIVIDED_STAIRS -> testAgainstVerticalDividedStairs(level, pos, state, dir, top, adjState, side);
                 default -> false;
             };
         }
@@ -162,6 +164,13 @@ public final class SlabCornerSkipPredicate implements SideSkipPredicate
         return false;
     }
 
+    private static boolean testAgainstDividedStairs(BlockGetter level, BlockPos pos, BlockState state, Direction dir, boolean top, BlockState adjState, Direction side)
+    {
+        Tuple<BlockState, BlockState> states = AbstractFramedDoubleBlock.getStatePair(adjState);
+        return testAgainstHalfStairs(level, pos, state, dir, top, states.getA(), side) ||
+               testAgainstHalfStairs(level, pos, state, dir, top, states.getB(), side);
+    }
+
     private static boolean testAgainstVerticalHalfStairs(BlockGetter level, BlockPos pos, BlockState state, Direction dir, boolean top, BlockState adjState, Direction side)
     {
         Direction adjDir = adjState.getValue(FramedProperties.FACING_HOR);
@@ -172,6 +181,13 @@ public final class SlabCornerSkipPredicate implements SideSkipPredicate
             return SideSkipPredicate.compareState(level, pos, side, state, adjState);
         }
         return false;
+    }
+
+    private static boolean testAgainstVerticalDividedStairs(BlockGetter level, BlockPos pos, BlockState state, Direction dir, boolean top, BlockState adjState, Direction side)
+    {
+        Tuple<BlockState, BlockState> states = AbstractFramedDoubleBlock.getStatePair(adjState);
+        return testAgainstVerticalHalfStairs(level, pos, state, dir, top, states.getA(), side) ||
+               testAgainstVerticalHalfStairs(level, pos, state, dir, top, states.getB(), side);
     }
 
 

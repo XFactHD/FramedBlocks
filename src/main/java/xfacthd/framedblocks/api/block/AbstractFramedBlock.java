@@ -26,6 +26,7 @@ import net.minecraftforge.client.extensions.common.IClientBlockExtensions;
 import net.minecraftforge.common.IPlantable;
 import xfacthd.framedblocks.api.shapes.ShapeProvider;
 import xfacthd.framedblocks.api.type.IBlockType;
+import xfacthd.framedblocks.api.util.Utils;
 
 import javax.annotation.Nullable;
 import java.util.List;
@@ -251,6 +252,23 @@ public abstract class AbstractFramedBlock extends Block implements IFramedBlock,
     }
 
 
+
+    protected static BlockState withCornerFacing(BlockState state, Direction side, Direction facing, Vec3 hitVec)
+    {
+        if (Utils.isY(side))
+        {
+            return state.setValue(FramedProperties.FACING_HOR, facing);
+        }
+
+        if (Utils.fractionInDir(hitVec, side.getCounterClockWise()) > .5)
+        {
+            return state.setValue(FramedProperties.FACING_HOR, side.getOpposite().getClockWise());
+        }
+        else
+        {
+            return state.setValue(FramedProperties.FACING_HOR, side.getOpposite());
+        }
+    }
 
     protected static BlockState withTop(BlockState state, Direction side, Vec3 hitVec)
     {
