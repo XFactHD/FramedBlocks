@@ -68,10 +68,12 @@ public class FramedFlatElevatedSlopeSlabCornerBlock extends FramedBlock
     @Override
     public BlockState getStateForPlacement(BlockPlaceContext context)
     {
-        Direction face = context.getClickedFace();
-        Direction facing = Utils.isY(face) ? context.getHorizontalDirection() : face.getOpposite();
-
-        BlockState state = defaultBlockState().setValue(FramedProperties.FACING_HOR, facing);
+        BlockState state = withCornerFacing(
+                defaultBlockState(),
+                context.getClickedFace(),
+                context.getHorizontalDirection(),
+                context.getClickLocation()
+        );
 
         state = withTop(state, context.getClickedFace(), context.getClickLocation());
         return withWater(state, context.getLevel(), context.getClickedPos());

@@ -63,20 +63,21 @@ public class FramedDoubleCornerBlock extends AbstractFramedDoubleBlock
         BlockState state = defaultBlockState();
 
         Direction side = context.getClickedFace();
+        Direction typeSide = side;
         Vec3 hitPoint = Utils.fraction(context.getClickLocation());
         if (!Utils.isY(side))
         {
             if (hitPoint.y() < (3D / 16D))
             {
-                side = Direction.UP;
+                typeSide = Direction.UP;
             }
             else if (hitPoint.y() > (13D / 16D))
             {
-                side = Direction.DOWN;
+                typeSide = Direction.DOWN;
             }
         }
 
-        return withCornerType(state, context, side, hitPoint, context.getHorizontalDirection());
+        return withCornerType(state, context, side, typeSide, hitPoint, context.getHorizontalDirection());
     }
 
     @Override

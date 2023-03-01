@@ -56,20 +56,12 @@ public class FramedSlopedStairsBlock extends FramedBlock
         Direction side = context.getClickedFace();
         Vec3 hitVec = context.getClickLocation();
 
-        Direction dir;
-        if (Utils.isY(side))
-        {
-            dir = context.getHorizontalDirection();
-        }
-        else
-        {
-            dir = side.getOpposite();
-            if (Utils.fractionInDir(hitVec, side.getCounterClockWise()) > .5D)
-            {
-                dir = dir.getClockWise();
-            }
-        }
-        BlockState state = defaultBlockState().setValue(FramedProperties.FACING_HOR, dir);
+        BlockState state = withCornerFacing(
+                defaultBlockState(),
+                context.getClickedFace(),
+                context.getHorizontalDirection(),
+                context.getClickLocation()
+        );
 
         state = withTop(state, side, hitVec);
         return withWater(state, context.getLevel(), context.getClickedPos());

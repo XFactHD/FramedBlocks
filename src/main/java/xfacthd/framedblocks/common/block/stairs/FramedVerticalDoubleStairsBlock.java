@@ -37,7 +37,12 @@ public class FramedVerticalDoubleStairsBlock extends AbstractFramedDoubleBlock
     @Override
     public BlockState getStateForPlacement(BlockPlaceContext context)
     {
-        return defaultBlockState().setValue(FramedProperties.FACING_HOR, context.getHorizontalDirection());
+        return withCornerFacing(
+                defaultBlockState(),
+                context.getClickedFace(),
+                context.getHorizontalDirection(),
+                context.getClickLocation()
+        );
     }
 
     @Override

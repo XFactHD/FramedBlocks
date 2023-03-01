@@ -93,6 +93,19 @@ public enum HorizontalRotation implements StringRepresentable
         throw new IllegalStateException(String.format("How did we get here?! %s|%s", facing, dir));
     }
 
+    public static HorizontalRotation fromDirection(Direction facing, Direction dir, Vec3 hitVec)
+    {
+        HorizontalRotation rot = fromDirection(facing, dir);
+        double dist = switch (rot)
+        {
+            case UP -> Utils.fractionInDir(hitVec, facing.getCounterClockWise());
+            case DOWN -> Utils.fractionInDir(hitVec, facing.getClockWise());
+            case RIGHT -> Utils.fractionInDir(hitVec, Direction.UP);
+            case LEFT -> Utils.fractionInDir(hitVec, Direction.DOWN);
+        };
+        return dist > .5 ? rot.rotate(Rotation.CLOCKWISE_90) : rot;
+    }
+
     public static HorizontalRotation fromWallCross(Vec3 hitVec, Direction hitFace)
     {
         hitVec = Utils.fraction(hitVec);

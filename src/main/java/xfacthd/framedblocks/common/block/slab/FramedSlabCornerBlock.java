@@ -44,15 +44,12 @@ public class FramedSlabCornerBlock extends FramedBlock
         Vec3 hitPoint = Utils.fraction(context.getClickLocation());
         if (face.getAxis().isHorizontal())
         {
-            boolean positive = Utils.isPositive(face.getCounterClockWise());
-            double xz = Utils.isX(face) ? hitPoint.z() : hitPoint.x();
-
-            Direction dir = face.getOpposite();
-            if ((xz > .5D) == positive)
-            {
-                dir = dir.getClockWise();
-            }
-            state = state.setValue(FramedProperties.FACING_HOR, dir);
+            state = withCornerFacing(
+                    state,
+                    context.getClickedFace(),
+                    context.getHorizontalDirection(),
+                    context.getClickLocation()
+            );
         }
         else
         {

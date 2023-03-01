@@ -51,8 +51,12 @@ public class FramedDoubleThreewayCornerBlock extends AbstractFramedDoubleBlock
     @Override
     public BlockState getStateForPlacement(BlockPlaceContext context)
     {
-        Direction facing = context.getHorizontalDirection();
-        BlockState state = defaultBlockState().setValue(FramedProperties.FACING_HOR, facing);
+        BlockState state = withCornerFacing(
+                defaultBlockState(),
+                context.getClickedFace(),
+                context.getHorizontalDirection(),
+                context.getClickLocation()
+        );
         return withTop(state, context.getClickedFace(), context.getClickLocation());
     }
 
