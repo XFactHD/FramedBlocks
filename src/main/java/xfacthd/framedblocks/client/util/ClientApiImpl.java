@@ -16,9 +16,15 @@ import xfacthd.framedblocks.client.render.BlockOutlineRenderer;
 import xfacthd.framedblocks.client.render.GhostBlockRenderer;
 import xfacthd.framedblocks.common.compat.create.CreateCompat;
 
+import java.util.function.Function;
+
 @SuppressWarnings("unused")
 public final class ClientApiImpl implements FramedBlocksClientAPI
 {
+    private static final CtContextSupplier[] CT_CONTEXT_GETTERS = new CtContextSupplier[] {
+            CreateCompat::tryGetCTContext
+    };
+
     @Override
     public BlockColor defaultBlockColor() { return FramedBlockColor.INSTANCE; }
 
@@ -52,12 +58,19 @@ public final class ClientApiImpl implements FramedBlocksClientAPI
     @Override
     public Object extractCTContext(ModelData data)
     {
-        Object ctx = CreateCompat.tryGetCTContext(data);
-        if (ctx != null) { return ctx; }
-
-        //ctx = CtmCompat.tryGetCTContext(data);
-        //if (ctx != null) { return ctx; }
-
+        for (CtContextSupplier sup : CT_CONTEXT_GETTERS)
+        {
+            Object ctx = sup.apply(data);
+            if (ctx != null)
+            {
+                return ctx;
+            }
+        }
         return null;
     }
+
+
+
+    @FunctionalInterface
+    private interface CtContextSupplier extends Function<ModelData, Object> { }
 }
