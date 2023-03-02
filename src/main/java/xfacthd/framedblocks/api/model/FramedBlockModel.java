@@ -293,6 +293,11 @@ public abstract class FramedBlockModel extends BakedModelProxy
         return ItemBlockRenderTypes.canRenderInLayer(camoState, layer);
     }
 
+    public final void clearCache()
+    {
+        quadCacheTable.clear();
+    }
+
     private static class FullFaceCache
     {
         private final boolean[] cache = new boolean[7];

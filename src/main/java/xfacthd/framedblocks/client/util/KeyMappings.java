@@ -10,12 +10,14 @@ import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.HitResult;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.ClientRegistry;
+import net.minecraftforge.client.model.ForgeModelBakery;
 import net.minecraftforge.common.util.Lazy;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import org.lwjgl.glfw.GLFW;
 import xfacthd.framedblocks.api.block.FramedBlockEntity;
+import xfacthd.framedblocks.api.model.FramedBlockModel;
 import xfacthd.framedblocks.api.util.FramedConstants;
 
 @Mod.EventBusSubscriber(modid = FramedConstants.MOD_ID, value = Dist.CLIENT)
@@ -23,10 +25,12 @@ public final class KeyMappings
 {
     public static final String KEY_CATEGORY = FramedConstants.MOD_ID + ".key.categories.framedblocks";
     public static final Lazy<KeyMapping> KEYMAPPING_UPDATE_CULLING = makeKeyMapping("update_cull", GLFW.GLFW_KEY_F9);
+    public static final Lazy<KeyMapping> KEYMAPPING_WIPE_CACHE = makeKeyMapping("wipe_cache", -1);
 
     public static void register()
     {
         ClientRegistry.registerKeyBinding(KEYMAPPING_UPDATE_CULLING.get());
+        ClientRegistry.registerKeyBinding(KEYMAPPING_WIPE_CACHE.get());
     }
 
     private static Lazy<KeyMapping> makeKeyMapping(String name, int key)
@@ -58,6 +62,19 @@ public final class KeyMappings
                 //noinspection ConstantConditions
                 Minecraft.getInstance().player.displayClientMessage(msg, true);
             }
+        }
+        if (KEYMAPPING_WIPE_CACHE.get().consumeClick() && ForgeModelBakery.instance() != null)
+        {
+            ForgeModelBakery.instance()
+                    .getBakedTopLevelModels()
+                    .values()
+                    .stream()
+                    .filter(FramedBlockModel.class::isInstance)
+                    .map(FramedBlockModel.class::cast)
+                    .forEach(FramedBlockModel::clearCache);
+
+            //noinspection ConstantConditions
+            Minecraft.getInstance().player.displayClientMessage(new TextComponent("Model cache cleared"), true);
         }
     }
 
