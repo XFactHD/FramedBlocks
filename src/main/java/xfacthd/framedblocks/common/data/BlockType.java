@@ -21,6 +21,7 @@ import xfacthd.framedblocks.common.block.slope.*;
 import xfacthd.framedblocks.common.block.slopepanel.*;
 import xfacthd.framedblocks.common.block.slopeslab.*;
 import xfacthd.framedblocks.common.block.stairs.*;
+import xfacthd.framedblocks.common.data.skippreds.OneWayWindowSkipPredicate;
 import xfacthd.framedblocks.common.data.skippreds.door.*;
 import xfacthd.framedblocks.common.data.skippreds.misc.*;
 import xfacthd.framedblocks.common.data.skippreds.pane.*;
@@ -179,6 +180,7 @@ public enum BlockType implements IBlockType
     FRAMED_SLOPED_STAIRS                            ( true,  true, false,  true,  true,  true, false, false, FramedSlopedStairsBlock.CTM_PREDICATE, new SlopedStairsSkipPredicate(), FramedSlopedStairsBlock::generateShapes),
     FRAMED_VERTICAL_SLOPED_STAIRS                   ( true,  true, false,  true,  true,  true, false, false, FramedVerticalSlopedStairsBlock.CTM_PREDICATE, new VerticalSlopedStairsSkipPredicate(), FramedVerticalSlopedStairsBlock::generateShapes),
     FRAMED_MINI_CUBE                                (false, false, false,  true,  true,  true, false, false, Block.box(4, 0, 4, 12, 8, 12)),
+    FRAMED_ONE_WAY_WINDOW                           (false, false,  true, false,  true, false, false, false, FramedOneWayWindowBlock.CTM_PREDICATE, new OneWayWindowSkipPredicate(), Shapes.block()),
     ;
 
     private final String name = toString().toLowerCase(Locale.ROOT);

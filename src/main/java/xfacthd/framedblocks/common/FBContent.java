@@ -216,6 +216,7 @@ public final class FBContent
     public static final RegistryObject<Block> blockFramedSlopedStairs = registerBlock(FramedSlopedStairsBlock::new, BlockType.FRAMED_SLOPED_STAIRS);
     public static final RegistryObject<Block> blockFramedVerticalSlopedStairs = registerBlock(FramedVerticalSlopedStairsBlock::new, BlockType.FRAMED_VERTICAL_SLOPED_STAIRS);
     public static final RegistryObject<Block> blockFramedMiniCube = registerBlock(FramedMiniCubeBlock::new, BlockType.FRAMED_MINI_CUBE);
+    public static final RegistryObject<Block> blockFramedOneWayWindow = registerBlock(FramedOneWayWindowBlock::new, BlockType.FRAMED_ONE_WAY_WINDOW);
     // endregion
 
     // region Special Blocks
@@ -393,6 +394,10 @@ public final class FBContent
     public static final RegistryObject<BlockEntityType<FramedVerticalDoubleHalfSlopeBlockEntity>> blockEntityTypeFramedVerticalDoubleHalfSlope = createBlockEntityType(
             FramedVerticalDoubleHalfSlopeBlockEntity::new,
             BlockType.FRAMED_VERTICAL_DOUBLE_HALF_SLOPE
+    );
+    public static final RegistryObject<BlockEntityType<FramedOwnableBlockEntity>> blockEntityTypeFramedOwnableBlock = createBlockEntityType(
+            FramedOwnableBlockEntity::new,
+            BlockType.FRAMED_ONE_WAY_WINDOW
     );
     // endregion
 

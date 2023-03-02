@@ -10,7 +10,7 @@ import org.jetbrains.annotations.Nullable;
 import xfacthd.framedblocks.api.ghost.GhostRenderBehaviour;
 import xfacthd.framedblocks.common.blockentity.FramedCollapsibleBlockEntity;
 import xfacthd.framedblocks.common.data.PropertyHolder;
-import xfacthd.framedblocks.common.data.property.CollapseFace;
+import xfacthd.framedblocks.common.data.property.NullableDirection;
 
 public final class CollapsibleBlockGhostRenderBehaviour implements GhostRenderBehaviour
 {
@@ -24,7 +24,7 @@ public final class CollapsibleBlockGhostRenderBehaviour implements GhostRenderBe
         {
             int faceIdx = stack.getTag().getCompound("BlockEntityTag").getInt("face");
             Direction face = faceIdx == -1 ? null : Direction.from3DDataValue(faceIdx);
-            state = state.setValue(PropertyHolder.COLLAPSED_FACE, CollapseFace.fromDirection(face));
+            state = state.setValue(PropertyHolder.NULLABLE_FACE, NullableDirection.fromDirection(face));
         }
         return state;
     }

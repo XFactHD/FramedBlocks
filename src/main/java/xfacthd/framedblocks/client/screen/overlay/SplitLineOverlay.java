@@ -1,11 +1,8 @@
 package xfacthd.framedblocks.client.screen.overlay;
 
-import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.level.BlockGetter;
-import net.minecraft.world.level.block.state.BlockState;
 import xfacthd.framedblocks.api.util.Utils;
 import xfacthd.framedblocks.client.util.ClientConfig;
 import xfacthd.framedblocks.common.FBContent;
@@ -37,15 +34,15 @@ public final class SplitLineOverlay extends BlockInteractOverlay
     }
 
     @Override
-    protected boolean isValidTarget(BlockState state)
+    protected boolean isValidTarget(Target target)
     {
-        return state.getBlock() == FBContent.blockFramedCollapsibleBlock.get();
+        return target.state().getBlock() == FBContent.blockFramedCollapsibleBlock.get();
     }
 
     @Override
-    protected boolean getState(BlockGetter level, BlockPos pos, BlockState state)
+    protected boolean getState(Target target)
     {
-        return state.getValue(PropertyHolder.ROTATE_SPLIT_LINE);
+        return target.state().getValue(PropertyHolder.ROTATE_SPLIT_LINE);
     }
 
     @Override

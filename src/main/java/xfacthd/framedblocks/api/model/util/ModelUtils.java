@@ -25,6 +25,7 @@ public final class ModelUtils
 {
     public static final ChunkRenderTypeSet SOLID = ChunkRenderTypeSet.of(RenderType.solid());
     public static final ChunkRenderTypeSet CUTOUT = ChunkRenderTypeSet.of(RenderType.cutout());
+    public static final ChunkRenderTypeSet TRANSLUCENT = ChunkRenderTypeSet.of(RenderType.translucent());
     private static final double UV_SUBSTEP_COUNT = 8D;
 
     public static void unpackPosition(int[] vertexData, float[] pos, int vert)

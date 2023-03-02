@@ -1,11 +1,8 @@
 package xfacthd.framedblocks.client.screen.overlay;
 
-import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.level.BlockGetter;
-import net.minecraft.world.level.block.state.BlockState;
 import xfacthd.framedblocks.api.block.FramedProperties;
 import xfacthd.framedblocks.api.util.Utils;
 import xfacthd.framedblocks.client.util.ClientConfig;
@@ -37,15 +34,15 @@ public final class PrismOffsetOverlay extends BlockInteractOverlay
     }
 
     @Override
-    protected boolean isValidTarget(BlockState state)
+    protected boolean isValidTarget(Target target)
     {
-        return state.hasProperty(FramedProperties.OFFSET);
+        return target.state().hasProperty(FramedProperties.OFFSET);
     }
 
     @Override
-    protected boolean getState(BlockGetter level, BlockPos pos, BlockState state)
+    protected boolean getState(Target target)
     {
-        return state.getValue(FramedProperties.OFFSET);
+        return target.state().getValue(FramedProperties.OFFSET);
     }
 
     @Override

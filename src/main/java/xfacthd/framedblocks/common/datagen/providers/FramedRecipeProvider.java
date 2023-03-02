@@ -7,6 +7,7 @@ import net.minecraft.tags.ItemTags;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.ItemLike;
 import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.Blocks;
 import net.minecraftforge.common.Tags;
 import net.minecraftforge.registries.RegistryObject;
 import xfacthd.framedblocks.api.util.Utils;
@@ -1012,6 +1013,15 @@ public final class FramedRecipeProvider extends RecipeProvider
                 .requires(FBContent.blockFramedMiniCube.get())
                 .unlockedBy("hasFramedMiniCube", has(FBContent.blockFramedMiniCube.get()))
                 .save(consumer, Utils.rl("framed_half_pillar_from_mini_cube"));
+
+        shapedBuildingBlock(FBContent.blockFramedOneWayWindow.get(), 4)
+                .pattern("GFG")
+                .pattern("F F")
+                .pattern("GFG")
+                .define('F', FBContent.blockFramedCube.get())
+                .define('G', Blocks.TINTED_GLASS)
+                .unlockedBy("hasFramedBlock", HAS_FRAMED_BLOCK)
+                .save(consumer);
 
 
 

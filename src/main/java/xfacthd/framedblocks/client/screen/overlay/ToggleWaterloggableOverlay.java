@@ -1,12 +1,9 @@
 package xfacthd.framedblocks.client.screen.overlay;
 
-import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import xfacthd.framedblocks.api.util.Utils;
 import xfacthd.framedblocks.client.util.ClientConfig;
@@ -41,16 +38,16 @@ public final class ToggleWaterloggableOverlay extends BlockInteractOverlay
     }
 
     @Override
-    protected boolean isValidTarget(BlockState state)
+    protected boolean isValidTarget(Target target)
     {
-        Block block = state.getBlock();
+        Block block = target.state().getBlock();
         return block instanceof FramedPressurePlateBlock || block instanceof FramedWeightedPressurePlateBlock;
     }
 
     @Override
-    protected boolean getState(BlockGetter level, BlockPos pos, BlockState state)
+    protected boolean getState(Target target)
     {
-        return state.hasProperty(BlockStateProperties.WATERLOGGED);
+        return target.state().hasProperty(BlockStateProperties.WATERLOGGED);
     }
 
     @Override

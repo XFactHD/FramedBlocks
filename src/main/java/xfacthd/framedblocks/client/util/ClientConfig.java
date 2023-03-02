@@ -25,6 +25,7 @@ public final class ClientConfig
     private static final String KEY_REINFORCED_SHOW_DETAILS = "reinforcedShowDetails";
     private static final String KEY_PRISM_OFFSET_SHOW_DETAILS = "prismOffsetShowDetails";
     private static final String KEY_SPLIT_LINES_SHOW_DETAILS = "splitLineShowDetails";
+    private static final String KEY_ONE_WAY_WINDOW_SHOW_DETAILS = "oneWayWindowShowDetails";
 
     public static final String TRANSLATION_SHOW_GHOST_BLOCKS = translate(KEY_SHOW_GHOST_BLOCKS);
     public static final String TRANSLATION_FANCY_HITBOXES = translate(KEY_FANCY_HITBOXES);
@@ -37,6 +38,7 @@ public final class ClientConfig
     public static final String TRANSLATION_REINFORCED_SHOW_DETAILS = translate(KEY_REINFORCED_SHOW_DETAILS);
     public static final String TRANSLATION_PRISM_OFFSET_SHOW_DETAILS = translate(KEY_PRISM_OFFSET_SHOW_DETAILS);
     public static final String TRANSLATION_SPLIT_LINES_SHOW_DETAILS = translate(KEY_SPLIT_LINES_SHOW_DETAILS);
+    public static final String TRANSLATION_ONE_WAY_WINDOW_SHOW_DETAILS = translate(KEY_ONE_WAY_WINDOW_SHOW_DETAILS);
 
     public static boolean showGhostBlocks = false;
     public static boolean fancyHitboxes = false;
@@ -49,6 +51,7 @@ public final class ClientConfig
     public static boolean reinforcedShowDetails;
     public static boolean prismOffsetShowDetails;
     public static boolean splitLineShowDetails;
+    public static boolean oneWayWindowShowDetails;
 
     private final ForgeConfigSpec.BooleanValue showGhostBlocksValue;
     private final ForgeConfigSpec.BooleanValue fancyHitboxesValue;
@@ -62,6 +65,7 @@ public final class ClientConfig
     private final ForgeConfigSpec.BooleanValue reinforcedShowDetailsValue;
     private final ForgeConfigSpec.BooleanValue prismOffsetShowDetailsValue;
     private final ForgeConfigSpec.BooleanValue splitLineShowDetailsValue;
+    private final ForgeConfigSpec.BooleanValue oneWayWindowShowDetailsValue;
 
     static
     {
@@ -129,6 +133,10 @@ public final class ClientConfig
                 .comment("If true, the Collapsible Block Split Line overlay will show detailed info, if false, it will only show an icon")
                 .translation(TRANSLATION_SPLIT_LINES_SHOW_DETAILS)
                 .define(KEY_SPLIT_LINES_SHOW_DETAILS, true);
+        oneWayWindowShowDetailsValue = builder
+                .comment("If true, the One-Way Window overlay will show detailed info, if false, it will only show an icon")
+                .translation(TRANSLATION_ONE_WAY_WINDOW_SHOW_DETAILS)
+                .define(KEY_ONE_WAY_WINDOW_SHOW_DETAILS, true);
         builder.pop();
     }
 
@@ -154,6 +162,7 @@ public final class ClientConfig
             reinforcedShowDetails = reinforcedShowDetailsValue.get();
             prismOffsetShowDetails = prismOffsetShowDetailsValue.get();
             splitLineShowDetails = splitLineShowDetailsValue.get();
+            oneWayWindowShowDetails = oneWayWindowShowDetailsValue.get();
         }
     }
 }

@@ -5,6 +5,7 @@ import net.minecraft.data.recipes.FinishedRecipe;
 import net.minecraft.data.recipes.RecipeProvider;
 import net.minecraft.tags.ItemTags;
 import net.minecraft.world.item.Items;
+import net.minecraft.world.level.block.Blocks;
 import net.minecraftforge.common.Tags;
 import xfacthd.framedblocks.common.FBContent;
 import xfacthd.framedblocks.common.crafting.FramingSawRecipe;
@@ -594,6 +595,11 @@ public final class FramingSawRecipeProvider extends RecipeProvider
 
         FramingSawRecipeBuilder.builder(FBContent.blockFramedMiniCube)
                 .material(FramingSawRecipe.CUBE_MATERIAL_VALUE / 8)
+                .save(consumer);
+
+        FramingSawRecipeBuilder.builder(FBContent.blockFramedOneWayWindow)
+                .material(FramingSawRecipe.CUBE_MATERIAL_VALUE)
+                .additive(FramingSawRecipeBuilder.Additive.of(Blocks.TINTED_GLASS))
                 .save(consumer);
     }
 
