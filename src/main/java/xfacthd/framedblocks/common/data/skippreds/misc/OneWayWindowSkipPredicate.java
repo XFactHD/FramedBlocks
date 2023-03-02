@@ -1,4 +1,4 @@
-package xfacthd.framedblocks.common.data.skippreds;
+package xfacthd.framedblocks.common.data.skippreds.misc;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -16,7 +16,7 @@ public class OneWayWindowSkipPredicate implements SideSkipPredicate
     {
         if (adjState.getBlock() != FBContent.blockFramedOneWayWindow.get())
         {
-            return false;
+            return SideSkipPredicate.CTM.test(level, pos, state, adjState, side);
         }
 
         NullableDirection face = state.getValue(PropertyHolder.NULLABLE_FACE);
