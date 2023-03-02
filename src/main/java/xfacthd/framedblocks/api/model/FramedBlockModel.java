@@ -419,6 +419,11 @@ public abstract class FramedBlockModel extends BakedModelProxy
         return baseModel.getParticleIcon();
     }
 
+    public final void clearCache()
+    {
+        quadCache.invalidateAll();
+    }
+
 
 
     @SuppressWarnings("unused")

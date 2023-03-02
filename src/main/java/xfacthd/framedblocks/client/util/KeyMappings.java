@@ -16,6 +16,7 @@ import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import org.lwjgl.glfw.GLFW;
 import xfacthd.framedblocks.api.block.FramedBlockEntity;
+import xfacthd.framedblocks.api.model.FramedBlockModel;
 import xfacthd.framedblocks.api.util.FramedConstants;
 
 @Mod.EventBusSubscriber(modid = FramedConstants.MOD_ID, bus = Mod.EventBusSubscriber.Bus.MOD, value = Dist.CLIENT)
@@ -23,11 +24,13 @@ public final class KeyMappings
 {
     public static final String KEY_CATEGORY = FramedConstants.MOD_ID + ".key.categories.framedblocks";
     public static final Lazy<KeyMapping> KEYMAPPING_UPDATE_CULLING = makeKeyMapping("update_cull", GLFW.GLFW_KEY_F9);
+    public static final Lazy<KeyMapping> KEYMAPPING_WIPE_CACHE = makeKeyMapping("wipe_cache", -1);
 
     @SubscribeEvent
     public static void register(final RegisterKeyMappingsEvent event)
     {
         event.register(KEYMAPPING_UPDATE_CULLING.get());
+        event.register(KEYMAPPING_WIPE_CACHE.get());
 
         MinecraftForge.EVENT_BUS.addListener(KeyMappings::onClientTick);
     }
@@ -62,6 +65,21 @@ public final class KeyMappings
                 //noinspection ConstantConditions
                 Minecraft.getInstance().player.displayClientMessage(msg, true);
             }
+        }
+        if (KEYMAPPING_WIPE_CACHE.get().consumeClick())
+        {
+            Minecraft.getInstance()
+                    .getModelManager()
+                    .getModelBakery()
+                    .getBakedTopLevelModels()
+                    .values()
+                    .stream()
+                    .filter(FramedBlockModel.class::isInstance)
+                    .map(FramedBlockModel.class::cast)
+                    .forEach(FramedBlockModel::clearCache);
+
+            //noinspection ConstantConditions
+            Minecraft.getInstance().player.displayClientMessage(Component.literal("Model cache cleared"), true);
         }
     }
 
