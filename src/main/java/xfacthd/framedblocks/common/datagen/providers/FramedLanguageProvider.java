@@ -162,6 +162,7 @@ public final class FramedLanguageProvider extends LanguageProvider
         add(FBContent.blockFramedVerticalDoubleHalfSlope.get(), "Framed Double Half Slope");
         add(FBContent.blockFramedSlopedStairs.get(), "Framed Sloped Stairs");
         add(FBContent.blockFramedVerticalSlopedStairs.get(), "Framed Vertical Sloped Stairs");
+        add(FBContent.blockFramedMiniCube.get(), "Framed Mini Cube");
 
         add(FBContent.blockFramingSaw.get(), "Framing Saw");
 

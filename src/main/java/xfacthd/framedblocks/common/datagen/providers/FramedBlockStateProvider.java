@@ -176,6 +176,7 @@ public final class FramedBlockStateProvider extends BlockStateProvider
         registerFramedFancyPoweredRail();
         registerFramedFancyDetectorRail();
         registerFramedFancyActivatorRail();
+        registerFramedMiniCube(cube);
 
         registerFramingSaw();
     }
@@ -806,6 +807,21 @@ public final class FramedBlockStateProvider extends BlockStateProvider
                 ),
                 BlockStateProperties.WATERLOGGED
         );
+    }
+
+    private void registerFramedMiniCube(ModelFile cube)
+    {
+        simpleBlock(FBContent.blockFramedMiniCube.get(), cube);
+
+        itemModels().withExistingParent("framed_mini_cube", mcLoc("block/block"))
+                .element()
+                .from(4, 0, 4)
+                .to(12, 8, 12)
+                .allFaces((d, f) -> f.uvs(0, 0, 16, 16))
+                .textureAll("#all")
+                .end()
+                .texture("all", TEXTURE)
+                .renderType("cutout");
     }
 
 
