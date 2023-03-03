@@ -1,5 +1,6 @@
 package xfacthd.framedblocks.common.datagen.providers;
 
+import net.minecraft.core.Direction;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.TranslatableComponent;
@@ -15,6 +16,7 @@ import xfacthd.framedblocks.common.FBContent;
 import xfacthd.framedblocks.common.block.FramingSawBlock;
 import xfacthd.framedblocks.common.blockentity.FramedStorageBlockEntity;
 import xfacthd.framedblocks.common.crafting.FramingSawRecipe;
+import xfacthd.framedblocks.common.data.property.NullableDirection;
 import xfacthd.framedblocks.common.item.FramedBlueprintItem;
 import xfacthd.framedblocks.common.blockentity.FramedChestBlockEntity;
 import xfacthd.framedblocks.api.block.FramedBlockEntity;
@@ -180,6 +182,7 @@ public final class FramedLanguageProvider extends LanguageProvider
         add(FBContent.blockFramedSlopedStairs.get(), "Framed Sloped Stairs");
         add(FBContent.blockFramedVerticalSlopedStairs.get(), "Framed Vertical Sloped Stairs");
         add(FBContent.blockFramedMiniCube.get(), "Framed Mini Cube");
+        add(FBContent.blockFramedOneWayWindow.get(), "Framed One-Way Window");
     }
 
     private void addSpecialBlockTranslations()
@@ -278,6 +281,30 @@ public final class FramedLanguageProvider extends LanguageProvider
         add(SplitLineOverlay.SPLIT_LINE_FALSE, "Split-line of the deformed face runs along the steep diagonal.");
         add(SplitLineOverlay.SPLIT_LINE_TRUE, "Split-line of the deformed face runs along the shallow diagonal.");
         add(SplitLineOverlay.MSG_SWITCH_SPLIT_LINE, "Hit with a Framed Hammer to switch the orientation of the split-line");
+
+        add(OneWayWindowOverlay.LINE_CURR_FACE, "Current see-through side: %s");
+        add(OneWayWindowOverlay.LINE_SET_FACE, "Hit with a Framed Wrench to set the see-through side to %s");
+        add(OneWayWindowOverlay.LINE_CLEAR_FACE, "Hit with a Framed Wrench while crouching to clear see-through side");
+        add(OneWayWindowOverlay.FACE_VALUE_LINES[NullableDirection.NONE.ordinal()], "None");
+        add(OneWayWindowOverlay.FACE_VALUE_LINES[NullableDirection.DOWN.ordinal()], "Down");
+        add(OneWayWindowOverlay.FACE_VALUE_LINES[NullableDirection.UP.ordinal()], "Up");
+        add(OneWayWindowOverlay.FACE_VALUE_LINES[NullableDirection.NORTH.ordinal()], "North");
+        add(OneWayWindowOverlay.FACE_VALUE_LINES[NullableDirection.SOUTH.ordinal()], "South");
+        add(OneWayWindowOverlay.FACE_VALUE_LINES[NullableDirection.WEST.ordinal()], "West");
+        add(OneWayWindowOverlay.FACE_VALUE_LINES[NullableDirection.EAST.ordinal()], "East");
+        add(OneWayWindowOverlay.DIR_VALUE_LINES[Direction.DOWN.ordinal()], "Down");
+        add(OneWayWindowOverlay.DIR_VALUE_LINES[Direction.UP.ordinal()], "Up");
+        add(OneWayWindowOverlay.DIR_VALUE_LINES[Direction.NORTH.ordinal()], "North");
+        add(OneWayWindowOverlay.DIR_VALUE_LINES[Direction.SOUTH.ordinal()], "South");
+        add(OneWayWindowOverlay.DIR_VALUE_LINES[Direction.WEST.ordinal()], "West");
+        add(OneWayWindowOverlay.DIR_VALUE_LINES[Direction.EAST.ordinal()], "East");
+        add(OneWayWindowOverlay.FACE_VALUE_ABBRS[NullableDirection.NONE.ordinal()], "-");
+        add(OneWayWindowOverlay.FACE_VALUE_ABBRS[NullableDirection.DOWN.ordinal()], "D");
+        add(OneWayWindowOverlay.FACE_VALUE_ABBRS[NullableDirection.UP.ordinal()], "U");
+        add(OneWayWindowOverlay.FACE_VALUE_ABBRS[NullableDirection.NORTH.ordinal()], "N");
+        add(OneWayWindowOverlay.FACE_VALUE_ABBRS[NullableDirection.SOUTH.ordinal()], "S");
+        add(OneWayWindowOverlay.FACE_VALUE_ABBRS[NullableDirection.WEST.ordinal()], "W");
+        add(OneWayWindowOverlay.FACE_VALUE_ABBRS[NullableDirection.EAST.ordinal()], "E");
     }
 
     private void addConfigTranslations()
@@ -298,6 +325,7 @@ public final class FramedLanguageProvider extends LanguageProvider
         add(ClientConfig.TRANSLATION_REINFORCED_SHOW_DETAILS, "Reinforcement overlay: Show details");
         add(ClientConfig.TRANSLATION_PRISM_OFFSET_SHOW_DETAILS, "Prism offset overlay: Show details");
         add(ClientConfig.TRANSLATION_SPLIT_LINES_SHOW_DETAILS, "Collapsible block split lines overlay: Show details");
+        add(ClientConfig.TRANSLATION_ONE_WAY_WINDOW_SHOW_DETAILS, "One-Way Window overlay: Show details");
     }
 
     private void add(Component key, String value)

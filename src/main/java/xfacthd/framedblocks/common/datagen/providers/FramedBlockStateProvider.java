@@ -175,6 +175,7 @@ public final class FramedBlockStateProvider extends BlockStateProvider
         registerFramedFancyDetectorRail();
         registerFramedFancyActivatorRail();
         registerFramedMiniCube(cube);
+        registerFramedOneWayWindow();
 
         registerFramingSaw();
     }
@@ -998,6 +999,12 @@ public final class FramedBlockStateProvider extends BlockStateProvider
                 .textureAll("#all")
                 .end()
                 .texture("all", TEXTURE);
+    }
+
+    private void registerFramedOneWayWindow()
+    {
+        ModelFile model = makeUnderlayedCube("framed_one_way_window", mcLoc("block/moss_block"));
+        simpleBlockWithItem(FBContent.blockFramedOneWayWindow, model);
     }
 
 

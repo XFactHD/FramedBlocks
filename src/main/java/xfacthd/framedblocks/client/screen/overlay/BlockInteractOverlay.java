@@ -9,6 +9,7 @@ import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiComponent;
 import net.minecraft.client.renderer.GameRenderer;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.packs.resources.ResourceManager;
@@ -27,6 +28,7 @@ import java.util.*;
 public abstract class BlockInteractOverlay implements IIngameOverlay
 {
     private static final int LINE_DIST = 3;
+    private static final Target NO_TARGET = new Target(BlockPos.ZERO, Blocks.AIR.defaultBlockState(), Direction.NORTH);
     private static final int COLOR_BACKGROUND = 0xf0100010;
     private static final int COLOR_BORDER_START = 0x505000FF;
     private static final int COLOR_BORDER_END = 0x5028007f;
@@ -54,32 +56,27 @@ public abstract class BlockInteractOverlay implements IIngameOverlay
         ItemStack stack = player().getMainHandItem();
         if (!isValidTool(stack)) { return; }
 
-        BlockState block = getTargettedBlock();
-        if (!isValidTarget(block)) { return; }
+        Target target = getTargettedBlock();
+        if (!isValidTarget(target)) { return; }
 
-        boolean state = getState(level(), getTargettedPos(), block);
+        boolean state = getState(target);
         int centerX = screenWidth / 2;
         int centerY = screenHeight / 2;
 
-        Texture tex = state ? textureTrue : textureFalse;
-        renderMainIcon(gui, poseStack, tex, centerX, centerY);
+        Texture tex = getTexture(target, state, textureFalse, textureTrue);
+        int texX = centerX + 20;
+        int texY = centerY - (tex.height / 2);
+        tex.draw(gui, poseStack, texX, texY);
+        renderAfterIcon(gui, poseStack, tex, texX, texY, target);
 
         if (showDetailed())
         {
-            List<Component> lines = state ? linesTrue : linesFalse;
-            renderDetailed(gui, poseStack, tex, lines, centerX, screenHeight);
+            List<Component> lines = getLines(target, state, linesFalse, linesTrue);
+            renderDetailed(gui, poseStack, tex, lines, centerX, screenHeight, target);
         }
     }
 
-    private static void renderMainIcon(ForgeIngameGui gui, PoseStack poseStack, Texture tex, int centerX, int centerY)
-    {
-        int texY = centerY - (tex.height / 2);
-        gui.setupOverlayRenderState(true, false, tex.location);
-        //noinspection SuspiciousNameCombination
-        GuiComponent.blit(poseStack, centerX + 20, texY, 0, tex.xOff, tex.yOff, tex.width, tex.height, tex.texWidth, tex.texHeight);
-    }
-
-    private void renderDetailed(ForgeIngameGui gui, PoseStack poseStack, Texture tex, List<Component> lines, int centerX, int screenHeight)
+    private void renderDetailed(ForgeIngameGui gui, PoseStack poseStack, Texture tex, List<Component> lines, int centerX, int screenHeight, Target target)
     {
         Font font = gui.getFont();
         if (!textWidthValid) { updateTextWidth(font); }
@@ -104,18 +101,29 @@ public abstract class BlockInteractOverlay implements IIngameOverlay
         }
 
         int texY = y + (height / 2) - (tex.height / 2);
-        gui.setupOverlayRenderState(true, false, tex.location);
-        //noinspection SuspiciousNameCombination
-        GuiComponent.blit(poseStack, x, texY, gui.getBlitOffset(), tex.xOff, tex.yOff, tex.width, tex.height, tex.texWidth, tex.texHeight);
+        tex.draw(gui, poseStack, x, texY);
+        renderAfterIcon(gui, poseStack, tex, x, texY, target);
     }
 
     protected abstract boolean isValidTool(ItemStack stack);
 
-    protected abstract boolean isValidTarget(BlockState state);
+    protected abstract boolean isValidTarget(Target target);
 
-    protected abstract boolean getState(BlockGetter level, BlockPos pos, BlockState state);
+    protected abstract boolean getState(Target target);
+
+    protected Texture getTexture(Target target, boolean state, Texture texFalse, Texture texTrue)
+    {
+        return state ? texTrue : texFalse;
+    }
+
+    protected List<Component> getLines(Target target, boolean state, List<Component> linesFalse, List<Component> linesTrue)
+    {
+        return state ? linesTrue : linesFalse;
+    }
 
     protected abstract boolean showDetailed();
+
+    protected void renderAfterIcon(ForgeIngameGui gui, PoseStack poseStack, Texture tex, int texX, int texY, Target target) { }
 
     private void updateTextWidth(Font font)
     {
@@ -144,24 +152,15 @@ public abstract class BlockInteractOverlay implements IIngameOverlay
         return Objects.requireNonNull(Minecraft.getInstance().player);
     }
 
-    protected static BlockPos getTargettedPos()
+    protected static Target getTargettedBlock()
     {
         HitResult hit = Minecraft.getInstance().hitResult;
         if (hit instanceof BlockHitResult blockHit)
         {
-            return blockHit.getBlockPos();
+            BlockPos pos = blockHit.getBlockPos();
+            return new Target(pos, level().getBlockState(pos), blockHit.getDirection());
         }
-        return null;
-    }
-
-    protected static BlockState getTargettedBlock()
-    {
-        HitResult hit = Minecraft.getInstance().hitResult;
-        if (hit instanceof BlockHitResult blockHit)
-        {
-            return Objects.requireNonNull(Minecraft.getInstance().level).getBlockState(blockHit.getBlockPos());
-        }
-        return Blocks.AIR.defaultBlockState();
+        return NO_TARGET;
     }
 
     private static void drawTooltipBackground(PoseStack poseStack, int x, int y, int width, int height, int blitOffset)
@@ -197,5 +196,15 @@ public abstract class BlockInteractOverlay implements IIngameOverlay
         GuiComponent.fillGradient(pose, buffer,     x - 3, y + h + 2, x + w + 3,     y + h + 3, blitOffset, COLOR_BORDER_END, COLOR_BORDER_END);
     }
 
-    protected record Texture(ResourceLocation location, int xOff, int yOff, int width, int height, int texWidth, int texHeight) { }
+    protected record Texture(ResourceLocation location, int xOff, int yOff, int width, int height, int texWidth, int texHeight)
+    {
+        public void draw(ForgeIngameGui gui, PoseStack poseStack, int x, int y)
+        {
+            gui.setupOverlayRenderState(true, false, location);
+            //noinspection SuspiciousNameCombination
+            GuiComponent.blit(poseStack, x, y, gui.getBlitOffset(), xOff, yOff, width, height, texWidth, texHeight);
+        }
+    }
+
+    protected record Target(BlockPos pos, BlockState state, Direction side) { }
 }

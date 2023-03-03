@@ -81,7 +81,7 @@ public class FramedCollapsibleBlockModel extends BakedModelProxy
         public CollapsibleModel(BlockState state, BakedModel baseModel, int packedOffsets)
         {
             super(state, baseModel);
-            this.collapsedFace = state.getValue(PropertyHolder.COLLAPSED_FACE).toDirection();
+            this.collapsedFace = state.getValue(PropertyHolder.NULLABLE_FACE).toDirection();
             this.rotSplitEdge = state.getValue(PropertyHolder.ROTATE_SPLIT_LINE);
 
             byte[] vertexOffsets = FramedCollapsibleBlockEntity.unpackOffsets(packedOffsets);

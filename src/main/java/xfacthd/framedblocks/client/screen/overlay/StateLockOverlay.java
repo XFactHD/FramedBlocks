@@ -1,12 +1,9 @@
 package xfacthd.framedblocks.client.screen.overlay;
 
-import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.level.BlockGetter;
-import net.minecraft.world.level.block.state.BlockState;
 import xfacthd.framedblocks.api.block.IFramedBlock;
 import xfacthd.framedblocks.api.util.*;
 import xfacthd.framedblocks.client.util.ClientConfig;
@@ -40,15 +37,15 @@ public final class StateLockOverlay extends BlockInteractOverlay
     }
 
     @Override
-    protected boolean isValidTarget(BlockState state)
+    protected boolean isValidTarget(Target target)
     {
-        return state.getBlock() instanceof IFramedBlock block && block.getBlockType().canLockState();
+        return target.state().getBlock() instanceof IFramedBlock block && block.getBlockType().canLockState();
     }
 
     @Override
-    protected boolean getState(BlockGetter level, BlockPos pos, BlockState state)
+    protected boolean getState(Target target)
     {
-        return state.getValue(FramedProperties.STATE_LOCKED);
+        return target.state().getValue(FramedProperties.STATE_LOCKED);
     }
 
     @Override

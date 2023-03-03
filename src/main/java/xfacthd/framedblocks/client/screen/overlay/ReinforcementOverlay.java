@@ -1,13 +1,10 @@
 package xfacthd.framedblocks.client.screen.overlay;
 
 import net.minecraft.ChatFormatting;
-import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.level.BlockGetter;
-import net.minecraft.world.level.block.state.BlockState;
 import xfacthd.framedblocks.api.block.FramedBlockEntity;
 import xfacthd.framedblocks.api.block.IFramedBlock;
 import xfacthd.framedblocks.api.util.Utils;
@@ -45,15 +42,15 @@ public final class ReinforcementOverlay extends BlockInteractOverlay
     }
 
     @Override
-    protected boolean isValidTarget(BlockState state)
+    protected boolean isValidTarget(Target target)
     {
-        return state.getBlock() instanceof IFramedBlock;
+        return target.state().getBlock() instanceof IFramedBlock;
     }
 
     @Override
-    protected boolean getState(BlockGetter level, BlockPos pos, BlockState state)
+    protected boolean getState(Target target)
     {
-        if (level.getBlockEntity(pos) instanceof FramedBlockEntity be)
+        if (level().getBlockEntity(target.pos()) instanceof FramedBlockEntity be)
         {
             return be.isReinforced();
         }

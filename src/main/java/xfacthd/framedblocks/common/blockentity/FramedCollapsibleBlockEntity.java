@@ -12,7 +12,7 @@ import net.minecraftforge.client.model.data.ModelProperty;
 import xfacthd.framedblocks.api.block.FramedBlockEntity;
 import xfacthd.framedblocks.api.util.Utils;
 import xfacthd.framedblocks.common.FBContent;
-import xfacthd.framedblocks.common.data.property.CollapseFace;
+import xfacthd.framedblocks.common.data.property.NullableDirection;
 import xfacthd.framedblocks.common.data.PropertyHolder;
 import xfacthd.framedblocks.common.util.MathUtils;
 
@@ -81,7 +81,7 @@ public class FramedCollapsibleBlockEntity extends FramedBlockEntity
             if (noOffsets)
             {
                 collapsedFace = null;
-                level.setBlock(worldPosition, getBlockState().setValue(PropertyHolder.COLLAPSED_FACE, CollapseFace.NONE), Block.UPDATE_ALL);
+                level.setBlock(worldPosition, getBlockState().setValue(PropertyHolder.NULLABLE_FACE, NullableDirection.NONE), Block.UPDATE_ALL);
             }
             else
             {
@@ -91,7 +91,7 @@ public class FramedCollapsibleBlockEntity extends FramedBlockEntity
         else if (collapsedFace == null)
         {
             collapsedFace = faceHit;
-            level.setBlock(worldPosition, getBlockState().setValue(PropertyHolder.COLLAPSED_FACE, CollapseFace.fromDirection(collapsedFace)), Block.UPDATE_ALL);
+            level.setBlock(worldPosition, getBlockState().setValue(PropertyHolder.NULLABLE_FACE, NullableDirection.fromDirection(collapsedFace)), Block.UPDATE_ALL);
         }
         else
         {

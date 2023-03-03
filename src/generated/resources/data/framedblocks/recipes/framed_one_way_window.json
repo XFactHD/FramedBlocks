@@ -1,0 +1,20 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "key": {
+    "F": {
+      "item": "framedblocks:framed_cube"
+    },
+    "G": {
+      "item": "minecraft:tinted_glass"
+    }
+  },
+  "pattern": [
+    "GFG",
+    "F F",
+    "GFG"
+  ],
+  "result": {
+    "count": 4,
+    "item": "framedblocks:framed_one_way_window"
+  }
+}

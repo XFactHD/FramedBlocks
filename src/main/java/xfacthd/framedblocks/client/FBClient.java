@@ -96,6 +96,7 @@ public final class FBClient
         OverlayRegistry.registerOverlayTop("reinforcement", new ReinforcementOverlay());
         OverlayRegistry.registerOverlayTop("prism_offset", new PrismOffsetOverlay());
         OverlayRegistry.registerOverlayTop("split_line", new SplitLineOverlay());
+        OverlayRegistry.registerOverlayTop("one_way_window", new OneWayWindowOverlay());
 
         KeyMappings.register();
 
@@ -225,6 +226,7 @@ public final class FBClient
         FramedStoneButtonModel.cacheFrameModels(registry);
         FramedLargeStoneButtonModel.cacheFrameModels(registry);
         FramedTargetModel.cacheOverlayModel(registry);
+        FramedOneWayWindowModel.captureTintedGlassModel(registry);
 
         if (SupplementariesCompat.isLoaded())
         {
@@ -380,6 +382,7 @@ public final class FBClient
         ClientUtils.replaceModels(FBContent.blockFramedSlopedStairs, registry, FramedSlopedStairsModel::new, FramedSlopedStairsModel.itemSource(), ignoreDefault);
         ClientUtils.replaceModels(FBContent.blockFramedVerticalSlopedStairs, registry, FramedVerticalSlopedStairsModel::new, FramedVerticalSlopedStairsModel.itemSource(), ignoreDefault);
         ClientUtils.replaceModels(FBContent.blockFramedMiniCube, registry, FramedMiniCubeModel::new, ignoreWaterlogged);
+        ClientUtils.replaceModels(FBContent.blockFramedOneWayWindow, registry, FramedOneWayWindowModel::new, null);
     }
 
     @SubscribeEvent

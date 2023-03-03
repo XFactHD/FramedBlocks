@@ -241,15 +241,9 @@ public interface IFramedBlock extends EntityBlock//, IFacade
         BlockPos neighborPos = pos.relative(side);
         BlockState neighborState = level.getBlockState(neighborPos);
 
-        if (FramedBlocksAPI.getInstance().enableIntangibility() && !isIntangible(state, level, pos, null))
+        if (neighborState.getBlock() instanceof IFramedBlock block && block.shouldPreventNeighborCulling(level, neighborPos, neighborState, pos, state))
         {
-            if (neighborState.getBlock() instanceof IFramedBlock block && block.getBlockType().allowMakingIntangible())
-            {
-                if (block.isIntangible(neighborState, level, neighborPos, null))
-                {
-                    return false;
-                }
-            }
+            return false;
         }
 
         //Let the game handle culling against solid surfaces automatically
@@ -260,6 +254,20 @@ public interface IFramedBlock extends EntityBlock//, IFacade
 
         SideSkipPredicate pred = FramedBlocksAPI.getInstance().detailedCullingEnabled() ? getBlockType().getSideSkipPredicate() : SideSkipPredicate.CTM;
         return pred.test(level, pos, state, neighborState, side);
+    }
+
+    default boolean shouldPreventNeighborCulling(BlockGetter level, BlockPos pos, BlockState state, BlockPos adjPos, BlockState adjState)
+    {
+        if (!FramedBlocksAPI.getInstance().enableIntangibility() || isIntangible(adjState, level, adjPos, null))
+        {
+            return false;
+        }
+
+        if (getBlockType().allowMakingIntangible())
+        {
+            return isIntangible(state, level, pos, null);
+        }
+        return false;
     }
 
     default float getCamoSlipperiness(BlockState state, LevelReader level, BlockPos pos, @Nullable Entity entity)
@@ -368,6 +376,10 @@ public interface IFramedBlock extends EntityBlock//, IFacade
         if (!FramedBlocksAPI.getInstance().canHideNeighborFaceInLevel(level)) { return false; }
         if (neighborState.getBlock() instanceof IFramedBlock) { return false; }
 
+        if (shouldPreventNeighborCulling(level, pos, state, pos.relative(dir), neighborState))
+        {
+            return false;
+        }
         if (level.getExistingBlockEntity(pos) instanceof FramedBlockEntity be)
         {
             if (neighborState.getBlock() instanceof HalfTransparentBlock && SideSkipPredicate.CTM.test(level, pos, state, neighborState, dir))

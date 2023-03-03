@@ -12,8 +12,8 @@ import net.minecraft.world.phys.shapes.Shapes;
 import xfacthd.framedblocks.api.render.Quaternions;
 import xfacthd.framedblocks.api.util.client.OutlineRender;
 import xfacthd.framedblocks.common.blockentity.FramedCollapsibleBlockEntity;
+import xfacthd.framedblocks.common.data.property.NullableDirection;
 import xfacthd.framedblocks.common.data.PropertyHolder;
-import xfacthd.framedblocks.common.data.property.CollapseFace;
 
 public final class CollapsibleBlockOutlineRenderer implements OutlineRender
 {
@@ -25,8 +25,8 @@ public final class CollapsibleBlockOutlineRenderer implements OutlineRender
     @Override
     public void draw(BlockState state, Level level, BlockPos pos, PoseStack poseStack, VertexConsumer builder)
     {
-        CollapseFace face = state.getValue(PropertyHolder.COLLAPSED_FACE);
-        if (face == CollapseFace.NONE)
+        NullableDirection face = state.getValue(PropertyHolder.NULLABLE_FACE);
+        if (face == NullableDirection.NONE)
         {
             Shapes.block().forAllEdges((pMinX, pMinY, pMinZ, pMaxX, pMaxY, pMaxZ) -> OutlineRender.drawLine(builder, poseStack, pMinX, pMinY, pMinZ, pMaxX, pMaxY, pMaxZ));
         }

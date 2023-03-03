@@ -137,6 +137,7 @@
     "framedblocks:framed_vertical_double_half_slope",
     "framedblocks:framed_sloped_stairs",
     "framedblocks:framed_vertical_sloped_stairs",
-    "framedblocks:framed_mini_cube"
+    "framedblocks:framed_mini_cube",
+    "framedblocks:framed_one_way_window"
   ]
 }
