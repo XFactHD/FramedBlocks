@@ -2,7 +2,7 @@
   "parent": "minecraft:recipes/root",
   "rewards": {
     "recipes": [
-      "framedblocks:framed_stairs_from_half_stairs"
+      "framedblocks:framed_divided_stairs"
     ]
   },
   "criteria": {
@@ -21,7 +21,7 @@
     "has_the_recipe": {
       "trigger": "minecraft:recipe_unlocked",
       "conditions": {
-        "recipe": "framedblocks:framed_stairs_from_half_stairs"
+        "recipe": "framedblocks:framed_divided_stairs"
       }
     }
   },

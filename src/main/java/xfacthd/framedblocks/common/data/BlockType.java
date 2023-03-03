@@ -103,6 +103,7 @@ public enum BlockType implements IBlockType
     FRAMED_POST                                     (false, false, false,  true,  true,  true, false, false, CtmPredicate.FALSE, new PostSkipPredicate(), FramedPillarBlock::generatePostShapes),
     FRAMED_COLLAPSIBLE_BLOCK                        (false,  true,  true,  true,  true,  true, false, false, FramedCollapsibleBlock.CTM_PREDICATE, new CollapsibleBlockSkipPredicate()),
     FRAMED_HALF_STAIRS                              (false, false, false,  true,  true,  true, false, false, CtmPredicate.FALSE, new HalfStairsSkipPredicate(), FramedHalfStairsBlock::generateShapes),
+    FRAMED_DIVIDED_STAIRS                           ( true, false,  true,  true,  true,  true,  true, false, FramedDividedStairsBlock::generateShapes),
     FRAMED_BOUNCY_CUBE                              ( true, false, false, false,  true, false, false, false, CtmPredicate.TRUE, SideSkipPredicate.CTM, Shapes.block()),
     FRAMED_SECRET_STORAGE                           ( true, false,  true, false,  true, false, false, false, CtmPredicate.TRUE, SideSkipPredicate.CTM, Shapes.block()),
     FRAMED_REDSTONE_BLOCK                           ( true, false, false, false,  true,  true, false, false, CtmPredicate.TRUE, SideSkipPredicate.CTM, Shapes.block()),
@@ -129,6 +130,7 @@ public enum BlockType implements IBlockType
     FRAMED_FLAT_STACKED_SLOPE_SLAB_CORNER           ( true,  true,  true,  true,  true,  true,  true, false, CtmPredicate.TOP, FramedFlatElevatedSlopeSlabCornerBlock::generateShapes),
     FRAMED_FLAT_STACKED_INNER_SLOPE_SLAB_CORNER     ( true,  true,  true,  true,  true,  true,  true, false, CtmPredicate.TOP, FramedFlatElevatedSlopeSlabCornerBlock::generateInnerShapes),
     FRAMED_VERTICAL_HALF_STAIRS                     (false, false, false,  true,  true, false, false, false, CtmPredicate.FALSE, new VerticalHalfStairsSkipPredicate(), FramedVerticalHalfStairsBlock::generateShapes),
+    FRAMED_VERTICAL_DIVIDED_STAIRS                  ( true, false,  true,  true,  true,  true,  true, false, FramedVerticalDividedStairsBlock::generateShapes),
     FRAMED_SLOPE_PANEL                              ( true,  true, false,  true,  true,  true, false, false, FramedSlopePanelBlock.CTM_PREDICATE, new SlopePanelSkipPredicate(), FramedSlopePanelBlock::generateShapes),
     FRAMED_EXTENDED_SLOPE_PANEL                     ( true,  true,  true,  true,  true,  true, false, false, FramedExtendedSlopePanelBlock.CTM_PREDICATE, new ExtendedSlopePanelSkipPredicate(), FramedExtendedSlopePanelBlock::generateShapes),
     FRAMED_DOUBLE_SLOPE_PANEL                       ( true, false,  true,  true,  true,  true,  true, false, FramedDoubleSlopePanelBlock.CTM_PREDICATE, FramedDoubleSlopePanelBlock::generateShapes), //Side skip is handled by the single vertical slope slab
