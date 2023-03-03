@@ -593,7 +593,7 @@ public final class FramingSawRecipeProvider extends RecipeProvider
                 .save(consumer);
 
         FramingSawRecipeBuilder.builder(FBContent.blockFramedMiniCube)
-                .material(FramingSawRecipe.CUBE_MATERIAL_VALUE / 8)
+                .material(FramingSawRecipe.CUBE_MATERIAL_VALUE)
                 .save(consumer);
     }
 
