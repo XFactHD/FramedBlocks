@@ -5,27 +5,27 @@
       "faces": {
         "down": {
           "cullface": "down",
-          "texture": "#redstone"
+          "texture": "#underlay"
         },
         "east": {
           "cullface": "east",
-          "texture": "#redstone"
+          "texture": "#underlay"
         },
         "north": {
           "cullface": "north",
-          "texture": "#redstone"
+          "texture": "#underlay"
         },
         "south": {
           "cullface": "south",
-          "texture": "#redstone"
+          "texture": "#underlay"
         },
         "up": {
           "cullface": "up",
-          "texture": "#redstone"
+          "texture": "#underlay"
         },
         "west": {
           "cullface": "west",
-          "texture": "#redstone"
+          "texture": "#underlay"
         }
       },
       "from": [
@@ -78,9 +78,10 @@
       ]
     }
   ],
+  "render_type": "minecraft:cutout",
   "textures": {
     "frame": "framedblocks:block/framed_block",
     "particle": "framedblocks:block/framed_block",
-    "redstone": "minecraft:block/redstone_block"
+    "underlay": "minecraft:block/redstone_block"
   }
 }

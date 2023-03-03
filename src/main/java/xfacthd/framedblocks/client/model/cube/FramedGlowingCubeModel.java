@@ -11,7 +11,7 @@ import net.minecraftforge.client.model.data.ModelData;
 
 import java.util.*;
 
-public class FramedGlowingCubeModel extends FramedCubeModel
+public class FramedGlowingCubeModel extends FramedCubeBaseModel
 {
     public FramedGlowingCubeModel(BlockState state, BakedModel baseModel) { super(state, baseModel); }
 

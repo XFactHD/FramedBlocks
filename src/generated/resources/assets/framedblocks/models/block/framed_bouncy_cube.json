@@ -5,27 +5,27 @@
       "faces": {
         "down": {
           "cullface": "down",
-          "texture": "#slime"
+          "texture": "#underlay"
         },
         "east": {
           "cullface": "east",
-          "texture": "#slime"
+          "texture": "#underlay"
         },
         "north": {
           "cullface": "north",
-          "texture": "#slime"
+          "texture": "#underlay"
         },
         "south": {
           "cullface": "south",
-          "texture": "#slime"
+          "texture": "#underlay"
         },
         "up": {
           "cullface": "up",
-          "texture": "#slime"
+          "texture": "#underlay"
         },
         "west": {
           "cullface": "west",
-          "texture": "#slime"
+          "texture": "#underlay"
         }
       },
       "from": [
@@ -78,9 +78,10 @@
       ]
     }
   ],
+  "render_type": "minecraft:cutout",
   "textures": {
     "frame": "framedblocks:block/framed_block",
     "particle": "framedblocks:block/framed_block",
-    "slime": "minecraft:block/slime_block"
+    "underlay": "minecraft:block/slime_block"
   }
 }

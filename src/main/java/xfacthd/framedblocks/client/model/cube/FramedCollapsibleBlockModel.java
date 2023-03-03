@@ -4,13 +4,11 @@ import net.minecraft.client.renderer.block.model.BakedQuad;
 import net.minecraft.client.resources.model.BakedModel;
 import net.minecraft.core.Direction;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraftforge.client.ChunkRenderTypeSet;
 import net.minecraftforge.client.model.data.ModelData;
 import xfacthd.framedblocks.api.model.FramedBlockModel;
 import xfacthd.framedblocks.api.model.quad.Modifiers;
 import xfacthd.framedblocks.api.model.quad.QuadModifier;
 import xfacthd.framedblocks.api.util.Utils;
-import xfacthd.framedblocks.api.util.client.ModelUtils;
 import xfacthd.framedblocks.common.blockentity.FramedCollapsibleBlockEntity;
 import xfacthd.framedblocks.common.data.PropertyHolder;
 
@@ -105,9 +103,6 @@ public class FramedCollapsibleBlockModel extends FramedBlockModel
 
     @Override
     protected boolean useBaseModel() { return true; }
-
-    @Override
-    protected ChunkRenderTypeSet getBaseModelRenderTypes() { return ModelUtils.SOLID; }
 
     @Override
     protected QuadCacheKey makeCacheKey(BlockState state, Object ctCtx, ModelData data)

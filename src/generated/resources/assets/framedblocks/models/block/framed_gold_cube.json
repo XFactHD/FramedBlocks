@@ -82,6 +82,6 @@
   "textures": {
     "frame": "framedblocks:block/framed_block",
     "particle": "framedblocks:block/framed_block",
-    "underlay": "forge:white"
+    "underlay": "minecraft:block/gold_block"
   }
 }

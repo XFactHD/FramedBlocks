@@ -1,21 +1,16 @@
 package xfacthd.framedblocks.client.model.cube;
 
-import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.client.renderer.block.model.BakedQuad;
 import net.minecraft.client.resources.model.BakedModel;
-import net.minecraft.core.Direction;
-import xfacthd.framedblocks.api.model.FramedBlockModel;
+import net.minecraft.world.level.block.state.BlockState;
+import xfacthd.framedblocks.api.util.FramedBlockData;
 
-import java.util.List;
-import java.util.Map;
-
-public class FramedCubeModel extends FramedBlockModel
+public class FramedCubeModel extends FramedCubeBaseModel
 {
     public FramedCubeModel(BlockState state, BakedModel baseModel) { super(state, baseModel); }
 
     @Override
-    protected void transformQuad(Map<Direction, List<BakedQuad>> quadMap, BakedQuad quad) { }
-
-    @Override
-    protected boolean forceUngeneratedBaseModel() { return true; }
+    protected BlockState getNoCamoModelState(BlockState camoState, FramedBlockData fbData)
+    {
+        return super.getNoCamoModelState(this.state, fbData);
+    }
 }

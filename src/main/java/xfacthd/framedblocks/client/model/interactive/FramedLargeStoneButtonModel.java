@@ -60,7 +60,7 @@ public class FramedLargeStoneButtonModel extends FramedLargeButtonModel
     protected void getAdditionalQuads(Map<Direction, List<BakedQuad>> quadMap, BlockState state, RandomSource rand, ModelData data, RenderType layer)
     {
         FramedBlockData fbData = data.get(FramedBlockData.PROPERTY);
-        if (fbData != null && fbData.getCamoState().isAir()) { return; }
+        if (fbData == null || fbData.getCamoState().isAir()) { return; }
 
         List<BakedQuad> quads = frameModel.getQuads(state, null, rand, data, layer);
         addRotatedQuads(quads, quadMap.get(null));
@@ -90,7 +90,7 @@ public class FramedLargeStoneButtonModel extends FramedLargeButtonModel
     }
 
     @Override
-    protected boolean forceUngeneratedBaseModel() { return true; }
+    protected boolean useBaseModel() { return true; }
 
 
 

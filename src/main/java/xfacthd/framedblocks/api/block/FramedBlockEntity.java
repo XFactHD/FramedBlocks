@@ -680,7 +680,13 @@ public class FramedBlockEntity extends BlockEntity
             needCullingUpdate = true;
         }
 
-        reinforced = nbt.getBoolean("reinforced");
+        boolean newReinforced = nbt.getBoolean("reinforced");
+        if (newReinforced != reinforced)
+        {
+            reinforced = newReinforced;
+            modelData.setReinforced(reinforced);
+            needUpdate = true;
+        }
 
         if (needCullingUpdate)
         {
@@ -718,7 +724,13 @@ public class FramedBlockEntity extends BlockEntity
 
         glowing = nbt.getBoolean("glowing");
         intangible = nbt.getBoolean("intangible");
-        reinforced = nbt.getBoolean("reinforced");
+
+        boolean newReinforced = nbt.getBoolean("reinforced");
+        if (newReinforced != reinforced)
+        {
+            reinforced = newReinforced;
+            modelData.setReinforced(reinforced);
+        }
 
         requestModelDataUpdate();
     }

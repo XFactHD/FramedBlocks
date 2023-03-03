@@ -1,10 +1,7 @@
 {
   "variants": {
-    "powered=false": {
-      "model": "framedblocks:block/framed_obsidian_pressure_plate_up"
-    },
-    "powered=true": {
-      "model": "framedblocks:block/framed_obsidian_pressure_plate_down"
+    "": {
+      "model": "framedblocks:block/framed_obsidian_cube"
     }
   }
 }
