@@ -5,7 +5,7 @@ import net.minecraft.util.StringRepresentable;
 
 import java.util.Locale;
 
-public enum CollapseFace implements StringRepresentable
+public enum NullableDirection implements StringRepresentable
 {
     NONE(null),
     DOWN(Direction.DOWN),
@@ -17,7 +17,7 @@ public enum CollapseFace implements StringRepresentable
 
     private final Direction dir;
 
-    CollapseFace(Direction dir) { this.dir = dir; }
+    NullableDirection(Direction dir) { this.dir = dir; }
 
     public Direction toDirection() { return dir; }
 
@@ -26,7 +26,7 @@ public enum CollapseFace implements StringRepresentable
 
 
 
-    public static CollapseFace fromDirection(Direction dir)
+    public static NullableDirection fromDirection(Direction dir)
     {
         if (dir == null) { return NONE; }
 

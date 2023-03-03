@@ -1,0 +1,87 @@
+{
+  "parent": "minecraft:block/block",
+  "elements": [
+    {
+      "faces": {
+        "down": {
+          "cullface": "down",
+          "texture": "#underlay"
+        },
+        "east": {
+          "cullface": "east",
+          "texture": "#underlay"
+        },
+        "north": {
+          "cullface": "north",
+          "texture": "#underlay"
+        },
+        "south": {
+          "cullface": "south",
+          "texture": "#underlay"
+        },
+        "up": {
+          "cullface": "up",
+          "texture": "#underlay"
+        },
+        "west": {
+          "cullface": "west",
+          "texture": "#underlay"
+        }
+      },
+      "from": [
+        0,
+        0,
+        0
+      ],
+      "to": [
+        16,
+        16,
+        16
+      ]
+    },
+    {
+      "faces": {
+        "down": {
+          "cullface": "down",
+          "texture": "#frame"
+        },
+        "east": {
+          "cullface": "east",
+          "texture": "#frame"
+        },
+        "north": {
+          "cullface": "north",
+          "texture": "#frame"
+        },
+        "south": {
+          "cullface": "south",
+          "texture": "#frame"
+        },
+        "up": {
+          "cullface": "up",
+          "texture": "#frame"
+        },
+        "west": {
+          "cullface": "west",
+          "texture": "#frame"
+        }
+      },
+      "from": [
+        0,
+        0,
+        0
+      ],
+      "to": [
+        16,
+        16,
+        16
+      ]
+    }
+  ],
+  "render_type": "minecraft:cutout",
+  "textures": {
+    "frame": "framedblocks:block/framed_block",
+    "particle": "framedblocks:block/framed_block",
+    "underlay": "minecraft:block/moss_block"
+  }
+}

@@ -12,22 +12,22 @@ import xfacthd.framedblocks.api.util.SideSkipPredicate;
 import xfacthd.framedblocks.api.util.Utils;
 import xfacthd.framedblocks.common.FBContent;
 import xfacthd.framedblocks.common.blockentity.FramedCollapsibleBlockEntity;
-import xfacthd.framedblocks.common.data.property.CollapseFace;
+import xfacthd.framedblocks.common.data.property.NullableDirection;
 import xfacthd.framedblocks.common.data.PropertyHolder;
 
 public final class CollapsibleBlockSkipPredicate implements SideSkipPredicate
 {
-    private static final Table<CollapseFace, Direction, VertexPair> EDGE_MAPPING = makeEdgeMappings();
+    private static final Table<NullableDirection, Direction, VertexPair> EDGE_MAPPING = makeEdgeMappings();
 
     @Override
     public boolean test(BlockGetter level, BlockPos pos, BlockState state, BlockState adjState, Direction side)
     {
-        CollapseFace face = state.getValue(PropertyHolder.COLLAPSED_FACE);
-        if (face == CollapseFace.NONE || side == face.toDirection().getOpposite())
+        NullableDirection face = state.getValue(PropertyHolder.NULLABLE_FACE);
+        if (face == NullableDirection.NONE || side == face.toDirection().getOpposite())
         {
             return SideSkipPredicate.CTM.test(level, pos, state, adjState, side);
         }
-        else if (side == face.toDirection() || !adjState.is(FBContent.blockFramedCollapsibleBlock.get()) || adjState.getValue(PropertyHolder.COLLAPSED_FACE) != face)
+        else if (side == face.toDirection() || !adjState.is(FBContent.blockFramedCollapsibleBlock.get()) || adjState.getValue(PropertyHolder.NULLABLE_FACE) != face)
         {
             return false;
         }
@@ -54,39 +54,39 @@ public final class CollapsibleBlockSkipPredicate implements SideSkipPredicate
 
 
 
-    private static Table<CollapseFace, Direction, VertexPair> makeEdgeMappings()
+    private static Table<NullableDirection, Direction, VertexPair> makeEdgeMappings()
     {
-        Table<CollapseFace, Direction, VertexPair> table = HashBasedTable.create(6, 4);
+        Table<NullableDirection, Direction, VertexPair> table = HashBasedTable.create(6, 4);
 
-        table.put(CollapseFace.UP, Direction.NORTH, new VertexPair(0, 3));
-        table.put(CollapseFace.UP, Direction.EAST,  new VertexPair(3, 2));
-        table.put(CollapseFace.UP, Direction.SOUTH, new VertexPair(2, 1));
-        table.put(CollapseFace.UP, Direction.WEST,  new VertexPair(1, 0));
+        table.put(NullableDirection.UP, Direction.NORTH, new VertexPair(0, 3));
+        table.put(NullableDirection.UP, Direction.EAST,  new VertexPair(3, 2));
+        table.put(NullableDirection.UP, Direction.SOUTH, new VertexPair(2, 1));
+        table.put(NullableDirection.UP, Direction.WEST,  new VertexPair(1, 0));
 
-        table.put(CollapseFace.DOWN, Direction.NORTH, new VertexPair(1, 2));
-        table.put(CollapseFace.DOWN, Direction.EAST,  new VertexPair(2, 3));
-        table.put(CollapseFace.DOWN, Direction.SOUTH, new VertexPair(3, 0));
-        table.put(CollapseFace.DOWN, Direction.WEST,  new VertexPair(0, 1));
+        table.put(NullableDirection.DOWN, Direction.NORTH, new VertexPair(1, 2));
+        table.put(NullableDirection.DOWN, Direction.EAST,  new VertexPair(2, 3));
+        table.put(NullableDirection.DOWN, Direction.SOUTH, new VertexPair(3, 0));
+        table.put(NullableDirection.DOWN, Direction.WEST,  new VertexPair(0, 1));
 
-        table.put(CollapseFace.NORTH, Direction.UP,   new VertexPair(0, 3));
-        table.put(CollapseFace.NORTH, Direction.WEST, new VertexPair(3, 2));
-        table.put(CollapseFace.NORTH, Direction.DOWN, new VertexPair(2, 1));
-        table.put(CollapseFace.NORTH, Direction.EAST, new VertexPair(1, 0));
+        table.put(NullableDirection.NORTH, Direction.UP,   new VertexPair(0, 3));
+        table.put(NullableDirection.NORTH, Direction.WEST, new VertexPair(3, 2));
+        table.put(NullableDirection.NORTH, Direction.DOWN, new VertexPair(2, 1));
+        table.put(NullableDirection.NORTH, Direction.EAST, new VertexPair(1, 0));
 
-        table.put(CollapseFace.EAST, Direction.UP,    new VertexPair(0, 3));
-        table.put(CollapseFace.EAST, Direction.NORTH, new VertexPair(3, 2));
-        table.put(CollapseFace.EAST, Direction.DOWN,  new VertexPair(2, 1));
-        table.put(CollapseFace.EAST, Direction.SOUTH, new VertexPair(1, 0));
+        table.put(NullableDirection.EAST, Direction.UP,    new VertexPair(0, 3));
+        table.put(NullableDirection.EAST, Direction.NORTH, new VertexPair(3, 2));
+        table.put(NullableDirection.EAST, Direction.DOWN,  new VertexPair(2, 1));
+        table.put(NullableDirection.EAST, Direction.SOUTH, new VertexPair(1, 0));
 
-        table.put(CollapseFace.SOUTH, Direction.UP,   new VertexPair(0, 3));
-        table.put(CollapseFace.SOUTH, Direction.EAST, new VertexPair(3, 2));
-        table.put(CollapseFace.SOUTH, Direction.DOWN, new VertexPair(2, 1));
-        table.put(CollapseFace.SOUTH, Direction.WEST, new VertexPair(1, 0));
+        table.put(NullableDirection.SOUTH, Direction.UP,   new VertexPair(0, 3));
+        table.put(NullableDirection.SOUTH, Direction.EAST, new VertexPair(3, 2));
+        table.put(NullableDirection.SOUTH, Direction.DOWN, new VertexPair(2, 1));
+        table.put(NullableDirection.SOUTH, Direction.WEST, new VertexPair(1, 0));
 
-        table.put(CollapseFace.WEST, Direction.UP,    new VertexPair(0, 3));
-        table.put(CollapseFace.WEST, Direction.SOUTH, new VertexPair(3, 2));
-        table.put(CollapseFace.WEST, Direction.DOWN,  new VertexPair(2, 1));
-        table.put(CollapseFace.WEST, Direction.NORTH, new VertexPair(1, 0));
+        table.put(NullableDirection.WEST, Direction.UP,    new VertexPair(0, 3));
+        table.put(NullableDirection.WEST, Direction.SOUTH, new VertexPair(3, 2));
+        table.put(NullableDirection.WEST, Direction.DOWN,  new VertexPair(2, 1));
+        table.put(NullableDirection.WEST, Direction.NORTH, new VertexPair(1, 0));
 
         return table;
     }

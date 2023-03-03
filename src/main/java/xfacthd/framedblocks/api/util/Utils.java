@@ -1,6 +1,7 @@
 package xfacthd.framedblocks.api.util;
 
 import com.google.common.base.Preconditions;
+import net.minecraft.ChatFormatting;
 import net.minecraft.core.*;
 import net.minecraft.nbt.*;
 import net.minecraft.nbt.Tag;
@@ -9,6 +10,7 @@ import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.*;
 import net.minecraft.util.Mth;
+import net.minecraft.util.StringRepresentable;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.*;
 import net.minecraft.world.level.block.Block;
@@ -35,6 +37,7 @@ import xfacthd.framedblocks.api.util.client.ClientUtils;
 import java.lang.invoke.*;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
+import java.util.Arrays;
 import java.util.function.Consumer;
 
 public final class Utils
@@ -178,6 +181,27 @@ public final class Utils
     public static String translateConfig(String type, String key)
     {
         return translationKey("config", type + "." + key);
+    }
+
+    public static <T extends Enum<T> & StringRepresentable> Component[] buildEnumTranslations(
+            String prefix, String postfix, T[] values, ChatFormatting... formatting
+    )
+    {
+        return Arrays.stream(values)
+                .map(v -> translate(prefix, postfix + "." + v.getSerializedName()))
+                .map(c -> c.withStyle(formatting))
+                .toArray(Component[]::new);
+    }
+
+    public static <T extends Enum<T>> Component[] bindEnumTranslation(String key, T[] values, Component[] valueTranslations)
+    {
+        Preconditions.checkArgument(values.length == valueTranslations.length, "Value and translation arrays must have the same length");
+        Component[] components = new Component[values.length];
+        for (T v : values)
+        {
+            components[v.ordinal()] = Component.translatable(key, valueTranslations[v.ordinal()]);
+        }
+        return components;
     }
 
     public static BlockEntity getBlockEntitySafe(BlockGetter blockGetter, BlockPos pos)

@@ -23,14 +23,14 @@ import xfacthd.framedblocks.common.FBContent;
 import xfacthd.framedblocks.common.block.FramedBlock;
 import xfacthd.framedblocks.common.blockentity.FramedCollapsibleBlockEntity;
 import xfacthd.framedblocks.common.data.*;
-import xfacthd.framedblocks.common.data.property.CollapseFace;
+import xfacthd.framedblocks.common.data.property.NullableDirection;
 
 public class FramedCollapsibleBlock extends FramedBlock
 {
     public static final CtmPredicate CTM_PREDICATE = (state, dir) ->
     {
-        CollapseFace face = state.getValue(PropertyHolder.COLLAPSED_FACE);
-        if (face == CollapseFace.NONE) { return true; }
+        NullableDirection face = state.getValue(PropertyHolder.NULLABLE_FACE);
+        if (face == NullableDirection.NONE) { return true; }
         return dir == face.toDirection().getOpposite();
     };
 
@@ -48,7 +48,7 @@ public class FramedCollapsibleBlock extends FramedBlock
     @Override
     protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder)
     {
-        builder.add(PropertyHolder.COLLAPSED_FACE, BlockStateProperties.WATERLOGGED, PropertyHolder.ROTATE_SPLIT_LINE);
+        builder.add(PropertyHolder.NULLABLE_FACE, BlockStateProperties.WATERLOGGED, PropertyHolder.ROTATE_SPLIT_LINE);
     }
 
     @Nullable
@@ -87,8 +87,8 @@ public class FramedCollapsibleBlock extends FramedBlock
     {
         if (isIntangible(state, level, pos, ctx)) { return Shapes.empty(); }
 
-        CollapseFace face = state.getValue(PropertyHolder.COLLAPSED_FACE);
-        if (face != CollapseFace.NONE)
+        NullableDirection face = state.getValue(PropertyHolder.NULLABLE_FACE);
+        if (face != NullableDirection.NONE)
         {
             if (level.getBlockEntity(pos) instanceof FramedCollapsibleBlockEntity be)
             {
@@ -112,9 +112,9 @@ public class FramedCollapsibleBlock extends FramedBlock
             if (level.getBlockEntity(pos) instanceof FramedCollapsibleBlockEntity be)
             {
                 Direction collapseFace = be.getCollapsedFace();
-                if (state.getValue(PropertyHolder.COLLAPSED_FACE).toDirection() != collapseFace)
+                if (state.getValue(PropertyHolder.NULLABLE_FACE).toDirection() != collapseFace)
                 {
-                    level.setBlockAndUpdate(pos, state.setValue(PropertyHolder.COLLAPSED_FACE, CollapseFace.fromDirection(collapseFace)));
+                    level.setBlockAndUpdate(pos, state.setValue(PropertyHolder.NULLABLE_FACE, NullableDirection.fromDirection(collapseFace)));
                 }
             }
         }
@@ -123,8 +123,8 @@ public class FramedCollapsibleBlock extends FramedBlock
     @Override
     protected boolean doesBlockOccludeBeaconBeam(BlockState state, LevelReader level, BlockPos pos)
     {
-        CollapseFace face = state.getValue(PropertyHolder.COLLAPSED_FACE);
-        return face == CollapseFace.NONE || Utils.isY(face.toDirection());
+        NullableDirection face = state.getValue(PropertyHolder.NULLABLE_FACE);
+        return face == NullableDirection.NONE || Utils.isY(face.toDirection());
     }
 
     @Override

@@ -1,0 +1,7 @@
+{
+  "variants": {
+    "": {
+      "model": "framedblocks:block/framed_one_way_window"
+    }
+  }
+}
