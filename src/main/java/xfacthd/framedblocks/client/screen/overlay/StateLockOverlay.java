@@ -16,7 +16,7 @@ import java.util.List;
 
 public final class StateLockOverlay extends BlockInteractOverlay
 {
-    public static final String LOCK_MESSAGE = "tooltip." + FramedConstants.MOD_ID + ".lock_state";
+    public static final String LOCK_MESSAGE = Utils.translationKey("tooltip", "lock_state");
     private static final List<Component> LINES_FALSE = List.of(
             new TranslatableComponent(LOCK_MESSAGE, IFramedBlock.STATE_UNLOCKED)
     );

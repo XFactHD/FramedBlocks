@@ -1,23 +1,23 @@
 {
   "type": "framedblocks:frame",
-  "material": 6144,
   "additives": [
     {
+      "count": 6,
       "ingredient": {
         "tag": "forge:ingots/iron"
-      },
-      "count": 6
+      }
     },
     {
+      "count": 1,
       "ingredient": {
         "item": "minecraft:redstone_torch"
-      },
-      "count": 1
+      }
     }
   ],
+  "disabled": true,
+  "material": 6144,
   "result": {
-    "item": "framedblocks:framed_fancy_activator_rail",
-    "count": 6
-  },
-  "disabled": true
+    "count": 6,
+    "item": "framedblocks:framed_fancy_activator_rail"
+  }
 }

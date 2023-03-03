@@ -10,22 +10,21 @@ import net.minecraft.world.level.block.WeightedPressurePlateBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.client.model.ForgeModelBakery;
 import net.minecraftforge.client.model.data.IModelData;
-import xfacthd.framedblocks.api.util.FramedBlockData;
-import xfacthd.framedblocks.api.util.FramedConstants;
+import xfacthd.framedblocks.api.util.*;
 import xfacthd.framedblocks.common.FBContent;
 
 import java.util.*;
 
 public class FramedMarkedPressurePlateModel extends FramedPressurePlateModel
 {
-    public static final ResourceLocation STONE_FRAME_LOCATION = new ResourceLocation(FramedConstants.MOD_ID, "block/stone_plate_frame");
-    public static final ResourceLocation STONE_FRAME_DOWN_LOCATION = new ResourceLocation(FramedConstants.MOD_ID, "block/stone_plate_down_frame");
-    public static final ResourceLocation OBSIDIAN_FRAME_LOCATION = new ResourceLocation(FramedConstants.MOD_ID, "block/obsidian_plate_frame");
-    public static final ResourceLocation OBSIDIAN_FRAME_DOWN_LOCATION = new ResourceLocation(FramedConstants.MOD_ID, "block/obsidian_plate_down_frame");
-    public static final ResourceLocation GOLD_FRAME_LOCATION = new ResourceLocation(FramedConstants.MOD_ID, "block/gold_plate_frame");
-    public static final ResourceLocation GOLD_FRAME_DOWN_LOCATION = new ResourceLocation(FramedConstants.MOD_ID, "block/gold_plate_down_frame");
-    public static final ResourceLocation IRON_FRAME_LOCATION = new ResourceLocation(FramedConstants.MOD_ID, "block/iron_plate_frame");
-    public static final ResourceLocation IRON_FRAME_DOWN_LOCATION = new ResourceLocation(FramedConstants.MOD_ID, "block/iron_plate_down_frame");
+    public static final ResourceLocation STONE_FRAME_LOCATION = Utils.rl("block/stone_plate_frame");
+    public static final ResourceLocation STONE_FRAME_DOWN_LOCATION = Utils.rl("block/stone_plate_down_frame");
+    public static final ResourceLocation OBSIDIAN_FRAME_LOCATION = Utils.rl("block/obsidian_plate_frame");
+    public static final ResourceLocation OBSIDIAN_FRAME_DOWN_LOCATION = Utils.rl("block/obsidian_plate_down_frame");
+    public static final ResourceLocation GOLD_FRAME_LOCATION = Utils.rl("block/gold_plate_frame");
+    public static final ResourceLocation GOLD_FRAME_DOWN_LOCATION = Utils.rl("block/gold_plate_down_frame");
+    public static final ResourceLocation IRON_FRAME_LOCATION = Utils.rl("block/iron_plate_frame");
+    public static final ResourceLocation IRON_FRAME_DOWN_LOCATION = Utils.rl("block/iron_plate_down_frame");
     private static final Map<ResourceLocation, BakedModel> FRAME_MODELS = new HashMap<>();
 
     private final BakedModel frameModel;

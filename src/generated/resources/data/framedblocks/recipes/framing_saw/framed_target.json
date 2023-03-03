@@ -1,22 +1,22 @@
 {
   "type": "framedblocks:frame",
-  "material": 6144,
   "additives": [
     {
-      "ingredient": {
-        "tag": "forge:dusts/redstone"
-      },
-      "count": 4
-    },
-    {
+      "count": 1,
       "ingredient": {
         "item": "minecraft:hay_block"
-      },
-      "count": 1
+      }
+    },
+    {
+      "count": 4,
+      "ingredient": {
+        "tag": "forge:dusts/redstone"
+      }
     }
   ],
+  "disabled": true,
+  "material": 6144,
   "result": {
     "item": "framedblocks:framed_target"
-  },
-  "disabled": true
+  }
 }

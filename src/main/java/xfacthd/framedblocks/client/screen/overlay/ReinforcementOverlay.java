@@ -10,7 +10,6 @@ import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.block.state.BlockState;
 import xfacthd.framedblocks.api.block.FramedBlockEntity;
 import xfacthd.framedblocks.api.block.IFramedBlock;
-import xfacthd.framedblocks.api.util.FramedConstants;
 import xfacthd.framedblocks.api.util.Utils;
 import xfacthd.framedblocks.client.util.ClientConfig;
 
@@ -18,7 +17,7 @@ import java.util.List;
 
 public final class ReinforcementOverlay extends BlockInteractOverlay
 {
-    public static final String REINFORCE_MESSAGE = "tooltip." + FramedConstants.MOD_ID + ".reinforce_state";
+    public static final String REINFORCE_MESSAGE = Utils.translationKey("tooltip", "reinforce_state");
     public static final Component STATE_NOT_REINFORCED = Utils.translate("tooltip", "reinforce_state.false")
             .withStyle(ChatFormatting.RED);
     public static final Component STATE_REINFORCED = Utils.translate("tooltip", "reinforce_state.true")

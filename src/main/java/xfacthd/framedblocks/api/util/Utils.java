@@ -41,24 +41,19 @@ public final class Utils
     public static final TagKey<Item> DISABLE_INTANGIBLE = itemTag("disable_intangible");
 
     public static final RegistryObject<Item> FRAMED_HAMMER = RegistryObject.create(
-            new ResourceLocation(FramedConstants.MOD_ID, "framed_hammer"),
-            ForgeRegistries.ITEMS
+            Utils.rl("framed_hammer"), ForgeRegistries.ITEMS
     );
     public static final RegistryObject<Item> FRAMED_WRENCH = RegistryObject.create(
-            new ResourceLocation(FramedConstants.MOD_ID, "framed_wrench"),
-            ForgeRegistries.ITEMS
+            Utils.rl("framed_wrench"), ForgeRegistries.ITEMS
     );
     public static final RegistryObject<Item> FRAMED_KEY = RegistryObject.create(
-            new ResourceLocation(FramedConstants.MOD_ID, "framed_key"),
-            ForgeRegistries.ITEMS
+            Utils.rl("framed_key"), ForgeRegistries.ITEMS
     );
     public static final RegistryObject<Item> FRAMED_SCREWDRIVER = RegistryObject.create(
-            new ResourceLocation(FramedConstants.MOD_ID, "framed_screwdriver"),
-            ForgeRegistries.ITEMS
+            Utils.rl("framed_screwdriver"), ForgeRegistries.ITEMS
     );
     public static final RegistryObject<Item> FRAMED_REINFORCEMENT = RegistryObject.create(
-            new ResourceLocation(FramedConstants.MOD_ID, "framed_reinforcement"),
-            ForgeRegistries.ITEMS
+            Utils.rl("framed_reinforcement"), ForgeRegistries.ITEMS
     );
 
     public static VoxelShape rotateShape(Direction from, Direction to, VoxelShape shape)
@@ -98,11 +93,11 @@ public final class Utils
     {
         vec = fraction(vec);
         double coord = switch (dir.getAxis())
-                {
-                    case X -> vec.x;
-                    case Y -> vec.y;
-                    case Z -> vec.z;
-                };
+        {
+            case X -> vec.x;
+            case Y -> vec.y;
+            case Z -> vec.z;
+        };
         return isPositive(dir) ? coord : (1D - coord);
     }
 
@@ -146,9 +141,29 @@ public final class Utils
         return actualType == type ? (BlockEntityTicker<A>)ticker : null;
     }
 
+    public static TranslatableComponent translate(String prefix, String postfix, Object... arguments)
+    {
+        return new TranslatableComponent(translationKey(prefix, postfix), arguments);
+    }
+
     public static TranslatableComponent translate(String prefix, String postfix)
     {
-        return new TranslatableComponent(prefix + "." + FramedConstants.MOD_ID + "." + postfix);
+        return new TranslatableComponent(translationKey(prefix, postfix));
+    }
+
+    public static String translationKey(String prefix, String postfix)
+    {
+        String key = "";
+        if (prefix != null)
+        {
+            key = prefix + ".";
+        }
+        key += FramedConstants.MOD_ID;
+        if (postfix != null)
+        {
+            key += "." + postfix;
+        }
+        return key;
     }
 
     public static BlockEntity getBlockEntitySafe(BlockGetter blockGetter, BlockPos pos)
@@ -256,24 +271,24 @@ public final class Utils
         if (mirror == Mirror.LEFT_RIGHT)
         {
             dir = switch (dir)
-                    {
-                        case NORTH -> Direction.WEST;
-                        case EAST -> Direction.SOUTH;
-                        case SOUTH -> Direction.EAST;
-                        case WEST -> Direction.NORTH;
-                        default -> throw new IllegalArgumentException("Unreachable!");
-                    };
+            {
+                case NORTH -> Direction.WEST;
+                case EAST -> Direction.SOUTH;
+                case SOUTH -> Direction.EAST;
+                case WEST -> Direction.NORTH;
+                default -> throw new IllegalArgumentException("Unreachable!");
+            };
         }
         else
         {
             dir = switch (dir)
-                    {
-                        case NORTH -> Direction.EAST;
-                        case EAST -> Direction.NORTH;
-                        case SOUTH -> Direction.WEST;
-                        case WEST -> Direction.SOUTH;
-                        default -> throw new IllegalArgumentException("Unreachable!");
-                    };
+            {
+                case NORTH -> Direction.EAST;
+                case EAST -> Direction.NORTH;
+                case SOUTH -> Direction.WEST;
+                case WEST -> Direction.SOUTH;
+                default -> throw new IllegalArgumentException("Unreachable!");
+            };
         }
         return state.setValue(property, dir);
     }

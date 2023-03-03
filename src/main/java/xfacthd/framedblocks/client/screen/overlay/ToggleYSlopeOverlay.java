@@ -15,8 +15,8 @@ import java.util.List;
 
 public final class ToggleYSlopeOverlay extends BlockInteractOverlay
 {
-    public static final String SLOPE_MESSAGE = "tooltip." + FramedConstants.MOD_ID + ".y_slope";
-    public static final String TOGGLE_MESSAGE = "tooltip." + FramedConstants.MOD_ID +  ".y_slope.toggle";
+    public static final String SLOPE_MESSAGE = Utils.translationKey("tooltip", "y_slope");
+    public static final String TOGGLE_MESSAGE = Utils.translationKey("tooltip", "y_slope.toggle");
     public static final Component SLOPE_HOR = Utils.translate("tooltip", "y_slope.horizontal");
     public static final Component SLOPE_VERT = Utils.translate("tooltip", "y_slope.vertical");
     private static final List<Component> LINES_FALSE = List.of(

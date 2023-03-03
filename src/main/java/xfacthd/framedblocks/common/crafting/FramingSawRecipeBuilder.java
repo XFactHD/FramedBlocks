@@ -7,6 +7,7 @@ import net.minecraft.advancements.*;
 import net.minecraft.data.recipes.FinishedRecipe;
 import net.minecraft.data.recipes.RecipeBuilder;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.item.crafting.RecipeSerializer;
@@ -16,8 +17,7 @@ import net.minecraftforge.registries.RegistryObject;
 import org.jetbrains.annotations.Nullable;
 import xfacthd.framedblocks.common.FBContent;
 
-import java.util.Map;
-import java.util.Objects;
+import java.util.*;
 import java.util.function.Consumer;
 
 public final class FramingSawRecipeBuilder implements RecipeBuilder
@@ -25,7 +25,7 @@ public final class FramingSawRecipeBuilder implements RecipeBuilder
     private final Item result;
     private final int count;
     private int material = 0;
-    private Map<Ingredient, Integer> additives = null;
+    private List<Additive> additives = null;
     private boolean disabled = false;
 
     private FramingSawRecipeBuilder(ItemLike result, int count)
@@ -63,24 +63,14 @@ public final class FramingSawRecipeBuilder implements RecipeBuilder
         return this;
     }
 
-    public FramingSawRecipeBuilder additive(Ingredient additive)
+    public FramingSawRecipeBuilder additive(Additive additive)
     {
-        return additive(additive, 1);
-    }
-
-    public FramingSawRecipeBuilder additive(Ingredient additive, int count)
-    {
-        Preconditions.checkState(additive == null || count > 0, "Additive count must be greater than 0 for non-null additive");
-        this.additives = additive != null ? Map.of(additive, count) : null;
+        this.additives = additive != null ? List.of(additive) : null;
         return this;
     }
 
-    public FramingSawRecipeBuilder additives(Map<Ingredient, Integer> additives)
+    public FramingSawRecipeBuilder additives(List<Additive> additives)
     {
-        Preconditions.checkState(
-                additives == null || additives.entrySet().stream().allMatch(e -> e.getKey() != null && e.getValue() > 0),
-                "Additive count must be greater than 0 for non-null additive"
-        );
         this.additives = additives;
         return this;
     }
@@ -121,12 +111,41 @@ public final class FramingSawRecipeBuilder implements RecipeBuilder
 
 
 
+    public record Additive(Ingredient additive, int count)
+    {
+        public Additive
+        {
+            Preconditions.checkArgument(additive != null, "Additive ingredient must be non-null");
+            Preconditions.checkArgument(count > 0, "Additive count must be greater than 0");
+        }
+
+        public static Additive of(TagKey<Item> tag)
+        {
+            return of(tag, 1);
+        }
+
+        public static Additive of(TagKey<Item> tag, int count)
+        {
+            return new Additive(Ingredient.of(tag), count);
+        }
+
+        public static Additive of(ItemLike item)
+        {
+            return of(item, 1);
+        }
+
+        public static Additive of(ItemLike item, int count)
+        {
+            return new Additive(Ingredient.of(item), count);
+        }
+    }
+
     private record Result(
             ResourceLocation id,
             Item result,
             int count,
             int material,
-            Map<Ingredient, Integer> additives,
+            List<Additive> additives,
             boolean disabled
     ) implements FinishedRecipe
     {
@@ -138,11 +157,11 @@ public final class FramingSawRecipeBuilder implements RecipeBuilder
             if (additives != null)
             {
                 JsonArray additiveArr = new JsonArray();
-                additives.forEach((ing, count) ->
+                additives.forEach(add ->
                 {
                     JsonObject additive = new JsonObject();
-                    additive.add("ingredient", ing.toJson());
-                    additive.addProperty("count", count);
+                    additive.add("ingredient", add.additive.toJson());
+                    additive.addProperty("count", add.count);
                     additiveArr.add(additive);
                 });
                 json.add("additives", additiveArr);

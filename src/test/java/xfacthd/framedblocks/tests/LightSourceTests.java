@@ -11,8 +11,7 @@ import net.minecraftforge.gametest.GameTestHolder;
 import net.minecraftforge.registries.ForgeRegistries;
 import xfacthd.framedblocks.api.block.IFramedBlock;
 import xfacthd.framedblocks.api.type.IBlockType;
-import xfacthd.framedblocks.api.util.FramedConstants;
-import xfacthd.framedblocks.api.util.FramedProperties;
+import xfacthd.framedblocks.api.util.*;
 import xfacthd.framedblocks.api.util.test.TestUtils;
 import xfacthd.framedblocks.common.data.BlockType;
 
@@ -29,7 +28,7 @@ public final class LightSourceTests
     {
         return Arrays.stream(BlockType.values())
                 .filter(LightSourceTests::isNotSelfEmitting)
-                .map(type -> new ResourceLocation(FramedConstants.MOD_ID, type.getName()))
+                .map(type -> Utils.rl(type.getName()))
                 .map(ForgeRegistries.BLOCKS::getValue)
                 .filter(Objects::nonNull)
                 .map(LightSourceTests::getTestState)
