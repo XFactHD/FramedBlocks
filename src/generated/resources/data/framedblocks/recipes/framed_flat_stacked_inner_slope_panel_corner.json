@@ -1,0 +1,20 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "key": {
+    "C": {
+      "item": "framedblocks:framed_flat_inner_slope_panel_corner"
+    },
+    "H": {
+      "item": "framedblocks:framed_hammer"
+    },
+    "P": {
+      "item": "framedblocks:framed_panel"
+    }
+  },
+  "pattern": [
+    "PCH"
+  ],
+  "result": {
+    "item": "framedblocks:framed_flat_stacked_inner_slope_panel_corner"
+  }
+}

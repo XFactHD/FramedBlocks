@@ -564,6 +564,16 @@ public final class FramedRecipeProvider extends RecipeProvider
                 .unlockedBy("hasFramedSlopeSlab", has(FBContent.blockFramedSlopeSlab.get()))
                 .save(consumer);
 
+        ShapedRecipeBuilder.shaped(FBContent.blockFramedStackedSlopeSlab.get())
+                .pattern("H")
+                .pattern("S")
+                .pattern("F")
+                .define('H', FBContent.itemFramedHammer.get())
+                .define('S', FBContent.blockFramedSlopeSlab.get())
+                .define('F', FBContent.blockFramedSlab.get())
+                .unlockedBy("hasFramedSlopeSlab", has(FBContent.blockFramedSlopeSlab.get()))
+                .save(consumer);
+
         ShapelessRecipeBuilder.shapeless(FBContent.blockFramedVerticalHalfStairs.get(), 2)
                 .requires(FBContent.blockFramedVerticalStairs.get())
                 .requires(FBContent.itemFramedHammer.get())
@@ -636,6 +646,26 @@ public final class FramedRecipeProvider extends RecipeProvider
                 .unlockedBy("hasFramedFlatElevatedInnerSlopeSlabCorner", has(FBContent.blockFramedFlatElevatedInnerSlopeSlabCorner.get()))
                 .save(consumer);
 
+        ShapedRecipeBuilder.shaped(FBContent.blockFramedFlatStackedSlopeSlabCorner.get())
+                .pattern("H")
+                .pattern("C")
+                .pattern("S")
+                .define('H', FBContent.itemFramedHammer.get())
+                .define('C', FBContent.blockFramedFlatSlopeSlabCorner.get())
+                .define('S', FBContent.blockFramedSlab.get())
+                .unlockedBy("hasFramedFlatSlopeSlabCorner", has(FBContent.blockFramedFlatSlopeSlabCorner.get()))
+                .save(consumer);
+
+        ShapedRecipeBuilder.shaped(FBContent.blockFramedFlatStackedInnerSlopeSlabCorner.get())
+                .pattern("H")
+                .pattern("C")
+                .pattern("S")
+                .define('H', FBContent.itemFramedHammer.get())
+                .define('C', FBContent.blockFramedFlatInnerSlopeSlabCorner.get())
+                .define('S', FBContent.blockFramedSlab.get())
+                .unlockedBy("hasFramedFlatInnerSlopeSlabCorner", has(FBContent.blockFramedFlatInnerSlopeSlabCorner.get()))
+                .save(consumer);
+
         ShapedRecipeBuilder.shaped(FBContent.blockFramedSlopePanel.get(), 6)
                 .pattern("S")
                 .pattern("S")
@@ -671,6 +701,14 @@ public final class FramedRecipeProvider extends RecipeProvider
                 .pattern("ES")
                 .define('S', FBContent.blockFramedSlopePanel.get())
                 .define('E', FBContent.blockFramedExtendedSlopePanel.get())
+                .unlockedBy("hasFramedSlopePanel", has(FBContent.blockFramedSlopePanel.get()))
+                .save(consumer);
+
+        ShapedRecipeBuilder.shaped(FBContent.blockFramedStackedSlopePanel.get())
+                .pattern("PSH")
+                .define('P', FBContent.blockFramedPanel.get())
+                .define('S', FBContent.blockFramedSlopePanel.get())
+                .define('H', FBContent.itemFramedHammer.get())
                 .unlockedBy("hasFramedSlopePanel", has(FBContent.blockFramedSlopePanel.get()))
                 .save(consumer);
 
@@ -733,6 +771,22 @@ public final class FramedRecipeProvider extends RecipeProvider
                 .define('I', FBContent.blockFramedFlatExtendedInnerSlopePanelCorner.get())
                 .define('C', FBContent.blockFramedFlatSlopePanelCorner.get())
                 .unlockedBy("hasFramedFlatExtendedInnerSlopePanelCorner", has(FBContent.blockFramedFlatExtendedInnerSlopePanelCorner.get()))
+                .save(consumer);
+
+        ShapedRecipeBuilder.shaped(FBContent.blockFramedFlatStackedSlopePanelCorner.get())
+                .pattern("PCH")
+                .define('C', FBContent.blockFramedFlatSlopePanelCorner.get())
+                .define('P', FBContent.blockFramedPanel.get())
+                .define('H', FBContent.itemFramedHammer.get())
+                .unlockedBy("hasFramedFlatSlopePanelCorner", has(FBContent.blockFramedFlatSlopePanelCorner.get()))
+                .save(consumer);
+
+        ShapedRecipeBuilder.shaped(FBContent.blockFramedFlatStackedInnerSlopePanelCorner.get())
+                .pattern("PCH")
+                .define('C', FBContent.blockFramedFlatInnerSlopePanelCorner.get())
+                .define('P', FBContent.blockFramedPanel.get())
+                .define('H', FBContent.itemFramedHammer.get())
+                .unlockedBy("hasFramedFlatInnerSlopePanelCorner", has(FBContent.blockFramedFlatInnerSlopePanelCorner.get()))
                 .save(consumer);
 
         ShapedRecipeBuilder.shaped(FBContent.blockFramedDoubleStairs.get())
@@ -1023,6 +1077,7 @@ public final class FramedRecipeProvider extends RecipeProvider
         makeRotationRecipe(FBContent.blockFramedDoubleSlopeSlab, FBContent.blockFramedDoubleSlopePanel, consumer);
         makeRotationRecipe(FBContent.blockFramedInverseDoubleSlopeSlab, FBContent.blockFramedInverseDoubleSlopePanel, consumer);
         makeRotationRecipe(FBContent.blockFramedElevatedDoubleSlopeSlab, FBContent.blockFramedExtendedDoubleSlopePanel, consumer);
+        makeRotationRecipe(FBContent.blockFramedStackedSlopeSlab, FBContent.blockFramedStackedSlopePanel, consumer);
         makeRotationRecipe(FBContent.blockFramedFlatSlopeSlabCorner, FBContent.blockFramedFlatSlopePanelCorner, consumer);
         makeRotationRecipe(FBContent.blockFramedFlatInnerSlopeSlabCorner, FBContent.blockFramedFlatInnerSlopePanelCorner, consumer);
         makeRotationRecipe(FBContent.blockFramedFlatElevatedSlopeSlabCorner, FBContent.blockFramedFlatExtendedSlopePanelCorner, consumer);
@@ -1031,6 +1086,8 @@ public final class FramedRecipeProvider extends RecipeProvider
         makeRotationRecipe(FBContent.blockFramedFlatInverseDoubleSlopeSlabCorner, FBContent.blockFramedFlatInverseDoubleSlopePanelCorner, consumer);
         makeRotationRecipe(FBContent.blockFramedFlatElevatedDoubleSlopeSlabCorner, FBContent.blockFramedFlatExtendedDoubleSlopePanelCorner, consumer);
         makeRotationRecipe(FBContent.blockFramedFlatElevatedInnerDoubleSlopeSlabCorner, FBContent.blockFramedFlatExtendedInnerDoubleSlopePanelCorner, consumer);
+        makeRotationRecipe(FBContent.blockFramedFlatStackedSlopeSlabCorner, FBContent.blockFramedFlatStackedSlopePanelCorner, consumer);
+        makeRotationRecipe(FBContent.blockFramedFlatStackedInnerSlopeSlabCorner, FBContent.blockFramedFlatStackedInnerSlopePanelCorner, consumer);
     }
 
     private static void makeRotationRecipe(RegistryObject<Block> first, RegistryObject<Block> second, Consumer<FinishedRecipe> consumer)
