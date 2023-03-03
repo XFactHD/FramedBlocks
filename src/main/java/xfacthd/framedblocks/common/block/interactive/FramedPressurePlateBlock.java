@@ -70,7 +70,7 @@ public class FramedPressurePlateBlock extends PressurePlateBlock implements IFra
         {
             if (!level.isClientSide())
             {
-                Utils.wrapInStateCopy(level, pos, false, () ->
+                Utils.wrapInStateCopy(level, pos, player, ItemStack.EMPTY, false, false, () ->
                 {
                     BlockState newState = FBContent.byType(WATERLOGGING_SWITCH.get(type)).defaultBlockState();
                     level.setBlockAndUpdate(pos, newState);
