@@ -22,6 +22,7 @@ public final class GeneratorHandler
         gen.addProvider(new FramedItemModelProvider(gen, fileHelper));
         gen.addProvider(new FramedLootTableProvider(gen));
         gen.addProvider(new FramedRecipeProvider(gen));
+        gen.addProvider(new FramingSawRecipeProvider(gen));
         BlockTagsProvider tagProvider = new FramedBlockTagProvider(gen, fileHelper);
         gen.addProvider(tagProvider);
         gen.addProvider(new FramedItemTagProvider(gen, tagProvider, fileHelper));

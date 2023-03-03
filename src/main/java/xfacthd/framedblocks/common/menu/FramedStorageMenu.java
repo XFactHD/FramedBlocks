@@ -12,6 +12,7 @@ import net.minecraftforge.items.*;
 import xfacthd.framedblocks.common.FBContent;
 import xfacthd.framedblocks.common.blockentity.FramedChestBlockEntity;
 import xfacthd.framedblocks.common.blockentity.FramedStorageBlockEntity;
+import xfacthd.framedblocks.common.util.FramedUtils;
 
 public class FramedStorageMenu extends AbstractContainerMenu
 {
@@ -33,16 +34,7 @@ public class FramedStorageMenu extends AbstractContainerMenu
         {
             blockInv = new ItemStackHandler(blockInv.getSlots());
         }
-        addSlots(blockInv, inv);
-    }
 
-    public FramedStorageMenu(int windowId, Inventory inv, FriendlyByteBuf extraData)
-    {
-        this(windowId, inv, inv.player.level.getBlockEntity(extraData.readBlockPos()));
-    }
-
-    private void addSlots(IItemHandler blockInv, Inventory playerInv)
-    {
         for (int row = 0; row < 3; ++row)
         {
             for (int col = 0; col < 9; ++col)
@@ -50,19 +42,12 @@ public class FramedStorageMenu extends AbstractContainerMenu
                 addSlot(new SlotItemHandler(blockInv, col + row * 9, 8 + col * 18, 18 + row * 18));
             }
         }
+        FramedUtils.addPlayerInvSlots(this::addSlot, inv, 8, 85);
+    }
 
-        for (int row = 0; row < 3; ++row)
-        {
-            for (int col = 0; col < 9; ++col)
-            {
-                addSlot(new Slot(playerInv, col + row * 9 + 9, 8 + col * 18, 85 + row * 18));
-            }
-        }
-
-        for (int col = 0; col < 9; ++col)
-        {
-            addSlot(new Slot(playerInv, col, 8 + col * 18, 143));
-        }
+    public FramedStorageMenu(int windowId, Inventory inv, FriendlyByteBuf extraData)
+    {
+        this(windowId, inv, inv.player.level.getBlockEntity(extraData.readBlockPos()));
     }
 
     @Override

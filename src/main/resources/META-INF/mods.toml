@@ -57,3 +57,10 @@ description='''
     versionRange="[1.18.2-0.5.0,)"
     ordering="NONE"
     side="CLIENT"
+
+[[dependencies.framedblocks]]
+    modId="jei"
+    mandatory=false
+    versionRange="[9.7.2.266,10)"
+    ordering="NONE"
+    side="BOTH"

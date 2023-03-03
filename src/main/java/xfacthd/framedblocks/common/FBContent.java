@@ -1,21 +1,25 @@
 package xfacthd.framedblocks.common;
 
 import com.google.common.base.Preconditions;
-import net.minecraft.world.inventory.AbstractContainerMenu;
-import net.minecraft.world.inventory.MenuType;
+import net.minecraft.core.Registry;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.inventory.*;
+import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
+import net.minecraft.world.item.crafting.*;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraftforge.common.extensions.IForgeMenuType;
 import net.minecraftforge.event.RegistryEvent;
-import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
+import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.network.IContainerFactory;
 import net.minecraftforge.registries.*;
 import xfacthd.framedblocks.FramedBlocks;
 import xfacthd.framedblocks.api.block.FramedBlockEntity;
 import xfacthd.framedblocks.api.block.IFramedBlock;
-import xfacthd.framedblocks.api.util.FramedConstants;
+import xfacthd.framedblocks.api.util.*;
+import xfacthd.framedblocks.common.block.FramingSawBlock;
 import xfacthd.framedblocks.common.block.cube.*;
 import xfacthd.framedblocks.common.block.door.*;
 import xfacthd.framedblocks.common.block.interactive.*;
@@ -29,12 +33,15 @@ import xfacthd.framedblocks.common.block.slopepanel.*;
 import xfacthd.framedblocks.common.block.slopeslab.*;
 import xfacthd.framedblocks.common.block.stairs.*;
 import xfacthd.framedblocks.common.block.torch.*;
+import xfacthd.framedblocks.common.crafting.FramingSawRecipe;
+import xfacthd.framedblocks.common.crafting.FramingSawRecipeSerializer;
 import xfacthd.framedblocks.common.menu.FramedStorageMenu;
 import xfacthd.framedblocks.common.data.BlockType;
 import xfacthd.framedblocks.common.data.FramedToolType;
 import xfacthd.framedblocks.common.item.FramedBlueprintItem;
 import xfacthd.framedblocks.common.item.FramedToolItem;
 import xfacthd.framedblocks.common.blockentity.*;
+import xfacthd.framedblocks.common.menu.FramingSawMenu;
 
 import java.util.*;
 import java.util.function.Function;
@@ -46,6 +53,7 @@ public final class FBContent
     private static final DeferredRegister<Item> ITEMS = DeferredRegister.create(ForgeRegistries.ITEMS, FramedConstants.MOD_ID);
     private static final DeferredRegister<BlockEntityType<?>> BE_TYPES = DeferredRegister.create(ForgeRegistries.BLOCK_ENTITIES, FramedConstants.MOD_ID);
     private static final DeferredRegister<MenuType<?>> CONTAINER_TYPES = DeferredRegister.create(ForgeRegistries.CONTAINERS, FramedConstants.MOD_ID);
+    private static final DeferredRegister<RecipeSerializer<?>> RECIPE_SERIALIZERS = DeferredRegister.create(ForgeRegistries.RECIPE_SERIALIZERS, FramedConstants.MOD_ID);
 
     private static final Map<BlockType, RegistryObject<Block>> BLOCKS_BY_TYPE = new EnumMap<>(BlockType.class);
     private static final Map<FramedToolType, RegistryObject<Item>> TOOLS_BY_TYPE = new EnumMap<>(FramedToolType.class);
@@ -184,6 +192,9 @@ public final class FBContent
     public static final RegistryObject<Block> blockFramedVerticalDoubleHalfSlope = registerBlock(FramedVerticalDoubleHalfSlopeBlock::new, BlockType.FRAMED_VERTICAL_DOUBLE_HALF_SLOPE);
     public static final RegistryObject<Block> blockFramedSlopedStairs = registerBlock(FramedSlopedStairsBlock::new, BlockType.FRAMED_SLOPED_STAIRS);
     public static final RegistryObject<Block> blockFramedVerticalSlopedStairs = registerBlock(FramedVerticalSlopedStairsBlock::new, BlockType.FRAMED_VERTICAL_SLOPED_STAIRS);
+
+    /** SPECIAL BLOCKS */
+    public static final RegistryObject<Block> blockFramingSaw = registerBlock("framing_saw", FramingSawBlock::new);
 
     /** ITEMS */
     public static final RegistryObject<Item> itemFramedHammer = registerToolItem(FramedToolItem::new, FramedToolType.HAMMER);
@@ -346,17 +357,41 @@ public final class FBContent
 
     /** CONTAINER TYPES */
     public static final RegistryObject<MenuType<FramedStorageMenu>> menuTypeFramedStorage = createMenuType(FramedStorageMenu::new, "framed_chest");
+    public static final RegistryObject<MenuType<FramingSawMenu>> menuTypeFramingSaw = createMenuType(
+            (id, inv, buf) -> new FramingSawMenu(id, inv, ContainerLevelAccess.NULL),
+            "framing_saw"
+    );
+
+    /** RECIPE TYPES */
+    public static final WriteOnceHolder<RecipeType<FramingSawRecipe>> recipeTypeFramingSawRecipe = new WriteOnceHolder<>();
+
+    /** RECIPE SERIALIZERS */
+    public static final RegistryObject<RecipeSerializer<FramingSawRecipe>> recipeSerializerFramingSawRecipe = RECIPE_SERIALIZERS.register(
+            "frame",
+            () ->
+            {
+                ResourceLocation name = Utils.rl("frame");
+                recipeTypeFramingSawRecipe.accept(Registry.register(Registry.RECIPE_TYPE, name, new RecipeType<>()
+                {
+                    @Override
+                    public String toString() { return name.toString(); }
+                }));
+
+                return new FramingSawRecipeSerializer();
+            }
+    );
 
 
 
-    public static void init()
+    public static void init(IEventBus modBus)
     {
-        BLOCKS.register(FMLJavaModLoadingContext.get().getModEventBus());
-        ITEMS.register(FMLJavaModLoadingContext.get().getModEventBus());
-        BE_TYPES.register(FMLJavaModLoadingContext.get().getModEventBus());
-        CONTAINER_TYPES.register(FMLJavaModLoadingContext.get().getModEventBus());
+        BLOCKS.register(modBus);
+        ITEMS.register(modBus);
+        BE_TYPES.register(modBus);
+        CONTAINER_TYPES.register(modBus);
+        RECIPE_SERIALIZERS.register(modBus);
 
-        FMLJavaModLoadingContext.get().getModEventBus().addGenericListener(Item.class, FBContent::onRegisterItems);
+        modBus.addGenericListener(Item.class, FBContent::onRegisterItems);
     }
 
     public static Collection<RegistryObject<Block>> getRegisteredBlocks() { return BLOCKS.getEntries(); }
@@ -405,6 +440,14 @@ public final class FBContent
             return block;
         });
         BLOCKS_BY_TYPE.put(type, result);
+        return result;
+    }
+
+    @SuppressWarnings("SameParameterValue")
+    private static RegistryObject<Block> registerBlock(String name, Supplier<? extends Block> blockFactory)
+    {
+        RegistryObject<Block> result = BLOCKS.register(name, blockFactory);
+        ITEMS.register(name, () -> new BlockItem(result.get(), new Item.Properties().tab(FramedBlocks.FRAMED_TAB)));
         return result;
     }
 

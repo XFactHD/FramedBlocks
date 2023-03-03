@@ -1,19 +1,18 @@
 {
   "type": "minecraft:crafting_shaped",
   "pattern": [
-    " F ",
-    "FCF",
-    " F "
+    " I ",
+    "FFF"
   ],
   "key": {
+    "I": {
+      "tag": "forge:ingots/iron"
+    },
     "F": {
       "item": "framedblocks:framed_cube"
-    },
-    "C": {
-      "item": "framedblocks:framed_chest"
     }
   },
   "result": {
-    "item": "framedblocks:framed_secret_storage"
+    "item": "framedblocks:framing_saw"
   }
 }

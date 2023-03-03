@@ -18,6 +18,7 @@ import org.apache.commons.lang3.mutable.MutableInt;
 import xfacthd.framedblocks.api.util.FramedConstants;
 import xfacthd.framedblocks.cmdtests.SpecialTestCommand;
 import xfacthd.framedblocks.common.FBContent;
+import xfacthd.framedblocks.common.crafting.FramingSawRecipe;
 import xfacthd.framedblocks.common.data.BlockType;
 import xfacthd.framedblocks.common.data.FramedToolType;
 
@@ -28,7 +29,7 @@ import java.util.stream.Collectors;
 public final class RecipePresent
 {
     public static final String NAME = "RecipePresence";
-    private static final String RESULT_MSG = "[" + NAME + "] Collected %,d recipes in %dms. ";
+    private static final String RESULT_MSG = "[" + NAME + "] Collected %,d crafting recipes and %,d saw recipes (%,d disabled) in %dms. ";
     private static final Lazy<Set<ItemLike>> EXCLUDED = Lazy.of(() -> Set.of(
             FBContent.blockFramedDoubleSlab.get().asItem(),
             FBContent.blockFramedDoublePanel.get().asItem()
@@ -39,41 +40,83 @@ public final class RecipePresent
         Level level = ctx.getSource().getLevel();
 
         Stopwatch watch = Stopwatch.createStarted();
-        MutableInt count = new MutableInt(0);
+        MutableInt craftCount = new MutableInt(0);
+        MutableInt sawCount = new MutableInt(0);
+        MutableInt sawDisabledCount = new MutableInt(0);
 
         RecipeManager recipeManager = level.getRecipeManager();
-        Set<ItemLike> results = recipeManager.getRecipeIds()
+        List<? extends Recipe<?>> fbRecipes = recipeManager.getRecipeIds()
                 .filter(id -> id.getNamespace().equals(FramedConstants.MOD_ID))
                 .map(recipeManager::byKey)
                 .filter(Optional::isPresent)
                 .map(Optional::get)
+                .toList();
+
+        Set<ItemLike> craftResults = fbRecipes.stream()
                 .filter(CraftingRecipe.class::isInstance)
                 .map(CraftingRecipe.class::cast)
-                .peek(r -> count.increment())
+                .peek(r -> craftCount.increment())
                 .map(CraftingRecipe::getResultItem)
                 .map(ItemStack::getItem)
                 .map(ItemLike.class::cast)
                 .collect(Collectors.toSet());
 
-        Set<ItemLike> diff = Sets.difference(collectAllItems(), results);
+        Set<ItemLike> sawResults = fbRecipes.stream()
+                .filter(FramingSawRecipe.class::isInstance)
+                .map(FramingSawRecipe.class::cast)
+                .peek(r ->
+                {
+                    sawCount.increment();
+                    if (r.isDisabled())
+                    {
+                        sawDisabledCount.increment();
+                    }
+                })
+                .map(FramingSawRecipe::getResultItem)
+                .map(ItemStack::getItem)
+                .map(ItemLike.class::cast)
+                .collect(Collectors.toSet());
+
+        Set<ItemLike> craftDiff = Sets.difference(collectAllItems(), craftResults);
+        Set<ItemLike> sawDiff = Sets.difference(collectBlockTypedItems(), sawResults);
         watch.stop();
         long time = watch.elapsed(TimeUnit.MILLISECONDS);
 
         Component resultMsg = new TextComponent("No missing recipes found");
         ChatFormatting color = ChatFormatting.DARK_GREEN;
 
-        int size = diff.size();
-        if (size > 0)
-        {
-            StringBuilder testResult = new StringBuilder("Found the following items without recipe:");
-            diff.forEach(item -> testResult.append(String.format("\n\t%s", item)));
+        StringBuilder testResult = new StringBuilder();
 
+        int craftSize = craftDiff.size();
+        if (craftSize > 0)
+        {
+            testResult.append("Found the following items without crafting recipe:");
+            craftDiff.forEach(item -> testResult.append(String.format("\n\t%s", item)));
+        }
+
+        int sawSize = sawDiff.size();
+        if (sawSize > 0)
+        {
+            if (!testResult.isEmpty())
+            {
+                testResult.append("\n\n");
+            }
+            testResult.append("Found the following items without recipe:");
+            sawDiff.forEach(item -> testResult.append(String.format("\n\t%s", item)));
+        }
+
+        if (!testResult.isEmpty())
+        {
             Component exportMsg = SpecialTestCommand.writeResultToFile("recipepresent", testResult.toString());
-            resultMsg = new TextComponent("Found %d missing recipes. ".formatted(size)).append(exportMsg);
+            resultMsg = new TextComponent(
+                    "Found %d missing crafting recipes and %d missing saw recipes. ".formatted(craftSize, sawSize)
+            ).append(exportMsg);
             color = ChatFormatting.DARK_RED;
         }
 
-        resultMsg = new TextComponent(RESULT_MSG.formatted(count.intValue(), time))
+        resultMsg = new TextComponent(RESULT_MSG.formatted(
+                        craftCount.intValue(), sawCount.intValue(), sawDisabledCount.intValue(), time
+                ))
                 .withStyle(color)
                 .append(resultMsg);
         ctx.getSource().sendSuccess(resultMsg, true);
@@ -83,6 +126,19 @@ public final class RecipePresent
 
     private static Set<ItemLike> collectAllItems()
     {
+        Set<ItemLike> toolItems = Arrays.stream(FramedToolType.values())
+                .map(FBContent::toolByType)
+                .map(ItemLike.class::cast)
+                .collect(Collectors.toSet());
+
+        Set<ItemLike> allItems = new HashSet<>(collectBlockTypedItems());
+        allItems.addAll(toolItems);
+        allItems.removeAll(EXCLUDED.get());
+        return allItems;
+    }
+
+    private static Set<ItemLike> collectBlockTypedItems()
+    {
         Set<ItemLike> blockItems = Arrays.stream(BlockType.values())
                 .filter(BlockType::hasBlockItem)
                 .map(FBContent::byType)
@@ -90,14 +146,7 @@ public final class RecipePresent
                 .map(ItemLike.class::cast)
                 .collect(Collectors.toSet());
 
-        Set<ItemLike> toolItems = Arrays.stream(FramedToolType.values())
-                .map(FBContent::toolByType)
-                .map(ItemLike.class::cast)
-                .collect(Collectors.toSet());
-
-        Set<ItemLike> allItems = new HashSet<>(blockItems);
-        allItems.addAll(toolItems);
-        allItems.removeAll(EXCLUDED.get());
-        return allItems;
+        blockItems.removeAll(EXCLUDED.get());
+        return blockItems;
     }
 }

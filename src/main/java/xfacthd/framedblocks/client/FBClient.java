@@ -81,9 +81,12 @@ public final class FBClient
                         type == RenderType.translucent()
                 ));
 
+        ItemBlockRenderTypes.setRenderLayer(FBContent.blockFramingSaw.get(), RenderType.cutout());
+
         event.enqueueWork(() ->
         {
             MenuScreens.register(FBContent.menuTypeFramedStorage.get(), FramedStorageScreen::new);
+            MenuScreens.register(FBContent.menuTypeFramingSaw.get(), FramingSawScreen::new);
 
             BlueprintPropertyOverride.register();
         });
@@ -152,6 +155,8 @@ public final class FBClient
         forgeBus.addListener(BlockOutlineRenderer::onRenderBlockHighlight);
         forgeBus.addListener(KeyMappings::onClientTick);
         forgeBus.addListener(GhostBlockRenderer::onRenderStage);
+        forgeBus.addListener(ClientEventHandler::onRecipesUpdated);
+        forgeBus.addListener(ClientEventHandler::onClientDisconnect);
     }
 
     @SubscribeEvent

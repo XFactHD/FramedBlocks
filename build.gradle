@@ -23,7 +23,7 @@ group = 'xfacthd.framedblocks'
 archivesBaseName = 'FramedBlocks'
 
 java.toolchain.languageVersion = JavaLanguageVersion.of(17)
-//Print out JVM information so that we know what version is running. Extreamly useful for people to know when helping you.
+//Print out JVM information so that we know what version is running. Extremely useful for people to know when helping you.
 println('Java: ' + System.getProperty('java.version') + ' JVM: ' + System.getProperty('java.vm.version') + '(' + System.getProperty('java.vendor') + ') Arch: ' + System.getProperty('os.arch'))
 
 minecraft {
@@ -126,6 +126,11 @@ repositories {
     maven {
         url "https://www.cursemaven.com"
     }
+    maven {
+        name = "Jared's maven"
+        url = "https://maven.blamejared.com/"
+    }
+    mavenCentral()
 }
 
 dependencies {
@@ -140,7 +145,9 @@ dependencies {
 
     compileOnly fg.deobf("curse.maven:nocubes-309664:3944354")
 
-    runtimeOnly fg.deobf("curse.maven:jei-238222:3773518")
+    compileOnly fg.deobf("mezz.jei:jei-1.18.2:9.7.2.266:api")
+    implementation fg.deobf("mezz.jei:jei-1.18.2:9.7.2.266")
+
     runtimeOnly fg.deobf("curse.maven:spark-361579:3767286")
 
     //runtimeOnly fg.deobf("curse.maven:magnesium_sodium-532724:3556734")
