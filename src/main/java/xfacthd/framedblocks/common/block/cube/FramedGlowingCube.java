@@ -7,17 +7,17 @@ import xfacthd.framedblocks.api.util.FramedProperties;
 import xfacthd.framedblocks.common.block.FramedBlock;
 import xfacthd.framedblocks.common.data.BlockType;
 
-public class FramedCube extends FramedBlock
+public class FramedGlowingCube extends FramedBlock
 {
-    public FramedCube()
+    public FramedGlowingCube()
     {
-        super(BlockType.FRAMED_CUBE);
-        registerDefaultState(defaultBlockState().setValue(FramedProperties.ALT, false));
+        super(BlockType.FRAMED_GLOWING_CUBE);
     }
 
     @Override
     protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder)
     {
-        builder.add(FramedProperties.SOLID, FramedProperties.GLOWING, FramedProperties.ALT);
+        super.createBlockStateDefinition(builder);
+        builder.add(FramedProperties.SOLID, FramedProperties.GLOWING);
     }
 }
