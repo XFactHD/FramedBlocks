@@ -18,15 +18,11 @@ import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import xfacthd.framedblocks.api.block.FramedProperties;
-import xfacthd.framedblocks.api.camo.CamoContainer;
-import xfacthd.framedblocks.api.camo.EmptyCamoContainer;
 import xfacthd.framedblocks.api.shapes.ShapeProvider;
 import xfacthd.framedblocks.api.util.*;
 import xfacthd.framedblocks.common.FBContent;
 import xfacthd.framedblocks.common.block.FramedBlock;
 import xfacthd.framedblocks.common.data.BlockType;
-import xfacthd.framedblocks.common.blockentity.FramedDoubleBlockEntity;
-import xfacthd.framedblocks.api.block.FramedBlockEntity;
 
 @SuppressWarnings("deprecation")
 public class FramedPanelBlock extends FramedBlock
@@ -69,36 +65,15 @@ public class FramedPanelBlock extends FramedBlock
             {
                 if (!level.isClientSide())
                 {
-                    CamoContainer camo = EmptyCamoContainer.EMPTY;
-                    boolean glowing = false;
-                    boolean intangible = false;
-
-                    if (level.getBlockEntity(pos) instanceof FramedBlockEntity be)
-                    {
-                        camo = be.getCamo();
-                        glowing = be.isGlowing();
-                        intangible = be.isIntangible(null);
-                    }
-
                     Direction newFacing = (facing == Direction.NORTH || facing == Direction.EAST) ? facing : facing.getOpposite();
                     BlockState newState = FBContent.blockFramedDoublePanel.get().defaultBlockState();
-                    level.setBlockAndUpdate(pos, newState.setValue(FramedProperties.FACING_NE, newFacing));
+
+                    Utils.wrapInStateCopy(level, pos, player, stack, facing != newFacing, true, () ->
+                            level.setBlockAndUpdate(pos, newState.setValue(FramedProperties.FACING_NE, newFacing))
+                    );
 
                     SoundType sound = FBContent.blockFramedCube.get().getSoundType(FBContent.blockFramedCube.get().defaultBlockState());
                     level.playSound(null, pos, sound.getPlaceSound(), SoundSource.BLOCKS, (sound.getVolume() + 1.0F) / 2.0F, sound.getPitch() * 0.8F);
-
-                    if (!player.isCreative())
-                    {
-                        stack.shrink(1);
-                        player.getInventory().setChanged();
-                    }
-
-                    if (level.getBlockEntity(pos) instanceof FramedDoubleBlockEntity be)
-                    {
-                        be.setCamo(camo, facing != newFacing);
-                        be.setGlowing(glowing);
-                        be.setIntangible(intangible);
-                    }
                 }
                 return InteractionResult.sidedSuccess(level.isClientSide());
             }
