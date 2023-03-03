@@ -7,6 +7,7 @@
 		"particle": "block/powered_rail",
 		"texture": "block/powered_rail"
 	},
+	"render_type": "minecraft:cutout",
 	"elements": [
 		{
 			"name": "rail_left",

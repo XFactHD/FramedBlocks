@@ -5,6 +5,7 @@
         "texture": "framedblocks:block/framed_block",
         "particle": "#texture"
     },
+    "render_type": "minecraft:cutout",
     "elements": [
         {
             "from": [ 0, 0, 0 ],
