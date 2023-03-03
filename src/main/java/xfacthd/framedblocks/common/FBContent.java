@@ -308,7 +308,7 @@ public final class FBContent
     public static final RegistryObject<BlockEntityType<FramedInverseDoubleSlopeSlabBlockEntity>> blockEntityTypeFramedInverseDoubleSlopeSlab = createBlockEntityType(
             FramedInverseDoubleSlopeSlabBlockEntity::new,
             "framed_inverse_double_slope_slab",
-            () -> new Block[] { blockFramedInverseDoubleSlopeSlab.get() } //TODO: switch to by-type registration in breaking window
+            () -> new Block[] { blockFramedInverseDoubleSlopeSlab.get() }
     );
     public static final RegistryObject<BlockEntityType<FramedElevatedDoubleSlopeSlabBlockEntity>> blockEntityTypeFramedElevatedDoubleSlopeSlab = createBlockEntityType(
             FramedElevatedDoubleSlopeSlabBlockEntity::new,
@@ -341,7 +341,7 @@ public final class FBContent
     public static final RegistryObject<BlockEntityType<FramedInverseDoubleSlopePanelBlockEntity>> blockEntityTypeFramedInverseDoubleSlopePanel = createBlockEntityType(
             FramedInverseDoubleSlopePanelBlockEntity::new,
             "framed_inverse_double_slope_panel",
-            () -> new Block[] { blockFramedInverseDoubleSlopePanel.get() } //TODO: switch to by-type registration in breaking window
+            () -> new Block[] { blockFramedInverseDoubleSlopePanel.get() }
     );
     public static final RegistryObject<BlockEntityType<FramedExtendedDoubleSlopePanelBlockEntity>> blockEntityTypeFramedExtendedDoubleSlopePanel = createBlockEntityType(
             FramedExtendedDoubleSlopePanelBlockEntity::new,

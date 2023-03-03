@@ -159,7 +159,6 @@ public interface IFramedBlock extends EntityBlock, IForgeBlock
 
     default int getLight(BlockState state, BlockGetter level, BlockPos pos)
     {
-        //TODO: 1.20: require glowing state on all blocks
         if (getBlockType().canOccludeWithSolidCamo() && !state.getValue(FramedProperties.GLOWING))
         {
             return 0;

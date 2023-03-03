@@ -340,7 +340,6 @@ public final class ModelUtils
         }
         else
         {
-            //TODO: remove null check in 1.20
             if (sprite != null && FramedBlocksClientAPI.getInstance().useDiscreteUVSteps())
             {
                 double relMin = uvIdx == 0 ? sprite.getUOffset(uvMin) : sprite.getVOffset(uvMin);
