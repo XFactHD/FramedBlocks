@@ -1013,11 +1013,6 @@ public final class FramedRecipeProvider extends RecipeProvider
                 .unlockedBy("hasFramedHalfPillar", has(FBContent.blockFramedHalfPillar.get()))
                 .save(consumer);
 
-        ShapelessRecipeBuilder.shapeless(FBContent.blockFramedHalfPillar.get(), 1)
-                .requires(FBContent.blockFramedMiniCube.get())
-                .unlockedBy("hasFramedMiniCube", has(FBContent.blockFramedMiniCube.get()))
-                .save(consumer, Utils.rl("framed_half_pillar_from_mini_cube"));
-
         ShapedRecipeBuilder.shaped(FBContent.blockFramedOneWayWindow.get(), 4)
                 .pattern("GFG")
                 .pattern("F F")
