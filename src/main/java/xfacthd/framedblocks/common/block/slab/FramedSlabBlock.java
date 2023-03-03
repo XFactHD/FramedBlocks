@@ -21,11 +21,10 @@ import net.minecraft.world.level.pathfinder.PathComputationType;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import xfacthd.framedblocks.api.util.FramedProperties;
+import xfacthd.framedblocks.api.util.Utils;
 import xfacthd.framedblocks.common.FBContent;
 import xfacthd.framedblocks.common.block.FramedBlock;
 import xfacthd.framedblocks.common.data.BlockType;
-import xfacthd.framedblocks.common.blockentity.FramedDoubleBlockEntity;
-import xfacthd.framedblocks.api.block.FramedBlockEntity;
 
 @SuppressWarnings("deprecation")
 public class FramedSlabBlock extends FramedBlock
@@ -60,36 +59,12 @@ public class FramedSlabBlock extends FramedBlock
             {
                 if (!level.isClientSide())
                 {
-                    BlockState camoState = Blocks.AIR.defaultBlockState();
-                    ItemStack camoStack = ItemStack.EMPTY;
-                    boolean glowing = false;
-                    boolean intangible = false;
-
-                    if (level.getBlockEntity(pos) instanceof FramedBlockEntity be)
-                    {
-                        camoState = be.getCamoState();
-                        camoStack = be.getCamoStack();
-                        glowing = be.isGlowing();
-                        intangible = be.isIntangible(null);
-                    }
-
-                    level.setBlockAndUpdate(pos, FBContent.blockFramedDoubleSlab.get().defaultBlockState());
+                    Utils.wrapInStateCopy(level, pos, player, stack, top, true, () ->
+                            level.setBlockAndUpdate(pos, FBContent.blockFramedDoubleSlab.get().defaultBlockState())
+                    );
 
                     SoundType sound = FBContent.blockFramedCube.get().getSoundType(FBContent.blockFramedCube.get().defaultBlockState());
                     level.playSound(null, pos, sound.getPlaceSound(), SoundSource.BLOCKS, (sound.getVolume() + 1.0F) / 2.0F, sound.getPitch() * 0.8F);
-
-                    if (!player.isCreative())
-                    {
-                        stack.shrink(1);
-                        player.getInventory().setChanged();
-                    }
-
-                    if (level.getBlockEntity(pos) instanceof FramedDoubleBlockEntity be)
-                    {
-                        be.setCamo(camoStack, camoState, top);
-                        be.setGlowing(glowing);
-                        be.setIntangible(intangible);
-                    }
                 }
                 return InteractionResult.sidedSuccess(level.isClientSide());
             }

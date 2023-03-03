@@ -10,6 +10,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.*;
 import net.minecraft.util.Mth;
 import net.minecraft.util.StringRepresentable;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.*;
@@ -42,7 +43,7 @@ public final class Utils
     public static final TagKey<Block> BLACKLIST = blockTag("blacklisted");
     public static final TagKey<Block> CAMO_SUSTAIN_PLANT = blockTag("camo_sustain_plant");
     public static final TagKey<Item> WRENCH = itemTag("forge", "tools/wrench");
-    /** Allow other mods to add items that temporarily disable intangibility to allow interaction with the targetted block */
+    /** Allow other mods to add items that temporarily disable intangibility to allow interaction with the targeted block */
     public static final TagKey<Item> DISABLE_INTANGIBLE = itemTag("disable_intangible");
 
     public static final RegistryObject<Item> FRAMED_HAMMER = RegistryObject.create(
@@ -347,12 +348,21 @@ public final class Utils
         }
     }
 
+    @Deprecated(forRemoval = true)
     public static void wrapInStateCopy(LevelAccessor level, BlockPos pos, boolean writeToCamoTwo, Runnable action)
+    {
+        wrapInStateCopy(level, pos, null, ItemStack.EMPTY, writeToCamoTwo, false, action);
+    }
+
+    public static void wrapInStateCopy(
+            LevelAccessor level, BlockPos pos, Player player, ItemStack stack, boolean writeToCamoTwo, boolean consumeItem, Runnable action
+    )
     {
         BlockState camoState = Blocks.AIR.defaultBlockState();
         ItemStack camoStack = ItemStack.EMPTY;
         boolean glowing = false;
         boolean intangible = false;
+        boolean reinforced = false;
 
         if (level.getBlockEntity(pos) instanceof FramedBlockEntity be)
         {
@@ -360,15 +370,23 @@ public final class Utils
             camoStack = be.getCamoStack();
             glowing = be.isGlowing();
             intangible = be.isIntangible(null);
+            reinforced = be.isReinforced();
         }
 
         action.run();
+
+        if (consumeItem && !player.isCreative())
+        {
+            stack.shrink(1);
+            player.getInventory().setChanged();
+        }
 
         if (level.getBlockEntity(pos) instanceof FramedBlockEntity be)
         {
             be.setCamo(camoStack, camoState, writeToCamoTwo);
             be.setGlowing(glowing);
             be.setIntangible(intangible);
+            be.setReinforced(reinforced);
         }
     }
 

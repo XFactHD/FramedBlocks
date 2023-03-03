@@ -20,7 +20,6 @@ import net.minecraft.world.phys.shapes.VoxelShape;
 import net.minecraft.world.phys.shapes.Shapes;
 import xfacthd.framedblocks.api.block.IFramedBlock;
 import xfacthd.framedblocks.api.util.*;
-import xfacthd.framedblocks.api.block.FramedBlockEntity;
 import xfacthd.framedblocks.common.block.FramedBlock;
 import xfacthd.framedblocks.common.data.*;
 import xfacthd.framedblocks.common.data.property.SlopeType;
@@ -91,36 +90,12 @@ public class FramedSlopeBlock extends FramedBlock
 
                 if (!level.isClientSide())
                 {
-                    BlockState camoState = Blocks.AIR.defaultBlockState();
-                    ItemStack camoStack = ItemStack.EMPTY;
-                    boolean glowing = false;
-                    boolean intangible = false;
-
-                    if (level.getBlockEntity(pos) instanceof FramedBlockEntity be)
-                    {
-                        camoState = be.getCamoState();
-                        camoStack = be.getCamoStack();
-                        glowing = be.isGlowing();
-                        intangible = be.isIntangible(null);
-                    }
-
-                    level.setBlockAndUpdate(pos, newState);
+                    Utils.wrapInStateCopy(level, pos, player, stack, false, true, () ->
+                            level.setBlockAndUpdate(pos, newState)
+                    );
 
                     SoundType sound = Blocks.RAIL.getSoundType(Blocks.RAIL.defaultBlockState());
                     level.playSound(null, pos, sound.getPlaceSound(), SoundSource.BLOCKS, (sound.getVolume() + 1.0F) / 2.0F, sound.getPitch() * 0.8F);
-
-                    if (!player.isCreative())
-                    {
-                        stack.shrink(1);
-                        player.getInventory().setChanged();
-                    }
-
-                    if (level.getBlockEntity(pos) instanceof FramedBlockEntity be)
-                    {
-                        be.setCamo(camoStack, camoState, false);
-                        be.setGlowing(glowing);
-                        be.setIntangible(intangible);
-                    }
                 }
 
                 return InteractionResult.sidedSuccess(level.isClientSide());
