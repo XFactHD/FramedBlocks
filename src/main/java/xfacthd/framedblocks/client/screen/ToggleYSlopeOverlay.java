@@ -1,23 +1,16 @@
 package xfacthd.framedblocks.client.screen;
 
-import com.google.common.base.Preconditions;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiComponent;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.phys.BlockHitResult;
-import net.minecraft.world.phys.HitResult;
 import net.minecraftforge.client.gui.overlay.ForgeGui;
-import net.minecraftforge.client.gui.overlay.IGuiOverlay;
 import xfacthd.framedblocks.api.util.*;
 
-public final class ToggleYSlopeOverlay implements IGuiOverlay
+public final class ToggleYSlopeOverlay extends BlockInteractOverlay
 {
     private static final ResourceLocation SYMBOL_TEXTURE = Utils.rl("textures/gui/yslope_symbols.png");
     public static final String SLOPE_MESSAGE = "tooltip." + FramedConstants.MOD_ID + ".y_slope";
@@ -44,19 +37,5 @@ public final class ToggleYSlopeOverlay implements IGuiOverlay
 
         Component textTwo = Component.translatable(TOGGLE_MESSAGE, ySlope ? SLOPE_HOR : SLOPE_VERT);
         GuiComponent.drawCenteredString(poseStack, gui.getFont(), textTwo, width / 2, (height / 2) + 60, -1);
-    }
-
-
-
-    private static Player player() { return Preconditions.checkNotNull(Minecraft.getInstance().player); }
-
-    private static BlockState getTargettedBlock()
-    {
-        HitResult hit = Minecraft.getInstance().hitResult;
-        if (hit instanceof BlockHitResult blockHit)
-        {
-            return Preconditions.checkNotNull(Minecraft.getInstance().level).getBlockState(blockHit.getBlockPos());
-        }
-        return Blocks.AIR.defaultBlockState();
     }
 }
