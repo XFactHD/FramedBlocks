@@ -57,35 +57,23 @@ public abstract class FramedBlock extends AbstractFramedBlock
         else
         {
             state = state.setValue(PropertyHolder.SLOPE_TYPE, SlopeType.HORIZONTAL);
-
-            boolean xAxis = Utils.isX(side);
-            boolean positive = Utils.isPositive(side.getCounterClockWise());
-            double xz = xAxis ? hitPoint.z() : hitPoint.x();
-
-            if ((xz > .5D) == positive)
-            {
-                state = state.setValue(FramedProperties.FACING_HOR, side.getOpposite().getClockWise());
-            }
-            else
-            {
-                state = state.setValue(FramedProperties.FACING_HOR, side.getOpposite());
-            }
+            state = withCornerFacing(state, side, facing, hitVec);
         }
 
         return state;
     }
 
-    protected static BlockState withCornerType(BlockState state, BlockPlaceContext context, Direction side, Vec3 hitPoint, Direction facing)
+    protected static BlockState withCornerType(BlockState state, BlockPlaceContext context, Direction side, Direction typeSide, Vec3 hitPoint, Direction facing)
     {
-        state = state.setValue(FramedProperties.FACING_HOR, facing);
-
-        if (side == Direction.DOWN)
+        if (typeSide == Direction.DOWN)
         {
             state = state.setValue(PropertyHolder.CORNER_TYPE, CornerType.TOP);
+            state = withCornerFacing(state, side, facing, hitPoint);
         }
-        else if (side == Direction.UP)
+        else if (typeSide == Direction.UP)
         {
             state = state.setValue(PropertyHolder.CORNER_TYPE, CornerType.BOTTOM);
+            state = withCornerFacing(state, side, facing, hitPoint);
         }
         else
         {
@@ -103,7 +91,8 @@ public abstract class FramedBlock extends AbstractFramedBlock
             {
                 type = (y > .5D) ? CornerType.HORIZONTAL_TOP_LEFT : CornerType.HORIZONTAL_BOTTOM_LEFT;
             }
-            state = state.setValue(PropertyHolder.CORNER_TYPE, type);
+
+            state = state.setValue(PropertyHolder.CORNER_TYPE, type).setValue(FramedProperties.FACING_HOR, facing);
         }
         return state;
     }

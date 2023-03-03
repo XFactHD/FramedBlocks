@@ -53,10 +53,12 @@ public class FramedFlatDoubleSlopeSlabCornerBlock extends AbstractFramedDoubleBl
     @Override
     public BlockState getStateForPlacement(BlockPlaceContext context)
     {
-        Direction face = context.getClickedFace();
-        Direction facing = Utils.isY(face) ? context.getHorizontalDirection() : face.getOpposite();
-
-        BlockState state = defaultBlockState().setValue(FramedProperties.FACING_HOR, facing);
+        BlockState state = withCornerFacing(
+                defaultBlockState(),
+                context.getClickedFace(),
+                context.getHorizontalDirection(),
+                context.getClickLocation()
+        );
 
         state = withTop(state, PropertyHolder.TOP_HALF, context.getClickedFace(), context.getClickLocation());
         state = state.setValue(FramedProperties.TOP, context.getPlayer() != null && context.getPlayer().isShiftKeyDown());

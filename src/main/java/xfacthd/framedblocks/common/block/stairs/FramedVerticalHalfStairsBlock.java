@@ -29,7 +29,12 @@ public class FramedVerticalHalfStairsBlock extends FramedBlock
     @Override
     public BlockState getStateForPlacement(BlockPlaceContext context)
     {
-        BlockState state = defaultBlockState().setValue(FramedProperties.FACING_HOR, context.getHorizontalDirection());
+        BlockState state = withCornerFacing(
+                defaultBlockState(),
+                context.getClickedFace(),
+                context.getHorizontalDirection(),
+                context.getClickLocation()
+        );
         state = withTop(state, context.getClickedFace(), context.getClickLocation());
         return withWater(state, context.getLevel(), context.getClickedPos());
     }

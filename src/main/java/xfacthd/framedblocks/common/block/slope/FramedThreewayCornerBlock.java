@@ -59,10 +59,12 @@ public class FramedThreewayCornerBlock extends FramedBlock
     @Override
     public BlockState getStateForPlacement(BlockPlaceContext context)
     {
-        BlockState state = defaultBlockState();
-
-        Direction facing = context.getHorizontalDirection();
-        state = state.setValue(FramedProperties.FACING_HOR, facing);
+        BlockState state = withCornerFacing(
+                defaultBlockState(),
+                context.getClickedFace(),
+                context.getHorizontalDirection(),
+                context.getClickLocation()
+        );
 
         state = withWater(state, context.getLevel(), context.getClickedPos());
         return withTop(state, context.getClickedFace(), context.getClickLocation());

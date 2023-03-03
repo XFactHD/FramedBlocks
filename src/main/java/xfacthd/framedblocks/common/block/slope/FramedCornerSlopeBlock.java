@@ -79,21 +79,22 @@ public class FramedCornerSlopeBlock extends FramedBlock
         BlockState state = defaultBlockState();
 
         Direction side = context.getClickedFace();
+        Direction typeSide = side;
         Vec3 hitPoint = Utils.fraction(context.getClickLocation());
         if (!Utils.isY(side))
         {
             if (hitPoint.y() < (3D / 16D))
             {
-                side = Direction.UP;
+                typeSide = Direction.UP;
             }
             else if (hitPoint.y() > (13D / 16D))
             {
-                side = Direction.DOWN;
+                typeSide = Direction.DOWN;
             }
         }
 
         Direction facing = context.getHorizontalDirection();
-        state = withCornerType(state, context, side, hitPoint, facing);
+        state = withCornerType(state, context, side, typeSide, hitPoint, facing);
 
         return withWater(state, context.getLevel(), context.getClickedPos());
     }
