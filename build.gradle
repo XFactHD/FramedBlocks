@@ -131,6 +131,10 @@ repositories {
     maven {
         url = "https://maven.tterrag.com/"
     }
+    maven {
+        name = "Jared's maven"
+        url = "https://maven.blamejared.com/"
+    }
     mavenCentral()
 }
 
@@ -144,7 +148,10 @@ dependencies {
 
     implementation fg.deobf("curse.maven:buildinggadgets-298187:4002496")
 
-    runtimeOnly fg.deobf("curse.maven:jei-238222:4239206")
+    compileOnly(fg.deobf("mezz.jei:jei-1.19.2-common-api:11.6.0.1010"))
+    compileOnly(fg.deobf("mezz.jei:jei-1.19.2-forge-api:11.6.0.1010"))
+    runtimeOnly(fg.deobf("mezz.jei:jei-1.19.2-forge:11.6.0.1010"))
+
     //runtimeOnly fg.deobf("curse.maven:spark-361579:3767286")
 
     //runtimeOnly fg.deobf("curse.maven:magnesium_sodium-532724:3556734")

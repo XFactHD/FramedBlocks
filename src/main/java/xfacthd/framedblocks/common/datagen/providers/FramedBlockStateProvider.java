@@ -170,6 +170,8 @@ public final class FramedBlockStateProvider extends BlockStateProvider
         registerFramedFancyPoweredRail();
         registerFramedFancyDetectorRail();
         registerFramedFancyActivatorRail();
+
+        registerFramingSaw();
     }
 
     private void registerFramedCube(ModelFile cube)
@@ -798,6 +800,22 @@ public final class FramedBlockStateProvider extends BlockStateProvider
                 ),
                 BlockStateProperties.WATERLOGGED
         );
+    }
+
+
+
+    private void registerFramingSaw()
+    {
+        ModelFile model = models().getExistingFile(modLoc("block/framing_saw"));
+        getVariantBuilder(FBContent.blockFramingSaw.get()).forAllStates(state ->
+        {
+            int rotY = (int) state.getValue(FramedProperties.FACING_HOR).toYRot();
+            return ConfiguredModel.builder()
+                    .rotationY(rotY)
+                    .modelFile(model)
+                    .build();
+        });
+        simpleBlockItem(FBContent.blockFramingSaw, model);
     }
 
 

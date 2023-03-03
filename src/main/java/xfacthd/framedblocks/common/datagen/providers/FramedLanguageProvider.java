@@ -12,7 +12,9 @@ import xfacthd.framedblocks.client.screen.*;
 import xfacthd.framedblocks.client.screen.overlay.*;
 import xfacthd.framedblocks.client.util.KeyMappings;
 import xfacthd.framedblocks.common.FBContent;
+import xfacthd.framedblocks.common.block.FramingSawBlock;
 import xfacthd.framedblocks.common.blockentity.FramedStorageBlockEntity;
+import xfacthd.framedblocks.common.crafting.FramingSawRecipe;
 import xfacthd.framedblocks.common.item.FramedBlueprintItem;
 import xfacthd.framedblocks.common.blockentity.FramedChestBlockEntity;
 import xfacthd.framedblocks.api.block.FramedBlockEntity;
@@ -155,6 +157,8 @@ public final class FramedLanguageProvider extends LanguageProvider
         add(FBContent.blockFramedSlopedStairs.get(), "Framed Sloped Stairs");
         add(FBContent.blockFramedVerticalSlopedStairs.get(), "Framed Vertical Sloped Stairs");
 
+        add(FBContent.blockFramingSaw.get(), "Framing Saw");
+
         add(FBContent.itemFramedHammer.get(), "Framed Hammer");
         add(FBContent.itemFramedWrench.get(), "Framed Wrench");
         add(FBContent.itemFramedBlueprint.get(), "Framed Blueprint");
@@ -198,6 +202,22 @@ public final class FramedLanguageProvider extends LanguageProvider
         add(ReinforcementOverlay.REINFORCE_MESSAGE, "Block is %s");
         add(ReinforcementOverlay.STATE_NOT_REINFORCED, "not reinforced");
         add(ReinforcementOverlay.STATE_REINFORCED, "reinforced");
+        add(FramingSawBlock.MENU_TITLE, "Framing Saw");
+        add(FramingSawScreen.TOOLTIP_MATERIAL, "Material value: %s");
+        add(FramingSawScreen.TOOLTIP_LOOSE_ADDITIVE, "Item was crafted with additive ingredients, these will be lost");
+        add(FramingSawScreen.TOOLTIP_HAVE_X_BUT_NEED_Y_ITEM, "Have %s, but need %s");
+        add(FramingSawScreen.TOOLTIP_HAVE_X_BUT_NEED_Y_TAG, "Have %s, but need any %s");
+        add(FramingSawScreen.TOOLTIP_HAVE_X_BUT_NEED_Y_ITEM_COUNT, "Have %s item(s), but need at least %s item(s)");
+        add(FramingSawScreen.TOOLTIP_HAVE_X_BUT_NEED_Y_MATERIAL_COUNT, "Have %s material, but need at least %s material");
+        add(FramingSawScreen.TOOLTIP_HAVE_ITEM_NONE, "none");
+        add(FramingSawScreen.TOOLTIP_PRESS_TO_SHOW, "Press [%s] to show all possible items");
+        add(FramingSawRecipe.FailReason.NONE.translation(), "Craftable");
+        add(FramingSawRecipe.FailReason.MATERIAL_VALUE.translation(), "Insufficient input material available");
+        add(FramingSawRecipe.FailReason.MATERIAL_LCM.translation(), "Too few input items to evenly convert to this output");
+        add(FramingSawRecipe.FailReason.MISSING_ADDITIVE.translation(), "Missing additive ingredient");
+        add(FramingSawRecipe.FailReason.UNEXPECTED_ADDITIVE.translation(), "Unexpected additive ingredient present");
+        add(FramingSawRecipe.FailReason.INCORRECT_ADDITIVE.translation(), "Incorrect additive ingredient present");
+        add(FramingSawRecipe.FailReason.INSUFFICIENT_ADDITIVE.translation(), "Insufficient amount of additive ingredient present");
     }
 
     private void add(Component key, String value)

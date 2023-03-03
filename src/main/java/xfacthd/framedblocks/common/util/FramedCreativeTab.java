@@ -33,6 +33,8 @@ public final class FramedCreativeTab extends CreativeModeTab
             }
             else if (itemOne instanceof FramedToolItem) { return 1; }
             else if (itemTwo instanceof FramedToolItem) { return -1; }
+            if (itemOne == FBContent.blockFramingSaw.get().asItem()) { return 1; }
+            if (itemTwo == FBContent.blockFramingSaw.get().asItem()) { return -1; }
 
             Preconditions.checkArgument(
                     itemOne instanceof BlockItem bi && bi.getBlock() instanceof IFramedBlock,

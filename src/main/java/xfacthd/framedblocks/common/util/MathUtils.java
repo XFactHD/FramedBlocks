@@ -1,5 +1,6 @@
 package xfacthd.framedblocks.common.util;
 
+import com.google.common.math.IntMath;
 import net.minecraft.world.phys.Vec3;
 
 public final class MathUtils
@@ -28,6 +29,11 @@ public final class MathUtils
         {
             return val;
         }
+    }
+
+    public static long lcm(int a, int b)
+    {
+        return (long) a * (long) (b / IntMath.gcd(a, b));
     }
 
 

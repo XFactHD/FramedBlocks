@@ -463,9 +463,9 @@ public final class FramedRecipeProvider extends RecipeProvider
                 .save(consumer);
 
         ShapedRecipeBuilder.shaped(FBContent.blockFramedSecretStorage.get())
-                .pattern("FFF")
+                .pattern(" F ")
                 .pattern("FCF")
-                .pattern("FFF")
+                .pattern(" F ")
                 .define('F', FBContent.blockFramedCube.get())
                 .define('C', FBContent.blockFramedChest.get())
                 .unlockedBy("hasFramedBlock", HAS_FRAMED_BLOCK)
@@ -942,6 +942,16 @@ public final class FramedRecipeProvider extends RecipeProvider
                 .define('H', FBContent.blockFramedHalfSlope.get())
                 .define('P', FBContent.blockFramedPanel.get())
                 .unlockedBy("hasFramedPanel", has(FBContent.blockFramedPanel.get()))
+                .save(consumer);
+
+
+
+        ShapedRecipeBuilder.shaped(FBContent.blockFramingSaw.get())
+                .pattern(" I ")
+                .pattern("FFF")
+                .define('I', Tags.Items.INGOTS_IRON)
+                .define('F', FBContent.blockFramedCube.get())
+                .unlockedBy("hasFramedBlock", HAS_FRAMED_BLOCK)
                 .save(consumer);
 
 

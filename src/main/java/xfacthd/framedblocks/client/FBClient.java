@@ -77,6 +77,7 @@ public final class FBClient
         event.enqueueWork(() ->
         {
             MenuScreens.register(FBContent.menuTypeFramedStorage.get(), FramedStorageScreen::new);
+            MenuScreens.register(FBContent.menuTypeFramingSaw.get(), FramingSawScreen::new);
 
             BlueprintPropertyOverride.register();
         });
@@ -139,6 +140,8 @@ public final class FBClient
         forgeBus.addListener(BlockOutlineRenderer::onRenderBlockHighlight);
         forgeBus.addListener(KeyMappings::onClientTick);
         forgeBus.addListener(GhostBlockRenderer::onRenderLevelStage);
+        forgeBus.addListener(ClientEventHandler::onRecipesUpdated);
+        forgeBus.addListener(ClientEventHandler::onClientDisconnect);
     }
 
     @SubscribeEvent
