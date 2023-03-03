@@ -18,13 +18,15 @@ public class FramedInnerPrismCornerModel extends FramedBlockModel
     private final Direction dir;
     private final boolean top;
     private final boolean offset;
+    private final boolean ySlope;
 
     public FramedInnerPrismCornerModel(BlockState state, BakedModel baseModel)
     {
         super(state, baseModel);
-        dir = state.getValue(FramedProperties.FACING_HOR);
-        top = state.getValue(FramedProperties.TOP);
-        offset = state.getValue(FramedProperties.OFFSET);
+        this.dir = state.getValue(FramedProperties.FACING_HOR);
+        this.top = state.getValue(FramedProperties.TOP);
+        this.offset = state.getValue(FramedProperties.OFFSET);
+        this.ySlope = state.getValue(FramedProperties.Y_SLOPE);
     }
 
     @Override
@@ -45,7 +47,7 @@ public class FramedInnerPrismCornerModel extends FramedBlockModel
                     .export(quadMap.get(quadDir));
         }
 
-        if (quadDir == dir.getOpposite())
+        if (!ySlope && quadDir == dir.getOpposite())
         {
             if (offset)
             {
@@ -65,6 +67,29 @@ public class FramedInnerPrismCornerModel extends FramedBlockModel
             {
                 QuadModifier.geometry(quad)
                         .apply(Modifiers.cutPrismTriangle(top, false))
+                        .export(quadMap.get(null));
+            }
+        }
+        else if (ySlope && ((!top && quadDir == Direction.UP) || (top && quadDir == Direction.DOWN)))
+        {
+            if (offset)
+            {
+                QuadModifier.geometry(quad)
+                        .apply(Modifiers.cutTopBottom(dir.getClockWise(), .5F))
+                        .apply(Modifiers.offset(dir.getClockWise(), .5F))
+                        .apply(Modifiers.cutPrismTriangle(dir.getOpposite(), false))
+                        .export(quadMap.get(null));
+
+                QuadModifier.geometry(quad)
+                        .apply(Modifiers.cutTopBottom(dir.getCounterClockWise(), .5F))
+                        .apply(Modifiers.offset(dir.getCounterClockWise(), .5F))
+                        .apply(Modifiers.cutPrismTriangle(dir.getOpposite(), false))
+                        .export(quadMap.get(null));
+            }
+            else
+            {
+                QuadModifier.geometry(quad)
+                        .apply(Modifiers.cutPrismTriangle(dir.getOpposite(), false))
                         .export(quadMap.get(null));
             }
         }

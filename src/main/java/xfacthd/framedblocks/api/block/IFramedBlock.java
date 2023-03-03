@@ -548,4 +548,14 @@ public interface IFramedBlock extends EntityBlock, IForgeBlock
         if (camoState.isAir()) { return Optional.empty(); }
         return Optional.of(camoState.getBlock().getName().withStyle(ChatFormatting.WHITE));
     }
+
+    static boolean toggleYSlope(BlockState state, Level level, BlockPos pos, Player player)
+    {
+        if (player.getMainHandItem().is(Utils.WRENCH))
+        {
+            level.setBlockAndUpdate(pos, state.setValue(FramedProperties.Y_SLOPE, !state.getValue(FramedProperties.Y_SLOPE)));
+            return true;
+        }
+        return false;
+    }
 }

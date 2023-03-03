@@ -17,12 +17,14 @@ public class FramedInnerThreewayCornerModel extends FramedBlockModel
 {
     private final Direction dir;
     private final boolean top;
+    private final boolean ySlope;
 
     public FramedInnerThreewayCornerModel(BlockState state, BakedModel baseModel)
     {
         super(state, baseModel);
-        dir = state.getValue(FramedProperties.FACING_HOR);
-        top = state.getValue(FramedProperties.TOP);
+        this.dir = state.getValue(FramedProperties.FACING_HOR);
+        this.top = state.getValue(FramedProperties.TOP);
+        this.ySlope = state.getValue(FramedProperties.Y_SLOPE);
     }
 
     @Override
@@ -45,21 +47,36 @@ public class FramedInnerThreewayCornerModel extends FramedBlockModel
 
         if (quadDir == dir.getClockWise())
         {
-            QuadModifier.geometry(quad)
-                    .apply(Modifiers.cutSmallTriangle(dir))
-                    .apply(Modifiers.makeVerticalSlope(!top, 45))
-                    .export(quadMap.get(null));
+            if (!ySlope)
+            {
+                QuadModifier.geometry(quad)
+                        .apply(Modifiers.cutSmallTriangle(dir))
+                        .apply(Modifiers.makeVerticalSlope(!top, 45))
+                        .export(quadMap.get(null));
+            }
 
             QuadModifier.geometry(quad)
                     .apply(Modifiers.cutSmallTriangle(top ? Direction.UP : Direction.DOWN))
                     .apply(Modifiers.makeHorizontalSlope(true, 45))
                     .export(quadMap.get(null));
         }
-        else if (quadDir == dir.getOpposite())
+        else if (!ySlope && quadDir == dir.getOpposite())
         {
             QuadModifier.geometry(quad)
                     .apply(Modifiers.cutSmallTriangle(dir.getCounterClockWise()))
                     .apply(Modifiers.makeVerticalSlope(!top, 45))
+                    .export(quadMap.get(null));
+        }
+        else if (ySlope && ((!top && quadDir == Direction.UP) || (top && quadDir == Direction.DOWN)))
+        {
+            QuadModifier.geometry(quad)
+                    .apply(Modifiers.cutSmallTriangle(dir))
+                    .apply(Modifiers.makeVerticalSlope(dir.getClockWise(), 45))
+                    .export(quadMap.get(null));
+
+            QuadModifier.geometry(quad)
+                    .apply(Modifiers.cutSmallTriangle(dir.getCounterClockWise()))
+                    .apply(Modifiers.makeVerticalSlope(dir.getOpposite(), 45))
                     .export(quadMap.get(null));
         }
     }

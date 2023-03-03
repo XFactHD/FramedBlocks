@@ -20,12 +20,14 @@ public class FramedCornerSlopeModel extends FramedBlockModel
 {
     private final Direction dir;
     private final CornerType type;
+    private final boolean ySlope;
 
     public FramedCornerSlopeModel(BlockState state, BakedModel baseModel)
     {
         super(state, baseModel);
-        dir = state.getValue(FramedProperties.FACING_HOR);
-        type = state.getValue(PropertyHolder.CORNER_TYPE);
+        this.dir = state.getValue(FramedProperties.FACING_HOR);
+        this.type = state.getValue(PropertyHolder.CORNER_TYPE);
+        this.ySlope = state.getValue(FramedProperties.Y_SLOPE);
     }
 
     @Override
@@ -67,11 +69,18 @@ public class FramedCornerSlopeModel extends FramedBlockModel
                     .apply(Modifiers.makeHorizontalSlope(!right, 45))
                     .export(quadMap.get(null));
         }
-        else if (quadDir == dir.getOpposite())
+        else if (!ySlope && quadDir == dir.getOpposite())
         {
             QuadModifier.geometry(quad)
                     .apply(Modifiers.cutSideUpDown(!top, right ? 0 : 1, right ? 1 : 0))
                     .apply(Modifiers.makeVerticalSlope(!top, 45))
+                    .export(quadMap.get(null));
+        }
+        else if (ySlope && ((!top && quadDir == Direction.UP) || (top && quadDir == Direction.DOWN)))
+        {
+            QuadModifier.geometry(quad)
+                    .apply(Modifiers.cutTopBottom(dir.getOpposite(), right ? 0 : 1, right ? 1 : 0))
+                    .apply(Modifiers.makeVerticalSlope(dir.getOpposite(), 45))
                     .export(quadMap.get(null));
         }
     }
@@ -79,16 +88,32 @@ public class FramedCornerSlopeModel extends FramedBlockModel
     private void createVerticalCornerSlope(Map<Direction, List<BakedQuad>> quadMap, BakedQuad quad)
     {
         Direction quadDir = quad.getDirection();
-        if (Utils.isY(quadDir)) { return; }
+        boolean yQuad = Utils.isY(quadDir);
+        if (!ySlope && yQuad) { return; }
 
         boolean top = type.isTop();
         Direction cutDir = quadDir.getAxis() == dir.getAxis() ? dir.getClockWise() : dir.getOpposite();
         boolean slope = quadDir == dir.getOpposite() || quadDir == dir.getClockWise();
 
-        QuadModifier.geometry(quad)
-                .apply(Modifiers.cutSideLeftRight(cutDir, top ? 1 : 0, top ? 0 : 1))
-                .applyIf(Modifiers.makeVerticalSlope(!top, 45), slope)
-                .export(quadMap.get(slope ? null : quadDir));
+        if ((!slope && !yQuad) || !ySlope)
+        {
+            QuadModifier.geometry(quad)
+                    .apply(Modifiers.cutSideLeftRight(cutDir, top ? 1 : 0, top ? 0 : 1))
+                    .applyIf(Modifiers.makeVerticalSlope(!top, 45), slope)
+                    .export(quadMap.get(slope ? null : quadDir));
+        }
+        else if (yQuad)
+        {
+            QuadModifier.geometry(quad)
+                    .apply(Modifiers.cutTopBottom(dir.getOpposite(), 0, 1))
+                    .apply(Modifiers.makeVerticalSlope(dir.getClockWise(), 45))
+                    .export(quadMap.get(null));
+
+            QuadModifier.geometry(quad)
+                    .apply(Modifiers.cutTopBottom(dir.getClockWise(), 1, 0))
+                    .apply(Modifiers.makeVerticalSlope(dir.getOpposite(), 45))
+                    .export(quadMap.get(null));
+        }
     }
 
 

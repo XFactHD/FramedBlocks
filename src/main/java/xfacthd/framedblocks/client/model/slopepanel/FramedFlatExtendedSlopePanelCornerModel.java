@@ -24,6 +24,7 @@ public class FramedFlatExtendedSlopePanelCornerModel extends FramedBlockModel
     private final HorizontalRotation rotRotation;
     private final Direction orientation;
     private final Direction rotOrientation;
+    private final boolean ySlope;
 
     public FramedFlatExtendedSlopePanelCornerModel(BlockState state, BakedModel baseModel)
     {
@@ -33,6 +34,7 @@ public class FramedFlatExtendedSlopePanelCornerModel extends FramedBlockModel
         this.rotRotation = rotation.rotate(Rotation.COUNTERCLOCKWISE_90);
         this.orientation = rotation.withFacing(facing);
         this.rotOrientation = rotRotation.withFacing(facing);
+        this.ySlope = state.getValue(FramedProperties.Y_SLOPE);
     }
 
     @Override
@@ -61,18 +63,41 @@ public class FramedFlatExtendedSlopePanelCornerModel extends FramedBlockModel
                         .apply(Modifiers.cutSideLeftRight(facing.getOpposite(), .5F))
                         .export(quadMap.get(face));
             }
+
+            if (ySlope && Utils.isY(orientation) && face == orientation)
+            {
+                QuadModifier.geometry(quad)
+                        .apply(FramedFlatSlopePanelCornerModel.createVerticalSlopeTriangle(facing, orientation, false))
+                        .apply(FramedSlopePanelModel.createVerticalSlope(facing, orientation))
+                        .apply(Modifiers.offset(facing.getOpposite(), .5F))
+                        .export(quadMap.get(null));
+            }
+            else if (ySlope && Utils.isY(rotOrientation) && face == rotOrientation)
+            {
+                QuadModifier.geometry(quad)
+                        .apply(FramedFlatSlopePanelCornerModel.createVerticalSlopeTriangle(facing, rotOrientation, true))
+                        .apply(FramedSlopePanelModel.createVerticalSlope(facing, rotOrientation))
+                        .apply(Modifiers.offset(facing.getOpposite(), .5F))
+                        .export(quadMap.get(null));
+            }
         }
         else if (face == facing.getOpposite())
         {
-            QuadModifier.geometry(quad)
-                    .apply(FramedFlatSlopePanelCornerModel.createSlopeTriangle(facing, orientation, false))
-                    .apply(FramedSlopePanelModel.createSlope(facing, orientation))
-                    .export(quadMap.get(null));
+            if (!ySlope || !Utils.isY(orientation))
+            {
+                QuadModifier.geometry(quad)
+                        .apply(FramedFlatSlopePanelCornerModel.createSlopeTriangle(facing, orientation, false))
+                        .apply(FramedSlopePanelModel.createSlope(facing, orientation))
+                        .export(quadMap.get(null));
+            }
 
-            QuadModifier.geometry(quad)
-                    .apply(FramedFlatSlopePanelCornerModel.createSlopeTriangle(facing, rotOrientation, true))
-                    .apply(FramedSlopePanelModel.createSlope(facing, rotOrientation))
-                    .export(quadMap.get(null));
+            if (!ySlope || !Utils.isY(rotOrientation))
+            {
+                QuadModifier.geometry(quad)
+                        .apply(FramedFlatSlopePanelCornerModel.createSlopeTriangle(facing, rotOrientation, true))
+                        .apply(FramedSlopePanelModel.createSlope(facing, rotOrientation))
+                        .export(quadMap.get(null));
+            }
         }
         else if (face == facing)
         {

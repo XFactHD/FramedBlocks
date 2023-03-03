@@ -58,8 +58,12 @@ public class FramedRailSlopeModel extends FramedSlopeModel
     {
         RailShape shape = state.getValue(PropertyHolder.ASCENDING_RAIL_SHAPE);
         Direction dir = FramedUtils.getDirectionFromAscendingRailShape(shape);
+        boolean ySlope = state.getValue(FramedProperties.Y_SLOPE);
 
-        return FBContent.blockFramedSlope.get().defaultBlockState().setValue(FramedProperties.FACING_HOR, dir);
+        return FBContent.blockFramedSlope.get()
+                .defaultBlockState()
+                .setValue(FramedProperties.FACING_HOR, dir)
+                .setValue(FramedProperties.Y_SLOPE, ySlope);
     }
 
 

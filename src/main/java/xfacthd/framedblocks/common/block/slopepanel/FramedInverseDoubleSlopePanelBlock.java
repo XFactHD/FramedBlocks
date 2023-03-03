@@ -5,7 +5,9 @@ import com.google.common.collect.ImmutableMap;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.util.Tuple;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.context.BlockPlaceContext;
+import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.*;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
@@ -14,6 +16,7 @@ import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
+import xfacthd.framedblocks.api.block.IFramedBlock;
 import xfacthd.framedblocks.api.util.FramedProperties;
 import xfacthd.framedblocks.api.util.Utils;
 import xfacthd.framedblocks.common.FBContent;
@@ -24,13 +27,20 @@ import xfacthd.framedblocks.common.data.property.HorizontalRotation;
 
 public class FramedInverseDoubleSlopePanelBlock extends AbstractFramedDoubleBlock
 {
-    public FramedInverseDoubleSlopePanelBlock() { super(BlockType.FRAMED_INV_DOUBLE_SLOPE_PANEL); }
+    public FramedInverseDoubleSlopePanelBlock()
+    {
+        super(BlockType.FRAMED_INV_DOUBLE_SLOPE_PANEL);
+        registerDefaultState(defaultBlockState().setValue(FramedProperties.Y_SLOPE, false));
+    }
 
     @Override
     protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder)
     {
         super.createBlockStateDefinition(builder);
-        builder.add(FramedProperties.FACING_HOR, PropertyHolder.ROTATION, BlockStateProperties.WATERLOGGED);
+        builder.add(
+                FramedProperties.FACING_HOR, PropertyHolder.ROTATION, BlockStateProperties.WATERLOGGED,
+                FramedProperties.Y_SLOPE
+        );
     }
 
     @Override
@@ -53,6 +63,12 @@ public class FramedInverseDoubleSlopePanelBlock extends AbstractFramedDoubleBloc
                 .setValue(FramedProperties.FACING_HOR, facing)
                 .setValue(PropertyHolder.ROTATION, rotation);
         return withWater(state, context.getLevel(), context.getClickedPos());
+    }
+
+    @Override
+    public boolean handleBlockLeftClick(BlockState state, Level level, BlockPos pos, Player player)
+    {
+        return IFramedBlock.toggleYSlope(state, level, pos, player);
     }
 
     @Override
@@ -114,15 +130,18 @@ public class FramedInverseDoubleSlopePanelBlock extends AbstractFramedDoubleBloc
     {
         Direction facing = state.getValue(FramedProperties.FACING_HOR);
         HorizontalRotation rotation = state.getValue(PropertyHolder.ROTATION);
+        boolean ySlope = state.getValue(FramedProperties.Y_SLOPE);
 
         BlockState defState = FBContent.blockFramedSlopePanel.get().defaultBlockState();
         return new Tuple<>(
                 defState.setValue(FramedProperties.FACING_HOR, facing.getOpposite())
                         .setValue(PropertyHolder.ROTATION, rotation.isVertical() ? rotation.getOpposite() : rotation)
-                        .setValue(PropertyHolder.FRONT, true),
+                        .setValue(PropertyHolder.FRONT, true)
+                        .setValue(FramedProperties.Y_SLOPE, ySlope),
                 defState.setValue(FramedProperties.FACING_HOR, facing)
                         .setValue(PropertyHolder.ROTATION, rotation)
                         .setValue(PropertyHolder.FRONT, true)
+                        .setValue(FramedProperties.Y_SLOPE, ySlope)
         );
     }
 

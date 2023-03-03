@@ -22,7 +22,7 @@ public class FramedPrismCornerBlock extends FramedThreewayCornerBlock
     public FramedPrismCornerBlock(BlockType type)
     {
         super(type);
-        registerDefaultState(defaultBlockState().setValue(FramedProperties.TOP, false).setValue(FramedProperties.OFFSET, false));
+        registerDefaultState(defaultBlockState().setValue(FramedProperties.OFFSET, false));
     }
 
     @Override
@@ -58,7 +58,7 @@ public class FramedPrismCornerBlock extends FramedThreewayCornerBlock
             level.setBlockAndUpdate(pos, state.setValue(FramedProperties.OFFSET, !state.getValue(FramedProperties.OFFSET)));
             return true;
         }
-        return false;
+        return super.handleBlockLeftClick(state, level, pos, player);
     }
 
 

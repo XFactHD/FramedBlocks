@@ -9,6 +9,7 @@ import xfacthd.framedblocks.api.model.FramedBlockModel;
 import xfacthd.framedblocks.api.model.quad.Modifiers;
 import xfacthd.framedblocks.api.model.quad.QuadModifier;
 import xfacthd.framedblocks.api.util.FramedProperties;
+import xfacthd.framedblocks.api.util.Utils;
 import xfacthd.framedblocks.common.FBContent;
 import xfacthd.framedblocks.common.data.PropertyHolder;
 import xfacthd.framedblocks.common.data.property.HorizontalRotation;
@@ -23,6 +24,7 @@ public class FramedFlatExtendedInnerSlopePanelCornerModel extends FramedBlockMod
     private final HorizontalRotation rotRotation;
     private final Direction orientation;
     private final Direction rotOrientation;
+    private final boolean ySlope;
 
     public FramedFlatExtendedInnerSlopePanelCornerModel(BlockState state, BakedModel baseModel)
     {
@@ -32,6 +34,7 @@ public class FramedFlatExtendedInnerSlopePanelCornerModel extends FramedBlockMod
         this.rotRotation = rotation.rotate(Rotation.COUNTERCLOCKWISE_90);
         this.orientation = rotation.withFacing(facing);
         this.rotOrientation = rotRotation.withFacing(facing);
+        this.ySlope = state.getValue(FramedProperties.Y_SLOPE);
     }
 
     @Override
@@ -41,22 +44,46 @@ public class FramedFlatExtendedInnerSlopePanelCornerModel extends FramedBlockMod
         if (face == orientation)
         {
             FramedFlatSlopePanelCornerModel.createSideTriangle(quadMap, quad, facing, rotRotation, true, true);
+
+            if (ySlope && Utils.isY(orientation))
+            {
+                QuadModifier.geometry(quad)
+                        .apply(FramedFlatSlopePanelCornerModel.createVerticalSlopeTriangle(facing.getOpposite(), orientation, false))
+                        .apply(FramedSlopePanelModel.createVerticalSlope(facing, orientation))
+                        .apply(Modifiers.offset(facing.getOpposite(), .5F))
+                        .export(quadMap.get(null));
+            }
         }
         else if (face == rotOrientation)
         {
             FramedFlatSlopePanelCornerModel.createSideTriangle(quadMap, quad, facing, rotation, true, true);
+
+            if (ySlope && Utils.isY(rotOrientation))
+            {
+                QuadModifier.geometry(quad)
+                        .apply(FramedFlatSlopePanelCornerModel.createVerticalSlopeTriangle(facing.getOpposite(), rotOrientation, true))
+                        .apply(FramedSlopePanelModel.createVerticalSlope(facing, rotOrientation))
+                        .apply(Modifiers.offset(facing.getOpposite(), .5F))
+                        .export(quadMap.get(null));
+            }
         }
         else if (face == facing.getOpposite())
         {
-            QuadModifier.geometry(quad)
-                    .apply(FramedFlatSlopePanelCornerModel.createSlopeTriangle(facing, rotOrientation, true))
-                    .apply(FramedSlopePanelModel.createSlope(facing, orientation))
-                    .export(quadMap.get(null));
+            if (!ySlope || !Utils.isY(orientation))
+            {
+                QuadModifier.geometry(quad)
+                        .apply(FramedFlatSlopePanelCornerModel.createSlopeTriangle(facing, rotOrientation, true))
+                        .apply(FramedSlopePanelModel.createSlope(facing, orientation))
+                        .export(quadMap.get(null));
+            }
 
-            QuadModifier.geometry(quad)
-                    .apply(FramedFlatSlopePanelCornerModel.createSlopeTriangle(facing, orientation, false))
-                    .apply(FramedSlopePanelModel.createSlope(facing, rotOrientation))
-                    .export(quadMap.get(null));
+            if (!ySlope || !Utils.isY(rotOrientation))
+            {
+                QuadModifier.geometry(quad)
+                        .apply(FramedFlatSlopePanelCornerModel.createSlopeTriangle(facing, orientation, false))
+                        .apply(FramedSlopePanelModel.createSlope(facing, rotOrientation))
+                        .export(quadMap.get(null));
+            }
         }
         else if (face == facing)
         {
