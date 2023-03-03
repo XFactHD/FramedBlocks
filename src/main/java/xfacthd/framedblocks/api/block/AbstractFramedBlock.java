@@ -25,6 +25,7 @@ import net.minecraftforge.common.IPlantable;
 import xfacthd.framedblocks.FramedBlocks;
 import xfacthd.framedblocks.api.type.IBlockType;
 import xfacthd.framedblocks.api.util.FramedProperties;
+import xfacthd.framedblocks.api.util.Utils;
 import xfacthd.framedblocks.api.util.client.FramedBlockRenderProperties;
 
 import javax.annotation.Nullable;
@@ -224,12 +225,6 @@ public abstract class AbstractFramedBlock extends Block implements IFramedBlock,
             FramedBlocks.LOGGER.warn("Block '{}' handles shapes itself but doesn't override AbstractFramedBlock#doesBlockMaskBeaconBeam()", this);
             return false;
         }
-        //TODO: switch to precondition in 1.20
-        /*Preconditions.checkNotNull(
-                beamColorMasking,
-                "Block '%s' handles shapes itself but doesn't override AbstractFramedBlock#doesBlockMaskBeaconBeam()",
-                this
-        );*/
         return beaconBeamOcclusion.getBoolean(state);
     }
 
@@ -251,6 +246,23 @@ public abstract class AbstractFramedBlock extends Block implements IFramedBlock,
     }
 
 
+
+    protected static BlockState withCornerFacing(BlockState state, Direction side, Direction facing, Vec3 hitVec)
+    {
+        if (Utils.isY(side))
+        {
+            return state.setValue(FramedProperties.FACING_HOR, facing);
+        }
+
+        if (Utils.fractionInDir(hitVec, side.getCounterClockWise()) > .5)
+        {
+            return state.setValue(FramedProperties.FACING_HOR, side.getOpposite().getClockWise());
+        }
+        else
+        {
+            return state.setValue(FramedProperties.FACING_HOR, side.getOpposite());
+        }
+    }
 
     protected static BlockState withTop(BlockState state, Direction side, Vec3 hitVec)
     {

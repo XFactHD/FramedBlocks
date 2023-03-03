@@ -143,6 +143,7 @@ public final class FBContent
     public static final RegistryObject<Block> blockFramedPost = registerBlock(FramedPillarBlock::new, BlockType.FRAMED_POST);
     public static final RegistryObject<Block> blockFramedCollapsibleBlock = registerBlock(FramedCollapsibleBlock::new, BlockType.FRAMED_COLLAPSIBLE_BLOCK);
     public static final RegistryObject<Block> blockFramedHalfStairs = registerBlock(FramedHalfStairsBlock::new, BlockType.FRAMED_HALF_STAIRS);
+    public static final RegistryObject<Block> blockFramedDividedStairs = registerBlock(FramedDividedStairsBlock::new, BlockType.FRAMED_DIVIDED_STAIRS);
     public static final RegistryObject<Block> blockFramedBouncyCube = registerBlock(FramedBouncyCubeBlock::new, BlockType.FRAMED_BOUNCY_CUBE);
     public static final RegistryObject<Block> blockFramedSecretStorage = registerBlock(FramedStorageBlock::new, BlockType.FRAMED_SECRET_STORAGE);
     public static final RegistryObject<Block> blockFramedRedstoneBlock = registerBlock(FramedRedstoneBlock::new, BlockType.FRAMED_REDSTONE_BLOCK);
@@ -169,6 +170,7 @@ public final class FBContent
     public static final RegistryObject<Block> blockFramedFlatStackedSlopeSlabCorner = registerBlock(FramedFlatStackedSlopeSlabCornerBlock::new, BlockType.FRAMED_FLAT_STACKED_SLOPE_SLAB_CORNER);
     public static final RegistryObject<Block> blockFramedFlatStackedInnerSlopeSlabCorner = registerBlock(FramedFlatStackedSlopeSlabCornerBlock::new, BlockType.FRAMED_FLAT_STACKED_INNER_SLOPE_SLAB_CORNER);
     public static final RegistryObject<Block> blockFramedVerticalHalfStairs = registerBlock(FramedVerticalHalfStairsBlock::new, BlockType.FRAMED_VERTICAL_HALF_STAIRS);
+    public static final RegistryObject<Block> blockFramedVerticalDividedStairs = registerBlock(FramedVerticalDividedStairsBlock::new, BlockType.FRAMED_VERTICAL_DIVIDED_STAIRS);
     public static final RegistryObject<Block> blockFramedSlopePanel = registerBlock(FramedSlopePanelBlock::new, BlockType.FRAMED_SLOPE_PANEL);
     public static final RegistryObject<Block> blockFramedExtendedSlopePanel = registerBlock(FramedExtendedSlopePanelBlock::new, BlockType.FRAMED_EXTENDED_SLOPE_PANEL);
     public static final RegistryObject<Block> blockFramedDoubleSlopePanel = registerBlock(FramedDoubleSlopePanelBlock::new, BlockType.FRAMED_DOUBLE_SLOPE_PANEL);
@@ -282,6 +284,10 @@ public final class FBContent
             FramedCollapsibleBlockEntity::new,
             BlockType.FRAMED_COLLAPSIBLE_BLOCK
     );
+    public static final RegistryObject<BlockEntityType<FramedDividedStairsBlockEntity>> blockEntityTypeFramedDividedStairs = createBlockEntityType(
+            FramedDividedStairsBlockEntity::new,
+            BlockType.FRAMED_DIVIDED_STAIRS
+    );
     public static final RegistryObject<BlockEntityType<FramedStorageBlockEntity>> blockEntityTypeFramedSecretStorage = createBlockEntityType(
             FramedStorageBlockEntity::new,
             BlockType.FRAMED_SECRET_STORAGE
@@ -310,6 +316,10 @@ public final class FBContent
     public static final RegistryObject<BlockEntityType<FramedStackedSlopeSlabBlockEntity>> blockEntityTypeFramedStackedSlopeSlab = createBlockEntityType(
             FramedStackedSlopeSlabBlockEntity::new,
             BlockType.FRAMED_STACKED_SLOPE_SLAB, BlockType.FRAMED_FLAT_STACKED_SLOPE_SLAB_CORNER, BlockType.FRAMED_FLAT_STACKED_INNER_SLOPE_SLAB_CORNER
+    );
+    public static final RegistryObject<BlockEntityType<FramedVerticalDividedStairsBlockEntity>> blockEntityTypeFramedVerticalDividedStairs = createBlockEntityType(
+            FramedVerticalDividedStairsBlockEntity::new,
+            BlockType.FRAMED_VERTICAL_DIVIDED_STAIRS
     );
     public static final RegistryObject<BlockEntityType<FramedFlatDoubleSlopeSlabCornerBlockEntity>> blockEntityTypeFramedFlatDoubleSlopeSlabCorner = createBlockEntityType(
             FramedFlatDoubleSlopeSlabCornerBlockEntity::new,

@@ -315,6 +315,7 @@ public final class FBClient
         ClientUtils.replaceModels(FBContent.blockFramedPost, registry, FramedPillarModel::new, ignoreWaterlogged);
         ClientUtils.replaceModels(FBContent.blockFramedCollapsibleBlock, registry, FramedCollapsibleBlockModel::new, ignoreWaterlogged);
         ClientUtils.replaceModels(FBContent.blockFramedHalfStairs, registry, FramedHalfStairsModel::new, ignoreWaterlogged);
+        replaceDoubleBlockModels(FBContent.blockFramedDividedStairs, registry, null, ignoreDefault);
         ClientUtils.replaceModels(FBContent.blockFramedBouncyCube, registry, (state, baseModel) -> FramedMarkedCubeModel.slime(state, baseModel, registry), ignoreSolid);
         ClientUtils.replaceModels(FBContent.blockFramedSecretStorage, registry, FramedCubeBaseModel::new, ignoreSolid);
         ClientUtils.replaceModels(FBContent.blockFramedRedstoneBlock, registry, (state, baseModel) -> FramedMarkedCubeModel.redstone(state, baseModel, registry), ignoreSolid);
@@ -341,6 +342,7 @@ public final class FBClient
         ClientUtils.replaceModels(FBContent.blockFramedFlatStackedSlopeSlabCorner, registry, FramedStackedSlopeSlabModel::new, FramedStackedSlopeSlabModel.itemSourceCorner(), ignoreDefault);
         ClientUtils.replaceModels(FBContent.blockFramedFlatStackedInnerSlopeSlabCorner, registry, FramedStackedSlopeSlabModel::new, FramedStackedSlopeSlabModel.itemSourceInnerCorner(), ignoreDefault);
         ClientUtils.replaceModels(FBContent.blockFramedVerticalHalfStairs, registry, FramedVerticalHalfStairsModel::new, ignoreWaterlogged);
+        ClientUtils.replaceModels(FBContent.blockFramedVerticalDividedStairs, registry, FramedVerticalDividedStairsModel::new, ignoreDefault);
         ClientUtils.replaceModels(FBContent.blockFramedSlopePanel, registry, FramedSlopePanelModel::new, FramedSlopePanelModel.itemSource(), ignoreDefault);
         ClientUtils.replaceModels(FBContent.blockFramedExtendedSlopePanel, registry, FramedExtendedSlopePanelModel::new, FramedExtendedSlopePanelModel.itemSource(), ignoreDefault);
         ClientUtils.replaceModels(FBContent.blockFramedDoubleSlopePanel, registry, FramedDoubleSlopePanelModel::new, FramedDoubleSlopePanelModel.itemSource(), ignoreDefault);

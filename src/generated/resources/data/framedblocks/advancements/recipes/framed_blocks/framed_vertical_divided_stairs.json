@@ -1,12 +1,12 @@
 {
   "parent": "minecraft:recipes/root",
   "criteria": {
-    "hasFramedHalfStairs": {
+    "hasFramedVerticalHalfStairs": {
       "conditions": {
         "items": [
           {
             "items": [
-              "framedblocks:framed_half_stairs"
+              "framedblocks:framed_vertical_half_stairs"
             ]
           }
         ]
@@ -15,20 +15,20 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "framedblocks:framed_stairs_from_half_stairs"
+        "recipe": "framedblocks:framed_vertical_divided_stairs"
       },
       "trigger": "minecraft:recipe_unlocked"
     }
   },
   "requirements": [
     [
-      "hasFramedHalfStairs",
+      "hasFramedVerticalHalfStairs",
       "has_the_recipe"
     ]
   ],
   "rewards": {
     "recipes": [
-      "framedblocks:framed_stairs_from_half_stairs"
+      "framedblocks:framed_vertical_divided_stairs"
     ]
   }
 }

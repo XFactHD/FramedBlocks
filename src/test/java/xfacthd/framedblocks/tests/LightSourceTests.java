@@ -97,11 +97,15 @@ public final class LightSourceTests
                  FRAMED_FLAT_INV_DOUBLE_SLOPE_PANEL_CORNER,
                  FRAMED_FLAT_EXT_DOUBLE_SLOPE_PANEL_CORNER,
                  FRAMED_FLAT_EXT_INNER_DOUBLE_SLOPE_PANEL_CORNER,
+                 FRAMED_STACKED_SLOPE_PANEL,
+                 FRAMED_FLAT_STACKED_SLOPE_PANEL_CORNER,
+                 FRAMED_FLAT_STACKED_INNER_SLOPE_PANEL_CORNER,
                  FRAMED_VERTICAL_DOUBLE_HALF_SLOPE -> List.of(Direction.NORTH, Direction.SOUTH);
 
             case FRAMED_DIVIDED_PANEL_VERTICAL,
                  FRAMED_VERTICAL_DOUBLE_STAIRS,
-                 FRAMED_DIVIDED_SLOPE -> List.of(Direction.EAST, Direction.WEST);
+                 FRAMED_DIVIDED_SLOPE,
+                 FRAMED_DIVIDED_STAIRS -> List.of(Direction.EAST, Direction.WEST);
 
             default -> List.of(Direction.UP, Direction.DOWN);
         };

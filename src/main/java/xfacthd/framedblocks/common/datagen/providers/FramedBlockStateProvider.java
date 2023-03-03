@@ -75,6 +75,7 @@ public final class FramedBlockStateProvider extends BlockStateProvider
         simpleBlock(FBContent.blockFramedHalfPillar.get(), cube);
         simpleBlock(FBContent.blockFramedPost.get(), cube);
         simpleBlock(FBContent.blockFramedHalfStairs.get(), cube);
+        simpleBlock(FBContent.blockFramedDividedStairs.get(), cube);
         simpleBlockWithItem(FBContent.blockFramedPrism, cube, "cutout");
         simpleBlockWithItem(FBContent.blockFramedInnerPrism, cube, "cutout");
         simpleBlockWithItem(FBContent.blockFramedDoublePrism, cube, "cutout");
@@ -98,6 +99,7 @@ public final class FramedBlockStateProvider extends BlockStateProvider
         simpleBlockWithItem(FBContent.blockFramedFlatStackedSlopeSlabCorner, cube, "cutout");
         simpleBlockWithItem(FBContent.blockFramedFlatStackedInnerSlopeSlabCorner, cube, "cutout");
         simpleBlock(FBContent.blockFramedVerticalHalfStairs.get(), cube);
+        simpleBlock(FBContent.blockFramedVerticalDividedStairs.get(), cube);
         simpleBlockWithItem(FBContent.blockFramedSlopePanel, cube, "cutout");
         simpleBlockWithItem(FBContent.blockFramedExtendedSlopePanel, cube, "cutout");
         simpleBlockWithItem(FBContent.blockFramedDoubleSlopePanel, cube, "cutout");
@@ -842,6 +844,7 @@ public final class FramedBlockStateProvider extends BlockStateProvider
 
 
 
+    @SuppressWarnings("unused")
     private BlockModelBuilder block(RegistryObject<Block> block) { return block(block, ""); }
 
     private BlockModelBuilder block(RegistryObject<Block> block, String suffix)
