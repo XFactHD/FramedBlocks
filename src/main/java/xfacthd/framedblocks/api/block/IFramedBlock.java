@@ -563,6 +563,16 @@ public interface IFramedBlock extends EntityBlock, IForgeBlock
         return false;
     }
 
+    @Override
+    default boolean shouldDisplayFluidOverlay(BlockState state, BlockAndTintGetter level, BlockPos pos, FluidState fluid)
+    {
+        if (!state.getValue(FramedProperties.SOLID) && level.getBlockEntity(pos) instanceof FramedBlockEntity be)
+        {
+            return be.shouldCamoDisplayFluidOverlay(level, pos, fluid);
+        }
+        return false;
+    }
+
     default Optional<MutableComponent> printCamoBlock(CompoundTag beTag)
     {
         BlockState camoState = CamoContainer.load(beTag.getCompound("camo")).getState();

@@ -2,16 +2,16 @@ package xfacthd.framedblocks.common.blockentity;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.util.Tuple;
-import net.minecraft.world.level.LevelReader;
+import net.minecraft.world.level.*;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.core.Direction;
+import net.minecraft.world.level.material.FluidState;
 import net.minecraft.world.level.material.MaterialColor;
 import net.minecraft.world.phys.BlockHitResult;
-import net.minecraft.world.level.Explosion;
 import net.minecraftforge.client.model.data.*;
 import net.minecraftforge.registries.ForgeRegistries;
 import xfacthd.framedblocks.FramedBlocks;
@@ -134,6 +134,16 @@ public abstract class FramedDoubleBlockEntity extends FramedBlockEntity
                 (superMult[1] + localMult[1]) / 2F,
                 (superMult[2] + localMult[2]) / 2F
         };
+    }
+
+    @Override
+    public boolean shouldCamoDisplayFluidOverlay(BlockAndTintGetter level, BlockPos pos, FluidState fluid)
+    {
+        if (camoContainer.isEmpty() || camoContainer.getState().shouldDisplayFluidOverlay(level, pos, fluid))
+        {
+            return true;
+        }
+        return super.shouldCamoDisplayFluidOverlay(level, pos, fluid);
     }
 
     @Override
