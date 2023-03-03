@@ -25,6 +25,7 @@ import net.minecraft.world.phys.Vec3;
 import net.minecraft.world.phys.shapes.*;
 import net.minecraftforge.common.IPlantable;
 import net.minecraftforge.common.Tags;
+import net.minecraftforge.common.extensions.IForgeBlock;
 import xfacthd.framedblocks.api.FramedBlocksAPI;
 import xfacthd.framedblocks.api.type.IBlockType;
 import xfacthd.framedblocks.api.util.*;
@@ -40,7 +41,7 @@ import java.util.function.Supplier;
  * via a mixin to allow CTM to be an optional dependency :/
  */
 @SuppressWarnings({ "deprecation", "unused" })
-public interface IFramedBlock extends EntityBlock//, IFacade
+public interface IFramedBlock extends EntityBlock, IForgeBlock//, IFacade
 {
     String LOCK_MESSAGE = Utils.translationKey("msg", "lock_state");
     Component STATE_LOCKED = Utils.translate("msg", "lock_state.locked").withStyle(ChatFormatting.RED);
@@ -515,6 +516,16 @@ public interface IFramedBlock extends EntityBlock//, IFacade
 
             BlockState camoState = be.getCamoState(side);
             return camoState.is(Utils.CAMO_SUSTAIN_PLANT) && camoState.canSustainPlant(level, pos, side, plant);
+        }
+        return false;
+    }
+
+    @Override
+    default boolean shouldDisplayFluidOverlay(BlockState state, BlockAndTintGetter level, BlockPos pos, FluidState fluid)
+    {
+        if (!state.getValue(FramedProperties.SOLID) && level.getBlockEntity(pos) instanceof FramedBlockEntity be)
+        {
+            return be.shouldCamoDisplayFluidOverlay(level, pos, fluid);
         }
         return false;
     }

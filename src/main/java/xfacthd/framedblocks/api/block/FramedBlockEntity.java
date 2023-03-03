@@ -18,6 +18,7 @@ import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.*;
+import net.minecraft.world.level.material.FluidState;
 import net.minecraft.world.level.material.MaterialColor;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.shapes.CollisionContext;
@@ -673,6 +674,11 @@ public class FramedBlockEntity extends BlockEntity
             return camoState.getBeaconColorMultiplier(level, pos, beaconPos);
         }
         return null;
+    }
+
+    public boolean shouldCamoDisplayFluidOverlay(BlockAndTintGetter level, BlockPos pos, FluidState fluid)
+    {
+        return camoState.isAir() || camoState.shouldDisplayFluidOverlay(level, pos, fluid);
     }
 
     @Override
