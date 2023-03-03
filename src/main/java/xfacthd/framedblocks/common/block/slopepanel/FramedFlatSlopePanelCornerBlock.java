@@ -66,7 +66,7 @@ public class FramedFlatSlopePanelCornerBlock extends FramedBlock
         }
         else
         {
-            rotation = HorizontalRotation.fromDirection(facing, side);
+            rotation = HorizontalRotation.fromDirection(facing, side, context.getClickLocation());
         }
 
         BlockState state = block.defaultBlockState()
