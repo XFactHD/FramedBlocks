@@ -583,6 +583,10 @@ public final class FramingSawRecipeProvider extends RecipeProvider
         FramingSawRecipeBuilder.builder(FBContent.blockFramedVerticalSlopedStairs)
                 .material(FramingSawRecipe.CUBE_MATERIAL_VALUE / 4 * 3)
                 .save(consumer);
+
+        FramingSawRecipeBuilder.builder(FBContent.blockFramedMiniCube)
+                .material(FramingSawRecipe.CUBE_MATERIAL_VALUE / 8)
+                .save(consumer);
     }
 
     @Override

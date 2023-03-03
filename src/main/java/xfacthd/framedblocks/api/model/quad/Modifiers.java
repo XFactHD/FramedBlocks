@@ -854,6 +854,34 @@ public final class Modifiers
         }
     }
 
+    public static QuadModifier.Modifier scaleFace(float factor, Vector3f origin)
+    {
+        return data ->
+        {
+            Vector3f scaleVec = switch (data.quad().getDirection().getAxis())
+                    {
+                        case X -> new Vector3f(0.0F, 1.0F, 1.0F);
+                        case Y -> new Vector3f(1.0F, 0.0F, 1.0F);
+                        case Z -> new Vector3f(1.0F, 1.0F, 0.0F);
+                    };
+
+            scaleVec.mul(factor);
+
+            float[][] pos = data.pos();
+            for (int i = 0; i < 4; i++)
+            {
+                Vector4f posVec = new Vector4f(pos[i][0] - origin.x(), pos[i][1] - origin.y(), pos[i][2] - origin.z(), 1.0F);
+                posVec.mul(scaleVec);
+
+                pos[i][0] = posVec.x() + origin.x();
+                pos[i][1] = posVec.y() + origin.y();
+                pos[i][2] = posVec.z() + origin.z();
+            }
+
+            return true;
+        };
+    }
+
     public static QuadModifier.Modifier applyFullbright() { return applyLightmap(15, 15); }
 
     public static QuadModifier.Modifier applyLightmap(int light) { return applyLightmap(light, light); }
