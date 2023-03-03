@@ -1007,7 +1007,8 @@ public final class FramedRecipeProvider extends RecipeProvider
                 .save(consumer);
 
         ShapelessRecipeBuilder.shapeless(FBContent.blockFramedMiniCube.get(), 1)
-                .requires(FBContent.blockFramedHalfPillar.get())
+                .requires(FBContent.blockFramedCube.get())
+                .requires(FBContent.itemFramedHammer.get())
                 .unlockedBy("hasFramedHalfPillar", has(FBContent.blockFramedHalfPillar.get()))
                 .save(consumer);
 
