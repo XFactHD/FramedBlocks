@@ -2,7 +2,6 @@ package xfacthd.framedblocks.common.block.slope;
 
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
-import com.mojang.datafixers.util.Pair;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.util.Tuple;
@@ -109,15 +108,12 @@ public class FramedDoubleHalfSlopeBlock extends AbstractFramedDoubleBlock
     }
 
     @Override
-    public Pair<IFramedBlock, BlockItem> createItemBlock()
+    public BlockItem createBlockItem()
     {
-        return Pair.of(
+        return new VerticalAndWallBlockItem(
                 this,
-                new VerticalAndWallBlockItem(
-                        this,
-                        FBContent.blockFramedVerticalDoubleHalfSlope.get(),
-                        new Item.Properties().tab(FramedBlocks.FRAMED_TAB)
-                )
+                FBContent.blockFramedVerticalDoubleHalfSlope.get(),
+                new Item.Properties().tab(FramedBlocks.FRAMED_TAB)
         );
     }
 

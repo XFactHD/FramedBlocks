@@ -1,6 +1,5 @@
 package xfacthd.framedblocks.common.block.torch;
 
-import com.mojang.datafixers.util.Pair;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
@@ -108,12 +107,12 @@ public class FramedRedstoneTorchBlock extends RedstoneTorchBlock implements IFra
     public BlockType getBlockType() { return BlockType.FRAMED_REDSTONE_TORCH; }
 
     @Override
-    public Pair<IFramedBlock, BlockItem> createItemBlock()
+    public BlockItem createBlockItem()
     {
-        return Pair.of(this, new StandingAndWallBlockItem(
+        return new StandingAndWallBlockItem(
                 FBContent.blockFramedRedstoneTorch.get(),
                 FBContent.blockFramedRedstoneWallTorch.get(),
                 new Item.Properties().tab(FramedBlocks.FRAMED_TAB)
-        ));
+        );
     }
 }

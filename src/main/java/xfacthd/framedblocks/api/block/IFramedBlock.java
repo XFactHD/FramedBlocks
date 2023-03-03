@@ -76,6 +76,11 @@ public interface IFramedBlock extends EntityBlock, IForgeBlock
         return ((IFramedBlock) state.getBlock()).isSuffocating(state, level, pos);
     }
 
+    /**
+     * @deprecated Use {@link IFramedBlock#createBlockItem()} instead
+     */
+    @Deprecated(forRemoval = true, since = "1.19.3")
+    @SuppressWarnings("DeprecatedIsStillUsed")
     default Pair<IFramedBlock, BlockItem> createItemBlock()
     {
         return Pair.of(
@@ -85,6 +90,11 @@ public interface IFramedBlock extends EntityBlock, IForgeBlock
                         new Item.Properties().tab(FramedBlocksAPI.getInstance().defaultCreativeTab())
                 )
         );
+    }
+
+    default BlockItem createBlockItem()
+    {
+        return createItemBlock().getSecond();
     }
 
     default void tryApplyCamoImmediately(Level level, BlockPos pos, @Nullable LivingEntity placer, ItemStack stack)

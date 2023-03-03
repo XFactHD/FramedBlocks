@@ -1,18 +1,14 @@
 package xfacthd.framedblocks.common;
 
 import com.google.common.base.Preconditions;
-import com.mojang.datafixers.util.Pair;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.inventory.MenuType;
-import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraftforge.common.extensions.IForgeMenuType;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import net.minecraftforge.network.IContainerFactory;
 import net.minecraftforge.registries.*;
@@ -22,7 +18,6 @@ import xfacthd.framedblocks.api.block.IFramedBlock;
 import xfacthd.framedblocks.api.data.EmptyCamoContainer;
 import xfacthd.framedblocks.api.data.CamoContainer;
 import xfacthd.framedblocks.api.util.FramedConstants;
-import xfacthd.framedblocks.api.util.Utils;
 import xfacthd.framedblocks.common.block.cube.*;
 import xfacthd.framedblocks.common.block.door.*;
 import xfacthd.framedblocks.common.block.interactive.*;
@@ -49,7 +44,6 @@ import java.util.*;
 import java.util.function.Function;
 import java.util.function.Supplier;
 
-@Mod.EventBusSubscriber(modid = FramedConstants.MOD_ID, bus = Mod.EventBusSubscriber.Bus.MOD)
 public final class FBContent
 {
     private static final DeferredRegister<Block> BLOCKS = DeferredRegister.create(ForgeRegistries.BLOCKS, FramedConstants.MOD_ID);
@@ -405,32 +399,6 @@ public final class FBContent
 
     public static Item toolByType(FramedToolType type) { return TOOLS_BY_TYPE.get(type).get(); }
 
-    @SubscribeEvent
-    public static void onRegisterItems(final RegisterEvent event)
-    {
-        if (event.getRegistryKey() != ForgeRegistries.Keys.ITEMS) { return; }
-
-        BLOCKS.getEntries()
-                .stream()
-                .map(RegistryObject::get)
-                .filter(block -> block instanceof IFramedBlock)
-                .map(IFramedBlock.class::cast)
-                .filter(block -> block.getBlockType().hasBlockItem())
-                .map(IFramedBlock::createItemBlock)
-                .forEach(item -> registerBlockItem(event, item));
-    }
-
-    private static void registerBlockItem(RegisterEvent event, Pair<IFramedBlock, BlockItem> item)
-    {
-        event.register(
-                ForgeRegistries.Keys.ITEMS,
-                helper -> helper.register(
-                        Utils.rl(item.getFirst().getBlockType().getName()),
-                        item.getSecond()
-                )
-        );
-    }
-
     private static Supplier<Block[]> getDefaultEntityBlocks()
     {
         //noinspection SuspiciousToArrayCall
@@ -457,6 +425,14 @@ public final class FBContent
             return block;
         });
         BLOCKS_BY_TYPE.put(type, result);
+
+        if (type.hasBlockItem())
+        {
+            ITEMS.register(type.getName(), () ->
+                    ((IFramedBlock) result.get()).createBlockItem()
+            );
+        }
+
         return result;
     }
 

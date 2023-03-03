@@ -46,6 +46,7 @@ public class FramedBlueprintItem extends FramedToolItem
 
     private static final Map<Block, BlueprintCopyBehaviour> COPY_BEHAVIOURS = new IdentityHashMap<>();
     private static final BlueprintCopyBehaviour NO_OP_BEHAVIOUR = new BlueprintCopyBehaviour(){};
+    private static boolean locked = false;
 
     public FramedBlueprintItem(FramedToolType type) { super(type); }
 
@@ -365,6 +366,8 @@ public class FramedBlueprintItem extends FramedToolItem
 
     public static synchronized void registerBehaviour(BlueprintCopyBehaviour behaviour, Block... blocks)
     {
+        Preconditions.checkState(!locked, "BlueprintCopyBehaviour registry is locked!");
+
         Preconditions.checkNotNull(behaviour, "BlueprintCopyBehaviour must be non-null");
         Preconditions.checkNotNull(blocks, "Blocks array must be non-null to register a BlueprintCopyBehaviour");
         Preconditions.checkState(blocks.length > 0, "At least one block must be provided to register a BlueprintCopyBehaviour");
@@ -373,5 +376,10 @@ public class FramedBlueprintItem extends FramedToolItem
         {
             COPY_BEHAVIOURS.put(block, behaviour);
         }
+    }
+
+    public static void lockRegistration()
+    {
+        locked = true;
     }
 }
