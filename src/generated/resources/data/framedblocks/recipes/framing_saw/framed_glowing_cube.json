@@ -1,0 +1,15 @@
+{
+  "type": "framedblocks:frame",
+  "additives": [
+    {
+      "count": 4,
+      "ingredient": {
+        "tag": "forge:dusts/glowstone"
+      }
+    }
+  ],
+  "material": 6144,
+  "result": {
+    "item": "framedblocks:framed_glowing_cube"
+  }
+}

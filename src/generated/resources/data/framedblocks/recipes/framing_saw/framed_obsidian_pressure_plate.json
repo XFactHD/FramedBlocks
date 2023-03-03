@@ -1,0 +1,15 @@
+{
+  "type": "framedblocks:frame",
+  "additives": [
+    {
+      "count": 1,
+      "ingredient": {
+        "tag": "forge:obsidian"
+      }
+    }
+  ],
+  "material": 1536,
+  "result": {
+    "item": "framedblocks:framed_obsidian_pressure_plate"
+  }
+}

@@ -1,0 +1,15 @@
+{
+  "type": "framedblocks:frame",
+  "additives": [
+    {
+      "count": 1,
+      "ingredient": {
+        "item": "minecraft:activator_rail"
+      }
+    }
+  ],
+  "material": 3072,
+  "result": {
+    "item": "framedblocks:framed_activator_rail_slope"
+  }
+}

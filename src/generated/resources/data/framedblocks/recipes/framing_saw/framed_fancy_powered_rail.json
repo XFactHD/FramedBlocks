@@ -1,0 +1,23 @@
+{
+  "type": "framedblocks:frame",
+  "additives": [
+    {
+      "count": 6,
+      "ingredient": {
+        "tag": "forge:ingots/gold"
+      }
+    },
+    {
+      "count": 1,
+      "ingredient": {
+        "tag": "forge:dusts/redstone"
+      }
+    }
+  ],
+  "disabled": true,
+  "material": 6144,
+  "result": {
+    "count": 6,
+    "item": "framedblocks:framed_fancy_powered_rail"
+  }
+}
