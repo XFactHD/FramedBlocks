@@ -1,12 +1,13 @@
 package xfacthd.framedblocks.common.block.cube;
 
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.*;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
@@ -16,12 +17,14 @@ import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import org.jetbrains.annotations.Nullable;
 import xfacthd.framedblocks.api.util.CtmPredicate;
+import xfacthd.framedblocks.api.util.Utils;
 import xfacthd.framedblocks.common.FBContent;
 import xfacthd.framedblocks.common.block.FramedBlock;
 import xfacthd.framedblocks.common.blockentity.FramedOwnableBlockEntity;
 import xfacthd.framedblocks.common.data.BlockType;
 import xfacthd.framedblocks.common.data.PropertyHolder;
 import xfacthd.framedblocks.common.data.property.NullableDirection;
+import xfacthd.framedblocks.common.util.ServerConfig;
 
 public class FramedOneWayWindowBlock extends FramedBlock
 {
@@ -102,6 +105,32 @@ public class FramedOneWayWindowBlock extends FramedBlock
     }
 
     @Override
+    @SuppressWarnings("deprecation")
+    public BlockState rotate(BlockState state, Rotation rotation)
+    {
+        Direction dir = state.getValue(PropertyHolder.NULLABLE_FACE).toDirection();
+        if (dir != null && !Utils.isY(dir))
+        {
+            dir = rotation.rotate(dir);
+            state = state.setValue(PropertyHolder.NULLABLE_FACE, NullableDirection.fromDirection(dir));
+        }
+        return state;
+    }
+
+    @Override
+    @SuppressWarnings("deprecation")
+    public BlockState mirror(BlockState state, Mirror mirror)
+    {
+        Direction dir = state.getValue(PropertyHolder.NULLABLE_FACE).toDirection();
+        if (dir != null && !Utils.isY(dir))
+        {
+            dir = mirror.mirror(dir);
+            state = state.setValue(PropertyHolder.NULLABLE_FACE, NullableDirection.fromDirection(dir));
+        }
+        return state;
+    }
+
+    @Override
     public BlockEntity newBlockEntity(BlockPos pos, BlockState state)
     {
         return new FramedOwnableBlockEntity(pos, state);
@@ -111,6 +140,10 @@ public class FramedOneWayWindowBlock extends FramedBlock
 
     public static boolean isOwnedBy(BlockGetter level, BlockPos pos, Player player)
     {
+        if (!ServerConfig.oneWayWindowOwnable)
+        {
+            return true;
+        }
         if (level.getBlockEntity(pos) instanceof FramedOwnableBlockEntity be)
         {
             return player.getUUID().equals(be.getOwner());

@@ -21,18 +21,22 @@ public final class ServerConfig
     private static final String KEY_ALLOW_BLOCK_ENTITIES = "allowBlockEntities";
     private static final String KEY_ENABLE_INTANGIBILITY = "enableIntangibleFeature";
     private static final String KEY_INTANGIBLE_MARKER = "intangibleMarkerItem";
+    private static final String KEY_ONE_WAY_WINDOW_OWNABLE = "oneWayWindowOwnable";
 
     public static final String TRANSLATION_ALLOW_BLOCK_ENTITIES = translate(KEY_ALLOW_BLOCK_ENTITIES);
     public static final String TRANSLATION_ENABLE_INTANGIBILITY = translate(KEY_ENABLE_INTANGIBILITY);
     public static final String TRANSLATION_INTANGIBLE_MARKER = translate(KEY_INTANGIBLE_MARKER);
+    public static final String TRANSLATION_ONE_WAY_WINDOW_OWNABLE = translate(KEY_ONE_WAY_WINDOW_OWNABLE);
 
     public static boolean allowBlockEntities;
     public static boolean enableIntangibleFeature;
     public static Item intangibleMarkerItem;
+    public static boolean oneWayWindowOwnable;
 
     private final ForgeConfigSpec.BooleanValue allowBlockEntitiesValue;
     private final ForgeConfigSpec.BooleanValue enableIntangibleFeatureValue;
     private final ForgeConfigSpec.ConfigValue<String> intangibleMarkerItemValue;
+    private final ForgeConfigSpec.BooleanValue oneWayWindowOwnableValue;
 
     static
     {
@@ -58,7 +62,11 @@ public final class ServerConfig
         intangibleMarkerItemValue = builder
                 .comment("The item to use for making Framed Blocks intangible. The value must be a valid item registry name")
                 .translation(TRANSLATION_INTANGIBLE_MARKER)
-                .define("intangibleMarkerItem", Items.PHANTOM_MEMBRANE.getRegistryName().toString(), ServerConfig::validateItemName);
+                .define(KEY_INTANGIBLE_MARKER, Items.PHANTOM_MEMBRANE.getRegistryName().toString(), ServerConfig::validateItemName);
+        oneWayWindowOwnableValue = builder
+                .comment("If true, only the player who placed the Framed One-Way Window can modify the window direction")
+                .translation(TRANSLATION_ONE_WAY_WINDOW_OWNABLE)
+                .define(KEY_ONE_WAY_WINDOW_OWNABLE, true);
         builder.pop();
     }
 
@@ -88,6 +96,7 @@ public final class ServerConfig
             allowBlockEntities = allowBlockEntitiesValue.get();
             enableIntangibleFeature = enableIntangibleFeatureValue.get();
             intangibleMarkerItem = ForgeRegistries.ITEMS.getValue(new ResourceLocation(intangibleMarkerItemValue.get()));
+            oneWayWindowOwnable = oneWayWindowOwnableValue.get();
         }
     }
 }
