@@ -94,6 +94,8 @@ public final class FBClient
         OverlayRegistry.registerOverlayTop("framedblocks:toggle_waterloggable", new ToggleWaterloggableOverlay());
         OverlayRegistry.registerOverlayTop("y_slope", new ToggleYSlopeOverlay());
         OverlayRegistry.registerOverlayTop("reinforcement", new ReinforcementOverlay());
+        OverlayRegistry.registerOverlayTop("prism_offset", new PrismOffsetOverlay());
+        OverlayRegistry.registerOverlayTop("split_line", new SplitLineOverlay());
 
         KeyMappings.register();
 
