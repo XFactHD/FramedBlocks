@@ -25,6 +25,8 @@ public final class FramedCreativeTab extends CreativeModeTab
             Item itemOne = s1.getItem();
             Item itemTwo = s2.getItem();
 
+            if (itemOne == FBContent.itemFramedReinforcement.get()) { return 1; }
+            if (itemTwo == FBContent.itemFramedReinforcement.get()) { return -1; }
             if (itemOne instanceof FramedToolItem toolOne && itemTwo instanceof FramedToolItem toolTwo)
             {
                 return toolOne.getType().compareTo(toolTwo.getType());

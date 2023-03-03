@@ -25,6 +25,8 @@ public final class FramedItemModelProvider extends ItemModelProvider
         handheldItem(FBContent.itemFramedKey, "cutout");
         handheldItem(FBContent.itemFramedScrewdriver, "cutout");
 
+        simpleItem(FBContent.itemFramedReinforcement, "cutout");
+
         ItemModelBuilder modelNormal = simpleItem(FBContent.itemFramedBlueprint, "cutout");
         ModelFile modelWritten = simpleItem("framed_blueprint_written", "cutout");
 

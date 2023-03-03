@@ -22,6 +22,7 @@ import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.EntityCollisionContext;
 import net.minecraftforge.client.model.data.ModelData;
 import net.minecraftforge.common.Tags;
+import net.minecraftforge.common.ToolActions;
 import net.minecraftforge.common.capabilities.ForgeCapabilities;
 import net.minecraftforge.fluids.capability.IFluidHandler;
 import net.minecraftforge.registries.ForgeRegistries;
@@ -48,11 +49,18 @@ public class FramedBlockEntity extends BlockEntity
     private CamoContainer camoContainer = EmptyCamoContainer.EMPTY;
     private boolean glowing = false;
     private boolean intangible = false;
+    private boolean reinforced = false;
     private boolean recheckStates = false;
 
-    public FramedBlockEntity(BlockPos pos, BlockState state) { this(FramedBlocksAPI.getInstance().defaultBlockEntity(), pos, state); }
+    public FramedBlockEntity(BlockPos pos, BlockState state)
+    {
+        this(FramedBlocksAPI.getInstance().defaultBlockEntity(), pos, state);
+    }
 
-    protected FramedBlockEntity(BlockEntityType<?> type, BlockPos pos, BlockState state) { super(type, pos, state); }
+    protected FramedBlockEntity(BlockEntityType<?> type, BlockPos pos, BlockState state)
+    {
+        super(type, pos, state);
+    }
 
     public final InteractionResult handleInteraction(Player player, InteractionHand hand, BlockHitResult hit)
     {
@@ -127,6 +135,34 @@ public class FramedBlockEntity extends BlockEntity
             }
             return InteractionResult.sidedSuccess(level.isClientSide());
         }
+        else if (!reinforced && stack.is(Utils.FRAMED_REINFORCEMENT.get()))
+        {
+            //noinspection ConstantConditions
+            if (!level.isClientSide())
+            {
+                if (!player.isCreative()) { stack.shrink(1); }
+
+                setReinforced(true);
+            }
+            return InteractionResult.sidedSuccess(level.isClientSide());
+        }
+        else if (reinforced && canRemoveReinforcement(stack))
+        {
+            //noinspection ConstantConditions
+            if (!level.isClientSide())
+            {
+                setReinforced(false);
+
+                stack.hurtAndBreak(1, player, p -> p.broadcastBreakEvent(hand));
+
+                ItemStack result = new ItemStack(Utils.FRAMED_REINFORCEMENT.get());
+                if (!player.getInventory().add(result))
+                {
+                    player.drop(result, false);
+                }
+            }
+            return InteractionResult.sidedSuccess(level.isClientSide());
+        }
 
         return InteractionResult.PASS;
     }
@@ -138,6 +174,15 @@ public class FramedBlockEntity extends BlockEntity
             return false;
         }
         return stack.is(FramedBlocksAPI.getInstance().getIntangibilityMarkerItem()) && getBlockType().allowMakingIntangible();
+    }
+
+    private static boolean canRemoveReinforcement(ItemStack stack)
+    {
+        if (stack.getItem().canPerformAction(stack, ToolActions.PICKAXE_DIG))
+        {
+            return stack.isCorrectToolForDrops(Blocks.OBSIDIAN.defaultBlockState());
+        }
+        return false;
     }
 
     private InteractionResult clearBlockCamo(Player player, CamoContainer camo, ItemStack stack, boolean secondary)
@@ -435,7 +480,12 @@ public class FramedBlockEntity extends BlockEntity
 
     public float getCamoExplosionResistance(Explosion explosion)
     {
-        return camoContainer.getState().getExplosionResistance(level, worldPosition, explosion);
+        float camoRes = camoContainer.getState().getExplosionResistance(level, worldPosition, explosion);
+        if (reinforced)
+        {
+            camoRes = Math.max(camoRes, Blocks.OBSIDIAN.getExplosionResistance());
+        }
+        return camoRes;
     }
 
     public boolean isCamoFlammable(Direction face)
@@ -504,6 +554,23 @@ public class FramedBlockEntity extends BlockEntity
         return true;
     }
 
+    public void setReinforced(boolean reinforced)
+    {
+        if (this.reinforced != reinforced)
+        {
+            this.reinforced = reinforced;
+
+            //noinspection ConstantConditions
+            level.sendBlockUpdated(worldPosition, getBlockState(), getBlockState(), Block.UPDATE_ALL);
+            setChanged();
+        }
+    }
+
+    public boolean isReinforced()
+    {
+        return reinforced;
+    }
+
     protected final void doLightUpdate()
     {
         //noinspection ConstantConditions
@@ -519,6 +586,10 @@ public class FramedBlockEntity extends BlockEntity
         if (!camoContainer.isEmpty())
         {
             drops.add(camoContainer.toItemStack(ItemStack.EMPTY));
+        }
+        if (reinforced)
+        {
+            drops.add(new ItemStack(Utils.FRAMED_REINFORCEMENT.get()));
         }
     }
 
@@ -571,6 +642,7 @@ public class FramedBlockEntity extends BlockEntity
         nbt.put("camo", CamoContainer.save(camoContainer));
         nbt.putBoolean("glowing", glowing);
         nbt.putBoolean("intangible", intangible);
+        nbt.putBoolean("reinforced", reinforced);
     }
 
     protected boolean readFromDataPacket(CompoundTag nbt)
@@ -608,6 +680,8 @@ public class FramedBlockEntity extends BlockEntity
             needCullingUpdate = true;
         }
 
+        reinforced = nbt.getBoolean("reinforced");
+
         if (needCullingUpdate)
         {
             updateCulling(true, false);
@@ -624,6 +698,7 @@ public class FramedBlockEntity extends BlockEntity
         nbt.put("camo", CamoContainer.save(camoContainer));
         nbt.putBoolean("glowing", glowing);
         nbt.putBoolean("intangible", intangible);
+        nbt.putBoolean("reinforced", reinforced);
 
         return nbt;
     }
@@ -643,6 +718,7 @@ public class FramedBlockEntity extends BlockEntity
 
         glowing = nbt.getBoolean("glowing");
         intangible = nbt.getBoolean("intangible");
+        reinforced = nbt.getBoolean("reinforced");
 
         requestModelDataUpdate();
     }
@@ -686,6 +762,7 @@ public class FramedBlockEntity extends BlockEntity
         nbt.put("camo", CamoContainer.save(camoContainer));
         nbt.putBoolean("glowing", glowing);
         nbt.putBoolean("intangible", intangible);
+        nbt.putBoolean("reinforced", reinforced);
         nbt.putByte("updated", (byte) DATA_VERSION);
 
         super.saveAdditional(nbt);
@@ -714,5 +791,6 @@ public class FramedBlockEntity extends BlockEntity
         }
         glowing = nbt.getBoolean("glowing");
         intangible = nbt.getBoolean("intangible");
+        reinforced = nbt.getBoolean("reinforced");
     }
 }
