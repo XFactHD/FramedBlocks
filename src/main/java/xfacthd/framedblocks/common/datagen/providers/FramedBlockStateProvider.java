@@ -179,7 +179,7 @@ public final class FramedBlockStateProvider extends BlockStateProvider
         registerFramedFancyPoweredRail();
         registerFramedFancyDetectorRail();
         registerFramedFancyActivatorRail();
-        registerFramedHead(cube);
+        registerFramedMiniCube(cube);
         registerFramedOneWayWindow();
 
         registerFramingSaw();
@@ -813,7 +813,7 @@ public final class FramedBlockStateProvider extends BlockStateProvider
         );
     }
 
-    private void registerFramedHead(ModelFile cube)
+    private void registerFramedMiniCube(ModelFile cube)
     {
         simpleBlock(FBContent.blockFramedMiniCube.get(), cube);
 
@@ -852,6 +852,7 @@ public final class FramedBlockStateProvider extends BlockStateProvider
 
 
 
+    @SuppressWarnings("unused")
     private BlockModelBuilder block(RegistryObject<Block> block) { return block(block, ""); }
 
     private BlockModelBuilder block(RegistryObject<Block> block, String suffix)

@@ -267,6 +267,12 @@ public abstract class FramedDoubleBlockEntity extends FramedBlockEntity
 
             ClientUtils.enqueueClientTask(() -> updateCulling(true, true));
         }
+
+        boolean newReinforced = nbt.getBoolean("reinforced");
+        if (isReinforced() != newReinforced)
+        {
+            modelData.setReinforced(newReinforced);
+        }
     }
 
     /*

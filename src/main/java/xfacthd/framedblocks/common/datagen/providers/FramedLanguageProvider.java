@@ -316,6 +316,7 @@ public final class FramedLanguageProvider extends LanguageProvider
         add(ServerConfig.TRANSLATION_ALLOW_BLOCK_ENTITIES, "Allow BlockEntities");
         add(ServerConfig.TRANSLATION_ENABLE_INTANGIBILITY, "Enable intangibility feature");
         add(ServerConfig.TRANSLATION_INTANGIBLE_MARKER, "Intangibility marker item");
+        add(ServerConfig.TRANSLATION_ONE_WAY_WINDOW_OWNABLE, "One-Way Window ownability");
 
         add(ClientConfig.TRANSLATION_SHOW_GHOST_BLOCKS, "Show ghost blocks");
         add(ClientConfig.TRANSLATION_FANCY_HITBOXES, "Fancy hitboxes");

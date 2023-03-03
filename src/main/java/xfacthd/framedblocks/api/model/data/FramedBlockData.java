@@ -61,5 +61,11 @@ public sealed class FramedBlockData permits FramedBlockData.Immutable
         {
             throw new UnsupportedOperationException("Immutable");
         }
+
+        @Override
+        public void setReinforced(boolean reinforced)
+        {
+            throw new UnsupportedOperationException("Immutable");
+        }
     }
 }

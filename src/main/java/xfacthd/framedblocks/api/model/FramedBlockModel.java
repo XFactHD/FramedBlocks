@@ -184,7 +184,7 @@ public abstract class FramedBlockModel extends BakedModelProxy
             needCtCtx = false;
             camoState = getNoCamoModelState(FramedBlocksAPI.getInstance().defaultModelState(), fbData);
             addReinforcement = useBaseModel && fbData.isReinforced();
-            camoInRenderType = baseModelRenderTypes.contains(renderType)/* || (addReinforcement && renderType == RenderType.cutout())*/;
+            camoInRenderType = baseModelRenderTypes.contains(renderType);
             noProcessing = (camoInRenderType && forceUngeneratedBaseModel) || fullFaceCache.isFullFace(side);
             model = getCamoModel(camoState, useBaseModel);
             camoData = ModelData.EMPTY;

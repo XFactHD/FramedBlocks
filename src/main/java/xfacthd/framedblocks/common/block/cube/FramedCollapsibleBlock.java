@@ -65,8 +65,8 @@ public class FramedCollapsibleBlock extends FramedBlock
         ItemStack heldItem = player.getMainHandItem();
         if (heldItem.is(Utils.WRENCH))
         {
-            boolean rotSplitEdge = state.getValue(PropertyHolder.ROTATE_SPLIT_LINE);
-            level.setBlockAndUpdate(pos, state.setValue(PropertyHolder.ROTATE_SPLIT_LINE, !rotSplitEdge));
+            boolean rotSplitLine = state.getValue(PropertyHolder.ROTATE_SPLIT_LINE);
+            level.setBlockAndUpdate(pos, state.setValue(PropertyHolder.ROTATE_SPLIT_LINE, !rotSplitLine));
             return true;
         }
         else if (heldItem.getItem() == FBContent.itemFramedHammer.get())

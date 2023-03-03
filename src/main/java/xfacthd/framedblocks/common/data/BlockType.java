@@ -21,7 +21,6 @@ import xfacthd.framedblocks.common.block.slope.*;
 import xfacthd.framedblocks.common.block.slopepanel.*;
 import xfacthd.framedblocks.common.block.slopeslab.*;
 import xfacthd.framedblocks.common.block.stairs.*;
-import xfacthd.framedblocks.common.data.skippreds.misc.OneWayWindowSkipPredicate;
 import xfacthd.framedblocks.common.data.skippreds.door.*;
 import xfacthd.framedblocks.common.data.skippreds.misc.*;
 import xfacthd.framedblocks.common.data.skippreds.pane.*;

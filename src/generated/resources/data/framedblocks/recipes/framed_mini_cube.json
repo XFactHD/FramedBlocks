@@ -3,7 +3,10 @@
   "category": "building",
   "ingredients": [
     {
-      "item": "framedblocks:framed_half_pillar"
+      "item": "framedblocks:framed_cube"
+    },
+    {
+      "item": "framedblocks:framed_hammer"
     }
   ],
   "result": {
