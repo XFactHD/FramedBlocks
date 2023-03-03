@@ -194,6 +194,8 @@ public final class FBClient
         event.registerAboveAll("toggle_waterloggable", new ToggleWaterloggableOverlay());
         event.registerAboveAll("y_slope", new ToggleYSlopeOverlay());
         event.registerAboveAll("reinforced", new ReinforcementOverlay());
+        event.registerAboveAll("prism_offset", new PrismOffsetOverlay());
+        event.registerAboveAll("split_line", new SplitLineOverlay());
     }
 
     @SubscribeEvent

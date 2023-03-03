@@ -20,13 +20,13 @@ public class FramedCollapsibleBlockModel extends FramedBlockModel
     private static final float MIN_DEPTH = .001F;
 
     private final Direction collapsedFace;
-    private final boolean rotSplitEdge;
+    private final boolean rotSplitLine;
 
     public FramedCollapsibleBlockModel(BlockState state, BakedModel baseModel)
     {
         super(state, baseModel);
         this.collapsedFace = state.getValue(PropertyHolder.COLLAPSED_FACE).toDirection();
-        this.rotSplitEdge = state.getValue(PropertyHolder.ROTATE_SPLIT_EDGE);
+        this.rotSplitLine = state.getValue(PropertyHolder.ROTATE_SPLIT_LINE);
     }
 
     @Override
@@ -54,7 +54,7 @@ public class FramedCollapsibleBlockModel extends FramedBlockModel
         {
             float diff02 = Math.abs(vertexPos[0] - vertexPos[2]);
             float diff13 = Math.abs(vertexPos[1] - vertexPos[3]);
-            boolean rotate = (diff13 > diff02) != rotSplitEdge;
+            boolean rotate = (diff13 > diff02) != rotSplitLine;
 
             QuadModifier.geometry(quad)
                     .apply(Modifiers.setPosition(vertexPos, true))
