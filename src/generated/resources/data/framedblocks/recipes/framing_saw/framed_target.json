@@ -2,15 +2,15 @@
   "type": "framedblocks:frame",
   "additives": [
     {
-      "count": 4,
-      "ingredient": {
-        "tag": "forge:dusts/redstone"
-      }
-    },
-    {
       "count": 1,
       "ingredient": {
         "item": "minecraft:hay_block"
+      }
+    },
+    {
+      "count": 4,
+      "ingredient": {
+        "tag": "forge:dusts/redstone"
       }
     }
   ],

@@ -21,8 +21,8 @@ import java.util.Map;
 
 public class FramedStoneButtonModel extends FramedButtonModel
 {
-    private static final ResourceLocation FRAME_LOCATION = new ResourceLocation(FramedConstants.MOD_ID, "block/framed_stone_button_frame");
-    private static final ResourceLocation FRAME_PRESSED_LOCATION = new ResourceLocation(FramedConstants.MOD_ID, "block/framed_stone_button_pressed_frame");
+    private static final ResourceLocation FRAME_LOCATION = Utils.rl("block/framed_stone_button_frame");
+    private static final ResourceLocation FRAME_PRESSED_LOCATION = Utils.rl("block/framed_stone_button_pressed_frame");
 
     private static BakedModel frameNormalModel;
     private static BakedModel framePressedModel;

@@ -4,13 +4,13 @@
     {
       "count": 1,
       "ingredient": {
-        "item": "minecraft:glow_ink_sac"
+        "tag": "forge:leather"
       }
     },
     {
       "count": 1,
       "ingredient": {
-        "tag": "forge:leather"
+        "item": "minecraft:glow_ink_sac"
       }
     }
   ],

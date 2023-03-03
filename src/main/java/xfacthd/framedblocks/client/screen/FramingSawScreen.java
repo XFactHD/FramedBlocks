@@ -22,7 +22,6 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Ingredient;
 import org.lwjgl.glfw.GLFW;
-import xfacthd.framedblocks.api.util.FramedConstants;
 import xfacthd.framedblocks.api.util.Utils;
 import xfacthd.framedblocks.client.util.ItemRenderHelper;
 import xfacthd.framedblocks.common.FBContent;
@@ -36,14 +35,14 @@ import java.util.*;
 
 public class FramingSawScreen extends AbstractContainerScreen<FramingSawMenu>
 {
-    public static final String TOOLTIP_MATERIAL = "tooltip." + FramedConstants.MOD_ID + ".framing_saw.material";
+    public static final String TOOLTIP_MATERIAL = Utils.translationKey("tooltip", "framing_saw.material");
     public static final Component TOOLTIP_LOOSE_ADDITIVE = Utils.translate("tooltip", "framing_saw.loose_additive");
-    public static final String TOOLTIP_HAVE_X_BUT_NEED_Y_ITEM = "tooltip." + FramedConstants.MOD_ID + ".framing_saw.have_x_but_need_y_item";
-    public static final String TOOLTIP_HAVE_X_BUT_NEED_Y_TAG = "tooltip." + FramedConstants.MOD_ID + ".framing_saw.have_x_but_need_y_tag";
-    public static final String TOOLTIP_HAVE_X_BUT_NEED_Y_ITEM_COUNT = "tooltip." + FramedConstants.MOD_ID + ".framing_saw.have_x_but_need_y_item_count";
-    public static final String TOOLTIP_HAVE_X_BUT_NEED_Y_MATERIAL_COUNT = "tooltip." + FramedConstants.MOD_ID + ".framing_saw.have_x_but_need_y_material_count";
+    public static final String TOOLTIP_HAVE_X_BUT_NEED_Y_ITEM = Utils.translationKey("tooltip", "framing_saw.have_x_but_need_y_item");
+    public static final String TOOLTIP_HAVE_X_BUT_NEED_Y_TAG = Utils.translationKey("tooltip", "framing_saw.have_x_but_need_y_tag");
+    public static final String TOOLTIP_HAVE_X_BUT_NEED_Y_ITEM_COUNT = Utils.translationKey("tooltip", "framing_saw.have_x_but_need_y_item_count");
+    public static final String TOOLTIP_HAVE_X_BUT_NEED_Y_MATERIAL_COUNT = Utils.translationKey("tooltip", "framing_saw.have_x_but_need_y_material_count");
     public static final Component TOOLTIP_HAVE_ITEM_NONE = Utils.translate("tooltip", "framing_saw.have_item_none").withStyle(ChatFormatting.GOLD);
-    public static final String TOOLTIP_PRESS_TO_SHOW = "tooltip." + FramedConstants.MOD_ID + ".framing_saw.press_to_show";
+    public static final String TOOLTIP_PRESS_TO_SHOW = Utils.translationKey("tooltip", "framing_saw.press_to_show");
     private static final ResourceLocation BACKGROUND = Utils.rl("textures/gui/framing_saw.png");
     public static final ResourceLocation WARNING_ICON = new ResourceLocation("forge", "textures/gui/experimental_warning.png");
     private static final int IMAGE_WIDTH = 256;

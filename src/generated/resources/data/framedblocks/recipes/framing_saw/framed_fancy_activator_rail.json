@@ -2,15 +2,15 @@
   "type": "framedblocks:frame",
   "additives": [
     {
-      "count": 1,
-      "ingredient": {
-        "item": "minecraft:redstone_torch"
-      }
-    },
-    {
       "count": 6,
       "ingredient": {
         "tag": "forge:ingots/iron"
+      }
+    },
+    {
+      "count": 1,
+      "ingredient": {
+        "item": "minecraft:redstone_torch"
       }
     }
   ],

@@ -44,7 +44,7 @@ import java.util.function.Supplier;
 @SuppressWarnings({ "deprecation", "unused" })
 public interface IFramedBlock extends EntityBlock, IForgeBlock
 {
-    String LOCK_MESSAGE = "msg." + FramedConstants.MOD_ID + ".lock_state";
+    String LOCK_MESSAGE = Utils.translationKey("msg", "lock_state");
     Component STATE_LOCKED = Utils.translate("msg", "lock_state.locked").withStyle(ChatFormatting.RED);
     Component STATE_UNLOCKED = Utils.translate("msg", "lock_state.unlocked").withStyle(ChatFormatting.GREEN);
 

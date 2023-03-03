@@ -2,12 +2,6 @@
   "type": "framedblocks:frame",
   "additives": [
     {
-      "count": 1,
-      "ingredient": {
-        "item": "minecraft:stone_pressure_plate"
-      }
-    },
-    {
       "count": 6,
       "ingredient": {
         "tag": "forge:ingots/iron"
@@ -17,6 +11,12 @@
       "count": 1,
       "ingredient": {
         "tag": "forge:dusts/redstone"
+      }
+    },
+    {
+      "count": 1,
+      "ingredient": {
+        "item": "minecraft:stone_pressure_plate"
       }
     }
   ],

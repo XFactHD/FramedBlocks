@@ -37,7 +37,7 @@ import java.util.List;
 public class FramedSignScreen extends Screen
 {
     private static final Table<BlockState, Direction, TextureAtlasSprite> SPRITE_CACHE = HashBasedTable.create();
-    private static final ResourceLocation DEFAULT_TEXTURE = new ResourceLocation(FramedConstants.MOD_ID, "block/framed_block");
+    private static final ResourceLocation DEFAULT_TEXTURE = Utils.rl("block/framed_block");
     public static final Component TITLE = Utils.translate("title", "sign.edit");
     public static final Component DONE = Utils.translate("button", "gui.done");
     private static final int TEX_W = 128;
