@@ -10,6 +10,7 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.*;
 import net.minecraft.world.level.block.*;
+import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraftforge.registries.RegistryObject;
@@ -75,6 +76,9 @@ public abstract class AbstractFramedDoubleBlock extends FramedBlock
 
         return Optional.of(component);
     }
+
+    @Override
+    public abstract BlockEntity newBlockEntity(BlockPos pos, BlockState state);
 
     protected abstract Tuple<BlockState, BlockState> getBlockPair(BlockState state);
 

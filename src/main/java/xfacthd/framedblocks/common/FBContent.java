@@ -84,8 +84,11 @@ public final class FBContent
     public static final RegistryObject<Block> blockFramedSlab = registerBlock(FramedSlabBlock::new, BlockType.FRAMED_SLAB);
     public static final RegistryObject<Block> blockFramedSlabEdge = registerBlock(FramedSlabEdgeBlock::new, BlockType.FRAMED_SLAB_EDGE);
     public static final RegistryObject<Block> blockFramedSlabCorner = registerBlock(FramedSlabCornerBlock::new, BlockType.FRAMED_SLAB_CORNER);
+    public static final RegistryObject<Block> blockFramedDividedSlab = registerBlock(FramedDividedSlabBlock::new, BlockType.FRAMED_DIVIDED_SLAB);
     public static final RegistryObject<Block> blockFramedPanel = registerBlock(FramedPanelBlock::new, BlockType.FRAMED_PANEL);
     public static final RegistryObject<Block> blockFramedCornerPillar = registerBlock(FramedCornerPillarBlock::new, BlockType.FRAMED_CORNER_PILLAR);
+    public static final RegistryObject<Block> blockFramedDividedPanelHor = registerBlock(FramedDividedPanelBlock::new, BlockType.FRAMED_DIVIDED_PANEL_HORIZONTAL);
+    public static final RegistryObject<Block> blockFramedDividedPanelVert = registerBlock(FramedDividedPanelBlock::new, BlockType.FRAMED_DIVIDED_PANEL_VERTICAL);
     public static final RegistryObject<Block> blockFramedStairs = registerBlock(FramedStairsBlock::new, BlockType.FRAMED_STAIRS);
     public static final RegistryObject<Block> blockFramedWall = registerBlock(FramedWallBlock::new, BlockType.FRAMED_WALL);
     public static final RegistryObject<Block> blockFramedFence = registerBlock(FramedFenceBlock::new, BlockType.FRAMED_FENCE);
@@ -218,6 +221,14 @@ public final class FBContent
             FramedBlockEntity::new,
             "framed_tile",
             getDefaultEntityBlocks()
+    );
+    public static final RegistryObject<BlockEntityType<FramedDividedSlabBlockEntity>> blockEntityTypeFramedDividedSlab = createBlockEntityType(
+            FramedDividedSlabBlockEntity::new,
+            BlockType.FRAMED_DIVIDED_SLAB
+    );
+    public static final RegistryObject<BlockEntityType<FramedDividedPanelBlockEntity>> blockEntityTypeFramedDividedPanel = createBlockEntityType(
+            FramedDividedPanelBlockEntity::new,
+            BlockType.FRAMED_DIVIDED_PANEL_HORIZONTAL, BlockType.FRAMED_DIVIDED_PANEL_VERTICAL
     );
     public static final RegistryObject<BlockEntityType<FramedSignBlockEntity>> blockEntityTypeFramedSign = createBlockEntityType(
             FramedSignBlockEntity::new,
