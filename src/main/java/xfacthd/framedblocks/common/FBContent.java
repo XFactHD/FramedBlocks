@@ -14,6 +14,7 @@ import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import net.minecraftforge.network.IContainerFactory;
 import net.minecraftforge.registries.*;
+import xfacthd.framedblocks.FramedBlocks;
 import xfacthd.framedblocks.api.block.FramedBlockEntity;
 import xfacthd.framedblocks.api.block.IFramedBlock;
 import xfacthd.framedblocks.api.util.FramedConstants;
@@ -193,6 +194,10 @@ public final class FBContent
     public static final RegistryObject<Item> itemFramedBlueprint = registerToolItem(FramedBlueprintItem::new, FramedToolType.BLUEPRINT);
     public static final RegistryObject<Item> itemFramedKey = registerToolItem(FramedToolItem::new, FramedToolType.KEY);
     public static final RegistryObject<Item> itemFramedScrewdriver = registerToolItem(FramedToolItem::new, FramedToolType.SCREWDRIVER);
+    public static final RegistryObject<Item> itemFramedReinforcement = ITEMS.register("framed_reinforcement", () ->
+            new Item(new Item.Properties().tab(FramedBlocks.FRAMED_TAB))
+    );
+    // endregion
 
     /** TILE ENTITY TYPES */
     public static final RegistryObject<BlockEntityType<FramedBlockEntity>> blockEntityTypeFramedBlock = createBlockEntityType(

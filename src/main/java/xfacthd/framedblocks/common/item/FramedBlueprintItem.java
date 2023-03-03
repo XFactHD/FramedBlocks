@@ -23,8 +23,9 @@ import net.minecraft.world.phys.BlockHitResult;
 import net.minecraftforge.registries.ForgeRegistries;
 import xfacthd.framedblocks.api.blueprint.BlueprintCopyBehaviour;
 import xfacthd.framedblocks.api.block.IFramedBlock;
+import xfacthd.framedblocks.common.FBContent;
+import xfacthd.framedblocks.common.data.*;
 import xfacthd.framedblocks.api.util.Utils;
-import xfacthd.framedblocks.common.data.FramedToolType;
 import xfacthd.framedblocks.api.block.FramedBlockEntity;
 import xfacthd.framedblocks.common.util.ServerConfig;
 
@@ -36,10 +37,12 @@ public class FramedBlueprintItem extends FramedToolItem
     public static final String CONTAINED_BLOCK = "desc.framedblocks.blueprint_block";
     public static final String CAMO_BLOCK = "desc.framedblocks.blueprint_camo";
     public static final String IS_ILLUMINATED = "desc.framedblocks.blueprint_illuminated";
+    public static final String IS_INTANGIBLE = "desc.framedblocks.blueprint_intangible";
+    public static final String IS_REINFORCED = "desc.framedblocks.blueprint_reinforced";
     public static final MutableComponent BLOCK_NONE = Utils.translate("desc", "blueprint_none").withStyle(ChatFormatting.RED);
     public static final MutableComponent BLOCK_INVALID = Utils.translate("desc", "blueprint_invalid").withStyle(ChatFormatting.RED);
-    public static final MutableComponent ILLUMINATED_FALSE = Utils.translate("desc", "blueprint_illuminated_false").withStyle(ChatFormatting.RED);
-    public static final MutableComponent ILLUMINATED_TRUE = Utils.translate("desc", "blueprint_illuminated_true").withStyle(ChatFormatting.GREEN);
+    public static final MutableComponent FALSE = Utils.translate("desc", "blueprint_false").withStyle(ChatFormatting.RED);
+    public static final MutableComponent TRUE = Utils.translate("desc", "blueprint_true").withStyle(ChatFormatting.GREEN);
     public static final MutableComponent CANT_COPY = Utils.translate("desc", "blueprint_cant_copy").withStyle(ChatFormatting.RED);
     public static final Component CANT_PLACE_FLUID_CAMO = Utils.translate("desc", "blueprint_cant_place_fluid_camo").withStyle(ChatFormatting.RED);
 
@@ -154,15 +157,22 @@ public class FramedBlueprintItem extends FramedToolItem
         materials.add(getBlockItem(item));
         materials.addAll(getCamoStacksMerged(camos));
 
-        int glowstone = getBehaviour(item.getBlock()).getGlowstoneCount(tag);
+        BlueprintCopyBehaviour behaviour = getBehaviour(item.getBlock());
+
+        int glowstone = behaviour.getGlowstoneCount(tag);
         if (glowstone > 0)
         {
             materials.add(new ItemStack(Items.GLOWSTONE_DUST, glowstone));
         }
-        int intangible = getBehaviour(item.getBlock()).getIntangibleCount(tag);
+        int intangible = behaviour.getIntangibleCount(tag);
         if (intangible > 0)
         {
             materials.add(new ItemStack(ServerConfig.intangibleMarkerItem, glowstone));
+        }
+        int reinforcement = behaviour.getReinforcementCount(tag);
+        if (reinforcement > 0)
+        {
+            materials.add(new ItemStack(FBContent.itemFramedReinforcement.get(), reinforcement));
         }
 
         for (ItemStack stack : materials)
@@ -218,15 +228,22 @@ public class FramedBlueprintItem extends FramedToolItem
         materials.add(getBlockItem(item));
         materials.addAll(getCamoStacksMerged(camos));
 
-        int glowstone = getBehaviour(item.getBlock()).getGlowstoneCount(tag);
+        BlueprintCopyBehaviour behaviour = getBehaviour(item.getBlock());
+
+        int glowstone = behaviour.getGlowstoneCount(tag);
         if (glowstone > 0)
         {
             materials.add(new ItemStack(Items.GLOWSTONE_DUST, glowstone));
         }
-        int intangible = getBehaviour(item.getBlock()).getIntangibleCount(tag);
+        int intangible = behaviour.getIntangibleCount(tag);
         if (intangible > 0)
         {
             materials.add(new ItemStack(ServerConfig.intangibleMarkerItem, glowstone));
+        }
+        int reinforcement = behaviour.getReinforcementCount(tag);
+        if (reinforcement > 0)
+        {
+            materials.add(new ItemStack(FBContent.itemFramedReinforcement.get(), reinforcement));
         }
 
         Inventory inv = player.getInventory();
@@ -339,13 +356,18 @@ public class FramedBlueprintItem extends FramedToolItem
 
             CompoundTag beTag = tag.getCompound("camo_data");
             Component camoName = !(block instanceof IFramedBlock fb) ? BLOCK_NONE : fb.printCamoBlock(beTag).orElse(BLOCK_NONE);
-            Component illuminated = beTag.getBoolean("glowing") ? ILLUMINATED_TRUE : ILLUMINATED_FALSE;
+            Component illuminated = beTag.getBoolean("glowing") ? TRUE : FALSE;
+            Component intangible = beTag.getBoolean("intangible") ? TRUE : FALSE;
+            Component reinforced = beTag.getBoolean("reinforced") ? TRUE : FALSE;
 
             Component lineOne = new TranslatableComponent(CONTAINED_BLOCK, blockName).withStyle(ChatFormatting.GOLD);
             Component lineTwo = new TranslatableComponent(CAMO_BLOCK, camoName).withStyle(ChatFormatting.GOLD);
             Component lineThree = new TranslatableComponent(IS_ILLUMINATED, illuminated).withStyle(ChatFormatting.GOLD);
 
-            components.addAll(Arrays.asList(lineOne, lineTwo, lineThree));
+            Component lineFour = new TranslatableComponent(IS_INTANGIBLE, intangible).withStyle(ChatFormatting.GOLD);
+            Component lineFive = new TranslatableComponent(IS_REINFORCED, reinforced).withStyle(ChatFormatting.GOLD);
+
+            components.addAll(Arrays.asList(lineOne, lineTwo, lineThree, lineFour, lineFive));
         }
     }
 

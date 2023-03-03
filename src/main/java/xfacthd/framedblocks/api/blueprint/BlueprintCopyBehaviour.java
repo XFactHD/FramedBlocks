@@ -30,6 +30,7 @@ public interface BlueprintCopyBehaviour
     String CAMO_STACK_KEY = "camo_stack";
     String GLOWSTONE_KEY = "glowstone";
     String INTANGIBLE_KEY = "intangible";
+    String REINFORCEMENT_KEY = "reinforced";
 
     /**
      * Allows semi-custom storage of blueprint data, i.e. storing camo data from a second block like the Framed Door does
@@ -94,6 +95,19 @@ public interface BlueprintCopyBehaviour
     default int getIntangibleCount(CompoundTag blueprintData)
     {
         return blueprintData.getCompound(MAIN_CAMO_KEY).getBoolean(INTANGIBLE_KEY) ? 1 : 0;
+    }
+
+    /**
+     * Provide a custom amount of the reinforcement item when placing the block
+     *
+     * @param blueprintData The {@link CompoundTag} containing the full blueprint data (block to place, camo data as
+     *                      written from {@link FramedBlockEntity#writeToBlueprint()}, any custom data added in
+     *                      {@link BlueprintCopyBehaviour#writeToBlueprint(Level, BlockPos, BlockState, FramedBlockEntity, CompoundTag)})
+     * @return The amount of items to consume
+     */
+    default int getReinforcementCount(CompoundTag blueprintData)
+    {
+        return blueprintData.getCompound(MAIN_CAMO_KEY).getBoolean(REINFORCEMENT_KEY) ? 1 : 0;
     }
 
     /**

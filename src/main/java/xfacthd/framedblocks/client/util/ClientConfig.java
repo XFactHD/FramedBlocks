@@ -20,6 +20,7 @@ public class ClientConfig
     public static boolean stateLockShowDetails;
     public static boolean toggleWaterlogShowDetails;
     public static boolean toggleYSlopeShowDetails;
+    public static boolean reinforcedShowDetails;
 
     private final ForgeConfigSpec.BooleanValue showGhostBlocksValue;
     private final ForgeConfigSpec.BooleanValue fancyHitboxesValue;
@@ -29,6 +30,7 @@ public class ClientConfig
     private final ForgeConfigSpec.BooleanValue stateLockShowDetailsValue;
     private final ForgeConfigSpec.BooleanValue toggleWaterlogShowDetailsValue;
     private final ForgeConfigSpec.BooleanValue toggleYSlopeShowDetailsValue;
+    private final ForgeConfigSpec.BooleanValue reinforcedShowDetailsValue;
 
     static
     {
@@ -73,6 +75,10 @@ public class ClientConfig
                 .comment("If true, the Toggle Slope Face overlay will show detailed info, if false, it will only show an icon")
                 .translation("config." + FramedConstants.MOD_ID + ".stateLockShowDetails")
                 .define("toggleYSlopeShowDetails", true);
+        reinforcedShowDetailsValue = builder
+                .comment("If true, the Reinforcement overlay will show detailed info, if false, it will only show an icon")
+                .translation("config." + FramedConstants.MOD_ID + "stateLockShowDetails")
+                .define("reinforcedShowDetails", true);
         builder.pop();
     }
 
@@ -89,6 +95,7 @@ public class ClientConfig
             stateLockShowDetails = stateLockShowDetailsValue.get();
             toggleWaterlogShowDetails = toggleWaterlogShowDetailsValue.get();
             toggleYSlopeShowDetails = toggleYSlopeShowDetailsValue.get();
+            reinforcedShowDetails = reinforcedShowDetailsValue.get();
         }
     }
 }

@@ -10,7 +10,7 @@ import xfacthd.framedblocks.client.util.BlueprintPropertyOverride;
 import xfacthd.framedblocks.common.FBContent;
 
 @SuppressWarnings({ "SameParameterValue", "UnusedReturnValue" })
-public class FramedItemModelProvider extends ItemModelProvider
+public final class FramedItemModelProvider extends ItemModelProvider
 {
     public FramedItemModelProvider(DataGenerator gen, ExistingFileHelper fileHelper)
     {
@@ -24,6 +24,8 @@ public class FramedItemModelProvider extends ItemModelProvider
         handheldItem(FBContent.itemFramedWrench);
         handheldItem(FBContent.itemFramedKey);
         handheldItem(FBContent.itemFramedScrewdriver);
+
+        simpleItem(FBContent.itemFramedReinforcement);
 
         ItemModelBuilder modelNormal = simpleItem(FBContent.itemFramedBlueprint);
         ModelFile modelWritten = simpleItem("framed_blueprint_written");

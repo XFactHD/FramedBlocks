@@ -8,11 +8,13 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiComponent;
 import net.minecraft.client.renderer.GameRenderer;
+import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.packs.resources.ResourceManager;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.BlockHitResult;
@@ -55,7 +57,7 @@ public abstract class BlockInteractOverlay implements IIngameOverlay
         BlockState block = getTargettedBlock();
         if (!isValidTarget(block)) { return; }
 
-        boolean state = getState(block);
+        boolean state = getState(level(), getTargettedPos(), block);
         int centerX = screenWidth / 2;
         int centerY = screenHeight / 2;
 
@@ -111,7 +113,7 @@ public abstract class BlockInteractOverlay implements IIngameOverlay
 
     protected abstract boolean isValidTarget(BlockState state);
 
-    protected abstract boolean getState(BlockState state);
+    protected abstract boolean getState(BlockGetter level, BlockPos pos, BlockState state);
 
     protected abstract boolean showDetailed();
 
@@ -132,9 +134,24 @@ public abstract class BlockInteractOverlay implements IIngameOverlay
         OVERLAYS.forEach(overlay -> overlay.textWidthValid = false);
     }
 
+    protected static BlockGetter level()
+    {
+        return Objects.requireNonNull(Minecraft.getInstance().level);
+    }
+
     protected static Player player()
     {
         return Objects.requireNonNull(Minecraft.getInstance().player);
+    }
+
+    protected static BlockPos getTargettedPos()
+    {
+        HitResult hit = Minecraft.getInstance().hitResult;
+        if (hit instanceof BlockHitResult blockHit)
+        {
+            return blockHit.getBlockPos();
+        }
+        return null;
     }
 
     protected static BlockState getTargettedBlock()
