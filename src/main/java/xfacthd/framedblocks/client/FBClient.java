@@ -4,6 +4,7 @@ import com.github.benmanes.caffeine.cache.RemovalCause;
 import net.minecraft.client.gui.screens.MenuScreens;
 import net.minecraft.client.resources.model.BakedModel;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.packs.resources.ResourceManagerReloadListener;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
@@ -39,6 +40,7 @@ import xfacthd.framedblocks.client.model.torch.*;
 import xfacthd.framedblocks.client.render.*;
 import xfacthd.framedblocks.client.render.outline.*;
 import xfacthd.framedblocks.client.screen.*;
+import xfacthd.framedblocks.client.screen.overlay.*;
 import xfacthd.framedblocks.client.util.*;
 import xfacthd.framedblocks.common.FBContent;
 import xfacthd.framedblocks.common.block.interactive.FramedWeightedPressurePlateBlock;
@@ -339,6 +341,12 @@ public final class FBClient
         ClientUtils.replaceModels(FBContent.blockFramedVerticalDoubleHalfSlope, registry, (state, model) -> new FramedDoubleBlockModel(state, model, false), ignoreDefault);
         ClientUtils.replaceModels(FBContent.blockFramedSlopedStairs, registry, FramedSlopedStairsModel::new, FramedSlopedStairsModel.itemSource(), ignoreDefault);
         ClientUtils.replaceModels(FBContent.blockFramedVerticalSlopedStairs, registry, FramedVerticalSlopedStairsModel::new, FramedVerticalSlopedStairsModel.itemSource(), ignoreDefault);
+    }
+
+    @SubscribeEvent
+    public static void onRegisterReloadListener(final RegisterClientReloadListenersEvent event)
+    {
+        event.registerReloadListener((ResourceManagerReloadListener) BlockInteractOverlay::onResourceReload);
     }
 
 

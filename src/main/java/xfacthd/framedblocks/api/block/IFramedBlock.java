@@ -551,7 +551,7 @@ public interface IFramedBlock extends EntityBlock, IForgeBlock
 
     static boolean toggleYSlope(BlockState state, Level level, BlockPos pos, Player player)
     {
-        if (player.getMainHandItem().is(Utils.WRENCH))
+        if (player.getMainHandItem().getItem() == Utils.FRAMED_WRENCH.get())
         {
             level.setBlockAndUpdate(pos, state.setValue(FramedProperties.Y_SLOPE, !state.getValue(FramedProperties.Y_SLOPE)));
             return true;
