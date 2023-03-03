@@ -25,7 +25,7 @@ public final class ToggleWaterloggableOverlay extends BlockInteractOverlay
     private static final List<Component> LINES_FALSE = List.of(MSG_IS_NOT_WATERLOGGABLE, MSG_MAKE_WATERLOGGABLE);
     private static final List<Component> LINES_TRUE = List.of(MSG_IS_WATERLOGGABLE, MSG_MAKE_NOT_WATERLOGGABLE);
 
-    private static final ResourceLocation SYMBOL_TEXTURE = Utils.rl("textures/gui/waterloggable_symbols.png");
+    private static final ResourceLocation SYMBOL_TEXTURE = Utils.rl("textures/overlay/waterloggable_symbols.png");
     private static final Texture TEXTURE_FALSE = new Texture(SYMBOL_TEXTURE, 0, 0, 20, 20, 40, 20);
     private static final Texture TEXTURE_TRUE = new Texture(SYMBOL_TEXTURE, 20, 0, 20, 20, 40, 20);
 

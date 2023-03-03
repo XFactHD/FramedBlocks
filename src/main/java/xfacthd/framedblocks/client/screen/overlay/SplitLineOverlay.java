@@ -21,7 +21,7 @@ public final class SplitLineOverlay extends BlockInteractOverlay
     private static final List<Component> LINES_FALSE = List.of(SPLIT_LINE_FALSE, MSG_SWITCH_SPLIT_LINE);
     private static final List<Component> LINES_TRUE = List.of(SPLIT_LINE_TRUE, MSG_SWITCH_SPLIT_LINE);
 
-    private static final ResourceLocation SYMBOL_TEXTURE = Utils.rl("textures/gui/split_line_symbols.png");
+    private static final ResourceLocation SYMBOL_TEXTURE = Utils.rl("textures/overlay/split_line_symbols.png");
     private static final Texture TEXTURE_FALSE = new Texture(SYMBOL_TEXTURE, 0, 0, 20, 20, 40, 20);
     private static final Texture TEXTURE_TRUE = new Texture(SYMBOL_TEXTURE, 20, 0, 20, 20, 40, 20);
 

@@ -21,7 +21,7 @@ public final class PrismOffsetOverlay extends BlockInteractOverlay
     private static final List<Component> LINES_FALSE = List.of(PRISM_OFFSET_FALSE, MSG_SWITCH_OFFSET);
     private static final List<Component> LINES_TRUE = List.of(PRISM_OFFSET_TRUE, MSG_SWITCH_OFFSET);
 
-    private static final ResourceLocation SYMBOL_TEXTURE = Utils.rl("textures/gui/prism_offset_symbols.png");
+    private static final ResourceLocation SYMBOL_TEXTURE = Utils.rl("textures/overlay/prism_offset_symbols.png");
     private static final Texture TEXTURE_FALSE = new Texture(SYMBOL_TEXTURE, 0, 0, 19, 19, 38, 19);
     private static final Texture TEXTURE_TRUE = new Texture(SYMBOL_TEXTURE, 19, 0, 19, 19, 38, 19);
 
