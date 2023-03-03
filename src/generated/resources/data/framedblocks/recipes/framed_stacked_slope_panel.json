@@ -1,0 +1,20 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "key": {
+    "H": {
+      "item": "framedblocks:framed_hammer"
+    },
+    "P": {
+      "item": "framedblocks:framed_panel"
+    },
+    "S": {
+      "item": "framedblocks:framed_slope_panel"
+    }
+  },
+  "pattern": [
+    "PSH"
+  ],
+  "result": {
+    "item": "framedblocks:framed_stacked_slope_panel"
+  }
+}

@@ -104,6 +104,7 @@ public class FramedLanguageProvider extends LanguageProvider
         add(FBContent.blockFramedDoubleSlopeSlab.get(), "Framed Double Slope Slab");
         add(FBContent.blockFramedInverseDoubleSlopeSlab.get(), "Framed Inverted Double Slope Slab");
         add(FBContent.blockFramedElevatedDoubleSlopeSlab.get(), "Framed Elevated Double Slope Slab");
+        add(FBContent.blockFramedStackedSlopeSlab.get(), "Framed Stacked Slope Slab");
         add(FBContent.blockFramedFlatSlopeSlabCorner.get(), "Framed Flat Slope Slab Corner");
         add(FBContent.blockFramedFlatInnerSlopeSlabCorner.get(), "Framed Flat Inner Slope Slab Corner");
         add(FBContent.blockFramedFlatElevatedSlopeSlabCorner.get(), "Framed Flat Elevated Slope Slab Corner");
@@ -112,12 +113,15 @@ public class FramedLanguageProvider extends LanguageProvider
         add(FBContent.blockFramedFlatInverseDoubleSlopeSlabCorner.get(), "Framed Flat Inverse Double Slope Slab Corner");
         add(FBContent.blockFramedFlatElevatedDoubleSlopeSlabCorner.get(), "Framed Flat Elevated Double Slope Slab Corner");
         add(FBContent.blockFramedFlatElevatedInnerDoubleSlopeSlabCorner.get(), "Framed Flat Elevated Inner Double Slope Slab Corner");
+        add(FBContent.blockFramedFlatStackedSlopeSlabCorner.get(), "Framed Flat Stacked Slope Slab Corner");
+        add(FBContent.blockFramedFlatStackedInnerSlopeSlabCorner.get(), "Framed Flat Stacked Inner Slope Slab Corner");
         add(FBContent.blockFramedVerticalHalfStairs.get(), "Framed Vertical Half Stairs");
         add(FBContent.blockFramedSlopePanel.get(), "Framed Slope Panel");
         add(FBContent.blockFramedExtendedSlopePanel.get(), "Framed Extended Slope Panel");
         add(FBContent.blockFramedDoubleSlopePanel.get(), "Framed Double Slope Panel");
         add(FBContent.blockFramedInverseDoubleSlopePanel.get(), "Framed Inverted Double Slope Panel");
         add(FBContent.blockFramedExtendedDoubleSlopePanel.get(), "Framed Extended Double Slope Panel");
+        add(FBContent.blockFramedStackedSlopePanel.get(), "Framed Stacked Slope Panel");
         add(FBContent.blockFramedFlatSlopePanelCorner.get(), "Framed Flat Slope Panel Corner");
         add(FBContent.blockFramedFlatInnerSlopePanelCorner.get(), "Framed Flat Inner Slope Panel Corner");
         add(FBContent.blockFramedFlatExtendedSlopePanelCorner.get(), "Framed Flat Extended Slope Panel Corner");
@@ -126,6 +130,8 @@ public class FramedLanguageProvider extends LanguageProvider
         add(FBContent.blockFramedFlatInverseDoubleSlopePanelCorner.get(), "Framed Flat Inverse Double Slope Panel Corner");
         add(FBContent.blockFramedFlatExtendedDoubleSlopePanelCorner.get(), "Framed Flat Extended Double Slope Panel Corner");
         add(FBContent.blockFramedFlatExtendedInnerDoubleSlopePanelCorner.get(), "Framed Flat Extended Inner Double Slope Panel Corner");
+        add(FBContent.blockFramedFlatStackedSlopePanelCorner.get(), "Framed Flat Stacked Slope Panel Corner");
+        add(FBContent.blockFramedFlatStackedInnerSlopePanelCorner.get(), "Framed Flat Stacked Inner Slope Panel Corner");
         add(FBContent.blockFramedDoubleStairs.get(), "Framed Double Stairs");
         add(FBContent.blockFramedVerticalDoubleStairs.get(), "Framed Vertical Double Stairs");
         add(FBContent.blockFramedWallBoard.get(), "Framed Wall Board");

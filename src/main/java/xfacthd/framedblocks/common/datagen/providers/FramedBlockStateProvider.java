@@ -23,7 +23,7 @@ import xfacthd.framedblocks.common.data.PropertyHolder;
 import java.util.function.BiFunction;
 import java.util.function.Function;
 
-public class FramedBlockStateProvider extends BlockStateProvider
+public final class FramedBlockStateProvider extends BlockStateProvider
 {
     private final ResourceLocation TEXTURE;
 
@@ -81,6 +81,7 @@ public class FramedBlockStateProvider extends BlockStateProvider
         simpleBlockWithItem(FBContent.blockFramedDoubleSlopeSlab, cube);
         simpleBlockWithItem(FBContent.blockFramedInverseDoubleSlopeSlab, cube);
         simpleBlockWithItem(FBContent.blockFramedElevatedDoubleSlopeSlab, cube);
+        simpleBlockWithItem(FBContent.blockFramedStackedSlopeSlab, cube);
         simpleBlockWithItem(FBContent.blockFramedFlatSlopeSlabCorner, cube);
         simpleBlockWithItem(FBContent.blockFramedFlatInnerSlopeSlabCorner, cube);
         simpleBlockWithItem(FBContent.blockFramedFlatElevatedSlopeSlabCorner, cube);
@@ -89,12 +90,15 @@ public class FramedBlockStateProvider extends BlockStateProvider
         simpleBlockWithItem(FBContent.blockFramedFlatInverseDoubleSlopeSlabCorner, cube);
         simpleBlockWithItem(FBContent.blockFramedFlatElevatedDoubleSlopeSlabCorner, cube);
         simpleBlockWithItem(FBContent.blockFramedFlatElevatedInnerDoubleSlopeSlabCorner, cube);
+        simpleBlockWithItem(FBContent.blockFramedFlatStackedSlopeSlabCorner, cube);
+        simpleBlockWithItem(FBContent.blockFramedFlatStackedInnerSlopeSlabCorner, cube);
         simpleBlock(FBContent.blockFramedVerticalHalfStairs.get(), cube);
         simpleBlockWithItem(FBContent.blockFramedSlopePanel, cube);
         simpleBlockWithItem(FBContent.blockFramedExtendedSlopePanel, cube);
         simpleBlockWithItem(FBContent.blockFramedDoubleSlopePanel, cube);
         simpleBlockWithItem(FBContent.blockFramedInverseDoubleSlopePanel, cube);
         simpleBlockWithItem(FBContent.blockFramedExtendedDoubleSlopePanel, cube);
+        simpleBlockWithItem(FBContent.blockFramedStackedSlopePanel, cube);
         simpleBlockWithItem(FBContent.blockFramedFlatSlopePanelCorner, cube);
         simpleBlockWithItem(FBContent.blockFramedFlatInnerSlopePanelCorner, cube);
         simpleBlockWithItem(FBContent.blockFramedFlatExtendedSlopePanelCorner, cube);
@@ -103,6 +107,8 @@ public class FramedBlockStateProvider extends BlockStateProvider
         simpleBlockWithItem(FBContent.blockFramedFlatInverseDoubleSlopePanelCorner, cube);
         simpleBlockWithItem(FBContent.blockFramedFlatExtendedDoubleSlopePanelCorner, cube);
         simpleBlockWithItem(FBContent.blockFramedFlatExtendedInnerDoubleSlopePanelCorner, cube);
+        simpleBlockWithItem(FBContent.blockFramedFlatStackedSlopePanelCorner, cube);
+        simpleBlockWithItem(FBContent.blockFramedFlatStackedInnerSlopePanelCorner, cube);
         simpleBlockWithItem(FBContent.blockFramedDoubleStairs, cube);
         simpleBlockWithItem(FBContent.blockFramedVerticalDoubleStairs, cube);
         simpleBlock(FBContent.blockFramedWallBoard.get(), cube);
