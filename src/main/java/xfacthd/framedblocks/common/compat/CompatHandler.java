@@ -6,6 +6,7 @@ import xfacthd.framedblocks.common.compat.ctm.CtmCompat;
 import xfacthd.framedblocks.common.compat.flywheel.FlywheelCompat;
 import xfacthd.framedblocks.common.compat.jei.JeiCompat;
 import xfacthd.framedblocks.common.compat.nocubes.NoCubesCompat;
+import xfacthd.framedblocks.common.compat.rubidium.RubidiumCompat;
 import xfacthd.framedblocks.common.compat.supplementaries.SupplementariesCompat;
 
 public final class CompatHandler
@@ -18,6 +19,7 @@ public final class CompatHandler
         FlywheelCompat.init();
         JeiCompat.init();
         NoCubesCompat.init();
+        RubidiumCompat.init();
         SupplementariesCompat.init();
     }
 

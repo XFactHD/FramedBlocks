@@ -155,7 +155,7 @@ dependencies {
     //runtimeOnly fg.deobf("curse.maven:spark-361579:3767286")
 
     //runtimeOnly fg.deobf("curse.maven:magnesium_sodium-532724:3556734")
-    //runtimeOnly fg.deobf("curse.maven:rubidium_sodium-574856:3633735")
+    //runtimeOnly fg.deobf("curse.maven:rubidium_sodium-574856:3973894")
 
     compileOnly fg.deobf("com.simibubi.create:create-1.19.2:0.5.0.e-13:slim") { transitive = false }
     compileOnly fg.deobf("com.jozufozu.flywheel:flywheel-forge-1.19.2:0.6.6-7")

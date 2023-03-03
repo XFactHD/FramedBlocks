@@ -10,6 +10,7 @@ import xfacthd.framedblocks.api.model.quad.Modifiers;
 import xfacthd.framedblocks.api.model.quad.QuadModifier;
 import xfacthd.framedblocks.api.util.Utils;
 import xfacthd.framedblocks.common.blockentity.FramedCollapsibleBlockEntity;
+import xfacthd.framedblocks.common.compat.rubidium.RubidiumCompat;
 import xfacthd.framedblocks.common.data.PropertyHolder;
 
 import java.util.List;
@@ -26,7 +27,7 @@ public class FramedCollapsibleBlockModel extends FramedBlockModel
     {
         super(state, baseModel);
         this.collapsedFace = state.getValue(PropertyHolder.COLLAPSED_FACE).toDirection();
-        this.rotSplitLine = state.getValue(PropertyHolder.ROTATE_SPLIT_LINE);
+        this.rotSplitLine = state.getValue(PropertyHolder.ROTATE_SPLIT_LINE) ^ RubidiumCompat.invertCollapsibleBlockSplitLineRotation();
     }
 
     @Override
