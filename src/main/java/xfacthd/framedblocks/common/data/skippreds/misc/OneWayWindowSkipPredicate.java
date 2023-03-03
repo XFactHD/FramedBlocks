@@ -16,7 +16,7 @@ public class OneWayWindowSkipPredicate implements SideSkipPredicate
     {
         if (adjState.getBlock() != FBContent.blockFramedOneWayWindow.get())
         {
-            return false;
+            return SideSkipPredicate.CTM.test(level, pos, state, adjState, side);
         }
 
         NullableDirection face = state.getValue(PropertyHolder.NULLABLE_FACE);
