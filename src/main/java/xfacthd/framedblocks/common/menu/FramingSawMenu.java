@@ -38,6 +38,7 @@ public class FramingSawMenu extends AbstractContainerMenu
     private ItemStack lastInput = ItemStack.EMPTY;
     private ItemStack lastAdditive = ItemStack.EMPTY;
     private FramingSawRecipe selectedRecipe = null;
+    private boolean recipeChanged = false;
 
     public FramingSawMenu(int containerId, Inventory inv, ContainerLevelAccess levelAccess)
     {
@@ -127,6 +128,7 @@ public class FramingSawMenu extends AbstractContainerMenu
             selectedRecipeIdx.set(id);
             selectedRecipe = recipes.get(id).recipe;
             setupResultSlot();
+            recipeChanged = true;
         }
         return true;
     }
@@ -224,13 +226,20 @@ public class FramingSawMenu extends AbstractContainerMenu
         return selectedRecipeIdx.get();
     }
 
+    public boolean hasRecipeChanged()
+    {
+        boolean changed = recipeChanged;
+        recipeChanged = false;
+        return changed;
+    }
+
     @SuppressWarnings("BooleanMethodIsAlwaysInverted")
     private boolean moveItemStackTo(ItemStack stack, int slot)
     {
         return moveItemStackTo(stack, slot, slot + 1, false);
     }
 
-    private boolean isValidRecipeIndex(int idx)
+    public boolean isValidRecipeIndex(int idx)
     {
         return idx >= 0 && idx < recipes.size();
     }
