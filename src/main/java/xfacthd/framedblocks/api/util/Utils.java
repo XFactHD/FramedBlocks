@@ -44,6 +44,10 @@ public final class Utils
             new ResourceLocation(FramedConstants.MOD_ID, "framed_hammer"),
             ForgeRegistries.ITEMS
     );
+    public static final RegistryObject<Item> FRAMED_WRENCH = RegistryObject.create(
+            new ResourceLocation(FramedConstants.MOD_ID, "framed_wrench"),
+            ForgeRegistries.ITEMS
+    );
     public static final RegistryObject<Item> FRAMED_KEY = RegistryObject.create(
             new ResourceLocation(FramedConstants.MOD_ID, "framed_key"),
             ForgeRegistries.ITEMS

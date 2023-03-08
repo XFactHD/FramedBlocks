@@ -17,11 +17,18 @@ public class ClientConfig
     public static boolean fancyHitboxes = false;
     public static boolean detailedCulling = false;
     public static boolean useDiscreteUVSteps = false;
+    public static boolean stateLockShowDetails;
+    public static boolean toggleWaterlogShowDetails;
+    public static boolean toggleYSlopeShowDetails;
 
     private final ForgeConfigSpec.BooleanValue showGhostBlocksValue;
     private final ForgeConfigSpec.BooleanValue fancyHitboxesValue;
     private final ForgeConfigSpec.BooleanValue detailedCullingValue;
     private final ForgeConfigSpec.BooleanValue useDiscreteUVStepsValue;
+
+    private final ForgeConfigSpec.BooleanValue stateLockShowDetailsValue;
+    private final ForgeConfigSpec.BooleanValue toggleWaterlogShowDetailsValue;
+    private final ForgeConfigSpec.BooleanValue toggleYSlopeShowDetailsValue;
 
     static
     {
@@ -52,6 +59,21 @@ public class ClientConfig
                 .translation("config." + FramedConstants.MOD_ID + ".discreteUVSteps")
                 .define("discreteUVSteps", true);
         builder.pop();
+
+        builder.push("overlay");
+        stateLockShowDetailsValue = builder
+                .comment("If true, the State Lock overlay will show detailed info, if false, it will only show an icon")
+                .translation("config." + FramedConstants.MOD_ID + ".stateLockShowDetails")
+                .define("stateLockShowDetails", true);
+        toggleWaterlogShowDetailsValue = builder
+                .comment("If true, the Toggle Waterloggable overlay will show detailed info, if false, it will only show an icon")
+                .translation("config." + FramedConstants.MOD_ID + ".stateLockShowDetails")
+                .define("toggleWaterlogShowDetails", true);
+        toggleYSlopeShowDetailsValue = builder
+                .comment("If true, the Toggle Slope Face overlay will show detailed info, if false, it will only show an icon")
+                .translation("config." + FramedConstants.MOD_ID + ".stateLockShowDetails")
+                .define("toggleYSlopeShowDetails", true);
+        builder.pop();
     }
 
     @SubscribeEvent
@@ -63,6 +85,10 @@ public class ClientConfig
             fancyHitboxes = fancyHitboxesValue.get();
             detailedCulling = detailedCullingValue.get();
             useDiscreteUVSteps = useDiscreteUVStepsValue.get();
+
+            stateLockShowDetails = stateLockShowDetailsValue.get();
+            toggleWaterlogShowDetails = toggleWaterlogShowDetailsValue.get();
+            toggleYSlopeShowDetails = toggleYSlopeShowDetailsValue.get();
         }
     }
 }
