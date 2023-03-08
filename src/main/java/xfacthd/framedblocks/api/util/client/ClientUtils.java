@@ -134,7 +134,13 @@ public final class ClientUtils
                                             BlockState itemModelSource,
                                             Function<BlockState, BlockState> stateMerger)
     {
-        replaceModelsSpecial(block, models, blockModelGen, model -> models.get(BlockModelShaper.stateToModelLocation(itemModelSource)), stateMerger);
+        replaceModelsSpecial(
+                block,
+                models,
+                blockModelGen,
+                model -> itemModelSource != null ? models.get(BlockModelShaper.stateToModelLocation(itemModelSource)) : model,
+                stateMerger
+        );
     }
 
     /**

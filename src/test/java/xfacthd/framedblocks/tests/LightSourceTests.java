@@ -90,7 +90,8 @@ public final class LightSourceTests
 
         return switch ((BlockType) type)
         {
-            case FRAMED_DOUBLE_PANEL,
+            case FRAMED_DIVIDED_SLAB,
+                 FRAMED_DOUBLE_PANEL,
                  FRAMED_DOUBLE_SLOPE_PANEL,
                  FRAMED_INV_DOUBLE_SLOPE_PANEL,
                  FRAMED_EXTENDED_DOUBLE_SLOPE_PANEL,
@@ -98,11 +99,10 @@ public final class LightSourceTests
                  FRAMED_FLAT_INV_DOUBLE_SLOPE_PANEL_CORNER,
                  FRAMED_FLAT_EXT_DOUBLE_SLOPE_PANEL_CORNER,
                  FRAMED_FLAT_EXT_INNER_DOUBLE_SLOPE_PANEL_CORNER,
-                 FRAMED_DOUBLE_PRISM,
-                 FRAMED_DOUBLE_SLOPED_PRISM,
                  FRAMED_VERTICAL_DOUBLE_HALF_SLOPE -> List.of(Direction.NORTH, Direction.SOUTH);
 
-            case FRAMED_VERTICAL_DOUBLE_STAIRS,
+            case FRAMED_DIVIDED_PANEL_VERTICAL,
+                 FRAMED_VERTICAL_DOUBLE_STAIRS,
                  FRAMED_DIVIDED_SLOPE -> List.of(Direction.EAST, Direction.WEST);
 
             default -> List.of(Direction.UP, Direction.DOWN);

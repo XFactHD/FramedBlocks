@@ -41,9 +41,12 @@ public final class StairsSkipPredicate implements SideSkipPredicate
                 case FRAMED_SLAB -> testAgainstSlab(level, pos, state, dir, shape, half, adjState, side);
                 case FRAMED_DOUBLE_SLAB -> testAgainstDoubleSlab(level, pos, state, dir, shape, half, adjState, side);
                 case FRAMED_SLAB_EDGE -> testAgainstEdge(level, pos, state, dir, shape, half, adjState, side);
+                case FRAMED_DIVIDED_SLAB -> testAgainstDividedSlab(level, pos, state, dir, shape, half, adjState, side);
+                case FRAMED_DIVIDED_PANEL_HORIZONTAL -> testAgainstDividedPanelHor(level, pos, state, dir, shape, half, adjState, side);
                 case FRAMED_PANEL -> testAgainstPanel(level, pos, state, dir, shape, half, adjState, side);
                 case FRAMED_DOUBLE_PANEL -> testAgainstDoublePanel(level, pos, state, dir, shape, half, adjState, side);
                 case FRAMED_CORNER_PILLAR -> testAgainstPillar(level, pos, state, dir, shape, half, adjState, side);
+                case FRAMED_DIVIDED_PANEL_VERTICAL -> testAgainstDividedPanelVert(level, pos, state, dir, shape, half, adjState, side);
                 case FRAMED_SLAB_CORNER -> testAgainstCorner(level, pos, state, dir, shape, half, adjState, side);
                 case FRAMED_VERTICAL_STAIRS -> testAgainstVerticalStairs(level, pos, state, dir, shape, half, adjState, side);
                 case FRAMED_VERTICAL_DOUBLE_STAIRS -> testAgainstVerticalDoubleStairs(level, pos, state, dir, shape, half, adjState, side);
@@ -177,6 +180,24 @@ public final class StairsSkipPredicate implements SideSkipPredicate
         return false;
     }
 
+    private static boolean testAgainstDividedSlab(
+            BlockGetter level, BlockPos pos, BlockState state, Direction dir, StairsShape shape, Half half, BlockState adjState, Direction side
+    )
+    {
+        Tuple<BlockState, BlockState> states = AbstractFramedDoubleBlock.getStatePair(adjState);
+        return testAgainstEdge(level, pos, state, dir, shape, half, states.getA(), side) ||
+               testAgainstEdge(level, pos, state, dir, shape, half, states.getB(), side);
+    }
+
+    private static boolean testAgainstDividedPanelHor(
+            BlockGetter level, BlockPos pos, BlockState state, Direction dir, StairsShape shape, Half half, BlockState adjState, Direction side
+    )
+    {
+        Tuple<BlockState, BlockState> states = AbstractFramedDoubleBlock.getStatePair(adjState);
+        return testAgainstEdge(level, pos, state, dir, shape, half, states.getA(), side) ||
+               testAgainstEdge(level, pos, state, dir, shape, half, states.getB(), side);
+    }
+
     private static boolean testAgainstPanel(
             BlockGetter level, BlockPos pos, BlockState state, Direction dir, StairsShape shape, Half half, BlockState adjState, Direction side
     )
@@ -214,6 +235,15 @@ public final class StairsSkipPredicate implements SideSkipPredicate
             return SideSkipPredicate.compareState(level, pos, side, state, adjState);
         }
         return false;
+    }
+
+    private static boolean testAgainstDividedPanelVert(
+            BlockGetter level, BlockPos pos, BlockState state, Direction dir, StairsShape shape, Half half, BlockState adjState, Direction side
+    )
+    {
+        Tuple<BlockState, BlockState> states = AbstractFramedDoubleBlock.getStatePair(adjState);
+        return testAgainstPillar(level, pos, state, dir, shape, half, states.getA(), side) ||
+               testAgainstPillar(level, pos, state, dir, shape, half, states.getB(), side);
     }
 
     private static boolean testAgainstCorner(

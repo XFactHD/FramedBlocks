@@ -1,0 +1,14 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "key": {
+    "E": {
+      "item": "framedblocks:framed_slab_edge"
+    }
+  },
+  "pattern": [
+    "EE"
+  ],
+  "result": {
+    "item": "framedblocks:framed_divided_slab"
+  }
+}

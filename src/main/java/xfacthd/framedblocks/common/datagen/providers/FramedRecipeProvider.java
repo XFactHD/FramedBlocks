@@ -105,6 +105,12 @@ public class FramedRecipeProvider extends RecipeProvider
                 .unlockedBy("hasFramedSlab", has(FBContent.blockFramedSlab.get()))
                 .save(consumer);
 
+        ShapedRecipeBuilder.shaped(FBContent.blockFramedDividedSlab.get())
+                .pattern("EE")
+                .define('E', FBContent.blockFramedSlabEdge.get())
+                .unlockedBy("hasFramedSlabEdge", has(FBContent.blockFramedSlabEdge.get()))
+                .save(consumer);
+
         ShapedRecipeBuilder.shaped(FBContent.blockFramedPanel.get(), 6)
                 .pattern("F")
                 .pattern("F")
@@ -118,6 +124,19 @@ public class FramedRecipeProvider extends RecipeProvider
                 .pattern("F")
                 .define('F', FBContent.blockFramedCube.get())
                 .unlockedBy("hasFramedBlock", HAS_FRAMED_BLOCK)
+                .save(consumer);
+
+        ShapedRecipeBuilder.shaped(FBContent.blockFramedDividedPanelHor.get())
+                .pattern("E")
+                .pattern("E")
+                .define('E', FBContent.blockFramedSlabEdge.get())
+                .unlockedBy("hasFramedSlabEdge", has(FBContent.blockFramedSlabEdge.get()))
+                .save(consumer);
+
+        ShapedRecipeBuilder.shaped(FBContent.blockFramedDividedPanelVert.get())
+                .pattern("PP")
+                .define('P', FBContent.blockFramedCornerPillar.get())
+                .unlockedBy("hasFramedCornerPillar", has(FBContent.blockFramedCornerPillar.get()))
                 .save(consumer);
 
         ShapedRecipeBuilder.shaped(FBContent.blockFramedStairs.get(), 4)
@@ -974,6 +993,7 @@ public class FramedRecipeProvider extends RecipeProvider
 
 
         makeRotationRecipe(FBContent.blockFramedSlab, FBContent.blockFramedPanel, consumer);
+        makeRotationRecipe(FBContent.blockFramedDividedSlab, FBContent.blockFramedDividedPanelHor, consumer);
         makeRotationRecipe(FBContent.blockFramedStairs, FBContent.blockFramedVerticalStairs, consumer);
         makeRotationRecipe(FBContent.blockFramedDoubleStairs, FBContent.blockFramedVerticalDoubleStairs, consumer);
         makeRotationRecipe(FBContent.blockFramedFloor, FBContent.blockFramedWallBoard, consumer);
