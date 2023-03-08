@@ -2,8 +2,11 @@ package xfacthd.framedblocks.common.block.prism;
 
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
+import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.context.BlockPlaceContext;
+import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.*;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
@@ -11,14 +14,13 @@ import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.phys.Vec3;
 import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
+import xfacthd.framedblocks.api.block.IFramedBlock;
 import xfacthd.framedblocks.api.type.IBlockType;
 import xfacthd.framedblocks.api.util.*;
 import xfacthd.framedblocks.common.block.FramedBlock;
 import xfacthd.framedblocks.common.data.BlockType;
 import xfacthd.framedblocks.common.data.PropertyHolder;
 
-//TODO: move from two Direction properties to one Direction property and the Rotation property (needs to be adapted to handle y as rotation axis)
-//      to eliminate the possibility of invalid state in 1.19
 public class FramedSlopedPrismBlock extends FramedBlock
 {
     public static final CtmPredicate CTM_PREDICATE_INNER = (state, side) ->
@@ -38,13 +40,17 @@ public class FramedSlopedPrismBlock extends FramedBlock
         super(type);
         registerDefaultState(defaultBlockState()
                 .setValue(BlockStateProperties.FACING, Direction.NORTH)
+                .setValue(FramedProperties.Y_SLOPE, false)
         );
     }
 
     @Override
     protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder)
     {
-        builder.add(BlockStateProperties.FACING, PropertyHolder.ORIENTATION, BlockStateProperties.WATERLOGGED, FramedProperties.SOLID, FramedProperties.GLOWING);
+        builder.add(
+                BlockStateProperties.FACING, PropertyHolder.ORIENTATION, BlockStateProperties.WATERLOGGED,
+                FramedProperties.SOLID, FramedProperties.GLOWING, FramedProperties.Y_SLOPE
+        );
     }
 
     @Override
@@ -97,6 +103,12 @@ public class FramedSlopedPrismBlock extends FramedBlock
             state = withWater(state, context.getLevel(), context.getClickedPos());
         }
         return state;
+    }
+
+    @Override
+    public boolean handleBlockLeftClick(BlockState state, Level level, BlockPos pos, Player player)
+    {
+        return IFramedBlock.toggleYSlope(state, level, pos, player);
     }
 
     @Override

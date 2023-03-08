@@ -2,8 +2,11 @@ package xfacthd.framedblocks.common.block.slopepanel;
 
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
+import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.context.BlockPlaceContext;
+import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.*;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
@@ -11,6 +14,7 @@ import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.Vec3;
 import net.minecraft.world.phys.shapes.*;
+import xfacthd.framedblocks.api.block.IFramedBlock;
 import xfacthd.framedblocks.api.util.FramedProperties;
 import xfacthd.framedblocks.api.util.Utils;
 import xfacthd.framedblocks.common.block.FramedBlock;
@@ -23,7 +27,10 @@ public class FramedFlatSlopePanelCornerBlock extends FramedBlock
     public FramedFlatSlopePanelCornerBlock(BlockType type)
     {
         super(type);
-        registerDefaultState(defaultBlockState().setValue(PropertyHolder.FRONT, false));
+        registerDefaultState(defaultBlockState()
+                .setValue(PropertyHolder.FRONT, false)
+                .setValue(FramedProperties.Y_SLOPE, false)
+        );
     }
 
     @Override
@@ -31,7 +38,8 @@ public class FramedFlatSlopePanelCornerBlock extends FramedBlock
     {
         builder.add(
                 FramedProperties.FACING_HOR, PropertyHolder.ROTATION, PropertyHolder.FRONT,
-                FramedProperties.SOLID, FramedProperties.GLOWING, BlockStateProperties.WATERLOGGED
+                FramedProperties.SOLID, FramedProperties.GLOWING, BlockStateProperties.WATERLOGGED,
+                FramedProperties.Y_SLOPE
         );
     }
 
@@ -81,6 +89,12 @@ public class FramedFlatSlopePanelCornerBlock extends FramedBlock
             state = withWater(state, context.getLevel(), context.getClickedPos());
         }
         return state;
+    }
+
+    @Override
+    public boolean handleBlockLeftClick(BlockState state, Level level, BlockPos pos, Player player)
+    {
+        return IFramedBlock.toggleYSlope(state, level, pos, player);
     }
 
     @Override

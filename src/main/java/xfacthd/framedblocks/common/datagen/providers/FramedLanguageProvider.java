@@ -1,12 +1,13 @@
 package xfacthd.framedblocks.common.datagen.providers;
 
 import net.minecraft.data.DataGenerator;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraftforge.common.data.LanguageProvider;
 import xfacthd.framedblocks.FramedBlocks;
 import xfacthd.framedblocks.api.block.IFramedBlock;
 import xfacthd.framedblocks.api.util.FramedConstants;
-import xfacthd.framedblocks.client.screen.StateLockOverlay;
-import xfacthd.framedblocks.client.screen.ToggleWaterloggableOverlay;
+import xfacthd.framedblocks.client.screen.*;
 import xfacthd.framedblocks.client.util.KeyMappings;
 import xfacthd.framedblocks.common.FBContent;
 import xfacthd.framedblocks.common.blockentity.FramedStorageBlockEntity;
@@ -158,27 +159,43 @@ public class FramedLanguageProvider extends LanguageProvider
         add(KeyMappings.KEY_CATEGORY, "FramedBlocks");
         add(KeyMappings.KEYMAPPING_UPDATE_CULLING.get().getName(), "Update culling cache");
 
-        add(FramedBlocks.FRAMED_TAB.getDisplayName().getString(), "FramedBlocks");
+        add(FramedBlocks.FRAMED_TAB.getDisplayName(), "FramedBlocks");
         add(FramedBlockEntity.MSG_BLACKLISTED.getKey(), "This block is blacklisted!");
         add(FramedBlockEntity.MSG_BLOCK_ENTITY.getKey(), "Blocks with BlockEntities cannot be inserted into framed blocks!");
-        add(FramedChestBlockEntity.TITLE.getString(), "Framed Chest");
-        add(FramedStorageBlockEntity.TITLE.getString(), "Framed Secret Storage");
+        add(FramedChestBlockEntity.TITLE, "Framed Chest");
+        add(FramedStorageBlockEntity.TITLE, "Framed Secret Storage");
         add(FramedBlueprintItem.CONTAINED_BLOCK, "Contained Block: %s");
         add(FramedBlueprintItem.CAMO_BLOCK, "Camo Block: %s");
         add(FramedBlueprintItem.IS_ILLUMINATED, "Illuminated: %s");
-        add(FramedBlueprintItem.BLOCK_NONE.getString(), "None");
-        add(FramedBlueprintItem.BLOCK_INVALID.getString(), "Invalid");
-        add(FramedBlueprintItem.ILLUMINATED_FALSE.getString(), "false");
-        add(FramedBlueprintItem.ILLUMINATED_TRUE.getString(), "true");
-        add(FramedBlueprintItem.CANT_COPY.getString(), "This block can currently not be copied!");
-        add(FramedBlueprintItem.CANT_PLACE_FLUID_CAMO.getString(), "Copying blocks with fluid camos is currently not possible!");
+        add(FramedBlueprintItem.BLOCK_NONE, "None");
+        add(FramedBlueprintItem.BLOCK_INVALID, "Invalid");
+        add(FramedBlueprintItem.ILLUMINATED_FALSE, "false");
+        add(FramedBlueprintItem.ILLUMINATED_TRUE, "true");
+        add(FramedBlueprintItem.CANT_COPY, "This block can currently not be copied!");
+        add(FramedBlueprintItem.CANT_PLACE_FLUID_CAMO, "Copying blocks with fluid camos is currently not possible!");
         add(IFramedBlock.LOCK_MESSAGE, "The state of this block is now %s");
         add(StateLockOverlay.LOCK_MESSAGE, "State %s");
-        add(IFramedBlock.STATE_LOCKED.getString(), "locked");
-        add(IFramedBlock.STATE_UNLOCKED.getString(), "unlocked");
+        add(IFramedBlock.STATE_LOCKED, "locked");
+        add(IFramedBlock.STATE_UNLOCKED, "unlocked");
         add(ToggleWaterloggableOverlay.MSG_IS_WATERLOGGABLE, "Block is waterloggable");
         add(ToggleWaterloggableOverlay.MSG_IS_NOT_WATERLOGGABLE, "Block is not waterloggable");
         add(ToggleWaterloggableOverlay.MSG_MAKE_WATERLOGGABLE, "Hit with a Framed Hammer to make waterloggable");
         add(ToggleWaterloggableOverlay.MSG_MAKE_NOT_WATERLOGGABLE, "Hit with a Framed Hammer to make not waterloggable");
+        add(ToggleYSlopeOverlay.SLOPE_MESSAGE, "Block uses %s faces for vertical sloped faces");
+        add(ToggleYSlopeOverlay.TOGGLE_MESSAGE, "Hit with a Framed Wrench to switch to %s faces");
+        add(ToggleYSlopeOverlay.SLOPE_HOR, "horizontal");
+        add(ToggleYSlopeOverlay.SLOPE_VERT, "vertical");
+    }
+
+    private void add(Component key, String value)
+    {
+        if (key instanceof TranslatableComponent translatable)
+        {
+            add(translatable.getKey(), value);
+        }
+        else
+        {
+            add(key.getString(), value);
+        }
     }
 }

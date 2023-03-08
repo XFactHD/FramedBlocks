@@ -84,6 +84,7 @@ public final class FBClient
 
         OverlayRegistry.registerOverlayTop("framedblocks:state_lock", new StateLockOverlay());
         OverlayRegistry.registerOverlayTop("framedblocks:toggle_waterloggable", new ToggleWaterloggableOverlay());
+        OverlayRegistry.registerOverlayTop("y_slope", new ToggleYSlopeOverlay());
 
         KeyMappings.register();
 

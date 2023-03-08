@@ -3,12 +3,15 @@ package xfacthd.framedblocks.common.block.slope;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.util.Tuple;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.context.BlockPlaceContext;
+import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.block.*;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
+import xfacthd.framedblocks.api.block.IFramedBlock;
 import xfacthd.framedblocks.api.util.*;
 import xfacthd.framedblocks.common.FBContent;
 import xfacthd.framedblocks.common.block.AbstractFramedDoubleBlock;
@@ -34,13 +37,17 @@ public class FramedDoubleSlopeBlock extends AbstractFramedDoubleBlock
         }
     };
 
-    public FramedDoubleSlopeBlock() { super(BlockType.FRAMED_DOUBLE_SLOPE); }
+    public FramedDoubleSlopeBlock()
+    {
+        super(BlockType.FRAMED_DOUBLE_SLOPE);
+        registerDefaultState(defaultBlockState().setValue(FramedProperties.Y_SLOPE, false));
+    }
 
     @Override
     protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder)
     {
         super.createBlockStateDefinition(builder);
-        builder.add(FramedProperties.FACING_HOR, PropertyHolder.SLOPE_TYPE);
+        builder.add(FramedProperties.FACING_HOR, PropertyHolder.SLOPE_TYPE, FramedProperties.Y_SLOPE);
     }
 
     @Nullable
@@ -74,6 +81,12 @@ public class FramedDoubleSlopeBlock extends AbstractFramedDoubleBlock
             return getSoundType(state);
         }
         return super.getCamoSound(state, level, pos);
+    }
+
+    @Override
+    public boolean handleBlockLeftClick(BlockState state, Level level, BlockPos pos, Player player)
+    {
+        return IFramedBlock.toggleYSlope(state, level, pos, player);
     }
 
     @Override
@@ -114,13 +127,16 @@ public class FramedDoubleSlopeBlock extends AbstractFramedDoubleBlock
     {
         Direction facing = state.getValue(FramedProperties.FACING_HOR);
         SlopeType type = state.getValue(PropertyHolder.SLOPE_TYPE);
+        boolean ySlope = state.getValue(FramedProperties.Y_SLOPE);
 
         BlockState defState = FBContent.blockFramedSlope.get().defaultBlockState();
         return new Tuple<>(
                 defState.setValue(PropertyHolder.SLOPE_TYPE, type)
-                        .setValue(FramedProperties.FACING_HOR, facing),
+                        .setValue(FramedProperties.FACING_HOR, facing)
+                        .setValue(FramedProperties.Y_SLOPE, ySlope),
                 defState.setValue(PropertyHolder.SLOPE_TYPE, type == SlopeType.HORIZONTAL ? type : type.getOpposite())
                         .setValue(FramedProperties.FACING_HOR, facing.getOpposite())
+                        .setValue(FramedProperties.Y_SLOPE, ySlope)
         );
     }
 

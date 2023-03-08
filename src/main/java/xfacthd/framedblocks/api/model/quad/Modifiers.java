@@ -16,6 +16,8 @@ public final class Modifiers
     private static final float SCALE_ROTATION_22_5 = 1.0F / (float)Math.cos(Math.PI / 8F) - 1.0F;
     private static final Vector3f ONE = new Vector3f(1, 1, 1);
     private static final Vector3f CENTER = new Vector3f(.5F, .5F, .5F);
+    private static final Vector3f BOTTOM_CENTER = new Vector3f(.5F, 0, .5F);
+    private static final Vector3f TOP_CENTER = new Vector3f(.5F, 1, .5F);
     private static final float PRISM_TILT_ANGLE = (float)Math.toDegrees(Math.atan(.5D));
     private static final Vector3f[] PRISM_DIR_TO_ORIGIN_VECS = new Vector3f[]
     {
@@ -435,7 +437,7 @@ public final class Modifiers
     }
 
     /**
-     * Cuts a triangle quad with the tip centered horizontally and pointing up or down.
+     * Cuts a triangle quad with the tip centered horizontally and pointing up or down from a horizontal quad.
      * The quad will have the right edge pushed back and the tip tilted to the top or bottom left corner
      * @param up Whether the tip should point up or down
      * @param back Whether the tip should tilt forward or backward
@@ -444,11 +446,13 @@ public final class Modifiers
     {
         return data ->
         {
+            Direction quadDir = data.quad().getDirection();
+            Preconditions.checkArgument(!Utils.isY(quadDir), "Quad direction must not be on the Y axis");
+
             boolean leftCut = cutSideLeftRight(data, false, up ? .5F : 1, up ? 1 : .5F);
             boolean rightCut = cutSideLeftRight(data, true, up ? .5F : 1, up ? 1 : .5F);
             if (!leftCut && !rightCut) { return false; }
 
-            Direction quadDir = data.quad().getDirection();
             boolean northeast = quadDir == Direction.NORTH || quadDir == Direction.EAST;
 
             Vector3f origin = PRISM_DIR_TO_ORIGIN_VECS[quadDir.ordinal() - 2 + (up ? 0 : 4)];
@@ -456,6 +460,48 @@ public final class Modifiers
             if (northeast != up) { angle *= -1F; }
             rotate(data, quadDir.getClockWise().getAxis(), origin, angle, true);
             rotate(data, Direction.Axis.Y, origin, 45, true);
+
+            return true;
+        };
+    }
+
+    /**
+     * Cuts a triangle quad with the tip centered horizontally and pointing up or down from a vertical quad.
+     * The quad will have the right edge pushed back and the tip tilted to the top or bottom left corner
+     * @param cutDir The direction the triangle should point in the unrotated position
+     * @param back Whether the tip should tilt forward or backward
+     */
+    public static QuadModifier.Modifier cutPrismTriangle(Direction cutDir, boolean back)
+    {
+        Preconditions.checkArgument(!Utils.isY(cutDir), "Cut direction must be horizontal");
+        return data ->
+        {
+            Direction quadDir = data.quad().getDirection();
+            Preconditions.checkArgument(Utils.isY(quadDir), "Quad direction must be on the Y axis");
+
+            boolean leftCut = cutTopBottom(data, cutDir.getCounterClockWise(), .5F, 1);
+            boolean rightCut = cutTopBottom(data, cutDir.getClockWise(), 1, .5F);
+            if (!leftCut && !rightCut) { return false; }
+
+            boolean up = quadDir == Direction.UP;
+            boolean southwest = cutDir == Direction.SOUTH || cutDir == Direction.WEST;
+
+            Vector3f origin;
+            if (back)
+            {
+                origin = PRISM_DIR_TO_ORIGIN_VECS[cutDir.ordinal() - 2 + (!up ? 0 : 4)];
+            }
+            else
+            {
+                offset(data, cutDir, .5F);
+                origin = up ? TOP_CENTER : BOTTOM_CENTER;
+            }
+            float angle = up ? PRISM_TILT_ANGLE : -PRISM_TILT_ANGLE;
+            angle = (up ? 90F : -90F) - angle;
+            if (southwest == back) { angle *= -1F; }
+            rotate(data, cutDir.getClockWise().getAxis(), origin, angle, true);
+
+            rotate(data, Direction.Axis.Y, CENTER, 45, true);
 
             return true;
         };
@@ -602,16 +648,21 @@ public final class Modifiers
 
         return data ->
         {
-            int idx = dir.getAxis().ordinal();
-            float value = Utils.isPositive(dir) ? amount : (-1F * amount);
-
-            for (int i = 0; i < 4; i++)
-            {
-                data.pos()[i][idx] += value;
-            }
-
+            offset(data, dir, amount);
             return true;
         };
+    }
+
+    private static void offset(QuadModifier.Data data, Direction dir, float amount)
+    {
+        int idx = dir.getAxis().ordinal();
+        float value = Utils.isPositive(dir) ? amount : (-1F * amount);
+
+        for (int i = 0; i < 4; i++)
+        {
+            data.pos()[i][idx] += value;
+        }
+
     }
 
     /**

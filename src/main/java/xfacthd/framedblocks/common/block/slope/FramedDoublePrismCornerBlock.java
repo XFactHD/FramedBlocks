@@ -46,7 +46,7 @@ public class FramedDoublePrismCornerBlock extends FramedDoubleThreewayCornerBloc
             level.setBlockAndUpdate(pos, state.setValue(FramedProperties.OFFSET, !state.getValue(FramedProperties.OFFSET)));
             return true;
         }
-        return false;
+        return super.handleBlockLeftClick(state, level, pos, player);
     }
 
     @Override
@@ -55,16 +55,19 @@ public class FramedDoublePrismCornerBlock extends FramedDoubleThreewayCornerBloc
         Direction facing = state.getValue(FramedProperties.FACING_HOR);
         boolean top = state.getValue(FramedProperties.TOP);
         boolean offset = state.getValue(FramedProperties.OFFSET);
+        boolean ySlope = state.getValue(FramedProperties.Y_SLOPE);
 
         return new Tuple<>(
                 FBContent.blockFramedInnerPrismCorner.get().defaultBlockState()
                         .setValue(FramedProperties.FACING_HOR, facing)
                         .setValue(FramedProperties.TOP, top)
-                        .setValue(FramedProperties.OFFSET, offset),
+                        .setValue(FramedProperties.OFFSET, offset)
+                        .setValue(FramedProperties.Y_SLOPE, ySlope),
                 FBContent.blockFramedPrismCorner.get().defaultBlockState()
                         .setValue(FramedProperties.FACING_HOR, facing.getOpposite())
                         .setValue(FramedProperties.TOP, !top)
                         .setValue(FramedProperties.OFFSET, !offset)
+                        .setValue(FramedProperties.Y_SLOPE, ySlope)
         );
     }
 }

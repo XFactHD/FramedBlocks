@@ -3,14 +3,16 @@ package xfacthd.framedblocks.common.block.prism;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.util.Tuple;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.context.BlockPlaceContext;
+import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.*;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
-import xfacthd.framedblocks.api.util.CtmPredicate;
-import xfacthd.framedblocks.api.util.Utils;
+import xfacthd.framedblocks.api.block.IFramedBlock;
+import xfacthd.framedblocks.api.util.*;
 import xfacthd.framedblocks.common.FBContent;
 import xfacthd.framedblocks.common.block.AbstractFramedDoubleBlock;
 import xfacthd.framedblocks.common.blockentity.FramedDoublePrismBlockEntity;
@@ -24,19 +26,29 @@ public class FramedDoublePrismBlock extends AbstractFramedDoubleBlock
         return side != null && side.getAxis() != axis;
     };
 
-    public FramedDoublePrismBlock() { super(BlockType.FRAMED_DOUBLE_PRISM); }
+    public FramedDoublePrismBlock()
+    {
+        super(BlockType.FRAMED_DOUBLE_PRISM);
+        registerDefaultState(defaultBlockState().setValue(FramedProperties.Y_SLOPE, false));
+    }
 
     @Override
     protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder)
     {
         super.createBlockStateDefinition(builder);
-        builder.add(BlockStateProperties.FACING, BlockStateProperties.AXIS);
+        builder.add(BlockStateProperties.FACING, BlockStateProperties.AXIS, FramedProperties.Y_SLOPE);
     }
 
     @Override
     public BlockState getStateForPlacement(BlockPlaceContext context)
     {
         return FramedPrismBlock.getStateForPlacement(context, defaultBlockState(), getBlockType());
+    }
+
+    @Override
+    public boolean handleBlockLeftClick(BlockState state, Level level, BlockPos pos, Player player)
+    {
+        return IFramedBlock.toggleYSlope(state, level, pos, player);
     }
 
     @Override
@@ -85,16 +97,19 @@ public class FramedDoublePrismBlock extends AbstractFramedDoubleBlock
     {
         Direction facing = state.getValue(BlockStateProperties.FACING);
         Direction.Axis axis = state.getValue(BlockStateProperties.AXIS);
+        boolean ySlope = state.getValue(FramedProperties.Y_SLOPE);
 
         return new Tuple<>(
                 FBContent.blockFramedInnerPrism.get()
                         .defaultBlockState()
                         .setValue(BlockStateProperties.FACING, facing)
-                        .setValue(BlockStateProperties.AXIS, axis),
+                        .setValue(BlockStateProperties.AXIS, axis)
+                        .setValue(FramedProperties.Y_SLOPE, ySlope),
                 FBContent.blockFramedPrism.get()
                         .defaultBlockState()
                         .setValue(BlockStateProperties.FACING, facing.getOpposite())
                         .setValue(BlockStateProperties.AXIS, axis)
+                        .setValue(FramedProperties.Y_SLOPE, ySlope)
         );
     }
 

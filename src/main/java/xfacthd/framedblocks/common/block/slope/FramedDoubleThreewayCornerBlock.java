@@ -3,12 +3,15 @@ package xfacthd.framedblocks.common.block.slope;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.util.Tuple;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.context.BlockPlaceContext;
+import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.block.*;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
+import xfacthd.framedblocks.api.block.IFramedBlock;
 import xfacthd.framedblocks.api.util.*;
 import xfacthd.framedblocks.common.FBContent;
 import xfacthd.framedblocks.common.block.AbstractFramedDoubleBlock;
@@ -29,14 +32,17 @@ public class FramedDoubleThreewayCornerBlock extends AbstractFramedDoubleBlock
     public FramedDoubleThreewayCornerBlock(BlockType blockType)
     {
         super(blockType);
-        registerDefaultState(defaultBlockState().setValue(FramedProperties.TOP, false));
+        registerDefaultState(defaultBlockState()
+                .setValue(FramedProperties.TOP, false)
+                .setValue(FramedProperties.Y_SLOPE, false)
+        );
     }
 
     @Override
     protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder)
     {
         super.createBlockStateDefinition(builder);
-        builder.add(FramedProperties.FACING_HOR, FramedProperties.TOP);
+        builder.add(FramedProperties.FACING_HOR, FramedProperties.TOP, FramedProperties.Y_SLOPE);
     }
 
     @Override
@@ -67,6 +73,12 @@ public class FramedDoubleThreewayCornerBlock extends AbstractFramedDoubleBlock
             }
         }
         return getSoundType(state);
+    }
+
+    @Override
+    public boolean handleBlockLeftClick(BlockState state, Level level, BlockPos pos, Player player)
+    {
+        return IFramedBlock.toggleYSlope(state, level, pos, player);
     }
 
     @Override
@@ -103,14 +115,17 @@ public class FramedDoubleThreewayCornerBlock extends AbstractFramedDoubleBlock
     {
         Direction facing = state.getValue(FramedProperties.FACING_HOR);
         boolean top = state.getValue(FramedProperties.TOP);
+        boolean ySlope = state.getValue(FramedProperties.Y_SLOPE);
 
         return new Tuple<>(
                 FBContent.blockFramedInnerThreewayCorner.get().defaultBlockState()
                         .setValue(FramedProperties.FACING_HOR, facing)
-                        .setValue(FramedProperties.TOP, top),
+                        .setValue(FramedProperties.TOP, top)
+                        .setValue(FramedProperties.Y_SLOPE, ySlope),
                 FBContent.blockFramedThreewayCorner.get().defaultBlockState()
                         .setValue(FramedProperties.FACING_HOR, facing.getOpposite())
                         .setValue(FramedProperties.TOP, !top)
+                        .setValue(FramedProperties.Y_SLOPE, ySlope)
         );
     }
 

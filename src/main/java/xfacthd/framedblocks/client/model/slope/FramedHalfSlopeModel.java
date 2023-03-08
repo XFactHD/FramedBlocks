@@ -19,6 +19,7 @@ public class FramedHalfSlopeModel extends FramedBlockModel
     private final Direction dir;
     private final boolean top;
     private final boolean right;
+    private final boolean ySlope;
 
     public FramedHalfSlopeModel(BlockState state, BakedModel baseModel)
     {
@@ -26,6 +27,7 @@ public class FramedHalfSlopeModel extends FramedBlockModel
         this.dir = state.getValue(FramedProperties.FACING_HOR);
         this.top = state.getValue(FramedProperties.TOP);
         this.right = state.getValue(PropertyHolder.RIGHT);
+        this.ySlope = state.getValue(FramedProperties.Y_SLOPE);
     }
 
     @Override
@@ -35,11 +37,18 @@ public class FramedHalfSlopeModel extends FramedBlockModel
 
         Direction cutDir = right ? dir.getCounterClockWise() : dir.getClockWise();
 
-        if (quadDir == dir.getOpposite())
+        if (!ySlope && quadDir == dir.getOpposite())
         {
             QuadModifier.geometry(quad)
                     .apply(Modifiers.makeVerticalSlope(!top, 45))
                     .apply(Modifiers.cutSideLeftRight(cutDir, .5F))
+                    .export(quadMap.get(null));
+        }
+        else if (ySlope && ((!top && quadDir == Direction.UP) || (top && quadDir == Direction.DOWN)))
+        {
+            QuadModifier.geometry(quad)
+                    .apply(Modifiers.cutTopBottom(cutDir, .5F))
+                    .apply(Modifiers.makeVerticalSlope(dir.getOpposite(), 45))
                     .export(quadMap.get(null));
         }
         else if (quadDir == dir.getClockWise() || quadDir == dir.getCounterClockWise())

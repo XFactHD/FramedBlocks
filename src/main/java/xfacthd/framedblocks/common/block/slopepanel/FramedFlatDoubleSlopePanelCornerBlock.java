@@ -5,13 +5,16 @@ import com.google.common.collect.ImmutableMap;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.util.Tuple;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.context.BlockPlaceContext;
+import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.*;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.phys.shapes.VoxelShape;
+import xfacthd.framedblocks.api.block.IFramedBlock;
 import xfacthd.framedblocks.api.util.*;
 import xfacthd.framedblocks.common.FBContent;
 import xfacthd.framedblocks.common.block.AbstractFramedDoubleBlock;
@@ -38,7 +41,10 @@ public class FramedFlatDoubleSlopePanelCornerBlock extends AbstractFramedDoubleB
     public FramedFlatDoubleSlopePanelCornerBlock()
     {
         super(BlockType.FRAMED_FLAT_DOUBLE_SLOPE_PANEL_CORNER);
-        registerDefaultState(defaultBlockState().setValue(PropertyHolder.FRONT, false));
+        registerDefaultState(defaultBlockState()
+                .setValue(PropertyHolder.FRONT, false)
+                .setValue(FramedProperties.Y_SLOPE, false)
+        );
     }
 
     @Override
@@ -46,7 +52,8 @@ public class FramedFlatDoubleSlopePanelCornerBlock extends AbstractFramedDoubleB
     {
         builder.add(
                 FramedProperties.FACING_HOR, PropertyHolder.ROTATION, PropertyHolder.FRONT,
-                FramedProperties.SOLID, FramedProperties.GLOWING, BlockStateProperties.WATERLOGGED
+                FramedProperties.SOLID, FramedProperties.GLOWING, BlockStateProperties.WATERLOGGED,
+                FramedProperties.Y_SLOPE
         );
     }
 
@@ -54,6 +61,12 @@ public class FramedFlatDoubleSlopePanelCornerBlock extends AbstractFramedDoubleB
     public BlockState getStateForPlacement(BlockPlaceContext context)
     {
         return FramedFlatSlopePanelCornerBlock.getStateForPlacement(this, true, context);
+    }
+
+    @Override
+    public boolean handleBlockLeftClick(BlockState state, Level level, BlockPos pos, Player player)
+    {
+        return IFramedBlock.toggleYSlope(state, level, pos, player);
     }
 
     @Override
@@ -97,18 +110,21 @@ public class FramedFlatDoubleSlopePanelCornerBlock extends AbstractFramedDoubleB
         HorizontalRotation rotation = state.getValue(PropertyHolder.ROTATION);
         boolean front = state.getValue(PropertyHolder.FRONT);
         HorizontalRotation backRot = rotation.rotate(rotation.isVertical() ? Rotation.COUNTERCLOCKWISE_90 : Rotation.CLOCKWISE_90);
+        boolean ySlope = state.getValue(FramedProperties.Y_SLOPE);
 
         return new Tuple<>(
                 FBContent.blockFramedFlatInnerSlopePanelCorner.get()
                         .defaultBlockState()
                         .setValue(FramedProperties.FACING_HOR, facing)
                         .setValue(PropertyHolder.ROTATION, rotation)
-                        .setValue(PropertyHolder.FRONT, front),
+                        .setValue(PropertyHolder.FRONT, front)
+                        .setValue(FramedProperties.Y_SLOPE, ySlope),
                 FBContent.blockFramedFlatSlopePanelCorner.get()
                         .defaultBlockState()
                         .setValue(FramedProperties.FACING_HOR, facing.getOpposite())
                         .setValue(PropertyHolder.ROTATION, backRot)
                         .setValue(PropertyHolder.FRONT, !front)
+                        .setValue(FramedProperties.Y_SLOPE, ySlope)
         );
     }
 

@@ -6,6 +6,7 @@ import net.minecraft.client.renderer.block.model.BakedQuad;
 import net.minecraft.client.renderer.block.model.ItemTransforms;
 import net.minecraft.client.resources.model.BakedModel;
 import net.minecraft.core.Direction;
+import net.minecraft.world.level.block.Rotation;
 import net.minecraft.world.level.block.state.BlockState;
 import xfacthd.framedblocks.api.model.FramedBlockModel;
 import xfacthd.framedblocks.api.model.quad.Modifiers;
@@ -22,11 +23,14 @@ import java.util.Map;
 public class FramedSlopePanelModel extends FramedBlockModel
 {
     public static final float SLOPE_ANGLE = (float) Math.toDegrees(Math.atan(.5));
+    public static final float SLOPE_ANGLE_VERT = (float) (90D - Math.toDegrees(Math.atan(.5)));
 
     private final Direction facing;
     private final HorizontalRotation rotation;
     private final Direction orientation;
+    private final Direction.Axis triangleAxis;
     private final boolean front;
+    private final boolean ySlope;
 
     public FramedSlopePanelModel(BlockState state, BakedModel baseModel)
     {
@@ -34,7 +38,9 @@ public class FramedSlopePanelModel extends FramedBlockModel
         this.facing = state.getValue(FramedProperties.FACING_HOR);
         this.rotation = state.getValue(PropertyHolder.ROTATION);
         this.orientation = rotation.withFacing(facing);
+        this.triangleAxis = rotation.rotate(Rotation.CLOCKWISE_90).withFacing(facing).getAxis();
         this.front = state.getValue(PropertyHolder.FRONT);
+        this.ySlope = state.getValue(FramedProperties.Y_SLOPE);
     }
 
     @Override
@@ -58,11 +64,18 @@ public class FramedSlopePanelModel extends FramedBlockModel
                         .export(quadMap.get(face));
             }
         }
-        else if (face == facing.getOpposite())
+        else if ((!rotation.isVertical() || !ySlope) && face == facing.getOpposite())
         {
             QuadModifier.geometry(quad)
                     .apply(createSlope(facing, orientation))
                     .applyIf(Modifiers.offset(facing, .5F), !front)
+                    .export(quadMap.get(null));
+        }
+        else if (ySlope && isVerticalSlopeQuad(rotation, face))
+        {
+            QuadModifier.geometry(quad)
+                    .apply(createVerticalSlope(facing, orientation))
+                    .applyIf(Modifiers.offset(facing.getOpposite(), .5F), front)
                     .export(quadMap.get(null));
         }
         else if (face == facing)
@@ -74,7 +87,7 @@ public class FramedSlopePanelModel extends FramedBlockModel
                         .export(quadMap.get(null));
             }
         }
-        else if (face != orientation)
+        else if (face.getAxis() == triangleAxis)
         {
             if (yAxis)
             {
@@ -107,6 +120,16 @@ public class FramedSlopePanelModel extends FramedBlockModel
 
 
 
+    public static boolean isVerticalSlopeQuad(HorizontalRotation rotation, Direction face)
+    {
+        return switch (rotation)
+                {
+                    case DOWN -> face == Direction.DOWN;
+                    case UP -> face == Direction.UP;
+                    default -> false;
+                };
+    }
+
     public static QuadModifier.Modifier createSlope(Direction facing, Direction orientation)
     {
         Preconditions.checkArgument(facing.getAxis() != orientation.getAxis(), "Directions must be perpendicular");
@@ -119,6 +142,12 @@ public class FramedSlopePanelModel extends FramedBlockModel
         {
             return Modifiers.makeHorizontalSlope(orientation == facing.getCounterClockWise(), SLOPE_ANGLE);
         }
+    }
+
+    public static QuadModifier.Modifier createVerticalSlope(Direction facing, Direction orientation)
+    {
+        Preconditions.checkArgument(facing.getAxis() != orientation.getAxis(), "Directions must be perpendicular");
+        return Modifiers.makeVerticalSlope(facing.getOpposite(), SLOPE_ANGLE_VERT);
     }
 
     public static BlockState itemSource()

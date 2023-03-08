@@ -22,7 +22,7 @@ public class FramedVerticalSlopedStairsModel extends FramedBlockModel
     private final Direction facing;
     private final Direction rotDir;
     private final Direction rotDirTwo;
-    private final boolean useYSlope;
+    private final boolean ySlope;
 
     public FramedVerticalSlopedStairsModel(BlockState state, BakedModel baseModel)
     {
@@ -31,7 +31,7 @@ public class FramedVerticalSlopedStairsModel extends FramedBlockModel
         HorizontalRotation rot = state.getValue(PropertyHolder.ROTATION);
         this.rotDir = rot.withFacing(facing);
         this.rotDirTwo = rot.rotate(Rotation.COUNTERCLOCKWISE_90).withFacing(facing);
-        this.useYSlope = false;
+        this.ySlope = state.getValue(FramedProperties.Y_SLOPE);
     }
 
     @Override
@@ -65,7 +65,7 @@ public class FramedVerticalSlopedStairsModel extends FramedBlockModel
                     .export(quadMap.get(null));
         }
 
-        boolean useRotDirQuad = Utils.isY(rotDir) == useYSlope;
+        boolean useRotDirQuad = Utils.isY(rotDir) == ySlope;
         Direction slopeQuadDir = useRotDirQuad ? rotDir : rotDirTwo;
         Direction slopeRotDir = useRotDirQuad ? rotDirTwo : rotDir;
 
