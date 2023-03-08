@@ -39,13 +39,16 @@ public class FramedCollapsibleBlock extends FramedBlock
     public FramedCollapsibleBlock(BlockType blockType)
     {
         super(blockType, IFramedBlock.createProperties(BlockType.FRAMED_COLLAPSIBLE_BLOCK).dynamicShape());
-        registerDefaultState(defaultBlockState().setValue(BlockStateProperties.WATERLOGGED, false));
+        registerDefaultState(defaultBlockState()
+                .setValue(BlockStateProperties.WATERLOGGED, false)
+                .setValue(PropertyHolder.ROTATE_SPLIT_EDGE, false)
+        );
     }
 
     @Override
     protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder)
     {
-        builder.add(PropertyHolder.COLLAPSED_FACE, BlockStateProperties.WATERLOGGED);
+        builder.add(PropertyHolder.COLLAPSED_FACE, BlockStateProperties.WATERLOGGED, PropertyHolder.ROTATE_SPLIT_EDGE);
     }
 
     @Nullable
@@ -58,15 +61,23 @@ public class FramedCollapsibleBlock extends FramedBlock
     @Override
     public boolean handleBlockLeftClick(BlockState state, Level level, BlockPos pos, Player player)
     {
-        if (player.getMainHandItem().getItem() != FBContent.itemFramedHammer.get()) { return false; }
-
-        if (level.getBlockEntity(pos) instanceof FramedCollapsibleBlockEntity be)
+        ItemStack heldItem = player.getMainHandItem();
+        if (heldItem.is(Utils.WRENCH))
         {
-            if (!level.isClientSide())
-            {
-                be.handleDeform(player);
-            }
+            boolean rotSplitEdge = state.getValue(PropertyHolder.ROTATE_SPLIT_EDGE);
+            level.setBlockAndUpdate(pos, state.setValue(PropertyHolder.ROTATE_SPLIT_EDGE, !rotSplitEdge));
             return true;
+        }
+        else if (heldItem.getItem() == FBContent.itemFramedHammer.get())
+        {
+            if (level.getBlockEntity(pos) instanceof FramedCollapsibleBlockEntity be)
+            {
+                if (!level.isClientSide())
+                {
+                    be.handleDeform(player);
+                }
+                return true;
+            }
         }
         return false;
     }

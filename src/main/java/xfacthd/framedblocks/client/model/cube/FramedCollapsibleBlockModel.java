@@ -76,12 +76,14 @@ public class FramedCollapsibleBlockModel extends BakedModelProxy
         private static final float MIN_DEPTH = .001F;
 
         private final Direction collapsedFace;
+        private final boolean rotSplitEdge;
         private final float[] vertexPos = new float[4];
 
         public CollapsibleModel(BlockState state, BakedModel baseModel, int packedOffsets)
         {
             super(state, baseModel);
             this.collapsedFace = state.getValue(PropertyHolder.COLLAPSED_FACE).toDirection();
+            this.rotSplitEdge = state.getValue(PropertyHolder.ROTATE_SPLIT_EDGE);
 
             byte[] vertexOffsets = FramedCollapsibleBlockEntity.unpackOffsets(packedOffsets);
             for (int i = 0; i < 4; i++)
@@ -102,8 +104,13 @@ public class FramedCollapsibleBlockModel extends BakedModelProxy
 
             if (quadDir == collapsedFace)
             {
+                float diff02 = Math.abs(vertexPos[0] - vertexPos[2]);
+                float diff13 = Math.abs(vertexPos[1] - vertexPos[3]);
+                boolean rotate = (diff13 > diff02) != rotSplitEdge;
+
                 QuadModifier.geometry(quad)
                         .apply(Modifiers.setPosition(vertexPos, true))
+                        .applyIf(Modifiers.rotateVertices(), rotate)
                         .export(quadMap.get(null));
             }
             else
