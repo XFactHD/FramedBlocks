@@ -7,12 +7,12 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
-import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.*;
-import net.minecraft.world.level.block.*;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.SimpleWaterloggedBlock;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
@@ -20,7 +20,8 @@ import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.block.state.properties.Property;
 import net.minecraft.world.level.material.*;
 import net.minecraft.world.level.storage.loot.LootContext;
-import net.minecraft.world.phys.*;
+import net.minecraft.world.phys.BlockHitResult;
+import net.minecraft.world.phys.Vec3;
 import net.minecraft.world.phys.shapes.*;
 import net.minecraftforge.client.extensions.common.IClientBlockExtensions;
 import net.minecraftforge.common.IPlantable;
@@ -92,21 +93,6 @@ public abstract class AbstractFramedBlock extends Block implements IFramedBlock,
     }
 
     @Override
-    public void onBlockStateChange(LevelReader level, BlockPos pos, BlockState oldState, BlockState newState)
-    {
-        onStateChange(level, pos, oldState, newState);
-    }
-
-    @Override
-    public int getLightEmission(BlockState state, BlockGetter level, BlockPos pos) { return getLight(state, level, pos); }
-
-    @Override
-    public SoundType getSoundType(BlockState state, LevelReader level, BlockPos pos, Entity entity)
-    {
-        return getCamoSound(state, level, pos);
-    }
-
-    @Override
     public VoxelShape getShape(BlockState state, BlockGetter level, BlockPos pos, CollisionContext ctx)
     {
         if (isIntangible(state, level, pos, ctx))
@@ -129,33 +115,6 @@ public abstract class AbstractFramedBlock extends Block implements IFramedBlock,
     public VoxelShape getVisualShape(BlockState state, BlockGetter level, BlockPos pos, CollisionContext ctx)
     {
         return getCamoVisualShape(state, level, pos, ctx);
-    }
-
-    @Override
-    public float getFriction(BlockState state, LevelReader level, BlockPos pos, @Nullable Entity entity)
-    {
-        return getCamoSlipperiness(state, level, pos, entity);
-    }
-
-    @Override
-    public float getShadeBrightness(BlockState state, BlockGetter level, BlockPos pos) { return 1F; }
-
-    @Override
-    public float getExplosionResistance(BlockState state, BlockGetter level, BlockPos pos, Explosion explosion)
-    {
-        return getCamoExplosionResistance(state, level, pos, explosion);
-    }
-
-    @Override
-    public boolean isFlammable(BlockState state, BlockGetter level, BlockPos pos, Direction face)
-    {
-        return isCamoFlammable(level, pos, face);
-    }
-
-    @Override
-    public int getFlammability(BlockState state, BlockGetter level, BlockPos pos, Direction face)
-    {
-        return getCamoFlammability(level, pos, face);
     }
 
     @Override
@@ -199,23 +158,11 @@ public abstract class AbstractFramedBlock extends Block implements IFramedBlock,
     }
 
     @Override
-    public boolean hidesNeighborFace(BlockGetter level, BlockPos pos, BlockState state, BlockState neighborState, Direction dir)
-    {
-        return doesHideNeighborFace(level, pos, state, neighborState, dir);
-    }
-
-    @Override
-    public MaterialColor getMapColor(BlockState state, BlockGetter level, BlockPos pos, MaterialColor defaultColor)
-    {
-        return getCamoMapColor(level, pos, defaultColor);
-    }
-
-    @Override
     public float[] getBeaconColorMultiplier(BlockState state, LevelReader level, BlockPos pos, BlockPos beaconPos)
     {
         if (doesBlockOccludeBeaconBeam(state, level, pos))
         {
-            return getCamoBeaconColorMultiplier(level, pos, beaconPos);
+            return IFramedBlock.super.getBeaconColorMultiplier(state, level, pos, beaconPos);
         }
         return null;
     }

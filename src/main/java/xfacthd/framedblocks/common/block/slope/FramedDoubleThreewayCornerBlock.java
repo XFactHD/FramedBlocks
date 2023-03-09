@@ -6,21 +6,18 @@ import net.minecraft.util.Tuple;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.block.*;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import xfacthd.framedblocks.api.block.FramedProperties;
 import xfacthd.framedblocks.api.block.IFramedBlock;
-import xfacthd.framedblocks.api.camo.CamoContainer;
 import xfacthd.framedblocks.api.predicate.CtmPredicate;
-import xfacthd.framedblocks.api.util.*;
+import xfacthd.framedblocks.api.util.Utils;
 import xfacthd.framedblocks.common.FBContent;
 import xfacthd.framedblocks.common.block.AbstractFramedDoubleBlock;
-import xfacthd.framedblocks.common.data.BlockType;
 import xfacthd.framedblocks.common.blockentity.FramedDoubleThreewayCornerBlockEntity;
-import xfacthd.framedblocks.common.blockentity.FramedDoubleBlockEntity;
+import xfacthd.framedblocks.common.data.BlockType;
 
 public class FramedDoubleThreewayCornerBlock extends AbstractFramedDoubleBlock
 {
@@ -58,28 +55,6 @@ public class FramedDoubleThreewayCornerBlock extends AbstractFramedDoubleBlock
                 context.getClickLocation()
         );
         return withTop(state, context.getClickedFace(), context.getClickLocation());
-    }
-
-    @Override
-    @SuppressWarnings("deprecation")
-    public SoundType getCamoSound(BlockState state, LevelReader level, BlockPos pos)
-    {
-        boolean top = state.getValue(FramedProperties.TOP);
-        if (level.getBlockEntity(pos) instanceof FramedDoubleBlockEntity dbe)
-        {
-            CamoContainer camo = top ? dbe.getCamo() : dbe.getCamoTwo();
-            if (!camo.isEmpty())
-            {
-                return camo.getSoundType();
-            }
-
-            camo = top ? dbe.getCamoTwo() : dbe.getCamo();
-            if (!camo.isEmpty())
-            {
-                return camo.getSoundType();
-            }
-        }
-        return getSoundType(state);
     }
 
     @Override

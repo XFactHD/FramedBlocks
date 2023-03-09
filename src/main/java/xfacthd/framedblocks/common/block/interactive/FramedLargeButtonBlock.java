@@ -37,7 +37,7 @@ public class FramedLargeButtonBlock extends FramedButtonBlock
     {
         if (state.getValue(FACE) != AttachFace.WALL)
         {
-            return getCamoBeaconColorMultiplier(level, pos, beaconPos);
+            return super.getBeaconColorMultiplier(state, level, pos, beaconPos);
         }
         return null;
     }

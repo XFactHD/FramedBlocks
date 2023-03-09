@@ -153,6 +153,17 @@ public interface IFramedBlock extends EntityBlock, IForgeBlock
         return InteractionResult.FAIL;
     }
 
+    @Override
+    default int getLightEmission(BlockState state, BlockGetter level, BlockPos pos)
+    {
+        return getLight(state, level, pos);
+    }
+
+    /**
+     * Use {@link IForgeBlock#getLightEmission(BlockState, BlockGetter, BlockPos)} instead
+     */
+    @SuppressWarnings("DeprecatedIsStillUsed")
+    @Deprecated(forRemoval = true)
     default int getLight(BlockState state, BlockGetter level, BlockPos pos)
     {
         if (!state.getValue(FramedProperties.GLOWING))
@@ -166,6 +177,17 @@ public interface IFramedBlock extends EntityBlock, IForgeBlock
         return 0;
     }
 
+    @Override
+    default SoundType getSoundType(BlockState state, LevelReader level, BlockPos pos, @org.jetbrains.annotations.Nullable Entity entity)
+    {
+        return getCamoSound(state, level, pos);
+    }
+
+    /**
+     * Use {@link IForgeBlock#getSoundType(BlockState, LevelReader, BlockPos, Entity)} instead
+     */
+    @SuppressWarnings("DeprecatedIsStillUsed")
+    @Deprecated(forRemoval = true)
     default SoundType getCamoSound(BlockState state, LevelReader level, BlockPos pos)
     {
         if (level.getBlockEntity(pos) instanceof FramedBlockEntity be)
@@ -299,6 +321,17 @@ public interface IFramedBlock extends EntityBlock, IForgeBlock
         return false;
     }
 
+    @Override
+    default float getFriction(BlockState state, LevelReader level, BlockPos pos, @org.jetbrains.annotations.Nullable Entity entity)
+    {
+        return getCamoSlipperiness(state, level, pos, entity);
+    }
+
+    /**
+     * Use {@link IForgeBlock#getFriction(BlockState, LevelReader, BlockPos, Entity)} instead
+     */
+    @SuppressWarnings("DeprecatedIsStillUsed")
+    @Deprecated(forRemoval = true)
     default float getCamoSlipperiness(BlockState state, LevelReader level, BlockPos pos, @Nullable Entity entity)
     {
         if (level.getBlockEntity(pos) instanceof FramedBlockEntity be)
@@ -312,6 +345,17 @@ public interface IFramedBlock extends EntityBlock, IForgeBlock
         return state.getBlock().getFriction();
     }
 
+    @Override
+    default float getExplosionResistance(BlockState state, BlockGetter level, BlockPos pos, Explosion explosion)
+    {
+        return getCamoExplosionResistance(state, level, pos, explosion);
+    }
+
+    /**
+     * Use {@link IForgeBlock#getExplosionResistance(BlockState, BlockGetter, BlockPos, Explosion)} instead
+     */
+    @SuppressWarnings("DeprecatedIsStillUsed")
+    @Deprecated(forRemoval = true)
     default float getCamoExplosionResistance(BlockState state, BlockGetter level, BlockPos pos, Explosion explosion)
     {
         if (level.getBlockEntity(pos) instanceof FramedBlockEntity be)
@@ -325,6 +369,17 @@ public interface IFramedBlock extends EntityBlock, IForgeBlock
         return state.getBlock().getExplosionResistance();
     }
 
+    @Override
+    default boolean isFlammable(BlockState state, BlockGetter level, BlockPos pos, Direction face)
+    {
+        return isCamoFlammable(level, pos, face);
+    }
+
+    /**
+     * Use {@link IForgeBlock#isFlammable(BlockState, BlockGetter, BlockPos, Direction)} instead
+     */
+    @SuppressWarnings("DeprecatedIsStillUsed")
+    @Deprecated(forRemoval = true)
     default boolean isCamoFlammable(BlockGetter level, BlockPos pos, Direction face)
     {
         if (FramedBlocksAPI.getInstance().areBlocksFireproof()) { return false; }
@@ -336,6 +391,17 @@ public interface IFramedBlock extends EntityBlock, IForgeBlock
         return true;
     }
 
+    @Override
+    default int getFlammability(BlockState state, BlockGetter level, BlockPos pos, Direction face)
+    {
+        return getCamoFlammability(level, pos, face);
+    }
+
+    /**
+     * Use {@link IForgeBlock#getFlammability(BlockState, BlockGetter, BlockPos, Direction)} instead
+     */
+    @SuppressWarnings("DeprecatedIsStillUsed")
+    @Deprecated(forRemoval = true)
     default int getCamoFlammability(BlockGetter level, BlockPos pos, Direction face)
     {
         if (FramedBlocksAPI.getInstance().areBlocksFireproof()) { return 0; }
@@ -349,6 +415,22 @@ public interface IFramedBlock extends EntityBlock, IForgeBlock
             }
         }
         return 20;
+    }
+
+    @Override
+    default int getFireSpreadSpeed(BlockState state, BlockGetter level, BlockPos pos, Direction face)
+    {
+        if (FramedBlocksAPI.getInstance().areBlocksFireproof()) { return 0; }
+
+        if (level.getBlockEntity(pos) instanceof FramedBlockEntity be)
+        {
+            int spreadSpeed = be.getCamoFireSpreadSpeed(face);
+            if (spreadSpeed > -1)
+            {
+                return spreadSpeed;
+            }
+        }
+        return 5;
     }
 
     default boolean handleBlockLeftClick(BlockState state, Level level, BlockPos pos, Player player) { return false; }
@@ -400,6 +482,17 @@ public interface IFramedBlock extends EntityBlock, IForgeBlock
         return state.getCollisionShape(level, pos, ctx);
     }
 
+    @Override
+    default boolean hidesNeighborFace(BlockGetter level, BlockPos pos, BlockState state, BlockState neighborState, Direction dir)
+    {
+        return doesHideNeighborFace(level, pos, state, neighborState, dir);
+    }
+
+    /**
+     * Use {@link IForgeBlock#hidesNeighborFace(BlockGetter, BlockPos, BlockState, BlockState, Direction)} instead
+     */
+    @SuppressWarnings("DeprecatedIsStillUsed")
+    @Deprecated(forRemoval = true)
     default boolean doesHideNeighborFace(BlockGetter level, BlockPos pos, BlockState state, BlockState neighborState, Direction dir)
     {
         if (!FramedBlocksAPI.getInstance().canHideNeighborFaceInLevel(level)) { return false; }
@@ -420,6 +513,17 @@ public interface IFramedBlock extends EntityBlock, IForgeBlock
         return false;
     }
 
+    @Override
+    default void onBlockStateChange(LevelReader level, BlockPos pos, BlockState oldState, BlockState newState)
+    {
+        onStateChange(level, pos, oldState, newState);
+    }
+
+    /**
+     * Use {@link IForgeBlock#onBlockStateChange(LevelReader, BlockPos, BlockState, BlockState)} instead
+     */
+    @SuppressWarnings("DeprecatedIsStillUsed")
+    @Deprecated(forRemoval = true)
     default void onStateChange(LevelReader level, BlockPos pos, BlockState oldState, BlockState newState)
     {
         if (level.isClientSide() && level.getBlockEntity(pos) instanceof FramedBlockEntity be)
@@ -511,6 +615,17 @@ public interface IFramedBlock extends EntityBlock, IForgeBlock
 
     default BlockState rotate(BlockState state, Direction face, Rotation rot) { return state.rotate(rot); }
 
+    @Override
+    default MaterialColor getMapColor(BlockState state, BlockGetter level, BlockPos pos, MaterialColor defaultColor)
+    {
+        return getCamoMapColor(level, pos, defaultColor);
+    }
+
+    /**
+     * Use {@link IForgeBlock#getMapColor(BlockState, BlockGetter, BlockPos, MaterialColor)} instead
+     */
+    @SuppressWarnings("DeprecatedIsStillUsed")
+    @Deprecated(forRemoval = true)
     default MaterialColor getCamoMapColor(BlockGetter level, BlockPos pos, MaterialColor defaultColor)
     {
         if (level.getBlockEntity(pos) instanceof FramedBlockEntity be)
@@ -524,6 +639,17 @@ public interface IFramedBlock extends EntityBlock, IForgeBlock
         return defaultColor;
     }
 
+    @Override
+    default float[] getBeaconColorMultiplier(BlockState state, LevelReader level, BlockPos pos, BlockPos beaconPos)
+    {
+        return getCamoBeaconColorMultiplier(level, pos, beaconPos);
+    }
+
+    /**
+     * Use {@link IForgeBlock#getBeaconColorMultiplier(BlockState, LevelReader, BlockPos, BlockPos)} instead
+     */
+    @SuppressWarnings("DeprecatedIsStillUsed")
+    @Deprecated(forRemoval = true)
     default float[] getCamoBeaconColorMultiplier(LevelReader level, BlockPos pos, BlockPos beaconPos)
     {
         if (level.getBlockEntity(pos) instanceof FramedBlockEntity be)
@@ -533,6 +659,7 @@ public interface IFramedBlock extends EntityBlock, IForgeBlock
         return null;
     }
 
+    // Can't be replaced with an override for the IForgeBlock method due to that being overridden in a Block patch
     default boolean canCamoSustainPlant(BlockState state, BlockGetter level, BlockPos pos, Direction side, IPlantable plant)
     {
         if (state.isFaceSturdy(level, pos, side, SupportType.FULL) && level.getBlockEntity(pos) instanceof FramedBlockEntity be)

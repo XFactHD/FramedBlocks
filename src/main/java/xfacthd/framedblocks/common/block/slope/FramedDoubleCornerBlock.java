@@ -6,7 +6,6 @@ import net.minecraft.util.Tuple;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.block.*;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
@@ -14,13 +13,13 @@ import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.phys.Vec3;
 import xfacthd.framedblocks.api.block.FramedProperties;
 import xfacthd.framedblocks.api.block.IFramedBlock;
-import xfacthd.framedblocks.api.camo.CamoContainer;
 import xfacthd.framedblocks.api.predicate.CtmPredicate;
-import xfacthd.framedblocks.api.util.*;
+import xfacthd.framedblocks.api.util.Utils;
 import xfacthd.framedblocks.common.FBContent;
 import xfacthd.framedblocks.common.block.AbstractFramedDoubleBlock;
-import xfacthd.framedblocks.common.data.*;
-import xfacthd.framedblocks.common.blockentity.*;
+import xfacthd.framedblocks.common.blockentity.FramedDoubleCornerBlockEntity;
+import xfacthd.framedblocks.common.data.BlockType;
+import xfacthd.framedblocks.common.data.PropertyHolder;
 import xfacthd.framedblocks.common.data.property.CornerType;
 
 public class FramedDoubleCornerBlock extends AbstractFramedDoubleBlock
@@ -78,28 +77,6 @@ public class FramedDoubleCornerBlock extends AbstractFramedDoubleBlock
         }
 
         return withCornerType(state, context, side, typeSide, hitPoint, context.getHorizontalDirection());
-    }
-
-    @Override
-    @SuppressWarnings("deprecation")
-    public SoundType getCamoSound(BlockState state, LevelReader level, BlockPos pos)
-    {
-        CornerType type = state.getValue(PropertyHolder.CORNER_TYPE);
-        if (level.getBlockEntity(pos) instanceof FramedDoubleBlockEntity dbe)
-        {
-            CamoContainer camo = (type.isHorizontal() || type.isTop()) ? dbe.getCamo() : dbe.getCamoTwo();
-            if (!camo.isEmpty())
-            {
-                return camo.getSoundType();
-            }
-
-            camo = (type.isHorizontal() || type.isTop()) ? dbe.getCamoTwo() : dbe.getCamo();
-            if (!camo.isEmpty())
-            {
-                return camo.getSoundType();
-            }
-        }
-        return getSoundType(state);
     }
 
     @Override

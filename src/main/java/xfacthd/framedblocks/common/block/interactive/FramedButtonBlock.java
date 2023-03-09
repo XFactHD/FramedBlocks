@@ -6,18 +6,16 @@ import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
-import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.level.*;
+import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.*;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.AttachFace;
 import net.minecraft.world.level.material.Material;
-import net.minecraft.world.level.material.MaterialColor;
 import net.minecraft.world.level.storage.loot.LootContext;
 import net.minecraft.world.phys.BlockHitResult;
 import xfacthd.framedblocks.api.block.*;
@@ -70,27 +68,6 @@ public class FramedButtonBlock extends ButtonBlock implements IFramedBlock
     }
 
     @Override
-    public void onBlockStateChange(LevelReader level, BlockPos pos, BlockState oldState, BlockState newState)
-    {
-        onStateChange(level, pos, oldState, newState);
-    }
-
-    @Override
-    public int getLightEmission(BlockState state, BlockGetter level, BlockPos pos) { return getLight(state, level, pos); }
-
-    @Override
-    public SoundType getSoundType(BlockState state, LevelReader level, BlockPos pos, Entity entity)
-    {
-        return getCamoSound(state, level, pos);
-    }
-
-    @Override
-    public float getExplosionResistance(BlockState state, BlockGetter level, BlockPos pos, Explosion explosion)
-    {
-        return getCamoExplosionResistance(state, level, pos, explosion);
-    }
-
-    @Override
     public List<ItemStack> getDrops(BlockState state, LootContext.Builder builder)
     {
         return getCamoDrops(super.getDrops(state, builder), builder);
@@ -104,12 +81,6 @@ public class FramedButtonBlock extends ButtonBlock implements IFramedBlock
             return rotate(state, rot);
         }
         return state;
-    }
-
-    @Override
-    public MaterialColor getMapColor(BlockState state, BlockGetter level, BlockPos pos, MaterialColor defaultColor)
-    {
-        return getCamoMapColor(level, pos, defaultColor);
     }
 
     @Override
