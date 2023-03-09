@@ -33,6 +33,15 @@ public final class FramedJeiPlugin implements IModPlugin
     }
 
     @Override
+    public void registerRecipeTransferHandlers(IRecipeTransferRegistration registration)
+    {
+        registration.addRecipeTransferHandler(
+                new FramingSawTransferHandler(registration.getTransferHelper()),
+                FRAMING_SAW_RECIPE_TYPE
+        );
+    }
+
+    @Override
     public void registerRecipeCatalysts(IRecipeCatalystRegistration registration)
     {
         registration.addRecipeCatalyst(

@@ -107,6 +107,12 @@ public class FramingSawScreen extends AbstractContainerScreen<FramingSawMenu>
             RenderSystem.setShaderTexture(0, BACKGROUND);
         }
 
+        int idx = menu.getSelectedRecipeIndex();
+        if (menu.hasRecipeChanged())
+        {
+            tryScrollToRecipe(idx);
+        }
+
         int recX = leftPos + RECIPES_X;
         int recY = topPos + RECIPES_Y;
         int lastIndex = firstIndex + RECIPE_COUNT;
@@ -114,7 +120,6 @@ public class FramingSawScreen extends AbstractContainerScreen<FramingSawMenu>
         renderRecipes(recX, recY, lastIndex);
 
         List<FramingSawRecipe> recipes = cache.getRecipes();
-        int idx = menu.getSelectedRecipeIndex();
         if (idx >= 0 && idx < recipes.size())
         {
             FramingSawRecipe recipe = recipes.get(idx);
@@ -130,6 +135,18 @@ public class FramingSawScreen extends AbstractContainerScreen<FramingSawMenu>
                 int i = (int) (System.currentTimeMillis() / 1700) % items.length;
                 ItemRenderHelper.renderFakeItemTransparent(items[i], leftPos + 20, topPos + 82, 127);
             }
+        }
+    }
+
+    private void tryScrollToRecipe(int idx)
+    {
+        if (idx != -1 && (idx < firstIndex || idx >= firstIndex + RECIPE_COUNT))
+        {
+            int row = (idx / RECIPE_COLS) - 2; // Center the selected recipe if possible
+            int hidden = getHiddenRows();
+            scrollOffset = (float) row / (float) hidden;
+            scrollOffset = Mth.clamp(scrollOffset, 0, 1);
+            firstIndex = calculateFirstIndex(hidden);
         }
     }
 
@@ -404,7 +421,7 @@ public class FramingSawScreen extends AbstractContainerScreen<FramingSawMenu>
 
             scrollOffset = ((float) mouseY - topY - (SCROLL_BTN_HEIGHT / 2F)) / freeScrollHeight;
             scrollOffset = Mth.clamp(scrollOffset, 0F, 1F);
-            firstIndex = (int) (scrollOffset * getHiddenRows() + .5D) * RECIPE_COLS;
+            firstIndex = calculateFirstIndex(getHiddenRows());
 
             return true;
         }
@@ -420,7 +437,7 @@ public class FramingSawScreen extends AbstractContainerScreen<FramingSawMenu>
             int hiddenRows = getHiddenRows();
             float offset = (float) delta / (float) hiddenRows;
             scrollOffset = Mth.clamp(scrollOffset - offset, 0F, 1F);
-            firstIndex = (int) ((double) (scrollOffset * (float) hiddenRows) + .5D) * RECIPE_COLS;
+            firstIndex = calculateFirstIndex(hiddenRows);
         }
 
         return true;
@@ -467,5 +484,10 @@ public class FramingSawScreen extends AbstractContainerScreen<FramingSawMenu>
     private int getHiddenRows()
     {
         return (menu.getRecipes().size() + RECIPE_COLS - 1) / RECIPE_COLS - RECIPE_ROWS;
+    }
+
+    private int calculateFirstIndex(int hiddenRows)
+    {
+        return (int) ((double) (scrollOffset * (float) hiddenRows) + .5D) * RECIPE_COLS;
     }
 }

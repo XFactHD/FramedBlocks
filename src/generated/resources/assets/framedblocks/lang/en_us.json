@@ -185,6 +185,8 @@
   "msg.framedblocks.frame_crafter.fail.missing_additive": "Missing additive ingredient",
   "msg.framedblocks.frame_crafter.fail.none": "Craftable",
   "msg.framedblocks.frame_crafter.fail.unexpected_additive": "Unexpected additive ingredient present",
+  "msg.framedblocks.framing_saw.transfer.invalid_recipe": "Invalid recipe",
+  "msg.framedblocks.framing_saw.transfer.not_implemented": "No items will be transferred",
   "msg.framedblocks.lock_state": "The state of this block is now %s",
   "msg.framedblocks.lock_state.locked": "locked",
   "msg.framedblocks.lock_state.unlocked": "unlocked",
