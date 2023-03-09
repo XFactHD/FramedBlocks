@@ -16,7 +16,7 @@ import xfacthd.framedblocks.client.util.ClientConfig;
 
 import java.util.List;
 
-public class ReinforcementOverlay extends BlockInteractOverlay
+public final class ReinforcementOverlay extends BlockInteractOverlay
 {
     public static final String REINFORCE_MESSAGE = "tooltip." + FramedConstants.MOD_ID + ".reinforce_state";
     public static final Component STATE_NOT_REINFORCED = Utils.translate("tooltip", "reinforce_state.false")
