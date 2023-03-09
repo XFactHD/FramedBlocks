@@ -554,11 +554,19 @@ public class FramedBlockEntity extends BlockEntity
 
     public boolean isCamoFlammable(Direction face)
     {
+        if (reinforced)
+        {
+            return false;
+        }
         return camoState.isAir() || camoState.isFlammable(level, worldPosition, face);
     }
 
     public int getCamoFlammability(Direction face)
     {
+        if (reinforced)
+        {
+            return 0;
+        }
         return getCamoState().isAir() ? -1 : getCamoState().getFlammability(level, worldPosition, face);
     }
 
