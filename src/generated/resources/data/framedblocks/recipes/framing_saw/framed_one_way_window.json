@@ -1,14 +1,14 @@
 {
   "type": "framedblocks:frame",
+  "material": 6144,
   "additives": [
     {
-      "count": 1,
       "ingredient": {
         "item": "minecraft:tinted_glass"
-      }
+      },
+      "count": 1
     }
   ],
-  "material": 6144,
   "result": {
     "item": "framedblocks:framed_one_way_window"
   }
