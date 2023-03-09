@@ -15,9 +15,12 @@ import net.minecraftforge.client.event.*;
 import net.minecraftforge.client.gui.OverlayRegistry;
 import net.minecraftforge.client.model.ForgeModelBakery;
 import net.minecraftforge.client.model.ModelLoaderRegistry;
+import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
+import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import net.minecraftforge.registries.RegistryObject;
 import org.jetbrains.annotations.Nullable;
 import xfacthd.framedblocks.api.FramedBlocksClientAPI;
@@ -140,6 +143,15 @@ public final class FBClient
 
         GhostBlockRenderer.init();
         GhostRenderBehaviours.register();
+
+        IEventBus modBus = FMLJavaModLoadingContext.get().getModEventBus();
+        modBus.addListener(FramedSignScreen::onTextureStitch);
+
+        IEventBus forgeBus = MinecraftForge.EVENT_BUS;
+        forgeBus.addListener(ClientUtils::onClientTick);
+        forgeBus.addListener(BlockOutlineRenderer::onRenderBlockHighlight);
+        forgeBus.addListener(KeyMappings::onClientTick);
+        forgeBus.addListener(GhostBlockRenderer::onRenderStage);
     }
 
     @SubscribeEvent

@@ -15,7 +15,6 @@ import net.minecraft.world.phys.*;
 import net.minecraftforge.client.ForgeHooksClient;
 import net.minecraftforge.client.event.RenderLevelStageEvent;
 import net.minecraftforge.client.model.data.IModelData;
-import net.minecraftforge.common.MinecraftForge;
 import xfacthd.framedblocks.api.ghost.CamoPair;
 import xfacthd.framedblocks.api.ghost.GhostRenderBehaviour;
 import xfacthd.framedblocks.api.util.*;
@@ -42,8 +41,6 @@ public final class GhostBlockRenderer
         //Needed to render ghosts of double blocks
         GHOST_MODEL_DATA.setData(FramedDoubleBlockEntity.DATA_LEFT, GHOST_MODEL_DATA);
         GHOST_MODEL_DATA.setData(FramedDoubleBlockEntity.DATA_RIGHT, GHOST_MODEL_DATA_TWO);
-
-        MinecraftForge.EVENT_BUS.addListener(GhostBlockRenderer::onRenderStage);
     }
 
     public static void onRenderStage(final RenderLevelStageEvent event)

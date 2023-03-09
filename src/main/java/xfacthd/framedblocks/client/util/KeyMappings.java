@@ -8,19 +8,15 @@ import net.minecraft.network.chat.TextComponent;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.HitResult;
-import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.ClientRegistry;
 import net.minecraftforge.client.model.ForgeModelBakery;
 import net.minecraftforge.common.util.Lazy;
 import net.minecraftforge.event.TickEvent;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.common.Mod;
 import org.lwjgl.glfw.GLFW;
 import xfacthd.framedblocks.api.block.FramedBlockEntity;
 import xfacthd.framedblocks.api.model.FramedBlockModel;
 import xfacthd.framedblocks.api.util.FramedConstants;
 
-@Mod.EventBusSubscriber(modid = FramedConstants.MOD_ID, value = Dist.CLIENT)
 public final class KeyMappings
 {
     public static final String KEY_CATEGORY = FramedConstants.MOD_ID + ".key.categories.framedblocks";
@@ -40,7 +36,6 @@ public final class KeyMappings
         );
     }
 
-    @SubscribeEvent
     public static void onClientTick(final TickEvent.ClientTickEvent event)
     {
         Level level = Minecraft.getInstance().level;
@@ -57,12 +52,15 @@ public final class KeyMappings
                 Component msg = new TextComponent("Culling updated for '")
                         .append(be.getBlockState().getBlock().getName())
                         .append("' at ")
-                        .append(new TextComponent(String.format("{x=%d, y=%d, z=%d}", pos.getX(), pos.getY(), pos.getZ())));
+                        .append(new TextComponent(
+                                String.format("{x=%d, y=%d, z=%d}", pos.getX(), pos.getY(), pos.getZ())
+                        ));
 
                 //noinspection ConstantConditions
                 Minecraft.getInstance().player.displayClientMessage(msg, true);
             }
         }
+
         if (KEYMAPPING_WIPE_CACHE.get().consumeClick() && ForgeModelBakery.instance() != null)
         {
             ForgeModelBakery.instance()

@@ -9,8 +9,6 @@ import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraftforge.common.extensions.IForgeMenuType;
 import net.minecraftforge.event.RegistryEvent;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import net.minecraftforge.network.IContainerFactory;
 import net.minecraftforge.registries.*;
@@ -42,7 +40,6 @@ import java.util.*;
 import java.util.function.Function;
 import java.util.function.Supplier;
 
-@Mod.EventBusSubscriber(modid = FramedConstants.MOD_ID, bus = Mod.EventBusSubscriber.Bus.MOD)
 public final class FBContent
 {
     private static final DeferredRegister<Block> BLOCKS = DeferredRegister.create(ForgeRegistries.BLOCKS, FramedConstants.MOD_ID);
@@ -358,6 +355,8 @@ public final class FBContent
         ITEMS.register(FMLJavaModLoadingContext.get().getModEventBus());
         BE_TYPES.register(FMLJavaModLoadingContext.get().getModEventBus());
         CONTAINER_TYPES.register(FMLJavaModLoadingContext.get().getModEventBus());
+
+        FMLJavaModLoadingContext.get().getModEventBus().addGenericListener(Item.class, FBContent::onRegisterItems);
     }
 
     public static Collection<RegistryObject<Block>> getRegisteredBlocks() { return BLOCKS.getEntries(); }
@@ -366,9 +365,7 @@ public final class FBContent
 
     public static Item toolByType(FramedToolType type) { return TOOLS_BY_TYPE.get(type).get(); }
 
-
-    @SubscribeEvent
-    public static void onRegisterItems(final RegistryEvent.Register<Item> event)
+    private static void onRegisterItems(final RegistryEvent.Register<Item> event)
     {
         IForgeRegistry<Item> registry = event.getRegistry();
 

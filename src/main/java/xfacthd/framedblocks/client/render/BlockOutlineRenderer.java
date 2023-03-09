@@ -7,26 +7,20 @@ import net.minecraft.client.renderer.RenderType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.Vec3;
-import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.event.DrawSelectionEvent;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.common.Mod;
 import xfacthd.framedblocks.FramedBlocks;
 import xfacthd.framedblocks.api.block.IFramedBlock;
 import xfacthd.framedblocks.api.type.IBlockType;
-import xfacthd.framedblocks.api.util.FramedConstants;
 import xfacthd.framedblocks.api.util.client.OutlineRender;
 import xfacthd.framedblocks.client.util.ClientConfig;
 
 import java.util.*;
 
-@Mod.EventBusSubscriber(modid = FramedConstants.MOD_ID, value = Dist.CLIENT)
 public final class BlockOutlineRenderer
 {
     private static final Map<IBlockType, OutlineRender> OUTLINE_RENDERERS = new HashMap<>();
     private static final Set<IBlockType> ERRORED_TYPES = new HashSet<>();
 
-    @SubscribeEvent
     public static void onRenderBlockHighlight(final DrawSelectionEvent.HighlightBlock event)
     {
         if (!ClientConfig.fancyHitboxes) { return; }

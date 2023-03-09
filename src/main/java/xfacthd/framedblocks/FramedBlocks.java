@@ -3,12 +3,14 @@ package xfacthd.framedblocks;
 import com.mojang.logging.LogUtils;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.*;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.fml.CrashReportCallables;
 import net.minecraftforge.fml.ModLoadingContext;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.config.ModConfig;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
+import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import net.minecraftforge.network.NetworkDirection;
 import net.minecraftforge.network.NetworkRegistry;
 import net.minecraftforge.network.simple.SimpleChannel;
@@ -48,13 +50,18 @@ public final class FramedBlocks
         ModLoadingContext.get().registerConfig(ModConfig.Type.SERVER, ServerConfig.SPEC);
         FramedBlocksAPI.INSTANCE.accept(new ApiImpl());
 
+        IEventBus modBus = FMLJavaModLoadingContext.get().getModEventBus();
+        modBus.addListener(FramedBlocks::onCommonSetup);
+
+        IEventBus forgeBus = MinecraftForge.EVENT_BUS;
+        forgeBus.addListener(EventHandler::onBlockLeftClick);
+
         CompatHandler.init();
 
         CrashReportCallables.registerCrashCallable("FramedBlocks BlockEntity Warning", FramedBlocks::getBlockEntityWarning);
     }
 
-    @SubscribeEvent
-    public static void setup(final FMLCommonSetupEvent event)
+    private static void onCommonSetup(final FMLCommonSetupEvent event)
     {
         CHANNEL.messageBuilder(SignUpdatePacket.class, 0, NetworkDirection.PLAY_TO_SERVER)
                 .encoder(SignUpdatePacket::encode)

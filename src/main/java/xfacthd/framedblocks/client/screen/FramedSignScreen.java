@@ -22,11 +22,8 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
-import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.event.TextureStitchEvent;
 import net.minecraftforge.client.model.data.EmptyModelData;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.common.Mod;
 import org.lwjgl.glfw.GLFW;
 import xfacthd.framedblocks.FramedBlocks;
 import xfacthd.framedblocks.api.util.FramedConstants;
@@ -38,7 +35,6 @@ import xfacthd.framedblocks.common.blockentity.FramedSignBlockEntity;
 import java.util.List;
 
 @SuppressWarnings("deprecation")
-@Mod.EventBusSubscriber(modid = FramedConstants.MOD_ID, bus = Mod.EventBusSubscriber.Bus.MOD, value = Dist.CLIENT)
 public class FramedSignScreen extends Screen
 {
     private static final Table<BlockState, Direction, TextureAtlasSprite> SPRITE_CACHE = HashBasedTable.create();
@@ -294,6 +290,11 @@ public class FramedSignScreen extends Screen
         return SPRITE_CACHE.get(camoState, front);
     }
 
-    @SubscribeEvent
-    public static void onTextureStitch(final TextureStitchEvent.Pre event) { SPRITE_CACHE.clear(); }
+    public static void onTextureStitch(final TextureStitchEvent.Pre event)
+    {
+        if (event.getAtlas().location().equals(TextureAtlas.LOCATION_BLOCKS))
+        {
+            SPRITE_CACHE.clear();
+        }
+    }
 }

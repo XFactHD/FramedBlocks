@@ -44,7 +44,10 @@ public final class BuildingGadgetsCompat
                 Reference.TileDataSerializerReference.REGISTRY_ID_TILE_DATA_SERIALIZER,
                 FramedConstants.MOD_ID
         );
-        static final RegistryObject<ITileDataSerializer> FRAMED_SERIALIZER = SERIALIZERS.register("framed_serializer", FramedBlockEntityDataSerializer::new);
+        static final RegistryObject<ITileDataSerializer> FRAMED_SERIALIZER = SERIALIZERS.register(
+                "framed_serializer",
+                FramedBlockEntityDataSerializer::new
+        );
 
         public static void init()
         {
