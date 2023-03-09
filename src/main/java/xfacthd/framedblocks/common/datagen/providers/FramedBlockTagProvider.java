@@ -75,7 +75,25 @@ public final class FramedBlockTagProvider extends BlockTagsProvider
                  .addOptional(rl("create", "dark_oak_window"))
                  .addOptional(rl("create", "crimson_window"))
                  .addOptional(rl("create", "warped_window"))
-                 .addOptional(rl("create", "ornate_iron_window"));
+                 .addOptional(rl("create", "ornate_iron_window"))
+                 .addOptionalTag(rl("chipped", "glass"))
+                 .addOptionalTag(rl("chipped", "white_stained_glass"))
+                 .addOptionalTag(rl("chipped", "orange_stained_glass"))
+                 .addOptionalTag(rl("chipped", "magenta_stained_glass"))
+                 .addOptionalTag(rl("chipped", "light_blue_stained_glass"))
+                 .addOptionalTag(rl("chipped", "yellow_stained_glass"))
+                 .addOptionalTag(rl("chipped", "lime_stained_glass"))
+                 .addOptionalTag(rl("chipped", "pink_stained_glass"))
+                 .addOptionalTag(rl("chipped", "gray_stained_glass"))
+                 .addOptionalTag(rl("chipped", "light_gray_stained_glass"))
+                 .addOptionalTag(rl("chipped", "cyan_stained_glass"))
+                 .addOptionalTag(rl("chipped", "purple_stained_glass"))
+                 .addOptionalTag(rl("chipped", "blue_stained_glass"))
+                 .addOptionalTag(rl("chipped", "brown_stained_glass"))
+                 .addOptionalTag(rl("chipped", "green_stained_glass"))
+                 .addOptionalTag(rl("chipped", "red_stained_glass"))
+                 .addOptionalTag(rl("chipped", "black_stained_glass"))
+                 .addOptionalTag(rl("forge", "hardened_glass"));
 
         tag(Utils.BLACKLIST).add(
                 Blocks.PISTON,
