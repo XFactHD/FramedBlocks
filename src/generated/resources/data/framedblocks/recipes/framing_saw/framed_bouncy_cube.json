@@ -1,0 +1,15 @@
+{
+  "type": "framedblocks:frame",
+  "material": 6144,
+  "additives": [
+    {
+      "ingredient": {
+        "tag": "forge:slimeballs"
+      },
+      "count": 4
+    }
+  ],
+  "result": {
+    "item": "framedblocks:framed_bouncy_cube"
+  }
+}

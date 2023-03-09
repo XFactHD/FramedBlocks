@@ -1,0 +1,15 @@
+{
+  "type": "framedblocks:frame",
+  "material": 1536,
+  "additives": [
+    {
+      "ingredient": {
+        "tag": "forge:ingots/iron"
+      },
+      "count": 1
+    }
+  ],
+  "result": {
+    "item": "framedblocks:framed_iron_pressure_plate"
+  }
+}

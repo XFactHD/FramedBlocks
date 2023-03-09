@@ -1,0 +1,29 @@
+{
+  "type": "framedblocks:frame",
+  "material": 6144,
+  "additives": [
+    {
+      "ingredient": {
+        "tag": "forge:ingots/iron"
+      },
+      "count": 6
+    },
+    {
+      "ingredient": {
+        "tag": "forge:dusts/redstone"
+      },
+      "count": 1
+    },
+    {
+      "ingredient": {
+        "item": "minecraft:stone_pressure_plate"
+      },
+      "count": 1
+    }
+  ],
+  "result": {
+    "item": "framedblocks:framed_fancy_detector_rail",
+    "count": 6
+  },
+  "disabled": true
+}

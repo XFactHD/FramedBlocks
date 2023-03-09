@@ -1,0 +1,22 @@
+{
+  "type": "framedblocks:frame",
+  "material": 1536,
+  "additives": [
+    {
+      "ingredient": {
+        "tag": "minecraft:coals"
+      },
+      "count": 1
+    },
+    {
+      "ingredient": {
+        "item": "minecraft:soul_sand"
+      },
+      "count": 1
+    }
+  ],
+  "result": {
+    "item": "framedblocks:framed_soul_torch"
+  },
+  "disabled": true
+}

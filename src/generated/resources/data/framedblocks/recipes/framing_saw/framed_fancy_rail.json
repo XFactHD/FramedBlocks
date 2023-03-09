@@ -1,0 +1,16 @@
+{
+  "type": "framedblocks:frame",
+  "material": 6144,
+  "additives": [
+    {
+      "ingredient": {
+        "tag": "forge:ingots/iron"
+      },
+      "count": 6
+    }
+  ],
+  "result": {
+    "item": "framedblocks:framed_fancy_rail",
+    "count": 16
+  }
+}
