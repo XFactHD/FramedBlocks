@@ -11,7 +11,6 @@ import net.minecraft.world.item.*;
 import net.minecraft.world.level.*;
 import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.block.TorchBlock;
-import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.material.Material;
 import net.minecraft.world.level.storage.loot.LootContext;
@@ -20,7 +19,6 @@ import xfacthd.framedblocks.FramedBlocks;
 import xfacthd.framedblocks.api.block.IFramedBlock;
 import xfacthd.framedblocks.common.FBContent;
 import xfacthd.framedblocks.common.data.BlockType;
-import xfacthd.framedblocks.api.block.FramedBlockEntity;
 
 import javax.annotation.Nullable;
 import java.util.List;
@@ -65,9 +63,6 @@ public class FramedTorchBlock extends TorchBlock implements IFramedBlock
     {
         return getCamoDrops(super.getDrops(state, builder), builder);
     }
-
-    @Override
-    public final BlockEntity newBlockEntity(BlockPos pos, BlockState state) { return new FramedBlockEntity(pos, state); }
 
     @Override
     public BlockType getBlockType() { return BlockType.FRAMED_TORCH; }

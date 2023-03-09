@@ -144,7 +144,10 @@ public class FramedFlowerPotBlock extends FramedBlock
     }
 
     @Override
-    public BlockEntity newBlockEntity(BlockPos pos, BlockState state) { return new FramedFlowerPotBlockEntity(pos, state); }
+    public BlockEntity newBlockEntity(BlockPos pos, BlockState state)
+    {
+        return new FramedFlowerPotBlockEntity(pos, state);
+    }
 
 
 

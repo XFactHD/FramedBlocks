@@ -9,7 +9,6 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.*;
 import net.minecraft.world.level.block.*;
-import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.*;
@@ -17,11 +16,11 @@ import net.minecraft.world.level.material.Material;
 import net.minecraft.world.level.storage.loot.LootContext;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.shapes.*;
+import xfacthd.framedblocks.api.block.FramedBlockEntity;
 import xfacthd.framedblocks.api.block.IFramedBlock;
 import xfacthd.framedblocks.api.util.FramedProperties;
 import xfacthd.framedblocks.api.util.client.ClientUtils;
 import xfacthd.framedblocks.common.data.BlockType;
-import xfacthd.framedblocks.api.block.FramedBlockEntity;
 import xfacthd.framedblocks.api.util.CtmPredicate;
 
 import javax.annotation.Nullable;
@@ -153,12 +152,6 @@ public class FramedDoorBlock extends DoorBlock implements IFramedBlock
     public List<ItemStack> getDrops(BlockState state, LootContext.Builder builder)
     {
         return getCamoDrops(super.getDrops(state, builder), builder);
-    }
-
-    @Override
-    public final BlockEntity newBlockEntity(BlockPos pos, BlockState state)
-    {
-        return new FramedBlockEntity(pos, state);
     }
 
     @Override
