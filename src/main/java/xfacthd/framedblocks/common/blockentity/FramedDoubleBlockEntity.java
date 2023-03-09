@@ -191,6 +191,17 @@ public abstract class FramedDoubleBlockEntity extends FramedBlockEntity
         return Math.min(flammabilityOne, flammabilityTwo);
     }
 
+    @Override
+    public int getCamoFireSpreadSpeed(Direction face)
+    {
+        int spreadSpeedOne = super.getCamoFireSpreadSpeed(face);
+        int spreadSpeedTwo = camoContainer.isEmpty() ? -1 : camoContainer.getState().getFireSpreadSpeed(level, worldPosition, face);
+
+        if (spreadSpeedOne == -1) { return spreadSpeedOne; }
+        if (spreadSpeedTwo == -1) { return spreadSpeedTwo; }
+        return Math.min(spreadSpeedOne, spreadSpeedTwo);
+    }
+
     public final DoubleBlockSoundType getSoundType() { return soundType; }
 
     @Override

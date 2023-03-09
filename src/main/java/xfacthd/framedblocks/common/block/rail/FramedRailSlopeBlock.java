@@ -5,7 +5,6 @@ import net.minecraft.core.Direction;
 import net.minecraft.util.Tuple;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
-import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.vehicle.AbstractMinecart;
@@ -17,7 +16,8 @@ import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.*;
-import net.minecraft.world.level.material.*;
+import net.minecraft.world.level.material.FluidState;
+import net.minecraft.world.level.material.Fluids;
 import net.minecraft.world.level.storage.loot.LootContext;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.shapes.*;
@@ -94,12 +94,6 @@ public class FramedRailSlopeBlock extends BaseRailBlock implements IFramedBlock
     }
 
     @Override
-    public void onBlockStateChange(LevelReader level, BlockPos pos, BlockState oldState, BlockState newState)
-    {
-        onStateChange(level, pos, oldState, newState);
-    }
-
-    @Override
     public boolean canSurvive(BlockState state, LevelReader level, BlockPos pos) { return true; }
 
     @Override //Copy of AbstractRailBlock#neighborChanged() to disable removal
@@ -145,42 +139,9 @@ public class FramedRailSlopeBlock extends BaseRailBlock implements IFramedBlock
     }
 
     @Override
-    public int getLightEmission(BlockState state, BlockGetter level, BlockPos pos) { return getLight(state, level, pos); }
-
-    @Override
-    public SoundType getSoundType(BlockState state, LevelReader level, BlockPos pos, Entity entity)
-    {
-        return getCamoSound(state, level, pos);
-    }
-
-    @Override
-    public float getExplosionResistance(BlockState state, BlockGetter level, BlockPos pos, Explosion explosion)
-    {
-        return getCamoExplosionResistance(state, level, pos, explosion);
-    }
-
-    @Override
-    public boolean isFlammable(BlockState state, BlockGetter level, BlockPos pos, Direction face)
-    {
-        return isCamoFlammable(level, pos, face);
-    }
-
-    @Override
-    public int getFlammability(BlockState state, BlockGetter level, BlockPos pos, Direction face)
-    {
-        return getCamoFlammability(level, pos, face);
-    }
-
-    @Override
     public List<ItemStack> getDrops(BlockState state, LootContext.Builder builder)
     {
         return getCamoDrops(super.getDrops(state, builder), builder);
-    }
-
-    @Override
-    public float getFriction(BlockState state, LevelReader level, BlockPos pos, @Nullable Entity entity)
-    {
-        return getCamoSlipperiness(state, level, pos, entity);
     }
 
     @Override
@@ -197,12 +158,6 @@ public class FramedRailSlopeBlock extends BaseRailBlock implements IFramedBlock
             return Shapes.empty();
         }
         return getShape(state, worldIn, pos, context);
-    }
-
-    @Override
-    public boolean hidesNeighborFace(BlockGetter level, BlockPos pos, BlockState state, BlockState neighborState, Direction dir)
-    {
-        return doesHideNeighborFace(level, pos, state, neighborState, dir);
     }
 
     @Override
@@ -232,18 +187,6 @@ public class FramedRailSlopeBlock extends BaseRailBlock implements IFramedBlock
             return state.setValue(PropertyHolder.ASCENDING_RAIL_SHAPE, FramedUtils.getAscendingRailShapeFromDirection(dir));
         }
         return state;
-    }
-
-    @Override
-    public MaterialColor getMapColor(BlockState state, BlockGetter level, BlockPos pos, MaterialColor defaultColor)
-    {
-        return getCamoMapColor(level, pos, defaultColor);
-    }
-
-    @Override
-    public float[] getBeaconColorMultiplier(BlockState state, LevelReader level, BlockPos pos, BlockPos beaconPos)
-    {
-        return getCamoBeaconColorMultiplier(level, pos, beaconPos);
     }
 
     @Override
