@@ -1,6 +1,86 @@
 {
-  "parent": "minecraft:block/cube_all",
+  "parent": "minecraft:block/block",
   "textures": {
-    "all": "framedblocks:block/framed_collapsible_block"
-  }
+    "frame": "framedblocks:block/framed_block",
+    "underlay": "minecraft:block/oak_planks",
+    "particle": "framedblocks:block/framed_block"
+  },
+  "elements": [
+    {
+      "from": [
+        0,
+        0,
+        0
+      ],
+      "to": [
+        16,
+        16,
+        16
+      ],
+      "faces": {
+        "down": {
+          "texture": "#underlay",
+          "cullface": "down"
+        },
+        "up": {
+          "texture": "#underlay",
+          "cullface": "up"
+        },
+        "north": {
+          "texture": "#underlay",
+          "cullface": "north"
+        },
+        "south": {
+          "texture": "#underlay",
+          "cullface": "south"
+        },
+        "west": {
+          "texture": "#underlay",
+          "cullface": "west"
+        },
+        "east": {
+          "texture": "#underlay",
+          "cullface": "east"
+        }
+      }
+    },
+    {
+      "from": [
+        0,
+        0,
+        0
+      ],
+      "to": [
+        16,
+        16,
+        16
+      ],
+      "faces": {
+        "down": {
+          "texture": "#frame",
+          "cullface": "down"
+        },
+        "up": {
+          "texture": "#frame",
+          "cullface": "up"
+        },
+        "north": {
+          "texture": "#frame",
+          "cullface": "north"
+        },
+        "south": {
+          "texture": "#frame",
+          "cullface": "south"
+        },
+        "west": {
+          "texture": "#frame",
+          "cullface": "west"
+        },
+        "east": {
+          "texture": "#frame",
+          "cullface": "east"
+        }
+      }
+    }
+  ]
 }

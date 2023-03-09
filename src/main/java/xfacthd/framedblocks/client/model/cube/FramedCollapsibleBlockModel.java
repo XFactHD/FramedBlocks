@@ -2,7 +2,6 @@ package xfacthd.framedblocks.client.model.cube;
 
 import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
 import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
-import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.block.model.BakedQuad;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.resources.model.BakedModel;
@@ -156,9 +155,6 @@ public class FramedCollapsibleBlockModel extends BakedModelProxy
             if (camoState == FBContent.blockFramedCube.get().defaultBlockState()) { return baseModel; }
             return super.getCamoModel(camoState);
         }
-
-        @Override
-        protected boolean canRenderBaseModelInLayer(RenderType layer) { return layer == RenderType.solid(); }
 
         private int getYCollapsedIndexOffset(Direction quadFace)
         {

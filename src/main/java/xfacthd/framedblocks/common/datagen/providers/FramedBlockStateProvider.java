@@ -630,7 +630,7 @@ public class FramedBlockStateProvider extends BlockStateProvider
 
     private void registerFramedCollapsibleBlock()
     {
-        ModelFile block = models().cubeAll("framed_collapsible_block", modLoc("block/framed_collapsible_block"));
+        ModelFile block = makeUnderlayedCube("framed_collapsible_block", mcLoc("block/oak_planks"));
         simpleBlockWithItem(FBContent.blockFramedCollapsibleBlock, block);
     }
 
@@ -1025,5 +1025,19 @@ public class FramedBlockStateProvider extends BlockStateProvider
     {
         simpleBlock(block.get(), model);
         simpleBlockItem(block.get(), model);
+    }
+
+    private BlockModelBuilder makeUnderlayedCube(String name, ResourceLocation underlayTex)
+    {
+        return models().withExistingParent(name, "block/block")
+                .element()
+                .cube("#underlay")
+                .end()
+                .element()
+                .cube("#frame")
+                .end()
+                .texture("frame", TEXTURE)
+                .texture("underlay", underlayTex)
+                .texture("particle", TEXTURE);
     }
 }
