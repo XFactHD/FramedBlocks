@@ -123,7 +123,10 @@ public class FramedTargetBlock extends TargetBlock implements IFramedBlock
     }
 
     @Override
-    public BlockEntity newBlockEntity(BlockPos pos, BlockState state) { return new FramedTargetBlockEntity(pos, state); }
+    public BlockEntity newBlockEntity(BlockPos pos, BlockState state)
+    {
+        return new FramedTargetBlockEntity(pos, state);
+    }
 
     @Override
     public void initializeClient(Consumer<IClientBlockExtensions> consumer)

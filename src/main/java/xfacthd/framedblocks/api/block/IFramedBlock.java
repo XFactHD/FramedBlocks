@@ -16,6 +16,7 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.*;
 import net.minecraft.world.level.*;
 import net.minecraft.world.level.block.*;
+import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.material.*;
@@ -683,6 +684,12 @@ public interface IFramedBlock extends EntityBlock, IForgeBlock
             return be.shouldCamoDisplayFluidOverlay(level, pos, fluid);
         }
         return false;
+    }
+
+    @Override
+    default BlockEntity newBlockEntity(BlockPos pos, BlockState state)
+    {
+        return new FramedBlockEntity(pos, state);
     }
 
     default Optional<MutableComponent> printCamoBlock(CompoundTag beTag)
