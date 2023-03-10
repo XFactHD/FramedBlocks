@@ -208,8 +208,13 @@ public final class QuadModifier
 
 
 
-    public record Data(BakedQuad quad, float[][] pos, float[][] uv, float[][] normal, int[][] color, int[][] light)
+    public record Data(BakedQuad quad, float[][] pos, float[][] uv, float[][] normal, int[][] color, int[][] light, boolean uvRotated, boolean uvMirrored)
     {
+        public Data(BakedQuad quad, float[][] pos, float[][] uv, float[][] normal, int[][] color, int[][] light)
+        {
+            this(quad, pos, uv, normal, color, light, ModelUtils.isQuadRotated(uv), ModelUtils.isQuadMirrored(uv));
+        }
+
         public Data(BakedQuad quad, float[][] pos, float[][] uv, float[][] normal)
         {
             this(quad, pos, uv, normal, null, null);

@@ -144,8 +144,8 @@ public final class Modifiers
         float toXZ2 = positive ? Math.min(xz2, targetL) : Math.max(xz2, targetL);
 
         float[][] uv = data.uv();
-        boolean rotated = ModelUtils.isQuadRotated(uv);
-        boolean mirrored = ModelUtils.isQuadMirrored(uv);
+        boolean rotated = data.uvRotated();
+        boolean mirrored = data.uvMirrored();
         TextureAtlasSprite sprite = data.quad().getSprite();
 
         if (xAxis)
@@ -226,11 +226,11 @@ public final class Modifiers
         float toY2 = downwards ? Math.max(y2, targetL) : Math.min(y2, targetL);
 
         float[][] uv = data.uv();
-        boolean rotated = ModelUtils.isQuadRotated(uv);
-        boolean mirrored = ModelUtils.isQuadMirrored(uv);
+        boolean rotated = data.uvRotated();
+        boolean mirrored = data.uvMirrored();
         TextureAtlasSprite sprite = data.quad().getSprite();
-        ModelUtils.remapUV(quadDir, sprite, pos[1][1], pos[0][1], toY1, uv, 0, 1, idx1, true, true, rotated, mirrored);
-        ModelUtils.remapUV(quadDir, sprite, pos[2][1], pos[3][1], toY2, uv, 3, 2, idx2, true, true, rotated, mirrored);
+        ModelUtils.remapUV(quadDir, sprite, pos[1][1], pos[0][1], toY1, uv, 0, 1, idx1, true, !mirrored, rotated, mirrored);
+        ModelUtils.remapUV(quadDir, sprite, pos[2][1], pos[3][1], toY2, uv, 3, 2, idx2, true, !mirrored, rotated, mirrored);
 
         pos[idx1][1] = toY1;
         pos[idx2][1] = toY2;
@@ -322,8 +322,8 @@ public final class Modifiers
         float toXZ2 = positive ? Math.max(xz2, targetBot) : Math.min(xz2, targetBot);
 
         float[][] uv = data.uv();
-        boolean rotated = ModelUtils.isQuadRotated(uv);
-        boolean mirrored = ModelUtils.isQuadMirrored(uv);
+        boolean rotated = data.uvRotated();
+        boolean mirrored = data.uvMirrored();
         TextureAtlasSprite sprite = data.quad().getSprite();
         ModelUtils.remapUV(quadDir, sprite, pos[0][coordIdx], pos[3][coordIdx], toXZ1, uv, 0, 3, idx1, false, positive != towardsRight, rotated, mirrored);
         ModelUtils.remapUV(quadDir, sprite, pos[1][coordIdx], pos[2][coordIdx], toXZ2, uv, 1, 2, idx2, false, positive != towardsRight, rotated, mirrored);
