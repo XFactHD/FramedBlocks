@@ -24,7 +24,7 @@ public final class SplitLineOverlay extends BlockInteractOverlay
 
     public SplitLineOverlay()
     {
-        super(LINES_FALSE, LINES_TRUE, TEXTURE_FALSE, TEXTURE_TRUE);
+        super(LINES_FALSE, LINES_TRUE, TEXTURE_FALSE, TEXTURE_TRUE, () -> ClientConfig.splitLineMode);
     }
 
     @Override
@@ -43,11 +43,5 @@ public final class SplitLineOverlay extends BlockInteractOverlay
     protected boolean getState(Target target)
     {
         return target.state().getValue(PropertyHolder.ROTATE_SPLIT_LINE);
-    }
-
-    @Override
-    protected boolean showDetailed()
-    {
-        return ClientConfig.splitLineShowDetails;
     }
 }

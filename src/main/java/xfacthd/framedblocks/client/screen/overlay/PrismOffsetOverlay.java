@@ -24,7 +24,7 @@ public final class PrismOffsetOverlay extends BlockInteractOverlay
 
     public PrismOffsetOverlay()
     {
-        super(LINES_FALSE, LINES_TRUE, TEXTURE_FALSE, TEXTURE_TRUE);
+        super(LINES_FALSE, LINES_TRUE, TEXTURE_FALSE, TEXTURE_TRUE, () -> ClientConfig.prismOffsetMode);
     }
 
     @Override
@@ -43,11 +43,5 @@ public final class PrismOffsetOverlay extends BlockInteractOverlay
     protected boolean getState(Target target)
     {
         return target.state().getValue(FramedProperties.OFFSET);
-    }
-
-    @Override
-    protected boolean showDetailed()
-    {
-        return ClientConfig.prismOffsetShowDetails;
     }
 }

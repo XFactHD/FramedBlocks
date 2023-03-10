@@ -28,7 +28,7 @@ public final class ToggleWaterloggableOverlay extends BlockInteractOverlay
 
     public ToggleWaterloggableOverlay()
     {
-        super(LINES_FALSE, LINES_TRUE, TEXTURE_FALSE, TEXTURE_TRUE);
+        super(LINES_FALSE, LINES_TRUE, TEXTURE_FALSE, TEXTURE_TRUE, () -> ClientConfig.toggleWaterlogMode);
     }
 
     @Override
@@ -48,11 +48,5 @@ public final class ToggleWaterloggableOverlay extends BlockInteractOverlay
     protected boolean getState(Target target)
     {
         return target.state().hasProperty(BlockStateProperties.WATERLOGGED);
-    }
-
-    @Override
-    protected boolean showDetailed()
-    {
-        return ClientConfig.toggleWaterlogShowDetails;
     }
 }
