@@ -394,10 +394,8 @@ public class FramedBlockEntity extends BlockEntity
 
     public final void checkCamoSolid()
     {
-        if (getBlock().getBlockType().canOccludeWithSolidCamo() && !camoContainer.isEmpty())
-        {
-            updateDynamicStates(true, false);
-        }
+        boolean checkSolid = getBlock().getBlockType().canOccludeWithSolidCamo() && !camoContainer.isEmpty();
+        updateDynamicStates(checkSolid, glowing);
     }
 
     protected final boolean updateDynamicStates(boolean updateSolid, boolean updateLight)
