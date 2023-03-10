@@ -97,6 +97,7 @@ public final class FBClient
         OverlayRegistry.registerOverlayTop("prism_offset", new PrismOffsetOverlay());
         OverlayRegistry.registerOverlayTop("split_line", new SplitLineOverlay());
         OverlayRegistry.registerOverlayTop("one_way_window", new OneWayWindowOverlay());
+        OverlayRegistry.registerOverlayTop("frame_background", new FrameBackgroundOverlay());
 
         KeyMappings.register();
 
