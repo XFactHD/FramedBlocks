@@ -18,13 +18,9 @@ public class FramedLargeStoneButtonBlock extends FramedStoneButtonBlock
     }
 
     @Override
-    public float[] getBeaconColorMultiplier(BlockState state, LevelReader level, BlockPos pos, BlockPos beaconPos)
+    public boolean doesBlockOccludeBeaconBeam(BlockState state, LevelReader level, BlockPos pos)
     {
-        if (state.getValue(FACE) != AttachFace.WALL)
-        {
-            return getCamoBeaconColorMultiplier(level, pos, beaconPos);
-        }
-        return null;
+        return state.getValue(FACE) != AttachFace.WALL;
     }
 
     @Override

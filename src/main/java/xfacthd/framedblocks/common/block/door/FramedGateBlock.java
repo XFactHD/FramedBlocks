@@ -155,7 +155,7 @@ public class FramedGateBlock extends FramedBlock
     }
 
     @Override
-    protected boolean doesBlockOccludeBeaconBeam(BlockState state, LevelReader level, BlockPos pos) { return false; }
+    public boolean doesBlockOccludeBeaconBeam(BlockState state, LevelReader level, BlockPos pos) { return false; }
 
     @Override
     public PushReaction getPistonPushReaction(BlockState state) { return PushReaction.DESTROY; }

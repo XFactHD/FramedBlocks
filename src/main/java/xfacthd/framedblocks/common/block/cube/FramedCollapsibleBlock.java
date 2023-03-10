@@ -121,7 +121,7 @@ public class FramedCollapsibleBlock extends FramedBlock
     }
 
     @Override
-    protected boolean doesBlockOccludeBeaconBeam(BlockState state, LevelReader level, BlockPos pos)
+    public boolean doesBlockOccludeBeaconBeam(BlockState state, LevelReader level, BlockPos pos)
     {
         NullableDirection face = state.getValue(PropertyHolder.NULLABLE_FACE);
         return face == NullableDirection.NONE || Utils.isY(face.toDirection());

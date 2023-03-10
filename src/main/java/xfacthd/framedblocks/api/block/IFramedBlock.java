@@ -657,7 +657,16 @@ public interface IFramedBlock extends EntityBlock, IForgeBlock
     @Override
     default float[] getBeaconColorMultiplier(BlockState state, LevelReader level, BlockPos pos, BlockPos beaconPos)
     {
+        if (!doesBlockOccludeBeaconBeam(state, level, pos))
+        {
+            return null;
+        }
         return getCamoBeaconColorMultiplier(level, pos, beaconPos);
+    }
+
+    default boolean doesBlockOccludeBeaconBeam(BlockState state, LevelReader level, BlockPos pos)
+    {
+        return false;
     }
 
     /**
