@@ -301,20 +301,20 @@ public final class ModelUtils
             {
                 invert = !mirrored;
             }
-            else if (Utils.isPositive(quadDir) != vAxis)
+            else if (!vAxis)
             {
-                invert = !invert;
+                invert = invert == mirrored;
             }
         }
         else if (mirrored)
         {
             if (quadDir == Direction.UP)
             {
-                invert = !vAxis || (uvSrc[0][1] > uvSrc[1][1]);
+                invert = !vAxis || (uvSrc[0][1] > uvSrc[1][1]) || (uvSrc[3][1] > uvSrc[2][1]);
             }
             else if (quadDir == Direction.DOWN)
             {
-                invert = !vAxis || (uvSrc[0][1] < uvSrc[1][1]);
+                invert = !vAxis || (uvSrc[0][1] < uvSrc[1][1]) || (uvSrc[3][1] < uvSrc[2][1]);
             }
             else if (!vAxis)
             {
