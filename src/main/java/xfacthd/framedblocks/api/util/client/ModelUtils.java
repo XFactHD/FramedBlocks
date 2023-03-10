@@ -96,6 +96,7 @@ public final class ModelUtils
         return DefaultVertexFormat.BLOCK.getOffset(elemIdx) / 4;
     }
 
+    @Deprecated(forRemoval = true)
     public static BakedQuad duplicateQuad(BakedQuad quad)
     {
         int[] vertexData = quad.getVertices();

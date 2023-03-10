@@ -21,6 +21,7 @@ import net.minecraftforge.client.model.data.EmptyModelData;
 import net.minecraftforge.client.model.data.IModelData;
 import xfacthd.framedblocks.api.FramedBlocksAPI;
 import xfacthd.framedblocks.api.FramedBlocksClientAPI;
+import xfacthd.framedblocks.api.model.quad.QuadModifier;
 import xfacthd.framedblocks.api.type.IBlockType;
 import xfacthd.framedblocks.api.util.*;
 import xfacthd.framedblocks.api.block.IFramedBlock;
@@ -169,6 +170,13 @@ public abstract class FramedBlockModel extends BakedModelProxy
         return quadMap;
     }
 
+    /**
+     * Called for each {@link BakedQuad} of the camo block's model for whose side this block's
+     * {@code CtmPredicate#test(BlockState, Direction)} returns {@code false}.
+     * @param quadMap The target map to put all final quads into
+     * @param quad The source quad. Must not be modified directly, use {@link QuadModifier}s to
+     *             modify the quad
+     */
     protected abstract void transformQuad(Map<Direction, List<BakedQuad>> quadMap, BakedQuad quad);
 
     protected void postProcessQuads(Map<Direction, List<BakedQuad>> quadMap) {}
