@@ -37,7 +37,7 @@ public final class OneWayWindowOverlay extends BlockInteractOverlay
 
     public OneWayWindowOverlay()
     {
-        super(LINES, List.of(), null, null);
+        super(LINES, List.of(), null, null, () -> ClientConfig.oneWayWindowMode);
     }
 
     @Override
@@ -79,12 +79,6 @@ public final class OneWayWindowOverlay extends BlockInteractOverlay
                 SET_FACE_LINES[target.side().ordinal()],
                 LINE_CLEAR_FACE
         );
-    }
-
-    @Override
-    protected boolean showDetailed()
-    {
-        return ClientConfig.oneWayWindowShowDetails;
     }
 
     @Override

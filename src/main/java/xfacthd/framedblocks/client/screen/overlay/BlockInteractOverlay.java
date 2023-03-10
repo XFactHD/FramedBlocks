@@ -24,6 +24,7 @@ import net.minecraftforge.client.gui.overlay.IGuiOverlay;
 import net.minecraftforge.common.util.ConcatenatedListView;
 
 import java.util.*;
+import java.util.function.Supplier;
 
 public abstract class BlockInteractOverlay implements IGuiOverlay
 {
@@ -38,21 +39,26 @@ public abstract class BlockInteractOverlay implements IGuiOverlay
     private final List<Component> linesTrue;
     private final Texture textureFalse;
     private final Texture textureTrue;
+    private final Supplier<Mode> modeGetter;
     private int textWidth = 0;
     private boolean textWidthValid = false;
 
-    BlockInteractOverlay(List<Component> linesFalse, List<Component> linesTrue, Texture textureFalse, Texture textureTrue)
+    BlockInteractOverlay(List<Component> linesFalse, List<Component> linesTrue, Texture textureFalse, Texture textureTrue, Supplier<Mode> modeGetter)
     {
         this.linesFalse = linesFalse;
         this.linesTrue = linesTrue;
         this.textureFalse = textureFalse;
         this.textureTrue = textureTrue;
+        this.modeGetter = modeGetter;
         OVERLAYS.add(this);
     }
 
     @Override
     public void render(ForgeGui gui, PoseStack poseStack, float partialTick, int screenWidth, int screenHeight)
     {
+        Mode mode = modeGetter.get();
+        if (mode == Mode.HIDDEN) { return; }
+
         ItemStack stack = player().getMainHandItem();
         if (!isValidTool(stack)) { return; }
 
@@ -69,7 +75,7 @@ public abstract class BlockInteractOverlay implements IGuiOverlay
         tex.draw(gui, poseStack, texX, texY);
         renderAfterIcon(gui, poseStack, tex, texX, texY, target);
 
-        if (showDetailed())
+        if (mode == Mode.DETAILED)
         {
             List<Component> lines = getLines(target, state, linesFalse, linesTrue);
             renderDetailed(gui, poseStack, tex, lines, centerX, screenHeight, target);
@@ -120,8 +126,6 @@ public abstract class BlockInteractOverlay implements IGuiOverlay
     {
         return state ? linesTrue : linesFalse;
     }
-
-    protected abstract boolean showDetailed();
 
     protected void renderAfterIcon(ForgeGui gui, PoseStack poseStack, Texture tex, int texX, int texY, Target target) { }
 
@@ -207,4 +211,11 @@ public abstract class BlockInteractOverlay implements IGuiOverlay
     }
 
     protected record Target(BlockPos pos, BlockState state, Direction side) { }
+
+    public enum Mode
+    {
+        HIDDEN,
+        ICON,
+        DETAILED
+    }
 }

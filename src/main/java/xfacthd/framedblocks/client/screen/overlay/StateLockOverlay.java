@@ -26,7 +26,7 @@ public final class StateLockOverlay extends BlockInteractOverlay
 
     public StateLockOverlay()
     {
-        super(LINES_FALSE, LINES_TRUE, TEXTURE_FALSE, TEXTURE_TRUE);
+        super(LINES_FALSE, LINES_TRUE, TEXTURE_FALSE, TEXTURE_TRUE, () -> ClientConfig.stateLockMode);
     }
 
     @Override
@@ -45,11 +45,5 @@ public final class StateLockOverlay extends BlockInteractOverlay
     protected boolean getState(Target target)
     {
         return target.state().getValue(FramedProperties.STATE_LOCKED);
-    }
-
-    @Override
-    protected boolean showDetailed()
-    {
-        return ClientConfig.stateLockShowDetails;
     }
 }
