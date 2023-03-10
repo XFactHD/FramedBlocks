@@ -138,7 +138,7 @@ public class FramedFlowerPotBlock extends FramedBlock
     }
 
     @Override
-    protected boolean doesBlockOccludeBeaconBeam(BlockState state, LevelReader level, BlockPos pos)
+    public boolean doesBlockOccludeBeaconBeam(BlockState state, LevelReader level, BlockPos pos)
     {
         //It technically does occlude the beam, but it looks stupid, so we disable it :D
         return false;

@@ -153,21 +153,12 @@ public abstract class AbstractFramedBlock extends Block implements IFramedBlock,
         return getCamoDrops(super.getDrops(state, builder), builder);
     }
 
-    @Override
-    public float[] getBeaconColorMultiplier(BlockState state, LevelReader level, BlockPos pos, BlockPos beaconPos)
-    {
-        if (doesBlockOccludeBeaconBeam(state, level, pos))
-        {
-            return IFramedBlock.super.getBeaconColorMultiplier(state, level, pos, beaconPos);
-        }
-        return null;
-    }
-
     /**
      * Return true if the given {@link BlockState} occludes the full area of the beacon beam and
      * can therefore tint the beam
      */
-    protected boolean doesBlockOccludeBeaconBeam(BlockState state, LevelReader level, BlockPos pos)
+    @Override
+    public boolean doesBlockOccludeBeaconBeam(BlockState state, LevelReader level, BlockPos pos)
     {
         Preconditions.checkNotNull(
                 beaconBeamOcclusion,

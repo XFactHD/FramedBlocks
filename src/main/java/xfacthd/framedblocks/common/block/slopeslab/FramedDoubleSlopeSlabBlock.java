@@ -71,7 +71,7 @@ public class FramedDoubleSlopeSlabBlock extends AbstractFramedDoubleBlock
     }
 
     @Override
-    protected boolean doesBlockOccludeBeaconBeam(BlockState state, LevelReader level, BlockPos pos) { return true; }
+    public boolean doesBlockOccludeBeaconBeam(BlockState state, LevelReader level, BlockPos pos) { return true; }
 
     @Override
     public boolean handleBlockLeftClick(BlockState state, Level level, BlockPos pos, Player player)

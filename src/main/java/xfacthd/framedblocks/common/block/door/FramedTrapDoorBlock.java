@@ -112,13 +112,9 @@ public class FramedTrapDoorBlock extends TrapDoorBlock implements IFramedBlock
     }
 
     @Override
-    public float[] getBeaconColorMultiplier(BlockState state, LevelReader level, BlockPos pos, BlockPos beaconPos)
+    public boolean doesBlockOccludeBeaconBeam(BlockState state, LevelReader level, BlockPos pos)
     {
-        if (!state.getValue(OPEN))
-        {
-            return IFramedBlock.super.getBeaconColorMultiplier(state, level, pos, beaconPos);
-        }
-        return null;
+        return !state.getValue(OPEN);
     }
 
     @Override
