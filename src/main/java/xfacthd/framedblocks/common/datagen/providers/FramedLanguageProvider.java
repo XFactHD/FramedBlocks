@@ -325,13 +325,13 @@ public final class FramedLanguageProvider extends LanguageProvider
         add(ClientConfig.TRANSLATION_FANCY_HITBOXES, "Fancy hitboxes");
         add(ClientConfig.TRANSLATION_DETAILED_CULLING, "Detailed culling");
         add(ClientConfig.TRANSLATION_USE_DISCRETE_UV_STEPS, "Use discrete UV steps");
-        add(ClientConfig.TRANSLATION_STATE_LOCK_SHOW_DETAILS, "State lock overlay: Show details");
-        add(ClientConfig.TRANSLATION_TOGGLE_WATERLOG_SHOW_DETAILS, "Toggle waterloggable overlay: Show details");
-        add(ClientConfig.TRANSLATION_TOGGLE_Y_SLOPE_SHOW_DETAILS, "Toggle Y slope overlay: Show details");
-        add(ClientConfig.TRANSLATION_REINFORCED_SHOW_DETAILS, "Reinforcement overlay: Show details");
-        add(ClientConfig.TRANSLATION_PRISM_OFFSET_SHOW_DETAILS, "Prism offset overlay: Show details");
-        add(ClientConfig.TRANSLATION_SPLIT_LINES_SHOW_DETAILS, "Collapsible block split lines overlay: Show details");
-        add(ClientConfig.TRANSLATION_ONE_WAY_WINDOW_SHOW_DETAILS, "One-Way Window overlay: Show details");
+        add(ClientConfig.TRANSLATION_STATE_LOCK_MODE, "State lock overlay: Display mode");
+        add(ClientConfig.TRANSLATION_TOGGLE_WATERLOG_MODE, "Toggle waterloggable overlay: Display mode");
+        add(ClientConfig.TRANSLATION_TOGGLE_Y_SLOPE_MODE, "Toggle Y slope overlay: Display mode");
+        add(ClientConfig.TRANSLATION_REINFORCEMENT_MODE, "Reinforcement overlay: Display mode");
+        add(ClientConfig.TRANSLATION_PRISM_OFFSET_MODE, "Prism offset overlay: Display mode");
+        add(ClientConfig.TRANSLATION_SPLIT_LINES_MODE, "Collapsible block split lines overlay: Display mode");
+        add(ClientConfig.TRANSLATION_ONE_WAY_WINDOW_MODE, "One-Way Window overlay: Display mode");
     }
 
     private void add(Component key, String value)

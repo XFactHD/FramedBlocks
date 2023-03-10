@@ -31,7 +31,7 @@ public final class ToggleYSlopeOverlay extends BlockInteractOverlay
 
     public ToggleYSlopeOverlay()
     {
-        super(LINES_FALSE, LINES_TRUE, TEXTURE_FALSE, TEXTURE_TRUE);
+        super(LINES_FALSE, LINES_TRUE, TEXTURE_FALSE, TEXTURE_TRUE, () -> ClientConfig.toggleYSlopeMode);
     }
 
     @Override
@@ -50,11 +50,5 @@ public final class ToggleYSlopeOverlay extends BlockInteractOverlay
     protected boolean getState(Target target)
     {
         return target.state().getValue(FramedProperties.Y_SLOPE);
-    }
-
-    @Override
-    protected boolean showDetailed()
-    {
-        return ClientConfig.toggleYSlopeShowDetails;
     }
 }
