@@ -570,6 +570,15 @@ public class FramedBlockEntity extends BlockEntity
         return getCamoState().isAir() ? -1 : getCamoState().getFlammability(level, worldPosition, face);
     }
 
+    public int getCamoFireSpreadSpeed(Direction face)
+    {
+        if (reinforced)
+        {
+            return 0;
+        }
+        return getCamoState().isAir() ? -1 : getCamoState().getFireSpreadSpeed(level, worldPosition, face);
+    }
+
     public final void setGlowing(boolean glowing)
     {
         if (this.glowing != glowing)

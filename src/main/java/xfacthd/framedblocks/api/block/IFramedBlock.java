@@ -323,6 +323,22 @@ public interface IFramedBlock extends EntityBlock, IForgeBlock//, IFacade
         return 20;
     }
 
+    @Override
+    default int getFireSpreadSpeed(BlockState state, BlockGetter level, BlockPos pos, Direction face)
+    {
+        if (FramedBlocksAPI.getInstance().areBlocksFireproof()) { return 0; }
+
+        if (level.getBlockEntity(pos) instanceof FramedBlockEntity be)
+        {
+            int spreadSpeed = be.getCamoFireSpreadSpeed(face);
+            if (spreadSpeed > -1)
+            {
+                return spreadSpeed;
+            }
+        }
+        return 5;
+    }
+
     default boolean handleBlockLeftClick(BlockState state, Level level, BlockPos pos, Player player) { return false; }
 
     default boolean isIntangible(BlockState state, BlockGetter level, BlockPos pos, @Nullable CollisionContext ctx)
