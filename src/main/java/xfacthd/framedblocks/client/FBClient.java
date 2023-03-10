@@ -197,6 +197,7 @@ public final class FBClient
         event.registerAboveAll("prism_offset", new PrismOffsetOverlay());
         event.registerAboveAll("split_line", new SplitLineOverlay());
         event.registerAboveAll("one_way_window", new OneWayWindowOverlay());
+        event.registerAboveAll("frame_background", new FrameBackgroundOverlay());
     }
 
     @SubscribeEvent

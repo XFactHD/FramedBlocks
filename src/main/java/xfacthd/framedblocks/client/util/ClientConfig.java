@@ -26,6 +26,7 @@ public final class ClientConfig
     private static final String KEY_PRISM_OFFSET_MODE = "prismOffsetMode";
     private static final String KEY_SPLIT_LINES_MODE = "splitLineMode";
     private static final String KEY_ONE_WAY_WINDOW_MODE = "oneWayWindowMode";
+    private static final String KEY_FRAME_BACKGROUND_MODE = "itemFrameBackgroundMode";
 
     public static final String TRANSLATION_SHOW_GHOST_BLOCKS = translate(KEY_SHOW_GHOST_BLOCKS);
     public static final String TRANSLATION_FANCY_HITBOXES = translate(KEY_FANCY_HITBOXES);
@@ -39,6 +40,7 @@ public final class ClientConfig
     public static final String TRANSLATION_PRISM_OFFSET_MODE = translate(KEY_PRISM_OFFSET_MODE);
     public static final String TRANSLATION_SPLIT_LINES_MODE = translate(KEY_SPLIT_LINES_MODE);
     public static final String TRANSLATION_ONE_WAY_WINDOW_MODE = translate(KEY_ONE_WAY_WINDOW_MODE);
+    public static final String TRANSLATION_FRAME_BACKGROUND_MODE = translate(KEY_FRAME_BACKGROUND_MODE);
 
     private static final String COMMENT_OVERLAY_HIDDEN = "If set to HIDDEN, the %s overlay will be completely hidden";
     private static final String COMMENT_OVERLAY_ICON = "If set to ICON, the %s overlay will only show an icon";
@@ -56,6 +58,7 @@ public final class ClientConfig
     public static BlockInteractOverlay.Mode prismOffsetMode;
     public static BlockInteractOverlay.Mode splitLineMode;
     public static BlockInteractOverlay.Mode oneWayWindowMode;
+    public static BlockInteractOverlay.Mode frameBackgroundMode;
 
     private final ForgeConfigSpec.BooleanValue showGhostBlocksValue;
     private final ForgeConfigSpec.BooleanValue fancyHitboxesValue;
@@ -70,6 +73,7 @@ public final class ClientConfig
     private final ForgeConfigSpec.EnumValue<BlockInteractOverlay.Mode> prismOffsetModeValue;
     private final ForgeConfigSpec.EnumValue<BlockInteractOverlay.Mode> splitLineModeValue;
     private final ForgeConfigSpec.EnumValue<BlockInteractOverlay.Mode> oneWayWindowModeValue;
+    private final ForgeConfigSpec.EnumValue<BlockInteractOverlay.Mode> frameBackgroundModeValue;
 
     static
     {
@@ -155,6 +159,12 @@ public final class ClientConfig
                 .comment(COMMENT_OVERLAY_DETAILED.formatted("One-Way Window"))
                 .translation(TRANSLATION_ONE_WAY_WINDOW_MODE)
                 .defineEnum(KEY_ONE_WAY_WINDOW_MODE, BlockInteractOverlay.Mode.DETAILED);
+        frameBackgroundModeValue = builder
+                .comment(COMMENT_OVERLAY_HIDDEN.formatted("Item Frame Background"))
+                .comment(COMMENT_OVERLAY_ICON.formatted("Item Frame Background"))
+                .comment(COMMENT_OVERLAY_DETAILED.formatted("Item Frame Background"))
+                .translation(TRANSLATION_FRAME_BACKGROUND_MODE)
+                .defineEnum(KEY_FRAME_BACKGROUND_MODE, BlockInteractOverlay.Mode.DETAILED);
         builder.pop();
     }
 
@@ -181,6 +191,7 @@ public final class ClientConfig
             prismOffsetMode = prismOffsetModeValue.get();
             splitLineMode = splitLineModeValue.get();
             oneWayWindowMode = oneWayWindowModeValue.get();
+            frameBackgroundMode = frameBackgroundModeValue.get();
         }
     }
 }
