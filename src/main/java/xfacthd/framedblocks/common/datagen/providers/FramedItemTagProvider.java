@@ -35,7 +35,8 @@ public final class FramedItemTagProvider extends ItemTagsProvider
         tag(Utils.DISABLE_INTANGIBLE).addTag(Utils.WRENCH).add(
                 FBContent.itemFramedHammer.get(),
                 FBContent.itemFramedBlueprint.get(),
-                FBContent.itemFramedScrewdriver.get()
+                FBContent.itemFramedScrewdriver.get(),
+                FBContent.itemFramedKey.get()
         );
     }
 }
