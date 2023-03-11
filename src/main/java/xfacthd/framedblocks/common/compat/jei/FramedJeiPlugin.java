@@ -53,7 +53,7 @@ public final class FramedJeiPlugin implements IModPlugin
     @Override
     public void onRuntimeAvailable(IJeiRuntime jeiRuntime)
     {
-        JeiCompat.Guarded.acceptRuntime(jeiRuntime);
+        JeiCompat.GuardedAccess.acceptRuntime(jeiRuntime);
     }
 
     @Override

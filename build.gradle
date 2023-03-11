@@ -18,7 +18,7 @@ apply plugin: 'eclipse'
 apply plugin: 'maven-publish'
 apply plugin: 'org.spongepowered.mixin'
 
-version = '5.11.0'
+version = '5.11.1'
 group = 'xfacthd.framedblocks'
 archivesBaseName = 'FramedBlocks'
 
@@ -145,8 +145,10 @@ dependencies {
 
     compileOnly fg.deobf("curse.maven:nocubes-309664:3944354")
 
-    compileOnly fg.deobf("mezz.jei:jei-1.18.2:9.7.2.266:api")
-    implementation fg.deobf("mezz.jei:jei-1.18.2:9.7.2.266")
+    compileOnly fg.deobf("mezz.jei:jei-1.18.2-common-api:10.2.1.1002")
+    compileOnly fg.deobf("mezz.jei:jei-1.18.2-forge-api:10.2.1.1002")
+    implementation fg.deobf("mezz.jei:jei-1.18.2-forge:10.2.1.1002")
+    //runtimeOnly fg.deobf("mezz.jei:jei-1.18.2:9.7.2.266")
 
     runtimeOnly fg.deobf("curse.maven:spark-361579:3767286")
 

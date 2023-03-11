@@ -61,6 +61,6 @@ description='''
 [[dependencies.framedblocks]]
     modId="jei"
     mandatory=false
-    versionRange="[9.7.2.266,10)"
+    versionRange="[9.7.2.266,11)"
     ordering="NONE"
     side="BOTH"
