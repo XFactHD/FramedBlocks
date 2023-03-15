@@ -2,6 +2,7 @@ package xfacthd.framedblocks.common.crafting;
 
 import it.unimi.dsi.fastutil.ints.IntIntPair;
 import net.minecraft.ChatFormatting;
+import net.minecraft.core.RegistryAccess;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.Container;
@@ -95,7 +96,7 @@ public final class FramingSawRecipe implements Recipe<Container>
     }
 
     @Override
-    public ItemStack assemble(Container container) { return result.copy(); }
+    public ItemStack assemble(Container container, RegistryAccess access) { return result.copy(); }
 
     @Override
     public boolean canCraftInDimensions(int width, int height) { return true; }
@@ -107,8 +108,10 @@ public final class FramingSawRecipe implements Recipe<Container>
 
     public int getAdditiveCount() { return additive != null ? additiveCount : 0; }
 
+    public ItemStack getResult() { return result; }
+
     @Override
-    public ItemStack getResultItem() { return result; }
+    public ItemStack getResultItem(RegistryAccess access) { return result; }
 
     public int getResultSize(Container container, Level level)
     {

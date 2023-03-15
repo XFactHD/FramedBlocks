@@ -2,8 +2,6 @@ package xfacthd.framedblocks.common.block.door;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
-import net.minecraft.sounds.SoundEvent;
-import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.LivingEntity;
@@ -53,9 +51,9 @@ public class FramedDoorBlock extends DoorBlock implements IFramedBlock
 
     private final BlockType type;
 
-    private FramedDoorBlock(BlockType type, Properties props, SoundEvent closeSound, SoundEvent openSound)
+    private FramedDoorBlock(BlockType type, Properties props, BlockSetType blockSet)
     {
-        super(props, closeSound, openSound);
+        super(props, blockSet);
         this.type = type;
         registerDefaultState(defaultBlockState()
                 .setValue(FramedProperties.SOLID, false)
@@ -166,8 +164,7 @@ public class FramedDoorBlock extends DoorBlock implements IFramedBlock
         return new FramedDoorBlock(
                 BlockType.FRAMED_DOOR,
                 IFramedBlock.createProperties(BlockType.FRAMED_DOOR),
-                SoundEvents.WOODEN_DOOR_CLOSE,
-                SoundEvents.WOODEN_DOOR_OPEN
+                BlockSetType.OAK
         );
     }
 
@@ -177,8 +174,7 @@ public class FramedDoorBlock extends DoorBlock implements IFramedBlock
                 BlockType.FRAMED_IRON_DOOR,
                 IFramedBlock.createProperties(BlockType.FRAMED_IRON_DOOR, IRON_WOOD)
                         .requiresCorrectToolForDrops(),
-                SoundEvents.IRON_DOOR_CLOSE,
-                SoundEvents.IRON_DOOR_OPEN
+                BlockSetType.IRON
         );
     }
 }

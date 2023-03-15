@@ -2,8 +2,6 @@ package xfacthd.framedblocks.common.block.interactive;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
-import net.minecraft.sounds.SoundEvent;
-import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.LivingEntity;
@@ -14,6 +12,7 @@ import net.minecraft.world.level.block.*;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.AttachFace;
+import net.minecraft.world.level.block.state.properties.BlockSetType;
 import net.minecraft.world.level.material.Material;
 import net.minecraft.world.level.storage.loot.LootContext;
 import net.minecraft.world.phys.BlockHitResult;
@@ -29,17 +28,16 @@ public class FramedButtonBlock extends ButtonBlock implements IFramedBlock
 {
     private final BlockType type;
 
-    protected FramedButtonBlock(BlockType type, int pressTime, boolean arrowsCanPress, SoundEvent soundOff, SoundEvent soundOn)
+    protected FramedButtonBlock(BlockType type, int pressTime, boolean arrowsCanPress, BlockSetType blockSet)
     {
         super(Properties.of(Material.DECORATION)
                 .noCollission()
                 .strength(0.5F)
                 .sound(SoundType.WOOD)
                 .noOcclusion(),
+                blockSet,
                 pressTime,
-                arrowsCanPress,
-                soundOff,
-                soundOn
+                arrowsCanPress
         );
         this.type = type;
         registerDefaultState(defaultBlockState().setValue(FramedProperties.GLOWING, false));
@@ -94,8 +92,7 @@ public class FramedButtonBlock extends ButtonBlock implements IFramedBlock
                 BlockType.FRAMED_BUTTON,
                 30,
                 true,
-                SoundEvents.WOODEN_BUTTON_CLICK_OFF,
-                SoundEvents.WOODEN_BUTTON_CLICK_ON
+                BlockSetType.OAK
         );
     }
 
@@ -105,8 +102,7 @@ public class FramedButtonBlock extends ButtonBlock implements IFramedBlock
                 BlockType.FRAMED_STONE_BUTTON,
                 20,
                 false,
-                SoundEvents.STONE_BUTTON_CLICK_OFF,
-                SoundEvents.STONE_BUTTON_CLICK_ON
+                BlockSetType.STONE
         );
     }
 }

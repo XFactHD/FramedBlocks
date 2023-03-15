@@ -36,7 +36,7 @@ public final class FramingSawRecipeCache
 
         recipes.forEach(recipe ->
         {
-            ItemStack result = recipe.getResultItem();
+            ItemStack result = recipe.getResult();
 
             if (recipe.getAdditive() != null)
             {
@@ -93,9 +93,9 @@ public final class FramingSawRecipeCache
     private static int sortRecipes(FramingSawRecipe r1, FramingSawRecipe r2)
     {
         //noinspection ConstantConditions
-        String ns1 = ForgeRegistries.ITEMS.getKey(r1.getResultItem().getItem()).getNamespace();
+        String ns1 = ForgeRegistries.ITEMS.getKey(r1.getResult().getItem()).getNamespace();
         //noinspection ConstantConditions
-        String ns2 = ForgeRegistries.ITEMS.getKey(r2.getResultItem().getItem()).getNamespace();
+        String ns2 = ForgeRegistries.ITEMS.getKey(r2.getResult().getItem()).getNamespace();
 
         if (!ns1.equals(ns2))
         {

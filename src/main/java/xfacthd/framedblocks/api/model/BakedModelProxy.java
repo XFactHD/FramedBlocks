@@ -6,6 +6,7 @@ import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.resources.model.BakedModel;
 import net.minecraft.core.Direction;
 import net.minecraft.util.RandomSource;
+import net.minecraft.world.item.ItemDisplayContext;
 import net.minecraft.world.level.block.state.BlockState;
 
 import java.util.List;
@@ -45,10 +46,10 @@ public abstract class BakedModelProxy implements BakedModel
     public ItemTransforms getTransforms() { return baseModel.getTransforms(); }
 
     @Override
-    public BakedModel applyTransform(ItemTransforms.TransformType type, PoseStack poseStack, boolean applyLeftHandTransform)
+    public BakedModel applyTransform(ItemDisplayContext type, PoseStack poseStack, boolean applyLeftHandTransform)
     {
         BakedModel model = BakedModel.super.applyTransform(type, poseStack, applyLeftHandTransform);
-        if (type.firstPerson() || type == ItemTransforms.TransformType.THIRD_PERSON_LEFT_HAND || type == ItemTransforms.TransformType.THIRD_PERSON_RIGHT_HAND)
+        if (type.firstPerson() || type == ItemDisplayContext.THIRD_PERSON_LEFT_HAND || type == ItemDisplayContext.THIRD_PERSON_RIGHT_HAND)
         {
             applyInHandTransformation(poseStack, type);
         }
@@ -58,5 +59,5 @@ public abstract class BakedModelProxy implements BakedModel
     /**
      * Apply transformations to the item model when it is rendered in hand
      */
-    protected void applyInHandTransformation(PoseStack poseStack, ItemTransforms.TransformType type) { }
+    protected void applyInHandTransformation(PoseStack poseStack, ItemDisplayContext ctx) { }
 }

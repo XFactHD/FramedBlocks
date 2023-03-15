@@ -2,8 +2,6 @@ package xfacthd.framedblocks.common.block.door;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
-import net.minecraft.sounds.SoundEvent;
-import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.LivingEntity;
@@ -14,8 +12,7 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.TrapDoorBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
-import net.minecraft.world.level.block.state.properties.BlockStateProperties;
-import net.minecraft.world.level.block.state.properties.Half;
+import net.minecraft.world.level.block.state.properties.*;
 import net.minecraft.world.level.storage.loot.LootContext;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.shapes.CollisionContext;
@@ -47,9 +44,9 @@ public class FramedTrapDoorBlock extends TrapDoorBlock implements IFramedBlock
 
     private final BlockType type;
 
-    private FramedTrapDoorBlock(BlockType type, Properties props, SoundEvent closeSound, SoundEvent openSound)
+    private FramedTrapDoorBlock(BlockType type, Properties props, BlockSetType blockSet)
     {
-        super(props, closeSound, openSound);
+        super(props, blockSet);
         this.type = type;
         registerDefaultState(defaultBlockState()
                 .setValue(FramedProperties.SOLID, false)
@@ -133,8 +130,7 @@ public class FramedTrapDoorBlock extends TrapDoorBlock implements IFramedBlock
         return new FramedTrapDoorBlock(
                 BlockType.FRAMED_TRAPDOOR,
                 IFramedBlock.createProperties(BlockType.FRAMED_TRAPDOOR),
-                SoundEvents.WOODEN_TRAPDOOR_CLOSE,
-                SoundEvents.WOODEN_TRAPDOOR_OPEN
+                BlockSetType.OAK
         );
     }
 
@@ -144,8 +140,7 @@ public class FramedTrapDoorBlock extends TrapDoorBlock implements IFramedBlock
                 BlockType.FRAMED_IRON_TRAPDOOR,
                 IFramedBlock.createProperties(BlockType.FRAMED_IRON_TRAPDOOR, FramedDoorBlock.IRON_WOOD)
                         .requiresCorrectToolForDrops(),
-                SoundEvents.IRON_TRAPDOOR_CLOSE,
-                SoundEvents.IRON_TRAPDOOR_OPEN
+                BlockSetType.IRON
         );
     }
 }

@@ -1,10 +1,10 @@
 package xfacthd.framedblocks.client.model.slopepanel;
 
 import com.mojang.blaze3d.vertex.PoseStack;
-import net.minecraft.client.renderer.block.model.ItemTransforms;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.resources.model.BakedModel;
 import net.minecraft.core.Direction;
+import net.minecraft.world.item.ItemDisplayContext;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.client.model.data.ModelData;
 import org.jetbrains.annotations.NotNull;
@@ -36,7 +36,7 @@ public class FramedFlatInverseDoubleSlopePanelCornerModel extends FramedDoubleBl
     }
 
     @Override
-    protected void applyInHandTransformation(PoseStack poseStack, ItemTransforms.TransformType type)
+    protected void applyInHandTransformation(PoseStack poseStack, ItemDisplayContext ctx)
     {
         poseStack.translate(0, .5, 0);
     }

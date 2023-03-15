@@ -4,8 +4,8 @@ import net.minecraft.core.HolderLookup;
 import net.minecraft.data.PackOutput;
 import net.minecraft.data.tags.ItemTagsProvider;
 import net.minecraft.tags.ItemTags;
+import net.minecraft.world.level.block.Block;
 import net.minecraftforge.common.Tags;
-import net.minecraftforge.common.data.BlockTagsProvider;
 import net.minecraftforge.common.data.ExistingFileHelper;
 import xfacthd.framedblocks.api.util.FramedConstants;
 import xfacthd.framedblocks.common.FBContent;
@@ -15,9 +15,14 @@ import java.util.concurrent.CompletableFuture;
 
 public final class FramedItemTagProvider extends ItemTagsProvider
 {
-    public FramedItemTagProvider(PackOutput output, CompletableFuture<HolderLookup.Provider> lookupProvider, BlockTagsProvider provider, ExistingFileHelper existingFileHelper)
+    public FramedItemTagProvider(
+            PackOutput output,
+            CompletableFuture<HolderLookup.Provider> lookupProvider,
+            CompletableFuture<TagLookup<Block>> blockTagProvider,
+            ExistingFileHelper fileHelper
+    )
     {
-        super(output, lookupProvider, provider, FramedConstants.MOD_ID, existingFileHelper);
+        super(output, lookupProvider, blockTagProvider, FramedConstants.MOD_ID, fileHelper);
     }
 
     @Override

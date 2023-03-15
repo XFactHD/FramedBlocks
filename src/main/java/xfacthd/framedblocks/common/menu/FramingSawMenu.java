@@ -170,7 +170,7 @@ public class FramingSawMenu extends AbstractContainerMenu
             if (holder.failReason.success())
             {
                 FramingSawRecipe recipe = holder.recipe;
-                ItemStack result = recipe.assemble(inputContainer);
+                ItemStack result = recipe.assemble(inputContainer, level.registryAccess());
                 result.setCount(recipe.getResultSize(inputContainer, level));
                 resultContainer.setRecipeUsed(recipe);
                 resultSlot.set(result);

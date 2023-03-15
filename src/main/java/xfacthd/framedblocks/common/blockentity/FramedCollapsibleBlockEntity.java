@@ -61,7 +61,7 @@ public class FramedCollapsibleBlockEntity extends FramedBlockEntity
     @SuppressWarnings("ConstantConditions")
     private void applyDeformation(int vertex, byte offset, Direction faceHit)
     {
-        offset = Mth.clamp(offset, (byte) 0, (byte) 16);
+        offset = (byte) Mth.clamp(offset, (byte) 0, (byte) 16);
 
         if (offset == vertexOffsets[vertex]) { return; }
 

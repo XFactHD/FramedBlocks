@@ -2,12 +2,11 @@ package xfacthd.framedblocks.common.block.interactive;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
-import net.minecraft.sounds.SoundEvent;
-import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.AttachFace;
+import net.minecraft.world.level.block.state.properties.BlockSetType;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import xfacthd.framedblocks.api.util.Utils;
@@ -21,9 +20,9 @@ public class FramedLargeButtonBlock extends FramedButtonBlock
     private static final VoxelShape SHAPE_TOP_PRESSED = box(1, 15, 1, 15, 16, 15);
     private static final VoxelShape[] SHAPES_HORIZONTAL = makeHorizontalShapes();
 
-    private FramedLargeButtonBlock(BlockType type, int pressTime, boolean arrowsCanPress, SoundEvent soundOff, SoundEvent soundOn)
+    private FramedLargeButtonBlock(BlockType type, int pressTime, boolean arrowsCanPress, BlockSetType blockSet)
     {
-        super(type, pressTime, arrowsCanPress, soundOff, soundOn);
+        super(type, pressTime, arrowsCanPress, blockSet);
     }
 
     @Override
@@ -75,8 +74,7 @@ public class FramedLargeButtonBlock extends FramedButtonBlock
                 BlockType.FRAMED_LARGE_BUTTON,
                 30,
                 true,
-                SoundEvents.WOODEN_BUTTON_CLICK_OFF,
-                SoundEvents.WOODEN_BUTTON_CLICK_ON
+                BlockSetType.OAK
         );
     }
 
@@ -86,8 +84,7 @@ public class FramedLargeButtonBlock extends FramedButtonBlock
                 BlockType.FRAMED_LARGE_STONE_BUTTON,
                 20,
                 false,
-                SoundEvents.STONE_BUTTON_CLICK_OFF,
-                SoundEvents.STONE_BUTTON_CLICK_ON
+                BlockSetType.STONE
         );
     }
 }

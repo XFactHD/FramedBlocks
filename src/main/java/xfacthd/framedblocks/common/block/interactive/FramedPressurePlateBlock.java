@@ -1,8 +1,6 @@
 package xfacthd.framedblocks.common.block.interactive;
 
 import net.minecraft.core.BlockPos;
-import net.minecraft.sounds.SoundEvent;
-import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.LivingEntity;
@@ -13,6 +11,7 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.PressurePlateBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
+import net.minecraft.world.level.block.state.properties.BlockSetType;
 import net.minecraft.world.level.storage.loot.LootContext;
 import net.minecraft.world.phys.BlockHitResult;
 import xfacthd.framedblocks.api.block.FramedProperties;
@@ -40,9 +39,9 @@ public class FramedPressurePlateBlock extends PressurePlateBlock implements IFra
     private final BlockType type;
 
     @SuppressWarnings("ConstantConditions")
-    protected FramedPressurePlateBlock(BlockType type, Sensitivity sensitivity, Properties props, SoundEvent soundOff, SoundEvent soundOn)
+    protected FramedPressurePlateBlock(BlockType type, Sensitivity sensitivity, Properties props, BlockSetType blockSet)
     {
-        super(sensitivity, props, soundOff, soundOn);
+        super(sensitivity, props, blockSet);
         this.type = type;
         registerDefaultState(defaultBlockState().setValue(FramedProperties.GLOWING, false));
     }
@@ -126,8 +125,7 @@ public class FramedPressurePlateBlock extends PressurePlateBlock implements IFra
                 IFramedBlock.createProperties(BlockType.FRAMED_PRESSURE_PLATE)
                         .noCollission()
                         .strength(0.5F),
-                SoundEvents.WOODEN_PRESSURE_PLATE_CLICK_OFF,
-                SoundEvents.WOODEN_PRESSURE_PLATE_CLICK_ON
+                BlockSetType.OAK
         );
     }
 
@@ -139,8 +137,7 @@ public class FramedPressurePlateBlock extends PressurePlateBlock implements IFra
                 IFramedBlock.createProperties(BlockType.FRAMED_WATERLOGGABLE_PRESSURE_PLATE)
                         .noCollission()
                         .strength(0.5F),
-                SoundEvents.WOODEN_PRESSURE_PLATE_CLICK_OFF,
-                SoundEvents.WOODEN_PRESSURE_PLATE_CLICK_ON
+                BlockSetType.OAK
         );
     }
 
@@ -153,8 +150,7 @@ public class FramedPressurePlateBlock extends PressurePlateBlock implements IFra
                         .requiresCorrectToolForDrops()
                         .noCollission()
                         .strength(0.5F),
-                SoundEvents.STONE_PRESSURE_PLATE_CLICK_OFF,
-                SoundEvents.STONE_PRESSURE_PLATE_CLICK_ON
+                BlockSetType.STONE
         );
     }
 
@@ -167,8 +163,7 @@ public class FramedPressurePlateBlock extends PressurePlateBlock implements IFra
                         .requiresCorrectToolForDrops()
                         .noCollission()
                         .strength(0.5F),
-                SoundEvents.STONE_PRESSURE_PLATE_CLICK_OFF,
-                SoundEvents.STONE_PRESSURE_PLATE_CLICK_ON
+                BlockSetType.STONE
         );
     }
 
@@ -181,8 +176,7 @@ public class FramedPressurePlateBlock extends PressurePlateBlock implements IFra
                         .requiresCorrectToolForDrops()
                         .noCollission()
                         .strength(0.5F),
-                SoundEvents.STONE_PRESSURE_PLATE_CLICK_OFF,
-                SoundEvents.STONE_PRESSURE_PLATE_CLICK_ON
+                BlockSetType.STONE
         );
     }
 
@@ -195,8 +189,7 @@ public class FramedPressurePlateBlock extends PressurePlateBlock implements IFra
                         .requiresCorrectToolForDrops()
                         .noCollission()
                         .strength(0.5F),
-                SoundEvents.STONE_PRESSURE_PLATE_CLICK_OFF,
-                SoundEvents.STONE_PRESSURE_PLATE_CLICK_ON
+                BlockSetType.STONE
         );
     }
 }

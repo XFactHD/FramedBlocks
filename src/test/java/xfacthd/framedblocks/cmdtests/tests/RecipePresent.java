@@ -55,7 +55,7 @@ public final class RecipePresent
                 .filter(CraftingRecipe.class::isInstance)
                 .map(CraftingRecipe.class::cast)
                 .peek(r -> craftCount.increment())
-                .map(CraftingRecipe::getResultItem)
+                .map(r -> r.getResultItem(level.registryAccess()))
                 .map(ItemStack::getItem)
                 .map(ItemLike.class::cast)
                 .collect(Collectors.toSet());
@@ -71,7 +71,7 @@ public final class RecipePresent
                         sawDisabledCount.increment();
                     }
                 })
-                .map(FramingSawRecipe::getResultItem)
+                .map(FramingSawRecipe::getResult)
                 .map(ItemStack::getItem)
                 .map(ItemLike.class::cast)
                 .collect(Collectors.toSet());

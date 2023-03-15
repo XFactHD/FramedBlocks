@@ -7,6 +7,7 @@ import com.mojang.blaze3d.platform.Lighting;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.*;
 import net.minecraft.ChatFormatting;
+import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.font.TextFieldHelper;
 import net.minecraft.client.gui.screens.Screen;
@@ -150,7 +151,7 @@ public class FramedSignScreen extends Screen
         TextureAtlasSprite sprite = getFrontSprite();
 
         innerBlit(mstack.last().pose(),
-                texX, texX + TEX_W, texY, texY + TEX_H, getBlitOffset(),
+                texX, texX + TEX_W, texY, texY + TEX_H, 0,
                 sprite.getU0(),
                 sprite.getU1(),
                 sprite.getV0(),
@@ -158,7 +159,7 @@ public class FramedSignScreen extends Screen
         );
 
         mstack.pushPose();
-        mstack.translate(width / 2D, height / 2D - 20, getBlitOffset());
+        mstack.translate(width / 2D, height / 2D - 20, 0);
         mstack.scale(1.2F, 1.2F, 1F);
 
         //noinspection ConstantConditions
@@ -185,7 +186,7 @@ public class FramedSignScreen extends Screen
                 if (font.isBidirectional()) { text = font.bidirectionalShaping(text); }
 
                 float textX = -font.width(text) / 2F;
-                font.drawInBatch(text, textX, line * 10 - 20, color, false, matrix, buffer, false, 0, 15728880);
+                font.drawInBatch(text, textX, line * 10 - 20, color, false, matrix, buffer, Font.DisplayMode.NORMAL, 0, 15728880);
             }
         }
 
@@ -217,7 +218,7 @@ public class FramedSignScreen extends Screen
                     }
                     else
                     {
-                        font.drawInBatch("_", cursorX, y, color, false, matrix, buffer, false, 0, 15728880);
+                        font.drawInBatch("_", cursorX, y, color, false, matrix, buffer, Font.DisplayMode.NORMAL, 0, 15728880);
                         buffer.endBatch();
                     }
                 }
@@ -232,7 +233,6 @@ public class FramedSignScreen extends Screen
                     Tesselator tessellator = Tesselator.getInstance();
                     BufferBuilder tessBuffer = tessellator.getBuilder();
 
-                    RenderSystem.disableTexture();
                     RenderSystem.enableColorLogicOp();
                     RenderSystem.logicOp(GlStateManager.LogicOp.OR_REVERSE);
 
@@ -244,7 +244,6 @@ public class FramedSignScreen extends Screen
                     BufferUploader.drawWithShader(tessBuffer.end());
 
                     RenderSystem.disableColorLogicOp();
-                    RenderSystem.enableTexture();
                 }
             }
         }

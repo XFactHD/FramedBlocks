@@ -31,7 +31,7 @@ public final class GeneratorHandler
         gen.addProvider(event.includeServer(), new FramingSawRecipeProvider(output));
         BlockTagsProvider tagProvider = new FramedBlockTagProvider(output, lookupProvider, fileHelper);
         gen.addProvider(event.includeServer(), tagProvider);
-        gen.addProvider(event.includeServer(), new FramedItemTagProvider(output, lookupProvider, tagProvider, fileHelper));
+        gen.addProvider(event.includeServer(), new FramedItemTagProvider(output, lookupProvider, tagProvider.contentsGetter(), fileHelper));
         gen.addProvider(event.includeClient(), new FramedLanguageProvider(output));
     }
 

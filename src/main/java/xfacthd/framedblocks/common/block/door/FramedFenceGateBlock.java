@@ -2,7 +2,6 @@ package xfacthd.framedblocks.common.block.door;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
-import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.LivingEntity;
@@ -14,6 +13,7 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.FenceGateBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
+import net.minecraft.world.level.block.state.properties.WoodType;
 import net.minecraft.world.level.storage.loot.LootContext;
 import net.minecraft.world.phys.BlockHitResult;
 import xfacthd.framedblocks.api.block.FramedProperties;
@@ -28,10 +28,7 @@ public class FramedFenceGateBlock extends FenceGateBlock implements IFramedBlock
 {
     public FramedFenceGateBlock()
     {
-        super(IFramedBlock.createProperties(BlockType.FRAMED_FENCE_GATE),
-                SoundEvents.FENCE_GATE_CLOSE,
-                SoundEvents.FENCE_GATE_OPEN
-        );
+        super(IFramedBlock.createProperties(BlockType.FRAMED_FENCE_GATE), WoodType.OAK);
         registerDefaultState(defaultBlockState().setValue(FramedProperties.GLOWING, false));
     }
 

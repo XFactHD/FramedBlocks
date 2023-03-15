@@ -111,13 +111,13 @@ public final class FramingSawRecipeCategory implements IRecipeCategory<FramingSa
         IntIntPair counts = recipe.getInputOutputCount(input, true);
 
         ItemStack inputStack = new ItemStack(input, counts.leftInt());
-        ItemStack outputStack = recipe.getResultItem().copy();
+        ItemStack outputStack = recipe.getResult().copy();
         outputStack.setCount(counts.rightInt());
 
         Ingredient additive = recipe.getAdditive();
         if (additive != null)
         {
-            int addCount = recipe.getAdditiveCount() * (counts.rightInt() / recipe.getResultItem().getCount());
+            int addCount = recipe.getAdditiveCount() * (counts.rightInt() / recipe.getResult().getCount());
 
             Stream.of(additive.getItems())
                     .map(ItemStack::copy)

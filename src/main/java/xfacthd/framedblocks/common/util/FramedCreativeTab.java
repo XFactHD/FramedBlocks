@@ -20,7 +20,7 @@ public final class FramedCreativeTab
         tab = event.registerCreativeModeTab(Utils.rl("main_tab"), builder ->
                 builder.title(Component.translatable("itemGroup.framed_blocks"))
                         .icon(() -> new ItemStack(FBContent.blockFramedCube.get()))
-                        .displayItems((flagSet, output, opPerm) ->
+                        .displayItems((params, output) ->
                         {
                             for (BlockType type : BlockType.values())
                             {

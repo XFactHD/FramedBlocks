@@ -89,7 +89,7 @@ public final class FramingSawRecipeSerializer implements RecipeSerializer<Framin
             buffer.writeBoolean(false);
         }
 
-        buffer.writeItem(recipe.getResultItem());
+        buffer.writeItem(recipe.getResult());
         buffer.writeBoolean(recipe.isDisabled());
     }
 

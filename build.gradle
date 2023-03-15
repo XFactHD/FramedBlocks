@@ -20,7 +20,7 @@ apply plugin: 'org.spongepowered.mixin'
 
 jarJar.enable()
 
-version = '7.1.0'
+version = '8.0.0'
 group = 'xfacthd.framedblocks'
 archivesBaseName = 'FramedBlocks'
 
@@ -29,7 +29,7 @@ java.toolchain.languageVersion = JavaLanguageVersion.of(17)
 println('Java: ' + System.getProperty('java.version') + ' JVM: ' + System.getProperty('java.vm.version') + '(' + System.getProperty('java.vendor') + ') Arch: ' + System.getProperty('os.arch'))
 
 minecraft {
-    mappings channel: 'parchment', version: '2022.12.18-1.19.3'
+    mappings channel: 'parchment', version: '1.19.3-2023.03.12-1.19.4'
     
     accessTransformer = file('src/main/resources/META-INF/accesstransformer.cfg')
 
@@ -139,7 +139,7 @@ repositories {
 }
 
 dependencies {
-    minecraft 'net.minecraftforge:forge:1.19.3-44.1.0'
+    minecraft 'net.minecraftforge:forge:1.19.4-45.0.1'
 
     //compileOnly fg.deobf("curse.maven:ctm-267602:3737369")
 
@@ -150,7 +150,7 @@ dependencies {
 
     compileOnly(fg.deobf("mezz.jei:jei-1.19.3-common-api:12.1.1.13"))
     compileOnly(fg.deobf("mezz.jei:jei-1.19.3-forge-api:12.1.1.13"))
-    runtimeOnly(fg.deobf("mezz.jei:jei-1.19.3-forge:12.1.1.13"))
+    //runtimeOnly(fg.deobf("mezz.jei:jei-1.19.3-forge:12.1.1.13"))
 
     //runtimeOnly fg.deobf("curse.maven:spark-361579:3767286")
 

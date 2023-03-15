@@ -92,7 +92,7 @@ public abstract class BlockInteractOverlay implements IGuiOverlay
         int height = Math.max(contentHeight, tex.height);
         int x = centerX - (width / 2);
         int y = screenHeight - 80 - height;
-        drawTooltipBackground(poseStack, x, y, width, height, gui.getBlitOffset());
+        drawTooltipBackground(poseStack, x, y, width, height);
 
         int textX = x + tex.width + 10;
         int yBaseOff = tex.height > contentHeight ? ((tex.height - contentHeight) / 2) : 0;
@@ -164,7 +164,7 @@ public abstract class BlockInteractOverlay implements IGuiOverlay
         return NO_TARGET;
     }
 
-    private static void drawTooltipBackground(PoseStack poseStack, int x, int y, int width, int height, int blitOffset)
+    private static void drawTooltipBackground(PoseStack poseStack, int x, int y, int width, int height)
     {
         BufferBuilder buffer = Tesselator.getInstance().getBuilder();
         RenderSystem.setShader(GameRenderer::getPositionColorShader);
@@ -174,18 +174,16 @@ public abstract class BlockInteractOverlay implements IGuiOverlay
                 GuiComponent::fillGradient,
                 poseStack.last().pose(),
                 buffer,
-                x - 2, y - 2, width + 4, height + 4, blitOffset
+                x - 2, y - 2, width + 4, height + 4, 0
         );
 
         RenderSystem.enableDepthTest();
-        RenderSystem.disableTexture();
         RenderSystem.enableBlend();
         RenderSystem.defaultBlendFunc();
         RenderSystem.setShaderColor(1, 1, 1, .95F);
         BufferUploader.drawWithShader(buffer.end());
         RenderSystem.setShaderColor(1, 1, 1, 1);
         RenderSystem.disableBlend();
-        RenderSystem.enableTexture();
     }
 
     protected record Texture(ResourceLocation location, int xOff, int yOff, int width, int height, int texWidth, int texHeight)
@@ -194,7 +192,7 @@ public abstract class BlockInteractOverlay implements IGuiOverlay
         {
             gui.setupOverlayRenderState(true, false, location);
             //noinspection SuspiciousNameCombination
-            GuiComponent.blit(poseStack, x, y, gui.getBlitOffset(), xOff, yOff, width, height, texWidth, texHeight);
+            GuiComponent.blit(poseStack, x, y, 0, xOff, yOff, width, height, texWidth, texHeight);
         }
     }
 

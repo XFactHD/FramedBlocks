@@ -2,9 +2,9 @@ package xfacthd.framedblocks.client.model.prism;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.renderer.block.model.BakedQuad;
-import net.minecraft.client.renderer.block.model.ItemTransforms;
 import net.minecraft.client.resources.model.BakedModel;
 import net.minecraft.core.Direction;
+import net.minecraft.world.item.ItemDisplayContext;
 import net.minecraft.world.level.block.state.BlockState;
 import xfacthd.framedblocks.api.block.FramedProperties;
 import xfacthd.framedblocks.api.model.FramedBlockModel;
@@ -101,7 +101,7 @@ public class FramedPrismModel extends FramedBlockModel
     }
 
     @Override
-    protected void applyInHandTransformation(PoseStack poseStack, ItemTransforms.TransformType type)
+    protected void applyInHandTransformation(PoseStack poseStack, ItemDisplayContext ctx)
     {
         poseStack.translate(0, .5, 0);
     }

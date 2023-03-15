@@ -4,14 +4,12 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.math.Axis;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.MultiBufferSource;
-import net.minecraft.client.renderer.block.model.ItemTransforms;
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderer;
 import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
 import net.minecraft.client.renderer.entity.ItemRenderer;
 import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.core.Direction;
-import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.MapItem;
+import net.minecraft.world.item.*;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.saveddata.maps.MapItemSavedData;
 import net.minecraft.world.phys.Vec3;
@@ -74,7 +72,7 @@ public class FramedItemFrameRenderer implements BlockEntityRenderer<FramedItemFr
             pstack.scale(0.5F, 0.5F, 0.5F);
 
             int itemLight = be.isGlowingFrame() ? 0x00F000F0 : packedLight;
-            itemRenderer.renderStatic(item, ItemTransforms.TransformType.FIXED, itemLight, OverlayTexture.NO_OVERLAY, pstack, buffer, 0);
+            itemRenderer.renderStatic(item, ItemDisplayContext.FIXED, itemLight, OverlayTexture.NO_OVERLAY, pstack, buffer, be.getLevel(), 0);
         }
 
         pstack.popPose();

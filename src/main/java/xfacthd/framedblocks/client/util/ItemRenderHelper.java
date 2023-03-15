@@ -6,11 +6,11 @@ import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.*;
-import net.minecraft.client.renderer.block.model.ItemTransforms;
 import net.minecraft.client.renderer.entity.ItemRenderer;
 import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.client.renderer.texture.TextureAtlas;
 import net.minecraft.client.resources.model.BakedModel;
+import net.minecraft.world.item.ItemDisplayContext;
 import net.minecraft.world.item.ItemStack;
 
 @SuppressWarnings("deprecation")
@@ -25,9 +25,7 @@ public final class ItemRenderHelper
         ItemRenderer renderer = Minecraft.getInstance().getItemRenderer();
 
         BakedModel model = renderer.getModel(stack, null, Minecraft.getInstance().player, 0);
-        renderer.blitOffset += 50;
         renderItemModel(stack, x, y, alpha, model, renderer);
-        renderer.blitOffset -= 50;
     }
 
     /**
@@ -45,7 +43,7 @@ public final class ItemRenderHelper
 
         PoseStack modelViewStack = RenderSystem.getModelViewStack();
         modelViewStack.pushPose();
-        modelViewStack.translate(x, y, 100.0F + renderer.blitOffset);
+        modelViewStack.translate(x, y, 100.0F);
         modelViewStack.translate(8.0D, 8.0D, 0.0D);
         modelViewStack.scale(1.0F, -1.0F, 1.0F);
         modelViewStack.scale(16.0F, 16.0F, 16.0F);
@@ -60,7 +58,7 @@ public final class ItemRenderHelper
         MultiBufferSource.BufferSource buffer = Minecraft.getInstance().renderBuffers().bufferSource();
         renderer.render(
                 stack,
-                ItemTransforms.TransformType.GUI,
+                ItemDisplayContext.GUI,
                 false,
                 new PoseStack(),
                 wrapBuffer(buffer, alpha, alpha < 255),

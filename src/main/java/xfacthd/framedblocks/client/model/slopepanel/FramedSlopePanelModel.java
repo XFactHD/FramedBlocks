@@ -3,9 +3,9 @@ package xfacthd.framedblocks.client.model.slopepanel;
 import com.google.common.base.Preconditions;
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.renderer.block.model.BakedQuad;
-import net.minecraft.client.renderer.block.model.ItemTransforms;
 import net.minecraft.client.resources.model.BakedModel;
 import net.minecraft.core.Direction;
+import net.minecraft.world.item.ItemDisplayContext;
 import net.minecraft.world.level.block.Rotation;
 import net.minecraft.world.level.block.state.BlockState;
 import xfacthd.framedblocks.api.model.FramedBlockModel;
@@ -113,7 +113,7 @@ public class FramedSlopePanelModel extends FramedBlockModel
     }
 
     @Override
-    protected void applyInHandTransformation(PoseStack poseStack, ItemTransforms.TransformType type)
+    protected void applyInHandTransformation(PoseStack poseStack, ItemDisplayContext ctx)
     {
         poseStack.translate(0, .5, 0);
     }

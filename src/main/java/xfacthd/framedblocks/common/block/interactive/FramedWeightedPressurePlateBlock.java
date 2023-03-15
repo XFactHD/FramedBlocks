@@ -1,8 +1,6 @@
 package xfacthd.framedblocks.common.block.interactive;
 
 import net.minecraft.core.BlockPos;
-import net.minecraft.sounds.SoundEvent;
-import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.LivingEntity;
@@ -13,6 +11,7 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.WeightedPressurePlateBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
+import net.minecraft.world.level.block.state.properties.BlockSetType;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.storage.loot.LootContext;
 import net.minecraft.world.phys.BlockHitResult;
@@ -38,9 +37,9 @@ public class FramedWeightedPressurePlateBlock extends WeightedPressurePlateBlock
 
     private final BlockType type;
 
-    protected FramedWeightedPressurePlateBlock(BlockType type, int maxWeight, Properties props, SoundEvent soundOff, SoundEvent soundOn)
+    protected FramedWeightedPressurePlateBlock(BlockType type, int maxWeight, Properties props, BlockSetType blockSet)
     {
-        super(maxWeight, props, soundOff, soundOn);
+        super(maxWeight, props, blockSet);
         this.type = type;
         registerDefaultState(defaultBlockState().setValue(FramedProperties.GLOWING, false));
     }
@@ -116,8 +115,7 @@ public class FramedWeightedPressurePlateBlock extends WeightedPressurePlateBlock
                 IFramedBlock.createProperties(BlockType.FRAMED_GOLD_PRESSURE_PLATE)
                         .noCollission()
                         .strength(0.5F),
-                SoundEvents.METAL_PRESSURE_PLATE_CLICK_OFF,
-                SoundEvents.METAL_PRESSURE_PLATE_CLICK_ON
+                BlockSetType.GOLD
         );
     }
 
@@ -129,8 +127,7 @@ public class FramedWeightedPressurePlateBlock extends WeightedPressurePlateBlock
                 IFramedBlock.createProperties(BlockType.FRAMED_WATERLOGGABLE_GOLD_PRESSURE_PLATE)
                         .noCollission()
                         .strength(0.5F),
-                SoundEvents.METAL_PRESSURE_PLATE_CLICK_OFF,
-                SoundEvents.METAL_PRESSURE_PLATE_CLICK_ON
+                BlockSetType.GOLD
         );
     }
 
@@ -143,8 +140,7 @@ public class FramedWeightedPressurePlateBlock extends WeightedPressurePlateBlock
                         .requiresCorrectToolForDrops()
                         .noCollission()
                         .strength(0.5F),
-                SoundEvents.METAL_PRESSURE_PLATE_CLICK_OFF,
-                SoundEvents.METAL_PRESSURE_PLATE_CLICK_ON
+                BlockSetType.IRON
         );
     }
 
@@ -157,8 +153,7 @@ public class FramedWeightedPressurePlateBlock extends WeightedPressurePlateBlock
                         .requiresCorrectToolForDrops()
                         .noCollission()
                         .strength(0.5F),
-                SoundEvents.METAL_PRESSURE_PLATE_CLICK_OFF,
-                SoundEvents.METAL_PRESSURE_PLATE_CLICK_ON
+                BlockSetType.IRON
         );
     }
 }

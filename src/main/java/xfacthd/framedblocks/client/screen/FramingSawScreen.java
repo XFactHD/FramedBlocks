@@ -118,7 +118,7 @@ public class FramingSawScreen extends AbstractContainerScreen<FramingSawMenu>
         int recY = topPos + RECIPES_Y;
         int lastIndex = firstIndex + RECIPE_COUNT;
         renderButtons(poseStack, mouseX, mouseY, recX, recY, lastIndex);
-        renderRecipes(recX, recY, lastIndex);
+        renderRecipes(poseStack, recX, recY, lastIndex);
 
         List<FramingSawRecipe> recipes = cache.getRecipes();
         if (idx >= 0 && idx < recipes.size())
@@ -180,7 +180,7 @@ public class FramingSawScreen extends AbstractContainerScreen<FramingSawMenu>
             if (mouseX >= recX && mouseX < recX + RECIPE_WIDTH && mouseY >= recY && mouseY < recY + RECIPE_HEIGHT)
             {
                 FramingSawMenu.RecipeHolder recipe = recipes.get(idx);
-                ItemStack result = recipe.getRecipe().getResultItem();
+                ItemStack result = recipe.getRecipe().getResult();
                 renderItemTooltip(poseStack, mouseX, mouseY, result, recipe);
             }
         }
@@ -354,7 +354,7 @@ public class FramingSawScreen extends AbstractContainerScreen<FramingSawMenu>
         }
     }
 
-    private void renderRecipes(int pLeft, int pTop, int lastIndex)
+    private void renderRecipes(PoseStack pstack, int pLeft, int pTop, int lastIndex)
     {
         List<FramingSawMenu.RecipeHolder> recipes = menu.getRecipes();
 
@@ -365,7 +365,7 @@ public class FramingSawScreen extends AbstractContainerScreen<FramingSawMenu>
             int y = pTop + relIdx / RECIPE_COLS * RECIPE_HEIGHT + 1;
 
             //noinspection ConstantConditions
-            minecraft.getItemRenderer().renderAndDecorateItem(recipes.get(idx).getRecipe().getResultItem(), x, y);
+            minecraft.getItemRenderer().renderAndDecorateItem(pstack, recipes.get(idx).getRecipe().getResult(), x, y);
         }
     }
 
@@ -466,7 +466,7 @@ public class FramingSawScreen extends AbstractContainerScreen<FramingSawMenu>
                 List<FramingSawRecipe> recipes = cache.getRecipes();
                 if (idx > 0 && idx < recipes.size())
                 {
-                    if (JeiCompat.handleShowRecipeRequest(cache.getRecipes().get(idx).getResultItem()))
+                    if (JeiCompat.handleShowRecipeRequest(cache.getRecipes().get(idx).getResult()))
                     {
                         return true;
                     }

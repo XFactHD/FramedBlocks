@@ -4,15 +4,13 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.math.Axis;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.blockentity.*;
-import net.minecraft.util.Mth;
+import net.minecraft.util.*;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.renderer.MultiBufferSource;
-import com.mojang.blaze3d.platform.NativeImage;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
-import net.minecraft.util.FormattedCharSequence;
 import net.minecraft.world.phys.Vec3;
 import xfacthd.framedblocks.api.block.FramedProperties;
 import xfacthd.framedblocks.common.block.interactive.FramedSignBlock;
@@ -90,7 +88,7 @@ public class FramedSignRenderer implements BlockEntityRenderer<FramedSignBlockEn
                 }
                 else
                 {
-                    fontrenderer.drawInBatch(text, xOff, y, textColor, false, matrix.last().pose(), buffer, false, 0, textLight);
+                    fontrenderer.drawInBatch(text, xOff, y, textColor, false, matrix.last().pose(), buffer, Font.DisplayMode.NORMAL, 0, textLight);
                 }
             }
         }
@@ -106,10 +104,10 @@ public class FramedSignRenderer implements BlockEntityRenderer<FramedSignBlockEn
             return 0xFFF0EBCC;
         }
 
-        int r = (int) ((double) NativeImage.getR(color) * 0.4D);
-        int g = (int) ((double) NativeImage.getG(color) * 0.4D);
-        int b = (int) ((double) NativeImage.getB(color) * 0.4D);
-        return NativeImage.combine(0, b, g, r);
+        int r = (int) ((double) FastColor.ARGB32.red(color) * 0.4D);
+        int g = (int) ((double) FastColor.ARGB32.green(color) * 0.4D);
+        int b = (int) ((double) FastColor.ARGB32.blue(color) * 0.4D);
+        return FastColor.ARGB32.color(0, b, g, r);
     }
 
     private static boolean showOutline(FramedSignBlockEntity sign)
