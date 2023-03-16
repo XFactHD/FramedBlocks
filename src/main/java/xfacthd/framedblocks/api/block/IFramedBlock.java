@@ -539,6 +539,10 @@ public interface IFramedBlock extends EntityBlock, IForgeBlock//, IFacade
     @Override
     default boolean shouldDisplayFluidOverlay(BlockState state, BlockAndTintGetter level, BlockPos pos, FluidState fluid)
     {
+        if (!getBlockType().canOccludeWithSolidCamo())
+        {
+            return false;
+        }
         if (!state.getValue(FramedProperties.SOLID) && level.getBlockEntity(pos) instanceof FramedBlockEntity be)
         {
             return be.shouldCamoDisplayFluidOverlay(level, pos, fluid);
