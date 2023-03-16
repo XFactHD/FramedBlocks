@@ -107,7 +107,7 @@ public class FramedSignRenderer implements BlockEntityRenderer<FramedSignBlockEn
         int r = (int) ((double) FastColor.ARGB32.red(color) * 0.4D);
         int g = (int) ((double) FastColor.ARGB32.green(color) * 0.4D);
         int b = (int) ((double) FastColor.ARGB32.blue(color) * 0.4D);
-        return FastColor.ARGB32.color(0, b, g, r);
+        return FastColor.ARGB32.color(0, r, g, b);
     }
 
     private static boolean showOutline(FramedSignBlockEntity sign)
