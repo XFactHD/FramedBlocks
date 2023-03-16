@@ -358,6 +358,7 @@ public class FramingSawScreen extends AbstractContainerScreen<FramingSawMenu>
     {
         List<FramingSawMenu.RecipeHolder> recipes = menu.getRecipes();
 
+        RenderSystem.setShaderColor(1F, 1F, 1F, 1F);
         for (int idx = firstIndex; idx < lastIndex && idx < recipes.size(); idx++)
         {
             int relIdx = idx - firstIndex;
