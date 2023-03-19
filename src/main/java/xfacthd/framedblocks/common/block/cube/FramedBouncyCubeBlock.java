@@ -60,8 +60,14 @@ public class FramedBouncyCubeBlock extends SlimeBlock implements IFramedBlock
     @Override
     public BlockState updateShape(BlockState state, Direction direction, BlockState neighborState, LevelAccessor level, BlockPos currentPos, BlockPos neighborPos)
     {
-        updateCulling(level, currentPos, neighborState, direction, false);
+        updateCulling(level, currentPos);
         return super.updateShape(state, direction, neighborState, level, currentPos, neighborPos);
+    }
+
+    @Override
+    public void neighborChanged(BlockState state, Level level, BlockPos pos, Block block, BlockPos fromPos, boolean isMoving)
+    {
+        updateCulling(level, pos);
     }
 
     @Override

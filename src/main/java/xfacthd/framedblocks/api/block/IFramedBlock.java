@@ -1,6 +1,5 @@
 package xfacthd.framedblocks.api.block;
 
-import com.google.common.base.Preconditions;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -27,6 +26,7 @@ import net.minecraftforge.common.IPlantable;
 import net.minecraftforge.common.Tags;
 import net.minecraftforge.common.extensions.IForgeBlock;
 import xfacthd.framedblocks.api.FramedBlocksAPI;
+import xfacthd.framedblocks.api.block.update.CullingUpdateTracker;
 import xfacthd.framedblocks.api.type.IBlockType;
 import xfacthd.framedblocks.api.util.*;
 
@@ -410,6 +410,10 @@ public interface IFramedBlock extends EntityBlock, IForgeBlock//, IFacade
 
     default void onStateChange(LevelReader level, BlockPos pos, BlockState oldState, BlockState newState)
     {
+        if (needCullingUpdateAfterStateChange(level, oldState, newState))
+        {
+            updateCulling(level, pos);
+        }
         if (level.isClientSide() && level.getBlockEntity(pos) instanceof FramedBlockEntity be)
         {
             onStateChangeClient(level, pos, oldState, newState, be);
@@ -419,25 +423,23 @@ public interface IFramedBlock extends EntityBlock, IForgeBlock//, IFacade
     default void onStateChangeClient(LevelReader level, BlockPos pos, BlockState oldState, BlockState newState, FramedBlockEntity be)
     {
         be.setBlockState(newState);
-        if (needCullingUpdateAfterStateChange(level, oldState, newState))
-        {
-            be.updateCulling(true, false);
-        }
     }
 
+    @Deprecated(forRemoval = true)
     default void updateCulling(LevelAccessor level, BlockPos pos, @Nullable BlockState neighborState, @Nullable Direction side, boolean rerender)
     {
-        Preconditions.checkArgument(side == null || neighborState != null, "Neighbor BlockState cannot be null when a side is provided");
-        if (level.isClientSide() && (side == null || !(neighborState.getBlock() instanceof IFramedBlock)) && level.getBlockEntity(pos) instanceof FramedBlockEntity be)
+        updateCulling(level, pos);
+    }
+
+    default void updateCulling(LevelReader level, BlockPos pos)
+    {
+        if (!level.isClientSide() && level instanceof Level realLevel)
         {
-            if (side != null)
-            {
-                be.updateCulling(side, rerender);
-            }
-            else
-            {
-                be.updateCulling(true, rerender);
-            }
+            CullingUpdateTracker.enqueueCullingUpdate(realLevel, pos);
+        }
+        else if (level.isClientSide() && level.getBlockEntity(pos) instanceof FramedBlockEntity be)
+        {
+            be.updateCulling(true, false);
         }
     }
 

@@ -15,6 +15,8 @@ import net.minecraftforge.network.NetworkRegistry;
 import net.minecraftforge.network.simple.SimpleChannel;
 import org.slf4j.Logger;
 import xfacthd.framedblocks.api.FramedBlocksAPI;
+import xfacthd.framedblocks.api.block.update.CullingUpdatePacket;
+import xfacthd.framedblocks.api.block.update.CullingUpdateTracker;
 import xfacthd.framedblocks.api.util.FramedConstants;
 import xfacthd.framedblocks.api.util.Utils;
 import xfacthd.framedblocks.client.util.ClientConfig;
@@ -57,6 +59,7 @@ public final class FramedBlocks
 
         IEventBus forgeBus = MinecraftForge.EVENT_BUS;
         forgeBus.addListener(EventHandler::onBlockLeftClick);
+        forgeBus.addListener(CullingUpdateTracker::onServerLevelTick);
         forgeBus.addListener(FramingSawRecipeCache::onAddReloadListener);
 
         CompatHandler.init();
@@ -76,6 +79,12 @@ public final class FramedBlocks
                 .encoder(OpenSignScreenPacket::encode)
                 .decoder(OpenSignScreenPacket::new)
                 .consumer(OpenSignScreenPacket::handle)
+                .add();
+
+        CHANNEL.messageBuilder(CullingUpdatePacket.class, 2, NetworkDirection.PLAY_TO_CLIENT)
+                .encoder(CullingUpdatePacket::encode)
+                .decoder(CullingUpdatePacket::decode)
+                .consumer(CullingUpdatePacket::handle)
                 .add();
 
         BlueprintBehaviours.register();
