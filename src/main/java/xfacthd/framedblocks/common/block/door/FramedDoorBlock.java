@@ -20,7 +20,6 @@ import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import xfacthd.framedblocks.api.block.*;
 import xfacthd.framedblocks.api.predicate.CtmPredicate;
-import xfacthd.framedblocks.api.util.ClientUtils;
 import xfacthd.framedblocks.common.data.BlockType;
 
 import javax.annotation.Nullable;
@@ -91,34 +90,18 @@ public class FramedDoorBlock extends DoorBlock implements IFramedBlock
     public BlockState updateShape(BlockState state, Direction facing, BlockState facingState, LevelAccessor level, BlockPos currentPos, BlockPos facingPos)
     {
         BlockState newState = super.updateShape(state, facing, facingState, level, currentPos, facingPos);
-        if (level.isClientSide())
+        if (newState == state)
         {
-            if (newState == state)
-            {
-                updateCulling(level, currentPos, facingState, facing, false);
-            }
-            else if (newState.isAir())
-            {
-                BlockPos pos = currentPos.immutable();
-                Direction dir = state.getValue(FACING);
-                Set<Direction> faces = EnumSet.of(
-                        dir.getClockWise(),
-                        dir.getCounterClockWise(),
-                        state.getValue(HALF) == DoubleBlockHalf.UPPER ? Direction.UP : Direction.DOWN
-                );
-                ClientUtils.enqueueClientTask(3, () ->
-                {
-                    for (Direction face : faces)
-                    {
-                        if (level.getBlockEntity(pos.relative(face)) instanceof FramedBlockEntity be)
-                        {
-                            be.updateCulling(face.getOpposite(), true);
-                        }
-                    }
-                });
-            }
+            updateCulling(level, currentPos);
         }
         return newState;
+    }
+
+    @Override
+    public void neighborChanged(BlockState state, Level level, BlockPos pos, Block block, BlockPos fromPos, boolean isMoving)
+    {
+        super.neighborChanged(state, level, pos, block, fromPos, isMoving);
+        updateCulling(level, pos);
     }
 
     @Override

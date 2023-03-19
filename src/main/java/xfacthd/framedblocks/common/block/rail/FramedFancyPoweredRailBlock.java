@@ -52,9 +52,16 @@ public class FramedFancyPoweredRailBlock extends PoweredRailBlock implements IFr
         BlockState newState = super.updateShape(state, direction, neighborState, level, currentPos, neighborPos);
         if (newState == state)
         {
-            updateCulling(level, currentPos, neighborState, direction, false);
+            updateCulling(level, currentPos);
         }
         return newState;
+    }
+
+    @Override
+    public void neighborChanged(BlockState state, Level level, BlockPos pos, Block block, BlockPos fromPos, boolean isMoving)
+    {
+        super.neighborChanged(state, level, pos, block, fromPos, isMoving);
+        updateCulling(level, pos);
     }
 
     @Override

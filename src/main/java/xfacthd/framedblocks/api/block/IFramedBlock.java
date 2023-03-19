@@ -1,6 +1,5 @@
 package xfacthd.framedblocks.api.block;
 
-import com.google.common.base.Preconditions;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -32,6 +31,7 @@ import net.minecraftforge.common.extensions.IForgeBlock;
 import net.minecraftforge.fml.loading.FMLEnvironment;
 import xfacthd.framedblocks.api.FramedBlocksAPI;
 import xfacthd.framedblocks.api.FramedBlocksClientAPI;
+import xfacthd.framedblocks.api.block.update.CullingUpdateTracker;
 import xfacthd.framedblocks.api.camo.CamoContainer;
 import xfacthd.framedblocks.api.model.data.FramedBlockData;
 import xfacthd.framedblocks.api.predicate.*;
@@ -436,44 +436,25 @@ public interface IFramedBlock extends EntityBlock, IForgeBlock
     @Override
     default void onBlockStateChange(LevelReader level, BlockPos pos, BlockState oldState, BlockState newState)
     {
-        onStateChange(level, pos, oldState, newState);
-    }
-
-    /**
-     * Use {@link IForgeBlock#onBlockStateChange(LevelReader, BlockPos, BlockState, BlockState)} instead
-     */
-    @SuppressWarnings("DeprecatedIsStillUsed")
-    @Deprecated(forRemoval = true)
-    default void onStateChange(LevelReader level, BlockPos pos, BlockState oldState, BlockState newState)
-    {
-        if (level.isClientSide() && level.getBlockEntity(pos) instanceof FramedBlockEntity be)
-        {
-            onStateChangeClient(level, pos, oldState, newState, be);
-        }
-    }
-
-    default void onStateChangeClient(LevelReader level, BlockPos pos, BlockState oldState, BlockState newState, FramedBlockEntity be)
-    {
-        be.setBlockState(newState);
         if (needCullingUpdateAfterStateChange(level, oldState, newState))
         {
-            be.updateCulling(true, false);
+            updateCulling(level, pos);
+        }
+        if (level.isClientSide() && level.getBlockEntity(pos) instanceof FramedBlockEntity be)
+        {
+            be.setBlockState(newState);
         }
     }
 
-    default void updateCulling(LevelAccessor level, BlockPos pos, @Nullable BlockState neighborState, @Nullable Direction side, boolean rerender)
+    default void updateCulling(LevelReader level, BlockPos pos)
     {
-        Preconditions.checkArgument(side == null || neighborState != null, "Neighbor BlockState cannot be null when a side is provided");
-        if (level.isClientSide() && (side == null || !(neighborState.getBlock() instanceof IFramedBlock)) && level.getBlockEntity(pos) instanceof FramedBlockEntity be)
+        if (!level.isClientSide() && level instanceof Level realLevel)
         {
-            if (side != null)
-            {
-                be.updateCulling(side, rerender);
-            }
-            else
-            {
-                be.updateCulling(true, rerender);
-            }
+            CullingUpdateTracker.enqueueCullingUpdate(realLevel, pos);
+        }
+        else if (level.isClientSide() && level.getBlockEntity(pos) instanceof FramedBlockEntity be)
+        {
+            be.updateCulling(true, false);
         }
     }
 
