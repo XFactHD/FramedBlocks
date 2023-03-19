@@ -403,12 +403,6 @@ public final class Utils
         }
     }
 
-    @Deprecated(forRemoval = true)
-    public static void wrapInStateCopy(LevelAccessor level, BlockPos pos, boolean writeToCamoTwo, Runnable action)
-    {
-        wrapInStateCopy(level, pos, null, ItemStack.EMPTY, writeToCamoTwo, false, action);
-    }
-
     public static void wrapInStateCopy(
             LevelAccessor level, BlockPos pos, Player player, ItemStack stack, boolean writeToCamoTwo, boolean consumeItem, Runnable action
     )

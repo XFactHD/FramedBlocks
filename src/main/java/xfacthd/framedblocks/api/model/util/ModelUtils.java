@@ -116,21 +116,6 @@ public final class ModelUtils
         vertexData[offset] = LightTexture.pack(light[0], light[1]);
     }
 
-    @Deprecated(forRemoval = true)
-    public static BakedQuad duplicateQuad(BakedQuad quad)
-    {
-        int[] vertexData = quad.getVertices();
-        vertexData = Arrays.copyOf(vertexData, vertexData.length);
-
-        return new BakedQuad(
-                vertexData,
-                quad.getTintIndex(),
-                quad.getDirection(),
-                quad.getSprite(),
-                quad.isShade()
-        );
-    }
-
     /**
      * Calculate face normals from vertex positions
      * Adapted from {@code net.minecraftforge.client.ForgeHooksClient#fillNormal(int[], Direction)}
