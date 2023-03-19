@@ -87,7 +87,7 @@ public class FramedPoweredRailSlopeBlock extends PoweredRailBlock implements IFr
         BlockState newState = super.updateShape(state, direction, neighborState, level, currentPos, neighborPos);
         if (newState == state)
         {
-            updateCulling(level, currentPos, neighborState, direction, false);
+            updateCulling(level, currentPos);
         }
         return newState;
     }
@@ -98,6 +98,7 @@ public class FramedPoweredRailSlopeBlock extends PoweredRailBlock implements IFr
     @Override //Copy of AbstractRailBlock#neighborChanged() to disable removal
     public void neighborChanged(BlockState state, Level level, BlockPos pos, Block block, BlockPos pFromPos, boolean isMoving)
     {
+        updateCulling(level, pos);
         if (!level.isClientSide() && level.getBlockState(pos).is(this))
         {
             updateState(state, level, pos, block);

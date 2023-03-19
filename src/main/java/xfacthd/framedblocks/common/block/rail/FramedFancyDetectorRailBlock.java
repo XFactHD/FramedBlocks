@@ -8,6 +8,7 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.*;
+import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.DetectorRailBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.storage.loot.LootContext;
@@ -37,9 +38,16 @@ public class FramedFancyDetectorRailBlock extends DetectorRailBlock implements I
         BlockState newState = super.updateShape(state, direction, neighborState, level, currentPos, neighborPos);
         if (newState == state)
         {
-            updateCulling(level, currentPos, neighborState, direction, false);
+            updateCulling(level, currentPos);
         }
         return newState;
+    }
+
+    @Override
+    public void neighborChanged(BlockState state, Level level, BlockPos pos, Block block, BlockPos fromPos, boolean isMoving)
+    {
+        super.neighborChanged(state, level, pos, block, fromPos, isMoving);
+        updateCulling(level, pos);
     }
 
     @Override

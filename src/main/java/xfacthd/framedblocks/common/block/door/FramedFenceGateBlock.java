@@ -9,6 +9,7 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelAccessor;
+import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.FenceGateBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.storage.loot.LootContext;
@@ -45,9 +46,16 @@ public class FramedFenceGateBlock extends FenceGateBlock implements IFramedBlock
         BlockState newState = super.updateShape(state, facing, facingState, level, currentPos, facingPos);
         if (newState == state)
         {
-            updateCulling(level, currentPos, facingState, facing, false);
+            updateCulling(level, currentPos);
         }
         return newState;
+    }
+
+    @Override
+    public void neighborChanged(BlockState state, Level level, BlockPos pos, Block block, BlockPos fromPos, boolean isMoving)
+    {
+        super.neighborChanged(state, level, pos, block, fromPos, isMoving);
+        updateCulling(level, pos);
     }
 
     @Override
