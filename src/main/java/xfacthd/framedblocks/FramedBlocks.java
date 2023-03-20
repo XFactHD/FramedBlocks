@@ -64,7 +64,11 @@ public final class FramedBlocks
 
         CompatHandler.init();
 
-        CrashReportCallables.registerCrashCallable("FramedBlocks BlockEntity Warning", FramedBlocks::getBlockEntityWarning);
+        CrashReportCallables.registerCrashCallable(
+                "FramedBlocks BlockEntity Warning",
+                FramedBlocks::getBlockEntityWarning,
+                () -> ServerConfig.allowBlockEntities
+        );
     }
 
     private static void onCommonSetup(final FMLCommonSetupEvent event)
@@ -100,20 +104,13 @@ public final class FramedBlocks
 
     private static String getBlockEntityWarning()
     {
-        if (!ServerConfig.allowBlockEntities)
-        {
-            return "Not applicable";
-        }
-        else
-        {
-            return """
-                   
-                   \t\tThe 'allowBlockEntities' setting in the framedblocks-server.toml config file is enabled.
-                   \t\tIf this crash happened in FramedBlocks code, please try the following solutions before reporting:
-                   \t\t- If you can identify the block that was used as a camo and resulted in the crash, add the block to the blacklist tag
-                   \t\t- If you can't identify the block or the crash wasn't fixed, make a backup of the world and disable the mentioned config setting
-                   \t\tIf the crash still happens, please report it on the FramedBlocks GitHub repository
-                   """;
-        }
+        return """
+               
+               \t\tThe 'allowBlockEntities' setting in the framedblocks-server.toml config file is enabled.
+               \t\tIf this crash happened in FramedBlocks code, please try the following solutions before reporting:
+               \t\t- If you can identify the block that was used as a camo and resulted in the crash, add the block to the blacklist tag
+               \t\t- If you can't identify the block or the crash wasn't fixed, make a backup of the world and disable the mentioned config setting
+               \t\tIf the crash still happens, please report it on the FramedBlocks GitHub repository
+               """;
     }
 }
