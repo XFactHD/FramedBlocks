@@ -126,7 +126,7 @@ public class FramingSawScreen extends AbstractContainerScreen<FramingSawMenu>
             FramingSawRecipe recipe = recipes.get(idx);
             if (input.isEmpty())
             {
-                ItemRenderHelper.renderFakeItemTransparent(cubeStack, leftPos + 20, topPos + 46, 127);
+                ItemRenderHelper.renderFakeItemTransparent(poseStack, cubeStack, leftPos + 20, topPos + 46, 127);
             }
 
             Ingredient additive = recipe.getAdditive();
@@ -134,7 +134,7 @@ public class FramingSawScreen extends AbstractContainerScreen<FramingSawMenu>
             {
                 ItemStack[] items = additive.getItems();
                 int i = (int) (System.currentTimeMillis() / 1700) % items.length;
-                ItemRenderHelper.renderFakeItemTransparent(items[i], leftPos + 20, topPos + 82, 127);
+                ItemRenderHelper.renderFakeItemTransparent(poseStack, items[i], leftPos + 20, topPos + 82, 127);
             }
         }
     }

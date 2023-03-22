@@ -1,6 +1,5 @@
 package xfacthd.framedblocks.client.util;
 
-import com.mojang.blaze3d.platform.GlStateManager;
 import com.mojang.blaze3d.platform.Lighting;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
@@ -18,35 +17,30 @@ public final class ItemRenderHelper
 {
     private static final RenderType TRANSLUCENT = RenderType.entityTranslucentCull(TextureAtlas.LOCATION_BLOCKS);
 
-    public static void renderFakeItemTransparent(ItemStack stack, int x, int y, int alpha)
+    public static void renderFakeItemTransparent(PoseStack poseStack, ItemStack stack, int x, int y, int alpha)
     {
         if (stack.isEmpty()) { return; }
 
         ItemRenderer renderer = Minecraft.getInstance().getItemRenderer();
 
         BakedModel model = renderer.getModel(stack, null, Minecraft.getInstance().player, 0);
-        renderItemModel(stack, x, y, alpha, model, renderer);
+        renderItemModel(poseStack, stack, x, y, alpha, model, renderer);
     }
 
     /**
      * {@link ItemRenderer::renderGuiItem} but with alpha
      */
-    public static void renderItemModel(ItemStack stack, int x, int y, int alpha, BakedModel model, ItemRenderer renderer)
+    public static void renderItemModel(PoseStack poseStack, ItemStack stack, int x, int y, int alpha, BakedModel model, ItemRenderer renderer)
     {
-        Minecraft.getInstance().getTextureManager().getTexture(TextureAtlas.LOCATION_BLOCKS).setFilter(false, false);
-
-        RenderSystem.setShaderTexture(0, TextureAtlas.LOCATION_BLOCKS);
-
-        RenderSystem.enableBlend();
-        RenderSystem.blendFunc(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA);
-        RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
+        poseStack.pushPose();
+        poseStack.translate(x, y, 100.0F);
+        poseStack.translate(8.0D, 8.0D, 0.0D);
+        poseStack.scale(1.0F, -1.0F, 1.0F);
+        poseStack.scale(16.0F, 16.0F, 16.0F);
 
         PoseStack modelViewStack = RenderSystem.getModelViewStack();
         modelViewStack.pushPose();
-        modelViewStack.translate(x, y, 100.0F);
-        modelViewStack.translate(8.0D, 8.0D, 0.0D);
-        modelViewStack.scale(1.0F, -1.0F, 1.0F);
-        modelViewStack.scale(16.0F, 16.0F, 16.0F);
+        modelViewStack.mulPoseMatrix(poseStack.last().pose());
         RenderSystem.applyModelViewMatrix();
 
         boolean flatLight = !model.usesBlockLight();
@@ -75,6 +69,7 @@ public final class ItemRenderHelper
             Lighting.setupFor3DItems();
         }
 
+        poseStack.popPose();
         modelViewStack.popPose();
         RenderSystem.applyModelViewMatrix();
     }
