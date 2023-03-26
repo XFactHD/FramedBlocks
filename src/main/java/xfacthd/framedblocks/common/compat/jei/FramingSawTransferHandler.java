@@ -4,11 +4,9 @@ import mezz.jei.api.gui.ingredient.IRecipeSlotsView;
 import mezz.jei.api.recipe.RecipeType;
 import mezz.jei.api.recipe.transfer.*;
 import net.minecraft.client.Minecraft;
-import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.MenuType;
 import org.jetbrains.annotations.Nullable;
-import xfacthd.framedblocks.api.util.Utils;
 import xfacthd.framedblocks.common.FBContent;
 import xfacthd.framedblocks.common.crafting.FramingSawRecipe;
 import xfacthd.framedblocks.common.crafting.FramingSawRecipeCache;
@@ -18,8 +16,6 @@ import java.util.Optional;
 
 public class FramingSawTransferHandler implements IRecipeTransferHandler<FramingSawMenu, FramingSawRecipe>
 {
-    public static final Component MSG_INVALID_RECIPE = Utils.translate("msg", "framing_saw.transfer.invalid_recipe");
-
     private final IRecipeTransferHandlerHelper transferHelper;
 
     public FramingSawTransferHandler(IRecipeTransferHandlerHelper transferHelper)
@@ -60,6 +56,6 @@ public class FramingSawTransferHandler implements IRecipeTransferHandler<Framing
             }
             return new RecipeTransferErrorTransferNotImplemented();
         }
-        return transferHelper.createUserErrorWithTooltip(MSG_INVALID_RECIPE);
+        return transferHelper.createUserErrorWithTooltip(JeiCompat.MSG_INVALID_RECIPE);
     }
 }

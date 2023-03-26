@@ -7,14 +7,19 @@ import mezz.jei.api.helpers.IJeiHelpers;
 import mezz.jei.api.ingredients.ITypedIngredient;
 import mezz.jei.api.recipe.*;
 import mezz.jei.api.runtime.*;
+import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.fml.ModList;
 import net.minecraftforge.fml.loading.FMLEnvironment;
+import xfacthd.framedblocks.api.util.Utils;
 
 import java.util.Optional;
 
 public final class JeiCompat
 {
+    public static final Component MSG_INVALID_RECIPE = Utils.translate("msg", "framing_saw.transfer.invalid_recipe");
+    public static final Component MSG_TRANSFER_NOT_IMPLEMENTED = Utils.translate("msg", "framing_saw.transfer.not_implemented");
+
     private static boolean loadedClient = false;
 
     public static void init()

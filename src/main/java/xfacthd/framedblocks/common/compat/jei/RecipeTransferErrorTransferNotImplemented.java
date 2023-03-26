@@ -5,16 +5,12 @@ import mezz.jei.api.gui.ingredient.IRecipeSlotsView;
 import mezz.jei.api.recipe.transfer.IRecipeTransferError;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screens.Screen;
-import net.minecraft.network.chat.Component;
-import xfacthd.framedblocks.api.util.Utils;
 
 import java.util.List;
 import java.util.Optional;
 
 public class RecipeTransferErrorTransferNotImplemented implements IRecipeTransferError
 {
-    public static final Component MSG_TRANSFER_NOT_IMPLEMENTED = Utils.translate("msg", "framing_saw.transfer.not_implemented");
-
     @Override
     public Type getType()
     {
@@ -33,7 +29,7 @@ public class RecipeTransferErrorTransferNotImplemented implements IRecipeTransfe
         Screen screen = Minecraft.getInstance().screen;
         if (screen != null)
         {
-            screen.renderTooltip(poseStack, List.of(MSG_TRANSFER_NOT_IMPLEMENTED), Optional.empty(), mouseX, mouseY);
+            screen.renderTooltip(poseStack, List.of(JeiCompat.MSG_TRANSFER_NOT_IMPLEMENTED), Optional.empty(), mouseX, mouseY);
         }
     }
 }

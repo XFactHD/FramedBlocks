@@ -15,8 +15,7 @@ import xfacthd.framedblocks.client.util.KeyMappings;
 import xfacthd.framedblocks.common.FBContent;
 import xfacthd.framedblocks.common.block.FramingSawBlock;
 import xfacthd.framedblocks.common.blockentity.FramedStorageBlockEntity;
-import xfacthd.framedblocks.common.compat.jei.FramingSawTransferHandler;
-import xfacthd.framedblocks.common.compat.jei.RecipeTransferErrorTransferNotImplemented;
+import xfacthd.framedblocks.common.compat.jei.JeiCompat;
 import xfacthd.framedblocks.common.crafting.FramingSawRecipe;
 import xfacthd.framedblocks.common.data.property.NullableDirection;
 import xfacthd.framedblocks.common.item.FramedBlueprintItem;
@@ -208,8 +207,8 @@ public final class FramedLanguageProvider extends LanguageProvider
 
         add(FramedCreativeTab.get().getDisplayName(), "FramedBlocks");
 
-        add(FramingSawTransferHandler.MSG_INVALID_RECIPE, "Invalid recipe");
-        add(RecipeTransferErrorTransferNotImplemented.MSG_TRANSFER_NOT_IMPLEMENTED, "No items will be transferred");
+        add(JeiCompat.MSG_INVALID_RECIPE, "Invalid recipe");
+        add(JeiCompat.MSG_TRANSFER_NOT_IMPLEMENTED, "No items will be transferred");
     }
 
     private void addStatusMessageTranslations()
