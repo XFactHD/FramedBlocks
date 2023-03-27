@@ -2,6 +2,7 @@
   "values": [
     "framedblocks:framed_iron_door",
     "framedblocks:framed_iron_trapdoor",
-    "framedblocks:framed_iron_gate"
+    "framedblocks:framed_iron_gate",
+    "framedblocks:framing_saw"
   ]
 }
