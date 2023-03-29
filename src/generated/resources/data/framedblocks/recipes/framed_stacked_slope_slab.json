@@ -19,5 +19,6 @@
   ],
   "result": {
     "item": "framedblocks:framed_stacked_slope_slab"
-  }
+  },
+  "show_notification": true
 }

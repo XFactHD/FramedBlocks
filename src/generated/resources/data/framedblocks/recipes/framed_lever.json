@@ -15,5 +15,6 @@
   ],
   "result": {
     "item": "framedblocks:framed_lever"
-  }
+  },
+  "show_notification": true
 }

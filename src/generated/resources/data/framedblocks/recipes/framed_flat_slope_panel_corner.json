@@ -15,5 +15,6 @@
   ],
   "result": {
     "item": "framedblocks:framed_flat_slope_panel_corner"
-  }
+  },
+  "show_notification": true
 }

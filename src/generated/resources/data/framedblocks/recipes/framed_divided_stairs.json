@@ -11,5 +11,6 @@
   ],
   "result": {
     "item": "framedblocks:framed_divided_stairs"
-  }
+  },
+  "show_notification": true
 }

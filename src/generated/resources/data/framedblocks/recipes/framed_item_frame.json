@@ -16,5 +16,6 @@
   ],
   "result": {
     "item": "framedblocks:framed_item_frame"
-  }
+  },
+  "show_notification": true
 }

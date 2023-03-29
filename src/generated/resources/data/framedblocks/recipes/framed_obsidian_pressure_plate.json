@@ -15,5 +15,6 @@
   ],
   "result": {
     "item": "framedblocks:framed_obsidian_pressure_plate"
-  }
+  },
+  "show_notification": true
 }

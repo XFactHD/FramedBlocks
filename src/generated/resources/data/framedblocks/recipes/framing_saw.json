@@ -15,5 +15,6 @@
   ],
   "result": {
     "item": "framedblocks:framing_saw"
-  }
+  },
+  "show_notification": true
 }

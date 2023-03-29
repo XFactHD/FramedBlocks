@@ -17,5 +17,6 @@
   ],
   "result": {
     "item": "framedblocks:framed_stacked_slope_panel"
-  }
+  },
+  "show_notification": true
 }

@@ -12,5 +12,6 @@
   ],
   "result": {
     "item": "framedblocks:framed_divided_panel_horizontal"
-  }
+  },
+  "show_notification": true
 }

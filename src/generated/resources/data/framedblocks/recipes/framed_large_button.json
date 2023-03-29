@@ -12,5 +12,6 @@
   ],
   "result": {
     "item": "framedblocks:framed_large_button"
-  }
+  },
+  "show_notification": true
 }

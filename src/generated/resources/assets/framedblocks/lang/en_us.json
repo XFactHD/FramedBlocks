@@ -192,7 +192,7 @@
   "msg.framedblocks.frame_crafter.fail.missing_additive_0": "Missing additive ingredient in the first slot",
   "msg.framedblocks.frame_crafter.fail.missing_additive_1": "Missing additive ingredient in the second slot",
   "msg.framedblocks.frame_crafter.fail.missing_additive_2": "Missing additive ingredient in the third slot",
-  "msg.framedblocks.frame_crafter.fail.none": "Craftable",
+  "msg.framedblocks.frame_crafter.fail.success": "Craftable",
   "msg.framedblocks.frame_crafter.fail.unexpected_additive_0": "Unexpected additive ingredient present in the first slot",
   "msg.framedblocks.frame_crafter.fail.unexpected_additive_1": "Unexpected additive ingredient present in the second slot",
   "msg.framedblocks.frame_crafter.fail.unexpected_additive_2": "Unexpected additive ingredient present in the third slot",

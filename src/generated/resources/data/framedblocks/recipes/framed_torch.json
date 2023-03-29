@@ -16,5 +16,6 @@
   "result": {
     "count": 4,
     "item": "framedblocks:framed_torch"
-  }
+  },
+  "show_notification": true
 }

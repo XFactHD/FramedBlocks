@@ -15,5 +15,6 @@
   ],
   "result": {
     "item": "framedblocks:framed_fancy_rail_slope"
-  }
+  },
+  "show_notification": true
 }

@@ -16,5 +16,6 @@
   ],
   "result": {
     "item": "framedblocks:framed_wrench"
-  }
+  },
+  "show_notification": true
 }

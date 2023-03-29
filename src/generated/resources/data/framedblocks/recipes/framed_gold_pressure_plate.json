@@ -15,5 +15,6 @@
   ],
   "result": {
     "item": "framedblocks:framed_gold_pressure_plate"
-  }
+  },
+  "show_notification": true
 }

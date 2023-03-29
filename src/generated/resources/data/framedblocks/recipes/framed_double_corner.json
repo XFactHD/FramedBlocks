@@ -14,5 +14,6 @@
   ],
   "result": {
     "item": "framedblocks:framed_double_corner"
-  }
+  },
+  "show_notification": true
 }

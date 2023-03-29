@@ -14,5 +14,6 @@
   ],
   "result": {
     "item": "framedblocks:framed_vertical_double_stairs"
-  }
+  },
+  "show_notification": true
 }

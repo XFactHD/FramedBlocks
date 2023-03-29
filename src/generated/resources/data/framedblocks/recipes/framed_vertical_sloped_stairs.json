@@ -14,5 +14,6 @@
   ],
   "result": {
     "item": "framedblocks:framed_vertical_sloped_stairs"
-  }
+  },
+  "show_notification": true
 }

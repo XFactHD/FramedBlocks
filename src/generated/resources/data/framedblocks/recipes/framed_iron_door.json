@@ -14,5 +14,6 @@
   ],
   "result": {
     "item": "framedblocks:framed_iron_door"
-  }
+  },
+  "show_notification": true
 }

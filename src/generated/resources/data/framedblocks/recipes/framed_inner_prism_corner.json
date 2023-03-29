@@ -12,5 +12,6 @@
   ],
   "result": {
     "item": "framedblocks:framed_inner_prism_corner"
-  }
+  },
+  "show_notification": true
 }

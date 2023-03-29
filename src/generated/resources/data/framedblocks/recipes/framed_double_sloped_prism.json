@@ -15,5 +15,6 @@
   ],
   "result": {
     "item": "framedblocks:framed_double_sloped_prism"
-  }
+  },
+  "show_notification": true
 }

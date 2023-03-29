@@ -15,5 +15,6 @@
   ],
   "result": {
     "item": "framedblocks:framed_inner_corner_slope"
-  }
+  },
+  "show_notification": true
 }

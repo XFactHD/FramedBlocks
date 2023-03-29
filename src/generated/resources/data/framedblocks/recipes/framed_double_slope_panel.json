@@ -11,5 +11,6 @@
   ],
   "result": {
     "item": "framedblocks:framed_double_slope_panel"
-  }
+  },
+  "show_notification": true
 }

@@ -16,5 +16,6 @@
   ],
   "result": {
     "item": "framedblocks:framed_bouncy_cube"
-  }
+  },
+  "show_notification": true
 }

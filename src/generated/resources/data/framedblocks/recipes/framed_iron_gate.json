@@ -13,5 +13,6 @@
   "result": {
     "count": 4,
     "item": "framedblocks:framed_iron_gate"
-  }
+  },
+  "show_notification": true
 }

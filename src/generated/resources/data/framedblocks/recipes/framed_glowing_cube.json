@@ -16,5 +16,6 @@
   ],
   "result": {
     "item": "framedblocks:framed_glowing_cube"
-  }
+  },
+  "show_notification": true
 }
