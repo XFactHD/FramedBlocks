@@ -14,7 +14,6 @@
       }
     }
   ],
-  "disabled": true,
   "material": 1536,
   "result": {
     "item": "framedblocks:framed_glowing_item_frame"

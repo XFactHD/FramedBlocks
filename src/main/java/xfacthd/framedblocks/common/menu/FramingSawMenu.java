@@ -1,6 +1,5 @@
 package xfacthd.framedblocks.common.menu;
 
-import it.unimi.dsi.fastutil.ints.IntIntPair;
 import net.minecraft.world.Container;
 import net.minecraft.world.SimpleContainer;
 import net.minecraft.world.entity.player.Inventory;
@@ -10,24 +9,24 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import org.jetbrains.annotations.NotNull;
 import xfacthd.framedblocks.common.FBContent;
-import xfacthd.framedblocks.common.crafting.FramingSawRecipe;
-import xfacthd.framedblocks.common.crafting.FramingSawRecipeCache;
+import xfacthd.framedblocks.common.crafting.*;
 import xfacthd.framedblocks.common.util.FramedUtils;
 
+import java.util.Arrays;
 import java.util.List;
 
 public class FramingSawMenu extends AbstractContainerMenu
 {
     public static final int SLOT_INPUT = 0;
-    private static final int SLOT_ADDITIVE = 1;
-    private static final int SLOT_RESULT = 2;
-    public static final int SLOT_INV_FIRST = 3;
+    private static final int SLOT_ADDITIVE_FIRST = SLOT_INPUT + 1;
+    public static final int SLOT_RESULT = SLOT_ADDITIVE_FIRST + FramingSawRecipe.MAX_ADDITIVE_COUNT;
+    public static final int SLOT_INV_FIRST = SLOT_RESULT + 1;
     public static final int INV_SLOT_COUNT = 4 * 9;
     public static final int TOTAL_SLOT_COUNT = SLOT_INV_FIRST + INV_SLOT_COUNT;
 
     private final Level level;
     private final Slot inputSlot;
-    private final Slot additiveSlot;
+    private final Slot[] additiveSlots;
     private final Slot resultSlot;
     private final ContainerLevelAccess levelAccess;
     private final Container inputContainer = new FrameCrafterContainer(this);
@@ -35,8 +34,8 @@ public class FramingSawMenu extends AbstractContainerMenu
     private final DataSlot selectedRecipeIdx = DataSlot.standalone();
     private final FramingSawRecipeCache cache;
     private final List<RecipeHolder> recipes;
+    private final ItemStack[] lastAdditives;
     private ItemStack lastInput = ItemStack.EMPTY;
-    private ItemStack lastAdditive = ItemStack.EMPTY;
     private FramingSawRecipe selectedRecipe = null;
     private boolean recipeChanged = false;
 
@@ -46,9 +45,17 @@ public class FramingSawMenu extends AbstractContainerMenu
 
         this.level = inv.player.level;
         this.levelAccess = levelAccess;
-        this.inputSlot = addSlot(new Slot(inputContainer, SLOT_INPUT, 20, 46));
-        this.additiveSlot = addSlot(new Slot(inputContainer, SLOT_ADDITIVE, 20, 82));
+        this.inputSlot = addSlot(new Slot(inputContainer, SLOT_INPUT, 20, 28));
+        this.additiveSlots = new Slot[FramingSawRecipe.MAX_ADDITIVE_COUNT];
+        for (int i = 0; i < additiveSlots.length; i++)
+        {
+            int y = 64 + (i * 18);
+            additiveSlots[i] = addSlot(new Slot(inputContainer, SLOT_ADDITIVE_FIRST + i, 20, y));
+        }
         this.resultSlot = addSlot(new ResultSlot(this, resultContainer, 0, 223, 64));
+
+        this.lastAdditives = new ItemStack[FramingSawRecipe.MAX_ADDITIVE_COUNT];
+        Arrays.fill(lastAdditives, ItemStack.EMPTY);
 
         FramedUtils.addPlayerInvSlots(this::addSlot, inv, 48, 151);
 
@@ -90,12 +97,12 @@ public class FramingSawMenu extends AbstractContainerMenu
             }
             else if (cache.getMaterialValue(stack.getItem()) > 0)
             {
-                if (!moveItemStackTo(stack, SLOT_INPUT))
+                if (!moveItemStackTo(stack, SLOT_INPUT, SLOT_INPUT + 1, false))
                 {
                     return ItemStack.EMPTY;
                 }
             }
-            else if (!moveItemStackTo(stack, SLOT_ADDITIVE))
+            else if (!moveItemStackTo(stack, SLOT_ADDITIVE_FIRST, SLOT_ADDITIVE_FIRST + FramingSawRecipe.MAX_ADDITIVE_COUNT, false))
             {
                 return ItemStack.EMPTY;
             }
@@ -145,18 +152,21 @@ public class FramingSawMenu extends AbstractContainerMenu
             changed = true;
         }
 
-        ItemStack additive = additiveSlot.getItem();
-        if (!additive.is(lastAdditive.getItem()) || additive.getCount() != lastAdditive.getCount())
+        for (int i = 0; i < additiveSlots.length; i++)
         {
-            lastAdditive = additive.copy();
-            changed = true;
+            ItemStack additive = additiveSlots[i].getItem();
+            if (!additive.is(lastAdditives[i].getItem()) || additive.getCount() != lastAdditives[i].getCount())
+            {
+                lastAdditives[i] = additive.copy();
+                changed = true;
+            }
         }
 
         if (changed)
         {
             for (RecipeHolder holder : recipes)
             {
-                holder.failReason = holder.recipe.matchWithReason(inputContainer, level);
+                holder.matchResult = holder.recipe.matchWithResult(inputContainer, level);
             }
             setupResultSlot();
         }
@@ -167,11 +177,15 @@ public class FramingSawMenu extends AbstractContainerMenu
         if (isValidRecipeIndex(selectedRecipeIdx.get()))
         {
             RecipeHolder holder = recipes.get(selectedRecipeIdx.get());
-            if (holder.failReason.success())
+            if (holder.matchResult.success())
             {
                 FramingSawRecipe recipe = holder.recipe;
+                FramingSawRecipeCalculation calc = recipe.makeCraftingCalculation(
+                        inputContainer, level.isClientSide()
+                );
+
                 ItemStack result = recipe.assemble(inputContainer, level.registryAccess());
-                result.setCount(recipe.getResultSize(inputContainer, level));
+                result.setCount(calc.getOutputCount());
                 resultContainer.setRecipeUsed(recipe);
                 resultSlot.set(result);
                 selectedRecipe = recipe;
@@ -206,14 +220,19 @@ public class FramingSawMenu extends AbstractContainerMenu
         levelAccess.execute((level, pos) -> clearContainer(player, inputContainer));
     }
 
+    public Container getInputContainer()
+    {
+        return inputContainer;
+    }
+
     public ItemStack getInputStack()
     {
         return inputSlot.getItem();
     }
 
-    public ItemStack getAdditiveStack()
+    public ItemStack getAdditiveStack(int slot)
     {
-        return additiveSlot.getItem();
+        return additiveSlots[slot].getItem();
     }
 
     public List<RecipeHolder> getRecipes()
@@ -233,12 +252,6 @@ public class FramingSawMenu extends AbstractContainerMenu
         return changed;
     }
 
-    @SuppressWarnings("BooleanMethodIsAlwaysInverted")
-    private boolean moveItemStackTo(ItemStack stack, int slot)
-    {
-        return moveItemStackTo(stack, slot, slot + 1, false);
-    }
-
     public boolean isValidRecipeIndex(int idx)
     {
         return idx >= 0 && idx < recipes.size();
@@ -252,7 +265,7 @@ public class FramingSawMenu extends AbstractContainerMenu
 
         FrameCrafterContainer(FramingSawMenu menu)
         {
-            super(2);
+            super(FramingSawRecipe.MAX_ADDITIVE_COUNT + 1);
             this.menu = menu;
         }
 
@@ -286,14 +299,15 @@ public class FramingSawMenu extends AbstractContainerMenu
             stack.onCraftedBy(player.level, player, stack.getCount());
             menu.resultContainer.awardUsedRecipes(player);
 
-            IntIntPair inAddCount = menu.selectedRecipe.getInputAndAdditiveCount(menu.inputContainer, menu.level);
-            int inputCount = inAddCount.leftInt();
-            int additiveCount = inAddCount.rightInt();
+            FramingSawRecipeCalculation calc = menu.selectedRecipe.makeCraftingCalculation(
+                    menu.inputContainer, menu.level.isClientSide()
+            );
+            int additiveCount = menu.selectedRecipe.getAdditives().size();
 
-            menu.inputSlot.remove(inputCount);
-            if (additiveCount > 0)
+            menu.inputSlot.remove(calc.getInputCount());
+            for (int i = 0; i < additiveCount; i++)
             {
-                menu.additiveSlot.remove(additiveCount);
+                menu.additiveSlots[i].remove(calc.getAdditiveCount(i));
             }
 
             super.onTake(player, stack);
@@ -303,7 +317,7 @@ public class FramingSawMenu extends AbstractContainerMenu
     public static class RecipeHolder
     {
         private final FramingSawRecipe recipe;
-        private FramingSawRecipe.FailReason failReason = FramingSawRecipe.FailReason.MATERIAL_VALUE;
+        private FramingSawRecipeMatchResult matchResult = FramingSawRecipeMatchResult.MATERIAL_VALUE;
 
         private RecipeHolder(FramingSawRecipe recipe)
         {
@@ -315,9 +329,9 @@ public class FramingSawMenu extends AbstractContainerMenu
             return recipe;
         }
 
-        public FramingSawRecipe.FailReason getFailReason()
+        public FramingSawRecipeMatchResult getMatchResult()
         {
-            return failReason;
+            return matchResult;
         }
     }
 }

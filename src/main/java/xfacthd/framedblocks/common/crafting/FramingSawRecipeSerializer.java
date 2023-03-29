@@ -12,6 +12,9 @@ import net.minecraftforge.common.crafting.CraftingHelper;
 import xfacthd.framedblocks.api.block.IFramedBlock;
 import xfacthd.framedblocks.api.type.IBlockType;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public final class FramingSawRecipeSerializer implements RecipeSerializer<FramingSawRecipe>
 {
     @Override
@@ -25,23 +28,29 @@ public final class FramingSawRecipeSerializer implements RecipeSerializer<Framin
             throw new JsonSyntaxException("Value of 'material' must be greater than 0");
         }
 
-        Ingredient additive = null;
-        int additiveCount = 0;
+        List<FramingSawRecipeAdditive> additives = new ArrayList<>();
         if (json.has("additives"))
         {
             JsonArray additiveArr = GsonHelper.getAsJsonArray(json, "additives");
-            if (additiveArr.size() > 1 && !disabled)
+            if (additiveArr.size() > FramingSawRecipe.MAX_ADDITIVE_COUNT)
             {
-                // TODO: add support for more than 1 additive
-                throw new JsonSyntaxException("More than 1 additive is currently not supported");
+                throw new JsonSyntaxException("More than 3 additives are not supported");
             }
 
-            JsonObject firstAdditive = additiveArr.get(0).getAsJsonObject();
-            additive = Ingredient.fromJson(firstAdditive.get("ingredient"));
-            additiveCount = GsonHelper.getAsInt(firstAdditive, "count");
-            if (additiveCount <= 0)
+            for (JsonElement additiveElem : additiveArr)
             {
-                throw new JsonSyntaxException("Value of 'additive_count' must be greater than 0");
+                JsonObject additiveObj = additiveElem.getAsJsonObject();
+                Ingredient additive = Ingredient.fromJson(additiveObj.get("ingredient"));
+                if (!additive.isSimple())
+                {
+                    throw new JsonSyntaxException("Custom ingredients are not supported");
+                }
+                int additiveCount = GsonHelper.getAsInt(additiveObj, "count");
+                if (additiveCount <= 0)
+                {
+                    throw new JsonSyntaxException("Value of 'additive_count' must be greater than 0");
+                }
+                additives.add(new FramingSawRecipeAdditive(additive, additiveCount));
             }
         }
 
@@ -49,7 +58,7 @@ public final class FramingSawRecipeSerializer implements RecipeSerializer<Framin
         ItemStack result = CraftingHelper.getItemStack(resultObj, false);
         IBlockType resultType = findResultType(result);
 
-        return new FramingSawRecipe(recipeId, material, additive, additiveCount, result, resultType, disabled);
+        return new FramingSawRecipe(recipeId, material, additives, result, resultType, disabled);
     }
 
     @Override
@@ -57,19 +66,20 @@ public final class FramingSawRecipeSerializer implements RecipeSerializer<Framin
     {
         int material = buffer.readInt();
 
-        Ingredient additive = null;
-        int additiveCount = 0;
-        if (buffer.readBoolean())
+        int count = buffer.readInt();
+        List<FramingSawRecipeAdditive> additives = new ArrayList<>(count);
+        for (int i = 0; i < count; i++)
         {
-            additive = Ingredient.fromNetwork(buffer);
-            additiveCount = buffer.readInt();
+            Ingredient additive = Ingredient.fromNetwork(buffer);
+            int additiveCount = buffer.readInt();
+            additives.add(new FramingSawRecipeAdditive(additive, additiveCount));
         }
 
         ItemStack result = buffer.readItem();
         IBlockType resultType = findResultType(result);
         boolean disabled = buffer.readBoolean();
 
-        return new FramingSawRecipe(recipeId, material, additive, additiveCount, result, resultType, disabled);
+        return new FramingSawRecipe(recipeId, material, additives, result, resultType, disabled);
     }
 
     @Override
@@ -77,16 +87,12 @@ public final class FramingSawRecipeSerializer implements RecipeSerializer<Framin
     {
         buffer.writeInt(recipe.getMaterialAmount());
 
-        Ingredient additive = recipe.getAdditive();
-        if (additive != null)
+        List<FramingSawRecipeAdditive> additives = recipe.getAdditives();
+        buffer.writeInt(additives.size());
+        for (FramingSawRecipeAdditive additive : additives)
         {
-            buffer.writeBoolean(true);
-            additive.toNetwork(buffer);
-            buffer.writeInt(recipe.getAdditiveCount());
-        }
-        else
-        {
-            buffer.writeBoolean(false);
+            additive.ingredient().toNetwork(buffer);
+            buffer.writeInt(additive.count());
         }
 
         buffer.writeItem(recipe.getResult());

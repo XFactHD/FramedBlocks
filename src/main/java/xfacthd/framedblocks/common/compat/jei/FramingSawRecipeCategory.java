@@ -1,7 +1,7 @@
 package xfacthd.framedblocks.common.compat.jei;
 
+import com.google.common.collect.Lists;
 import com.mojang.blaze3d.vertex.PoseStack;
-import it.unimi.dsi.fastutil.ints.IntIntPair;
 import mezz.jei.api.gui.builder.IRecipeLayoutBuilder;
 import mezz.jei.api.gui.builder.IRecipeSlotBuilder;
 import mezz.jei.api.gui.drawable.IDrawable;
@@ -11,25 +11,25 @@ import mezz.jei.api.recipe.*;
 import mezz.jei.api.recipe.category.IRecipeCategory;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.SimpleContainer;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.crafting.Ingredient;
 import xfacthd.framedblocks.api.util.Utils;
 import xfacthd.framedblocks.client.screen.FramingSawScreen;
 import xfacthd.framedblocks.common.FBContent;
 import xfacthd.framedblocks.common.block.FramingSawBlock;
-import xfacthd.framedblocks.common.crafting.FramingSawRecipe;
-import xfacthd.framedblocks.common.crafting.FramingSawRecipeCache;
+import xfacthd.framedblocks.common.crafting.*;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Stream;
 
 public final class FramingSawRecipeCategory implements IRecipeCategory<FramingSawRecipe>
 {
     private static final ResourceLocation BACKGROUND = Utils.rl("textures/gui/framing_saw_jei.png");
-    private static final int WIDTH = 82;
+    private static final int WIDTH = 118;
     private static final int HEIGHT = 41;
-    private static final int WARNING_X = 20;
+    private static final int WARNING_X = 38;
     private static final int WARNING_Y = 3;
     private static final int WARNING_SIZE = 16;
     private static final float WARNING_SCALE = .75F;
@@ -62,15 +62,20 @@ public final class FramingSawRecipeCategory implements IRecipeCategory<FramingSa
     public void setRecipe(IRecipeLayoutBuilder builder, FramingSawRecipe recipe, IFocusGroup focuses)
     {
         FramingSawRecipeCache cache = FramingSawRecipeCache.get(true);
-        Ingredient additive = recipe.getAdditive();
+        List<FramingSawRecipeAdditive> additives = recipe.getAdditives();
 
-        IRecipeSlotBuilder inputSlot = builder.addSlot(RecipeIngredientRole.INPUT, 1, 1).setSlotName("input");
-        IRecipeSlotBuilder additiveSlot = null;
-        if (additive != null)
+        IRecipeSlotBuilder inputSlot = builder.addSlot(RecipeIngredientRole.INPUT, 19, 1).setSlotName("input");
+        IRecipeSlotBuilder[] additiveSlots = null;
+        if (!additives.isEmpty())
         {
-            additiveSlot = builder.addSlot(RecipeIngredientRole.INPUT, 1, 24);
+            additiveSlots = new IRecipeSlotBuilder[additives.size()];
+            for (int i = 0; i < additives.size(); i++)
+            {
+                int x = 1 + (i * 18);
+                additiveSlots[i] = builder.addSlot(RecipeIngredientRole.INPUT, x, 24);
+            }
         }
-        IRecipeSlotBuilder outputSlot = builder.addSlot(RecipeIngredientRole.OUTPUT, 61, 13);
+        IRecipeSlotBuilder outputSlot = builder.addSlot(RecipeIngredientRole.OUTPUT, 97, 13);
 
         ItemStack inputStack = focuses.getItemStackFocuses(RecipeIngredientRole.INPUT)
                 .map(focus -> focus.getTypedValue().getIngredient())
@@ -82,12 +87,14 @@ public final class FramingSawRecipeCategory implements IRecipeCategory<FramingSa
         {
             for (Item input : cache.getKnownItems())
             {
-                setRecipe(input, recipe, inputSlot, additiveSlot, outputSlot);
+                setRecipe(input, recipe, inputSlot, additiveSlots, outputSlot);
             }
 
-            if (additive != null)
+            if (additiveSlots != null)
             {
-                builder.createFocusLink(inputSlot, additiveSlot, outputSlot);
+                IRecipeSlotBuilder[] slots = new IRecipeSlotBuilder[additives.size() + 2];
+                System.arraycopy(additiveSlots, 0, slots, 1, additiveSlots.length);
+                builder.createFocusLink(slots);
             }
             else
             {
@@ -96,52 +103,48 @@ public final class FramingSawRecipeCategory implements IRecipeCategory<FramingSa
         }
         else if (!inputStack.isEmpty())
         {
-            setRecipe(inputStack.getItem(), recipe, inputSlot, additiveSlot, outputSlot);
+            setRecipe(inputStack.getItem(), recipe, inputSlot, additiveSlots, outputSlot);
         }
         else
         {
-            setRecipe(FBContent.blockFramedCube.get().asItem(), recipe, inputSlot, additiveSlot, outputSlot);
+            setRecipe(FBContent.blockFramedCube.get().asItem(), recipe, inputSlot, additiveSlots, outputSlot);
         }
     }
 
     private static void setRecipe(
-            Item input, FramingSawRecipe recipe, IRecipeSlotBuilder inputSlot, IRecipeSlotBuilder additiveSlot, IRecipeSlotBuilder outputSlot
+            Item input, FramingSawRecipe recipe, IRecipeSlotBuilder inputSlot, IRecipeSlotBuilder[] additiveSlots, IRecipeSlotBuilder outputSlot
     )
     {
-        IntIntPair counts = recipe.getInputOutputCount(input, true);
+        FramingSawRecipeCalculation calc = recipe.makeCraftingCalculation(
+                new SimpleContainer(new ItemStack(input)), true
+        );
 
-        ItemStack inputStack = new ItemStack(input, counts.leftInt());
+        ItemStack inputStack = new ItemStack(input, calc.getInputCount());
         ItemStack outputStack = recipe.getResult().copy();
-        outputStack.setCount(counts.rightInt());
+        int outputCount = calc.getOutputCount();
+        outputStack.setCount(outputCount);
 
-        Ingredient additive = recipe.getAdditive();
-        if (additive != null)
+        List<FramingSawRecipeAdditive> additives = recipe.getAdditives();
+        List<List<ItemStack>> flatAdditives = new ArrayList<>(FramingSawRecipe.MAX_ADDITIVE_COUNT);
+        for (FramingSawRecipeAdditive additive : additives)
         {
-            int addCount = recipe.getAdditiveCount() * (counts.rightInt() / recipe.getResult().getCount());
-
-            Stream.of(additive.getItems())
+            int addCount = additive.count() * (outputCount / recipe.getResult().getCount());
+            List<ItemStack> additiveStacks = Stream.of(additive.ingredient().getItems())
                     .map(ItemStack::copy)
                     .peek(s -> s.setCount(addCount))
-                    .forEach(additiveStack ->
-                            setRecipe(inputStack, additiveStack, outputStack, inputSlot, additiveSlot, outputSlot)
-                    );
+                    .toList();
+            flatAdditives.add(additiveStacks);
         }
-        else
+        List<List<ItemStack>> combinations = Lists.cartesianProduct(flatAdditives);
+        combinations.forEach(stacks ->
         {
-            setRecipe(inputStack, null, outputStack, inputSlot, additiveSlot, outputSlot);
-        }
-    }
-
-    private static void setRecipe(
-            ItemStack input, ItemStack additive, ItemStack output, IRecipeSlotBuilder inputSlot, IRecipeSlotBuilder additiveSlot, IRecipeSlotBuilder outputSlot
-    )
-    {
-        inputSlot.addItemStack(input);
-        if (additive != null)
-        {
-            additiveSlot.addItemStack(additive);
-        }
-        outputSlot.addItemStack(output);
+            inputSlot.addItemStack(inputStack);
+            outputSlot.addItemStack(outputStack);
+            for (int i = 0; i < stacks.size(); i++)
+            {
+                additiveSlots[i].addItemStack(stacks.get(i));
+            }
+        });
     }
 
     @Override
