@@ -38,7 +38,7 @@ public final class FramingSawRecipeCache
         {
             ItemStack result = recipe.getResultItem();
 
-            if (recipe.getAdditive() != null)
+            if (!recipe.getAdditives().isEmpty())
             {
                 containsAdditive.add(result.getItem());
             }

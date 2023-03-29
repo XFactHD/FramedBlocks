@@ -26,8 +26,7 @@ import xfacthd.framedblocks.api.util.Utils;
 import xfacthd.framedblocks.client.util.ItemRenderHelper;
 import xfacthd.framedblocks.common.FBContent;
 import xfacthd.framedblocks.common.compat.jei.JeiCompat;
-import xfacthd.framedblocks.common.crafting.FramingSawRecipe;
-import xfacthd.framedblocks.common.crafting.FramingSawRecipeCache;
+import xfacthd.framedblocks.common.crafting.*;
 import xfacthd.framedblocks.common.menu.FramingSawMenu;
 import xfacthd.framedblocks.common.util.RecipeUtils;
 
@@ -61,7 +60,7 @@ public class FramingSawScreen extends AbstractContainerScreen<FramingSawMenu>
     private static final int SCROLL_BTN_TEX_X = RECIPE_WIDTH * 3;
     private static final int SCROLL_BAR_HEIGHT = 108;
     private static final int WARNING_X = 20;
-    private static final int WARNING_Y = 64;
+    private static final int WARNING_Y = 46;
 
     private final FramingSawRecipeCache cache = FramingSawRecipeCache.get(true);
     private final ItemStack cubeStack = new ItemStack(FBContent.blockFramedCube.get());
@@ -126,15 +125,21 @@ public class FramingSawScreen extends AbstractContainerScreen<FramingSawMenu>
             FramingSawRecipe recipe = recipes.get(idx);
             if (input.isEmpty())
             {
-                ItemRenderHelper.renderFakeItemTransparent(cubeStack, leftPos + 20, topPos + 46, 127);
+                ItemRenderHelper.renderFakeItemTransparent(cubeStack, leftPos + 20, topPos + 28, 127);
             }
 
-            Ingredient additive = recipe.getAdditive();
-            if (additive != null && !additive.isEmpty() && menu.getAdditiveStack().isEmpty())
+            List<FramingSawRecipeAdditive> additives = recipe.getAdditives();
+            for (int i = 0; i < additives.size(); i++)
             {
-                ItemStack[] items = additive.getItems();
-                int i = (int) (System.currentTimeMillis() / 1700) % items.length;
-                ItemRenderHelper.renderFakeItemTransparent(items[i], leftPos + 20, topPos + 82, 127);
+                if (!menu.getAdditiveStack(i).isEmpty())
+                {
+                    continue;
+                }
+
+                ItemStack[] items = additives.get(i).ingredient().getItems();
+                int t = (int) (System.currentTimeMillis() / 1700) % items.length;
+                int y = topPos + 64 + (18 * i);
+                ItemRenderHelper.renderFakeItemTransparent(items[t], leftPos + 20, y, 127);
             }
         }
     }
@@ -208,14 +213,14 @@ public class FramingSawScreen extends AbstractContainerScreen<FramingSawMenu>
     private void appendRecipeFailure(List<Component> components, FramingSawMenu.RecipeHolder recipeHolder)
     {
         FramingSawRecipe recipe = recipeHolder.getRecipe();
-        FramingSawRecipe.FailReason failReason = recipeHolder.getFailReason();
-        if (!failReason.success())
+        FramingSawRecipeMatchResult matchResult = recipeHolder.getMatchResult();
+        if (!matchResult.success())
         {
-            components.add(failReason.translation());
+            components.add(matchResult.translation());
 
             ItemStack input = menu.getInputStack();
-            boolean listAdditives = false;
-            MutableComponent detail = switch (failReason)
+            int listAdditives = -1;
+            MutableComponent detail = switch (matchResult)
             {
                 case MATERIAL_VALUE ->
                 {
@@ -229,72 +234,86 @@ public class FramingSawScreen extends AbstractContainerScreen<FramingSawMenu>
                 }
                 case MATERIAL_LCM ->
                 {
-                    int cntIn = input.getCount();
-                    int cntReq = recipe.getInputAndAdditiveCount(input, true).firstInt();
+                    FramingSawRecipeCalculation calc = recipe.makeCraftingCalculation(
+                            menu.getInputContainer(), true
+                    );
                     yield Component.translatable(
                             TOOLTIP_HAVE_X_BUT_NEED_Y_ITEM_COUNT,
-                            Component.literal(Integer.toString(cntIn)).withStyle(ChatFormatting.GOLD),
-                            Component.literal(Integer.toString(cntReq)).withStyle(ChatFormatting.GOLD)
+                            Component.literal(Integer.toString(input.getCount())).withStyle(ChatFormatting.GOLD),
+                            Component.literal(Integer.toString(calc.getInputCount())).withStyle(ChatFormatting.GOLD)
                     );
                 }
-                case MISSING_ADDITIVE ->
+                case MISSING_ADDITIVE_0, MISSING_ADDITIVE_1, MISSING_ADDITIVE_2 ->
                 {
-                    listAdditives = true;
-                    yield makeHaveButNeedTooltip(
-                            TOOLTIP_HAVE_ITEM_NONE,
-                            Objects.requireNonNull(recipe.getAdditive())
-                    );
+                    listAdditives = matchResult.additiveSlot();
+                    Ingredient additive = recipe.getAdditives().get(matchResult.additiveSlot()).ingredient();
+                    yield makeHaveButNeedTooltip(TOOLTIP_HAVE_ITEM_NONE, additive);
                 }
-                case UNEXPECTED_ADDITIVE ->
+                case UNEXPECTED_ADDITIVE_0, UNEXPECTED_ADDITIVE_1, UNEXPECTED_ADDITIVE_2 ->
                 {
-                    Item itemIn = menu.getAdditiveStack().getItem();
+                    Item itemIn = menu.getAdditiveStack(matchResult.additiveSlot()).getItem();
                     yield Component.translatable(
                             TOOLTIP_HAVE_X_BUT_NEED_Y_ITEM,
                             Component.translatable(itemIn.getDescriptionId()).withStyle(ChatFormatting.GOLD),
                             TOOLTIP_HAVE_ITEM_NONE
                     );
                 }
-                case INCORRECT_ADDITIVE ->
+                case INCORRECT_ADDITIVE_0, INCORRECT_ADDITIVE_1, INCORRECT_ADDITIVE_2 ->
                 {
-                    listAdditives = true;
-                    Item itemIn = menu.getAdditiveStack().getItem();
+                    listAdditives = matchResult.additiveSlot();
+                    Item itemIn = menu.getAdditiveStack(matchResult.additiveSlot()).getItem();
+                    Ingredient additive = recipe.getAdditives().get(matchResult.additiveSlot()).ingredient();
                     yield makeHaveButNeedTooltip(
                             Component.translatable(itemIn.getDescriptionId()).withStyle(ChatFormatting.GOLD),
-                            Objects.requireNonNull(recipe.getAdditive())
+                            additive
                     );
                 }
-                case INSUFFICIENT_ADDITIVE ->
+                case INSUFFICIENT_ADDITIVE_0, INSUFFICIENT_ADDITIVE_1, INSUFFICIENT_ADDITIVE_2 ->
                 {
-                    int cntIn = menu.getAdditiveStack().getCount();
-                    int cntReq = recipe.getInputAndAdditiveCount(input, true).secondInt();
+                    FramingSawRecipeCalculation calc = recipe.makeCraftingCalculation(
+                            menu.getInputContainer(), true
+                    );
+                    int cntIn = menu.getAdditiveStack(matchResult.additiveSlot()).getCount();
+                    int cntReq = calc.getAdditiveCount(matchResult.additiveSlot());
                     yield Component.translatable(
                             TOOLTIP_HAVE_X_BUT_NEED_Y_ITEM_COUNT,
                             Component.literal(Integer.toString(cntIn)).withStyle(ChatFormatting.GOLD),
                             Component.literal(Integer.toString(cntReq)).withStyle(ChatFormatting.GOLD)
                     );
                 }
-                case NONE -> throw new IllegalStateException("Unreachable");
+                case SUCCESS -> throw new IllegalStateException("Unreachable");
             };
             components.add(detail.withStyle(ChatFormatting.RED));
 
-            if (listAdditives && recipe.getAdditive().getItems().length > 1)
+            if (listAdditives > -1)
             {
-                if (hasShiftDown())
-                {
-                    for (ItemStack option : recipe.getAdditive().getItems())
-                    {
-                        components.add(Component.literal("- ").append(option.getItem().getDescription()).withStyle(ChatFormatting.GOLD));
-                    }
-                }
-                else
-                {
-                    Component keyName = InputConstants.getKey(GLFW.GLFW_KEY_LEFT_SHIFT, -1).getDisplayName();
-                    components.add(Component.translatable(
-                            TOOLTIP_PRESS_TO_SHOW,
-                            Component.literal("").append(keyName).withStyle(ChatFormatting.GOLD)
-                    ).withStyle(ChatFormatting.RED));
-                }
+                appendAdditiveItemOptions(components, recipe, listAdditives);
             }
+        }
+    }
+
+    private static void appendAdditiveItemOptions(List<Component> components, FramingSawRecipe recipe, int additiveSlot)
+    {
+        Ingredient additive = recipe.getAdditives().get(additiveSlot).ingredient();
+        if (additive.getItems().length <= 1)
+        {
+            return;
+        }
+
+        if (hasShiftDown())
+        {
+            for (ItemStack option : additive.getItems())
+            {
+                components.add(Component.literal("- ").append(option.getItem().getDescription()).withStyle(ChatFormatting.GOLD));
+            }
+        }
+        else
+        {
+            Component keyName = InputConstants.getKey(GLFW.GLFW_KEY_LEFT_SHIFT, -1).getDisplayName();
+            components.add(Component.translatable(
+                    TOOLTIP_PRESS_TO_SHOW,
+                    Component.literal("").append(keyName).withStyle(ChatFormatting.GOLD)
+            ).withStyle(ChatFormatting.RED));
         }
     }
 
@@ -341,7 +360,7 @@ public class FramingSawScreen extends AbstractContainerScreen<FramingSawMenu>
                 hovered = true;
             }
 
-            if (!hovered && !recipes.get(idx).getFailReason().success())
+            if (!hovered && !recipes.get(idx).getMatchResult().success())
             {
                 RenderSystem.setShaderColor(.9F, .3F, .3F, 1F);
             }

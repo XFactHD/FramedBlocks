@@ -7,9 +7,7 @@ import net.minecraft.advancements.*;
 import net.minecraft.data.recipes.FinishedRecipe;
 import net.minecraft.data.recipes.RecipeBuilder;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.Item;
-import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.minecraft.world.level.ItemLike;
 import net.minecraftforge.registries.ForgeRegistries;
@@ -25,7 +23,7 @@ public final class FramingSawRecipeBuilder implements RecipeBuilder
     private final Item result;
     private final int count;
     private int material = 0;
-    private List<Additive> additives = null;
+    private List<FramingSawRecipeAdditive> additives = null;
     private boolean disabled = false;
 
     private FramingSawRecipeBuilder(ItemLike result, int count)
@@ -63,13 +61,13 @@ public final class FramingSawRecipeBuilder implements RecipeBuilder
         return this;
     }
 
-    public FramingSawRecipeBuilder additive(Additive additive)
+    public FramingSawRecipeBuilder additive(FramingSawRecipeAdditive additive)
     {
         this.additives = additive != null ? List.of(additive) : null;
         return this;
     }
 
-    public FramingSawRecipeBuilder additives(List<Additive> additives)
+    public FramingSawRecipeBuilder additives(List<FramingSawRecipeAdditive> additives)
     {
         this.additives = additives;
         return this;
@@ -111,41 +109,12 @@ public final class FramingSawRecipeBuilder implements RecipeBuilder
 
 
 
-    public record Additive(Ingredient additive, int count)
-    {
-        public Additive
-        {
-            Preconditions.checkArgument(additive != null, "Additive ingredient must be non-null");
-            Preconditions.checkArgument(count > 0, "Additive count must be greater than 0");
-        }
-
-        public static Additive of(TagKey<Item> tag)
-        {
-            return of(tag, 1);
-        }
-
-        public static Additive of(TagKey<Item> tag, int count)
-        {
-            return new Additive(Ingredient.of(tag), count);
-        }
-
-        public static Additive of(ItemLike item)
-        {
-            return of(item, 1);
-        }
-
-        public static Additive of(ItemLike item, int count)
-        {
-            return new Additive(Ingredient.of(item), count);
-        }
-    }
-
     private record Result(
             ResourceLocation id,
             Item result,
             int count,
             int material,
-            List<Additive> additives,
+            List<FramingSawRecipeAdditive> additives,
             boolean disabled
     ) implements FinishedRecipe
     {
@@ -160,8 +129,8 @@ public final class FramingSawRecipeBuilder implements RecipeBuilder
                 additives.forEach(add ->
                 {
                     JsonObject additive = new JsonObject();
-                    additive.add("ingredient", add.additive.toJson());
-                    additive.addProperty("count", add.count);
+                    additive.add("ingredient", add.ingredient().toJson());
+                    additive.addProperty("count", add.count());
                     additiveArr.add(additive);
                 });
                 json.add("additives", additiveArr);
