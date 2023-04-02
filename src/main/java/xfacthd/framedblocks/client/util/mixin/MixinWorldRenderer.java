@@ -28,7 +28,8 @@ public class MixinWorldRenderer
                     target = "Lnet/minecraft/client/particle/ParticleManager;renderParticles(Lcom/mojang/blaze3d/matrix/MatrixStack;Lnet/minecraft/client/renderer/IRenderTypeBuffer$Impl;Lnet/minecraft/client/renderer/LightTexture;Lnet/minecraft/client/renderer/ActiveRenderInfo;FLnet/minecraft/client/renderer/culling/ClippingHelper;)V",
                     remap = false
             ),
-            remap = true
+            remap = true,
+            require = 0 // Just in case this injection starts randomly breaking again with Rubidium, Oculus, OptiFine, etc.
     )
     @SuppressWarnings("DefaultAnnotationParam")
     private void framedblocks_renderAfterParticles(MatrixStack matrix, float partialTick, long finishNanoTime, boolean renderBlockOutline, ActiveRenderInfo camera, GameRenderer gameRenderer, LightTexture lightTexture, Matrix4f projMat, CallbackInfo ci)

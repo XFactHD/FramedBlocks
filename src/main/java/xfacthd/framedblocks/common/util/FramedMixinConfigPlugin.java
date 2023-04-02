@@ -18,18 +18,6 @@ public class FramedMixinConfigPlugin implements IMixinConfigPlugin
     @Override
     public boolean shouldApplyMixin(String targetClassName, String mixinClassName)
     {
-        if (mixinClassName.equals("xfacthd.framedblocks.client.util.mixin.MixinWorldRenderer"))
-        {
-            try
-            {
-                Class.forName("me.jellysquid.mods.sodium.common.config.Option");
-                return false;
-            }
-            catch (ClassNotFoundException e)
-            {
-                return true;
-            }
-        }
         return true;
     }
 

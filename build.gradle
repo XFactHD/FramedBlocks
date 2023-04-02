@@ -18,7 +18,7 @@ apply plugin: 'maven-publish'
 apply plugin: 'org.parchmentmc.librarian.forgegradle'
 apply plugin: 'org.spongepowered.mixin'
 
-version = '2.16.2'
+version = '2.16.3'
 group = 'xfacthd.framedblocks'
 archivesBaseName = 'FramedBlocks'
 
@@ -110,7 +110,8 @@ dependencies {
 
     implementation fg.deobf("curse.maven:buildinggadgets-298187:3498508")
 
-    //implementation fg.deobf("curse.maven:sodium-491233:3395290")
+    runtimeOnly fg.deobf("curse.maven:rubidium-574856:4397474")
+    runtimeOnly fg.deobf("curse.maven:oculus-581495:4300427")
 
     runtimeOnly fg.deobf("curse.maven:jei-238222:3435100")
 
