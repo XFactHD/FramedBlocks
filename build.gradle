@@ -20,7 +20,7 @@ apply plugin: 'org.spongepowered.mixin'
 
 jarJar.enable()
 
-version = '7.1.1'
+version = '7.1.2'
 group = 'xfacthd.framedblocks'
 archivesBaseName = 'FramedBlocks'
 
