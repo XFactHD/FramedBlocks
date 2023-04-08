@@ -7,8 +7,10 @@ import net.minecraft.client.renderer.chunk.RenderChunkRegion;
 import net.minecraft.client.resources.model.BakedModel;
 import net.minecraft.client.resources.model.ModelResourceLocation;
 import net.minecraft.core.BlockPos;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.BlockGetter;
+import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
@@ -256,16 +258,29 @@ public final class ClientUtils
         tasks.add(new ClientTask(time, task));
     }
 
+    private static ResourceKey<Level> lastDimension = null;
+
     public static void onClientTick(TickEvent.ClientTickEvent event)
     {
         if (event.phase != TickEvent.Phase.END || tasks.isEmpty()) { return; }
+
+        Level level = Minecraft.getInstance().level;
+        if (level == null || level.dimension() != lastDimension)
+        {
+            lastDimension = level != null ? level.dimension() : null;
+            tasks.clear(); //Clear remaining tasks from the previous level
+
+            if (level == null)
+            {
+                return;
+            }
+        }
 
         Iterator<ClientTask> it = tasks.iterator();
         while (it.hasNext())
         {
             ClientTask task = it.next();
-            //noinspection ConstantConditions
-            if (Minecraft.getInstance().level.getGameTime() >= task.time)
+            if (level.getGameTime() >= task.time)
             {
                 task.task.run();
                 it.remove();
