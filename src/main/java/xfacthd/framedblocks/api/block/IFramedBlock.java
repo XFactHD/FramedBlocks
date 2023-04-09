@@ -412,6 +412,21 @@ public interface IFramedBlock extends EntityBlock, IForgeBlock
         return state.getCollisionShape(level, pos, ctx);
     }
 
+    default void spawnCamoDestroyParticles(Level level, Player player, BlockPos pos, BlockState state)
+    {
+        if (!level.isClientSide())
+        {
+            return;
+        }
+
+        BlockState particleState = state;
+        if (level.getBlockEntity(pos) instanceof FramedBlockEntity be)
+        {
+            particleState = be.getCamo().getState();
+        }
+        level.levelEvent(LevelEvent.PARTICLES_DESTROY_BLOCK, pos, Block.getId(particleState));
+    }
+
     @Override
     default boolean hidesNeighborFace(BlockGetter level, BlockPos pos, BlockState state, BlockState neighborState, Direction dir)
     {

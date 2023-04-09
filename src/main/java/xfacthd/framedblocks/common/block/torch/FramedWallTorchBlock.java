@@ -57,6 +57,12 @@ public class FramedWallTorchBlock extends WallTorchBlock implements IFramedBlock
     }
 
     @Override
+    protected void spawnDestroyParticles(Level level, Player player, BlockPos pos, BlockState state)
+    {
+        spawnCamoDestroyParticles(level, player, pos, state);
+    }
+
+    @Override
     public int getLightEmission(BlockState state, BlockGetter level, BlockPos pos)
     {
         return Math.max(state.getLightEmission(), super.getLightEmission(state, level, pos));

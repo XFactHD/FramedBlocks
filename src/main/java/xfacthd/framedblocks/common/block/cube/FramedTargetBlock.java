@@ -107,6 +107,12 @@ public class FramedTargetBlock extends TargetBlock implements IFramedBlock
     }
 
     @Override
+    protected void spawnDestroyParticles(Level level, Player player, BlockPos pos, BlockState state)
+    {
+        spawnCamoDestroyParticles(level, player, pos, state);
+    }
+
+    @Override
     public VoxelShape getShape(BlockState state, BlockGetter level, BlockPos pos, CollisionContext ctx)
     {
         if (isIntangible(state, level, pos, ctx))

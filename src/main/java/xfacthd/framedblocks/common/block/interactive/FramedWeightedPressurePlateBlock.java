@@ -64,6 +64,12 @@ public class FramedWeightedPressurePlateBlock extends WeightedPressurePlateBlock
     }
 
     @Override
+    protected void spawnDestroyParticles(Level level, Player player, BlockPos pos, BlockState state)
+    {
+        spawnCamoDestroyParticles(level, player, pos, state);
+    }
+
+    @Override
     public boolean handleBlockLeftClick(BlockState state, Level level, BlockPos pos, Player player)
     {
         if (player.getMainHandItem().is(FBContent.itemFramedHammer.get()))

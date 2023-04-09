@@ -99,6 +99,12 @@ public class FramedPaneBlock extends IronBarsBlock implements IFramedBlock
         return super.getCollisionShape(state, level, pos, ctx);
     }
 
+    @Override
+    protected void spawnDestroyParticles(Level level, Player player, BlockPos pos, BlockState state)
+    {
+        spawnCamoDestroyParticles(level, player, pos, state);
+    }
+
     @Override //The pane handles this through the SideSkipPredicate instead
     public boolean skipRendering(BlockState state, BlockState adjacentState, Direction side)
     {
