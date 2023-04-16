@@ -148,9 +148,9 @@ dependencies {
 
     compileOnly fg.deobf("curse.maven:buildinggadgets-298187:3829297")
 
-    compileOnly(fg.deobf("mezz.jei:jei-1.19.4-common-api:13.1.0.2"))
-    compileOnly(fg.deobf("mezz.jei:jei-1.19.4-forge-api:13.1.0.2"))
-    runtimeOnly(fg.deobf("mezz.jei:jei-1.19.4-forge:13.1.0.2"))
+    compileOnly(fg.deobf("mezz.jei:jei-1.19.4-common-api:13.1.0.3"))
+    compileOnly(fg.deobf("mezz.jei:jei-1.19.4-forge-api:13.1.0.3"))
+    runtimeOnly(fg.deobf("mezz.jei:jei-1.19.4-forge:13.1.0.3"))
 
     //runtimeOnly fg.deobf("curse.maven:spark-361579:3767286")
 
