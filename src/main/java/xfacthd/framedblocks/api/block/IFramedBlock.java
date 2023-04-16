@@ -414,17 +414,16 @@ public interface IFramedBlock extends EntityBlock, IForgeBlock
 
     default void spawnCamoDestroyParticles(Level level, Player player, BlockPos pos, BlockState state)
     {
-        if (!level.isClientSide())
-        {
-            return;
-        }
-
         BlockState particleState = state;
         if (level.getBlockEntity(pos) instanceof FramedBlockEntity be)
         {
             particleState = be.getCamo().getState();
+            if (particleState.isAir())
+            {
+                particleState = be.getBlockState();
+            }
         }
-        level.levelEvent(LevelEvent.PARTICLES_DESTROY_BLOCK, pos, Block.getId(particleState));
+        level.levelEvent(player, LevelEvent.PARTICLES_DESTROY_BLOCK, pos, Block.getId(particleState));
     }
 
     @Override
