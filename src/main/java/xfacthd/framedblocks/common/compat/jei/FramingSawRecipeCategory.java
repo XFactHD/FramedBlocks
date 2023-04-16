@@ -93,6 +93,8 @@ public final class FramingSawRecipeCategory implements IRecipeCategory<FramingSa
             if (additiveSlots != null)
             {
                 IRecipeSlotBuilder[] slots = new IRecipeSlotBuilder[additives.size() + 2];
+                slots[0] = inputSlot;
+                slots[slots.length - 1] = outputSlot;
                 System.arraycopy(additiveSlots, 0, slots, 1, additiveSlots.length);
                 builder.createFocusLink(slots);
             }
