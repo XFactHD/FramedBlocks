@@ -103,4 +103,13 @@ public class FramedDoubleStairsBlock extends AbstractFramedDoubleBlock
     {
         return new FramedDoubleStairsBlockEntity(pos, state);
     }
+
+
+
+    public static BlockState itemSource()
+    {
+        return FBContent.blockFramedDoubleStairs.get()
+                .defaultBlockState()
+                .setValue(FramedProperties.FACING_HOR, Direction.SOUTH);
+    }
 }

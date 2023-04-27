@@ -14,6 +14,7 @@ import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import xfacthd.framedblocks.api.block.FramedProperties;
 import xfacthd.framedblocks.api.block.IFramedBlock;
 import xfacthd.framedblocks.api.util.Utils;
+import xfacthd.framedblocks.client.util.DoubleBlockParticleMode;
 import xfacthd.framedblocks.common.FBContent;
 import xfacthd.framedblocks.common.block.AbstractFramedDoubleBlock;
 import xfacthd.framedblocks.common.blockentity.FramedDividedSlopeBlockEntity;
@@ -124,5 +125,20 @@ public class FramedDividedSlopeBlock extends AbstractFramedDoubleBlock
     public BlockEntity newBlockEntity(BlockPos pos, BlockState state)
     {
         return new FramedDividedSlopeBlockEntity(pos, state);
+    }
+
+
+
+    public static DoubleBlockParticleMode particleMode(BlockState state)
+    {
+        boolean horizontal = state.getValue(PropertyHolder.SLOPE_TYPE) == SlopeType.HORIZONTAL;
+        return horizontal ? DoubleBlockParticleMode.SECOND : DoubleBlockParticleMode.EITHER;
+    }
+
+    public static BlockState itemSource()
+    {
+        return FBContent.blockFramedDividedSlope.get()
+                .defaultBlockState()
+                .setValue(FramedProperties.FACING_HOR, Direction.SOUTH);
     }
 }

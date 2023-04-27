@@ -70,4 +70,13 @@ public class FramedDoublePrismCornerBlock extends FramedDoubleThreewayCornerBloc
                         .setValue(FramedProperties.Y_SLOPE, ySlope)
         );
     }
+
+
+
+    public static BlockState itemModelSourcePrism()
+    {
+        return FBContent.blockFramedDoublePrismCorner.get()
+                .defaultBlockState()
+                .setValue(FramedProperties.FACING_HOR, Direction.WEST);
+    }
 }

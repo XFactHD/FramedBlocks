@@ -280,4 +280,11 @@ public class FramedRailSlopeBlock extends BaseRailBlock implements IFramedBlock
             return BlockStateProperties.RAIL_SHAPE_STRAIGHT;
         }
     }
+
+    public static BlockState itemModelSourceFancy()
+    {
+        return FBContent.blockFramedFancyRailSlope.get()
+                .defaultBlockState()
+                .setValue(PropertyHolder.ASCENDING_RAIL_SHAPE, RailShape.ASCENDING_SOUTH);
+    }
 }

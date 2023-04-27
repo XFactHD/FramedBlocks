@@ -170,4 +170,11 @@ public class FramedDoubleHalfSlopeBlock extends AbstractFramedDoubleBlock
 
         return ShapeProvider.of(builder.build());
     }
+
+    public static BlockState itemSource()
+    {
+        return FBContent.blockFramedDoubleHalfSlope.get()
+                .defaultBlockState()
+                .setValue(FramedProperties.FACING_HOR, Direction.WEST);
+    }
 }

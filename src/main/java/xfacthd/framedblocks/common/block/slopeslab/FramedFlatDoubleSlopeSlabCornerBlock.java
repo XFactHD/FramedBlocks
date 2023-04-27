@@ -150,4 +150,11 @@ public class FramedFlatDoubleSlopeSlabCornerBlock extends AbstractFramedDoubleBl
 
         return ShapeProvider.of(builder.build());
     }
+
+    public static BlockState itemModelSource()
+    {
+        return FBContent.blockFramedFlatDoubleSlopeSlabCorner.get()
+                .defaultBlockState()
+                .setValue(FramedProperties.FACING_HOR, Direction.SOUTH);
+    }
 }

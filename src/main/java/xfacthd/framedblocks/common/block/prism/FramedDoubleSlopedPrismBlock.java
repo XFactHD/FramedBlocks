@@ -1,6 +1,7 @@
 package xfacthd.framedblocks.common.block.prism;
 
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
 import net.minecraft.util.Tuple;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.context.BlockPlaceContext;
@@ -12,6 +13,7 @@ import net.minecraft.world.level.block.state.StateDefinition;
 import xfacthd.framedblocks.api.block.FramedProperties;
 import xfacthd.framedblocks.api.predicate.CtmPredicate;
 import xfacthd.framedblocks.api.util.Utils;
+import xfacthd.framedblocks.client.util.DoubleBlockParticleMode;
 import xfacthd.framedblocks.common.FBContent;
 import xfacthd.framedblocks.common.block.AbstractFramedDoubleBlock;
 import xfacthd.framedblocks.common.blockentity.FramedDoubleSlopedPrismBlockEntity;
@@ -95,5 +97,28 @@ public class FramedDoubleSlopedPrismBlock extends AbstractFramedDoubleBlock
     public BlockEntity newBlockEntity(BlockPos pos, BlockState state)
     {
         return new FramedDoubleSlopedPrismBlockEntity(pos, state);
+    }
+
+
+
+    public static DoubleBlockParticleMode particleMode(BlockState state)
+    {
+        CompoundDirection cmpDir = state.getValue(PropertyHolder.FACING_DIR);
+        if (cmpDir.direction() == Direction.UP)
+        {
+            return DoubleBlockParticleMode.SECOND;
+        }
+        else if (cmpDir.direction() == Direction.DOWN || cmpDir.orientation() != Direction.UP)
+        {
+            return DoubleBlockParticleMode.FIRST;
+        }
+        return DoubleBlockParticleMode.EITHER;
+    }
+
+    public static BlockState itemModelSource()
+    {
+        return FBContent.blockFramedDoubleSlopedPrism.get()
+                .defaultBlockState()
+                .setValue(PropertyHolder.FACING_DIR, CompoundDirection.UP_EAST);
     }
 }

@@ -14,6 +14,7 @@ import xfacthd.framedblocks.api.block.FramedProperties;
 import xfacthd.framedblocks.api.block.IFramedBlock;
 import xfacthd.framedblocks.api.predicate.CtmPredicate;
 import xfacthd.framedblocks.api.util.*;
+import xfacthd.framedblocks.client.util.DoubleBlockParticleMode;
 import xfacthd.framedblocks.common.FBContent;
 import xfacthd.framedblocks.common.block.AbstractFramedDoubleBlock;
 import xfacthd.framedblocks.common.blockentity.FramedFlatExtendedDoubleSlopePanelCornerBlockEntity;
@@ -133,9 +134,27 @@ public class FramedFlatExtendedDoubleSlopePanelCornerBlock extends AbstractFrame
 
 
 
+    public static DoubleBlockParticleMode particleModeInner(BlockState state)
+    {
+        HorizontalRotation rotation = state.getValue(PropertyHolder.ROTATION);
+        if (rotation == HorizontalRotation.UP || rotation == HorizontalRotation.RIGHT)
+        {
+            return DoubleBlockParticleMode.FIRST;
+        }
+        return DoubleBlockParticleMode.EITHER;
+    }
+
     public static BlockState itemModelSource()
     {
         return FBContent.blockFramedFlatExtendedDoubleSlopePanelCorner.get()
+                .defaultBlockState()
+                .setValue(FramedProperties.FACING_HOR, Direction.SOUTH)
+                .setValue(PropertyHolder.ROTATION, HorizontalRotation.RIGHT);
+    }
+
+    public static BlockState itemModelSourceInner()
+    {
+        return FBContent.blockFramedFlatExtendedInnerDoubleSlopePanelCorner.get()
                 .defaultBlockState()
                 .setValue(FramedProperties.FACING_HOR, Direction.SOUTH)
                 .setValue(PropertyHolder.ROTATION, HorizontalRotation.RIGHT);

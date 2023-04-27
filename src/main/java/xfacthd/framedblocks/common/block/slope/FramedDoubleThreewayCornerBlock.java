@@ -116,4 +116,13 @@ public class FramedDoubleThreewayCornerBlock extends AbstractFramedDoubleBlock
     {
         return new FramedDoubleThreewayCornerBlockEntity(pos, state);
     }
+
+
+
+    public static BlockState itemModelSourceThreeway()
+    {
+        return FBContent.blockFramedDoubleThreewayCorner.get()
+                .defaultBlockState()
+                .setValue(FramedProperties.FACING_HOR, Direction.WEST);
+    }
 }

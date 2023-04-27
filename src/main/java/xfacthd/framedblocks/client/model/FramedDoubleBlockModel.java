@@ -1,5 +1,6 @@
 package xfacthd.framedblocks.client.model;
 
+import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.block.BlockRenderDispatcher;
@@ -10,9 +11,11 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.util.RandomSource;
 import net.minecraft.util.Tuple;
+import net.minecraft.world.item.ItemDisplayContext;
 import net.minecraft.world.level.BlockAndTintGetter;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.client.ChunkRenderTypeSet;
 import net.minecraftforge.client.model.data.*;
 import net.minecraftforge.common.util.ConcatenatedListView;
@@ -20,6 +23,7 @@ import org.jetbrains.annotations.NotNull;
 import xfacthd.framedblocks.api.model.BakedModelProxy;
 import xfacthd.framedblocks.api.model.data.FramedBlockData;
 import xfacthd.framedblocks.api.model.util.ModelUtils;
+import xfacthd.framedblocks.client.util.DoubleBlockParticleMode;
 import xfacthd.framedblocks.common.block.AbstractFramedDoubleBlock;
 import xfacthd.framedblocks.common.blockentity.FramedDoubleBlockEntity;
 
@@ -33,13 +37,23 @@ public class FramedDoubleBlockModel extends BakedModelProxy
     private static final ModelData EMPTY_ALT_FRAME = makeDefaultData(true);
 
     private final boolean specialItemModel;
+    private final DoubleBlockParticleMode particleMode;
+    private final Vec3 firstpersonTransform;
     private final Tuple<BlockState, BlockState> dummyStates;
     private Tuple<BakedModel, BakedModel> models = null;
 
-    public FramedDoubleBlockModel(BlockState state, BakedModel baseModel, boolean specialItemModel)
+    public FramedDoubleBlockModel(
+            BlockState state,
+            BakedModel baseModel,
+            DoubleBlockParticleMode particleMode,
+            Vec3 firstpersonTransform,
+            boolean specialItemModel
+    )
     {
         super(baseModel);
         this.dummyStates = AbstractFramedDoubleBlock.getStatePair(state);
+        this.particleMode = particleMode;
+        this.firstpersonTransform = firstpersonTransform;
         this.specialItemModel = specialItemModel;
     }
 
@@ -74,28 +88,30 @@ public class FramedDoubleBlockModel extends BakedModelProxy
     }
 
     @Override
-    @SuppressWarnings("deprecation")
     public TextureAtlasSprite getParticleIcon(@Nonnull ModelData data)
     {
-        ModelData innerData = data.get(FramedDoubleBlockEntity.DATA_LEFT);
-        if (innerData != null)
+        return switch (particleMode)
         {
-            FramedBlockData fbData = innerData.get(FramedBlockData.PROPERTY);
-            if (fbData != null && !fbData.getCamoState().isAir())
+            case FIRST -> getSpriteOrDefault(data, false);
+            case SECOND -> getSpriteOrDefault(data, true);
+            case EITHER ->
             {
-                return getModels().getA().getParticleIcon(innerData);
+                TextureAtlasSprite sprite = getSprite(data, false);
+                if (sprite != null)
+                {
+                    yield sprite;
+                }
+
+                sprite = getSprite(data, true);
+                if (sprite != null)
+                {
+                    yield sprite;
+                }
+
+                //noinspection deprecation
+                yield baseModel.getParticleIcon();
             }
-        }
-        innerData = data.get(FramedDoubleBlockEntity.DATA_RIGHT);
-        if (innerData != null)
-        {
-            FramedBlockData fbData = innerData.get(FramedBlockData.PROPERTY);
-            if (fbData != null && !fbData.getCamoState().isAir())
-            {
-                return getModels().getB().getParticleIcon(innerData);
-            }
-        }
-        return baseModel.getParticleIcon();
+        };
     }
 
     @Override
@@ -130,6 +146,15 @@ public class FramedDoubleBlockModel extends BakedModelProxy
                 .build();
     }
 
+    @Override
+    protected void applyInHandTransformation(PoseStack poseStack, ItemDisplayContext ctx)
+    {
+        if (firstpersonTransform != null)
+        {
+            poseStack.translate(firstpersonTransform.x, firstpersonTransform.y, firstpersonTransform.z);
+        }
+    }
+
 
 
     protected final Tuple<BakedModel, BakedModel> getModels()
@@ -149,20 +174,26 @@ public class FramedDoubleBlockModel extends BakedModelProxy
      * Returns the camo-dependent particle texture of the side given by {@code key} when the camo is not air,
      * else returns the basic "framed block" sprite
      */
-    protected final TextureAtlasSprite getSpriteOrDefault(ModelData data, ModelProperty<ModelData> key, BakedModel model)
+    protected final TextureAtlasSprite getSpriteOrDefault(ModelData data, boolean secondary)
     {
-        ModelData innerData = data.get(key);
+        TextureAtlasSprite sprite = getSprite(data, secondary);
+        //noinspection deprecation
+        return sprite != null ? sprite : baseModel.getParticleIcon();
+    }
+
+    protected final TextureAtlasSprite getSprite(ModelData data, boolean secondary)
+    {
+        ModelData innerData = data.get(secondary ? FramedDoubleBlockEntity.DATA_RIGHT : FramedDoubleBlockEntity.DATA_LEFT);
         if (innerData != null)
         {
             FramedBlockData fbData = innerData.get(FramedBlockData.PROPERTY);
             if (fbData != null && !fbData.getCamoState().isAir())
             {
+                BakedModel model = secondary ? getModels().getB() : getModels().getA();
                 return model.getParticleIcon(innerData);
             }
         }
-
-        //noinspection deprecation
-        return baseModel.getParticleIcon();
+        return null;
     }
 
     private static List<BakedQuad> invertTintIndizes(List<BakedQuad> quads)

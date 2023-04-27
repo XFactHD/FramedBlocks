@@ -117,4 +117,9 @@ public class FramedInverseDoubleSlopeSlabBlock extends AbstractFramedDoubleBlock
 
         return ShapeProvider.of(builder.build());
     }
+
+    public static BlockState itemModelSource()
+    {
+        return FBContent.blockFramedInverseDoubleSlopeSlab.get().defaultBlockState();
+    }
 }

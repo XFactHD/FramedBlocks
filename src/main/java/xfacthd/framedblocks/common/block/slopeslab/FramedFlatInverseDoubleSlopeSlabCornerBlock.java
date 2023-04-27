@@ -214,4 +214,11 @@ public class FramedFlatInverseDoubleSlopeSlabCornerBlock extends AbstractFramedD
 
         return ShapeProvider.of(builder.build());
     }
+
+    public static BlockState itemModelSource()
+    {
+        return FBContent.blockFramedFlatInverseDoubleSlopeSlabCorner.get()
+                .defaultBlockState()
+                .setValue(FramedProperties.FACING_HOR, Direction.SOUTH);
+    }
 }

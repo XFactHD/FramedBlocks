@@ -14,6 +14,7 @@ import xfacthd.framedblocks.api.block.FramedProperties;
 import xfacthd.framedblocks.api.block.IFramedBlock;
 import xfacthd.framedblocks.api.predicate.CtmPredicate;
 import xfacthd.framedblocks.api.util.Utils;
+import xfacthd.framedblocks.client.util.DoubleBlockParticleMode;
 import xfacthd.framedblocks.common.FBContent;
 import xfacthd.framedblocks.common.block.AbstractFramedDoubleBlock;
 import xfacthd.framedblocks.common.blockentity.FramedDoubleSlopeBlockEntity;
@@ -119,5 +120,25 @@ public class FramedDoubleSlopeBlock extends AbstractFramedDoubleBlock
     public final BlockEntity newBlockEntity(BlockPos pos, BlockState state)
     {
         return new FramedDoubleSlopeBlockEntity(pos, state);
+    }
+
+
+
+    public static DoubleBlockParticleMode particleMode(BlockState state)
+    {
+        return switch (state.getValue(PropertyHolder.SLOPE_TYPE))
+        {
+            case BOTTOM -> DoubleBlockParticleMode.SECOND;
+            case TOP -> DoubleBlockParticleMode.FIRST;
+            case HORIZONTAL -> DoubleBlockParticleMode.EITHER;
+        };
+    }
+
+    public static BlockState itemModelSource()
+    {
+        return FBContent.blockFramedDoubleSlope.get()
+                .defaultBlockState()
+                .setValue(FramedProperties.FACING_HOR, Direction.WEST)
+                .setValue(PropertyHolder.SLOPE_TYPE, SlopeType.HORIZONTAL);
     }
 }
