@@ -19,12 +19,13 @@ public class FramedBlockMovementChecks implements BlockMovementChecks.AllChecks
         if (state.getBlock() instanceof IFramedBlock block && block.getBlockType() instanceof BlockType type)
         {
             return switch (type)
-                    {
-                        case FRAMED_SIGN, FRAMED_FLOWER_POT, FRAMED_FLOOR_BOARD -> result(side == Direction.DOWN);
-                        case FRAMED_WALL_SIGN -> result(state.getValue(FramedProperties.FACING_HOR) == side.getOpposite());
-                        case FRAMED_WALL_BOARD -> result(state.getValue(FramedProperties.FACING_HOR) == side);
-                        default -> BlockMovementChecks.CheckResult.PASS;
-                    };
+            {
+                case FRAMED_SIGN, FRAMED_FLOWER_POT -> result(side == Direction.DOWN);
+                case FRAMED_FLOOR_BOARD -> result(side == (state.getValue(FramedProperties.TOP) ? Direction.UP : Direction.DOWN));
+                case FRAMED_WALL_SIGN -> result(state.getValue(FramedProperties.FACING_HOR) == side.getOpposite());
+                case FRAMED_WALL_BOARD -> result(state.getValue(FramedProperties.FACING_HOR) == side);
+                default -> BlockMovementChecks.CheckResult.PASS;
+            };
         }
         return BlockMovementChecks.CheckResult.PASS;
     }
