@@ -43,30 +43,25 @@ public class FramedFlatExtendedDoubleSlopePanelCornerBlockEntity extends FramedD
             return false;
         }
 
-        Vec3 vec = Utils.fraction(hit.getLocation());
-
-        double hor = Utils.isX(facing) ? vec.x() : vec.z();
-        if (!Utils.isPositive(facing))
+        Vec3 hitVec = hit.getLocation();
+        double hor = Utils.fractionInDir(hitVec, facing.getOpposite());
+        if (!isInner && (side == rotDir || side == perpRotDir))
         {
-            hor = 1D - hor;
+            return hor > .5;
         }
 
         Direction perpDir;
         if (isInner)
         {
-            perpDir = side == rotDir ? perpRotDir : rotDir;
+            perpDir = side == rotDir ? perpRotDir.getOpposite() : rotDir.getOpposite();
         }
         else
         {
             perpDir = side == rotDir.getOpposite() ? perpRotDir.getOpposite() : rotDir.getOpposite();
         }
 
-        double perpHor = Utils.isY(perpDir) ? vec.y() : (Utils.isX(facing) ? vec.z() : vec.x());
-        if ((perpDir == Direction.DOWN || (!Utils.isY(perpDir) && !Utils.isPositive(perpDir))) == isInner)
-        {
-            perpHor = 1F - perpHor;
-        }
-        return (hor * 2D) < perpHor;
+        double perpHor = Utils.fractionInDir(hitVec, perpDir);
+        return ((hor - .5) * 2D) > perpHor;
     }
 
     @Override
