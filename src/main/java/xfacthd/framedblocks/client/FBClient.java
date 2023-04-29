@@ -2,6 +2,7 @@ package xfacthd.framedblocks.client;
 
 import com.github.benmanes.caffeine.cache.RemovalCause;
 import net.minecraft.client.gui.screens.MenuScreens;
+import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
 import net.minecraft.client.resources.model.BakedModel;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.packs.resources.ResourceManagerReloadListener;
@@ -19,6 +20,7 @@ import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import net.minecraftforge.fml.event.lifecycle.FMLLoadCompleteEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
+import net.minecraftforge.fml.loading.FMLEnvironment;
 import net.minecraftforge.registries.RegistryObject;
 import org.jetbrains.annotations.Nullable;
 import xfacthd.framedblocks.api.FramedBlocksClientAPI;
@@ -58,6 +60,7 @@ import xfacthd.framedblocks.common.block.slope.*;
 import xfacthd.framedblocks.common.block.slopepanel.*;
 import xfacthd.framedblocks.common.block.slopeslab.*;
 import xfacthd.framedblocks.common.block.stairs.*;
+import xfacthd.framedblocks.common.blockentity.FramedDoubleBlockEntity;
 import xfacthd.framedblocks.common.compat.supplementaries.SupplementariesCompat;
 import xfacthd.framedblocks.common.data.BlockType;
 import xfacthd.framedblocks.client.data.GhostRenderBehaviours;
@@ -69,6 +72,8 @@ import java.util.function.Function;
 @Mod.EventBusSubscriber(modid = FramedConstants.MOD_ID, bus = Mod.EventBusSubscriber.Bus.MOD, value = Dist.CLIENT)
 public final class FBClient
 {
+    private static final boolean ENABLE_DOUBLE_BLOCK_DEBUG_RENDERER = false;
+
     static
     {
         FramedBlocksClientAPI.INSTANCE.accept(new ClientApiImpl());
@@ -123,6 +128,14 @@ public final class FBClient
         event.registerBlockEntityRenderer(FBContent.blockEntityTypeFramedSign.get(), FramedSignRenderer::new);
         event.registerBlockEntityRenderer(FBContent.blockEntityTypeFramedChest.get(), FramedChestRenderer::new);
         event.registerBlockEntityRenderer(FBContent.blockEntityTypeFramedItemFrame.get(), FramedItemFrameRenderer::new);
+
+        if (!FMLEnvironment.production && ENABLE_DOUBLE_BLOCK_DEBUG_RENDERER)
+        {
+            BlockEntityRendererProvider<FramedDoubleBlockEntity> provider = FramedDoubleBlockDebugRenderer::new;
+            FBContent.getDoubleBlockEntities().forEach(type ->
+                    event.registerBlockEntityRenderer(type.get(), provider)
+            );
+        }
     }
 
     @SubscribeEvent

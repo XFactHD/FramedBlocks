@@ -10,6 +10,7 @@ import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraftforge.common.extensions.IForgeMenuType;
 import net.minecraftforge.eventbus.api.IEventBus;
+import net.minecraftforge.fml.loading.FMLEnvironment;
 import net.minecraftforge.network.IContainerFactory;
 import net.minecraftforge.registries.*;
 import xfacthd.framedblocks.api.block.FramedBlockEntity;
@@ -72,6 +73,7 @@ public final class FBContent
 
     private static final Map<BlockType, RegistryObject<Block>> BLOCKS_BY_TYPE = new EnumMap<>(BlockType.class);
     private static final Map<FramedToolType, RegistryObject<Item>> TOOLS_BY_TYPE = new EnumMap<>(FramedToolType.class);
+    private static final List<RegistryObject<BlockEntityType<? extends FramedDoubleBlockEntity>>> DOUBLE_BLOCK_ENTITIES = new ArrayList<>();
 
     // region Blocks
     public static final RegistryObject<Block> blockFramedCube = registerBlock(FramedCube::new, BlockType.FRAMED_CUBE);
@@ -454,6 +456,11 @@ public final class FBContent
 
     public static Item toolByType(FramedToolType type) { return TOOLS_BY_TYPE.get(type).get(); }
 
+    public static List<RegistryObject<BlockEntityType<? extends FramedDoubleBlockEntity>>> getDoubleBlockEntities()
+    {
+        return DOUBLE_BLOCK_ENTITIES;
+    }
+
     private static Supplier<Block[]> getDefaultEntityBlocks()
     {
         //noinspection SuspiciousToArrayCall
@@ -514,7 +521,13 @@ public final class FBContent
                 .map(BLOCKS_BY_TYPE::get)
                 .map(RegistryObject::get)
                 .toArray(Block[]::new);
-        return createBlockEntityType(factory, types[0].getName(), blocks);
+        RegistryObject<BlockEntityType<T>> result = createBlockEntityType(factory, types[0].getName(), blocks);
+        if (!FMLEnvironment.production && Arrays.stream(types).anyMatch(BlockType::isDoubleBlock))
+        {
+            //noinspection unchecked
+            DOUBLE_BLOCK_ENTITIES.add((RegistryObject<BlockEntityType<? extends FramedDoubleBlockEntity>>)(Object) result);
+        }
+        return result;
     }
 
     private static <T extends BlockEntity> RegistryObject<BlockEntityType<T>> createBlockEntityType(

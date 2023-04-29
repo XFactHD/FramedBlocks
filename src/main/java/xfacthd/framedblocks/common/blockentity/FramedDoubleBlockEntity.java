@@ -2,6 +2,7 @@ package xfacthd.framedblocks.common.blockentity;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.util.Tuple;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.*;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
@@ -13,6 +14,7 @@ import net.minecraft.world.level.material.FluidState;
 import net.minecraft.world.level.material.MaterialColor;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraftforge.client.model.data.*;
+import net.minecraftforge.fml.loading.FMLEnvironment;
 import net.minecraftforge.registries.ForgeRegistries;
 import xfacthd.framedblocks.FramedBlocks;
 import xfacthd.framedblocks.api.block.FramedBlockEntity;
@@ -223,6 +225,26 @@ public abstract class FramedDoubleBlockEntity extends FramedBlockEntity
     {
         super.setBlockState(state);
         blockPair = AbstractFramedDoubleBlock.getStatePair(state);
+    }
+
+    /*
+     * Debug rendering
+     */
+
+    @Override
+    public boolean hasCustomOutlineRendering(Player player)
+    {
+        return !FMLEnvironment.production;
+    }
+
+    public Tuple<BlockState, BlockState> getBlockPair()
+    {
+        return blockPair;
+    }
+
+    public final boolean debugHitSecondary(BlockHitResult hit)
+    {
+        return hitSecondary(hit);
     }
 
     /*
