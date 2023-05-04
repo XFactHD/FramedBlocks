@@ -2,6 +2,7 @@ package xfacthd.framedblocks;
 
 import com.mojang.logging.LogUtils;
 import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.event.AddReloadListenerEvent;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.fml.CrashReportCallables;
 import net.minecraftforge.fml.ModLoadingContext;
@@ -10,6 +11,7 @@ import net.minecraftforge.fml.config.ModConfig;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fml.event.lifecycle.FMLLoadCompleteEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
+import net.minecraftforge.fml.loading.FMLEnvironment;
 import net.minecraftforge.network.NetworkDirection;
 import net.minecraftforge.network.NetworkRegistry;
 import net.minecraftforge.network.simple.SimpleChannel;
@@ -17,6 +19,7 @@ import org.slf4j.Logger;
 import xfacthd.framedblocks.api.FramedBlocksAPI;
 import xfacthd.framedblocks.api.block.update.CullingUpdatePacket;
 import xfacthd.framedblocks.api.block.update.CullingUpdateTracker;
+import xfacthd.framedblocks.api.shapes.ReloadableShapeProvider;
 import xfacthd.framedblocks.api.util.FramedConstants;
 import xfacthd.framedblocks.api.util.Utils;
 import xfacthd.framedblocks.client.util.ClientConfig;
@@ -62,6 +65,11 @@ public final class FramedBlocks
         forgeBus.addListener(CullingUpdateTracker::onServerLevelTick);
         forgeBus.addListener(FramingSawRecipeCache::onAddReloadListener);
 
+        if (!FMLEnvironment.production)
+        {
+            forgeBus.addListener(FramedBlocks::onAddDebugReloadListener);
+        }
+
         CompatHandler.init();
 
         CrashReportCallables.registerCrashCallable(
@@ -100,6 +108,11 @@ public final class FramedBlocks
     {
         CamoFactories.lock();
         FramedBlueprintItem.lockRegistration();
+    }
+
+    private static void onAddDebugReloadListener(final AddReloadListenerEvent event)
+    {
+        event.addListener(ReloadableShapeProvider.Reloader.INSTANCE);
     }
 
     private static String getBlockEntityWarning()

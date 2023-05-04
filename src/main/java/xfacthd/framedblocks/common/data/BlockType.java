@@ -5,10 +5,10 @@ import com.google.common.collect.ImmutableList;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.shapes.*;
+import net.minecraftforge.fml.loading.FMLEnvironment;
 import xfacthd.framedblocks.api.predicate.CtmPredicate;
 import xfacthd.framedblocks.api.predicate.SideSkipPredicate;
-import xfacthd.framedblocks.api.shapes.ShapeProvider;
-import xfacthd.framedblocks.api.shapes.ShapeGenerator;
+import xfacthd.framedblocks.api.shapes.*;
 import xfacthd.framedblocks.api.type.IBlockType;
 import xfacthd.framedblocks.common.block.cube.*;
 import xfacthd.framedblocks.common.block.door.*;
@@ -261,6 +261,10 @@ public enum BlockType implements IBlockType
     @Override
     public ShapeProvider generateShapes(ImmutableList<BlockState> states)
     {
+        if (!FMLEnvironment.production)
+        {
+            return new ReloadableShapeProvider(shapeGen, states);
+        }
         return shapeGen.generate(states);
     }
 
