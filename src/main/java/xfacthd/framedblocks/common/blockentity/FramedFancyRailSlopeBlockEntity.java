@@ -29,6 +29,12 @@ public class FramedFancyRailSlopeBlockEntity extends FramedDoubleBlockEntity
     public DoubleSoundMode getSoundMode() { return DoubleSoundMode.FIRST; }
 
     @Override
+    public CamoContainer getCamo(Direction side)
+    {
+        return getCamo();
+    }
+
+    @Override
     public boolean isSolidSide(Direction side)
     {
         if (side == Direction.DOWN || side == getFacing())

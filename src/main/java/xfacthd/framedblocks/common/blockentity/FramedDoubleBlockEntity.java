@@ -212,6 +212,12 @@ public abstract class FramedDoubleBlockEntity extends FramedBlockEntity
     public abstract DoubleSoundMode getSoundMode();
 
     @Override
+    public abstract CamoContainer getCamo(Direction side);
+
+    @Override
+    public abstract boolean isSolidSide(Direction side);
+
+    @Override
     public boolean updateCulling(Direction side, boolean rerender)
     {
         boolean changed = updateCulling(getModelDataInternal(), blockPair.getA(), side, rerender);
