@@ -701,12 +701,24 @@ public final class Modifiers
 
         return data ->
         {
-            // Interpolation is not viable as it cannot cleanly handle cases like the four corners not being on a flat plane
-            int idx = data.quad().getDirection().getAxis().ordinal();
-            boolean positive = Utils.isPositive(data.quad().getDirection());
+            Direction dir = data.quad().getDirection();
+            float[][] pos = data.pos();
+            int idx = dir.getAxis().ordinal();
+            boolean positive = Utils.isPositive(dir);
+            boolean y = Utils.isY(dir);
+            Direction ccwDir = y ? dir : dir.getCounterClockWise();
+            boolean ccwPositive = Utils.isPositive(ccwDir);
+            int lerpXIdx = y ? 0 : ccwDir.getAxis().ordinal();
+            int lerpZIdx = y ? 2 : 1;
+            boolean invLerpX = !y && !ccwPositive;
+            boolean invLerpZ = !y || !ccwPositive;
+
             for (int i = 0; i < 4; i++)
             {
-                data.pos()[i][idx] = positive ? posTarget[i] : 1F - posTarget[i];
+                float x0 = invLerpX ? (1F - pos[i][lerpXIdx]) : pos[i][lerpXIdx];
+                float z0 = invLerpZ ? (1F - pos[i][lerpZIdx]) : pos[i][lerpZIdx];
+                float target = (float) Mth.lerp2(x0, z0, posTarget[0], posTarget[3], posTarget[1], posTarget[2]);
+                data.pos()[i][idx] = positive ? target : (1F - target);
             }
 
             return true;
