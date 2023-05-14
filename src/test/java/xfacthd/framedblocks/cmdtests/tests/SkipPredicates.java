@@ -18,9 +18,9 @@ import xfacthd.framedblocks.common.data.BlockType;
 
 import java.util.*;
 import java.util.concurrent.*;
-import java.util.concurrent.atomic.AtomicInteger;
+import java.util.concurrent.atomic.AtomicLong;
 import java.util.function.Consumer;
-import java.util.function.IntConsumer;
+import java.util.function.LongConsumer;
 
 public final class SkipPredicates
 {
@@ -35,12 +35,12 @@ public final class SkipPredicates
     public static void testSkipPredicates(CommandContext<CommandSourceStack> ctx, Consumer<Component> msgQueueAppender)
     {
         List<Triple<BlockType, BlockType, Throwable>> errors = new ArrayList<>();
-        AtomicInteger combinations = new AtomicInteger(0);
-        AtomicInteger lastPrinted = new AtomicInteger(0);
-        IntConsumer combinationCollector = i ->
+        AtomicLong combinations = new AtomicLong(0);
+        AtomicLong lastPrinted = new AtomicLong(0);
+        LongConsumer combinationCollector = i ->
         {
-            int val = combinations.addAndGet(i);
-            if (val - lastPrinted.get() > 10000000)
+            long val = combinations.addAndGet(i);
+            if (val - lastPrinted.get() > 10000000L)
             {
                 lastPrinted.set(val);
                 msgQueueAppender.accept(Component.literal(PROGRESS_MSG.formatted(val)));
@@ -92,19 +92,19 @@ public final class SkipPredicates
             color = ChatFormatting.DARK_RED;
         }
 
-        resultMsg = Component.literal(RESULT_MSG.formatted(combinations.intValue(), time))
+        resultMsg = Component.literal(RESULT_MSG.formatted(combinations.longValue(), time))
                 .withStyle(color)
                 .append(resultMsg);
         msgQueueAppender.accept(resultMsg);
     }
 
-    private static Result testTypeAgainstAll(BlockType type, IntConsumer combinationCollector)
+    private static Result testTypeAgainstAll(BlockType type, LongConsumer combinationCollector)
     {
         List<Triple<BlockType, BlockType, Throwable>> errors = new ArrayList<>();
         Block block = FBContent.byType(type);
         SideSkipPredicate skipPredicate = type.getSideSkipPredicate();
-        int combinations = 0;
-        int lastSent = 0;
+        long combinations = 0;
+        long lastSent = 0;
         for (BlockState state : block.getStateDefinition().getPossibleStates())
         {
             for (BlockType adjType : TYPES)
@@ -124,9 +124,9 @@ public final class SkipPredicates
                         }
 
                         combinations++;
-                        if (combinations % 100000 == 0)
+                        if (combinations % 100000L == 0)
                         {
-                            combinationCollector.accept(100000);
+                            combinationCollector.accept(100000L);
                             lastSent = combinations;
                         }
                     }
@@ -138,7 +138,7 @@ public final class SkipPredicates
         return new Result(combinations, errors);
     }
 
-    private record Result(int combinations, List<Triple<BlockType, BlockType, Throwable>> errors) { }
+    private record Result(long combinations, List<Triple<BlockType, BlockType, Throwable>> errors) { }
 
 
 
