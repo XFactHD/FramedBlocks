@@ -5,6 +5,7 @@ import com.simibubi.create.content.contraptions.components.structureMovement.Blo
 import com.simibubi.create.content.contraptions.components.structureMovement.MovingInteractionBehaviour;
 import com.simibubi.create.content.contraptions.components.structureMovement.interaction.*;
 import com.simibubi.create.foundation.block.connected.CTModel;
+import com.simibubi.create.foundation.utility.NBTProcessors;
 import net.minecraft.world.level.block.Block;
 import net.minecraftforge.client.model.data.ModelData;
 import net.minecraftforge.client.model.data.ModelProperty;
@@ -73,6 +74,19 @@ public final class CreateCompat
             registerInteractionBehaviour(FBContent.blockFramedTrapDoor, new TrapdoorMovingInteraction());
 
             BlockMovementChecks.registerAllChecks(new FramedBlockMovementChecks());
+
+            NBTProcessors.addProcessor(FBContent.blockEntityTypeFramedSign.get(), tag ->
+            {
+                for (int i = 0; i < 4; ++i)
+                {
+                    String key = "Text" + (i + 1);
+                    if (NBTProcessors.textComponentHasClickEvent(tag.getString(key)))
+                    {
+                        tag.remove(key);
+                    }
+                }
+                return tag;
+            });
         }
 
         private static void registerInteractionBehaviour(RegistryObject<Block> block, MovingInteractionBehaviour behaviour)
