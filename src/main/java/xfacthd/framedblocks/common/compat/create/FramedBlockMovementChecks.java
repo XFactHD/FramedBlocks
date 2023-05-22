@@ -1,6 +1,6 @@
 package xfacthd.framedblocks.common.compat.create;
 
-import com.simibubi.create.content.contraptions.components.structureMovement.BlockMovementChecks;
+import com.simibubi.create.content.contraptions.BlockMovementChecks;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.world.level.Level;

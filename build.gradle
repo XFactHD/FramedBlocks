@@ -157,8 +157,8 @@ dependencies {
     //runtimeOnly fg.deobf("curse.maven:magnesium_sodium-532724:3556734")
     //runtimeOnly fg.deobf("curse.maven:rubidium_sodium-574856:3973894")
 
-    compileOnly fg.deobf("com.simibubi.create:create-1.19.2:0.5.0.e-13:slim") { transitive = false }
-    compileOnly fg.deobf("com.jozufozu.flywheel:flywheel-forge-1.19.2:0.6.6-7")
+    compileOnly fg.deobf("com.simibubi.create:create-1.19.2:0.5.1.a-29:slim") { transitive = false }
+    compileOnly fg.deobf("com.jozufozu.flywheel:flywheel-forge-1.19.2:0.6.8.a-14")
     //runtimeOnly fg.deobf("com.tterrag.registrate:Registrate:MC1.19-1.1.5") //Only needed when Create and/or Flywheel are switched to implementation
 
     compileOnly fg.deobf("curse.maven:moonlight-499980:4348554")
