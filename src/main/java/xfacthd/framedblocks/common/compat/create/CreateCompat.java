@@ -69,6 +69,8 @@ public final class CreateCompat
         public static void init()
         {
             registerInteractionBehaviour(FBContent.blockFramedLever, new LeverMovingInteraction());
+            registerInteractionBehaviour(FBContent.blockFramedDoor, new DoorMovingInteraction());
+            registerInteractionBehaviour(FBContent.blockFramedTrapDoor, new TrapdoorMovingInteraction());
 
             BlockMovementChecks.registerAllChecks(new FramedBlockMovementChecks());
         }
