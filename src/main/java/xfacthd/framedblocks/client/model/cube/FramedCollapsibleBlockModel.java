@@ -44,10 +44,11 @@ public class FramedCollapsibleBlockModel extends FramedBlockModel
         float[] vertexPos = new float[] { 1F, 1F, 1F, 1F };
         if (offsets != null && offsets != 0)
         {
-            byte[] vertexOffsets = FramedCollapsibleBlockEntity.unpackOffsets(offsets);
+            byte[] relOff = FramedCollapsibleBlockEntity.unpackOffsets(offsets);
+            boolean allSame = relOff[0] == relOff[1] && relOff[0] == relOff[2] && relOff[0] == relOff[3];
             for (int i = 0; i < 4; i++)
             {
-                vertexPos[i] = Math.max(1F - ((float) vertexOffsets[i] / 16F), MIN_DEPTH);
+                vertexPos[i] = Math.max(1F - ((float) relOff[i] / 16F), allSame ? MIN_DEPTH : 0F);
             }
         }
 
