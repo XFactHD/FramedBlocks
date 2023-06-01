@@ -6,7 +6,8 @@ import xfacthd.framedblocks.api.data.CamoContainer;
 import xfacthd.framedblocks.api.ghost.CamoPair;
 import xfacthd.framedblocks.api.ghost.GhostRenderBehaviour;
 
-public class DoubleBlockGhostRenderBehaviour implements GhostRenderBehaviour
+public sealed class DoubleBlockGhostRenderBehaviour implements GhostRenderBehaviour
+        permits DoublePanelGhostRenderBehaviour
 {
     @Override
     public CamoPair readCamo(ItemStack stack, ItemStack proxiedStack, boolean secondPass)

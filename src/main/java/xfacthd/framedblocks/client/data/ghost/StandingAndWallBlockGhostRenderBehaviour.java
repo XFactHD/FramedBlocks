@@ -25,7 +25,9 @@ public final class StandingAndWallBlockGhostRenderBehaviour implements GhostRend
         }
         catch (Throwable e)
         {
-            throw new RuntimeException("Failed to invoke BlockItem#getPlacementState '%s'", e);
+            throw new RuntimeException(
+                    "Failed to invoke BlockItem#getPlacementState on '%s'".formatted(stack.getItem()), e
+            );
         }
     }
 }

@@ -9,7 +9,7 @@ import org.jetbrains.annotations.Nullable;
 import xfacthd.framedblocks.api.ghost.GhostRenderBehaviour;
 import xfacthd.framedblocks.common.FBContent;
 
-public class FancyRailGhostRenderBehaviour implements GhostRenderBehaviour
+public final class FancyRailGhostRenderBehaviour implements GhostRenderBehaviour
 {
     private final RailSlopeGhostRenderBehaviour railSlopeBehaviour = new RailSlopeGhostRenderBehaviour();
 
