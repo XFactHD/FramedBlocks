@@ -120,4 +120,13 @@ public class FramedExtendedDoubleSlopePanelBlock extends AbstractFramedDoubleBlo
     {
         return new FramedExtendedDoubleSlopePanelBlockEntity(pos, state);
     }
+
+
+
+    public static BlockState itemSource()
+    {
+        return FBContent.blockFramedExtendedDoubleSlopePanel.get()
+                .defaultBlockState()
+                .setValue(FramedProperties.FACING_HOR, Direction.SOUTH);
+    }
 }

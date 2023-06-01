@@ -14,6 +14,7 @@ import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.phys.shapes.*;
 import xfacthd.framedblocks.api.block.IFramedBlock;
 import xfacthd.framedblocks.api.util.*;
+import xfacthd.framedblocks.client.util.DoubleBlockParticleMode;
 import xfacthd.framedblocks.common.FBContent;
 import xfacthd.framedblocks.common.block.AbstractFramedDoubleBlock;
 import xfacthd.framedblocks.common.blockentity.FramedDoubleSlopeSlabBlockEntity;
@@ -130,5 +131,17 @@ public class FramedDoubleSlopeSlabBlock extends AbstractFramedDoubleBlock
     public BlockEntity newBlockEntity(BlockPos pos, BlockState state)
     {
         return new FramedDoubleSlopeSlabBlockEntity(pos, state);
+    }
+
+
+
+    public static DoubleBlockParticleMode particleMode(BlockState state)
+    {
+        return state.getValue(PropertyHolder.TOP_HALF) ? DoubleBlockParticleMode.FIRST : DoubleBlockParticleMode.SECOND;
+    }
+
+    public static BlockState itemModelSource()
+    {
+        return FBContent.blockFramedDoubleSlopeSlab.get().defaultBlockState();
     }
 }

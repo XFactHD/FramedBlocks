@@ -125,4 +125,20 @@ public class FramedFlatElevatedDoubleSlopeSlabCornerBlock extends AbstractFramed
     {
         return new FramedFlatElevatedDoubleSlopeSlabCornerBlockEntity(pos, state);
     }
+
+
+
+    public static BlockState itemModelSource()
+    {
+        return FBContent.blockFramedFlatElevatedDoubleSlopeSlabCorner.get()
+                .defaultBlockState()
+                .setValue(FramedProperties.FACING_HOR, Direction.SOUTH);
+    }
+
+    public static BlockState itemModelSourceInner()
+    {
+        return FBContent.blockFramedFlatElevatedInnerDoubleSlopeSlabCorner.get()
+                .defaultBlockState()
+                .setValue(FramedProperties.FACING_HOR, Direction.SOUTH);
+    }
 }

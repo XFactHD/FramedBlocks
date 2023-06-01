@@ -13,6 +13,7 @@ import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import xfacthd.framedblocks.api.block.IFramedBlock;
 import xfacthd.framedblocks.api.util.*;
+import xfacthd.framedblocks.client.util.DoubleBlockParticleMode;
 import xfacthd.framedblocks.common.FBContent;
 import xfacthd.framedblocks.common.block.AbstractFramedDoubleBlock;
 import xfacthd.framedblocks.common.blockentity.FramedDoubleSlopedPrismBlockEntity;
@@ -104,5 +105,29 @@ public class FramedDoubleSlopedPrismBlock extends AbstractFramedDoubleBlock
     public BlockEntity newBlockEntity(BlockPos pos, BlockState state)
     {
         return new FramedDoubleSlopedPrismBlockEntity(pos, state);
+    }
+
+
+
+    public static DoubleBlockParticleMode particleMode(BlockState state)
+    {
+        Direction dir = state.getValue(BlockStateProperties.FACING);
+        if (dir == Direction.UP)
+        {
+            return DoubleBlockParticleMode.SECOND;
+        }
+        else if (dir == Direction.DOWN || state.getValue(PropertyHolder.ORIENTATION) != Direction.UP)
+        {
+            return DoubleBlockParticleMode.FIRST;
+        }
+        return DoubleBlockParticleMode.EITHER;
+    }
+
+    public static BlockState itemModelSource()
+    {
+        return FBContent.blockFramedDoubleSlopedPrism.get()
+                .defaultBlockState()
+                .setValue(BlockStateProperties.FACING, Direction.UP)
+                .setValue(PropertyHolder.ORIENTATION, Direction.EAST);
     }
 }

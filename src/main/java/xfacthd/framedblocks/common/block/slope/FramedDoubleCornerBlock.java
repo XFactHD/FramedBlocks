@@ -12,8 +12,8 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.phys.Vec3;
 import xfacthd.framedblocks.api.block.IFramedBlock;
-import xfacthd.framedblocks.api.data.CamoContainer;
 import xfacthd.framedblocks.api.util.*;
+import xfacthd.framedblocks.client.util.DoubleBlockParticleMode;
 import xfacthd.framedblocks.common.FBContent;
 import xfacthd.framedblocks.common.block.AbstractFramedDoubleBlock;
 import xfacthd.framedblocks.common.blockentity.FramedDoubleCornerBlockEntity;
@@ -147,5 +147,28 @@ public class FramedDoubleCornerBlock extends AbstractFramedDoubleBlock
     public final BlockEntity newBlockEntity(BlockPos pos, BlockState state)
     {
         return new FramedDoubleCornerBlockEntity(pos, state);
+    }
+
+
+
+    public static DoubleBlockParticleMode particleMode(BlockState state)
+    {
+        CornerType type = state.getValue(PropertyHolder.CORNER_TYPE);
+        if (type == CornerType.BOTTOM)
+        {
+            return DoubleBlockParticleMode.SECOND;
+        }
+        else if (type.isTop())
+        {
+            return DoubleBlockParticleMode.FIRST;
+        }
+        return DoubleBlockParticleMode.EITHER;
+    }
+
+    public static BlockState itemModelSource()
+    {
+        return FBContent.blockFramedDoubleCorner.get()
+                .defaultBlockState()
+                .setValue(FramedProperties.FACING_HOR, Direction.WEST);
     }
 }

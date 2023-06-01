@@ -16,6 +16,7 @@ import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import xfacthd.framedblocks.api.block.IFramedBlock;
 import xfacthd.framedblocks.api.util.*;
+import xfacthd.framedblocks.client.util.DoubleBlockParticleMode;
 import xfacthd.framedblocks.common.FBContent;
 import xfacthd.framedblocks.common.block.AbstractFramedDoubleBlock;
 import xfacthd.framedblocks.common.blockentity.FramedDoubleSlopePanelBlockEntity;
@@ -143,5 +144,20 @@ public class FramedDoubleSlopePanelBlock extends AbstractFramedDoubleBlock
         }
 
         return builder.build();
+    }
+
+    public static DoubleBlockParticleMode particleMode(BlockState state)
+    {
+        return switch (state.getValue(PropertyHolder.ROTATION))
+        {
+            case LEFT, RIGHT -> DoubleBlockParticleMode.EITHER;
+            case UP -> DoubleBlockParticleMode.SECOND;
+            case DOWN -> DoubleBlockParticleMode.FIRST;
+        };
+    }
+
+    public static BlockState itemSource()
+    {
+        return FBContent.blockFramedDoubleSlopePanel.get().defaultBlockState();
     }
 }

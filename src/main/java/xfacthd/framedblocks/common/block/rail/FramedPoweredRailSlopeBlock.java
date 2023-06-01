@@ -25,6 +25,7 @@ import xfacthd.framedblocks.api.block.IFramedBlock;
 import xfacthd.framedblocks.api.type.IBlockType;
 import xfacthd.framedblocks.api.util.FramedProperties;
 import xfacthd.framedblocks.api.util.Utils;
+import xfacthd.framedblocks.common.FBContent;
 import xfacthd.framedblocks.common.blockentity.FramedFancyRailSlopeBlockEntity;
 import xfacthd.framedblocks.common.data.BlockType;
 import xfacthd.framedblocks.common.data.PropertyHolder;
@@ -244,5 +245,21 @@ public class FramedPoweredRailSlopeBlock extends PoweredRailBlock implements IFr
                 false,
                 FramedFancyRailSlopeBlockEntity::new
         );
+    }
+
+
+
+    public static BlockState itemModelSourceFancyPowered()
+    {
+        return FBContent.blockFramedFancyPoweredRailSlope.get()
+                .defaultBlockState()
+                .setValue(PropertyHolder.ASCENDING_RAIL_SHAPE, RailShape.ASCENDING_SOUTH);
+    }
+
+    public static BlockState itemModelSourceFancyActivator()
+    {
+        return FBContent.blockFramedFancyActivatorRailSlope.get()
+                .defaultBlockState()
+                .setValue(PropertyHolder.ASCENDING_RAIL_SHAPE, RailShape.ASCENDING_SOUTH);
     }
 }

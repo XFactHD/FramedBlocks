@@ -107,4 +107,13 @@ public class FramedElevatedDoubleSlopeSlabBlock extends AbstractFramedDoubleBloc
     {
         return new FramedElevatedDoubleSlopeSlabBlockEntity(pos, state);
     }
+
+
+
+    public static BlockState itemModelSource()
+    {
+        return FBContent.blockFramedElevatedDoubleSlopeSlab.get()
+                .defaultBlockState()
+                .setValue(FramedProperties.FACING_HOR, Direction.SOUTH);
+    }
 }

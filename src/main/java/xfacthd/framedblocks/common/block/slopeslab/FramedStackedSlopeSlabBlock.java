@@ -126,4 +126,13 @@ public class FramedStackedSlopeSlabBlock extends AbstractFramedDoubleBlock
                         .setValue(FramedProperties.Y_SLOPE, ySlope)
         );
     }
+
+
+
+    public static BlockState itemModelSource()
+    {
+        return FBContent.blockFramedStackedSlopeSlab.get()
+                .defaultBlockState()
+                .setValue(FramedProperties.FACING_HOR, Direction.SOUTH);
+    }
 }
