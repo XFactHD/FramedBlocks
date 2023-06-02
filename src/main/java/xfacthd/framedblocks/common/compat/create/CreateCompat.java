@@ -1,9 +1,8 @@
 package xfacthd.framedblocks.common.compat.create;
 
 import com.simibubi.create.AllInteractionBehaviours;
-import com.simibubi.create.content.contraptions.components.structureMovement.BlockMovementChecks;
-import com.simibubi.create.content.contraptions.components.structureMovement.MovingInteractionBehaviour;
-import com.simibubi.create.content.contraptions.components.structureMovement.interaction.*;
+import com.simibubi.create.content.contraptions.BlockMovementChecks;
+import com.simibubi.create.content.contraptions.behaviour.*;
 import com.simibubi.create.foundation.block.connected.CTModel;
 import com.simibubi.create.foundation.utility.NBTProcessors;
 import net.minecraft.world.level.block.Block;
