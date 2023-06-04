@@ -1,9 +1,8 @@
 package xfacthd.framedblocks.common.compat.create;
 
 import com.simibubi.create.AllInteractionBehaviours;
-import com.simibubi.create.content.contraptions.components.structureMovement.BlockMovementChecks;
-import com.simibubi.create.content.contraptions.components.structureMovement.MovingInteractionBehaviour;
-import com.simibubi.create.content.contraptions.components.structureMovement.interaction.*;
+import com.simibubi.create.content.contraptions.BlockMovementChecks;
+import com.simibubi.create.content.contraptions.behaviour.*;
 import net.minecraft.world.level.block.Block;
 import net.minecraftforge.fml.ModList;
 import net.minecraftforge.registries.RegistryObject;
@@ -39,7 +38,7 @@ public class CreateCompat
 
         private static void registerInteractionBehaviour(RegistryObject<Block> block, MovingInteractionBehaviour behaviour)
         {
-            AllInteractionBehaviours.registerBehaviour(block.get().delegate, behaviour);
+            AllInteractionBehaviours.registerBehaviour(block.get(), behaviour);
         }
     }
 }

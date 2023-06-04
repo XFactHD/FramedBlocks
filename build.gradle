@@ -18,7 +18,7 @@ apply plugin: 'eclipse'
 apply plugin: 'maven-publish'
 apply plugin: 'org.spongepowered.mixin'
 
-version = '5.11.4'
+version = '5.11.5'
 group = 'xfacthd.framedblocks'
 archivesBaseName = 'FramedBlocks'
 
@@ -156,7 +156,7 @@ dependencies {
     //runtimeOnly fg.deobf("curse.maven:rubidium_sodium-574856:3633735")
 
     compileOnly fg.deobf("curse.maven:flywheel-486392:3871082")
-    compileOnly fg.deobf("curse.maven:create-328085:3872145")
+    compileOnly fg.deobf("curse.maven:create-328085:4547146")
 
     compileOnly fg.deobf("curse.maven:moonlight-499980:3842421")
     compileOnly fg.deobf("curse.maven:supplementaries-412082:3947959")
