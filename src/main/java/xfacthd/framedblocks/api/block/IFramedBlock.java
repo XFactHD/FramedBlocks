@@ -17,8 +17,9 @@ import net.minecraft.world.level.block.*;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
+import net.minecraft.world.level.block.state.properties.NoteBlockInstrument;
 import net.minecraft.world.level.material.*;
-import net.minecraft.world.level.storage.loot.LootContext;
+import net.minecraft.world.level.storage.loot.LootParams;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.Vec3;
@@ -54,12 +55,10 @@ public interface IFramedBlock extends EntityBlock, IForgeBlock
 
     static Block.Properties createProperties(IBlockType type)
     {
-        return createProperties(type, Material.WOOD);
-    }
-
-    static Block.Properties createProperties(IBlockType type, Material material)
-    {
-        Block.Properties props = Block.Properties.of(material)
+        Block.Properties props = Block.Properties.of()
+                .mapColor(MapColor.WOOD)
+                .ignitedByLava()
+                .instrument(NoteBlockInstrument.BASS)
                 .strength(2F)
                 .sound(SoundType.WOOD)
                 .isViewBlocking(IFramedBlock::isBlockSuffocating)
@@ -171,7 +170,7 @@ public interface IFramedBlock extends EntityBlock, IForgeBlock
         return ((Block) this).getSoundType(state);
     }
 
-    default List<ItemStack> getCamoDrops(List<ItemStack> drops, LootContext.Builder builder)
+    default List<ItemStack> getCamoDrops(List<ItemStack> drops, LootParams.Builder builder)
     {
         if (builder.getOptionalParameter(LootContextParams.BLOCK_ENTITY) instanceof FramedBlockEntity be)
         {
@@ -200,7 +199,7 @@ public interface IFramedBlock extends EntityBlock, IForgeBlock
 
         if (mode.atleast(ConTexMode.FULL_CON_FACE) && queryPos != null)
         {
-            Direction conFace = Direction.fromNormal(queryPos.subtract(pos));
+            Direction conFace = Utils.dirByNormal(queryPos.subtract(pos));
             if (pred.test(state, conFace))
             {
                 //TODO: this successfully prevents a full block's side from connecting to a horizontally neighboring
@@ -214,7 +213,7 @@ public interface IFramedBlock extends EntityBlock, IForgeBlock
             // Can't use query state directly as the query state may be the camo of the framed block actually in that position
             if (level.getBlockState(queryPos).getBlock() instanceof IFramedBlock block)
             {
-                Direction conFace = Direction.fromNormal(queryPos.subtract(pos));
+                Direction conFace = Utils.dirByNormal(queryPos.subtract(pos));
                 if (conFace != null && isSideHiddenInModelData(level, pos, block, conFace))
                 {
                     //TODO: improve camo retrieval on interactions with double blocks (i.e. slab next to double slab)
@@ -384,7 +383,7 @@ public interface IFramedBlock extends EntityBlock, IForgeBlock
         }
 
         // Copy of the default suffocation check
-        return state.getMaterial().blocksMotion() && state.isCollisionShapeFullBlock(level, pos);
+        return state.blocksMotion() && state.isCollisionShapeFullBlock(level, pos);
     }
 
     default boolean useCamoOcclusionShapeForLightOcclusion(BlockState state)
@@ -531,11 +530,11 @@ public interface IFramedBlock extends EntityBlock, IForgeBlock
     default BlockState rotate(BlockState state, Direction face, Rotation rot) { return state.rotate(rot); }
 
     @Override
-    default MaterialColor getMapColor(BlockState state, BlockGetter level, BlockPos pos, MaterialColor defaultColor)
+    default MapColor getMapColor(BlockState state, BlockGetter level, BlockPos pos, MapColor defaultColor)
     {
         if (level.getBlockEntity(pos) instanceof FramedBlockEntity be)
         {
-            MaterialColor color = be.getMapColor();
+            MapColor color = be.getMapColor();
             if (color != null)
             {
                 return color;

@@ -1,6 +1,8 @@
 package xfacthd.framedblocks.api.util;
 
 import com.google.common.base.Preconditions;
+import it.unimi.dsi.fastutil.longs.Long2ObjectMap;
+import it.unimi.dsi.fastutil.longs.Long2ObjectOpenHashMap;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.*;
 import net.minecraft.core.registries.BuiltInRegistries;
@@ -43,6 +45,7 @@ import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.util.Arrays;
 import java.util.function.*;
+import java.util.stream.Collectors;
 
 public final class Utils
 {
@@ -71,6 +74,14 @@ public final class Utils
     public static final RegistryObject<Item> FRAMED_REINFORCEMENT = RegistryObject.create(
             Utils.rl("framed_reinforcement"), ForgeRegistries.ITEMS
     );
+
+    private static final Long2ObjectMap<Direction> DIRECTION_BY_NORMAL = Arrays.stream(Direction.values())
+            .collect(Collectors.toMap(
+                    side -> new BlockPos(side.getNormal()).asLong(),
+                    Function.identity(),
+                    (sideA, sideB) -> { throw new IllegalArgumentException("Duplicate keys"); },
+                    Long2ObjectOpenHashMap::new
+            ));
 
     public static VoxelShape rotateShape(Direction from, Direction to, VoxelShape shape)
     {
@@ -232,6 +243,11 @@ public final class Utils
     public static boolean isY(Direction dir) { return dir.getAxis() == Direction.Axis.Y; }
 
     public static boolean isZ(Direction dir) { return dir.getAxis() == Direction.Axis.Z; }
+
+    public static Direction dirByNormal(BlockPos normal)
+    {
+        return DIRECTION_BY_NORMAL.get(normal.asLong());
+    }
 
     public static Direction.Axis nextAxisNotEqualTo(Direction.Axis axis, Direction.Axis except)
     {

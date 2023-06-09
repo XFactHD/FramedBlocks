@@ -103,5 +103,5 @@ public abstract class AbstractFramedSignBlock extends FramedBlock
     }
 
     @Override
-    public boolean isPossibleToRespawnInThis() { return true; }
+    public boolean isPossibleToRespawnInThis(BlockState state) { return true; }
 }

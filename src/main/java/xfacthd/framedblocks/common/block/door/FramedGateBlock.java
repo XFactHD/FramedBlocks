@@ -23,6 +23,7 @@ import net.minecraft.world.phys.shapes.VoxelShape;
 import xfacthd.framedblocks.api.block.IFramedBlock;
 import xfacthd.framedblocks.api.block.FramedProperties;
 import xfacthd.framedblocks.api.util.Utils;
+import xfacthd.framedblocks.common.FBContent;
 import xfacthd.framedblocks.common.block.FramedBlock;
 import xfacthd.framedblocks.common.data.BlockType;
 
@@ -112,7 +113,7 @@ public class FramedGateBlock extends FramedBlock
         InteractionResult result = super.use(state, level, pos, player, hand, hit);
         if (result.consumesAction()) { return result; }
 
-        if (material == FramedDoorBlock.IRON_WOOD)
+        if (this == FBContent.blockFramedIronGate.get())
         {
             return InteractionResult.PASS;
         }
@@ -165,8 +166,9 @@ public class FramedGateBlock extends FramedBlock
     @Override
     public boolean doesBlockOccludeBeaconBeam(BlockState state, LevelReader level, BlockPos pos) { return false; }
 
-    @Override
-    public PushReaction getPistonPushReaction(BlockState state) { return PushReaction.DESTROY; }
+    // FIXME: https://github.com/MinecraftForge/MinecraftForge/pull/9538
+    //@Override
+    //public PushReaction getPistonPushReaction(BlockState state) { return PushReaction.DESTROY; }
 
     @Override
     public BlockState rotate(BlockState state, Rotation rotation)
@@ -215,7 +217,7 @@ public class FramedGateBlock extends FramedBlock
     {
         return new FramedGateBlock(
                 BlockType.FRAMED_IRON_GATE,
-                IFramedBlock.createProperties(BlockType.FRAMED_IRON_GATE, FramedDoorBlock.IRON_WOOD)
+                IFramedBlock.createProperties(BlockType.FRAMED_IRON_GATE)
                         .requiresCorrectToolForDrops(),
                 SoundEvents.IRON_DOOR_CLOSE,
                 SoundEvents.IRON_DOOR_OPEN

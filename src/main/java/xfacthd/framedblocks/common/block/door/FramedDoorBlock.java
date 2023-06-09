@@ -13,8 +13,7 @@ import net.minecraft.world.level.block.DoorBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.*;
-import net.minecraft.world.level.material.Material;
-import net.minecraft.world.level.storage.loot.LootContext;
+import net.minecraft.world.level.storage.loot.LootParams;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
@@ -71,9 +70,7 @@ public class FramedDoorBlock extends DoorBlock implements IFramedBlock
     public final InteractionResult use(BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hit)
     {
         InteractionResult result = handleUse(state, level, pos, player, hand, hit);
-        if (result.consumesAction()) { return result; }
-
-        return material == IRON_WOOD ? InteractionResult.PASS : super.use(state, level, pos, player, hand, hit);
+        return result.consumesAction() ? result : super.use(state, level, pos, player, hand, hit);
     }
 
     @Override
@@ -126,7 +123,7 @@ public class FramedDoorBlock extends DoorBlock implements IFramedBlock
     }
 
     @Override
-    public List<ItemStack> getDrops(BlockState state, LootContext.Builder builder)
+    public List<ItemStack> getDrops(BlockState state, LootParams.Builder builder)
     {
         return getCamoDrops(super.getDrops(state, builder), builder);
     }
@@ -135,18 +132,6 @@ public class FramedDoorBlock extends DoorBlock implements IFramedBlock
     public BlockType getBlockType() { return type; }
 
 
-
-    // Fake wooden material to satisfy the hard-coded wooden door check while staying wooden
-    public static final Material IRON_WOOD = new Material(
-            Material.WOOD.getColor(),
-            Material.WOOD.isLiquid(),
-            Material.WOOD.isSolid(),
-            Material.WOOD.blocksMotion(),
-            Material.WOOD.isSolidBlocking(),
-            Material.WOOD.isFlammable(),
-            Material.WOOD.isReplaceable(),
-            Material.WOOD.getPushReaction()
-    );
 
     public static FramedDoorBlock wood()
     {
@@ -161,7 +146,7 @@ public class FramedDoorBlock extends DoorBlock implements IFramedBlock
     {
         return new FramedDoorBlock(
                 BlockType.FRAMED_IRON_DOOR,
-                IFramedBlock.createProperties(BlockType.FRAMED_IRON_DOOR, IRON_WOOD)
+                IFramedBlock.createProperties(BlockType.FRAMED_IRON_DOOR)
                         .requiresCorrectToolForDrops(),
                 BlockSetType.IRON
         );

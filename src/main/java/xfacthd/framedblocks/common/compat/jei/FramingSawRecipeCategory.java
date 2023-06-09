@@ -1,7 +1,6 @@
 package xfacthd.framedblocks.common.compat.jei;
 
 import com.google.common.collect.Lists;
-import com.mojang.blaze3d.vertex.PoseStack;
 import mezz.jei.api.gui.builder.IRecipeLayoutBuilder;
 import mezz.jei.api.gui.builder.IRecipeSlotBuilder;
 import mezz.jei.api.gui.drawable.IDrawable;
@@ -9,6 +8,7 @@ import mezz.jei.api.gui.ingredient.IRecipeSlotsView;
 import mezz.jei.api.helpers.IGuiHelper;
 import mezz.jei.api.recipe.*;
 import mezz.jei.api.recipe.category.IRecipeCategory;
+import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.SimpleContainer;
@@ -150,7 +150,7 @@ public final class FramingSawRecipeCategory implements IRecipeCategory<FramingSa
     }
 
     @Override
-    public void draw(FramingSawRecipe recipe, IRecipeSlotsView slots, PoseStack poseStack, double mouseX, double mouseY)
+    public void draw(FramingSawRecipe recipe, IRecipeSlotsView slots, GuiGraphics graphics, double mouseX, double mouseY)
     {
         ItemStack input = slots.findSlotByName("input")
                 .orElseThrow()
@@ -159,11 +159,11 @@ public final class FramingSawRecipeCategory implements IRecipeCategory<FramingSa
 
         if (FramingSawRecipeCache.get(true).containsAdditive(input.getItem()))
         {
-            poseStack.pushPose();
-            poseStack.scale(WARNING_SCALE, WARNING_SCALE, 1F);
-            poseStack.translate(WARNING_X * (1F / WARNING_SCALE), WARNING_Y * (1F / WARNING_SCALE), 0);
-            warning.draw(poseStack);
-            poseStack.popPose();
+            graphics.pose().pushPose();
+            graphics.pose().scale(WARNING_SCALE, WARNING_SCALE, 1F);
+            graphics.pose().translate(WARNING_X * (1F / WARNING_SCALE), WARNING_Y * (1F / WARNING_SCALE), 0);
+            warning.draw(graphics);
+            graphics.pose().popPose();
         }
     }
 

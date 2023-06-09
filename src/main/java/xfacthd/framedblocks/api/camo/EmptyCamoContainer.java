@@ -6,7 +6,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.BlockAndTintGetter;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.block.Blocks;
-import net.minecraft.world.level.material.MaterialColor;
+import net.minecraft.world.level.material.MapColor;
 import xfacthd.framedblocks.api.FramedBlocksAPI;
 
 public final class EmptyCamoContainer extends CamoContainer
@@ -19,7 +19,7 @@ public final class EmptyCamoContainer extends CamoContainer
     public int getColor(BlockAndTintGetter level, BlockPos pos, int tintIdx) { return -1; }
 
     @Override
-    public MaterialColor getMapColor(BlockGetter level, BlockPos pos) { return null; }
+    public MapColor getMapColor(BlockGetter level, BlockPos pos) { return null; }
 
     @Override
     public ItemStack toItemStack(ItemStack stack) { return ItemStack.EMPTY; }

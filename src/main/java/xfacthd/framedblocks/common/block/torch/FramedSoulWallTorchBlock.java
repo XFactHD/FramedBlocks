@@ -2,14 +2,15 @@ package xfacthd.framedblocks.common.block.torch;
 
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.world.level.block.SoundType;
-import net.minecraft.world.level.material.Material;
+import net.minecraft.world.level.material.PushReaction;
 import xfacthd.framedblocks.common.data.BlockType;
 
 public class FramedSoulWallTorchBlock extends FramedWallTorchBlock
 {
     public FramedSoulWallTorchBlock()
     {
-        super(Properties.of(Material.DECORATION)
+        super(Properties.of()
+                .pushReaction(PushReaction.DESTROY)
                 .noCollission()
                 .strength(0.5F)
                 .sound(SoundType.WOOD)

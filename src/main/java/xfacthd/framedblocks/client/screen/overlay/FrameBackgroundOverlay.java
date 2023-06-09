@@ -1,6 +1,6 @@
 package xfacthd.framedblocks.client.screen.overlay;
 
-import com.mojang.blaze3d.vertex.PoseStack;
+import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
@@ -57,12 +57,12 @@ public class FrameBackgroundOverlay extends BlockInteractOverlay
     }
 
     @Override
-    protected void renderAfterIcon(ForgeGui gui, PoseStack poseStack, Texture tex, int texX, int texY, Target target)
+    protected void renderAfterIcon(ForgeGui gui, GuiGraphics graphics, Texture tex, int texX, int texY, Target target)
     {
-        TEXTURE_LEATHER.draw(gui, poseStack, texX + 3, texY + 3);
+        TEXTURE_LEATHER.draw(gui, graphics, texX + 3, texY + 3);
         if (!target.state().getValue(PropertyHolder.LEATHER))
         {
-            TEXTURE_CROSS.draw(gui, poseStack, texX + 3, texY + 3);
+            TEXTURE_CROSS.draw(gui, graphics, texX + 3, texY + 3);
         }
     }
 }

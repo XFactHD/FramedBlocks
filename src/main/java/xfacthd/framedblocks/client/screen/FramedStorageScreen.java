@@ -1,9 +1,8 @@
 package xfacthd.framedblocks.client.screen;
 
-import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.systems.RenderSystem;
+import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
-import net.minecraft.client.renderer.GameRenderer;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.network.chat.Component;
@@ -22,24 +21,22 @@ public class FramedStorageScreen extends AbstractContainerScreen<FramedStorageMe
     }
 
     @Override
-    public void render(PoseStack poseStack, int mouseX, int mouseY, float partialTicks)
+    public void render(GuiGraphics graphics, int mouseX, int mouseY, float partialTicks)
     {
-        this.renderBackground(poseStack);
-        super.render(poseStack, mouseX, mouseY, partialTicks);
-        this.renderTooltip(poseStack, mouseX, mouseY);
+        this.renderBackground(graphics);
+        super.render(graphics, mouseX, mouseY, partialTicks);
+        this.renderTooltip(graphics, mouseX, mouseY);
     }
 
     @Override
-    protected void renderBg(PoseStack poseStack, float partialTicks, int x, int y)
+    protected void renderBg(GuiGraphics graphics, float partialTicks, int x, int y)
     {
-        RenderSystem.setShader(GameRenderer::getPositionTexShader);
         RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
-        RenderSystem.setShaderTexture(0, CHEST_GUI_TEXTURE);
 
         int left = (this.width - this.imageWidth) / 2;
         int top = (this.height - this.imageHeight) / 2;
 
-        blit(poseStack, left, top, 0, 0, imageWidth, 71);
-        blit(poseStack, left, top + 71, 0, 126, imageWidth, 96);
+        graphics.blit(CHEST_GUI_TEXTURE, left, top, 0, 0, imageWidth, 71);
+        graphics.blit(CHEST_GUI_TEXTURE, left, top + 71, 0, 126, imageWidth, 96);
     }
 }

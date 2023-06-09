@@ -8,6 +8,7 @@ import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.*;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.gui.Font;
+import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.font.TextFieldHelper;
 import net.minecraft.client.gui.screens.Screen;
@@ -36,7 +37,7 @@ import xfacthd.framedblocks.common.blockentity.FramedSignBlockEntity;
 import java.util.List;
 
 @SuppressWarnings("deprecation")
-public class FramedSignScreen extends Screen
+public class FramedSignScreen extends Screen // FIXME: update to match vanilla sign screen
 {
     private static final Table<BlockState, Direction, TextureAtlasSprite> SPRITE_CACHE = HashBasedTable.create();
     private static final ResourceLocation DEFAULT_TEXTURE = Utils.rl("block/framed_block");
@@ -139,18 +140,17 @@ public class FramedSignScreen extends Screen
     }
 
     @Override
-    public void render(PoseStack mstack, int mouseX, int mouseY, float partialTicks)
+    public void render(GuiGraphics graphics, int mouseX, int mouseY, float partialTicks)
     {
         Lighting.setupForFlatItems();
 
-        renderBackground(mstack);
+        renderBackground(graphics);
         //noinspection ConstantConditions
-        drawCenteredString(mstack, font, title, width / 2, 40, ChatFormatting.WHITE.getColor());
+        graphics.drawCenteredString(font, title, width / 2, 40, ChatFormatting.WHITE.getColor());
 
-        RenderSystem.setShaderTexture(0, TextureAtlas.LOCATION_BLOCKS);
         TextureAtlasSprite sprite = getFrontSprite();
-
-        innerBlit(mstack.last().pose(),
+        graphics.innerBlit(
+                sprite.atlasLocation(),
                 texX, texX + TEX_W, texY, texY + TEX_H, 0,
                 sprite.getU0(),
                 sprite.getU1(),
@@ -158,20 +158,20 @@ public class FramedSignScreen extends Screen
                 sprite.getV(TEX_MAX_V)
         );
 
-        mstack.pushPose();
-        mstack.translate(width / 2D, height / 2D - 20, 0);
-        mstack.scale(1.2F, 1.2F, 1F);
+        graphics.pose().pushPose();
+        graphics.pose().translate(width / 2D, height / 2D - 20, 0);
+        graphics.pose().scale(1.2F, 1.2F, 1F);
 
         //noinspection ConstantConditions
         MultiBufferSource.BufferSource buffer = minecraft.renderBuffers().bufferSource();
 
-        drawLines(mstack.last().pose(), buffer, lines);
-        drawCursor(mstack, buffer, lines);
+        drawLines(graphics.pose().last().pose(), buffer, lines);
+        drawCursor(graphics, buffer, lines);
 
-        mstack.popPose();
+        graphics.pose().popPose();
 
         Lighting.setupFor3DItems();
-        super.render(mstack, mouseX, mouseY, partialTicks);
+        super.render(graphics, mouseX, mouseY, partialTicks);
     }
 
     private void drawLines(Matrix4f matrix, MultiBufferSource.BufferSource buffer, String[] lines)
@@ -193,9 +193,9 @@ public class FramedSignScreen extends Screen
         buffer.endBatch();
     }
 
-    private void drawCursor(PoseStack mstack, MultiBufferSource.BufferSource buffer, String[] lines)
+    private void drawCursor(GuiGraphics graphics, MultiBufferSource.BufferSource buffer, String[] lines)
     {
-        Matrix4f matrix = mstack.last().pose();
+        Matrix4f matrix = graphics.pose().last().pose();
         int color = sign.getTextColor().getTextColor();
         boolean blink = blinkCounter / 6 % 2 == 0;
         int dir = font.isBidirectional() ? -1 : 1;
@@ -214,7 +214,7 @@ public class FramedSignScreen extends Screen
                 {
                     if (inputUtil.getCursorPos() < line.length())
                     {
-                        fill(mstack, cursorX, y - 1, cursorX + 1, y + 9, 0xff000000 | color);
+                        graphics.fill(cursorX, y - 1, cursorX + 1, y + 9, 0xff000000 | color);
                     }
                     else
                     {

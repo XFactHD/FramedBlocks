@@ -13,8 +13,8 @@ import net.minecraft.world.level.block.*;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
-import net.minecraft.world.level.material.Material;
-import net.minecraft.world.level.storage.loot.LootContext;
+import net.minecraft.world.level.material.PushReaction;
+import net.minecraft.world.level.storage.loot.LootParams;
 import net.minecraft.world.phys.BlockHitResult;
 import xfacthd.framedblocks.api.block.FramedProperties;
 import xfacthd.framedblocks.api.block.IFramedBlock;
@@ -29,7 +29,8 @@ public class FramedRedstoneTorchBlock extends RedstoneTorchBlock implements IFra
 {
     public FramedRedstoneTorchBlock()
     {
-        super(Properties.of(Material.DECORATION)
+        super(Properties.of()
+                .pushReaction(PushReaction.DESTROY)
                 .noCollission()
                 .strength(0.5F)
                 .sound(SoundType.WOOD)
@@ -83,7 +84,7 @@ public class FramedRedstoneTorchBlock extends RedstoneTorchBlock implements IFra
     }
 
     @Override
-    public List<ItemStack> getDrops(BlockState state, LootContext.Builder builder)
+    public List<ItemStack> getDrops(BlockState state, LootParams.Builder builder)
     {
         return getCamoDrops(super.getDrops(state, builder), builder);
     }

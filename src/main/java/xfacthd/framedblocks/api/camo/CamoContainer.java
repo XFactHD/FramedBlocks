@@ -10,7 +10,7 @@ import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.Property;
 import net.minecraft.world.level.material.Fluid;
-import net.minecraft.world.level.material.MaterialColor;
+import net.minecraft.world.level.material.MapColor;
 import org.slf4j.Logger;
 import xfacthd.framedblocks.api.FramedBlocksAPI;
 import xfacthd.framedblocks.api.util.Utils;
@@ -38,12 +38,12 @@ public abstract class CamoContainer
     }
 
     /**
-     * Returns the {@link MaterialColor} to use on the map for this camo container
+     * Returns the {@link MapColor} to use on the map for this camo container
      * @param level The current level
      * @param pos The position of the framed block
      * @return The map color
      */
-    public MaterialColor getMapColor(BlockGetter level, BlockPos pos) { return state.getMapColor(level, pos); }
+    public MapColor getMapColor(BlockGetter level, BlockPos pos) { return state.getMapColor(level, pos); }
 
     /**
      * Returns the color multipliers to apply to a beacon beam

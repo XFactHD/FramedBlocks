@@ -303,7 +303,7 @@ public class FramedBlueprintItem extends FramedToolItem
 
             for (ItemStack existing : camoStacks)
             {
-                if (ItemStack.isSame(existing, stack))
+                if (ItemStack.isSameItem(existing, stack))
                 {
                     int size = existing.getCount();
                     existing.grow(Math.max(existing.getMaxStackSize() - size, stack.getCount()));

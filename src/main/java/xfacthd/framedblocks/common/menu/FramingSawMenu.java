@@ -43,7 +43,7 @@ public class FramingSawMenu extends AbstractContainerMenu
     {
         super(FBContent.menuTypeFramingSaw.get(), containerId);
 
-        this.level = inv.player.level;
+        this.level = inv.player.level();
         this.levelAccess = levelAccess;
         this.inputSlot = addSlot(new Slot(inputContainer, SLOT_INPUT, 20, 28));
         this.additiveSlots = new Slot[FramingSawRecipe.MAX_ADDITIVE_COUNT];
@@ -80,7 +80,7 @@ public class FramingSawMenu extends AbstractContainerMenu
 
             if (index == SLOT_RESULT)
             {
-                stack.getItem().onCraftedBy(stack, player.level, player);
+                stack.getItem().onCraftedBy(stack, player.level(), player);
                 if (!moveItemStackTo(stack, SLOT_INV_FIRST, slots.size(), true))
                 {
                     return ItemStack.EMPTY;
@@ -296,8 +296,13 @@ public class FramingSawMenu extends AbstractContainerMenu
         @Override
         public void onTake(Player player, ItemStack stack)
         {
-            stack.onCraftedBy(player.level, player, stack.getCount());
-            menu.resultContainer.awardUsedRecipes(player);
+            stack.onCraftedBy(player.level(), player, stack.getCount());
+            menu.resultContainer.awardUsedRecipes(player, List.of(
+                    menu.inputSlot.getItem(),
+                    menu.additiveSlots[0].getItem(),
+                    menu.additiveSlots[1].getItem(),
+                    menu.additiveSlots[2].getItem()
+            ));
 
             FramingSawRecipeCalculation calc = menu.selectedRecipe.makeCraftingCalculation(
                     menu.inputContainer, menu.level.isClientSide()

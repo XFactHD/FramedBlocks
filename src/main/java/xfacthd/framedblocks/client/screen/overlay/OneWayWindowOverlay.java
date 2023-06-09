@@ -1,8 +1,7 @@
 package xfacthd.framedblocks.client.screen.overlay;
 
-import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.ChatFormatting;
-import net.minecraft.client.gui.GuiComponent;
+import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.core.Direction;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
@@ -82,24 +81,24 @@ public final class OneWayWindowOverlay extends BlockInteractOverlay
     }
 
     @Override
-    protected void renderAfterIcon(ForgeGui gui, PoseStack poseStack, Texture tex, int texX, int texY, Target target)
+    protected void renderAfterIcon(ForgeGui gui, GuiGraphics graphics, Texture tex, int texX, int texY, Target target)
     {
         NullableDirection face = target.state().getValue(PropertyHolder.NULLABLE_FACE);
 
-        poseStack.pushPose();
-        poseStack.translate(-.5, -.5, 0);
+        graphics.pose().pushPose();
+        graphics.pose().translate(-.5, -.5, 0);
 
-        TEXTURE_EYE.draw(gui, poseStack, texX + 3, texY + 3);
+        TEXTURE_EYE.draw(gui, graphics, texX + 3, texY + 3);
         if (face == NullableDirection.NONE)
         {
-            TEXTURE_CROSS.draw(gui, poseStack, texX + 4, texY + 4);
+            TEXTURE_CROSS.draw(gui, graphics, texX + 4, texY + 4);
         }
 
-        poseStack.popPose();
+        graphics.pose().popPose();
 
         int x = texX + (tex.width() / 2);
         int y = texY + (tex.height() * 3 / 4) - (gui.getFont().lineHeight / 2);
-        GuiComponent.drawCenteredString(poseStack, gui.getFont(), FACE_VALUE_ABBRS[face.ordinal()], x, y, -1/*0x555555*/);
+        graphics.drawCenteredString(gui.getFont(), FACE_VALUE_ABBRS[face.ordinal()], x, y, -1/*0x555555*/);
     }
 
 

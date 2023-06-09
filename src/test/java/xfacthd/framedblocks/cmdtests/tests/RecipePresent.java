@@ -118,7 +118,9 @@ public final class RecipePresent
                 ))
                 .withStyle(color)
                 .append(resultMsg);
-        ctx.getSource().sendSuccess(resultMsg, true);
+
+        Component resultMsgFinal = resultMsg;
+        ctx.getSource().sendSuccess(() -> resultMsgFinal, true);
 
         return Command.SINGLE_SUCCESS;
     }
@@ -148,4 +150,6 @@ public final class RecipePresent
         blockItems.removeAll(EXCLUDED.get());
         return blockItems;
     }
+
+    private RecipePresent() { }
 }

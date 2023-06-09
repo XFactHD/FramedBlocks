@@ -58,7 +58,6 @@ public final class FramedBlocks
 
         modBus.addListener(FramedBlocks::onCommonSetup);
         modBus.addListener(FramedBlocks::onLoadComplete);
-        modBus.addListener(FramedCreativeTab::onRegisterCreativeTabs);
 
         IEventBus forgeBus = MinecraftForge.EVENT_BUS;
         forgeBus.addListener(EventHandler::onBlockLeftClick);

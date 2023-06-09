@@ -3,10 +3,10 @@ package xfacthd.framedblocks.client.screen;
 import com.mojang.blaze3d.platform.InputConstants;
 import com.mojang.blaze3d.platform.Window;
 import com.mojang.blaze3d.systems.RenderSystem;
-import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.MouseHandler;
+import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
 import net.minecraft.client.renderer.GameRenderer;
 import net.minecraft.client.resources.sounds.SimpleSoundInstance;
@@ -79,32 +79,29 @@ public class FramingSawScreen extends AbstractContainerScreen<FramingSawMenu>
     }
 
     @Override
-    public void render(PoseStack poseStack, int mouseX, int mouseY, float partialTick)
+    public void render(GuiGraphics graphics, int mouseX, int mouseY, float partialTick)
     {
-        super.render(poseStack, mouseX, mouseY, partialTick);
-        renderTooltip(poseStack, mouseX, mouseY);
+        super.render(graphics, mouseX, mouseY, partialTick);
+        renderTooltip(graphics, mouseX, mouseY);
     }
 
     @Override
-    protected void renderBg(PoseStack poseStack, float partialTick, int mouseX, int mouseY)
+    protected void renderBg(GuiGraphics graphics, float partialTick, int mouseX, int mouseY)
     {
-        renderBackground(poseStack);
+        renderBackground(graphics);
 
         RenderSystem.setShader(GameRenderer::getPositionTexShader);
         RenderSystem.setShaderColor(1F, 1F, 1F, 1F);
 
-        RenderSystem.setShaderTexture(0, BACKGROUND);
-        blit(poseStack, leftPos, topPos, 0, 0, imageWidth, imageHeight);
+        graphics.blit(BACKGROUND, leftPos, topPos, 0, 0, imageWidth, imageHeight);
         int offset = (int) ((SCROLL_BAR_HEIGHT - SCROLL_BTN_HEIGHT) * scrollOffset);
         int scrollU = SCROLL_BTN_TEX_X + (isScrollBarActive() ? 0 : SCROLL_BTN_WIDTH);
-        blit(poseStack, leftPos + SCROLL_BAR_X, topPos + SCROLL_BAR_Y + offset, scrollU, imageHeight, SCROLL_BTN_WIDTH, SCROLL_BTN_HEIGHT);
+        graphics.blit(BACKGROUND, leftPos + SCROLL_BAR_X, topPos + SCROLL_BAR_Y + offset, scrollU, imageHeight, SCROLL_BTN_WIDTH, SCROLL_BTN_HEIGHT);
 
         ItemStack input = menu.getInputStack();
         if (!input.isEmpty() && cache.containsAdditive(input.getItem()))
         {
-            RenderSystem.setShaderTexture(0, WARNING_ICON);
-            blit(poseStack, leftPos + WARNING_X, topPos + WARNING_Y, 8, 8, 24, 24, 32, 32);
-            RenderSystem.setShaderTexture(0, BACKGROUND);
+            graphics.blit(WARNING_ICON, leftPos + WARNING_X, topPos + WARNING_Y, 8, 8, 24, 24, 32, 32);
         }
 
         int idx = menu.getSelectedRecipeIndex();
@@ -116,8 +113,8 @@ public class FramingSawScreen extends AbstractContainerScreen<FramingSawMenu>
         int recX = leftPos + RECIPES_X;
         int recY = topPos + RECIPES_Y;
         int lastIndex = firstIndex + RECIPE_COUNT;
-        renderButtons(poseStack, mouseX, mouseY, recX, recY, lastIndex);
-        renderRecipes(poseStack, recX, recY, lastIndex);
+        renderButtons(graphics, mouseX, mouseY, recX, recY, lastIndex);
+        renderRecipes(graphics, recX, recY, lastIndex);
 
         List<FramingSawRecipe> recipes = cache.getRecipes();
         if (idx >= 0 && idx < recipes.size())
@@ -125,7 +122,7 @@ public class FramingSawScreen extends AbstractContainerScreen<FramingSawMenu>
             FramingSawRecipe recipe = recipes.get(idx);
             if (input.isEmpty())
             {
-                ItemRenderHelper.renderFakeItemTransparent(poseStack, cubeStack, leftPos + 20, topPos + 28, 127);
+                ItemRenderHelper.renderFakeItemTransparent(graphics.pose(), cubeStack, leftPos + 20, topPos + 28, 127);
             }
 
             List<FramingSawRecipeAdditive> additives = recipe.getAdditives();
@@ -139,7 +136,7 @@ public class FramingSawScreen extends AbstractContainerScreen<FramingSawMenu>
                 ItemStack[] items = additives.get(i).ingredient().getItems();
                 int t = (int) (System.currentTimeMillis() / 1700) % items.length;
                 int y = topPos + 64 + (18 * i);
-                ItemRenderHelper.renderFakeItemTransparent(poseStack, items[t], leftPos + 20, y, 127);
+                ItemRenderHelper.renderFakeItemTransparent(graphics.pose(), items[t], leftPos + 20, y, 127);
             }
         }
     }
@@ -157,18 +154,18 @@ public class FramingSawScreen extends AbstractContainerScreen<FramingSawMenu>
     }
 
     @Override
-    protected void renderTooltip(PoseStack poseStack, int mouseX, int mouseY)
+    protected void renderTooltip(GuiGraphics graphics, int mouseX, int mouseY)
     {
         if (menu.getCarried().isEmpty() && hoveredSlot != null && hoveredSlot.hasItem())
         {
-            renderItemTooltip(poseStack, mouseX, mouseY, hoveredSlot.getItem(), null);
+            renderItemTooltip(graphics, mouseX, mouseY, hoveredSlot.getItem(), null);
             return;
         }
 
         ItemStack input = menu.getInputStack();
         if (!input.isEmpty() && isHovering(WARNING_X, WARNING_Y, 16, 16, mouseX, mouseY) && cache.containsAdditive(input.getItem()))
         {
-            renderTooltip(poseStack, TOOLTIP_LOOSE_ADDITIVE, mouseX, mouseY);
+            graphics.renderTooltip(font, TOOLTIP_LOOSE_ADDITIVE, mouseX, mouseY);
             return;
         }
 
@@ -186,14 +183,15 @@ public class FramingSawScreen extends AbstractContainerScreen<FramingSawMenu>
             {
                 FramingSawMenu.RecipeHolder recipe = recipes.get(idx);
                 ItemStack result = recipe.getRecipe().getResult();
-                renderItemTooltip(poseStack, mouseX, mouseY, result, recipe);
+                renderItemTooltip(graphics, mouseX, mouseY, result, recipe);
             }
         }
     }
 
-    private void renderItemTooltip(PoseStack poseStack, int mouseX, int mouseY, ItemStack stack, FramingSawMenu.RecipeHolder recipeHolder)
+    private void renderItemTooltip(GuiGraphics graphics, int mouseX, int mouseY, ItemStack stack, FramingSawMenu.RecipeHolder recipeHolder)
     {
-        List<Component> components = new ArrayList<>(getTooltipFromItem(stack));
+        //noinspection ConstantConditions
+        List<Component> components = new ArrayList<>(getTooltipFromItem(minecraft, stack));
         Optional<TooltipComponent> tooltip = stack.getTooltipImage();
 
         int material = cache.getMaterialValue(stack.getItem());
@@ -207,7 +205,7 @@ public class FramingSawScreen extends AbstractContainerScreen<FramingSawMenu>
             appendRecipeFailure(components, recipeHolder);
         }
 
-        renderTooltip(poseStack, components, tooltip, mouseX, mouseY, null, stack);
+        graphics.renderTooltip(font, components, tooltip, stack, mouseX, mouseY);
     }
 
     private void appendRecipeFailure(List<Component> components, FramingSawMenu.RecipeHolder recipeHolder)
@@ -339,7 +337,7 @@ public class FramingSawScreen extends AbstractContainerScreen<FramingSawMenu>
         }
     }
 
-    private void renderButtons(PoseStack poseStack, int mouseX, int mouseY, int x, int y, int lastIdx)
+    private void renderButtons(GuiGraphics graphics, int mouseX, int mouseY, int x, int y, int lastIdx)
     {
         List<FramingSawMenu.RecipeHolder> recipes = menu.getRecipes();
         for (int idx = firstIndex; idx < lastIdx && idx < recipes.size(); ++idx)
@@ -369,11 +367,11 @@ public class FramingSawScreen extends AbstractContainerScreen<FramingSawMenu>
                 RenderSystem.setShaderColor(1F, 1F, 1F, 1F);
             }
 
-            blit(poseStack, recX, recY, u, imageHeight, RECIPE_WIDTH, RECIPE_HEIGHT);
+            graphics.blit(BACKGROUND, recX, recY, u, imageHeight, RECIPE_WIDTH, RECIPE_HEIGHT);
         }
     }
 
-    private void renderRecipes(PoseStack pstack, int pLeft, int pTop, int lastIndex)
+    private void renderRecipes(GuiGraphics graphics, int pLeft, int pTop, int lastIndex)
     {
         List<FramingSawMenu.RecipeHolder> recipes = menu.getRecipes();
 
@@ -384,8 +382,9 @@ public class FramingSawScreen extends AbstractContainerScreen<FramingSawMenu>
             int x = pLeft + relIdx % RECIPE_COLS * RECIPE_WIDTH + 1;
             int y = pTop + relIdx / RECIPE_COLS * RECIPE_HEIGHT + 1;
 
-            //noinspection ConstantConditions
-            minecraft.getItemRenderer().renderAndDecorateItem(pstack, recipes.get(idx).getRecipe().getResult(), x, y);
+            ItemStack stack = recipes.get(idx).getRecipe().getResult();
+            graphics.renderItem(stack, x, y, x * y * imageWidth);
+            graphics.renderItemDecorations(font, stack, x, y);
         }
     }
 

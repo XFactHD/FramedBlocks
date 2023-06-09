@@ -11,6 +11,7 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.CraftingContainer;
+import net.minecraft.world.inventory.TransientCraftingContainer;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.*;
 import net.minecraft.world.level.Level;
@@ -47,7 +48,7 @@ public final class RecipeCollisions
                 .map(CraftingRecipe.class::cast)
                 .toList();
 
-        CraftingContainer container = new CraftingContainer(player.containerMenu, 3, 3);
+        CraftingContainer container = new TransientCraftingContainer(player.containerMenu, 3, 3);
         NonNullList<ItemStack> items = Objects.requireNonNull(ObfuscationReflectionHelper.getPrivateValue(CraftingContainer.class, container, "f_39320_"));
 
         Multimap<ResourceLocation, ResourceLocation> collisions = ArrayListMultimap.create();

@@ -11,7 +11,7 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.core.Direction;
 import net.minecraft.world.level.material.FluidState;
-import net.minecraft.world.level.material.MaterialColor;
+import net.minecraft.world.level.material.MapColor;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraftforge.client.model.data.*;
 import net.minecraftforge.fml.loading.FMLEnvironment;
@@ -106,7 +106,7 @@ public abstract class FramedDoubleBlockEntity extends FramedBlockEntity
     }
 
     @Override
-    public MaterialColor getMapColor()
+    public MapColor getMapColor()
     {
         if (!camoContainer.isEmpty())
         {

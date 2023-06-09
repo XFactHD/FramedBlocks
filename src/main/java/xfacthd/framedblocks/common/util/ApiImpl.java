@@ -29,7 +29,7 @@ public final class ApiImpl implements FramedBlocksAPI
     public BlockState defaultModelState() { return FBContent.blockFramedCube.get().defaultBlockState(); }
 
     @Override
-    public CreativeModeTab defaultCreativeTab() { return FramedCreativeTab.get(); }
+    public CreativeModeTab defaultCreativeTab() { return FBContent.mainTab.get(); }
 
     @Override
     public boolean isFramedDoubleBlockEntity(FramedBlockEntity be) { return be instanceof FramedDoubleBlockEntity; }

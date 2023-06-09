@@ -1,9 +1,9 @@
 package xfacthd.framedblocks.common;
 
 import com.google.common.base.Preconditions;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.world.inventory.*;
-import net.minecraft.world.item.BlockItem;
-import net.minecraft.world.item.Item;
+import net.minecraft.world.item.*;
 import net.minecraft.world.item.crafting.*;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntity;
@@ -44,6 +44,7 @@ import xfacthd.framedblocks.common.data.FramedToolType;
 import xfacthd.framedblocks.common.item.FramedBlueprintItem;
 import xfacthd.framedblocks.common.item.FramedToolItem;
 import xfacthd.framedblocks.common.blockentity.*;
+import xfacthd.framedblocks.common.util.FramedCreativeTab;
 
 import java.util.*;
 import java.util.function.Function;
@@ -57,6 +58,7 @@ public final class FBContent
     private static final DeferredRegister<MenuType<?>> CONTAINER_TYPES = DeferredRegister.create(ForgeRegistries.MENU_TYPES, FramedConstants.MOD_ID);
     private static final DeferredRegister<RecipeType<?>> RECIPE_TYPES = DeferredRegister.create(ForgeRegistries.RECIPE_TYPES, FramedConstants.MOD_ID);
     private static final DeferredRegister<RecipeSerializer<?>> RECIPE_SERIALIZERS = DeferredRegister.create(ForgeRegistries.RECIPE_SERIALIZERS, FramedConstants.MOD_ID);
+    private static final DeferredRegister<CreativeModeTab> CREATIVE_TABS = DeferredRegister.create(Registries.CREATIVE_MODE_TAB, FramedConstants.MOD_ID);
 
     private static final DeferredRegister<CamoContainer.Factory> CAMO_CONTAINER_FACTORIES = DeferredRegister.create(
             FramedConstants.CAMO_CONTAINER_FACTORY_REGISTRY_NAME,
@@ -422,6 +424,12 @@ public final class FBContent
     );
     // endregion
 
+    // region CreativeModeTabs
+    public static final RegistryObject<CreativeModeTab> mainTab = CREATIVE_TABS.register(
+            "framed_blocks", FramedCreativeTab::makeTab
+    );
+    // endregion
+
     // region CamoContainer.Factories
     public static final RegistryObject<CamoContainer.Factory> factoryEmpty = CAMO_CONTAINER_FACTORIES.register(
             "empty",
@@ -447,6 +455,7 @@ public final class FBContent
         CONTAINER_TYPES.register(modBus);
         RECIPE_TYPES.register(modBus);
         RECIPE_SERIALIZERS.register(modBus);
+        CREATIVE_TABS.register(modBus);
         CAMO_CONTAINER_FACTORIES.register(modBus);
     }
 

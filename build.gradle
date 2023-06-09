@@ -1,36 +1,28 @@
-buildscript {
-    repositories {
-        maven { url = 'https://maven.minecraftforge.net' }
-        maven { url = 'https://repo.spongepowered.org/maven' }
-        maven { url = 'https://maven.parchmentmc.org' }
-        mavenCentral()
-    }
-    dependencies {
-        classpath group: 'net.minecraftforge.gradle', name: 'ForgeGradle', version: '5.+', changing: true
-        classpath group: 'org.spongepowered', name: 'mixingradle', version: '0.7-SNAPSHOT'
-        classpath 'org.parchmentmc:librarian:1.+'
-    }
+plugins {
+    id 'eclipse'
+    id 'idea'
+    id 'maven-publish'
+    id 'net.minecraftforge.gradle' version '[6.0,6.2)'
+    id 'org.parchmentmc.librarian.forgegradle' version '1.+'
+    id 'org.spongepowered.mixin' version '0.7.+'
 }
-apply plugin: 'net.minecraftforge.gradle'
-apply plugin: 'org.parchmentmc.librarian.forgegradle'
-// Only edit below this line, the above code adds and enables the necessary things for Forge to be setup.
-apply plugin: 'eclipse'
-apply plugin: 'maven-publish'
-apply plugin: 'org.spongepowered.mixin'
 
-jarJar.enable()
-
-version = '8.0.2'
+version = mod_version
 group = 'xfacthd.framedblocks'
-archivesBaseName = 'FramedBlocks'
 
+base {
+    archivesName = 'FramedBlocks'
+}
+
+// Mojang ships Java 17 to end users in 1.18+, so your mod should target Java 17.
 java.toolchain.languageVersion = JavaLanguageVersion.of(17)
-//Print out JVM information so that we know what version is running. Extremely useful for people to know when helping you.
-println('Java: ' + System.getProperty('java.version') + ' JVM: ' + System.getProperty('java.vm.version') + '(' + System.getProperty('java.vendor') + ') Arch: ' + System.getProperty('os.arch'))
 
+println "Java: ${System.getProperty 'java.version'}, JVM: ${System.getProperty 'java.vm.version'} (${System.getProperty 'java.vendor'}), Arch: ${System.getProperty 'os.arch'}"
 minecraft {
-    mappings channel: 'parchment', version: '1.19.3-2023.03.12-1.19.4'
-    
+    mappings channel: 'parchment', version: "${mapping_version}-${minecraft_version}"
+
+    copyIdeResources = true
+
     accessTransformer = file('src/main/resources/META-INF/accesstransformer.cfg')
 
     // Default run configurations.
@@ -44,6 +36,9 @@ minecraft {
 
             // Recommended logging level for the console
             property 'forge.logging.console.level', 'debug'
+
+            // Comma-separated list of namespaces to load gametests from. Empty = all namespaces.
+            property 'forge.enabledGameTestNamespaces', 'framedblocks'
 
             mods {
                 framedblocks {
@@ -139,7 +134,7 @@ repositories {
 }
 
 dependencies {
-    minecraft 'net.minecraftforge:forge:1.19.4-45.0.18'
+    minecraft "net.minecraftforge:forge:${minecraft_version}-${forge_version}"
 
     //compileOnly fg.deobf("curse.maven:ctm-267602:3737369")
 
@@ -148,9 +143,9 @@ dependencies {
 
     compileOnly fg.deobf("curse.maven:buildinggadgets-298187:3829297")
 
-    compileOnly(fg.deobf("mezz.jei:jei-1.19.4-common-api:13.1.0.3"))
-    compileOnly(fg.deobf("mezz.jei:jei-1.19.4-forge-api:13.1.0.3"))
-    runtimeOnly(fg.deobf("mezz.jei:jei-1.19.4-forge:13.1.0.3"))
+    compileOnly(fg.deobf("mezz.jei:jei-1.20-common-api:14.0.0.4"))
+    compileOnly(fg.deobf("mezz.jei:jei-1.20-forge-api:14.0.0.4"))
+    runtimeOnly(fg.deobf("mezz.jei:jei-1.20-forge:14.0.0.4"))
 
     //runtimeOnly fg.deobf("curse.maven:spark-361579:3767286")
 
@@ -179,8 +174,26 @@ mixin {
     //config "framedblocks.mixin.json"
 }
 
+// This block of code expands all declared replace properties in the specified resource targets.
+// A missing property will result in an error. Properties are expanded using ${} Groovy notation.
+// When "copyIdeResources" is enabled, this will also run before the game launches in IDE environments.
+// See https://docs.gradle.org/current/dsl/org.gradle.language.jvm.tasks.ProcessResources.html
+def resourceTargets = ['META-INF/mods.toml', 'pack.mcmeta']
+def replaceProperties = [
+        minecraft_version: minecraft_version, minecraft_version_range: minecraft_version_range,
+        forge_version: forge_version, forge_version_range: forge_version_range,
+        loader_version_range: loader_version_range, mod_version: mod_version
+]
+
 processResources {
     exclude("framedblocks.mixin.json")
+
+    inputs.properties replaceProperties
+    replaceProperties.put 'project', project
+
+    filesMatching(resourceTargets) {
+        expand replaceProperties
+    }
 }
 
 processTestResources {
@@ -188,28 +201,30 @@ processTestResources {
 }
 
 tasks.jarJar.configure {
-    classifier ''
+    archiveClassifier = ''
 }
 
 // Example for how to get properties into the manifest for reading by the runtime..
 jar {
-    classifier 'slim'
+    archiveClassifier = 'slim'
 
     manifest {
         attributes([
-            "Specification-Title": "framedblocks",
-            "Specification-Vendor": "XFactHD",
-            "Specification-Version": "1", // We are version 1 of ourselves
-            "Implementation-Title": project.name,
-            "Implementation-Version": "${project.version}",
-            "Implementation-Vendor" : "XFactHD",
-            "Implementation-Timestamp": new Date().format("yyyy-MM-dd'T'HH:mm:ssZ"),
-            //"MixinConfigs": "framedblocks.mixin.json"
+                "Specification-Title"     : "framedblocks",
+                "Specification-Vendor"    : "XFactHD",
+                "Specification-Version"   : "1", // We are version 1 of ourselves
+                "Implementation-Title"    : project.name,
+                "Implementation-Version"  : project.jar.archiveVersion,
+                "Implementation-Vendor"   : "XFactHD"
         ])
     }
 }
 
-jar.finalizedBy('reobfJar') 
+// Example configuration to allow publishing using the maven-publish plugin
+// This is the preferred method to reobfuscate your jar file
+jar.finalizedBy('reobfJar')
+// However if you are in a multi-project build, dev time needs unobfed jar files, so you can delay the obfuscation until publishing by doing
+// publish.dependsOn('reobfJar')
 
 publishing {
     publications {
@@ -219,7 +234,11 @@ publishing {
     }
     repositories {
         maven {
-            url "file:///${project.projectDir}/mcmodsrepo"
+            url "file://${project.projectDir}/mcmodsrepo"
         }
     }
+}
+
+tasks.withType(JavaCompile).configureEach {
+    options.encoding = 'UTF-8' // Use the UTF-8 charset for Java compilation
 }

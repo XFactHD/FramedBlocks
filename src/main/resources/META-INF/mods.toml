@@ -1,11 +1,11 @@
 modLoader="javafml"
-loaderVersion="[45,)"
+loaderVersion="${loader_version_range}"
 issueTrackerURL="https://www.github.com/xfacthd/framedblocks"
 license="LGPL v3"
 
 [[mods]]
 modId="framedblocks"
-version="${file.jarVersion}"
+version="${mod_version}"
 displayName="FramedBlocks"
 #updateJSONURL="http://myurl.me/"
 displayURL="https://www.curseforge.com/minecraft/mc-mods/framedblocks"
@@ -19,14 +19,14 @@ description='''
 [[dependencies.framedblocks]]
     modId="forge"
     mandatory=true
-    versionRange="[45.0.18,)"
+    versionRange="${forge_version_range}"
     ordering="NONE"
     side="BOTH"
 
 [[dependencies.framedblocks]]
     modId="minecraft"
     mandatory=true
-    versionRange="[1.19.4,1.20)"
+    versionRange="${minecraft_version_range}"
     ordering="NONE"
     side="BOTH"
 

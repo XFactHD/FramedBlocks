@@ -205,7 +205,7 @@ public final class FramedLanguageProvider extends LanguageProvider
         add(KeyMappings.KEY_CATEGORY, "FramedBlocks");
         add(KeyMappings.KEYMAPPING_UPDATE_CULLING.get().getName(), "Update culling cache");
 
-        add(FramedCreativeTab.get().getDisplayName(), "FramedBlocks");
+        add(FBContent.mainTab.get().getDisplayName(), "FramedBlocks");
 
         add(JeiCompat.MSG_INVALID_RECIPE, "Invalid recipe");
         add(JeiCompat.MSG_TRANSFER_NOT_IMPLEMENTED, "No items will be transferred");

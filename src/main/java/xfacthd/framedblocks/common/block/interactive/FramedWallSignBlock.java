@@ -71,7 +71,7 @@ public class FramedWallSignBlock extends AbstractFramedSignBlock
     public boolean canSurvive(BlockState state, LevelReader level, BlockPos pos)
     {
         Direction dir = state.getValue(FramedProperties.FACING_HOR).getOpposite();
-        return level.getBlockState(pos.relative(dir)).getMaterial().isSolid();
+        return level.getBlockState(pos.relative(dir)).isSolid();
     }
 
     @Override

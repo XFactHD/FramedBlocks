@@ -45,7 +45,7 @@ public record SignUpdatePacket(BlockPos pos, String[] lines)
         {
             ServerPlayer player = ctx.get().getSender();
             //noinspection ConstantConditions
-            Level level = player.getLevel();
+            Level level = player.level();
 
             //noinspection deprecation
             if (level.hasChunkAt(pos))

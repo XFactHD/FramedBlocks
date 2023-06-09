@@ -48,7 +48,7 @@ public class FramedStorageMenu extends AbstractContainerMenu
 
     public FramedStorageMenu(int windowId, Inventory inv, FriendlyByteBuf extraData)
     {
-        this(windowId, inv, inv.player.level.getBlockEntity(extraData.readBlockPos()));
+        this(windowId, inv, inv.player.level().getBlockEntity(extraData.readBlockPos()));
     }
 
     @Override

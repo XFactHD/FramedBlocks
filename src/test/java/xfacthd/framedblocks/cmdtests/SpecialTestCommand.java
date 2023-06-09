@@ -11,7 +11,6 @@ import net.minecraft.network.chat.Component;
 import net.minecraftforge.event.RegisterCommandsEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.fml.loading.FileUtils;
 import xfacthd.framedblocks.FramedBlocks;
 import xfacthd.framedblocks.api.util.FramedConstants;
 import xfacthd.framedblocks.cmdtests.tests.*;
@@ -48,7 +47,7 @@ public final class SpecialTestCommand
     {
         return ctx ->
         {
-            ctx.getSource().sendSuccess(Component.literal("Starting " + testName + " test"), false);
+            ctx.getSource().sendSuccess(() -> Component.literal("Starting " + testName + " test"), false);
 
             Consumer<Component> appender = msg -> ctx.getSource().getServer().submit(() ->
                     ctx.getSource().source.sendSystemMessage(msg)
@@ -79,7 +78,15 @@ public final class SpecialTestCommand
 
     public static Component writeResultToFile(String filePrefix, String data)
     {
-        FileUtils.getOrCreateDirectory(EXPORT_DIR, "Test results");
+        try
+        {
+            Files.createDirectories(EXPORT_DIR);
+        }
+        catch (IOException e)
+        {
+            throw new RuntimeException(e);
+        }
+
         String dateTime = FORMATTER.format(LocalDateTime.now());
         Path path = EXPORT_DIR.resolve("%s_%s.txt".formatted(filePrefix, dateTime));
 

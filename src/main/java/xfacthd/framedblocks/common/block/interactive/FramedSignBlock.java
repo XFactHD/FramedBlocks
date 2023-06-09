@@ -18,7 +18,7 @@ import xfacthd.framedblocks.common.data.BlockType;
 import xfacthd.framedblocks.common.item.FramedSignItem;
 
 @SuppressWarnings("deprecation")
-public class FramedSignBlock extends AbstractFramedSignBlock
+public class FramedSignBlock extends AbstractFramedSignBlock // FIXME: update to match vanilla sign block
 {
     private static final VoxelShape SHAPE = Block.box(4.0D, 0.0D, 4.0D, 12.0D, 16.0D, 12.0D);
 
@@ -60,7 +60,7 @@ public class FramedSignBlock extends AbstractFramedSignBlock
     @Override
     public boolean canSurvive(BlockState state, LevelReader level, BlockPos pos)
     {
-        return level.getBlockState(pos.below()).getMaterial().isSolid();
+        return level.getBlockState(pos.below()).isSolid();
     }
 
     @Override
