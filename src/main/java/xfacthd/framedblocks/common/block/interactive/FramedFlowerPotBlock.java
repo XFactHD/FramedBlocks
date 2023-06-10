@@ -58,7 +58,14 @@ public class FramedFlowerPotBlock extends FramedBlock
     }
 
     @Override
-    public BlockState updateShape(BlockState state, Direction side, BlockState sideState, LevelAccessor level, BlockPos pos, BlockPos sidePos)
+    public BlockState updateShape(
+            BlockState state,
+            Direction side,
+            BlockState sideState,
+            LevelAccessor level,
+            BlockPos pos,
+            BlockPos sidePos
+    )
     {
         if (state.getValue(PropertyHolder.HANGING) && side == Direction.UP && !state.canSurvive(level, pos))
         {
@@ -79,10 +86,15 @@ public class FramedFlowerPotBlock extends FramedBlock
     }
 
     @Override
-    public InteractionResult use(BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hit)
+    public InteractionResult use(
+            BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hit
+    )
     {
         InteractionResult result = super.use(state, level, pos, player, hand, hit);
-        if (result != InteractionResult.PASS) { return result; }
+        if (result != InteractionResult.PASS)
+        {
+            return result;
+        }
 
         if (level.getBlockEntity(pos) instanceof FramedFlowerPotBlockEntity be)
         {

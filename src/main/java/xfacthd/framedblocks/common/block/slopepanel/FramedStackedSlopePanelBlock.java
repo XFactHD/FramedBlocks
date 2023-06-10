@@ -109,7 +109,10 @@ public class FramedStackedSlopePanelBlock extends AbstractFramedDoubleBlock
 
     @Override
     @SuppressWarnings("deprecation")
-    public BlockState rotate(BlockState state, Rotation rot) { return rotate(state, Direction.UP, rot); }
+    public BlockState rotate(BlockState state, Rotation rot)
+    {
+        return rotate(state, Direction.UP, rot);
+    }
 
     @Override
     @SuppressWarnings("deprecation")
@@ -126,10 +129,10 @@ public class FramedStackedSlopePanelBlock extends AbstractFramedDoubleBlock
         boolean ySlope = state.getValue(FramedProperties.Y_SLOPE);
 
         return new Tuple<>(
-                FBContent.blockFramedPanel.get()
+                FBContent.BLOCK_FRAMED_PANEL.get()
                         .defaultBlockState()
                         .setValue(FramedProperties.FACING_HOR, facing),
-                FBContent.blockFramedSlopePanel.get()
+                FBContent.BLOCK_FRAMED_SLOPE_PANEL.get()
                         .defaultBlockState()
                         .setValue(FramedProperties.FACING_HOR, facing)
                         .setValue(PropertyHolder.ROTATION, rotation)
@@ -148,7 +151,7 @@ public class FramedStackedSlopePanelBlock extends AbstractFramedDoubleBlock
 
     public static BlockState itemModelSource()
     {
-        return FBContent.blockFramedStackedSlopePanel.get()
+        return FBContent.BLOCK_FRAMED_STACKED_SLOPE_PANEL.get()
                 .defaultBlockState()
                 .setValue(FramedProperties.FACING_HOR, Direction.SOUTH);
     }

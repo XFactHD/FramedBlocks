@@ -15,7 +15,7 @@ public class FramedFancyRailSlopeBlockEntity extends FramedDoubleBlockEntity
 {
     public FramedFancyRailSlopeBlockEntity(BlockPos pos, BlockState state)
     {
-        super(FBContent.blockEntityTypeFramedFancyRailSlope.get(), pos, state);
+        super(FBContent.BE_TYPE_FRAMED_FANCY_RAIL_SLOPE.get(), pos, state);
     }
 
     @Override
@@ -26,7 +26,10 @@ public class FramedFancyRailSlopeBlockEntity extends FramedDoubleBlockEntity
     }
 
     @Override
-    public DoubleSoundMode getSoundMode() { return DoubleSoundMode.FIRST; }
+    public DoubleSoundMode getSoundMode()
+    {
+        return DoubleSoundMode.FIRST;
+    }
 
     @Override
     public CamoContainer getCamo(Direction side)

@@ -68,13 +68,13 @@ public final class CreateCompat
     {
         public static void init()
         {
-            registerInteractionBehaviour(FBContent.blockFramedLever, new LeverMovingInteraction());
-            registerInteractionBehaviour(FBContent.blockFramedDoor, new DoorMovingInteraction());
-            registerInteractionBehaviour(FBContent.blockFramedTrapDoor, new TrapdoorMovingInteraction());
+            registerInteractionBehaviour(FBContent.BLOCK_FRAMED_LEVER, new LeverMovingInteraction());
+            registerInteractionBehaviour(FBContent.BLOCK_FRAMED_DOOR, new DoorMovingInteraction());
+            registerInteractionBehaviour(FBContent.BLOCK_FRAMED_TRAP_DOOR, new TrapdoorMovingInteraction());
 
             BlockMovementChecks.registerAllChecks(new FramedBlockMovementChecks());
 
-            NBTProcessors.addProcessor(FBContent.blockEntityTypeFramedSign.get(), tag ->
+            NBTProcessors.addProcessor(FBContent.BE_TYPE_FRAMED_SIGN.get(), tag ->
             {
                 for (int i = 0; i < 4; ++i)
                 {

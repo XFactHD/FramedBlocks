@@ -23,209 +23,209 @@ public final class FramingSawRecipeProvider extends RecipeProvider
     @Override
     protected void buildRecipes(Consumer<FinishedRecipe> consumer)
     {
-        FramingSawRecipeBuilder.builder(FBContent.blockFramedCube)
+        FramingSawRecipeBuilder.builder(FBContent.BLOCK_FRAMED_CUBE)
                 .material(FramingSawRecipe.CUBE_MATERIAL_VALUE)
                 .save(consumer);
 
-        FramingSawRecipeBuilder.builder(FBContent.blockFramedSlope)
+        FramingSawRecipeBuilder.builder(FBContent.BLOCK_FRAMED_SLOPE)
                 .material(FramingSawRecipe.CUBE_MATERIAL_VALUE / 2)
                 .save(consumer);
 
-        FramingSawRecipeBuilder.builder(FBContent.blockFramedCornerSlope)
+        FramingSawRecipeBuilder.builder(FBContent.BLOCK_FRAMED_CORNER_SLOPE)
                 .material(FramingSawRecipe.CUBE_MATERIAL_VALUE / 4)
                 .save(consumer);
 
-        FramingSawRecipeBuilder.builder(FBContent.blockFramedInnerCornerSlope)
+        FramingSawRecipeBuilder.builder(FBContent.BLOCK_FRAMED_INNER_CORNER_SLOPE)
                 .material(FramingSawRecipe.CUBE_MATERIAL_VALUE / 4 * 3)
                 .save(consumer);
 
-        FramingSawRecipeBuilder.builder(FBContent.blockFramedPrismCorner)
+        FramingSawRecipeBuilder.builder(FBContent.BLOCK_FRAMED_PRISM_CORNER)
                 .material(FramingSawRecipe.CUBE_MATERIAL_VALUE / 4)
                 .save(consumer);
 
-        FramingSawRecipeBuilder.builder(FBContent.blockFramedInnerPrismCorner)
+        FramingSawRecipeBuilder.builder(FBContent.BLOCK_FRAMED_INNER_PRISM_CORNER)
                 .material(FramingSawRecipe.CUBE_MATERIAL_VALUE / 4 * 3)
                 .save(consumer);
 
-        FramingSawRecipeBuilder.builder(FBContent.blockFramedThreewayCorner)
+        FramingSawRecipeBuilder.builder(FBContent.BLOCK_FRAMED_THREEWAY_CORNER)
                 .material(FramingSawRecipe.CUBE_MATERIAL_VALUE / 4)
                 .save(consumer);
 
-        FramingSawRecipeBuilder.builder(FBContent.blockFramedInnerThreewayCorner)
+        FramingSawRecipeBuilder.builder(FBContent.BLOCK_FRAMED_INNER_THREEWAY_CORNER)
                 .material(FramingSawRecipe.CUBE_MATERIAL_VALUE / 4 * 3)
                 .save(consumer);
 
-        FramingSawRecipeBuilder.builder(FBContent.blockFramedSlab)
+        FramingSawRecipeBuilder.builder(FBContent.BLOCK_FRAMED_SLAB)
                 .material(FramingSawRecipe.CUBE_MATERIAL_VALUE / 2)
                 .save(consumer);
 
-        FramingSawRecipeBuilder.builder(FBContent.blockFramedSlabEdge)
+        FramingSawRecipeBuilder.builder(FBContent.BLOCK_FRAMED_SLAB_EDGE)
                 .material(FramingSawRecipe.CUBE_MATERIAL_VALUE / 4)
                 .save(consumer);
 
-        FramingSawRecipeBuilder.builder(FBContent.blockFramedSlabCorner)
+        FramingSawRecipeBuilder.builder(FBContent.BLOCK_FRAMED_SLAB_CORNER)
                 .material(FramingSawRecipe.CUBE_MATERIAL_VALUE / 8)
                 .save(consumer);
 
-        FramingSawRecipeBuilder.builder(FBContent.blockFramedDividedSlab)
+        FramingSawRecipeBuilder.builder(FBContent.BLOCK_FRAMED_DIVIDED_SLAB)
                 .material(FramingSawRecipe.CUBE_MATERIAL_VALUE / 2)
                 .save(consumer);
 
-        FramingSawRecipeBuilder.builder(FBContent.blockFramedPanel)
+        FramingSawRecipeBuilder.builder(FBContent.BLOCK_FRAMED_PANEL)
                 .material(FramingSawRecipe.CUBE_MATERIAL_VALUE / 2)
                 .save(consumer);
 
-        FramingSawRecipeBuilder.builder(FBContent.blockFramedCornerPillar)
+        FramingSawRecipeBuilder.builder(FBContent.BLOCK_FRAMED_CORNER_PILLAR)
                 .material(FramingSawRecipe.CUBE_MATERIAL_VALUE / 4)
                 .save(consumer);
 
-        FramingSawRecipeBuilder.builder(FBContent.blockFramedDividedPanelHor)
+        FramingSawRecipeBuilder.builder(FBContent.BLOCK_FRAMED_DIVIDED_PANEL_HOR)
                 .material(FramingSawRecipe.CUBE_MATERIAL_VALUE / 2)
                 .save(consumer);
 
-        FramingSawRecipeBuilder.builder(FBContent.blockFramedDividedPanelVert)
+        FramingSawRecipeBuilder.builder(FBContent.BLOCK_FRAMED_DIVIDED_PANEL_VERT)
                 .material(FramingSawRecipe.CUBE_MATERIAL_VALUE / 2)
                 .save(consumer);
 
-        FramingSawRecipeBuilder.builder(FBContent.blockFramedStairs)
+        FramingSawRecipeBuilder.builder(FBContent.BLOCK_FRAMED_STAIRS)
                 .material(FramingSawRecipe.CUBE_MATERIAL_VALUE / 4 * 3)
                 .save(consumer);
 
-        FramingSawRecipeBuilder.builder(FBContent.blockFramedDoubleStairs)
+        FramingSawRecipeBuilder.builder(FBContent.BLOCK_FRAMED_DOUBLE_STAIRS)
                 .material(FramingSawRecipe.CUBE_MATERIAL_VALUE)
                 .save(consumer);
 
-        FramingSawRecipeBuilder.builder(FBContent.blockFramedHalfStairs)
+        FramingSawRecipeBuilder.builder(FBContent.BLOCK_FRAMED_HALF_STAIRS)
                 .material(FramingSawRecipe.CUBE_MATERIAL_VALUE / 4 * 3 / 2)
                 .save(consumer);
 
-        FramingSawRecipeBuilder.builder(FBContent.blockFramedDividedStairs)
+        FramingSawRecipeBuilder.builder(FBContent.BLOCK_FRAMED_DIVIDED_STAIRS)
                 .material(FramingSawRecipe.CUBE_MATERIAL_VALUE / 4 * 3)
                 .save(consumer);
 
-        FramingSawRecipeBuilder.builder(FBContent.blockFramedVerticalStairs)
+        FramingSawRecipeBuilder.builder(FBContent.BLOCK_FRAMED_VERTICAL_STAIRS)
                 .material(FramingSawRecipe.CUBE_MATERIAL_VALUE / 4 * 3)
                 .save(consumer);
 
-        FramingSawRecipeBuilder.builder(FBContent.blockFramedVerticalDoubleStairs)
+        FramingSawRecipeBuilder.builder(FBContent.BLOCK_FRAMED_VERTICAL_DOUBLE_STAIRS)
                 .material(FramingSawRecipe.CUBE_MATERIAL_VALUE)
                 .save(consumer);
 
-        FramingSawRecipeBuilder.builder(FBContent.blockFramedVerticalHalfStairs)
+        FramingSawRecipeBuilder.builder(FBContent.BLOCK_FRAMED_VERTICAL_HALF_STAIRS)
                 .material(FramingSawRecipe.CUBE_MATERIAL_VALUE / 4 * 3 / 2)
                 .save(consumer);
 
-        FramingSawRecipeBuilder.builder(FBContent.blockFramedVerticalDividedStairs)
+        FramingSawRecipeBuilder.builder(FBContent.BLOCK_FRAMED_VERTICAL_DIVIDED_STAIRS)
                 .material(FramingSawRecipe.CUBE_MATERIAL_VALUE / 4 * 3)
                 .save(consumer);
 
-        FramingSawRecipeBuilder.builder(FBContent.blockFramedWall)
+        FramingSawRecipeBuilder.builder(FBContent.BLOCK_FRAMED_WALL)
                 .material(FramingSawRecipe.CUBE_MATERIAL_VALUE / 4)
                 .save(consumer);
 
-        FramingSawRecipeBuilder.builder(FBContent.blockFramedFence)
+        FramingSawRecipeBuilder.builder(FBContent.BLOCK_FRAMED_FENCE)
                 .material(FramingSawRecipe.CUBE_MATERIAL_VALUE / 8)
                 .save(consumer);
 
-        FramingSawRecipeBuilder.builder(FBContent.blockFramedFenceGate)
+        FramingSawRecipeBuilder.builder(FBContent.BLOCK_FRAMED_FENCE_GATE)
                 .material(FramingSawRecipe.CUBE_MATERIAL_VALUE / 4)
                 .save(consumer);
 
-        FramingSawRecipeBuilder.builder(FBContent.blockFramedDoor)
+        FramingSawRecipeBuilder.builder(FBContent.BLOCK_FRAMED_DOOR)
                 .material(FramingSawRecipe.CUBE_MATERIAL_VALUE / 2)
                 .save(consumer);
 
-        FramingSawRecipeBuilder.builder(FBContent.blockFramedIronDoor)
+        FramingSawRecipeBuilder.builder(FBContent.BLOCK_FRAMED_IRON_DOOR)
                 .material(FramingSawRecipe.CUBE_MATERIAL_VALUE / 2)
                 .additive(FramingSawRecipeAdditive.of(Tags.Items.INGOTS_IRON, 2))
                 .save(consumer);
 
-        FramingSawRecipeBuilder.builder(FBContent.blockFramedTrapDoor)
+        FramingSawRecipeBuilder.builder(FBContent.BLOCK_FRAMED_TRAP_DOOR)
                 .material(FramingSawRecipe.CUBE_MATERIAL_VALUE / 4)
                 .save(consumer);
 
-        FramingSawRecipeBuilder.builder(FBContent.blockFramedIronTrapDoor)
+        FramingSawRecipeBuilder.builder(FBContent.BLOCK_FRAMED_IRON_TRAP_DOOR)
                 .material(FramingSawRecipe.CUBE_MATERIAL_VALUE / 4)
                 .additive(FramingSawRecipeAdditive.of(Tags.Items.INGOTS_IRON))
                 .save(consumer);
 
-        FramingSawRecipeBuilder.builder(FBContent.blockFramedPressurePlate)
+        FramingSawRecipeBuilder.builder(FBContent.BLOCK_FRAMED_PRESSURE_PLATE)
                 .material(FramingSawRecipe.CUBE_MATERIAL_VALUE / 4)
                 .save(consumer);
 
-        FramingSawRecipeBuilder.builder(FBContent.blockFramedStonePressurePlate)
+        FramingSawRecipeBuilder.builder(FBContent.BLOCK_FRAMED_STONE_PRESSURE_PLATE)
                 .material(FramingSawRecipe.CUBE_MATERIAL_VALUE / 4)
                 .additive(FramingSawRecipeAdditive.of(Tags.Items.STONE))
                 .save(consumer);
 
-        FramingSawRecipeBuilder.builder(FBContent.blockFramedObsidianPressurePlate)
+        FramingSawRecipeBuilder.builder(FBContent.BLOCK_FRAMED_OBSIDIAN_PRESSURE_PLATE)
                 .material(FramingSawRecipe.CUBE_MATERIAL_VALUE / 4)
                 .additive(FramingSawRecipeAdditive.of(Tags.Items.OBSIDIAN))
                 .save(consumer);
 
-        FramingSawRecipeBuilder.builder(FBContent.blockFramedGoldPressurePlate)
+        FramingSawRecipeBuilder.builder(FBContent.BLOCK_FRAMED_GOLD_PRESSURE_PLATE)
                 .material(FramingSawRecipe.CUBE_MATERIAL_VALUE / 4)
                 .additive(FramingSawRecipeAdditive.of(Tags.Items.INGOTS_GOLD))
                 .save(consumer);
 
-        FramingSawRecipeBuilder.builder(FBContent.blockFramedIronPressurePlate)
+        FramingSawRecipeBuilder.builder(FBContent.BLOCK_FRAMED_IRON_PRESSURE_PLATE)
                 .material(FramingSawRecipe.CUBE_MATERIAL_VALUE / 4)
                 .additive(FramingSawRecipeAdditive.of(Tags.Items.INGOTS_IRON))
                 .save(consumer);
 
-        FramingSawRecipeBuilder.builder(FBContent.blockFramedLadder)
+        FramingSawRecipeBuilder.builder(FBContent.BLOCK_FRAMED_LADDER)
                 .material(FramingSawRecipe.CUBE_MATERIAL_VALUE / 4)
                 .save(consumer);
 
-        FramingSawRecipeBuilder.builder(FBContent.blockFramedButton)
+        FramingSawRecipeBuilder.builder(FBContent.BLOCK_FRAMED_BUTTON)
                 .material(FramingSawRecipe.CUBE_MATERIAL_VALUE / 8)
                 .save(consumer);
 
-        FramingSawRecipeBuilder.builder(FBContent.blockFramedStoneButton)
+        FramingSawRecipeBuilder.builder(FBContent.BLOCK_FRAMED_STONE_BUTTON)
                 .material(FramingSawRecipe.CUBE_MATERIAL_VALUE / 8)
                 .additive(FramingSawRecipeAdditive.of(Tags.Items.STONE))
                 .save(consumer);
 
-        FramingSawRecipeBuilder.builder(FBContent.blockFramedLargeButton)
+        FramingSawRecipeBuilder.builder(FBContent.BLOCK_FRAMED_LARGE_BUTTON)
                 .material(FramingSawRecipe.CUBE_MATERIAL_VALUE / 4)
                 .save(consumer);
 
-        FramingSawRecipeBuilder.builder(FBContent.blockFramedLargeStoneButton)
+        FramingSawRecipeBuilder.builder(FBContent.BLOCK_FRAMED_LARGE_STONE_BUTTON)
                 .material(FramingSawRecipe.CUBE_MATERIAL_VALUE / 4)
                 .additive(FramingSawRecipeAdditive.of(Tags.Items.STONE))
                 .save(consumer);
 
-        FramingSawRecipeBuilder.builder(FBContent.blockFramedLever)
+        FramingSawRecipeBuilder.builder(FBContent.BLOCK_FRAMED_LEVER)
                 .material(FramingSawRecipe.CUBE_MATERIAL_VALUE / 4)
                 .additive(FramingSawRecipeAdditive.of(Tags.Items.COBBLESTONE))
                 .save(consumer);
 
-        FramingSawRecipeBuilder.builder(FBContent.blockFramedSign)
+        FramingSawRecipeBuilder.builder(FBContent.BLOCK_FRAMED_SIGN)
                 .material(FramingSawRecipe.CUBE_MATERIAL_VALUE / 4)
                 .save(consumer);
 
-        FramingSawRecipeBuilder.builder(FBContent.blockFramedDoubleSlope)
+        FramingSawRecipeBuilder.builder(FBContent.BLOCK_FRAMED_DOUBLE_SLOPE)
                 .material(FramingSawRecipe.CUBE_MATERIAL_VALUE)
                 .save(consumer);
 
-        FramingSawRecipeBuilder.builder(FBContent.blockFramedDoubleCorner)
+        FramingSawRecipeBuilder.builder(FBContent.BLOCK_FRAMED_DOUBLE_CORNER)
                 .material(FramingSawRecipe.CUBE_MATERIAL_VALUE)
                 .save(consumer);
 
-        FramingSawRecipeBuilder.builder(FBContent.blockFramedDoublePrismCorner)
+        FramingSawRecipeBuilder.builder(FBContent.BLOCK_FRAMED_DOUBLE_PRISM_CORNER)
                 .material(FramingSawRecipe.CUBE_MATERIAL_VALUE)
                 .save(consumer);
 
-        FramingSawRecipeBuilder.builder(FBContent.blockFramedDoubleThreewayCorner)
+        FramingSawRecipeBuilder.builder(FBContent.BLOCK_FRAMED_DOUBLE_THREEWAY_CORNER)
                 .material(FramingSawRecipe.CUBE_MATERIAL_VALUE)
                 .save(consumer);
 
-        FramingSawRecipeBuilder.builder(FBContent.blockFramedTorch, 4)
+        FramingSawRecipeBuilder.builder(FBContent.BLOCK_FRAMED_TORCH, 4)
                 .material(FramingSawRecipe.CUBE_MATERIAL_VALUE / 4)
                 .additive(FramingSawRecipeAdditive.of(ItemTags.COALS))
                 .save(consumer);
 
-        FramingSawRecipeBuilder.builder(FBContent.blockFramedSoulTorch, 4)
+        FramingSawRecipeBuilder.builder(FBContent.BLOCK_FRAMED_SOUL_TORCH, 4)
                 .material(FramingSawRecipe.CUBE_MATERIAL_VALUE / 4)
                 .additives(List.of(
                         FramingSawRecipeAdditive.of(ItemTags.COALS),
@@ -233,260 +233,260 @@ public final class FramingSawRecipeProvider extends RecipeProvider
                 ))
                 .save(consumer);
 
-        FramingSawRecipeBuilder.builder(FBContent.blockFramedRedstoneTorch, 4)
+        FramingSawRecipeBuilder.builder(FBContent.BLOCK_FRAMED_REDSTONE_TORCH, 4)
                 .material(FramingSawRecipe.CUBE_MATERIAL_VALUE / 4)
                 .additive(FramingSawRecipeAdditive.of(Tags.Items.DUSTS_REDSTONE))
                 .save(consumer);
 
-        FramingSawRecipeBuilder.builder(FBContent.blockFramedFloor)
+        FramingSawRecipeBuilder.builder(FBContent.BLOCK_FRAMED_FLOOR)
                 .material(FramingSawRecipe.CUBE_MATERIAL_VALUE / 16)
                 .save(consumer);
 
-        FramingSawRecipeBuilder.builder(FBContent.blockFramedWallBoard)
+        FramingSawRecipeBuilder.builder(FBContent.BLOCK_FRAMED_WALL_BOARD)
                 .material(FramingSawRecipe.CUBE_MATERIAL_VALUE / 16)
                 .save(consumer);
 
-        FramingSawRecipeBuilder.builder(FBContent.blockFramedLattice)
+        FramingSawRecipeBuilder.builder(FBContent.BLOCK_FRAMED_LATTICE)
                 .material(FramingSawRecipe.CUBE_MATERIAL_VALUE / 4)
                 .save(consumer);
 
-        FramingSawRecipeBuilder.builder(FBContent.blockFramedChest)
+        FramingSawRecipeBuilder.builder(FBContent.BLOCK_FRAMED_CHEST)
                 .material(FramingSawRecipe.CUBE_MATERIAL_VALUE * 4)
                 .save(consumer);
 
-        FramingSawRecipeBuilder.builder(FBContent.blockFramedSecretStorage)
+        FramingSawRecipeBuilder.builder(FBContent.BLOCK_FRAMED_SECRET_STORAGE)
                 .material(FramingSawRecipe.CUBE_MATERIAL_VALUE * 4)
-                .additive(FramingSawRecipeAdditive.of(FBContent.blockFramedChest.get()))
+                .additive(FramingSawRecipeAdditive.of(FBContent.BLOCK_FRAMED_CHEST.get()))
                 .save(consumer);
 
-        FramingSawRecipeBuilder.builder(FBContent.blockFramedBars)
+        FramingSawRecipeBuilder.builder(FBContent.BLOCK_FRAMED_BARS)
                 .material(FramingSawRecipe.CUBE_MATERIAL_VALUE / 8)
                 .save(consumer);
 
-        FramingSawRecipeBuilder.builder(FBContent.blockFramedPane)
+        FramingSawRecipeBuilder.builder(FBContent.BLOCK_FRAMED_PANE)
                 .material(FramingSawRecipe.CUBE_MATERIAL_VALUE / 8)
                 .save(consumer);
 
-        FramingSawRecipeBuilder.builder(FBContent.blockFramedHorizontalPane)
+        FramingSawRecipeBuilder.builder(FBContent.BLOCK_FRAMED_HORIZONTAL_PANE)
                 .material(FramingSawRecipe.CUBE_MATERIAL_VALUE / 8)
                 .save(consumer);
 
-        FramingSawRecipeBuilder.builder(FBContent.blockFramedRailSlope)
+        FramingSawRecipeBuilder.builder(FBContent.BLOCK_FRAMED_RAIL_SLOPE)
                 .material(FramingSawRecipe.CUBE_MATERIAL_VALUE / 2)
                 .additive(FramingSawRecipeAdditive.of(Items.RAIL))
                 .save(consumer);
 
-        FramingSawRecipeBuilder.builder(FBContent.blockFramedPoweredRailSlope)
+        FramingSawRecipeBuilder.builder(FBContent.BLOCK_FRAMED_POWERED_RAIL_SLOPE)
                 .material(FramingSawRecipe.CUBE_MATERIAL_VALUE / 2)
                 .additive(FramingSawRecipeAdditive.of(Items.POWERED_RAIL))
                 .save(consumer);
 
-        FramingSawRecipeBuilder.builder(FBContent.blockFramedDetectorRailSlope)
+        FramingSawRecipeBuilder.builder(FBContent.BLOCK_FRAMED_DETECTOR_RAIL_SLOPE)
                 .material(FramingSawRecipe.CUBE_MATERIAL_VALUE / 2)
                 .additive(FramingSawRecipeAdditive.of(Items.DETECTOR_RAIL))
                 .save(consumer);
 
-        FramingSawRecipeBuilder.builder(FBContent.blockFramedActivatorRailSlope)
+        FramingSawRecipeBuilder.builder(FBContent.BLOCK_FRAMED_ACTIVATOR_RAIL_SLOPE)
                 .material(FramingSawRecipe.CUBE_MATERIAL_VALUE / 2)
                 .additive(FramingSawRecipeAdditive.of(Items.ACTIVATOR_RAIL))
                 .save(consumer);
 
-        FramingSawRecipeBuilder.builder(FBContent.blockFramedFlowerPot)
+        FramingSawRecipeBuilder.builder(FBContent.BLOCK_FRAMED_FLOWER_POT)
                 .material(FramingSawRecipe.CUBE_MATERIAL_VALUE / 4)
                 .save(consumer);
 
-        FramingSawRecipeBuilder.builder(FBContent.blockFramedPillar)
+        FramingSawRecipeBuilder.builder(FBContent.BLOCK_FRAMED_PILLAR)
                 .material(FramingSawRecipe.CUBE_MATERIAL_VALUE / 4)
                 .save(consumer);
 
-        FramingSawRecipeBuilder.builder(FBContent.blockFramedHalfPillar)
+        FramingSawRecipeBuilder.builder(FBContent.BLOCK_FRAMED_HALF_PILLAR)
                 .material(FramingSawRecipe.CUBE_MATERIAL_VALUE / 8)
                 .save(consumer);
 
-        FramingSawRecipeBuilder.builder(FBContent.blockFramedPost)
+        FramingSawRecipeBuilder.builder(FBContent.BLOCK_FRAMED_POST)
                 .material(FramingSawRecipe.CUBE_MATERIAL_VALUE / 8)
                 .save(consumer);
 
-        FramingSawRecipeBuilder.builder(FBContent.blockFramedCollapsibleBlock)
+        FramingSawRecipeBuilder.builder(FBContent.BLOCK_FRAMED_COLLAPSIBLE_BLOCK)
                 .material(FramingSawRecipe.CUBE_MATERIAL_VALUE * 2)
                 .save(consumer);
 
-        FramingSawRecipeBuilder.builder(FBContent.blockFramedBouncyCube)
+        FramingSawRecipeBuilder.builder(FBContent.BLOCK_FRAMED_BOUNCY_CUBE)
                 .material(FramingSawRecipe.CUBE_MATERIAL_VALUE)
                 .additive(FramingSawRecipeAdditive.of(Tags.Items.SLIMEBALLS, 4))
                 .save(consumer);
 
-        FramingSawRecipeBuilder.builder(FBContent.blockFramedRedstoneBlock)
+        FramingSawRecipeBuilder.builder(FBContent.BLOCK_FRAMED_REDSTONE_BLOCK)
                 .material(FramingSawRecipe.CUBE_MATERIAL_VALUE)
                 .additive(FramingSawRecipeAdditive.of(Tags.Items.DUSTS_REDSTONE, 8))
                 .save(consumer);
 
-        FramingSawRecipeBuilder.builder(FBContent.blockFramedPrism)
+        FramingSawRecipeBuilder.builder(FBContent.BLOCK_FRAMED_PRISM)
                 .material(FramingSawRecipe.CUBE_MATERIAL_VALUE / 4)
                 .save(consumer);
 
-        FramingSawRecipeBuilder.builder(FBContent.blockFramedInnerPrism)
+        FramingSawRecipeBuilder.builder(FBContent.BLOCK_FRAMED_INNER_PRISM)
                 .material(FramingSawRecipe.CUBE_MATERIAL_VALUE / 4 * 3)
                 .save(consumer);
 
-        FramingSawRecipeBuilder.builder(FBContent.blockFramedDoublePrism)
+        FramingSawRecipeBuilder.builder(FBContent.BLOCK_FRAMED_DOUBLE_PRISM)
                 .material(FramingSawRecipe.CUBE_MATERIAL_VALUE)
                 .save(consumer);
 
-        FramingSawRecipeBuilder.builder(FBContent.blockFramedSlopedPrism)
+        FramingSawRecipeBuilder.builder(FBContent.BLOCK_FRAMED_SLOPED_PRISM)
                 .material(FramingSawRecipe.CUBE_MATERIAL_VALUE / 4)
                 .save(consumer);
 
-        FramingSawRecipeBuilder.builder(FBContent.blockFramedInnerSlopedPrism)
+        FramingSawRecipeBuilder.builder(FBContent.BLOCK_FRAMED_INNER_SLOPED_PRISM)
                 .material(FramingSawRecipe.CUBE_MATERIAL_VALUE / 4 * 3)
                 .save(consumer);
 
-        FramingSawRecipeBuilder.builder(FBContent.blockFramedDoubleSlopedPrism)
+        FramingSawRecipeBuilder.builder(FBContent.BLOCK_FRAMED_DOUBLE_SLOPED_PRISM)
                 .material(FramingSawRecipe.CUBE_MATERIAL_VALUE)
                 .save(consumer);
 
-        FramingSawRecipeBuilder.builder(FBContent.blockFramedSlopeSlab)
+        FramingSawRecipeBuilder.builder(FBContent.BLOCK_FRAMED_SLOPE_SLAB)
                 .material(FramingSawRecipe.CUBE_MATERIAL_VALUE / 4)
                 .save(consumer);
 
-        FramingSawRecipeBuilder.builder(FBContent.blockFramedElevatedSlopeSlab)
+        FramingSawRecipeBuilder.builder(FBContent.BLOCK_FRAMED_ELEVATED_SLOPE_SLAB)
                 .material(FramingSawRecipe.CUBE_MATERIAL_VALUE / 4 * 3)
                 .save(consumer);
 
-        FramingSawRecipeBuilder.builder(FBContent.blockFramedDoubleSlopeSlab)
+        FramingSawRecipeBuilder.builder(FBContent.BLOCK_FRAMED_DOUBLE_SLOPE_SLAB)
                 .material(FramingSawRecipe.CUBE_MATERIAL_VALUE / 2)
                 .save(consumer);
 
-        FramingSawRecipeBuilder.builder(FBContent.blockFramedInverseDoubleSlopeSlab)
+        FramingSawRecipeBuilder.builder(FBContent.BLOCK_FRAMED_INVERSE_DOUBLE_SLOPE_SLAB)
                 .material(FramingSawRecipe.CUBE_MATERIAL_VALUE / 2)
                 .save(consumer);
 
-        FramingSawRecipeBuilder.builder(FBContent.blockFramedElevatedDoubleSlopeSlab)
+        FramingSawRecipeBuilder.builder(FBContent.BLOCK_FRAMED_ELEVATED_DOUBLE_SLOPE_SLAB)
                 .material(FramingSawRecipe.CUBE_MATERIAL_VALUE)
                 .save(consumer);
 
-        FramingSawRecipeBuilder.builder(FBContent.blockFramedStackedSlopeSlab)
+        FramingSawRecipeBuilder.builder(FBContent.BLOCK_FRAMED_STACKED_SLOPE_SLAB)
                 .material(FramingSawRecipe.CUBE_MATERIAL_VALUE / 4 * 3)
                 .save(consumer);
 
-        FramingSawRecipeBuilder.builder(FBContent.blockFramedFlatSlopeSlabCorner)
+        FramingSawRecipeBuilder.builder(FBContent.BLOCK_FRAMED_FLAT_SLOPE_SLAB_CORNER)
                 .material(FramingSawRecipe.CUBE_MATERIAL_VALUE / 4)
                 .save(consumer);
 
-        FramingSawRecipeBuilder.builder(FBContent.blockFramedFlatInnerSlopeSlabCorner)
+        FramingSawRecipeBuilder.builder(FBContent.BLOCK_FRAMED_FLAT_INNER_SLOPE_SLAB_CORNER)
                 .material(FramingSawRecipe.CUBE_MATERIAL_VALUE / 4)
                 .save(consumer);
 
-        FramingSawRecipeBuilder.builder(FBContent.blockFramedFlatElevatedSlopeSlabCorner)
+        FramingSawRecipeBuilder.builder(FBContent.BLOCK_FRAMED_FLAT_ELEVATED_SLOPE_SLAB_CORNER)
                 .material(FramingSawRecipe.CUBE_MATERIAL_VALUE / 4 * 3)
                 .save(consumer);
 
-        FramingSawRecipeBuilder.builder(FBContent.blockFramedFlatElevatedInnerSlopeSlabCorner)
+        FramingSawRecipeBuilder.builder(FBContent.BLOCK_FRAMED_FLAT_ELEVATED_INNER_SLOPE_SLAB_CORNER)
                 .material(FramingSawRecipe.CUBE_MATERIAL_VALUE / 4 * 3)
                 .save(consumer);
 
-        FramingSawRecipeBuilder.builder(FBContent.blockFramedFlatDoubleSlopeSlabCorner)
+        FramingSawRecipeBuilder.builder(FBContent.BLOCK_FRAMED_FLAT_DOUBLE_SLOPE_SLAB_CORNER)
                 .material(FramingSawRecipe.CUBE_MATERIAL_VALUE / 2)
                 .save(consumer);
 
-        FramingSawRecipeBuilder.builder(FBContent.blockFramedFlatInverseDoubleSlopeSlabCorner)
+        FramingSawRecipeBuilder.builder(FBContent.BLOCK_FRAMED_FLAT_INVERSE_DOUBLE_SLOPE_SLAB_CORNER)
                 .material(FramingSawRecipe.CUBE_MATERIAL_VALUE / 2)
                 .save(consumer);
 
-        FramingSawRecipeBuilder.builder(FBContent.blockFramedFlatElevatedDoubleSlopeSlabCorner)
+        FramingSawRecipeBuilder.builder(FBContent.BLOCK_FRAMED_FLAT_ELEVATED_DOUBLE_SLOPE_SLAB_CORNER)
                 .material(FramingSawRecipe.CUBE_MATERIAL_VALUE)
                 .save(consumer);
 
-        FramingSawRecipeBuilder.builder(FBContent.blockFramedFlatElevatedInnerDoubleSlopeSlabCorner)
+        FramingSawRecipeBuilder.builder(FBContent.BLOCK_FRAMED_FLAT_ELEVATED_INNER_DOUBLE_SLOPE_SLAB_CORNER)
                 .material(FramingSawRecipe.CUBE_MATERIAL_VALUE)
                 .save(consumer);
 
-        FramingSawRecipeBuilder.builder(FBContent.blockFramedFlatStackedSlopeSlabCorner)
+        FramingSawRecipeBuilder.builder(FBContent.BLOCK_FRAMED_FLAT_STACKED_SLOPE_SLAB_CORNER)
                 .material(FramingSawRecipe.CUBE_MATERIAL_VALUE / 4 * 3)
                 .save(consumer);
 
-        FramingSawRecipeBuilder.builder(FBContent.blockFramedFlatStackedInnerSlopeSlabCorner)
+        FramingSawRecipeBuilder.builder(FBContent.BLOCK_FRAMED_FLAT_STACKED_INNER_SLOPE_SLAB_CORNER)
                 .material(FramingSawRecipe.CUBE_MATERIAL_VALUE / 4 * 3)
                 .save(consumer);
 
-        FramingSawRecipeBuilder.builder(FBContent.blockFramedSlopePanel)
+        FramingSawRecipeBuilder.builder(FBContent.BLOCK_FRAMED_SLOPE_PANEL)
                 .material(FramingSawRecipe.CUBE_MATERIAL_VALUE / 4)
                 .save(consumer);
 
-        FramingSawRecipeBuilder.builder(FBContent.blockFramedExtendedSlopePanel)
+        FramingSawRecipeBuilder.builder(FBContent.BLOCK_FRAMED_EXTENDED_SLOPE_PANEL)
                 .material(FramingSawRecipe.CUBE_MATERIAL_VALUE / 4 * 3)
                 .save(consumer);
 
-        FramingSawRecipeBuilder.builder(FBContent.blockFramedDoubleSlopePanel)
+        FramingSawRecipeBuilder.builder(FBContent.BLOCK_FRAMED_DOUBLE_SLOPE_PANEL)
                 .material(FramingSawRecipe.CUBE_MATERIAL_VALUE / 2)
                 .save(consumer);
 
-        FramingSawRecipeBuilder.builder(FBContent.blockFramedInverseDoubleSlopePanel)
+        FramingSawRecipeBuilder.builder(FBContent.BLOCK_FRAMED_INVERSE_DOUBLE_SLOPE_PANEL)
                 .material(FramingSawRecipe.CUBE_MATERIAL_VALUE / 2)
                 .save(consumer);
 
-        FramingSawRecipeBuilder.builder(FBContent.blockFramedExtendedDoubleSlopePanel)
+        FramingSawRecipeBuilder.builder(FBContent.BLOCK_FRAMED_EXTENDED_DOUBLE_SLOPE_PANEL)
                 .material(FramingSawRecipe.CUBE_MATERIAL_VALUE)
                 .save(consumer);
 
-        FramingSawRecipeBuilder.builder(FBContent.blockFramedStackedSlopePanel)
+        FramingSawRecipeBuilder.builder(FBContent.BLOCK_FRAMED_STACKED_SLOPE_PANEL)
                 .material(FramingSawRecipe.CUBE_MATERIAL_VALUE / 4 * 3)
                 .save(consumer);
 
-        FramingSawRecipeBuilder.builder(FBContent.blockFramedFlatSlopePanelCorner)
+        FramingSawRecipeBuilder.builder(FBContent.BLOCK_FRAMED_FLAT_SLOPE_PANEL_CORNER)
                 .material(FramingSawRecipe.CUBE_MATERIAL_VALUE / 4)
                 .save(consumer);
 
-        FramingSawRecipeBuilder.builder(FBContent.blockFramedFlatInnerSlopePanelCorner)
+        FramingSawRecipeBuilder.builder(FBContent.BLOCK_FRAMED_FLAT_INNER_SLOPE_PANEL_CORNER)
                 .material(FramingSawRecipe.CUBE_MATERIAL_VALUE / 4)
                 .save(consumer);
 
-        FramingSawRecipeBuilder.builder(FBContent.blockFramedFlatExtendedSlopePanelCorner)
+        FramingSawRecipeBuilder.builder(FBContent.BLOCK_FRAMED_FLAT_EXTENDED_SLOPE_PANEL_CORNER)
                 .material(FramingSawRecipe.CUBE_MATERIAL_VALUE / 4 * 3)
                 .save(consumer);
 
-        FramingSawRecipeBuilder.builder(FBContent.blockFramedFlatExtendedInnerSlopePanelCorner)
+        FramingSawRecipeBuilder.builder(FBContent.BLOCK_FRAMED_FLAT_EXTENDED_INNER_SLOPE_PANEL_CORNER)
                 .material(FramingSawRecipe.CUBE_MATERIAL_VALUE / 4 * 3)
                 .save(consumer);
 
-        FramingSawRecipeBuilder.builder(FBContent.blockFramedFlatDoubleSlopePanelCorner)
+        FramingSawRecipeBuilder.builder(FBContent.BLOCK_FRAMED_FLAT_DOUBLE_SLOPE_PANEL_CORNER)
                 .material(FramingSawRecipe.CUBE_MATERIAL_VALUE / 2)
                 .save(consumer);
 
-        FramingSawRecipeBuilder.builder(FBContent.blockFramedFlatInverseDoubleSlopePanelCorner)
+        FramingSawRecipeBuilder.builder(FBContent.BLOCK_FRAMED_FLAT_INVERSE_DOUBLE_SLOPE_PANEL_CORNER)
                 .material(FramingSawRecipe.CUBE_MATERIAL_VALUE / 2)
                 .save(consumer);
 
-        FramingSawRecipeBuilder.builder(FBContent.blockFramedFlatExtendedDoubleSlopePanelCorner)
+        FramingSawRecipeBuilder.builder(FBContent.BLOCK_FRAMED_FLAT_EXTENDED_DOUBLE_SLOPE_PANEL_CORNER)
                 .material(FramingSawRecipe.CUBE_MATERIAL_VALUE)
                 .save(consumer);
 
-        FramingSawRecipeBuilder.builder(FBContent.blockFramedFlatExtendedInnerDoubleSlopePanelCorner)
+        FramingSawRecipeBuilder.builder(FBContent.BLOCK_FRAMED_FLAT_EXTENDED_INNER_DOUBLE_SLOPE_PANEL_CORNER)
                 .material(FramingSawRecipe.CUBE_MATERIAL_VALUE)
                 .save(consumer);
 
-        FramingSawRecipeBuilder.builder(FBContent.blockFramedFlatStackedSlopePanelCorner)
+        FramingSawRecipeBuilder.builder(FBContent.BLOCK_FRAMED_FLAT_STACKED_SLOPE_PANEL_CORNER)
                 .material(FramingSawRecipe.CUBE_MATERIAL_VALUE / 4 * 3)
                 .save(consumer);
 
-        FramingSawRecipeBuilder.builder(FBContent.blockFramedFlatStackedInnerSlopePanelCorner)
+        FramingSawRecipeBuilder.builder(FBContent.BLOCK_FRAMED_FLAT_STACKED_INNER_SLOPE_PANEL_CORNER)
                 .material(FramingSawRecipe.CUBE_MATERIAL_VALUE / 4 * 3)
                 .save(consumer);
 
-        FramingSawRecipeBuilder.builder(FBContent.blockFramedGlowingCube)
+        FramingSawRecipeBuilder.builder(FBContent.BLOCK_FRAMED_GLOWING_CUBE)
                 .material(FramingSawRecipe.CUBE_MATERIAL_VALUE)
                 .additive(FramingSawRecipeAdditive.of(Tags.Items.DUSTS_GLOWSTONE, 4))
                 .save(consumer);
 
-        FramingSawRecipeBuilder.builder(FBContent.blockFramedPyramid)
+        FramingSawRecipeBuilder.builder(FBContent.BLOCK_FRAMED_PYRAMID)
                 .material(FramingSawRecipe.CUBE_MATERIAL_VALUE / 2)
                 .save(consumer);
 
-        FramingSawRecipeBuilder.builder(FBContent.blockFramedPyramidSlab, 3)
+        FramingSawRecipeBuilder.builder(FBContent.BLOCK_FRAMED_PYRAMID_SLAB, 3)
                 .material(FramingSawRecipe.CUBE_MATERIAL_VALUE / 2)
                 .save(consumer);
 
-        FramingSawRecipeBuilder.builder(FBContent.blockFramedTarget)
+        FramingSawRecipeBuilder.builder(FBContent.BLOCK_FRAMED_TARGET)
                 .material(FramingSawRecipe.CUBE_MATERIAL_VALUE)
                 .additives(List.of(
                         FramingSawRecipeAdditive.of(Items.HAY_BLOCK),
@@ -494,16 +494,16 @@ public final class FramingSawRecipeProvider extends RecipeProvider
                 ))
                 .save(consumer);
 
-        FramingSawRecipeBuilder.builder(FBContent.blockFramedGate)
+        FramingSawRecipeBuilder.builder(FBContent.BLOCK_FRAMED_GATE)
                 .material(FramingSawRecipe.CUBE_MATERIAL_VALUE / 4)
                 .save(consumer);
 
-        FramingSawRecipeBuilder.builder(FBContent.blockFramedIronGate)
+        FramingSawRecipeBuilder.builder(FBContent.BLOCK_FRAMED_IRON_GATE)
                 .material(FramingSawRecipe.CUBE_MATERIAL_VALUE / 4)
                 .additive(FramingSawRecipeAdditive.of(Tags.Items.INGOTS_IRON))
                 .save(consumer);
 
-        FramingSawRecipeBuilder.builder(FBContent.blockFramedGlowingItemFrame)
+        FramingSawRecipeBuilder.builder(FBContent.BLOCK_FRAMED_GLOWING_ITEM_FRAME)
                 .material(FramingSawRecipe.CUBE_MATERIAL_VALUE / 4)
                 .additives(List.of(
                         FramingSawRecipeAdditive.of(Tags.Items.LEATHER),
@@ -511,17 +511,17 @@ public final class FramingSawRecipeProvider extends RecipeProvider
                 ))
                 .save(consumer);
 
-        FramingSawRecipeBuilder.builder(FBContent.blockFramedItemFrame)
+        FramingSawRecipeBuilder.builder(FBContent.BLOCK_FRAMED_ITEM_FRAME)
                 .material(FramingSawRecipe.CUBE_MATERIAL_VALUE / 4)
                 .additive(FramingSawRecipeAdditive.of(Tags.Items.LEATHER))
                 .save(consumer);
 
-        FramingSawRecipeBuilder.builder(FBContent.blockFramedFancyRail, 16)
+        FramingSawRecipeBuilder.builder(FBContent.BLOCK_FRAMED_FANCY_RAIL, 16)
                 .material(FramingSawRecipe.CUBE_MATERIAL_VALUE)
                 .additive(FramingSawRecipeAdditive.of(Tags.Items.INGOTS_IRON, 6))
                 .save(consumer);
 
-        FramingSawRecipeBuilder.builder(FBContent.blockFramedFancyPoweredRail, 6)
+        FramingSawRecipeBuilder.builder(FBContent.BLOCK_FRAMED_FANCY_POWERED_RAIL, 6)
                 .material(FramingSawRecipe.CUBE_MATERIAL_VALUE)
                 .additives(List.of(
                         FramingSawRecipeAdditive.of(Tags.Items.INGOTS_GOLD, 6),
@@ -529,7 +529,7 @@ public final class FramingSawRecipeProvider extends RecipeProvider
                 ))
                 .save(consumer);
 
-        FramingSawRecipeBuilder.builder(FBContent.blockFramedFancyDetectorRail, 6)
+        FramingSawRecipeBuilder.builder(FBContent.BLOCK_FRAMED_FANCY_DETECTOR_RAIL, 6)
                 .material(FramingSawRecipe.CUBE_MATERIAL_VALUE)
                 .additives(List.of(
                         FramingSawRecipeAdditive.of(Tags.Items.INGOTS_IRON, 6),
@@ -538,7 +538,7 @@ public final class FramingSawRecipeProvider extends RecipeProvider
                 ))
                 .save(consumer);
 
-        FramingSawRecipeBuilder.builder(FBContent.blockFramedFancyActivatorRail, 6)
+        FramingSawRecipeBuilder.builder(FBContent.BLOCK_FRAMED_FANCY_ACTIVATOR_RAIL, 6)
                 .material(FramingSawRecipe.CUBE_MATERIAL_VALUE)
                 .additives(List.of(
                         FramingSawRecipeAdditive.of(Tags.Items.INGOTS_IRON, 6),
@@ -546,51 +546,51 @@ public final class FramingSawRecipeProvider extends RecipeProvider
                 ))
                 .save(consumer);
 
-        FramingSawRecipeBuilder.builder(FBContent.blockFramedFancyRailSlope)
+        FramingSawRecipeBuilder.builder(FBContent.BLOCK_FRAMED_FANCY_RAIL_SLOPE)
                 .material(FramingSawRecipe.CUBE_MATERIAL_VALUE / 2)
-                .additive(FramingSawRecipeAdditive.of(FBContent.blockFramedFancyRail.get()))
+                .additive(FramingSawRecipeAdditive.of(FBContent.BLOCK_FRAMED_FANCY_RAIL.get()))
                 .save(consumer);
 
-        FramingSawRecipeBuilder.builder(FBContent.blockFramedFancyPoweredRailSlope)
+        FramingSawRecipeBuilder.builder(FBContent.BLOCK_FRAMED_FANCY_POWERED_RAIL_SLOPE)
                 .material(FramingSawRecipe.CUBE_MATERIAL_VALUE / 2)
-                .additive(FramingSawRecipeAdditive.of(FBContent.blockFramedFancyPoweredRail.get()))
+                .additive(FramingSawRecipeAdditive.of(FBContent.BLOCK_FRAMED_FANCY_POWERED_RAIL.get()))
                 .save(consumer);
 
-        FramingSawRecipeBuilder.builder(FBContent.blockFramedFancyDetectorRailSlope)
+        FramingSawRecipeBuilder.builder(FBContent.BLOCK_FRAMED_FANCY_DETECTOR_RAIL_SLOPE)
                 .material(FramingSawRecipe.CUBE_MATERIAL_VALUE / 2)
-                .additive(FramingSawRecipeAdditive.of(FBContent.blockFramedFancyDetectorRail.get()))
+                .additive(FramingSawRecipeAdditive.of(FBContent.BLOCK_FRAMED_FANCY_DETECTOR_RAIL.get()))
                 .save(consumer);
 
-        FramingSawRecipeBuilder.builder(FBContent.blockFramedFancyActivatorRailSlope)
+        FramingSawRecipeBuilder.builder(FBContent.BLOCK_FRAMED_FANCY_ACTIVATOR_RAIL_SLOPE)
                 .material(FramingSawRecipe.CUBE_MATERIAL_VALUE / 2)
-                .additive(FramingSawRecipeAdditive.of(FBContent.blockFramedFancyActivatorRail.get()))
+                .additive(FramingSawRecipeAdditive.of(FBContent.BLOCK_FRAMED_FANCY_ACTIVATOR_RAIL.get()))
                 .save(consumer);
 
-        FramingSawRecipeBuilder.builder(FBContent.blockFramedHalfSlope)
+        FramingSawRecipeBuilder.builder(FBContent.BLOCK_FRAMED_HALF_SLOPE)
                 .material(FramingSawRecipe.CUBE_MATERIAL_VALUE / 4)
                 .save(consumer);
 
-        FramingSawRecipeBuilder.builder(FBContent.blockFramedDividedSlope)
+        FramingSawRecipeBuilder.builder(FBContent.BLOCK_FRAMED_DIVIDED_SLOPE)
                 .material(FramingSawRecipe.CUBE_MATERIAL_VALUE / 2)
                 .save(consumer);
 
-        FramingSawRecipeBuilder.builder(FBContent.blockFramedDoubleHalfSlope)
+        FramingSawRecipeBuilder.builder(FBContent.BLOCK_FRAMED_DOUBLE_HALF_SLOPE)
                 .material(FramingSawRecipe.CUBE_MATERIAL_VALUE / 2)
                 .save(consumer);
 
-        FramingSawRecipeBuilder.builder(FBContent.blockFramedSlopedStairs)
+        FramingSawRecipeBuilder.builder(FBContent.BLOCK_FRAMED_SLOPED_STAIRS)
                 .material(FramingSawRecipe.CUBE_MATERIAL_VALUE / 4 * 3)
                 .save(consumer);
 
-        FramingSawRecipeBuilder.builder(FBContent.blockFramedVerticalSlopedStairs)
+        FramingSawRecipeBuilder.builder(FBContent.BLOCK_FRAMED_VERTICAL_SLOPED_STAIRS)
                 .material(FramingSawRecipe.CUBE_MATERIAL_VALUE / 4 * 3)
                 .save(consumer);
 
-        FramingSawRecipeBuilder.builder(FBContent.blockFramedMiniCube)
+        FramingSawRecipeBuilder.builder(FBContent.BLOCK_FRAMED_MINI_CUBE)
                 .material(FramingSawRecipe.CUBE_MATERIAL_VALUE)
                 .save(consumer);
 
-        FramingSawRecipeBuilder.builder(FBContent.blockFramedOneWayWindow)
+        FramingSawRecipeBuilder.builder(FBContent.BLOCK_FRAMED_ONE_WAY_WINDOW)
                 .material(FramingSawRecipe.CUBE_MATERIAL_VALUE)
                 .additive(FramingSawRecipeAdditive.of(Blocks.TINTED_GLASS))
                 .save(consumer);

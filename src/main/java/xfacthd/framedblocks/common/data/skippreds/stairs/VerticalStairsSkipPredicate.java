@@ -75,7 +75,9 @@ public final class VerticalStairsSkipPredicate implements SideSkipPredicate
         return false;
     }
 
-    private static boolean testAgainstVerticalStairs(BlockGetter level, BlockPos pos, BlockState state, Direction dir, StairsType type, BlockState adjState, Direction side)
+    private static boolean testAgainstVerticalStairs(
+            BlockGetter level, BlockPos pos, BlockState state, Direction dir, StairsType type, BlockState adjState, Direction side
+    )
     {
         StairsType adjType = adjState.getValue(PropertyHolder.STAIRS_TYPE);
         Direction adjDir = adjState.getValue(FramedProperties.FACING_HOR);
@@ -95,14 +97,18 @@ public final class VerticalStairsSkipPredicate implements SideSkipPredicate
         return false;
     }
 
-    private static boolean testAgainstVerticalDoubleStairs(BlockGetter level, BlockPos pos, BlockState state, Direction dir, StairsType type, BlockState adjState, Direction side)
+    private static boolean testAgainstVerticalDoubleStairs(
+            BlockGetter level, BlockPos pos, BlockState state, Direction dir, StairsType type, BlockState adjState, Direction side
+    )
     {
         Tuple<BlockState, BlockState> states = AbstractFramedDoubleBlock.getStatePair(adjState);
         return testAgainstVerticalStairs(level, pos, state, dir, type, states.getA(), side) ||
                testAgainstPillar(level, pos, state, dir, type, states.getB(), side);
     }
 
-    private static boolean testAgainstVerticalHalfStairs(BlockGetter level, BlockPos pos, BlockState state, Direction dir, StairsType type, BlockState adjState, Direction side)
+    private static boolean testAgainstVerticalHalfStairs(
+            BlockGetter level, BlockPos pos, BlockState state, Direction dir, StairsType type, BlockState adjState, Direction side
+    )
     {
         Direction adjDir = adjState.getValue(FramedProperties.FACING_HOR);
         boolean adjTop = adjState.getValue(FramedProperties.TOP);
@@ -131,7 +137,9 @@ public final class VerticalStairsSkipPredicate implements SideSkipPredicate
                testAgainstVerticalHalfStairs(level, pos, state, dir, type, states.getB(), side);
     }
 
-    private static boolean testAgainstStairs(BlockGetter level, BlockPos pos, BlockState state, Direction dir, StairsType type, BlockState adjState, Direction side)
+    private static boolean testAgainstStairs(
+            BlockGetter level, BlockPos pos, BlockState state, Direction dir, StairsType type, BlockState adjState, Direction side
+    )
     {
         Direction adjDir = adjState.getValue(BlockStateProperties.HORIZONTAL_FACING);
         StairsShape adjShape = adjState.getValue(BlockStateProperties.STAIRS_SHAPE);
@@ -152,14 +160,18 @@ public final class VerticalStairsSkipPredicate implements SideSkipPredicate
         return false;
     }
 
-    private static boolean testAgainstDoubleStairs(BlockGetter level, BlockPos pos, BlockState state, Direction dir, StairsType type, BlockState adjState, Direction side)
+    private static boolean testAgainstDoubleStairs(
+            BlockGetter level, BlockPos pos, BlockState state, Direction dir, StairsType type, BlockState adjState, Direction side
+    )
     {
         Tuple<BlockState, BlockState> states = AbstractFramedDoubleBlock.getStatePair(adjState);
         return testAgainstStairs(level, pos, state, dir, type, states.getA(), side) ||
                testAgainstEdge(level, pos, state, dir, type, states.getB(), side);
     }
 
-    private static boolean testAgainstHalfStairs(BlockGetter level, BlockPos pos, BlockState state, Direction dir, StairsType type, BlockState adjState, Direction side)
+    private static boolean testAgainstHalfStairs(
+            BlockGetter level, BlockPos pos, BlockState state, Direction dir, StairsType type, BlockState adjState, Direction side
+    )
     {
         Direction adjDir = adjState.getValue(FramedProperties.FACING_HOR);
         boolean adjTop = adjState.getValue(FramedProperties.TOP);
@@ -189,7 +201,9 @@ public final class VerticalStairsSkipPredicate implements SideSkipPredicate
                testAgainstHalfStairs(level, pos, state, dir, type, states.getB(), side);
     }
 
-    private static boolean testAgainstPanel(BlockGetter level, BlockPos pos, BlockState state, Direction dir, StairsType type, BlockState adjState, Direction side)
+    private static boolean testAgainstPanel(
+            BlockGetter level, BlockPos pos, BlockState state, Direction dir, StairsType type, BlockState adjState, Direction side
+    )
     {
         Direction adjDir = adjState.getValue(FramedProperties.FACING_HOR);
 
@@ -200,14 +214,18 @@ public final class VerticalStairsSkipPredicate implements SideSkipPredicate
         return false;
     }
 
-    private static boolean testAgainstDoublePanel(BlockGetter level, BlockPos pos, BlockState state, Direction dir, StairsType type, BlockState adjState, Direction side)
+    private static boolean testAgainstDoublePanel(
+            BlockGetter level, BlockPos pos, BlockState state, Direction dir, StairsType type, BlockState adjState, Direction side
+    )
     {
         Tuple<BlockState, BlockState> states = AbstractFramedDoubleBlock.getStatePair(adjState);
         return testAgainstPanel(level, pos, state, dir, type, states.getA(), side) ||
                testAgainstPanel(level, pos, state, dir, type, states.getB(), side);
     }
 
-    private static boolean testAgainstCorner(BlockGetter level, BlockPos pos, BlockState state, Direction dir, StairsType type, BlockState adjState, Direction side)
+    private static boolean testAgainstCorner(
+            BlockGetter level, BlockPos pos, BlockState state, Direction dir, StairsType type, BlockState adjState, Direction side
+    )
     {
         Direction adjDir = adjState.getValue(FramedProperties.FACING_HOR);
         boolean adjTop = adjState.getValue(FramedProperties.TOP);
@@ -219,7 +237,9 @@ public final class VerticalStairsSkipPredicate implements SideSkipPredicate
         return false;
     }
 
-    private static boolean testAgainstPillar(BlockGetter level, BlockPos pos, BlockState state, Direction dir, StairsType type, BlockState adjState, Direction side)
+    private static boolean testAgainstPillar(
+            BlockGetter level, BlockPos pos, BlockState state, Direction dir, StairsType type, BlockState adjState, Direction side
+    )
     {
         Direction adjDir = adjState.getValue(FramedProperties.FACING_HOR);
 
@@ -243,7 +263,9 @@ public final class VerticalStairsSkipPredicate implements SideSkipPredicate
                testAgainstPillar(level, pos, state, dir, type, states.getB(), side);
     }
 
-    private static boolean testAgainstEdge(BlockGetter level, BlockPos pos, BlockState state, Direction dir, StairsType type, BlockState adjState, Direction side)
+    private static boolean testAgainstEdge(
+            BlockGetter level, BlockPos pos, BlockState state, Direction dir, StairsType type, BlockState adjState, Direction side
+    )
     {
         Direction adjDir = adjState.getValue(FramedProperties.FACING_HOR);
         boolean adjTop = adjState.getValue(FramedProperties.TOP);
@@ -277,7 +299,9 @@ public final class VerticalStairsSkipPredicate implements SideSkipPredicate
                testAgainstEdge(level, pos, state, dir, type, states.getB(), side);
     }
 
-    private static boolean testAgainstSlopePanel(BlockGetter level, BlockPos pos, BlockState state, Direction dir, StairsType type, BlockState adjState, Direction side)
+    private static boolean testAgainstSlopePanel(
+            BlockGetter level, BlockPos pos, BlockState state, Direction dir, StairsType type, BlockState adjState, Direction side
+    )
     {
         Direction adjDir = adjState.getValue(FramedProperties.FACING_HOR);
         HorizontalRotation adjRot = adjState.getValue(PropertyHolder.ROTATION);
@@ -290,7 +314,9 @@ public final class VerticalStairsSkipPredicate implements SideSkipPredicate
         return false;
     }
 
-    private static boolean testAgainstExtendedSlopePanel(BlockGetter level, BlockPos pos, BlockState state, Direction dir, StairsType type, BlockState adjState, Direction side)
+    private static boolean testAgainstExtendedSlopePanel(
+            BlockGetter level, BlockPos pos, BlockState state, Direction dir, StairsType type, BlockState adjState, Direction side
+    )
     {
         Direction adjDir = adjState.getValue(FramedProperties.FACING_HOR);
         HorizontalRotation adjRot = adjState.getValue(PropertyHolder.ROTATION);
@@ -302,21 +328,27 @@ public final class VerticalStairsSkipPredicate implements SideSkipPredicate
         return false;
     }
 
-    private static boolean testAgainstDoubleSlopePanel(BlockGetter level, BlockPos pos, BlockState state, Direction dir, StairsType type, BlockState adjState, Direction side)
+    private static boolean testAgainstDoubleSlopePanel(
+            BlockGetter level, BlockPos pos, BlockState state, Direction dir, StairsType type, BlockState adjState, Direction side
+    )
     {
         Tuple<BlockState, BlockState> states = AbstractFramedDoubleBlock.getStatePair(adjState);
         return testAgainstSlopePanel(level, pos, state, dir, type, states.getA(), side) ||
                testAgainstSlopePanel(level, pos, state, dir, type, states.getB(), side);
     }
 
-    private static boolean testAgainstInverseDoubleSlopePanel(BlockGetter level, BlockPos pos, BlockState state, Direction dir, StairsType type, BlockState adjState, Direction side)
+    private static boolean testAgainstInverseDoubleSlopePanel(
+            BlockGetter level, BlockPos pos, BlockState state, Direction dir, StairsType type, BlockState adjState, Direction side
+    )
     {
         Tuple<BlockState, BlockState> states = AbstractFramedDoubleBlock.getStatePair(adjState);
         return testAgainstSlopePanel(level, pos, state, dir, type, states.getA(), side) ||
                testAgainstSlopePanel(level, pos, state, dir, type, states.getB(), side);
     }
 
-    private static boolean testAgainstExtendedDoubleSlopePanel(BlockGetter level, BlockPos pos, BlockState state, Direction dir, StairsType type, BlockState adjState, Direction side)
+    private static boolean testAgainstExtendedDoubleSlopePanel(
+            BlockGetter level, BlockPos pos, BlockState state, Direction dir, StairsType type, BlockState adjState, Direction side
+    )
     {
         Tuple<BlockState, BlockState> states = AbstractFramedDoubleBlock.getStatePair(adjState);
         return testAgainstExtendedSlopePanel(level, pos, state, dir, type, states.getA(), side) ||

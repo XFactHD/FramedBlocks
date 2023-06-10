@@ -14,7 +14,7 @@ public class FramedTargetBlockEntity extends FramedBlockEntity
 
     public FramedTargetBlockEntity(BlockPos pos, BlockState state)
     {
-        super(FBContent.blockEntityTypeFramedTarget.get(), pos, state);
+        super(FBContent.BE_TYPE_FRAMED_TARGET.get(), pos, state);
     }
 
     public boolean setOverlayColor(DyeColor overlayColor)
@@ -35,7 +35,10 @@ public class FramedTargetBlockEntity extends FramedBlockEntity
         return false;
     }
 
-    public int getOverlayColor() { return overlayColor.getTextColor(); }
+    public int getOverlayColor()
+    {
+        return overlayColor.getTextColor();
+    }
 
     @Override
     public CompoundTag getUpdateTag()

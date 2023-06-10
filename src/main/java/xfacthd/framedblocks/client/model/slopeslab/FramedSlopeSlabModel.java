@@ -89,6 +89,8 @@ public class FramedSlopeSlabModel extends FramedBlockModel
 
     public static BlockState itemSource()
     {
-        return FBContent.blockFramedSlopeSlab.get().defaultBlockState().setValue(FramedProperties.FACING_HOR, Direction.SOUTH);
+        return FBContent.BLOCK_FRAMED_SLOPE_SLAB.get()
+                .defaultBlockState()
+                .setValue(FramedProperties.FACING_HOR, Direction.SOUTH);
     }
 }

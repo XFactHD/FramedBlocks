@@ -27,16 +27,27 @@ public final class SlopedPrismSkipPredicate implements SideSkipPredicate
         }
 
         Direction orientation = cmpDir.orientation();
-        if (orientation.getAxis() == dir.getAxis() || side != orientation) { return false; }
+        if (orientation.getAxis() == dir.getAxis() || side != orientation)
+        {
+            return false;
+        }
 
         if (adjState.getBlock() instanceof IFramedBlock block && block.getBlockType() instanceof BlockType type)
         {
             return switch (type)
             {
-                case FRAMED_SLOPED_PRISM -> testAgainstSlopedPrism(level, pos, state, cmpDir, adjState, side);
-                case FRAMED_PRISM -> testAgainstPrism(level, pos, state, cmpDir, adjState, side);
-                case FRAMED_DOUBLE_SLOPED_PRISM -> testAgainstDoubleSlopedPrism(level, pos, state, cmpDir, adjState, side);
-                case FRAMED_DOUBLE_PRISM -> testAgainstDoublePrism(level, pos, state, cmpDir, adjState, side);
+                case FRAMED_SLOPED_PRISM -> testAgainstSlopedPrism(
+                        level, pos, state, cmpDir, adjState, side
+                );
+                case FRAMED_PRISM -> testAgainstPrism(
+                        level, pos, state, cmpDir, adjState, side
+                );
+                case FRAMED_DOUBLE_SLOPED_PRISM -> testAgainstDoubleSlopedPrism(
+                        level, pos, state, cmpDir, adjState, side
+                );
+                case FRAMED_DOUBLE_PRISM -> testAgainstDoublePrism(
+                        level, pos, state, cmpDir, adjState, side
+                );
                 default -> false;
             };
         }

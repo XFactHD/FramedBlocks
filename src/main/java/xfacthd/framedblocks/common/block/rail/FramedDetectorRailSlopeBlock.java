@@ -17,10 +17,10 @@ import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.*;
 import net.minecraft.world.level.material.FluidState;
 import net.minecraft.world.level.material.Fluids;
-import net.minecraft.world.level.storage.loot.LootContext;
 import net.minecraft.world.level.storage.loot.LootParams;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.shapes.*;
+import org.jetbrains.annotations.Nullable;
 import xfacthd.framedblocks.api.block.*;
 import xfacthd.framedblocks.api.shapes.ShapeProvider;
 import xfacthd.framedblocks.api.type.IBlockType;
@@ -82,7 +82,14 @@ public class FramedDetectorRailSlopeBlock extends DetectorRailBlock implements I
     }
 
     @Override
-    public BlockState updateShape(BlockState state, Direction direction, BlockState neighborState, LevelAccessor level, BlockPos currentPos, BlockPos neighborPos)
+    public BlockState updateShape(
+            BlockState state,
+            Direction direction,
+            BlockState neighborState,
+            LevelAccessor level,
+            BlockPos currentPos,
+            BlockPos neighborPos
+    )
     {
         BlockState newState = super.updateShape(state, direction, neighborState, level, currentPos, neighborPos);
         if (newState == state)
@@ -93,10 +100,15 @@ public class FramedDetectorRailSlopeBlock extends DetectorRailBlock implements I
     }
 
     @Override
-    public boolean canSurvive(BlockState state, LevelReader level, BlockPos pos) { return true; }
+    public boolean canSurvive(BlockState state, LevelReader level, BlockPos pos)
+    {
+        return true;
+    }
 
     @Override //Copy of AbstractRailBlock#neighborChanged() to disable removal
-    public void neighborChanged(BlockState state, Level level, BlockPos pos, Block block, BlockPos pFromPos, boolean isMoving)
+    public void neighborChanged(
+            BlockState state, Level level, BlockPos pos, Block block, BlockPos pFromPos, boolean isMoving
+    )
     {
         updateCulling(level, pos);
         if (!level.isClientSide() && level.getBlockState(pos).is(this))
@@ -106,25 +118,36 @@ public class FramedDetectorRailSlopeBlock extends DetectorRailBlock implements I
     }
 
     @Override
-    public Property<RailShape> getShapeProperty() { return PropertyHolder.ASCENDING_RAIL_SHAPE; }
+    public Property<RailShape> getShapeProperty()
+    {
+        return PropertyHolder.ASCENDING_RAIL_SHAPE;
+    }
 
     @Override
-    public boolean isValidRailShape(RailShape shape) { return shape.isAscending(); }
+    public boolean isValidRailShape(RailShape shape)
+    {
+        return shape.isAscending();
+    }
 
     @Override
-    public final InteractionResult use(BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hit)
+    public final InteractionResult use(
+            BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hit
+    )
     {
         return handleUse(state, level, pos, player, hand, hit);
     }
 
     @Override
-    public void setPlacedBy(Level level, BlockPos pos, BlockState state, @javax.annotation.Nullable LivingEntity placer, ItemStack stack)
+    public void setPlacedBy(Level level, BlockPos pos, BlockState state, @Nullable LivingEntity placer, ItemStack stack)
     {
         tryApplyCamoImmediately(level, pos, placer, stack);
     }
 
     @Override
-    public boolean useShapeForLightOcclusion(BlockState state) { return useCamoOcclusionShapeForLightOcclusion(state); }
+    public boolean useShapeForLightOcclusion(BlockState state)
+    {
+        return useCamoOcclusionShapeForLightOcclusion(state);
+    }
 
     @Override
     public VoxelShape getOcclusionShape(BlockState state, BlockGetter level, BlockPos pos)
@@ -196,10 +219,16 @@ public class FramedDetectorRailSlopeBlock extends DetectorRailBlock implements I
     }
 
     @Override
-    public final BlockEntity newBlockEntity(BlockPos pos, BlockState state) { return beFactory.apply(pos, state); }
+    public final BlockEntity newBlockEntity(BlockPos pos, BlockState state)
+    {
+        return beFactory.apply(pos, state);
+    }
 
     @Override
-    public IBlockType getBlockType() { return type; }
+    public IBlockType getBlockType()
+    {
+        return type;
+    }
 
 
 
@@ -223,7 +252,7 @@ public class FramedDetectorRailSlopeBlock extends DetectorRailBlock implements I
 
     public static BlockState itemModelSourceFancy()
     {
-        return FBContent.blockFramedFancyDetectorRailSlope.get()
+        return FBContent.BLOCK_FRAMED_FANCY_DETECTOR_RAIL_SLOPE.get()
                 .defaultBlockState()
                 .setValue(PropertyHolder.ASCENDING_RAIL_SHAPE, RailShape.ASCENDING_SOUTH);
     }

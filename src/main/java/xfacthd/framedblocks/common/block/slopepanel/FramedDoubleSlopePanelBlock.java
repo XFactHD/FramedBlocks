@@ -109,7 +109,7 @@ public class FramedDoubleSlopePanelBlock extends AbstractFramedDoubleBlock
         boolean front = state.getValue(PropertyHolder.FRONT);
         boolean ySlope = state.getValue(FramedProperties.Y_SLOPE);
 
-        BlockState defState = FBContent.blockFramedSlopePanel.get().defaultBlockState();
+        BlockState defState = FBContent.BLOCK_FRAMED_SLOPE_PANEL.get().defaultBlockState();
         return new Tuple<>(
                 defState.setValue(FramedProperties.FACING_HOR, facing)
                         .setValue(PropertyHolder.ROTATION, rotation)
@@ -161,6 +161,6 @@ public class FramedDoubleSlopePanelBlock extends AbstractFramedDoubleBlock
 
     public static BlockState itemSource()
     {
-        return FBContent.blockFramedDoubleSlopePanel.get().defaultBlockState();
+        return FBContent.BLOCK_FRAMED_DOUBLE_SLOPE_PANEL.get().defaultBlockState();
     }
 }

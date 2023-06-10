@@ -10,7 +10,10 @@ import xfacthd.framedblocks.api.model.data.FramedBlockData;
 
 public class FramedCubeModel extends FramedCubeBaseModel
 {
-    public FramedCubeModel(BlockState state, BakedModel baseModel) { super(state, baseModel); }
+    public FramedCubeModel(BlockState state, BakedModel baseModel)
+    {
+        super(state, baseModel);
+    }
 
     @Override
     public ChunkRenderTypeSet getRenderTypes(@NotNull BlockState state, @NotNull RandomSource rand, @NotNull ModelData data)

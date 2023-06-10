@@ -15,18 +15,24 @@ public class FramedInverseDoubleSlopeSlabBlockEntity extends FramedDoubleBlockEn
 {
     public FramedInverseDoubleSlopeSlabBlockEntity(BlockPos pos, BlockState state)
     {
-        super(FBContent.blockEntityTypeFramedInverseDoubleSlopeSlab.get(), pos, state);
+        super(FBContent.BE_TYPE_FRAMED_INVERSE_DOUBLE_SLOPE_SLAB.get(), pos, state);
     }
 
     @Override
     protected boolean hitSecondary(BlockHitResult hit)
     {
-        if (hit.getDirection() == Direction.DOWN) { return false; }
+        if (hit.getDirection() == Direction.DOWN)
+        {
+            return false;
+        }
         return hit.getDirection() == Direction.UP || Mth.frac(hit.getLocation().y()) >= .5F;
     }
 
     @Override
-    public DoubleSoundMode getSoundMode() { return DoubleSoundMode.SECOND; }
+    public DoubleSoundMode getSoundMode()
+    {
+        return DoubleSoundMode.SECOND;
+    }
 
     @Override
     public CamoContainer getCamo(Direction side)
@@ -46,5 +52,8 @@ public class FramedInverseDoubleSlopeSlabBlockEntity extends FramedDoubleBlockEn
     }
 
     @Override
-    public boolean isSolidSide(Direction side) { return false; }
+    public boolean isSolidSide(Direction side)
+    {
+        return false;
+    }
 }

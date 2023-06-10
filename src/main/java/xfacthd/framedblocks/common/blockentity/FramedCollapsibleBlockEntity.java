@@ -28,18 +28,24 @@ public class FramedCollapsibleBlockEntity extends FramedBlockEntity
 
     public FramedCollapsibleBlockEntity(BlockPos pos, BlockState state)
     {
-        super(FBContent.blockEntityTypeFramedCollapsibleBlock.get(), pos, state);
+        super(FBContent.BE_TYPE_FRAMED_COLLAPSIBLE_BLOCK.get(), pos, state);
     }
 
     public void handleDeform(Player player)
     {
         HitResult hit = player.pick(10D, 0, false);
-        if (!(hit instanceof BlockHitResult blockHit)) { return; }
+        if (!(hit instanceof BlockHitResult blockHit))
+        {
+            return;
+        }
 
         Direction faceHit = blockHit.getDirection();
         Vec3 hitLoc = Utils.fraction(hit.getLocation());
 
-        if (collapsedFace != null && faceHit != collapsedFace) { return; }
+        if (collapsedFace != null && faceHit != collapsedFace)
+        {
+            return;
+        }
 
         int vert = vertexFromHit(faceHit, hitLoc);
         if (player.isShiftKeyDown() && collapsedFace != null && vertexOffsets[vert] > 0)
@@ -63,7 +69,10 @@ public class FramedCollapsibleBlockEntity extends FramedBlockEntity
     {
         offset = (byte) Mth.clamp(offset, (byte) 0, (byte) 16);
 
-        if (offset == vertexOffsets[vertex]) { return; }
+        if (offset == vertexOffsets[vertex])
+        {
+            return;
+        }
 
         vertexOffsets[vertex] = offset;
         packedOffsets = packOffsets(vertexOffsets);
@@ -185,11 +194,20 @@ public class FramedCollapsibleBlockEntity extends FramedBlockEntity
         }
     }
 
-    public Direction getCollapsedFace() { return collapsedFace; }
+    public Direction getCollapsedFace()
+    {
+        return collapsedFace;
+    }
 
-    public byte[] getVertexOffsets() { return vertexOffsets; }
+    public byte[] getVertexOffsets()
+    {
+        return vertexOffsets;
+    }
 
-    public int getPackedOffsets() { return packedOffsets; }
+    public int getPackedOffsets()
+    {
+        return packedOffsets;
+    }
 
     @Override
     public ModelData getModelData()

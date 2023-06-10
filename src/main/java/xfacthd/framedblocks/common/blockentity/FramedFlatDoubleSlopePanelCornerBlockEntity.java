@@ -18,7 +18,7 @@ public class FramedFlatDoubleSlopePanelCornerBlockEntity extends FramedDoubleBlo
 {
     public FramedFlatDoubleSlopePanelCornerBlockEntity(BlockPos pos, BlockState state)
     {
-        super(FBContent.blockEntityTypeFramedFlatDoubleSlopePanelCorner.get(), pos, state);
+        super(FBContent.BE_TYPE_FRAMED_FLAT_DOUBLE_SLOPE_PANEL_CORNER.get(), pos, state);
     }
 
     @Override
@@ -27,8 +27,14 @@ public class FramedFlatDoubleSlopePanelCornerBlockEntity extends FramedDoubleBlo
         Direction side = hit.getDirection();
 
         Direction facing = getBlockState().getValue(FramedProperties.FACING_HOR);
-        if (side == facing) { return false; }
-        if (side == facing.getOpposite()) { return true; }
+        if (side == facing)
+        {
+            return false;
+        }
+        if (side == facing.getOpposite())
+        {
+            return true;
+        }
 
         HorizontalRotation rotation = getBlockState().getValue(PropertyHolder.ROTATION);
         Direction rotDir = rotation.withFacing(facing);
@@ -74,8 +80,14 @@ public class FramedFlatDoubleSlopePanelCornerBlockEntity extends FramedDoubleBlo
     public CamoContainer getCamo(Direction side)
     {
         Direction facing = getBlockState().getValue(FramedProperties.FACING_HOR);
-        if (side == facing) { return getCamo(); }
-        if (side == facing.getOpposite()) { return getCamoTwo(); }
+        if (side == facing)
+        {
+            return getCamo();
+        }
+        if (side == facing.getOpposite())
+        {
+            return getCamoTwo();
+        }
 
         HorizontalRotation rotation = getBlockState().getValue(PropertyHolder.ROTATION);
         Direction rotDir = rotation.withFacing(facing);
@@ -94,13 +106,11 @@ public class FramedFlatDoubleSlopePanelCornerBlockEntity extends FramedDoubleBlo
         boolean front = getBlockState().getValue(PropertyHolder.FRONT);
         if (side == facing && !front)
         {
-            //noinspection ConstantConditions
-            return getCamo().getState().isSolidRender(level, worldPosition);
+            return getCamo().isSolid(level, worldPosition);
         }
         if (side == facing.getOpposite() && front)
         {
-            //noinspection ConstantConditions
-            return getCamoTwo().getState().isSolidRender(level, worldPosition);
+            return getCamoTwo().isSolid(level, worldPosition);
         }
 
         return false;

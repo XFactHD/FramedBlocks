@@ -6,5 +6,8 @@ public record TestDelay(int delay) implements TestRunnable
     public void run() { }
 
     @Override
-    public int getDuration() { return delay; }
+    public int getDuration()
+    {
+        return delay;
+    }
 }

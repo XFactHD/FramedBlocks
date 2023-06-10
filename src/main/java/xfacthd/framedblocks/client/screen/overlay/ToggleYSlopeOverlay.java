@@ -37,7 +37,7 @@ public final class ToggleYSlopeOverlay extends BlockInteractOverlay
     @Override
     protected boolean isValidTool(ItemStack stack)
     {
-        return stack.getItem() == FBContent.itemFramedWrench.get();
+        return stack.getItem() == FBContent.ITEM_FRAMED_WRENCH.get();
     }
 
     @Override

@@ -30,11 +30,11 @@ public final class LatticeSkipPredicate implements SideSkipPredicate
 
     private static boolean isFenceOrVerticalLattice(Block block, BlockState state)
     {
-        if (block == FBContent.blockFramedPost.get())
+        if (block == FBContent.BLOCK_FRAMED_POST.get())
         {
             return state.getValue(BlockStateProperties.AXIS) == Direction.Axis.Y;
         }
-        return block == FBContent.blockFramedFence.get();
+        return block == FBContent.BLOCK_FRAMED_FENCE.get();
     }
 
     private static boolean hasArm(BlockState state, Direction side)

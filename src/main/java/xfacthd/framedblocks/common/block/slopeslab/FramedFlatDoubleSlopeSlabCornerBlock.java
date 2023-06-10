@@ -112,13 +112,13 @@ public class FramedFlatDoubleSlopeSlabCornerBlock extends AbstractFramedDoubleBl
         boolean ySlope = state.getValue(FramedProperties.Y_SLOPE);
 
         return new Tuple<>(
-                FBContent.blockFramedFlatInnerSlopeSlabCorner.get()
+                FBContent.BLOCK_FRAMED_FLAT_INNER_SLOPE_SLAB_CORNER.get()
                         .defaultBlockState()
                         .setValue(FramedProperties.FACING_HOR, facing)
                         .setValue(PropertyHolder.TOP_HALF, topHalf)
                         .setValue(FramedProperties.TOP, top)
                         .setValue(FramedProperties.Y_SLOPE, ySlope),
-                FBContent.blockFramedFlatSlopeSlabCorner.get()
+                FBContent.BLOCK_FRAMED_FLAT_SLOPE_SLAB_CORNER.get()
                         .defaultBlockState()
                         .setValue(FramedProperties.FACING_HOR, facing.getOpposite())
                         .setValue(PropertyHolder.TOP_HALF, topHalf)
@@ -153,7 +153,7 @@ public class FramedFlatDoubleSlopeSlabCornerBlock extends AbstractFramedDoubleBl
 
     public static BlockState itemModelSource()
     {
-        return FBContent.blockFramedFlatDoubleSlopeSlabCorner.get()
+        return FBContent.BLOCK_FRAMED_FLAT_DOUBLE_SLOPE_SLAB_CORNER.get()
                 .defaultBlockState()
                 .setValue(FramedProperties.FACING_HOR, Direction.SOUTH);
     }

@@ -76,7 +76,10 @@ public final class QuadModifier
      * Apply the given {@link Modifier} to the current vertex data if {@code apply} is true. If a previous modifier
      * failed, then the modification will not be applied
      */
-    public QuadModifier applyIf(Modifier modifier, boolean apply) { return apply ? apply(modifier) : this; }
+    public QuadModifier applyIf(Modifier modifier, boolean apply)
+    {
+        return apply ? apply(modifier) : this;
+    }
 
     /**
      * Apply the given {@link Modifier} to the current vertex data. If a previous modifier failed,
@@ -109,7 +112,10 @@ public final class QuadModifier
      * Re-assemble the quad and add it to the given quad list. If any of modifier failed,
      * the quad will not be exported
      */
-    public void export(List<BakedQuad> quadList) { export(quadList::add); }
+    public void export(List<BakedQuad> quadList)
+    {
+        export(quadList::add);
+    }
 
     /**
      * Re-assemble a copy of the quad and export it to the given quad consumer. If any of the modifiers failed,
@@ -117,7 +123,10 @@ public final class QuadModifier
      */
     public void export(Consumer<BakedQuad> quadConsumer)
     {
-        if (failed) { return; }
+        if (failed)
+        {
+            return;
+        }
 
         int[] vertexData = data.quad.getVertices();
         vertexData = Arrays.copyOf(vertexData, vertexData.length);
@@ -144,7 +153,10 @@ public final class QuadModifier
         Preconditions.checkState(tintIndex == -1, "In-place modification can't change tintIndex but a tintIndex has been set");
         Preconditions.checkState(!noShade, "In-place modification can't change shading but noShade has been set");
 
-        if (failed) { return; }
+        if (failed)
+        {
+            return;
+        }
 
         packVertexData(data.quad.getVertices());
         ModelUtils.fillNormal(data.quad);
@@ -184,11 +196,23 @@ public final class QuadModifier
         return new QuadModifier(new Data(data), limited, tintIndex, noShade, false);
     }
 
-    public boolean hasFailed() { return failed; }
+    public boolean hasFailed()
+    {
+        return failed;
+    }
 
 
 
-    public record Data(BakedQuad quad, float[][] pos, float[][] uv, float[][] normal, int[][] color, int[][] light, boolean uvRotated, boolean uvMirrored)
+    public record Data(
+            BakedQuad quad,
+            float[][] pos,
+            float[][] uv,
+            float[][] normal,
+            int[][] color,
+            int[][] light,
+            boolean uvRotated,
+            boolean uvMirrored
+    )
     {
         public Data(BakedQuad quad, float[][] pos, float[][] uv, float[][] normal, int[][] color, int[][] light)
         {

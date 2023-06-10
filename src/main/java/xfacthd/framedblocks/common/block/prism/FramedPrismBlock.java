@@ -44,7 +44,10 @@ public class FramedPrismBlock extends FramedBlock
     protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder)
     {
         super.createBlockStateDefinition(builder);
-        builder.add(PropertyHolder.FACING_AXIS, BlockStateProperties.WATERLOGGED, FramedProperties.SOLID, FramedProperties.Y_SLOPE);
+        builder.add(
+                PropertyHolder.FACING_AXIS, BlockStateProperties.WATERLOGGED,
+                FramedProperties.SOLID, FramedProperties.Y_SLOPE
+        );
     }
 
     @Override

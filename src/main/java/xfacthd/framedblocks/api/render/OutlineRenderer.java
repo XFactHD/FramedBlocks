@@ -9,7 +9,7 @@ import net.minecraft.core.Direction;
 import net.minecraft.util.Mth;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
-import org.joml.Quaternionf;
+import org.joml.*;
 import xfacthd.framedblocks.api.block.FramedProperties;
 
 public interface OutlineRenderer
@@ -39,7 +39,10 @@ public interface OutlineRenderer
     /**
      * Get the horizontal {@link Direction} the block is facing in
      */
-    default Direction getRotationDir(BlockState state) { return state.getValue(FramedProperties.FACING_HOR); }
+    default Direction getRotationDir(BlockState state)
+    {
+        return state.getValue(FramedProperties.FACING_HOR);
+    }
 
     /**
      * Manipulate the {@link PoseStack} to apply rotations and other transformations
@@ -70,7 +73,9 @@ public interface OutlineRenderer
     /**
      * Draw a line between the two points given by the two sets of 3D coordinates
      */
-    static void drawLine(VertexConsumer builder, PoseStack mstack, double x1, double y1, double z1, double x2, double y2, double z2)
+    static void drawLine(
+            VertexConsumer builder, PoseStack poseStack, double x1, double y1, double z1, double x2, double y2, double z2
+    )
     {
         float nX = (float)(x2 - x1);
         float nY = (float)(y2 - y1);
@@ -81,8 +86,10 @@ public interface OutlineRenderer
         nY = nY / nLen;
         nZ = nZ / nLen;
 
-        builder.vertex(mstack.last().pose(), (float)x1, (float)y1, (float)z1).color(0.0F, 0.0F, 0.0F, 0.4F).normal(mstack.last().normal(), nX, nY, nZ).endVertex();
-        builder.vertex(mstack.last().pose(), (float)x2, (float)y2, (float)z2).color(0.0F, 0.0F, 0.0F, 0.4F).normal(mstack.last().normal(), nX, nY, nZ).endVertex();
+        Matrix4f pose = poseStack.last().pose();
+        Matrix3f normal = poseStack.last().normal();
+        builder.vertex(pose, (float)x1, (float)y1, (float)z1).color(0.0F, 0.0F, 0.0F, 0.4F).normal(normal, nX, nY, nZ).endVertex();
+        builder.vertex(pose, (float)x2, (float)y2, (float)z2).color(0.0F, 0.0F, 0.0F, 0.4F).normal(normal, nX, nY, nZ).endVertex();
     }
 
 

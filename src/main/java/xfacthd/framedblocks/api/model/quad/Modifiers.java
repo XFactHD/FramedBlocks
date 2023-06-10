@@ -40,7 +40,10 @@ public final class Modifiers
      */
     public static QuadModifier.Modifier cut(Direction cutDir, float length)
     {
-        if (Mth.equal(length, 1F)) { return NOOP_MODIFIER; }
+        if (Mth.equal(length, 1F))
+        {
+            return NOOP_MODIFIER;
+        }
         return cut(cutDir, length, length);
     }
 
@@ -85,7 +88,10 @@ public final class Modifiers
      */
     public static QuadModifier.Modifier cutTopBottom(Direction cutDir, float length)
     {
-        if (Mth.equal(length, 1F)) { return NOOP_MODIFIER; }
+        if (Mth.equal(length, 1F))
+        {
+            return NOOP_MODIFIER;
+        }
         return cutTopBottom(cutDir, length, length);
     }
 
@@ -136,8 +142,14 @@ public final class Modifiers
         int vertIdxL = xAxis ? (positive ? 0 : 2) : (up ? (positive ? 3 : 1) : (positive ? 2 : 0));
         int coordIdx = xAxis ? 0 : 2;
 
-        if (positive && (Utils.isHigher(pos[vertIdxR][coordIdx], targetR) || Utils.isHigher(pos[vertIdxL][coordIdx], targetL))) { return false; }
-        if (!positive && (Utils.isLower(pos[vertIdxR][coordIdx], targetR) || Utils.isLower(pos[vertIdxL][coordIdx], targetL))) { return false; }
+        if (positive && (Utils.isHigher(pos[vertIdxR][coordIdx], targetR) || Utils.isHigher(pos[vertIdxL][coordIdx], targetL)))
+        {
+            return false;
+        }
+        if (!positive && (Utils.isLower(pos[vertIdxR][coordIdx], targetR) || Utils.isLower(pos[vertIdxL][coordIdx], targetL)))
+        {
+            return false;
+        }
 
         float xz1 = pos[idxR][coordIdx];
         float xz2 = pos[idxL][coordIdx];
@@ -183,7 +195,10 @@ public final class Modifiers
      */
     public static QuadModifier.Modifier cutSideUpDown(boolean downwards, float length)
     {
-        if (Mth.equal(length, 1F)) { return NOOP_MODIFIER; }
+        if (Mth.equal(length, 1F))
+        {
+            return NOOP_MODIFIER;
+        }
         return cutSideUpDown(downwards, length, length);
     }
 
@@ -215,8 +230,14 @@ public final class Modifiers
         float targetR = Mth.lerp(factorR, downwards ? 1F - lengthRight : lengthRight, downwards ? 1F - lengthLeft : lengthLeft);
         float targetL = Mth.lerp(factorL, downwards ? 1F - lengthRight : lengthRight, downwards ? 1F - lengthLeft : lengthLeft);
 
-        if (downwards && (Utils.isLower(pos[0][1], targetR) || Utils.isLower(pos[3][1], targetL))) { return false; }
-        if (!downwards && (Utils.isHigher(pos[1][1], targetR) || Utils.isHigher(pos[2][1], targetL))) { return false; }
+        if (downwards && (Utils.isLower(pos[0][1], targetR) || Utils.isLower(pos[3][1], targetL)))
+        {
+            return false;
+        }
+        if (!downwards && (Utils.isHigher(pos[1][1], targetR) || Utils.isHigher(pos[2][1], targetL)))
+        {
+            return false;
+        }
 
         int idx1 = downwards ? 1 : 0;
         int idx2 = downwards ? 2 : 3;
@@ -311,8 +332,14 @@ public final class Modifiers
         float targetTop = Mth.lerp(1F - pos[vertIdxTop][1], positive ? 1F - lengthTop : lengthTop, positive ? 1F - lengthBot : lengthBot);
         float targetBot = Mth.lerp(1F - pos[vertIdxBot][1], positive ? 1F - lengthTop : lengthTop, positive ? 1F - lengthBot : lengthBot);
 
-        if (positive && (Utils.isLower(pos[vertIdxTop][coordIdx], targetTop) || Utils.isLower(pos[vertIdxBot][coordIdx], targetBot))) { return false; }
-        if (!positive && (Utils.isHigher(pos[vertIdxTop][coordIdx], targetTop) || Utils.isHigher(pos[vertIdxBot][coordIdx], targetBot))) { return false; }
+        if (positive && (Utils.isLower(pos[vertIdxTop][coordIdx], targetTop) || Utils.isLower(pos[vertIdxBot][coordIdx], targetBot)))
+        {
+            return false;
+        }
+        if (!positive && (Utils.isHigher(pos[vertIdxTop][coordIdx], targetTop) || Utils.isHigher(pos[vertIdxBot][coordIdx], targetBot)))
+        {
+            return false;
+        }
 
         int idx1 = towardsRight ? 0 : 3;
         int idx2 = towardsRight ? 1 : 2;
@@ -453,7 +480,10 @@ public final class Modifiers
 
             boolean leftCut = cutSideLeftRight(data, false, up ? .5F : 1, up ? 1 : .5F);
             boolean rightCut = cutSideLeftRight(data, true, up ? .5F : 1, up ? 1 : .5F);
-            if (!leftCut && !rightCut) { return false; }
+            if (!leftCut && !rightCut)
+            {
+                return false;
+            }
 
             boolean northeast = quadDir == Direction.NORTH || quadDir == Direction.EAST;
 
@@ -483,7 +513,10 @@ public final class Modifiers
 
             boolean leftCut = cutTopBottom(data, cutDir.getCounterClockWise(), .5F, 1);
             boolean rightCut = cutTopBottom(data, cutDir.getClockWise(), 1, .5F);
-            if (!leftCut && !rightCut) { return false; }
+            if (!leftCut && !rightCut)
+            {
+                return false;
+            }
 
             boolean up = quadDir == Direction.UP;
             boolean southwest = cutDir == Direction.SOUTH || cutDir == Direction.WEST;
@@ -520,7 +553,10 @@ public final class Modifiers
             Direction quadDir = data.quad().getDirection();
             Preconditions.checkArgument(!Utils.isY(quadDir) || !Utils.isY(cutDir), "Cut direction cannot be along the Y axis for quads pointing along the Y axis");
 
-            if (!cut(data, cutDir, .5F, .5F)) { return false; }
+            if (!cut(data, cutDir, .5F, .5F))
+            {
+                return false;
+            }
 
             boolean left;
             boolean right;
@@ -646,7 +682,10 @@ public final class Modifiers
      */
     public static QuadModifier.Modifier offset(Direction dir, float amount)
     {
-        if (Mth.equal(amount, 0F)) { return NOOP_MODIFIER; }
+        if (Mth.equal(amount, 0F))
+        {
+            return NOOP_MODIFIER;
+        }
 
         return data ->
         {
@@ -673,7 +712,10 @@ public final class Modifiers
      */
     public static QuadModifier.Modifier setPosition(float posTarget)
     {
-        if (Mth.equal(posTarget, 1F)) { return NOOP_MODIFIER; }
+        if (Mth.equal(posTarget, 1F))
+        {
+            return NOOP_MODIFIER;
+        }
 
         return data ->
         {
@@ -844,8 +886,14 @@ public final class Modifiers
         {
             float scaleAngle = Mth.abs(angle) > 45F ? (90F - Mth.abs(angle)) : Mth.abs(angle);
 
-            if (scaleAngle == 22.5F) { scaleVec.mul(SCALE_ROTATION_22_5); }
-            else if (scaleAngle == 45F) { scaleVec.mul(SCALE_ROTATION_45); }
+            if (scaleAngle == 22.5F)
+            {
+                scaleVec.mul(SCALE_ROTATION_22_5);
+            }
+            else if (scaleAngle == 45F)
+            {
+                scaleVec.mul(SCALE_ROTATION_45);
+            }
             else
             {
                 float scaleFactor = 1.0F / (float)Math.cos(Math.PI / (180D / (double)scaleAngle)) - 1.0F;
@@ -860,7 +908,10 @@ public final class Modifiers
         for (int i = 0; i < 4; i++)
         {
             Vector4f vector4f = new Vector4f(pos[i][0] - origin.x(), pos[i][1] - origin.y(), pos[i][2] - origin.z(), 1.0F);
-            if (rescale) { vector4f.mul(new Vector4f(scaleVec, 1.0F)); }
+            if (rescale)
+            {
+                vector4f.mul(new Vector4f(scaleVec, 1.0F));
+            }
             vector4f.mul(transform);
 
             pos[i][0] = vector4f.x() + origin.x();
@@ -897,9 +948,15 @@ public final class Modifiers
         };
     }
 
-    public static QuadModifier.Modifier applyFullbright() { return applyLightmap(15, 15); }
+    public static QuadModifier.Modifier applyFullbright()
+    {
+        return applyLightmap(15, 15);
+    }
 
-    public static QuadModifier.Modifier applyLightmap(int light) { return applyLightmap(light, light); }
+    public static QuadModifier.Modifier applyLightmap(int light)
+    {
+        return applyLightmap(light, light);
+    }
 
     public static QuadModifier.Modifier applyLightmap(int blockLight, int skyLight)
     {

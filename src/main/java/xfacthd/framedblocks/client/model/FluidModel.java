@@ -21,7 +21,6 @@ import net.minecraftforge.client.ChunkRenderTypeSet;
 import net.minecraftforge.client.extensions.common.IClientFluidTypeExtensions;
 import net.minecraftforge.client.model.*;
 import net.minecraftforge.client.model.data.ModelData;
-import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import xfacthd.framedblocks.api.model.util.ModelCache;
 import xfacthd.framedblocks.api.util.Utils;
@@ -64,35 +63,62 @@ public final class FluidModel implements BakedModel
     }
 
     @Override
-    public @NotNull List<BakedQuad> getQuads(@Nullable BlockState state, @Nullable Direction side, @NotNull RandomSource rand, @NotNull ModelData extraData, RenderType layer)
+    public List<BakedQuad> getQuads(
+            @Nullable BlockState state,
+            @Nullable Direction side,
+            RandomSource rand,
+            ModelData extraData,
+            RenderType layer
+    )
     {
-        if (side == null || layer != fluidLayer) { return Collections.emptyList(); }
+        if (side == null || layer != fluidLayer)
+        {
+            return Collections.emptyList();
+        }
         return quads.get(side);
     }
 
     @Override
-    public ChunkRenderTypeSet getRenderTypes(@NotNull BlockState state, @NotNull RandomSource rand, @NotNull ModelData data)
+    public ChunkRenderTypeSet getRenderTypes(BlockState state, RandomSource rand, ModelData data)
     {
         return fluidLayerSet;
     }
 
     @Override
-    public boolean useAmbientOcclusion() { return false; }
+    public boolean useAmbientOcclusion()
+    {
+        return false;
+    }
 
     @Override
-    public boolean isGui3d() { return false; }
+    public boolean isGui3d()
+    {
+        return false;
+    }
 
     @Override
-    public boolean usesBlockLight() { return false; }
+    public boolean usesBlockLight()
+    {
+        return false;
+    }
 
     @Override
-    public boolean isCustomRenderer() { return false; }
+    public boolean isCustomRenderer()
+    {
+        return false;
+    }
 
     @Override
-    public TextureAtlasSprite getParticleIcon() { return particles; }
+    public TextureAtlasSprite getParticleIcon()
+    {
+        return particles;
+    }
 
     @Override
-    public ItemOverrides getOverrides() { return ItemOverrides.EMPTY; }
+    public ItemOverrides getOverrides()
+    {
+        return ItemOverrides.EMPTY;
+    }
 
 
 

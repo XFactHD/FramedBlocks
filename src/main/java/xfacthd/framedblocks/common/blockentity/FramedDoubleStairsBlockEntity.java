@@ -16,7 +16,7 @@ public class FramedDoubleStairsBlockEntity extends FramedDoubleBlockEntity
 {
     public FramedDoubleStairsBlockEntity(BlockPos worldPosition, BlockState blockState)
     {
-        super(FBContent.blockEntityTypeFramedDoubleStairs.get(), worldPosition, blockState);
+        super(FBContent.BE_TYPE_FRAMED_DOUBLE_STAIRS.get(), worldPosition, blockState);
     }
 
     @Override
@@ -88,10 +88,8 @@ public class FramedDoubleStairsBlockEntity extends FramedDoubleBlockEntity
 
         if (side == facing || (top && side == Direction.UP) || (!top && side == Direction.DOWN))
         {
-            //noinspection ConstantConditions
-            return getCamo().getState().isSolidRender(level, worldPosition);
+            return getCamo().isSolid(level, worldPosition);
         }
-
         return false;
     }
 }

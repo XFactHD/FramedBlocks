@@ -16,7 +16,10 @@ public abstract class BakedModelProxy implements BakedModel
 {
     protected final BakedModel baseModel;
 
-    protected BakedModelProxy(BakedModel baseModel) { this.baseModel = baseModel; }
+    protected BakedModelProxy(BakedModel baseModel)
+    {
+        this.baseModel = baseModel;
+    }
 
     @Override
     public List<BakedQuad> getQuads(BlockState state, Direction side, RandomSource rand)
@@ -25,25 +28,46 @@ public abstract class BakedModelProxy implements BakedModel
     }
 
     @Override
-    public boolean useAmbientOcclusion() { return baseModel.useAmbientOcclusion(); }
+    public boolean useAmbientOcclusion()
+    {
+        return baseModel.useAmbientOcclusion();
+    }
 
     @Override
-    public boolean isGui3d() { return true; }
+    public boolean isGui3d()
+    {
+        return true;
+    }
 
     @Override
-    public boolean usesBlockLight() { return baseModel.usesBlockLight(); }
+    public boolean usesBlockLight()
+    {
+        return baseModel.usesBlockLight();
+    }
 
     @Override
-    public boolean isCustomRenderer() { return false; }
+    public boolean isCustomRenderer()
+    {
+        return false;
+    }
 
     @Override
-    public TextureAtlasSprite getParticleIcon() { return baseModel.getParticleIcon(); }
+    public TextureAtlasSprite getParticleIcon()
+    {
+        return baseModel.getParticleIcon();
+    }
 
     @Override
-    public ItemOverrides getOverrides() { return baseModel.getOverrides(); }
+    public ItemOverrides getOverrides()
+    {
+        return baseModel.getOverrides();
+    }
 
     @Override
-    public ItemTransforms getTransforms() { return baseModel.getTransforms(); }
+    public ItemTransforms getTransforms()
+    {
+        return baseModel.getTransforms();
+    }
 
     @Override
     public BakedModel applyTransform(ItemDisplayContext type, PoseStack poseStack, boolean applyLeftHandTransform)

@@ -16,7 +16,10 @@ public interface SideSkipPredicate
 
     SideSkipPredicate CTM = (level, pos, state, adjState, side) ->
     {
-        if (!((IFramedBlock) state.getBlock()).getCtmPredicate().test(state, side)) { return false; }
+        if (!((IFramedBlock) state.getBlock()).getCtmPredicate().test(state, side))
+        {
+            return false;
+        }
 
         if (adjState.getBlock() instanceof IFramedBlock block)
         {
@@ -170,7 +173,10 @@ public interface SideSkipPredicate
      */
     static boolean compareState(BlockGetter level, BlockPos pos, BlockState state, BlockState adjState, Direction side)
     {
-        if (state.isAir() || adjState.isAir()) { return false; }
+        if (state.isAir() || adjState.isAir())
+        {
+            return false;
+        }
 
         if (state == adjState)
         {

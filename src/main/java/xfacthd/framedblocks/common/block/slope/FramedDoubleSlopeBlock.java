@@ -56,7 +56,12 @@ public class FramedDoubleSlopeBlock extends AbstractFramedDoubleBlock
     @Override
     public BlockState getStateForPlacement(BlockPlaceContext context)
     {
-        return withSlopeType(defaultBlockState(), context.getClickedFace(), context.getHorizontalDirection(), context.getClickLocation());
+        return withSlopeType(
+                defaultBlockState(),
+                context.getClickedFace(),
+                context.getHorizontalDirection(),
+                context.getClickLocation()
+        );
     }
 
     @Override
@@ -96,7 +101,10 @@ public class FramedDoubleSlopeBlock extends AbstractFramedDoubleBlock
 
     @Override
     @SuppressWarnings("deprecation")
-    public BlockState rotate(BlockState state, Rotation rot) { return rotate(state, Direction.UP, rot); }
+    public BlockState rotate(BlockState state, Rotation rot)
+    {
+        return rotate(state, Direction.UP, rot);
+    }
 
     @Override
     protected Tuple<BlockState, BlockState> getBlockPair(BlockState state)
@@ -105,7 +113,7 @@ public class FramedDoubleSlopeBlock extends AbstractFramedDoubleBlock
         SlopeType type = state.getValue(PropertyHolder.SLOPE_TYPE);
         boolean ySlope = state.getValue(FramedProperties.Y_SLOPE);
 
-        BlockState defState = FBContent.blockFramedSlope.get().defaultBlockState();
+        BlockState defState = FBContent.BLOCK_FRAMED_SLOPE.get().defaultBlockState();
         return new Tuple<>(
                 defState.setValue(PropertyHolder.SLOPE_TYPE, type)
                         .setValue(FramedProperties.FACING_HOR, facing)
@@ -136,7 +144,7 @@ public class FramedDoubleSlopeBlock extends AbstractFramedDoubleBlock
 
     public static BlockState itemModelSource()
     {
-        return FBContent.blockFramedDoubleSlope.get()
+        return FBContent.BLOCK_FRAMED_DOUBLE_SLOPE.get()
                 .defaultBlockState()
                 .setValue(FramedProperties.FACING_HOR, Direction.WEST)
                 .setValue(PropertyHolder.SLOPE_TYPE, SlopeType.HORIZONTAL);

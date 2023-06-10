@@ -46,7 +46,13 @@ public class FramedRedstoneWallTorchModel extends FramedBlockModel
     }
 
     @Override
-    protected void getAdditionalQuads(Map<Direction, List<BakedQuad>> quadMap, BlockState state, RandomSource rand, ModelData extraData, RenderType renderType)
+    protected void getAdditionalQuads(
+            Map<Direction, List<BakedQuad>> quadMap,
+            BlockState state,
+            RandomSource rand,
+            ModelData extraData,
+            RenderType renderType
+    )
     {
         List<BakedQuad> quads = baseModel.getQuads(state, null, rand, extraData, renderType);
         for (BakedQuad quad : quads)
@@ -104,5 +110,8 @@ public class FramedRedstoneWallTorchModel extends FramedBlockModel
     }
 
     @Override
-    public boolean useAmbientOcclusion() { return false; }
+    public boolean useAmbientOcclusion()
+    {
+        return false;
+    }
 }

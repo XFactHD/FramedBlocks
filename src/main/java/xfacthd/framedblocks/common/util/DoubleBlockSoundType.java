@@ -18,29 +18,47 @@ public final class DoubleBlockSoundType extends SoundType
     }
 
     @Override
-    public float getVolume() { return getSoundType(be.getSoundMode()).getVolume(); }
+    public float getVolume()
+    {
+        return getSoundType(be.getSoundMode()).getVolume();
+    }
 
     @Override
-    public float getPitch() { return getSoundType(be.getSoundMode()).getPitch(); }
+    public float getPitch()
+    {
+        return getSoundType(be.getSoundMode()).getPitch();
+    }
 
     // This is only called when no camo is applied and should therefore return the default break sound
     @Override
-    public SoundEvent getBreakSound() { return be.getBlockState().getSoundType().getBreakSound(); }
+    public SoundEvent getBreakSound()
+    {
+        return be.getBlockState().getSoundType().getBreakSound();
+    }
 
     @Override
-    public SoundEvent getStepSound() { return getSoundType(be.getSoundMode()).getStepSound(); }
+    public SoundEvent getStepSound()
+    {
+        return getSoundType(be.getSoundMode()).getStepSound();
+    }
 
     @Override
     public SoundEvent getPlaceSound()
     {
-        return FBContent.blockFramedCube.get().defaultBlockState().getSoundType().getPlaceSound();
+        return FBContent.BLOCK_FRAMED_CUBE.get().defaultBlockState().getSoundType().getPlaceSound();
     }
 
     @Override
-    public SoundEvent getHitSound() { return getEitherSoundType().getHitSound(); }
+    public SoundEvent getHitSound()
+    {
+        return getEitherSoundType().getHitSound();
+    }
 
     @Override
-    public SoundEvent getFallSound() { return getSoundType(be.getSoundMode()).getFallSound(); }
+    public SoundEvent getFallSound()
+    {
+        return getSoundType(be.getSoundMode()).getFallSound();
+    }
 
 
 

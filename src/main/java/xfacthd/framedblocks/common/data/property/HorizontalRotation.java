@@ -20,9 +20,15 @@ public enum HorizontalRotation implements StringRepresentable
     private final String name = toString().toLowerCase(Locale.ROOT);
     private final Function<Direction, Direction> facingMod;
 
-    HorizontalRotation(Function<Direction, Direction> facingMod) { this.facingMod = facingMod; }
+    HorizontalRotation(Function<Direction, Direction> facingMod)
+    {
+        this.facingMod = facingMod;
+    }
 
-    public Direction withFacing(Direction dir) { return facingMod.apply(dir); }
+    public Direction withFacing(Direction dir)
+    {
+        return facingMod.apply(dir);
+    }
 
     public HorizontalRotation getOpposite()
     {
@@ -58,7 +64,10 @@ public enum HorizontalRotation implements StringRepresentable
         };
     }
 
-    public boolean isVertical() { return this == UP || this == DOWN; }
+    public boolean isVertical()
+    {
+        return this == UP || this == DOWN;
+    }
 
     /**
      * Returns true if the {@link Direction} this rotation resolves to with the given {@code dir} is the
@@ -73,7 +82,10 @@ public enum HorizontalRotation implements StringRepresentable
     }
 
     @Override
-    public String getSerializedName() { return name; }
+    public String getSerializedName()
+    {
+        return name;
+    }
 
 
 

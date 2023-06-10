@@ -34,7 +34,7 @@ public final class JeiCompat
     {
         if (loadedClient)
         {
-            return Guarded.isShowRecipePressed(key);
+            return GuardedAccess.isShowRecipePressed(key);
         }
         return false;
     }
@@ -43,14 +43,14 @@ public final class JeiCompat
     {
         if (loadedClient)
         {
-            return Guarded.handleButtonRecipeRequest(result);
+            return GuardedAccess.handleButtonRecipeRequest(result);
         }
         return false;
     }
 
 
 
-    static final class Guarded
+    static final class GuardedAccess
     {
         private static IJeiRuntime runtime = null;
 
@@ -86,7 +86,15 @@ public final class JeiCompat
 
         public static void acceptRuntime(IJeiRuntime runtime)
         {
-            Guarded.runtime = runtime;
+            GuardedAccess.runtime = runtime;
         }
+
+
+
+        private GuardedAccess() { }
     }
+
+
+
+    private JeiCompat() { }
 }

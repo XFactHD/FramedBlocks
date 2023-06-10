@@ -15,9 +15,16 @@ public final class SlabGhostRenderBehaviour implements GhostRenderBehaviour
 {
     @Override
     @Nullable
-    public BlockState getRenderState(ItemStack stack, ItemStack proxiedStack, BlockHitResult hit, BlockPlaceContext ctx, BlockState hitState, boolean secondPass)
+    public BlockState getRenderState(
+            ItemStack stack,
+            @Nullable ItemStack proxiedStack,
+            BlockHitResult hit,
+            BlockPlaceContext ctx,
+            BlockState hitState,
+            boolean secondPass
+    )
     {
-        if (hitState.getBlock() == FBContent.blockFramedSlab.get())
+        if (hitState.getBlock() == FBContent.BLOCK_FRAMED_SLAB.get())
         {
             boolean top = hitState.getValue(FramedProperties.TOP);
             if ((top && hit.getDirection() == Direction.DOWN) || (!top && hit.getDirection() == Direction.UP))
@@ -29,9 +36,17 @@ public final class SlabGhostRenderBehaviour implements GhostRenderBehaviour
     }
 
     @Override
-    public BlockPos getRenderPos(ItemStack stack, ItemStack proxiedStack, BlockHitResult hit, BlockPlaceContext ctx, BlockState hitState, BlockPos defaultPos, boolean secondPass)
+    public BlockPos getRenderPos(
+            ItemStack stack,
+            @Nullable ItemStack proxiedStack,
+            BlockHitResult hit,
+            BlockPlaceContext ctx,
+            BlockState hitState,
+            BlockPos defaultPos,
+            boolean secondPass
+    )
     {
-        if (hitState.getBlock() == FBContent.blockFramedSlab.get())
+        if (hitState.getBlock() == FBContent.BLOCK_FRAMED_SLAB.get())
         {
             boolean top = hitState.getValue(FramedProperties.TOP);
             if ((top && hit.getDirection() == Direction.DOWN) || (!top && hit.getDirection() == Direction.UP))
@@ -43,7 +58,15 @@ public final class SlabGhostRenderBehaviour implements GhostRenderBehaviour
     }
 
     @Override
-    public boolean canRenderAt(ItemStack stack, ItemStack proxiedStack, BlockHitResult hit, BlockPlaceContext ctx, BlockState hitState, BlockState renderState, BlockPos renderPos)
+    public boolean canRenderAt(
+            ItemStack stack,
+            @Nullable ItemStack proxiedStack,
+            BlockHitResult hit,
+            BlockPlaceContext ctx,
+            BlockState hitState,
+            BlockState renderState,
+            BlockPos renderPos
+    )
     {
         if (renderPos.equals(hit.getBlockPos()))
         {

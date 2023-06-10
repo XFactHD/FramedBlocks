@@ -21,7 +21,7 @@ public class FramedFlatExtendedDoubleSlopePanelCornerBlockEntity extends FramedD
 
     public FramedFlatExtendedDoubleSlopePanelCornerBlockEntity(BlockPos pos, BlockState state)
     {
-        super(FBContent.blockEntityTypeFramedFlatExtendedDoubleSlopePanelCorner.get(), pos, state);
+        super(FBContent.BE_TYPE_FRAMED_FLAT_EXTENDED_DOUBLE_SLOPE_PANEL_CORNER.get(), pos, state);
         this.isInner = getBlockType() == BlockType.FRAMED_FLAT_EXT_INNER_DOUBLE_SLOPE_PANEL_CORNER;
     }
 
@@ -31,8 +31,14 @@ public class FramedFlatExtendedDoubleSlopePanelCornerBlockEntity extends FramedD
         Direction side = hit.getDirection();
 
         Direction facing = getBlockState().getValue(FramedProperties.FACING_HOR);
-        if (side == facing) { return false; }
-        if (side == facing.getOpposite()) { return true; }
+        if (side == facing)
+        {
+            return false;
+        }
+        if (side == facing.getOpposite())
+        {
+            return true;
+        }
 
         HorizontalRotation rotation = getBlockState().getValue(PropertyHolder.ROTATION);
         Direction rotDir = rotation.withFacing(facing);
@@ -82,8 +88,14 @@ public class FramedFlatExtendedDoubleSlopePanelCornerBlockEntity extends FramedD
     public CamoContainer getCamo(Direction side)
     {
         Direction facing = getBlockState().getValue(FramedProperties.FACING_HOR);
-        if (side == facing) { return getCamo(); }
-        if (side == facing.getOpposite()) { return getCamoTwo(); }
+        if (side == facing)
+        {
+            return getCamo();
+        }
+        if (side == facing.getOpposite())
+        {
+            return getCamoTwo();
+        }
 
         HorizontalRotation rotation = getBlockState().getValue(PropertyHolder.ROTATION);
         Direction rotDir = rotation.withFacing(facing);
@@ -102,13 +114,11 @@ public class FramedFlatExtendedDoubleSlopePanelCornerBlockEntity extends FramedD
 
         if (side == facing)
         {
-            //noinspection ConstantConditions
-            return getCamo().getState().isSolidRender(level, worldPosition);
+            return getCamo().isSolid(level, worldPosition);
         }
         if (side == facing.getOpposite())
         {
-            //noinspection ConstantConditions
-            return getCamoTwo().getState().isSolidRender(level, worldPosition);
+            return getCamoTwo().isSolid(level, worldPosition);
         }
 
         if (isInner)
@@ -118,11 +128,9 @@ public class FramedFlatExtendedDoubleSlopePanelCornerBlockEntity extends FramedD
             Direction perpRotDir = rotation.rotate(Rotation.COUNTERCLOCKWISE_90).withFacing(facing);
             if (side == rotDir.getOpposite() || side == perpRotDir.getOpposite())
             {
-                //noinspection ConstantConditions
-                return getCamo().getState().isSolidRender(level, worldPosition);
+                return getCamo().isSolid(level, worldPosition);
             }
         }
-
         return false;
     }
 }

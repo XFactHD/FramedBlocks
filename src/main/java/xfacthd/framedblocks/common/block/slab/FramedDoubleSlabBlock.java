@@ -16,18 +16,21 @@ import xfacthd.framedblocks.common.blockentity.FramedDoubleSlabBlockEntity;
 
 public class FramedDoubleSlabBlock extends AbstractFramedDoubleBlock
 {
-    public FramedDoubleSlabBlock() { super(BlockType.FRAMED_DOUBLE_SLAB); }
+    public FramedDoubleSlabBlock()
+    {
+        super(BlockType.FRAMED_DOUBLE_SLAB);
+    }
 
     @Override
     public ItemStack getCloneItemStack(BlockState state, HitResult target, BlockGetter level, BlockPos pos, Player player)
     {
-        return new ItemStack(FBContent.blockFramedSlab.get());
+        return new ItemStack(FBContent.BLOCK_FRAMED_SLAB.get());
     }
 
     @Override
     protected Tuple<BlockState, BlockState> getBlockPair(BlockState state)
     {
-        BlockState defState = FBContent.blockFramedSlab.get().defaultBlockState();
+        BlockState defState = FBContent.BLOCK_FRAMED_SLAB.get().defaultBlockState();
         return new Tuple<>(
                 defState.setValue(FramedProperties.TOP, false),
                 defState.setValue(FramedProperties.TOP, true)

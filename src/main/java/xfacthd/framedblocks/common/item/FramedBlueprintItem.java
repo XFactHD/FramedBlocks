@@ -48,10 +48,16 @@ public class FramedBlueprintItem extends FramedToolItem
     private static final BlueprintCopyBehaviour NO_OP_BEHAVIOUR = new BlueprintCopyBehaviour(){};
     private static boolean locked = false;
 
-    public FramedBlueprintItem(FramedToolType type) { super(type); }
+    public FramedBlueprintItem(FramedToolType type)
+    {
+        super(type);
+    }
 
     @Override
-    public boolean doesSneakBypassUse(ItemStack stack, LevelReader level, BlockPos pos, Player player) { return false; }
+    public boolean doesSneakBypassUse(ItemStack stack, LevelReader level, BlockPos pos, Player player)
+    {
+        return false;
+    }
 
     @Override
     public InteractionResultHolder<ItemStack> use(Level level, Player player, InteractionHand hand)
@@ -75,7 +81,10 @@ public class FramedBlueprintItem extends FramedToolItem
     public InteractionResult useOn(UseOnContext context)
     {
         Player player = context.getPlayer();
-        if (player == null) { return InteractionResult.FAIL; }
+        if (player == null)
+        {
+            return InteractionResult.FAIL;
+        }
 
         Level level = context.getLevel();
         BlockPos pos = context.getClickedPos();
@@ -141,7 +150,11 @@ public class FramedBlueprintItem extends FramedToolItem
 
     private static boolean checkMissingMaterials(Player player, BlockItem item, CompoundTag tag)
     {
-        if (player.getAbilities().instabuild) { return false; } //Creative mode can always build
+        if (player.getAbilities().instabuild)
+        {
+            //Creative mode can always build
+            return false;
+        }
 
         Set<CamoContainer> camos = getCamoContainers(item, tag);
 
@@ -171,12 +184,15 @@ public class FramedBlueprintItem extends FramedToolItem
         int reinforcement = behaviour.getReinforcementCount(tag);
         if (reinforcement > 0)
         {
-            materials.add(new ItemStack(FBContent.itemFramedReinforcement.get(), reinforcement));
+            materials.add(new ItemStack(FBContent.ITEM_FRAMED_REINFORCEMENT.get(), reinforcement));
         }
 
         for (ItemStack stack : materials)
         {
-            if (stack.isEmpty()) { continue; }
+            if (stack.isEmpty())
+            {
+                continue;
+            }
 
             if (player.getInventory().countItem(stack.getItem()) < stack.getCount())
             {
@@ -221,7 +237,10 @@ public class FramedBlueprintItem extends FramedToolItem
         Set<CamoContainer> camos = getCamoContainers(item, tag);
 
         //Copying fluid camos is currently not possible
-        if (camos.stream().anyMatch(camo -> camo.getType().isFluid())) { return; }
+        if (camos.stream().anyMatch(camo -> camo.getType().isFluid()))
+        {
+            return;
+        }
 
         List<ItemStack> materials = new ArrayList<>();
         materials.add(getBlockItem(item));
@@ -242,7 +261,7 @@ public class FramedBlueprintItem extends FramedToolItem
         int reinforcement = behaviour.getReinforcementCount(tag);
         if (reinforcement > 0)
         {
-            materials.add(new ItemStack(FBContent.itemFramedReinforcement.get(), reinforcement));
+            materials.add(new ItemStack(FBContent.ITEM_FRAMED_REINFORCEMENT.get(), reinforcement));
         }
 
         Inventory inv = player.getInventory();

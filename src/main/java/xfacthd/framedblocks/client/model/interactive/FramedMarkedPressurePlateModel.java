@@ -32,7 +32,9 @@ public class FramedMarkedPressurePlateModel extends FramedPressurePlateModel
 
     private final BakedModel frameModel;
 
-    private FramedMarkedPressurePlateModel(BlockState state, BakedModel baseModel, ResourceLocation frameLocation, boolean powered)
+    private FramedMarkedPressurePlateModel(
+            BlockState state, BakedModel baseModel, ResourceLocation frameLocation, boolean powered
+    )
     {
         super(state, baseModel, powered);
         frameModel = FRAME_MODELS.get(frameLocation);
@@ -50,10 +52,19 @@ public class FramedMarkedPressurePlateModel extends FramedPressurePlateModel
     }
 
     @Override
-    protected void getAdditionalQuads(Map<Direction, List<BakedQuad>> quadMap, BlockState state, RandomSource rand, ModelData data, RenderType layer)
+    protected void getAdditionalQuads(
+            Map<Direction, List<BakedQuad>> quadMap,
+            BlockState state,
+            RandomSource rand,
+            ModelData data,
+            RenderType layer
+    )
     {
         FramedBlockData fbData = data.get(FramedBlockData.PROPERTY);
-        if (fbData == null || fbData.getCamoState().isAir()) { return; }
+        if (fbData == null || fbData.getCamoState().isAir())
+        {
+            return;
+        }
 
         quadMap.get(null).addAll(frameModel.getQuads(state, null, rand, data, layer));
         for (Direction side : Direction.values())
@@ -63,7 +74,10 @@ public class FramedMarkedPressurePlateModel extends FramedPressurePlateModel
     }
 
     @Override
-    protected boolean useBaseModel() { return true; }
+    protected boolean useBaseModel()
+    {
+        return true;
+    }
 
 
 

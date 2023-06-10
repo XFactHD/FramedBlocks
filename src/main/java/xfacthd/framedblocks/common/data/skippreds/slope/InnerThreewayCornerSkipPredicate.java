@@ -22,7 +22,10 @@ public final class InnerThreewayCornerSkipPredicate implements SideSkipPredicate
     @Override
     public boolean test(BlockGetter level, BlockPos pos, BlockState state, BlockState adjState, Direction side)
     {
-        if (SideSkipPredicate.CTM.test(level, pos, state, adjState, side)) { return true; }
+        if (SideSkipPredicate.CTM.test(level, pos, state, adjState, side))
+        {
+            return true;
+        }
 
         if (adjState.getBlock() instanceof IFramedBlock block && block.getBlockType() instanceof BlockType type)
         {
@@ -31,9 +34,15 @@ public final class InnerThreewayCornerSkipPredicate implements SideSkipPredicate
 
             return switch (type)
             {
-                case FRAMED_INNER_PRISM_CORNER, FRAMED_INNER_THREEWAY_CORNER -> testAgainstInnerThreewayCorner(level, pos, state, dir, top, adjState, side);
-                case FRAMED_PRISM_CORNER, FRAMED_THREEWAY_CORNER -> testAgainstThreewayCorner(level, pos, state, dir, top, adjState, side);
-                case FRAMED_DOUBLE_PRISM_CORNER, FRAMED_DOUBLE_THREEWAY_CORNER -> testAgainstDoubleThreewayCorner(level, pos, state, dir, top, adjState, side);
+                case FRAMED_INNER_PRISM_CORNER, FRAMED_INNER_THREEWAY_CORNER -> testAgainstInnerThreewayCorner(
+                        level, pos, state, dir, top, adjState, side
+                );
+                case FRAMED_PRISM_CORNER, FRAMED_THREEWAY_CORNER -> testAgainstThreewayCorner(
+                        level, pos, state, dir, top, adjState, side
+                );
+                case FRAMED_DOUBLE_PRISM_CORNER, FRAMED_DOUBLE_THREEWAY_CORNER -> testAgainstDoubleThreewayCorner(
+                        level, pos, state, dir, top, adjState, side
+                );
                 case FRAMED_SLOPE,
                      FRAMED_RAIL_SLOPE,
                      FRAMED_POWERED_RAIL_SLOPE,
@@ -42,18 +51,42 @@ public final class InnerThreewayCornerSkipPredicate implements SideSkipPredicate
                      FRAMED_FANCY_RAIL_SLOPE,
                      FRAMED_FANCY_POWERED_RAIL_SLOPE,
                      FRAMED_FANCY_DETECTOR_RAIL_SLOPE,
-                     FRAMED_FANCY_ACTIVATOR_RAIL_SLOPE -> testAgainstSlope(level, pos, state, dir, top, adjState, side);
-                case FRAMED_DOUBLE_SLOPE -> testAgainstDoubleSlope(level, pos, state, dir, top, adjState, side);
-                case FRAMED_CORNER_SLOPE -> testAgainstCorner(level, pos, state, dir, top, adjState, side);
-                case FRAMED_INNER_CORNER_SLOPE -> testAgainstInnerCorner(level, pos, state, dir, top, adjState, side);
-                case FRAMED_DOUBLE_CORNER -> testAgainstDoubleCorner(level, pos, state, dir, top, adjState, side);
-                case FRAMED_HALF_SLOPE -> testAgainstHalfSlope(level, pos, state, dir, top, adjState, side);
-                case FRAMED_DIVIDED_SLOPE -> testAgainstDividedSlope(level, pos, state, dir, top, adjState, side);
-                case FRAMED_DOUBLE_HALF_SLOPE -> testAgainstDoubleHalfSlope(level, pos, state, dir, top, adjState, side);
-                case FRAMED_VERTICAL_HALF_SLOPE -> testAgainstVerticalHalfSlope(level, pos, state, dir, top, adjState, side);
-                case FRAMED_VERTICAL_DOUBLE_HALF_SLOPE -> testAgainstVerticalDoubleHalfSlope(level, pos, state, dir, top, adjState, side);
-                case FRAMED_SLOPED_STAIRS -> testAgainstSlopedStairs(level, pos, state, dir, top, adjState, side);
-                case FRAMED_VERTICAL_SLOPED_STAIRS -> testAgainstVerticalSlopedStairs(level, pos, state, dir, top, adjState, side);
+                     FRAMED_FANCY_ACTIVATOR_RAIL_SLOPE -> testAgainstSlope(
+                             level, pos, state, dir, top, adjState, side
+                );
+                case FRAMED_DOUBLE_SLOPE -> testAgainstDoubleSlope(
+                        level, pos, state, dir, top, adjState, side
+                );
+                case FRAMED_CORNER_SLOPE -> testAgainstCorner(
+                        level, pos, state, dir, top, adjState, side
+                );
+                case FRAMED_INNER_CORNER_SLOPE -> testAgainstInnerCorner(
+                        level, pos, state, dir, top, adjState, side
+                );
+                case FRAMED_DOUBLE_CORNER -> testAgainstDoubleCorner(
+                        level, pos, state, dir, top, adjState, side
+                );
+                case FRAMED_HALF_SLOPE -> testAgainstHalfSlope(
+                        level, pos, state, dir, top, adjState, side
+                );
+                case FRAMED_DIVIDED_SLOPE -> testAgainstDividedSlope(
+                        level, pos, state, dir, top, adjState, side
+                );
+                case FRAMED_DOUBLE_HALF_SLOPE -> testAgainstDoubleHalfSlope(
+                        level, pos, state, dir, top, adjState, side
+                );
+                case FRAMED_VERTICAL_HALF_SLOPE -> testAgainstVerticalHalfSlope(
+                        level, pos, state, dir, top, adjState, side
+                );
+                case FRAMED_VERTICAL_DOUBLE_HALF_SLOPE -> testAgainstVerticalDoubleHalfSlope(
+                        level, pos, state, dir, top, adjState, side
+                );
+                case FRAMED_SLOPED_STAIRS -> testAgainstSlopedStairs(
+                        level, pos, state, dir, top, adjState, side
+                );
+                case FRAMED_VERTICAL_SLOPED_STAIRS -> testAgainstVerticalSlopedStairs(
+                        level, pos, state, dir, top, adjState, side
+                );
                 default -> false;
             };
         }
@@ -61,7 +94,9 @@ public final class InnerThreewayCornerSkipPredicate implements SideSkipPredicate
         return false;
     }
 
-    private static boolean testAgainstInnerThreewayCorner(BlockGetter level, BlockPos pos, BlockState state, Direction dir, boolean top, BlockState adjState, Direction side)
+    private static boolean testAgainstInnerThreewayCorner(
+            BlockGetter level, BlockPos pos, BlockState state, Direction dir, boolean top, BlockState adjState, Direction side
+    )
     {
         Direction adjDir = adjState.getValue(FramedProperties.FACING_HOR);
         boolean adjTop = adjState.getValue(FramedProperties.TOP);
@@ -73,7 +108,9 @@ public final class InnerThreewayCornerSkipPredicate implements SideSkipPredicate
         return false;
     }
 
-    private static boolean testAgainstThreewayCorner(BlockGetter level, BlockPos pos, BlockState state, Direction dir, boolean top, BlockState adjState, Direction side)
+    private static boolean testAgainstThreewayCorner(
+            BlockGetter level, BlockPos pos, BlockState state, Direction dir, boolean top, BlockState adjState, Direction side
+    )
     {
         Direction adjDir = adjState.getValue(FramedProperties.FACING_HOR);
         boolean adjTop = adjState.getValue(FramedProperties.TOP);
@@ -85,14 +122,18 @@ public final class InnerThreewayCornerSkipPredicate implements SideSkipPredicate
         return false;
     }
 
-    private static boolean testAgainstDoubleThreewayCorner(BlockGetter level, BlockPos pos, BlockState state, Direction dir, boolean top, BlockState adjState, Direction side)
+    private static boolean testAgainstDoubleThreewayCorner(
+            BlockGetter level, BlockPos pos, BlockState state, Direction dir, boolean top, BlockState adjState, Direction side
+    )
     {
         Tuple<BlockState, BlockState> states = AbstractFramedDoubleBlock.getStatePair(adjState);
         return testAgainstInnerThreewayCorner(level, pos, state, dir, top, states.getA(), side) ||
                testAgainstThreewayCorner(level, pos, state, dir, top, states.getB(), side);
     }
 
-    private static boolean testAgainstSlope(BlockGetter level, BlockPos pos, BlockState state, Direction dir, boolean top, BlockState adjState, Direction side)
+    private static boolean testAgainstSlope(
+            BlockGetter level, BlockPos pos, BlockState state, Direction dir, boolean top, BlockState adjState, Direction side
+    )
     {
         Direction adjDir = FramedUtils.getSlopeBlockFacing(adjState);
         SlopeType adjType = FramedUtils.getSlopeType(adjState);
@@ -104,14 +145,18 @@ public final class InnerThreewayCornerSkipPredicate implements SideSkipPredicate
         return false;
     }
 
-    private static boolean testAgainstDoubleSlope(BlockGetter level, BlockPos pos, BlockState state, Direction dir, boolean top, BlockState adjState, Direction side)
+    private static boolean testAgainstDoubleSlope(
+            BlockGetter level, BlockPos pos, BlockState state, Direction dir, boolean top, BlockState adjState, Direction side
+    )
     {
         Tuple<BlockState, BlockState> states = AbstractFramedDoubleBlock.getStatePair(adjState);
         return testAgainstSlope(level, pos, state, dir, top, states.getA(), side) ||
                testAgainstSlope(level, pos, state, dir, top, states.getB(), side);
     }
 
-    private static boolean testAgainstCorner(BlockGetter level, BlockPos pos, BlockState state, Direction dir, boolean top, BlockState adjState, Direction side)
+    private static boolean testAgainstCorner(
+            BlockGetter level, BlockPos pos, BlockState state, Direction dir, boolean top, BlockState adjState, Direction side
+    )
     {
         Direction adjDir = adjState.getValue(FramedProperties.FACING_HOR);
         CornerType adjType = adjState.getValue(PropertyHolder.CORNER_TYPE);
@@ -123,7 +168,9 @@ public final class InnerThreewayCornerSkipPredicate implements SideSkipPredicate
         return false;
     }
 
-    private static boolean testAgainstInnerCorner(BlockGetter level, BlockPos pos, BlockState state, Direction dir, boolean top, BlockState adjState, Direction side)
+    private static boolean testAgainstInnerCorner(
+            BlockGetter level, BlockPos pos, BlockState state, Direction dir, boolean top, BlockState adjState, Direction side
+    )
     {
         Direction adjDir = adjState.getValue(FramedProperties.FACING_HOR);
         CornerType adjType = adjState.getValue(PropertyHolder.CORNER_TYPE);
@@ -135,14 +182,18 @@ public final class InnerThreewayCornerSkipPredicate implements SideSkipPredicate
         return false;
     }
 
-    private static boolean testAgainstDoubleCorner(BlockGetter level, BlockPos pos, BlockState state, Direction dir, boolean top, BlockState adjState, Direction side)
+    private static boolean testAgainstDoubleCorner(
+            BlockGetter level, BlockPos pos, BlockState state, Direction dir, boolean top, BlockState adjState, Direction side
+    )
     {
         Tuple<BlockState, BlockState> states = AbstractFramedDoubleBlock.getStatePair(adjState);
         return testAgainstInnerCorner(level, pos, state, dir, top, states.getA(), side) ||
                testAgainstCorner(level, pos, state, dir, top, states.getB(), side);
     }
 
-    private static boolean testAgainstHalfSlope(BlockGetter level, BlockPos pos, BlockState state, Direction dir, boolean top, BlockState adjState, Direction side)
+    private static boolean testAgainstHalfSlope(
+            BlockGetter level, BlockPos pos, BlockState state, Direction dir, boolean top, BlockState adjState, Direction side
+    )
     {
         Direction adjDir = adjState.getValue(FramedProperties.FACING_HOR);
         boolean adjTop = adjState.getValue(FramedProperties.TOP);
@@ -155,7 +206,9 @@ public final class InnerThreewayCornerSkipPredicate implements SideSkipPredicate
         return false;
     }
 
-    private static boolean testAgainstDividedSlope(BlockGetter level, BlockPos pos, BlockState state, Direction dir, boolean top, BlockState adjState, Direction side)
+    private static boolean testAgainstDividedSlope(
+            BlockGetter level, BlockPos pos, BlockState state, Direction dir, boolean top, BlockState adjState, Direction side
+    )
     {
         Tuple<BlockState, BlockState> states = AbstractFramedDoubleBlock.getStatePair(adjState);
         if (adjState.getValue(PropertyHolder.SLOPE_TYPE) == SlopeType.HORIZONTAL)
@@ -170,16 +223,23 @@ public final class InnerThreewayCornerSkipPredicate implements SideSkipPredicate
         }
     }
 
-    private static boolean testAgainstDoubleHalfSlope(BlockGetter level, BlockPos pos, BlockState state, Direction dir, boolean top, BlockState adjState, Direction side)
+    private static boolean testAgainstDoubleHalfSlope(
+            BlockGetter level, BlockPos pos, BlockState state, Direction dir, boolean top, BlockState adjState, Direction side
+    )
     {
         Tuple<BlockState, BlockState> states = AbstractFramedDoubleBlock.getStatePair(adjState);
         return testAgainstHalfSlope(level, pos, state, dir, top, states.getA(), side) ||
                testAgainstHalfSlope(level, pos, state, dir, top, states.getB(), side);
     }
 
-    private static boolean testAgainstVerticalHalfSlope(BlockGetter level, BlockPos pos, BlockState state, Direction dir, boolean top, BlockState adjState, Direction side)
+    private static boolean testAgainstVerticalHalfSlope(
+            BlockGetter level, BlockPos pos, BlockState state, Direction dir, boolean top, BlockState adjState, Direction side
+    )
     {
-        if ((top && side != Direction.DOWN) || (!top && side != Direction.UP)) { return false; }
+        if ((top && side != Direction.DOWN) || (!top && side != Direction.UP))
+        {
+            return false;
+        }
 
         Direction adjDir = adjState.getValue(FramedProperties.FACING_HOR);
         boolean adjTop = adjState.getValue(FramedProperties.TOP);
@@ -191,18 +251,28 @@ public final class InnerThreewayCornerSkipPredicate implements SideSkipPredicate
         return false;
     }
 
-    private static boolean testAgainstVerticalDoubleHalfSlope(BlockGetter level, BlockPos pos, BlockState state, Direction dir, boolean top, BlockState adjState, Direction side)
+    private static boolean testAgainstVerticalDoubleHalfSlope(
+            BlockGetter level, BlockPos pos, BlockState state, Direction dir, boolean top, BlockState adjState, Direction side
+    )
     {
-        if ((top && side != Direction.DOWN) || (!top && side != Direction.UP)) { return false; }
+        if ((top && side != Direction.DOWN) || (!top && side != Direction.UP))
+        {
+            return false;
+        }
 
         Tuple<BlockState, BlockState> states = AbstractFramedDoubleBlock.getStatePair(adjState);
         return testAgainstVerticalHalfSlope(level, pos, state, dir, top, states.getA(), side) ||
                testAgainstVerticalHalfSlope(level, pos, state, dir, top, states.getB(), side);
     }
 
-    private static boolean testAgainstSlopedStairs(BlockGetter level, BlockPos pos, BlockState state, Direction dir, boolean top, BlockState adjState, Direction side)
+    private static boolean testAgainstSlopedStairs(
+            BlockGetter level, BlockPos pos, BlockState state, Direction dir, boolean top, BlockState adjState, Direction side
+    )
     {
-        if ((top && side != Direction.DOWN) || (!top && side != Direction.UP)) { return false; }
+        if ((top && side != Direction.DOWN) || (!top && side != Direction.UP))
+        {
+            return false;
+        }
 
         Direction adjDir = adjState.getValue(FramedProperties.FACING_HOR);
         boolean adjTop = adjState.getValue(FramedProperties.TOP);
@@ -214,9 +284,14 @@ public final class InnerThreewayCornerSkipPredicate implements SideSkipPredicate
         return false;
     }
 
-    private static boolean testAgainstVerticalSlopedStairs(BlockGetter level, BlockPos pos, BlockState state, Direction dir, boolean top, BlockState adjState, Direction side)
+    private static boolean testAgainstVerticalSlopedStairs(
+            BlockGetter level, BlockPos pos, BlockState state, Direction dir, boolean top, BlockState adjState, Direction side
+    )
     {
-        if (Utils.isY(side) || (side != dir.getOpposite() && side != dir.getClockWise())) { return false; }
+        if (Utils.isY(side) || (side != dir.getOpposite() && side != dir.getClockWise()))
+        {
+            return false;
+        }
 
         Direction adjDir = adjState.getValue(FramedProperties.FACING_HOR);
         HorizontalRotation adjRot = adjState.getValue(PropertyHolder.ROTATION);

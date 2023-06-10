@@ -20,7 +20,10 @@ public final class DoorSkipPredicate implements SideSkipPredicate
             return SideSkipPredicate.CTM.test(level, pos, state, adjState, side);
         }
 
-        if (!(adjState.getBlock() instanceof FramedDoorBlock)) { return false; }
+        if (!(adjState.getBlock() instanceof FramedDoorBlock))
+        {
+            return false;
+        }
 
         boolean top = state.getValue(BlockStateProperties.DOUBLE_BLOCK_HALF) == DoubleBlockHalf.UPPER;
         if ((top && side == Direction.DOWN) || (!top && side ==  Direction.UP))

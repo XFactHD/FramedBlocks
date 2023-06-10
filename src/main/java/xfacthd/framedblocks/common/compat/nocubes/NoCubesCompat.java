@@ -8,7 +8,10 @@ public final class NoCubesCompat
 {
     private static boolean noCubesLoaded = false;
 
-    public static void init() { noCubesLoaded = ModList.get().isLoaded("nocubes"); }
+    public static void init()
+    {
+        noCubesLoaded = ModList.get().isLoaded("nocubes");
+    }
 
     public static boolean mayCullNextTo(BlockState state)
     {

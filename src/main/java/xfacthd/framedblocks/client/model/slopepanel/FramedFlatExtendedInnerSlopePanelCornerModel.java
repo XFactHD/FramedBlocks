@@ -97,7 +97,7 @@ public class FramedFlatExtendedInnerSlopePanelCornerModel extends FramedBlockMod
 
     public static BlockState itemSource()
     {
-        return FBContent.blockFramedFlatExtendedInnerSlopePanelCorner.get()
+        return FBContent.BLOCK_FRAMED_FLAT_EXTENDED_INNER_SLOPE_PANEL_CORNER.get()
                 .defaultBlockState()
                 .setValue(FramedProperties.FACING_HOR, Direction.SOUTH)
                 .setValue(PropertyHolder.ROTATION, HorizontalRotation.RIGHT);

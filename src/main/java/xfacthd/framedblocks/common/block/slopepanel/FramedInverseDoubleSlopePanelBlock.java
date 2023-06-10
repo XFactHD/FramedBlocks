@@ -117,7 +117,10 @@ public class FramedInverseDoubleSlopePanelBlock extends AbstractFramedDoubleBloc
 
     @Override
     @SuppressWarnings("deprecation")
-    public BlockState rotate(BlockState state, Rotation rot) { return rotate(state, Direction.UP, rot); }
+    public BlockState rotate(BlockState state, Rotation rot)
+    {
+        return rotate(state, Direction.UP, rot);
+    }
 
     @Override
     @SuppressWarnings("deprecation")
@@ -133,7 +136,7 @@ public class FramedInverseDoubleSlopePanelBlock extends AbstractFramedDoubleBloc
         HorizontalRotation rotation = state.getValue(PropertyHolder.ROTATION);
         boolean ySlope = state.getValue(FramedProperties.Y_SLOPE);
 
-        BlockState defState = FBContent.blockFramedSlopePanel.get().defaultBlockState();
+        BlockState defState = FBContent.BLOCK_FRAMED_SLOPE_PANEL.get().defaultBlockState();
         return new Tuple<>(
                 defState.setValue(FramedProperties.FACING_HOR, facing.getOpposite())
                         .setValue(PropertyHolder.ROTATION, rotation.isVertical() ? rotation.getOpposite() : rotation)
@@ -180,6 +183,6 @@ public class FramedInverseDoubleSlopePanelBlock extends AbstractFramedDoubleBloc
 
     public static BlockState itemModelSource()
     {
-        return FBContent.blockFramedInverseDoubleSlopePanel.get().defaultBlockState();
+        return FBContent.BLOCK_FRAMED_INVERSE_DOUBLE_SLOPE_PANEL.get().defaultBlockState();
     }
 }

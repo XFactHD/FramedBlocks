@@ -43,101 +43,101 @@ public final class FramedBlockStateProvider extends BlockStateProvider
         ModelFile ironCube = makeUnderlayedCube("framed_iron_cube", mcLoc("block/iron_block"));
         ModelFile goldCube = makeUnderlayedCube("framed_gold_cube", mcLoc("block/gold_block"));
 
-        simpleBlockWithItem(FBContent.blockFramedSlope, cube, "cutout");
-        simpleBlockWithItem(FBContent.blockFramedCornerSlope, cube, "cutout");
-        simpleBlockWithItem(FBContent.blockFramedInnerCornerSlope, cube, "cutout");
-        simpleBlockWithItem(FBContent.blockFramedPrismCorner, cube, "cutout");
-        simpleBlockWithItem(FBContent.blockFramedInnerPrismCorner, cube, "cutout");
-        simpleBlockWithItem(FBContent.blockFramedThreewayCorner, cube, "cutout");
-        simpleBlockWithItem(FBContent.blockFramedInnerThreewayCorner, cube, "cutout");
-        simpleBlock(FBContent.blockFramedSlabEdge.get(), cube);
-        simpleBlock(FBContent.blockFramedSlabCorner.get(), cube);
-        simpleBlock(FBContent.blockFramedDividedSlab.get(), cube);
-        simpleBlock(FBContent.blockFramedPanel.get(), cube);
-        simpleBlock(FBContent.blockFramedCornerPillar.get(), cube);
-        simpleBlock(FBContent.blockFramedDividedPanelHor.get(), cube);
-        simpleBlock(FBContent.blockFramedDividedPanelVert.get(), cube);
-        simpleBlock(FBContent.blockFramedIronTrapDoor.get(), ironCube);
-        simpleBlock(FBContent.blockFramedStoneButton.get(), stoneCube);
-        simpleBlock(FBContent.blockFramedWallSign.get(), cube);
-        simpleBlock(FBContent.blockFramedLattice.get(), cube);
-        simpleBlock(FBContent.blockFramedVerticalStairs.get(), cube);
-        simpleBlockWithItem(FBContent.blockFramedDoubleSlab, cube, "cutout");
-        simpleBlockWithItem(FBContent.blockFramedDoublePanel, cube, "cutout");
-        simpleBlockWithItem(FBContent.blockFramedDoubleSlope.get(), cube);
-        simpleBlockWithItem(FBContent.blockFramedDoubleCorner, cube, "cutout");
-        simpleBlockWithItem(FBContent.blockFramedDoublePrismCorner, cube, "cutout");
-        simpleBlockWithItem(FBContent.blockFramedDoubleThreewayCorner, cube, "cutout");
-        simpleBlockWithItem(FBContent.blockFramedRailSlope, cube, "cutout");
-        simpleBlockWithItem(FBContent.blockFramedPoweredRailSlope, cube, "cutout");
-        simpleBlockWithItem(FBContent.blockFramedDetectorRailSlope, cube, "cutout");
-        simpleBlockWithItem(FBContent.blockFramedActivatorRailSlope, cube, "cutout");
-        simpleBlock(FBContent.blockFramedPillar.get(), cube);
-        simpleBlock(FBContent.blockFramedHalfPillar.get(), cube);
-        simpleBlock(FBContent.blockFramedPost.get(), cube);
-        simpleBlock(FBContent.blockFramedHalfStairs.get(), cube);
-        simpleBlock(FBContent.blockFramedDividedStairs.get(), cube);
-        simpleBlockWithItem(FBContent.blockFramedPrism, cube, "cutout");
-        simpleBlockWithItem(FBContent.blockFramedInnerPrism, cube, "cutout");
-        simpleBlockWithItem(FBContent.blockFramedDoublePrism, cube, "cutout");
-        simpleBlockWithItem(FBContent.blockFramedSlopedPrism, cube, "cutout");
-        simpleBlockWithItem(FBContent.blockFramedInnerSlopedPrism, cube, "cutout");
-        simpleBlockWithItem(FBContent.blockFramedDoubleSlopedPrism, cube, "cutout");
-        simpleBlockWithItem(FBContent.blockFramedSlopeSlab, cube, "cutout");
-        simpleBlockWithItem(FBContent.blockFramedElevatedSlopeSlab, cube, "cutout");
-        simpleBlockWithItem(FBContent.blockFramedDoubleSlopeSlab, cube, "cutout");
-        simpleBlockWithItem(FBContent.blockFramedInverseDoubleSlopeSlab, cube, "cutout");
-        simpleBlockWithItem(FBContent.blockFramedElevatedDoubleSlopeSlab, cube, "cutout");
-        simpleBlockWithItem(FBContent.blockFramedStackedSlopeSlab, cube, "cutout");
-        simpleBlockWithItem(FBContent.blockFramedFlatSlopeSlabCorner, cube, "cutout");
-        simpleBlockWithItem(FBContent.blockFramedFlatInnerSlopeSlabCorner, cube, "cutout");
-        simpleBlockWithItem(FBContent.blockFramedFlatElevatedSlopeSlabCorner, cube, "cutout");
-        simpleBlockWithItem(FBContent.blockFramedFlatElevatedInnerSlopeSlabCorner, cube, "cutout");
-        simpleBlockWithItem(FBContent.blockFramedFlatDoubleSlopeSlabCorner, cube, "cutout");
-        simpleBlockWithItem(FBContent.blockFramedFlatInverseDoubleSlopeSlabCorner, cube, "cutout");
-        simpleBlockWithItem(FBContent.blockFramedFlatElevatedDoubleSlopeSlabCorner, cube, "cutout");
-        simpleBlockWithItem(FBContent.blockFramedFlatElevatedInnerDoubleSlopeSlabCorner, cube, "cutout");
-        simpleBlockWithItem(FBContent.blockFramedFlatStackedSlopeSlabCorner, cube, "cutout");
-        simpleBlockWithItem(FBContent.blockFramedFlatStackedInnerSlopeSlabCorner, cube, "cutout");
-        simpleBlock(FBContent.blockFramedVerticalHalfStairs.get(), cube);
-        simpleBlock(FBContent.blockFramedVerticalDividedStairs.get(), cube);
-        simpleBlockWithItem(FBContent.blockFramedSlopePanel, cube, "cutout");
-        simpleBlockWithItem(FBContent.blockFramedExtendedSlopePanel, cube, "cutout");
-        simpleBlockWithItem(FBContent.blockFramedDoubleSlopePanel, cube, "cutout");
-        simpleBlockWithItem(FBContent.blockFramedInverseDoubleSlopePanel, cube, "cutout");
-        simpleBlockWithItem(FBContent.blockFramedExtendedDoubleSlopePanel, cube, "cutout");
-        simpleBlockWithItem(FBContent.blockFramedStackedSlopePanel, cube, "cutout");
-        simpleBlockWithItem(FBContent.blockFramedFlatSlopePanelCorner, cube, "cutout");
-        simpleBlockWithItem(FBContent.blockFramedFlatInnerSlopePanelCorner, cube, "cutout");
-        simpleBlockWithItem(FBContent.blockFramedFlatExtendedSlopePanelCorner, cube, "cutout");
-        simpleBlockWithItem(FBContent.blockFramedFlatExtendedInnerSlopePanelCorner, cube, "cutout");
-        simpleBlockWithItem(FBContent.blockFramedFlatDoubleSlopePanelCorner, cube, "cutout");
-        simpleBlockWithItem(FBContent.blockFramedFlatInverseDoubleSlopePanelCorner, cube, "cutout");
-        simpleBlockWithItem(FBContent.blockFramedFlatExtendedDoubleSlopePanelCorner, cube, "cutout");
-        simpleBlockWithItem(FBContent.blockFramedFlatExtendedInnerDoubleSlopePanelCorner, cube, "cutout");
-        simpleBlockWithItem(FBContent.blockFramedFlatStackedSlopePanelCorner, cube, "cutout");
-        simpleBlockWithItem(FBContent.blockFramedFlatStackedInnerSlopePanelCorner, cube, "cutout");
-        simpleBlockWithItem(FBContent.blockFramedDoubleStairs, cube, "cutout");
-        simpleBlockWithItem(FBContent.blockFramedVerticalDoubleStairs, cube, "cutout");
-        simpleBlock(FBContent.blockFramedWallBoard.get(), cube);
-        simpleBlockWithItem(FBContent.blockFramedPyramid, cube);
-        simpleBlockWithItem(FBContent.blockFramedPyramidSlab, cube);
-        simpleBlock(FBContent.blockFramedHorizontalPane.get(), cube);
-        simpleBlock(FBContent.blockFramedLargeButton.get(), cube);
-        simpleBlock(FBContent.blockFramedLargeStoneButton.get(), stoneCube);
-        simpleBlock(FBContent.blockFramedGate.get(), cube);
-        simpleBlock(FBContent.blockFramedIronGate.get(), ironCube);
-        simpleBlockWithItem(FBContent.blockFramedFancyRailSlope, cube, "cutout");
-        simpleBlockWithItem(FBContent.blockFramedFancyPoweredRailSlope, cube, "cutout");
-        simpleBlockWithItem(FBContent.blockFramedFancyDetectorRailSlope, cube, "cutout");
-        simpleBlockWithItem(FBContent.blockFramedFancyActivatorRailSlope, cube, "cutout");
-        simpleBlockWithItem(FBContent.blockFramedHalfSlope, cube, "cutout");
-        simpleBlockWithItem(FBContent.blockFramedVerticalHalfSlope, cube, "cutout");
-        simpleBlockWithItem(FBContent.blockFramedDividedSlope, cube, "cutout");
-        simpleBlockWithItem(FBContent.blockFramedDoubleHalfSlope, cube, "cutout");
-        simpleBlockWithItem(FBContent.blockFramedVerticalDoubleHalfSlope, cube, "cutout");
-        simpleBlockWithItem(FBContent.blockFramedSlopedStairs, cube, "cutout");
-        simpleBlockWithItem(FBContent.blockFramedVerticalSlopedStairs, cube, "cutout");
+        simpleBlockWithItem(FBContent.BLOCK_FRAMED_SLOPE, cube, "cutout");
+        simpleBlockWithItem(FBContent.BLOCK_FRAMED_CORNER_SLOPE, cube, "cutout");
+        simpleBlockWithItem(FBContent.BLOCK_FRAMED_INNER_CORNER_SLOPE, cube, "cutout");
+        simpleBlockWithItem(FBContent.BLOCK_FRAMED_PRISM_CORNER, cube, "cutout");
+        simpleBlockWithItem(FBContent.BLOCK_FRAMED_INNER_PRISM_CORNER, cube, "cutout");
+        simpleBlockWithItem(FBContent.BLOCK_FRAMED_THREEWAY_CORNER, cube, "cutout");
+        simpleBlockWithItem(FBContent.BLOCK_FRAMED_INNER_THREEWAY_CORNER, cube, "cutout");
+        simpleBlock(FBContent.BLOCK_FRAMED_SLAB_EDGE.get(), cube);
+        simpleBlock(FBContent.BLOCK_FRAMED_SLAB_CORNER.get(), cube);
+        simpleBlock(FBContent.BLOCK_FRAMED_DIVIDED_SLAB.get(), cube);
+        simpleBlock(FBContent.BLOCK_FRAMED_PANEL.get(), cube);
+        simpleBlock(FBContent.BLOCK_FRAMED_CORNER_PILLAR.get(), cube);
+        simpleBlock(FBContent.BLOCK_FRAMED_DIVIDED_PANEL_HOR.get(), cube);
+        simpleBlock(FBContent.BLOCK_FRAMED_DIVIDED_PANEL_VERT.get(), cube);
+        simpleBlock(FBContent.BLOCK_FRAMED_IRON_TRAP_DOOR.get(), ironCube);
+        simpleBlock(FBContent.BLOCK_FRAMED_STONE_BUTTON.get(), stoneCube);
+        simpleBlock(FBContent.BLOCK_FRAMED_WALL_SIGN.get(), cube);
+        simpleBlock(FBContent.BLOCK_FRAMED_LATTICE.get(), cube);
+        simpleBlock(FBContent.BLOCK_FRAMED_VERTICAL_STAIRS.get(), cube);
+        simpleBlockWithItem(FBContent.BLOCK_FRAMED_DOUBLE_SLAB, cube, "cutout");
+        simpleBlockWithItem(FBContent.BLOCK_FRAMED_DOUBLE_PANEL, cube, "cutout");
+        simpleBlockWithItem(FBContent.BLOCK_FRAMED_DOUBLE_SLOPE.get(), cube);
+        simpleBlockWithItem(FBContent.BLOCK_FRAMED_DOUBLE_CORNER, cube, "cutout");
+        simpleBlockWithItem(FBContent.BLOCK_FRAMED_DOUBLE_PRISM_CORNER, cube, "cutout");
+        simpleBlockWithItem(FBContent.BLOCK_FRAMED_DOUBLE_THREEWAY_CORNER, cube, "cutout");
+        simpleBlockWithItem(FBContent.BLOCK_FRAMED_RAIL_SLOPE, cube, "cutout");
+        simpleBlockWithItem(FBContent.BLOCK_FRAMED_POWERED_RAIL_SLOPE, cube, "cutout");
+        simpleBlockWithItem(FBContent.BLOCK_FRAMED_DETECTOR_RAIL_SLOPE, cube, "cutout");
+        simpleBlockWithItem(FBContent.BLOCK_FRAMED_ACTIVATOR_RAIL_SLOPE, cube, "cutout");
+        simpleBlock(FBContent.BLOCK_FRAMED_PILLAR.get(), cube);
+        simpleBlock(FBContent.BLOCK_FRAMED_HALF_PILLAR.get(), cube);
+        simpleBlock(FBContent.BLOCK_FRAMED_POST.get(), cube);
+        simpleBlock(FBContent.BLOCK_FRAMED_HALF_STAIRS.get(), cube);
+        simpleBlock(FBContent.BLOCK_FRAMED_DIVIDED_STAIRS.get(), cube);
+        simpleBlockWithItem(FBContent.BLOCK_FRAMED_PRISM, cube, "cutout");
+        simpleBlockWithItem(FBContent.BLOCK_FRAMED_INNER_PRISM, cube, "cutout");
+        simpleBlockWithItem(FBContent.BLOCK_FRAMED_DOUBLE_PRISM, cube, "cutout");
+        simpleBlockWithItem(FBContent.BLOCK_FRAMED_SLOPED_PRISM, cube, "cutout");
+        simpleBlockWithItem(FBContent.BLOCK_FRAMED_INNER_SLOPED_PRISM, cube, "cutout");
+        simpleBlockWithItem(FBContent.BLOCK_FRAMED_DOUBLE_SLOPED_PRISM, cube, "cutout");
+        simpleBlockWithItem(FBContent.BLOCK_FRAMED_SLOPE_SLAB, cube, "cutout");
+        simpleBlockWithItem(FBContent.BLOCK_FRAMED_ELEVATED_SLOPE_SLAB, cube, "cutout");
+        simpleBlockWithItem(FBContent.BLOCK_FRAMED_DOUBLE_SLOPE_SLAB, cube, "cutout");
+        simpleBlockWithItem(FBContent.BLOCK_FRAMED_INVERSE_DOUBLE_SLOPE_SLAB, cube, "cutout");
+        simpleBlockWithItem(FBContent.BLOCK_FRAMED_ELEVATED_DOUBLE_SLOPE_SLAB, cube, "cutout");
+        simpleBlockWithItem(FBContent.BLOCK_FRAMED_STACKED_SLOPE_SLAB, cube, "cutout");
+        simpleBlockWithItem(FBContent.BLOCK_FRAMED_FLAT_SLOPE_SLAB_CORNER, cube, "cutout");
+        simpleBlockWithItem(FBContent.BLOCK_FRAMED_FLAT_INNER_SLOPE_SLAB_CORNER, cube, "cutout");
+        simpleBlockWithItem(FBContent.BLOCK_FRAMED_FLAT_ELEVATED_SLOPE_SLAB_CORNER, cube, "cutout");
+        simpleBlockWithItem(FBContent.BLOCK_FRAMED_FLAT_ELEVATED_INNER_SLOPE_SLAB_CORNER, cube, "cutout");
+        simpleBlockWithItem(FBContent.BLOCK_FRAMED_FLAT_DOUBLE_SLOPE_SLAB_CORNER, cube, "cutout");
+        simpleBlockWithItem(FBContent.BLOCK_FRAMED_FLAT_INVERSE_DOUBLE_SLOPE_SLAB_CORNER, cube, "cutout");
+        simpleBlockWithItem(FBContent.BLOCK_FRAMED_FLAT_ELEVATED_DOUBLE_SLOPE_SLAB_CORNER, cube, "cutout");
+        simpleBlockWithItem(FBContent.BLOCK_FRAMED_FLAT_ELEVATED_INNER_DOUBLE_SLOPE_SLAB_CORNER, cube, "cutout");
+        simpleBlockWithItem(FBContent.BLOCK_FRAMED_FLAT_STACKED_SLOPE_SLAB_CORNER, cube, "cutout");
+        simpleBlockWithItem(FBContent.BLOCK_FRAMED_FLAT_STACKED_INNER_SLOPE_SLAB_CORNER, cube, "cutout");
+        simpleBlock(FBContent.BLOCK_FRAMED_VERTICAL_HALF_STAIRS.get(), cube);
+        simpleBlock(FBContent.BLOCK_FRAMED_VERTICAL_DIVIDED_STAIRS.get(), cube);
+        simpleBlockWithItem(FBContent.BLOCK_FRAMED_SLOPE_PANEL, cube, "cutout");
+        simpleBlockWithItem(FBContent.BLOCK_FRAMED_EXTENDED_SLOPE_PANEL, cube, "cutout");
+        simpleBlockWithItem(FBContent.BLOCK_FRAMED_DOUBLE_SLOPE_PANEL, cube, "cutout");
+        simpleBlockWithItem(FBContent.BLOCK_FRAMED_INVERSE_DOUBLE_SLOPE_PANEL, cube, "cutout");
+        simpleBlockWithItem(FBContent.BLOCK_FRAMED_EXTENDED_DOUBLE_SLOPE_PANEL, cube, "cutout");
+        simpleBlockWithItem(FBContent.BLOCK_FRAMED_STACKED_SLOPE_PANEL, cube, "cutout");
+        simpleBlockWithItem(FBContent.BLOCK_FRAMED_FLAT_SLOPE_PANEL_CORNER, cube, "cutout");
+        simpleBlockWithItem(FBContent.BLOCK_FRAMED_FLAT_INNER_SLOPE_PANEL_CORNER, cube, "cutout");
+        simpleBlockWithItem(FBContent.BLOCK_FRAMED_FLAT_EXTENDED_SLOPE_PANEL_CORNER, cube, "cutout");
+        simpleBlockWithItem(FBContent.BLOCK_FRAMED_FLAT_EXTENDED_INNER_SLOPE_PANEL_CORNER, cube, "cutout");
+        simpleBlockWithItem(FBContent.BLOCK_FRAMED_FLAT_DOUBLE_SLOPE_PANEL_CORNER, cube, "cutout");
+        simpleBlockWithItem(FBContent.BLOCK_FRAMED_FLAT_INVERSE_DOUBLE_SLOPE_PANEL_CORNER, cube, "cutout");
+        simpleBlockWithItem(FBContent.BLOCK_FRAMED_FLAT_EXTENDED_DOUBLE_SLOPE_PANEL_CORNER, cube, "cutout");
+        simpleBlockWithItem(FBContent.BLOCK_FRAMED_FLAT_EXTENDED_INNER_DOUBLE_SLOPE_PANEL_CORNER, cube, "cutout");
+        simpleBlockWithItem(FBContent.BLOCK_FRAMED_FLAT_STACKED_SLOPE_PANEL_CORNER, cube, "cutout");
+        simpleBlockWithItem(FBContent.BLOCK_FRAMED_FLAT_STACKED_INNER_SLOPE_PANEL_CORNER, cube, "cutout");
+        simpleBlockWithItem(FBContent.BLOCK_FRAMED_DOUBLE_STAIRS, cube, "cutout");
+        simpleBlockWithItem(FBContent.BLOCK_FRAMED_VERTICAL_DOUBLE_STAIRS, cube, "cutout");
+        simpleBlock(FBContent.BLOCK_FRAMED_WALL_BOARD.get(), cube);
+        simpleBlockWithItem(FBContent.BLOCK_FRAMED_PYRAMID, cube);
+        simpleBlockWithItem(FBContent.BLOCK_FRAMED_PYRAMID_SLAB, cube);
+        simpleBlock(FBContent.BLOCK_FRAMED_HORIZONTAL_PANE.get(), cube);
+        simpleBlock(FBContent.BLOCK_FRAMED_LARGE_BUTTON.get(), cube);
+        simpleBlock(FBContent.BLOCK_FRAMED_LARGE_STONE_BUTTON.get(), stoneCube);
+        simpleBlock(FBContent.BLOCK_FRAMED_GATE.get(), cube);
+        simpleBlock(FBContent.BLOCK_FRAMED_IRON_GATE.get(), ironCube);
+        simpleBlockWithItem(FBContent.BLOCK_FRAMED_FANCY_RAIL_SLOPE, cube, "cutout");
+        simpleBlockWithItem(FBContent.BLOCK_FRAMED_FANCY_POWERED_RAIL_SLOPE, cube, "cutout");
+        simpleBlockWithItem(FBContent.BLOCK_FRAMED_FANCY_DETECTOR_RAIL_SLOPE, cube, "cutout");
+        simpleBlockWithItem(FBContent.BLOCK_FRAMED_FANCY_ACTIVATOR_RAIL_SLOPE, cube, "cutout");
+        simpleBlockWithItem(FBContent.BLOCK_FRAMED_HALF_SLOPE, cube, "cutout");
+        simpleBlockWithItem(FBContent.BLOCK_FRAMED_VERTICAL_HALF_SLOPE, cube, "cutout");
+        simpleBlockWithItem(FBContent.BLOCK_FRAMED_DIVIDED_SLOPE, cube, "cutout");
+        simpleBlockWithItem(FBContent.BLOCK_FRAMED_DOUBLE_HALF_SLOPE, cube, "cutout");
+        simpleBlockWithItem(FBContent.BLOCK_FRAMED_VERTICAL_DOUBLE_HALF_SLOPE, cube, "cutout");
+        simpleBlockWithItem(FBContent.BLOCK_FRAMED_SLOPED_STAIRS, cube, "cutout");
+        simpleBlockWithItem(FBContent.BLOCK_FRAMED_VERTICAL_SLOPED_STAIRS, cube, "cutout");
 
         registerFramedCube(cube);
         registerFramedSlab(cube);
@@ -192,7 +192,7 @@ public final class FramedBlockStateProvider extends BlockStateProvider
         ModelFile reinforcement = models().cubeAll("framed_reinforcement", modLoc("block/framed_reinforcement"))
                 .renderType("cutout");
 
-        getMultipartBuilder(FBContent.blockFramedCube.get())
+        getMultipartBuilder(FBContent.BLOCK_FRAMED_CUBE.get())
                 .part()
                     .modelFile(cube)
                     .addModel()
@@ -209,24 +209,24 @@ public final class FramedBlockStateProvider extends BlockStateProvider
                     .condition(FramedProperties.REINFORCED, true)
                     .end();
 
-        simpleBlockItem(FBContent.blockFramedCube, cube);
+        simpleBlockItem(FBContent.BLOCK_FRAMED_CUBE, cube);
     }
 
     private void registerFramedSlab(ModelFile cube)
     {
-        simpleBlock(FBContent.blockFramedSlab.get(), cube);
+        simpleBlock(FBContent.BLOCK_FRAMED_SLAB.get(), cube);
         itemModels().slab("framed_slab", TEXTURE, TEXTURE, TEXTURE).renderType("cutout");
     }
 
     private void registerFramedStairs(ModelFile cube)
     {
-        simpleBlock(FBContent.blockFramedStairs.get(), cube);
+        simpleBlock(FBContent.BLOCK_FRAMED_STAIRS.get(), cube);
         itemModels().stairs("framed_stairs", TEXTURE, TEXTURE, TEXTURE).renderType("cutout");
     }
 
     private void registerFramedWall(ModelFile cube)
     {
-        simpleBlock(FBContent.blockFramedWall.get(), cube);
+        simpleBlock(FBContent.BLOCK_FRAMED_WALL.get(), cube);
         itemModels().getBuilder("framed_wall")
                 .parent(models().getExistingFile(mcLoc("block/wall_inventory")))
                 .texture("wall", TEXTURE)
@@ -235,7 +235,7 @@ public final class FramedBlockStateProvider extends BlockStateProvider
 
     private void registerFramedFence(ModelFile cube)
     {
-        getMultipartBuilder(FBContent.blockFramedFence.get())
+        getMultipartBuilder(FBContent.BLOCK_FRAMED_FENCE.get())
                 .part()
                 .modelFile(cube)
                 .addModel();
@@ -248,25 +248,25 @@ public final class FramedBlockStateProvider extends BlockStateProvider
 
     private void registerFramedFenceGate(ModelFile cube)
     {
-        simpleBlock(FBContent.blockFramedFenceGate.get(), cube);
+        simpleBlock(FBContent.BLOCK_FRAMED_FENCE_GATE.get(), cube);
         itemModels().fenceGate("framed_fence_gate", TEXTURE).renderType("cutout");
     }
 
     private void registerFramedDoor(ModelFile cube)
     {
-        simpleBlock(FBContent.blockFramedDoor.get(), cube);
-        simpleItem(FBContent.blockFramedDoor, "cutout");
+        simpleBlock(FBContent.BLOCK_FRAMED_DOOR.get(), cube);
+        simpleItem(FBContent.BLOCK_FRAMED_DOOR, "cutout");
     }
 
     private void registerFramedIronDoor(ModelFile cube)
     {
-        simpleBlock(FBContent.blockFramedIronDoor.get(), cube);
-        simpleItem(FBContent.blockFramedIronDoor, "cutout");
+        simpleBlock(FBContent.BLOCK_FRAMED_IRON_DOOR.get(), cube);
+        simpleItem(FBContent.BLOCK_FRAMED_IRON_DOOR, "cutout");
     }
 
     private void registerFramedTrapDoor(ModelFile cube)
     {
-        simpleBlock(FBContent.blockFramedTrapDoor.get(), cube);
+        simpleBlock(FBContent.BLOCK_FRAMED_TRAP_DOOR.get(), cube);
         itemModels().withExistingParent("framed_trapdoor", mcLoc("block/template_orientable_trapdoor_bottom"))
                 .texture("texture", TEXTURE)
                 .renderType("cutout");
@@ -274,8 +274,8 @@ public final class FramedBlockStateProvider extends BlockStateProvider
 
     private void registerFramedPressurePlate(ModelFile cube)
     {
-        simpleBlock(FBContent.blockFramedPressurePlate.get(), cube);
-        simpleBlock(FBContent.blockFramedWaterloggablePressurePlate.get(), cube);
+        simpleBlock(FBContent.BLOCK_FRAMED_PRESSURE_PLATE.get(), cube);
+        simpleBlock(FBContent.BLOCK_FRAMED_WATERLOGGABLE_PRESSURE_PLATE.get(), cube);
 
         itemModels().withExistingParent("framed_pressure_plate", mcLoc("block/pressure_plate_up"))
                 .texture("texture", TEXTURE).renderType("cutout");
@@ -283,8 +283,8 @@ public final class FramedBlockStateProvider extends BlockStateProvider
 
     private void registerFramedStonePressurePlate(ModelFile cube)
     {
-        simpleBlock(FBContent.blockFramedStonePressurePlate.get(), cube);
-        simpleBlock(FBContent.blockFramedWaterloggableStonePressurePlate.get(), cube);
+        simpleBlock(FBContent.BLOCK_FRAMED_STONE_PRESSURE_PLATE.get(), cube);
+        simpleBlock(FBContent.BLOCK_FRAMED_WATERLOGGABLE_STONE_PRESSURE_PLATE.get(), cube);
 
         makeOverlayModel(
                 FramedMarkedPressurePlateModel.STONE_FRAME_LOCATION,
@@ -308,8 +308,8 @@ public final class FramedBlockStateProvider extends BlockStateProvider
 
     private void registerFramedObsidianPressurePlate(ModelFile cube)
     {
-        simpleBlock(FBContent.blockFramedObsidianPressurePlate.get(), cube);
-        simpleBlock(FBContent.blockFramedWaterloggableObsidianPressurePlate.get(), cube);
+        simpleBlock(FBContent.BLOCK_FRAMED_OBSIDIAN_PRESSURE_PLATE.get(), cube);
+        simpleBlock(FBContent.BLOCK_FRAMED_WATERLOGGABLE_OBSIDIAN_PRESSURE_PLATE.get(), cube);
 
         makeOverlayModel(
                 FramedMarkedPressurePlateModel.OBSIDIAN_FRAME_LOCATION,
@@ -333,8 +333,8 @@ public final class FramedBlockStateProvider extends BlockStateProvider
 
     private void registerFramedGoldPressurePlate(ModelFile cube)
     {
-        simpleBlock(FBContent.blockFramedGoldPressurePlate.get(), cube);
-        simpleBlock(FBContent.blockFramedWaterloggableGoldPressurePlate.get(), cube);
+        simpleBlock(FBContent.BLOCK_FRAMED_GOLD_PRESSURE_PLATE.get(), cube);
+        simpleBlock(FBContent.BLOCK_FRAMED_WATERLOGGABLE_GOLD_PRESSURE_PLATE.get(), cube);
 
         makeOverlayModel(
                 FramedMarkedPressurePlateModel.GOLD_FRAME_LOCATION,
@@ -358,8 +358,8 @@ public final class FramedBlockStateProvider extends BlockStateProvider
 
     private void registerFramedIronPressurePlate(ModelFile cube)
     {
-        simpleBlock(FBContent.blockFramedIronPressurePlate.get(), cube);
-        simpleBlock(FBContent.blockFramedWaterloggableIronPressurePlate.get(), cube);
+        simpleBlock(FBContent.BLOCK_FRAMED_IRON_PRESSURE_PLATE.get(), cube);
+        simpleBlock(FBContent.BLOCK_FRAMED_WATERLOGGABLE_IRON_PRESSURE_PLATE.get(), cube);
 
         makeOverlayModel(
                 FramedMarkedPressurePlateModel.IRON_FRAME_LOCATION,
@@ -391,12 +391,12 @@ public final class FramedBlockStateProvider extends BlockStateProvider
                     .face(Direction.NORTH).texture("#0").end()
                     .face(Direction.SOUTH).texture("#0").end()
                 .end();
-        simpleBlockWithItem(FBContent.blockFramedLadder, ladder, "cutout");
+        simpleBlockWithItem(FBContent.BLOCK_FRAMED_LADDER, ladder, "cutout");
     }
 
     private void registerFramedButton(ModelFile cube)
     {
-        simpleBlock(FBContent.blockFramedButton.get(), cube);
+        simpleBlock(FBContent.BLOCK_FRAMED_BUTTON.get(), cube);
 
         itemModels().getBuilder("framed_button")
                 .parent(models().getExistingFile(mcLoc("block/button_inventory")))
@@ -415,7 +415,7 @@ public final class FramedBlockStateProvider extends BlockStateProvider
                 .texture("base", ClientUtils.DUMMY_TEXTURE)
                 .texture("particle", TEXTURE);
 
-        getVariantBuilder(FBContent.blockFramedLever.get()).forAllStatesExcept(state ->
+        getVariantBuilder(FBContent.BLOCK_FRAMED_LEVER.get()).forAllStatesExcept(state ->
         {
             Direction facing = state.getValue(HorizontalDirectionalBlock.FACING);
             AttachFace face = state.getValue(FaceAttachedHorizontalDirectionalBlock.FACE);
@@ -431,26 +431,26 @@ public final class FramedBlockStateProvider extends BlockStateProvider
                     .build();
         }, FramedProperties.GLOWING);
 
-        simpleItem(FBContent.blockFramedLever, "cutout");
+        simpleItem(FBContent.BLOCK_FRAMED_LEVER, "cutout");
     }
 
     private void registerFramedSign(ModelFile cube)
     {
-        simpleBlock(FBContent.blockFramedSign.get(), cube);
-        simpleItem(FBContent.blockFramedSign, "cutout");
+        simpleBlock(FBContent.BLOCK_FRAMED_SIGN.get(), cube);
+        simpleItem(FBContent.BLOCK_FRAMED_SIGN, "cutout");
     }
 
     private void registerFramedTorch()
     {
         ModelFile torch = models().getExistingFile(modLoc("framed_torch"));
-        simpleBlock(FBContent.blockFramedTorch.get(), torch);
-        simpleItem(FBContent.blockFramedTorch, "block/framed_torch", "cutout");
+        simpleBlock(FBContent.BLOCK_FRAMED_TORCH.get(), torch);
+        simpleItem(FBContent.BLOCK_FRAMED_TORCH, "block/framed_torch", "cutout");
     }
 
     private void registerFramedWallTorch()
     {
         ModelFile wallTorch = models().getExistingFile(modLoc("framed_wall_torch"));
-        getVariantBuilder(FBContent.blockFramedWallTorch.get()).forAllStatesExcept(state ->
+        getVariantBuilder(FBContent.BLOCK_FRAMED_WALL_TORCH.get()).forAllStatesExcept(state ->
         {
             Direction dir = state.getValue(BlockStateProperties.HORIZONTAL_FACING);
             int rotY = ((int)dir.toYRot() + 90) % 360;
@@ -463,8 +463,8 @@ public final class FramedBlockStateProvider extends BlockStateProvider
         ModelFile torch = models().withExistingParent("framed_soul_torch", modLoc("framed_torch"))
                 .texture("particle", modLoc("block/framed_soul_torch"))
                 .texture("top", mcLoc("block/soul_torch"));
-        simpleBlock(FBContent.blockFramedSoulTorch.get(), torch);
-        simpleItem(FBContent.blockFramedSoulTorch, "block/framed_soul_torch", "cutout");
+        simpleBlock(FBContent.BLOCK_FRAMED_SOUL_TORCH.get(), torch);
+        simpleItem(FBContent.BLOCK_FRAMED_SOUL_TORCH, "block/framed_soul_torch", "cutout");
     }
 
     private void registerFramedSoulWallTorch()
@@ -472,7 +472,7 @@ public final class FramedBlockStateProvider extends BlockStateProvider
         ModelFile wallTorch = models().withExistingParent("framed_soul_wall_torch", modLoc("framed_wall_torch"))
                 .texture("particle", modLoc("block/framed_soul_torch"))
                 .texture("top", mcLoc("block/soul_torch"));
-        getVariantBuilder(FBContent.blockFramedSoulWallTorch.get()).forAllStatesExcept(state ->
+        getVariantBuilder(FBContent.BLOCK_FRAMED_SOUL_WALL_TORCH.get()).forAllStatesExcept(state ->
         {
             Direction dir = state.getValue(BlockStateProperties.HORIZONTAL_FACING);
             int rotY = ((int)dir.toYRot() + 90) % 360;
@@ -487,13 +487,13 @@ public final class FramedBlockStateProvider extends BlockStateProvider
                 .texture("particle", modLoc("block/framed_redstone_torch_off"))
                 .texture("top", mcLoc("block/redstone_torch_off"));
 
-        getVariantBuilder(FBContent.blockFramedRedstoneTorch.get()).forAllStatesExcept(state ->
+        getVariantBuilder(FBContent.BLOCK_FRAMED_REDSTONE_TORCH.get()).forAllStatesExcept(state ->
         {
             ModelFile model = state.getValue(BlockStateProperties.LIT) ? torch : torchOff;
             return ConfiguredModel.builder().modelFile(model).build();
         }, FramedProperties.GLOWING);
 
-        simpleItem(FBContent.blockFramedRedstoneTorch, "block/framed_redstone_torch", "cutout");
+        simpleItem(FBContent.BLOCK_FRAMED_REDSTONE_TORCH, "block/framed_redstone_torch", "cutout");
     }
 
     private void registerFramedRedstoneWallTorch()
@@ -503,7 +503,7 @@ public final class FramedBlockStateProvider extends BlockStateProvider
                 .texture("particle", modLoc("block/framed_redstone_torch_off"))
                 .texture("top", mcLoc("block/redstone_torch_off"));
 
-        getVariantBuilder(FBContent.blockFramedRedstoneWallTorch.get()).forAllStatesExcept(state ->
+        getVariantBuilder(FBContent.BLOCK_FRAMED_REDSTONE_WALL_TORCH.get()).forAllStatesExcept(state ->
         {
             Direction dir = state.getValue(BlockStateProperties.HORIZONTAL_FACING);
             int rotY = ((int)dir.toYRot() + 90) % 360;
@@ -514,7 +514,7 @@ public final class FramedBlockStateProvider extends BlockStateProvider
 
     private void registerFramedFloorBoard(ModelFile cube)
     {
-        simpleBlock(FBContent.blockFramedFloor.get(), cube);
+        simpleBlock(FBContent.BLOCK_FRAMED_FLOOR.get(), cube);
         itemModels().carpet("framed_floor_board", TEXTURE).renderType("cutout");
     }
 
@@ -522,45 +522,45 @@ public final class FramedBlockStateProvider extends BlockStateProvider
     {
         ModelFile chest = models().getExistingFile(modLoc("block/framed_chest"));
 
-        getVariantBuilder(FBContent.blockFramedChest.get()).forAllStatesExcept(state ->
+        getVariantBuilder(FBContent.BLOCK_FRAMED_CHEST.get()).forAllStatesExcept(state ->
         {
             Direction dir = state.getValue(BlockStateProperties.HORIZONTAL_FACING);
             int rotY = ((int)dir.toYRot() + 180) % 360;
             return ConfiguredModel.builder().modelFile(chest).rotationY(rotY).build();
         }, BlockStateProperties.WATERLOGGED, PropertyHolder.LATCH_TYPE, FramedProperties.GLOWING);
 
-        simpleBlockItem(FBContent.blockFramedChest, chest, "cutout");
+        simpleBlockItem(FBContent.BLOCK_FRAMED_CHEST, chest, "cutout");
     }
 
     private void registerFramedBarsBlock(ModelFile cube)
     {
-        simpleBlock(FBContent.blockFramedBars.get(), cube);
-        simpleItem(FBContent.blockFramedBars, "cutout");
+        simpleBlock(FBContent.BLOCK_FRAMED_BARS.get(), cube);
+        simpleItem(FBContent.BLOCK_FRAMED_BARS, "cutout");
     }
 
     private void registerFramedPaneBlock(ModelFile cube)
     {
-        simpleBlock(FBContent.blockFramedPane.get(), cube);
-        simpleItem(FBContent.blockFramedPane, TEXTURE.getPath(), "cutout");
+        simpleBlock(FBContent.BLOCK_FRAMED_PANE.get(), cube);
+        simpleItem(FBContent.BLOCK_FRAMED_PANE, TEXTURE.getPath(), "cutout");
     }
 
     private void registerFramedFlowerPotBlock(ModelFile cube)
     {
-        simpleBlock(FBContent.blockFramedFlowerPot.get(), cube);
-        simpleItem(FBContent.blockFramedFlowerPot, "cutout");
+        simpleBlock(FBContent.BLOCK_FRAMED_FLOWER_POT.get(), cube);
+        simpleItem(FBContent.BLOCK_FRAMED_FLOWER_POT, "cutout");
     }
 
     private void registerFramedCollapsibleBlock()
     {
         ModelFile block = makeUnderlayedCube("framed_collapsible_block", mcLoc("block/oak_planks")).renderType("cutout");
-        simpleBlockWithItem(FBContent.blockFramedCollapsibleBlock, block, "cutout");
+        simpleBlockWithItem(FBContent.BLOCK_FRAMED_COLLAPSIBLE_BLOCK, block, "cutout");
     }
 
     private void registerFramedBouncyBlock()
     {
         ModelFile block = makeUnderlayedCube("framed_bouncy_cube", mcLoc("block/slime_block"));
 
-        simpleBlockWithItem(FBContent.blockFramedBouncyCube, block, "cutout");
+        simpleBlockWithItem(FBContent.BLOCK_FRAMED_BOUNCY_CUBE, block, "cutout");
 
         makeOverlayModel(
                 FramedMarkedCubeModel.SLIME_FRAME_LOCATION,
@@ -591,14 +591,14 @@ public final class FramedBlockStateProvider extends BlockStateProvider
                 .texture("frame", TEXTURE)
                 .texture("particle", TEXTURE);
 
-        simpleBlockWithItem(FBContent.blockFramedSecretStorage, block, "cutout");
+        simpleBlockWithItem(FBContent.BLOCK_FRAMED_SECRET_STORAGE, block, "cutout");
     }
 
     private void registerFramedRedstoneBlock()
     {
         ModelFile block = makeUnderlayedCube("framed_redstone_block", mcLoc("block/redstone_block"));
 
-        simpleBlockWithItem(FBContent.blockFramedRedstoneBlock, block, "cutout");
+        simpleBlockWithItem(FBContent.BLOCK_FRAMED_REDSTONE_BLOCK, block, "cutout");
 
         makeOverlayModel(
                 FramedMarkedCubeModel.REDSTONE_FRAME_LOCATION,
@@ -611,12 +611,12 @@ public final class FramedBlockStateProvider extends BlockStateProvider
     private void registerFramedGlowingCube()
     {
         ModelFile block = makeUnderlayedCube("framed_glowing_cube", new ResourceLocation("forge", "white"));
-        simpleBlockWithItem(FBContent.blockFramedGlowingCube, block);
+        simpleBlockWithItem(FBContent.BLOCK_FRAMED_GLOWING_CUBE, block);
     }
 
     private void registerFramedTarget(ModelFile cube)
     {
-        simpleBlockWithItem(FBContent.blockFramedTarget, cube, "cutout");
+        simpleBlockWithItem(FBContent.BLOCK_FRAMED_TARGET, cube, "cutout");
 
         models().getBuilder("target_overlay")
                 .customLoader(OverlayLoaderBuilder::new)
@@ -679,13 +679,13 @@ public final class FramedBlockStateProvider extends BlockStateProvider
                     .build();
         };
 
-        getVariantBuilder(FBContent.blockFramedItemFrame.get())
+        getVariantBuilder(FBContent.BLOCK_FRAMED_ITEM_FRAME.get())
                 .forAllStatesExcept(mapper.apply(normalFrame, normalMapFrame), PropertyHolder.LEATHER, FramedProperties.GLOWING);
-        getVariantBuilder(FBContent.blockFramedGlowingItemFrame.get())
+        getVariantBuilder(FBContent.BLOCK_FRAMED_GLOWING_ITEM_FRAME.get())
                 .forAllStatesExcept(mapper.apply(glowFrame, glowMapFrame), PropertyHolder.LEATHER, FramedProperties.GLOWING);
 
-        simpleItem(FBContent.blockFramedItemFrame, "cutout");
-        simpleItem(FBContent.blockFramedGlowingItemFrame, "cutout");
+        simpleItem(FBContent.BLOCK_FRAMED_ITEM_FRAME, "cutout");
+        simpleItem(FBContent.BLOCK_FRAMED_GLOWING_ITEM_FRAME, "cutout");
     }
 
     private static Function<BlockState, ConfiguredModel[]> railStates(
@@ -731,11 +731,11 @@ public final class FramedBlockStateProvider extends BlockStateProvider
 
     private void registerFramedFancyRail()
     {
-        ModelFile normalRail = existingBlock(FBContent.blockFramedFancyRail);
-        ModelFile ascendingRail = existingBlock(FBContent.blockFramedFancyRail, "ascending");
-        ModelFile curvedRail = existingBlock(FBContent.blockFramedFancyRail, "curved");
+        ModelFile normalRail = existingBlock(FBContent.BLOCK_FRAMED_FANCY_RAIL);
+        ModelFile ascendingRail = existingBlock(FBContent.BLOCK_FRAMED_FANCY_RAIL, "ascending");
+        ModelFile curvedRail = existingBlock(FBContent.BLOCK_FRAMED_FANCY_RAIL, "curved");
 
-        getVariantBuilder(FBContent.blockFramedFancyRail.get()).forAllStatesExcept(
+        getVariantBuilder(FBContent.BLOCK_FRAMED_FANCY_RAIL.get()).forAllStatesExcept(
                 railStates(BlockStateProperties.RAIL_SHAPE, state -> normalRail, state -> ascendingRail, state -> curvedRail),
                 BlockStateProperties.WATERLOGGED, FramedProperties.GLOWING
         );
@@ -743,18 +743,18 @@ public final class FramedBlockStateProvider extends BlockStateProvider
 
     private void registerFramedFancyPoweredRail()
     {
-        ModelFile normalRail = existingBlock(FBContent.blockFramedFancyPoweredRail);
-        ModelFile normalRailOn = block(FBContent.blockFramedFancyPoweredRail, "on")
+        ModelFile normalRail = existingBlock(FBContent.BLOCK_FRAMED_FANCY_POWERED_RAIL);
+        ModelFile normalRailOn = block(FBContent.BLOCK_FRAMED_FANCY_POWERED_RAIL, "on")
                 .parent(normalRail)
                 .texture("texture", mcLoc("block/powered_rail_on"))
                 .texture("particle", mcLoc("block/powered_rail_on"));
-        ModelFile ascendingRail = existingBlock(FBContent.blockFramedFancyPoweredRail, "ascending");
-        ModelFile ascendingRailOn = block(FBContent.blockFramedFancyPoweredRail, "ascending_on")
+        ModelFile ascendingRail = existingBlock(FBContent.BLOCK_FRAMED_FANCY_POWERED_RAIL, "ascending");
+        ModelFile ascendingRailOn = block(FBContent.BLOCK_FRAMED_FANCY_POWERED_RAIL, "ascending_on")
                 .parent(ascendingRail)
                 .texture("texture", mcLoc("block/powered_rail_on"))
                 .texture("particle", mcLoc("block/powered_rail_on"));
 
-        getVariantBuilder(FBContent.blockFramedFancyPoweredRail.get()).forAllStatesExcept(
+        getVariantBuilder(FBContent.BLOCK_FRAMED_FANCY_POWERED_RAIL.get()).forAllStatesExcept(
                 railStates(
                         BlockStateProperties.RAIL_SHAPE_STRAIGHT,
                         state -> state.getValue(BlockStateProperties.POWERED) ? normalRailOn : normalRail,
@@ -767,18 +767,18 @@ public final class FramedBlockStateProvider extends BlockStateProvider
 
     private void registerFramedFancyDetectorRail()
     {
-        ModelFile normalRail = existingBlock(FBContent.blockFramedFancyDetectorRail);
-        ModelFile normalRailOn = block(FBContent.blockFramedFancyDetectorRail, "on")
+        ModelFile normalRail = existingBlock(FBContent.BLOCK_FRAMED_FANCY_DETECTOR_RAIL);
+        ModelFile normalRailOn = block(FBContent.BLOCK_FRAMED_FANCY_DETECTOR_RAIL, "on")
                 .parent(normalRail)
                 .texture("texture", mcLoc("block/detector_rail_on"))
                 .texture("particle", mcLoc("block/detector_rail_on"));
-        ModelFile ascendingRail = existingBlock(FBContent.blockFramedFancyDetectorRail, "ascending");
-        ModelFile ascendingRailOn = block(FBContent.blockFramedFancyDetectorRail, "ascending_on")
+        ModelFile ascendingRail = existingBlock(FBContent.BLOCK_FRAMED_FANCY_DETECTOR_RAIL, "ascending");
+        ModelFile ascendingRailOn = block(FBContent.BLOCK_FRAMED_FANCY_DETECTOR_RAIL, "ascending_on")
                 .parent(ascendingRail)
                 .texture("texture", mcLoc("block/detector_rail_on"))
                 .texture("particle", mcLoc("block/detector_rail_on"));
 
-        getVariantBuilder(FBContent.blockFramedFancyDetectorRail.get()).forAllStatesExcept(
+        getVariantBuilder(FBContent.BLOCK_FRAMED_FANCY_DETECTOR_RAIL.get()).forAllStatesExcept(
                 railStates(
                         BlockStateProperties.RAIL_SHAPE_STRAIGHT,
                         state -> state.getValue(BlockStateProperties.POWERED) ? normalRailOn : normalRail,
@@ -791,18 +791,18 @@ public final class FramedBlockStateProvider extends BlockStateProvider
 
     private void registerFramedFancyActivatorRail()
     {
-        ModelFile normalRail = existingBlock(FBContent.blockFramedFancyActivatorRail);
-        ModelFile normalRailOn = block(FBContent.blockFramedFancyActivatorRail, "on")
+        ModelFile normalRail = existingBlock(FBContent.BLOCK_FRAMED_FANCY_ACTIVATOR_RAIL);
+        ModelFile normalRailOn = block(FBContent.BLOCK_FRAMED_FANCY_ACTIVATOR_RAIL, "on")
                 .parent(normalRail)
                 .texture("texture", mcLoc("block/activator_rail_on"))
                 .texture("particle", mcLoc("block/activator_rail_on"));
-        ModelFile ascendingRail = existingBlock(FBContent.blockFramedFancyActivatorRail, "ascending");
-        ModelFile ascendingRailOn = block(FBContent.blockFramedFancyActivatorRail, "ascending_on")
+        ModelFile ascendingRail = existingBlock(FBContent.BLOCK_FRAMED_FANCY_ACTIVATOR_RAIL, "ascending");
+        ModelFile ascendingRailOn = block(FBContent.BLOCK_FRAMED_FANCY_ACTIVATOR_RAIL, "ascending_on")
                 .parent(ascendingRail)
                 .texture("texture", mcLoc("block/activator_rail_on"))
                 .texture("particle", mcLoc("block/activator_rail_on"));
 
-        getVariantBuilder(FBContent.blockFramedFancyActivatorRail.get()).forAllStatesExcept(
+        getVariantBuilder(FBContent.BLOCK_FRAMED_FANCY_ACTIVATOR_RAIL.get()).forAllStatesExcept(
                 railStates(
                         BlockStateProperties.RAIL_SHAPE_STRAIGHT,
                         state -> state.getValue(BlockStateProperties.POWERED) ? normalRailOn : normalRail,
@@ -815,7 +815,7 @@ public final class FramedBlockStateProvider extends BlockStateProvider
 
     private void registerFramedMiniCube(ModelFile cube)
     {
-        simpleBlock(FBContent.blockFramedMiniCube.get(), cube);
+        simpleBlock(FBContent.BLOCK_FRAMED_MINI_CUBE.get(), cube);
 
         itemModels().withExistingParent("framed_mini_cube", mcLoc("block/block"))
                 .element()
@@ -831,7 +831,7 @@ public final class FramedBlockStateProvider extends BlockStateProvider
     private void registerFramedOneWayWindow()
     {
         ModelFile model = makeUnderlayedCube("framed_one_way_window", mcLoc("block/moss_block"));
-        simpleBlockWithItem(FBContent.blockFramedOneWayWindow, model);
+        simpleBlockWithItem(FBContent.BLOCK_FRAMED_ONE_WAY_WINDOW, model);
     }
 
 
@@ -839,7 +839,7 @@ public final class FramedBlockStateProvider extends BlockStateProvider
     private void registerFramingSaw()
     {
         ModelFile model = models().getExistingFile(modLoc("block/framing_saw"));
-        getVariantBuilder(FBContent.blockFramingSaw.get()).forAllStates(state ->
+        getVariantBuilder(FBContent.BLOCK_FRAMING_SAW.get()).forAllStates(state ->
         {
             int rotY = (int) state.getValue(FramedProperties.FACING_HOR).toYRot();
             return ConfiguredModel.builder()
@@ -847,13 +847,16 @@ public final class FramedBlockStateProvider extends BlockStateProvider
                     .modelFile(model)
                     .build();
         });
-        simpleBlockItem(FBContent.blockFramingSaw, model);
+        simpleBlockItem(FBContent.BLOCK_FRAMING_SAW, model);
     }
 
 
 
     @SuppressWarnings("unused")
-    private BlockModelBuilder block(RegistryObject<Block> block) { return block(block, ""); }
+    private BlockModelBuilder block(RegistryObject<Block> block)
+    {
+        return block(block, "");
+    }
 
     private BlockModelBuilder block(RegistryObject<Block> block, String suffix)
     {
@@ -866,7 +869,10 @@ public final class FramedBlockStateProvider extends BlockStateProvider
         return models().getBuilder(path);
     }
 
-    private ModelFile existingBlock(RegistryObject<Block> block) { return existingBlock(block, ""); }
+    private ModelFile existingBlock(RegistryObject<Block> block)
+    {
+        return existingBlock(block, "");
+    }
 
     private ModelFile existingBlock(RegistryObject<Block> block, String suffix)
     {

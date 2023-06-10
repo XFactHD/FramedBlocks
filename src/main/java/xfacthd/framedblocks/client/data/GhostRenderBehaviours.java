@@ -21,7 +21,7 @@ public final class GhostRenderBehaviours
                 .filter(b -> ((IFramedBlock) b).getBlockType().isDoubleBlock())
                 .forEach(block ->
                 {
-                    if (block == FBContent.blockFramedDoublePanel.get())
+                    if (block == FBContent.BLOCK_FRAMED_DOUBLE_PANEL.get())
                     {
                         GhostBlockRenderer.registerBehaviour(
                                 new DoublePanelGhostRenderBehaviour(),
@@ -39,32 +39,32 @@ public final class GhostRenderBehaviours
 
         GhostBlockRenderer.registerBehaviour(
                 new DoorGhostRenderBehaviour(),
-                FBContent.blockFramedDoor.get(), FBContent.blockFramedIronDoor.get()
+                FBContent.BLOCK_FRAMED_DOOR.get(), FBContent.BLOCK_FRAMED_IRON_DOOR.get()
         );
 
         GhostBlockRenderer.registerBehaviour(
                 new SlabGhostRenderBehaviour(),
-                FBContent.blockFramedSlab.get()
+                FBContent.BLOCK_FRAMED_SLAB.get()
         );
 
         GhostBlockRenderer.registerBehaviour(
                 new PanelGhostRenderBehaviour(),
-                FBContent.blockFramedPanel.get()
+                FBContent.BLOCK_FRAMED_PANEL.get()
         );
 
         GhostBlockRenderer.registerBehaviour(
                 new StandingAndWallBlockGhostRenderBehaviour(),
-                FBContent.blockFramedSign.get(),
-                FBContent.blockFramedTorch.get(),
-                FBContent.blockFramedSoulTorch.get(),
-                FBContent.blockFramedRedstoneTorch.get(),
-                FBContent.blockFramedHalfSlope.get(),
-                FBContent.blockFramedDoubleHalfSlope.get()
+                FBContent.BLOCK_FRAMED_SIGN.get(),
+                FBContent.BLOCK_FRAMED_TORCH.get(),
+                FBContent.BLOCK_FRAMED_SOUL_TORCH.get(),
+                FBContent.BLOCK_FRAMED_REDSTONE_TORCH.get(),
+                FBContent.BLOCK_FRAMED_HALF_SLOPE.get(),
+                FBContent.BLOCK_FRAMED_DOUBLE_HALF_SLOPE.get()
         );
 
         GhostBlockRenderer.registerBehaviour(
                 new CollapsibleBlockGhostRenderBehaviour(),
-                FBContent.blockFramedCollapsibleBlock.get()
+                FBContent.BLOCK_FRAMED_COLLAPSIBLE_BLOCK.get()
         );
 
         GhostBlockRenderer.registerBehaviour(
@@ -77,15 +77,15 @@ public final class GhostRenderBehaviours
 
         GhostBlockRenderer.registerBehaviour(
                 new FancyRailGhostRenderBehaviour(),
-                FBContent.blockFramedFancyRail.get().asItem(),
-                FBContent.blockFramedFancyPoweredRail.get().asItem(),
-                FBContent.blockFramedFancyDetectorRail.get().asItem(),
-                FBContent.blockFramedFancyActivatorRail.get().asItem()
+                FBContent.BLOCK_FRAMED_FANCY_RAIL.get().asItem(),
+                FBContent.BLOCK_FRAMED_FANCY_POWERED_RAIL.get().asItem(),
+                FBContent.BLOCK_FRAMED_FANCY_DETECTOR_RAIL.get().asItem(),
+                FBContent.BLOCK_FRAMED_FANCY_ACTIVATOR_RAIL.get().asItem()
         );
 
         GhostBlockRenderer.registerBehaviour(
                 new BlueprintGhostRenderBehaviour(),
-                FBContent.itemFramedBlueprint.get()
+                FBContent.ITEM_FRAMED_BLUEPRINT.get()
         );
     }
 

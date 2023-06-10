@@ -78,7 +78,7 @@ public class FramedDividedSlabBlock extends AbstractFramedDoubleBlock
     @Override
     protected Tuple<BlockState, BlockState> getBlockPair(BlockState state)
     {
-        BlockState defState = FBContent.blockFramedSlabEdge.get()
+        BlockState defState = FBContent.BLOCK_FRAMED_SLAB_EDGE.get()
                 .defaultBlockState()
                 .setValue(FramedProperties.TOP, state.getValue(FramedProperties.TOP));
         Direction dir = state.getValue(FramedProperties.FACING_HOR);

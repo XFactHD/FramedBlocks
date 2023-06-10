@@ -43,7 +43,14 @@ public class FramedFancyDetectorRailBlock extends DetectorRailBlock implements I
     }
 
     @Override
-    public BlockState updateShape(BlockState state, Direction direction, BlockState neighborState, LevelAccessor level, BlockPos currentPos, BlockPos neighborPos)
+    public BlockState updateShape(
+            BlockState state,
+            Direction direction,
+            BlockState neighborState,
+            LevelAccessor level,
+            BlockPos currentPos,
+            BlockPos neighborPos
+    )
     {
         BlockState newState = super.updateShape(state, direction, neighborState, level, currentPos, neighborPos);
         if (newState == state)
@@ -54,14 +61,18 @@ public class FramedFancyDetectorRailBlock extends DetectorRailBlock implements I
     }
 
     @Override
-    public void neighborChanged(BlockState state, Level level, BlockPos pos, Block block, BlockPos fromPos, boolean isMoving)
+    public void neighborChanged(
+            BlockState state, Level level, BlockPos pos, Block block, BlockPos fromPos, boolean isMoving
+    )
     {
         super.neighborChanged(state, level, pos, block, fromPos, isMoving);
         updateCulling(level, pos);
     }
 
     @Override
-    public final InteractionResult use(BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hit)
+    public final InteractionResult use(
+            BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hit
+    )
     {
         return handleUse(state, level, pos, player, hand, hit);
     }
@@ -73,7 +84,10 @@ public class FramedFancyDetectorRailBlock extends DetectorRailBlock implements I
     }
 
     @Override
-    public boolean useShapeForLightOcclusion(BlockState state) { return useCamoOcclusionShapeForLightOcclusion(state); }
+    public boolean useShapeForLightOcclusion(BlockState state)
+    {
+        return useCamoOcclusionShapeForLightOcclusion(state);
+    }
 
     @Override
     public VoxelShape getOcclusionShape(BlockState state, BlockGetter level, BlockPos pos)
@@ -100,5 +114,8 @@ public class FramedFancyDetectorRailBlock extends DetectorRailBlock implements I
     }
 
     @Override
-    public IBlockType getBlockType() { return BlockType.FRAMED_FANCY_DETECTOR_RAIL; }
+    public IBlockType getBlockType()
+    {
+        return BlockType.FRAMED_FANCY_DETECTOR_RAIL;
+    }
 }

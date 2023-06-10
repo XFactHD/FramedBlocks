@@ -16,7 +16,7 @@ public class FramedVerticalDoubleStairsBlockEntity extends FramedDoubleBlockEnti
 {
     public FramedVerticalDoubleStairsBlockEntity(BlockPos worldPosition, BlockState blockState)
     {
-        super(FBContent.blockEntityTypeFramedVerticalDoubleStairs.get(), worldPosition, blockState);
+        super(FBContent.BE_TYPE_FRAMED_VERTICAL_DOUBLE_STAIRS.get(), worldPosition, blockState);
     }
 
     @Override
@@ -57,7 +57,10 @@ public class FramedVerticalDoubleStairsBlockEntity extends FramedDoubleBlockEnti
     }
 
     @Override
-    public DoubleSoundMode getSoundMode() { return DoubleSoundMode.EITHER; }
+    public DoubleSoundMode getSoundMode()
+    {
+        return DoubleSoundMode.EITHER;
+    }
 
     @Override
     public CamoContainer getCamo(Direction side)
@@ -86,7 +89,6 @@ public class FramedVerticalDoubleStairsBlockEntity extends FramedDoubleBlockEnti
             //noinspection ConstantConditions
             return getCamo().getState().isSolidRender(level, worldPosition);
         }
-
         return false;
     }
 }

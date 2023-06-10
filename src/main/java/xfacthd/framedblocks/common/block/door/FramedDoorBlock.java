@@ -67,7 +67,9 @@ public class FramedDoorBlock extends DoorBlock implements IFramedBlock
     }
 
     @Override
-    public final InteractionResult use(BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hit)
+    public final InteractionResult use(
+            BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hit
+    )
     {
         InteractionResult result = handleUse(state, level, pos, player, hand, hit);
         return result.consumesAction() ? result : super.use(state, level, pos, player, hand, hit);
@@ -84,7 +86,14 @@ public class FramedDoorBlock extends DoorBlock implements IFramedBlock
     }
 
     @Override
-    public BlockState updateShape(BlockState state, Direction facing, BlockState facingState, LevelAccessor level, BlockPos currentPos, BlockPos facingPos)
+    public BlockState updateShape(
+            BlockState state,
+            Direction facing,
+            BlockState facingState,
+            LevelAccessor level,
+            BlockPos currentPos,
+            BlockPos facingPos
+    )
     {
         BlockState newState = super.updateShape(state, facing, facingState, level, currentPos, facingPos);
         if (newState == state)
@@ -95,14 +104,19 @@ public class FramedDoorBlock extends DoorBlock implements IFramedBlock
     }
 
     @Override
-    public void neighborChanged(BlockState state, Level level, BlockPos pos, Block block, BlockPos fromPos, boolean isMoving)
+    public void neighborChanged(
+            BlockState state, Level level, BlockPos pos, Block block, BlockPos fromPos, boolean isMoving
+    )
     {
         super.neighborChanged(state, level, pos, block, fromPos, isMoving);
         updateCulling(level, pos);
     }
 
     @Override
-    public boolean useShapeForLightOcclusion(BlockState state) { return useCamoOcclusionShapeForLightOcclusion(state); }
+    public boolean useShapeForLightOcclusion(BlockState state)
+    {
+        return useCamoOcclusionShapeForLightOcclusion(state);
+    }
 
     @Override
     public VoxelShape getOcclusionShape(BlockState state, BlockGetter level, BlockPos pos)
@@ -129,7 +143,10 @@ public class FramedDoorBlock extends DoorBlock implements IFramedBlock
     }
 
     @Override
-    public BlockType getBlockType() { return type; }
+    public BlockType getBlockType()
+    {
+        return type;
+    }
 
 
 

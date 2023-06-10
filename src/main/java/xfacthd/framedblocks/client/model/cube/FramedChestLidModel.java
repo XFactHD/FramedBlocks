@@ -60,10 +60,19 @@ public class FramedChestLidModel extends FramedBlockModel
     }
 
     @Override
-    protected ChunkRenderTypeSet getAdditionalRenderTypes(RandomSource rand, ModelData extraData) { return addLayers; }
+    protected ChunkRenderTypeSet getAdditionalRenderTypes(RandomSource rand, ModelData extraData)
+    {
+        return addLayers;
+    }
 
     @Override
-    protected void getAdditionalQuads(Map<Direction, List<BakedQuad>> quadMap, BlockState state, RandomSource rand, ModelData data, RenderType layer)
+    protected void getAdditionalQuads(
+            Map<Direction, List<BakedQuad>> quadMap,
+            BlockState state,
+            RandomSource rand,
+            ModelData data,
+            RenderType layer
+    )
     {
         List<BakedQuad> quads = baseModel.getQuads(state, null, rand, data, layer);
         for (BakedQuad quad : quads)

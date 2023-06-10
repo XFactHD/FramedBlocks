@@ -54,7 +54,9 @@ public class FramedPressurePlateBlock extends PressurePlateBlock implements IFra
     }
 
     @Override
-    public final InteractionResult use(BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hit)
+    public final InteractionResult use(
+            BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hit
+    )
     {
         return handleUse(state, level, pos, player, hand, hit);
     }
@@ -68,7 +70,7 @@ public class FramedPressurePlateBlock extends PressurePlateBlock implements IFra
     @Override
     public boolean handleBlockLeftClick(BlockState state, Level level, BlockPos pos, Player player)
     {
-        if (player.getMainHandItem().is(FBContent.itemFramedHammer.get()))
+        if (player.getMainHandItem().is(FBContent.ITEM_FRAMED_HAMMER.get()))
         {
             if (!level.isClientSide())
             {
@@ -119,7 +121,10 @@ public class FramedPressurePlateBlock extends PressurePlateBlock implements IFra
     }
 
     @Override
-    public BlockType getBlockType() { return type; }
+    public BlockType getBlockType()
+    {
+        return type;
+    }
 
 
 

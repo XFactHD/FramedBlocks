@@ -29,7 +29,10 @@ public final class ModelCache
         modelBakery = bakery;
     }
 
-    public static BakedModel getModel(BlockState state) { return modelCache.get(state); }
+    public static BakedModel getModel(BlockState state)
+    {
+        return modelCache.get(state);
+    }
 
     public static ChunkRenderTypeSet getRenderTypes(BlockState state, RandomSource random, ModelData data)
     {

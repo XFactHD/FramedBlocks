@@ -39,45 +39,45 @@ public final class FramedUtils
                item == Items.POWERED_RAIL ||
                item == Items.DETECTOR_RAIL ||
                item == Items.ACTIVATOR_RAIL ||
-               item == FBContent.blockFramedFancyRail.get().asItem() ||
-               item == FBContent.blockFramedFancyPoweredRail.get().asItem() ||
-               item == FBContent.blockFramedFancyDetectorRail.get().asItem() ||
-               item == FBContent.blockFramedFancyActivatorRail.get().asItem();
+               item == FBContent.BLOCK_FRAMED_FANCY_RAIL.get().asItem() ||
+               item == FBContent.BLOCK_FRAMED_FANCY_POWERED_RAIL.get().asItem() ||
+               item == FBContent.BLOCK_FRAMED_FANCY_DETECTOR_RAIL.get().asItem() ||
+               item == FBContent.BLOCK_FRAMED_FANCY_ACTIVATOR_RAIL.get().asItem();
     }
 
     public static Block getRailSlopeBlock(Item item)
     {
         if (item == Items.RAIL)
         {
-            return FBContent.blockFramedRailSlope.get();
+            return FBContent.BLOCK_FRAMED_RAIL_SLOPE.get();
         }
         if (item == Items.POWERED_RAIL)
         {
-            return FBContent.blockFramedPoweredRailSlope.get();
+            return FBContent.BLOCK_FRAMED_POWERED_RAIL_SLOPE.get();
         }
         if (item == Items.DETECTOR_RAIL)
         {
-            return FBContent.blockFramedDetectorRailSlope.get();
+            return FBContent.BLOCK_FRAMED_DETECTOR_RAIL_SLOPE.get();
         }
         if (item == Items.ACTIVATOR_RAIL)
         {
-            return FBContent.blockFramedActivatorRailSlope.get();
+            return FBContent.BLOCK_FRAMED_ACTIVATOR_RAIL_SLOPE.get();
         }
-        if (item == FBContent.blockFramedFancyRail.get().asItem())
+        if (item == FBContent.BLOCK_FRAMED_FANCY_RAIL.get().asItem())
         {
-            return FBContent.blockFramedFancyRailSlope.get();
+            return FBContent.BLOCK_FRAMED_FANCY_RAIL_SLOPE.get();
         }
-        if (item == FBContent.blockFramedFancyPoweredRail.get().asItem())
+        if (item == FBContent.BLOCK_FRAMED_FANCY_POWERED_RAIL.get().asItem())
         {
-            return FBContent.blockFramedFancyPoweredRailSlope.get();
+            return FBContent.BLOCK_FRAMED_FANCY_POWERED_RAIL_SLOPE.get();
         }
-        if (item == FBContent.blockFramedFancyDetectorRail.get().asItem())
+        if (item == FBContent.BLOCK_FRAMED_FANCY_DETECTOR_RAIL.get().asItem())
         {
-            return FBContent.blockFramedFancyDetectorRailSlope.get();
+            return FBContent.BLOCK_FRAMED_FANCY_DETECTOR_RAIL_SLOPE.get();
         }
-        if (item == FBContent.blockFramedFancyActivatorRail.get().asItem())
+        if (item == FBContent.BLOCK_FRAMED_FANCY_ACTIVATOR_RAIL.get().asItem())
         {
-            return FBContent.blockFramedFancyActivatorRailSlope.get();
+            return FBContent.BLOCK_FRAMED_FANCY_ACTIVATOR_RAIL_SLOPE.get();
         }
         throw new IllegalStateException("Invalid rail item: " + item);
     }

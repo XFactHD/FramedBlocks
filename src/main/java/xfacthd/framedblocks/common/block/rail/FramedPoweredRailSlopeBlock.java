@@ -20,6 +20,7 @@ import net.minecraft.world.level.material.Fluids;
 import net.minecraft.world.level.storage.loot.LootParams;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.shapes.*;
+import org.jetbrains.annotations.Nullable;
 import xfacthd.framedblocks.api.block.*;
 import xfacthd.framedblocks.api.shapes.ShapeProvider;
 import xfacthd.framedblocks.api.type.IBlockType;
@@ -81,7 +82,14 @@ public class FramedPoweredRailSlopeBlock extends PoweredRailBlock implements IFr
     }
 
     @Override
-    public BlockState updateShape(BlockState state, Direction direction, BlockState neighborState, LevelAccessor level, BlockPos currentPos, BlockPos neighborPos)
+    public BlockState updateShape(
+            BlockState state,
+            Direction direction,
+            BlockState neighborState,
+            LevelAccessor level,
+            BlockPos currentPos,
+            BlockPos neighborPos
+    )
     {
         BlockState newState = super.updateShape(state, direction, neighborState, level, currentPos, neighborPos);
         if (newState == state)
@@ -92,10 +100,15 @@ public class FramedPoweredRailSlopeBlock extends PoweredRailBlock implements IFr
     }
 
     @Override
-    public boolean canSurvive(BlockState state, LevelReader level, BlockPos pos) { return true; }
+    public boolean canSurvive(BlockState state, LevelReader level, BlockPos pos)
+    {
+        return true;
+    }
 
     @Override //Copy of AbstractRailBlock#neighborChanged() to disable removal
-    public void neighborChanged(BlockState state, Level level, BlockPos pos, Block block, BlockPos pFromPos, boolean isMoving)
+    public void neighborChanged(
+            BlockState state, Level level, BlockPos pos, Block block, BlockPos pFromPos, boolean isMoving
+    )
     {
         updateCulling(level, pos);
         if (!level.isClientSide() && level.getBlockState(pos).is(this))
@@ -108,7 +121,9 @@ public class FramedPoweredRailSlopeBlock extends PoweredRailBlock implements IFr
     protected void updateState(BlockState state, Level level, BlockPos pos, Block block)
     {
         boolean wasPowered = state.getValue(POWERED);
-        boolean isPowered = level.hasNeighborSignal(pos) || findPoweredRailSignal(level, pos, state, true, 0) || findPoweredRailSignal(level, pos, state, false, 0);
+        boolean isPowered = level.hasNeighborSignal(pos) ||
+                findPoweredRailSignal(level, pos, state, true, 0) ||
+                findPoweredRailSignal(level, pos, state, false, 0);
         if (isPowered != wasPowered)
         {
             level.setBlock(pos, state.setValue(POWERED, isPowered), UPDATE_ALL);
@@ -118,25 +133,36 @@ public class FramedPoweredRailSlopeBlock extends PoweredRailBlock implements IFr
     }
 
     @Override
-    public Property<RailShape> getShapeProperty() { return PropertyHolder.ASCENDING_RAIL_SHAPE; }
+    public Property<RailShape> getShapeProperty()
+    {
+        return PropertyHolder.ASCENDING_RAIL_SHAPE;
+    }
 
     @Override
-    public boolean isValidRailShape(RailShape shape) { return shape.isAscending(); }
+    public boolean isValidRailShape(RailShape shape)
+    {
+        return shape.isAscending();
+    }
 
     @Override
-    public final InteractionResult use(BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hit)
+    public final InteractionResult use(
+            BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hit
+    )
     {
         return handleUse(state, level, pos, player, hand, hit);
     }
 
     @Override
-    public void setPlacedBy(Level level, BlockPos pos, BlockState state, @javax.annotation.Nullable LivingEntity placer, ItemStack stack)
+    public void setPlacedBy(Level level, BlockPos pos, BlockState state, @Nullable LivingEntity placer, ItemStack stack)
     {
         tryApplyCamoImmediately(level, pos, placer, stack);
     }
 
     @Override
-    public boolean useShapeForLightOcclusion(BlockState state) { return useCamoOcclusionShapeForLightOcclusion(state); }
+    public boolean useShapeForLightOcclusion(BlockState state)
+    {
+        return useCamoOcclusionShapeForLightOcclusion(state);
+    }
 
     @Override
     public VoxelShape getOcclusionShape(BlockState state, BlockGetter level, BlockPos pos)
@@ -208,10 +234,16 @@ public class FramedPoweredRailSlopeBlock extends PoweredRailBlock implements IFr
     }
 
     @Override
-    public final BlockEntity newBlockEntity(BlockPos pos, BlockState state) { return beFactory.apply(pos, state); }
+    public final BlockEntity newBlockEntity(BlockPos pos, BlockState state)
+    {
+        return beFactory.apply(pos, state);
+    }
 
     @Override
-    public IBlockType getBlockType() { return type; }
+    public IBlockType getBlockType()
+    {
+        return type;
+    }
 
 
 
@@ -255,14 +287,14 @@ public class FramedPoweredRailSlopeBlock extends PoweredRailBlock implements IFr
 
     public static BlockState itemModelSourceFancyPowered()
     {
-        return FBContent.blockFramedFancyPoweredRailSlope.get()
+        return FBContent.BLOCK_FRAMED_FANCY_POWERED_RAIL_SLOPE.get()
                 .defaultBlockState()
                 .setValue(PropertyHolder.ASCENDING_RAIL_SHAPE, RailShape.ASCENDING_SOUTH);
     }
 
     public static BlockState itemModelSourceFancyActivator()
     {
-        return FBContent.blockFramedFancyActivatorRailSlope.get()
+        return FBContent.BLOCK_FRAMED_FANCY_ACTIVATOR_RAIL_SLOPE.get()
                 .defaultBlockState()
                 .setValue(PropertyHolder.ASCENDING_RAIL_SHAPE, RailShape.ASCENDING_SOUTH);
     }

@@ -101,9 +101,18 @@ public class FramedChestModel extends FramedBlockModel
     }
 
     @Override
-    protected void getAdditionalQuads(Map<Direction, List<BakedQuad>> quadMap, BlockState state, RandomSource rand, ModelData data, RenderType renderType)
+    protected void getAdditionalQuads(
+            Map<Direction, List<BakedQuad>> quadMap,
+            BlockState state,
+            RandomSource rand,
+            ModelData data,
+            RenderType renderType
+    )
     {
-        if (!closed || latch != LatchType.DEFAULT) { return; }
+        if (!closed || latch != LatchType.DEFAULT)
+        {
+            return;
+        }
 
         List<BakedQuad> quads = baseModel.getQuads(state, null, rand, data, renderType);
         for (BakedQuad quad : quads)
@@ -114,5 +123,8 @@ public class FramedChestModel extends FramedBlockModel
 
 
 
-    public static BlockState itemSource() { return FBContent.blockFramedChest.get().defaultBlockState(); }
+    public static BlockState itemSource()
+    {
+        return FBContent.BLOCK_FRAMED_CHEST.get().defaultBlockState();
+    }
 }

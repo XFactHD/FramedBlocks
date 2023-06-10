@@ -10,7 +10,7 @@ public class FramedDoubleSlopedPrismBlockEntity extends FramedDoublePrismBlockEn
 {
     public FramedDoubleSlopedPrismBlockEntity(BlockPos pos, BlockState state)
     {
-        super(FBContent.blockEntityTypeFramedDoubleSlopedPrism.get(), pos, state);
+        super(FBContent.BE_TYPE_FRAMED_DOUBLE_SLOPED_PRISM.get(), pos, state);
     }
 
     @Override

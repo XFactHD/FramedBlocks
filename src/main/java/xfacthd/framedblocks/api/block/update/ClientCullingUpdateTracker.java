@@ -37,4 +37,8 @@ final class ClientCullingUpdateTracker
             });
         });
     }
+
+
+
+    private ClientCullingUpdateTracker() { }
 }

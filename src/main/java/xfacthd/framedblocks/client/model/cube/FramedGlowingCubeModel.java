@@ -13,10 +13,15 @@ import java.util.*;
 
 public class FramedGlowingCubeModel extends FramedCubeBaseModel
 {
-    public FramedGlowingCubeModel(BlockState state, BakedModel baseModel) { super(state, baseModel); }
+    public FramedGlowingCubeModel(BlockState state, BakedModel baseModel)
+    {
+        super(state, baseModel);
+    }
 
     @Override
-    public List<BakedQuad> getQuads(BlockState state, Direction side, RandomSource rand, ModelData extraData, RenderType renderType)
+    public List<BakedQuad> getQuads(
+            BlockState state, Direction side, RandomSource rand, ModelData extraData, RenderType renderType
+    )
     {
         List<BakedQuad> quads = super.getQuads(state, side, rand, extraData, renderType);
         return applyFullbright(quads);
@@ -30,7 +35,10 @@ public class FramedGlowingCubeModel extends FramedCubeBaseModel
     }
 
     @Override
-    public boolean useAmbientOcclusion() { return false; }
+    public boolean useAmbientOcclusion()
+    {
+        return false;
+    }
 
 
 

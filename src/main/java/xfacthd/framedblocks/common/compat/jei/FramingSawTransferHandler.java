@@ -14,7 +14,7 @@ import xfacthd.framedblocks.common.menu.FramingSawMenu;
 
 import java.util.Optional;
 
-public class FramingSawTransferHandler implements IRecipeTransferHandler<FramingSawMenu, FramingSawRecipe>
+public final class FramingSawTransferHandler implements IRecipeTransferHandler<FramingSawMenu, FramingSawRecipe>
 {
     private final IRecipeTransferHandlerHelper transferHelper;
 

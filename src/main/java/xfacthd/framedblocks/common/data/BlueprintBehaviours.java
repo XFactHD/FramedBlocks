@@ -20,11 +20,11 @@ public final class BlueprintBehaviours
                 .filter(b -> ((IFramedBlock) b).getBlockType().isDoubleBlock())
                 .forEach(block ->
                 {
-                    if (block == FBContent.blockFramedDoubleSlab.get())
+                    if (block == FBContent.BLOCK_FRAMED_DOUBLE_SLAB.get())
                     {
                         FramedBlueprintItem.registerBehaviour(new DoubleSlabCopyBehaviour(), block);
                     }
-                    else if (block == FBContent.blockFramedDoublePanel.get())
+                    else if (block == FBContent.BLOCK_FRAMED_DOUBLE_PANEL.get())
                     {
                         FramedBlueprintItem.registerBehaviour(new DoublePanelCopyBehaviour(), block);
                     }
@@ -36,13 +36,13 @@ public final class BlueprintBehaviours
 
         FramedBlueprintItem.registerBehaviour(
                 new DoorCopyBehaviour(),
-                FBContent.blockFramedDoor.get(),
-                FBContent.blockFramedIronDoor.get()
+                FBContent.BLOCK_FRAMED_DOOR.get(),
+                FBContent.BLOCK_FRAMED_IRON_DOOR.get()
         );
 
         FramedBlueprintItem.registerBehaviour(
                 new CollapsibleBlockCopyBehaviour(),
-                FBContent.blockFramedCollapsibleBlock.get()
+                FBContent.BLOCK_FRAMED_COLLAPSIBLE_BLOCK.get()
         );
     }
 

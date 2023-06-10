@@ -19,7 +19,7 @@ public class FramedFlatElevatedDoubleSlopeSlabCornerBlockEntity extends FramedDo
 
     public FramedFlatElevatedDoubleSlopeSlabCornerBlockEntity(BlockPos pos, BlockState state)
     {
-        super(FBContent.blockEntityTypeFramedFlatElevatedDoubleSlopeSlabCorner.get(), pos, state);
+        super(FBContent.BE_TYPE_FRAMED_FLAT_ELEVATED_DOUBLE_SLOPE_SLAB_CORNER.get(), pos, state);
         this.isInner = getBlockType() == BlockType.FRAMED_FLAT_ELEV_INNER_DOUBLE_SLOPE_SLAB_CORNER;
     }
 
@@ -29,8 +29,14 @@ public class FramedFlatElevatedDoubleSlopeSlabCornerBlockEntity extends FramedDo
         Direction side = hit.getDirection();
         boolean top = getBlockState().getValue(FramedProperties.TOP);
 
-        if (side == Direction.UP) { return !top; }
-        if (side == Direction.DOWN) { return top; }
+        if (side == Direction.UP)
+        {
+            return !top;
+        }
+        if (side == Direction.DOWN)
+        {
+            return top;
+        }
 
         Direction facing = getBlockState().getValue(FramedProperties.FACING_HOR);
         if (isInner && (side == facing || side == facing.getCounterClockWise()))
@@ -86,8 +92,14 @@ public class FramedFlatElevatedDoubleSlopeSlabCornerBlockEntity extends FramedDo
         {
             boolean top = getBlockState().getValue(FramedProperties.TOP);
 
-            if (side == Direction.UP) { return top ? getCamo() : getCamoTwo(); }
-            if (side == Direction.DOWN) { return top ? getCamoTwo() : getCamo(); }
+            if (side == Direction.UP)
+            {
+                return top ? getCamo() : getCamoTwo();
+            }
+            if (side == Direction.DOWN)
+            {
+                return top ? getCamoTwo() : getCamo();
+            }
         }
 
         Direction facing = getBlockState().getValue(FramedProperties.FACING_HOR);
@@ -109,16 +121,14 @@ public class FramedFlatElevatedDoubleSlopeSlabCornerBlockEntity extends FramedDo
         {
             boolean top = getBlockState().getValue(FramedProperties.TOP);
             CamoContainer camo = top == (side == Direction.UP) ? getCamo() : getCamoTwo();
-            //noinspection ConstantConditions
-            return camo.getState().isSolidRender(level, worldPosition);
+            return camo.isSolid(level, worldPosition);
         }
         if (isInner)
         {
             Direction facing = getBlockState().getValue(FramedProperties.FACING_HOR);
             if (side == facing || side == facing.getCounterClockWise())
             {
-                //noinspection ConstantConditions
-                return getCamo().getState().isSolidRender(level, worldPosition);
+                return getCamo().isSolid(level, worldPosition);
             }
         }
         return false;

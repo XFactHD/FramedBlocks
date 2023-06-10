@@ -15,24 +15,36 @@ public class FramedDoubleSlabBlockEntity extends FramedDoubleBlockEntity
 {
     public FramedDoubleSlabBlockEntity(BlockPos pos, BlockState state)
     {
-        super(FBContent.blockEntityTypeDoubleFramedSlab.get(), pos, state);
+        super(FBContent.BE_TYPE_DOUBLE_FRAMED_SLAB.get(), pos, state);
     }
 
     @Override
     protected boolean hitSecondary(BlockHitResult hit)
     {
-        if (hit.getDirection() == Direction.DOWN) { return false; }
+        if (hit.getDirection() == Direction.DOWN)
+        {
+            return false;
+        }
         return hit.getDirection() == Direction.UP || Mth.frac(hit.getLocation().y()) >= .5F;
     }
 
     @Override
-    public DoubleSoundMode getSoundMode() { return DoubleSoundMode.SECOND; }
+    public DoubleSoundMode getSoundMode()
+    {
+        return DoubleSoundMode.SECOND;
+    }
 
     @Override
     public CamoContainer getCamo(Direction side)
     {
-        if (side == Direction.UP) { return getCamoTwo(); }
-        if (side == Direction.DOWN) { return getCamo(); }
+        if (side == Direction.UP)
+        {
+            return getCamoTwo();
+        }
+        if (side == Direction.DOWN)
+        {
+            return getCamo();
+        }
         return EmptyCamoContainer.EMPTY;
     }
 
@@ -41,10 +53,8 @@ public class FramedDoubleSlabBlockEntity extends FramedDoubleBlockEntity
     {
         if (Utils.isY(side))
         {
-            //noinspection ConstantConditions
-            return getCamo(side).getState().isSolidRender(level, worldPosition);
+            return getCamo(side).isSolid(level, worldPosition);
         }
-        //noinspection ConstantConditions
-        return getCamo().getState().isSolidRender(level, worldPosition) && getCamoTwo().getState().isSolidRender(level, worldPosition);
+        return getCamo().isSolid(level, worldPosition) && getCamoTwo().isSolid(level, worldPosition);
     }
 }

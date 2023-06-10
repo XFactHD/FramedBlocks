@@ -5,7 +5,7 @@ import com.mojang.blaze3d.vertex.VertexConsumer;
 import net.minecraft.world.level.block.state.BlockState;
 import xfacthd.framedblocks.api.render.OutlineRenderer;
 
-public class NoopOutlineRenderer implements OutlineRenderer
+public final class NoopOutlineRenderer implements OutlineRenderer
 {
     public static final NoopOutlineRenderer INSTANCE = new NoopOutlineRenderer();
 

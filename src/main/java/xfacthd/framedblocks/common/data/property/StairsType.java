@@ -13,9 +13,18 @@ public enum StairsType implements StringRepresentable
     private final String name = toString().toLowerCase(Locale.ENGLISH);
 
     @Override
-    public String getSerializedName() { return name; }
+    public String getSerializedName()
+    {
+        return name;
+    }
 
-    public boolean isTop() { return this == TOP_CORNER; }
+    public boolean isTop()
+    {
+        return this == TOP_CORNER;
+    }
 
-    public boolean isBottom() { return this == BOTTOM_CORNER; }
+    public boolean isBottom()
+    {
+        return this == BOTTOM_CORNER;
+    }
 }

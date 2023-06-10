@@ -24,16 +24,26 @@ public class FramedItemFrameRenderer implements BlockEntityRenderer<FramedItemFr
 
     private final ItemRenderer itemRenderer;
 
-    public FramedItemFrameRenderer(BlockEntityRendererProvider.Context ctx) { itemRenderer = ctx.getItemRenderer(); }
+    public FramedItemFrameRenderer(BlockEntityRendererProvider.Context ctx)
+    {
+        itemRenderer = ctx.getItemRenderer();
+    }
 
     @Override
-    public void render(FramedItemFrameBlockEntity be, float partialTick, PoseStack pstack, MultiBufferSource buffer, int packedLight, int packedOverlay)
+    public void render(
+            FramedItemFrameBlockEntity be,
+            float partialTick,
+            PoseStack poseStack,
+            MultiBufferSource buffer,
+            int packedLight,
+            int packedOverlay
+    )
     {
-        pstack.pushPose();
+        poseStack.pushPose();
 
         Direction dir = be.getBlockState().getValue(BlockStateProperties.FACING).getOpposite();
         float dirOff = Utils.isPositive(dir) ? 0 : 1;
-        pstack.translate(
+        poseStack.translate(
                 dir.getStepX() * DIR_OFF_MULT + (Utils.isX(dir) ? dirOff : .5F),
                 dir.getStepY() * DIR_OFF_MULT + (Utils.isY(dir) ? dirOff : .5F),
                 dir.getStepZ() * DIR_OFF_MULT + (Utils.isZ(dir) ? dirOff : .5F)
@@ -43,39 +53,39 @@ public class FramedItemFrameRenderer implements BlockEntityRenderer<FramedItemFr
         float yRot = vert ? 0 : dir.toYRot();
         if (vert)
         {
-            pstack.mulPose(Axis.XP.rotationDegrees(-90F * dir.getAxisDirection().getStep()));
+            poseStack.mulPose(Axis.XP.rotationDegrees(-90F * dir.getAxisDirection().getStep()));
         }
-        pstack.mulPose(Axis.YP.rotationDegrees(180.0F - yRot));
+        poseStack.mulPose(Axis.YP.rotationDegrees(180.0F - yRot));
 
         ItemStack item = be.getItem();
         //noinspection ConstantConditions
         MapItemSavedData mapData = MapItem.getSavedData(item, be.getLevel());
 
-        pstack.translate(0.0D, 0.0D, ITEM_Z_OFF);
+        poseStack.translate(0.0D, 0.0D, ITEM_Z_OFF);
         float itemRotation = mapData != null ? (be.getRotation() % 4 * 2) : be.getRotation();
-        pstack.mulPose(Axis.ZP.rotationDegrees(itemRotation * 360.0F / 8.0F));
+        poseStack.mulPose(Axis.ZP.rotationDegrees(itemRotation * 360.0F / 8.0F));
 
         if (mapData != null)
         {
-            pstack.mulPose(Axis.ZP.rotationDegrees(180.0F));
+            poseStack.mulPose(Axis.ZP.rotationDegrees(180.0F));
 
-            pstack.scale(MAP_SCALE, MAP_SCALE, MAP_SCALE);
-            pstack.translate(-64.0D, -64.0D, -1.0D);
+            poseStack.scale(MAP_SCALE, MAP_SCALE, MAP_SCALE);
+            poseStack.translate(-64.0D, -64.0D, -1.0D);
 
             int mapLight = be.isGlowingFrame() ? 0x00F000D2 : packedLight;
             //noinspection ConstantConditions
             int mapId = MapItem.getMapId(item);
-            Minecraft.getInstance().gameRenderer.getMapRenderer().render(pstack, buffer, mapId, mapData, true, mapLight);
+            Minecraft.getInstance().gameRenderer.getMapRenderer().render(poseStack, buffer, mapId, mapData, true, mapLight);
         }
         else
         {
-            pstack.scale(0.5F, 0.5F, 0.5F);
+            poseStack.scale(0.5F, 0.5F, 0.5F);
 
             int itemLight = be.isGlowingFrame() ? 0x00F000F0 : packedLight;
-            itemRenderer.renderStatic(item, ItemDisplayContext.FIXED, itemLight, OverlayTexture.NO_OVERLAY, pstack, buffer, be.getLevel(), 0);
+            itemRenderer.renderStatic(item, ItemDisplayContext.FIXED, itemLight, OverlayTexture.NO_OVERLAY, poseStack, buffer, be.getLevel(), 0);
         }
 
-        pstack.popPose();
+        poseStack.popPose();
     }
 
     @Override

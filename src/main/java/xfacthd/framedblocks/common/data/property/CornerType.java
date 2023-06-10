@@ -18,13 +18,25 @@ public enum CornerType implements StringRepresentable
     private final String name = toString().toLowerCase(Locale.ENGLISH);
 
     @Override
-    public String getSerializedName() { return name; }
+    public String getSerializedName()
+    {
+        return name;
+    }
 
-    public boolean isHorizontal() { return this != BOTTOM && this != TOP; }
+    public boolean isHorizontal()
+    {
+        return this != BOTTOM && this != TOP;
+    }
 
-    public boolean isTop() { return this == TOP || this == HORIZONTAL_TOP_LEFT || this == HORIZONTAL_TOP_RIGHT; }
+    public boolean isTop()
+    {
+        return this == TOP || this == HORIZONTAL_TOP_LEFT || this == HORIZONTAL_TOP_RIGHT;
+    }
 
-    public boolean isRight() { return this == HORIZONTAL_BOTTOM_RIGHT || this == HORIZONTAL_TOP_RIGHT; }
+    public boolean isRight()
+    {
+        return this == HORIZONTAL_BOTTOM_RIGHT || this == HORIZONTAL_TOP_RIGHT;
+    }
 
     public CornerType verticalOpposite()
     {
@@ -89,7 +101,10 @@ public enum CornerType implements StringRepresentable
 
     public boolean isHorizontalAdjacent(Direction dir, Direction side, CornerType adjType)
     {
-        if (!isHorizontal() || !adjType.isHorizontal()) { return false; }
+        if (!isHorizontal() || !adjType.isHorizontal())
+        {
+            return false;
+        }
 
         switch (this)
         {
@@ -123,7 +138,10 @@ public enum CornerType implements StringRepresentable
 
     public boolean isHorizontalAdjacentInner(Direction dir, Direction side, CornerType adjType)
     {
-        if (!isHorizontal() || !adjType.isHorizontal()) { return false; }
+        if (!isHorizontal() || !adjType.isHorizontal())
+        {
+            return false;
+        }
 
         switch (this)
         {

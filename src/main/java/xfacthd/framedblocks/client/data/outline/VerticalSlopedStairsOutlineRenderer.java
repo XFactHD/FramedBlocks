@@ -7,7 +7,7 @@ import xfacthd.framedblocks.api.render.OutlineRenderer;
 import xfacthd.framedblocks.common.data.PropertyHolder;
 import xfacthd.framedblocks.common.data.property.HorizontalRotation;
 
-public class VerticalSlopedStairsOutlineRenderer implements OutlineRenderer
+public final class VerticalSlopedStairsOutlineRenderer implements OutlineRenderer
 {
     @Override
     public void draw(BlockState state, PoseStack poseStack, VertexConsumer builder)

@@ -22,7 +22,7 @@ public class FramedStorageMenu extends AbstractContainerMenu
 
     public FramedStorageMenu(int windowId, Inventory inv, BlockEntity blockEntity)
     {
-        super(FBContent.menuTypeFramedStorage.get(), windowId);
+        super(FBContent.MENU_TYPE_FRAMED_STORAGE.get(), windowId);
 
         Preconditions.checkArgument(blockEntity instanceof FramedStorageBlockEntity);
         this.blockEntity = (FramedStorageBlockEntity) blockEntity;
@@ -52,7 +52,10 @@ public class FramedStorageMenu extends AbstractContainerMenu
     }
 
     @Override
-    public boolean stillValid(Player player) { return blockEntity.isUsableByPlayer(player); }
+    public boolean stillValid(Player player)
+    {
+        return blockEntity.isUsableByPlayer(player);
+    }
 
     @Override
     public ItemStack quickMoveStack(Player player, int index)

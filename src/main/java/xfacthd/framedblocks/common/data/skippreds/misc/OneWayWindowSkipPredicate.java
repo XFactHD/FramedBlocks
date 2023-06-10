@@ -9,12 +9,12 @@ import xfacthd.framedblocks.common.FBContent;
 import xfacthd.framedblocks.common.data.PropertyHolder;
 import xfacthd.framedblocks.common.data.property.NullableDirection;
 
-public class OneWayWindowSkipPredicate implements SideSkipPredicate
+public final class OneWayWindowSkipPredicate implements SideSkipPredicate
 {
     @Override
     public boolean test(BlockGetter level, BlockPos pos, BlockState state, BlockState adjState, Direction side)
     {
-        if (adjState.getBlock() != FBContent.blockFramedOneWayWindow.get())
+        if (adjState.getBlock() != FBContent.BLOCK_FRAMED_ONE_WAY_WINDOW.get())
         {
             return SideSkipPredicate.CTM.test(level, pos, state, adjState, side);
         }

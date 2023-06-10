@@ -25,22 +25,24 @@ public final class BlockOutlineRenderer
 
     public static void onRenderBlockHighlight(final RenderHighlightEvent.Block event)
     {
-        if (!ClientConfig.fancyHitboxes) { return; }
+        if (!ClientConfig.fancyHitboxes)
+        {
+            return;
+        }
 
         BlockHitResult result = event.getTarget();
         //noinspection ConstantConditions
         BlockState state = Minecraft.getInstance().level.getBlockState(result.getBlockPos());
-        if (!(state.getBlock() instanceof IFramedBlock block)) { return; }
+        if (!(state.getBlock() instanceof IFramedBlock block))
+        {
+            return;
+        }
 
         IBlockType type = block.getBlockType();
         if (type.hasSpecialHitbox())
         {
-            PoseStack mstack = event.getPoseStack();
-            Vec3 offset = Vec3.atLowerCornerOf(result.getBlockPos()).subtract(event.getCamera().getPosition());
-            VertexConsumer builder = event.getMultiBufferSource().getBuffer(RenderType.lines());
-
-            OutlineRenderer render = OUTLINE_RENDERERS.get(type);
-            if (render == null)
+            OutlineRenderer renderer = OUTLINE_RENDERERS.get(type);
+            if (renderer == null)
             {
                 if (ERRORED_TYPES.add(type))
                 {
@@ -49,13 +51,17 @@ public final class BlockOutlineRenderer
                 return;
             }
 
+            PoseStack mstack = event.getPoseStack();
+            Vec3 offset = Vec3.atLowerCornerOf(result.getBlockPos()).subtract(event.getCamera().getPosition());
+            VertexConsumer builder = event.getMultiBufferSource().getBuffer(RenderType.lines());
+
             mstack.pushPose();
             mstack.translate(offset.x, offset.y, offset.z);
             mstack.translate(.5, .5, .5);
-            render.rotateMatrix(mstack, state);
+            renderer.rotateMatrix(mstack, state);
             mstack.translate(-.5, -.5, -.5);
 
-            render.draw(state, Minecraft.getInstance().level, result.getBlockPos(), mstack, builder);
+            renderer.draw(state, Minecraft.getInstance().level, result.getBlockPos(), mstack, builder);
 
             mstack.popPose();
 
@@ -69,7 +75,9 @@ public final class BlockOutlineRenderer
 
         if (!type.hasSpecialHitbox())
         {
-            throw new IllegalArgumentException(String.format("Type %s doesn't return true from IBlockType#hasSpecialHitbox()", type));
+            throw new IllegalArgumentException(String.format(
+                    "Type %s doesn't return true from IBlockType#hasSpecialHitbox()", type
+            ));
         }
 
         OUTLINE_RENDERERS.put(type, render);

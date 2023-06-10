@@ -98,6 +98,8 @@ public class FramedPrismCornerModel extends FramedBlockModel
 
     public static BlockState itemSource()
     {
-        return FBContent.blockFramedPrismCorner.get().defaultBlockState().setValue(FramedProperties.FACING_HOR, Direction.SOUTH);
+        return FBContent.BLOCK_FRAMED_PRISM_CORNER.get()
+                .defaultBlockState()
+                .setValue(FramedProperties.FACING_HOR, Direction.SOUTH);
     }
 }

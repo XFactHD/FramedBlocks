@@ -85,6 +85,8 @@ public class FramedInnerThreewayCornerModel extends FramedBlockModel
 
     public static BlockState itemSource()
     {
-        return FBContent.blockFramedInnerThreewayCorner.get().defaultBlockState().setValue(FramedProperties.FACING_HOR, Direction.SOUTH);
+        return FBContent.BLOCK_FRAMED_INNER_THREEWAY_CORNER.get()
+                .defaultBlockState()
+                .setValue(FramedProperties.FACING_HOR, Direction.SOUTH);
     }
 }

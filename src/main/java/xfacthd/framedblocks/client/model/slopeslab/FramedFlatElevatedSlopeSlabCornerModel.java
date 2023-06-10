@@ -79,7 +79,7 @@ public class FramedFlatElevatedSlopeSlabCornerModel extends FramedBlockModel
 
     public static BlockState itemSource()
     {
-        return FBContent.blockFramedFlatElevatedSlopeSlabCorner.get()
+        return FBContent.BLOCK_FRAMED_FLAT_ELEVATED_SLOPE_SLAB_CORNER.get()
                 .defaultBlockState()
                 .setValue(FramedProperties.FACING_HOR, Direction.SOUTH);
     }

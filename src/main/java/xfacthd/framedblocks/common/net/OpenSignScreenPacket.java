@@ -10,9 +10,15 @@ import java.util.function.Supplier;
 
 public record OpenSignScreenPacket(BlockPos pos)
 {
-    public OpenSignScreenPacket(FriendlyByteBuf buffer) { this(buffer.readBlockPos()); }
+    public OpenSignScreenPacket(FriendlyByteBuf buffer)
+    {
+        this(buffer.readBlockPos());
+    }
 
-    public void encode(FriendlyByteBuf buffer) { buffer.writeBlockPos(pos); }
+    public void encode(FriendlyByteBuf buffer)
+    {
+        buffer.writeBlockPos(pos);
+    }
 
     public boolean handle(Supplier<NetworkEvent.Context> ctx)
     {

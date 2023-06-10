@@ -100,11 +100,11 @@ public class FramedDoubleThreewayCornerBlock extends AbstractFramedDoubleBlock
         boolean ySlope = state.getValue(FramedProperties.Y_SLOPE);
 
         return new Tuple<>(
-                FBContent.blockFramedInnerThreewayCorner.get().defaultBlockState()
+                FBContent.BLOCK_FRAMED_INNER_THREEWAY_CORNER.get().defaultBlockState()
                         .setValue(FramedProperties.FACING_HOR, facing)
                         .setValue(FramedProperties.TOP, top)
                         .setValue(FramedProperties.Y_SLOPE, ySlope),
-                FBContent.blockFramedThreewayCorner.get().defaultBlockState()
+                FBContent.BLOCK_FRAMED_THREEWAY_CORNER.get().defaultBlockState()
                         .setValue(FramedProperties.FACING_HOR, facing.getOpposite())
                         .setValue(FramedProperties.TOP, !top)
                         .setValue(FramedProperties.Y_SLOPE, ySlope)
@@ -121,7 +121,7 @@ public class FramedDoubleThreewayCornerBlock extends AbstractFramedDoubleBlock
 
     public static BlockState itemModelSourceThreeway()
     {
-        return FBContent.blockFramedDoubleThreewayCorner.get()
+        return FBContent.BLOCK_FRAMED_DOUBLE_THREEWAY_CORNER.get()
                 .defaultBlockState()
                 .setValue(FramedProperties.FACING_HOR, Direction.WEST);
     }

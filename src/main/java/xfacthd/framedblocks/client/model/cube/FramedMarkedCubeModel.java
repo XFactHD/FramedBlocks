@@ -21,7 +21,12 @@ public class FramedMarkedCubeModel extends FramedCubeBaseModel
     public static final ResourceLocation REDSTONE_FRAME_LOCATION = Utils.rl("block/redstone_frame");
     private final BakedModel frameModel;
 
-    public FramedMarkedCubeModel(BlockState state, BakedModel baseModel, Map<ResourceLocation, BakedModel> registry, ResourceLocation frameLocation)
+    public FramedMarkedCubeModel(
+            BlockState state,
+            BakedModel baseModel,
+            Map<ResourceLocation, BakedModel> registry,
+            ResourceLocation frameLocation
+    )
     {
         super(state, baseModel);
         frameModel = registry.get(frameLocation);
@@ -39,7 +44,14 @@ public class FramedMarkedCubeModel extends FramedCubeBaseModel
     }
 
     @Override
-    protected void getAdditionalQuads(List<BakedQuad> quads, Direction side, BlockState state, RandomSource rand, ModelData data, RenderType renderType)
+    protected void getAdditionalQuads(
+            List<BakedQuad> quads,
+            Direction side,
+            BlockState state,
+            RandomSource rand,
+            ModelData data,
+            RenderType renderType
+    )
     {
         FramedBlockData fbData = data.get(FramedBlockData.PROPERTY);
         if (fbData != null && !fbData.getCamoState().isAir())
@@ -50,12 +62,16 @@ public class FramedMarkedCubeModel extends FramedCubeBaseModel
 
 
 
-    public static FramedMarkedCubeModel slime(BlockState state, BakedModel baseModel, Map<ResourceLocation, BakedModel> registry)
+    public static FramedMarkedCubeModel slime(
+            BlockState state, BakedModel baseModel, Map<ResourceLocation, BakedModel> registry
+    )
     {
         return new FramedMarkedCubeModel(state, baseModel, registry, SLIME_FRAME_LOCATION);
     }
 
-    public static FramedMarkedCubeModel redstone(BlockState state, BakedModel baseModel, Map<ResourceLocation, BakedModel> registry)
+    public static FramedMarkedCubeModel redstone(
+            BlockState state, BakedModel baseModel, Map<ResourceLocation, BakedModel> registry
+    )
     {
         return new FramedMarkedCubeModel(state, baseModel, registry, REDSTONE_FRAME_LOCATION);
     }

@@ -41,7 +41,7 @@ public class FramingSawMenu extends AbstractContainerMenu
 
     public FramingSawMenu(int containerId, Inventory inv, ContainerLevelAccess levelAccess)
     {
-        super(FBContent.menuTypeFramingSaw.get(), containerId);
+        super(FBContent.MENU_TYPE_FRAMING_SAW.get(), containerId);
 
         this.level = inv.player.level();
         this.levelAccess = levelAccess;
@@ -209,7 +209,7 @@ public class FramingSawMenu extends AbstractContainerMenu
     @Override
     public boolean stillValid(Player player)
     {
-        return stillValid(this.levelAccess, player, FBContent.blockFramingSaw.get());
+        return stillValid(this.levelAccess, player, FBContent.BLOCK_FRAMING_SAW.get());
     }
 
     @Override

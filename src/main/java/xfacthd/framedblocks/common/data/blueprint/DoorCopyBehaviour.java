@@ -22,7 +22,9 @@ public final class DoorCopyBehaviour implements BlueprintCopyBehaviour
     private static final String SECOND_CAMO_KEY = "camo_data_two";
 
     @Override
-    public boolean writeToBlueprint(Level level, BlockPos pos, BlockState state, FramedBlockEntity be, CompoundTag blueprintData)
+    public boolean writeToBlueprint(
+            Level level, BlockPos pos, BlockState state, FramedBlockEntity be, CompoundTag blueprintData
+    )
     {
         boolean top = state.getValue(BlockStateProperties.DOUBLE_BLOCK_HALF) == DoubleBlockHalf.UPPER;
         BlockPos posTwo = top ? pos.below() : pos.above();
@@ -64,7 +66,9 @@ public final class DoorCopyBehaviour implements BlueprintCopyBehaviour
     }
 
     @Override
-    public void postProcessPaste(Level level, BlockPos pos, Player player, CompoundTag blueprintData, ItemStack dummyStack)
+    public void postProcessPaste(
+            Level level, BlockPos pos, Player player, CompoundTag blueprintData, ItemStack dummyStack
+    )
     {
         if (!blueprintData.contains(SECOND_CAMO_KEY, Tag.TAG_COMPOUND)) { return; }
 

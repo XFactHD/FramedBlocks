@@ -62,6 +62,8 @@ public class FramedSlopedStairsModel extends FramedBlockModel
 
     public static BlockState itemSource()
     {
-        return FBContent.blockFramedSlopedStairs.get().defaultBlockState().setValue(FramedProperties.FACING_HOR, Direction.SOUTH);
+        return FBContent.BLOCK_FRAMED_SLOPED_STAIRS.get()
+                .defaultBlockState()
+                .setValue(FramedProperties.FACING_HOR, Direction.SOUTH);
     }
 }

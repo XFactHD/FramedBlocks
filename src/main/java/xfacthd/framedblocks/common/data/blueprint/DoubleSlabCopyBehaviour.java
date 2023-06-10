@@ -10,6 +10,6 @@ public final class DoubleSlabCopyBehaviour extends DoubleBlockCopyBehaviour
     @Override
     public Optional<ItemStack> getBlockItem()
     {
-        return Optional.of(new ItemStack(FBContent.blockFramedSlab.get(), 2));
+        return Optional.of(new ItemStack(FBContent.BLOCK_FRAMED_SLAB.get(), 2));
     }
 }

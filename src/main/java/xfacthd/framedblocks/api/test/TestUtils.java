@@ -81,7 +81,9 @@ public final class TestUtils
 
             if (!result.shouldAwardStats())
             {
-                helper.fail(String.format("Camo application on side '%s' of block '%s' failed", side, helper.getBlockState(pos)), pos);
+                helper.fail(String.format(
+                        "Camo application on side '%s' of block '%s' failed", side, helper.getBlockState(pos)
+                ), pos);
             }
         });
     }
@@ -202,7 +204,10 @@ public final class TestUtils
 
     public static boolean assertCanOcclude(GameTestHelper helper, Block block)
     {
-        if (!assertFramedBlock(helper, block)) { return false; }
+        if (!assertFramedBlock(helper, block))
+        {
+            return false;
+        }
 
         if (!((IFramedBlock) block).getBlockType().canOccludeWithSolidCamo())
         {
@@ -260,9 +265,14 @@ public final class TestUtils
         testBlockOccludesLight(helper, OCCLUSION_BLOCK_SIDE, OCCLUSION_LIGHT_SIDE, state, camoSides);
     }
 
-    private static void testBlockOccludesLight(GameTestHelper helper, BlockPos blockPos, BlockPos lightPos, BlockState state, List<Direction> camoSides)
+    private static void testBlockOccludesLight(
+            GameTestHelper helper, BlockPos blockPos, BlockPos lightPos, BlockState state, List<Direction> camoSides
+    )
     {
-        if (!assertCanOcclude(helper, state.getBlock())) { return; }
+        if (!assertCanOcclude(helper, state.getBlock()))
+        {
+            return;
+        }
 
         //Indirectly validate that the correct structure is used
         helper.assertBlockPresent(Blocks.AIR, blockPos);
@@ -302,7 +312,9 @@ public final class TestUtils
         testBlockLightEmission(helper, state, camoSides, 0);
     }
 
-    public static void testBlockLightEmission(GameTestHelper helper, BlockState state, List<Direction> camoSides, int baseEmission)
+    public static void testBlockLightEmission(
+            GameTestHelper helper, BlockState state, List<Direction> camoSides, int baseEmission
+    )
     {
         //noinspection deprecation
         int glowstoneLight = Blocks.GLOWSTONE.defaultBlockState().getLightEmission();
@@ -478,7 +490,7 @@ public final class TestUtils
         ));
     }
 
-    private static class ClientGuard
+    private static final class ClientGuard
     {
         public static void testHasParticleOverride(GameTestHelper helper, BlockState state)
         {

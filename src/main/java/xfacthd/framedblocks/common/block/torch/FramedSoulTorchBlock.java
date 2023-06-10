@@ -24,14 +24,17 @@ public class FramedSoulTorchBlock extends FramedTorchBlock
     }
 
     @Override
-    public BlockType getBlockType() { return BlockType.FRAMED_SOUL_TORCH; }
+    public BlockType getBlockType()
+    {
+        return BlockType.FRAMED_SOUL_TORCH;
+    }
 
     @Override
     public BlockItem createBlockItem()
     {
         return new StandingAndWallBlockItem(
-                FBContent.blockFramedSoulTorch.get(),
-                FBContent.blockFramedSoulWallTorch.get(),
+                FBContent.BLOCK_FRAMED_SOUL_TORCH.get(),
+                FBContent.BLOCK_FRAMED_SOUL_WALL_TORCH.get(),
                 new Item.Properties(),
                 Direction.DOWN
         );

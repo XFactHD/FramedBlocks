@@ -14,7 +14,6 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.*;
 import net.minecraft.world.level.gameevent.GameEvent;
-import net.minecraft.world.level.material.PushReaction;
 import net.minecraft.world.level.pathfinder.PathComputationType;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.Vec3;
@@ -108,12 +107,17 @@ public class FramedGateBlock extends FramedBlock
     }
 
     @Override
-    public final InteractionResult use(BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hit)
+    public final InteractionResult use(
+            BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hit
+    )
     {
         InteractionResult result = super.use(state, level, pos, player, hand, hit);
-        if (result.consumesAction()) { return result; }
+        if (result.consumesAction())
+        {
+            return result;
+        }
 
-        if (this == FBContent.blockFramedIronGate.get())
+        if (this == FBContent.BLOCK_FRAMED_IRON_GATE.get())
         {
             return InteractionResult.PASS;
         }
@@ -129,7 +133,9 @@ public class FramedGateBlock extends FramedBlock
     }
 
     @Override
-    public void neighborChanged(BlockState state, Level level, BlockPos pos, Block block, BlockPos fromPos, boolean isMoving)
+    public void neighborChanged(
+            BlockState state, Level level, BlockPos pos, Block block, BlockPos fromPos, boolean isMoving
+    )
     {
         boolean powered = level.hasNeighborSignal(pos);
         if (!defaultBlockState().is(block) && powered != state.getValue(BlockStateProperties.POWERED))
@@ -164,11 +170,17 @@ public class FramedGateBlock extends FramedBlock
     }
 
     @Override
-    public boolean doesBlockOccludeBeaconBeam(BlockState state, LevelReader level, BlockPos pos) { return false; }
+    public boolean doesBlockOccludeBeaconBeam(BlockState state, LevelReader level, BlockPos pos)
+    {
+        return false;
+    }
 
     // FIXME: https://github.com/MinecraftForge/MinecraftForge/pull/9538
     //@Override
-    //public PushReaction getPistonPushReaction(BlockState state) { return PushReaction.DESTROY; }
+    //public PushReaction getPistonPushReaction(BlockState state)
+    //{
+    //    return PushReaction.DESTROY;
+    //}
 
     @Override
     public BlockState rotate(BlockState state, Rotation rotation)

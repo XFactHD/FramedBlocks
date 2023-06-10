@@ -29,7 +29,7 @@ public final class InteractionTests
     public static void testSignDying(GameTestHelper helper)
     {
         TestUtils.chainTasks(helper, List.of(
-                () -> helper.setBlock(POS_ABOVE_FLOOR, FBContent.blockFramedSign.get()),
+                () -> helper.setBlock(POS_ABOVE_FLOOR, FBContent.BLOCK_FRAMED_SIGN.get()),
                 () ->
                 {
                     FramedSignBlockEntity be = TestUtils.getBlockEntity(helper, POS_ABOVE_FLOOR, FramedSignBlockEntity.class);
@@ -88,7 +88,7 @@ public final class InteractionTests
     public static void testButtonPress(GameTestHelper helper)
     {
         TestUtils.chainTasks(helper, List.of(
-                () -> helper.setBlock(POS_ABOVE_FLOOR, FBContent.blockFramedButton.get()),
+                () -> helper.setBlock(POS_ABOVE_FLOOR, FBContent.BLOCK_FRAMED_BUTTON.get()),
                 () -> helper.assertBlockProperty(POS_ABOVE_FLOOR, ButtonBlock.POWERED, false),
                 () -> helper.useBlock(POS_ABOVE_FLOOR),
                 () -> helper.assertBlockProperty(POS_ABOVE_FLOOR, ButtonBlock.POWERED, true)
@@ -102,7 +102,7 @@ public final class InteractionTests
     public static void testStoneButtonPress(GameTestHelper helper)
     {
         TestUtils.chainTasks(helper, List.of(
-                () -> helper.setBlock(POS_ABOVE_FLOOR, FBContent.blockFramedStoneButton.get()),
+                () -> helper.setBlock(POS_ABOVE_FLOOR, FBContent.BLOCK_FRAMED_STONE_BUTTON.get()),
                 () -> helper.assertBlockProperty(POS_ABOVE_FLOOR, ButtonBlock.POWERED, false),
                 () -> helper.useBlock(POS_ABOVE_FLOOR),
                 () -> helper.assertBlockProperty(POS_ABOVE_FLOOR, ButtonBlock.POWERED, true)
@@ -116,7 +116,7 @@ public final class InteractionTests
     public static void testLeverFlip(GameTestHelper helper)
     {
         TestUtils.chainTasks(helper, List.of(
-                () -> helper.setBlock(POS_ABOVE_FLOOR, FBContent.blockFramedLever.get()),
+                () -> helper.setBlock(POS_ABOVE_FLOOR, FBContent.BLOCK_FRAMED_LEVER.get()),
                 () -> helper.assertBlockProperty(POS_ABOVE_FLOOR, LeverBlock.POWERED, false),
                 () -> helper.useBlock(POS_ABOVE_FLOOR),
                 () -> helper.assertBlockProperty(POS_ABOVE_FLOOR, LeverBlock.POWERED, true),
@@ -130,7 +130,7 @@ public final class InteractionTests
     public static void testDoorInteract(GameTestHelper helper)
     {
         TestUtils.chainTasks(helper, List.of(
-                () -> helper.setBlock(POS_ABOVE_FLOOR, FBContent.blockFramedDoor.get()),
+                () -> helper.setBlock(POS_ABOVE_FLOOR, FBContent.BLOCK_FRAMED_DOOR.get()),
                 () -> helper.assertBlockProperty(POS_ABOVE_FLOOR, DoorBlock.OPEN, false),
                 () -> helper.useBlock(POS_ABOVE_FLOOR),
                 () -> helper.assertBlockProperty(POS_ABOVE_FLOOR, DoorBlock.OPEN, true),
@@ -144,7 +144,7 @@ public final class InteractionTests
     public static void testTrapDoorInteract(GameTestHelper helper)
     {
         TestUtils.chainTasks(helper, List.of(
-                () -> helper.setBlock(POS_ABOVE_FLOOR, FBContent.blockFramedTrapDoor.get()),
+                () -> helper.setBlock(POS_ABOVE_FLOOR, FBContent.BLOCK_FRAMED_TRAP_DOOR.get()),
                 () -> helper.assertBlockProperty(POS_ABOVE_FLOOR, TrapDoorBlock.OPEN, false),
                 () -> helper.useBlock(POS_ABOVE_FLOOR),
                 () -> helper.assertBlockProperty(POS_ABOVE_FLOOR, TrapDoorBlock.OPEN, true),
@@ -158,7 +158,7 @@ public final class InteractionTests
     public static void testFenceGateInteract(GameTestHelper helper)
     {
         TestUtils.chainTasks(helper, List.of(
-                () -> helper.setBlock(POS_ABOVE_FLOOR, FBContent.blockFramedFenceGate.get()),
+                () -> helper.setBlock(POS_ABOVE_FLOOR, FBContent.BLOCK_FRAMED_FENCE_GATE.get()),
                 () -> helper.assertBlockProperty(POS_ABOVE_FLOOR, FenceGateBlock.OPEN, false),
                 () -> helper.useBlock(POS_ABOVE_FLOOR),
                 () -> helper.assertBlockProperty(POS_ABOVE_FLOOR, FenceGateBlock.OPEN, true),
@@ -173,7 +173,7 @@ public final class InteractionTests
     {
         helper.setBlock(POS_ABOVE_FLOOR.below(), Blocks.REDSTONE_LAMP);
         int delay = TestUtils.chainTasks(helper, List.of(
-                () -> helper.setBlock(POS_ABOVE_FLOOR, FBContent.blockFramedPressurePlate.get()),
+                () -> helper.setBlock(POS_ABOVE_FLOOR, FBContent.BLOCK_FRAMED_PRESSURE_PLATE.get()),
                 () -> helper.assertBlockProperty(POS_ABOVE_FLOOR, PressurePlateBlock.POWERED, false),
                 () -> TestUtils.spawnItemCentered(helper, Items.IRON_INGOT, POS_ABOVE_FLOOR),
                 () -> helper.assertBlockProperty(POS_ABOVE_FLOOR, PressurePlateBlock.POWERED, true),
@@ -188,9 +188,9 @@ public final class InteractionTests
     public static void testBuildDoubleSlab(GameTestHelper helper)
     {
         TestUtils.chainTasks(helper, List.of(
-                () -> helper.setBlock(POS_ABOVE_FLOOR, FBContent.blockFramedSlab.get()),
-                () -> TestUtils.clickWithItem(helper, POS_ABOVE_FLOOR, FBContent.blockFramedSlab.get()),
-                () -> helper.succeedWhenBlockPresent(FBContent.blockFramedDoubleSlab.get(), POS_ABOVE_FLOOR)
+                () -> helper.setBlock(POS_ABOVE_FLOOR, FBContent.BLOCK_FRAMED_SLAB.get()),
+                () -> TestUtils.clickWithItem(helper, POS_ABOVE_FLOOR, FBContent.BLOCK_FRAMED_SLAB.get()),
+                () -> helper.succeedWhenBlockPresent(FBContent.BLOCK_FRAMED_DOUBLE_SLAB.get(), POS_ABOVE_FLOOR)
         ));
     }
 
@@ -198,9 +198,9 @@ public final class InteractionTests
     public static void testBuildDoublePanelNorthSouth(GameTestHelper helper)
     {
         TestUtils.chainTasks(helper, List.of(
-                () -> helper.setBlock(POS_ABOVE_FLOOR, FBContent.blockFramedPanel.get()),
-                () -> TestUtils.clickWithItem(helper, POS_ABOVE_FLOOR, FBContent.blockFramedPanel.get(), Direction.SOUTH),
-                () -> helper.assertBlockPresent(FBContent.blockFramedDoublePanel.get(), POS_ABOVE_FLOOR),
+                () -> helper.setBlock(POS_ABOVE_FLOOR, FBContent.BLOCK_FRAMED_PANEL.get()),
+                () -> TestUtils.clickWithItem(helper, POS_ABOVE_FLOOR, FBContent.BLOCK_FRAMED_PANEL.get(), Direction.SOUTH),
+                () -> helper.assertBlockPresent(FBContent.BLOCK_FRAMED_DOUBLE_PANEL.get(), POS_ABOVE_FLOOR),
                 () -> helper.assertBlockProperty(POS_ABOVE_FLOOR, FramedProperties.FACING_NE, Direction.NORTH),
                 helper::succeed
         ));
@@ -209,14 +209,14 @@ public final class InteractionTests
     @GameTest(template = "floor_1x1", batch = "interaction")
     public static void testBuildDoublePanelEastWest(GameTestHelper helper)
     {
-        BlockState state = FBContent.blockFramedPanel.get()
+        BlockState state = FBContent.BLOCK_FRAMED_PANEL.get()
                 .defaultBlockState()
                 .setValue(FramedProperties.FACING_HOR, Direction.EAST);
 
         TestUtils.chainTasks(helper, List.of(
                 () -> helper.setBlock(POS_ABOVE_FLOOR, state),
-                () -> TestUtils.clickWithItem(helper, POS_ABOVE_FLOOR, FBContent.blockFramedPanel.get(), Direction.WEST),
-                () -> helper.assertBlockPresent(FBContent.blockFramedDoublePanel.get(), POS_ABOVE_FLOOR),
+                () -> TestUtils.clickWithItem(helper, POS_ABOVE_FLOOR, FBContent.BLOCK_FRAMED_PANEL.get(), Direction.WEST),
+                () -> helper.assertBlockPresent(FBContent.BLOCK_FRAMED_DOUBLE_PANEL.get(), POS_ABOVE_FLOOR),
                 () -> helper.assertBlockProperty(POS_ABOVE_FLOOR, FramedProperties.FACING_NE, Direction.EAST),
                 helper::succeed
         ));
@@ -230,9 +230,9 @@ public final class InteractionTests
         BlockPos posSouth = POS_ABOVE_FLOOR.south();
 
         TestUtils.chainTasks(helper, List.of(
-                () -> helper.setBlock(posSouth, FBContent.blockFramedSlope.get()),
+                () -> helper.setBlock(posSouth, FBContent.BLOCK_FRAMED_SLOPE.get()),
                 () -> TestUtils.clickWithItem(helper, posSouth, Items.RAIL),
-                () -> helper.succeedWhenBlockPresent(FBContent.blockFramedRailSlope.get(), posSouth)
+                () -> helper.succeedWhenBlockPresent(FBContent.BLOCK_FRAMED_RAIL_SLOPE.get(), posSouth)
         ));
     }
 
@@ -244,9 +244,9 @@ public final class InteractionTests
         BlockPos posSouth = POS_ABOVE_FLOOR.south();
 
         TestUtils.chainTasks(helper, List.of(
-                () -> helper.setBlock(posSouth, FBContent.blockFramedSlope.get()),
+                () -> helper.setBlock(posSouth, FBContent.BLOCK_FRAMED_SLOPE.get()),
                 () -> TestUtils.clickWithItem(helper, posSouth, Items.POWERED_RAIL),
-                () -> helper.succeedWhenBlockPresent(FBContent.blockFramedPoweredRailSlope.get(), posSouth)
+                () -> helper.succeedWhenBlockPresent(FBContent.BLOCK_FRAMED_POWERED_RAIL_SLOPE.get(), posSouth)
         ));
     }
 
@@ -258,9 +258,9 @@ public final class InteractionTests
         BlockPos posSouth = POS_ABOVE_FLOOR.south();
 
         TestUtils.chainTasks(helper, List.of(
-                () -> helper.setBlock(posSouth, FBContent.blockFramedSlope.get()),
+                () -> helper.setBlock(posSouth, FBContent.BLOCK_FRAMED_SLOPE.get()),
                 () -> TestUtils.clickWithItem(helper, posSouth, Items.DETECTOR_RAIL),
-                () -> helper.succeedWhenBlockPresent(FBContent.blockFramedDetectorRailSlope.get(), posSouth)
+                () -> helper.succeedWhenBlockPresent(FBContent.BLOCK_FRAMED_DETECTOR_RAIL_SLOPE.get(), posSouth)
         ));
     }
 
@@ -272,9 +272,9 @@ public final class InteractionTests
         BlockPos posSouth = POS_ABOVE_FLOOR.south();
 
         TestUtils.chainTasks(helper, List.of(
-                () -> helper.setBlock(posSouth, FBContent.blockFramedSlope.get()),
+                () -> helper.setBlock(posSouth, FBContent.BLOCK_FRAMED_SLOPE.get()),
                 () -> TestUtils.clickWithItem(helper, posSouth, Items.ACTIVATOR_RAIL),
-                () -> helper.succeedWhenBlockPresent(FBContent.blockFramedActivatorRailSlope.get(), posSouth)
+                () -> helper.succeedWhenBlockPresent(FBContent.BLOCK_FRAMED_ACTIVATOR_RAIL_SLOPE.get(), posSouth)
         ));
     }
 
@@ -282,7 +282,7 @@ public final class InteractionTests
     public static void testRotateCamo(GameTestHelper helper)
     {
         TestUtils.chainTasks(helper, List.of(
-                () -> helper.setBlock(POS_ABOVE_FLOOR, FBContent.blockFramedCube.get()),
+                () -> helper.setBlock(POS_ABOVE_FLOOR, FBContent.BLOCK_FRAMED_CUBE.get()),
                 () -> TestUtils.applyCamo(helper, POS_ABOVE_FLOOR, Blocks.OAK_LOG, List.of(Direction.UP)),
                 () ->
                 {
@@ -294,7 +294,7 @@ public final class InteractionTests
                             () -> String.format("Expected oak log default state as camo, got %s", be.getCamo().getState())
                     );
                 },
-                () -> TestUtils.clickWithItem(helper, POS_ABOVE_FLOOR, FBContent.itemFramedScrewdriver.get()),
+                () -> TestUtils.clickWithItem(helper, POS_ABOVE_FLOOR, FBContent.ITEM_FRAMED_SCREWDRIVER.get()),
                 () ->
                 {
                     FramedBlockEntity be = TestUtils.getBlockEntity(helper, POS_ABOVE_FLOOR, FramedBlockEntity.class);
@@ -313,13 +313,13 @@ public final class InteractionTests
     public static void testSwitchChestLock(GameTestHelper helper)
     {
         TestUtils.chainTasks(helper, List.of(
-                () -> helper.setBlock(POS_ABOVE_FLOOR, FBContent.blockFramedChest.get()),
+                () -> helper.setBlock(POS_ABOVE_FLOOR, FBContent.BLOCK_FRAMED_CHEST.get()),
                 () -> helper.assertBlockProperty(POS_ABOVE_FLOOR, PropertyHolder.LATCH_TYPE, LatchType.DEFAULT),
-                () -> TestUtils.attackWithItem(helper, POS_ABOVE_FLOOR, FBContent.itemFramedHammer.get()),
+                () -> TestUtils.attackWithItem(helper, POS_ABOVE_FLOOR, FBContent.ITEM_FRAMED_HAMMER.get()),
                 () -> helper.assertBlockProperty(POS_ABOVE_FLOOR, PropertyHolder.LATCH_TYPE, LatchType.CAMO),
-                () -> TestUtils.attackWithItem(helper, POS_ABOVE_FLOOR, FBContent.itemFramedHammer.get()),
+                () -> TestUtils.attackWithItem(helper, POS_ABOVE_FLOOR, FBContent.ITEM_FRAMED_HAMMER.get()),
                 () -> helper.assertBlockProperty(POS_ABOVE_FLOOR, PropertyHolder.LATCH_TYPE, LatchType.NONE),
-                () -> TestUtils.attackWithItem(helper, POS_ABOVE_FLOOR, FBContent.itemFramedHammer.get()),
+                () -> TestUtils.attackWithItem(helper, POS_ABOVE_FLOOR, FBContent.ITEM_FRAMED_HAMMER.get()),
                 () -> helper.assertBlockProperty(POS_ABOVE_FLOOR, PropertyHolder.LATCH_TYPE, LatchType.DEFAULT),
                 helper::succeed
         ));
@@ -328,19 +328,19 @@ public final class InteractionTests
     @GameTest(template = "floor_1x1", batch = "interaction")
     public static void testSwitchOffsetPrism(GameTestHelper helper)
     {
-        testSwitchOffset(helper, FBContent.blockFramedPrismCorner);
+        testSwitchOffset(helper, FBContent.BLOCK_FRAMED_PRISM_CORNER);
     }
 
     @GameTest(template = "floor_1x1", batch = "interaction")
     public static void testSwitchOffsetInnerPrism(GameTestHelper helper)
     {
-        testSwitchOffset(helper, FBContent.blockFramedInnerPrismCorner);
+        testSwitchOffset(helper, FBContent.BLOCK_FRAMED_INNER_PRISM_CORNER);
     }
 
     @GameTest(template = "floor_1x1", batch = "interaction")
     public static void testSwitchOffsetDoublePrism(GameTestHelper helper)
     {
-        testSwitchOffset(helper, FBContent.blockFramedDoublePrismCorner);
+        testSwitchOffset(helper, FBContent.BLOCK_FRAMED_DOUBLE_PRISM_CORNER);
     }
 
     private static void testSwitchOffset(GameTestHelper helper, RegistryObject<Block> block)
@@ -348,9 +348,9 @@ public final class InteractionTests
         TestUtils.chainTasks(helper, List.of(
                 () -> helper.setBlock(POS_ABOVE_FLOOR, block.get()),
                 () -> helper.assertBlockProperty(POS_ABOVE_FLOOR, FramedProperties.OFFSET, false),
-                () -> TestUtils.attackWithItem(helper, POS_ABOVE_FLOOR, FBContent.itemFramedHammer.get()),
+                () -> TestUtils.attackWithItem(helper, POS_ABOVE_FLOOR, FBContent.ITEM_FRAMED_HAMMER.get()),
                 () -> helper.assertBlockProperty(POS_ABOVE_FLOOR, FramedProperties.OFFSET, true),
-                () -> TestUtils.attackWithItem(helper, POS_ABOVE_FLOOR, FBContent.itemFramedHammer.get()),
+                () -> TestUtils.attackWithItem(helper, POS_ABOVE_FLOOR, FBContent.ITEM_FRAMED_HAMMER.get()),
                 () -> helper.assertBlockProperty(POS_ABOVE_FLOOR, FramedProperties.OFFSET, false),
                 helper::succeed
         ));
@@ -360,7 +360,7 @@ public final class InteractionTests
     public static void testFlowerPotInteract(GameTestHelper helper)
     {
         TestUtils.chainTasks(helper, List.of(
-                () -> helper.setBlock(POS_ABOVE_FLOOR, FBContent.blockFramedFlowerPot.get()),
+                () -> helper.setBlock(POS_ABOVE_FLOOR, FBContent.BLOCK_FRAMED_FLOWER_POT.get()),
                 () -> TestUtils.applyCamo(helper, POS_ABOVE_FLOOR, Blocks.POLISHED_GRANITE, List.of(Direction.UP)),
                 () ->
                 {
@@ -412,7 +412,7 @@ public final class InteractionTests
     public static void testIronDoorInteract(GameTestHelper helper)
     {
         TestUtils.chainTasks(helper, List.of(
-                () -> helper.setBlock(POS_ABOVE_FLOOR, FBContent.blockFramedIronDoor.get()),
+                () -> helper.setBlock(POS_ABOVE_FLOOR, FBContent.BLOCK_FRAMED_IRON_DOOR.get()),
                 () -> helper.assertBlockProperty(POS_ABOVE_FLOOR, DoorBlock.OPEN, false),
                 () -> helper.useBlock(POS_ABOVE_FLOOR),
                 //No, this is not a typo, the door must not budge ;)
@@ -425,7 +425,7 @@ public final class InteractionTests
     public static void testIronTrapDoorInteract(GameTestHelper helper)
     {
         TestUtils.chainTasks(helper, List.of(
-                () -> helper.setBlock(POS_ABOVE_FLOOR, FBContent.blockFramedIronTrapDoor.get()),
+                () -> helper.setBlock(POS_ABOVE_FLOOR, FBContent.BLOCK_FRAMED_IRON_TRAP_DOOR.get()),
                 () -> helper.assertBlockProperty(POS_ABOVE_FLOOR, TrapDoorBlock.OPEN, false),
                 () -> helper.useBlock(POS_ABOVE_FLOOR),
                 //No, this is not a typo, the trapdoor must not budge ;)
@@ -438,7 +438,7 @@ public final class InteractionTests
     public static void testLargeButtonPress(GameTestHelper helper)
     {
         TestUtils.chainTasks(helper, List.of(
-                () -> helper.setBlock(POS_ABOVE_FLOOR, FBContent.blockFramedLargeButton.get()),
+                () -> helper.setBlock(POS_ABOVE_FLOOR, FBContent.BLOCK_FRAMED_LARGE_BUTTON.get()),
                 () -> helper.assertBlockProperty(POS_ABOVE_FLOOR, ButtonBlock.POWERED, false),
                 () -> helper.useBlock(POS_ABOVE_FLOOR),
                 () -> helper.assertBlockProperty(POS_ABOVE_FLOOR, ButtonBlock.POWERED, true)
@@ -452,7 +452,7 @@ public final class InteractionTests
     public static void testLargeStoneButtonPress(GameTestHelper helper)
     {
         TestUtils.chainTasks(helper, List.of(
-                () -> helper.setBlock(POS_ABOVE_FLOOR, FBContent.blockFramedLargeStoneButton.get()),
+                () -> helper.setBlock(POS_ABOVE_FLOOR, FBContent.BLOCK_FRAMED_LARGE_STONE_BUTTON.get()),
                 () -> helper.assertBlockProperty(POS_ABOVE_FLOOR, ButtonBlock.POWERED, false),
                 () -> helper.useBlock(POS_ABOVE_FLOOR),
                 () -> helper.assertBlockProperty(POS_ABOVE_FLOOR, ButtonBlock.POWERED, true)
@@ -466,7 +466,7 @@ public final class InteractionTests
     public static void testTargetColoring(GameTestHelper helper)
     {
         TestUtils.chainTasks(helper, List.of(
-                () -> helper.setBlock(POS_ABOVE_FLOOR, FBContent.blockFramedTarget.get()),
+                () -> helper.setBlock(POS_ABOVE_FLOOR, FBContent.BLOCK_FRAMED_TARGET.get()),
                 () ->
                 {
                     FramedTargetBlockEntity be = TestUtils.getBlockEntity(helper, POS_ABOVE_FLOOR, FramedTargetBlockEntity.class);

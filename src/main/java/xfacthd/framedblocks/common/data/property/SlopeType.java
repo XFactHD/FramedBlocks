@@ -13,7 +13,10 @@ public enum SlopeType implements StringRepresentable
     private final String name = toString().toLowerCase(Locale.ENGLISH);
 
     @Override
-    public String getSerializedName() { return name; }
+    public String getSerializedName()
+    {
+        return name;
+    }
 
     public SlopeType getOpposite()
     {

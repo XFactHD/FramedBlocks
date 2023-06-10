@@ -88,7 +88,10 @@ public class FramedSlabCornerBlock extends FramedBlock
 
     @Override
     @SuppressWarnings("deprecation")
-    public BlockState rotate(BlockState state, Rotation rot) { return rotate(state, Direction.UP, rot); }
+    public BlockState rotate(BlockState state, Rotation rot)
+    {
+        return rotate(state, Direction.UP, rot);
+    }
 
     @Override
     @SuppressWarnings("deprecation")

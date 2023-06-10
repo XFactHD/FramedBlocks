@@ -74,14 +74,14 @@ public final class ChunkBanTest
     private static final Supplier<CamoContainer> CAMO_ONE_FACTORY = () ->
     {
         ItemStack stack = new ItemStack(Items.POLISHED_GRANITE);
-        CamoContainer container = FBContent.factoryBlock.get().fromItem(stack);
+        CamoContainer container = FBContent.FACTORY_BLOCK.get().fromItem(stack);
         Preconditions.checkState(!container.isEmpty(), "Container is empty?!");
         return container;
     };
     private static final Supplier<CamoContainer> CAMO_TWO_FACTORY = () ->
     {
         ItemStack stack = new ItemStack(Items.POLISHED_DIORITE);
-        CamoContainer container = FBContent.factoryBlock.get().fromItem(stack);
+        CamoContainer container = FBContent.FACTORY_BLOCK.get().fromItem(stack);
         Preconditions.checkState(!container.isEmpty(), "Container is empty?!");
         return container;
     };
@@ -121,7 +121,7 @@ public final class ChunkBanTest
         }
         else
         {
-            state = FBContent.blockFramedDoubleSlab.get().defaultBlockState();
+            state = FBContent.BLOCK_FRAMED_DOUBLE_SLAB.get().defaultBlockState();
         }
 
         ChunkPos chunk = new ChunkPos(new BlockPos((int) player.getX(), (int) player.getY(), (int) player.getZ()));

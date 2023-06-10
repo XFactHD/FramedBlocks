@@ -16,7 +16,7 @@ public class FramedDoublePanelBlockEntity extends FramedDoubleBlockEntity
 {
     public FramedDoublePanelBlockEntity(BlockPos pos, BlockState state)
     {
-        super(FBContent.blockEntityTypeDoubleFramedPanel.get(), pos, state);
+        super(FBContent.BE_TYPE_DOUBLE_FRAMED_PANEL.get(), pos, state);
     }
 
     @Override
@@ -26,8 +26,14 @@ public class FramedDoublePanelBlockEntity extends FramedDoubleBlockEntity
         Direction side = hit.getDirection();
         Vec3 vec = Utils.fraction(hit.getLocation());
 
-        if (side == facing) { return false; }
-        if (side == facing.getOpposite()) { return true; }
+        if (side == facing)
+        {
+            return false;
+        }
+        if (side == facing.getOpposite())
+        {
+            return true;
+        }
 
         if (facing == Direction.NORTH)
         {
@@ -40,14 +46,23 @@ public class FramedDoublePanelBlockEntity extends FramedDoubleBlockEntity
     }
 
     @Override
-    public DoubleSoundMode getSoundMode() { return DoubleSoundMode.EITHER; }
+    public DoubleSoundMode getSoundMode()
+    {
+        return DoubleSoundMode.EITHER;
+    }
 
     @Override
     public CamoContainer getCamo(Direction side)
     {
         Direction facing = getBlockState().getValue(FramedProperties.FACING_NE);
-        if (side == facing) { return getCamo(); }
-        if (side == facing.getOpposite()) { return getCamoTwo(); }
+        if (side == facing)
+        {
+            return getCamo();
+        }
+        if (side == facing.getOpposite())
+        {
+            return getCamoTwo();
+        }
         return EmptyCamoContainer.EMPTY;
     }
 
@@ -57,10 +72,8 @@ public class FramedDoublePanelBlockEntity extends FramedDoubleBlockEntity
         Direction facing = getBlockState().getValue(FramedProperties.FACING_NE);
         if (side == facing || side == facing.getOpposite())
         {
-            //noinspection ConstantConditions
-            return getCamo(side).getState().isSolidRender(level, worldPosition);
+            return getCamo(side).isSolid(level, worldPosition);
         }
-        //noinspection ConstantConditions
-        return getCamo().getState().isSolidRender(level, worldPosition) && getCamoTwo().getState().isSolidRender(level, worldPosition);
+        return getCamo().isSolid(level, worldPosition) && getCamoTwo().isSolid(level, worldPosition);
     }
 }

@@ -38,7 +38,7 @@ public final class BuildingGadgetsCompat
         }
     }
 
-    static class GuardedAccess
+    static final class GuardedAccess
     {
         private static final DeferredRegister<ITileDataSerializer> SERIALIZERS = DeferredRegister.create(
                 Reference.TileDataSerializerReference.REGISTRY_ID_TILE_DATA_SERIALIZER,
@@ -71,6 +71,10 @@ public final class BuildingGadgetsCompat
                 return factory;
             };
         }
+
+
+
+        private GuardedAccess() { }
     }
 
 

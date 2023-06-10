@@ -40,9 +40,15 @@ public enum DirectionAxis implements StringRepresentable
         this.axis = axis;
     }
 
-    public Direction direction() { return dir; }
+    public Direction direction()
+    {
+        return dir;
+    }
 
-    public Direction.Axis axis() { return axis; }
+    public Direction.Axis axis()
+    {
+        return axis;
+    }
 
     public DirectionAxis rotate(Rotation rot)
     {
@@ -82,7 +88,10 @@ public enum DirectionAxis implements StringRepresentable
     }
 
     @Override
-    public String getSerializedName() { return name; }
+    public String getSerializedName()
+    {
+        return name;
+    }
 
 
 

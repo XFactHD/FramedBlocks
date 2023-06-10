@@ -116,7 +116,7 @@ public class FramedHalfSlopeBlock extends FramedBlock
     {
         return new VerticalAndWallBlockItem(
                 this,
-                FBContent.blockFramedVerticalHalfSlope.get(),
+                FBContent.BLOCK_FRAMED_VERTICAL_HALF_SLOPE.get(),
                 new Item.Properties()
         );
     }

@@ -92,7 +92,10 @@ public final class FramingSawRecipeBuilder implements RecipeBuilder
     }
 
     @Override
-    public Item getResult() { return result; }
+    public Item getResult()
+    {
+        return result;
+    }
 
     @Override
     public void save(Consumer<FinishedRecipe> finishedRecipeConsumer, ResourceLocation recipeId)
@@ -148,15 +151,27 @@ public final class FramingSawRecipeBuilder implements RecipeBuilder
         }
 
         @Override
-        public JsonObject serializeAdvancement() { return null; }
+        public JsonObject serializeAdvancement()
+        {
+            return null;
+        }
 
         @Override
-        public ResourceLocation getId() { return id; }
+        public ResourceLocation getId()
+        {
+            return id;
+        }
 
         @Override
-        public ResourceLocation getAdvancementId() { return null; }
+        public ResourceLocation getAdvancementId()
+        {
+            return null;
+        }
 
         @Override
-        public RecipeSerializer<?> getType() { return FBContent.recipeSerializerFramingSawRecipe.get(); }
+        public RecipeSerializer<?> getType()
+        {
+            return FBContent.RECIPE_SERIALIZER_FRAMING_SAW_RECIPE.get();
+        }
     }
 }

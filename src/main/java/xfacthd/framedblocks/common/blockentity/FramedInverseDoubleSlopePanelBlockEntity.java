@@ -17,7 +17,7 @@ public class FramedInverseDoubleSlopePanelBlockEntity extends FramedDoubleBlockE
 {
     public FramedInverseDoubleSlopePanelBlockEntity(BlockPos pos, BlockState state)
     {
-        super(FBContent.blockEntityTypeFramedInverseDoubleSlopePanel.get(), pos, state);
+        super(FBContent.BE_TYPE_FRAMED_INVERSE_DOUBLE_SLOPE_PANEL.get(), pos, state);
     }
 
     @Override
@@ -27,8 +27,14 @@ public class FramedInverseDoubleSlopePanelBlockEntity extends FramedDoubleBlockE
         Direction side = hit.getDirection();
         Vec3 vec = Utils.fraction(hit.getLocation());
 
-        if (side == facing) { return false; }
-        if (side == facing.getOpposite()) { return true; }
+        if (side == facing)
+        {
+            return false;
+        }
+        if (side == facing.getOpposite())
+        {
+            return true;
+        }
 
         boolean second;
         if (Utils.isZ(facing))
@@ -53,19 +59,37 @@ public class FramedInverseDoubleSlopePanelBlockEntity extends FramedDoubleBlockE
     {
         Direction facing = getBlockState().getValue(FramedProperties.FACING_HOR);
 
-        if (side == facing) { return getCamo(); }
-        if (side == facing.getOpposite()) { return getCamoTwo(); }
+        if (side == facing)
+        {
+            return getCamo();
+        }
+        if (side == facing.getOpposite())
+        {
+            return getCamoTwo();
+        }
 
         Direction rotation = getBlockState().getValue(PropertyHolder.ROTATION).withFacing(facing);
-        if (side == rotation) { return getCamo(); }
-        if (side == rotation.getOpposite()) { return getCamoTwo(); }
+        if (side == rotation)
+        {
+            return getCamo();
+        }
+        if (side == rotation.getOpposite())
+        {
+            return getCamoTwo();
+        }
 
         return EmptyCamoContainer.EMPTY;
     }
 
     @Override
-    public boolean isSolidSide(Direction side) { return false; }
+    public boolean isSolidSide(Direction side)
+    {
+        return false;
+    }
 
     @Override
-    public DoubleSoundMode getSoundMode() { return DoubleSoundMode.EITHER; }
+    public DoubleSoundMode getSoundMode()
+    {
+        return DoubleSoundMode.EITHER;
+    }
 }

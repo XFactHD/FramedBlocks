@@ -68,12 +68,19 @@ public class FramedSlopeBlock extends FramedBlock
     @Override
     public BlockState getStateForPlacement(BlockPlaceContext context)
     {
-        BlockState state = withSlopeType(defaultBlockState(), context.getClickedFace(), context.getHorizontalDirection(), context.getClickLocation());
+        BlockState state = withSlopeType(
+                defaultBlockState(),
+                context.getClickedFace(),
+                context.getHorizontalDirection(),
+                context.getClickLocation()
+        );
         return withWater(state, context.getLevel(), context.getClickedPos());
     }
 
     @Override
-    public InteractionResult use(BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hit)
+    public InteractionResult use(
+            BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hit
+    )
     {
         ItemStack stack = player.getItemInHand(hand);
         if (!stack.isEmpty() && FramedUtils.isRailItem(stack.getItem()))
@@ -131,7 +138,10 @@ public class FramedSlopeBlock extends FramedBlock
 
     @Override
     @SuppressWarnings("deprecation")
-    public BlockState rotate(BlockState state, Rotation rot) { return rotate(state, Direction.UP, rot); }
+    public BlockState rotate(BlockState state, Rotation rot)
+    {
+        return rotate(state, Direction.UP, rot);
+    }
 
     @Override
     @SuppressWarnings("deprecation")

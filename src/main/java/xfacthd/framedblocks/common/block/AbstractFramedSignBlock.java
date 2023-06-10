@@ -22,10 +22,15 @@ import xfacthd.framedblocks.common.blockentity.FramedSignBlockEntity;
 
 public abstract class AbstractFramedSignBlock extends FramedBlock
 {
-    protected AbstractFramedSignBlock(BlockType type, Properties props) { super(type, props); }
+    protected AbstractFramedSignBlock(BlockType type, Properties props)
+    {
+        super(type, props);
+    }
 
     @Override
-    public InteractionResult use(BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hit)
+    public InteractionResult use(
+            BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hit
+    )
     {
         //Makes sure the block can have a camo applied, even when the sign can execute a command
         InteractionResult result = super.use(state, level, pos, player, hand, hit);
@@ -103,5 +108,8 @@ public abstract class AbstractFramedSignBlock extends FramedBlock
     }
 
     @Override
-    public boolean isPossibleToRespawnInThis(BlockState state) { return true; }
+    public boolean isPossibleToRespawnInThis(BlockState state)
+    {
+        return true;
+    }
 }

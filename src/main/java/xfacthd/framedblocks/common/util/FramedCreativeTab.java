@@ -12,7 +12,7 @@ public final class FramedCreativeTab
     {
         return CreativeModeTab.builder()
                 .title(Component.translatable("itemGroup.framed_blocks"))
-                .icon(() -> new ItemStack(FBContent.blockFramedCube.get()))
+                .icon(() -> new ItemStack(FBContent.BLOCK_FRAMED_CUBE.get()))
                 .withTabsBefore(CreativeModeTabs.SPAWN_EGGS)
                 .displayItems((params, output) ->
                 {
@@ -30,14 +30,14 @@ public final class FramedCreativeTab
                         }
                     }
 
-                    output.accept(FBContent.blockFramingSaw.get());
+                    output.accept(FBContent.BLOCK_FRAMING_SAW.get());
 
                     for (FramedToolType tool : FramedToolType.values())
                     {
                         output.accept(FBContent.toolByType(tool));
                     }
 
-                    output.accept(FBContent.itemFramedReinforcement.get());
+                    output.accept(FBContent.ITEM_FRAMED_REINFORCEMENT.get());
                 })
                 .build();
     }

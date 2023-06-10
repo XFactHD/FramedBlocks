@@ -13,7 +13,7 @@ import xfacthd.framedblocks.api.shapes.ShapeProvider;
 
 public interface IBlockType
 {
-    default boolean canOccludeWithSolidCamo() { return false; }
+    boolean canOccludeWithSolidCamo();
 
     boolean hasSpecialHitbox();
 
@@ -43,7 +43,10 @@ public interface IBlockType
      * any specific class, it should only ideally guarantee compliance with the data layout used by the reference
      * implementation in FramedBlocks
      */
-    default boolean isDoubleBlock() { return false; }
+    default boolean isDoubleBlock()
+    {
+        return false;
+    }
 
     /**
      * Return true if this block allows locking the state in order to suppress state changes from neighbor updates.

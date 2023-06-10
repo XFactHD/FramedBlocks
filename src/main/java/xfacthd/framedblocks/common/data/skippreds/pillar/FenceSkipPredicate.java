@@ -38,7 +38,7 @@ public final class FenceSkipPredicate implements SideSkipPredicate
             return SideSkipPredicate.compareState(level, pos, side, state, adjState);
         }
 
-        if (adjState.getBlock() == FBContent.blockFramedFenceGate.get())
+        if (adjState.getBlock() == FBContent.BLOCK_FRAMED_FENCE_GATE.get())
         {
             Direction adjDir = adjState.getValue(BlockStateProperties.HORIZONTAL_FACING);
             if (adjDir.getCounterClockWise() == side || adjDir.getClockWise() == side)
@@ -53,11 +53,11 @@ public final class FenceSkipPredicate implements SideSkipPredicate
     private static boolean isVerticalPostOrLattice(BlockState state)
     {
         Block block = state.getBlock();
-        if (block == FBContent.blockFramedLattice.get())
+        if (block == FBContent.BLOCK_FRAMED_LATTICE.get())
         {
             return state.getValue(FramedProperties.Y_AXIS);
         }
-        if (block == FBContent.blockFramedPost.get())
+        if (block == FBContent.BLOCK_FRAMED_POST.get())
         {
             return state.getValue(BlockStateProperties.AXIS) == Direction.Axis.Y;
         }

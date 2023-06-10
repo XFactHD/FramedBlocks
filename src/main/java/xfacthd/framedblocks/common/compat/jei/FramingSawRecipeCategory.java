@@ -42,21 +42,33 @@ public final class FramingSawRecipeCategory implements IRecipeCategory<FramingSa
     public FramingSawRecipeCategory(IGuiHelper guiHelper)
     {
         this.background = guiHelper.createDrawable(BACKGROUND, 0, 0, WIDTH, HEIGHT);
-        this.icon = guiHelper.createDrawableItemStack(new ItemStack(FBContent.blockFramingSaw.get()));
+        this.icon = guiHelper.createDrawableItemStack(new ItemStack(FBContent.BLOCK_FRAMING_SAW.get()));
         this.warning = guiHelper.drawableBuilder(FramingSawScreen.WARNING_ICON, 8, 8, WARNING_SIZE, WARNING_SIZE).setTextureSize(32, 32).build();
     }
 
     @Override
-    public RecipeType<FramingSawRecipe> getRecipeType() { return FramedJeiPlugin.FRAMING_SAW_RECIPE_TYPE; }
+    public RecipeType<FramingSawRecipe> getRecipeType()
+    {
+        return FramedJeiPlugin.FRAMING_SAW_RECIPE_TYPE;
+    }
 
     @Override
-    public Component getTitle() { return FramingSawBlock.MENU_TITLE; }
+    public Component getTitle()
+    {
+        return FramingSawBlock.MENU_TITLE;
+    }
 
     @Override
-    public IDrawable getBackground() { return background; }
+    public IDrawable getBackground()
+    {
+        return background;
+    }
 
     @Override
-    public IDrawable getIcon() { return icon; }
+    public IDrawable getIcon()
+    {
+        return icon;
+    }
 
     @Override
     public void setRecipe(IRecipeLayoutBuilder builder, FramingSawRecipe recipe, IFocusGroup focuses)
@@ -109,12 +121,16 @@ public final class FramingSawRecipeCategory implements IRecipeCategory<FramingSa
         }
         else
         {
-            setRecipe(FBContent.blockFramedCube.get().asItem(), recipe, inputSlot, additiveSlots, outputSlot);
+            setRecipe(FBContent.BLOCK_FRAMED_CUBE.get().asItem(), recipe, inputSlot, additiveSlots, outputSlot);
         }
     }
 
     private static void setRecipe(
-            Item input, FramingSawRecipe recipe, IRecipeSlotBuilder inputSlot, IRecipeSlotBuilder[] additiveSlots, IRecipeSlotBuilder outputSlot
+            Item input,
+            FramingSawRecipe recipe,
+            IRecipeSlotBuilder inputSlot,
+            IRecipeSlotBuilder[] additiveSlots,
+            IRecipeSlotBuilder outputSlot
     )
     {
         FramingSawRecipeCalculation calc = recipe.makeCraftingCalculation(

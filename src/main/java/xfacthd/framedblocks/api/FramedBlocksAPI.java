@@ -16,7 +16,10 @@ public interface FramedBlocksAPI
 {
     WriteOnceHolder<FramedBlocksAPI> INSTANCE = new WriteOnceHolder<>();
 
-    static FramedBlocksAPI getInstance() { return INSTANCE.get(); }
+    static FramedBlocksAPI getInstance()
+    {
+        return INSTANCE.get();
+    }
 
 
 
@@ -35,11 +38,6 @@ public interface FramedBlocksAPI
      * Returns the {@link CreativeModeTab} that contains the FramedBlocks items
      */
     CreativeModeTab defaultCreativeTab();
-
-    /**
-     * Checks if the give {@link FramedBlockEntity} is a double block (i.e. a Framed Double Slab)
-     */
-    boolean isFramedDoubleBlockEntity(FramedBlockEntity be);
 
     /**
      * Returns the current value of the {@code fireproofBlocks} setting in the common config

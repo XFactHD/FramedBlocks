@@ -32,7 +32,13 @@ public final class CamoPair
         return this;
     }
 
-    public BlockState getCamoOne() { return camoOne; }
+    public BlockState getCamoOne()
+    {
+        return camoOne;
+    }
 
-    public BlockState getCamoTwo() { return camoTwo; }
+    public BlockState getCamoTwo()
+    {
+        return camoTwo;
+    }
 }

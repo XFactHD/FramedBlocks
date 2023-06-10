@@ -12,22 +12,28 @@ public final class SupplementariesCompat
     public static final ResourceLocation HANGING_MODEL_LOCATION = new ResourceLocation("supplementaries", "block/hanging_flower_pot_rope");
     private static boolean loaded = false;
 
-    public static void init() { loaded = ModList.get().isLoaded("supplementaries"); }
+    public static void init()
+    {
+        loaded = ModList.get().isLoaded("supplementaries");
+    }
 
-    public static boolean isLoaded() { return loaded; }
+    public static boolean isLoaded()
+    {
+        return loaded;
+    }
 
     public static boolean canSurviveHanging(LevelReader level, BlockPos pos)
     {
         if (loaded)
         {
-            return Guarded.canSurviveHanging(level, pos);
+            return GuardedAccess.canSurviveHanging(level, pos);
         }
         return false;
     }
 
 
 
-    private static class Guarded
+    private static final class GuardedAccess
     {
         private static boolean failedPreviously = false;
 
@@ -48,6 +54,8 @@ public final class SupplementariesCompat
             }
         }
     }
+
+
 
     private SupplementariesCompat() { }
 }

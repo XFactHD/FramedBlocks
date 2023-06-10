@@ -30,7 +30,10 @@ public final class KeyMappings
     public static void onClientTick(final TickEvent.ClientTickEvent event)
     {
         Level level = Minecraft.getInstance().level;
-        if (event.phase != TickEvent.Phase.START || level == null || Minecraft.getInstance().screen != null) { return; }
+        if (event.phase != TickEvent.Phase.START || level == null || Minecraft.getInstance().screen != null)
+        {
+            return;
+        }
 
         if (KEYMAPPING_UPDATE_CULLING.get().consumeClick())
         {

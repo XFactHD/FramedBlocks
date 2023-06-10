@@ -18,7 +18,7 @@ public class FramedDoubleCornerBlockEntity extends FramedDoubleBlockEntity
 {
     public FramedDoubleCornerBlockEntity(BlockPos pos, BlockState state)
     {
-        super(FBContent.blockEntityTypeDoubleFramedCorner.get(), pos, state);
+        super(FBContent.BE_TYPE_DOUBLE_FRAMED_CORNER.get(), pos, state);
     }
 
     @Override
@@ -34,9 +34,15 @@ public class FramedDoubleCornerBlockEntity extends FramedDoubleBlockEntity
         {
             if (side == facing || (!type.isTop() && side == Direction.DOWN) || (type.isTop() && side == Direction.UP) ||
                 (!type.isRight() && side == facing.getCounterClockWise()) || (type.isRight() && side == facing.getClockWise())
-            ) { return false; }
+            )
+            {
+                return false;
+            }
 
-            if (side == facing.getOpposite()) { return true; }
+            if (side == facing.getOpposite())
+            {
+                return true;
+            }
 
             if (Utils.isY(side))
             {
@@ -76,8 +82,14 @@ public class FramedDoubleCornerBlockEntity extends FramedDoubleBlockEntity
         }
         else if (type == CornerType.TOP)
         {
-            if (side == facing || side == Direction.UP || side == facing.getCounterClockWise()) { return false; }
-            if (side == Direction.DOWN) { return true; }
+            if (side == facing || side == Direction.UP || side == facing.getCounterClockWise())
+            {
+                return false;
+            }
+            if (side == Direction.DOWN)
+            {
+                return true;
+            }
 
             if (side == facing.getClockWise())
             {
@@ -101,8 +113,14 @@ public class FramedDoubleCornerBlockEntity extends FramedDoubleBlockEntity
         }
         else if (type == CornerType.BOTTOM)
         {
-            if (side == facing || side == Direction.DOWN || side == facing.getCounterClockWise()) { return false; }
-            if (side == Direction.UP) { return true; }
+            if (side == facing || side == Direction.DOWN || side == facing.getCounterClockWise())
+            {
+                return false;
+            }
+            if (side == Direction.UP)
+            {
+                return true;
+            }
 
             if (side == facing.getClockWise())
             {
@@ -191,17 +209,14 @@ public class FramedDoubleCornerBlockEntity extends FramedDoubleBlockEntity
                 side == dir || side == dir.getOpposite()
             )
             {
-                //noinspection ConstantConditions
-                return getCamo(side).getState().isSolidRender(level, worldPosition);
+                return getCamo(side).isSolid(level, worldPosition);
             }
         }
         else if (side == dir || side == dir.getCounterClockWise() || Utils.isY(side))
         {
-            //noinspection ConstantConditions
-            return getCamo(side).getState().isSolidRender(level, worldPosition);
+            return getCamo(side).isSolid(level, worldPosition);
         }
 
-        //noinspection ConstantConditions
-        return getCamo().getState().isSolidRender(level, worldPosition) && getCamoTwo().getState().isSolidRender(level, worldPosition);
+        return getCamo().isSolid(level, worldPosition) && getCamoTwo().isSolid(level, worldPosition);
     }
 }

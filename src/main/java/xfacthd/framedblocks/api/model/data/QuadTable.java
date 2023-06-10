@@ -48,5 +48,5 @@ public final class QuadTable
         return side.get3DDataValue();
     }
 
-    private record QuadList(List<BakedQuad> quads) {}
+    private record QuadList(List<BakedQuad> quads) { }
 }

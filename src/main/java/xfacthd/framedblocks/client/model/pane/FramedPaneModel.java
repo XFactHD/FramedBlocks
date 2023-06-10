@@ -62,7 +62,9 @@ public class FramedPaneModel extends FramedBlockModel
         }
     }
 
-    protected static void createTopBottomCenterQuad(Map<Direction, List<BakedQuad>> quadMap, BakedQuad quad, boolean mirrored)
+    protected static void createTopBottomCenterQuad(
+            Map<Direction, List<BakedQuad>> quadMap, BakedQuad quad, boolean mirrored
+    )
     {
         QuadModifier.geometry(quad)
                 .apply(Modifiers.cutTopBottom(7F/16F, 7F/16F, 9F/16F, 9F/16F))
@@ -70,7 +72,9 @@ public class FramedPaneModel extends FramedBlockModel
                 .export(quadMap.get(mirrored ? null : quad.getDirection()));
     }
 
-    protected static void createTopBottomEdgeQuad(Map<Direction, List<BakedQuad>> quadMap, BakedQuad quad, Direction dir, boolean mirrored)
+    protected static void createTopBottomEdgeQuad(
+            Map<Direction, List<BakedQuad>> quadMap, BakedQuad quad, Direction dir, boolean mirrored
+    )
     {
         Preconditions.checkArgument(!Utils.isY(dir), String.format("Invalid direction: %s!", dir));
 
@@ -81,9 +85,11 @@ public class FramedPaneModel extends FramedBlockModel
                 .export(quadMap.get(mirrored ? null : quad.getDirection()));
     }
 
-    protected static void createSideEdgeQuad(Map<Direction, List<BakedQuad>> quadMap, BakedQuad quad, boolean inset, boolean mirrored)
+    protected static void createSideEdgeQuad(
+            Map<Direction, List<BakedQuad>> quadMap, BakedQuad quad, boolean inset, boolean mirrored
+    )
     {
-        if (inset && mirrored) { throw new IllegalArgumentException("Quad can't be mirrored and inset!"); }
+        Preconditions.checkArgument(!inset || !mirrored, "Quad can't be mirrored and inset!");
 
         Direction quadDir = quad.getDirection();
         Direction exportSide = inset ? null : (mirrored ? quadDir.getOpposite() : quadDir);

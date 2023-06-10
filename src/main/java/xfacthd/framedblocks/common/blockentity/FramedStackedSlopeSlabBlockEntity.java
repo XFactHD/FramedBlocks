@@ -19,7 +19,7 @@ public class FramedStackedSlopeSlabBlockEntity extends FramedDoubleBlockEntity
 
     public FramedStackedSlopeSlabBlockEntity(BlockPos pos, BlockState state)
     {
-        super(FBContent.blockEntityTypeFramedStackedSlopeSlab.get(), pos, state);
+        super(FBContent.BE_TYPE_FRAMED_STACKED_SLOPE_SLAB.get(), pos, state);
         BlockType type = (BlockType) getBlockType();
         this.corner = type != BlockType.FRAMED_FLAT_STACKED_SLOPE_SLAB_CORNER;
         this.innerCorner = type == BlockType.FRAMED_FLAT_STACKED_INNER_SLOPE_SLAB_CORNER;
@@ -74,7 +74,6 @@ public class FramedStackedSlopeSlabBlockEntity extends FramedDoubleBlockEntity
         {
             return getCamo().isSolid(level, worldPosition) && getCamoTwo().isSolid(level, worldPosition);
         }
-
         return false;
     }
 }

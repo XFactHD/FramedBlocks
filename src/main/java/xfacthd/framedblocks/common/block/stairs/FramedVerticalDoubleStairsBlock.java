@@ -25,7 +25,10 @@ public class FramedVerticalDoubleStairsBlock extends AbstractFramedDoubleBlock
         return side == facing || side == facing.getCounterClockWise();
     };
 
-    public FramedVerticalDoubleStairsBlock() { super(BlockType.FRAMED_VERTICAL_DOUBLE_STAIRS); }
+    public FramedVerticalDoubleStairsBlock()
+    {
+        super(BlockType.FRAMED_VERTICAL_DOUBLE_STAIRS);
+    }
 
     @Override
     protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder)
@@ -66,10 +69,10 @@ public class FramedVerticalDoubleStairsBlock extends AbstractFramedDoubleBlock
         Direction facing = state.getValue(FramedProperties.FACING_HOR);
 
         return new Tuple<>(
-                FBContent.blockFramedVerticalStairs.get()
+                FBContent.BLOCK_FRAMED_VERTICAL_STAIRS.get()
                         .defaultBlockState()
                         .setValue(BlockStateProperties.HORIZONTAL_FACING, facing),
-                FBContent.blockFramedCornerPillar.get()
+                FBContent.BLOCK_FRAMED_CORNER_PILLAR.get()
                         .defaultBlockState()
                         .setValue(FramedProperties.FACING_HOR, facing.getOpposite())
         );
@@ -85,7 +88,7 @@ public class FramedVerticalDoubleStairsBlock extends AbstractFramedDoubleBlock
 
     public static BlockState itemModelSource()
     {
-        return FBContent.blockFramedVerticalDoubleStairs.get()
+        return FBContent.BLOCK_FRAMED_VERTICAL_DOUBLE_STAIRS.get()
                 .defaultBlockState()
                 .setValue(FramedProperties.FACING_HOR, Direction.SOUTH);
     }

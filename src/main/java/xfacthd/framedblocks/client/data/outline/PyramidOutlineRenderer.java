@@ -16,7 +16,10 @@ public final class PyramidOutlineRenderer implements OutlineRenderer
 
     private final float height;
 
-    public PyramidOutlineRenderer(boolean slab) { this.height = slab ? .5F : 1; }
+    public PyramidOutlineRenderer(boolean slab)
+    {
+        this.height = slab ? .5F : 1;
+    }
 
     @Override
     public void draw(BlockState state, PoseStack pstack, VertexConsumer builder)

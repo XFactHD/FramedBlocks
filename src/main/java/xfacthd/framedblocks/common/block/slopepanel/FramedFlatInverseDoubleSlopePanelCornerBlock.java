@@ -119,7 +119,10 @@ public class FramedFlatInverseDoubleSlopePanelCornerBlock extends AbstractFramed
 
     @Override
     @SuppressWarnings("deprecation")
-    public BlockState rotate(BlockState state, Rotation rotation) { return rotate(state, Direction.UP, rotation); }
+    public BlockState rotate(BlockState state, Rotation rotation)
+    {
+        return rotate(state, Direction.UP, rotation);
+    }
 
     @Override
     @SuppressWarnings("deprecation")
@@ -137,13 +140,13 @@ public class FramedFlatInverseDoubleSlopePanelCornerBlock extends AbstractFramed
         boolean ySlope = state.getValue(FramedProperties.Y_SLOPE);
 
         return new Tuple<>(
-                FBContent.blockFramedFlatInnerSlopePanelCorner.get()
+                FBContent.BLOCK_FRAMED_FLAT_INNER_SLOPE_PANEL_CORNER.get()
                         .defaultBlockState()
                         .setValue(FramedProperties.FACING_HOR, facing.getOpposite())
                         .setValue(PropertyHolder.ROTATION, backRot)
                         .setValue(PropertyHolder.FRONT, true)
                         .setValue(FramedProperties.Y_SLOPE, ySlope),
-                FBContent.blockFramedFlatSlopePanelCorner.get()
+                FBContent.BLOCK_FRAMED_FLAT_SLOPE_PANEL_CORNER.get()
                         .defaultBlockState()
                         .setValue(FramedProperties.FACING_HOR, facing)
                         .setValue(PropertyHolder.ROTATION, rotation.getOpposite())
@@ -194,7 +197,7 @@ public class FramedFlatInverseDoubleSlopePanelCornerBlock extends AbstractFramed
 
     public static BlockState itemSource()
     {
-        return FBContent.blockFramedFlatInverseDoubleSlopePanelCorner.get()
+        return FBContent.BLOCK_FRAMED_FLAT_INVERSE_DOUBLE_SLOPE_PANEL_CORNER.get()
                 .defaultBlockState()
                 .setValue(FramedProperties.FACING_HOR, Direction.SOUTH)
                 .setValue(PropertyHolder.ROTATION, HorizontalRotation.RIGHT);

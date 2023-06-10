@@ -82,7 +82,14 @@ public class FramedRailSlopeBlock extends BaseRailBlock implements IFramedBlock
     }
 
     @Override
-    public BlockState updateShape(BlockState state, Direction direction, BlockState neighborState, LevelAccessor level, BlockPos currentPos, BlockPos neighborPos)
+    public BlockState updateShape(
+            BlockState state,
+            Direction direction,
+            BlockState neighborState,
+            LevelAccessor level,
+            BlockPos currentPos,
+            BlockPos neighborPos
+    )
     {
         BlockState newState = super.updateShape(state, direction, neighborState, level, currentPos, neighborPos);
         if (newState == state)
@@ -93,10 +100,15 @@ public class FramedRailSlopeBlock extends BaseRailBlock implements IFramedBlock
     }
 
     @Override
-    public boolean canSurvive(BlockState state, LevelReader level, BlockPos pos) { return true; }
+    public boolean canSurvive(BlockState state, LevelReader level, BlockPos pos)
+    {
+        return true;
+    }
 
     @Override //Copy of AbstractRailBlock#neighborChanged() to disable removal
-    public void neighborChanged(BlockState state, Level level, BlockPos pos, Block block, BlockPos pFromPos, boolean isMoving)
+    public void neighborChanged(
+            BlockState state, Level level, BlockPos pos, Block block, BlockPos pFromPos, boolean isMoving
+    )
     {
         updateCulling(level, pos);
         if (!level.isClientSide() && level.getBlockState(pos).is(this))
@@ -106,13 +118,21 @@ public class FramedRailSlopeBlock extends BaseRailBlock implements IFramedBlock
     }
 
     @Override
-    public Property<RailShape> getShapeProperty() { return PropertyHolder.ASCENDING_RAIL_SHAPE; }
+    public Property<RailShape> getShapeProperty()
+    {
+        return PropertyHolder.ASCENDING_RAIL_SHAPE;
+    }
 
     @Override
-    public boolean isValidRailShape(RailShape shape) { return shape.isAscending(); }
+    public boolean isValidRailShape(RailShape shape)
+    {
+        return shape.isAscending();
+    }
 
     @Override
-    public final InteractionResult use(BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hit)
+    public final InteractionResult use(
+            BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hit
+    )
     {
         return handleUse(state, level, pos, player, hand, hit);
     }
@@ -124,7 +144,10 @@ public class FramedRailSlopeBlock extends BaseRailBlock implements IFramedBlock
     }
 
     @Override
-    public boolean useShapeForLightOcclusion(BlockState state) { return useCamoOcclusionShapeForLightOcclusion(state); }
+    public boolean useShapeForLightOcclusion(BlockState state)
+    {
+        return useCamoOcclusionShapeForLightOcclusion(state);
+    }
 
     @Override
     public VoxelShape getOcclusionShape(BlockState state, BlockGetter level, BlockPos pos)
@@ -196,10 +219,16 @@ public class FramedRailSlopeBlock extends BaseRailBlock implements IFramedBlock
     }
 
     @Override
-    public final BlockEntity newBlockEntity(BlockPos pos, BlockState state) { return beFactory.apply(pos, state); }
+    public final BlockEntity newBlockEntity(BlockPos pos, BlockState state)
+    {
+        return beFactory.apply(pos, state);
+    }
 
     @Override
-    public BlockType getBlockType() { return type; }
+    public BlockType getBlockType()
+    {
+        return type;
+    }
 
 
 
@@ -224,10 +253,10 @@ public class FramedRailSlopeBlock extends BaseRailBlock implements IFramedBlock
     public static void cacheStatePairs(Map<BlockState, Tuple<BlockState, BlockState>> statePairs)
     {
         Stream.of(
-                FBContent.blockFramedFancyRailSlope,
-                FBContent.blockFramedFancyPoweredRailSlope,
-                FBContent.blockFramedFancyDetectorRailSlope,
-                FBContent.blockFramedFancyActivatorRailSlope
+                FBContent.BLOCK_FRAMED_FANCY_RAIL_SLOPE,
+                FBContent.BLOCK_FRAMED_FANCY_POWERED_RAIL_SLOPE,
+                FBContent.BLOCK_FRAMED_FANCY_DETECTOR_RAIL_SLOPE,
+                FBContent.BLOCK_FRAMED_FANCY_ACTIVATOR_RAIL_SLOPE
         )
                 .map(RegistryObject::get)
                 .map(Block::getStateDefinition)
@@ -243,13 +272,13 @@ public class FramedRailSlopeBlock extends BaseRailBlock implements IFramedBlock
         boolean powered = type != BlockType.FRAMED_FANCY_RAIL_SLOPE && state.getValue(BlockStateProperties.POWERED);
         boolean ySlope = state.getValue(FramedProperties.Y_SLOPE);
 
-        BlockState slopeState = FBContent.blockFramedSlope.get().defaultBlockState();
+        BlockState slopeState = FBContent.BLOCK_FRAMED_SLOPE.get().defaultBlockState();
         BlockState railState = (switch(type)
         {
-            case FRAMED_FANCY_RAIL_SLOPE -> FBContent.blockFramedFancyRail;
-            case FRAMED_FANCY_POWERED_RAIL_SLOPE -> FBContent.blockFramedFancyPoweredRail;
-            case FRAMED_FANCY_DETECTOR_RAIL_SLOPE -> FBContent.blockFramedFancyDetectorRail;
-            case FRAMED_FANCY_ACTIVATOR_RAIL_SLOPE -> FBContent.blockFramedFancyActivatorRail;
+            case FRAMED_FANCY_RAIL_SLOPE -> FBContent.BLOCK_FRAMED_FANCY_RAIL;
+            case FRAMED_FANCY_POWERED_RAIL_SLOPE -> FBContent.BLOCK_FRAMED_FANCY_POWERED_RAIL;
+            case FRAMED_FANCY_DETECTOR_RAIL_SLOPE -> FBContent.BLOCK_FRAMED_FANCY_DETECTOR_RAIL;
+            case FRAMED_FANCY_ACTIVATOR_RAIL_SLOPE -> FBContent.BLOCK_FRAMED_FANCY_ACTIVATOR_RAIL;
             default -> throw new IllegalArgumentException("Invalid block type");
         }).get().defaultBlockState();
 
@@ -283,7 +312,7 @@ public class FramedRailSlopeBlock extends BaseRailBlock implements IFramedBlock
 
     public static BlockState itemModelSourceFancy()
     {
-        return FBContent.blockFramedFancyRailSlope.get()
+        return FBContent.BLOCK_FRAMED_FANCY_RAIL_SLOPE.get()
                 .defaultBlockState()
                 .setValue(PropertyHolder.ASCENDING_RAIL_SHAPE, RailShape.ASCENDING_SOUTH);
     }

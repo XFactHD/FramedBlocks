@@ -24,9 +24,16 @@ public final class RailSlopeGhostRenderBehaviour implements GhostRenderBehaviour
 
     @Override
     @Nullable
-    public BlockState getRenderState(ItemStack stack, ItemStack proxiedStack, BlockHitResult hit, BlockPlaceContext ctx, BlockState hitState, boolean secondPass)
+    public BlockState getRenderState(
+            ItemStack stack,
+            @Nullable ItemStack proxiedStack,
+            BlockHitResult hit,
+            BlockPlaceContext ctx,
+            BlockState hitState,
+            boolean secondPass
+    )
     {
-        if (hitState.getBlock() == FBContent.blockFramedSlope.get())
+        if (hitState.getBlock() == FBContent.BLOCK_FRAMED_SLOPE.get())
         {
             RailShape shape = FramedUtils.getAscendingRailShapeFromDirection(hitState.getValue(FramedProperties.FACING_HOR));
             if (!(stack.getItem() instanceof BlockItem item) || !(item.getBlock() instanceof BaseRailBlock block))
@@ -40,13 +47,29 @@ public final class RailSlopeGhostRenderBehaviour implements GhostRenderBehaviour
     }
 
     @Override
-    public BlockPos getRenderPos(ItemStack stack, ItemStack proxiedStack, BlockHitResult hit, BlockPlaceContext ctx, BlockState hitState, BlockPos defaultPos, boolean secondPass)
+    public BlockPos getRenderPos(
+            ItemStack stack,
+            @Nullable ItemStack proxiedStack,
+            BlockHitResult hit,
+            BlockPlaceContext ctx,
+            BlockState hitState,
+            BlockPos defaultPos,
+            boolean secondPass
+    )
     {
         return hit.getBlockPos();
     }
 
     @Override
-    public boolean canRenderAt(ItemStack stack, ItemStack proxiedStack, BlockHitResult hit, BlockPlaceContext ctx, BlockState hitState, BlockState renderState, BlockPos renderPos)
+    public boolean canRenderAt(
+            ItemStack stack,
+            @Nullable ItemStack proxiedStack,
+            BlockHitResult hit,
+            BlockPlaceContext ctx,
+            BlockState hitState,
+            BlockState renderState,
+            BlockPos renderPos
+    )
     {
         return true;
     }

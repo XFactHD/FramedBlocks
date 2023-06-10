@@ -20,11 +20,13 @@ public class FramedSignItem extends StandingAndWallBlockItem
 {
     public FramedSignItem()
     {
-        super(FBContent.blockFramedSign.get(), FBContent.blockFramedWallSign.get(), new Properties(), Direction.DOWN);
+        super(FBContent.BLOCK_FRAMED_SIGN.get(), FBContent.BLOCK_FRAMED_WALL_SIGN.get(), new Properties(), Direction.DOWN);
     }
 
     @Override
-    protected boolean updateCustomBlockEntityTag(BlockPos pos, Level level, @Nullable Player player, ItemStack stack, BlockState state)
+    protected boolean updateCustomBlockEntityTag(
+            BlockPos pos, Level level, @Nullable Player player, ItemStack stack, BlockState state
+    )
     {
         boolean hadNBT = super.updateCustomBlockEntityTag(pos, level, player, stack, state);
         if (!level.isClientSide() && !hadNBT && player != null)

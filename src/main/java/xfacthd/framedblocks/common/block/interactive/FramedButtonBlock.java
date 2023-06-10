@@ -52,12 +52,12 @@ public class FramedButtonBlock extends ButtonBlock implements IFramedBlock
     }
 
     @Override
-    public final InteractionResult use(BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hit)
+    public final InteractionResult use(
+            BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hit
+    )
     {
         InteractionResult result = handleUse(state, level, pos, player, hand, hit);
-        if (result.consumesAction()) { return result; }
-
-        return super.use(state, level, pos, player, hand, hit);
+        return result.consumesAction() ? result : super.use(state, level, pos, player, hand, hit);
     }
 
     @Override

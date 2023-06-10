@@ -17,7 +17,7 @@ public class FramedDoubleSlopeSlabBlockEntity extends FramedDoubleBlockEntity
 {
     public FramedDoubleSlopeSlabBlockEntity(BlockPos pos, BlockState state)
     {
-        super(FBContent.blockEntityTypeFramedDoubleSlopeSlab.get(), pos, state);
+        super(FBContent.BE_TYPE_FRAMED_DOUBLE_SLOPE_SLAB.get(), pos, state);
     }
 
     @Override
@@ -26,8 +26,14 @@ public class FramedDoubleSlopeSlabBlockEntity extends FramedDoubleBlockEntity
         Direction facing = getBlockState().getValue(FramedProperties.FACING_HOR);
         Direction side = hit.getDirection();
 
-        if (side == facing.getOpposite() || side == Direction.UP) { return true; }
-        if (side == facing || side == Direction.DOWN) { return false; }
+        if (side == facing.getOpposite() || side == Direction.UP)
+        {
+            return true;
+        }
+        if (side == facing || side == Direction.DOWN)
+        {
+            return false;
+        }
 
         Vec3 vec = Utils.fraction(hit.getLocation());
 
@@ -46,7 +52,10 @@ public class FramedDoubleSlopeSlabBlockEntity extends FramedDoubleBlockEntity
     }
 
     @Override
-    public DoubleSoundMode getSoundMode() { return DoubleSoundMode.SECOND; }
+    public DoubleSoundMode getSoundMode()
+    {
+        return DoubleSoundMode.SECOND;
+    }
 
     @Override
     public CamoContainer getCamo(Direction side)
@@ -71,13 +80,11 @@ public class FramedDoubleSlopeSlabBlockEntity extends FramedDoubleBlockEntity
         boolean topHalf = getBlockState().getValue(PropertyHolder.TOP_HALF);
         if (topHalf && side == Direction.UP)
         {
-            //noinspection ConstantConditions
-            return getCamoTwo().getState().isSolidRender(level, worldPosition);
+            return getCamoTwo().isSolid(level, worldPosition);
         }
         else if (!topHalf && side == Direction.DOWN)
         {
-            //noinspection ConstantConditions
-            return getCamo().getState().isSolidRender(level, worldPosition);
+            return getCamo().isSolid(level, worldPosition);
         }
         return false;
     }

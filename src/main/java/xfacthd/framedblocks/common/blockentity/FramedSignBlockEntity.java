@@ -31,7 +31,7 @@ public class FramedSignBlockEntity extends FramedBlockEntity
 
     public FramedSignBlockEntity(BlockPos pos, BlockState state)
     {
-        super(FBContent.blockEntityTypeFramedSign.get(), pos, state);
+        super(FBContent.BE_TYPE_FRAMED_SIGN.get(), pos, state);
         for (int i = 0; i < 4; i++) { lines[i] = Component.literal(""); }
     }
 
@@ -41,7 +41,10 @@ public class FramedSignBlockEntity extends FramedBlockEntity
         renderLines[line] = null;
     }
 
-    public Component getLine(int line) { return lines[line]; }
+    public Component getLine(int line)
+    {
+        return lines[line];
+    }
 
     public FormattedCharSequence getRenderedLine(int line, Function<Component, FormattedCharSequence> converter)
     {
@@ -81,8 +84,6 @@ public class FramedSignBlockEntity extends FramedBlockEntity
         return new CommandSourceStack(CommandSource.NULL, posVec, Vec2.ZERO, (ServerLevel)level, 2, nameString, name, level.getServer(), player);
     }
 
-
-
     public boolean setTextColor(DyeColor color)
     {
         if (textColor != color)
@@ -98,7 +99,10 @@ public class FramedSignBlockEntity extends FramedBlockEntity
         return false;
     }
 
-    public DyeColor getTextColor() { return textColor; }
+    public DyeColor getTextColor()
+    {
+        return textColor;
+    }
 
     public boolean setGlowingText(boolean glowing)
     {
@@ -115,14 +119,26 @@ public class FramedSignBlockEntity extends FramedBlockEntity
         return false;
     }
 
-    public boolean hasGlowingText() { return glowingText; }
+    public boolean hasGlowingText()
+    {
+        return glowingText;
+    }
 
-    public Player getEditingPlayer() { return editingPlayer; }
+    public Player getEditingPlayer()
+    {
+        return editingPlayer;
+    }
 
-    public void setEditingPlayer(Player player) { this.editingPlayer = player; }
+    public void setEditingPlayer(Player player)
+    {
+        this.editingPlayer = player;
+    }
 
     @Override
-    public boolean onlyOpCanSetNbt() { return true; }
+    public boolean onlyOpCanSetNbt()
+    {
+        return true;
+    }
 
 
 

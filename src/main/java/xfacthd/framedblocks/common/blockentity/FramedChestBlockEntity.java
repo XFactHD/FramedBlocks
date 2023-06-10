@@ -23,7 +23,10 @@ public class FramedChestBlockEntity extends FramedStorageBlockEntity
     private long lastChangeTime = 0;
     private ChestState lastState = ChestState.CLOSED;
 
-    public FramedChestBlockEntity(BlockPos pos, BlockState state) { super(FBContent.blockEntityTypeFramedChest.get(), pos, state); }
+    public FramedChestBlockEntity(BlockPos pos, BlockState state)
+    {
+        super(FBContent.blockEntityTypeFramedChest.get(), pos, state);
+    }
 
     public static void tick(Level level, BlockPos pos, BlockState state, FramedChestBlockEntity tile)
     {
@@ -86,5 +89,8 @@ public class FramedChestBlockEntity extends FramedStorageBlockEntity
     }
 
     @Override
-    protected Component getDefaultName() { return TITLE; }
+    protected Component getDefaultName()
+    {
+        return TITLE;
+    }
 }

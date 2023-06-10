@@ -31,7 +31,7 @@ public final class FramingSawRecipeCache
     {
         clear();
 
-        recipes.addAll(recipeManager.getAllRecipesFor(FBContent.recipeTypeFramingSawRecipe.get()));
+        recipes.addAll(recipeManager.getAllRecipesFor(FBContent.RECIPE_TYPE_FRAMING_SAW_RECIPE.get()));
         recipes.sort(FramingSawRecipeCache::sortRecipes);
 
         recipes.forEach(recipe ->

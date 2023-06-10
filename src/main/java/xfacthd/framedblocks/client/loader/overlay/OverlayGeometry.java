@@ -17,7 +17,14 @@ record OverlayGeometry(BlockModel wrapped, Vector3f offset, Vector3f scale) impl
     public static final Vector3f VEC_ZERO = new Vector3f();
 
     @Override
-    public BakedModel bake(IGeometryBakingContext context, ModelBaker bakery, Function<Material, TextureAtlasSprite> spriteGetter, ModelState transform, ItemOverrides overrides, ResourceLocation modelLocation)
+    public BakedModel bake(
+            IGeometryBakingContext context,
+            ModelBaker bakery,
+            Function<Material, TextureAtlasSprite> spriteGetter,
+            ModelState transform,
+            ItemOverrides overrides,
+            ResourceLocation modelLocation
+    )
     {
         Transformation transformation = transform.getRotation().compose(new Transformation(offset, null, scale, null));
         transform = new SimpleModelState(transformation, transform.isUvLocked());

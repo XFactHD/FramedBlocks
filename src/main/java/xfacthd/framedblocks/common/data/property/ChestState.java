@@ -11,5 +11,8 @@ public enum ChestState implements StringRepresentable
     CLOSING;
 
     @Override
-    public String getSerializedName() { return toString().toLowerCase(Locale.ROOT); }
+    public String getSerializedName()
+    {
+        return toString().toLowerCase(Locale.ROOT);
+    }
 }

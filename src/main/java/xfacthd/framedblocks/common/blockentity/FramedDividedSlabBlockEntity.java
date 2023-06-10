@@ -15,7 +15,7 @@ public class FramedDividedSlabBlockEntity extends FramedDoubleBlockEntity
 {
     public FramedDividedSlabBlockEntity(BlockPos pos, BlockState state)
     {
-        super(FBContent.blockEntityTypeFramedDividedSlab.get(), pos, state);
+        super(FBContent.BE_TYPE_FRAMED_DIVIDED_SLAB.get(), pos, state);
     }
 
     @Override
@@ -24,8 +24,14 @@ public class FramedDividedSlabBlockEntity extends FramedDoubleBlockEntity
         Direction face = hit.getDirection();
         Direction dir = getBlockState().getValue(FramedProperties.FACING_HOR);
 
-        if (face == dir.getOpposite()) { return false; }
-        if (face == dir) { return true; }
+        if (face == dir.getOpposite())
+        {
+            return false;
+        }
+        if (face == dir)
+        {
+            return true;
+        }
 
         double xz = Utils.fractionInDir(hit.getLocation(), dir);
         return xz > .5D;

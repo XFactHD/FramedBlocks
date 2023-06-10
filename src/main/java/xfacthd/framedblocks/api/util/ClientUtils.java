@@ -41,9 +41,12 @@ public final class ClientUtils
      * @param ignoredProps The list of {@link Property}s to ignore, allows for deduplication of models when certain
      *                     properties don't influence the model (i.e. waterlogging).
      */
-    public static void replaceModels(RegistryObject<Block> block, Map<ResourceLocation, BakedModel> models,
-                                     BiFunction<BlockState, BakedModel, BakedModel> blockModelGen,
-                                     @Nullable List<Property<?>> ignoredProps)
+    public static void replaceModels(
+            RegistryObject<Block> block,
+            Map<ResourceLocation, BakedModel> models,
+            BiFunction<BlockState, BakedModel, BakedModel> blockModelGen,
+            @Nullable List<Property<?>> ignoredProps
+    )
     {
         replaceModels(block, models, blockModelGen, null, ignoredProps);
     }
@@ -58,10 +61,13 @@ public final class ClientUtils
      * @param ignoredProps The list of {@link Property}s to ignore, allows for deduplication of models when certain
      *                     properties don't influence the model (i.e. waterlogging).
      */
-    public static void replaceModels(RegistryObject<Block> block, Map<ResourceLocation, BakedModel> models,
-                                     BiFunction<BlockState, BakedModel, BakedModel> blockModelGen,
-                                     @Nullable BlockState itemModelSource,
-                                     @Nullable List<Property<?>> ignoredProps)
+    public static void replaceModels(
+            RegistryObject<Block> block,
+            Map<ResourceLocation, BakedModel> models,
+            BiFunction<BlockState, BakedModel, BakedModel> blockModelGen,
+            @Nullable BlockState itemModelSource,
+            @Nullable List<Property<?>> ignoredProps
+    )
     {
         replaceModelsSpecial(block, models, blockModelGen, itemModelSource, testState -> ignoreProps(testState, ignoredProps));
     }
@@ -76,9 +82,12 @@ public final class ClientUtils
      *                    properties or specific value ranges of a property don't influence the model (i.e. redstone power
      *                    of weighted pressure plates).
      */
-    public static void replaceModelsSpecial(RegistryObject<Block> block, Map<ResourceLocation, BakedModel> models,
-                                     BiFunction<BlockState, BakedModel, BakedModel> blockModelGen,
-                                     Function<BlockState, BlockState> stateMerger)
+    public static void replaceModelsSpecial(
+            RegistryObject<Block> block,
+            Map<ResourceLocation, BakedModel> models,
+            BiFunction<BlockState, BakedModel, BakedModel> blockModelGen,
+            Function<BlockState, BlockState> stateMerger
+    )
     {
         replaceModelsSpecial(block, models, blockModelGen, null, stateMerger);
     }
@@ -94,10 +103,13 @@ public final class ClientUtils
      *                    properties or specific value ranges of a property don't influence the model (i.e. redstone power
      *                    of weighted pressure plates).
      */
-    public static void replaceModelsSpecial(RegistryObject<Block> block, Map<ResourceLocation, BakedModel> models,
-                                     BiFunction<BlockState, BakedModel, BakedModel> blockModelGen,
-                                     @Nullable BlockState itemModelSource,
-                                     Function<BlockState, BlockState> stateMerger)
+    public static void replaceModelsSpecial(
+            RegistryObject<Block> block,
+            Map<ResourceLocation, BakedModel> models,
+            BiFunction<BlockState, BakedModel, BakedModel> blockModelGen,
+            @Nullable BlockState itemModelSource,
+            Function<BlockState, BlockState> stateMerger
+    )
     {
         Map<BlockState, BakedModel> visitedStates = new HashMap<>();
 
@@ -122,8 +134,10 @@ public final class ClientUtils
 
     @SuppressWarnings({ "unchecked", "rawtypes" })
     public static void reuseModels(
-            RegistryObject<Block> block, Map<ResourceLocation, BakedModel> models,
-            RegistryObject<Block> sourceBlock, @Nullable List<Property<?>> ignoredProps
+            RegistryObject<Block> block,
+            Map<ResourceLocation, BakedModel> models,
+            RegistryObject<Block> sourceBlock,
+            @Nullable List<Property<?>> ignoredProps
     )
     {
         for (BlockState state : block.get().getStateDefinition().getPossibleStates())
@@ -193,7 +207,10 @@ public final class ClientUtils
         }
     });
 
-    public static void enqueueClientTask(Runnable task) { Minecraft.getInstance().tell(task); }
+    public static void enqueueClientTask(Runnable task)
+    {
+        Minecraft.getInstance().tell(task);
+    }
 
     public static int getBlockColor(BlockAndTintGetter level, BlockPos pos, BlockState state, int tintIdx)
     {

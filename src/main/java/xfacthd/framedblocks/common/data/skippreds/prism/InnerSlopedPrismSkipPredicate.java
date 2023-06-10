@@ -26,16 +26,27 @@ public final class InnerSlopedPrismSkipPredicate implements SideSkipPredicate
             return SideSkipPredicate.CTM.test(level, pos, state, adjState, side);
         }
 
-        if (orientation.getAxis() == cmpDir.direction().getAxis()) { return false; }
+        if (orientation.getAxis() == cmpDir.direction().getAxis())
+        {
+            return false;
+        }
 
         if (adjState.getBlock() instanceof IFramedBlock block && block.getBlockType() instanceof BlockType type)
         {
             return switch (type)
             {
-                case FRAMED_INNER_SLOPED_PRISM -> testAgainstInnerSlopedPrism(level, pos, state, cmpDir, adjState, side);
-                case FRAMED_INNER_PRISM -> testAgainstInnerPrism(level, pos, state, cmpDir, adjState, side);
-                case FRAMED_DOUBLE_SLOPED_PRISM -> testAgainstDoubleSlopedPrism(level, pos, state, cmpDir, adjState, side);
-                case FRAMED_DOUBLE_PRISM -> testAgainstDoublePrism(level, pos, state, cmpDir, adjState, side);
+                case FRAMED_INNER_SLOPED_PRISM -> testAgainstInnerSlopedPrism(
+                        level, pos, state, cmpDir, adjState, side
+                );
+                case FRAMED_INNER_PRISM -> testAgainstInnerPrism(
+                        level, pos, state, cmpDir, adjState, side
+                );
+                case FRAMED_DOUBLE_SLOPED_PRISM -> testAgainstDoubleSlopedPrism(
+                        level, pos, state, cmpDir, adjState, side
+                );
+                case FRAMED_DOUBLE_PRISM -> testAgainstDoublePrism(
+                        level, pos, state, cmpDir, adjState, side
+                );
                 default -> false;
             };
         }

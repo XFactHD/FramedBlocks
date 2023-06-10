@@ -23,7 +23,7 @@ public class FramedFlowerPotBlockEntity extends FramedBlockEntity
 
     public FramedFlowerPotBlockEntity(BlockPos pos, BlockState state)
     {
-        super(FBContent.blockEntityTypeFramedFlowerPot.get(), pos, state);
+        super(FBContent.BE_TYPE_FRAMED_FLOWER_POT.get(), pos, state);
     }
 
     public void setFlowerBlock(Block flowerBlock)
@@ -39,9 +39,15 @@ public class FramedFlowerPotBlockEntity extends FramedBlockEntity
         }
     }
 
-    public boolean hasFlowerBlock() { return flowerBlock != Blocks.AIR; }
+    public boolean hasFlowerBlock()
+    {
+        return flowerBlock != Blocks.AIR;
+    }
 
-    public Block getFlowerBlock() { return flowerBlock; }
+    public Block getFlowerBlock()
+    {
+        return flowerBlock;
+    }
 
     @Override
     public void addCamoDrops(List<ItemStack> drops)

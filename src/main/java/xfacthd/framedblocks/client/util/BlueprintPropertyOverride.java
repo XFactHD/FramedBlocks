@@ -15,7 +15,7 @@ public final class BlueprintPropertyOverride
     public static void register()
     {
         ItemProperties.register(
-                FBContent.itemFramedBlueprint.get(),
+                FBContent.ITEM_FRAMED_BLUEPRINT.get(),
                 HAS_DATA,
                 (stack, level, entity, seed) ->
                 {

@@ -8,7 +8,6 @@ import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.client.model.BakedModelWrapper;
 import net.minecraftforge.client.model.data.ModelData;
-import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.joml.Vector3f;
 import xfacthd.framedblocks.api.model.quad.Modifiers;
@@ -37,19 +36,29 @@ final class OverlayModel extends BakedModelWrapper<BakedModel>
     }
 
     @Override
-    public List<BakedQuad> getQuads(@Nullable BlockState state, @Nullable Direction side, @NotNull RandomSource rand, @NotNull ModelData extraData, @Nullable RenderType renderType)
+    public List<BakedQuad> getQuads(
+            @Nullable BlockState state,
+            @Nullable Direction side,
+            RandomSource rand,
+            ModelData extraData,
+            @Nullable RenderType renderType
+    )
     {
         return side == null ? unculledQuads : culledQuads.get(side);
     }
 
 
 
-    private static List<BakedQuad> makeUnculledQuads(BakedModel model, Vector3f offset, Vector3f scale, RandomSource random)
+    private static List<BakedQuad> makeUnculledQuads(
+            BakedModel model, Vector3f offset, Vector3f scale, RandomSource random
+    )
     {
         return untranslateQuads(model.getQuads(null, null, random, ModelData.EMPTY, null), offset, scale);
     }
 
-    private static Map<Direction, List<BakedQuad>> makeCulledQuads(BakedModel model, Vector3f offset, Vector3f scale, RandomSource random)
+    private static Map<Direction, List<BakedQuad>> makeCulledQuads(
+            BakedModel model, Vector3f offset, Vector3f scale, RandomSource random
+    )
     {
         Map<Direction, List<BakedQuad>> quadMap = new EnumMap<>(Direction.class);
         for (Direction side : Direction.values())

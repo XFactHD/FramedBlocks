@@ -37,12 +37,15 @@ public final class CamoFactories
         }
         if (stack.getCapability(ForgeCapabilities.FLUID_HANDLER_ITEM).isPresent())
         {
-            return FBContent.factoryFluid.get();
+            return FBContent.FACTORY_FLUID.get();
         }
-        return FBContent.factoryBlock.get();
+        return FBContent.FACTORY_BLOCK.get();
     }
 
-    public static void lock() { locked = true; }
+    public static void lock()
+    {
+        locked = true;
+    }
 
 
 

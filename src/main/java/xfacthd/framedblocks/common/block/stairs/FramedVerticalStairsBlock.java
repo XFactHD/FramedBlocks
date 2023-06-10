@@ -45,7 +45,10 @@ public class FramedVerticalStairsBlock extends FramedBlock
     protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder)
     {
         super.createBlockStateDefinition(builder);
-        builder.add(FramedProperties.FACING_HOR, PropertyHolder.STAIRS_TYPE, BlockStateProperties.WATERLOGGED, FramedProperties.SOLID, FramedProperties.STATE_LOCKED);
+        builder.add(
+                FramedProperties.FACING_HOR, PropertyHolder.STAIRS_TYPE, BlockStateProperties.WATERLOGGED,
+                FramedProperties.SOLID, FramedProperties.STATE_LOCKED
+        );
     }
 
     @Override
@@ -73,7 +76,10 @@ public class FramedVerticalStairsBlock extends FramedBlock
 
     private BlockState getStateFromContext(BlockState state, LevelAccessor level, BlockPos pos)
     {
-        if (state.getValue(FramedProperties.STATE_LOCKED)) { return state; }
+        if (state.getValue(FramedProperties.STATE_LOCKED))
+        {
+            return state;
+        }
 
         Direction dir = state.getValue(FramedProperties.FACING_HOR);
 

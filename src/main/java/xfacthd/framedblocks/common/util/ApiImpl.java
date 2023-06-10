@@ -13,7 +13,6 @@ import xfacthd.framedblocks.api.blueprint.BlueprintCopyBehaviour;
 import xfacthd.framedblocks.api.camo.CamoContainer;
 import xfacthd.framedblocks.client.util.ClientConfig;
 import xfacthd.framedblocks.common.FBContent;
-import xfacthd.framedblocks.common.blockentity.FramedDoubleBlockEntity;
 import xfacthd.framedblocks.common.compat.flywheel.FlywheelCompat;
 import xfacthd.framedblocks.common.compat.nocubes.NoCubesCompat;
 import xfacthd.framedblocks.common.data.camo.CamoFactories;
@@ -23,31 +22,52 @@ import xfacthd.framedblocks.common.item.FramedBlueprintItem;
 public final class ApiImpl implements FramedBlocksAPI
 {
     @Override
-    public BlockEntityType<FramedBlockEntity> defaultBlockEntity() { return FBContent.blockEntityTypeFramedBlock.get(); }
+    public BlockEntityType<FramedBlockEntity> defaultBlockEntity()
+    {
+        return FBContent.BE_TYPE_FRAMED_BLOCK.get();
+    }
 
     @Override
-    public BlockState defaultModelState() { return FBContent.blockFramedCube.get().defaultBlockState(); }
+    public BlockState defaultModelState()
+    {
+        return FBContent.BLOCK_FRAMED_CUBE.get().defaultBlockState();
+    }
 
     @Override
-    public CreativeModeTab defaultCreativeTab() { return FBContent.mainTab.get(); }
+    public CreativeModeTab defaultCreativeTab()
+    {
+        return FBContent.MAIN_TAB.get();
+    }
 
     @Override
-    public boolean isFramedDoubleBlockEntity(FramedBlockEntity be) { return be instanceof FramedDoubleBlockEntity; }
+    public boolean areBlocksFireproof()
+    {
+        return CommonConfig.fireproofBlocks;
+    }
 
     @Override
-    public boolean areBlocksFireproof() { return CommonConfig.fireproofBlocks; }
+    public boolean detailedCullingEnabled()
+    {
+        return ClientConfig.detailedCulling;
+    }
 
     @Override
-    public boolean detailedCullingEnabled() { return ClientConfig.detailedCulling; }
+    public boolean allowBlockEntities()
+    {
+        return ServerConfig.allowBlockEntities;
+    }
 
     @Override
-    public boolean allowBlockEntities() { return ServerConfig.allowBlockEntities; }
+    public boolean enableIntangibility()
+    {
+        return ServerConfig.enableIntangibleFeature;
+    }
 
     @Override
-    public boolean enableIntangibility() { return ServerConfig.enableIntangibleFeature; }
-
-    @Override
-    public Item getIntangibilityMarkerItem() { return ServerConfig.intangibleMarkerItem; }
+    public Item getIntangibilityMarkerItem()
+    {
+        return ServerConfig.intangibleMarkerItem;
+    }
 
     @Override
     public IForgeRegistry<CamoContainer.Factory> getCamoContainerFactoryRegistry()
@@ -62,10 +82,16 @@ public final class ApiImpl implements FramedBlocksAPI
     }
 
     @Override
-    public CamoContainer.Factory emptyCamoContainerFactory() { return FBContent.factoryEmpty.get(); }
+    public CamoContainer.Factory emptyCamoContainerFactory()
+    {
+        return FBContent.FACTORY_EMPTY.get();
+    }
 
     @Override
-    public CamoContainer.Factory getCamoContainerFactory(ItemStack stack) { return CamoFactories.getFactory(stack); }
+    public CamoContainer.Factory getCamoContainerFactory(ItemStack stack)
+    {
+        return CamoFactories.getFactory(stack);
+    }
 
     @Override
     public void registerBlueprintCopyBehaviour(BlueprintCopyBehaviour behaviour, Block... blocks)

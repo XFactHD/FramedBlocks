@@ -59,7 +59,7 @@ public class FramedOneWayWindowBlock extends FramedBlock
     @Override
     public boolean handleBlockLeftClick(BlockState state, Level level, BlockPos pos, Player player)
     {
-        if (player.getMainHandItem().is(FBContent.itemFramedWrench.get()) && isOwnedBy(level, pos, player))
+        if (player.getMainHandItem().is(FBContent.ITEM_FRAMED_WRENCH.get()) && isOwnedBy(level, pos, player))
         {
             if (!level.isClientSide())
             {
@@ -95,9 +95,11 @@ public class FramedOneWayWindowBlock extends FramedBlock
     }
 
     @Override
-    public boolean shouldPreventNeighborCulling(BlockGetter level, BlockPos pos, BlockState state, BlockPos adjPos, BlockState adjState)
+    public boolean shouldPreventNeighborCulling(
+            BlockGetter level, BlockPos pos, BlockState state, BlockPos adjPos, BlockState adjState
+    )
     {
-        if (adjState.getBlock() != FBContent.blockFramedOneWayWindow.get())
+        if (adjState.getBlock() != FBContent.BLOCK_FRAMED_ONE_WAY_WINDOW.get())
         {
             return true;
         }

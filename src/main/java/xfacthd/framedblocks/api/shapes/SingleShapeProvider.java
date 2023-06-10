@@ -18,10 +18,16 @@ public final class SingleShapeProvider implements ShapeProvider
     }
 
     @Override
-    public VoxelShape get(BlockState state) { return shape; }
+    public VoxelShape get(BlockState state)
+    {
+        return shape;
+    }
 
     @Override
-    public boolean isEmpty() { return false; }
+    public boolean isEmpty()
+    {
+        return false;
+    }
 
     @Override
     public void forEach(BiConsumer<BlockState, VoxelShape> consumer)

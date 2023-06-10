@@ -27,16 +27,27 @@ public final class PrismSkipPredicate implements SideSkipPredicate
         }
 
         Direction.Axis axis = dirAxis.axis();
-        if (axis == dir.getAxis() || side.getAxis() != axis) { return false; }
+        if (axis == dir.getAxis() || side.getAxis() != axis)
+        {
+            return false;
+        }
 
         if (adjState.getBlock() instanceof IFramedBlock block && block.getBlockType() instanceof BlockType type)
         {
             return switch (type)
             {
-                case FRAMED_PRISM -> testAgainstPrism(level, pos, state, dirAxis, adjState, side);
-                case FRAMED_SLOPED_PRISM -> testAgainstSlopedPrism(level, pos, state, dirAxis, adjState, side);
-                case FRAMED_DOUBLE_PRISM -> testAgainstDoublePrism(level, pos, state, dirAxis, adjState, side);
-                case FRAMED_DOUBLE_SLOPED_PRISM -> testAgainstDoubleSlopedPrism(level, pos, state, dirAxis, adjState, side);
+                case FRAMED_PRISM -> testAgainstPrism(
+                        level, pos, state, dirAxis, adjState, side
+                );
+                case FRAMED_SLOPED_PRISM -> testAgainstSlopedPrism(
+                        level, pos, state, dirAxis, adjState, side
+                );
+                case FRAMED_DOUBLE_PRISM -> testAgainstDoublePrism(
+                        level, pos, state, dirAxis, adjState, side
+                );
+                case FRAMED_DOUBLE_SLOPED_PRISM -> testAgainstDoubleSlopedPrism(
+                        level, pos, state, dirAxis, adjState, side
+                );
                 default -> false;
             };
         }

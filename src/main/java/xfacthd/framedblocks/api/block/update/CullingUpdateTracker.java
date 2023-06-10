@@ -42,4 +42,8 @@ public final class CullingUpdateTracker
     {
         UPDATED_POSITIONS.computeIfAbsent(level.dimension(), $ -> new LongArraySet()).add(pos.asLong());
     }
+
+
+
+    private CullingUpdateTracker() { }
 }

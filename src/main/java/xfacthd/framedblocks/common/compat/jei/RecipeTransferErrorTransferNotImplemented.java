@@ -9,18 +9,12 @@ import net.minecraft.client.gui.screens.Screen;
 import java.util.List;
 import java.util.Optional;
 
-public class RecipeTransferErrorTransferNotImplemented implements IRecipeTransferError
+public final class RecipeTransferErrorTransferNotImplemented implements IRecipeTransferError
 {
     @Override
     public Type getType()
     {
         return Type.COSMETIC;
-    }
-
-    @Override
-    public int getButtonHighlightColor()
-    {
-        return 0x80FFA500;
     }
 
     @Override

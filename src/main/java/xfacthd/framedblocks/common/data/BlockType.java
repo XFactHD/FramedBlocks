@@ -247,16 +247,28 @@ public enum BlockType implements IBlockType
     }
 
     @Override
-    public boolean canOccludeWithSolidCamo() { return canOcclude; }
+    public boolean canOccludeWithSolidCamo()
+    {
+        return canOcclude;
+    }
 
     @Override
-    public boolean hasSpecialHitbox() { return specialHitbox; }
+    public boolean hasSpecialHitbox()
+    {
+        return specialHitbox;
+    }
 
     @Override
-    public CtmPredicate getCtmPredicate() { return ctmPredicate; }
+    public CtmPredicate getCtmPredicate()
+    {
+        return ctmPredicate;
+    }
 
     @Override
-    public SideSkipPredicate getSideSkipPredicate() { return skipPredicate; }
+    public SideSkipPredicate getSideSkipPredicate()
+    {
+        return skipPredicate;
+    }
 
     @Override
     public ShapeProvider generateShapes(ImmutableList<BlockState> states)
@@ -269,25 +281,46 @@ public enum BlockType implements IBlockType
     }
 
     @Override
-    public boolean hasSpecialTile() { return specialTile; }
+    public boolean hasSpecialTile()
+    {
+        return specialTile;
+    }
 
     @Override
-    public boolean hasBlockItem() { return blockItem; }
+    public boolean hasBlockItem()
+    {
+        return blockItem;
+    }
 
     @Override
-    public boolean supportsWaterLogging() { return waterloggable; }
+    public boolean supportsWaterLogging()
+    {
+        return waterloggable;
+    }
 
     @Override
-    public boolean allowMakingIntangible() { return allowIntangible; }
+    public boolean allowMakingIntangible()
+    {
+        return allowIntangible;
+    }
 
     @Override
-    public boolean isDoubleBlock() { return doubleBlock; }
+    public boolean isDoubleBlock()
+    {
+        return doubleBlock;
+    }
 
     @Override
-    public boolean canLockState() { return lockable; }
+    public boolean canLockState()
+    {
+        return lockable;
+    }
 
     @Override
-    public String getName() { return name; }
+    public String getName()
+    {
+        return name;
+    }
 
     @Override
     public int compareTo(IBlockType other)

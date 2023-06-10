@@ -17,18 +17,30 @@ public enum NullableDirection implements StringRepresentable
 
     private final Direction dir;
 
-    NullableDirection(Direction dir) { this.dir = dir; }
+    NullableDirection(Direction dir)
+    {
+        this.dir = dir;
+    }
 
-    public Direction toDirection() { return dir; }
+    public Direction toDirection()
+    {
+        return dir;
+    }
 
     @Override
-    public String getSerializedName() { return toString().toLowerCase(Locale.ROOT); }
+    public String getSerializedName()
+    {
+        return toString().toLowerCase(Locale.ROOT);
+    }
 
 
 
     public static NullableDirection fromDirection(Direction dir)
     {
-        if (dir == null) { return NONE; }
+        if (dir == null)
+        {
+            return NONE;
+        }
 
         return switch (dir)
         {

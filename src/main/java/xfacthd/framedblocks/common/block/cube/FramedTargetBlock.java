@@ -51,10 +51,15 @@ public class FramedTargetBlock extends TargetBlock implements IFramedBlock
     }
 
     @Override
-    public final InteractionResult use(BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hit)
+    public final InteractionResult use(
+            BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hit
+    )
     {
         InteractionResult result = handleUse(state, level, pos, player, hand, hit);
-        if (result != InteractionResult.PASS || !player.mayBuild()) { return result; }
+        if (result != InteractionResult.PASS || !player.mayBuild())
+        {
+            return result;
+        }
 
         ItemStack stack = player.getItemInHand(hand);
         if (!stack.isEmpty() && level.getBlockEntity(pos) instanceof FramedTargetBlockEntity be)
@@ -79,20 +84,32 @@ public class FramedTargetBlock extends TargetBlock implements IFramedBlock
     }
 
     @Override
-    public BlockState updateShape(BlockState state, Direction direction, BlockState neighborState, LevelAccessor level, BlockPos currentPos, BlockPos neighborPos)
+    public BlockState updateShape(
+            BlockState state,
+            Direction direction,
+            BlockState neighborState,
+            LevelAccessor level,
+            BlockPos currentPos,
+            BlockPos neighborPos
+    )
     {
         updateCulling(level, currentPos);
         return super.updateShape(state, direction, neighborState, level, currentPos, neighborPos);
     }
 
     @Override
-    public void neighborChanged(BlockState state, Level level, BlockPos pos, Block block, BlockPos fromPos, boolean isMoving)
+    public void neighborChanged(
+            BlockState state, Level level, BlockPos pos, Block block, BlockPos fromPos, boolean isMoving
+    )
     {
         updateCulling(level, pos);
     }
 
     @Override
-    public boolean useShapeForLightOcclusion(BlockState state) { return useCamoOcclusionShapeForLightOcclusion(state); }
+    public boolean useShapeForLightOcclusion(BlockState state)
+    {
+        return useCamoOcclusionShapeForLightOcclusion(state);
+    }
 
     @Override
     public VoxelShape getOcclusionShape(BlockState state, BlockGetter level, BlockPos pos)
@@ -147,5 +164,8 @@ public class FramedTargetBlock extends TargetBlock implements IFramedBlock
     }
 
     @Override
-    public IBlockType getBlockType() { return BlockType.FRAMED_TARGET; }
+    public IBlockType getBlockType()
+    {
+        return BlockType.FRAMED_TARGET;
+    }
 }

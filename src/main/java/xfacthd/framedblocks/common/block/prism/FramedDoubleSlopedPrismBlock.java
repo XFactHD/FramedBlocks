@@ -79,11 +79,11 @@ public class FramedDoubleSlopedPrismBlock extends AbstractFramedDoubleBlock
         boolean ySlope = state.getValue(FramedProperties.Y_SLOPE);
 
         return new Tuple<>(
-                FBContent.blockFramedInnerSlopedPrism.get()
+                FBContent.BLOCK_FRAMED_INNER_SLOPED_PRISM.get()
                         .defaultBlockState()
                         .setValue(PropertyHolder.FACING_DIR, cmpDir)
                         .setValue(FramedProperties.Y_SLOPE, ySlope),
-                FBContent.blockFramedSlopedPrism.get()
+                FBContent.BLOCK_FRAMED_SLOPED_PRISM.get()
                         .defaultBlockState()
                         .setValue(PropertyHolder.FACING_DIR, CompoundDirection.of(
                                 cmpDir.direction().getOpposite(),
@@ -117,7 +117,7 @@ public class FramedDoubleSlopedPrismBlock extends AbstractFramedDoubleBlock
 
     public static BlockState itemModelSource()
     {
-        return FBContent.blockFramedDoubleSlopedPrism.get()
+        return FBContent.BLOCK_FRAMED_DOUBLE_SLOPED_PRISM.get()
                 .defaultBlockState()
                 .setValue(PropertyHolder.FACING_DIR, CompoundDirection.UP_EAST);
     }

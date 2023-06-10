@@ -18,7 +18,14 @@ public final class DoorGhostRenderBehaviour implements GhostRenderBehaviour
 
     @Override
     @Nullable
-    public BlockState getRenderState(ItemStack stack, ItemStack proxiedStack, BlockHitResult hit, BlockPlaceContext ctx, BlockState hitState, boolean secondPass)
+    public BlockState getRenderState(
+            ItemStack stack,
+            @Nullable ItemStack proxiedStack,
+            BlockHitResult hit,
+            BlockPlaceContext ctx,
+            BlockState hitState,
+            boolean secondPass
+    )
     {
         BlockState state = GhostRenderBehaviour.super.getRenderState(stack, proxiedStack, hit, ctx, hitState, secondPass);
         if (state != null && secondPass)
@@ -29,13 +36,29 @@ public final class DoorGhostRenderBehaviour implements GhostRenderBehaviour
     }
 
     @Override
-    public BlockPos getRenderPos(ItemStack stack, ItemStack proxiedStack, BlockHitResult hit, BlockPlaceContext ctx, BlockState hitState, BlockPos defaultPos, boolean secondPass)
+    public BlockPos getRenderPos(
+            ItemStack stack,
+            @Nullable ItemStack proxiedStack,
+            BlockHitResult hit,
+            BlockPlaceContext ctx,
+            BlockState hitState,
+            BlockPos defaultPos,
+            boolean secondPass
+    )
     {
         return secondPass ? defaultPos.above() : defaultPos;
     }
 
     @Override
-    public boolean canRenderAt(ItemStack stack, ItemStack proxiedStack, BlockHitResult hit, BlockPlaceContext ctx, BlockState hitState, BlockState renderState, BlockPos renderPos)
+    public boolean canRenderAt(
+            ItemStack stack,
+            @Nullable ItemStack proxiedStack,
+            BlockHitResult hit,
+            BlockPlaceContext ctx,
+            BlockState hitState,
+            BlockState renderState,
+            BlockPos renderPos
+    )
     {
         return GhostRenderBehaviour.super.canRenderAt(stack, proxiedStack, hit, ctx, hitState, renderState, renderPos) &&
                GhostRenderBehaviour.super.canRenderAt(stack, proxiedStack, hit, ctx, hitState, renderState, renderPos.above());
@@ -52,7 +75,14 @@ public final class DoorGhostRenderBehaviour implements GhostRenderBehaviour
     }
 
     @Override
-    public CamoPair postProcessCamo(ItemStack stack, ItemStack proxiedStack, BlockPlaceContext ctx, BlockState renderState, boolean secondPass, CamoPair camo)
+    public CamoPair postProcessCamo(
+            ItemStack stack,
+            @Nullable ItemStack proxiedStack,
+            BlockPlaceContext ctx,
+            BlockState renderState,
+            boolean secondPass,
+            CamoPair camo
+    )
     {
         return secondPass ? camo.swap() : camo;
     }

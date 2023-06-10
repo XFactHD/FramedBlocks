@@ -115,7 +115,9 @@ public class FramedFlatSlopePanelCornerModel extends FramedBlockModel
         }
     }
 
-    public static QuadModifier.Modifier createVerticalSlopeTriangle(Direction facing, Direction orientation, boolean second)
+    public static QuadModifier.Modifier createVerticalSlopeTriangle(
+            Direction facing, Direction orientation, boolean second
+    )
     {
         boolean down = orientation == Direction.DOWN;
         float right = (second == down) ? 0 : 1;
@@ -168,7 +170,7 @@ public class FramedFlatSlopePanelCornerModel extends FramedBlockModel
 
     public static BlockState itemSource()
     {
-        return FBContent.blockFramedFlatSlopePanelCorner.get()
+        return FBContent.BLOCK_FRAMED_FLAT_SLOPE_PANEL_CORNER.get()
                 .defaultBlockState()
                 .setValue(FramedProperties.FACING_HOR, Direction.SOUTH)
                 .setValue(PropertyHolder.ROTATION, HorizontalRotation.RIGHT);

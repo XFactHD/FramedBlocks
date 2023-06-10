@@ -23,7 +23,7 @@ public class FramedStackedSlopePanelBlockEntity extends FramedDoubleBlockEntity
 
     public FramedStackedSlopePanelBlockEntity(BlockPos pos, BlockState state)
     {
-        super(FBContent.blockEntityTypeFramedStackedSlopePanel.get(), pos, state);
+        super(FBContent.BE_TYPE_FRAMED_STACKED_SLOPE_PANEL.get(), pos, state);
         BlockType type = (BlockType) getBlockType();
         this.corner = type != BlockType.FRAMED_FLAT_STACKED_SLOPE_PANEL_CORNER;
         this.innerCorner = type == BlockType.FRAMED_FLAT_STACKED_INNER_SLOPE_PANEL_CORNER;
@@ -36,14 +36,23 @@ public class FramedStackedSlopePanelBlockEntity extends FramedDoubleBlockEntity
         Direction side = hit.getDirection();
         Vec3 vec = Utils.fraction(hit.getLocation());
 
-        if (side == facing) { return false; }
-        if (side == facing.getOpposite()) { return true; }
+        if (side == facing)
+        {
+            return false;
+        }
+        if (side == facing.getOpposite())
+        {
+            return true;
+        }
 
         return Utils.fractionInDir(vec, facing.getOpposite()) > .5F;
     }
 
     @Override
-    public DoubleSoundMode getSoundMode() { return DoubleSoundMode.EITHER; }
+    public DoubleSoundMode getSoundMode()
+    {
+        return DoubleSoundMode.EITHER;
+    }
 
     @Override
     public CamoContainer getCamo(Direction side)
@@ -75,7 +84,6 @@ public class FramedStackedSlopePanelBlockEntity extends FramedDoubleBlockEntity
         {
             return getCamo().isSolid(level, worldPosition) && getCamoTwo().isSolid(level, worldPosition);
         }
-
         return false;
     }
 }

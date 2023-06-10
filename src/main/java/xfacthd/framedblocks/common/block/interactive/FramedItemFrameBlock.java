@@ -75,7 +75,14 @@ public class FramedItemFrameBlock extends FramedBlock
     }
 
     @Override
-    public BlockState updateShape(BlockState state, Direction direction, BlockState neighborState, LevelAccessor level, BlockPos currentPos, BlockPos neighborPos)
+    public BlockState updateShape(
+            BlockState state,
+            Direction direction,
+            BlockState neighborState,
+            LevelAccessor level,
+            BlockPos currentPos,
+            BlockPos neighborPos
+    )
     {
         if (!canSurvive(state, level, currentPos))
         {
@@ -92,7 +99,9 @@ public class FramedItemFrameBlock extends FramedBlock
     }
 
     @Override
-    public InteractionResult use(BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hit)
+    public InteractionResult use(
+            BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hit
+    )
     {
         InteractionResult result = super.use(state, level, pos, player, hand, hit);
         if (result.consumesAction()) { return result; }
@@ -107,7 +116,7 @@ public class FramedItemFrameBlock extends FramedBlock
     @Override
     public boolean handleBlockLeftClick(BlockState state, Level level, BlockPos pos, Player player)
     {
-        if (player.getMainHandItem().is(FBContent.itemFramedHammer.get()))
+        if (player.getMainHandItem().is(FBContent.ITEM_FRAMED_HAMMER.get()))
         {
             if (!level.isClientSide())
             {
@@ -134,7 +143,14 @@ public class FramedItemFrameBlock extends FramedBlock
     }
 
     @Override
-    public boolean addLandingEffects(BlockState state1, ServerLevel level, BlockPos pos, BlockState state2, LivingEntity entity, int numberOfParticles)
+    public boolean addLandingEffects(
+            BlockState state1,
+            ServerLevel level,
+            BlockPos pos,
+            BlockState state2,
+            LivingEntity entity,
+            int numberOfParticles
+    )
     {
         //Suppress landing impact particles
         return true;

@@ -11,7 +11,7 @@ import xfacthd.framedblocks.api.block.FramedProperties;
 import xfacthd.framedblocks.common.block.AbstractFramedSignBlock;
 import xfacthd.framedblocks.common.data.BlockType;
 
-public class FramedBlockMovementChecks implements BlockMovementChecks.AllChecks
+public final class FramedBlockMovementChecks implements BlockMovementChecks.AllChecks
 {
     @Override
     public BlockMovementChecks.CheckResult isBlockAttachedTowards(BlockState state, Level level, BlockPos pos, Direction side)

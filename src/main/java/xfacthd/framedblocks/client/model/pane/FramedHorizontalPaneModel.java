@@ -14,7 +14,10 @@ import java.util.Map;
 
 public class FramedHorizontalPaneModel extends FramedBlockModel
 {
-    public FramedHorizontalPaneModel(BlockState state, BakedModel baseModel) { super(state, baseModel); }
+    public FramedHorizontalPaneModel(BlockState state, BakedModel baseModel)
+    {
+        super(state, baseModel);
+    }
 
     @Override
     protected void transformQuad(Map<Direction, List<BakedQuad>> quadMap, BakedQuad quad)

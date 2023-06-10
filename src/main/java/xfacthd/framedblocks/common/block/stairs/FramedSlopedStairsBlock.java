@@ -47,7 +47,10 @@ public class FramedSlopedStairsBlock extends FramedBlock
     protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder)
     {
         super.createBlockStateDefinition(builder);
-        builder.add(FramedProperties.FACING_HOR, FramedProperties.TOP, FramedProperties.SOLID, PropertyHolder.RIGHT, BlockStateProperties.WATERLOGGED);
+        builder.add(
+                FramedProperties.FACING_HOR, FramedProperties.TOP, FramedProperties.SOLID,
+                PropertyHolder.RIGHT, BlockStateProperties.WATERLOGGED
+        );
     }
 
     @Override

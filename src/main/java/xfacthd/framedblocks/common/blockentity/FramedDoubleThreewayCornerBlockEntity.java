@@ -16,7 +16,7 @@ public class FramedDoubleThreewayCornerBlockEntity extends FramedDoubleBlockEnti
 {
     public FramedDoubleThreewayCornerBlockEntity(BlockPos pos, BlockState state)
     {
-        super(FBContent.blockEntityTypeDoubleFramedThreewayCorner.get(), pos, state);
+        super(FBContent.BE_TYPE_DOUBLE_FRAMED_THREEWAY_CORNER.get(), pos, state);
     }
 
     @Override
@@ -30,7 +30,10 @@ public class FramedDoubleThreewayCornerBlockEntity extends FramedDoubleBlockEnti
 
         if (top)
         {
-            if (side == facing || side == Direction.UP || side == facing.getCounterClockWise()) { return false; }
+            if (side == facing || side == Direction.UP || side == facing.getCounterClockWise())
+            {
+                return false;
+            }
 
             if (side == facing.getClockWise())
             {
@@ -54,13 +57,19 @@ public class FramedDoubleThreewayCornerBlockEntity extends FramedDoubleBlockEnti
             else if (side == Direction.DOWN)
             {
                 boolean secondary = Utils.isX(facing) ? vec.x() >= vec.z() : vec.z() >= (1D - vec.x());
-                if (Utils.isPositive(facing)) { secondary = !secondary; }
+                if (Utils.isPositive(facing))
+                {
+                    secondary = !secondary;
+                }
                 return secondary;
             }
         }
         else
         {
-            if (side == facing || side == Direction.DOWN || side == facing.getCounterClockWise()) { return false; }
+            if (side == facing || side == Direction.DOWN || side == facing.getCounterClockWise())
+            {
+                return false;
+            }
 
             if (side == facing.getClockWise())
             {
@@ -84,7 +93,10 @@ public class FramedDoubleThreewayCornerBlockEntity extends FramedDoubleBlockEnti
             else if (side == Direction.UP)
             {
                 boolean secondary = Utils.isX(facing) ? vec.x() >= vec.z() : vec.z() >= (1D - vec.x());
-                if (Utils.isPositive(facing)) { secondary = !secondary; }
+                if (Utils.isPositive(facing))
+                {
+                    secondary = !secondary;
+                }
                 return secondary;
             }
         }
@@ -105,13 +117,25 @@ public class FramedDoubleThreewayCornerBlockEntity extends FramedDoubleBlockEnti
 
         if (top)
         {
-            if (side == dir || side == Direction.UP || side == dir.getCounterClockWise()) { return getCamo(); }
-            if (side == dir.getOpposite() || side == Direction.DOWN || side == dir.getClockWise()) { return getCamoTwo(); }
+            if (side == dir || side == Direction.UP || side == dir.getCounterClockWise())
+            {
+                return getCamo();
+            }
+            if (side == dir.getOpposite() || side == Direction.DOWN || side == dir.getClockWise())
+            {
+                return getCamoTwo();
+            }
         }
         else
         {
-            if (side == dir || side == Direction.DOWN || side == dir.getCounterClockWise()) { return getCamo(); }
-            if (side == dir.getOpposite() || side == Direction.UP || side == dir.getClockWise()) { return getCamoTwo(); }
+            if (side == dir || side == Direction.DOWN || side == dir.getCounterClockWise())
+            {
+                return getCamo();
+            }
+            if (side == dir.getOpposite() || side == Direction.UP || side == dir.getClockWise())
+            {
+                return getCamoTwo();
+            }
         }
 
         return EmptyCamoContainer.EMPTY;
@@ -125,10 +149,8 @@ public class FramedDoubleThreewayCornerBlockEntity extends FramedDoubleBlockEnti
 
         if (side == dir || side == dir.getCounterClockWise() || (side == Direction.DOWN && !top) || (side == Direction.UP && top))
         {
-            //noinspection ConstantConditions
-            return getCamo(side).getState().isSolidRender(level, worldPosition);
+            return getCamo(side).isSolid(level, worldPosition);
         }
-        //noinspection ConstantConditions
-        return getCamo().getState().isSolidRender(level, worldPosition) && getCamoTwo().getState().isSolidRender(level, worldPosition);
+        return getCamo().isSolid(level, worldPosition) && getCamoTwo().isSolid(level, worldPosition);
     }
 }

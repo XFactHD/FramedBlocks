@@ -21,5 +21,8 @@ public class FramedSoulWallTorchBlock extends FramedWallTorchBlock
     }
 
     @Override
-    public BlockType getBlockType() { return BlockType.FRAMED_SOUL_WALL_TORCH; }
+    public BlockType getBlockType()
+    {
+        return BlockType.FRAMED_SOUL_WALL_TORCH;
+    }
 }

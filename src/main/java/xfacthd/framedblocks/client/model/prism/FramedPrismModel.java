@@ -110,7 +110,7 @@ public class FramedPrismModel extends FramedBlockModel
 
     public static BlockState itemSource()
     {
-        return FBContent.blockFramedPrism.get()
+        return FBContent.BLOCK_FRAMED_PRISM.get()
                 .defaultBlockState()
                 .setValue(PropertyHolder.FACING_AXIS, DirectionAxis.UP_X);
     }

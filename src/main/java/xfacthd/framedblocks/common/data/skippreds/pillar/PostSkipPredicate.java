@@ -27,7 +27,7 @@ public final class PostSkipPredicate implements SideSkipPredicate
             Direction.Axis adjAxis = adjState.getValue(BlockStateProperties.AXIS);
             return axis == adjAxis && SideSkipPredicate.compareState(level, pos, side, state, side);
         }
-        else if (block == FBContent.blockFramedFence.get() || isVerticalLattice(block, adjState))
+        else if (block == FBContent.BLOCK_FRAMED_FENCE.get() || isVerticalLattice(block, adjState))
         {
             return axis == Direction.Axis.Y && SideSkipPredicate.compareState(level, pos, side, state, side);
         }
@@ -36,6 +36,6 @@ public final class PostSkipPredicate implements SideSkipPredicate
 
     private static boolean isVerticalLattice(Block block, BlockState state)
     {
-        return block == FBContent.blockFramedLattice.get() && state.getValue(FramedProperties.Y_AXIS);
+        return block == FBContent.BLOCK_FRAMED_LATTICE.get() && state.getValue(FramedProperties.Y_AXIS);
     }
 }

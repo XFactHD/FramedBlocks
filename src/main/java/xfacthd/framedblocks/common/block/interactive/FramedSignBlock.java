@@ -48,7 +48,14 @@ public class FramedSignBlock extends AbstractFramedSignBlock // FIXME: update to
     }
 
     @Override
-    public BlockState updateShape(BlockState state, Direction facing, BlockState facingState, LevelAccessor level, BlockPos pos, BlockPos facingPos)
+    public BlockState updateShape(
+            BlockState state,
+            Direction facing,
+            BlockState facingState,
+            LevelAccessor level,
+            BlockPos pos,
+            BlockPos facingPos
+    )
     {
         if (facing == Direction.DOWN && !canSurvive(state, level, pos))
         {
@@ -64,7 +71,10 @@ public class FramedSignBlock extends AbstractFramedSignBlock // FIXME: update to
     }
 
     @Override
-    public boolean doesBlockOccludeBeaconBeam(BlockState state, LevelReader level, BlockPos pos) { return false; }
+    public boolean doesBlockOccludeBeaconBeam(BlockState state, LevelReader level, BlockPos pos)
+    {
+        return false;
+    }
 
     @Override
     public BlockState rotate(BlockState state, Direction face, Rotation rot)
@@ -97,5 +107,8 @@ public class FramedSignBlock extends AbstractFramedSignBlock // FIXME: update to
     }
 
     @Override
-    public BlockItem createBlockItem() { return new FramedSignItem(); }
+    public BlockItem createBlockItem()
+    {
+        return new FramedSignItem();
+    }
 }

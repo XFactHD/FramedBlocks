@@ -17,21 +17,45 @@ public sealed class FramedBlockData permits FramedBlockData.Immutable
 
     public FramedBlockData() { }
 
-    public void setCamoState(BlockState camoState) { this.camoState = camoState; }
+    public void setCamoState(BlockState camoState)
+    {
+        this.camoState = camoState;
+    }
 
-    public void setSideHidden(Direction side, boolean hide) { hidden[side.ordinal()] = hide; }
+    public void setSideHidden(Direction side, boolean hide)
+    {
+        hidden[side.ordinal()] = hide;
+    }
 
-    public void setUseAltModel(boolean altModel) { this.altModel = altModel; }
+    public void setUseAltModel(boolean altModel)
+    {
+        this.altModel = altModel;
+    }
 
-    public void setReinforced(boolean reinforced) { this.reinforced = reinforced; }
+    public void setReinforced(boolean reinforced)
+    {
+        this.reinforced = reinforced;
+    }
 
-    public BlockState getCamoState() { return camoState; }
+    public BlockState getCamoState()
+    {
+        return camoState;
+    }
 
-    public boolean isSideHidden(Direction side) { return hidden[side.ordinal()]; }
+    public boolean isSideHidden(Direction side)
+    {
+        return hidden[side.ordinal()];
+    }
 
-    public boolean useAltModel() { return altModel; }
+    public boolean useAltModel()
+    {
+        return altModel;
+    }
 
-    public boolean isReinforced() { return reinforced; }
+    public boolean isReinforced()
+    {
+        return reinforced;
+    }
 
 
 

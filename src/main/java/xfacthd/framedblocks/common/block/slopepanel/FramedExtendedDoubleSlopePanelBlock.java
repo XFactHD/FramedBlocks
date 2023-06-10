@@ -88,7 +88,10 @@ public class FramedExtendedDoubleSlopePanelBlock extends AbstractFramedDoubleBlo
 
     @Override
     @SuppressWarnings("deprecation")
-    public BlockState rotate(BlockState state, Rotation rot) { return rotate(state, Direction.UP, rot); }
+    public BlockState rotate(BlockState state, Rotation rot)
+    {
+        return rotate(state, Direction.UP, rot);
+    }
 
     @Override
     @SuppressWarnings("deprecation")
@@ -105,11 +108,11 @@ public class FramedExtendedDoubleSlopePanelBlock extends AbstractFramedDoubleBlo
         boolean ySlope = state.getValue(FramedProperties.Y_SLOPE);
 
         return new Tuple<>(
-                FBContent.blockFramedExtendedSlopePanel.get().defaultBlockState()
+                FBContent.BLOCK_FRAMED_EXTENDED_SLOPE_PANEL.get().defaultBlockState()
                         .setValue(FramedProperties.FACING_HOR, facing)
                         .setValue(PropertyHolder.ROTATION, rotation)
                         .setValue(FramedProperties.Y_SLOPE, ySlope),
-                FBContent.blockFramedSlopePanel.get().defaultBlockState()
+                FBContent.BLOCK_FRAMED_SLOPE_PANEL.get().defaultBlockState()
                         .setValue(FramedProperties.FACING_HOR, facing.getOpposite())
                         .setValue(PropertyHolder.ROTATION, rotation.isVertical() ? rotation.getOpposite() : rotation)
                         .setValue(PropertyHolder.FRONT, false)
@@ -127,7 +130,7 @@ public class FramedExtendedDoubleSlopePanelBlock extends AbstractFramedDoubleBlo
 
     public static BlockState itemSource()
     {
-        return FBContent.blockFramedExtendedDoubleSlopePanel.get()
+        return FBContent.BLOCK_FRAMED_EXTENDED_DOUBLE_SLOPE_PANEL.get()
                 .defaultBlockState()
                 .setValue(FramedProperties.FACING_HOR, Direction.SOUTH);
     }

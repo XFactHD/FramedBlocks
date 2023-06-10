@@ -77,8 +77,14 @@ public class FramedFenceGateModel extends FramedBlockModel
                     .export(quadMap.get(null));
         }
 
-        if (open) { createGateOpen(quadMap, quad, yOff); }
-        else { createGateClosed(quadMap.get(null), quad, yOff); }
+        if (open)
+        {
+            createGateOpen(quadMap, quad, yOff);
+        }
+        else
+        {
+            createGateClosed(quadMap.get(null), quad, yOff);
+        }
     }
 
     private void createGateClosed(List<BakedQuad> quadList, BakedQuad quad, float yOff)
@@ -109,7 +115,10 @@ public class FramedFenceGateModel extends FramedBlockModel
                     .apply(Modifiers.cutTopBottom(dir.getClockWise(), 14F/16F))
                     .apply(Modifiers.cutTopBottom(dir.getCounterClockWise(), 14F/16F));
 
-            if (mod.hasFailed()) { return; }
+            if (mod.hasFailed())
+            {
+                return;
+            }
 
             boolean up = quadDir == Direction.UP;
             float height = up ? 9F / 16F - yOff : 4F / 16F + yOff;

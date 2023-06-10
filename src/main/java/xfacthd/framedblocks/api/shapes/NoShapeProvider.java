@@ -18,7 +18,10 @@ public final class NoShapeProvider implements ShapeProvider
     }
 
     @Override
-    public boolean isEmpty() { return true; }
+    public boolean isEmpty()
+    {
+        return true;
+    }
 
     @Override
     public void forEach(BiConsumer<BlockState, VoxelShape> consumer)

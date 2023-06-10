@@ -170,7 +170,21 @@ public final class ModelUtils
      * @param rotated Whether the UVs are rotated
      * @param mirrored Whether the UVs are mirrored
      */
-    public static void remapUV(Direction quadDir, TextureAtlasSprite sprite, float coord1, float coord2, float coordTo, float[][] uv, int uv1, int uv2, int uvTo, boolean vAxis, boolean invert, boolean rotated, boolean mirrored)
+    public static void remapUV(
+            Direction quadDir,
+            TextureAtlasSprite sprite,
+            float coord1,
+            float coord2,
+            float coordTo,
+            float[][] uv,
+            int uv1,
+            int uv2,
+            int uvTo,
+            boolean vAxis,
+            boolean invert,
+            boolean rotated,
+            boolean mirrored
+    )
     {
         remapUV(quadDir, sprite, coord1, coord2, coordTo, uv, uv, uv1, uv2, uvTo, vAxis, invert, rotated, mirrored);
     }
@@ -195,7 +209,22 @@ public final class ModelUtils
      * @param rotated Whether the UVs are rotated
      * @param mirrored Whether the UVs are mirrored
      */
-    public static void remapUV(Direction quadDir, TextureAtlasSprite sprite, float coord1, float coord2, float coordTo, float[][] uvSrc, float[][] uvDest, int uv1, int uv2, int uvTo, boolean vAxis, boolean invert, boolean rotated, boolean mirrored)
+    public static void remapUV(
+            Direction quadDir,
+            TextureAtlasSprite sprite,
+            float coord1,
+            float coord2,
+            float coordTo,
+            float[][] uvSrc,
+            float[][] uvDest,
+            int uv1,
+            int uv2,
+            int uvTo,
+            boolean vAxis,
+            boolean invert,
+            boolean rotated,
+            boolean mirrored
+    )
     {
         if (rotated)
         {
@@ -304,9 +333,15 @@ public final class ModelUtils
         );
     }
 
-    public static int encodeSecondaryTintIndex(int tintIndex) { return (tintIndex + 2) * -1; }
+    public static int encodeSecondaryTintIndex(int tintIndex)
+    {
+        return (tintIndex + 2) * -1;
+    }
 
-    public static int decodeSecondaryTintIndex(int tintIndex) { return (tintIndex * -1) - 2; }
+    public static int decodeSecondaryTintIndex(int tintIndex)
+    {
+        return (tintIndex * -1) - 2;
+    }
 
     public static ModelData getCamoModelData(ModelData data)
     {
@@ -316,7 +351,9 @@ public final class ModelUtils
 
     private static final MethodHandle WBM_WRAPPED_MODEL = Utils.unreflectField(WeightedBakedModel.class, "f_119542_");
 
-    public static List<BakedQuad> getAllCullableQuads(BakedModel model, BlockState state, RandomSource rand, ModelData data, RenderType renderType)
+    public static List<BakedQuad> getAllCullableQuads(
+            BakedModel model, BlockState state, RandomSource rand, ModelData data, RenderType renderType
+    )
     {
         if (model instanceof WeightedBakedModel weighted)
         {

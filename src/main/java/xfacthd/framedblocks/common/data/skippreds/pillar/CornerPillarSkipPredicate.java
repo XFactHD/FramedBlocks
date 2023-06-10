@@ -32,33 +32,87 @@ public final class CornerPillarSkipPredicate implements SideSkipPredicate
 
             return switch (type)
             {
-                case FRAMED_CORNER_PILLAR -> testAgainstPillar(level, pos, state, dir, adjState, side);
-                case FRAMED_DIVIDED_PANEL_VERTICAL -> testAgainstDividedPanelVert(level, pos, state, dir, adjState, side);
-                case FRAMED_SLAB_CORNER -> testAgainstCorner(level, pos, state, dir, adjState, side);
-                case FRAMED_PANEL -> testAgainstPanel(level, pos, state, dir, adjState, side);
-                case FRAMED_DOUBLE_PANEL -> testAgainstDoublePanel(level, pos, state, dir, adjState, side);
-                case FRAMED_STAIRS -> testAgainstStairs(level, pos, state, dir, adjState, side);
-                case FRAMED_HALF_STAIRS -> testAgainstHalfStairs(level, pos, state, dir, adjState, side);
-                case FRAMED_DIVIDED_STAIRS -> testAgainstDividedStairs(level, pos, state, dir, adjState, side);
-                case FRAMED_VERTICAL_STAIRS -> testAgainstVerticalStairs(level, pos, state, dir, adjState, side);
-                case FRAMED_VERTICAL_DOUBLE_STAIRS -> testAgainstVerticalDoubleStairs(level, pos, state, dir, adjState, side);
-                case FRAMED_SLOPE_PANEL -> testAgainstSlopePanel(level, pos, state, dir, adjState, side);
-                case FRAMED_EXTENDED_SLOPE_PANEL -> testAgainstExtendedSlopePanel(level, pos, state, dir, adjState, side);
-                case FRAMED_DOUBLE_SLOPE_PANEL -> testAgainstDoubleSlopePanel(level, pos, state, dir, adjState, side);
-                case FRAMED_INV_DOUBLE_SLOPE_PANEL -> testAgainstInverseDoubleSlopePanel(level, pos, state, dir, adjState, side);
-                case FRAMED_EXTENDED_DOUBLE_SLOPE_PANEL -> testAgainstExtendedDoubleSlopePanel(level, pos, state, dir, adjState, side);
-                case FRAMED_STACKED_SLOPE_PANEL -> testAgainstStackedSlopePanel(level, pos, state, dir, adjState, side);
-                case FRAMED_FLAT_INNER_SLOPE_PANEL_CORNER -> testAgainstFlatInnerSlopePanelCorner(level, pos, state, dir, adjState, side);
-                case FRAMED_FLAT_EXT_SLOPE_PANEL_CORNER -> testAgainstFlatExtendedSlopePanelCorner(level, pos, state, dir, adjState, side);
-                case FRAMED_FLAT_DOUBLE_SLOPE_PANEL_CORNER -> testAgainstFlatDoubleSlopePanelCorner(level, pos, state, dir, adjState, side);
-                case FRAMED_FLAT_INV_DOUBLE_SLOPE_PANEL_CORNER -> testAgainstFlatInverseDoubleSlopePanelCorner(level, pos, state, dir, adjState, side);
-                case FRAMED_FLAT_EXT_DOUBLE_SLOPE_PANEL_CORNER -> testAgainstFlatExtendedDoubleSlopePanelCorner(level, pos, state, dir, adjState, side);
-                case FRAMED_FLAT_STACKED_SLOPE_PANEL_CORNER -> testAgainstFlatStackedSlopePanelCorner(level, pos, state, dir, adjState, side);
-                case FRAMED_FLAT_STACKED_INNER_SLOPE_PANEL_CORNER -> testAgainstFlatStackedInnerSlopePanelCorner(level, pos, state, dir, adjState, side);
-                case FRAMED_HALF_SLOPE -> testAgainstHalfSlope(level, pos, state, dir, adjState, side);
-                case FRAMED_DIVIDED_SLOPE -> testAgainstDividedSlope(level, pos, state, dir, adjState, side);
-                case FRAMED_DOUBLE_HALF_SLOPE -> testAgainstDoubleHalfSlope(level, pos, state, dir, adjState, side);
-                case FRAMED_VERTICAL_SLOPED_STAIRS -> testAgainstVerticalSlopedStairs(level, pos, state, dir, adjState, side);
+                case FRAMED_CORNER_PILLAR -> testAgainstPillar(
+                        level, pos, state, dir, adjState, side
+                );
+                case FRAMED_DIVIDED_PANEL_VERTICAL -> testAgainstDividedPanelVert(
+                        level, pos, state, dir, adjState, side
+                );
+                case FRAMED_SLAB_CORNER -> testAgainstCorner(
+                        level, pos, state, dir, adjState, side
+                );
+                case FRAMED_PANEL -> testAgainstPanel(
+                        level, pos, state, dir, adjState, side
+                );
+                case FRAMED_DOUBLE_PANEL -> testAgainstDoublePanel(
+                        level, pos, state, dir, adjState, side
+                );
+                case FRAMED_STAIRS -> testAgainstStairs(
+                        level, pos, state, dir, adjState, side
+                );
+                case FRAMED_HALF_STAIRS -> testAgainstHalfStairs(
+                        level, pos, state, dir, adjState, side
+                );
+                case FRAMED_DIVIDED_STAIRS -> testAgainstDividedStairs(
+                        level, pos, state, dir, adjState, side
+                );
+                case FRAMED_VERTICAL_STAIRS -> testAgainstVerticalStairs(
+                        level, pos, state, dir, adjState, side
+                );
+                case FRAMED_VERTICAL_DOUBLE_STAIRS -> testAgainstVerticalDoubleStairs(
+                        level, pos, state, dir, adjState, side
+                );
+                case FRAMED_SLOPE_PANEL -> testAgainstSlopePanel(
+                        level, pos, state, dir, adjState, side
+                );
+                case FRAMED_EXTENDED_SLOPE_PANEL -> testAgainstExtendedSlopePanel(
+                        level, pos, state, dir, adjState, side
+                );
+                case FRAMED_DOUBLE_SLOPE_PANEL -> testAgainstDoubleSlopePanel(
+                        level, pos, state, dir, adjState, side
+                );
+                case FRAMED_INV_DOUBLE_SLOPE_PANEL -> testAgainstInverseDoubleSlopePanel(
+                        level, pos, state, dir, adjState, side
+                );
+                case FRAMED_EXTENDED_DOUBLE_SLOPE_PANEL -> testAgainstExtendedDoubleSlopePanel(
+                        level, pos, state, dir, adjState, side
+                );
+                case FRAMED_STACKED_SLOPE_PANEL -> testAgainstStackedSlopePanel(
+                        level, pos, state, dir, adjState, side
+                );
+                case FRAMED_FLAT_INNER_SLOPE_PANEL_CORNER -> testAgainstFlatInnerSlopePanelCorner(
+                        level, pos, state, dir, adjState, side
+                );
+                case FRAMED_FLAT_EXT_SLOPE_PANEL_CORNER -> testAgainstFlatExtendedSlopePanelCorner(
+                        level, pos, state, dir, adjState, side
+                );
+                case FRAMED_FLAT_DOUBLE_SLOPE_PANEL_CORNER -> testAgainstFlatDoubleSlopePanelCorner(
+                        level, pos, state, dir, adjState, side
+                );
+                case FRAMED_FLAT_INV_DOUBLE_SLOPE_PANEL_CORNER -> testAgainstFlatInverseDoubleSlopePanelCorner(
+                        level, pos, state, dir, adjState, side
+                );
+                case FRAMED_FLAT_EXT_DOUBLE_SLOPE_PANEL_CORNER -> testAgainstFlatExtendedDoubleSlopePanelCorner(
+                        level, pos, state, dir, adjState, side
+                );
+                case FRAMED_FLAT_STACKED_SLOPE_PANEL_CORNER -> testAgainstFlatStackedSlopePanelCorner(
+                        level, pos, state, dir, adjState, side
+                );
+                case FRAMED_FLAT_STACKED_INNER_SLOPE_PANEL_CORNER -> testAgainstFlatStackedInnerSlopePanelCorner(
+                        level, pos, state, dir, adjState, side
+                );
+                case FRAMED_HALF_SLOPE -> testAgainstHalfSlope(
+                        level, pos, state, dir, adjState, side
+                );
+                case FRAMED_DIVIDED_SLOPE -> testAgainstDividedSlope(
+                        level, pos, state, dir, adjState, side
+                );
+                case FRAMED_DOUBLE_HALF_SLOPE -> testAgainstDoubleHalfSlope(
+                        level, pos, state, dir, adjState, side
+                );
+                case FRAMED_VERTICAL_SLOPED_STAIRS -> testAgainstVerticalSlopedStairs(
+                        level, pos, state, dir, adjState, side
+                );
                 default -> false;
             };
         }
@@ -82,7 +136,9 @@ public final class CornerPillarSkipPredicate implements SideSkipPredicate
         return false;
     }
 
-    private static boolean testAgainstDividedPanelVert(BlockGetter level, BlockPos pos, BlockState state, Direction dir, BlockState adjState, Direction side)
+    private static boolean testAgainstDividedPanelVert(
+            BlockGetter level, BlockPos pos, BlockState state, Direction dir, BlockState adjState, Direction side
+    )
     {
         Tuple<BlockState, BlockState> states = AbstractFramedDoubleBlock.getStatePair(adjState);
         return testAgainstPillar(level, pos, state, dir, states.getA(), side) ||
@@ -188,7 +244,9 @@ public final class CornerPillarSkipPredicate implements SideSkipPredicate
         return false;
     }
 
-    private static boolean testAgainstDividedStairs(BlockGetter level, BlockPos pos, BlockState state, Direction dir, BlockState adjState, Direction side)
+    private static boolean testAgainstDividedStairs(
+            BlockGetter level, BlockPos pos, BlockState state, Direction dir, BlockState adjState, Direction side
+    )
     {
         Tuple<BlockState, BlockState> states = AbstractFramedDoubleBlock.getStatePair(adjState);
         return testAgainstHalfStairs(level, pos, state, dir, states.getA(), side) ||

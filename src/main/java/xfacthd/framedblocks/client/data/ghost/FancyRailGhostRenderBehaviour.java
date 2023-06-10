@@ -20,7 +20,14 @@ public final class FancyRailGhostRenderBehaviour implements GhostRenderBehaviour
     }
 
     @Override
-    public @Nullable BlockState getRenderState(ItemStack stack, @Nullable ItemStack proxiedStack, BlockHitResult hit, BlockPlaceContext ctx, BlockState hitState, boolean secondPass)
+    public @Nullable BlockState getRenderState(
+            ItemStack stack,
+            @Nullable ItemStack proxiedStack,
+            BlockHitResult hit,
+            BlockPlaceContext ctx,
+            BlockState hitState,
+            boolean secondPass
+    )
     {
         BlockState state = railSlopeBehaviour.getRenderState(stack, proxiedStack, hit, ctx, hitState, secondPass);
         if (state != null)
@@ -31,9 +38,17 @@ public final class FancyRailGhostRenderBehaviour implements GhostRenderBehaviour
     }
 
     @Override
-    public BlockPos getRenderPos(ItemStack stack, @Nullable ItemStack proxiedStack, BlockHitResult hit, BlockPlaceContext ctx, BlockState hitState, BlockPos defaultPos, boolean secondPass)
+    public BlockPos getRenderPos(
+            ItemStack stack,
+            @Nullable ItemStack proxiedStack,
+            BlockHitResult hit,
+            BlockPlaceContext ctx,
+            BlockState hitState,
+            BlockPos defaultPos,
+            boolean secondPass
+    )
     {
-        if (hitState.getBlock() == FBContent.blockFramedSlope.get())
+        if (hitState.getBlock() == FBContent.BLOCK_FRAMED_SLOPE.get())
         {
             return railSlopeBehaviour.getRenderPos(stack, proxiedStack, hit, ctx, hitState, defaultPos, secondPass);
         }
@@ -41,7 +56,15 @@ public final class FancyRailGhostRenderBehaviour implements GhostRenderBehaviour
     }
 
     @Override
-    public boolean canRenderAt(ItemStack stack, @Nullable ItemStack proxiedStack, BlockHitResult hit, BlockPlaceContext ctx, BlockState hitState, BlockState renderState, BlockPos renderPos)
+    public boolean canRenderAt(
+            ItemStack stack,
+            @Nullable ItemStack proxiedStack,
+            BlockHitResult hit,
+            BlockPlaceContext ctx,
+            BlockState hitState,
+            BlockState renderState,
+            BlockPos renderPos
+    )
     {
         if (renderPos.equals(hit.getBlockPos()))
         {

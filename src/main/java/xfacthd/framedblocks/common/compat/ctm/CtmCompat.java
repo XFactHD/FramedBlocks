@@ -53,4 +53,8 @@ public final class CtmCompat
             return data.get(CTM_CT_PROPERTY);
         }
     }
+
+
+
+    private CtmCompat() { }
 }

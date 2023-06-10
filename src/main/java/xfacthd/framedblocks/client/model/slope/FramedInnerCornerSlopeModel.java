@@ -137,6 +137,8 @@ public class FramedInnerCornerSlopeModel extends FramedBlockModel
 
     public static BlockState itemSource()
     {
-        return FBContent.blockFramedInnerCornerSlope.get().defaultBlockState().setValue(FramedProperties.FACING_HOR, Direction.SOUTH);
+        return FBContent.BLOCK_FRAMED_INNER_CORNER_SLOPE.get()
+                .defaultBlockState()
+                .setValue(FramedProperties.FACING_HOR, Direction.SOUTH);
     }
 }

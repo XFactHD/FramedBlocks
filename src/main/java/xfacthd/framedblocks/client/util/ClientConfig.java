@@ -89,11 +89,11 @@ public final class ClientConfig
 
         builder.push("general");
         showGhostBlocksValue = builder
-                .comment("Wether ghost blocks are shown when you are holding a framed block")
+                .comment("Whether ghost blocks are shown when you are holding a framed block")
                 .translation(TRANSLATION_SHOW_GHOST_BLOCKS)
                 .define(KEY_SHOW_GHOST_BLOCKS, true);
         fancyHitboxesValue = builder
-                .comment("Wether certain framed blocks should show fancy hitboxes")
+                .comment("Whether certain framed blocks should show fancy hitboxes")
                 .translation(TRANSLATION_FANCY_HITBOXES)
                 .define(KEY_FANCY_HITBOXES, true);
         detailedCullingValue = builder

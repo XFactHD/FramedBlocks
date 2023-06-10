@@ -10,7 +10,10 @@ import xfacthd.framedblocks.common.data.BlockType;
 
 public class FramedHorizontalPaneBlock extends FramedBlock
 {
-    public FramedHorizontalPaneBlock() { super(BlockType.FRAMED_HORIZONTAL_PANE); }
+    public FramedHorizontalPaneBlock()
+    {
+        super(BlockType.FRAMED_HORIZONTAL_PANE);
+    }
 
     @Override
     protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder)

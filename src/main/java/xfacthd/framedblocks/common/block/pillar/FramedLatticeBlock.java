@@ -37,7 +37,10 @@ public class FramedLatticeBlock extends FramedBlock
     protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder)
     {
         super.createBlockStateDefinition(builder);
-        builder.add(FramedProperties.X_AXIS, FramedProperties.Y_AXIS, FramedProperties.Z_AXIS, BlockStateProperties.WATERLOGGED, FramedProperties.STATE_LOCKED);
+        builder.add(
+                FramedProperties.X_AXIS, FramedProperties.Y_AXIS, FramedProperties.Z_AXIS,
+                BlockStateProperties.WATERLOGGED, FramedProperties.STATE_LOCKED
+        );
     }
 
     @Override
@@ -55,7 +58,14 @@ public class FramedLatticeBlock extends FramedBlock
     }
 
     @Override
-    public BlockState updateShape(BlockState state, Direction facing, BlockState facingState, LevelAccessor level, BlockPos pos, BlockPos facingPos)
+    public BlockState updateShape(
+            BlockState state,
+            Direction facing,
+            BlockState facingState,
+            LevelAccessor level,
+            BlockPos pos,
+            BlockPos facingPos
+    )
     {
         if (!state.getValue(FramedProperties.STATE_LOCKED))
         {

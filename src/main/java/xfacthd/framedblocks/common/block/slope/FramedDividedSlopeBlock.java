@@ -43,7 +43,12 @@ public class FramedDividedSlopeBlock extends AbstractFramedDoubleBlock
     @Override
     public BlockState getStateForPlacement(BlockPlaceContext context)
     {
-        BlockState state = withSlopeType(defaultBlockState(), context.getClickedFace(), context.getHorizontalDirection(), context.getClickLocation());
+        BlockState state = withSlopeType(
+                defaultBlockState(),
+                context.getClickedFace(),
+                context.getHorizontalDirection(),
+                context.getClickLocation()
+        );
         return withWater(state, context.getLevel(), context.getClickedPos());
     }
 
@@ -71,7 +76,10 @@ public class FramedDividedSlopeBlock extends AbstractFramedDoubleBlock
 
     @Override
     @SuppressWarnings("deprecation")
-    public BlockState rotate(BlockState state, Rotation rot) { return rotate(state, Direction.UP, rot); }
+    public BlockState rotate(BlockState state, Rotation rot)
+    {
+        return rotate(state, Direction.UP, rot);
+    }
 
     @Override
     @SuppressWarnings("deprecation")
@@ -95,7 +103,7 @@ public class FramedDividedSlopeBlock extends AbstractFramedDoubleBlock
 
         if (type == SlopeType.HORIZONTAL)
         {
-            BlockState defState = FBContent.blockFramedVerticalHalfSlope.get().defaultBlockState();
+            BlockState defState = FBContent.BLOCK_FRAMED_VERTICAL_HALF_SLOPE.get().defaultBlockState();
             return new Tuple<>(
                     defState.setValue(FramedProperties.FACING_HOR, facing)
                             .setValue(FramedProperties.TOP, false),
@@ -105,7 +113,7 @@ public class FramedDividedSlopeBlock extends AbstractFramedDoubleBlock
         }
         else
         {
-            BlockState defState = FBContent.blockFramedHalfSlope.get().defaultBlockState();
+            BlockState defState = FBContent.BLOCK_FRAMED_HALF_SLOPE.get().defaultBlockState();
             boolean top = type == SlopeType.TOP;
             boolean ySlope = state.getValue(FramedProperties.Y_SLOPE);
             return new Tuple<>(
@@ -137,7 +145,7 @@ public class FramedDividedSlopeBlock extends AbstractFramedDoubleBlock
 
     public static BlockState itemSource()
     {
-        return FBContent.blockFramedDividedSlope.get()
+        return FBContent.BLOCK_FRAMED_DIVIDED_SLOPE.get()
                 .defaultBlockState()
                 .setValue(FramedProperties.FACING_HOR, Direction.SOUTH);
     }

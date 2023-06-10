@@ -25,7 +25,10 @@ public final class ClientAccess
 
     public static void resetDestroyDelay()
     {
-        if (Objects.requireNonNull(Minecraft.getInstance().player).isCreative()) { return; }
+        if (Objects.requireNonNull(Minecraft.getInstance().player).isCreative())
+        {
+            return;
+        }
 
         MultiPlayerGameMode gameMode = Objects.requireNonNull(Minecraft.getInstance().gameMode);
         try

@@ -42,7 +42,9 @@ public class FramedFenceBlock extends FenceBlock implements IFramedBlock
     }
 
     @Override
-    public final InteractionResult use(BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hit)
+    public final InteractionResult use(
+            BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hit
+    )
     {
         InteractionResult result = handleUse(state, level, pos, player, hand, hit);
         if (result.consumesAction()) { return result; }
@@ -57,7 +59,14 @@ public class FramedFenceBlock extends FenceBlock implements IFramedBlock
     }
 
     @Override
-    public BlockState updateShape(BlockState state, Direction facing, BlockState facingState, LevelAccessor level, BlockPos currentPos, BlockPos facingPos)
+    public BlockState updateShape(
+            BlockState state,
+            Direction facing,
+            BlockState facingState,
+            LevelAccessor level,
+            BlockPos currentPos,
+            BlockPos facingPos
+    )
     {
         BlockState newState = updateShapeLockable(
                 state, level, currentPos,
@@ -72,7 +81,9 @@ public class FramedFenceBlock extends FenceBlock implements IFramedBlock
     }
 
     @Override
-    public void neighborChanged(BlockState state, Level level, BlockPos pos, Block block, BlockPos fromPos, boolean isMoving)
+    public void neighborChanged(
+            BlockState state, Level level, BlockPos pos, Block block, BlockPos fromPos, boolean isMoving
+    )
     {
         updateCulling(level, pos);
     }
@@ -90,5 +101,8 @@ public class FramedFenceBlock extends FenceBlock implements IFramedBlock
     }
 
     @Override
-    public BlockType getBlockType() { return BlockType.FRAMED_FENCE; }
+    public BlockType getBlockType()
+    {
+        return BlockType.FRAMED_FENCE;
+    }
 }

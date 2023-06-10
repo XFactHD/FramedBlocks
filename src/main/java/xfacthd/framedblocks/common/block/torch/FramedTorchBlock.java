@@ -15,7 +15,6 @@ import net.minecraft.world.level.block.*;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.material.PushReaction;
-import net.minecraft.world.level.storage.loot.LootContext;
 import net.minecraft.world.level.storage.loot.LootParams;
 import net.minecraft.world.phys.BlockHitResult;
 import xfacthd.framedblocks.api.block.FramedProperties;
@@ -56,7 +55,9 @@ public class FramedTorchBlock extends TorchBlock implements IFramedBlock
     }
 
     @Override
-    public final InteractionResult use(BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hit)
+    public final InteractionResult use(
+            BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hit
+    )
     {
         return handleUse(state, level, pos, player, hand, hit);
     }
@@ -92,8 +93,8 @@ public class FramedTorchBlock extends TorchBlock implements IFramedBlock
     public BlockItem createBlockItem()
     {
         return new StandingAndWallBlockItem(
-                FBContent.blockFramedTorch.get(),
-                FBContent.blockFramedWallTorch.get(),
+                FBContent.BLOCK_FRAMED_TORCH.get(),
+                FBContent.BLOCK_FRAMED_WALL_TORCH.get(),
                 new Item.Properties(),
                 Direction.DOWN
         );

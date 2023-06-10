@@ -234,7 +234,7 @@ public class FramedInnerSlopedPrismModel extends FramedBlockModel
 
     public static BlockState itemSource()
     {
-        return FBContent.blockFramedInnerSlopedPrism.get()
+        return FBContent.BLOCK_FRAMED_INNER_SLOPED_PRISM.get()
                 .defaultBlockState()
                 .setValue(PropertyHolder.FACING_DIR, CompoundDirection.UP_EAST);
     }

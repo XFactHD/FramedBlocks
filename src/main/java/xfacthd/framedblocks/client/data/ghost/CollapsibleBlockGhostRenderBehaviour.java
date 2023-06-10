@@ -16,7 +16,14 @@ public final class CollapsibleBlockGhostRenderBehaviour implements GhostRenderBe
 {
     @Override
     @Nullable
-    public BlockState getRenderState(ItemStack stack, ItemStack proxiedStack, BlockHitResult hit, BlockPlaceContext ctx, BlockState hitState, boolean secondPass)
+    public BlockState getRenderState(
+            ItemStack stack,
+            @Nullable ItemStack proxiedStack,
+            BlockHitResult hit,
+            BlockPlaceContext ctx,
+            BlockState hitState,
+            boolean secondPass
+    )
     {
         BlockState state = GhostRenderBehaviour.super.getRenderState(stack, proxiedStack, hit, ctx, hitState, secondPass);
         //noinspection ConstantConditions
@@ -30,7 +37,14 @@ public final class CollapsibleBlockGhostRenderBehaviour implements GhostRenderBe
     }
 
     @Override
-    public ModelData appendModelData(ItemStack stack, @Nullable ItemStack proxiedStack, BlockPlaceContext ctx, BlockState renderState, boolean secondPass, ModelData data)
+    public ModelData appendModelData(
+            ItemStack stack,
+            @Nullable ItemStack proxiedStack,
+            BlockPlaceContext ctx,
+            BlockState renderState,
+            boolean secondPass,
+            ModelData data
+    )
     {
         //noinspection ConstantConditions
         if (stack.hasTag() && stack.getTag().contains("BlockEntityTag"))

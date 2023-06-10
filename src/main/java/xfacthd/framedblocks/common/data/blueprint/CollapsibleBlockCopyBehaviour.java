@@ -13,7 +13,9 @@ import xfacthd.framedblocks.common.data.PropertyHolder;
 public final class CollapsibleBlockCopyBehaviour implements BlueprintCopyBehaviour
 {
     @Override
-    public void postProcessPaste(Level level, BlockPos pos, Player player, CompoundTag blueprintData, ItemStack dummyStack)
+    public void postProcessPaste(
+            Level level, BlockPos pos, Player player, CompoundTag blueprintData, ItemStack dummyStack
+    )
     {
         if (level.getBlockEntity(pos) instanceof FramedCollapsibleBlockEntity be)
         {

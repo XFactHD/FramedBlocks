@@ -63,7 +63,10 @@ public class FluidCamoContainer extends CamoContainer
     }
 
     @Override
-    public Fluid getFluid() { return fluidState.getType(); }
+    public Fluid getFluid()
+    {
+        return fluidState.getType();
+    }
 
     @Override
     public SoundType getSoundType()
@@ -73,10 +76,16 @@ public class FluidCamoContainer extends CamoContainer
     }
 
     @Override
-    public ContainerType getType() { return ContainerType.FLUID; }
+    public ContainerType getType()
+    {
+        return ContainerType.FLUID;
+    }
 
     @Override
-    public CamoContainer.Factory getFactory() { return FBContent.factoryFluid.get(); }
+    public CamoContainer.Factory getFactory()
+    {
+        return FBContent.FACTORY_FLUID.get();
+    }
 
     @Override
     public void save(CompoundTag tag)

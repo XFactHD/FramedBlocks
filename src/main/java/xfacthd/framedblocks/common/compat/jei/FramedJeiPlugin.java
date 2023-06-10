@@ -45,7 +45,7 @@ public final class FramedJeiPlugin implements IModPlugin
     public void registerRecipeCatalysts(IRecipeCatalystRegistration registration)
     {
         registration.addRecipeCatalyst(
-                new ItemStack(FBContent.blockFramingSaw.get()),
+                new ItemStack(FBContent.BLOCK_FRAMING_SAW.get()),
                 FRAMING_SAW_RECIPE_TYPE
         );
     }
@@ -53,15 +53,18 @@ public final class FramedJeiPlugin implements IModPlugin
     @Override
     public void onRuntimeAvailable(IJeiRuntime jeiRuntime)
     {
-        JeiCompat.Guarded.acceptRuntime(jeiRuntime);
+        JeiCompat.GuardedAccess.acceptRuntime(jeiRuntime);
     }
 
     @Override
     public void onRuntimeUnavailable()
     {
-        JeiCompat.Guarded.acceptRuntime(null);
+        JeiCompat.GuardedAccess.acceptRuntime(null);
     }
 
     @Override
-    public ResourceLocation getPluginUid() { return ID; }
+    public ResourceLocation getPluginUid()
+    {
+        return ID;
+    }
 }

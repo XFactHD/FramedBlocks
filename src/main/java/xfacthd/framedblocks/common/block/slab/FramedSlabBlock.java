@@ -46,14 +46,24 @@ public class FramedSlabBlock extends FramedBlock
     @Override
     public BlockState getStateForPlacement(BlockPlaceContext context)
     {
-        return withWater(withTop(defaultBlockState(), context.getClickedFace(), context.getClickLocation()), context.getLevel(), context.getClickedPos());
+        return withWater(
+                withTop(
+                        defaultBlockState(),
+                        context.getClickedFace(),
+                        context.getClickLocation()
+                ),
+                context.getLevel(),
+                context.getClickedPos()
+        );
     }
 
     @Override
-    public InteractionResult use(BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hit)
+    public InteractionResult use(
+            BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hit
+    )
     {
         ItemStack stack = player.getItemInHand(hand);
-        if (stack.getItem() == FBContent.blockFramedSlab.get().asItem())
+        if (stack.getItem() == FBContent.BLOCK_FRAMED_SLAB.get().asItem())
         {
             boolean top = state.getValue(FramedProperties.TOP);
             Direction face = hit.getDirection();
@@ -62,10 +72,10 @@ public class FramedSlabBlock extends FramedBlock
                 if (!level.isClientSide())
                 {
                     Utils.wrapInStateCopy(level, pos, player, stack, top, true, () ->
-                            level.setBlockAndUpdate(pos, FBContent.blockFramedDoubleSlab.get().defaultBlockState())
+                            level.setBlockAndUpdate(pos, FBContent.BLOCK_FRAMED_DOUBLE_SLAB.get().defaultBlockState())
                     );
 
-                    SoundType sound = FBContent.blockFramedCube.get().getSoundType(FBContent.blockFramedCube.get().defaultBlockState());
+                    SoundType sound = FBContent.BLOCK_FRAMED_CUBE.get().getSoundType(FBContent.BLOCK_FRAMED_CUBE.get().defaultBlockState());
                     level.playSound(null, pos, sound.getPlaceSound(), SoundSource.BLOCKS, (sound.getVolume() + 1.0F) / 2.0F, sound.getPitch() * 0.8F);
                 }
                 return InteractionResult.sidedSuccess(level.isClientSide());

@@ -16,7 +16,7 @@ public final class FramingSawRecipe implements Recipe<Container>
 {
     public static final int CUBE_MATERIAL_VALUE = 6144; // Empirically determined value
     public static final int MAX_ADDITIVE_COUNT = 3;
-    private static final Lazy<ItemStack> TOAST_ICON = Lazy.of(() -> new ItemStack(FBContent.blockFramingSaw.get()));
+    private static final Lazy<ItemStack> TOAST_ICON = Lazy.of(() -> new ItemStack(FBContent.BLOCK_FRAMING_SAW.get()));
 
     private final ResourceLocation id;
     private final int materialAmount;
@@ -101,36 +101,75 @@ public final class FramingSawRecipe implements Recipe<Container>
     }
 
     @Override
-    public ItemStack assemble(Container container, RegistryAccess access) { return result.copy(); }
+    public ItemStack assemble(Container container, RegistryAccess access)
+    {
+        return result.copy();
+    }
 
     @Override
-    public boolean canCraftInDimensions(int width, int height) { return true; }
+    public boolean canCraftInDimensions(int width, int height)
+    {
+        return true;
+    }
 
-    public int getMaterialAmount() { return materialAmount; }
+    public int getMaterialAmount()
+    {
+        return materialAmount;
+    }
 
-    public List<FramingSawRecipeAdditive> getAdditives() { return additives; }
+    public List<FramingSawRecipeAdditive> getAdditives()
+    {
+        return additives;
+    }
 
-    public ItemStack getResult() { return result; }
-
-    @Override
-    public ItemStack getResultItem(RegistryAccess access) { return result; }
-
-    public IBlockType getResultType() { return resultType; }
-
-    public boolean isDisabled() { return disabled; }
-
-    @Override
-    public ResourceLocation getId() { return id; }
-
-    @Override
-    public boolean isSpecial() { return true; }
-
-    @Override
-    public ItemStack getToastSymbol() { return TOAST_ICON.get(); }
+    public ItemStack getResult()
+    {
+        return result;
+    }
 
     @Override
-    public RecipeSerializer<?> getSerializer() { return FBContent.recipeSerializerFramingSawRecipe.get(); }
+    public ItemStack getResultItem(RegistryAccess access)
+    {
+        return result;
+    }
+
+    public IBlockType getResultType()
+    {
+        return resultType;
+    }
+
+    public boolean isDisabled()
+    {
+        return disabled;
+    }
 
     @Override
-    public RecipeType<?> getType() { return FBContent.recipeTypeFramingSawRecipe.get(); }
+    public ResourceLocation getId()
+    {
+        return id;
+    }
+
+    @Override
+    public boolean isSpecial()
+    {
+        return true;
+    }
+
+    @Override
+    public ItemStack getToastSymbol()
+    {
+        return TOAST_ICON.get();
+    }
+
+    @Override
+    public RecipeSerializer<?> getSerializer()
+    {
+        return FBContent.RECIPE_SERIALIZER_FRAMING_SAW_RECIPE.get();
+    }
+
+    @Override
+    public RecipeType<?> getType()
+    {
+        return FBContent.RECIPE_TYPE_FRAMING_SAW_RECIPE.get();
+    }
 }

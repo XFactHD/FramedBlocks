@@ -89,7 +89,10 @@ public class FramedCornerSlopeModel extends FramedBlockModel
     {
         Direction quadDir = quad.getDirection();
         boolean yQuad = Utils.isY(quadDir);
-        if (!ySlope && yQuad) { return; }
+        if (!ySlope && yQuad)
+        {
+            return;
+        }
 
         boolean top = type.isTop();
         Direction cutDir = quadDir.getAxis() == dir.getAxis() ? dir.getClockWise() : dir.getOpposite();
@@ -120,6 +123,8 @@ public class FramedCornerSlopeModel extends FramedBlockModel
 
     public static BlockState itemSource()
     {
-        return FBContent.blockFramedCornerSlope.get().defaultBlockState().setValue(FramedProperties.FACING_HOR, Direction.SOUTH);
+        return FBContent.BLOCK_FRAMED_CORNER_SLOPE.get()
+                .defaultBlockState()
+                .setValue(FramedProperties.FACING_HOR, Direction.SOUTH);
     }
 }

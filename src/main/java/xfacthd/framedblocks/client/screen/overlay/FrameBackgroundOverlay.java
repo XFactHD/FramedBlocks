@@ -13,7 +13,7 @@ import xfacthd.framedblocks.common.data.PropertyHolder;
 
 import java.util.List;
 
-public class FrameBackgroundOverlay extends BlockInteractOverlay
+public final class FrameBackgroundOverlay extends BlockInteractOverlay
 {
     private static final ResourceLocation SYMBOL_TEXTURE = Utils.rl("textures/overlay/frame_background_symbols.png");
     private static final ResourceLocation LEATHER_TEXTURE = new ResourceLocation("textures/item/leather.png");
@@ -35,7 +35,7 @@ public class FrameBackgroundOverlay extends BlockInteractOverlay
     @Override
     protected boolean isValidTool(ItemStack stack)
     {
-        return stack.is(FBContent.itemFramedHammer.get());
+        return stack.is(FBContent.ITEM_FRAMED_HAMMER.get());
     }
 
     @Override

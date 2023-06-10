@@ -7,14 +7,16 @@ import net.minecraft.world.level.block.state.BlockState;
 import xfacthd.framedblocks.api.model.quad.Modifiers;
 import xfacthd.framedblocks.api.model.quad.QuadModifier;
 import xfacthd.framedblocks.api.util.Utils;
-import xfacthd.framedblocks.client.model.pane.FramedPaneModel;
 
 import java.util.List;
 import java.util.Map;
 
 public class FramedBarsModel extends FramedPaneModel
 {
-    public FramedBarsModel(BlockState state, BakedModel baseModel) { super(state, baseModel); }
+    public FramedBarsModel(BlockState state, BakedModel baseModel)
+    {
+        super(state, baseModel);
+    }
 
     @Override
     protected void transformQuad(Map<Direction, List<BakedQuad>> quadMap, BakedQuad quad)
@@ -48,8 +50,14 @@ public class FramedBarsModel extends FramedPaneModel
         }
         else
         {
-            if (!isSideInset(face)) { createSideEdgeQuad(quadMap, quad, false, false); }
-            if (!isSideInset(face.getOpposite())) { createSideEdgeQuad(quadMap, quad, false, true); }
+            if (!isSideInset(face))
+            {
+                createSideEdgeQuad(quadMap, quad, false, false);
+            }
+            if (!isSideInset(face.getOpposite()))
+            {
+                createSideEdgeQuad(quadMap, quad, false, true);
+            }
 
             if (Utils.isX(face))
             {
@@ -93,7 +101,10 @@ public class FramedBarsModel extends FramedPaneModel
      */
     private static void createCenterPillarQuad(List<BakedQuad> quadList, BakedQuad quad, boolean perpNeg, boolean perpPos, boolean parNeg, boolean parPos)
     {
-        if (perpNeg && perpPos && !parNeg && !parPos) { return; }
+        if (perpNeg && perpPos && !parNeg && !parPos)
+        {
+            return;
+        }
 
         boolean perpendicular = perpNeg || perpPos;
         boolean oneParallel = parNeg ^ parPos;
@@ -124,7 +135,10 @@ public class FramedBarsModel extends FramedPaneModel
 
     private static void createPillarQuad(List<BakedQuad> quadList, BakedQuad quad, Direction dir)
     {
-        if (Utils.isY(dir)) { throw new IllegalArgumentException(String.format("Invalid direction: %s!", dir)); }
+        if (Utils.isY(dir))
+        {
+            throw new IllegalArgumentException(String.format("Invalid direction: %s!", dir));
+        }
 
         boolean positive = Utils.isPositive(dir);
         float minXZ = positive ? 12F/16F : 2F/16F;
@@ -138,7 +152,10 @@ public class FramedBarsModel extends FramedPaneModel
 
     private static void createBarQuads(List<BakedQuad> quadList, BakedQuad quad, Direction dir)
     {
-        if (Utils.isY(dir)) { throw new IllegalArgumentException(String.format("Invalid direction: %s!", dir)); }
+        if (Utils.isY(dir))
+        {
+            throw new IllegalArgumentException(String.format("Invalid direction: %s!", dir));
+        }
 
         boolean positive = Utils.isPositive(dir);
         boolean northeast = dir == Direction.NORTH || dir == Direction.EAST;

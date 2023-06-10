@@ -12,11 +12,6 @@ public final class FlatSlopePanelCornerOutlineRenderer implements OutlineRendere
     @Override
     public void draw(BlockState state, PoseStack poseStack, VertexConsumer builder)
     {
-        if (!state.getValue(PropertyHolder.FRONT))
-        {
-            poseStack.translate(0, 0, .5);
-        }
-
         // Back edges
         OutlineRenderer.drawLine(builder, poseStack, 0, 0, .5, 1, 0, .5);
         OutlineRenderer.drawLine(builder, poseStack, 0, 1, .5, 1, 1, .5);
@@ -39,5 +34,10 @@ public final class FlatSlopePanelCornerOutlineRenderer implements OutlineRendere
 
         HorizontalRotation rotation = state.getValue(PropertyHolder.ROTATION);
         poseStack.mulPose(SlopePanelOutlineRenderer.ROTATIONS[rotation.ordinal()]);
+
+        if (!state.getValue(PropertyHolder.FRONT))
+        {
+            poseStack.translate(0, 0, .5);
+        }
     }
 }

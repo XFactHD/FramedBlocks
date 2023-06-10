@@ -37,7 +37,13 @@ public abstract class BlockInteractOverlay implements IGuiOverlay
     private int textWidth = 0;
     private boolean textWidthValid = false;
 
-    BlockInteractOverlay(List<Component> linesFalse, List<Component> linesTrue, Texture textureFalse, Texture textureTrue, Supplier<Mode> modeGetter)
+    BlockInteractOverlay(
+            List<Component> linesFalse,
+            List<Component> linesTrue,
+            Texture textureFalse,
+            Texture textureTrue,
+            Supplier<Mode> modeGetter
+    )
     {
         this.linesFalse = linesFalse;
         this.linesTrue = linesTrue;
@@ -51,13 +57,22 @@ public abstract class BlockInteractOverlay implements IGuiOverlay
     public void render(ForgeGui gui, GuiGraphics graphics, float partialTick, int screenWidth, int screenHeight)
     {
         Mode mode = modeGetter.get();
-        if (mode == Mode.HIDDEN) { return; }
+        if (mode == Mode.HIDDEN)
+        {
+            return;
+        }
 
         ItemStack stack = player().getMainHandItem();
-        if (!isValidTool(stack)) { return; }
+        if (!isValidTool(stack))
+        {
+            return;
+        }
 
         Target target = getTargettedBlock();
-        if (!isValidTarget(target)) { return; }
+        if (!isValidTarget(target))
+        {
+            return;
+        }
 
         boolean state = getState(target);
         int centerX = screenWidth / 2;
@@ -76,10 +91,21 @@ public abstract class BlockInteractOverlay implements IGuiOverlay
         }
     }
 
-    private void renderDetailed(ForgeGui gui, GuiGraphics graphics, Texture tex, List<Component> lines, int centerX, int screenHeight, Target target)
+    private void renderDetailed(
+            ForgeGui gui,
+            GuiGraphics graphics,
+            Texture tex,
+            List<Component> lines,
+            int centerX,
+            int screenHeight,
+            Target target
+    )
     {
         Font font = gui.getFont();
-        if (!textWidthValid) { updateTextWidth(font); }
+        if (!textWidthValid)
+        {
+            updateTextWidth(font);
+        }
 
         int lineHeight = font.lineHeight + LINE_DIST;
         int count = lines.size();
@@ -170,7 +196,9 @@ public abstract class BlockInteractOverlay implements IGuiOverlay
         ));
     }
 
-    protected record Texture(ResourceLocation location, int xOff, int yOff, int width, int height, int texWidth, int texHeight)
+    protected record Texture(
+            ResourceLocation location, int xOff, int yOff, int width, int height, int texWidth, int texHeight
+    )
     {
         public void draw(ForgeGui gui, GuiGraphics graphics, int x, int y)
         {

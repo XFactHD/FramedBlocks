@@ -28,7 +28,10 @@ public abstract class AbstractFramedDoubleBlock extends FramedBlock
 {
     private static final Map<BlockState, Tuple<BlockState, BlockState>> STATE_PAIRS = new IdentityHashMap<>();
 
-    public AbstractFramedDoubleBlock(BlockType blockType) { super(blockType); }
+    public AbstractFramedDoubleBlock(BlockType blockType)
+    {
+        super(blockType);
+    }
 
     @Override
     protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder)

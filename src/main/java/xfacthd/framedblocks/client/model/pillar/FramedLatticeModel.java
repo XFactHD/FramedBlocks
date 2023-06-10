@@ -90,7 +90,9 @@ public class FramedLatticeModel extends FramedBlockModel
         }
     }
 
-    private static void createHorizontalStrutSideQuads(Map<Direction, List<BakedQuad>> quadMap, BakedQuad quad, boolean frontAxis, boolean sideAxis)
+    private static void createHorizontalStrutSideQuads(
+            Map<Direction, List<BakedQuad>> quadMap, BakedQuad quad, boolean frontAxis, boolean sideAxis
+    )
     {
         QuadModifier.geometry(quad)
                 .apply(Modifiers.cutSide(MIN_COORD, MIN_COORD, MAX_COORD, MAX_COORD))

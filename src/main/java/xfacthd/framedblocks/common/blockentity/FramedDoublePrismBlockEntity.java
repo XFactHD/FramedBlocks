@@ -16,7 +16,7 @@ public class FramedDoublePrismBlockEntity extends FramedDoubleBlockEntity
 {
     public FramedDoublePrismBlockEntity(BlockPos pos, BlockState state)
     {
-        this(FBContent.blockEntityTypeFramedDoublePrism.get(), pos, state);
+        this(FBContent.BE_TYPE_FRAMED_DOUBLE_PRISM.get(), pos, state);
     }
 
     protected FramedDoublePrismBlockEntity(BlockEntityType<?> type, BlockPos pos, BlockState state)
@@ -30,8 +30,14 @@ public class FramedDoublePrismBlockEntity extends FramedDoubleBlockEntity
         Direction side = hit.getDirection();
 
         Direction facing = getFacing(getBlockState());
-        if (side == facing) { return true; }
-        if (side == facing.getOpposite()) { return false; }
+        if (side == facing)
+        {
+            return true;
+        }
+        if (side == facing.getOpposite())
+        {
+            return false;
+        }
         if (!isDoubleSide(side) && side.getAxis() != facing.getAxis())
         {
             return false;
@@ -86,15 +92,13 @@ public class FramedDoublePrismBlockEntity extends FramedDoubleBlockEntity
         Direction facing = getFacing(getBlockState());
         if (side == facing)
         {
-            //noinspection ConstantConditions
-            return getCamoTwo().getState().isSolidRender(level, worldPosition);
+            return getCamoTwo().isSolid(level, worldPosition);
         }
         if (isDoubleSide(side))
         {
             return false;
         }
-        //noinspection ConstantConditions
-        return getCamo().getState().isSolidRender(level, worldPosition);
+        return getCamo().isSolid(level, worldPosition);
     }
 
     protected boolean isDoubleSide(Direction side)

@@ -17,7 +17,7 @@ public class FramedDividedSlopeBlockEntity extends FramedDoubleBlockEntity
 {
     public FramedDividedSlopeBlockEntity(BlockPos pos, BlockState state)
     {
-        super(FBContent.blockEntityTypeFramedDividedSlope.get(), pos, state);
+        super(FBContent.BE_TYPE_FRAMED_DIVIDED_SLOPE.get(), pos, state);
     }
 
     @Override
@@ -35,8 +35,14 @@ public class FramedDividedSlopeBlockEntity extends FramedDoubleBlockEntity
         }
 
         Direction side = hit.getDirection();
-        if (side == dir) { return true; }
-        if (side == dir.getOpposite()) { return false; }
+        if (side == dir)
+        {
+            return true;
+        }
+        if (side == dir.getOpposite())
+        {
+            return false;
+        }
 
         return Utils.fractionInDir(hit.getLocation(), dir) > .5;
     }

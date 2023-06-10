@@ -146,7 +146,7 @@ public class FramedInnerPrismModel extends FramedBlockModel
 
     public static BlockState itemSource()
     {
-        return FBContent.blockFramedInnerPrism.get()
+        return FBContent.BLOCK_FRAMED_INNER_PRISM.get()
                 .defaultBlockState()
                 .setValue(PropertyHolder.FACING_AXIS, DirectionAxis.UP_X);
     }

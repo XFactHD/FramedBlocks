@@ -31,7 +31,14 @@ public class FramedDoubleBlockDebugRenderer implements BlockEntityRenderer<Frame
     public FramedDoubleBlockDebugRenderer(@SuppressWarnings("unused") BlockEntityRendererProvider.Context ctx) { }
 
     @Override
-    public void render(FramedDoubleBlockEntity be, float partialTick, PoseStack poseStack, MultiBufferSource buffer, int light, int overlay)
+    public void render(
+            FramedDoubleBlockEntity be,
+            float partialTick,
+            PoseStack poseStack,
+            MultiBufferSource buffer,
+            int light,
+            int overlay
+    )
     {
         HitResult hit = Minecraft.getInstance().hitResult;
         if (!(hit instanceof BlockHitResult blockHit) || !blockHit.getBlockPos().equals(be.getBlockPos()))

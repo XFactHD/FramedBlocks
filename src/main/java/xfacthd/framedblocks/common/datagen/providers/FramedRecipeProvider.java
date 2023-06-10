@@ -17,15 +17,15 @@ import java.util.function.Consumer;
 
 public final class FramedRecipeProvider extends RecipeProvider
 {
-    private final CriterionTriggerInstance HAS_FRAMED_BLOCK = has(FBContent.blockFramedCube.get());
-    private final CriterionTriggerInstance HAS_FRAMED_SLOPE = has(FBContent.blockFramedSlope.get());
+    private final CriterionTriggerInstance HAS_FRAMED_BLOCK = has(FBContent.BLOCK_FRAMED_CUBE.get());
+    private final CriterionTriggerInstance HAS_FRAMED_SLOPE = has(FBContent.BLOCK_FRAMED_SLOPE.get());
 
     public FramedRecipeProvider(PackOutput output) { super(output); }
 
     @Override
     protected void buildRecipes(Consumer<FinishedRecipe> consumer)
     {
-        shapedBuildingBlock(FBContent.blockFramedCube.get(), 4)
+        shapedBuildingBlock(FBContent.BLOCK_FRAMED_CUBE.get(), 4)
                 .pattern("PSP")
                 .pattern("S S")
                 .pattern("PSP")
@@ -34,1080 +34,1080 @@ public final class FramedRecipeProvider extends RecipeProvider
                 .unlockedBy("hasPlanks", has(ItemTags.PLANKS))
                 .save(consumer);
 
-        shapedBuildingBlock(FBContent.blockFramedSlope.get(), 3)
+        shapedBuildingBlock(FBContent.BLOCK_FRAMED_SLOPE.get(), 3)
                 .pattern("F ")
                 .pattern("FF")
-                .define('F', FBContent.blockFramedCube.get())
+                .define('F', FBContent.BLOCK_FRAMED_CUBE.get())
                 .unlockedBy("hasFramedBlock", HAS_FRAMED_BLOCK)
                 .save(consumer);
 
-        shapedBuildingBlock(FBContent.blockFramedCornerSlope.get())
+        shapedBuildingBlock(FBContent.BLOCK_FRAMED_CORNER_SLOPE.get())
                 .pattern("HF ")
                 .pattern("  F")
-                .define('F', FBContent.blockFramedSlope.get())
-                .define('H', FBContent.itemFramedHammer.get())
+                .define('F', FBContent.BLOCK_FRAMED_SLOPE.get())
+                .define('H', FBContent.ITEM_FRAMED_HAMMER.get())
                 .unlockedBy("hasFramedSlope", HAS_FRAMED_SLOPE)
                 .save(consumer);
 
-        shapedBuildingBlock(FBContent.blockFramedInnerCornerSlope.get())
+        shapedBuildingBlock(FBContent.BLOCK_FRAMED_INNER_CORNER_SLOPE.get())
                 .pattern("H F")
                 .pattern(" F ")
-                .define('F', FBContent.blockFramedSlope.get())
-                .define('H', FBContent.itemFramedHammer.get())
+                .define('F', FBContent.BLOCK_FRAMED_SLOPE.get())
+                .define('H', FBContent.ITEM_FRAMED_HAMMER.get())
                 .unlockedBy("hasFramedSlope", HAS_FRAMED_SLOPE)
                 .save(consumer);
 
-        shapedBuildingBlock(FBContent.blockFramedPrismCorner.get())
+        shapedBuildingBlock(FBContent.BLOCK_FRAMED_PRISM_CORNER.get())
                 .pattern("F F")
                 .pattern(" F ")
-                .define('F', FBContent.blockFramedSlope.get())
+                .define('F', FBContent.BLOCK_FRAMED_SLOPE.get())
                 .unlockedBy("hasFramedSlope", HAS_FRAMED_SLOPE)
                 .save(consumer);
 
-        shapedBuildingBlock(FBContent.blockFramedInnerPrismCorner.get())
+        shapedBuildingBlock(FBContent.BLOCK_FRAMED_INNER_PRISM_CORNER.get())
                 .pattern(" F ")
                 .pattern("F F")
-                .define('F', FBContent.blockFramedSlope.get())
+                .define('F', FBContent.BLOCK_FRAMED_SLOPE.get())
                 .unlockedBy("hasFramedSlope", HAS_FRAMED_SLOPE)
                 .save(consumer);
 
-        shapedBuildingBlock(FBContent.blockFramedThreewayCorner.get())
+        shapedBuildingBlock(FBContent.BLOCK_FRAMED_THREEWAY_CORNER.get())
                 .pattern("F ")
                 .pattern("FF")
-                .define('F', FBContent.blockFramedSlope.get())
+                .define('F', FBContent.BLOCK_FRAMED_SLOPE.get())
                 .unlockedBy("hasFramedSlope", HAS_FRAMED_SLOPE)
                 .save(consumer);
 
-        shapedBuildingBlock(FBContent.blockFramedInnerThreewayCorner.get())
+        shapedBuildingBlock(FBContent.BLOCK_FRAMED_INNER_THREEWAY_CORNER.get())
                 .pattern("FF")
                 .pattern("F ")
-                .define('F', FBContent.blockFramedSlope.get())
+                .define('F', FBContent.BLOCK_FRAMED_SLOPE.get())
                 .unlockedBy("hasFramedSlope", HAS_FRAMED_SLOPE)
                 .save(consumer);
 
-        shapedBuildingBlock(FBContent.blockFramedSlab.get(), 6)
+        shapedBuildingBlock(FBContent.BLOCK_FRAMED_SLAB.get(), 6)
                 .pattern("FFF")
-                .define('F', FBContent.blockFramedCube.get())
+                .define('F', FBContent.BLOCK_FRAMED_CUBE.get())
                 .unlockedBy("hasFramedBlock", HAS_FRAMED_BLOCK)
                 .save(consumer);
 
-        shapedBuildingBlock(FBContent.blockFramedSlabEdge.get(), 6)
+        shapedBuildingBlock(FBContent.BLOCK_FRAMED_SLAB_EDGE.get(), 6)
                 .pattern("FFF")
-                .define('F', FBContent.blockFramedSlab.get())
-                .unlockedBy("hasFramedSlab", has(FBContent.blockFramedSlab.get()))
+                .define('F', FBContent.BLOCK_FRAMED_SLAB.get())
+                .unlockedBy("hasFramedSlab", has(FBContent.BLOCK_FRAMED_SLAB.get()))
                 .save(consumer);
 
-        shapedBuildingBlock(FBContent.blockFramedSlabCorner.get(), 8)
+        shapedBuildingBlock(FBContent.BLOCK_FRAMED_SLAB_CORNER.get(), 8)
                 .pattern("FF")
                 .pattern("FF")
-                .define('F', FBContent.blockFramedSlab.get())
-                .unlockedBy("hasFramedSlab", has(FBContent.blockFramedSlab.get()))
+                .define('F', FBContent.BLOCK_FRAMED_SLAB.get())
+                .unlockedBy("hasFramedSlab", has(FBContent.BLOCK_FRAMED_SLAB.get()))
                 .save(consumer);
 
-        shapedBuildingBlock(FBContent.blockFramedDividedSlab.get())
+        shapedBuildingBlock(FBContent.BLOCK_FRAMED_DIVIDED_SLAB.get())
                 .pattern("EE")
-                .define('E', FBContent.blockFramedSlabEdge.get())
-                .unlockedBy("hasFramedSlabEdge", has(FBContent.blockFramedSlabEdge.get()))
+                .define('E', FBContent.BLOCK_FRAMED_SLAB_EDGE.get())
+                .unlockedBy("hasFramedSlabEdge", has(FBContent.BLOCK_FRAMED_SLAB_EDGE.get()))
                 .save(consumer);
 
-        shapedBuildingBlock(FBContent.blockFramedPanel.get(), 6)
+        shapedBuildingBlock(FBContent.BLOCK_FRAMED_PANEL.get(), 6)
                 .pattern("F")
                 .pattern("F")
                 .pattern("F")
-                .define('F', FBContent.blockFramedCube.get())
+                .define('F', FBContent.BLOCK_FRAMED_CUBE.get())
                 .unlockedBy("hasFramedBlock", HAS_FRAMED_BLOCK)
                 .save(consumer);
 
-        shapedBuildingBlock(FBContent.blockFramedCornerPillar.get(), 4)
+        shapedBuildingBlock(FBContent.BLOCK_FRAMED_CORNER_PILLAR.get(), 4)
                 .pattern("F")
                 .pattern("F")
-                .define('F', FBContent.blockFramedCube.get())
+                .define('F', FBContent.BLOCK_FRAMED_CUBE.get())
                 .unlockedBy("hasFramedBlock", HAS_FRAMED_BLOCK)
                 .save(consumer);
 
-        shapedBuildingBlock(FBContent.blockFramedDividedPanelHor.get())
+        shapedBuildingBlock(FBContent.BLOCK_FRAMED_DIVIDED_PANEL_HOR.get())
                 .pattern("E")
                 .pattern("E")
-                .define('E', FBContent.blockFramedSlabEdge.get())
-                .unlockedBy("hasFramedSlabEdge", has(FBContent.blockFramedSlabEdge.get()))
+                .define('E', FBContent.BLOCK_FRAMED_SLAB_EDGE.get())
+                .unlockedBy("hasFramedSlabEdge", has(FBContent.BLOCK_FRAMED_SLAB_EDGE.get()))
                 .save(consumer);
 
-        shapedBuildingBlock(FBContent.blockFramedDividedPanelVert.get())
+        shapedBuildingBlock(FBContent.BLOCK_FRAMED_DIVIDED_PANEL_VERT.get())
                 .pattern("PP")
-                .define('P', FBContent.blockFramedCornerPillar.get())
-                .unlockedBy("hasFramedCornerPillar", has(FBContent.blockFramedCornerPillar.get()))
+                .define('P', FBContent.BLOCK_FRAMED_CORNER_PILLAR.get())
+                .unlockedBy("hasFramedCornerPillar", has(FBContent.BLOCK_FRAMED_CORNER_PILLAR.get()))
                 .save(consumer);
 
-        shapedBuildingBlock(FBContent.blockFramedStairs.get(), 4)
+        shapedBuildingBlock(FBContent.BLOCK_FRAMED_STAIRS.get(), 4)
                 .pattern("F  ")
                 .pattern("FF ")
                 .pattern("FFF")
-                .define('F', FBContent.blockFramedCube.get())
+                .define('F', FBContent.BLOCK_FRAMED_CUBE.get())
                 .unlockedBy("hasFramedBlock", HAS_FRAMED_BLOCK)
                 .save(consumer);
 
-        shapedBuildingBlock(FBContent.blockFramedWall.get(), 6)
+        shapedBuildingBlock(FBContent.BLOCK_FRAMED_WALL.get(), 6)
                 .pattern("FFF")
                 .pattern("FFF")
-                .define('F', FBContent.blockFramedCube.get())
+                .define('F', FBContent.BLOCK_FRAMED_CUBE.get())
                 .unlockedBy("hasFramedBlock", HAS_FRAMED_BLOCK)
                 .save(consumer);
 
-        shapedBuildingBlock(FBContent.blockFramedFence.get(), 3)
+        shapedBuildingBlock(FBContent.BLOCK_FRAMED_FENCE.get(), 3)
                 .pattern("FSF")
                 .pattern("FSF")
-                .define('F', FBContent.blockFramedCube.get())
+                .define('F', FBContent.BLOCK_FRAMED_CUBE.get())
                 .define('S', Items.STICK)
                 .unlockedBy("hasFramedBlock", HAS_FRAMED_BLOCK)
                 .save(consumer);
 
-        shapedBuildingBlock(FBContent.blockFramedFenceGate.get())
+        shapedBuildingBlock(FBContent.BLOCK_FRAMED_FENCE_GATE.get())
                 .pattern("SFS")
                 .pattern("SFS")
-                .define('F', FBContent.blockFramedCube.get())
+                .define('F', FBContent.BLOCK_FRAMED_CUBE.get())
                 .define('S', Items.STICK)
                 .unlockedBy("hasFramedBlock", HAS_FRAMED_BLOCK)
                 .save(consumer);
 
-        shapedBuildingBlock(FBContent.blockFramedDoor.get(), 3)
+        shapedBuildingBlock(FBContent.BLOCK_FRAMED_DOOR.get(), 3)
                 .pattern("FF")
                 .pattern("FF")
                 .pattern("FF")
-                .define('F', FBContent.blockFramedCube.get())
+                .define('F', FBContent.BLOCK_FRAMED_CUBE.get())
                 .unlockedBy("hasFramedBlock", HAS_FRAMED_BLOCK)
                 .save(consumer);
 
-        shapedBuildingBlock(FBContent.blockFramedIronDoor.get())
+        shapedBuildingBlock(FBContent.BLOCK_FRAMED_IRON_DOOR.get())
                 .pattern("IDI")
-                .define('D', FBContent.blockFramedDoor.get())
+                .define('D', FBContent.BLOCK_FRAMED_DOOR.get())
                 .define('I', Items.IRON_INGOT)
-                .unlockedBy("hasFramedDoor", has(FBContent.blockFramedDoor.get()))
+                .unlockedBy("hasFramedDoor", has(FBContent.BLOCK_FRAMED_DOOR.get()))
                 .save(consumer);
 
-        shapedBuildingBlock(FBContent.blockFramedTrapDoor.get())
+        shapedBuildingBlock(FBContent.BLOCK_FRAMED_TRAP_DOOR.get())
                 .pattern("FFF")
                 .pattern("FFF")
-                .define('F', FBContent.blockFramedSlab.get())
-                .unlockedBy("hasFramedSlab", has(FBContent.blockFramedSlab.get()))
+                .define('F', FBContent.BLOCK_FRAMED_SLAB.get())
+                .unlockedBy("hasFramedSlab", has(FBContent.BLOCK_FRAMED_SLAB.get()))
                 .save(consumer);
 
-        shapelessBuildingBlock(FBContent.blockFramedIronTrapDoor.get())
-                .requires(FBContent.blockFramedTrapDoor.get())
+        shapelessBuildingBlock(FBContent.BLOCK_FRAMED_IRON_TRAP_DOOR.get())
+                .requires(FBContent.BLOCK_FRAMED_TRAP_DOOR.get())
                 .requires(Items.IRON_INGOT)
-                .unlockedBy("hasFramedTrapdoor", has(FBContent.blockFramedTrapDoor.get()))
+                .unlockedBy("hasFramedTrapdoor", has(FBContent.BLOCK_FRAMED_TRAP_DOOR.get()))
                 .save(consumer);
 
-        shapedBuildingBlock(FBContent.blockFramedPressurePlate.get())
+        shapedBuildingBlock(FBContent.BLOCK_FRAMED_PRESSURE_PLATE.get())
                 .pattern("FF")
-                .define('F', FBContent.blockFramedCube.get())
+                .define('F', FBContent.BLOCK_FRAMED_CUBE.get())
                 .unlockedBy("hasFramedBlock", HAS_FRAMED_BLOCK)
                 .save(consumer);
 
-        shapedBuildingBlock(FBContent.blockFramedStonePressurePlate.get())
+        shapedBuildingBlock(FBContent.BLOCK_FRAMED_STONE_PRESSURE_PLATE.get())
                 .pattern("FF")
                 .pattern("SS")
-                .define('F', FBContent.blockFramedCube.get())
+                .define('F', FBContent.BLOCK_FRAMED_CUBE.get())
                 .define('S', Tags.Items.STONE)
                 .unlockedBy("hasFramedBlock", HAS_FRAMED_BLOCK)
                 .save(consumer);
 
-        shapedBuildingBlock(FBContent.blockFramedObsidianPressurePlate.get())
+        shapedBuildingBlock(FBContent.BLOCK_FRAMED_OBSIDIAN_PRESSURE_PLATE.get())
                 .pattern("FF")
                 .pattern("OO")
-                .define('F', FBContent.blockFramedCube.get())
+                .define('F', FBContent.BLOCK_FRAMED_CUBE.get())
                 .define('O', Tags.Items.OBSIDIAN)
                 .unlockedBy("hasFramedBlock", HAS_FRAMED_BLOCK)
                 .save(consumer);
 
-        shapedBuildingBlock(FBContent.blockFramedGoldPressurePlate.get())
+        shapedBuildingBlock(FBContent.BLOCK_FRAMED_GOLD_PRESSURE_PLATE.get())
                 .pattern("FF")
                 .pattern("GG")
-                .define('F', FBContent.blockFramedCube.get())
+                .define('F', FBContent.BLOCK_FRAMED_CUBE.get())
                 .define('G', Tags.Items.INGOTS_GOLD)
                 .unlockedBy("hasFramedBlock", HAS_FRAMED_BLOCK)
                 .save(consumer);
 
-        shapedBuildingBlock(FBContent.blockFramedIronPressurePlate.get())
+        shapedBuildingBlock(FBContent.BLOCK_FRAMED_IRON_PRESSURE_PLATE.get())
                 .pattern("FF")
                 .pattern("II")
-                .define('F', FBContent.blockFramedCube.get())
+                .define('F', FBContent.BLOCK_FRAMED_CUBE.get())
                 .define('I', Tags.Items.INGOTS_IRON)
                 .unlockedBy("hasFramedBlock", HAS_FRAMED_BLOCK)
                 .save(consumer);
 
-        shapedBuildingBlock(FBContent.blockFramedLadder.get(), 3)
+        shapedBuildingBlock(FBContent.BLOCK_FRAMED_LADDER.get(), 3)
                 .pattern("F F")
                 .pattern("FSF")
                 .pattern("F F")
-                .define('F', FBContent.blockFramedCube.get())
+                .define('F', FBContent.BLOCK_FRAMED_CUBE.get())
                 .define('S', Items.STICK)
                 .unlockedBy("hasFramedBlock", HAS_FRAMED_BLOCK)
                 .save(consumer);
 
-        shapelessBuildingBlock(FBContent.blockFramedButton.get())
-                .requires(FBContent.blockFramedCube.get())
-                .unlockedBy("hasFramedBlock", has(FBContent.blockFramedCube.get()))
+        shapelessBuildingBlock(FBContent.BLOCK_FRAMED_BUTTON.get())
+                .requires(FBContent.BLOCK_FRAMED_CUBE.get())
+                .unlockedBy("hasFramedBlock", has(FBContent.BLOCK_FRAMED_CUBE.get()))
                 .save(consumer);
 
-        shapelessBuildingBlock(FBContent.blockFramedStoneButton.get())
-                .requires(FBContent.blockFramedCube.get())
+        shapelessBuildingBlock(FBContent.BLOCK_FRAMED_STONE_BUTTON.get())
+                .requires(FBContent.BLOCK_FRAMED_CUBE.get())
                 .requires(Tags.Items.STONE)
-                .unlockedBy("hasFramedBlock", has(FBContent.blockFramedCube.get()))
+                .unlockedBy("hasFramedBlock", has(FBContent.BLOCK_FRAMED_CUBE.get()))
                 .save(consumer);
 
-        shapedBuildingBlock(FBContent.blockFramedLever.get())
+        shapedBuildingBlock(FBContent.BLOCK_FRAMED_LEVER.get())
                 .pattern("S")
                 .pattern("F")
-                .define('F', FBContent.blockFramedCube.get())
+                .define('F', FBContent.BLOCK_FRAMED_CUBE.get())
                 .define('S', Items.STICK)
                 .unlockedBy("hasFramedBlock", HAS_FRAMED_BLOCK)
                 .save(consumer);
 
-        shapedBuildingBlock(FBContent.blockFramedSign.get(), 3)
+        shapedBuildingBlock(FBContent.BLOCK_FRAMED_SIGN.get(), 3)
                 .pattern("FFF")
                 .pattern("FFF")
                 .pattern(" S ")
-                .define('F', FBContent.blockFramedCube.get())
+                .define('F', FBContent.BLOCK_FRAMED_CUBE.get())
                 .define('S', Items.STICK)
                 .unlockedBy("hasFramedBlock", HAS_FRAMED_BLOCK)
                 .save(consumer);
 
-        shapedBuildingBlock(FBContent.blockFramedDoubleSlope.get(), 1)
+        shapedBuildingBlock(FBContent.BLOCK_FRAMED_DOUBLE_SLOPE.get(), 1)
                 .pattern("FF")
-                .define('F', FBContent.blockFramedSlope.get())
+                .define('F', FBContent.BLOCK_FRAMED_SLOPE.get())
                 .unlockedBy("hasFramedSlope", HAS_FRAMED_SLOPE)
                 .save(consumer);
 
-        shapedBuildingBlock(FBContent.blockFramedDoubleCorner.get(), 1)
+        shapedBuildingBlock(FBContent.BLOCK_FRAMED_DOUBLE_CORNER.get(), 1)
                 .pattern("IC")
-                .define('C', FBContent.blockFramedCornerSlope.get())
-                .define('I', FBContent.blockFramedInnerCornerSlope.get())
-                .unlockedBy("hasFramedCorner", has(FBContent.blockFramedCornerSlope.get()))
+                .define('C', FBContent.BLOCK_FRAMED_CORNER_SLOPE.get())
+                .define('I', FBContent.BLOCK_FRAMED_INNER_CORNER_SLOPE.get())
+                .unlockedBy("hasFramedCorner", has(FBContent.BLOCK_FRAMED_CORNER_SLOPE.get()))
                 .save(consumer);
 
-        shapedBuildingBlock(FBContent.blockFramedDoublePrismCorner.get(), 1)
+        shapedBuildingBlock(FBContent.BLOCK_FRAMED_DOUBLE_PRISM_CORNER.get(), 1)
                 .pattern("IC")
-                .define('C', FBContent.blockFramedPrismCorner.get())
-                .define('I', FBContent.blockFramedInnerPrismCorner.get())
-                .unlockedBy("hasFramedCorner", has(FBContent.blockFramedPrismCorner.get()))
+                .define('C', FBContent.BLOCK_FRAMED_PRISM_CORNER.get())
+                .define('I', FBContent.BLOCK_FRAMED_INNER_PRISM_CORNER.get())
+                .unlockedBy("hasFramedCorner", has(FBContent.BLOCK_FRAMED_PRISM_CORNER.get()))
                 .save(consumer);
 
-        shapedBuildingBlock(FBContent.blockFramedDoubleThreewayCorner.get(), 1)
+        shapedBuildingBlock(FBContent.BLOCK_FRAMED_DOUBLE_THREEWAY_CORNER.get(), 1)
                 .pattern("IC")
-                .define('C', FBContent.blockFramedThreewayCorner.get())
-                .define('I', FBContent.blockFramedInnerThreewayCorner.get())
-                .unlockedBy("hasFramedCorner", has(FBContent.blockFramedThreewayCorner.get()))
+                .define('C', FBContent.BLOCK_FRAMED_THREEWAY_CORNER.get())
+                .define('I', FBContent.BLOCK_FRAMED_INNER_THREEWAY_CORNER.get())
+                .unlockedBy("hasFramedCorner", has(FBContent.BLOCK_FRAMED_THREEWAY_CORNER.get()))
                 .save(consumer);
 
-        shapedBuildingBlock(FBContent.blockFramedTorch.get(), 4)
+        shapedBuildingBlock(FBContent.BLOCK_FRAMED_TORCH.get(), 4)
                 .pattern("C")
                 .pattern("F")
                 .define('C', ItemTags.COALS)
-                .define('F', FBContent.blockFramedCube.get())
+                .define('F', FBContent.BLOCK_FRAMED_CUBE.get())
                 .unlockedBy("hasFramedBlock", HAS_FRAMED_BLOCK)
                 .save(consumer);
 
-        shapedBuildingBlock(FBContent.blockFramedSoulTorch.get(), 4)
+        shapedBuildingBlock(FBContent.BLOCK_FRAMED_SOUL_TORCH.get(), 4)
                 .pattern("C")
                 .pattern("F")
                 .pattern("S")
                 .define('C', ItemTags.COALS)
-                .define('F', FBContent.blockFramedCube.get())
+                .define('F', FBContent.BLOCK_FRAMED_CUBE.get())
                 .define('S', ItemTags.SOUL_FIRE_BASE_BLOCKS)
                 .unlockedBy("hasFramedBlock", HAS_FRAMED_BLOCK)
                 .save(consumer);
 
-        shapedBuildingBlock(FBContent.blockFramedRedstoneTorch.get(), 4)
+        shapedBuildingBlock(FBContent.BLOCK_FRAMED_REDSTONE_TORCH.get(), 4)
                 .pattern("R")
                 .pattern("F")
                 .define('R', Tags.Items.DUSTS_REDSTONE)
-                .define('F', FBContent.blockFramedCube.get())
+                .define('F', FBContent.BLOCK_FRAMED_CUBE.get())
                 .unlockedBy("hasFramedBlock", HAS_FRAMED_BLOCK)
                 .save(consumer);
 
-        shapedBuildingBlock(FBContent.blockFramedFloor.get(), 4)
+        shapedBuildingBlock(FBContent.BLOCK_FRAMED_FLOOR.get(), 4)
                 .pattern("FFH")
-                .define('F', FBContent.blockFramedSlab.get())
-                .define('H', FBContent.itemFramedHammer.get())
-                .unlockedBy("hasFramedSlab", has(FBContent.blockFramedSlab.get()))
+                .define('F', FBContent.BLOCK_FRAMED_SLAB.get())
+                .define('H', FBContent.ITEM_FRAMED_HAMMER.get())
+                .unlockedBy("hasFramedSlab", has(FBContent.BLOCK_FRAMED_SLAB.get()))
                 .save(consumer);
 
-        shapedBuildingBlock(FBContent.blockFramedLattice.get(), 3)
+        shapedBuildingBlock(FBContent.BLOCK_FRAMED_LATTICE.get(), 3)
                 .pattern(" F ")
                 .pattern("FFF")
                 .pattern(" F ")
-                .define('F', FBContent.blockFramedCube.get())
+                .define('F', FBContent.BLOCK_FRAMED_CUBE.get())
                 .unlockedBy("hasFramedBlock", HAS_FRAMED_BLOCK)
                 .save(consumer);
 
-        shapedBuildingBlock(FBContent.blockFramedVerticalStairs.get(), 4)
+        shapedBuildingBlock(FBContent.BLOCK_FRAMED_VERTICAL_STAIRS.get(), 4)
                 .pattern("FFF")
                 .pattern("FF ")
                 .pattern("F  ")
-                .define('F', FBContent.blockFramedCube.get())
+                .define('F', FBContent.BLOCK_FRAMED_CUBE.get())
                 .unlockedBy("hasFramedBlock", HAS_FRAMED_BLOCK)
                 .save(consumer);
 
-        shapedBuildingBlock(FBContent.blockFramedChest.get(), 1)
+        shapedBuildingBlock(FBContent.BLOCK_FRAMED_CHEST.get(), 1)
                 .pattern("FFF")
                 .pattern("F F")
                 .pattern("FFF")
-                .define('F', FBContent.blockFramedCube.get())
+                .define('F', FBContent.BLOCK_FRAMED_CUBE.get())
                 .unlockedBy("hasFramedBlock", HAS_FRAMED_BLOCK)
                 .save(consumer);
 
-        shapedBuildingBlock(FBContent.blockFramedBars.get(), 16)
+        shapedBuildingBlock(FBContent.BLOCK_FRAMED_BARS.get(), 16)
                 .pattern("F F")
                 .pattern("FFF")
                 .pattern("F F")
-                .define('F', FBContent.blockFramedCube.get())
+                .define('F', FBContent.BLOCK_FRAMED_CUBE.get())
                 .unlockedBy("hasFramedBlock", HAS_FRAMED_BLOCK)
                 .save(consumer);
 
-        shapedBuildingBlock(FBContent.blockFramedPane.get(), 12)
+        shapedBuildingBlock(FBContent.BLOCK_FRAMED_PANE.get(), 12)
                 .pattern("FF")
                 .pattern("FF")
-                .define('F', FBContent.blockFramedCube.get())
+                .define('F', FBContent.BLOCK_FRAMED_CUBE.get())
                 .unlockedBy("hasFramedBlock", HAS_FRAMED_BLOCK)
                 .save(consumer);
 
-        shapelessBuildingBlock(FBContent.blockFramedRailSlope.get(), 1)
-                .requires(FBContent.blockFramedSlope.get())
+        shapelessBuildingBlock(FBContent.BLOCK_FRAMED_RAIL_SLOPE.get(), 1)
+                .requires(FBContent.BLOCK_FRAMED_SLOPE.get())
                 .requires(Items.RAIL)
                 .unlockedBy("hasFramedSlope", HAS_FRAMED_SLOPE)
                 .save(consumer);
 
-        shapelessBuildingBlock(FBContent.blockFramedPoweredRailSlope.get(), 1)
-                .requires(FBContent.blockFramedSlope.get())
+        shapelessBuildingBlock(FBContent.BLOCK_FRAMED_POWERED_RAIL_SLOPE.get(), 1)
+                .requires(FBContent.BLOCK_FRAMED_SLOPE.get())
                 .requires(Items.POWERED_RAIL)
                 .unlockedBy("hasFramedSlope", HAS_FRAMED_SLOPE)
                 .save(consumer);
 
-        shapelessBuildingBlock(FBContent.blockFramedDetectorRailSlope.get(), 1)
-                .requires(FBContent.blockFramedSlope.get())
+        shapelessBuildingBlock(FBContent.BLOCK_FRAMED_DETECTOR_RAIL_SLOPE.get(), 1)
+                .requires(FBContent.BLOCK_FRAMED_SLOPE.get())
                 .requires(Items.DETECTOR_RAIL)
                 .unlockedBy("hasFramedSlope", HAS_FRAMED_SLOPE)
                 .save(consumer);
 
-        shapelessBuildingBlock(FBContent.blockFramedActivatorRailSlope.get(), 1)
-                .requires(FBContent.blockFramedSlope.get())
+        shapelessBuildingBlock(FBContent.BLOCK_FRAMED_ACTIVATOR_RAIL_SLOPE.get(), 1)
+                .requires(FBContent.BLOCK_FRAMED_SLOPE.get())
                 .requires(Items.ACTIVATOR_RAIL)
                 .unlockedBy("hasFramedSlope", HAS_FRAMED_SLOPE)
                 .save(consumer);
 
-        shapedBuildingBlock(FBContent.blockFramedFlowerPot.get(), 1)
+        shapedBuildingBlock(FBContent.BLOCK_FRAMED_FLOWER_POT.get(), 1)
                 .pattern("F F")
                 .pattern(" F ")
-                .define('F', FBContent.blockFramedCube.get())
+                .define('F', FBContent.BLOCK_FRAMED_CUBE.get())
                 .unlockedBy("hasFramedBlock", HAS_FRAMED_BLOCK)
                 .save(consumer);
 
-        shapelessBuildingBlock(FBContent.blockFramedPillar.get(), 1)
-                .requires(FBContent.blockFramedCornerPillar.get())
-                .unlockedBy("hasFramedCornerPillar", has(FBContent.blockFramedCornerPillar.get()))
+        shapelessBuildingBlock(FBContent.BLOCK_FRAMED_PILLAR.get(), 1)
+                .requires(FBContent.BLOCK_FRAMED_CORNER_PILLAR.get())
+                .unlockedBy("hasFramedCornerPillar", has(FBContent.BLOCK_FRAMED_CORNER_PILLAR.get()))
                 .save(consumer);
 
-        shapelessBuildingBlock(FBContent.blockFramedCornerPillar.get(), 1)
-                .requires(FBContent.blockFramedPillar.get())
-                .unlockedBy("hasFramedPillar", has(FBContent.blockFramedPillar.get()))
+        shapelessBuildingBlock(FBContent.BLOCK_FRAMED_CORNER_PILLAR.get(), 1)
+                .requires(FBContent.BLOCK_FRAMED_PILLAR.get())
+                .unlockedBy("hasFramedPillar", has(FBContent.BLOCK_FRAMED_PILLAR.get()))
                 .save(consumer, Utils.rl("framed_corner_pillar_from_pillar"));
 
-        shapelessBuildingBlock(FBContent.blockFramedHalfPillar.get(), 1)
-                .requires(FBContent.blockFramedSlabCorner.get())
-                .unlockedBy("hasFramedSlabCorner", has(FBContent.blockFramedSlabCorner.get()))
+        shapelessBuildingBlock(FBContent.BLOCK_FRAMED_HALF_PILLAR.get(), 1)
+                .requires(FBContent.BLOCK_FRAMED_SLAB_CORNER.get())
+                .unlockedBy("hasFramedSlabCorner", has(FBContent.BLOCK_FRAMED_SLAB_CORNER.get()))
                 .save(consumer);
 
-        shapelessBuildingBlock(FBContent.blockFramedSlabCorner.get(), 1)
-                .requires(FBContent.blockFramedHalfPillar.get())
-                .unlockedBy("hasFramedHalfPillar", has(FBContent.blockFramedHalfPillar.get()))
+        shapelessBuildingBlock(FBContent.BLOCK_FRAMED_SLAB_CORNER.get(), 1)
+                .requires(FBContent.BLOCK_FRAMED_HALF_PILLAR.get())
+                .unlockedBy("hasFramedHalfPillar", has(FBContent.BLOCK_FRAMED_HALF_PILLAR.get()))
                 .save(consumer, Utils.rl("framed_slab_corner_from_half_pillar"));
 
-        shapelessBuildingBlock(FBContent.blockFramedPost.get(), 1)
-                .requires(FBContent.blockFramedFence.get())
-                .unlockedBy("hasFramedFence", has(FBContent.blockFramedFence.get()))
+        shapelessBuildingBlock(FBContent.BLOCK_FRAMED_POST.get(), 1)
+                .requires(FBContent.BLOCK_FRAMED_FENCE.get())
+                .unlockedBy("hasFramedFence", has(FBContent.BLOCK_FRAMED_FENCE.get()))
                 .save(consumer);
 
-        shapelessBuildingBlock(FBContent.blockFramedFence.get(), 1)
-                .requires(FBContent.blockFramedPost.get())
-                .unlockedBy("hasFramedPost", has(FBContent.blockFramedPost.get()))
+        shapelessBuildingBlock(FBContent.BLOCK_FRAMED_FENCE.get(), 1)
+                .requires(FBContent.BLOCK_FRAMED_POST.get())
+                .unlockedBy("hasFramedPost", has(FBContent.BLOCK_FRAMED_POST.get()))
                 .save(consumer, Utils.rl("framed_fence_from_post"));
 
-        shapedBuildingBlock(FBContent.blockFramedCollapsibleBlock.get(), 4)
+        shapedBuildingBlock(FBContent.BLOCK_FRAMED_COLLAPSIBLE_BLOCK.get(), 4)
                 .pattern("FFF")
                 .pattern("FFF")
                 .pattern("FFF")
-                .define('F', FBContent.blockFramedCube.get())
+                .define('F', FBContent.BLOCK_FRAMED_CUBE.get())
                 .unlockedBy("hasFramedBlock", HAS_FRAMED_BLOCK)
                 .save(consumer);
 
-        shapelessBuildingBlock(FBContent.blockFramedHalfStairs.get(), 2)
-                .requires(FBContent.itemFramedHammer.get())
-                .requires(FBContent.blockFramedStairs.get())
-                .unlockedBy("hasFramedStairs", has(FBContent.blockFramedStairs.get()))
+        shapelessBuildingBlock(FBContent.BLOCK_FRAMED_HALF_STAIRS.get(), 2)
+                .requires(FBContent.ITEM_FRAMED_HAMMER.get())
+                .requires(FBContent.BLOCK_FRAMED_STAIRS.get())
+                .unlockedBy("hasFramedStairs", has(FBContent.BLOCK_FRAMED_STAIRS.get()))
                 .save(consumer);
 
-        shapedBuildingBlock(FBContent.blockFramedDividedStairs.get())
+        shapedBuildingBlock(FBContent.BLOCK_FRAMED_DIVIDED_STAIRS.get())
                 .pattern("SS")
-                .define('S', FBContent.blockFramedHalfStairs.get())
-                .unlockedBy("hasFramedHalfStairs", has(FBContent.blockFramedHalfStairs.get()))
+                .define('S', FBContent.BLOCK_FRAMED_HALF_STAIRS.get())
+                .unlockedBy("hasFramedHalfStairs", has(FBContent.BLOCK_FRAMED_HALF_STAIRS.get()))
                 .save(consumer);
 
-        shapedBuildingBlock(FBContent.blockFramedBouncyCube.get())
+        shapedBuildingBlock(FBContent.BLOCK_FRAMED_BOUNCY_CUBE.get())
                 .pattern(" S ")
                 .pattern("SCS")
                 .pattern(" S ")
                 .define('S', Tags.Items.SLIMEBALLS)
-                .define('C', FBContent.blockFramedCube.get())
+                .define('C', FBContent.BLOCK_FRAMED_CUBE.get())
                 .unlockedBy("hasFramedBlock", HAS_FRAMED_BLOCK)
                 .save(consumer);
 
-        shapedBuildingBlock(FBContent.blockFramedSecretStorage.get())
+        shapedBuildingBlock(FBContent.BLOCK_FRAMED_SECRET_STORAGE.get())
                 .pattern(" F ")
                 .pattern("FCF")
                 .pattern(" F ")
-                .define('F', FBContent.blockFramedCube.get())
-                .define('C', FBContent.blockFramedChest.get())
+                .define('F', FBContent.BLOCK_FRAMED_CUBE.get())
+                .define('C', FBContent.BLOCK_FRAMED_CHEST.get())
                 .unlockedBy("hasFramedBlock", HAS_FRAMED_BLOCK)
                 .save(consumer);
 
-        shapedBuildingBlock(FBContent.blockFramedRedstoneBlock.get())
+        shapedBuildingBlock(FBContent.BLOCK_FRAMED_REDSTONE_BLOCK.get())
                 .pattern("RRR")
                 .pattern("RCR")
                 .pattern("RRR")
                 .define('R', Tags.Items.DUSTS_REDSTONE)
-                .define('C', FBContent.blockFramedCube.get())
+                .define('C', FBContent.BLOCK_FRAMED_CUBE.get())
                 .unlockedBy("hasFramedBlock", HAS_FRAMED_BLOCK)
                 .save(consumer);
 
-        shapedBuildingBlock(FBContent.blockFramedPrism.get(), 2)
+        shapedBuildingBlock(FBContent.BLOCK_FRAMED_PRISM.get(), 2)
                 .pattern("FFH")
-                .define('F', FBContent.blockFramedSlope.get())
-                .define('H', FBContent.itemFramedHammer.get())
+                .define('F', FBContent.BLOCK_FRAMED_SLOPE.get())
+                .define('H', FBContent.ITEM_FRAMED_HAMMER.get())
                 .unlockedBy("hasFramedSlope", HAS_FRAMED_SLOPE)
                 .save(consumer);
 
-        shapedBuildingBlock(FBContent.blockFramedInnerPrism.get(), 2)
+        shapedBuildingBlock(FBContent.BLOCK_FRAMED_INNER_PRISM.get(), 2)
                 .pattern("FF")
                 .pattern("SS")
-                .define('F', FBContent.blockFramedSlope.get())
-                .define('S', FBContent.blockFramedSlab.get())
+                .define('F', FBContent.BLOCK_FRAMED_SLOPE.get())
+                .define('S', FBContent.BLOCK_FRAMED_SLAB.get())
                 .unlockedBy("hasFramedSlope", HAS_FRAMED_SLOPE)
                 .save(consumer);
 
-        shapedBuildingBlock(FBContent.blockFramedDoublePrism.get())
+        shapedBuildingBlock(FBContent.BLOCK_FRAMED_DOUBLE_PRISM.get())
                 .pattern("P")
                 .pattern("I")
-                .define('P', FBContent.blockFramedPrism.get())
-                .define('I', FBContent.blockFramedInnerPrism.get())
-                .unlockedBy("hasFramedPrism", has(FBContent.blockFramedPrism.get()))
+                .define('P', FBContent.BLOCK_FRAMED_PRISM.get())
+                .define('I', FBContent.BLOCK_FRAMED_INNER_PRISM.get())
+                .unlockedBy("hasFramedPrism", has(FBContent.BLOCK_FRAMED_PRISM.get()))
                 .save(consumer);
 
-        shapedBuildingBlock(FBContent.blockFramedSlopedPrism.get(), 2)
+        shapedBuildingBlock(FBContent.BLOCK_FRAMED_SLOPED_PRISM.get(), 2)
                 .pattern("FF")
-                .define('F', FBContent.blockFramedCornerSlope.get())
-                .unlockedBy("hasFramedCorner", has(FBContent.blockFramedCornerSlope.get()))
+                .define('F', FBContent.BLOCK_FRAMED_CORNER_SLOPE.get())
+                .unlockedBy("hasFramedCorner", has(FBContent.BLOCK_FRAMED_CORNER_SLOPE.get()))
                 .save(consumer);
 
-        shapedBuildingBlock(FBContent.blockFramedInnerSlopedPrism.get(), 2)
+        shapedBuildingBlock(FBContent.BLOCK_FRAMED_INNER_SLOPED_PRISM.get(), 2)
                 .pattern("FF")
                 .pattern("SS")
-                .define('F', FBContent.blockFramedCornerSlope.get())
-                .define('S', FBContent.blockFramedSlab.get())
-                .unlockedBy("hasFramedCorner", has(FBContent.blockFramedCornerSlope.get()))
+                .define('F', FBContent.BLOCK_FRAMED_CORNER_SLOPE.get())
+                .define('S', FBContent.BLOCK_FRAMED_SLAB.get())
+                .unlockedBy("hasFramedCorner", has(FBContent.BLOCK_FRAMED_CORNER_SLOPE.get()))
                 .save(consumer);
 
-        shapedBuildingBlock(FBContent.blockFramedDoubleSlopedPrism.get())
+        shapedBuildingBlock(FBContent.BLOCK_FRAMED_DOUBLE_SLOPED_PRISM.get())
                 .pattern("P")
                 .pattern("I")
-                .define('P', FBContent.blockFramedSlopedPrism.get())
-                .define('I', FBContent.blockFramedInnerSlopedPrism.get())
-                .unlockedBy("hasFramedSlopedPrism", has(FBContent.blockFramedSlopedPrism.get()))
+                .define('P', FBContent.BLOCK_FRAMED_SLOPED_PRISM.get())
+                .define('I', FBContent.BLOCK_FRAMED_INNER_SLOPED_PRISM.get())
+                .unlockedBy("hasFramedSlopedPrism", has(FBContent.BLOCK_FRAMED_SLOPED_PRISM.get()))
                 .save(consumer);
 
-        shapedBuildingBlock(FBContent.blockFramedSlopeSlab.get(), 6)
+        shapedBuildingBlock(FBContent.BLOCK_FRAMED_SLOPE_SLAB.get(), 6)
                 .pattern("FFF")
-                .define('F', FBContent.blockFramedSlope.get())
+                .define('F', FBContent.BLOCK_FRAMED_SLOPE.get())
                 .unlockedBy("hasFramedSlope", HAS_FRAMED_SLOPE)
                 .save(consumer);
 
-        shapedBuildingBlock(FBContent.blockFramedElevatedSlopeSlab.get())
+        shapedBuildingBlock(FBContent.BLOCK_FRAMED_ELEVATED_SLOPE_SLAB.get())
                 .pattern("S")
                 .pattern("F")
-                .define('S', FBContent.blockFramedSlopeSlab.get())
-                .define('F', FBContent.blockFramedSlab.get())
-                .unlockedBy("hasFramedSlopeSlab", has(FBContent.blockFramedSlopeSlab.get()))
+                .define('S', FBContent.BLOCK_FRAMED_SLOPE_SLAB.get())
+                .define('F', FBContent.BLOCK_FRAMED_SLAB.get())
+                .unlockedBy("hasFramedSlopeSlab", has(FBContent.BLOCK_FRAMED_SLOPE_SLAB.get()))
                 .save(consumer);
 
-        shapedBuildingBlock(FBContent.blockFramedDoubleSlopeSlab.get())
+        shapedBuildingBlock(FBContent.BLOCK_FRAMED_DOUBLE_SLOPE_SLAB.get())
                 .pattern("FF")
-                .define('F', FBContent.blockFramedSlopeSlab.get())
-                .unlockedBy("hasFramedSlopeSlab", has(FBContent.blockFramedSlopeSlab.get()))
+                .define('F', FBContent.BLOCK_FRAMED_SLOPE_SLAB.get())
+                .unlockedBy("hasFramedSlopeSlab", has(FBContent.BLOCK_FRAMED_SLOPE_SLAB.get()))
                 .save(consumer);
 
-        shapelessBuildingBlock(FBContent.blockFramedInverseDoubleSlopeSlab.get())
-                .requires(FBContent.blockFramedDoubleSlopeSlab.get())
-                .unlockedBy("hasFramedDoubleSlopeSlab", has(FBContent.blockFramedDoubleSlopeSlab.get()))
+        shapelessBuildingBlock(FBContent.BLOCK_FRAMED_INVERSE_DOUBLE_SLOPE_SLAB.get())
+                .requires(FBContent.BLOCK_FRAMED_DOUBLE_SLOPE_SLAB.get())
+                .unlockedBy("hasFramedDoubleSlopeSlab", has(FBContent.BLOCK_FRAMED_DOUBLE_SLOPE_SLAB.get()))
                 .save(consumer);
 
-        shapelessBuildingBlock(FBContent.blockFramedDoubleSlopeSlab.get())
-                .requires(FBContent.blockFramedInverseDoubleSlopeSlab.get())
-                .unlockedBy("hasFramedInverseDoubleSlopeSlab", has(FBContent.blockFramedInverseDoubleSlopeSlab.get()))
+        shapelessBuildingBlock(FBContent.BLOCK_FRAMED_DOUBLE_SLOPE_SLAB.get())
+                .requires(FBContent.BLOCK_FRAMED_INVERSE_DOUBLE_SLOPE_SLAB.get())
+                .unlockedBy("hasFramedInverseDoubleSlopeSlab", has(FBContent.BLOCK_FRAMED_INVERSE_DOUBLE_SLOPE_SLAB.get()))
                 .save(consumer, Utils.rl("framed_double_slope_slab_from_inverse"));
 
-        shapedBuildingBlock(FBContent.blockFramedElevatedDoubleSlopeSlab.get())
+        shapedBuildingBlock(FBContent.BLOCK_FRAMED_ELEVATED_DOUBLE_SLOPE_SLAB.get())
                 .pattern("S")
                 .pattern("E")
-                .define('S', FBContent.blockFramedSlopeSlab.get())
-                .define('E', FBContent.blockFramedElevatedSlopeSlab.get())
-                .unlockedBy("hasFramedSlopeSlab", has(FBContent.blockFramedSlopeSlab.get()))
+                .define('S', FBContent.BLOCK_FRAMED_SLOPE_SLAB.get())
+                .define('E', FBContent.BLOCK_FRAMED_ELEVATED_SLOPE_SLAB.get())
+                .unlockedBy("hasFramedSlopeSlab", has(FBContent.BLOCK_FRAMED_SLOPE_SLAB.get()))
                 .save(consumer);
 
-        shapedBuildingBlock(FBContent.blockFramedStackedSlopeSlab.get())
+        shapedBuildingBlock(FBContent.BLOCK_FRAMED_STACKED_SLOPE_SLAB.get())
                 .pattern("H")
                 .pattern("S")
                 .pattern("F")
-                .define('H', FBContent.itemFramedHammer.get())
-                .define('S', FBContent.blockFramedSlopeSlab.get())
-                .define('F', FBContent.blockFramedSlab.get())
-                .unlockedBy("hasFramedSlopeSlab", has(FBContent.blockFramedSlopeSlab.get()))
+                .define('H', FBContent.ITEM_FRAMED_HAMMER.get())
+                .define('S', FBContent.BLOCK_FRAMED_SLOPE_SLAB.get())
+                .define('F', FBContent.BLOCK_FRAMED_SLAB.get())
+                .unlockedBy("hasFramedSlopeSlab", has(FBContent.BLOCK_FRAMED_SLOPE_SLAB.get()))
                 .save(consumer);
 
-        shapelessBuildingBlock(FBContent.blockFramedVerticalHalfStairs.get(), 2)
-                .requires(FBContent.blockFramedVerticalStairs.get())
-                .requires(FBContent.itemFramedHammer.get())
-                .unlockedBy("hasFramedVerticalStairs", has(FBContent.blockFramedVerticalStairs.get()))
+        shapelessBuildingBlock(FBContent.BLOCK_FRAMED_VERTICAL_HALF_STAIRS.get(), 2)
+                .requires(FBContent.BLOCK_FRAMED_VERTICAL_STAIRS.get())
+                .requires(FBContent.ITEM_FRAMED_HAMMER.get())
+                .unlockedBy("hasFramedVerticalStairs", has(FBContent.BLOCK_FRAMED_VERTICAL_STAIRS.get()))
                 .save(consumer);
 
-        shapedBuildingBlock(FBContent.blockFramedVerticalDividedStairs.get())
+        shapedBuildingBlock(FBContent.BLOCK_FRAMED_VERTICAL_DIVIDED_STAIRS.get())
                 .pattern("S")
                 .pattern("S")
-                .define('S', FBContent.blockFramedVerticalHalfStairs.get())
-                .unlockedBy("hasFramedVerticalHalfStairs", has(FBContent.blockFramedVerticalHalfStairs.get()))
+                .define('S', FBContent.BLOCK_FRAMED_VERTICAL_HALF_STAIRS.get())
+                .unlockedBy("hasFramedVerticalHalfStairs", has(FBContent.BLOCK_FRAMED_VERTICAL_HALF_STAIRS.get()))
                 .save(consumer);
 
-        shapedBuildingBlock(FBContent.blockFramedFlatSlopeSlabCorner.get())
+        shapedBuildingBlock(FBContent.BLOCK_FRAMED_FLAT_SLOPE_SLAB_CORNER.get())
                 .pattern("HF ")
                 .pattern("  F")
-                .define('F', FBContent.blockFramedSlopeSlab.get())
-                .define('H', FBContent.itemFramedHammer.get())
-                .unlockedBy("hasFramedSlopeSlab", has(FBContent.blockFramedSlopeSlab.get()))
+                .define('F', FBContent.BLOCK_FRAMED_SLOPE_SLAB.get())
+                .define('H', FBContent.ITEM_FRAMED_HAMMER.get())
+                .unlockedBy("hasFramedSlopeSlab", has(FBContent.BLOCK_FRAMED_SLOPE_SLAB.get()))
                 .save(consumer);
 
-        shapedBuildingBlock(FBContent.blockFramedFlatInnerSlopeSlabCorner.get())
+        shapedBuildingBlock(FBContent.BLOCK_FRAMED_FLAT_INNER_SLOPE_SLAB_CORNER.get())
                 .pattern("H F")
                 .pattern(" F ")
-                .define('F', FBContent.blockFramedSlopeSlab.get())
-                .define('H', FBContent.itemFramedHammer.get())
-                .unlockedBy("hasFramedSlopeSlab", has(FBContent.blockFramedSlopeSlab.get()))
+                .define('F', FBContent.BLOCK_FRAMED_SLOPE_SLAB.get())
+                .define('H', FBContent.ITEM_FRAMED_HAMMER.get())
+                .unlockedBy("hasFramedSlopeSlab", has(FBContent.BLOCK_FRAMED_SLOPE_SLAB.get()))
                 .save(consumer);
 
-        shapedBuildingBlock(FBContent.blockFramedFlatElevatedSlopeSlabCorner.get())
+        shapedBuildingBlock(FBContent.BLOCK_FRAMED_FLAT_ELEVATED_SLOPE_SLAB_CORNER.get())
                 .pattern("C")
                 .pattern("S")
-                .define('C', FBContent.blockFramedFlatSlopeSlabCorner.get())
-                .define('S', FBContent.blockFramedSlab.get())
-                .unlockedBy("hasFramedFlatSlopeSlabCorner", has(FBContent.blockFramedFlatSlopeSlabCorner.get()))
+                .define('C', FBContent.BLOCK_FRAMED_FLAT_SLOPE_SLAB_CORNER.get())
+                .define('S', FBContent.BLOCK_FRAMED_SLAB.get())
+                .unlockedBy("hasFramedFlatSlopeSlabCorner", has(FBContent.BLOCK_FRAMED_FLAT_SLOPE_SLAB_CORNER.get()))
                 .save(consumer);
 
-        shapedBuildingBlock(FBContent.blockFramedFlatElevatedInnerSlopeSlabCorner.get())
+        shapedBuildingBlock(FBContent.BLOCK_FRAMED_FLAT_ELEVATED_INNER_SLOPE_SLAB_CORNER.get())
                 .pattern("C")
                 .pattern("S")
-                .define('C', FBContent.blockFramedFlatInnerSlopeSlabCorner.get())
-                .define('S', FBContent.blockFramedSlab.get())
-                .unlockedBy("hasFramedFlatInnerSlopeSlabCorner", has(FBContent.blockFramedFlatInnerSlopeSlabCorner.get()))
+                .define('C', FBContent.BLOCK_FRAMED_FLAT_INNER_SLOPE_SLAB_CORNER.get())
+                .define('S', FBContent.BLOCK_FRAMED_SLAB.get())
+                .unlockedBy("hasFramedFlatInnerSlopeSlabCorner", has(FBContent.BLOCK_FRAMED_FLAT_INNER_SLOPE_SLAB_CORNER.get()))
                 .save(consumer);
 
-        shapedBuildingBlock(FBContent.blockFramedFlatDoubleSlopeSlabCorner.get())
+        shapedBuildingBlock(FBContent.BLOCK_FRAMED_FLAT_DOUBLE_SLOPE_SLAB_CORNER.get())
                 .pattern("C")
                 .pattern("I")
-                .define('C', FBContent.blockFramedFlatSlopeSlabCorner.get())
-                .define('I', FBContent.blockFramedFlatInnerSlopeSlabCorner.get())
-                .unlockedBy("hasFramedFlatSlopeSlabCorner", has(FBContent.blockFramedFlatSlopeSlabCorner.get()))
+                .define('C', FBContent.BLOCK_FRAMED_FLAT_SLOPE_SLAB_CORNER.get())
+                .define('I', FBContent.BLOCK_FRAMED_FLAT_INNER_SLOPE_SLAB_CORNER.get())
+                .unlockedBy("hasFramedFlatSlopeSlabCorner", has(FBContent.BLOCK_FRAMED_FLAT_SLOPE_SLAB_CORNER.get()))
                 .save(consumer);
 
-        shapelessBuildingBlock(FBContent.blockFramedFlatInverseDoubleSlopeSlabCorner.get())
-                .requires(FBContent.blockFramedFlatDoubleSlopeSlabCorner.get())
-                .unlockedBy("hasFramedFlatDoubleSlopeSlabCorner", has(FBContent.blockFramedFlatDoubleSlopeSlabCorner.get()))
+        shapelessBuildingBlock(FBContent.BLOCK_FRAMED_FLAT_INVERSE_DOUBLE_SLOPE_SLAB_CORNER.get())
+                .requires(FBContent.BLOCK_FRAMED_FLAT_DOUBLE_SLOPE_SLAB_CORNER.get())
+                .unlockedBy("hasFramedFlatDoubleSlopeSlabCorner", has(FBContent.BLOCK_FRAMED_FLAT_DOUBLE_SLOPE_SLAB_CORNER.get()))
                 .save(consumer);
 
-        shapelessBuildingBlock(FBContent.blockFramedFlatDoubleSlopeSlabCorner.get())
-                .requires(FBContent.blockFramedFlatInverseDoubleSlopeSlabCorner.get())
-                .unlockedBy("hasFramedFlatInverseDoubleSlopeSlabCorner", has(FBContent.blockFramedFlatInverseDoubleSlopeSlabCorner.get()))
+        shapelessBuildingBlock(FBContent.BLOCK_FRAMED_FLAT_DOUBLE_SLOPE_SLAB_CORNER.get())
+                .requires(FBContent.BLOCK_FRAMED_FLAT_INVERSE_DOUBLE_SLOPE_SLAB_CORNER.get())
+                .unlockedBy("hasFramedFlatInverseDoubleSlopeSlabCorner", has(FBContent.BLOCK_FRAMED_FLAT_INVERSE_DOUBLE_SLOPE_SLAB_CORNER.get()))
                 .save(consumer, Utils.rl("framed_flat_double_slope_slab_corner_from_inverse"));
 
-        shapedBuildingBlock(FBContent.blockFramedFlatElevatedDoubleSlopeSlabCorner.get())
+        shapedBuildingBlock(FBContent.BLOCK_FRAMED_FLAT_ELEVATED_DOUBLE_SLOPE_SLAB_CORNER.get())
                 .pattern("C")
                 .pattern("E")
-                .define('C', FBContent.blockFramedFlatInnerSlopeSlabCorner.get())
-                .define('E', FBContent.blockFramedFlatElevatedSlopeSlabCorner.get())
-                .unlockedBy("hasFramedFlatElevatedSlopeSlabCorner", has(FBContent.blockFramedFlatElevatedSlopeSlabCorner.get()))
+                .define('C', FBContent.BLOCK_FRAMED_FLAT_INNER_SLOPE_SLAB_CORNER.get())
+                .define('E', FBContent.BLOCK_FRAMED_FLAT_ELEVATED_SLOPE_SLAB_CORNER.get())
+                .unlockedBy("hasFramedFlatElevatedSlopeSlabCorner", has(FBContent.BLOCK_FRAMED_FLAT_ELEVATED_SLOPE_SLAB_CORNER.get()))
                 .save(consumer);
 
-        shapedBuildingBlock(FBContent.blockFramedFlatElevatedInnerDoubleSlopeSlabCorner.get())
+        shapedBuildingBlock(FBContent.BLOCK_FRAMED_FLAT_ELEVATED_INNER_DOUBLE_SLOPE_SLAB_CORNER.get())
                 .pattern("C")
                 .pattern("E")
-                .define('C', FBContent.blockFramedFlatSlopeSlabCorner.get())
-                .define('E', FBContent.blockFramedFlatElevatedInnerSlopeSlabCorner.get())
-                .unlockedBy("hasFramedFlatElevatedInnerSlopeSlabCorner", has(FBContent.blockFramedFlatElevatedInnerSlopeSlabCorner.get()))
+                .define('C', FBContent.BLOCK_FRAMED_FLAT_SLOPE_SLAB_CORNER.get())
+                .define('E', FBContent.BLOCK_FRAMED_FLAT_ELEVATED_INNER_SLOPE_SLAB_CORNER.get())
+                .unlockedBy("hasFramedFlatElevatedInnerSlopeSlabCorner", has(FBContent.BLOCK_FRAMED_FLAT_ELEVATED_INNER_SLOPE_SLAB_CORNER.get()))
                 .save(consumer);
 
-        shapedBuildingBlock(FBContent.blockFramedFlatStackedSlopeSlabCorner.get())
+        shapedBuildingBlock(FBContent.BLOCK_FRAMED_FLAT_STACKED_SLOPE_SLAB_CORNER.get())
                 .pattern("H")
                 .pattern("C")
                 .pattern("S")
-                .define('H', FBContent.itemFramedHammer.get())
-                .define('C', FBContent.blockFramedFlatSlopeSlabCorner.get())
-                .define('S', FBContent.blockFramedSlab.get())
-                .unlockedBy("hasFramedFlatSlopeSlabCorner", has(FBContent.blockFramedFlatSlopeSlabCorner.get()))
+                .define('H', FBContent.ITEM_FRAMED_HAMMER.get())
+                .define('C', FBContent.BLOCK_FRAMED_FLAT_SLOPE_SLAB_CORNER.get())
+                .define('S', FBContent.BLOCK_FRAMED_SLAB.get())
+                .unlockedBy("hasFramedFlatSlopeSlabCorner", has(FBContent.BLOCK_FRAMED_FLAT_SLOPE_SLAB_CORNER.get()))
                 .save(consumer);
 
-        shapedBuildingBlock(FBContent.blockFramedFlatStackedInnerSlopeSlabCorner.get())
+        shapedBuildingBlock(FBContent.BLOCK_FRAMED_FLAT_STACKED_INNER_SLOPE_SLAB_CORNER.get())
                 .pattern("H")
                 .pattern("C")
                 .pattern("S")
-                .define('H', FBContent.itemFramedHammer.get())
-                .define('C', FBContent.blockFramedFlatInnerSlopeSlabCorner.get())
-                .define('S', FBContent.blockFramedSlab.get())
-                .unlockedBy("hasFramedFlatInnerSlopeSlabCorner", has(FBContent.blockFramedFlatInnerSlopeSlabCorner.get()))
+                .define('H', FBContent.ITEM_FRAMED_HAMMER.get())
+                .define('C', FBContent.BLOCK_FRAMED_FLAT_INNER_SLOPE_SLAB_CORNER.get())
+                .define('S', FBContent.BLOCK_FRAMED_SLAB.get())
+                .unlockedBy("hasFramedFlatInnerSlopeSlabCorner", has(FBContent.BLOCK_FRAMED_FLAT_INNER_SLOPE_SLAB_CORNER.get()))
                 .save(consumer);
 
-        shapedBuildingBlock(FBContent.blockFramedSlopePanel.get(), 6)
+        shapedBuildingBlock(FBContent.BLOCK_FRAMED_SLOPE_PANEL.get(), 6)
                 .pattern("S")
                 .pattern("S")
                 .pattern("S")
-                .define('S', FBContent.blockFramedSlope.get())
+                .define('S', FBContent.BLOCK_FRAMED_SLOPE.get())
                 .unlockedBy("hasFramedSlope", HAS_FRAMED_SLOPE)
                 .save(consumer);
 
-        shapedBuildingBlock(FBContent.blockFramedExtendedSlopePanel.get())
+        shapedBuildingBlock(FBContent.BLOCK_FRAMED_EXTENDED_SLOPE_PANEL.get())
                 .pattern("PS")
-                .define('P', FBContent.blockFramedPanel.get())
-                .define('S', FBContent.blockFramedSlopePanel.get())
-                .unlockedBy("hasFramedSlopePanel", has(FBContent.blockFramedSlopePanel.get()))
+                .define('P', FBContent.BLOCK_FRAMED_PANEL.get())
+                .define('S', FBContent.BLOCK_FRAMED_SLOPE_PANEL.get())
+                .unlockedBy("hasFramedSlopePanel", has(FBContent.BLOCK_FRAMED_SLOPE_PANEL.get()))
                 .save(consumer);
 
-        shapedBuildingBlock(FBContent.blockFramedDoubleSlopePanel.get())
+        shapedBuildingBlock(FBContent.BLOCK_FRAMED_DOUBLE_SLOPE_PANEL.get())
                 .pattern("PP")
-                .define('P', FBContent.blockFramedSlopePanel.get())
-                .unlockedBy("hasFramedSlopePanel", has(FBContent.blockFramedSlopePanel.get()))
+                .define('P', FBContent.BLOCK_FRAMED_SLOPE_PANEL.get())
+                .unlockedBy("hasFramedSlopePanel", has(FBContent.BLOCK_FRAMED_SLOPE_PANEL.get()))
                 .save(consumer);
 
-        shapelessBuildingBlock(FBContent.blockFramedInverseDoubleSlopePanel.get())
-                .requires(FBContent.blockFramedDoubleSlopePanel.get())
-                .unlockedBy("hasFramedDoubleSlopePanel", has(FBContent.blockFramedDoubleSlopePanel.get()))
+        shapelessBuildingBlock(FBContent.BLOCK_FRAMED_INVERSE_DOUBLE_SLOPE_PANEL.get())
+                .requires(FBContent.BLOCK_FRAMED_DOUBLE_SLOPE_PANEL.get())
+                .unlockedBy("hasFramedDoubleSlopePanel", has(FBContent.BLOCK_FRAMED_DOUBLE_SLOPE_PANEL.get()))
                 .save(consumer);
 
-        shapelessBuildingBlock(FBContent.blockFramedDoubleSlopePanel.get())
-                .requires(FBContent.blockFramedInverseDoubleSlopePanel.get())
-                .unlockedBy("hasFramedInverseDoubleSlopePanel", has(FBContent.blockFramedInverseDoubleSlopePanel.get()))
+        shapelessBuildingBlock(FBContent.BLOCK_FRAMED_DOUBLE_SLOPE_PANEL.get())
+                .requires(FBContent.BLOCK_FRAMED_INVERSE_DOUBLE_SLOPE_PANEL.get())
+                .unlockedBy("hasFramedInverseDoubleSlopePanel", has(FBContent.BLOCK_FRAMED_INVERSE_DOUBLE_SLOPE_PANEL.get()))
                 .save(consumer, Utils.rl("framed_double_slope_panel_from_inverse_double_slope_panel"));
 
-        shapedBuildingBlock(FBContent.blockFramedExtendedDoubleSlopePanel.get())
+        shapedBuildingBlock(FBContent.BLOCK_FRAMED_EXTENDED_DOUBLE_SLOPE_PANEL.get())
                 .pattern("ES")
-                .define('S', FBContent.blockFramedSlopePanel.get())
-                .define('E', FBContent.blockFramedExtendedSlopePanel.get())
-                .unlockedBy("hasFramedSlopePanel", has(FBContent.blockFramedSlopePanel.get()))
+                .define('S', FBContent.BLOCK_FRAMED_SLOPE_PANEL.get())
+                .define('E', FBContent.BLOCK_FRAMED_EXTENDED_SLOPE_PANEL.get())
+                .unlockedBy("hasFramedSlopePanel", has(FBContent.BLOCK_FRAMED_SLOPE_PANEL.get()))
                 .save(consumer);
 
-        shapedBuildingBlock(FBContent.blockFramedStackedSlopePanel.get())
+        shapedBuildingBlock(FBContent.BLOCK_FRAMED_STACKED_SLOPE_PANEL.get())
                 .pattern("PSH")
-                .define('P', FBContent.blockFramedPanel.get())
-                .define('S', FBContent.blockFramedSlopePanel.get())
-                .define('H', FBContent.itemFramedHammer.get())
-                .unlockedBy("hasFramedSlopePanel", has(FBContent.blockFramedSlopePanel.get()))
+                .define('P', FBContent.BLOCK_FRAMED_PANEL.get())
+                .define('S', FBContent.BLOCK_FRAMED_SLOPE_PANEL.get())
+                .define('H', FBContent.ITEM_FRAMED_HAMMER.get())
+                .unlockedBy("hasFramedSlopePanel", has(FBContent.BLOCK_FRAMED_SLOPE_PANEL.get()))
                 .save(consumer);
 
-        shapedBuildingBlock(FBContent.blockFramedFlatSlopePanelCorner.get())
+        shapedBuildingBlock(FBContent.BLOCK_FRAMED_FLAT_SLOPE_PANEL_CORNER.get())
                 .pattern("HF ")
                 .pattern("  F")
-                .define('F', FBContent.blockFramedSlopePanel.get())
-                .define('H', FBContent.itemFramedHammer.get())
-                .unlockedBy("hasFramedSlopePanel", has(FBContent.blockFramedSlopePanel.get()))
+                .define('F', FBContent.BLOCK_FRAMED_SLOPE_PANEL.get())
+                .define('H', FBContent.ITEM_FRAMED_HAMMER.get())
+                .unlockedBy("hasFramedSlopePanel", has(FBContent.BLOCK_FRAMED_SLOPE_PANEL.get()))
                 .save(consumer);
 
-        shapedBuildingBlock(FBContent.blockFramedFlatInnerSlopePanelCorner.get())
+        shapedBuildingBlock(FBContent.BLOCK_FRAMED_FLAT_INNER_SLOPE_PANEL_CORNER.get())
                 .pattern("H F")
                 .pattern(" F ")
-                .define('F', FBContent.blockFramedSlopePanel.get())
-                .define('H', FBContent.itemFramedHammer.get())
-                .unlockedBy("hasFramedSlopePanel", has(FBContent.blockFramedSlopePanel.get()))
+                .define('F', FBContent.BLOCK_FRAMED_SLOPE_PANEL.get())
+                .define('H', FBContent.ITEM_FRAMED_HAMMER.get())
+                .unlockedBy("hasFramedSlopePanel", has(FBContent.BLOCK_FRAMED_SLOPE_PANEL.get()))
                 .save(consumer);
 
-        shapedBuildingBlock(FBContent.blockFramedFlatExtendedSlopePanelCorner.get())
+        shapedBuildingBlock(FBContent.BLOCK_FRAMED_FLAT_EXTENDED_SLOPE_PANEL_CORNER.get())
                 .pattern("PC")
-                .define('C', FBContent.blockFramedFlatSlopePanelCorner.get())
-                .define('P', FBContent.blockFramedPanel.get())
-                .unlockedBy("hasFramedFlatSlopePanelCorner", has(FBContent.blockFramedFlatSlopePanelCorner.get()))
+                .define('C', FBContent.BLOCK_FRAMED_FLAT_SLOPE_PANEL_CORNER.get())
+                .define('P', FBContent.BLOCK_FRAMED_PANEL.get())
+                .unlockedBy("hasFramedFlatSlopePanelCorner", has(FBContent.BLOCK_FRAMED_FLAT_SLOPE_PANEL_CORNER.get()))
                 .save(consumer);
 
-        shapedBuildingBlock(FBContent.blockFramedFlatExtendedInnerSlopePanelCorner.get())
+        shapedBuildingBlock(FBContent.BLOCK_FRAMED_FLAT_EXTENDED_INNER_SLOPE_PANEL_CORNER.get())
                 .pattern("PC")
-                .define('C', FBContent.blockFramedFlatInnerSlopePanelCorner.get())
-                .define('P', FBContent.blockFramedPanel.get())
-                .unlockedBy("hasFramedFlatInnerSlopePanelCorner", has(FBContent.blockFramedFlatInnerSlopePanelCorner.get()))
+                .define('C', FBContent.BLOCK_FRAMED_FLAT_INNER_SLOPE_PANEL_CORNER.get())
+                .define('P', FBContent.BLOCK_FRAMED_PANEL.get())
+                .unlockedBy("hasFramedFlatInnerSlopePanelCorner", has(FBContent.BLOCK_FRAMED_FLAT_INNER_SLOPE_PANEL_CORNER.get()))
                 .save(consumer);
 
-        shapedBuildingBlock(FBContent.blockFramedFlatDoubleSlopePanelCorner.get())
+        shapedBuildingBlock(FBContent.BLOCK_FRAMED_FLAT_DOUBLE_SLOPE_PANEL_CORNER.get())
                 .pattern("IC")
-                .define('C', FBContent.blockFramedFlatSlopePanelCorner.get())
-                .define('I', FBContent.blockFramedFlatInnerSlopePanelCorner.get())
-                .unlockedBy("hasFramedFlatSlopePanelCorner", has(FBContent.blockFramedFlatSlopePanelCorner.get()))
+                .define('C', FBContent.BLOCK_FRAMED_FLAT_SLOPE_PANEL_CORNER.get())
+                .define('I', FBContent.BLOCK_FRAMED_FLAT_INNER_SLOPE_PANEL_CORNER.get())
+                .unlockedBy("hasFramedFlatSlopePanelCorner", has(FBContent.BLOCK_FRAMED_FLAT_SLOPE_PANEL_CORNER.get()))
                 .save(consumer);
 
-        shapelessBuildingBlock(FBContent.blockFramedFlatInverseDoubleSlopePanelCorner.get())
-                .requires(FBContent.blockFramedFlatDoubleSlopePanelCorner.get())
-                .unlockedBy("hasFramedFlatDoubleSlopePanelCorner", has(FBContent.blockFramedFlatDoubleSlopePanelCorner.get()))
+        shapelessBuildingBlock(FBContent.BLOCK_FRAMED_FLAT_INVERSE_DOUBLE_SLOPE_PANEL_CORNER.get())
+                .requires(FBContent.BLOCK_FRAMED_FLAT_DOUBLE_SLOPE_PANEL_CORNER.get())
+                .unlockedBy("hasFramedFlatDoubleSlopePanelCorner", has(FBContent.BLOCK_FRAMED_FLAT_DOUBLE_SLOPE_PANEL_CORNER.get()))
                 .save(consumer);
 
-        shapelessBuildingBlock(FBContent.blockFramedFlatDoubleSlopePanelCorner.get())
-                .requires(FBContent.blockFramedFlatInverseDoubleSlopePanelCorner.get())
-                .unlockedBy("hasFramedFlatInverseDoubleSlopePanelCorner", has(FBContent.blockFramedFlatInverseDoubleSlopePanelCorner.get()))
+        shapelessBuildingBlock(FBContent.BLOCK_FRAMED_FLAT_DOUBLE_SLOPE_PANEL_CORNER.get())
+                .requires(FBContent.BLOCK_FRAMED_FLAT_INVERSE_DOUBLE_SLOPE_PANEL_CORNER.get())
+                .unlockedBy("hasFramedFlatInverseDoubleSlopePanelCorner", has(FBContent.BLOCK_FRAMED_FLAT_INVERSE_DOUBLE_SLOPE_PANEL_CORNER.get()))
                 .save(consumer, Utils.rl("framed_flat_double_slope_panel_corner_from_flat_inverse_double_slope_panel_corner"));
 
-        shapedBuildingBlock(FBContent.blockFramedFlatExtendedDoubleSlopePanelCorner.get())
+        shapedBuildingBlock(FBContent.BLOCK_FRAMED_FLAT_EXTENDED_DOUBLE_SLOPE_PANEL_CORNER.get())
                 .pattern("CI")
-                .define('C', FBContent.blockFramedFlatExtendedSlopePanelCorner.get())
-                .define('I', FBContent.blockFramedFlatInnerSlopePanelCorner.get())
-                .unlockedBy("hasFramedFlatExtendedSlopePanelCorner", has(FBContent.blockFramedFlatExtendedSlopePanelCorner.get()))
+                .define('C', FBContent.BLOCK_FRAMED_FLAT_EXTENDED_SLOPE_PANEL_CORNER.get())
+                .define('I', FBContent.BLOCK_FRAMED_FLAT_INNER_SLOPE_PANEL_CORNER.get())
+                .unlockedBy("hasFramedFlatExtendedSlopePanelCorner", has(FBContent.BLOCK_FRAMED_FLAT_EXTENDED_SLOPE_PANEL_CORNER.get()))
                 .save(consumer);
 
-        shapedBuildingBlock(FBContent.blockFramedFlatExtendedInnerDoubleSlopePanelCorner.get())
+        shapedBuildingBlock(FBContent.BLOCK_FRAMED_FLAT_EXTENDED_INNER_DOUBLE_SLOPE_PANEL_CORNER.get())
                 .pattern("IC")
-                .define('I', FBContent.blockFramedFlatExtendedInnerSlopePanelCorner.get())
-                .define('C', FBContent.blockFramedFlatSlopePanelCorner.get())
-                .unlockedBy("hasFramedFlatExtendedInnerSlopePanelCorner", has(FBContent.blockFramedFlatExtendedInnerSlopePanelCorner.get()))
+                .define('I', FBContent.BLOCK_FRAMED_FLAT_EXTENDED_INNER_SLOPE_PANEL_CORNER.get())
+                .define('C', FBContent.BLOCK_FRAMED_FLAT_SLOPE_PANEL_CORNER.get())
+                .unlockedBy("hasFramedFlatExtendedInnerSlopePanelCorner", has(FBContent.BLOCK_FRAMED_FLAT_EXTENDED_INNER_SLOPE_PANEL_CORNER.get()))
                 .save(consumer);
 
-        shapedBuildingBlock(FBContent.blockFramedFlatStackedSlopePanelCorner.get())
+        shapedBuildingBlock(FBContent.BLOCK_FRAMED_FLAT_STACKED_SLOPE_PANEL_CORNER.get())
                 .pattern("PCH")
-                .define('C', FBContent.blockFramedFlatSlopePanelCorner.get())
-                .define('P', FBContent.blockFramedPanel.get())
-                .define('H', FBContent.itemFramedHammer.get())
-                .unlockedBy("hasFramedFlatSlopePanelCorner", has(FBContent.blockFramedFlatSlopePanelCorner.get()))
+                .define('C', FBContent.BLOCK_FRAMED_FLAT_SLOPE_PANEL_CORNER.get())
+                .define('P', FBContent.BLOCK_FRAMED_PANEL.get())
+                .define('H', FBContent.ITEM_FRAMED_HAMMER.get())
+                .unlockedBy("hasFramedFlatSlopePanelCorner", has(FBContent.BLOCK_FRAMED_FLAT_SLOPE_PANEL_CORNER.get()))
                 .save(consumer);
 
-        shapedBuildingBlock(FBContent.blockFramedFlatStackedInnerSlopePanelCorner.get())
+        shapedBuildingBlock(FBContent.BLOCK_FRAMED_FLAT_STACKED_INNER_SLOPE_PANEL_CORNER.get())
                 .pattern("PCH")
-                .define('C', FBContent.blockFramedFlatInnerSlopePanelCorner.get())
-                .define('P', FBContent.blockFramedPanel.get())
-                .define('H', FBContent.itemFramedHammer.get())
-                .unlockedBy("hasFramedFlatInnerSlopePanelCorner", has(FBContent.blockFramedFlatInnerSlopePanelCorner.get()))
+                .define('C', FBContent.BLOCK_FRAMED_FLAT_INNER_SLOPE_PANEL_CORNER.get())
+                .define('P', FBContent.BLOCK_FRAMED_PANEL.get())
+                .define('H', FBContent.ITEM_FRAMED_HAMMER.get())
+                .unlockedBy("hasFramedFlatInnerSlopePanelCorner", has(FBContent.BLOCK_FRAMED_FLAT_INNER_SLOPE_PANEL_CORNER.get()))
                 .save(consumer);
 
-        shapedBuildingBlock(FBContent.blockFramedDoubleStairs.get())
+        shapedBuildingBlock(FBContent.BLOCK_FRAMED_DOUBLE_STAIRS.get())
                 .pattern("SE")
-                .define('S', FBContent.blockFramedStairs.get())
-                .define('E', FBContent.blockFramedSlabEdge.get())
-                .unlockedBy("hasFramedStairs", has(FBContent.blockFramedStairs.get()))
+                .define('S', FBContent.BLOCK_FRAMED_STAIRS.get())
+                .define('E', FBContent.BLOCK_FRAMED_SLAB_EDGE.get())
+                .unlockedBy("hasFramedStairs", has(FBContent.BLOCK_FRAMED_STAIRS.get()))
                 .save(consumer);
 
-        shapedBuildingBlock(FBContent.blockFramedVerticalDoubleStairs.get())
+        shapedBuildingBlock(FBContent.BLOCK_FRAMED_VERTICAL_DOUBLE_STAIRS.get())
                 .pattern("SE")
-                .define('S', FBContent.blockFramedVerticalStairs.get())
-                .define('E', FBContent.blockFramedCornerPillar.get())
-                .unlockedBy("hasFramedStairs", has(FBContent.blockFramedVerticalStairs.get()))
+                .define('S', FBContent.BLOCK_FRAMED_VERTICAL_STAIRS.get())
+                .define('E', FBContent.BLOCK_FRAMED_CORNER_PILLAR.get())
+                .unlockedBy("hasFramedStairs", has(FBContent.BLOCK_FRAMED_VERTICAL_STAIRS.get()))
                 .save(consumer);
 
-        shapedBuildingBlock(FBContent.blockFramedWallBoard.get(), 4)
+        shapedBuildingBlock(FBContent.BLOCK_FRAMED_WALL_BOARD.get(), 4)
                 .pattern("FFH")
-                .define('F', FBContent.blockFramedPanel.get())
-                .define('H', FBContent.itemFramedHammer.get())
-                .unlockedBy("hasFramedPanel", has(FBContent.blockFramedPanel.get()))
+                .define('F', FBContent.BLOCK_FRAMED_PANEL.get())
+                .define('H', FBContent.ITEM_FRAMED_HAMMER.get())
+                .unlockedBy("hasFramedPanel", has(FBContent.BLOCK_FRAMED_PANEL.get()))
                 .save(consumer);
 
-        shapedBuildingBlock(FBContent.blockFramedGlowingCube.get())
+        shapedBuildingBlock(FBContent.BLOCK_FRAMED_GLOWING_CUBE.get())
                 .pattern(" G ")
                 .pattern("GCG")
                 .pattern(" G ")
                 .define('G', Tags.Items.DUSTS_GLOWSTONE)
-                .define('C', FBContent.blockFramedCube.get())
+                .define('C', FBContent.BLOCK_FRAMED_CUBE.get())
                 .unlockedBy("hasFramedCube", HAS_FRAMED_BLOCK)
                 .save(consumer);
 
-        shapedBuildingBlock(FBContent.blockFramedPyramid.get(), 4)
+        shapedBuildingBlock(FBContent.BLOCK_FRAMED_PYRAMID.get(), 4)
                 .pattern("SS")
                 .pattern("SS")
-                .define('S', FBContent.blockFramedSlopePanel.get())
-                .unlockedBy("hasFramedSlopePanel", has(FBContent.blockFramedSlopePanel.get()))
+                .define('S', FBContent.BLOCK_FRAMED_SLOPE_PANEL.get())
+                .unlockedBy("hasFramedSlopePanel", has(FBContent.BLOCK_FRAMED_SLOPE_PANEL.get()))
                 .save(consumer);
 
-        shapedBuildingBlock(FBContent.blockFramedPyramidSlab.get(), 4)
+        shapedBuildingBlock(FBContent.BLOCK_FRAMED_PYRAMID_SLAB.get(), 4)
                 .pattern("SS")
                 .pattern("SS")
-                .define('S', FBContent.blockFramedSlope.get())
-                .unlockedBy("hasFramedSlope", has(FBContent.blockFramedSlope.get()))
+                .define('S', FBContent.BLOCK_FRAMED_SLOPE.get())
+                .unlockedBy("hasFramedSlope", has(FBContent.BLOCK_FRAMED_SLOPE.get()))
                 .save(consumer);
 
-        shapedBuildingBlock(FBContent.blockFramedHorizontalPane.get(), 4)
+        shapedBuildingBlock(FBContent.BLOCK_FRAMED_HORIZONTAL_PANE.get(), 4)
                 .pattern("PP")
                 .pattern("PP")
-                .define('P', FBContent.blockFramedPane.get())
-                .unlockedBy("hasFramedPane", has(FBContent.blockFramedPane.get()))
+                .define('P', FBContent.BLOCK_FRAMED_PANE.get())
+                .unlockedBy("hasFramedPane", has(FBContent.BLOCK_FRAMED_PANE.get()))
                 .save(consumer);
 
-        shapedBuildingBlock(FBContent.blockFramedLargeButton.get())
+        shapedBuildingBlock(FBContent.BLOCK_FRAMED_LARGE_BUTTON.get())
                 .pattern("BB")
                 .pattern("BB")
-                .define('B', FBContent.blockFramedButton.get())
-                .unlockedBy("hasFramedButton", has(FBContent.blockFramedButton.get()))
+                .define('B', FBContent.BLOCK_FRAMED_BUTTON.get())
+                .unlockedBy("hasFramedButton", has(FBContent.BLOCK_FRAMED_BUTTON.get()))
                 .save(consumer);
 
-        shapedBuildingBlock(FBContent.blockFramedLargeStoneButton.get())
+        shapedBuildingBlock(FBContent.BLOCK_FRAMED_LARGE_STONE_BUTTON.get())
                 .pattern("BB")
                 .pattern("BB")
-                .define('B', FBContent.blockFramedStoneButton.get())
-                .unlockedBy("hasFramedStoneButton", has(FBContent.blockFramedStoneButton.get()))
+                .define('B', FBContent.BLOCK_FRAMED_STONE_BUTTON.get())
+                .unlockedBy("hasFramedStoneButton", has(FBContent.BLOCK_FRAMED_STONE_BUTTON.get()))
                 .save(consumer);
 
-        shapedBuildingBlock(FBContent.blockFramedTarget.get())
+        shapedBuildingBlock(FBContent.BLOCK_FRAMED_TARGET.get())
                 .pattern("FRF")
                 .pattern("RHR")
                 .pattern("FRF")
-                .define('F', FBContent.blockFramedCube.get())
+                .define('F', FBContent.BLOCK_FRAMED_CUBE.get())
                 .define('R', Tags.Items.DUSTS_REDSTONE)
                 .define('H', Items.HAY_BLOCK)
                 .unlockedBy("hasFramedCube", HAS_FRAMED_BLOCK)
                 .save(consumer);
 
-        shapedBuildingBlock(FBContent.blockFramedGate.get(), 4)
+        shapedBuildingBlock(FBContent.BLOCK_FRAMED_GATE.get(), 4)
                 .pattern("DD")
                 .pattern("DD")
-                .define('D', FBContent.blockFramedDoor.get())
-                .unlockedBy("hasFramedDoor", has(FBContent.blockFramedDoor.get()))
+                .define('D', FBContent.BLOCK_FRAMED_DOOR.get())
+                .unlockedBy("hasFramedDoor", has(FBContent.BLOCK_FRAMED_DOOR.get()))
                 .save(consumer);
 
-        shapedBuildingBlock(FBContent.blockFramedIronGate.get(), 4)
+        shapedBuildingBlock(FBContent.BLOCK_FRAMED_IRON_GATE.get(), 4)
                 .pattern("DD")
                 .pattern("DD")
-                .define('D', FBContent.blockFramedIronDoor.get())
-                .unlockedBy("hasFramedIronDoor", has(FBContent.blockFramedIronDoor.get()))
+                .define('D', FBContent.BLOCK_FRAMED_IRON_DOOR.get())
+                .unlockedBy("hasFramedIronDoor", has(FBContent.BLOCK_FRAMED_IRON_DOOR.get()))
                 .save(consumer);
 
-        shapedBuildingBlock(FBContent.blockFramedItemFrame.get())
+        shapedBuildingBlock(FBContent.BLOCK_FRAMED_ITEM_FRAME.get())
                 .pattern("FFF")
                 .pattern("FLF")
                 .pattern("FFF")
-                .define('F', FBContent.blockFramedCube.get())
+                .define('F', FBContent.BLOCK_FRAMED_CUBE.get())
                 .define('L', Tags.Items.LEATHER)
                 .unlockedBy("hasFramedCube", HAS_FRAMED_BLOCK)
                 .save(consumer);
 
-        shapelessBuildingBlock(FBContent.blockFramedGlowingItemFrame.get())
-                .requires(FBContent.blockFramedItemFrame.get())
+        shapelessBuildingBlock(FBContent.BLOCK_FRAMED_GLOWING_ITEM_FRAME.get())
+                .requires(FBContent.BLOCK_FRAMED_ITEM_FRAME.get())
                 .requires(Items.GLOW_INK_SAC)
-                .unlockedBy("hasFramedItemFrame", has(FBContent.blockFramedItemFrame.get()))
+                .unlockedBy("hasFramedItemFrame", has(FBContent.BLOCK_FRAMED_ITEM_FRAME.get()))
                 .save(consumer);
 
-        shapedBuildingBlock(FBContent.blockFramedFancyRail.get(), 16)
+        shapedBuildingBlock(FBContent.BLOCK_FRAMED_FANCY_RAIL.get(), 16)
                 .pattern("I I")
                 .pattern("IFI")
                 .pattern("I I")
                 .define('I', Tags.Items.INGOTS_IRON)
-                .define('F', FBContent.blockFramedCube.get())
+                .define('F', FBContent.BLOCK_FRAMED_CUBE.get())
                 .unlockedBy("hasFramedBlock", HAS_FRAMED_BLOCK)
                 .save(consumer);
 
-        shapedBuildingBlock(FBContent.blockFramedFancyPoweredRail.get(), 6)
+        shapedBuildingBlock(FBContent.BLOCK_FRAMED_FANCY_POWERED_RAIL.get(), 6)
                 .pattern("G G")
                 .pattern("GFG")
                 .pattern("GRG")
                 .define('G', Tags.Items.INGOTS_GOLD)
                 .define('R', Tags.Items.DUSTS_REDSTONE)
-                .define('F', FBContent.blockFramedCube.get())
+                .define('F', FBContent.BLOCK_FRAMED_CUBE.get())
                 .unlockedBy("hasFramedBlock", HAS_FRAMED_BLOCK)
                 .save(consumer);
 
-        shapedBuildingBlock(FBContent.blockFramedFancyDetectorRail.get(), 6)
+        shapedBuildingBlock(FBContent.BLOCK_FRAMED_FANCY_DETECTOR_RAIL.get(), 6)
                 .pattern("IPI")
                 .pattern("IFI")
                 .pattern("IRI")
                 .define('I', Tags.Items.INGOTS_IRON)
                 .define('R', Tags.Items.DUSTS_REDSTONE)
                 .define('P', Items.STONE_PRESSURE_PLATE)
-                .define('F', FBContent.blockFramedCube.get())
+                .define('F', FBContent.BLOCK_FRAMED_CUBE.get())
                 .unlockedBy("hasFramedBlock", HAS_FRAMED_BLOCK)
                 .save(consumer);
 
-        shapedBuildingBlock(FBContent.blockFramedFancyActivatorRail.get(), 6)
+        shapedBuildingBlock(FBContent.BLOCK_FRAMED_FANCY_ACTIVATOR_RAIL.get(), 6)
                 .pattern("IFI")
                 .pattern("IRI")
                 .pattern("IFI")
                 .define('I', Tags.Items.INGOTS_IRON)
                 .define('R', Items.REDSTONE_TORCH)
-                .define('F', FBContent.blockFramedCube.get())
+                .define('F', FBContent.BLOCK_FRAMED_CUBE.get())
                 .unlockedBy("hasFramedBlock", HAS_FRAMED_BLOCK)
                 .save(consumer);
 
-        shapedBuildingBlock(FBContent.blockFramedFancyRailSlope.get())
+        shapedBuildingBlock(FBContent.BLOCK_FRAMED_FANCY_RAIL_SLOPE.get())
                 .pattern("R")
                 .pattern("S")
-                .define('R', FBContent.blockFramedFancyRail.get())
-                .define('S', FBContent.blockFramedSlope.get())
+                .define('R', FBContent.BLOCK_FRAMED_FANCY_RAIL.get())
+                .define('S', FBContent.BLOCK_FRAMED_SLOPE.get())
                 .unlockedBy("hasFramedSlope", HAS_FRAMED_SLOPE)
                 .save(consumer);
 
-        shapedBuildingBlock(FBContent.blockFramedFancyPoweredRailSlope.get())
+        shapedBuildingBlock(FBContent.BLOCK_FRAMED_FANCY_POWERED_RAIL_SLOPE.get())
                 .pattern("R")
                 .pattern("S")
-                .define('R', FBContent.blockFramedFancyPoweredRail.get())
-                .define('S', FBContent.blockFramedSlope.get())
+                .define('R', FBContent.BLOCK_FRAMED_FANCY_POWERED_RAIL.get())
+                .define('S', FBContent.BLOCK_FRAMED_SLOPE.get())
                 .unlockedBy("hasFramedSlope", HAS_FRAMED_SLOPE)
                 .save(consumer);
 
-        shapedBuildingBlock(FBContent.blockFramedFancyDetectorRailSlope.get())
+        shapedBuildingBlock(FBContent.BLOCK_FRAMED_FANCY_DETECTOR_RAIL_SLOPE.get())
                 .pattern("R")
                 .pattern("S")
-                .define('R', FBContent.blockFramedFancyDetectorRail.get())
-                .define('S', FBContent.blockFramedSlope.get())
+                .define('R', FBContent.BLOCK_FRAMED_FANCY_DETECTOR_RAIL.get())
+                .define('S', FBContent.BLOCK_FRAMED_SLOPE.get())
                 .unlockedBy("hasFramedSlope", HAS_FRAMED_SLOPE)
                 .save(consumer);
 
-        shapedBuildingBlock(FBContent.blockFramedFancyActivatorRailSlope.get())
+        shapedBuildingBlock(FBContent.BLOCK_FRAMED_FANCY_ACTIVATOR_RAIL_SLOPE.get())
                 .pattern("R")
                 .pattern("S")
-                .define('R', FBContent.blockFramedFancyActivatorRail.get())
-                .define('S', FBContent.blockFramedSlope.get())
+                .define('R', FBContent.BLOCK_FRAMED_FANCY_ACTIVATOR_RAIL.get())
+                .define('S', FBContent.BLOCK_FRAMED_SLOPE.get())
                 .unlockedBy("hasFramedSlope", HAS_FRAMED_SLOPE)
                 .save(consumer);
 
-        shapelessBuildingBlock(FBContent.blockFramedHalfSlope.get(), 2)
-                .requires(FBContent.blockFramedSlope.get())
-                .requires(FBContent.itemFramedHammer.get())
+        shapelessBuildingBlock(FBContent.BLOCK_FRAMED_HALF_SLOPE.get(), 2)
+                .requires(FBContent.BLOCK_FRAMED_SLOPE.get())
+                .requires(FBContent.ITEM_FRAMED_HAMMER.get())
                 .unlockedBy("hasFramedSlope", HAS_FRAMED_SLOPE)
                 .save(consumer);
 
-        shapedBuildingBlock(FBContent.blockFramedDividedSlope.get())
+        shapedBuildingBlock(FBContent.BLOCK_FRAMED_DIVIDED_SLOPE.get())
                 .pattern("SS")
-                .define('S', FBContent.blockFramedHalfSlope.get())
-                .unlockedBy("hasFramedHalfSlope", has(FBContent.blockFramedHalfSlope.get()))
+                .define('S', FBContent.BLOCK_FRAMED_HALF_SLOPE.get())
+                .unlockedBy("hasFramedHalfSlope", has(FBContent.BLOCK_FRAMED_HALF_SLOPE.get()))
                 .save(consumer);
 
-        shapedBuildingBlock(FBContent.blockFramedDoubleHalfSlope.get())
+        shapedBuildingBlock(FBContent.BLOCK_FRAMED_DOUBLE_HALF_SLOPE.get())
                 .pattern("S")
                 .pattern("S")
-                .define('S', FBContent.blockFramedHalfSlope.get())
-                .unlockedBy("hasFramedHalfSlope", has(FBContent.blockFramedHalfSlope.get()))
+                .define('S', FBContent.BLOCK_FRAMED_HALF_SLOPE.get())
+                .unlockedBy("hasFramedHalfSlope", has(FBContent.BLOCK_FRAMED_HALF_SLOPE.get()))
                 .save(consumer);
 
-        shapedBuildingBlock(FBContent.blockFramedSlopedStairs.get())
+        shapedBuildingBlock(FBContent.BLOCK_FRAMED_SLOPED_STAIRS.get())
                 .pattern("H")
                 .pattern("S")
-                .define('H', FBContent.blockFramedHalfSlope.get())
-                .define('S', FBContent.blockFramedSlab.get())
-                .unlockedBy("hasFramedSlab", has(FBContent.blockFramedSlab.get()))
+                .define('H', FBContent.BLOCK_FRAMED_HALF_SLOPE.get())
+                .define('S', FBContent.BLOCK_FRAMED_SLAB.get())
+                .unlockedBy("hasFramedSlab", has(FBContent.BLOCK_FRAMED_SLAB.get()))
                 .save(consumer);
 
-        shapedBuildingBlock(FBContent.blockFramedVerticalSlopedStairs.get())
+        shapedBuildingBlock(FBContent.BLOCK_FRAMED_VERTICAL_SLOPED_STAIRS.get())
                 .pattern("PH")
-                .define('H', FBContent.blockFramedHalfSlope.get())
-                .define('P', FBContent.blockFramedPanel.get())
-                .unlockedBy("hasFramedPanel", has(FBContent.blockFramedPanel.get()))
+                .define('H', FBContent.BLOCK_FRAMED_HALF_SLOPE.get())
+                .define('P', FBContent.BLOCK_FRAMED_PANEL.get())
+                .unlockedBy("hasFramedPanel", has(FBContent.BLOCK_FRAMED_PANEL.get()))
                 .save(consumer);
 
-        shapelessBuildingBlock(FBContent.blockFramedMiniCube.get(), 1)
-                .requires(FBContent.blockFramedCube.get())
-                .requires(FBContent.itemFramedHammer.get())
-                .unlockedBy("hasFramedHalfPillar", has(FBContent.blockFramedHalfPillar.get()))
+        shapelessBuildingBlock(FBContent.BLOCK_FRAMED_MINI_CUBE.get(), 1)
+                .requires(FBContent.BLOCK_FRAMED_CUBE.get())
+                .requires(FBContent.ITEM_FRAMED_HAMMER.get())
+                .unlockedBy("hasFramedHalfPillar", has(FBContent.BLOCK_FRAMED_HALF_PILLAR.get()))
                 .save(consumer);
 
-        shapedBuildingBlock(FBContent.blockFramedOneWayWindow.get(), 4)
+        shapedBuildingBlock(FBContent.BLOCK_FRAMED_ONE_WAY_WINDOW.get(), 4)
                 .pattern("GFG")
                 .pattern("F F")
                 .pattern("GFG")
-                .define('F', FBContent.blockFramedCube.get())
+                .define('F', FBContent.BLOCK_FRAMED_CUBE.get())
                 .define('G', Blocks.TINTED_GLASS)
                 .unlockedBy("hasFramedBlock", HAS_FRAMED_BLOCK)
                 .save(consumer);
 
 
 
-        ShapedRecipeBuilder.shaped(RecipeCategory.TOOLS, FBContent.blockFramingSaw.get())
+        ShapedRecipeBuilder.shaped(RecipeCategory.TOOLS, FBContent.BLOCK_FRAMING_SAW.get())
                 .pattern(" I ")
                 .pattern("FFF")
                 .define('I', Tags.Items.INGOTS_IRON)
-                .define('F', FBContent.blockFramedCube.get())
+                .define('F', FBContent.BLOCK_FRAMED_CUBE.get())
                 .unlockedBy("hasFramedBlock", HAS_FRAMED_BLOCK)
                 .save(consumer);
 
 
 
-        ShapedRecipeBuilder.shaped(RecipeCategory.TOOLS, FBContent.itemFramedHammer.get())
+        ShapedRecipeBuilder.shaped(RecipeCategory.TOOLS, FBContent.ITEM_FRAMED_HAMMER.get())
                 .pattern(" F ")
                 .pattern(" SF")
                 .pattern("S  ")
-                .define('F', FBContent.blockFramedCube.get())
+                .define('F', FBContent.BLOCK_FRAMED_CUBE.get())
                 .define('S', Items.STICK)
                 .unlockedBy("hasFramedBlock", HAS_FRAMED_BLOCK)
                 .save(consumer);
 
-        ShapedRecipeBuilder.shaped(RecipeCategory.TOOLS, FBContent.itemFramedWrench.get())
+        ShapedRecipeBuilder.shaped(RecipeCategory.TOOLS, FBContent.ITEM_FRAMED_WRENCH.get())
                 .pattern("F F")
                 .pattern(" S ")
                 .pattern(" S ")
-                .define('F', FBContent.blockFramedCube.get())
+                .define('F', FBContent.BLOCK_FRAMED_CUBE.get())
                 .define('S', Items.STICK)
                 .unlockedBy("hasFramedBlock", HAS_FRAMED_BLOCK)
                 .save(consumer);
 
-        ShapedRecipeBuilder.shaped(RecipeCategory.TOOLS, FBContent.itemFramedBlueprint.get())
+        ShapedRecipeBuilder.shaped(RecipeCategory.TOOLS, FBContent.ITEM_FRAMED_BLUEPRINT.get())
                 .pattern(" F ")
                 .pattern("FPF")
                 .pattern(" F ")
-                .define('F', FBContent.blockFramedCube.get())
+                .define('F', FBContent.BLOCK_FRAMED_CUBE.get())
                 .define('P', Items.PAPER)
                 .unlockedBy("hasFramedBlock", HAS_FRAMED_BLOCK)
                 .save(consumer);
 
-        ShapedRecipeBuilder.shaped(RecipeCategory.TOOLS, FBContent.itemFramedKey.get())
+        ShapedRecipeBuilder.shaped(RecipeCategory.TOOLS, FBContent.ITEM_FRAMED_KEY.get())
                 .pattern("SSF")
                 .pattern("NN ")
                 .define('S', Tags.Items.RODS_WOODEN)
-                .define('F', FBContent.blockFramedCube.get())
+                .define('F', FBContent.BLOCK_FRAMED_CUBE.get())
                 .define('N', Tags.Items.NUGGETS_IRON)
                 .unlockedBy("hasFramedBlock", HAS_FRAMED_BLOCK)
                 .save(consumer);
 
-        ShapedRecipeBuilder.shaped(RecipeCategory.TOOLS, FBContent.itemFramedScrewdriver.get())
+        ShapedRecipeBuilder.shaped(RecipeCategory.TOOLS, FBContent.ITEM_FRAMED_SCREWDRIVER.get())
                 .pattern("S ")
                 .pattern(" F")
                 .define('S', Tags.Items.RODS_WOODEN)
-                .define('F', FBContent.blockFramedCube.get())
+                .define('F', FBContent.BLOCK_FRAMED_CUBE.get())
                 .unlockedBy("hasFramedBlock", HAS_FRAMED_BLOCK)
                 .save(consumer);
 
-        ShapedRecipeBuilder.shaped(RecipeCategory.MISC, FBContent.itemFramedReinforcement.get(), 16)
+        ShapedRecipeBuilder.shaped(RecipeCategory.MISC, FBContent.ITEM_FRAMED_REINFORCEMENT.get(), 16)
                 .pattern("OSO")
                 .pattern("SFS")
                 .pattern("OSO")
                 .define('O', Tags.Items.OBSIDIAN)
                 .define('S', Items.STICK)
-                .define('F', FBContent.blockFramedCube.get())
+                .define('F', FBContent.BLOCK_FRAMED_CUBE.get())
                 .unlockedBy("hasFramedBlock", HAS_FRAMED_BLOCK)
                 .save(consumer);
 
 
 
-        makeRotationRecipe(FBContent.blockFramedSlab, FBContent.blockFramedPanel, consumer);
-        makeRotationRecipe(FBContent.blockFramedDividedSlab, FBContent.blockFramedDividedPanelHor, consumer);
-        makeRotationRecipe(FBContent.blockFramedStairs, FBContent.blockFramedVerticalStairs, consumer);
-        makeRotationRecipe(FBContent.blockFramedDoubleStairs, FBContent.blockFramedVerticalDoubleStairs, consumer);
-        makeRotationRecipe(FBContent.blockFramedFloor, FBContent.blockFramedWallBoard, consumer);
-        makeRotationRecipe(FBContent.blockFramedSlopeSlab, FBContent.blockFramedSlopePanel, consumer);
-        makeRotationRecipe(FBContent.blockFramedElevatedSlopeSlab, FBContent.blockFramedExtendedSlopePanel, consumer);
-        makeRotationRecipe(FBContent.blockFramedDoubleSlopeSlab, FBContent.blockFramedDoubleSlopePanel, consumer);
-        makeRotationRecipe(FBContent.blockFramedInverseDoubleSlopeSlab, FBContent.blockFramedInverseDoubleSlopePanel, consumer);
-        makeRotationRecipe(FBContent.blockFramedElevatedDoubleSlopeSlab, FBContent.blockFramedExtendedDoubleSlopePanel, consumer);
-        makeRotationRecipe(FBContent.blockFramedStackedSlopeSlab, FBContent.blockFramedStackedSlopePanel, consumer);
-        makeRotationRecipe(FBContent.blockFramedFlatSlopeSlabCorner, FBContent.blockFramedFlatSlopePanelCorner, consumer);
-        makeRotationRecipe(FBContent.blockFramedFlatInnerSlopeSlabCorner, FBContent.blockFramedFlatInnerSlopePanelCorner, consumer);
-        makeRotationRecipe(FBContent.blockFramedFlatElevatedSlopeSlabCorner, FBContent.blockFramedFlatExtendedSlopePanelCorner, consumer);
-        makeRotationRecipe(FBContent.blockFramedFlatElevatedInnerSlopeSlabCorner, FBContent.blockFramedFlatExtendedInnerSlopePanelCorner, consumer);
-        makeRotationRecipe(FBContent.blockFramedFlatDoubleSlopeSlabCorner, FBContent.blockFramedFlatDoubleSlopePanelCorner, consumer);
-        makeRotationRecipe(FBContent.blockFramedFlatInverseDoubleSlopeSlabCorner, FBContent.blockFramedFlatInverseDoubleSlopePanelCorner, consumer);
-        makeRotationRecipe(FBContent.blockFramedFlatElevatedDoubleSlopeSlabCorner, FBContent.blockFramedFlatExtendedDoubleSlopePanelCorner, consumer);
-        makeRotationRecipe(FBContent.blockFramedFlatElevatedInnerDoubleSlopeSlabCorner, FBContent.blockFramedFlatExtendedInnerDoubleSlopePanelCorner, consumer);
-        makeRotationRecipe(FBContent.blockFramedFlatStackedSlopeSlabCorner, FBContent.blockFramedFlatStackedSlopePanelCorner, consumer);
-        makeRotationRecipe(FBContent.blockFramedFlatStackedInnerSlopeSlabCorner, FBContent.blockFramedFlatStackedInnerSlopePanelCorner, consumer);
+        makeRotationRecipe(FBContent.BLOCK_FRAMED_SLAB, FBContent.BLOCK_FRAMED_PANEL, consumer);
+        makeRotationRecipe(FBContent.BLOCK_FRAMED_DIVIDED_SLAB, FBContent.BLOCK_FRAMED_DIVIDED_PANEL_HOR, consumer);
+        makeRotationRecipe(FBContent.BLOCK_FRAMED_STAIRS, FBContent.BLOCK_FRAMED_VERTICAL_STAIRS, consumer);
+        makeRotationRecipe(FBContent.BLOCK_FRAMED_DOUBLE_STAIRS, FBContent.BLOCK_FRAMED_VERTICAL_DOUBLE_STAIRS, consumer);
+        makeRotationRecipe(FBContent.BLOCK_FRAMED_FLOOR, FBContent.BLOCK_FRAMED_WALL_BOARD, consumer);
+        makeRotationRecipe(FBContent.BLOCK_FRAMED_SLOPE_SLAB, FBContent.BLOCK_FRAMED_SLOPE_PANEL, consumer);
+        makeRotationRecipe(FBContent.BLOCK_FRAMED_ELEVATED_SLOPE_SLAB, FBContent.BLOCK_FRAMED_EXTENDED_SLOPE_PANEL, consumer);
+        makeRotationRecipe(FBContent.BLOCK_FRAMED_DOUBLE_SLOPE_SLAB, FBContent.BLOCK_FRAMED_DOUBLE_SLOPE_PANEL, consumer);
+        makeRotationRecipe(FBContent.BLOCK_FRAMED_INVERSE_DOUBLE_SLOPE_SLAB, FBContent.BLOCK_FRAMED_INVERSE_DOUBLE_SLOPE_PANEL, consumer);
+        makeRotationRecipe(FBContent.BLOCK_FRAMED_ELEVATED_DOUBLE_SLOPE_SLAB, FBContent.BLOCK_FRAMED_EXTENDED_DOUBLE_SLOPE_PANEL, consumer);
+        makeRotationRecipe(FBContent.BLOCK_FRAMED_STACKED_SLOPE_SLAB, FBContent.BLOCK_FRAMED_STACKED_SLOPE_PANEL, consumer);
+        makeRotationRecipe(FBContent.BLOCK_FRAMED_FLAT_SLOPE_SLAB_CORNER, FBContent.BLOCK_FRAMED_FLAT_SLOPE_PANEL_CORNER, consumer);
+        makeRotationRecipe(FBContent.BLOCK_FRAMED_FLAT_INNER_SLOPE_SLAB_CORNER, FBContent.BLOCK_FRAMED_FLAT_INNER_SLOPE_PANEL_CORNER, consumer);
+        makeRotationRecipe(FBContent.BLOCK_FRAMED_FLAT_ELEVATED_SLOPE_SLAB_CORNER, FBContent.BLOCK_FRAMED_FLAT_EXTENDED_SLOPE_PANEL_CORNER, consumer);
+        makeRotationRecipe(FBContent.BLOCK_FRAMED_FLAT_ELEVATED_INNER_SLOPE_SLAB_CORNER, FBContent.BLOCK_FRAMED_FLAT_EXTENDED_INNER_SLOPE_PANEL_CORNER, consumer);
+        makeRotationRecipe(FBContent.BLOCK_FRAMED_FLAT_DOUBLE_SLOPE_SLAB_CORNER, FBContent.BLOCK_FRAMED_FLAT_DOUBLE_SLOPE_PANEL_CORNER, consumer);
+        makeRotationRecipe(FBContent.BLOCK_FRAMED_FLAT_INVERSE_DOUBLE_SLOPE_SLAB_CORNER, FBContent.BLOCK_FRAMED_FLAT_INVERSE_DOUBLE_SLOPE_PANEL_CORNER, consumer);
+        makeRotationRecipe(FBContent.BLOCK_FRAMED_FLAT_ELEVATED_DOUBLE_SLOPE_SLAB_CORNER, FBContent.BLOCK_FRAMED_FLAT_EXTENDED_DOUBLE_SLOPE_PANEL_CORNER, consumer);
+        makeRotationRecipe(FBContent.BLOCK_FRAMED_FLAT_ELEVATED_INNER_DOUBLE_SLOPE_SLAB_CORNER, FBContent.BLOCK_FRAMED_FLAT_EXTENDED_INNER_DOUBLE_SLOPE_PANEL_CORNER, consumer);
+        makeRotationRecipe(FBContent.BLOCK_FRAMED_FLAT_STACKED_SLOPE_SLAB_CORNER, FBContent.BLOCK_FRAMED_FLAT_STACKED_SLOPE_PANEL_CORNER, consumer);
+        makeRotationRecipe(FBContent.BLOCK_FRAMED_FLAT_STACKED_INNER_SLOPE_SLAB_CORNER, FBContent.BLOCK_FRAMED_FLAT_STACKED_INNER_SLOPE_PANEL_CORNER, consumer);
     }
 
     private static void makeRotationRecipe(RegistryObject<Block> first, RegistryObject<Block> second, Consumer<FinishedRecipe> consumer)
@@ -1115,14 +1115,14 @@ public final class FramedRecipeProvider extends RecipeProvider
         String name = first.getId().getPath() + "_rotate_to_" + second.getId().getPath();
         shapelessBuildingBlock(second.get())
                 .requires(first.get())
-                .requires(FBContent.itemFramedWrench.get())
+                .requires(FBContent.ITEM_FRAMED_WRENCH.get())
                 .unlockedBy("has_" + first.getId().getPath(), has(first.get()))
                 .save(consumer, Utils.rl(name));
 
         name = second.getId().getPath() + "_rotate_to_" + first.getId().getPath();
         shapelessBuildingBlock(first.get())
                 .requires(second.get())
-                .requires(FBContent.itemFramedWrench.get())
+                .requires(FBContent.ITEM_FRAMED_WRENCH.get())
                 .unlockedBy("has_" + second.getId().getPath(), has(second.get()))
                 .save(consumer, Utils.rl(name));
     }

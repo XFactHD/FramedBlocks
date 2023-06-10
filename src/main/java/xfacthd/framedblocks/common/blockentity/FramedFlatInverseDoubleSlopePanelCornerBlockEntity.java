@@ -19,7 +19,7 @@ public class FramedFlatInverseDoubleSlopePanelCornerBlockEntity extends FramedDo
 {
     public FramedFlatInverseDoubleSlopePanelCornerBlockEntity(BlockPos pos, BlockState state)
     {
-        super(FBContent.blockEntityTypeFramedFlatInverseDoubleSlopePanelCorner.get(), pos, state);
+        super(FBContent.BE_TYPE_FRAMED_FLAT_INVERSE_DOUBLE_SLOPE_PANEL_CORNER.get(), pos, state);
     }
 
     @Override
@@ -28,8 +28,14 @@ public class FramedFlatInverseDoubleSlopePanelCornerBlockEntity extends FramedDo
         Direction facing = getBlockState().getValue(FramedProperties.FACING_HOR);
         Direction side = hit.getDirection();
 
-        if (side == facing) { return false; }
-        if (side == facing.getOpposite()) { return true; }
+        if (side == facing)
+        {
+            return false;
+        }
+        if (side == facing.getOpposite())
+        {
+            return true;
+        }
 
         Vec3 vec = Utils.fraction(hit.getLocation());
         double hor = Utils.isX(facing) ? vec.x() : vec.z();
@@ -41,15 +47,24 @@ public class FramedFlatInverseDoubleSlopePanelCornerBlockEntity extends FramedDo
     }
 
     @Override
-    public DoubleSoundMode getSoundMode() { return DoubleSoundMode.EITHER; }
+    public DoubleSoundMode getSoundMode()
+    {
+        return DoubleSoundMode.EITHER;
+    }
 
     @Override
     public CamoContainer getCamo(Direction side)
     {
         Direction facing = getBlockState().getValue(FramedProperties.FACING_HOR);
 
-        if (side == facing) { return getCamo(); }
-        if (side == facing.getOpposite()) { return getCamoTwo(); }
+        if (side == facing)
+        {
+            return getCamo();
+        }
+        if (side == facing.getOpposite())
+        {
+            return getCamoTwo();
+        }
 
         HorizontalRotation rotation = getBlockState().getValue(PropertyHolder.ROTATION);
         Direction rotDir = rotation.withFacing(facing);
@@ -68,5 +83,8 @@ public class FramedFlatInverseDoubleSlopePanelCornerBlockEntity extends FramedDo
     }
 
     @Override
-    public boolean isSolidSide(Direction side) { return false; }
+    public boolean isSolidSide(Direction side)
+    {
+        return false;
+    }
 }

@@ -34,30 +34,30 @@ public final class FramedBlockTagProvider extends BlockTagsProvider
     @SuppressWarnings("unchecked")
     protected void addTags(HolderLookup.Provider provider)
     {
-        tag(BlockTags.SLABS).add(FBContent.blockFramedSlab.get());
-        tag(BlockTags.STAIRS).add(FBContent.blockFramedStairs.get());
-        tag(BlockTags.WALLS).add(FBContent.blockFramedWall.get());
-        tag(BlockTags.FENCES).add(FBContent.blockFramedFence.get());
-        tag(BlockTags.DOORS).add(FBContent.blockFramedDoor.get(), FBContent.blockFramedIronDoor.get());
-        tag(BlockTags.TRAPDOORS).add(FBContent.blockFramedTrapDoor.get(), FBContent.blockFramedIronTrapDoor.get());
-        tag(BlockTags.CLIMBABLE).add(FBContent.blockFramedLadder.get());
-        tag(BlockTags.SIGNS).add(FBContent.blockFramedSign.get(), FBContent.blockFramedWallSign.get());
-        tag(BlockTags.STANDING_SIGNS).add(FBContent.blockFramedSign.get());
-        tag(BlockTags.WALL_SIGNS).add(FBContent.blockFramedWallSign.get());
-        tag(Tags.Blocks.CHESTS).add(FBContent.blockFramedChest.get());
+        tag(BlockTags.SLABS).add(FBContent.BLOCK_FRAMED_SLAB.get());
+        tag(BlockTags.STAIRS).add(FBContent.BLOCK_FRAMED_STAIRS.get());
+        tag(BlockTags.WALLS).add(FBContent.BLOCK_FRAMED_WALL.get());
+        tag(BlockTags.FENCES).add(FBContent.BLOCK_FRAMED_FENCE.get());
+        tag(BlockTags.DOORS).add(FBContent.BLOCK_FRAMED_DOOR.get(), FBContent.BLOCK_FRAMED_IRON_DOOR.get());
+        tag(BlockTags.TRAPDOORS).add(FBContent.BLOCK_FRAMED_TRAP_DOOR.get(), FBContent.BLOCK_FRAMED_IRON_TRAP_DOOR.get());
+        tag(BlockTags.CLIMBABLE).add(FBContent.BLOCK_FRAMED_LADDER.get());
+        tag(BlockTags.SIGNS).add(FBContent.BLOCK_FRAMED_SIGN.get(), FBContent.BLOCK_FRAMED_WALL_SIGN.get());
+        tag(BlockTags.STANDING_SIGNS).add(FBContent.BLOCK_FRAMED_SIGN.get());
+        tag(BlockTags.WALL_SIGNS).add(FBContent.BLOCK_FRAMED_WALL_SIGN.get());
+        tag(Tags.Blocks.CHESTS).add(FBContent.BLOCK_FRAMED_CHEST.get());
         tag(BlockTags.RAILS).add(
-                FBContent.blockFramedRailSlope.get(),
-                FBContent.blockFramedPoweredRailSlope.get(),
-                FBContent.blockFramedDetectorRailSlope.get(),
-                FBContent.blockFramedActivatorRailSlope.get(),
-                FBContent.blockFramedFancyRail.get(),
-                FBContent.blockFramedFancyPoweredRail.get(),
-                FBContent.blockFramedFancyDetectorRail.get(),
-                FBContent.blockFramedFancyActivatorRail.get(),
-                FBContent.blockFramedFancyRailSlope.get(),
-                FBContent.blockFramedFancyPoweredRailSlope.get(),
-                FBContent.blockFramedFancyDetectorRailSlope.get(),
-                FBContent.blockFramedFancyActivatorRailSlope.get()
+                FBContent.BLOCK_FRAMED_RAIL_SLOPE.get(),
+                FBContent.BLOCK_FRAMED_POWERED_RAIL_SLOPE.get(),
+                FBContent.BLOCK_FRAMED_DETECTOR_RAIL_SLOPE.get(),
+                FBContent.BLOCK_FRAMED_ACTIVATOR_RAIL_SLOPE.get(),
+                FBContent.BLOCK_FRAMED_FANCY_RAIL.get(),
+                FBContent.BLOCK_FRAMED_FANCY_POWERED_RAIL.get(),
+                FBContent.BLOCK_FRAMED_FANCY_DETECTOR_RAIL.get(),
+                FBContent.BLOCK_FRAMED_FANCY_ACTIVATOR_RAIL.get(),
+                FBContent.BLOCK_FRAMED_FANCY_RAIL_SLOPE.get(),
+                FBContent.BLOCK_FRAMED_FANCY_POWERED_RAIL_SLOPE.get(),
+                FBContent.BLOCK_FRAMED_FANCY_DETECTOR_RAIL_SLOPE.get(),
+                FBContent.BLOCK_FRAMED_FANCY_ACTIVATOR_RAIL_SLOPE.get()
         );
 
         TagsProvider.TagAppender<Block> frameable = tag(Utils.FRAMEABLE).addTags(
@@ -113,16 +113,16 @@ public final class FramedBlockTagProvider extends BlockTagsProvider
         );
 
         Set<Block> noToolBlocks = Set.of(
-                FBContent.blockFramedItemFrame.get(),
-                FBContent.blockFramedGlowingItemFrame.get()
+                FBContent.BLOCK_FRAMED_ITEM_FRAME.get(),
+                FBContent.BLOCK_FRAMED_GLOWING_ITEM_FRAME.get()
         );
 
         Set<Block> pickaxeBlocks = new LinkedHashSet<>();
 
-        pickaxeBlocks.add(FBContent.blockFramedIronDoor.get());
-        pickaxeBlocks.add(FBContent.blockFramedIronTrapDoor.get());
-        pickaxeBlocks.add(FBContent.blockFramedIronGate.get());
-        pickaxeBlocks.add(FBContent.blockFramingSaw.get());
+        pickaxeBlocks.add(FBContent.BLOCK_FRAMED_IRON_DOOR.get());
+        pickaxeBlocks.add(FBContent.BLOCK_FRAMED_IRON_TRAP_DOOR.get());
+        pickaxeBlocks.add(FBContent.BLOCK_FRAMED_IRON_GATE.get());
+        pickaxeBlocks.add(FBContent.BLOCK_FRAMING_SAW.get());
 
         IntrinsicTagAppender<Block> axeTag = tag(BlockTags.MINEABLE_WITH_AXE);
         FBContent.getRegisteredBlocks()

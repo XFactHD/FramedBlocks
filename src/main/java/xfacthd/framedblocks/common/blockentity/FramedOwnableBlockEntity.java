@@ -22,7 +22,7 @@ public class FramedOwnableBlockEntity extends FramedBlockEntity
 
     public FramedOwnableBlockEntity(BlockPos pos, BlockState state)
     {
-        this(FBContent.blockEntityTypeFramedOwnableBlock.get(), pos, state);
+        this(FBContent.BE_TYPE_FRAMED_OWNABLE_BLOCK.get(), pos, state);
     }
 
     public void setOwner(UUID owner, boolean forceSync)

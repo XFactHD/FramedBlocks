@@ -45,7 +45,9 @@ public class FramedLeverBlock extends LeverBlock implements IFramedBlock
     }
 
     @Override
-    public final InteractionResult use(BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hit)
+    public final InteractionResult use(
+            BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hit
+    )
     {
         InteractionResult result = handleUse(state, level, pos, player, hand, hit);
         if (result.consumesAction()) { return result; }
@@ -82,5 +84,8 @@ public class FramedLeverBlock extends LeverBlock implements IFramedBlock
     }
 
     @Override
-    public BlockType getBlockType() { return BlockType.FRAMED_LEVER; }
+    public BlockType getBlockType()
+    {
+        return BlockType.FRAMED_LEVER;
+    }
 }

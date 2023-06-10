@@ -100,7 +100,13 @@ public class FramedFlowerPotModel extends FramedBlockModel
     }
 
     @Override
-    protected void getAdditionalQuads(Map<Direction, List<BakedQuad>> quadMap, BlockState state, RandomSource rand, ModelData data, RenderType layer)
+    protected void getAdditionalQuads(
+            Map<Direction, List<BakedQuad>> quadMap,
+            BlockState state,
+            RandomSource rand,
+            ModelData data,
+            RenderType layer
+    )
     {
         BlockState potState = FramedFlowerPotBlock.getFlowerPotState(getFlowerBlock(data));
         if (!potState.isAir())
@@ -130,7 +136,9 @@ public class FramedFlowerPotModel extends FramedBlockModel
         return new FlowerPotQuadCacheKey(state, ctCtx, getFlowerBlock(data));
     }
 
-    private static void addPlantQuads(Map<Direction, List<BakedQuad>> quadMap, BlockState potState, RandomSource rand, RenderType layer)
+    private static void addPlantQuads(
+            Map<Direction, List<BakedQuad>> quadMap, BlockState potState, RandomSource rand, RenderType layer
+    )
     {
         BakedModel potModel = ModelCache.getModel(potState);
 
@@ -144,7 +152,9 @@ public class FramedFlowerPotModel extends FramedBlockModel
         }
     }
 
-    private static List<BakedQuad> getFilteredPlantQuads(BlockState potState, BakedModel potModel, Direction face, RandomSource rand, RenderType layer)
+    private static List<BakedQuad> getFilteredPlantQuads(
+            BlockState potState, BakedModel potModel, Direction face, RandomSource rand, RenderType layer
+    )
     {
         return potModel.getQuads(potState, face, rand, ModelData.EMPTY, layer)
                 .stream()
@@ -154,7 +164,9 @@ public class FramedFlowerPotModel extends FramedBlockModel
                 .collect(Collectors.toList());
     }
 
-    private static void addDirtQuads(Map<Direction, List<BakedQuad>> quadMap, RandomSource rand, ModelData data, RenderType layer)
+    private static void addDirtQuads(
+            Map<Direction, List<BakedQuad>> quadMap, RandomSource rand, ModelData data, RenderType layer
+    )
     {
         BakedModel dirtModel = ModelCache.getModel(Blocks.DIRT.defaultBlockState());
         if (dirtModel.getRenderTypes(Blocks.DIRT.defaultBlockState(), rand, ModelData.EMPTY).contains(layer))

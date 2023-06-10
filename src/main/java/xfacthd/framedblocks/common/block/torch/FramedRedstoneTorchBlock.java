@@ -48,7 +48,9 @@ public class FramedRedstoneTorchBlock extends RedstoneTorchBlock implements IFra
     }
 
     @Override
-    public final InteractionResult use(BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hit)
+    public final InteractionResult use(
+            BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hit
+    )
     {
         return handleUse(state, level, pos, player, hand, hit);
     }
@@ -90,14 +92,17 @@ public class FramedRedstoneTorchBlock extends RedstoneTorchBlock implements IFra
     }
 
     @Override
-    public BlockType getBlockType() { return BlockType.FRAMED_REDSTONE_TORCH; }
+    public BlockType getBlockType()
+    {
+        return BlockType.FRAMED_REDSTONE_TORCH;
+    }
 
     @Override
     public BlockItem createBlockItem()
     {
         return new StandingAndWallBlockItem(
-                FBContent.blockFramedRedstoneTorch.get(),
-                FBContent.blockFramedRedstoneWallTorch.get(),
+                FBContent.BLOCK_FRAMED_REDSTONE_TORCH.get(),
+                FBContent.BLOCK_FRAMED_REDSTONE_WALL_TORCH.get(),
                 new Item.Properties(),
                 Direction.DOWN
         );

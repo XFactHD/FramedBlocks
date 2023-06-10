@@ -16,7 +16,7 @@ public class FramedVerticalDoubleHalfSlopeBlockEntity extends FramedDoubleBlockE
 {
     public FramedVerticalDoubleHalfSlopeBlockEntity(BlockPos pos, BlockState state)
     {
-        super(FBContent.blockEntityTypeFramedVerticalDoubleHalfSlope.get(), pos, state);
+        super(FBContent.BE_TYPE_FRAMED_VERTICAL_DOUBLE_HALF_SLOPE.get(), pos, state);
     }
 
     @Override
@@ -46,7 +46,10 @@ public class FramedVerticalDoubleHalfSlopeBlockEntity extends FramedDoubleBlockE
     }
 
     @Override
-    public DoubleSoundMode getSoundMode() { return DoubleSoundMode.EITHER; }
+    public DoubleSoundMode getSoundMode()
+    {
+        return DoubleSoundMode.EITHER;
+    }
 
     @Override
     public CamoContainer getCamo(Direction side)

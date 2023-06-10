@@ -20,14 +20,14 @@ public final class FramedItemModelProvider extends ItemModelProvider
     @Override
     protected void registerModels()
     {
-        handheldItem(FBContent.itemFramedHammer, "cutout");
-        handheldItem(FBContent.itemFramedWrench, "cutout");
-        handheldItem(FBContent.itemFramedKey, "cutout");
-        handheldItem(FBContent.itemFramedScrewdriver, "cutout");
+        handheldItem(FBContent.ITEM_FRAMED_HAMMER, "cutout");
+        handheldItem(FBContent.ITEM_FRAMED_WRENCH, "cutout");
+        handheldItem(FBContent.ITEM_FRAMED_KEY, "cutout");
+        handheldItem(FBContent.ITEM_FRAMED_SCREWDRIVER, "cutout");
 
-        simpleItem(FBContent.itemFramedReinforcement, "cutout");
+        simpleItem(FBContent.ITEM_FRAMED_REINFORCEMENT, "cutout");
 
-        ItemModelBuilder modelNormal = simpleItem(FBContent.itemFramedBlueprint, "cutout");
+        ItemModelBuilder modelNormal = simpleItem(FBContent.ITEM_FRAMED_BLUEPRINT, "cutout");
         ModelFile modelWritten = simpleItem("framed_blueprint_written", "cutout");
 
         modelNormal.override()

@@ -11,7 +11,10 @@ public enum LatchType implements StringRepresentable
     NONE;
 
     @Override
-    public String getSerializedName() { return toString().toLowerCase(Locale.ROOT); }
+    public String getSerializedName()
+    {
+        return toString().toLowerCase(Locale.ROOT);
+    }
 
     public LatchType next()
     {

@@ -41,7 +41,10 @@ public enum FramingSawRecipeMatchResult
     private final int additiveSlot;
     private final Component translation;
 
-    FramingSawRecipeMatchResult(boolean success) { this(success, -1); }
+    FramingSawRecipeMatchResult(boolean success)
+    {
+        this(success, -1);
+    }
 
     FramingSawRecipeMatchResult(boolean success, int additiveSlot)
     {
@@ -52,9 +55,18 @@ public enum FramingSawRecipeMatchResult
         ).withStyle(success ? ChatFormatting.GREEN : ChatFormatting.RED);
     }
 
-    public boolean success() { return success; }
+    public boolean success()
+    {
+        return success;
+    }
 
-    public int additiveSlot() { return additiveSlot; }
+    public int additiveSlot()
+    {
+        return additiveSlot;
+    }
 
-    public Component translation() { return translation; }
+    public Component translation()
+    {
+        return translation;
+    }
 }

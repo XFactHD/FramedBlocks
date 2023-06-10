@@ -175,7 +175,10 @@ public final class SlopedStairsSkipPredicate implements SideSkipPredicate
         Direction adjDir = adjState.getValue(FramedProperties.FACING_HOR);
         boolean adjTop = adjState.getValue(FramedProperties.TOP);
 
-        if (adjTop != top) { return false; }
+        if (adjTop != top)
+        {
+            return false;
+        }
 
         if (getTriDir(dir, top, side).isEqualTo(VerticalHalfSlopeSkipPredicate.getTriDir(adjDir, adjTop, side.getOpposite())))
         {
@@ -202,7 +205,10 @@ public final class SlopedStairsSkipPredicate implements SideSkipPredicate
             BlockGetter level, BlockPos pos, BlockState state, Direction dir, boolean top, BlockState adjState, Direction side
     )
     {
-        if (adjState.getValue(PropertyHolder.SLOPE_TYPE) != SlopeType.HORIZONTAL) { return false; }
+        if (adjState.getValue(PropertyHolder.SLOPE_TYPE) != SlopeType.HORIZONTAL)
+        {
+            return false;
+        }
 
         Tuple<BlockState, BlockState> states = AbstractFramedDoubleBlock.getStatePair(adjState);
         return testAgainstVerticalHalfSlope(level, pos, state, dir, top, states.getA(), side) ||

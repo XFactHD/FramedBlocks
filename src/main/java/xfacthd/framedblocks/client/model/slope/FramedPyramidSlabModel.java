@@ -88,10 +88,16 @@ public class FramedPyramidSlabModel extends FramedBlockModel
                 boolean up = quadDir == Direction.UP;
 
                 float angle = up ? 45 : -45;
-                if (facing == Direction.NORTH || facing == Direction.EAST) { angle *= -1F; }
+                if (facing == Direction.NORTH || facing == Direction.EAST)
+                {
+                    angle *= -1F;
+                }
 
                 Vector3f origin = facing.getOpposite().step().max(ZERO);
-                if (up) { origin.add(0, 1, 0); }
+                if (up)
+                {
+                    origin.add(0, 1, 0);
+                }
 
                 QuadModifier.geometry(quad)
                         .apply(Modifiers.cutTopBottom(facing, .5F))
@@ -121,5 +127,8 @@ public class FramedPyramidSlabModel extends FramedBlockModel
 
 
 
-    public static BlockState itemSource() { return FBContent.blockFramedPyramidSlab.get().defaultBlockState(); }
+    public static BlockState itemSource()
+    {
+        return FBContent.BLOCK_FRAMED_PYRAMID_SLAB.get().defaultBlockState();
+    }
 }

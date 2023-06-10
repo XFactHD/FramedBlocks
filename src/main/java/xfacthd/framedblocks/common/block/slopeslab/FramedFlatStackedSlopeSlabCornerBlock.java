@@ -37,7 +37,10 @@ public class FramedFlatStackedSlopeSlabCornerBlock extends AbstractFramedDoubleB
     protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder)
     {
         super.createBlockStateDefinition(builder);
-        builder.add(FramedProperties.FACING_HOR, FramedProperties.TOP, FramedProperties.Y_SLOPE, BlockStateProperties.WATERLOGGED);
+        builder.add(
+                FramedProperties.FACING_HOR, FramedProperties.TOP,
+                FramedProperties.Y_SLOPE, BlockStateProperties.WATERLOGGED
+        );
     }
 
     @Override
@@ -147,15 +150,15 @@ public class FramedFlatStackedSlopeSlabCornerBlock extends AbstractFramedDoubleB
         Block topBlock;
         if (getBlockType() == BlockType.FRAMED_FLAT_STACKED_INNER_SLOPE_SLAB_CORNER)
         {
-            topBlock = FBContent.blockFramedFlatInnerSlopeSlabCorner.get();
+            topBlock = FBContent.BLOCK_FRAMED_FLAT_INNER_SLOPE_SLAB_CORNER.get();
         }
         else
         {
-            topBlock = FBContent.blockFramedFlatSlopeSlabCorner.get();
+            topBlock = FBContent.BLOCK_FRAMED_FLAT_SLOPE_SLAB_CORNER.get();
         }
 
         return new Tuple<>(
-                FBContent.blockFramedSlab.get()
+                FBContent.BLOCK_FRAMED_SLAB.get()
                         .defaultBlockState()
                         .setValue(FramedProperties.TOP, top),
                 topBlock.defaultBlockState()
@@ -170,14 +173,14 @@ public class FramedFlatStackedSlopeSlabCornerBlock extends AbstractFramedDoubleB
 
     public static BlockState itemModelSource()
     {
-        return FBContent.blockFramedFlatStackedSlopeSlabCorner.get()
+        return FBContent.BLOCK_FRAMED_FLAT_STACKED_SLOPE_SLAB_CORNER.get()
                 .defaultBlockState()
                 .setValue(FramedProperties.FACING_HOR, Direction.SOUTH);
     }
 
     public static BlockState itemModelSourceInner()
     {
-        return FBContent.blockFramedFlatStackedInnerSlopeSlabCorner.get()
+        return FBContent.BLOCK_FRAMED_FLAT_STACKED_INNER_SLOPE_SLAB_CORNER.get()
                 .defaultBlockState()
                 .setValue(FramedProperties.FACING_HOR, Direction.SOUTH);
     }

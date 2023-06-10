@@ -15,7 +15,7 @@ public class FramedDividedStairsBlockEntity extends FramedDoubleBlockEntity
 {
     public FramedDividedStairsBlockEntity(BlockPos pos, BlockState state)
     {
-        super(FBContent.blockEntityTypeFramedDividedStairs.get(), pos, state);
+        super(FBContent.BE_TYPE_FRAMED_DIVIDED_STAIRS.get(), pos, state);
     }
 
     @Override
@@ -24,8 +24,14 @@ public class FramedDividedStairsBlockEntity extends FramedDoubleBlockEntity
         Direction facing = getBlockState().getValue(FramedProperties.FACING_HOR);
 
         Direction side = hit.getDirection();
-        if (side == facing.getClockWise()) { return true; }
-        if (side == facing.getCounterClockWise()) { return false; }
+        if (side == facing.getClockWise())
+        {
+            return true;
+        }
+        if (side == facing.getCounterClockWise())
+        {
+            return false;
+        }
 
         return Utils.fractionInDir(hit.getLocation(), facing.getClockWise()) > .5;
     }

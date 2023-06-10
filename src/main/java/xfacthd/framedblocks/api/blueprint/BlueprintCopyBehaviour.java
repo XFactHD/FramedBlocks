@@ -44,7 +44,9 @@ public interface BlueprintCopyBehaviour
      * @return true if the default handling should not be executed
      * @implNote The main blueprint data ({@link FramedBlockEntity#writeToBlueprint()}) must be stored in the tag with the key "camo_data"
      */
-    default boolean writeToBlueprint(Level level, BlockPos pos, BlockState state, FramedBlockEntity be, CompoundTag blueprintData)
+    default boolean writeToBlueprint(
+            Level level, BlockPos pos, BlockState state, FramedBlockEntity be, CompoundTag blueprintData
+    )
     {
         return false;
     }
@@ -54,7 +56,10 @@ public interface BlueprintCopyBehaviour
      * used to place the block. Used by Framed Double Slabs and Framed Double Panels to consume two of the single
      * blocks instead of one double block
      */
-    default Optional<ItemStack> getBlockItem() { return Optional.empty(); }
+    default Optional<ItemStack> getBlockItem()
+    {
+        return Optional.empty();
+    }
 
     /**
      * Provide a custom {@link Set} of {@link CamoContainer}s for item consumption. Used by double blocks and the Framed Door
@@ -121,5 +126,8 @@ public interface BlueprintCopyBehaviour
      * @param blueprintData The {@link CompoundTag} containing the full blueprint data
      * @param dummyStack The dummy {@link ItemStack} used to place the Block
      */
-    default void postProcessPaste(Level level, BlockPos pos, Player player, CompoundTag blueprintData, ItemStack dummyStack) { }
+    default void postProcessPaste(
+            Level level, BlockPos pos, Player player, CompoundTag blueprintData, ItemStack dummyStack
+    )
+    { }
 }

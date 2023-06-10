@@ -89,6 +89,8 @@ public class FramedExtendedSlopePanelModel extends FramedBlockModel
 
     public static BlockState itemSource()
     {
-        return FBContent.blockFramedExtendedSlopePanel.get().defaultBlockState().setValue(FramedProperties.FACING_HOR, Direction.SOUTH);
+        return FBContent.BLOCK_FRAMED_EXTENDED_SLOPE_PANEL.get()
+                .defaultBlockState()
+                .setValue(FramedProperties.FACING_HOR, Direction.SOUTH);
     }
 }

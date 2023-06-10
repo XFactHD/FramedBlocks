@@ -34,7 +34,7 @@ public final class ToggleWaterloggableOverlay extends BlockInteractOverlay
     @Override
     protected boolean isValidTool(ItemStack stack)
     {
-        return stack.is(FBContent.itemFramedHammer.get());
+        return stack.is(FBContent.ITEM_FRAMED_HAMMER.get());
     }
 
     @Override

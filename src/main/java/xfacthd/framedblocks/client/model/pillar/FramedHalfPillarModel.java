@@ -27,7 +27,10 @@ public class FramedHalfPillarModel extends FramedBlockModel
     protected void transformQuad(Map<Direction, List<BakedQuad>> quadMap, BakedQuad quad)
     {
         QuadModifier mod = FramedPillarModel.createPillarQuad(quad, face.getAxis(), 4F / 16F, 12F / 16F, 12F / 16F);
-        if (mod.hasFailed()) { return; }
+        if (mod.hasFailed())
+        {
+            return;
+        }
 
         Direction quadDir = quad.getDirection();
         if (quadDir == face)

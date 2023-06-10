@@ -20,7 +20,10 @@ public final class GateSkipPredicate implements SideSkipPredicate
             return SideSkipPredicate.CTM.test(level, pos, state, adjState, side);
         }
 
-        if (!(adjState.getBlock() instanceof FramedGateBlock)) { return false; }
+        if (!(adjState.getBlock() instanceof FramedGateBlock))
+        {
+            return false;
+        }
 
         Direction adjFacing = getDoorFacing(adjState);
         if (facing == adjFacing && side.getAxis() != facing.getAxis())

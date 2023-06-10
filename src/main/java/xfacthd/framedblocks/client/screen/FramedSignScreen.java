@@ -92,12 +92,12 @@ public class FramedSignScreen extends Screen // FIXME: update to match vanilla s
     public void removed()
     {
         FramedBlocks.CHANNEL.sendToServer(new SignUpdatePacket(sign.getBlockPos(), new String[]
-                {
-                        sign.getLine(0).getString(),
-                        sign.getLine(1).getString(),
-                        sign.getLine(2).getString(),
-                        sign.getLine(3).getString()
-                }));
+        {
+                sign.getLine(0).getString(),
+                sign.getLine(1).getString(),
+                sign.getLine(2).getString(),
+                sign.getLine(3).getString()
+        }));
     }
 
     @Override
@@ -186,7 +186,7 @@ public class FramedSignScreen extends Screen // FIXME: update to match vanilla s
                 if (font.isBidirectional()) { text = font.bidirectionalShaping(text); }
 
                 float textX = -font.width(text) / 2F;
-                font.drawInBatch(text, textX, line * 10 - 20, color, false, matrix, buffer, Font.DisplayMode.NORMAL, 0, 15728880);
+                font.drawInBatch(text, textX, line * 10 - 20, color, false, matrix, buffer, Font.DisplayMode.NORMAL, 0, 0xF000F0);
             }
         }
 
@@ -214,11 +214,11 @@ public class FramedSignScreen extends Screen // FIXME: update to match vanilla s
                 {
                     if (inputUtil.getCursorPos() < line.length())
                     {
-                        graphics.fill(cursorX, y - 1, cursorX + 1, y + 9, 0xff000000 | color);
+                        graphics.fill(cursorX, y - 1, cursorX + 1, y + 9, 0xFF000000 | color);
                     }
                     else
                     {
-                        font.drawInBatch("_", cursorX, y, color, false, matrix, buffer, Font.DisplayMode.NORMAL, 0, 15728880);
+                        font.drawInBatch("_", cursorX, y, color, false, matrix, buffer, Font.DisplayMode.NORMAL, 0, 0xF000F0);
                         buffer.endBatch();
                     }
                 }
@@ -257,7 +257,7 @@ public class FramedSignScreen extends Screen // FIXME: update to match vanilla s
         Direction front;
 
         BlockState state = sign.getBlockState();
-        if (state.getBlock() == FBContent.blockFramedWallSign.get())
+        if (state.getBlock() == FBContent.BLOCK_FRAMED_WALL_SIGN.get())
         {
             front = state.getValue(FramedProperties.FACING_HOR);
         }
@@ -271,7 +271,7 @@ public class FramedSignScreen extends Screen // FIXME: update to match vanilla s
         BlockState camoState = sign.getCamo().getState();
         if (camoState.isAir())
         {
-            camoState = FBContent.blockFramedCube.get().defaultBlockState();
+            camoState = FBContent.BLOCK_FRAMED_CUBE.get().defaultBlockState();
         }
 
         if (!SPRITE_CACHE.contains(camoState, front))

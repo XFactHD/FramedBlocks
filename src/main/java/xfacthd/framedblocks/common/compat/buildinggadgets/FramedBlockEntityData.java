@@ -21,9 +21,15 @@ import xfacthd.framedblocks.common.util.ServerConfig;
 
 final class FramedBlockEntityData extends NBTTileEntityData
 {
-    public FramedBlockEntityData(FramedBlockEntity be) { super(writeBlockEntityTag(be), buildMaterialList(be)); }
+    public FramedBlockEntityData(FramedBlockEntity be)
+    {
+        super(writeBlockEntityTag(be), buildMaterialList(be));
+    }
 
-    public FramedBlockEntityData(CompoundTag data, MaterialList materials) { super(data, materials); }
+    public FramedBlockEntityData(CompoundTag data, MaterialList materials)
+    {
+        super(data, materials);
+    }
 
     @Override
     public boolean placeIn(BuildContext context, BlockState state, BlockPos pos)
@@ -56,7 +62,10 @@ final class FramedBlockEntityData extends NBTTileEntityData
     }
 
     @Override
-    public ITileDataSerializer getSerializer() { return BuildingGadgetsCompat.GuardedAccess.FRAMED_SERIALIZER.get(); }
+    public ITileDataSerializer getSerializer()
+    {
+        return BuildingGadgetsCompat.GuardedAccess.FRAMED_SERIALIZER.get();
+    }
 
     private static CompoundTag writeBlockEntityTag(FramedBlockEntity be)
     {
@@ -79,18 +88,18 @@ final class FramedBlockEntityData extends NBTTileEntityData
         MaterialList.SimpleBuilder builder = MaterialList.simpleBuilder();
 
         //Add base materials
-        if (be.getBlock() == FBContent.blockFramedDoubleSlab.get())
+        if (be.getBlock() == FBContent.BLOCK_FRAMED_DOUBLE_SLAB.get())
         {
             builder.add(
-                    UniqueItem.ofStack(new ItemStack(FBContent.blockFramedSlab.get())),
-                    UniqueItem.ofStack(new ItemStack(FBContent.blockFramedSlab.get()))
+                    UniqueItem.ofStack(new ItemStack(FBContent.BLOCK_FRAMED_SLAB.get())),
+                    UniqueItem.ofStack(new ItemStack(FBContent.BLOCK_FRAMED_SLAB.get()))
             );
         }
-        else if (be.getBlock() == FBContent.blockFramedDoublePanel.get())
+        else if (be.getBlock() == FBContent.BLOCK_FRAMED_DOUBLE_PANEL.get())
         {
             builder.add(
-                    UniqueItem.ofStack(new ItemStack(FBContent.blockFramedPanel.get())),
-                    UniqueItem.ofStack(new ItemStack(FBContent.blockFramedPanel.get()))
+                    UniqueItem.ofStack(new ItemStack(FBContent.BLOCK_FRAMED_PANEL.get())),
+                    UniqueItem.ofStack(new ItemStack(FBContent.BLOCK_FRAMED_PANEL.get()))
             );
         }
         else

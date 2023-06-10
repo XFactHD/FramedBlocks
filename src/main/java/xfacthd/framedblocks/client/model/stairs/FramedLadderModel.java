@@ -103,6 +103,8 @@ public class FramedLadderModel extends FramedBlockModel
 
     public static BlockState itemSource()
     {
-        return FBContent.blockFramedLadder.get().defaultBlockState().setValue(FramedProperties.FACING_HOR, Direction.SOUTH);
+        return FBContent.BLOCK_FRAMED_LADDER.get()
+                .defaultBlockState()
+                .setValue(FramedProperties.FACING_HOR, Direction.SOUTH);
     }
 }

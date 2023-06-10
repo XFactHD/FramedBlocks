@@ -28,13 +28,17 @@ public class FramedChestBlock extends FramedStorageBlock
     protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder)
     {
         //Don't call super, this block doesn't need the SOLID property
-        builder.add(FramedProperties.FACING_HOR, PropertyHolder.CHEST_STATE, PropertyHolder.LATCH_TYPE, FramedProperties.GLOWING, BlockStateProperties.WATERLOGGED);
+        builder.add(
+                FramedProperties.FACING_HOR, PropertyHolder.CHEST_STATE, PropertyHolder.LATCH_TYPE,
+                FramedProperties.GLOWING, BlockStateProperties.WATERLOGGED
+        );
     }
 
     @Override
     public BlockState getStateForPlacement(BlockPlaceContext context)
     {
-        BlockState state = defaultBlockState().setValue(FramedProperties.FACING_HOR, context.getHorizontalDirection().getOpposite());
+        BlockState state = defaultBlockState()
+                .setValue(FramedProperties.FACING_HOR, context.getHorizontalDirection().getOpposite());
         return withWater(state, context.getLevel(), context.getClickedPos());
     }
 
@@ -70,14 +74,19 @@ public class FramedChestBlock extends FramedStorageBlock
     }
 
     @Override
-    public BlockEntity newBlockEntity(BlockPos pos, BlockState state) { return new FramedChestBlockEntity(pos, state); }
+    public BlockEntity newBlockEntity(BlockPos pos, BlockState state)
+    {
+        return new FramedChestBlockEntity(pos, state);
+    }
 
     @Nullable
     @Override
     public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level level, BlockState state, BlockEntityType<T> type)
     {
-        if (level.isClientSide() || state.getValue(PropertyHolder.CHEST_STATE) != ChestState.CLOSING) { return null; }
-
+        if (level.isClientSide() || state.getValue(PropertyHolder.CHEST_STATE) != ChestState.CLOSING)
+        {
+            return null;
+        }
         return Utils.createBlockEntityTicker(type, FBContent.blockEntityTypeFramedChest.get(), FramedChestBlockEntity::tick);
     }
 }

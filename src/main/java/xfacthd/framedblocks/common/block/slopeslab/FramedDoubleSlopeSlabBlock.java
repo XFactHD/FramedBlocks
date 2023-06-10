@@ -72,7 +72,10 @@ public class FramedDoubleSlopeSlabBlock extends AbstractFramedDoubleBlock
     }
 
     @Override
-    public boolean doesBlockOccludeBeaconBeam(BlockState state, LevelReader level, BlockPos pos) { return true; }
+    public boolean doesBlockOccludeBeaconBeam(BlockState state, LevelReader level, BlockPos pos)
+    {
+        return true;
+    }
 
     @Override
     public boolean handleBlockLeftClick(BlockState state, Level level, BlockPos pos, Player player)
@@ -116,7 +119,7 @@ public class FramedDoubleSlopeSlabBlock extends AbstractFramedDoubleBlock
         boolean topHalf = state.getValue(PropertyHolder.TOP_HALF);
         boolean ySlope = state.getValue(FramedProperties.Y_SLOPE);
 
-        BlockState defState = FBContent.blockFramedSlopeSlab.get().defaultBlockState();
+        BlockState defState = FBContent.BLOCK_FRAMED_SLOPE_SLAB.get().defaultBlockState();
         return new Tuple<>(
                 defState.setValue(FramedProperties.FACING_HOR, facing)
                         .setValue(PropertyHolder.TOP_HALF, topHalf)
@@ -144,6 +147,6 @@ public class FramedDoubleSlopeSlabBlock extends AbstractFramedDoubleBlock
 
     public static BlockState itemModelSource()
     {
-        return FBContent.blockFramedDoubleSlopeSlab.get().defaultBlockState();
+        return FBContent.BLOCK_FRAMED_DOUBLE_SLOPE_SLAB.get().defaultBlockState();
     }
 }

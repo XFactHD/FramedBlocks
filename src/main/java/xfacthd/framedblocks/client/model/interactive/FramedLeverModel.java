@@ -46,7 +46,13 @@ public class FramedLeverModel extends FramedBlockModel
     }
 
     @Override
-    protected void getAdditionalQuads(Map<Direction, List<BakedQuad>> quadMap, BlockState state, RandomSource rand, ModelData data, RenderType renderType)
+    protected void getAdditionalQuads(
+            Map<Direction, List<BakedQuad>> quadMap,
+            BlockState state,
+            RandomSource rand,
+            ModelData data,
+            RenderType renderType
+    )
     {
         List<BakedQuad> quads = baseModel.getQuads(state, null, rand, data, renderType);
         for (BakedQuad quad : quads)

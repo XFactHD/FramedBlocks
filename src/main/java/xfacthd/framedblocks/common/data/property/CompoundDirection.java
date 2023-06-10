@@ -53,9 +53,15 @@ public enum CompoundDirection implements StringRepresentable
         this.orientation = orientation;
     }
 
-    public Direction direction() { return direction; }
+    public Direction direction()
+    {
+        return direction;
+    }
 
-    public Direction orientation() { return orientation; }
+    public Direction orientation()
+    {
+        return orientation;
+    }
 
     public CompoundDirection rotate(Rotation rot)
     {
@@ -90,7 +96,10 @@ public enum CompoundDirection implements StringRepresentable
     }
 
     @Override
-    public String getSerializedName() { return name; }
+    public String getSerializedName()
+    {
+        return name;
+    }
 
 
 

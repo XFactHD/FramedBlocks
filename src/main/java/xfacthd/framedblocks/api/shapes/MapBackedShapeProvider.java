@@ -17,10 +17,16 @@ public final class MapBackedShapeProvider implements ShapeProvider
     }
 
     @Override
-    public VoxelShape get(BlockState state) { return shapes.get(state); }
+    public VoxelShape get(BlockState state)
+    {
+        return shapes.get(state);
+    }
 
     @Override
-    public boolean isEmpty() { return shapes.isEmpty(); }
+    public boolean isEmpty()
+    {
+        return shapes.isEmpty();
+    }
 
     @Override
     public void forEach(BiConsumer<BlockState, VoxelShape> consumer)

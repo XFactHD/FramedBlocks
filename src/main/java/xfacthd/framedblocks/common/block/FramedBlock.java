@@ -17,15 +17,24 @@ import xfacthd.framedblocks.common.data.property.SlopeType;
 
 public abstract class FramedBlock extends AbstractFramedBlock
 {
-    protected FramedBlock(BlockType blockType) { this(blockType, IFramedBlock.createProperties(blockType)); }
+    protected FramedBlock(BlockType blockType)
+    {
+        this(blockType, IFramedBlock.createProperties(blockType));
+    }
 
-    protected FramedBlock(BlockType blockType, Properties props) { super(blockType, props); }
+    protected FramedBlock(BlockType blockType, Properties props)
+    {
+        super(blockType, props);
+    }
 
     @Override
     @SuppressWarnings("deprecation")
     public boolean isPathfindable(BlockState state, BlockGetter level, BlockPos pos, PathComputationType type)
     {
-        if (getBlockType() != BlockType.FRAMED_CUBE) { return false; }
+        if (getBlockType() != BlockType.FRAMED_CUBE)
+        {
+            return false;
+        }
         return super.isPathfindable(state, level, pos, type);
     }
 

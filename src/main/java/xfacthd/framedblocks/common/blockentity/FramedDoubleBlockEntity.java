@@ -87,13 +87,28 @@ public abstract class FramedDoubleBlockEntity extends FramedBlockEntity
     }
 
     @Override
-    protected CamoContainer getCamo(boolean secondary) { return secondary ? camoContainer : getCamo(); }
+    protected CamoContainer getCamo(boolean secondary)
+    {
+        return secondary ? camoContainer : getCamo();
+    }
 
-    public final CamoContainer getCamoTwo() { return camoContainer; }
+    public final CamoContainer getCamoTwo()
+    {
+        return camoContainer;
+    }
 
     @Override
     @SuppressWarnings("deprecation")
-    public int getLightValue() { return Math.max(camoContainer.getState().getLightEmission(), super.getLightValue()); }
+    public int getLightValue()
+    {
+        return Math.max(camoContainer.getState().getLightEmission(), super.getLightValue());
+    }
+
+    @Override
+    public boolean canAutoApplyCamoOnPlacement()
+    {
+        return false;
+    }
 
     @Override
     public void addCamoDrops(List<ItemStack> drops)
@@ -151,7 +166,10 @@ public abstract class FramedDoubleBlockEntity extends FramedBlockEntity
     @Override
     protected boolean isCamoSolid()
     {
-        if (camoContainer.isEmpty()) { return false; }
+        if (camoContainer.isEmpty())
+        {
+            return false;
+        }
 
         //noinspection ConstantConditions
         return super.isCamoSolid() && camoContainer.getState().isSolidRender(level, worldPosition);
@@ -188,8 +206,14 @@ public abstract class FramedDoubleBlockEntity extends FramedBlockEntity
         int flammabilityOne = super.getCamoFlammability(face);
         int flammabilityTwo = camoContainer.isEmpty() ? -1 : camoContainer.getState().getFlammability(level, worldPosition, face);
 
-        if (flammabilityOne == -1) { return flammabilityTwo; }
-        if (flammabilityTwo == -1) { return flammabilityOne; }
+        if (flammabilityOne == -1)
+        {
+            return flammabilityTwo;
+        }
+        if (flammabilityTwo == -1)
+        {
+            return flammabilityOne;
+        }
         return Math.min(flammabilityOne, flammabilityTwo);
     }
 
@@ -199,12 +223,21 @@ public abstract class FramedDoubleBlockEntity extends FramedBlockEntity
         int spreadSpeedOne = super.getCamoFireSpreadSpeed(face);
         int spreadSpeedTwo = camoContainer.isEmpty() ? -1 : camoContainer.getState().getFireSpreadSpeed(level, worldPosition, face);
 
-        if (spreadSpeedOne == -1) { return spreadSpeedOne; }
-        if (spreadSpeedTwo == -1) { return spreadSpeedTwo; }
+        if (spreadSpeedOne == -1)
+        {
+            return spreadSpeedOne;
+        }
+        if (spreadSpeedTwo == -1)
+        {
+            return spreadSpeedTwo;
+        }
         return Math.min(spreadSpeedOne, spreadSpeedTwo);
     }
 
-    public final DoubleBlockSoundType getSoundType() { return soundType; }
+    public final DoubleBlockSoundType getSoundType()
+    {
+        return soundType;
+    }
 
     @Override
     protected abstract boolean hitSecondary(BlockHitResult hit);

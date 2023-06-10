@@ -8,6 +8,7 @@ import net.minecraft.client.renderer.*;
 import net.minecraft.client.resources.model.BakedModel;
 import net.minecraft.core.BlockPos;
 import net.minecraft.util.RandomSource;
+import net.minecraft.util.profiling.ProfilerFiller;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.item.*;
 import net.minecraft.world.item.context.BlockPlaceContext;
@@ -66,42 +67,50 @@ public final class GhostBlockRenderer
             return;
         }
 
-        mc().getProfiler().push(PROFILER_KEY);
-        tryDrawGhostBlock(event.getPoseStack());
-        mc().getProfiler().pop();
+        ProfilerFiller profiler = mc().getProfiler();
+        profiler.push(PROFILER_KEY);
+        tryDrawGhostBlock(event.getPoseStack(), profiler);
+        profiler.pop();
     }
 
-    private static void tryDrawGhostBlock(PoseStack poseStack)
+    private static void tryDrawGhostBlock(PoseStack poseStack, ProfilerFiller profiler)
     {
-        if (!(mc().hitResult instanceof BlockHitResult hit) || hit.getType() != HitResult.Type.BLOCK) { return; }
+        if (!(mc().hitResult instanceof BlockHitResult hit) || hit.getType() != HitResult.Type.BLOCK)
+        {
+            return;
+        }
 
         ItemStack stack = mc().player.getMainHandItem();
-        if (stack.isEmpty()) { return; }
+        if (stack.isEmpty())
+        {
+            return;
+        }
 
         GhostRenderBehaviour behaviour = RENDER_BEHAVIOURS.getOrDefault(stack.getItem(), DEFAULT_BEHAVIOUR);
 
-        mc().getProfiler().push("get_stack");
+        profiler.push("get_stack");
         ItemStack proxiedStack = behaviour.getProxiedStack(stack);
-        mc().getProfiler().pop(); //get_stack
+        profiler.pop(); //get_stack
 
-        mc().getProfiler().push("may_render");
+        profiler.push("may_render");
         if (!behaviour.mayRender(stack, proxiedStack))
         {
-            mc().getProfiler().pop(); //may_render
+            profiler.pop(); //may_render
             return;
         }
-        mc().getProfiler().pop(); //may_render
+        profiler.pop(); //may_render
 
-        mc().getProfiler().push("make_context");
+        profiler.push("make_context");
         BlockPlaceContext context = new BlockPlaceContext(mc().player, InteractionHand.MAIN_HAND, stack, hit);
         BlockState hitState = mc().level.getBlockState(hit.getBlockPos());
-        mc().getProfiler().pop(); //make_context
+        profiler.pop(); //make_context
 
-        drawGhostBlock(poseStack, behaviour, stack, proxiedStack, hit, context, hitState, false);
+        drawGhostBlock(poseStack, profiler, behaviour, stack, proxiedStack, hit, context, hitState, false);
     }
 
     private static void drawGhostBlock(
             PoseStack poseStack,
+            ProfilerFiller profiler,
             GhostRenderBehaviour behaviour,
             ItemStack stack,
             ItemStack proxiedStack,
@@ -111,77 +120,93 @@ public final class GhostBlockRenderer
             boolean secondPass
     )
     {
-        mc().getProfiler().push("get_state");
+        profiler.push("get_state");
         BlockState renderState = behaviour.getRenderState(stack, proxiedStack, hit, context, hitState, secondPass);
-        mc().getProfiler().pop(); //get_state
-        if (renderState == null) { return; }
-
-        mc().getProfiler().push("get_pos");
-        BlockPos renderPos = behaviour.getRenderPos(stack, proxiedStack, hit, context, hitState, context.getClickedPos(), secondPass);
-        mc().getProfiler().popPush("can_render"); //get_pos
-        if (!secondPass && !behaviour.canRenderAt(stack, proxiedStack, hit, context, hitState, renderState, renderPos))
+        profiler.pop(); //get_state
+        if (renderState == null)
         {
-            mc().getProfiler().pop(); //can_render
             return;
         }
-        mc().getProfiler().pop(); //can_render
 
-        mc().getProfiler().push("get_camo");
+        profiler.push("get_pos");
+        BlockPos renderPos = behaviour.getRenderPos(stack, proxiedStack, hit, context, hitState, context.getClickedPos(), secondPass);
+        profiler.popPush("can_render"); //get_pos
+        if (!secondPass && !behaviour.canRenderAt(stack, proxiedStack, hit, context, hitState, renderState, renderPos))
+        {
+            profiler.pop(); //can_render
+            return;
+        }
+        profiler.pop(); //can_render
+
+        profiler.push("get_camo");
         CamoPair camo = behaviour.readCamo(stack, proxiedStack, secondPass);
         camo = behaviour.postProcessCamo(stack, proxiedStack, context, renderState, secondPass, camo);
         GHOST_MODEL_DATA.setCamoState(camo.getCamoOne());
         GHOST_MODEL_DATA_TWO.setCamoState(camo.getCamoTwo());
-        mc().getProfiler().pop(); //get_camo
+        profiler.pop(); //get_camo
 
-        mc().getProfiler().push("append_modeldata");
+        profiler.push("append_modeldata");
         ModelData modelData = behaviour.appendModelData(stack, proxiedStack, context, renderState, secondPass, MODEL_DATA);
-        mc().getProfiler().pop(); //append_modeldata
+        profiler.pop(); //append_modeldata
 
         MultiBufferSource.BufferSource buffers = mc().renderBuffers().bufferSource();
 
-        doRenderGhostBlock(poseStack, buffers, renderPos, renderState, modelData);
+        doRenderGhostBlock(poseStack, buffers, profiler, renderPos, renderState, modelData);
 
         GHOST_MODEL_DATA.setCamoState(Blocks.AIR.defaultBlockState());
         GHOST_MODEL_DATA_TWO.setCamoState(Blocks.AIR.defaultBlockState());
 
         if (!secondPass && behaviour.hasSecondBlock(stack, proxiedStack))
         {
-            drawGhostBlock(poseStack, behaviour, stack, proxiedStack, hit, context, hitState, true);
+            drawGhostBlock(poseStack, profiler, behaviour, stack, proxiedStack, hit, context, hitState, true);
         }
     }
 
-    private static void doRenderGhostBlock(PoseStack mstack, MultiBufferSource.BufferSource buffers, BlockPos renderPos, BlockState renderState, ModelData modelData)
+    private static void doRenderGhostBlock(
+            PoseStack poseStack,
+            MultiBufferSource.BufferSource buffers,
+            ProfilerFiller profiler,
+            BlockPos renderPos,
+            BlockState renderState,
+            ModelData modelData
+    )
     {
-        mc().getProfiler().push("buffer");
+        profiler.push("buffer");
         Vec3 offset = Vec3.atLowerCornerOf(renderPos).subtract(mc().gameRenderer.getMainCamera().getPosition());
         VertexConsumer builder = new GhostVertexConsumer(buffers.getBuffer(ForgeRenderTypes.TRANSLUCENT_ON_PARTICLES_TARGET.get()), 0xAA);
-        mc().getProfiler().pop(); //buffer
+        profiler.pop(); //buffer
 
-        mc().getProfiler().push("draw");
+        profiler.push("draw");
         BakedModel model = ModelCache.getModel(renderState);
         for (RenderType type : model.getRenderTypes(renderState, RANDOM, modelData))
         {
-            doRenderGhostBlockInLayer(mstack, builder, renderPos, renderState, type, offset, modelData);
+            doRenderGhostBlockInLayer(poseStack, builder, renderPos, renderState, type, offset, modelData);
         }
-        mc().getProfiler().pop(); //draw
+        profiler.pop(); //draw
 
-        mc().getProfiler().push("upload");
+        profiler.push("upload");
         buffers.endBatch(ForgeRenderTypes.TRANSLUCENT_ON_PARTICLES_TARGET.get());
-        mc().getProfiler().pop(); //upload
+        profiler.pop(); //upload
     }
 
     private static void doRenderGhostBlockInLayer(
-            PoseStack mstack, VertexConsumer builder, BlockPos renderPos, BlockState renderState, RenderType layer, Vec3 offset, ModelData modelData
+            PoseStack poseStack,
+            VertexConsumer builder,
+            BlockPos renderPos,
+            BlockState renderState,
+            RenderType layer,
+            Vec3 offset,
+            ModelData modelData
     )
     {
-        mstack.pushPose();
-        mstack.translate(offset.x, offset.y, offset.z);
+        poseStack.pushPose();
+        poseStack.translate(offset.x, offset.y, offset.z);
 
         mc().getBlockRenderer().renderBatched(
                 renderState,
                 renderPos,
                 mc().level,
-                mstack,
+                poseStack,
                 builder,
                 false,
                 RANDOM,
@@ -189,7 +214,7 @@ public final class GhostBlockRenderer
                 layer
         );
 
-        mstack.popPose();
+        poseStack.popPose();
     }
 
 
@@ -200,7 +225,7 @@ public final class GhostBlockRenderer
 
         Preconditions.checkNotNull(behaviour, "GhostRenderBehaviour must be non-null");
         Preconditions.checkNotNull(blocks, "Blocks array must be non-null to register a GhostRenderBehaviour");
-        Preconditions.checkState(blocks.length > 0, "At least one block must be provided to register a GhostRenderBehaviour");
+        Preconditions.checkArgument(blocks.length > 0, "At least one block must be provided to register a GhostRenderBehaviour");
 
         for (Block block : blocks)
         {
@@ -216,7 +241,7 @@ public final class GhostBlockRenderer
 
         Preconditions.checkNotNull(behaviour, "GhostRenderBehaviour must be non-null");
         Preconditions.checkNotNull(items, "Items array must be non-null to register a GhostRenderBehaviour");
-        Preconditions.checkState(items.length > 0, "At least one item must be provided to register a GhostRenderBehaviour");
+        Preconditions.checkArgument(items.length > 0, "At least one item must be provided to register a GhostRenderBehaviour");
 
         for (Item item : items)
         {
@@ -229,9 +254,15 @@ public final class GhostBlockRenderer
         return RENDER_BEHAVIOURS.getOrDefault(item, DEFAULT_BEHAVIOUR);
     }
 
-    public static void lockRegistration() { locked = true; }
+    public static void lockRegistration()
+    {
+        locked = true;
+    }
 
-    private static Minecraft mc() { return Minecraft.getInstance(); }
+    private static Minecraft mc()
+    {
+        return Minecraft.getInstance();
+    }
 
 
 

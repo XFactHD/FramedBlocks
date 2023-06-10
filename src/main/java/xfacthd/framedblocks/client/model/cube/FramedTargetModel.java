@@ -40,12 +40,22 @@ public class FramedTargetModel extends FramedBlockModel
     }
 
     @Override
-    protected void getAdditionalQuads(List<BakedQuad> quads, Direction side, BlockState state, RandomSource rand, ModelData data, RenderType renderType)
+    protected void getAdditionalQuads(
+            List<BakedQuad> quads,
+            Direction side,
+            BlockState state,
+            RandomSource rand,
+            ModelData data,
+            RenderType renderType
+    )
     {
         quads.addAll(overlayModel.getQuads(state, side, rand, data, renderType));
     }
 
 
 
-    public static BlockState itemSource() { return FBContent.blockFramedTarget.get().defaultBlockState(); }
+    public static BlockState itemSource()
+    {
+        return FBContent.BLOCK_FRAMED_TARGET.get().defaultBlockState();
+    }
 }

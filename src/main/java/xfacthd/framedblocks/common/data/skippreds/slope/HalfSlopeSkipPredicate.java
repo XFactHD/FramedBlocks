@@ -199,7 +199,10 @@ public final class HalfSlopeSkipPredicate implements SideSkipPredicate
     )
     {
         SlopeType adjType = adjState.getValue(PropertyHolder.SLOPE_TYPE);
-        if (adjType == SlopeType.HORIZONTAL) { return false; }
+        if (adjType == SlopeType.HORIZONTAL)
+        {
+            return false;
+        }
 
         Tuple<BlockState, BlockState> states = AbstractFramedDoubleBlock.getStatePair(adjState);
         return testAgainstHalfSlope(level, pos, state, dir, top, right, states.getA(), side) ||

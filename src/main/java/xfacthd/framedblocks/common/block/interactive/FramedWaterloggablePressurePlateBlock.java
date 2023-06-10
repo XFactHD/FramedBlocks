@@ -37,7 +37,14 @@ public class FramedWaterloggablePressurePlateBlock extends FramedPressurePlateBl
     }
 
     @Override
-    public BlockState updateShape(BlockState state, Direction facing, BlockState facingState, LevelAccessor level, BlockPos pos, BlockPos facingPos)
+    public BlockState updateShape(
+            BlockState state,
+            Direction facing,
+            BlockState facingState,
+            LevelAccessor level,
+            BlockPos pos,
+            BlockPos facingPos
+    )
     {
         BlockState newState = super.updateShape(state, facing, facingState, level, pos, facingPos);
         if (!newState.isAir() && state.getValue(BlockStateProperties.WATERLOGGED))

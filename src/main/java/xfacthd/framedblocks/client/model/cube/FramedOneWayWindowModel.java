@@ -45,7 +45,13 @@ public class FramedOneWayWindowModel extends FramedBlockModel
     }
 
     @Override
-    protected void getAdditionalQuads(Map<Direction, List<BakedQuad>> quadMap, BlockState state, RandomSource rand, ModelData data, RenderType renderType)
+    protected void getAdditionalQuads(
+            Map<Direction, List<BakedQuad>> quadMap,
+            BlockState state,
+            RandomSource rand,
+            ModelData data,
+            RenderType renderType
+    )
     {
         if (face != NullableDirection.NONE && renderType == RenderType.translucent())
         {
@@ -61,7 +67,10 @@ public class FramedOneWayWindowModel extends FramedBlockModel
     }
 
     @Override
-    protected boolean useBaseModel() { return true; }
+    protected boolean useBaseModel()
+    {
+        return true;
+    }
 
 
 

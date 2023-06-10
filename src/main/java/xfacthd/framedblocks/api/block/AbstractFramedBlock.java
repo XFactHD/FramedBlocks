@@ -67,7 +67,9 @@ public abstract class AbstractFramedBlock extends Block implements IFramedBlock,
     }
 
     @Override
-    public InteractionResult use(BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hit)
+    public InteractionResult use(
+            BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hit
+    )
     {
         return handleUse(state, level, pos, player, hand, hit);
     }
@@ -79,7 +81,14 @@ public abstract class AbstractFramedBlock extends Block implements IFramedBlock,
     }
 
     @Override
-    public BlockState updateShape(BlockState state, Direction facing, BlockState facingState, LevelAccessor level, BlockPos pos, BlockPos facingPos)
+    public BlockState updateShape(
+            BlockState state,
+            Direction facing,
+            BlockState facingState,
+            LevelAccessor level,
+            BlockPos pos,
+            BlockPos facingPos
+    )
     {
         updateCulling(level, pos);
         if (isWaterLoggable() && state.getValue(BlockStateProperties.WATERLOGGED))
@@ -91,7 +100,9 @@ public abstract class AbstractFramedBlock extends Block implements IFramedBlock,
     }
 
     @Override
-    public void neighborChanged(BlockState state, Level level, BlockPos pos, Block block, BlockPos fromPos, boolean isMoving)
+    public void neighborChanged(
+            BlockState state, Level level, BlockPos pos, Block block, BlockPos fromPos, boolean isMoving
+    )
     {
         updateCulling(level, pos);
     }
@@ -107,7 +118,10 @@ public abstract class AbstractFramedBlock extends Block implements IFramedBlock,
     }
 
     @Override
-    public boolean useShapeForLightOcclusion(BlockState state) { return useCamoOcclusionShapeForLightOcclusion(state); }
+    public boolean useShapeForLightOcclusion(BlockState state)
+    {
+        return useCamoOcclusionShapeForLightOcclusion(state);
+    }
 
     @Override
     public VoxelShape getOcclusionShape(BlockState state, BlockGetter level, BlockPos pos)
@@ -140,21 +154,22 @@ public abstract class AbstractFramedBlock extends Block implements IFramedBlock,
     @Override
     public boolean canPlaceLiquid(BlockGetter level, BlockPos pos, BlockState state, Fluid fluid)
     {
-        if (!isWaterLoggable()) { return false; }
-        return SimpleWaterloggedBlock.super.canPlaceLiquid(level, pos, state, fluid);
+        return isWaterLoggable() && SimpleWaterloggedBlock.super.canPlaceLiquid(level, pos, state, fluid);
     }
 
     @Override
     public boolean placeLiquid(LevelAccessor pLevel, BlockPos pPos, BlockState pState, FluidState pFluidState)
     {
-        if (!isWaterLoggable()) { return false; }
-        return SimpleWaterloggedBlock.super.placeLiquid(pLevel, pPos, pState, pFluidState);
+        return isWaterLoggable() && SimpleWaterloggedBlock.super.placeLiquid(pLevel, pPos, pState, pFluidState);
     }
 
     @Override
     public ItemStack pickupBlock(LevelAccessor level, BlockPos pos, BlockState state)
     {
-        if (!isWaterLoggable()) { return ItemStack.EMPTY; }
+        if (!isWaterLoggable())
+        {
+            return ItemStack.EMPTY;
+        }
         return SimpleWaterloggedBlock.super.pickupBlock(level, pos, state);
     }
 
@@ -186,9 +201,15 @@ public abstract class AbstractFramedBlock extends Block implements IFramedBlock,
     }
 
     @Override
-    public IBlockType getBlockType() { return blockType; }
+    public IBlockType getBlockType()
+    {
+        return blockType;
+    }
 
-    protected final boolean isWaterLoggable() { return blockType.supportsWaterLogging(); }
+    protected final boolean isWaterLoggable()
+    {
+        return blockType.supportsWaterLogging();
+    }
 
     @Override
     public void initializeClient(Consumer<IClientBlockExtensions> consumer)

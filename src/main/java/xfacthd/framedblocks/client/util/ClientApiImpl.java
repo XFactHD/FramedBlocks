@@ -26,10 +26,16 @@ public final class ClientApiImpl implements FramedBlocksClientAPI
     };
 
     @Override
-    public BlockColor defaultBlockColor() { return FramedBlockColor.INSTANCE; }
+    public BlockColor defaultBlockColor()
+    {
+        return FramedBlockColor.INSTANCE;
+    }
 
     @Override
-    public BakedModel createFluidModel(Fluid fluid) { return FluidModel.create(fluid); }
+    public BakedModel createFluidModel(Fluid fluid)
+    {
+        return FluidModel.create(fluid);
+    }
 
     @Override
     public void registerOutlineRender(IBlockType type, OutlineRenderer render)
@@ -50,10 +56,16 @@ public final class ClientApiImpl implements FramedBlocksClientAPI
     }
 
     @Override
-    public boolean useDiscreteUVSteps() { return ClientConfig.useDiscreteUVSteps; }
+    public boolean useDiscreteUVSteps()
+    {
+        return ClientConfig.useDiscreteUVSteps;
+    }
 
     @Override
-    public ConTexMode getConTexMode() { return ClientConfig.conTexMode; }
+    public ConTexMode getConTexMode()
+    {
+        return ClientConfig.conTexMode;
+    }
 
     @Override
     public Object extractCTContext(ModelData data)

@@ -12,7 +12,6 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.Property;
 import net.minecraft.world.level.material.Fluid;
 import net.minecraft.world.level.material.MapColor;
-import net.minecraftforge.registries.ForgeRegistry;
 import org.slf4j.Logger;
 import xfacthd.framedblocks.api.FramedBlocksAPI;
 import xfacthd.framedblocks.api.util.Utils;
@@ -23,12 +22,18 @@ public abstract class CamoContainer
 
     protected BlockState state;
 
-    protected CamoContainer(BlockState state) { this.state = state; }
+    protected CamoContainer(BlockState state)
+    {
+        this.state = state;
+    }
 
     /**
      * Returns the {@link BlockState} used as the data source in the model
      */
-    public BlockState getState() { return state; }
+    public BlockState getState()
+    {
+        return state;
+    }
 
     /**
      * Returns the fluid contained in this camo container, if applicable
@@ -45,7 +50,10 @@ public abstract class CamoContainer
      * @param pos The position of the framed block
      * @return The map color
      */
-    public MapColor getMapColor(BlockGetter level, BlockPos pos) { return state.getMapColor(level, pos); }
+    public MapColor getMapColor(BlockGetter level, BlockPos pos)
+    {
+        return state.getMapColor(level, pos);
+    }
 
     /**
      * Returns the color multipliers to apply to a beacon beam
@@ -98,17 +106,26 @@ public abstract class CamoContainer
     /**
      * Returns the {@link SoundType} to use for the camo this container holds
      */
-    public SoundType getSoundType() { return state.getSoundType(); }
+    public SoundType getSoundType()
+    {
+        return state.getSoundType();
+    }
 
     /**
      * @return True if the camo is fully solid
      */
-    public boolean isSolid(BlockGetter level, BlockPos pos) { return getState().isSolidRender(level, pos); }
+    public boolean isSolid(BlockGetter level, BlockPos pos)
+    {
+        return getState().isSolidRender(level, pos);
+    }
 
     /**
      * Returns true if this container is empty
      */
-    public boolean isEmpty() { return false; }
+    public boolean isEmpty()
+    {
+        return false;
+    }
 
     /**
      * Returns the type of camo this container holds
@@ -150,7 +167,10 @@ public abstract class CamoContainer
 
     public static CamoContainer load(CompoundTag tag)
     {
-        if (tag.isEmpty()) { return EmptyCamoContainer.EMPTY; }
+        if (tag.isEmpty())
+        {
+            return EmptyCamoContainer.EMPTY;
+        }
 
         ResourceLocation id = ResourceLocation.tryParse(tag.getString("type"));
         Factory factory = FramedBlocksAPI.getInstance().getCamoContainerFactoryRegistry().getValue(id);
@@ -164,10 +184,13 @@ public abstract class CamoContainer
 
     public static CamoContainer readFromNetwork(CompoundTag tag)
     {
-        if (tag.isEmpty()) { return EmptyCamoContainer.EMPTY; }
+        if (tag.isEmpty())
+        {
+            return EmptyCamoContainer.EMPTY;
+        }
 
         int id = tag.getInt("type");
-        Factory factory = ((ForgeRegistry<Factory>) FramedBlocksAPI.getInstance().getCamoContainerFactoryRegistry()).getValue(id);
+        Factory factory = Utils.getValue(FramedBlocksAPI.getInstance().getCamoContainerFactoryRegistry(), id);
         if (factory == null)
         {
             LOGGER.error("Unknown ICamoContainer with ID {}, dropping!", id);
@@ -197,7 +220,7 @@ public abstract class CamoContainer
         {
             if (syncId == -1)
             {
-                syncId = ((ForgeRegistry<Factory>) FramedBlocksAPI.getInstance().getCamoContainerFactoryRegistry()).getID(this);
+                syncId = Utils.getId(FramedBlocksAPI.getInstance().getCamoContainerFactoryRegistry(), this);
                 Preconditions.checkState(syncId != -1, "Attempted to get sync ID for unregistered CamoContainer.Factory");
             }
             return syncId;

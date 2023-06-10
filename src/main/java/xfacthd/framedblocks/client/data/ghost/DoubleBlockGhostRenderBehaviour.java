@@ -2,6 +2,7 @@ package xfacthd.framedblocks.client.data.ghost;
 
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.item.ItemStack;
+import org.jetbrains.annotations.Nullable;
 import xfacthd.framedblocks.api.camo.CamoContainer;
 import xfacthd.framedblocks.api.ghost.CamoPair;
 import xfacthd.framedblocks.api.ghost.GhostRenderBehaviour;
@@ -9,7 +10,7 @@ import xfacthd.framedblocks.api.ghost.GhostRenderBehaviour;
 public sealed class DoubleBlockGhostRenderBehaviour implements GhostRenderBehaviour permits DoublePanelGhostRenderBehaviour
 {
     @Override
-    public CamoPair readCamo(ItemStack stack, ItemStack proxiedStack, boolean secondPass)
+    public CamoPair readCamo(ItemStack stack, @Nullable ItemStack proxiedStack, boolean secondPass)
     {
         //noinspection ConstantConditions
         if (stack.hasTag() && stack.getTag().contains("BlockEntityTag"))

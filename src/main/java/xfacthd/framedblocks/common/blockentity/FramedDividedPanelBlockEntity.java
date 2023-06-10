@@ -18,8 +18,8 @@ public class FramedDividedPanelBlockEntity extends FramedDoubleBlockEntity
 
     public FramedDividedPanelBlockEntity(BlockPos pos, BlockState state)
     {
-        super(FBContent.blockEntityTypeFramedDividedPanel.get(), pos, state);
-        this.vertical = state.getBlock() == FBContent.blockFramedDividedPanelVert.get();
+        super(FBContent.BE_TYPE_FRAMED_DIVIDED_PANEL.get(), pos, state);
+        this.vertical = state.getBlock() == FBContent.BLOCK_FRAMED_DIVIDED_PANEL_VERT.get();
     }
 
     @Override
@@ -29,8 +29,14 @@ public class FramedDividedPanelBlockEntity extends FramedDoubleBlockEntity
         if (vertical)
         {
             Direction dir = getBlockState().getValue(FramedProperties.FACING_HOR);
-            if (face == dir.getClockWise()) { return true; }
-            if (face == dir.getCounterClockWise()) { return false; }
+            if (face == dir.getClockWise())
+            {
+                return true;
+            }
+            if (face == dir.getCounterClockWise())
+            {
+                return false;
+            }
 
             double xz = Utils.fractionInDir(hit.getLocation(), dir.getClockWise());
             return xz > .5D;

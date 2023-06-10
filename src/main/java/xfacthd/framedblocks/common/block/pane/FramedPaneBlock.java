@@ -47,7 +47,9 @@ public class FramedPaneBlock extends IronBarsBlock implements IFramedBlock
     }
 
     @Override
-    public final InteractionResult use(BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hit)
+    public final InteractionResult use(
+            BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hit
+    )
     {
         return handleUse(state, level, pos, player, hand, hit);
     }
@@ -59,7 +61,14 @@ public class FramedPaneBlock extends IronBarsBlock implements IFramedBlock
     }
 
     @Override
-    public BlockState updateShape(BlockState state, Direction facing, BlockState facingState, LevelAccessor level, BlockPos currentPos, BlockPos facingPos)
+    public BlockState updateShape(
+            BlockState state,
+            Direction facing,
+            BlockState facingState,
+            LevelAccessor level,
+            BlockPos currentPos,
+            BlockPos facingPos
+    )
     {
         BlockState newState = updateShapeLockable(
                 state, level, currentPos,
@@ -74,7 +83,9 @@ public class FramedPaneBlock extends IronBarsBlock implements IFramedBlock
     }
 
     @Override
-    public void neighborChanged(BlockState state, Level level, BlockPos pos, Block block, BlockPos fromPos, boolean isMoving)
+    public void neighborChanged(
+            BlockState state, Level level, BlockPos pos, Block block, BlockPos fromPos, boolean isMoving
+    )
     {
         updateCulling(level, pos);
     }
@@ -88,14 +99,20 @@ public class FramedPaneBlock extends IronBarsBlock implements IFramedBlock
     @Override
     public VoxelShape getShape(BlockState state, BlockGetter level, BlockPos pos, CollisionContext ctx)
     {
-        if (isIntangible(state, level, pos, ctx)) { return Shapes.empty(); }
+        if (isIntangible(state, level, pos, ctx))
+        {
+            return Shapes.empty();
+        }
         return super.getShape(state, level, pos, ctx);
     }
 
     @Override
     public VoxelShape getCollisionShape(BlockState state, BlockGetter level, BlockPos pos, CollisionContext ctx)
     {
-        if (isIntangible(state, level, pos, null)) { return Shapes.empty(); }
+        if (isIntangible(state, level, pos, null))
+        {
+            return Shapes.empty();
+        }
         return super.getCollisionShape(state, level, pos, ctx);
     }
 
@@ -108,7 +125,7 @@ public class FramedPaneBlock extends IronBarsBlock implements IFramedBlock
     @Override //The pane handles this through the SideSkipPredicate instead
     public boolean skipRendering(BlockState state, BlockState adjacentState, Direction side)
     {
-        return this == FBContent.blockFramedBars.get() && super.skipRendering(state, adjacentState, side);
+        return this == FBContent.BLOCK_FRAMED_BARS.get() && super.skipRendering(state, adjacentState, side);
     }
 
     @Override
@@ -118,5 +135,8 @@ public class FramedPaneBlock extends IronBarsBlock implements IFramedBlock
     }
 
     @Override
-    public BlockType getBlockType() { return type; }
+    public BlockType getBlockType()
+    {
+        return type;
+    }
 }

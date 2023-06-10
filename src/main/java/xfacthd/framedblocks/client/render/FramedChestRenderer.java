@@ -40,12 +40,22 @@ public class FramedChestRenderer implements BlockEntityRenderer<FramedChestBlock
     public FramedChestRenderer(BlockEntityRendererProvider.Context ctx) { }
 
     @Override
-    public void render(FramedChestBlockEntity be, float partialTicks, PoseStack matrix, MultiBufferSource buffer, int light, int overlay)
+    public void render(
+            FramedChestBlockEntity be,
+            float partialTicks,
+            PoseStack poseStack,
+            MultiBufferSource buffer,
+            int light,
+            int overlay
+    )
     {
         BlockState state = be.getBlockState();
 
         ChestState chestState = state.getValue(PropertyHolder.CHEST_STATE);
-        if (chestState == ChestState.CLOSED) { return; }
+        if (chestState == ChestState.CLOSED)
+        {
+            return;
+        }
 
         Direction dir = state.getValue(FramedProperties.FACING_HOR);
         long lastChange = be.getLastChangeTime(chestState);
@@ -59,18 +69,25 @@ public class FramedChestRenderer implements BlockEntityRenderer<FramedChestBlock
         float xOff = Utils.isX(dir) ? (Utils.isPositive(dir) ? 1F/16F : 15F/16F) : 0;
         float zOff = Utils.isZ(dir) ? (Utils.isPositive(dir) ? 1F/16F : 15F/16F) : 0;
 
-        matrix.pushPose();
+        poseStack.pushPose();
 
-        matrix.translate(xOff, 9F/16F, zOff);
-        matrix.mulPose(Utils.isX(dir) ? Axis.ZP.rotationDegrees(angle) : Axis.XN.rotationDegrees(angle));
-        matrix.translate(-xOff, -9F/16F, -zOff);
+        poseStack.translate(xOff, 9F/16F, zOff);
+        poseStack.mulPose(Utils.isX(dir) ? Axis.ZP.rotationDegrees(angle) : Axis.XN.rotationDegrees(angle));
+        poseStack.translate(-xOff, -9F/16F, -zOff);
 
-        renderLidModel(be, state, matrix, buffer, model, data);
+        renderLidModel(be, state, poseStack, buffer, model, data);
 
-        matrix.popPose();
+        poseStack.popPose();
     }
 
-    private static void renderLidModel(FramedChestBlockEntity be, BlockState state, PoseStack matrix, MultiBufferSource buffer, BakedModel model, ModelData data)
+    private static void renderLidModel(
+            FramedChestBlockEntity be,
+            BlockState state,
+            PoseStack matrix,
+            MultiBufferSource buffer,
+            BakedModel model,
+            ModelData data
+    )
     {
         ModelBlockRenderer renderer = Minecraft.getInstance().getBlockRenderer().getModelRenderer();
         //noinspection ConstantConditions
@@ -101,7 +118,9 @@ public class FramedChestRenderer implements BlockEntityRenderer<FramedChestBlock
         }
     }
 
-    private static float calculateAngle(FramedChestBlockEntity be, ChestState chestState, Direction dir, long lastChange, float partialTicks)
+    private static float calculateAngle(
+            FramedChestBlockEntity be, ChestState chestState, Direction dir, long lastChange, float partialTicks
+    )
     {
         //noinspection ConstantConditions
         float diff = (float) (be.getLevel().getGameTime() - lastChange) + partialTicks;
@@ -132,7 +151,7 @@ public class FramedChestRenderer implements BlockEntityRenderer<FramedChestBlock
         {
             for (LatchType latch : LatchType.values())
             {
-                BlockState state = FBContent.blockFramedChest.get().defaultBlockState()
+                BlockState state = FBContent.BLOCK_FRAMED_CHEST.get().defaultBlockState()
                         .setValue(FramedProperties.FACING_HOR, dir)
                         .setValue(PropertyHolder.LATCH_TYPE, latch);
 

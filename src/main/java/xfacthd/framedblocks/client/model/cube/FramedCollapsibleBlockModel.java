@@ -104,7 +104,10 @@ public class FramedCollapsibleBlockModel extends FramedBlockModel
     protected void transformQuad(Map<Direction, List<BakedQuad>> quadMap, BakedQuad quad) { }
 
     @Override
-    protected boolean useBaseModel() { return true; }
+    protected boolean useBaseModel()
+    {
+        return true;
+    }
 
     @Override
     protected QuadCacheKey makeCacheKey(BlockState state, Object ctCtx, ModelData data)

@@ -88,7 +88,7 @@ public class FramedVerticalDoubleHalfSlopeBlock extends AbstractFramedDoubleBloc
         Direction facing = state.getValue(FramedProperties.FACING_HOR);
         boolean top = state.getValue(FramedProperties.TOP);
 
-        BlockState defState = FBContent.blockFramedVerticalHalfSlope.get().defaultBlockState();
+        BlockState defState = FBContent.BLOCK_FRAMED_VERTICAL_HALF_SLOPE.get().defaultBlockState();
         return new Tuple<>(
                 defState.setValue(FramedProperties.FACING_HOR, facing)
                         .setValue(FramedProperties.TOP, top),

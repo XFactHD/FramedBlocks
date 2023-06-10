@@ -32,10 +32,15 @@ public class FramedStorageBlock extends FramedBlock
     }
 
     @Override
-    public InteractionResult use(BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hit)
+    public InteractionResult use(
+            BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hit
+    )
     {
         InteractionResult result = super.use(state, level, pos, player, hand, hit);
-        if (result != InteractionResult.PASS) { return result; }
+        if (result != InteractionResult.PASS)
+        {
+            return result;
+        }
 
         if (!level.isClientSide())
         {
@@ -74,7 +79,10 @@ public class FramedStorageBlock extends FramedBlock
 
     @Override
     @SuppressWarnings("deprecation")
-    public boolean hasAnalogOutputSignal(BlockState state) { return true; }
+    public boolean hasAnalogOutputSignal(BlockState state)
+    {
+        return true;
+    }
 
     @Override
     @SuppressWarnings("deprecation")

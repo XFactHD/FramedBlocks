@@ -16,7 +16,7 @@ public class FramedElevatedDoubleSlopeSlabBlockEntity extends FramedDoubleBlockE
 {
     public FramedElevatedDoubleSlopeSlabBlockEntity(BlockPos pos, BlockState state)
     {
-        super(FBContent.blockEntityTypeFramedElevatedDoubleSlopeSlab.get(), pos, state);
+        super(FBContent.BE_TYPE_FRAMED_ELEVATED_DOUBLE_SLOPE_SLAB.get(), pos, state);
     }
 
     @Override
@@ -26,8 +26,14 @@ public class FramedElevatedDoubleSlopeSlabBlockEntity extends FramedDoubleBlockE
         boolean top = getBlockState().getValue(FramedProperties.TOP);
         Direction side = hit.getDirection();
 
-        if (side == Direction.UP) { return !top; }
-        if (side == Direction.DOWN || side == facing) { return top; }
+        if (side == Direction.UP)
+        {
+            return !top;
+        }
+        if (side == Direction.DOWN || side == facing)
+        {
+            return top;
+        }
 
         Vec3 vec = Utils.fraction(hit.getLocation());
         if (side == facing.getOpposite())
@@ -51,7 +57,10 @@ public class FramedElevatedDoubleSlopeSlabBlockEntity extends FramedDoubleBlockE
     }
 
     @Override
-    public DoubleSoundMode getSoundMode() { return DoubleSoundMode.SECOND; }
+    public DoubleSoundMode getSoundMode()
+    {
+        return DoubleSoundMode.SECOND;
+    }
 
     @Override
     public CamoContainer getCamo(Direction side)
@@ -80,13 +89,11 @@ public class FramedElevatedDoubleSlopeSlabBlockEntity extends FramedDoubleBlockE
     {
         if (side == Direction.UP)
         {
-            //noinspection ConstantConditions
-            return getCamoTwo().getState().isSolidRender(level, worldPosition);
+            return getCamoTwo().isSolid(level, worldPosition);
         }
         else if (side == Direction.DOWN)
         {
-            //noinspection ConstantConditions
-            return getCamo().getState().isSolidRender(level, worldPosition);
+            return getCamo().isSolid(level, worldPosition);
         }
 
         Direction facing = getBlockState().getValue(FramedProperties.FACING_HOR);
@@ -94,8 +101,7 @@ public class FramedElevatedDoubleSlopeSlabBlockEntity extends FramedDoubleBlockE
         {
             boolean top = getBlockState().getValue(FramedProperties.TOP);
             CamoContainer camo = top ? getCamoTwo() : getCamo();
-            //noinspection ConstantConditions
-            return camo.getState().isSolidRender(level, worldPosition);
+            return camo.isSolid(level, worldPosition);
         }
         return false;
     }

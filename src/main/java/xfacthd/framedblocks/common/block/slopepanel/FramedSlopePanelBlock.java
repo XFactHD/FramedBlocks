@@ -58,7 +58,10 @@ public class FramedSlopePanelBlock extends FramedBlock
     }
 
     @Override
-    public BlockState getStateForPlacement(BlockPlaceContext context) { return getStateForPlacement(this, context); }
+    public BlockState getStateForPlacement(BlockPlaceContext context)
+    {
+        return getStateForPlacement(this, context);
+    }
 
     public static BlockState getStateForPlacement(Block block, BlockPlaceContext context)
     {

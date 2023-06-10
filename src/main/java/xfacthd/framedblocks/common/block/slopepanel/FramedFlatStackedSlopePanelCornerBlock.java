@@ -35,7 +35,10 @@ public class FramedFlatStackedSlopePanelCornerBlock extends AbstractFramedDouble
     protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder)
     {
         super.createBlockStateDefinition(builder);
-        builder.add(FramedProperties.FACING_HOR, PropertyHolder.ROTATION, BlockStateProperties.WATERLOGGED, FramedProperties.Y_SLOPE);
+        builder.add(
+                FramedProperties.FACING_HOR, PropertyHolder.ROTATION,
+                BlockStateProperties.WATERLOGGED, FramedProperties.Y_SLOPE
+        );
     }
 
     @Override
@@ -114,7 +117,10 @@ public class FramedFlatStackedSlopePanelCornerBlock extends AbstractFramedDouble
 
     @Override
     @SuppressWarnings("deprecation")
-    public BlockState rotate(BlockState state, Rotation rot) { return rotate(state, Direction.UP, rot); }
+    public BlockState rotate(BlockState state, Rotation rot)
+    {
+        return rotate(state, Direction.UP, rot);
+    }
 
     @Override
     @SuppressWarnings("deprecation")
@@ -139,15 +145,15 @@ public class FramedFlatStackedSlopePanelCornerBlock extends AbstractFramedDouble
         Block topBlock;
         if (getBlockType() == BlockType.FRAMED_FLAT_STACKED_INNER_SLOPE_PANEL_CORNER)
         {
-            topBlock = FBContent.blockFramedFlatInnerSlopePanelCorner.get();
+            topBlock = FBContent.BLOCK_FRAMED_FLAT_INNER_SLOPE_PANEL_CORNER.get();
         }
         else
         {
-            topBlock = FBContent.blockFramedFlatSlopePanelCorner.get();
+            topBlock = FBContent.BLOCK_FRAMED_FLAT_SLOPE_PANEL_CORNER.get();
         }
 
         return new Tuple<>(
-                FBContent.blockFramedPanel.get()
+                FBContent.BLOCK_FRAMED_PANEL.get()
                         .defaultBlockState()
                         .setValue(FramedProperties.FACING_HOR, facing),
                 topBlock.defaultBlockState()
@@ -162,14 +168,14 @@ public class FramedFlatStackedSlopePanelCornerBlock extends AbstractFramedDouble
 
     public static BlockState itemModelSource()
     {
-        return FBContent.blockFramedFlatStackedSlopePanelCorner.get()
+        return FBContent.BLOCK_FRAMED_FLAT_STACKED_SLOPE_PANEL_CORNER.get()
                 .defaultBlockState()
                 .setValue(FramedProperties.FACING_HOR, Direction.SOUTH);
     }
 
     public static BlockState itemModelSourceInner()
     {
-        return FBContent.blockFramedFlatStackedInnerSlopePanelCorner.get()
+        return FBContent.BLOCK_FRAMED_FLAT_STACKED_INNER_SLOPE_PANEL_CORNER.get()
                 .defaultBlockState()
                 .setValue(FramedProperties.FACING_HOR, Direction.SOUTH);
     }

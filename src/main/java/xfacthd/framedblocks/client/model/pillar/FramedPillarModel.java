@@ -42,7 +42,9 @@ public class FramedPillarModel extends FramedBlockModel
                 .export(quadMap.get(quadDir.getAxis() == axis ? quadDir : null));
     }
 
-    public static QuadModifier createPillarQuad(BakedQuad quad, Direction.Axis axis, float capStart, float capEnd, float sideCut)
+    public static QuadModifier createPillarQuad(
+            BakedQuad quad, Direction.Axis axis, float capStart, float capEnd, float sideCut
+    )
     {
         Direction quadDir = quad.getDirection();
         if (quadDir.getAxis() == axis)

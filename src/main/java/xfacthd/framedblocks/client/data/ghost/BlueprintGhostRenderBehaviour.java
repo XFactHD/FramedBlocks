@@ -30,7 +30,10 @@ public final class BlueprintGhostRenderBehaviour implements GhostRenderBehaviour
             //noinspection ConstantConditions
             if (stack.hasTag() && stack.getTag().contains("blueprint_data"))
             {
-                proxied.getOrCreateTag().put("BlockEntityTag", stack.getTag().getCompound("blueprint_data").getCompound("camo_data"));
+                proxied.getOrCreateTag().put(
+                        "BlockEntityTag",
+                        stack.getTag().getCompound("blueprint_data").getCompound("camo_data")
+                );
             }
             return proxied;
         }
@@ -44,37 +47,70 @@ public final class BlueprintGhostRenderBehaviour implements GhostRenderBehaviour
     }
 
     @Override
-    public boolean hasSecondBlock(ItemStack stack, ItemStack proxiedStack)
+    public boolean hasSecondBlock(ItemStack stack, @Nullable ItemStack proxiedStack)
     {
-        return proxyBehaviour(proxiedStack).hasSecondBlock(proxiedStack, null);
+        return proxiedStack != null && proxyBehaviour(proxiedStack).hasSecondBlock(proxiedStack, null);
     }
 
     @Override
     @Nullable
-    public BlockState getRenderState(ItemStack stack, ItemStack proxiedStack, BlockHitResult hit, BlockPlaceContext ctx, BlockState hitState, boolean secondPass)
+    public BlockState getRenderState(
+            ItemStack stack,
+            @Nullable ItemStack proxiedStack,
+            BlockHitResult hit,
+            BlockPlaceContext ctx,
+            BlockState hitState,
+            boolean secondPass
+    )
     {
-        if (proxiedStack == null) { return null; }
-
+        if (proxiedStack == null)
+        {
+            return null;
+        }
         return proxyBehaviour(proxiedStack).getRenderState(proxiedStack, null, hit, ctx, hitState, secondPass);
     }
 
     @Override
-    public BlockPos getRenderPos(ItemStack stack, ItemStack proxiedStack, BlockHitResult hit, BlockPlaceContext ctx, BlockState hitState, BlockPos defaultPos, boolean secondPass)
+    public BlockPos getRenderPos(
+            ItemStack stack,
+            @Nullable ItemStack proxiedStack,
+            BlockHitResult hit,
+            BlockPlaceContext ctx,
+            BlockState hitState,
+            BlockPos defaultPos,
+            boolean secondPass
+    )
     {
+        if (proxiedStack == null)
+        {
+            return null;
+        }
         return proxyBehaviour(proxiedStack).getRenderPos(proxiedStack, null, hit, ctx, hitState, defaultPos, secondPass);
     }
 
     @Override
-    public boolean canRenderAt(ItemStack stack, ItemStack proxiedStack, BlockHitResult hit, BlockPlaceContext ctx, BlockState hitState, BlockState renderState, BlockPos renderPos)
+    public boolean canRenderAt(
+            ItemStack stack,
+            @Nullable ItemStack proxiedStack,
+            BlockHitResult hit,
+            BlockPlaceContext ctx,
+            BlockState hitState,
+            BlockState renderState,
+            BlockPos renderPos
+    )
     {
+        if (proxiedStack == null)
+        {
+            return false;
+        }
         return proxyBehaviour(proxiedStack).canRenderAt(proxiedStack, null, hit, ctx, hitState, renderState, renderPos);
     }
 
     @Override
-    public CamoPair readCamo(ItemStack stack, ItemStack proxiedStack, boolean secondPass)
+    public CamoPair readCamo(ItemStack stack, @Nullable ItemStack proxiedStack, boolean secondPass)
     {
         //noinspection ConstantConditions
-        if (stack.hasTag() && stack.getTag().contains("blueprint_data"))
+        if (proxiedStack != null && stack.hasTag() && stack.getTag().contains("blueprint_data"))
         {
             CompoundTag tag = stack.getOrCreateTagElement("blueprint_data");
             Set<CamoContainer> camos = FramedBlueprintItem.getCamoContainers((BlockItem) proxiedStack.getItem(), tag);
@@ -92,14 +128,36 @@ public final class BlueprintGhostRenderBehaviour implements GhostRenderBehaviour
     }
 
     @Override
-    public CamoPair postProcessCamo(ItemStack stack, ItemStack proxiedStack, BlockPlaceContext ctx, BlockState renderState, boolean secondPass, CamoPair camo)
+    public CamoPair postProcessCamo(
+            ItemStack stack,
+            @Nullable ItemStack proxiedStack,
+            BlockPlaceContext ctx,
+            BlockState renderState,
+            boolean secondPass,
+            CamoPair camo
+    )
     {
+        if (proxiedStack == null)
+        {
+            return CamoPair.EMPTY;
+        }
         return proxyBehaviour(proxiedStack).postProcessCamo(proxiedStack, null, ctx, renderState, secondPass, camo);
     }
 
     @Override
-    public ModelData appendModelData(ItemStack stack, ItemStack proxiedStack, BlockPlaceContext ctx, BlockState renderState, boolean secondPass, ModelData data)
+    public ModelData appendModelData(
+            ItemStack stack,
+            @Nullable ItemStack proxiedStack,
+            BlockPlaceContext ctx,
+            BlockState renderState,
+            boolean secondPass,
+            ModelData data
+    )
     {
+        if (proxiedStack == null)
+        {
+            return data;
+        }
         return proxyBehaviour(proxiedStack).appendModelData(proxiedStack, null, ctx, renderState, secondPass, data);
     }
 

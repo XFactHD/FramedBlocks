@@ -42,9 +42,14 @@ public class FramedDiagonalFenceModel extends FramedFenceModel
         createDiagonalFenceBars(quadMap, quad, Direction.WEST, northWest);
     }
 
-    private static void createDiagonalFenceBars(Map<Direction, List<BakedQuad>> quadMap, BakedQuad quad, Direction dir, boolean active)
+    private static void createDiagonalFenceBars(
+            Map<Direction, List<BakedQuad>> quadMap, BakedQuad quad, Direction dir, boolean active
+    )
     {
-        if (!active) { return; }
+        if (!active)
+        {
+            return;
+        }
 
         Direction quadDir = quad.getDirection();
 

@@ -34,7 +34,9 @@ public class FramedCollapsibleBlock extends FramedBlock
         return dir == face.toDirection().getOpposite();
     };
 
-    private static final LoadingCache<Integer, VoxelShape> SHAPE_CACHE = CacheBuilder.newBuilder().maximumSize(1024).build(new ShapeLoader());
+    private static final LoadingCache<Integer, VoxelShape> SHAPE_CACHE = CacheBuilder.newBuilder()
+            .maximumSize(1024)
+            .build(new ShapeLoader());
 
     public FramedCollapsibleBlock(BlockType blockType)
     {
@@ -69,7 +71,7 @@ public class FramedCollapsibleBlock extends FramedBlock
             level.setBlockAndUpdate(pos, state.setValue(PropertyHolder.ROTATE_SPLIT_LINE, !rotSplitLine));
             return true;
         }
-        else if (heldItem.getItem() == FBContent.itemFramedHammer.get())
+        else if (heldItem.getItem() == FBContent.ITEM_FRAMED_HAMMER.get())
         {
             if (level.getBlockEntity(pos) instanceof FramedCollapsibleBlockEntity be)
             {
@@ -86,7 +88,10 @@ public class FramedCollapsibleBlock extends FramedBlock
     @Override
     public VoxelShape getShape(BlockState state, BlockGetter level, BlockPos pos, CollisionContext ctx)
     {
-        if (isIntangible(state, level, pos, ctx)) { return Shapes.empty(); }
+        if (isIntangible(state, level, pos, ctx))
+        {
+            return Shapes.empty();
+        }
 
         NullableDirection face = state.getValue(PropertyHolder.NULLABLE_FACE);
         if (face != NullableDirection.NONE)
@@ -167,14 +172,14 @@ public class FramedCollapsibleBlock extends FramedBlock
                             Math.min(Math.min(y0, y1), 16D - (Mth.EPSILON * 2D));
 
                     VoxelShape shape = switch (face)
-                            {
-                                case NORTH -> box(x * 4, z * 4, y, (x + 1) * 4, (z + 1) * 4, 16);
-                                case EAST -> box(0, z * 4, x * 4, y, (z + 1) * 4, (x + 1) * 4);
-                                case SOUTH -> box(x * 4, z * 4, 0, (x + 1) * 4, (z + 1) * 4, y);
-                                case WEST -> box(y, z * 4, x * 4, 16, (z + 1) * 4, (x + 1) * 4);
-                                case UP -> box(x * 4, 0, z * 4, (x + 1) * 4, y, (z + 1) * 4);
-                                case DOWN -> box(x * 4, y, z * 4, (x + 1) * 4, 16, (z + 1) * 4);
-                            };
+                    {
+                        case NORTH -> box(x * 4, z * 4, y, (x + 1) * 4, (z + 1) * 4, 16);
+                        case EAST -> box(0, z * 4, x * 4, y, (z + 1) * 4, (x + 1) * 4);
+                        case SOUTH -> box(x * 4, z * 4, 0, (x + 1) * 4, (z + 1) * 4, y);
+                        case WEST -> box(y, z * 4, x * 4, 16, (z + 1) * 4, (x + 1) * 4);
+                        case UP -> box(x * 4, 0, z * 4, (x + 1) * 4, y, (z + 1) * 4);
+                        case DOWN -> box(x * 4, y, z * 4, (x + 1) * 4, 16, (z + 1) * 4);
+                    };
 
                     result = Shapes.join(result, shape, BooleanOp.OR);
                 }

@@ -34,7 +34,10 @@ public class FramedLadderBlock extends FramedBlock
             )
     );
 
-    public FramedLadderBlock() { super(BlockType.FRAMED_LADDER); }
+    public FramedLadderBlock()
+    {
+        super(BlockType.FRAMED_LADDER);
+    }
 
     @Override
     protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder)
@@ -64,10 +67,16 @@ public class FramedLadderBlock extends FramedBlock
     }
 
     @Override
-    public boolean doesBlockOccludeBeaconBeam(BlockState state, LevelReader level, BlockPos pos) { return false; }
+    public boolean doesBlockOccludeBeaconBeam(BlockState state, LevelReader level, BlockPos pos)
+    {
+        return false;
+    }
 
     @Override
-    public boolean isLadder(BlockState state, LevelReader level, BlockPos pos, LivingEntity entity) { return true; }
+    public boolean isLadder(BlockState state, LevelReader level, BlockPos pos, LivingEntity entity)
+    {
+        return true;
+    }
 
     @Override
     public boolean makesOpenTrapdoorAboveClimbable(BlockState state, LevelReader level, BlockPos pos, BlockState trapdoorState)

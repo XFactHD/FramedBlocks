@@ -18,13 +18,25 @@ public class FramedToolItem extends Item
     }
 
     @Override
-    public boolean hasCraftingRemainingItem(ItemStack stack) { return true; }
+    public boolean hasCraftingRemainingItem(ItemStack stack)
+    {
+        return true;
+    }
 
     @Override
-    public ItemStack getCraftingRemainingItem(ItemStack stack) { return stack.copy(); }
+    public ItemStack getCraftingRemainingItem(ItemStack stack)
+    {
+        return stack.copy();
+    }
 
     @Override
-    public boolean doesSneakBypassUse(ItemStack stack, LevelReader level, BlockPos pos, Player player) { return true; }
+    public boolean doesSneakBypassUse(ItemStack stack, LevelReader level, BlockPos pos, Player player)
+    {
+        return true;
+    }
 
-    public FramedToolType getType() { return type; }
+    public final FramedToolType getType()
+    {
+        return type;
+    }
 }

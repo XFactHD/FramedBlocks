@@ -27,7 +27,7 @@ public final class CollapsibleBlockSkipPredicate implements SideSkipPredicate
         {
             return SideSkipPredicate.CTM.test(level, pos, state, adjState, side);
         }
-        else if (side == face.toDirection() || !adjState.is(FBContent.blockFramedCollapsibleBlock.get()) || adjState.getValue(PropertyHolder.NULLABLE_FACE) != face)
+        else if (side == face.toDirection() || !adjState.is(FBContent.BLOCK_FRAMED_COLLAPSIBLE_BLOCK.get()) || adjState.getValue(PropertyHolder.NULLABLE_FACE) != face)
         {
             return false;
         }

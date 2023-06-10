@@ -78,7 +78,9 @@ public class FramedWallModel extends FramedBlockModel
         buildCenterPillar(quadMap, quad);
     }
 
-    private void buildWallHalfSegment(Map<Direction, List<BakedQuad>> quadMap, BakedQuad quad, Direction dir, WallSide height)
+    private void buildWallHalfSegment(
+            Map<Direction, List<BakedQuad>> quadMap, BakedQuad quad, Direction dir, WallSide height
+    )
     {
         if (height != WallSide.NONE)
         {
@@ -103,7 +105,9 @@ public class FramedWallModel extends FramedBlockModel
         }
     }
 
-    private static void buildWallEndCap(Map<Direction, List<BakedQuad>> quadMap, BakedQuad quad, Direction dir, WallSide height)
+    private static void buildWallEndCap(
+            Map<Direction, List<BakedQuad>> quadMap, BakedQuad quad, Direction dir, WallSide height
+    )
     {
         if (quad.getDirection() == dir && height != WallSide.NONE)
         {

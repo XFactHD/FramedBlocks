@@ -20,7 +20,10 @@ public final class CollapsibleBlockOutlineRenderer implements OutlineRenderer
     private static final Quaternionf ROTATION = Axis.YN.rotationDegrees(180);
 
     @Override
-    public void rotateMatrix(PoseStack poseStack, BlockState state) { poseStack.mulPose(ROTATION); }
+    public void rotateMatrix(PoseStack poseStack, BlockState state)
+    {
+        poseStack.mulPose(ROTATION);
+    }
 
     @Override
     public void draw(BlockState state, Level level, BlockPos pos, PoseStack poseStack, VertexConsumer builder)
@@ -28,11 +31,16 @@ public final class CollapsibleBlockOutlineRenderer implements OutlineRenderer
         NullableDirection face = state.getValue(PropertyHolder.NULLABLE_FACE);
         if (face == NullableDirection.NONE)
         {
-            Shapes.block().forAllEdges((pMinX, pMinY, pMinZ, pMaxX, pMaxY, pMaxZ) -> OutlineRenderer.drawLine(builder, poseStack, pMinX, pMinY, pMinZ, pMaxX, pMaxY, pMaxZ));
+            Shapes.block().forAllEdges((pMinX, pMinY, pMinZ, pMaxX, pMaxY, pMaxZ) ->
+                    OutlineRenderer.drawLine(builder, poseStack, pMinX, pMinY, pMinZ, pMaxX, pMaxY, pMaxZ)
+            );
         }
         else
         {
-            if (!(level.getBlockEntity(pos) instanceof FramedCollapsibleBlockEntity be)) { return; }
+            if (!(level.getBlockEntity(pos) instanceof FramedCollapsibleBlockEntity be))
+            {
+                return;
+            }
 
             byte[] offets = be.getVertexOffsets();
             Direction faceDir = face.toDirection().getOpposite();
@@ -73,5 +81,8 @@ public final class CollapsibleBlockOutlineRenderer implements OutlineRenderer
     }
 
     @Override
-    public void draw(BlockState state, PoseStack poseStack, VertexConsumer builder) { throw new UnsupportedOperationException(); }
+    public void draw(BlockState state, PoseStack poseStack, VertexConsumer builder)
+    {
+        throw new UnsupportedOperationException();
+    }
 }

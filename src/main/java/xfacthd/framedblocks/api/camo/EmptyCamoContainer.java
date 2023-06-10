@@ -13,25 +13,46 @@ public final class EmptyCamoContainer extends CamoContainer
 {
     public static final EmptyCamoContainer EMPTY = new EmptyCamoContainer();
 
-    private EmptyCamoContainer() { super(Blocks.AIR.defaultBlockState()); }
+    private EmptyCamoContainer()
+    {
+        super(Blocks.AIR.defaultBlockState());
+    }
 
     @Override
-    public int getColor(BlockAndTintGetter level, BlockPos pos, int tintIdx) { return -1; }
+    public int getColor(BlockAndTintGetter level, BlockPos pos, int tintIdx)
+    {
+        return -1;
+    }
 
     @Override
-    public MapColor getMapColor(BlockGetter level, BlockPos pos) { return null; }
+    public MapColor getMapColor(BlockGetter level, BlockPos pos)
+    {
+        return null;
+    }
 
     @Override
-    public ItemStack toItemStack(ItemStack stack) { return ItemStack.EMPTY; }
+    public ItemStack toItemStack(ItemStack stack)
+    {
+        return ItemStack.EMPTY;
+    }
 
     @Override
-    public boolean isEmpty() { return true; }
+    public boolean isEmpty()
+    {
+        return true;
+    }
 
     @Override
-    public ContainerType getType() { return ContainerType.EMPTY; }
+    public ContainerType getType()
+    {
+        return ContainerType.EMPTY;
+    }
 
     @Override
-    public CamoContainer.Factory getFactory() { return FramedBlocksAPI.getInstance().emptyCamoContainerFactory(); }
+    public CamoContainer.Factory getFactory()
+    {
+        return FramedBlocksAPI.getInstance().emptyCamoContainerFactory();
+    }
 
     @Override
     public void save(CompoundTag tag) { }
@@ -44,10 +65,16 @@ public final class EmptyCamoContainer extends CamoContainer
     public static final class Factory extends CamoContainer.Factory
     {
         @Override
-        public CamoContainer fromNbt(CompoundTag tag) { return EMPTY; }
+        public CamoContainer fromNbt(CompoundTag tag)
+        {
+            return EMPTY;
+        }
 
         @Override
-        public CamoContainer fromNetwork(CompoundTag tag) { return EMPTY; }
+        public CamoContainer fromNetwork(CompoundTag tag)
+        {
+            return EMPTY;
+        }
 
         @Override
         public CamoContainer fromItem(ItemStack stack)

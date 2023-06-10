@@ -33,8 +33,7 @@ import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import net.minecraftforge.fml.loading.FMLEnvironment;
 import net.minecraftforge.fml.util.ObfuscationReflectionHelper;
-import net.minecraftforge.registries.ForgeRegistries;
-import net.minecraftforge.registries.RegistryObject;
+import net.minecraftforge.registries.*;
 import xfacthd.framedblocks.api.block.FramedBlockEntity;
 import xfacthd.framedblocks.api.block.FramedProperties;
 import xfacthd.framedblocks.api.camo.CamoContainer;
@@ -85,8 +84,14 @@ public final class Utils
 
     public static VoxelShape rotateShape(Direction from, Direction to, VoxelShape shape)
     {
-        if (isY(from) || isY(to)) { throw new IllegalArgumentException("Invalid Direction!"); }
-        if (from == to) { return shape; }
+        if (isY(from) || isY(to))
+        {
+            throw new IllegalArgumentException("Invalid Direction!");
+        }
+        if (from == to)
+        {
+            return shape;
+        }
 
         VoxelShape[] buffer = new VoxelShape[] { shape, Shapes.empty() };
 
@@ -208,9 +213,13 @@ public final class Utils
                 .toArray(Component[]::new);
     }
 
-    public static <T extends Enum<T>> Component[] bindEnumTranslation(String key, T[] values, Component[] valueTranslations)
+    public static <T extends Enum<T>> Component[] bindEnumTranslation(
+            String key, T[] values, Component[] valueTranslations
+    )
     {
-        Preconditions.checkArgument(values.length == valueTranslations.length, "Value and translation arrays must have the same length");
+        Preconditions.checkArgument(
+                values.length == valueTranslations.length, "Value and translation arrays must have the same length"
+        );
         Component[] components = new Component[values.length];
         for (T v : values)
         {
@@ -236,13 +245,25 @@ public final class Utils
         return null;
     }
 
-    public static boolean isPositive(Direction dir) { return dir.getAxisDirection() == Direction.AxisDirection.POSITIVE; }
+    public static boolean isPositive(Direction dir)
+    {
+        return dir.getAxisDirection() == Direction.AxisDirection.POSITIVE;
+    }
 
-    public static boolean isX(Direction dir) { return dir.getAxis() == Direction.Axis.X; }
+    public static boolean isX(Direction dir)
+    {
+        return dir.getAxis() == Direction.Axis.X;
+    }
 
-    public static boolean isY(Direction dir) { return dir.getAxis() == Direction.Axis.Y; }
+    public static boolean isY(Direction dir)
+    {
+        return dir.getAxis() == Direction.Axis.Y;
+    }
 
-    public static boolean isZ(Direction dir) { return dir.getAxis() == Direction.Axis.Z; }
+    public static boolean isZ(Direction dir)
+    {
+        return dir.getAxis() == Direction.Axis.Z;
+    }
 
     public static Direction dirByNormal(BlockPos normal)
     {
@@ -351,14 +372,20 @@ public final class Utils
         return state.setValue(property, dir);
     }
 
-    public static TagKey<Block> blockTag(String name) { return blockTag(FramedConstants.MOD_ID, name); }
+    public static TagKey<Block> blockTag(String name)
+    {
+        return blockTag(FramedConstants.MOD_ID, name);
+    }
 
     public static TagKey<Block> blockTag(String modid, String name)
     {
         return BlockTags.create(new ResourceLocation(modid, name));
     }
 
-    public static TagKey<Item> itemTag(String name) { return itemTag(FramedConstants.MOD_ID, name); }
+    public static TagKey<Item> itemTag(String name)
+    {
+        return itemTag(FramedConstants.MOD_ID, name);
+    }
 
     public static TagKey<Item> itemTag(String modid, String name)
     {
@@ -410,6 +437,11 @@ public final class Utils
         return null;
     }
 
+    public static <T extends Comparable<T>> T tryGetValue(BlockState state, Property<T> property, T _default)
+    {
+        return state.hasProperty(property) ? state.getValue(property) : _default;
+    }
+
     public static void forAllDirections(Consumer<Direction> consumer)
     {
         consumer.accept(null);
@@ -420,7 +452,13 @@ public final class Utils
     }
 
     public static void wrapInStateCopy(
-            LevelAccessor level, BlockPos pos, Player player, ItemStack stack, boolean writeToCamoTwo, boolean consumeItem, Runnable action
+            LevelAccessor level,
+            BlockPos pos,
+            Player player,
+            ItemStack stack,
+            boolean writeToCamoTwo,
+            boolean consumeItem,
+            Runnable action
     )
     {
         CamoContainer camo = EmptyCamoContainer.EMPTY;
@@ -463,7 +501,10 @@ public final class Utils
         return BuiltInRegistries.BLOCK.asLookup();
     }
 
-    public static ResourceLocation rl(String path) { return new ResourceLocation(FramedConstants.MOD_ID, path); }
+    public static ResourceLocation rl(String path)
+    {
+        return new ResourceLocation(FramedConstants.MOD_ID, path);
+    }
 
     public static MethodHandle unreflectMethod(Class<?> clazz, String srgMethodName, Class<?>... paramTypes)
     {
@@ -502,6 +543,18 @@ public final class Utils
         {
             throw new RuntimeException("Failed to unreflect field '%s#%s'".formatted(clazz.getName(), srgFieldName), e);
         }
+    }
+
+    @SuppressWarnings("UnstableApiUsage")
+    public static <T> int getId(IForgeRegistry<T> registry, T obj)
+    {
+        return ((ForgeRegistry<T>) registry).getID(obj);
+    }
+
+    @SuppressWarnings("UnstableApiUsage")
+    public static <T> T getValue(IForgeRegistry<T> registry, int id)
+    {
+        return ((ForgeRegistry<T>) registry).getValue(id);
     }
 
 

@@ -15,15 +15,21 @@ public class FramedVerticalDividedStairsBlockEntity extends FramedDoubleBlockEnt
 {
     public FramedVerticalDividedStairsBlockEntity(BlockPos pos, BlockState state)
     {
-        super(FBContent.blockEntityTypeFramedVerticalDividedStairs.get(), pos, state);
+        super(FBContent.BE_TYPE_FRAMED_VERTICAL_DIVIDED_STAIRS.get(), pos, state);
     }
 
     @Override
     protected boolean hitSecondary(BlockHitResult hit)
     {
         Direction side = hit.getDirection();
-        if (side == Direction.UP) { return true; }
-        if (side == Direction.DOWN) { return false; }
+        if (side == Direction.UP)
+        {
+            return true;
+        }
+        if (side == Direction.DOWN)
+        {
+            return false;
+        }
         return Utils.fraction(hit.getLocation()).y > .5;
     }
 
@@ -52,7 +58,6 @@ public class FramedVerticalDividedStairsBlockEntity extends FramedDoubleBlockEnt
         {
             return getCamo().isSolid(level, worldPosition) && getCamoTwo().isSolid(level, worldPosition);
         }
-
         return false;
     }
 }

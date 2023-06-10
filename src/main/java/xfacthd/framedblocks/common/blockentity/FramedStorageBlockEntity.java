@@ -25,7 +25,6 @@ import xfacthd.framedblocks.api.util.Utils;
 import xfacthd.framedblocks.common.FBContent;
 import xfacthd.framedblocks.common.menu.FramedStorageMenu;
 
-import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.List;
@@ -47,16 +46,21 @@ public class FramedStorageBlockEntity extends FramedBlockEntity implements MenuP
 
     public FramedStorageBlockEntity(BlockPos pos, BlockState state)
     {
-        super(FBContent.blockEntityTypeFramedSecretStorage.get(), pos, state);
+        super(FBContent.BE_TYPE_FRAMED_SECRET_STORAGE.get(), pos, state);
     }
 
-    protected FramedStorageBlockEntity(BlockEntityType<?> type, BlockPos pos, BlockState state) { super(type, pos, state); }
+    protected FramedStorageBlockEntity(BlockEntityType<?> type, BlockPos pos, BlockState state)
+    {
+        super(type, pos, state);
+    }
 
-    public void open(ServerPlayer player) { NetworkHooks.openScreen(player, this, worldPosition); }
+    public void open(ServerPlayer player)
+    {
+        NetworkHooks.openScreen(player, this, worldPosition);
+    }
 
-    @Nonnull
     @Override
-    public <T> LazyOptional<T> getCapability(@Nonnull Capability<T> cap, @Nullable Direction side)
+    public <T> LazyOptional<T> getCapability(Capability<T> cap, @Nullable Direction side)
     {
         if (cap == ForgeCapabilities.ITEM_HANDLER)
         {
@@ -139,10 +143,16 @@ public class FramedStorageBlockEntity extends FramedBlockEntity implements MenuP
     }
 
     @Override
-    public Component getName() { return customName != null ? customName : getDefaultName(); }
+    public Component getName()
+    {
+        return customName != null ? customName : getDefaultName();
+    }
 
     @Override
-    public Component getCustomName() { return customName; }
+    public Component getCustomName()
+    {
+        return customName;
+    }
 
 
 
@@ -179,10 +189,16 @@ public class FramedStorageBlockEntity extends FramedBlockEntity implements MenuP
 
 
 
-    protected Component getDefaultName() { return TITLE; }
+    protected Component getDefaultName()
+    {
+        return TITLE;
+    }
 
     @Override
-    public final Component getDisplayName() { return getName(); }
+    public final Component getDisplayName()
+    {
+        return getName();
+    }
 
     @Override
     public AbstractContainerMenu createMenu(int windowId, Inventory inv, Player player)

@@ -37,4 +37,8 @@ public final class RubidiumCompat
             return true;
         }
     }
+
+
+
+    private RubidiumCompat() { }
 }

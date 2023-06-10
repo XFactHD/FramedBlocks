@@ -17,7 +17,10 @@ public interface FramedBlocksClientAPI
 {
     WriteOnceHolder<FramedBlocksClientAPI> INSTANCE = new WriteOnceHolder<>();
 
-    static FramedBlocksClientAPI getInstance() { return INSTANCE.get(); }
+    static FramedBlocksClientAPI getInstance()
+    {
+        return INSTANCE.get();
+    }
 
 
     /**

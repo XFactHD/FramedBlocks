@@ -16,7 +16,10 @@ import xfacthd.framedblocks.common.FBContent;
 
 public class BlockCamoContainer extends CamoContainer
 {
-    private BlockCamoContainer(BlockState state) { super(state); }
+    private BlockCamoContainer(BlockState state)
+    {
+        super(state);
+    }
 
     @Override
     public int getColor(BlockAndTintGetter level, BlockPos pos, int tintIdx)
@@ -29,16 +32,28 @@ public class BlockCamoContainer extends CamoContainer
     }
 
     @Override
-    public ItemStack toItemStack(ItemStack stack) { return new ItemStack(state.getBlock()); }
+    public ItemStack toItemStack(ItemStack stack)
+    {
+        return new ItemStack(state.getBlock());
+    }
 
     @Override
-    public CamoContainer.Factory getFactory() { return FBContent.factoryBlock.get(); }
+    public CamoContainer.Factory getFactory()
+    {
+        return FBContent.FACTORY_BLOCK.get();
+    }
 
     @Override
-    public ContainerType getType() { return ContainerType.BLOCK; }
+    public ContainerType getType()
+    {
+        return ContainerType.BLOCK;
+    }
 
     @Override
-    public void save(CompoundTag tag) { tag.put("state", NbtUtils.writeBlockState(state)); }
+    public void save(CompoundTag tag)
+    {
+        tag.put("state", NbtUtils.writeBlockState(state));
+    }
 
     @Override
     public void toNetwork(CompoundTag tag)

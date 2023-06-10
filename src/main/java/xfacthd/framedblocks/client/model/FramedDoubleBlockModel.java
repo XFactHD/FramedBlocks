@@ -19,7 +19,6 @@ import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.client.ChunkRenderTypeSet;
 import net.minecraftforge.client.model.data.*;
 import net.minecraftforge.common.util.ConcatenatedListView;
-import org.jetbrains.annotations.NotNull;
 import xfacthd.framedblocks.api.model.BakedModelProxy;
 import xfacthd.framedblocks.api.model.data.FramedBlockData;
 import xfacthd.framedblocks.api.model.util.ModelUtils;
@@ -27,7 +26,6 @@ import xfacthd.framedblocks.client.util.DoubleBlockParticleMode;
 import xfacthd.framedblocks.common.block.AbstractFramedDoubleBlock;
 import xfacthd.framedblocks.common.blockentity.FramedDoubleBlockEntity;
 
-import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.*;
 
@@ -57,9 +55,14 @@ public class FramedDoubleBlockModel extends BakedModelProxy
         this.specialItemModel = specialItemModel;
     }
 
-    @Nonnull
     @Override
-    public List<BakedQuad> getQuads(@Nullable BlockState state, @Nullable Direction side, @Nonnull RandomSource rand, @Nonnull ModelData extraData, RenderType layer)
+    public List<BakedQuad> getQuads(
+            @Nullable BlockState state,
+            @Nullable Direction side,
+            RandomSource rand,
+            ModelData extraData,
+            RenderType layer
+    )
     {
         List<List<BakedQuad>> quads = new ArrayList<>(2);
         Tuple<BakedModel, BakedModel> models = getModels();
@@ -88,7 +91,7 @@ public class FramedDoubleBlockModel extends BakedModelProxy
     }
 
     @Override
-    public TextureAtlasSprite getParticleIcon(@Nonnull ModelData data)
+    public TextureAtlasSprite getParticleIcon(ModelData data)
     {
         return switch (particleMode)
         {
@@ -115,7 +118,7 @@ public class FramedDoubleBlockModel extends BakedModelProxy
     }
 
     @Override
-    public ChunkRenderTypeSet getRenderTypes(@NotNull BlockState state, @NotNull RandomSource rand, @NotNull ModelData data)
+    public ChunkRenderTypeSet getRenderTypes(BlockState state, RandomSource rand, ModelData data)
     {
         Tuple<BakedModel, BakedModel> models = getModels();
 
@@ -128,9 +131,8 @@ public class FramedDoubleBlockModel extends BakedModelProxy
         );
     }
 
-    @Nonnull
     @Override
-    public ModelData getModelData(@Nonnull BlockAndTintGetter level, @Nonnull BlockPos pos, @Nonnull BlockState state, @Nonnull ModelData tileData)
+    public ModelData getModelData(BlockAndTintGetter level, BlockPos pos, BlockState state, ModelData tileData)
     {
         Tuple<BakedModel, BakedModel> models = getModels();
 

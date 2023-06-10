@@ -224,7 +224,10 @@ public final class VerticalSlopedStairsSkipPredicate implements SideSkipPredicat
             BlockGetter level, BlockPos pos, BlockState state, Direction dir, HorizontalRotation rot, BlockState adjState, Direction side
     )
     {
-        if (adjState.getValue(PropertyHolder.SLOPE_TYPE) == SlopeType.HORIZONTAL) { return false; }
+        if (adjState.getValue(PropertyHolder.SLOPE_TYPE) == SlopeType.HORIZONTAL)
+        {
+            return false;
+        }
 
         Tuple<BlockState, BlockState> states = AbstractFramedDoubleBlock.getStatePair(adjState);
         return testAgainstHalfSlope(level, pos, state, dir, rot, states.getA(), side) ||

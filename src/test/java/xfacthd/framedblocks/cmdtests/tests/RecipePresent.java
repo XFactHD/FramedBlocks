@@ -30,8 +30,8 @@ public final class RecipePresent
     public static final String NAME = "RecipePresence";
     private static final String RESULT_MSG = "[" + NAME + "] Collected %,d crafting recipes and %,d saw recipes (%,d disabled) in %dms. ";
     private static final Lazy<Set<ItemLike>> EXCLUDED = Lazy.of(() -> Set.of(
-            FBContent.blockFramedDoubleSlab.get().asItem(),
-            FBContent.blockFramedDoublePanel.get().asItem()
+            FBContent.BLOCK_FRAMED_DOUBLE_SLAB.get().asItem(),
+            FBContent.BLOCK_FRAMED_DOUBLE_PANEL.get().asItem()
     ));
 
     public static int checkForRecipePresence(CommandContext<CommandSourceStack> ctx)

@@ -24,7 +24,7 @@ public final class PillarSkipPredicate implements SideSkipPredicate
             Direction.Axis adjAxis = adjState.getValue(BlockStateProperties.AXIS);
             return axis == adjAxis && SideSkipPredicate.compareState(level, pos, side, state, adjState);
         }
-        else if (adjState.getBlock() == FBContent.blockFramedHalfPillar.get())
+        else if (adjState.getBlock() == FBContent.BLOCK_FRAMED_HALF_PILLAR.get())
         {
             Direction adjFace = adjState.getValue(BlockStateProperties.FACING);
             return adjFace == side.getOpposite() && SideSkipPredicate.compareState(level, pos, side, state, adjState);

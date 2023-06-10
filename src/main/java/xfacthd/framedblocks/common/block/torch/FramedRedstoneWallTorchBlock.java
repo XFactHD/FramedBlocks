@@ -47,7 +47,9 @@ public class FramedRedstoneWallTorchBlock extends RedstoneWallTorchBlock impleme
     }
 
     @Override
-    public final InteractionResult use(BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hit)
+    public final InteractionResult use(
+            BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hit
+    )
     {
         return handleUse(state, level, pos, player, hand, hit);
     }
@@ -96,5 +98,8 @@ public class FramedRedstoneWallTorchBlock extends RedstoneWallTorchBlock impleme
     }
 
     @Override
-    public BlockType getBlockType() { return BlockType.FRAMED_REDSTONE_WALL_TORCH; }
+    public BlockType getBlockType()
+    {
+        return BlockType.FRAMED_REDSTONE_WALL_TORCH;
+    }
 }

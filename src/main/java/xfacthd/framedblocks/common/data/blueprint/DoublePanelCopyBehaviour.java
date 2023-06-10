@@ -18,11 +18,13 @@ public final class DoublePanelCopyBehaviour extends DoubleBlockCopyBehaviour
     @Override
     public Optional<ItemStack> getBlockItem()
     {
-        return Optional.of(new ItemStack(FBContent.blockFramedPanel.get(), 2));
+        return Optional.of(new ItemStack(FBContent.BLOCK_FRAMED_PANEL.get(), 2));
     }
 
     @Override
-    public void postProcessPaste(Level level, BlockPos pos, Player player, CompoundTag blueprintData, ItemStack dummyStack)
+    public void postProcessPaste(
+            Level level, BlockPos pos, Player player, CompoundTag blueprintData, ItemStack dummyStack
+    )
     {
         BlockState state = level.getBlockState(pos);
         if (state.getValue(FramedProperties.FACING_NE) != player.getDirection())

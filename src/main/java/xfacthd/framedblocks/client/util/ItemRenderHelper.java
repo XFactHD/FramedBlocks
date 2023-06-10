@@ -30,7 +30,9 @@ public final class ItemRenderHelper
     /**
      * {@link ItemRenderer::renderGuiItem} but with alpha
      */
-    public static void renderItemModel(PoseStack poseStack, ItemStack stack, int x, int y, int alpha, BakedModel model, ItemRenderer renderer)
+    public static void renderItemModel(
+            PoseStack poseStack, ItemStack stack, int x, int y, int alpha, BakedModel model, ItemRenderer renderer
+    )
     {
         poseStack.pushPose();
         poseStack.translate(x, y, 100.0F);

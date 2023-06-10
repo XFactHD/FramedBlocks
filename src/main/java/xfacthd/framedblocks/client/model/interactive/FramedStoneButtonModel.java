@@ -58,10 +58,19 @@ public class FramedStoneButtonModel extends FramedButtonModel
     }
 
     @Override
-    protected void getAdditionalQuads(Map<Direction, List<BakedQuad>> quadMap, BlockState state, RandomSource rand, ModelData data, RenderType layer)
+    protected void getAdditionalQuads(
+            Map<Direction, List<BakedQuad>> quadMap,
+            BlockState state,
+            RandomSource rand,
+            ModelData data,
+            RenderType layer
+    )
     {
         FramedBlockData fbData = data.get(FramedBlockData.PROPERTY);
-        if (fbData == null || fbData.getCamoState().isAir()) { return; }
+        if (fbData == null || fbData.getCamoState().isAir())
+        {
+            return;
+        }
 
         List<BakedQuad> quads = frameModel.getQuads(state, null, rand, data, layer);
         addRotatedQuads(quads, quadMap.get(null));
@@ -91,7 +100,10 @@ public class FramedStoneButtonModel extends FramedButtonModel
     }
 
     @Override
-    protected boolean useBaseModel() { return true; }
+    protected boolean useBaseModel()
+    {
+        return true;
+    }
 
 
 
