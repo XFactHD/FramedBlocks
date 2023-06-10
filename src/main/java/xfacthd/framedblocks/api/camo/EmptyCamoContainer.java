@@ -36,12 +36,18 @@ public final class EmptyCamoContainer extends CamoContainer
     @Override
     public void save(CompoundTag tag) { }
 
+    @Override
+    public void toNetwork(CompoundTag tag) { }
+
 
 
     public static final class Factory extends CamoContainer.Factory
     {
         @Override
         public CamoContainer fromNbt(CompoundTag tag) { return EMPTY; }
+
+        @Override
+        public CamoContainer fromNetwork(CompoundTag tag) { return EMPTY; }
 
         @Override
         public CamoContainer fromItem(ItemStack stack)

@@ -6,6 +6,7 @@ import net.minecraft.nbt.NbtUtils;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.BlockAndTintGetter;
+import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.fml.loading.FMLEnvironment;
 import xfacthd.framedblocks.api.camo.*;
@@ -39,6 +40,12 @@ public class BlockCamoContainer extends CamoContainer
     @Override
     public void save(CompoundTag tag) { tag.put("state", NbtUtils.writeBlockState(state)); }
 
+    @Override
+    public void toNetwork(CompoundTag tag)
+    {
+        tag.putInt("state", Block.getId(state));
+    }
+
 
 
     public static final class Factory extends CamoContainer.Factory
@@ -47,6 +54,13 @@ public class BlockCamoContainer extends CamoContainer
         public CamoContainer fromNbt(CompoundTag tag)
         {
             BlockState state = NbtUtils.readBlockState(Utils.getBlockHolderLookup(null), tag.getCompound("state"));
+            return new BlockCamoContainer(state);
+        }
+
+        @Override
+        public CamoContainer fromNetwork(CompoundTag tag)
+        {
+            BlockState state = Block.stateById(tag.getInt("state"));
             return new BlockCamoContainer(state);
         }
 

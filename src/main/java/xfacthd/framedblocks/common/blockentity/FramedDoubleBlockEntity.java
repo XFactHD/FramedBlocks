@@ -262,14 +262,14 @@ public abstract class FramedDoubleBlockEntity extends FramedBlockEntity
     {
         super.writeToDataPacket(nbt);
 
-        nbt.put("camo_two", CamoContainer.save(camoContainer));
+        nbt.put("camo_two", CamoContainer.writeToNetwork(camoContainer));
     }
 
     @Override
     protected boolean readFromDataPacket(CompoundTag nbt)
     {
         boolean needUpdate = false;
-        CamoContainer newCamo = CamoContainer.load(nbt.getCompound("camo_two"));
+        CamoContainer newCamo = CamoContainer.readFromNetwork(nbt.getCompound("camo_two"));
         if (!newCamo.equals(camoContainer))
         {
             int oldLight = getLightValue();
@@ -282,7 +282,9 @@ public abstract class FramedDoubleBlockEntity extends FramedBlockEntity
             updateCulling(true, false);
         }
 
-        boolean newReinforced = nbt.getBoolean("reinforced");
+        byte flags = nbt.getByte("flags");
+
+        boolean newReinforced = readFlag(flags, FLAG_REINFORCED);
         if (isReinforced() != newReinforced)
         {
             modelData.setReinforced(newReinforced);
@@ -297,7 +299,7 @@ public abstract class FramedDoubleBlockEntity extends FramedBlockEntity
     {
         CompoundTag nbt = super.getUpdateTag();
 
-        nbt.put("camo_two", CamoContainer.save(camoContainer));
+        nbt.put("camo_two", CamoContainer.writeToNetwork(camoContainer));
 
         return nbt;
     }
@@ -307,7 +309,7 @@ public abstract class FramedDoubleBlockEntity extends FramedBlockEntity
     {
         super.handleUpdateTag(nbt);
 
-        CamoContainer newCamo = CamoContainer.load(nbt.getCompound("camo_two"));
+        CamoContainer newCamo = CamoContainer.readFromNetwork(nbt.getCompound("camo_two"));
         if (!newCamo.equals(camoContainer))
         {
             camoContainer = newCamo;
@@ -317,7 +319,9 @@ public abstract class FramedDoubleBlockEntity extends FramedBlockEntity
             ClientUtils.enqueueClientTask(() -> updateCulling(true, true));
         }
 
-        boolean newReinforced = nbt.getBoolean("reinforced");
+        byte flags = nbt.getByte("flags");
+
+        boolean newReinforced = readFlag(flags, FLAG_REINFORCED);
         if (isReinforced() != newReinforced)
         {
             modelData.setReinforced(newReinforced);

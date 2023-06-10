@@ -1,5 +1,6 @@
 package xfacthd.framedblocks.api.camo;
 
+import com.google.common.base.Preconditions;
 import com.mojang.logging.LogUtils;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
@@ -11,6 +12,7 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.Property;
 import net.minecraft.world.level.material.Fluid;
 import net.minecraft.world.level.material.MapColor;
+import net.minecraftforge.registries.ForgeRegistry;
 import org.slf4j.Logger;
 import xfacthd.framedblocks.api.FramedBlocksAPI;
 import xfacthd.framedblocks.api.util.Utils;
@@ -123,6 +125,11 @@ public abstract class CamoContainer
      */
     public abstract void save(CompoundTag tag);
 
+    /**
+     * Save the data of this container to the given {@link CompoundTag} for sync over the network
+     */
+    public abstract void toNetwork(CompoundTag tag);
+
 
 
     public static CompoundTag save(CamoContainer camo)
@@ -130,6 +137,14 @@ public abstract class CamoContainer
         CompoundTag tag = new CompoundTag();
         tag.putString("type", camo.getFactory().getId());
         camo.save(tag);
+        return tag;
+    }
+
+    public static CompoundTag writeToNetwork(CamoContainer camo)
+    {
+        CompoundTag tag = new CompoundTag();
+        tag.putInt("type", camo.getFactory().getSyncId());
+        camo.toNetwork(tag);
         return tag;
     }
 
@@ -147,11 +162,26 @@ public abstract class CamoContainer
         return factory.fromNbt(tag);
     }
 
+    public static CamoContainer readFromNetwork(CompoundTag tag)
+    {
+        if (tag.isEmpty()) { return EmptyCamoContainer.EMPTY; }
+
+        int id = tag.getInt("type");
+        Factory factory = ((ForgeRegistry<Factory>) FramedBlocksAPI.getInstance().getCamoContainerFactoryRegistry()).getValue(id);
+        if (factory == null)
+        {
+            LOGGER.error("Unknown ICamoContainer with ID {}, dropping!", id);
+            return EmptyCamoContainer.EMPTY;
+        }
+        return factory.fromNetwork(tag);
+    }
+
 
 
     public static abstract class Factory
     {
         private String id;
+        private int syncId = -1;
 
         public final String getId()
         {
@@ -163,10 +193,25 @@ public abstract class CamoContainer
             return id;
         }
 
+        public final int getSyncId()
+        {
+            if (syncId == -1)
+            {
+                syncId = ((ForgeRegistry<Factory>) FramedBlocksAPI.getInstance().getCamoContainerFactoryRegistry()).getID(this);
+                Preconditions.checkState(syncId != -1, "Attempted to get sync ID for unregistered CamoContainer.Factory");
+            }
+            return syncId;
+        }
+
         /**
          * Reconstruct the {@link CamoContainer} from the given {@link CompoundTag}
          */
         public abstract CamoContainer fromNbt(CompoundTag tag);
+
+        /**
+         * Reconstruct the {@link CamoContainer} from the given {@link CompoundTag}
+         */
+        public abstract CamoContainer fromNetwork(CompoundTag tag);
 
         /**
          * Construct a {@link CamoContainer} from the given {@link ItemStack}

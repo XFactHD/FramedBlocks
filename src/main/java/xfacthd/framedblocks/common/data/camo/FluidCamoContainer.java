@@ -84,6 +84,12 @@ public class FluidCamoContainer extends CamoContainer
         tag.put("fluid", NbtUtils.writeFluidState(fluidState));
     }
 
+    @Override
+    public void toNetwork(CompoundTag tag)
+    {
+        save(tag);
+    }
+
 
 
     public static final class Factory extends CamoContainer.Factory
@@ -93,6 +99,12 @@ public class FluidCamoContainer extends CamoContainer
         {
             FluidState fluidState = Utils.readFluidStateFromNbt(tag.getCompound("fluid"));
             return new FluidCamoContainer(fluidState);
+        }
+
+        @Override
+        public CamoContainer fromNetwork(CompoundTag tag)
+        {
+            return fromNbt(tag);
         }
 
         @Override

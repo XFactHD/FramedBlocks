@@ -205,7 +205,7 @@ public class FramedCollapsibleBlockEntity extends FramedBlockEntity
     {
         super.writeToDataPacket(nbt);
         nbt.putInt("offsets", packOffsets(vertexOffsets));
-        nbt.putInt("face", collapsedFace == null ? -1 : collapsedFace.get3DDataValue());
+        nbt.putByte("face", (byte) (collapsedFace == null ? -1 : collapsedFace.get3DDataValue()));
     }
 
     @Override
@@ -222,7 +222,7 @@ public class FramedCollapsibleBlockEntity extends FramedBlockEntity
             needUpdate = true;
         }
 
-        int faceIdx = nbt.getInt("face");
+        int faceIdx = nbt.getByte("face");
         Direction face = faceIdx == -1 ? null : Direction.from3DDataValue(faceIdx);
         if (collapsedFace != face)
         {
@@ -239,7 +239,7 @@ public class FramedCollapsibleBlockEntity extends FramedBlockEntity
     {
         CompoundTag nbt = super.getUpdateTag();
         nbt.putInt("offsets", packedOffsets);
-        nbt.putInt("face", collapsedFace == null ? -1 : collapsedFace.get3DDataValue());
+        nbt.putByte("face", (byte) (collapsedFace == null ? -1 : collapsedFace.get3DDataValue()));
         return nbt;
     }
 
@@ -249,7 +249,7 @@ public class FramedCollapsibleBlockEntity extends FramedBlockEntity
         packedOffsets = nbt.getInt("offsets");
         vertexOffsets = unpackOffsets(packedOffsets);
 
-        int face = nbt.getInt("face");
+        int face = nbt.getByte("face");
         collapsedFace = face == -1 ? null : Direction.from3DDataValue(face);
 
         super.handleUpdateTag(nbt);

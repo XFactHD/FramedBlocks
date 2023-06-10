@@ -1,11 +1,13 @@
 package xfacthd.framedblocks.cmdtests;
 
 import com.mojang.brigadier.Command;
+import com.mojang.brigadier.arguments.StringArgumentType;
 import com.mojang.brigadier.context.CommandContext;
 import net.minecraft.ChatFormatting;
 import net.minecraft.Util;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
+import net.minecraft.commands.arguments.blocks.BlockStateArgument;
 import net.minecraft.network.chat.ClickEvent;
 import net.minecraft.network.chat.Component;
 import net.minecraftforge.event.RegisterCommandsEvent;
@@ -39,6 +41,14 @@ public final class SpecialTestCommand
                 )
                 .then(Commands.literal("recipepresent")
                         .executes(RecipePresent::checkForRecipePresence)
+                )
+                .then(Commands.literal("chunkban")
+                        .then(Commands.argument("confirm", StringArgumentType.string())
+                                .then(Commands.argument("state", BlockStateArgument.block(event.getBuildContext()))
+                                        .executes(ctx -> ChunkBanTest.startChunkBanTest(ctx, true))
+                                )
+                                .executes(ctx-> ChunkBanTest.startChunkBanTest(ctx, false))
+                        )
                 )
         );
     }

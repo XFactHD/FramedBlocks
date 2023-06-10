@@ -60,6 +60,7 @@ minecraft {
             mods {
                 framedblocks {
                     source sourceSets.main
+                    source sourceSets.test
                 }
             }
         }
@@ -205,7 +206,7 @@ tasks.jarJar.configure {
 }
 
 // Example for how to get properties into the manifest for reading by the runtime..
-jar {
+tasks.named('jar', Jar).configure {
     archiveClassifier = 'slim'
 
     manifest {
@@ -218,13 +219,16 @@ jar {
                 "Implementation-Vendor"   : "XFactHD"
         ])
     }
-}
 
-// Example configuration to allow publishing using the maven-publish plugin
-// This is the preferred method to reobfuscate your jar file
-jar.finalizedBy('reobfJar')
-// However if you are in a multi-project build, dev time needs unobfed jar files, so you can delay the obfuscation until publishing by doing
-// publish.dependsOn('reobfJar')
+    // The settings below make sure that your build is reproducible
+    // More information at https://docs.gradle.org/current/userguide/working_with_files.html#sec:reproducible_archives
+    preserveFileTimestamps = false
+    reproducibleFileOrder = true
+
+    // Example configuration to allow publishing using the maven-publish plugin
+    // This is the preferred method to reobfuscate your jar file
+    finalizedBy('reobfJar')
+}
 
 publishing {
     publications {

@@ -46,6 +46,9 @@ public class FramedBlockEntity extends BlockEntity
     public static final Component MSG_BLOCK_ENTITY = Utils.translate("msg", "block_entity");
     private static final Direction[] DIRECTIONS = Direction.values();
     private static final int DATA_VERSION = 2;
+    protected static final int FLAG_GLOWING = 1;
+    protected static final int FLAG_INTANGIBLE = 1 << 1;
+    protected static final int FLAG_REINFORCED = 1 << 2;
 
     private final FramedBlockData modelData = new FramedBlockData();
     private CamoContainer camoContainer = EmptyCamoContainer.EMPTY;
@@ -659,10 +662,8 @@ public class FramedBlockEntity extends BlockEntity
 
     protected void writeToDataPacket(CompoundTag nbt)
     {
-        nbt.put("camo", CamoContainer.save(camoContainer));
-        nbt.putBoolean("glowing", glowing);
-        nbt.putBoolean("intangible", intangible);
-        nbt.putBoolean("reinforced", reinforced);
+        nbt.put("camo", CamoContainer.writeToNetwork(camoContainer));
+        nbt.putByte("flags", writeFlags());
     }
 
     protected boolean readFromDataPacket(CompoundTag nbt)
@@ -670,7 +671,7 @@ public class FramedBlockEntity extends BlockEntity
         boolean needUpdate = false;
         boolean needCullingUpdate = false;
 
-        CamoContainer newCamo = CamoContainer.load(nbt.getCompound("camo"));
+        CamoContainer newCamo = CamoContainer.readFromNetwork(nbt.getCompound("camo"));
         if (!newCamo.equals(camoContainer))
         {
             int oldLight = getLightValue();
@@ -683,7 +684,9 @@ public class FramedBlockEntity extends BlockEntity
             needCullingUpdate = true;
         }
 
-        boolean newGlow = nbt.getBoolean("glowing");
+        byte flags = nbt.getByte("flags");
+
+        boolean newGlow = readFlag(flags, FLAG_GLOWING);
         if (newGlow != glowing)
         {
             glowing = newGlow;
@@ -692,7 +695,7 @@ public class FramedBlockEntity extends BlockEntity
             doLightUpdate();
         }
 
-        boolean newIntangible = nbt.getBoolean("intangible");
+        boolean newIntangible = readFlag(flags, FLAG_INTANGIBLE);
         if (newIntangible != intangible)
         {
             intangible = newIntangible;
@@ -721,10 +724,8 @@ public class FramedBlockEntity extends BlockEntity
     {
         CompoundTag nbt = super.getUpdateTag();
 
-        nbt.put("camo", CamoContainer.save(camoContainer));
-        nbt.putBoolean("glowing", glowing);
-        nbt.putBoolean("intangible", intangible);
-        nbt.putBoolean("reinforced", reinforced);
+        nbt.put("camo", CamoContainer.writeToNetwork(camoContainer));
+        nbt.putByte("flags", writeFlags());
 
         return nbt;
     }
@@ -732,7 +733,7 @@ public class FramedBlockEntity extends BlockEntity
     @Override
     public void handleUpdateTag(CompoundTag nbt)
     {
-        CamoContainer newCamo = CamoContainer.load(nbt.getCompound("camo"));
+        CamoContainer newCamo = CamoContainer.readFromNetwork(nbt.getCompound("camo"));
         if (!newCamo.equals(camoContainer))
         {
             camoContainer = newCamo;
@@ -742,10 +743,11 @@ public class FramedBlockEntity extends BlockEntity
             ClientUtils.enqueueClientTask(() -> updateCulling(true, true));
         }
 
-        glowing = nbt.getBoolean("glowing");
-        intangible = nbt.getBoolean("intangible");
+        byte flags = nbt.getByte("flags");
+        glowing = readFlag(flags, FLAG_GLOWING);
+        intangible = readFlag(flags, FLAG_INTANGIBLE);
 
-        boolean newReinforced = nbt.getBoolean("reinforced");
+        boolean newReinforced = readFlag(flags, FLAG_REINFORCED);
         if (newReinforced != reinforced)
         {
             reinforced = newReinforced;
@@ -753,6 +755,20 @@ public class FramedBlockEntity extends BlockEntity
         }
 
         requestModelDataUpdate();
+    }
+
+    private byte writeFlags()
+    {
+        byte flags = 0;
+        if (glowing) flags |= FLAG_GLOWING;
+        if (intangible) flags |= FLAG_INTANGIBLE;
+        if (reinforced) flags |= FLAG_REINFORCED;
+        return flags;
+    }
+
+    protected static boolean readFlag(byte flags, int flag)
+    {
+        return (flags & flag) != 0;
     }
 
     /*
