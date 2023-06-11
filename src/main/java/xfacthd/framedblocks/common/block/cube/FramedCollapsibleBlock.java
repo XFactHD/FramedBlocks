@@ -17,7 +17,7 @@ import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.phys.shapes.*;
 import org.jetbrains.annotations.Nullable;
 import xfacthd.framedblocks.api.block.IFramedBlock;
-import xfacthd.framedblocks.api.predicate.CtmPredicate;
+import xfacthd.framedblocks.api.predicate.FullFacePredicate;
 import xfacthd.framedblocks.api.util.Utils;
 import xfacthd.framedblocks.common.FBContent;
 import xfacthd.framedblocks.common.block.FramedBlock;
@@ -27,7 +27,7 @@ import xfacthd.framedblocks.common.data.property.NullableDirection;
 
 public class FramedCollapsibleBlock extends FramedBlock
 {
-    public static final CtmPredicate CTM_PREDICATE = (state, dir) ->
+    public static final FullFacePredicate CTM_PREDICATE = (state, dir) ->
     {
         NullableDirection face = state.getValue(PropertyHolder.NULLABLE_FACE);
         if (face == NullableDirection.NONE) { return true; }

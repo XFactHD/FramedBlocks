@@ -20,7 +20,7 @@ import net.minecraft.world.phys.shapes.VoxelShape;
 import net.minecraftforge.common.IPlantable;
 import xfacthd.framedblocks.api.block.FramedProperties;
 import xfacthd.framedblocks.api.block.IFramedBlock;
-import xfacthd.framedblocks.api.predicate.CtmPredicate;
+import xfacthd.framedblocks.api.predicate.FullFacePredicate;
 import xfacthd.framedblocks.common.data.BlockType;
 
 import javax.annotation.Nullable;
@@ -29,7 +29,7 @@ import java.util.List;
 @SuppressWarnings("deprecation")
 public class FramedTrapDoorBlock extends TrapDoorBlock implements IFramedBlock
 {
-    public static final CtmPredicate CTM_PREDICATE = (state, dir) ->
+    public static final FullFacePredicate CTM_PREDICATE = (state, dir) ->
     {
         if (state.getValue(BlockStateProperties.OPEN))
         {

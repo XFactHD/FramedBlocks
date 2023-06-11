@@ -26,7 +26,7 @@ import xfacthd.framedblocks.api.model.quad.QuadModifier;
 import xfacthd.framedblocks.api.model.util.ModelCache;
 import xfacthd.framedblocks.api.model.util.ModelUtils;
 import xfacthd.framedblocks.api.predicate.ConTexMode;
-import xfacthd.framedblocks.api.predicate.CtmPredicate;
+import xfacthd.framedblocks.api.predicate.FullFacePredicate;
 import xfacthd.framedblocks.api.type.IBlockType;
 import xfacthd.framedblocks.api.block.IFramedBlock;
 import xfacthd.framedblocks.api.util.Utils;
@@ -362,7 +362,7 @@ public abstract class FramedBlockModel extends BakedModelProxy
 
     /**
      * Called for each {@link BakedQuad} of the camo block's model for whose side this block's
-     * {@link CtmPredicate#test(BlockState, Direction)} returns {@code false}.
+     * {@link FullFacePredicate#test(BlockState, Direction)} returns {@code false}.
      * @param quadMap The target map to put all final quads into
      * @param quad The source quad. Must not be modified directly, use {@link QuadModifier}s to
      *             modify the quad
@@ -375,7 +375,7 @@ public abstract class FramedBlockModel extends BakedModelProxy
 
     /**
      * Called for each {@link BakedQuad} of the camo block's model for whose side this block's
-     * {@link CtmPredicate#test(BlockState, Direction)} returns {@code false}.
+     * {@link FullFacePredicate#test(BlockState, Direction)} returns {@code false}.
      * @param quadMap The target map to put all final quads into
      * @param quad The source quad. Must not be modified directly, use {@link QuadModifier}s to
      *             modify the quad
@@ -410,7 +410,7 @@ public abstract class FramedBlockModel extends BakedModelProxy
 
     /**
      * Return true if all quads should be submitted for transformation, even if their cull-face would be filtered
-     * by the {@link CtmPredicate}
+     * by the {@link FullFacePredicate}
      */
     protected boolean transformAllQuads(BlockState state)
     {
@@ -473,7 +473,7 @@ public abstract class FramedBlockModel extends BakedModelProxy
     }
 
     /**
-     * Add additional quads to faces that return {@code true} from {@link CtmPredicate#test(BlockState, Direction)}<br>
+     * Add additional quads to faces that return {@code true} from {@link FullFacePredicate#test(BlockState, Direction)}<br>
      * The result of this method will NOT be cached, execution should therefore be as fast as possible
      */
     protected void getAdditionalQuads(
@@ -487,7 +487,7 @@ public abstract class FramedBlockModel extends BakedModelProxy
     { }
 
     /**
-     * Add additional quads to faces that return {@code false} from {@link CtmPredicate#test(BlockState, Direction)}<br>
+     * Add additional quads to faces that return {@code false} from {@link FullFacePredicate#test(BlockState, Direction)}<br>
      * The result of this method will be cached, processing time is therefore not critical
      */
     protected void getAdditionalQuads(
@@ -586,7 +586,7 @@ public abstract class FramedBlockModel extends BakedModelProxy
 
         public FullFaceCache(IBlockType type, BlockState state)
         {
-            CtmPredicate pred = type.getCtmPredicate();
+            FullFacePredicate pred = type.getFullFacePredicate();
             for (Direction side : DIRECTIONS)
             {
                 boolean full = pred.test(state, side);

@@ -16,7 +16,7 @@ import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import xfacthd.framedblocks.api.block.FramedProperties;
 import xfacthd.framedblocks.api.block.IFramedBlock;
-import xfacthd.framedblocks.api.predicate.CtmPredicate;
+import xfacthd.framedblocks.api.predicate.FullFacePredicate;
 import xfacthd.framedblocks.api.shapes.ShapeProvider;
 import xfacthd.framedblocks.api.util.*;
 import xfacthd.framedblocks.common.FBContent;
@@ -27,7 +27,7 @@ import xfacthd.framedblocks.common.data.PropertyHolder;
 
 public class FramedFlatDoubleSlopeSlabCornerBlock extends AbstractFramedDoubleBlock
 {
-    public static final CtmPredicate CTM_PREDICATE = (state, side) ->
+    public static final FullFacePredicate CTM_PREDICATE = (state, side) ->
     {
         boolean topHalf = state.getValue(PropertyHolder.TOP_HALF);
         return topHalf ? side == Direction.UP : side == Direction.DOWN;

@@ -13,7 +13,7 @@ import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.phys.Vec3;
 import xfacthd.framedblocks.api.block.FramedProperties;
 import xfacthd.framedblocks.api.block.IFramedBlock;
-import xfacthd.framedblocks.api.predicate.CtmPredicate;
+import xfacthd.framedblocks.api.predicate.FullFacePredicate;
 import xfacthd.framedblocks.api.util.Utils;
 import xfacthd.framedblocks.client.util.DoubleBlockParticleMode;
 import xfacthd.framedblocks.common.FBContent;
@@ -25,7 +25,7 @@ import xfacthd.framedblocks.common.data.property.CornerType;
 
 public class FramedDoubleCornerBlock extends AbstractFramedDoubleBlock
 {
-    public static final CtmPredicate CTM_PREDICATE = (state, side) ->
+    public static final FullFacePredicate CTM_PREDICATE = (state, side) ->
     {
         Direction dir = state.getValue(FramedProperties.FACING_HOR);
         CornerType type = state.getValue(PropertyHolder.CORNER_TYPE);

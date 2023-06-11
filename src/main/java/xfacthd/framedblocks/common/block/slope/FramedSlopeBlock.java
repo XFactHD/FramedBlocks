@@ -19,7 +19,7 @@ import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import net.minecraft.world.phys.shapes.Shapes;
 import xfacthd.framedblocks.api.block.*;
-import xfacthd.framedblocks.api.predicate.CtmPredicate;
+import xfacthd.framedblocks.api.predicate.FullFacePredicate;
 import xfacthd.framedblocks.api.shapes.ShapeProvider;
 import xfacthd.framedblocks.api.util.*;
 import xfacthd.framedblocks.common.block.FramedBlock;
@@ -30,7 +30,7 @@ import xfacthd.framedblocks.common.util.FramedUtils;
 @SuppressWarnings("deprecation")
 public class FramedSlopeBlock extends FramedBlock
 {
-    public static final CtmPredicate CTM_PREDICATE = (state, dir) ->
+    public static final FullFacePredicate CTM_PREDICATE = (state, dir) ->
     {
         SlopeType type = FramedUtils.getSlopeType(state);
         if (dir == Direction.UP && type == SlopeType.TOP)

@@ -16,14 +16,14 @@ public interface SideSkipPredicate
 
     SideSkipPredicate CTM = (level, pos, state, adjState, side) ->
     {
-        if (!((IFramedBlock) state.getBlock()).getCtmPredicate().test(state, side))
+        if (!((IFramedBlock) state.getBlock()).getFullFacePredicate().test(state, side))
         {
             return false;
         }
 
         if (adjState.getBlock() instanceof IFramedBlock block)
         {
-            if (!block.getCtmPredicate().test(adjState, side.getOpposite()))
+            if (!block.getFullFacePredicate().test(adjState, side.getOpposite()))
             {
                 return false;
             }

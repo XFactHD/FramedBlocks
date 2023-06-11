@@ -14,7 +14,7 @@ import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.phys.Vec3;
 import net.minecraft.world.phys.shapes.*;
 import xfacthd.framedblocks.api.block.FramedProperties;
-import xfacthd.framedblocks.api.predicate.CtmPredicate;
+import xfacthd.framedblocks.api.predicate.FullFacePredicate;
 import xfacthd.framedblocks.api.shapes.ShapeProvider;
 import xfacthd.framedblocks.api.type.IBlockType;
 import xfacthd.framedblocks.api.util.*;
@@ -25,10 +25,10 @@ import xfacthd.framedblocks.common.data.property.DirectionAxis;
 
 public class FramedPrismBlock extends FramedBlock
 {
-    public static final CtmPredicate CTM_PREDICATE = (state, side) ->
+    public static final FullFacePredicate CTM_PREDICATE = (state, side) ->
             side == state.getValue(PropertyHolder.FACING_AXIS).direction().getOpposite();
 
-    public static final CtmPredicate CTM_PREDICATE_INNER = (state, side) ->
+    public static final FullFacePredicate CTM_PREDICATE_INNER = (state, side) ->
     {
         DirectionAxis dirAxis = state.getValue(PropertyHolder.FACING_AXIS);
         return side != dirAxis.direction() && side != null && side.getAxis() != dirAxis.axis();

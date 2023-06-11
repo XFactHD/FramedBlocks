@@ -14,7 +14,7 @@ import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.phys.shapes.*;
 import xfacthd.framedblocks.api.block.FramedProperties;
 import xfacthd.framedblocks.api.block.IFramedBlock;
-import xfacthd.framedblocks.api.predicate.CtmPredicate;
+import xfacthd.framedblocks.api.predicate.FullFacePredicate;
 import xfacthd.framedblocks.api.util.*;
 import xfacthd.framedblocks.client.util.DoubleBlockParticleMode;
 import xfacthd.framedblocks.common.FBContent;
@@ -28,7 +28,7 @@ public class FramedDoubleSlopeSlabBlock extends AbstractFramedDoubleBlock
     private static final VoxelShape SHAPE_BOTTOM = Block.box(0.0D, 0.0D, 0.0D, 16.0D, 8.0D, 16.0D);
     private static final VoxelShape SHAPE_TOP = Block.box(0.0D, 8.0D, 0.0D, 16.0D, 16.0D, 16.0D);
 
-    public static final CtmPredicate CTM_PREDICATE = (state, dir) ->
+    public static final FullFacePredicate CTM_PREDICATE = (state, dir) ->
             (state.getValue(PropertyHolder.TOP_HALF) && dir == Direction.UP) ||
             (!state.getValue(PropertyHolder.TOP_HALF) && dir == Direction.DOWN);
 

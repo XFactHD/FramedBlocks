@@ -19,7 +19,7 @@ import net.minecraft.world.phys.shapes.*;
 import net.minecraftforge.client.extensions.common.IClientBlockExtensions;
 import net.minecraftforge.common.IPlantable;
 import xfacthd.framedblocks.api.block.*;
-import xfacthd.framedblocks.api.predicate.CtmPredicate;
+import xfacthd.framedblocks.api.predicate.FullFacePredicate;
 import xfacthd.framedblocks.common.FBContent;
 import xfacthd.framedblocks.common.data.BlockType;
 
@@ -30,7 +30,7 @@ import java.util.function.Consumer;
 @SuppressWarnings("deprecation")
 public class FramedStairsBlock extends StairBlock implements IFramedBlock
 {
-    public static final CtmPredicate CTM_PREDICATE = (state, dir) ->
+    public static final FullFacePredicate CTM_PREDICATE = (state, dir) ->
     {
         if (dir == Direction.UP)
         {

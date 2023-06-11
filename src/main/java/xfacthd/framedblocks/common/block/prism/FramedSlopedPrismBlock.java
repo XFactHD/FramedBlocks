@@ -15,7 +15,7 @@ import net.minecraft.world.phys.Vec3;
 import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import xfacthd.framedblocks.api.block.FramedProperties;
-import xfacthd.framedblocks.api.predicate.CtmPredicate;
+import xfacthd.framedblocks.api.predicate.FullFacePredicate;
 import xfacthd.framedblocks.api.shapes.ShapeProvider;
 import xfacthd.framedblocks.api.type.IBlockType;
 import xfacthd.framedblocks.api.util.*;
@@ -26,10 +26,10 @@ import xfacthd.framedblocks.common.data.property.CompoundDirection;
 
 public class FramedSlopedPrismBlock extends FramedBlock
 {
-    public static final CtmPredicate CTM_PREDICATE = (state, side) ->
+    public static final FullFacePredicate CTM_PREDICATE = (state, side) ->
             side == state.getValue(PropertyHolder.FACING_DIR).direction().getOpposite();
 
-    public static final CtmPredicate CTM_PREDICATE_INNER = (state, side) ->
+    public static final FullFacePredicate CTM_PREDICATE_INNER = (state, side) ->
     {
         CompoundDirection cmpDir = state.getValue(PropertyHolder.FACING_DIR);
         return side != cmpDir.direction() && side != cmpDir.orientation();

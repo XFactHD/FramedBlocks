@@ -191,9 +191,9 @@ public interface IFramedBlock extends EntityBlock, IForgeBlock
         return drops;
     }
 
-    default CtmPredicate getCtmPredicate()
+    default FullFacePredicate getFullFacePredicate()
     {
-        return getBlockType().getCtmPredicate();
+        return getBlockType().getFullFacePredicate();
     }
 
     @Override

@@ -15,7 +15,7 @@ import net.minecraft.world.phys.Vec3;
 import net.minecraft.world.phys.shapes.*;
 import xfacthd.framedblocks.api.block.FramedProperties;
 import xfacthd.framedblocks.api.block.IFramedBlock;
-import xfacthd.framedblocks.api.predicate.CtmPredicate;
+import xfacthd.framedblocks.api.predicate.FullFacePredicate;
 import xfacthd.framedblocks.api.shapes.ShapeProvider;
 import xfacthd.framedblocks.api.util.*;
 import xfacthd.framedblocks.common.block.FramedBlock;
@@ -24,7 +24,7 @@ import xfacthd.framedblocks.common.data.property.CornerType;
 
 public class FramedCornerSlopeBlock extends FramedBlock
 {
-    public static final CtmPredicate CTM_PREDICATE = (state, dir) ->
+    public static final FullFacePredicate CTM_PREDICATE = (state, dir) ->
     {
         CornerType type = state.getValue(PropertyHolder.CORNER_TYPE);
         if (type == CornerType.TOP)
@@ -38,7 +38,7 @@ public class FramedCornerSlopeBlock extends FramedBlock
         return state.getValue(FramedProperties.FACING_HOR) == dir;
     };
 
-    public static final CtmPredicate CTM_PREDICATE_INNER = (state, dir) ->
+    public static final FullFacePredicate CTM_PREDICATE_INNER = (state, dir) ->
     {
         CornerType type = state.getValue(PropertyHolder.CORNER_TYPE);
         if ((type == CornerType.TOP || (type.isHorizontal() && type.isTop())) && dir == Direction.UP)

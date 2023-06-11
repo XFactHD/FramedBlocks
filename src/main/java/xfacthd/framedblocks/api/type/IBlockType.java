@@ -5,9 +5,8 @@ import net.minecraft.client.resources.model.BakedModel;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
-import xfacthd.framedblocks.api.predicate.CtmPredicate;
+import xfacthd.framedblocks.api.predicate.*;
 import xfacthd.framedblocks.api.block.FramedProperties;
-import xfacthd.framedblocks.api.predicate.SideSkipPredicate;
 import xfacthd.framedblocks.api.block.FramedBlockRenderProperties;
 import xfacthd.framedblocks.api.shapes.ShapeProvider;
 
@@ -17,7 +16,7 @@ public interface IBlockType
 
     boolean hasSpecialHitbox();
 
-    CtmPredicate getCtmPredicate();
+    FullFacePredicate getFullFacePredicate();
 
     SideSkipPredicate getSideSkipPredicate();
 

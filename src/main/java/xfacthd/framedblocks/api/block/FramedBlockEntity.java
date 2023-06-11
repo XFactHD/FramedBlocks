@@ -410,7 +410,7 @@ public class FramedBlockEntity extends BlockEntity
         {
             return false;
         }
-        return getBlock().getCtmPredicate().test(getBlockState(), side) && camoContainer.isSolid(level, worldPosition);
+        return getBlock().getFullFacePredicate().test(getBlockState(), side) && camoContainer.isSolid(level, worldPosition);
     }
 
     /**
