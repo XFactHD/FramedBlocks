@@ -191,6 +191,11 @@ public class FramedBlockEntity extends BlockEntity
     private InteractionResult setBlockCamo(Player player, ItemStack stack, boolean secondary)
     {
         BlockState state = ((BlockItem) stack.getItem()).getBlock().defaultBlockState();
+        if (state.getBlock() instanceof IFramedBlock)
+        {
+            return InteractionResult.FAIL;
+        }
+
         if (isValidBlock(state, player))
         {
             //noinspection ConstantConditions
@@ -207,7 +212,7 @@ public class FramedBlockEntity extends BlockEntity
 
             return InteractionResult.sidedSuccess(level.isClientSide());
         }
-        return InteractionResult.FAIL;
+        return InteractionResult.CONSUME;
     }
 
     private InteractionResult setFluidCamo(Player player, ItemStack stack, boolean secondary)
@@ -242,7 +247,7 @@ public class FramedBlockEntity extends BlockEntity
             }
             return InteractionResult.sidedSuccess(level.isClientSide());
         }
-        return InteractionResult.FAIL;
+        return InteractionResult.CONSUME;
     }
 
     private InteractionResult applyGlowstone(Player player, ItemStack stack)
