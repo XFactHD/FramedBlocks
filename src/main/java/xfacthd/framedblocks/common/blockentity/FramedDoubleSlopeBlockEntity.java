@@ -5,8 +5,8 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.core.Direction;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.Vec3;
+import org.jetbrains.annotations.Nullable;
 import xfacthd.framedblocks.api.camo.CamoContainer;
-import xfacthd.framedblocks.api.camo.EmptyCamoContainer;
 import xfacthd.framedblocks.api.block.FramedProperties;
 import xfacthd.framedblocks.common.FBContent;
 import xfacthd.framedblocks.common.data.PropertyHolder;
@@ -99,49 +99,79 @@ public class FramedDoubleSlopeBlockEntity extends FramedDoubleBlockEntity
     }
 
     @Override
-    public CamoContainer getCamo(Direction side)
+    public CamoGetter getCamoGetter(Direction side, @Nullable Direction edge)
     {
-        SlopeType type = getBlockState().getValue(PropertyHolder.SLOPE_TYPE);
         Direction facing = getBlockState().getValue(FramedProperties.FACING_HOR);
-
-        switch (type)
+        SlopeType type = getBlockState().getValue(PropertyHolder.SLOPE_TYPE);
+        return switch (type)
         {
             case HORIZONTAL ->
             {
-                if (side == facing || side == facing.getCounterClockWise())
+                if (matchesHor(side, facing) || (Utils.isY(side) && matchesHor(edge, facing)))
                 {
-                    return getCamo();
+                    yield this::getCamo;
                 }
-                if (side == facing.getOpposite() || side == facing.getClockWise())
+                Direction oppFacing = facing.getOpposite();
+                if (matchesHor(side, oppFacing) || (Utils.isY(side) && matchesHor(edge, oppFacing)))
                 {
-                    return getCamoTwo();
+                    yield this::getCamoTwo;
                 }
+                yield EMPTY_GETTER;
             }
             case TOP ->
             {
+                if (side.getAxis() == facing.getClockWise().getAxis())
+                {
+                    if (edge == facing || edge == Direction.UP)
+                    {
+                        yield this::getCamo;
+                    }
+                    if (edge == facing.getOpposite() || edge == Direction.DOWN)
+                    {
+                        yield this::getCamoTwo;
+                    }
+                    yield EMPTY_GETTER;
+                }
                 if (side == facing || side == Direction.UP)
                 {
-                    return getCamo();
+                    yield this::getCamo;
                 }
                 if (side == facing.getOpposite() || side == Direction.DOWN)
                 {
-                    return getCamoTwo();
+                    yield this::getCamoTwo;
                 }
+                yield EMPTY_GETTER;
             }
             case BOTTOM ->
             {
+                if (side.getAxis() == facing.getClockWise().getAxis())
+                {
+                    if (edge == facing || edge == Direction.DOWN)
+                    {
+                        yield this::getCamo;
+                    }
+                    if (edge == facing.getOpposite() || edge == Direction.UP)
+                    {
+                        yield this::getCamoTwo;
+                    }
+                    yield EMPTY_GETTER;
+                }
                 if (side == facing || side == Direction.DOWN)
                 {
-                    return getCamo();
+                    yield this::getCamo;
                 }
                 if (side == facing.getOpposite() || side == Direction.UP)
                 {
-                    return getCamoTwo();
+                    yield this::getCamoTwo;
                 }
+                yield EMPTY_GETTER;
             }
-        }
+        };
+    }
 
-        return EmptyCamoContainer.EMPTY;
+    private static boolean matchesHor(Direction side, Direction facing)
+    {
+        return side == facing || side == facing.getCounterClockWise();
     }
 
     @Override

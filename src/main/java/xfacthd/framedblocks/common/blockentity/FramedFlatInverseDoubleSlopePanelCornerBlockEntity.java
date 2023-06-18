@@ -6,8 +6,7 @@ import net.minecraft.world.level.block.Rotation;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.Vec3;
-import xfacthd.framedblocks.api.camo.CamoContainer;
-import xfacthd.framedblocks.api.camo.EmptyCamoContainer;
+import org.jetbrains.annotations.Nullable;
 import xfacthd.framedblocks.api.block.FramedProperties;
 import xfacthd.framedblocks.api.util.Utils;
 import xfacthd.framedblocks.common.FBContent;
@@ -53,33 +52,23 @@ public class FramedFlatInverseDoubleSlopePanelCornerBlockEntity extends FramedDo
     }
 
     @Override
-    public CamoContainer getCamo(Direction side)
+    public CamoGetter getCamoGetter(Direction side, @Nullable Direction edge)
     {
         Direction facing = getBlockState().getValue(FramedProperties.FACING_HOR);
 
-        if (side == facing)
+        if (edge == facing)
         {
-            return getCamo();
-        }
-        if (side == facing.getOpposite())
-        {
-            return getCamoTwo();
+            HorizontalRotation rotation = getBlockState().getValue(PropertyHolder.ROTATION);
+            Direction rotDir = rotation.withFacing(facing);
+            Direction perpRotDir = rotation.rotate(Rotation.COUNTERCLOCKWISE_90).withFacing(facing);
+
+            if (side == rotDir.getOpposite() || side == perpRotDir.getOpposite())
+            {
+                return this::getCamo;
+            }
         }
 
-        HorizontalRotation rotation = getBlockState().getValue(PropertyHolder.ROTATION);
-        Direction rotDir = rotation.withFacing(facing);
-        Direction perpRotDir = rotation.rotate(Rotation.COUNTERCLOCKWISE_90).withFacing(facing);
-
-        if (side == rotDir || side == perpRotDir)
-        {
-            return getCamoTwo();
-        }
-        if (side == rotDir.getOpposite() || side == perpRotDir.getOpposite())
-        {
-            return getCamo();
-        }
-
-        return EmptyCamoContainer.EMPTY;
+        return EMPTY_GETTER;
     }
 
     @Override

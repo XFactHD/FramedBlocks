@@ -4,9 +4,8 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.BlockHitResult;
+import org.jetbrains.annotations.Nullable;
 import xfacthd.framedblocks.api.block.FramedProperties;
-import xfacthd.framedblocks.api.camo.CamoContainer;
-import xfacthd.framedblocks.api.camo.EmptyCamoContainer;
 import xfacthd.framedblocks.api.util.Utils;
 import xfacthd.framedblocks.common.FBContent;
 import xfacthd.framedblocks.common.util.DoubleSoundMode;
@@ -40,14 +39,19 @@ public class FramedVerticalDividedStairsBlockEntity extends FramedDoubleBlockEnt
     }
 
     @Override
-    public CamoContainer getCamo(Direction side)
+    public CamoGetter getCamoGetter(Direction side, @Nullable Direction edge)
     {
-        return switch (side)
+        Direction facing = getBlockState().getValue(FramedProperties.FACING_HOR);
+        if (edge == facing || edge == facing.getCounterClockWise())
         {
-            case UP -> getCamoTwo();
-            case DOWN -> getCamo();
-            default -> EmptyCamoContainer.EMPTY;
-        };
+            return switch (side)
+            {
+                case UP -> this::getCamoTwo;
+                case DOWN -> this::getCamo;
+                default -> EMPTY_GETTER;
+            };
+        }
+        return EMPTY_GETTER;
     }
 
     @Override

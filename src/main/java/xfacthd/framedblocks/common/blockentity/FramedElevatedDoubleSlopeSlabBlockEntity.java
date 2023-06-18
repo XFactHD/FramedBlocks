@@ -5,8 +5,8 @@ import net.minecraft.core.Direction;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.Vec3;
+import org.jetbrains.annotations.Nullable;
 import xfacthd.framedblocks.api.camo.CamoContainer;
-import xfacthd.framedblocks.api.camo.EmptyCamoContainer;
 import xfacthd.framedblocks.api.block.FramedProperties;
 import xfacthd.framedblocks.api.util.Utils;
 import xfacthd.framedblocks.common.FBContent;
@@ -63,25 +63,33 @@ public class FramedElevatedDoubleSlopeSlabBlockEntity extends FramedDoubleBlockE
     }
 
     @Override
-    public CamoContainer getCamo(Direction side)
+    public CamoGetter getCamoGetter(Direction side, @Nullable Direction edge)
     {
         Direction facing = getBlockState().getValue(FramedProperties.FACING_HOR);
         boolean top = getBlockState().getValue(FramedProperties.TOP);
+        Direction dirTwo = top ? Direction.UP : Direction.DOWN;
 
-        if (side == Direction.UP)
+        if (side == dirTwo || side == facing)
         {
-            return top ? getCamo() : getCamoTwo();
+            return this::getCamo;
         }
-        else if (side == Direction.DOWN || side == facing)
+        else if (side == dirTwo.getOpposite())
         {
-            return top ? getCamoTwo() : getCamo();
+            return this::getCamoTwo;
         }
-        else if (side == facing.getOpposite())
+        else if (!Utils.isY(side))
         {
-            return getCamoTwo();
+            if (edge == dirTwo)
+            {
+                return this::getCamo;
+            }
+            else if (edge == dirTwo.getOpposite())
+            {
+                return this::getCamoTwo;
+            }
         }
 
-        return EmptyCamoContainer.EMPTY;
+        return EMPTY_GETTER;
     }
 
     @Override

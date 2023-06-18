@@ -6,7 +6,7 @@ import net.minecraft.world.level.block.Rotation;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.Vec3;
-import xfacthd.framedblocks.api.camo.CamoContainer;
+import org.jetbrains.annotations.Nullable;
 import xfacthd.framedblocks.api.block.FramedProperties;
 import xfacthd.framedblocks.api.util.Utils;
 import xfacthd.framedblocks.common.FBContent;
@@ -77,16 +77,17 @@ public class FramedFlatDoubleSlopePanelCornerBlockEntity extends FramedDoubleBlo
     }
 
     @Override
-    public CamoContainer getCamo(Direction side)
+    public CamoGetter getCamoGetter(Direction side, @Nullable Direction edge)
     {
         Direction facing = getBlockState().getValue(FramedProperties.FACING_HOR);
+        boolean front = getBlockState().getValue(PropertyHolder.FRONT);
         if (side == facing)
         {
-            return getCamo();
+            return front ? EMPTY_GETTER : this::getCamo;
         }
-        if (side == facing.getOpposite())
+        else if (side == facing.getOpposite())
         {
-            return getCamoTwo();
+            return front ? this::getCamoTwo : EMPTY_GETTER;
         }
 
         HorizontalRotation rotation = getBlockState().getValue(PropertyHolder.ROTATION);
@@ -94,9 +95,21 @@ public class FramedFlatDoubleSlopePanelCornerBlockEntity extends FramedDoubleBlo
         Direction perpRotDir = rotation.rotate(Rotation.COUNTERCLOCKWISE_90).withFacing(facing);
         if (side == rotDir || side == perpRotDir)
         {
-            return getCamoTwo();
+            if (edge == facing && !front)
+            {
+                return this::getCamo;
+            }
+            else if (edge == facing.getOpposite() && front)
+            {
+                return this::getCamoTwo;
+            }
         }
-        return getCamo();
+        else if ((!front && edge == facing) || (front && edge == facing.getOpposite()))
+        {
+            return this::getCamo;
+        }
+
+        return EMPTY_GETTER;
     }
 
     @Override

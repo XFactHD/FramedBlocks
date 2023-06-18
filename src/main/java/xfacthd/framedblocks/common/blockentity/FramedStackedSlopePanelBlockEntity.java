@@ -6,9 +6,8 @@ import net.minecraft.world.level.block.Rotation;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.Vec3;
+import org.jetbrains.annotations.Nullable;
 import xfacthd.framedblocks.api.block.FramedProperties;
-import xfacthd.framedblocks.api.camo.CamoContainer;
-import xfacthd.framedblocks.api.camo.EmptyCamoContainer;
 import xfacthd.framedblocks.api.util.Utils;
 import xfacthd.framedblocks.common.FBContent;
 import xfacthd.framedblocks.common.data.BlockType;
@@ -25,7 +24,7 @@ public class FramedStackedSlopePanelBlockEntity extends FramedDoubleBlockEntity
     {
         super(FBContent.BE_TYPE_FRAMED_STACKED_SLOPE_PANEL.get(), pos, state);
         BlockType type = (BlockType) getBlockType();
-        this.corner = type != BlockType.FRAMED_FLAT_STACKED_SLOPE_PANEL_CORNER;
+        this.corner = type == BlockType.FRAMED_FLAT_STACKED_SLOPE_PANEL_CORNER;
         this.innerCorner = type == BlockType.FRAMED_FLAT_STACKED_INNER_SLOPE_PANEL_CORNER;
     }
 
@@ -55,18 +54,26 @@ public class FramedStackedSlopePanelBlockEntity extends FramedDoubleBlockEntity
     }
 
     @Override
-    public CamoContainer getCamo(Direction side)
+    public CamoGetter getCamoGetter(Direction side, @Nullable Direction edge)
     {
         Direction facing = getBlockState().getValue(FramedProperties.FACING_HOR);
-        if (side == facing)
+        if (side == facing || (side.getAxis() != facing.getAxis() && edge == facing))
         {
-            return getCamo();
+            return this::getCamo;
         }
-        if (side == facing.getOpposite())
+
+        if (!corner && edge == facing.getOpposite())
         {
-            return getCamoTwo();
+            HorizontalRotation rot = getBlockState().getValue(PropertyHolder.ROTATION);
+            Direction rotDir = rot.withFacing(facing);
+            Direction perpRotDir = rot.rotate(Rotation.COUNTERCLOCKWISE_90).withFacing(facing);
+
+            if (side == rotDir.getOpposite() || (innerCorner && side == perpRotDir.getOpposite()))
+            {
+                return this::getCamoTwo;
+            }
         }
-        return EmptyCamoContainer.EMPTY;
+        return EMPTY_GETTER;
     }
 
     @Override

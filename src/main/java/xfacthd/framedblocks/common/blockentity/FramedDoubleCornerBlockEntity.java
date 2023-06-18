@@ -5,8 +5,7 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.core.Direction;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.Vec3;
-import xfacthd.framedblocks.api.camo.CamoContainer;
-import xfacthd.framedblocks.api.camo.EmptyCamoContainer;
+import org.jetbrains.annotations.Nullable;
 import xfacthd.framedblocks.api.block.FramedProperties;
 import xfacthd.framedblocks.common.FBContent;
 import xfacthd.framedblocks.common.data.*;
@@ -161,7 +160,7 @@ public class FramedDoubleCornerBlockEntity extends FramedDoubleBlockEntity
     }
 
     @Override
-    public CamoContainer getCamo(Direction side)
+    public CamoGetter getCamoGetter(Direction side, @Nullable Direction edge)
     {
         CornerType type = getBlockState().getValue(PropertyHolder.CORNER_TYPE);
         Direction dir = getBlockState().getValue(FramedProperties.FACING_HOR);
@@ -172,28 +171,40 @@ public class FramedDoubleCornerBlockEntity extends FramedDoubleBlockEntity
                 (!type.isRight() && side == dir.getCounterClockWise()) || (type.isRight() && side == dir.getClockWise())
             )
             {
-                return getCamo();
+                return this::getCamo;
             }
 
             if (side == dir.getOpposite() || (!type.isTop() && side == Direction.UP) || (type.isTop() && side == Direction.DOWN) ||
                 (!type.isRight() && side == dir.getClockWise()) || (type.isRight() && side == dir.getCounterClockWise())
             )
             {
-                return getCamoTwo();
+                return this::getCamoTwo;
             }
         }
         else if (type == CornerType.TOP)
         {
-            if (side == dir || side == Direction.UP || side == dir.getCounterClockWise()) { return getCamo(); }
-            if (side == dir.getOpposite() || side == Direction.DOWN || side == dir.getClockWise()) { return getCamoTwo(); }
+            if (side == dir || side == Direction.UP || side == dir.getCounterClockWise())
+            {
+                return this::getCamo;
+            }
+            if (side == dir.getOpposite() || side == Direction.DOWN || side == dir.getClockWise())
+            {
+                return this::getCamoTwo;
+            }
         }
         else if (type == CornerType.BOTTOM)
         {
-            if (side == dir || side == Direction.DOWN || side == dir.getCounterClockWise()) { return getCamo(); }
-            if (side == dir.getOpposite() || side == Direction.UP || side == dir.getClockWise()) { return getCamoTwo(); }
+            if (side == dir || side == Direction.DOWN || side == dir.getCounterClockWise())
+            {
+                return this::getCamo;
+            }
+            if (side == dir.getOpposite() || side == Direction.UP || side == dir.getClockWise())
+            {
+                return this::getCamoTwo;
+            }
         }
 
-        return EmptyCamoContainer.EMPTY;
+        return EMPTY_GETTER;
     }
 
     @Override

@@ -5,8 +5,7 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.core.Direction;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.Vec3;
-import xfacthd.framedblocks.api.camo.CamoContainer;
-import xfacthd.framedblocks.api.camo.EmptyCamoContainer;
+import org.jetbrains.annotations.Nullable;
 import xfacthd.framedblocks.api.block.FramedProperties;
 import xfacthd.framedblocks.common.FBContent;
 import xfacthd.framedblocks.api.util.Utils;
@@ -110,35 +109,51 @@ public class FramedDoubleThreewayCornerBlockEntity extends FramedDoubleBlockEnti
     }
 
     @Override
-    public CamoContainer getCamo(Direction side)
+    public CamoGetter getCamoGetter(Direction side, @Nullable Direction edge)
     {
-        Direction dir = getBlockState().getValue(FramedProperties.FACING_HOR);
+        Direction facing = getBlockState().getValue(FramedProperties.FACING_HOR);
         boolean top = getBlockState().getValue(FramedProperties.TOP);
+        Direction dirTwo = top ? Direction.UP : Direction.DOWN;
 
-        if (top)
+        if (side == facing || side == facing.getCounterClockWise() || side == dirTwo)
         {
-            if (side == dir || side == Direction.UP || side == dir.getCounterClockWise())
+            return this::getCamo;
+        }
+        else if (side == dirTwo.getOpposite())
+        {
+            if (edge == facing || edge == facing.getCounterClockWise())
             {
-                return getCamo();
+                return this::getCamo;
             }
-            if (side == dir.getOpposite() || side == Direction.DOWN || side == dir.getClockWise())
+            else if (edge == facing.getOpposite() || edge == facing.getClockWise())
             {
-                return getCamoTwo();
+                return this::getCamoTwo;
             }
         }
-        else
+        else if (side == facing.getOpposite())
         {
-            if (side == dir || side == Direction.DOWN || side == dir.getCounterClockWise())
+            if (edge == facing.getCounterClockWise() || edge == dirTwo)
             {
-                return getCamo();
+                return this::getCamo;
             }
-            if (side == dir.getOpposite() || side == Direction.UP || side == dir.getClockWise())
+            else if (edge == facing.getClockWise() || edge == dirTwo.getOpposite())
             {
-                return getCamoTwo();
+                return this::getCamoTwo;
+            }
+        }
+        else if (side == facing.getClockWise())
+        {
+            if (edge == facing || edge == dirTwo)
+            {
+                return this::getCamo;
+            }
+            else if (edge == facing.getOpposite() || edge == dirTwo.getOpposite())
+            {
+                return this::getCamoTwo;
             }
         }
 
-        return EmptyCamoContainer.EMPTY;
+        return EMPTY_GETTER;
     }
 
     @Override

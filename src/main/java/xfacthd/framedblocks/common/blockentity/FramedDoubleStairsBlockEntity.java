@@ -5,8 +5,7 @@ import net.minecraft.core.Direction;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.Vec3;
-import xfacthd.framedblocks.api.camo.CamoContainer;
-import xfacthd.framedblocks.api.camo.EmptyCamoContainer;
+import org.jetbrains.annotations.Nullable;
 import xfacthd.framedblocks.api.block.FramedProperties;
 import xfacthd.framedblocks.api.util.Utils;
 import xfacthd.framedblocks.common.FBContent;
@@ -63,21 +62,40 @@ public class FramedDoubleStairsBlockEntity extends FramedDoubleBlockEntity
     }
 
     @Override
-    public CamoContainer getCamo(Direction side)
+    public CamoGetter getCamoGetter(Direction side, @Nullable Direction edge)
     {
         Direction facing = getBlockState().getValue(FramedProperties.FACING_HOR);
         boolean top = getBlockState().getValue(FramedProperties.TOP);
+        Direction dirTwo = top ? Direction.UP : Direction.DOWN;
 
-        if (side == facing || (top && side == Direction.UP) || (!top && side == Direction.DOWN))
+        if (side == facing || side == dirTwo)
         {
-            return getCamo();
+            return this::getCamo;
         }
-        else if (side == facing.getOpposite() || (!top && side == Direction.UP) || (top && side == Direction.DOWN))
+        else if (side == facing.getOpposite())
         {
-            return getCamoTwo();
+            if (edge == dirTwo)
+            {
+                return this::getCamo;
+            }
+            else if (edge == dirTwo.getOpposite())
+            {
+                return this::getCamoTwo;
+            }
+        }
+        else if (side == dirTwo.getOpposite())
+        {
+            if (edge == facing)
+            {
+                return this::getCamo;
+            }
+            else if (edge == facing.getOpposite())
+            {
+                return this::getCamoTwo;
+            }
         }
 
-        return EmptyCamoContainer.EMPTY;
+        return EMPTY_GETTER;
     }
 
     @Override

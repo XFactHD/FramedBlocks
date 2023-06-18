@@ -5,6 +5,7 @@ import net.minecraft.core.Direction;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.Vec3;
+import org.jetbrains.annotations.Nullable;
 import xfacthd.framedblocks.api.camo.CamoContainer;
 import xfacthd.framedblocks.api.block.FramedProperties;
 import xfacthd.framedblocks.api.util.Utils;
@@ -67,30 +68,37 @@ public class FramedFlatDoubleSlopeSlabCornerBlockEntity extends FramedDoubleBloc
     }
 
     @Override
-    public CamoContainer getCamo(Direction side)
+    public CamoGetter getCamoGetter(Direction side, @Nullable Direction edge)
     {
         Direction facing = getBlockState().getValue(FramedProperties.FACING_HOR);
         boolean top = getBlockState().getValue(FramedProperties.TOP);
+        boolean topHalf = getBlockState().getValue(PropertyHolder.TOP_HALF);
 
-        if (side == Direction.UP)
+        if (side == Direction.UP && topHalf)
         {
-            return top ? getCamo() : getCamoTwo();
+            return top ? this::getCamo : this::getCamoTwo;
         }
-        if (side == Direction.DOWN)
+        else if (side == Direction.DOWN && !topHalf)
         {
-            return top ? getCamoTwo() : getCamo();
-        }
-
-        if (side == facing.getOpposite() || side == facing.getClockWise())
-        {
-            return getCamoTwo();
-        }
-        else if (side == facing || side == facing.getCounterClockWise())
-        {
-            return getCamo();
+            return top ? this::getCamoTwo : this::getCamo;
         }
 
-        throw new IllegalStateException("This should not be possible!");
+        if (side == facing || side == facing.getCounterClockWise())
+        {
+            if ((!topHalf && edge == Direction.DOWN) || (topHalf && edge == Direction.UP))
+            {
+                return this::getCamo;
+            }
+        }
+        else if (side == facing.getOpposite() || side == facing.getClockWise())
+        {
+            if ((!topHalf && edge == Direction.DOWN) || (topHalf && edge == Direction.UP))
+            {
+                return top == topHalf ? this::getCamo : this::getCamoTwo;
+            }
+        }
+
+        return EMPTY_GETTER;
     }
 
     @Override

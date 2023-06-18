@@ -16,25 +16,31 @@ import net.minecraft.world.phys.BlockHitResult;
 import net.minecraftforge.client.model.data.*;
 import net.minecraftforge.fml.loading.FMLEnvironment;
 import net.minecraftforge.registries.ForgeRegistries;
+import org.jetbrains.annotations.Nullable;
 import xfacthd.framedblocks.FramedBlocks;
 import xfacthd.framedblocks.api.block.FramedBlockEntity;
 import xfacthd.framedblocks.api.camo.EmptyCamoContainer;
 import xfacthd.framedblocks.api.camo.CamoContainer;
 import xfacthd.framedblocks.api.model.data.FramedBlockData;
 import xfacthd.framedblocks.api.util.ClientUtils;
+import xfacthd.framedblocks.api.util.Utils;
 import xfacthd.framedblocks.common.block.AbstractFramedDoubleBlock;
 import xfacthd.framedblocks.common.util.DoubleBlockSoundType;
 import xfacthd.framedblocks.common.util.DoubleSoundMode;
 
 import java.util.List;
+import java.util.Objects;
+import java.util.function.Supplier;
 
 public abstract class FramedDoubleBlockEntity extends FramedBlockEntity
 {
     public static final ModelProperty<ModelData> DATA_LEFT = new ModelProperty<>();
     public static final ModelProperty<ModelData> DATA_RIGHT = new ModelProperty<>();
+    protected static final CamoGetter EMPTY_GETTER = () -> EmptyCamoContainer.EMPTY;
 
     private final FramedBlockData modelData = new FramedBlockData();
     private final DoubleBlockSoundType soundType = new DoubleBlockSoundType(this);
+    private final CamoGetter[][] camoGetters = new CamoGetter[6][7];
     private Tuple<BlockState, BlockState> blockPair;
     private CamoContainer camoContainer = EmptyCamoContainer.EMPTY;
 
@@ -43,6 +49,7 @@ public abstract class FramedDoubleBlockEntity extends FramedBlockEntity
         super(type, pos, state);
         blockPair = AbstractFramedDoubleBlock.getStatePair(state);
         modelData.setUseAltModel(true);
+        collectCamoGetters();
     }
 
     @Override
@@ -245,7 +252,18 @@ public abstract class FramedDoubleBlockEntity extends FramedBlockEntity
     public abstract DoubleSoundMode getSoundMode();
 
     @Override
-    public abstract CamoContainer getCamo(Direction side);
+    public final CamoContainer getCamo(Direction side)
+    {
+        return getCamo(side, null);
+    }
+
+    @Override
+    public final CamoContainer getCamo(Direction side, @Nullable Direction edge)
+    {
+        return camoGetters[side.ordinal()][Utils.maskNullDirection(edge)].get();
+    }
+
+    public abstract CamoGetter getCamoGetter(Direction side, @Nullable Direction edge);
 
     @Override
     public abstract boolean isSolidSide(Direction side);
@@ -264,6 +282,20 @@ public abstract class FramedDoubleBlockEntity extends FramedBlockEntity
     {
         super.setBlockState(state);
         blockPair = AbstractFramedDoubleBlock.getStatePair(state);
+        collectCamoGetters();
+    }
+
+    private void collectCamoGetters()
+    {
+        Utils.forAllDirections(false, side -> Utils.forAllDirections(edge ->
+        {
+            CamoGetter getter = null;
+            if (edge == null || edge.getAxis() != side.getAxis())
+            {
+                getter = getCamoGetter(side, edge);
+            }
+            camoGetters[side.ordinal()][Utils.maskNullDirection(edge)] = getter;
+        }));
     }
 
     /*
@@ -416,4 +448,8 @@ public abstract class FramedDoubleBlockEntity extends FramedBlockEntity
             );
         }
     }
+
+
+
+    protected interface CamoGetter extends Supplier<CamoContainer> { }
 }

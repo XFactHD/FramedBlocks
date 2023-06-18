@@ -5,8 +5,7 @@ import net.minecraft.core.Direction;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.BlockHitResult;
-import xfacthd.framedblocks.api.camo.CamoContainer;
-import xfacthd.framedblocks.api.camo.EmptyCamoContainer;
+import org.jetbrains.annotations.Nullable;
 import xfacthd.framedblocks.api.util.Utils;
 import xfacthd.framedblocks.common.FBContent;
 import xfacthd.framedblocks.common.data.PropertyHolder;
@@ -72,18 +71,26 @@ public class FramedDoublePrismBlockEntity extends FramedDoubleBlockEntity
     }
 
     @Override
-    public CamoContainer getCamo(Direction side)
+    public CamoGetter getCamoGetter(Direction side, @Nullable Direction edge)
     {
         Direction facing = getFacing(getBlockState());
         if (side == facing)
         {
-            return getCamoTwo();
+            return this::getCamoTwo;
         }
         if (isDoubleSide(side))
         {
-            return EmptyCamoContainer.EMPTY;
+            if (edge == facing)
+            {
+                return this::getCamoTwo;
+            }
+            else if (edge != null)
+            {
+                return this::getCamo;
+            }
+            return EMPTY_GETTER;
         }
-        return getCamo();
+        return this::getCamo;
     }
 
     @Override

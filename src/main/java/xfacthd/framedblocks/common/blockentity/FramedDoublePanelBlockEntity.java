@@ -5,8 +5,7 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.core.Direction;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.Vec3;
-import xfacthd.framedblocks.api.camo.CamoContainer;
-import xfacthd.framedblocks.api.camo.EmptyCamoContainer;
+import org.jetbrains.annotations.Nullable;
 import xfacthd.framedblocks.api.block.FramedProperties;
 import xfacthd.framedblocks.common.FBContent;
 import xfacthd.framedblocks.api.util.Utils;
@@ -52,18 +51,19 @@ public class FramedDoublePanelBlockEntity extends FramedDoubleBlockEntity
     }
 
     @Override
-    public CamoContainer getCamo(Direction side)
+    public CamoGetter getCamoGetter(Direction side, @Nullable Direction edge)
     {
         Direction facing = getBlockState().getValue(FramedProperties.FACING_NE);
-        if (side == facing)
+        boolean notFacingAxis = side.getAxis() != facing.getAxis();
+        if (side == facing || (notFacingAxis && edge == facing))
         {
-            return getCamo();
+            return this::getCamo;
         }
-        if (side == facing.getOpposite())
+        if (side == facing.getOpposite() || (notFacingAxis && edge == facing.getOpposite()))
         {
-            return getCamoTwo();
+            return this::getCamoTwo;
         }
-        return EmptyCamoContainer.EMPTY;
+        return EMPTY_GETTER;
     }
 
     @Override

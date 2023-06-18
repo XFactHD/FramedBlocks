@@ -6,7 +6,7 @@ import net.minecraft.world.level.block.Rotation;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.Vec3;
-import xfacthd.framedblocks.api.camo.CamoContainer;
+import org.jetbrains.annotations.Nullable;
 import xfacthd.framedblocks.api.block.FramedProperties;
 import xfacthd.framedblocks.api.util.Utils;
 import xfacthd.framedblocks.common.FBContent;
@@ -85,26 +85,38 @@ public class FramedFlatExtendedDoubleSlopePanelCornerBlockEntity extends FramedD
     }
 
     @Override
-    public CamoContainer getCamo(Direction side)
+    public CamoGetter getCamoGetter(Direction side, @Nullable Direction edge)
     {
         Direction facing = getBlockState().getValue(FramedProperties.FACING_HOR);
         if (side == facing)
         {
-            return getCamo();
+            return this::getCamo;
         }
         if (side == facing.getOpposite())
         {
-            return getCamoTwo();
+            return this::getCamoTwo;
         }
 
         HorizontalRotation rotation = getBlockState().getValue(PropertyHolder.ROTATION);
         Direction rotDir = rotation.withFacing(facing);
         Direction perpRotDir = rotation.rotate(Rotation.COUNTERCLOCKWISE_90).withFacing(facing);
-        if (side == rotDir || side == perpRotDir)
+        if (isInner && (side == rotDir.getOpposite() || side == perpRotDir.getOpposite()))
         {
-            return getCamoTwo();
+            return this::getCamo;
         }
-        return getCamo();
+        else if (side.getAxis() != facing.getAxis())
+        {
+            if (edge == facing)
+            {
+                return this::getCamo;
+            }
+            else if (edge == facing.getOpposite())
+            {
+                return this::getCamoTwo;
+            }
+        }
+
+        return EMPTY_GETTER;
     }
 
     @Override

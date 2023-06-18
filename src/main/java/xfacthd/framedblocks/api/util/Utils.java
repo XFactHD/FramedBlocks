@@ -444,11 +444,24 @@ public final class Utils
 
     public static void forAllDirections(Consumer<Direction> consumer)
     {
-        consumer.accept(null);
+        forAllDirections(true, consumer);
+    }
+
+    public static void forAllDirections(boolean includeNull, Consumer<Direction> consumer)
+    {
+        if (includeNull)
+        {
+            consumer.accept(null);
+        }
         for (Direction dir : DIRECTIONS)
         {
             consumer.accept(dir);
         }
+    }
+
+    public static int maskNullDirection(Direction dir)
+    {
+        return dir == null ? DIRECTIONS.length : dir.ordinal();
     }
 
     public static void wrapInStateCopy(

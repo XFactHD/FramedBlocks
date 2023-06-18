@@ -5,8 +5,7 @@ import net.minecraft.core.Direction;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.Vec3;
-import xfacthd.framedblocks.api.camo.CamoContainer;
-import xfacthd.framedblocks.api.camo.EmptyCamoContainer;
+import org.jetbrains.annotations.Nullable;
 import xfacthd.framedblocks.api.block.FramedProperties;
 import xfacthd.framedblocks.api.util.Utils;
 import xfacthd.framedblocks.common.FBContent;
@@ -63,20 +62,42 @@ public class FramedVerticalDoubleStairsBlockEntity extends FramedDoubleBlockEnti
     }
 
     @Override
-    public CamoContainer getCamo(Direction side)
+    public CamoGetter getCamoGetter(Direction side, @Nullable Direction edge)
     {
         Direction facing = getBlockState().getValue(FramedProperties.FACING_HOR);
 
         if (side == facing || side == facing.getCounterClockWise())
         {
-            return getCamo();
+            return this::getCamo;
         }
-        else if (side == facing.getOpposite() || side == facing.getClockWise())
+        else if (Utils.isY(side) && (edge == facing || edge == facing.getCounterClockWise()))
         {
-            return getCamoTwo();
+            return this::getCamo;
+        }
+        else if (side == facing.getOpposite())
+        {
+            if (edge == facing.getClockWise())
+            {
+                return this::getCamoTwo;
+            }
+            else if (edge == facing.getCounterClockWise())
+            {
+                return this::getCamo;
+            }
+        }
+        else if (side == facing.getClockWise())
+        {
+            if (edge == facing)
+            {
+                return this::getCamo;
+            }
+            else if (edge == facing.getOpposite())
+            {
+                return this::getCamoTwo;
+            }
         }
 
-        return EmptyCamoContainer.EMPTY;
+        return EMPTY_GETTER;
     }
 
     @Override

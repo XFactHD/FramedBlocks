@@ -5,8 +5,7 @@ import net.minecraft.core.Direction;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.Vec3;
-import xfacthd.framedblocks.api.camo.CamoContainer;
-import xfacthd.framedblocks.api.camo.EmptyCamoContainer;
+import org.jetbrains.annotations.Nullable;
 import xfacthd.framedblocks.api.block.FramedProperties;
 import xfacthd.framedblocks.api.util.Utils;
 import xfacthd.framedblocks.common.FBContent;
@@ -55,30 +54,21 @@ public class FramedInverseDoubleSlopePanelBlockEntity extends FramedDoubleBlockE
     }
 
     @Override
-    public CamoContainer getCamo(Direction side)
+    public CamoGetter getCamoGetter(Direction side, @Nullable Direction edge)
     {
         Direction facing = getBlockState().getValue(FramedProperties.FACING_HOR);
-
-        if (side == facing)
-        {
-            return getCamo();
-        }
-        if (side == facing.getOpposite())
-        {
-            return getCamoTwo();
-        }
-
         Direction rotation = getBlockState().getValue(PropertyHolder.ROTATION).withFacing(facing);
-        if (side == rotation)
+
+        if (side == rotation && edge == facing)
         {
-            return getCamo();
+            return this::getCamo;
         }
-        if (side == rotation.getOpposite())
+        else if (side == rotation.getOpposite() && edge == facing.getOpposite())
         {
-            return getCamoTwo();
+            return this::getCamoTwo;
         }
 
-        return EmptyCamoContainer.EMPTY;
+        return EMPTY_GETTER;
     }
 
     @Override

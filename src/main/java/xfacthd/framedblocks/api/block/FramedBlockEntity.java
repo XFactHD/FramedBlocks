@@ -27,6 +27,7 @@ import net.minecraftforge.common.ToolActions;
 import net.minecraftforge.common.capabilities.ForgeCapabilities;
 import net.minecraftforge.fluids.capability.IFluidHandler;
 import net.minecraftforge.registries.ForgeRegistries;
+import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
 import xfacthd.framedblocks.api.FramedBlocksAPI;
 import xfacthd.framedblocks.api.camo.EmptyCamoContainer;
@@ -429,6 +430,14 @@ public class FramedBlockEntity extends BlockEntity
     public CamoContainer getCamo(Direction side)
     {
         return camoContainer;
+    }
+
+    /**
+     * Returns the camo for the given edge of the given side
+     */
+    public CamoContainer getCamo(Direction side, @Nullable Direction edge)
+    {
+        return getCamo(side);
     }
 
     /**

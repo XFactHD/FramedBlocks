@@ -5,9 +5,8 @@ import net.minecraft.core.Direction;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.Vec3;
+import org.jetbrains.annotations.Nullable;
 import xfacthd.framedblocks.api.block.FramedProperties;
-import xfacthd.framedblocks.api.camo.CamoContainer;
-import xfacthd.framedblocks.api.camo.EmptyCamoContainer;
 import xfacthd.framedblocks.api.util.Utils;
 import xfacthd.framedblocks.common.FBContent;
 import xfacthd.framedblocks.common.util.DoubleSoundMode;
@@ -63,9 +62,37 @@ public class FramedDividedPanelBlockEntity extends FramedDoubleBlockEntity
     }
 
     @Override
-    public CamoContainer getCamo(Direction side)
+    public CamoGetter getCamoGetter(Direction side, @Nullable Direction edge)
     {
-        return EmptyCamoContainer.EMPTY;
+        if (edge == null)
+        {
+            return EMPTY_GETTER;
+        }
+
+        Direction facing = getBlockState().getValue(FramedProperties.FACING_HOR);
+        if (edge == facing)
+        {
+            if ((!vertical && side == Direction.DOWN) || (vertical && side == facing.getCounterClockWise()))
+            {
+                return this::getCamo;
+            }
+            if ((!vertical && side == Direction.UP) || (vertical && side == facing.getClockWise()))
+            {
+                return this::getCamoTwo;
+            }
+        }
+        else if (side == facing)
+        {
+            if ((!vertical && edge == Direction.DOWN) || (vertical && edge == facing.getCounterClockWise()))
+            {
+                return this::getCamo;
+            }
+            if ((!vertical && edge == Direction.UP) || (vertical && edge == facing.getClockWise()))
+            {
+                return this::getCamoTwo;
+            }
+        }
+        return EMPTY_GETTER;
     }
 
     @Override

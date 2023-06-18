@@ -5,8 +5,7 @@ import net.minecraft.core.Direction;
 import net.minecraft.util.Mth;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.BlockHitResult;
-import xfacthd.framedblocks.api.camo.CamoContainer;
-import xfacthd.framedblocks.api.camo.EmptyCamoContainer;
+import org.jetbrains.annotations.Nullable;
 import xfacthd.framedblocks.api.block.FramedProperties;
 import xfacthd.framedblocks.common.FBContent;
 import xfacthd.framedblocks.common.util.DoubleSoundMode;
@@ -35,20 +34,20 @@ public class FramedInverseDoubleSlopeSlabBlockEntity extends FramedDoubleBlockEn
     }
 
     @Override
-    public CamoContainer getCamo(Direction side)
+    public CamoGetter getCamoGetter(Direction side, @Nullable Direction edge)
     {
         Direction facing = getBlockState().getValue(FramedProperties.FACING_HOR);
 
-        if (side == Direction.UP || side == facing)
+        if (side == facing && edge == Direction.UP)
         {
-            return getCamoTwo();
+            return this::getCamoTwo;
         }
-        if (side == Direction.DOWN || side == facing.getOpposite())
+        else if (side == facing.getOpposite() && edge == Direction.DOWN)
         {
-            return getCamo();
+            return this::getCamo;
         }
 
-        return EmptyCamoContainer.EMPTY;
+        return EMPTY_GETTER;
     }
 
     @Override

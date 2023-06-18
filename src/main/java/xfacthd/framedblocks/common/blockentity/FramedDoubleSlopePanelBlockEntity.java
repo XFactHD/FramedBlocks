@@ -2,15 +2,17 @@ package xfacthd.framedblocks.common.blockentity;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.world.level.block.Rotation;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.Vec3;
+import org.jetbrains.annotations.Nullable;
 import xfacthd.framedblocks.api.camo.CamoContainer;
-import xfacthd.framedblocks.api.camo.EmptyCamoContainer;
 import xfacthd.framedblocks.api.block.FramedProperties;
 import xfacthd.framedblocks.api.util.Utils;
 import xfacthd.framedblocks.common.FBContent;
 import xfacthd.framedblocks.common.data.PropertyHolder;
+import xfacthd.framedblocks.common.data.property.HorizontalRotation;
 import xfacthd.framedblocks.common.util.DoubleSoundMode;
 
 public class FramedDoubleSlopePanelBlockEntity extends FramedDoubleBlockEntity
@@ -66,30 +68,36 @@ public class FramedDoubleSlopePanelBlockEntity extends FramedDoubleBlockEntity
     }
 
     @Override
-    public CamoContainer getCamo(Direction side)
+    public CamoGetter getCamoGetter(Direction side, @Nullable Direction edge)
     {
         Direction facing = getBlockState().getValue(FramedProperties.FACING_HOR);
+        boolean front = getBlockState().getValue(PropertyHolder.FRONT);
 
         if (side == facing)
         {
-            return getCamo();
+            return front ? EMPTY_GETTER : this::getCamo;
         }
-        if (side == facing.getOpposite())
+        else if (side == facing.getOpposite())
         {
-            return getCamoTwo();
+            return front ? this::getCamoTwo : EMPTY_GETTER;
         }
 
-        Direction orientation = getBlockState().getValue(PropertyHolder.ROTATION).withFacing(facing);
-        if (side == orientation)
+        if ((!front && edge == facing) || (front && edge == facing.getOpposite()))
         {
-            return getCamoTwo();
-        }
-        if (side == orientation.getOpposite())
-        {
-            return getCamo();
+            HorizontalRotation rot = getBlockState().getValue(PropertyHolder.ROTATION);
+            Direction orientation = rot.withFacing(facing);
+            Direction perpOrientation = rot.rotate(Rotation.CLOCKWISE_90).withFacing(facing);
+            if (side == orientation || (side.getAxis() == perpOrientation.getAxis() && front))
+            {
+                return this::getCamoTwo;
+            }
+            else if (side == orientation.getOpposite() || (side.getAxis() == perpOrientation.getAxis()))
+            {
+                return this::getCamo;
+            }
         }
 
-        return EmptyCamoContainer.EMPTY;
+        return EMPTY_GETTER;
     }
 
     @Override
