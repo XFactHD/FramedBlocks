@@ -479,6 +479,15 @@ public interface IFramedBlock extends EntityBlock, IForgeBlock
         level.levelEvent(player, LevelEvent.PARTICLES_DESTROY_BLOCK, pos, Block.getId(particleState));
     }
 
+    default float getCamoShadeBrightness(BlockState state, BlockGetter level, BlockPos pos, float ownShade)
+    {
+        if (level.getBlockEntity(pos) instanceof FramedBlockEntity be && !be.getCamo().isEmpty())
+        {
+            return Math.max(ownShade, be.getCamo().getState().getShadeBrightness(level, pos));
+        }
+        return ownShade;
+    }
+
     @Override
     default boolean hidesNeighborFace(
             BlockGetter level, BlockPos pos, BlockState state, BlockState neighborState, Direction dir

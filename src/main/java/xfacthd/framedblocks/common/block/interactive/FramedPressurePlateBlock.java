@@ -6,6 +6,7 @@ import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.PressurePlateBlock;
@@ -43,14 +44,17 @@ public class FramedPressurePlateBlock extends PressurePlateBlock implements IFra
     {
         super(sensitivity, props, blockSet);
         this.type = type;
-        registerDefaultState(defaultBlockState().setValue(FramedProperties.GLOWING, false));
+        registerDefaultState(defaultBlockState()
+                .setValue(FramedProperties.GLOWING, false)
+                .setValue(FramedProperties.PROPAGATES_SKYLIGHT, false)
+        );
     }
 
     @Override
     protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder)
     {
         super.createBlockStateDefinition(builder);
-        builder.add(FramedProperties.GLOWING);
+        builder.add(FramedProperties.GLOWING, FramedProperties.PROPAGATES_SKYLIGHT);
     }
 
     @Override
@@ -89,6 +93,18 @@ public class FramedPressurePlateBlock extends PressurePlateBlock implements IFra
     protected void spawnDestroyParticles(Level level, Player player, BlockPos pos, BlockState state)
     {
         spawnCamoDestroyParticles(level, player, pos, state);
+    }
+
+    @Override
+    public float getShadeBrightness(BlockState state, BlockGetter level, BlockPos pos)
+    {
+        return getCamoShadeBrightness(state, level, pos, super.getShadeBrightness(state, level, pos));
+    }
+
+    @Override
+    public boolean propagatesSkylightDown(BlockState state, BlockGetter level, BlockPos pos)
+    {
+        return state.getValue(FramedProperties.PROPAGATES_SKYLIGHT);
     }
 
     @Override

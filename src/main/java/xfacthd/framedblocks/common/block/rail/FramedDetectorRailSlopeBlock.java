@@ -53,6 +53,7 @@ public class FramedDetectorRailSlopeBlock extends DetectorRailBlock implements I
                 .setValue(FramedProperties.GLOWING, false)
                 .setValue(POWERED, false)
                 .setValue(FramedProperties.Y_SLOPE, false)
+                .setValue(FramedProperties.PROPAGATES_SKYLIGHT, false)
         );
     }
 
@@ -64,7 +65,8 @@ public class FramedDetectorRailSlopeBlock extends DetectorRailBlock implements I
     {
         builder.add(
                 PropertyHolder.ASCENDING_RAIL_SHAPE, BlockStateProperties.POWERED, BlockStateProperties.WATERLOGGED,
-                FramedProperties.SOLID, FramedProperties.GLOWING, FramedProperties.Y_SLOPE
+                FramedProperties.SOLID, FramedProperties.GLOWING, FramedProperties.Y_SLOPE,
+                FramedProperties.PROPAGATES_SKYLIGHT
         );
     }
 
@@ -165,6 +167,18 @@ public class FramedDetectorRailSlopeBlock extends DetectorRailBlock implements I
     protected void spawnDestroyParticles(Level level, Player player, BlockPos pos, BlockState state)
     {
         spawnCamoDestroyParticles(level, player, pos, state);
+    }
+
+    @Override
+    public float getShadeBrightness(BlockState state, BlockGetter level, BlockPos pos)
+    {
+        return getCamoShadeBrightness(state, level, pos, super.getShadeBrightness(state, level, pos));
+    }
+
+    @Override
+    public boolean propagatesSkylightDown(BlockState state, BlockGetter level, BlockPos pos)
+    {
+        return state.getValue(FramedProperties.PROPAGATES_SKYLIGHT);
     }
 
     @Override

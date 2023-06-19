@@ -9,8 +9,7 @@ import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.level.Level;
-import net.minecraft.world.level.LevelAccessor;
+import net.minecraft.world.level.*;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.WallBlock;
 import net.minecraft.world.level.block.state.BlockState;
@@ -36,6 +35,7 @@ public class FramedWallBlock extends WallBlock implements IFramedBlock
         registerDefaultState(defaultBlockState()
                 .setValue(FramedProperties.STATE_LOCKED, false)
                 .setValue(FramedProperties.GLOWING, false)
+                .setValue(FramedProperties.PROPAGATES_SKYLIGHT, false)
         );
         fixShapeMaps();
     }
@@ -44,7 +44,7 @@ public class FramedWallBlock extends WallBlock implements IFramedBlock
     protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder)
     {
         super.createBlockStateDefinition(builder);
-        builder.add(FramedProperties.STATE_LOCKED, FramedProperties.GLOWING);
+        builder.add(FramedProperties.STATE_LOCKED, FramedProperties.GLOWING, FramedProperties.PROPAGATES_SKYLIGHT);
     }
 
     @Override
@@ -98,6 +98,18 @@ public class FramedWallBlock extends WallBlock implements IFramedBlock
     }
 
     @Override
+    public float getShadeBrightness(BlockState state, BlockGetter level, BlockPos pos)
+    {
+        return getCamoShadeBrightness(state, level, pos, super.getShadeBrightness(state, level, pos));
+    }
+
+    @Override
+    public boolean propagatesSkylightDown(BlockState state, BlockGetter level, BlockPos pos)
+    {
+        return state.getValue(FramedProperties.PROPAGATES_SKYLIGHT);
+    }
+
+    @Override
     public List<ItemStack> getDrops(BlockState state, LootParams.Builder builder)
     {
         return getCamoDrops(super.getDrops(state, builder), builder);
@@ -131,9 +143,14 @@ public class FramedWallBlock extends WallBlock implements IFramedBlock
 
         for (BlockState state : map.keySet())
         {
-            builder.put(state.cycle(FramedProperties.STATE_LOCKED), map.get(state));
-            builder.put(state.cycle(FramedProperties.GLOWING), map.get(state));
-            builder.put(state.cycle(FramedProperties.GLOWING).cycle(FramedProperties.STATE_LOCKED), map.get(state));
+            VoxelShape shape = map.get(state);
+            builder.put(state.cycle(FramedProperties.STATE_LOCKED), shape);
+            builder.put(state.cycle(FramedProperties.GLOWING), shape);
+            builder.put(state.cycle(FramedProperties.PROPAGATES_SKYLIGHT), shape);
+            builder.put(state.cycle(FramedProperties.GLOWING).cycle(FramedProperties.STATE_LOCKED), shape);
+            builder.put(state.cycle(FramedProperties.PROPAGATES_SKYLIGHT).cycle(FramedProperties.STATE_LOCKED), shape);
+            builder.put(state.cycle(FramedProperties.PROPAGATES_SKYLIGHT).cycle(FramedProperties.GLOWING), shape);
+            builder.put(state.cycle(FramedProperties.PROPAGATES_SKYLIGHT).cycle(FramedProperties.GLOWING).cycle(FramedProperties.STATE_LOCKED), shape);
         }
 
         return builder.build();

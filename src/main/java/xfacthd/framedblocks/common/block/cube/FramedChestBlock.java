@@ -30,7 +30,8 @@ public class FramedChestBlock extends FramedStorageBlock
         //Don't call super, this block doesn't need the SOLID property
         builder.add(
                 FramedProperties.FACING_HOR, PropertyHolder.CHEST_STATE, PropertyHolder.LATCH_TYPE,
-                FramedProperties.GLOWING, BlockStateProperties.WATERLOGGED
+                FramedProperties.GLOWING, FramedProperties.PROPAGATES_SKYLIGHT,
+                BlockStateProperties.WATERLOGGED
         );
     }
 

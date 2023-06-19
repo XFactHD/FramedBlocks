@@ -69,7 +69,7 @@ public abstract class FramedDoubleBlockEntity extends FramedBlockEntity
                 doLightUpdate();
             }
 
-            if (!updateDynamicStates(true, true))
+            if (!updateDynamicStates(true, true, true))
             {
                 //noinspection ConstantConditions
                 level.sendBlockUpdated(worldPosition, getBlockState(), getBlockState(), Block.UPDATE_ALL);
@@ -182,6 +182,17 @@ public abstract class FramedDoubleBlockEntity extends FramedBlockEntity
 
         //noinspection ConstantConditions
         return super.isCamoSolid() && camoContainer.getState().isSolidRender(level, worldPosition);
+    }
+
+    @Override
+    protected boolean doesCamoPropagateSkylightDown()
+    {
+        //noinspection ConstantConditions
+        if (!camoContainer.getState().propagatesSkylightDown(level, worldPosition))
+        {
+            return false;
+        }
+        return super.doesCamoPropagateSkylightDown();
     }
 
     @Override

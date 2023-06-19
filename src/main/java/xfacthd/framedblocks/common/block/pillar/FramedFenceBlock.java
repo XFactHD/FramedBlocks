@@ -7,8 +7,7 @@ import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.level.Level;
-import net.minecraft.world.level.LevelAccessor;
+import net.minecraft.world.level.*;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.FenceBlock;
 import net.minecraft.world.level.block.state.BlockState;
@@ -31,6 +30,7 @@ public class FramedFenceBlock extends FenceBlock implements IFramedBlock
         registerDefaultState(defaultBlockState()
                 .setValue(FramedProperties.STATE_LOCKED, false)
                 .setValue(FramedProperties.GLOWING, false)
+                .setValue(FramedProperties.PROPAGATES_SKYLIGHT, false)
         );
     }
 
@@ -38,7 +38,7 @@ public class FramedFenceBlock extends FenceBlock implements IFramedBlock
     protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder)
     {
         super.createBlockStateDefinition(builder);
-        builder.add(FramedProperties.GLOWING, FramedProperties.STATE_LOCKED);
+        builder.add(FramedProperties.GLOWING, FramedProperties.STATE_LOCKED, FramedProperties.PROPAGATES_SKYLIGHT);
     }
 
     @Override
@@ -92,6 +92,18 @@ public class FramedFenceBlock extends FenceBlock implements IFramedBlock
     protected void spawnDestroyParticles(Level level, Player player, BlockPos pos, BlockState state)
     {
         spawnCamoDestroyParticles(level, player, pos, state);
+    }
+
+    @Override
+    public float getShadeBrightness(BlockState state, BlockGetter level, BlockPos pos)
+    {
+        return getCamoShadeBrightness(state, level, pos, super.getShadeBrightness(state, level, pos));
+    }
+
+    @Override
+    public boolean propagatesSkylightDown(BlockState state, BlockGetter level, BlockPos pos)
+    {
+        return state.getValue(FramedProperties.PROPAGATES_SKYLIGHT);
     }
 
     @Override

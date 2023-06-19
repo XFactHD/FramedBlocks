@@ -46,7 +46,10 @@ public abstract class AbstractFramedBlock extends Block implements IFramedBlock,
         this.shapes = blockType.generateShapes(getStateDefinition().getPossibleStates());
         this.beaconBeamOcclusion = computeBeaconBeamOcclusion(shapes);
 
-        registerDefaultState(defaultBlockState().setValue(FramedProperties.GLOWING, false));
+        registerDefaultState(defaultBlockState()
+                .setValue(FramedProperties.GLOWING, false)
+                .setValue(FramedProperties.PROPAGATES_SKYLIGHT, false)
+        );
 
         if (blockType.canOccludeWithSolidCamo())
         {
@@ -63,7 +66,7 @@ public abstract class AbstractFramedBlock extends Block implements IFramedBlock,
     @Override
     protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder)
     {
-        builder.add(FramedProperties.GLOWING);
+        builder.add(FramedProperties.GLOWING, FramedProperties.PROPAGATES_SKYLIGHT);
     }
 
     @Override
@@ -139,6 +142,18 @@ public abstract class AbstractFramedBlock extends Block implements IFramedBlock,
     protected void spawnDestroyParticles(Level level, Player player, BlockPos pos, BlockState state)
     {
         spawnCamoDestroyParticles(level, player, pos, state);
+    }
+
+    @Override
+    public float getShadeBrightness(BlockState state, BlockGetter level, BlockPos pos)
+    {
+        return getCamoShadeBrightness(state, level, pos, super.getShadeBrightness(state, level, pos));
+    }
+
+    @Override
+    public boolean propagatesSkylightDown(BlockState state, BlockGetter level, BlockPos pos)
+    {
+        return state.getValue(FramedProperties.PROPAGATES_SKYLIGHT);
     }
 
     @Override

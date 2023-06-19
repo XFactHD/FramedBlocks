@@ -47,7 +47,6 @@ public class FramedGateBlock extends FramedBlock
         registerDefaultState(defaultBlockState()
                 .setValue(BlockStateProperties.OPEN, false)
                 .setValue(BlockStateProperties.POWERED, false)
-                .setValue(FramedProperties.SOLID, false)
         );
     }
 

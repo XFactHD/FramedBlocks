@@ -40,6 +40,7 @@ public class FramedTargetBlock extends TargetBlock implements IFramedBlock
         registerDefaultState(defaultBlockState()
                 .setValue(FramedProperties.SOLID, false)
                 .setValue(FramedProperties.GLOWING, false)
+                .setValue(FramedProperties.PROPAGATES_SKYLIGHT, false)
         );
     }
 
@@ -47,7 +48,7 @@ public class FramedTargetBlock extends TargetBlock implements IFramedBlock
     protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder)
     {
         super.createBlockStateDefinition(builder);
-        builder.add(FramedProperties.SOLID, FramedProperties.GLOWING);
+        builder.add(FramedProperties.SOLID, FramedProperties.GLOWING, FramedProperties.PROPAGATES_SKYLIGHT);
     }
 
     @Override
@@ -127,6 +128,18 @@ public class FramedTargetBlock extends TargetBlock implements IFramedBlock
     protected void spawnDestroyParticles(Level level, Player player, BlockPos pos, BlockState state)
     {
         spawnCamoDestroyParticles(level, player, pos, state);
+    }
+
+    @Override
+    public float getShadeBrightness(BlockState state, BlockGetter level, BlockPos pos)
+    {
+        return getCamoShadeBrightness(state, level, pos, super.getShadeBrightness(state, level, pos));
+    }
+
+    @Override
+    public boolean propagatesSkylightDown(BlockState state, BlockGetter level, BlockPos pos)
+    {
+        return state.getValue(FramedProperties.PROPAGATES_SKYLIGHT);
     }
 
     @Override

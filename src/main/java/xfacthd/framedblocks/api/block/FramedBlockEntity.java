@@ -262,7 +262,7 @@ public class FramedBlockEntity extends BlockEntity
 
             int light = getLightValue();
             glowing = true;
-            if (!updateDynamicStates(false, true))
+            if (!updateDynamicStates(false, true, false))
             {
                 level.sendBlockUpdated(worldPosition, getBlockState(), getBlockState(), Block.UPDATE_ALL);
             }
@@ -403,7 +403,7 @@ public class FramedBlockEntity extends BlockEntity
             doLightUpdate();
         }
 
-        if (!updateDynamicStates(true, true))
+        if (!updateDynamicStates(true, true, true))
         {
             //noinspection ConstantConditions
             level.sendBlockUpdated(worldPosition, getBlockState(), getBlockState(), Block.UPDATE_ALL);
@@ -468,13 +468,19 @@ public class FramedBlockEntity extends BlockEntity
         return !camoContainer.isEmpty() && camoContainer.isSolid(level, worldPosition);
     }
 
-    public final void checkCamoSolid()
+    protected boolean doesCamoPropagateSkylightDown()
     {
-        boolean checkSolid = getBlock().getBlockType().canOccludeWithSolidCamo() && !camoContainer.isEmpty();
-        updateDynamicStates(checkSolid, glowing);
+        //noinspection ConstantConditions
+        return camoContainer.getState().propagatesSkylightDown(level, worldPosition);
     }
 
-    protected final boolean updateDynamicStates(boolean updateSolid, boolean updateLight)
+    public final void checkCamoSolid()
+    {
+        boolean checkSolid = getBlock().getBlockType().canOccludeWithSolidCamo();
+        updateDynamicStates(checkSolid, true, true);
+    }
+
+    protected final boolean updateDynamicStates(boolean updateSolid, boolean updateLight, boolean updateSkylight)
     {
         BlockState state = getBlockState();
         boolean changed = false;
@@ -498,6 +504,17 @@ public class FramedBlockEntity extends BlockEntity
             if (isGlowing != state.getValue(FramedProperties.GLOWING))
             {
                 state = state.setValue(FramedProperties.GLOWING, isGlowing);
+                changed = true;
+            }
+        }
+
+        if (updateSkylight)
+        {
+            boolean propagatesSkylight = doesCamoPropagateSkylightDown();
+
+            if (propagatesSkylight != state.getValue(FramedProperties.PROPAGATES_SKYLIGHT))
+            {
+                state = state.setValue(FramedProperties.PROPAGATES_SKYLIGHT, propagatesSkylight);
                 changed = true;
             }
         }
@@ -628,7 +645,7 @@ public class FramedBlockEntity extends BlockEntity
 
             setChanged();
 
-            if (!updateDynamicStates(true, false))
+            if (!updateDynamicStates(true, false, false))
             {
                 //noinspection ConstantConditions
                 level.sendBlockUpdated(worldPosition, getBlockState(), getBlockState(), Block.UPDATE_ALL);
