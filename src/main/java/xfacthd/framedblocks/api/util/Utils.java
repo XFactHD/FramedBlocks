@@ -42,7 +42,7 @@ import xfacthd.framedblocks.api.camo.EmptyCamoContainer;
 import java.lang.invoke.*;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
-import java.util.Arrays;
+import java.util.*;
 import java.util.function.*;
 import java.util.stream.Collectors;
 
@@ -370,6 +370,14 @@ public final class Utils
             };
         }
         return state.setValue(property, dir);
+    }
+
+    public static <T> List<T> concat(List<T> listOne, List<T> listTwo)
+    {
+        List<T> list = new ArrayList<>(listOne.size() + listTwo.size());
+        list.addAll(listOne);
+        list.addAll(listTwo);
+        return List.copyOf(list);
     }
 
     public static TagKey<Block> blockTag(String name)

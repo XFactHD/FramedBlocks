@@ -14,6 +14,7 @@ import net.minecraft.world.level.*;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.block.state.properties.Property;
 import net.minecraft.world.level.material.FluidState;
 import net.minecraftforge.client.extensions.common.IClientFluidTypeExtensions;
@@ -31,6 +32,20 @@ public final class ClientUtils
 {
     private static final Logger LOGGER = LogManager.getLogger();
     public static final ResourceLocation DUMMY_TEXTURE = new ResourceLocation("forge", "white");
+    /** List of properties which are always present and always need to be ignored */
+    public static final List<Property<?>> IGNORE_ALWAYS = List.of(FramedProperties.GLOWING, FramedProperties.PROPAGATES_SKYLIGHT);
+    /** {@link ClientUtils#IGNORE_ALWAYS} + solid */
+    public static final List<Property<?>> IGNORE_SOLID = Utils.concat(List.of(FramedProperties.SOLID), IGNORE_ALWAYS);
+    /** {@link ClientUtils#IGNORE_ALWAYS} + solid + waterlogged */
+    public static final List<Property<?>> IGNORE_DEFAULT = Utils.concat(List.of(BlockStateProperties.WATERLOGGED), IGNORE_SOLID);
+    /** {@link ClientUtils#IGNORE_ALWAYS} + solid + waterlogged + state-lock */
+    public static final List<Property<?>> IGNORE_DEFAULT_LOCK = Utils.concat(List.of(FramedProperties.STATE_LOCKED), IGNORE_DEFAULT);
+    /** {@link ClientUtils#IGNORE_ALWAYS} + waterlogged */
+    public static final List<Property<?>> IGNORE_WATERLOGGED = Utils.concat(List.of(BlockStateProperties.WATERLOGGED), IGNORE_ALWAYS);
+    /** {@link ClientUtils#IGNORE_ALWAYS} + waterlogged + state-lock */
+    public static final List<Property<?>> IGNORE_WATERLOGGED_LOCK = Utils.concat(List.of(FramedProperties.STATE_LOCKED), IGNORE_WATERLOGGED);
+    /** Ignore all properties -> use the same model instance for every state */
+    public static final Function<BlockState, BlockState> IGNORE_ALL = state -> state.getBlock().defaultBlockState();
 
     /**
      * Replace the {@link BakedModel}s for all {@link BlockState}s of the given {@link Block} via the given block model

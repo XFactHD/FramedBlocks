@@ -429,7 +429,7 @@ public final class FramedBlockStateProvider extends BlockStateProvider
                     .rotationX(rotX)
                     .rotationY(rotY)
                     .build();
-        }, FramedProperties.GLOWING);
+        }, FramedProperties.GLOWING, FramedProperties.PROPAGATES_SKYLIGHT);
 
         simpleItem(FBContent.BLOCK_FRAMED_LEVER, "cutout");
     }
@@ -455,7 +455,7 @@ public final class FramedBlockStateProvider extends BlockStateProvider
             Direction dir = state.getValue(BlockStateProperties.HORIZONTAL_FACING);
             int rotY = ((int)dir.toYRot() + 90) % 360;
             return ConfiguredModel.builder().modelFile(wallTorch).rotationY(rotY).build();
-        }, FramedProperties.GLOWING);
+        }, FramedProperties.GLOWING, FramedProperties.PROPAGATES_SKYLIGHT);
     }
 
     private void registerFramedSoulTorch()
@@ -477,7 +477,7 @@ public final class FramedBlockStateProvider extends BlockStateProvider
             Direction dir = state.getValue(BlockStateProperties.HORIZONTAL_FACING);
             int rotY = ((int)dir.toYRot() + 90) % 360;
             return ConfiguredModel.builder().modelFile(wallTorch).rotationY(rotY).build();
-        }, FramedProperties.GLOWING);
+        }, FramedProperties.GLOWING, FramedProperties.PROPAGATES_SKYLIGHT);
     }
 
     private void registerFramedRedstoneTorch()
@@ -491,7 +491,7 @@ public final class FramedBlockStateProvider extends BlockStateProvider
         {
             ModelFile model = state.getValue(BlockStateProperties.LIT) ? torch : torchOff;
             return ConfiguredModel.builder().modelFile(model).build();
-        }, FramedProperties.GLOWING);
+        }, FramedProperties.GLOWING, FramedProperties.PROPAGATES_SKYLIGHT);
 
         simpleItem(FBContent.BLOCK_FRAMED_REDSTONE_TORCH, "block/framed_redstone_torch", "cutout");
     }
@@ -509,7 +509,7 @@ public final class FramedBlockStateProvider extends BlockStateProvider
             int rotY = ((int)dir.toYRot() + 90) % 360;
             ModelFile model = state.getValue(BlockStateProperties.LIT) ? wallTorch : wallTorchOff;
             return ConfiguredModel.builder().modelFile(model).rotationY(rotY).build();
-        }, FramedProperties.GLOWING);
+        }, FramedProperties.GLOWING, FramedProperties.PROPAGATES_SKYLIGHT);
     }
 
     private void registerFramedFloorBoard(ModelFile cube)
@@ -527,7 +527,7 @@ public final class FramedBlockStateProvider extends BlockStateProvider
             Direction dir = state.getValue(BlockStateProperties.HORIZONTAL_FACING);
             int rotY = ((int)dir.toYRot() + 180) % 360;
             return ConfiguredModel.builder().modelFile(chest).rotationY(rotY).build();
-        }, BlockStateProperties.WATERLOGGED, PropertyHolder.LATCH_TYPE, FramedProperties.GLOWING);
+        }, BlockStateProperties.WATERLOGGED, PropertyHolder.LATCH_TYPE, FramedProperties.GLOWING, FramedProperties.PROPAGATES_SKYLIGHT);
 
         simpleBlockItem(FBContent.BLOCK_FRAMED_CHEST, chest, "cutout");
     }
@@ -679,10 +679,18 @@ public final class FramedBlockStateProvider extends BlockStateProvider
                     .build();
         };
 
-        getVariantBuilder(FBContent.BLOCK_FRAMED_ITEM_FRAME.get())
-                .forAllStatesExcept(mapper.apply(normalFrame, normalMapFrame), PropertyHolder.LEATHER, FramedProperties.GLOWING);
-        getVariantBuilder(FBContent.BLOCK_FRAMED_GLOWING_ITEM_FRAME.get())
-                .forAllStatesExcept(mapper.apply(glowFrame, glowMapFrame), PropertyHolder.LEATHER, FramedProperties.GLOWING);
+        getVariantBuilder(FBContent.BLOCK_FRAMED_ITEM_FRAME.get()).forAllStatesExcept(
+                mapper.apply(normalFrame, normalMapFrame),
+                PropertyHolder.LEATHER,
+                FramedProperties.GLOWING,
+                FramedProperties.PROPAGATES_SKYLIGHT
+        );
+        getVariantBuilder(FBContent.BLOCK_FRAMED_GLOWING_ITEM_FRAME.get()).forAllStatesExcept(
+                mapper.apply(glowFrame, glowMapFrame),
+                PropertyHolder.LEATHER,
+                FramedProperties.GLOWING,
+                FramedProperties.PROPAGATES_SKYLIGHT
+        );
 
         simpleItem(FBContent.BLOCK_FRAMED_ITEM_FRAME, "cutout");
         simpleItem(FBContent.BLOCK_FRAMED_GLOWING_ITEM_FRAME, "cutout");
@@ -737,7 +745,7 @@ public final class FramedBlockStateProvider extends BlockStateProvider
 
         getVariantBuilder(FBContent.BLOCK_FRAMED_FANCY_RAIL.get()).forAllStatesExcept(
                 railStates(BlockStateProperties.RAIL_SHAPE, state -> normalRail, state -> ascendingRail, state -> curvedRail),
-                BlockStateProperties.WATERLOGGED, FramedProperties.GLOWING
+                BlockStateProperties.WATERLOGGED, FramedProperties.GLOWING, FramedProperties.PROPAGATES_SKYLIGHT
         );
     }
 
@@ -761,7 +769,7 @@ public final class FramedBlockStateProvider extends BlockStateProvider
                         state -> state.getValue(BlockStateProperties.POWERED) ? ascendingRailOn : ascendingRail,
                         state -> null
                 ),
-                BlockStateProperties.WATERLOGGED, FramedProperties.GLOWING
+                BlockStateProperties.WATERLOGGED, FramedProperties.GLOWING, FramedProperties.PROPAGATES_SKYLIGHT
         );
     }
 
@@ -785,7 +793,7 @@ public final class FramedBlockStateProvider extends BlockStateProvider
                         state -> state.getValue(BlockStateProperties.POWERED) ? ascendingRailOn : ascendingRail,
                         state -> null
                 ),
-                BlockStateProperties.WATERLOGGED, FramedProperties.GLOWING
+                BlockStateProperties.WATERLOGGED, FramedProperties.GLOWING, FramedProperties.PROPAGATES_SKYLIGHT
         );
     }
 
@@ -809,7 +817,7 @@ public final class FramedBlockStateProvider extends BlockStateProvider
                         state -> state.getValue(BlockStateProperties.POWERED) ? ascendingRailOn : ascendingRail,
                         state -> null
                 ),
-                BlockStateProperties.WATERLOGGED, FramedProperties.GLOWING
+                BlockStateProperties.WATERLOGGED, FramedProperties.GLOWING, FramedProperties.PROPAGATES_SKYLIGHT
         );
     }
 
