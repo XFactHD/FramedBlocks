@@ -45,13 +45,13 @@ public class FramedDoubleHalfSlopeBlockEntity extends FramedDoubleBlockEntity
     }
 
     @Override
-    public DoubleSoundMode getSoundMode()
+    protected DoubleSoundMode calculateSoundMode()
     {
         return DoubleSoundMode.SECOND;
     }
 
     @Override
-    public CamoGetter getCamoGetter(Direction side, @Nullable Direction edge)
+    protected CamoGetter getCamoGetter(Direction side, @Nullable Direction edge)
     {
         Direction facing = getBlockState().getValue(FramedProperties.FACING_HOR);
         boolean right = getBlockState().getValue(PropertyHolder.RIGHT);
@@ -82,14 +82,14 @@ public class FramedDoubleHalfSlopeBlockEntity extends FramedDoubleBlockEntity
     }
 
     @Override
-    public boolean isSolidSide(Direction side)
+    protected SolidityCheck getSolidityCheck(Direction side)
     {
         Direction facing = getBlockState().getValue(FramedProperties.FACING_HOR);
         boolean right = getBlockState().getValue(PropertyHolder.RIGHT);
         if ((!right && side == facing.getCounterClockWise()) || (right && side == facing.getClockWise()))
         {
-            return getCamo().isSolid(level, worldPosition) && getCamoTwo().isSolid(level, worldPosition);
+            return SolidityCheck.BOTH;
         }
-        return false;
+        return SolidityCheck.NONE;
     }
 }

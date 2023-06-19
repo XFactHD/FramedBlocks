@@ -6,7 +6,6 @@ import net.minecraft.core.Direction;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.Vec3;
 import org.jetbrains.annotations.Nullable;
-import xfacthd.framedblocks.api.camo.CamoContainer;
 import xfacthd.framedblocks.api.block.FramedProperties;
 import xfacthd.framedblocks.common.FBContent;
 import xfacthd.framedblocks.common.data.PropertyHolder;
@@ -84,7 +83,7 @@ public class FramedDoubleSlopeBlockEntity extends FramedDoubleBlockEntity
     }
 
     @Override
-    public DoubleSoundMode getSoundMode()
+    protected DoubleSoundMode calculateSoundMode()
     {
         SlopeType type = getBlockState().getValue(PropertyHolder.SLOPE_TYPE);
         if (type == SlopeType.BOTTOM)
@@ -99,7 +98,7 @@ public class FramedDoubleSlopeBlockEntity extends FramedDoubleBlockEntity
     }
 
     @Override
-    public CamoGetter getCamoGetter(Direction side, @Nullable Direction edge)
+    protected CamoGetter getCamoGetter(Direction side, @Nullable Direction edge)
     {
         Direction facing = getBlockState().getValue(FramedProperties.FACING_HOR);
         SlopeType type = getBlockState().getValue(PropertyHolder.SLOPE_TYPE);
@@ -175,13 +174,48 @@ public class FramedDoubleSlopeBlockEntity extends FramedDoubleBlockEntity
     }
 
     @Override
-    public boolean isSolidSide(Direction side)
+    protected SolidityCheck getSolidityCheck(Direction side)
     {
-        CamoContainer camo = getCamo(side);
-        if (!camo.isEmpty())
+        Direction facing = getBlockState().getValue(FramedProperties.FACING_HOR);
+        SlopeType type = getBlockState().getValue(PropertyHolder.SLOPE_TYPE);
+        return switch (type)
         {
-            return camo.isSolid(level, worldPosition);
-        }
-        return getCamo().isSolid(level, worldPosition) && getCamoTwo().isSolid(level, worldPosition);
+            case HORIZONTAL ->
+            {
+                if (side == facing || side == facing.getCounterClockWise())
+                {
+                    yield SolidityCheck.FIRST;
+                }
+                else if (side == facing.getOpposite() || side == facing.getClockWise())
+                {
+                    yield SolidityCheck.SECOND;
+                }
+                yield SolidityCheck.BOTH;
+            }
+            case TOP ->
+            {
+                if (side == facing || side == Direction.UP)
+                {
+                    yield SolidityCheck.FIRST;
+                }
+                else if (side == facing.getOpposite() || side == Direction.DOWN)
+                {
+                    yield SolidityCheck.SECOND;
+                }
+                yield SolidityCheck.BOTH;
+            }
+            case BOTTOM ->
+            {
+                if (side == facing || side == Direction.UP)
+                {
+                    yield SolidityCheck.SECOND;
+                }
+                else if (side == facing.getOpposite() || side == Direction.DOWN)
+                {
+                    yield SolidityCheck.FIRST;
+                }
+                yield SolidityCheck.BOTH;
+            }
+        };
     }
 }

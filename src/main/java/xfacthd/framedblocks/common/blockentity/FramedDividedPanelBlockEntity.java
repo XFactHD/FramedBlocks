@@ -56,13 +56,13 @@ public class FramedDividedPanelBlockEntity extends FramedDoubleBlockEntity
     }
 
     @Override
-    public DoubleSoundMode getSoundMode()
+    protected DoubleSoundMode calculateSoundMode()
     {
         return vertical ? DoubleSoundMode.EITHER : DoubleSoundMode.SECOND;
     }
 
     @Override
-    public CamoGetter getCamoGetter(Direction side, @Nullable Direction edge)
+    protected CamoGetter getCamoGetter(Direction side, @Nullable Direction edge)
     {
         if (edge == null)
         {
@@ -96,12 +96,12 @@ public class FramedDividedPanelBlockEntity extends FramedDoubleBlockEntity
     }
 
     @Override
-    public boolean isSolidSide(Direction side)
+    protected SolidityCheck getSolidityCheck(Direction side)
     {
         if (side == getBlockState().getValue(FramedProperties.FACING_HOR))
         {
-            return getCamo().isSolid(level, worldPosition) && getCamoTwo().isSolid(level, worldPosition);
+            return SolidityCheck.BOTH;
         }
-        return false;
+        return SolidityCheck.NONE;
     }
 }

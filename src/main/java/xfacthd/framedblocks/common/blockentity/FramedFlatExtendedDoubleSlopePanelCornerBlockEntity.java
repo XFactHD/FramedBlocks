@@ -71,7 +71,7 @@ public class FramedFlatExtendedDoubleSlopePanelCornerBlockEntity extends FramedD
     }
 
     @Override
-    public DoubleSoundMode getSoundMode()
+    protected DoubleSoundMode calculateSoundMode()
     {
         if (isInner)
         {
@@ -85,7 +85,7 @@ public class FramedFlatExtendedDoubleSlopePanelCornerBlockEntity extends FramedD
     }
 
     @Override
-    public CamoGetter getCamoGetter(Direction side, @Nullable Direction edge)
+    protected CamoGetter getCamoGetter(Direction side, @Nullable Direction edge)
     {
         Direction facing = getBlockState().getValue(FramedProperties.FACING_HOR);
         if (side == facing)
@@ -120,17 +120,17 @@ public class FramedFlatExtendedDoubleSlopePanelCornerBlockEntity extends FramedD
     }
 
     @Override
-    public boolean isSolidSide(Direction side)
+    protected SolidityCheck getSolidityCheck(Direction side)
     {
         Direction facing = getBlockState().getValue(FramedProperties.FACING_HOR);
 
         if (side == facing)
         {
-            return getCamo().isSolid(level, worldPosition);
+            return SolidityCheck.FIRST;
         }
-        if (side == facing.getOpposite())
+        else if (side == facing.getOpposite())
         {
-            return getCamoTwo().isSolid(level, worldPosition);
+            return SolidityCheck.SECOND;
         }
 
         if (isInner)
@@ -140,9 +140,9 @@ public class FramedFlatExtendedDoubleSlopePanelCornerBlockEntity extends FramedD
             Direction perpRotDir = rotation.rotate(Rotation.COUNTERCLOCKWISE_90).withFacing(facing);
             if (side == rotDir.getOpposite() || side == perpRotDir.getOpposite())
             {
-                return getCamo().isSolid(level, worldPosition);
+                return SolidityCheck.FIRST;
             }
         }
-        return false;
+        return SolidityCheck.BOTH;
     }
 }

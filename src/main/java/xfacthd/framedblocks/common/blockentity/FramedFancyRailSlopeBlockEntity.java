@@ -27,26 +27,25 @@ public class FramedFancyRailSlopeBlockEntity extends FramedDoubleBlockEntity
     }
 
     @Override
-    public DoubleSoundMode getSoundMode()
+    protected DoubleSoundMode calculateSoundMode()
     {
         return DoubleSoundMode.FIRST;
     }
 
     @Override
-    public CamoGetter getCamoGetter(Direction side, @Nullable Direction edge)
+    protected CamoGetter getCamoGetter(Direction side, @Nullable Direction edge)
     {
         return this::getCamo;
     }
 
     @Override
-    public boolean isSolidSide(Direction side)
+    protected SolidityCheck getSolidityCheck(Direction side)
     {
         if (side == Direction.DOWN || side == getFacing())
         {
-            //noinspection ConstantConditions
-            return getCamo().getState().isSolidRender(level, worldPosition);
+            return SolidityCheck.FIRST;
         }
-        return false;
+        return SolidityCheck.NONE;
     }
 
     @Override

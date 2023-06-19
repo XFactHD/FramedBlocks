@@ -47,7 +47,7 @@ public class FramedDividedSlopeBlockEntity extends FramedDoubleBlockEntity
     }
 
     @Override
-    public DoubleSoundMode getSoundMode()
+    protected DoubleSoundMode calculateSoundMode()
     {
         if (getBlockState().getValue(PropertyHolder.SLOPE_TYPE) == SlopeType.HORIZONTAL)
         {
@@ -57,7 +57,7 @@ public class FramedDividedSlopeBlockEntity extends FramedDoubleBlockEntity
     }
 
     @Override
-    public CamoGetter getCamoGetter(Direction side, @Nullable Direction edge)
+    protected CamoGetter getCamoGetter(Direction side, @Nullable Direction edge)
     {
         SlopeType type = getBlockState().getValue(PropertyHolder.SLOPE_TYPE);
         if (type == SlopeType.HORIZONTAL)
@@ -113,7 +113,7 @@ public class FramedDividedSlopeBlockEntity extends FramedDoubleBlockEntity
     }
 
     @Override
-    public boolean isSolidSide(Direction side)
+    protected SolidityCheck getSolidityCheck(Direction side)
     {
         SlopeType type = getBlockState().getValue(PropertyHolder.SLOPE_TYPE);
         Direction facing = getBlockState().getValue(FramedProperties.FACING_HOR);
@@ -127,9 +127,8 @@ public class FramedDividedSlopeBlockEntity extends FramedDoubleBlockEntity
 
         if (side == facing || side == secDir)
         {
-            return getCamo().isSolid(level, worldPosition) && getCamoTwo().isSolid(level, worldPosition);
+            return SolidityCheck.BOTH;
         }
-
-        return false;
+        return SolidityCheck.NONE;
     }
 }

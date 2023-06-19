@@ -64,7 +64,10 @@ public final class DoubleBlockSoundType extends SoundType
 
     private SoundType getSoundType(DoubleSoundMode mode)
     {
-        if (mode == DoubleSoundMode.EITHER) { return getEitherSoundType(); }
+        if (mode == DoubleSoundMode.EITHER)
+        {
+            return getEitherSoundType();
+        }
 
         CamoContainer camo = mode == DoubleSoundMode.SECOND ? be.getCamoTwo() : be.getCamo();
         if (!camo.isEmpty())

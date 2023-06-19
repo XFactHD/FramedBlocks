@@ -103,13 +103,13 @@ public class FramedDoubleThreewayCornerBlockEntity extends FramedDoubleBlockEnti
     }
 
     @Override
-    public DoubleSoundMode getSoundMode()
+    protected DoubleSoundMode calculateSoundMode()
     {
         return getBlockState().getValue(FramedProperties.TOP) ? DoubleSoundMode.FIRST : DoubleSoundMode.EITHER;
     }
 
     @Override
-    public CamoGetter getCamoGetter(Direction side, @Nullable Direction edge)
+    protected CamoGetter getCamoGetter(Direction side, @Nullable Direction edge)
     {
         Direction facing = getBlockState().getValue(FramedProperties.FACING_HOR);
         boolean top = getBlockState().getValue(FramedProperties.TOP);
@@ -157,15 +157,15 @@ public class FramedDoubleThreewayCornerBlockEntity extends FramedDoubleBlockEnti
     }
 
     @Override
-    public boolean isSolidSide(Direction side)
+    protected SolidityCheck getSolidityCheck(Direction side)
     {
         Direction dir = getBlockState().getValue(FramedProperties.FACING_HOR);
         boolean top = getBlockState().getValue(FramedProperties.TOP);
 
         if (side == dir || side == dir.getCounterClockWise() || (side == Direction.DOWN && !top) || (side == Direction.UP && top))
         {
-            return getCamo(side).isSolid(level, worldPosition);
+            return SolidityCheck.FIRST;
         }
-        return getCamo().isSolid(level, worldPosition) && getCamoTwo().isSolid(level, worldPosition);
+        return SolidityCheck.BOTH;
     }
 }

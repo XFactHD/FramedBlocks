@@ -7,7 +7,6 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.Vec3;
 import org.jetbrains.annotations.Nullable;
-import xfacthd.framedblocks.api.camo.CamoContainer;
 import xfacthd.framedblocks.api.block.FramedProperties;
 import xfacthd.framedblocks.api.util.Utils;
 import xfacthd.framedblocks.common.FBContent;
@@ -68,7 +67,7 @@ public class FramedDoubleSlopePanelBlockEntity extends FramedDoubleBlockEntity
     }
 
     @Override
-    public CamoGetter getCamoGetter(Direction side, @Nullable Direction edge)
+    protected CamoGetter getCamoGetter(Direction side, @Nullable Direction edge)
     {
         Direction facing = getBlockState().getValue(FramedProperties.FACING_HOR);
         boolean front = getBlockState().getValue(PropertyHolder.FRONT);
@@ -101,22 +100,30 @@ public class FramedDoubleSlopePanelBlockEntity extends FramedDoubleBlockEntity
     }
 
     @Override
-    public boolean isSolidSide(Direction side)
+    protected SolidityCheck getSolidityCheck(Direction side)
     {
         Direction facing = getBlockState().getValue(FramedProperties.FACING_HOR);
         boolean front = getBlockState().getValue(PropertyHolder.FRONT);
 
-        if ((!front && side == facing) || (front && side == facing.getOpposite()))
+        if (!front && side == facing)
         {
-            CamoContainer camo = front ? getCamoTwo() : getCamo();
-            return camo.isSolid(level, worldPosition);
+            return SolidityCheck.FIRST;
         }
-        return false;
+        else if (front && side == facing.getOpposite())
+        {
+            return SolidityCheck.SECOND;
+        }
+        return SolidityCheck.NONE;
     }
 
     @Override
-    public DoubleSoundMode getSoundMode()
+    protected DoubleSoundMode calculateSoundMode()
     {
-        return DoubleSoundMode.EITHER;
+        return switch (getBlockState().getValue(PropertyHolder.ROTATION))
+        {
+            case UP -> DoubleSoundMode.SECOND;
+            case DOWN -> DoubleSoundMode.FIRST;
+            case LEFT, RIGHT -> DoubleSoundMode.EITHER;
+        };
     }
 }

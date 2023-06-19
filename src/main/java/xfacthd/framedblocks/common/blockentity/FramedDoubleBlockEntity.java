@@ -30,6 +30,7 @@ import xfacthd.framedblocks.common.util.DoubleSoundMode;
 
 import java.util.List;
 import java.util.Objects;
+import java.util.function.Predicate;
 import java.util.function.Supplier;
 
 public abstract class FramedDoubleBlockEntity extends FramedBlockEntity
@@ -41,7 +42,9 @@ public abstract class FramedDoubleBlockEntity extends FramedBlockEntity
     private final FramedBlockData modelData = new FramedBlockData();
     private final DoubleBlockSoundType soundType = new DoubleBlockSoundType(this);
     private final CamoGetter[][] camoGetters = new CamoGetter[6][7];
+    private final SolidityCheck[] solidityChecks = new SolidityCheck[6];
     private Tuple<BlockState, BlockState> blockPair;
+    private DoubleSoundMode soundMode = DoubleSoundMode.EITHER;
     private CamoContainer camoContainer = EmptyCamoContainer.EMPTY;
 
     public FramedDoubleBlockEntity(BlockEntityType<?> type, BlockPos pos, BlockState state)
@@ -49,7 +52,6 @@ public abstract class FramedDoubleBlockEntity extends FramedBlockEntity
         super(type, pos, state);
         blockPair = AbstractFramedDoubleBlock.getStatePair(state);
         modelData.setUseAltModel(true);
-        collectCamoGetters();
     }
 
     @Override
@@ -249,7 +251,12 @@ public abstract class FramedDoubleBlockEntity extends FramedBlockEntity
     @Override
     protected abstract boolean hitSecondary(BlockHitResult hit);
 
-    public abstract DoubleSoundMode getSoundMode();
+    public final DoubleSoundMode getSoundMode()
+    {
+        return soundMode;
+    }
+
+    protected abstract DoubleSoundMode calculateSoundMode();
 
     @Override
     public final CamoContainer getCamo(Direction side)
@@ -263,10 +270,15 @@ public abstract class FramedDoubleBlockEntity extends FramedBlockEntity
         return camoGetters[side.ordinal()][Utils.maskNullDirection(edge)].get();
     }
 
-    public abstract CamoGetter getCamoGetter(Direction side, @Nullable Direction edge);
+    protected abstract CamoGetter getCamoGetter(Direction side, @Nullable Direction edge);
 
     @Override
-    public abstract boolean isSolidSide(Direction side);
+    public final boolean isSolidSide(Direction side)
+    {
+        return solidityChecks[side.ordinal()].isSolid(this);
+    }
+
+    protected abstract SolidityCheck getSolidityCheck(Direction side);
 
     @Override
     public boolean updateCulling(Direction side, boolean rerender)
@@ -283,6 +295,25 @@ public abstract class FramedDoubleBlockEntity extends FramedBlockEntity
         super.setBlockState(state);
         blockPair = AbstractFramedDoubleBlock.getStatePair(state);
         collectCamoGetters();
+        calculateSolidityChecks();
+        soundMode = calculateSoundMode();
+    }
+
+    @Override
+    public void onLoad()
+    {
+        BlockState state = getBlockState();
+        super.onLoad();
+        if (state != getBlockState())
+        {
+            // State was updated in super call -> no point in recalculating things below again
+            return;
+        }
+
+        // These can't happen in the constructor due to some implementations using variables initialized in their constructor
+        collectCamoGetters();
+        calculateSolidityChecks();
+        soundMode = calculateSoundMode();
     }
 
     private void collectCamoGetters()
@@ -296,6 +327,11 @@ public abstract class FramedDoubleBlockEntity extends FramedBlockEntity
             }
             camoGetters[side.ordinal()][Utils.maskNullDirection(edge)] = getter;
         }));
+    }
+
+    private void calculateSolidityChecks()
+    {
+        Utils.forAllDirections(false, side -> solidityChecks[side.ordinal()] = getSolidityCheck(side));
     }
 
     /*
@@ -452,4 +488,24 @@ public abstract class FramedDoubleBlockEntity extends FramedBlockEntity
 
 
     protected interface CamoGetter extends Supplier<CamoContainer> { }
+
+    protected enum SolidityCheck
+    {
+        NONE(be -> false),
+        FIRST(be -> be.getCamo().isSolid(be.level, be.worldPosition)),
+        SECOND(be -> be.getCamoTwo().isSolid(be.level, be.worldPosition)),
+        BOTH(be -> FIRST.isSolid(be) && SECOND.isSolid(be));
+
+        private final Predicate<FramedDoubleBlockEntity> predicate;
+
+        SolidityCheck(Predicate<FramedDoubleBlockEntity> predicate)
+        {
+            this.predicate = predicate;
+        }
+
+        public boolean isSolid(FramedDoubleBlockEntity be)
+        {
+            return predicate.test(be);
+        }
+    }
 }

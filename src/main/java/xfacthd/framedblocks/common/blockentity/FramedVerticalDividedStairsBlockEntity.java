@@ -33,13 +33,13 @@ public class FramedVerticalDividedStairsBlockEntity extends FramedDoubleBlockEnt
     }
 
     @Override
-    public DoubleSoundMode getSoundMode()
+    protected DoubleSoundMode calculateSoundMode()
     {
         return DoubleSoundMode.SECOND;
     }
 
     @Override
-    public CamoGetter getCamoGetter(Direction side, @Nullable Direction edge)
+    protected CamoGetter getCamoGetter(Direction side, @Nullable Direction edge)
     {
         Direction facing = getBlockState().getValue(FramedProperties.FACING_HOR);
         if (edge == facing || edge == facing.getCounterClockWise())
@@ -55,13 +55,13 @@ public class FramedVerticalDividedStairsBlockEntity extends FramedDoubleBlockEnt
     }
 
     @Override
-    public boolean isSolidSide(Direction side)
+    protected SolidityCheck getSolidityCheck(Direction side)
     {
         Direction facing = getBlockState().getValue(FramedProperties.FACING_HOR);
         if (side == facing || side == facing.getCounterClockWise())
         {
-            return getCamo().isSolid(level, worldPosition) && getCamoTwo().isSolid(level, worldPosition);
+            return SolidityCheck.BOTH;
         }
-        return false;
+        return SolidityCheck.NONE;
     }
 }

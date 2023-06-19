@@ -28,13 +28,13 @@ public class FramedInverseDoubleSlopeSlabBlockEntity extends FramedDoubleBlockEn
     }
 
     @Override
-    public DoubleSoundMode getSoundMode()
+    protected DoubleSoundMode calculateSoundMode()
     {
         return DoubleSoundMode.SECOND;
     }
 
     @Override
-    public CamoGetter getCamoGetter(Direction side, @Nullable Direction edge)
+    protected CamoGetter getCamoGetter(Direction side, @Nullable Direction edge)
     {
         Direction facing = getBlockState().getValue(FramedProperties.FACING_HOR);
 
@@ -51,8 +51,8 @@ public class FramedInverseDoubleSlopeSlabBlockEntity extends FramedDoubleBlockEn
     }
 
     @Override
-    public boolean isSolidSide(Direction side)
+    protected SolidityCheck getSolidityCheck(Direction side)
     {
-        return false;
+        return SolidityCheck.NONE;
     }
 }

@@ -66,7 +66,7 @@ public class FramedFlatDoubleSlopePanelCornerBlockEntity extends FramedDoubleBlo
     }
 
     @Override
-    public DoubleSoundMode getSoundMode()
+    protected DoubleSoundMode calculateSoundMode()
     {
         HorizontalRotation rotation = getBlockState().getValue(PropertyHolder.ROTATION);
         if (rotation == HorizontalRotation.UP || rotation == HorizontalRotation.RIGHT)
@@ -77,7 +77,7 @@ public class FramedFlatDoubleSlopePanelCornerBlockEntity extends FramedDoubleBlo
     }
 
     @Override
-    public CamoGetter getCamoGetter(Direction side, @Nullable Direction edge)
+    protected CamoGetter getCamoGetter(Direction side, @Nullable Direction edge)
     {
         Direction facing = getBlockState().getValue(FramedProperties.FACING_HOR);
         boolean front = getBlockState().getValue(PropertyHolder.FRONT);
@@ -113,19 +113,18 @@ public class FramedFlatDoubleSlopePanelCornerBlockEntity extends FramedDoubleBlo
     }
 
     @Override
-    public boolean isSolidSide(Direction side)
+    protected SolidityCheck getSolidityCheck(Direction side)
     {
         Direction facing = getBlockState().getValue(FramedProperties.FACING_HOR);
         boolean front = getBlockState().getValue(PropertyHolder.FRONT);
         if (side == facing && !front)
         {
-            return getCamo().isSolid(level, worldPosition);
+            return SolidityCheck.FIRST;
         }
-        if (side == facing.getOpposite() && front)
+        else if (side == facing.getOpposite() && front)
         {
-            return getCamoTwo().isSolid(level, worldPosition);
+            return SolidityCheck.SECOND;
         }
-
-        return false;
+        return SolidityCheck.NONE;
     }
 }

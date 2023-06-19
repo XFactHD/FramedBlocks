@@ -39,14 +39,14 @@ public class FramedStackedSlopeSlabBlockEntity extends FramedDoubleBlockEntity
     }
 
     @Override
-    public DoubleSoundMode getSoundMode()
+    protected DoubleSoundMode calculateSoundMode()
     {
         boolean top = getBlockState().getValue(FramedProperties.TOP);
         return top ? DoubleSoundMode.FIRST : DoubleSoundMode.SECOND;
     }
 
     @Override
-    public CamoGetter getCamoGetter(Direction side, @Nullable Direction edge)
+    protected CamoGetter getCamoGetter(Direction side, @Nullable Direction edge)
     {
         boolean top = getBlockState().getValue(FramedProperties.TOP);
         Direction dirTwo = top ? Direction.UP : Direction.DOWN;
@@ -68,19 +68,22 @@ public class FramedStackedSlopeSlabBlockEntity extends FramedDoubleBlockEntity
     }
 
     @Override
-    public boolean isSolidSide(Direction side)
+    protected SolidityCheck getSolidityCheck(Direction side)
     {
         boolean top = getBlockState().getValue(FramedProperties.TOP);
         if ((!top && side == Direction.DOWN) || (top && side == Direction.UP))
         {
-            return getCamo(side).isSolid(level, worldPosition);
+            return SolidityCheck.FIRST;
         }
 
-        Direction facing = getBlockState().getValue(FramedProperties.FACING_HOR);
-        if ((side == facing && !corner) || (side == facing.getCounterClockWise() && innerCorner))
+        if (!corner)
         {
-            return getCamo().isSolid(level, worldPosition) && getCamoTwo().isSolid(level, worldPosition);
+            Direction facing = getBlockState().getValue(FramedProperties.FACING_HOR);
+            if (side == facing || (innerCorner && side == facing.getCounterClockWise()))
+            {
+                return SolidityCheck.BOTH;
+            }
         }
-        return false;
+        return SolidityCheck.NONE;
     }
 }

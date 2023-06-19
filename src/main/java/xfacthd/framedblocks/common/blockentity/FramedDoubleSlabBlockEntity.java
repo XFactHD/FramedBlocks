@@ -6,7 +6,6 @@ import net.minecraft.core.Direction;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.util.Mth;
 import org.jetbrains.annotations.Nullable;
-import xfacthd.framedblocks.api.util.Utils;
 import xfacthd.framedblocks.common.FBContent;
 import xfacthd.framedblocks.common.util.DoubleSoundMode;
 
@@ -28,13 +27,13 @@ public class FramedDoubleSlabBlockEntity extends FramedDoubleBlockEntity
     }
 
     @Override
-    public DoubleSoundMode getSoundMode()
+    protected DoubleSoundMode calculateSoundMode()
     {
         return DoubleSoundMode.SECOND;
     }
 
     @Override
-    public CamoGetter getCamoGetter(Direction side, @Nullable Direction edge)
+    protected CamoGetter getCamoGetter(Direction side, @Nullable Direction edge)
     {
         if (side == Direction.UP)
         {
@@ -56,12 +55,13 @@ public class FramedDoubleSlabBlockEntity extends FramedDoubleBlockEntity
     }
 
     @Override
-    public boolean isSolidSide(Direction side)
+    protected SolidityCheck getSolidityCheck(Direction side)
     {
-        if (Utils.isY(side))
+        return switch (side)
         {
-            return getCamo(side).isSolid(level, worldPosition);
-        }
-        return getCamo().isSolid(level, worldPosition) && getCamoTwo().isSolid(level, worldPosition);
+            case DOWN -> SolidityCheck.FIRST;
+            case UP -> SolidityCheck.SECOND;
+            default -> SolidityCheck.BOTH;
+        };
     }
 }

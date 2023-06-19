@@ -6,7 +6,6 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.Vec3;
 import org.jetbrains.annotations.Nullable;
-import xfacthd.framedblocks.api.camo.CamoContainer;
 import xfacthd.framedblocks.api.block.FramedProperties;
 import xfacthd.framedblocks.api.util.Utils;
 import xfacthd.framedblocks.common.FBContent;
@@ -80,13 +79,13 @@ public class FramedFlatElevatedDoubleSlopeSlabCornerBlockEntity extends FramedDo
     }
 
     @Override
-    public DoubleSoundMode getSoundMode()
+    protected DoubleSoundMode calculateSoundMode()
     {
         return getBlockState().getValue(FramedProperties.TOP) ? DoubleSoundMode.FIRST : DoubleSoundMode.SECOND;
     }
 
     @Override
-    public CamoGetter getCamoGetter(Direction side, @Nullable Direction edge)
+    protected CamoGetter getCamoGetter(Direction side, @Nullable Direction edge)
     {
         boolean top = getBlockState().getValue(FramedProperties.TOP);
         Direction dirTwo = top ? Direction.UP : Direction.DOWN;
@@ -124,22 +123,25 @@ public class FramedFlatElevatedDoubleSlopeSlabCornerBlockEntity extends FramedDo
     }
 
     @Override
-    public boolean isSolidSide(Direction side)
+    protected SolidityCheck getSolidityCheck(Direction side)
     {
-        if (Utils.isY(side))
+        boolean top = getBlockState().getValue(FramedProperties.TOP);
+        if (side == Direction.UP)
         {
-            boolean top = getBlockState().getValue(FramedProperties.TOP);
-            CamoContainer camo = top == (side == Direction.UP) ? getCamo() : getCamoTwo();
-            return camo.isSolid(level, worldPosition);
+            return top ? SolidityCheck.FIRST : SolidityCheck.SECOND;
         }
-        if (isInner)
+        else if (side == Direction.DOWN)
+        {
+            return top ? SolidityCheck.SECOND : SolidityCheck.FIRST;
+        }
+        else if (isInner)
         {
             Direction facing = getBlockState().getValue(FramedProperties.FACING_HOR);
             if (side == facing || side == facing.getCounterClockWise())
             {
-                return getCamo().isSolid(level, worldPosition);
+                return SolidityCheck.FIRST;
             }
         }
-        return false;
+        return SolidityCheck.BOTH;
     }
 }

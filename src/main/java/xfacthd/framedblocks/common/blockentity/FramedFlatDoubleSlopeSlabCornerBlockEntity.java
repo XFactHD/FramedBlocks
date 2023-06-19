@@ -6,7 +6,6 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.Vec3;
 import org.jetbrains.annotations.Nullable;
-import xfacthd.framedblocks.api.camo.CamoContainer;
 import xfacthd.framedblocks.api.block.FramedProperties;
 import xfacthd.framedblocks.api.util.Utils;
 import xfacthd.framedblocks.common.FBContent;
@@ -62,13 +61,13 @@ public class FramedFlatDoubleSlopeSlabCornerBlockEntity extends FramedDoubleBloc
     }
 
     @Override
-    public DoubleSoundMode getSoundMode()
+    protected DoubleSoundMode calculateSoundMode()
     {
         return getBlockState().getValue(FramedProperties.TOP) ? DoubleSoundMode.FIRST : DoubleSoundMode.SECOND;
     }
 
     @Override
-    public CamoGetter getCamoGetter(Direction side, @Nullable Direction edge)
+    protected CamoGetter getCamoGetter(Direction side, @Nullable Direction edge)
     {
         Direction facing = getBlockState().getValue(FramedProperties.FACING_HOR);
         boolean top = getBlockState().getValue(FramedProperties.TOP);
@@ -102,20 +101,18 @@ public class FramedFlatDoubleSlopeSlabCornerBlockEntity extends FramedDoubleBloc
     }
 
     @Override
-    public boolean isSolidSide(Direction side)
+    protected SolidityCheck getSolidityCheck(Direction side)
     {
         boolean top = getBlockState().getValue(FramedProperties.TOP);
         boolean topHalf = getBlockState().getValue(PropertyHolder.TOP_HALF);
         if (topHalf && side == Direction.UP)
         {
-            CamoContainer camo = top ? getCamo() : getCamoTwo();
-            return camo.isSolid(level, worldPosition);
+            return top ? SolidityCheck.FIRST : SolidityCheck.SECOND;
         }
         else if (!topHalf && side == Direction.DOWN)
         {
-            CamoContainer camo = top ? getCamoTwo() : getCamo();
-            return camo.isSolid(level, worldPosition);
+            return top ? SolidityCheck.SECOND : SolidityCheck.FIRST;
         }
-        return false;
+        return SolidityCheck.NONE;
     }
 }

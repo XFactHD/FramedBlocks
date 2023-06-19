@@ -57,7 +57,7 @@ public class FramedDoublePrismBlockEntity extends FramedDoubleBlockEntity
     }
 
     @Override
-    public DoubleSoundMode getSoundMode()
+    protected DoubleSoundMode calculateSoundMode()
     {
         if (isDoubleSide(Direction.UP))
         {
@@ -71,7 +71,7 @@ public class FramedDoublePrismBlockEntity extends FramedDoubleBlockEntity
     }
 
     @Override
-    public CamoGetter getCamoGetter(Direction side, @Nullable Direction edge)
+    protected CamoGetter getCamoGetter(Direction side, @Nullable Direction edge)
     {
         Direction facing = getFacing(getBlockState());
         if (side == facing)
@@ -94,18 +94,18 @@ public class FramedDoublePrismBlockEntity extends FramedDoubleBlockEntity
     }
 
     @Override
-    public boolean isSolidSide(Direction side)
+    protected SolidityCheck getSolidityCheck(Direction side)
     {
         Direction facing = getFacing(getBlockState());
         if (side == facing)
         {
-            return getCamoTwo().isSolid(level, worldPosition);
+            return SolidityCheck.SECOND;
         }
         if (isDoubleSide(side))
         {
-            return false;
+            return SolidityCheck.BOTH;
         }
-        return getCamo().isSolid(level, worldPosition);
+        return SolidityCheck.FIRST;
     }
 
     protected boolean isDoubleSide(Direction side)

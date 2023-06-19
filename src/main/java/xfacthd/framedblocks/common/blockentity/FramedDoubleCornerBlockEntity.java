@@ -145,7 +145,7 @@ public class FramedDoubleCornerBlockEntity extends FramedDoubleBlockEntity
     }
 
     @Override
-    public DoubleSoundMode getSoundMode()
+    protected DoubleSoundMode calculateSoundMode()
     {
         CornerType type = getBlockState().getValue(PropertyHolder.CORNER_TYPE);
         if (type == CornerType.BOTTOM)
@@ -160,7 +160,7 @@ public class FramedDoubleCornerBlockEntity extends FramedDoubleBlockEntity
     }
 
     @Override
-    public CamoGetter getCamoGetter(Direction side, @Nullable Direction edge)
+    protected CamoGetter getCamoGetter(Direction side, @Nullable Direction edge)
     {
         CornerType type = getBlockState().getValue(PropertyHolder.CORNER_TYPE);
         Direction dir = getBlockState().getValue(FramedProperties.FACING_HOR);
@@ -208,26 +208,45 @@ public class FramedDoubleCornerBlockEntity extends FramedDoubleBlockEntity
     }
 
     @Override
-    public boolean isSolidSide(Direction side)
+    protected SolidityCheck getSolidityCheck(Direction side)
     {
         CornerType type = getBlockState().getValue(PropertyHolder.CORNER_TYPE);
-        Direction dir = getBlockState().getValue(FramedProperties.FACING_HOR);
+        Direction facing = getBlockState().getValue(FramedProperties.FACING_HOR);
 
         if (type.isHorizontal())
         {
-            if ((!type.isRight() && side == dir.getCounterClockWise()) || (type.isRight() && side == dir.getClockWise()) ||
-                (!type.isTop() && side == Direction.DOWN) || (type.isTop() && side == Direction.UP) ||
-                side == dir || side == dir.getOpposite()
-            )
+            if (side == facing)
             {
-                return getCamo(side).isSolid(level, worldPosition);
+                return SolidityCheck.FIRST;
+            }
+            else if (side == facing.getOpposite())
+            {
+                return SolidityCheck.SECOND;
+            }
+            else if ((!type.isRight() && side == facing.getCounterClockWise()) || (type.isRight() && side == facing.getClockWise()))
+            {
+                return SolidityCheck.FIRST;
+            }
+            else if ((!type.isTop() && side == Direction.DOWN) || (type.isTop() && side == Direction.UP))
+            {
+                return SolidityCheck.FIRST;
             }
         }
-        else if (side == dir || side == dir.getCounterClockWise() || Utils.isY(side))
+        else
         {
-            return getCamo(side).isSolid(level, worldPosition);
+            if (side == facing || side == facing.getCounterClockWise())
+            {
+                return SolidityCheck.FIRST;
+            }
+            else if ((!type.isTop() && side == Direction.DOWN) || (type.isTop() && side == Direction.UP))
+            {
+                return SolidityCheck.FIRST;
+            }
+            else if ((!type.isTop() && side == Direction.UP) || (type.isTop() && side == Direction.DOWN))
+            {
+                return SolidityCheck.SECOND;
+            }
         }
-
-        return getCamo().isSolid(level, worldPosition) && getCamoTwo().isSolid(level, worldPosition);
+        return SolidityCheck.BOTH;
     }
 }

@@ -48,13 +48,13 @@ public class FramedStackedSlopePanelBlockEntity extends FramedDoubleBlockEntity
     }
 
     @Override
-    public DoubleSoundMode getSoundMode()
+    protected DoubleSoundMode calculateSoundMode()
     {
         return DoubleSoundMode.EITHER;
     }
 
     @Override
-    public CamoGetter getCamoGetter(Direction side, @Nullable Direction edge)
+    protected CamoGetter getCamoGetter(Direction side, @Nullable Direction edge)
     {
         Direction facing = getBlockState().getValue(FramedProperties.FACING_HOR);
         if (side == facing || (side.getAxis() != facing.getAxis() && edge == facing))
@@ -77,20 +77,25 @@ public class FramedStackedSlopePanelBlockEntity extends FramedDoubleBlockEntity
     }
 
     @Override
-    public boolean isSolidSide(Direction side)
+    protected SolidityCheck getSolidityCheck(Direction side)
     {
         Direction facing = getBlockState().getValue(FramedProperties.FACING_HOR);
-        if (side == facing || side == facing.getOpposite())
+        if (side == facing)
         {
-            return getCamo(side).isSolid(level, worldPosition);
+            return SolidityCheck.FIRST;
         }
 
-        HorizontalRotation rot = getBlockState().getValue(PropertyHolder.ROTATION);
-        HorizontalRotation rotCw = rot.rotate(Rotation.COUNTERCLOCKWISE_90);
-        if ((rot.withFacing(facing) == side.getOpposite() && !corner) || rotCw.withFacing(facing) == side.getOpposite() && innerCorner)
+        if (!corner)
         {
-            return getCamo().isSolid(level, worldPosition) && getCamoTwo().isSolid(level, worldPosition);
+            HorizontalRotation rot = getBlockState().getValue(PropertyHolder.ROTATION);
+            Direction rotDir = rot.withFacing(facing);
+            Direction perpRotDir = rot.rotate(Rotation.COUNTERCLOCKWISE_90).withFacing(facing);
+
+            if (side == rotDir.getOpposite() || (innerCorner && side == perpRotDir.getOpposite()))
+            {
+                return SolidityCheck.BOTH;
+            }
         }
-        return false;
+        return SolidityCheck.NONE;
     }
 }

@@ -45,13 +45,13 @@ public class FramedDoublePanelBlockEntity extends FramedDoubleBlockEntity
     }
 
     @Override
-    public DoubleSoundMode getSoundMode()
+    protected DoubleSoundMode calculateSoundMode()
     {
         return DoubleSoundMode.EITHER;
     }
 
     @Override
-    public CamoGetter getCamoGetter(Direction side, @Nullable Direction edge)
+    protected CamoGetter getCamoGetter(Direction side, @Nullable Direction edge)
     {
         Direction facing = getBlockState().getValue(FramedProperties.FACING_NE);
         boolean notFacingAxis = side.getAxis() != facing.getAxis();
@@ -67,13 +67,17 @@ public class FramedDoublePanelBlockEntity extends FramedDoubleBlockEntity
     }
 
     @Override
-    public boolean isSolidSide(Direction side)
+    protected SolidityCheck getSolidityCheck(Direction side)
     {
         Direction facing = getBlockState().getValue(FramedProperties.FACING_NE);
-        if (side == facing || side == facing.getOpposite())
+        if (side == facing)
         {
-            return getCamo(side).isSolid(level, worldPosition);
+            return SolidityCheck.FIRST;
         }
-        return getCamo().isSolid(level, worldPosition) && getCamoTwo().isSolid(level, worldPosition);
+        else if (side == facing.getOpposite())
+        {
+            return SolidityCheck.SECOND;
+        }
+        return SolidityCheck.BOTH;
     }
 }

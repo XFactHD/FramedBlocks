@@ -10,6 +10,7 @@ import xfacthd.framedblocks.api.block.FramedProperties;
 import xfacthd.framedblocks.api.util.Utils;
 import xfacthd.framedblocks.common.FBContent;
 import xfacthd.framedblocks.common.data.PropertyHolder;
+import xfacthd.framedblocks.common.data.property.HorizontalRotation;
 import xfacthd.framedblocks.common.util.DoubleSoundMode;
 
 public class FramedExtendedDoubleSlopePanelBlockEntity extends FramedDoubleBlockEntity
@@ -62,13 +63,14 @@ public class FramedExtendedDoubleSlopePanelBlockEntity extends FramedDoubleBlock
     }
 
     @Override
-    public DoubleSoundMode getSoundMode()
+    protected DoubleSoundMode calculateSoundMode()
     {
-        return DoubleSoundMode.EITHER;
+        HorizontalRotation rot = getBlockState().getValue(PropertyHolder.ROTATION);
+        return rot == HorizontalRotation.DOWN ? DoubleSoundMode.FIRST : DoubleSoundMode.EITHER;
     }
 
     @Override
-    public CamoGetter getCamoGetter(Direction side, @Nullable Direction edge)
+    protected CamoGetter getCamoGetter(Direction side, @Nullable Direction edge)
     {
         Direction facing = getBlockState().getValue(FramedProperties.FACING_HOR);
         if (side == facing)
@@ -101,15 +103,23 @@ public class FramedExtendedDoubleSlopePanelBlockEntity extends FramedDoubleBlock
     }
 
     @Override
-    public boolean isSolidSide(Direction side)
+    protected SolidityCheck getSolidityCheck(Direction side)
     {
         Direction facing = getBlockState().getValue(FramedProperties.FACING_HOR);
-        if (side.getAxis() == facing.getAxis())
+        if (side == facing)
         {
-            return getCamo(side).isSolid(level, worldPosition);
+            return SolidityCheck.FIRST;
+        }
+        else if (side == facing.getOpposite())
+        {
+            return SolidityCheck.SECOND;
         }
 
         Direction orientation = getBlockState().getValue(PropertyHolder.ROTATION).withFacing(facing);
-        return side == orientation.getOpposite() && getCamo().isSolid(level, worldPosition);
+        if (side == orientation.getOpposite())
+        {
+            return SolidityCheck.FIRST;
+        }
+        return SolidityCheck.BOTH;
     }
 }
