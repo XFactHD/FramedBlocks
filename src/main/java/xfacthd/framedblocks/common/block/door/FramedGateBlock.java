@@ -14,6 +14,7 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.*;
 import net.minecraft.world.level.gameevent.GameEvent;
+import net.minecraft.world.level.material.PushReaction;
 import net.minecraft.world.level.pathfinder.PathComputationType;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.Vec3;
@@ -41,7 +42,7 @@ public class FramedGateBlock extends FramedBlock
 
     private FramedGateBlock(BlockType blockType, Properties props, SoundEvent closeSound, SoundEvent openSound)
     {
-        super(blockType, props);
+        super(blockType, props.pushReaction(PushReaction.DESTROY));
         this.closeSound = closeSound;
         this.openSound = openSound;
         registerDefaultState(defaultBlockState()
@@ -173,13 +174,6 @@ public class FramedGateBlock extends FramedBlock
     {
         return false;
     }
-
-    // FIXME: https://github.com/MinecraftForge/MinecraftForge/pull/9538
-    //@Override
-    //public PushReaction getPistonPushReaction(BlockState state)
-    //{
-    //    return PushReaction.DESTROY;
-    //}
 
     @Override
     public BlockState rotate(BlockState state, Rotation rotation)
