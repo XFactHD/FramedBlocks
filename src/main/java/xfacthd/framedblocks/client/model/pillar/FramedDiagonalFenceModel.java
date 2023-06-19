@@ -24,7 +24,6 @@ public class FramedDiagonalFenceModel extends FramedFenceModel
     {
         super(state, baseModel);
 
-
         boolean hasProps = state.getBlock() instanceof DiagonalBlock && ((DiagonalBlock)state.getBlock()).hasProperties();
         northEast = hasProps && state.getValue(DiagonalBlock.NORTH_EAST);
         southEast = hasProps && state.getValue(DiagonalBlock.SOUTH_EAST);
