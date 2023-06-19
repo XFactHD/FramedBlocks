@@ -30,5 +30,6 @@
     "recipes": [
       "framedblocks:framed_reinforcement"
     ]
-  }
+  },
+  "sends_telemetry_event": false
 }

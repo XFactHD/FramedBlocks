@@ -30,5 +30,6 @@
     "recipes": [
       "framedblocks:framed_flat_double_slope_slab_corner_rotate_to_framed_flat_double_slope_panel_corner"
     ]
-  }
+  },
+  "sends_telemetry_event": false
 }

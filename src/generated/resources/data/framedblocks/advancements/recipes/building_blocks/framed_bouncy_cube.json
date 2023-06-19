@@ -30,5 +30,6 @@
     "recipes": [
       "framedblocks:framed_bouncy_cube"
     ]
-  }
+  },
+  "sends_telemetry_event": false
 }

@@ -30,5 +30,6 @@
     "recipes": [
       "framedblocks:framed_wall_board_rotate_to_framed_floor_board"
     ]
-  }
+  },
+  "sends_telemetry_event": false
 }

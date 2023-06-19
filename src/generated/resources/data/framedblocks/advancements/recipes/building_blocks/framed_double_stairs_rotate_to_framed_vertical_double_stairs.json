@@ -30,5 +30,6 @@
     "recipes": [
       "framedblocks:framed_double_stairs_rotate_to_framed_vertical_double_stairs"
     ]
-  }
+  },
+  "sends_telemetry_event": false
 }

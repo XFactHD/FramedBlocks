@@ -30,5 +30,6 @@
     "recipes": [
       "framedblocks:framed_glowing_cube"
     ]
-  }
+  },
+  "sends_telemetry_event": false
 }

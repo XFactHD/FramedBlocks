@@ -30,5 +30,6 @@
     "recipes": [
       "framedblocks:framed_mini_cube"
     ]
-  }
+  },
+  "sends_telemetry_event": false
 }

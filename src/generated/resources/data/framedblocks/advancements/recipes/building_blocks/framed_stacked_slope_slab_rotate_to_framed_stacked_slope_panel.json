@@ -30,5 +30,6 @@
     "recipes": [
       "framedblocks:framed_stacked_slope_slab_rotate_to_framed_stacked_slope_panel"
     ]
-  }
+  },
+  "sends_telemetry_event": false
 }

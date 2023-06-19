@@ -30,5 +30,6 @@
     "recipes": [
       "framedblocks:framed_slab_corner_from_half_pillar"
     ]
-  }
+  },
+  "sends_telemetry_event": false
 }

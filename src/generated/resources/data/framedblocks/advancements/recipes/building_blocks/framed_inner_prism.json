@@ -30,5 +30,6 @@
     "recipes": [
       "framedblocks:framed_inner_prism"
     ]
-  }
+  },
+  "sends_telemetry_event": false
 }

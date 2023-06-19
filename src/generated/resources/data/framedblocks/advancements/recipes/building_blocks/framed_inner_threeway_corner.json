@@ -30,5 +30,6 @@
     "recipes": [
       "framedblocks:framed_inner_threeway_corner"
     ]
-  }
+  },
+  "sends_telemetry_event": false
 }

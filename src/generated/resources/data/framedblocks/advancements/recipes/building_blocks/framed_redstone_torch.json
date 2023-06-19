@@ -30,5 +30,6 @@
     "recipes": [
       "framedblocks:framed_redstone_torch"
     ]
-  }
+  },
+  "sends_telemetry_event": false
 }

@@ -30,5 +30,6 @@
     "recipes": [
       "framedblocks:framed_extended_double_slope_panel"
     ]
-  }
+  },
+  "sends_telemetry_event": false
 }

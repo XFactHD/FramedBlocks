@@ -30,5 +30,6 @@
     "recipes": [
       "framedblocks:framed_fancy_rail_slope"
     ]
-  }
+  },
+  "sends_telemetry_event": false
 }

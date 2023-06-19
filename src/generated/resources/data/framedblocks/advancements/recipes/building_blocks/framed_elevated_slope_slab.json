@@ -30,5 +30,6 @@
     "recipes": [
       "framedblocks:framed_elevated_slope_slab"
     ]
-  }
+  },
+  "sends_telemetry_event": false
 }

@@ -30,5 +30,6 @@
     "recipes": [
       "framedblocks:framed_fence_from_post"
     ]
-  }
+  },
+  "sends_telemetry_event": false
 }
