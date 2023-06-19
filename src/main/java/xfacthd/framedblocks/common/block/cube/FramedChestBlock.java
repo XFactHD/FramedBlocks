@@ -14,7 +14,7 @@ import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import xfacthd.framedblocks.api.block.FramedProperties;
 import xfacthd.framedblocks.api.util.Utils;
 import xfacthd.framedblocks.common.FBContent;
-import xfacthd.framedblocks.common.blockentity.FramedChestBlockEntity;
+import xfacthd.framedblocks.common.blockentity.special.FramedChestBlockEntity;
 import xfacthd.framedblocks.common.data.*;
 import xfacthd.framedblocks.common.data.property.ChestState;
 

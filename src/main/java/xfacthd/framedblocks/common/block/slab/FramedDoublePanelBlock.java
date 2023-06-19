@@ -16,7 +16,7 @@ import xfacthd.framedblocks.api.block.FramedProperties;
 import xfacthd.framedblocks.common.FBContent;
 import xfacthd.framedblocks.common.block.AbstractFramedDoubleBlock;
 import xfacthd.framedblocks.common.data.BlockType;
-import xfacthd.framedblocks.common.blockentity.FramedDoublePanelBlockEntity;
+import xfacthd.framedblocks.common.blockentity.doubled.FramedDoublePanelBlockEntity;
 
 public class FramedDoublePanelBlock extends AbstractFramedDoubleBlock
 {

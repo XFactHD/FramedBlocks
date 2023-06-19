@@ -11,8 +11,8 @@ import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraftforge.common.capabilities.ForgeCapabilities;
 import net.minecraftforge.items.*;
 import xfacthd.framedblocks.common.FBContent;
-import xfacthd.framedblocks.common.blockentity.FramedChestBlockEntity;
-import xfacthd.framedblocks.common.blockentity.FramedStorageBlockEntity;
+import xfacthd.framedblocks.common.blockentity.special.FramedChestBlockEntity;
+import xfacthd.framedblocks.common.blockentity.special.FramedStorageBlockEntity;
 import xfacthd.framedblocks.common.util.FramedUtils;
 
 public class FramedStorageMenu extends AbstractContainerMenu

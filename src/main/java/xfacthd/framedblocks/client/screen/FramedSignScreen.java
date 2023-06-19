@@ -32,7 +32,7 @@ import xfacthd.framedblocks.api.block.FramedProperties;
 import xfacthd.framedblocks.api.util.Utils;
 import xfacthd.framedblocks.common.FBContent;
 import xfacthd.framedblocks.common.net.SignUpdatePacket;
-import xfacthd.framedblocks.common.blockentity.FramedSignBlockEntity;
+import xfacthd.framedblocks.common.blockentity.special.FramedSignBlockEntity;
 
 import java.util.List;
 

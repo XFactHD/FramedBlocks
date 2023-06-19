@@ -33,6 +33,8 @@ import xfacthd.framedblocks.common.block.slopepanel.*;
 import xfacthd.framedblocks.common.block.slopeslab.*;
 import xfacthd.framedblocks.common.block.stairs.*;
 import xfacthd.framedblocks.common.block.torch.*;
+import xfacthd.framedblocks.common.blockentity.doubled.*;
+import xfacthd.framedblocks.common.blockentity.special.*;
 import xfacthd.framedblocks.common.crafting.FramingSawRecipe;
 import xfacthd.framedblocks.common.crafting.FramingSawRecipeSerializer;
 import xfacthd.framedblocks.common.data.camo.BlockCamoContainer;

@@ -18,7 +18,7 @@ import xfacthd.framedblocks.api.util.*;
 import xfacthd.framedblocks.client.util.DoubleBlockParticleMode;
 import xfacthd.framedblocks.common.FBContent;
 import xfacthd.framedblocks.common.block.AbstractFramedDoubleBlock;
-import xfacthd.framedblocks.common.blockentity.FramedDoubleSlopeSlabBlockEntity;
+import xfacthd.framedblocks.common.blockentity.doubled.FramedDoubleSlopeSlabBlockEntity;
 import xfacthd.framedblocks.common.data.BlockType;
 import xfacthd.framedblocks.common.data.PropertyHolder;
 

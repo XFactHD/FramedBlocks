@@ -14,7 +14,7 @@ import xfacthd.framedblocks.api.util.FramedConstants;
 import xfacthd.framedblocks.api.block.FramedProperties;
 import xfacthd.framedblocks.api.test.TestUtils;
 import xfacthd.framedblocks.common.FBContent;
-import xfacthd.framedblocks.common.blockentity.*;
+import xfacthd.framedblocks.common.blockentity.special.*;
 import xfacthd.framedblocks.common.data.property.LatchType;
 import xfacthd.framedblocks.common.data.PropertyHolder;
 

@@ -8,7 +8,7 @@ import net.minecraft.world.phys.BlockHitResult;
 import net.minecraftforge.client.model.data.ModelData;
 import org.jetbrains.annotations.Nullable;
 import xfacthd.framedblocks.api.ghost.GhostRenderBehaviour;
-import xfacthd.framedblocks.common.blockentity.FramedCollapsibleBlockEntity;
+import xfacthd.framedblocks.common.blockentity.special.FramedCollapsibleBlockEntity;
 import xfacthd.framedblocks.common.data.PropertyHolder;
 import xfacthd.framedblocks.common.data.property.NullableDirection;
 

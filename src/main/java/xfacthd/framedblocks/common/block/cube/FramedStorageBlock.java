@@ -15,7 +15,7 @@ import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.phys.BlockHitResult;
 import xfacthd.framedblocks.api.block.FramedProperties;
 import xfacthd.framedblocks.common.block.FramedBlock;
-import xfacthd.framedblocks.common.blockentity.FramedStorageBlockEntity;
+import xfacthd.framedblocks.common.blockentity.special.FramedStorageBlockEntity;
 import xfacthd.framedblocks.common.data.BlockType;
 
 import javax.annotation.Nullable;

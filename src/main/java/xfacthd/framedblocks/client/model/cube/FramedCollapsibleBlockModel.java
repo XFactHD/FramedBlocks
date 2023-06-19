@@ -9,7 +9,7 @@ import xfacthd.framedblocks.api.model.FramedBlockModel;
 import xfacthd.framedblocks.api.model.quad.Modifiers;
 import xfacthd.framedblocks.api.model.quad.QuadModifier;
 import xfacthd.framedblocks.api.util.Utils;
-import xfacthd.framedblocks.common.blockentity.FramedCollapsibleBlockEntity;
+import xfacthd.framedblocks.common.blockentity.special.FramedCollapsibleBlockEntity;
 import xfacthd.framedblocks.common.compat.rubidium.RubidiumCompat;
 import xfacthd.framedblocks.common.data.PropertyHolder;
 

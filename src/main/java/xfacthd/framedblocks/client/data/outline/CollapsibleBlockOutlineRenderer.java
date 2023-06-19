@@ -11,7 +11,7 @@ import net.minecraft.world.phys.shapes.*;
 import org.joml.Quaternionf;
 import xfacthd.framedblocks.api.render.Quaternions;
 import xfacthd.framedblocks.api.render.OutlineRenderer;
-import xfacthd.framedblocks.common.blockentity.FramedCollapsibleBlockEntity;
+import xfacthd.framedblocks.common.blockentity.special.FramedCollapsibleBlockEntity;
 import xfacthd.framedblocks.common.data.property.NullableDirection;
 import xfacthd.framedblocks.common.data.PropertyHolder;
 

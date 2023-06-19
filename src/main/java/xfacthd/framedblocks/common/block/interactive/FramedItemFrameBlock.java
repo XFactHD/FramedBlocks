@@ -28,7 +28,7 @@ import xfacthd.framedblocks.api.shapes.ShapeProvider;
 import xfacthd.framedblocks.api.util.Utils;
 import xfacthd.framedblocks.common.FBContent;
 import xfacthd.framedblocks.common.block.FramedBlock;
-import xfacthd.framedblocks.common.blockentity.FramedItemFrameBlockEntity;
+import xfacthd.framedblocks.common.blockentity.special.FramedItemFrameBlockEntity;
 import xfacthd.framedblocks.common.data.BlockType;
 import xfacthd.framedblocks.common.data.PropertyHolder;
 

@@ -8,7 +8,7 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.level.Level;
 import net.minecraftforge.network.NetworkEvent;
 import xfacthd.framedblocks.FramedBlocks;
-import xfacthd.framedblocks.common.blockentity.FramedSignBlockEntity;
+import xfacthd.framedblocks.common.blockentity.special.FramedSignBlockEntity;
 
 import java.util.function.Supplier;
 

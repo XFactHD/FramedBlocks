@@ -20,7 +20,7 @@ import xfacthd.framedblocks.api.block.IFramedBlock;
 import xfacthd.framedblocks.api.util.Utils;
 import xfacthd.framedblocks.common.FBContent;
 import xfacthd.framedblocks.common.block.FramedBlock;
-import xfacthd.framedblocks.common.blockentity.FramedCollapsibleBlockEntity;
+import xfacthd.framedblocks.common.blockentity.special.FramedCollapsibleBlockEntity;
 import xfacthd.framedblocks.common.data.*;
 import xfacthd.framedblocks.common.data.property.NullableDirection;
 

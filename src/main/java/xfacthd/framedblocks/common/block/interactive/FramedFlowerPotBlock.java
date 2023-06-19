@@ -20,7 +20,7 @@ import net.minecraft.world.level.pathfinder.PathComputationType;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraftforge.registries.ForgeRegistries;
 import xfacthd.framedblocks.common.block.FramedBlock;
-import xfacthd.framedblocks.common.blockentity.FramedFlowerPotBlockEntity;
+import xfacthd.framedblocks.common.blockentity.special.FramedFlowerPotBlockEntity;
 import xfacthd.framedblocks.common.compat.supplementaries.SupplementariesCompat;
 import xfacthd.framedblocks.common.data.BlockType;
 import xfacthd.framedblocks.common.data.PropertyHolder;

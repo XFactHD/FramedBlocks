@@ -5,7 +5,7 @@ import net.minecraft.client.multiplayer.MultiPlayerGameMode;
 import net.minecraft.core.BlockPos;
 import xfacthd.framedblocks.api.util.Utils;
 import xfacthd.framedblocks.client.screen.FramedSignScreen;
-import xfacthd.framedblocks.common.blockentity.FramedSignBlockEntity;
+import xfacthd.framedblocks.common.blockentity.special.FramedSignBlockEntity;
 
 import java.lang.invoke.MethodHandle;
 import java.util.Objects;

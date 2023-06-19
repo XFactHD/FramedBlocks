@@ -25,7 +25,7 @@ import xfacthd.framedblocks.api.util.ClientUtils;
 import xfacthd.framedblocks.client.model.cube.FramedChestLidModel;
 import xfacthd.framedblocks.common.FBContent;
 import xfacthd.framedblocks.common.data.*;
-import xfacthd.framedblocks.common.blockentity.FramedChestBlockEntity;
+import xfacthd.framedblocks.common.blockentity.special.FramedChestBlockEntity;
 import xfacthd.framedblocks.common.data.property.ChestState;
 import xfacthd.framedblocks.common.data.property.LatchType;
 

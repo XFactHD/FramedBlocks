@@ -19,7 +19,7 @@ import org.jetbrains.annotations.Nullable;
 import xfacthd.framedblocks.api.util.Utils;
 import xfacthd.framedblocks.common.FBContent;
 import xfacthd.framedblocks.common.block.FramedBlock;
-import xfacthd.framedblocks.common.blockentity.FramedOwnableBlockEntity;
+import xfacthd.framedblocks.common.blockentity.special.FramedOwnableBlockEntity;
 import xfacthd.framedblocks.common.data.BlockType;
 import xfacthd.framedblocks.common.data.PropertyHolder;
 import xfacthd.framedblocks.common.data.property.NullableDirection;

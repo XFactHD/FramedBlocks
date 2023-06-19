@@ -11,7 +11,7 @@ import net.minecraft.world.level.block.state.BlockState;
 import xfacthd.framedblocks.api.predicate.SideSkipPredicate;
 import xfacthd.framedblocks.api.util.Utils;
 import xfacthd.framedblocks.common.FBContent;
-import xfacthd.framedblocks.common.blockentity.FramedCollapsibleBlockEntity;
+import xfacthd.framedblocks.common.blockentity.special.FramedCollapsibleBlockEntity;
 import xfacthd.framedblocks.common.data.property.NullableDirection;
 import xfacthd.framedblocks.common.data.PropertyHolder;
 

@@ -18,7 +18,7 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.pathfinder.PathComputationType;
 import net.minecraft.world.phys.BlockHitResult;
 import xfacthd.framedblocks.common.data.BlockType;
-import xfacthd.framedblocks.common.blockentity.FramedSignBlockEntity;
+import xfacthd.framedblocks.common.blockentity.special.FramedSignBlockEntity;
 
 public abstract class AbstractFramedSignBlock extends FramedBlock
 {

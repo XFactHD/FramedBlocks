@@ -24,7 +24,7 @@ import net.minecraftforge.client.extensions.common.IClientBlockExtensions;
 import net.minecraftforge.common.IPlantable;
 import xfacthd.framedblocks.api.block.*;
 import xfacthd.framedblocks.api.type.IBlockType;
-import xfacthd.framedblocks.common.blockentity.FramedTargetBlockEntity;
+import xfacthd.framedblocks.common.blockentity.special.FramedTargetBlockEntity;
 import xfacthd.framedblocks.common.data.BlockType;
 
 import javax.annotation.Nullable;

@@ -12,7 +12,7 @@ import net.minecraftforge.network.PacketDistributor;
 import xfacthd.framedblocks.FramedBlocks;
 import xfacthd.framedblocks.common.FBContent;
 import xfacthd.framedblocks.common.net.OpenSignScreenPacket;
-import xfacthd.framedblocks.common.blockentity.FramedSignBlockEntity;
+import xfacthd.framedblocks.common.blockentity.special.FramedSignBlockEntity;
 
 import javax.annotation.Nullable;
 

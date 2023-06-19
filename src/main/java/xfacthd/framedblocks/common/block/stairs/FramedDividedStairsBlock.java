@@ -17,7 +17,7 @@ import xfacthd.framedblocks.api.shapes.ShapeProvider;
 import xfacthd.framedblocks.api.util.Utils;
 import xfacthd.framedblocks.common.FBContent;
 import xfacthd.framedblocks.common.block.AbstractFramedDoubleBlock;
-import xfacthd.framedblocks.common.blockentity.FramedDividedStairsBlockEntity;
+import xfacthd.framedblocks.common.blockentity.doubled.FramedDividedStairsBlockEntity;
 import xfacthd.framedblocks.common.data.BlockType;
 import xfacthd.framedblocks.common.data.PropertyHolder;
 

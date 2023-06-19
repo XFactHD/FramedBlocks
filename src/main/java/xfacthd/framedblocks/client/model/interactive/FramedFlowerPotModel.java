@@ -21,7 +21,7 @@ import xfacthd.framedblocks.api.util.Utils;
 import xfacthd.framedblocks.api.model.util.ModelCache;
 import xfacthd.framedblocks.api.model.util.ModelUtils;
 import xfacthd.framedblocks.common.block.interactive.FramedFlowerPotBlock;
-import xfacthd.framedblocks.common.blockentity.FramedFlowerPotBlockEntity;
+import xfacthd.framedblocks.common.blockentity.special.FramedFlowerPotBlockEntity;
 import xfacthd.framedblocks.common.compat.supplementaries.SupplementariesCompat;
 import xfacthd.framedblocks.common.data.PropertyHolder;
 

@@ -14,7 +14,7 @@ import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.saveddata.maps.MapItemSavedData;
 import net.minecraft.world.phys.Vec3;
 import xfacthd.framedblocks.api.util.Utils;
-import xfacthd.framedblocks.common.blockentity.FramedItemFrameBlockEntity;
+import xfacthd.framedblocks.common.blockentity.special.FramedItemFrameBlockEntity;
 
 public class FramedItemFrameRenderer implements BlockEntityRenderer<FramedItemFrameBlockEntity>
 {

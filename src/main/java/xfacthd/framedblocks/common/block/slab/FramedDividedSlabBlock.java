@@ -13,7 +13,7 @@ import xfacthd.framedblocks.api.block.FramedProperties;
 import xfacthd.framedblocks.api.util.Utils;
 import xfacthd.framedblocks.common.FBContent;
 import xfacthd.framedblocks.common.block.AbstractFramedDoubleBlock;
-import xfacthd.framedblocks.common.blockentity.FramedDividedSlabBlockEntity;
+import xfacthd.framedblocks.common.blockentity.doubled.FramedDividedSlabBlockEntity;
 import xfacthd.framedblocks.common.data.BlockType;
 
 public class FramedDividedSlabBlock extends AbstractFramedDoubleBlock

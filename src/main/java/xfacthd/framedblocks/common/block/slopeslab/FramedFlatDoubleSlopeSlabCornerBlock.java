@@ -20,7 +20,7 @@ import xfacthd.framedblocks.api.shapes.ShapeProvider;
 import xfacthd.framedblocks.api.util.*;
 import xfacthd.framedblocks.common.FBContent;
 import xfacthd.framedblocks.common.block.AbstractFramedDoubleBlock;
-import xfacthd.framedblocks.common.blockentity.FramedFlatDoubleSlopeSlabCornerBlockEntity;
+import xfacthd.framedblocks.common.blockentity.doubled.FramedFlatDoubleSlopeSlabCornerBlockEntity;
 import xfacthd.framedblocks.common.data.BlockType;
 import xfacthd.framedblocks.common.data.PropertyHolder;
 
