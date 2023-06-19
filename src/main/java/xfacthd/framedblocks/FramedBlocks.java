@@ -29,6 +29,8 @@ import xfacthd.framedblocks.common.compat.CompatHandler;
 import xfacthd.framedblocks.common.crafting.FramingSawRecipeCache;
 import xfacthd.framedblocks.common.data.BlueprintBehaviours;
 import xfacthd.framedblocks.common.data.camo.CamoFactories;
+import xfacthd.framedblocks.common.data.facepreds.FullFacePredicates;
+import xfacthd.framedblocks.common.data.skippreds.SideSkipPredicates;
 import xfacthd.framedblocks.common.item.FramedBlueprintItem;
 import xfacthd.framedblocks.common.net.*;
 import xfacthd.framedblocks.common.util.*;
@@ -68,6 +70,9 @@ public final class FramedBlocks
         {
             forgeBus.addListener(FramedBlocks::onAddDebugReloadListener);
         }
+
+        FullFacePredicates.PREDICATES.initialize();
+        SideSkipPredicates.PREDICATES.initialize();
 
         CompatHandler.init();
 

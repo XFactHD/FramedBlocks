@@ -15,7 +15,6 @@ import net.minecraft.world.phys.shapes.VoxelShape;
 import net.minecraft.world.phys.shapes.Shapes;
 import xfacthd.framedblocks.api.block.FramedProperties;
 import xfacthd.framedblocks.api.block.IFramedBlock;
-import xfacthd.framedblocks.api.predicate.FullFacePredicate;
 import xfacthd.framedblocks.api.shapes.ShapeProvider;
 import xfacthd.framedblocks.api.util.*;
 import xfacthd.framedblocks.common.block.FramedBlock;
@@ -23,24 +22,6 @@ import xfacthd.framedblocks.common.data.*;
 
 public class FramedThreewayCornerBlock extends FramedBlock
 {
-    public static final FullFacePredicate CTM_PREDICATE = (state, dir) ->
-    {
-        boolean top = state.getValue(FramedProperties.TOP);
-        if (top && dir == Direction.UP)
-        {
-            return true;
-        }
-        else if (!top && dir == Direction.DOWN)
-        {
-            return true;
-        }
-
-        Direction facing = state.getValue(FramedProperties.FACING_HOR);
-        if (facing == dir) { return true; }
-
-        return facing.getCounterClockWise() == dir;
-    };
-
     public FramedThreewayCornerBlock(BlockType type)
     {
         super(type);

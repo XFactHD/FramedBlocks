@@ -17,7 +17,6 @@ import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import xfacthd.framedblocks.api.block.FramedProperties;
 import xfacthd.framedblocks.api.block.IFramedBlock;
-import xfacthd.framedblocks.api.predicate.FullFacePredicate;
 import xfacthd.framedblocks.api.shapes.ShapeProvider;
 import xfacthd.framedblocks.api.util.*;
 import xfacthd.framedblocks.common.block.FramedBlock;
@@ -29,15 +28,6 @@ import java.util.Map;
 
 public class FramedSlopePanelBlock extends FramedBlock
 {
-    public static final FullFacePredicate CTM_PREDICATE = (state, side) ->
-    {
-        if (state.getValue(PropertyHolder.FRONT))
-        {
-            return false;
-        }
-        return side == state.getValue(FramedProperties.FACING_HOR);
-    };
-
     public FramedSlopePanelBlock()
     {
         super(BlockType.FRAMED_SLOPE_PANEL);

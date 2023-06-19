@@ -16,7 +16,6 @@ import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import xfacthd.framedblocks.api.block.FramedProperties;
 import xfacthd.framedblocks.api.block.IFramedBlock;
-import xfacthd.framedblocks.api.predicate.FullFacePredicate;
 import xfacthd.framedblocks.api.shapes.ShapeProvider;
 import xfacthd.framedblocks.api.util.*;
 import xfacthd.framedblocks.common.block.FramedBlock;
@@ -24,11 +23,6 @@ import xfacthd.framedblocks.common.data.BlockType;
 
 public class FramedElevatedSlopeSlabBlock extends FramedBlock
 {
-    public static final FullFacePredicate CTM_PREDICATE = (state, dir) ->
-            dir == state.getValue(FramedProperties.FACING_HOR) ||
-            (state.getValue(FramedProperties.TOP) && dir == Direction.UP) ||
-            (!state.getValue(FramedProperties.TOP) && dir == Direction.DOWN);
-
     public FramedElevatedSlopeSlabBlock()
     {
         super(BlockType.FRAMED_ELEVATED_SLOPE_SLAB);

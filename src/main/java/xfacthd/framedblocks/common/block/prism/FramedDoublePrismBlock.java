@@ -11,7 +11,6 @@ import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import xfacthd.framedblocks.api.block.FramedProperties;
-import xfacthd.framedblocks.api.predicate.FullFacePredicate;
 import xfacthd.framedblocks.api.util.Utils;
 import xfacthd.framedblocks.client.util.DoubleBlockParticleMode;
 import xfacthd.framedblocks.common.FBContent;
@@ -23,12 +22,6 @@ import xfacthd.framedblocks.common.data.property.DirectionAxis;
 
 public class FramedDoublePrismBlock extends AbstractFramedDoubleBlock
 {
-    public static final FullFacePredicate CTM_PREDICATE = (state, side) ->
-    {
-        Direction.Axis axis = state.getValue(PropertyHolder.FACING_AXIS).axis();
-        return side != null && side.getAxis() != axis;
-    };
-
     public FramedDoublePrismBlock()
     {
         super(BlockType.FRAMED_DOUBLE_PRISM);

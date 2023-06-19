@@ -19,7 +19,6 @@ import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import net.minecraft.world.phys.shapes.Shapes;
 import xfacthd.framedblocks.api.block.*;
-import xfacthd.framedblocks.api.predicate.FullFacePredicate;
 import xfacthd.framedblocks.api.shapes.ShapeProvider;
 import xfacthd.framedblocks.api.util.*;
 import xfacthd.framedblocks.common.block.FramedBlock;
@@ -30,25 +29,6 @@ import xfacthd.framedblocks.common.util.FramedUtils;
 @SuppressWarnings("deprecation")
 public class FramedSlopeBlock extends FramedBlock
 {
-    public static final FullFacePredicate CTM_PREDICATE = (state, dir) ->
-    {
-        SlopeType type = FramedUtils.getSlopeType(state);
-        if (dir == Direction.UP && type == SlopeType.TOP)
-        {
-            return true;
-        }
-        else if (dir == Direction.DOWN && type == SlopeType.BOTTOM)
-        {
-            return true;
-        }
-        else if (type == SlopeType.HORIZONTAL)
-        {
-            Direction facing = state.getValue(FramedProperties.FACING_HOR);
-            return dir == facing || dir == facing.getCounterClockWise();
-        }
-        return FramedUtils.getSlopeBlockFacing(state) == dir;
-    };
-
     public FramedSlopeBlock()
     {
         super(BlockType.FRAMED_SLOPE);

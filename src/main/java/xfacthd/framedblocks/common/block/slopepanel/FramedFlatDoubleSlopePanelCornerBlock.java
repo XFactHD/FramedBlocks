@@ -16,7 +16,6 @@ import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import xfacthd.framedblocks.api.block.FramedProperties;
 import xfacthd.framedblocks.api.block.IFramedBlock;
-import xfacthd.framedblocks.api.predicate.FullFacePredicate;
 import xfacthd.framedblocks.api.shapes.ShapeProvider;
 import xfacthd.framedblocks.api.util.*;
 import xfacthd.framedblocks.client.util.DoubleBlockParticleMode;
@@ -29,19 +28,6 @@ import xfacthd.framedblocks.common.data.property.HorizontalRotation;
 
 public class FramedFlatDoubleSlopePanelCornerBlock extends AbstractFramedDoubleBlock
 {
-    public static final FullFacePredicate CTM_PREDICATE = (state, side) ->
-    {
-        Direction facing = state.getValue(FramedProperties.FACING_HOR);
-        if (state.getValue(PropertyHolder.FRONT))
-        {
-            return side == facing.getOpposite();
-        }
-        else
-        {
-            return side == facing;
-        }
-    };
-
     public FramedFlatDoubleSlopePanelCornerBlock()
     {
         super(BlockType.FRAMED_FLAT_DOUBLE_SLOPE_PANEL_CORNER);

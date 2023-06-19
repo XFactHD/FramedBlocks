@@ -12,7 +12,6 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import xfacthd.framedblocks.api.block.FramedProperties;
 import xfacthd.framedblocks.api.block.IFramedBlock;
-import xfacthd.framedblocks.api.predicate.FullFacePredicate;
 import xfacthd.framedblocks.api.util.Utils;
 import xfacthd.framedblocks.client.util.DoubleBlockParticleMode;
 import xfacthd.framedblocks.common.FBContent;
@@ -26,19 +25,6 @@ import javax.annotation.Nullable;
 
 public class FramedDoubleSlopeBlock extends AbstractFramedDoubleBlock
 {
-    public static final FullFacePredicate CTM_PREDICATE = (state, dir) ->
-    {
-        if (state.getValue(PropertyHolder.SLOPE_TYPE) == SlopeType.HORIZONTAL)
-        {
-            return dir != null && !Utils.isY(dir);
-        }
-        else
-        {
-            Direction facing = state.getValue(FramedProperties.FACING_HOR);
-            return (dir != null && Utils.isY(dir)) || dir == facing || dir == facing.getOpposite();
-        }
-    };
-
     public FramedDoubleSlopeBlock()
     {
         super(BlockType.FRAMED_DOUBLE_SLOPE);

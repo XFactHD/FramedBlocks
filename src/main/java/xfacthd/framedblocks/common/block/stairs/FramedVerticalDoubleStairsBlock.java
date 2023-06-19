@@ -10,7 +10,6 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import xfacthd.framedblocks.api.block.FramedProperties;
-import xfacthd.framedblocks.api.predicate.FullFacePredicate;
 import xfacthd.framedblocks.api.util.*;
 import xfacthd.framedblocks.common.FBContent;
 import xfacthd.framedblocks.common.block.AbstractFramedDoubleBlock;
@@ -19,12 +18,6 @@ import xfacthd.framedblocks.common.data.BlockType;
 
 public class FramedVerticalDoubleStairsBlock extends AbstractFramedDoubleBlock
 {
-    public static final FullFacePredicate CTM_PREDICATE = (state, side) ->
-    {
-        Direction facing = state.getValue(FramedProperties.FACING_HOR);
-        return side == facing || side == facing.getCounterClockWise();
-    };
-
     public FramedVerticalDoubleStairsBlock()
     {
         super(BlockType.FRAMED_VERTICAL_DOUBLE_STAIRS);

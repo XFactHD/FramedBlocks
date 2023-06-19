@@ -23,7 +23,7 @@ public interface FullFacePredicate extends BiPredicate<BlockState, Direction>
     FullFacePredicate HOR_DIR_AXIS = (state, dir) -> dir.getAxis() == state.getValue(FramedProperties.FACING_HOR).getAxis();
 
     @Override
-    boolean test(BlockState state, Direction direction);
+    boolean test(BlockState state, Direction side);
 
     @Override
     default FullFacePredicate and(BiPredicate<? super BlockState, ? super Direction> other)

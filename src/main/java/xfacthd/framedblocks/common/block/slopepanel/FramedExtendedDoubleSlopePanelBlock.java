@@ -12,7 +12,6 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import xfacthd.framedblocks.api.block.FramedProperties;
 import xfacthd.framedblocks.api.block.IFramedBlock;
-import xfacthd.framedblocks.api.predicate.FullFacePredicate;
 import xfacthd.framedblocks.api.util.*;
 import xfacthd.framedblocks.common.FBContent;
 import xfacthd.framedblocks.common.block.AbstractFramedDoubleBlock;
@@ -23,13 +22,6 @@ import xfacthd.framedblocks.common.data.property.HorizontalRotation;
 
 public class FramedExtendedDoubleSlopePanelBlock extends AbstractFramedDoubleBlock
 {
-    public static final FullFacePredicate CTM_PREDICATE = FullFacePredicate.HOR_DIR_AXIS.or((state, side) ->
-    {
-        Direction dir = state.getValue(FramedProperties.FACING_HOR);
-        HorizontalRotation rot = state.getValue(PropertyHolder.ROTATION);
-        return side == rot.withFacing(dir).getOpposite();
-    });
-
     public FramedExtendedDoubleSlopePanelBlock()
     {
         super(BlockType.FRAMED_EXTENDED_DOUBLE_SLOPE_PANEL);

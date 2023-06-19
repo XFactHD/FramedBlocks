@@ -13,7 +13,6 @@ import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.block.state.properties.Half;
 import net.minecraft.world.phys.shapes.*;
 import xfacthd.framedblocks.api.block.FramedProperties;
-import xfacthd.framedblocks.api.predicate.FullFacePredicate;
 import xfacthd.framedblocks.api.shapes.ShapeProvider;
 import xfacthd.framedblocks.api.util.*;
 import xfacthd.framedblocks.common.block.FramedBlock;
@@ -24,17 +23,6 @@ import java.util.stream.Stream;
 
 public class FramedVerticalStairsBlock extends FramedBlock
 {
-    public static final FullFacePredicate CTM_PREDICATE = (state, side) ->
-    {
-        StairsType type = state.getValue(PropertyHolder.STAIRS_TYPE);
-        if (type == StairsType.VERTICAL)
-        {
-            Direction dir = state.getValue(FramedProperties.FACING_HOR);
-            return side == dir || side == dir.getCounterClockWise();
-        }
-        return false;
-    };
-
     public FramedVerticalStairsBlock()
     {
         super(BlockType.FRAMED_VERTICAL_STAIRS);

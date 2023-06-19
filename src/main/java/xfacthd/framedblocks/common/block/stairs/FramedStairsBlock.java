@@ -12,14 +12,12 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.StairBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
-import net.minecraft.world.level.block.state.properties.*;
 import net.minecraft.world.level.storage.loot.LootParams;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.shapes.*;
 import net.minecraftforge.client.extensions.common.IClientBlockExtensions;
 import net.minecraftforge.common.IPlantable;
 import xfacthd.framedblocks.api.block.*;
-import xfacthd.framedblocks.api.predicate.FullFacePredicate;
 import xfacthd.framedblocks.common.FBContent;
 import xfacthd.framedblocks.common.data.BlockType;
 
@@ -30,39 +28,6 @@ import java.util.function.Consumer;
 @SuppressWarnings("deprecation")
 public class FramedStairsBlock extends StairBlock implements IFramedBlock
 {
-    public static final FullFacePredicate CTM_PREDICATE = (state, dir) ->
-    {
-        if (dir == Direction.UP)
-        {
-            return state.getValue(BlockStateProperties.HALF) == Half.TOP;
-        }
-        else if (dir == Direction.DOWN)
-        {
-            return state.getValue(BlockStateProperties.HALF) == Half.BOTTOM;
-        }
-        else
-        {
-            Direction facing = state.getValue(BlockStateProperties.HORIZONTAL_FACING);
-            StairsShape shape = state.getValue(BlockStateProperties.STAIRS_SHAPE);
-            if (shape == StairsShape.STRAIGHT)
-            {
-                return facing == dir;
-            }
-            else if (shape == StairsShape.INNER_LEFT)
-            {
-                return facing == dir || facing.getCounterClockWise() == dir;
-            }
-            else if (shape == StairsShape.INNER_RIGHT)
-            {
-                return facing == dir || facing.getClockWise() == dir;
-            }
-            else
-            {
-                return false;
-            }
-        }
-    };
-
     public FramedStairsBlock()
     {
         super(() -> FBContent.BLOCK_FRAMED_CUBE.get().defaultBlockState(), IFramedBlock.createProperties(BlockType.FRAMED_STAIRS));

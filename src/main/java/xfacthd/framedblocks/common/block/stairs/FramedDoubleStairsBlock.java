@@ -11,7 +11,6 @@ import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.block.state.properties.Half;
 import xfacthd.framedblocks.api.block.FramedProperties;
-import xfacthd.framedblocks.api.predicate.FullFacePredicate;
 import xfacthd.framedblocks.api.util.*;
 import xfacthd.framedblocks.common.FBContent;
 import xfacthd.framedblocks.common.block.AbstractFramedDoubleBlock;
@@ -20,17 +19,6 @@ import xfacthd.framedblocks.common.data.BlockType;
 
 public class FramedDoubleStairsBlock extends AbstractFramedDoubleBlock
 {
-    public static final FullFacePredicate CTM_PREDICATE = (state, side) ->
-    {
-        if (side == state.getValue(FramedProperties.FACING_HOR))
-        {
-            return true;
-        }
-
-        boolean top = state.getValue(FramedProperties.TOP);
-        return Utils.isY(side) && top == (side == Direction.UP);
-    };
-
     public FramedDoubleStairsBlock()
     {
         super(BlockType.FRAMED_DOUBLE_STAIRS);

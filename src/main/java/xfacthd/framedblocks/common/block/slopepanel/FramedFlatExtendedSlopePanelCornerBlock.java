@@ -16,7 +16,6 @@ import net.minecraft.world.phys.Vec3;
 import net.minecraft.world.phys.shapes.*;
 import xfacthd.framedblocks.api.block.FramedProperties;
 import xfacthd.framedblocks.api.block.IFramedBlock;
-import xfacthd.framedblocks.api.predicate.FullFacePredicate;
 import xfacthd.framedblocks.api.shapes.ShapeProvider;
 import xfacthd.framedblocks.api.util.*;
 import xfacthd.framedblocks.common.block.FramedBlock;
@@ -26,28 +25,6 @@ import xfacthd.framedblocks.common.data.property.HorizontalRotation;
 
 public class FramedFlatExtendedSlopePanelCornerBlock extends FramedBlock
 {
-    public static final FullFacePredicate CTM_PREDICATE = FullFacePredicate.HOR_DIR.or((state, side) ->
-    {
-        Direction facing = state.getValue(FramedProperties.FACING_HOR);
-        Direction orientation = state.getValue(PropertyHolder.ROTATION).withFacing(facing);
-
-        if (side == orientation.getOpposite())
-        {
-            return true;
-        }
-
-        Direction rotOrientation;
-        if (Utils.isPositive(facing))
-        {
-            rotOrientation = orientation.getClockWise(facing.getAxis());
-        }
-        else
-        {
-            rotOrientation = orientation.getCounterClockWise(facing.getAxis());
-        }
-        return side == rotOrientation.getOpposite();
-    });
-
     public FramedFlatExtendedSlopePanelCornerBlock(BlockType type)
     {
         super(type);

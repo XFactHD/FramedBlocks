@@ -18,7 +18,6 @@ import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import xfacthd.framedblocks.api.block.*;
-import xfacthd.framedblocks.api.predicate.FullFacePredicate;
 import xfacthd.framedblocks.common.data.BlockType;
 
 import javax.annotation.Nullable;
@@ -27,26 +26,6 @@ import java.util.*;
 @SuppressWarnings("deprecation")
 public class FramedDoorBlock extends DoorBlock implements IFramedBlock
 {
-    public static final FullFacePredicate CTM_PREDICATE = (state, dir) ->
-    {
-        Direction facing = state.getValue(BlockStateProperties.HORIZONTAL_FACING);
-        if (state.getValue(BlockStateProperties.OPEN))
-        {
-            if (state.getValue(BlockStateProperties.DOOR_HINGE) == DoorHingeSide.LEFT)
-            {
-                return facing.getCounterClockWise() == dir;
-            }
-            else
-            {
-                return facing.getClockWise() == dir;
-            }
-        }
-        else
-        {
-            return facing.getOpposite() == dir;
-        }
-    };
-
     private final BlockType type;
 
     private FramedDoorBlock(BlockType type, Properties props, BlockSetType blockSet)

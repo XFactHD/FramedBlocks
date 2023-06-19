@@ -13,7 +13,6 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.phys.HitResult;
 import xfacthd.framedblocks.api.block.FramedProperties;
-import xfacthd.framedblocks.api.predicate.FullFacePredicate;
 import xfacthd.framedblocks.common.FBContent;
 import xfacthd.framedblocks.common.block.AbstractFramedDoubleBlock;
 import xfacthd.framedblocks.common.data.BlockType;
@@ -21,13 +20,10 @@ import xfacthd.framedblocks.common.blockentity.FramedDoublePanelBlockEntity;
 
 public class FramedDoublePanelBlock extends AbstractFramedDoubleBlock
 {
-    public static final FullFacePredicate CTM_PREDICATE = (state, dir) ->
+    public FramedDoublePanelBlock()
     {
-        Direction facing = state.getValue(FramedProperties.FACING_NE);
-        return dir == facing || dir == facing.getOpposite();
-    };
-
-    public FramedDoublePanelBlock() { super(BlockType.FRAMED_DOUBLE_PANEL); }
+        super(BlockType.FRAMED_DOUBLE_PANEL);
+    }
 
     @Override
     protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder)

@@ -15,7 +15,6 @@ import net.minecraft.world.phys.Vec3;
 import net.minecraft.world.phys.shapes.*;
 import xfacthd.framedblocks.api.block.FramedProperties;
 import xfacthd.framedblocks.api.block.IFramedBlock;
-import xfacthd.framedblocks.api.predicate.FullFacePredicate;
 import xfacthd.framedblocks.api.shapes.ShapeProvider;
 import xfacthd.framedblocks.api.util.*;
 import xfacthd.framedblocks.common.block.FramedBlock;
@@ -24,43 +23,6 @@ import xfacthd.framedblocks.common.data.property.CornerType;
 
 public class FramedCornerSlopeBlock extends FramedBlock
 {
-    public static final FullFacePredicate CTM_PREDICATE = (state, dir) ->
-    {
-        CornerType type = state.getValue(PropertyHolder.CORNER_TYPE);
-        if (type == CornerType.TOP)
-        {
-            return dir == Direction.UP;
-        }
-        else if (type == CornerType.BOTTOM)
-        {
-            return dir == Direction.DOWN;
-        }
-        return state.getValue(FramedProperties.FACING_HOR) == dir;
-    };
-
-    public static final FullFacePredicate CTM_PREDICATE_INNER = (state, dir) ->
-    {
-        CornerType type = state.getValue(PropertyHolder.CORNER_TYPE);
-        if ((type == CornerType.TOP || (type.isHorizontal() && type.isTop())) && dir == Direction.UP)
-        {
-            return true;
-        }
-        else if ((type == CornerType.BOTTOM || (type.isHorizontal() && !type.isTop())) && dir == Direction.DOWN)
-        {
-            return true;
-        }
-
-        Direction facing = state.getValue(FramedProperties.FACING_HOR);
-        if (type.isHorizontal())
-        {
-            return facing == dir || (type.isRight() && facing.getClockWise() == dir) || (!type.isRight() && facing.getCounterClockWise() == dir);
-        }
-        else
-        {
-            return facing == dir || facing.getCounterClockWise() == dir;
-        }
-    };
-
     public FramedCornerSlopeBlock(BlockType type)
     {
         super(type);

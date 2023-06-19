@@ -12,7 +12,6 @@ import net.minecraft.world.phys.Vec3;
 import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import xfacthd.framedblocks.api.block.FramedProperties;
-import xfacthd.framedblocks.api.predicate.FullFacePredicate;
 import xfacthd.framedblocks.api.shapes.ShapeProvider;
 import xfacthd.framedblocks.api.util.*;
 import xfacthd.framedblocks.common.block.FramedBlock;
@@ -22,18 +21,6 @@ import xfacthd.framedblocks.common.data.PropertyHolder;
 
 public class FramedSlopedStairsBlock extends FramedBlock
 {
-    public static final FullFacePredicate CTM_PREDICATE = (state, side) ->
-    {
-        Direction dir = state.getValue(FramedProperties.FACING_HOR);
-        if (side == dir || side == dir.getCounterClockWise())
-        {
-            return true;
-        }
-
-        boolean top = state.getValue(FramedProperties.TOP);
-        return top ? side == Direction.UP : side == Direction.DOWN;
-    };
-
     public FramedSlopedStairsBlock()
     {
         super(BlockType.FRAMED_SLOPED_STAIRS);

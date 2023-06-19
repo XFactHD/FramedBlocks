@@ -20,7 +20,6 @@ import net.minecraft.world.phys.shapes.VoxelShape;
 import net.minecraftforge.common.IPlantable;
 import xfacthd.framedblocks.api.block.FramedProperties;
 import xfacthd.framedblocks.api.block.IFramedBlock;
-import xfacthd.framedblocks.api.predicate.FullFacePredicate;
 import xfacthd.framedblocks.common.data.BlockType;
 
 import javax.annotation.Nullable;
@@ -29,19 +28,6 @@ import java.util.List;
 @SuppressWarnings("deprecation")
 public class FramedTrapDoorBlock extends TrapDoorBlock implements IFramedBlock
 {
-    public static final FullFacePredicate CTM_PREDICATE = (state, dir) ->
-    {
-        if (state.getValue(BlockStateProperties.OPEN))
-        {
-            return state.getValue(BlockStateProperties.HORIZONTAL_FACING).getOpposite() == dir;
-        }
-        else if (state.getValue(BlockStateProperties.HALF) == Half.TOP)
-        {
-            return dir == Direction.UP;
-        }
-        return dir == Direction.DOWN;
-    };
-
     private final BlockType type;
 
     private FramedTrapDoorBlock(BlockType type, Properties props, BlockSetType blockSet)
