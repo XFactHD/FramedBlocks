@@ -16,13 +16,9 @@ public final class RubidiumCompat
         }
     }
 
-    public static boolean invertCollapsibleBlockSplitLineRotation()
+    public static boolean isLoaded()
     {
-        if (loadedClient)
-        {
-            return GuardedClientAccess.invertCollapsibleBlockSplitLineRotation();
-        }
-        return false;
+        return loadedClient;
     }
 
     private static final class GuardedClientAccess
@@ -30,11 +26,6 @@ public final class RubidiumCompat
         public static void init()
         {
 
-        }
-
-        public static boolean invertCollapsibleBlockSplitLineRotation()
-        {
-            return true;
         }
     }
 

@@ -27,7 +27,7 @@ public class FramedCollapsibleBlockModel extends FramedBlockModel
     {
         super(state, baseModel);
         this.collapsedFace = state.getValue(PropertyHolder.NULLABLE_FACE).toDirection();
-        this.rotSplitLine = state.getValue(PropertyHolder.ROTATE_SPLIT_LINE) ^ RubidiumCompat.invertCollapsibleBlockSplitLineRotation();
+        this.rotSplitLine = state.getValue(PropertyHolder.ROTATE_SPLIT_LINE) ^ RubidiumCompat.isLoaded();
     }
 
     @Override

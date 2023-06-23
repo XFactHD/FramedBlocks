@@ -11,6 +11,7 @@ import net.minecraft.client.renderer.texture.TextureAtlas;
 import net.minecraft.client.resources.model.BakedModel;
 import net.minecraft.world.item.ItemDisplayContext;
 import net.minecraft.world.item.ItemStack;
+import xfacthd.framedblocks.common.compat.rubidium.RubidiumCompat;
 
 @SuppressWarnings("deprecation")
 public final class ItemRenderHelper
@@ -19,7 +20,10 @@ public final class ItemRenderHelper
 
     public static void renderFakeItemTransparent(PoseStack poseStack, ItemStack stack, int x, int y, int alpha)
     {
-        if (stack.isEmpty()) { return; }
+        if (stack.isEmpty() || RubidiumCompat.isLoaded())
+        {
+            return;
+        }
 
         ItemRenderer renderer = Minecraft.getInstance().getItemRenderer();
 
