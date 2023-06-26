@@ -11,12 +11,14 @@ import net.minecraft.client.renderer.texture.TextureAtlas;
 import net.minecraft.client.resources.model.BakedModel;
 import net.minecraft.world.item.ItemDisplayContext;
 import net.minecraft.world.item.ItemStack;
+import org.joml.Matrix4f;
 import xfacthd.framedblocks.common.compat.rubidium.RubidiumCompat;
 
 @SuppressWarnings("deprecation")
 public final class ItemRenderHelper
 {
     private static final RenderType TRANSLUCENT = RenderType.entityTranslucentCull(TextureAtlas.LOCATION_BLOCKS);
+    private static final Matrix4f SCALE_INVERT_Y = new Matrix4f().scaling(1F, -1F, 1F);
 
     public static void renderFakeItemTransparent(PoseStack poseStack, ItemStack stack, int x, int y, int alpha)
     {
@@ -39,15 +41,9 @@ public final class ItemRenderHelper
     )
     {
         poseStack.pushPose();
-        poseStack.translate(x, y, 100.0F);
-        poseStack.translate(8.0D, 8.0D, 0.0D);
-        poseStack.scale(1.0F, -1.0F, 1.0F);
+        poseStack.translate(x + 8F, y + 8F, 150F);
+        poseStack.mulPoseMatrix(SCALE_INVERT_Y);
         poseStack.scale(16.0F, 16.0F, 16.0F);
-
-        PoseStack modelViewStack = RenderSystem.getModelViewStack();
-        modelViewStack.pushPose();
-        modelViewStack.mulPoseMatrix(poseStack.last().pose());
-        RenderSystem.applyModelViewMatrix();
 
         boolean flatLight = !model.usesBlockLight();
         if (flatLight)
@@ -60,7 +56,7 @@ public final class ItemRenderHelper
                 stack,
                 ItemDisplayContext.GUI,
                 false,
-                new PoseStack(),
+                poseStack,
                 wrapBuffer(buffer, alpha, alpha < 255),
                 LightTexture.FULL_BRIGHT,
                 OverlayTexture.NO_OVERLAY,
@@ -76,8 +72,6 @@ public final class ItemRenderHelper
         }
 
         poseStack.popPose();
-        modelViewStack.popPose();
-        RenderSystem.applyModelViewMatrix();
     }
 
     private static MultiBufferSource wrapBuffer(MultiBufferSource buffer, int alpha, boolean forceTranslucent)
