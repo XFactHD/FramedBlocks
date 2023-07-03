@@ -3,8 +3,7 @@ package xfacthd.framedblocks.common.data.skippreds;
 import xfacthd.framedblocks.api.predicate.SideSkipPredicate;
 import xfacthd.framedblocks.common.data.BlockType;
 import xfacthd.framedblocks.common.data.skippreds.door.*;
-import xfacthd.framedblocks.common.data.skippreds.misc.CollapsibleBlockSkipPredicate;
-import xfacthd.framedblocks.common.data.skippreds.misc.OneWayWindowSkipPredicate;
+import xfacthd.framedblocks.common.data.skippreds.misc.*;
 import xfacthd.framedblocks.common.data.skippreds.pane.*;
 import xfacthd.framedblocks.common.data.skippreds.pillar.*;
 import xfacthd.framedblocks.common.data.skippreds.prism.*;
@@ -68,7 +67,7 @@ public final class SideSkipPredicates extends BlockTypeMap<SideSkipPredicate>
         put(BlockType.FRAMED_WATERLOGGABLE_GOLD_PRESSURE_PLATE, SideSkipPredicate.FALSE);
         put(BlockType.FRAMED_IRON_PRESSURE_PLATE, SideSkipPredicate.FALSE);
         put(BlockType.FRAMED_WATERLOGGABLE_IRON_PRESSURE_PLATE, SideSkipPredicate.FALSE);
-        put(BlockType.FRAMED_LADDER, SideSkipPredicate.FALSE);
+        put(BlockType.FRAMED_LADDER, new LadderSkipPredicate());
         put(BlockType.FRAMED_BUTTON, SideSkipPredicate.FALSE);
         put(BlockType.FRAMED_STONE_BUTTON, SideSkipPredicate.FALSE);
         put(BlockType.FRAMED_LARGE_BUTTON, SideSkipPredicate.FALSE);

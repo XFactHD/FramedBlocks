@@ -127,7 +127,8 @@ public final class FlatElevatedInnerSlopeSlabCornerSkipPredicate implements Side
         if (side == dir.getOpposite() || side == dir.getClockWise())
         {
             Direction longEdge = top ? Direction.UP : Direction.DOWN;
-            return HalfTriangleDir.fromDirections(longEdge, dir, false);
+            Direction shortEdge = side == dir.getOpposite() ? dir.getCounterClockWise() : dir;
+            return HalfTriangleDir.fromDirections(longEdge, shortEdge, false);
         }
         return HalfTriangleDir.NULL;
     }

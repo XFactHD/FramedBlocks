@@ -444,7 +444,8 @@ public final class FlatInnerSlopeSlabCornerSkipPredicate implements SideSkipPred
         if (side == dir.getOpposite() || side == dir.getClockWise())
         {
             Direction longEdge = top ? Direction.UP : Direction.DOWN;
-            return HalfTriangleDir.fromDirections(longEdge, dir, topHalf == top);
+            Direction shortEdge = side == dir.getOpposite() ? dir.getCounterClockWise() : dir;
+            return HalfTriangleDir.fromDirections(longEdge, shortEdge, topHalf == top);
         }
         return HalfTriangleDir.NULL;
     }
