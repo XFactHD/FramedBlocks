@@ -1,6 +1,6 @@
 package xfacthd.framedblocks.common.compat.supplementaries;
 
-import net.mehvahdjukaar.supplementaries.common.block.blocks.RopeBlock;
+import net.mehvahdjukaar.supplementaries.common.block.IRopeConnection;
 import net.minecraft.core.BlockPos;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.LevelReader;
@@ -41,14 +41,14 @@ public final class SupplementariesCompat
         {
             try
             {
-                return RopeBlock.isSupportingCeiling(pos, level);
+                return IRopeConnection.isSupportingCeiling(pos, level);
             }
             catch (Throwable e)
             {
                 if (!failedPreviously)
                 {
                     failedPreviously = true;
-                    FramedBlocks.LOGGER.error("Encountered an error while checking hanging pot surviving", e);
+                    FramedBlocks.LOGGER.error("[SupplementariesCompat] Encountered an error while checking hanging pot surviving", e);
                 }
                 return true;
             }

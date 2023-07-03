@@ -142,13 +142,13 @@ dependencies {
 
     //compileOnly fg.deobf("curse.maven:ctm-267602:3737369")
 
-    //runtimeOnly fg.deobf("curse.maven:puzzleslib-495476:3873579") //Only needed when Diagonal Fences is switched to implementation
-    compileOnly fg.deobf("curse.maven:diagonalfences-458048:3876555")
+    //runtimeOnly fg.deobf("curse.maven:puzzleslib-495476:4621178") //Only needed when Diagonal Fences is switched to implementation
+    compileOnly fg.deobf("curse.maven:diagonalfences-458048:4611775")
 
     compileOnly fg.deobf("curse.maven:buildinggadgets-298187:3829297")
 
     implementation fg.deobf("xfacthd.contex:ConnectedTextures:2.1:slim") { transitive = false }
-    implementation fg.deobf("curse.maven:athena-841890:4621937")
+    compileOnly fg.deobf("curse.maven:athena-841890:4621937")
 
     compileOnly(fg.deobf("mezz.jei:jei-1.20.1-common-api:15.0.0.15"))
     compileOnly(fg.deobf("mezz.jei:jei-1.20.1-forge-api:15.0.0.15"))
@@ -156,14 +156,15 @@ dependencies {
 
     //runtimeOnly fg.deobf("curse.maven:spark-361579:3767286")
 
-    //runtimeOnly fg.deobf("curse.maven:rubidium_sodium-574856:4573226")
+    //runtimeOnly fg.deobf("curse.maven:rubidium-574856:4573226")
+    //runtimeOnly fg.deobf("curse.maven:oculus-581495:4578741")
 
     compileOnly fg.deobf("com.simibubi.create:create-1.19.2:0.5.1.a-29:slim") { transitive = false }
     compileOnly fg.deobf("com.jozufozu.flywheel:flywheel-forge-1.19.2:0.6.8.a-14")
     //runtimeOnly fg.deobf("com.tterrag.registrate:Registrate:MC1.19-1.1.5") //Only needed when Create and/or Flywheel are switched to implementation
 
-    compileOnly fg.deobf("curse.maven:moonlight-499980:3920391")
-    compileOnly fg.deobf("curse.maven:supplementaries-412082:3920399")
+    compileOnly fg.deobf("curse.maven:moonlight-499980:4621773")
+    compileOnly fg.deobf("curse.maven:supplementaries-412082:4622527")
 
     compileOnly fg.deobf("curse.maven:nocubes-309664:3944569")
 
