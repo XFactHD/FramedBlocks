@@ -46,7 +46,7 @@ public class FramedBlockEntity extends BlockEntity
     public static final Component MSG_BLACKLISTED = Utils.translate("msg", "blacklisted");
     public static final Component MSG_BLOCK_ENTITY = Utils.translate("msg", "block_entity");
     private static final Direction[] DIRECTIONS = Direction.values();
-    private static final int DATA_VERSION = 2;
+    private static final int DATA_VERSION = 3;
     protected static final int FLAG_GLOWING = 1;
     protected static final int FLAG_INTANGIBLE = 1 << 1;
     protected static final int FLAG_REINFORCED = 1 << 2;

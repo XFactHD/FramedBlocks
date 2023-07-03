@@ -32,14 +32,20 @@ public abstract class BlockTypeMap<T>
 
     private void check()
     {
+        int missing = 0;
         for (int i = 0; i < TYPE_COUNT; i++)
         {
             if (values[i] == null)
             {
+                missing++;
                 FramedBlocks.LOGGER.error(
                         "Type '{}' missing mapping in '{}'", TYPES[i], getClass().getSimpleName()
                 );
             }
+        }
+        if (missing > 0)
+        {
+            FramedBlocks.LOGGER.error("Found {} missing mappings in '{}'", missing, getClass().getSimpleName());
         }
     }
 
