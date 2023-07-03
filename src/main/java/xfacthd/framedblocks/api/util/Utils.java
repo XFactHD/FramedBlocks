@@ -270,6 +270,11 @@ public final class Utils
         return DIRECTION_BY_NORMAL.get(normal.asLong());
     }
 
+    public static Direction dirByNormal(int x, int y, int z)
+    {
+        return DIRECTION_BY_NORMAL.get(BlockPos.asLong(x, y, z));
+    }
+
     public static Direction.Axis nextAxisNotEqualTo(Direction.Axis axis, Direction.Axis except)
     {
         Direction.Axis[] axes = Direction.Axis.VALUES;

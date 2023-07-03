@@ -24,18 +24,13 @@ import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.Vec3;
 import net.minecraft.world.phys.shapes.*;
-import net.minecraftforge.client.model.data.ModelData;
-import net.minecraftforge.client.model.data.ModelDataManager;
 import net.minecraftforge.common.IPlantable;
 import net.minecraftforge.common.Tags;
 import net.minecraftforge.common.extensions.IForgeBlock;
-import net.minecraftforge.fml.loading.FMLEnvironment;
 import org.jetbrains.annotations.Nullable;
 import xfacthd.framedblocks.api.FramedBlocksAPI;
-import xfacthd.framedblocks.api.FramedBlocksClientAPI;
 import xfacthd.framedblocks.api.block.update.CullingUpdateTracker;
 import xfacthd.framedblocks.api.camo.CamoContainer;
-import xfacthd.framedblocks.api.model.data.FramedBlockData;
 import xfacthd.framedblocks.api.predicate.*;
 import xfacthd.framedblocks.api.type.IBlockType;
 import xfacthd.framedblocks.api.util.*;
@@ -196,6 +191,11 @@ public interface IFramedBlock extends EntityBlock, IForgeBlock
         return getBlockType().getFullFacePredicate();
     }
 
+    default ConnectionPredicate getConnectionPredicate()
+    {
+        return getBlockType().getConnectionPredicate();
+    }
+
     @Override
     default BlockState getAppearance(
             BlockState state,
@@ -206,87 +206,7 @@ public interface IFramedBlock extends EntityBlock, IForgeBlock
             @Nullable BlockPos queryPos
     )
     {
-        BlockState air = Blocks.AIR.defaultBlockState();
-        if (!FMLEnvironment.dist.isClient())
-        {
-            return air;
-        }
-
-        ConTexMode mode = FramedBlocksClientAPI.getInstance().getConTexMode();
-        if (mode == ConTexMode.NONE)
-        {
-            return air;
-        }
-
-        CtmPredicate pred = getCtmPredicate();
-        if (mode.atleast(ConTexMode.FULL_FACE) && pred.test(state, side))
-        {
-            return getCamo(level, pos, side, air);
-        }
-
-        if (mode.atleast(ConTexMode.FULL_CON_FACE) && queryPos != null)
-        {
-            Direction conFace = Utils.dirByNormal(queryPos.subtract(pos));
-            if (pred.test(state, conFace))
-            {
-                //TODO: this successfully prevents a full block's side from connecting to a horizontally neighboring
-                //      slab but not the other way round
-                return getCamo(level, pos, conFace, air);
-            }
-        }
-
-        if (mode == ConTexMode.DETAILED && queryPos != null && !queryPos.equals(pos))
-        {
-            // Can't use query state directly as the query state may be the camo of the framed block actually in that position
-            if (level.getBlockState(queryPos).getBlock() instanceof IFramedBlock block)
-            {
-                Direction conFace = Utils.dirByNormal(queryPos.subtract(pos));
-                if (conFace != null && isSideHiddenInModelData(level, pos, block, conFace))
-                {
-                    //TODO: improve camo retrieval on interactions with double blocks (i.e. slab next to double slab)
-                    return getCamo(level, pos, conFace, air);
-                }
-            }
-        }
-        return air;
-    }
-
-    @SuppressWarnings("UnstableApiUsage")
-    private static boolean isSideHiddenInModelData(
-            BlockAndTintGetter level, BlockPos pos, IFramedBlock block, Direction side
-    )
-    {
-        ModelDataManager manager = level.getModelDataManager();
-        if (manager == null)
-        {
-            return false;
-        }
-
-        ModelData data = manager.getAt(pos);
-        if (data == null)
-        {
-            return false;
-        }
-
-        if (block.getBlockType().isDoubleBlock())
-        {
-            //TODO: this can't handle double blocks
-            return false;
-        }
-        else
-        {
-            FramedBlockData fbData = data.get(FramedBlockData.PROPERTY);
-            return fbData != null && fbData.isSideHidden(side);
-        }
-    }
-
-    private static BlockState getCamo(BlockAndTintGetter level, BlockPos pos, Direction side, BlockState air)
-    {
-        if (level.getBlockEntity(pos) instanceof FramedBlockEntity be)
-        {
-            return be.getCamo(side).getState();
-        }
-        return air;
+        return AppearanceHelper.getAppearance(this, state, level, pos, side, queryState, queryPos);
     }
 
     default boolean isSideHidden(BlockGetter level, BlockPos pos, BlockState state, Direction side)

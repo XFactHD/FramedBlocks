@@ -107,10 +107,10 @@ public final class ClientConfig
         conTexModeValue = builder
                 .comment(
                         "Configures how detailed connected textures are supported.",
-                        "Use anything above FULL_FACE at your own risk (performance impact, unexpected behaviour)!",
+                        "Use anything above FULL_EDGE at your own risk (performance impact, unexpected behaviour)!",
                         "If NONE, all connected textures support is disabled",
                         "If FULL_FACE, connected textures are supported on full faces",
-                        "If FULL_CON_FACE, connected textures are supported as above and on faces whose connecting neighbor covers a full face",
+                        "If FULL_EDGE, connected textures are supported as above and on faces whose connecting edge covers the full block width",
                         "If DETAILED, connected textures are supported as above and on most faces when interacting with other framed blocks"
                 )
                 .translation(TRANSLATION_CON_TEX_MODE)

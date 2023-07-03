@@ -51,6 +51,7 @@ public abstract class FramedBlockModel extends BakedModelProxy
             .expireAfterAccess(ModelCache.DEFAULT_CACHE_DURATION)
             .build();
     protected final BlockState state;
+    private final IBlockType type;
     private final boolean cacheFullRenderTypes;
     private final boolean forceUngeneratedBaseModel;
     private final boolean useBaseModel;
@@ -61,6 +62,7 @@ public abstract class FramedBlockModel extends BakedModelProxy
     {
         super(baseModel);
         this.state = state;
+        this.type = ((IFramedBlock) state.getBlock()).getBlockType();
         this.cacheFullRenderTypes = canFullyCacheRenderTypes();
         this.forceUngeneratedBaseModel = forceUngeneratedBaseModel();
         this.useBaseModel = useBaseModel();
@@ -213,7 +215,7 @@ public abstract class FramedBlockModel extends BakedModelProxy
         else
         {
             noProcessing = fullFaceCache.isFullFace(side);
-            needCtCtx = needCtContext(noProcessing);
+            needCtCtx = type.supportsConnectedTextures() && needCtContext(noProcessing, type.getMinimumConTexMode());
             model = getCamoModel(camoState, false);
             camoData = needCtCtx ? ModelUtils.getCamoModelData(extraData) : ModelData.EMPTY;
             camoInRenderType = getCachedRenderTypes(camoState, camoState, rand, camoData).camoTypes.contains(renderType);
@@ -258,14 +260,14 @@ public abstract class FramedBlockModel extends BakedModelProxy
         }
     }
 
-    private static boolean needCtContext(boolean noProcessing)
+    private static boolean needCtContext(boolean noProcessing, ConTexMode minMode)
     {
         ConTexMode mode = FramedBlocksClientAPI.getInstance().getConTexMode();
         if (mode == ConTexMode.NONE)
         {
             return false;
         }
-        return noProcessing || mode.atleast(ConTexMode.FULL_CON_FACE);
+        return noProcessing || (mode.atleast(ConTexMode.FULL_EDGE) && mode.atleast(minMode));
     }
 
     /**
@@ -516,14 +518,35 @@ public abstract class FramedBlockModel extends BakedModelProxy
     @Override
     public final ModelData getModelData(BlockAndTintGetter level, BlockPos pos, BlockState state, ModelData tileData)
     {
-        FramedBlockData data = tileData.get(FramedBlockData.PROPERTY);
-        if (data != null && !data.getCamoState().isAir())
+        if (!type.supportsConnectedTextures())
         {
-            BlockState camoState = data.getCamoState();
+            return tileData;
+        }
+
+        FramedBlockData data = tileData.get(FramedBlockData.PROPERTY);
+        if (data == null)
+        {
+            return tileData;
+        }
+
+        BlockState camoState = data.getCamoState();
+        if (!camoState.isAir() && needCtContext(fullFaceCache.anyFullFace, type.getMinimumConTexMode()))
+        {
             BakedModel model = ModelCache.getModel(camoState);
-            tileData = tileData.derive()
-                    .with(FramedBlockData.CAMO_DATA, model.getModelData(level, pos, camoState, tileData))
-                    .build();
+            ModelData camoData;
+            try
+            {
+                // Try getting camo data with the enclosing state, some mods may not like that
+                // This option provides better CT behaviour
+                camoData = model.getModelData(level, pos, state, tileData);
+            }
+            catch (Throwable t)
+            {
+                // Fall back to getting camo data with the camo state if a mod didn't like it
+                // This option may cause some CT weirdness
+                camoData = model.getModelData(level, pos, camoState, tileData);
+            }
+            tileData = tileData.derive().with(FramedBlockData.CAMO_DATA, camoData).build();
         }
         return tileData;
     }
@@ -583,16 +606,20 @@ public abstract class FramedBlockModel extends BakedModelProxy
     private static class FullFaceCache
     {
         private final boolean[] cache = new boolean[7];
+        private final boolean anyFullFace;
 
         public FullFaceCache(IBlockType type, BlockState state)
         {
             FullFacePredicate pred = type.getFullFacePredicate();
+            boolean any = false;
             for (Direction side : DIRECTIONS)
             {
                 boolean full = pred.test(state, side);
                 cache[side.ordinal()] = full;
+                any |= full;
             }
             cache[6] = false;
+            anyFullFace = any;
         }
 
         public boolean isFullFace(Direction side)

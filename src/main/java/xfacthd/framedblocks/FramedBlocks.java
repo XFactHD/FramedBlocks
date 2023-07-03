@@ -29,6 +29,7 @@ import xfacthd.framedblocks.common.compat.CompatHandler;
 import xfacthd.framedblocks.common.crafting.FramingSawRecipeCache;
 import xfacthd.framedblocks.common.data.BlueprintBehaviours;
 import xfacthd.framedblocks.common.data.camo.CamoFactories;
+import xfacthd.framedblocks.common.data.conpreds.ConnectionPredicates;
 import xfacthd.framedblocks.common.data.facepreds.FullFacePredicates;
 import xfacthd.framedblocks.common.data.skippreds.SideSkipPredicates;
 import xfacthd.framedblocks.common.item.FramedBlueprintItem;
@@ -73,6 +74,7 @@ public final class FramedBlocks
 
         FullFacePredicates.PREDICATES.initialize();
         SideSkipPredicates.PREDICATES.initialize();
+        ConnectionPredicates.PREDICATES.initialize();
 
         CompatHandler.init();
 

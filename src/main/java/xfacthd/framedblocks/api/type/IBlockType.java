@@ -20,6 +20,8 @@ public interface IBlockType
 
     SideSkipPredicate getSideSkipPredicate();
 
+    ConnectionPredicate getConnectionPredicate();
+
     ShapeProvider generateShapes(ImmutableList<BlockState> states);
 
     boolean hasSpecialTile();
@@ -27,6 +29,13 @@ public interface IBlockType
     boolean hasBlockItem();
 
     boolean supportsWaterLogging();
+
+    boolean supportsConnectedTextures();
+
+    /**
+     * {@return the minimum {@link ConTexMode} required for this block to react to texture connections}
+     */
+    ConTexMode getMinimumConTexMode();
 
     /**
      * @implNote If this method returns true, then the associated block must override {@link Block#initializeClient(java.util.function.Consumer)}

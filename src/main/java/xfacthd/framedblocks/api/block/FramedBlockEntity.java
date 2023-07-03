@@ -750,6 +750,25 @@ public class FramedBlockEntity extends BlockEntity
     }
 
     /*
+     * Special handling for connected textures
+     */
+
+    @Nullable
+    public BlockState getComponentBySkipPredicate(BlockGetter ctLevel, BlockState neighborState, Direction side)
+    {
+        return getBlockState();
+    }
+
+    /**
+     * Extract the nested {@link ModelData}, if any, from the given data based on the given state,
+     * only relevant for double blocks
+     */
+    public ModelData getModelData(ModelData data, BlockState state)
+    {
+        return data;
+    }
+
+    /*
      * Sync
      */
 

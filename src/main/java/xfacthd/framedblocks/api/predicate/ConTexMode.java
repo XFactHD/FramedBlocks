@@ -19,7 +19,7 @@ public enum ConTexMode
      * a full face of the framed block (i.e. a full block covering the full face of a
      * Framed Slab) can display connected textures
      */
-    FULL_CON_FACE,
+    FULL_EDGE,
     /**
      * Faces falling under the above rules and faces whose connecting neighbor occludes
      * a face returning true from the block's {@link SideSkipPredicate} (i.e. two stacked
