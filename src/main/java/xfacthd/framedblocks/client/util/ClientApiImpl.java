@@ -14,6 +14,8 @@ import xfacthd.framedblocks.api.render.OutlineRenderer;
 import xfacthd.framedblocks.client.model.FluidModel;
 import xfacthd.framedblocks.client.render.BlockOutlineRenderer;
 import xfacthd.framedblocks.client.render.GhostBlockRenderer;
+import xfacthd.framedblocks.common.compat.athena.AthenaCompat;
+import xfacthd.framedblocks.common.compat.contex.ConTexCompat;
 import xfacthd.framedblocks.common.compat.create.CreateCompat;
 
 import java.util.function.Function;
@@ -22,6 +24,8 @@ import java.util.function.Function;
 public final class ClientApiImpl implements FramedBlocksClientAPI
 {
     private static final CtContextSupplier[] CT_CONTEXT_GETTERS = new CtContextSupplier[] {
+            ConTexCompat::tryGetCTContext,
+            AthenaCompat::tryGetCTContext,
             CreateCompat::tryGetCTContext
     };
 

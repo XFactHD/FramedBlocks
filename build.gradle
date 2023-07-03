@@ -134,6 +134,7 @@ repositories {
         url = "https://maven.blamejared.com/"
     }
     mavenCentral()
+    mavenLocal()
 }
 
 dependencies {
@@ -145,6 +146,9 @@ dependencies {
     compileOnly fg.deobf("curse.maven:diagonalfences-458048:3876555")
 
     compileOnly fg.deobf("curse.maven:buildinggadgets-298187:3829297")
+
+    implementation fg.deobf("xfacthd.contex:ConnectedTextures:2.1:slim") { transitive = false }
+    implementation fg.deobf("curse.maven:athena-841890:4621937")
 
     compileOnly(fg.deobf("mezz.jei:jei-1.20.1-common-api:15.0.0.15"))
     compileOnly(fg.deobf("mezz.jei:jei-1.20.1-forge-api:15.0.0.15"))
