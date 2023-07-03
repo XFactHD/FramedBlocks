@@ -14,13 +14,13 @@ public final class SlopedPrismConnectionPredicate implements ConnectionPredicate
     {
         CompoundDirection cmpDir = state.getValue(PropertyHolder.FACING_DIR);
 
-        if (side == cmpDir.direction())
+        if (side == cmpDir.direction().getOpposite())
         {
             return true;
         }
         else if (side == cmpDir.orientation())
         {
-            return edge == cmpDir.direction();
+            return edge == cmpDir.direction().getOpposite();
         }
         return false;
     }
@@ -32,7 +32,7 @@ public final class SlopedPrismConnectionPredicate implements ConnectionPredicate
         Direction facing = cmpDir.direction();
         Direction orientation = cmpDir.orientation();
 
-        if (side == facing.getOpposite() || side.getAxis() == facing.getClockWise(orientation.getAxis()).getAxis())
+        if (side == facing || side.getAxis() == facing.getClockWise(orientation.getAxis()).getAxis())
         {
             return edge == orientation;
         }

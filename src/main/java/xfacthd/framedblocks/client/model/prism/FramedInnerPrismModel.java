@@ -64,11 +64,16 @@ public class FramedInnerPrismModel extends FramedBlockModel
                     .apply(Modifiers.makeVerticalSlope(offAxisCCW, 45))
                     .export(quadMap.get(null));
         }
-        else if (!yFacing && yAxis && !quadOnAxis && !quadOnFacingAxis) // Slopes for horizontal facing and Y axis without Y_SLOPE
+        else if (!yFacing && yAxis && !quadOnAxis && quadOnFacingAxis) // Slopes for horizontal facing and Y axis without Y_SLOPE
         {
             QuadModifier.geometry(quad)
-                    .apply(Modifiers.cutSideLeftRight(facing.getOpposite(), .5F))
-                    .apply(Modifiers.makeHorizontalSlope(quadFace == facing.getCounterClockWise(), 45))
+                    .apply(Modifiers.cutSideLeftRight(facing.getClockWise(), .5F))
+                    .apply(Modifiers.makeHorizontalSlope(true, 45))
+                    .export(quadMap.get(null));
+
+            QuadModifier.geometry(quad)
+                    .apply(Modifiers.cutSideLeftRight(facing.getCounterClockWise(), .5F))
+                    .apply(Modifiers.makeHorizontalSlope(false, 45))
                     .export(quadMap.get(null));
         }
         else if (!ySlope && !yFacing && !yAxis && quadFace == facing)

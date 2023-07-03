@@ -53,6 +53,7 @@ public class FramedPrismBlock extends FramedBlock
         if (Utils.isY(face))
         {
             axis = context.getHorizontalDirection().getAxis();
+            state = state.setValue(FramedProperties.Y_SLOPE, true);
         }
         else
         {

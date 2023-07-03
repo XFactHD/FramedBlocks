@@ -14,13 +14,13 @@ public final class PrismConnectionPredicate implements ConnectionPredicate
     {
         DirectionAxis dirAxis = state.getValue(PropertyHolder.FACING_AXIS);
 
-        if (side == dirAxis.direction())
+        if (side == dirAxis.direction().getOpposite())
         {
             return true;
         }
         else if (side.getAxis() == dirAxis.axis())
         {
-            return edge == dirAxis.direction();
+            return edge == dirAxis.direction().getOpposite();
         }
         return false;
     }
@@ -32,7 +32,7 @@ public final class PrismConnectionPredicate implements ConnectionPredicate
         Direction facing = dirAxis.direction();
         Direction.Axis axis = dirAxis.axis();
 
-        if (side == facing.getOpposite() || side.getAxis() == facing.getClockWise(axis).getAxis())
+        if (side == facing || side.getAxis() == facing.getClockWise(axis).getAxis())
         {
             return edge.getAxis() == axis;
         }

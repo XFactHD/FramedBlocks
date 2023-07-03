@@ -61,6 +61,7 @@ public class FramedSlopedPrismBlock extends FramedBlock
             {
                 orientation = orientation.getOpposite();
             }
+            state = state.setValue(FramedProperties.Y_SLOPE, true);
         }
         else
         {
