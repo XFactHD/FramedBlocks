@@ -47,7 +47,7 @@ description='''
 [[dependencies.framedblocks]]
     modId="diagonalfences"
     mandatory=false
-    versionRange="[4.0.1,)"
+    versionRange="[8.0.0,)"
     ordering="NONE"
     side="BOTH"
 
@@ -61,6 +61,6 @@ description='''
 [[dependencies.framedblocks]]
     modId="jei"
     mandatory=false
-    versionRange="[12.1.1.13,)"
+    versionRange="[15.0.0.15,)"
     ordering="NONE"
     side="BOTH"
