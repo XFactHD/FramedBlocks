@@ -164,4 +164,8 @@ public final class BeaconTintTests
             default -> List.of(Direction.UP, Direction.DOWN);
         };
     }
+
+
+
+    private BeaconTintTests() { }
 }

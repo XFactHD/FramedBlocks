@@ -77,7 +77,7 @@ public final class FBClient
     static
     {
         FramedBlocksClientAPI.INSTANCE.accept(new ClientApiImpl());
-        // Forcefully classload RemovalCause because EventBus and ThreadPools can't get their classloader shit together
+        // Forcefully class-load RemovalCause because EventBus and ThreadPools can't get their classloader shit together
         RemovalCause.EXPLICIT.wasEvicted();
     }
 

@@ -22,7 +22,10 @@ import javax.annotation.Nullable;
 
 public class FramedChestBlock extends FramedStorageBlock
 {
-    public FramedChestBlock() { super(BlockType.FRAMED_CHEST); }
+    public FramedChestBlock()
+    {
+        super(BlockType.FRAMED_CHEST);
+    }
 
     @Override
     protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder)

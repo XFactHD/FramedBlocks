@@ -811,7 +811,10 @@ public class FramedBlockEntity extends BlockEntity
         {
             int oldLight = getLightValue();
             camoContainer = newCamo;
-            if (oldLight != getLightValue()) { doLightUpdate(); }
+            if (oldLight != getLightValue())
+            {
+                doLightUpdate();
+            }
 
             modelData.setCamoState(camoContainer.getState());
 

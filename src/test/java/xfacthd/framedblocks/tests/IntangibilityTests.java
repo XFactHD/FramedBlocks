@@ -62,7 +62,7 @@ public final class IntangibilityTests
 
     private static BlockState getTestState(Block block)
     {
-        Preconditions.checkArgument(block instanceof IFramedBlock);
+        Preconditions.checkArgument(block instanceof IFramedBlock, "Invalid test block: " + block);
 
         IBlockType type = ((IFramedBlock) block).getBlockType();
         return block.defaultBlockState();
@@ -74,4 +74,8 @@ public final class IntangibilityTests
         Preconditions.checkState(regName != null);
         return String.format("intangibilitytests.test_%s", regName.getPath());
     }
+
+
+
+    private IntangibilityTests() { }
 }

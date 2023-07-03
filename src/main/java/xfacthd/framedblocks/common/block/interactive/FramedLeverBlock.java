@@ -54,9 +54,7 @@ public class FramedLeverBlock extends LeverBlock implements IFramedBlock
     )
     {
         InteractionResult result = handleUse(state, level, pos, player, hand, hit);
-        if (result.consumesAction()) { return result; }
-
-        return super.use(state, level, pos, player, hand, hit);
+        return result.consumesAction() ? result : super.use(state, level, pos, player, hand, hit);
     }
 
     @Override

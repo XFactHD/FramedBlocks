@@ -51,7 +51,7 @@ public abstract class BlockTypeMap<T>
 
     protected final void put(BlockType type, T value)
     {
-        values[type.ordinal()] = value;
+        values[type.ordinal()] = Objects.requireNonNull(value);
     }
 
     @SuppressWarnings("unchecked")
