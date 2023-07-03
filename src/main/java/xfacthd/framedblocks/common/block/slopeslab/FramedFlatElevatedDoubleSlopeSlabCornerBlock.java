@@ -26,7 +26,7 @@ public class FramedFlatElevatedDoubleSlopeSlabCornerBlock extends AbstractFramed
         super(blockType);
         registerDefaultState(defaultBlockState()
                 .setValue(FramedProperties.TOP, false)
-                .setValue(FramedProperties.Y_SLOPE, false)
+                .setValue(FramedProperties.Y_SLOPE, true)
         );
     }
 

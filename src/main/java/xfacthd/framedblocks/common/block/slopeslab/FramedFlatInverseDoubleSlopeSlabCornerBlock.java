@@ -33,7 +33,7 @@ public class FramedFlatInverseDoubleSlopeSlabCornerBlock extends AbstractFramedD
         super(BlockType.FRAMED_FLAT_INV_DOUBLE_SLOPE_SLAB_CORNER);
         registerDefaultState(defaultBlockState()
                 .setValue(FramedProperties.TOP, false)
-                .setValue(FramedProperties.Y_SLOPE, false)
+                .setValue(FramedProperties.Y_SLOPE, true)
         );
     }
 

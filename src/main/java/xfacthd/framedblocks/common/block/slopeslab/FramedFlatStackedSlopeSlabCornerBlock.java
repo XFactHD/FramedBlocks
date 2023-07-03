@@ -29,7 +29,7 @@ public class FramedFlatStackedSlopeSlabCornerBlock extends AbstractFramedDoubleB
         super(type);
         registerDefaultState(defaultBlockState()
                 .setValue(FramedProperties.TOP, false)
-                .setValue(FramedProperties.Y_SLOPE, false)
+                .setValue(FramedProperties.Y_SLOPE, true)
         );
     }
 

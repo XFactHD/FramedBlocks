@@ -29,7 +29,7 @@ public class FramedSlopeSlabBlock extends FramedBlock
         registerDefaultState(defaultBlockState()
                 .setValue(FramedProperties.TOP, false)
                 .setValue(PropertyHolder.TOP_HALF, false)
-                .setValue(FramedProperties.Y_SLOPE, false)
+                .setValue(FramedProperties.Y_SLOPE, true)
         );
     }
 

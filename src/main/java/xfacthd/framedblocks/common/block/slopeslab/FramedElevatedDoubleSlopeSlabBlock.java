@@ -26,7 +26,7 @@ public class FramedElevatedDoubleSlopeSlabBlock extends AbstractFramedDoubleBloc
         super(BlockType.FRAMED_ELEVATED_DOUBLE_SLOPE_SLAB);
         registerDefaultState(defaultBlockState()
                 .setValue(FramedProperties.TOP, false)
-                .setValue(FramedProperties.Y_SLOPE, false)
+                .setValue(FramedProperties.Y_SLOPE, true)
         );
     }
 

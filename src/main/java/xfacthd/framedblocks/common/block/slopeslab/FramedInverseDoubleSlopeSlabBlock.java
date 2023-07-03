@@ -30,7 +30,7 @@ public class FramedInverseDoubleSlopeSlabBlock extends AbstractFramedDoubleBlock
     public FramedInverseDoubleSlopeSlabBlock()
     {
         super(BlockType.FRAMED_INV_DOUBLE_SLOPE_SLAB);
-        registerDefaultState(defaultBlockState().setValue(FramedProperties.Y_SLOPE, false));
+        registerDefaultState(defaultBlockState().setValue(FramedProperties.Y_SLOPE, true));
     }
 
     @Override
