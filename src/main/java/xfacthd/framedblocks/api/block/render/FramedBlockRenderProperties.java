@@ -1,4 +1,4 @@
-package xfacthd.framedblocks.api.block;
+package xfacthd.framedblocks.api.block.render;
 
 import net.minecraft.client.particle.ParticleEngine;
 import net.minecraft.core.BlockPos;
@@ -7,6 +7,7 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.HitResult;
 import net.minecraftforge.client.extensions.common.IClientBlockExtensions;
+import xfacthd.framedblocks.api.block.IFramedBlock;
 
 public class FramedBlockRenderProperties implements IClientBlockExtensions
 {

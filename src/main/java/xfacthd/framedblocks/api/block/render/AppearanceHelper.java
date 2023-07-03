@@ -1,4 +1,4 @@
-package xfacthd.framedblocks.api.block;
+package xfacthd.framedblocks.api.block.render;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -11,6 +11,8 @@ import net.minecraftforge.fml.loading.FMLEnvironment;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.Nullable;
 import xfacthd.framedblocks.api.FramedBlocksClientAPI;
+import xfacthd.framedblocks.api.block.FramedBlockEntity;
+import xfacthd.framedblocks.api.block.IFramedBlock;
 import xfacthd.framedblocks.api.model.data.FramedBlockData;
 import xfacthd.framedblocks.api.predicate.ConTexMode;
 import xfacthd.framedblocks.api.predicate.ConnectionPredicate;
@@ -20,11 +22,11 @@ import xfacthd.framedblocks.api.util.Utils;
 import java.util.function.Predicate;
 
 @ApiStatus.Internal
-final class AppearanceHelper
+public final class AppearanceHelper
 {
     private static final BlockState AIR = Blocks.AIR.defaultBlockState();
 
-    static BlockState getAppearance(
+    public static BlockState getAppearance(
             IFramedBlock framedBlock,
             BlockState state,
             BlockGetter level,
