@@ -50,6 +50,9 @@ public final class SpecialTestCommand
                                 .executes(ctx-> ChunkBanTest.startChunkBanTest(ctx, false))
                         )
                 )
+                .then(Commands.literal("stateinfo")
+                        .executes(BlockStateInfo::dumpBlockStateInfo)
+                )
         );
     }
 
@@ -88,6 +91,11 @@ public final class SpecialTestCommand
 
     public static Component writeResultToFile(String filePrefix, String data)
     {
+        return writeResultToFile(filePrefix, "txt", data);
+    }
+
+    public static Component writeResultToFile(String filePrefix, String fileType, String data)
+    {
         try
         {
             Files.createDirectories(EXPORT_DIR);
@@ -98,7 +106,7 @@ public final class SpecialTestCommand
         }
 
         String dateTime = FORMATTER.format(LocalDateTime.now());
-        Path path = EXPORT_DIR.resolve("%s_%s.txt".formatted(filePrefix, dateTime));
+        Path path = EXPORT_DIR.resolve("%s_%s.%s".formatted(filePrefix, dateTime, fileType));
 
         try
         {
