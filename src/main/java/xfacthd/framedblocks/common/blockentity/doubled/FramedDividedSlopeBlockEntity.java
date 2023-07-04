@@ -11,7 +11,7 @@ import xfacthd.framedblocks.common.FBContent;
 import xfacthd.framedblocks.common.blockentity.FramedDoubleBlockEntity;
 import xfacthd.framedblocks.common.data.PropertyHolder;
 import xfacthd.framedblocks.common.data.property.SlopeType;
-import xfacthd.framedblocks.common.util.DoubleSoundMode;
+import xfacthd.framedblocks.common.util.DoubleBlockTopInteractionMode;
 
 public class FramedDividedSlopeBlockEntity extends FramedDoubleBlockEntity
 {
@@ -48,13 +48,13 @@ public class FramedDividedSlopeBlockEntity extends FramedDoubleBlockEntity
     }
 
     @Override
-    protected DoubleSoundMode calculateSoundMode()
+    protected DoubleBlockTopInteractionMode calculateTopInteractionMode()
     {
         if (getBlockState().getValue(PropertyHolder.SLOPE_TYPE) == SlopeType.HORIZONTAL)
         {
-            return DoubleSoundMode.SECOND;
+            return DoubleBlockTopInteractionMode.SECOND;
         }
-        return DoubleSoundMode.EITHER;
+        return DoubleBlockTopInteractionMode.EITHER;
     }
 
     @Override

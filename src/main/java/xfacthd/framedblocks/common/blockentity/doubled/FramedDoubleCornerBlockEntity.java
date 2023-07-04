@@ -12,7 +12,7 @@ import xfacthd.framedblocks.common.blockentity.FramedDoubleBlockEntity;
 import xfacthd.framedblocks.common.data.*;
 import xfacthd.framedblocks.api.util.Utils;
 import xfacthd.framedblocks.common.data.property.CornerType;
-import xfacthd.framedblocks.common.util.DoubleSoundMode;
+import xfacthd.framedblocks.common.util.DoubleBlockTopInteractionMode;
 
 public class FramedDoubleCornerBlockEntity extends FramedDoubleBlockEntity
 {
@@ -146,18 +146,18 @@ public class FramedDoubleCornerBlockEntity extends FramedDoubleBlockEntity
     }
 
     @Override
-    protected DoubleSoundMode calculateSoundMode()
+    protected DoubleBlockTopInteractionMode calculateTopInteractionMode()
     {
         CornerType type = getBlockState().getValue(PropertyHolder.CORNER_TYPE);
         if (type == CornerType.BOTTOM)
         {
-            return DoubleSoundMode.SECOND;
+            return DoubleBlockTopInteractionMode.SECOND;
         }
         else if (type.isTop())
         {
-            return DoubleSoundMode.FIRST;
+            return DoubleBlockTopInteractionMode.FIRST;
         }
-        return DoubleSoundMode.EITHER;
+        return DoubleBlockTopInteractionMode.EITHER;
     }
 
     @Override

@@ -2,6 +2,7 @@ package xfacthd.framedblocks.common.blockentity;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.util.Tuple;
+import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.*;
 import net.minecraft.world.level.block.Block;
@@ -14,6 +15,7 @@ import net.minecraft.world.level.material.FluidState;
 import net.minecraft.world.level.material.MapColor;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraftforge.client.model.data.*;
+import net.minecraftforge.common.IPlantable;
 import net.minecraftforge.fml.loading.FMLEnvironment;
 import net.minecraftforge.registries.ForgeRegistries;
 import org.jetbrains.annotations.Nullable;
@@ -27,12 +29,11 @@ import xfacthd.framedblocks.api.util.ClientUtils;
 import xfacthd.framedblocks.api.util.Utils;
 import xfacthd.framedblocks.common.block.AbstractFramedDoubleBlock;
 import xfacthd.framedblocks.common.util.DoubleBlockSoundType;
-import xfacthd.framedblocks.common.util.DoubleSoundMode;
+import xfacthd.framedblocks.common.util.DoubleBlockTopInteractionMode;
 
 import java.util.List;
 import java.util.Objects;
-import java.util.function.Predicate;
-import java.util.function.Supplier;
+import java.util.function.*;
 
 public abstract class FramedDoubleBlockEntity extends FramedBlockEntity
 {
@@ -45,7 +46,7 @@ public abstract class FramedDoubleBlockEntity extends FramedBlockEntity
     private final CamoGetter[][] camoGetters = new CamoGetter[6][7];
     private final SolidityCheck[] solidityChecks = new SolidityCheck[6];
     private Tuple<BlockState, BlockState> blockPair;
-    private DoubleSoundMode soundMode = DoubleSoundMode.EITHER;
+    private DoubleBlockTopInteractionMode topInteractionMode = DoubleBlockTopInteractionMode.EITHER;
     private CamoContainer camoContainer = EmptyCamoContainer.EMPTY;
 
     public FramedDoubleBlockEntity(BlockEntityType<?> type, BlockPos pos, BlockState state)
@@ -174,6 +175,26 @@ public abstract class FramedDoubleBlockEntity extends FramedBlockEntity
     }
 
     @Override
+    public float getCamoFriction(BlockState state, @Nullable Entity entity)
+    {
+        return switch (topInteractionMode)
+        {
+            case FIRST -> getFriction(this, getCamo(), state, entity);
+            case SECOND -> getFriction(this, getCamoTwo(), state, entity);
+            case EITHER -> Math.max(
+                    getFriction(this, getCamo(), state, entity),
+                    getFriction(this, getCamoTwo(), state, entity)
+            );
+        };
+    }
+
+    @Override
+    public boolean canCamoSustainPlant(Direction side, IPlantable plant)
+    {
+        return solidityChecks[side.ordinal()].canSustainPlant(this, side, plant);
+    }
+
+    @Override
     protected boolean isCamoSolid()
     {
         if (camoContainer.isEmpty())
@@ -263,12 +284,12 @@ public abstract class FramedDoubleBlockEntity extends FramedBlockEntity
     @Override
     protected abstract boolean hitSecondary(BlockHitResult hit);
 
-    public final DoubleSoundMode getSoundMode()
+    public final DoubleBlockTopInteractionMode getTopInteractionMode()
     {
-        return soundMode;
+        return topInteractionMode;
     }
 
-    protected abstract DoubleSoundMode calculateSoundMode();
+    protected abstract DoubleBlockTopInteractionMode calculateTopInteractionMode();
 
     @Override
     public final CamoContainer getCamo(Direction side)
@@ -308,7 +329,7 @@ public abstract class FramedDoubleBlockEntity extends FramedBlockEntity
         blockPair = AbstractFramedDoubleBlock.getStatePair(state);
         collectCamoGetters();
         calculateSolidityChecks();
-        soundMode = calculateSoundMode();
+        topInteractionMode = calculateTopInteractionMode();
     }
 
     @Override
@@ -325,7 +346,7 @@ public abstract class FramedDoubleBlockEntity extends FramedBlockEntity
         // These can't happen in the constructor due to some implementations using variables initialized in their constructor
         collectCamoGetters();
         calculateSolidityChecks();
-        soundMode = calculateSoundMode();
+        topInteractionMode = calculateTopInteractionMode();
     }
 
     private void collectCamoGetters()
@@ -544,23 +565,47 @@ public abstract class FramedDoubleBlockEntity extends FramedBlockEntity
 
     protected interface CamoGetter extends Supplier<CamoContainer> { }
 
+    protected interface PlantablePredicate
+    {
+        boolean test(FramedDoubleBlockEntity be, Direction side, IPlantable plant);
+    }
+
     protected enum SolidityCheck
     {
-        NONE(be -> false),
-        FIRST(be -> be.getCamo().isSolid(be.level, be.worldPosition)),
-        SECOND(be -> be.getCamoTwo().isSolid(be.level, be.worldPosition)),
-        BOTH(be -> FIRST.isSolid(be) && SECOND.isSolid(be));
+        NONE(
+                be -> false,
+                (be, side, plant) -> false
+        ),
+        FIRST(
+                be -> be.getCamo().isSolid(be.level, be.worldPosition),
+                (be, side, plant) -> FramedBlockEntity.canSustainPlant(be, be.getCamo(), side, plant)
+        ),
+        SECOND(
+                be -> be.getCamoTwo().isSolid(be.level, be.worldPosition),
+                (be, side, plant) -> FramedBlockEntity.canSustainPlant(be, be.getCamoTwo(), side, plant)
+        ),
+        BOTH(
+                be -> FIRST.isSolid(be) && SECOND.isSolid(be),
+                (be, side, plant) -> FIRST.canSustainPlant(be, side, plant) && SECOND.canSustainPlant(be, side, plant)
+        );
 
         private final Predicate<FramedDoubleBlockEntity> predicate;
+        private final PlantablePredicate plantablePredicate;
 
-        SolidityCheck(Predicate<FramedDoubleBlockEntity> predicate)
+        SolidityCheck(Predicate<FramedDoubleBlockEntity> predicate, PlantablePredicate plantablePredicate)
         {
             this.predicate = predicate;
+            this.plantablePredicate = plantablePredicate;
         }
 
         public boolean isSolid(FramedDoubleBlockEntity be)
         {
             return predicate.test(be);
+        }
+
+        public boolean canSustainPlant(FramedDoubleBlockEntity be, Direction side, IPlantable plant)
+        {
+            return plantablePredicate.test(be, side, plant);
         }
     }
 }

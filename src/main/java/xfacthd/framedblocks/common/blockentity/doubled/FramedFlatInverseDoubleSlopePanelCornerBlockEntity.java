@@ -13,7 +13,7 @@ import xfacthd.framedblocks.common.FBContent;
 import xfacthd.framedblocks.common.blockentity.FramedDoubleBlockEntity;
 import xfacthd.framedblocks.common.data.PropertyHolder;
 import xfacthd.framedblocks.common.data.property.HorizontalRotation;
-import xfacthd.framedblocks.common.util.DoubleSoundMode;
+import xfacthd.framedblocks.common.util.DoubleBlockTopInteractionMode;
 
 public class FramedFlatInverseDoubleSlopePanelCornerBlockEntity extends FramedDoubleBlockEntity
 {
@@ -47,9 +47,9 @@ public class FramedFlatInverseDoubleSlopePanelCornerBlockEntity extends FramedDo
     }
 
     @Override
-    protected DoubleSoundMode calculateSoundMode()
+    protected DoubleBlockTopInteractionMode calculateTopInteractionMode()
     {
-        return DoubleSoundMode.EITHER;
+        return DoubleBlockTopInteractionMode.EITHER;
     }
 
     @Override

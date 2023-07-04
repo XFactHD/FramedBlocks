@@ -11,7 +11,7 @@ import xfacthd.framedblocks.api.util.Utils;
 import xfacthd.framedblocks.common.FBContent;
 import xfacthd.framedblocks.common.blockentity.FramedDoubleBlockEntity;
 import xfacthd.framedblocks.common.data.PropertyHolder;
-import xfacthd.framedblocks.common.util.DoubleSoundMode;
+import xfacthd.framedblocks.common.util.DoubleBlockTopInteractionMode;
 
 public class FramedDoubleSlopeSlabBlockEntity extends FramedDoubleBlockEntity
 {
@@ -52,9 +52,9 @@ public class FramedDoubleSlopeSlabBlockEntity extends FramedDoubleBlockEntity
     }
 
     @Override
-    protected DoubleSoundMode calculateSoundMode()
+    protected DoubleBlockTopInteractionMode calculateTopInteractionMode()
     {
-        return DoubleSoundMode.SECOND;
+        return DoubleBlockTopInteractionMode.SECOND;
     }
 
     @Override

@@ -10,7 +10,7 @@ import xfacthd.framedblocks.api.util.Utils;
 import xfacthd.framedblocks.common.FBContent;
 import xfacthd.framedblocks.common.blockentity.FramedDoubleBlockEntity;
 import xfacthd.framedblocks.common.data.PropertyHolder;
-import xfacthd.framedblocks.common.util.DoubleSoundMode;
+import xfacthd.framedblocks.common.util.DoubleBlockTopInteractionMode;
 
 public class FramedDoublePrismBlockEntity extends FramedDoubleBlockEntity
 {
@@ -58,17 +58,17 @@ public class FramedDoublePrismBlockEntity extends FramedDoubleBlockEntity
     }
 
     @Override
-    protected DoubleSoundMode calculateSoundMode()
+    protected DoubleBlockTopInteractionMode calculateTopInteractionMode()
     {
         if (isDoubleSide(Direction.UP))
         {
-            return DoubleSoundMode.EITHER;
+            return DoubleBlockTopInteractionMode.EITHER;
         }
         else if (getFacing(getBlockState()) == Direction.DOWN)
         {
-            return DoubleSoundMode.SECOND;
+            return DoubleBlockTopInteractionMode.SECOND;
         }
-        return DoubleSoundMode.FIRST;
+        return DoubleBlockTopInteractionMode.FIRST;
     }
 
     @Override

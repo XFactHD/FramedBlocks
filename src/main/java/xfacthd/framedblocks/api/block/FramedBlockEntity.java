@@ -9,6 +9,7 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
+import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.*;
 import net.minecraft.world.level.*;
@@ -22,8 +23,7 @@ import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.EntityCollisionContext;
 import net.minecraftforge.client.model.data.ModelData;
-import net.minecraftforge.common.Tags;
-import net.minecraftforge.common.ToolActions;
+import net.minecraftforge.common.*;
 import net.minecraftforge.common.capabilities.ForgeCapabilities;
 import net.minecraftforge.fluids.capability.IFluidHandler;
 import net.minecraftforge.registries.ForgeRegistries;
@@ -736,6 +736,33 @@ public class FramedBlockEntity extends BlockEntity
     public boolean shouldCamoDisplayFluidOverlay(BlockAndTintGetter level, BlockPos pos, FluidState fluid)
     {
         return camoContainer.isEmpty() || camoContainer.getState().shouldDisplayFluidOverlay(level, pos, fluid);
+    }
+
+    public float getCamoFriction(BlockState state, @Nullable Entity entity)
+    {
+        return getFriction(this, camoContainer, state, entity);
+    }
+
+    protected static float getFriction(
+            FramedBlockEntity be, CamoContainer camo, BlockState state, @Nullable Entity entity
+    )
+    {
+        if (!camo.isEmpty())
+        {
+            return camo.getState().getFriction(be.level, be.worldPosition, entity);
+        }
+        return state.getBlock().getFriction();
+    }
+
+    public boolean canCamoSustainPlant(Direction side, IPlantable plant)
+    {
+        return !camoContainer.isEmpty() && canSustainPlant(this, camoContainer, side, plant);
+    }
+
+    protected static boolean canSustainPlant(FramedBlockEntity be, CamoContainer camo, Direction side, IPlantable plant)
+    {
+        BlockState state = camo.getState();
+        return state.is(Utils.CAMO_SUSTAIN_PLANT) && state.canSustainPlant(be.level, be.worldPosition, side, plant);
     }
 
     @Override

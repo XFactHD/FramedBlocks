@@ -8,7 +8,7 @@ import net.minecraft.util.Mth;
 import org.jetbrains.annotations.Nullable;
 import xfacthd.framedblocks.common.FBContent;
 import xfacthd.framedblocks.common.blockentity.FramedDoubleBlockEntity;
-import xfacthd.framedblocks.common.util.DoubleSoundMode;
+import xfacthd.framedblocks.common.util.DoubleBlockTopInteractionMode;
 
 public class FramedDoubleSlabBlockEntity extends FramedDoubleBlockEntity
 {
@@ -28,9 +28,9 @@ public class FramedDoubleSlabBlockEntity extends FramedDoubleBlockEntity
     }
 
     @Override
-    protected DoubleSoundMode calculateSoundMode()
+    protected DoubleBlockTopInteractionMode calculateTopInteractionMode()
     {
-        return DoubleSoundMode.SECOND;
+        return DoubleBlockTopInteractionMode.SECOND;
     }
 
     @Override

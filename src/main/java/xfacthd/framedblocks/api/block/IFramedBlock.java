@@ -253,11 +253,7 @@ public interface IFramedBlock extends EntityBlock, IForgeBlock
     {
         if (level.getBlockEntity(pos) instanceof FramedBlockEntity be)
         {
-            CamoContainer camo = be.getCamo(Direction.UP);
-            if (!camo.isEmpty())
-            {
-                return camo.getState().getFriction(level, pos, entity);
-            }
+            return be.getCamoFriction(state, entity);
         }
         return state.getBlock().getFriction();
     }
@@ -568,13 +564,7 @@ public interface IFramedBlock extends EntityBlock, IForgeBlock
     {
         if (state.isFaceSturdy(level, pos, side, SupportType.FULL) && level.getBlockEntity(pos) instanceof FramedBlockEntity be)
         {
-            if (!be.isSolidSide(side))
-            {
-                return false;
-            }
-
-            BlockState camoState = be.getCamo(side).getState();
-            return camoState.is(Utils.CAMO_SUSTAIN_PLANT) && camoState.canSustainPlant(level, pos, side, plant);
+            return be.canCamoSustainPlant(side, plant);
         }
         return false;
     }

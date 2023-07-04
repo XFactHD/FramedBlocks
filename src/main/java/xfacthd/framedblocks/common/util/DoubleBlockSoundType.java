@@ -20,13 +20,13 @@ public final class DoubleBlockSoundType extends SoundType
     @Override
     public float getVolume()
     {
-        return getSoundType(be.getSoundMode()).getVolume();
+        return getSoundType(be.getTopInteractionMode()).getVolume();
     }
 
     @Override
     public float getPitch()
     {
-        return getSoundType(be.getSoundMode()).getPitch();
+        return getSoundType(be.getTopInteractionMode()).getPitch();
     }
 
     // This is only called when no camo is applied and should therefore return the default break sound
@@ -39,7 +39,7 @@ public final class DoubleBlockSoundType extends SoundType
     @Override
     public SoundEvent getStepSound()
     {
-        return getSoundType(be.getSoundMode()).getStepSound();
+        return getSoundType(be.getTopInteractionMode()).getStepSound();
     }
 
     @Override
@@ -57,19 +57,19 @@ public final class DoubleBlockSoundType extends SoundType
     @Override
     public SoundEvent getFallSound()
     {
-        return getSoundType(be.getSoundMode()).getFallSound();
+        return getSoundType(be.getTopInteractionMode()).getFallSound();
     }
 
 
 
-    private SoundType getSoundType(DoubleSoundMode mode)
+    private SoundType getSoundType(DoubleBlockTopInteractionMode mode)
     {
-        if (mode == DoubleSoundMode.EITHER)
+        if (mode == DoubleBlockTopInteractionMode.EITHER)
         {
             return getEitherSoundType();
         }
 
-        CamoContainer camo = mode == DoubleSoundMode.SECOND ? be.getCamoTwo() : be.getCamo();
+        CamoContainer camo = mode == DoubleBlockTopInteractionMode.SECOND ? be.getCamoTwo() : be.getCamo();
         if (!camo.isEmpty())
         {
             return camo.getSoundType();
