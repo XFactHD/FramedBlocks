@@ -1,4 +1,4 @@
-package xfacthd.framedblocks.common.data.skippreds.stairs;
+package xfacthd.framedblocks.common.data.facepreds.stairs;
 
 import net.minecraft.core.Direction;
 import net.minecraft.world.level.block.state.BlockState;

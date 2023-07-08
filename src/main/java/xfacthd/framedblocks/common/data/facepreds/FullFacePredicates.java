@@ -10,7 +10,6 @@ import xfacthd.framedblocks.common.data.facepreds.slope.*;
 import xfacthd.framedblocks.common.data.facepreds.slopepanel.*;
 import xfacthd.framedblocks.common.data.facepreds.slopeslab.*;
 import xfacthd.framedblocks.common.data.facepreds.stairs.*;
-import xfacthd.framedblocks.common.data.skippreds.stairs.VerticalStairsFullFacePredicate;
 import xfacthd.framedblocks.common.util.BlockTypeMap;
 
 public final class FullFacePredicates extends BlockTypeMap<FullFacePredicate>
