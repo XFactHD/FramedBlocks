@@ -2,6 +2,7 @@ package xfacthd.framedblocks.common.block;
 
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
@@ -14,8 +15,10 @@ import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraftforge.registries.RegistryObject;
+import org.jetbrains.annotations.Nullable;
 import xfacthd.framedblocks.api.camo.CamoContainer;
 import xfacthd.framedblocks.api.block.FramedProperties;
+import xfacthd.framedblocks.api.predicate.SideSkipPredicate;
 import xfacthd.framedblocks.common.FBContent;
 import xfacthd.framedblocks.common.block.rail.FramedRailSlopeBlock;
 import xfacthd.framedblocks.common.data.BlockType;
@@ -66,6 +69,24 @@ public abstract class AbstractFramedDoubleBlock extends FramedBlock
                 level.levelEvent(player, LevelEvent.PARTICLES_DESTROY_BLOCK, pos, getId(camoTwo.isAir() ? defaultState : camoTwo));
             }
         }
+    }
+
+    @Override
+    @Nullable
+    public BlockState runOcclusionTestAndGetLookupState(
+            SideSkipPredicate pred, BlockGetter level, BlockPos pos, BlockState state, BlockState adjState, Direction side
+    )
+    {
+        Tuple<BlockState, BlockState> statePair = STATE_PAIRS.get(adjState);
+        if (pred.test(level, pos, state, statePair.getA(), side))
+        {
+            return statePair.getA();
+        }
+        if (pred.test(level, pos, state, statePair.getB(), side))
+        {
+            return statePair.getB();
+        }
+        return null;
     }
 
     @Override

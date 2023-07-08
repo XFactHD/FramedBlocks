@@ -22,7 +22,7 @@ public final class InnerPrismSkipPredicate implements SideSkipPredicate
         DirectionAxis dirAxis = state.getValue(PropertyHolder.FACING_AXIS);
         if (side.getAxis() != dirAxis.axis())
         {
-            return SideSkipPredicate.CTM.test(level, pos, state, adjState, side);
+            return SideSkipPredicate.FULL_FACE.test(level, pos, state, adjState, side);
         }
         else if (dirAxis.axis() == dirAxis.direction().getAxis())
         {
@@ -33,18 +33,10 @@ public final class InnerPrismSkipPredicate implements SideSkipPredicate
         {
             return switch (type)
             {
-                case FRAMED_INNER_PRISM -> testAgainstInnerPrism(
-                        level, pos, state, dirAxis, adjState, side
-                );
-                case FRAMED_INNER_SLOPED_PRISM -> testAgainstInnerSlopedPrism(
-                        level, pos, state, dirAxis, adjState, side
-                );
-                case FRAMED_DOUBLE_PRISM -> testAgainstDoublePrism(
-                        level, pos, state, dirAxis, adjState, side
-                );
-                case FRAMED_DOUBLE_SLOPED_PRISM -> testAgainstDoubleSlopedPrism(
-                        level, pos, state, dirAxis, adjState, side
-                );
+                case FRAMED_INNER_PRISM -> testAgainstInnerPrism(dirAxis, adjState, side);
+                case FRAMED_INNER_SLOPED_PRISM -> testAgainstInnerSlopedPrism(dirAxis, adjState, side);
+                case FRAMED_DOUBLE_PRISM -> testAgainstDoublePrism(dirAxis, adjState, side);
+                case FRAMED_DOUBLE_SLOPED_PRISM -> testAgainstDoubleSlopedPrism(dirAxis, adjState, side);
                 default -> false;
             };
         }
@@ -52,46 +44,28 @@ public final class InnerPrismSkipPredicate implements SideSkipPredicate
         return false;
     }
 
-    private static boolean testAgainstInnerPrism(
-            BlockGetter level, BlockPos pos, BlockState state, DirectionAxis dirAxis, BlockState adjState, Direction side
-    )
+    private static boolean testAgainstInnerPrism(DirectionAxis dirAxis, BlockState adjState, Direction side)
     {
         DirectionAxis adjDirAxis = adjState.getValue(PropertyHolder.FACING_AXIS);
-
-        if (getTriDir(dirAxis, side).isEqualTo(getTriDir(adjDirAxis, side.getOpposite())))
-        {
-            return SideSkipPredicate.compareState(level, pos, side, state, adjState);
-        }
-        return false;
+        return getTriDir(dirAxis, side).isEqualTo(getTriDir(adjDirAxis, side.getOpposite()));
     }
 
-    private static boolean testAgainstInnerSlopedPrism(
-            BlockGetter level, BlockPos pos, BlockState state, DirectionAxis dirAxis, BlockState adjState, Direction side
-    )
+    private static boolean testAgainstInnerSlopedPrism(DirectionAxis dirAxis, BlockState adjState, Direction side)
     {
         CompoundDirection adjCmpDir = adjState.getValue(PropertyHolder.FACING_DIR);
-
-        if (getTriDir(dirAxis, side).isEqualTo(InnerSlopedPrismSkipPredicate.getTriDir(adjCmpDir, side.getOpposite())))
-        {
-            return SideSkipPredicate.compareState(level, pos, side, state, adjState);
-        }
-        return false;
+        return getTriDir(dirAxis, side).isEqualTo(InnerSlopedPrismSkipPredicate.getTriDir(adjCmpDir, side.getOpposite()));
     }
 
-    private static boolean testAgainstDoublePrism(
-            BlockGetter level, BlockPos pos, BlockState state, DirectionAxis dirAxis, BlockState adjState, Direction side
-    )
+    private static boolean testAgainstDoublePrism(DirectionAxis dirAxis, BlockState adjState, Direction side)
     {
         Tuple<BlockState, BlockState> states = AbstractFramedDoubleBlock.getStatePair(adjState);
-        return testAgainstInnerPrism(level, pos, state, dirAxis, states.getA(), side);
+        return testAgainstInnerPrism(dirAxis, states.getA(), side);
     }
 
-    private static boolean testAgainstDoubleSlopedPrism(
-            BlockGetter level, BlockPos pos, BlockState state, DirectionAxis dirAxis, BlockState adjState, Direction side
-    )
+    private static boolean testAgainstDoubleSlopedPrism(DirectionAxis dirAxis, BlockState adjState, Direction side)
     {
         Tuple<BlockState, BlockState> states = AbstractFramedDoubleBlock.getStatePair(adjState);
-        return testAgainstInnerSlopedPrism(level, pos, state, dirAxis, states.getA(), side);
+        return testAgainstInnerSlopedPrism(dirAxis, states.getA(), side);
     }
 
 

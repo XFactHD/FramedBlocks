@@ -25,11 +25,11 @@ public final class PostSkipPredicate implements SideSkipPredicate
         if (block == state.getBlock())
         {
             Direction.Axis adjAxis = adjState.getValue(BlockStateProperties.AXIS);
-            return axis == adjAxis && SideSkipPredicate.compareState(level, pos, side, state, side);
+            return axis == adjAxis;
         }
         else if (block == FBContent.BLOCK_FRAMED_FENCE.get() || isVerticalLattice(block, adjState))
         {
-            return axis == Direction.Axis.Y && SideSkipPredicate.compareState(level, pos, side, state, side);
+            return axis == Direction.Axis.Y;
         }
         return false;
     }

@@ -10,6 +10,7 @@ import net.minecraft.world.phys.HitResult;
 import net.minecraftforge.common.util.Lazy;
 import net.minecraftforge.event.TickEvent;
 import org.lwjgl.glfw.GLFW;
+import xfacthd.framedblocks.FramedBlocks;
 import xfacthd.framedblocks.api.block.FramedBlockEntity;
 import xfacthd.framedblocks.api.model.FramedBlockModel;
 import xfacthd.framedblocks.api.util.FramedConstants;
@@ -40,7 +41,17 @@ public final class KeyMappings
             HitResult hit = Minecraft.getInstance().hitResult;
             if (hit instanceof BlockHitResult blockHit && level.getBlockEntity(blockHit.getBlockPos()) instanceof FramedBlockEntity be)
             {
-                be.updateCulling(true, true);
+                try
+                {
+                    be.updateCulling(true, true);
+                }
+                catch (Throwable throwable)
+                {
+                    FramedBlocks.LOGGER.error(
+                            "Encountered unexpected exception while updating culling of " + be.getBlockState().getBlock(),
+                            throwable
+                    );
+                }
 
                 BlockPos pos = blockHit.getBlockPos();
                 Component blockName = be.getBlockState().getBlock().getName();

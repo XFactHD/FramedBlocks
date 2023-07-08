@@ -25,7 +25,7 @@ public final class CollapsibleBlockSkipPredicate implements SideSkipPredicate
         NullableDirection face = state.getValue(PropertyHolder.NULLABLE_FACE);
         if (face == NullableDirection.NONE || side == face.toDirection().getOpposite())
         {
-            return SideSkipPredicate.CTM.test(level, pos, state, adjState, side);
+            return SideSkipPredicate.FULL_FACE.test(level, pos, state, adjState, side);
         }
         else if (side == face.toDirection() || !adjState.is(FBContent.BLOCK_FRAMED_COLLAPSIBLE_BLOCK.get()) || adjState.getValue(PropertyHolder.NULLABLE_FACE) != face)
         {
@@ -43,10 +43,7 @@ public final class CollapsibleBlockSkipPredicate implements SideSkipPredicate
             byte[] offsets = cbe.getVertexOffsets();
             byte[] adjOffsets = adjCbe.getVertexOffsets();
 
-            if (offsets[verts.v1] == adjOffsets[adjVerts.v2] && offsets[verts.v2] == adjOffsets[adjVerts.v1])
-            {
-                return SideSkipPredicate.compareState(level, pos, side, state, adjState);
-            }
+            return offsets[verts.v1] == adjOffsets[adjVerts.v2] && offsets[verts.v2] == adjOffsets[adjVerts.v1];
         }
 
         return false;

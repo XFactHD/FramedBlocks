@@ -16,15 +16,11 @@ public final class OneWayWindowSkipPredicate implements SideSkipPredicate
     {
         if (adjState.getBlock() != FBContent.BLOCK_FRAMED_ONE_WAY_WINDOW.get())
         {
-            return SideSkipPredicate.CTM.test(level, pos, state, adjState, side);
+            return SideSkipPredicate.FULL_FACE.test(level, pos, state, adjState, side);
         }
 
         NullableDirection face = state.getValue(PropertyHolder.NULLABLE_FACE);
         NullableDirection adjFace = adjState.getValue(PropertyHolder.NULLABLE_FACE);
-        if (face == adjFace)
-        {
-            return SideSkipPredicate.compareState(level, pos, side);
-        }
-        return false;
+        return face == adjFace;
     }
 }

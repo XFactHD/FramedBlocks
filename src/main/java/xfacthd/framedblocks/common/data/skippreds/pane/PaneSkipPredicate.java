@@ -13,7 +13,10 @@ public final class PaneSkipPredicate implements SideSkipPredicate
     @Override
     public boolean test(BlockGetter level, BlockPos pos, BlockState state, BlockState adjState, Direction side)
     {
-        if (adjState.getBlock() != state.getBlock()) { return false; }
+        if (adjState.getBlock() != state.getBlock())
+        {
+            return false;
+        }
 
         boolean north = state.getValue(BlockStateProperties.NORTH);
         boolean east = state.getValue(BlockStateProperties.EAST);
@@ -27,18 +30,16 @@ public final class PaneSkipPredicate implements SideSkipPredicate
 
         if (Utils.isY(side) && north == adjNorth && east == adjEast && south == adjSouth && west == adjWest)
         {
-            return SideSkipPredicate.compareState(level, pos, side, state, adjState);
+            return true;
         }
-        else if
-        (
-                (side == Direction.NORTH && north && adjSouth) ||
-                (side == Direction.EAST && east && adjWest) ||
-                (side == Direction.SOUTH && south && adjNorth) ||
-                (side == Direction.WEST && west && adjEast)
-        )
+
+        return switch (side)
         {
-            return SideSkipPredicate.compareState(level, pos, side, state, adjState);
-        }
-        return false;
+            case NORTH -> north && adjSouth;
+            case EAST -> east && adjWest;
+            case SOUTH -> south && adjNorth;
+            case WEST -> west && adjEast;
+            default -> false;
+        };
     }
 }

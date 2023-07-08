@@ -17,7 +17,7 @@ public final class GateSkipPredicate implements SideSkipPredicate
 
         if (side == facing.getOpposite())
         {
-            return SideSkipPredicate.CTM.test(level, pos, state, adjState, side);
+            return SideSkipPredicate.FULL_FACE.test(level, pos, state, adjState, side);
         }
 
         if (!(adjState.getBlock() instanceof FramedGateBlock))
@@ -26,12 +26,7 @@ public final class GateSkipPredicate implements SideSkipPredicate
         }
 
         Direction adjFacing = getDoorFacing(adjState);
-        if (facing == adjFacing && side.getAxis() != facing.getAxis())
-        {
-            return SideSkipPredicate.compareState(level, pos, side, state, adjState);
-        }
-
-        return false;
+        return facing == adjFacing && side.getAxis() != facing.getAxis();
     }
 
     private static Direction getDoorFacing(BlockState state)

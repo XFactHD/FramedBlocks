@@ -19,11 +19,11 @@ public final class LatticeSkipPredicate implements SideSkipPredicate
         Block block = adjState.getBlock();
         if (block == state.getBlock() && hasArm(state, side) && hasArm(adjState, side.getOpposite()))
         {
-            return SideSkipPredicate.compareState(level, pos, side, state, adjState);
+            return true;
         }
         else if (Utils.isY(side) && hasArm(state, side) && isFenceOrVerticalLattice(block, adjState))
         {
-            return SideSkipPredicate.compareState(level, pos, side, state, adjState);
+            return true;
         }
         return false;
     }

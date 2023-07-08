@@ -18,16 +18,14 @@ public final class TrapdoorSkipPredicate implements SideSkipPredicate
 
         if (side == facing.getOpposite())
         {
-            return SideSkipPredicate.CTM.test(level, pos, state, adjState, side);
+            return SideSkipPredicate.FULL_FACE.test(level, pos, state, adjState, side);
         }
 
-        if (!(adjState.getBlock() instanceof FramedTrapDoorBlock))
+        if (adjState.getBlock() instanceof FramedTrapDoorBlock)
         {
-            return false;
+            return facing == getTrapDoorFacing(adjState);
         }
-
-        Direction adjFacing = getTrapDoorFacing(adjState);
-        return adjFacing == facing && SideSkipPredicate.compareState(level, pos, side, state, adjState);
+        return false;
     }
 
     private static Direction getTrapDoorFacing(BlockState state)

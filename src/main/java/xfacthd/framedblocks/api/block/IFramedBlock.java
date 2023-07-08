@@ -30,6 +30,7 @@ import net.minecraftforge.common.extensions.IForgeBlock;
 import org.jetbrains.annotations.Nullable;
 import xfacthd.framedblocks.api.FramedBlocksAPI;
 import xfacthd.framedblocks.api.block.render.AppearanceHelper;
+import xfacthd.framedblocks.api.block.render.CullingHelper;
 import xfacthd.framedblocks.api.block.update.CullingUpdateTracker;
 import xfacthd.framedblocks.api.camo.CamoContainer;
 import xfacthd.framedblocks.api.predicate.*;
@@ -197,6 +198,29 @@ public interface IFramedBlock extends EntityBlock, IForgeBlock
         return getBlockType().getConnectionPredicate();
     }
 
+    /**
+     * Called on the occluding block to determine which {@link BlockState} should be used to retrieve the camo from its
+     * {@link FramedBlockEntity} if the given {@link SideSkipPredicate} of the block being occluded succeeds
+     * @param pred The skip predicate of the block being occluded
+     * @param level The level the blocks are in
+     * @param pos The position of the block being occluded
+     * @param state The block being occluded
+     * @param adjState The occluding block (the block this method is being called on)
+     * @param side The side being occluded of the block that is being occluded
+     * @return The state used for camo lookup on the occluding block if the given predicate succeeds, else null
+     */
+    @Nullable
+    default BlockState runOcclusionTestAndGetLookupState(
+            SideSkipPredicate pred, BlockGetter level, BlockPos pos, BlockState state, BlockState adjState, Direction side
+    )
+    {
+        if (pred.test(level, pos, state, adjState, side))
+        {
+            return adjState;
+        }
+        return null;
+    }
+
     @Override
     default BlockState getAppearance(
             BlockState state,
@@ -208,28 +232,6 @@ public interface IFramedBlock extends EntityBlock, IForgeBlock
     )
     {
         return AppearanceHelper.getAppearance(this, state, level, pos, side, queryState, queryPos);
-    }
-
-    default boolean isSideHidden(BlockGetter level, BlockPos pos, BlockState state, Direction side)
-    {
-        BlockPos neighborPos = pos.relative(side);
-        BlockState neighborState = level.getBlockState(neighborPos);
-
-        if (neighborState.getBlock() instanceof IFramedBlock block && block.shouldPreventNeighborCulling(level, neighborPos, neighborState, pos, state))
-        {
-            return false;
-        }
-
-        //Let the game handle culling against solid surfaces automatically
-        if (neighborState.isSolidRender(level, neighborPos))
-        {
-            return false;
-        }
-
-        SideSkipPredicate pred = FramedBlocksAPI.getInstance().detailedCullingEnabled() ?
-                getBlockType().getSideSkipPredicate() :
-                SideSkipPredicate.CTM;
-        return pred.test(level, pos, state, neighborState, side);
     }
 
     default boolean shouldPreventNeighborCulling(
@@ -407,27 +409,10 @@ public interface IFramedBlock extends EntityBlock, IForgeBlock
 
     @Override
     default boolean hidesNeighborFace(
-            BlockGetter level, BlockPos pos, BlockState state, BlockState neighborState, Direction dir
+            BlockGetter level, BlockPos pos, BlockState state, BlockState adjState, Direction side
     )
     {
-        if (!FramedBlocksAPI.getInstance().canHideNeighborFaceInLevel(level) || neighborState.getBlock() instanceof IFramedBlock)
-        {
-            return false;
-        }
-
-        if (shouldPreventNeighborCulling(level, pos, state, pos.relative(dir), neighborState))
-        {
-            return false;
-        }
-        if (level.getExistingBlockEntity(pos) instanceof FramedBlockEntity be)
-        {
-            if (neighborState.getBlock() instanceof HalfTransparentBlock && SideSkipPredicate.CTM.test(level, pos, state, neighborState, dir))
-            {
-                return true;
-            }
-            return be.isSolidSide(dir) && !be.isIntangible(null);
-        }
-        return false;
+        return CullingHelper.hidesNeighborFace(this, level, pos, state, adjState, side);
     }
 
     @Override

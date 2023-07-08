@@ -14,11 +14,10 @@ public final class FenceGateSkipPredicate implements SideSkipPredicate
     public boolean test(BlockGetter level, BlockPos pos, BlockState state, BlockState adjState, Direction side)
     {
         Direction dir = state.getValue(FenceGateBlock.FACING);
-        if ((side == dir.getClockWise() || side == dir.getCounterClockWise()) && adjState.getBlock() == FBContent.BLOCK_FRAMED_WALL.get())
+        if (side == dir.getClockWise() || side == dir.getCounterClockWise())
         {
-            return SideSkipPredicate.compareState(level, pos, side, state, adjState);
+            return adjState.getBlock() == FBContent.BLOCK_FRAMED_WALL.get();
         }
-
         return false;
     }
 }

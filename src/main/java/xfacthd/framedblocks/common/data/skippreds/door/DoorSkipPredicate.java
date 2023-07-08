@@ -17,7 +17,7 @@ public final class DoorSkipPredicate implements SideSkipPredicate
 
         if (side == facing.getOpposite())
         {
-            return SideSkipPredicate.CTM.test(level, pos, state, adjState, side);
+            return SideSkipPredicate.FULL_FACE.test(level, pos, state, adjState, side);
         }
 
         if (!(adjState.getBlock() instanceof FramedDoorBlock))
@@ -28,16 +28,11 @@ public final class DoorSkipPredicate implements SideSkipPredicate
         boolean top = state.getValue(BlockStateProperties.DOUBLE_BLOCK_HALF) == DoubleBlockHalf.UPPER;
         if ((top && side == Direction.DOWN) || (!top && side ==  Direction.UP))
         {
-            return SideSkipPredicate.compareState(level, pos, side, state, adjState);
+            return true;
         }
 
         Direction adjFacing = getDoorFacing(adjState);
-        if (facing == adjFacing && (side == facing.getClockWise() || side == facing.getCounterClockWise()))
-        {
-            return SideSkipPredicate.compareState(level, pos, side, state, adjState);
-        }
-
-        return false;
+        return facing == adjFacing && (side == facing.getClockWise() || side == facing.getCounterClockWise());
     }
 
     private static Direction getDoorFacing(BlockState state)

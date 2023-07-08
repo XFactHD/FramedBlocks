@@ -23,7 +23,7 @@ public final class SlopedPrismSkipPredicate implements SideSkipPredicate
         Direction dir = cmpDir.direction();
         if (side == dir.getOpposite())
         {
-            return SideSkipPredicate.CTM.test(level, pos, state, adjState, side);
+            return SideSkipPredicate.FULL_FACE.test(level, pos, state, adjState, side);
         }
 
         Direction orientation = cmpDir.orientation();
@@ -36,18 +36,10 @@ public final class SlopedPrismSkipPredicate implements SideSkipPredicate
         {
             return switch (type)
             {
-                case FRAMED_SLOPED_PRISM -> testAgainstSlopedPrism(
-                        level, pos, state, cmpDir, adjState, side
-                );
-                case FRAMED_PRISM -> testAgainstPrism(
-                        level, pos, state, cmpDir, adjState, side
-                );
-                case FRAMED_DOUBLE_SLOPED_PRISM -> testAgainstDoubleSlopedPrism(
-                        level, pos, state, cmpDir, adjState, side
-                );
-                case FRAMED_DOUBLE_PRISM -> testAgainstDoublePrism(
-                        level, pos, state, cmpDir, adjState, side
-                );
+                case FRAMED_SLOPED_PRISM -> testAgainstSlopedPrism(cmpDir, adjState, side);
+                case FRAMED_PRISM -> testAgainstPrism(cmpDir, adjState, side);
+                case FRAMED_DOUBLE_SLOPED_PRISM -> testAgainstDoubleSlopedPrism(cmpDir, adjState, side);
+                case FRAMED_DOUBLE_PRISM -> testAgainstDoublePrism(cmpDir, adjState, side);
                 default -> false;
             };
         }
@@ -55,46 +47,28 @@ public final class SlopedPrismSkipPredicate implements SideSkipPredicate
         return false;
     }
 
-    private static boolean testAgainstSlopedPrism(
-            BlockGetter level, BlockPos pos, BlockState state, CompoundDirection cmpDir, BlockState adjState, Direction side
-    )
+    private static boolean testAgainstSlopedPrism(CompoundDirection cmpDir, BlockState adjState, Direction side)
     {
         CompoundDirection adjCmpDir = adjState.getValue(PropertyHolder.FACING_DIR);
-
-        if (getTriDir(cmpDir, side).isEqualTo(getTriDir(adjCmpDir, side.getOpposite())))
-        {
-            return SideSkipPredicate.compareState(level, pos, side, state, adjState);
-        }
-        return false;
+        return getTriDir(cmpDir, side).isEqualTo(getTriDir(adjCmpDir, side.getOpposite()));
     }
 
-    private static boolean testAgainstPrism(
-            BlockGetter level, BlockPos pos, BlockState state, CompoundDirection cmpDir, BlockState adjState, Direction side
-    )
+    private static boolean testAgainstPrism(CompoundDirection cmpDir, BlockState adjState, Direction side)
     {
         DirectionAxis adjDirAxis = adjState.getValue(PropertyHolder.FACING_AXIS);
-
-        if (getTriDir(cmpDir, side).isEqualTo(PrismSkipPredicate.getTriDir(adjDirAxis, side.getOpposite())))
-        {
-            return SideSkipPredicate.compareState(level, pos, side, state, adjState);
-        }
-        return false;
+        return getTriDir(cmpDir, side).isEqualTo(PrismSkipPredicate.getTriDir(adjDirAxis, side.getOpposite()));
     }
 
-    private static boolean testAgainstDoubleSlopedPrism(
-            BlockGetter level, BlockPos pos, BlockState state, CompoundDirection cmpDir, BlockState adjState, Direction side
-    )
+    private static boolean testAgainstDoubleSlopedPrism(CompoundDirection cmpDir, BlockState adjState, Direction side)
     {
         Tuple<BlockState, BlockState> states = AbstractFramedDoubleBlock.getStatePair(adjState);
-        return testAgainstSlopedPrism(level, pos, state, cmpDir, states.getA(), side);
+        return testAgainstSlopedPrism(cmpDir, states.getA(), side);
     }
 
-    private static boolean testAgainstDoublePrism(
-            BlockGetter level, BlockPos pos, BlockState state, CompoundDirection cmpDir, BlockState adjState, Direction side
-    )
+    private static boolean testAgainstDoublePrism(CompoundDirection cmpDir, BlockState adjState, Direction side)
     {
         Tuple<BlockState, BlockState> states = AbstractFramedDoubleBlock.getStatePair(adjState);
-        return testAgainstPrism(level, pos, state, cmpDir, states.getA(), side);
+        return testAgainstPrism(cmpDir, states.getA(), side);
     }
 
 

@@ -20,11 +20,11 @@ public final class WallSkipPredicate implements SideSkipPredicate
             {
                 boolean up = state.getValue(WallBlock.UP);
                 boolean adjUp = adjState.getValue(WallBlock.UP);
-                return up == adjUp && SideSkipPredicate.compareState(level, pos, side, state, adjState);
+                return up == adjUp;
             }
             else if (getArm(state, side) == getArm(adjState, side.getOpposite()))
             {
-                return SideSkipPredicate.compareState(level, pos, side, state, adjState);
+                return true;
             }
         }
         return false;

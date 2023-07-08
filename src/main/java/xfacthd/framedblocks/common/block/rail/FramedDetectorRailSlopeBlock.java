@@ -41,7 +41,7 @@ public class FramedDetectorRailSlopeBlock extends DetectorRailBlock implements I
     private final ShapeProvider shapes;
     private final BiFunction<BlockPos, BlockState, FramedBlockEntity> beFactory;
 
-    private FramedDetectorRailSlopeBlock(BlockType type, BiFunction<BlockPos, BlockState, FramedBlockEntity> beFactory)
+    protected FramedDetectorRailSlopeBlock(BlockType type, BiFunction<BlockPos, BlockState, FramedBlockEntity> beFactory)
     {
         super(IFramedBlock.createProperties(type));
         this.type = type;
@@ -256,7 +256,7 @@ public class FramedDetectorRailSlopeBlock extends DetectorRailBlock implements I
 
     public static FramedDetectorRailSlopeBlock fancy()
     {
-        return new FramedDetectorRailSlopeBlock(
+        return new FramedFancyDetectorRailSlopeBlock(
                 BlockType.FRAMED_FANCY_DETECTOR_RAIL_SLOPE,
                 FramedFancyRailSlopeBlockEntity::new
         );

@@ -30,6 +30,7 @@ import net.minecraftforge.registries.ForgeRegistries;
 import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
 import xfacthd.framedblocks.api.FramedBlocksAPI;
+import xfacthd.framedblocks.api.block.render.CullingHelper;
 import xfacthd.framedblocks.api.camo.EmptyCamoContainer;
 import xfacthd.framedblocks.api.camo.CamoContainer;
 import xfacthd.framedblocks.api.model.data.FramedBlockData;
@@ -557,7 +558,7 @@ public class FramedBlockEntity extends BlockEntity
     {
         boolean wasHidden = modelData.isSideHidden(side);
         //noinspection ConstantConditions
-        boolean hidden = ((IFramedBlock) testState.getBlock()).isSideHidden(level, worldPosition, testState, side);
+        boolean hidden = CullingHelper.isSideHidden(getBlock(), level, worldPosition, testState, side);
         if (wasHidden != hidden)
         {
             modelData.setSideHidden(side, hidden);

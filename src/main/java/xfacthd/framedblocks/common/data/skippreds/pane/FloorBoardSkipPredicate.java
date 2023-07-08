@@ -15,13 +15,13 @@ public final class FloorBoardSkipPredicate implements SideSkipPredicate
     {
         if (Utils.isY(side))
         {
-            return SideSkipPredicate.CTM.test(level, pos, state, adjState, side);
+            return SideSkipPredicate.FULL_FACE.test(level, pos, state, adjState, side);
         }
         else if (adjState.getBlock() == state.getBlock())
         {
             boolean top = state.getValue(FramedProperties.TOP);
             boolean adjTop = adjState.getValue(FramedProperties.TOP);
-            return top == adjTop && SideSkipPredicate.compareState(level, pos, side, state, adjState);
+            return top == adjTop;
         }
 
         return false;

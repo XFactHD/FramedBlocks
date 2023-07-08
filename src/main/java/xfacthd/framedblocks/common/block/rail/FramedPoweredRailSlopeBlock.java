@@ -41,7 +41,7 @@ public class FramedPoweredRailSlopeBlock extends PoweredRailBlock implements IFr
     private final ShapeProvider shapes;
     private final BiFunction<BlockPos, BlockState, FramedBlockEntity> beFactory;
 
-    private FramedPoweredRailSlopeBlock(BlockType type, boolean isPoweredRail, BiFunction<BlockPos, BlockState, FramedBlockEntity> beFactory)
+    protected FramedPoweredRailSlopeBlock(BlockType type, boolean isPoweredRail, BiFunction<BlockPos, BlockState, FramedBlockEntity> beFactory)
     {
         super(IFramedBlock.createProperties(type), isPoweredRail);
         this.type = type;
@@ -272,7 +272,7 @@ public class FramedPoweredRailSlopeBlock extends PoweredRailBlock implements IFr
 
     public static FramedPoweredRailSlopeBlock poweredFancy()
     {
-        return new FramedPoweredRailSlopeBlock(
+        return new FramedFancyPoweredRailSlopeBlock(
                 BlockType.FRAMED_FANCY_POWERED_RAIL_SLOPE,
                 true,
                 FramedFancyRailSlopeBlockEntity::new
@@ -290,7 +290,7 @@ public class FramedPoweredRailSlopeBlock extends PoweredRailBlock implements IFr
 
     public static FramedPoweredRailSlopeBlock activatorFancy()
     {
-        return new FramedPoweredRailSlopeBlock(
+        return new FramedFancyPoweredRailSlopeBlock(
                 BlockType.FRAMED_FANCY_ACTIVATOR_RAIL_SLOPE,
                 false,
                 FramedFancyRailSlopeBlockEntity::new

@@ -13,10 +13,6 @@ public final class LadderSkipPredicate implements SideSkipPredicate
     @Override
     public boolean test(BlockGetter level, BlockPos pos, BlockState state, BlockState adjState, Direction side)
     {
-        if (Utils.isY(side) && adjState.getBlock() == FBContent.BLOCK_FRAMED_LADDER.get())
-        {
-            return SideSkipPredicate.compareState(level, pos, side, state, adjState);
-        }
-        return false;
+        return Utils.isY(side) && adjState.getBlock() == FBContent.BLOCK_FRAMED_LADDER.get();
     }
 }

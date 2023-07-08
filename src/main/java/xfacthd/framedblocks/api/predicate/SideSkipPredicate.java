@@ -1,20 +1,16 @@
 package xfacthd.framedblocks.api.predicate;
 
-import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.core.Direction;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.BlockGetter;
-import xfacthd.framedblocks.api.FramedBlocksAPI;
 import xfacthd.framedblocks.api.block.IFramedBlock;
-import xfacthd.framedblocks.api.block.FramedBlockEntity;
-import xfacthd.framedblocks.api.util.Utils;
 
 public interface SideSkipPredicate
 {
     SideSkipPredicate FALSE = (level, pos, state, adjState, side) -> false;
 
-    SideSkipPredicate CTM = (level, pos, state, adjState, side) ->
+    SideSkipPredicate FULL_FACE = (level, pos, state, adjState, side) ->
     {
         if (!((IFramedBlock) state.getBlock()).getFullFacePredicate().test(state, side))
         {
@@ -23,18 +19,9 @@ public interface SideSkipPredicate
 
         if (adjState.getBlock() instanceof IFramedBlock block)
         {
-            if (!block.getFullFacePredicate().test(adjState, side.getOpposite()))
-            {
-                return false;
-            }
-
-            if (Utils.getBlockEntitySafe(level, pos.relative(side)) instanceof FramedBlockEntity be)
-            {
-                adjState = be.getCamo(side.getOpposite()).getState();
-            }
+            return block.getFullFacePredicate().test(adjState, side.getOpposite());
         }
-
-        return !adjState.isAir() && compareState(level, pos, adjState, side, side);
+        return true;
     };
 
     /**
@@ -47,141 +34,4 @@ public interface SideSkipPredicate
      * @return Whether the given side should be hidden
      */
     boolean test(BlockGetter level, BlockPos pos, BlockState state, BlockState adjState, Direction side);
-
-    /**
-     * Compares the camo state of the {@link FramedBlockEntity} at the given position against the camo state of the
-     * FramedBlockEntity at the given position offset by the given {@link Direction side}.
-     * On the FramedBlockEntity at the given position, the given side will be used for the camo lookup, on the
-     * neighboring FramedBlockEntity the opposite of the given side will be used for the camo lookup
-     * @param level The Level
-     * @param pos The position of the block being tested
-     * @param side The side on which the neighbor to be tested against is located
-     * @return true if the camo states either match (with certain exclusions) or occlude each other by being solid
-     */
-    static boolean compareState(BlockGetter level, BlockPos pos, Direction side)
-    {
-        return compareState(level, pos, side, side, side.getOpposite());
-    }
-
-    /**
-     * Compares the camo state of the {@link FramedBlockEntity} at the given position against the camo state of the
-     * FramedBlockEntity at the given position offset by the given {@link Direction side}.
-     * @param level The Level
-     * @param pos The position of the block being tested
-     * @param side The side on which the neighbor to be tested against is located
-     * @param camoSide The side on which to look up the camo state in the FramedBlockEntity at the given position
-     * @param adjCamoSide The side on which to look up the camo state in the neighboring FramedBlockEntity
-     * @return true if the camo states either match (with certain exclusions) or occlude each other by being solid
-     */
-    static boolean compareState(BlockGetter level, BlockPos pos, Direction side, Direction camoSide, Direction adjCamoSide)
-    {
-        if (Utils.getBlockEntitySafe(level, pos.relative(side)) instanceof FramedBlockEntity be)
-        {
-            BlockState adjState = be.getCamo(adjCamoSide).getState();
-            return !adjState.isAir() && compareState(level, pos, adjState, side, camoSide);
-        }
-        return false;
-    }
-
-    /**
-     * Compares the camo state of the {@link FramedBlockEntity} at the given position against the given {@link BlockState}
-     * @param level The Level
-     * @param pos The position of the block being tested
-     * @param adjState The neighboring state, can be a camo state from a neighboring FramedBlockEntity or an actual state
-     *                 in the level
-     * @param camoSide The side on which to look up the camo state in the FramedBlockEntity at the given position
-     * @return true if the neighboring state either matches the camo state of the FramedBlockEntity (with certain
-     * exclusions) or they occlude each other by being solid
-     */
-    static boolean compareState(BlockGetter level, BlockPos pos, BlockState adjState, Direction side, Direction camoSide)
-    {
-        if (Utils.getBlockEntitySafe(level, pos) instanceof FramedBlockEntity be)
-        {
-            BlockState state = be.getCamo(camoSide).getState();
-            return compareState(level, pos, state, adjState, side);
-        }
-
-        return false;
-    }
-
-    /**
-     * Compares the camo state of the {@link FramedBlockEntity} at the given position against the camo state of the
-     * FramedBlockEntity at the given position offset by the given {@link Direction side}.
-     * On the FramedBlockEntity at the given position, the given state will be used for the camo lookup, on the
-     * neighboring FramedBlockEntity the given adjCamoSide will be used for the camo lookup
-     * @param level The Level
-     * @param pos The position of the block being tested
-     * @param side The side on which the neighbor to be tested against is located
-     * @param testState The state used in the test, used to look up the camo on the FramedBlockEntity at the given position
-     * @param adjCamoSide The side on which to look up the camo state in the neighboring FramedBlockEntity
-     * @return true if the camo states either match (with certain exclusions) or occlude each other by being solid
-     */
-    static boolean compareState(BlockGetter level, BlockPos pos, Direction side, BlockState testState, Direction adjCamoSide)
-    {
-        BlockState adjCamoState = Blocks.AIR.defaultBlockState();
-        if (Utils.getBlockEntitySafe(level, pos.relative(side)) instanceof FramedBlockEntity be)
-        {
-            adjCamoState = be.getCamo(adjCamoSide).getState();
-        }
-
-        if (!adjCamoState.isAir() && Utils.getBlockEntitySafe(level, pos) instanceof FramedBlockEntity be)
-        {
-            BlockState camoState = be.getCamo(testState).getState();
-            return compareState(level, pos, camoState, adjCamoState, side);
-        }
-
-        return false;
-    }
-
-    /**
-     * Compares the camo state of the {@link FramedBlockEntity} at the given position against the camo state of the
-     * FramedBlockEntity at the given position offset by the given {@link Direction side}.
-     * On the FramedBlockEntity at the given position, the given state will be used for the camo lookup, on the
-     * neighboring FramedBlockEntity the given adjCamoSide will be used for the camo lookup
-     * @param level The Level
-     * @param pos The position of the block being tested
-     * @param side The side on which the neighbor to be tested against is located
-     * @param testState The state used in the test, used to look up the camo on the FramedBlockEntity at the given position
-     * @param adjTestState The adjacent state used in the test, used to look up the camo in the neighboring FramedBlockEntity
-     * @return true if the camo states either match (with certain exclusions) or occlude each other by being solid
-     */
-    static boolean compareState(BlockGetter level, BlockPos pos, Direction side, BlockState testState, BlockState adjTestState)
-    {
-        BlockState adjCamoState = Blocks.AIR.defaultBlockState();
-        if (Utils.getBlockEntitySafe(level, pos.relative(side)) instanceof FramedBlockEntity be)
-        {
-            adjCamoState = be.getCamo(adjTestState).getState();
-        }
-
-        if (!adjCamoState.isAir() && Utils.getBlockEntitySafe(level, pos) instanceof FramedBlockEntity be)
-        {
-            BlockState camoState = be.getCamo(testState).getState();
-            return compareState(level, pos, camoState, adjCamoState, side);
-        }
-
-        return false;
-    }
-
-    /**
-     * Compares the two given camo states against each other
-     * @param level The Level
-     * @param pos The position of the block being tested
-     * @param state The camo state of the block at the given position
-     * @param adjState The camo state of the block at the neighboring position
-     * @param side The side on which the neighbor to be tested against is located
-     * @return true if the camo states either match (with certain exclusions) or occlude each other by being solid
-     */
-    static boolean compareState(BlockGetter level, BlockPos pos, BlockState state, BlockState adjState, Direction side)
-    {
-        if (state.isAir() || adjState.isAir())
-        {
-            return false;
-        }
-
-        if (state == adjState)
-        {
-            return FramedBlocksAPI.getInstance().canCullBlockNextTo(state, adjState);
-        }
-        return state.isSolidRender(level, pos) && adjState.isSolidRender(level, pos.relative(side));
-    }
 }

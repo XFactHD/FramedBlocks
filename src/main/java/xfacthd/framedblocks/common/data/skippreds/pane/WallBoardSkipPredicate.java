@@ -16,13 +16,13 @@ public final class WallBoardSkipPredicate implements SideSkipPredicate
 
         if (side == dir)
         {
-            return SideSkipPredicate.CTM.test(level, pos, state, adjState, side);
+            return SideSkipPredicate.FULL_FACE.test(level, pos, state, adjState, side);
         }
 
         if (side != dir.getOpposite() && adjState.getBlock() == state.getBlock())
         {
             Direction adjDir = adjState.getValue(FramedProperties.FACING_HOR);
-            return adjDir == dir && SideSkipPredicate.compareState(level, pos, side, state, adjState);
+            return adjDir == dir;
         }
 
         return false;

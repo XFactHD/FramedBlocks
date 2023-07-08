@@ -21,11 +21,7 @@ public final class FenceSkipPredicate implements SideSkipPredicate
 
         if (Utils.isY(side))
         {
-            if (sameBlock || isVerticalPostOrLattice(adjState))
-            {
-                return SideSkipPredicate.compareState(level, pos, side, state, adjState);
-            }
-            return false;
+            return sameBlock || isVerticalPostOrLattice(adjState);
         }
 
         if (!hasFenceArm(state, side))
@@ -35,16 +31,13 @@ public final class FenceSkipPredicate implements SideSkipPredicate
 
         if (sameBlock && hasFenceArm(adjState, side.getOpposite()))
         {
-            return SideSkipPredicate.compareState(level, pos, side, state, adjState);
+            return true;
         }
 
         if (adjState.getBlock() == FBContent.BLOCK_FRAMED_FENCE_GATE.get())
         {
             Direction adjDir = adjState.getValue(BlockStateProperties.HORIZONTAL_FACING);
-            if (adjDir.getCounterClockWise() == side || adjDir.getClockWise() == side)
-            {
-                return SideSkipPredicate.compareState(level, pos, side, state, adjState);
-            }
+            return adjDir.getCounterClockWise() == side || adjDir.getClockWise() == side;
         }
 
         return false;

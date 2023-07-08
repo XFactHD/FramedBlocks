@@ -45,7 +45,7 @@ public class FramedRailSlopeBlock extends BaseRailBlock implements IFramedBlock
     private final ShapeProvider shapes;
     private final BiFunction<BlockPos, BlockState, FramedBlockEntity> beFactory;
 
-    private FramedRailSlopeBlock(BlockType type, BiFunction<BlockPos, BlockState, FramedBlockEntity> beFactory)
+    protected FramedRailSlopeBlock(BlockType type, BiFunction<BlockPos, BlockState, FramedBlockEntity> beFactory)
     {
         super(true, IFramedBlock.createProperties(type));
         this.type = type;
@@ -255,7 +255,7 @@ public class FramedRailSlopeBlock extends BaseRailBlock implements IFramedBlock
 
     public static FramedRailSlopeBlock fancy()
     {
-        return new FramedRailSlopeBlock(
+        return new FramedFancyRailSlopeBlock(
                 BlockType.FRAMED_FANCY_RAIL_SLOPE,
                 FramedFancyRailSlopeBlockEntity::new
         );
