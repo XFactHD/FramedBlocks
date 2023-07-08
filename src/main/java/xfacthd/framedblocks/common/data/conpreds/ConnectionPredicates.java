@@ -1,6 +1,6 @@
 package xfacthd.framedblocks.common.data.conpreds;
 
-import xfacthd.framedblocks.api.predicate.ConnectionPredicate;
+import xfacthd.framedblocks.api.predicate.contex.ConnectionPredicate;
 import xfacthd.framedblocks.common.data.BlockType;
 import xfacthd.framedblocks.common.data.conpreds.door.*;
 import xfacthd.framedblocks.common.data.conpreds.misc.*;

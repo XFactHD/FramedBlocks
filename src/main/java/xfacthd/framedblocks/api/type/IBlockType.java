@@ -5,9 +5,12 @@ import net.minecraft.client.resources.model.BakedModel;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
-import xfacthd.framedblocks.api.predicate.*;
 import xfacthd.framedblocks.api.block.FramedProperties;
 import xfacthd.framedblocks.api.block.render.FramedBlockRenderProperties;
+import xfacthd.framedblocks.api.predicate.contex.ConTexMode;
+import xfacthd.framedblocks.api.predicate.contex.ConnectionPredicate;
+import xfacthd.framedblocks.api.predicate.cull.SideSkipPredicate;
+import xfacthd.framedblocks.api.predicate.fullface.FullFacePredicate;
 import xfacthd.framedblocks.api.shapes.ShapeProvider;
 
 public interface IBlockType
@@ -33,7 +36,7 @@ public interface IBlockType
     boolean supportsConnectedTextures();
 
     /**
-     * {@return the minimum {@link ConTexMode} required for this block to react to texture connections}
+     * {@return the minimum {@link ConTexMode } required for this block to react to texture connections}
      */
     ConTexMode getMinimumConTexMode();
 

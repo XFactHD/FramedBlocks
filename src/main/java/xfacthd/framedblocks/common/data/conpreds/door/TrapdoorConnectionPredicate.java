@@ -5,7 +5,7 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.block.state.properties.Half;
 import org.jetbrains.annotations.Nullable;
-import xfacthd.framedblocks.api.predicate.ConnectionPredicate;
+import xfacthd.framedblocks.api.predicate.contex.ConnectionPredicate;
 
 public final class TrapdoorConnectionPredicate implements ConnectionPredicate
 {

@@ -3,7 +3,7 @@ package xfacthd.framedblocks.common.data.conpreds.misc;
 import net.minecraft.core.Direction;
 import net.minecraft.world.level.block.state.BlockState;
 import org.jetbrains.annotations.Nullable;
-import xfacthd.framedblocks.api.predicate.ConnectionPredicate;
+import xfacthd.framedblocks.api.predicate.contex.ConnectionPredicate;
 import xfacthd.framedblocks.api.util.Utils;
 
 public final class LadderConnectionPredicate implements ConnectionPredicate

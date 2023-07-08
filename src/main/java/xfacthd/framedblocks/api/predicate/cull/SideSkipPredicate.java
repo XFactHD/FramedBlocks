@@ -1,4 +1,4 @@
-package xfacthd.framedblocks.api.predicate;
+package xfacthd.framedblocks.api.predicate.cull;
 
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.core.Direction;

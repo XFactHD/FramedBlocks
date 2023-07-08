@@ -3,7 +3,7 @@ package xfacthd.framedblocks.common.data.conpreds.slopeslab;
 import net.minecraft.core.Direction;
 import net.minecraft.world.level.block.state.BlockState;
 import org.jetbrains.annotations.Nullable;
-import xfacthd.framedblocks.api.predicate.NonDetailedConnectionPredicate;
+import xfacthd.framedblocks.api.predicate.contex.NonDetailedConnectionPredicate;
 import xfacthd.framedblocks.api.util.Utils;
 
 public final class FlatElevatedDoubleSlopeSlabCornerConnectionPredicate extends NonDetailedConnectionPredicate

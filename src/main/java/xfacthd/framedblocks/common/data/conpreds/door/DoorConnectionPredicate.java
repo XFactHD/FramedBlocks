@@ -5,7 +5,7 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.block.state.properties.DoorHingeSide;
 import org.jetbrains.annotations.Nullable;
-import xfacthd.framedblocks.api.predicate.ConnectionPredicate;
+import xfacthd.framedblocks.api.predicate.contex.ConnectionPredicate;
 import xfacthd.framedblocks.api.util.Utils;
 
 public final class DoorConnectionPredicate implements ConnectionPredicate

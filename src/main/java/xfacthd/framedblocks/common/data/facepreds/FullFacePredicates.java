@@ -1,6 +1,6 @@
 package xfacthd.framedblocks.common.data.facepreds;
 
-import xfacthd.framedblocks.api.predicate.FullFacePredicate;
+import xfacthd.framedblocks.api.predicate.fullface.FullFacePredicate;
 import xfacthd.framedblocks.common.data.BlockType;
 import xfacthd.framedblocks.common.data.facepreds.door.*;
 import xfacthd.framedblocks.common.data.facepreds.misc.*;

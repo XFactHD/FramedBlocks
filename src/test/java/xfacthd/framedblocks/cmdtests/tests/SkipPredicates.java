@@ -11,7 +11,7 @@ import net.minecraft.world.level.EmptyBlockGetter;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 import org.apache.commons.lang3.tuple.Triple;
-import xfacthd.framedblocks.api.predicate.SideSkipPredicate;
+import xfacthd.framedblocks.api.predicate.cull.SideSkipPredicate;
 import xfacthd.framedblocks.cmdtests.SpecialTestCommand;
 import xfacthd.framedblocks.common.FBContent;
 import xfacthd.framedblocks.common.data.BlockType;

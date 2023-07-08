@@ -5,7 +5,7 @@ import net.minecraft.world.level.block.Rotation;
 import net.minecraft.world.level.block.state.BlockState;
 import org.jetbrains.annotations.Nullable;
 import xfacthd.framedblocks.api.block.FramedProperties;
-import xfacthd.framedblocks.api.predicate.NonDetailedConnectionPredicate;
+import xfacthd.framedblocks.api.predicate.contex.NonDetailedConnectionPredicate;
 import xfacthd.framedblocks.common.data.PropertyHolder;
 import xfacthd.framedblocks.common.data.property.HorizontalRotation;
 

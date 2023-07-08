@@ -14,8 +14,8 @@ import xfacthd.framedblocks.api.FramedBlocksClientAPI;
 import xfacthd.framedblocks.api.block.FramedBlockEntity;
 import xfacthd.framedblocks.api.block.IFramedBlock;
 import xfacthd.framedblocks.api.model.data.FramedBlockData;
-import xfacthd.framedblocks.api.predicate.ConTexMode;
-import xfacthd.framedblocks.api.predicate.ConnectionPredicate;
+import xfacthd.framedblocks.api.predicate.contex.ConTexMode;
+import xfacthd.framedblocks.api.predicate.contex.ConnectionPredicate;
 import xfacthd.framedblocks.api.type.IBlockType;
 import xfacthd.framedblocks.api.util.Utils;
 

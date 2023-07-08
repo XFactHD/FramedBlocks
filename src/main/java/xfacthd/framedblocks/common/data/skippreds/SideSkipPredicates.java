@@ -1,6 +1,6 @@
 package xfacthd.framedblocks.common.data.skippreds;
 
-import xfacthd.framedblocks.api.predicate.SideSkipPredicate;
+import xfacthd.framedblocks.api.predicate.cull.SideSkipPredicate;
 import xfacthd.framedblocks.common.data.BlockType;
 import xfacthd.framedblocks.common.data.skippreds.door.*;
 import xfacthd.framedblocks.common.data.skippreds.misc.*;

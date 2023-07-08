@@ -18,7 +18,7 @@ import net.minecraftforge.registries.RegistryObject;
 import org.jetbrains.annotations.Nullable;
 import xfacthd.framedblocks.api.camo.CamoContainer;
 import xfacthd.framedblocks.api.block.FramedProperties;
-import xfacthd.framedblocks.api.predicate.SideSkipPredicate;
+import xfacthd.framedblocks.api.predicate.cull.SideSkipPredicate;
 import xfacthd.framedblocks.common.FBContent;
 import xfacthd.framedblocks.common.block.rail.FramedRailSlopeBlock;
 import xfacthd.framedblocks.common.data.BlockType;

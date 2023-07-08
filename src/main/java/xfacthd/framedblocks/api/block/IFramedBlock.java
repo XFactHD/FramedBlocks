@@ -33,7 +33,9 @@ import xfacthd.framedblocks.api.block.render.AppearanceHelper;
 import xfacthd.framedblocks.api.block.render.CullingHelper;
 import xfacthd.framedblocks.api.block.update.CullingUpdateTracker;
 import xfacthd.framedblocks.api.camo.CamoContainer;
-import xfacthd.framedblocks.api.predicate.*;
+import xfacthd.framedblocks.api.predicate.contex.ConnectionPredicate;
+import xfacthd.framedblocks.api.predicate.cull.SideSkipPredicate;
+import xfacthd.framedblocks.api.predicate.fullface.FullFacePredicate;
 import xfacthd.framedblocks.api.type.IBlockType;
 import xfacthd.framedblocks.api.util.*;
 

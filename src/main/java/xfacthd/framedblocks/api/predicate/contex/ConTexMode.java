@@ -1,4 +1,6 @@
-package xfacthd.framedblocks.api.predicate;
+package xfacthd.framedblocks.api.predicate.contex;
+
+import xfacthd.framedblocks.api.predicate.cull.SideSkipPredicate;
 
 /**
  * Enum of the possible connected texture support modes

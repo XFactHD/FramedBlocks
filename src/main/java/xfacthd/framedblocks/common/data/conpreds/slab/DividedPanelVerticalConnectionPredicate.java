@@ -4,7 +4,7 @@ import net.minecraft.core.Direction;
 import net.minecraft.world.level.block.state.BlockState;
 import org.jetbrains.annotations.Nullable;
 import xfacthd.framedblocks.api.block.FramedProperties;
-import xfacthd.framedblocks.api.predicate.NonDetailedConnectionPredicate;
+import xfacthd.framedblocks.api.predicate.contex.NonDetailedConnectionPredicate;
 
 public final class DividedPanelVerticalConnectionPredicate extends NonDetailedConnectionPredicate
 {

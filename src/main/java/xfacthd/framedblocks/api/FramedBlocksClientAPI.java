@@ -8,7 +8,7 @@ import net.minecraft.world.level.material.Fluid;
 import net.minecraftforge.client.model.data.ModelData;
 import xfacthd.framedblocks.api.ghost.GhostRenderBehaviour;
 import xfacthd.framedblocks.api.type.IBlockType;
-import xfacthd.framedblocks.api.predicate.ConTexMode;
+import xfacthd.framedblocks.api.predicate.contex.ConTexMode;
 import xfacthd.framedblocks.api.util.WriteOnceHolder;
 import xfacthd.framedblocks.api.render.OutlineRenderer;
 

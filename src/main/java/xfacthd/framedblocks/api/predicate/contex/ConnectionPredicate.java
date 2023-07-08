@@ -1,8 +1,9 @@
-package xfacthd.framedblocks.api.predicate;
+package xfacthd.framedblocks.api.predicate.contex;
 
 import net.minecraft.core.Direction;
 import net.minecraft.world.level.block.state.BlockState;
 import org.jetbrains.annotations.Nullable;
+import xfacthd.framedblocks.api.predicate.fullface.FullFacePredicate;
 
 public interface ConnectionPredicate
 {

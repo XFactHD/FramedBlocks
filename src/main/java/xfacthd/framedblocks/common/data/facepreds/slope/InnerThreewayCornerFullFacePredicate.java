@@ -3,7 +3,7 @@ package xfacthd.framedblocks.common.data.facepreds.slope;
 import net.minecraft.core.Direction;
 import net.minecraft.world.level.block.state.BlockState;
 import xfacthd.framedblocks.api.block.FramedProperties;
-import xfacthd.framedblocks.api.predicate.FullFacePredicate;
+import xfacthd.framedblocks.api.predicate.fullface.FullFacePredicate;
 
 public final class InnerThreewayCornerFullFacePredicate implements FullFacePredicate
 {
