@@ -20,6 +20,7 @@ import org.jetbrains.annotations.ApiStatus;
 import xfacthd.framedblocks.api.FramedBlocksAPI;
 import xfacthd.framedblocks.api.FramedBlocksClientAPI;
 import xfacthd.framedblocks.api.block.FramedProperties;
+import xfacthd.framedblocks.api.block.cache.StateCache;
 import xfacthd.framedblocks.api.model.data.FramedBlockData;
 import xfacthd.framedblocks.api.model.data.QuadTable;
 import xfacthd.framedblocks.api.model.quad.QuadModifier;
@@ -56,7 +57,7 @@ public abstract class FramedBlockModel extends BakedModelProxy
     private final boolean forceUngeneratedBaseModel;
     private final boolean useBaseModel;
     private final boolean transformAllQuads;
-    private final FullFaceCache fullFaceCache;
+    private final StateCache stateCache;
 
     public FramedBlockModel(BlockState state, BakedModel baseModel)
     {
@@ -67,8 +68,7 @@ public abstract class FramedBlockModel extends BakedModelProxy
         this.forceUngeneratedBaseModel = forceUngeneratedBaseModel();
         this.useBaseModel = useBaseModel();
         this.transformAllQuads = transformAllQuads(state);
-        IBlockType type = ((IFramedBlock) state.getBlock()).getBlockType();
-        this.fullFaceCache = new FullFaceCache(type, state);
+        this.stateCache = ((IFramedBlock) state.getBlock()).getCache(state);
 
         Preconditions.checkState(
                 this.useBaseModel || !this.forceUngeneratedBaseModel,
@@ -208,13 +208,13 @@ public abstract class FramedBlockModel extends BakedModelProxy
             camoState = getNoCamoModelState(FramedBlocksAPI.getInstance().defaultModelState(), fbData);
             addReinforcement = useBaseModel && fbData.isReinforced();
             camoInRenderType = BASE_MODEL_RENDER_TYPES.contains(renderType);
-            noProcessing = (camoInRenderType && forceUngeneratedBaseModel) || fullFaceCache.isFullFace(side);
+            noProcessing = (camoInRenderType && forceUngeneratedBaseModel) || stateCache.isFullFace(side);
             model = getCamoModel(camoState, useBaseModel);
             camoData = ModelData.EMPTY;
         }
         else
         {
-            noProcessing = fullFaceCache.isFullFace(side);
+            noProcessing = stateCache.isFullFace(side);
             needCtCtx = type.supportsConnectedTextures() && needCtContext(noProcessing, type.getMinimumConTexMode());
             model = getCamoModel(camoState, false);
             camoData = needCtCtx ? ModelUtils.getCamoModelData(extraData) : ModelData.EMPTY;
@@ -343,7 +343,7 @@ public abstract class FramedBlockModel extends BakedModelProxy
             }
             if (!transformAllQuads)
             {
-                quads.removeIf(q -> fullFaceCache.isFullFace(q.getDirection()));
+                quads.removeIf(q -> stateCache.isFullFace(q.getDirection()));
             }
 
             for (BakedQuad quad : quads)
@@ -530,7 +530,7 @@ public abstract class FramedBlockModel extends BakedModelProxy
         }
 
         BlockState camoState = data.getCamoState();
-        if (!camoState.isAir() && needCtContext(fullFaceCache.anyFullFace, type.getMinimumConTexMode()))
+        if (!camoState.isAir() && needCtContext(stateCache.hasAnyFullFace(), type.getMinimumConTexMode()))
         {
             BakedModel model = ModelCache.getModel(camoState);
             ModelData camoData;
@@ -600,31 +600,6 @@ public abstract class FramedBlockModel extends BakedModelProxy
         public CachedRenderTypes(ChunkRenderTypeSet camoTypes, ChunkRenderTypeSet overlayTypes)
         {
             this(camoTypes, overlayTypes, ChunkRenderTypeSet.union(camoTypes, overlayTypes));
-        }
-    }
-
-    private static class FullFaceCache
-    {
-        private final boolean[] cache = new boolean[7];
-        private final boolean anyFullFace;
-
-        public FullFaceCache(IBlockType type, BlockState state)
-        {
-            FullFacePredicate pred = type.getFullFacePredicate();
-            boolean any = false;
-            for (Direction side : DIRECTIONS)
-            {
-                boolean full = pred.test(state, side);
-                cache[side.ordinal()] = full;
-                any |= full;
-            }
-            cache[6] = false;
-            anyFullFace = any;
-        }
-
-        public boolean isFullFace(Direction side)
-        {
-            return side != null && cache[side.ordinal()];
         }
     }
 }

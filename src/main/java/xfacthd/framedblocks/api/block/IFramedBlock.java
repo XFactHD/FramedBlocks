@@ -29,13 +29,13 @@ import net.minecraftforge.common.Tags;
 import net.minecraftforge.common.extensions.IForgeBlock;
 import org.jetbrains.annotations.Nullable;
 import xfacthd.framedblocks.api.FramedBlocksAPI;
+import xfacthd.framedblocks.api.block.cache.IStateCacheAccessor;
+import xfacthd.framedblocks.api.block.cache.StateCache;
 import xfacthd.framedblocks.api.block.render.AppearanceHelper;
 import xfacthd.framedblocks.api.block.render.CullingHelper;
 import xfacthd.framedblocks.api.block.update.CullingUpdateTracker;
 import xfacthd.framedblocks.api.camo.CamoContainer;
-import xfacthd.framedblocks.api.predicate.contex.ConnectionPredicate;
 import xfacthd.framedblocks.api.predicate.cull.SideSkipPredicate;
-import xfacthd.framedblocks.api.predicate.fullface.FullFacePredicate;
 import xfacthd.framedblocks.api.type.IBlockType;
 import xfacthd.framedblocks.api.util.*;
 
@@ -79,6 +79,11 @@ public interface IFramedBlock extends EntityBlock, IForgeBlock
     default BlockItem createBlockItem()
     {
         return new BlockItem((Block) this, new Item.Properties());
+    }
+
+    default StateCache getCache(BlockState state)
+    {
+        return ((IStateCacheAccessor) state).framedblocks$getCache();
     }
 
     default void tryApplyCamoImmediately(Level level, BlockPos pos, @Nullable LivingEntity placer, ItemStack stack)
@@ -188,16 +193,6 @@ public interface IFramedBlock extends EntityBlock, IForgeBlock
             be.addCamoDrops(drops);
         }
         return drops;
-    }
-
-    default FullFacePredicate getFullFacePredicate()
-    {
-        return getBlockType().getFullFacePredicate();
-    }
-
-    default ConnectionPredicate getConnectionPredicate()
-    {
-        return getBlockType().getConnectionPredicate();
     }
 
     /**

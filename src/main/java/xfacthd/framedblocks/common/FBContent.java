@@ -1,6 +1,7 @@
 package xfacthd.framedblocks.common;
 
 import com.google.common.base.Preconditions;
+import com.google.common.base.Stopwatch;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.world.inventory.*;
 import net.minecraft.world.item.*;
@@ -8,13 +9,16 @@ import net.minecraft.world.item.crafting.*;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
+import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraftforge.common.extensions.IForgeMenuType;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.fml.loading.FMLEnvironment;
 import net.minecraftforge.network.IContainerFactory;
 import net.minecraftforge.registries.*;
+import xfacthd.framedblocks.FramedBlocks;
 import xfacthd.framedblocks.api.block.FramedBlockEntity;
 import xfacthd.framedblocks.api.block.IFramedBlock;
+import xfacthd.framedblocks.api.block.cache.IStateCacheAccessor;
 import xfacthd.framedblocks.api.camo.EmptyCamoContainer;
 import xfacthd.framedblocks.api.camo.CamoContainer;
 import xfacthd.framedblocks.api.util.FramedConstants;
@@ -460,6 +464,23 @@ public final class FBContent
         RECIPE_SERIALIZERS.register(modBus);
         CREATIVE_TABS.register(modBus);
         CAMO_CONTAINER_FACTORIES.register(modBus);
+    }
+
+    public static void initializeStateCache()
+    {
+        FramedBlocks.LOGGER.debug("Initializing custom state metadata cache");
+        Stopwatch watch = Stopwatch.createStarted();
+        long count = ForgeRegistries.BLOCKS.getValues()
+                .stream()
+                .filter(block -> block instanceof IFramedBlock)
+                .map(Block::getStateDefinition)
+                .map(StateDefinition::getPossibleStates)
+                .flatMap(List::stream)
+                .map(IStateCacheAccessor.class::cast)
+                .peek(IStateCacheAccessor::framedblocks$initCache)
+                .count();
+        watch.stop();
+        FramedBlocks.LOGGER.debug("Initialized {} caches in {}", count, watch);
     }
 
     public static Collection<RegistryObject<Block>> getRegisteredBlocks()

@@ -5,6 +5,7 @@ import net.minecraft.client.resources.model.BakedModel;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
+import org.jetbrains.annotations.ApiStatus;
 import xfacthd.framedblocks.api.block.FramedProperties;
 import xfacthd.framedblocks.api.block.render.FramedBlockRenderProperties;
 import xfacthd.framedblocks.api.predicate.contex.ConTexMode;
@@ -19,10 +20,12 @@ public interface IBlockType
 
     boolean hasSpecialHitbox();
 
+    @ApiStatus.OverrideOnly
     FullFacePredicate getFullFacePredicate();
 
     SideSkipPredicate getSideSkipPredicate();
 
+    @ApiStatus.OverrideOnly
     ConnectionPredicate getConnectionPredicate();
 
     ShapeProvider generateShapes(ImmutableList<BlockState> states);

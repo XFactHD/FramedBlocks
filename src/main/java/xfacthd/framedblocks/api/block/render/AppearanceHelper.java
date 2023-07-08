@@ -13,9 +13,9 @@ import org.jetbrains.annotations.Nullable;
 import xfacthd.framedblocks.api.FramedBlocksClientAPI;
 import xfacthd.framedblocks.api.block.FramedBlockEntity;
 import xfacthd.framedblocks.api.block.IFramedBlock;
+import xfacthd.framedblocks.api.block.cache.StateCache;
 import xfacthd.framedblocks.api.model.data.FramedBlockData;
 import xfacthd.framedblocks.api.predicate.contex.ConTexMode;
-import xfacthd.framedblocks.api.predicate.contex.ConnectionPredicate;
 import xfacthd.framedblocks.api.type.IBlockType;
 import xfacthd.framedblocks.api.util.Utils;
 
@@ -61,14 +61,14 @@ public final class AppearanceHelper
             return AIR;
         }
 
-        ConnectionPredicate pred = framedBlock.getConnectionPredicate();
+        StateCache stateCache = framedBlock.getCache(state);
         if (framedBlock.getBlockType().isDoubleBlock())
         {
             if (actualQueryState != null && level.getBlockEntity(pos) instanceof FramedBlockEntity be)
             {
                 if (canDoubleBlockConnectFullEdgeTo(pos, queryPos, actualQueryState, side, edge))
                 {
-                    if (pred.canConnectFullEdge(state, side, edge))
+                    if (stateCache.canConnectFullEdge(side, edge))
                     {
                         return getCamo(level, pos, side, edge);
                     }
@@ -86,7 +86,7 @@ public final class AppearanceHelper
         }
 
         ConTexMode typeMode = framedBlock.getBlockType().getMinimumConTexMode();
-        if (canUseMode(mode, typeMode, ConTexMode.FULL_FACE) && pred.canConnectFullEdge(state, side, null))
+        if (canUseMode(mode, typeMode, ConTexMode.FULL_FACE) && stateCache.canConnectFullEdge(side, null))
         {
             if (isNotFramedOrCanConnectFullEdgeTo(pos, queryPos, actualQueryState, side, edge))
             {
@@ -98,7 +98,7 @@ public final class AppearanceHelper
         if (canUseMode(mode, typeMode, ConTexMode.FULL_EDGE))
         {
             Direction conEdge = findFirstSuitableDirectionFromOffset(pos, queryPos, side, testEdge ->
-                    pred.canConnectFullEdge(state, side, testEdge)
+                    stateCache.canConnectFullEdge(side, testEdge)
             );
             if (conEdge != null)
             {
@@ -111,7 +111,7 @@ public final class AppearanceHelper
             Direction detEdge = findFirstSuitableDirectionFromOffset(pos, queryPos, side, testEdge ->
                     isSideHidden(level, pos, state, testEdge)
             );
-            if (detEdge != null && pred.canConnectDetailed(state, side, detEdge))
+            if (detEdge != null && stateCache.canConnectDetailed(side, detEdge))
             {
                 return getCamo(level, pos, state);
             }
@@ -210,7 +210,7 @@ public final class AppearanceHelper
             // CT impl is trying to check connection occlusion => check opposite side
             side = side.getOpposite();
         }
-        return block.getConnectionPredicate().canConnectFullEdge(queryState, side, edge.getOpposite());
+        return block.getCache(queryState).canConnectFullEdge(side, edge.getOpposite());
     }
 
     private static boolean isNotFramedOrCanConnectFullEdgeTo(
@@ -227,7 +227,7 @@ public final class AppearanceHelper
                 // CT impl is trying to check connection occlusion => check opposite side
                 side = side.getOpposite();
             }
-            return block.getConnectionPredicate().canConnectFullEdge(queryState, side, edge.getOpposite());
+            return block.getCache(queryState).canConnectFullEdge(side, edge.getOpposite());
         }
         return true;
     }

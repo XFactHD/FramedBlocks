@@ -30,6 +30,7 @@ import net.minecraftforge.registries.ForgeRegistries;
 import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
 import xfacthd.framedblocks.api.FramedBlocksAPI;
+import xfacthd.framedblocks.api.block.cache.StateCache;
 import xfacthd.framedblocks.api.block.render.CullingHelper;
 import xfacthd.framedblocks.api.camo.EmptyCamoContainer;
 import xfacthd.framedblocks.api.camo.CamoContainer;
@@ -53,6 +54,7 @@ public class FramedBlockEntity extends BlockEntity
     protected static final int FLAG_REINFORCED = 1 << 2;
 
     private final FramedBlockData modelData = new FramedBlockData();
+    protected final StateCache stateCache;
     private CamoContainer camoContainer = EmptyCamoContainer.EMPTY;
     private boolean glowing = false;
     private boolean intangible = false;
@@ -67,6 +69,7 @@ public class FramedBlockEntity extends BlockEntity
     protected FramedBlockEntity(BlockEntityType<?> type, BlockPos pos, BlockState state)
     {
         super(type, pos, state);
+        this.stateCache = ((IFramedBlock) state.getBlock()).getCache(state);
     }
 
     public final InteractionResult handleInteraction(Player player, InteractionHand hand, BlockHitResult hit)
@@ -417,7 +420,7 @@ public class FramedBlockEntity extends BlockEntity
         {
             return false;
         }
-        return getBlock().getFullFacePredicate().test(getBlockState(), side) && camoContainer.isSolid(level, worldPosition);
+        return stateCache.isFullFace(side) && camoContainer.isSolid(level, worldPosition);
     }
 
     /**

@@ -10,6 +10,7 @@ final class FullFaceConnectionPredicate extends NonDetailedConnectionPredicate
     @Override
     public boolean canConnectFullEdge(BlockState state, Direction side, @Nullable Direction edge)
     {
-        return ((IFramedBlock) state.getBlock()).getFullFacePredicate().test(state, side);
+        // Cannot be replaced with cache access because it's used within cache init
+        return ((IFramedBlock) state.getBlock()).getBlockType().getFullFacePredicate().test(state, side);
     }
 }

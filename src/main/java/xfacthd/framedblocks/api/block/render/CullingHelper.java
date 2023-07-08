@@ -216,7 +216,7 @@ public final class CullingHelper
             return false;
         }
 
-        if (((IFramedBlock) state.getBlock()).getFullFacePredicate().test(state, side))
+        if (((IFramedBlock) state.getBlock()).getCache(state).isFullFace(side))
         {
             return compareState(level, pos, pos.relative(side), adjState, false, side);
         }

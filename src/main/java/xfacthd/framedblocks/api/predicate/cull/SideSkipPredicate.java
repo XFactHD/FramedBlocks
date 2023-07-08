@@ -12,14 +12,14 @@ public interface SideSkipPredicate
 
     SideSkipPredicate FULL_FACE = (level, pos, state, adjState, side) ->
     {
-        if (!((IFramedBlock) state.getBlock()).getFullFacePredicate().test(state, side))
+        if (!((IFramedBlock) state.getBlock()).getCache(state).isFullFace(side))
         {
             return false;
         }
 
         if (adjState.getBlock() instanceof IFramedBlock block)
         {
-            return block.getFullFacePredicate().test(adjState, side.getOpposite());
+            return block.getCache(adjState).isFullFace(side.getOpposite());
         }
         return true;
     };

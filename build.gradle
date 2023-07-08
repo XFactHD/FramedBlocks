@@ -173,12 +173,12 @@ dependencies {
         transitive(false)
     }
 
-    //annotationProcessor 'org.spongepowered:mixin:0.8.5:processor'
+    annotationProcessor 'org.spongepowered:mixin:0.8.5:processor'
 }
 
 mixin {
-    //add sourceSets.main, "framedblocks.refmap.json"
-    //config "framedblocks.mixin.json"
+    add sourceSets.main, "framedblocks.refmap.json"
+    config "framedblocks.mixin.json"
 }
 
 // This block of code expands all declared replace properties in the specified resource targets.
@@ -193,7 +193,7 @@ def replaceProperties = [
 ]
 
 processResources {
-    exclude("framedblocks.mixin.json")
+    //exclude("framedblocks.mixin.json")
 
     inputs.properties replaceProperties
     replaceProperties.put 'project', project

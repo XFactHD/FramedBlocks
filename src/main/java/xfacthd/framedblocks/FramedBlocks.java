@@ -105,6 +105,7 @@ public final class FramedBlocks
                 .consumerNetworkThread(CullingUpdatePacket::handle)
                 .add();
 
+        FBContent.initializeStateCache();
         BlueprintBehaviours.register();
         AbstractFramedDoubleBlock.cacheStatePairs();
         CompatHandler.commonSetup();
