@@ -285,13 +285,20 @@ public abstract class FramedBlockModel extends BakedModelProxy
     {
         QuadTable quadTable = new QuadTable();
 
+        ChunkRenderTypeSet modelLayers = getRenderTypes(state, rand, data);
         ChunkRenderTypeSet camoLayers = BASE_MODEL_RENDER_TYPES;
         if (!noCamo)
         {
             camoLayers = ModelCache.getRenderTypes(camoState, rand, camoData);
         }
+        else
+        {
+            // Make sure the RenderType set being iterated actually contains the no-camo layers in case getQuads()
+            // was called with a null RenderType while a camo is provided (i.e. block breaking overlay)
+            modelLayers = ChunkRenderTypeSet.union(modelLayers, camoLayers);
+        }
 
-        for (RenderType renderType : getRenderTypes(state, rand, data))
+        for (RenderType renderType : modelLayers)
         {
             boolean camoInRenderType = camoLayers.contains(renderType);
 
