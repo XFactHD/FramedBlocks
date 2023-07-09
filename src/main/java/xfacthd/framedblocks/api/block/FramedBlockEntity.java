@@ -561,7 +561,7 @@ public class FramedBlockEntity extends BlockEntity
     {
         boolean wasHidden = modelData.isSideHidden(side);
         //noinspection ConstantConditions
-        boolean hidden = CullingHelper.isSideHidden(getBlock(), level, worldPosition, testState, side);
+        boolean hidden = CullingHelper.isSideHidden(level, worldPosition, testState, side);
         if (wasHidden != hidden)
         {
             modelData.setSideHidden(side, hidden);

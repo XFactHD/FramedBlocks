@@ -26,16 +26,13 @@ public final class CullingHelper
      * Test whether the given {@link IFramedBlock} is occluded on the given side by the neighboring block
      * and their camos either match or the camo of the occluding block is solid
      *
-     * @param framedBlock The {@code IFramedBlock} whose side is tested for occlusion
      * @param level The level the block is in
      * @param pos The position of the block
      * @param state The state of the block
      * @param side The side being tested for occlusion
      * @return true if the given block is occluded on the given side
      */
-    public static boolean isSideHidden(
-            IFramedBlock framedBlock, BlockGetter level, BlockPos pos, BlockState state, Direction side
-    )
+    public static boolean isSideHidden(BlockGetter level, BlockPos pos, BlockState state, Direction side)
     {
         BlockPos adjPos = pos.relative(side);
         BlockState adjState = level.getBlockState(adjPos);
@@ -66,7 +63,7 @@ public final class CullingHelper
             return false;
         }
 
-        SideSkipPredicate pred = framedBlock.getBlockType().getSideSkipPredicate();
+        SideSkipPredicate pred = ((IFramedBlock) state.getBlock()).getBlockType().getSideSkipPredicate();
         IFramedBlock adjBlock = (IFramedBlock) adjState.getBlock();
         BlockState adjTestState = adjBlock.runOcclusionTestAndGetLookupState(pred, level, pos, state, adjState, side);
         if (adjTestState != null)
