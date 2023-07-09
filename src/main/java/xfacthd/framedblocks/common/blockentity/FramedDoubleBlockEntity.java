@@ -134,12 +134,20 @@ public abstract class FramedDoubleBlockEntity extends FramedBlockEntity
     @Override
     public MapColor getMapColor()
     {
-        if (!camoContainer.isEmpty())
+        return switch (topInteractionMode)
         {
-            //noinspection ConstantConditions
-            return camoContainer.getState().getMapColor(level, worldPosition);
-        }
-        return super.getMapColor();
+            case FIRST -> super.getMapColor();
+            case SECOND -> camoContainer.getMapColor(level, worldPosition);
+            case EITHER ->
+            {
+                MapColor color = super.getMapColor();
+                if (color != null)
+                {
+                    yield color;
+                }
+                yield camoContainer.getMapColor(level, worldPosition);
+            }
+        };
     }
 
     @Override
