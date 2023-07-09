@@ -156,6 +156,7 @@
   "config.framedblocks.client.toggleYSlopeMode": "Toggle Y slope overlay: Display mode",
   "config.framedblocks.common.fireproofBlocks": "Fireproof blocks",
   "config.framedblocks.server.allowBlockEntities": "Allow BlockEntities",
+  "config.framedblocks.server.consumeCamoItem": "Consume camo item",
   "config.framedblocks.server.enableIntangibleFeature": "Enable intangibility feature",
   "config.framedblocks.server.intangibleMarkerItem": "Intangibility marker item",
   "config.framedblocks.server.oneWayWindowOwnable": "One-Way Window ownability",

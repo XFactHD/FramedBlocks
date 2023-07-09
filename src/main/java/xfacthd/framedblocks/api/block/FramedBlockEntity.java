@@ -146,9 +146,16 @@ public class FramedBlockEntity extends BlockEntity
         if (!level.isClientSide())
         {
             ItemStack camoStack = camo.toItemStack(stack);
-            if ((!player.isCreative() || !player.getInventory().contains(camoStack)) && !player.getInventory().add(camoStack))
+            if (!player.isCreative() && FramedBlocksAPI.getInstance().shouldConsumeCamo())
             {
-                player.drop(camoStack, false);
+                if (!player.getInventory().add(camoStack))
+                {
+                    player.drop(camoStack, false);
+                }
+            }
+            else if (player.isCreative() && !player.getInventory().contains(camoStack))
+            {
+                player.getInventory().add(camoStack);
             }
 
             setCamo(EmptyCamoContainer.EMPTY, secondary);
@@ -168,7 +175,7 @@ public class FramedBlockEntity extends BlockEntity
             //noinspection ConstantConditions
             if (!level.isClientSide())
             {
-                if (!player.isCreative())
+                if (!player.isCreative() && FramedBlocksAPI.getInstance().shouldConsumeCamo())
                 {
                     // Container holds fluid in NBT -> stack doesn't change
                     if (result == input)
@@ -208,7 +215,7 @@ public class FramedBlockEntity extends BlockEntity
                 CamoContainer.Factory factory = FramedBlocksAPI.getInstance().getCamoContainerFactory(stack);
                 setCamo(factory.fromItem(stack), secondary);
 
-                if (!player.isCreative())
+                if (!player.isCreative() && FramedBlocksAPI.getInstance().shouldConsumeCamo())
                 {
                     stack.shrink(1);
                 }
@@ -228,7 +235,7 @@ public class FramedBlockEntity extends BlockEntity
             //noinspection ConstantConditions
             if (!level.isClientSide())
             {
-                if (!player.isCreative())
+                if (!player.isCreative() && FramedBlocksAPI.getInstance().shouldConsumeCamo())
                 {
                     ItemStack result = stack.getCapability(ForgeCapabilities.FLUID_HANDLER_ITEM).map(handler ->
                     {
@@ -711,9 +718,14 @@ public class FramedBlockEntity extends BlockEntity
         return true;
     }
 
-    public void addCamoDrops(List<ItemStack> drops)
+    /**
+     * Add additional drops to the list of items being dropped
+     * @param drops The list of items being dropped
+     * @param dropCamo Whether the camo item should be dropped
+     */
+    public void addAdditionalDrops(List<ItemStack> drops, boolean dropCamo)
     {
-        if (!camoContainer.isEmpty())
+        if (dropCamo && !camoContainer.isEmpty())
         {
             drops.add(camoContainer.toItemStack(ItemStack.EMPTY));
         }

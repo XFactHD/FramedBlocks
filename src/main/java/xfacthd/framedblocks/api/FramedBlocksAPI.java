@@ -101,4 +101,9 @@ public interface FramedBlocksAPI
      * @param adjState The adjacent block
      */
     boolean canCullBlockNextTo(BlockState state, BlockState adjState);
+
+    /**
+     * {@return true if the camo item should be consumed on application and dropped on removal of the camo}
+     */
+    boolean shouldConsumeCamo();
 }

@@ -110,4 +110,10 @@ public final class ApiImpl implements FramedBlocksAPI
     {
         return !state.is(BlockTags.LEAVES) && NoCubesCompat.mayCullNextTo(adjState);
     }
+
+    @Override
+    public boolean shouldConsumeCamo()
+    {
+        return ServerConfig.consumeCamoItem;
+    }
 }

@@ -121,10 +121,10 @@ public abstract class FramedDoubleBlockEntity extends FramedBlockEntity
     }
 
     @Override
-    public void addCamoDrops(List<ItemStack> drops)
+    public void addAdditionalDrops(List<ItemStack> drops, boolean dropCamo)
     {
-        super.addCamoDrops(drops);
-        if (!camoContainer.isEmpty())
+        super.addAdditionalDrops(drops, dropCamo);
+        if (dropCamo && !camoContainer.isEmpty())
         {
             drops.add(camoContainer.toItemStack(ItemStack.EMPTY));
         }

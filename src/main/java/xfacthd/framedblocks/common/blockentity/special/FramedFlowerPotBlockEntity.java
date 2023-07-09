@@ -50,9 +50,9 @@ public class FramedFlowerPotBlockEntity extends FramedBlockEntity
     }
 
     @Override
-    public void addCamoDrops(List<ItemStack> drops)
+    public void addAdditionalDrops(List<ItemStack> drops, boolean dropCamo)
     {
-        super.addCamoDrops(drops);
+        super.addAdditionalDrops(drops, dropCamo);
         if (flowerBlock != Blocks.AIR)
         {
             drops.add(new ItemStack(flowerBlock));

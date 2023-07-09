@@ -197,7 +197,7 @@ public interface IFramedBlock extends EntityBlock, IForgeBlock
     {
         if (builder.getOptionalParameter(LootContextParams.BLOCK_ENTITY) instanceof FramedBlockEntity be)
         {
-            be.addCamoDrops(drops);
+            be.addAdditionalDrops(drops, FramedBlocksAPI.getInstance().shouldConsumeCamo());
         }
         return drops;
     }
