@@ -5,9 +5,9 @@
     "refmap": "framedblocks.refmap.json",
     "plugin": "xfacthd.framedblocks.common.util.FramedMixinConfigPlugin",
     "mixins": [
+        "MixinBlockStateBase"
     ],
     "client": [
-        "MixinBlockStateBase"
     ],
     "injectors": {
         "defaultRequire": 1
