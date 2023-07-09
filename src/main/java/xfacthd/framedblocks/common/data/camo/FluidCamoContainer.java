@@ -16,6 +16,7 @@ import net.minecraftforge.fluids.FluidType;
 import net.minecraftforge.fluids.capability.IFluidHandler;
 import net.minecraftforge.fluids.capability.IFluidHandlerItem;
 import net.minecraftforge.fml.loading.FMLEnvironment;
+import net.minecraftforge.registries.ForgeRegistries;
 import xfacthd.framedblocks.api.camo.*;
 import xfacthd.framedblocks.api.util.Utils;
 import xfacthd.framedblocks.api.util.ClientUtils;
@@ -96,7 +97,7 @@ public class FluidCamoContainer extends CamoContainer
     @Override
     public void toNetwork(CompoundTag tag)
     {
-        save(tag);
+        tag.putInt("fluid", Utils.getId(ForgeRegistries.FLUIDS, fluidState.getType()));
     }
 
 
@@ -113,7 +114,8 @@ public class FluidCamoContainer extends CamoContainer
         @Override
         public CamoContainer fromNetwork(CompoundTag tag)
         {
-            return fromNbt(tag);
+            FluidState fluidState = Utils.getValue(ForgeRegistries.FLUIDS, tag.getInt("fluid")).defaultFluidState();
+            return new FluidCamoContainer(fluidState);
         }
 
         @Override
