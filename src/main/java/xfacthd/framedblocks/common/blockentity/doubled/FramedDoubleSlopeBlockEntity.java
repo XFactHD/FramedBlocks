@@ -12,7 +12,6 @@ import xfacthd.framedblocks.common.blockentity.FramedDoubleBlockEntity;
 import xfacthd.framedblocks.common.data.PropertyHolder;
 import xfacthd.framedblocks.common.data.property.SlopeType;
 import xfacthd.framedblocks.api.util.Utils;
-import xfacthd.framedblocks.common.util.DoubleBlockTopInteractionMode;
 
 public class FramedDoubleSlopeBlockEntity extends FramedDoubleBlockEntity
 {
@@ -81,21 +80,6 @@ public class FramedDoubleSlopeBlockEntity extends FramedDoubleBlockEntity
         }
 
         return false;
-    }
-
-    @Override
-    protected DoubleBlockTopInteractionMode calculateTopInteractionMode()
-    {
-        SlopeType type = getBlockState().getValue(PropertyHolder.SLOPE_TYPE);
-        if (type == SlopeType.BOTTOM)
-        {
-            return DoubleBlockTopInteractionMode.SECOND;
-        }
-        else if (type == SlopeType.TOP)
-        {
-            return DoubleBlockTopInteractionMode.FIRST;
-        }
-        return DoubleBlockTopInteractionMode.EITHER;
     }
 
     @Override

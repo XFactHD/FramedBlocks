@@ -14,7 +14,6 @@ import xfacthd.framedblocks.common.blockentity.FramedDoubleBlockEntity;
 import xfacthd.framedblocks.common.data.BlockType;
 import xfacthd.framedblocks.common.data.PropertyHolder;
 import xfacthd.framedblocks.common.data.property.HorizontalRotation;
-import xfacthd.framedblocks.common.util.DoubleBlockTopInteractionMode;
 
 public class FramedFlatExtendedDoubleSlopePanelCornerBlockEntity extends FramedDoubleBlockEntity
 {
@@ -69,20 +68,6 @@ public class FramedFlatExtendedDoubleSlopePanelCornerBlockEntity extends FramedD
 
         double perpHor = Utils.fractionInDir(hitVec, perpDir);
         return ((hor - .5) * 2D) > perpHor;
-    }
-
-    @Override
-    protected DoubleBlockTopInteractionMode calculateTopInteractionMode()
-    {
-        if (isInner)
-        {
-            HorizontalRotation rotation = getBlockState().getValue(PropertyHolder.ROTATION);
-            if (rotation == HorizontalRotation.UP || rotation == HorizontalRotation.RIGHT)
-            {
-                return DoubleBlockTopInteractionMode.FIRST;
-            }
-        }
-        return DoubleBlockTopInteractionMode.EITHER;
     }
 
     @Override

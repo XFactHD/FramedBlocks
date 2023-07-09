@@ -24,7 +24,7 @@ public abstract class MixinBlockStateBase implements IStateCacheAccessor
         BlockState state = asState();
         if (state.getBlock() instanceof IFramedBlock block)
         {
-            framedblocks$cache = new StateCache(state, block.getBlockType());
+            framedblocks$cache = block.initCache(state);
         }
     }
 

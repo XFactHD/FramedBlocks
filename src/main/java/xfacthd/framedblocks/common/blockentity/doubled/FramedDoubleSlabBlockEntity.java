@@ -8,7 +8,6 @@ import net.minecraft.util.Mth;
 import org.jetbrains.annotations.Nullable;
 import xfacthd.framedblocks.common.FBContent;
 import xfacthd.framedblocks.common.blockentity.FramedDoubleBlockEntity;
-import xfacthd.framedblocks.common.util.DoubleBlockTopInteractionMode;
 
 public class FramedDoubleSlabBlockEntity extends FramedDoubleBlockEntity
 {
@@ -25,12 +24,6 @@ public class FramedDoubleSlabBlockEntity extends FramedDoubleBlockEntity
             return false;
         }
         return hit.getDirection() == Direction.UP || Mth.frac(hit.getLocation().y()) >= .5F;
-    }
-
-    @Override
-    protected DoubleBlockTopInteractionMode calculateTopInteractionMode()
-    {
-        return DoubleBlockTopInteractionMode.SECOND;
     }
 
     @Override

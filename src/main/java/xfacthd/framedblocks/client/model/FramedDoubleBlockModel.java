@@ -22,7 +22,7 @@ import net.minecraftforge.common.util.ConcatenatedListView;
 import xfacthd.framedblocks.api.model.BakedModelProxy;
 import xfacthd.framedblocks.api.model.data.FramedBlockData;
 import xfacthd.framedblocks.api.model.util.ModelUtils;
-import xfacthd.framedblocks.common.block.AbstractFramedDoubleBlock;
+import xfacthd.framedblocks.common.block.DoubleBlockStateCache;
 import xfacthd.framedblocks.common.block.IFramedDoubleBlock;
 import xfacthd.framedblocks.common.blockentity.FramedDoubleBlockEntity;
 import xfacthd.framedblocks.common.util.DoubleBlockTopInteractionMode;
@@ -49,9 +49,9 @@ public class FramedDoubleBlockModel extends BakedModelProxy
     )
     {
         super(baseModel);
-        IFramedDoubleBlock block = (IFramedDoubleBlock) state.getBlock();
-        this.dummyStates = AbstractFramedDoubleBlock.getStatePair(state);
-        this.particleMode = block.getTopInteractionMode(state);
+        DoubleBlockStateCache cache = ((IFramedDoubleBlock) state.getBlock()).getCache(state);
+        this.dummyStates = cache.getBlockPair();
+        this.particleMode = cache.getTopInteractionMode();
         this.firstpersonTransform = firstpersonTransform;
         this.specialItemModel = specialItemModel;
     }

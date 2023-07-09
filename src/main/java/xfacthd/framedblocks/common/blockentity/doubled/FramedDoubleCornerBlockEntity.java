@@ -12,7 +12,6 @@ import xfacthd.framedblocks.common.blockentity.FramedDoubleBlockEntity;
 import xfacthd.framedblocks.common.data.*;
 import xfacthd.framedblocks.api.util.Utils;
 import xfacthd.framedblocks.common.data.property.CornerType;
-import xfacthd.framedblocks.common.util.DoubleBlockTopInteractionMode;
 
 public class FramedDoubleCornerBlockEntity extends FramedDoubleBlockEntity
 {
@@ -143,21 +142,6 @@ public class FramedDoubleCornerBlockEntity extends FramedDoubleBlockEntity
             }
         }
         return false;
-    }
-
-    @Override
-    protected DoubleBlockTopInteractionMode calculateTopInteractionMode()
-    {
-        CornerType type = getBlockState().getValue(PropertyHolder.CORNER_TYPE);
-        if (type == CornerType.BOTTOM)
-        {
-            return DoubleBlockTopInteractionMode.SECOND;
-        }
-        else if (type.isTop())
-        {
-            return DoubleBlockTopInteractionMode.FIRST;
-        }
-        return DoubleBlockTopInteractionMode.EITHER;
     }
 
     @Override

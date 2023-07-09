@@ -8,7 +8,7 @@ import xfacthd.framedblocks.api.predicate.fullface.FullFacePredicate;
 import xfacthd.framedblocks.api.type.IBlockType;
 import xfacthd.framedblocks.api.util.Utils;
 
-public final class StateCache
+public class StateCache
 {
     private static final Direction[] DIRECTIONS = Direction.values();
     private static final int DIR_COUNT = DIRECTIONS.length;
@@ -61,22 +61,22 @@ public final class StateCache
         this.conDetailed = anyConDetailed ? conDetailed : null;
     }
 
-    public boolean hasAnyFullFace()
+    public final boolean hasAnyFullFace()
     {
         return anyFullFace;
     }
 
-    public boolean isFullFace(@Nullable Direction side)
+    public final boolean isFullFace(@Nullable Direction side)
     {
         return side != null && fullFace[side.ordinal()];
     }
 
-    public boolean canConnectFullEdge(Direction side, @Nullable Direction edge)
+    public final boolean canConnectFullEdge(Direction side, @Nullable Direction edge)
     {
         return conFullEdge != null && conFullEdge[side.ordinal()][Utils.maskNullDirection(edge)];
     }
 
-    public boolean canConnectDetailed(Direction side, Direction edge)
+    public final boolean canConnectDetailed(Direction side, Direction edge)
     {
         return conDetailed != null && conDetailed[side.ordinal()][edge.ordinal()];
     }

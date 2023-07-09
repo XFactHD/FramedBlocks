@@ -9,7 +9,6 @@ import xfacthd.framedblocks.api.block.FramedProperties;
 import xfacthd.framedblocks.api.util.Utils;
 import xfacthd.framedblocks.common.FBContent;
 import xfacthd.framedblocks.common.blockentity.FramedDoubleBlockEntity;
-import xfacthd.framedblocks.common.util.DoubleBlockTopInteractionMode;
 
 public class FramedDividedSlabBlockEntity extends FramedDoubleBlockEntity
 {
@@ -35,12 +34,6 @@ public class FramedDividedSlabBlockEntity extends FramedDoubleBlockEntity
 
         double xz = Utils.fractionInDir(hit.getLocation(), dir);
         return xz > .5D;
-    }
-
-    @Override
-    protected DoubleBlockTopInteractionMode calculateTopInteractionMode()
-    {
-        return DoubleBlockTopInteractionMode.EITHER;
     }
 
     @Override

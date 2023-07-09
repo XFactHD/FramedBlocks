@@ -107,7 +107,7 @@ public class FramedDoubleCornerBlock extends AbstractFramedDoubleBlock
     }
 
     @Override
-    protected Tuple<BlockState, BlockState> getBlockPair(BlockState state)
+    public Tuple<BlockState, BlockState> calculateBlockPair(BlockState state)
     {
         Direction facing = state.getValue(FramedProperties.FACING_HOR);
         CornerType type = state.getValue(PropertyHolder.CORNER_TYPE);
@@ -126,7 +126,7 @@ public class FramedDoubleCornerBlock extends AbstractFramedDoubleBlock
     }
 
     @Override
-    public DoubleBlockTopInteractionMode getTopInteractionModeRaw(BlockState state)
+    public DoubleBlockTopInteractionMode calculateTopInteractionMode(BlockState state)
     {
         CornerType type = state.getValue(PropertyHolder.CORNER_TYPE);
         if (type == CornerType.BOTTOM)

@@ -142,7 +142,7 @@ public class FramedFlatStackedSlopeSlabCornerBlock extends AbstractFramedDoubleB
     }
 
     @Override
-    protected Tuple<BlockState, BlockState> getBlockPair(BlockState state)
+    public Tuple<BlockState, BlockState> calculateBlockPair(BlockState state)
     {
         Direction dir = state.getValue(FramedProperties.FACING_HOR);
         boolean top = state.getValue(FramedProperties.TOP);
@@ -171,7 +171,7 @@ public class FramedFlatStackedSlopeSlabCornerBlock extends AbstractFramedDoubleB
     }
 
     @Override
-    public DoubleBlockTopInteractionMode getTopInteractionModeRaw(BlockState state)
+    public DoubleBlockTopInteractionMode calculateTopInteractionMode(BlockState state)
     {
         if (state.getValue(FramedProperties.TOP))
         {

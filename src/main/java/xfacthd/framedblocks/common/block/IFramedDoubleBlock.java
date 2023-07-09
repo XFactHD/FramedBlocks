@@ -11,25 +11,48 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.Vec3;
+import org.jetbrains.annotations.ApiStatus;
 import xfacthd.framedblocks.api.block.IFramedBlock;
+import xfacthd.framedblocks.api.block.cache.StateCache;
 import xfacthd.framedblocks.common.FBContent;
 import xfacthd.framedblocks.common.blockentity.FramedDoubleBlockEntity;
 import xfacthd.framedblocks.common.util.DoubleBlockTopInteractionMode;
 
 public interface IFramedDoubleBlock extends IFramedBlock
 {
-    DoubleBlockTopInteractionMode getTopInteractionModeRaw(BlockState state);
+    @ApiStatus.OverrideOnly
+    DoubleBlockTopInteractionMode calculateTopInteractionMode(BlockState state);
+
+    @ApiStatus.OverrideOnly
+    Tuple<BlockState, BlockState> calculateBlockPair(BlockState state);
 
     default DoubleBlockTopInteractionMode getTopInteractionMode(BlockState state)
     {
-        return getTopInteractionModeRaw(state);
+        return getCache(state).getTopInteractionMode();
+    }
+
+    default Tuple<BlockState, BlockState> getBlockPair(BlockState state)
+    {
+        return getCache(state).getBlockPair();
+    }
+
+    @Override
+    default StateCache initCache(BlockState state)
+    {
+        return new DoubleBlockStateCache(state, getBlockType());
+    }
+
+    @Override
+    default DoubleBlockStateCache getCache(BlockState state)
+    {
+        return (DoubleBlockStateCache) IFramedBlock.super.getCache(state);
     }
 
     default boolean addCamoRunningEffects(BlockState state, Level level, BlockPos pos, Entity entity)
     {
         if (level.getBlockEntity(pos) instanceof FramedDoubleBlockEntity be)
         {
-            Tuple<BlockState, BlockState> statePair = AbstractFramedDoubleBlock.getStatePair(state);
+            Tuple<BlockState, BlockState> statePair = getBlockPair(state);
             switch (getTopInteractionMode(state))
             {
                 case FIRST -> IFramedDoubleBlock.spawnRunningParticles(
@@ -57,7 +80,7 @@ public interface IFramedDoubleBlock extends IFramedBlock
     {
         if (level.getBlockEntity(pos) instanceof FramedDoubleBlockEntity be)
         {
-            Tuple<BlockState, BlockState> statePair = AbstractFramedDoubleBlock.getStatePair(state);
+            Tuple<BlockState, BlockState> statePair = getBlockPair(state);
             switch (getTopInteractionMode(state))
             {
                 case FIRST -> IFramedDoubleBlock.spawnLandingParticles(

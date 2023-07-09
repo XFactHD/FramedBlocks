@@ -69,7 +69,7 @@ public class FramedDoubleSlopedPrismBlock extends AbstractFramedDoubleBlock
     }
 
     @Override
-    protected Tuple<BlockState, BlockState> getBlockPair(BlockState state)
+    public Tuple<BlockState, BlockState> calculateBlockPair(BlockState state)
     {
         CompoundDirection cmpDir = state.getValue(PropertyHolder.FACING_DIR);
         boolean ySlope = state.getValue(FramedProperties.Y_SLOPE);
@@ -90,7 +90,7 @@ public class FramedDoubleSlopedPrismBlock extends AbstractFramedDoubleBlock
     }
 
     @Override
-    public DoubleBlockTopInteractionMode getTopInteractionModeRaw(BlockState state)
+    public DoubleBlockTopInteractionMode calculateTopInteractionMode(BlockState state)
     {
         CompoundDirection cmpDir = state.getValue(PropertyHolder.FACING_DIR);
         if (cmpDir.direction() == Direction.UP)

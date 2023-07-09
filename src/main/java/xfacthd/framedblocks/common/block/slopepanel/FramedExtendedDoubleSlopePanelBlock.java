@@ -94,7 +94,7 @@ public class FramedExtendedDoubleSlopePanelBlock extends AbstractFramedDoubleBlo
     }
 
     @Override
-    protected Tuple<BlockState, BlockState> getBlockPair(BlockState state)
+    public Tuple<BlockState, BlockState> calculateBlockPair(BlockState state)
     {
         Direction facing = state.getValue(FramedProperties.FACING_HOR);
         HorizontalRotation rotation = state.getValue(PropertyHolder.ROTATION);
@@ -114,7 +114,7 @@ public class FramedExtendedDoubleSlopePanelBlock extends AbstractFramedDoubleBlo
     }
 
     @Override
-    public DoubleBlockTopInteractionMode getTopInteractionModeRaw(BlockState state)
+    public DoubleBlockTopInteractionMode calculateTopInteractionMode(BlockState state)
     {
         if (state.getValue(PropertyHolder.ROTATION) == HorizontalRotation.DOWN)
         {

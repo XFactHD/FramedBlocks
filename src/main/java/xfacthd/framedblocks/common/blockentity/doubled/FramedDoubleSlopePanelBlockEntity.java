@@ -13,7 +13,6 @@ import xfacthd.framedblocks.common.FBContent;
 import xfacthd.framedblocks.common.blockentity.FramedDoubleBlockEntity;
 import xfacthd.framedblocks.common.data.PropertyHolder;
 import xfacthd.framedblocks.common.data.property.HorizontalRotation;
-import xfacthd.framedblocks.common.util.DoubleBlockTopInteractionMode;
 
 public class FramedDoubleSlopePanelBlockEntity extends FramedDoubleBlockEntity
 {
@@ -115,16 +114,5 @@ public class FramedDoubleSlopePanelBlockEntity extends FramedDoubleBlockEntity
             return SolidityCheck.SECOND;
         }
         return SolidityCheck.NONE;
-    }
-
-    @Override
-    protected DoubleBlockTopInteractionMode calculateTopInteractionMode()
-    {
-        return switch (getBlockState().getValue(PropertyHolder.ROTATION))
-        {
-            case UP -> DoubleBlockTopInteractionMode.SECOND;
-            case DOWN -> DoubleBlockTopInteractionMode.FIRST;
-            case LEFT, RIGHT -> DoubleBlockTopInteractionMode.EITHER;
-        };
     }
 }

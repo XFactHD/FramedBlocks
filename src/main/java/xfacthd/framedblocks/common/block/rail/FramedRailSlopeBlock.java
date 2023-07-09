@@ -2,7 +2,6 @@ package xfacthd.framedblocks.common.block.rail;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
-import net.minecraft.util.Tuple;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.LivingEntity;
@@ -21,7 +20,6 @@ import net.minecraft.world.level.material.Fluids;
 import net.minecraft.world.level.storage.loot.LootParams;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.shapes.*;
-import net.minecraftforge.registries.RegistryObject;
 import xfacthd.framedblocks.api.block.*;
 import xfacthd.framedblocks.api.shapes.ShapeProvider;
 import xfacthd.framedblocks.api.util.Utils;
@@ -29,14 +27,11 @@ import xfacthd.framedblocks.common.FBContent;
 import xfacthd.framedblocks.common.blockentity.doubled.FramedFancyRailSlopeBlockEntity;
 import xfacthd.framedblocks.common.data.BlockType;
 import xfacthd.framedblocks.common.data.PropertyHolder;
-import xfacthd.framedblocks.common.data.property.SlopeType;
 import xfacthd.framedblocks.common.util.FramedUtils;
 
 import javax.annotation.Nullable;
 import java.util.List;
-import java.util.Map;
 import java.util.function.BiFunction;
-import java.util.stream.Stream;
 
 @SuppressWarnings("deprecation")
 public class FramedRailSlopeBlock extends BaseRailBlock implements IFramedBlock
@@ -262,66 +257,6 @@ public class FramedRailSlopeBlock extends BaseRailBlock implements IFramedBlock
     }
 
 
-
-    public static void cacheStatePairs(Map<BlockState, Tuple<BlockState, BlockState>> statePairs)
-    {
-        Stream.of(
-                FBContent.BLOCK_FRAMED_FANCY_RAIL_SLOPE,
-                FBContent.BLOCK_FRAMED_FANCY_POWERED_RAIL_SLOPE,
-                FBContent.BLOCK_FRAMED_FANCY_DETECTOR_RAIL_SLOPE,
-                FBContent.BLOCK_FRAMED_FANCY_ACTIVATOR_RAIL_SLOPE
-        )
-                .map(RegistryObject::get)
-                .map(Block::getStateDefinition)
-                .map(StateDefinition::getPossibleStates)
-                .flatMap(List::stream)
-                .forEach(state -> statePairs.put(state, getBlockPair(state)));
-    }
-
-    private static Tuple<BlockState, BlockState> getBlockPair(BlockState state)
-    {
-        BlockType type = (BlockType) ((IFramedBlock) state.getBlock()).getBlockType();
-        RailShape shape = state.getValue(PropertyHolder.ASCENDING_RAIL_SHAPE);
-        boolean powered = type != BlockType.FRAMED_FANCY_RAIL_SLOPE && state.getValue(BlockStateProperties.POWERED);
-        boolean ySlope = state.getValue(FramedProperties.Y_SLOPE);
-
-        BlockState slopeState = FBContent.BLOCK_FRAMED_SLOPE.get().defaultBlockState();
-        BlockState railState = (switch(type)
-        {
-            case FRAMED_FANCY_RAIL_SLOPE -> FBContent.BLOCK_FRAMED_FANCY_RAIL;
-            case FRAMED_FANCY_POWERED_RAIL_SLOPE -> FBContent.BLOCK_FRAMED_FANCY_POWERED_RAIL;
-            case FRAMED_FANCY_DETECTOR_RAIL_SLOPE -> FBContent.BLOCK_FRAMED_FANCY_DETECTOR_RAIL;
-            case FRAMED_FANCY_ACTIVATOR_RAIL_SLOPE -> FBContent.BLOCK_FRAMED_FANCY_ACTIVATOR_RAIL;
-            default -> throw new IllegalArgumentException("Invalid block type");
-        }).get().defaultBlockState();
-
-        if (type != BlockType.FRAMED_FANCY_RAIL_SLOPE)
-        {
-            railState = railState.setValue(BlockStateProperties.POWERED, powered);
-        }
-
-        EnumProperty<RailShape> shapeProp = getShapeProperty(type);
-        Direction facing = FramedUtils.getDirectionFromAscendingRailShape(shape);
-
-        return new Tuple<>(
-                slopeState.setValue(PropertyHolder.SLOPE_TYPE, SlopeType.BOTTOM)
-                        .setValue(FramedProperties.FACING_HOR, facing)
-                        .setValue(FramedProperties.Y_SLOPE, ySlope),
-                railState.setValue(shapeProp, shape)
-        );
-    }
-
-    private static EnumProperty<RailShape> getShapeProperty(BlockType type)
-    {
-        if (type == BlockType.FRAMED_FANCY_RAIL_SLOPE)
-        {
-            return BlockStateProperties.RAIL_SHAPE;
-        }
-        else
-        {
-            return BlockStateProperties.RAIL_SHAPE_STRAIGHT;
-        }
-    }
 
     public static BlockState itemModelSourceFancy()
     {

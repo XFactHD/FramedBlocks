@@ -14,7 +14,6 @@ import xfacthd.framedblocks.common.blockentity.FramedDoubleBlockEntity;
 import xfacthd.framedblocks.common.data.BlockType;
 import xfacthd.framedblocks.common.data.PropertyHolder;
 import xfacthd.framedblocks.common.data.property.HorizontalRotation;
-import xfacthd.framedblocks.common.util.DoubleBlockTopInteractionMode;
 
 public class FramedStackedSlopePanelBlockEntity extends FramedDoubleBlockEntity
 {
@@ -46,12 +45,6 @@ public class FramedStackedSlopePanelBlockEntity extends FramedDoubleBlockEntity
         }
 
         return Utils.fractionInDir(vec, facing.getOpposite()) > .5F;
-    }
-
-    @Override
-    protected DoubleBlockTopInteractionMode calculateTopInteractionMode()
-    {
-        return DoubleBlockTopInteractionMode.EITHER;
     }
 
     @Override

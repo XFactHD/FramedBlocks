@@ -2,7 +2,8 @@ package xfacthd.framedblocks.api.block;
 
 import com.google.common.base.Preconditions;
 import it.unimi.dsi.fastutil.objects.Object2BooleanMap;
-import it.unimi.dsi.fastutil.objects.Object2BooleanOpenHashMap;
+import it.unimi.dsi.fastutil.objects.Object2BooleanOpenCustomHashMap;
+import net.minecraft.Util;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.world.InteractionHand;
@@ -290,7 +291,7 @@ public abstract class AbstractFramedBlock extends Block implements IFramedBlock,
             return null;
         }
 
-        Object2BooleanMap<BlockState> beamColorMasking = new Object2BooleanOpenHashMap<>();
+        Object2BooleanMap<BlockState> beamColorMasking = new Object2BooleanOpenCustomHashMap<>(Util.identityStrategy());
 
         shapes.forEach((state, shape) ->
         {

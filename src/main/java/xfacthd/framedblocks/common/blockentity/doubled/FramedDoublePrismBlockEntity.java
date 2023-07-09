@@ -10,7 +10,6 @@ import xfacthd.framedblocks.api.util.Utils;
 import xfacthd.framedblocks.common.FBContent;
 import xfacthd.framedblocks.common.blockentity.FramedDoubleBlockEntity;
 import xfacthd.framedblocks.common.data.PropertyHolder;
-import xfacthd.framedblocks.common.util.DoubleBlockTopInteractionMode;
 
 public class FramedDoublePrismBlockEntity extends FramedDoubleBlockEntity
 {
@@ -55,20 +54,6 @@ public class FramedDoublePrismBlockEntity extends FramedDoubleBlockEntity
         }
 
         return false;
-    }
-
-    @Override
-    protected DoubleBlockTopInteractionMode calculateTopInteractionMode()
-    {
-        if (isDoubleSide(Direction.UP))
-        {
-            return DoubleBlockTopInteractionMode.EITHER;
-        }
-        else if (getFacing(getBlockState()) == Direction.DOWN)
-        {
-            return DoubleBlockTopInteractionMode.SECOND;
-        }
-        return DoubleBlockTopInteractionMode.FIRST;
     }
 
     @Override

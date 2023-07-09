@@ -17,13 +17,10 @@ import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraftforge.client.extensions.common.IClientBlockExtensions;
-import net.minecraftforge.registries.RegistryObject;
 import org.jetbrains.annotations.Nullable;
 import xfacthd.framedblocks.api.camo.CamoContainer;
 import xfacthd.framedblocks.api.block.FramedProperties;
 import xfacthd.framedblocks.api.predicate.cull.SideSkipPredicate;
-import xfacthd.framedblocks.common.FBContent;
-import xfacthd.framedblocks.common.block.rail.FramedRailSlopeBlock;
 import xfacthd.framedblocks.common.data.BlockType;
 import xfacthd.framedblocks.common.item.FramedBlueprintItem;
 import xfacthd.framedblocks.common.blockentity.FramedDoubleBlockEntity;
@@ -33,8 +30,6 @@ import java.util.function.Consumer;
 
 public abstract class AbstractFramedDoubleBlock extends FramedBlock implements IFramedDoubleBlock
 {
-    private static final Map<BlockState, Tuple<BlockState, BlockState>> STATE_PAIRS = new IdentityHashMap<>();
-
     public AbstractFramedDoubleBlock(BlockType blockType)
     {
         super(blockType);
@@ -95,7 +90,7 @@ public abstract class AbstractFramedDoubleBlock extends FramedBlock implements I
             SideSkipPredicate pred, BlockGetter level, BlockPos pos, BlockState state, BlockState adjState, Direction side
     )
     {
-        Tuple<BlockState, BlockState> statePair = STATE_PAIRS.get(adjState);
+        Tuple<BlockState, BlockState> statePair = getBlockPair(adjState);
         if (pred.test(level, pos, state, statePair.getA(), side))
         {
             return statePair.getA();
@@ -129,33 +124,10 @@ public abstract class AbstractFramedDoubleBlock extends FramedBlock implements I
     @Override
     public abstract BlockEntity newBlockEntity(BlockPos pos, BlockState state);
 
-    protected abstract Tuple<BlockState, BlockState> getBlockPair(BlockState state);
 
-
-
-    public static void cacheStatePairs()
-    {
-        STATE_PAIRS.clear();
-
-        FBContent.getRegisteredBlocks()
-                .stream()
-                .map(RegistryObject::get)
-                .filter(AbstractFramedDoubleBlock.class::isInstance)
-                .map(AbstractFramedDoubleBlock.class::cast)
-                .forEach(block -> block.stateDefinition.getPossibleStates().forEach(state ->
-                        STATE_PAIRS.put(state, block.getBlockPair(state))
-                ));
-
-        FramedRailSlopeBlock.cacheStatePairs(STATE_PAIRS);
-    }
 
     public static Tuple<BlockState, BlockState> getStatePair(BlockState state)
     {
-        Tuple<BlockState, BlockState> pair = STATE_PAIRS.get(state);
-        if (pair == null)
-        {
-            throw new IllegalArgumentException("BlockState pair requested for invalid block: " + state.getBlock());
-        }
-        return pair;
+        return ((IFramedDoubleBlock) state.getBlock()).getCache(state).getBlockPair();
     }
 }

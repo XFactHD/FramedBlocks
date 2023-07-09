@@ -60,7 +60,7 @@ public class FramedDividedPanelBlock extends AbstractFramedDoubleBlock
     }
 
     @Override
-    protected Tuple<BlockState, BlockState> getBlockPair(BlockState state)
+    public Tuple<BlockState, BlockState> calculateBlockPair(BlockState state)
     {
         Direction dir = state.getValue(FramedProperties.FACING_HOR);
         if (getBlockType() == BlockType.FRAMED_DIVIDED_PANEL_HORIZONTAL)
@@ -82,7 +82,7 @@ public class FramedDividedPanelBlock extends AbstractFramedDoubleBlock
     }
 
     @Override
-    public DoubleBlockTopInteractionMode getTopInteractionModeRaw(BlockState state)
+    public DoubleBlockTopInteractionMode calculateTopInteractionMode(BlockState state)
     {
         if (getBlockType() == BlockType.FRAMED_DIVIDED_PANEL_HORIZONTAL)
         {

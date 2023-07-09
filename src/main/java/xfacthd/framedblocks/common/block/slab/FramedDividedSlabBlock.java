@@ -77,7 +77,7 @@ public class FramedDividedSlabBlock extends AbstractFramedDoubleBlock
     }
 
     @Override
-    protected Tuple<BlockState, BlockState> getBlockPair(BlockState state)
+    public Tuple<BlockState, BlockState> calculateBlockPair(BlockState state)
     {
         BlockState defState = FBContent.BLOCK_FRAMED_SLAB_EDGE.get()
                 .defaultBlockState()
@@ -90,7 +90,7 @@ public class FramedDividedSlabBlock extends AbstractFramedDoubleBlock
     }
 
     @Override
-    public DoubleBlockTopInteractionMode getTopInteractionModeRaw(BlockState state)
+    public DoubleBlockTopInteractionMode calculateTopInteractionMode(BlockState state)
     {
         return DoubleBlockTopInteractionMode.EITHER;
     }

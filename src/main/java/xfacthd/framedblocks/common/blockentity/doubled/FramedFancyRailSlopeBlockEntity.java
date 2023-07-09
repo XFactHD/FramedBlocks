@@ -11,7 +11,6 @@ import xfacthd.framedblocks.api.camo.CamoContainer;
 import xfacthd.framedblocks.common.FBContent;
 import xfacthd.framedblocks.common.blockentity.FramedDoubleBlockEntity;
 import xfacthd.framedblocks.common.data.PropertyHolder;
-import xfacthd.framedblocks.common.util.DoubleBlockTopInteractionMode;
 import xfacthd.framedblocks.common.util.FramedUtils;
 
 public class FramedFancyRailSlopeBlockEntity extends FramedDoubleBlockEntity
@@ -26,12 +25,6 @@ public class FramedFancyRailSlopeBlockEntity extends FramedDoubleBlockEntity
     {
         Direction side = hit.getDirection();
         return side == Direction.UP || side == getFacing().getOpposite();
-    }
-
-    @Override
-    protected DoubleBlockTopInteractionMode calculateTopInteractionMode()
-    {
-        return DoubleBlockTopInteractionMode.FIRST;
     }
 
     @Override

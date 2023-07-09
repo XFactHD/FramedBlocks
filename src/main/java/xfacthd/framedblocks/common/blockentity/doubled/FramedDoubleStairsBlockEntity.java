@@ -10,7 +10,6 @@ import xfacthd.framedblocks.api.block.FramedProperties;
 import xfacthd.framedblocks.api.util.Utils;
 import xfacthd.framedblocks.common.FBContent;
 import xfacthd.framedblocks.common.blockentity.FramedDoubleBlockEntity;
-import xfacthd.framedblocks.common.util.DoubleBlockTopInteractionMode;
 
 public class FramedDoubleStairsBlockEntity extends FramedDoubleBlockEntity
 {
@@ -53,13 +52,6 @@ public class FramedDoubleStairsBlockEntity extends FramedDoubleBlockEntity
             boolean positive = Utils.isPositive(facing);
             return xz > .5 != positive;
         }
-    }
-
-    @Override
-    protected DoubleBlockTopInteractionMode calculateTopInteractionMode()
-    {
-        boolean top = getBlockState().getValue(FramedProperties.TOP);
-        return top ? DoubleBlockTopInteractionMode.FIRST : DoubleBlockTopInteractionMode.EITHER;
     }
 
     @Override

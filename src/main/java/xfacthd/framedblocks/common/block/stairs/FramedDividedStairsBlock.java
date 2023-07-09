@@ -88,7 +88,7 @@ public class FramedDividedStairsBlock extends AbstractFramedDoubleBlock
     }
 
     @Override
-    protected Tuple<BlockState, BlockState> getBlockPair(BlockState state)
+    public Tuple<BlockState, BlockState> calculateBlockPair(BlockState state)
     {
         BlockState defState = FBContent.BLOCK_FRAMED_HALF_STAIRS.get().defaultBlockState();
         Direction facing = state.getValue(FramedProperties.FACING_HOR);
@@ -105,7 +105,7 @@ public class FramedDividedStairsBlock extends AbstractFramedDoubleBlock
     }
 
     @Override
-    public DoubleBlockTopInteractionMode getTopInteractionModeRaw(BlockState state)
+    public DoubleBlockTopInteractionMode calculateTopInteractionMode(BlockState state)
     {
         return DoubleBlockTopInteractionMode.EITHER;
     }

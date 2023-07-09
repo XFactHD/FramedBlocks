@@ -27,7 +27,7 @@ import xfacthd.framedblocks.api.camo.CamoContainer;
 import xfacthd.framedblocks.api.model.data.FramedBlockData;
 import xfacthd.framedblocks.api.util.ClientUtils;
 import xfacthd.framedblocks.api.util.Utils;
-import xfacthd.framedblocks.common.block.AbstractFramedDoubleBlock;
+import xfacthd.framedblocks.common.block.*;
 import xfacthd.framedblocks.common.util.DoubleBlockSoundType;
 import xfacthd.framedblocks.common.util.DoubleBlockTopInteractionMode;
 
@@ -45,15 +45,14 @@ public abstract class FramedDoubleBlockEntity extends FramedBlockEntity
     private final DoubleBlockSoundType soundType = new DoubleBlockSoundType(this);
     private final CamoGetter[][] camoGetters = new CamoGetter[6][7];
     private final SolidityCheck[] solidityChecks = new SolidityCheck[6];
-    private Tuple<BlockState, BlockState> blockPair;
-    private DoubleBlockTopInteractionMode topInteractionMode = DoubleBlockTopInteractionMode.EITHER;
+    private DoubleBlockStateCache stateCache;
     private CamoContainer camoContainer = EmptyCamoContainer.EMPTY;
 
     public FramedDoubleBlockEntity(BlockEntityType<?> type, BlockPos pos, BlockState state)
     {
         super(type, pos, state);
-        blockPair = AbstractFramedDoubleBlock.getStatePair(state);
-        modelData.setUseAltModel(true);
+        this.stateCache = getDoubleBlock().getCache(state);
+        this.modelData.setUseAltModel(true);
     }
 
     @Override
@@ -86,11 +85,11 @@ public abstract class FramedDoubleBlockEntity extends FramedBlockEntity
     @Override
     public CamoContainer getCamo(BlockState state)
     {
-        if (state == blockPair.getA())
+        if (state == stateCache.getBlockPair().getA())
         {
             return getCamo();
         }
-        if (state == blockPair.getB())
+        if (state == stateCache.getBlockPair().getB())
         {
             return getCamoTwo();
         }
@@ -134,7 +133,7 @@ public abstract class FramedDoubleBlockEntity extends FramedBlockEntity
     @Override
     public MapColor getMapColor()
     {
-        return switch (topInteractionMode)
+        return switch (stateCache.getTopInteractionMode())
         {
             case FIRST -> super.getMapColor();
             case SECOND -> camoContainer.getMapColor(level, worldPosition);
@@ -185,7 +184,7 @@ public abstract class FramedDoubleBlockEntity extends FramedBlockEntity
     @Override
     public float getCamoFriction(BlockState state, @Nullable Entity entity)
     {
-        return switch (topInteractionMode)
+        return switch (stateCache.getTopInteractionMode())
         {
             case FIRST -> getFriction(this, getCamo(), state, entity);
             case SECOND -> getFriction(this, getCamoTwo(), state, entity);
@@ -294,10 +293,8 @@ public abstract class FramedDoubleBlockEntity extends FramedBlockEntity
 
     public final DoubleBlockTopInteractionMode getTopInteractionMode()
     {
-        return topInteractionMode;
+        return stateCache.getTopInteractionMode();
     }
-
-    protected abstract DoubleBlockTopInteractionMode calculateTopInteractionMode();
 
     @Override
     public final CamoContainer getCamo(Direction side)
@@ -324,8 +321,8 @@ public abstract class FramedDoubleBlockEntity extends FramedBlockEntity
     @Override
     public boolean updateCulling(Direction side, boolean rerender)
     {
-        boolean changed = updateCulling(getModelDataInternal(), blockPair.getA(), side, rerender);
-        changed |= updateCulling(modelData, blockPair.getB(), side, rerender);
+        boolean changed = updateCulling(getModelDataInternal(), stateCache.getBlockPair().getA(), side, rerender);
+        changed |= updateCulling(modelData, stateCache.getBlockPair().getB(), side, rerender);
         return changed;
     }
 
@@ -334,10 +331,9 @@ public abstract class FramedDoubleBlockEntity extends FramedBlockEntity
     public void setBlockState(BlockState state)
     {
         super.setBlockState(state);
-        blockPair = AbstractFramedDoubleBlock.getStatePair(state);
+        stateCache = getDoubleBlock().getCache(state);
         collectCamoGetters();
         calculateSolidityChecks();
-        topInteractionMode = calculateTopInteractionMode();
     }
 
     @Override
@@ -354,7 +350,6 @@ public abstract class FramedDoubleBlockEntity extends FramedBlockEntity
         // These can't happen in the constructor due to some implementations using variables initialized in their constructor
         collectCamoGetters();
         calculateSolidityChecks();
-        topInteractionMode = calculateTopInteractionMode();
     }
 
     private void collectCamoGetters()
@@ -375,6 +370,11 @@ public abstract class FramedDoubleBlockEntity extends FramedBlockEntity
         Utils.forAllDirections(false, side -> solidityChecks[side.ordinal()] = getSolidityCheck(side));
     }
 
+    protected IFramedDoubleBlock getDoubleBlock()
+    {
+        return (IFramedDoubleBlock) getBlockState().getBlock();
+    }
+
     /*
      * Debug rendering
      */
@@ -387,7 +387,7 @@ public abstract class FramedDoubleBlockEntity extends FramedBlockEntity
 
     public Tuple<BlockState, BlockState> getBlockPair()
     {
-        return blockPair;
+        return stateCache.getBlockPair();
     }
 
     public final boolean debugHitSecondary(BlockHitResult hit)
@@ -403,12 +403,12 @@ public abstract class FramedDoubleBlockEntity extends FramedBlockEntity
     @Nullable
     public BlockState getComponentBySkipPredicate(BlockGetter ctLevel, BlockState neighborState, Direction side)
     {
-        BlockState compA = blockPair.getA();
+        BlockState compA = stateCache.getBlockPair().getA();
         if (testComponent(ctLevel, worldPosition, compA, neighborState, side))
         {
             return compA;
         }
-        BlockState compB = blockPair.getB();
+        BlockState compB = stateCache.getBlockPair().getB();
         if (testComponent(ctLevel, worldPosition, compB, neighborState, side))
         {
             return compB;
@@ -427,11 +427,11 @@ public abstract class FramedDoubleBlockEntity extends FramedBlockEntity
     @Override
     public ModelData getModelData(ModelData data, BlockState state)
     {
-        if (state == blockPair.getA())
+        if (state == stateCache.getBlockPair().getA())
         {
             return Objects.requireNonNullElse(data.get(DATA_LEFT), ModelData.EMPTY);
         }
-        if (state == blockPair.getB())
+        if (state == stateCache.getBlockPair().getB())
         {
             return Objects.requireNonNullElse(data.get(DATA_RIGHT), ModelData.EMPTY);
         }

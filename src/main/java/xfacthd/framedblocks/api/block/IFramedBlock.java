@@ -27,6 +27,7 @@ import net.minecraft.world.phys.shapes.*;
 import net.minecraftforge.common.IPlantable;
 import net.minecraftforge.common.Tags;
 import net.minecraftforge.common.extensions.IForgeBlock;
+import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.Nullable;
 import xfacthd.framedblocks.api.FramedBlocksAPI;
 import xfacthd.framedblocks.api.block.cache.IStateCacheAccessor;
@@ -79,6 +80,12 @@ public interface IFramedBlock extends EntityBlock, IForgeBlock
     default BlockItem createBlockItem()
     {
         return new BlockItem((Block) this, new Item.Properties());
+    }
+
+    @ApiStatus.OverrideOnly
+    default StateCache initCache(BlockState state)
+    {
+        return new StateCache(state, getBlockType());
     }
 
     default StateCache getCache(BlockState state)

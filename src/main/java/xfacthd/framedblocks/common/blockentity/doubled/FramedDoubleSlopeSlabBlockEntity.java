@@ -11,7 +11,6 @@ import xfacthd.framedblocks.api.util.Utils;
 import xfacthd.framedblocks.common.FBContent;
 import xfacthd.framedblocks.common.blockentity.FramedDoubleBlockEntity;
 import xfacthd.framedblocks.common.data.PropertyHolder;
-import xfacthd.framedblocks.common.util.DoubleBlockTopInteractionMode;
 
 public class FramedDoubleSlopeSlabBlockEntity extends FramedDoubleBlockEntity
 {
@@ -49,12 +48,6 @@ public class FramedDoubleSlopeSlabBlockEntity extends FramedDoubleBlockEntity
             y -= .5;
         }
         return (y * 2D) >= hor;
-    }
-
-    @Override
-    protected DoubleBlockTopInteractionMode calculateTopInteractionMode()
-    {
-        return DoubleBlockTopInteractionMode.SECOND;
     }
 
     @Override

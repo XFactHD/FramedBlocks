@@ -9,7 +9,6 @@ import org.jetbrains.annotations.Nullable;
 import xfacthd.framedblocks.api.block.FramedProperties;
 import xfacthd.framedblocks.common.FBContent;
 import xfacthd.framedblocks.common.blockentity.FramedDoubleBlockEntity;
-import xfacthd.framedblocks.common.util.DoubleBlockTopInteractionMode;
 
 public class FramedInverseDoubleSlopeSlabBlockEntity extends FramedDoubleBlockEntity
 {
@@ -26,12 +25,6 @@ public class FramedInverseDoubleSlopeSlabBlockEntity extends FramedDoubleBlockEn
             return false;
         }
         return hit.getDirection() == Direction.UP || Mth.frac(hit.getLocation().y()) >= .5F;
-    }
-
-    @Override
-    protected DoubleBlockTopInteractionMode calculateTopInteractionMode()
-    {
-        return DoubleBlockTopInteractionMode.SECOND;
     }
 
     @Override

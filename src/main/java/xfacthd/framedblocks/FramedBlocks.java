@@ -24,7 +24,6 @@ import xfacthd.framedblocks.api.util.FramedConstants;
 import xfacthd.framedblocks.api.util.Utils;
 import xfacthd.framedblocks.client.util.ClientConfig;
 import xfacthd.framedblocks.common.FBContent;
-import xfacthd.framedblocks.common.block.AbstractFramedDoubleBlock;
 import xfacthd.framedblocks.common.compat.CompatHandler;
 import xfacthd.framedblocks.common.crafting.FramingSawRecipeCache;
 import xfacthd.framedblocks.common.data.BlueprintBehaviours;
@@ -107,7 +106,6 @@ public final class FramedBlocks
 
         FBContent.initializeStateCache();
         BlueprintBehaviours.register();
-        AbstractFramedDoubleBlock.cacheStatePairs();
         CompatHandler.commonSetup();
     }
 
