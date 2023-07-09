@@ -9,6 +9,7 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.*;
 import xfacthd.framedblocks.api.block.render.FramedBlockRenderProperties;
+import xfacthd.framedblocks.common.FBContent;
 import xfacthd.framedblocks.common.blockentity.FramedDoubleBlockEntity;
 
 public class FramedDoubleBlockRenderProperties extends FramedBlockRenderProperties
@@ -31,6 +32,11 @@ public class FramedDoubleBlockRenderProperties extends FramedBlockRenderProperti
             BlockState state, Level level, BlockHitResult target, BlockState camoState, ParticleEngine engine
     )
     {
+        if (camoState.isAir())
+        {
+            camoState = FBContent.BLOCK_FRAMED_CUBE.get().defaultBlockState();
+        }
+
         BlockPos pos = target.getBlockPos();
         Direction side = target.getDirection();
 

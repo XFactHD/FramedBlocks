@@ -12,6 +12,7 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.Vec3;
 import xfacthd.framedblocks.api.block.IFramedBlock;
+import xfacthd.framedblocks.common.FBContent;
 import xfacthd.framedblocks.common.blockentity.FramedDoubleBlockEntity;
 import xfacthd.framedblocks.common.util.DoubleBlockTopInteractionMode;
 
@@ -84,6 +85,11 @@ public interface IFramedDoubleBlock extends IFramedBlock
 
     static void spawnLandingParticles(BlockState state, ServerLevel level, BlockPos pos, LivingEntity entity, int count)
     {
+        if (state.isAir())
+        {
+            state = FBContent.BLOCK_FRAMED_CUBE.get().defaultBlockState();
+        }
+
         double x = entity.getX();
         double y = entity.getY();
         double z = entity.getZ();
@@ -112,6 +118,11 @@ public interface IFramedDoubleBlock extends IFramedBlock
 
     static void spawnRunningParticles(BlockState state, Level level, BlockPos pos, Entity entity)
     {
+        if (state.isAir())
+        {
+            state = FBContent.BLOCK_FRAMED_CUBE.get().defaultBlockState();
+        }
+
         Vec3 delta = entity.getDeltaMovement();
         BlockPos enityPos = entity.blockPosition();
 
