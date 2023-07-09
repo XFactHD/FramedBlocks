@@ -592,7 +592,10 @@ public interface IFramedBlock extends EntityBlock, IForgeBlock
     {
         BlockState camoState = CamoContainer.load(beTag.getCompound("camo")).getState();
 
-        if (camoState.isAir()) { return Optional.empty(); }
+        if (camoState.isAir())
+        {
+            return Optional.empty();
+        }
         return Optional.of(camoState.getBlock().getName().withStyle(ChatFormatting.WHITE));
     }
 

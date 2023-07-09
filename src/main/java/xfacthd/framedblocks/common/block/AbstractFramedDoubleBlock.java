@@ -1,28 +1,23 @@
 package xfacthd.framedblocks.common.block;
 
-import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
-import net.minecraft.nbt.CompoundTag;
-import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.util.Tuple;
 import net.minecraft.world.entity.Entity;
-import net.minecraft.world.level.*;
-import net.minecraft.world.level.block.*;
+import net.minecraft.world.level.BlockGetter;
+import net.minecraft.world.level.LevelReader;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraftforge.client.extensions.common.IClientBlockExtensions;
 import org.jetbrains.annotations.Nullable;
-import xfacthd.framedblocks.api.camo.CamoContainer;
 import xfacthd.framedblocks.api.block.FramedProperties;
 import xfacthd.framedblocks.api.predicate.cull.SideSkipPredicate;
-import xfacthd.framedblocks.common.data.BlockType;
-import xfacthd.framedblocks.common.item.FramedBlueprintItem;
 import xfacthd.framedblocks.common.blockentity.FramedDoubleBlockEntity;
+import xfacthd.framedblocks.common.data.BlockType;
 
-import java.util.*;
 import java.util.function.Consumer;
 
 public abstract class AbstractFramedDoubleBlock extends FramedBlock implements IFramedDoubleBlock
@@ -66,19 +61,6 @@ public abstract class AbstractFramedDoubleBlock extends FramedBlock implements I
             return statePair.getB();
         }
         return null;
-    }
-
-    @Override
-    public Optional<MutableComponent> printCamoBlock(CompoundTag beTag)
-    {
-        BlockState camoState = CamoContainer.load(beTag.getCompound("camo")).getState();
-        BlockState camoStateTwo = CamoContainer.load(beTag.getCompound("camo_two")).getState();
-
-        MutableComponent component = camoState.isAir() ? FramedBlueprintItem.BLOCK_NONE : camoState.getBlock().getName().withStyle(ChatFormatting.WHITE);
-        component = component.copy().append(Component.literal(" | ").withStyle(ChatFormatting.GOLD));
-        component.append(camoStateTwo.isAir() ? FramedBlueprintItem.BLOCK_NONE : camoStateTwo.getBlock().getName().withStyle(ChatFormatting.WHITE));
-
-        return Optional.of(component);
     }
 
     @Override
