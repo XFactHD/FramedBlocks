@@ -22,6 +22,7 @@ import xfacthd.framedblocks.common.blockentity.doubled.FramedStackedSlopePanelBl
 import xfacthd.framedblocks.common.data.BlockType;
 import xfacthd.framedblocks.common.data.PropertyHolder;
 import xfacthd.framedblocks.common.data.property.HorizontalRotation;
+import xfacthd.framedblocks.common.util.DoubleBlockTopInteractionMode;
 
 public class FramedFlatStackedSlopePanelCornerBlock extends AbstractFramedDoubleBlock
 {
@@ -127,6 +128,12 @@ public class FramedFlatStackedSlopePanelCornerBlock extends AbstractFramedDouble
     public BlockState mirror(BlockState state, Mirror mirror)
     {
         return FramedFlatSlopePanelCornerBlock.mirrorCorner(state, mirror);
+    }
+
+    @Override
+    public DoubleBlockTopInteractionMode getTopInteractionModeRaw(BlockState state)
+    {
+        return DoubleBlockTopInteractionMode.EITHER;
     }
 
     @Override

@@ -27,6 +27,7 @@ import xfacthd.framedblocks.common.blockentity.doubled.FramedDoubleHalfSlopeBloc
 import xfacthd.framedblocks.common.data.BlockType;
 import xfacthd.framedblocks.common.data.PropertyHolder;
 import xfacthd.framedblocks.common.item.VerticalAndWallBlockItem;
+import xfacthd.framedblocks.common.util.DoubleBlockTopInteractionMode;
 
 public class FramedDoubleHalfSlopeBlock extends AbstractFramedDoubleBlock
 {
@@ -135,6 +136,12 @@ public class FramedDoubleHalfSlopeBlock extends AbstractFramedDoubleBlock
                         .setValue(PropertyHolder.RIGHT, !right)
                         .setValue(FramedProperties.Y_SLOPE, ySlope)
         );
+    }
+
+    @Override
+    public DoubleBlockTopInteractionMode getTopInteractionModeRaw(BlockState state)
+    {
+        return DoubleBlockTopInteractionMode.SECOND;
     }
 
     @Override

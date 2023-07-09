@@ -13,13 +13,13 @@ import net.minecraft.world.level.block.state.StateDefinition;
 import xfacthd.framedblocks.api.block.FramedProperties;
 import xfacthd.framedblocks.api.block.IFramedBlock;
 import xfacthd.framedblocks.api.util.Utils;
-import xfacthd.framedblocks.client.util.DoubleBlockParticleMode;
 import xfacthd.framedblocks.common.FBContent;
 import xfacthd.framedblocks.common.block.AbstractFramedDoubleBlock;
 import xfacthd.framedblocks.common.blockentity.doubled.FramedDoubleSlopeBlockEntity;
 import xfacthd.framedblocks.common.data.BlockType;
 import xfacthd.framedblocks.common.data.PropertyHolder;
 import xfacthd.framedblocks.common.data.property.SlopeType;
+import xfacthd.framedblocks.common.util.DoubleBlockTopInteractionMode;
 
 import javax.annotation.Nullable;
 
@@ -111,22 +111,23 @@ public class FramedDoubleSlopeBlock extends AbstractFramedDoubleBlock
     }
 
     @Override
+    public DoubleBlockTopInteractionMode getTopInteractionModeRaw(BlockState state)
+    {
+        return switch (state.getValue(PropertyHolder.SLOPE_TYPE))
+        {
+            case BOTTOM -> DoubleBlockTopInteractionMode.SECOND;
+            case TOP -> DoubleBlockTopInteractionMode.FIRST;
+            case HORIZONTAL -> DoubleBlockTopInteractionMode.EITHER;
+        };
+    }
+
+    @Override
     public final BlockEntity newBlockEntity(BlockPos pos, BlockState state)
     {
         return new FramedDoubleSlopeBlockEntity(pos, state);
     }
 
 
-
-    public static DoubleBlockParticleMode particleMode(BlockState state)
-    {
-        return switch (state.getValue(PropertyHolder.SLOPE_TYPE))
-        {
-            case BOTTOM -> DoubleBlockParticleMode.SECOND;
-            case TOP -> DoubleBlockParticleMode.FIRST;
-            case HORIZONTAL -> DoubleBlockParticleMode.EITHER;
-        };
-    }
 
     public static BlockState itemModelSource()
     {

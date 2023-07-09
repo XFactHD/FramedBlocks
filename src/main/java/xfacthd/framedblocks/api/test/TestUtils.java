@@ -1,6 +1,8 @@
 package xfacthd.framedblocks.api.test;
 
 import com.mojang.logging.LogUtils;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.particle.ParticleEngine;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.gametest.framework.*;
@@ -510,8 +512,9 @@ public final class TestUtils
 
             try
             {
-                hit = blockExt.addHitEffects(state, helper.getLevel(), miss, null);
-                destroy = blockExt.addDestroyEffects(state, helper.getLevel(), pos, null);
+                ParticleEngine engine = Minecraft.getInstance().particleEngine;
+                hit = blockExt.addHitEffects(state, helper.getLevel(), miss, engine);
+                destroy = blockExt.addDestroyEffects(state, helper.getLevel(), pos, engine);
             }
             catch (Throwable e)
             {

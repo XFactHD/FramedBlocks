@@ -15,12 +15,12 @@ import net.minecraft.world.phys.shapes.*;
 import xfacthd.framedblocks.api.block.FramedProperties;
 import xfacthd.framedblocks.api.block.IFramedBlock;
 import xfacthd.framedblocks.api.util.*;
-import xfacthd.framedblocks.client.util.DoubleBlockParticleMode;
 import xfacthd.framedblocks.common.FBContent;
 import xfacthd.framedblocks.common.block.AbstractFramedDoubleBlock;
 import xfacthd.framedblocks.common.blockentity.doubled.FramedDoubleSlopeSlabBlockEntity;
 import xfacthd.framedblocks.common.data.BlockType;
 import xfacthd.framedblocks.common.data.PropertyHolder;
+import xfacthd.framedblocks.common.util.DoubleBlockTopInteractionMode;
 
 public class FramedDoubleSlopeSlabBlock extends AbstractFramedDoubleBlock
 {
@@ -128,17 +128,18 @@ public class FramedDoubleSlopeSlabBlock extends AbstractFramedDoubleBlock
     }
 
     @Override
+    public DoubleBlockTopInteractionMode getTopInteractionModeRaw(BlockState state)
+    {
+        return DoubleBlockTopInteractionMode.SECOND;
+    }
+
+    @Override
     public BlockEntity newBlockEntity(BlockPos pos, BlockState state)
     {
         return new FramedDoubleSlopeSlabBlockEntity(pos, state);
     }
 
 
-
-    public static DoubleBlockParticleMode particleMode(BlockState state)
-    {
-        return state.getValue(PropertyHolder.TOP_HALF) ? DoubleBlockParticleMode.FIRST : DoubleBlockParticleMode.SECOND;
-    }
 
     public static BlockState itemModelSource()
     {

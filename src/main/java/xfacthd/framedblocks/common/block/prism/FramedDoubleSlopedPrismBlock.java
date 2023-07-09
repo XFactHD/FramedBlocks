@@ -12,13 +12,13 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import xfacthd.framedblocks.api.block.FramedProperties;
 import xfacthd.framedblocks.api.util.Utils;
-import xfacthd.framedblocks.client.util.DoubleBlockParticleMode;
 import xfacthd.framedblocks.common.FBContent;
 import xfacthd.framedblocks.common.block.AbstractFramedDoubleBlock;
 import xfacthd.framedblocks.common.blockentity.doubled.FramedDoubleSlopedPrismBlockEntity;
 import xfacthd.framedblocks.common.data.BlockType;
 import xfacthd.framedblocks.common.data.PropertyHolder;
 import xfacthd.framedblocks.common.data.property.CompoundDirection;
+import xfacthd.framedblocks.common.util.DoubleBlockTopInteractionMode;
 
 public class FramedDoubleSlopedPrismBlock extends AbstractFramedDoubleBlock
 {
@@ -90,26 +90,27 @@ public class FramedDoubleSlopedPrismBlock extends AbstractFramedDoubleBlock
     }
 
     @Override
+    public DoubleBlockTopInteractionMode getTopInteractionModeRaw(BlockState state)
+    {
+        CompoundDirection cmpDir = state.getValue(PropertyHolder.FACING_DIR);
+        if (cmpDir.direction() == Direction.UP)
+        {
+            return DoubleBlockTopInteractionMode.SECOND;
+        }
+        else if (cmpDir.direction() == Direction.DOWN || cmpDir.orientation() != Direction.UP)
+        {
+            return DoubleBlockTopInteractionMode.FIRST;
+        }
+        return DoubleBlockTopInteractionMode.EITHER;
+    }
+
+    @Override
     public BlockEntity newBlockEntity(BlockPos pos, BlockState state)
     {
         return new FramedDoubleSlopedPrismBlockEntity(pos, state);
     }
 
 
-
-    public static DoubleBlockParticleMode particleMode(BlockState state)
-    {
-        CompoundDirection cmpDir = state.getValue(PropertyHolder.FACING_DIR);
-        if (cmpDir.direction() == Direction.UP)
-        {
-            return DoubleBlockParticleMode.SECOND;
-        }
-        else if (cmpDir.direction() == Direction.DOWN || cmpDir.orientation() != Direction.UP)
-        {
-            return DoubleBlockParticleMode.FIRST;
-        }
-        return DoubleBlockParticleMode.EITHER;
-    }
 
     public static BlockState itemModelSource()
     {

@@ -18,6 +18,7 @@ import xfacthd.framedblocks.common.block.AbstractFramedDoubleBlock;
 import xfacthd.framedblocks.common.blockentity.doubled.FramedElevatedDoubleSlopeSlabBlockEntity;
 import xfacthd.framedblocks.common.data.BlockType;
 import xfacthd.framedblocks.common.data.PropertyHolder;
+import xfacthd.framedblocks.common.util.DoubleBlockTopInteractionMode;
 
 public class FramedElevatedDoubleSlopeSlabBlock extends AbstractFramedDoubleBlock
 {
@@ -100,6 +101,16 @@ public class FramedElevatedDoubleSlopeSlabBlock extends AbstractFramedDoubleBloc
                         .setValue(FramedProperties.TOP, !top)
                         .setValue(FramedProperties.Y_SLOPE, ySlope)
         );
+    }
+
+    @Override
+    public DoubleBlockTopInteractionMode getTopInteractionModeRaw(BlockState state)
+    {
+        if (state.getValue(FramedProperties.TOP))
+        {
+            return DoubleBlockTopInteractionMode.FIRST;
+        }
+        return DoubleBlockTopInteractionMode.SECOND;
     }
 
     @Override

@@ -22,9 +22,10 @@ import net.minecraftforge.common.util.ConcatenatedListView;
 import xfacthd.framedblocks.api.model.BakedModelProxy;
 import xfacthd.framedblocks.api.model.data.FramedBlockData;
 import xfacthd.framedblocks.api.model.util.ModelUtils;
-import xfacthd.framedblocks.client.util.DoubleBlockParticleMode;
 import xfacthd.framedblocks.common.block.AbstractFramedDoubleBlock;
+import xfacthd.framedblocks.common.block.IFramedDoubleBlock;
 import xfacthd.framedblocks.common.blockentity.FramedDoubleBlockEntity;
+import xfacthd.framedblocks.common.util.DoubleBlockTopInteractionMode;
 
 import javax.annotation.Nullable;
 import java.util.*;
@@ -35,7 +36,7 @@ public class FramedDoubleBlockModel extends BakedModelProxy
     private static final ModelData EMPTY_ALT_FRAME = makeDefaultData(true);
 
     private final boolean specialItemModel;
-    private final DoubleBlockParticleMode particleMode;
+    private final DoubleBlockTopInteractionMode particleMode;
     private final Vec3 firstpersonTransform;
     private final Tuple<BlockState, BlockState> dummyStates;
     private Tuple<BakedModel, BakedModel> models = null;
@@ -43,14 +44,14 @@ public class FramedDoubleBlockModel extends BakedModelProxy
     public FramedDoubleBlockModel(
             BlockState state,
             BakedModel baseModel,
-            DoubleBlockParticleMode particleMode,
             Vec3 firstpersonTransform,
             boolean specialItemModel
     )
     {
         super(baseModel);
+        IFramedDoubleBlock block = (IFramedDoubleBlock) state.getBlock();
         this.dummyStates = AbstractFramedDoubleBlock.getStatePair(state);
-        this.particleMode = particleMode;
+        this.particleMode = block.getTopInteractionMode(state);
         this.firstpersonTransform = firstpersonTransform;
         this.specialItemModel = specialItemModel;
     }

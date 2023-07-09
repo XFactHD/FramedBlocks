@@ -19,6 +19,7 @@ import xfacthd.framedblocks.common.blockentity.doubled.FramedExtendedDoubleSlope
 import xfacthd.framedblocks.common.data.BlockType;
 import xfacthd.framedblocks.common.data.PropertyHolder;
 import xfacthd.framedblocks.common.data.property.HorizontalRotation;
+import xfacthd.framedblocks.common.util.DoubleBlockTopInteractionMode;
 
 public class FramedExtendedDoubleSlopePanelBlock extends AbstractFramedDoubleBlock
 {
@@ -110,6 +111,16 @@ public class FramedExtendedDoubleSlopePanelBlock extends AbstractFramedDoubleBlo
                         .setValue(PropertyHolder.FRONT, false)
                         .setValue(FramedProperties.Y_SLOPE, ySlope)
         );
+    }
+
+    @Override
+    public DoubleBlockTopInteractionMode getTopInteractionModeRaw(BlockState state)
+    {
+        if (state.getValue(PropertyHolder.ROTATION) == HorizontalRotation.DOWN)
+        {
+            return DoubleBlockTopInteractionMode.FIRST;
+        }
+        return DoubleBlockTopInteractionMode.EITHER;
     }
 
     @Override

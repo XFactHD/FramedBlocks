@@ -15,6 +15,7 @@ import xfacthd.framedblocks.common.FBContent;
 import xfacthd.framedblocks.common.block.AbstractFramedDoubleBlock;
 import xfacthd.framedblocks.common.blockentity.doubled.FramedDividedSlabBlockEntity;
 import xfacthd.framedblocks.common.data.BlockType;
+import xfacthd.framedblocks.common.util.DoubleBlockTopInteractionMode;
 
 public class FramedDividedSlabBlock extends AbstractFramedDoubleBlock
 {
@@ -86,5 +87,11 @@ public class FramedDividedSlabBlock extends AbstractFramedDoubleBlock
                 defState.setValue(FramedProperties.FACING_HOR, dir.getOpposite()),
                 defState.setValue(FramedProperties.FACING_HOR, dir)
         );
+    }
+
+    @Override
+    public DoubleBlockTopInteractionMode getTopInteractionModeRaw(BlockState state)
+    {
+        return DoubleBlockTopInteractionMode.EITHER;
     }
 }

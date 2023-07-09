@@ -6,14 +6,17 @@ import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.Tuple;
 import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.*;
 import net.minecraft.world.level.block.*;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
+import net.minecraftforge.client.extensions.common.IClientBlockExtensions;
 import net.minecraftforge.registries.RegistryObject;
 import org.jetbrains.annotations.Nullable;
 import xfacthd.framedblocks.api.camo.CamoContainer;
@@ -26,8 +29,9 @@ import xfacthd.framedblocks.common.item.FramedBlueprintItem;
 import xfacthd.framedblocks.common.blockentity.FramedDoubleBlockEntity;
 
 import java.util.*;
+import java.util.function.Consumer;
 
-public abstract class AbstractFramedDoubleBlock extends FramedBlock
+public abstract class AbstractFramedDoubleBlock extends FramedBlock implements IFramedDoubleBlock
 {
     private static final Map<BlockState, Tuple<BlockState, BlockState>> STATE_PAIRS = new IdentityHashMap<>();
 
@@ -72,6 +76,20 @@ public abstract class AbstractFramedDoubleBlock extends FramedBlock
     }
 
     @Override
+    public boolean addRunningEffects(BlockState state, Level level, BlockPos pos, Entity entity)
+    {
+        return addCamoRunningEffects(state, level, pos, entity);
+    }
+
+    @Override
+    public boolean addLandingEffects(
+            BlockState state, ServerLevel level, BlockPos pos, BlockState sameState, LivingEntity entity, int count
+    )
+    {
+        return addCamoLandingEffects(state, level, pos, entity, count);
+    }
+
+    @Override
     @Nullable
     public BlockState runOcclusionTestAndGetLookupState(
             SideSkipPredicate pred, BlockGetter level, BlockPos pos, BlockState state, BlockState adjState, Direction side
@@ -100,6 +118,12 @@ public abstract class AbstractFramedDoubleBlock extends FramedBlock
         component.append(camoStateTwo.isAir() ? FramedBlueprintItem.BLOCK_NONE : camoStateTwo.getBlock().getName().withStyle(ChatFormatting.WHITE));
 
         return Optional.of(component);
+    }
+
+    @Override
+    public void initializeClient(Consumer<IClientBlockExtensions> consumer)
+    {
+        consumer.accept(new FramedDoubleBlockRenderProperties());
     }
 
     @Override

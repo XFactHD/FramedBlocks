@@ -16,6 +16,7 @@ import xfacthd.framedblocks.common.FBContent;
 import xfacthd.framedblocks.common.block.AbstractFramedDoubleBlock;
 import xfacthd.framedblocks.common.blockentity.doubled.FramedDoubleStairsBlockEntity;
 import xfacthd.framedblocks.common.data.BlockType;
+import xfacthd.framedblocks.common.util.DoubleBlockTopInteractionMode;
 
 public class FramedDoubleStairsBlock extends AbstractFramedDoubleBlock
 {
@@ -84,6 +85,16 @@ public class FramedDoubleStairsBlock extends AbstractFramedDoubleBlock
                         .setValue(FramedProperties.FACING_HOR, facing.getOpposite())
                         .setValue(FramedProperties.TOP, !top)
         );
+    }
+
+    @Override
+    public DoubleBlockTopInteractionMode getTopInteractionModeRaw(BlockState state)
+    {
+        if (state.getValue(FramedProperties.TOP))
+        {
+            return DoubleBlockTopInteractionMode.FIRST;
+        }
+        return DoubleBlockTopInteractionMode.EITHER;
     }
 
     @Override

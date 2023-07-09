@@ -18,13 +18,13 @@ import xfacthd.framedblocks.api.block.FramedProperties;
 import xfacthd.framedblocks.api.block.IFramedBlock;
 import xfacthd.framedblocks.api.shapes.ShapeProvider;
 import xfacthd.framedblocks.api.util.*;
-import xfacthd.framedblocks.client.util.DoubleBlockParticleMode;
 import xfacthd.framedblocks.common.FBContent;
 import xfacthd.framedblocks.common.block.AbstractFramedDoubleBlock;
 import xfacthd.framedblocks.common.blockentity.doubled.FramedFlatDoubleSlopePanelCornerBlockEntity;
 import xfacthd.framedblocks.common.data.BlockType;
 import xfacthd.framedblocks.common.data.PropertyHolder;
 import xfacthd.framedblocks.common.data.property.HorizontalRotation;
+import xfacthd.framedblocks.common.util.DoubleBlockTopInteractionMode;
 
 public class FramedFlatDoubleSlopePanelCornerBlock extends AbstractFramedDoubleBlock
 {
@@ -119,6 +119,17 @@ public class FramedFlatDoubleSlopePanelCornerBlock extends AbstractFramedDoubleB
     }
 
     @Override
+    public DoubleBlockTopInteractionMode getTopInteractionModeRaw(BlockState state)
+    {
+        HorizontalRotation rotation = state.getValue(PropertyHolder.ROTATION);
+        if (rotation == HorizontalRotation.DOWN || rotation == HorizontalRotation.LEFT)
+        {
+            return DoubleBlockTopInteractionMode.FIRST;
+        }
+        return DoubleBlockTopInteractionMode.EITHER;
+    }
+
+    @Override
     public BlockEntity newBlockEntity(BlockPos pos, BlockState state)
     {
         return new FramedFlatDoubleSlopePanelCornerBlockEntity(pos, state);
@@ -143,16 +154,6 @@ public class FramedFlatDoubleSlopePanelCornerBlock extends AbstractFramedDoubleB
         }
 
         return ShapeProvider.of(builder.build());
-    }
-
-    public static DoubleBlockParticleMode particleMode(BlockState state)
-    {
-        HorizontalRotation rotation = state.getValue(PropertyHolder.ROTATION);
-        if (rotation == HorizontalRotation.DOWN || rotation == HorizontalRotation.LEFT)
-        {
-            return DoubleBlockParticleMode.FIRST;
-        }
-        return DoubleBlockParticleMode.EITHER;
     }
 
     public static BlockState itemSource()

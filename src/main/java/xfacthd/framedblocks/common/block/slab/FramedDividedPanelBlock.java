@@ -15,6 +15,7 @@ import xfacthd.framedblocks.common.FBContent;
 import xfacthd.framedblocks.common.block.AbstractFramedDoubleBlock;
 import xfacthd.framedblocks.common.blockentity.doubled.FramedDividedPanelBlockEntity;
 import xfacthd.framedblocks.common.data.BlockType;
+import xfacthd.framedblocks.common.util.DoubleBlockTopInteractionMode;
 
 public class FramedDividedPanelBlock extends AbstractFramedDoubleBlock
 {
@@ -77,6 +78,19 @@ public class FramedDividedPanelBlock extends AbstractFramedDoubleBlock
                     defState.setValue(FramedProperties.FACING_HOR, dir),
                     defState.setValue(FramedProperties.FACING_HOR, dir.getClockWise())
             );
+        }
+    }
+
+    @Override
+    public DoubleBlockTopInteractionMode getTopInteractionModeRaw(BlockState state)
+    {
+        if (getBlockType() == BlockType.FRAMED_DIVIDED_PANEL_HORIZONTAL)
+        {
+            return DoubleBlockTopInteractionMode.SECOND;
+        }
+        else
+        {
+            return DoubleBlockTopInteractionMode.EITHER;
         }
     }
 }

@@ -67,7 +67,6 @@ import xfacthd.framedblocks.client.data.GhostRenderBehaviours;
 
 import java.util.List;
 import java.util.Map;
-import java.util.function.Function;
 
 @Mod.EventBusSubscriber(modid = FramedConstants.MOD_ID, bus = Mod.EventBusSubscriber.Bus.MOD, value = Dist.CLIENT)
 public final class FBClient
@@ -208,11 +207,6 @@ public final class FBClient
         FramedStoneButtonModel.cacheFrameModels(registry);
         FramedLargeStoneButtonModel.cacheFrameModels(registry);
 
-        Function<BlockState, DoubleBlockParticleMode> particleTopFirstBottomSecond = state ->
-                state.getValue(FramedProperties.TOP) ? DoubleBlockParticleMode.FIRST : DoubleBlockParticleMode.SECOND;
-        Function<BlockState, DoubleBlockParticleMode> particleTopFirstElseEither = state ->
-                state.getValue(FramedProperties.TOP) ? DoubleBlockParticleMode.FIRST : DoubleBlockParticleMode.EITHER;
-
         Vec3 yHalfUp = new Vec3(0, .5, 0);
 
         ClientUtils.replaceModels(FBContent.BLOCK_FRAMED_CUBE, registry, FramedCubeModel::new, ClientUtils.IGNORE_SOLID);
@@ -226,11 +220,11 @@ public final class FBClient
         ClientUtils.replaceModels(FBContent.BLOCK_FRAMED_SLAB, registry, FramedSlabModel::new, ClientUtils.IGNORE_DEFAULT);
         ClientUtils.replaceModels(FBContent.BLOCK_FRAMED_SLAB_EDGE, registry, FramedSlabEdgeModel::new, ClientUtils.IGNORE_WATERLOGGED);
         ClientUtils.replaceModels(FBContent.BLOCK_FRAMED_SLAB_CORNER, registry, FramedSlabCornerModel::new, ClientUtils.IGNORE_WATERLOGGED);
-        replaceDoubleBlockModels(FBContent.BLOCK_FRAMED_DIVIDED_SLAB, registry, DoubleBlockParticleMode.EITHER, null, ClientUtils.IGNORE_DEFAULT);
+        replaceDoubleBlockModels(FBContent.BLOCK_FRAMED_DIVIDED_SLAB, registry, null, ClientUtils.IGNORE_DEFAULT);
         ClientUtils.replaceModels(FBContent.BLOCK_FRAMED_PANEL, registry, FramedPanelModel::new, ClientUtils.IGNORE_DEFAULT);
         ClientUtils.replaceModels(FBContent.BLOCK_FRAMED_CORNER_PILLAR, registry, FramedCornerPillarModel::new, ClientUtils.IGNORE_WATERLOGGED);
-        replaceDoubleBlockModels(FBContent.BLOCK_FRAMED_DIVIDED_PANEL_HOR, registry, DoubleBlockParticleMode.SECOND, null, ClientUtils.IGNORE_DEFAULT);
-        replaceDoubleBlockModels(FBContent.BLOCK_FRAMED_DIVIDED_PANEL_VERT, registry, DoubleBlockParticleMode.EITHER, null, ClientUtils.IGNORE_DEFAULT);
+        replaceDoubleBlockModels(FBContent.BLOCK_FRAMED_DIVIDED_PANEL_HOR, registry, null, ClientUtils.IGNORE_DEFAULT);
+        replaceDoubleBlockModels(FBContent.BLOCK_FRAMED_DIVIDED_PANEL_VERT, registry, null, ClientUtils.IGNORE_DEFAULT);
         ClientUtils.replaceModels(FBContent.BLOCK_FRAMED_STAIRS, registry, FramedStairsModel::new, ClientUtils.IGNORE_DEFAULT_LOCK);
         ClientUtils.replaceModels(FBContent.BLOCK_FRAMED_WALL, registry, FramedWallModel::new, ClientUtils.IGNORE_WATERLOGGED_LOCK);
         ClientUtils.replaceModels(FBContent.BLOCK_FRAMED_FENCE, registry, FramedFenceModel::createFenceModel, ClientUtils.IGNORE_WATERLOGGED_LOCK);
@@ -255,12 +249,12 @@ public final class FBClient
         ClientUtils.replaceModels(FBContent.BLOCK_FRAMED_LEVER, registry, FramedLeverModel::new, null);
         ClientUtils.replaceModels(FBContent.BLOCK_FRAMED_SIGN, registry, FramedSignModel::new, ClientUtils.IGNORE_WATERLOGGED);
         ClientUtils.replaceModels(FBContent.BLOCK_FRAMED_WALL_SIGN, registry, FramedWallSignModel::new, ClientUtils.IGNORE_WATERLOGGED);
-        replaceDoubleBlockModels(FBContent.BLOCK_FRAMED_DOUBLE_SLAB, registry, DoubleBlockParticleMode.SECOND, null, ClientUtils.IGNORE_SOLID);
-        replaceDoubleBlockModels(FBContent.BLOCK_FRAMED_DOUBLE_PANEL, registry, DoubleBlockParticleMode.EITHER, null, ClientUtils.IGNORE_SOLID);
-        replaceDoubleBlockModels(FBContent.BLOCK_FRAMED_DOUBLE_SLOPE, registry, FramedDoubleSlopeBlock::particleMode, FramedDoubleSlopeBlock.itemModelSource(), ClientUtils.IGNORE_SOLID);
-        replaceDoubleBlockModels(FBContent.BLOCK_FRAMED_DOUBLE_CORNER, registry, FramedDoubleCornerBlock::particleMode, FramedDoubleCornerBlock.itemModelSource(), ClientUtils.IGNORE_SOLID);
-        replaceDoubleBlockModels(FBContent.BLOCK_FRAMED_DOUBLE_PRISM_CORNER, registry, particleTopFirstElseEither, FramedDoublePrismCornerBlock.itemModelSourcePrism(), ClientUtils.IGNORE_SOLID);
-        replaceDoubleBlockModels(FBContent.BLOCK_FRAMED_DOUBLE_THREEWAY_CORNER, registry, particleTopFirstElseEither, FramedDoubleThreewayCornerBlock.itemModelSourceThreeway(), ClientUtils.IGNORE_SOLID);
+        replaceDoubleBlockModels(FBContent.BLOCK_FRAMED_DOUBLE_SLAB, registry, null, ClientUtils.IGNORE_SOLID);
+        replaceDoubleBlockModels(FBContent.BLOCK_FRAMED_DOUBLE_PANEL, registry, null, ClientUtils.IGNORE_SOLID);
+        replaceDoubleBlockModels(FBContent.BLOCK_FRAMED_DOUBLE_SLOPE, registry, FramedDoubleSlopeBlock.itemModelSource(), ClientUtils.IGNORE_SOLID);
+        replaceDoubleBlockModels(FBContent.BLOCK_FRAMED_DOUBLE_CORNER, registry, FramedDoubleCornerBlock.itemModelSource(), ClientUtils.IGNORE_SOLID);
+        replaceDoubleBlockModels(FBContent.BLOCK_FRAMED_DOUBLE_PRISM_CORNER, registry, FramedDoublePrismCornerBlock.itemModelSourcePrism(), ClientUtils.IGNORE_SOLID);
+        replaceDoubleBlockModels(FBContent.BLOCK_FRAMED_DOUBLE_THREEWAY_CORNER, registry, FramedDoubleThreewayCornerBlock.itemModelSourceThreeway(), ClientUtils.IGNORE_SOLID);
         ClientUtils.replaceModels(FBContent.BLOCK_FRAMED_TORCH, registry, FramedTorchModel::new, null);
         ClientUtils.replaceModels(FBContent.BLOCK_FRAMED_WALL_TORCH, registry, FramedWallTorchModel::new, null);
         ClientUtils.replaceModels(FBContent.BLOCK_FRAMED_SOUL_TORCH, registry, FramedSoulTorchModel::new, null);
@@ -283,52 +277,52 @@ public final class FBClient
         ClientUtils.replaceModels(FBContent.BLOCK_FRAMED_POST, registry, FramedPillarModel::new, ClientUtils.IGNORE_WATERLOGGED);
         ClientUtils.replaceModels(FBContent.BLOCK_FRAMED_COLLAPSIBLE_BLOCK, registry, FramedCollapsibleBlockModel::new, ClientUtils.IGNORE_WATERLOGGED);
         ClientUtils.replaceModels(FBContent.BLOCK_FRAMED_HALF_STAIRS, registry, FramedHalfStairsModel::new, ClientUtils.IGNORE_WATERLOGGED);
-        replaceDoubleBlockModels(FBContent.BLOCK_FRAMED_DIVIDED_STAIRS, registry, DoubleBlockParticleMode.EITHER, null, ClientUtils.IGNORE_DEFAULT);
+        replaceDoubleBlockModels(FBContent.BLOCK_FRAMED_DIVIDED_STAIRS, registry, null, ClientUtils.IGNORE_DEFAULT);
         ClientUtils.replaceModels(FBContent.BLOCK_FRAMED_BOUNCY_CUBE, registry, (state, baseModel) -> FramedMarkedCubeModel.slime(state, baseModel, registry), ClientUtils.IGNORE_SOLID);
         ClientUtils.replaceModels(FBContent.BLOCK_FRAMED_SECRET_STORAGE, registry, FramedCubeBaseModel::new, ClientUtils.IGNORE_SOLID);
         ClientUtils.replaceModels(FBContent.BLOCK_FRAMED_REDSTONE_BLOCK, registry, (state, baseModel) -> FramedMarkedCubeModel.redstone(state, baseModel, registry), ClientUtils.IGNORE_SOLID);
         ClientUtils.replaceModels(FBContent.BLOCK_FRAMED_PRISM, registry, FramedPrismModel::new, FramedPrismModel.itemSource(), ClientUtils.IGNORE_DEFAULT);
         ClientUtils.replaceModels(FBContent.BLOCK_FRAMED_INNER_PRISM, registry, FramedInnerPrismModel::new, FramedInnerPrismModel.itemSource(), ClientUtils.IGNORE_DEFAULT);
-        replaceDoubleBlockModels(FBContent.BLOCK_FRAMED_DOUBLE_PRISM, registry, FramedDoublePrismBlock::particleMode, FramedDoublePrismBlock.itemModelSource(), ClientUtils.IGNORE_SOLID);
+        replaceDoubleBlockModels(FBContent.BLOCK_FRAMED_DOUBLE_PRISM, registry, FramedDoublePrismBlock.itemModelSource(), ClientUtils.IGNORE_SOLID);
         ClientUtils.replaceModels(FBContent.BLOCK_FRAMED_SLOPED_PRISM, registry, FramedSlopedPrismModel::new, FramedSlopedPrismModel.itemSource(), ClientUtils.IGNORE_DEFAULT);
         ClientUtils.replaceModels(FBContent.BLOCK_FRAMED_INNER_SLOPED_PRISM, registry, FramedInnerSlopedPrismModel::new, FramedInnerSlopedPrismModel.itemSource(), ClientUtils.IGNORE_DEFAULT);
-        replaceDoubleBlockModels(FBContent.BLOCK_FRAMED_DOUBLE_SLOPED_PRISM, registry, FramedDoubleSlopedPrismBlock::particleMode, FramedDoubleSlopedPrismBlock.itemModelSource(), ClientUtils.IGNORE_SOLID);
+        replaceDoubleBlockModels(FBContent.BLOCK_FRAMED_DOUBLE_SLOPED_PRISM, registry, FramedDoubleSlopedPrismBlock.itemModelSource(), ClientUtils.IGNORE_SOLID);
         ClientUtils.replaceModels(FBContent.BLOCK_FRAMED_SLOPE_SLAB, registry, FramedSlopeSlabModel::new, FramedSlopeSlabModel.itemSource(), ClientUtils.IGNORE_DEFAULT);
         ClientUtils.replaceModels(FBContent.BLOCK_FRAMED_ELEVATED_SLOPE_SLAB, registry, FramedElevatedSlopeSlabModel::new, FramedElevatedSlopeSlabModel.itemSource(), ClientUtils.IGNORE_DEFAULT);
-        replaceDoubleBlockModels(FBContent.BLOCK_FRAMED_DOUBLE_SLOPE_SLAB, registry, FramedDoubleSlopeSlabBlock::particleMode, yHalfUp, FramedDoubleSlopeSlabBlock.itemModelSource(), ClientUtils.IGNORE_DEFAULT);
-        replaceDoubleBlockModels(FBContent.BLOCK_FRAMED_INVERSE_DOUBLE_SLOPE_SLAB, registry, DoubleBlockParticleMode.SECOND, FramedInverseDoubleSlopeSlabBlock.itemModelSource(), ClientUtils.IGNORE_DEFAULT);
-        replaceDoubleBlockModels(FBContent.BLOCK_FRAMED_ELEVATED_DOUBLE_SLOPE_SLAB, registry, particleTopFirstBottomSecond, FramedElevatedDoubleSlopeSlabBlock.itemModelSource(), ClientUtils.IGNORE_SOLID);
-        replaceDoubleBlockModels(FBContent.BLOCK_FRAMED_STACKED_SLOPE_SLAB, registry, particleTopFirstBottomSecond, FramedStackedSlopeSlabBlock.itemModelSource(), ClientUtils.IGNORE_DEFAULT);
+        replaceDoubleBlockModels(FBContent.BLOCK_FRAMED_DOUBLE_SLOPE_SLAB, registry, yHalfUp, FramedDoubleSlopeSlabBlock.itemModelSource(), ClientUtils.IGNORE_DEFAULT);
+        replaceDoubleBlockModels(FBContent.BLOCK_FRAMED_INVERSE_DOUBLE_SLOPE_SLAB, registry, FramedInverseDoubleSlopeSlabBlock.itemModelSource(), ClientUtils.IGNORE_DEFAULT);
+        replaceDoubleBlockModels(FBContent.BLOCK_FRAMED_ELEVATED_DOUBLE_SLOPE_SLAB, registry, FramedElevatedDoubleSlopeSlabBlock.itemModelSource(), ClientUtils.IGNORE_SOLID);
+        replaceDoubleBlockModels(FBContent.BLOCK_FRAMED_STACKED_SLOPE_SLAB, registry, FramedStackedSlopeSlabBlock.itemModelSource(), ClientUtils.IGNORE_DEFAULT);
         ClientUtils.replaceModels(FBContent.BLOCK_FRAMED_FLAT_SLOPE_SLAB_CORNER, registry, FramedFlatSlopeSlabCornerModel::new, FramedFlatSlopeSlabCornerModel.itemSource(), ClientUtils.IGNORE_DEFAULT);
         ClientUtils.replaceModels(FBContent.BLOCK_FRAMED_FLAT_INNER_SLOPE_SLAB_CORNER, registry, FramedFlatInnerSlopeSlabCornerModel::new, FramedFlatInnerSlopeSlabCornerModel.itemSource(), ClientUtils.IGNORE_DEFAULT);
         ClientUtils.replaceModels(FBContent.BLOCK_FRAMED_FLAT_ELEVATED_SLOPE_SLAB_CORNER, registry, FramedFlatElevatedSlopeSlabCornerModel::new, FramedFlatElevatedSlopeSlabCornerModel.itemSource(), ClientUtils.IGNORE_DEFAULT);
         ClientUtils.replaceModels(FBContent.BLOCK_FRAMED_FLAT_ELEVATED_INNER_SLOPE_SLAB_CORNER, registry, FramedFlatElevatedInnerSlopeSlabCornerModel::new, FramedFlatElevatedInnerSlopeSlabCornerModel.itemSource(), ClientUtils.IGNORE_DEFAULT);
-        replaceDoubleBlockModels(FBContent.BLOCK_FRAMED_FLAT_DOUBLE_SLOPE_SLAB_CORNER, registry, particleTopFirstBottomSecond, yHalfUp, FramedFlatDoubleSlopeSlabCornerBlock.itemModelSource(), ClientUtils.IGNORE_DEFAULT);
-        replaceDoubleBlockModels(FBContent.BLOCK_FRAMED_FLAT_INVERSE_DOUBLE_SLOPE_SLAB_CORNER, registry, particleTopFirstBottomSecond, FramedFlatInverseDoubleSlopeSlabCornerBlock.itemModelSource(), ClientUtils.IGNORE_DEFAULT);
-        replaceDoubleBlockModels(FBContent.BLOCK_FRAMED_FLAT_ELEVATED_DOUBLE_SLOPE_SLAB_CORNER, registry, particleTopFirstBottomSecond, FramedFlatElevatedDoubleSlopeSlabCornerBlock.itemModelSource(), ClientUtils.IGNORE_SOLID);
-        replaceDoubleBlockModels(FBContent.BLOCK_FRAMED_FLAT_ELEVATED_INNER_DOUBLE_SLOPE_SLAB_CORNER, registry, particleTopFirstBottomSecond, FramedFlatElevatedDoubleSlopeSlabCornerBlock.itemModelSourceInner(), ClientUtils.IGNORE_SOLID);
-        replaceDoubleBlockModels(FBContent.BLOCK_FRAMED_FLAT_STACKED_SLOPE_SLAB_CORNER, registry, particleTopFirstBottomSecond, FramedFlatStackedSlopeSlabCornerBlock.itemModelSource(), ClientUtils.IGNORE_DEFAULT);
-        replaceDoubleBlockModels(FBContent.BLOCK_FRAMED_FLAT_STACKED_INNER_SLOPE_SLAB_CORNER, registry, particleTopFirstBottomSecond, FramedFlatStackedSlopeSlabCornerBlock.itemModelSourceInner(), ClientUtils.IGNORE_DEFAULT);
+        replaceDoubleBlockModels(FBContent.BLOCK_FRAMED_FLAT_DOUBLE_SLOPE_SLAB_CORNER, registry, yHalfUp, FramedFlatDoubleSlopeSlabCornerBlock.itemModelSource(), ClientUtils.IGNORE_DEFAULT);
+        replaceDoubleBlockModels(FBContent.BLOCK_FRAMED_FLAT_INVERSE_DOUBLE_SLOPE_SLAB_CORNER, registry, FramedFlatInverseDoubleSlopeSlabCornerBlock.itemModelSource(), ClientUtils.IGNORE_DEFAULT);
+        replaceDoubleBlockModels(FBContent.BLOCK_FRAMED_FLAT_ELEVATED_DOUBLE_SLOPE_SLAB_CORNER, registry, FramedFlatElevatedDoubleSlopeSlabCornerBlock.itemModelSource(), ClientUtils.IGNORE_SOLID);
+        replaceDoubleBlockModels(FBContent.BLOCK_FRAMED_FLAT_ELEVATED_INNER_DOUBLE_SLOPE_SLAB_CORNER, registry, FramedFlatElevatedDoubleSlopeSlabCornerBlock.itemModelSourceInner(), ClientUtils.IGNORE_SOLID);
+        replaceDoubleBlockModels(FBContent.BLOCK_FRAMED_FLAT_STACKED_SLOPE_SLAB_CORNER, registry, FramedFlatStackedSlopeSlabCornerBlock.itemModelSource(), ClientUtils.IGNORE_DEFAULT);
+        replaceDoubleBlockModels(FBContent.BLOCK_FRAMED_FLAT_STACKED_INNER_SLOPE_SLAB_CORNER, registry, FramedFlatStackedSlopeSlabCornerBlock.itemModelSourceInner(), ClientUtils.IGNORE_DEFAULT);
         ClientUtils.replaceModels(FBContent.BLOCK_FRAMED_VERTICAL_HALF_STAIRS, registry, FramedVerticalHalfStairsModel::new, ClientUtils.IGNORE_WATERLOGGED);
-        replaceDoubleBlockModels(FBContent.BLOCK_FRAMED_VERTICAL_DIVIDED_STAIRS, registry, DoubleBlockParticleMode.SECOND, null, ClientUtils.IGNORE_DEFAULT);
+        replaceDoubleBlockModels(FBContent.BLOCK_FRAMED_VERTICAL_DIVIDED_STAIRS, registry, null, ClientUtils.IGNORE_DEFAULT);
         ClientUtils.replaceModels(FBContent.BLOCK_FRAMED_SLOPE_PANEL, registry, FramedSlopePanelModel::new, FramedSlopePanelModel.itemSource(), ClientUtils.IGNORE_DEFAULT);
         ClientUtils.replaceModels(FBContent.BLOCK_FRAMED_EXTENDED_SLOPE_PANEL, registry, FramedExtendedSlopePanelModel::new, FramedExtendedSlopePanelModel.itemSource(), ClientUtils.IGNORE_DEFAULT);
-        replaceDoubleBlockModels(FBContent.BLOCK_FRAMED_DOUBLE_SLOPE_PANEL, registry, FramedDoubleSlopePanelBlock::particleMode, FramedDoubleSlopePanelBlock.itemSource(), ClientUtils.IGNORE_DEFAULT);
-        replaceDoubleBlockModels(FBContent.BLOCK_FRAMED_INVERSE_DOUBLE_SLOPE_PANEL, registry, DoubleBlockParticleMode.EITHER, FramedInverseDoubleSlopePanelBlock.itemModelSource(), ClientUtils.IGNORE_DEFAULT);
-        replaceDoubleBlockModels(FBContent.BLOCK_FRAMED_EXTENDED_DOUBLE_SLOPE_PANEL, registry, DoubleBlockParticleMode.EITHER, FramedExtendedDoubleSlopePanelBlock.itemSource(), ClientUtils.IGNORE_SOLID);
-        replaceDoubleBlockModels(FBContent.BLOCK_FRAMED_STACKED_SLOPE_PANEL, registry, DoubleBlockParticleMode.EITHER, FramedStackedSlopePanelBlock.itemModelSource(), ClientUtils.IGNORE_DEFAULT);
+        replaceDoubleBlockModels(FBContent.BLOCK_FRAMED_DOUBLE_SLOPE_PANEL, registry, FramedDoubleSlopePanelBlock.itemSource(), ClientUtils.IGNORE_DEFAULT);
+        replaceDoubleBlockModels(FBContent.BLOCK_FRAMED_INVERSE_DOUBLE_SLOPE_PANEL, registry, FramedInverseDoubleSlopePanelBlock.itemModelSource(), ClientUtils.IGNORE_DEFAULT);
+        replaceDoubleBlockModels(FBContent.BLOCK_FRAMED_EXTENDED_DOUBLE_SLOPE_PANEL, registry, FramedExtendedDoubleSlopePanelBlock.itemSource(), ClientUtils.IGNORE_SOLID);
+        replaceDoubleBlockModels(FBContent.BLOCK_FRAMED_STACKED_SLOPE_PANEL, registry, FramedStackedSlopePanelBlock.itemModelSource(), ClientUtils.IGNORE_DEFAULT);
         ClientUtils.replaceModels(FBContent.BLOCK_FRAMED_FLAT_SLOPE_PANEL_CORNER, registry, FramedFlatSlopePanelCornerModel::new, FramedFlatSlopePanelCornerModel.itemSource(), ClientUtils.IGNORE_DEFAULT);
         ClientUtils.replaceModels(FBContent.BLOCK_FRAMED_FLAT_INNER_SLOPE_PANEL_CORNER, registry, FramedFlatInnerSlopePanelCornerModel::new, FramedFlatInnerSlopePanelCornerModel.itemSource(), ClientUtils.IGNORE_DEFAULT);
         ClientUtils.replaceModels(FBContent.BLOCK_FRAMED_FLAT_EXTENDED_SLOPE_PANEL_CORNER, registry, FramedFlatExtendedSlopePanelCornerModel::new, FramedFlatExtendedSlopePanelCornerModel.itemSource(), ClientUtils.IGNORE_DEFAULT);
         ClientUtils.replaceModels(FBContent.BLOCK_FRAMED_FLAT_EXTENDED_INNER_SLOPE_PANEL_CORNER, registry, FramedFlatExtendedInnerSlopePanelCornerModel::new, FramedFlatExtendedInnerSlopePanelCornerModel.itemSource(), ClientUtils.IGNORE_DEFAULT);
-        replaceDoubleBlockModels(FBContent.BLOCK_FRAMED_FLAT_DOUBLE_SLOPE_PANEL_CORNER, registry, FramedFlatDoubleSlopePanelCornerBlock::particleMode, yHalfUp, FramedFlatDoubleSlopePanelCornerBlock.itemSource(), ClientUtils.IGNORE_DEFAULT);
-        replaceDoubleBlockModels(FBContent.BLOCK_FRAMED_FLAT_INVERSE_DOUBLE_SLOPE_PANEL_CORNER, registry, DoubleBlockParticleMode.EITHER, yHalfUp, FramedFlatInverseDoubleSlopePanelCornerBlock.itemSource(), ClientUtils.IGNORE_DEFAULT);
-        replaceDoubleBlockModels(FBContent.BLOCK_FRAMED_FLAT_EXTENDED_DOUBLE_SLOPE_PANEL_CORNER, registry, DoubleBlockParticleMode.EITHER, FramedFlatExtendedDoubleSlopePanelCornerBlock.itemModelSource(), ClientUtils.IGNORE_SOLID);
-        replaceDoubleBlockModels(FBContent.BLOCK_FRAMED_FLAT_EXTENDED_INNER_DOUBLE_SLOPE_PANEL_CORNER, registry, FramedFlatExtendedDoubleSlopePanelCornerBlock::particleModeInner, FramedFlatExtendedDoubleSlopePanelCornerBlock.itemModelSourceInner(), ClientUtils.IGNORE_SOLID);
-        replaceDoubleBlockModels(FBContent.BLOCK_FRAMED_FLAT_STACKED_SLOPE_PANEL_CORNER, registry, DoubleBlockParticleMode.EITHER, FramedFlatStackedSlopePanelCornerBlock.itemModelSource(), ClientUtils.IGNORE_DEFAULT);
-        replaceDoubleBlockModels(FBContent.BLOCK_FRAMED_FLAT_STACKED_INNER_SLOPE_PANEL_CORNER, registry, DoubleBlockParticleMode.EITHER, FramedFlatStackedSlopePanelCornerBlock.itemModelSourceInner(), ClientUtils.IGNORE_DEFAULT);
-        replaceDoubleBlockModels(FBContent.BLOCK_FRAMED_DOUBLE_STAIRS, registry, particleTopFirstElseEither, FramedDoubleStairsBlock.itemSource(), ClientUtils.IGNORE_SOLID);
-        replaceDoubleBlockModels(FBContent.BLOCK_FRAMED_VERTICAL_DOUBLE_STAIRS, registry, DoubleBlockParticleMode.EITHER, FramedVerticalDoubleStairsBlock.itemModelSource(), ClientUtils.IGNORE_SOLID);
+        replaceDoubleBlockModels(FBContent.BLOCK_FRAMED_FLAT_DOUBLE_SLOPE_PANEL_CORNER, registry, yHalfUp, FramedFlatDoubleSlopePanelCornerBlock.itemSource(), ClientUtils.IGNORE_DEFAULT);
+        replaceDoubleBlockModels(FBContent.BLOCK_FRAMED_FLAT_INVERSE_DOUBLE_SLOPE_PANEL_CORNER, registry, yHalfUp, FramedFlatInverseDoubleSlopePanelCornerBlock.itemSource(), ClientUtils.IGNORE_DEFAULT);
+        replaceDoubleBlockModels(FBContent.BLOCK_FRAMED_FLAT_EXTENDED_DOUBLE_SLOPE_PANEL_CORNER, registry, FramedFlatExtendedDoubleSlopePanelCornerBlock.itemModelSource(), ClientUtils.IGNORE_SOLID);
+        replaceDoubleBlockModels(FBContent.BLOCK_FRAMED_FLAT_EXTENDED_INNER_DOUBLE_SLOPE_PANEL_CORNER, registry, FramedFlatExtendedDoubleSlopePanelCornerBlock.itemModelSourceInner(), ClientUtils.IGNORE_SOLID);
+        replaceDoubleBlockModels(FBContent.BLOCK_FRAMED_FLAT_STACKED_SLOPE_PANEL_CORNER, registry, FramedFlatStackedSlopePanelCornerBlock.itemModelSource(), ClientUtils.IGNORE_DEFAULT);
+        replaceDoubleBlockModels(FBContent.BLOCK_FRAMED_FLAT_STACKED_INNER_SLOPE_PANEL_CORNER, registry, FramedFlatStackedSlopePanelCornerBlock.itemModelSourceInner(), ClientUtils.IGNORE_DEFAULT);
+        replaceDoubleBlockModels(FBContent.BLOCK_FRAMED_DOUBLE_STAIRS, registry, FramedDoubleStairsBlock.itemSource(), ClientUtils.IGNORE_SOLID);
+        replaceDoubleBlockModels(FBContent.BLOCK_FRAMED_VERTICAL_DOUBLE_STAIRS, registry, FramedVerticalDoubleStairsBlock.itemModelSource(), ClientUtils.IGNORE_SOLID);
         ClientUtils.replaceModels(FBContent.BLOCK_FRAMED_WALL_BOARD, registry, FramedWallBoardModel::new, ClientUtils.IGNORE_DEFAULT);
         ClientUtils.replaceModels(FBContent.BLOCK_FRAMED_GLOWING_CUBE, registry, FramedGlowingCubeModel::new, ClientUtils.IGNORE_SOLID);
         ClientUtils.replaceModels(FBContent.BLOCK_FRAMED_PYRAMID, registry, FramedPyramidModel::new, FramedPyramidModel.itemSource(), ClientUtils.IGNORE_DEFAULT);
@@ -345,15 +339,15 @@ public final class FBClient
         ClientUtils.replaceModels(FBContent.BLOCK_FRAMED_FANCY_POWERED_RAIL, registry, FramedFancyRailModel::straight, ClientUtils.IGNORE_WATERLOGGED);
         ClientUtils.replaceModels(FBContent.BLOCK_FRAMED_FANCY_DETECTOR_RAIL, registry, FramedFancyRailModel::straight, ClientUtils.IGNORE_WATERLOGGED);
         ClientUtils.replaceModels(FBContent.BLOCK_FRAMED_FANCY_ACTIVATOR_RAIL, registry, FramedFancyRailModel::straight, ClientUtils.IGNORE_WATERLOGGED);
-        replaceDoubleBlockModels(FBContent.BLOCK_FRAMED_FANCY_RAIL_SLOPE, registry, DoubleBlockParticleMode.FIRST, FramedRailSlopeBlock.itemModelSourceFancy(), ClientUtils.IGNORE_DEFAULT);
-        replaceDoubleBlockModels(FBContent.BLOCK_FRAMED_FANCY_POWERED_RAIL_SLOPE, registry, DoubleBlockParticleMode.FIRST, FramedPoweredRailSlopeBlock.itemModelSourceFancyPowered(), ClientUtils.IGNORE_DEFAULT);
-        replaceDoubleBlockModels(FBContent.BLOCK_FRAMED_FANCY_DETECTOR_RAIL_SLOPE, registry, DoubleBlockParticleMode.FIRST, FramedDetectorRailSlopeBlock.itemModelSourceFancy(), ClientUtils.IGNORE_DEFAULT);
-        replaceDoubleBlockModels(FBContent.BLOCK_FRAMED_FANCY_ACTIVATOR_RAIL_SLOPE, registry, DoubleBlockParticleMode.FIRST, FramedPoweredRailSlopeBlock.itemModelSourceFancyActivator(), ClientUtils.IGNORE_DEFAULT);
+        replaceDoubleBlockModels(FBContent.BLOCK_FRAMED_FANCY_RAIL_SLOPE, registry, FramedRailSlopeBlock.itemModelSourceFancy(), ClientUtils.IGNORE_DEFAULT);
+        replaceDoubleBlockModels(FBContent.BLOCK_FRAMED_FANCY_POWERED_RAIL_SLOPE, registry, FramedPoweredRailSlopeBlock.itemModelSourceFancyPowered(), ClientUtils.IGNORE_DEFAULT);
+        replaceDoubleBlockModels(FBContent.BLOCK_FRAMED_FANCY_DETECTOR_RAIL_SLOPE, registry, FramedDetectorRailSlopeBlock.itemModelSourceFancy(), ClientUtils.IGNORE_DEFAULT);
+        replaceDoubleBlockModels(FBContent.BLOCK_FRAMED_FANCY_ACTIVATOR_RAIL_SLOPE, registry, FramedPoweredRailSlopeBlock.itemModelSourceFancyActivator(), ClientUtils.IGNORE_DEFAULT);
         ClientUtils.replaceModels(FBContent.BLOCK_FRAMED_HALF_SLOPE, registry, FramedHalfSlopeModel::new, FramedHalfSlopeModel.itemSource(), ClientUtils.IGNORE_WATERLOGGED);
         ClientUtils.replaceModels(FBContent.BLOCK_FRAMED_VERTICAL_HALF_SLOPE, registry, FramedVerticalHalfSlopeModel::new, ClientUtils.IGNORE_WATERLOGGED);
-        replaceDoubleBlockModels(FBContent.BLOCK_FRAMED_DIVIDED_SLOPE, registry, FramedDividedSlopeBlock::particleMode, FramedDividedSlopeBlock.itemSource(), ClientUtils.IGNORE_DEFAULT);
-        replaceDoubleBlockModels(FBContent.BLOCK_FRAMED_DOUBLE_HALF_SLOPE, registry, DoubleBlockParticleMode.SECOND, FramedDoubleHalfSlopeBlock.itemSource(), ClientUtils.IGNORE_DEFAULT);
-        replaceDoubleBlockModels(FBContent.BLOCK_FRAMED_VERTICAL_DOUBLE_HALF_SLOPE, registry, DoubleBlockParticleMode.SECOND, null, ClientUtils.IGNORE_DEFAULT);
+        replaceDoubleBlockModels(FBContent.BLOCK_FRAMED_DIVIDED_SLOPE, registry, FramedDividedSlopeBlock.itemSource(), ClientUtils.IGNORE_DEFAULT);
+        replaceDoubleBlockModels(FBContent.BLOCK_FRAMED_DOUBLE_HALF_SLOPE, registry, FramedDoubleHalfSlopeBlock.itemSource(), ClientUtils.IGNORE_DEFAULT);
+        replaceDoubleBlockModels(FBContent.BLOCK_FRAMED_VERTICAL_DOUBLE_HALF_SLOPE, registry, null, ClientUtils.IGNORE_DEFAULT);
         ClientUtils.replaceModels(FBContent.BLOCK_FRAMED_SLOPED_STAIRS, registry, FramedSlopedStairsModel::new, FramedSlopedStairsModel.itemSource(), ClientUtils.IGNORE_DEFAULT);
         ClientUtils.replaceModels(FBContent.BLOCK_FRAMED_VERTICAL_SLOPED_STAIRS, registry, FramedVerticalSlopedStairsModel::new, FramedVerticalSlopedStairsModel.itemSource(), ClientUtils.IGNORE_DEFAULT);
         ClientUtils.replaceModels(FBContent.BLOCK_FRAMED_MINI_CUBE, registry, FramedMiniCubeModel::new, ClientUtils.IGNORE_WATERLOGGED);
@@ -377,42 +371,18 @@ public final class FBClient
 
 
 
-    @SuppressWarnings("SameParameterValue")
     private static void replaceDoubleBlockModels(
             RegistryObject<Block> block, Map<ResourceLocation, BakedModel> models,
-            DoubleBlockParticleMode particleMode,
-            Vec3 firstpersonTransform,
             @Nullable BlockState itemModelSource,
             @Nullable List<Property<?>> ignoredProps
     )
     {
-        replaceDoubleBlockModels(block, models, state -> particleMode, firstpersonTransform, itemModelSource, ignoredProps);
+        replaceDoubleBlockModels(block, models, null, itemModelSource, ignoredProps);
     }
 
     private static void replaceDoubleBlockModels(
             RegistryObject<Block> block, Map<ResourceLocation, BakedModel> models,
-            DoubleBlockParticleMode particleMode,
-            @Nullable BlockState itemModelSource,
-            @Nullable List<Property<?>> ignoredProps
-    )
-    {
-        replaceDoubleBlockModels(block, models, state -> particleMode, null, itemModelSource, ignoredProps);
-    }
-
-    private static void replaceDoubleBlockModels(
-            RegistryObject<Block> block, Map<ResourceLocation, BakedModel> models,
-            Function<BlockState, DoubleBlockParticleMode> particleMode,
-            @Nullable BlockState itemModelSource,
-            @Nullable List<Property<?>> ignoredProps
-    )
-    {
-        replaceDoubleBlockModels(block, models, particleMode, null, itemModelSource, ignoredProps);
-    }
-
-    private static void replaceDoubleBlockModels(
-            RegistryObject<Block> block, Map<ResourceLocation, BakedModel> models,
-            Function<BlockState, DoubleBlockParticleMode> particleMode,
-            Vec3 firstpersonTransform,
+            @Nullable Vec3 firstpersonTransform,
             @Nullable BlockState itemModelSource,
             @Nullable List<Property<?>> ignoredProps
     )
@@ -423,7 +393,6 @@ public final class FBClient
                 (state, model) -> new FramedDoubleBlockModel(
                         state,
                         model,
-                        particleMode.apply(state),
                         firstpersonTransform,
                         itemModelSource != null
                 ),

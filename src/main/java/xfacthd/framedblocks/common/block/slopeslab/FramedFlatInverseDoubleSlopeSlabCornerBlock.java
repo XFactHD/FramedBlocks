@@ -25,6 +25,7 @@ import xfacthd.framedblocks.common.block.AbstractFramedDoubleBlock;
 import xfacthd.framedblocks.common.blockentity.doubled.FramedFlatInverseDoubleSlopeSlabCornerBlockEntity;
 import xfacthd.framedblocks.common.data.BlockType;
 import xfacthd.framedblocks.common.data.PropertyHolder;
+import xfacthd.framedblocks.common.util.DoubleBlockTopInteractionMode;
 
 public class FramedFlatInverseDoubleSlopeSlabCornerBlock extends AbstractFramedDoubleBlock
 {
@@ -161,6 +162,16 @@ public class FramedFlatInverseDoubleSlopeSlabCornerBlock extends AbstractFramedD
                         .setValue(FramedProperties.TOP, top)
                         .setValue(FramedProperties.Y_SLOPE, ySlope)
         );
+    }
+
+    @Override
+    public DoubleBlockTopInteractionMode getTopInteractionModeRaw(BlockState state)
+    {
+        if (state.getValue(FramedProperties.TOP))
+        {
+            return DoubleBlockTopInteractionMode.FIRST;
+        }
+        return DoubleBlockTopInteractionMode.SECOND;
     }
 
     @Override
