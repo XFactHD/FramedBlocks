@@ -16,6 +16,7 @@ import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.client.ChunkRenderTypeSet;
 import net.minecraftforge.client.model.data.ModelData;
+import net.minecraftforge.fml.loading.FMLEnvironment;
 import org.jetbrains.annotations.ApiStatus;
 import xfacthd.framedblocks.api.FramedBlocksAPI;
 import xfacthd.framedblocks.api.FramedBlocksClientAPI;
@@ -30,6 +31,7 @@ import xfacthd.framedblocks.api.predicate.contex.ConTexMode;
 import xfacthd.framedblocks.api.predicate.fullface.FullFacePredicate;
 import xfacthd.framedblocks.api.type.IBlockType;
 import xfacthd.framedblocks.api.block.IFramedBlock;
+import xfacthd.framedblocks.api.util.TestProperties;
 import xfacthd.framedblocks.api.util.Utils;
 
 import java.util.*;
@@ -37,6 +39,7 @@ import java.util.*;
 @SuppressWarnings("deprecation")
 public abstract class FramedBlockModel extends BakedModelProxy
 {
+    private static final boolean DISABLE_QUAD_CACHE = !FMLEnvironment.production && TestProperties.DISABLE_MODEL_QUAD_CACHE;
     private static final Direction[] DIRECTIONS = Direction.values();
     private static final FramedBlockData DEFAULT_DATA = new FramedBlockData.Immutable(
             Blocks.AIR.defaultBlockState(), new boolean[6], false
@@ -253,6 +256,11 @@ public abstract class FramedBlockModel extends BakedModelProxy
         else
         {
             Object ctCtx = needCtCtx ? FramedBlocksClientAPI.getInstance().extractCTContext(camoData) : null;
+            if (DISABLE_QUAD_CACHE)
+            {
+                return buildQuadCache(state, camoState, rand, extraData, ctCtx != null ? camoData : ModelData.EMPTY, noCamo, addReinforcement)
+                        .getQuads(renderType, side);
+            }
             return quadCache.get(
                     makeCacheKey(camoState, ctCtx, extraData),
                     key -> buildQuadCache(state, key.state(), rand, extraData, ctCtx != null ? camoData : ModelData.EMPTY, noCamo, addReinforcement)
