@@ -24,6 +24,7 @@ import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import net.minecraftforge.client.extensions.common.IClientBlockExtensions;
 import xfacthd.framedblocks.api.block.IFramedBlock;
+import xfacthd.framedblocks.api.block.render.FramedBlockRenderProperties;
 import xfacthd.framedblocks.api.shapes.ShapeProvider;
 import xfacthd.framedblocks.api.util.Utils;
 import xfacthd.framedblocks.common.FBContent;
@@ -194,7 +195,7 @@ public class FramedItemFrameBlock extends FramedBlock
     public void initializeClient(Consumer<IClientBlockExtensions> consumer)
     {
         //Suppress hit and destroy particles
-        consumer.accept(new IClientBlockExtensions()
+        consumer.accept(new FramedBlockRenderProperties()
         {
             @Override
             public boolean addHitEffects(BlockState state, Level level, HitResult target, ParticleEngine manager)

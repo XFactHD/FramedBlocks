@@ -16,13 +16,16 @@ import net.minecraft.world.level.storage.loot.LootParams;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
+import net.minecraftforge.client.extensions.common.IClientBlockExtensions;
 import xfacthd.framedblocks.api.block.FramedProperties;
 import xfacthd.framedblocks.api.block.IFramedBlock;
+import xfacthd.framedblocks.api.block.render.FramedBlockRenderProperties;
 import xfacthd.framedblocks.api.type.IBlockType;
 import xfacthd.framedblocks.common.data.BlockType;
 
 import javax.annotation.Nullable;
 import java.util.List;
+import java.util.function.Consumer;
 
 @SuppressWarnings("deprecation")
 public class FramedFancyDetectorRailBlock extends DetectorRailBlock implements IFramedBlock
@@ -105,12 +108,6 @@ public class FramedFancyDetectorRailBlock extends DetectorRailBlock implements I
     }
 
     @Override
-    protected void spawnDestroyParticles(Level level, Player player, BlockPos pos, BlockState state)
-    {
-        spawnCamoDestroyParticles(level, player, pos, state);
-    }
-
-    @Override
     public float getShadeBrightness(BlockState state, BlockGetter level, BlockPos pos)
     {
         return getCamoShadeBrightness(state, level, pos, super.getShadeBrightness(state, level, pos));
@@ -132,5 +129,11 @@ public class FramedFancyDetectorRailBlock extends DetectorRailBlock implements I
     public IBlockType getBlockType()
     {
         return BlockType.FRAMED_FANCY_DETECTOR_RAIL;
+    }
+
+    @Override
+    public void initializeClient(Consumer<IClientBlockExtensions> consumer)
+    {
+        consumer.accept(FramedBlockRenderProperties.INSTANCE);
     }
 }

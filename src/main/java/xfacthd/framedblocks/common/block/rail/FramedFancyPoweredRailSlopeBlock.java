@@ -2,12 +2,8 @@ package xfacthd.framedblocks.common.block.rail;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
-import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.Tuple;
-import net.minecraft.world.entity.Entity;
-import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.level.BlockGetter;
-import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.block.state.properties.RailShape;
@@ -34,20 +30,6 @@ class FramedFancyPoweredRailSlopeBlock extends FramedPoweredRailSlopeBlock imple
     )
     {
         super(type, isPoweredRail, beFactory);
-    }
-
-    @Override
-    public boolean addRunningEffects(BlockState state, Level level, BlockPos pos, Entity entity)
-    {
-        return addCamoRunningEffects(state, level, pos, entity);
-    }
-
-    @Override
-    public boolean addLandingEffects(
-            BlockState state, ServerLevel level, BlockPos pos, BlockState sameState, LivingEntity entity, int count
-    )
-    {
-        return addCamoLandingEffects(state, level, pos, entity, count);
     }
 
     @Override
@@ -92,6 +74,6 @@ class FramedFancyPoweredRailSlopeBlock extends FramedPoweredRailSlopeBlock imple
     @Override
     public void initializeClient(Consumer<IClientBlockExtensions> consumer)
     {
-        consumer.accept(new FramedDoubleBlockRenderProperties());
+        consumer.accept(FramedDoubleBlockRenderProperties.INSTANCE);
     }
 }

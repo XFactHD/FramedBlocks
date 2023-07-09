@@ -17,11 +17,14 @@ import net.minecraft.world.level.storage.loot.LootParams;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
+import net.minecraftforge.client.extensions.common.IClientBlockExtensions;
 import xfacthd.framedblocks.api.block.*;
+import xfacthd.framedblocks.api.block.render.FramedBlockRenderProperties;
 import xfacthd.framedblocks.common.data.BlockType;
 
 import javax.annotation.Nullable;
 import java.util.*;
+import java.util.function.Consumer;
 
 @SuppressWarnings("deprecation")
 public class FramedDoorBlock extends DoorBlock implements IFramedBlock
@@ -111,12 +114,6 @@ public class FramedDoorBlock extends DoorBlock implements IFramedBlock
     }
 
     @Override
-    protected void spawnDestroyParticles(Level level, Player player, BlockPos pos, BlockState state)
-    {
-        spawnCamoDestroyParticles(level, player, pos, state);
-    }
-
-    @Override
     public float getShadeBrightness(BlockState state, BlockGetter level, BlockPos pos)
     {
         return getCamoShadeBrightness(state, level, pos, super.getShadeBrightness(state, level, pos));
@@ -138,6 +135,12 @@ public class FramedDoorBlock extends DoorBlock implements IFramedBlock
     public BlockType getBlockType()
     {
         return type;
+    }
+
+    @Override
+    public void initializeClient(Consumer<IClientBlockExtensions> consumer)
+    {
+        consumer.accept(FramedBlockRenderProperties.INSTANCE);
     }
 
 

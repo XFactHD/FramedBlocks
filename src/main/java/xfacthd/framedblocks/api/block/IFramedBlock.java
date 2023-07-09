@@ -6,6 +6,7 @@ import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.Entity;
@@ -32,8 +33,7 @@ import org.jetbrains.annotations.Nullable;
 import xfacthd.framedblocks.api.FramedBlocksAPI;
 import xfacthd.framedblocks.api.block.cache.IStateCacheAccessor;
 import xfacthd.framedblocks.api.block.cache.StateCache;
-import xfacthd.framedblocks.api.block.render.AppearanceHelper;
-import xfacthd.framedblocks.api.block.render.CullingHelper;
+import xfacthd.framedblocks.api.block.render.*;
 import xfacthd.framedblocks.api.block.update.CullingUpdateTracker;
 import xfacthd.framedblocks.api.camo.CamoContainer;
 import xfacthd.framedblocks.api.predicate.cull.SideSkipPredicate;
@@ -388,20 +388,6 @@ public interface IFramedBlock extends EntityBlock, IForgeBlock
         return state.getCollisionShape(level, pos, ctx);
     }
 
-    default void spawnCamoDestroyParticles(Level level, Player player, BlockPos pos, BlockState state)
-    {
-        BlockState particleState = state;
-        if (level.getBlockEntity(pos) instanceof FramedBlockEntity be)
-        {
-            particleState = be.getCamo().getState();
-            if (particleState.isAir())
-            {
-                particleState = be.getBlockState();
-            }
-        }
-        level.levelEvent(player, LevelEvent.PARTICLES_DESTROY_BLOCK, pos, Block.getId(particleState));
-    }
-
     default float getCamoShadeBrightness(BlockState state, BlockGetter level, BlockPos pos, float ownShade)
     {
         if (level.getBlockEntity(pos) instanceof FramedBlockEntity be && !be.getCamo().isEmpty())
@@ -409,6 +395,30 @@ public interface IFramedBlock extends EntityBlock, IForgeBlock
             return Math.max(ownShade, be.getCamo().getState().getShadeBrightness(level, pos));
         }
         return ownShade;
+    }
+
+    @Override
+    default boolean addRunningEffects(BlockState state, Level level, BlockPos pos, Entity entity)
+    {
+        if (level.getBlockEntity(pos) instanceof FramedBlockEntity be)
+        {
+            ParticleHelper.spawnRunningParticles(be.getCamo().getState(), level, pos, entity);
+            return true;
+        }
+        return false;
+    }
+
+    @Override
+    default boolean addLandingEffects(
+            BlockState state, ServerLevel level, BlockPos pos, BlockState sameState, LivingEntity entity, int count
+    )
+    {
+        if (level.getBlockEntity(pos) instanceof FramedBlockEntity be)
+        {
+            ParticleHelper.spawnLandingParticles(be.getCamo().getState(), level, pos, entity, count);
+            return true;
+        }
+        return false;
     }
 
     @Override

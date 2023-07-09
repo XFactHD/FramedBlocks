@@ -6,11 +6,8 @@ import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
-import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.Tuple;
 import net.minecraft.world.entity.Entity;
-import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.*;
 import net.minecraft.world.level.block.*;
 import net.minecraft.world.level.block.entity.BlockEntity;
@@ -54,37 +51,6 @@ public abstract class AbstractFramedDoubleBlock extends FramedBlock implements I
     }
 
     @Override
-    protected void spawnDestroyParticles(Level level, Player player, BlockPos pos, BlockState state)
-    {
-        if (level.isClientSide() && level.getBlockEntity(pos) instanceof FramedDoubleBlockEntity be)
-        {
-            BlockState defaultState = be.getBlockState();
-            BlockState camoOne = be.getCamo().getState();
-            BlockState camoTwo = be.getCamoTwo().getState();
-
-            level.levelEvent(player, LevelEvent.PARTICLES_DESTROY_BLOCK, pos, getId(camoOne.isAir() ? defaultState : camoOne));
-            if (camoOne != camoTwo)
-            {
-                level.levelEvent(player, LevelEvent.PARTICLES_DESTROY_BLOCK, pos, getId(camoTwo.isAir() ? defaultState : camoTwo));
-            }
-        }
-    }
-
-    @Override
-    public boolean addRunningEffects(BlockState state, Level level, BlockPos pos, Entity entity)
-    {
-        return addCamoRunningEffects(state, level, pos, entity);
-    }
-
-    @Override
-    public boolean addLandingEffects(
-            BlockState state, ServerLevel level, BlockPos pos, BlockState sameState, LivingEntity entity, int count
-    )
-    {
-        return addCamoLandingEffects(state, level, pos, entity, count);
-    }
-
-    @Override
     @Nullable
     public BlockState runOcclusionTestAndGetLookupState(
             SideSkipPredicate pred, BlockGetter level, BlockPos pos, BlockState state, BlockState adjState, Direction side
@@ -118,7 +84,7 @@ public abstract class AbstractFramedDoubleBlock extends FramedBlock implements I
     @Override
     public void initializeClient(Consumer<IClientBlockExtensions> consumer)
     {
-        consumer.accept(new FramedDoubleBlockRenderProperties());
+        consumer.accept(FramedDoubleBlockRenderProperties.INSTANCE);
     }
 
     @Override

@@ -100,12 +100,6 @@ public class FramedRedstoneBlock extends PoweredBlock implements IFramedBlock
     }
 
     @Override
-    protected void spawnDestroyParticles(Level level, Player player, BlockPos pos, BlockState state)
-    {
-        spawnCamoDestroyParticles(level, player, pos, state);
-    }
-
-    @Override
     public float getShadeBrightness(BlockState state, BlockGetter level, BlockPos pos)
     {
         return getCamoShadeBrightness(state, level, pos, super.getShadeBrightness(state, level, pos));
@@ -142,7 +136,7 @@ public class FramedRedstoneBlock extends PoweredBlock implements IFramedBlock
     @Override
     public void initializeClient(Consumer<IClientBlockExtensions> consumer)
     {
-        consumer.accept(new FramedBlockRenderProperties());
+        consumer.accept(FramedBlockRenderProperties.INSTANCE);
     }
 
     @Override

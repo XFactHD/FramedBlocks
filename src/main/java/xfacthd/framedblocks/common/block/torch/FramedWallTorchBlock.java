@@ -16,11 +16,14 @@ import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.material.PushReaction;
 import net.minecraft.world.level.storage.loot.LootParams;
 import net.minecraft.world.phys.BlockHitResult;
+import net.minecraftforge.client.extensions.common.IClientBlockExtensions;
 import xfacthd.framedblocks.api.block.FramedProperties;
 import xfacthd.framedblocks.api.block.IFramedBlock;
+import xfacthd.framedblocks.api.block.render.FramedBlockRenderProperties;
 import xfacthd.framedblocks.common.data.BlockType;
 
 import java.util.List;
+import java.util.function.Consumer;
 
 @SuppressWarnings("deprecation")
 public class FramedWallTorchBlock extends WallTorchBlock implements IFramedBlock
@@ -63,12 +66,6 @@ public class FramedWallTorchBlock extends WallTorchBlock implements IFramedBlock
     }
 
     @Override
-    protected void spawnDestroyParticles(Level level, Player player, BlockPos pos, BlockState state)
-    {
-        spawnCamoDestroyParticles(level, player, pos, state);
-    }
-
-    @Override
     public float getShadeBrightness(BlockState state, BlockGetter level, BlockPos pos)
     {
         return getCamoShadeBrightness(state, level, pos, super.getShadeBrightness(state, level, pos));
@@ -100,5 +97,14 @@ public class FramedWallTorchBlock extends WallTorchBlock implements IFramedBlock
     }
 
     @Override
-    public BlockType getBlockType() { return BlockType.FRAMED_WALL_TORCH; }
+    public BlockType getBlockType()
+    {
+        return BlockType.FRAMED_WALL_TORCH;
+    }
+
+    @Override
+    public void initializeClient(Consumer<IClientBlockExtensions> consumer)
+    {
+        consumer.accept(FramedBlockRenderProperties.INSTANCE);
+    }
 }

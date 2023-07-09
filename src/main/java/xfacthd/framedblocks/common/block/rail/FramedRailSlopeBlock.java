@@ -20,7 +20,9 @@ import net.minecraft.world.level.material.Fluids;
 import net.minecraft.world.level.storage.loot.LootParams;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.shapes.*;
+import net.minecraftforge.client.extensions.common.IClientBlockExtensions;
 import xfacthd.framedblocks.api.block.*;
+import xfacthd.framedblocks.api.block.render.FramedBlockRenderProperties;
 import xfacthd.framedblocks.api.shapes.ShapeProvider;
 import xfacthd.framedblocks.api.util.Utils;
 import xfacthd.framedblocks.common.FBContent;
@@ -32,6 +34,7 @@ import xfacthd.framedblocks.common.util.FramedUtils;
 import javax.annotation.Nullable;
 import java.util.List;
 import java.util.function.BiFunction;
+import java.util.function.Consumer;
 
 @SuppressWarnings("deprecation")
 public class FramedRailSlopeBlock extends BaseRailBlock implements IFramedBlock
@@ -158,12 +161,6 @@ public class FramedRailSlopeBlock extends BaseRailBlock implements IFramedBlock
     }
 
     @Override
-    protected void spawnDestroyParticles(Level level, Player player, BlockPos pos, BlockState state)
-    {
-        spawnCamoDestroyParticles(level, player, pos, state);
-    }
-
-    @Override
     public float getShadeBrightness(BlockState state, BlockGetter level, BlockPos pos)
     {
         return getCamoShadeBrightness(state, level, pos, super.getShadeBrightness(state, level, pos));
@@ -236,6 +233,12 @@ public class FramedRailSlopeBlock extends BaseRailBlock implements IFramedBlock
     public BlockType getBlockType()
     {
         return type;
+    }
+
+    @Override
+    public void initializeClient(Consumer<IClientBlockExtensions> consumer)
+    {
+        consumer.accept(FramedBlockRenderProperties.INSTANCE);
     }
 
 
