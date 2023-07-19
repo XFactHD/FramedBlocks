@@ -336,22 +336,6 @@ public abstract class FramedDoubleBlockEntity extends FramedBlockEntity
         calculateSolidityChecks();
     }
 
-    @Override
-    public void onLoad()
-    {
-        BlockState state = getBlockState();
-        super.onLoad();
-        if (state != getBlockState())
-        {
-            // State was updated in super call -> no point in recalculating things below again
-            return;
-        }
-
-        // These can't happen in the constructor due to some implementations using variables initialized in their constructor
-        collectCamoGetters();
-        calculateSolidityChecks();
-    }
-
     private void collectCamoGetters()
     {
         Utils.forAllDirections(false, side -> Utils.forAllDirections(edge ->
@@ -534,6 +518,10 @@ public abstract class FramedDoubleBlockEntity extends FramedBlockEntity
     {
         super.initModelData();
         modelData.setCamoState(camoContainer.getState());
+        // These can't happen in the constructor due to some implementations using variables initialized in their constructor
+        // Must happen here instead because Create trains don't call onLoad()
+        collectCamoGetters();
+        calculateSolidityChecks();
     }
 
     /*
