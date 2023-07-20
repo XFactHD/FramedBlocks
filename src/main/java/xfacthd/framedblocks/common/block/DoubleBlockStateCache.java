@@ -6,6 +6,8 @@ import xfacthd.framedblocks.api.block.cache.StateCache;
 import xfacthd.framedblocks.api.type.IBlockType;
 import xfacthd.framedblocks.common.util.DoubleBlockTopInteractionMode;
 
+import java.util.Objects;
+
 public class DoubleBlockStateCache extends StateCache
 {
     private final DoubleBlockTopInteractionMode topInteractionMode;
@@ -27,5 +29,24 @@ public class DoubleBlockStateCache extends StateCache
     public final Tuple<BlockState, BlockState> getBlockPair()
     {
         return statePair;
+    }
+
+    @Override
+    public boolean equals(Object other)
+    {
+        if (!super.equals(other))
+        {
+            return false;
+        }
+        DoubleBlockStateCache that = (DoubleBlockStateCache) other;
+        return topInteractionMode == that.topInteractionMode &&
+                statePair.getA() == that.statePair.getA() &&
+                statePair.getB() == that.statePair.getB();
+    }
+
+    @Override
+    public int hashCode()
+    {
+        return Objects.hash(super.hashCode(), topInteractionMode, statePair.getA(), statePair.getB());
     }
 }

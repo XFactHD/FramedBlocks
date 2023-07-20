@@ -8,6 +8,14 @@ import xfacthd.framedblocks.api.predicate.fullface.FullFacePredicate;
 import xfacthd.framedblocks.api.type.IBlockType;
 import xfacthd.framedblocks.api.util.Utils;
 
+import java.util.Arrays;
+import java.util.Objects;
+
+/**
+ * Cache for constant metadata related to a specific {@link BlockState}.
+ * @apiNote Custom implementations must override {@link #equals(Object)} and {@link #hashCode()}
+ * in order for cache deduplication to work properly
+ */
 public class StateCache
 {
     private static final Direction[] DIRECTIONS = Direction.values();
@@ -79,5 +87,33 @@ public class StateCache
     public final boolean canConnectDetailed(Direction side, Direction edge)
     {
         return conDetailed != null && conDetailed[side.ordinal()][edge.ordinal()];
+    }
+
+    @Override
+    public boolean equals(Object other)
+    {
+        if (this == other)
+        {
+            return true;
+        }
+        if (other == null || getClass() != other.getClass())
+        {
+            return false;
+        }
+        StateCache that = (StateCache) other;
+        return anyFullFace == that.anyFullFace &&
+                Arrays.equals(fullFace, that.fullFace) &&
+                Arrays.deepEquals(conFullEdge, that.conFullEdge) &&
+                Arrays.deepEquals(conDetailed, that.conDetailed);
+    }
+
+    @Override
+    public int hashCode()
+    {
+        int result = Objects.hash(anyFullFace);
+        result = 31 * result + Arrays.hashCode(fullFace);
+        result = 31 * result + Arrays.deepHashCode(conFullEdge);
+        result = 31 * result + Arrays.deepHashCode(conDetailed);
+        return result;
     }
 }

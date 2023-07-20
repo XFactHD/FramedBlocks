@@ -19,6 +19,7 @@ import xfacthd.framedblocks.FramedBlocks;
 import xfacthd.framedblocks.api.block.FramedBlockEntity;
 import xfacthd.framedblocks.api.block.IFramedBlock;
 import xfacthd.framedblocks.api.block.cache.IStateCacheAccessor;
+import xfacthd.framedblocks.api.block.cache.StateCache;
 import xfacthd.framedblocks.api.camo.EmptyCamoContainer;
 import xfacthd.framedblocks.api.camo.CamoContainer;
 import xfacthd.framedblocks.api.util.FramedConstants;
@@ -468,8 +469,9 @@ public final class FBContent
 
     public static void initializeStateCache()
     {
-        FramedBlocks.LOGGER.debug("Initializing custom state metadata cache");
+        FramedBlocks.LOGGER.debug("Initializing custom state metadata caches");
         Stopwatch watch = Stopwatch.createStarted();
+        Map<Block, List<StateCache>> dedupMap = new HashMap<>();
         long count = ForgeRegistries.BLOCKS.getValues()
                 .stream()
                 .filter(block -> block instanceof IFramedBlock)
@@ -477,10 +479,10 @@ public final class FBContent
                 .map(StateDefinition::getPossibleStates)
                 .flatMap(List::stream)
                 .map(IStateCacheAccessor.class::cast)
-                .peek(IStateCacheAccessor::framedblocks$initCache)
+                .peek(acc -> acc.framedblocks$initCache(dedupMap))
                 .count();
         watch.stop();
-        FramedBlocks.LOGGER.debug("Initialized {} caches in {}", count, watch);
+        FramedBlocks.LOGGER.debug("Initialized caches for {} states in {}", count, watch);
     }
 
     public static Collection<RegistryObject<Block>> getRegisteredBlocks()
