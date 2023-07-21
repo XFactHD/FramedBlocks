@@ -518,6 +518,12 @@ public abstract class FramedDoubleBlockEntity extends FramedBlockEntity
     {
         super.initModelData();
         modelData.setCamoState(camoContainer.getState());
+    }
+
+    @Override
+    public void setLevel(Level level)
+    {
+        super.setLevel(level);
         // These can't happen in the constructor due to some implementations using variables initialized in their constructor
         // Must happen here instead because Create trains don't call onLoad()
         collectCamoGetters();
