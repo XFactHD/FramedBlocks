@@ -48,12 +48,6 @@ public final class AppearanceHelper
             return AIR;
         }
 
-        Direction edge = findFirstSuitableDirectionFromOffset(pos, queryPos, side, $ -> true);
-        if (edge == null)
-        {
-            return AIR;
-        }
-
         BlockState actualQueryState = findApplicableNeighbor(level, queryPos, queryState);
         if (actualQueryState == AIR)
         {
@@ -61,6 +55,7 @@ public final class AppearanceHelper
             return AIR;
         }
 
+        Direction edge = findFirstSuitableDirectionFromOffset(pos, queryPos, side, $ -> true);
         StateCache stateCache = framedBlock.getCache(state);
         if (framedBlock.getBlockType().isDoubleBlock())
         {
@@ -72,6 +67,11 @@ public final class AppearanceHelper
                     {
                         return getCamo(level, pos, side, edge);
                     }
+                    return AIR;
+                }
+
+                if (edge == null)
+                {
                     return AIR;
                 }
 
@@ -92,6 +92,12 @@ public final class AppearanceHelper
             {
                 return getCamo(level, pos, state);
             }
+            return AIR;
+        }
+
+        if (edge == null)
+        {
+            // If the edge is null here, then there is no point in checking further
             return AIR;
         }
 
@@ -128,6 +134,11 @@ public final class AppearanceHelper
             BlockPos pos, BlockPos queryPos, Direction side, Predicate<Direction> pred
     )
     {
+        if (pos.equals(queryPos))
+        {
+            return null;
+        }
+
         int nx = queryPos.getX() - pos.getX();
         int ny = queryPos.getY() - pos.getY();
         int nz = queryPos.getZ() - pos.getZ();
@@ -194,7 +205,7 @@ public final class AppearanceHelper
     }
 
     private static boolean canDoubleBlockConnectFullEdgeTo(
-            BlockPos pos, BlockPos queryPos, BlockState queryState, Direction side, Direction edge
+            BlockPos pos, BlockPos queryPos, BlockState queryState, Direction side, @Nullable Direction edge
     )
     {
         if (!(queryState.getBlock() instanceof IFramedBlock block))
@@ -210,11 +221,15 @@ public final class AppearanceHelper
             // CT impl is trying to check connection occlusion => check opposite side
             side = side.getOpposite();
         }
-        return block.getCache(queryState).canConnectFullEdge(side, edge.getOpposite());
+        if (edge != null)
+        {
+            edge = edge.getOpposite();
+        }
+        return block.getCache(queryState).canConnectFullEdge(side, edge);
     }
 
     private static boolean isNotFramedOrCanConnectFullEdgeTo(
-            BlockPos pos, BlockPos queryPos, BlockState queryState, Direction side, Direction edge
+            BlockPos pos, BlockPos queryPos, BlockState queryState, Direction side, @Nullable Direction edge
     )
     {
         if (queryState != null && queryState.getBlock() instanceof IFramedBlock block)
@@ -227,7 +242,11 @@ public final class AppearanceHelper
                 // CT impl is trying to check connection occlusion => check opposite side
                 side = side.getOpposite();
             }
-            return block.getCache(queryState).canConnectFullEdge(side, edge.getOpposite());
+            if (edge != null)
+            {
+                edge = edge.getOpposite();
+            }
+            return block.getCache(queryState).canConnectFullEdge(side, edge);
         }
         return true;
     }
