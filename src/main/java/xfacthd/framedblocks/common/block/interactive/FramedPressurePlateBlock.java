@@ -83,7 +83,7 @@ public class FramedPressurePlateBlock extends PressurePlateBlock implements IFra
             {
                 Utils.wrapInStateCopy(level, pos, player, ItemStack.EMPTY, false, false, () ->
                 {
-                    BlockState newState = FBContent.byType(WATERLOGGING_SWITCH.get(type)).defaultBlockState();
+                    BlockState newState = getCounterpart().defaultBlockState();
                     level.setBlockAndUpdate(pos, newState);
                 });
             }
@@ -143,6 +143,11 @@ public class FramedPressurePlateBlock extends PressurePlateBlock implements IFra
     public void initializeClient(Consumer<IClientBlockExtensions> consumer)
     {
         consumer.accept(FramedBlockRenderProperties.INSTANCE);
+    }
+
+    protected final Block getCounterpart()
+    {
+        return FBContent.byType(WATERLOGGING_SWITCH.get(type));
     }
 
 
