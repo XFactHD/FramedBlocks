@@ -482,7 +482,8 @@ public final class FBContent
                 .peek(acc -> acc.framedblocks$initCache(dedupMap))
                 .count();
         watch.stop();
-        FramedBlocks.LOGGER.debug("Initialized caches for {} states in {}", count, watch);
+        long unique = dedupMap.values().stream().mapToLong(List::size).sum();
+        FramedBlocks.LOGGER.debug("Initialized {} unique caches for {} states in {}", unique, count, watch);
     }
 
     public static Collection<RegistryObject<Block>> getRegisteredBlocks()
