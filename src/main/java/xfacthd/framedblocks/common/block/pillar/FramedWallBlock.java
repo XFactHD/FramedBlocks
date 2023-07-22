@@ -113,6 +113,12 @@ public class FramedWallBlock extends WallBlock implements IFramedBlock
     }
 
     @Override
+    public boolean doesBlockOccludeBeaconBeam(BlockState state, LevelReader level, BlockPos pos)
+    {
+        return true;
+    }
+
+    @Override
     public BlockType getBlockType()
     {
         return BlockType.FRAMED_WALL;

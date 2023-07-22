@@ -134,6 +134,12 @@ public class FramedRedstoneBlock extends PoweredBlock implements IFramedBlock
     }
 
     @Override
+    public boolean doesBlockOccludeBeaconBeam(BlockState state, LevelReader level, BlockPos pos)
+    {
+        return true;
+    }
+
+    @Override
     public void initializeClient(Consumer<IClientBlockExtensions> consumer)
     {
         consumer.accept(FramedBlockRenderProperties.INSTANCE);

@@ -230,6 +230,12 @@ public class FramedDetectorRailSlopeBlock extends DetectorRailBlock implements I
     }
 
     @Override
+    public boolean doesBlockOccludeBeaconBeam(BlockState state, LevelReader level, BlockPos pos)
+    {
+        return true;
+    }
+
+    @Override
     public final BlockEntity newBlockEntity(BlockPos pos, BlockState state)
     {
         return beFactory.apply(pos, state);
