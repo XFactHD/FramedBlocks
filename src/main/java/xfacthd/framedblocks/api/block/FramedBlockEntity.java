@@ -884,7 +884,7 @@ public class FramedBlockEntity extends BlockEntity
             needCullingUpdate = true;
         }
 
-        boolean newReinforced = nbt.getBoolean("reinforced");
+        boolean newReinforced = readFlag(flags, FLAG_REINFORCED);
         if (newReinforced != reinforced)
         {
             reinforced = newReinforced;
