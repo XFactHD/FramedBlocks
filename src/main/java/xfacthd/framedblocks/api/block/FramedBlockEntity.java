@@ -781,6 +781,26 @@ public class FramedBlockEntity extends BlockEntity
         return state.is(Utils.CAMO_SUSTAIN_PLANT) && state.canSustainPlant(be.level, be.worldPosition, side, plant);
     }
 
+    public boolean doesCamoPreventDestructionByEntity(Entity entity)
+    {
+        if (reinforced && !Blocks.OBSIDIAN.defaultBlockState().canEntityDestroy(level, worldPosition, entity))
+        {
+            return false;
+        }
+        return doesCamoPreventDestructionByEntity(this, camoContainer, entity);
+    }
+
+    protected static boolean doesCamoPreventDestructionByEntity(FramedBlockEntity be, CamoContainer camo, Entity entity)
+    {
+        if (camo.isEmpty())
+        {
+            return false;
+        }
+
+        BlockState state = camo.getState();
+        return !state.canEntityDestroy(be.level, be.worldPosition, entity);
+    }
+
     @Override
     public void onLoad()
     {

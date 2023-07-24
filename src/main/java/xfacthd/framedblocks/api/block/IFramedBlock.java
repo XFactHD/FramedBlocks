@@ -583,6 +583,19 @@ public interface IFramedBlock extends EntityBlock, IForgeBlock
     }
 
     @Override
+    default boolean canEntityDestroy(BlockState state, BlockGetter level, BlockPos pos, Entity entity)
+    {
+        if (level.getBlockEntity(pos) instanceof FramedBlockEntity be)
+        {
+            if (be.doesCamoPreventDestructionByEntity(entity))
+            {
+                return false;
+            }
+        }
+        return IForgeBlock.super.canEntityDestroy(state, level, pos, entity);
+    }
+
+    @Override
     default BlockEntity newBlockEntity(BlockPos pos, BlockState state)
     {
         return new FramedBlockEntity(pos, state);

@@ -202,6 +202,16 @@ public abstract class FramedDoubleBlockEntity extends FramedBlockEntity
     }
 
     @Override
+    public boolean doesCamoPreventDestructionByEntity(Entity entity)
+    {
+        if (super.doesCamoPreventDestructionByEntity(entity))
+        {
+            return true;
+        }
+        return doesCamoPreventDestructionByEntity(this, camoContainer, entity);
+    }
+
+    @Override
     protected boolean isCamoSolid()
     {
         if (camoContainer.isEmpty())
