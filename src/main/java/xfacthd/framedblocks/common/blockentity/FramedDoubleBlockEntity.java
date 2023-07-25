@@ -94,10 +94,10 @@ public abstract class FramedDoubleBlockEntity extends FramedBlockEntity
     public int getLightValue() { return Math.max(camoContainer.getState().getLightEmission(), super.getLightValue()); }
 
     @Override
-    public void addCamoDrops(List<ItemStack> drops)
+    public void addAdditionalDrops(List<ItemStack> drops, boolean dropCamo)
     {
-        super.addCamoDrops(drops);
-        if (!camoContainer.isEmpty())
+        super.addAdditionalDrops(drops, dropCamo);
+        if (dropCamo && !camoContainer.isEmpty())
         {
             drops.add(camoContainer.toItemStack(ItemStack.EMPTY));
         }
