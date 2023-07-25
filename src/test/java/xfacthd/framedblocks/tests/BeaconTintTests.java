@@ -109,8 +109,8 @@ public final class BeaconTintTests
             {
                 case FRAMED_PILLAR -> state.setValue(BlockStateProperties.AXIS, Direction.Axis.Y);
                 case FRAMED_HALF_PILLAR -> state.setValue(BlockStateProperties.FACING, Direction.DOWN);
-                case FRAMED_PRISM -> state.setValue(BlockStateProperties.FACING, Direction.UP);
-                case FRAMED_SLOPED_PRISM -> state.setValue(BlockStateProperties.FACING, Direction.UP).setValue(PropertyHolder.ORIENTATION, Direction.NORTH);
+                case FRAMED_PRISM, FRAMED_DOUBLE_PRISM -> state.setValue(BlockStateProperties.FACING, Direction.UP);
+                case FRAMED_SLOPED_PRISM, FRAMED_DOUBLE_SLOPED_PRISM -> state.setValue(BlockStateProperties.FACING, Direction.UP).setValue(PropertyHolder.ORIENTATION, Direction.NORTH);
                 case FRAMED_DOUBLE_STAIRS, FRAMED_VERTICAL_DOUBLE_STAIRS -> state.setValue(FramedProperties.FACING_HOR, Direction.SOUTH);
                 case FRAMED_LARGE_BUTTON, FRAMED_LARGE_STONE_BUTTON -> state.setValue(BlockStateProperties.ATTACH_FACE, AttachFace.FLOOR);
                 default -> state;

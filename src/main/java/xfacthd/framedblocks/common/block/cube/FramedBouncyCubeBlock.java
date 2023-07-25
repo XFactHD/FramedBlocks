@@ -103,5 +103,11 @@ public class FramedBouncyCubeBlock extends SlimeBlock implements IFramedBlock
     }
 
     @Override
+    public boolean doesBlockOccludeBeaconBeam(BlockState state, LevelReader level, BlockPos pos)
+    {
+        return true;
+    }
+
+    @Override
     public IBlockType getBlockType() { return BlockType.FRAMED_BOUNCY_CUBE; }
 }
