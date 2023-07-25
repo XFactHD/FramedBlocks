@@ -509,7 +509,7 @@ public final class HalfStairsSkipPredicate implements SideSkipPredicate
                     right ? dir.getClockWise() : dir.getCounterClockWise()
             );
         }
-        else if ((!top && side == Direction.DOWN) || (top && side == Direction.UP))
+        else if ((!top && side == Direction.UP) || (top && side == Direction.DOWN))
         {
             return CornerDir.fromDirections(
                     side,

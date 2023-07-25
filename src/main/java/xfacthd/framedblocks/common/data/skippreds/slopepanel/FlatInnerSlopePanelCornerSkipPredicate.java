@@ -498,9 +498,11 @@ public final class FlatInnerSlopePanelCornerSkipPredicate implements SideSkipPre
 
     public static HalfTriangleDir getTriDir(Direction dir, HorizontalRotation rot, boolean front, Direction side)
     {
-        if (side == rot.withFacing(dir) || side == rot.rotate(Rotation.COUNTERCLOCKWISE_90).withFacing(dir))
+        Direction rotDir = rot.withFacing(dir);
+        Direction perpRotDir = rot.rotate(Rotation.COUNTERCLOCKWISE_90).withFacing(dir);
+        if (side == rotDir || side == perpRotDir)
         {
-            Direction shortEdge = rot.getOpposite().withFacing(dir);
+            Direction shortEdge = side == rotDir ? perpRotDir.getOpposite() : rotDir.getOpposite();
             return HalfTriangleDir.fromDirections(dir, shortEdge, !front);
         }
         return HalfTriangleDir.NULL;

@@ -76,7 +76,7 @@ public enum BlockType implements IBlockType
     FRAMED_WATERLOGGABLE_GOLD_PRESSURE_PLATE        (false, false, false,  true, false, false, false, false),
     FRAMED_IRON_PRESSURE_PLATE                      (false, false, false, false,  true, false, false, false),
     FRAMED_WATERLOGGABLE_IRON_PRESSURE_PLATE        (false, false, false,  true, false, false, false, false),
-    FRAMED_LADDER                                   (false, false, false,  true,  true, false, false, false),
+    FRAMED_LADDER                                   (false, false, false,  true,  true, false, false, false, CtmPredicate.FALSE, new LadderSkipPredicate()),
     FRAMED_BUTTON                                   (false, false, false, false,  true, false, false, false),
     FRAMED_STONE_BUTTON                             (false, false, false, false,  true, false, false, false),
     FRAMED_LARGE_BUTTON                             (false, false, false, false,  true, false, false, false),
