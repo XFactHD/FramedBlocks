@@ -7,6 +7,7 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.PressurePlateBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.storage.loot.LootContext;
@@ -62,7 +63,7 @@ public class FramedPressurePlateBlock extends PressurePlateBlock implements IFra
             {
                 Utils.wrapInStateCopy(level, pos, player, ItemStack.EMPTY, false, false, () ->
                 {
-                    BlockState newState = FBContent.byType(WATERLOGGING_SWITCH.get(type)).defaultBlockState();
+                    BlockState newState = getCounterpart().defaultBlockState();
                     level.setBlockAndUpdate(pos, newState);
                 });
             }
@@ -102,6 +103,11 @@ public class FramedPressurePlateBlock extends PressurePlateBlock implements IFra
 
     @Override
     public BlockType getBlockType() { return type; }
+
+    protected final Block getCounterpart()
+    {
+        return FBContent.byType(WATERLOGGING_SWITCH.get(type));
+    }
 
 
 

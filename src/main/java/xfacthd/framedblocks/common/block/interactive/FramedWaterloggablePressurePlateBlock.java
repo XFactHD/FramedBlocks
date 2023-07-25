@@ -2,7 +2,10 @@ package xfacthd.framedblocks.common.block.interactive;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.context.BlockPlaceContext;
+import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.SimpleWaterloggedBlock;
@@ -11,6 +14,7 @@ import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.material.FluidState;
 import net.minecraft.world.level.material.Fluids;
+import net.minecraft.world.phys.HitResult;
 import xfacthd.framedblocks.common.data.BlockType;
 
 public class FramedWaterloggablePressurePlateBlock extends FramedPressurePlateBlock implements SimpleWaterloggedBlock
@@ -55,5 +59,11 @@ public class FramedWaterloggablePressurePlateBlock extends FramedPressurePlateBl
             return Fluids.WATER.getSource(false);
         }
         return Fluids.EMPTY.defaultFluidState();
+    }
+
+    @Override
+    public ItemStack getCloneItemStack(BlockState state, HitResult target, BlockGetter level, BlockPos pos, Player player)
+    {
+        return new ItemStack(getCounterpart());
     }
 }
