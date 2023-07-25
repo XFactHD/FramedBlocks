@@ -15,6 +15,7 @@ public final class ClientConfig
     public static final ClientConfig INSTANCE;
 
     private static final String KEY_SHOW_GHOST_BLOCKS = "showGhostBlocks";
+    private static final String KEY_ALT_GHOST_RENDERER = "altGhostRenderer";
     private static final String KEY_FANCY_HITBOXES = "fancyHitboxes";
     private static final String KEY_DETAILED_CULLING = "detailedCulling";
     private static final String KEY_USE_DISCRETE_UV_STEPS = "discreteUVSteps";
@@ -29,6 +30,7 @@ public final class ClientConfig
     private static final String KEY_FRAME_BACKGROUND_MODE = "itemFrameBackgroundMode";
 
     public static final String TRANSLATION_SHOW_GHOST_BLOCKS = translate(KEY_SHOW_GHOST_BLOCKS);
+    public static final String TRANSLATION_ALT_GHOST_RENDERER = translate(KEY_ALT_GHOST_RENDERER);
     public static final String TRANSLATION_FANCY_HITBOXES = translate(KEY_FANCY_HITBOXES);
     public static final String TRANSLATION_DETAILED_CULLING = translate(KEY_DETAILED_CULLING);
     public static final String TRANSLATION_USE_DISCRETE_UV_STEPS = translate(KEY_USE_DISCRETE_UV_STEPS);
@@ -47,6 +49,7 @@ public final class ClientConfig
     private static final String COMMENT_OVERLAY_DETAILED = "If set to DETAILED, the %s overlay will show detailed info";
 
     public static boolean showGhostBlocks = false;
+    public static boolean altGhostRenderer = false;
     public static boolean fancyHitboxes = false;
     public static boolean detailedCulling = false;
     public static boolean useDiscreteUVSteps = false;
@@ -61,6 +64,7 @@ public final class ClientConfig
     public static BlockInteractOverlay.Mode frameBackgroundMode;
 
     private final ForgeConfigSpec.BooleanValue showGhostBlocksValue;
+    private final ForgeConfigSpec.BooleanValue altGhostRendererValue;
     private final ForgeConfigSpec.BooleanValue fancyHitboxesValue;
     private final ForgeConfigSpec.BooleanValue detailedCullingValue;
     private final ForgeConfigSpec.BooleanValue useDiscreteUVStepsValue;
@@ -91,6 +95,10 @@ public final class ClientConfig
                 .comment("Wether ghost blocks are shown when you are holding a framed block")
                 .translation(TRANSLATION_SHOW_GHOST_BLOCKS)
                 .define(KEY_SHOW_GHOST_BLOCKS, true);
+        altGhostRendererValue = builder
+                .comment("If true, an alternate renderer will be used for the placement preview. May solve issues with certain shaders")
+                .translation(TRANSLATION_ALT_GHOST_RENDERER)
+                .define(KEY_ALT_GHOST_RENDERER, false);
         fancyHitboxesValue = builder
                 .comment("Wether certain framed blocks should show fancy hitboxes")
                 .translation(TRANSLATION_FANCY_HITBOXES)
@@ -179,6 +187,7 @@ public final class ClientConfig
         if (event.getConfig().getType() == ModConfig.Type.CLIENT && event.getConfig().getSpec() == SPEC)
         {
             showGhostBlocks = showGhostBlocksValue.get();
+            altGhostRenderer = altGhostRendererValue.get();
             fancyHitboxes = fancyHitboxesValue.get();
             detailedCulling = detailedCullingValue.get();
             useDiscreteUVSteps = useDiscreteUVStepsValue.get();

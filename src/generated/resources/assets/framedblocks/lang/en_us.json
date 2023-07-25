@@ -141,6 +141,7 @@
   "block.framedblocks.framed_waterloggable_stone_pressure_plate": "Framed Stone Pressure Plate",
   "block.framedblocks.framing_saw": "Framing Saw",
   "button.framedblocks.gui.done": "Done",
+  "config.framedblocks.client.altGhostRenderer": "Use alternative placement preview renderer",
   "config.framedblocks.client.conTexMode": "Connected textures mode",
   "config.framedblocks.client.detailedCulling": "Detailed culling",
   "config.framedblocks.client.discreteUVSteps": "Use discrete UV steps",

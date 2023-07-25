@@ -152,9 +152,13 @@ public final class GhostBlockRenderer
 
     private static void doRenderGhostBlock(PoseStack mstack, MultiBufferSource.BufferSource buffers, BlockPos renderPos, BlockState renderState, ModelData modelData)
     {
+        RenderType bufferType = ClientConfig.altGhostRenderer ?
+                Sheets.translucentCullBlockSheet() :
+                ForgeRenderTypes.TRANSLUCENT_ON_PARTICLES_TARGET.get();
+
         mc().getProfiler().push("buffer");
         Vec3 offset = Vec3.atLowerCornerOf(renderPos).subtract(mc().gameRenderer.getMainCamera().getPosition());
-        VertexConsumer builder = new GhostVertexConsumer(buffers.getBuffer(ForgeRenderTypes.TRANSLUCENT_ON_PARTICLES_TARGET.get()), 0xAA);
+        VertexConsumer builder = new GhostVertexConsumer(buffers.getBuffer(bufferType), 0xAA);
         mc().getProfiler().pop(); //buffer
 
         mc().getProfiler().push("draw");
@@ -167,7 +171,7 @@ public final class GhostBlockRenderer
 
         mc().getProfiler().push("upload");
         RenderSystem.enableCull();
-        buffers.endBatch(ForgeRenderTypes.TRANSLUCENT_ON_PARTICLES_TARGET.get());
+        buffers.endBatch(bufferType);
         mc().getProfiler().pop(); //upload
     }
 
