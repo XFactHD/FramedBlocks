@@ -1,6 +1,7 @@
 package xfacthd.framedblocks.client.render;
 
 import com.google.common.base.Preconditions;
+import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import net.minecraft.client.Minecraft;
@@ -165,6 +166,7 @@ public final class GhostBlockRenderer
         mc().getProfiler().pop(); //draw
 
         mc().getProfiler().push("upload");
+        RenderSystem.enableCull();
         buffers.endBatch(ForgeRenderTypes.TRANSLUCENT_ON_PARTICLES_TARGET.get());
         mc().getProfiler().pop(); //upload
     }
