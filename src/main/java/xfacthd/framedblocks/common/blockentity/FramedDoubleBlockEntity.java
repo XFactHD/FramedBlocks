@@ -2,6 +2,7 @@ package xfacthd.framedblocks.common.blockentity;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.util.Tuple;
+import net.minecraft.world.entity.Entity;
 import net.minecraft.world.level.*;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
@@ -144,6 +145,16 @@ public abstract class FramedDoubleBlockEntity extends FramedBlockEntity
             return true;
         }
         return super.shouldCamoDisplayFluidOverlay(level, pos, fluid);
+    }
+
+    @Override
+    public boolean doesCamoPreventDestructionByEntity(Entity entity)
+    {
+        if (super.doesCamoPreventDestructionByEntity(entity))
+        {
+            return true;
+        }
+        return doesCamoPreventDestructionByEntity(this, camoContainer, entity);
     }
 
     @Override

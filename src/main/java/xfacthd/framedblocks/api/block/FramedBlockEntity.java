@@ -9,6 +9,7 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
+import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.*;
 import net.minecraft.world.level.*;
@@ -651,6 +652,26 @@ public class FramedBlockEntity extends BlockEntity
     public boolean shouldCamoDisplayFluidOverlay(BlockAndTintGetter level, BlockPos pos, FluidState fluid)
     {
         return camoContainer.isEmpty() || camoContainer.getState().shouldDisplayFluidOverlay(level, pos, fluid);
+    }
+
+    public boolean doesCamoPreventDestructionByEntity(Entity entity)
+    {
+        if (reinforced && !Blocks.OBSIDIAN.defaultBlockState().canEntityDestroy(level, worldPosition, entity))
+        {
+            return false;
+        }
+        return doesCamoPreventDestructionByEntity(this, camoContainer, entity);
+    }
+
+    protected static boolean doesCamoPreventDestructionByEntity(FramedBlockEntity be, CamoContainer camo, Entity entity)
+    {
+        if (camo.isEmpty())
+        {
+            return false;
+        }
+
+        BlockState state = camo.getState();
+        return !state.canEntityDestroy(be.level, be.worldPosition, entity);
     }
 
     @Override
