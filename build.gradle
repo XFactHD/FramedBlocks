@@ -20,7 +20,7 @@ apply plugin: 'org.spongepowered.mixin'
 
 jarJar.enable()
 
-version = '6.8.4'
+version = '6.8.5'
 group = 'xfacthd.framedblocks'
 archivesBaseName = 'FramedBlocks'
 
@@ -139,7 +139,7 @@ repositories {
 }
 
 dependencies {
-    minecraft 'net.minecraftforge:forge:1.19.2-43.1.57'
+    minecraft 'net.minecraftforge:forge:1.19.2-43.2.14'
 
     compileOnly fg.deobf("curse.maven:ctm-267602:4393695")
 
@@ -152,10 +152,14 @@ dependencies {
     compileOnly(fg.deobf("mezz.jei:jei-1.19.2-forge-api:11.6.0.1010"))
     runtimeOnly(fg.deobf("mezz.jei:jei-1.19.2-forge:11.6.0.1010"))
 
+    //runtimeOnly fg.deobf("curse.maven:structure-gel-api-378802:4489756")
+    //runtimeOnly fg.deobf("curse.maven:blue-skies-312918:3966273")
+
     //runtimeOnly fg.deobf("curse.maven:spark-361579:3767286")
 
-    //runtimeOnly fg.deobf("curse.maven:magnesium_sodium-532724:3556734")
-    //runtimeOnly fg.deobf("curse.maven:rubidium_sodium-574856:3973894")
+    //runtimeOnly fg.deobf("curse.maven:rubidium-574856:4568727")
+    //runtimeOnly fg.deobf("curse.maven:oculus-581495:4578731")
+    //runtimeOnly fg.deobf("curse.maven:modernfix-790626:4593890")
 
     compileOnly fg.deobf("com.simibubi.create:create-1.19.2:0.5.1.a-29:slim") { transitive = false }
     compileOnly fg.deobf("com.jozufozu.flywheel:flywheel-forge-1.19.2:0.6.8.a-14")
