@@ -17,6 +17,7 @@ import net.minecraft.world.phys.shapes.*;
 import xfacthd.framedblocks.api.block.FramedProperties;
 import xfacthd.framedblocks.api.block.IFramedBlock;
 import xfacthd.framedblocks.api.shapes.ShapeProvider;
+import xfacthd.framedblocks.api.shapes.ShapeUtils;
 import xfacthd.framedblocks.api.util.*;
 import xfacthd.framedblocks.common.block.FramedBlock;
 import xfacthd.framedblocks.common.data.BlockType;
@@ -140,22 +141,31 @@ public class FramedFlatElevatedSlopeSlabCornerBlock extends FramedBlock
     {
         ImmutableMap.Builder<BlockState, VoxelShape> builder = ImmutableMap.builder();
 
+        VoxelShape shapeSlopeBottom = FramedSlopeSlabBlock.SHAPES.get(Boolean.FALSE).move(0, .5, 0);
+        VoxelShape shapeSlopeTop = FramedSlopeSlabBlock.SHAPES.get(Boolean.TRUE);
+
+        VoxelShape shapeBottom = ShapeUtils.orUnoptimized(
+                ShapeUtils.andUnoptimized(
+                        shapeSlopeBottom,
+                        ShapeUtils.rotateShapeUnoptimized(Direction.NORTH, Direction.WEST, shapeSlopeBottom)
+                ),
+                box(0, 0, 0, 16, 8, 16)
+        );
+        VoxelShape shapeTop = ShapeUtils.orUnoptimized(
+                ShapeUtils.andUnoptimized(
+                        shapeSlopeTop,
+                        ShapeUtils.rotateShapeUnoptimized(Direction.NORTH, Direction.WEST, shapeSlopeTop)
+                ),
+                box(0, 8, 0, 16, 16, 16)
+        );
+
+        VoxelShape[] shapes = ShapeUtils.makeHorizontalRotationsWithFlag(shapeBottom, shapeTop, Direction.NORTH);
+
         for (BlockState state : states)
         {
-            Direction facing = state.getValue(FramedProperties.FACING_HOR);
+            Direction dir = state.getValue(FramedProperties.FACING_HOR);
             boolean top = state.getValue(FramedProperties.TOP);
-
-            VoxelShape shape = top ? FramedSlopeSlabBlock.SHAPE_TOP : FramedSlopeSlabBlock.SHAPE_BOTTOM.move(0, .5, 0);
-            shape = Shapes.or(shape, box(0, top ? 8 : 0, 0, 16, top ? 16 : 8, 16));
-
-            builder.put(
-                    state,
-                    Shapes.join(
-                            Utils.rotateShape(Direction.NORTH, facing, shape),
-                            Utils.rotateShape(Direction.NORTH, facing.getCounterClockWise(), shape),
-                            BooleanOp.AND
-                    )
-            );
+            builder.put(state, shapes[dir.get2DDataValue() + (top ? 4 : 0)]);
         }
 
         return ShapeProvider.of(builder.build());
@@ -165,21 +175,31 @@ public class FramedFlatElevatedSlopeSlabCornerBlock extends FramedBlock
     {
         ImmutableMap.Builder<BlockState, VoxelShape> builder = ImmutableMap.builder();
 
+        VoxelShape shapeSlopeBottom = FramedSlopeSlabBlock.SHAPES.get(Boolean.FALSE).move(0, .5, 0);
+        VoxelShape shapeSlopeTop = FramedSlopeSlabBlock.SHAPES.get(Boolean.TRUE);
+
+        VoxelShape shapeBottom = ShapeUtils.orUnoptimized(
+                ShapeUtils.orUnoptimized(
+                        shapeSlopeBottom,
+                        ShapeUtils.rotateShapeUnoptimized(Direction.NORTH, Direction.WEST, shapeSlopeBottom)
+                ),
+                box(0, 0, 0, 16, 8, 16)
+        );
+        VoxelShape shapeTop = ShapeUtils.orUnoptimized(
+                ShapeUtils.orUnoptimized(
+                        shapeSlopeTop,
+                        ShapeUtils.rotateShapeUnoptimized(Direction.NORTH, Direction.WEST, shapeSlopeTop)
+                ),
+                box(0, 8, 0, 16, 16, 16)
+        );
+
+        VoxelShape[] shapes = ShapeUtils.makeHorizontalRotationsWithFlag(shapeBottom, shapeTop, Direction.NORTH);
+
         for (BlockState state : states)
         {
-            Direction facing = state.getValue(FramedProperties.FACING_HOR);
+            Direction dir = state.getValue(FramedProperties.FACING_HOR);
             boolean top = state.getValue(FramedProperties.TOP);
-
-            VoxelShape shape = top ? FramedSlopeSlabBlock.SHAPE_TOP : FramedSlopeSlabBlock.SHAPE_BOTTOM.move(0, .5, 0);
-            shape = Shapes.or(shape, box(0, top ? 8 : 0, 0, 16, top ? 16 : 8, 16));
-
-            builder.put(
-                    state,
-                    Shapes.or(
-                            Utils.rotateShape(Direction.NORTH, facing, shape),
-                            Utils.rotateShape(Direction.NORTH, facing.getCounterClockWise(), shape)
-                    )
-            );
+            builder.put(state, shapes[dir.get2DDataValue() + (top ? 4 : 0)]);
         }
 
         return ShapeProvider.of(builder.build());

@@ -26,6 +26,7 @@ import net.minecraftforge.client.extensions.common.IClientBlockExtensions;
 import xfacthd.framedblocks.api.block.IFramedBlock;
 import xfacthd.framedblocks.api.block.render.FramedBlockRenderProperties;
 import xfacthd.framedblocks.api.shapes.ShapeProvider;
+import xfacthd.framedblocks.api.shapes.ShapeUtils;
 import xfacthd.framedblocks.api.util.Utils;
 import xfacthd.framedblocks.common.FBContent;
 import xfacthd.framedblocks.common.block.FramedBlock;
@@ -223,6 +224,7 @@ public class FramedItemFrameBlock extends FramedBlock
         VoxelShape bottomMapShape = box(0, 0, 0, 16, 1, 16);
         VoxelShape northShape = box(2, 2, 0, 14, 14, 1);
         VoxelShape northMapShape = box(0, 0, 0, 16, 16, 1);
+        VoxelShape[] horShapes = ShapeUtils.makeHorizontalRotationsWithFlag(northShape, northMapShape, Direction.NORTH);
 
         for (BlockState state : states)
         {
@@ -230,12 +232,9 @@ public class FramedItemFrameBlock extends FramedBlock
             boolean map = state.getValue(PropertyHolder.MAP_FRAME);
             builder.put(state, switch (dir)
             {
-                case UP: yield map ? topMapShape : topShape;
-                case DOWN: yield map ? bottomMapShape : bottomShape;
-                case NORTH, EAST, SOUTH, WEST:
-                {
-                    yield Utils.rotateShape(Direction.NORTH, dir, map ? northMapShape : northShape);
-                }
+                case UP -> map ? topMapShape : topShape;
+                case DOWN -> map ? bottomMapShape : bottomShape;
+                default -> horShapes[dir.get2DDataValue() + (map ? 4 : 0)];
             });
         }
 

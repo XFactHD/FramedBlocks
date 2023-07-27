@@ -15,6 +15,7 @@ import net.minecraft.world.phys.shapes.*;
 import xfacthd.framedblocks.api.block.FramedProperties;
 import xfacthd.framedblocks.api.block.IFramedBlock;
 import xfacthd.framedblocks.api.shapes.ShapeProvider;
+import xfacthd.framedblocks.api.shapes.ShapeUtils;
 import xfacthd.framedblocks.api.util.Utils;
 import xfacthd.framedblocks.common.block.FramedBlock;
 import xfacthd.framedblocks.common.data.BlockType;
@@ -77,7 +78,9 @@ public class FramedPyramidBlock extends FramedBlock
 
     public static ShapeProvider generateShapes(ImmutableList<BlockState> states)
     {
-        VoxelShape shapeUp = Shapes.or(
+        ImmutableMap.Builder<BlockState, VoxelShape> builder = new ImmutableMap.Builder<>();
+
+        VoxelShape shapeUp = ShapeUtils.orUnoptimized(
                 box( 0,  0,  0,   16, .5,   16),
                 box(.5, .5, .5, 15.5,  4, 15.5),
                 box( 2,  4,  2,   14,  8,   14),
@@ -85,7 +88,7 @@ public class FramedPyramidBlock extends FramedBlock
                 box( 6, 12,  6,   10, 16,   10)
         );
 
-        VoxelShape shapeDown = Shapes.or(
+        VoxelShape shapeDown = ShapeUtils.orUnoptimized(
                 box( 0, 15.5,  0,   16,   16,   16),
                 box(.5,   12, .5, 15.5, 15.5, 15.5),
                 box( 2,    8,  2,   14,   12,   14),
@@ -93,7 +96,7 @@ public class FramedPyramidBlock extends FramedBlock
                 box( 6,    0,  6,   10,    4,   10)
         );
 
-        VoxelShape shapeNorth = Shapes.or(
+        VoxelShape shapeNorth = ShapeUtils.orUnoptimized(
                 box( 0,  0, 15.5,   16,   16,   16),
                 box(.5, .5,   12, 15.5, 15.5, 15.5),
                 box( 2,  2,    8,   14,   14,   12),
@@ -101,7 +104,7 @@ public class FramedPyramidBlock extends FramedBlock
                 box( 6,  6,    0,   10,   10,    4)
         );
 
-        ImmutableMap.Builder<BlockState, VoxelShape> builder = new ImmutableMap.Builder<>();
+        VoxelShape[] horShapes = ShapeUtils.makeHorizontalRotations(shapeNorth, Direction.NORTH);
 
         for (BlockState state : states)
         {
@@ -110,7 +113,7 @@ public class FramedPyramidBlock extends FramedBlock
             {
                 case UP -> shapeUp;
                 case DOWN -> shapeDown;
-                default -> Utils.rotateShape(Direction.NORTH, facing, shapeNorth);
+                default -> horShapes[facing.get2DDataValue()];
             };
             builder.put(state, shape);
         }
@@ -120,7 +123,9 @@ public class FramedPyramidBlock extends FramedBlock
 
     public static ShapeProvider generateSlabShapes(ImmutableList<BlockState> states)
     {
-        VoxelShape shapeUp = Shapes.or(
+        ImmutableMap.Builder<BlockState, VoxelShape> builder = new ImmutableMap.Builder<>();
+
+        VoxelShape shapeUp = ShapeUtils.orUnoptimized(
                 box( 0,  0,  0,   16, .5,   16),
                 box(.5, .5, .5, 15.5,  2, 15.5),
                 box( 2,  2,  2,   14,  4,   14),
@@ -128,7 +133,7 @@ public class FramedPyramidBlock extends FramedBlock
                 box( 6,  6,  6,   10,  8,   10)
         );
 
-        VoxelShape shapeDown = Shapes.or(
+        VoxelShape shapeDown = ShapeUtils.orUnoptimized(
                 box( 0, 15.5,  0,   16,   16,   16),
                 box(.5,   14, .5, 15.5, 15.5, 15.5),
                 box( 2,   12,  2,   14,   14,   14),
@@ -136,7 +141,7 @@ public class FramedPyramidBlock extends FramedBlock
                 box( 6,    8,  6,   10,   10,   10)
         );
 
-        VoxelShape shapeNorth = Shapes.or(
+        VoxelShape shapeNorth = ShapeUtils.orUnoptimized(
                 box( 0,  0, 15.5,   16,   16,   16),
                 box(.5, .5,   14, 15.5, 15.5, 15.5),
                 box( 2,  2,   12,   14,   14,   14),
@@ -144,7 +149,7 @@ public class FramedPyramidBlock extends FramedBlock
                 box( 6,  6,    8,   10,   10,   10)
         );
 
-        ImmutableMap.Builder<BlockState, VoxelShape> builder = new ImmutableMap.Builder<>();
+        VoxelShape[] horShapes = ShapeUtils.makeHorizontalRotations(shapeNorth, Direction.NORTH);
 
         for (BlockState state : states)
         {
@@ -153,7 +158,7 @@ public class FramedPyramidBlock extends FramedBlock
             {
                 case UP -> shapeUp;
                 case DOWN -> shapeDown;
-                default -> Utils.rotateShape(Direction.NORTH, facing, shapeNorth);
+                default -> horShapes[facing.get2DDataValue()];
             };
             builder.put(state, shape);
         }

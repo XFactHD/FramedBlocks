@@ -12,6 +12,7 @@ import net.minecraft.world.phys.Vec3;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import xfacthd.framedblocks.api.block.FramedProperties;
 import xfacthd.framedblocks.api.shapes.ShapeProvider;
+import xfacthd.framedblocks.api.shapes.ShapeUtils;
 import xfacthd.framedblocks.common.block.FramedBlock;
 import xfacthd.framedblocks.common.data.BlockType;
 import xfacthd.framedblocks.api.util.Utils;
@@ -78,14 +79,15 @@ public class FramedCornerPillarBlock extends FramedBlock
 
     public static ShapeProvider generateShapes(ImmutableList<BlockState> states)
     {
-        VoxelShape shape = box(0, 0, 0, 8, 16, 8);
-
         ImmutableMap.Builder<BlockState, VoxelShape> builder = ImmutableMap.builder();
+
+        VoxelShape shape = box(0, 0, 0, 8, 16, 8);
+        VoxelShape[] shapes = ShapeUtils.makeHorizontalRotations(shape, Direction.NORTH);
 
         for (BlockState state : states)
         {
             Direction dir = state.getValue(FramedProperties.FACING_HOR);
-            builder.put(state, Utils.rotateShape(Direction.NORTH, dir, shape));
+            builder.put(state, shapes[dir.get2DDataValue()]);
         }
 
         return ShapeProvider.of(builder.build());

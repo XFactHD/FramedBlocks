@@ -2,6 +2,7 @@ package xfacthd.framedblocks.common.block.slopepanel;
 
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
+import net.minecraft.Util;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.world.entity.player.Player;
@@ -17,6 +18,7 @@ import net.minecraft.world.phys.shapes.*;
 import xfacthd.framedblocks.api.block.FramedProperties;
 import xfacthd.framedblocks.api.block.IFramedBlock;
 import xfacthd.framedblocks.api.shapes.ShapeProvider;
+import xfacthd.framedblocks.api.shapes.ShapeUtils;
 import xfacthd.framedblocks.api.util.*;
 import xfacthd.framedblocks.common.block.FramedBlock;
 import xfacthd.framedblocks.common.data.BlockType;
@@ -199,24 +201,28 @@ public class FramedFlatSlopePanelCornerBlock extends FramedBlock
     {
         ImmutableMap.Builder<BlockState, VoxelShape> builder = ImmutableMap.builder();
 
+        VoxelShape[] shapes = Util.make(new VoxelShape[4], arr ->
+        {
+            for (HorizontalRotation rot : HorizontalRotation.values())
+            {
+                arr[rot.ordinal()] = ShapeUtils.andUnoptimized(
+                        FramedSlopePanelBlock.SHAPES.get(rot),
+                        FramedSlopePanelBlock.SHAPES.get(rot.rotate(Rotation.COUNTERCLOCKWISE_90))
+                );
+            }
+        });
+
         for (BlockState state : states)
         {
             HorizontalRotation rot = state.getValue(PropertyHolder.ROTATION);
-            VoxelShape shape = Shapes.join(
-                    FramedSlopePanelBlock.SHAPES.get(rot),
-                    FramedSlopePanelBlock.SHAPES.get(rot.rotate(Rotation.COUNTERCLOCKWISE_90)),
-                    BooleanOp.AND
-            );
+            VoxelShape shape = shapes[rot.ordinal()];
             if (state.getValue(PropertyHolder.FRONT))
             {
                 shape = shape.move(0, 0, .5);
             }
 
             Direction facing = state.getValue(FramedProperties.FACING_HOR);
-            builder.put(
-                    state,
-                    Utils.rotateShape(Direction.NORTH, facing, shape)
-            );
+            builder.put(state, ShapeUtils.rotateShape(Direction.NORTH, facing, shape));
         }
 
         return ShapeProvider.of(builder.build());
@@ -226,23 +232,32 @@ public class FramedFlatSlopePanelCornerBlock extends FramedBlock
     {
         ImmutableMap.Builder<BlockState, VoxelShape> builder = ImmutableMap.builder();
 
-        for (BlockState state : states)
+        int maskFront = 0b100;
+        VoxelShape[] shapes = new VoxelShape[4 * 4 * 2];
+        for (HorizontalRotation rot : HorizontalRotation.values())
         {
-            HorizontalRotation rot = state.getValue(PropertyHolder.ROTATION);
-            VoxelShape shape = Shapes.or(
+            VoxelShape preShape = ShapeUtils.orUnoptimized(
                     FramedSlopePanelBlock.SHAPES.get(rot),
                     FramedSlopePanelBlock.SHAPES.get(rot.rotate(Rotation.COUNTERCLOCKWISE_90))
             );
-            if (state.getValue(PropertyHolder.FRONT))
-            {
-                shape = shape.move(0, 0, .5);
-            }
+            VoxelShape preShapeFront = preShape.move(0, 0, .5);
 
-            Direction facing = state.getValue(FramedProperties.FACING_HOR);
-            builder.put(
-                    state,
-                    Utils.rotateShape(Direction.NORTH, facing, shape)
-            );
+            for (Direction dir : Direction.Plane.HORIZONTAL)
+            {
+                int idx = dir.get2DDataValue() | (rot.ordinal() << 3);
+                shapes[idx] = ShapeUtils.rotateShape(Direction.NORTH, dir, preShape);
+                idx = dir.get2DDataValue() | maskFront | (rot.ordinal() << 3);
+                shapes[idx] = ShapeUtils.rotateShape(Direction.NORTH, dir, preShapeFront);
+            }
+        }
+
+        for (BlockState state : states)
+        {
+            Direction dir = state.getValue(FramedProperties.FACING_HOR);
+            HorizontalRotation rot = state.getValue(PropertyHolder.ROTATION);
+            int front = state.getValue(PropertyHolder.FRONT) ? maskFront : 0;
+            int idx = dir.get2DDataValue() | front | (rot.ordinal() << 3);
+            builder.put(state, shapes[idx]);
         }
 
         return ShapeProvider.of(builder.build());

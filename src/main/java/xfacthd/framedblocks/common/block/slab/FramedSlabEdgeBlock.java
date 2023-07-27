@@ -15,6 +15,7 @@ import net.minecraft.world.level.pathfinder.PathComputationType;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import xfacthd.framedblocks.api.block.FramedProperties;
 import xfacthd.framedblocks.api.shapes.ShapeProvider;
+import xfacthd.framedblocks.api.shapes.ShapeUtils;
 import xfacthd.framedblocks.common.block.FramedBlock;
 import xfacthd.framedblocks.common.data.BlockType;
 import xfacthd.framedblocks.api.util.Utils;
@@ -81,19 +82,17 @@ public class FramedSlabEdgeBlock extends FramedBlock
 
     public static ShapeProvider generateShapes(ImmutableList<BlockState> states)
     {
-        VoxelShape bottomShape = box(0.0D, 0.0D, 0.0D, 16.0D, 8.0D, 8.0D);
-        VoxelShape topShape = box(0.0D, 8.0D, 0.0D, 16.0D, 16.0D, 8.0D);
-
         ImmutableMap.Builder<BlockState, VoxelShape> builder = ImmutableMap.builder();
+
+        VoxelShape shapeBot = box(0.0D, 0.0D, 0.0D, 16.0D, 8.0D, 8.0D);
+        VoxelShape shapeTop = box(0.0D, 8.0D, 0.0D, 16.0D, 16.0D, 8.0D);
+        VoxelShape[] shapes = ShapeUtils.makeHorizontalRotationsWithFlag(shapeBot, shapeTop, Direction.NORTH);
 
         for (BlockState state : states)
         {
-            VoxelShape shape = Utils.rotateShape(
-                    Direction.NORTH,
-                    state.getValue(FramedProperties.FACING_HOR),
-                    state.getValue(FramedProperties.TOP) ? topShape : bottomShape
-            );
-            builder.put(state, shape);
+            Direction dir = state.getValue(FramedProperties.FACING_HOR);
+            boolean top = state.getValue(FramedProperties.TOP);
+            builder.put(state, shapes[dir.get2DDataValue() + (top ? 4 : 0)]);
         }
 
         return ShapeProvider.of(builder.build());

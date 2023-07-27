@@ -16,10 +16,12 @@ import net.minecraft.world.phys.shapes.*;
 import xfacthd.framedblocks.api.block.FramedProperties;
 import xfacthd.framedblocks.api.block.IFramedBlock;
 import xfacthd.framedblocks.api.shapes.ShapeProvider;
+import xfacthd.framedblocks.api.shapes.ShapeUtils;
 import xfacthd.framedblocks.api.util.*;
 import xfacthd.framedblocks.common.block.FramedBlock;
 import xfacthd.framedblocks.common.data.*;
 import xfacthd.framedblocks.common.data.property.CornerType;
+import xfacthd.framedblocks.common.data.property.SlopeType;
 
 public class FramedCornerSlopeBlock extends FramedBlock
 {
@@ -115,40 +117,32 @@ public class FramedCornerSlopeBlock extends FramedBlock
 
     public static ShapeProvider generateCornerShapes(ImmutableList<BlockState> states)
     {
-        VoxelShape shapeTop = Shapes.join(
-                FramedSlopeBlock.SHAPE_TOP,
-                Utils.rotateShape(Direction.NORTH, Direction.WEST, FramedSlopeBlock.SHAPE_TOP),
-                BooleanOp.AND
+        VoxelShape shapeSlopeBottom = FramedSlopeBlock.SHAPES.get(SlopeType.BOTTOM);
+        VoxelShape shapeSlopeTop = FramedSlopeBlock.SHAPES.get(SlopeType.TOP);
+        VoxelShape shapeSlopeHorizontal = FramedSlopeBlock.SHAPES.get(SlopeType.HORIZONTAL);
+
+        VoxelShape shapeTop = ShapeUtils.andUnoptimized(
+                shapeSlopeTop,
+                ShapeUtils.rotateShapeUnoptimized(Direction.NORTH, Direction.WEST, shapeSlopeTop)
         );
 
-        VoxelShape shapeBottom = Shapes.join(
-                FramedSlopeBlock.SHAPE_BOTTOM,
-                Utils.rotateShape(Direction.NORTH, Direction.WEST, FramedSlopeBlock.SHAPE_BOTTOM),
-                BooleanOp.AND
+        VoxelShape shapeBottom = ShapeUtils.andUnoptimized(
+                shapeSlopeBottom,
+                ShapeUtils.rotateShapeUnoptimized(Direction.NORTH, Direction.WEST, shapeSlopeBottom)
         );
 
-        VoxelShape shapeBottomLeft = Shapes.join(
-                FramedSlopeBlock.SHAPE_BOTTOM,
-                FramedSlopeBlock.SHAPE_HORIZONTAL,
-                BooleanOp.AND
+        VoxelShape shapeBottomLeft = ShapeUtils.andUnoptimized(shapeSlopeBottom, shapeSlopeHorizontal);
+
+        VoxelShape shapeBottomRight = ShapeUtils.andUnoptimized(
+                shapeSlopeBottom,
+                ShapeUtils.rotateShapeUnoptimized(Direction.NORTH, Direction.EAST, shapeSlopeHorizontal)
         );
 
-        VoxelShape shapeBottomRight = Shapes.join(
-                FramedSlopeBlock.SHAPE_BOTTOM,
-                Utils.rotateShape(Direction.NORTH, Direction.EAST, FramedSlopeBlock.SHAPE_HORIZONTAL),
-                BooleanOp.AND
-        );
+        VoxelShape shapeTopLeft = ShapeUtils.andUnoptimized(shapeSlopeTop, shapeSlopeHorizontal);
 
-        VoxelShape shapeTopLeft = Shapes.join(
-                FramedSlopeBlock.SHAPE_TOP,
-                FramedSlopeBlock.SHAPE_HORIZONTAL,
-                BooleanOp.AND
-        );
-
-        VoxelShape shapeTopRight = Shapes.join(
-                FramedSlopeBlock.SHAPE_TOP,
-                Utils.rotateShape(Direction.NORTH, Direction.EAST, FramedSlopeBlock.SHAPE_HORIZONTAL),
-                BooleanOp.AND
+        VoxelShape shapeTopRight = ShapeUtils.andUnoptimized(
+                shapeSlopeTop,
+                ShapeUtils.rotateShapeUnoptimized(Direction.NORTH, Direction.EAST, shapeSlopeHorizontal)
         );
 
         ImmutableMap.Builder<BlockState, VoxelShape> builder = ImmutableMap.builder();
@@ -168,11 +162,11 @@ public class FramedCornerSlopeBlock extends FramedBlock
                     case HORIZONTAL_TOP_RIGHT -> shapeTopRight;
                     default -> Shapes.block();
                 };
-                builder.put(state, Utils.rotateShape(Direction.NORTH, dir, shape));
+                builder.put(state, ShapeUtils.rotateShape(Direction.NORTH, dir, shape));
             }
             else
             {
-                builder.put(state, Utils.rotateShape(Direction.NORTH, dir, type.isTop() ? shapeTop : shapeBottom));
+                builder.put(state, ShapeUtils.rotateShape(Direction.NORTH, dir, type.isTop() ? shapeTop : shapeBottom));
             }
         }
 
@@ -181,59 +175,67 @@ public class FramedCornerSlopeBlock extends FramedBlock
 
     public static ShapeProvider generateInnerCornerShapes(ImmutableList<BlockState> states)
     {
-        VoxelShape shapeTop = Shapes.or(
-                FramedSlopeBlock.SHAPE_TOP,
-                Utils.rotateShape(Direction.NORTH, Direction.WEST, FramedSlopeBlock.SHAPE_TOP)
-        );
-
-        VoxelShape shapeBottom = Shapes.or(
-                FramedSlopeBlock.SHAPE_BOTTOM,
-                Utils.rotateShape(Direction.NORTH, Direction.WEST, FramedSlopeBlock.SHAPE_BOTTOM)
-        );
-
-        VoxelShape shapeBottomLeft = Shapes.or(
-                FramedSlopeBlock.SHAPE_BOTTOM,
-                FramedSlopeBlock.SHAPE_HORIZONTAL
-        );
-
-        VoxelShape shapeBottomRight = Shapes.or(
-                FramedSlopeBlock.SHAPE_BOTTOM,
-                Utils.rotateShape(Direction.NORTH, Direction.EAST, FramedSlopeBlock.SHAPE_HORIZONTAL)
-        );
-
-        VoxelShape shapeTopLeft = Shapes.or(
-                FramedSlopeBlock.SHAPE_TOP,
-                FramedSlopeBlock.SHAPE_HORIZONTAL
-        );
-
-        VoxelShape shapeTopRight = Shapes.or(
-                FramedSlopeBlock.SHAPE_TOP,
-                Utils.rotateShape(Direction.NORTH, Direction.EAST, FramedSlopeBlock.SHAPE_HORIZONTAL)
-        );
-
         ImmutableMap.Builder<BlockState, VoxelShape> builder = ImmutableMap.builder();
+
+        VoxelShape shapeSlopeBottom = FramedSlopeBlock.SHAPES.get(SlopeType.BOTTOM);
+        VoxelShape shapeSlopeTop = FramedSlopeBlock.SHAPES.get(SlopeType.TOP);
+        VoxelShape shapeSlopeHorizontal = FramedSlopeBlock.SHAPES.get(SlopeType.HORIZONTAL);
+
+        VoxelShape shapeTop = ShapeUtils.orUnoptimized(
+                shapeSlopeTop,
+                ShapeUtils.rotateShapeUnoptimized(Direction.NORTH, Direction.WEST, shapeSlopeTop)
+        );
+
+        VoxelShape shapeBottom = ShapeUtils.orUnoptimized(
+                shapeSlopeBottom,
+                ShapeUtils.rotateShapeUnoptimized(Direction.NORTH, Direction.WEST, shapeSlopeBottom)
+        );
+
+        VoxelShape shapeBottomLeft = ShapeUtils.orUnoptimized(shapeSlopeBottom, shapeSlopeHorizontal);
+
+        VoxelShape shapeBottomRight = ShapeUtils.orUnoptimized(
+                shapeSlopeBottom,
+                ShapeUtils.rotateShapeUnoptimized(Direction.NORTH, Direction.EAST, shapeSlopeHorizontal)
+        );
+
+        VoxelShape shapeTopLeft = ShapeUtils.orUnoptimized(shapeSlopeTop, shapeSlopeHorizontal);
+
+        VoxelShape shapeTopRight = ShapeUtils.orUnoptimized(
+                shapeSlopeTop,
+                ShapeUtils.rotateShapeUnoptimized(Direction.NORTH, Direction.EAST, shapeSlopeHorizontal)
+        );
+
+        VoxelShape[] shapes = new VoxelShape[4 * 6];
+        for (Direction dir : Direction.Plane.HORIZONTAL)
+        {
+            for (CornerType type : CornerType.values())
+            {
+                int idx = dir.get2DDataValue() | (type.ordinal() << 2);
+                if (type.isHorizontal())
+                {
+                    VoxelShape shape = switch (type)
+                    {
+                        case HORIZONTAL_BOTTOM_LEFT -> shapeBottomLeft;
+                        case HORIZONTAL_BOTTOM_RIGHT -> shapeBottomRight;
+                        case HORIZONTAL_TOP_LEFT -> shapeTopLeft;
+                        case HORIZONTAL_TOP_RIGHT -> shapeTopRight;
+                        default -> Shapes.block();
+                    };
+                    shapes[idx] = ShapeUtils.rotateShape(Direction.NORTH, dir, shape);
+                }
+                else
+                {
+                    shapes[idx] = ShapeUtils.rotateShape(Direction.NORTH, dir, type.isTop() ? shapeTop : shapeBottom);
+                }
+            }
+        }
 
         for (BlockState state : states)
         {
             CornerType type = state.getValue(PropertyHolder.CORNER_TYPE);
             Direction dir = state.getValue(FramedProperties.FACING_HOR);
-
-            if (type.isHorizontal())
-            {
-                VoxelShape shape = switch (type)
-                {
-                    case HORIZONTAL_BOTTOM_LEFT -> shapeBottomLeft;
-                    case HORIZONTAL_BOTTOM_RIGHT -> shapeBottomRight;
-                    case HORIZONTAL_TOP_LEFT -> shapeTopLeft;
-                    case HORIZONTAL_TOP_RIGHT -> shapeTopRight;
-                    default -> Shapes.block();
-                };
-                builder.put(state, Utils.rotateShape(Direction.NORTH, dir, shape));
-            }
-            else
-            {
-                builder.put(state, Utils.rotateShape(Direction.NORTH, dir, type.isTop() ? shapeTop : shapeBottom));
-            }
+            int idx = dir.get2DDataValue() | (type.ordinal() << 2);
+            builder.put(state, shapes[idx]);
         }
 
         return ShapeProvider.of(builder.build());

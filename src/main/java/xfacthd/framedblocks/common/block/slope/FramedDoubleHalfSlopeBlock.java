@@ -20,6 +20,7 @@ import net.minecraft.world.phys.shapes.VoxelShape;
 import xfacthd.framedblocks.api.block.IFramedBlock;
 import xfacthd.framedblocks.api.block.FramedProperties;
 import xfacthd.framedblocks.api.shapes.ShapeProvider;
+import xfacthd.framedblocks.api.shapes.ShapeUtils;
 import xfacthd.framedblocks.api.util.Utils;
 import xfacthd.framedblocks.common.FBContent;
 import xfacthd.framedblocks.common.block.AbstractFramedDoubleBlock;
@@ -154,9 +155,10 @@ public class FramedDoubleHalfSlopeBlock extends AbstractFramedDoubleBlock
 
     public static ShapeProvider generateShapes(ImmutableList<BlockState> states)
     {
-        VoxelShape shape = box(0, 0, 0, 8, 16, 16);
-
         ImmutableMap.Builder<BlockState, VoxelShape> builder = ImmutableMap.builder();
+
+        VoxelShape shape = box(0, 0, 0, 8, 16, 16);
+        VoxelShape[] shapes = ShapeUtils.makeHorizontalRotations(shape, Direction.NORTH);
 
         for (BlockState state : states)
         {
@@ -165,14 +167,7 @@ public class FramedDoubleHalfSlopeBlock extends AbstractFramedDoubleBlock
             {
                 dir = dir.getOpposite();
             }
-            builder.put(
-                    state,
-                    Utils.rotateShape(
-                            Direction.NORTH,
-                            dir,
-                            shape
-                    )
-            );
+            builder.put(state, shapes[dir.get2DDataValue()]);
         }
 
         return ShapeProvider.of(builder.build());

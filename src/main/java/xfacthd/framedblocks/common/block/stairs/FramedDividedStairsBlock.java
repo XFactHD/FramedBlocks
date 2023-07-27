@@ -14,6 +14,7 @@ import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.phys.shapes.*;
 import xfacthd.framedblocks.api.block.FramedProperties;
 import xfacthd.framedblocks.api.shapes.ShapeProvider;
+import xfacthd.framedblocks.api.shapes.ShapeUtils;
 import xfacthd.framedblocks.api.util.Utils;
 import xfacthd.framedblocks.common.FBContent;
 import xfacthd.framedblocks.common.block.AbstractFramedDoubleBlock;
@@ -116,25 +117,23 @@ public class FramedDividedStairsBlock extends AbstractFramedDoubleBlock
     {
         ImmutableMap.Builder<BlockState, VoxelShape> builder = ImmutableMap.builder();
 
-        VoxelShape shapeBottom = Shapes.join(
+        VoxelShape shapeBottom = ShapeUtils.orUnoptimized(
                 box(0, 0, 0, 16, 8, 16),
-                box(0, 8, 8, 16, 16, 16),
-                BooleanOp.OR
+                box(0, 8, 8, 16, 16, 16)
         );
 
-        VoxelShape shapeTop = Shapes.join(
+        VoxelShape shapeTop = ShapeUtils.orUnoptimized(
                 box(0, 8, 0, 16, 16, 16),
-                box(0, 0, 8, 16, 8, 16),
-                BooleanOp.OR
+                box(0, 0, 8, 16, 8, 16)
         );
+
+        VoxelShape[] shapes = ShapeUtils.makeHorizontalRotationsWithFlag(shapeBottom, shapeTop, Direction.SOUTH);
 
         for (BlockState state : states)
         {
             Direction dir = state.getValue(FramedProperties.FACING_HOR);
             boolean top = state.getValue(FramedProperties.TOP);
-
-            VoxelShape shape = top ? shapeTop : shapeBottom;
-            builder.put(state, Utils.rotateShape(Direction.SOUTH, dir, shape));
+            builder.put(state, shapes[dir.get2DDataValue() + (top ? 4 : 0)]);
         }
 
         return ShapeProvider.of(builder.build());

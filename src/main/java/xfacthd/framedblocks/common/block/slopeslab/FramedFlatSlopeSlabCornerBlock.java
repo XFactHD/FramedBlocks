@@ -17,6 +17,7 @@ import net.minecraft.world.phys.shapes.*;
 import xfacthd.framedblocks.api.block.FramedProperties;
 import xfacthd.framedblocks.api.block.IFramedBlock;
 import xfacthd.framedblocks.api.shapes.ShapeProvider;
+import xfacthd.framedblocks.api.shapes.ShapeUtils;
 import xfacthd.framedblocks.api.util.*;
 import xfacthd.framedblocks.common.block.FramedBlock;
 import xfacthd.framedblocks.common.data.BlockType;
@@ -142,24 +143,39 @@ public class FramedFlatSlopeSlabCornerBlock extends FramedBlock
     {
         ImmutableMap.Builder<BlockState, VoxelShape> builder = ImmutableMap.builder();
 
+        VoxelShape shapeSlopeBottom = FramedSlopeSlabBlock.SHAPES.get(Boolean.FALSE);
+        VoxelShape shapeSlopeTop = FramedSlopeSlabBlock.SHAPES.get(Boolean.TRUE);
+
+        VoxelShape shapeBottomBottomHalf = ShapeUtils.andUnoptimized(
+                shapeSlopeBottom,
+                ShapeUtils.rotateShapeUnoptimized(Direction.NORTH, Direction.WEST, shapeSlopeBottom)
+        );
+        VoxelShape shapeBottomTopHalf = shapeBottomBottomHalf.move(0, .5, 0);
+        VoxelShape shapeTopBottomHalf = ShapeUtils.andUnoptimized(
+                shapeSlopeTop,
+                ShapeUtils.rotateShapeUnoptimized(Direction.NORTH, Direction.WEST, shapeSlopeTop)
+        );
+        VoxelShape shapeTopTopHalf = shapeTopBottomHalf.move(0, .5, 0);
+
+        int maskTop = 0b0100;
+        int maskTopHalf = 0b1000;
+        VoxelShape[] shapes = new VoxelShape[16];
+        for (Direction dir : Direction.Plane.HORIZONTAL)
+        {
+            int horId = dir.get2DDataValue();
+            shapes[horId] = ShapeUtils.rotateShape(Direction.NORTH, dir, shapeBottomBottomHalf);
+            shapes[horId | maskTopHalf] = ShapeUtils.rotateShape(Direction.NORTH, dir, shapeBottomTopHalf);
+            shapes[horId | maskTop] = ShapeUtils.rotateShape(Direction.NORTH, dir, shapeTopBottomHalf);
+            shapes[horId | maskTop | maskTopHalf] = ShapeUtils.rotateShape(Direction.NORTH, dir, shapeTopTopHalf);
+        }
+
         for (BlockState state : states)
         {
-            Direction facing = state.getValue(FramedProperties.FACING_HOR);
-
-            VoxelShape shape = state.getValue(FramedProperties.TOP) ? FramedSlopeSlabBlock.SHAPE_TOP : FramedSlopeSlabBlock.SHAPE_BOTTOM;
-            if (state.getValue(PropertyHolder.TOP_HALF))
-            {
-                shape = shape.move(0, .5, 0);
-            }
-
-            builder.put(
-                    state,
-                    Shapes.join(
-                            Utils.rotateShape(Direction.NORTH, facing, shape),
-                            Utils.rotateShape(Direction.NORTH, facing.getCounterClockWise(), shape),
-                            BooleanOp.AND
-                    )
-            );
+            Direction dir = state.getValue(FramedProperties.FACING_HOR);
+            int top = state.getValue(FramedProperties.TOP) ? maskTop : 0;
+            int topHalf = state.getValue(PropertyHolder.TOP_HALF) ? maskTopHalf : 0;
+            int idx = dir.get2DDataValue() | top | topHalf;
+            builder.put(state, shapes[idx]);
         }
 
         return ShapeProvider.of(builder.build());
@@ -169,23 +185,39 @@ public class FramedFlatSlopeSlabCornerBlock extends FramedBlock
     {
         ImmutableMap.Builder<BlockState, VoxelShape> builder = ImmutableMap.builder();
 
+        VoxelShape shapeSlopeBottom = FramedSlopeSlabBlock.SHAPES.get(Boolean.FALSE);
+        VoxelShape shapeSlopeTop = FramedSlopeSlabBlock.SHAPES.get(Boolean.TRUE);
+
+        VoxelShape shapeBottomBottomHalf = ShapeUtils.orUnoptimized(
+                shapeSlopeBottom,
+                ShapeUtils.rotateShapeUnoptimized(Direction.NORTH, Direction.WEST, shapeSlopeBottom)
+        );
+        VoxelShape shapeBottomTopHalf = shapeBottomBottomHalf.move(0, .5, 0);
+        VoxelShape shapeTopBottomHalf = ShapeUtils.orUnoptimized(
+                shapeSlopeTop,
+                ShapeUtils.rotateShapeUnoptimized(Direction.NORTH, Direction.WEST, shapeSlopeTop)
+        );
+        VoxelShape shapeTopTopHalf = shapeTopBottomHalf.move(0, .5, 0);
+
+        int maskTop = 0b0100;
+        int maskTopHalf = 0b1000;
+        VoxelShape[] shapes = new VoxelShape[16];
+        for (Direction dir : Direction.Plane.HORIZONTAL)
+        {
+            int horId = dir.get2DDataValue();
+            shapes[horId] = ShapeUtils.rotateShape(Direction.NORTH, dir, shapeBottomBottomHalf);
+            shapes[horId | maskTopHalf] = ShapeUtils.rotateShape(Direction.NORTH, dir, shapeBottomTopHalf);
+            shapes[horId | maskTop] = ShapeUtils.rotateShape(Direction.NORTH, dir, shapeTopBottomHalf);
+            shapes[horId | maskTop | maskTopHalf] = ShapeUtils.rotateShape(Direction.NORTH, dir, shapeTopTopHalf);
+        }
+
         for (BlockState state : states)
         {
-            Direction facing = state.getValue(FramedProperties.FACING_HOR);
-
-            VoxelShape shape = state.getValue(FramedProperties.TOP) ? FramedSlopeSlabBlock.SHAPE_TOP : FramedSlopeSlabBlock.SHAPE_BOTTOM;
-            if (state.getValue(PropertyHolder.TOP_HALF))
-            {
-                shape = shape.move(0, .5, 0);
-            }
-
-            builder.put(
-                    state,
-                    Shapes.or(
-                            Utils.rotateShape(Direction.NORTH, facing, shape),
-                            Utils.rotateShape(Direction.NORTH, facing.getCounterClockWise(), shape)
-                    )
-            );
+            Direction dir = state.getValue(FramedProperties.FACING_HOR);
+            int top = state.getValue(FramedProperties.TOP) ? maskTop : 0;
+            int topHalf = state.getValue(PropertyHolder.TOP_HALF) ? maskTopHalf : 0;
+            int idx = dir.get2DDataValue() | top | topHalf;
+            builder.put(state, shapes[idx]);
         }
 
         return ShapeProvider.of(builder.build());

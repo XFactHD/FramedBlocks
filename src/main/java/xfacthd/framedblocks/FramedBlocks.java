@@ -19,7 +19,7 @@ import org.slf4j.Logger;
 import xfacthd.framedblocks.api.FramedBlocksAPI;
 import xfacthd.framedblocks.api.block.update.CullingUpdatePacket;
 import xfacthd.framedblocks.api.block.update.CullingUpdateTracker;
-import xfacthd.framedblocks.api.shapes.ReloadableShapeProvider;
+import xfacthd.framedblocks.api.shapes.ShapeReloader;
 import xfacthd.framedblocks.api.util.FramedConstants;
 import xfacthd.framedblocks.api.util.Utils;
 import xfacthd.framedblocks.client.util.ClientConfig;
@@ -117,7 +117,7 @@ public final class FramedBlocks
 
     private static void onAddDebugReloadListener(final AddReloadListenerEvent event)
     {
-        event.addListener(ReloadableShapeProvider.Reloader.INSTANCE);
+        event.addListener(ShapeReloader.INSTANCE);
     }
 
     private static String getBlockEntityWarning()

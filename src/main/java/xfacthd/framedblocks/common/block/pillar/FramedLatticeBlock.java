@@ -13,10 +13,10 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.block.state.properties.BooleanProperty;
-import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import xfacthd.framedblocks.api.block.FramedProperties;
 import xfacthd.framedblocks.api.shapes.ShapeProvider;
+import xfacthd.framedblocks.api.shapes.ShapeUtils;
 import xfacthd.framedblocks.common.block.FramedBlock;
 import xfacthd.framedblocks.common.data.BlockType;
 
@@ -107,19 +107,38 @@ public class FramedLatticeBlock extends FramedBlock
     {
         ImmutableMap.Builder<BlockState, VoxelShape> builder = ImmutableMap.builder();
 
+        int maskX = 0b001;
+        int maskY = 0b010;
+        int maskZ = 0b100;
+        VoxelShape centerShape = box(6, 6, 6, 10, 10, 10);
         VoxelShape xShape = box(0, 6, 6, 16, 10, 10);
         VoxelShape yShape = box(6, 0, 6, 10, 16, 10);
         VoxelShape zShape = box(6, 6, 0, 10, 10, 16);
+        VoxelShape[] shapes = new VoxelShape[8];
+        for (int i = 0; i < 8; i++)
+        {
+            VoxelShape shape = centerShape;
+            if ((i & maskX) != 0)
+            {
+                shape = ShapeUtils.orUnoptimized(shape, xShape);
+            }
+            if ((i & maskY) != 0)
+            {
+                shape = ShapeUtils.orUnoptimized(shape, yShape);
+            }
+            if ((i & maskZ) != 0)
+            {
+                shape = ShapeUtils.orUnoptimized(shape, zShape);
+            }
+            shapes[i] = shape.optimize();
+        }
 
         for (BlockState state : states)
         {
-            VoxelShape shape = box(6, 6, 6, 10, 10, 10);
-
-            if (state.getValue(FramedProperties.X_AXIS)) { shape = Shapes.or(shape, xShape); }
-            if (state.getValue(FramedProperties.Y_AXIS)) { shape = Shapes.or(shape, yShape); }
-            if (state.getValue(FramedProperties.Z_AXIS)) { shape = Shapes.or(shape, zShape); }
-
-            builder.put(state, shape.optimize());
+            int x = state.getValue(FramedProperties.X_AXIS) ? maskX : 0;
+            int y = state.getValue(FramedProperties.Y_AXIS) ? maskY : 0;
+            int z = state.getValue(FramedProperties.Z_AXIS) ? maskZ : 0;
+            builder.put(state, shapes[x | y | z]);
         }
 
         return ShapeProvider.of(builder.build());

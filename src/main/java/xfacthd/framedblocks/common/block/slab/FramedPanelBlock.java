@@ -19,6 +19,7 @@ import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import xfacthd.framedblocks.api.block.FramedProperties;
 import xfacthd.framedblocks.api.shapes.ShapeProvider;
+import xfacthd.framedblocks.api.shapes.ShapeUtils;
 import xfacthd.framedblocks.api.util.*;
 import xfacthd.framedblocks.common.FBContent;
 import xfacthd.framedblocks.common.block.FramedBlock;
@@ -102,14 +103,15 @@ public class FramedPanelBlock extends FramedBlock
 
     public static ShapeProvider generateShapes(ImmutableList<BlockState> states)
     {
-        VoxelShape shape = box(0, 0, 0, 16, 16, 8);
-
         ImmutableMap.Builder<BlockState, VoxelShape> builder = ImmutableMap.builder();
+
+        VoxelShape shape = box(0, 0, 0, 16, 16, 8);
+        VoxelShape[] shapes = ShapeUtils.makeHorizontalRotations(shape, Direction.NORTH);
 
         for (BlockState state : states)
         {
             Direction dir = state.getValue(FramedProperties.FACING_HOR);
-            builder.put(state, Utils.rotateShape(Direction.NORTH, dir, shape));
+            builder.put(state, shapes[dir.get2DDataValue()]);
         }
 
         return ShapeProvider.of(builder.build());

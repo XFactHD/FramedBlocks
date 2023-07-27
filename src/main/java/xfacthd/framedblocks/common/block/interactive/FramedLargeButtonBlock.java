@@ -9,7 +9,7 @@ import net.minecraft.world.level.block.state.properties.AttachFace;
 import net.minecraft.world.level.block.state.properties.BlockSetType;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
-import xfacthd.framedblocks.api.util.Utils;
+import xfacthd.framedblocks.api.shapes.ShapeUtils;
 import xfacthd.framedblocks.common.data.BlockType;
 
 public class FramedLargeButtonBlock extends FramedButtonBlock
@@ -62,8 +62,8 @@ public class FramedLargeButtonBlock extends FramedButtonBlock
         VoxelShape[] shapes = new VoxelShape[8];
         for (Direction dir : Direction.Plane.HORIZONTAL)
         {
-            shapes[dir.get2DDataValue()] = Utils.rotateShape(Direction.SOUTH, dir, shape);
-            shapes[dir.get2DDataValue() + 4] = Utils.rotateShape(Direction.SOUTH, dir, shapePressed);
+            shapes[dir.get2DDataValue()] = ShapeUtils.rotateShape(Direction.SOUTH, dir, shape);
+            shapes[dir.get2DDataValue() + 4] = ShapeUtils.rotateShape(Direction.SOUTH, dir, shapePressed);
         }
         return shapes;
     }

@@ -13,11 +13,11 @@ import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
-import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import xfacthd.framedblocks.api.block.FramedProperties;
 import xfacthd.framedblocks.api.block.IFramedBlock;
 import xfacthd.framedblocks.api.shapes.ShapeProvider;
+import xfacthd.framedblocks.api.shapes.ShapeUtils;
 import xfacthd.framedblocks.api.util.Utils;
 import xfacthd.framedblocks.common.FBContent;
 import xfacthd.framedblocks.common.block.AbstractFramedDoubleBlock;
@@ -106,20 +106,21 @@ public class FramedInverseDoubleSlopeSlabBlock extends AbstractFramedDoubleBlock
 
     public static ShapeProvider generateShapes(ImmutableList<BlockState> states)
     {
-        VoxelShape shape = Shapes.or(
-                FramedSlopeSlabBlock.SHAPE_BOTTOM.move(0, .5, 0),
-                Utils.rotateShape(Direction.NORTH, Direction.SOUTH, FramedSlopeSlabBlock.SHAPE_TOP)
+        ImmutableMap.Builder<BlockState, VoxelShape> builder = ImmutableMap.builder();
+
+        VoxelShape shape = ShapeUtils.orUnoptimized(
+                FramedSlopeSlabBlock.SHAPES.get(Boolean.FALSE).move(0, .5, 0),
+                ShapeUtils.rotateShapeUnoptimized(
+                        Direction.NORTH, Direction.SOUTH, FramedSlopeSlabBlock.SHAPES.get(Boolean.TRUE)
+                )
         );
 
-        ImmutableMap.Builder<BlockState, VoxelShape> builder = ImmutableMap.builder();
+        VoxelShape[] shapes = ShapeUtils.makeHorizontalRotations(shape, Direction.NORTH);
 
         for (BlockState state : states)
         {
-            Direction facing = state.getValue(FramedProperties.FACING_HOR);
-            builder.put(
-                    state,
-                    Utils.rotateShape(Direction.NORTH, facing, shape)
-            );
+            Direction dir = state.getValue(FramedProperties.FACING_HOR);
+            builder.put(state, shapes[dir.get2DDataValue()]);
         }
 
         return ShapeProvider.of(builder.build());

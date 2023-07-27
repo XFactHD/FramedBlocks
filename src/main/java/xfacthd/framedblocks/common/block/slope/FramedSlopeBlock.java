@@ -17,14 +17,15 @@ import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.core.Direction;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.shapes.VoxelShape;
-import net.minecraft.world.phys.shapes.Shapes;
 import xfacthd.framedblocks.api.block.*;
-import xfacthd.framedblocks.api.shapes.ShapeProvider;
+import xfacthd.framedblocks.api.shapes.*;
 import xfacthd.framedblocks.api.util.*;
 import xfacthd.framedblocks.common.block.FramedBlock;
 import xfacthd.framedblocks.common.data.*;
 import xfacthd.framedblocks.common.data.property.SlopeType;
 import xfacthd.framedblocks.common.util.FramedUtils;
+
+import java.util.EnumMap;
 
 @SuppressWarnings("deprecation")
 public class FramedSlopeBlock extends FramedBlock
@@ -139,54 +140,56 @@ public class FramedSlopeBlock extends FramedBlock
 
 
 
-    public static final VoxelShape SHAPE_BOTTOM = Shapes.or(
-            box(0,    0, 0, 16,   .5,   16),
-            box(0,   .5, 0, 16,    4, 15.5),
-            box(0,    4, 0, 16,    8,   12),
-            box(0,    8, 0, 16,   12,    8),
-            box(0,   12, 0, 16, 15.5,    4),
-            box(0, 15.5, 0, 16,   16,   .5)
-    ).optimize();
+    public static final ShapeCache<SlopeType> SHAPES = new ShapeCache<>(new EnumMap<>(SlopeType.class), map ->
+    {
+        map.put(SlopeType.BOTTOM, ShapeUtils.orUnoptimized(
+                box(0,    0, 0, 16,   .5,   16),
+                box(0,   .5, 0, 16,    4, 15.5),
+                box(0,    4, 0, 16,    8,   12),
+                box(0,    8, 0, 16,   12,    8),
+                box(0,   12, 0, 16, 15.5,    4),
+                box(0, 15.5, 0, 16,   16,   .5)
+        ));
 
-    public static final VoxelShape SHAPE_TOP = Shapes.or(
-            box(0,    0, 0, 16,   .5,   .5),
-            box(0,   .5, 0, 16,    4,    4),
-            box(0,    4, 0, 16,    8,    8),
-            box(0,    8, 0, 16,   12,   12),
-            box(0,   12, 0, 16, 15.5, 15.5),
-            box(0, 15.5, 0, 16,   16,   16)
-    ).optimize();
+        map.put(SlopeType.TOP, ShapeUtils.orUnoptimized(
+                box(0,    0, 0, 16,   .5,   .5),
+                box(0,   .5, 0, 16,    4,    4),
+                box(0,    4, 0, 16,    8,    8),
+                box(0,    8, 0, 16,   12,   12),
+                box(0,   12, 0, 16, 15.5, 15.5),
+                box(0, 15.5, 0, 16,   16,   16)
+        ));
 
-    public static final VoxelShape SHAPE_HORIZONTAL = Shapes.or(
-            box(   0, 0, 0,   .5, 16,   16),
-            box(   0, 0, 0,    4, 16, 15.5),
-            box(   4, 0, 0,    8, 16,   12),
-            box(   8, 0, 0,   12, 16,    8),
-            box(  12, 0, 0, 15.5, 16,    4),
-            box(15.5, 0, 0,   16, 16,   .5)
-    ).optimize();
+        map.put(SlopeType.HORIZONTAL, ShapeUtils.orUnoptimized(
+                box(   0, 0, 0,   .5, 16,   16),
+                box(   0, 0, 0,    4, 16, 15.5),
+                box(   4, 0, 0,    8, 16,   12),
+                box(   8, 0, 0,   12, 16,    8),
+                box(  12, 0, 0, 15.5, 16,    4),
+                box(15.5, 0, 0,   16, 16,   .5)
+        ));
+    });
 
     public static ShapeProvider generateShapes(ImmutableList<BlockState> states)
     {
         ImmutableMap.Builder<BlockState, VoxelShape> builder = ImmutableMap.builder();
 
+        VoxelShape[] shapes = new VoxelShape[4 * 3];
+        for (SlopeType type : SlopeType.values())
+        {
+            for (Direction dir : Direction.Plane.HORIZONTAL)
+            {
+                int idx = dir.get2DDataValue() | (type.ordinal() << 2);
+                shapes[idx] = ShapeUtils.rotateShape(Direction.NORTH, dir, SHAPES.get(type));
+            }
+        }
+
         for (BlockState state : states)
         {
             SlopeType type = FramedUtils.getSlopeType(state);
             Direction dir = FramedUtils.getSlopeBlockFacing(state);
-
-            if (type == SlopeType.BOTTOM)
-            {
-                builder.put(state, Utils.rotateShape(Direction.NORTH, dir, SHAPE_BOTTOM));
-            }
-            else if (type == SlopeType.TOP)
-            {
-                builder.put(state, Utils.rotateShape(Direction.NORTH, dir, SHAPE_TOP));
-            }
-            else
-            {
-                builder.put(state, Utils.rotateShape(Direction.NORTH, dir, SHAPE_HORIZONTAL));
-            }
+            int idx = dir.get2DDataValue() | (type.ordinal() << 2);
+            builder.put(state, shapes[idx]);
         }
 
         return ShapeProvider.of(builder.build());

@@ -15,6 +15,7 @@ import net.minecraft.world.phys.Vec3;
 import net.minecraft.world.phys.shapes.*;
 import xfacthd.framedblocks.api.block.FramedProperties;
 import xfacthd.framedblocks.api.shapes.ShapeProvider;
+import xfacthd.framedblocks.api.shapes.ShapeUtils;
 import xfacthd.framedblocks.api.type.IBlockType;
 import xfacthd.framedblocks.api.util.*;
 import xfacthd.framedblocks.common.block.FramedBlock;
@@ -113,54 +114,58 @@ public class FramedPrismBlock extends FramedBlock
     {
         ImmutableMap.Builder<BlockState, VoxelShape> builder = ImmutableMap.builder();
 
-        VoxelShape shapeBottom = Shapes.or(
+        VoxelShape shapeBottom = ShapeUtils.orUnoptimized(
                 box( 0, 0, 0,   16, .5, 16),
                 box(.5, 0, 0, 15.5,  4, 16),
                 box( 4, 0, 0,   12,  8, 16)
-        ).optimize();
+        );
 
-        VoxelShape shapeTop = Shapes.or(
+        VoxelShape shapeTop = ShapeUtils.orUnoptimized(
                 box( 0, 15.5, 0,   16, 16, 16),
                 box(.5,   12, 0, 15.5, 16, 16),
                 box( 4,    8, 0,   12, 16, 16)
-        ).optimize();
+        );
 
-        VoxelShape shapeXZ = Shapes.or(
+        VoxelShape shapeXZ = ShapeUtils.orUnoptimized(
                 box(0,  0, 15.5, 16,   16, 16),
                 box(0, .5,   12, 16, 15.5, 16),
                 box(0,  4,    8, 16,   12, 16)
-        ).optimize();
+        );
 
-        VoxelShape shapeY = Shapes.or(
+        VoxelShape shapeY = ShapeUtils.orUnoptimized(
                 box( 0, 0, 15.5,   16, 16, 16),
                 box(.5, 0,   12, 15.5, 16, 16),
                 box( 4, 0,    8,   12, 16, 16)
-        ).optimize();
+        );
 
-        for (BlockState state : states)
+        VoxelShape[] shapes = new VoxelShape[DirectionAxis.COUNT];
+        for (DirectionAxis dirAxis : DirectionAxis.values())
         {
-            DirectionAxis dirAxis = state.getValue(PropertyHolder.FACING_AXIS);
             Direction facing = dirAxis.direction();
             Direction.Axis axis = dirAxis.axis();
 
             if (Utils.isY(facing))
             {
-                builder.put(
-                        state,
-                        Utils.rotateShape(
-                                Direction.NORTH,
-                                Direction.fromAxisAndDirection(axis, Direction.AxisDirection.NEGATIVE),
-                                facing == Direction.UP ? shapeBottom : shapeTop
-                        )
+                shapes[dirAxis.ordinal()] = ShapeUtils.rotateShape(
+                        Direction.NORTH,
+                        Direction.fromAxisAndDirection(axis, Direction.AxisDirection.NEGATIVE),
+                        facing == Direction.UP ? shapeBottom : shapeTop
                 );
             }
             else
             {
-                builder.put(
-                        state,
-                        Utils.rotateShape(Direction.NORTH, facing, axis == Direction.Axis.Y ? shapeY : shapeXZ)
+                shapes[dirAxis.ordinal()] = ShapeUtils.rotateShape(
+                        Direction.NORTH,
+                        facing,
+                        axis == Direction.Axis.Y ? shapeY : shapeXZ
                 );
             }
+        }
+
+        for (BlockState state : states)
+        {
+            DirectionAxis dirAxis = state.getValue(PropertyHolder.FACING_AXIS);
+            builder.put(state, shapes[dirAxis.ordinal()]);
         }
 
         return ShapeProvider.of(builder.build());
@@ -170,7 +175,7 @@ public class FramedPrismBlock extends FramedBlock
     {
         ImmutableMap.Builder<BlockState, VoxelShape> builder = ImmutableMap.builder();
 
-        VoxelShape shapeBottom = Shapes.or(
+        VoxelShape shapeBottom = ShapeUtils.orUnoptimized(
                 box(   4, 0, 0,   12,   12, 16),
                 box(15.5, 0, 0,   16,   16, 16),
                 box(   0, 0, 0,   .5,   16, 16),
@@ -178,7 +183,7 @@ public class FramedPrismBlock extends FramedBlock
                 box(  .5, 0, 0,    4, 15.5, 16)
         );
 
-        VoxelShape shapeTop = Shapes.or(
+        VoxelShape shapeTop = ShapeUtils.orUnoptimized(
                box(   4,  4, 0,   12, 16, 16),
                box(15.5,  0, 0,   16, 16, 16),
                box(   0,  0, 0,   .5, 16, 16),
@@ -186,7 +191,7 @@ public class FramedPrismBlock extends FramedBlock
                box(  .5, .5, 0,    4, 16, 16)
         );
 
-        VoxelShape shapeXZ = Shapes.or(
+        VoxelShape shapeXZ = ShapeUtils.orUnoptimized(
                 box(0,    4,  4, 16,   12, 16),
                 box(0,    0,  0, 16,   .5, 16),
                 box(0, 15.5,  0, 16,   16, 16),
@@ -194,7 +199,7 @@ public class FramedPrismBlock extends FramedBlock
                 box(0,   12, .5, 16, 15.5, 16)
         );
 
-        VoxelShape shapeY = Shapes.or(
+        VoxelShape shapeY = ShapeUtils.orUnoptimized(
                 box(   4, 0,  4,   12, 16, 16),
                 box(15.5, 0,  0,   16, 16, 16),
                 box(   0, 0,  0,   .5, 16, 16),
@@ -202,34 +207,34 @@ public class FramedPrismBlock extends FramedBlock
                 box(  .5, 0, .5,    4, 16, 16)
         );
 
-        for (BlockState state : states)
+        VoxelShape[] shapes = new VoxelShape[12];
+        for (DirectionAxis dirAxis : DirectionAxis.values())
         {
-            DirectionAxis dirAxis = state.getValue(PropertyHolder.FACING_AXIS);
             Direction facing = dirAxis.direction();
             Direction.Axis axis = dirAxis.axis();
 
             if (Utils.isY(facing))
             {
-                builder.put(
-                        state,
-                        Utils.rotateShape(
-                                Direction.NORTH,
-                                Direction.fromAxisAndDirection(axis, Direction.AxisDirection.NEGATIVE),
-                                facing == Direction.UP ? shapeBottom : shapeTop
-                        )
+                shapes[dirAxis.ordinal()] = ShapeUtils.rotateShape(
+                        Direction.NORTH,
+                        Direction.fromAxisAndDirection(axis, Direction.AxisDirection.NEGATIVE),
+                        facing == Direction.UP ? shapeBottom : shapeTop
                 );
             }
             else
             {
-                builder.put(
-                        state,
-                        Utils.rotateShape(
-                                Direction.NORTH,
-                                facing.getOpposite(),
-                                axis == Direction.Axis.Y ? shapeY : shapeXZ
-                        )
+                shapes[dirAxis.ordinal()] = ShapeUtils.rotateShape(
+                        Direction.NORTH,
+                        facing.getOpposite(),
+                        axis == Direction.Axis.Y ? shapeY : shapeXZ
                 );
             }
+        }
+
+        for (BlockState state : states)
+        {
+            DirectionAxis dirAxis = state.getValue(PropertyHolder.FACING_AXIS);
+            builder.put(state, shapes[dirAxis.ordinal()]);
         }
 
         return ShapeProvider.of(builder.build());

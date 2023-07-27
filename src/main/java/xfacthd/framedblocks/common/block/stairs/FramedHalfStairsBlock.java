@@ -12,6 +12,7 @@ import net.minecraft.world.phys.Vec3;
 import net.minecraft.world.phys.shapes.*;
 import xfacthd.framedblocks.api.block.FramedProperties;
 import xfacthd.framedblocks.api.shapes.ShapeProvider;
+import xfacthd.framedblocks.api.shapes.ShapeUtils;
 import xfacthd.framedblocks.api.util.Utils;
 import xfacthd.framedblocks.common.block.FramedBlock;
 import xfacthd.framedblocks.common.data.BlockType;
@@ -116,46 +117,44 @@ public class FramedHalfStairsBlock extends FramedBlock
     {
         ImmutableMap.Builder<BlockState, VoxelShape> builder = ImmutableMap.builder();
 
-        VoxelShape bottomLeft = Shapes.join(
+        VoxelShape bottomLeft = ShapeUtils.orUnoptimized(
                 box(8, 0, 0, 16, 8, 16),
-                box(8, 8, 8, 16, 16, 16),
-                BooleanOp.OR
+                box(8, 8, 8, 16, 16, 16)
         );
 
-        VoxelShape bottomRight = Shapes.join(
+        VoxelShape bottomRight = ShapeUtils.orUnoptimized(
                 box(0, 0, 0, 8, 8, 16),
-                box(0, 8, 8, 8, 16, 16),
-                BooleanOp.OR
+                box(0, 8, 8, 8, 16, 16)
         );
 
-        VoxelShape topLeft = Shapes.join(
+        VoxelShape topLeft = ShapeUtils.orUnoptimized(
                 box(8, 8, 0, 16, 16, 16),
-                box(8, 0, 8, 16, 8, 16),
-                BooleanOp.OR
+                box(8, 0, 8, 16, 8, 16)
         );
 
-        VoxelShape topRight = Shapes.join(
+        VoxelShape topRight = ShapeUtils.orUnoptimized(
                 box(0, 8, 0, 8, 16, 16),
-                box(0, 0, 8, 8, 8, 16),
-                BooleanOp.OR
+                box(0, 0, 8, 8, 8, 16)
         );
+
+        int maskTop = 0b0100;
+        int maskRight = 0b1000;
+        VoxelShape[] shapes = new VoxelShape[4 * 4];
+        for (Direction dir : Direction.Plane.HORIZONTAL)
+        {
+            int horId = dir.get2DDataValue();
+            shapes[horId] = ShapeUtils.rotateShape(Direction.SOUTH, dir, bottomLeft);
+            shapes[horId | maskRight] = ShapeUtils.rotateShape(Direction.SOUTH, dir, bottomRight);
+            shapes[horId | maskTop] = ShapeUtils.rotateShape(Direction.SOUTH, dir, topLeft);
+            shapes[horId | maskTop | maskRight] = ShapeUtils.rotateShape(Direction.SOUTH, dir, topRight);
+        }
 
         for (BlockState state : states)
         {
             Direction dir = state.getValue(FramedProperties.FACING_HOR);
-            boolean top = state.getValue(FramedProperties.TOP);
-            boolean right = state.getValue(PropertyHolder.RIGHT);
-
-            VoxelShape shape;
-            if (top)
-            {
-                shape = right ? topRight : topLeft;
-            }
-            else
-            {
-                shape = right ? bottomRight : bottomLeft;
-            }
-            builder.put(state, Utils.rotateShape(Direction.SOUTH, dir, shape));
+            int top = state.getValue(FramedProperties.TOP) ? maskTop : 0;
+            int right = state.getValue(PropertyHolder.RIGHT) ? maskRight : 0;
+            builder.put(state, shapes[dir.get2DDataValue() | top | right]);
         }
 
         return ShapeProvider.of(builder.build());

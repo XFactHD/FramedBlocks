@@ -17,6 +17,7 @@ import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.phys.shapes.*;
 import org.jetbrains.annotations.Nullable;
 import xfacthd.framedblocks.api.block.IFramedBlock;
+import xfacthd.framedblocks.api.shapes.ShapeUtils;
 import xfacthd.framedblocks.api.util.Utils;
 import xfacthd.framedblocks.common.FBContent;
 import xfacthd.framedblocks.common.block.FramedBlock;
@@ -173,7 +174,7 @@ public class FramedCollapsibleBlock extends FramedBlock
                         case DOWN -> box(x * 4, y, z * 4, (x + 1) * 4, 16, (z + 1) * 4);
                     };
 
-                    result = Shapes.join(result, shape, BooleanOp.OR);
+                    result = ShapeUtils.orUnoptimized(result, shape);
                 }
             }
 

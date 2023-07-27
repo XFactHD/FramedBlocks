@@ -14,12 +14,11 @@ import net.minecraft.world.level.block.state.properties.Half;
 import net.minecraft.world.phys.shapes.*;
 import xfacthd.framedblocks.api.block.FramedProperties;
 import xfacthd.framedblocks.api.shapes.ShapeProvider;
+import xfacthd.framedblocks.api.shapes.ShapeUtils;
 import xfacthd.framedblocks.api.util.*;
 import xfacthd.framedblocks.common.block.FramedBlock;
 import xfacthd.framedblocks.common.data.*;
 import xfacthd.framedblocks.common.data.property.StairsType;
-
-import java.util.stream.Stream;
 
 public class FramedVerticalStairsBlock extends FramedBlock
 {
@@ -154,41 +153,42 @@ public class FramedVerticalStairsBlock extends FramedBlock
     {
         ImmutableMap.Builder<BlockState, VoxelShape> builder = ImmutableMap.builder();
 
-        VoxelShape vertShape = Shapes.join(
+        VoxelShape vertShape = ShapeUtils.orUnoptimized(
                 Block.box(0, 0, 8, 16, 16, 16),
-                Block.box(8, 0, 0, 16, 16, 8),
-                BooleanOp.OR
+                Block.box(8, 0, 0, 16, 16, 8)
         );
 
-        VoxelShape topCornerShape = Stream.of(
+        VoxelShape topCornerShape = ShapeUtils.orUnoptimized(
                 Block.box(8, 0, 8, 16, 16, 16),
                 Block.box(8, 0, 0, 16, 8, 8),
                 Block.box(0, 0, 8, 8, 8, 16)
-        ).reduce((v1, v2) -> Shapes.join(v1, v2, BooleanOp.OR)).get();
+        );
 
-        VoxelShape bottomCornerShape = Stream.of(
+        VoxelShape bottomCornerShape = ShapeUtils.orUnoptimized(
                 Block.box(8, 0, 8, 16, 16, 16),
                 Block.box(8, 8, 0, 16, 16, 8),
                 Block.box(0, 8, 8, 8, 16, 16)
-        ).reduce((v1, v2) -> Shapes.join(v1, v2, BooleanOp.OR)).get();
+        );
+
+        VoxelShape[] shapes = new VoxelShape[4 * 3];
+        for (Direction dir : Direction.Plane.HORIZONTAL)
+        {
+            int horId = dir.get2DDataValue();
+            shapes[horId] = ShapeUtils.rotateShape(Direction.NORTH, dir, vertShape);
+            shapes[horId | (StairsType.TOP_CORNER.ordinal() << 2)] = ShapeUtils.rotateShape(
+                    Direction.NORTH, dir, topCornerShape
+            );
+            shapes[horId | (StairsType.BOTTOM_CORNER.ordinal() << 2)] = ShapeUtils.rotateShape(
+                    Direction.NORTH, dir, bottomCornerShape
+            );
+        }
 
         for (BlockState state : states)
         {
-            StairsType type = state.getValue(PropertyHolder.STAIRS_TYPE);
             Direction dir = state.getValue(FramedProperties.FACING_HOR).getOpposite();
-
-            if (type == StairsType.TOP_CORNER)
-            {
-                builder.put(state, Utils.rotateShape(Direction.NORTH, dir, topCornerShape));
-            }
-            else if (type == StairsType.BOTTOM_CORNER)
-            {
-                builder.put(state, Utils.rotateShape(Direction.NORTH, dir, bottomCornerShape));
-            }
-            else
-            {
-                builder.put(state, Utils.rotateShape(Direction.NORTH, dir, vertShape));
-            }
+            StairsType type = state.getValue(PropertyHolder.STAIRS_TYPE);
+            int idx = dir.get2DDataValue() | (type.ordinal() << 2);
+            builder.put(state, shapes[idx]);
         }
 
         return ShapeProvider.of(builder.build());

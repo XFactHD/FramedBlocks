@@ -2,7 +2,6 @@ package xfacthd.framedblocks.common.block.slopepanel;
 
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
-import net.minecraft.Util;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.world.entity.player.Player;
@@ -13,18 +12,16 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.phys.Vec3;
-import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import xfacthd.framedblocks.api.block.FramedProperties;
 import xfacthd.framedblocks.api.block.IFramedBlock;
-import xfacthd.framedblocks.api.shapes.ShapeProvider;
+import xfacthd.framedblocks.api.shapes.*;
 import xfacthd.framedblocks.api.util.*;
 import xfacthd.framedblocks.common.block.FramedBlock;
 import xfacthd.framedblocks.common.data.*;
 import xfacthd.framedblocks.common.data.property.HorizontalRotation;
 
 import java.util.EnumMap;
-import java.util.Map;
 
 public class FramedSlopePanelBlock extends FramedBlock
 {
@@ -143,62 +140,72 @@ public class FramedSlopePanelBlock extends FramedBlock
 
 
 
-    public static final Map<HorizontalRotation, VoxelShape> SHAPES = Util.make(new EnumMap<>(HorizontalRotation.class), map ->
+    public static final ShapeCache<HorizontalRotation> SHAPES = new ShapeCache<>(new EnumMap<>(HorizontalRotation.class), map ->
     {
-        map.put(HorizontalRotation.UP, Shapes.or(
+        map.put(HorizontalRotation.UP, ShapeUtils.orUnoptimized(
                 box(0, 0, 0, 16, .5, 8),
                 box(0, .5, 0, 16, 4, 7.75),
                 box(0, 4, 0, 16, 8, 6),
                 box(0, 8, 0, 16, 12, 4),
                 box(0, 12, 0, 16, 15, 2),
                 box(0, 15, 0, 16, 16, 0.5)
-        ).optimize());
+        ));
 
-        map.put(HorizontalRotation.RIGHT, Shapes.or(
+        map.put(HorizontalRotation.RIGHT, ShapeUtils.orUnoptimized(
                 box(0, 0, 0, .5, 16, 8),
                 box(.5, 0, 0, 4, 16, 7.75),
                 box(4, 0, 0, 8, 16, 6),
                 box(8, 0, 0, 12, 16, 4),
                 box(12, 0, 0, 15, 16, 2),
                 box(15, 0, 0, 16, 16, 0.5)
-        ).optimize());
+        ));
 
-        map.put(HorizontalRotation.DOWN, Shapes.or(
+        map.put(HorizontalRotation.DOWN, ShapeUtils.orUnoptimized(
                 box(0, 15.5, 0, 16, 16, 8),
                 box(0, 12, 0, 16, 15.5, 7.75),
                 box(0, 8, 0, 16, 12, 6),
                 box(0, 4, 0, 16, 8, 4),
                 box(0, 1, 0, 16, 4, 2),
                 box(0, 0, 0, 16, 1, 0.5)
-        ).optimize());
+        ));
 
-        map.put(HorizontalRotation.LEFT, Shapes.or(
+        map.put(HorizontalRotation.LEFT, ShapeUtils.orUnoptimized(
                 box(15.5, 0, 0, 16, 16, 8),
                 box(12, 0, 0, 15.5, 16, 7.75),
                 box(8, 0, 0, 12, 16, 6),
                 box(4, 0, 0, 8, 16, 4),
                 box(1, 0, 0, 4, 16, 2),
                 box(0, 0, 0, 1, 16, 0.5)
-        ).optimize());
+        ));
     });
 
     public static ShapeProvider generateShapes(ImmutableList<BlockState> states)
     {
         ImmutableMap.Builder<BlockState, VoxelShape> builder = ImmutableMap.builder();
 
+        int maskFront = 0b10000;
+        VoxelShape[] shapes = new VoxelShape[4 * 4 * 2];
+        for (HorizontalRotation rot : HorizontalRotation.values())
+        {
+            VoxelShape shape = SHAPES.get(rot);
+            VoxelShape shapeFront = shape.move(0, 0, .5);
+
+            for (Direction dir : Direction.Plane.HORIZONTAL)
+            {
+                int idx = dir.get2DDataValue() | (rot.ordinal() << 2);
+                shapes[idx] = ShapeUtils.rotateShape(Direction.NORTH, dir, shape);
+                idx = dir.get2DDataValue() | (rot.ordinal() << 2) | maskFront;
+                shapes[idx] = ShapeUtils.rotateShape(Direction.NORTH, dir, shapeFront);
+            }
+        }
+
         for (BlockState state : states)
         {
-            VoxelShape shape = SHAPES.get(state.getValue(PropertyHolder.ROTATION));
-            if (state.getValue(PropertyHolder.FRONT))
-            {
-                shape = shape.move(0, 0, .5);
-            }
-
-            Direction facing = state.getValue(FramedProperties.FACING_HOR);
-            builder.put(
-                    state,
-                    Utils.rotateShape(Direction.NORTH, facing, shape)
-            );
+            Direction dir = state.getValue(FramedProperties.FACING_HOR);
+            HorizontalRotation rot = state.getValue(PropertyHolder.ROTATION);
+            int front = state.getValue(PropertyHolder.FRONT) ? maskFront : 0;
+            int idx = dir.get2DDataValue() | (rot.ordinal() << 2) | front;
+            builder.put(state, shapes[idx]);
         }
 
         return ShapeProvider.of(builder.build());

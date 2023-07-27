@@ -14,11 +14,11 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.phys.BlockHitResult;
-import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import xfacthd.framedblocks.api.block.FramedProperties;
 import xfacthd.framedblocks.api.block.IFramedBlock;
 import xfacthd.framedblocks.api.shapes.ShapeProvider;
+import xfacthd.framedblocks.api.shapes.ShapeUtils;
 import xfacthd.framedblocks.api.util.Utils;
 import xfacthd.framedblocks.common.FBContent;
 import xfacthd.framedblocks.common.block.AbstractFramedDoubleBlock;
@@ -168,21 +168,28 @@ public class FramedInverseDoubleSlopePanelBlock extends AbstractFramedDoubleBloc
     {
         ImmutableMap.Builder<BlockState, VoxelShape> builder = ImmutableMap.builder();
 
+        VoxelShape[] shapes = new VoxelShape[4 * 4];
+        for (HorizontalRotation rot : HorizontalRotation.values())
+        {
+            VoxelShape shapeOne = FramedSlopePanelBlock.SHAPES.get(rot.isVertical() ? rot.getOpposite() : rot);
+            VoxelShape preShape = ShapeUtils.orUnoptimized(
+                    ShapeUtils.rotateShapeUnoptimized(Direction.NORTH, Direction.SOUTH, shapeOne.move(0, 0, .5)),
+                    FramedSlopePanelBlock.SHAPES.get(rot).move(0, 0, .5)
+            );
+
+            for (Direction dir : Direction.Plane.HORIZONTAL)
+            {
+                int idx = dir.get2DDataValue() | (rot.ordinal() << 2);
+                shapes[idx] = ShapeUtils.rotateShape(Direction.NORTH, dir, preShape);
+            }
+        }
+
         for (BlockState state : states)
         {
-            Direction facing = state.getValue(FramedProperties.FACING_HOR);
-            HorizontalRotation rotation = state.getValue(PropertyHolder.ROTATION);
-
-            VoxelShape shapeOne = FramedSlopePanelBlock.SHAPES.get(rotation.isVertical() ? rotation.getOpposite() : rotation);
-            VoxelShape shape = Shapes.or(
-                    Utils.rotateShape(Direction.NORTH, Direction.SOUTH, shapeOne.move(0, 0, .5)),
-                    FramedSlopePanelBlock.SHAPES.get(rotation).move(0, 0, .5)
-            );
-
-            builder.put(
-                    state,
-                    Utils.rotateShape(Direction.NORTH, facing, shape)
-            );
+            Direction dir = state.getValue(FramedProperties.FACING_HOR);
+            HorizontalRotation rot = state.getValue(PropertyHolder.ROTATION);
+            int idx = dir.get2DDataValue() | (rot.ordinal() << 2);
+            builder.put(state, shapes[idx]);
         }
 
         return ShapeProvider.of(builder.build());

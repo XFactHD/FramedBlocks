@@ -94,11 +94,11 @@ public class FramedPillarBlock extends FramedBlock
         for (BlockState state : states)
         {
             builder.put(state, switch (state.getValue(BlockStateProperties.AXIS))
-                    {
-                        case X -> shapeX;
-                        case Y -> shapeY;
-                        case Z -> shapeZ;
-                    });
+            {
+                case X -> shapeX;
+                case Y -> shapeY;
+                case Z -> shapeZ;
+            });
         }
 
         return ShapeProvider.of(builder.build());

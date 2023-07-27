@@ -14,17 +14,18 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.phys.Vec3;
-import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import xfacthd.framedblocks.api.block.IFramedBlock;
 import xfacthd.framedblocks.api.block.FramedProperties;
-import xfacthd.framedblocks.api.shapes.ShapeProvider;
+import xfacthd.framedblocks.api.shapes.*;
 import xfacthd.framedblocks.api.util.Utils;
 import xfacthd.framedblocks.common.FBContent;
 import xfacthd.framedblocks.common.block.FramedBlock;
 import xfacthd.framedblocks.common.data.BlockType;
 import xfacthd.framedblocks.common.data.PropertyHolder;
 import xfacthd.framedblocks.common.item.VerticalAndWallBlockItem;
+
+import java.util.HashMap;
 
 public class FramedHalfSlopeBlock extends FramedBlock
 {
@@ -123,69 +124,74 @@ public class FramedHalfSlopeBlock extends FramedBlock
 
 
 
-    public static final VoxelShape SHAPE_BOTTOM_LEFT = Shapes.or(
-            box(0,    0, 0, 8,   .5,   16),
-            box(0,   .5, 0, 8,    4, 15.5),
-            box(0,    4, 0, 8,    8,   12),
-            box(0,    8, 0, 8,   12,    8),
-            box(0,   12, 0, 8, 15.5,    4),
-            box(0, 15.5, 0, 8,   16,   .5)
-    ).optimize();
+    public record ShapeKey(boolean top, boolean right) { }
 
-    public static final VoxelShape SHAPE_BOTTOM_RIGHT = Shapes.or(
-            box(8,    0, 0, 16,   .5,   16),
-            box(8,   .5, 0, 16,    4, 15.5),
-            box(8,    4, 0, 16,    8,   12),
-            box(8,    8, 0, 16,   12,    8),
-            box(8,   12, 0, 16, 15.5,    4),
-            box(8, 15.5, 0, 16,   16,   .5)
-    ).optimize();
+    public static final ShapeCache<ShapeKey> SHAPES = new ShapeCache<>(new HashMap<>(), map ->
+    {
+        map.put(new ShapeKey(false, false), ShapeUtils.orUnoptimized(
+                box(0,    0, 0, 8,   .5,   16),
+                box(0,   .5, 0, 8,    4, 15.5),
+                box(0,    4, 0, 8,    8,   12),
+                box(0,    8, 0, 8,   12,    8),
+                box(0,   12, 0, 8, 15.5,    4),
+                box(0, 15.5, 0, 8,   16,   .5)
+        ));
 
-    public static final VoxelShape SHAPE_TOP_LEFT = Shapes.or(
-            box(0,    0, 0, 8,   .5,   .5),
-            box(0,   .5, 0, 8,    4,    4),
-            box(0,    4, 0, 8,    8,    8),
-            box(0,    8, 0, 8,   12,   12),
-            box(0,   12, 0, 8, 15.5, 15.5),
-            box(0, 15.5, 0, 8,   16,   16)
-    ).optimize();
+        map.put(new ShapeKey(false, true), ShapeUtils.orUnoptimized(
+                box(8,    0, 0, 16,   .5,   16),
+                box(8,   .5, 0, 16,    4, 15.5),
+                box(8,    4, 0, 16,    8,   12),
+                box(8,    8, 0, 16,   12,    8),
+                box(8,   12, 0, 16, 15.5,    4),
+                box(8, 15.5, 0, 16,   16,   .5)
+        ));
 
-    public static final VoxelShape SHAPE_TOP_RIGHT = Shapes.or(
-            box(8,    0, 0, 16,   .5,   .5),
-            box(8,   .5, 0, 16,    4,    4),
-            box(8,    4, 0, 16,    8,    8),
-            box(8,    8, 0, 16,   12,   12),
-            box(8,   12, 0, 16, 15.5, 15.5),
-            box(8, 15.5, 0, 16,   16,   16)
-    ).optimize();
+        map.put(new ShapeKey(true, false), ShapeUtils.orUnoptimized(
+                box(0,    0, 0, 8,   .5,   .5),
+                box(0,   .5, 0, 8,    4,    4),
+                box(0,    4, 0, 8,    8,    8),
+                box(0,    8, 0, 8,   12,   12),
+                box(0,   12, 0, 8, 15.5, 15.5),
+                box(0, 15.5, 0, 8,   16,   16)
+        ));
+
+        map.put(new ShapeKey(true, true), ShapeUtils.orUnoptimized(
+                box(8,    0, 0, 16,   .5,   .5),
+                box(8,   .5, 0, 16,    4,    4),
+                box(8,    4, 0, 16,    8,    8),
+                box(8,    8, 0, 16,   12,   12),
+                box(8,   12, 0, 16, 15.5, 15.5),
+                box(8, 15.5, 0, 16,   16,   16)
+        ));
+    });
 
     public static ShapeProvider generateShapes(ImmutableList<BlockState> states)
     {
         ImmutableMap.Builder<BlockState, VoxelShape> builder = ImmutableMap.builder();
 
+        int maskTop = 0b0100;
+        int maskRight = 0b1000;
+        VoxelShape[] shapes = new VoxelShape[4 * 4];
+        for (Direction dir : Direction.Plane.HORIZONTAL)
+        {
+            for (int i = 0; i < 4; i++)
+            {
+                int idx = dir.get2DDataValue() | (i << 2);
+                shapes[idx] = ShapeUtils.rotateShape(
+                        Direction.NORTH,
+                        dir,
+                        SHAPES.get(new ShapeKey((idx & maskTop) != 0, (idx & maskRight) != 0))
+                );
+            }
+        }
+
         for (BlockState state : states)
         {
-            boolean top = state.getValue(FramedProperties.TOP);
-            boolean right = state.getValue(PropertyHolder.RIGHT);
-
-            VoxelShape shape;
-            if (top)
-            {
-                shape = right ? SHAPE_TOP_RIGHT : SHAPE_TOP_LEFT;
-            }
-            else
-            {
-                shape = right ? SHAPE_BOTTOM_RIGHT : SHAPE_BOTTOM_LEFT;
-            }
-
-            builder.put(
-                    state,
-                    Utils.rotateShape(
-                            Direction.NORTH,
-                            state.getValue(FramedProperties.FACING_HOR),
-                            shape
-                    )
-            );
+            Direction dir = state.getValue(FramedProperties.FACING_HOR);
+            int top = state.getValue(FramedProperties.TOP) ? maskTop : 0;
+            int right = state.getValue(PropertyHolder.RIGHT) ? maskRight : 0;
+            int idx = dir.get2DDataValue() | (top | right);
+            builder.put(state, shapes[idx]);
         }
 
         return ShapeProvider.of(builder.build());

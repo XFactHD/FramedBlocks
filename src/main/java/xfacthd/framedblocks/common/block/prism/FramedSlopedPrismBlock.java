@@ -12,10 +12,10 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.phys.Vec3;
-import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import xfacthd.framedblocks.api.block.FramedProperties;
 import xfacthd.framedblocks.api.shapes.ShapeProvider;
+import xfacthd.framedblocks.api.shapes.ShapeUtils;
 import xfacthd.framedblocks.api.type.IBlockType;
 import xfacthd.framedblocks.api.util.*;
 import xfacthd.framedblocks.common.block.FramedBlock;
@@ -128,73 +128,88 @@ public class FramedSlopedPrismBlock extends FramedBlock
     {
         ImmutableMap.Builder<BlockState, VoxelShape> builder = ImmutableMap.builder();
 
-        VoxelShape shapeBottom = Shapes.or(
+        VoxelShape shapeBottom = ShapeUtils.orUnoptimized(
                 box( 0, 0, 0,   16, .5,   16),
                 box(.5, 0, 0, 15.5,  4, 15.5),
                 box( 4, 0, 0,   12,  8,   12)
-        ).optimize();
+        );
 
-        VoxelShape shapeTop = Shapes.or(
+        VoxelShape shapeTop = ShapeUtils.orUnoptimized(
                 box( 0, 15.5, 0,   16, 16,   16),
                 box(.5,   12, 0, 15.5, 16, 15.5),
                 box( 4,    8, 0,   12, 16,   12)
-        ).optimize();
+        );
 
-        VoxelShape shapeRight = Shapes.or(
+        VoxelShape shapeRight = ShapeUtils.orUnoptimized(
                 box(0,  0, 15.5,   16,   16, 16),
                 box(0, .5,   12, 15.5, 15.5, 16),
                 box(0,  4,    8,   12,   12, 16)
-        ).optimize();
+        );
 
-        VoxelShape shapeLeft = Shapes.or(
+        VoxelShape shapeLeft = ShapeUtils.orUnoptimized(
                 box( 0,  0, 15.5, 16,   16, 16),
                 box(.5, .5,   12, 16, 15.5, 16),
                 box( 4,  4,    8, 16,   12, 16)
-        ).optimize();
+        );
 
-        VoxelShape shapeUp = Shapes.or(
+        VoxelShape shapeUp = ShapeUtils.orUnoptimized(
                 box( 0,  0, 15.5,   16, 16, 16),
                 box(.5, .5,   12, 15.5, 16, 16),
                 box( 4, 4,    8,   12,   16, 16)
-        ).optimize();
+        );
 
-        VoxelShape shapeDown = Shapes.or(
+        VoxelShape shapeDown = ShapeUtils.orUnoptimized(
                 box( 0, 0, 15.5,   16,   16, 16),
                 box(.5, 0,   12, 15.5, 15.5, 16),
                 box( 4,  0,    8,   12, 12, 16)
-        ).optimize();
+        );
 
-        for (BlockState state : states)
+        VoxelShape[] shapes = new VoxelShape[CompoundDirection.COUNT];
+        for (CompoundDirection cmpDir : CompoundDirection.values())
         {
-            CompoundDirection cmpDir = state.getValue(PropertyHolder.FACING_DIR);
             Direction facing = cmpDir.direction();
             Direction orientation = cmpDir.orientation();
 
             if (Utils.isY(facing))
             {
-                builder.put(
-                        state,
-                        Utils.rotateShape(
-                                Direction.NORTH,
-                                orientation,
-                                facing == Direction.UP ? shapeBottom : shapeTop
-                        )
+                shapes[cmpDir.ordinal()] = ShapeUtils.rotateShape(
+                        Direction.NORTH,
+                        orientation,
+                        facing == Direction.UP ? shapeBottom : shapeTop
                 );
             }
             else
             {
                 VoxelShape shape;
-                if (orientation == Direction.UP) { shape = shapeUp; }
-                else if (orientation == Direction.DOWN) { shape = shapeDown; }
-                else if (orientation == facing.getClockWise()) { shape = shapeLeft; }
-                else if (orientation == facing.getCounterClockWise()) { shape = shapeRight; }
-                else { throw new IllegalArgumentException("Invalid orientation for direction!"); }
+                if (orientation == Direction.UP)
+                {
+                    shape = shapeUp;
+                }
+                else if (orientation == Direction.DOWN)
+                {
+                    shape = shapeDown;
+                }
+                else if (orientation == facing.getClockWise())
+                {
+                    shape = shapeLeft;
+                }
+                else if (orientation == facing.getCounterClockWise())
+                {
+                    shape = shapeRight;
+                }
+                else
+                {
+                    throw new IllegalArgumentException("Invalid orientation for direction!");
+                }
 
-                builder.put(
-                        state,
-                        Utils.rotateShape(Direction.NORTH, facing, shape)
-                );
+                shapes[cmpDir.ordinal()] = ShapeUtils.rotateShape(Direction.NORTH, facing, shape);
             }
+        }
+
+        for (BlockState state : states)
+        {
+            CompoundDirection cmpDir = state.getValue(PropertyHolder.FACING_DIR);
+            builder.put(state, shapes[cmpDir.ordinal()]);
         }
 
         return ShapeProvider.of(builder.build());
@@ -204,7 +219,7 @@ public class FramedSlopedPrismBlock extends FramedBlock
     {
         ImmutableMap.Builder<BlockState, VoxelShape> builder = ImmutableMap.builder();
 
-        VoxelShape shapeBottom = Shapes.or(
+        VoxelShape shapeBottom = ShapeUtils.orUnoptimized(
                 box(   4, 0,    0,   12,   12,   16),
                 box(15.5, 0,    0,   16,   16,   16),
                 box(   0, 0,    0,   .5,   16,   16),
@@ -214,7 +229,7 @@ public class FramedSlopedPrismBlock extends FramedBlock
                 box(  .5, 0,   12, 15.5, 15.5, 15.5)
         );
 
-        VoxelShape shapeTop = Shapes.or(
+        VoxelShape shapeTop = ShapeUtils.orUnoptimized(
                 box(   4,  4,    0,   12, 16,   16),
                 box(15.5,  0,    0,   16, 16,   16),
                 box(   0,  0,    0,   .5, 16,   16),
@@ -224,7 +239,7 @@ public class FramedSlopedPrismBlock extends FramedBlock
                 box(  .5, .5,   12, 15.5, 16, 15.5)
         );
 
-        VoxelShape shapeRight = Shapes.or(
+        VoxelShape shapeRight = ShapeUtils.orUnoptimized(
                 box( 0,    4,  4, 16,   12, 16),
                 box( 0,    0,  0, 16,   .5, 16),
                 box( 0, 15.5,  0, 16,   16, 16),
@@ -234,7 +249,7 @@ public class FramedSlopedPrismBlock extends FramedBlock
                 box(.5,   .5, .5,  4, 15.5, 16)
         );
 
-        VoxelShape shapeLeft = Shapes.or(
+        VoxelShape shapeLeft = ShapeUtils.orUnoptimized(
                 box(0, 4, 4, 16, 12, 16),
                 box(0, 15.5, 0, 16, 16, 16),
                 box(0, 0, 0, 16, 0.5, 16),
@@ -244,7 +259,7 @@ public class FramedSlopedPrismBlock extends FramedBlock
                 box(12, 0.5, 0.5, 15.5, 15.5, 16)
         );
 
-        VoxelShape shapeUp = Shapes.or(
+        VoxelShape shapeUp = ShapeUtils.orUnoptimized(
                 box(   4,  0,  4,   12, 16, 16),
                 box(15.5,  0,  0,   16, 16, 16),
                 box(   0,  0,  0,   .5, 16, 16),
@@ -254,7 +269,7 @@ public class FramedSlopedPrismBlock extends FramedBlock
                 box(  .5, .5, .5, 15.5,  4, 16)
         );
 
-        VoxelShape shapeDown = Shapes.or(
+        VoxelShape shapeDown = ShapeUtils.orUnoptimized(
                 box(   4,    0,  4,   12,   16, 16),
                 box(   0,    0,  0,   .5,   16, 16),
                 box(15.5,    0,  0,   16,   16, 16),
@@ -264,37 +279,52 @@ public class FramedSlopedPrismBlock extends FramedBlock
                 box(  .5,   12, .5, 15.5, 15.5, 16)
         );
 
-        for (BlockState state : states)
+        VoxelShape[] shapes = new VoxelShape[CompoundDirection.COUNT];
+        for (CompoundDirection cmpDir : CompoundDirection.values())
         {
-            CompoundDirection cmdDir = state.getValue(PropertyHolder.FACING_DIR);
-            Direction facing = cmdDir.direction();
-            Direction orientation = cmdDir.orientation();
+            Direction facing = cmpDir.direction();
+            Direction orientation = cmpDir.orientation();
 
             if (Utils.isY(facing))
             {
-                builder.put(
-                        state,
-                        Utils.rotateShape(
-                                Direction.NORTH,
-                                orientation.getOpposite(),
-                                facing == Direction.UP ? shapeBottom : shapeTop
-                        )
+                shapes[cmpDir.ordinal()] = ShapeUtils.rotateShape(
+                        Direction.NORTH,
+                        orientation,
+                        facing == Direction.UP ? shapeBottom : shapeTop
                 );
             }
             else
             {
                 VoxelShape shape;
-                if (orientation == Direction.UP) { shape = shapeUp; }
-                else if (orientation == Direction.DOWN) { shape = shapeDown; }
-                else if (orientation == facing.getClockWise()) { shape = shapeLeft; }
-                else if (orientation == facing.getCounterClockWise()) { shape = shapeRight; }
-                else { throw new IllegalArgumentException("Invalid orientation for direction!"); }
+                if (orientation == Direction.UP)
+                {
+                    shape = shapeUp;
+                }
+                else if (orientation == Direction.DOWN)
+                {
+                    shape = shapeDown;
+                }
+                else if (orientation == facing.getClockWise())
+                {
+                    shape = shapeRight;
+                }
+                else if (orientation == facing.getCounterClockWise())
+                {
+                    shape = shapeLeft;
+                }
+                else
+                {
+                    throw new IllegalArgumentException("Invalid orientation for direction!");
+                }
 
-                builder.put(
-                        state,
-                        Utils.rotateShape(Direction.NORTH, facing, shape)
-                );
+                shapes[cmpDir.ordinal()] = ShapeUtils.rotateShape(Direction.NORTH, facing, shape);
             }
+        }
+
+        for (BlockState state : states)
+        {
+            CompoundDirection cmpDir = state.getValue(PropertyHolder.FACING_DIR);
+            builder.put(state, shapes[cmpDir.ordinal()]);
         }
 
         return ShapeProvider.of(builder.build());

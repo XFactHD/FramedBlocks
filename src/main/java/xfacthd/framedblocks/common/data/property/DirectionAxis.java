@@ -29,6 +29,7 @@ public enum DirectionAxis implements StringRepresentable
     EAST_Z  (Direction.EAST, Direction.Axis.Z);
 
     private static final DirectionAxis[][] FROM_DIR_AXIS = makeDirTable();
+    public static final int COUNT = values().length;
 
     private final String name = toString().toLowerCase(Locale.ROOT);
     private final Direction dir;

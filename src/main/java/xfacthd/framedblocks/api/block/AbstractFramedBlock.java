@@ -26,6 +26,7 @@ import net.minecraftforge.client.extensions.common.IClientBlockExtensions;
 import net.minecraftforge.common.IPlantable;
 import xfacthd.framedblocks.api.block.render.FramedBlockRenderProperties;
 import xfacthd.framedblocks.api.shapes.ShapeProvider;
+import xfacthd.framedblocks.api.shapes.ShapeUtils;
 import xfacthd.framedblocks.api.type.IBlockType;
 import xfacthd.framedblocks.api.util.Utils;
 
@@ -289,7 +290,7 @@ public abstract class AbstractFramedBlock extends Block implements IFramedBlock,
 
         shapes.forEach((state, shape) ->
         {
-            VoxelShape intersection = Shapes.join(shape, BEACON_BEAM_SHAPE, BooleanOp.AND);
+            VoxelShape intersection = ShapeUtils.andUnoptimized(shape, BEACON_BEAM_SHAPE);
 
             beamColorMasking.put(
                     state,

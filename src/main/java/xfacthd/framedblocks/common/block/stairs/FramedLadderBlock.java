@@ -14,6 +14,7 @@ import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import xfacthd.framedblocks.api.block.FramedProperties;
+import xfacthd.framedblocks.api.shapes.ShapeUtils;
 import xfacthd.framedblocks.api.util.Utils;
 import xfacthd.framedblocks.common.block.FramedBlock;
 import xfacthd.framedblocks.common.data.BlockType;
@@ -25,12 +26,12 @@ public class FramedLadderBlock extends FramedBlock
 
     private static final VoxelShape[] SHAPES = Util.make(new VoxelShape[4], arr ->
             Direction.Plane.HORIZONTAL.stream().forEach(dir ->
-                    arr[dir.get2DDataValue()] = Utils.rotateShape(Direction.NORTH, dir, SHAPE_NORTH)
+                    arr[dir.get2DDataValue()] = ShapeUtils.rotateShape(Direction.NORTH, dir, SHAPE_NORTH)
             )
     );
     private static final VoxelShape[] COLLISION_SHAPES = Util.make(new VoxelShape[4], arr ->
             Direction.Plane.HORIZONTAL.stream().forEach(dir ->
-                    arr[dir.get2DDataValue()] = Utils.rotateShape(Direction.NORTH, dir, COLLISION_SHAPE_NORTH)
+                    arr[dir.get2DDataValue()] = ShapeUtils.rotateShape(Direction.NORTH, dir, COLLISION_SHAPE_NORTH)
             )
     );
 

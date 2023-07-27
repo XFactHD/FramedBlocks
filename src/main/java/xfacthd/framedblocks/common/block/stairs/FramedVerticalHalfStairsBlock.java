@@ -12,6 +12,7 @@ import net.minecraft.world.phys.shapes.*;
 import org.jetbrains.annotations.Nullable;
 import xfacthd.framedblocks.api.block.FramedProperties;
 import xfacthd.framedblocks.api.shapes.ShapeProvider;
+import xfacthd.framedblocks.api.shapes.ShapeUtils;
 import xfacthd.framedblocks.api.util.Utils;
 import xfacthd.framedblocks.common.block.FramedBlock;
 import xfacthd.framedblocks.common.data.BlockType;
@@ -76,24 +77,23 @@ public class FramedVerticalHalfStairsBlock extends FramedBlock
     {
         ImmutableMap.Builder<BlockState, VoxelShape> builder = ImmutableMap.builder();
 
-        VoxelShape shapeBottom = Shapes.join(
+        VoxelShape shapeBottom = ShapeUtils.orUnoptimized(
                 Block.box(0, 0, 8, 16, 8, 16),
-                Block.box(8, 0, 0, 16, 8,  8),
-                BooleanOp.OR
+                Block.box(8, 0, 0, 16, 8,  8)
         );
 
-        VoxelShape shapeTop = Shapes.join(
+        VoxelShape shapeTop = ShapeUtils.orUnoptimized(
                 Block.box(0, 8, 8, 16, 16, 16),
-                Block.box(8, 8, 0, 16, 16,  8),
-                BooleanOp.OR
+                Block.box(8, 8, 0, 16, 16,  8)
         );
+
+        VoxelShape[] shapes = ShapeUtils.makeHorizontalRotationsWithFlag(shapeBottom, shapeTop, Direction.NORTH);
 
         for (BlockState state : states)
         {
             Direction dir = state.getValue(FramedProperties.FACING_HOR).getOpposite();
             boolean top = state.getValue(FramedProperties.TOP);
-
-            builder.put(state, Utils.rotateShape(Direction.NORTH, dir, top ? shapeTop : shapeBottom));
+            builder.put(state, shapes[dir.get2DDataValue() + (top ? 4 : 0)]);
         }
 
         return ShapeProvider.of(builder.build());

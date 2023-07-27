@@ -42,6 +42,7 @@ public enum CompoundDirection implements StringRepresentable
     ;
 
     private static final CompoundDirection[][] FROM_DIRS = makeDirTable();
+    public static final int COUNT = values().length;
 
     private final String name = toString().toLowerCase(Locale.ROOT);
     private final Direction direction;
