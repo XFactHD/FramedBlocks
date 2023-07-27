@@ -1,72 +1,79 @@
 package xfacthd.framedblocks.client.screen;
 
-import com.google.common.collect.HashBasedTable;
-import com.google.common.collect.Table;
 import com.mojang.blaze3d.platform.GlStateManager;
 import com.mojang.blaze3d.platform.Lighting;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.*;
+import com.mojang.math.Axis;
 import net.minecraft.ChatFormatting;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.font.TextFieldHelper;
 import net.minecraft.client.gui.screens.Screen;
-import net.minecraft.client.renderer.MultiBufferSource;
-import net.minecraft.client.renderer.block.model.BakedQuad;
-import net.minecraft.client.renderer.texture.TextureAtlas;
-import net.minecraft.client.renderer.texture.TextureAtlasSprite;
+import net.minecraft.client.renderer.*;
+import net.minecraft.client.renderer.block.BlockRenderDispatcher;
+import net.minecraft.client.renderer.texture.*;
 import net.minecraft.client.resources.model.BakedModel;
-import net.minecraft.core.Direction;
 import net.minecraft.network.chat.*;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.util.FastColor;
+import net.minecraft.util.RandomSource;
+import net.minecraft.world.level.block.entity.SignText;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.level.block.state.properties.BlockStateProperties;
-import net.minecraftforge.client.ChunkRenderTypeSet;
-import net.minecraftforge.client.event.TextureStitchEvent;
+import net.minecraftforge.client.RenderTypeHelper;
 import net.minecraftforge.client.model.data.ModelData;
 import org.joml.Matrix4f;
 import org.lwjgl.glfw.GLFW;
 import xfacthd.framedblocks.FramedBlocks;
-import xfacthd.framedblocks.api.block.FramedProperties;
+import xfacthd.framedblocks.api.render.Quaternions;
 import xfacthd.framedblocks.api.util.Utils;
-import xfacthd.framedblocks.common.FBContent;
+import xfacthd.framedblocks.common.block.AbstractFramedSignBlock;
+import xfacthd.framedblocks.common.data.BlockType;
 import xfacthd.framedblocks.common.net.SignUpdatePacket;
 import xfacthd.framedblocks.common.blockentity.special.FramedSignBlockEntity;
 
-import java.util.List;
+import java.util.stream.IntStream;
 
-@SuppressWarnings("deprecation")
-public class FramedSignScreen extends Screen // FIXME: update to match vanilla sign screen
+public class FramedSignScreen extends Screen
 {
-    private static final Table<BlockState, Direction, TextureAtlasSprite> SPRITE_CACHE = HashBasedTable.create();
-    private static final ResourceLocation DEFAULT_TEXTURE = Utils.rl("block/framed_block");
     public static final Component TITLE = Utils.translate("title", "sign.edit");
-    public static final Component DONE = Utils.translate("button", "gui.done");
-    private static final int TEX_W = 128;
-    private static final int TEX_H = 64;
-    private static final int TEX_MAX_V = 8;
 
+    private final AbstractFramedSignBlock signBlock;
     private final FramedSignBlockEntity sign;
-    private final String[] lines = new String[4];
+    private final boolean front;
+    private final int textYOffset;
+    private SignText text;
+    private final String[] lines;
     private int blinkCounter = 0;
     private int currLine = 0;
     private TextFieldHelper inputUtil;
-    private int texX;
-    private int texY;
 
-    public FramedSignScreen(FramedSignBlockEntity sign)
+    public FramedSignScreen(FramedSignBlockEntity sign, boolean front)
     {
         super(TITLE);
+        this.signBlock = (AbstractFramedSignBlock) sign.getBlockState().getBlock();
         this.sign = sign;
-
-        for (int i = 0; i < 4; i++) { lines[i] = sign.getLine(i).getString(); }
+        this.front = front;
+        this.text = sign.getText(front);
+        boolean filtered = Minecraft.getInstance().isTextFilteringEnabled();
+        this.lines = IntStream.range(0, 4)
+                .mapToObj(idx -> text.getMessage(idx, filtered))
+                .map(Component::getString)
+                .toArray(String[]::new);
+        this.textYOffset = switch ((BlockType) sign.getBlockType())
+        {
+            case FRAMED_SIGN -> 67;
+            case FRAMED_WALL_SIGN -> 30;
+            case FRAMED_HANGING_SIGN, FRAMED_WALL_HANGING_SIGN -> 6;
+            default -> throw new IllegalArgumentException("Invalid block type: " + sign.getBlockType());
+        };
     }
 
     @Override
     protected void init()
     {
-        addRenderableWidget(Button.builder(DONE, btn -> onClose())
+        addRenderableWidget(Button.builder(CommonComponents.GUI_DONE, btn -> Minecraft.getInstance().setScreen(null))
                 .pos(width / 2 - 100, height / 2 + 60)
                 .size(200, 20)
                 .build()
@@ -75,29 +82,23 @@ public class FramedSignScreen extends Screen // FIXME: update to match vanilla s
         //noinspection ConstantConditions
         inputUtil = new TextFieldHelper(
                 () -> lines[currLine],
-                (line) ->
-                {
-                    lines[currLine] = line;
-                    sign.setLine(currLine, Component.literal(line));
-                },
+                this::setLine,
                 TextFieldHelper.createClipboardGetter(minecraft), TextFieldHelper.createClipboardSetter(minecraft),
-                (line) -> minecraft.font.width(line) <= 90
+                (line) -> minecraft.font.width(line) <= signBlock.getMaxTextLineWidth()
         );
+    }
 
-        texX = width / 2 - TEX_W / 2;
-        texY = height / 2 - TEX_H / 2 - 20;
+    private void setLine(String line)
+    {
+        lines[currLine] = line;
+        text = text.setMessage(currLine, Component.literal(line));
+        sign.setText(text, front);
     }
 
     @Override
     public void removed()
     {
-        FramedBlocks.CHANNEL.sendToServer(new SignUpdatePacket(sign.getBlockPos(), new String[]
-        {
-                sign.getLine(0).getString(),
-                sign.getLine(1).getString(),
-                sign.getLine(2).getString(),
-                sign.getLine(3).getString()
-        }));
+        FramedBlocks.CHANNEL.sendToServer(new SignUpdatePacket(sign.getBlockPos(), front, lines));
     }
 
     @Override
@@ -105,10 +106,16 @@ public class FramedSignScreen extends Screen // FIXME: update to match vanilla s
     {
         blinkCounter++;
 
-        if (!sign.getType().isValid(sign.getBlockState()))
+        if (minecraft != null && minecraft.player != null && !sign.isRemoved() && sign.isTooFarAwayToEdit(minecraft.player))
         {
-            removed();
+            Minecraft.getInstance().setScreen(null);
         }
+    }
+
+    @Override
+    public boolean isPauseScreen()
+    {
+        return false;
     }
 
     @Override
@@ -142,24 +149,68 @@ public class FramedSignScreen extends Screen // FIXME: update to match vanilla s
     @Override
     public void render(GuiGraphics graphics, int mouseX, int mouseY, float partialTicks)
     {
-        Lighting.setupForFlatItems();
+        Lighting.setupForEntityInInventory();
 
         renderBackground(graphics);
         //noinspection ConstantConditions
         graphics.drawCenteredString(font, title, width / 2, 40, ChatFormatting.WHITE.getColor());
 
-        TextureAtlasSprite sprite = getFrontSprite();
-        graphics.innerBlit(
-                sprite.atlasLocation(),
-                texX, texX + TEX_W, texY, texY + TEX_H, 0,
-                sprite.getU0(),
-                sprite.getU1(),
-                sprite.getV0(),
-                sprite.getV(TEX_MAX_V)
-        );
+        drawSignBlock(graphics);
 
+        drawText(graphics);
+
+        Lighting.setupFor3DItems();
+        super.render(graphics, mouseX, mouseY, partialTicks);
+    }
+
+    private void drawSignBlock(GuiGraphics graphics)
+    {
+        BlockState state = sign.getBlockState();
+
+        PoseStack poseStack = graphics.pose();
+        poseStack.pushPose();
+        poseStack.translate(width / 2F, height / 2F, 100);
+        poseStack.mulPose(Axis.YN.rotationDegrees(signBlock.getYRotationDegrees(state)));
+        poseStack.mulPose(Quaternions.ZP_180);
+        poseStack.scale(112, 112, 112);
+        poseStack.translate(-.5, -.25, -.5);
+
+        //noinspection ConstantConditions
+        BlockRenderDispatcher renderer = minecraft.getBlockRenderer();
+        MultiBufferSource.BufferSource buffer = graphics.bufferSource();
+        PoseStack.Pose pose = poseStack.last();
+        BakedModel model = renderer.getBlockModel(state);
+        ModelData modelData = sign.getModelData();
+
+        int color = minecraft.getBlockColors().getColor(state, minecraft.level, sign.getBlockPos(), 0);
+        float red = FastColor.ARGB32.red(color) / 255F;
+        float green = FastColor.ARGB32.green(color) / 255F;
+        float blue = FastColor.ARGB32.blue(color) / 255F;
+
+        for (RenderType renderType : model.getRenderTypes(state, RandomSource.create(42), modelData))
+        {
+            VertexConsumer consumer = buffer.getBuffer(RenderTypeHelper.getEntityRenderType(renderType, false));
+            renderer.getModelRenderer().renderModel(
+                    pose,
+                    consumer,
+                    state,
+                    model,
+                    red, green, blue,
+                    LightTexture.FULL_BRIGHT,
+                    OverlayTexture.NO_OVERLAY,
+                    modelData,
+                    renderType
+            );
+        }
+
+        buffer.endBatch();
+        poseStack.popPose();
+    }
+
+    private void drawText(GuiGraphics graphics)
+    {
         graphics.pose().pushPose();
-        graphics.pose().translate(width / 2D, height / 2D - 20, 0);
+        graphics.pose().translate(width / 2D, height / 2D - textYOffset, 110);
         graphics.pose().scale(1.2F, 1.2F, 1F);
 
         //noinspection ConstantConditions
@@ -169,14 +220,11 @@ public class FramedSignScreen extends Screen // FIXME: update to match vanilla s
         drawCursor(graphics, buffer, lines);
 
         graphics.pose().popPose();
-
-        Lighting.setupFor3DItems();
-        super.render(graphics, mouseX, mouseY, partialTicks);
     }
 
     private void drawLines(Matrix4f matrix, MultiBufferSource.BufferSource buffer, String[] lines)
     {
-        int color = sign.getTextColor().getTextColor();
+        int color = text.getColor().getTextColor();
 
         for(int line = 0; line < lines.length; line++)
         {
@@ -196,7 +244,7 @@ public class FramedSignScreen extends Screen // FIXME: update to match vanilla s
     private void drawCursor(GuiGraphics graphics, MultiBufferSource.BufferSource buffer, String[] lines)
     {
         Matrix4f matrix = graphics.pose().last().pose();
-        int color = sign.getTextColor().getTextColor();
+        int color = text.getColor().getTextColor();
         boolean blink = blinkCounter / 6 % 2 == 0;
         int dir = font.isBidirectional() ? -1 : 1;
         int y = currLine * 10 - 20;
@@ -246,61 +294,6 @@ public class FramedSignScreen extends Screen // FIXME: update to match vanilla s
                     RenderSystem.disableColorLogicOp();
                 }
             }
-        }
-    }
-
-
-
-    @SuppressWarnings("ConstantConditions")
-    private TextureAtlasSprite getFrontSprite()
-    {
-        Direction front;
-
-        BlockState state = sign.getBlockState();
-        if (state.getBlock() == FBContent.BLOCK_FRAMED_WALL_SIGN.get())
-        {
-            front = state.getValue(FramedProperties.FACING_HOR);
-        }
-        else
-        {
-            int rot = state.getValue(BlockStateProperties.ROTATION_16);
-            double angle = rot * 360D / 16D;
-            front = Direction.fromYRot(angle);
-        }
-
-        BlockState camoState = sign.getCamo().getState();
-        if (camoState.isAir())
-        {
-            camoState = FBContent.BLOCK_FRAMED_CUBE.get().defaultBlockState();
-        }
-
-        if (!SPRITE_CACHE.contains(camoState, front))
-        {
-            BakedModel model = minecraft.getBlockRenderer().getBlockModel(camoState);
-            ChunkRenderTypeSet layers = model.getRenderTypes(camoState, minecraft.level.getRandom(), ModelData.EMPTY);
-            List<BakedQuad> quads = model.getQuads(camoState, front, minecraft.level.getRandom(), ModelData.EMPTY, layers.iterator().next());
-
-            TextureAtlasSprite sprite;
-            if (!quads.isEmpty())
-            {
-                sprite = quads.get(0).getSprite();
-            }
-            else
-            {
-                sprite = minecraft.getTextureAtlas(TextureAtlas.LOCATION_BLOCKS).apply(DEFAULT_TEXTURE);
-            }
-
-            SPRITE_CACHE.put(camoState, front, sprite);
-        }
-
-        return SPRITE_CACHE.get(camoState, front);
-    }
-
-    public static void onTextureStitch(final TextureStitchEvent.Post event)
-    {
-        if (event.getAtlas().location().equals(TextureAtlas.LOCATION_BLOCKS))
-        {
-            SPRITE_CACHE.clear();
         }
     }
 }

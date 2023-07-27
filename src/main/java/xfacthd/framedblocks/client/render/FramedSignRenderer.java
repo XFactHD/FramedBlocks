@@ -3,17 +3,22 @@ package xfacthd.framedblocks.client.render;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.math.Axis;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.renderer.LightTexture;
 import net.minecraft.client.renderer.blockentity.*;
+import net.minecraft.core.BlockPos;
 import net.minecraft.util.*;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.item.DyeColor;
+import net.minecraft.world.level.block.entity.SignText;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.renderer.MultiBufferSource;
-import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.phys.Vec3;
-import xfacthd.framedblocks.api.block.FramedProperties;
-import xfacthd.framedblocks.common.block.interactive.FramedSignBlock;
+import org.joml.Matrix4f;
+import org.joml.Vector3f;
+import xfacthd.framedblocks.api.render.Quaternions;
+import xfacthd.framedblocks.common.block.AbstractFramedSignBlock;
+import xfacthd.framedblocks.common.block.interactive.FramedStandingSignBlock;
 import xfacthd.framedblocks.common.blockentity.special.FramedSignBlockEntity;
 
 import java.util.List;
@@ -21,14 +26,20 @@ import java.util.List;
 public class FramedSignRenderer implements BlockEntityRenderer<FramedSignBlockEntity>
 {
     private static final int OUTLINE_RENDER_DISTANCE = Mth.square(16);
+    private static final float RENDER_SCALE = 0.6666667F;
+    private static final Vector3f TEXT_OFFSET = new Vector3f(0F, 5.6F/16F, 1F/16F);
+    private static final Vector3f WALL_TEXT_OFFSET = new Vector3f(0F, 5.35F/16F, 1F/16F);
 
-    private final Font fontrenderer;
+    private final Font font;
 
-    public FramedSignRenderer(BlockEntityRendererProvider.Context ctx) { fontrenderer = ctx.getFont(); }
+    public FramedSignRenderer(BlockEntityRendererProvider.Context ctx)
+    {
+        font = ctx.getFont();
+    }
 
     @Override
     public void render(
-            FramedSignBlockEntity tile,
+            FramedSignBlockEntity sign,
             float partialTicks,
             PoseStack poseStack,
             MultiBufferSource buffer,
@@ -36,77 +47,120 @@ public class FramedSignRenderer implements BlockEntityRenderer<FramedSignBlockEn
             int overlay
     )
     {
+        BlockState state = sign.getBlockState();
+        if (!(state.getBlock() instanceof AbstractFramedSignBlock signBlock))
+        {
+            return;
+        }
+
+        BlockPos pos = sign.getBlockPos();
+        int lineHeight = signBlock.getTextLineHeight();
+        int lineWidth = signBlock.getMaxTextLineWidth();
+
         poseStack.pushPose();
+        applyTransforms(poseStack, -signBlock.getYRotationDegrees(state), state);
+        renderText(pos, signBlock, sign.getFrontText(), poseStack, buffer, light, lineHeight, lineWidth, true);
+        renderText(pos, signBlock, sign.getBackText(), poseStack, buffer, light, lineHeight, lineWidth, false);
+        poseStack.popPose();
+    }
 
-        BlockState state = tile.getBlockState();
-        if (state.getBlock() instanceof FramedSignBlock)
+    protected void applyTransforms(PoseStack poseStack, float yRot, BlockState state)
+    {
+        poseStack.translate(.5F, .75F * RENDER_SCALE, .5F);
+        poseStack.mulPose(Axis.YP.rotationDegrees(yRot));
+        if (!(state.getBlock() instanceof FramedStandingSignBlock))
         {
-            poseStack.translate(0.5D, 0.5D, 0.5D);
-            float rot = -((state.getValue(BlockStateProperties.ROTATION_16) * 360) / 16.0F);
-            poseStack.mulPose(Axis.YP.rotationDegrees(rot));
+            poseStack.translate(0F, -5F/16F, -7F/16F);
         }
-        else
+    }
+
+    private void applyTextTransforms(PoseStack poseStack, AbstractFramedSignBlock signBlock, boolean front)
+    {
+        if (!front)
         {
-            poseStack.translate(0.5D, 0.5D, 0.5D);
-            float rot = -state.getValue(FramedProperties.FACING_HOR).toYRot();
-            poseStack.mulPose(Axis.YP.rotationDegrees(rot));
-            poseStack.translate(0.0D, -0.3125D, -0.4375D);
+            poseStack.mulPose(Quaternions.YP_180);
         }
 
-        poseStack.translate(0.0, 0.33, 0.065);
-        poseStack.scale(0.01F, -0.01F, 0.01F);
+        Vector3f offset = getTextOffset(signBlock);
+        poseStack.translate(offset.x, offset.y, offset.z);
+        float scale = 0.015625F * getSignTextRenderScale();
+        poseStack.scale(scale, -scale, scale);
+    }
 
-        boolean showOutline;
+    protected float getSignTextRenderScale()
+    {
+        return RENDER_SCALE;
+    }
+
+    protected Vector3f getTextOffset(AbstractFramedSignBlock signBlock)
+    {
+        boolean standing = signBlock instanceof FramedStandingSignBlock;
+        return standing ? TEXT_OFFSET : WALL_TEXT_OFFSET;
+    }
+
+    private void renderText(
+            BlockPos pos,
+            AbstractFramedSignBlock signBlock,
+            SignText text,
+            PoseStack poseStack,
+            MultiBufferSource buffer,
+            int light,
+            int lineHeight,
+            int lineWidth,
+            boolean front
+    )
+    {
+        poseStack.pushPose();
+        applyTextTransforms(poseStack, signBlock, front);
+
+        int darkColor = getDarkTextColor(text);
         int textColor;
-        int outlineColor;
+        boolean outline;
         int textLight;
-
-        if (tile.hasGlowingText())
+        if (text.hasGlowingText())
         {
-            showOutline = showOutline(tile);
-            textColor = tile.getTextColor().getTextColor();
-            outlineColor = getDarkTextColor(tile);
-            textLight = 0x00F000F0;
+            textColor = text.getColor().getTextColor();
+            outline = showOutline(pos, textColor);
+            textLight = LightTexture.FULL_BRIGHT;
         }
         else
         {
-            showOutline = false;
-            textColor = getDarkTextColor(tile);
-            outlineColor = 0;
+            textColor = darkColor;
+            outline = false;
             textLight = light;
         }
 
-        for (int line = 0; line < 4; line++)
+        FormattedCharSequence[] lines = text.getRenderMessages(
+                Minecraft.getInstance().isTextFilteringEnabled(), line -> {
+                    List<FormattedCharSequence> list = font.split(line, lineWidth);
+                    return list.isEmpty() ? FormattedCharSequence.EMPTY : list.get(0);
+                }
+        );
+
+        int centerY = 4 * lineHeight / 2;
+        Matrix4f pose = poseStack.last().pose();
+        for (int idx = 0; idx < 4; ++idx)
         {
-            FormattedCharSequence text = tile.getRenderedLine(line, component ->
+            FormattedCharSequence line = lines[idx];
+            float textX = (float) -font.width(line) / 2;
+            float textY = idx * lineHeight - centerY;
+            if (outline)
             {
-                List<FormattedCharSequence> parts = fontrenderer.split(component, 90);
-                return parts.isEmpty() ? FormattedCharSequence.EMPTY : parts.get(0);
-            });
-
-            if (text != null)
+                font.drawInBatch8xOutline(line, textX, textY, textColor, darkColor, pose, buffer, textLight);
+            }
+            else
             {
-                float xOff = -fontrenderer.width(text) / 2F;
-                float y = line * 10 - 20;
-
-                if (showOutline)
-                {
-                    fontrenderer.drawInBatch8xOutline(text, xOff, y, textColor, outlineColor, poseStack.last().pose(), buffer, textLight);
-                }
-                else
-                {
-                    fontrenderer.drawInBatch(text, xOff, y, textColor, false, poseStack.last().pose(), buffer, Font.DisplayMode.NORMAL, 0, textLight);
-                }
+                font.drawInBatch(line, textX, textY, textColor, false, pose, buffer, Font.DisplayMode.POLYGON_OFFSET, 0, textLight);
             }
         }
 
         poseStack.popPose();
     }
 
-    private static int getDarkTextColor(FramedSignBlockEntity sign)
+    private static int getDarkTextColor(SignText text)
     {
-        int color = sign.getTextColor().getTextColor();
-        if (color == DyeColor.BLACK.getTextColor() && sign.hasGlowingText())
+        int color = text.getColor().getTextColor();
+        if (color == DyeColor.BLACK.getTextColor() && text.hasGlowingText())
         {
             return 0xFFF0EBCC;
         }
@@ -117,9 +171,12 @@ public class FramedSignRenderer implements BlockEntityRenderer<FramedSignBlockEn
         return FastColor.ARGB32.color(0, r, g, b);
     }
 
-    private static boolean showOutline(FramedSignBlockEntity sign)
+    private static boolean showOutline(BlockPos pos, int textColor)
     {
-        if (sign.getTextColor().getTextColor() == DyeColor.BLACK.getTextColor()) { return true; }
+        if (textColor == DyeColor.BLACK.getTextColor())
+        {
+            return true;
+        }
 
         Minecraft mc = Minecraft.getInstance();
         if (mc.player != null && mc.options.getCameraType().isFirstPerson() && mc.player.isScoping())
@@ -129,7 +186,7 @@ public class FramedSignRenderer implements BlockEntityRenderer<FramedSignBlockEn
         else
         {
             Entity camera = mc.getCameraEntity();
-            return camera != null && camera.distanceToSqr(Vec3.atCenterOf(sign.getBlockPos())) < (double) OUTLINE_RENDER_DISTANCE;
+            return camera != null && camera.distanceToSqr(Vec3.atCenterOf(pos)) < (double) OUTLINE_RENDER_DISTANCE;
         }
     }
 }

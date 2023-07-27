@@ -2,16 +2,15 @@ package xfacthd.framedblocks.common.item;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
-import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.StandingAndWallBlockItem;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraftforge.network.PacketDistributor;
-import xfacthd.framedblocks.FramedBlocks;
+import net.minecraftforge.registries.RegistryObject;
 import xfacthd.framedblocks.common.FBContent;
-import xfacthd.framedblocks.common.net.OpenSignScreenPacket;
+import xfacthd.framedblocks.common.block.AbstractFramedSignBlock;
 import xfacthd.framedblocks.common.blockentity.special.FramedSignBlockEntity;
 
 import javax.annotation.Nullable;
@@ -20,7 +19,12 @@ public class FramedSignItem extends StandingAndWallBlockItem
 {
     public FramedSignItem()
     {
-        super(FBContent.BLOCK_FRAMED_SIGN.get(), FBContent.BLOCK_FRAMED_WALL_SIGN.get(), new Properties(), Direction.DOWN);
+        this(FBContent.BLOCK_FRAMED_SIGN, FBContent.BLOCK_FRAMED_WALL_SIGN, Direction.DOWN);
+    }
+
+    protected FramedSignItem(RegistryObject<Block> standing, RegistryObject<Block> wall, Direction attachFace)
+    {
+        super(standing.get(), wall.get(), new Properties(), attachFace);
     }
 
     @Override
@@ -33,12 +37,7 @@ public class FramedSignItem extends StandingAndWallBlockItem
         {
             if (level.getBlockEntity(pos) instanceof FramedSignBlockEntity be)
             {
-                be.setEditingPlayer(player);
-
-                FramedBlocks.CHANNEL.send(
-                        PacketDistributor.PLAYER.with(() -> (ServerPlayer) player),
-                        new OpenSignScreenPacket(pos)
-                );
+                AbstractFramedSignBlock.openEditScreen(player, be, true);
             }
         }
         return hadNBT;

@@ -2,6 +2,7 @@ package xfacthd.framedblocks.common.block.interactive;
 
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
+import net.minecraft.Util;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.world.item.context.BlockPlaceContext;
@@ -10,7 +11,7 @@ import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.block.*;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
-import net.minecraft.world.level.block.state.properties.BlockStateProperties;
+import net.minecraft.world.phys.Vec3;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import xfacthd.framedblocks.api.block.IFramedBlock;
 import xfacthd.framedblocks.api.block.FramedProperties;
@@ -21,6 +22,14 @@ import xfacthd.framedblocks.common.data.BlockType;
 @SuppressWarnings("deprecation")
 public class FramedWallSignBlock extends AbstractFramedSignBlock
 {
+    private static final Vec3[] HITBOX_CENTERS = Util.make(new Vec3[4], arr ->
+    {
+        arr[Direction.NORTH.get2DDataValue()] = new Vec3(.5, .5, 15D/16D);
+        arr[Direction.EAST.get2DDataValue()] = new Vec3(1D/16D, .5, .5);
+        arr[Direction.SOUTH.get2DDataValue()] = new Vec3(.5, .5, 1D/16D);
+        arr[Direction.WEST.get2DDataValue()] = new Vec3(15D/16D, .5, .5);
+    });
+
     public FramedWallSignBlock()
     {
         super(BlockType.FRAMED_WALL_SIGN, IFramedBlock.createProperties(BlockType.FRAMED_WALL_SIGN).noCollission());
@@ -30,7 +39,7 @@ public class FramedWallSignBlock extends AbstractFramedSignBlock
     protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder)
     {
         super.createBlockStateDefinition(builder);
-        builder.add(FramedProperties.FACING_HOR, BlockStateProperties.WATERLOGGED);
+        builder.add(FramedProperties.FACING_HOR);
     }
 
     @Override
@@ -41,7 +50,7 @@ public class FramedWallSignBlock extends AbstractFramedSignBlock
         BlockPos pos = context.getClickedPos();
         Direction[] dirs = context.getNearestLookingDirections();
 
-        for(Direction direction : dirs)
+        for (Direction direction : dirs)
         {
             if (direction.getAxis().isHorizontal())
             {
@@ -60,18 +69,18 @@ public class FramedWallSignBlock extends AbstractFramedSignBlock
     @Override
     public BlockState updateShape(
             BlockState state,
-            Direction facing,
+            Direction dir,
             BlockState facingState,
             LevelAccessor level,
             BlockPos pos,
             BlockPos facingPos
     )
     {
-        if (facing.getOpposite() == state.getValue(FramedProperties.FACING_HOR) && !state.canSurvive(level, pos))
+        if (dir.getOpposite() == state.getValue(FramedProperties.FACING_HOR) && !state.canSurvive(level, pos))
         {
             return Blocks.AIR.defaultBlockState();
         }
-        return super.updateShape(state, facing, facingState, level, pos, facingPos);
+        return super.updateShape(state, dir, facingState, level, pos, facingPos);
     }
 
     @Override
@@ -93,6 +102,18 @@ public class FramedWallSignBlock extends AbstractFramedSignBlock
     {
         Direction dir = state.getValue(FramedProperties.FACING_HOR);
         return state.setValue(FramedProperties.FACING_HOR, rot.rotate(dir));
+    }
+
+    @Override
+    public float getYRotationDegrees(BlockState state)
+    {
+        return state.getValue(FramedProperties.FACING_HOR).toYRot();
+    }
+
+    @Override
+    public Vec3 getSignHitboxCenterPosition(BlockState state)
+    {
+        return HITBOX_CENTERS[state.getValue(FramedProperties.FACING_HOR).get2DDataValue()];
     }
 
 

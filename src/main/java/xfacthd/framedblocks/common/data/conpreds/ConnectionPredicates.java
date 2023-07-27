@@ -75,6 +75,8 @@ public final class ConnectionPredicates extends BlockTypeMap<ConnectionPredicate
         put(BlockType.FRAMED_LEVER, ConnectionPredicate.FALSE);
         put(BlockType.FRAMED_SIGN, ConnectionPredicate.FALSE);
         put(BlockType.FRAMED_WALL_SIGN, ConnectionPredicate.FALSE);
+        put(BlockType.FRAMED_HANGING_SIGN, ConnectionPredicate.FALSE);
+        put(BlockType.FRAMED_WALL_HANGING_SIGN, ConnectionPredicate.FALSE);
         put(BlockType.FRAMED_DOUBLE_SLAB, new DoubleSlabConnectionPredicate());
         put(BlockType.FRAMED_DOUBLE_PANEL, new DoublePanelConnectionPredicate());
         put(BlockType.FRAMED_DOUBLE_SLOPE, new DoubleSlopeConnectionPredicate());

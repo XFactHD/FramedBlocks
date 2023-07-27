@@ -204,6 +204,11 @@ public final class FramingSawRecipeProvider extends RecipeProvider
                 .material(FramingSawRecipe.CUBE_MATERIAL_VALUE / 4)
                 .save(consumer);
 
+        FramingSawRecipeBuilder.builder(FBContent.BLOCK_FRAMED_HANGING_SIGN, 2)
+                .material(FramingSawRecipe.CUBE_MATERIAL_VALUE / 2)
+                .additive(FramingSawRecipeAdditive.of(Items.CHAIN))
+                .save(consumer);
+
         FramingSawRecipeBuilder.builder(FBContent.BLOCK_FRAMED_DOUBLE_SLOPE)
                 .material(FramingSawRecipe.CUBE_MATERIAL_VALUE)
                 .save(consumer);

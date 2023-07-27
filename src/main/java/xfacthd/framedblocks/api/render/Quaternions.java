@@ -12,6 +12,7 @@ public final class Quaternions
     public static final Quaternionf XN_90 = Axis.XN.rotationDegrees(90);
 
     public static final Quaternionf YP_90 = Axis.YP.rotationDegrees(90);
+    public static final Quaternionf YP_180 = Axis.YP.rotationDegrees(180);
     public static final Quaternionf YN_90 = Axis.YN.rotationDegrees(90);
 
     public static final Quaternionf ZP_90 = Axis.ZP.rotationDegrees(90);

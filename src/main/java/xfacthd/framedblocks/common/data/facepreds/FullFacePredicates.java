@@ -73,6 +73,8 @@ public final class FullFacePredicates extends BlockTypeMap<FullFacePredicate>
         put(BlockType.FRAMED_LEVER, FullFacePredicate.FALSE);
         put(BlockType.FRAMED_SIGN, FullFacePredicate.FALSE);
         put(BlockType.FRAMED_WALL_SIGN, FullFacePredicate.FALSE);
+        put(BlockType.FRAMED_HANGING_SIGN, FullFacePredicate.FALSE);
+        put(BlockType.FRAMED_WALL_HANGING_SIGN, FullFacePredicate.FALSE);
         put(BlockType.FRAMED_DOUBLE_SLAB, FullFacePredicate.Y_AXIS);
         put(BlockType.FRAMED_DOUBLE_PANEL, new DoublePanelFullFacePredicate());
         put(BlockType.FRAMED_DOUBLE_SLOPE, new DoubleSlopeFullFacePredicate());

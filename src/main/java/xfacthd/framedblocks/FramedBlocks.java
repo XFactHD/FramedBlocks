@@ -40,7 +40,7 @@ public final class FramedBlocks
 {
     public static final Logger LOGGER = LogUtils.getLogger();
 
-    private static final String PROTOCOL_VERSION = "1";
+    private static final String PROTOCOL_VERSION = "2";
     public static final SimpleChannel CHANNEL = NetworkRegistry.newSimpleChannel(
             Utils.rl("main"),
             () -> PROTOCOL_VERSION,

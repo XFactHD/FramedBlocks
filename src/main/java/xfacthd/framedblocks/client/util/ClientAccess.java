@@ -14,12 +14,12 @@ public final class ClientAccess
 {
     private static final MethodHandle MPGM_DESTROY_DELAY = Utils.unreflectFieldSetter(MultiPlayerGameMode.class, "f_105195_");
 
-    public static void openSignScreen(BlockPos pos)
+    public static void openSignScreen(BlockPos pos, boolean front)
     {
         //noinspection ConstantConditions
         if (Minecraft.getInstance().level.getBlockEntity(pos) instanceof FramedSignBlockEntity be)
         {
-            Minecraft.getInstance().setScreen(new FramedSignScreen(be));
+            Minecraft.getInstance().setScreen(new FramedSignScreen(be, front));
         }
     }
 

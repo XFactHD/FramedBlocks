@@ -36,48 +36,112 @@ public final class InteractionTests
                     TestUtils.assertTrue(
                             helper,
                             POS_ABOVE_FLOOR,
-                            be.getTextColor() == DyeColor.BLACK,
-                            () -> String.format("Expected sign text color to be 'black', got '%s'", be.getTextColor())
+                            be.getFrontText().getColor() == DyeColor.BLACK,
+                            () -> String.format("Expected sign text color to be 'black', got '%s'", be.getFrontText().getColor())
                     );
                     TestUtils.assertTrue(
                             helper,
                             POS_ABOVE_FLOOR,
-                            !be.hasGlowingText(),
-                            () -> "Sign text glowing unexpectedly"
-                    );
-                },
-                () -> TestUtils.clickWithItem(helper, POS_ABOVE_FLOOR, Items.RED_DYE),
-                () ->
-                {
-                    FramedSignBlockEntity be = TestUtils.getBlockEntity(helper, POS_ABOVE_FLOOR, FramedSignBlockEntity.class);
-                    TestUtils.assertTrue(
-                            helper,
-                            POS_ABOVE_FLOOR,
-                            be.getTextColor() == DyeColor.RED,
-                            () -> String.format("Expected sign text color to be 'red', got '%s'", be.getTextColor())
-                    );
-                    TestUtils.assertTrue(
-                            helper,
-                            POS_ABOVE_FLOOR,
-                            !be.hasGlowingText(),
+                            !be.getFrontText().hasGlowingText(),
                             () -> "Sign text should not be glowing"
                     );
+                    TestUtils.assertTrue(
+                            helper,
+                            POS_ABOVE_FLOOR,
+                            !be.isWaxed(),
+                            () -> "Sign should not be waxed"
+                    );
                 },
-                () -> TestUtils.clickWithItem(helper, POS_ABOVE_FLOOR, Items.GLOW_INK_SAC),
+                () -> TestUtils.clickWithItem(helper, POS_ABOVE_FLOOR, Items.RED_DYE, Direction.SOUTH),
                 () ->
                 {
                     FramedSignBlockEntity be = TestUtils.getBlockEntity(helper, POS_ABOVE_FLOOR, FramedSignBlockEntity.class);
                     TestUtils.assertTrue(
                             helper,
                             POS_ABOVE_FLOOR,
-                            be.getTextColor() == DyeColor.RED,
-                            () -> String.format("Expected sign text color to be 'red', got '%s'", be.getTextColor())
+                            be.getFrontText().getColor() == DyeColor.RED,
+                            () -> String.format("Expected sign text color to be 'red', got '%s'", be.getFrontText().getColor())
                     );
                     TestUtils.assertTrue(
                             helper,
                             POS_ABOVE_FLOOR,
-                            be.hasGlowingText(),
+                            !be.getFrontText().hasGlowingText(),
+                            () -> "Sign text should not be glowing"
+                    );
+                    TestUtils.assertTrue(
+                            helper,
+                            POS_ABOVE_FLOOR,
+                            !be.isWaxed(),
+                            () -> "Sign should not be waxed"
+                    );
+                },
+                () -> TestUtils.clickWithItem(helper, POS_ABOVE_FLOOR, Items.GLOW_INK_SAC, Direction.SOUTH),
+                () ->
+                {
+                    FramedSignBlockEntity be = TestUtils.getBlockEntity(helper, POS_ABOVE_FLOOR, FramedSignBlockEntity.class);
+                    TestUtils.assertTrue(
+                            helper,
+                            POS_ABOVE_FLOOR,
+                            be.getFrontText().getColor() == DyeColor.RED,
+                            () -> String.format("Expected sign text color to be 'red', got '%s'", be.getFrontText().getColor())
+                    );
+                    TestUtils.assertTrue(
+                            helper,
+                            POS_ABOVE_FLOOR,
+                            be.getFrontText().hasGlowingText(),
                             () -> "Sign text should be glowing"
+                    );
+                    TestUtils.assertTrue(
+                            helper,
+                            POS_ABOVE_FLOOR,
+                            !be.isWaxed(),
+                            () -> "Sign should not be waxed"
+                    );
+                },
+                () -> TestUtils.clickWithItem(helper, POS_ABOVE_FLOOR, Items.HONEYCOMB, Direction.SOUTH),
+                () ->
+                {
+                    FramedSignBlockEntity be = TestUtils.getBlockEntity(helper, POS_ABOVE_FLOOR, FramedSignBlockEntity.class);
+                    TestUtils.assertTrue(
+                            helper,
+                            POS_ABOVE_FLOOR,
+                            be.getFrontText().getColor() == DyeColor.RED,
+                            () -> String.format("Expected sign text color to be 'red', got '%s'", be.getFrontText().getColor())
+                    );
+                    TestUtils.assertTrue(
+                            helper,
+                            POS_ABOVE_FLOOR,
+                            be.getFrontText().hasGlowingText(),
+                            () -> "Sign text should be glowing"
+                    );
+                    TestUtils.assertTrue(
+                            helper,
+                            POS_ABOVE_FLOOR,
+                            be.isWaxed(),
+                            () -> "Sign should be waxed"
+                    );
+                },
+                () -> TestUtils.clickWithItem(helper, POS_ABOVE_FLOOR, Items.WOODEN_AXE, Direction.SOUTH),
+                () ->
+                {
+                    FramedSignBlockEntity be = TestUtils.getBlockEntity(helper, POS_ABOVE_FLOOR, FramedSignBlockEntity.class);
+                    TestUtils.assertTrue(
+                            helper,
+                            POS_ABOVE_FLOOR,
+                            be.getFrontText().getColor() == DyeColor.RED,
+                            () -> String.format("Expected sign text color to be 'red', got '%s'", be.getFrontText().getColor())
+                    );
+                    TestUtils.assertTrue(
+                            helper,
+                            POS_ABOVE_FLOOR,
+                            be.getFrontText().hasGlowingText(),
+                            () -> "Sign text should be glowing"
+                    );
+                    TestUtils.assertTrue(
+                            helper,
+                            POS_ABOVE_FLOOR,
+                            !be.isWaxed(),
+                            () -> "Sign should not be waxed"
                     );
                 },
                 helper::succeed

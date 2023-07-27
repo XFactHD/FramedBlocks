@@ -10,13 +10,14 @@ import java.util.function.Consumer;
 
 public final class QuadModifier
 {
-    private static final QuadModifier FAILED = new QuadModifier(null, true, -1, false, true);
-    private static final QuadModifier FAILED_FULL = new QuadModifier(null, false, -1, false, true);
+    private static final QuadModifier FAILED = new QuadModifier(null, true, -1, false, false, true);
+    private static final QuadModifier FAILED_FULL = new QuadModifier(null, false, -1, false, false, true);
 
     private final Data data;
     private final boolean limited;
     private int tintIndex;
     private boolean noShade;
+    private boolean modified;
     private boolean failed;
 
     /**
@@ -36,7 +37,7 @@ public final class QuadModifier
             ModelUtils.unpackNormals(vertexData, normal[i], i);
         }
 
-        return new QuadModifier(new Data(quad, pos, uv, normal), true, -1, false, false);
+        return new QuadModifier(new Data(quad, pos, uv, normal), true, -1, false, false, false);
     }
 
     /**
@@ -60,15 +61,16 @@ public final class QuadModifier
             ModelUtils.unpackLight(vertexData, light[i], i);
         }
 
-        return new QuadModifier(new Data(quad, pos, uv, normal, color, light), false, -1, false, false);
+        return new QuadModifier(new Data(quad, pos, uv, normal, color, light), false, -1, false, false, false);
     }
 
-    private QuadModifier(Data data, boolean limited, int tintIndex, boolean noShade, boolean failed)
+    private QuadModifier(Data data, boolean limited, int tintIndex, boolean noShade, boolean modified, boolean failed)
     {
         this.data = data;
         this.limited = limited;
         this.tintIndex = tintIndex;
         this.noShade = noShade;
+        this.modified = modified;
         this.failed = failed;
     }
 
@@ -90,6 +92,7 @@ public final class QuadModifier
         if (!failed)
         {
             failed = !modifier.accept(data);
+            modified = true;
         }
         return this;
     }
@@ -99,12 +102,14 @@ public final class QuadModifier
         Preconditions.checkState(this.tintIndex == -1, "TintIndex has already been set");
 
         this.tintIndex = tintIndex;
+        modified = true;
         return this;
     }
 
     public QuadModifier noShade()
     {
         noShade = true;
+        modified = true;
         return this;
     }
 
@@ -125,6 +130,12 @@ public final class QuadModifier
     {
         if (failed)
         {
+            return;
+        }
+
+        if (!modified)
+        {
+            quadConsumer.accept(data.quad);
             return;
         }
 
@@ -193,7 +204,7 @@ public final class QuadModifier
         {
             return limited ? FAILED : FAILED_FULL;
         }
-        return new QuadModifier(new Data(data), limited, tintIndex, noShade, false);
+        return new QuadModifier(new Data(data), limited, tintIndex, noShade, modified, false);
     }
 
     public boolean hasFailed()
@@ -224,7 +235,6 @@ public final class QuadModifier
             this(quad, pos, uv, normal, null, null);
         }
 
-        @SuppressWarnings("CopyConstructorMissesField")
         public Data(Data data)
         {
             this(data.quad,

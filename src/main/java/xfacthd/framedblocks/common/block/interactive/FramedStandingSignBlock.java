@@ -2,7 +2,6 @@ package xfacthd.framedblocks.common.block.interactive;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
-import net.minecraft.util.Mth;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.*;
@@ -10,6 +9,7 @@ import net.minecraft.world.level.block.*;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
+import net.minecraft.world.level.block.state.properties.RotationSegment;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import xfacthd.framedblocks.api.block.IFramedBlock;
@@ -18,11 +18,11 @@ import xfacthd.framedblocks.common.data.BlockType;
 import xfacthd.framedblocks.common.item.FramedSignItem;
 
 @SuppressWarnings("deprecation")
-public class FramedSignBlock extends AbstractFramedSignBlock // FIXME: update to match vanilla sign block
+public class FramedStandingSignBlock extends AbstractFramedSignBlock
 {
     private static final VoxelShape SHAPE = Block.box(4.0D, 0.0D, 4.0D, 12.0D, 16.0D, 12.0D);
 
-    public FramedSignBlock()
+    public FramedStandingSignBlock()
     {
         super(BlockType.FRAMED_SIGN, IFramedBlock.createProperties(BlockType.FRAMED_SIGN).noCollission());
     }
@@ -31,14 +31,15 @@ public class FramedSignBlock extends AbstractFramedSignBlock // FIXME: update to
     protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder)
     {
         super.createBlockStateDefinition(builder);
-        builder.add(BlockStateProperties.ROTATION_16, BlockStateProperties.WATERLOGGED);
+        builder.add(BlockStateProperties.ROTATION_16);
     }
 
     @Override
     public BlockState getStateForPlacement(BlockPlaceContext context)
     {
-        int rotation = Mth.floor((double) ((180.0F + context.getRotation()) * 16.0F / 360.0F) + 0.5D) & 15;
-        return withWater(defaultBlockState().setValue(BlockStateProperties.ROTATION_16, rotation), context.getLevel(), context.getClickedPos());
+        int rotation = RotationSegment.convertToSegment(context.getRotation() + 180.0F);
+        BlockState state = defaultBlockState().setValue(BlockStateProperties.ROTATION_16, rotation);
+        return withWater(state, context.getLevel(), context.getClickedPos());
     }
 
     @Override
@@ -50,18 +51,18 @@ public class FramedSignBlock extends AbstractFramedSignBlock // FIXME: update to
     @Override
     public BlockState updateShape(
             BlockState state,
-            Direction facing,
+            Direction dir,
             BlockState facingState,
             LevelAccessor level,
             BlockPos pos,
             BlockPos facingPos
     )
     {
-        if (facing == Direction.DOWN && !canSurvive(state, level, pos))
+        if (dir == Direction.DOWN && !canSurvive(state, level, pos))
         {
             return Blocks.AIR.defaultBlockState();
         }
-        return super.updateShape(state, facing, facingState, level, pos, facingPos);
+        return super.updateShape(state, dir, facingState, level, pos, facingPos);
     }
 
     @Override
@@ -104,6 +105,12 @@ public class FramedSignBlock extends AbstractFramedSignBlock // FIXME: update to
     {
         int rot = state.getValue(BlockStateProperties.ROTATION_16);
         return state.setValue(BlockStateProperties.ROTATION_16, mirror.mirror(rot, 16));
+    }
+
+    @Override
+    public float getYRotationDegrees(BlockState state)
+    {
+        return RotationSegment.convertToDegrees(state.getValue(BlockStateProperties.ROTATION_16));
     }
 
     @Override

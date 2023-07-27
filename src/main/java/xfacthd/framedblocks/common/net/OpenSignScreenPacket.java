@@ -8,16 +8,17 @@ import xfacthd.framedblocks.client.util.ClientAccess;
 
 import java.util.function.Supplier;
 
-public record OpenSignScreenPacket(BlockPos pos)
+public record OpenSignScreenPacket(BlockPos pos, boolean frontText)
 {
     public OpenSignScreenPacket(FriendlyByteBuf buffer)
     {
-        this(buffer.readBlockPos());
+        this(buffer.readBlockPos(), buffer.readBoolean());
     }
 
     public void encode(FriendlyByteBuf buffer)
     {
         buffer.writeBlockPos(pos);
+        buffer.writeBoolean(frontText);
     }
 
     public boolean handle(Supplier<NetworkEvent.Context> ctx)
@@ -26,7 +27,7 @@ public record OpenSignScreenPacket(BlockPos pos)
         {
             if (FMLEnvironment.dist.isClient())
             {
-                ClientAccess.openSignScreen(pos);
+                ClientAccess.openSignScreen(pos, frontText);
             }
         });
         return true;

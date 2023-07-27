@@ -157,6 +157,8 @@ public final class FramedBlockStateProvider extends BlockStateProvider
         registerFramedButton(cube);
         registerFramedLever();
         registerFramedSign(cube);
+        registerFramedHangingSign();
+        registerFramedWallHangingSign();
         registerFramedTorch();
         registerFramedWallTorch();
         registerFramedSoulTorch();
@@ -438,6 +440,41 @@ public final class FramedBlockStateProvider extends BlockStateProvider
     {
         simpleBlock(FBContent.BLOCK_FRAMED_SIGN.get(), cube);
         simpleItem(FBContent.BLOCK_FRAMED_SIGN, "cutout");
+    }
+
+    private void registerFramedHangingSign()
+    {
+        ModelFile model = models().getExistingFile(modLoc("block/framed_hanging_sign"));
+        ModelFile modelAttached = models().getExistingFile(modLoc("block/framed_hanging_sign_attached"));
+
+        getVariantBuilder(FBContent.BLOCK_FRAMED_HANGING_SIGN.get()).forAllStatesExcept(state ->
+        {
+            int rotation = state.getValue(BlockStateProperties.ROTATION_16);
+            Direction facing = Direction.from2DDataValue(rotation / 4);
+            boolean attached = state.getValue(BlockStateProperties.ATTACHED);
+
+            return ConfiguredModel.builder()
+                    .modelFile(attached ? modelAttached : model)
+                    .rotationY((int) facing.toYRot())
+                    .build();
+        }, FramedProperties.GLOWING, FramedProperties.PROPAGATES_SKYLIGHT, BlockStateProperties.WATERLOGGED);
+
+        simpleItem(FBContent.BLOCK_FRAMED_HANGING_SIGN, "cutout");
+    }
+
+    private void registerFramedWallHangingSign()
+    {
+        ModelFile model = models().getExistingFile(modLoc("block/framed_wall_hanging_sign"));
+
+        getVariantBuilder(FBContent.BLOCK_FRAMED_WALL_HANGING_SIGN.get()).forAllStatesExcept(state ->
+        {
+            Direction facing = state.getValue(FramedProperties.FACING_HOR);
+
+            return ConfiguredModel.builder()
+                    .modelFile(model)
+                    .rotationY((int) facing.toYRot())
+                    .build();
+        }, FramedProperties.GLOWING, FramedProperties.PROPAGATES_SKYLIGHT, BlockStateProperties.WATERLOGGED);
     }
 
     private void registerFramedTorch()

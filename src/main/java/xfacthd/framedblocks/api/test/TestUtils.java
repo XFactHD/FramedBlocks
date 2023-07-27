@@ -111,6 +111,7 @@ public final class TestUtils
         BlockPos absPos = helper.absolutePos(pos);
 
         Player player = helper.makeMockPlayer();
+        player.setPos(absPos.relative(side).getCenter());
         player.setShiftKeyDown(sneak);
         player.setItemInHand(InteractionHand.MAIN_HAND, new ItemStack(item));
 

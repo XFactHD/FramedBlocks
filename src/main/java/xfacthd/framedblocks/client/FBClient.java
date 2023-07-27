@@ -19,7 +19,6 @@ import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import net.minecraftforge.fml.event.lifecycle.FMLLoadCompleteEvent;
-import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import net.minecraftforge.fml.loading.FMLEnvironment;
 import net.minecraftforge.registries.RegistryObject;
 import org.jetbrains.annotations.Nullable;
@@ -95,9 +94,6 @@ public final class FBClient
         GhostBlockRenderer.init();
         GhostRenderBehaviours.register();
 
-        IEventBus modBus = FMLJavaModLoadingContext.get().getModEventBus();
-        modBus.addListener(FramedSignScreen::onTextureStitch);
-
         IEventBus forgeBus = MinecraftForge.EVENT_BUS;
         forgeBus.addListener(ClientUtils::onClientTick);
         forgeBus.addListener(BlockOutlineRenderer::onRenderBlockHighlight);
@@ -125,6 +121,7 @@ public final class FBClient
     public static void onRegisterRenderers(final EntityRenderersEvent.RegisterRenderers event)
     {
         event.registerBlockEntityRenderer(FBContent.BE_TYPE_FRAMED_SIGN.get(), FramedSignRenderer::new);
+        event.registerBlockEntityRenderer(FBContent.BE_TYPE_FRAMED_HANGING_SIGN.get(), FramedHangingSignRenderer::new);
         event.registerBlockEntityRenderer(FBContent.blockEntityTypeFramedChest.get(), FramedChestRenderer::new);
         event.registerBlockEntityRenderer(FBContent.BE_TYPE_FRAMED_ITEM_FRAME.get(), FramedItemFrameRenderer::new);
 
@@ -249,6 +246,8 @@ public final class FBClient
         ClientUtils.replaceModels(FBContent.BLOCK_FRAMED_LEVER, registry, FramedLeverModel::new, null);
         ClientUtils.replaceModels(FBContent.BLOCK_FRAMED_SIGN, registry, FramedSignModel::new, ClientUtils.IGNORE_WATERLOGGED);
         ClientUtils.replaceModels(FBContent.BLOCK_FRAMED_WALL_SIGN, registry, FramedWallSignModel::new, ClientUtils.IGNORE_WATERLOGGED);
+        ClientUtils.replaceModels(FBContent.BLOCK_FRAMED_HANGING_SIGN, registry, FramedCeilingHangingSignModel::new, ClientUtils.IGNORE_WATERLOGGED);
+        ClientUtils.replaceModels(FBContent.BLOCK_FRAMED_WALL_HANGING_SIGN, registry, FramedWallHangingSignModel::new, ClientUtils.IGNORE_WATERLOGGED);
         replaceDoubleBlockModels(FBContent.BLOCK_FRAMED_DOUBLE_SLAB, registry, null, ClientUtils.IGNORE_SOLID);
         replaceDoubleBlockModels(FBContent.BLOCK_FRAMED_DOUBLE_PANEL, registry, null, ClientUtils.IGNORE_SOLID);
         replaceDoubleBlockModels(FBContent.BLOCK_FRAMED_DOUBLE_SLOPE, registry, FramedDoubleSlopeBlock.itemModelSource(), ClientUtils.IGNORE_SOLID);

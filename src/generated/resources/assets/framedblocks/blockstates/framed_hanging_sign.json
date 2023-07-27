@@ -1,0 +1,124 @@
+{
+  "variants": {
+    "attached=false,rotation=0": {
+      "model": "framedblocks:block/framed_hanging_sign"
+    },
+    "attached=false,rotation=1": {
+      "model": "framedblocks:block/framed_hanging_sign"
+    },
+    "attached=false,rotation=10": {
+      "model": "framedblocks:block/framed_hanging_sign",
+      "y": 180
+    },
+    "attached=false,rotation=11": {
+      "model": "framedblocks:block/framed_hanging_sign",
+      "y": 180
+    },
+    "attached=false,rotation=12": {
+      "model": "framedblocks:block/framed_hanging_sign",
+      "y": 270
+    },
+    "attached=false,rotation=13": {
+      "model": "framedblocks:block/framed_hanging_sign",
+      "y": 270
+    },
+    "attached=false,rotation=14": {
+      "model": "framedblocks:block/framed_hanging_sign",
+      "y": 270
+    },
+    "attached=false,rotation=15": {
+      "model": "framedblocks:block/framed_hanging_sign",
+      "y": 270
+    },
+    "attached=false,rotation=2": {
+      "model": "framedblocks:block/framed_hanging_sign"
+    },
+    "attached=false,rotation=3": {
+      "model": "framedblocks:block/framed_hanging_sign"
+    },
+    "attached=false,rotation=4": {
+      "model": "framedblocks:block/framed_hanging_sign",
+      "y": 90
+    },
+    "attached=false,rotation=5": {
+      "model": "framedblocks:block/framed_hanging_sign",
+      "y": 90
+    },
+    "attached=false,rotation=6": {
+      "model": "framedblocks:block/framed_hanging_sign",
+      "y": 90
+    },
+    "attached=false,rotation=7": {
+      "model": "framedblocks:block/framed_hanging_sign",
+      "y": 90
+    },
+    "attached=false,rotation=8": {
+      "model": "framedblocks:block/framed_hanging_sign",
+      "y": 180
+    },
+    "attached=false,rotation=9": {
+      "model": "framedblocks:block/framed_hanging_sign",
+      "y": 180
+    },
+    "attached=true,rotation=0": {
+      "model": "framedblocks:block/framed_hanging_sign_attached"
+    },
+    "attached=true,rotation=1": {
+      "model": "framedblocks:block/framed_hanging_sign_attached"
+    },
+    "attached=true,rotation=10": {
+      "model": "framedblocks:block/framed_hanging_sign_attached",
+      "y": 180
+    },
+    "attached=true,rotation=11": {
+      "model": "framedblocks:block/framed_hanging_sign_attached",
+      "y": 180
+    },
+    "attached=true,rotation=12": {
+      "model": "framedblocks:block/framed_hanging_sign_attached",
+      "y": 270
+    },
+    "attached=true,rotation=13": {
+      "model": "framedblocks:block/framed_hanging_sign_attached",
+      "y": 270
+    },
+    "attached=true,rotation=14": {
+      "model": "framedblocks:block/framed_hanging_sign_attached",
+      "y": 270
+    },
+    "attached=true,rotation=15": {
+      "model": "framedblocks:block/framed_hanging_sign_attached",
+      "y": 270
+    },
+    "attached=true,rotation=2": {
+      "model": "framedblocks:block/framed_hanging_sign_attached"
+    },
+    "attached=true,rotation=3": {
+      "model": "framedblocks:block/framed_hanging_sign_attached"
+    },
+    "attached=true,rotation=4": {
+      "model": "framedblocks:block/framed_hanging_sign_attached",
+      "y": 90
+    },
+    "attached=true,rotation=5": {
+      "model": "framedblocks:block/framed_hanging_sign_attached",
+      "y": 90
+    },
+    "attached=true,rotation=6": {
+      "model": "framedblocks:block/framed_hanging_sign_attached",
+      "y": 90
+    },
+    "attached=true,rotation=7": {
+      "model": "framedblocks:block/framed_hanging_sign_attached",
+      "y": 90
+    },
+    "attached=true,rotation=8": {
+      "model": "framedblocks:block/framed_hanging_sign_attached",
+      "y": 180
+    },
+    "attached=true,rotation=9": {
+      "model": "framedblocks:block/framed_hanging_sign_attached",
+      "y": 180
+    }
+  }
+}

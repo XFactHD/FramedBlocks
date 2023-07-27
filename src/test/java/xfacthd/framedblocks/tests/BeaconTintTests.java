@@ -48,6 +48,8 @@ public final class BeaconTintTests
             BlockType.FRAMED_LEVER,
             BlockType.FRAMED_SIGN,
             BlockType.FRAMED_WALL_SIGN,
+            BlockType.FRAMED_HANGING_SIGN,
+            BlockType.FRAMED_WALL_HANGING_SIGN,
             BlockType.FRAMED_TORCH,
             BlockType.FRAMED_WALL_TORCH,
             BlockType.FRAMED_SOUL_TORCH,

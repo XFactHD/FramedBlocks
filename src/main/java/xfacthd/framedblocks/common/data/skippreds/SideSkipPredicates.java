@@ -75,6 +75,8 @@ public final class SideSkipPredicates extends BlockTypeMap<SideSkipPredicate>
         put(BlockType.FRAMED_LEVER, SideSkipPredicate.FALSE);
         put(BlockType.FRAMED_SIGN, SideSkipPredicate.FALSE);
         put(BlockType.FRAMED_WALL_SIGN, SideSkipPredicate.FALSE);
+        put(BlockType.FRAMED_HANGING_SIGN, SideSkipPredicate.FALSE);
+        put(BlockType.FRAMED_WALL_HANGING_SIGN, SideSkipPredicate.FALSE);
         put(BlockType.FRAMED_DOUBLE_SLAB, SideSkipPredicate.FALSE);
         put(BlockType.FRAMED_DOUBLE_PANEL, SideSkipPredicate.FALSE);
         put(BlockType.FRAMED_DOUBLE_SLOPE, SideSkipPredicate.FALSE);

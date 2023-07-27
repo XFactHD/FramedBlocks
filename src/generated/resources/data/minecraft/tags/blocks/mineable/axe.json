@@ -38,6 +38,8 @@
     "framedblocks:framed_lever",
     "framedblocks:framed_sign",
     "framedblocks:framed_wall_sign",
+    "framedblocks:framed_hanging_sign",
+    "framedblocks:framed_wall_hanging_sign",
     "framedblocks:framed_double_slab",
     "framedblocks:framed_double_panel",
     "framedblocks:framed_double_slope",

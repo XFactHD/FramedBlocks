@@ -1,0 +1,19 @@
+{
+	"credit": "Made with Blockbench",
+	"texture_size": [32, 16],
+	"textures": {
+		"0": "framedblocks:block/framed_hanging_sign",
+		"particle": "framedblocks:block/framed_hanging_sign"
+	},
+	"elements": [
+		{
+			"from": [2, 10, 8],
+			"to": [14, 16, 8],
+			"faces": {
+				"north": {"uv": [8, 8, 14, 14], "texture": "#0"},
+				"south": {"uv": [8, 8, 14, 14], "texture": "#0"}
+			}
+		}
+	],
+	"render_type": "minecraft:cutout"
+}

@@ -83,6 +83,8 @@ public final class FramedLanguageProvider extends LanguageProvider
         add(FBContent.BLOCK_FRAMED_LEVER.get(), "Framed Lever");
         add(FBContent.BLOCK_FRAMED_SIGN.get(), "Framed Sign");
         add(FBContent.BLOCK_FRAMED_WALL_SIGN.get(), "Framed Sign");
+        add(FBContent.BLOCK_FRAMED_HANGING_SIGN.get(), "Framed Hanging Sign");
+        add(FBContent.BLOCK_FRAMED_WALL_HANGING_SIGN.get(), "Framed Hanging Sign");
         add(FBContent.BLOCK_FRAMED_DOUBLE_SLAB.get(), "Framed Double Slab");
         add(FBContent.BLOCK_FRAMED_DOUBLE_PANEL.get(), "Framed Double Panel");
         add(FBContent.BLOCK_FRAMED_DOUBLE_SLOPE.get(), "Framed Double Slope");
@@ -225,7 +227,6 @@ public final class FramedLanguageProvider extends LanguageProvider
         add(FramedStorageBlockEntity.TITLE, "Framed Secret Storage");
 
         add(FramedSignScreen.TITLE, "Edit sign");
-        add(FramedSignScreen.DONE, "Done");
 
         add(FramingSawBlock.MENU_TITLE, "Framing Saw");
         add(FramingSawScreen.TOOLTIP_MATERIAL, "Material value: %s");

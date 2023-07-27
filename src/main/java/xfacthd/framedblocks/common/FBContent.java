@@ -124,8 +124,10 @@ public final class FBContent
     public static final RegistryObject<Block> BLOCK_FRAMED_BUTTON = registerBlock(FramedButtonBlock::wood, BlockType.FRAMED_BUTTON);
     public static final RegistryObject<Block> BLOCK_FRAMED_STONE_BUTTON = registerBlock(FramedButtonBlock::stone, BlockType.FRAMED_STONE_BUTTON);
     public static final RegistryObject<Block> BLOCK_FRAMED_LEVER = registerBlock(FramedLeverBlock::new, BlockType.FRAMED_LEVER);
-    public static final RegistryObject<Block> BLOCK_FRAMED_SIGN = registerBlock(FramedSignBlock::new, BlockType.FRAMED_SIGN);
+    public static final RegistryObject<Block> BLOCK_FRAMED_SIGN = registerBlock(FramedStandingSignBlock::new, BlockType.FRAMED_SIGN);
     public static final RegistryObject<Block> BLOCK_FRAMED_WALL_SIGN = registerBlock(FramedWallSignBlock::new, BlockType.FRAMED_WALL_SIGN);
+    public static final RegistryObject<Block> BLOCK_FRAMED_HANGING_SIGN = registerBlock(FramedCeilingHangingSignBlock::new, BlockType.FRAMED_HANGING_SIGN);
+    public static final RegistryObject<Block> BLOCK_FRAMED_WALL_HANGING_SIGN = registerBlock(FramedWallHangingSignBlock::new, BlockType.FRAMED_WALL_HANGING_SIGN);
     public static final RegistryObject<Block> BLOCK_FRAMED_DOUBLE_SLAB = registerBlock(FramedDoubleSlabBlock::new, BlockType.FRAMED_DOUBLE_SLAB);
     public static final RegistryObject<Block> BLOCK_FRAMED_DOUBLE_PANEL = registerBlock(FramedDoublePanelBlock::new, BlockType.FRAMED_DOUBLE_PANEL);
     public static final RegistryObject<Block> BLOCK_FRAMED_DOUBLE_SLOPE = registerBlock(FramedDoubleSlopeBlock::new, BlockType.FRAMED_DOUBLE_SLOPE);
@@ -261,8 +263,12 @@ public final class FBContent
             BlockType.FRAMED_DIVIDED_PANEL_HORIZONTAL, BlockType.FRAMED_DIVIDED_PANEL_VERTICAL
     );
     public static final RegisteredBE<FramedSignBlockEntity> BE_TYPE_FRAMED_SIGN = createBlockEntityType(
-            FramedSignBlockEntity::new,
+            FramedSignBlockEntity::normalSign,
             BlockType.FRAMED_SIGN, BlockType.FRAMED_WALL_SIGN
+    );
+    public static final RegisteredBE<FramedSignBlockEntity> BE_TYPE_FRAMED_HANGING_SIGN = createBlockEntityType(
+            FramedSignBlockEntity::hangingSign,
+            BlockType.FRAMED_HANGING_SIGN, BlockType.FRAMED_WALL_HANGING_SIGN
     );
     public static final RegisteredBE<FramedDoubleSlabBlockEntity> BE_TYPE_DOUBLE_FRAMED_SLAB = createBlockEntityType(
             FramedDoubleSlabBlockEntity::new,

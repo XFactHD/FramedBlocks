@@ -1,0 +1,22 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "building",
+  "key": {
+    "C": {
+      "item": "minecraft:chain"
+    },
+    "F": {
+      "item": "framedblocks:framed_cube"
+    }
+  },
+  "pattern": [
+    "C C",
+    "FFF",
+    "FFF"
+  ],
+  "result": {
+    "count": 6,
+    "item": "framedblocks:framed_hanging_sign"
+  },
+  "show_notification": true
+}

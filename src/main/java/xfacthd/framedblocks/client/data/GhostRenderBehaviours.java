@@ -55,6 +55,7 @@ public final class GhostRenderBehaviours
         GhostBlockRenderer.registerBehaviour(
                 new StandingAndWallBlockGhostRenderBehaviour(),
                 FBContent.BLOCK_FRAMED_SIGN.get(),
+                FBContent.BLOCK_FRAMED_HANGING_SIGN.get(),
                 FBContent.BLOCK_FRAMED_TORCH.get(),
                 FBContent.BLOCK_FRAMED_SOUL_TORCH.get(),
                 FBContent.BLOCK_FRAMED_REDSTONE_TORCH.get(),
