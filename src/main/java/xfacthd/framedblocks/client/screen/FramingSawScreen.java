@@ -23,7 +23,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Ingredient;
 import org.lwjgl.glfw.GLFW;
 import xfacthd.framedblocks.api.util.Utils;
-import xfacthd.framedblocks.client.util.ItemRenderHelper;
+import xfacthd.framedblocks.client.render.item.ItemRenderHelper;
 import xfacthd.framedblocks.common.FBContent;
 import xfacthd.framedblocks.common.compat.jei.JeiCompat;
 import xfacthd.framedblocks.common.crafting.*;

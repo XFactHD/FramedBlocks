@@ -5,7 +5,7 @@ import net.minecraftforge.registries.RegistryObject;
 import xfacthd.framedblocks.api.block.IFramedBlock;
 import xfacthd.framedblocks.api.ghost.GhostRenderBehaviour;
 import xfacthd.framedblocks.client.data.ghost.*;
-import xfacthd.framedblocks.client.render.GhostBlockRenderer;
+import xfacthd.framedblocks.client.render.special.GhostBlockRenderer;
 import xfacthd.framedblocks.common.FBContent;
 
 public final class GhostRenderBehaviours

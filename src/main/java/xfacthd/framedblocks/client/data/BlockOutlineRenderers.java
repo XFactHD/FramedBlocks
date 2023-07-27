@@ -1,7 +1,7 @@
 package xfacthd.framedblocks.client.data;
 
 import xfacthd.framedblocks.client.data.outline.*;
-import xfacthd.framedblocks.client.render.BlockOutlineRenderer;
+import xfacthd.framedblocks.client.render.special.BlockOutlineRenderer;
 import xfacthd.framedblocks.common.data.BlockType;
 
 public final class BlockOutlineRenderers

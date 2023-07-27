@@ -1,4 +1,4 @@
-package xfacthd.framedblocks.client.render;
+package xfacthd.framedblocks.client.render.special;
 
 import com.google.common.base.Preconditions;
 import com.mojang.blaze3d.vertex.PoseStack;

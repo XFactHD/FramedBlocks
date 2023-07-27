@@ -6,7 +6,7 @@ import net.minecraftforge.client.model.generators.*;
 import net.minecraftforge.common.data.ExistingFileHelper;
 import net.minecraftforge.registries.RegistryObject;
 import xfacthd.framedblocks.api.util.FramedConstants;
-import xfacthd.framedblocks.client.util.BlueprintPropertyOverride;
+import xfacthd.framedblocks.client.render.item.BlueprintPropertyOverride;
 import xfacthd.framedblocks.common.FBContent;
 
 @SuppressWarnings({ "SameParameterValue", "UnusedReturnValue" })

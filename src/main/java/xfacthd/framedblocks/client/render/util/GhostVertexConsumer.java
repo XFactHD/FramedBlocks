@@ -1,4 +1,4 @@
-package xfacthd.framedblocks.client.util;
+package xfacthd.framedblocks.client.render.util;
 
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import net.minecraftforge.client.model.pipeline.VertexConsumerWrapper;

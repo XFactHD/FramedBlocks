@@ -1,4 +1,4 @@
-package xfacthd.framedblocks.client.render;
+package xfacthd.framedblocks.client.render.special;
 
 import com.google.common.base.Preconditions;
 import com.mojang.blaze3d.systems.RenderSystem;
@@ -24,6 +24,7 @@ import xfacthd.framedblocks.api.ghost.GhostRenderBehaviour;
 import xfacthd.framedblocks.api.model.data.FramedBlockData;
 import xfacthd.framedblocks.api.util.*;
 import xfacthd.framedblocks.api.model.util.ModelCache;
+import xfacthd.framedblocks.client.render.util.GhostVertexConsumer;
 import xfacthd.framedblocks.client.util.*;
 import xfacthd.framedblocks.common.blockentity.FramedDoubleBlockEntity;
 

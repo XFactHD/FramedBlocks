@@ -1,4 +1,4 @@
-package xfacthd.framedblocks.client.render;
+package xfacthd.framedblocks.client.render.block;
 
 import com.google.common.collect.HashBasedTable;
 import com.google.common.collect.Table;

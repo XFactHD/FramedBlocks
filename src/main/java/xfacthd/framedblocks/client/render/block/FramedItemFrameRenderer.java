@@ -1,4 +1,4 @@
-package xfacthd.framedblocks.client.render;
+package xfacthd.framedblocks.client.render.block;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.math.Axis;
