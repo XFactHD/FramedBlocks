@@ -27,8 +27,8 @@ public class FramedSignRenderer implements BlockEntityRenderer<FramedSignBlockEn
 {
     private static final int OUTLINE_RENDER_DISTANCE = Mth.square(16);
     private static final float RENDER_SCALE = 0.6666667F;
-    private static final Vector3f TEXT_OFFSET = new Vector3f(0F, 5.6F/16F, 1F/16F);
-    private static final Vector3f WALL_TEXT_OFFSET = new Vector3f(0F, 5.35F/16F, 1F/16F);
+    private static final Vector3f TEXT_OFFSET = new Vector3f(0F, 5.6F/16F, 1.024F/16F);
+    private static final Vector3f WALL_TEXT_OFFSET = new Vector3f(0F, 5.35F/16F, 1.024F/16F);
 
     private final Font font;
 
@@ -130,12 +130,12 @@ public class FramedSignRenderer implements BlockEntityRenderer<FramedSignBlockEn
             textLight = light;
         }
 
-        FormattedCharSequence[] lines = text.getRenderMessages(
-                Minecraft.getInstance().isTextFilteringEnabled(), line -> {
-                    List<FormattedCharSequence> list = font.split(line, lineWidth);
-                    return list.isEmpty() ? FormattedCharSequence.EMPTY : list.get(0);
-                }
-        );
+        boolean filter = Minecraft.getInstance().isTextFilteringEnabled();
+        FormattedCharSequence[] lines = text.getRenderMessages(filter, line ->
+        {
+            List<FormattedCharSequence> parts = font.split(line, lineWidth);
+            return parts.isEmpty() ? FormattedCharSequence.EMPTY : parts.get(0);
+        });
 
         int centerY = 4 * lineHeight / 2;
         Matrix4f pose = poseStack.last().pose();

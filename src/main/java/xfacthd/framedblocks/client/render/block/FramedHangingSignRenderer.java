@@ -10,7 +10,7 @@ import xfacthd.framedblocks.common.block.AbstractFramedSignBlock;
 public class FramedHangingSignRenderer extends FramedSignRenderer
 {
     private static final float TEXT_RENDER_SCALE = 0.9F;
-    private static final Vector3f TEXT_OFFSET = new Vector3f(0.00625F, -0.32F, 0.073F);
+    private static final Vector3f TEXT_OFFSET = new Vector3f(0.1F/16F, -5.12F/16F, 1.024F/16F);
 
     public FramedHangingSignRenderer(BlockEntityRendererProvider.Context ctx)
     {
