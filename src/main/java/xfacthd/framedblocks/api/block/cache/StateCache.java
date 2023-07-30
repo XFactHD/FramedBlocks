@@ -20,6 +20,7 @@ public class StateCache
 {
     private static final Direction[] DIRECTIONS = Direction.values();
     private static final int DIR_COUNT = DIRECTIONS.length;
+    public static final StateCache EMPTY = new StateCache();
 
     private final boolean anyFullFace;
     private final boolean[] fullFace;
@@ -64,9 +65,17 @@ public class StateCache
         }
 
         this.anyFullFace = anyFullFace;
-        this.fullFace = fullFace;
+        this.fullFace = anyFullFace ? fullFace : null;
         this.conFullEdge = supportsCt ? conFullEdge : null;
         this.conDetailed = anyConDetailed ? conDetailed : null;
+    }
+
+    private StateCache()
+    {
+        this.anyFullFace = false;
+        this.fullFace = null;
+        this.conFullEdge = null;
+        this.conDetailed = null;
     }
 
     public final boolean hasAnyFullFace()
@@ -76,7 +85,7 @@ public class StateCache
 
     public final boolean isFullFace(@Nullable Direction side)
     {
-        return side != null && fullFace[side.ordinal()];
+        return side != null && anyFullFace && fullFace[side.ordinal()];
     }
 
     public final boolean canConnectFullEdge(Direction side, @Nullable Direction edge)

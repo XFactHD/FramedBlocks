@@ -484,11 +484,26 @@ public final class FBContent
                 .map(Block::getStateDefinition)
                 .map(StateDefinition::getPossibleStates)
                 .flatMap(List::stream)
-                .map(IStateCacheAccessor.class::cast)
-                .peek(acc -> acc.framedblocks$initCache(dedupMap))
+                .peek(state ->
+                {
+                    StateCache cache = ((IFramedBlock) state.getBlock()).initCache(state);
+                    if (cache.equals(StateCache.EMPTY))
+                    {
+                        ((IStateCacheAccessor) state).framedblocks$initCache(StateCache.EMPTY);
+                        return;
+                    }
+
+                    List<StateCache> caches = dedupMap.computeIfAbsent(state.getBlock(), $ -> new ArrayList<>());
+                    StateCache deduped = caches.stream().filter(cache::equals).findFirst().orElseGet(() ->
+                    {
+                        caches.add(cache);
+                        return cache;
+                    });
+                    ((IStateCacheAccessor) state).framedblocks$initCache(deduped);
+                })
                 .count();
         watch.stop();
-        long unique = dedupMap.values().stream().mapToLong(List::size).sum();
+        long unique = dedupMap.values().stream().mapToLong(List::size).sum() + 1; // +1 for the empty instance
         FramedBlocks.LOGGER.debug("Initialized {} unique caches for {} states in {}", unique, count, watch);
     }
 
