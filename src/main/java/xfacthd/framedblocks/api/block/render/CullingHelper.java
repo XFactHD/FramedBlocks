@@ -37,13 +37,6 @@ public final class CullingHelper
         BlockPos adjPos = pos.relative(side);
         BlockState adjState = level.getBlockState(adjPos);
 
-        // Let the game handle culling against fully solid cubes automatically,
-        // prevents xray issues with block tool modifications like farmland tilling
-        if (adjState.isSolidRender(level, adjPos))
-        {
-            return false;
-        }
-
         boolean adjFramed = false;
         if (adjState.getBlock() instanceof IFramedBlock block)
         {
@@ -52,6 +45,12 @@ public final class CullingHelper
                 return false;
             }
             adjFramed = true;
+        }
+        else if (adjState.isSolidRender(level, adjPos))
+        {
+            // Let the game handle culling against fully solid cubes automatically,
+            // prevents xray issues with block tool modifications like farmland tilling
+            return false;
         }
 
         if (!FramedBlocksAPI.getInstance().detailedCullingEnabled() || !adjFramed)
