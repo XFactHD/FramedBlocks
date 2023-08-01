@@ -48,8 +48,8 @@ public final class RecipeCollisions
                 .map(CraftingRecipe.class::cast)
                 .toList();
 
-        CraftingContainer container = new TransientCraftingContainer(player.containerMenu, 3, 3);
-        NonNullList<ItemStack> items = Objects.requireNonNull(ObfuscationReflectionHelper.getPrivateValue(CraftingContainer.class, container, "f_39320_"));
+        TransientCraftingContainer container = new TransientCraftingContainer(player.containerMenu, 3, 3);
+        NonNullList<ItemStack> items = Objects.requireNonNull(ObfuscationReflectionHelper.getPrivateValue(TransientCraftingContainer.class, container, "f_286951_"));
 
         Multimap<ResourceLocation, ResourceLocation> collisions = ArrayListMultimap.create();
         MutableInt combinations = new MutableInt(0);
