@@ -14,8 +14,7 @@ import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.event.*;
 import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.eventbus.api.IEventBus;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.minecraftforge.eventbus.api.*;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import net.minecraftforge.fml.event.lifecycle.FMLLoadCompleteEvent;
@@ -102,7 +101,7 @@ public final class FBClient
         forgeBus.addListener(BlockOutlineRenderer::onRenderBlockHighlight);
         forgeBus.addListener(KeyMappings::onClientTick);
         forgeBus.addListener(GhostBlockRenderer::onRenderLevelStage);
-        forgeBus.addListener(ClientEventHandler::onRecipesUpdated);
+        forgeBus.addListener(EventPriority.HIGH, ClientEventHandler::onRecipesUpdated);
         forgeBus.addListener(ClientEventHandler::onClientDisconnect);
     }
 

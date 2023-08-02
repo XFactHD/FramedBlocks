@@ -24,8 +24,8 @@ import net.minecraft.world.item.crafting.Ingredient;
 import org.lwjgl.glfw.GLFW;
 import xfacthd.framedblocks.api.util.Utils;
 import xfacthd.framedblocks.client.render.item.ItemRenderHelper;
+import xfacthd.framedblocks.client.util.RecipeViewer;
 import xfacthd.framedblocks.common.FBContent;
-import xfacthd.framedblocks.common.compat.jei.JeiCompat;
 import xfacthd.framedblocks.common.crafting.*;
 import xfacthd.framedblocks.common.menu.FramingSawMenu;
 import xfacthd.framedblocks.common.util.RecipeUtils;
@@ -61,6 +61,7 @@ public class FramingSawScreen extends AbstractContainerScreen<FramingSawMenu>
     private static final int SCROLL_BAR_HEIGHT = 108;
     private static final int WARNING_X = 20;
     private static final int WARNING_Y = 46;
+    private static final RecipeViewer RECIPE_VIEWER = RecipeViewer.get();
 
     private final FramingSawRecipeCache cache = FramingSawRecipeCache.get(true);
     private final ItemStack cubeStack = new ItemStack(FBContent.BLOCK_FRAMED_CUBE.get());
@@ -466,7 +467,7 @@ public class FramingSawScreen extends AbstractContainerScreen<FramingSawMenu>
     @Override
     public boolean keyPressed(int keyCode, int scanCode, int modifiers)
     {
-        if (JeiCompat.isShowRecipePressed(InputConstants.getKey(keyCode, scanCode)))
+        if (RECIPE_VIEWER != null && RECIPE_VIEWER.isShowRecipePressed(keyCode, scanCode))
         {
             Window window = Objects.requireNonNull(minecraft).getWindow();
             MouseHandler mouseHandler = minecraft.mouseHandler;
@@ -485,7 +486,7 @@ public class FramingSawScreen extends AbstractContainerScreen<FramingSawMenu>
                 List<FramingSawRecipe> recipes = cache.getRecipes();
                 if (idx > 0 && idx < recipes.size())
                 {
-                    if (JeiCompat.handleShowRecipeRequest(cache.getRecipes().get(idx).getResult()))
+                    if (RECIPE_VIEWER.handleShowRecipeRequest(cache.getRecipes().get(idx).getResult()))
                     {
                         return true;
                     }

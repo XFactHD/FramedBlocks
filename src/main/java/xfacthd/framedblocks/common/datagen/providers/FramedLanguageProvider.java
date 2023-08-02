@@ -15,6 +15,7 @@ import xfacthd.framedblocks.client.util.KeyMappings;
 import xfacthd.framedblocks.common.FBContent;
 import xfacthd.framedblocks.common.block.FramingSawBlock;
 import xfacthd.framedblocks.common.blockentity.special.FramedStorageBlockEntity;
+import xfacthd.framedblocks.common.compat.emi.EmiCompat;
 import xfacthd.framedblocks.common.compat.jei.JeiCompat;
 import xfacthd.framedblocks.common.crafting.FramingSawRecipeMatchResult;
 import xfacthd.framedblocks.common.data.property.NullableDirection;
@@ -211,6 +212,8 @@ public final class FramedLanguageProvider extends LanguageProvider
 
         add(JeiCompat.MSG_INVALID_RECIPE, "Invalid recipe");
         add(JeiCompat.MSG_TRANSFER_NOT_IMPLEMENTED, "No items will be transferred");
+
+        add(EmiCompat.SAW_CATEGORY, "Framing Saw");
     }
 
     private void addStatusMessageTranslations()
@@ -344,6 +347,7 @@ public final class FramedLanguageProvider extends LanguageProvider
         add(ClientConfig.TRANSLATION_DETAILED_CULLING, "Detailed culling");
         add(ClientConfig.TRANSLATION_USE_DISCRETE_UV_STEPS, "Use discrete UV steps");
         add(ClientConfig.TRANSLATION_CON_TEX_MODE, "Connected textures mode");
+        add(ClientConfig.TRANSLATION_SHOW_ALL_RECIPE_PERMUTATIONS_IN_EMI, "Show all Framing Saw recipe permutations in EMI");
         add(ClientConfig.TRANSLATION_STATE_LOCK_MODE, "State lock overlay: Display mode");
         add(ClientConfig.TRANSLATION_TOGGLE_WATERLOG_MODE, "Toggle waterloggable overlay: Display mode");
         add(ClientConfig.TRANSLATION_TOGGLE_Y_SLOPE_MODE, "Toggle Y slope overlay: Display mode");

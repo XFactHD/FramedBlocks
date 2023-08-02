@@ -21,6 +21,7 @@ public final class ClientConfig
     private static final String KEY_DETAILED_CULLING = "detailedCulling";
     private static final String KEY_USE_DISCRETE_UV_STEPS = "discreteUVSteps";
     private static final String KEY_CON_TEX_MODE = "conTexMode";
+    private static final String KEY_SHOW_ALL_RECIPE_PERMUTATIONS_IN_EMI = "showAllRecipePermutationsInEmi";
     private static final String KEY_STATE_LOCK_MODE = "stateLockMode";
     private static final String KEY_TOGGLE_WATERLOG_MODE = "toggleWaterlogMode";
     private static final String KEY_TOGGLE_Y_SLOPE_MODE = "toggleYSlopeMode";
@@ -36,6 +37,7 @@ public final class ClientConfig
     public static final String TRANSLATION_DETAILED_CULLING = translate(KEY_DETAILED_CULLING);
     public static final String TRANSLATION_USE_DISCRETE_UV_STEPS = translate(KEY_USE_DISCRETE_UV_STEPS);
     public static final String TRANSLATION_CON_TEX_MODE = translate(KEY_CON_TEX_MODE);
+    public static final String TRANSLATION_SHOW_ALL_RECIPE_PERMUTATIONS_IN_EMI = translate(KEY_SHOW_ALL_RECIPE_PERMUTATIONS_IN_EMI);
     public static final String TRANSLATION_STATE_LOCK_MODE = translate(KEY_STATE_LOCK_MODE);
     public static final String TRANSLATION_TOGGLE_WATERLOG_MODE = translate(KEY_TOGGLE_WATERLOG_MODE);
     public static final String TRANSLATION_TOGGLE_Y_SLOPE_MODE = translate(KEY_TOGGLE_Y_SLOPE_MODE);
@@ -55,6 +57,7 @@ public final class ClientConfig
     public static boolean detailedCulling = false;
     public static boolean useDiscreteUVSteps = false;
     public static ConTexMode conTexMode = ConTexMode.FULL_FACE;
+    public static boolean showAllRecipePermutationsInEmi = false;
     public static BlockInteractOverlay.Mode stateLockMode;
     public static BlockInteractOverlay.Mode toggleWaterlogMode;
     public static BlockInteractOverlay.Mode toggleYSlopeMode;
@@ -70,6 +73,7 @@ public final class ClientConfig
     private final ForgeConfigSpec.BooleanValue detailedCullingValue;
     private final ForgeConfigSpec.BooleanValue useDiscreteUVStepsValue;
     private final ForgeConfigSpec.EnumValue<ConTexMode> conTexModeValue;
+    private final ForgeConfigSpec.BooleanValue showAllRecipePermutationsInEmiValue;
 
     private final ForgeConfigSpec.EnumValue<BlockInteractOverlay.Mode> stateLockModeValue;
     private final ForgeConfigSpec.EnumValue<BlockInteractOverlay.Mode> toggleWaterlogModeValue;
@@ -123,6 +127,11 @@ public final class ClientConfig
                 )
                 .translation(TRANSLATION_CON_TEX_MODE)
                 .defineEnum(KEY_CON_TEX_MODE, ConTexMode.FULL_FACE);
+        showAllRecipePermutationsInEmiValue = builder
+                .comment("If true, all possible recipes of the Framing Saw will be added to EMI, else only the permutations using the Framed Cube will be added")
+                .comment("This setting only has an effect when EMI is installed")
+                .translation(TRANSLATION_SHOW_ALL_RECIPE_PERMUTATIONS_IN_EMI)
+                .define(KEY_SHOW_ALL_RECIPE_PERMUTATIONS_IN_EMI, true);
         builder.pop();
 
         builder.push("overlay");
@@ -193,6 +202,7 @@ public final class ClientConfig
             detailedCulling = detailedCullingValue.get();
             useDiscreteUVSteps = useDiscreteUVStepsValue.get();
             conTexMode = conTexModeValue.get();
+            showAllRecipePermutationsInEmi = showAllRecipePermutationsInEmiValue.get();
 
             stateLockMode = stateLockModeValue.get();
             toggleWaterlogMode = toggleWaterlogModeValue.get();

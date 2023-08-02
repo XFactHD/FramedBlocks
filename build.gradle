@@ -133,6 +133,10 @@ repositories {
         name = "Jared's maven"
         url = "https://maven.blamejared.com/"
     }
+    maven {
+        name = "TerraformersMC"
+        url = "https://maven.terraformersmc.com/"
+    }
     mavenCentral()
     mavenLocal()
 }
@@ -150,9 +154,12 @@ dependencies {
     implementation fg.deobf("xfacthd.contex:ConnectedTextures:2.1:slim") { transitive = false }
     compileOnly fg.deobf("curse.maven:athena-841890:4621937")
 
-    compileOnly(fg.deobf("mezz.jei:jei-1.20.1-common-api:15.0.0.15"))
-    compileOnly(fg.deobf("mezz.jei:jei-1.20.1-forge-api:15.0.0.15"))
-    runtimeOnly(fg.deobf("mezz.jei:jei-1.20.1-forge:15.0.0.15"))
+    compileOnly(fg.deobf("mezz.jei:jei-${minecraft_version}-common-api:${jei_version}"))
+    compileOnly(fg.deobf("mezz.jei:jei-${minecraft_version}-forge-api:${jei_version}"))
+    //runtimeOnly(fg.deobf("mezz.jei:jei-${minecraft_version}-forge:${jei_version}"))
+
+    compileOnly fg.deobf("dev.emi:emi-forge:${emi_version}+${minecraft_version}:api")
+    runtimeOnly fg.deobf("dev.emi:emi-forge:${emi_version}+${minecraft_version}")
 
     //runtimeOnly fg.deobf("curse.maven:spark-361579:3767286")
 

@@ -7,8 +7,7 @@ import net.minecraft.Util;
 import net.minecraft.server.ReloadableServerResources;
 import net.minecraft.server.packs.resources.ResourceManager;
 import net.minecraft.server.packs.resources.ResourceManagerReloadListener;
-import net.minecraft.world.item.Item;
-import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.*;
 import net.minecraft.world.item.crafting.RecipeManager;
 import net.minecraftforge.event.AddReloadListenerEvent;
 import net.minecraftforge.registries.ForgeRegistries;
@@ -92,10 +91,15 @@ public final class FramingSawRecipeCache
 
     private static int sortRecipes(FramingSawRecipe r1, FramingSawRecipe r2)
     {
+        return sortRecipes(r1.getResult(), r2.getResult(), r1.getResultType(), r2.getResultType());
+    }
+
+    public static int sortRecipes(ItemStack resultOne, ItemStack resultTwo, IBlockType typeOne, IBlockType typeTwo)
+    {
         //noinspection ConstantConditions
-        String ns1 = ForgeRegistries.ITEMS.getKey(r1.getResult().getItem()).getNamespace();
+        String ns1 = ForgeRegistries.ITEMS.getKey(resultOne.getItem()).getNamespace();
         //noinspection ConstantConditions
-        String ns2 = ForgeRegistries.ITEMS.getKey(r2.getResult().getItem()).getNamespace();
+        String ns2 = ForgeRegistries.ITEMS.getKey(resultTwo.getItem()).getNamespace();
 
         if (!ns1.equals(ns2))
         {
@@ -111,9 +115,7 @@ public final class FramingSawRecipeCache
         }
 
         // Assume that items from the same namespace use the same IBlockType implementation and are therefore comparable
-        IBlockType t1 = r1.getResultType();
-        IBlockType t2 = r2.getResultType();
-        return t1.compareTo(t2);
+        return typeOne.compareTo(typeTwo);
     }
 
 

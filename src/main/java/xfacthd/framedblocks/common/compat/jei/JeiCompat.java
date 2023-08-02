@@ -30,11 +30,16 @@ public final class JeiCompat
         }
     }
 
-    public static boolean isShowRecipePressed(InputConstants.Key key)
+    public static boolean isLoaded()
+    {
+        return loadedClient;
+    }
+
+    public static boolean isShowRecipePressed(int keyCode, int scanCode)
     {
         if (loadedClient)
         {
-            return GuardedAccess.isShowRecipePressed(key);
+            return GuardedAccess.isShowRecipePressed(keyCode, scanCode);
         }
         return false;
     }
@@ -54,10 +59,11 @@ public final class JeiCompat
     {
         private static IJeiRuntime runtime = null;
 
-        public static boolean isShowRecipePressed(InputConstants.Key key)
+        public static boolean isShowRecipePressed(int keyCode, int scanCode)
         {
             Preconditions.checkNotNull(runtime, "Runtime not set");
 
+            InputConstants.Key key = InputConstants.getKey(keyCode, scanCode);
             return runtime.getKeyMappings().getShowRecipe().isActiveAndMatches(key);
         }
 

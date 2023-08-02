@@ -20,6 +20,7 @@ public final class CompatHandler
         ConTexCompat.init();
         CreateCompat.init();
         //CtmCompat.init(); //TODO: add proper support for CTM's CT context
+        EmiCompat.init();
         FlywheelCompat.init();
         JeiCompat.init();
         NoCubesCompat.init();

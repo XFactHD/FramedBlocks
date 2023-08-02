@@ -89,12 +89,6 @@ public final class FramingSawRecipeCategory implements IRecipeCategory<FramingSa
         }
         IRecipeSlotBuilder outputSlot = builder.addSlot(RecipeIngredientRole.OUTPUT, 97, 13);
 
-        ItemStack inputStack = focuses.getItemStackFocuses(RecipeIngredientRole.INPUT)
-                .map(focus -> focus.getTypedValue().getIngredient())
-                .filter(stack -> cache.getMaterialValue(stack.getItem()) > 0)
-                .findFirst()
-                .orElse(ItemStack.EMPTY);
-
         if (focuses.isEmpty())
         {
             for (Item input : cache.getKnownItems())
@@ -114,8 +108,16 @@ public final class FramingSawRecipeCategory implements IRecipeCategory<FramingSa
             {
                 builder.createFocusLink(inputSlot, outputSlot);
             }
+            return;
         }
-        else if (!inputStack.isEmpty())
+
+        ItemStack inputStack = focuses.getItemStackFocuses(RecipeIngredientRole.INPUT)
+                .map(focus -> focus.getTypedValue().getIngredient())
+                .filter(stack -> cache.getMaterialValue(stack.getItem()) > 0)
+                .findFirst()
+                .orElse(ItemStack.EMPTY);
+
+        if (!inputStack.isEmpty())
         {
             setRecipe(inputStack.getItem(), recipe, inputSlot, additiveSlots, outputSlot);
         }
