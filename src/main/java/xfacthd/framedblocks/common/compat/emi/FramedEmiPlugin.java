@@ -23,9 +23,7 @@ import java.util.Set;
 public final class FramedEmiPlugin implements EmiPlugin
 {
     public static final EmiStack SAW_WORKSTATION = EmiStack.of(FBContent.BLOCK_FRAMING_SAW.get());
-    public static final EmiRecipeCategory SAW_CATEGORY = new EmiRecipeCategory(
-            EmiCompat.SAW_ID, SAW_WORKSTATION, SAW_WORKSTATION, FramedEmiPlugin::compareRecipes
-    );
+    public static final EmiRecipeCategory SAW_CATEGORY = new FramingSawRecipeCategory(SAW_WORKSTATION, SAW_WORKSTATION);
     private static final Set<Item> CUBE_ITEM = Set.of(FBContent.BLOCK_FRAMED_CUBE.get().asItem());
 
     @Override
@@ -80,7 +78,7 @@ public final class FramedEmiPlugin implements EmiPlugin
         FramedBlocks.LOGGER.debug("Registered {} framing saw recipes to EMI in {}", recipeCount[0], watch);
     }
 
-    private static int compareRecipes(EmiRecipe recipeOne, EmiRecipe recipeTwo)
+    static int compareRecipes(EmiRecipe recipeOne, EmiRecipe recipeTwo)
     {
         ItemStack resultOne;
         ItemStack resultTwo;

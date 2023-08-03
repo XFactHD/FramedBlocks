@@ -1,14 +1,12 @@
-package xfacthd.framedblocks.common.compat.emi;
+package xfacthd.framedblocks.common.compat.rei;
 
-import dev.emi.emi.api.EmiApi;
-import dev.emi.emi.api.stack.EmiStack;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.fml.ModList;
 import net.minecraftforge.fml.loading.FMLEnvironment;
 import xfacthd.framedblocks.api.util.Utils;
 
-public final class EmiCompat
+public final class ReiCompat
 {
     public static final ResourceLocation SAW_ID = Utils.rl("framing_saw");
 
@@ -16,8 +14,9 @@ public final class EmiCompat
 
     public static void init()
     {
-        if (FMLEnvironment.dist.isClient() && ModList.get().isLoaded("emi"))
+        if (FMLEnvironment.dist.isClient() && ModList.get().isLoaded("roughlyenoughitems"))
         {
+            GuardedAccess.init();
             loadedClient = true;
         }
     }
@@ -40,24 +39,28 @@ public final class EmiCompat
     {
         if (loadedClient)
         {
-            GuardedAccess.handleButtonRecipeRequest(result);
-            return true;
+            return GuardedAccess.handleButtonRecipeRequest(result);
         }
         return false;
     }
 
 
 
-    static final class GuardedAccess
+    static final class GuardedAccess // TODO: implement
     {
-        public static boolean isShowRecipePressed(int keyCode, int scanCode)
+        public static void init()
         {
-            return false; // TODO: implement: https://github.com/emilyploszaj/emi/issues/270
+
         }
 
-        private static void handleButtonRecipeRequest(ItemStack result)
+        public static boolean isShowRecipePressed(int keyCode, int scanCode)
         {
-            EmiApi.displayRecipes(EmiStack.of(result));
+            return false;
+        }
+
+        private static boolean handleButtonRecipeRequest(ItemStack result)
+        {
+            return false;
         }
 
 
@@ -67,5 +70,5 @@ public final class EmiCompat
 
 
 
-    private EmiCompat() { }
+    private ReiCompat() { }
 }

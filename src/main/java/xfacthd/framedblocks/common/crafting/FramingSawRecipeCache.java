@@ -11,6 +11,7 @@ import net.minecraft.world.item.*;
 import net.minecraft.world.item.crafting.RecipeManager;
 import net.minecraftforge.event.AddReloadListenerEvent;
 import net.minecraftforge.registries.ForgeRegistries;
+import org.jetbrains.annotations.Nullable;
 import xfacthd.framedblocks.api.type.IBlockType;
 import xfacthd.framedblocks.api.util.FramedConstants;
 import xfacthd.framedblocks.common.FBContent;
@@ -23,6 +24,7 @@ public final class FramingSawRecipeCache
     private static final FramingSawRecipeCache CLIENT_INSTANCE = new FramingSawRecipeCache();
 
     private final List<FramingSawRecipe> recipes = new ArrayList<>();
+    private final Map<Item, FramingSawRecipe> recipesByResult = new IdentityHashMap<>();
     private final Set<Item> containsAdditive = Sets.newIdentityHashSet();
     private final Object2IntMap<Item> materialValues = new Object2IntOpenCustomHashMap<>(Util.identityStrategy());
 
@@ -44,6 +46,11 @@ public final class FramingSawRecipeCache
 
             int materialValue = recipe.getMaterialAmount();
             materialValues.put(result.getItem(), materialValue / result.getCount());
+
+            if (!recipe.isDisabled())
+            {
+                recipesByResult.put(result.getItem(), recipe);
+            }
         });
 
         // Remove disabled recipes after extracting material values
@@ -53,6 +60,7 @@ public final class FramingSawRecipeCache
     public void clear()
     {
         recipes.clear();
+        recipesByResult.clear();
         containsAdditive.clear();
         materialValues.clear();
     }
@@ -60,6 +68,12 @@ public final class FramingSawRecipeCache
     public List<FramingSawRecipe> getRecipes()
     {
         return Collections.unmodifiableList(recipes);
+    }
+
+    @Nullable
+    public FramingSawRecipe findRecipeFor(ItemStack result)
+    {
+        return recipesByResult.get(result.getItem());
     }
 
     public Set<Item> getKnownItems()

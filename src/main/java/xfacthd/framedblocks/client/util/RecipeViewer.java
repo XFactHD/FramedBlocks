@@ -3,11 +3,12 @@ package xfacthd.framedblocks.client.util;
 import net.minecraft.world.item.ItemStack;
 import xfacthd.framedblocks.common.compat.emi.EmiCompat;
 import xfacthd.framedblocks.common.compat.jei.JeiCompat;
+import xfacthd.framedblocks.common.compat.rei.ReiCompat;
 
 public enum RecipeViewer
 {
     JEI(JeiCompat::isShowRecipePressed, JeiCompat::handleShowRecipeRequest),
-    //REI(ReiCompat::isShowRecipePressed, ReiCompat::handleShowRecipeRequest), // TODO: implement REI compat
+    REI(ReiCompat::isShowRecipePressed, ReiCompat::handleShowRecipeRequest),
     EMI(EmiCompat::isShowRecipePressed, EmiCompat::handleShowRecipeRequest);
 
     private final ShowRecipeKeyTest showKeyTest;
@@ -42,10 +43,10 @@ public enum RecipeViewer
         {
             return JEI;
         }
-        //if (ReiCompat.isLoaded())
-        //{
-        //    return REI;
-        //}
+        if (ReiCompat.isLoaded())
+        {
+            return REI;
+        }
         return null;
     }
 

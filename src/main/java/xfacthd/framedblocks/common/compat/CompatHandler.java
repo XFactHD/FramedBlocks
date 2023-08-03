@@ -5,9 +5,11 @@ import xfacthd.framedblocks.common.compat.buildinggadgets.BuildingGadgetsCompat;
 import xfacthd.framedblocks.common.compat.contex.ConTexCompat;
 import xfacthd.framedblocks.common.compat.create.CreateCompat;
 import xfacthd.framedblocks.common.compat.ctm.CtmCompat;
+import xfacthd.framedblocks.common.compat.emi.EmiCompat;
 import xfacthd.framedblocks.common.compat.flywheel.FlywheelCompat;
 import xfacthd.framedblocks.common.compat.jei.JeiCompat;
 import xfacthd.framedblocks.common.compat.nocubes.NoCubesCompat;
+import xfacthd.framedblocks.common.compat.rei.ReiCompat;
 import xfacthd.framedblocks.common.compat.rubidium.RubidiumCompat;
 import xfacthd.framedblocks.common.compat.supplementaries.SupplementariesCompat;
 
@@ -24,6 +26,7 @@ public final class CompatHandler
         FlywheelCompat.init();
         JeiCompat.init();
         NoCubesCompat.init();
+        ReiCompat.init();
         RubidiumCompat.init();
         SupplementariesCompat.init();
     }
