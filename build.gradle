@@ -137,6 +137,10 @@ repositories {
         name = "TerraformersMC"
         url = "https://maven.terraformersmc.com/"
     }
+    maven {
+        name = "Shedaniel's maven"
+        url = "https://maven.shedaniel.me/"
+    }
     mavenCentral()
     mavenLocal()
 }

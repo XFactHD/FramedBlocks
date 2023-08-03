@@ -1,8 +1,6 @@
 package xfacthd.framedblocks.common.compat.rei;
 
 import me.shedaniel.rei.api.client.registry.display.DynamicDisplayGenerator;
-import me.shedaniel.rei.api.client.view.ViewSearchBuilder;
-import me.shedaniel.rei.api.common.category.CategoryIdentifier;
 import me.shedaniel.rei.api.common.entry.EntryIngredient;
 import me.shedaniel.rei.api.common.entry.EntryStack;
 import me.shedaniel.rei.api.common.entry.type.VanillaEntryTypes;
@@ -38,8 +36,13 @@ public final class FramingSawDisplayGenerator implements DynamicDisplayGenerator
     {
         if (!entry.isEmpty() && entry.getType() == VanillaEntryTypes.ITEM)
         {
-            FramingSawRecipeCache cache = FramingSawRecipeCache.get(true);
             ItemStack input = entry.castValue();
+            if (input.is(FBContent.BLOCK_FRAMING_SAW.get().asItem()))
+            {
+                return getUsageFor(EntryStacks.of(FBContent.BLOCK_FRAMED_CUBE.get()));
+            }
+
+            FramingSawRecipeCache cache = FramingSawRecipeCache.get(true);
             if (cache.getMaterialValue(input.getItem()) > -1)
             {
                 List<FramingSawRecipe> recipes = cache.getRecipes();
@@ -52,25 +55,6 @@ public final class FramingSawDisplayGenerator implements DynamicDisplayGenerator
             }
         }
         return Optional.empty();
-    }
-
-    @Override // TODO: is this even close to correct???
-    public Optional<List<FramingSawDisplay>> generate(ViewSearchBuilder builder)
-    {
-        if (!builder.getCategories().contains(FramingSawRecipeCategory.SAW_CATEGORY))
-        {
-            return Optional.empty();
-        }
-        Set<CategoryIdentifier<?>> catFilter = builder.getFilteringCategories();
-        if (!catFilter.isEmpty() && !catFilter.contains(FramingSawRecipeCategory.SAW_CATEGORY))
-        {
-            return Optional.empty();
-        }
-
-        List<FramingSawDisplay> displays = new ArrayList<>();
-        builder.getRecipesFor().forEach(stack -> getRecipeFor(stack).ifPresent(displays::addAll));
-        builder.getUsagesFor().forEach(stack -> getUsageFor(stack).ifPresent(displays::addAll));
-        return Optional.of(displays);
     }
 
 
