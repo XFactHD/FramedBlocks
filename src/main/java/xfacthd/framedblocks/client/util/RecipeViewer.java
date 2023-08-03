@@ -9,7 +9,7 @@ public enum RecipeViewer
 {
     JEI(JeiCompat::isShowRecipePressed, JeiCompat::handleShowRecipeRequest),
     REI(ReiCompat::isShowRecipePressed, ReiCompat::handleShowRecipeRequest),
-    EMI(EmiCompat::isShowRecipePressed, EmiCompat::handleShowRecipeRequest);
+    EMI((keyCode, scanCode) -> false, resultStack -> false);
 
     private final ShowRecipeKeyTest showKeyTest;
     private final RecipeShower recipeShower;

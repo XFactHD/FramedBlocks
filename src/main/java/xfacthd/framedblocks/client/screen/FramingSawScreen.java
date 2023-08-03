@@ -474,27 +474,34 @@ public class FramingSawScreen extends AbstractContainerScreen<FramingSawMenu>
             double mouseX = mouseHandler.xpos() * (double)window.getGuiScaledWidth() / (double)window.getScreenWidth();
             double mouseY = mouseHandler.ypos() * (double)window.getGuiScaledHeight() / (double)window.getScreenHeight();
 
-            double x = leftPos + RECIPES_X;
-            double y = topPos + RECIPES_Y;
-
-            if (mouseX >= x && mouseX <= x + (RECIPE_WIDTH * RECIPE_COLS) && mouseY >= y && mouseY <= y + (RECIPE_HEIGHT * RECIPE_ROWS))
+            FramingSawRecipe recipe = getRecipeAt(mouseX, mouseY);
+            if (recipe != null && RECIPE_VIEWER.handleShowRecipeRequest(recipe.getResult()))
             {
-                int col = (int) ((mouseX - x) / RECIPE_WIDTH);
-                int row = (int) ((mouseY - y) / RECIPE_HEIGHT);
-                int idx = (row * RECIPE_COLS) + col + firstIndex;
-
-                List<FramingSawRecipe> recipes = cache.getRecipes();
-                if (idx > 0 && idx < recipes.size())
-                {
-                    if (RECIPE_VIEWER.handleShowRecipeRequest(cache.getRecipes().get(idx).getResult()))
-                    {
-                        return true;
-                    }
-                }
+                return true;
             }
         }
 
         return super.keyPressed(keyCode, scanCode, modifiers);
+    }
+
+    public FramingSawRecipe getRecipeAt(double mouseX, double mouseY)
+    {
+        double x = leftPos + RECIPES_X;
+        double y = topPos + RECIPES_Y;
+
+        if (mouseX >= x && mouseX <= x + (RECIPE_WIDTH * RECIPE_COLS) && mouseY >= y && mouseY <= y + (RECIPE_HEIGHT * RECIPE_ROWS))
+        {
+            int col = (int) ((mouseX - x) / RECIPE_WIDTH);
+            int row = (int) ((mouseY - y) / RECIPE_HEIGHT);
+            int idx = (row * RECIPE_COLS) + col + firstIndex;
+
+            List<FramingSawRecipe> recipes = cache.getRecipes();
+            if (idx > 0 && idx < recipes.size())
+            {
+                return cache.getRecipes().get(idx);
+            }
+        }
+        return null;
     }
 
     private boolean isScrollBarActive()
