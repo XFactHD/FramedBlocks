@@ -1,6 +1,5 @@
 package xfacthd.framedblocks.common.crafting;
 
-import com.google.common.collect.Sets;
 import it.unimi.dsi.fastutil.objects.Object2IntMap;
 import it.unimi.dsi.fastutil.objects.Object2IntOpenCustomHashMap;
 import net.minecraft.Util;
@@ -25,7 +24,7 @@ public final class FramingSawRecipeCache
 
     private final List<FramingSawRecipe> recipes = new ArrayList<>();
     private final Map<Item, FramingSawRecipe> recipesByResult = new IdentityHashMap<>();
-    private final Set<Item> containsAdditive = Sets.newIdentityHashSet();
+    private final Map<Item, FramingSawRecipe> recipesWithAdditives = new IdentityHashMap<>();
     private final Object2IntMap<Item> materialValues = new Object2IntOpenCustomHashMap<>(Util.identityStrategy());
 
     public void update(RecipeManager recipeManager)
@@ -39,29 +38,31 @@ public final class FramingSawRecipeCache
         {
             ItemStack result = recipe.getResult();
 
-            if (!recipe.getAdditives().isEmpty())
-            {
-                containsAdditive.add(result.getItem());
-            }
-
             int materialValue = recipe.getMaterialAmount();
             materialValues.put(result.getItem(), materialValue / result.getCount());
-
-            if (!recipe.isDisabled())
-            {
-                recipesByResult.put(result.getItem(), recipe);
-            }
         });
 
         // Remove disabled recipes after extracting material values
         recipes.removeIf(FramingSawRecipe::isDisabled);
+
+        recipes.forEach(recipe ->
+        {
+            ItemStack result = recipe.getResult();
+
+            recipesByResult.put(result.getItem(), recipe);
+
+            if (!recipe.getAdditives().isEmpty())
+            {
+                recipesWithAdditives.put(result.getItem(), recipe);
+            }
+        });
     }
 
     public void clear()
     {
         recipes.clear();
         recipesByResult.clear();
-        containsAdditive.clear();
+        recipesWithAdditives.clear();
         materialValues.clear();
     }
 
@@ -88,7 +89,19 @@ public final class FramingSawRecipeCache
 
     public boolean containsAdditive(Item item)
     {
-        return containsAdditive.contains(item);
+        return recipesWithAdditives.containsKey(item);
+    }
+
+    public List<FramingSawRecipe> getRecipesWithAdditive(ItemStack additive)
+    {
+        return recipesWithAdditives.values()
+                .stream()
+                .filter(recipe -> recipe.getAdditives()
+                        .stream()
+                        .map(FramingSawRecipeAdditive::ingredient)
+                        .anyMatch(ing -> ing.test(additive))
+                )
+                .toList();
     }
 
 

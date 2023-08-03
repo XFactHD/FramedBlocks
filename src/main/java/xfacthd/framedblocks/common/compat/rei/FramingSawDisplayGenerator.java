@@ -53,6 +53,18 @@ public final class FramingSawDisplayGenerator implements DynamicDisplayGenerator
                 }
                 return Optional.of(displays);
             }
+
+            List<FramingSawRecipe> recipes = cache.getRecipesWithAdditive(input);
+            if (!recipes.isEmpty())
+            {
+                List<FramingSawDisplay> displays = new ArrayList<>(recipes.size());
+                input = new ItemStack(FBContent.BLOCK_FRAMED_CUBE.get());
+                for (FramingSawRecipe recipe : recipes)
+                {
+                    displays.add(makeDisplay(recipe, input));
+                }
+                return Optional.of(displays);
+            }
         }
         return Optional.empty();
     }
