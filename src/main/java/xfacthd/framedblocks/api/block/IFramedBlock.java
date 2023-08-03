@@ -39,6 +39,7 @@ import xfacthd.framedblocks.api.camo.CamoContainer;
 import xfacthd.framedblocks.api.predicate.cull.SideSkipPredicate;
 import xfacthd.framedblocks.api.type.IBlockType;
 import xfacthd.framedblocks.api.util.*;
+import xfacthd.framedblocks.common.compat.starlight.StarlightCompat;
 
 import java.util.List;
 import java.util.Optional;
@@ -172,7 +173,7 @@ public interface IFramedBlock extends EntityBlock, IForgeBlock
         {
             return 0;
         }
-        if (level.getExistingBlockEntity(pos) instanceof FramedBlockEntity be)
+        if (StarlightCompat.getBlockEntityForLight(level, pos) instanceof FramedBlockEntity be)
         {
             return be.getLightValue();
         }

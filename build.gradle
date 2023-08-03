@@ -176,6 +176,7 @@ dependencies {
 
     //runtimeOnly fg.deobf("curse.maven:rubidium-574856:4573226")
     //runtimeOnly fg.deobf("curse.maven:oculus-581495:4578741")
+    //runtimeOnly fg.deobf("curse.maven:starlight-forge-526854:4631193")
 
     compileOnly fg.deobf("com.simibubi.create:create-1.20.1:0.5.1.d-9:slim") { transitive = false }
     compileOnly fg.deobf("com.jozufozu.flywheel:flywheel-forge-1.20.1:0.6.9-5")
