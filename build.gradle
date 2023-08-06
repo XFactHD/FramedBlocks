@@ -174,7 +174,7 @@ dependencies {
 
     //runtimeOnly fg.deobf("curse.maven:spark-361579:3767286")
 
-    //runtimeOnly fg.deobf("curse.maven:rubidium-574856:4573226")
+    //runtimeOnly fg.deobf("curse.maven:rubidium-574856:4684247")
     //runtimeOnly fg.deobf("curse.maven:oculus-581495:4578741")
     //runtimeOnly fg.deobf("curse.maven:starlight-forge-526854:4631193")
 

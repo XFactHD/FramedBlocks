@@ -23,7 +23,7 @@ public final class ItemRenderHelper
 
     public static void renderFakeItemTransparent(PoseStack poseStack, ItemStack stack, int x, int y, int alpha)
     {
-        if (stack.isEmpty() || RubidiumCompat.isLoaded())
+        if (stack.isEmpty() || !RubidiumCompat.supportsCustomVertexConsumer())
         {
             return;
         }
