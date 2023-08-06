@@ -369,10 +369,10 @@ public final class ModelUtils
             Objects.requireNonNull(model, "Wrapped model of WeightedBakedModel is null?!");
         }
 
-        List<BakedQuad> quads = new ArrayList<>();
+        ArrayList<BakedQuad> quads = new ArrayList<>();
         for (Direction dir : Direction.values())
         {
-            quads.addAll(model.getQuads(state, dir, rand, data, renderType));
+            Utils.copyAll(model.getQuads(state, dir, rand, data, renderType), quads);
         }
         return quads;
     }

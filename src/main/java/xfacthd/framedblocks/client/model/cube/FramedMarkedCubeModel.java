@@ -45,7 +45,7 @@ public class FramedMarkedCubeModel extends FramedCubeBaseModel
 
     @Override
     protected void getAdditionalQuads(
-            List<BakedQuad> quads,
+            ArrayList<BakedQuad> quads,
             Direction side,
             BlockState state,
             RandomSource rand,
@@ -56,7 +56,7 @@ public class FramedMarkedCubeModel extends FramedCubeBaseModel
         FramedBlockData fbData = data.get(FramedBlockData.PROPERTY);
         if (fbData != null && !fbData.getCamoState().isAir())
         {
-            quads.addAll(frameModel.getQuads(state, side, rand, data, renderType));
+            Utils.copyAll(frameModel.getQuads(state, side, rand, data, renderType), quads);
         }
     }
 

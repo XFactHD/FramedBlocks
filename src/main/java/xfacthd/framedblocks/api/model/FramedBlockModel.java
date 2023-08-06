@@ -234,11 +234,11 @@ public abstract class FramedBlockModel extends BakedModelProxy
                 return List.of();
             }
 
-            List<BakedQuad> quads = new ArrayList<>();
+            ArrayList<BakedQuad> quads = new ArrayList<>();
 
             if (camoInRenderType)
             {
-                quads.addAll(model.getQuads(camoState, side, rand, camoData, renderType));
+                Utils.copyAll(model.getQuads(camoState, side, rand, camoData, renderType), quads);
             }
 
             if (additionalQuads)
@@ -248,7 +248,7 @@ public abstract class FramedBlockModel extends BakedModelProxy
 
             if (addReinforcement && renderType == RenderType.cutout())
             {
-                quads.addAll(reinforcementModel.getQuads(camoState, side, rand, camoData, renderType));
+                Utils.copyAll(reinforcementModel.getQuads(camoState, side, rand, camoData, renderType), quads);
             }
 
             return quads;
@@ -306,6 +306,8 @@ public abstract class FramedBlockModel extends BakedModelProxy
             modelLayers = ChunkRenderTypeSet.union(modelLayers, camoLayers);
         }
 
+        BakedModel camoModel = getCamoModel(camoState, noCamo && useBaseModel);
+
         for (RenderType renderType : modelLayers)
         {
             boolean camoInRenderType = camoLayers.contains(renderType);
@@ -313,12 +315,12 @@ public abstract class FramedBlockModel extends BakedModelProxy
             quadTable.put(renderType, makeQuads(
                     state,
                     camoState,
+                    camoModel,
                     rand,
                     data,
                     camoData,
                     renderType,
                     camoInRenderType,
-                    noCamo,
                     addReinforcement && renderType == RenderType.cutout()
             ));
         }
@@ -332,12 +334,12 @@ public abstract class FramedBlockModel extends BakedModelProxy
     private Map<Direction, List<BakedQuad>> makeQuads(
             BlockState state,
             BlockState camoState,
+            BakedModel camoModel,
             RandomSource rand,
             ModelData data,
             ModelData camoData,
             RenderType renderType,
             boolean camoInRenderType,
-            boolean noCamo,
             boolean addReinforcement
     )
     {
@@ -350,11 +352,10 @@ public abstract class FramedBlockModel extends BakedModelProxy
 
         if (camoInRenderType)
         {
-            BakedModel camoModel = getCamoModel(camoState, noCamo && useBaseModel);
-            List<BakedQuad> quads = ModelUtils.getAllCullableQuads(camoModel, camoState, rand, camoData, renderType);
+            ArrayList<BakedQuad> quads = (ArrayList<BakedQuad>) ModelUtils.getAllCullableQuads(camoModel, camoState, rand, camoData, renderType);
             if (addReinforcement)
             {
-                quads.addAll(ModelUtils.getAllCullableQuads(reinforcementModel, camoState, rand, camoData, renderType));
+                Utils.copyAll(ModelUtils.getAllCullableQuads(reinforcementModel, camoState, rand, camoData, renderType), quads);
             }
             if (!transformAllQuads)
             {
@@ -493,6 +494,26 @@ public abstract class FramedBlockModel extends BakedModelProxy
      * Add additional quads to faces that return {@code true} from {@link FullFacePredicate#test(BlockState, Direction)}<br>
      * The result of this method will NOT be cached, execution should therefore be as fast as possible
      */
+    protected void getAdditionalQuads(
+            ArrayList<BakedQuad> quads,
+            Direction side,
+            BlockState state,
+            RandomSource rand,
+            ModelData data,
+            RenderType renderType
+    )
+    {
+        getAdditionalQuads((List<BakedQuad>) quads, side, state, rand, data, renderType);
+    }
+
+    /**
+     * Add additional quads to faces that return {@code true} from {@link FullFacePredicate#test(BlockState, Direction)}<br>
+     * The result of this method will NOT be cached, execution should therefore be as fast as possible
+     * @deprecated Use overload with {@link ArrayList} parameter instead to allow use of {@link Utils#copyAll(List, ArrayList)}
+     * as a faster replacement for {@link ArrayList#addAll(Collection)}
+     */
+    @Deprecated(forRemoval = true)
+    @SuppressWarnings("unused")
     protected void getAdditionalQuads(
             List<BakedQuad> quads,
             Direction side,

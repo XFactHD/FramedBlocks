@@ -14,8 +14,7 @@ import xfacthd.framedblocks.api.util.Utils;
 import xfacthd.framedblocks.api.model.util.ModelUtils;
 import xfacthd.framedblocks.common.FBContent;
 
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class FramedTargetModel extends FramedBlockModel
 {
@@ -41,7 +40,7 @@ public class FramedTargetModel extends FramedBlockModel
 
     @Override
     protected void getAdditionalQuads(
-            List<BakedQuad> quads,
+            ArrayList<BakedQuad> quads,
             Direction side,
             BlockState state,
             RandomSource rand,
@@ -49,7 +48,7 @@ public class FramedTargetModel extends FramedBlockModel
             RenderType renderType
     )
     {
-        quads.addAll(overlayModel.getQuads(state, side, rand, data, renderType));
+        Utils.copyAll(overlayModel.getQuads(state, side, rand, data, renderType), quads);
     }
 
 

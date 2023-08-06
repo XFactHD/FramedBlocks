@@ -368,6 +368,20 @@ public final class Utils
         return List.copyOf(list);
     }
 
+    /**
+     * Copy all elements from the source list to the destination list
+     * (Significantly faster than {@link ArrayList#addAll(Collection)} in benchmarks)
+     */
+    @SuppressWarnings({ "UseBulkOperation", "ForLoopReplaceableByForEach" })
+    public static <T> void copyAll(List<T> src, ArrayList<T> dest)
+    {
+        dest.ensureCapacity(dest.size() + src.size());
+        for (int i = 0; i < src.size(); i++)
+        {
+            dest.add(src.get(i));
+        }
+    }
+
     public static TagKey<Block> blockTag(String name)
     {
         return blockTag(FramedConstants.MOD_ID, name);

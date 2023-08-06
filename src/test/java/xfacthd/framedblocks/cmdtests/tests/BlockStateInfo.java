@@ -14,6 +14,7 @@ import xfacthd.framedblocks.api.util.ClientUtils;
 import xfacthd.framedblocks.cmdtests.SpecialTestCommand;
 import xfacthd.framedblocks.common.FBContent;
 import xfacthd.framedblocks.common.data.BlockType;
+import xfacthd.framedblocks.util.MarkdownTable;
 
 import java.util.List;
 import java.util.Set;
@@ -33,8 +34,15 @@ public final class BlockStateInfo
     {
         Stopwatch watch = Stopwatch.createStarted();
 
-        StringBuilder dump = new StringBuilder("| Block | State count | Model state count | Solid | Glowing | Skylight | Waterlogging | State lock |\n");
-        dump.append("| --- | --- | --- | --- | --- | --- | --- | --- |\n");
+        MarkdownTable table = new MarkdownTable();
+        table.header("Block")
+                .header("State count", true)
+                .header("Model state count", true)
+                .header("Solid")
+                .header("Glowing")
+                .header("Skylight")
+                .header("Waterlogging")
+                .header("State lock");
 
         long totalStates = 0;
         long totalModelStates = 0;
@@ -52,33 +60,29 @@ public final class BlockStateInfo
             String waterlogging = type.supportsWaterLogging() ? checkBooleanProperty(block, BlockStateProperties.WATERLOGGED) : "-";
             String stateLock = type.canLockState() ? checkBooleanProperty(block, FramedProperties.STATE_LOCKED) : "-";
 
-            dump.append("| ")
-                    .append(name)
-                    .append(" | %,d | ".formatted(stateCount))
-                    .append(" %,d | ".formatted(modelStateCount))
-                    .append(solid)
-                    .append(" | ")
-                    .append(glowing)
-                    .append(" | ")
-                    .append(skylight)
-                    .append(" | ")
-                    .append(waterlogging)
-                    .append(" | ")
-                    .append(stateLock)
-                    .append(" |\n");
+            table.cell(name)
+                    .cell("%,d".formatted(stateCount))
+                    .cell("%,d".formatted(modelStateCount))
+                    .cell(solid)
+                    .cell(glowing)
+                    .cell(skylight)
+                    .cell(waterlogging)
+                    .cell(stateLock)
+                    .newRow();
 
             totalStates += stateCount;
             totalModelStates += modelStateCount;
         }
 
-        dump.append("\nBlock count: ").append(TYPES.length)
-                .append("\\\nTotal states: ").append(totalStates)
-                .append("\\\nTotal model states: ").append(totalModelStates)
-                .append("\n");
+        String dump = table.print() +
+                "\nBlock count: " + TYPES.length +
+                "\\\nTotal states: " + totalStates +
+                "\\\nTotal model states: " + totalModelStates +
+                "\n";
 
         watch.stop();
 
-        Component exportMsg = SpecialTestCommand.writeResultToFile("blockstate_info", "md", dump.toString());
+        Component exportMsg = SpecialTestCommand.writeResultToFile("blockstate_info", "md", dump);
         Component resultMsg = Component.literal(RESULT_MSG.formatted(TYPES.length, watch)).append(exportMsg);
         ctx.getSource().sendSuccess(() -> resultMsg, true);
 
