@@ -156,7 +156,10 @@ dependencies {
     compileOnly fg.deobf("curse.maven:buildinggadgets-298187:3829297")
 
     implementation fg.deobf("xfacthd.contex:ConnectedTextures:2.1:slim") { transitive = false }
-    compileOnly fg.deobf("curse.maven:athena-841890:4621937")
+
+    implementation fg.deobf("curse.maven:athena-841890:4686264")
+    //runtimeOnly fg.deobf("curse.maven:resfullib-570073:4681831")
+    //runtimeOnly fg.deobf("curse.maven:chipped-456956:4634856")
 
     compileOnly(fg.deobf("mezz.jei:jei-${minecraft_version}-common-api:${jei_version}"))
     compileOnly(fg.deobf("mezz.jei:jei-${minecraft_version}-forge-api:${jei_version}"))

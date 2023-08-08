@@ -177,7 +177,8 @@ public final class AppearanceHelper
     /*
      * Non-null, non-AIR => connectable block
      * Non-null, AIR => framed block without CT support
-     * Null => Double framed block, can't determine connecting component, won't connect to other double blocks
+     * Null => Double framed block, can't determine connecting component, won't connect to other double blocks,
+     *         or neighbor state is actually air, in which case full-face and full-edge camos need to be returned
      */
     private static BlockState findApplicableNeighbor(BlockGetter level, BlockPos queryPos, @Nullable BlockState queryState)
     {
@@ -201,7 +202,7 @@ public final class AppearanceHelper
             return actualQueryState;
         }
 
-        return queryState;
+        return queryState != null && queryState.isAir() ? null : queryState;
     }
 
     private static boolean canDoubleBlockConnectFullEdgeTo(
