@@ -32,7 +32,9 @@ public final class SkipPredicates
     private static final String RESULT_MSG = MSG_PREFIX + "Tested %,d combinations in %dms. ";
     private static final BlockPos CENTER = new BlockPos(1, 1, 1);
 
-    public static void testSkipPredicates(CommandContext<CommandSourceStack> ctx, Consumer<Component> msgQueueAppender)
+    public static void testSkipPredicates(
+            @SuppressWarnings("unused") CommandContext<CommandSourceStack> ctx, Consumer<Component> msgQueueAppender
+    )
     {
         List<Triple<BlockType, BlockType, Throwable>> errors = new ArrayList<>();
         AtomicLong combinations = new AtomicLong(0);
@@ -76,9 +78,15 @@ public final class SkipPredicates
 
         if (!errors.isEmpty())
         {
-            StringBuilder testResult = new StringBuilder("Encountered errors while testing skip predicates:");
+            StringBuilder testResult = new StringBuilder("Encountered errors while testing skip predicates (deduplicated):");
+            Set<Triple<BlockType, BlockType, String>> deduplicated = new HashSet<>();
             for (Triple<BlockType, BlockType, Throwable> error : errors)
             {
+                if (!deduplicated.add(Triple.of(error.getLeft(), error.getMiddle(), error.getRight().getMessage())))
+                {
+                    continue;
+                }
+
                 testResult.append("\n\t- Type: ")
                         .append(error.getLeft())
                         .append(", Against: ")
