@@ -148,7 +148,7 @@ repositories {
 dependencies {
     minecraft "net.minecraftforge:forge:${minecraft_version}-${forge_version}"
 
-    //compileOnly fg.deobf("curse.maven:ctm-267602:3737369")
+    compileOnly fg.deobf("team.chisel.ctm:CTM:1.20.1-1.1.8+4")
 
     //runtimeOnly fg.deobf("curse.maven:puzzleslib-495476:4621178") //Only needed when Diagonal Fences is switched to implementation
     compileOnly fg.deobf("curse.maven:diagonalfences-458048:4611775")
@@ -182,7 +182,7 @@ dependencies {
     //runtimeOnly fg.deobf("curse.maven:oculus-581495:4578741")
     //runtimeOnly fg.deobf("curse.maven:starlight-forge-526854:4631193")
 
-    compileOnly fg.deobf("com.simibubi.create:create-1.20.1:0.5.1.d-9:slim") { transitive = false }
+    compileOnly fg.deobf("com.simibubi.create:create-1.20.1:0.5.1.d-11:slim") { transitive = false }
     compileOnly fg.deobf("com.jozufozu.flywheel:flywheel-forge-1.20.1:0.6.9-5")
     //runtimeOnly fg.deobf("com.tterrag.registrate:Registrate:MC1.20-1.3.3") //Only needed when Create and/or Flywheel are switched to implementation
 

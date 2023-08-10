@@ -6,29 +6,20 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.material.Fluid;
 import net.minecraftforge.client.model.data.ModelData;
+import net.minecraftforge.client.model.data.ModelProperty;
 import xfacthd.framedblocks.api.FramedBlocksClientAPI;
 import xfacthd.framedblocks.api.ghost.GhostRenderBehaviour;
 import xfacthd.framedblocks.api.type.IBlockType;
 import xfacthd.framedblocks.api.predicate.contex.ConTexMode;
 import xfacthd.framedblocks.api.render.OutlineRenderer;
+import xfacthd.framedblocks.client.data.ConTexDataHandler;
 import xfacthd.framedblocks.client.model.FluidModel;
 import xfacthd.framedblocks.client.render.special.BlockOutlineRenderer;
 import xfacthd.framedblocks.client.render.special.GhostBlockRenderer;
-import xfacthd.framedblocks.common.compat.athena.AthenaCompat;
-import xfacthd.framedblocks.common.compat.contex.ConTexCompat;
-import xfacthd.framedblocks.common.compat.create.CreateCompat;
-
-import java.util.function.Function;
 
 @SuppressWarnings("unused")
 public final class ClientApiImpl implements FramedBlocksClientAPI
 {
-    private static final CtContextSupplier[] CT_CONTEXT_GETTERS = new CtContextSupplier[] {
-            ConTexCompat::tryGetCTContext,
-            AthenaCompat::tryGetCTContext,
-            CreateCompat::tryGetCTContext
-    };
-
     @Override
     public BlockColor defaultBlockColor()
     {
@@ -72,21 +63,14 @@ public final class ClientApiImpl implements FramedBlocksClientAPI
     }
 
     @Override
-    public Object extractCTContext(ModelData data)
+    public void addConTexProperty(String modId, ModelProperty<?> ctProperty)
     {
-        for (CtContextSupplier sup : CT_CONTEXT_GETTERS)
-        {
-            Object ctx = sup.apply(data);
-            if (ctx != null)
-            {
-                return ctx;
-            }
-        }
-        return null;
+        ConTexDataHandler.addConTexProperty(ctProperty);
     }
 
-
-
-    @FunctionalInterface
-    private interface CtContextSupplier extends Function<ModelData, Object> { }
+    @Override
+    public Object extractCTContext(ModelData data)
+    {
+        return ConTexDataHandler.extractConTexData(data);
+    }
 }

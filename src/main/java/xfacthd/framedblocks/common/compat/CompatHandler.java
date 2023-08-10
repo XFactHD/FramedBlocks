@@ -13,6 +13,7 @@ import xfacthd.framedblocks.common.compat.rei.ReiCompat;
 import xfacthd.framedblocks.common.compat.rubidium.RubidiumCompat;
 import xfacthd.framedblocks.common.compat.starlight.StarlightCompat;
 import xfacthd.framedblocks.common.compat.supplementaries.SupplementariesCompat;
+import xfacthd.framedblocks.common.compat.xycraft.XyCraftCompat;
 
 public final class CompatHandler
 {
@@ -22,7 +23,7 @@ public final class CompatHandler
         BuildingGadgetsCompat.init();
         ConTexCompat.init();
         CreateCompat.init();
-        //CtmCompat.init(); //TODO: add proper support for CTM's CT context
+        CtmCompat.init();
         EmiCompat.init();
         FlywheelCompat.init();
         JeiCompat.init();
@@ -31,6 +32,7 @@ public final class CompatHandler
         RubidiumCompat.init();
         StarlightCompat.init();
         SupplementariesCompat.init();
+        XyCraftCompat.init();
     }
 
     public static void commonSetup()

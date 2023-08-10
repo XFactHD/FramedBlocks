@@ -1,16 +1,13 @@
 package xfacthd.framedblocks.common.compat.athena;
 
 import earth.terrarium.athena.api.client.forge.AthenaBakedModel;
-import net.minecraftforge.client.model.data.ModelData;
-import net.minecraftforge.client.model.data.ModelProperty;
 import net.minecraftforge.fml.ModList;
 import net.minecraftforge.fml.loading.FMLEnvironment;
 import xfacthd.framedblocks.FramedBlocks;
+import xfacthd.framedblocks.client.data.ConTexDataHandler;
 
 public final class AthenaCompat
 {
-    private static boolean loadedClient = false;
-
     public static void init()
     {
         if (ModList.get().isLoaded("athena"))
@@ -21,7 +18,6 @@ public final class AthenaCompat
                 if (FMLEnvironment.dist.isClient())
                 {
                     GuardedClientAccess.init();
-                    loadedClient = true;
                 }
             }
             catch (Throwable e)
@@ -31,27 +27,11 @@ public final class AthenaCompat
         }
     }
 
-    public static Object tryGetCTContext(ModelData data)
-    {
-        if (loadedClient)
-        {
-            return GuardedClientAccess.tryGetCTContext(data);
-        }
-        return null;
-    }
-
     private static final class GuardedClientAccess
     {
-        private static ModelProperty<?> ATHENA_CT_PROPERTY;
-
         public static void init()
         {
-            ATHENA_CT_PROPERTY = AthenaBakedModel.DATA;
-        }
-
-        public static Object tryGetCTContext(ModelData data)
-        {
-            return data.get(ATHENA_CT_PROPERTY);
+            ConTexDataHandler.addConTexProperty(AthenaBakedModel.DATA);
         }
     }
 

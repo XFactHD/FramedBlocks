@@ -6,6 +6,7 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.material.Fluid;
 import net.minecraftforge.client.model.data.ModelData;
+import net.minecraftforge.client.model.data.ModelProperty;
 import xfacthd.framedblocks.api.ghost.GhostRenderBehaviour;
 import xfacthd.framedblocks.api.type.IBlockType;
 import xfacthd.framedblocks.api.predicate.contex.ConTexMode;
@@ -59,6 +60,12 @@ public interface FramedBlocksClientAPI
      * Returns the currently configured {@link ConTexMode}
      */
     ConTexMode getConTexMode();
+
+    /**
+     * Add a {@link ModelProperty} for connected textures data to allow FramedBlocks to look up the data for use
+     * in the caching of generated quads in the model
+     */
+    void addConTexProperty(String modId, ModelProperty<?> ctProperty);
 
     /**
      * Attempts to extract a connected textures context object from the given {@link ModelData}

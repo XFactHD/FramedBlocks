@@ -13,11 +13,12 @@ import net.minecraft.world.level.block.state.properties.Property;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.event.*;
+import net.minecraftforge.client.model.data.ModelProperty;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.eventbus.api.*;
+import net.minecraftforge.fml.InterModComms;
 import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
-import net.minecraftforge.fml.event.lifecycle.FMLLoadCompleteEvent;
+import net.minecraftforge.fml.event.lifecycle.*;
 import net.minecraftforge.fml.loading.FMLEnvironment;
 import net.minecraftforge.registries.RegistryObject;
 import org.jetbrains.annotations.Nullable;
@@ -29,7 +30,7 @@ import xfacthd.framedblocks.api.type.IBlockType;
 import xfacthd.framedblocks.api.util.*;
 import xfacthd.framedblocks.api.util.ClientUtils;
 import xfacthd.framedblocks.api.model.util.ModelCache;
-import xfacthd.framedblocks.client.data.BlockOutlineRenderers;
+import xfacthd.framedblocks.client.data.*;
 import xfacthd.framedblocks.client.loader.overlay.OverlayLoader;
 import xfacthd.framedblocks.client.model.FluidModel;
 import xfacthd.framedblocks.client.model.FramedDoubleBlockModel;
@@ -64,10 +65,10 @@ import xfacthd.framedblocks.common.block.stairs.*;
 import xfacthd.framedblocks.common.blockentity.FramedDoubleBlockEntity;
 import xfacthd.framedblocks.common.compat.supplementaries.SupplementariesCompat;
 import xfacthd.framedblocks.common.data.BlockType;
-import xfacthd.framedblocks.client.data.GhostRenderBehaviours;
 
 import java.util.List;
 import java.util.Map;
+import java.util.function.Supplier;
 
 @Mod.EventBusSubscriber(modid = FramedConstants.MOD_ID, bus = Mod.EventBusSubscriber.Bus.MOD, value = Dist.CLIENT)
 public final class FBClient
@@ -106,10 +107,23 @@ public final class FBClient
     }
 
     @SubscribeEvent
+    public static void onImcMessageReceived(final InterModProcessEvent event)
+    {
+        event.getIMCStream()
+                .filter(msg -> msg.method().equals(ConTexDataHandler.IMC_METHOD_ADD_PROPERTY))
+                .map(InterModComms.IMCMessage::messageSupplier)
+                .map(Supplier::get)
+                .filter(ModelProperty.class::isInstance)
+                .map(ModelProperty.class::cast)
+                .forEach(ConTexDataHandler::addConTexProperty);
+    }
+
+    @SubscribeEvent
     public static void onLoadComplete(final FMLLoadCompleteEvent event)
     {
         GhostBlockRenderer.lockRegistration();
         BlockOutlineRenderer.lockRegistration();
+        ConTexDataHandler.lockRegistration();
     }
 
     @SubscribeEvent

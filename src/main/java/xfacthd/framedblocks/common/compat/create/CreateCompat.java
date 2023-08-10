@@ -6,19 +6,17 @@ import com.simibubi.create.content.contraptions.behaviour.*;
 import com.simibubi.create.foundation.block.connected.CTModel;
 import com.simibubi.create.foundation.utility.NBTProcessors;
 import net.minecraft.world.level.block.Block;
-import net.minecraftforge.client.model.data.ModelData;
 import net.minecraftforge.client.model.data.ModelProperty;
 import net.minecraftforge.fml.ModList;
 import net.minecraftforge.fml.loading.FMLEnvironment;
 import net.minecraftforge.fml.util.ObfuscationReflectionHelper;
 import net.minecraftforge.registries.RegistryObject;
 import xfacthd.framedblocks.FramedBlocks;
+import xfacthd.framedblocks.client.data.ConTexDataHandler;
 import xfacthd.framedblocks.common.FBContent;
 
 public final class CreateCompat
 {
-    private static boolean loadedClient = false;
-
     public static void init()
     {
         if (ModList.get().isLoaded("create"))
@@ -29,7 +27,6 @@ public final class CreateCompat
                 if (FMLEnvironment.dist.isClient())
                 {
                     GuardedClientAccess.init();
-                    loadedClient = true;
                 }
             }
             catch (Throwable e)
@@ -53,15 +50,6 @@ public final class CreateCompat
                 FramedBlocks.LOGGER.warn("An error occured while initializing Create integration!", e);
             }
         }
-    }
-
-    public static Object tryGetCTContext(ModelData data)
-    {
-        if (loadedClient)
-        {
-            return GuardedClientAccess.tryGetCTContext(data);
-        }
-        return null;
     }
 
     private static final class GuardedAccess
@@ -96,16 +84,11 @@ public final class CreateCompat
 
     private static final class GuardedClientAccess
     {
-        private static ModelProperty<?> CREATE_CT_PROPERTY;
 
         public static void init()
         {
-            CREATE_CT_PROPERTY = ObfuscationReflectionHelper.getPrivateValue(CTModel.class, null, "CT_PROPERTY");
-        }
-
-        public static Object tryGetCTContext(ModelData data)
-        {
-            return data.get(CREATE_CT_PROPERTY);
+            ModelProperty<?> ctProperty = ObfuscationReflectionHelper.getPrivateValue(CTModel.class, null, "CT_PROPERTY");
+            ConTexDataHandler.addConTexProperty(ctProperty);
         }
     }
 
