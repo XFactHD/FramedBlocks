@@ -36,6 +36,7 @@ import xfacthd.framedblocks.common.net.*;
 import xfacthd.framedblocks.common.util.*;
 
 @Mod(FramedConstants.MOD_ID)
+@SuppressWarnings("UtilityClassWithPublicConstructor")
 public final class FramedBlocks
 {
     public static final Logger LOGGER = LogUtils.getLogger();

@@ -102,17 +102,17 @@ public final class Utils
     }
 
     /**
-     * Calculate how far into the block the coordinate of the given direction points in the given direction
+     * Calculate how far into the block the coordinate of the given direction's axis points in the given direction
      */
     public static double fractionInDir(Vec3 vec, Direction dir)
     {
-        vec = fraction(vec);
         double coord = switch (dir.getAxis())
         {
             case X -> vec.x;
             case Y -> vec.y;
             case Z -> vec.z;
         };
+        coord = coord - Math.floor(coord);
         return isPositive(dir) ? coord : (1D - coord);
     }
 

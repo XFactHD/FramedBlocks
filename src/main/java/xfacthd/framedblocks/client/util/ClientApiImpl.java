@@ -63,7 +63,7 @@ public final class ClientApiImpl implements FramedBlocksClientAPI
     }
 
     @Override
-    public void addConTexProperty(String modId, ModelProperty<?> ctProperty)
+    public void addConTexProperty(ModelProperty<?> ctProperty)
     {
         ConTexDataHandler.addConTexProperty(ctProperty);
     }

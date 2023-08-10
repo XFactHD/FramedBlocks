@@ -178,9 +178,7 @@ public class FramedCollapsibleBlock extends FramedBlock
                 }
             }
 
-            result = result.optimize();
-
-            return result;
+            return result.optimize();
         }
     }
 }
