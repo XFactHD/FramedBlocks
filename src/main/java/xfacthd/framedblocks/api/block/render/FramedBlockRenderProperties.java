@@ -23,10 +23,17 @@ public class FramedBlockRenderProperties implements IClientBlockExtensions
         boolean suppressed = suppressParticles(state, level, hit.getBlockPos());
         if (!suppressed && level.getBlockEntity(hit.getBlockPos()) instanceof FramedBlockEntity be)
         {
-            ParticleHelper.Client.addHitEffects(state, level, hit, be.getCamo().getState(), engine);
-            return true;
+            return addHitEffectsUnsuppressed(state, level, hit, be, engine);
         }
         return suppressed;
+    }
+
+    protected boolean addHitEffectsUnsuppressed(
+            BlockState state, Level level, BlockHitResult hit, FramedBlockEntity be, ParticleEngine engine
+    )
+    {
+        ParticleHelper.Client.addHitEffects(state, level, hit, be.getCamo().getState(), engine);
+        return true;
     }
 
     @Override
@@ -35,10 +42,17 @@ public class FramedBlockRenderProperties implements IClientBlockExtensions
         boolean suppressed = suppressParticles(state, level, pos);
         if (!suppressed && level.getBlockEntity(pos) instanceof FramedBlockEntity be)
         {
-            ParticleHelper.Client.addDestroyEffects(state, level, pos, be.getCamo().getState(), engine);
-            return true;
+            return addDestroyEffectsUnsuppressed(state, level, pos, be, engine);
         }
         return suppressed;
+    }
+
+    protected boolean addDestroyEffectsUnsuppressed(
+            BlockState state, Level level, BlockPos pos, FramedBlockEntity be, ParticleEngine engine
+    )
+    {
+        ParticleHelper.Client.addDestroyEffects(state, level, pos, be.getCamo().getState(), engine);
+        return true;
     }
 
 
