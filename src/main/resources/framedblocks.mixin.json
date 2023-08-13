@@ -8,6 +8,7 @@
         "MixinBlockStateBase"
     ],
     "client": [
+        "MixinLevelRenderer"
     ],
     "injectors": {
         "defaultRequire": 1

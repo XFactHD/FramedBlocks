@@ -4,8 +4,7 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.util.Tuple;
 import net.minecraft.world.entity.Entity;
-import net.minecraft.world.level.BlockGetter;
-import net.minecraft.world.level.LevelReader;
+import net.minecraft.world.level.*;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.block.entity.BlockEntity;
@@ -14,7 +13,9 @@ import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraftforge.client.extensions.common.IClientBlockExtensions;
 import org.jetbrains.annotations.Nullable;
 import xfacthd.framedblocks.api.block.FramedProperties;
+import xfacthd.framedblocks.api.block.IFramedBlock;
 import xfacthd.framedblocks.api.predicate.cull.SideSkipPredicate;
+import xfacthd.framedblocks.common.FBContent;
 import xfacthd.framedblocks.common.blockentity.FramedDoubleBlockEntity;
 import xfacthd.framedblocks.common.data.BlockType;
 
@@ -61,6 +62,33 @@ public abstract class AbstractFramedDoubleBlock extends FramedBlock implements I
             return statePair.getB();
         }
         return null;
+    }
+
+    @Override
+    public boolean playBreakSound(BlockState state, Level level, BlockPos pos)
+    {
+        if (level.getBlockEntity(pos) instanceof FramedDoubleBlockEntity be)
+        {
+            BlockState stateOne = be.getCamo().getState();
+            if (stateOne.isAir())
+            {
+                stateOne = FBContent.BLOCK_FRAMED_CUBE.get().defaultBlockState();
+            }
+            IFramedBlock.playCamoBreakSound(level, pos, stateOne);
+
+            BlockState stateTwo = be.getCamoTwo().getState();
+            if (stateTwo.isAir())
+            {
+                stateTwo = FBContent.BLOCK_FRAMED_CUBE.get().defaultBlockState();
+            }
+            if (stateTwo.getSoundType() != stateOne.getSoundType())
+            {
+                IFramedBlock.playCamoBreakSound(level, pos, stateTwo);
+            }
+
+            return true;
+        }
+        return false;
     }
 
     @Override

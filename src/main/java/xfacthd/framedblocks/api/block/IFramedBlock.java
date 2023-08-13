@@ -7,6 +7,8 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.sounds.SoundEvent;
+import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.Entity;
@@ -178,6 +180,23 @@ public interface IFramedBlock extends EntityBlock, IForgeBlock
             return be.getLightValue();
         }
         return 0;
+    }
+
+    default boolean playBreakSound(BlockState state, Level level, BlockPos pos)
+    {
+        if (level.getBlockEntity(pos) instanceof FramedBlockEntity be)
+        {
+            playCamoBreakSound(level, pos, be.getCamo().getState());
+            return true;
+        }
+        return false;
+    }
+
+    static void playCamoBreakSound(Level level, BlockPos pos, BlockState camoState)
+    {
+        SoundType type = camoState.getSoundType();
+        SoundEvent sound = type.getBreakSound();
+        level.playLocalSound(pos, sound, SoundSource.BLOCKS, (type.getVolume() + 1F) / 2F, type.getPitch() * 0.8F, false);
     }
 
     @Override
