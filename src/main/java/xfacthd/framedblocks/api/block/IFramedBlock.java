@@ -38,10 +38,10 @@ import xfacthd.framedblocks.api.block.cache.StateCache;
 import xfacthd.framedblocks.api.block.render.*;
 import xfacthd.framedblocks.api.block.update.CullingUpdateTracker;
 import xfacthd.framedblocks.api.camo.CamoContainer;
+import xfacthd.framedblocks.api.internal.InternalAPI;
 import xfacthd.framedblocks.api.predicate.cull.SideSkipPredicate;
 import xfacthd.framedblocks.api.type.IBlockType;
 import xfacthd.framedblocks.api.util.*;
-import xfacthd.framedblocks.common.compat.starlight.StarlightCompat;
 
 import java.util.List;
 import java.util.Optional;
@@ -175,7 +175,7 @@ public interface IFramedBlock extends EntityBlock, IForgeBlock
         {
             return 0;
         }
-        if (StarlightCompat.getBlockEntityForLight(level, pos) instanceof FramedBlockEntity be)
+        if (InternalAPI.INSTANCE.getBlockEntityForLight(level, pos) instanceof FramedBlockEntity be)
         {
             return be.getLightValue();
         }

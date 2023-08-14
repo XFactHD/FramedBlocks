@@ -33,6 +33,7 @@ import net.minecraft.world.phys.shapes.VoxelShape;
 import net.minecraftforge.fml.loading.FMLEnvironment;
 import net.minecraftforge.fml.util.ObfuscationReflectionHelper;
 import net.minecraftforge.registries.*;
+import org.jetbrains.annotations.ApiStatus;
 import xfacthd.framedblocks.api.block.FramedBlockEntity;
 import xfacthd.framedblocks.api.block.FramedProperties;
 import xfacthd.framedblocks.api.camo.CamoContainer;
@@ -578,6 +579,14 @@ public final class Utils
     public static <T> T getValue(IForgeRegistry<T> registry, int id)
     {
         return ((ForgeRegistry<T>) registry).getValue(id);
+    }
+
+    @ApiStatus.Internal
+    public static <T> T loadService(Class<T> clazz)
+    {
+        return ServiceLoader.load(clazz)
+                .findFirst()
+                .orElseThrow(() -> new NullPointerException("Failed to load service for " + clazz.getName()));
     }
 
 
