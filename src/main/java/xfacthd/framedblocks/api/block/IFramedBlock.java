@@ -186,7 +186,12 @@ public interface IFramedBlock extends EntityBlock, IForgeBlock
     {
         if (level.getBlockEntity(pos) instanceof FramedBlockEntity be)
         {
-            playCamoBreakSound(level, pos, be.getCamo().getState());
+            BlockState camoState = be.getCamo().getState();
+            if (camoState.isAir())
+            {
+                camoState = state;
+            }
+            playCamoBreakSound(level, pos, camoState);
             return true;
         }
         return false;
