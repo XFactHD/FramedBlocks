@@ -17,28 +17,40 @@ import java.util.Optional;
 public final class FramingSawTransferHandler implements IRecipeTransferHandler<FramingSawMenu, FramingSawRecipe>
 {
     private final IRecipeTransferHandlerHelper transferHelper;
+    private final IRecipeTransferInfo<FramingSawMenu, FramingSawRecipe> transferInfo;
+    private final IRecipeTransferHandler<FramingSawMenu, FramingSawRecipe> wrappedHandler;
 
     public FramingSawTransferHandler(IRecipeTransferHandlerHelper transferHelper)
     {
         this.transferHelper = transferHelper;
+        this.transferInfo = transferHelper.createBasicRecipeTransferInfo(
+                FramingSawMenu.class,
+                FBContent.MENU_TYPE_FRAMING_SAW.get(),
+                FramedJeiPlugin.FRAMING_SAW_RECIPE_TYPE,
+                FramingSawMenu.SLOT_INPUT,
+                FramingSawMenu.SLOT_RESULT,
+                FramingSawMenu.SLOT_INV_FIRST,
+                FramingSawMenu.INV_SLOT_COUNT
+        );
+        this.wrappedHandler = transferHelper.createUnregisteredRecipeTransferHandler(transferInfo);
     }
 
     @Override
-    public Class<FramingSawMenu> getContainerClass()
+    public Class<? extends FramingSawMenu> getContainerClass()
     {
-        return FramingSawMenu.class;
+        return transferInfo.getContainerClass();
     }
 
     @Override
     public Optional<MenuType<FramingSawMenu>> getMenuType()
     {
-        return Optional.of(FBContent.menuTypeFramingSaw.get());
+        return transferInfo.getMenuType();
     }
 
     @Override
     public RecipeType<FramingSawRecipe> getRecipeType()
     {
-        return FramedJeiPlugin.FRAMING_SAW_RECIPE_TYPE;
+        return transferInfo.getRecipeType();
     }
 
     @Override
@@ -49,11 +61,18 @@ public final class FramingSawTransferHandler implements IRecipeTransferHandler<F
         if (idx != -1 && menu.isValidRecipeIndex(idx))
         {
             //TODO: https://github.com/mezz/JustEnoughItems/issues/3146
+            //IRecipeTransferError error = wrappedHandler.transferRecipe(menu, recipe, recipeSlots, player, maxTransfer, doTransfer);
+            //if (error != null)
+            //{
+            //    return error;
+            //}
+
             if (doTransfer && menu.clickMenuButton(player, idx))
             {
                 //noinspection ConstantConditions
                 Minecraft.getInstance().gameMode.handleInventoryButtonClick(menu.containerId, idx);
             }
+            // TODO: return null instead of "transfer not implemented" when the suggestion is implemented
             return new RecipeTransferErrorTransferNotImplemented();
         }
         return transferHelper.createUserErrorWithTooltip(JeiCompat.MSG_INVALID_RECIPE);
