@@ -15,6 +15,8 @@ import xfacthd.framedblocks.api.block.FramedProperties;
 import xfacthd.framedblocks.api.test.TestUtils;
 import xfacthd.framedblocks.api.util.Utils;
 import xfacthd.framedblocks.common.data.BlockType;
+import xfacthd.framedblocks.common.data.PropertyHolder;
+import xfacthd.framedblocks.common.data.property.HorizontalRotation;
 
 import java.util.*;
 
@@ -60,15 +62,21 @@ public final class LightSourceTests
         Preconditions.checkArgument(block instanceof IFramedBlock);
 
         IBlockType type = ((IFramedBlock) block).getBlockType();
-        if (type == BlockType.FRAMED_DOUBLE_STAIRS)
+        BlockState state = block.defaultBlockState();
+        return switch ((BlockType) type)
         {
-            return block.defaultBlockState().setValue(FramedProperties.FACING_HOR, Direction.SOUTH);
-        }
-        if (type == BlockType.FRAMED_VERTICAL_DOUBLE_STAIRS)
-        {
-            return block.defaultBlockState().setValue(FramedProperties.FACING_HOR, Direction.SOUTH);
-        }
-        return block.defaultBlockState();
+            case FRAMED_DOUBLE_STAIRS,
+                 FRAMED_VERTICAL_DOUBLE_STAIRS,
+                 FRAMED_INV_DOUBLE_CORNER_SLOPE_PANEL,
+                 FRAMED_INV_DOUBLE_CORNER_SLOPE_PANEL_W,
+                 FRAMED_EXT_INNER_DOUBLE_CORNER_SLOPE_PANEL,
+                 FRAMED_STACKED_CORNER_SLOPE_PANEL_W,
+                 FRAMED_STACKED_INNER_CORNER_SLOPE_PANEL_W
+                    -> state.setValue(FramedProperties.FACING_HOR, Direction.SOUTH);
+            case FRAMED_EXT_INNER_DOUBLE_CORNER_SLOPE_PANEL_W
+                    -> state.setValue(PropertyHolder.ROTATION, HorizontalRotation.RIGHT);
+            default -> state;
+        };
     }
 
     private static String getTestName(BlockState state)
@@ -102,6 +110,12 @@ public final class LightSourceTests
                  FRAMED_STACKED_SLOPE_PANEL,
                  FRAMED_FLAT_STACKED_SLOPE_PANEL_CORNER,
                  FRAMED_FLAT_STACKED_INNER_SLOPE_PANEL_CORNER,
+                 FRAMED_SMALL_DOUBLE_CORNER_SLOPE_PANEL_W,
+                 FRAMED_EXT_DOUBLE_CORNER_SLOPE_PANEL,
+                 FRAMED_EXT_DOUBLE_CORNER_SLOPE_PANEL_W,
+                 FRAMED_EXT_INNER_DOUBLE_CORNER_SLOPE_PANEL_W,
+                 FRAMED_STACKED_CORNER_SLOPE_PANEL,
+                 FRAMED_STACKED_INNER_CORNER_SLOPE_PANEL,
                  FRAMED_VERTICAL_DOUBLE_HALF_SLOPE -> List.of(Direction.NORTH, Direction.SOUTH);
 
             case FRAMED_DIVIDED_PANEL_VERTICAL,

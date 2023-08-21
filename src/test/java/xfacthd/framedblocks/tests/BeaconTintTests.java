@@ -19,8 +19,7 @@ import xfacthd.framedblocks.api.test.TestUtils;
 import xfacthd.framedblocks.api.util.Utils;
 import xfacthd.framedblocks.common.data.BlockType;
 import xfacthd.framedblocks.common.data.PropertyHolder;
-import xfacthd.framedblocks.common.data.property.CompoundDirection;
-import xfacthd.framedblocks.common.data.property.DirectionAxis;
+import xfacthd.framedblocks.common.data.property.*;
 
 import java.util.*;
 
@@ -69,6 +68,12 @@ public final class BeaconTintTests
             BlockType.FRAMED_FLAT_INNER_SLOPE_PANEL_CORNER,
             BlockType.FRAMED_FLAT_DOUBLE_SLOPE_PANEL_CORNER,
             BlockType.FRAMED_FLAT_INV_DOUBLE_SLOPE_PANEL_CORNER,
+            BlockType.FRAMED_SMALL_CORNER_SLOPE_PANEL,
+            BlockType.FRAMED_SMALL_CORNER_SLOPE_PANEL_W,
+            BlockType.FRAMED_SMALL_INNER_CORNER_SLOPE_PANEL,
+            BlockType.FRAMED_SMALL_INNER_CORNER_SLOPE_PANEL_W,
+            BlockType.FRAMED_SMALL_DOUBLE_CORNER_SLOPE_PANEL,
+            BlockType.FRAMED_SMALL_DOUBLE_CORNER_SLOPE_PANEL_W,
             BlockType.FRAMED_WALL_BOARD,
             BlockType.FRAMED_GATE,
             BlockType.FRAMED_IRON_GATE,
@@ -117,8 +122,19 @@ public final class BeaconTintTests
                 case FRAMED_HALF_PILLAR -> state.setValue(BlockStateProperties.FACING, Direction.DOWN);
                 case FRAMED_PRISM -> state.setValue(PropertyHolder.FACING_AXIS, DirectionAxis.UP_X);
                 case FRAMED_SLOPED_PRISM -> state.setValue(PropertyHolder.FACING_DIR, CompoundDirection.UP_NORTH);
-                case FRAMED_DOUBLE_STAIRS, FRAMED_VERTICAL_DOUBLE_STAIRS -> state.setValue(FramedProperties.FACING_HOR, Direction.SOUTH);
+                case FRAMED_DOUBLE_STAIRS,
+                     FRAMED_VERTICAL_DOUBLE_STAIRS,
+                     FRAMED_EXT_DOUBLE_CORNER_SLOPE_PANEL,
+                     FRAMED_EXT_DOUBLE_CORNER_SLOPE_PANEL_W,
+                     FRAMED_EXT_INNER_DOUBLE_CORNER_SLOPE_PANEL,
+                     FRAMED_INV_DOUBLE_CORNER_SLOPE_PANEL,
+                     FRAMED_INV_DOUBLE_CORNER_SLOPE_PANEL_W,
+                     FRAMED_STACKED_CORNER_SLOPE_PANEL,
+                     FRAMED_STACKED_CORNER_SLOPE_PANEL_W,
+                     FRAMED_STACKED_INNER_CORNER_SLOPE_PANEL,
+                     FRAMED_STACKED_INNER_CORNER_SLOPE_PANEL_W -> state.setValue(FramedProperties.FACING_HOR, Direction.SOUTH);
                 case FRAMED_LARGE_BUTTON, FRAMED_LARGE_STONE_BUTTON -> state.setValue(BlockStateProperties.ATTACH_FACE, AttachFace.FLOOR);
+                case FRAMED_EXT_INNER_DOUBLE_CORNER_SLOPE_PANEL_W -> state.setValue(PropertyHolder.ROTATION, HorizontalRotation.RIGHT);
                 default -> state;
             };
         }
@@ -156,6 +172,9 @@ public final class BeaconTintTests
                  FRAMED_STACKED_SLOPE_PANEL,
                  FRAMED_FLAT_STACKED_SLOPE_PANEL_CORNER,
                  FRAMED_FLAT_STACKED_INNER_SLOPE_PANEL_CORNER,
+                 FRAMED_SMALL_DOUBLE_CORNER_SLOPE_PANEL_W,
+                 FRAMED_EXT_DOUBLE_CORNER_SLOPE_PANEL,
+                 FRAMED_EXT_INNER_DOUBLE_CORNER_SLOPE_PANEL_W,
                  FRAMED_VERTICAL_DOUBLE_HALF_SLOPE -> List.of(Direction.NORTH, Direction.SOUTH);
 
             case FRAMED_DIVIDED_PANEL_VERTICAL,

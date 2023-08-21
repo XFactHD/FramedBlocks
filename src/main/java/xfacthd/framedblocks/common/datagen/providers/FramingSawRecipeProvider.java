@@ -478,6 +478,58 @@ public final class FramingSawRecipeProvider extends RecipeProvider
                 .material(FramingSawRecipe.CUBE_MATERIAL_VALUE / 4 * 3)
                 .save(consumer);
 
+        FramingSawRecipeBuilder.builder(FBContent.BLOCK_FRAMED_SMALL_CORNER_SLOPE_PANEL)
+                .material(FramingSawRecipe.CUBE_MATERIAL_VALUE / 8)
+                .save(consumer);
+
+        FramingSawRecipeBuilder.builder(FBContent.BLOCK_FRAMED_LARGE_CORNER_SLOPE_PANEL)
+                .material(FramingSawRecipe.CUBE_MATERIAL_VALUE / 8 * 3)
+                .save(consumer);
+
+        FramingSawRecipeBuilder.builder(FBContent.BLOCK_FRAMED_SMALL_INNER_CORNER_SLOPE_PANEL)
+                .material(FramingSawRecipe.CUBE_MATERIAL_VALUE / 8)
+                .save(consumer);
+
+        FramingSawRecipeBuilder.builder(FBContent.BLOCK_FRAMED_LARGE_INNER_CORNER_SLOPE_PANEL)
+                .material(FramingSawRecipe.CUBE_MATERIAL_VALUE / 8 * 3)
+                .save(consumer);
+
+        FramingSawRecipeBuilder.builder(FBContent.BLOCK_FRAMED_SMALL_DOUBLE_CORNER_SLOPE_PANEL)
+                .material(FramingSawRecipe.CUBE_MATERIAL_VALUE / 4)
+                .save(consumer);
+
+        FramingSawRecipeBuilder.builder(FBContent.BLOCK_FRAMED_LARGE_DOUBLE_CORNER_SLOPE_PANEL)
+                .material(FramingSawRecipe.CUBE_MATERIAL_VALUE / 4 * 3)
+                .save(consumer);
+
+        FramingSawRecipeBuilder.builder(FBContent.BLOCK_FRAMED_INVERSE_DOUBLE_CORNER_SLOPE_PANEL)
+                .material(FramingSawRecipe.CUBE_MATERIAL_VALUE / 2)
+                .save(consumer);
+
+        FramingSawRecipeBuilder.builder(FBContent.BLOCK_FRAMED_EXTENDED_CORNER_SLOPE_PANEL)
+                .material(FramingSawRecipe.CUBE_MATERIAL_VALUE / 8 * 5)
+                .save(consumer);
+
+        FramingSawRecipeBuilder.builder(FBContent.BLOCK_FRAMED_EXTENDED_INNER_CORNER_SLOPE_PANEL)
+                .material(FramingSawRecipe.CUBE_MATERIAL_VALUE / 8 * 5)
+                .save(consumer);
+
+        FramingSawRecipeBuilder.builder(FBContent.BLOCK_FRAMED_EXTENDED_DOUBLE_CORNER_SLOPE_PANEL)
+                .material(FramingSawRecipe.CUBE_MATERIAL_VALUE)
+                .save(consumer);
+
+        FramingSawRecipeBuilder.builder(FBContent.BLOCK_FRAMED_EXTENDED_INNER_DOUBLE_CORNER_SLOPE_PANEL)
+                .material(FramingSawRecipe.CUBE_MATERIAL_VALUE)
+                .save(consumer);
+
+        FramingSawRecipeBuilder.builder(FBContent.BLOCK_FRAMED_STACKED_CORNER_SLOPE_PANEL)
+                .material(FramingSawRecipe.CUBE_MATERIAL_VALUE / 8 * 5)
+                .save(consumer);
+
+        FramingSawRecipeBuilder.builder(FBContent.BLOCK_FRAMED_STACKED_INNER_CORNER_SLOPE_PANEL)
+                .material(FramingSawRecipe.CUBE_MATERIAL_VALUE / 8 * 5)
+                .save(consumer);
+
         FramingSawRecipeBuilder.builder(FBContent.BLOCK_FRAMED_GLOWING_CUBE)
                 .material(FramingSawRecipe.CUBE_MATERIAL_VALUE)
                 .additive(FramingSawRecipeAdditive.of(Tags.Items.DUSTS_GLOWSTONE, 4))

@@ -803,6 +803,107 @@ public final class FramedRecipeProvider extends RecipeProvider
                 .unlockedBy("hasFramedFlatInnerSlopePanelCorner", has(FBContent.BLOCK_FRAMED_FLAT_INNER_SLOPE_PANEL_CORNER.get()))
                 .save(consumer);
 
+        shapedBuildingBlock(FBContent.BLOCK_FRAMED_SMALL_CORNER_SLOPE_PANEL.get(), 6)
+                .pattern("HP")
+                .pattern("PP")
+                .define('P', FBContent.BLOCK_FRAMED_SLOPE_PANEL.get())
+                .define('H', FBContent.ITEM_FRAMED_HAMMER.get())
+                .unlockedBy("hasFramedSlopePanel", has(FBContent.BLOCK_FRAMED_SLOPE_PANEL.get()))
+                .save(consumer);
+
+        shapedBuildingBlock(FBContent.BLOCK_FRAMED_LARGE_CORNER_SLOPE_PANEL.get(), 2)
+                .pattern("H  ")
+                .pattern(" PP")
+                .pattern(" P ")
+                .define('P', FBContent.BLOCK_FRAMED_SLOPE_PANEL.get())
+                .define('H', FBContent.ITEM_FRAMED_HAMMER.get())
+                .unlockedBy("hasFramedSlopePanel", has(FBContent.BLOCK_FRAMED_SLOPE_PANEL.get()))
+                .save(consumer);
+
+        shapedBuildingBlock(FBContent.BLOCK_FRAMED_SMALL_INNER_CORNER_SLOPE_PANEL.get())
+                .pattern("PP")
+                .pattern("PH")
+                .define('P', FBContent.BLOCK_FRAMED_SLOPE_PANEL.get())
+                .define('H', FBContent.ITEM_FRAMED_HAMMER.get())
+                .unlockedBy("hasFramedSlopePanel", has(FBContent.BLOCK_FRAMED_SLOPE_PANEL.get()))
+                .save(consumer);
+
+        shapedBuildingBlock(FBContent.BLOCK_FRAMED_LARGE_INNER_CORNER_SLOPE_PANEL.get())
+                .pattern(" P ")
+                .pattern("PP ")
+                .pattern("  H")
+                .define('P', FBContent.BLOCK_FRAMED_SLOPE_PANEL.get())
+                .define('H', FBContent.ITEM_FRAMED_HAMMER.get())
+                .unlockedBy("hasFramedSlopePanel", has(FBContent.BLOCK_FRAMED_SLOPE_PANEL.get()))
+                .save(consumer);
+
+        shapedBuildingBlock(FBContent.BLOCK_FRAMED_EXTENDED_CORNER_SLOPE_PANEL.get())
+                .pattern("HCP")
+                .define('C', FBContent.BLOCK_FRAMED_LARGE_CORNER_SLOPE_PANEL.get())
+                .define('P', FBContent.BLOCK_FRAMED_CORNER_PILLAR.get())
+                .define('H', FBContent.ITEM_FRAMED_HAMMER.get())
+                .unlockedBy("hasFramedLargeCornerSlopePanel", has(FBContent.BLOCK_FRAMED_LARGE_CORNER_SLOPE_PANEL.get()))
+                .save(consumer);
+
+        shapedBuildingBlock(FBContent.BLOCK_FRAMED_EXTENDED_INNER_CORNER_SLOPE_PANEL.get())
+                .pattern("HCS")
+                .define('C', FBContent.BLOCK_FRAMED_SMALL_INNER_CORNER_SLOPE_PANEL.get())
+                .define('S', FBContent.BLOCK_FRAMED_VERTICAL_STAIRS.get())
+                .define('H', FBContent.ITEM_FRAMED_HAMMER.get())
+                .unlockedBy("hasFramedSmallInnerCornerSlopePanel", has(FBContent.BLOCK_FRAMED_SMALL_INNER_CORNER_SLOPE_PANEL.get()))
+                .save(consumer);
+
+        shapedBuildingBlock(FBContent.BLOCK_FRAMED_SMALL_DOUBLE_CORNER_SLOPE_PANEL.get())
+                .pattern("HCI")
+                .define('C', FBContent.BLOCK_FRAMED_SMALL_CORNER_SLOPE_PANEL.get())
+                .define('I', FBContent.BLOCK_FRAMED_SMALL_INNER_CORNER_SLOPE_PANEL.get())
+                .define('H', FBContent.ITEM_FRAMED_HAMMER.get())
+                .unlockedBy("hasFramedSmallCornerSlopePanel", has(FBContent.BLOCK_FRAMED_SMALL_CORNER_SLOPE_PANEL.get()))
+                .save(consumer);
+
+        shapedBuildingBlock(FBContent.BLOCK_FRAMED_LARGE_DOUBLE_CORNER_SLOPE_PANEL.get())
+                .pattern("HCI")
+                .define('C', FBContent.BLOCK_FRAMED_LARGE_CORNER_SLOPE_PANEL.get())
+                .define('I', FBContent.BLOCK_FRAMED_LARGE_INNER_CORNER_SLOPE_PANEL.get())
+                .define('H', FBContent.ITEM_FRAMED_HAMMER.get())
+                .unlockedBy("hasFramedLargeCornerSlopePanel", has(FBContent.BLOCK_FRAMED_LARGE_CORNER_SLOPE_PANEL.get()))
+                .save(consumer);
+
+        shapedBuildingBlock(FBContent.BLOCK_FRAMED_INVERSE_DOUBLE_CORNER_SLOPE_PANEL.get())
+                .pattern("CI")
+                .define('C', FBContent.BLOCK_FRAMED_LARGE_CORNER_SLOPE_PANEL.get())
+                .define('I', FBContent.BLOCK_FRAMED_SMALL_INNER_CORNER_SLOPE_PANEL.get())
+                .unlockedBy("hasFramedLargeCornerSlopePanel", has(FBContent.BLOCK_FRAMED_LARGE_CORNER_SLOPE_PANEL.get()))
+                .save(consumer);
+
+        shapedBuildingBlock(FBContent.BLOCK_FRAMED_EXTENDED_DOUBLE_CORNER_SLOPE_PANEL.get())
+                .pattern("CI")
+                .define('C', FBContent.BLOCK_FRAMED_EXTENDED_CORNER_SLOPE_PANEL.get())
+                .define('I', FBContent.BLOCK_FRAMED_LARGE_INNER_CORNER_SLOPE_PANEL.get())
+                .unlockedBy("hasFramedExtendedCornerSlopePanel", has(FBContent.BLOCK_FRAMED_EXTENDED_CORNER_SLOPE_PANEL.get()))
+                .save(consumer);
+
+        shapedBuildingBlock(FBContent.BLOCK_FRAMED_EXTENDED_INNER_DOUBLE_CORNER_SLOPE_PANEL.get())
+                .pattern("IC")
+                .define('I', FBContent.BLOCK_FRAMED_EXTENDED_INNER_CORNER_SLOPE_PANEL.get())
+                .define('C', FBContent.BLOCK_FRAMED_SMALL_CORNER_SLOPE_PANEL.get())
+                .unlockedBy("hasFramedExtendedInnerCornerSlopePanel", has(FBContent.BLOCK_FRAMED_EXTENDED_INNER_CORNER_SLOPE_PANEL.get()))
+                .save(consumer);
+
+        shapedBuildingBlock(FBContent.BLOCK_FRAMED_STACKED_CORNER_SLOPE_PANEL.get())
+                .pattern("CP")
+                .define('C', FBContent.BLOCK_FRAMED_LARGE_CORNER_SLOPE_PANEL.get())
+                .define('P', FBContent.BLOCK_FRAMED_CORNER_PILLAR.get())
+                .unlockedBy("hasFramedLargeCornerSlopePanel", has(FBContent.BLOCK_FRAMED_LARGE_CORNER_SLOPE_PANEL.get()))
+                .save(consumer);
+
+        shapedBuildingBlock(FBContent.BLOCK_FRAMED_STACKED_INNER_CORNER_SLOPE_PANEL.get())
+                .pattern("CS")
+                .define('C', FBContent.BLOCK_FRAMED_SMALL_INNER_CORNER_SLOPE_PANEL.get())
+                .define('S', FBContent.BLOCK_FRAMED_VERTICAL_STAIRS.get())
+                .unlockedBy("hasFramedSmallInnerCornerSlopePanel", has(FBContent.BLOCK_FRAMED_SMALL_INNER_CORNER_SLOPE_PANEL.get()))
+                .save(consumer);
+
         shapedBuildingBlock(FBContent.BLOCK_FRAMED_DOUBLE_STAIRS.get())
                 .pattern("SE")
                 .define('S', FBContent.BLOCK_FRAMED_STAIRS.get())

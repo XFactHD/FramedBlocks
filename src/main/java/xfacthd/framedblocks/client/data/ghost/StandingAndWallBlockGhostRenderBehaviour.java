@@ -11,7 +11,8 @@ import xfacthd.framedblocks.api.util.Utils;
 
 import java.lang.invoke.MethodHandle;
 
-public final class StandingAndWallBlockGhostRenderBehaviour implements GhostRenderBehaviour
+public sealed class StandingAndWallBlockGhostRenderBehaviour implements GhostRenderBehaviour
+        permits StandingAndWallDoubleBlockGhostRenderBehaviour
 {
     private static final MethodHandle BLOCKITEM_GETPLACESTATE = Utils.unreflectMethod(BlockItem.class, "m_5965_", BlockPlaceContext.class);
 

@@ -11,7 +11,9 @@ import xfacthd.framedblocks.api.predicate.cull.SideSkipPredicate;
 import xfacthd.framedblocks.common.block.AbstractFramedDoubleBlock;
 import xfacthd.framedblocks.common.data.BlockType;
 import xfacthd.framedblocks.common.data.PropertyHolder;
+import xfacthd.framedblocks.common.data.property.HorizontalRotation;
 import xfacthd.framedblocks.common.data.skippreds.HalfTriangleDir;
+import xfacthd.framedblocks.common.data.skippreds.slopepanelcorner.*;
 
 public final class FlatSlopeSlabCornerSkipPredicate implements SideSkipPredicate
 {
@@ -69,6 +71,39 @@ public final class FlatSlopeSlabCornerSkipPredicate implements SideSkipPredicate
                         dir, top, topHalf, adjState, side
                 );
                 case FRAMED_FLAT_STACKED_INNER_SLOPE_SLAB_CORNER -> testAgainstFlatStackedInnerSlopeSlabCorner(
+                        dir, top, topHalf, adjState, side
+                );
+                case FRAMED_SMALL_CORNER_SLOPE_PANEL_W -> testAgainstSmallCornerSlopePanelWall(
+                        dir, top, topHalf, adjState, side
+                );
+                case FRAMED_LARGE_CORNER_SLOPE_PANEL_W -> testAgainstLargeCornerSlopePanelWall(
+                        dir, top, topHalf, adjState, side
+                );
+                case FRAMED_SMALL_INNER_CORNER_SLOPE_PANEL_W -> testAgainstSmallInnerCornerSlopePanelWall(
+                        dir, top, topHalf, adjState, side
+                );
+                case FRAMED_LARGE_INNER_CORNER_SLOPE_PANEL_W -> testAgainstLargeInnerCornerSlopePanelWall(
+                        dir, top, topHalf, adjState, side
+                );
+                case FRAMED_SMALL_DOUBLE_CORNER_SLOPE_PANEL_W -> testAgainstSmallDoubleCornerSlopePanelWall(
+                        dir, top, topHalf, adjState, side
+                );
+                case FRAMED_LARGE_DOUBLE_CORNER_SLOPE_PANEL_W -> testAgainstLargeDoubleCornerSlopePanelWall(
+                        dir, top, topHalf, adjState, side
+                );
+                case FRAMED_INV_DOUBLE_CORNER_SLOPE_PANEL_W -> testAgainstInverseDoubleCornerSlopePanelWall(
+                        dir, top, topHalf, adjState, side
+                );
+                case FRAMED_EXT_DOUBLE_CORNER_SLOPE_PANEL_W -> testAgainstExtendedDoubleCornerSlopePanelWall(
+                        dir, top, topHalf, adjState, side
+                );
+                case FRAMED_EXT_INNER_DOUBLE_CORNER_SLOPE_PANEL_W -> testAgainstExtendedInnerDoubleCornerSlopePanelWall(
+                        dir, top, topHalf, adjState, side
+                );
+                case FRAMED_STACKED_CORNER_SLOPE_PANEL_W -> testAgainstStackedCornerSlopePanelWall(
+                        dir, top, topHalf, adjState, side
+                );
+                case FRAMED_STACKED_INNER_CORNER_SLOPE_PANEL_W -> testAgainstStackedInnerCornerSlopePanelWall(
                         dir, top, topHalf, adjState, side
                 );
                 default -> false;
@@ -193,6 +228,105 @@ public final class FlatSlopeSlabCornerSkipPredicate implements SideSkipPredicate
     {
         Tuple<BlockState, BlockState> states = AbstractFramedDoubleBlock.getStatePair(adjState);
         return testAgainstFlatInnerSlopeSlabCorner(dir, top, topHalf, states.getB(), side);
+    }
+
+    private static boolean testAgainstSmallCornerSlopePanelWall(
+            Direction dir, boolean top, boolean topHalf, BlockState adjState, Direction side
+    )
+    {
+        Direction adjDir = adjState.getValue(FramedProperties.FACING_HOR);
+        HorizontalRotation adjRot = adjState.getValue(PropertyHolder.ROTATION);
+
+        return getTriDir(dir, topHalf, top, side).isEqualTo(SmallCornerSlopePanelWallSkipPredicate.getTriDir(adjDir, adjRot, side.getOpposite()));
+    }
+
+    private static boolean testAgainstLargeCornerSlopePanelWall(
+            Direction dir, boolean top, boolean topHalf, BlockState adjState, Direction side
+    )
+    {
+        Direction adjDir = adjState.getValue(FramedProperties.FACING_HOR);
+        HorizontalRotation adjRot = adjState.getValue(PropertyHolder.ROTATION);
+
+        return getTriDir(dir, topHalf, top, side).isEqualTo(LargeCornerSlopePanelWallSkipPredicate.getTriDir(adjDir, adjRot, side.getOpposite()));
+    }
+
+    private static boolean testAgainstSmallInnerCornerSlopePanelWall(
+            Direction dir, boolean top, boolean topHalf, BlockState adjState, Direction side
+    )
+    {
+        Direction adjDir = adjState.getValue(FramedProperties.FACING_HOR);
+        HorizontalRotation adjRot = adjState.getValue(PropertyHolder.ROTATION);
+
+        return getTriDir(dir, topHalf, top, side).isEqualTo(SmallInnerCornerSlopePanelWallSkipPredicate.getTriDir(adjDir, adjRot, side.getOpposite()));
+    }
+
+    private static boolean testAgainstLargeInnerCornerSlopePanelWall(
+            Direction dir, boolean top, boolean topHalf, BlockState adjState, Direction side
+    )
+    {
+        Direction adjDir = adjState.getValue(FramedProperties.FACING_HOR);
+        HorizontalRotation adjRot = adjState.getValue(PropertyHolder.ROTATION);
+
+        return getTriDir(dir, topHalf, top, side).isEqualTo(LargeInnerCornerSlopePanelWallSkipPredicate.getTriDir(adjDir, adjRot, side.getOpposite()));
+    }
+
+    private static boolean testAgainstSmallDoubleCornerSlopePanelWall(
+            Direction dir, boolean top, boolean topHalf, BlockState adjState, Direction side
+    )
+    {
+        Tuple<BlockState, BlockState> states = AbstractFramedDoubleBlock.getStatePair(adjState);
+        return testAgainstSmallInnerCornerSlopePanelWall(dir, top, topHalf, states.getA(), side) ||
+               testAgainstSmallCornerSlopePanelWall(dir, top, topHalf, states.getB(), side);
+    }
+
+    private static boolean testAgainstLargeDoubleCornerSlopePanelWall(
+            Direction dir, boolean top, boolean topHalf, BlockState adjState, Direction side
+    )
+    {
+        Tuple<BlockState, BlockState> states = AbstractFramedDoubleBlock.getStatePair(adjState);
+        return testAgainstLargeInnerCornerSlopePanelWall(dir, top, topHalf, states.getA(), side) ||
+               testAgainstLargeCornerSlopePanelWall(dir, top, topHalf, states.getB(), side);
+    }
+
+    private static boolean testAgainstInverseDoubleCornerSlopePanelWall(
+            Direction dir, boolean top, boolean topHalf, BlockState adjState, Direction side
+    )
+    {
+        Tuple<BlockState, BlockState> states = AbstractFramedDoubleBlock.getStatePair(adjState);
+        return testAgainstLargeCornerSlopePanelWall(dir, top, topHalf, states.getA(), side) ||
+               testAgainstSmallInnerCornerSlopePanelWall(dir, top, topHalf, states.getB(), side);
+    }
+
+    private static boolean testAgainstExtendedDoubleCornerSlopePanelWall(
+            Direction dir, boolean top, boolean topHalf, BlockState adjState, Direction side
+    )
+    {
+        Tuple<BlockState, BlockState> states = AbstractFramedDoubleBlock.getStatePair(adjState);
+        return testAgainstLargeInnerCornerSlopePanelWall(dir, top, topHalf, states.getB(), side);
+    }
+
+    private static boolean testAgainstExtendedInnerDoubleCornerSlopePanelWall(
+            Direction dir, boolean top, boolean topHalf, BlockState adjState, Direction side
+    )
+    {
+        Tuple<BlockState, BlockState> states = AbstractFramedDoubleBlock.getStatePair(adjState);
+        return testAgainstSmallCornerSlopePanelWall(dir, top, topHalf, states.getB(), side);
+    }
+
+    private static boolean testAgainstStackedCornerSlopePanelWall(
+            Direction dir, boolean top, boolean topHalf, BlockState adjState, Direction side
+    )
+    {
+        Tuple<BlockState, BlockState> states = AbstractFramedDoubleBlock.getStatePair(adjState);
+        return testAgainstLargeCornerSlopePanelWall(dir, top, topHalf, states.getB(), side);
+    }
+
+    private static boolean testAgainstStackedInnerCornerSlopePanelWall(
+            Direction dir, boolean top, boolean topHalf, BlockState adjState, Direction side
+    )
+    {
+        Tuple<BlockState, BlockState> states = AbstractFramedDoubleBlock.getStatePair(adjState);
+        return testAgainstSmallInnerCornerSlopePanelWall(dir, top, topHalf, states.getB(), side);
     }
 
 

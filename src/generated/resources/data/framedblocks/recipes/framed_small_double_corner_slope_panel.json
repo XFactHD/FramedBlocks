@@ -1,0 +1,22 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "building",
+  "key": {
+    "C": {
+      "item": "framedblocks:framed_small_corner_slope_panel"
+    },
+    "H": {
+      "item": "framedblocks:framed_hammer"
+    },
+    "I": {
+      "item": "framedblocks:framed_small_inner_corner_slope_panel"
+    }
+  },
+  "pattern": [
+    "HCI"
+  ],
+  "result": {
+    "item": "framedblocks:framed_small_double_corner_slope_panel"
+  },
+  "show_notification": true
+}

@@ -12,6 +12,11 @@ public sealed class DoubleBlockGhostRenderBehaviour implements GhostRenderBehavi
     @Override
     public CamoPair readCamo(ItemStack stack, @Nullable ItemStack proxiedStack, boolean secondPass)
     {
+        return readDoubleCamo(stack);
+    }
+
+    public static CamoPair readDoubleCamo(ItemStack stack)
+    {
         //noinspection ConstantConditions
         if (stack.hasTag() && stack.getTag().contains("BlockEntityTag"))
         {

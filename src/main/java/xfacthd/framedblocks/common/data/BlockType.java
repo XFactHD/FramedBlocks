@@ -20,6 +20,7 @@ import xfacthd.framedblocks.common.block.prism.*;
 import xfacthd.framedblocks.common.block.slab.*;
 import xfacthd.framedblocks.common.block.slope.*;
 import xfacthd.framedblocks.common.block.slopepanel.*;
+import xfacthd.framedblocks.common.block.slopepanelcorner.*;
 import xfacthd.framedblocks.common.block.slopeslab.*;
 import xfacthd.framedblocks.common.block.stairs.*;
 import xfacthd.framedblocks.common.data.conpreds.ConnectionPredicates;
@@ -152,6 +153,32 @@ public enum BlockType implements IBlockType
     FRAMED_FLAT_EXT_INNER_DOUBLE_SLOPE_PANEL_CORNER ( true, false,  true, false,  true,  true,  true, false, ConTexMode.FULL_FACE, Shapes.block()),
     FRAMED_FLAT_STACKED_SLOPE_PANEL_CORNER          ( true,  true,  true,  true,  true,  true,  true, false, ConTexMode.FULL_FACE, FramedFlatExtendedSlopePanelCornerBlock::generateShapes),
     FRAMED_FLAT_STACKED_INNER_SLOPE_PANEL_CORNER    ( true,  true,  true,  true,  true,  true,  true, false, ConTexMode.FULL_FACE, FramedFlatExtendedSlopePanelCornerBlock::generateInnerShapes),
+    FRAMED_SMALL_CORNER_SLOPE_PANEL                 (false,  true, false,  true,  true,  true, false, false, ConTexMode.FULL_EDGE, FramedCornerSlopePanelBlock::generateSmallShapes),
+    FRAMED_SMALL_CORNER_SLOPE_PANEL_W               (false,  true, false,  true, false,  true, false, false, ConTexMode.FULL_EDGE, FramedCornerSlopePanelWallBlock::generateSmallShapes),
+    FRAMED_LARGE_CORNER_SLOPE_PANEL                 (false,  true, false,  true,  true,  true, false, false, ConTexMode.FULL_EDGE, FramedCornerSlopePanelBlock::generateLargeShapes),
+    FRAMED_LARGE_CORNER_SLOPE_PANEL_W               (false,  true, false,  true, false,  true, false, false, ConTexMode.FULL_EDGE, FramedCornerSlopePanelWallBlock::generateLargeShapes),
+    FRAMED_SMALL_INNER_CORNER_SLOPE_PANEL           (false,  true, false,  true,  true,  true, false, false, ConTexMode.FULL_EDGE, FramedCornerSlopePanelBlock::generateSmallInnerShapes),
+    FRAMED_SMALL_INNER_CORNER_SLOPE_PANEL_W         (false,  true, false,  true, false,  true, false, false, ConTexMode.FULL_EDGE, FramedCornerSlopePanelWallBlock::generateSmallInnerShapes),
+    FRAMED_LARGE_INNER_CORNER_SLOPE_PANEL           ( true,  true, false,  true,  true,  true, false, false, ConTexMode.FULL_FACE, FramedCornerSlopePanelBlock::generateLargeInnerShapes),
+    FRAMED_LARGE_INNER_CORNER_SLOPE_PANEL_W         ( true,  true, false,  true, false,  true, false, false, ConTexMode.FULL_FACE, FramedCornerSlopePanelWallBlock::generateLargeInnerShapes),
+    FRAMED_EXT_CORNER_SLOPE_PANEL                   ( true,  true, false,  true,  true,  true, false, false, ConTexMode.FULL_FACE, FramedExtendedCornerSlopePanelBlock::generateShapes),
+    FRAMED_EXT_CORNER_SLOPE_PANEL_W                 ( true,  true, false,  true, false,  true, false, false, ConTexMode.FULL_FACE, FramedExtendedCornerSlopePanelWallBlock::generateShapes),
+    FRAMED_EXT_INNER_CORNER_SLOPE_PANEL             ( true,  true, false,  true,  true,  true, false, false, ConTexMode.FULL_FACE, FramedExtendedCornerSlopePanelBlock::generateInnerShapes),
+    FRAMED_EXT_INNER_CORNER_SLOPE_PANEL_W           ( true,  true, false,  true, false,  true, false, false, ConTexMode.FULL_FACE, FramedExtendedCornerSlopePanelWallBlock::generateInnerShapes),
+    FRAMED_SMALL_DOUBLE_CORNER_SLOPE_PANEL          (false, false,  true,  true,  true,  true,  true, false, ConTexMode.FULL_EDGE, FramedDoubleCornerSlopePanelBlock::generateSmallShapes),
+    FRAMED_SMALL_DOUBLE_CORNER_SLOPE_PANEL_W        (false, false,  true,  true, false,  true,  true, false, ConTexMode.FULL_EDGE, FramedDoubleCornerSlopePanelWallBlock::generateSmallShapes),
+    FRAMED_LARGE_DOUBLE_CORNER_SLOPE_PANEL          ( true, false,  true,  true,  true,  true,  true, false, ConTexMode.FULL_FACE, FramedDoubleCornerSlopePanelBlock::generateLargeShapes),
+    FRAMED_LARGE_DOUBLE_CORNER_SLOPE_PANEL_W        ( true, false,  true,  true, false,  true,  true, false, ConTexMode.FULL_FACE, FramedDoubleCornerSlopePanelWallBlock::generateLargeShapes),
+    FRAMED_INV_DOUBLE_CORNER_SLOPE_PANEL            ( true,  true,  true,  true,  true,  true,  true, false, ConTexMode.FULL_EDGE, FramedInverseDoubleCornerSlopePanelBlock::generateShapes),
+    FRAMED_INV_DOUBLE_CORNER_SLOPE_PANEL_W          ( true,  true,  true,  true, false,  true,  true, false, ConTexMode.FULL_EDGE, FramedInverseDoubleCornerSlopePanelWallBlock::generateShapes),
+    FRAMED_EXT_DOUBLE_CORNER_SLOPE_PANEL            ( true, false,  true, false,  true,  true,  true, false, ConTexMode.FULL_FACE, Shapes.block()),
+    FRAMED_EXT_DOUBLE_CORNER_SLOPE_PANEL_W          ( true, false,  true, false, false,  true,  true, false, ConTexMode.FULL_FACE, Shapes.block()),
+    FRAMED_EXT_INNER_DOUBLE_CORNER_SLOPE_PANEL      ( true, false,  true, false,  true,  true,  true, false, ConTexMode.FULL_FACE, Shapes.block()),
+    FRAMED_EXT_INNER_DOUBLE_CORNER_SLOPE_PANEL_W    ( true, false,  true, false, false,  true,  true, false, ConTexMode.FULL_FACE, Shapes.block()),
+    FRAMED_STACKED_CORNER_SLOPE_PANEL               ( true,  true, false,  true,  true,  true,  true, false, ConTexMode.FULL_EDGE, FramedExtendedCornerSlopePanelBlock::generateShapes),
+    FRAMED_STACKED_CORNER_SLOPE_PANEL_W             ( true,  true, false,  true, false,  true,  true, false, ConTexMode.FULL_EDGE, FramedExtendedCornerSlopePanelWallBlock::generateShapes),
+    FRAMED_STACKED_INNER_CORNER_SLOPE_PANEL         ( true,  true, false,  true,  true,  true,  true, false, ConTexMode.FULL_FACE, FramedExtendedCornerSlopePanelBlock::generateInnerShapes),
+    FRAMED_STACKED_INNER_CORNER_SLOPE_PANEL_W       ( true,  true, false,  true, false,  true,  true, false, ConTexMode.FULL_FACE, FramedExtendedCornerSlopePanelWallBlock::generateInnerShapes),
     FRAMED_GLOWING_CUBE                             ( true, false, false, false,  true,  true, false, false, ConTexMode.FULL_FACE, Shapes.block()),
     FRAMED_PYRAMID                                  ( true,  true, false,  true,  true,  true, false, false, ConTexMode.FULL_FACE, FramedPyramidBlock::generateShapes),
     FRAMED_PYRAMID_SLAB                             ( true,  true, false,  true,  true,  true, false, false, ConTexMode.FULL_FACE, FramedPyramidBlock::generateSlabShapes),

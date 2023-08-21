@@ -15,11 +15,12 @@ import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import xfacthd.framedblocks.api.block.FramedProperties;
 import xfacthd.framedblocks.api.block.IFramedBlock;
-import xfacthd.framedblocks.api.shapes.ShapeProvider;
-import xfacthd.framedblocks.api.shapes.ShapeUtils;
+import xfacthd.framedblocks.api.shapes.*;
 import xfacthd.framedblocks.api.util.*;
 import xfacthd.framedblocks.common.block.FramedBlock;
 import xfacthd.framedblocks.common.data.BlockType;
+
+import java.util.HashMap;
 
 public class FramedElevatedSlopeSlabBlock extends FramedBlock
 {
@@ -106,21 +107,28 @@ public class FramedElevatedSlopeSlabBlock extends FramedBlock
 
 
 
+    public static final ShapeCache<Boolean> SHAPES = new ShapeCache<>(new HashMap<>(), map ->
+    {
+        map.put(Boolean.FALSE, ShapeUtils.orUnoptimized(
+                FramedSlopeSlabBlock.SHAPES.get(Boolean.FALSE).move(0, .5, 0),
+                box(0, 0, 0, 16, 8, 16)
+        ));
+
+        map.put(Boolean.TRUE, ShapeUtils.orUnoptimized(
+                FramedSlopeSlabBlock.SHAPES.get(Boolean.TRUE),
+                box(0, 8, 0, 16, 16, 16)
+        ));
+    });
+
     public static ShapeProvider generateShapes(ImmutableList<BlockState> states)
     {
         ImmutableMap.Builder<BlockState, VoxelShape> builder = ImmutableMap.builder();
 
-        VoxelShape shapeBottom = ShapeUtils.orUnoptimized(
-                FramedSlopeSlabBlock.SHAPES.get(Boolean.FALSE).move(0, .5, 0),
-                box(0, 0, 0, 16, 8, 16)
+        VoxelShape[] shapes = ShapeUtils.makeHorizontalRotationsWithFlag(
+                SHAPES.get(Boolean.FALSE),
+                SHAPES.get(Boolean.TRUE),
+                Direction.NORTH
         );
-
-        VoxelShape shapeTop = ShapeUtils.orUnoptimized(
-                FramedSlopeSlabBlock.SHAPES.get(Boolean.TRUE),
-                box(0, 8, 0, 16, 16, 16)
-        );
-
-        VoxelShape[] shapes = ShapeUtils.makeHorizontalRotationsWithFlag(shapeBottom, shapeTop, Direction.NORTH);
 
         for (BlockState state : states)
         {

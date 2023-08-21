@@ -5,6 +5,8 @@ import net.minecraft.core.Direction;
 import net.minecraft.util.StringRepresentable;
 import net.minecraft.world.level.block.Rotation;
 import net.minecraft.world.phys.Vec3;
+import net.minecraft.world.phys.shapes.Shapes;
+import net.minecraft.world.phys.shapes.VoxelShape;
 import xfacthd.framedblocks.api.util.Utils;
 
 import java.util.Locale;
@@ -12,17 +14,21 @@ import java.util.function.Function;
 
 public enum HorizontalRotation implements StringRepresentable
 {
-    UP(dir -> Direction.UP),
-    DOWN(dir -> Direction.DOWN),
-    RIGHT(Direction::getClockWise),
-    LEFT(Direction::getCounterClockWise);
+    UP   (dir -> Direction.UP,            Shapes.box( 0, .5, 0,  1,  1, 1), Shapes.box( 0, .5, 0, .5,  1, 1)),
+    DOWN (dir -> Direction.DOWN,          Shapes.box( 0,  0, 0,  1, .5, 1), Shapes.box(.5,  0, 0,  1, .5, 1)),
+    RIGHT(Direction::getClockWise,        Shapes.box(.5,  0, 0,  1,  1, 1), Shapes.box(.5, .5, 0,  1,  1, 1)),
+    LEFT (Direction::getCounterClockWise, Shapes.box( 0,  0, 0, .5,  1, 1), Shapes.box( 0,  0, 0, .5, .5, 1));
 
     private final String name = toString().toLowerCase(Locale.ROOT);
     private final Function<Direction, Direction> facingMod;
+    private final VoxelShape slabShape;
+    private final VoxelShape cornerShape;
 
-    HorizontalRotation(Function<Direction, Direction> facingMod)
+    HorizontalRotation(Function<Direction, Direction> facingMod, VoxelShape slabShape, VoxelShape cornerShape)
     {
         this.facingMod = facingMod;
+        this.slabShape = slabShape;
+        this.cornerShape = cornerShape;
     }
 
     public Direction withFacing(Direction dir)
@@ -79,6 +85,22 @@ public enum HorizontalRotation implements StringRepresentable
     public boolean isSameDir(Direction dir, HorizontalRotation adjRot, Direction adjDir)
     {
         return withFacing(dir) == adjRot.withFacing(adjDir);
+    }
+
+    /**
+     * {@return a {@link VoxelShape} of the half of the block represented by this rotation}
+     */
+    public VoxelShape getSlabShape()
+    {
+        return slabShape;
+    }
+
+    /**
+     * {@return a {@link VoxelShape} of the quarter of the block represented by this rotation}
+     */
+    public VoxelShape getCornerShape()
+    {
+        return cornerShape;
     }
 
     @Override

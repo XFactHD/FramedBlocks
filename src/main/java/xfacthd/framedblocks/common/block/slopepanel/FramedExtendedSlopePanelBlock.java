@@ -15,12 +15,13 @@ import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import xfacthd.framedblocks.api.block.FramedProperties;
 import xfacthd.framedblocks.api.block.IFramedBlock;
-import xfacthd.framedblocks.api.shapes.ShapeProvider;
-import xfacthd.framedblocks.api.shapes.ShapeUtils;
+import xfacthd.framedblocks.api.shapes.*;
 import xfacthd.framedblocks.api.util.*;
 import xfacthd.framedblocks.common.block.FramedBlock;
 import xfacthd.framedblocks.common.data.*;
 import xfacthd.framedblocks.common.data.property.HorizontalRotation;
+
+import java.util.EnumMap;
 
 public class FramedExtendedSlopePanelBlock extends FramedBlock
 {
@@ -119,18 +120,31 @@ public class FramedExtendedSlopePanelBlock extends FramedBlock
 
 
 
+    public static final ShapeCache<HorizontalRotation> SHAPES = new ShapeCache<>(
+            new EnumMap<>(HorizontalRotation.class),
+            map ->
+            {
+                VoxelShape shapePanel = box(0, 0, 0, 16, 16, 8);
+
+                for (HorizontalRotation rot : HorizontalRotation.values())
+                {
+                    VoxelShape shape = ShapeUtils.orUnoptimized(
+                            shapePanel,
+                            FramedSlopePanelBlock.SHAPES.get(rot).move(0, 0, .5)
+                    );
+                    map.put(rot, shape);
+                }
+            }
+    );
+
     public static ShapeProvider generateShapes(ImmutableList<BlockState> states)
     {
         ImmutableMap.Builder<BlockState, VoxelShape> builder = ImmutableMap.builder();
 
-        VoxelShape shapePanel = box(0, 0, 0, 16, 16, 8);
         VoxelShape[] shapes = new VoxelShape[4 * 4];
         for (HorizontalRotation rot : HorizontalRotation.values())
         {
-            VoxelShape preShape = ShapeUtils.orUnoptimized(
-                    shapePanel,
-                    FramedSlopePanelBlock.SHAPES.get(rot).move(0, 0, .5)
-            );
+            VoxelShape preShape = SHAPES.get(rot);
 
             for (Direction dir : Direction.Plane.HORIZONTAL)
             {

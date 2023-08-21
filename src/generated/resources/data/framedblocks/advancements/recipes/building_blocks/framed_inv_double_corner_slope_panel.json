@@ -1,0 +1,35 @@
+{
+  "parent": "minecraft:recipes/root",
+  "criteria": {
+    "hasFramedLargeCornerSlopePanel": {
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "framedblocks:framed_large_corner_slope_panel"
+            ]
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "has_the_recipe": {
+      "conditions": {
+        "recipe": "framedblocks:framed_inv_double_corner_slope_panel"
+      },
+      "trigger": "minecraft:recipe_unlocked"
+    }
+  },
+  "requirements": [
+    [
+      "hasFramedLargeCornerSlopePanel",
+      "has_the_recipe"
+    ]
+  ],
+  "rewards": {
+    "recipes": [
+      "framedblocks:framed_inv_double_corner_slope_panel"
+    ]
+  },
+  "sends_telemetry_event": false
+}

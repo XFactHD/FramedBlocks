@@ -35,6 +35,7 @@ import xfacthd.framedblocks.common.block.rail.*;
 import xfacthd.framedblocks.common.block.slab.*;
 import xfacthd.framedblocks.common.block.slope.*;
 import xfacthd.framedblocks.common.block.slopepanel.*;
+import xfacthd.framedblocks.common.block.slopepanelcorner.*;
 import xfacthd.framedblocks.common.block.slopeslab.*;
 import xfacthd.framedblocks.common.block.stairs.*;
 import xfacthd.framedblocks.common.block.torch.*;
@@ -200,6 +201,32 @@ public final class FBContent
     public static final RegistryObject<Block> BLOCK_FRAMED_FLAT_EXTENDED_INNER_DOUBLE_SLOPE_PANEL_CORNER = registerBlock(FramedFlatExtendedDoubleSlopePanelCornerBlock::new, BlockType.FRAMED_FLAT_EXT_INNER_DOUBLE_SLOPE_PANEL_CORNER);
     public static final RegistryObject<Block> BLOCK_FRAMED_FLAT_STACKED_SLOPE_PANEL_CORNER = registerBlock(FramedFlatStackedSlopePanelCornerBlock::new, BlockType.FRAMED_FLAT_STACKED_SLOPE_PANEL_CORNER);
     public static final RegistryObject<Block> BLOCK_FRAMED_FLAT_STACKED_INNER_SLOPE_PANEL_CORNER = registerBlock(FramedFlatStackedSlopePanelCornerBlock::new, BlockType.FRAMED_FLAT_STACKED_INNER_SLOPE_PANEL_CORNER);
+    public static final RegistryObject<Block> BLOCK_FRAMED_SMALL_CORNER_SLOPE_PANEL = registerBlock(FramedCornerSlopePanelBlock::new, BlockType.FRAMED_SMALL_CORNER_SLOPE_PANEL);
+    public static final RegistryObject<Block> BLOCK_FRAMED_SMALL_CORNER_SLOPE_PANEL_WALL = registerBlock(FramedCornerSlopePanelWallBlock::new, BlockType.FRAMED_SMALL_CORNER_SLOPE_PANEL_W);
+    public static final RegistryObject<Block> BLOCK_FRAMED_LARGE_CORNER_SLOPE_PANEL = registerBlock(FramedCornerSlopePanelBlock::new, BlockType.FRAMED_LARGE_CORNER_SLOPE_PANEL);
+    public static final RegistryObject<Block> BLOCK_FRAMED_LARGE_CORNER_SLOPE_PANEL_WALL = registerBlock(FramedCornerSlopePanelWallBlock::new, BlockType.FRAMED_LARGE_CORNER_SLOPE_PANEL_W);
+    public static final RegistryObject<Block> BLOCK_FRAMED_SMALL_INNER_CORNER_SLOPE_PANEL = registerBlock(FramedCornerSlopePanelBlock::new, BlockType.FRAMED_SMALL_INNER_CORNER_SLOPE_PANEL);
+    public static final RegistryObject<Block> BLOCK_FRAMED_SMALL_INNER_CORNER_SLOPE_PANEL_WALL = registerBlock(FramedCornerSlopePanelWallBlock::new, BlockType.FRAMED_SMALL_INNER_CORNER_SLOPE_PANEL_W);
+    public static final RegistryObject<Block> BLOCK_FRAMED_LARGE_INNER_CORNER_SLOPE_PANEL = registerBlock(FramedLargeInnerCornerSlopePanelBlock::new, BlockType.FRAMED_LARGE_INNER_CORNER_SLOPE_PANEL);
+    public static final RegistryObject<Block> BLOCK_FRAMED_LARGE_INNER_CORNER_SLOPE_PANEL_WALL = registerBlock(FramedLargeInnerCornerSlopePanelWallBlock::new, BlockType.FRAMED_LARGE_INNER_CORNER_SLOPE_PANEL_W);
+    public static final RegistryObject<Block> BLOCK_FRAMED_EXTENDED_CORNER_SLOPE_PANEL = registerBlock(FramedExtendedCornerSlopePanelBlock::new, BlockType.FRAMED_EXT_CORNER_SLOPE_PANEL);
+    public static final RegistryObject<Block> BLOCK_FRAMED_EXTENDED_CORNER_SLOPE_PANEL_WALL = registerBlock(FramedExtendedCornerSlopePanelWallBlock::new, BlockType.FRAMED_EXT_CORNER_SLOPE_PANEL_W);
+    public static final RegistryObject<Block> BLOCK_FRAMED_EXTENDED_INNER_CORNER_SLOPE_PANEL = registerBlock(FramedExtendedCornerSlopePanelBlock::new, BlockType.FRAMED_EXT_INNER_CORNER_SLOPE_PANEL);
+    public static final RegistryObject<Block> BLOCK_FRAMED_EXTENDED_INNER_CORNER_SLOPE_PANEL_WALL = registerBlock(FramedExtendedCornerSlopePanelWallBlock::new, BlockType.FRAMED_EXT_INNER_CORNER_SLOPE_PANEL_W);
+    public static final RegistryObject<Block> BLOCK_FRAMED_SMALL_DOUBLE_CORNER_SLOPE_PANEL = registerBlock(FramedDoubleCornerSlopePanelBlock::new, BlockType.FRAMED_SMALL_DOUBLE_CORNER_SLOPE_PANEL);
+    public static final RegistryObject<Block> BLOCK_FRAMED_SMALL_DOUBLE_CORNER_SLOPE_PANEL_WALL = registerBlock(FramedDoubleCornerSlopePanelWallBlock::new, BlockType.FRAMED_SMALL_DOUBLE_CORNER_SLOPE_PANEL_W);
+    public static final RegistryObject<Block> BLOCK_FRAMED_LARGE_DOUBLE_CORNER_SLOPE_PANEL = registerBlock(FramedDoubleCornerSlopePanelBlock::new, BlockType.FRAMED_LARGE_DOUBLE_CORNER_SLOPE_PANEL);
+    public static final RegistryObject<Block> BLOCK_FRAMED_LARGE_DOUBLE_CORNER_SLOPE_PANEL_WALL = registerBlock(FramedDoubleCornerSlopePanelWallBlock::new, BlockType.FRAMED_LARGE_DOUBLE_CORNER_SLOPE_PANEL_W);
+    public static final RegistryObject<Block> BLOCK_FRAMED_INVERSE_DOUBLE_CORNER_SLOPE_PANEL = registerBlock(FramedInverseDoubleCornerSlopePanelBlock::new, BlockType.FRAMED_INV_DOUBLE_CORNER_SLOPE_PANEL);
+    public static final RegistryObject<Block> BLOCK_FRAMED_INVERSE_DOUBLE_CORNER_SLOPE_PANEL_WALL = registerBlock(FramedInverseDoubleCornerSlopePanelWallBlock::new, BlockType.FRAMED_INV_DOUBLE_CORNER_SLOPE_PANEL_W);
+    public static final RegistryObject<Block> BLOCK_FRAMED_EXTENDED_DOUBLE_CORNER_SLOPE_PANEL = registerBlock(FramedExtendedDoubleCornerSlopePanelBlock::new, BlockType.FRAMED_EXT_DOUBLE_CORNER_SLOPE_PANEL);
+    public static final RegistryObject<Block> BLOCK_FRAMED_EXTENDED_DOUBLE_CORNER_SLOPE_PANEL_WALL = registerBlock(FramedExtendedDoubleCornerSlopePanelWallBlock::new, BlockType.FRAMED_EXT_DOUBLE_CORNER_SLOPE_PANEL_W);
+    public static final RegistryObject<Block> BLOCK_FRAMED_EXTENDED_INNER_DOUBLE_CORNER_SLOPE_PANEL = registerBlock(FramedExtendedDoubleCornerSlopePanelBlock::new, BlockType.FRAMED_EXT_INNER_DOUBLE_CORNER_SLOPE_PANEL);
+    public static final RegistryObject<Block> BLOCK_FRAMED_EXTENDED_INNER_DOUBLE_CORNER_SLOPE_PANEL_WALL = registerBlock(FramedExtendedDoubleCornerSlopePanelWallBlock::new, BlockType.FRAMED_EXT_INNER_DOUBLE_CORNER_SLOPE_PANEL_W);
+    public static final RegistryObject<Block> BLOCK_FRAMED_STACKED_CORNER_SLOPE_PANEL = registerBlock(FramedStackedCornerSlopePanelBlock::new, BlockType.FRAMED_STACKED_CORNER_SLOPE_PANEL);
+    public static final RegistryObject<Block> BLOCK_FRAMED_STACKED_CORNER_SLOPE_PANEL_WALL = registerBlock(FramedStackedCornerSlopePanelWallBlock::new, BlockType.FRAMED_STACKED_CORNER_SLOPE_PANEL_W);
+    public static final RegistryObject<Block> BLOCK_FRAMED_STACKED_INNER_CORNER_SLOPE_PANEL = registerBlock(FramedStackedCornerSlopePanelBlock::new, BlockType.FRAMED_STACKED_INNER_CORNER_SLOPE_PANEL);
+    public static final RegistryObject<Block> BLOCK_FRAMED_STACKED_INNER_CORNER_SLOPE_PANEL_WALL = registerBlock(FramedStackedCornerSlopePanelWallBlock::new, BlockType.FRAMED_STACKED_INNER_CORNER_SLOPE_PANEL_W);
     public static final RegistryObject<Block> BLOCK_FRAMED_DOUBLE_STAIRS = registerBlock(FramedDoubleStairsBlock::new, BlockType.FRAMED_DOUBLE_STAIRS);
     public static final RegistryObject<Block> BLOCK_FRAMED_VERTICAL_DOUBLE_STAIRS = registerBlock(FramedVerticalDoubleStairsBlock::new, BlockType.FRAMED_VERTICAL_DOUBLE_STAIRS);
     public static final RegistryObject<Block> BLOCK_FRAMED_WALL_BOARD = registerBlock(FramedWallBoardBlock::new, BlockType.FRAMED_WALL_BOARD);
@@ -377,6 +404,62 @@ public final class FBContent
     public static final RegisteredBE<FramedFlatExtendedDoubleSlopePanelCornerBlockEntity> BE_TYPE_FRAMED_FLAT_EXTENDED_DOUBLE_SLOPE_PANEL_CORNER = createBlockEntityType(
             FramedFlatExtendedDoubleSlopePanelCornerBlockEntity::new,
             BlockType.FRAMED_FLAT_EXT_DOUBLE_SLOPE_PANEL_CORNER, BlockType.FRAMED_FLAT_EXT_INNER_DOUBLE_SLOPE_PANEL_CORNER
+    );
+    public static final RegisteredBE<FramedSmallDoubleCornerSlopePanelBlockEntity> BE_TYPE_FRAMED_SMALL_DOUBLE_CORNER_SLOPE_PANEL = createBlockEntityType(
+            FramedSmallDoubleCornerSlopePanelBlockEntity::new,
+            BlockType.FRAMED_SMALL_DOUBLE_CORNER_SLOPE_PANEL
+    );
+    public static final RegisteredBE<FramedSmallDoubleCornerSlopePanelWallBlockEntity> BE_TYPE_FRAMED_SMALL_DOUBLE_CORNER_SLOPE_PANEL_WALL = createBlockEntityType(
+            FramedSmallDoubleCornerSlopePanelWallBlockEntity::new,
+            BlockType.FRAMED_SMALL_DOUBLE_CORNER_SLOPE_PANEL_W
+    );
+    public static final RegisteredBE<FramedLargeDoubleCornerSlopePanelBlockEntity> BE_TYPE_FRAMED_LARGE_DOUBLE_CORNER_SLOPE_PANEL = createBlockEntityType(
+            FramedLargeDoubleCornerSlopePanelBlockEntity::new,
+            BlockType.FRAMED_LARGE_DOUBLE_CORNER_SLOPE_PANEL
+    );
+    public static final RegisteredBE<FramedLargeDoubleCornerSlopePanelWallBlockEntity> BE_TYPE_FRAMED_LARGE_DOUBLE_CORNER_SLOPE_PANEL_WALL = createBlockEntityType(
+            FramedLargeDoubleCornerSlopePanelWallBlockEntity::new,
+            BlockType.FRAMED_LARGE_DOUBLE_CORNER_SLOPE_PANEL_W
+    );
+    public static final RegisteredBE<FramedInverseDoubleCornerSlopePanelBlockEntity> BE_TYPE_FRAMED_INVERSE_DOUBLE_CORNER_SLOPE_PANEL = createBlockEntityType(
+            FramedInverseDoubleCornerSlopePanelBlockEntity::new,
+            BlockType.FRAMED_INV_DOUBLE_CORNER_SLOPE_PANEL
+    );
+    public static final RegisteredBE<FramedInverseDoubleCornerSlopePanelWallBlockEntity> BE_TYPE_FRAMED_INVERSE_DOUBLE_CORNER_SLOPE_PANEL_WALL = createBlockEntityType(
+            FramedInverseDoubleCornerSlopePanelWallBlockEntity::new,
+            BlockType.FRAMED_INV_DOUBLE_CORNER_SLOPE_PANEL_W
+    );
+    public static final RegisteredBE<FramedExtendedDoubleCornerSlopePanelBlockEntity> BE_TYPE_FRAMED_EXTENDED_DOUBLE_CORNER_SLOPE_PANEL = createBlockEntityType(
+            FramedExtendedDoubleCornerSlopePanelBlockEntity::new,
+            BlockType.FRAMED_EXT_DOUBLE_CORNER_SLOPE_PANEL
+    );
+    public static final RegisteredBE<FramedExtendedDoubleCornerSlopePanelWallBlockEntity> BE_TYPE_FRAMED_EXTENDED_DOUBLE_CORNER_SLOPE_PANEL_WALL = createBlockEntityType(
+            FramedExtendedDoubleCornerSlopePanelWallBlockEntity::new,
+            BlockType.FRAMED_EXT_DOUBLE_CORNER_SLOPE_PANEL_W
+    );
+    public static final RegisteredBE<FramedExtendedInnerDoubleCornerSlopePanelBlockEntity> BE_TYPE_FRAMED_EXTENDED_INNER_DOUBLE_CORNER_SLOPE_PANEL = createBlockEntityType(
+            FramedExtendedInnerDoubleCornerSlopePanelBlockEntity::new,
+            BlockType.FRAMED_EXT_INNER_DOUBLE_CORNER_SLOPE_PANEL
+    );
+    public static final RegisteredBE<FramedExtendedInnerDoubleCornerSlopePanelWallBlockEntity> BE_TYPE_FRAMED_EXTENDED_INNER_DOUBLE_CORNER_SLOPE_PANEL_WALL = createBlockEntityType(
+            FramedExtendedInnerDoubleCornerSlopePanelWallBlockEntity::new,
+            BlockType.FRAMED_EXT_INNER_DOUBLE_CORNER_SLOPE_PANEL_W
+    );
+    public static final RegisteredBE<FramedStackedCornerSlopePanelBlockEntity> BE_TYPE_FRAMED_STACKED_CORNER_SLOPE_PANEL = createBlockEntityType(
+            FramedStackedCornerSlopePanelBlockEntity::new,
+            BlockType.FRAMED_STACKED_CORNER_SLOPE_PANEL
+    );
+    public static final RegisteredBE<FramedStackedCornerSlopePanelWallBlockEntity> BE_TYPE_FRAMED_STACKED_CORNER_SLOPE_PANEL_WALL = createBlockEntityType(
+            FramedStackedCornerSlopePanelWallBlockEntity::new,
+            BlockType.FRAMED_STACKED_CORNER_SLOPE_PANEL_W
+    );
+    public static final RegisteredBE<FramedStackedInnerCornerSlopePanelBlockEntity> BE_TYPE_FRAMED_STACKED_INNER_CORNER_SLOPE_PANEL = createBlockEntityType(
+            FramedStackedInnerCornerSlopePanelBlockEntity::new,
+            BlockType.FRAMED_STACKED_INNER_CORNER_SLOPE_PANEL
+    );
+    public static final RegisteredBE<FramedStackedInnerCornerSlopePanelWallBlockEntity> BE_TYPE_FRAMED_STACKED_INNER_CORNER_SLOPE_PANEL_WALL = createBlockEntityType(
+            FramedStackedInnerCornerSlopePanelWallBlockEntity::new,
+            BlockType.FRAMED_STACKED_INNER_CORNER_SLOPE_PANEL_W
     );
     public static final RegisteredBE<FramedDoubleStairsBlockEntity> BE_TYPE_FRAMED_DOUBLE_STAIRS = createBlockEntityType(
             FramedDoubleStairsBlockEntity::new,

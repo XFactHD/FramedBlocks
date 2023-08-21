@@ -1,0 +1,19 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "building",
+  "key": {
+    "C": {
+      "item": "framedblocks:framed_small_inner_corner_slope_panel"
+    },
+    "S": {
+      "item": "framedblocks:framed_vertical_stairs"
+    }
+  },
+  "pattern": [
+    "CS"
+  ],
+  "result": {
+    "item": "framedblocks:framed_stacked_inner_corner_slope_panel"
+  },
+  "show_notification": true
+}

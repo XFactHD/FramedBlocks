@@ -1,0 +1,19 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "building",
+  "key": {
+    "C": {
+      "item": "framedblocks:framed_large_corner_slope_panel"
+    },
+    "I": {
+      "item": "framedblocks:framed_small_inner_corner_slope_panel"
+    }
+  },
+  "pattern": [
+    "CI"
+  ],
+  "result": {
+    "item": "framedblocks:framed_inv_double_corner_slope_panel"
+  },
+  "show_notification": true
+}
