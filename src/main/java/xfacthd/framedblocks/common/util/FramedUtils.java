@@ -12,17 +12,26 @@ import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.block.BaseRailBlock;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.state.StateDefinition;
+import net.minecraft.world.level.block.state.properties.Property;
 import net.minecraft.world.level.block.state.properties.RailShape;
 import xfacthd.framedblocks.api.block.IFramedBlock;
 import xfacthd.framedblocks.api.block.FramedProperties;
+import xfacthd.framedblocks.api.util.Utils;
 import xfacthd.framedblocks.common.FBContent;
 import xfacthd.framedblocks.common.data.PropertyHolder;
 import xfacthd.framedblocks.common.data.property.SlopeType;
 
+import java.lang.invoke.MethodHandle;
+import java.util.Map;
 import java.util.function.Consumer;
 
 public final class FramedUtils
 {
+    private static final MethodHandle MH_STATE_DEF_BUILDER_GET_PROPERTIES = Utils.unreflectField(
+            StateDefinition.Builder.class, "f_61096_"
+    );
+
     public static boolean isFramedRailSlope(BlockState state)
     {
         Block block = state.getBlock();
@@ -161,6 +170,20 @@ public final class FramedUtils
         for (int col = 0; col < 9; ++col)
         {
             slotConsumer.accept(new Slot(playerInv, col, x + col * 18, y + 4));
+        }
+    }
+
+    @SuppressWarnings("unchecked")
+    public static void removeProperty(StateDefinition.Builder<Block, BlockState> builder, Property<?> property)
+    {
+        try
+        {
+            var properties = (Map<String, Property<?>>) MH_STATE_DEF_BUILDER_GET_PROPERTIES.invoke(builder);
+            properties.remove(property.getName());
+        }
+        catch (Throwable e)
+        {
+            throw new RuntimeException("Failed to remove property from state builder", e);
         }
     }
 

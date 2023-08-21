@@ -44,7 +44,7 @@ public class FramedDoubleCornerSlopePanelBlock extends AbstractFramedDoubleBlock
     @Override
     protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder)
     {
-        super.createBlockStateDefinition(builder); // TODO: remove solid property
+        super.createBlockStateDefinition(builder);
         builder.add(
                 FramedProperties.FACING_HOR, FramedProperties.TOP,
                 FramedProperties.Y_SLOPE, BlockStateProperties.WATERLOGGED
