@@ -228,9 +228,9 @@ public final class FBClient
         ClientUtils.replaceModels(FBContent.BLOCK_FRAMED_SLOPE, registry, FramedSlopeModel::new, FramedSlopeModel.itemSource(), ClientUtils.IGNORE_DEFAULT);
         ClientUtils.replaceModels(FBContent.BLOCK_FRAMED_CORNER_SLOPE, registry, FramedCornerSlopeModel::new, FramedCornerSlopeModel.itemSource(), ClientUtils.IGNORE_DEFAULT);
         ClientUtils.replaceModels(FBContent.BLOCK_FRAMED_INNER_CORNER_SLOPE, registry, FramedInnerCornerSlopeModel::new, FramedInnerCornerSlopeModel.itemSource(), ClientUtils.IGNORE_DEFAULT);
-        ClientUtils.replaceModels(FBContent.BLOCK_FRAMED_PRISM_CORNER, registry, FramedPrismCornerModel::new, FramedPrismCornerModel.itemSource(), ClientUtils.IGNORE_DEFAULT);
+        ClientUtils.replaceModels(FBContent.BLOCK_FRAMED_PRISM_CORNER, registry, FramedPrismCornerModel::new, FramedPrismCornerModel.itemSource(), ClientUtils.IGNORE_WATERLOGGED);
         ClientUtils.replaceModels(FBContent.BLOCK_FRAMED_INNER_PRISM_CORNER, registry, FramedInnerPrismCornerModel::new, FramedInnerPrismCornerModel.itemSource(), ClientUtils.IGNORE_DEFAULT);
-        ClientUtils.replaceModels(FBContent.BLOCK_FRAMED_THREEWAY_CORNER, registry, FramedThreewayCornerModel::new, FramedThreewayCornerModel.itemSource(), ClientUtils.IGNORE_DEFAULT);
+        ClientUtils.replaceModels(FBContent.BLOCK_FRAMED_THREEWAY_CORNER, registry, FramedThreewayCornerModel::new, FramedThreewayCornerModel.itemSource(), ClientUtils.IGNORE_WATERLOGGED);
         ClientUtils.replaceModels(FBContent.BLOCK_FRAMED_INNER_THREEWAY_CORNER, registry, FramedInnerThreewayCornerModel::new, FramedInnerThreewayCornerModel.itemSource(), ClientUtils.IGNORE_DEFAULT);
         ClientUtils.replaceModels(FBContent.BLOCK_FRAMED_SLAB, registry, FramedSlabModel::new, ClientUtils.IGNORE_DEFAULT);
         ClientUtils.replaceModels(FBContent.BLOCK_FRAMED_SLAB_EDGE, registry, FramedSlabEdgeModel::new, ClientUtils.IGNORE_WATERLOGGED);
