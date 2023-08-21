@@ -92,9 +92,9 @@ public final class FBContent
     public static final RegistryObject<Block> BLOCK_FRAMED_CORNER_SLOPE = registerBlock(FramedCornerSlopeBlock::new, BlockType.FRAMED_CORNER_SLOPE);
     public static final RegistryObject<Block> BLOCK_FRAMED_INNER_CORNER_SLOPE = registerBlock(FramedCornerSlopeBlock::new, BlockType.FRAMED_INNER_CORNER_SLOPE);
     public static final RegistryObject<Block> BLOCK_FRAMED_PRISM_CORNER = registerBlock(FramedPrismCornerBlock::new, BlockType.FRAMED_PRISM_CORNER);
-    public static final RegistryObject<Block> BLOCK_FRAMED_INNER_PRISM_CORNER = registerBlock(FramedPrismCornerBlock::new, BlockType.FRAMED_INNER_PRISM_CORNER);
+    public static final RegistryObject<Block> BLOCK_FRAMED_INNER_PRISM_CORNER = registerBlock(FramedInnerPrismCornerBlock::new, BlockType.FRAMED_INNER_PRISM_CORNER);
     public static final RegistryObject<Block> BLOCK_FRAMED_THREEWAY_CORNER = registerBlock(FramedThreewayCornerBlock::new, BlockType.FRAMED_THREEWAY_CORNER);
-    public static final RegistryObject<Block> BLOCK_FRAMED_INNER_THREEWAY_CORNER = registerBlock(FramedThreewayCornerBlock::new, BlockType.FRAMED_INNER_THREEWAY_CORNER);
+    public static final RegistryObject<Block> BLOCK_FRAMED_INNER_THREEWAY_CORNER = registerBlock(FramedInnerThreewayCornerBlock::new, BlockType.FRAMED_INNER_THREEWAY_CORNER);
     public static final RegistryObject<Block> BLOCK_FRAMED_SLAB = registerBlock(FramedSlabBlock::new, BlockType.FRAMED_SLAB);
     public static final RegistryObject<Block> BLOCK_FRAMED_SLAB_EDGE = registerBlock(FramedSlabEdgeBlock::new, BlockType.FRAMED_SLAB_EDGE);
     public static final RegistryObject<Block> BLOCK_FRAMED_SLAB_CORNER = registerBlock(FramedSlabCornerBlock::new, BlockType.FRAMED_SLAB_CORNER);

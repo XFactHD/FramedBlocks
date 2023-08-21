@@ -36,8 +36,8 @@ public class FramedThreewayCornerBlock extends FramedBlock
     {
         super.createBlockStateDefinition(builder);
         builder.add(
-                FramedProperties.FACING_HOR, FramedProperties.TOP, BlockStateProperties.WATERLOGGED,
-                FramedProperties.SOLID, FramedProperties.Y_SLOPE
+                FramedProperties.FACING_HOR, FramedProperties.TOP,
+                BlockStateProperties.WATERLOGGED, FramedProperties.Y_SLOPE
         );
     }
 
