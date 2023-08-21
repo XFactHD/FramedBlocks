@@ -2,6 +2,7 @@ package xfacthd.framedblocks.common.block;
 
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
@@ -12,11 +13,13 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
 import org.jetbrains.annotations.ApiStatus;
+import org.jetbrains.annotations.Nullable;
 import xfacthd.framedblocks.api.block.IFramedBlock;
 import xfacthd.framedblocks.api.block.cache.StateCache;
 import xfacthd.framedblocks.api.block.render.ParticleHelper;
 import xfacthd.framedblocks.api.camo.CamoContainer;
 import xfacthd.framedblocks.common.blockentity.FramedDoubleBlockEntity;
+import xfacthd.framedblocks.common.data.doubleblock.*;
 import xfacthd.framedblocks.common.item.FramedBlueprintItem;
 import xfacthd.framedblocks.common.util.DoubleBlockTopInteractionMode;
 
@@ -30,14 +33,32 @@ public interface IFramedDoubleBlock extends IFramedBlock
     @ApiStatus.OverrideOnly
     Tuple<BlockState, BlockState> calculateBlockPair(BlockState state);
 
+    @ApiStatus.OverrideOnly
+    SolidityCheck calculateSolidityCheck(BlockState state, Direction side);
+
+    @ApiStatus.OverrideOnly
+    CamoGetter calculateCamoGetter(BlockState state, Direction side, Direction edge);
+
+    @ApiStatus.NonExtendable
     default DoubleBlockTopInteractionMode getTopInteractionMode(BlockState state)
     {
         return getCache(state).getTopInteractionMode();
     }
 
+    @ApiStatus.NonExtendable
     default Tuple<BlockState, BlockState> getBlockPair(BlockState state)
     {
         return getCache(state).getBlockPair();
+    }
+
+    default SolidityCheck getSolidityCheck(BlockState state, Direction side)
+    {
+        return getCache(state).getSolidityCheck(side);
+    }
+
+    default CamoGetter getCamoGetter(BlockState state, Direction side, @Nullable Direction edge)
+    {
+        return getCache(state).getCamoGetter(side, edge);
     }
 
     @Override

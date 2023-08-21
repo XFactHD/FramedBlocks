@@ -5,7 +5,6 @@ import net.minecraft.core.Direction;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.Vec3;
-import org.jetbrains.annotations.Nullable;
 import xfacthd.framedblocks.api.block.FramedProperties;
 import xfacthd.framedblocks.api.util.Utils;
 import xfacthd.framedblocks.common.FBContent;
@@ -39,48 +38,5 @@ public class FramedStackedInnerCornerSlopePanelBlockEntity extends FramedDoubleB
 
         double xz = Utils.fractionInDir(hitVec, side == facing ? facing.getCounterClockWise() : facing);
         return xz > .5;
-    }
-
-    @Override
-    protected CamoGetter getCamoGetter(Direction side, @Nullable Direction edge)
-    {
-        Direction facing = getBlockState().getValue(FramedProperties.FACING_HOR);
-        if (side == facing.getOpposite() || side == facing.getClockWise())
-        {
-            return this::getCamo;
-        }
-        else if (side == facing && edge == facing.getClockWise())
-        {
-            return this::getCamo;
-        }
-        else if (side == facing.getCounterClockWise() && edge == facing.getOpposite())
-        {
-            return this::getCamo;
-        }
-        else if (Utils.isY(side) && (edge == facing.getOpposite() || edge == facing.getClockWise()))
-        {
-            return this::getCamo;
-        }
-        return EMPTY_GETTER;
-    }
-
-    @Override
-    protected SolidityCheck getSolidityCheck(Direction side)
-    {
-        if (Utils.isY(side))
-        {
-            boolean top = getBlockState().getValue(FramedProperties.TOP);
-            if ((!top && side == Direction.DOWN) || (top && side == Direction.UP))
-            {
-                return SolidityCheck.BOTH;
-            }
-        }
-
-        Direction facing = getBlockState().getValue(FramedProperties.FACING_HOR);
-        if (side == facing.getOpposite() || side == facing.getClockWise())
-        {
-            return SolidityCheck.FIRST;
-        }
-        return SolidityCheck.NONE;
     }
 }

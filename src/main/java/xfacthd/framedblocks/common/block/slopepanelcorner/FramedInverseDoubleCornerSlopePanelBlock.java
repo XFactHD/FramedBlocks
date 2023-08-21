@@ -18,6 +18,7 @@ import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.Vec3;
 import net.minecraft.world.phys.shapes.VoxelShape;
+import org.jetbrains.annotations.Nullable;
 import xfacthd.framedblocks.api.block.FramedProperties;
 import xfacthd.framedblocks.api.block.IFramedBlock;
 import xfacthd.framedblocks.api.shapes.ShapeProvider;
@@ -28,6 +29,8 @@ import xfacthd.framedblocks.common.block.AbstractFramedDoubleBlock;
 import xfacthd.framedblocks.common.blockentity.doubled.FramedInverseDoubleCornerSlopePanelBlockEntity;
 import xfacthd.framedblocks.common.data.BlockType;
 import xfacthd.framedblocks.common.data.CornerSlopePanelShape;
+import xfacthd.framedblocks.common.data.doubleblock.CamoGetter;
+import xfacthd.framedblocks.common.data.doubleblock.SolidityCheck;
 import xfacthd.framedblocks.common.item.VerticalAndWallBlockItem;
 import xfacthd.framedblocks.common.util.DoubleBlockTopInteractionMode;
 
@@ -142,6 +145,24 @@ public class FramedInverseDoubleCornerSlopePanelBlock extends AbstractFramedDoub
     public DoubleBlockTopInteractionMode calculateTopInteractionMode(BlockState state)
     {
         return DoubleBlockTopInteractionMode.EITHER;
+    }
+
+    @Override
+    public CamoGetter calculateCamoGetter(BlockState state, Direction side, @Nullable Direction edge)
+    {
+        Direction facing = state.getValue(FramedProperties.FACING_HOR);
+        Direction dirTwo = state.getValue(FramedProperties.TOP) ? Direction.UP : Direction.DOWN;
+        if (side == dirTwo && (edge == facing.getOpposite() || edge == facing.getClockWise()))
+        {
+            return CamoGetter.FIRST;
+        }
+        return CamoGetter.NONE;
+    }
+
+    @Override
+    public SolidityCheck calculateSolidityCheck(BlockState state, Direction side)
+    {
+        return SolidityCheck.NONE;
     }
 
     @Override

@@ -5,7 +5,6 @@ import net.minecraft.core.Direction;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.Vec3;
-import org.jetbrains.annotations.Nullable;
 import xfacthd.framedblocks.api.block.FramedProperties;
 import xfacthd.framedblocks.api.util.Utils;
 import xfacthd.framedblocks.common.FBContent;
@@ -41,23 +40,5 @@ public class FramedInverseDoubleCornerSlopePanelBlockEntity extends FramedDouble
         double xz1 = Utils.fractionInDir(hitVec, facing);
         double xz2 = Utils.fractionInDir(hitVec, facing.getCounterClockWise());
         return xz1 > .5 && xz2 > .5;
-    }
-
-    @Override
-    protected CamoGetter getCamoGetter(Direction side, @Nullable Direction edge)
-    {
-        Direction facing = getBlockState().getValue(FramedProperties.FACING_HOR);
-        Direction dirTwo = getBlockState().getValue(FramedProperties.TOP) ? Direction.UP : Direction.DOWN;
-        if (side == dirTwo && (edge == facing.getOpposite() || edge == facing.getClockWise()))
-        {
-            return this::getCamo;
-        }
-        return EMPTY_GETTER;
-    }
-
-    @Override
-    protected SolidityCheck getSolidityCheck(Direction side)
-    {
-        return SolidityCheck.NONE;
     }
 }

@@ -10,6 +10,7 @@ import net.minecraft.world.level.block.*;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
+import org.jetbrains.annotations.Nullable;
 import xfacthd.framedblocks.api.block.FramedProperties;
 import xfacthd.framedblocks.api.util.Utils;
 import xfacthd.framedblocks.common.FBContent;
@@ -17,6 +18,8 @@ import xfacthd.framedblocks.common.block.AbstractFramedDoubleBlock;
 import xfacthd.framedblocks.common.blockentity.doubled.FramedDoubleSlopedPrismBlockEntity;
 import xfacthd.framedblocks.common.data.BlockType;
 import xfacthd.framedblocks.common.data.PropertyHolder;
+import xfacthd.framedblocks.common.data.doubleblock.CamoGetter;
+import xfacthd.framedblocks.common.data.doubleblock.SolidityCheck;
 import xfacthd.framedblocks.common.data.property.CompoundDirection;
 import xfacthd.framedblocks.common.util.DoubleBlockTopInteractionMode;
 
@@ -102,6 +105,46 @@ public class FramedDoubleSlopedPrismBlock extends AbstractFramedDoubleBlock
             return DoubleBlockTopInteractionMode.FIRST;
         }
         return DoubleBlockTopInteractionMode.EITHER;
+    }
+
+    @Override
+    public CamoGetter calculateCamoGetter(BlockState state, Direction side, @Nullable Direction edge)
+    {
+        CompoundDirection cmpDir = state.getValue(PropertyHolder.FACING_DIR);
+        Direction facing = cmpDir.direction();
+        if (side == facing)
+        {
+            return CamoGetter.SECOND;
+        }
+        if (side == cmpDir.orientation())
+        {
+            if (edge == facing)
+            {
+                return CamoGetter.SECOND;
+            }
+            else if (edge != null)
+            {
+                return CamoGetter.FIRST;
+            }
+            return CamoGetter.NONE;
+        }
+        return CamoGetter.FIRST;
+    }
+
+    @Override
+    public SolidityCheck calculateSolidityCheck(BlockState state, Direction side)
+    {
+        CompoundDirection cmpDir = state.getValue(PropertyHolder.FACING_DIR);
+        Direction facing = cmpDir.direction();
+        if (side == facing)
+        {
+            return SolidityCheck.SECOND;
+        }
+        if (side == cmpDir.orientation())
+        {
+            return SolidityCheck.BOTH;
+        }
+        return SolidityCheck.FIRST;
     }
 
     @Override

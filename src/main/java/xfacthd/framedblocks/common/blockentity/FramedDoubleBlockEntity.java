@@ -26,25 +26,21 @@ import xfacthd.framedblocks.api.camo.EmptyCamoContainer;
 import xfacthd.framedblocks.api.camo.CamoContainer;
 import xfacthd.framedblocks.api.model.data.FramedBlockData;
 import xfacthd.framedblocks.api.util.ClientUtils;
-import xfacthd.framedblocks.api.util.Utils;
 import xfacthd.framedblocks.common.block.*;
+import xfacthd.framedblocks.common.data.doubleblock.DoubleBlockStateCache;
 import xfacthd.framedblocks.common.util.DoubleBlockSoundType;
 import xfacthd.framedblocks.common.util.DoubleBlockTopInteractionMode;
 
 import java.util.List;
 import java.util.Objects;
-import java.util.function.*;
 
 public abstract class FramedDoubleBlockEntity extends FramedBlockEntity
 {
     public static final ModelProperty<ModelData> DATA_LEFT = new ModelProperty<>();
     public static final ModelProperty<ModelData> DATA_RIGHT = new ModelProperty<>();
-    protected static final CamoGetter EMPTY_GETTER = () -> EmptyCamoContainer.EMPTY;
 
     private final FramedBlockData modelData = new FramedBlockData();
     private final DoubleBlockSoundType soundType = new DoubleBlockSoundType(this);
-    private final CamoGetter[][] camoGetters = new CamoGetter[6][7];
-    private final SolidityCheck[] solidityChecks = new SolidityCheck[6];
     private DoubleBlockStateCache stateCache;
     private CamoContainer camoContainer = EmptyCamoContainer.EMPTY;
 
@@ -198,7 +194,7 @@ public abstract class FramedDoubleBlockEntity extends FramedBlockEntity
     @Override
     public boolean canCamoSustainPlant(Direction side, IPlantable plant)
     {
-        return solidityChecks[side.ordinal()].canSustainPlant(this, side, plant);
+        return stateCache.getSolidityCheck(side).canSustainPlant(this, side, plant);
     }
 
     @Override
@@ -315,18 +311,14 @@ public abstract class FramedDoubleBlockEntity extends FramedBlockEntity
     @Override
     public final CamoContainer getCamo(Direction side, @Nullable Direction edge)
     {
-        return camoGetters[side.ordinal()][Utils.maskNullDirection(edge)].get();
+        return stateCache.getCamoGetter(side, edge).getCamo(this);
     }
-
-    protected abstract CamoGetter getCamoGetter(Direction side, @Nullable Direction edge);
 
     @Override
     public final boolean isSolidSide(Direction side)
     {
-        return solidityChecks[side.ordinal()].isSolid(this);
+        return stateCache.getSolidityCheck(side).isSolid(this);
     }
-
-    protected abstract SolidityCheck getSolidityCheck(Direction side);
 
     @Override
     public boolean updateCulling(Direction side, boolean rerender)
@@ -342,26 +334,6 @@ public abstract class FramedDoubleBlockEntity extends FramedBlockEntity
     {
         super.setBlockState(state);
         stateCache = getDoubleBlock().getCache(state);
-        collectCamoGetters();
-        calculateSolidityChecks();
-    }
-
-    private void collectCamoGetters()
-    {
-        Utils.forAllDirections(false, side -> Utils.forAllDirections(edge ->
-        {
-            CamoGetter getter = null;
-            if (edge == null || edge.getAxis() != side.getAxis())
-            {
-                getter = getCamoGetter(side, edge);
-            }
-            camoGetters[side.ordinal()][Utils.maskNullDirection(edge)] = getter;
-        }));
-    }
-
-    private void calculateSolidityChecks()
-    {
-        Utils.forAllDirections(false, side -> solidityChecks[side.ordinal()] = getSolidityCheck(side));
     }
 
     protected IFramedDoubleBlock getDoubleBlock()
@@ -530,16 +502,6 @@ public abstract class FramedDoubleBlockEntity extends FramedBlockEntity
         modelData.setCamoState(camoContainer.getState());
     }
 
-    @Override
-    public void setLevel(Level level)
-    {
-        super.setLevel(level);
-        // These can't happen in the constructor due to some implementations using variables initialized in their constructor
-        // Must happen here instead because Create trains don't call onLoad()
-        collectCamoGetters();
-        calculateSolidityChecks();
-    }
-
     /*
      * NBT stuff
      */
@@ -570,54 +532,6 @@ public abstract class FramedDoubleBlockEntity extends FramedBlockEntity
                     worldPosition,
                     ForgeRegistries.BLOCKS.getKey(camo.getState().getBlock())
             );
-        }
-    }
-
-
-
-    protected interface CamoGetter extends Supplier<CamoContainer> { }
-
-    protected interface PlantablePredicate
-    {
-        boolean test(FramedDoubleBlockEntity be, Direction side, IPlantable plant);
-    }
-
-    protected enum SolidityCheck
-    {
-        NONE(
-                be -> false,
-                (be, side, plant) -> false
-        ),
-        FIRST(
-                be -> be.getCamo().isSolid(be.level, be.worldPosition),
-                (be, side, plant) -> FramedBlockEntity.canSustainPlant(be, be.getCamo(), side, plant)
-        ),
-        SECOND(
-                be -> be.getCamoTwo().isSolid(be.level, be.worldPosition),
-                (be, side, plant) -> FramedBlockEntity.canSustainPlant(be, be.getCamoTwo(), side, plant)
-        ),
-        BOTH(
-                be -> FIRST.isSolid(be) && SECOND.isSolid(be),
-                (be, side, plant) -> FIRST.canSustainPlant(be, side, plant) && SECOND.canSustainPlant(be, side, plant)
-        );
-
-        private final Predicate<FramedDoubleBlockEntity> predicate;
-        private final PlantablePredicate plantablePredicate;
-
-        SolidityCheck(Predicate<FramedDoubleBlockEntity> predicate, PlantablePredicate plantablePredicate)
-        {
-            this.predicate = predicate;
-            this.plantablePredicate = plantablePredicate;
-        }
-
-        public boolean isSolid(FramedDoubleBlockEntity be)
-        {
-            return predicate.test(be);
-        }
-
-        public boolean canSustainPlant(FramedDoubleBlockEntity be, Direction side, IPlantable plant)
-        {
-            return plantablePredicate.test(be, side, plant);
         }
     }
 }

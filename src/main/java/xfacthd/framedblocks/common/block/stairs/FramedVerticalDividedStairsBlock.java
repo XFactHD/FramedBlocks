@@ -12,6 +12,7 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.phys.shapes.*;
+import org.jetbrains.annotations.Nullable;
 import xfacthd.framedblocks.api.block.FramedProperties;
 import xfacthd.framedblocks.api.shapes.ShapeProvider;
 import xfacthd.framedblocks.api.shapes.ShapeUtils;
@@ -20,6 +21,8 @@ import xfacthd.framedblocks.common.FBContent;
 import xfacthd.framedblocks.common.block.AbstractFramedDoubleBlock;
 import xfacthd.framedblocks.common.blockentity.doubled.FramedVerticalDividedStairsBlockEntity;
 import xfacthd.framedblocks.common.data.BlockType;
+import xfacthd.framedblocks.common.data.doubleblock.CamoGetter;
+import xfacthd.framedblocks.common.data.doubleblock.SolidityCheck;
 import xfacthd.framedblocks.common.util.DoubleBlockTopInteractionMode;
 
 public class FramedVerticalDividedStairsBlock extends AbstractFramedDoubleBlock
@@ -87,6 +90,33 @@ public class FramedVerticalDividedStairsBlock extends AbstractFramedDoubleBlock
     public DoubleBlockTopInteractionMode calculateTopInteractionMode(BlockState state)
     {
         return DoubleBlockTopInteractionMode.SECOND;
+    }
+
+    @Override
+    public CamoGetter calculateCamoGetter(BlockState state, Direction side, @Nullable Direction edge)
+    {
+        Direction facing = state.getValue(FramedProperties.FACING_HOR);
+        if (edge == facing || edge == facing.getCounterClockWise())
+        {
+            return switch (side)
+            {
+                case UP -> CamoGetter.SECOND;
+                case DOWN -> CamoGetter.FIRST;
+                default -> CamoGetter.NONE;
+            };
+        }
+        return CamoGetter.NONE;
+    }
+
+    @Override
+    public SolidityCheck calculateSolidityCheck(BlockState state, Direction side)
+    {
+        Direction facing = state.getValue(FramedProperties.FACING_HOR);
+        if (side == facing || side == facing.getCounterClockWise())
+        {
+            return SolidityCheck.BOTH;
+        }
+        return SolidityCheck.NONE;
     }
 
 

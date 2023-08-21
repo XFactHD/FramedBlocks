@@ -9,12 +9,15 @@ import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
+import org.jetbrains.annotations.Nullable;
 import xfacthd.framedblocks.api.block.FramedProperties;
 import xfacthd.framedblocks.api.util.Utils;
 import xfacthd.framedblocks.common.FBContent;
 import xfacthd.framedblocks.common.block.AbstractFramedDoubleBlock;
 import xfacthd.framedblocks.common.blockentity.doubled.FramedDividedPanelBlockEntity;
 import xfacthd.framedblocks.common.data.BlockType;
+import xfacthd.framedblocks.common.data.doubleblock.CamoGetter;
+import xfacthd.framedblocks.common.data.doubleblock.SolidityCheck;
 import xfacthd.framedblocks.common.util.DoubleBlockTopInteractionMode;
 
 public class FramedDividedPanelBlock extends AbstractFramedDoubleBlock
@@ -92,5 +95,50 @@ public class FramedDividedPanelBlock extends AbstractFramedDoubleBlock
         {
             return DoubleBlockTopInteractionMode.EITHER;
         }
+    }
+
+    @Override
+    public CamoGetter calculateCamoGetter(BlockState state, Direction side, @Nullable Direction edge)
+    {
+        if (edge == null)
+        {
+            return CamoGetter.NONE;
+        }
+
+        Direction facing = state.getValue(FramedProperties.FACING_HOR);
+        boolean vertical = state.getBlock() == FBContent.BLOCK_FRAMED_DIVIDED_PANEL_VERT.get();
+        if (edge == facing)
+        {
+            if ((!vertical && side == Direction.DOWN) || (vertical && side == facing.getCounterClockWise()))
+            {
+                return CamoGetter.FIRST;
+            }
+            if ((!vertical && side == Direction.UP) || (vertical && side == facing.getClockWise()))
+            {
+                return CamoGetter.SECOND;
+            }
+        }
+        else if (side == facing)
+        {
+            if ((!vertical && edge == Direction.DOWN) || (vertical && edge == facing.getCounterClockWise()))
+            {
+                return CamoGetter.FIRST;
+            }
+            if ((!vertical && edge == Direction.UP) || (vertical && edge == facing.getClockWise()))
+            {
+                return CamoGetter.SECOND;
+            }
+        }
+        return CamoGetter.NONE;
+    }
+
+    @Override
+    public SolidityCheck calculateSolidityCheck(BlockState state, Direction side)
+    {
+        if (side == state.getValue(FramedProperties.FACING_HOR))
+        {
+            return SolidityCheck.BOTH;
+        }
+        return SolidityCheck.NONE;
     }
 }

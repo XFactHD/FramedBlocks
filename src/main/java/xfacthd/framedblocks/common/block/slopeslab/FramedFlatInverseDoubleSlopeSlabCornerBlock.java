@@ -16,6 +16,7 @@ import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.Vec3;
 import net.minecraft.world.phys.shapes.*;
+import org.jetbrains.annotations.Nullable;
 import xfacthd.framedblocks.api.block.FramedProperties;
 import xfacthd.framedblocks.api.block.IFramedBlock;
 import xfacthd.framedblocks.api.shapes.ShapeProvider;
@@ -26,6 +27,8 @@ import xfacthd.framedblocks.common.block.AbstractFramedDoubleBlock;
 import xfacthd.framedblocks.common.blockentity.doubled.FramedFlatInverseDoubleSlopeSlabCornerBlockEntity;
 import xfacthd.framedblocks.common.data.BlockType;
 import xfacthd.framedblocks.common.data.PropertyHolder;
+import xfacthd.framedblocks.common.data.doubleblock.CamoGetter;
+import xfacthd.framedblocks.common.data.doubleblock.SolidityCheck;
 import xfacthd.framedblocks.common.util.DoubleBlockTopInteractionMode;
 
 public class FramedFlatInverseDoubleSlopeSlabCornerBlock extends AbstractFramedDoubleBlock
@@ -173,6 +176,30 @@ public class FramedFlatInverseDoubleSlopeSlabCornerBlock extends AbstractFramedD
             return DoubleBlockTopInteractionMode.FIRST;
         }
         return DoubleBlockTopInteractionMode.SECOND;
+    }
+
+    @Override
+    public CamoGetter calculateCamoGetter(BlockState state, Direction side, @Nullable Direction edge)
+    {
+        Direction facing = state.getValue(FramedProperties.FACING_HOR);
+
+        if (side == facing.getOpposite() || side == facing.getClockWise())
+        {
+            boolean top = state.getValue(FramedProperties.TOP);
+
+            if ((!top && edge == Direction.DOWN) || (top && edge == Direction.UP))
+            {
+                return CamoGetter.FIRST;
+            }
+        }
+
+        return CamoGetter.NONE;
+    }
+
+    @Override
+    public SolidityCheck calculateSolidityCheck(BlockState state, Direction side)
+    {
+        return SolidityCheck.NONE;
     }
 
     @Override

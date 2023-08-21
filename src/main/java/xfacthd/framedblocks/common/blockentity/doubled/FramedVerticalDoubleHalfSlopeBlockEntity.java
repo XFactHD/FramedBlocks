@@ -5,7 +5,6 @@ import net.minecraft.core.Direction;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.Vec3;
-import org.jetbrains.annotations.Nullable;
 import xfacthd.framedblocks.api.block.FramedProperties;
 import xfacthd.framedblocks.api.util.Utils;
 import xfacthd.framedblocks.common.FBContent;
@@ -42,35 +41,5 @@ public class FramedVerticalDoubleHalfSlopeBlockEntity extends FramedDoubleBlockE
             secondary = !secondary;
         }
         return secondary;
-    }
-
-    @Override
-    protected CamoGetter getCamoGetter(Direction side, @Nullable Direction edge)
-    {
-        boolean top = getBlockState().getValue(FramedProperties.TOP);
-        if ((!top && edge == Direction.DOWN) || (top && edge == Direction.UP))
-        {
-            Direction facing = getBlockState().getValue(FramedProperties.FACING_HOR);
-            if (side == facing || side == facing.getCounterClockWise())
-            {
-                return this::getCamo;
-            }
-            else if (side == facing.getOpposite() || side == facing.getClockWise())
-            {
-                return this::getCamoTwo;
-            }
-        }
-        return EMPTY_GETTER;
-    }
-
-    @Override
-    protected SolidityCheck getSolidityCheck(Direction side)
-    {
-        boolean top = getBlockState().getValue(FramedProperties.TOP);
-        if ((!top && side == Direction.DOWN) || (top && side == Direction.UP))
-        {
-            return SolidityCheck.BOTH;
-        }
-        return SolidityCheck.NONE;
     }
 }

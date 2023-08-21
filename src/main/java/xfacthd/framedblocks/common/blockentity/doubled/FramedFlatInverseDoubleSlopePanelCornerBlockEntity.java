@@ -2,17 +2,13 @@ package xfacthd.framedblocks.common.blockentity.doubled;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
-import net.minecraft.world.level.block.Rotation;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.Vec3;
-import org.jetbrains.annotations.Nullable;
 import xfacthd.framedblocks.api.block.FramedProperties;
 import xfacthd.framedblocks.api.util.Utils;
 import xfacthd.framedblocks.common.FBContent;
 import xfacthd.framedblocks.common.blockentity.FramedDoubleBlockEntity;
-import xfacthd.framedblocks.common.data.PropertyHolder;
-import xfacthd.framedblocks.common.data.property.HorizontalRotation;
 
 public class FramedFlatInverseDoubleSlopePanelCornerBlockEntity extends FramedDoubleBlockEntity
 {
@@ -43,31 +39,5 @@ public class FramedFlatInverseDoubleSlopePanelCornerBlockEntity extends FramedDo
             hor = 1D - hor;
         }
         return hor < .5D;
-    }
-
-    @Override
-    protected CamoGetter getCamoGetter(Direction side, @Nullable Direction edge)
-    {
-        Direction facing = getBlockState().getValue(FramedProperties.FACING_HOR);
-
-        if (edge == facing)
-        {
-            HorizontalRotation rotation = getBlockState().getValue(PropertyHolder.ROTATION);
-            Direction rotDir = rotation.withFacing(facing);
-            Direction perpRotDir = rotation.rotate(Rotation.COUNTERCLOCKWISE_90).withFacing(facing);
-
-            if (side == rotDir.getOpposite() || side == perpRotDir.getOpposite())
-            {
-                return this::getCamo;
-            }
-        }
-
-        return EMPTY_GETTER;
-    }
-
-    @Override
-    protected SolidityCheck getSolidityCheck(Direction side)
-    {
-        return SolidityCheck.NONE;
     }
 }

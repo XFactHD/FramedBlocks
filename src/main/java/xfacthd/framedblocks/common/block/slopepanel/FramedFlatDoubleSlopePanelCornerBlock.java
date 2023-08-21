@@ -14,6 +14,7 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.phys.shapes.VoxelShape;
+import org.jetbrains.annotations.Nullable;
 import xfacthd.framedblocks.api.block.FramedProperties;
 import xfacthd.framedblocks.api.block.IFramedBlock;
 import xfacthd.framedblocks.api.shapes.ShapeProvider;
@@ -24,6 +25,8 @@ import xfacthd.framedblocks.common.block.AbstractFramedDoubleBlock;
 import xfacthd.framedblocks.common.blockentity.doubled.FramedFlatDoubleSlopePanelCornerBlockEntity;
 import xfacthd.framedblocks.common.data.BlockType;
 import xfacthd.framedblocks.common.data.PropertyHolder;
+import xfacthd.framedblocks.common.data.doubleblock.CamoGetter;
+import xfacthd.framedblocks.common.data.doubleblock.SolidityCheck;
 import xfacthd.framedblocks.common.data.property.HorizontalRotation;
 import xfacthd.framedblocks.common.util.DoubleBlockTopInteractionMode;
 
@@ -128,6 +131,58 @@ public class FramedFlatDoubleSlopePanelCornerBlock extends AbstractFramedDoubleB
             return DoubleBlockTopInteractionMode.FIRST;
         }
         return DoubleBlockTopInteractionMode.EITHER;
+    }
+
+    @Override
+    public CamoGetter calculateCamoGetter(BlockState state, Direction side, @Nullable Direction edge)
+    {
+        Direction facing = state.getValue(FramedProperties.FACING_HOR);
+        boolean front = state.getValue(PropertyHolder.FRONT);
+        if (side == facing)
+        {
+            return front ? CamoGetter.NONE : CamoGetter.FIRST;
+        }
+        else if (side == facing.getOpposite())
+        {
+            return front ? CamoGetter.SECOND : CamoGetter.NONE;
+        }
+
+        HorizontalRotation rotation = state.getValue(PropertyHolder.ROTATION);
+        Direction rotDir = rotation.withFacing(facing);
+        Direction perpRotDir = rotation.rotate(Rotation.COUNTERCLOCKWISE_90).withFacing(facing);
+        if (side == rotDir || side == perpRotDir)
+        {
+            if (edge == facing && !front)
+            {
+                return CamoGetter.FIRST;
+            }
+            else if (edge == facing.getOpposite() && front)
+            {
+                return CamoGetter.SECOND;
+            }
+        }
+        else if ((!front && edge == facing) || (front && edge == facing.getOpposite()))
+        {
+            return CamoGetter.FIRST;
+        }
+
+        return CamoGetter.NONE;
+    }
+
+    @Override
+    public SolidityCheck calculateSolidityCheck(BlockState state, Direction side)
+    {
+        Direction facing = state.getValue(FramedProperties.FACING_HOR);
+        boolean front = state.getValue(PropertyHolder.FRONT);
+        if (side == facing && !front)
+        {
+            return SolidityCheck.FIRST;
+        }
+        else if (side == facing.getOpposite() && front)
+        {
+            return SolidityCheck.SECOND;
+        }
+        return SolidityCheck.NONE;
     }
 
     @Override

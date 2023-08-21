@@ -5,7 +5,6 @@ import net.minecraft.core.Direction;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.Vec3;
-import org.jetbrains.annotations.Nullable;
 import xfacthd.framedblocks.api.block.FramedProperties;
 import xfacthd.framedblocks.api.util.Utils;
 import xfacthd.framedblocks.common.FBContent;
@@ -53,56 +52,5 @@ public class FramedElevatedDoubleSlopeSlabBlockEntity extends FramedDoubleBlockE
         }
         y -= .5D;
         return (y * 2D) >= hor;
-    }
-
-    @Override
-    protected CamoGetter getCamoGetter(Direction side, @Nullable Direction edge)
-    {
-        Direction facing = getBlockState().getValue(FramedProperties.FACING_HOR);
-        boolean top = getBlockState().getValue(FramedProperties.TOP);
-        Direction dirTwo = top ? Direction.UP : Direction.DOWN;
-
-        if (side == dirTwo || side == facing)
-        {
-            return this::getCamo;
-        }
-        else if (side == dirTwo.getOpposite())
-        {
-            return this::getCamoTwo;
-        }
-        else if (!Utils.isY(side))
-        {
-            if (edge == dirTwo)
-            {
-                return this::getCamo;
-            }
-            else if (edge == dirTwo.getOpposite())
-            {
-                return this::getCamoTwo;
-            }
-        }
-
-        return EMPTY_GETTER;
-    }
-
-    @Override
-    protected SolidityCheck getSolidityCheck(Direction side)
-    {
-        boolean top = getBlockState().getValue(FramedProperties.TOP);
-        if (side == Direction.UP)
-        {
-            return top ? SolidityCheck.FIRST : SolidityCheck.SECOND;
-        }
-        else if (side == Direction.DOWN)
-        {
-            return top ? SolidityCheck.SECOND : SolidityCheck.FIRST;
-        }
-
-        Direction facing = getBlockState().getValue(FramedProperties.FACING_HOR);
-        if (side == facing)
-        {
-            return SolidityCheck.FIRST;
-        }
-        return SolidityCheck.BOTH;
     }
 }

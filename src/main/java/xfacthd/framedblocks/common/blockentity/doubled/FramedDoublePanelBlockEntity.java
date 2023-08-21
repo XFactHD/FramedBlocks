@@ -5,7 +5,6 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.core.Direction;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.Vec3;
-import org.jetbrains.annotations.Nullable;
 import xfacthd.framedblocks.api.block.FramedProperties;
 import xfacthd.framedblocks.common.FBContent;
 import xfacthd.framedblocks.api.util.Utils;
@@ -42,36 +41,5 @@ public class FramedDoublePanelBlockEntity extends FramedDoubleBlockEntity
         {
             return vec.x() <= .5F;
         }
-    }
-
-    @Override
-    protected CamoGetter getCamoGetter(Direction side, @Nullable Direction edge)
-    {
-        Direction facing = getBlockState().getValue(FramedProperties.FACING_NE);
-        boolean notFacingAxis = side.getAxis() != facing.getAxis();
-        if (side == facing || (notFacingAxis && edge == facing))
-        {
-            return this::getCamo;
-        }
-        if (side == facing.getOpposite() || (notFacingAxis && edge == facing.getOpposite()))
-        {
-            return this::getCamoTwo;
-        }
-        return EMPTY_GETTER;
-    }
-
-    @Override
-    protected SolidityCheck getSolidityCheck(Direction side)
-    {
-        Direction facing = getBlockState().getValue(FramedProperties.FACING_NE);
-        if (side == facing)
-        {
-            return SolidityCheck.FIRST;
-        }
-        else if (side == facing.getOpposite())
-        {
-            return SolidityCheck.SECOND;
-        }
-        return SolidityCheck.BOTH;
     }
 }

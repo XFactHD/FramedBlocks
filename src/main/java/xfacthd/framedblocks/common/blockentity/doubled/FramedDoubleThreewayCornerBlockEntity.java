@@ -5,7 +5,6 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.core.Direction;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.Vec3;
-import org.jetbrains.annotations.Nullable;
 import xfacthd.framedblocks.api.block.FramedProperties;
 import xfacthd.framedblocks.common.FBContent;
 import xfacthd.framedblocks.api.util.Utils;
@@ -100,66 +99,5 @@ public class FramedDoubleThreewayCornerBlockEntity extends FramedDoubleBlockEnti
             }
         }
         return false;
-    }
-
-    @Override
-    protected CamoGetter getCamoGetter(Direction side, @Nullable Direction edge)
-    {
-        Direction facing = getBlockState().getValue(FramedProperties.FACING_HOR);
-        boolean top = getBlockState().getValue(FramedProperties.TOP);
-        Direction dirTwo = top ? Direction.UP : Direction.DOWN;
-
-        if (side == facing || side == facing.getCounterClockWise() || side == dirTwo)
-        {
-            return this::getCamo;
-        }
-        else if (side == dirTwo.getOpposite())
-        {
-            if (edge == facing || edge == facing.getCounterClockWise())
-            {
-                return this::getCamo;
-            }
-            else if (edge == facing.getOpposite() || edge == facing.getClockWise())
-            {
-                return this::getCamoTwo;
-            }
-        }
-        else if (side == facing.getOpposite())
-        {
-            if (edge == facing.getCounterClockWise() || edge == dirTwo)
-            {
-                return this::getCamo;
-            }
-            else if (edge == facing.getClockWise() || edge == dirTwo.getOpposite())
-            {
-                return this::getCamoTwo;
-            }
-        }
-        else if (side == facing.getClockWise())
-        {
-            if (edge == facing || edge == dirTwo)
-            {
-                return this::getCamo;
-            }
-            else if (edge == facing.getOpposite() || edge == dirTwo.getOpposite())
-            {
-                return this::getCamoTwo;
-            }
-        }
-
-        return EMPTY_GETTER;
-    }
-
-    @Override
-    protected SolidityCheck getSolidityCheck(Direction side)
-    {
-        Direction dir = getBlockState().getValue(FramedProperties.FACING_HOR);
-        boolean top = getBlockState().getValue(FramedProperties.TOP);
-
-        if (side == dir || side == dir.getCounterClockWise() || (side == Direction.DOWN && !top) || (side == Direction.UP && top))
-        {
-            return SolidityCheck.FIRST;
-        }
-        return SolidityCheck.BOTH;
     }
 }

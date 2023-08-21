@@ -5,7 +5,6 @@ import net.minecraft.core.Direction;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.Vec3;
-import org.jetbrains.annotations.Nullable;
 import xfacthd.framedblocks.api.block.FramedProperties;
 import xfacthd.framedblocks.api.util.Utils;
 import xfacthd.framedblocks.common.FBContent;
@@ -58,55 +57,5 @@ public class FramedFlatDoubleSlopeSlabCornerBlockEntity extends FramedDoubleBloc
             y = .5 - y;
         }
         return (y * 2D) >= hor;
-    }
-
-    @Override
-    protected CamoGetter getCamoGetter(Direction side, @Nullable Direction edge)
-    {
-        Direction facing = getBlockState().getValue(FramedProperties.FACING_HOR);
-        boolean top = getBlockState().getValue(FramedProperties.TOP);
-        boolean topHalf = getBlockState().getValue(PropertyHolder.TOP_HALF);
-
-        if (side == Direction.UP && topHalf)
-        {
-            return top ? this::getCamo : this::getCamoTwo;
-        }
-        else if (side == Direction.DOWN && !topHalf)
-        {
-            return top ? this::getCamoTwo : this::getCamo;
-        }
-
-        if (side == facing || side == facing.getCounterClockWise())
-        {
-            if ((!topHalf && edge == Direction.DOWN) || (topHalf && edge == Direction.UP))
-            {
-                return this::getCamo;
-            }
-        }
-        else if (side == facing.getOpposite() || side == facing.getClockWise())
-        {
-            if ((!topHalf && edge == Direction.DOWN) || (topHalf && edge == Direction.UP))
-            {
-                return top == topHalf ? this::getCamo : this::getCamoTwo;
-            }
-        }
-
-        return EMPTY_GETTER;
-    }
-
-    @Override
-    protected SolidityCheck getSolidityCheck(Direction side)
-    {
-        boolean top = getBlockState().getValue(FramedProperties.TOP);
-        boolean topHalf = getBlockState().getValue(PropertyHolder.TOP_HALF);
-        if (topHalf && side == Direction.UP)
-        {
-            return top ? SolidityCheck.FIRST : SolidityCheck.SECOND;
-        }
-        else if (!topHalf && side == Direction.DOWN)
-        {
-            return top ? SolidityCheck.SECOND : SolidityCheck.FIRST;
-        }
-        return SolidityCheck.NONE;
     }
 }

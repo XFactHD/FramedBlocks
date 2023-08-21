@@ -12,6 +12,7 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.phys.BlockHitResult;
+import org.jetbrains.annotations.Nullable;
 import xfacthd.framedblocks.api.block.FramedProperties;
 import xfacthd.framedblocks.api.block.IFramedBlock;
 import xfacthd.framedblocks.api.util.Utils;
@@ -20,6 +21,8 @@ import xfacthd.framedblocks.common.block.AbstractFramedDoubleBlock;
 import xfacthd.framedblocks.common.blockentity.doubled.FramedStackedSlopePanelBlockEntity;
 import xfacthd.framedblocks.common.data.BlockType;
 import xfacthd.framedblocks.common.data.PropertyHolder;
+import xfacthd.framedblocks.common.data.doubleblock.CamoGetter;
+import xfacthd.framedblocks.common.data.doubleblock.SolidityCheck;
 import xfacthd.framedblocks.common.data.property.HorizontalRotation;
 import xfacthd.framedblocks.common.util.DoubleBlockTopInteractionMode;
 
@@ -138,6 +141,43 @@ public class FramedStackedSlopePanelBlock extends AbstractFramedDoubleBlock
     public DoubleBlockTopInteractionMode calculateTopInteractionMode(BlockState state)
     {
         return DoubleBlockTopInteractionMode.EITHER;
+    }
+
+    @Override
+    public CamoGetter calculateCamoGetter(BlockState state, Direction side, @Nullable Direction edge)
+    {
+        Direction facing = state.getValue(FramedProperties.FACING_HOR);
+        if (side == facing || (side.getAxis() != facing.getAxis() && edge == facing))
+        {
+            return CamoGetter.FIRST;
+        }
+
+        if (edge == facing.getOpposite())
+        {
+            HorizontalRotation rot = state.getValue(PropertyHolder.ROTATION);
+            if (side == rot.withFacing(facing).getOpposite())
+            {
+                return CamoGetter.SECOND;
+            }
+        }
+        return CamoGetter.NONE;
+    }
+
+    @Override
+    public SolidityCheck calculateSolidityCheck(BlockState state, Direction side)
+    {
+        Direction facing = state.getValue(FramedProperties.FACING_HOR);
+        if (side == facing)
+        {
+            return SolidityCheck.FIRST;
+        }
+
+        HorizontalRotation rot = state.getValue(PropertyHolder.ROTATION);
+        if (side == rot.withFacing(facing).getOpposite())
+        {
+            return SolidityCheck.BOTH;
+        }
+        return SolidityCheck.NONE;
     }
 
     @Override

@@ -1,7 +1,6 @@
 package xfacthd.framedblocks.common;
 
 import com.google.common.base.Preconditions;
-import com.google.common.base.Stopwatch;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.world.inventory.*;
 import net.minecraft.world.item.*;
@@ -9,17 +8,13 @@ import net.minecraft.world.item.crafting.*;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
-import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraftforge.common.extensions.IForgeMenuType;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.fml.loading.FMLEnvironment;
 import net.minecraftforge.network.IContainerFactory;
 import net.minecraftforge.registries.*;
-import xfacthd.framedblocks.FramedBlocks;
 import xfacthd.framedblocks.api.block.FramedBlockEntity;
 import xfacthd.framedblocks.api.block.IFramedBlock;
-import xfacthd.framedblocks.api.block.cache.IStateCacheAccessor;
-import xfacthd.framedblocks.api.block.cache.StateCache;
 import xfacthd.framedblocks.api.camo.EmptyCamoContainer;
 import xfacthd.framedblocks.api.camo.CamoContainer;
 import xfacthd.framedblocks.api.util.FramedConstants;
@@ -554,40 +549,6 @@ public final class FBContent
         RECIPE_SERIALIZERS.register(modBus);
         CREATIVE_TABS.register(modBus);
         CAMO_CONTAINER_FACTORIES.register(modBus);
-    }
-
-    public static void initializeStateCache()
-    {
-        FramedBlocks.LOGGER.debug("Initializing custom state metadata caches");
-        Stopwatch watch = Stopwatch.createStarted();
-        Map<Block, List<StateCache>> dedupMap = new HashMap<>();
-        long count = ForgeRegistries.BLOCKS.getValues()
-                .stream()
-                .filter(block -> block instanceof IFramedBlock)
-                .map(Block::getStateDefinition)
-                .map(StateDefinition::getPossibleStates)
-                .flatMap(List::stream)
-                .peek(state ->
-                {
-                    StateCache cache = ((IFramedBlock) state.getBlock()).initCache(state);
-                    if (cache.equals(StateCache.EMPTY))
-                    {
-                        ((IStateCacheAccessor) state).framedblocks$initCache(StateCache.EMPTY);
-                        return;
-                    }
-
-                    List<StateCache> caches = dedupMap.computeIfAbsent(state.getBlock(), $ -> new ArrayList<>());
-                    StateCache deduped = caches.stream().filter(cache::equals).findFirst().orElseGet(() ->
-                    {
-                        caches.add(cache);
-                        return cache;
-                    });
-                    ((IStateCacheAccessor) state).framedblocks$initCache(deduped);
-                })
-                .count();
-        watch.stop();
-        long unique = dedupMap.values().stream().mapToLong(List::size).sum() + 1; // +1 for the empty instance
-        FramedBlocks.LOGGER.debug("Initialized {} unique caches for {} states in {}", unique, count, watch);
     }
 
     public static Collection<RegistryObject<Block>> getRegisteredBlocks()

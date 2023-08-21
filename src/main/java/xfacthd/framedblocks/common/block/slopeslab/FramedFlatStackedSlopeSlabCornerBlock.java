@@ -13,6 +13,7 @@ import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.Vec3;
+import org.jetbrains.annotations.Nullable;
 import xfacthd.framedblocks.api.block.FramedProperties;
 import xfacthd.framedblocks.api.block.IFramedBlock;
 import xfacthd.framedblocks.api.util.Utils;
@@ -21,13 +22,18 @@ import xfacthd.framedblocks.common.block.AbstractFramedDoubleBlock;
 import xfacthd.framedblocks.common.blockentity.doubled.FramedStackedSlopeSlabBlockEntity;
 import xfacthd.framedblocks.common.data.BlockType;
 import xfacthd.framedblocks.common.data.PropertyHolder;
+import xfacthd.framedblocks.common.data.doubleblock.CamoGetter;
+import xfacthd.framedblocks.common.data.doubleblock.SolidityCheck;
 import xfacthd.framedblocks.common.util.DoubleBlockTopInteractionMode;
 
 public class FramedFlatStackedSlopeSlabCornerBlock extends AbstractFramedDoubleBlock
 {
+    private final boolean corner;
+
     public FramedFlatStackedSlopeSlabCornerBlock(BlockType type)
     {
         super(type);
+        this.corner = type == BlockType.FRAMED_FLAT_STACKED_SLOPE_SLAB_CORNER;
         registerDefaultState(defaultBlockState()
                 .setValue(FramedProperties.TOP, false)
                 .setValue(FramedProperties.Y_SLOPE, true)
@@ -178,6 +184,48 @@ public class FramedFlatStackedSlopeSlabCornerBlock extends AbstractFramedDoubleB
             return DoubleBlockTopInteractionMode.FIRST;
         }
         return DoubleBlockTopInteractionMode.SECOND;
+    }
+
+    @Override
+    public CamoGetter calculateCamoGetter(BlockState state, Direction side, @Nullable Direction edge)
+    {
+        boolean top = state.getValue(FramedProperties.TOP);
+        Direction dirTwo = top ? Direction.UP : Direction.DOWN;
+
+        if (side == dirTwo || (!Utils.isY(side) && edge == dirTwo))
+        {
+            return CamoGetter.FIRST;
+        }
+        else if (!corner && edge == dirTwo.getOpposite())
+        {
+            Direction facing = state.getValue(FramedProperties.FACING_HOR);
+            if (side == facing || side == facing.getCounterClockWise())
+            {
+                return CamoGetter.SECOND;
+            }
+        }
+
+        return CamoGetter.NONE;
+    }
+
+    @Override
+    public SolidityCheck calculateSolidityCheck(BlockState state, Direction side)
+    {
+        boolean top = state.getValue(FramedProperties.TOP);
+        if ((!top && side == Direction.DOWN) || (top && side == Direction.UP))
+        {
+            return SolidityCheck.FIRST;
+        }
+
+        if (!corner)
+        {
+            Direction facing = state.getValue(FramedProperties.FACING_HOR);
+            if (side == facing || side == facing.getCounterClockWise())
+            {
+                return SolidityCheck.BOTH;
+            }
+        }
+        return SolidityCheck.NONE;
     }
 
 

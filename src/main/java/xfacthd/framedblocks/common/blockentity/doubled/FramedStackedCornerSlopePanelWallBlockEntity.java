@@ -6,7 +6,6 @@ import net.minecraft.world.level.block.Rotation;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.Vec3;
-import org.jetbrains.annotations.Nullable;
 import xfacthd.framedblocks.api.block.FramedProperties;
 import xfacthd.framedblocks.api.util.Utils;
 import xfacthd.framedblocks.common.FBContent;
@@ -53,34 +52,5 @@ public class FramedStackedCornerSlopePanelWallBlockEntity extends FramedDoubleBl
             fracDir = Utils.isY(rotDir) ? rotDir : perpRotDir;
         }
         return Utils.fractionInDir(hitVec, fracDir) < .5;
-    }
-
-    @Override
-    protected CamoGetter getCamoGetter(Direction side, @Nullable Direction edge)
-    {
-        Direction dir = getBlockState().getValue(FramedProperties.FACING_HOR);
-        HorizontalRotation rot = getBlockState().getValue(PropertyHolder.ROTATION);
-        Direction rotDir = rot.withFacing(dir);
-        Direction perpRotDir = rot.rotate(Rotation.COUNTERCLOCKWISE_90).withFacing(dir);
-        if ((side == rotDir && edge == perpRotDir) || (side == perpRotDir && edge == rotDir))
-        {
-            return this::getCamo;
-        }
-        else if (side == dir && (edge == rotDir.getOpposite() || edge == perpRotDir.getOpposite()))
-        {
-            return this::getCamoTwo;
-        }
-        return EMPTY_GETTER;
-    }
-
-    @Override
-    protected SolidityCheck getSolidityCheck(Direction side)
-    {
-        Direction dir = getBlockState().getValue(FramedProperties.FACING_HOR);
-        if (side == dir)
-        {
-            return SolidityCheck.BOTH;
-        }
-        return SolidityCheck.NONE;
     }
 }

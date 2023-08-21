@@ -12,6 +12,7 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.phys.BlockHitResult;
+import org.jetbrains.annotations.Nullable;
 import xfacthd.framedblocks.api.block.FramedProperties;
 import xfacthd.framedblocks.api.block.IFramedBlock;
 import xfacthd.framedblocks.api.util.Utils;
@@ -20,6 +21,8 @@ import xfacthd.framedblocks.common.block.AbstractFramedDoubleBlock;
 import xfacthd.framedblocks.common.blockentity.doubled.FramedStackedSlopeSlabBlockEntity;
 import xfacthd.framedblocks.common.data.BlockType;
 import xfacthd.framedblocks.common.data.PropertyHolder;
+import xfacthd.framedblocks.common.data.doubleblock.CamoGetter;
+import xfacthd.framedblocks.common.data.doubleblock.SolidityCheck;
 import xfacthd.framedblocks.common.util.DoubleBlockTopInteractionMode;
 
 public class FramedStackedSlopeSlabBlock extends AbstractFramedDoubleBlock
@@ -136,6 +139,43 @@ public class FramedStackedSlopeSlabBlock extends AbstractFramedDoubleBlock
             return DoubleBlockTopInteractionMode.FIRST;
         }
         return DoubleBlockTopInteractionMode.SECOND;
+    }
+
+    @Override
+    public CamoGetter calculateCamoGetter(BlockState state, Direction side, @Nullable Direction edge)
+    {
+        boolean top = state.getValue(FramedProperties.TOP);
+        Direction dirTwo = top ? Direction.UP : Direction.DOWN;
+
+        if (side == dirTwo || (!Utils.isY(side) && edge == dirTwo))
+        {
+            return CamoGetter.FIRST;
+        }
+        else if (edge == dirTwo.getOpposite())
+        {
+            if (side == state.getValue(FramedProperties.FACING_HOR))
+            {
+                return CamoGetter.SECOND;
+            }
+        }
+
+        return CamoGetter.NONE;
+    }
+
+    @Override
+    public SolidityCheck calculateSolidityCheck(BlockState state, Direction side)
+    {
+        boolean top = state.getValue(FramedProperties.TOP);
+        if ((!top && side == Direction.DOWN) || (top && side == Direction.UP))
+        {
+            return SolidityCheck.FIRST;
+        }
+
+        if (side == state.getValue(FramedProperties.FACING_HOR))
+        {
+            return SolidityCheck.BOTH;
+        }
+        return SolidityCheck.NONE;
     }
 
 

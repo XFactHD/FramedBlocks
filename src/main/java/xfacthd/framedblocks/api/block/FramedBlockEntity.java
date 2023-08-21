@@ -775,7 +775,7 @@ public class FramedBlockEntity extends BlockEntity
         return !camoContainer.isEmpty() && canSustainPlant(this, camoContainer, side, plant);
     }
 
-    protected static boolean canSustainPlant(FramedBlockEntity be, CamoContainer camo, Direction side, IPlantable plant)
+    public static boolean canSustainPlant(FramedBlockEntity be, CamoContainer camo, Direction side, IPlantable plant)
     {
         BlockState state = camo.getState();
         return state.is(Utils.CAMO_SUSTAIN_PLANT) && state.canSustainPlant(be.level, be.worldPosition, side, plant);

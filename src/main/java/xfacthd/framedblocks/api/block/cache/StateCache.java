@@ -119,7 +119,7 @@ public class StateCache
     @Override
     public int hashCode()
     {
-        int result = Objects.hash(anyFullFace);
+        int result = Objects.hashCode(anyFullFace);
         result = 31 * result + Arrays.hashCode(fullFace);
         result = 31 * result + Arrays.deepHashCode(conFullEdge);
         result = 31 * result + Arrays.deepHashCode(conDetailed);

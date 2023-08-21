@@ -15,6 +15,7 @@ import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.Vec3;
+import org.jetbrains.annotations.Nullable;
 import xfacthd.framedblocks.api.block.FramedProperties;
 import xfacthd.framedblocks.api.block.IFramedBlock;
 import xfacthd.framedblocks.api.util.Utils;
@@ -23,6 +24,8 @@ import xfacthd.framedblocks.common.block.AbstractFramedDoubleBlock;
 import xfacthd.framedblocks.common.blockentity.doubled.FramedStackedCornerSlopePanelBlockEntity;
 import xfacthd.framedblocks.common.blockentity.doubled.FramedStackedInnerCornerSlopePanelBlockEntity;
 import xfacthd.framedblocks.common.data.BlockType;
+import xfacthd.framedblocks.common.data.doubleblock.CamoGetter;
+import xfacthd.framedblocks.common.data.doubleblock.SolidityCheck;
 import xfacthd.framedblocks.common.item.VerticalAndWallBlockItem;
 import xfacthd.framedblocks.common.util.DoubleBlockTopInteractionMode;
 
@@ -168,6 +171,94 @@ public class FramedStackedCornerSlopePanelBlock extends AbstractFramedDoubleBloc
     public DoubleBlockTopInteractionMode calculateTopInteractionMode(BlockState state)
     {
         return DoubleBlockTopInteractionMode.EITHER;
+    }
+
+    @Override
+    public CamoGetter calculateCamoGetter(BlockState state, Direction side, @Nullable Direction edge)
+    {
+        return switch ((BlockType) getBlockType())
+        {
+            case FRAMED_STACKED_CORNER_SLOPE_PANEL ->
+            {
+                Direction facing = state.getValue(FramedProperties.FACING_HOR);
+                Direction dirTwo = state.getValue(FramedProperties.TOP) ? Direction.UP : Direction.DOWN;
+
+                if (side == facing && edge == facing.getCounterClockWise())
+                {
+                    yield CamoGetter.FIRST;
+                }
+                else if (side == facing.getCounterClockWise() && edge == facing)
+                {
+                    yield CamoGetter.FIRST;
+                }
+                else if (side == dirTwo && (edge == facing.getOpposite() || edge == facing.getClockWise()))
+                {
+                    yield CamoGetter.SECOND;
+                }
+                yield CamoGetter.NONE;
+            }
+            case FRAMED_STACKED_INNER_CORNER_SLOPE_PANEL ->
+            {
+                Direction facing = state.getValue(FramedProperties.FACING_HOR);
+                if (side == facing.getOpposite() || side == facing.getClockWise())
+                {
+                    yield CamoGetter.FIRST;
+                }
+                else if (side == facing && edge == facing.getClockWise())
+                {
+                    yield CamoGetter.FIRST;
+                }
+                else if (side == facing.getCounterClockWise() && edge == facing.getOpposite())
+                {
+                    yield CamoGetter.FIRST;
+                }
+                else if (Utils.isY(side) && (edge == facing.getOpposite() || edge == facing.getClockWise()))
+                {
+                    yield CamoGetter.FIRST;
+                }
+                yield CamoGetter.NONE;
+            }
+            default -> throw new IllegalStateException("Unexpected type: " + getBlockType());
+        };
+    }
+
+    @Override
+    public SolidityCheck calculateSolidityCheck(BlockState state, Direction side)
+    {
+        return switch ((BlockType) getBlockType())
+        {
+            case FRAMED_STACKED_CORNER_SLOPE_PANEL ->
+            {
+                if (Utils.isY(side))
+                {
+                    boolean top = state.getValue(FramedProperties.TOP);
+                    if ((!top && side == Direction.DOWN) || (top && side == Direction.UP))
+                    {
+                        yield SolidityCheck.BOTH;
+                    }
+                }
+                yield SolidityCheck.NONE;
+            }
+            case FRAMED_STACKED_INNER_CORNER_SLOPE_PANEL ->
+            {
+                if (Utils.isY(side))
+                {
+                    boolean top = state.getValue(FramedProperties.TOP);
+                    if ((!top && side == Direction.DOWN) || (top && side == Direction.UP))
+                    {
+                        yield SolidityCheck.BOTH;
+                    }
+                }
+
+                Direction facing = state.getValue(FramedProperties.FACING_HOR);
+                if (side == facing.getOpposite() || side == facing.getClockWise())
+                {
+                    yield SolidityCheck.FIRST;
+                }
+                yield SolidityCheck.NONE;
+            }
+            default -> throw new IllegalStateException("Unexpected type: " + getBlockType());
+        };
     }
 
     @Override

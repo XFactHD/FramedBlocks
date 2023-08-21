@@ -14,6 +14,8 @@ import xfacthd.framedblocks.common.FBContent;
 import xfacthd.framedblocks.common.block.*;
 import xfacthd.framedblocks.common.data.BlockType;
 import xfacthd.framedblocks.common.data.PropertyHolder;
+import xfacthd.framedblocks.common.data.doubleblock.CamoGetter;
+import xfacthd.framedblocks.common.data.doubleblock.SolidityCheck;
 import xfacthd.framedblocks.common.data.property.SlopeType;
 import xfacthd.framedblocks.common.util.DoubleBlockTopInteractionMode;
 import xfacthd.framedblocks.common.util.FramedUtils;
@@ -60,6 +62,22 @@ class FramedFancyRailSlopeBlock extends FramedRailSlopeBlock implements IFramedD
                 FBContent.BLOCK_FRAMED_FANCY_RAIL.get().defaultBlockState()
                         .setValue(BlockStateProperties.RAIL_SHAPE, shape)
         );
+    }
+
+    @Override
+    public CamoGetter calculateCamoGetter(BlockState state, Direction side, @Nullable Direction edge)
+    {
+        return CamoGetter.FIRST;
+    }
+
+    @Override
+    public SolidityCheck calculateSolidityCheck(BlockState state, Direction side)
+    {
+        if (side == Direction.DOWN || side == FramedUtils.getSlopeBlockFacing(state))
+        {
+            return SolidityCheck.FIRST;
+        }
+        return SolidityCheck.NONE;
     }
 
     @Override

@@ -5,7 +5,6 @@ import net.minecraft.core.Direction;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.BlockHitResult;
-import org.jetbrains.annotations.Nullable;
 import xfacthd.framedblocks.api.util.Utils;
 import xfacthd.framedblocks.common.FBContent;
 import xfacthd.framedblocks.common.blockentity.FramedDoubleBlockEntity;
@@ -54,44 +53,6 @@ public class FramedDoublePrismBlockEntity extends FramedDoubleBlockEntity
         }
 
         return false;
-    }
-
-    @Override
-    protected CamoGetter getCamoGetter(Direction side, @Nullable Direction edge)
-    {
-        Direction facing = getFacing(getBlockState());
-        if (side == facing)
-        {
-            return this::getCamoTwo;
-        }
-        if (isDoubleSide(side))
-        {
-            if (edge == facing)
-            {
-                return this::getCamoTwo;
-            }
-            else if (edge != null)
-            {
-                return this::getCamo;
-            }
-            return EMPTY_GETTER;
-        }
-        return this::getCamo;
-    }
-
-    @Override
-    protected SolidityCheck getSolidityCheck(Direction side)
-    {
-        Direction facing = getFacing(getBlockState());
-        if (side == facing)
-        {
-            return SolidityCheck.SECOND;
-        }
-        if (isDoubleSide(side))
-        {
-            return SolidityCheck.BOTH;
-        }
-        return SolidityCheck.FIRST;
     }
 
     protected boolean isDoubleSide(Direction side)

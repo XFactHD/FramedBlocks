@@ -4,7 +4,6 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.BlockHitResult;
-import org.jetbrains.annotations.Nullable;
 import xfacthd.framedblocks.api.block.FramedProperties;
 import xfacthd.framedblocks.api.util.Utils;
 import xfacthd.framedblocks.common.FBContent;
@@ -34,51 +33,5 @@ public class FramedDividedSlabBlockEntity extends FramedDoubleBlockEntity
 
         double xz = Utils.fractionInDir(hit.getLocation(), dir);
         return xz > .5D;
-    }
-
-    @Override
-    protected CamoGetter getCamoGetter(Direction side, @Nullable Direction edge)
-    {
-        if (edge == null)
-        {
-            return EMPTY_GETTER;
-        }
-
-        Direction dirOne = getBlockState().getValue(FramedProperties.FACING_HOR);
-        Direction dirTwo = getBlockState().getValue(FramedProperties.TOP) ? Direction.UP : Direction.DOWN;
-        if (edge == dirTwo)
-        {
-            if (side == dirOne)
-            {
-                return this::getCamo;
-            }
-            if (side == dirOne.getOpposite())
-            {
-                return this::getCamoTwo;
-            }
-        }
-        else if (side == dirTwo)
-        {
-            if (edge == dirOne)
-            {
-                return this::getCamo;
-            }
-            if (edge == dirOne.getOpposite())
-            {
-                return this::getCamoTwo;
-            }
-        }
-        return EMPTY_GETTER;
-    }
-
-    @Override
-    protected SolidityCheck getSolidityCheck(Direction side)
-    {
-        boolean top = getBlockState().getValue(FramedProperties.TOP);
-        if ((!top && side == Direction.DOWN) || (top && side == Direction.UP))
-        {
-            return SolidityCheck.BOTH;
-        }
-        return SolidityCheck.NONE;
     }
 }

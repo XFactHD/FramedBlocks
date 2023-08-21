@@ -5,7 +5,6 @@ import net.minecraft.core.Direction;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.Vec3;
-import org.jetbrains.annotations.Nullable;
 import xfacthd.framedblocks.api.block.FramedProperties;
 import xfacthd.framedblocks.api.util.Utils;
 import xfacthd.framedblocks.common.FBContent;
@@ -53,56 +52,5 @@ public class FramedVerticalDoubleStairsBlockEntity extends FramedDoubleBlockEnti
 
             return (xzCCW > .5 != positiveCCW) && (xz > .5 != positive);
         }
-    }
-
-    @Override
-    protected CamoGetter getCamoGetter(Direction side, @Nullable Direction edge)
-    {
-        Direction facing = getBlockState().getValue(FramedProperties.FACING_HOR);
-
-        if (side == facing || side == facing.getCounterClockWise())
-        {
-            return this::getCamo;
-        }
-        else if (Utils.isY(side) && (edge == facing || edge == facing.getCounterClockWise()))
-        {
-            return this::getCamo;
-        }
-        else if (side == facing.getOpposite())
-        {
-            if (edge == facing.getClockWise())
-            {
-                return this::getCamoTwo;
-            }
-            else if (edge == facing.getCounterClockWise())
-            {
-                return this::getCamo;
-            }
-        }
-        else if (side == facing.getClockWise())
-        {
-            if (edge == facing)
-            {
-                return this::getCamo;
-            }
-            else if (edge == facing.getOpposite())
-            {
-                return this::getCamoTwo;
-            }
-        }
-
-        return EMPTY_GETTER;
-    }
-
-    @Override
-    protected SolidityCheck getSolidityCheck(Direction side)
-    {
-        Direction facing = getBlockState().getValue(FramedProperties.FACING_HOR);
-
-        if (side == facing || side == facing.getCounterClockWise())
-        {
-            return SolidityCheck.FIRST;
-        }
-        return SolidityCheck.BOTH;
     }
 }

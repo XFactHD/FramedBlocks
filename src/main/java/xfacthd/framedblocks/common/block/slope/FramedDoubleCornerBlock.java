@@ -11,6 +11,7 @@ import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.phys.Vec3;
+import org.jetbrains.annotations.Nullable;
 import xfacthd.framedblocks.api.block.FramedProperties;
 import xfacthd.framedblocks.api.block.IFramedBlock;
 import xfacthd.framedblocks.api.util.Utils;
@@ -19,6 +20,8 @@ import xfacthd.framedblocks.common.block.AbstractFramedDoubleBlock;
 import xfacthd.framedblocks.common.blockentity.doubled.FramedDoubleCornerBlockEntity;
 import xfacthd.framedblocks.common.data.BlockType;
 import xfacthd.framedblocks.common.data.PropertyHolder;
+import xfacthd.framedblocks.common.data.doubleblock.CamoGetter;
+import xfacthd.framedblocks.common.data.doubleblock.SolidityCheck;
 import xfacthd.framedblocks.common.data.property.CornerType;
 import xfacthd.framedblocks.common.util.DoubleBlockTopInteractionMode;
 
@@ -138,6 +141,97 @@ public class FramedDoubleCornerBlock extends AbstractFramedDoubleBlock
             return DoubleBlockTopInteractionMode.FIRST;
         }
         return DoubleBlockTopInteractionMode.EITHER;
+    }
+
+    @Override
+    public CamoGetter calculateCamoGetter(BlockState state, Direction side, @Nullable Direction edge)
+    {
+        CornerType type = state.getValue(PropertyHolder.CORNER_TYPE);
+        Direction dir = state.getValue(FramedProperties.FACING_HOR);
+
+        if (type.isHorizontal())
+        {
+            if (side == dir || (!type.isTop() && side == Direction.DOWN) || (type.isTop() && side == Direction.UP) ||
+                    (!type.isRight() && side == dir.getCounterClockWise()) || (type.isRight() && side == dir.getClockWise())
+            )
+            {
+                return CamoGetter.FIRST;
+            }
+
+            if (side == dir.getOpposite() || (!type.isTop() && side == Direction.UP) || (type.isTop() && side == Direction.DOWN) ||
+                    (!type.isRight() && side == dir.getClockWise()) || (type.isRight() && side == dir.getCounterClockWise())
+            )
+            {
+                return CamoGetter.SECOND;
+            }
+        }
+        else if (type == CornerType.TOP)
+        {
+            if (side == dir || side == Direction.UP || side == dir.getCounterClockWise())
+            {
+                return CamoGetter.FIRST;
+            }
+            if (side == dir.getOpposite() || side == Direction.DOWN || side == dir.getClockWise())
+            {
+                return CamoGetter.SECOND;
+            }
+        }
+        else if (type == CornerType.BOTTOM)
+        {
+            if (side == dir || side == Direction.DOWN || side == dir.getCounterClockWise())
+            {
+                return CamoGetter.FIRST;
+            }
+            if (side == dir.getOpposite() || side == Direction.UP || side == dir.getClockWise())
+            {
+                return CamoGetter.SECOND;
+            }
+        }
+
+        return CamoGetter.NONE;
+    }
+
+    @Override
+    public SolidityCheck calculateSolidityCheck(BlockState state, Direction side)
+    {
+        CornerType type = state.getValue(PropertyHolder.CORNER_TYPE);
+        Direction facing = state.getValue(FramedProperties.FACING_HOR);
+
+        if (type.isHorizontal())
+        {
+            if (side == facing)
+            {
+                return SolidityCheck.FIRST;
+            }
+            else if (side == facing.getOpposite())
+            {
+                return SolidityCheck.SECOND;
+            }
+            else if ((!type.isRight() && side == facing.getCounterClockWise()) || (type.isRight() && side == facing.getClockWise()))
+            {
+                return SolidityCheck.FIRST;
+            }
+            else if ((!type.isTop() && side == Direction.DOWN) || (type.isTop() && side == Direction.UP))
+            {
+                return SolidityCheck.FIRST;
+            }
+        }
+        else
+        {
+            if (side == facing || side == facing.getCounterClockWise())
+            {
+                return SolidityCheck.FIRST;
+            }
+            else if ((!type.isTop() && side == Direction.DOWN) || (type.isTop() && side == Direction.UP))
+            {
+                return SolidityCheck.FIRST;
+            }
+            else if ((!type.isTop() && side == Direction.UP) || (type.isTop() && side == Direction.DOWN))
+            {
+                return SolidityCheck.SECOND;
+            }
+        }
+        return SolidityCheck.BOTH;
     }
 
     @Override

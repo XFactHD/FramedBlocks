@@ -27,6 +27,7 @@ import xfacthd.framedblocks.common.FBContent;
 import xfacthd.framedblocks.common.compat.CompatHandler;
 import xfacthd.framedblocks.common.crafting.FramingSawRecipeCache;
 import xfacthd.framedblocks.common.data.BlueprintBehaviours;
+import xfacthd.framedblocks.common.data.StateCacheBuilder;
 import xfacthd.framedblocks.common.data.camo.CamoFactories;
 import xfacthd.framedblocks.common.data.conpreds.ConnectionPredicates;
 import xfacthd.framedblocks.common.data.facepreds.FullFacePredicates;
@@ -105,7 +106,7 @@ public final class FramedBlocks
                 .consumerNetworkThread(CullingUpdatePacket::handle)
                 .add();
 
-        FBContent.initializeStateCache();
+        StateCacheBuilder.initializeStateCaches();
         BlueprintBehaviours.register();
         CompatHandler.commonSetup();
     }
@@ -119,6 +120,7 @@ public final class FramedBlocks
     private static void onAddDebugReloadListener(final AddReloadListenerEvent event)
     {
         event.addListener(ShapeReloader.INSTANCE);
+        event.addListener(StateCacheBuilder.CacheReloader.INSTANCE);
     }
 
     private static String getBlockEntityWarning()

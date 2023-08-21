@@ -12,6 +12,7 @@ import net.minecraft.world.level.block.*;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
+import org.jetbrains.annotations.Nullable;
 import xfacthd.framedblocks.api.block.FramedProperties;
 import xfacthd.framedblocks.api.block.IFramedBlock;
 import xfacthd.framedblocks.api.util.Utils;
@@ -20,6 +21,8 @@ import xfacthd.framedblocks.common.block.AbstractFramedDoubleBlock;
 import xfacthd.framedblocks.common.blockentity.doubled.FramedExtendedDoubleCornerSlopePanelBlockEntity;
 import xfacthd.framedblocks.common.blockentity.doubled.FramedExtendedInnerDoubleCornerSlopePanelBlockEntity;
 import xfacthd.framedblocks.common.data.BlockType;
+import xfacthd.framedblocks.common.data.doubleblock.CamoGetter;
+import xfacthd.framedblocks.common.data.doubleblock.SolidityCheck;
 import xfacthd.framedblocks.common.item.VerticalAndWallBlockItem;
 import xfacthd.framedblocks.common.util.DoubleBlockTopInteractionMode;
 
@@ -137,6 +140,136 @@ public class FramedExtendedDoubleCornerSlopePanelBlock extends AbstractFramedDou
     {
         boolean top = state.getValue(FramedProperties.TOP);
         return top ? DoubleBlockTopInteractionMode.FIRST : DoubleBlockTopInteractionMode.EITHER;
+    }
+
+    @Override
+    public CamoGetter calculateCamoGetter(BlockState state, Direction side, @Nullable Direction edge)
+    {
+        return switch ((BlockType) getBlockType())
+        {
+            case FRAMED_EXT_DOUBLE_CORNER_SLOPE_PANEL ->
+            {
+                Direction facing = state.getValue(FramedProperties.FACING_HOR);
+                boolean top = state.getValue(FramedProperties.TOP);
+                Direction dirTwo = top ? Direction.UP : Direction.DOWN;
+                if (side == dirTwo)
+                {
+                    yield CamoGetter.FIRST;
+                }
+                else if (side == facing.getOpposite() || side == facing.getClockWise())
+                {
+                    yield CamoGetter.SECOND;
+                }
+                else if (side == facing)
+                {
+                    if (edge == facing.getCounterClockWise() || edge == dirTwo)
+                    {
+                        yield CamoGetter.FIRST;
+                    }
+                    else if (edge == facing.getClockWise())
+                    {
+                        yield CamoGetter.SECOND;
+                    }
+                }
+                else if (side == facing.getCounterClockWise())
+                {
+                    if (edge == facing || edge == dirTwo)
+                    {
+                        yield CamoGetter.FIRST;
+                    }
+                    else if (edge == facing.getOpposite())
+                    {
+                        yield CamoGetter.SECOND;
+                    }
+                }
+                else if (side == dirTwo.getOpposite() && (edge == facing.getClockWise() || edge == facing.getOpposite()))
+                {
+                    yield CamoGetter.SECOND;
+                }
+                yield CamoGetter.NONE;
+            }
+            case FRAMED_EXT_INNER_DOUBLE_CORNER_SLOPE_PANEL ->
+            {
+                Direction facing = state.getValue(FramedProperties.FACING_HOR);
+                boolean top = state.getValue(FramedProperties.TOP);
+                Direction dirTwo = top ? Direction.UP : Direction.DOWN;
+                if (side == facing.getOpposite() || side == facing.getClockWise() || side == dirTwo)
+                {
+                    yield CamoGetter.FIRST;
+                }
+                else if (side == dirTwo.getOpposite() && (edge == facing.getOpposite() || edge == facing.getClockWise()))
+                {
+                    yield CamoGetter.FIRST;
+                }
+                else if (side == facing)
+                {
+                    if (edge == dirTwo || edge == facing.getClockWise())
+                    {
+                        yield CamoGetter.FIRST;
+                    }
+                    else if (edge == facing.getCounterClockWise())
+                    {
+                        yield CamoGetter.SECOND;
+                    }
+                }
+                else if (side == facing.getCounterClockWise())
+                {
+                    if (edge == dirTwo || edge == facing.getOpposite())
+                    {
+                        yield CamoGetter.FIRST;
+                    }
+                    else if (edge == facing)
+                    {
+                        yield CamoGetter.SECOND;
+                    }
+                }
+                yield CamoGetter.NONE;
+            }
+            default -> throw new IllegalArgumentException("Unexpected type: " + getBlockType());
+        };
+    }
+
+    @Override
+    public SolidityCheck calculateSolidityCheck(BlockState state, Direction side)
+    {
+        return switch ((BlockType) getBlockType())
+        {
+            case FRAMED_EXT_DOUBLE_CORNER_SLOPE_PANEL ->
+            {
+                if (Utils.isY(side))
+                {
+                    boolean top = state.getValue(FramedProperties.TOP);
+                    if (top ? (side == Direction.UP) : (side == Direction.DOWN))
+                    {
+                        yield SolidityCheck.FIRST;
+                    }
+                }
+
+                Direction facing = state.getValue(FramedProperties.FACING_HOR);
+                if (side == facing.getOpposite() || side == facing.getClockWise())
+                {
+                    yield SolidityCheck.SECOND;
+                }
+                yield SolidityCheck.BOTH;
+            }
+            case FRAMED_EXT_INNER_DOUBLE_CORNER_SLOPE_PANEL ->
+            {
+                boolean primaryYFace = false;
+                if (Utils.isY(side))
+                {
+                    boolean top = state.getValue(FramedProperties.TOP);
+                    primaryYFace = top ? (side == Direction.UP) : (side == Direction.DOWN);
+                }
+
+                Direction facing = state.getValue(FramedProperties.FACING_HOR);
+                if (primaryYFace || side == facing.getOpposite() || side == facing.getClockWise())
+                {
+                    yield SolidityCheck.FIRST;
+                }
+                yield SolidityCheck.BOTH;
+            }
+            default -> throw new IllegalArgumentException("Unexpected type: " + getBlockType());
+        };
     }
 
     @Override

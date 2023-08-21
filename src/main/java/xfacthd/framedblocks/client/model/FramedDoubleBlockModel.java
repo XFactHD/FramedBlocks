@@ -22,7 +22,7 @@ import net.minecraftforge.common.util.ConcatenatedListView;
 import xfacthd.framedblocks.api.model.BakedModelProxy;
 import xfacthd.framedblocks.api.model.data.FramedBlockData;
 import xfacthd.framedblocks.api.model.util.ModelUtils;
-import xfacthd.framedblocks.common.block.DoubleBlockStateCache;
+import xfacthd.framedblocks.common.data.doubleblock.DoubleBlockStateCache;
 import xfacthd.framedblocks.common.block.IFramedDoubleBlock;
 import xfacthd.framedblocks.common.blockentity.FramedDoubleBlockEntity;
 import xfacthd.framedblocks.common.util.DoubleBlockTopInteractionMode;

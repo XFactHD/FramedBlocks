@@ -10,6 +10,7 @@ import net.minecraft.world.level.block.*;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
+import org.jetbrains.annotations.Nullable;
 import xfacthd.framedblocks.api.block.FramedProperties;
 import xfacthd.framedblocks.api.block.IFramedBlock;
 import xfacthd.framedblocks.api.util.Utils;
@@ -18,10 +19,10 @@ import xfacthd.framedblocks.common.block.AbstractFramedDoubleBlock;
 import xfacthd.framedblocks.common.blockentity.doubled.FramedDoubleSlopeBlockEntity;
 import xfacthd.framedblocks.common.data.BlockType;
 import xfacthd.framedblocks.common.data.PropertyHolder;
+import xfacthd.framedblocks.common.data.doubleblock.CamoGetter;
+import xfacthd.framedblocks.common.data.doubleblock.SolidityCheck;
 import xfacthd.framedblocks.common.data.property.SlopeType;
 import xfacthd.framedblocks.common.util.DoubleBlockTopInteractionMode;
-
-import javax.annotation.Nullable;
 
 public class FramedDoubleSlopeBlock extends AbstractFramedDoubleBlock
 {
@@ -118,6 +119,128 @@ public class FramedDoubleSlopeBlock extends AbstractFramedDoubleBlock
             case BOTTOM -> DoubleBlockTopInteractionMode.SECOND;
             case TOP -> DoubleBlockTopInteractionMode.FIRST;
             case HORIZONTAL -> DoubleBlockTopInteractionMode.EITHER;
+        };
+    }
+
+    @Override
+    public CamoGetter calculateCamoGetter(BlockState state, Direction side, @Nullable Direction edge)
+    {
+        Direction facing = state.getValue(FramedProperties.FACING_HOR);
+        SlopeType type = state.getValue(PropertyHolder.SLOPE_TYPE);
+        return switch (type)
+        {
+            case HORIZONTAL ->
+            {
+                if (matchesHor(side, facing) || (Utils.isY(side) && matchesHor(edge, facing)))
+                {
+                    yield CamoGetter.FIRST;
+                }
+                Direction oppFacing = facing.getOpposite();
+                if (matchesHor(side, oppFacing) || (Utils.isY(side) && matchesHor(edge, oppFacing)))
+                {
+                    yield CamoGetter.SECOND;
+                }
+                yield CamoGetter.NONE;
+            }
+            case TOP ->
+            {
+                if (side.getAxis() == facing.getClockWise().getAxis())
+                {
+                    if (edge == facing || edge == Direction.UP)
+                    {
+                        yield CamoGetter.FIRST;
+                    }
+                    if (edge == facing.getOpposite() || edge == Direction.DOWN)
+                    {
+                        yield CamoGetter.SECOND;
+                    }
+                    yield CamoGetter.NONE;
+                }
+                if (side == facing || side == Direction.UP)
+                {
+                    yield CamoGetter.FIRST;
+                }
+                if (side == facing.getOpposite() || side == Direction.DOWN)
+                {
+                    yield CamoGetter.SECOND;
+                }
+                yield CamoGetter.NONE;
+            }
+            case BOTTOM ->
+            {
+                if (side.getAxis() == facing.getClockWise().getAxis())
+                {
+                    if (edge == facing || edge == Direction.DOWN)
+                    {
+                        yield CamoGetter.FIRST;
+                    }
+                    if (edge == facing.getOpposite() || edge == Direction.UP)
+                    {
+                        yield CamoGetter.SECOND;
+                    }
+                    yield CamoGetter.NONE;
+                }
+                if (side == facing || side == Direction.DOWN)
+                {
+                    yield CamoGetter.FIRST;
+                }
+                if (side == facing.getOpposite() || side == Direction.UP)
+                {
+                    yield CamoGetter.SECOND;
+                }
+                yield CamoGetter.NONE;
+            }
+        };
+    }
+
+    private static boolean matchesHor(Direction side, Direction facing)
+    {
+        return side == facing || side == facing.getCounterClockWise();
+    }
+
+    @Override
+    public SolidityCheck calculateSolidityCheck(BlockState state, Direction side)
+    {
+        Direction facing = state.getValue(FramedProperties.FACING_HOR);
+        SlopeType type = state.getValue(PropertyHolder.SLOPE_TYPE);
+        return switch (type)
+        {
+            case HORIZONTAL ->
+            {
+                if (side == facing || side == facing.getCounterClockWise())
+                {
+                    yield SolidityCheck.FIRST;
+                }
+                else if (side == facing.getOpposite() || side == facing.getClockWise())
+                {
+                    yield SolidityCheck.SECOND;
+                }
+                yield SolidityCheck.BOTH;
+            }
+            case TOP ->
+            {
+                if (side == facing || side == Direction.UP)
+                {
+                    yield SolidityCheck.FIRST;
+                }
+                else if (side == facing.getOpposite() || side == Direction.DOWN)
+                {
+                    yield SolidityCheck.SECOND;
+                }
+                yield SolidityCheck.BOTH;
+            }
+            case BOTTOM ->
+            {
+                if (side == facing || side == Direction.UP)
+                {
+                    yield SolidityCheck.SECOND;
+                }
+                else if (side == facing.getOpposite() || side == Direction.DOWN)
+                {
+                    yield SolidityCheck.FIRST;
+                }
+                yield SolidityCheck.BOTH;
+            }
         };
     }
 

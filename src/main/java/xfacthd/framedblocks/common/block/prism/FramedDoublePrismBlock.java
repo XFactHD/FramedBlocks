@@ -10,6 +10,7 @@ import net.minecraft.world.level.block.*;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
+import org.jetbrains.annotations.Nullable;
 import xfacthd.framedblocks.api.block.FramedProperties;
 import xfacthd.framedblocks.api.util.Utils;
 import xfacthd.framedblocks.common.FBContent;
@@ -17,6 +18,8 @@ import xfacthd.framedblocks.common.block.AbstractFramedDoubleBlock;
 import xfacthd.framedblocks.common.blockentity.doubled.FramedDoublePrismBlockEntity;
 import xfacthd.framedblocks.common.data.BlockType;
 import xfacthd.framedblocks.common.data.PropertyHolder;
+import xfacthd.framedblocks.common.data.doubleblock.CamoGetter;
+import xfacthd.framedblocks.common.data.doubleblock.SolidityCheck;
 import xfacthd.framedblocks.common.data.property.DirectionAxis;
 import xfacthd.framedblocks.common.util.DoubleBlockTopInteractionMode;
 
@@ -102,6 +105,46 @@ public class FramedDoublePrismBlock extends AbstractFramedDoubleBlock
             return DoubleBlockTopInteractionMode.FIRST;
         }
         return DoubleBlockTopInteractionMode.EITHER;
+    }
+
+    @Override
+    public CamoGetter calculateCamoGetter(BlockState state, Direction side, @Nullable Direction edge)
+    {
+        DirectionAxis dirAxis = state.getValue(PropertyHolder.FACING_AXIS);
+        Direction facing = dirAxis.direction();
+        if (side == facing)
+        {
+            return CamoGetter.SECOND;
+        }
+        if (side.getAxis() == dirAxis.axis())
+        {
+            if (edge == facing)
+            {
+                return CamoGetter.SECOND;
+            }
+            else if (edge != null)
+            {
+                return CamoGetter.FIRST;
+            }
+            return CamoGetter.NONE;
+        }
+        return CamoGetter.FIRST;
+    }
+
+    @Override
+    public SolidityCheck calculateSolidityCheck(BlockState state, Direction side)
+    {
+        DirectionAxis dirAxis = state.getValue(PropertyHolder.FACING_AXIS);
+        Direction facing = dirAxis.direction();
+        if (side == facing)
+        {
+            return SolidityCheck.SECOND;
+        }
+        if (side.getAxis() == dirAxis.axis())
+        {
+            return SolidityCheck.BOTH;
+        }
+        return SolidityCheck.FIRST;
     }
 
     @Override

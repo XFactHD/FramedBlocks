@@ -5,7 +5,6 @@ import net.minecraft.core.Direction;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.Vec3;
-import org.jetbrains.annotations.Nullable;
 import xfacthd.framedblocks.api.block.FramedProperties;
 import xfacthd.framedblocks.api.util.Utils;
 import xfacthd.framedblocks.common.FBContent;
@@ -51,62 +50,5 @@ public class FramedExtendedInnerDoubleCornerSlopePanelBlockEntity extends Framed
 
         double y = Utils.fractionInDir(hitVec, top ? Direction.UP : Direction.DOWN);
         return ((xz - .5) * 2D) > y;
-    }
-
-    @Override
-    protected CamoGetter getCamoGetter(Direction side, @Nullable Direction edge)
-    {
-        Direction facing = getBlockState().getValue(FramedProperties.FACING_HOR);
-        boolean top = getBlockState().getValue(FramedProperties.TOP);
-        Direction dirTwo = top ? Direction.UP : Direction.DOWN;
-        if (side == facing.getOpposite() || side == facing.getClockWise() || side == dirTwo)
-        {
-            return this::getCamo;
-        }
-        else if (side == dirTwo.getOpposite() && (edge == facing.getOpposite() || edge == facing.getClockWise()))
-        {
-            return this::getCamo;
-        }
-        else if (side == facing)
-        {
-            if (edge == dirTwo || edge == facing.getClockWise())
-            {
-                return this::getCamo;
-            }
-            else if (edge == facing.getCounterClockWise())
-            {
-                return this::getCamoTwo;
-            }
-        }
-        else if (side == facing.getCounterClockWise())
-        {
-            if (edge == dirTwo || edge == facing.getOpposite())
-            {
-                return this::getCamo;
-            }
-            else if (edge == facing)
-            {
-                return this::getCamoTwo;
-            }
-        }
-        return EMPTY_GETTER;
-    }
-
-    @Override
-    protected SolidityCheck getSolidityCheck(Direction side)
-    {
-        boolean primaryYFace = false;
-        if (Utils.isY(side))
-        {
-            boolean top = getBlockState().getValue(FramedProperties.TOP);
-            primaryYFace = top ? (side == Direction.UP) : (side == Direction.DOWN);
-        }
-
-        Direction facing = getBlockState().getValue(FramedProperties.FACING_HOR);
-        if (primaryYFace || side == facing.getOpposite() || side == facing.getClockWise())
-        {
-            return SolidityCheck.FIRST;
-        }
-        return SolidityCheck.BOTH;
     }
 }

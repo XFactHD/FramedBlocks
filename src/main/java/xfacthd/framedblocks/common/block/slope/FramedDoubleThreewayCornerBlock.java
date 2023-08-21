@@ -10,6 +10,7 @@ import net.minecraft.world.level.block.*;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
+import org.jetbrains.annotations.Nullable;
 import xfacthd.framedblocks.api.block.FramedProperties;
 import xfacthd.framedblocks.api.block.IFramedBlock;
 import xfacthd.framedblocks.api.util.Utils;
@@ -17,6 +18,8 @@ import xfacthd.framedblocks.common.FBContent;
 import xfacthd.framedblocks.common.block.AbstractFramedDoubleBlock;
 import xfacthd.framedblocks.common.blockentity.doubled.FramedDoubleThreewayCornerBlockEntity;
 import xfacthd.framedblocks.common.data.BlockType;
+import xfacthd.framedblocks.common.data.doubleblock.CamoGetter;
+import xfacthd.framedblocks.common.data.doubleblock.SolidityCheck;
 import xfacthd.framedblocks.common.util.DoubleBlockTopInteractionMode;
 
 public class FramedDoubleThreewayCornerBlock extends AbstractFramedDoubleBlock
@@ -111,6 +114,67 @@ public class FramedDoubleThreewayCornerBlock extends AbstractFramedDoubleBlock
             return DoubleBlockTopInteractionMode.FIRST;
         }
         return DoubleBlockTopInteractionMode.EITHER;
+    }
+
+    @Override
+    public CamoGetter calculateCamoGetter(BlockState state, Direction side, @Nullable Direction edge)
+    {
+        Direction facing = state.getValue(FramedProperties.FACING_HOR);
+        boolean top = state.getValue(FramedProperties.TOP);
+        Direction dirTwo = top ? Direction.UP : Direction.DOWN;
+
+        if (side == facing || side == facing.getCounterClockWise() || side == dirTwo)
+        {
+            return CamoGetter.FIRST;
+        }
+        else if (side == dirTwo.getOpposite())
+        {
+            if (edge == facing || edge == facing.getCounterClockWise())
+            {
+                return CamoGetter.FIRST;
+            }
+            else if (edge == facing.getOpposite() || edge == facing.getClockWise())
+            {
+                return CamoGetter.SECOND;
+            }
+        }
+        else if (side == facing.getOpposite())
+        {
+            if (edge == facing.getCounterClockWise() || edge == dirTwo)
+            {
+                return CamoGetter.FIRST;
+            }
+            else if (edge == facing.getClockWise() || edge == dirTwo.getOpposite())
+            {
+                return CamoGetter.SECOND;
+            }
+        }
+        else if (side == facing.getClockWise())
+        {
+            if (edge == facing || edge == dirTwo)
+            {
+                return CamoGetter.FIRST;
+            }
+            else if (edge == facing.getOpposite() || edge == dirTwo.getOpposite())
+            {
+                return CamoGetter.SECOND;
+            }
+        }
+
+        return CamoGetter.NONE;
+    }
+
+    @Override
+    public SolidityCheck calculateSolidityCheck(BlockState state, Direction side)
+    {
+        Direction dir = state.getValue(FramedProperties.FACING_HOR);
+        boolean top = state.getValue(FramedProperties.TOP);
+
+        if (side == dir || side == dir.getCounterClockWise() || (side == Direction.DOWN && !top) || (side == Direction.UP && top))
+        {
+            return SolidityCheck.FIRST;
+        }
+        return SolidityCheck.BOTH;
     }
 
     @Override

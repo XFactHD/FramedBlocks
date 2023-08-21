@@ -14,6 +14,7 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.phys.shapes.*;
+import org.jetbrains.annotations.Nullable;
 import xfacthd.framedblocks.api.block.FramedProperties;
 import xfacthd.framedblocks.api.block.IFramedBlock;
 import xfacthd.framedblocks.api.shapes.ShapeProvider;
@@ -25,6 +26,8 @@ import xfacthd.framedblocks.common.blockentity.doubled.FramedLargeDoubleCornerSl
 import xfacthd.framedblocks.common.blockentity.doubled.FramedSmallDoubleCornerSlopePanelWallBlockEntity;
 import xfacthd.framedblocks.common.data.BlockType;
 import xfacthd.framedblocks.common.data.PropertyHolder;
+import xfacthd.framedblocks.common.data.doubleblock.CamoGetter;
+import xfacthd.framedblocks.common.data.doubleblock.SolidityCheck;
 import xfacthd.framedblocks.common.data.property.HorizontalRotation;
 import xfacthd.framedblocks.common.util.DoubleBlockTopInteractionMode;
 
@@ -165,6 +168,81 @@ public class FramedDoubleCornerSlopePanelWallBlock extends AbstractFramedDoubleB
             }
             default -> throw new IllegalArgumentException("Invalid type for this block: " + getBlockType());
         };
+    }
+
+    @Override
+    public CamoGetter calculateCamoGetter(BlockState state, Direction side, @Nullable Direction edge)
+    {
+        return switch ((BlockType) getBlockType())
+        {
+            case FRAMED_SMALL_DOUBLE_CORNER_SLOPE_PANEL_W ->
+            {
+                Direction dir = state.getValue(FramedProperties.FACING_HOR);
+                HorizontalRotation rot = state.getValue(PropertyHolder.ROTATION);
+                Direction rotDir = rot.withFacing(dir);
+                Direction perpRotDir = rot.rotate(Rotation.COUNTERCLOCKWISE_90).withFacing(dir);
+
+                if ((side == rotDir && edge == perpRotDir) || (side == perpRotDir && edge == rotDir))
+                {
+                    yield CamoGetter.SECOND;
+                }
+                yield CamoGetter.NONE;
+            }
+            case FRAMED_LARGE_DOUBLE_CORNER_SLOPE_PANEL_W ->
+            {
+                Direction dir = state.getValue(FramedProperties.FACING_HOR);
+                HorizontalRotation rot = state.getValue(PropertyHolder.ROTATION);
+                Direction rotDir = rot.withFacing(dir);
+                Direction perpRotDir = rot.rotate(Rotation.COUNTERCLOCKWISE_90).withFacing(dir);
+
+                if (side == dir && (edge == rotDir.getOpposite() || edge == perpRotDir.getOpposite()))
+                {
+                    yield CamoGetter.FIRST;
+                }
+                else if (side == dir.getOpposite() && (edge == rotDir.getOpposite() || edge == perpRotDir.getOpposite()))
+                {
+                    yield CamoGetter.SECOND;
+                }
+                else if (side == rotDir.getOpposite() || side == perpRotDir.getOpposite())
+                {
+                    yield CamoGetter.FIRST;
+                }
+                else if (side == rotDir && edge == perpRotDir.getOpposite())
+                {
+                    yield CamoGetter.FIRST;
+                }
+                else if (side == perpRotDir && edge == rotDir.getOpposite())
+                {
+                    yield CamoGetter.FIRST;
+                }
+                yield CamoGetter.NONE;
+            }
+            default -> throw new IllegalStateException("Unexpected type: " + getBlockType());
+        };
+    }
+
+    @Override
+    public SolidityCheck calculateSolidityCheck(BlockState state, Direction side)
+    {
+        return switch ((BlockType) getBlockType())
+        {
+            case FRAMED_SMALL_DOUBLE_CORNER_SLOPE_PANEL_W -> SolidityCheck.NONE;
+            case FRAMED_LARGE_DOUBLE_CORNER_SLOPE_PANEL_W ->
+            {
+                Direction dir = state.getValue(FramedProperties.FACING_HOR);
+                HorizontalRotation rot = state.getValue(PropertyHolder.ROTATION);
+                Direction perpRotDir = rot.rotate(Rotation.COUNTERCLOCKWISE_90).withFacing(dir);
+
+                if (side == rot.withFacing(dir).getOpposite() || side == perpRotDir.getOpposite())
+                {
+                    yield SolidityCheck.FIRST;
+                }
+                yield SolidityCheck.NONE;
+            }
+            default -> throw new IllegalStateException("Unexpected type: " + getBlockType());
+        };
+
+
     }
 
 

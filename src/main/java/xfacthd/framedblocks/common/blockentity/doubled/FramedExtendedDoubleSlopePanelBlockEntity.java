@@ -5,7 +5,6 @@ import net.minecraft.core.Direction;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.Vec3;
-import org.jetbrains.annotations.Nullable;
 import xfacthd.framedblocks.api.block.FramedProperties;
 import xfacthd.framedblocks.api.util.Utils;
 import xfacthd.framedblocks.common.FBContent;
@@ -59,59 +58,5 @@ public class FramedExtendedDoubleSlopePanelBlockEntity extends FramedDoubleBlock
             vert = 1F - vert;
         }
         return (hor * 2D) >= vert;
-    }
-
-    @Override
-    protected CamoGetter getCamoGetter(Direction side, @Nullable Direction edge)
-    {
-        Direction facing = getBlockState().getValue(FramedProperties.FACING_HOR);
-        if (side == facing)
-        {
-            return this::getCamo;
-        }
-        if (side == facing.getOpposite())
-        {
-            return this::getCamoTwo;
-        }
-
-        Direction orientation = getBlockState().getValue(PropertyHolder.ROTATION).withFacing(facing);
-        if (side == orientation.getOpposite())
-        {
-            return this::getCamo;
-        }
-        else if (side.getAxis() != facing.getAxis())
-        {
-            if (edge == facing)
-            {
-                return this::getCamo;
-            }
-            else if (edge == facing.getOpposite())
-            {
-                return this::getCamoTwo;
-            }
-        }
-
-        return EMPTY_GETTER;
-    }
-
-    @Override
-    protected SolidityCheck getSolidityCheck(Direction side)
-    {
-        Direction facing = getBlockState().getValue(FramedProperties.FACING_HOR);
-        if (side == facing)
-        {
-            return SolidityCheck.FIRST;
-        }
-        else if (side == facing.getOpposite())
-        {
-            return SolidityCheck.SECOND;
-        }
-
-        Direction orientation = getBlockState().getValue(PropertyHolder.ROTATION).withFacing(facing);
-        if (side == orientation.getOpposite())
-        {
-            return SolidityCheck.FIRST;
-        }
-        return SolidityCheck.BOTH;
     }
 }
