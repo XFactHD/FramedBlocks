@@ -784,6 +784,16 @@ public final class VerticalStairsSkipPredicate implements SideSkipPredicate
         {
             return TriangleDir.fromDirections(dir, dir.getCounterClockWise());
         }
+        if (side == dir && type != StairsType.VERTICAL)
+        {
+            Direction dirTwo = type == StairsType.TOP_CORNER ? Direction.DOWN : Direction.UP;
+            return TriangleDir.fromDirections(dir.getCounterClockWise(), dirTwo);
+        }
+        if (side == dir.getCounterClockWise() && type != StairsType.VERTICAL)
+        {
+            Direction dirTwo = type == StairsType.TOP_CORNER ? Direction.DOWN : Direction.UP;
+            return TriangleDir.fromDirections(dir, dirTwo);
+        }
         return TriangleDir.NULL;
     }
 

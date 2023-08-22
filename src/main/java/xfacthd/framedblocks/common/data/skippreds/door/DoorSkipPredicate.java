@@ -15,6 +15,10 @@ public final class DoorSkipPredicate implements SideSkipPredicate
     {
         Direction facing = getDoorFacing(state);
 
+        if (side == facing)
+        {
+            return false;
+        }
         if (side == facing.getOpposite())
         {
             return SideSkipPredicate.FULL_FACE.test(level, pos, state, adjState, side);
@@ -25,14 +29,7 @@ public final class DoorSkipPredicate implements SideSkipPredicate
             return false;
         }
 
-        boolean top = state.getValue(BlockStateProperties.DOUBLE_BLOCK_HALF) == DoubleBlockHalf.UPPER;
-        if ((top && side == Direction.DOWN) || (!top && side ==  Direction.UP))
-        {
-            return true;
-        }
-
-        Direction adjFacing = getDoorFacing(adjState);
-        return facing == adjFacing && (side == facing.getClockWise() || side == facing.getCounterClockWise());
+        return facing == getDoorFacing(adjState);
     }
 
     private static Direction getDoorFacing(BlockState state)
