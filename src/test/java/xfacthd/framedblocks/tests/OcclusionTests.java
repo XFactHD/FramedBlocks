@@ -879,7 +879,7 @@ public final class OcclusionTests
     public static void test_DoublePrismCorner_Bottom(GameTestHelper helper)
     {
         BlockState state = FBContent.BLOCK_FRAMED_DOUBLE_PRISM_CORNER.get().defaultBlockState();
-        TestUtils.testDoubleBlockOccludesLightBelow(helper, state, List.of(Direction.UP, Direction.DOWN));
+        TestUtils.testDoubleBlockOccludesLightBelow(helper, state, List.of(Direction.DOWN, Direction.UP));
     }
 
     @GameTest(template = "box_top", batch = "occlusion")
@@ -897,7 +897,7 @@ public final class OcclusionTests
     public static void test_DoubleThreewayCorner_Bottom(GameTestHelper helper)
     {
         BlockState state = FBContent.BLOCK_FRAMED_DOUBLE_THREEWAY_CORNER.get().defaultBlockState();
-        TestUtils.testDoubleBlockOccludesLightBelow(helper, state, List.of(Direction.UP, Direction.DOWN));
+        TestUtils.testDoubleBlockOccludesLightBelow(helper, state, List.of(Direction.DOWN, Direction.UP));
     }
 
     @GameTest(template = "box_top", batch = "occlusion")
@@ -2132,9 +2132,7 @@ public final class OcclusionTests
     @TestedType(type = BlockType.FRAMED_DOUBLE_STAIRS)
     public static void test_DoubleStairs_Bottom(GameTestHelper helper)
     {
-        BlockState state = FBContent.BLOCK_FRAMED_DOUBLE_STAIRS.get()
-                .defaultBlockState()
-                .setValue(FramedProperties.FACING_HOR, Direction.SOUTH);
+        BlockState state = FBContent.BLOCK_FRAMED_DOUBLE_STAIRS.get().defaultBlockState();
         TestUtils.testDoubleBlockOccludesLightBelow(helper, state, List.of(Direction.DOWN, Direction.UP));
     }
 
@@ -2171,10 +2169,8 @@ public final class OcclusionTests
     @TestedType(type = BlockType.FRAMED_VERTICAL_DOUBLE_STAIRS)
     public static void test_VerticalDoubleStairs(GameTestHelper helper)
     {
-        BlockState state = FBContent.BLOCK_FRAMED_VERTICAL_DOUBLE_STAIRS.get()
-                .defaultBlockState()
-                .setValue(FramedProperties.FACING_HOR, Direction.SOUTH);
-        TestUtils.testDoubleBlockOccludesLightBelow(helper, state, List.of(Direction.EAST, Direction.WEST));
+        BlockState state = FBContent.BLOCK_FRAMED_VERTICAL_DOUBLE_STAIRS.get().defaultBlockState();
+        TestUtils.testDoubleBlockOccludesLightBelow(helper, state, List.of(Direction.NORTH, Direction.SOUTH));
     }
 
     @GameTest(template = "box_side", batch = "occlusion")

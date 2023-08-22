@@ -60,7 +60,7 @@ public final class TestUtils
 
     public static void applyCamo(GameTestHelper helper, BlockPos pos, Block camo, List<Direction> camoSides)
     {
-        Map<Direction, Block> camos = new HashMap<>();
+        Map<Direction, Block> camos = new LinkedHashMap<>();
         camoSides.forEach(side -> camos.put(side, camo));
         applyCamo(helper, pos, camos);
     }
@@ -70,17 +70,28 @@ public final class TestUtils
         BlockPos absPos = helper.absolutePos(pos);
         Player player = helper.makeMockPlayer();
 
-        camos.forEach((side, camo) ->
+        int count = 0;
+        for (Map.Entry<Direction, Block> entry : camos.entrySet())
         {
+            Direction side = entry.getKey();
+            Block camo = entry.getValue();
+
             Item item = camo == Blocks.AIR ? Utils.FRAMED_HAMMER.get() : camo.asItem();
             player.setItemInHand(InteractionHand.MAIN_HAND, new ItemStack(item));
 
+            Vec3 hitVec = switch (count)
+            {
+                case 0 -> Vec3.atCenterOf(absPos).add(-.1, -.1, -.1);
+                case 1 -> Vec3.atCenterOf(absPos).add(.1, .1, .1);
+                default -> Vec3.atCenterOf(absPos);
+            };
             InteractionResult result = helper.getBlockState(pos).use(
                     helper.getLevel(),
                     player,
                     InteractionHand.MAIN_HAND,
-                    new BlockHitResult(Vec3.atCenterOf(absPos), side, absPos, true)
+                    new BlockHitResult(hitVec, side, absPos, true)
             );
+            count++;
 
             if (!result.shouldAwardStats())
             {
@@ -88,7 +99,7 @@ public final class TestUtils
                         "Camo application on side '%s' of block '%s' failed", side, helper.getBlockState(pos)
                 ), pos);
             }
-        });
+        }
     }
 
     public static void clickWithItem(GameTestHelper helper, BlockPos pos, ItemLike item)

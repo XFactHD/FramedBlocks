@@ -122,9 +122,7 @@ public final class BeaconTintTests
                 case FRAMED_HALF_PILLAR -> state.setValue(BlockStateProperties.FACING, Direction.DOWN);
                 case FRAMED_PRISM -> state.setValue(PropertyHolder.FACING_AXIS, DirectionAxis.UP_X);
                 case FRAMED_SLOPED_PRISM -> state.setValue(PropertyHolder.FACING_DIR, CompoundDirection.UP_NORTH);
-                case FRAMED_DOUBLE_STAIRS,
-                     FRAMED_VERTICAL_DOUBLE_STAIRS,
-                     FRAMED_EXT_DOUBLE_CORNER_SLOPE_PANEL,
+                case FRAMED_EXT_DOUBLE_CORNER_SLOPE_PANEL,
                      FRAMED_EXT_DOUBLE_CORNER_SLOPE_PANEL_W,
                      FRAMED_EXT_INNER_DOUBLE_CORNER_SLOPE_PANEL,
                      FRAMED_INV_DOUBLE_CORNER_SLOPE_PANEL,
@@ -178,11 +176,10 @@ public final class BeaconTintTests
                  FRAMED_VERTICAL_DOUBLE_HALF_SLOPE -> List.of(Direction.NORTH, Direction.SOUTH);
 
             case FRAMED_DIVIDED_PANEL_VERTICAL,
-                 FRAMED_VERTICAL_DOUBLE_STAIRS,
                  FRAMED_DIVIDED_SLOPE,
                  FRAMED_DIVIDED_STAIRS -> List.of(Direction.EAST, Direction.WEST);
 
-            default -> List.of(Direction.UP, Direction.DOWN);
+            default -> List.of(Direction.DOWN, Direction.UP);
         };
     }
 

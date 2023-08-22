@@ -65,9 +65,7 @@ public final class LightSourceTests
         BlockState state = block.defaultBlockState();
         return switch ((BlockType) type)
         {
-            case FRAMED_DOUBLE_STAIRS,
-                 FRAMED_VERTICAL_DOUBLE_STAIRS,
-                 FRAMED_INV_DOUBLE_CORNER_SLOPE_PANEL,
+            case FRAMED_INV_DOUBLE_CORNER_SLOPE_PANEL,
                  FRAMED_INV_DOUBLE_CORNER_SLOPE_PANEL_W,
                  FRAMED_EXT_INNER_DOUBLE_CORNER_SLOPE_PANEL,
                  FRAMED_STACKED_CORNER_SLOPE_PANEL_W,
@@ -119,11 +117,10 @@ public final class LightSourceTests
                  FRAMED_VERTICAL_DOUBLE_HALF_SLOPE -> List.of(Direction.NORTH, Direction.SOUTH);
 
             case FRAMED_DIVIDED_PANEL_VERTICAL,
-                 FRAMED_VERTICAL_DOUBLE_STAIRS,
                  FRAMED_DIVIDED_SLOPE,
                  FRAMED_DIVIDED_STAIRS -> List.of(Direction.EAST, Direction.WEST);
 
-            default -> List.of(Direction.UP, Direction.DOWN);
+            default -> List.of(Direction.DOWN, Direction.UP);
         };
     }
 
