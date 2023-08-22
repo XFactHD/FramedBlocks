@@ -60,7 +60,7 @@ public final class FlatExtendedSlopePanelCornerConnectionPredicate implements Co
         }
         else if (side == facing.getOpposite())
         {
-            return edge == rotDir.getOpposite() || edge == perpRotDir.getOpposite();
+            return true;
         }
         return false;
     }

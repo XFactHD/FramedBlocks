@@ -53,6 +53,10 @@ public final class FlatSlopeSlabCornerConnectionPredicate implements ConnectionP
         }
         else if (side == dirTwo || side == facing.getClockWise() || side == facing.getOpposite())
         {
+            if (top != topHalf && (edge == facing.getOpposite() || edge == facing.getClockWise()))
+            {
+                return true;
+            }
             return edge == facing || edge == facing.getCounterClockWise();
         }
         return false;

@@ -41,7 +41,7 @@ public final class ExtendedSlopePanelConnectionPredicate implements ConnectionPr
 
         if (side == facing.getOpposite() || side == rotDir)
         {
-            return edge.getAxis() == rotDir.getClockWise(facing.getAxis()).getAxis();
+            return edge != rotDir.getOpposite();
         }
         else if (side.getAxis() == rotDir.getClockWise(facing.getAxis()).getAxis())
         {

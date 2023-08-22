@@ -56,7 +56,7 @@ public final class FlatElevatedSlopeSlabCornerConnectionPredicate implements Con
         }
         else if (side == dirTwo)
         {
-            return edge == facing || edge == facing.getCounterClockWise();
+            return true;
         }
         return false;
     }

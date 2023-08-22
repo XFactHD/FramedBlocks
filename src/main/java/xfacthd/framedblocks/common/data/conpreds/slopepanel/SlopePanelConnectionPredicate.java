@@ -40,10 +40,11 @@ public final class SlopePanelConnectionPredicate implements ConnectionPredicate
         Direction facing = state.getValue(FramedProperties.FACING_HOR);
         HorizontalRotation rot = state.getValue(PropertyHolder.ROTATION);
         Direction rotDir = rot.withFacing(facing);
+        boolean front = state.getValue(PropertyHolder.FRONT);
 
         if (side == rotDir.getOpposite() || side == facing.getOpposite() || side == rotDir)
         {
-            return edge.getAxis() == facing.getClockWise().getAxis();
+            return front ? edge != rotDir.getOpposite() : edge != rotDir;
         }
         else if (side.getAxis() == rotDir.getClockWise(facing.getAxis()).getAxis())
         {

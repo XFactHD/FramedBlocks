@@ -43,7 +43,7 @@ public final class ElevatedSlopeSlabConnectionPredicate implements ConnectionPre
         }
         else if (side == facing.getOpposite() || side == dirTwo)
         {
-            return edge.getAxis() == facing.getClockWise().getAxis();
+            return edge != facing;
         }
         return false;
     }

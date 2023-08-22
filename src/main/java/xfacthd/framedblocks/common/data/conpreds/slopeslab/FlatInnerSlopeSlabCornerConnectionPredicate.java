@@ -60,6 +60,10 @@ public final class FlatInnerSlopeSlabCornerConnectionPredicate implements Connec
         }
         else if (side == dirTwo)
         {
+            if (top == topHalf && (edge == facing || edge == facing.getCounterClockWise()))
+            {
+                return true;
+            }
             return edge == facing.getClockWise() || edge == facing.getOpposite();
         }
         return false;

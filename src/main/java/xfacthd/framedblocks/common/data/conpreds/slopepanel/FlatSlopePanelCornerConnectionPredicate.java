@@ -57,6 +57,10 @@ public final class FlatSlopePanelCornerConnectionPredicate implements Connection
         }
         else if (side == facing.getOpposite() || side == rotDir || side == perpRotDir)
         {
+            if (front && (edge == rotDir || edge == perpRotDir))
+            {
+                return true;
+            }
             return edge == rotDir.getOpposite() || edge == perpRotDir.getOpposite();
         }
         return false;
