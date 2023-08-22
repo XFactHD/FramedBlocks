@@ -21,6 +21,7 @@ import xfacthd.framedblocks.api.shapes.ShapeProvider;
 import xfacthd.framedblocks.api.util.*;
 import xfacthd.framedblocks.common.FBContent;
 import xfacthd.framedblocks.common.block.AbstractFramedDoubleBlock;
+import xfacthd.framedblocks.common.block.slab.FramedSlabBlock;
 import xfacthd.framedblocks.common.blockentity.doubled.FramedFlatDoubleSlopeSlabCornerBlockEntity;
 import xfacthd.framedblocks.common.data.BlockType;
 import xfacthd.framedblocks.common.data.PropertyHolder;
@@ -194,15 +195,12 @@ public class FramedFlatDoubleSlopeSlabCornerBlock extends AbstractFramedDoubleBl
 
     public static ShapeProvider generateShapes(ImmutableList<BlockState> states)
     {
-        VoxelShape shapeBot = box(0, 0, 0, 16,  8, 16);
-        VoxelShape shapeTop = box(0, 8, 0, 16, 16, 16);
-
         ImmutableMap.Builder<BlockState, VoxelShape> builder = ImmutableMap.builder();
 
         for (BlockState state : states)
         {
-            boolean topHalf = state.getValue(PropertyHolder.TOP_HALF);
-            builder.put(state, topHalf ? shapeTop : shapeBot);
+            Boolean topHalf = state.getValue(PropertyHolder.TOP_HALF);
+            builder.put(state, FramedSlabBlock.SHAPES.get(topHalf));
         }
 
         return ShapeProvider.of(builder.build());

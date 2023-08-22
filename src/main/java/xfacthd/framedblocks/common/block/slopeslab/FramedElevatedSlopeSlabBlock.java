@@ -20,7 +20,7 @@ import xfacthd.framedblocks.api.util.*;
 import xfacthd.framedblocks.common.block.FramedBlock;
 import xfacthd.framedblocks.common.data.BlockType;
 
-import java.util.HashMap;
+import java.util.IdentityHashMap;
 
 public class FramedElevatedSlopeSlabBlock extends FramedBlock
 {
@@ -107,7 +107,7 @@ public class FramedElevatedSlopeSlabBlock extends FramedBlock
 
 
 
-    public static final ShapeCache<Boolean> SHAPES = new ShapeCache<>(new HashMap<>(), map ->
+    public static final ShapeCache<Boolean> SHAPES = new ShapeCache<>(new IdentityHashMap<>(), map ->
     {
         map.put(Boolean.FALSE, ShapeUtils.orUnoptimized(
                 FramedSlopeSlabBlock.SHAPES.get(Boolean.FALSE).move(0, .5, 0),
@@ -120,21 +120,27 @@ public class FramedElevatedSlopeSlabBlock extends FramedBlock
         ));
     });
 
+    private record ShapeKey(Direction dir, boolean top) { }
+
+    private static final ShapeCache<ShapeKey> FINAL_SHAPES = new ShapeCache<>(map ->
+            ShapeUtils.makeHorizontalRotationsWithFlag(
+                    SHAPES.get(Boolean.FALSE),
+                    SHAPES.get(Boolean.TRUE),
+                    Direction.NORTH,
+                    map,
+                    ShapeKey::new
+            )
+    );
+
     public static ShapeProvider generateShapes(ImmutableList<BlockState> states)
     {
         ImmutableMap.Builder<BlockState, VoxelShape> builder = ImmutableMap.builder();
-
-        VoxelShape[] shapes = ShapeUtils.makeHorizontalRotationsWithFlag(
-                SHAPES.get(Boolean.FALSE),
-                SHAPES.get(Boolean.TRUE),
-                Direction.NORTH
-        );
 
         for (BlockState state : states)
         {
             Direction dir = state.getValue(FramedProperties.FACING_HOR);
             boolean top = state.getValue(FramedProperties.TOP);
-            builder.put(state, shapes[dir.get2DDataValue() + (top ? 4 : 0)]);
+            builder.put(state, FINAL_SHAPES.get(new ShapeKey(dir, top)));
         }
 
         return ShapeProvider.of(builder.build());

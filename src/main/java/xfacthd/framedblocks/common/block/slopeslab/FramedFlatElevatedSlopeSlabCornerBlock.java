@@ -16,8 +16,7 @@ import net.minecraft.world.phys.Vec3;
 import net.minecraft.world.phys.shapes.*;
 import xfacthd.framedblocks.api.block.FramedProperties;
 import xfacthd.framedblocks.api.block.IFramedBlock;
-import xfacthd.framedblocks.api.shapes.ShapeProvider;
-import xfacthd.framedblocks.api.shapes.ShapeUtils;
+import xfacthd.framedblocks.api.shapes.*;
 import xfacthd.framedblocks.api.util.*;
 import xfacthd.framedblocks.common.block.FramedBlock;
 import xfacthd.framedblocks.common.data.BlockType;
@@ -137,10 +136,10 @@ public class FramedFlatElevatedSlopeSlabCornerBlock extends FramedBlock
 
 
 
-    public static ShapeProvider generateShapes(ImmutableList<BlockState> states)
-    {
-        ImmutableMap.Builder<BlockState, VoxelShape> builder = ImmutableMap.builder();
+    private record ShapeKey(Direction dir, boolean top) { }
 
+    private static final ShapeCache<ShapeKey> FINAL_SHAPES = new ShapeCache<>(map ->
+    {
         VoxelShape shapeSlopeBottom = FramedSlopeSlabBlock.SHAPES.get(Boolean.FALSE).move(0, .5, 0);
         VoxelShape shapeSlopeTop = FramedSlopeSlabBlock.SHAPES.get(Boolean.TRUE);
 
@@ -159,22 +158,25 @@ public class FramedFlatElevatedSlopeSlabCornerBlock extends FramedBlock
                 box(0, 8, 0, 16, 16, 16)
         );
 
-        VoxelShape[] shapes = ShapeUtils.makeHorizontalRotationsWithFlag(shapeBottom, shapeTop, Direction.NORTH);
+        ShapeUtils.makeHorizontalRotationsWithFlag(shapeBottom, shapeTop, Direction.NORTH, map, ShapeKey::new);
+    });
+
+    public static ShapeProvider generateShapes(ImmutableList<BlockState> states)
+    {
+        ImmutableMap.Builder<BlockState, VoxelShape> builder = ImmutableMap.builder();
 
         for (BlockState state : states)
         {
             Direction dir = state.getValue(FramedProperties.FACING_HOR);
             boolean top = state.getValue(FramedProperties.TOP);
-            builder.put(state, shapes[dir.get2DDataValue() + (top ? 4 : 0)]);
+            builder.put(state, FINAL_SHAPES.get(new ShapeKey(dir, top)));
         }
 
         return ShapeProvider.of(builder.build());
     }
 
-    public static ShapeProvider generateInnerShapes(ImmutableList<BlockState> states)
+    private static final ShapeCache<ShapeKey> FINAL_INNER_SHAPES = new ShapeCache<>(map ->
     {
-        ImmutableMap.Builder<BlockState, VoxelShape> builder = ImmutableMap.builder();
-
         VoxelShape shapeSlopeBottom = FramedSlopeSlabBlock.SHAPES.get(Boolean.FALSE).move(0, .5, 0);
         VoxelShape shapeSlopeTop = FramedSlopeSlabBlock.SHAPES.get(Boolean.TRUE);
 
@@ -193,13 +195,18 @@ public class FramedFlatElevatedSlopeSlabCornerBlock extends FramedBlock
                 box(0, 8, 0, 16, 16, 16)
         );
 
-        VoxelShape[] shapes = ShapeUtils.makeHorizontalRotationsWithFlag(shapeBottom, shapeTop, Direction.NORTH);
+        ShapeUtils.makeHorizontalRotationsWithFlag(shapeBottom, shapeTop, Direction.NORTH, map, ShapeKey::new);
+    });
+
+    public static ShapeProvider generateInnerShapes(ImmutableList<BlockState> states)
+    {
+        ImmutableMap.Builder<BlockState, VoxelShape> builder = ImmutableMap.builder();
 
         for (BlockState state : states)
         {
             Direction dir = state.getValue(FramedProperties.FACING_HOR);
             boolean top = state.getValue(FramedProperties.TOP);
-            builder.put(state, shapes[dir.get2DDataValue() + (top ? 4 : 0)]);
+            builder.put(state, FINAL_INNER_SHAPES.get(new ShapeKey(dir, top)));
         }
 
         return ShapeProvider.of(builder.build());

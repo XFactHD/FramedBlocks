@@ -16,7 +16,7 @@ import xfacthd.framedblocks.api.util.Utils;
 import xfacthd.framedblocks.common.block.FramedBlock;
 import xfacthd.framedblocks.common.data.BlockType;
 
-import java.util.HashMap;
+import java.util.IdentityHashMap;
 
 public class FramedVerticalHalfSlopeBlock extends FramedBlock
 {
@@ -81,7 +81,7 @@ public class FramedVerticalHalfSlopeBlock extends FramedBlock
 
 
 
-    public static final ShapeCache<Boolean> SHAPES = new ShapeCache<>(new HashMap<>(), map ->
+    public static final ShapeCache<Boolean> SHAPES = new ShapeCache<>(new IdentityHashMap<>(), map ->
     {
         map.put(false, ShapeUtils.orUnoptimized(
                 box(   0, 0, 0,   .5,  8,   16),

@@ -21,11 +21,14 @@ import net.minecraft.world.level.pathfinder.PathComputationType;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import xfacthd.framedblocks.api.block.FramedProperties;
+import xfacthd.framedblocks.api.shapes.ShapeCache;
 import xfacthd.framedblocks.api.shapes.ShapeProvider;
 import xfacthd.framedblocks.api.util.Utils;
 import xfacthd.framedblocks.common.FBContent;
 import xfacthd.framedblocks.common.block.FramedBlock;
 import xfacthd.framedblocks.common.data.BlockType;
+
+import java.util.IdentityHashMap;
 
 @SuppressWarnings("deprecation")
 public class FramedSlabBlock extends FramedBlock
@@ -102,16 +105,19 @@ public class FramedSlabBlock extends FramedBlock
 
 
 
+    public static final ShapeCache<Boolean> SHAPES = new ShapeCache<>(new IdentityHashMap<>(), map ->
+    {
+        map.put(Boolean.FALSE, box(0.0D, 0.0D, 0.0D, 16.0D, 8.0D, 16.0D));
+        map.put(Boolean.TRUE, box(0.0D, 8.0D, 0.0D, 16.0D, 16.0D, 16.0D));
+    });
+
     public static ShapeProvider generateShapes(ImmutableList<BlockState> states)
     {
-        VoxelShape bottomShape = box(0.0D, 0.0D, 0.0D, 16.0D, 8.0D, 16.0D);
-        VoxelShape topShape = box(0.0D, 8.0D, 0.0D, 16.0D, 16.0D, 16.0D);
-
         ImmutableMap.Builder<BlockState, VoxelShape> builder = ImmutableMap.builder();
 
         for (BlockState state : states)
         {
-            builder.put(state, state.getValue(FramedProperties.TOP) ? topShape : bottomShape);
+            builder.put(state, SHAPES.get(state.getValue(FramedProperties.TOP)));
         }
 
         return ShapeProvider.of(builder.build());

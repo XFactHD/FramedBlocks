@@ -22,6 +22,7 @@ import xfacthd.framedblocks.api.shapes.ShapeUtils;
 import xfacthd.framedblocks.api.util.Utils;
 import xfacthd.framedblocks.common.FBContent;
 import xfacthd.framedblocks.common.block.AbstractFramedDoubleBlock;
+import xfacthd.framedblocks.common.block.slab.FramedSlabEdgeBlock;
 import xfacthd.framedblocks.common.blockentity.doubled.FramedLargeDoubleCornerSlopePanelWallBlockEntity;
 import xfacthd.framedblocks.common.blockentity.doubled.FramedSmallDoubleCornerSlopePanelWallBlockEntity;
 import xfacthd.framedblocks.common.data.BlockType;
@@ -251,23 +252,18 @@ public class FramedDoubleCornerSlopePanelWallBlock extends AbstractFramedDoubleB
     {
         ImmutableMap.Builder<BlockState, VoxelShape> builder = ImmutableMap.builder();
 
-        VoxelShape[] shapes = new VoxelShape[4 * 4];
-        for (HorizontalRotation rot : HorizontalRotation.values())
-        {
-            VoxelShape preShape = rot.getCornerShape();
-            for (Direction dir : Direction.Plane.HORIZONTAL)
-            {
-                int idx = dir.get2DDataValue() | (rot.ordinal() << 2);
-                shapes[idx] = ShapeUtils.rotateShape(Direction.NORTH, dir, preShape);
-            }
-        }
-
         for (BlockState state : states)
         {
             Direction dir = state.getValue(FramedProperties.FACING_HOR);
             HorizontalRotation rot = state.getValue(PropertyHolder.ROTATION);
-            int idx = dir.get2DDataValue() | (rot.ordinal() << 2);
-            builder.put(state, shapes[idx]);
+            FramedSlabEdgeBlock.ShapeKey key = switch (rot)
+            {
+                case UP -> new FramedSlabEdgeBlock.ShapeKey(dir.getCounterClockWise(), true);
+                case DOWN -> new FramedSlabEdgeBlock.ShapeKey(dir.getClockWise(), false);
+                case RIGHT -> new FramedSlabEdgeBlock.ShapeKey(dir.getClockWise(), true);
+                case LEFT -> new FramedSlabEdgeBlock.ShapeKey(dir.getCounterClockWise(), false);
+            };
+            builder.put(state, FramedSlabEdgeBlock.SHAPES.get(key));
         }
 
         return ShapeProvider.of(builder.build());

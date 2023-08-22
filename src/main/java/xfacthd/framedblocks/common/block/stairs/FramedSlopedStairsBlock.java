@@ -15,6 +15,7 @@ import xfacthd.framedblocks.api.shapes.ShapeProvider;
 import xfacthd.framedblocks.api.shapes.ShapeUtils;
 import xfacthd.framedblocks.api.util.*;
 import xfacthd.framedblocks.common.block.FramedBlock;
+import xfacthd.framedblocks.common.block.slab.FramedSlabBlock;
 import xfacthd.framedblocks.common.block.slope.FramedVerticalHalfSlopeBlock;
 import xfacthd.framedblocks.common.data.BlockType;
 import xfacthd.framedblocks.common.data.PropertyHolder;
@@ -93,12 +94,12 @@ public class FramedSlopedStairsBlock extends FramedBlock
 
         VoxelShape shapeBottom = ShapeUtils.orUnoptimized(
                 FramedVerticalHalfSlopeBlock.SHAPES.get(Boolean.TRUE),
-                box(0, 0, 0, 16, 8, 16)
+                FramedSlabBlock.SHAPES.get(Boolean.FALSE)
         );
 
         VoxelShape shapeTop = ShapeUtils.orUnoptimized(
                 FramedVerticalHalfSlopeBlock.SHAPES.get(Boolean.FALSE),
-                box(0, 8, 0, 16, 16, 16)
+                FramedSlabBlock.SHAPES.get(Boolean.TRUE)
         );
 
         VoxelShape[] shapes = ShapeUtils.makeHorizontalRotationsWithFlag(shapeBottom, shapeTop, Direction.NORTH);

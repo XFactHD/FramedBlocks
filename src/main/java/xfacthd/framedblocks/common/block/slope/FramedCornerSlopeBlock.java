@@ -23,6 +23,9 @@ import xfacthd.framedblocks.common.data.*;
 import xfacthd.framedblocks.common.data.property.CornerType;
 import xfacthd.framedblocks.common.data.property.SlopeType;
 
+import java.util.HashMap;
+import java.util.Map;
+
 public class FramedCornerSlopeBlock extends FramedBlock
 {
     public FramedCornerSlopeBlock(BlockType type)
@@ -115,6 +118,8 @@ public class FramedCornerSlopeBlock extends FramedBlock
 
 
 
+    private record ShapeKey(Direction dir, CornerType type) { }
+
     public static ShapeProvider generateCornerShapes(ImmutableList<BlockState> states)
     {
         VoxelShape shapeSlopeBottom = FramedSlopeBlock.SHAPES.get(SlopeType.BOTTOM);
@@ -145,29 +150,28 @@ public class FramedCornerSlopeBlock extends FramedBlock
                 ShapeUtils.rotateShapeUnoptimized(Direction.NORTH, Direction.EAST, shapeSlopeHorizontal)
         );
 
+        Map<ShapeKey, VoxelShape> shapes = new HashMap<>();
+        for (CornerType type : CornerType.values())
+        {
+            VoxelShape shape = switch (type)
+            {
+                case BOTTOM -> shapeBottom;
+                case TOP -> shapeTop;
+                case HORIZONTAL_BOTTOM_LEFT -> shapeBottomLeft;
+                case HORIZONTAL_BOTTOM_RIGHT -> shapeBottomRight;
+                case HORIZONTAL_TOP_LEFT -> shapeTopLeft;
+                case HORIZONTAL_TOP_RIGHT -> shapeTopRight;
+            };
+            ShapeUtils.makeHorizontalRotations(shape, Direction.NORTH, shapes, type, ShapeKey::new);
+        }
+
         ImmutableMap.Builder<BlockState, VoxelShape> builder = ImmutableMap.builder();
 
         for (BlockState state : states)
         {
             CornerType type = state.getValue(PropertyHolder.CORNER_TYPE);
             Direction dir = state.getValue(FramedProperties.FACING_HOR);
-
-            if (type.isHorizontal())
-            {
-                VoxelShape shape = switch (type)
-                {
-                    case HORIZONTAL_BOTTOM_LEFT -> shapeBottomLeft;
-                    case HORIZONTAL_BOTTOM_RIGHT -> shapeBottomRight;
-                    case HORIZONTAL_TOP_LEFT -> shapeTopLeft;
-                    case HORIZONTAL_TOP_RIGHT -> shapeTopRight;
-                    default -> Shapes.block();
-                };
-                builder.put(state, ShapeUtils.rotateShape(Direction.NORTH, dir, shape));
-            }
-            else
-            {
-                builder.put(state, ShapeUtils.rotateShape(Direction.NORTH, dir, type.isTop() ? shapeTop : shapeBottom));
-            }
+            builder.put(state, shapes.get(new ShapeKey(dir, type)));
         }
 
         return ShapeProvider.of(builder.build());
@@ -205,37 +209,26 @@ public class FramedCornerSlopeBlock extends FramedBlock
                 ShapeUtils.rotateShapeUnoptimized(Direction.NORTH, Direction.EAST, shapeSlopeHorizontal)
         );
 
-        VoxelShape[] shapes = new VoxelShape[4 * 6];
-        for (Direction dir : Direction.Plane.HORIZONTAL)
+        Map<ShapeKey, VoxelShape> shapes = new HashMap<>();
+        for (CornerType type : CornerType.values())
         {
-            for (CornerType type : CornerType.values())
+            VoxelShape shape = switch (type)
             {
-                int idx = dir.get2DDataValue() | (type.ordinal() << 2);
-                if (type.isHorizontal())
-                {
-                    VoxelShape shape = switch (type)
-                    {
-                        case HORIZONTAL_BOTTOM_LEFT -> shapeBottomLeft;
-                        case HORIZONTAL_BOTTOM_RIGHT -> shapeBottomRight;
-                        case HORIZONTAL_TOP_LEFT -> shapeTopLeft;
-                        case HORIZONTAL_TOP_RIGHT -> shapeTopRight;
-                        default -> Shapes.block();
-                    };
-                    shapes[idx] = ShapeUtils.rotateShape(Direction.NORTH, dir, shape);
-                }
-                else
-                {
-                    shapes[idx] = ShapeUtils.rotateShape(Direction.NORTH, dir, type.isTop() ? shapeTop : shapeBottom);
-                }
-            }
+                case BOTTOM -> shapeBottom;
+                case TOP -> shapeTop;
+                case HORIZONTAL_BOTTOM_LEFT -> shapeBottomLeft;
+                case HORIZONTAL_BOTTOM_RIGHT -> shapeBottomRight;
+                case HORIZONTAL_TOP_LEFT -> shapeTopLeft;
+                case HORIZONTAL_TOP_RIGHT -> shapeTopRight;
+            };
+            ShapeUtils.makeHorizontalRotations(shape, Direction.NORTH, shapes, type, ShapeKey::new);
         }
 
         for (BlockState state : states)
         {
             CornerType type = state.getValue(PropertyHolder.CORNER_TYPE);
             Direction dir = state.getValue(FramedProperties.FACING_HOR);
-            int idx = dir.get2DDataValue() | (type.ordinal() << 2);
-            builder.put(state, shapes[idx]);
+            builder.put(state, shapes.get(new ShapeKey(dir, type)));
         }
 
         return ShapeProvider.of(builder.build());

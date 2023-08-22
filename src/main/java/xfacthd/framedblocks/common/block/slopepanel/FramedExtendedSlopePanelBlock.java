@@ -137,28 +137,25 @@ public class FramedExtendedSlopePanelBlock extends FramedBlock
             }
     );
 
+    private record ShapeKey(Direction dir, HorizontalRotation rot) { }
+
+    private static final ShapeCache<ShapeKey> FINAL_SHAPES = new ShapeCache<>(map ->
+    {
+        for (HorizontalRotation rot : HorizontalRotation.values())
+        {
+            ShapeUtils.makeHorizontalRotations(SHAPES.get(rot), Direction.NORTH, map, rot, ShapeKey::new);
+        }
+    });
+
     public static ShapeProvider generateShapes(ImmutableList<BlockState> states)
     {
         ImmutableMap.Builder<BlockState, VoxelShape> builder = ImmutableMap.builder();
-
-        VoxelShape[] shapes = new VoxelShape[4 * 4];
-        for (HorizontalRotation rot : HorizontalRotation.values())
-        {
-            VoxelShape preShape = SHAPES.get(rot);
-
-            for (Direction dir : Direction.Plane.HORIZONTAL)
-            {
-                int idx = dir.get2DDataValue() | (rot.ordinal() << 2);
-                shapes[idx] = ShapeUtils.rotateShape(Direction.NORTH, dir, preShape);
-            }
-        }
 
         for (BlockState state : states)
         {
             Direction dir = state.getValue(FramedProperties.FACING_HOR);
             HorizontalRotation rot = state.getValue(PropertyHolder.ROTATION);
-            int idx = dir.get2DDataValue() | (rot.ordinal() << 2);
-            builder.put(state, shapes[idx]);
+            builder.put(state, FINAL_SHAPES.get(new ShapeKey(dir, rot)));
         }
 
         return ShapeProvider.of(builder.build());

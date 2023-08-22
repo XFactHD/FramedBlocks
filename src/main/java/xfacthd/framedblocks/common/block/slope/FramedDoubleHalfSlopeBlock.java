@@ -21,10 +21,10 @@ import org.jetbrains.annotations.Nullable;
 import xfacthd.framedblocks.api.block.IFramedBlock;
 import xfacthd.framedblocks.api.block.FramedProperties;
 import xfacthd.framedblocks.api.shapes.ShapeProvider;
-import xfacthd.framedblocks.api.shapes.ShapeUtils;
 import xfacthd.framedblocks.api.util.Utils;
 import xfacthd.framedblocks.common.FBContent;
 import xfacthd.framedblocks.common.block.AbstractFramedDoubleBlock;
+import xfacthd.framedblocks.common.block.slab.FramedPanelBlock;
 import xfacthd.framedblocks.common.blockentity.doubled.FramedDoubleHalfSlopeBlockEntity;
 import xfacthd.framedblocks.common.data.BlockType;
 import xfacthd.framedblocks.common.data.PropertyHolder;
@@ -203,9 +203,6 @@ public class FramedDoubleHalfSlopeBlock extends AbstractFramedDoubleBlock
     {
         ImmutableMap.Builder<BlockState, VoxelShape> builder = ImmutableMap.builder();
 
-        VoxelShape shape = box(0, 0, 0, 8, 16, 16);
-        VoxelShape[] shapes = ShapeUtils.makeHorizontalRotations(shape, Direction.NORTH);
-
         for (BlockState state : states)
         {
             Direction dir = state.getValue(FramedProperties.FACING_HOR);
@@ -213,7 +210,7 @@ public class FramedDoubleHalfSlopeBlock extends AbstractFramedDoubleBlock
             {
                 dir = dir.getOpposite();
             }
-            builder.put(state, shapes[dir.get2DDataValue()]);
+            builder.put(state, FramedPanelBlock.SHAPES.get(dir.getCounterClockWise()));
         }
 
         return ShapeProvider.of(builder.build());

@@ -4,6 +4,7 @@ import net.minecraft.world.phys.shapes.VoxelShape;
 import net.minecraftforge.fml.loading.FMLEnvironment;
 import org.jetbrains.annotations.ApiStatus;
 
+import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Consumer;
 
@@ -15,6 +16,11 @@ public final class ShapeCache<K>
 {
     private final Map<K, VoxelShape> cache;
     private final Consumer<Map<K, VoxelShape>> generator;
+
+    public ShapeCache(Consumer<Map<K, VoxelShape>> generator)
+    {
+        this(new HashMap<>(), generator);
+    }
 
     public ShapeCache(Map<K, VoxelShape> cache, Consumer<Map<K, VoxelShape>> generator)
     {

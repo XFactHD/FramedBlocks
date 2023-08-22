@@ -170,26 +170,25 @@ public class FramedSlopeBlock extends FramedBlock
         ));
     });
 
+    private record ShapeKey(Direction dir, SlopeType type) { }
+
+    private static final ShapeCache<ShapeKey> FINAL_SHAPES = new ShapeCache<>(map ->
+    {
+        for (SlopeType type : SlopeType.values())
+        {
+            ShapeUtils.makeHorizontalRotations(SHAPES.get(type), Direction.NORTH, map, type, ShapeKey::new);
+        }
+    });
+
     public static ShapeProvider generateShapes(ImmutableList<BlockState> states)
     {
         ImmutableMap.Builder<BlockState, VoxelShape> builder = ImmutableMap.builder();
-
-        VoxelShape[] shapes = new VoxelShape[4 * 3];
-        for (SlopeType type : SlopeType.values())
-        {
-            for (Direction dir : Direction.Plane.HORIZONTAL)
-            {
-                int idx = dir.get2DDataValue() | (type.ordinal() << 2);
-                shapes[idx] = ShapeUtils.rotateShape(Direction.NORTH, dir, SHAPES.get(type));
-            }
-        }
 
         for (BlockState state : states)
         {
             SlopeType type = FramedUtils.getSlopeType(state);
             Direction dir = FramedUtils.getSlopeBlockFacing(state);
-            int idx = dir.get2DDataValue() | (type.ordinal() << 2);
-            builder.put(state, shapes[idx]);
+            builder.put(state, FINAL_SHAPES.get(new ShapeKey(dir, type)));
         }
 
         return ShapeProvider.of(builder.build());

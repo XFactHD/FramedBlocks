@@ -20,7 +20,7 @@ import xfacthd.framedblocks.common.block.FramedBlock;
 import xfacthd.framedblocks.common.data.BlockType;
 import xfacthd.framedblocks.common.data.PropertyHolder;
 
-import java.util.HashMap;
+import java.util.IdentityHashMap;
 
 public class FramedSlopeSlabBlock extends FramedBlock
 {
@@ -93,7 +93,7 @@ public class FramedSlopeSlabBlock extends FramedBlock
 
 
 
-    public static final ShapeCache<Boolean> SHAPES = new ShapeCache<>(new HashMap<>(), map ->
+    public static final ShapeCache<Boolean> SHAPES = new ShapeCache<>(new IdentityHashMap<>(), map ->
     {
         map.put(false, ShapeUtils.orUnoptimized(
                 box(0, 0, 0, 16,   .5, 16),

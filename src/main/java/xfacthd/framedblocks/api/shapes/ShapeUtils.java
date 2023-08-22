@@ -6,6 +6,7 @@ import net.minecraft.world.phys.shapes.*;
 import xfacthd.framedblocks.api.util.Utils;
 
 import java.util.List;
+import java.util.Map;
 
 public final class ShapeUtils
 {
@@ -90,6 +91,24 @@ public final class ShapeUtils
         return shapes;
     }
 
+    public static void makeHorizontalRotations(VoxelShape shape, Direction srcDir, Map<Direction, VoxelShape> targetMap)
+    {
+        for (Direction dir : HORIZONTAL_DIRECTIONS)
+        {
+            targetMap.put(dir, rotateShape(srcDir, dir, shape));
+        }
+    }
+
+    public static <V, T> void makeHorizontalRotations(
+            VoxelShape shape, Direction srcDir, Map<T, VoxelShape> targetMap, V staticKeyParam, ArbKeyGenerator<V, T> keyGen
+    )
+    {
+        for (Direction dir : HORIZONTAL_DIRECTIONS)
+        {
+            targetMap.put(keyGen.makeKey(dir, staticKeyParam), rotateShape(srcDir, dir, shape));
+        }
+    }
+
     public static VoxelShape[] makeHorizontalRotationsWithFlag(VoxelShape shapeFalse, VoxelShape shapeTrue, Direction srcDir)
     {
         VoxelShape[] shapes = new VoxelShape[8];
@@ -99,6 +118,31 @@ public final class ShapeUtils
             shapes[dir.get2DDataValue() + 4] = rotateShape(srcDir, dir, shapeTrue);
         }
         return shapes;
+    }
+
+    public static <T> void makeHorizontalRotationsWithFlag(
+            VoxelShape shapeFalse,
+            VoxelShape shapeTrue,
+            Direction srcDir,
+            Map<T, VoxelShape> targetMap,
+            FlagKeyGenerator<T> keyGen
+    )
+    {
+        for (Direction dir : HORIZONTAL_DIRECTIONS)
+        {
+            targetMap.put(keyGen.makeKey(dir, false), rotateShape(srcDir, dir, shapeFalse));
+            targetMap.put(keyGen.makeKey(dir, true), rotateShape(srcDir, dir, shapeTrue));
+        }
+    }
+
+    public interface ArbKeyGenerator<V, T>
+    {
+        T makeKey(Direction dir, V staticParam);
+    }
+
+    public interface FlagKeyGenerator<T>
+    {
+        T makeKey(Direction dir, boolean flag);
     }
 
 

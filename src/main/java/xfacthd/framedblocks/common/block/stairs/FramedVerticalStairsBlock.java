@@ -13,8 +13,7 @@ import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.block.state.properties.Half;
 import net.minecraft.world.phys.shapes.*;
 import xfacthd.framedblocks.api.block.FramedProperties;
-import xfacthd.framedblocks.api.shapes.ShapeProvider;
-import xfacthd.framedblocks.api.shapes.ShapeUtils;
+import xfacthd.framedblocks.api.shapes.*;
 import xfacthd.framedblocks.api.util.*;
 import xfacthd.framedblocks.common.block.FramedBlock;
 import xfacthd.framedblocks.common.data.*;
@@ -149,10 +148,10 @@ public class FramedVerticalStairsBlock extends FramedBlock
 
 
 
-    public static ShapeProvider generateShapes(ImmutableList<BlockState> states)
-    {
-        ImmutableMap.Builder<BlockState, VoxelShape> builder = ImmutableMap.builder();
+    public record ShapeKey(Direction dir, StairsType type) { }
 
+    public static final ShapeCache<ShapeKey> SHAPES = new ShapeCache<>(map ->
+    {
         VoxelShape vertShape = ShapeUtils.orUnoptimized(
                 Block.box(0, 0, 8, 16, 16, 16),
                 Block.box(8, 0, 0, 16, 16, 8)
@@ -170,25 +169,27 @@ public class FramedVerticalStairsBlock extends FramedBlock
                 Block.box(0, 8, 8, 8, 16, 16)
         );
 
-        VoxelShape[] shapes = new VoxelShape[4 * 3];
         for (Direction dir : Direction.Plane.HORIZONTAL)
         {
-            int horId = dir.get2DDataValue();
-            shapes[horId] = ShapeUtils.rotateShape(Direction.NORTH, dir, vertShape);
-            shapes[horId | (StairsType.TOP_CORNER.ordinal() << 2)] = ShapeUtils.rotateShape(
-                    Direction.NORTH, dir, topCornerShape
-            );
-            shapes[horId | (StairsType.BOTTOM_CORNER.ordinal() << 2)] = ShapeUtils.rotateShape(
-                    Direction.NORTH, dir, bottomCornerShape
-            );
+            map.put(new ShapeKey(dir, StairsType.VERTICAL), ShapeUtils.rotateShape(Direction.SOUTH, dir, vertShape));
+            map.put(new ShapeKey(dir, StairsType.TOP_CORNER), ShapeUtils.rotateShape(
+                    Direction.SOUTH, dir, topCornerShape
+            ));
+            map.put(new ShapeKey(dir, StairsType.BOTTOM_CORNER), ShapeUtils.rotateShape(
+                    Direction.SOUTH, dir, bottomCornerShape
+            ));
         }
+    });
+
+    public static ShapeProvider generateShapes(ImmutableList<BlockState> states)
+    {
+        ImmutableMap.Builder<BlockState, VoxelShape> builder = ImmutableMap.builder();
 
         for (BlockState state : states)
         {
-            Direction dir = state.getValue(FramedProperties.FACING_HOR).getOpposite();
+            Direction dir = state.getValue(FramedProperties.FACING_HOR);
             StairsType type = state.getValue(PropertyHolder.STAIRS_TYPE);
-            int idx = dir.get2DDataValue() | (type.ordinal() << 2);
-            builder.put(state, shapes[idx]);
+            builder.put(state, SHAPES.get(new ShapeKey(dir, type)));
         }
 
         return ShapeProvider.of(builder.build());

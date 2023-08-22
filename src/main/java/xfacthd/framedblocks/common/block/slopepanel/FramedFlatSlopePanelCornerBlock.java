@@ -2,7 +2,6 @@ package xfacthd.framedblocks.common.block.slopepanel;
 
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
-import net.minecraft.Util;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.world.entity.player.Player;
@@ -201,28 +200,32 @@ public class FramedFlatSlopePanelCornerBlock extends FramedBlock
     {
         ImmutableMap.Builder<BlockState, VoxelShape> builder = ImmutableMap.builder();
 
-        VoxelShape[] shapes = Util.make(new VoxelShape[4], arr ->
+        int maskFront = 0b100;
+        VoxelShape[] shapes = new VoxelShape[4 * 4 * 2];
+        for (HorizontalRotation rot : HorizontalRotation.values())
         {
-            for (HorizontalRotation rot : HorizontalRotation.values())
+            VoxelShape preShape = ShapeUtils.andUnoptimized(
+                    FramedSlopePanelBlock.SHAPES.get(rot),
+                    FramedSlopePanelBlock.SHAPES.get(rot.rotate(Rotation.COUNTERCLOCKWISE_90))
+            );
+            VoxelShape preShapeFront = preShape.move(0, 0, .5);
+
+            for (Direction dir : Direction.Plane.HORIZONTAL)
             {
-                arr[rot.ordinal()] = ShapeUtils.andUnoptimized(
-                        FramedSlopePanelBlock.SHAPES.get(rot),
-                        FramedSlopePanelBlock.SHAPES.get(rot.rotate(Rotation.COUNTERCLOCKWISE_90))
-                );
+                int idx = dir.get2DDataValue() | (rot.ordinal() << 3);
+                shapes[idx] = ShapeUtils.rotateShape(Direction.NORTH, dir, preShape);
+                idx = dir.get2DDataValue() | maskFront | (rot.ordinal() << 3);
+                shapes[idx] = ShapeUtils.rotateShape(Direction.NORTH, dir, preShapeFront);
             }
-        });
+        }
 
         for (BlockState state : states)
         {
+            Direction dir = state.getValue(FramedProperties.FACING_HOR);
             HorizontalRotation rot = state.getValue(PropertyHolder.ROTATION);
-            VoxelShape shape = shapes[rot.ordinal()];
-            if (state.getValue(PropertyHolder.FRONT))
-            {
-                shape = shape.move(0, 0, .5);
-            }
-
-            Direction facing = state.getValue(FramedProperties.FACING_HOR);
-            builder.put(state, ShapeUtils.rotateShape(Direction.NORTH, facing, shape));
+            int front = state.getValue(PropertyHolder.FRONT) ? maskFront : 0;
+            int idx = dir.get2DDataValue() | front | (rot.ordinal() << 3);
+            builder.put(state, shapes[idx]);
         }
 
         return ShapeProvider.of(builder.build());

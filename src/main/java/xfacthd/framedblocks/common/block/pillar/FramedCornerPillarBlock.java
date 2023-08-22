@@ -11,11 +11,12 @@ import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.phys.Vec3;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import xfacthd.framedblocks.api.block.FramedProperties;
-import xfacthd.framedblocks.api.shapes.ShapeProvider;
-import xfacthd.framedblocks.api.shapes.ShapeUtils;
+import xfacthd.framedblocks.api.shapes.*;
 import xfacthd.framedblocks.common.block.FramedBlock;
 import xfacthd.framedblocks.common.data.BlockType;
 import xfacthd.framedblocks.api.util.Utils;
+
+import java.util.EnumMap;
 
 public class FramedCornerPillarBlock extends FramedBlock
 {
@@ -77,17 +78,20 @@ public class FramedCornerPillarBlock extends FramedBlock
 
 
 
+    public static final ShapeCache<Direction> SHAPES = new ShapeCache<>(new EnumMap<>(Direction.class), map ->
+    {
+        VoxelShape shape = box(0, 0, 0, 8, 16, 8);
+        ShapeUtils.makeHorizontalRotations(shape, Direction.NORTH, map);
+    });
+
     public static ShapeProvider generateShapes(ImmutableList<BlockState> states)
     {
         ImmutableMap.Builder<BlockState, VoxelShape> builder = ImmutableMap.builder();
 
-        VoxelShape shape = box(0, 0, 0, 8, 16, 8);
-        VoxelShape[] shapes = ShapeUtils.makeHorizontalRotations(shape, Direction.NORTH);
-
         for (BlockState state : states)
         {
             Direction dir = state.getValue(FramedProperties.FACING_HOR);
-            builder.put(state, shapes[dir.get2DDataValue()]);
+            builder.put(state, SHAPES.get(dir));
         }
 
         return ShapeProvider.of(builder.build());

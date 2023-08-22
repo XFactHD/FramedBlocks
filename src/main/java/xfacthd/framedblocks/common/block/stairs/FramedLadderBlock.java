@@ -1,6 +1,5 @@
 package xfacthd.framedblocks.common.block.stairs;
 
-import net.minecraft.Util;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.world.entity.LivingEntity;
@@ -14,26 +13,33 @@ import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import xfacthd.framedblocks.api.block.FramedProperties;
+import xfacthd.framedblocks.api.shapes.ShapeCache;
 import xfacthd.framedblocks.api.shapes.ShapeUtils;
 import xfacthd.framedblocks.api.util.Utils;
 import xfacthd.framedblocks.common.block.FramedBlock;
 import xfacthd.framedblocks.common.data.BlockType;
+
+import java.util.EnumMap;
 
 public class FramedLadderBlock extends FramedBlock
 {
     private static final VoxelShape SHAPE_NORTH = box( 0, 0,  0, 16, 16,  2);
     private static final VoxelShape COLLISION_SHAPE_NORTH = box( 0, 0,  0, 16, 16,  3);
 
-    private static final VoxelShape[] SHAPES = Util.make(new VoxelShape[4], arr ->
-            Direction.Plane.HORIZONTAL.stream().forEach(dir ->
-                    arr[dir.get2DDataValue()] = ShapeUtils.rotateShape(Direction.NORTH, dir, SHAPE_NORTH)
-            )
-    );
-    private static final VoxelShape[] COLLISION_SHAPES = Util.make(new VoxelShape[4], arr ->
-            Direction.Plane.HORIZONTAL.stream().forEach(dir ->
-                    arr[dir.get2DDataValue()] = ShapeUtils.rotateShape(Direction.NORTH, dir, COLLISION_SHAPE_NORTH)
-            )
-    );
+    private static final ShapeCache<Direction> SHAPES = new ShapeCache<>(new EnumMap<>(Direction.class), map ->
+    {
+        for (Direction dir : Direction.Plane.HORIZONTAL)
+        {
+            map.put(dir, ShapeUtils.rotateShape(Direction.NORTH, dir, SHAPE_NORTH));
+        }
+    });
+    private static final ShapeCache<Direction> COLLISION_SHAPES = new ShapeCache<>(new EnumMap<>(Direction.class), map ->
+    {
+        for (Direction dir : Direction.Plane.HORIZONTAL)
+        {
+            map.put(dir, ShapeUtils.rotateShape(Direction.NORTH, dir, COLLISION_SHAPE_NORTH));
+        }
+    });
 
     public FramedLadderBlock()
     {
@@ -57,14 +63,14 @@ public class FramedLadderBlock extends FramedBlock
     @Override
     public VoxelShape getShape(BlockState state, BlockGetter level, BlockPos pos, CollisionContext context)
     {
-        return SHAPES[state.getValue(FramedProperties.FACING_HOR).get2DDataValue()];
+        return SHAPES.get(state.getValue(FramedProperties.FACING_HOR));
     }
 
     @Override
     @SuppressWarnings("deprecation")
     public VoxelShape getCollisionShape(BlockState state, BlockGetter level, BlockPos pos, CollisionContext context)
     {
-        return COLLISION_SHAPES[state.getValue(FramedProperties.FACING_HOR).get2DDataValue()];
+        return COLLISION_SHAPES.get(state.getValue(FramedProperties.FACING_HOR));
     }
 
     @Override
