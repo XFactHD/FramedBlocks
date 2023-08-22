@@ -21,6 +21,7 @@ import xfacthd.framedblocks.api.block.*;
 import xfacthd.framedblocks.api.shapes.*;
 import xfacthd.framedblocks.api.util.*;
 import xfacthd.framedblocks.common.block.FramedBlock;
+import xfacthd.framedblocks.common.block.ISlopeBlock;
 import xfacthd.framedblocks.common.data.*;
 import xfacthd.framedblocks.common.data.property.SlopeType;
 import xfacthd.framedblocks.common.util.FramedUtils;
@@ -28,7 +29,7 @@ import xfacthd.framedblocks.common.util.FramedUtils;
 import java.util.EnumMap;
 
 @SuppressWarnings("deprecation")
-public class FramedSlopeBlock extends FramedBlock
+public class FramedSlopeBlock extends FramedBlock implements ISlopeBlock
 {
     public FramedSlopeBlock()
     {
@@ -138,6 +139,18 @@ public class FramedSlopeBlock extends FramedBlock
         }
     }
 
+    @Override
+    public Direction getFacing(BlockState state)
+    {
+        return state.getValue(FramedProperties.FACING_HOR);
+    }
+
+    @Override
+    public SlopeType getSlopeType(BlockState state)
+    {
+        return state.getValue(PropertyHolder.SLOPE_TYPE);
+    }
+
 
 
     public static final ShapeCache<SlopeType> SHAPES = new ShapeCache<>(new EnumMap<>(SlopeType.class), map ->
@@ -186,8 +199,9 @@ public class FramedSlopeBlock extends FramedBlock
 
         for (BlockState state : states)
         {
-            SlopeType type = FramedUtils.getSlopeType(state);
-            Direction dir = FramedUtils.getSlopeBlockFacing(state);
+            ISlopeBlock block = (ISlopeBlock) state.getBlock();
+            SlopeType type = block.getSlopeType(state);
+            Direction dir = block.getFacing(state);
             builder.put(state, FINAL_SHAPES.get(new ShapeKey(dir, type)));
         }
 

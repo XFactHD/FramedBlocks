@@ -2,17 +2,22 @@ package xfacthd.framedblocks.client.data.outline;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
+import net.minecraft.core.Direction;
 import net.minecraft.world.level.block.state.BlockState;
 import xfacthd.framedblocks.api.render.OutlineRenderer;
+import xfacthd.framedblocks.common.block.ISlopeBlock;
 import xfacthd.framedblocks.common.data.property.SlopeType;
-import xfacthd.framedblocks.common.util.FramedUtils;
 
-public class SlopeOutlineRenderer implements OutlineRenderer
+public final class SlopeOutlineRenderer implements OutlineRenderer
 {
+    public static final SlopeOutlineRenderer INSTANCE = new SlopeOutlineRenderer();
+
+    private SlopeOutlineRenderer() { }
+
     @Override
     public void draw(BlockState state, PoseStack poseStack, VertexConsumer builder)
     {
-        SlopeType type = FramedUtils.getSlopeType(state);
+        SlopeType type = ((ISlopeBlock) state.getBlock()).getSlopeType(state);
 
         if (type != SlopeType.HORIZONTAL)
         {
@@ -53,11 +58,17 @@ public class SlopeOutlineRenderer implements OutlineRenderer
     }
 
     @Override
+    public Direction getRotationDir(BlockState state)
+    {
+        return ((ISlopeBlock) state.getBlock()).getFacing(state);
+    }
+
+    @Override
     public void rotateMatrix(PoseStack poseStack, BlockState state)
     {
         OutlineRenderer.super.rotateMatrix(poseStack, state);
 
-        if (FramedUtils.getSlopeType(state) == SlopeType.TOP)
+        if (((ISlopeBlock) state.getBlock()).getSlopeType(state) == SlopeType.TOP)
         {
             OutlineRenderer.mirrorHorizontally(poseStack, false);
         }

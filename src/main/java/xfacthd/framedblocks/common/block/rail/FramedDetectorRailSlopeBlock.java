@@ -28,6 +28,7 @@ import xfacthd.framedblocks.api.shapes.ShapeProvider;
 import xfacthd.framedblocks.api.type.IBlockType;
 import xfacthd.framedblocks.api.util.Utils;
 import xfacthd.framedblocks.common.FBContent;
+import xfacthd.framedblocks.common.block.ISlopeBlock;
 import xfacthd.framedblocks.common.blockentity.doubled.FramedFancyRailSlopeBlockEntity;
 import xfacthd.framedblocks.common.data.BlockType;
 import xfacthd.framedblocks.common.data.PropertyHolder;
@@ -38,7 +39,7 @@ import java.util.function.BiFunction;
 import java.util.function.Consumer;
 
 @SuppressWarnings("deprecation")
-public class FramedDetectorRailSlopeBlock extends DetectorRailBlock implements IFramedBlock
+public class FramedDetectorRailSlopeBlock extends DetectorRailBlock implements IFramedBlock, ISlopeBlock.IRailSlopeBlock
 {
     private final BlockType type;
     private final ShapeProvider shapes;

@@ -8,8 +8,8 @@ import net.minecraft.world.phys.BlockHitResult;
 import org.jetbrains.annotations.Nullable;
 import xfacthd.framedblocks.api.camo.CamoContainer;
 import xfacthd.framedblocks.common.FBContent;
+import xfacthd.framedblocks.common.block.ISlopeBlock;
 import xfacthd.framedblocks.common.blockentity.FramedDoubleBlockEntity;
-import xfacthd.framedblocks.common.util.FramedUtils;
 
 public class FramedFancyRailSlopeBlockEntity extends FramedDoubleBlockEntity
 {
@@ -22,7 +22,8 @@ public class FramedFancyRailSlopeBlockEntity extends FramedDoubleBlockEntity
     protected boolean hitSecondary(BlockHitResult hit)
     {
         Direction side = hit.getDirection();
-        return side == Direction.UP || side == FramedUtils.getSlopeBlockFacing(getBlockState()).getOpposite();
+        BlockState state = getBlockState();
+        return side == Direction.UP || side == ((ISlopeBlock) state.getBlock()).getFacing(state).getOpposite();
     }
 
     @Override

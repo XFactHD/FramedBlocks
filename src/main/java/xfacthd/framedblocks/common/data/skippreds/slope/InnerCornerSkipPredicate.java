@@ -9,12 +9,12 @@ import xfacthd.framedblocks.api.block.FramedProperties;
 import xfacthd.framedblocks.api.block.IFramedBlock;
 import xfacthd.framedblocks.api.predicate.cull.SideSkipPredicate;
 import xfacthd.framedblocks.common.block.AbstractFramedDoubleBlock;
+import xfacthd.framedblocks.common.block.ISlopeBlock;
 import xfacthd.framedblocks.common.data.*;
 import xfacthd.framedblocks.common.data.property.*;
 import xfacthd.framedblocks.common.data.skippreds.TriangleDir;
 import xfacthd.framedblocks.common.data.skippreds.stairs.SlopedStairsSkipPredicate;
 import xfacthd.framedblocks.common.data.skippreds.stairs.VerticalSlopedStairsSkipPredicate;
-import xfacthd.framedblocks.common.util.FramedUtils;
 
 public final class InnerCornerSkipPredicate implements SideSkipPredicate
 {
@@ -126,8 +126,9 @@ public final class InnerCornerSkipPredicate implements SideSkipPredicate
             Direction dir, CornerType type, BlockState adjState, Direction side
     )
     {
-        Direction adjDir = FramedUtils.getSlopeBlockFacing(adjState);
-        SlopeType adjType = FramedUtils.getSlopeType(adjState);
+        ISlopeBlock block = (ISlopeBlock) adjState.getBlock();
+        Direction adjDir = block.getFacing(adjState);
+        SlopeType adjType = block.getSlopeType(adjState);
 
         return getTriDir(dir, type, side).isEqualTo(SlopeSkipPredicate.getTriDir(adjDir, adjType, side.getOpposite()));
     }

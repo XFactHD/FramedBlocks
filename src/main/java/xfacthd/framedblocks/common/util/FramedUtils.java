@@ -9,21 +9,17 @@ import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.LevelAccessor;
-import net.minecraft.world.level.block.BaseRailBlock;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.Property;
 import net.minecraft.world.level.block.state.properties.RailShape;
-import xfacthd.framedblocks.api.block.IFramedBlock;
-import xfacthd.framedblocks.api.block.FramedProperties;
+import net.minecraftforge.common.util.Lazy;
 import xfacthd.framedblocks.api.util.Utils;
 import xfacthd.framedblocks.common.FBContent;
-import xfacthd.framedblocks.common.data.PropertyHolder;
-import xfacthd.framedblocks.common.data.property.SlopeType;
 
 import java.lang.invoke.MethodHandle;
-import java.util.Map;
+import java.util.*;
 import java.util.function.Consumer;
 
 public final class FramedUtils
@@ -31,82 +27,45 @@ public final class FramedUtils
     private static final MethodHandle MH_STATE_DEF_BUILDER_GET_PROPERTIES = Utils.unreflectField(
             StateDefinition.Builder.class, "f_61096_"
     );
-
-    public static boolean isFramedRailSlope(BlockState state)
+    private static final Lazy<Set<Item>> RAIL_ITEMS = Lazy.concurrentOf(() ->
     {
-        Block block = state.getBlock();
-        if (block instanceof BaseRailBlock && block instanceof IFramedBlock)
-        {
-            return state.hasProperty(PropertyHolder.ASCENDING_RAIL_SHAPE);
-        }
-        return false;
-    }
+        Set<Item> items = Collections.newSetFromMap(new IdentityHashMap<>());
+        items.addAll(Set.of(
+                Items.RAIL,
+                Items.POWERED_RAIL,
+                Items.DETECTOR_RAIL,
+                Items.ACTIVATOR_RAIL,
+                FBContent.BLOCK_FRAMED_FANCY_RAIL.get().asItem(),
+                FBContent.BLOCK_FRAMED_FANCY_POWERED_RAIL.get().asItem(),
+                FBContent.BLOCK_FRAMED_FANCY_DETECTOR_RAIL.get().asItem(),
+                FBContent.BLOCK_FRAMED_FANCY_ACTIVATOR_RAIL.get().asItem()
+        ));
+        return items;
+    });
+    private static final Lazy<Map<Item, Block>> RAIL_SLOPE_BLOCKS = Lazy.concurrentOf(() -> new IdentityHashMap<>(Map.of(
+            Items.RAIL, FBContent.BLOCK_FRAMED_RAIL_SLOPE.get(),
+            Items.POWERED_RAIL, FBContent.BLOCK_FRAMED_POWERED_RAIL_SLOPE.get(),
+            Items.DETECTOR_RAIL, FBContent.BLOCK_FRAMED_DETECTOR_RAIL_SLOPE.get(),
+            Items.ACTIVATOR_RAIL, FBContent.BLOCK_FRAMED_ACTIVATOR_RAIL_SLOPE.get(),
+            FBContent.BLOCK_FRAMED_FANCY_RAIL.get().asItem(), FBContent.BLOCK_FRAMED_FANCY_RAIL_SLOPE.get(),
+            FBContent.BLOCK_FRAMED_FANCY_POWERED_RAIL.get().asItem(), FBContent.BLOCK_FRAMED_FANCY_POWERED_RAIL_SLOPE.get(),
+            FBContent.BLOCK_FRAMED_FANCY_DETECTOR_RAIL.get().asItem(), FBContent.BLOCK_FRAMED_FANCY_DETECTOR_RAIL_SLOPE.get(),
+            FBContent.BLOCK_FRAMED_FANCY_ACTIVATOR_RAIL.get().asItem(), FBContent.BLOCK_FRAMED_FANCY_ACTIVATOR_RAIL_SLOPE.get()
+    )));
 
     public static boolean isRailItem(Item item)
     {
-        return item == Items.RAIL ||
-               item == Items.POWERED_RAIL ||
-               item == Items.DETECTOR_RAIL ||
-               item == Items.ACTIVATOR_RAIL ||
-               item == FBContent.BLOCK_FRAMED_FANCY_RAIL.get().asItem() ||
-               item == FBContent.BLOCK_FRAMED_FANCY_POWERED_RAIL.get().asItem() ||
-               item == FBContent.BLOCK_FRAMED_FANCY_DETECTOR_RAIL.get().asItem() ||
-               item == FBContent.BLOCK_FRAMED_FANCY_ACTIVATOR_RAIL.get().asItem();
+        return RAIL_ITEMS.get().contains(item);
     }
 
     public static Block getRailSlopeBlock(Item item)
     {
-        if (item == Items.RAIL)
+        Block railSlope = RAIL_SLOPE_BLOCKS.get().get(item);
+        if (railSlope == null)
         {
-            return FBContent.BLOCK_FRAMED_RAIL_SLOPE.get();
+            throw new IllegalStateException("Invalid rail item: " + item);
         }
-        if (item == Items.POWERED_RAIL)
-        {
-            return FBContent.BLOCK_FRAMED_POWERED_RAIL_SLOPE.get();
-        }
-        if (item == Items.DETECTOR_RAIL)
-        {
-            return FBContent.BLOCK_FRAMED_DETECTOR_RAIL_SLOPE.get();
-        }
-        if (item == Items.ACTIVATOR_RAIL)
-        {
-            return FBContent.BLOCK_FRAMED_ACTIVATOR_RAIL_SLOPE.get();
-        }
-        if (item == FBContent.BLOCK_FRAMED_FANCY_RAIL.get().asItem())
-        {
-            return FBContent.BLOCK_FRAMED_FANCY_RAIL_SLOPE.get();
-        }
-        if (item == FBContent.BLOCK_FRAMED_FANCY_POWERED_RAIL.get().asItem())
-        {
-            return FBContent.BLOCK_FRAMED_FANCY_POWERED_RAIL_SLOPE.get();
-        }
-        if (item == FBContent.BLOCK_FRAMED_FANCY_DETECTOR_RAIL.get().asItem())
-        {
-            return FBContent.BLOCK_FRAMED_FANCY_DETECTOR_RAIL_SLOPE.get();
-        }
-        if (item == FBContent.BLOCK_FRAMED_FANCY_ACTIVATOR_RAIL.get().asItem())
-        {
-            return FBContent.BLOCK_FRAMED_FANCY_ACTIVATOR_RAIL_SLOPE.get();
-        }
-        throw new IllegalStateException("Invalid rail item: " + item);
-    }
-
-    public static Direction getSlopeBlockFacing(BlockState state)
-    {
-        if (isFramedRailSlope(state))
-        {
-            return getDirectionFromAscendingRailShape(state.getValue(PropertyHolder.ASCENDING_RAIL_SHAPE));
-        }
-        return state.getValue(FramedProperties.FACING_HOR);
-    }
-
-    public static SlopeType getSlopeType(BlockState state)
-    {
-        if (isFramedRailSlope(state))
-        {
-            return SlopeType.BOTTOM;
-        }
-        return state.getValue(PropertyHolder.SLOPE_TYPE);
+        return railSlope;
     }
 
     public static RailShape getAscendingRailShapeFromDirection(Direction dir)

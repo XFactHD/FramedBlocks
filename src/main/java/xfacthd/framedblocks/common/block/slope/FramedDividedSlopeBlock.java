@@ -17,6 +17,7 @@ import xfacthd.framedblocks.api.block.IFramedBlock;
 import xfacthd.framedblocks.api.util.Utils;
 import xfacthd.framedblocks.common.FBContent;
 import xfacthd.framedblocks.common.block.AbstractFramedDoubleBlock;
+import xfacthd.framedblocks.common.block.ISlopeBlock;
 import xfacthd.framedblocks.common.blockentity.doubled.FramedDividedSlopeBlockEntity;
 import xfacthd.framedblocks.common.data.BlockType;
 import xfacthd.framedblocks.common.data.PropertyHolder;
@@ -25,7 +26,7 @@ import xfacthd.framedblocks.common.data.doubleblock.SolidityCheck;
 import xfacthd.framedblocks.common.data.property.SlopeType;
 import xfacthd.framedblocks.common.util.DoubleBlockTopInteractionMode;
 
-public class FramedDividedSlopeBlock extends AbstractFramedDoubleBlock
+public class FramedDividedSlopeBlock extends AbstractFramedDoubleBlock implements ISlopeBlock
 {
     public FramedDividedSlopeBlock()
     {
@@ -96,6 +97,18 @@ public class FramedDividedSlopeBlock extends AbstractFramedDoubleBlock
         {
             return Utils.mirrorFaceBlock(state, mirror);
         }
+    }
+
+    @Override
+    public Direction getFacing(BlockState state)
+    {
+        return state.getValue(FramedProperties.FACING_HOR);
+    }
+
+    @Override
+    public SlopeType getSlopeType(BlockState state)
+    {
+        return state.getValue(PropertyHolder.SLOPE_TYPE);
     }
 
     @Override

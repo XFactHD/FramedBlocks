@@ -23,7 +23,7 @@ import xfacthd.framedblocks.common.util.FramedUtils;
 import java.util.function.BiFunction;
 import java.util.function.Consumer;
 
-class FramedFancyRailSlopeBlock extends FramedRailSlopeBlock implements IFramedDoubleBlock
+class FramedFancyRailSlopeBlock extends FramedRailSlopeBlock implements IFramedDoubleBlock, ISlopeBlock.IRailSlopeBlock
 {
     FramedFancyRailSlopeBlock(BlockType type, BiFunction<BlockPos, BlockState, FramedBlockEntity> beFactory)
     {
@@ -73,7 +73,7 @@ class FramedFancyRailSlopeBlock extends FramedRailSlopeBlock implements IFramedD
     @Override
     public SolidityCheck calculateSolidityCheck(BlockState state, Direction side)
     {
-        if (side == Direction.DOWN || side == FramedUtils.getSlopeBlockFacing(state))
+        if (side == Direction.DOWN || side == getFacing(state))
         {
             return SolidityCheck.FIRST;
         }

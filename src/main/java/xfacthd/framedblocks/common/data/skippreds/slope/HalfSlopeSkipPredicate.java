@@ -12,6 +12,7 @@ import xfacthd.framedblocks.api.block.IFramedBlock;
 import xfacthd.framedblocks.api.block.FramedProperties;
 import xfacthd.framedblocks.api.predicate.cull.SideSkipPredicate;
 import xfacthd.framedblocks.common.block.AbstractFramedDoubleBlock;
+import xfacthd.framedblocks.common.block.ISlopeBlock;
 import xfacthd.framedblocks.common.data.BlockType;
 import xfacthd.framedblocks.common.data.PropertyHolder;
 import xfacthd.framedblocks.common.data.property.*;
@@ -22,7 +23,6 @@ import xfacthd.framedblocks.common.data.skippreds.slab.PanelSkipPredicate;
 import xfacthd.framedblocks.common.data.skippreds.slab.SlabEdgeSkipPredicate;
 import xfacthd.framedblocks.common.data.skippreds.slopepanel.*;
 import xfacthd.framedblocks.common.data.skippreds.stairs.*;
-import xfacthd.framedblocks.common.util.FramedUtils;
 
 public final class HalfSlopeSkipPredicate implements SideSkipPredicate
 {
@@ -231,8 +231,9 @@ public final class HalfSlopeSkipPredicate implements SideSkipPredicate
             Direction dir, boolean top, boolean right, BlockState adjState, Direction side
     )
     {
-        Direction adjDir = FramedUtils.getSlopeBlockFacing(adjState);
-        SlopeType adjType = FramedUtils.getSlopeType(adjState);
+        ISlopeBlock block = (ISlopeBlock) adjState.getBlock();
+        Direction adjDir = block.getFacing(adjState);
+        SlopeType adjType = block.getSlopeType(adjState);
 
         return getTriDir(dir, top, right, side).isEqualTo(SlopeSkipPredicate.getTriDir(adjDir, adjType, side.getOpposite()));
     }

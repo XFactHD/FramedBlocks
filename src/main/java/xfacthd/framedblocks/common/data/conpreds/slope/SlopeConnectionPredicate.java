@@ -6,8 +6,8 @@ import org.jetbrains.annotations.Nullable;
 import xfacthd.framedblocks.api.block.FramedProperties;
 import xfacthd.framedblocks.api.predicate.contex.ConnectionPredicate;
 import xfacthd.framedblocks.api.util.Utils;
+import xfacthd.framedblocks.common.block.ISlopeBlock;
 import xfacthd.framedblocks.common.data.property.SlopeType;
-import xfacthd.framedblocks.common.util.FramedUtils;
 
 public final class SlopeConnectionPredicate implements ConnectionPredicate
 {
@@ -18,7 +18,8 @@ public final class SlopeConnectionPredicate implements ConnectionPredicate
     @Override
     public boolean canConnectFullEdge(BlockState state, Direction side, @Nullable Direction edge)
     {
-        SlopeType type = FramedUtils.getSlopeType(state);
+        ISlopeBlock block = (ISlopeBlock) state.getBlock();
+        SlopeType type = block.getSlopeType(state);
         if (type == SlopeType.HORIZONTAL)
         {
             Direction dirOne = state.getValue(FramedProperties.FACING_HOR);
@@ -34,7 +35,7 @@ public final class SlopeConnectionPredicate implements ConnectionPredicate
             return false;
         }
 
-        Direction dirOne = FramedUtils.getSlopeBlockFacing(state);
+        Direction dirOne = block.getFacing(state);
         Direction dirTwo = type == SlopeType.TOP ? Direction.UP : Direction.DOWN;
         if (side == dirOne || side == dirTwo)
         {
@@ -50,7 +51,8 @@ public final class SlopeConnectionPredicate implements ConnectionPredicate
     @Override
     public boolean canConnectDetailed(BlockState state, Direction side, Direction edge)
     {
-        SlopeType type = FramedUtils.getSlopeType(state);
+        ISlopeBlock block = (ISlopeBlock) state.getBlock();
+        SlopeType type = block.getSlopeType(state);
         if (type == SlopeType.HORIZONTAL)
         {
             Direction dirOne = state.getValue(FramedProperties.FACING_HOR).getOpposite();
@@ -63,7 +65,7 @@ public final class SlopeConnectionPredicate implements ConnectionPredicate
             return false;
         }
 
-        Direction dirOne = FramedUtils.getSlopeBlockFacing(state).getOpposite();
+        Direction dirOne = block.getFacing(state).getOpposite();
         Direction dirTwo = type == SlopeType.TOP ? Direction.DOWN : Direction.UP;
         if (side == dirOne || side == dirTwo)
         {
