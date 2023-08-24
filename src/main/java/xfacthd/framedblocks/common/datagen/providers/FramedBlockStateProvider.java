@@ -597,13 +597,21 @@ public final class FramedBlockStateProvider extends BlockStateProvider
 
     private void registerFramedBarsBlock(ModelFile cube)
     {
-        simpleBlock(FBContent.BLOCK_FRAMED_BARS.get(), cube);
+        getMultipartBuilder(FBContent.BLOCK_FRAMED_BARS.get())
+                .part()
+                .modelFile(cube)
+                .addModel();
+
         simpleItem(FBContent.BLOCK_FRAMED_BARS, "cutout");
     }
 
     private void registerFramedPaneBlock(ModelFile cube)
     {
-        simpleBlock(FBContent.BLOCK_FRAMED_PANE.get(), cube);
+        getMultipartBuilder(FBContent.BLOCK_FRAMED_PANE.get())
+                .part()
+                .modelFile(cube)
+                .addModel();
+
         simpleItem(FBContent.BLOCK_FRAMED_PANE, TEXTURE.getPath(), "cutout");
     }
 

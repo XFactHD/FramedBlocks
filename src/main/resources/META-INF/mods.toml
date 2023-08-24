@@ -52,6 +52,13 @@ description='''
     side="BOTH"
 
 [[dependencies.framedblocks]]
+    modId="diagonalwindows"
+    mandatory=false
+    versionRange="[8.0.1,)"
+    ordering="NONE"
+    side="BOTH"
+
+[[dependencies.framedblocks]]
     modId="nocubes"
     mandatory=false
     versionRange="[1.19.1-0.5.0,)"

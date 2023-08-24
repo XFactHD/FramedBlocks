@@ -283,7 +283,7 @@ public final class FBClient
         ClientUtils.replaceModels(FBContent.BLOCK_FRAMED_VERTICAL_STAIRS, registry, FramedVerticalStairsModel::new, ClientUtils.IGNORE_DEFAULT_LOCK);
         ClientUtils.replaceModels(FBContent.BLOCK_FRAMED_CHEST, registry, FramedChestModel::new, FramedChestModel.itemSource(), ClientUtils.IGNORE_WATERLOGGED);
         ClientUtils.replaceModels(FBContent.BLOCK_FRAMED_BARS, registry, FramedBarsModel::new, ClientUtils.IGNORE_WATERLOGGED_LOCK);
-        ClientUtils.replaceModels(FBContent.BLOCK_FRAMED_PANE, registry, FramedPaneModel::new, ClientUtils.IGNORE_WATERLOGGED_LOCK);
+        ClientUtils.replaceModels(FBContent.BLOCK_FRAMED_PANE, registry, FramedPaneModel::createPaneModel, ClientUtils.IGNORE_WATERLOGGED_LOCK);
         ClientUtils.replaceModels(FBContent.BLOCK_FRAMED_RAIL_SLOPE, registry, FramedRailSlopeModel::normal, FramedRailSlopeModel.itemSourceNormal(), ClientUtils.IGNORE_DEFAULT);
         ClientUtils.replaceModels(FBContent.BLOCK_FRAMED_POWERED_RAIL_SLOPE, registry, FramedRailSlopeModel::powered, FramedRailSlopeModel.itemSourcePowered(), ClientUtils.IGNORE_DEFAULT);
         ClientUtils.replaceModels(FBContent.BLOCK_FRAMED_DETECTOR_RAIL_SLOPE, registry, FramedRailSlopeModel::detector, FramedRailSlopeModel.itemSourceDetector(), ClientUtils.IGNORE_DEFAULT);

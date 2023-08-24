@@ -136,6 +136,8 @@ public final class FramedBlockTagProvider extends BlockTagsProvider
                 .forEach(axeTag::add);
 
         tag(BlockTags.MINEABLE_WITH_PICKAXE).add(pickaxeBlocks.toArray(Block[]::new));
+
+        tag(BlockTags.create(rl("diagonalwindows", "non_diagonal_panes"))).add(FBContent.BLOCK_FRAMED_BARS.get());
     }
 
 

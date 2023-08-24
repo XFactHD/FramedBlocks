@@ -150,8 +150,9 @@ dependencies {
 
     compileOnly fg.deobf("team.chisel.ctm:CTM:1.20.1-1.1.8+4")
 
-    //runtimeOnly fg.deobf("curse.maven:puzzleslib-495476:4621178") //Only needed when Diagonal Fences is switched to implementation
+    //runtimeOnly fg.deobf("curse.maven:puzzleslib-495476:4621178") //Only needed when Diagonal Fences or Diagonal Windows is switched to implementation
     compileOnly fg.deobf("curse.maven:diagonalfences-458048:4611775")
+    compileOnly fg.deobf("curse.maven:diagonalwindows-891328:4660584")
 
     compileOnly fg.deobf("curse.maven:buildinggadgets-298187:3829297")
 
