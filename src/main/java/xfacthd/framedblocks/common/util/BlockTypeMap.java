@@ -5,6 +5,7 @@ import xfacthd.framedblocks.FramedBlocks;
 import xfacthd.framedblocks.common.data.BlockType;
 
 import java.util.Objects;
+import java.util.function.BiConsumer;
 
 public abstract class BlockTypeMap<T>
 {
@@ -63,5 +64,13 @@ public abstract class BlockTypeMap<T>
             return (T) value;
         }
         return defaultValue;
+    }
+
+    public final void forEach(BiConsumer<BlockType, T> consumer)
+    {
+        for (BlockType type : TYPES)
+        {
+            consumer.accept(type, get(type));
+        }
     }
 }

@@ -88,6 +88,11 @@ public final class BlockOutlineRenderer
         locked = true;
     }
 
+    public static boolean hasOutlineRenderer(IBlockType type)
+    {
+        return OUTLINE_RENDERERS.containsKey(type);
+    }
+
 
 
     private BlockOutlineRenderer() { }
