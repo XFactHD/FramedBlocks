@@ -8,10 +8,14 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.Half;
 import xfacthd.framedblocks.api.predicate.cull.SideSkipPredicate;
 import xfacthd.framedblocks.common.block.door.FramedTrapDoorBlock;
+import xfacthd.framedblocks.common.data.BlockType;
+import xfacthd.framedblocks.common.data.skippreds.CullTest;
 
+@CullTest(BlockType.FRAMED_TRAPDOOR)
 public final class TrapdoorSkipPredicate implements SideSkipPredicate
 {
     @Override
+    @CullTest.SingleTarget(BlockType.FRAMED_TRAPDOOR)
     public boolean test(BlockGetter level, BlockPos pos, BlockState state, BlockState adjState, Direction side)
     {
         Direction facing = getTrapDoorFacing(state);

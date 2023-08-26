@@ -12,14 +12,18 @@ import xfacthd.framedblocks.api.predicate.cull.SideSkipPredicate;
 import xfacthd.framedblocks.api.util.Utils;
 import xfacthd.framedblocks.common.FBContent;
 import xfacthd.framedblocks.common.blockentity.special.FramedCollapsibleBlockEntity;
+import xfacthd.framedblocks.common.data.BlockType;
 import xfacthd.framedblocks.common.data.property.NullableDirection;
 import xfacthd.framedblocks.common.data.PropertyHolder;
+import xfacthd.framedblocks.common.data.skippreds.CullTest;
 
+@CullTest(BlockType.FRAMED_COLLAPSIBLE_BLOCK)
 public final class CollapsibleBlockSkipPredicate implements SideSkipPredicate
 {
     private static final Table<NullableDirection, Direction, VertexPair> EDGE_MAPPING = makeEdgeMappings();
 
     @Override
+    @CullTest.SingleTarget(BlockType.FRAMED_COLLAPSIBLE_BLOCK)
     public boolean test(BlockGetter level, BlockPos pos, BlockState state, BlockState adjState, Direction side)
     {
         NullableDirection face = state.getValue(PropertyHolder.NULLABLE_FACE);

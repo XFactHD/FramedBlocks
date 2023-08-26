@@ -10,10 +10,14 @@ import xfacthd.framedblocks.api.block.FramedProperties;
 import xfacthd.framedblocks.api.predicate.cull.SideSkipPredicate;
 import xfacthd.framedblocks.api.util.*;
 import xfacthd.framedblocks.common.FBContent;
+import xfacthd.framedblocks.common.data.BlockType;
+import xfacthd.framedblocks.common.data.skippreds.CullTest;
 
+@CullTest(BlockType.FRAMED_LATTICE_BLOCK)
 public final class LatticeSkipPredicate implements SideSkipPredicate
 {
     @Override
+    @CullTest.SingleTarget({ BlockType.FRAMED_LATTICE_BLOCK, BlockType.FRAMED_FENCE, BlockType.FRAMED_POST })
     public boolean test(BlockGetter level, BlockPos pos, BlockState state, BlockState adjState, Direction side)
     {
         Block block = adjState.getBlock();

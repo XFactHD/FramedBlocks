@@ -9,10 +9,14 @@ import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import xfacthd.framedblocks.api.block.FramedProperties;
 import xfacthd.framedblocks.api.predicate.cull.SideSkipPredicate;
 import xfacthd.framedblocks.common.FBContent;
+import xfacthd.framedblocks.common.data.BlockType;
+import xfacthd.framedblocks.common.data.skippreds.CullTest;
 
+@CullTest(BlockType.FRAMED_POST)
 public final class PostSkipPredicate implements SideSkipPredicate
 {
     @Override
+    @CullTest.SingleTarget({ BlockType.FRAMED_POST, BlockType.FRAMED_FENCE, BlockType.FRAMED_LATTICE_BLOCK })
     public boolean test(BlockGetter level, BlockPos pos, BlockState state, BlockState adjState, Direction side)
     {
         Direction.Axis axis = state.getValue(BlockStateProperties.AXIS);

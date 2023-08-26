@@ -7,10 +7,14 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import xfacthd.framedblocks.api.predicate.cull.SideSkipPredicate;
 import xfacthd.framedblocks.common.FBContent;
+import xfacthd.framedblocks.common.data.BlockType;
+import xfacthd.framedblocks.common.data.skippreds.CullTest;
 
+@CullTest(BlockType.FRAMED_HALF_PILLAR)
 public final class HalfPillarSkipPredicate implements SideSkipPredicate
 {
     @Override
+    @CullTest.SingleTarget({ BlockType.FRAMED_HALF_PILLAR, BlockType.FRAMED_PILLAR })
     public boolean test(BlockGetter level, BlockPos pos, BlockState state, BlockState adjState, Direction side)
     {
         Direction face = state.getValue(BlockStateProperties.FACING);

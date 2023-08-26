@@ -12,8 +12,10 @@ import xfacthd.framedblocks.common.data.BlockType;
 import xfacthd.framedblocks.common.data.PropertyHolder;
 import xfacthd.framedblocks.common.data.property.CompoundDirection;
 import xfacthd.framedblocks.common.data.property.DirectionAxis;
+import xfacthd.framedblocks.common.data.skippreds.CullTest;
 import xfacthd.framedblocks.common.data.skippreds.HalfDir;
 
+@CullTest(BlockType.FRAMED_PRISM)
 public final class PrismSkipPredicate implements SideSkipPredicate
 {
     @Override
@@ -46,24 +48,34 @@ public final class PrismSkipPredicate implements SideSkipPredicate
         return false;
     }
 
+    @CullTest.SingleTarget(BlockType.FRAMED_PRISM)
     private static boolean testAgainstPrism(DirectionAxis dirAxis, BlockState adjState, Direction side)
     {
         DirectionAxis adjDirAxis = adjState.getValue(PropertyHolder.FACING_AXIS);
         return getTriDir(dirAxis, side).isEqualTo(getTriDir(adjDirAxis, side.getOpposite()));
     }
 
+    @CullTest.SingleTarget(BlockType.FRAMED_SLOPED_PRISM)
     private static boolean testAgainstSlopedPrism(DirectionAxis dirAxis, BlockState adjState, Direction side)
     {
         CompoundDirection adjCmpDir = adjState.getValue(PropertyHolder.FACING_DIR);
         return getTriDir(dirAxis, side).isEqualTo(SlopedPrismSkipPredicate.getTriDir(adjCmpDir, side.getOpposite()));
     }
 
+    @CullTest.DoubleTarget(
+            value = BlockType.FRAMED_DOUBLE_PRISM,
+            partTargets = BlockType.FRAMED_PRISM
+    )
     private static boolean testAgainstDoublePrism(DirectionAxis dirAxis, BlockState adjState, Direction side)
     {
         Tuple<BlockState, BlockState> states = AbstractFramedDoubleBlock.getStatePair(adjState);
         return testAgainstPrism(dirAxis, states.getA(), side);
     }
 
+    @CullTest.DoubleTarget(
+            value = BlockType.FRAMED_DOUBLE_SLOPED_PRISM,
+            partTargets = BlockType.FRAMED_SLOPED_PRISM
+    )
     private static boolean testAgainstDoubleSlopedPrism(DirectionAxis dirAxis, BlockState adjState, Direction side)
     {
         Tuple<BlockState, BlockState> states = AbstractFramedDoubleBlock.getStatePair(adjState);

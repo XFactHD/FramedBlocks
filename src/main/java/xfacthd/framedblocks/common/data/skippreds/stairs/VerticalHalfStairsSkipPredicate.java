@@ -19,6 +19,7 @@ import xfacthd.framedblocks.common.data.skippreds.slope.VerticalHalfSlopeSkipPre
 import xfacthd.framedblocks.common.data.skippreds.slopepanelcorner.*;
 import xfacthd.framedblocks.common.data.skippreds.slopeslab.*;
 
+@CullTest(BlockType.FRAMED_VERTICAL_HALF_STAIRS)
 public final class VerticalHalfStairsSkipPredicate implements SideSkipPredicate
 {
     @Override
@@ -112,16 +113,10 @@ public final class VerticalHalfStairsSkipPredicate implements SideSkipPredicate
                 case FRAMED_FLAT_STACKED_INNER_SLOPE_SLAB_CORNER -> testAgainstFlatStackedInnerSlopeSlabCorner(
                         dir, top, adjState, side
                 );
-                case FRAMED_SMALL_CORNER_SLOPE_PANEL -> testAgainstSmallCornerSlopePanel(
-                        dir, top, adjState, side
-                );
                 case FRAMED_SMALL_CORNER_SLOPE_PANEL_W -> testAgainstSmallCornerSlopePanelWall(
                         dir, top, adjState, side
                 );
                 case FRAMED_LARGE_CORNER_SLOPE_PANEL -> testAgainstLargeCornerSlopePanel(
-                        dir, top, adjState, side
-                );
-                case FRAMED_SMALL_INNER_CORNER_SLOPE_PANEL -> testAgainstSmallInnerCornerSlopePanel(
                         dir, top, adjState, side
                 );
                 case FRAMED_SMALL_INNER_CORNER_SLOPE_PANEL_W -> testAgainstSmallInnerCornerSlopePanelWall(
@@ -130,16 +125,10 @@ public final class VerticalHalfStairsSkipPredicate implements SideSkipPredicate
                 case FRAMED_LARGE_INNER_CORNER_SLOPE_PANEL -> testAgainstLargeInnerCornerSlopePanel(
                         dir, top, adjState, side
                 );
-                case FRAMED_EXT_CORNER_SLOPE_PANEL -> testAgainstExtendedCornerSlopePanel(
-                        dir, top, adjState, side
-                );
                 case FRAMED_EXT_CORNER_SLOPE_PANEL_W -> testAgainstExtendedCornerSlopePanelWall(
                         dir, top, adjState, side
                 );
                 case FRAMED_EXT_INNER_CORNER_SLOPE_PANEL -> testAgainstExtendedInnerCornerSlopePanel(
-                        dir, top, adjState, side
-                );
-                case FRAMED_SMALL_DOUBLE_CORNER_SLOPE_PANEL -> testAgainstSmallDoubleCornerSlopePanel(
                         dir, top, adjState, side
                 );
                 case FRAMED_SMALL_DOUBLE_CORNER_SLOPE_PANEL_W -> testAgainstSmallDoubleCornerSlopePanelWall(
@@ -197,6 +186,7 @@ public final class VerticalHalfStairsSkipPredicate implements SideSkipPredicate
         return false;
     }
 
+    @CullTest.SingleTarget(BlockType.FRAMED_VERTICAL_HALF_STAIRS)
     private static boolean testAgainstVerticalHalfStairs(
             Direction dir, boolean top, BlockState adjState, Direction side
     )
@@ -219,6 +209,10 @@ public final class VerticalHalfStairsSkipPredicate implements SideSkipPredicate
         return false;
     }
 
+    @CullTest.DoubleTarget(
+            value = BlockType.FRAMED_DIVIDED_STAIRS,
+            partTargets = BlockType.FRAMED_HALF_STAIRS
+    )
     private static boolean testAgainstDividedStairs(
             Direction dir, boolean top, BlockState adjState, Direction side
     )
@@ -228,6 +222,7 @@ public final class VerticalHalfStairsSkipPredicate implements SideSkipPredicate
                testAgainstHalfStairs(dir, top, states.getB(), side);
     }
 
+    @CullTest.SingleTarget(BlockType.FRAMED_VERTICAL_STAIRS)
     private static boolean testAgainstVerticalStairs(
             Direction dir, boolean top, BlockState adjState, Direction side
     )
@@ -250,6 +245,10 @@ public final class VerticalHalfStairsSkipPredicate implements SideSkipPredicate
         return false;
     }
 
+    @CullTest.DoubleTarget(
+            value = BlockType.FRAMED_VERTICAL_DOUBLE_STAIRS,
+            partTargets = BlockType.FRAMED_VERTICAL_STAIRS
+    )
     private static boolean testAgainstVerticalDoubleStairs(
             Direction dir, boolean top, BlockState adjState, Direction side
     )
@@ -258,6 +257,7 @@ public final class VerticalHalfStairsSkipPredicate implements SideSkipPredicate
         return testAgainstVerticalStairs(dir, top, states.getA(), side);
     }
 
+    @CullTest.SingleTarget(BlockType.FRAMED_SLAB)
     private static boolean testAgainstSlab(
             Direction dir, boolean top, BlockState adjState, Direction side
     )
@@ -267,6 +267,10 @@ public final class VerticalHalfStairsSkipPredicate implements SideSkipPredicate
         return getHalfDir(dir, top, side).isEqualTo(SlabSkipPredicate.getHalfDir(adjTop, side.getOpposite()));
     }
 
+    @CullTest.DoubleTarget(
+            value = BlockType.FRAMED_DOUBLE_SLAB,
+            partTargets = BlockType.FRAMED_SLAB
+    )
     private static boolean testAgainstDoubleSlab(
             Direction dir, boolean top, BlockState adjState, Direction side
     )
@@ -276,6 +280,7 @@ public final class VerticalHalfStairsSkipPredicate implements SideSkipPredicate
                testAgainstSlab(dir, top, states.getB(), side);
     }
 
+    @CullTest.SingleTarget(BlockType.FRAMED_SLAB_EDGE)
     private static boolean testAgainstSlabEdge(
             Direction dir, boolean top, BlockState adjState, Direction side
     )
@@ -294,6 +299,10 @@ public final class VerticalHalfStairsSkipPredicate implements SideSkipPredicate
         return false;
     }
 
+    @CullTest.DoubleTarget(
+            value = BlockType.FRAMED_DIVIDED_SLAB,
+            partTargets =  BlockType.FRAMED_SLAB_EDGE
+    )
     private static boolean testAgainstDividedSlab(
             Direction dir, boolean top, BlockState adjState, Direction side
     )
@@ -303,6 +312,10 @@ public final class VerticalHalfStairsSkipPredicate implements SideSkipPredicate
                testAgainstSlabEdge(dir, top, states.getB(), side);
     }
 
+    @CullTest.DoubleTarget(
+            value = BlockType.FRAMED_DIVIDED_PANEL_HORIZONTAL,
+            partTargets = BlockType.FRAMED_SLAB_EDGE
+    )
     private static boolean testAgainstDividedPanelHor(
             Direction dir, boolean top, BlockState adjState, Direction side
     )
@@ -312,6 +325,7 @@ public final class VerticalHalfStairsSkipPredicate implements SideSkipPredicate
                testAgainstSlabEdge(dir, top, states.getB(), side);
     }
 
+    @CullTest.SingleTarget(BlockType.FRAMED_SLAB_CORNER)
     private static boolean testAgainstSlabCorner(
             Direction dir, boolean top, BlockState adjState, Direction side
     )
@@ -322,6 +336,7 @@ public final class VerticalHalfStairsSkipPredicate implements SideSkipPredicate
         return getCornerDir(dir, top, side).isEqualTo(SlabCornerSkipPredicate.getCornerDir(adjDir, adjTop, side.getOpposite()));
     }
 
+    @CullTest.SingleTarget(BlockType.FRAMED_STAIRS)
     private static boolean testAgainstStairs(
             Direction dir, boolean top, BlockState adjState, Direction side
     )
@@ -345,6 +360,10 @@ public final class VerticalHalfStairsSkipPredicate implements SideSkipPredicate
         return false;
     }
 
+    @CullTest.DoubleTarget(
+            value = BlockType.FRAMED_DOUBLE_STAIRS,
+            partTargets = { BlockType.FRAMED_STAIRS, BlockType.FRAMED_SLAB_EDGE }
+    )
     private static boolean testAgainstDoubleStairs(
             Direction dir, boolean top, BlockState adjState, Direction side
     )
@@ -354,6 +373,7 @@ public final class VerticalHalfStairsSkipPredicate implements SideSkipPredicate
                testAgainstSlabEdge(dir, top, states.getB(), side);
     }
 
+    @CullTest.SingleTarget(BlockType.FRAMED_HALF_STAIRS)
     private static boolean testAgainstHalfStairs(
             Direction dir, boolean top, BlockState adjState, Direction side
     )
@@ -362,21 +382,13 @@ public final class VerticalHalfStairsSkipPredicate implements SideSkipPredicate
         boolean adjTop = adjState.getValue(FramedProperties.TOP);
         boolean adjRight = adjState.getValue(PropertyHolder.RIGHT);
 
-        if (getStairDir(dir, top, side).isEqualTo(HalfStairsSkipPredicate.getStairDir(adjDir, adjTop, adjRight, side.getOpposite())))
-        {
-            return true;
-        }
-        else if (getHalfDir(dir, top, side).isEqualTo(HalfStairsSkipPredicate.getHalfDir(adjDir, adjTop, adjRight, side.getOpposite())))
-        {
-            return true;
-        }
-        else if (getCornerDir(dir, top, side).isEqualTo(HalfStairsSkipPredicate.getCornerDir(adjDir, adjTop, adjRight, side.getOpposite())))
-        {
-            return true;
-        }
-        return false;
+        return getCornerDir(dir, top, side).isEqualTo(HalfStairsSkipPredicate.getCornerDir(adjDir, adjTop, adjRight, side.getOpposite()));
     }
 
+    @CullTest.DoubleTarget(
+            value = BlockType.FRAMED_VERTICAL_DIVIDED_STAIRS,
+            partTargets = BlockType.FRAMED_VERTICAL_HALF_STAIRS
+    )
     private static boolean testAgainstVerticalDividedStairs(
             Direction dir, boolean top, BlockState adjState, Direction side
     )
@@ -386,6 +398,7 @@ public final class VerticalHalfStairsSkipPredicate implements SideSkipPredicate
                testAgainstVerticalHalfStairs(dir, top, states.getB(), side);
     }
 
+    @CullTest.SingleTarget(BlockType.FRAMED_SLOPE_SLAB)
     private static boolean testAgainstSlopeSlab(
             Direction dir, boolean top, BlockState adjState, Direction side
     )
@@ -396,6 +409,7 @@ public final class VerticalHalfStairsSkipPredicate implements SideSkipPredicate
         return getHalfDir(dir, top, side).isEqualTo(SlopeSlabSkipPredicate.getHalfDir(adjDir, adjTop, side.getOpposite()));
     }
 
+    @CullTest.SingleTarget(BlockType.FRAMED_ELEVATED_SLOPE_SLAB)
     private static boolean testAgainstElevatedSlopeSlab(
             Direction dir, boolean top, BlockState adjState, Direction side
     )
@@ -406,6 +420,10 @@ public final class VerticalHalfStairsSkipPredicate implements SideSkipPredicate
         return getHalfDir(dir, top, side).isEqualTo(ElevatedSlopeSlabSkipPredicate.getHalfDir(adjDir, adjTop, side.getOpposite()));
     }
 
+    @CullTest.DoubleTarget(
+            value = BlockType.FRAMED_DOUBLE_SLOPE_SLAB,
+            partTargets = BlockType.FRAMED_SLOPE_SLAB
+    )
     private static boolean testAgainstDoubleSlopeSlab(
             Direction dir, boolean top, BlockState adjState, Direction side
     )
@@ -415,6 +433,10 @@ public final class VerticalHalfStairsSkipPredicate implements SideSkipPredicate
                testAgainstSlopeSlab(dir, top, states.getB(), side);
     }
 
+    @CullTest.DoubleTarget(
+            value = BlockType.FRAMED_INV_DOUBLE_SLOPE_SLAB,
+            partTargets = BlockType.FRAMED_SLOPE_SLAB
+    )
     private static boolean testAgainstInverseDoubleSlopeSlab(
             Direction dir, boolean top, BlockState adjState, Direction side
     )
@@ -424,6 +446,10 @@ public final class VerticalHalfStairsSkipPredicate implements SideSkipPredicate
                testAgainstSlopeSlab(dir, top, states.getB(), side);
     }
 
+    @CullTest.DoubleTarget(
+            value = BlockType.FRAMED_ELEVATED_DOUBLE_SLOPE_SLAB,
+            partTargets = { BlockType.FRAMED_ELEVATED_SLOPE_SLAB, BlockType.FRAMED_SLOPE_SLAB }
+    )
     private static boolean testAgainstElevatedDoubleSlopeSlab(
             Direction dir, boolean top, BlockState adjState, Direction side
     )
@@ -433,6 +459,10 @@ public final class VerticalHalfStairsSkipPredicate implements SideSkipPredicate
                testAgainstSlopeSlab(dir, top, states.getB(), side);
     }
 
+    @CullTest.DoubleTarget(
+            value = BlockType.FRAMED_STACKED_SLOPE_SLAB,
+            partTargets = { BlockType.FRAMED_SLAB, BlockType.FRAMED_SLOPE_SLAB }
+    )
     private static boolean testAgainstStackedSlopeSlab(
             Direction dir, boolean top, BlockState adjState, Direction side
     )
@@ -442,6 +472,7 @@ public final class VerticalHalfStairsSkipPredicate implements SideSkipPredicate
                testAgainstSlopeSlab(dir, top, states.getB(), side);
     }
 
+    @CullTest.SingleTarget(BlockType.FRAMED_FLAT_INNER_SLOPE_SLAB_CORNER)
     private static boolean testAgainstFlatInnerSlopeSlabCorner(
             Direction dir, boolean top, BlockState adjState, Direction side
     )
@@ -452,6 +483,7 @@ public final class VerticalHalfStairsSkipPredicate implements SideSkipPredicate
         return getHalfDir(dir, top, side).isEqualTo(FlatInnerSlopeSlabCornerSkipPredicate.getHalfDir(adjDir, adjTopHalf, side.getOpposite()));
     }
 
+    @CullTest.SingleTarget(BlockType.FRAMED_FLAT_ELEV_SLOPE_SLAB_CORNER)
     private static boolean testAgainstFlatElevatedSlopeSlabCorner(
             Direction dir, boolean top, BlockState adjState, Direction side
     )
@@ -462,6 +494,10 @@ public final class VerticalHalfStairsSkipPredicate implements SideSkipPredicate
         return getHalfDir(dir, top, side).isEqualTo(FlatElevatedSlopeSlabCornerSkipPredicate.getHalfDir(adjDir, adjTop, side.getOpposite()));
     }
 
+    @CullTest.DoubleTarget(
+            value = BlockType.FRAMED_FLAT_DOUBLE_SLOPE_SLAB_CORNER,
+            partTargets = BlockType.FRAMED_FLAT_INNER_SLOPE_SLAB_CORNER
+    )
     private static boolean testAgainstFlatDoubleSlopeSlabCorner(
             Direction dir, boolean top, BlockState adjState, Direction side
     )
@@ -470,6 +506,10 @@ public final class VerticalHalfStairsSkipPredicate implements SideSkipPredicate
         return testAgainstFlatInnerSlopeSlabCorner(dir, top, states.getA(), side);
     }
 
+    @CullTest.DoubleTarget(
+            value = BlockType.FRAMED_FLAT_INV_DOUBLE_SLOPE_SLAB_CORNER,
+            partTargets = BlockType.FRAMED_FLAT_INNER_SLOPE_SLAB_CORNER
+    )
     private static boolean testAgainstFlatInverseDoubleSlopeSlabCorner(
             Direction dir, boolean top, BlockState adjState, Direction side
     )
@@ -478,6 +518,10 @@ public final class VerticalHalfStairsSkipPredicate implements SideSkipPredicate
         return testAgainstFlatInnerSlopeSlabCorner(dir, top, states.getA(), side);
     }
 
+    @CullTest.DoubleTarget(
+            value = BlockType.FRAMED_FLAT_ELEV_DOUBLE_SLOPE_SLAB_CORNER,
+            partTargets = { BlockType.FRAMED_FLAT_ELEV_SLOPE_SLAB_CORNER, BlockType.FRAMED_FLAT_INNER_SLOPE_SLAB_CORNER }
+    )
     private static boolean testAgainstFlatElevatedDoubleSlopeSlabCorner(
             Direction dir, boolean top, BlockState adjState, Direction side
     )
@@ -487,6 +531,10 @@ public final class VerticalHalfStairsSkipPredicate implements SideSkipPredicate
                testAgainstFlatInnerSlopeSlabCorner(dir, top, states.getB(), side);
     }
 
+    @CullTest.DoubleTarget(
+            value = BlockType.FRAMED_FLAT_STACKED_SLOPE_SLAB_CORNER,
+            partTargets = BlockType.FRAMED_SLAB
+    )
     private static boolean testAgainstFlatStackedSlopeSlabCorner(
             Direction dir, boolean top, BlockState adjState, Direction side
     )
@@ -495,6 +543,10 @@ public final class VerticalHalfStairsSkipPredicate implements SideSkipPredicate
         return testAgainstSlab(dir, top, states.getA(), side);
     }
 
+    @CullTest.DoubleTarget(
+            value = BlockType.FRAMED_FLAT_STACKED_INNER_SLOPE_SLAB_CORNER,
+            partTargets = { BlockType.FRAMED_SLAB, BlockType.FRAMED_FLAT_INNER_SLOPE_SLAB_CORNER }
+    )
     private static boolean testAgainstFlatStackedInnerSlopeSlabCorner(
             Direction dir, boolean top, BlockState adjState, Direction side
     )
@@ -504,16 +556,7 @@ public final class VerticalHalfStairsSkipPredicate implements SideSkipPredicate
                testAgainstFlatInnerSlopeSlabCorner(dir, top, states.getB(), side);
     }
 
-    private static boolean testAgainstSmallCornerSlopePanel(
-            Direction dir, boolean top, BlockState adjState, Direction side
-    )
-    {
-        Direction adjDir = adjState.getValue(FramedProperties.FACING_HOR);
-        boolean adjTop = adjState.getValue(FramedProperties.TOP);
-
-        return getCornerDir(dir, top, side).isEqualTo(SmallCornerSlopePanelSkipPredicate.getCornerDir(adjDir, adjTop, side.getOpposite()));
-    }
-
+    @CullTest.SingleTarget(BlockType.FRAMED_SMALL_CORNER_SLOPE_PANEL_W)
     private static boolean testAgainstSmallCornerSlopePanelWall(
             Direction dir, boolean top, BlockState adjState, Direction side
     )
@@ -524,6 +567,7 @@ public final class VerticalHalfStairsSkipPredicate implements SideSkipPredicate
         return getCornerDir(dir, top, side).isEqualTo(SmallCornerSlopePanelWallSkipPredicate.getCornerDir(adjDir, adjRot, side.getOpposite()));
     }
 
+    @CullTest.SingleTarget(BlockType.FRAMED_LARGE_CORNER_SLOPE_PANEL)
     private static boolean testAgainstLargeCornerSlopePanel(
             Direction dir, boolean top, BlockState adjState, Direction side
     )
@@ -534,16 +578,7 @@ public final class VerticalHalfStairsSkipPredicate implements SideSkipPredicate
         return getStairDir(dir, top, side).isEqualTo(LargeCornerSlopePanelSkipPredicate.getStairDir(adjDir, adjTop, side.getOpposite()));
     }
 
-    private static boolean testAgainstSmallInnerCornerSlopePanel(
-            Direction dir, boolean top, BlockState adjState, Direction side
-    )
-    {
-        Direction adjDir = adjState.getValue(FramedProperties.FACING_HOR);
-        boolean adjTop = adjState.getValue(FramedProperties.TOP);
-
-        return getCornerDir(dir, top, side).isEqualTo(SmallInnerCornerSlopePanelSkipPredicate.getCornerDir(adjDir, adjTop, side.getOpposite()));
-    }
-
+    @CullTest.SingleTarget(BlockType.FRAMED_SMALL_INNER_CORNER_SLOPE_PANEL_W)
     private static boolean testAgainstSmallInnerCornerSlopePanelWall(
             Direction dir, boolean top, BlockState adjState, Direction side
     )
@@ -554,6 +589,7 @@ public final class VerticalHalfStairsSkipPredicate implements SideSkipPredicate
         return getCornerDir(dir, top, side).isEqualTo(SmallInnerCornerSlopePanelWallSkipPredicate.getCornerDir(adjDir, adjRot, side.getOpposite()));
     }
 
+    @CullTest.SingleTarget(BlockType.FRAMED_LARGE_INNER_CORNER_SLOPE_PANEL)
     private static boolean testAgainstLargeInnerCornerSlopePanel(
             Direction dir, boolean top, BlockState adjState, Direction side
     )
@@ -564,16 +600,7 @@ public final class VerticalHalfStairsSkipPredicate implements SideSkipPredicate
         return getStairDir(dir, top, side).isEqualTo(LargeInnerCornerSlopePanelSkipPredicate.getStairDir(adjDir, adjTop, side.getOpposite()));
     }
 
-    private static boolean testAgainstExtendedCornerSlopePanel(
-            Direction dir, boolean top, BlockState adjState, Direction side
-    )
-    {
-        Direction adjDir = adjState.getValue(FramedProperties.FACING_HOR);
-        boolean adjTop = adjState.getValue(FramedProperties.TOP);
-
-        return getCornerDir(dir, top, side).isEqualTo(ExtendedCornerSlopePanelSkipPredicate.getCornerDir(adjDir, adjTop, side.getOpposite()));
-    }
-
+    @CullTest.SingleTarget(BlockType.FRAMED_EXT_CORNER_SLOPE_PANEL_W)
     private static boolean testAgainstExtendedCornerSlopePanelWall(
             Direction dir, boolean top, BlockState adjState, Direction side
     )
@@ -584,6 +611,7 @@ public final class VerticalHalfStairsSkipPredicate implements SideSkipPredicate
         return getCornerDir(dir, top, side).isEqualTo(ExtendedCornerSlopePanelWallSkipPredicate.getCornerDir(adjDir, adjRot, side.getOpposite()));
     }
 
+    @CullTest.SingleTarget(BlockType.FRAMED_EXT_INNER_CORNER_SLOPE_PANEL)
     private static boolean testAgainstExtendedInnerCornerSlopePanel(
             Direction dir, boolean top, BlockState adjState, Direction side
     )
@@ -594,15 +622,10 @@ public final class VerticalHalfStairsSkipPredicate implements SideSkipPredicate
         return getStairDir(dir, top, side).isEqualTo(ExtendedInnerCornerSlopePanelSkipPredicate.getStairDir(adjDir, adjTop, side.getOpposite()));
     }
 
-    private static boolean testAgainstSmallDoubleCornerSlopePanel(
-            Direction dir, boolean top, BlockState adjState, Direction side
+    @CullTest.DoubleTarget(
+            value = BlockType.FRAMED_SMALL_DOUBLE_CORNER_SLOPE_PANEL_W,
+            partTargets = { BlockType.FRAMED_SMALL_INNER_CORNER_SLOPE_PANEL_W, BlockType.FRAMED_SMALL_CORNER_SLOPE_PANEL_W }
     )
-    {
-        Tuple<BlockState, BlockState> states = AbstractFramedDoubleBlock.getStatePair(adjState);
-        return testAgainstSmallInnerCornerSlopePanel(dir, top, states.getA(), side) ||
-               testAgainstSmallCornerSlopePanel(dir, top, states.getB(), side);
-    }
-
     private static boolean testAgainstSmallDoubleCornerSlopePanelWall(
             Direction dir, boolean top, BlockState adjState, Direction side
     )
@@ -612,6 +635,10 @@ public final class VerticalHalfStairsSkipPredicate implements SideSkipPredicate
                testAgainstSmallCornerSlopePanelWall(dir, top, states.getB(), side);
     }
 
+    @CullTest.DoubleTarget(
+            value = BlockType.FRAMED_LARGE_DOUBLE_CORNER_SLOPE_PANEL,
+            partTargets = { BlockType.FRAMED_LARGE_INNER_CORNER_SLOPE_PANEL, BlockType.FRAMED_LARGE_CORNER_SLOPE_PANEL }
+    )
     private static boolean testAgainstLargeDoubleCornerSlopePanel(
             Direction dir, boolean top, BlockState adjState, Direction side
     )
@@ -621,15 +648,22 @@ public final class VerticalHalfStairsSkipPredicate implements SideSkipPredicate
                testAgainstLargeCornerSlopePanel(dir, top, states.getB(), side);
     }
 
+    @CullTest.DoubleTarget(
+            value = BlockType.FRAMED_INV_DOUBLE_CORNER_SLOPE_PANEL,
+            partTargets = BlockType.FRAMED_LARGE_CORNER_SLOPE_PANEL
+    )
     private static boolean testAgainstInverseDoubleCornerSlopePanel(
             Direction dir, boolean top, BlockState adjState, Direction side
     )
     {
         Tuple<BlockState, BlockState> states = AbstractFramedDoubleBlock.getStatePair(adjState);
-        return testAgainstLargeCornerSlopePanel(dir, top, states.getA(), side) ||
-               testAgainstSmallInnerCornerSlopePanel(dir, top, states.getB(), side);
+        return testAgainstLargeCornerSlopePanel(dir, top, states.getA(), side);
     }
 
+    @CullTest.DoubleTarget(
+            value = BlockType.FRAMED_INV_DOUBLE_CORNER_SLOPE_PANEL_W,
+            partTargets = BlockType.FRAMED_SMALL_INNER_CORNER_SLOPE_PANEL_W
+    )
     private static boolean testAgainstInverseDoubleCornerSlopePanelWall(
             Direction dir, boolean top, BlockState adjState, Direction side
     )
@@ -638,15 +672,22 @@ public final class VerticalHalfStairsSkipPredicate implements SideSkipPredicate
         return testAgainstSmallInnerCornerSlopePanelWall(dir, top, states.getB(), side);
     }
 
+    @CullTest.DoubleTarget(
+            value = BlockType.FRAMED_EXT_DOUBLE_CORNER_SLOPE_PANEL,
+            partTargets = BlockType.FRAMED_LARGE_INNER_CORNER_SLOPE_PANEL
+    )
     private static boolean testAgainstExtendedDoubleCornerSlopePanel(
             Direction dir, boolean top, BlockState adjState, Direction side
     )
     {
         Tuple<BlockState, BlockState> states = AbstractFramedDoubleBlock.getStatePair(adjState);
-        return testAgainstExtendedCornerSlopePanel(dir, top, states.getA(), side) ||
-               testAgainstLargeInnerCornerSlopePanel(dir, top, states.getB(), side);
+        return testAgainstLargeInnerCornerSlopePanel(dir, top, states.getB(), side);
     }
 
+    @CullTest.DoubleTarget(
+            value = BlockType.FRAMED_EXT_DOUBLE_CORNER_SLOPE_PANEL_W,
+            partTargets = BlockType.FRAMED_EXT_CORNER_SLOPE_PANEL_W
+    )
     private static boolean testAgainstExtendedDoubleCornerSlopePanelWall(
             Direction dir, boolean top, BlockState adjState, Direction side
     )
@@ -655,15 +696,22 @@ public final class VerticalHalfStairsSkipPredicate implements SideSkipPredicate
         return testAgainstExtendedCornerSlopePanelWall(dir, top, states.getA(), side);
     }
 
+    @CullTest.DoubleTarget(
+            value = BlockType.FRAMED_EXT_INNER_DOUBLE_CORNER_SLOPE_PANEL,
+            partTargets = BlockType.FRAMED_EXT_INNER_CORNER_SLOPE_PANEL
+    )
     private static boolean testAgainstExtendedInnerDoubleCornerSlopePanel(
             Direction dir, boolean top, BlockState adjState, Direction side
     )
     {
         Tuple<BlockState, BlockState> states = AbstractFramedDoubleBlock.getStatePair(adjState);
-        return testAgainstExtendedInnerCornerSlopePanel(dir, top, states.getA(), side) ||
-               testAgainstSmallCornerSlopePanel(dir, top, states.getB(), side);
+        return testAgainstExtendedInnerCornerSlopePanel(dir, top, states.getA(), side);
     }
 
+    @CullTest.DoubleTarget(
+            value = BlockType.FRAMED_EXT_INNER_DOUBLE_CORNER_SLOPE_PANEL_W,
+            partTargets = BlockType.FRAMED_SMALL_CORNER_SLOPE_PANEL_W
+    )
     private static boolean testAgainstExtendedInnerDoubleCornerSlopePanelWall(
             Direction dir, boolean top, BlockState adjState, Direction side
     )
@@ -672,6 +720,10 @@ public final class VerticalHalfStairsSkipPredicate implements SideSkipPredicate
         return testAgainstSmallCornerSlopePanelWall(dir, top, states.getB(), side);
     }
 
+    @CullTest.DoubleTarget(
+            value = BlockType.FRAMED_STACKED_CORNER_SLOPE_PANEL,
+            partTargets = BlockType.FRAMED_LARGE_CORNER_SLOPE_PANEL
+    )
     private static boolean testAgainstStackedCornerSlopePanel(
             Direction dir, boolean top, BlockState adjState, Direction side
     )
@@ -680,6 +732,10 @@ public final class VerticalHalfStairsSkipPredicate implements SideSkipPredicate
         return testAgainstLargeCornerSlopePanel(dir, top, states.getB(), side);
     }
 
+    @CullTest.DoubleTarget(
+            value = BlockType.FRAMED_STACKED_CORNER_SLOPE_PANEL_W,
+            partTargets = BlockType.FRAMED_SLAB_EDGE
+    )
     private static boolean testAgainstStackedCornerSlopePanelWall(
             Direction dir, boolean top, BlockState adjState, Direction side
     )
@@ -688,15 +744,22 @@ public final class VerticalHalfStairsSkipPredicate implements SideSkipPredicate
         return testAgainstSlabEdge(dir, top, states.getA(), side);
     }
 
+    @CullTest.DoubleTarget(
+            value = BlockType.FRAMED_STACKED_INNER_CORNER_SLOPE_PANEL,
+            partTargets = BlockType.FRAMED_VERTICAL_STAIRS
+    )
     private static boolean testAgainstStackedInnerCornerSlopePanel(
             Direction dir, boolean top, BlockState adjState, Direction side
     )
     {
         Tuple<BlockState, BlockState> states = AbstractFramedDoubleBlock.getStatePair(adjState);
-        return testAgainstVerticalStairs(dir, top, states.getA(), side) ||
-               testAgainstSmallInnerCornerSlopePanel(dir, top, states.getB(), side);
+        return testAgainstVerticalStairs(dir, top, states.getA(), side);
     }
 
+    @CullTest.DoubleTarget(
+            value = BlockType.FRAMED_STACKED_INNER_CORNER_SLOPE_PANEL_W,
+            partTargets = { BlockType.FRAMED_STAIRS, BlockType.FRAMED_SMALL_INNER_CORNER_SLOPE_PANEL_W }
+    )
     private static boolean testAgainstStackedInnerCornerSlopePanelWall(
             Direction dir, boolean top, BlockState adjState, Direction side
     )
@@ -706,6 +769,7 @@ public final class VerticalHalfStairsSkipPredicate implements SideSkipPredicate
                testAgainstSmallInnerCornerSlopePanelWall(dir, top, states.getB(), side);
     }
 
+    @CullTest.SingleTarget(BlockType.FRAMED_VERTICAL_HALF_SLOPE)
     private static boolean testAgainstVerticalHalfSlope(
             Direction dir, boolean top, BlockState adjState, Direction side
     )
@@ -716,6 +780,10 @@ public final class VerticalHalfStairsSkipPredicate implements SideSkipPredicate
         return getHalfDir(dir, top, side).isEqualTo(VerticalHalfSlopeSkipPredicate.getHalfDir(adjDir, adjTop, side.getOpposite()));
     }
 
+    @CullTest.DoubleTarget(
+            value = BlockType.FRAMED_DIVIDED_SLOPE,
+            partTargets = BlockType.FRAMED_VERTICAL_HALF_SLOPE
+    )
     private static boolean testAgainstDividedSlope(
             Direction dir, boolean top, BlockState adjState, Direction side
     )
@@ -726,11 +794,14 @@ public final class VerticalHalfStairsSkipPredicate implements SideSkipPredicate
         }
 
         Tuple<BlockState, BlockState> states = AbstractFramedDoubleBlock.getStatePair(adjState);
-        //Half slopes re-use the half stairs check
-        return testAgainstVerticalHalfStairs(dir, top, states.getA(), side) ||
-               testAgainstVerticalHalfStairs(dir, top, states.getB(), side);
+        return testAgainstVerticalHalfSlope(dir, top, states.getA(), side) ||
+               testAgainstVerticalHalfSlope(dir, top, states.getB(), side);
     }
 
+    @CullTest.DoubleTarget(
+            value = BlockType.FRAMED_VERTICAL_DOUBLE_HALF_SLOPE,
+            partTargets = BlockType.FRAMED_VERTICAL_HALF_SLOPE
+    )
     private static boolean testAgainstVerticalDoubleHalfSlope(
             Direction dir, boolean top, BlockState adjState, Direction side
     )
@@ -740,6 +811,7 @@ public final class VerticalHalfStairsSkipPredicate implements SideSkipPredicate
                testAgainstVerticalHalfSlope(dir, top, states.getB(), side);
     }
 
+    @CullTest.SingleTarget(BlockType.FRAMED_SLOPED_STAIRS)
     private static boolean testAgainstSlopedStairs(
             Direction dir, boolean top, BlockState adjState, Direction side
     )
