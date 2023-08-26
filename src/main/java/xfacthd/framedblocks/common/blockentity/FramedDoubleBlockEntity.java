@@ -36,6 +36,7 @@ import java.util.Objects;
 
 public abstract class FramedDoubleBlockEntity extends FramedBlockEntity
 {
+    public static final boolean ENABLE_DOUBLE_BLOCK_DEBUG_RENDERER = false;
     public static final ModelProperty<ModelData> DATA_LEFT = new ModelProperty<>();
     public static final ModelProperty<ModelData> DATA_RIGHT = new ModelProperty<>();
 
@@ -348,7 +349,7 @@ public abstract class FramedDoubleBlockEntity extends FramedBlockEntity
     @Override
     public boolean hasCustomOutlineRendering(Player player)
     {
-        return !FMLEnvironment.production;
+        return !FMLEnvironment.production && ENABLE_DOUBLE_BLOCK_DEBUG_RENDERER;
     }
 
     public Tuple<BlockState, BlockState> getBlockPair()

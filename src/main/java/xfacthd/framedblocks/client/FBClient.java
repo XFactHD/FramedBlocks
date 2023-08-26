@@ -75,8 +75,6 @@ import java.util.function.Supplier;
 @Mod.EventBusSubscriber(modid = FramedConstants.MOD_ID, bus = Mod.EventBusSubscriber.Bus.MOD, value = Dist.CLIENT)
 public final class FBClient
 {
-    private static final boolean ENABLE_DOUBLE_BLOCK_DEBUG_RENDERER = false;
-
     static
     {
         FramedBlocksClientAPI.INSTANCE.accept(new ClientApiImpl());
@@ -143,7 +141,7 @@ public final class FBClient
         event.registerBlockEntityRenderer(FBContent.blockEntityTypeFramedChest.get(), FramedChestRenderer::new);
         event.registerBlockEntityRenderer(FBContent.BE_TYPE_FRAMED_ITEM_FRAME.get(), FramedItemFrameRenderer::new);
 
-        if (!FMLEnvironment.production && ENABLE_DOUBLE_BLOCK_DEBUG_RENDERER)
+        if (!FMLEnvironment.production && FramedDoubleBlockEntity.ENABLE_DOUBLE_BLOCK_DEBUG_RENDERER)
         {
             BlockEntityRendererProvider<FramedDoubleBlockEntity> provider = FramedDoubleBlockDebugRenderer::new;
             FBContent.getDoubleBlockEntities().forEach(type ->
