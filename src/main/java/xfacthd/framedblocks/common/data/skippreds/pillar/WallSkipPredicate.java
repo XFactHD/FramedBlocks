@@ -71,7 +71,7 @@ public final class WallSkipPredicate implements SideSkipPredicate
 
 
 
-    private static WallSide getArm(BlockState state, Direction dir)
+    public static WallSide getArm(BlockState state, Direction dir)
     {
         return switch (dir)
         {
