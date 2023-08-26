@@ -96,6 +96,7 @@ public final class FramedLanguageProvider extends LanguageProvider
         add(FBContent.BLOCK_FRAMED_REDSTONE_TORCH.get(), "Framed Redstone Torch"); //See above
         add(FBContent.BLOCK_FRAMED_FLOOR.get(), "Framed Floor Board");
         add(FBContent.BLOCK_FRAMED_LATTICE.get(), "Framed Lattice");
+        add(FBContent.BLOCK_FRAMED_THICK_LATTICE.get(), "Framed Thick Lattice");
         add(FBContent.BLOCK_FRAMED_VERTICAL_STAIRS.get(), "Framed Vertical Stairs");
         add(FBContent.BLOCK_FRAMED_CHEST.get(), "Framed Chest");
         add(FBContent.BLOCK_FRAMED_BARS.get(), "Framed Bars");

@@ -93,6 +93,7 @@ public final class SideSkipPredicates extends BlockTypeMap<SideSkipPredicate>
         put(BlockType.FRAMED_FLOOR_BOARD, new FloorBoardSkipPredicate());
         put(BlockType.FRAMED_WALL_BOARD, new WallBoardSkipPredicate());
         put(BlockType.FRAMED_LATTICE_BLOCK, new LatticeSkipPredicate());
+        put(BlockType.FRAMED_THICK_LATTICE, new ThickLatticeSkipPredicate());
         put(BlockType.FRAMED_CHEST, SideSkipPredicate.FALSE);
         put(BlockType.FRAMED_SECRET_STORAGE, SideSkipPredicate.FULL_FACE);
         put(BlockType.FRAMED_BARS, SideSkipPredicate.FALSE);

@@ -349,6 +349,15 @@ public final class FramedRecipeProvider extends RecipeProvider
                 .unlockedBy("hasFramedBlock", HAS_FRAMED_BLOCK)
                 .save(consumer);
 
+        shapedBuildingBlock(FBContent.BLOCK_FRAMED_THICK_LATTICE.get(), 2)
+                .pattern("HF ")
+                .pattern("FFF")
+                .pattern(" F ")
+                .define('F', FBContent.BLOCK_FRAMED_CUBE.get())
+                .define('H', FBContent.ITEM_FRAMED_HAMMER.get())
+                .unlockedBy("hasFramedBlock", HAS_FRAMED_BLOCK)
+                .save(consumer);
+
         shapedBuildingBlock(FBContent.BLOCK_FRAMED_VERTICAL_STAIRS.get(), 4)
                 .pattern("FFF")
                 .pattern("FF ")

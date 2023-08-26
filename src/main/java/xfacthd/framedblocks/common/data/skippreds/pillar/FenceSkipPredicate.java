@@ -3,14 +3,13 @@ package xfacthd.framedblocks.common.data.skippreds.pillar;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.world.level.BlockGetter;
-import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.FenceBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import xfacthd.framedblocks.api.block.FramedProperties;
+import xfacthd.framedblocks.api.block.IFramedBlock;
 import xfacthd.framedblocks.api.predicate.cull.SideSkipPredicate;
 import xfacthd.framedblocks.api.util.*;
-import xfacthd.framedblocks.common.FBContent;
 import xfacthd.framedblocks.common.data.BlockType;
 import xfacthd.framedblocks.common.data.skippreds.CullTest;
 
@@ -18,48 +17,52 @@ import xfacthd.framedblocks.common.data.skippreds.CullTest;
 public final class FenceSkipPredicate implements SideSkipPredicate
 {
     @Override
-    @CullTest.SingleTarget({ BlockType.FRAMED_FENCE, BlockType.FRAMED_LATTICE_BLOCK, BlockType.FRAMED_POST })
     public boolean test(BlockGetter level, BlockPos pos, BlockState state, BlockState adjState, Direction side)
     {
-        boolean sameBlock = adjState.getBlock() == state.getBlock();
-
-        if (Utils.isY(side))
+        if (adjState.getBlock() instanceof IFramedBlock block && block.getBlockType() instanceof BlockType type)
         {
-            return sameBlock || isVerticalPostOrLattice(adjState);
+            return switch (type)
+            {
+                case FRAMED_FENCE -> testAgainstFence(state, adjState, side);
+                case FRAMED_FENCE_GATE -> testAgainstFenceGate(state, adjState, side);
+                case FRAMED_POST -> testAgainstPost(adjState, side);
+                case FRAMED_LATTICE_BLOCK -> testAgainstLattice(adjState, side);
+                default -> false;
+            };
         }
+        return false;
+    }
 
-        if (!hasFenceArm(state, side))
-        {
-            return false;
-        }
+    @CullTest.SingleTarget(BlockType.FRAMED_FENCE)
+    private static boolean testAgainstFence(BlockState state, BlockState adjState, Direction side)
+    {
+        return Utils.isY(side) || (hasFenceArm(state, side) && hasFenceArm(adjState, side.getOpposite()));
+    }
 
-        if (sameBlock && hasFenceArm(adjState, side.getOpposite()))
-        {
-            return true;
-        }
-
-        if (adjState.getBlock() == FBContent.BLOCK_FRAMED_FENCE_GATE.get())
+    @CullTest.SingleTarget(value = BlockType.FRAMED_FENCE_GATE, oneWay = true)
+    private static boolean testAgainstFenceGate(BlockState state, BlockState adjState, Direction side)
+    {
+        if (!Utils.isY(side) && hasFenceArm(state, side))
         {
             Direction adjDir = adjState.getValue(BlockStateProperties.HORIZONTAL_FACING);
-            return adjDir.getCounterClockWise() == side || adjDir.getClockWise() == side;
+            return adjDir.getClockWise().getAxis() == side.getAxis();
         }
-
         return false;
     }
 
-    private static boolean isVerticalPostOrLattice(BlockState state)
+    @CullTest.SingleTarget(BlockType.FRAMED_POST)
+    private static boolean testAgainstPost(BlockState adjState, Direction side)
     {
-        Block block = state.getBlock();
-        if (block == FBContent.BLOCK_FRAMED_LATTICE.get())
-        {
-            return state.getValue(FramedProperties.Y_AXIS);
-        }
-        if (block == FBContent.BLOCK_FRAMED_POST.get())
-        {
-            return state.getValue(BlockStateProperties.AXIS) == Direction.Axis.Y;
-        }
-        return false;
+        return Utils.isY(side) && adjState.getValue(BlockStateProperties.AXIS) == Direction.Axis.Y;
     }
+
+    @CullTest.SingleTarget(BlockType.FRAMED_LATTICE_BLOCK)
+    private static boolean testAgainstLattice(BlockState adjState, Direction side)
+    {
+        return Utils.isY(side) && adjState.getValue(FramedProperties.Y_AXIS);
+    }
+
+
 
     private static boolean hasFenceArm(BlockState state, Direction side)
     {

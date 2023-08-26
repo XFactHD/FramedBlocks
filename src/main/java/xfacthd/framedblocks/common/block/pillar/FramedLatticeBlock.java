@@ -4,6 +4,7 @@ import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.tags.BlockTags;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelAccessor;
@@ -17,20 +18,32 @@ import net.minecraft.world.phys.shapes.VoxelShape;
 import xfacthd.framedblocks.api.block.FramedProperties;
 import xfacthd.framedblocks.api.shapes.ShapeProvider;
 import xfacthd.framedblocks.api.shapes.ShapeUtils;
+import xfacthd.framedblocks.api.util.Utils;
+import xfacthd.framedblocks.common.FBContent;
 import xfacthd.framedblocks.common.block.FramedBlock;
 import xfacthd.framedblocks.common.data.BlockType;
 
+import java.util.function.BiPredicate;
+
 public class FramedLatticeBlock extends FramedBlock
 {
-    public FramedLatticeBlock()
+    private final BiPredicate<Direction, BlockState> connectionTest;
+
+    public FramedLatticeBlock(BlockType type)
     {
-        super(BlockType.FRAMED_LATTICE_BLOCK);
+        super(type);
         registerDefaultState(defaultBlockState()
                 .setValue(FramedProperties.X_AXIS, false)
                 .setValue(FramedProperties.Y_AXIS, false)
                 .setValue(FramedProperties.Z_AXIS, false)
                 .setValue(FramedProperties.STATE_LOCKED, false)
         );
+        this.connectionTest = switch (type)
+        {
+            case FRAMED_LATTICE_BLOCK -> FramedLatticeBlock::canConnectThin;
+            case FRAMED_THICK_LATTICE -> FramedLatticeBlock::canConnectThick;
+            default -> throw new IllegalArgumentException("Unexpected lattice type: " + type);
+        };
     }
 
     @Override
@@ -50,9 +63,18 @@ public class FramedLatticeBlock extends FramedBlock
         BlockPos pos = context.getClickedPos();
 
         BlockState state = defaultBlockState();
-        state = state.setValue(FramedProperties.X_AXIS, level.getBlockState(pos.east()).is(this) || level.getBlockState(pos.west()).is(this));
-        state = state.setValue(FramedProperties.Y_AXIS, level.getBlockState(pos.above()).is(this) || level.getBlockState(pos.below()).is(this));
-        state = state.setValue(FramedProperties.Z_AXIS, level.getBlockState(pos.north()).is(this) || level.getBlockState(pos.south()).is(this));
+        state = state.setValue(
+                FramedProperties.X_AXIS,
+                canConnectTo(level, pos, Direction.EAST) || canConnectTo(level, pos, Direction.WEST)
+        );
+        state = state.setValue(
+                FramedProperties.Y_AXIS,
+                canConnectTo(level, pos, Direction.UP) || canConnectTo(level, pos, Direction.DOWN)
+        );
+        state = state.setValue(
+                FramedProperties.Z_AXIS,
+                canConnectTo(level, pos, Direction.NORTH) || canConnectTo(level, pos, Direction.SOUTH)
+        );
 
         return withWater(state, level, pos);
     }
@@ -69,13 +91,25 @@ public class FramedLatticeBlock extends FramedBlock
     {
         if (!state.getValue(FramedProperties.STATE_LOCKED))
         {
+            Direction opposite = facing.getOpposite();
             state = state.setValue(
                     getPropFromAxis(facing),
-                    facingState.is(this) || level.getBlockState(pos.relative(facing.getOpposite())).is(this)
+                    canConnectTo(facingState, facing) || canConnectTo(level, pos, opposite)
             );
         }
 
         return super.updateShape(state, facing, facingState, level, pos, facingPos);
+    }
+
+    private boolean canConnectTo(LevelAccessor level, BlockPos pos, Direction side)
+    {
+        BlockState state = level.getBlockState(pos.relative(side));
+        return canConnectTo(state, side);
+    }
+
+    private boolean canConnectTo(BlockState state, Direction side)
+    {
+        return state.is(this) || connectionTest.test(side, state);
     }
 
     @Override
@@ -103,17 +137,37 @@ public class FramedLatticeBlock extends FramedBlock
 
 
 
-    public static ShapeProvider generateShapes(ImmutableList<BlockState> states)
+    public static ShapeProvider generateThinShapes(ImmutableList<BlockState> states)
+    {
+        return generateShapes(
+                states,
+                box(6, 6, 6, 10, 10, 10),
+                box(0, 6, 6, 16, 10, 10),
+                box(6, 0, 6, 10, 16, 10),
+                box(6, 6, 0, 10, 10, 16)
+        );
+    }
+
+    public static ShapeProvider generateThickShapes(ImmutableList<BlockState> states)
+    {
+        return generateShapes(
+                states,
+                box(4, 4, 4, 12, 12, 12),
+                box(0, 4, 4, 16, 12, 12),
+                box(4, 0, 4, 12, 16, 12),
+                box(4, 4, 0, 12, 12, 16)
+        );
+    }
+
+    private static ShapeProvider generateShapes(
+            ImmutableList<BlockState> states, VoxelShape centerShape, VoxelShape xShape, VoxelShape yShape, VoxelShape zShape
+    )
     {
         ImmutableMap.Builder<BlockState, VoxelShape> builder = ImmutableMap.builder();
 
         int maskX = 0b001;
         int maskY = 0b010;
         int maskZ = 0b100;
-        VoxelShape centerShape = box(6, 6, 6, 10, 10, 10);
-        VoxelShape xShape = box(0, 6, 6, 16, 10, 10);
-        VoxelShape yShape = box(6, 0, 6, 10, 16, 10);
-        VoxelShape zShape = box(6, 6, 0, 10, 10, 16);
         VoxelShape[] shapes = new VoxelShape[8];
         for (int i = 0; i < 8; i++)
         {
@@ -152,5 +206,31 @@ public class FramedLatticeBlock extends FramedBlock
             case Y -> FramedProperties.Y_AXIS;
             case Z -> FramedProperties.Z_AXIS;
         };
+    }
+
+    private static boolean canConnectThin(Direction side, BlockState state)
+    {
+        if (state.is(FBContent.BLOCK_FRAMED_POST.get()))
+        {
+            return side.getAxis() == state.getValue(BlockStateProperties.AXIS);
+        }
+        return Utils.isY(side) && state.is(BlockTags.FENCES);
+    }
+
+    private static boolean canConnectThick(Direction side, BlockState state)
+    {
+        if (state.is(BlockTags.WALLS))
+        {
+            return side == Direction.DOWN || (side == Direction.UP && state.getValue(BlockStateProperties.UP));
+        }
+        if (state.is(FBContent.BLOCK_FRAMED_PILLAR.get()))
+        {
+            return side.getAxis() == state.getValue(BlockStateProperties.AXIS);
+        }
+        if (state.is(FBContent.BLOCK_FRAMED_HALF_PILLAR.get()))
+        {
+            return side == state.getValue(BlockStateProperties.FACING).getOpposite();
+        }
+        return false;
     }
 }

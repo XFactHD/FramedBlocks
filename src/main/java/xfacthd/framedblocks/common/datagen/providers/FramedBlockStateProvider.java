@@ -61,6 +61,7 @@ public final class FramedBlockStateProvider extends BlockStateProvider
         simpleBlock(FBContent.BLOCK_FRAMED_STONE_BUTTON.get(), stoneCube);
         simpleBlock(FBContent.BLOCK_FRAMED_WALL_SIGN.get(), cube);
         simpleBlock(FBContent.BLOCK_FRAMED_LATTICE.get(), cube);
+        simpleBlock(FBContent.BLOCK_FRAMED_THICK_LATTICE.get(), cube);
         simpleBlock(FBContent.BLOCK_FRAMED_VERTICAL_STAIRS.get(), cube);
         simpleBlockWithItem(FBContent.BLOCK_FRAMED_DOUBLE_SLAB, cube, "cutout");
         simpleBlockWithItem(FBContent.BLOCK_FRAMED_DOUBLE_PANEL, cube, "cutout");

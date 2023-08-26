@@ -1,0 +1,50 @@
+{
+	"credit": "Made with Blockbench",
+	"parent": "block/cube",
+	"textures": {
+		"0": "framedblocks:block/framed_block",
+		"particle": "framedblocks:block/framed_block"
+	},
+	"render_type": "minecraft:cutout",
+	"elements": [
+		{
+			"name": "x",
+			"from": [0, 4, 4],
+			"to": [16, 12, 12],
+			"faces": {
+				"north": {"uv": [0, 4, 16, 12], "texture": "#0"},
+				"east": {"uv": [4, 4, 12, 12], "texture": "#0"},
+				"south": {"uv": [0, 4, 16, 12], "texture": "#0"},
+				"west": {"uv": [4, 4, 12, 12], "texture": "#0"},
+				"up": {"uv": [0, 4, 16, 12], "texture": "#0"},
+				"down": {"uv": [0, 4, 16, 12], "texture": "#0"}
+			}
+		},
+		{
+			"name": "y",
+			"from": [4, 0, 4],
+			"to": [12, 16, 12],
+			"faces": {
+				"north": {"uv": [4, 0, 12, 16], "texture": "#0"},
+				"east": {"uv": [4, 0, 12, 16], "texture": "#0"},
+				"south": {"uv": [4, 0, 12, 16], "texture": "#0"},
+				"west": {"uv": [4, 0, 12, 16], "texture": "#0"},
+				"up": {"uv": [4, 4, 12, 12], "texture": "#0"},
+				"down": {"uv": [4, 4, 12, 12], "texture": "#0"}
+			}
+		},
+		{
+			"name": "z",
+			"from": [4, 4, 0],
+			"to": [12, 12, 16],
+			"faces": {
+				"north": {"uv": [4, 4, 12, 12], "texture": "#0"},
+				"east": {"uv": [0, 4, 16, 12], "texture": "#0"},
+				"south": {"uv": [4, 4, 12, 12], "texture": "#0"},
+				"west": {"uv": [0, 4, 16, 12], "texture": "#0"},
+				"up": {"uv": [4, 0, 12, 16], "texture": "#0"},
+				"down": {"uv": [4, 0, 12, 16], "texture": "#0"}
+			}
+		}
+	]
+}

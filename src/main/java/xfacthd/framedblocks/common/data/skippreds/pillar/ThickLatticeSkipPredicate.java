@@ -8,12 +8,12 @@ import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import xfacthd.framedblocks.api.block.FramedProperties;
 import xfacthd.framedblocks.api.block.IFramedBlock;
 import xfacthd.framedblocks.api.predicate.cull.SideSkipPredicate;
-import xfacthd.framedblocks.api.util.*;
+import xfacthd.framedblocks.api.util.Utils;
 import xfacthd.framedblocks.common.data.BlockType;
 import xfacthd.framedblocks.common.data.skippreds.CullTest;
 
-@CullTest(BlockType.FRAMED_LATTICE_BLOCK)
-public final class LatticeSkipPredicate implements SideSkipPredicate
+@CullTest(BlockType.FRAMED_THICK_LATTICE)
+public final class ThickLatticeSkipPredicate implements SideSkipPredicate
 {
     @Override
     public boolean test(BlockGetter level, BlockPos pos, BlockState state, BlockState adjState, Direction side)
@@ -26,17 +26,18 @@ public final class LatticeSkipPredicate implements SideSkipPredicate
 
             return switch (type)
             {
-                case FRAMED_LATTICE_BLOCK -> testAgainstLattice(xAxis, yAxis, zAxis, adjState, side);
-                case FRAMED_FENCE -> testAgainstWall(yAxis, side);
-                case FRAMED_POST -> testAgainstPost(xAxis, yAxis, zAxis, adjState, side);
+                case FRAMED_THICK_LATTICE -> testAgainstThickLattice(xAxis, yAxis, zAxis, adjState, side);
+                case FRAMED_WALL -> testAgainstWall(yAxis, adjState, side);
+                case FRAMED_PILLAR -> testAgainstPillar(xAxis, yAxis, zAxis, adjState, side);
+                case FRAMED_HALF_PILLAR -> testAgainstHalfPillar(xAxis, yAxis, zAxis, adjState, side);
                 default -> false;
             };
         }
         return false;
     }
 
-    @CullTest.SingleTarget(BlockType.FRAMED_LATTICE_BLOCK)
-    private static boolean testAgainstLattice(
+    @CullTest.SingleTarget(BlockType.FRAMED_THICK_LATTICE)
+    private static boolean testAgainstThickLattice(
             boolean xAxis, boolean yAxis, boolean zAxis, BlockState adjState, Direction side
     )
     {
@@ -48,19 +49,39 @@ public final class LatticeSkipPredicate implements SideSkipPredicate
         };
     }
 
-    @CullTest.SingleTarget(BlockType.FRAMED_FENCE)
-    private static boolean testAgainstWall(boolean yAxis, Direction side)
+    @CullTest.SingleTarget(BlockType.FRAMED_WALL)
+    private static boolean testAgainstWall(
+            boolean yAxis, BlockState adjState, Direction side
+    )
     {
-        return yAxis && Utils.isY(side);
+        if (yAxis && Utils.isY(side))
+        {
+            return adjState.getValue(BlockStateProperties.UP);
+        }
+        return false;
     }
 
-    @CullTest.SingleTarget(BlockType.FRAMED_POST)
-    private static boolean testAgainstPost(
+    @CullTest.SingleTarget(BlockType.FRAMED_PILLAR)
+    private static boolean testAgainstPillar(
             boolean xAxis, boolean yAxis, boolean zAxis, BlockState adjState, Direction side
     )
     {
         Direction.Axis adjAxis = adjState.getValue(BlockStateProperties.AXIS);
         return adjAxis == side.getAxis() && switch (adjAxis)
+        {
+            case X -> xAxis;
+            case Y -> yAxis;
+            case Z -> zAxis;
+        };
+    }
+
+    @CullTest.SingleTarget(BlockType.FRAMED_HALF_PILLAR)
+    private static boolean testAgainstHalfPillar(
+            boolean xAxis, boolean yAxis, boolean zAxis, BlockState adjState, Direction side
+    )
+    {
+        Direction adjDir = adjState.getValue(BlockStateProperties.FACING);
+        return side == adjDir.getOpposite() && switch (adjDir.getAxis())
         {
             case X -> xAxis;
             case Y -> yAxis;

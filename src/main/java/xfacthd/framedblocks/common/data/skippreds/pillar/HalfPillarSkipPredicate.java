@@ -5,8 +5,10 @@ import net.minecraft.core.Direction;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
+import xfacthd.framedblocks.api.block.FramedProperties;
+import xfacthd.framedblocks.api.block.IFramedBlock;
 import xfacthd.framedblocks.api.predicate.cull.SideSkipPredicate;
-import xfacthd.framedblocks.common.FBContent;
+import xfacthd.framedblocks.api.util.Utils;
 import xfacthd.framedblocks.common.data.BlockType;
 import xfacthd.framedblocks.common.data.skippreds.CullTest;
 
@@ -14,26 +16,49 @@ import xfacthd.framedblocks.common.data.skippreds.CullTest;
 public final class HalfPillarSkipPredicate implements SideSkipPredicate
 {
     @Override
-    @CullTest.SingleTarget({ BlockType.FRAMED_HALF_PILLAR, BlockType.FRAMED_PILLAR })
     public boolean test(BlockGetter level, BlockPos pos, BlockState state, BlockState adjState, Direction side)
     {
         Direction face = state.getValue(BlockStateProperties.FACING);
-        if (side == null || side != face)
+        if (side == face && adjState.getBlock() instanceof IFramedBlock block && block.getBlockType() instanceof BlockType type)
         {
-            return false;
+            return switch (type)
+            {
+                case FRAMED_HALF_PILLAR -> testAgainstHalfPillar(adjState, side);
+                case FRAMED_PILLAR -> testAgainstPillar(adjState, side);
+                case FRAMED_WALL -> testAgainstWall(adjState, side);
+                case FRAMED_THICK_LATTICE -> testAgainstThickLattice(adjState, side);
+                default -> false;
+            };
         }
-
-        if (adjState.getBlock() == state.getBlock())
-        {
-            Direction adjFace = adjState.getValue(BlockStateProperties.FACING);
-            return adjFace == face.getOpposite();
-        }
-        else if (adjState.getBlock() == FBContent.BLOCK_FRAMED_PILLAR.get())
-        {
-            Direction.Axis adjAxis = adjState.getValue(BlockStateProperties.AXIS);
-            return adjAxis == face.getAxis();
-        }
-
         return false;
+    }
+
+    @CullTest.SingleTarget(BlockType.FRAMED_HALF_PILLAR)
+    private static boolean testAgainstHalfPillar(BlockState adjState, Direction side)
+    {
+        return adjState.getValue(BlockStateProperties.FACING) == side.getOpposite();
+    }
+
+    @CullTest.SingleTarget(BlockType.FRAMED_PILLAR)
+    private static boolean testAgainstPillar(BlockState adjState, Direction side)
+    {
+        return adjState.getValue(BlockStateProperties.AXIS) == side.getAxis();
+    }
+
+    @CullTest.SingleTarget(BlockType.FRAMED_WALL)
+    private static boolean testAgainstWall(BlockState adjState, Direction side)
+    {
+        return Utils.isY(side) && adjState.getValue(BlockStateProperties.UP);
+    }
+
+    @CullTest.SingleTarget(BlockType.FRAMED_THICK_LATTICE)
+    private static boolean testAgainstThickLattice(BlockState adjState, Direction side)
+    {
+        return switch (side.getAxis())
+        {
+            case X -> adjState.getValue(FramedProperties.X_AXIS);
+            case Y -> adjState.getValue(FramedProperties.Y_AXIS);
+            case Z -> adjState.getValue(FramedProperties.Z_AXIS);
+        };
     }
 }
