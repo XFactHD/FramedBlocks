@@ -120,14 +120,30 @@ public final class ModelUtils
      * Calculate face normals from vertex positions
      * Adapted from {@code net.minecraftforge.client.ForgeHooksClient#fillNormal(int[], Direction)}
      */
+    @Deprecated(forRemoval = true)
     public static void fillNormal(BakedQuad quad)
     {
+        int[] vertexData = quad.getVertices();
         float[][] pos = new float[4][3];
-        for (int i = 0; i < 4; i++)
+        for (int vert = 0; vert < 4; vert++)
         {
-            unpackPosition(quad.getVertices(), pos[i], i);
+            unpackPosition(vertexData, pos[vert], vert);
         }
+        float[][] normal = new float[4][3];
+        fillNormal(pos, normal);
+        for (int vert = 0; vert < 4; vert++)
+        {
+            packNormals(normal[vert], vertexData, vert);
+        }
+    }
 
+    /**
+     * Calculate face normals from vertex positions
+     * Adapted from {@code net.minecraftforge.client.ForgeHooksClient#fillNormal(int[], Direction)}
+     * @return The {@link Direction} closest to the calculated normal vector
+     */
+    public static Direction fillNormal(float[][] pos, float[][] normal)
+    {
         Vector3f v1 = new Vector3f(pos[3][0], pos[3][1], pos[3][2]);
         Vector3f t1 = new Vector3f(pos[1][0], pos[1][1], pos[1][2]);
         Vector3f v2 = new Vector3f(pos[2][0], pos[2][1], pos[2][2]);
@@ -138,17 +154,14 @@ public final class ModelUtils
         v2.cross(v1);
         v2.normalize();
 
-        int x = ((byte) Math.round(v2.x() * 127)) & 0xFF;
-        int y = ((byte) Math.round(v2.y() * 127)) & 0xFF;
-        int z = ((byte) Math.round(v2.z() * 127)) & 0xFF;
-
-        int normal = x | (y << 0x08) | (z << 0x10);
-
-        int[] vertexData = quad.getVertices();
         for (int vert = 0; vert < 4; vert++)
         {
-            vertexData[vert * IQuadTransformer.STRIDE + IQuadTransformer.NORMAL] = normal;
+            normal[vert][0] = v2.x;
+            normal[vert][1] = v2.y;
+            normal[vert][2] = v2.z;
         }
+
+        return Direction.getNearest(v2.x, v2.y, v2.z);
     }
 
     /**

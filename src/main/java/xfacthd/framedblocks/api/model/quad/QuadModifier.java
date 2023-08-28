@@ -2,6 +2,7 @@ package xfacthd.framedblocks.api.model.quad;
 
 import com.google.common.base.Preconditions;
 import net.minecraft.client.renderer.block.model.BakedQuad;
+import net.minecraft.core.Direction;
 import xfacthd.framedblocks.api.model.util.ModelUtils;
 
 import java.util.Arrays;
@@ -139,6 +140,8 @@ public final class QuadModifier
             return;
         }
 
+        Direction normalDir = ModelUtils.fillNormal(data.pos, data.normal);
+
         int[] vertexData = data.quad.getVertices();
         vertexData = Arrays.copyOf(vertexData, vertexData.length);
         packVertexData(vertexData);
@@ -146,12 +149,11 @@ public final class QuadModifier
         BakedQuad newQuad = new BakedQuad(
                 vertexData,
                 tintIndex == -1 ? data.quad.getTintIndex() : tintIndex,
-                data.quad.getDirection(),
+                normalDir,
                 data.quad.getSprite(),
                 !noShade && data.quad.isShade(),
                 data.quad.hasAmbientOcclusion()
         );
-        ModelUtils.fillNormal(newQuad);
         quadConsumer.accept(newQuad);
     }
 
@@ -169,8 +171,8 @@ public final class QuadModifier
             return;
         }
 
+        ModelUtils.fillNormal(data.pos, data.normal);
         packVertexData(data.quad.getVertices());
-        ModelUtils.fillNormal(data.quad);
     }
 
     private void packVertexData(int[] vertexData)
