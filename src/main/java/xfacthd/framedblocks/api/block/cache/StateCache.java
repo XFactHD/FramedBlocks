@@ -56,6 +56,12 @@ public class StateCache
 
             for (Direction edge : DIRECTIONS)
             {
+                if (edge.getAxis() == side.getAxis())
+                {
+                    conFullEdge[sideOrd][Utils.maskNullDirection(edge)] = conFullEdge[sideOrd][Utils.maskNullDirection(null)];
+                    continue;
+                }
+
                 conFullEdge[sideOrd][Utils.maskNullDirection(edge)] = conPred.canConnectFullEdge(state, side, edge);
 
                 boolean detailed = conPred.canConnectDetailed(state, side, edge);
