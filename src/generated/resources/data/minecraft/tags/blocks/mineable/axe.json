@@ -168,6 +168,8 @@
     "framedblocks:framed_mini_cube",
     "framedblocks:framed_one_way_window",
     "framedblocks:framed_bookshelf",
-    "framedblocks:framed_chiseled_bookshelf"
+    "framedblocks:framed_chiseled_bookshelf",
+    "framedblocks:framed_centered_slab",
+    "framedblocks:framed_centered_panel"
   ]
 }

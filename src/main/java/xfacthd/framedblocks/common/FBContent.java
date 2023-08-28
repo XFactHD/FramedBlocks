@@ -256,6 +256,8 @@ public final class FBContent
     public static final RegistryObject<Block> BLOCK_FRAMED_ONE_WAY_WINDOW = registerBlock(FramedOneWayWindowBlock::new, BlockType.FRAMED_ONE_WAY_WINDOW);
     public static final RegistryObject<Block> BLOCK_FRAMED_BOOKSHELF = registerBlock(FramedBookshelfBlock::new, BlockType.FRAMED_BOOKSHELF);
     public static final RegistryObject<Block> BLOCK_FRAMED_CHISELED_BOOKSHELF = registerBlock(FramedChiseledBookshelfBlock::new, BlockType.FRAMED_CHISELED_BOOKSHELF);
+    public static final RegistryObject<Block> BLOCK_FRAMED_CENTERED_SLAB = registerBlock(FramedCenteredSlabBlock::new, BlockType.FRAMED_CENTERED_SLAB);
+    public static final RegistryObject<Block> BLOCK_FRAMED_CENTERED_PANEL = registerBlock(FramedCenteredPanelBlock::new, BlockType.FRAMED_CENTERED_PANEL);
     // endregion
 
     // region Special Blocks

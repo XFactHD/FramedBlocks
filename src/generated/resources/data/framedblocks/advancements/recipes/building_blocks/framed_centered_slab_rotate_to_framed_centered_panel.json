@@ -1,0 +1,35 @@
+{
+  "parent": "minecraft:recipes/root",
+  "criteria": {
+    "has_framed_centered_slab": {
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "framedblocks:framed_centered_slab"
+            ]
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "has_the_recipe": {
+      "conditions": {
+        "recipe": "framedblocks:framed_centered_slab_rotate_to_framed_centered_panel"
+      },
+      "trigger": "minecraft:recipe_unlocked"
+    }
+  },
+  "requirements": [
+    [
+      "has_framed_centered_slab",
+      "has_the_recipe"
+    ]
+  ],
+  "rewards": {
+    "recipes": [
+      "framedblocks:framed_centered_slab_rotate_to_framed_centered_panel"
+    ]
+  },
+  "sends_telemetry_event": false
+}

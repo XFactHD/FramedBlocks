@@ -664,6 +664,14 @@ public final class FramingSawRecipeProvider extends RecipeProvider
         FramingSawRecipeBuilder.builder(FBContent.BLOCK_FRAMED_CHISELED_BOOKSHELF)
                 .material(FramingSawRecipe.CUBE_MATERIAL_VALUE * 3)
                 .save(consumer);
+
+        FramingSawRecipeBuilder.builder(FBContent.BLOCK_FRAMED_CENTERED_SLAB)
+                .material(FramingSawRecipe.CUBE_MATERIAL_VALUE / 2)
+                .save(consumer);
+
+        FramingSawRecipeBuilder.builder(FBContent.BLOCK_FRAMED_CENTERED_PANEL)
+                .material(FramingSawRecipe.CUBE_MATERIAL_VALUE / 2)
+                .save(consumer);
     }
 
     @Override

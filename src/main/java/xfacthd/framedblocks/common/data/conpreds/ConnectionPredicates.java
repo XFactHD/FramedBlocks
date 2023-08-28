@@ -201,5 +201,7 @@ public final class ConnectionPredicates extends BlockTypeMap<ConnectionPredicate
         put(BlockType.FRAMED_ONE_WAY_WINDOW, ConnectionPredicate.FULL_FACE);
         put(BlockType.FRAMED_BOOKSHELF, new BookshelfConnectionPredicate());
         put(BlockType.FRAMED_CHISELED_BOOKSHELF, new ChiseledBookshelfConnectionPredicate());
+        put(BlockType.FRAMED_CENTERED_SLAB, new CenteredSlabConnectionPredicate());
+        put(BlockType.FRAMED_CENTERED_PANEL, new CenteredPanelConnectionPredicate());
     }
 }

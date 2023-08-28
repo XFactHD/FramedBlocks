@@ -214,6 +214,8 @@ public final class FramedLanguageProvider extends LanguageProvider
         add(FBContent.BLOCK_FRAMED_ONE_WAY_WINDOW.get(), "Framed One-Way Window");
         add(FBContent.BLOCK_FRAMED_BOOKSHELF.get(), "Framed Bookshelf");
         add(FBContent.BLOCK_FRAMED_CHISELED_BOOKSHELF.get(), "Framed Chiseled Bookshelf");
+        add(FBContent.BLOCK_FRAMED_CENTERED_SLAB.get(), "Framed Centered Slab");
+        add(FBContent.BLOCK_FRAMED_CENTERED_PANEL.get(), "Framed Centered Panel");
     }
 
     private void addSpecialBlockTranslations()

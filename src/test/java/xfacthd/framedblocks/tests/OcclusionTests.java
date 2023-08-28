@@ -48,6 +48,8 @@ import java.util.stream.Collectors;
  * <li>{@link OcclusionTests#test_InverseDoubleCornerSlopePanel_Top(GameTestHelper)}</li>
  * <li>{@link OcclusionTests#test_InverseDoubleCornerSlopePanelWall(GameTestHelper)}</li>
  * <li>{@link OcclusionTests#test_HorizontalPane(GameTestHelper)}</li>
+ * <li>{@link OcclusionTests#test_CenteredSlab(GameTestHelper)}</li>
+ * <li>{@link OcclusionTests#test_CenteredPanel(GameTestHelper)}</li>
  * </ul>
  */
 
@@ -2560,6 +2562,22 @@ public final class OcclusionTests
     {
         BlockState state = FBContent.BLOCK_FRAMED_VERTICAL_SLOPED_STAIRS.get()
                 .defaultBlockState();
+        TestUtils.testBlockOccludesLightNorth(helper, state);
+    }
+
+    @GameTest(template = "box_top", batch = "occlusion", required = false)
+    @TestedType(type = BlockType.FRAMED_SLAB)
+    public static void test_CenteredSlab(GameTestHelper helper)
+    {
+        BlockState state = FBContent.BLOCK_FRAMED_CENTERED_SLAB.get().defaultBlockState();
+        TestUtils.testBlockOccludesLightBelow(helper, state);
+    }
+
+    @GameTest(template = "box_side", batch = "occlusion", required = false)
+    @TestedType(type = BlockType.FRAMED_PANEL)
+    public static void test_CenteredPanel(GameTestHelper helper)
+    {
+        BlockState state = FBContent.BLOCK_FRAMED_CENTERED_PANEL.get().defaultBlockState();
         TestUtils.testBlockOccludesLightNorth(helper, state);
     }
 

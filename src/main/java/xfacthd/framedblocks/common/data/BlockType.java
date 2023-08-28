@@ -207,6 +207,8 @@ public enum BlockType implements IBlockType
     FRAMED_ONE_WAY_WINDOW                           (false, false,  true, false,  true, false, false, false, ConTexMode.FULL_FACE, Shapes.block()),
     FRAMED_BOOKSHELF                                ( true, false, false, false,  true,  true, false, false, ConTexMode.FULL_FACE, Shapes.block()),
     FRAMED_CHISELED_BOOKSHELF                       ( true, false,  true, false,  true,  true, false, false, ConTexMode.FULL_FACE, Shapes.block()),
+    FRAMED_CENTERED_SLAB                            ( true, false, false,  true,  true,  true, false, false, ConTexMode.DETAILED, FramedCenteredSlabBlock::generateShapes),
+    FRAMED_CENTERED_PANEL                           ( true, false, false,  true,  true,  true, false, false, ConTexMode.DETAILED, FramedCenteredPanelBlock::generateShapes),
     ;
 
     private final String name = toString().toLowerCase(Locale.ROOT);

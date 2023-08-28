@@ -1156,6 +1156,30 @@ public final class FramedRecipeProvider extends RecipeProvider
                 .unlockedBy("hasFramedBlock", HAS_FRAMED_BLOCK)
                 .save(consumer);
 
+        shapelessBuildingBlock(FBContent.BLOCK_FRAMED_CENTERED_SLAB.get())
+                .requires(FBContent.BLOCK_FRAMED_SLAB.get())
+                .requires(FBContent.ITEM_FRAMED_HAMMER.get())
+                .unlockedBy("hasFramedSlab", has(FBContent.BLOCK_FRAMED_SLAB.get()))
+                .save(consumer);
+
+        shapelessBuildingBlock(FBContent.BLOCK_FRAMED_SLAB.get())
+                .requires(FBContent.BLOCK_FRAMED_CENTERED_SLAB.get())
+                .requires(FBContent.ITEM_FRAMED_HAMMER.get())
+                .unlockedBy("hasFramedCenteredSlab", has(FBContent.BLOCK_FRAMED_CENTERED_SLAB.get()))
+                .save(consumer, Utils.rl("framed_slab_from_framed_centered_slab"));
+
+        shapelessBuildingBlock(FBContent.BLOCK_FRAMED_CENTERED_PANEL.get())
+                .requires(FBContent.BLOCK_FRAMED_PANEL.get())
+                .requires(FBContent.ITEM_FRAMED_HAMMER.get())
+                .unlockedBy("hasFramedPanel", has(FBContent.BLOCK_FRAMED_PANEL.get()))
+                .save(consumer);
+
+        shapelessBuildingBlock(FBContent.BLOCK_FRAMED_PANEL.get())
+                .requires(FBContent.BLOCK_FRAMED_CENTERED_PANEL.get())
+                .requires(FBContent.ITEM_FRAMED_HAMMER.get())
+                .unlockedBy("hasFramedCenteredPanel", has(FBContent.BLOCK_FRAMED_CENTERED_PANEL.get()))
+                .save(consumer, Utils.rl("framed_panel_from_framed_centered_panel"));
+
 
 
         ShapedRecipeBuilder.shaped(RecipeCategory.TOOLS, FBContent.BLOCK_FRAMING_SAW.get())
@@ -1245,6 +1269,7 @@ public final class FramedRecipeProvider extends RecipeProvider
         makeRotationRecipe(FBContent.BLOCK_FRAMED_FLAT_ELEVATED_INNER_DOUBLE_SLOPE_SLAB_CORNER, FBContent.BLOCK_FRAMED_FLAT_EXTENDED_INNER_DOUBLE_SLOPE_PANEL_CORNER, consumer);
         makeRotationRecipe(FBContent.BLOCK_FRAMED_FLAT_STACKED_SLOPE_SLAB_CORNER, FBContent.BLOCK_FRAMED_FLAT_STACKED_SLOPE_PANEL_CORNER, consumer);
         makeRotationRecipe(FBContent.BLOCK_FRAMED_FLAT_STACKED_INNER_SLOPE_SLAB_CORNER, FBContent.BLOCK_FRAMED_FLAT_STACKED_INNER_SLOPE_PANEL_CORNER, consumer);
+        makeRotationRecipe(FBContent.BLOCK_FRAMED_CENTERED_SLAB, FBContent.BLOCK_FRAMED_CENTERED_PANEL, consumer);
     }
 
     private static void makeRotationRecipe(RegistryObject<Block> first, RegistryObject<Block> second, Consumer<FinishedRecipe> consumer)
