@@ -61,6 +61,8 @@ public final class FramedBlockTagProvider extends BlockTagsProvider
                 FBContent.BLOCK_FRAMED_FANCY_DETECTOR_RAIL_SLOPE.get(),
                 FBContent.BLOCK_FRAMED_FANCY_ACTIVATOR_RAIL_SLOPE.get()
         );
+        tag(BlockTags.ENCHANTMENT_POWER_PROVIDER).add(FBContent.BLOCK_FRAMED_BOOKSHELF.get());
+        tag(Tags.Blocks.BOOKSHELVES).add(FBContent.BLOCK_FRAMED_BOOKSHELF.get());
 
         TagsProvider.TagAppender<Block> frameable = tag(Utils.FRAMEABLE).addTags(
                 Tags.Blocks.GLASS,

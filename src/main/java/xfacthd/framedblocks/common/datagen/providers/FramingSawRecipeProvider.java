@@ -655,6 +655,15 @@ public final class FramingSawRecipeProvider extends RecipeProvider
                 .material(FramingSawRecipe.CUBE_MATERIAL_VALUE)
                 .additive(FramingSawRecipeAdditive.of(Blocks.TINTED_GLASS))
                 .save(consumer);
+
+        FramingSawRecipeBuilder.builder(FBContent.BLOCK_FRAMED_BOOKSHELF)
+                .material(FramingSawRecipe.CUBE_MATERIAL_VALUE * 2)
+                .additive(FramingSawRecipeAdditive.of(Items.BOOK, 3))
+                .save(consumer);
+
+        FramingSawRecipeBuilder.builder(FBContent.BLOCK_FRAMED_CHISELED_BOOKSHELF)
+                .material(FramingSawRecipe.CUBE_MATERIAL_VALUE * 3)
+                .save(consumer);
     }
 
     @Override

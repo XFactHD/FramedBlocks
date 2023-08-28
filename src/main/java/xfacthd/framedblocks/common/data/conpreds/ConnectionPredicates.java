@@ -199,5 +199,7 @@ public final class ConnectionPredicates extends BlockTypeMap<ConnectionPredicate
         put(BlockType.FRAMED_VERTICAL_SLOPED_STAIRS, new VerticalSlopeStairsConnectionPredicate());
         put(BlockType.FRAMED_MINI_CUBE, ConnectionPredicate.FALSE);
         put(BlockType.FRAMED_ONE_WAY_WINDOW, ConnectionPredicate.FULL_FACE);
+        put(BlockType.FRAMED_BOOKSHELF, new BookshelfConnectionPredicate());
+        put(BlockType.FRAMED_CHISELED_BOOKSHELF, new ChiseledBookshelfConnectionPredicate());
     }
 }

@@ -197,5 +197,7 @@ public final class FullFacePredicates extends BlockTypeMap<FullFacePredicate>
         put(BlockType.FRAMED_VERTICAL_SLOPED_STAIRS, new VerticalSlopedStairsFullFacePredicate());
         put(BlockType.FRAMED_MINI_CUBE, FullFacePredicate.FALSE);
         put(BlockType.FRAMED_ONE_WAY_WINDOW, new OneWayWindowFullFacePredicate());
+        put(BlockType.FRAMED_BOOKSHELF, FullFacePredicate.Y_AXIS);
+        put(BlockType.FRAMED_CHISELED_BOOKSHELF, FullFacePredicate.NOT_HOR_DIR);
     }
 }

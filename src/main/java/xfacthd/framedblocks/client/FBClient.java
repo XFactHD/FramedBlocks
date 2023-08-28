@@ -394,6 +394,8 @@ public final class FBClient
         ClientUtils.replaceModels(FBContent.BLOCK_FRAMED_VERTICAL_SLOPED_STAIRS, registry, FramedVerticalSlopedStairsModel::new, FramedVerticalSlopedStairsModel.itemSource(), ClientUtils.IGNORE_DEFAULT);
         ClientUtils.replaceModels(FBContent.BLOCK_FRAMED_MINI_CUBE, registry, FramedMiniCubeModel::new, ClientUtils.IGNORE_WATERLOGGED);
         ClientUtils.replaceModels(FBContent.BLOCK_FRAMED_ONE_WAY_WINDOW, registry, FramedOneWayWindowModel::new, List.of(FramedProperties.GLOWING));
+        ClientUtils.replaceModels(FBContent.BLOCK_FRAMED_BOOKSHELF, registry, FramedBookshelfModel::normal, FramedBookshelfModel.itemSourceNormal(), ClientUtils.IGNORE_SOLID);
+        ClientUtils.replaceModels(FBContent.BLOCK_FRAMED_CHISELED_BOOKSHELF, registry, FramedBookshelfModel::chiseled, FramedBookshelfModel.itemSourceChiseled(), ClientUtils.IGNORE_SOLID);
     }
 
     @SubscribeEvent

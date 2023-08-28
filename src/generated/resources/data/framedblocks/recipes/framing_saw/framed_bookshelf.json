@@ -1,0 +1,15 @@
+{
+  "type": "framedblocks:frame",
+  "additives": [
+    {
+      "count": 3,
+      "ingredient": {
+        "item": "minecraft:book"
+      }
+    }
+  ],
+  "material": 12288,
+  "result": {
+    "item": "framedblocks:framed_bookshelf"
+  }
+}

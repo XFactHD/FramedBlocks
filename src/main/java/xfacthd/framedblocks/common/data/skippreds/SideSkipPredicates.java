@@ -199,5 +199,7 @@ public final class SideSkipPredicates extends BlockTypeMap<SideSkipPredicate>
         put(BlockType.FRAMED_VERTICAL_SLOPED_STAIRS, new VerticalSlopedStairsSkipPredicate());
         put(BlockType.FRAMED_MINI_CUBE, SideSkipPredicate.FALSE);
         put(BlockType.FRAMED_ONE_WAY_WINDOW, new OneWayWindowSkipPredicate());
+        put(BlockType.FRAMED_BOOKSHELF, SideSkipPredicate.FULL_FACE);
+        put(BlockType.FRAMED_CHISELED_BOOKSHELF, SideSkipPredicate.FULL_FACE);
     }
 }

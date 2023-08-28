@@ -4,6 +4,7 @@ import net.minecraft.core.Direction;
 import net.minecraft.data.PackOutput;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.block.*;
+import net.minecraft.world.level.block.entity.ChiseledBookShelfBlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.*;
 import net.minecraftforge.client.model.generators.*;
@@ -210,6 +211,8 @@ public final class FramedBlockStateProvider extends BlockStateProvider
         registerFramedFancyActivatorRail();
         registerFramedMiniCube(cube);
         registerFramedOneWayWindow();
+        registerFramedBookshelf();
+        registerFramedChiseledBookshelf(cube);
 
         registerFramingSaw();
     }
@@ -912,6 +915,61 @@ public final class FramedBlockStateProvider extends BlockStateProvider
     {
         ModelFile model = makeUnderlayedCube("framed_one_way_window", mcLoc("block/moss_block"));
         simpleBlockWithItem(FBContent.BLOCK_FRAMED_ONE_WAY_WINDOW, model);
+    }
+
+    private void registerFramedBookshelf()
+    {
+        ModelFile model = models().getExistingFile(modLoc("block/framed_bookshelf"));
+        simpleBlockWithItem(FBContent.BLOCK_FRAMED_BOOKSHELF, model);
+    }
+
+    private void registerFramedChiseledBookshelf(ModelFile cube)
+    {
+        String template = "block/template_framed_chiseled_bookshelf_slot_";
+        String baseName = "framed_chiseled_bookshelf";
+        String[] slots = new String[] { "top_left", "top_mid", "top_right", "bottom_left", "bottom_mid", "bottom_right" };
+        ModelFile[] modelsEmpty = new ModelFile[6];
+        ModelFile[] modelsFilled = new ModelFile[6];
+        for (int i = 0; i < ChiseledBookShelfBlockEntity.MAX_BOOKS_IN_STORAGE; i++)
+        {
+            String slot = slots[i];
+            modelsEmpty[i] = models().withExistingParent(baseName + "_empty_slot_" + slot, modLoc(template + slot))
+                    .texture("texture", mcLoc("block/chiseled_bookshelf_empty"));
+            modelsFilled[i] = models().withExistingParent(baseName + "_occupied_slot_" + slot, modLoc(template + slot))
+                    .texture("texture", "minecraft:block/chiseled_bookshelf_occupied");
+        }
+
+        MultiPartBlockStateBuilder builder = getMultipartBuilder(FBContent.BLOCK_FRAMED_CHISELED_BOOKSHELF.get());
+        builder.part().modelFile(models().getExistingFile(mcLoc("block/block"))).addModel().end();
+        for (Direction dir : Direction.Plane.HORIZONTAL)
+        {
+            for (int i = 0; i < ChiseledBookShelfBlockEntity.MAX_BOOKS_IN_STORAGE; i++)
+            {
+                BooleanProperty prop = ChiseledBookShelfBlock.SLOT_OCCUPIED_PROPERTIES.get(i);
+                int rot = (int) ((dir.toYRot() + 180F) % 360F);
+                builder.part()
+                        .modelFile(modelsEmpty[i])
+                        .rotationY(rot)
+                        .addModel()
+                        .nestedGroup()
+                            .condition(prop, false)
+                            .condition(FramedProperties.FACING_HOR, dir)
+                            .end()
+                        .end();
+
+                builder.part()
+                        .modelFile(modelsFilled[i])
+                        .rotationY(rot)
+                        .addModel()
+                        .nestedGroup()
+                            .condition(prop, true)
+                            .condition(FramedProperties.FACING_HOR, dir)
+                            .end()
+                        .end();
+            }
+        }
+
+        simpleBlockItem(FBContent.BLOCK_FRAMED_CHISELED_BOOKSHELF, cube);
     }
 
 

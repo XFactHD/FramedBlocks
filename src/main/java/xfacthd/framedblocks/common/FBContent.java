@@ -254,6 +254,8 @@ public final class FBContent
     public static final RegistryObject<Block> BLOCK_FRAMED_VERTICAL_SLOPED_STAIRS = registerBlock(FramedVerticalSlopedStairsBlock::new, BlockType.FRAMED_VERTICAL_SLOPED_STAIRS);
     public static final RegistryObject<Block> BLOCK_FRAMED_MINI_CUBE = registerBlock(FramedMiniCubeBlock::new, BlockType.FRAMED_MINI_CUBE);
     public static final RegistryObject<Block> BLOCK_FRAMED_ONE_WAY_WINDOW = registerBlock(FramedOneWayWindowBlock::new, BlockType.FRAMED_ONE_WAY_WINDOW);
+    public static final RegistryObject<Block> BLOCK_FRAMED_BOOKSHELF = registerBlock(FramedBookshelfBlock::new, BlockType.FRAMED_BOOKSHELF);
+    public static final RegistryObject<Block> BLOCK_FRAMED_CHISELED_BOOKSHELF = registerBlock(FramedChiseledBookshelfBlock::new, BlockType.FRAMED_CHISELED_BOOKSHELF);
     // endregion
 
     // region Special Blocks
@@ -495,6 +497,10 @@ public final class FBContent
     public static final RegisteredBE<FramedOwnableBlockEntity> BE_TYPE_FRAMED_OWNABLE_BLOCK = createBlockEntityType(
             FramedOwnableBlockEntity::new,
             BlockType.FRAMED_ONE_WAY_WINDOW
+    );
+    public static final RegisteredBE<FramedChiseledBookshelfBlockEntity> BE_TYPE_FRAMED_CHISELED_BOOKSHELF = createBlockEntityType(
+            FramedChiseledBookshelfBlockEntity::new,
+            BlockType.FRAMED_CHISELED_BOOKSHELF
     );
     // endregion
 

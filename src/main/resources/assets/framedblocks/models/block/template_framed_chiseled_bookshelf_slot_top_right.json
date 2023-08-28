@@ -1,0 +1,15 @@
+{
+    "textures": {
+      "texture": "#texture"
+    },
+	"render_type": "minecraft:cutout",
+	"elements": [
+		{
+			"from": [1, 9, 0],
+			"to": [5, 15, 0],
+			"faces": {
+				"north": {"uv": [11, 1, 15, 7], "texture": "#texture", "cullface": "north"}
+			}
+		}
+	]
+}

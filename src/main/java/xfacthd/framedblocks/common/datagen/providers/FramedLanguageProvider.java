@@ -212,6 +212,8 @@ public final class FramedLanguageProvider extends LanguageProvider
         add(FBContent.BLOCK_FRAMED_VERTICAL_SLOPED_STAIRS.get(), "Framed Vertical Sloped Stairs");
         add(FBContent.BLOCK_FRAMED_MINI_CUBE.get(), "Framed Mini Cube");
         add(FBContent.BLOCK_FRAMED_ONE_WAY_WINDOW.get(), "Framed One-Way Window");
+        add(FBContent.BLOCK_FRAMED_BOOKSHELF.get(), "Framed Bookshelf");
+        add(FBContent.BLOCK_FRAMED_CHISELED_BOOKSHELF.get(), "Framed Chiseled Bookshelf");
     }
 
     private void addSpecialBlockTranslations()
