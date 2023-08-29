@@ -161,7 +161,7 @@ public class FramedBlueprintItem extends FramedToolItem
         Set<CamoContainer> camos = getCamoContainers(item, tag);
 
         //Copying fluid camos is currently not possible
-        if (camos.stream().anyMatch(camo -> camo.getType().isFluid()))
+        if (ServerConfig.consumeCamoItem && camos.stream().anyMatch(camo -> camo.getType().isFluid()))
         {
             if (player.level().isClientSide())
             {
@@ -172,7 +172,10 @@ public class FramedBlueprintItem extends FramedToolItem
 
         List<ItemStack> materials = new ArrayList<>();
         materials.add(getBlockItem(item));
-        materials.addAll(getCamoStacksMerged(camos));
+        if (ServerConfig.consumeCamoItem)
+        {
+            materials.addAll(getCamoStacksMerged(camos));
+        }
 
         BlueprintCopyBehaviour behaviour = getBehaviour(item.getBlock());
 
@@ -256,14 +259,17 @@ public class FramedBlueprintItem extends FramedToolItem
         Set<CamoContainer> camos = getCamoContainers(item, tag);
 
         //Copying fluid camos is currently not possible
-        if (camos.stream().anyMatch(camo -> camo.getType().isFluid()))
+        if (ServerConfig.consumeCamoItem && camos.stream().anyMatch(camo -> camo.getType().isFluid()))
         {
             return;
         }
 
         List<ItemStack> materials = new ArrayList<>();
         materials.add(getBlockItem(item));
-        materials.addAll(getCamoStacksMerged(camos));
+        if (ServerConfig.consumeCamoItem)
+        {
+            materials.addAll(getCamoStacksMerged(camos));
+        }
 
         BlueprintCopyBehaviour behaviour = getBehaviour(item.getBlock());
 
