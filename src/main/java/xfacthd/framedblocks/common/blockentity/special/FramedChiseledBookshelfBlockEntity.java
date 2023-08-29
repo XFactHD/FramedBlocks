@@ -22,7 +22,7 @@ import java.util.List;
 
 public class FramedChiseledBookshelfBlockEntity extends FramedBlockEntity
 {
-    private final ItemStackHandler itemHandler = new ItemStackHandler(9 * 4);
+    private final ItemStackHandler itemHandler = new ItemStackHandler(6);
     private LazyOptional<IItemHandler> lazyItemHandler = LazyOptional.empty();
     private int lastInteractedSlot = -1;
 
