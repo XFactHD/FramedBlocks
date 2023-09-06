@@ -192,6 +192,8 @@ dependencies {
 
     compileOnly fg.deobf("curse.maven:nocubes-309664:3944569")
 
+    implementation fg.deobf("curse.maven:guidebook-253874:4593765")
+
     minecraftLibrary(group: 'com.github.ben-manes.caffeine', name: 'caffeine', version: '3.1.1')
     jarJar(group: 'com.github.ben-manes.caffeine', name: 'caffeine', version: '[3.1.1,4.0.0)') {
         transitive(false)
