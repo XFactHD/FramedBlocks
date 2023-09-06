@@ -315,9 +315,15 @@ public final class ModelUtils
                (Mth.equal(uv[1][0], uv[2][0]) || Mth.equal(uv[0][0], uv[3][0]));
     }
 
+    @Deprecated(forRemoval = true)
     public static boolean isQuadMirrored(float[][] uv)
     {
         boolean rotated = isQuadRotated(uv);
+        return isQuadMirrored(uv, rotated);
+    }
+
+    public static boolean isQuadMirrored(float[][] uv, boolean rotated)
+    {
         if (!rotated)
         {
             return (uv[0][0] > uv[3][0] && uv[1][0] > uv[2][0]) ||
