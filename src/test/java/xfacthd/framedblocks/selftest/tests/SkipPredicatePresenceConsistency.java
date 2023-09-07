@@ -13,8 +13,10 @@ import xfacthd.framedblocks.common.data.skippreds.SideSkipPredicates;
 import java.lang.reflect.Method;
 import java.util.*;
 
-public final class SkipPredicateConsistency
+public final class SkipPredicatePresenceConsistency
 {
+    private static final Map<BlockType, Test> TESTS = new EnumMap<>(BlockType.class);
+
     public static void checkSkipPredicateConsistency(List<Block> blocks)
     {
         FramedBlocks.LOGGER.info("  Checking skip predicate consistency");
@@ -33,7 +35,6 @@ public final class SkipPredicateConsistency
             doubleBlockPartTypes.put(type, partTypes);
         });
 
-        Map<BlockType, Test> tests = new EnumMap<>(BlockType.class);
         SideSkipPredicates.PREDICATES.forEach((type, pred) ->
         {
             Class<?> clazz = pred.getClass();
@@ -79,11 +80,11 @@ public final class SkipPredicateConsistency
             }
             for (BlockType testType : cullTest.value())
             {
-                tests.put(testType, test);
+                TESTS.put(testType, test);
             }
         });
 
-        tests.forEach((type, test) ->
+        TESTS.forEach((type, test) ->
         {
             if (!test.targets.contains(type))
             {
@@ -96,7 +97,7 @@ public final class SkipPredicateConsistency
                     return;
                 }
 
-                Test reverse = tests.get(target);
+                Test reverse = TESTS.get(target);
                 if (reverse != null && !reverse.targets.contains(type))
                 {
                     FramedBlocks.LOGGER.warn(
@@ -109,7 +110,7 @@ public final class SkipPredicateConsistency
             {
                 for (BlockType part : target.testedParts)
                 {
-                    Test reverse = tests.get(part);
+                    Test reverse = TESTS.get(part);
                     if (reverse != null && !reverse.targets.contains(type))
                     {
                         FramedBlocks.LOGGER.warn(
@@ -122,7 +123,7 @@ public final class SkipPredicateConsistency
 
                 for (BlockType part : doubleBlockPartTypes.get(target.target))
                 {
-                    Test reverse = tests.get(part);
+                    Test reverse = TESTS.get(part);
                     if (reverse != null && reverse.targets.contains(type) && !target.testedParts.contains(part) && !target.ignoredParts.contains(part))
                     {
                         FramedBlocks.LOGGER.warn(
@@ -245,13 +246,18 @@ public final class SkipPredicateConsistency
         }
     }
 
+    public static Test getTestOf(BlockType type)
+    {
+        return TESTS.get(type);
+    }
 
 
-    record DoubleTarget(BlockType target, Set<BlockType> testedParts, Set<BlockType> ignoredParts) { }
 
-    record Test(String clazzName, Set<BlockType> targets, Set<BlockType> oneWayTargets, Set<DoubleTarget> doubleTargets) { }
+    public record DoubleTarget(BlockType target, Set<BlockType> testedParts, Set<BlockType> ignoredParts) { }
+
+    public record Test(String clazzName, Set<BlockType> targets, Set<BlockType> oneWayTargets, Set<DoubleTarget> doubleTargets) { }
 
 
 
-    private SkipPredicateConsistency() { }
+    private SkipPredicatePresenceConsistency() { }
 }

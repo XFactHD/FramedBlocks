@@ -37,7 +37,7 @@ public final class SelfTest
         LockingPropertyConsistency.checkLockingProperty(blocks);
         ClientBlockExtensionsPresence.checkClientExtensionsPresent(blocks);
         SpecialShapeRendererPresence.checkSpecialShapePresent(blocks);
-        SkipPredicateConsistency.checkSkipPredicateConsistency(blocks);
+        SkipPredicatePresenceConsistency.checkSkipPredicateConsistency(blocks);
 
         stopwatch.stop();
         FramedBlocks.LOGGER.info("Self test completed in {}", stopwatch);

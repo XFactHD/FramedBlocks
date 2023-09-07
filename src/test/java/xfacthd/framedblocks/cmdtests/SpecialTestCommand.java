@@ -35,7 +35,21 @@ public final class SpecialTestCommand
     {
         event.getDispatcher().register(Commands.literal("fbtest")
                 .then(Commands.literal("skippredicates")
-                        .executes(async(SkipPredicates.NAME, SkipPredicates::testSkipPredicates))
+                        .then(Commands.literal("errors")
+                                .executes(async(
+                                        SkipPredicateErrors.NAME, SkipPredicateErrors::testSkipPredicates
+                                ))
+                        )
+                        .then(Commands.literal("consistency")
+                                .executes(async(
+                                        SkipPredicateConsistency.NAME, SkipPredicateConsistency::testSkipPredicates
+                                ))
+                        )
+                        .then(Commands.literal("redundancy")
+                                .executes(async(
+                                        SkipPredicateRedundancy.NAME, SkipPredicateRedundancy::testSkipPredicates
+                                ))
+                        )
                 )
                 .then(Commands.literal("recipecollision")
                         .executes(async(RecipeCollisions.NAME, RecipeCollisions::checkForRecipeCollisions))
