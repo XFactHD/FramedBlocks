@@ -1,4 +1,4 @@
-package xfacthd.framedblocks.common.block;
+package xfacthd.framedblocks.common.block.sign;
 
 import net.minecraft.advancements.CriteriaTriggers;
 import net.minecraft.core.BlockPos;
@@ -30,6 +30,7 @@ import net.minecraftforge.network.PacketDistributor;
 import xfacthd.framedblocks.FramedBlocks;
 import xfacthd.framedblocks.api.util.Utils;
 import xfacthd.framedblocks.common.FBContent;
+import xfacthd.framedblocks.common.block.FramedBlock;
 import xfacthd.framedblocks.common.data.BlockType;
 import xfacthd.framedblocks.common.blockentity.special.FramedSignBlockEntity;
 import xfacthd.framedblocks.common.net.OpenSignScreenPacket;

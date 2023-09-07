@@ -1,4 +1,4 @@
-package xfacthd.framedblocks.common.block.interactive;
+package xfacthd.framedblocks.common.block.sign;
 
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
@@ -16,7 +16,6 @@ import net.minecraft.world.phys.shapes.VoxelShape;
 import xfacthd.framedblocks.api.block.IFramedBlock;
 import xfacthd.framedblocks.api.block.FramedProperties;
 import xfacthd.framedblocks.api.shapes.ShapeProvider;
-import xfacthd.framedblocks.common.block.AbstractFramedSignBlock;
 import xfacthd.framedblocks.common.data.BlockType;
 
 @SuppressWarnings("deprecation")

@@ -5,7 +5,7 @@ import net.minecraft.core.Direction;
 import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.block.state.BlockState;
 import xfacthd.framedblocks.common.FBContent;
-import xfacthd.framedblocks.common.block.interactive.FramedWallHangingSignBlock;
+import xfacthd.framedblocks.common.block.sign.FramedWallHangingSignBlock;
 
 public class FramedHangingSignItem extends FramedSignItem
 {

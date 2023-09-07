@@ -10,7 +10,7 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.registries.RegistryObject;
 import xfacthd.framedblocks.common.FBContent;
-import xfacthd.framedblocks.common.block.AbstractFramedSignBlock;
+import xfacthd.framedblocks.common.block.sign.AbstractFramedSignBlock;
 import xfacthd.framedblocks.common.blockentity.special.FramedSignBlockEntity;
 
 import javax.annotation.Nullable;

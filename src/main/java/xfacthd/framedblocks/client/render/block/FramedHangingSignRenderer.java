@@ -5,7 +5,7 @@ import com.mojang.math.Axis;
 import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
 import net.minecraft.world.level.block.state.BlockState;
 import org.joml.Vector3f;
-import xfacthd.framedblocks.common.block.AbstractFramedSignBlock;
+import xfacthd.framedblocks.common.block.sign.AbstractFramedSignBlock;
 
 public class FramedHangingSignRenderer extends FramedSignRenderer
 {

@@ -17,6 +17,7 @@ import xfacthd.framedblocks.common.block.interactive.*;
 import xfacthd.framedblocks.common.block.pane.*;
 import xfacthd.framedblocks.common.block.pillar.*;
 import xfacthd.framedblocks.common.block.prism.*;
+import xfacthd.framedblocks.common.block.sign.*;
 import xfacthd.framedblocks.common.block.slab.*;
 import xfacthd.framedblocks.common.block.slope.*;
 import xfacthd.framedblocks.common.block.slopepanel.*;

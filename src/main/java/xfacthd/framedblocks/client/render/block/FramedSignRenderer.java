@@ -17,8 +17,8 @@ import net.minecraft.world.phys.Vec3;
 import org.joml.Matrix4f;
 import org.joml.Vector3f;
 import xfacthd.framedblocks.api.render.Quaternions;
-import xfacthd.framedblocks.common.block.AbstractFramedSignBlock;
-import xfacthd.framedblocks.common.block.interactive.FramedStandingSignBlock;
+import xfacthd.framedblocks.common.block.sign.AbstractFramedSignBlock;
+import xfacthd.framedblocks.common.block.sign.FramedStandingSignBlock;
 import xfacthd.framedblocks.common.blockentity.special.FramedSignBlockEntity;
 
 import java.util.List;
