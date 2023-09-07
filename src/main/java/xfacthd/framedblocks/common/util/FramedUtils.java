@@ -8,6 +8,7 @@ import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.Items;
+import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
@@ -15,6 +16,8 @@ import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.Property;
 import net.minecraft.world.level.block.state.properties.RailShape;
 import net.minecraftforge.common.util.Lazy;
+import net.minecraftforge.items.IItemHandlerModifiable;
+import net.minecraftforge.items.ItemStackHandler;
 import xfacthd.framedblocks.api.util.Utils;
 import xfacthd.framedblocks.common.FBContent;
 
@@ -144,6 +147,15 @@ public final class FramedUtils
         {
             throw new RuntimeException("Failed to remove property from state builder", e);
         }
+    }
+
+    public static IItemHandlerModifiable makeMenuItemHandler(IItemHandlerModifiable handler, Level level)
+    {
+        if (level.isClientSide())
+        {
+            handler = new ItemStackHandler(handler.getSlots());
+        }
+        return handler;
     }
 
 

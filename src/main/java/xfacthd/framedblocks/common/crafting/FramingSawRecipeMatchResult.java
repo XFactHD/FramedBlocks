@@ -36,6 +36,7 @@ public enum FramingSawRecipeMatchResult
     static final FramingSawRecipeMatchResult[] INSUFFICIENT_ADDITIVE = new FramingSawRecipeMatchResult[] {
             INSUFFICIENT_ADDITIVE_0, INSUFFICIENT_ADDITIVE_1, INSUFFICIENT_ADDITIVE_2
     };
+    private static final FramingSawRecipeMatchResult[] VALUES = values();
 
     private final boolean success;
     private final int additiveSlot;
@@ -68,5 +69,12 @@ public enum FramingSawRecipeMatchResult
     public Component translation()
     {
         return translation;
+    }
+
+
+
+    public static FramingSawRecipeMatchResult valueOf(int idx)
+    {
+        return VALUES[idx];
     }
 }

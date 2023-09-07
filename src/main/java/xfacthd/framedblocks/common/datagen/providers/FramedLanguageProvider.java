@@ -13,7 +13,8 @@ import xfacthd.framedblocks.client.screen.overlay.*;
 import xfacthd.framedblocks.client.util.ClientConfig;
 import xfacthd.framedblocks.client.util.KeyMappings;
 import xfacthd.framedblocks.common.FBContent;
-import xfacthd.framedblocks.common.block.FramingSawBlock;
+import xfacthd.framedblocks.common.block.special.FramingSawBlock;
+import xfacthd.framedblocks.common.block.special.PoweredFramingSawBlock;
 import xfacthd.framedblocks.common.blockentity.special.FramedStorageBlockEntity;
 import xfacthd.framedblocks.common.compat.jei.JeiCompat;
 import xfacthd.framedblocks.common.crafting.FramingSawRecipeMatchResult;
@@ -221,6 +222,7 @@ public final class FramedLanguageProvider extends LanguageProvider
     private void addSpecialBlockTranslations()
     {
         add(FBContent.BLOCK_FRAMING_SAW.get(), "Framing Saw");
+        add(FBContent.BLOCK_POWERED_FRAMING_SAW.get(), "Powered Framing Saw");
     }
 
     private void addItemTranslations()
@@ -259,7 +261,8 @@ public final class FramedLanguageProvider extends LanguageProvider
 
         add(FramedSignScreen.TITLE, "Edit sign");
 
-        add(FramingSawBlock.MENU_TITLE, "Framing Saw");
+        add(FramingSawBlock.SAW_MENU_TITLE, "Framing Saw");
+        add(PoweredFramingSawBlock.POWERED_SAW_MENU_TITLE, "Powered Framing Saw");
         add(FramingSawScreen.TOOLTIP_MATERIAL, "Material value: %s");
         add(FramingSawScreen.TOOLTIP_LOOSE_ADDITIVE, "Item was crafted with additive ingredients, these will be lost");
         add(FramingSawScreen.TOOLTIP_HAVE_X_BUT_NEED_Y_ITEM, "Have %s, but need %s");
@@ -268,6 +271,13 @@ public final class FramedLanguageProvider extends LanguageProvider
         add(FramingSawScreen.TOOLTIP_HAVE_X_BUT_NEED_Y_MATERIAL_COUNT, "Have %s material, but need at least %s material");
         add(FramingSawScreen.TOOLTIP_HAVE_ITEM_NONE, "none");
         add(FramingSawScreen.TOOLTIP_PRESS_TO_SHOW, "Press [%s] to show all possible items");
+        add(PoweredFramingSawScreen.TITLE_TARGETBLOCK, "Target:");
+        add(PoweredFramingSawScreen.MSG_STATUS, "Status: ");
+        add(PoweredFramingSawScreen.MSG_STATUS_NO_RECIPE, "No recipe");
+        add(PoweredFramingSawScreen.MSG_STATUS_NO_MATCH, "Recipe doesn't match");
+        add(PoweredFramingSawScreen.MSG_STATUS_READY, "Ready");
+        add(PoweredFramingSawScreen.TOOLTIP_STATUS_NO_RECIPE, "No recipe selected, click the target slot with any framed block to select a recipe");
+        add(PoweredFramingSawScreen.TOOLTIP_ENERGY, "%s / %s FE");
         add(FramingSawRecipeMatchResult.SUCCESS.translation(), "Craftable");
         add(FramingSawRecipeMatchResult.MATERIAL_VALUE.translation(), "Insufficient input material available");
         add(FramingSawRecipeMatchResult.MATERIAL_LCM.translation(), "Too few input items to evenly convert to this output");

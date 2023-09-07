@@ -217,6 +217,7 @@ public final class FramedBlockStateProvider extends BlockStateProvider
         registerFramedChiseledBookshelf(cube);
 
         registerFramingSaw();
+        registerPoweredFramingSaw();
     }
 
     private void registerFramedCube(ModelFile cube)
@@ -988,6 +989,26 @@ public final class FramedBlockStateProvider extends BlockStateProvider
                     .build();
         });
         simpleBlockItem(FBContent.BLOCK_FRAMING_SAW, model);
+    }
+
+    private void registerPoweredFramingSaw()
+    {
+        ModelFile modelInactive = models().withExistingParent(
+                "powered_framing_saw_inactive", modLoc("block/powered_framing_saw")
+        ).texture("saw", FramedSpriteSourceProvider.SPRITE_SAW_STILL);
+        ModelFile modelActive = models().withExistingParent(
+                "powered_framing_saw_active", modLoc("block/powered_framing_saw")
+        ).texture("saw", mcLoc("block/stonecutter_saw"));
+
+        getVariantBuilder(FBContent.BLOCK_POWERED_FRAMING_SAW.get()).forAllStates(state ->
+        {
+            int rotY = (int) state.getValue(FramedProperties.FACING_HOR).toYRot();
+            return ConfiguredModel.builder()
+                    .rotationY(rotY)
+                    .modelFile(state.getValue(PropertyHolder.ACTIVE) ? modelActive : modelInactive)
+                    .build();
+        });
+        simpleBlockItem(FBContent.BLOCK_POWERED_FRAMING_SAW, modelActive);
     }
 
 

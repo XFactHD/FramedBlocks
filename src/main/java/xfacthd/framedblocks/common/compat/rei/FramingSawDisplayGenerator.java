@@ -1,6 +1,7 @@
 package xfacthd.framedblocks.common.compat.rei;
 
 import me.shedaniel.rei.api.client.registry.display.DynamicDisplayGenerator;
+import me.shedaniel.rei.api.client.view.ViewSearchBuilder;
 import me.shedaniel.rei.api.common.entry.EntryIngredient;
 import me.shedaniel.rei.api.common.entry.EntryStack;
 import me.shedaniel.rei.api.common.entry.type.VanillaEntryTypes;
@@ -37,7 +38,7 @@ public final class FramingSawDisplayGenerator implements DynamicDisplayGenerator
         if (!entry.isEmpty() && entry.getType() == VanillaEntryTypes.ITEM)
         {
             ItemStack input = entry.castValue();
-            if (input.is(FBContent.BLOCK_FRAMING_SAW.get().asItem()))
+            if (input.is(FBContent.BLOCK_FRAMING_SAW.get().asItem()) || input.is(FBContent.BLOCK_POWERED_FRAMING_SAW.get().asItem()))
             {
                 return getUsageFor(EntryStacks.of(FBContent.BLOCK_FRAMED_CUBE.get()));
             }
@@ -65,6 +66,16 @@ public final class FramingSawDisplayGenerator implements DynamicDisplayGenerator
                 }
                 return Optional.of(displays);
             }
+        }
+        return Optional.empty();
+    }
+
+    @Override
+    public Optional<List<FramingSawDisplay>> generate(ViewSearchBuilder builder)
+    {
+        if (builder.getUsagesFor().isEmpty() && builder.getRecipesFor().isEmpty() && builder.getCategories().contains(FramingSawRecipeCategory.SAW_CATEGORY))
+        {
+            return getUsageFor(EntryStacks.of(FBContent.BLOCK_FRAMED_CUBE.get()));
         }
         return Optional.empty();
     }

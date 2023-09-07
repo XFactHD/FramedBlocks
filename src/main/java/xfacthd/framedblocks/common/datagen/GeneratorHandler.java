@@ -24,6 +24,7 @@ public final class GeneratorHandler
         ExistingFileHelper fileHelper = event.getExistingFileHelper();
         CompletableFuture<HolderLookup.Provider> lookupProvider = event.getLookupProvider();
 
+        gen.addProvider(event.includeClient(), new FramedSpriteSourceProvider(output, fileHelper));
         gen.addProvider(event.includeClient(), new FramedBlockStateProvider(output, fileHelper));
         gen.addProvider(event.includeClient(), new FramedItemModelProvider(output, fileHelper));
         gen.addProvider(event.includeServer(), new FramedLootTableProvider(output));

@@ -3,7 +3,7 @@ package xfacthd.framedblocks.common.compat.emi;
 import dev.emi.emi.api.recipe.EmiRecipeCategory;
 import dev.emi.emi.api.render.EmiRenderable;
 import net.minecraft.network.chat.Component;
-import xfacthd.framedblocks.common.block.FramingSawBlock;
+import xfacthd.framedblocks.common.block.special.FramingSawBlock;
 
 public final class FramingSawRecipeCategory extends EmiRecipeCategory
 {
@@ -15,6 +15,6 @@ public final class FramingSawRecipeCategory extends EmiRecipeCategory
     @Override
     public Component getName()
     {
-        return FramingSawBlock.MENU_TITLE;
+        return FramingSawBlock.SAW_MENU_TITLE;
     }
 }

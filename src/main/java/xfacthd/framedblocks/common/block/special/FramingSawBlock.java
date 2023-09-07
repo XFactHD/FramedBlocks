@@ -1,4 +1,4 @@
-package xfacthd.framedblocks.common.block;
+package xfacthd.framedblocks.common.block.special;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -28,8 +28,8 @@ import xfacthd.framedblocks.common.menu.FramingSawMenu;
 
 public class FramingSawBlock extends Block
 {
-    public static final Component MENU_TITLE = Utils.translate("title", "frame_crafter");
-    private static final VoxelShape SHAPE = box(0, 0, 0, 16, 9, 16);
+    public static final Component SAW_MENU_TITLE = Utils.translate("title", "framing_saw");
+    protected static final VoxelShape SHAPE = box(0, 0, 0, 16, 9, 16);
 
     public FramingSawBlock()
     {
@@ -66,15 +66,15 @@ public class FramingSawBlock extends Block
                 @Override
                 public Component getDisplayName()
                 {
-                    return MENU_TITLE;
+                    return getSawMenuTitle();
                 }
 
                 @Override
                 public AbstractContainerMenu createMenu(int containerId, Inventory inventory, Player player)
                 {
-                    return new FramingSawMenu(containerId, inventory, ContainerLevelAccess.create(level, pos));
+                    return createSawMenu(containerId, inventory, level, pos);
                 }
-            });
+            }, pos);
         }
         return InteractionResult.sidedSuccess(level.isClientSide());
     }
@@ -92,5 +92,15 @@ public class FramingSawBlock extends Block
     {
         Direction dir = rotation.rotate(state.getValue(FramedProperties.FACING_HOR));
         return state.setValue(FramedProperties.FACING_HOR, dir);
+    }
+
+    protected Component getSawMenuTitle()
+    {
+        return SAW_MENU_TITLE;
+    }
+
+    protected AbstractContainerMenu createSawMenu(int containerId, Inventory inventory, Level level, BlockPos pos)
+    {
+        return new FramingSawMenu(containerId, inventory, ContainerLevelAccess.create(level, pos));
     }
 }

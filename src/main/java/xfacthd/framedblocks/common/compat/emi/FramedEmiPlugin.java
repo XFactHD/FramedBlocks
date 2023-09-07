@@ -12,6 +12,7 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import xfacthd.framedblocks.FramedBlocks;
 import xfacthd.framedblocks.client.screen.FramingSawScreen;
+import xfacthd.framedblocks.client.screen.PoweredFramingSawScreen;
 import xfacthd.framedblocks.client.util.ClientConfig;
 import xfacthd.framedblocks.common.FBContent;
 import xfacthd.framedblocks.common.crafting.FramingSawRecipeCache;
@@ -24,6 +25,7 @@ import java.util.Set;
 public final class FramedEmiPlugin implements EmiPlugin
 {
     public static final EmiStack SAW_WORKSTATION = EmiStack.of(FBContent.BLOCK_FRAMING_SAW.get());
+    private static final EmiStack POWERED_SAW_WORKSTATION = EmiStack.of(FBContent.BLOCK_POWERED_FRAMING_SAW.get());
     public static final EmiRecipeCategory SAW_CATEGORY = new FramingSawRecipeCategory(SAW_WORKSTATION, SAW_WORKSTATION);
     private static final Set<Item> CUBE_ITEM = Set.of(FBContent.BLOCK_FRAMED_CUBE.get().asItem());
 
@@ -32,8 +34,11 @@ public final class FramedEmiPlugin implements EmiPlugin
     {
         registry.addCategory(SAW_CATEGORY);
         registry.addWorkstation(SAW_CATEGORY, SAW_WORKSTATION);
-        registry.addRecipeHandler(FBContent.MENU_TYPE_FRAMING_SAW.get(), new FramedEmiRecipeHandler());
+        registry.addWorkstation(SAW_CATEGORY, POWERED_SAW_WORKSTATION);
+        registry.addRecipeHandler(FBContent.MENU_TYPE_FRAMING_SAW.get(), new FramedEmiRecipeHandler<>());
+        registry.addRecipeHandler(FBContent.MENU_TYPE_POWERED_FRAMING_SAW.get(), new FramedEmiRecipeHandler<>());
         registry.addStackProvider(FramingSawScreen.class, new FramingSawStackProvider());
+        registry.addDragDropHandler(PoweredFramingSawScreen.class, new PoweredFramingSawDragDropHandler());
         registerRecipes(registry);
     }
 

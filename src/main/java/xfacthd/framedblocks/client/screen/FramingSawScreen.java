@@ -28,6 +28,7 @@ import xfacthd.framedblocks.client.util.RecipeViewer;
 import xfacthd.framedblocks.common.FBContent;
 import xfacthd.framedblocks.common.crafting.*;
 import xfacthd.framedblocks.common.menu.FramingSawMenu;
+import xfacthd.framedblocks.common.menu.IFramingSawMenu;
 import xfacthd.framedblocks.common.util.RecipeUtils;
 
 import java.util.*;
@@ -211,8 +212,17 @@ public class FramingSawScreen extends AbstractContainerScreen<FramingSawMenu>
 
     private void appendRecipeFailure(List<Component> components, FramingSawMenu.RecipeHolder recipeHolder)
     {
-        FramingSawRecipe recipe = recipeHolder.getRecipe();
-        FramingSawRecipeMatchResult matchResult = recipeHolder.getMatchResult();
+        appendRecipeFailure(components, cache, recipeHolder.getRecipe(), recipeHolder.getMatchResult(), menu);
+    }
+
+    public static List<Component> appendRecipeFailure(
+            List<Component> components,
+            FramingSawRecipeCache cache,
+            FramingSawRecipe recipe,
+            FramingSawRecipeMatchResult matchResult,
+            IFramingSawMenu menu
+    )
+    {
         if (!matchResult.success())
         {
             components.add(matchResult.translation());
@@ -289,6 +299,7 @@ public class FramingSawScreen extends AbstractContainerScreen<FramingSawMenu>
                 appendAdditiveItemOptions(components, recipe, listAdditives);
             }
         }
+        return components;
     }
 
     private static void appendAdditiveItemOptions(List<Component> components, FramingSawRecipe recipe, int additiveSlot)

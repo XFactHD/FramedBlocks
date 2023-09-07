@@ -52,6 +52,7 @@ import xfacthd.framedblocks.client.render.block.*;
 import xfacthd.framedblocks.client.render.item.BlueprintPropertyOverride;
 import xfacthd.framedblocks.client.render.special.BlockOutlineRenderer;
 import xfacthd.framedblocks.client.render.special.GhostBlockRenderer;
+import xfacthd.framedblocks.client.render.util.AnimationSplitterSource;
 import xfacthd.framedblocks.client.screen.*;
 import xfacthd.framedblocks.client.screen.overlay.*;
 import xfacthd.framedblocks.client.util.*;
@@ -89,6 +90,7 @@ public final class FBClient
         {
             MenuScreens.register(FBContent.MENU_TYPE_FRAMED_STORAGE.get(), FramedStorageScreen::new);
             MenuScreens.register(FBContent.MENU_TYPE_FRAMING_SAW.get(), FramingSawScreen::new);
+            MenuScreens.register(FBContent.MENU_TYPE_POWERED_FRAMING_SAW.get(), PoweredFramingSawScreen::new);
 
             BlueprintPropertyOverride.register();
         });
@@ -413,6 +415,7 @@ public final class FBClient
     public static void onRegisterReloadListener(final RegisterClientReloadListenersEvent event)
     {
         event.registerReloadListener((ResourceManagerReloadListener) BlockInteractOverlay::onResourceReload);
+        AnimationSplitterSource.register();
     }
 
 

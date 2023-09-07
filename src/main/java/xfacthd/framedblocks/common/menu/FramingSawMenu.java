@@ -15,10 +15,10 @@ import xfacthd.framedblocks.common.util.FramedUtils;
 import java.util.Arrays;
 import java.util.List;
 
-public class FramingSawMenu extends AbstractContainerMenu
+public class FramingSawMenu extends AbstractContainerMenu implements IFramingSawMenu
 {
     public static final int SLOT_INPUT = 0;
-    private static final int SLOT_ADDITIVE_FIRST = SLOT_INPUT + 1;
+    public static final int SLOT_ADDITIVE_FIRST = SLOT_INPUT + 1;
     public static final int SLOT_RESULT = SLOT_ADDITIVE_FIRST + FramingSawRecipe.MAX_ADDITIVE_COUNT;
     public static final int SLOT_INV_FIRST = SLOT_RESULT + 1;
     public static final int INV_SLOT_COUNT = 4 * 9;
@@ -220,16 +220,19 @@ public class FramingSawMenu extends AbstractContainerMenu
         levelAccess.execute((level, pos) -> clearContainer(player, inputContainer));
     }
 
+    @Override
     public Container getInputContainer()
     {
         return inputContainer;
     }
 
+    @Override
     public ItemStack getInputStack()
     {
         return inputSlot.getItem();
     }
 
+    @Override
     public ItemStack getAdditiveStack(int slot)
     {
         return additiveSlots[slot].getItem();
@@ -252,6 +255,7 @@ public class FramingSawMenu extends AbstractContainerMenu
         return changed;
     }
 
+    @Override
     public boolean isValidRecipeIndex(int idx)
     {
         return idx >= 0 && idx < recipes.size();

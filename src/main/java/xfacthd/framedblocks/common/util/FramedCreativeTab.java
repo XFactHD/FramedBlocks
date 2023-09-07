@@ -31,6 +31,7 @@ public final class FramedCreativeTab
                     }
 
                     output.accept(FBContent.BLOCK_FRAMING_SAW.get());
+                    output.accept(FBContent.BLOCK_POWERED_FRAMING_SAW.get());
 
                     for (FramedToolType tool : FramedToolType.values())
                     {

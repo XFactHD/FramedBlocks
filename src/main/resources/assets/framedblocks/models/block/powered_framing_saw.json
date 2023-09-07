@@ -1,0 +1,61 @@
+{
+	"parent": "block/stonecutter",
+	"render_type": "cutout",
+	"textures": {
+		"glass": "block/glass",
+		"stone": "block/stone",
+		"particle": "framedblocks:block/framing_saw_bottom",
+		"bottom": "framedblocks:block/framing_saw_bottom",
+		"side": "framedblocks:block/framing_saw_side",
+		"top": "framedblocks:block/framing_saw_top"
+	},
+	"elements": [
+		{
+			"name": "base_stone",
+			"from": [0, 0, 0],
+			"to": [16, 9, 16],
+			"faces": {
+				"north": {"uv": [0, 7, 16, 16], "texture": "#stone"},
+				"east": {"uv": [0, 7, 16, 16], "texture": "#stone"},
+				"south": {"uv": [0, 7, 16, 16], "texture": "#stone"},
+				"west": {"uv": [0, 7, 16, 16], "texture": "#stone"},
+				"up": {"uv": [0, 0, 16, 16], "texture": "#stone"},
+				"down": {"uv": [0, 0, 16, 16], "texture": "#stone"}
+			}
+		},
+		{
+			"name": "base_frame",
+			"from": [0, 0, 0],
+			"to": [16, 9, 16],
+			"faces": {
+				"north": {"uv": [0, 7, 16, 16], "texture": "#side"},
+				"east": {"uv": [0, 7, 16, 16], "texture": "#side"},
+				"south": {"uv": [0, 7, 16, 16], "texture": "#side"},
+				"west": {"uv": [0, 7, 16, 16], "texture": "#side"},
+				"up": {"uv": [0, 0, 16, 16], "texture": "#top"},
+				"down": {"uv": [0, 0, 16, 16], "texture": "#bottom"}
+			}
+		},
+		{
+			"name": "saw",
+			"from": [0, 9, 8],
+			"to": [16, 16, 8],
+			"faces": {
+				"north": {"uv": [0, 9, 16, 16], "texture": "#saw"},
+				"south": {"uv": [16, 9, 0, 16], "texture": "#saw"}
+			}
+		},
+		{
+			"name": "cover",
+			"from": [0, 9, 0],
+			"to": [16, 16, 16],
+			"faces": {
+				"north": {"uv": [0, 0, 16, 7], "texture": "#glass"},
+				"east": {"uv": [0, 0, 16, 7], "texture": "#glass"},
+				"south": {"uv": [0, 0, 16, 7], "texture": "#glass"},
+				"west": {"uv": [0, 0, 16, 7], "texture": "#glass"},
+				"up": {"uv": [0, 0, 16, 16], "texture": "#glass"}
+			}
+		}
+	]
+}

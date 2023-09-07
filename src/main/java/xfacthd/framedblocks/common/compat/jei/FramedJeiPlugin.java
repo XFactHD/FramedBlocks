@@ -9,6 +9,7 @@ import mezz.jei.api.runtime.IJeiRuntime;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
 import xfacthd.framedblocks.api.util.Utils;
+import xfacthd.framedblocks.client.screen.PoweredFramingSawScreen;
 import xfacthd.framedblocks.common.FBContent;
 import xfacthd.framedblocks.common.crafting.FramingSawRecipeCache;
 import xfacthd.framedblocks.common.crafting.FramingSawRecipe;
@@ -49,6 +50,23 @@ public final class FramedJeiPlugin implements IModPlugin
         registration.addRecipeCatalyst(
                 new ItemStack(FBContent.BLOCK_FRAMING_SAW.get()),
                 FRAMING_SAW_RECIPE_TYPE
+        );
+        registration.addRecipeCatalyst(
+                new ItemStack(FBContent.BLOCK_POWERED_FRAMING_SAW.get()),
+                FRAMING_SAW_RECIPE_TYPE
+        );
+    }
+
+    @Override
+    public void registerGuiHandlers(IGuiHandlerRegistration registration)
+    {
+        registration.addGhostIngredientHandler(
+                PoweredFramingSawScreen.class,
+                new PoweredFramingSawGhostIngredientHandler()
+        );
+        registration.addGuiContainerHandler(
+                PoweredFramingSawScreen.class,
+                new PoweredFramingSawGuiContainerHandler()
         );
     }
 

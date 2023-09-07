@@ -2,22 +2,24 @@ package xfacthd.framedblocks.common.compat.rei;
 
 import me.shedaniel.rei.api.client.registry.transfer.TransferHandler;
 import net.minecraft.client.Minecraft;
+import net.minecraft.world.inventory.AbstractContainerMenu;
 import xfacthd.framedblocks.common.compat.jei.JeiCompat;
 import xfacthd.framedblocks.common.crafting.FramingSawRecipeCache;
-import xfacthd.framedblocks.common.menu.FramingSawMenu;
+import xfacthd.framedblocks.common.menu.IFramingSawMenu;
 
 public final class FramingSawTransferHandler implements TransferHandler
 {
     @Override
     public Result handle(Context ctx)
     {
-        if (!(ctx.getMenu() instanceof FramingSawMenu menu) || !(ctx.getDisplay() instanceof FramingSawDisplay display))
+        AbstractContainerMenu menu = ctx.getMenu();
+        if (!(menu instanceof IFramingSawMenu sawMenu) || !(ctx.getDisplay() instanceof FramingSawDisplay display))
         {
             return Result.createNotApplicable();
         }
 
         int idx = FramingSawRecipeCache.get(true).getRecipes().indexOf(display.getRecipe());
-        if (idx > -1 && menu.isValidRecipeIndex(idx))
+        if (idx > -1 && sawMenu.isValidRecipeIndex(idx))
         {
             // TODO: implement actual transfer (can't defer to basic transfer handler)
 

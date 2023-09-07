@@ -1,0 +1,14 @@
+{
+  "sources": [
+    {
+      "type": "framedblocks:anim_splitter",
+      "frames": [
+        {
+          "frame_idx": 0,
+          "sprite": "framedblocks:block/stonecutter_saw_still"
+        }
+      ],
+      "resource": "minecraft:block/stonecutter_saw"
+    }
+  ]
+}

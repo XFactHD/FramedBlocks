@@ -1190,6 +1190,15 @@ public final class FramedRecipeProvider extends RecipeProvider
                 .unlockedBy("hasFramedBlock", HAS_FRAMED_BLOCK)
                 .save(consumer);
 
+        ShapedRecipeBuilder.shaped(RecipeCategory.TOOLS, FBContent.BLOCK_POWERED_FRAMING_SAW.get())
+                .pattern("RIR")
+                .pattern("FFF")
+                .define('R', Tags.Items.DUSTS_REDSTONE)
+                .define('I', Tags.Items.INGOTS_IRON)
+                .define('F', FBContent.BLOCK_FRAMED_CUBE.get())
+                .unlockedBy("hasFramedBlock", HAS_FRAMED_BLOCK)
+                .save(consumer);
+
 
 
         ShapedRecipeBuilder.shaped(RecipeCategory.TOOLS, FBContent.ITEM_FRAMED_HAMMER.get())

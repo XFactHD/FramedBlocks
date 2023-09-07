@@ -19,7 +19,8 @@ import xfacthd.framedblocks.api.camo.EmptyCamoContainer;
 import xfacthd.framedblocks.api.camo.CamoContainer;
 import xfacthd.framedblocks.api.util.FramedConstants;
 import xfacthd.framedblocks.api.util.Utils;
-import xfacthd.framedblocks.common.block.FramingSawBlock;
+import xfacthd.framedblocks.common.block.special.FramingSawBlock;
+import xfacthd.framedblocks.common.block.special.PoweredFramingSawBlock;
 import xfacthd.framedblocks.common.block.cube.*;
 import xfacthd.framedblocks.common.block.door.*;
 import xfacthd.framedblocks.common.block.interactive.*;
@@ -40,8 +41,7 @@ import xfacthd.framedblocks.common.crafting.FramingSawRecipe;
 import xfacthd.framedblocks.common.crafting.FramingSawRecipeSerializer;
 import xfacthd.framedblocks.common.data.camo.BlockCamoContainer;
 import xfacthd.framedblocks.common.data.camo.FluidCamoContainer;
-import xfacthd.framedblocks.common.menu.FramingSawMenu;
-import xfacthd.framedblocks.common.menu.FramedStorageMenu;
+import xfacthd.framedblocks.common.menu.*;
 import xfacthd.framedblocks.common.data.BlockType;
 import xfacthd.framedblocks.common.data.FramedToolType;
 import xfacthd.framedblocks.common.item.FramedBlueprintItem;
@@ -262,6 +262,7 @@ public final class FBContent
 
     // region Special Blocks
     public static final RegistryObject<Block> BLOCK_FRAMING_SAW = registerBlock("framing_saw", FramingSawBlock::new);
+    public static final RegistryObject<Block> BLOCK_POWERED_FRAMING_SAW = registerBlock("powered_framing_saw", PoweredFramingSawBlock::new);
     // endregion
 
     // region Items
@@ -506,11 +507,26 @@ public final class FBContent
     );
     // endregion
 
+    // region Special BlockEntities
+    public static final RegisteredBE<PoweredFramingSawBlockEntity> BE_TYPE_POWERED_FRAMING_SAW = createBlockEntityType(
+            PoweredFramingSawBlockEntity::new,
+            "powered_framing_saw",
+            () -> new Block[] { BLOCK_POWERED_FRAMING_SAW.get() }
+    );
+    // endregion
+
     // region MenuTypes
-    public static final RegistryObject<MenuType<FramedStorageMenu>> MENU_TYPE_FRAMED_STORAGE = createMenuType(FramedStorageMenu::new, "framed_chest");
+    public static final RegistryObject<MenuType<FramedStorageMenu>> MENU_TYPE_FRAMED_STORAGE = createMenuType(
+            FramedStorageMenu::new,
+            "framed_chest"
+    );
     public static final RegistryObject<MenuType<FramingSawMenu>> MENU_TYPE_FRAMING_SAW = createMenuType(
             (id, inv, buf) -> new FramingSawMenu(id, inv, ContainerLevelAccess.NULL),
             "framing_saw"
+    );
+    public static final RegistryObject<MenuType<PoweredFramingSawMenu>> MENU_TYPE_POWERED_FRAMING_SAW = createMenuType(
+            PoweredFramingSawMenu::new,
+            "powered_framing_saw"
     );
     // endregion
 

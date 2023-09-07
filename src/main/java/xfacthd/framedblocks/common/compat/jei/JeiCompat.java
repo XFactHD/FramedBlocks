@@ -95,6 +95,11 @@ public final class JeiCompat
             GuardedAccess.runtime = runtime;
         }
 
+        public static IJeiRuntime getRuntime()
+        {
+            return runtime;
+        }
+
 
 
         private GuardedAccess() { }

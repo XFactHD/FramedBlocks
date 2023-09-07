@@ -17,7 +17,7 @@ import net.minecraft.world.item.ItemStack;
 import xfacthd.framedblocks.api.util.Utils;
 import xfacthd.framedblocks.client.screen.FramingSawScreen;
 import xfacthd.framedblocks.common.FBContent;
-import xfacthd.framedblocks.common.block.FramingSawBlock;
+import xfacthd.framedblocks.common.block.special.FramingSawBlock;
 import xfacthd.framedblocks.common.crafting.*;
 
 import java.util.ArrayList;
@@ -55,7 +55,7 @@ public final class FramingSawRecipeCategory implements IRecipeCategory<FramingSa
     @Override
     public Component getTitle()
     {
-        return FramingSawBlock.MENU_TITLE;
+        return FramingSawBlock.SAW_MENU_TITLE;
     }
 
     @Override

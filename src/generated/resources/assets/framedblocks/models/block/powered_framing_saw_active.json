@@ -1,0 +1,6 @@
+{
+  "parent": "framedblocks:block/powered_framing_saw",
+  "textures": {
+    "saw": "minecraft:block/stonecutter_saw"
+  }
+}

@@ -10,7 +10,7 @@ import me.shedaniel.rei.api.common.util.EntryStacks;
 import net.minecraft.network.chat.Component;
 import xfacthd.framedblocks.client.screen.FramingSawScreen;
 import xfacthd.framedblocks.common.FBContent;
-import xfacthd.framedblocks.common.block.FramingSawBlock;
+import xfacthd.framedblocks.common.block.special.FramingSawBlock;
 import xfacthd.framedblocks.common.crafting.FramingSawRecipe;
 
 import java.util.ArrayList;
@@ -50,7 +50,7 @@ public final class FramingSawRecipeCategory implements DisplayCategory<FramingSa
     @Override
     public Component getTitle()
     {
-        return FramingSawBlock.MENU_TITLE;
+        return FramingSawBlock.SAW_MENU_TITLE;
     }
 
     @Override

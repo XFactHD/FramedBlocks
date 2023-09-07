@@ -3,6 +3,7 @@
     "framedblocks:framed_iron_door",
     "framedblocks:framed_iron_trapdoor",
     "framedblocks:framed_iron_gate",
-    "framedblocks:framing_saw"
+    "framedblocks:framing_saw",
+    "framedblocks:powered_framing_saw"
   ]
 }
