@@ -70,6 +70,18 @@ public class FluidCamoContainer extends CamoContainer
     }
 
     @Override
+    public boolean canRotateCamo()
+    {
+        return false;
+    }
+
+    @Override
+    public boolean rotateCamo()
+    {
+        return false;
+    }
+
+    @Override
     public SoundType getSoundType()
     {
         //TODO: build custom sound type suitable for the contained fluid

@@ -186,6 +186,7 @@ public final class FBClient
         event.registerAboveAll("split_line", new SplitLineOverlay());
         event.registerAboveAll("one_way_window", new OneWayWindowOverlay());
         event.registerAboveAll("frame_background", new FrameBackgroundOverlay());
+        event.registerAboveAll("camo_rotation", new CamoRotationOverlay());
     }
 
     @SubscribeEvent

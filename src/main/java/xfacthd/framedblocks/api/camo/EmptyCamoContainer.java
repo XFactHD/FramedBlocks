@@ -3,9 +3,9 @@ package xfacthd.framedblocks.api.camo;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.level.BlockAndTintGetter;
-import net.minecraft.world.level.BlockGetter;
+import net.minecraft.world.level.*;
 import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.material.MapColor;
 import xfacthd.framedblocks.api.FramedBlocksAPI;
 
@@ -31,9 +31,39 @@ public final class EmptyCamoContainer extends CamoContainer
     }
 
     @Override
+    public float[] getBeaconColorMultiplier(LevelReader level, BlockPos pos, BlockPos beaconPos)
+    {
+        return null;
+    }
+
+    @Override
     public ItemStack toItemStack(ItemStack stack)
     {
         return ItemStack.EMPTY;
+    }
+
+    @Override
+    public boolean canRotateCamo()
+    {
+        return false;
+    }
+
+    @Override
+    public boolean rotateCamo()
+    {
+        return false;
+    }
+
+    @Override
+    public SoundType getSoundType()
+    {
+        return SoundType.EMPTY;
+    }
+
+    @Override
+    public boolean isSolid(BlockGetter level, BlockPos pos)
+    {
+        return false;
     }
 
     @Override

@@ -30,6 +30,7 @@ public final class ClientConfig
     private static final String KEY_SPLIT_LINES_MODE = "splitLineMode";
     private static final String KEY_ONE_WAY_WINDOW_MODE = "oneWayWindowMode";
     private static final String KEY_FRAME_BACKGROUND_MODE = "itemFrameBackgroundMode";
+    private static final String KEY_CAMO_ROTATION_MODE = "camoRotationMode";
 
     public static final String TRANSLATION_SHOW_GHOST_BLOCKS = translate(KEY_SHOW_GHOST_BLOCKS);
     public static final String TRANSLATION_ALT_GHOST_RENDERER = translate(KEY_ALT_GHOST_RENDERER);
@@ -46,6 +47,7 @@ public final class ClientConfig
     public static final String TRANSLATION_SPLIT_LINES_MODE = translate(KEY_SPLIT_LINES_MODE);
     public static final String TRANSLATION_ONE_WAY_WINDOW_MODE = translate(KEY_ONE_WAY_WINDOW_MODE);
     public static final String TRANSLATION_FRAME_BACKGROUND_MODE = translate(KEY_FRAME_BACKGROUND_MODE);
+    public static final String TRANSLATION_CAMO_ROTATION_MODE = translate(KEY_CAMO_ROTATION_MODE);
 
     private static final String COMMENT_OVERLAY_HIDDEN = "If set to HIDDEN, the %s overlay will be completely hidden";
     private static final String COMMENT_OVERLAY_ICON = "If set to ICON, the %s overlay will only show an icon";
@@ -66,6 +68,7 @@ public final class ClientConfig
     public static BlockInteractOverlay.Mode splitLineMode;
     public static BlockInteractOverlay.Mode oneWayWindowMode;
     public static BlockInteractOverlay.Mode frameBackgroundMode;
+    public static BlockInteractOverlay.Mode camoRotationMode;
 
     private final ForgeConfigSpec.BooleanValue showGhostBlocksValue;
     private final ForgeConfigSpec.BooleanValue altGhostRendererValue;
@@ -83,6 +86,7 @@ public final class ClientConfig
     private final ForgeConfigSpec.EnumValue<BlockInteractOverlay.Mode> splitLineModeValue;
     private final ForgeConfigSpec.EnumValue<BlockInteractOverlay.Mode> oneWayWindowModeValue;
     private final ForgeConfigSpec.EnumValue<BlockInteractOverlay.Mode> frameBackgroundModeValue;
+    private final ForgeConfigSpec.EnumValue<BlockInteractOverlay.Mode> camoRotationModeValue;
 
     static
     {
@@ -183,6 +187,12 @@ public final class ClientConfig
                 .comment(COMMENT_OVERLAY_DETAILED.formatted("Item Frame Background"))
                 .translation(TRANSLATION_FRAME_BACKGROUND_MODE)
                 .defineEnum(KEY_FRAME_BACKGROUND_MODE, BlockInteractOverlay.Mode.DETAILED);
+        camoRotationModeValue = builder
+                .comment(COMMENT_OVERLAY_HIDDEN.formatted("Camo Rotation"))
+                .comment(COMMENT_OVERLAY_ICON.formatted("Camo Rotation"))
+                .comment(COMMENT_OVERLAY_DETAILED.formatted("Camo Rotation"))
+                .translation(TRANSLATION_CAMO_ROTATION_MODE)
+                .defineEnum(KEY_CAMO_ROTATION_MODE, BlockInteractOverlay.Mode.DETAILED);
         builder.pop();
     }
 
@@ -212,6 +222,7 @@ public final class ClientConfig
             splitLineMode = splitLineModeValue.get();
             oneWayWindowMode = oneWayWindowModeValue.get();
             frameBackgroundMode = frameBackgroundModeValue.get();
+            camoRotationMode = camoRotationModeValue.get();
         }
     }
 }
