@@ -212,6 +212,8 @@ public enum BlockType implements IBlockType
     FRAMED_CENTERED_PANEL                           ( true, false, false,  true,  true,  true, false, false, ConTexMode.DETAILED, FramedCenteredPanelBlock::generateShapes),
     ;
 
+    public static final int COUNT = values().length;
+
     private final String name = toString().toLowerCase(Locale.ROOT);
     private final boolean canOcclude;
     private final boolean specialHitbox;

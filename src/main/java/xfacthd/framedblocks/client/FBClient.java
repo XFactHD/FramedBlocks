@@ -1,6 +1,7 @@
 package xfacthd.framedblocks.client;
 
 import com.github.benmanes.caffeine.cache.RemovalCause;
+import com.google.common.base.Stopwatch;
 import net.minecraft.client.gui.screens.MenuScreens;
 import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
 import net.minecraft.client.resources.model.BakedModel;
@@ -22,6 +23,7 @@ import net.minecraftforge.fml.event.lifecycle.*;
 import net.minecraftforge.fml.loading.FMLEnvironment;
 import net.minecraftforge.registries.RegistryObject;
 import org.jetbrains.annotations.Nullable;
+import xfacthd.framedblocks.FramedBlocks;
 import xfacthd.framedblocks.api.FramedBlocksClientAPI;
 import xfacthd.framedblocks.api.block.FramedProperties;
 import xfacthd.framedblocks.api.block.IFramedBlock;
@@ -225,6 +227,8 @@ public final class FBClient
 
         Vec3 yHalfUp = new Vec3(0, .5, 0);
 
+        Stopwatch stopwatch = Stopwatch.createStarted();
+
         ClientUtils.replaceModels(FBContent.BLOCK_FRAMED_CUBE, registry, FramedCubeModel::new, ClientUtils.IGNORE_SOLID);
         ClientUtils.replaceModels(FBContent.BLOCK_FRAMED_SLOPE, registry, FramedSlopeModel::new, FramedSlopeModel.itemSource(), ClientUtils.IGNORE_DEFAULT);
         ClientUtils.replaceModels(FBContent.BLOCK_FRAMED_CORNER_SLOPE, registry, FramedCornerSlopeModel::new, FramedCornerSlopeModel.itemSource(), ClientUtils.IGNORE_DEFAULT);
@@ -401,6 +405,11 @@ public final class FBClient
         ClientUtils.replaceModels(FBContent.BLOCK_FRAMED_CHISELED_BOOKSHELF, registry, FramedBookshelfModel::chiseled, FramedBookshelfModel.itemSourceChiseled(), ClientUtils.IGNORE_SOLID);
         ClientUtils.replaceModels(FBContent.BLOCK_FRAMED_CENTERED_SLAB, registry, FramedCenteredSlabModel::new, ClientUtils.IGNORE_DEFAULT);
         ClientUtils.replaceModels(FBContent.BLOCK_FRAMED_CENTERED_PANEL, registry, FramedCenteredPanelModel::new, ClientUtils.IGNORE_DEFAULT);
+
+        stopwatch.stop();
+        // TODO: add total and distinct model count when reworking model replacement to use a wrapping handler and
+        //       a geometry generator separate from the actual model
+        FramedBlocks.LOGGER.debug("Replaced models for {} blocks in {}", BlockType.COUNT, stopwatch);
     }
 
     @SubscribeEvent
