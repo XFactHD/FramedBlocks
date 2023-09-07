@@ -8,7 +8,7 @@ import xfacthd.framedblocks.FramedBlocks;
 public final class RubidiumCompat
 {
     private static boolean loadedClient = false;
-    private static boolean supportsCustomVertexConsumer = false;
+    private static boolean supportsCustomVertexConsumer = true;
 
     public static void init()
     {
@@ -27,6 +27,7 @@ public final class RubidiumCompat
             catch (Throwable t)
             {
                 FramedBlocks.LOGGER.error("Rubidium version check failed, assuming worst case", t);
+                supportsCustomVertexConsumer = false;
             }
         }
     }
