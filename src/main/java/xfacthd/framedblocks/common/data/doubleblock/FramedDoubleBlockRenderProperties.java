@@ -1,4 +1,4 @@
-package xfacthd.framedblocks.common.block;
+package xfacthd.framedblocks.common.data.doubleblock;
 
 import net.minecraft.client.particle.ParticleEngine;
 import net.minecraft.core.BlockPos;
