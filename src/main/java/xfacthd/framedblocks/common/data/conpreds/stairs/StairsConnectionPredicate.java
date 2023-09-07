@@ -141,6 +141,10 @@ public final class StairsConnectionPredicate implements ConnectionPredicate
                 {
                     yield edge != dirTwo;
                 }
+                else if (side.getAxis() == facing.getClockWise().getAxis())
+                {
+                    yield edge == dirTwo.getOpposite();
+                }
                 yield false;
             }
             case INNER_LEFT ->
@@ -151,11 +155,11 @@ public final class StairsConnectionPredicate implements ConnectionPredicate
                 }
                 else if (side == facing.getOpposite())
                 {
-                    yield edge == facing.getClockWise();
+                    yield edge == facing.getClockWise() || edge == dirTwo.getOpposite();
                 }
                 else if (side == facing.getClockWise())
                 {
-                    yield edge == facing.getOpposite();
+                    yield edge == facing.getOpposite() || edge == dirTwo.getOpposite();
                 }
                 yield false;
             }
@@ -167,11 +171,11 @@ public final class StairsConnectionPredicate implements ConnectionPredicate
                 }
                 else if (side == facing.getOpposite())
                 {
-                    yield edge == facing.getCounterClockWise();
+                    yield edge == facing.getCounterClockWise() || edge == dirTwo.getOpposite();
                 }
                 else if (side == facing.getCounterClockWise())
                 {
-                    yield edge == facing.getOpposite();
+                    yield edge == facing.getOpposite() || edge == dirTwo.getOpposite();
                 }
                 yield false;
             }

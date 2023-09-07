@@ -1298,6 +1298,10 @@ public final class StairsSkipPredicate implements SideSkipPredicate
                 {
                     yield HalfDir.fromDirections(side, edge);
                 }
+                else if (side == edge.getOpposite())
+                {
+                    yield HalfDir.fromDirections(side, dir);
+                }
                 yield HalfDir.NULL;
             }
             case OUTER_LEFT ->
