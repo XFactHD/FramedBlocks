@@ -10,6 +10,10 @@ public interface SideSkipPredicate
 {
     SideSkipPredicate FALSE = (level, pos, state, adjState, side) -> false;
 
+    /**
+     * @deprecated Use {@link #FALSE} instead, full-face testing is done before the skip predicate is invoked
+     */
+    @Deprecated(forRemoval = true)
     SideSkipPredicate FULL_FACE = (level, pos, state, adjState, side) ->
     {
         if (!((IFramedBlock) state.getBlock()).getCache(state).isFullFace(side))

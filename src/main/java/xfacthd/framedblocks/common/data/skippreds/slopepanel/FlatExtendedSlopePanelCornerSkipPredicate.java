@@ -28,17 +28,11 @@ public final class FlatExtendedSlopePanelCornerSkipPredicate implements SideSkip
     @Override
     public boolean test(BlockGetter level, BlockPos pos, BlockState state, BlockState adjState, Direction side)
     {
-        Direction dir = state.getValue(FramedProperties.FACING_HOR);
-
-        if (side == dir)
-        {
-            return SideSkipPredicate.FULL_FACE.test(level, pos, state, adjState, side);
-        }
-
-        HorizontalRotation rot = state.getValue(PropertyHolder.ROTATION);
-
         if (adjState.getBlock() instanceof IFramedBlock block && block.getBlockType() instanceof BlockType type)
         {
+            Direction dir = state.getValue(FramedProperties.FACING_HOR);
+            HorizontalRotation rot = state.getValue(PropertyHolder.ROTATION);
+
             return switch (type)
             {
                 case FRAMED_FLAT_EXT_SLOPE_PANEL_CORNER -> testAgainstFlatExtendedSlopePanelCorner(

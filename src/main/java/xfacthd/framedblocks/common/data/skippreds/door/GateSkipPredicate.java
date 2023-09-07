@@ -17,18 +17,12 @@ public final class GateSkipPredicate implements SideSkipPredicate
     @CullTest.SingleTarget(BlockType.FRAMED_GATE)
     public boolean test(BlockGetter level, BlockPos pos, BlockState state, BlockState adjState, Direction side)
     {
-        Direction facing = getDoorFacing(state);
-
-        if (side == facing.getOpposite())
-        {
-            return SideSkipPredicate.FULL_FACE.test(level, pos, state, adjState, side);
-        }
-
         if (!(adjState.getBlock() instanceof FramedGateBlock))
         {
             return false;
         }
 
+        Direction facing = getDoorFacing(state);
         Direction adjFacing = getDoorFacing(adjState);
         return facing == adjFacing && side.getAxis() != facing.getAxis();
     }

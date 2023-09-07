@@ -28,16 +28,11 @@ public final class ExtendedInnerCornerSlopePanelWallSkipPredicate implements Sid
     @Override
     public boolean test(BlockGetter level, BlockPos pos, BlockState state, BlockState adjState, Direction side)
     {
-        Direction dir = state.getValue(FramedProperties.FACING_HOR);
-        HorizontalRotation rot = state.getValue(PropertyHolder.ROTATION);
-        HorizontalRotation perpRot = rot.rotate(Rotation.COUNTERCLOCKWISE_90);
-        if (side == dir || side == rot.withFacing(dir).getOpposite() || side == perpRot.withFacing(dir).getOpposite())
-        {
-            return SideSkipPredicate.FULL_FACE.test(level, pos, state, adjState, side);
-        }
-
         if (adjState.getBlock() instanceof IFramedBlock block && block.getBlockType() instanceof BlockType type)
         {
+            Direction dir = state.getValue(FramedProperties.FACING_HOR);
+            HorizontalRotation rot = state.getValue(PropertyHolder.ROTATION);
+
             return switch (type)
             {
                 case FRAMED_EXT_INNER_CORNER_SLOPE_PANEL_W -> testAgainstExtendedInnerCornerSlopePanelWall(

@@ -10,7 +10,6 @@ import xfacthd.framedblocks.api.FramedBlocksAPI;
 import xfacthd.framedblocks.api.block.FramedBlockEntity;
 import xfacthd.framedblocks.api.block.IFramedBlock;
 import xfacthd.framedblocks.api.predicate.cull.SideSkipPredicate;
-import xfacthd.framedblocks.api.util.Utils;
 
 /**
  * Helpers for checking whether an {@link IFramedBlock}'s side is occluded by the neighboring block or it occludes
@@ -38,6 +37,7 @@ public final class CullingHelper
         BlockState adjState = level.getBlockState(adjPos);
 
         boolean adjFramed = false;
+        IFramedBlock adjBlock = null;
         if (adjState.getBlock() instanceof IFramedBlock block)
         {
             if (block.shouldPreventNeighborCulling(level, adjPos, adjState, pos, state))
@@ -45,6 +45,7 @@ public final class CullingHelper
                 return false;
             }
             adjFramed = true;
+            adjBlock = block;
         }
         else if (adjState.isSolidRender(level, adjPos))
         {
@@ -53,17 +54,18 @@ public final class CullingHelper
             return false;
         }
 
-        if (!FramedBlocksAPI.getInstance().detailedCullingEnabled() || !adjFramed)
+        IFramedBlock block = (IFramedBlock) state.getBlock();
+        boolean fullFace = block.getCache(state).isFullFace(side);
+        if (!adjFramed || fullFace || !FramedBlocksAPI.getInstance().detailedCullingEnabled())
         {
-            if (SideSkipPredicate.FULL_FACE.test(level, pos, state, adjState, side))
+            if (fullFace && (!adjFramed || adjBlock.getCache(adjState).isFullFace(side.getOpposite())))
             {
                 return compareState(level, pos, adjPos, adjState, adjFramed, side);
             }
             return false;
         }
 
-        SideSkipPredicate pred = ((IFramedBlock) state.getBlock()).getBlockType().getSideSkipPredicate();
-        IFramedBlock adjBlock = (IFramedBlock) adjState.getBlock();
+        SideSkipPredicate pred = block.getBlockType().getSideSkipPredicate();
         BlockState adjTestState = adjBlock.runOcclusionTestAndGetLookupState(pred, level, pos, state, adjState, side);
         if (adjTestState != null)
         {
@@ -129,12 +131,12 @@ public final class CullingHelper
     )
     {
         BlockState adjCamoState = AIR;
-        if (Utils.getBlockEntitySafe(level, pos.relative(side)) instanceof FramedBlockEntity be)
+        if (level.getBlockEntity(pos.relative(side)) instanceof FramedBlockEntity be)
         {
             adjCamoState = be.getCamo(adjTestState).getState();
         }
 
-        if (!adjCamoState.isAir() && Utils.getBlockEntitySafe(level, pos) instanceof FramedBlockEntity be)
+        if (!adjCamoState.isAir() && level.getBlockEntity(pos) instanceof FramedBlockEntity be)
         {
             BlockState camoState = be.getCamo(testState).getState();
             return compareState(level, pos, camoState, adjCamoState, side);

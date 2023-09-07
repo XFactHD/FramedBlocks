@@ -5,7 +5,6 @@ import net.minecraft.core.Direction;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.block.state.BlockState;
 import xfacthd.framedblocks.api.predicate.cull.SideSkipPredicate;
-import xfacthd.framedblocks.common.FBContent;
 import xfacthd.framedblocks.common.data.BlockType;
 import xfacthd.framedblocks.common.data.PropertyHolder;
 import xfacthd.framedblocks.common.data.property.NullableDirection;
@@ -18,13 +17,12 @@ public final class OneWayWindowSkipPredicate implements SideSkipPredicate
     @CullTest.SingleTarget(BlockType.FRAMED_ONE_WAY_WINDOW)
     public boolean test(BlockGetter level, BlockPos pos, BlockState state, BlockState adjState, Direction side)
     {
-        if (adjState.getBlock() != FBContent.BLOCK_FRAMED_ONE_WAY_WINDOW.get())
+        if (adjState.getBlock() == state.getBlock())
         {
-            return SideSkipPredicate.FULL_FACE.test(level, pos, state, adjState, side);
+            NullableDirection face = state.getValue(PropertyHolder.NULLABLE_FACE);
+            NullableDirection adjFace = adjState.getValue(PropertyHolder.NULLABLE_FACE);
+            return face == adjFace;
         }
-
-        NullableDirection face = state.getValue(PropertyHolder.NULLABLE_FACE);
-        NullableDirection adjFace = adjState.getValue(PropertyHolder.NULLABLE_FACE);
-        return face == adjFace;
+        return false;
     }
 }

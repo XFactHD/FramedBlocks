@@ -22,11 +22,7 @@ public final class InnerPrismSkipPredicate implements SideSkipPredicate
     public boolean test(BlockGetter level, BlockPos pos, BlockState state, BlockState adjState, Direction side)
     {
         DirectionAxis dirAxis = state.getValue(PropertyHolder.FACING_AXIS);
-        if (side.getAxis() != dirAxis.axis())
-        {
-            return SideSkipPredicate.FULL_FACE.test(level, pos, state, adjState, side);
-        }
-        else if (dirAxis.axis() == dirAxis.direction().getAxis())
+        if (side.getAxis() != dirAxis.axis() || dirAxis.axis() == dirAxis.direction().getAxis())
         {
             return false;
         }

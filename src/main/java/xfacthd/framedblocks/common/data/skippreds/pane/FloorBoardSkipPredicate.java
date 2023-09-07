@@ -17,11 +17,7 @@ public final class FloorBoardSkipPredicate implements SideSkipPredicate
     @CullTest.SingleTarget(BlockType.FRAMED_FLOOR_BOARD)
     public boolean test(BlockGetter level, BlockPos pos, BlockState state, BlockState adjState, Direction side)
     {
-        if (Utils.isY(side))
-        {
-            return SideSkipPredicate.FULL_FACE.test(level, pos, state, adjState, side);
-        }
-        else if (adjState.getBlock() == state.getBlock())
+        if (!Utils.isY(side) && adjState.getBlock() == state.getBlock())
         {
             boolean top = state.getValue(FramedProperties.TOP);
             boolean adjTop = adjState.getValue(FramedProperties.TOP);

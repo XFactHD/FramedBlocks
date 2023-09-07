@@ -23,12 +23,7 @@ public final class InnerSlopedPrismSkipPredicate implements SideSkipPredicate
     {
         CompoundDirection cmpDir = state.getValue(PropertyHolder.FACING_DIR);
         Direction orientation = cmpDir.orientation();
-        if (side != orientation)
-        {
-            return SideSkipPredicate.FULL_FACE.test(level, pos, state, adjState, side);
-        }
-
-        if (orientation.getAxis() == cmpDir.direction().getAxis())
+        if (side != orientation || orientation.getAxis() == cmpDir.direction().getAxis())
         {
             return false;
         }

@@ -27,7 +27,7 @@ public final class SideSkipPredicates extends BlockTypeMap<SideSkipPredicate>
     @Override
     protected void fill()
     {
-        put(BlockType.FRAMED_CUBE, SideSkipPredicate.FULL_FACE);
+        put(BlockType.FRAMED_CUBE, SideSkipPredicate.FALSE);
         put(BlockType.FRAMED_SLOPE, SlopeSkipPredicate.INSTANCE);
         put(BlockType.FRAMED_CORNER_SLOPE, new CornerSkipPredicate());
         put(BlockType.FRAMED_INNER_CORNER_SLOPE, new InnerCornerSkipPredicate());
@@ -95,7 +95,7 @@ public final class SideSkipPredicates extends BlockTypeMap<SideSkipPredicate>
         put(BlockType.FRAMED_LATTICE_BLOCK, new LatticeSkipPredicate());
         put(BlockType.FRAMED_THICK_LATTICE, new ThickLatticeSkipPredicate());
         put(BlockType.FRAMED_CHEST, SideSkipPredicate.FALSE);
-        put(BlockType.FRAMED_SECRET_STORAGE, SideSkipPredicate.FULL_FACE);
+        put(BlockType.FRAMED_SECRET_STORAGE, SideSkipPredicate.FALSE);
         put(BlockType.FRAMED_BARS, SideSkipPredicate.FALSE);
         put(BlockType.FRAMED_PANE, new PaneSkipPredicate());
         put(BlockType.FRAMED_HORIZONTAL_PANE, new HorizontalPaneSkipPredicate());
@@ -108,8 +108,8 @@ public final class SideSkipPredicates extends BlockTypeMap<SideSkipPredicate>
         put(BlockType.FRAMED_HALF_PILLAR, new HalfPillarSkipPredicate());
         put(BlockType.FRAMED_POST, new PostSkipPredicate());
         put(BlockType.FRAMED_COLLAPSIBLE_BLOCK, new CollapsibleBlockSkipPredicate());
-        put(BlockType.FRAMED_BOUNCY_CUBE, SideSkipPredicate.FULL_FACE);
-        put(BlockType.FRAMED_REDSTONE_BLOCK, SideSkipPredicate.FULL_FACE);
+        put(BlockType.FRAMED_BOUNCY_CUBE, SideSkipPredicate.FALSE);
+        put(BlockType.FRAMED_REDSTONE_BLOCK, SideSkipPredicate.FALSE);
         put(BlockType.FRAMED_PRISM, new PrismSkipPredicate());
         put(BlockType.FRAMED_INNER_PRISM, new InnerPrismSkipPredicate());
         put(BlockType.FRAMED_DOUBLE_PRISM, SideSkipPredicate.FALSE);
@@ -174,10 +174,10 @@ public final class SideSkipPredicates extends BlockTypeMap<SideSkipPredicate>
         put(BlockType.FRAMED_STACKED_CORNER_SLOPE_PANEL_W, SideSkipPredicate.FALSE);
         put(BlockType.FRAMED_STACKED_INNER_CORNER_SLOPE_PANEL, SideSkipPredicate.FALSE);
         put(BlockType.FRAMED_STACKED_INNER_CORNER_SLOPE_PANEL_W, SideSkipPredicate.FALSE);
-        put(BlockType.FRAMED_GLOWING_CUBE, SideSkipPredicate.FULL_FACE);
-        put(BlockType.FRAMED_PYRAMID, SideSkipPredicate.FULL_FACE);
-        put(BlockType.FRAMED_PYRAMID_SLAB, SideSkipPredicate.FULL_FACE);
-        put(BlockType.FRAMED_TARGET, SideSkipPredicate.FULL_FACE);
+        put(BlockType.FRAMED_GLOWING_CUBE, SideSkipPredicate.FALSE);
+        put(BlockType.FRAMED_PYRAMID, SideSkipPredicate.FALSE);
+        put(BlockType.FRAMED_PYRAMID_SLAB, SideSkipPredicate.FALSE);
+        put(BlockType.FRAMED_TARGET, SideSkipPredicate.FALSE);
         put(BlockType.FRAMED_GATE, new GateSkipPredicate());
         put(BlockType.FRAMED_IRON_GATE, new GateSkipPredicate());
         put(BlockType.FRAMED_ITEM_FRAME, SideSkipPredicate.FALSE);
@@ -199,8 +199,8 @@ public final class SideSkipPredicates extends BlockTypeMap<SideSkipPredicate>
         put(BlockType.FRAMED_VERTICAL_SLOPED_STAIRS, new VerticalSlopedStairsSkipPredicate());
         put(BlockType.FRAMED_MINI_CUBE, SideSkipPredicate.FALSE);
         put(BlockType.FRAMED_ONE_WAY_WINDOW, new OneWayWindowSkipPredicate());
-        put(BlockType.FRAMED_BOOKSHELF, SideSkipPredicate.FULL_FACE);
-        put(BlockType.FRAMED_CHISELED_BOOKSHELF, SideSkipPredicate.FULL_FACE);
+        put(BlockType.FRAMED_BOOKSHELF, SideSkipPredicate.FALSE);
+        put(BlockType.FRAMED_CHISELED_BOOKSHELF, SideSkipPredicate.FALSE);
         put(BlockType.FRAMED_CENTERED_SLAB, new CenteredSlabSkipPredicate());
         put(BlockType.FRAMED_CENTERED_PANEL, new CenteredPanelSkipPredicate());
     }

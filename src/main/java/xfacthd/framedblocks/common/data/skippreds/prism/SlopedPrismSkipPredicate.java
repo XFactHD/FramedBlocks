@@ -23,13 +23,8 @@ public final class SlopedPrismSkipPredicate implements SideSkipPredicate
     {
         CompoundDirection cmpDir = state.getValue(PropertyHolder.FACING_DIR);
         Direction dir = cmpDir.direction();
-        if (side == dir.getOpposite())
-        {
-            return SideSkipPredicate.FULL_FACE.test(level, pos, state, adjState, side);
-        }
-
         Direction orientation = cmpDir.orientation();
-        if (orientation.getAxis() == dir.getAxis() || side != orientation)
+        if (side == dir.getOpposite() || orientation.getAxis() == dir.getAxis() || side != orientation)
         {
             return false;
         }

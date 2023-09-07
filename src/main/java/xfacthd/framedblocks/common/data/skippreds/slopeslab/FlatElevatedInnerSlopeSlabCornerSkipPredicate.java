@@ -22,16 +22,11 @@ public final class FlatElevatedInnerSlopeSlabCornerSkipPredicate implements Side
     @Override
     public boolean test(BlockGetter level, BlockPos pos, BlockState state, BlockState adjState, Direction side)
     {
-        Direction dir = state.getValue(FramedProperties.FACING_HOR);
-        boolean top = state.getValue(FramedProperties.TOP);
-
-        if ((top && side == Direction.UP) || (!top && side == Direction.DOWN) || side == dir || side == dir.getCounterClockWise())
-        {
-            return SideSkipPredicate.FULL_FACE.test(level, pos, state, adjState, side);
-        }
-
         if (adjState.getBlock() instanceof IFramedBlock block && block.getBlockType() instanceof BlockType blockType)
         {
+            Direction dir = state.getValue(FramedProperties.FACING_HOR);
+            boolean top = state.getValue(FramedProperties.TOP);
+
             return switch (blockType)
             {
                 case FRAMED_FLAT_ELEV_INNER_SLOPE_SLAB_CORNER -> testAgainstFlatElevatedInnerSlopeSlabCorner(

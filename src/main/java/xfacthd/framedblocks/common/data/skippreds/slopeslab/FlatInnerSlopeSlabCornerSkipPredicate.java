@@ -30,17 +30,11 @@ public final class FlatInnerSlopeSlabCornerSkipPredicate implements SideSkipPred
     @Override
     public boolean test(BlockGetter level, BlockPos pos, BlockState state, BlockState adjState, Direction side)
     {
-        boolean top = state.getValue(FramedProperties.TOP);
-        boolean topHalf = state.getValue(PropertyHolder.TOP_HALF);
-
-        if (top == topHalf && ((topHalf && side == Direction.UP) || (!topHalf && side == Direction.DOWN)))
-        {
-            return SideSkipPredicate.FULL_FACE.test(level, pos, state, adjState, side);
-        }
-
         if (adjState.getBlock() instanceof IFramedBlock block && block.getBlockType() instanceof BlockType blockType)
         {
             Direction dir = state.getValue(FramedProperties.FACING_HOR);
+            boolean top = state.getValue(FramedProperties.TOP);
+            boolean topHalf = state.getValue(PropertyHolder.TOP_HALF);
 
             return switch (blockType)
             {

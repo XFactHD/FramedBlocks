@@ -19,13 +19,9 @@ public final class DoorSkipPredicate implements SideSkipPredicate
     {
         Direction facing = getDoorFacing(state);
 
-        if (side == facing)
+        if (side.getAxis() == facing.getAxis())
         {
             return false;
-        }
-        if (side == facing.getOpposite())
-        {
-            return SideSkipPredicate.FULL_FACE.test(level, pos, state, adjState, side);
         }
 
         if (!(adjState.getBlock() instanceof FramedDoorBlock))

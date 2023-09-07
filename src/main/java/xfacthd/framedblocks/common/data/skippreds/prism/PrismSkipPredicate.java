@@ -23,13 +23,8 @@ public final class PrismSkipPredicate implements SideSkipPredicate
     {
         DirectionAxis dirAxis = state.getValue(PropertyHolder.FACING_AXIS);
         Direction dir = dirAxis.direction();
-        if (side == dir.getOpposite())
-        {
-            return SideSkipPredicate.FULL_FACE.test(level, pos, state, adjState, side);
-        }
-
         Direction.Axis axis = dirAxis.axis();
-        if (axis == dir.getAxis() || side.getAxis() != axis)
+        if (side == dir.getOpposite() || axis == dir.getAxis() || side.getAxis() != axis)
         {
             return false;
         }

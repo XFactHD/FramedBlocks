@@ -26,14 +26,9 @@ public final class LargeInnerCornerSlopePanelSkipPredicate implements SideSkipPr
     @Override
     public boolean test(BlockGetter level, BlockPos pos, BlockState state, BlockState adjState, Direction side)
     {
-        Direction dir = state.getValue(FramedProperties.FACING_HOR);
-        if (side == dir.getOpposite() || side == dir.getClockWise())
-        {
-            return StairsSkipPredicate.FULL_FACE.test(level, pos, state, adjState, side);
-        }
-
         if (adjState.getBlock() instanceof IFramedBlock block && block.getBlockType() instanceof BlockType type)
         {
+            Direction dir = state.getValue(FramedProperties.FACING_HOR);
             boolean top = state.getValue(FramedProperties.TOP);
 
             return switch (type)

@@ -25,14 +25,10 @@ public final class PanelSkipPredicate implements SideSkipPredicate
     @Override
     public boolean test(BlockGetter level, BlockPos pos, BlockState state, BlockState adjState, Direction side)
     {
-        Direction dir = state.getValue(FramedProperties.FACING_HOR);
-        if (side == dir)
-        {
-            return SideSkipPredicate.FULL_FACE.test(level, pos, state, adjState, side);
-        }
-
         if (adjState.getBlock() instanceof IFramedBlock block && block.getBlockType() instanceof BlockType type)
         {
+            Direction dir = state.getValue(FramedProperties.FACING_HOR);
+
             return switch (type)
             {
                 case FRAMED_PANEL -> testAgainstPanel(
