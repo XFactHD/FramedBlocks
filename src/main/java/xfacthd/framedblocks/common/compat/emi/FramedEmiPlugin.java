@@ -38,6 +38,7 @@ public final class FramedEmiPlugin implements EmiPlugin
         registry.addRecipeHandler(FBContent.MENU_TYPE_FRAMING_SAW.get(), new FramedEmiRecipeHandler<>());
         registry.addRecipeHandler(FBContent.MENU_TYPE_POWERED_FRAMING_SAW.get(), new FramedEmiRecipeHandler<>());
         registry.addStackProvider(FramingSawScreen.class, new FramingSawStackProvider());
+        registry.addStackProvider(PoweredFramingSawScreen.class, new PoweredFramingSawStackProvider());
         registry.addDragDropHandler(PoweredFramingSawScreen.class, new PoweredFramingSawDragDropHandler());
         registerRecipes(registry);
     }

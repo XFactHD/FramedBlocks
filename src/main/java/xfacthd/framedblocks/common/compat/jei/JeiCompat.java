@@ -12,6 +12,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.fml.ModList;
 import net.minecraftforge.fml.loading.FMLEnvironment;
 import xfacthd.framedblocks.api.util.Utils;
+import xfacthd.framedblocks.client.util.RecipeViewer;
 
 import java.util.Optional;
 
@@ -35,20 +36,20 @@ public final class JeiCompat
         return loadedClient;
     }
 
-    public static boolean isShowRecipePressed(int keyCode, int scanCode)
+    public static RecipeViewer.LookupTarget isShowRecipePressed(int keyCode, int scanCode)
     {
         if (loadedClient)
         {
             return GuardedAccess.isShowRecipePressed(keyCode, scanCode);
         }
-        return false;
+        return null;
     }
 
-    public static boolean handleShowRecipeRequest(ItemStack result)
+    public static boolean handleShowRecipeRequest(ItemStack result, RecipeViewer.LookupTarget target)
     {
         if (loadedClient)
         {
-            return GuardedAccess.handleButtonRecipeRequest(result);
+            return GuardedAccess.handleButtonRecipeRequest(result, target);
         }
         return false;
     }
@@ -58,16 +59,25 @@ public final class JeiCompat
     static final class GuardedAccess
     {
         private static IJeiRuntime runtime = null;
+        private static IJeiKeyMappings keys = null;
 
-        public static boolean isShowRecipePressed(int keyCode, int scanCode)
+        public static RecipeViewer.LookupTarget isShowRecipePressed(int keyCode, int scanCode)
         {
             Preconditions.checkNotNull(runtime, "Runtime not set");
 
             InputConstants.Key key = InputConstants.getKey(keyCode, scanCode);
-            return runtime.getKeyMappings().getShowRecipe().isActiveAndMatches(key);
+            if (keys.getShowRecipe().isActiveAndMatches(key))
+            {
+                return RecipeViewer.LookupTarget.RECIPE;
+            }
+            if (keys.getShowUses().isActiveAndMatches(key))
+            {
+                return RecipeViewer.LookupTarget.USAGE;
+            }
+            return null;
         }
 
-        private static boolean handleButtonRecipeRequest(ItemStack result)
+        private static boolean handleButtonRecipeRequest(ItemStack result, RecipeViewer.LookupTarget target)
         {
             Preconditions.checkNotNull(runtime, "Runtime not set");
 
@@ -81,7 +91,12 @@ public final class JeiCompat
             );
             if (ingredient.isPresent())
             {
-                IFocus<ItemStack> focus = focusFactory.createFocus(RecipeIngredientRole.OUTPUT, ingredient.get());
+                RecipeIngredientRole role = switch (target)
+                {
+                    case RECIPE -> RecipeIngredientRole.OUTPUT;
+                    case USAGE -> RecipeIngredientRole.INPUT;
+                };
+                IFocus<ItemStack> focus = focusFactory.createFocus(role, ingredient.get());
                 gui.show(focus);
 
                 return true;
@@ -93,6 +108,7 @@ public final class JeiCompat
         public static void acceptRuntime(IJeiRuntime runtime)
         {
             GuardedAccess.runtime = runtime;
+            GuardedAccess.keys = runtime.getKeyMappings();
         }
 
         public static IJeiRuntime getRuntime()

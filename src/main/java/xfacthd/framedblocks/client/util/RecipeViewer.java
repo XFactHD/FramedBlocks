@@ -9,7 +9,7 @@ public enum RecipeViewer
 {
     JEI(JeiCompat::isShowRecipePressed, JeiCompat::handleShowRecipeRequest),
     REI(ReiCompat::isShowRecipePressed, ReiCompat::handleShowRecipeRequest),
-    EMI((keyCode, scanCode) -> false, resultStack -> false);
+    EMI((keyCode, scanCode) -> null, (stack, target) -> false);
 
     private final ShowRecipeKeyTest showKeyTest;
     private final RecipeShower recipeShower;
@@ -20,14 +20,14 @@ public enum RecipeViewer
         this.recipeShower = recipeShower;
     }
 
-    public boolean isShowRecipePressed(int keyCode, int scanCode)
+    public LookupTarget isShowRecipePressed(int keyCode, int scanCode)
     {
         return showKeyTest.isShowRecipePressed(keyCode, scanCode);
     }
 
-    public boolean handleShowRecipeRequest(ItemStack resultStack)
+    public boolean handleShowRecipeRequest(ItemStack stack, LookupTarget target)
     {
-        return recipeShower.handleShowRecipeRequest(resultStack);
+        return recipeShower.handleShowRecipeRequest(stack, target);
     }
 
 
@@ -52,13 +52,19 @@ public enum RecipeViewer
 
 
 
+    public enum LookupTarget
+    {
+        RECIPE,
+        USAGE
+    }
+
     private interface ShowRecipeKeyTest
     {
-        boolean isShowRecipePressed(int keyCode, int scanCode);
+        LookupTarget isShowRecipePressed(int keyCode, int scanCode);
     }
 
     private interface RecipeShower
     {
-        boolean handleShowRecipeRequest(ItemStack resultStack);
+        boolean handleShowRecipeRequest(ItemStack stack, LookupTarget target);
     }
 }

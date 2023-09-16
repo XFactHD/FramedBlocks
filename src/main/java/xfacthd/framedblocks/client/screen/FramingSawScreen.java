@@ -479,7 +479,8 @@ public class FramingSawScreen extends AbstractContainerScreen<FramingSawMenu>
     @Override
     public boolean keyPressed(int keyCode, int scanCode, int modifiers)
     {
-        if (RECIPE_VIEWER != null && RECIPE_VIEWER.isShowRecipePressed(keyCode, scanCode))
+        RecipeViewer.LookupTarget target;
+        if (RECIPE_VIEWER != null && (target = RECIPE_VIEWER.isShowRecipePressed(keyCode, scanCode)) != null)
         {
             Window window = Objects.requireNonNull(minecraft).getWindow();
             MouseHandler mouseHandler = minecraft.mouseHandler;
@@ -487,7 +488,7 @@ public class FramingSawScreen extends AbstractContainerScreen<FramingSawMenu>
             double mouseY = mouseHandler.ypos() * (double)window.getGuiScaledHeight() / (double)window.getScreenHeight();
 
             FramingSawRecipe recipe = getRecipeAt(mouseX, mouseY);
-            if (recipe != null && RECIPE_VIEWER.handleShowRecipeRequest(recipe.getResult()))
+            if (recipe != null && RECIPE_VIEWER.handleShowRecipeRequest(recipe.getResult(), target))
             {
                 return true;
             }
