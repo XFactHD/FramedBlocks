@@ -9,6 +9,7 @@ import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.inventory.tooltip.TooltipComponent;
 import net.minecraft.world.item.ItemStack;
+import xfacthd.framedblocks.FramedBlocks;
 import xfacthd.framedblocks.api.util.Utils;
 import xfacthd.framedblocks.client.render.item.ItemRenderHelper;
 import xfacthd.framedblocks.common.FBContent;
@@ -16,6 +17,7 @@ import xfacthd.framedblocks.common.blockentity.special.PoweredFramingSawBlockEnt
 import xfacthd.framedblocks.common.crafting.*;
 import xfacthd.framedblocks.common.menu.FramingSawMenu;
 import xfacthd.framedblocks.common.menu.PoweredFramingSawMenu;
+import xfacthd.framedblocks.common.net.SelectFramingSawRecipePacket;
 
 import java.util.*;
 
@@ -251,8 +253,7 @@ public class PoweredFramingSawScreen extends AbstractContainerScreen<PoweredFram
             //noinspection ConstantConditions
             if (menu.clickMenuButton(minecraft.player, id))
             {
-                //noinspection ConstantConditions
-                minecraft.gameMode.handleInventoryButtonClick(menu.containerId, id);
+                FramedBlocks.CHANNEL.sendToServer(new SelectFramingSawRecipePacket(menu.containerId, id));
             }
         }
     }

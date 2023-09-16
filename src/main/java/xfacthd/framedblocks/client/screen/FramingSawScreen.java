@@ -22,6 +22,7 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Ingredient;
 import org.lwjgl.glfw.GLFW;
+import xfacthd.framedblocks.FramedBlocks;
 import xfacthd.framedblocks.api.util.Utils;
 import xfacthd.framedblocks.client.render.item.ItemRenderHelper;
 import xfacthd.framedblocks.client.util.RecipeViewer;
@@ -29,6 +30,7 @@ import xfacthd.framedblocks.common.FBContent;
 import xfacthd.framedblocks.common.crafting.*;
 import xfacthd.framedblocks.common.menu.FramingSawMenu;
 import xfacthd.framedblocks.common.menu.IFramingSawMenu;
+import xfacthd.framedblocks.common.net.SelectFramingSawRecipePacket;
 import xfacthd.framedblocks.common.util.RecipeUtils;
 
 import java.util.*;
@@ -423,8 +425,7 @@ public class FramingSawScreen extends AbstractContainerScreen<FramingSawMenu>
             if (menu.clickMenuButton(minecraft.player, idx))
             {
                 Minecraft.getInstance().getSoundManager().play(SimpleSoundInstance.forUI(SoundEvents.UI_STONECUTTER_SELECT_RECIPE, 1.0F));
-                //noinspection ConstantConditions
-                minecraft.gameMode.handleInventoryButtonClick(menu.containerId, idx);
+                FramedBlocks.CHANNEL.sendToServer(new SelectFramingSawRecipePacket(menu.containerId, idx));
                 return true;
             }
         }

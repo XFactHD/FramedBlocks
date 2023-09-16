@@ -42,7 +42,7 @@ public final class FramedBlocks
 {
     public static final Logger LOGGER = LogUtils.getLogger();
 
-    private static final String PROTOCOL_VERSION = "2";
+    private static final String PROTOCOL_VERSION = "3";
     public static final SimpleChannel CHANNEL = NetworkRegistry.newSimpleChannel(
             Utils.rl("main"),
             () -> PROTOCOL_VERSION,
@@ -104,6 +104,12 @@ public final class FramedBlocks
                 .encoder(CullingUpdatePacket::encode)
                 .decoder(CullingUpdatePacket::decode)
                 .consumerNetworkThread(CullingUpdatePacket::handle)
+                .add();
+
+        CHANNEL.messageBuilder(SelectFramingSawRecipePacket.class, 3, NetworkDirection.PLAY_TO_SERVER)
+                .encoder(SelectFramingSawRecipePacket::encode)
+                .decoder(SelectFramingSawRecipePacket::new)
+                .consumerMainThread(SelectFramingSawRecipePacket::handle)
                 .add();
 
         StateCacheBuilder.initializeStateCaches();
