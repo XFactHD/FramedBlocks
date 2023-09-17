@@ -184,10 +184,13 @@ public final class GhostBlockRenderer
 
         profiler.push("draw");
         BakedModel model = ModelCache.getModel(renderState);
+        poseStack.pushPose();
+        poseStack.translate(offset.x, offset.y, offset.z);
         for (RenderType type : model.getRenderTypes(renderState, RANDOM, modelData))
         {
-            doRenderGhostBlockInLayer(poseStack, builder, renderPos, renderState, type, offset, modelData);
+            doRenderGhostBlockInLayer(poseStack, builder, renderPos, renderState, type, modelData);
         }
+        poseStack.popPose();
         profiler.pop(); //draw
 
         profiler.push("upload");
@@ -202,13 +205,9 @@ public final class GhostBlockRenderer
             BlockPos renderPos,
             BlockState renderState,
             RenderType layer,
-            Vec3 offset,
             ModelData modelData
     )
     {
-        poseStack.pushPose();
-        poseStack.translate(offset.x, offset.y, offset.z);
-
         mc().getBlockRenderer().renderBatched(
                 renderState,
                 renderPos,
@@ -220,8 +219,6 @@ public final class GhostBlockRenderer
                 modelData,
                 layer
         );
-
-        poseStack.popPose();
     }
 
 
