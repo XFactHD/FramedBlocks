@@ -1,6 +1,5 @@
 package xfacthd.framedblocks.common.blockentity.special;
 
-import com.google.common.base.Objects;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
@@ -27,6 +26,7 @@ import xfacthd.framedblocks.common.util.ExternalItemHandler;
 
 import javax.annotation.Nullable;
 import java.util.List;
+import java.util.Objects;
 import java.util.function.Consumer;
 
 public class PoweredFramingSawBlockEntity extends BlockEntity
@@ -76,6 +76,7 @@ public class PoweredFramingSawBlockEntity extends BlockEntity
     private FramingSawRecipeCalculation calculation = null;
     private int outputCount = 0;
     private int progress = 0;
+    private boolean needSaving = false;
     private boolean inhibitUpdate = false;
     private boolean internalAccess = false;
 
@@ -132,6 +133,12 @@ public class PoweredFramingSawBlockEntity extends BlockEntity
                 be.progress = 0;
             }
         }
+
+        if (be.needSaving)
+        {
+            be.setChanged();
+            be.needSaving = false;
+        }
     }
 
     private boolean canRun()
@@ -174,7 +181,7 @@ public class PoweredFramingSawBlockEntity extends BlockEntity
 
     private void onContentsChanged(int slot)
     {
-        setChanged();
+        needSaving = true;
         if (slot != FramingSawMenu.SLOT_RESULT && !inhibitUpdate)
         {
             checkRecipeSatisfied();
@@ -214,9 +221,9 @@ public class PoweredFramingSawBlockEntity extends BlockEntity
         selectedRecipe = recipe;
         selectedRecipeId = recipe == null ? null : recipe.getId();
         checkRecipeSatisfied();
-        if (!Objects.equal(lastId, selectedRecipeId))
+        if (!Objects.equals(lastId, selectedRecipeId))
         {
-            setChanged();
+            needSaving = true;
         }
     }
 
