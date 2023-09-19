@@ -22,8 +22,7 @@ import xfacthd.framedblocks.api.FramedBlocksAPI;
 import xfacthd.framedblocks.api.FramedBlocksClientAPI;
 import xfacthd.framedblocks.api.block.FramedProperties;
 import xfacthd.framedblocks.api.block.cache.StateCache;
-import xfacthd.framedblocks.api.model.data.FramedBlockData;
-import xfacthd.framedblocks.api.model.data.QuadTable;
+import xfacthd.framedblocks.api.model.data.*;
 import xfacthd.framedblocks.api.model.quad.QuadModifier;
 import xfacthd.framedblocks.api.model.util.ModelCache;
 import xfacthd.framedblocks.api.model.util.ModelUtils;
@@ -40,7 +39,6 @@ import java.util.*;
 public abstract class FramedBlockModel extends BakedModelProxy
 {
     private static final boolean DISABLE_QUAD_CACHE = !FMLEnvironment.production && TestProperties.DISABLE_MODEL_QUAD_CACHE;
-    private static final Direction[] DIRECTIONS = Direction.values();
     private static final FramedBlockData DEFAULT_DATA = new FramedBlockData.Immutable(
             Blocks.AIR.defaultBlockState(), new boolean[6], false
     );
@@ -312,7 +310,8 @@ public abstract class FramedBlockModel extends BakedModelProxy
         {
             boolean camoInRenderType = camoLayers.contains(renderType);
 
-            quadTable.put(renderType, makeQuads(
+            makeQuadsForLayer(
+                    quadTable,
                     state,
                     camoState,
                     camoModel,
@@ -322,8 +321,9 @@ public abstract class FramedBlockModel extends BakedModelProxy
                     renderType,
                     camoInRenderType,
                     addReinforcement && renderType == RenderType.cutout()
-            ));
+            );
         }
+        quadTable.bindRenderType(null);
 
         return quadTable;
     }
@@ -331,7 +331,8 @@ public abstract class FramedBlockModel extends BakedModelProxy
     /**
      * Builds the list of quads per side for a given {@linkplain BlockState camo state} and {@link RenderType}
      */
-    private Map<Direction, List<BakedQuad>> makeQuads(
+    private void makeQuadsForLayer(
+            QuadTable quadMap,
             BlockState state,
             BlockState camoState,
             BakedModel camoModel,
@@ -343,12 +344,7 @@ public abstract class FramedBlockModel extends BakedModelProxy
             boolean addReinforcement
     )
     {
-        Map<Direction, List<BakedQuad>> quadMap = new IdentityHashMap<>();
-        quadMap.put(null, new ArrayList<>());
-        for (Direction dir : DIRECTIONS)
-        {
-            quadMap.put(dir, new ArrayList<>());
-        }
+        quadMap.initializeForLayer(renderType);
 
         if (camoInRenderType)
         {
@@ -374,8 +370,6 @@ public abstract class FramedBlockModel extends BakedModelProxy
         {
             getAdditionalQuads(quadMap, state, rand, data, renderType);
         }
-
-        return quadMap;
     }
 
     /**
