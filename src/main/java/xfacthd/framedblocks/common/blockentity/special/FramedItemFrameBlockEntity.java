@@ -108,6 +108,11 @@ public class FramedItemFrameBlockEntity extends FramedBlockEntity
         return heldItem;
     }
 
+    public ItemStack getCloneItem()
+    {
+        return heldItem.copy();
+    }
+
     public int getRotation()
     {
         return rotation;
