@@ -199,6 +199,11 @@ dependencies {
         transitive(false)
     }
 
+    implementation(annotationProcessor("io.github.llamalad7:mixinextras-common:0.2.0-rc.4"))
+    implementation(jarJar("io.github.llamalad7:mixinextras-forge:0.2.0-rc.4")) {
+        jarJar.ranged(it, "[0.2.0-rc.4,)")
+    }
+
     annotationProcessor 'org.spongepowered:mixin:0.8.5:processor'
 }
 
