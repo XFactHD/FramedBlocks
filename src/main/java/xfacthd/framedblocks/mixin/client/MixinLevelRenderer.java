@@ -1,4 +1,4 @@
-package xfacthd.framedblocks.client.util.mixin;
+package xfacthd.framedblocks.mixin.client;
 
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.renderer.LevelRenderer;

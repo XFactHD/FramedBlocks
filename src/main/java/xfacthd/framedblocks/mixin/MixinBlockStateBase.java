@@ -1,4 +1,4 @@
-package xfacthd.framedblocks.client.util.mixin;
+package xfacthd.framedblocks.mixin;
 
 import com.google.common.base.Preconditions;
 import net.minecraft.world.level.block.state.BlockBehaviour;

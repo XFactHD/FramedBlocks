@@ -1,4 +1,4 @@
-package xfacthd.framedblocks.client.util.mixin;
+package xfacthd.framedblocks.mixin;
 
 import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
 import net.minecraft.core.BlockPos;
