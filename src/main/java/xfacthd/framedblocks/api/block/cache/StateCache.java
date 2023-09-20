@@ -19,21 +19,22 @@ import java.util.Objects;
 public class StateCache
 {
     private static final Direction[] DIRECTIONS = Direction.values();
-    private static final int DIR_COUNT = DIRECTIONS.length;
+    protected static final int DIR_COUNT = DIRECTIONS.length;
+    protected static final int DIR_COUNT_N = DIR_COUNT + 1;
     public static final StateCache EMPTY = new StateCache();
 
     private final boolean anyFullFace;
     private final boolean[] fullFace;
-    private final boolean[][] conFullEdge;
-    private final boolean[][] conDetailed;
+    private final boolean[] conFullEdge;
+    private final boolean[] conDetailed;
 
     public StateCache(BlockState state, IBlockType type)
     {
         boolean anyFullFace = false;
         boolean anyConDetailed = false;
         boolean[] fullFace = new boolean[DIR_COUNT];
-        boolean[][] conFullEdge = new boolean[DIR_COUNT][DIR_COUNT + 1];
-        boolean[][] conDetailed = new boolean[DIR_COUNT][DIR_COUNT];
+        boolean[] conFullEdge = new boolean[DIR_COUNT * DIR_COUNT_N];
+        boolean[] conDetailed = new boolean[DIR_COUNT * DIR_COUNT];
 
         FullFacePredicate facePred = type.getFullFacePredicate();
         ConnectionPredicate conPred = type.getConnectionPredicate();
@@ -52,21 +53,24 @@ public class StateCache
                 continue;
             }
 
-            conFullEdge[sideOrd][Utils.maskNullDirection(null)] = conPred.canConnectFullEdge(state, side, null);
+            int feNullIdx = sideOrd * DIR_COUNT_N + Utils.maskNullDirection(null);
+            conFullEdge[feNullIdx] = conPred.canConnectFullEdge(state, side, null);
 
             for (Direction edge : DIRECTIONS)
             {
+                int feIdx = sideOrd * DIR_COUNT_N + Utils.maskNullDirection(edge);
                 if (edge.getAxis() == side.getAxis())
                 {
-                    conFullEdge[sideOrd][Utils.maskNullDirection(edge)] = conFullEdge[sideOrd][Utils.maskNullDirection(null)];
+                    conFullEdge[feIdx] = conFullEdge[feNullIdx];
                     continue;
                 }
 
-                conFullEdge[sideOrd][Utils.maskNullDirection(edge)] = conPred.canConnectFullEdge(state, side, edge);
+                conFullEdge[feIdx] = conPred.canConnectFullEdge(state, side, edge);
 
                 boolean detailed = conPred.canConnectDetailed(state, side, edge);
                 anyConDetailed |= detailed;
-                conDetailed[sideOrd][edge.ordinal()] = detailed;
+                int dIdx = sideOrd * DIR_COUNT + edge.ordinal();
+                conDetailed[dIdx] = detailed;
             }
         }
 
@@ -96,12 +100,12 @@ public class StateCache
 
     public final boolean canConnectFullEdge(Direction side, @Nullable Direction edge)
     {
-        return conFullEdge != null && conFullEdge[side.ordinal()][Utils.maskNullDirection(edge)];
+        return conFullEdge != null && conFullEdge[side.ordinal() * DIR_COUNT_N + Utils.maskNullDirection(edge)];
     }
 
     public final boolean canConnectDetailed(Direction side, Direction edge)
     {
-        return conDetailed != null && conDetailed[side.ordinal()][edge.ordinal()];
+        return conDetailed != null && conDetailed[side.ordinal() * DIR_COUNT + edge.ordinal()];
     }
 
     @Override
@@ -118,8 +122,8 @@ public class StateCache
         StateCache that = (StateCache) other;
         return anyFullFace == that.anyFullFace &&
                 Arrays.equals(fullFace, that.fullFace) &&
-                Arrays.deepEquals(conFullEdge, that.conFullEdge) &&
-                Arrays.deepEquals(conDetailed, that.conDetailed);
+                Arrays.equals(conFullEdge, that.conFullEdge) &&
+                Arrays.equals(conDetailed, that.conDetailed);
     }
 
     @Override
@@ -127,8 +131,8 @@ public class StateCache
     {
         int result = Objects.hashCode(anyFullFace);
         result = 31 * result + Arrays.hashCode(fullFace);
-        result = 31 * result + Arrays.deepHashCode(conFullEdge);
-        result = 31 * result + Arrays.deepHashCode(conDetailed);
+        result = 31 * result + Arrays.hashCode(conFullEdge);
+        result = 31 * result + Arrays.hashCode(conDetailed);
         return result;
     }
 }

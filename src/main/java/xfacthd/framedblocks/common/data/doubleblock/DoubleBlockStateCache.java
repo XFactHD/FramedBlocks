@@ -17,8 +17,8 @@ public class DoubleBlockStateCache extends StateCache
 {
     private final DoubleBlockTopInteractionMode topInteractionMode;
     private final Tuple<BlockState, BlockState> statePair;
-    private final SolidityCheck[] solidityChecks = new SolidityCheck[6];
-    private final CamoGetter[][] camoGetters = new CamoGetter[6][7];
+    private final SolidityCheck[] solidityChecks = new SolidityCheck[DIR_COUNT];
+    private final CamoGetter[] camoGetters = new CamoGetter[DIR_COUNT * DIR_COUNT_N];
 
     public DoubleBlockStateCache(BlockState state, IBlockType type)
     {
@@ -35,13 +35,15 @@ public class DoubleBlockStateCache extends StateCache
                 if (edge != null && edge.getAxis() == side.getAxis())
                 {
                     // null is the first value this lambda receives, so this is safe
-                    getter = camoGetters[side.ordinal()][Utils.maskNullDirection(null)];
+                    int cgNullIdx = side.ordinal() *  Utils.maskNullDirection(null);
+                    getter = camoGetters[cgNullIdx];
                 }
                 else
                 {
                     getter = block.calculateCamoGetter(state, side, edge);
                 }
-                camoGetters[side.ordinal()][Utils.maskNullDirection(edge)] = getter;
+                int cgIdx = side.ordinal() * DIR_COUNT_N + Utils.maskNullDirection(edge);
+                camoGetters[cgIdx] = getter;
             });
         });
     }
@@ -63,7 +65,7 @@ public class DoubleBlockStateCache extends StateCache
 
     public final CamoGetter getCamoGetter(Direction side, @Nullable Direction edge)
     {
-        return camoGetters[side.ordinal()][Utils.maskNullDirection(edge)];
+        return camoGetters[side.ordinal() * DIR_COUNT_N + Utils.maskNullDirection(edge)];
     }
 
     @Override
@@ -78,7 +80,7 @@ public class DoubleBlockStateCache extends StateCache
                 statePair.getA() == that.statePair.getA() &&
                 statePair.getB() == that.statePair.getB() &&
                 Arrays.equals(solidityChecks, that.solidityChecks) &&
-                Arrays.deepEquals(camoGetters, that.camoGetters);
+                Arrays.equals(camoGetters, that.camoGetters);
     }
 
     @Override
@@ -89,7 +91,7 @@ public class DoubleBlockStateCache extends StateCache
         result = 31 * result + Objects.hashCode(statePair.getA());
         result = 31 * result + Objects.hashCode(statePair.getB());
         result = 31 * result + Arrays.hashCode(solidityChecks);
-        result = 31 * result + Arrays.deepHashCode(camoGetters);
+        result = 31 * result + Arrays.hashCode(camoGetters);
         return result;
     }
 }
