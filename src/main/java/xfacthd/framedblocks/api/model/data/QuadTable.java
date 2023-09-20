@@ -48,12 +48,16 @@ public final class QuadTable implements QuadMap
     public void initializeForLayer(RenderType renderType)
     {
         bindRenderType(renderType);
-        Arrays.setAll(quads, i -> new ArrayList<>());
+        int end = boundBaseIdx + SIDE_COUNT;
+        for (int i = boundBaseIdx; i < end; i++)
+        {
+            quads[i] = new ArrayList<>();
+        }
     }
 
     public void bindRenderType(RenderType renderType)
     {
-        boundBaseIdx = renderType != null ? renderType.getChunkLayerId() : -1;
+        boundBaseIdx = renderType != null ? (renderType.getChunkLayerId() * SIDE_COUNT) : -1;
     }
 
 

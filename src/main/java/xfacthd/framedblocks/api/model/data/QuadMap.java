@@ -29,7 +29,7 @@ public interface QuadMap extends Map<Direction, List<BakedQuad>>
     @Override
     default boolean containsKey(Object key)
     {
-        return key instanceof Direction;
+        return key == null || key instanceof Direction;
     }
 
     @Override
