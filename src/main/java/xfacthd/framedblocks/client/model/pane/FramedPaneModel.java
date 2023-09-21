@@ -6,6 +6,7 @@ import net.minecraft.client.resources.model.BakedModel;
 import net.minecraft.core.Direction;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
+import net.minecraftforge.fml.ModList;
 import xfacthd.framedblocks.api.model.FramedBlockModel;
 import xfacthd.framedblocks.api.model.quad.Modifiers;
 import xfacthd.framedblocks.api.model.quad.QuadModifier;
@@ -21,7 +22,7 @@ public class FramedPaneModel extends FramedBlockModel
     protected final boolean south;
     protected final boolean west;
 
-    public FramedPaneModel(BlockState state, BakedModel baseModel)
+    protected FramedPaneModel(BlockState state, BakedModel baseModel)
     {
         super(state, baseModel);
 
@@ -37,7 +38,10 @@ public class FramedPaneModel extends FramedBlockModel
         Direction face = quad.getDirection();
         if (Utils.isY(face))
         {
-            createTopBottomCenterQuad(quadMap, quad, false);
+            if (isPillarVisible())
+            {
+                createTopBottomCenterQuad(quadMap, quad, false);
+            }
 
             if (north) { createTopBottomEdgeQuad(quadMap, quad, Direction.NORTH, false); }
             if (east) { createTopBottomEdgeQuad(quadMap, quad, Direction.EAST, false); }
@@ -46,7 +50,11 @@ public class FramedPaneModel extends FramedBlockModel
         }
         else
         {
-            createSideEdgeQuad(quadMap, quad, isSideInset(face), false);
+            boolean inset = isSideInset(face);
+            if (!inset || isPillarVisible())
+            {
+                createSideEdgeQuad(quadMap, quad, inset, false);
+            }
 
             if (Utils.isX(face))
             {
@@ -60,6 +68,11 @@ public class FramedPaneModel extends FramedBlockModel
                 if (west) { createSideQuad(quadMap.get(null), quad, Direction.WEST); }
             }
         }
+    }
+
+    protected boolean isPillarVisible()
+    {
+        return true;
     }
 
     protected static void createTopBottomCenterQuad(Map<Direction, List<BakedQuad>> quadMap, BakedQuad quad, boolean mirrored)
@@ -113,5 +126,16 @@ public class FramedPaneModel extends FramedBlockModel
             case WEST -> !west;
             default -> throw new IllegalArgumentException(String.format("Invalid face: %s!", face));
         };
+    }
+
+
+
+    public static BakedModel createPaneModel(BlockState state, BakedModel baseModel)
+    {
+        if (ModList.get().isLoaded("diagonalwindows"))
+        {
+            return new FramedDiagonalPaneModel(state, baseModel);
+        }
+        return new FramedPaneModel(state, baseModel);
     }
 }

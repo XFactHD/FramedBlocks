@@ -270,7 +270,7 @@ public final class FBClient
         ClientUtils.replaceModels(FBContent.blockFramedVerticalStairs, registry, FramedVerticalStairsModel::new, ignoreDefaultLock);
         ClientUtils.replaceModels(FBContent.blockFramedChest, registry, FramedChestModel::new, FramedChestModel.itemSource(), ignoreWaterlogged);
         ClientUtils.replaceModels(FBContent.blockFramedBars, registry, FramedBarsModel::new, ignoreWaterloggedLock);
-        ClientUtils.replaceModels(FBContent.blockFramedPane, registry, FramedPaneModel::new, ignoreWaterloggedLock);
+        ClientUtils.replaceModels(FBContent.blockFramedPane, registry, FramedPaneModel::createPaneModel, ignoreWaterloggedLock);
         ClientUtils.replaceModels(FBContent.blockFramedRailSlope, registry, FramedRailSlopeModel::normal, FramedRailSlopeModel.itemSourceNormal(), ignoreDefault);
         ClientUtils.replaceModels(FBContent.blockFramedPoweredRailSlope, registry, FramedRailSlopeModel::powered, FramedRailSlopeModel.itemSourcePowered(), ignoreDefault);
         ClientUtils.replaceModels(FBContent.blockFramedDetectorRailSlope, registry, FramedRailSlopeModel::detector, FramedRailSlopeModel.itemSourceDetector(), ignoreDefault);

@@ -143,8 +143,9 @@ dependencies {
 
     compileOnly fg.deobf("curse.maven:ctm-267602:4393695")
 
-    //runtimeOnly fg.deobf("curse.maven:puzzleslib-495476:3873579") //Only needed when Diagonal Fences is switched to implementation
+    //runtimeOnly fg.deobf("curse.maven:puzzleslib-495476:4499052") //Only needed when Diagonal Fences or Diagonal Windows is switched to implementation
     compileOnly fg.deobf("curse.maven:diagonalfences-458048:3876555")
+    compileOnly fg.deobf("curse.maven:diagonalwindows-891328:4660580")
 
     implementation fg.deobf("curse.maven:buildinggadgets-298187:4002496")
 

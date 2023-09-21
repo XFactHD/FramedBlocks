@@ -1,7 +1,9 @@
 {
-  "variants": {
-    "": {
-      "model": "framedblocks:block/framed_cube"
+  "multipart": [
+    {
+      "apply": {
+        "model": "framedblocks:block/framed_cube"
+      }
     }
-  }
+  ]
 }
