@@ -1,11 +1,13 @@
 package xfacthd.framedblocks.api;
 
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.item.*;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.registries.IForgeRegistry;
+import org.jetbrains.annotations.ApiStatus;
 import xfacthd.framedblocks.api.block.FramedBlockEntity;
 import xfacthd.framedblocks.api.blueprint.BlueprintCopyBehaviour;
 import xfacthd.framedblocks.api.data.CamoContainer;
@@ -108,4 +110,7 @@ public interface FramedBlocksAPI
      * {@return true if the camo item should be consumed on application and dropped on removal of the camo}
      */
     boolean shouldConsumeCamo();
+
+    @ApiStatus.Internal
+    void updateCamoNbt(CompoundTag tag, String stateKey, String stackKey, String camoKey);
 }

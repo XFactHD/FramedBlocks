@@ -1,5 +1,6 @@
 package xfacthd.framedblocks.common.util;
 
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.world.item.*;
 import net.minecraft.world.level.BlockGetter;
@@ -90,5 +91,20 @@ public final class ApiImpl implements FramedBlocksAPI
     public boolean shouldConsumeCamo()
     {
         return ServerConfig.consumeCamoItem;
+    }
+
+    @Override
+    public void updateCamoNbt(CompoundTag tag, String stateKey, String stackKey, String camoKey)
+    {
+        if (tag.contains(stateKey))
+        {
+            CompoundTag stateTag = tag.getCompound(stateKey);
+            tag.remove(stateKey);
+            tag.remove(stackKey);
+            CompoundTag camoTag = new CompoundTag();
+            camoTag.putString("type", FBContent.factoryBlock.getId().toString());
+            camoTag.put("state", stateTag);
+            tag.put(camoKey, camoTag);
+        }
     }
 }

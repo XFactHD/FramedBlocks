@@ -16,6 +16,7 @@ import net.minecraft.world.phys.BlockHitResult;
 import net.minecraftforge.client.model.data.*;
 import net.minecraftforge.registries.ForgeRegistries;
 import xfacthd.framedblocks.FramedBlocks;
+import xfacthd.framedblocks.api.FramedBlocksAPI;
 import xfacthd.framedblocks.api.block.FramedBlockEntity;
 import xfacthd.framedblocks.api.data.EmptyCamoContainer;
 import xfacthd.framedblocks.api.data.CamoContainer;
@@ -346,6 +347,8 @@ public abstract class FramedDoubleBlockEntity extends FramedBlockEntity
     public void load(CompoundTag nbt)
     {
         super.load(nbt);
+
+        FramedBlocksAPI.getInstance().updateCamoNbt(nbt, "camo_state_two", "camo_stack_two", "camo_two");
 
         CamoContainer camo = CamoContainer.load(nbt.getCompound("camo_two"));
         if (camo.isEmpty() || isValidBlock(camo.getState(), null))

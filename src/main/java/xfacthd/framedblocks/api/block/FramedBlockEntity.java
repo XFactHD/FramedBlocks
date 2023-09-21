@@ -855,6 +855,8 @@ public class FramedBlockEntity extends BlockEntity
     {
         super.load(nbt);
 
+        FramedBlocksAPI.getInstance().updateCamoNbt(nbt, "camo_state", "camo_stack", "camo");
+
         CamoContainer camo = CamoContainer.load(nbt.getCompound("camo"));
         if (camo.isEmpty() || isValidBlock(camo.getState(), null))
         {
