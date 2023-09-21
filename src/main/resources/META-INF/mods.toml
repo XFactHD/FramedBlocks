@@ -73,6 +73,20 @@ description='''
     side="BOTH"
 
 [[dependencies.framedblocks]]
+    modId="rei"
+    mandatory=false
+    versionRange="[12.0.634,)"
+    ordering="NONE"
+    side="BOTH"
+
+[[dependencies.framedblocks]]
+    modId="emi"
+    mandatory=false
+    versionRange="[1.0.17,)"
+    ordering="NONE"
+    side="BOTH"
+
+[[dependencies.framedblocks]]
     modId="atlasviewer"
     mandatory=false
     versionRange="[5.1.1,)"
