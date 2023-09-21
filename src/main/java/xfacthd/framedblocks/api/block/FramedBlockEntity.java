@@ -34,6 +34,7 @@ import xfacthd.framedblocks.api.block.cache.StateCache;
 import xfacthd.framedblocks.api.block.render.CullingHelper;
 import xfacthd.framedblocks.api.camo.EmptyCamoContainer;
 import xfacthd.framedblocks.api.camo.CamoContainer;
+import xfacthd.framedblocks.api.internal.InternalAPI;
 import xfacthd.framedblocks.api.model.data.FramedBlockData;
 import xfacthd.framedblocks.api.type.IBlockType;
 import xfacthd.framedblocks.api.util.*;
@@ -1030,6 +1031,8 @@ public class FramedBlockEntity extends BlockEntity
     public void load(CompoundTag nbt)
     {
         super.load(nbt);
+
+        InternalAPI.INSTANCE.updateCamoNbt(nbt, "camo_state", "camo_stack", "camo");
 
         CamoContainer camo = CamoContainer.load(nbt.getCompound("camo"));
         if (camo.isEmpty() || isValidBlock(camo.getState(), null))
