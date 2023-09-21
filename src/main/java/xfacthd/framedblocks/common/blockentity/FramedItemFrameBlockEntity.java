@@ -102,6 +102,11 @@ public class FramedItemFrameBlockEntity extends FramedBlockEntity
 
     public ItemStack getItem() { return heldItem; }
 
+    public ItemStack getCloneItem()
+    {
+        return heldItem.copy();
+    }
+
     public int getRotation() { return rotation; }
 
     public boolean isGlowingFrame() { return glowing; }

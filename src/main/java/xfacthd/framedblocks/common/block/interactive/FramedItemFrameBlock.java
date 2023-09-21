@@ -12,6 +12,7 @@ import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.*;
 import net.minecraft.world.level.block.*;
@@ -143,6 +144,16 @@ public class FramedItemFrameBlock extends FramedBlock
     {
         //Suppress sprinting particles
         return true;
+    }
+
+    @Override
+    public ItemStack getCloneItemStack(BlockState state, HitResult target, BlockGetter level, BlockPos pos, Player player)
+    {
+        if (level.getBlockEntity(pos) instanceof FramedItemFrameBlockEntity be && be.hasItem())
+        {
+            return be.getCloneItem();
+        }
+        return super.getCloneItemStack(state, target, level, pos, player);
     }
 
     @Override
