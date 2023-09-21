@@ -28,17 +28,16 @@ import xfacthd.framedblocks.common.crafting.FramingSawRecipeCache;
 import xfacthd.framedblocks.common.data.BlueprintBehaviours;
 import xfacthd.framedblocks.common.data.camo.CamoFactories;
 import xfacthd.framedblocks.common.item.FramedBlueprintItem;
-import xfacthd.framedblocks.common.net.OpenSignScreenPacket;
-import xfacthd.framedblocks.common.net.SignUpdatePacket;
+import xfacthd.framedblocks.common.net.*;
 import xfacthd.framedblocks.common.util.*;
 
 @Mod(FramedConstants.MOD_ID)
-@Mod.EventBusSubscriber(modid = FramedConstants.MOD_ID, bus = Mod.EventBusSubscriber.Bus.MOD)
+@SuppressWarnings("UtilityClassWithPublicConstructor")
 public final class FramedBlocks
 {
     public static final Logger LOGGER = LogUtils.getLogger();
 
-    private static final String PROTOCOL_VERSION = "1";
+    private static final String PROTOCOL_VERSION = "2";
     public static final SimpleChannel CHANNEL = NetworkRegistry.newSimpleChannel(
             Utils.rl("main"),
             () -> PROTOCOL_VERSION,
@@ -89,6 +88,12 @@ public final class FramedBlocks
                 .encoder(CullingUpdatePacket::encode)
                 .decoder(CullingUpdatePacket::decode)
                 .consumerNetworkThread(CullingUpdatePacket::handle)
+                .add();
+
+        CHANNEL.messageBuilder(SelectFramingSawRecipePacket.class, 3, NetworkDirection.PLAY_TO_SERVER)
+                .encoder(SelectFramingSawRecipePacket::encode)
+                .decoder(SelectFramingSawRecipePacket::new)
+                .consumerMainThread(SelectFramingSawRecipePacket::handle)
                 .add();
 
         BlueprintBehaviours.register();
