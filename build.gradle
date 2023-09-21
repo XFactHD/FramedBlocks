@@ -176,16 +176,21 @@ dependencies {
         transitive(false)
     }
 
-    //annotationProcessor 'org.spongepowered:mixin:0.8.5:processor'
+    implementation(annotationProcessor("io.github.llamalad7:mixinextras-common:0.2.0-rc.4"))
+    implementation(jarJar("io.github.llamalad7:mixinextras-forge:0.2.0-rc.4")) {
+        jarJar.ranged(it, "[0.2.0-rc.4,)")
+    }
+
+    annotationProcessor 'org.spongepowered:mixin:0.8.5:processor'
 }
 
 mixin {
-    //add sourceSets.main, "framedblocks.refmap.json"
-    //config "framedblocks.mixin.json"
+    add sourceSets.main, "framedblocks.refmap.json"
+    config "framedblocks.mixin.json"
 }
 
 processResources {
-    exclude("framedblocks.mixin.json")
+    //exclude("framedblocks.mixin.json")
 }
 
 processTestResources {
@@ -208,8 +213,7 @@ jar {
             "Implementation-Title": project.name,
             "Implementation-Version": "${project.version}",
             "Implementation-Vendor" : "XFactHD",
-            "Implementation-Timestamp": new Date().format("yyyy-MM-dd'T'HH:mm:ssZ"),
-            //"MixinConfigs": "framedblocks.mixin.json"
+            "Implementation-Timestamp": new Date().format("yyyy-MM-dd'T'HH:mm:ssZ")
         ])
     }
 }
