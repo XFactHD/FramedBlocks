@@ -263,12 +263,13 @@ public final class FramedLanguageProvider extends LanguageProvider
         add(FramedBlueprintItem.IS_ILLUMINATED, "Illuminated: %s");
         add(FramedBlueprintItem.IS_INTANGIBLE, "Intangible: %s");
         add(FramedBlueprintItem.IS_REINFORCED, "Reinforced: %s");
+        add(FramedBlueprintItem.MISSING_MATERIALS, "[Framed Blueprint] Missing required materials:");
         add(FramedBlueprintItem.BLOCK_NONE, "None");
         add(FramedBlueprintItem.BLOCK_INVALID, "Invalid");
         add(FramedBlueprintItem.FALSE, "false");
         add(FramedBlueprintItem.TRUE, "true");
-        add(FramedBlueprintItem.CANT_COPY, "This block can currently not be copied!");
-        add(FramedBlueprintItem.CANT_PLACE_FLUID_CAMO, "Copying blocks with fluid camos is currently not possible!");
+        add(FramedBlueprintItem.CANT_COPY, "[Framed Blueprint] This block can currently not be copied!");
+        add(FramedBlueprintItem.CANT_PLACE_FLUID_CAMO, "[Framed Blueprint] Copying blocks with fluid camos is currently not possible!");
     }
 
     private void addOverlayTranslations()

@@ -29,7 +29,7 @@ public interface BlueprintCopyBehaviour
 {
     String MAIN_CAMO_KEY = "camo_data";
     String CAMO_CONTAINER_KEY = "camo";
-    String GLOWSTONE_KEY = "glowstone";
+    String GLOWSTONE_KEY = "glowing";
     String INTANGIBLE_KEY = "intangible";
     String REINFORCEMENT_KEY = "reinforced";
 
