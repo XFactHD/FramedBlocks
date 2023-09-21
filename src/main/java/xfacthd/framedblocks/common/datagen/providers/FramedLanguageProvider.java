@@ -328,6 +328,9 @@ public final class FramedLanguageProvider extends LanguageProvider
         add(FrameBackgroundOverlay.LINE_USE_LEATHER_BG, "Framed Item Frame uses leather as background");
         add(FrameBackgroundOverlay.LINE_SET_CAMO_BG, "Hit with a Framed Hammer to use the camo as background");
         add(FrameBackgroundOverlay.LINE_SET_LEATHER_BG, "Hit with a Framed Hammer to use leather as background");
+
+        add(CamoRotationOverlay.ROTATEABLE_FALSE, "The targetted camo cannot be rotated");
+        add(CamoRotationOverlay.ROTATEABLE_TRUE, "The targetted camo can be rotated");
     }
 
     private void addConfigTranslations()
@@ -353,6 +356,8 @@ public final class FramedLanguageProvider extends LanguageProvider
         add(ClientConfig.TRANSLATION_PRISM_OFFSET_MODE, "Prism offset overlay: Display mode");
         add(ClientConfig.TRANSLATION_SPLIT_LINES_MODE, "Collapsible block split lines overlay: Display mode");
         add(ClientConfig.TRANSLATION_ONE_WAY_WINDOW_MODE, "One-Way Window overlay: Display mode");
+        add(ClientConfig.TRANSLATION_FRAME_BACKGROUND_MODE, "Item Frame Background overlay: Display mode");
+        add(ClientConfig.TRANSLATION_CAMO_ROTATION_MODE, "Camo Rotation overlay: Display mode");
     }
 
     private void add(Component key, String value)

@@ -78,6 +78,14 @@ public abstract class CamoContainer
     public abstract ItemStack toItemStack(ItemStack stack);
 
     /**
+     * {@return true if this camo can be rotated}
+     */
+    public boolean canRotateCamo()
+    {
+        return Utils.getRotatableProperty(getState()) != null;
+    }
+
+    /**
      * Rotate the camo by cycling through the first property considered rotatable by {@link Utils#getRotatableProperty(BlockState)}.
      * @return True if the rotation was successful, requiring a render update
      */
