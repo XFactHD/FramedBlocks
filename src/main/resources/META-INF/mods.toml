@@ -71,3 +71,10 @@ description='''
     versionRange="[15.0.0.15,)"
     ordering="NONE"
     side="BOTH"
+
+[[dependencies.framedblocks]]
+    modId="atlasviewer"
+    mandatory=false
+    versionRange="[5.1.1,)"
+    ordering="NONE"
+    side="CLIENT"
