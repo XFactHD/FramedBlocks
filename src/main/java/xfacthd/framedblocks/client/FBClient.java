@@ -52,8 +52,7 @@ import xfacthd.framedblocks.client.model.stairs.*;
 import xfacthd.framedblocks.client.model.torch.*;
 import xfacthd.framedblocks.client.render.block.*;
 import xfacthd.framedblocks.client.render.item.BlueprintPropertyOverride;
-import xfacthd.framedblocks.client.render.special.BlockOutlineRenderer;
-import xfacthd.framedblocks.client.render.special.GhostBlockRenderer;
+import xfacthd.framedblocks.client.render.special.*;
 import xfacthd.framedblocks.client.render.util.AnimationSplitterSource;
 import xfacthd.framedblocks.client.screen.*;
 import xfacthd.framedblocks.client.screen.overlay.*;
@@ -108,6 +107,7 @@ public final class FBClient
         forgeBus.addListener(GhostBlockRenderer::onRenderLevelStage);
         forgeBus.addListener(EventPriority.HIGH, ClientEventHandler::onRecipesUpdated);
         forgeBus.addListener(ClientEventHandler::onClientDisconnect);
+        forgeBus.addListener(EventPriority.LOW, true, CollapsibleBlockIndicatorRenderer::onRenderBlockHighlight);
     }
 
     @SubscribeEvent
