@@ -108,7 +108,7 @@ public final class JeiCompat
         public static void acceptRuntime(IJeiRuntime runtime)
         {
             GuardedAccess.runtime = runtime;
-            GuardedAccess.keys = runtime.getKeyMappings();
+            GuardedAccess.keys = runtime != null ? runtime.getKeyMappings() : null;
         }
 
         public static IJeiRuntime getRuntime()
