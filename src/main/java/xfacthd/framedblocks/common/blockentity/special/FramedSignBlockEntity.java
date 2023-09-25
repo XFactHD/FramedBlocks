@@ -84,7 +84,7 @@ public final class FramedSignBlockEntity extends FramedBlockEntity
         if (isWaxed() || !player.getUUID().equals(editingPlayer))
         {
             FramedBlocks.LOGGER.warn(
-                    "Player {} just tried to change non-editable sign at", player.getName().getString(), worldPosition
+                    "Player {} just tried to change non-editable sign at {}", player.getName().getString(), worldPosition
             );
             return;
         }

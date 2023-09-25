@@ -5,7 +5,6 @@ import net.minecraft.world.level.block.state.BlockState;
 import org.jetbrains.annotations.Nullable;
 import xfacthd.framedblocks.api.block.FramedProperties;
 import xfacthd.framedblocks.api.predicate.contex.NonDetailedConnectionPredicate;
-import xfacthd.framedblocks.api.util.Utils;
 
 public final class ChiseledBookshelfConnectionPredicate extends NonDetailedConnectionPredicate
 {

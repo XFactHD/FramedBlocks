@@ -6,6 +6,7 @@ import net.minecraft.client.particle.ParticleEngine;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.gametest.framework.*;
+import net.minecraft.network.protocol.game.ServerboundPlayerActionPacket;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
@@ -144,7 +145,7 @@ public final class TestUtils
         Player player = helper.makeMockPlayer();
         player.setItemInHand(InteractionHand.MAIN_HAND, new ItemStack(item));
 
-        ForgeHooks.onLeftClickBlock(player, helper.absolutePos(pos), Direction.UP);
+        ForgeHooks.onLeftClickBlock(player, helper.absolutePos(pos), Direction.UP, ServerboundPlayerActionPacket.Action.START_DESTROY_BLOCK);
     }
 
     /**

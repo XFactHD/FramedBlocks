@@ -17,7 +17,7 @@ public abstract class MixinBlockStateBase implements IStateCacheAccessor
     private StateCache framedblocks$cache = null;
 
     @Shadow
-    abstract BlockState asState();
+    protected abstract BlockState asState();
 
     @Override
     public void framedblocks$initCache(StateCache cache)

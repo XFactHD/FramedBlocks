@@ -9,7 +9,7 @@ import java.util.*;
 
 public class DoubleBlockCopyBehaviour implements BlueprintCopyBehaviour
 {
-    String CAMO_CONTAINER_TWO_KEY = "camo_two";
+    static final String CAMO_CONTAINER_TWO_KEY = "camo_two";
 
     @Override
     public Optional<Set<CamoContainer>> getCamos(CompoundTag blueprintData)

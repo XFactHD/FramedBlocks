@@ -57,7 +57,7 @@ public record SignUpdatePacket(BlockPos pos, boolean front, String[] lines)
                 if (sign.isWaxed() || !player.getUUID().equals(sign.getEditingPlayer()))
                 {
                     FramedBlocks.LOGGER.warn(
-                            "Player {} just tried to change non-editable sign at", player.getName().getString(), pos
+                            "Player {} just tried to change non-editable sign at {}", player.getName().getString(), pos
                     );
                     return;
                 }
