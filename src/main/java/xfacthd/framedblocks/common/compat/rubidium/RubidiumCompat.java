@@ -37,7 +37,6 @@ public final class RubidiumCompat
         return loadedClient;
     }
 
-    // TODO: remove version check in 1.20.2, assuming they don't break shit again...
     @Deprecated
     @SuppressWarnings("DeprecatedIsStillUsed")
     public static boolean supportsCustomVertexConsumer()

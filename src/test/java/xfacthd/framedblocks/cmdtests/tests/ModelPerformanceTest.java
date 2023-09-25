@@ -150,10 +150,10 @@ public final class ModelPerformanceTest
         }
 
         data.append("Relative speed:\n")
-                .append("- Min (blank): ").append("%6.2f".formatted(minBlank))
-                .append("- Max (blank): ").append("%6.2f".formatted(maxBlank))
-                .append("- Min (camo):  ").append("%6.2f".formatted(minCamo))
-                .append("- Max (camo):  ").append("%6.2f".formatted(maxCamo))
+                .append("- Min (blank): ").append("%6.2f\n".formatted(minBlank))
+                .append("- Max (blank): ").append("%6.2f\n".formatted(maxBlank))
+                .append("- Min (camo):  ").append("%6.2f\n".formatted(minCamo))
+                .append("- Max (camo):  ").append("%6.2f\n".formatted(maxCamo))
                 .append("\n\n").append(table.print());
 
         Component msg = SpecialTestCommand.writeResultToFile("modelperf", "md", data.toString());

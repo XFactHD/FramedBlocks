@@ -361,7 +361,6 @@ public final class FramedSignBlockEntity extends FramedBlockEntity
     {
         super.load(nbt);
 
-        // TODO: remove in the next breaking update
         if (nbt.contains("text0") || nbt.contains("text1") || nbt.contains("text2") || nbt.contains("text3") || nbt.contains("glowingText") || nbt.contains("color"))
         {
             for (int i = 0; i < 4; i++)

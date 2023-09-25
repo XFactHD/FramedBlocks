@@ -51,11 +51,13 @@ public interface IFramedDoubleBlock extends IFramedBlock
         return getCache(state).getBlockPair();
     }
 
+    @ApiStatus.NonExtendable
     default SolidityCheck getSolidityCheck(BlockState state, Direction side)
     {
         return getCache(state).getSolidityCheck(side);
     }
 
+    @ApiStatus.NonExtendable
     default CamoGetter getCamoGetter(BlockState state, Direction side, @Nullable Direction edge)
     {
         return getCache(state).getCamoGetter(side, edge);

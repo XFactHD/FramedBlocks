@@ -42,7 +42,7 @@ public final class CollapsibleBlockOutlineRenderer implements OutlineRenderer
                 return;
             }
 
-            byte[] offets = be.getVertexOffsets();
+            byte[] offsets = be.getVertexOffsets();
             Direction faceDir = face.toDirection().getOpposite();
 
             poseStack.pushPose();
@@ -59,10 +59,10 @@ public final class CollapsibleBlockOutlineRenderer implements OutlineRenderer
             poseStack.translate(-.5, -.5, -.5);
 
             //Top
-            OutlineRenderer.drawLine(builder, poseStack, 0, 1D - (offets[2] / 16D), 0, 0, 1D - (offets[3] / 16D), 1);
-            OutlineRenderer.drawLine(builder, poseStack, 0, 1D - (offets[2] / 16D), 0, 1, 1D - (offets[1] / 16D), 0);
-            OutlineRenderer.drawLine(builder, poseStack, 1, 1D - (offets[1] / 16D), 0, 1, 1D - (offets[0] / 16D), 1);
-            OutlineRenderer.drawLine(builder, poseStack, 0, 1D - (offets[3] / 16D), 1, 1, 1D - (offets[0] / 16D), 1);
+            OutlineRenderer.drawLine(builder, poseStack, 0, 1D - (offsets[2] / 16D), 0, 0, 1D - (offsets[3] / 16D), 1);
+            OutlineRenderer.drawLine(builder, poseStack, 0, 1D - (offsets[2] / 16D), 0, 1, 1D - (offsets[1] / 16D), 0);
+            OutlineRenderer.drawLine(builder, poseStack, 1, 1D - (offsets[1] / 16D), 0, 1, 1D - (offsets[0] / 16D), 1);
+            OutlineRenderer.drawLine(builder, poseStack, 0, 1D - (offsets[3] / 16D), 1, 1, 1D - (offsets[0] / 16D), 1);
 
             //Bottom
             OutlineRenderer.drawLine(builder, poseStack, 0, 0, 0, 0, 0, 1);
@@ -71,10 +71,10 @@ public final class CollapsibleBlockOutlineRenderer implements OutlineRenderer
             OutlineRenderer.drawLine(builder, poseStack, 0, 0, 1, 1, 0, 1);
 
             //Vertical
-            OutlineRenderer.drawLine(builder, poseStack, 1, 0, 1, 1, 1D - (offets[0] / 16D), 1);
-            OutlineRenderer.drawLine(builder, poseStack, 1, 0, 0, 1, 1D - (offets[1] / 16D), 0);
-            OutlineRenderer.drawLine(builder, poseStack, 0, 0, 0, 0, 1D - (offets[2] / 16D), 0);
-            OutlineRenderer.drawLine(builder, poseStack, 0, 0, 1, 0, 1D - (offets[3] / 16D), 1);
+            OutlineRenderer.drawLine(builder, poseStack, 1, 0, 1, 1, 1D - (offsets[0] / 16D), 1);
+            OutlineRenderer.drawLine(builder, poseStack, 1, 0, 0, 1, 1D - (offsets[1] / 16D), 0);
+            OutlineRenderer.drawLine(builder, poseStack, 0, 0, 0, 0, 1D - (offsets[2] / 16D), 0);
+            OutlineRenderer.drawLine(builder, poseStack, 0, 0, 1, 0, 1D - (offsets[3] / 16D), 1);
 
             poseStack.popPose();
         }
