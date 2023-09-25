@@ -2,7 +2,8 @@ package xfacthd.framedblocks.api.model.quad;
 
 import com.google.common.base.Preconditions;
 import net.minecraft.client.renderer.block.model.BakedQuad;
-import net.minecraft.core.Direction;
+import net.minecraftforge.client.model.IQuadTransformer;
+import org.joml.Vector3f;
 import xfacthd.framedblocks.api.model.util.ModelUtils;
 
 import java.util.Arrays;
@@ -26,19 +27,7 @@ public final class QuadModifier
      */
     public static QuadModifier geometry(BakedQuad quad)
     {
-        float[][] pos = new float[4][3];
-        float[][] uv = new float[4][2];
-        float[][] normal = new float[4][3];
-
-        int[] vertexData = quad.getVertices();
-        for (int i = 0; i < 4; i++)
-        {
-            ModelUtils.unpackPosition(vertexData, pos[i], i);
-            ModelUtils.unpackUV(vertexData, uv[i], i);
-            ModelUtils.unpackNormals(vertexData, normal[i], i);
-        }
-
-        return new QuadModifier(Data.create(quad, pos, uv, normal), true, -1, false, false, false);
+        return new QuadModifier(new Data(quad), true, -1, false, false, false);
     }
 
     /**
@@ -46,23 +35,7 @@ public final class QuadModifier
      */
     public static QuadModifier full(BakedQuad quad)
     {
-        float[][] pos = new float[4][3];
-        float[][] uv = new float[4][2];
-        float[][] normal = new float[4][3];
-        int[][] color = new int[4][4];
-        int[][] light = new int[4][2];
-
-        int[] vertexData = quad.getVertices();
-        for (int i = 0; i < 4; i++)
-        {
-            ModelUtils.unpackPosition(vertexData, pos[i], i);
-            ModelUtils.unpackUV(vertexData, uv[i], i);
-            ModelUtils.unpackNormals(vertexData, normal[i], i);
-            ModelUtils.unpackColor(vertexData, color[i], i);
-            ModelUtils.unpackLight(vertexData, light[i], i);
-        }
-
-        return new QuadModifier(Data.create(quad, pos, uv, normal, color, light), false, -1, false, false, false);
+        return new QuadModifier(new Data(quad), false, -1, false, false, false);
     }
 
     private QuadModifier(Data data, boolean limited, int tintIndex, boolean noShade, boolean modified, boolean failed)
@@ -140,16 +113,10 @@ public final class QuadModifier
             return;
         }
 
-        Direction normalDir = ModelUtils.fillNormal(data.pos, data.normal);
-
-        int[] vertexData = data.quad.getVertices();
-        vertexData = Arrays.copyOf(vertexData, vertexData.length);
-        packVertexData(vertexData);
-
         BakedQuad newQuad = new BakedQuad(
-                vertexData,
+                data.vertexData,
                 tintIndex == -1 ? data.quad.getTintIndex() : tintIndex,
-                normalDir,
+                ModelUtils.fillNormal(data),
                 data.quad.getSprite(),
                 !noShade && data.quad.isShade(),
                 data.quad.hasAmbientOcclusion()
@@ -171,27 +138,8 @@ public final class QuadModifier
             return;
         }
 
-        ModelUtils.fillNormal(data.pos, data.normal);
-        packVertexData(data.quad.getVertices());
-    }
-
-    private void packVertexData(int[] vertexData)
-    {
-        for (int i = 0; i < 4; i++)
-        {
-            ModelUtils.packPosition(data.pos[i], vertexData, i);
-            ModelUtils.packUV(data.uv[i], vertexData, i);
-            ModelUtils.packNormals(data.normal[i], vertexData, i);
-
-            if (data.color != null)
-            {
-                ModelUtils.packColor(data.color[i], vertexData, i);
-            }
-            if (data.light != null)
-            {
-                ModelUtils.packLight(data.light[i], vertexData, i);
-            }
-        }
+        ModelUtils.fillNormal(data);
+        System.arraycopy(data.vertexData, 0, data.quad.getVertices(), 0, data.vertexData.length);
     }
 
     /**
@@ -206,8 +154,7 @@ public final class QuadModifier
         {
             return limited ? FAILED : FAILED_FULL;
         }
-        //return new QuadModifier(new Data(data), limited, tintIndex, noShade, modified, false);
-        return new QuadModifier(data.copy(), limited, tintIndex, noShade, modified, false);
+        return new QuadModifier(new Data(data), limited, tintIndex, noShade, modified, false);
     }
 
     public boolean hasFailed()
@@ -217,58 +164,157 @@ public final class QuadModifier
 
 
 
-    public record Data(
-            BakedQuad quad,
-            float[][] pos,
-            float[][] uv,
-            float[][] normal,
-            int[][] color,
-            int[][] light,
-            boolean uvRotated,
-            boolean uvMirrored
-    )
+    public static final class Data
     {
-        public static Data create(BakedQuad quad, float[][] pos, float[][] uv, float[][] normal, int[][] color, int[][] light)
+        private final BakedQuad quad;
+        private final int[] vertexData;
+        private final boolean uvRotated;
+        private final boolean uvMirrored;
+
+        public Data(BakedQuad quad)
         {
-            boolean rotated = ModelUtils.isQuadRotated(uv);
-            return new Data(quad, pos, uv, normal, color, light, rotated, ModelUtils.isQuadMirrored(uv, rotated));
+            this.quad = quad;
+            int[] vertexData = quad.getVertices();
+            this.vertexData = Arrays.copyOf(vertexData, vertexData.length);
+            this.uvRotated = ModelUtils.isQuadRotated(this);
+            this.uvMirrored = ModelUtils.isQuadMirrored(this, uvRotated);
         }
 
-        public static Data create(BakedQuad quad, float[][] pos, float[][] uv, float[][] normal)
+        private Data(Data data)
         {
-            return create(quad, pos, uv, normal, null, null);
+            this.quad = data.quad;
+            this.vertexData = Arrays.copyOf(data.vertexData, data.vertexData.length);
+            this.uvRotated = data.uvRotated;
+            this.uvMirrored = data.uvMirrored;
         }
 
-        public Data copy()
+        public BakedQuad quad()
         {
-            return create(
-                    quad,
-                    deepCopy(pos),
-                    deepCopy(uv),
-                    deepCopy(normal),
-                    color != null ? deepCopy(color) : null,
-                    light != null ? deepCopy(light) : null
-            );
+            return quad;
         }
 
-        private static float[][] deepCopy(float[][] arr)
+        public boolean uvRotated()
         {
-            float[][] newArr = new float[arr.length][];
-            for (int i = 0; i < arr.length; i++)
-            {
-                newArr[i] = Arrays.copyOf(arr[i], arr[i].length);
-            }
-            return newArr;
+            return uvRotated;
         }
 
-        private static int[][] deepCopy(int[][] arr)
+        public boolean uvMirrored()
         {
-            int[][] newArr = new int[arr.length][];
-            for (int i = 0; i < arr.length; i++)
-            {
-                newArr[i] = Arrays.copyOf(arr[i], arr[i].length);
-            }
-            return newArr;
+            return uvMirrored;
+        }
+
+        public float pos(int vert, int idx)
+        {
+            int offset = vert * IQuadTransformer.STRIDE + IQuadTransformer.POSITION;
+            return Float.intBitsToFloat(vertexData[offset + idx]);
+        }
+
+        public void pos(int vert, float[] out, int startIdx)
+        {
+            int offset = vert * IQuadTransformer.STRIDE + IQuadTransformer.POSITION;
+            out[startIdx    ] = Float.intBitsToFloat(vertexData[offset]);
+            out[startIdx + 1] = Float.intBitsToFloat(vertexData[offset + 1]);
+            out[startIdx + 2] = Float.intBitsToFloat(vertexData[offset + 2]);
+        }
+
+        public Vector3f pos(int vert, Vector3f out)
+        {
+            int offset = vert * IQuadTransformer.STRIDE + IQuadTransformer.POSITION;
+            out.x = Float.intBitsToFloat(vertexData[offset]);
+            out.y = Float.intBitsToFloat(vertexData[offset + 1]);
+            out.z = Float.intBitsToFloat(vertexData[offset + 2]);
+            return out;
+        }
+
+        public void pos(int vert, int idx, float val)
+        {
+            int offset = vert * IQuadTransformer.STRIDE + IQuadTransformer.POSITION;
+            vertexData[offset + idx] = Float.floatToRawIntBits(val);
+        }
+
+        public void pos(int vert, float x, float y, float z)
+        {
+            int offset = vert * IQuadTransformer.STRIDE + IQuadTransformer.POSITION;
+            vertexData[offset    ] = Float.floatToRawIntBits(x);
+            vertexData[offset + 1] = Float.floatToRawIntBits(y);
+            vertexData[offset + 2] = Float.floatToRawIntBits(z);
+        }
+
+        public float uv(int vert, int idx)
+        {
+            int offset = vert * IQuadTransformer.STRIDE + IQuadTransformer.UV0;
+            return Float.intBitsToFloat(vertexData[offset + idx]);
+        }
+
+        public void uv(int vert, float[] out, int startIdx)
+        {
+            int offset = vert * IQuadTransformer.STRIDE + IQuadTransformer.UV0;
+            out[startIdx    ] = Float.intBitsToFloat(vertexData[offset]);
+            out[startIdx + 1] = Float.intBitsToFloat(vertexData[offset + 1]);
+        }
+
+        public void uv(int vert, int idx, float val)
+        {
+            int offset = vert * IQuadTransformer.STRIDE + IQuadTransformer.UV0;
+            vertexData[offset + idx] = Float.floatToRawIntBits(val);
+        }
+
+        public void uv(int vert, float u, float v)
+        {
+            int offset = vert * IQuadTransformer.STRIDE + IQuadTransformer.UV0;
+            vertexData[offset    ] = Float.floatToRawIntBits(u);
+            vertexData[offset + 1] = Float.floatToRawIntBits(v);
+        }
+
+        public float normal(int vert, int idx)
+        {
+            int offset = vert * IQuadTransformer.STRIDE + IQuadTransformer.NORMAL;
+            int packedNormal = vertexData[offset];
+            return ((byte) ((packedNormal >> (8 * idx)) & 0xFF)) / 127F;
+        }
+
+        public void normal(int vert, int idx, float val)
+        {
+            int offset = vert * IQuadTransformer.STRIDE + IQuadTransformer.NORMAL;
+            int packedNormal = vertexData[offset];
+            vertexData[offset] = ((((byte) (val * 127F)) & 0xFF) << 8 * idx) | (packedNormal & ~(0x000000FF << (8 * idx)));
+        }
+
+        public void normal(int vert, Vector3f vals)
+        {
+            int offset = vert * IQuadTransformer.STRIDE + IQuadTransformer.NORMAL;
+            int packedNormal = vertexData[offset];
+            vertexData[offset] =
+                    (((byte)  (vals.x * 127F)) & 0xFF) |
+                    ((((byte) (vals.y * 127F)) & 0xFF) << 8) |
+                    ((((byte) (vals.z * 127F)) & 0xFF) << 16) |
+                    (packedNormal & 0xFF000000);
+        }
+
+        public int color(int vert, int idx)
+        {
+            int offset = vert * IQuadTransformer.STRIDE + IQuadTransformer.COLOR;
+            int packedColor = vertexData[offset];
+            return (packedColor >> (8 * idx)) & 0xFF;
+        }
+
+        public void color(int vert, int idx, int val)
+        {
+            int offset = vert * IQuadTransformer.STRIDE + IQuadTransformer.COLOR;
+            int packedColor = vertexData[offset];
+            vertexData[offset] = ((val & 0xFF) << (8 * idx)) | (packedColor & ~(0x000000FF << (8 * idx)));
+        }
+
+        public int light(int vert)
+        {
+            int offset = vert * IQuadTransformer.STRIDE + IQuadTransformer.UV2;
+            return vertexData[offset];
+        }
+
+        public void light(int vert, int val)
+        {
+            int offset = vert * IQuadTransformer.STRIDE + IQuadTransformer.UV2;
+            vertexData[offset] = val;
         }
     }
 

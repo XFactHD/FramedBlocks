@@ -1,6 +1,5 @@
 package xfacthd.framedblocks.api.model.util;
 
-import net.minecraft.client.renderer.LightTexture;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.block.model.BakedQuad;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
@@ -11,11 +10,11 @@ import net.minecraft.util.Mth;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.client.ChunkRenderTypeSet;
-import net.minecraftforge.client.model.IQuadTransformer;
 import net.minecraftforge.client.model.data.ModelData;
 import org.joml.Vector3f;
 import xfacthd.framedblocks.api.FramedBlocksClientAPI;
 import xfacthd.framedblocks.api.model.data.FramedBlockData;
+import xfacthd.framedblocks.api.model.quad.QuadModifier;
 import xfacthd.framedblocks.api.util.Utils;
 
 import java.lang.invoke.MethodHandle;
@@ -28,126 +27,12 @@ public final class ModelUtils
     public static final ChunkRenderTypeSet TRANSLUCENT = ChunkRenderTypeSet.of(RenderType.translucent());
     private static final double UV_SUBSTEP_COUNT = 8D;
 
-    public static void unpackPosition(int[] vertexData, float[] pos, int vert)
+    public static Direction fillNormal(QuadModifier.Data data)
     {
-        int offset = vert * IQuadTransformer.STRIDE + IQuadTransformer.POSITION;
-        pos[0] = Float.intBitsToFloat(vertexData[offset]);
-        pos[1] = Float.intBitsToFloat(vertexData[offset + 1]);
-        pos[2] = Float.intBitsToFloat(vertexData[offset + 2]);
-    }
-
-    public static void unpackUV(int[] vertexData, float[] uv, int vert)
-    {
-        int offset = vert * IQuadTransformer.STRIDE + IQuadTransformer.UV0;
-        uv[0] = Float.intBitsToFloat(vertexData[offset]);
-        uv[1] = Float.intBitsToFloat(vertexData[offset + 1]);
-    }
-
-    public static void unpackNormals(int[] vertexData, float[] normal, int vert)
-    {
-        int offset = vert * IQuadTransformer.STRIDE + IQuadTransformer.NORMAL;
-        int packedNormal = vertexData[offset];
-
-        normal[0] = ((byte) (packedNormal & 0xFF)) / 127F;
-        normal[1] = ((byte) ((packedNormal >> 8) & 0xFF)) / 127F;
-        normal[2] = ((byte) ((packedNormal >> 16) & 0xFF)) / 127F;
-    }
-
-    public static void unpackColor(int[] vertexData, int[] color, int vert)
-    {
-        int offset = vert * IQuadTransformer.STRIDE + IQuadTransformer.COLOR;
-        int packedColor = vertexData[offset];
-
-        color[0] = packedColor & 0xFF;
-        color[1] = (packedColor >> 8) & 0xFF;
-        color[2] = (packedColor >> 16) & 0xFF;
-        color[3] = (packedColor >> 24) & 0xFF;
-    }
-
-    public static void unpackLight(int[] vertexData, int[] light, int vert)
-    {
-        int offset = vert * IQuadTransformer.STRIDE + IQuadTransformer.UV2;
-        int packedLight = vertexData[offset];
-
-        light[0] = LightTexture.block(packedLight);
-        light[1] = LightTexture.sky(packedLight);
-    }
-
-    public static void packPosition(float[] pos, int[] vertexData, int vert)
-    {
-        int offset = vert * IQuadTransformer.STRIDE + IQuadTransformer.POSITION;
-        vertexData[offset    ] = Float.floatToRawIntBits(pos[0]);
-        vertexData[offset + 1] = Float.floatToRawIntBits(pos[1]);
-        vertexData[offset + 2] = Float.floatToRawIntBits(pos[2]);
-    }
-
-    public static void packUV(float[] uv, int[] vertexData, int vert)
-    {
-        int offset = vert * IQuadTransformer.STRIDE + IQuadTransformer.UV0;
-        vertexData[offset    ] = Float.floatToRawIntBits(uv[0]);
-        vertexData[offset + 1] = Float.floatToRawIntBits(uv[1]);
-    }
-
-    public static void packNormals(float[] normal, int[] vertexData, int vert)
-    {
-        int offset = vert * IQuadTransformer.STRIDE + IQuadTransformer.NORMAL;
-
-        int packedNormal = vertexData[offset];
-        vertexData[offset] =
-                (((byte)  (normal[0] * 127F)) & 0xFF) |
-                ((((byte) (normal[1] * 127F)) & 0xFF) << 8) |
-                ((((byte) (normal[2] * 127F)) & 0xFF) << 16) |
-                (packedNormal & 0xFF000000);
-    }
-
-    public static void packColor(int[] color, int[] vertexData, int vert)
-    {
-        int offset = vert * IQuadTransformer.STRIDE + IQuadTransformer.COLOR;
-
-        vertexData[offset] = ( color[0] & 0xFF) |
-                             ((color[1] & 0xFF) << 8) |
-                             ((color[2] & 0xFF) << 16) |
-                             ((color[3] & 0xFF) << 24);
-    }
-
-    public static void packLight(int[] light, int[] vertexData, int vert)
-    {
-        int offset = vert * IQuadTransformer.STRIDE + IQuadTransformer.UV2;
-        vertexData[offset] = LightTexture.pack(light[0], light[1]);
-    }
-
-    /**
-     * Calculate face normals from vertex positions
-     * Adapted from {@code net.minecraftforge.client.ForgeHooksClient#fillNormal(int[], Direction)}
-     */
-    @Deprecated(forRemoval = true)
-    public static void fillNormal(BakedQuad quad)
-    {
-        int[] vertexData = quad.getVertices();
-        float[][] pos = new float[4][3];
-        for (int vert = 0; vert < 4; vert++)
-        {
-            unpackPosition(vertexData, pos[vert], vert);
-        }
-        float[][] normal = new float[4][3];
-        fillNormal(pos, normal);
-        for (int vert = 0; vert < 4; vert++)
-        {
-            packNormals(normal[vert], vertexData, vert);
-        }
-    }
-
-    /**
-     * Calculate face normals from vertex positions
-     * Adapted from {@code net.minecraftforge.client.ForgeHooksClient#fillNormal(int[], Direction)}
-     * @return The {@link Direction} closest to the calculated normal vector
-     */
-    public static Direction fillNormal(float[][] pos, float[][] normal)
-    {
-        Vector3f v1 = new Vector3f(pos[3][0], pos[3][1], pos[3][2]);
-        Vector3f t1 = new Vector3f(pos[1][0], pos[1][1], pos[1][2]);
-        Vector3f v2 = new Vector3f(pos[2][0], pos[2][1], pos[2][2]);
-        Vector3f t2 = new Vector3f(pos[0][0], pos[0][1], pos[0][2]);
+        Vector3f v1 = data.pos(3, new Vector3f());
+        Vector3f t1 = data.pos(1, new Vector3f());
+        Vector3f v2 = data.pos(2, new Vector3f());
+        Vector3f t2 = data.pos(0, new Vector3f());
 
         v1.sub(t1);
         v2.sub(t2);
@@ -156,9 +41,7 @@ public final class ModelUtils
 
         for (int vert = 0; vert < 4; vert++)
         {
-            normal[vert][0] = v2.x;
-            normal[vert][1] = v2.y;
-            normal[vert][2] = v2.z;
+            data.normal(vert, v2);
         }
 
         return Direction.getNearestStable(v2.x, v2.y, v2.z);
@@ -174,7 +57,7 @@ public final class ModelUtils
      * @param coord1 The first coordinate
      * @param coord2 The second coordinate
      * @param coordTo The target coordinate, must lie between coord1 and coord2
-     * @param uv The UV data (modified in place)
+     * @param data The {@link QuadModifier.Data} being operated on
      * @param uv1 The first UV texture coordinate
      * @param uv2 The second UV texture coordinate
      * @param uvTo The target UV texture coordinate
@@ -189,47 +72,7 @@ public final class ModelUtils
             float coord1,
             float coord2,
             float coordTo,
-            float[][] uv,
-            int uv1,
-            int uv2,
-            int uvTo,
-            boolean vAxis,
-            boolean invert,
-            boolean rotated,
-            boolean mirrored
-    )
-    {
-        remapUV(quadDir, sprite, coord1, coord2, coordTo, uv, uv, uv1, uv2, uvTo, vAxis, invert, rotated, mirrored);
-    }
-
-    /**
-     * Maps a coordinate 'coordTo' between the given coordinates 'coord1' and 'coord2'
-     * onto the UV range they occupy as given by the values at 'uv1' and 'uv2' in the 'uv'
-     * array, calculates the target UV coordinate corresponding to the value of 'coordTo'
-     * and places it at 'uvTo' in the 'uv' array
-     * @param quadDir The direction the quad is facing in
-     * @param sprite The quad's texture
-     * @param coord1 The first coordinate
-     * @param coord2 The second coordinate
-     * @param coordTo The target coordinate, must lie between coord1 and coord2
-     * @param uvSrc The source UV data (not modified)
-     * @param uvDest The UV data to modify (modified in place)
-     * @param uv1 The first UV texture coordinate
-     * @param uv2 The second UV texture coordinate
-     * @param uvTo The target UV texture coordinate
-     * @param vAxis Whether the modification should happen on the V axis or the U axis
-     * @param invert Whether the coordinates grow in the opposite direction of the texture coordinates
-     * @param rotated Whether the UVs are rotated
-     * @param mirrored Whether the UVs are mirrored
-     */
-    public static void remapUV(
-            Direction quadDir,
-            TextureAtlasSprite sprite,
-            float coord1,
-            float coord2,
-            float coordTo,
-            float[][] uvSrc,
-            float[][] uvDest,
+            QuadModifier.Data data,
             int uv1,
             int uv2,
             int uvTo,
@@ -258,11 +101,11 @@ public final class ModelUtils
         {
             if (quadDir == Direction.UP)
             {
-                invert = !vAxis || (uvSrc[0][1] > uvSrc[1][1]) || (uvSrc[3][1] > uvSrc[2][1]);
+                invert = !vAxis || (data.uv(0, 1) > data.uv(1, 1)) || (data.uv(3, 1) > data.uv(2, 1));
             }
             else if (quadDir == Direction.DOWN)
             {
-                invert = !vAxis || (uvSrc[0][1] < uvSrc[1][1]) || (uvSrc[3][1] < uvSrc[2][1]);
+                invert = !vAxis || (data.uv(0, 1) < data.uv(1, 1)) || (data.uv(3, 1) < data.uv(2, 1));
             }
             else if (!vAxis)
             {
@@ -275,16 +118,16 @@ public final class ModelUtils
 
         int uvIdx = rotated != vAxis ? 1 : 0;
 
-        float uvMin = Math.min(uvSrc[uv1][uvIdx], uvSrc[uv2][uvIdx]);
-        float uvMax = Math.max(uvSrc[uv1][uvIdx], uvSrc[uv2][uvIdx]);
+        float uvMin = Math.min(data.uv(uv1, uvIdx), data.uv(uv2, uvIdx));
+        float uvMax = Math.max(data.uv(uv1, uvIdx), data.uv(uv2, uvIdx));
 
         if (coordTo == coordMin)
         {
-            uvDest[uvTo][uvIdx] = (invert) ? uvMax : uvMin;
+            data.uv(uvTo, uvIdx,  (invert) ? uvMax : uvMin);
         }
         else if (coordTo == coordMax)
         {
-            uvDest[uvTo][uvIdx] = (invert) ? uvMin : uvMax;
+            data.uv(uvTo, uvIdx,  (invert) ? uvMin : uvMax);
         }
         else
         {
@@ -298,34 +141,34 @@ public final class ModelUtils
 
                 double relTo = Mth.lerp(mult, relMin, relMax);
                 relTo = Math.round(relTo * UV_SUBSTEP_COUNT) / UV_SUBSTEP_COUNT;
-                uvDest[uvTo][uvIdx] = uvIdx == 0 ? sprite.getU(relTo) : sprite.getV(relTo);
+                data.uv(uvTo, uvIdx, uvIdx == 0 ? sprite.getU(relTo) : sprite.getV(relTo));
             }
             else
             {
                 float mult = (coordTo - coordMin) / (coordMax - coordMin);
                 if (invert) { mult = 1F - mult; }
-                uvDest[uvTo][uvIdx] = Mth.lerp(mult, uvMin, uvMax);
+                data.uv(uvTo, uvIdx, Mth.lerp(mult, uvMin, uvMax));
             }
         }
     }
 
-    public static boolean isQuadRotated(float[][] uv)
+    public static boolean isQuadRotated(QuadModifier.Data data)
     {
-        return (Mth.equal(uv[0][1], uv[1][1]) || Mth.equal(uv[3][1], uv[2][1])) &&
-               (Mth.equal(uv[1][0], uv[2][0]) || Mth.equal(uv[0][0], uv[3][0]));
+        return (Mth.equal(data.uv(0, 1), data.uv(1, 1)) || Mth.equal(data.uv(3, 1), data.uv(2, 1))) &&
+               (Mth.equal(data.uv(1, 0), data.uv(2, 0)) || Mth.equal(data.uv(0, 0), data.uv(3, 0)));
     }
 
-    public static boolean isQuadMirrored(float[][] uv, boolean rotated)
+    public static boolean isQuadMirrored(QuadModifier.Data data, boolean rotated)
     {
         if (!rotated)
         {
-            return (uv[0][0] > uv[3][0] && uv[1][0] > uv[2][0]) ||
-                   (uv[0][1] > uv[1][1] && uv[3][1] > uv[2][1]);
+            return (data.uv(0, 0) > data.uv(3, 0) && data.uv(1, 0) > data.uv(2, 0)) ||
+                   (data.uv(0, 1) > data.uv(1, 1) && data.uv(3, 1) > data.uv(2, 1));
         }
         else
         {
-            return (uv[0][0] > uv[1][0] && uv[3][0] > uv[2][0]) ||
-                   (uv[0][1] < uv[3][1] && uv[1][1] < uv[2][1]);
+            return (data.uv(0, 0) > data.uv(1, 0) && data.uv(3, 0) > data.uv(2, 0)) ||
+                   (data.uv(0, 1) < data.uv(3, 1) && data.uv(1, 1) < data.uv(2, 1));
         }
     }
 

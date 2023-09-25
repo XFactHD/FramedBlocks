@@ -1,6 +1,7 @@
 package xfacthd.framedblocks.api.model.quad;
 
 import com.google.common.base.Preconditions;
+import net.minecraft.client.renderer.LightTexture;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.core.Direction;
 import net.minecraft.util.Mth;
@@ -131,9 +132,8 @@ public final class Modifiers
 
         Direction perpDir = cutDir.getCounterClockWise();
         boolean perpX = Utils.isX(perpDir);
-        float[][] pos = data.pos();
-        float factorR = perpX ? pos[idxR][0] : (up ? (1F - pos[idxR][2]) : pos[idxR][2]);
-        float factorL = perpX ? pos[idxL][0] : (up ? (1F - pos[idxL][2]) : pos[idxL][2]);
+        float factorR = perpX ? data.pos(idxR, 0) : (up ? (1F - data.pos(idxR, 2)) : data.pos(idxR, 2));
+        float factorL = perpX ? data.pos(idxL, 0) : (up ? (1F - data.pos(idxL, 2)) : data.pos(idxL, 2));
 
         float targetR = Mth.lerp(factorR, positive ? lengthR : 1F - lengthR, positive ? lengthL : 1F - lengthL);
         float targetL = Mth.lerp(factorL, positive ? lengthR : 1F - lengthR, positive ? lengthL : 1F - lengthL);
@@ -142,39 +142,38 @@ public final class Modifiers
         int vertIdxL = xAxis ? (positive ? 0 : 2) : (up ? (positive ? 3 : 1) : (positive ? 2 : 0));
         int coordIdx = xAxis ? 0 : 2;
 
-        if (positive && (Utils.isHigher(pos[vertIdxR][coordIdx], targetR) || Utils.isHigher(pos[vertIdxL][coordIdx], targetL)))
+        if (positive && (Utils.isHigher(data.pos(vertIdxR, coordIdx), targetR) || Utils.isHigher(data.pos(vertIdxL, coordIdx), targetL)))
         {
             return false;
         }
-        if (!positive && (Utils.isLower(pos[vertIdxR][coordIdx], targetR) || Utils.isLower(pos[vertIdxL][coordIdx], targetL)))
+        if (!positive && (Utils.isLower(data.pos(vertIdxR, coordIdx), targetR) || Utils.isLower(data.pos(vertIdxL, coordIdx), targetL)))
         {
             return false;
         }
 
-        float xz1 = pos[idxR][coordIdx];
-        float xz2 = pos[idxL][coordIdx];
+        float xz1 = data.pos(idxR, coordIdx);
+        float xz2 = data.pos(idxL, coordIdx);
 
         float toXZ1 = positive ? Math.min(xz1, targetR) : Math.max(xz1, targetR);
         float toXZ2 = positive ? Math.min(xz2, targetL) : Math.max(xz2, targetL);
 
-        float[][] uv = data.uv();
         boolean rotated = data.uvRotated();
         boolean mirrored = data.uvMirrored();
         TextureAtlasSprite sprite = data.quad().getSprite();
 
         if (xAxis)
         {
-            ModelUtils.remapUV(quadDir, sprite, pos[1][coordIdx], pos[2][coordIdx], toXZ1, uv, 1, 2, idxR, false, false, rotated, mirrored);
-            ModelUtils.remapUV(quadDir, sprite, pos[0][coordIdx], pos[3][coordIdx], toXZ2, uv, 0, 3, idxL, false, false, rotated, mirrored);
+            ModelUtils.remapUV(quadDir, sprite, data.pos(1, coordIdx), data.pos(2, coordIdx), toXZ1, data, 1, 2, idxR, false, false, rotated, mirrored);
+            ModelUtils.remapUV(quadDir, sprite, data.pos(0, coordIdx), data.pos(3, coordIdx), toXZ2, data, 0, 3, idxL, false, false, rotated, mirrored);
         }
         else
         {
-            ModelUtils.remapUV(quadDir, sprite, pos[1][coordIdx], pos[0][coordIdx], toXZ1, uv, 0, 1, idxR, true, !up, rotated, mirrored);
-            ModelUtils.remapUV(quadDir, sprite, pos[2][coordIdx], pos[3][coordIdx], toXZ2, uv, 3, 2, idxL, true, !up, rotated, mirrored);
+            ModelUtils.remapUV(quadDir, sprite, data.pos(1, coordIdx), data.pos(0, coordIdx), toXZ1, data, 0, 1, idxR, true, !up, rotated, mirrored);
+            ModelUtils.remapUV(quadDir, sprite, data.pos(2, coordIdx), data.pos(3, coordIdx), toXZ2, data, 3, 2, idxL, true, !up, rotated, mirrored);
         }
 
-        pos[idxR][coordIdx] = toXZ1;
-        pos[idxL][coordIdx] = toXZ2;
+        data.pos(idxR, coordIdx, toXZ1);
+        data.pos(idxL, coordIdx, toXZ2);
 
         return true;
     }
@@ -222,19 +221,17 @@ public final class Modifiers
         boolean x = Utils.isX(quadDirRot);
         boolean positive = Utils.isPositive(quadDirRot);
 
-        float[][] pos = data.pos();
-
-        float factorR = positive ? pos[0][x ? 0 : 2] : (1F - pos[0][x ? 0 : 2]);
-        float factorL = positive ? pos[3][x ? 0 : 2] : (1F - pos[3][x ? 0 : 2]);
+        float factorR = positive ? data.pos(0, x ? 0 : 2) : (1F - data.pos(0, x ? 0 : 2));
+        float factorL = positive ? data.pos(3, x ? 0 : 2) : (1F - data.pos(3, x ? 0 : 2));
 
         float targetR = Mth.lerp(factorR, downwards ? 1F - lengthRight : lengthRight, downwards ? 1F - lengthLeft : lengthLeft);
         float targetL = Mth.lerp(factorL, downwards ? 1F - lengthRight : lengthRight, downwards ? 1F - lengthLeft : lengthLeft);
 
-        if (downwards && (Utils.isLower(pos[0][1], targetR) || Utils.isLower(pos[3][1], targetL)))
+        if (downwards && (Utils.isLower(data.pos(0, 1), targetR) || Utils.isLower(data.pos(3, 1), targetL)))
         {
             return false;
         }
-        if (!downwards && (Utils.isHigher(pos[1][1], targetR) || Utils.isHigher(pos[2][1], targetL)))
+        if (!downwards && (Utils.isHigher(data.pos(1, 1), targetR) || Utils.isHigher(data.pos(2, 1), targetL)))
         {
             return false;
         }
@@ -242,21 +239,20 @@ public final class Modifiers
         int idx1 = downwards ? 1 : 0;
         int idx2 = downwards ? 2 : 3;
 
-        float y1 = pos[idx1][1];
-        float y2 = pos[idx2][1];
+        float y1 = data.pos(idx1, 1);
+        float y2 = data.pos(idx2, 1);
 
         float toY1 = downwards ? Math.max(y1, targetR) : Math.min(y1, targetR);
         float toY2 = downwards ? Math.max(y2, targetL) : Math.min(y2, targetL);
 
-        float[][] uv = data.uv();
         boolean rotated = data.uvRotated();
         boolean mirrored = data.uvMirrored();
         TextureAtlasSprite sprite = data.quad().getSprite();
-        ModelUtils.remapUV(quadDir, sprite, pos[1][1], pos[0][1], toY1, uv, 0, 1, idx1, true, !mirrored, rotated, mirrored);
-        ModelUtils.remapUV(quadDir, sprite, pos[2][1], pos[3][1], toY2, uv, 3, 2, idx2, true, !mirrored, rotated, mirrored);
+        ModelUtils.remapUV(quadDir, sprite, data.pos(1, 1), data.pos(0, 1), toY1, data, 0, 1, idx1, true, !mirrored, rotated, mirrored);
+        ModelUtils.remapUV(quadDir, sprite, data.pos(2, 1), data.pos(3, 1), toY2, data, 3, 2, idx2, true, !mirrored, rotated, mirrored);
 
-        pos[idx1][1] = toY1;
-        pos[idx2][1] = toY2;
+        data.pos(idx1, 1, toY1);
+        data.pos(idx2, 1, toY2);
 
         return true;
     }
@@ -327,16 +323,14 @@ public final class Modifiers
         int vertIdxTop = towardsRight ? 3 : 0;
         int vertIdxBot = towardsRight ? 2 : 1;
 
-        float[][] pos = data.pos();
+        float targetTop = Mth.lerp(1F - data.pos(vertIdxTop, 1), positive ? 1F - lengthTop : lengthTop, positive ? 1F - lengthBot : lengthBot);
+        float targetBot = Mth.lerp(1F - data.pos(vertIdxBot, 1), positive ? 1F - lengthTop : lengthTop, positive ? 1F - lengthBot : lengthBot);
 
-        float targetTop = Mth.lerp(1F - pos[vertIdxTop][1], positive ? 1F - lengthTop : lengthTop, positive ? 1F - lengthBot : lengthBot);
-        float targetBot = Mth.lerp(1F - pos[vertIdxBot][1], positive ? 1F - lengthTop : lengthTop, positive ? 1F - lengthBot : lengthBot);
-
-        if (positive && (Utils.isLower(pos[vertIdxTop][coordIdx], targetTop) || Utils.isLower(pos[vertIdxBot][coordIdx], targetBot)))
+        if (positive && (Utils.isLower(data.pos(vertIdxTop, coordIdx), targetTop) || Utils.isLower(data.pos(vertIdxBot, coordIdx), targetBot)))
         {
             return false;
         }
-        if (!positive && (Utils.isHigher(pos[vertIdxTop][coordIdx], targetTop) || Utils.isHigher(pos[vertIdxBot][coordIdx], targetBot)))
+        if (!positive && (Utils.isHigher(data.pos(vertIdxTop, coordIdx), targetTop) || Utils.isHigher(data.pos(vertIdxBot, coordIdx), targetBot)))
         {
             return false;
         }
@@ -344,21 +338,20 @@ public final class Modifiers
         int idx1 = towardsRight ? 0 : 3;
         int idx2 = towardsRight ? 1 : 2;
 
-        float xz1 = pos[idx1][coordIdx];
-        float xz2 = pos[idx2][coordIdx];
+        float xz1 = data.pos(idx1, coordIdx);
+        float xz2 = data.pos(idx2, coordIdx);
 
         float toXZ1 = positive ? Math.max(xz1, targetTop) : Math.min(xz1, targetTop);
         float toXZ2 = positive ? Math.max(xz2, targetBot) : Math.min(xz2, targetBot);
 
-        float[][] uv = data.uv();
         boolean rotated = data.uvRotated();
         boolean mirrored = data.uvMirrored();
         TextureAtlasSprite sprite = data.quad().getSprite();
-        ModelUtils.remapUV(quadDir, sprite, pos[0][coordIdx], pos[3][coordIdx], toXZ1, uv, 0, 3, idx1, false, positive != towardsRight, rotated, mirrored);
-        ModelUtils.remapUV(quadDir, sprite, pos[1][coordIdx], pos[2][coordIdx], toXZ2, uv, 1, 2, idx2, false, positive != towardsRight, rotated, mirrored);
+        ModelUtils.remapUV(quadDir, sprite, data.pos(0, coordIdx), data.pos(3, coordIdx), toXZ1, data, 0, 3, idx1, false, positive != towardsRight, rotated, mirrored);
+        ModelUtils.remapUV(quadDir, sprite, data.pos(1, coordIdx), data.pos(2, coordIdx), toXZ2, data, 1, 2, idx2, false, positive != towardsRight, rotated, mirrored);
 
-        pos[idx1][coordIdx] = toXZ1;
-        pos[idx2][coordIdx] = toXZ2;
+        data.pos(idx1, coordIdx, toXZ1);
+        data.pos(idx2, coordIdx, toXZ2);
 
         return true;
     }
@@ -701,7 +694,7 @@ public final class Modifiers
 
         for (int i = 0; i < 4; i++)
         {
-            data.pos()[i][idx] += value;
+            data.pos(i, idx, data.pos(i, idx) + value);
         }
 
     }
@@ -724,7 +717,7 @@ public final class Modifiers
 
             for (int i = 0; i < 4; i++)
             {
-                data.pos()[i][idx] = value;
+                data.pos(i, idx, value);
             }
 
             return true;
@@ -744,7 +737,6 @@ public final class Modifiers
         return data ->
         {
             Direction dir = data.quad().getDirection();
-            float[][] pos = data.pos();
             int idx = dir.getAxis().ordinal();
             boolean positive = Utils.isPositive(dir);
             boolean y = Utils.isY(dir);
@@ -757,10 +749,10 @@ public final class Modifiers
 
             for (int i = 0; i < 4; i++)
             {
-                float x0 = invLerpX ? (1F - pos[i][lerpXIdx]) : pos[i][lerpXIdx];
-                float z0 = invLerpZ ? (1F - pos[i][lerpZIdx]) : pos[i][lerpZIdx];
+                float x0 = invLerpX ? (1F - data.pos(i, lerpXIdx)) : data.pos(i, lerpXIdx);
+                float z0 = invLerpZ ? (1F - data.pos(i, lerpZIdx)) : data.pos(i, lerpZIdx);
                 float target = (float) Mth.lerp2(x0, z0, posTarget[0], posTarget[3], posTarget[1], posTarget[2]);
-                data.pos()[i][idx] = positive ? target : (1F - target);
+                data.pos(i, idx, positive ? target : (1F - target));
             }
 
             return true;
@@ -774,19 +766,19 @@ public final class Modifiers
     {
         return data ->
         {
-            float[][] pos = data.pos();
-            float[][] uv = data.uv();
-            float[][] newPos = new float[4][3];
-            float[][] newUv = new float[4][2];
-
+            float[] pos = new float[4 * 3];
+            float[] uv = new float[4 * 2];
             for (int i = 0; i < 4; i++)
             {
-                System.arraycopy(pos[i], 0, newPos[(i + 1) % 4], 0, 3);
-                System.arraycopy(uv[i], 0, newUv[(i + 1) % 4], 0, 2);
+                int j = (i + i) % 4;
+                data.pos(i, pos, j * 3);
+                data.uv(i, uv, j * 2);
             }
-
-            System.arraycopy(newPos, 0, pos, 0, 4);
-            System.arraycopy(newUv, 0, uv, 0, 4);
+            for (int i = 0; i < 4; i++)
+            {
+                data.pos(i, pos[i * 3], pos[i * 3 + 1], pos[i * 3 + 2]);
+                data.uv(i, uv[i * 2], uv[i * 2 + 1]);
+            }
 
             return true;
         };
@@ -904,19 +896,18 @@ public final class Modifiers
             scaleVec.add(1.0F, 1.0F, 1.0F);
         }
 
-        float[][] pos = data.pos();
         for (int i = 0; i < 4; i++)
         {
-            Vector4f vector4f = new Vector4f(pos[i][0] - origin.x(), pos[i][1] - origin.y(), pos[i][2] - origin.z(), 1.0F);
+            Vector4f vector4f = new Vector4f(data.pos(i, 0) - origin.x(), data.pos(i, 1) - origin.y(), data.pos(i, 2) - origin.z(), 1.0F);
             if (rescale)
             {
                 vector4f.mul(new Vector4f(scaleVec, 1.0F));
             }
             vector4f.mul(transform);
 
-            pos[i][0] = vector4f.x() + origin.x();
-            pos[i][1] = vector4f.y() + origin.y();
-            pos[i][2] = vector4f.z() + origin.z();
+            data.pos(i, 0, vector4f.x() + origin.x());
+            data.pos(i, 1, vector4f.y() + origin.y());
+            data.pos(i, 2, vector4f.z() + origin.z());
         }
     }
 
@@ -933,15 +924,14 @@ public final class Modifiers
 
             scaleVec.mul(factor);
 
-            float[][] pos = data.pos();
             for (int i = 0; i < 4; i++)
             {
-                Vector4f posVec = new Vector4f(pos[i][0] - origin.x(), pos[i][1] - origin.y(), pos[i][2] - origin.z(), 1.0F);
+                Vector4f posVec = new Vector4f(data.pos(i, 0) - origin.x(), data.pos(i, 1) - origin.y(), data.pos(i, 2) - origin.z(), 1.0F);
                 posVec.mul(new Vector4f(scaleVec, 1.0F));
 
-                pos[i][0] = posVec.x() + origin.x();
-                pos[i][1] = posVec.y() + origin.y();
-                pos[i][2] = posVec.z() + origin.z();
+                data.pos(i, 0, posVec.x() + origin.x());
+                data.pos(i, 1, posVec.y() + origin.y());
+                data.pos(i, 2, posVec.z() + origin.z());
             }
 
             return true;
@@ -966,8 +956,7 @@ public final class Modifiers
         {
             for (int i = 0; i < 4; i++)
             {
-                data.light()[i][0] = blockLight;
-                data.light()[i][1] = skyLight;
+                data.light(i, LightTexture.pack(blockLight, skyLight));
             }
             return true;
         };
