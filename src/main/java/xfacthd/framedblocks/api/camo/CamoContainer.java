@@ -181,7 +181,7 @@ public abstract class CamoContainer
         }
 
         ResourceLocation id = ResourceLocation.tryParse(tag.getString("type"));
-        Factory factory = FramedBlocksAPI.getInstance().getCamoContainerFactoryRegistry().getValue(id);
+        Factory factory = FramedBlocksAPI.INSTANCE.getCamoContainerFactoryRegistry().getValue(id);
         if (factory == null)
         {
             LOGGER.error("Unknown ICamoContainer with ID {}, dropping!", id);
@@ -198,7 +198,7 @@ public abstract class CamoContainer
         }
 
         int id = tag.getInt("type");
-        Factory factory = Utils.getValue(FramedBlocksAPI.getInstance().getCamoContainerFactoryRegistry(), id);
+        Factory factory = Utils.getValue(FramedBlocksAPI.INSTANCE.getCamoContainerFactoryRegistry(), id);
         if (factory == null)
         {
             LOGGER.error("Unknown ICamoContainer with ID {}, dropping!", id);
@@ -219,7 +219,7 @@ public abstract class CamoContainer
             if (id == null)
             {
                 //noinspection ConstantConditions
-                id = FramedBlocksAPI.getInstance().getCamoContainerFactoryRegistry().getKey(this).toString();
+                id = FramedBlocksAPI.INSTANCE.getCamoContainerFactoryRegistry().getKey(this).toString();
             }
             return id;
         }
@@ -228,7 +228,7 @@ public abstract class CamoContainer
         {
             if (syncId == -1)
             {
-                syncId = Utils.getId(FramedBlocksAPI.getInstance().getCamoContainerFactoryRegistry(), this);
+                syncId = Utils.getId(FramedBlocksAPI.INSTANCE.getCamoContainerFactoryRegistry(), this);
                 Preconditions.checkState(syncId != -1, "Attempted to get sync ID for unregistered CamoContainer.Factory");
             }
             return syncId;

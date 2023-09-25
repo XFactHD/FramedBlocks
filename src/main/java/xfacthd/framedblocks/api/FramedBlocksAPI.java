@@ -9,17 +9,12 @@ import net.minecraftforge.registries.IForgeRegistry;
 import xfacthd.framedblocks.api.block.FramedBlockEntity;
 import xfacthd.framedblocks.api.blueprint.BlueprintCopyBehaviour;
 import xfacthd.framedblocks.api.camo.CamoContainer;
-import xfacthd.framedblocks.api.util.WriteOnceHolder;
+import xfacthd.framedblocks.api.util.Utils;
 
 @SuppressWarnings({ "unused", "SameReturnValue" })
 public interface FramedBlocksAPI
 {
-    WriteOnceHolder<FramedBlocksAPI> INSTANCE = new WriteOnceHolder<>();
-
-    static FramedBlocksAPI getInstance()
-    {
-        return INSTANCE.get();
-    }
+    FramedBlocksAPI INSTANCE = Utils.loadService(FramedBlocksAPI.class);
 
 
 

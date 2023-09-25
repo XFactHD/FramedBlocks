@@ -16,7 +16,6 @@ import net.minecraftforge.network.NetworkDirection;
 import net.minecraftforge.network.NetworkRegistry;
 import net.minecraftforge.network.simple.SimpleChannel;
 import org.slf4j.Logger;
-import xfacthd.framedblocks.api.FramedBlocksAPI;
 import xfacthd.framedblocks.api.block.update.CullingUpdatePacket;
 import xfacthd.framedblocks.api.block.update.CullingUpdateTracker;
 import xfacthd.framedblocks.api.shapes.ShapeReloader;
@@ -58,7 +57,6 @@ public final class FramedBlocks
         ModLoadingContext.get().registerConfig(ModConfig.Type.CLIENT, ClientConfig.SPEC);
         ModLoadingContext.get().registerConfig(ModConfig.Type.COMMON, CommonConfig.SPEC);
         ModLoadingContext.get().registerConfig(ModConfig.Type.SERVER, ServerConfig.SPEC);
-        FramedBlocksAPI.INSTANCE.accept(new ApiImpl());
 
         modBus.addListener(FramedBlocks::onCommonSetup);
         modBus.addListener(FramedBlocks::onLoadComplete);

@@ -35,7 +35,7 @@ public final class ModelCache
         {
             return modelCache.computeIfAbsent(
                     fluidBlock.getFluid(),
-                    FramedBlocksClientAPI.getInstance()::createFluidModel
+                    FramedBlocksClientAPI.INSTANCE::createFluidModel
             );
         }
         return Minecraft.getInstance().getBlockRenderer().getBlockModel(state);

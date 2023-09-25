@@ -1,9 +1,12 @@
 package xfacthd.framedblocks.api.util;
 
+import com.github.benmanes.caffeine.cache.Cache;
+import com.github.benmanes.caffeine.cache.Caffeine;
 import com.google.common.base.Preconditions;
 import it.unimi.dsi.fastutil.longs.Long2ObjectMap;
 import it.unimi.dsi.fastutil.longs.Long2ObjectOpenHashMap;
 import net.minecraft.ChatFormatting;
+import net.minecraft.Util;
 import net.minecraft.core.*;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
@@ -41,6 +44,7 @@ import xfacthd.framedblocks.api.camo.EmptyCamoContainer;
 import java.lang.invoke.*;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
+import java.time.Duration;
 import java.util.*;
 import java.util.function.*;
 import java.util.stream.Collectors;
@@ -575,6 +579,15 @@ public final class Utils
         return ServiceLoader.load(clazz)
                 .findFirst()
                 .orElseThrow(() -> new NullPointerException("Failed to load service for " + clazz.getName()));
+    }
+
+    @ApiStatus.Internal
+    public static <K, V> Cache<K, V> makeLRUCache(Duration timeToExpiration)
+    {
+        return Caffeine.newBuilder()
+                .expireAfterAccess(timeToExpiration)
+                .executor(Util.backgroundExecutor())
+                .build();
     }
 
 

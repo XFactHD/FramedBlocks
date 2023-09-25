@@ -394,7 +394,7 @@ public final class TestUtils
 
     public static void testBlockIntangibility(GameTestHelper helper, BlockState state)
     {
-        if (!FramedBlocksAPI.getInstance().enableIntangibility())
+        if (!FramedBlocksAPI.INSTANCE.enableIntangibility())
         {
             helper.fail("Intangibility is not enabled in the ServerConfig");
         }
@@ -420,7 +420,7 @@ public final class TestUtils
                             () -> String.format("Block '%s' returns an empty shape when not intangible", state.getBlock())
                     );
                 },
-                () -> clickWithItem(helper, INTANGIBILITY_BLOCK, FramedBlocksAPI.getInstance().getIntangibilityMarkerItem()),
+                () -> clickWithItem(helper, INTANGIBILITY_BLOCK, FramedBlocksAPI.INSTANCE.getIntangibilityMarkerItem()),
                 () ->
                 {
                     FramedBlockEntity be = getBlockEntity(helper, INTANGIBILITY_BLOCK, FramedBlockEntity.class);

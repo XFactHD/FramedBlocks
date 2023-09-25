@@ -222,7 +222,7 @@ public interface IFramedBlock extends EntityBlock, IForgeBlock
     {
         if (builder.getOptionalParameter(LootContextParams.BLOCK_ENTITY) instanceof FramedBlockEntity be)
         {
-            be.addAdditionalDrops(drops, FramedBlocksAPI.getInstance().shouldConsumeCamo());
+            be.addAdditionalDrops(drops, FramedBlocksAPI.INSTANCE.shouldConsumeCamo());
         }
         return drops;
     }
@@ -267,7 +267,7 @@ public interface IFramedBlock extends EntityBlock, IForgeBlock
             BlockGetter level, BlockPos pos, BlockState state, BlockPos adjPos, BlockState adjState
     )
     {
-        if (!FramedBlocksAPI.getInstance().enableIntangibility() || isIntangible(adjState, level, adjPos, null))
+        if (!FramedBlocksAPI.INSTANCE.enableIntangibility() || isIntangible(adjState, level, adjPos, null))
         {
             return false;
         }
@@ -306,7 +306,7 @@ public interface IFramedBlock extends EntityBlock, IForgeBlock
     @Override
     default boolean isFlammable(BlockState state, BlockGetter level, BlockPos pos, Direction face)
     {
-        if (FramedBlocksAPI.getInstance().areBlocksFireproof())
+        if (FramedBlocksAPI.INSTANCE.areBlocksFireproof())
         {
             return false;
         }
@@ -321,7 +321,7 @@ public interface IFramedBlock extends EntityBlock, IForgeBlock
     @Override
     default int getFlammability(BlockState state, BlockGetter level, BlockPos pos, Direction face)
     {
-        if (FramedBlocksAPI.getInstance().areBlocksFireproof())
+        if (FramedBlocksAPI.INSTANCE.areBlocksFireproof())
         {
             return 0;
         }
@@ -340,7 +340,7 @@ public interface IFramedBlock extends EntityBlock, IForgeBlock
     @Override
     default int getFireSpreadSpeed(BlockState state, BlockGetter level, BlockPos pos, Direction face)
     {
-        if (FramedBlocksAPI.getInstance().areBlocksFireproof())
+        if (FramedBlocksAPI.INSTANCE.areBlocksFireproof())
         {
             return 0;
         }
@@ -363,7 +363,7 @@ public interface IFramedBlock extends EntityBlock, IForgeBlock
 
     default boolean isIntangible(BlockState state, BlockGetter level, BlockPos pos, @Nullable CollisionContext ctx)
     {
-        if (!FramedBlocksAPI.getInstance().enableIntangibility() || !getBlockType().allowMakingIntangible())
+        if (!FramedBlocksAPI.INSTANCE.enableIntangibility() || !getBlockType().allowMakingIntangible())
         {
             return false;
         }
@@ -372,7 +372,7 @@ public interface IFramedBlock extends EntityBlock, IForgeBlock
 
     default boolean isSuffocating(BlockState state, BlockGetter level, BlockPos pos)
     {
-        if (FramedBlocksAPI.getInstance().enableIntangibility() && getBlockType().allowMakingIntangible())
+        if (FramedBlocksAPI.INSTANCE.enableIntangibility() && getBlockType().allowMakingIntangible())
         {
             // The given BlockPos may be a neighboring block due to how Entity#isInWall() calls this
             BlockState stateAtPos = level.getBlockState(pos);

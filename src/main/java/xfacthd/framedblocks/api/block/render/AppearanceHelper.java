@@ -41,7 +41,7 @@ public final class AppearanceHelper
             return AIR;
         }
 
-        ConTexMode mode = FramedBlocksClientAPI.getInstance().getConTexMode();
+        ConTexMode mode = FramedBlocksClientAPI.INSTANCE.getConTexMode();
         if (mode == ConTexMode.NONE || queryPos == null)
         {
             // If queryPos is null, we can't make sure the connection is possible

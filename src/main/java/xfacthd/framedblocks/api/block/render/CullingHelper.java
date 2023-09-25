@@ -56,7 +56,7 @@ public final class CullingHelper
 
         IFramedBlock block = (IFramedBlock) state.getBlock();
         boolean fullFace = block.getCache(state).isFullFace(side);
-        if (!adjFramed || fullFace || !FramedBlocksAPI.getInstance().detailedCullingEnabled())
+        if (!adjFramed || fullFace || !FramedBlocksAPI.INSTANCE.detailedCullingEnabled())
         {
             if (fullFace && (!adjFramed || adjBlock.getCache(adjState).isFullFace(side.getOpposite())))
             {
@@ -165,7 +165,7 @@ public final class CullingHelper
 
         if (camoState == adjCamoState)
         {
-            return FramedBlocksAPI.getInstance().canCullBlockNextTo(camoState, adjCamoState);
+            return FramedBlocksAPI.INSTANCE.canCullBlockNextTo(camoState, adjCamoState);
         }
         // Always cull the face if the other camo is solid, even if the camo being culled is non-solid
         return adjCamoState.isSolidRender(level, pos.relative(side));
@@ -185,7 +185,7 @@ public final class CullingHelper
             IFramedBlock block, BlockGetter level, BlockPos pos, BlockState state, BlockState adjState, Direction side
     )
     {
-        if (!FramedBlocksAPI.getInstance().canHideNeighborFaceInLevel(level) || adjState.getBlock() instanceof IFramedBlock)
+        if (!FramedBlocksAPI.INSTANCE.canHideNeighborFaceInLevel(level) || adjState.getBlock() instanceof IFramedBlock)
         {
             return false;
         }

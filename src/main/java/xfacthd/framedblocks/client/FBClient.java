@@ -1,6 +1,5 @@
 package xfacthd.framedblocks.client;
 
-import com.github.benmanes.caffeine.cache.RemovalCause;
 import com.google.common.base.Stopwatch;
 import net.minecraft.client.gui.screens.MenuScreens;
 import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
@@ -24,7 +23,6 @@ import net.minecraftforge.fml.loading.FMLEnvironment;
 import net.minecraftforge.registries.RegistryObject;
 import org.jetbrains.annotations.Nullable;
 import xfacthd.framedblocks.FramedBlocks;
-import xfacthd.framedblocks.api.FramedBlocksClientAPI;
 import xfacthd.framedblocks.api.block.FramedProperties;
 import xfacthd.framedblocks.api.block.IFramedBlock;
 import xfacthd.framedblocks.api.model.FramedBlockModel;
@@ -77,13 +75,6 @@ import java.util.function.Supplier;
 @Mod.EventBusSubscriber(modid = FramedConstants.MOD_ID, bus = Mod.EventBusSubscriber.Bus.MOD, value = Dist.CLIENT)
 public final class FBClient
 {
-    static
-    {
-        FramedBlocksClientAPI.INSTANCE.accept(new ClientApiImpl());
-        // Forcefully class-load RemovalCause because EventBus and ThreadPools can't get their classloader shit together
-        RemovalCause.EXPLICIT.wasEvicted();
-    }
-
     @SubscribeEvent
     public static void onClientSetup(final FMLClientSetupEvent event)
     {

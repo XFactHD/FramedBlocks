@@ -1,7 +1,6 @@
 package xfacthd.framedblocks.api.model;
 
 import com.github.benmanes.caffeine.cache.Cache;
-import com.github.benmanes.caffeine.cache.Caffeine;
 import com.google.common.base.Preconditions;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.block.model.BakedQuad;
@@ -46,12 +45,8 @@ public abstract class FramedBlockModel extends BakedModelProxy
     public static final ResourceLocation REINFORCEMENT_LOCATION = Utils.rl("block/framed_reinforcement");
     private static BakedModel reinforcementModel = null;
 
-    private final Cache<QuadCacheKey, QuadTable> quadCache = Caffeine.newBuilder()
-            .expireAfterAccess(ModelCache.DEFAULT_CACHE_DURATION)
-            .build();
-    private final Cache<QuadCacheKey, CachedRenderTypes> renderTypeCache = Caffeine.newBuilder()
-            .expireAfterAccess(ModelCache.DEFAULT_CACHE_DURATION)
-            .build();
+    private final Cache<QuadCacheKey, QuadTable> quadCache = Utils.makeLRUCache(ModelCache.DEFAULT_CACHE_DURATION);
+    private final Cache<QuadCacheKey, CachedRenderTypes> renderTypeCache = Utils.makeLRUCache(ModelCache.DEFAULT_CACHE_DURATION);
     protected final BlockState state;
     private final IBlockType type;
     private final boolean cacheFullRenderTypes;
@@ -144,7 +139,7 @@ public abstract class FramedBlockModel extends BakedModelProxy
         if (camoState == null || camoState.isAir())
         {
             camoState = Blocks.AIR.defaultBlockState();
-            keyState = getNoCamoModelState(FramedBlocksAPI.getInstance().defaultModelState(), fbData);
+            keyState = getNoCamoModelState(FramedBlocksAPI.INSTANCE.defaultModelState(), fbData);
         }
 
         CachedRenderTypes cachedTypes = getCachedRenderTypes(keyState, camoState, rand, data);
@@ -206,7 +201,7 @@ public abstract class FramedBlockModel extends BakedModelProxy
         if (noCamo)
         {
             needCtCtx = false;
-            camoState = getNoCamoModelState(FramedBlocksAPI.getInstance().defaultModelState(), fbData);
+            camoState = getNoCamoModelState(FramedBlocksAPI.INSTANCE.defaultModelState(), fbData);
             addReinforcement = useBaseModel && fbData.isReinforced();
             camoInRenderType = BASE_MODEL_RENDER_TYPES.contains(renderType);
             noProcessing = (camoInRenderType && forceUngeneratedBaseModel) || stateCache.isFullFace(side);
@@ -253,7 +248,7 @@ public abstract class FramedBlockModel extends BakedModelProxy
         }
         else
         {
-            Object ctCtx = needCtCtx ? FramedBlocksClientAPI.getInstance().extractCTContext(camoData) : null;
+            Object ctCtx = needCtCtx ? FramedBlocksClientAPI.INSTANCE.extractCTContext(camoData) : null;
             if (DISABLE_QUAD_CACHE)
             {
                 return buildQuadCache(state, camoState, rand, extraData, ctCtx != null ? camoData : ModelData.EMPTY, noCamo, addReinforcement)
@@ -268,7 +263,7 @@ public abstract class FramedBlockModel extends BakedModelProxy
 
     private static boolean needCtContext(boolean noProcessing, ConTexMode minMode)
     {
-        ConTexMode mode = FramedBlocksClientAPI.getInstance().getConTexMode();
+        ConTexMode mode = FramedBlocksClientAPI.INSTANCE.getConTexMode();
         if (mode == ConTexMode.NONE)
         {
             return false;
@@ -348,7 +343,7 @@ public abstract class FramedBlockModel extends BakedModelProxy
 
         if (camoInRenderType)
         {
-            ArrayList<BakedQuad> quads = (ArrayList<BakedQuad>) ModelUtils.getAllCullableQuads(camoModel, camoState, rand, camoData, renderType);
+            ArrayList<BakedQuad> quads = ModelUtils.getAllCullableQuads(camoModel, camoState, rand, camoData, renderType);
             if (addReinforcement)
             {
                 Utils.copyAll(ModelUtils.getAllCullableQuads(reinforcementModel, camoState, rand, camoData, renderType), quads);

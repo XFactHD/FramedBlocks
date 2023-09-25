@@ -10,18 +10,13 @@ import net.minecraftforge.client.model.data.ModelProperty;
 import xfacthd.framedblocks.api.ghost.GhostRenderBehaviour;
 import xfacthd.framedblocks.api.type.IBlockType;
 import xfacthd.framedblocks.api.predicate.contex.ConTexMode;
-import xfacthd.framedblocks.api.util.WriteOnceHolder;
+import xfacthd.framedblocks.api.util.Utils;
 import xfacthd.framedblocks.api.render.OutlineRenderer;
 
 @SuppressWarnings({ "unused", "SameReturnValue" })
 public interface FramedBlocksClientAPI
 {
-    WriteOnceHolder<FramedBlocksClientAPI> INSTANCE = new WriteOnceHolder<>();
-
-    static FramedBlocksClientAPI getInstance()
-    {
-        return INSTANCE.get();
-    }
+    FramedBlocksClientAPI INSTANCE = Utils.loadService(FramedBlocksClientAPI.class);
 
 
     /**

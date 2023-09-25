@@ -81,7 +81,7 @@ public final class EmptyCamoContainer extends CamoContainer
     @Override
     public CamoContainer.Factory getFactory()
     {
-        return FramedBlocksAPI.getInstance().emptyCamoContainerFactory();
+        return FramedBlocksAPI.INSTANCE.emptyCamoContainerFactory();
     }
 
     @Override

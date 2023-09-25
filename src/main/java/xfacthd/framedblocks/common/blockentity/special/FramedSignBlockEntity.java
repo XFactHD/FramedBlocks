@@ -12,7 +12,6 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.server.network.FilteredText;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.level.EmptyBlockGetter;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
@@ -360,24 +359,6 @@ public final class FramedSignBlockEntity extends FramedBlockEntity
     public void load(CompoundTag nbt)
     {
         super.load(nbt);
-
-        // TODO: remove in the next breaking update
-        if (nbt.contains("text0") || nbt.contains("text1") || nbt.contains("text2") || nbt.contains("text3") || nbt.contains("glowingText") || nbt.contains("color"))
-        {
-            for (int i = 0; i < 4; i++)
-            {
-                String text = nbt.getString("text" + i);
-                Component line = Component.Serializer.fromJson(text.isEmpty() ? "\"\"" : text);
-                if (line != null)
-                {
-                    frontText.setMessage(i, line);
-                }
-            }
-
-            frontText.setHasGlowingText(nbt.getBoolean("glowingText"));
-            frontText.setColor(DyeColor.byName(nbt.getString("color"), DyeColor.BLACK));
-            return;
-        }
         readFromNbt(nbt);
     }
 

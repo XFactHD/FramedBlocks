@@ -131,7 +131,7 @@ public final class ModelUtils
         }
         else
         {
-            if (FramedBlocksClientAPI.getInstance().useDiscreteUVSteps())
+            if (FramedBlocksClientAPI.INSTANCE.useDiscreteUVSteps())
             {
                 double relMin = uvIdx == 0 ? sprite.getUOffset(uvMin) : sprite.getVOffset(uvMin);
                 double relMax = uvIdx == 0 ? sprite.getUOffset(uvMax) : sprite.getVOffset(uvMax);
@@ -206,7 +206,7 @@ public final class ModelUtils
 
     private static final MethodHandle WBM_WRAPPED_MODEL = Utils.unreflectField(WeightedBakedModel.class, "f_119542_");
 
-    public static List<BakedQuad> getAllCullableQuads(
+    public static ArrayList<BakedQuad> getAllCullableQuads(
             BakedModel model, BlockState state, RandomSource rand, ModelData data, RenderType renderType
     )
     {
