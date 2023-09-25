@@ -12,6 +12,7 @@ import net.minecraftforge.client.ChunkRenderTypeSet;
 import net.minecraftforge.client.model.data.ModelData;
 import org.joml.Vector3f;
 import xfacthd.framedblocks.api.model.FramedBlockModel;
+import xfacthd.framedblocks.api.model.data.QuadMap;
 import xfacthd.framedblocks.api.model.quad.Modifiers;
 import xfacthd.framedblocks.api.model.quad.QuadModifier;
 import xfacthd.framedblocks.api.model.util.ModelCache;
@@ -19,7 +20,6 @@ import xfacthd.framedblocks.api.util.ClientUtils;
 import xfacthd.framedblocks.api.util.Utils;
 
 import java.util.List;
-import java.util.Map;
 
 public class FramedWallTorchModel extends FramedBlockModel
 {
@@ -45,7 +45,7 @@ public class FramedWallTorchModel extends FramedBlockModel
 
     @Override
     protected void getAdditionalQuads(
-            Map<Direction, List<BakedQuad>> quadMap,
+            QuadMap quadMap,
             BlockState state,
             RandomSource rand,
             ModelData extraData,
@@ -63,7 +63,7 @@ public class FramedWallTorchModel extends FramedBlockModel
     }
 
     @Override
-    protected void transformQuad(Map<Direction, List<BakedQuad>> quadMap, BakedQuad quad)
+    protected void transformQuad(QuadMap quadMap, BakedQuad quad)
     {
         /*
         "from": [-1, 3.5, 7],
@@ -95,7 +95,7 @@ public class FramedWallTorchModel extends FramedBlockModel
     }
 
     @Override
-    protected void postProcessQuads(Map<Direction, List<BakedQuad>> quadMap)
+    protected void postProcessQuads(QuadMap quadMap)
     {
         float yAngle = 270F - dir.toYRot();
         quadMap.get(null).forEach(q ->

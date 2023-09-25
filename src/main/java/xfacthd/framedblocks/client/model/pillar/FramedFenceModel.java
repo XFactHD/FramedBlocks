@@ -7,12 +7,10 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraftforge.fml.ModList;
 import xfacthd.framedblocks.api.model.FramedBlockModel;
+import xfacthd.framedblocks.api.model.data.QuadMap;
 import xfacthd.framedblocks.api.model.quad.Modifiers;
 import xfacthd.framedblocks.api.model.quad.QuadModifier;
 import xfacthd.framedblocks.api.util.Utils;
-
-import java.util.List;
-import java.util.Map;
 
 public class FramedFenceModel extends FramedBlockModel
 {
@@ -31,7 +29,7 @@ public class FramedFenceModel extends FramedBlockModel
     }
 
     @Override
-    protected void transformQuad(Map<Direction, List<BakedQuad>> quadMap, BakedQuad quad)
+    protected void transformQuad(QuadMap quadMap, BakedQuad quad)
     {
         Direction quadDir = quad.getDirection();
         if (Utils.isY(quadDir))
@@ -55,9 +53,7 @@ public class FramedFenceModel extends FramedBlockModel
         createFenceBars(quadMap, quad, Direction.WEST, west);
     }
 
-    private static void createFenceBars(
-            Map<Direction, List<BakedQuad>> quadMap, BakedQuad quad, Direction dir, boolean active
-    )
+    private static void createFenceBars(QuadMap quadMap, BakedQuad quad, Direction dir, boolean active)
     {
         if (!active)
         {

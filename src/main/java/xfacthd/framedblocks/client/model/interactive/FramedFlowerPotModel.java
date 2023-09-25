@@ -13,6 +13,7 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.client.ChunkRenderTypeSet;
 import net.minecraftforge.client.model.data.ModelData;
 import xfacthd.framedblocks.api.model.FramedBlockModel;
+import xfacthd.framedblocks.api.model.data.QuadMap;
 import xfacthd.framedblocks.api.model.quad.Modifiers;
 import xfacthd.framedblocks.api.model.quad.QuadModifier;
 import xfacthd.framedblocks.api.model.data.FramedBlockData;
@@ -44,7 +45,7 @@ public class FramedFlowerPotModel extends FramedBlockModel
     }
 
     @Override
-    protected void transformQuad(Map<Direction, List<BakedQuad>> quadMap, BakedQuad quad)
+    protected void transformQuad(QuadMap quadMap, BakedQuad quad)
     {
         if (quad.getDirection() == Direction.DOWN)
         {
@@ -101,7 +102,7 @@ public class FramedFlowerPotModel extends FramedBlockModel
 
     @Override
     protected void getAdditionalQuads(
-            Map<Direction, List<BakedQuad>> quadMap,
+            QuadMap quadMap,
             BlockState state,
             RandomSource rand,
             ModelData data,
@@ -136,9 +137,7 @@ public class FramedFlowerPotModel extends FramedBlockModel
         return new FlowerPotQuadCacheKey(state, ctCtx, getFlowerBlock(data));
     }
 
-    private static void addPlantQuads(
-            Map<Direction, List<BakedQuad>> quadMap, BlockState potState, RandomSource rand, RenderType layer
-    )
+    private static void addPlantQuads(QuadMap quadMap, BlockState potState, RandomSource rand, RenderType layer)
     {
         BakedModel potModel = ModelCache.getModel(potState);
 
@@ -164,9 +163,7 @@ public class FramedFlowerPotModel extends FramedBlockModel
                 .collect(Collectors.toList());
     }
 
-    private static void addDirtQuads(
-            Map<Direction, List<BakedQuad>> quadMap, RandomSource rand, ModelData data, RenderType layer
-    )
+    private static void addDirtQuads(QuadMap quadMap, RandomSource rand, ModelData data, RenderType layer)
     {
         BakedModel dirtModel = ModelCache.getModel(Blocks.DIRT.defaultBlockState());
         if (dirtModel.getRenderTypes(Blocks.DIRT.defaultBlockState(), rand, ModelData.EMPTY).contains(layer))

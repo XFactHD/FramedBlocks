@@ -7,12 +7,12 @@ import net.minecraft.client.resources.model.BakedModel;
 import net.minecraft.core.Direction;
 import net.minecraft.world.level.block.state.BlockState;
 import org.joml.Vector3f;
+import xfacthd.framedblocks.api.model.data.QuadMap;
 import xfacthd.framedblocks.api.model.quad.Modifiers;
 import xfacthd.framedblocks.api.model.quad.QuadModifier;
 import xfacthd.framedblocks.api.util.Utils;
 
 import java.util.List;
-import java.util.Map;
 
 public class FramedDiagonalPaneModel extends FramedPaneModel
 {
@@ -35,7 +35,7 @@ public class FramedDiagonalPaneModel extends FramedPaneModel
     }
 
     @Override
-    protected void transformQuad(Map<Direction, List<BakedQuad>> quadMap, BakedQuad quad)
+    protected void transformQuad(QuadMap quadMap, BakedQuad quad)
     {
         super.transformQuad(quadMap, quad);
 
@@ -98,9 +98,7 @@ public class FramedDiagonalPaneModel extends FramedPaneModel
         return !noPillar;
     }
 
-    protected static void createDiagonalTopBottomEdgeQuad(
-            Map<Direction, List<BakedQuad>> quadMap, BakedQuad quad, Direction dir, boolean noPillar
-    )
+    protected static void createDiagonalTopBottomEdgeQuad(QuadMap quadMap, BakedQuad quad, Direction dir, boolean noPillar)
     {
         Preconditions.checkArgument(!Utils.isY(dir), String.format("Invalid direction: %s!", dir));
 
@@ -111,7 +109,7 @@ public class FramedDiagonalPaneModel extends FramedPaneModel
                 .export(quadMap.get(null));
     }
 
-    protected static void createDiagonalSideEdgeQuad(Map<Direction, List<BakedQuad>> quadMap, BakedQuad quad)
+    protected static void createDiagonalSideEdgeQuad(QuadMap quadMap, BakedQuad quad)
     {
         QuadModifier.geometry(quad)
                 .apply(Modifiers.cutSideLeftRight(9F/16F))

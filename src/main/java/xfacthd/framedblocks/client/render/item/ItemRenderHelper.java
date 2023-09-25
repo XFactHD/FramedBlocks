@@ -13,7 +13,6 @@ import net.minecraft.world.item.ItemDisplayContext;
 import net.minecraft.world.item.ItemStack;
 import org.joml.Matrix4f;
 import xfacthd.framedblocks.client.render.util.GhostVertexConsumer;
-import xfacthd.framedblocks.common.compat.rubidium.RubidiumCompat;
 
 @SuppressWarnings("deprecation")
 public final class ItemRenderHelper
@@ -23,7 +22,7 @@ public final class ItemRenderHelper
 
     public static void renderFakeItemTransparent(PoseStack poseStack, ItemStack stack, int x, int y, int alpha)
     {
-        if (stack.isEmpty() || !RubidiumCompat.supportsCustomVertexConsumer())
+        if (stack.isEmpty())
         {
             return;
         }

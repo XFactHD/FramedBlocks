@@ -5,14 +5,12 @@ import net.minecraft.client.resources.model.BakedModel;
 import net.minecraft.core.Direction;
 import net.minecraft.world.level.block.state.BlockState;
 import xfacthd.framedblocks.api.model.FramedBlockModel;
+import xfacthd.framedblocks.api.model.data.QuadMap;
 import xfacthd.framedblocks.api.model.quad.Modifiers;
 import xfacthd.framedblocks.api.model.quad.QuadModifier;
 import xfacthd.framedblocks.api.block.FramedProperties;
 import xfacthd.framedblocks.api.util.Utils;
 import xfacthd.framedblocks.common.data.PropertyHolder;
-
-import java.util.List;
-import java.util.Map;
 
 public class FramedHalfStairsModel extends FramedBlockModel
 {
@@ -29,7 +27,7 @@ public class FramedHalfStairsModel extends FramedBlockModel
     }
 
     @Override
-    protected void transformQuad(Map<Direction, List<BakedQuad>> quadMap, BakedQuad quad)
+    protected void transformQuad(QuadMap quadMap, BakedQuad quad)
     {
         Direction face = quad.getDirection();
         Direction vertCut = right ? dir.getCounterClockWise() : dir.getClockWise();

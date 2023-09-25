@@ -6,15 +6,13 @@ import net.minecraft.core.Direction;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.client.model.data.ModelData;
 import xfacthd.framedblocks.api.model.FramedBlockModel;
+import xfacthd.framedblocks.api.model.data.QuadMap;
 import xfacthd.framedblocks.api.model.quad.Modifiers;
 import xfacthd.framedblocks.api.model.quad.QuadModifier;
 import xfacthd.framedblocks.api.util.Utils;
 import xfacthd.framedblocks.common.blockentity.special.FramedCollapsibleBlockEntity;
 import xfacthd.framedblocks.common.compat.rubidium.RubidiumCompat;
 import xfacthd.framedblocks.common.data.PropertyHolder;
-
-import java.util.List;
-import java.util.Map;
 
 public class FramedCollapsibleBlockModel extends FramedBlockModel
 {
@@ -31,7 +29,7 @@ public class FramedCollapsibleBlockModel extends FramedBlockModel
     }
 
     @Override
-    protected void transformQuad(Map<Direction, List<BakedQuad>> quadMap, BakedQuad quad, ModelData data)
+    protected void transformQuad(QuadMap quadMap, BakedQuad quad, ModelData data)
     {
         Direction quadDir = quad.getDirection();
         if (collapsedFace == null || quadDir == collapsedFace.getOpposite())
@@ -101,7 +99,7 @@ public class FramedCollapsibleBlockModel extends FramedBlockModel
     }
 
     @Override
-    protected void transformQuad(Map<Direction, List<BakedQuad>> quadMap, BakedQuad quad) { }
+    protected void transformQuad(QuadMap quadMap, BakedQuad quad) { }
 
     @Override
     protected boolean useBaseModel()

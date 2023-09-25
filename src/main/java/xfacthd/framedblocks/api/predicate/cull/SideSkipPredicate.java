@@ -4,29 +4,10 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.core.Direction;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.BlockGetter;
-import xfacthd.framedblocks.api.block.IFramedBlock;
 
 public interface SideSkipPredicate
 {
     SideSkipPredicate FALSE = (level, pos, state, adjState, side) -> false;
-
-    /**
-     * @deprecated Use {@link #FALSE} instead, full-face testing is done before the skip predicate is invoked
-     */
-    @Deprecated(forRemoval = true)
-    SideSkipPredicate FULL_FACE = (level, pos, state, adjState, side) ->
-    {
-        if (!((IFramedBlock) state.getBlock()).getCache(state).isFullFace(side))
-        {
-            return false;
-        }
-
-        if (adjState.getBlock() instanceof IFramedBlock block)
-        {
-            return block.getCache(adjState).isFullFace(side.getOpposite());
-        }
-        return true;
-    };
 
     /**
      * Check whether the given side should be hidden in presence of the given neighbor

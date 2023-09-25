@@ -5,13 +5,11 @@ import net.minecraft.client.resources.model.BakedModel;
 import net.minecraft.core.Direction;
 import net.minecraft.world.level.block.state.BlockState;
 import xfacthd.framedblocks.api.model.FramedBlockModel;
+import xfacthd.framedblocks.api.model.data.QuadMap;
 import xfacthd.framedblocks.api.model.quad.Modifiers;
 import xfacthd.framedblocks.api.model.quad.QuadModifier;
 import xfacthd.framedblocks.api.block.FramedProperties;
 import xfacthd.framedblocks.api.util.Utils;
-
-import java.util.List;
-import java.util.Map;
 
 public class FramedSlabEdgeModel extends FramedBlockModel
 {
@@ -26,7 +24,7 @@ public class FramedSlabEdgeModel extends FramedBlockModel
     }
 
     @Override
-    protected void transformQuad(Map<Direction, List<BakedQuad>> quadMap, final BakedQuad quad)
+    protected void transformQuad(QuadMap quadMap, final BakedQuad quad)
     {
         Direction quadDir = quad.getDirection();
         if (Utils.isY(quadDir))

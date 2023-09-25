@@ -8,12 +8,12 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraftforge.fml.ModList;
 import xfacthd.framedblocks.api.model.FramedBlockModel;
+import xfacthd.framedblocks.api.model.data.QuadMap;
 import xfacthd.framedblocks.api.model.quad.Modifiers;
 import xfacthd.framedblocks.api.model.quad.QuadModifier;
 import xfacthd.framedblocks.api.util.Utils;
 
 import java.util.List;
-import java.util.Map;
 
 public class FramedPaneModel extends FramedBlockModel
 {
@@ -33,7 +33,7 @@ public class FramedPaneModel extends FramedBlockModel
     }
 
     @Override
-    protected void transformQuad(Map<Direction, List<BakedQuad>> quadMap, BakedQuad quad)
+    protected void transformQuad(QuadMap quadMap, BakedQuad quad)
     {
         Direction face = quad.getDirection();
         if (Utils.isY(face))
@@ -75,9 +75,7 @@ public class FramedPaneModel extends FramedBlockModel
         return true;
     }
 
-    protected static void createTopBottomCenterQuad(
-            Map<Direction, List<BakedQuad>> quadMap, BakedQuad quad, boolean mirrored
-    )
+    protected static void createTopBottomCenterQuad(QuadMap quadMap, BakedQuad quad, boolean mirrored)
     {
         QuadModifier.geometry(quad)
                 .apply(Modifiers.cutTopBottom(7F/16F, 7F/16F, 9F/16F, 9F/16F))
@@ -85,9 +83,7 @@ public class FramedPaneModel extends FramedBlockModel
                 .export(quadMap.get(mirrored ? null : quad.getDirection()));
     }
 
-    protected static void createTopBottomEdgeQuad(
-            Map<Direction, List<BakedQuad>> quadMap, BakedQuad quad, Direction dir, boolean mirrored
-    )
+    protected static void createTopBottomEdgeQuad(QuadMap quadMap, BakedQuad quad, Direction dir, boolean mirrored)
     {
         Preconditions.checkArgument(!Utils.isY(dir), String.format("Invalid direction: %s!", dir));
 
@@ -98,9 +94,7 @@ public class FramedPaneModel extends FramedBlockModel
                 .export(quadMap.get(mirrored ? null : quad.getDirection()));
     }
 
-    protected static void createSideEdgeQuad(
-            Map<Direction, List<BakedQuad>> quadMap, BakedQuad quad, boolean inset, boolean mirrored
-    )
+    protected static void createSideEdgeQuad(QuadMap quadMap, BakedQuad quad, boolean inset, boolean mirrored)
     {
         Preconditions.checkArgument(!inset || !mirrored, "Quad can't be mirrored and inset!");
 

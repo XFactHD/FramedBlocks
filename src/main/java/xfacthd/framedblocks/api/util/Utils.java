@@ -29,7 +29,6 @@ import net.minecraft.world.level.block.state.properties.Property;
 import net.minecraft.world.level.chunk.LevelChunk;
 import net.minecraft.world.level.material.*;
 import net.minecraft.world.phys.Vec3;
-import net.minecraft.world.phys.shapes.VoxelShape;
 import net.minecraftforge.fml.loading.FMLEnvironment;
 import net.minecraftforge.fml.util.ObfuscationReflectionHelper;
 import net.minecraftforge.registries.*;
@@ -38,7 +37,6 @@ import xfacthd.framedblocks.api.block.FramedBlockEntity;
 import xfacthd.framedblocks.api.block.FramedProperties;
 import xfacthd.framedblocks.api.camo.CamoContainer;
 import xfacthd.framedblocks.api.camo.EmptyCamoContainer;
-import xfacthd.framedblocks.api.shapes.ShapeUtils;
 
 import java.lang.invoke.*;
 import java.lang.reflect.Field;
@@ -82,16 +80,6 @@ public final class Utils
                     (sideA, sideB) -> { throw new IllegalArgumentException("Duplicate keys"); },
                     Long2ObjectOpenHashMap::new
             ));
-
-    /**
-     * @deprecated Use {@link ShapeUtils#rotateShape(Direction, Direction, VoxelShape)} for terminal rotations and
-     * {@link ShapeUtils#rotateShapeUnoptimized(Direction, Direction, VoxelShape)} for non-terminal rotations instead
-     */
-    @Deprecated(forRemoval = true, since = "1.20.1")
-    public static VoxelShape rotateShape(Direction from, Direction to, VoxelShape shape)
-    {
-        return ShapeUtils.rotateShape(from, to, shape);
-    }
 
     public static Vec3 fraction(Vec3 vec)
     {

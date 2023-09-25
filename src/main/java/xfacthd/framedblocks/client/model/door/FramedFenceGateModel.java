@@ -6,12 +6,12 @@ import net.minecraft.core.Direction;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import xfacthd.framedblocks.api.model.FramedBlockModel;
+import xfacthd.framedblocks.api.model.data.QuadMap;
 import xfacthd.framedblocks.api.model.quad.Modifiers;
 import xfacthd.framedblocks.api.model.quad.QuadModifier;
 import xfacthd.framedblocks.api.util.Utils;
 
 import java.util.List;
-import java.util.Map;
 
 public class FramedFenceGateModel extends FramedBlockModel
 {
@@ -28,7 +28,7 @@ public class FramedFenceGateModel extends FramedBlockModel
     }
 
     @Override
-    protected void transformQuad(Map<Direction, List<BakedQuad>> quadMap, BakedQuad quad)
+    protected void transformQuad(QuadMap quadMap, BakedQuad quad)
     {
         Direction quadDir = quad.getDirection();
         float yOff = inWall ? 3F/16F : 0F;
@@ -143,7 +143,7 @@ public class FramedFenceGateModel extends FramedBlockModel
         }
     }
 
-    private void createGateOpen(Map<Direction, List<BakedQuad>> quadMap, BakedQuad quad, float yOff)
+    private void createGateOpen(QuadMap quadMap, BakedQuad quad, float yOff)
     {
         Direction quadDir = quad.getDirection();
         if (quadDir == dir.getClockWise() || quadDir == dir.getCounterClockWise())

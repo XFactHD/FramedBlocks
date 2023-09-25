@@ -6,12 +6,10 @@ import net.minecraft.client.resources.model.BakedModel;
 import net.minecraft.core.Direction;
 import net.minecraft.world.level.block.state.BlockState;
 import org.joml.Vector3f;
+import xfacthd.framedblocks.api.model.data.QuadMap;
 import xfacthd.framedblocks.api.model.quad.Modifiers;
 import xfacthd.framedblocks.api.model.quad.QuadModifier;
 import xfacthd.framedblocks.api.util.Utils;
-
-import java.util.List;
-import java.util.Map;
 
 public class FramedDiagonalFenceModel extends FramedFenceModel
 {
@@ -32,7 +30,7 @@ public class FramedDiagonalFenceModel extends FramedFenceModel
     }
 
     @Override
-    protected void transformQuad(Map<Direction, List<BakedQuad>> quadMap, BakedQuad quad)
+    protected void transformQuad(QuadMap quadMap, BakedQuad quad)
     {
         super.transformQuad(quadMap, quad);
 
@@ -42,9 +40,7 @@ public class FramedDiagonalFenceModel extends FramedFenceModel
         createDiagonalFenceBars(quadMap, quad, Direction.WEST, northWest);
     }
 
-    private static void createDiagonalFenceBars(
-            Map<Direction, List<BakedQuad>> quadMap, BakedQuad quad, Direction dir, boolean active
-    )
+    private static void createDiagonalFenceBars(QuadMap quadMap, BakedQuad quad, Direction dir, boolean active)
     {
         if (!active)
         {

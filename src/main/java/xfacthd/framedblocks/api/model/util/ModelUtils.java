@@ -161,7 +161,7 @@ public final class ModelUtils
             normal[vert][2] = v2.z;
         }
 
-        return Direction.getNearest(v2.x, v2.y, v2.z);
+        return Direction.getNearestStable(v2.x, v2.y, v2.z);
     }
 
     /**
@@ -313,13 +313,6 @@ public final class ModelUtils
     {
         return (Mth.equal(uv[0][1], uv[1][1]) || Mth.equal(uv[3][1], uv[2][1])) &&
                (Mth.equal(uv[1][0], uv[2][0]) || Mth.equal(uv[0][0], uv[3][0]));
-    }
-
-    @Deprecated(forRemoval = true)
-    public static boolean isQuadMirrored(float[][] uv)
-    {
-        boolean rotated = isQuadRotated(uv);
-        return isQuadMirrored(uv, rotated);
     }
 
     public static boolean isQuadMirrored(float[][] uv, boolean rotated)

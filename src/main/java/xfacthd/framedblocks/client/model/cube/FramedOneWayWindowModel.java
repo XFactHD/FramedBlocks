@@ -12,11 +12,11 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.client.ChunkRenderTypeSet;
 import net.minecraftforge.client.model.data.ModelData;
 import xfacthd.framedblocks.api.model.FramedBlockModel;
+import xfacthd.framedblocks.api.model.data.QuadMap;
 import xfacthd.framedblocks.api.model.util.ModelUtils;
 import xfacthd.framedblocks.common.data.PropertyHolder;
 import xfacthd.framedblocks.common.data.property.NullableDirection;
 
-import java.util.List;
 import java.util.Map;
 
 public class FramedOneWayWindowModel extends FramedBlockModel
@@ -32,7 +32,7 @@ public class FramedOneWayWindowModel extends FramedBlockModel
     }
 
     @Override
-    protected void transformQuad(Map<Direction, List<BakedQuad>> quadMap, BakedQuad quad) { }
+    protected void transformQuad(QuadMap quadMap, BakedQuad quad) { }
 
     @Override
     protected ChunkRenderTypeSet getAdditionalRenderTypes(RandomSource rand, ModelData extraData)
@@ -46,7 +46,7 @@ public class FramedOneWayWindowModel extends FramedBlockModel
 
     @Override
     protected void getAdditionalQuads(
-            Map<Direction, List<BakedQuad>> quadMap,
+            QuadMap quadMap,
             BlockState state,
             RandomSource rand,
             ModelData data,

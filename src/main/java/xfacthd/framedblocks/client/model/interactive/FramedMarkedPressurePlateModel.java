@@ -1,7 +1,6 @@
 package xfacthd.framedblocks.client.model.interactive;
 
 import net.minecraft.client.renderer.RenderType;
-import net.minecraft.client.renderer.block.model.BakedQuad;
 import net.minecraft.client.resources.model.BakedModel;
 import net.minecraft.core.Direction;
 import net.minecraft.resources.ResourceLocation;
@@ -13,6 +12,7 @@ import net.minecraftforge.client.ChunkRenderTypeSet;
 import net.minecraftforge.client.event.ModelEvent;
 import net.minecraftforge.client.model.data.ModelData;
 import xfacthd.framedblocks.api.model.data.FramedBlockData;
+import xfacthd.framedblocks.api.model.data.QuadMap;
 import xfacthd.framedblocks.api.model.util.ModelUtils;
 import xfacthd.framedblocks.api.util.Utils;
 
@@ -53,7 +53,7 @@ public class FramedMarkedPressurePlateModel extends FramedPressurePlateModel
 
     @Override
     protected void getAdditionalQuads(
-            Map<Direction, List<BakedQuad>> quadMap,
+            QuadMap quadMap,
             BlockState state,
             RandomSource rand,
             ModelData data,

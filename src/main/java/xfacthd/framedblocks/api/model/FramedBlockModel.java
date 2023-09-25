@@ -380,7 +380,7 @@ public abstract class FramedBlockModel extends BakedModelProxy
      *             modify the quad
      * @param data The {@link ModelData}
      */
-    protected void transformQuad(Map<Direction, List<BakedQuad>> quadMap, BakedQuad quad, ModelData data)
+    protected void transformQuad(QuadMap quadMap, BakedQuad quad, ModelData data)
     {
         transformQuad(quadMap, quad);
     }
@@ -392,13 +392,13 @@ public abstract class FramedBlockModel extends BakedModelProxy
      * @param quad The source quad. Must not be modified directly, use {@link QuadModifier}s to
      *             modify the quad
      */
-    protected abstract void transformQuad(Map<Direction, List<BakedQuad>> quadMap, BakedQuad quad);
+    protected abstract void transformQuad(QuadMap quadMap, BakedQuad quad);
 
     /**
-     * Called after all quads have been piped through {@link FramedBlockModel#transformQuad(Map, BakedQuad)}
+     * Called after all quads have been piped through {@link FramedBlockModel#transformQuad(QuadMap, BakedQuad)}
      * to apply bulk modifications to all quads, like transformation or rotation
      */
-    protected void postProcessQuads(Map<Direction, List<BakedQuad>> quadMap) { }
+    protected void postProcessQuads(QuadMap quadMap) { }
 
     /**
      * Return true if the base model loaded from JSON should be used when no camo is applied without going
@@ -496,26 +496,6 @@ public abstract class FramedBlockModel extends BakedModelProxy
             ModelData data,
             RenderType renderType
     )
-    {
-        getAdditionalQuads((List<BakedQuad>) quads, side, state, rand, data, renderType);
-    }
-
-    /**
-     * Add additional quads to faces that return {@code true} from {@link FullFacePredicate#test(BlockState, Direction)}<br>
-     * The result of this method will NOT be cached, execution should therefore be as fast as possible
-     * @deprecated Use overload with {@link ArrayList} parameter instead to allow use of {@link Utils#copyAll(List, ArrayList)}
-     * as a faster replacement for {@link ArrayList#addAll(Collection)}
-     */
-    @Deprecated(forRemoval = true)
-    @SuppressWarnings("unused")
-    protected void getAdditionalQuads(
-            List<BakedQuad> quads,
-            Direction side,
-            BlockState state,
-            RandomSource rand,
-            ModelData data,
-            RenderType renderType
-    )
     { }
 
     /**
@@ -523,7 +503,7 @@ public abstract class FramedBlockModel extends BakedModelProxy
      * The result of this method will be cached, processing time is therefore not critical
      */
     protected void getAdditionalQuads(
-            Map<Direction, List<BakedQuad>> quadMap,
+            QuadMap quadMap,
             BlockState state,
             RandomSource rand,
             ModelData data,

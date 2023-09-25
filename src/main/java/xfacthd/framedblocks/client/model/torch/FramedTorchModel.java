@@ -10,6 +10,7 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.client.ChunkRenderTypeSet;
 import net.minecraftforge.client.model.data.ModelData;
 import xfacthd.framedblocks.api.model.FramedBlockModel;
+import xfacthd.framedblocks.api.model.data.QuadMap;
 import xfacthd.framedblocks.api.model.quad.Modifiers;
 import xfacthd.framedblocks.api.model.quad.QuadModifier;
 import xfacthd.framedblocks.api.util.Utils;
@@ -17,7 +18,6 @@ import xfacthd.framedblocks.api.util.ClientUtils;
 import xfacthd.framedblocks.api.model.util.ModelCache;
 
 import java.util.List;
-import java.util.Map;
 
 public class FramedTorchModel extends FramedBlockModel
 {
@@ -34,7 +34,7 @@ public class FramedTorchModel extends FramedBlockModel
     }
 
     @Override
-    protected void getAdditionalQuads(Map<Direction, List<BakedQuad>> quadMap, BlockState state, RandomSource rand, ModelData extraData, RenderType layer)
+    protected void getAdditionalQuads(QuadMap quadMap, BlockState state, RandomSource rand, ModelData extraData, RenderType layer)
     {
         List<BakedQuad> quads = baseModel.getQuads(state, null, rand, extraData, layer);
         for (BakedQuad quad : quads)
@@ -47,7 +47,7 @@ public class FramedTorchModel extends FramedBlockModel
     }
 
     @Override
-    protected void transformQuad(Map<Direction, List<BakedQuad>> quadMap, BakedQuad quad)
+    protected void transformQuad(QuadMap quadMap, BakedQuad quad)
     {
         Direction quadDir = quad.getDirection();
         if (Utils.isY(quadDir))

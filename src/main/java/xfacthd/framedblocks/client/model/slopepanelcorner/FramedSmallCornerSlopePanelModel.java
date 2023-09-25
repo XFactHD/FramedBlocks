@@ -9,13 +9,11 @@ import net.minecraft.world.level.block.state.BlockState;
 import org.joml.Vector3f;
 import xfacthd.framedblocks.api.block.FramedProperties;
 import xfacthd.framedblocks.api.model.FramedBlockModel;
+import xfacthd.framedblocks.api.model.data.QuadMap;
 import xfacthd.framedblocks.api.model.quad.Modifiers;
 import xfacthd.framedblocks.api.model.quad.QuadModifier;
 import xfacthd.framedblocks.client.model.slopepanel.FramedSlopePanelModel;
 import xfacthd.framedblocks.common.FBContent;
-
-import java.util.List;
-import java.util.Map;
 
 public class FramedSmallCornerSlopePanelModel extends FramedBlockModel
 {
@@ -35,7 +33,7 @@ public class FramedSmallCornerSlopePanelModel extends FramedBlockModel
     }
 
     @Override
-    protected void transformQuad(Map<Direction, List<BakedQuad>> quadMap, BakedQuad quad)
+    protected void transformQuad(QuadMap quadMap, BakedQuad quad)
     {
         Direction quadDir = quad.getDirection();
         if (quadDir == dir || quadDir == dir.getCounterClockWise())

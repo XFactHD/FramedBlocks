@@ -10,6 +10,7 @@ import net.minecraftforge.client.ChunkRenderTypeSet;
 import net.minecraftforge.client.model.data.ModelData;
 import xfacthd.framedblocks.api.block.FramedProperties;
 import xfacthd.framedblocks.api.model.FramedBlockModel;
+import xfacthd.framedblocks.api.model.data.QuadMap;
 import xfacthd.framedblocks.api.model.quad.Modifiers;
 import xfacthd.framedblocks.api.model.quad.QuadModifier;
 import xfacthd.framedblocks.api.util.*;
@@ -21,7 +22,6 @@ import xfacthd.framedblocks.common.data.property.ChestState;
 import xfacthd.framedblocks.common.data.property.LatchType;
 
 import java.util.List;
-import java.util.Map;
 
 public class FramedChestModel extends FramedBlockModel
 {
@@ -40,7 +40,7 @@ public class FramedChestModel extends FramedBlockModel
     }
 
     @Override
-    protected void transformQuad(Map<Direction, List<BakedQuad>> quadMap, BakedQuad quad)
+    protected void transformQuad(QuadMap quadMap, BakedQuad quad)
     {
         Direction quadDir = quad.getDirection();
         if (Utils.isY(quad.getDirection()))
@@ -64,7 +64,7 @@ public class FramedChestModel extends FramedBlockModel
         }
     }
 
-    public static void makeChestLatch(Map<Direction, List<BakedQuad>> quadMap, BakedQuad quad, Direction facing)
+    public static void makeChestLatch(QuadMap quadMap, BakedQuad quad, Direction facing)
     {
         Direction face = quad.getDirection();
 
@@ -102,7 +102,7 @@ public class FramedChestModel extends FramedBlockModel
 
     @Override
     protected void getAdditionalQuads(
-            Map<Direction, List<BakedQuad>> quadMap,
+            QuadMap quadMap,
             BlockState state,
             RandomSource rand,
             ModelData data,

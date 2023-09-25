@@ -228,30 +228,6 @@ public final class QuadModifier
             boolean uvMirrored
     )
     {
-        @Deprecated(forRemoval = true)
-        public Data(BakedQuad quad, float[][] pos, float[][] uv, float[][] normal, int[][] color, int[][] light)
-        {
-            this(quad, pos, uv, normal, color, light, ModelUtils.isQuadRotated(uv), ModelUtils.isQuadMirrored(uv));
-        }
-
-        @Deprecated(forRemoval = true)
-        public Data(BakedQuad quad, float[][] pos, float[][] uv, float[][] normal)
-        {
-            this(quad, pos, uv, normal, null, null);
-        }
-
-        @Deprecated(forRemoval = true)
-        public Data(Data data)
-        {
-            this(data.quad,
-                 deepCopy(data.pos),
-                 deepCopy(data.uv),
-                 deepCopy(data.normal),
-                 data.color != null ? deepCopy(data.color) : null,
-                 data.light != null ? deepCopy(data.light) : null
-            );
-        }
-
         public static Data create(BakedQuad quad, float[][] pos, float[][] uv, float[][] normal, int[][] color, int[][] light)
         {
             boolean rotated = ModelUtils.isQuadRotated(uv);

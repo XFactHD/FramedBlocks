@@ -8,12 +8,12 @@ import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.block.state.properties.WallSide;
 import org.joml.Vector4f;
 import xfacthd.framedblocks.api.model.FramedBlockModel;
+import xfacthd.framedblocks.api.model.data.QuadMap;
 import xfacthd.framedblocks.api.model.quad.Modifiers;
 import xfacthd.framedblocks.api.model.quad.QuadModifier;
 import xfacthd.framedblocks.api.util.Utils;
 
 import java.util.List;
-import java.util.Map;
 
 public class FramedWallModel extends FramedBlockModel
 {
@@ -50,7 +50,7 @@ public class FramedWallModel extends FramedBlockModel
     }
 
     @Override
-    protected void transformQuad(Map<Direction, List<BakedQuad>> quadMap, BakedQuad quad)
+    protected void transformQuad(QuadMap quadMap, BakedQuad quad)
     {
         if (north != WallSide.NONE)
         {
@@ -78,9 +78,7 @@ public class FramedWallModel extends FramedBlockModel
         buildCenterPillar(quadMap, quad);
     }
 
-    private void buildWallHalfSegment(
-            Map<Direction, List<BakedQuad>> quadMap, BakedQuad quad, Direction dir, WallSide height
-    )
+    private void buildWallHalfSegment(QuadMap quadMap, BakedQuad quad, Direction dir, WallSide height)
     {
         if (height != WallSide.NONE)
         {
@@ -105,9 +103,7 @@ public class FramedWallModel extends FramedBlockModel
         }
     }
 
-    private static void buildWallEndCap(
-            Map<Direction, List<BakedQuad>> quadMap, BakedQuad quad, Direction dir, WallSide height
-    )
+    private static void buildWallEndCap(QuadMap quadMap, BakedQuad quad, Direction dir, WallSide height)
     {
         if (quad.getDirection() == dir && height != WallSide.NONE)
         {
@@ -117,7 +113,7 @@ public class FramedWallModel extends FramedBlockModel
         }
     }
 
-    private void buildCenterPillar(Map<Direction, List<BakedQuad>> quadMap, BakedQuad quad)
+    private void buildCenterPillar(QuadMap quadMap, BakedQuad quad)
     {
         Direction quadDir = quad.getDirection();
         if (center)

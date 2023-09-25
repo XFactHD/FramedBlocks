@@ -11,6 +11,7 @@ import net.minecraft.world.level.block.state.properties.*;
 import net.minecraftforge.client.ChunkRenderTypeSet;
 import net.minecraftforge.client.model.data.ModelData;
 import xfacthd.framedblocks.api.block.FramedProperties;
+import xfacthd.framedblocks.api.model.data.QuadMap;
 import xfacthd.framedblocks.api.model.util.ModelCache;
 import xfacthd.framedblocks.client.model.slope.FramedSlopeModel;
 import xfacthd.framedblocks.common.FBContent;
@@ -36,7 +37,7 @@ public class FramedRailSlopeModel extends FramedSlopeModel
 
     @Override
     protected void getAdditionalQuads(
-            Map<Direction, List<BakedQuad>> quadMap,
+            QuadMap quadMap,
             BlockState state,
             RandomSource rand,
             ModelData data,
