@@ -35,7 +35,7 @@ public class DoubleBlockStateCache extends StateCache
                 if (edge != null && edge.getAxis() == side.getAxis())
                 {
                     // null is the first value this lambda receives, so this is safe
-                    int cgNullIdx = side.ordinal() *  Utils.maskNullDirection(null);
+                    int cgNullIdx = side.ordinal() * DIR_COUNT_N + Utils.maskNullDirection(null);
                     getter = camoGetters[cgNullIdx];
                 }
                 else
