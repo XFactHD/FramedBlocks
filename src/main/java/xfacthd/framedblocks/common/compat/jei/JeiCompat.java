@@ -25,7 +25,8 @@ public final class JeiCompat
 
     public static void init()
     {
-        if (FMLEnvironment.dist.isClient() && ModList.get().isLoaded("jei"))
+        // Ignore REI's JEI plugin compat layer, we have a proper REI plugin and our JEI plugin won't be called by REI
+        if (FMLEnvironment.dist.isClient() && ModList.get().isLoaded("jei") && !ModList.get().isLoaded("rei_plugin_compatibilities"))
         {
             loadedClient = true;
         }
