@@ -170,6 +170,7 @@ dependencies {
     compileOnly fg.deobf("dev.architectury:architectury-forge:${arch_version}")
     compileOnly fg.deobf("me.shedaniel.cloth:cloth-config-forge:${cloth_version}")
     compileOnly fg.deobf("me.shedaniel:RoughlyEnoughItems-forge:${rei_version}")
+    //runtimeOnly fg.deobf("curse.maven:reipc-521393:4723408")
     compileOnly fg.deobf("me.shedaniel:RoughlyEnoughItems-api-forge:${rei_version}")
     compileOnly fg.deobf("me.shedaniel:RoughlyEnoughItems-default-plugin-forge:${rei_version}")
     compileOnly fg.deobf("me.shedaniel:REIPluginCompatibilities-forge-annotations:${reipcanno_version}")
