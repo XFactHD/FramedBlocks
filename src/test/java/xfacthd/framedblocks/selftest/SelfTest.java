@@ -38,6 +38,7 @@ public final class SelfTest
         ClientBlockExtensionsPresence.checkClientExtensionsPresent(blocks);
         SpecialShapeRendererPresence.checkSpecialShapePresent(blocks);
         SkipPredicatePresenceConsistency.checkSkipPredicateConsistency(blocks);
+        StateCacheValidity.checkStateCacheValid(blocks);
 
         stopwatch.stop();
         FramedBlocks.LOGGER.info("Self test completed in {}", stopwatch);
