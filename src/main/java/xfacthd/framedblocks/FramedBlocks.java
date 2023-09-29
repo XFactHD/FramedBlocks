@@ -112,7 +112,7 @@ public final class FramedBlocks
                 .consumerMainThread(SelectFramingSawRecipePacket::handle)
                 .add();
 
-        StateCacheBuilder.initializeStateCaches();
+        StateCacheBuilder.ensureStateCachesInitialized();
         BlueprintBehaviours.register();
         CompatHandler.commonSetup();
     }
