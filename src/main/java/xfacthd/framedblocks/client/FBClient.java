@@ -67,6 +67,7 @@ import xfacthd.framedblocks.common.block.stairs.*;
 import xfacthd.framedblocks.common.blockentity.FramedDoubleBlockEntity;
 import xfacthd.framedblocks.common.compat.supplementaries.SupplementariesCompat;
 import xfacthd.framedblocks.common.data.BlockType;
+import xfacthd.framedblocks.common.data.StateCacheBuilder;
 
 import java.util.List;
 import java.util.Map;
@@ -394,6 +395,8 @@ public final class FBClient
     @SubscribeEvent
     public static void onModifyBakingResult(final ModelEvent.ModifyBakingResult event)
     {
+        StateCacheBuilder.ensureStateCachesInitialized();
+
         Map<ResourceLocation, BakedModel> registry = event.getModels();
 
         FramedChestRenderer.onModelsLoaded(registry); //Must happen before the chest model is replaced

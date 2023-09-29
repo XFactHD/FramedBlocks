@@ -15,7 +15,24 @@ import java.util.*;
 
 public final class StateCacheBuilder
 {
-    public static void initializeStateCaches()
+    private static volatile boolean cachesBuilt = false;
+
+    public static void ensureStateCachesInitialized()
+    {
+        if (!cachesBuilt)
+        {
+            synchronized (StateCacheBuilder.class)
+            {
+                if (!cachesBuilt)
+                {
+                    initializeStateCaches();
+                    cachesBuilt = true;
+                }
+            }
+        }
+    }
+
+    private static void initializeStateCaches()
     {
         FramedBlocks.LOGGER.debug("Initializing custom state metadata caches");
         Stopwatch watch = Stopwatch.createStarted();
