@@ -14,7 +14,7 @@ import net.minecraftforge.client.model.data.ModelData;
 import org.joml.Vector3f;
 import xfacthd.framedblocks.api.FramedBlocksClientAPI;
 import xfacthd.framedblocks.api.model.data.FramedBlockData;
-import xfacthd.framedblocks.api.model.quad.QuadModifier;
+import xfacthd.framedblocks.api.model.quad.QuadData;
 import xfacthd.framedblocks.api.util.Utils;
 
 import java.lang.invoke.MethodHandle;
@@ -27,7 +27,7 @@ public final class ModelUtils
     public static final ChunkRenderTypeSet TRANSLUCENT = ChunkRenderTypeSet.of(RenderType.translucent());
     private static final double UV_SUBSTEP_COUNT = 8D;
 
-    public static Direction fillNormal(QuadModifier.Data data)
+    public static Direction fillNormal(QuadData data)
     {
         Vector3f v1 = data.pos(3, new Vector3f());
         Vector3f t1 = data.pos(1, new Vector3f());
@@ -57,7 +57,7 @@ public final class ModelUtils
      * @param coord1 The first coordinate
      * @param coord2 The second coordinate
      * @param coordTo The target coordinate, must lie between coord1 and coord2
-     * @param data The {@link QuadModifier.Data} being operated on
+     * @param data The {@link QuadData} being operated on
      * @param uv1 The first UV texture coordinate
      * @param uv2 The second UV texture coordinate
      * @param uvTo The target UV texture coordinate
@@ -72,7 +72,7 @@ public final class ModelUtils
             float coord1,
             float coord2,
             float coordTo,
-            QuadModifier.Data data,
+            QuadData data,
             int uv1,
             int uv2,
             int uvTo,
@@ -152,13 +152,13 @@ public final class ModelUtils
         }
     }
 
-    public static boolean isQuadRotated(QuadModifier.Data data)
+    public static boolean isQuadRotated(QuadData data)
     {
         return (Mth.equal(data.uv(0, 1), data.uv(1, 1)) || Mth.equal(data.uv(3, 1), data.uv(2, 1))) &&
                (Mth.equal(data.uv(1, 0), data.uv(2, 0)) || Mth.equal(data.uv(0, 0), data.uv(3, 0)));
     }
 
-    public static boolean isQuadMirrored(QuadModifier.Data data, boolean rotated)
+    public static boolean isQuadMirrored(QuadData data, boolean rotated)
     {
         if (!rotated)
         {

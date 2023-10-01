@@ -63,7 +63,7 @@ public final class Modifiers
         return data -> cut(data, cutDir, lengthRightTop, lengthLeftBottom);
     }
 
-    private static boolean cut(QuadModifier.Data data, Direction cutDir, float lengthRightTop, float lengthLeftBottom)
+    private static boolean cut(QuadData data, Direction cutDir, float lengthRightTop, float lengthLeftBottom)
     {
         Direction quadDir = data.quad().getDirection();
         Preconditions.checkState(quadDir.getAxis() != cutDir.getAxis(), "Cut direction must be prependicular to the quad direction");
@@ -108,7 +108,7 @@ public final class Modifiers
         return data -> cutTopBottom(data, cutDir, lengthRight, lengthLeft);
     }
 
-    private static boolean cutTopBottom(QuadModifier.Data data, Direction cutDir, float lengthR, float lengthL)
+    private static boolean cutTopBottom(QuadData data, Direction cutDir, float lengthR, float lengthL)
     {
         Direction quadDir = data.quad().getDirection();
         Preconditions.checkState(Utils.isY(quadDir), "Quad direction must be vertical");
@@ -212,7 +212,7 @@ public final class Modifiers
         return data -> cutSideUpDown(data, downwards, lengthRight, lengthLeft);
     }
 
-    private static boolean cutSideUpDown(QuadModifier.Data data, boolean downwards, float lengthRight, float lengthLeft)
+    private static boolean cutSideUpDown(QuadData data, boolean downwards, float lengthRight, float lengthLeft)
     {
         Direction quadDir = data.quad().getDirection();
         Preconditions.checkState(!Utils.isY(quadDir), "Quad direction must be horizontal");
@@ -313,7 +313,7 @@ public final class Modifiers
         return data -> cutSideLeftRight(data, towardsRight, lengthTop, lengthBottom);
     }
 
-    private static boolean cutSideLeftRight(QuadModifier.Data data, boolean towardsRight, float lengthTop, float lengthBot)
+    private static boolean cutSideLeftRight(QuadData data, boolean towardsRight, float lengthTop, float lengthBot)
     {
         Direction quadDir = data.quad().getDirection();
         Preconditions.checkState(!Utils.isY(quadDir), "Quad direction must be horizontal");
@@ -687,7 +687,7 @@ public final class Modifiers
         };
     }
 
-    private static void offset(QuadModifier.Data data, Direction dir, float amount)
+    private static void offset(QuadData data, Direction dir, float amount)
     {
         int idx = dir.getAxis().ordinal();
         float value = Utils.isPositive(dir) ? amount : (-1F * amount);
@@ -825,7 +825,7 @@ public final class Modifiers
         };
     }
 
-    private static void rotate(QuadModifier.Data data, Direction.Axis axis, Vector3f origin, float angle, boolean rescale)
+    private static void rotate(QuadData data, Direction.Axis axis, Vector3f origin, float angle, boolean rescale)
     {
         rotate(data, axis, origin, angle, rescale, ONE);
     }
@@ -847,7 +847,7 @@ public final class Modifiers
         };
     }
 
-    private static void rotate(QuadModifier.Data data, Direction.Axis axis, Vector3f origin, float angle, boolean rescale, Vector3f scaleMult)
+    private static void rotate(QuadData data, Direction.Axis axis, Vector3f origin, float angle, boolean rescale, Vector3f scaleMult)
     {
         Vector3f axisVec;
         Vector3f scaleVec;
