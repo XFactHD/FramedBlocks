@@ -1,4 +1,4 @@
-package xfacthd.framedblocks.api.block.render;
+package xfacthd.framedblocks.common.data.appearance;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -8,7 +8,6 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.client.model.data.ModelData;
 import net.minecraftforge.client.model.data.ModelDataManager;
 import net.minecraftforge.fml.loading.FMLEnvironment;
-import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.Nullable;
 import xfacthd.framedblocks.api.FramedBlocksClientAPI;
 import xfacthd.framedblocks.api.block.FramedBlockEntity;
@@ -21,7 +20,6 @@ import xfacthd.framedblocks.api.util.Utils;
 
 import java.util.function.Predicate;
 
-@ApiStatus.Internal
 public final class AppearanceHelper
 {
     private static final BlockState AIR = Blocks.AIR.defaultBlockState();

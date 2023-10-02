@@ -36,7 +36,6 @@ import xfacthd.framedblocks.api.FramedBlocksAPI;
 import xfacthd.framedblocks.api.block.cache.IStateCacheAccessor;
 import xfacthd.framedblocks.api.block.cache.StateCache;
 import xfacthd.framedblocks.api.block.render.*;
-import xfacthd.framedblocks.api.block.update.CullingUpdateTracker;
 import xfacthd.framedblocks.api.camo.CamoContainer;
 import xfacthd.framedblocks.api.internal.InternalAPI;
 import xfacthd.framedblocks.api.predicate.cull.SideSkipPredicate;
@@ -260,7 +259,7 @@ public interface IFramedBlock extends EntityBlock, IForgeBlock
             @Nullable BlockPos queryPos
     )
     {
-        return AppearanceHelper.getAppearance(this, state, level, pos, side, queryState, queryPos);
+        return InternalAPI.INSTANCE.getAppearance(this, state, level, pos, side, queryState, queryPos);
     }
 
     default boolean shouldPreventNeighborCulling(
@@ -471,7 +470,7 @@ public interface IFramedBlock extends EntityBlock, IForgeBlock
     {
         if (!level.isClientSide() && level instanceof Level realLevel)
         {
-            CullingUpdateTracker.enqueueCullingUpdate(realLevel, pos);
+            InternalAPI.INSTANCE.enqueueCullingUpdate(realLevel, pos);
         }
         else if (level.isClientSide() && level.getBlockEntity(pos) instanceof FramedBlockEntity be)
         {

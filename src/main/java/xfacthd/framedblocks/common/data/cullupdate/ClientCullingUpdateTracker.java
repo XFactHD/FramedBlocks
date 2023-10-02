@@ -1,17 +1,15 @@
-package xfacthd.framedblocks.api.block.update;
+package xfacthd.framedblocks.common.data.cullupdate;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.level.Level;
-import org.jetbrains.annotations.ApiStatus;
 import xfacthd.framedblocks.api.block.FramedBlockEntity;
 import xfacthd.framedblocks.api.util.ClientUtils;
 
 import java.util.Collection;
 import java.util.Objects;
 
-@ApiStatus.Internal
 final class ClientCullingUpdateTracker
 {
     public static void handleCullingUpdates(Collection<CullingUpdateChunk> chunks)

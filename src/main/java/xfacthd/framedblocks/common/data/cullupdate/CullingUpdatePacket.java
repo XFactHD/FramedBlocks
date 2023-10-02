@@ -1,4 +1,4 @@
-package xfacthd.framedblocks.api.block.update;
+package xfacthd.framedblocks.common.data.cullupdate;
 
 import it.unimi.dsi.fastutil.longs.*;
 import net.minecraft.core.BlockPos;
@@ -6,11 +6,9 @@ import net.minecraft.core.SectionPos;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.world.level.ChunkPos;
 import net.minecraftforge.network.NetworkEvent;
-import org.jetbrains.annotations.ApiStatus;
 
 import java.util.function.Supplier;
 
-@ApiStatus.Internal
 public record CullingUpdatePacket(LongSet positions)
 {
     public static CullingUpdatePacket decode(FriendlyByteBuf buf)
