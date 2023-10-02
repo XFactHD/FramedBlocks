@@ -5,7 +5,6 @@ import net.minecraft.client.renderer.block.model.BakedQuad;
 import xfacthd.framedblocks.api.model.util.ModelUtils;
 
 import java.util.List;
-import java.util.function.Consumer;
 
 public final class QuadModifier
 {
@@ -97,15 +96,6 @@ public final class QuadModifier
      */
     public void export(List<BakedQuad> quadList)
     {
-        export(quadList::add);
-    }
-
-    /**
-     * Re-assemble a copy of the quad and export it to the given quad consumer. If any of the modifiers failed,
-     * the quad will not be exported
-     */
-    public void export(Consumer<BakedQuad> quadConsumer)
-    {
         if (failed)
         {
             return;
@@ -113,7 +103,7 @@ public final class QuadModifier
 
         if (!modified)
         {
-            quadConsumer.accept(data.quad);
+            quadList.add(data.quad);
             return;
         }
 
@@ -125,7 +115,7 @@ public final class QuadModifier
                 !noShade && data.quad.isShade(),
                 data.quad.hasAmbientOcclusion()
         );
-        quadConsumer.accept(newQuad);
+        quadList.add(newQuad);
         exported = true;
     }
 

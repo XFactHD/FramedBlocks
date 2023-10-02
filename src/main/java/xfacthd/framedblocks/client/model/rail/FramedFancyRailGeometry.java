@@ -90,7 +90,7 @@ public class FramedFancyRailGeometry implements Geometry
                             .apply(Modifiers.cutTopBottom(dir, distDir))
                             .apply(Modifiers.cutTopBottom(dir.getOpposite(), distOpp))
                             .applyIf(Modifiers.setPosition(SLEEPER_HEIGHT), quadDir == Direction.UP)
-                            .export(result::add)
+                            .export(result)
             );
         }
         else if (quadDir.getAxis() == dir.getAxis())
@@ -101,7 +101,7 @@ public class FramedFancyRailGeometry implements Geometry
                     QuadModifier.geometry(quad)
                             .apply(Modifiers.cutSideUpDown(false, SLEEPER_HEIGHT))
                             .apply(Modifiers.setPosition(distDir))
-                            .export(result::add)
+                            .export(result)
             );
         }
         else
@@ -113,7 +113,7 @@ public class FramedFancyRailGeometry implements Geometry
                             .apply(Modifiers.cutSideUpDown(false, SLEEPER_HEIGHT))
                             .apply(Modifiers.cutSideLeftRight(dir, distDir))
                             .apply(Modifiers.cutSideLeftRight(dir.getOpposite(), distOpp))
-                            .export(result::add)
+                            .export(result)
             );
         }
 
@@ -162,7 +162,7 @@ public class FramedFancyRailGeometry implements Geometry
                         .applyIf(rotateCurveSleeper(dir, secDir, i), i < 2)
                         .applyIf(Modifiers.offset(dir, SLEEPER_DIAGONAL_OFFSET), i == 1)
                         .applyIf(Modifiers.offset(secDir, SLEEPER_DIAGONAL_OFFSET), i == 1)
-                        .export(result::add);
+                        .export(result);
             });
         }
         else if (quadDir.getAxis() == dir.getAxis())
@@ -177,7 +177,7 @@ public class FramedFancyRailGeometry implements Geometry
                             .applyIf(rotateCurveSleeper(dir, secDir, i), i < 2)
                             .applyIf(Modifiers.offset(dir, SLEEPER_DIAGONAL_OFFSET), i == 1)
                             .applyIf(Modifiers.offset(secDir, SLEEPER_DIAGONAL_OFFSET), i == 1)
-                            .export(result::add)
+                            .export(result)
             );
         }
         else
@@ -192,7 +192,7 @@ public class FramedFancyRailGeometry implements Geometry
                             .applyIf(rotateCurveSleeper(dir, secDir, i), i < 2)
                             .applyIf(Modifiers.offset(dir, SLEEPER_DIAGONAL_OFFSET), i == 1)
                             .applyIf(Modifiers.offset(secDir, SLEEPER_DIAGONAL_OFFSET), i == 1)
-                            .export(result::add)
+                            .export(result)
             );
         }
 
