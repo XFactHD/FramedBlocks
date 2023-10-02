@@ -54,9 +54,8 @@ public class FramedLadderGeometry implements Geometry
 
             for (int i = 0; i < 4; i++)
             {
-                // Don't need to derive since the quad is only moved
                 float height = quad.getDirection() == Direction.DOWN ? 1F - RUNGS[i] : RUNGS[i] + RUNG_DEPTH;
-                rungMod.apply(Modifiers.setPosition(height))
+                rungMod.derive().apply(Modifiers.setPosition(height))
                         .export(quadMap.get(null));
             }
         }
@@ -91,7 +90,7 @@ public class FramedLadderGeometry implements Geometry
 
             mod.export(quadMap.get(quadDir));
 
-            mod.apply(Modifiers.setPosition(RUNG_DEPTH * 2F))
+            mod.derive().apply(Modifiers.setPosition(RUNG_DEPTH * 2F))
                     .export(quadMap.get(null));
         }
     }

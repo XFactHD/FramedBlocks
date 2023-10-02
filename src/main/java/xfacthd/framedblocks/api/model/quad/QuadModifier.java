@@ -63,6 +63,12 @@ public final class QuadModifier
     {
         if (!failed)
         {
+            if (exported)
+            {
+                throw new IllegalStateException(
+                        "QuadModifier has been exported, no further modifications allowed without deriving"
+                );
+            }
             failed = !modifier.accept(data);
             modified = true;
         }

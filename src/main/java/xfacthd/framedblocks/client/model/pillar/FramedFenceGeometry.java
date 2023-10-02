@@ -66,7 +66,7 @@ public class FramedFenceGeometry implements Geometry
                     .apply(Modifiers.cutTopBottom(dir.getClockWise(), 9F/16F))
                     .apply(Modifiers.cutTopBottom(dir.getCounterClockWise(), 9F/16F));
 
-            mod.apply(Modifiers.setPosition(quadDir == Direction.UP ? 15F/16F : 4F/16F))
+            mod.derive().apply(Modifiers.setPosition(quadDir == Direction.UP ? 15F/16F : 4F/16F))
                     .export(quadMap.get(null));
 
             mod.apply(Modifiers.setPosition(quadDir == Direction.UP ? 9F/16F : 10F/16F))

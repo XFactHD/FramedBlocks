@@ -71,7 +71,8 @@ public class FramedFenceGateGeometry implements Geometry
 
             mod.export(quadMap.get(quadDir));
 
-            mod.apply(Modifiers.setPosition(2F/16F))
+            mod.derive()
+                    .apply(Modifiers.setPosition(2F/16F))
                     .export(quadMap.get(null));
         }
 
