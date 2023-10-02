@@ -10,7 +10,7 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.*;
 import net.minecraftforge.registries.ForgeRegistries;
 import xfacthd.framedblocks.api.block.FramedProperties;
-import xfacthd.framedblocks.api.util.ClientUtils;
+import xfacthd.framedblocks.api.model.wrapping.WrapHelper;
 import xfacthd.framedblocks.cmdtests.SpecialTestCommand;
 import xfacthd.framedblocks.common.FBContent;
 import xfacthd.framedblocks.common.data.BlockType;
@@ -27,7 +27,7 @@ public final class BlockStateInfo
     private static final String RESULT_MSG = "[" + NAME + "] Collected blockstate info for %s blocks in %s. ";
     private static final BlockType[] TYPES = BlockType.values();
     private static final Set<Property<?>> IGNORED_PROPERTIES = Stream.of(
-            ClientUtils.IGNORE_DEFAULT_LOCK
+            WrapHelper.IGNORE_DEFAULT_LOCK
     ).flatMap(List::stream).collect(Collectors.toSet());
 
     public static int dumpBlockStateInfo(CommandContext<CommandSourceStack> ctx)

@@ -18,6 +18,7 @@ public final class QuadModifier
     private boolean noShade;
     private boolean modified;
     private boolean failed;
+    private boolean exported;
 
     /**
      * @return a {@code QuadModifier} for the given {@link BakedQuad} that can only modify vertex position, texture and normals
@@ -119,6 +120,7 @@ public final class QuadModifier
                 data.quad.hasAmbientOcclusion()
         );
         quadConsumer.accept(newQuad);
+        exported = true;
     }
 
     /**
@@ -137,6 +139,7 @@ public final class QuadModifier
 
         ModelUtils.fillNormal(data);
         System.arraycopy(data.vertexData, 0, data.quad.getVertices(), 0, data.vertexData.length);
+        exported = true;
     }
 
     /**

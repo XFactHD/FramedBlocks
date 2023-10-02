@@ -13,7 +13,7 @@ import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.client.model.data.ModelData;
 import net.minecraftforge.registries.ForgeRegistries;
-import xfacthd.framedblocks.api.model.FramedBlockModel;
+import xfacthd.framedblocks.client.model.FramedBlockModel;
 import xfacthd.framedblocks.api.model.data.FramedBlockData;
 import xfacthd.framedblocks.api.util.TestProperties;
 import xfacthd.framedblocks.cmdtests.SpecialTestCommand;

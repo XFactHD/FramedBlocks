@@ -7,7 +7,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.BlockAndTintGetter;
 import net.minecraft.world.level.block.state.BlockState;
 import org.jetbrains.annotations.Nullable;
-import xfacthd.framedblocks.client.model.cube.FramedTargetModel;
+import xfacthd.framedblocks.client.model.cube.FramedTargetGeometry;
 import xfacthd.framedblocks.common.blockentity.special.FramedTargetBlockEntity;
 
 public final class FramedTargetBlockColor extends FramedBlockColor implements ItemColor
@@ -19,7 +19,7 @@ public final class FramedTargetBlockColor extends FramedBlockColor implements It
     @Override
     public int getColor(BlockState state, @Nullable BlockAndTintGetter level, @Nullable BlockPos pos, int tintIndex)
     {
-        if (tintIndex == FramedTargetModel.OVERLAY_TINT_IDX && level != null && pos != null)
+        if (tintIndex == FramedTargetGeometry.OVERLAY_TINT_IDX && level != null && pos != null)
         {
             if (level.getBlockEntity(pos) instanceof FramedTargetBlockEntity be)
             {
@@ -32,7 +32,7 @@ public final class FramedTargetBlockColor extends FramedBlockColor implements It
     @Override
     public int getColor(ItemStack stack, int tintIndex)
     {
-        if (tintIndex == FramedTargetModel.OVERLAY_TINT_IDX)
+        if (tintIndex == FramedTargetGeometry.OVERLAY_TINT_IDX)
         {
             return DyeColor.RED.getTextColor();
         }

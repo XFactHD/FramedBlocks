@@ -15,10 +15,10 @@ import xfacthd.framedblocks.api.block.FramedProperties;
 import xfacthd.framedblocks.api.util.*;
 import xfacthd.framedblocks.api.util.ClientUtils;
 import xfacthd.framedblocks.client.loader.overlay.OverlayLoaderBuilder;
-import xfacthd.framedblocks.client.model.cube.FramedMarkedCubeModel;
-import xfacthd.framedblocks.client.model.cube.FramedTargetModel;
-import xfacthd.framedblocks.client.model.interactive.FramedMarkedPressurePlateModel;
-import xfacthd.framedblocks.client.model.rail.FramedFancyRailModel;
+import xfacthd.framedblocks.client.model.cube.FramedMarkedCubeGeometry;
+import xfacthd.framedblocks.client.model.cube.FramedTargetGeometry;
+import xfacthd.framedblocks.client.model.interactive.FramedMarkedPressurePlateGeometry;
+import xfacthd.framedblocks.client.model.rail.FramedFancyRailGeometry;
 import xfacthd.framedblocks.common.FBContent;
 import xfacthd.framedblocks.common.data.PropertyHolder;
 
@@ -322,14 +322,14 @@ public final class FramedBlockStateProvider extends BlockStateProvider
         simpleBlock(FBContent.BLOCK_FRAMED_WATERLOGGABLE_STONE_PRESSURE_PLATE.get(), cube);
 
         makeOverlayModel(
-                FramedMarkedPressurePlateModel.STONE_FRAME_LOCATION,
+                FramedMarkedPressurePlateGeometry.STONE_FRAME_LOCATION,
                 modLoc("block/framed_pressure_plate_frame_up"),
                 "texture",
                 modLoc("block/stone_plate_frame"),
                 new Vector3f(8F, 0.5F, 8F)
         );
         makeOverlayModel(
-                FramedMarkedPressurePlateModel.STONE_FRAME_DOWN_LOCATION,
+                FramedMarkedPressurePlateGeometry.STONE_FRAME_DOWN_LOCATION,
                 modLoc("block/framed_pressure_plate_frame_down"),
                 "texture",
                 modLoc("block/stone_plate_frame"),
@@ -347,14 +347,14 @@ public final class FramedBlockStateProvider extends BlockStateProvider
         simpleBlock(FBContent.BLOCK_FRAMED_WATERLOGGABLE_OBSIDIAN_PRESSURE_PLATE.get(), cube);
 
         makeOverlayModel(
-                FramedMarkedPressurePlateModel.OBSIDIAN_FRAME_LOCATION,
+                FramedMarkedPressurePlateGeometry.OBSIDIAN_FRAME_LOCATION,
                 modLoc("block/framed_pressure_plate_frame_up"),
                 "texture",
                 modLoc("block/obsidian_plate_frame"),
                 new Vector3f(8F, 0.5F, 8F)
         );
         makeOverlayModel(
-                FramedMarkedPressurePlateModel.OBSIDIAN_FRAME_DOWN_LOCATION,
+                FramedMarkedPressurePlateGeometry.OBSIDIAN_FRAME_DOWN_LOCATION,
                 modLoc("block/framed_pressure_plate_frame_down"),
                 "texture",
                 modLoc("block/obsidian_plate_frame"),
@@ -372,14 +372,14 @@ public final class FramedBlockStateProvider extends BlockStateProvider
         simpleBlock(FBContent.BLOCK_FRAMED_WATERLOGGABLE_GOLD_PRESSURE_PLATE.get(), cube);
 
         makeOverlayModel(
-                FramedMarkedPressurePlateModel.GOLD_FRAME_LOCATION,
+                FramedMarkedPressurePlateGeometry.GOLD_FRAME_LOCATION,
                 modLoc("block/framed_pressure_plate_frame_up"),
                 "texture",
                 modLoc("block/gold_plate_frame"),
                 new Vector3f(8F, 0.5F, 8F)
         );
         makeOverlayModel(
-                FramedMarkedPressurePlateModel.GOLD_FRAME_DOWN_LOCATION,
+                FramedMarkedPressurePlateGeometry.GOLD_FRAME_DOWN_LOCATION,
                 modLoc("block/framed_pressure_plate_frame_down"),
                 "texture",
                 modLoc("block/gold_plate_frame"),
@@ -397,14 +397,14 @@ public final class FramedBlockStateProvider extends BlockStateProvider
         simpleBlock(FBContent.BLOCK_FRAMED_WATERLOGGABLE_IRON_PRESSURE_PLATE.get(), cube);
 
         makeOverlayModel(
-                FramedMarkedPressurePlateModel.IRON_FRAME_LOCATION,
+                FramedMarkedPressurePlateGeometry.IRON_FRAME_LOCATION,
                 modLoc("block/framed_pressure_plate_frame_up"),
                 "texture",
                 modLoc("block/iron_plate_frame"),
                 new Vector3f(8F, 0.5F, 8F)
         );
         makeOverlayModel(
-                FramedMarkedPressurePlateModel.IRON_FRAME_DOWN_LOCATION,
+                FramedMarkedPressurePlateGeometry.IRON_FRAME_DOWN_LOCATION,
                 modLoc("block/framed_pressure_plate_frame_down"),
                 "texture",
                 modLoc("block/iron_plate_frame"),
@@ -641,7 +641,7 @@ public final class FramedBlockStateProvider extends BlockStateProvider
         simpleBlockWithItem(FBContent.BLOCK_FRAMED_BOUNCY_CUBE, block, "cutout");
 
         makeOverlayModel(
-                FramedMarkedCubeModel.SLIME_FRAME_LOCATION,
+                FramedMarkedCubeGeometry.SLIME_FRAME_LOCATION,
                 mcLoc("block/cube_all"),
                 "all",
                 modLoc("block/slime_frame")
@@ -679,7 +679,7 @@ public final class FramedBlockStateProvider extends BlockStateProvider
         simpleBlockWithItem(FBContent.BLOCK_FRAMED_REDSTONE_BLOCK, block, "cutout");
 
         makeOverlayModel(
-                FramedMarkedCubeModel.REDSTONE_FRAME_LOCATION,
+                FramedMarkedCubeGeometry.REDSTONE_FRAME_LOCATION,
                 mcLoc("block/cube_all"),
                 "all",
                 modLoc("block/redstone_frame")
@@ -688,7 +688,7 @@ public final class FramedBlockStateProvider extends BlockStateProvider
 
     private void registerFramedGlowingCube()
     {
-        ModelFile block = makeUnderlayedCube("framed_glowing_cube", new ResourceLocation("forge", "white"));
+        ModelFile block = makeUnderlayedCube("framed_glowing_cube", new ResourceLocation("forge", "white")).ao(false);
         simpleBlockWithItem(FBContent.BLOCK_FRAMED_GLOWING_CUBE, block);
     }
 
@@ -701,7 +701,7 @@ public final class FramedBlockStateProvider extends BlockStateProvider
                 .model(models().nested().parent(models().getExistingFile(mcLoc("block/block")))
                         .element()
                             .cube("#overlay")
-                            .faces((dir, face) -> face.tintindex(FramedTargetModel.OVERLAY_TINT_IDX))
+                            .faces((dir, face) -> face.tintindex(FramedTargetGeometry.OVERLAY_TINT_IDX))
                             .end()
                         .texture("overlay", modLoc("block/target_overlay"))
                         .renderType("cutout")
@@ -785,7 +785,7 @@ public final class FramedBlockStateProvider extends BlockStateProvider
             RailShape shape = state.getValue(shapeProp);
 
             ModelFile model;
-            int rotY = (int) FramedFancyRailModel.getDirectionFromRailShape(shape).toYRot();
+            int rotY = (int) FramedFancyRailGeometry.getDirectionFromRailShape(shape).toYRot();
             if (shape.isAscending())
             {
                 model = ascendingRail.apply(state);

@@ -15,8 +15,8 @@ import net.minecraft.world.level.block.state.properties.Property;
 import xfacthd.framedblocks.api.block.FramedProperties;
 import xfacthd.framedblocks.api.block.IFramedBlock;
 import xfacthd.framedblocks.api.block.cache.StateCache;
+import xfacthd.framedblocks.api.model.wrapping.WrapHelper;
 import xfacthd.framedblocks.api.predicate.cull.SideSkipPredicate;
-import xfacthd.framedblocks.api.util.ClientUtils;
 import xfacthd.framedblocks.cmdtests.SpecialTestCommand;
 import xfacthd.framedblocks.common.FBContent;
 import xfacthd.framedblocks.common.data.BlockType;
@@ -39,7 +39,7 @@ public final class SkipPredicateConsistency
     private static final String RESULT_MSG = MSG_PREFIX + "Tested %,d combinations in %dms. ";
     private static final BlockPos CENTER = new BlockPos(1, 1, 1);
     private static final Set<Property<?>> IGNORED_PROPERTIES = Stream.of(
-            ClientUtils.IGNORE_DEFAULT_LOCK,
+            WrapHelper.IGNORE_DEFAULT_LOCK,
             List.of(BlockStateProperties.POWERED, FramedProperties.Y_SLOPE, FramedProperties.OFFSET)
     ).flatMap(List::stream).collect(Collectors.toSet());
 

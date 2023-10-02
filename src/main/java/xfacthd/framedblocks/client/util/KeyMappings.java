@@ -12,7 +12,7 @@ import net.minecraftforge.event.TickEvent;
 import org.lwjgl.glfw.GLFW;
 import xfacthd.framedblocks.FramedBlocks;
 import xfacthd.framedblocks.api.block.FramedBlockEntity;
-import xfacthd.framedblocks.api.model.FramedBlockModel;
+import xfacthd.framedblocks.client.model.FramedBlockModel;
 import xfacthd.framedblocks.api.util.FramedConstants;
 
 public final class KeyMappings

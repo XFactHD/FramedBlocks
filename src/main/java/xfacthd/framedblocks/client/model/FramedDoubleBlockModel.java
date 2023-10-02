@@ -12,15 +12,17 @@ import net.minecraft.core.Direction;
 import net.minecraft.util.RandomSource;
 import net.minecraft.util.Tuple;
 import net.minecraft.world.item.ItemDisplayContext;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.BlockAndTintGetter;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.client.ChunkRenderTypeSet;
+import net.minecraftforge.client.model.BakedModelWrapper;
 import net.minecraftforge.client.model.data.*;
 import net.minecraftforge.common.util.ConcatenatedListView;
-import xfacthd.framedblocks.api.model.BakedModelProxy;
 import xfacthd.framedblocks.api.model.data.FramedBlockData;
+import xfacthd.framedblocks.api.model.wrapping.GeometryFactory;
 import xfacthd.framedblocks.api.model.util.ModelUtils;
 import xfacthd.framedblocks.common.data.doubleblock.DoubleBlockStateCache;
 import xfacthd.framedblocks.common.block.IFramedDoubleBlock;
@@ -30,7 +32,7 @@ import xfacthd.framedblocks.common.util.DoubleBlockTopInteractionMode;
 import javax.annotation.Nullable;
 import java.util.*;
 
-public class FramedDoubleBlockModel extends BakedModelProxy
+public final class FramedDoubleBlockModel extends BakedModelWrapper<BakedModel>
 {
     private static final ModelData EMPTY_FRAME = makeDefaultData(false);
     private static final ModelData EMPTY_ALT_FRAME = makeDefaultData(true);
@@ -42,13 +44,13 @@ public class FramedDoubleBlockModel extends BakedModelProxy
     private Tuple<BakedModel, BakedModel> models = null;
 
     public FramedDoubleBlockModel(
-            BlockState state,
-            BakedModel baseModel,
+            GeometryFactory.Context ctx,
             Vec3 firstpersonTransform,
             boolean specialItemModel
     )
     {
-        super(baseModel);
+        super(ctx.baseModel());
+        BlockState state = ctx.state();
         DoubleBlockStateCache cache = ((IFramedDoubleBlock) state.getBlock()).getCache(state);
         this.dummyStates = cache.getBlockPair();
         this.particleMode = cache.getTopInteractionMode();
@@ -113,7 +115,7 @@ public class FramedDoubleBlockModel extends BakedModelProxy
                 }
 
                 //noinspection deprecation
-                yield baseModel.getParticleIcon();
+                yield originalModel.getParticleIcon();
             }
         };
     }
@@ -150,17 +152,28 @@ public class FramedDoubleBlockModel extends BakedModelProxy
     }
 
     @Override
-    protected void applyInHandTransformation(PoseStack poseStack, ItemDisplayContext ctx)
+    public BakedModel applyTransform(ItemDisplayContext type, PoseStack poseStack, boolean applyLeftHandTransform)
     {
-        if (firstpersonTransform != null)
+        getTransforms().getTransform(type).apply(applyLeftHandTransform, poseStack);
+        if (type.firstPerson() || type == ItemDisplayContext.THIRD_PERSON_LEFT_HAND || type == ItemDisplayContext.THIRD_PERSON_RIGHT_HAND)
         {
-            poseStack.translate(firstpersonTransform.x, firstpersonTransform.y, firstpersonTransform.z);
+            if (firstpersonTransform != null)
+            {
+                poseStack.translate(firstpersonTransform.x, firstpersonTransform.y, firstpersonTransform.z);
+            }
         }
+        return this;
+    }
+
+    @Override
+    public List<BakedModel> getRenderPasses(ItemStack itemStack, boolean fabulous)
+    {
+        return List.of(this);
     }
 
 
 
-    protected final Tuple<BakedModel, BakedModel> getModels()
+    private Tuple<BakedModel, BakedModel> getModels()
     {
         if (models == null)
         {
@@ -177,14 +190,14 @@ public class FramedDoubleBlockModel extends BakedModelProxy
      * Returns the camo-dependent particle texture of the side given by {@code key} when the camo is not air,
      * else returns the basic "framed block" sprite
      */
-    protected final TextureAtlasSprite getSpriteOrDefault(ModelData data, boolean secondary)
+    private TextureAtlasSprite getSpriteOrDefault(ModelData data, boolean secondary)
     {
         TextureAtlasSprite sprite = getSprite(data, secondary);
         //noinspection deprecation
-        return sprite != null ? sprite : baseModel.getParticleIcon();
+        return sprite != null ? sprite : originalModel.getParticleIcon();
     }
 
-    protected final TextureAtlasSprite getSprite(ModelData data, boolean secondary)
+    private TextureAtlasSprite getSprite(ModelData data, boolean secondary)
     {
         ModelData innerData = data.get(secondary ? FramedDoubleBlockEntity.DATA_RIGHT : FramedDoubleBlockEntity.DATA_LEFT);
         if (innerData != null)

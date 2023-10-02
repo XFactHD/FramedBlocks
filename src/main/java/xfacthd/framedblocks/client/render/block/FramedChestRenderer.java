@@ -20,9 +20,11 @@ import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.client.RenderTypeHelper;
 import net.minecraftforge.client.model.data.ModelData;
 import xfacthd.framedblocks.api.block.FramedProperties;
+import xfacthd.framedblocks.api.model.wrapping.GeometryFactory;
 import xfacthd.framedblocks.api.util.Utils;
 import xfacthd.framedblocks.api.util.ClientUtils;
-import xfacthd.framedblocks.client.model.cube.FramedChestLidModel;
+import xfacthd.framedblocks.client.model.FramedBlockModel;
+import xfacthd.framedblocks.client.model.cube.FramedChestLidGeometry;
 import xfacthd.framedblocks.common.FBContent;
 import xfacthd.framedblocks.common.data.*;
 import xfacthd.framedblocks.common.blockentity.special.FramedChestBlockEntity;
@@ -157,10 +159,8 @@ public class FramedChestRenderer implements BlockEntityRenderer<FramedChestBlock
 
                 ResourceLocation location = BlockModelShaper.stateToModelLocation(state);
 
-                LID_MODELS_PRE_CACHE.put(dir, latch, new FramedChestLidModel(
-                        state,
-                        registry.get(location)
-                ));
+                GeometryFactory.Context ctx = new GeometryFactory.Context(state, registry.get(location), registry::get);
+                LID_MODELS_PRE_CACHE.put(dir, latch, new FramedBlockModel(ctx, new FramedChestLidGeometry(ctx)));
             }
         }
     }
