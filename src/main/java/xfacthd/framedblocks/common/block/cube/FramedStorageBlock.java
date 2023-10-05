@@ -59,7 +59,7 @@ public class FramedStorageBlock extends FramedBlock
         if (newState.getBlock() != state.getBlock() && level.getBlockEntity(pos) instanceof FramedStorageBlockEntity be)
         {
             be.getDrops().forEach(stack -> popResource(level, pos, stack));
-            be.clearContents();
+            be.clearContent();
             level.updateNeighbourForOutputSignal(pos, this);
         }
 
