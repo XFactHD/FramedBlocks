@@ -1,4 +1,4 @@
-package xfacthd.framedblocks.common.util;
+package xfacthd.framedblocks.common.capability;
 
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraftforge.energy.EnergyStorage;

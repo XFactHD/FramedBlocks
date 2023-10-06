@@ -28,7 +28,7 @@ import xfacthd.framedblocks.common.data.PropertyHolder;
 import xfacthd.framedblocks.common.data.doubleblock.CamoGetter;
 import xfacthd.framedblocks.common.data.doubleblock.SolidityCheck;
 import xfacthd.framedblocks.common.data.property.HorizontalRotation;
-import xfacthd.framedblocks.common.util.DoubleBlockTopInteractionMode;
+import xfacthd.framedblocks.common.data.doubleblock.DoubleBlockTopInteractionMode;
 
 public class FramedFlatDoubleSlopePanelCornerBlock extends AbstractFramedDoubleBlock
 {

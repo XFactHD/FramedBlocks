@@ -1,4 +1,4 @@
-package xfacthd.framedblocks.common.util;
+package xfacthd.framedblocks.common.apiimpl;
 
 import net.minecraft.world.item.*;
 import net.minecraft.world.level.block.Block;

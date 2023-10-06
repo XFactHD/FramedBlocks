@@ -23,7 +23,7 @@ import xfacthd.framedblocks.common.data.BlockType;
 import xfacthd.framedblocks.common.data.doubleblock.CamoGetter;
 import xfacthd.framedblocks.common.data.doubleblock.SolidityCheck;
 import xfacthd.framedblocks.common.data.property.StairsType;
-import xfacthd.framedblocks.common.util.DoubleBlockTopInteractionMode;
+import xfacthd.framedblocks.common.data.doubleblock.DoubleBlockTopInteractionMode;
 
 public class FramedVerticalDividedStairsBlock extends AbstractFramedDoubleBlock
 {

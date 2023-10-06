@@ -29,8 +29,8 @@ import xfacthd.framedblocks.api.model.data.FramedBlockData;
 import xfacthd.framedblocks.api.util.ClientUtils;
 import xfacthd.framedblocks.common.block.*;
 import xfacthd.framedblocks.common.data.doubleblock.DoubleBlockStateCache;
-import xfacthd.framedblocks.common.util.DoubleBlockSoundType;
-import xfacthd.framedblocks.common.util.DoubleBlockTopInteractionMode;
+import xfacthd.framedblocks.common.data.doubleblock.DoubleBlockSoundType;
+import xfacthd.framedblocks.common.data.doubleblock.DoubleBlockTopInteractionMode;
 
 import java.util.List;
 import java.util.Objects;

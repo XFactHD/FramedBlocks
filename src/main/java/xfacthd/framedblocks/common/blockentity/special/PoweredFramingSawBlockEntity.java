@@ -21,8 +21,8 @@ import xfacthd.framedblocks.common.FBContent;
 import xfacthd.framedblocks.common.crafting.*;
 import xfacthd.framedblocks.common.data.PropertyHolder;
 import xfacthd.framedblocks.common.menu.FramingSawMenu;
-import xfacthd.framedblocks.common.util.EntityAwareEnergyStorage;
-import xfacthd.framedblocks.common.util.ExternalItemHandler;
+import xfacthd.framedblocks.common.capability.EntityAwareEnergyStorage;
+import xfacthd.framedblocks.common.capability.ExternalItemHandler;
 
 import javax.annotation.Nullable;
 import java.util.List;

@@ -1,4 +1,4 @@
-package xfacthd.framedblocks.client.util;
+package xfacthd.framedblocks.client.apiimpl;
 
 import net.minecraft.client.resources.model.BakedModel;
 import net.minecraft.resources.ResourceLocation;
@@ -15,6 +15,7 @@ import xfacthd.framedblocks.api.model.wrapping.*;
 import xfacthd.framedblocks.client.model.FluidModel;
 import xfacthd.framedblocks.client.model.FramedBlockModel;
 import xfacthd.framedblocks.client.modelwrapping.*;
+import xfacthd.framedblocks.client.util.ClientTaskQueue;
 
 import java.util.List;
 

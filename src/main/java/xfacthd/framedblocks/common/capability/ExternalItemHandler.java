@@ -1,4 +1,4 @@
-package xfacthd.framedblocks.common.util;
+package xfacthd.framedblocks.common.capability;
 
 import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.items.IItemHandler;

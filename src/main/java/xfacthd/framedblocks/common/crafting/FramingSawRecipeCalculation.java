@@ -2,7 +2,7 @@ package xfacthd.framedblocks.common.crafting;
 
 import net.minecraft.world.Container;
 import net.minecraft.world.item.ItemStack;
-import xfacthd.framedblocks.common.util.MathUtils;
+import xfacthd.framedblocks.api.util.Utils;
 
 public final class FramingSawRecipeCalculation
 {
@@ -42,7 +42,7 @@ public final class FramingSawRecipeCalculation
 
     static long getMaterialLCM(FramingSawRecipe recipe, int inputValue)
     {
-        return MathUtils.lcm(inputValue, recipe.getMaterialAmount());
+        return Utils.lcm(inputValue, recipe.getMaterialAmount());
     }
 
     static int getAdditiveCount(FramingSawRecipe recipe, FramingSawRecipeAdditive additive, long lcm)

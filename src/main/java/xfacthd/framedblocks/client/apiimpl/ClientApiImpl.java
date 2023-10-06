@@ -1,4 +1,4 @@
-package xfacthd.framedblocks.client.util;
+package xfacthd.framedblocks.client.apiimpl;
 
 import net.minecraft.client.color.block.BlockColor;
 import net.minecraft.world.item.Item;
@@ -11,6 +11,7 @@ import xfacthd.framedblocks.api.render.OutlineRenderer;
 import xfacthd.framedblocks.client.data.ConTexDataHandler;
 import xfacthd.framedblocks.client.render.special.BlockOutlineRenderer;
 import xfacthd.framedblocks.client.render.special.GhostBlockRenderer;
+import xfacthd.framedblocks.client.util.FramedBlockColor;
 
 @SuppressWarnings("unused")
 public final class ClientApiImpl implements FramedBlocksClientAPI

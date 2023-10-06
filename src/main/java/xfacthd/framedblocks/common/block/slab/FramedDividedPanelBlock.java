@@ -18,7 +18,7 @@ import xfacthd.framedblocks.common.blockentity.doubled.FramedDividedPanelBlockEn
 import xfacthd.framedblocks.common.data.BlockType;
 import xfacthd.framedblocks.common.data.doubleblock.CamoGetter;
 import xfacthd.framedblocks.common.data.doubleblock.SolidityCheck;
-import xfacthd.framedblocks.common.util.DoubleBlockTopInteractionMode;
+import xfacthd.framedblocks.common.data.doubleblock.DoubleBlockTopInteractionMode;
 
 public class FramedDividedPanelBlock extends AbstractFramedDoubleBlock
 {

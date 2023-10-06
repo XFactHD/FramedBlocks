@@ -27,7 +27,7 @@ import xfacthd.framedblocks.api.model.util.ModelUtils;
 import xfacthd.framedblocks.common.data.doubleblock.DoubleBlockStateCache;
 import xfacthd.framedblocks.common.block.IFramedDoubleBlock;
 import xfacthd.framedblocks.common.blockentity.FramedDoubleBlockEntity;
-import xfacthd.framedblocks.common.util.DoubleBlockTopInteractionMode;
+import xfacthd.framedblocks.common.data.doubleblock.DoubleBlockTopInteractionMode;
 
 import javax.annotation.Nullable;
 import java.util.*;

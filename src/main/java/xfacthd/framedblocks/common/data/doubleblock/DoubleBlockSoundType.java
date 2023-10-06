@@ -1,4 +1,4 @@
-package xfacthd.framedblocks.common.util;
+package xfacthd.framedblocks.common.data.doubleblock;
 
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.world.level.block.SoundType;

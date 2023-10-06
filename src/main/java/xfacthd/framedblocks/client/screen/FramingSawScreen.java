@@ -31,7 +31,7 @@ import xfacthd.framedblocks.common.crafting.*;
 import xfacthd.framedblocks.common.menu.FramingSawMenu;
 import xfacthd.framedblocks.common.menu.IFramingSawMenu;
 import xfacthd.framedblocks.common.net.SelectFramingSawRecipePacket;
-import xfacthd.framedblocks.common.util.RecipeUtils;
+import xfacthd.framedblocks.common.util.FramedUtils;
 
 import java.util.*;
 
@@ -332,9 +332,9 @@ public class FramingSawScreen extends AbstractContainerScreen<FramingSawMenu>
     private static MutableComponent makeHaveButNeedTooltip(Component present, Ingredient additive)
     {
         ItemStack[] options = additive.getItems();
-        if (options.length > 1 && RecipeUtils.getSingleIngredientValue(additive) instanceof Ingredient.TagValue value)
+        if (options.length > 1 && FramedUtils.getSingleIngredientValue(additive) instanceof Ingredient.TagValue value)
         {
-            TagKey<Item> tag = RecipeUtils.getItemTagFromValue(value);
+            TagKey<Item> tag = FramedUtils.getItemTagFromValue(value);
             return Component.translatable(
                     TOOLTIP_HAVE_X_BUT_NEED_Y_TAG,
                     present,

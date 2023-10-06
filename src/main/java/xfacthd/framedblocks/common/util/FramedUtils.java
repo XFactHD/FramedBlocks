@@ -4,10 +4,12 @@ import net.minecraft.core.Direction;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.TickTask;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.tags.TagKey;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.Items;
+import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.block.Block;
@@ -29,6 +31,12 @@ public final class FramedUtils
 {
     private static final MethodHandle MH_STATE_DEF_BUILDER_GET_PROPERTIES = Utils.unreflectFieldGetter(
             StateDefinition.Builder.class, "properties"
+    );
+    private static final MethodHandle INGREDIENT_GET_VALUES = Utils.unreflectFieldGetter(
+            Ingredient.class, "values"
+    );
+    private static final MethodHandle INGREDIENT_TAGVALUE_GET_TAG = Utils.unreflectFieldGetter(
+            Ingredient.TagValue.class, "tag"
     );
     private static final Lazy<Set<Item>> RAIL_ITEMS = Lazy.concurrentOf(() ->
     {
@@ -156,6 +164,33 @@ public final class FramedUtils
             handler = new ItemStackHandler(handler.getSlots());
         }
         return handler;
+    }
+
+    public static Ingredient.Value getSingleIngredientValue(Ingredient ing)
+    {
+        Ingredient.Value[] values;
+        try
+        {
+            values = (Ingredient.Value[]) INGREDIENT_GET_VALUES.invoke(ing);
+        }
+        catch (Throwable e)
+        {
+            throw new RuntimeException(e);
+        }
+        return values.length == 1 ? values[0] : null;
+    }
+
+    @SuppressWarnings("unchecked")
+    public static TagKey<Item> getItemTagFromValue(Ingredient.TagValue value)
+    {
+        try
+        {
+            return (TagKey<Item>) INGREDIENT_TAGVALUE_GET_TAG.invoke(value);
+        }
+        catch (Throwable e)
+        {
+            throw new RuntimeException(e);
+        }
     }
 
 

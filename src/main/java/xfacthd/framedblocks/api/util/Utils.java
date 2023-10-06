@@ -3,6 +3,7 @@ package xfacthd.framedblocks.api.util;
 import com.github.benmanes.caffeine.cache.Cache;
 import com.github.benmanes.caffeine.cache.Caffeine;
 import com.google.common.base.Preconditions;
+import com.google.common.math.IntMath;
 import it.unimi.dsi.fastutil.longs.Long2ObjectMap;
 import it.unimi.dsi.fastutil.longs.Long2ObjectOpenHashMap;
 import net.minecraft.ChatFormatting;
@@ -139,6 +140,14 @@ public final class Utils
             return false;
         }
         return lhs > rhs;
+    }
+
+    /**
+     * {@return the least common multiple of the two input values}
+     */
+    public static long lcm(int a, int b)
+    {
+        return (long) a * (long) (b / IntMath.gcd(a, b));
     }
 
     @SuppressWarnings("unchecked")

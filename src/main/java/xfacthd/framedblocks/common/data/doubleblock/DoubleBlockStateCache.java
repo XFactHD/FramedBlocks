@@ -8,7 +8,6 @@ import xfacthd.framedblocks.api.block.cache.StateCache;
 import xfacthd.framedblocks.api.type.IBlockType;
 import xfacthd.framedblocks.api.util.Utils;
 import xfacthd.framedblocks.common.block.IFramedDoubleBlock;
-import xfacthd.framedblocks.common.util.DoubleBlockTopInteractionMode;
 
 import java.util.Arrays;
 import java.util.Objects;

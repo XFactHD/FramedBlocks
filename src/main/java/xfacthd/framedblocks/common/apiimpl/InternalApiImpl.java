@@ -1,4 +1,4 @@
-package xfacthd.framedblocks.common.util;
+package xfacthd.framedblocks.common.apiimpl;
 
 import com.google.common.base.Preconditions;
 import net.minecraft.core.BlockPos;
