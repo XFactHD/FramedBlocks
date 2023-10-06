@@ -527,7 +527,7 @@ public final class Utils
     {
         try
         {
-            Method method = clazz.getMethod(methodName, paramTypes);
+            Method method = clazz.getDeclaredMethod(methodName, paramTypes);
             method.setAccessible(true);
             return method;
         }
