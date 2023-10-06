@@ -14,7 +14,7 @@ import xfacthd.framedblocks.api.util.FramedConstants;
 import xfacthd.framedblocks.api.test.TestUtils;
 import xfacthd.framedblocks.api.util.Utils;
 import xfacthd.framedblocks.common.data.BlockType;
-import xfacthd.framedblocks.common.util.ServerConfig;
+import xfacthd.framedblocks.common.config.ServerConfig;
 
 import java.util.*;
 

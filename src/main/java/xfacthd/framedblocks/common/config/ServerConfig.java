@@ -1,4 +1,4 @@
-package xfacthd.framedblocks.common.util;
+package xfacthd.framedblocks.common.config;
 
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Item;

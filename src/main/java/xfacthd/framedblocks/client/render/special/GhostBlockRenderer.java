@@ -25,8 +25,8 @@ import xfacthd.framedblocks.api.model.data.FramedBlockData;
 import xfacthd.framedblocks.api.util.*;
 import xfacthd.framedblocks.api.model.util.ModelCache;
 import xfacthd.framedblocks.client.render.util.GhostVertexConsumer;
-import xfacthd.framedblocks.client.util.*;
 import xfacthd.framedblocks.common.blockentity.FramedDoubleBlockEntity;
+import xfacthd.framedblocks.common.config.ClientConfig;
 
 import java.util.IdentityHashMap;
 import java.util.Map;

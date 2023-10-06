@@ -17,7 +17,7 @@ import xfacthd.framedblocks.api.block.FramedBlockEntity;
 import xfacthd.framedblocks.common.FBContent;
 import xfacthd.framedblocks.common.blockentity.FramedDoubleBlockEntity;
 import xfacthd.framedblocks.common.util.FramedUtils;
-import xfacthd.framedblocks.common.util.ServerConfig;
+import xfacthd.framedblocks.common.config.ServerConfig;
 
 final class FramedBlockEntityData extends NBTTileEntityData
 {

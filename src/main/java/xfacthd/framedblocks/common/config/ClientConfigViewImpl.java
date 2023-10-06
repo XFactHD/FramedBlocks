@@ -2,7 +2,6 @@ package xfacthd.framedblocks.common.config;
 
 import xfacthd.framedblocks.api.predicate.contex.ConTexMode;
 import xfacthd.framedblocks.api.util.ConfigView;
-import xfacthd.framedblocks.client.util.ClientConfig;
 
 public final class ClientConfigViewImpl implements ConfigView.Client
 {

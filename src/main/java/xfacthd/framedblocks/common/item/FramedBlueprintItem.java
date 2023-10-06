@@ -25,7 +25,7 @@ import xfacthd.framedblocks.api.block.IFramedBlock;
 import xfacthd.framedblocks.common.FBContent;
 import xfacthd.framedblocks.common.data.*;
 import xfacthd.framedblocks.api.block.FramedBlockEntity;
-import xfacthd.framedblocks.common.util.ServerConfig;
+import xfacthd.framedblocks.common.config.ServerConfig;
 
 import javax.annotation.Nullable;
 import java.util.*;

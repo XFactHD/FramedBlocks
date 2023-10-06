@@ -6,7 +6,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import xfacthd.framedblocks.api.util.Utils;
-import xfacthd.framedblocks.client.util.ClientConfig;
+import xfacthd.framedblocks.common.config.ClientConfig;
 import xfacthd.framedblocks.common.FBContent;
 import xfacthd.framedblocks.common.block.interactive.FramedPressurePlateBlock;
 import xfacthd.framedblocks.common.block.interactive.FramedWeightedPressurePlateBlock;

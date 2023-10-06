@@ -9,7 +9,7 @@ import net.minecraft.world.phys.HitResult;
 import xfacthd.framedblocks.api.block.FramedBlockEntity;
 import xfacthd.framedblocks.api.block.IFramedBlock;
 import xfacthd.framedblocks.api.util.Utils;
-import xfacthd.framedblocks.client.util.ClientConfig;
+import xfacthd.framedblocks.common.config.ClientConfig;
 import xfacthd.framedblocks.common.FBContent;
 
 import java.util.List;

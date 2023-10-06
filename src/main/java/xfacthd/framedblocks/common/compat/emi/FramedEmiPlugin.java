@@ -13,7 +13,7 @@ import net.minecraft.world.item.ItemStack;
 import xfacthd.framedblocks.FramedBlocks;
 import xfacthd.framedblocks.client.screen.FramingSawScreen;
 import xfacthd.framedblocks.client.screen.PoweredFramingSawScreen;
-import xfacthd.framedblocks.client.util.ClientConfig;
+import xfacthd.framedblocks.common.config.ClientConfig;
 import xfacthd.framedblocks.common.FBContent;
 import xfacthd.framedblocks.common.crafting.FramingSawRecipeCache;
 import xfacthd.framedblocks.common.crafting.FramingSawRecipeCalculation;

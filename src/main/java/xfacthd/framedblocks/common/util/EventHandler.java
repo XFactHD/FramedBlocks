@@ -9,6 +9,7 @@ import net.minecraftforge.fml.loading.FMLEnvironment;
 import xfacthd.framedblocks.api.block.FramedBlockEntity;
 import xfacthd.framedblocks.api.block.IFramedBlock;
 import xfacthd.framedblocks.client.util.ClientAccess;
+import xfacthd.framedblocks.common.config.ServerConfig;
 
 public final class EventHandler
 {

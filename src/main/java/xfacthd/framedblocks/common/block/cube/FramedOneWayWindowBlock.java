@@ -30,7 +30,7 @@ import xfacthd.framedblocks.common.blockentity.special.FramedOwnableBlockEntity;
 import xfacthd.framedblocks.common.data.BlockType;
 import xfacthd.framedblocks.common.data.PropertyHolder;
 import xfacthd.framedblocks.common.data.property.NullableDirection;
-import xfacthd.framedblocks.common.util.ServerConfig;
+import xfacthd.framedblocks.common.config.ServerConfig;
 
 import java.util.function.Consumer;
 
