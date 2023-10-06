@@ -14,7 +14,7 @@ import net.minecraftforge.fml.loading.FMLEnvironment;
 import org.jetbrains.annotations.Nullable;
 import xfacthd.framedblocks.api.block.FramedBlockEntity;
 import xfacthd.framedblocks.api.block.IFramedBlock;
-import xfacthd.framedblocks.api.camo.CamoContainer;
+import xfacthd.framedblocks.api.camo.CamoContainerFactory;
 import xfacthd.framedblocks.api.shapes.*;
 import xfacthd.framedblocks.common.compat.nocubes.NoCubesCompat;
 import xfacthd.framedblocks.common.data.appearance.AppearanceHelper;
@@ -34,7 +34,7 @@ public final class InternalApiImpl implements InternalAPI
     }
 
     @Override
-    public CamoContainer.Factory getEmptyCamoContainerFactory()
+    public CamoContainerFactory getEmptyCamoContainerFactory()
     {
         return FBContent.FACTORY_EMPTY.get();
     }

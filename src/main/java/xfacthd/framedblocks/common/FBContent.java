@@ -15,8 +15,7 @@ import net.minecraftforge.network.IContainerFactory;
 import net.minecraftforge.registries.*;
 import xfacthd.framedblocks.api.block.FramedBlockEntity;
 import xfacthd.framedblocks.api.block.IFramedBlock;
-import xfacthd.framedblocks.api.camo.EmptyCamoContainer;
-import xfacthd.framedblocks.api.camo.CamoContainer;
+import xfacthd.framedblocks.api.camo.*;
 import xfacthd.framedblocks.api.util.FramedConstants;
 import xfacthd.framedblocks.api.util.Utils;
 import xfacthd.framedblocks.common.block.sign.*;
@@ -65,14 +64,14 @@ public final class FBContent
     private static final DeferredRegister<RecipeSerializer<?>> RECIPE_SERIALIZERS = DeferredRegister.create(ForgeRegistries.RECIPE_SERIALIZERS, FramedConstants.MOD_ID);
     private static final DeferredRegister<CreativeModeTab> CREATIVE_TABS = DeferredRegister.create(Registries.CREATIVE_MODE_TAB, FramedConstants.MOD_ID);
 
-    private static final DeferredRegister<CamoContainer.Factory> CAMO_CONTAINER_FACTORIES = DeferredRegister.create(
+    private static final DeferredRegister<CamoContainerFactory> CAMO_CONTAINER_FACTORIES = DeferredRegister.create(
             FramedConstants.CAMO_CONTAINER_FACTORY_REGISTRY_NAME,
             FramedConstants.MOD_ID
     );
-    public static final Supplier<IForgeRegistry<CamoContainer.Factory>> CAMO_CONTAINER_FACTORY_REGISTRY = CAMO_CONTAINER_FACTORIES.makeRegistry(
+    public static final Supplier<IForgeRegistry<CamoContainerFactory>> CAMO_CONTAINER_FACTORY_REGISTRY = CAMO_CONTAINER_FACTORIES.makeRegistry(
             () ->
             {
-                RegistryBuilder<CamoContainer.Factory> builder = new RegistryBuilder<>();
+                RegistryBuilder<CamoContainerFactory> builder = new RegistryBuilder<>();
                 builder.disableOverrides().setDefaultKey(Utils.rl("empty"));
                 return builder;
             }
@@ -549,15 +548,15 @@ public final class FBContent
     // endregion
 
     // region CamoContainer.Factories
-    public static final RegistryObject<CamoContainer.Factory> FACTORY_EMPTY = CAMO_CONTAINER_FACTORIES.register(
+    public static final RegistryObject<CamoContainerFactory> FACTORY_EMPTY = CAMO_CONTAINER_FACTORIES.register(
             "empty",
             EmptyCamoContainer.Factory::new
     );
-    public static final RegistryObject<CamoContainer.Factory> FACTORY_BLOCK = CAMO_CONTAINER_FACTORIES.register(
+    public static final RegistryObject<CamoContainerFactory> FACTORY_BLOCK = CAMO_CONTAINER_FACTORIES.register(
             "block",
             BlockCamoContainer.Factory::new
     );
-    public static final RegistryObject<CamoContainer.Factory> FACTORY_FLUID = CAMO_CONTAINER_FACTORIES.register(
+    public static final RegistryObject<CamoContainerFactory> FACTORY_FLUID = CAMO_CONTAINER_FACTORIES.register(
             "fluid",
             FluidCamoContainer.Factory::new
     );

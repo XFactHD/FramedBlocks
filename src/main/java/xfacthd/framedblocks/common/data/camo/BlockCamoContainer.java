@@ -3,8 +3,7 @@ package xfacthd.framedblocks.common.data.camo;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.NbtUtils;
-import net.minecraft.world.item.BlockItem;
-import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.*;
 import net.minecraft.world.level.BlockAndTintGetter;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
@@ -13,6 +12,8 @@ import xfacthd.framedblocks.api.camo.*;
 import xfacthd.framedblocks.api.util.ClientUtils;
 import xfacthd.framedblocks.api.util.Utils;
 import xfacthd.framedblocks.common.FBContent;
+
+import java.util.function.Consumer;
 
 public class BlockCamoContainer extends CamoContainer
 {
@@ -38,15 +39,15 @@ public class BlockCamoContainer extends CamoContainer
     }
 
     @Override
-    public CamoContainer.Factory getFactory()
+    public CamoContainerFactory getFactory()
     {
         return FBContent.FACTORY_BLOCK.get();
     }
 
     @Override
-    public ContainerType getType()
+    public CamoContainerType getType()
     {
-        return ContainerType.BLOCK;
+        return CamoContainerType.BLOCK;
     }
 
     @Override
@@ -63,7 +64,7 @@ public class BlockCamoContainer extends CamoContainer
 
 
 
-    public static final class Factory extends CamoContainer.Factory
+    public static final class Factory extends CamoContainerFactory
     {
         @Override
         public CamoContainer fromNbt(CompoundTag tag)
@@ -89,5 +90,8 @@ public class BlockCamoContainer extends CamoContainer
             }
             return EmptyCamoContainer.EMPTY;
         }
+
+        @Override
+        public void registerTriggerItems(Consumer<Item> registrar) { }
     }
 }

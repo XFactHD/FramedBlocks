@@ -12,7 +12,7 @@ import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.Nullable;
 import xfacthd.framedblocks.api.block.FramedBlockEntity;
 import xfacthd.framedblocks.api.block.IFramedBlock;
-import xfacthd.framedblocks.api.camo.CamoContainer;
+import xfacthd.framedblocks.api.camo.CamoContainerFactory;
 import xfacthd.framedblocks.api.shapes.ReloadableShapeProvider;
 import xfacthd.framedblocks.api.shapes.ShapeCache;
 import xfacthd.framedblocks.api.util.Utils;
@@ -26,7 +26,7 @@ public interface InternalAPI
 
     BlockEntityType<FramedBlockEntity> getDefaultBlockEntity();
 
-    CamoContainer.Factory getEmptyCamoContainerFactory();
+    CamoContainerFactory getEmptyCamoContainerFactory();
 
     BlockEntity getExistingBlockEntity(BlockGetter level, BlockPos pos);
 

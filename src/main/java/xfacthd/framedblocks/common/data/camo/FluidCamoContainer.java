@@ -22,6 +22,8 @@ import xfacthd.framedblocks.api.util.Utils;
 import xfacthd.framedblocks.api.util.ClientUtils;
 import xfacthd.framedblocks.common.FBContent;
 
+import java.util.function.Consumer;
+
 public class FluidCamoContainer extends CamoContainer
 {
     private final FluidState fluidState;
@@ -89,13 +91,13 @@ public class FluidCamoContainer extends CamoContainer
     }
 
     @Override
-    public ContainerType getType()
+    public CamoContainerType getType()
     {
-        return ContainerType.FLUID;
+        return CamoContainerType.FLUID;
     }
 
     @Override
-    public CamoContainer.Factory getFactory()
+    public CamoContainerFactory getFactory()
     {
         return FBContent.FACTORY_FLUID.get();
     }
@@ -114,7 +116,7 @@ public class FluidCamoContainer extends CamoContainer
 
 
 
-    public static final class Factory extends CamoContainer.Factory
+    public static final class Factory extends CamoContainerFactory
     {
         @Override
         public CamoContainer fromNbt(CompoundTag tag)
@@ -150,5 +152,8 @@ public class FluidCamoContainer extends CamoContainer
                 return EmptyCamoContainer.EMPTY;
             }).orElse(EmptyCamoContainer.EMPTY);
         }
+
+        @Override
+        public void registerTriggerItems(Consumer<Item> registrar) { }
     }
 }

@@ -1,6 +1,5 @@
 package xfacthd.framedblocks.api.camo;
 
-import com.google.common.base.Preconditions;
 import com.mojang.logging.LogUtils;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
@@ -37,7 +36,7 @@ public abstract class CamoContainer
 
     /**
      * Returns the fluid contained in this camo container, if applicable
-     * @apiNote Must be overridden by CamoContainers returning {@link ContainerType#FLUID} from {@link CamoContainer#getType()}
+     * @apiNote Must be overridden by CamoContainers returning {@link CamoContainerType#FLUID} from {@link CamoContainer#getType()}
      */
     public Fluid getFluid()
     {
@@ -138,12 +137,12 @@ public abstract class CamoContainer
     /**
      * Returns the type of camo this container holds
      */
-    public abstract ContainerType getType();
+    public abstract CamoContainerType getType();
 
     /**
-     * Returns the {@link Factory} used to reconstruct
+     * Returns the {@link CamoContainerFactory} used to reconstruct
      */
-    public abstract CamoContainer.Factory getFactory();
+    public abstract CamoContainerFactory getFactory();
 
     /**
      * Save the data of this container to the given {@link CompoundTag}
@@ -181,7 +180,7 @@ public abstract class CamoContainer
         }
 
         ResourceLocation id = ResourceLocation.tryParse(tag.getString("type"));
-        Factory factory = FramedBlocksAPI.INSTANCE.getCamoContainerFactoryRegistry().getValue(id);
+        CamoContainerFactory factory = FramedBlocksAPI.INSTANCE.getCamoContainerFactoryRegistry().getValue(id);
         if (factory == null)
         {
             LOGGER.error("Unknown ICamoContainer with ID {}, dropping!", id);
@@ -198,56 +197,12 @@ public abstract class CamoContainer
         }
 
         int id = tag.getInt("type");
-        Factory factory = Utils.getValue(FramedBlocksAPI.INSTANCE.getCamoContainerFactoryRegistry(), id);
+        CamoContainerFactory factory = Utils.getValue(FramedBlocksAPI.INSTANCE.getCamoContainerFactoryRegistry(), id);
         if (factory == null)
         {
             LOGGER.error("Unknown ICamoContainer with ID {}, dropping!", id);
             return EmptyCamoContainer.EMPTY;
         }
         return factory.fromNetwork(tag);
-    }
-
-
-
-    public static abstract class Factory
-    {
-        private String id;
-        private int syncId = -1;
-
-        public final String getId()
-        {
-            if (id == null)
-            {
-                //noinspection ConstantConditions
-                id = FramedBlocksAPI.INSTANCE.getCamoContainerFactoryRegistry().getKey(this).toString();
-            }
-            return id;
-        }
-
-        public final int getSyncId()
-        {
-            if (syncId == -1)
-            {
-                syncId = Utils.getId(FramedBlocksAPI.INSTANCE.getCamoContainerFactoryRegistry(), this);
-                Preconditions.checkState(syncId != -1, "Attempted to get sync ID for unregistered CamoContainer.Factory");
-            }
-            return syncId;
-        }
-
-        /**
-         * Reconstruct the {@link CamoContainer} from the given {@link CompoundTag}
-         */
-        public abstract CamoContainer fromNbt(CompoundTag tag);
-
-        /**
-         * Reconstruct the {@link CamoContainer} from the given {@link CompoundTag}
-         */
-        public abstract CamoContainer fromNetwork(CompoundTag tag);
-
-        /**
-         * Construct a {@link CamoContainer} from the given {@link ItemStack}
-         * @return A new CamoContainer or {@link EmptyCamoContainer#EMPTY}
-         */
-        public abstract CamoContainer fromItem(ItemStack stack);
     }
 }

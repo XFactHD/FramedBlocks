@@ -32,8 +32,7 @@ import org.slf4j.Logger;
 import xfacthd.framedblocks.api.FramedBlocksAPI;
 import xfacthd.framedblocks.api.block.cache.StateCache;
 import xfacthd.framedblocks.api.block.render.CullingHelper;
-import xfacthd.framedblocks.api.camo.EmptyCamoContainer;
-import xfacthd.framedblocks.api.camo.CamoContainer;
+import xfacthd.framedblocks.api.camo.*;
 import xfacthd.framedblocks.api.internal.InternalAPI;
 import xfacthd.framedblocks.api.model.data.FramedBlockData;
 import xfacthd.framedblocks.api.type.IBlockType;
@@ -213,7 +212,7 @@ public class FramedBlockEntity extends BlockEntity
             //noinspection ConstantConditions
             if (!level.isClientSide())
             {
-                CamoContainer.Factory factory = FramedBlocksAPI.INSTANCE.getCamoContainerFactory(stack);
+                CamoContainerFactory factory = FramedBlocksAPI.INSTANCE.getCamoContainerFactory(stack);
                 setCamo(factory.fromItem(stack), secondary);
 
                 if (!player.isCreative() && ConfigView.Server.INSTANCE.shouldConsumeCamoItem())
@@ -229,7 +228,7 @@ public class FramedBlockEntity extends BlockEntity
 
     private InteractionResult setFluidCamo(Player player, ItemStack stack, boolean secondary)
     {
-        CamoContainer.Factory factory = FramedBlocksAPI.INSTANCE.getCamoContainerFactory(stack);
+        CamoContainerFactory factory = FramedBlocksAPI.INSTANCE.getCamoContainerFactory(stack);
         CamoContainer camo = factory.fromItem(stack);
         if (!camo.isEmpty())
         {

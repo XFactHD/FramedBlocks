@@ -2,12 +2,15 @@ package xfacthd.framedblocks.api.camo;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.*;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.material.MapColor;
 import xfacthd.framedblocks.api.internal.InternalAPI;
+
+import java.util.function.Consumer;
 
 public final class EmptyCamoContainer extends CamoContainer
 {
@@ -73,13 +76,13 @@ public final class EmptyCamoContainer extends CamoContainer
     }
 
     @Override
-    public ContainerType getType()
+    public CamoContainerType getType()
     {
-        return ContainerType.EMPTY;
+        return CamoContainerType.EMPTY;
     }
 
     @Override
-    public CamoContainer.Factory getFactory()
+    public CamoContainerFactory getFactory()
     {
         return InternalAPI.INSTANCE.getEmptyCamoContainerFactory();
     }
@@ -92,7 +95,7 @@ public final class EmptyCamoContainer extends CamoContainer
 
 
 
-    public static final class Factory extends CamoContainer.Factory
+    public static final class Factory extends CamoContainerFactory
     {
         @Override
         public CamoContainer fromNbt(CompoundTag tag)
@@ -111,5 +114,8 @@ public final class EmptyCamoContainer extends CamoContainer
         {
             throw new UnsupportedOperationException("Empty camo container cannot be created from ItemStack");
         }
+
+        @Override
+        public void registerTriggerItems(Consumer<Item> registrar) { }
     }
 }

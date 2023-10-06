@@ -5,7 +5,7 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.registries.IForgeRegistry;
 import xfacthd.framedblocks.api.blueprint.BlueprintCopyBehaviour;
-import xfacthd.framedblocks.api.camo.CamoContainer;
+import xfacthd.framedblocks.api.camo.CamoContainerFactory;
 import xfacthd.framedblocks.api.util.Utils;
 
 @SuppressWarnings("unused")
@@ -28,17 +28,12 @@ public interface FramedBlocksAPI
     /**
      * Returns the registry of camo container factories
      */
-    IForgeRegistry<CamoContainer.Factory> getCamoContainerFactoryRegistry();
-
-    /**
-     * Register the given factory to be used when the given item is used to apply a camo
-     */
-    void registerCamoContainerFactory(Item item, CamoContainer.Factory factory);
+    IForgeRegistry<CamoContainerFactory> getCamoContainerFactoryRegistry();
 
     /**
      * Returns the camo container factory to use for the given {@link ItemStack}
      */
-    CamoContainer.Factory getCamoContainerFactory(ItemStack stack);
+    CamoContainerFactory getCamoContainerFactory(ItemStack stack);
 
     /**
      * Register a custom {@link BlueprintCopyBehaviour} for the given {@link Block}s

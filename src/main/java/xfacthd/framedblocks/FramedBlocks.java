@@ -29,7 +29,7 @@ import xfacthd.framedblocks.common.compat.CompatHandler;
 import xfacthd.framedblocks.common.crafting.FramingSawRecipeCache;
 import xfacthd.framedblocks.common.data.BlueprintBehaviours;
 import xfacthd.framedblocks.common.data.StateCacheBuilder;
-import xfacthd.framedblocks.common.data.camo.CamoFactories;
+import xfacthd.framedblocks.common.data.camo.CamoContainerFactories;
 import xfacthd.framedblocks.common.data.conpreds.ConnectionPredicates;
 import xfacthd.framedblocks.common.data.facepreds.FullFacePredicates;
 import xfacthd.framedblocks.common.data.skippreds.SideSkipPredicates;
@@ -115,11 +115,11 @@ public final class FramedBlocks
         StateCacheBuilder.ensureStateCachesInitialized();
         BlueprintBehaviours.register();
         CompatHandler.commonSetup();
+        CamoContainerFactories.registerCamoFactories();
     }
 
     private static void onLoadComplete(final FMLLoadCompleteEvent event)
     {
-        CamoFactories.lock();
         FramedBlueprintItem.lockRegistration();
     }
 

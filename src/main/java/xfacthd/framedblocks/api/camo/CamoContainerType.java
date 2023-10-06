@@ -1,6 +1,6 @@
 package xfacthd.framedblocks.api.camo;
 
-public enum ContainerType
+public enum CamoContainerType
 {
     EMPTY,
     BLOCK,
