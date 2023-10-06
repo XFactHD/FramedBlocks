@@ -28,7 +28,6 @@ import xfacthd.framedblocks.client.modelwrapping.ModelWrappingManager;
 import xfacthd.framedblocks.client.model.FramedBlockModel;
 import xfacthd.framedblocks.api.type.IBlockType;
 import xfacthd.framedblocks.api.util.*;
-import xfacthd.framedblocks.api.util.ClientUtils;
 import xfacthd.framedblocks.api.model.util.ModelCache;
 import xfacthd.framedblocks.client.data.*;
 import xfacthd.framedblocks.client.loader.overlay.OverlayLoader;
@@ -93,7 +92,7 @@ public final class FBClient
         GhostRenderBehaviours.register();
 
         IEventBus forgeBus = MinecraftForge.EVENT_BUS;
-        forgeBus.addListener(ClientUtils::onClientTick);
+        forgeBus.addListener(ClientTaskQueue::onClientTick);
         forgeBus.addListener(BlockOutlineRenderer::onRenderBlockHighlight);
         forgeBus.addListener(KeyMappings::onClientTick);
         forgeBus.addListener(GhostBlockRenderer::onRenderLevelStage);

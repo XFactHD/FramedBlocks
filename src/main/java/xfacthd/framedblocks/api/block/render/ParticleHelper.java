@@ -22,7 +22,7 @@ public final class ParticleHelper
     {
         if (state.isAir())
         {
-            state = FBContent.BLOCK_FRAMED_CUBE.get().defaultBlockState();
+            state = FramedBlocksAPI.INSTANCE.getDefaultModelState();
         }
 
         double x = entity.getX();
@@ -48,7 +48,7 @@ public final class ParticleHelper
     {
         if (state.isAir())
         {
-            state = FBContent.BLOCK_FRAMED_CUBE.get().defaultBlockState();
+            state = FramedBlocksAPI.INSTANCE.getDefaultModelState();
         }
 
         Vec3 delta = entity.getDeltaMovement();
@@ -81,7 +81,7 @@ public final class ParticleHelper
         {
             if (camoState.isAir())
             {
-                camoState = FBContent.BLOCK_FRAMED_CUBE.get().defaultBlockState();
+                camoState = FramedBlocksAPI.INSTANCE.getDefaultModelState();
             }
 
             BlockPos pos = target.getBlockPos();
@@ -118,7 +118,7 @@ public final class ParticleHelper
         {
             if (camoState.isAir())
             {
-                camoState = FBContent.BLOCK_FRAMED_CUBE.get().defaultBlockState();
+                camoState = FramedBlocksAPI.INSTANCE.getDefaultModelState();
             }
             BlockState fCamoState = camoState;
 

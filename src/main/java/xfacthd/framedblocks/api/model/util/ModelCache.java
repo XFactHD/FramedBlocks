@@ -11,7 +11,7 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.material.Fluid;
 import net.minecraftforge.client.ChunkRenderTypeSet;
 import net.minecraftforge.client.model.data.ModelData;
-import xfacthd.framedblocks.api.FramedBlocksClientAPI;
+import xfacthd.framedblocks.api.internal.InternalClientAPI;
 
 import java.time.Duration;
 import java.util.Map;
@@ -35,7 +35,7 @@ public final class ModelCache
         {
             return modelCache.computeIfAbsent(
                     fluidBlock.getFluid(),
-                    FramedBlocksClientAPI.INSTANCE::createFluidModel
+                    InternalClientAPI.INSTANCE::createFluidModel
             );
         }
         return Minecraft.getInstance().getBlockRenderer().getBlockModel(state);

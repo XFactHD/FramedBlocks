@@ -5,18 +5,20 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.Property;
+import net.minecraft.world.level.material.Fluid;
 import net.minecraftforge.common.util.Lazy;
 import net.minecraftforge.registries.RegistryObject;
 import org.jetbrains.annotations.Nullable;
 import xfacthd.framedblocks.FramedBlocks;
 import xfacthd.framedblocks.api.internal.InternalClientAPI;
 import xfacthd.framedblocks.api.model.wrapping.*;
+import xfacthd.framedblocks.client.model.FluidModel;
 import xfacthd.framedblocks.client.model.FramedBlockModel;
 import xfacthd.framedblocks.client.modelwrapping.*;
 
 import java.util.List;
 
-public class InternalClientApiImpl implements InternalClientAPI
+public final class InternalClientApiImpl implements InternalClientAPI
 {
     @Override
     public void registerModelWrapper(
@@ -95,5 +97,17 @@ public class InternalClientApiImpl implements InternalClientAPI
                     return sourceState;
                 }
         ));
+    }
+
+    @Override
+    public void enqueueClientTask(long delay, Runnable task)
+    {
+        ClientTaskQueue.enqueueClientTask(delay, task);
+    }
+
+    @Override
+    public BakedModel createFluidModel(Fluid fluid)
+    {
+        return FluidModel.create(fluid);
     }
 }

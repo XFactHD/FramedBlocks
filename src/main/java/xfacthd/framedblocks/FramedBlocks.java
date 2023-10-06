@@ -18,7 +18,7 @@ import net.minecraftforge.network.simple.SimpleChannel;
 import org.slf4j.Logger;
 import xfacthd.framedblocks.common.data.cullupdate.CullingUpdatePacket;
 import xfacthd.framedblocks.common.data.cullupdate.CullingUpdateTracker;
-import xfacthd.framedblocks.api.shapes.ShapeReloader;
+import xfacthd.framedblocks.common.data.shapes.ShapeReloader;
 import xfacthd.framedblocks.api.util.FramedConstants;
 import xfacthd.framedblocks.api.util.Utils;
 import xfacthd.framedblocks.client.util.ClientConfig;

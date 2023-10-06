@@ -20,7 +20,6 @@ import net.minecraftforge.client.model.data.ModelData;
 import net.minecraftforge.fml.loading.FMLEnvironment;
 import org.jetbrains.annotations.ApiStatus;
 import xfacthd.framedblocks.api.FramedBlocksAPI;
-import xfacthd.framedblocks.api.FramedBlocksClientAPI;
 import xfacthd.framedblocks.api.block.FramedProperties;
 import xfacthd.framedblocks.api.block.cache.StateCache;
 import xfacthd.framedblocks.api.model.cache.QuadCacheKey;
@@ -34,6 +33,8 @@ import xfacthd.framedblocks.api.type.IBlockType;
 import xfacthd.framedblocks.api.block.IFramedBlock;
 import xfacthd.framedblocks.api.util.TestProperties;
 import xfacthd.framedblocks.api.util.Utils;
+import xfacthd.framedblocks.client.data.ConTexDataHandler;
+import xfacthd.framedblocks.client.util.ClientConfig;
 import xfacthd.framedblocks.common.FBContent;
 
 import java.util.*;
@@ -151,7 +152,7 @@ public final class FramedBlockModel extends BakedModelProxy
         if (camoState == null || camoState.isAir())
         {
             camoState = Blocks.AIR.defaultBlockState();
-            keyState = getNoCamoModelState(FramedBlocksAPI.INSTANCE.defaultModelState(), fbData);
+            keyState = getNoCamoModelState(FramedBlocksAPI.INSTANCE.getDefaultModelState(), fbData);
         }
 
         CachedRenderTypes cachedTypes = getCachedRenderTypes(keyState, camoState, rand, data);
@@ -213,7 +214,7 @@ public final class FramedBlockModel extends BakedModelProxy
         if (noCamo)
         {
             needCtCtx = false;
-            camoState = getNoCamoModelState(FramedBlocksAPI.INSTANCE.defaultModelState(), fbData);
+            camoState = getNoCamoModelState(FramedBlocksAPI.INSTANCE.getDefaultModelState(), fbData);
             addReinforcement = useBaseModel && fbData.isReinforced();
             camoInRenderType = BASE_MODEL_RENDER_TYPES.contains(renderType);
             noProcessing = (camoInRenderType && forceUngeneratedBaseModel) || stateCache.isFullFace(side);
@@ -260,7 +261,7 @@ public final class FramedBlockModel extends BakedModelProxy
         }
         else
         {
-            Object ctCtx = needCtCtx ? FramedBlocksClientAPI.INSTANCE.extractCTContext(camoData) : null;
+            Object ctCtx = needCtCtx ? ConTexDataHandler.extractConTexData(camoData) : null;
             if (DISABLE_QUAD_CACHE)
             {
                 return buildQuadCache(state, camoState, rand, extraData, ctCtx != null ? camoData : ModelData.EMPTY, noCamo, addReinforcement)
@@ -275,7 +276,7 @@ public final class FramedBlockModel extends BakedModelProxy
 
     private static boolean needCtContext(boolean noProcessing, ConTexMode minMode)
     {
-        ConTexMode mode = FramedBlocksClientAPI.INSTANCE.getConTexMode();
+        ConTexMode mode = ClientConfig.conTexMode;
         if (mode == ConTexMode.NONE)
         {
             return false;

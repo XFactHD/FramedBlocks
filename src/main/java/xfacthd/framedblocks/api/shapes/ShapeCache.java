@@ -3,6 +3,7 @@ package xfacthd.framedblocks.api.shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import net.minecraftforge.fml.loading.FMLEnvironment;
 import org.jetbrains.annotations.ApiStatus;
+import xfacthd.framedblocks.api.internal.InternalAPI;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -29,7 +30,7 @@ public final class ShapeCache<K>
         generator.accept(cache);
         if (!FMLEnvironment.production)
         {
-            ShapeReloader.addCache(this);
+            InternalAPI.INSTANCE.registerShapeCache(this);
         }
     }
 
@@ -39,7 +40,7 @@ public final class ShapeCache<K>
     }
 
     @ApiStatus.Internal
-    void reload()
+    public void reload()
     {
         cache.clear();
         generator.accept(cache);

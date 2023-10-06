@@ -7,7 +7,7 @@ import net.minecraft.world.level.*;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.material.MapColor;
-import xfacthd.framedblocks.api.FramedBlocksAPI;
+import xfacthd.framedblocks.api.internal.InternalAPI;
 
 public final class EmptyCamoContainer extends CamoContainer
 {
@@ -81,7 +81,7 @@ public final class EmptyCamoContainer extends CamoContainer
     @Override
     public CamoContainer.Factory getFactory()
     {
-        return FramedBlocksAPI.INSTANCE.emptyCamoContainerFactory();
+        return InternalAPI.INSTANCE.getEmptyCamoContainerFactory();
     }
 
     @Override

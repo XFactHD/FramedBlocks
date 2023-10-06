@@ -12,9 +12,9 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.client.ChunkRenderTypeSet;
 import net.minecraftforge.client.model.data.ModelData;
 import org.joml.Vector3f;
-import xfacthd.framedblocks.api.FramedBlocksClientAPI;
 import xfacthd.framedblocks.api.model.data.FramedBlockData;
 import xfacthd.framedblocks.api.model.quad.QuadData;
+import xfacthd.framedblocks.api.util.ConfigView;
 import xfacthd.framedblocks.api.util.Utils;
 
 import java.lang.invoke.MethodHandle;
@@ -131,7 +131,7 @@ public final class ModelUtils
         }
         else
         {
-            if (FramedBlocksClientAPI.INSTANCE.useDiscreteUVSteps())
+            if (ConfigView.Client.INSTANCE.useDiscreteUVSteps())
             {
                 double relMin = uvIdx == 0 ? sprite.getUOffset(uvMin) : sprite.getVOffset(uvMin);
                 double relMax = uvIdx == 0 ? sprite.getUOffset(uvMax) : sprite.getVOffset(uvMax);

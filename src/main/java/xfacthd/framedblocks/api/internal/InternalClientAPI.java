@@ -1,8 +1,10 @@
 package xfacthd.framedblocks.api.internal;
 
+import net.minecraft.client.resources.model.BakedModel;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.Property;
+import net.minecraft.world.level.material.Fluid;
 import net.minecraftforge.registries.RegistryObject;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.Nullable;
@@ -15,6 +17,8 @@ import java.util.List;
 public interface InternalClientAPI
 {
     InternalClientAPI INSTANCE = Utils.loadService(InternalClientAPI.class);
+
+
 
     void registerModelWrapper(
             RegistryObject<Block> block,
@@ -36,4 +40,8 @@ public interface InternalClientAPI
             @Nullable BlockState itemModelSource,
             @Nullable List<Property<?>> ignoredProps
     );
+
+    void enqueueClientTask(long delay, Runnable task);
+
+    BakedModel createFluidModel(Fluid fluid);
 }

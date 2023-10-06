@@ -1,16 +1,16 @@
-package xfacthd.framedblocks.api.shapes;
+package xfacthd.framedblocks.common.data.shapes;
 
 import com.google.common.base.Stopwatch;
 import com.mojang.logging.LogUtils;
 import net.minecraft.server.packs.resources.ResourceManager;
 import net.minecraft.server.packs.resources.ResourceManagerReloadListener;
-import org.jetbrains.annotations.ApiStatus;
 import org.slf4j.Logger;
+import xfacthd.framedblocks.api.shapes.ReloadableShapeProvider;
+import xfacthd.framedblocks.api.shapes.ShapeCache;
 
 import java.util.ArrayList;
 import java.util.List;
 
-@ApiStatus.Internal
 public final class ShapeReloader implements ResourceManagerReloadListener
 {
     public static final ShapeReloader INSTANCE = new ShapeReloader();
@@ -20,12 +20,12 @@ public final class ShapeReloader implements ResourceManagerReloadListener
 
     private ShapeReloader() { }
 
-    static synchronized void addCache(ShapeCache<?> cache)
+    public static synchronized void addCache(ShapeCache<?> cache)
     {
         CACHES.add(cache);
     }
 
-    static synchronized void addProvider(ReloadableShapeProvider provider)
+    public static synchronized void addProvider(ReloadableShapeProvider provider)
     {
         PROVIDERS.add(provider);
     }

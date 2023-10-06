@@ -1,9 +1,10 @@
-package xfacthd.framedblocks.api.model.data;
+package xfacthd.framedblocks.client.model;
 
 import com.google.common.base.Preconditions;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.block.model.BakedQuad;
 import net.minecraft.core.Direction;
+import xfacthd.framedblocks.api.model.data.QuadMap;
 import xfacthd.framedblocks.api.util.Utils;
 
 import java.util.*;
@@ -11,7 +12,7 @@ import java.util.*;
 public final class QuadTable implements QuadMap
 {
     private static final int LAYER_COUNT = RenderType.chunkBufferLayers().size();
-    static final int SIDE_COUNT = Direction.values().length + 1;
+    private static final int SIDE_COUNT = Direction.values().length + 1;
     private static final List<BakedQuad> EMPTY = List.of();
 
     @SuppressWarnings("unchecked")

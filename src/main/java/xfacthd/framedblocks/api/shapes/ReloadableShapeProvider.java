@@ -6,6 +6,7 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import net.minecraftforge.fml.loading.FMLEnvironment;
 import org.jetbrains.annotations.ApiStatus;
+import xfacthd.framedblocks.api.internal.InternalAPI;
 
 import java.util.function.BiConsumer;
 
@@ -21,7 +22,7 @@ public final class ReloadableShapeProvider implements ShapeProvider
         this.generator = generator;
         this.states = states;
         this.wrapped = generator.generate(states);
-        ShapeReloader.addProvider(this);
+        InternalAPI.INSTANCE.registerReloadableShapeProvider(this);
     }
 
     @Override
@@ -43,7 +44,7 @@ public final class ReloadableShapeProvider implements ShapeProvider
     }
 
     @ApiStatus.Internal
-    void reload()
+    public void reload()
     {
         wrapped = generator.generate(states);
     }

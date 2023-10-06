@@ -64,7 +64,7 @@ public class FramedBlockEntity extends BlockEntity
 
     public FramedBlockEntity(BlockPos pos, BlockState state)
     {
-        this(FramedBlocksAPI.INSTANCE.defaultBlockEntity(), pos, state);
+        this(InternalAPI.INSTANCE.getDefaultBlockEntity(), pos, state);
     }
 
     protected FramedBlockEntity(BlockEntityType<?> type, BlockPos pos, BlockState state)
@@ -125,11 +125,11 @@ public class FramedBlockEntity extends BlockEntity
 
     private boolean canMakeIntangible(ItemStack stack)
     {
-        if (!FramedBlocksAPI.INSTANCE.enableIntangibility())
+        if (!ConfigView.Server.INSTANCE.enableIntangibility())
         {
             return false;
         }
-        return stack.is(FramedBlocksAPI.INSTANCE.getIntangibilityMarkerItem()) && getBlockType().allowMakingIntangible();
+        return stack.is(ConfigView.Server.INSTANCE.getIntangibilityMarkerItem()) && getBlockType().allowMakingIntangible();
     }
 
     private static boolean canRemoveReinforcement(ItemStack stack)
@@ -147,7 +147,7 @@ public class FramedBlockEntity extends BlockEntity
         if (!level.isClientSide())
         {
             ItemStack camoStack = camo.toItemStack(stack);
-            if (!player.isCreative() && FramedBlocksAPI.INSTANCE.shouldConsumeCamo())
+            if (!player.isCreative() && ConfigView.Server.INSTANCE.shouldConsumeCamoItem())
             {
                 if (!player.getInventory().add(camoStack))
                 {
@@ -176,7 +176,7 @@ public class FramedBlockEntity extends BlockEntity
             //noinspection ConstantConditions
             if (!level.isClientSide())
             {
-                if (!player.isCreative() && FramedBlocksAPI.INSTANCE.shouldConsumeCamo())
+                if (!player.isCreative() && ConfigView.Server.INSTANCE.shouldConsumeCamoItem())
                 {
                     // Container holds fluid in NBT -> stack doesn't change
                     if (result == input)
@@ -216,7 +216,7 @@ public class FramedBlockEntity extends BlockEntity
                 CamoContainer.Factory factory = FramedBlocksAPI.INSTANCE.getCamoContainerFactory(stack);
                 setCamo(factory.fromItem(stack), secondary);
 
-                if (!player.isCreative() && FramedBlocksAPI.INSTANCE.shouldConsumeCamo())
+                if (!player.isCreative() && ConfigView.Server.INSTANCE.shouldConsumeCamoItem())
                 {
                     stack.shrink(1);
                 }
@@ -236,7 +236,7 @@ public class FramedBlockEntity extends BlockEntity
             //noinspection ConstantConditions
             if (!level.isClientSide())
             {
-                if (!player.isCreative() && FramedBlocksAPI.INSTANCE.shouldConsumeCamo())
+                if (!player.isCreative() && ConfigView.Server.INSTANCE.shouldConsumeCamoItem())
                 {
                     ItemStack result = stack.getCapability(ForgeCapabilities.FLUID_HANDLER_ITEM).map(handler ->
                     {
@@ -327,7 +327,7 @@ public class FramedBlockEntity extends BlockEntity
         {
             setIntangible(false);
 
-            ItemStack result = new ItemStack(FramedBlocksAPI.INSTANCE.getIntangibilityMarkerItem());
+            ItemStack result = new ItemStack(ConfigView.Server.INSTANCE.getIntangibilityMarkerItem());
             if (!player.getInventory().add(result))
             {
                 player.drop(result, false);
@@ -385,7 +385,7 @@ public class FramedBlockEntity extends BlockEntity
             }
             return false;
         }
-        if (state.hasBlockEntity() && !FramedBlocksAPI.INSTANCE.allowBlockEntities() && !state.is(Utils.BE_WHITELIST))
+        if (state.hasBlockEntity() && !ConfigView.Server.INSTANCE.allowBlockEntities() && !state.is(Utils.BE_WHITELIST))
         {
             if (player != null)
             {
@@ -667,7 +667,7 @@ public class FramedBlockEntity extends BlockEntity
 
     public boolean isIntangible(CollisionContext ctx)
     {
-        if (!FramedBlocksAPI.INSTANCE.enableIntangibility() || !intangible)
+        if (!ConfigView.Server.INSTANCE.enableIntangibility() || !intangible)
         {
             return false;
         }

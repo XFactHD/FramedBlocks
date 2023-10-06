@@ -9,7 +9,6 @@ import net.minecraftforge.client.model.data.ModelData;
 import net.minecraftforge.client.model.data.ModelDataManager;
 import net.minecraftforge.fml.loading.FMLEnvironment;
 import org.jetbrains.annotations.Nullable;
-import xfacthd.framedblocks.api.FramedBlocksClientAPI;
 import xfacthd.framedblocks.api.block.FramedBlockEntity;
 import xfacthd.framedblocks.api.block.IFramedBlock;
 import xfacthd.framedblocks.api.block.cache.StateCache;
@@ -17,6 +16,7 @@ import xfacthd.framedblocks.api.model.data.FramedBlockData;
 import xfacthd.framedblocks.api.predicate.contex.ConTexMode;
 import xfacthd.framedblocks.api.type.IBlockType;
 import xfacthd.framedblocks.api.util.Utils;
+import xfacthd.framedblocks.client.util.ClientConfig;
 
 import java.util.function.Predicate;
 
@@ -39,7 +39,7 @@ public final class AppearanceHelper
             return AIR;
         }
 
-        ConTexMode mode = FramedBlocksClientAPI.INSTANCE.getConTexMode();
+        ConTexMode mode = ClientConfig.conTexMode;
         if (mode == ConTexMode.NONE || queryPos == null)
         {
             // If queryPos is null, we can't make sure the connection is possible
