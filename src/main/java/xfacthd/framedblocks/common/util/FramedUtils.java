@@ -27,8 +27,8 @@ import java.util.function.Consumer;
 
 public final class FramedUtils
 {
-    private static final MethodHandle MH_STATE_DEF_BUILDER_GET_PROPERTIES = Utils.unreflectField(
-            StateDefinition.Builder.class, "f_61096_"
+    private static final MethodHandle MH_STATE_DEF_BUILDER_GET_PROPERTIES = Utils.unreflectFieldGetter(
+            StateDefinition.Builder.class, "properties"
     );
     private static final Lazy<Set<Item>> RAIL_ITEMS = Lazy.concurrentOf(() ->
     {

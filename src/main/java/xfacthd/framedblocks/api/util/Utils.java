@@ -33,9 +33,9 @@ import net.minecraft.world.level.chunk.LevelChunk;
 import net.minecraft.world.level.material.*;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.fml.loading.FMLEnvironment;
-import net.minecraftforge.fml.util.ObfuscationReflectionHelper;
 import net.minecraftforge.registries.*;
 import org.jetbrains.annotations.ApiStatus;
+import org.jetbrains.annotations.Nullable;
 import xfacthd.framedblocks.api.block.FramedBlockEntity;
 import xfacthd.framedblocks.api.block.FramedProperties;
 import xfacthd.framedblocks.api.camo.CamoContainer;
@@ -402,7 +402,8 @@ public final class Utils
             return Fluids.EMPTY.defaultFluidState();
         }
 
-        Fluid fluid = ForgeRegistries.FLUIDS.getValue(new ResourceLocation(tag.getString("Name")));
+        //noinspection deprecation
+        Fluid fluid = BuiltInRegistries.FLUID.get(new ResourceLocation(tag.getString("Name")));
         Preconditions.checkNotNull(fluid);
 
         FluidState fluidState = fluid.defaultFluidState();
@@ -522,42 +523,97 @@ public final class Utils
         return new ResourceLocation(FramedConstants.MOD_ID, path);
     }
 
-    public static MethodHandle unreflectMethod(Class<?> clazz, String srgMethodName, Class<?>... paramTypes)
+    public static Method findMethod(Class<?> clazz, String methodName, Class<?>... paramTypes)
     {
-        Method method = ObfuscationReflectionHelper.findMethod(clazz, srgMethodName, paramTypes);
+        try
+        {
+            Method method = clazz.getMethod(methodName, paramTypes);
+            method.setAccessible(true);
+            return method;
+        }
+        catch (NoSuchMethodException e)
+        {
+            throw new RuntimeException("Failed to find method '%s#%s()'".formatted(clazz.getName(), methodName), e);
+        }
+    }
+
+    public static Field findField(Class<?> clazz, String fieldName)
+    {
+        try
+        {
+            Field field = clazz.getDeclaredField(fieldName);
+            field.setAccessible(true);
+            return field;
+        }
+        catch (NoSuchFieldException e)
+        {
+            throw new RuntimeException("Failed to find field '%s#%s'".formatted(clazz.getName(), fieldName), e);
+        }
+    }
+
+    public static MethodHandle unreflectMethod(Class<?> clazz, String methodName, Class<?>... paramTypes)
+    {
+        Method method = findMethod(clazz, methodName, paramTypes);
         try
         {
             return MethodHandles.publicLookup().unreflect(method);
         }
         catch (IllegalAccessException e)
         {
-            throw new RuntimeException("Failed to unreflect method '%s#%s()'".formatted(clazz.getName(), srgMethodName), e);
+            throw new RuntimeException("Failed to unreflect method '%s#%s()'".formatted(clazz.getName(), methodName), e);
         }
     }
 
-    public static MethodHandle unreflectField(Class<?> clazz, String srgFieldName)
+    public static MethodHandle unreflectFieldGetter(Class<?> clazz, String fieldName)
     {
-        Field field = ObfuscationReflectionHelper.findField(clazz, srgFieldName);
+        Field field = findField(clazz, fieldName);
         try
         {
             return MethodHandles.publicLookup().unreflectGetter(field);
         }
         catch (IllegalAccessException e)
         {
-            throw new RuntimeException("Failed to unreflect field '%s#%s'".formatted(clazz.getName(), srgFieldName), e);
+            throw new RuntimeException("Failed to unreflect field '%s#%s'".formatted(clazz.getName(), fieldName), e);
         }
     }
 
-    public static MethodHandle unreflectFieldSetter(Class<?> clazz, String srgFieldName)
+    public static MethodHandle unreflectFieldSetter(Class<?> clazz, String fieldName)
     {
-        Field field = ObfuscationReflectionHelper.findField(clazz, srgFieldName);
+        Field field = findField(clazz, fieldName);
         try
         {
             return MethodHandles.publicLookup().unreflectSetter(field);
         }
         catch (IllegalAccessException e)
         {
-            throw new RuntimeException("Failed to unreflect field '%s#%s'".formatted(clazz.getName(), srgFieldName), e);
+            throw new RuntimeException("Failed to unreflect field '%s#%s'".formatted(clazz.getName(), fieldName), e);
+        }
+    }
+
+    @SuppressWarnings("unchecked")
+    public static <T, E> T getPrivateValue(Class<? super E> clazz, @Nullable E instance, String fieldName)
+    {
+        Field field = findField(clazz, fieldName);
+        try
+        {
+            return (T) field.get(instance);
+        }
+        catch (IllegalAccessException e)
+        {
+            throw new RuntimeException("Failed to get private value of field '%s#%s'".formatted(clazz.getName(), fieldName), e);
+        }
+    }
+
+    public static <T, E> void setPrivateValue(Class<? super E> clazz, @Nullable E instance, @Nullable T value, String fieldName)
+    {
+        Field field = findField(clazz, fieldName);
+        try
+        {
+            field.set(instance, value);
+        }
+        catch (IllegalAccessException e)
+        {
+            throw new RuntimeException("Failed to set private value of field '%s#%s'".formatted(clazz.getName(), fieldName), e);
         }
     }
 

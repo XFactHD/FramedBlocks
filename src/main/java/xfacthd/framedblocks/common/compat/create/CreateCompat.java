@@ -9,9 +9,9 @@ import net.minecraft.world.level.block.Block;
 import net.minecraftforge.client.model.data.ModelProperty;
 import net.minecraftforge.fml.ModList;
 import net.minecraftforge.fml.loading.FMLEnvironment;
-import net.minecraftforge.fml.util.ObfuscationReflectionHelper;
 import net.minecraftforge.registries.RegistryObject;
 import xfacthd.framedblocks.FramedBlocks;
+import xfacthd.framedblocks.api.util.Utils;
 import xfacthd.framedblocks.client.data.ConTexDataHandler;
 import xfacthd.framedblocks.common.FBContent;
 
@@ -87,7 +87,7 @@ public final class CreateCompat
 
         public static void init()
         {
-            ModelProperty<?> ctProperty = ObfuscationReflectionHelper.getPrivateValue(CTModel.class, null, "CT_PROPERTY");
+            ModelProperty<?> ctProperty = Utils.getPrivateValue(CTModel.class, null, "CT_PROPERTY");
             ConTexDataHandler.addConTexProperty(ctProperty);
         }
     }

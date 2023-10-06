@@ -9,8 +9,8 @@ import java.lang.invoke.MethodHandle;
 
 public final class RecipeUtils
 {
-    private static final MethodHandle INGREDIENT_GET_VALUES = Utils.unreflectField(Ingredient.class, "f_43902_");
-    private static final MethodHandle INGREDIENT_TAGVALUE_GET_TAG = Utils.unreflectField(Ingredient.TagValue.class, "f_43959_");
+    private static final MethodHandle INGREDIENT_GET_VALUES = Utils.unreflectFieldGetter(Ingredient.class, "values");
+    private static final MethodHandle INGREDIENT_TAGVALUE_GET_TAG = Utils.unreflectFieldGetter(Ingredient.TagValue.class, "tag");
 
     public static Ingredient.Value getSingleIngredientValue(Ingredient ing)
     {

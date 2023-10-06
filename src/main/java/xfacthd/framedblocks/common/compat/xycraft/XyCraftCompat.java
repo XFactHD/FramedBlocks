@@ -3,8 +3,8 @@ package xfacthd.framedblocks.common.compat.xycraft;
 import net.minecraftforge.client.model.data.ModelProperty;
 import net.minecraftforge.fml.ModList;
 import net.minecraftforge.fml.loading.FMLEnvironment;
-import net.minecraftforge.fml.util.ObfuscationReflectionHelper;
 import xfacthd.framedblocks.FramedBlocks;
+import xfacthd.framedblocks.api.util.Utils;
 import xfacthd.framedblocks.client.data.ConTexDataHandler;
 
 // TODO: remove explicit compat when XyCraft ships compat via IMC
@@ -36,7 +36,7 @@ public final class XyCraftCompat
         public static void init() throws ClassNotFoundException
         {
             Class<?> modelDataClass = Class.forName("tv.soaryn.xycraft.core.client.render.model.ConnectedTextureModel$Data");
-            ModelProperty<?> property = ObfuscationReflectionHelper.getPrivateValue(modelDataClass, null, "PROPERTY");
+            ModelProperty<?> property = Utils.getPrivateValue(modelDataClass, null, "PROPERTY");
             ConTexDataHandler.addConTexProperty(property);
         }
     }

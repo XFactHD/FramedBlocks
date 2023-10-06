@@ -15,9 +15,9 @@ import net.minecraft.world.inventory.TransientCraftingContainer;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.*;
 import net.minecraft.world.level.Level;
-import net.minecraftforge.fml.util.ObfuscationReflectionHelper;
 import org.apache.commons.lang3.mutable.MutableInt;
 import xfacthd.framedblocks.api.util.FramedConstants;
+import xfacthd.framedblocks.api.util.Utils;
 import xfacthd.framedblocks.cmdtests.SpecialTestCommand;
 
 import java.util.*;
@@ -49,7 +49,7 @@ public final class RecipeCollisions
                 .toList();
 
         TransientCraftingContainer container = new TransientCraftingContainer(player.containerMenu, 3, 3);
-        NonNullList<ItemStack> items = Objects.requireNonNull(ObfuscationReflectionHelper.getPrivateValue(TransientCraftingContainer.class, container, "f_286951_"));
+        NonNullList<ItemStack> items = Objects.requireNonNull(Utils.getPrivateValue(TransientCraftingContainer.class, container, "items"));
 
         Multimap<ResourceLocation, ResourceLocation> collisions = ArrayListMultimap.create();
         MutableInt combinations = new MutableInt(0);

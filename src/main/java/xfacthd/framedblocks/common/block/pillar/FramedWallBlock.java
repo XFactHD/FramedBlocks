@@ -18,10 +18,10 @@ import net.minecraft.world.level.storage.loot.LootParams;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import net.minecraftforge.client.extensions.common.IClientBlockExtensions;
-import net.minecraftforge.fml.util.ObfuscationReflectionHelper;
 import xfacthd.framedblocks.api.block.FramedProperties;
 import xfacthd.framedblocks.api.block.IFramedBlock;
 import xfacthd.framedblocks.api.block.render.FramedBlockRenderProperties;
+import xfacthd.framedblocks.api.util.Utils;
 import xfacthd.framedblocks.common.data.BlockType;
 
 import javax.annotation.Nullable;
@@ -134,13 +134,13 @@ public class FramedWallBlock extends WallBlock implements IFramedBlock
 
     private void fixShapeMaps()
     {
-        Map<BlockState, VoxelShape> shapeByIndex = ObfuscationReflectionHelper.getPrivateValue(WallBlock.class, this, "f_57955_");
+        Map<BlockState, VoxelShape> shapeByIndex = Utils.getPrivateValue(WallBlock.class, this, "shapeByIndex");
         shapeByIndex = fixShapeMap(shapeByIndex);
-        ObfuscationReflectionHelper.setPrivateValue(WallBlock.class, this, shapeByIndex, "f_57955_");
+        Utils.setPrivateValue(WallBlock.class, this, shapeByIndex, "shapeByIndex");
 
-        Map<BlockState, VoxelShape> collisionShapeByIndex = ObfuscationReflectionHelper.getPrivateValue(WallBlock.class, this, "f_57956_");
+        Map<BlockState, VoxelShape> collisionShapeByIndex = Utils.getPrivateValue(WallBlock.class, this, "collisionShapeByIndex");
         collisionShapeByIndex = fixShapeMap(collisionShapeByIndex);
-        ObfuscationReflectionHelper.setPrivateValue(WallBlock.class, this, collisionShapeByIndex, "f_57956_");
+        Utils.setPrivateValue(WallBlock.class, this, collisionShapeByIndex, "collisionShapeByIndex");
     }
 
     private static Map<BlockState, VoxelShape> fixShapeMap(Map<BlockState, VoxelShape> map)

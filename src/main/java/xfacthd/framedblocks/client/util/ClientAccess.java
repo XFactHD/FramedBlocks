@@ -12,7 +12,7 @@ import java.util.Objects;
 
 public final class ClientAccess
 {
-    private static final MethodHandle MPGM_DESTROY_DELAY = Utils.unreflectFieldSetter(MultiPlayerGameMode.class, "f_105195_");
+    private static final MethodHandle MPGM_DESTROY_DELAY = Utils.unreflectFieldSetter(MultiPlayerGameMode.class, "destroyDelay");
 
     public static void openSignScreen(BlockPos pos, boolean front)
     {

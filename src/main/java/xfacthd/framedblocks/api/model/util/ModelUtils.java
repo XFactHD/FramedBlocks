@@ -204,7 +204,7 @@ public final class ModelUtils
         return camoData != null ? camoData : ModelData.EMPTY;
     }
 
-    private static final MethodHandle WBM_WRAPPED_MODEL = Utils.unreflectField(WeightedBakedModel.class, "f_119542_");
+    private static final MethodHandle WBM_WRAPPED_MODEL = Utils.unreflectFieldGetter(WeightedBakedModel.class, "wrapped");
 
     public static ArrayList<BakedQuad> getAllCullableQuads(
             BakedModel model, BlockState state, RandomSource rand, ModelData data, RenderType renderType
