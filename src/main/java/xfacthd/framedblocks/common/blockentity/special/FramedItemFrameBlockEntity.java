@@ -22,6 +22,7 @@ import xfacthd.framedblocks.common.FBContent;
 import xfacthd.framedblocks.common.data.BlockType;
 import xfacthd.framedblocks.common.data.PropertyHolder;
 
+import java.util.List;
 import java.util.Objects;
 
 public class FramedItemFrameBlockEntity extends FramedBlockEntity
@@ -211,6 +212,16 @@ public class FramedItemFrameBlockEntity extends FramedBlockEntity
     {
         //noinspection ConstantConditions
         level.playSound(null, worldPosition.getX(), worldPosition.getY(), worldPosition.getZ(), sound, SoundSource.BLOCKS, 1F, 1F);
+    }
+
+    @Override
+    public void addAdditionalDrops(List<ItemStack> drops, boolean dropCamo)
+    {
+        super.addAdditionalDrops(drops, dropCamo);
+        if (!heldItem.isEmpty())
+        {
+            drops.add(getCloneItem());
+        }
     }
 
     // Network
