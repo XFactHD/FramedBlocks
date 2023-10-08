@@ -152,12 +152,7 @@ public class FramedExtendedCornerSlopePanelWallBlock extends FramedBlock
                 case DOWN, LEFT -> FramedElevatedSlopeSlabBlock.SHAPES.get(Boolean.FALSE);
             };
             VoxelShape preShape = ShapeUtils.andUnoptimized(shapeOne, shapeTwo);
-
-            for (Direction dir : Direction.Plane.HORIZONTAL)
-            {
-                int idx = dir.get2DDataValue() | (rot.ordinal() << 2);
-                shapes[idx] = ShapeUtils.rotateShape(Direction.NORTH, dir, preShape);
-            }
+            ShapeUtils.makeHorizontalRotations(preShape, Direction.NORTH, shapes, rot.ordinal() << 2);
         }
 
         for (BlockState state : states)
@@ -197,12 +192,7 @@ public class FramedExtendedCornerSlopePanelWallBlock extends FramedBlock
                 case DOWN, LEFT -> FramedElevatedSlopeSlabBlock.SHAPES.get(Boolean.TRUE);
             };
             VoxelShape preShape = ShapeUtils.orUnoptimized(shapeOne, shapeTwo);
-
-            for (Direction dir : Direction.Plane.HORIZONTAL)
-            {
-                int idx = dir.get2DDataValue() | (rot.ordinal() << 2);
-                shapes[idx] = ShapeUtils.rotateShape(Direction.NORTH, dir, preShape);
-            }
+            ShapeUtils.makeHorizontalRotations(preShape, Direction.NORTH, shapes, rot.ordinal() << 2);
         }
 
         for (BlockState state : states)

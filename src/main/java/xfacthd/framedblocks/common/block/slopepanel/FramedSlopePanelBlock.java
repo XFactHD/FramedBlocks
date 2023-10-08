@@ -189,14 +189,8 @@ public class FramedSlopePanelBlock extends FramedBlock
         {
             VoxelShape shape = SHAPES.get(rot);
             VoxelShape shapeFront = shape.move(0, 0, .5);
-
-            for (Direction dir : Direction.Plane.HORIZONTAL)
-            {
-                int idx = dir.get2DDataValue() | (rot.ordinal() << 2);
-                shapes[idx] = ShapeUtils.rotateShape(Direction.NORTH, dir, shape);
-                idx = dir.get2DDataValue() | (rot.ordinal() << 2) | maskFront;
-                shapes[idx] = ShapeUtils.rotateShape(Direction.NORTH, dir, shapeFront);
-            }
+            ShapeUtils.makeHorizontalRotations(shape, Direction.NORTH, shapes, rot.ordinal() << 2);
+            ShapeUtils.makeHorizontalRotations(shapeFront, Direction.NORTH, shapes, maskFront | (rot.ordinal() << 2));
         }
 
         for (BlockState state : states)

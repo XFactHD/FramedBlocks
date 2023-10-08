@@ -170,17 +170,14 @@ public class FramedHalfSlopeBlock extends FramedBlock
         int maskTop = 0b0100;
         int maskRight = 0b1000;
         VoxelShape[] shapes = new VoxelShape[4 * 4];
-        for (Direction dir : Direction.Plane.HORIZONTAL)
+        for (int i = 0; i < 4; i++)
         {
-            for (int i = 0; i < 4; i++)
-            {
-                int idx = dir.get2DDataValue() | (i << 2);
-                shapes[idx] = ShapeUtils.rotateShape(
-                        Direction.NORTH,
-                        dir,
-                        SHAPES.get(new ShapeKey((idx & maskTop) != 0, (idx & maskRight) != 0))
-                );
-            }
+            ShapeUtils.makeHorizontalRotations(
+                    SHAPES.get(new ShapeKey((i & 0b01) != 0, (i & 0b10) != 0)),
+                    Direction.NORTH,
+                    shapes,
+                    i << 2
+            );
         }
 
         for (BlockState state : states)

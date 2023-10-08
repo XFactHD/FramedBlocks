@@ -169,16 +169,9 @@ public class FramedVerticalStairsBlock extends FramedBlock
                 Block.box(0, 8, 8, 8, 16, 16)
         );
 
-        for (Direction dir : Direction.Plane.HORIZONTAL)
-        {
-            map.put(new ShapeKey(dir, StairsType.VERTICAL), ShapeUtils.rotateShape(Direction.SOUTH, dir, vertShape));
-            map.put(new ShapeKey(dir, StairsType.TOP_CORNER), ShapeUtils.rotateShape(
-                    Direction.SOUTH, dir, topCornerShape
-            ));
-            map.put(new ShapeKey(dir, StairsType.BOTTOM_CORNER), ShapeUtils.rotateShape(
-                    Direction.SOUTH, dir, bottomCornerShape
-            ));
-        }
+        ShapeUtils.makeHorizontalRotations(vertShape, Direction.SOUTH, map, StairsType.VERTICAL, ShapeKey::new);
+        ShapeUtils.makeHorizontalRotations(topCornerShape, Direction.SOUTH, map, StairsType.TOP_CORNER, ShapeKey::new);
+        ShapeUtils.makeHorizontalRotations(bottomCornerShape, Direction.SOUTH, map, StairsType.BOTTOM_CORNER, ShapeKey::new);
     });
 
     public static ShapeProvider generateShapes(ImmutableList<BlockState> states)

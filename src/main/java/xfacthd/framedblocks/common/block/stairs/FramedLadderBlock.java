@@ -27,19 +27,11 @@ public class FramedLadderBlock extends FramedBlock
     private static final VoxelShape COLLISION_SHAPE_NORTH = box( 0, 0,  0, 16, 16,  3);
 
     private static final ShapeCache<Direction> SHAPES = new ShapeCache<>(new EnumMap<>(Direction.class), map ->
-    {
-        for (Direction dir : Direction.Plane.HORIZONTAL)
-        {
-            map.put(dir, ShapeUtils.rotateShape(Direction.NORTH, dir, SHAPE_NORTH));
-        }
-    });
+            ShapeUtils.makeHorizontalRotations(SHAPE_NORTH, Direction.NORTH, map)
+    );
     private static final ShapeCache<Direction> COLLISION_SHAPES = new ShapeCache<>(new EnumMap<>(Direction.class), map ->
-    {
-        for (Direction dir : Direction.Plane.HORIZONTAL)
-        {
-            map.put(dir, ShapeUtils.rotateShape(Direction.NORTH, dir, COLLISION_SHAPE_NORTH));
-        }
-    });
+            ShapeUtils.makeHorizontalRotations(COLLISION_SHAPE_NORTH, Direction.NORTH, map)
+    );
 
     public FramedLadderBlock()
     {

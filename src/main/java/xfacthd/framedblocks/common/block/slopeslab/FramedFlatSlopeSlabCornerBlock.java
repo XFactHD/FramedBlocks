@@ -160,14 +160,10 @@ public class FramedFlatSlopeSlabCornerBlock extends FramedBlock
         int maskTop = 0b0100;
         int maskTopHalf = 0b1000;
         VoxelShape[] shapes = new VoxelShape[16];
-        for (Direction dir : Direction.Plane.HORIZONTAL)
-        {
-            int horId = dir.get2DDataValue();
-            shapes[horId] = ShapeUtils.rotateShape(Direction.NORTH, dir, shapeBottomBottomHalf);
-            shapes[horId | maskTopHalf] = ShapeUtils.rotateShape(Direction.NORTH, dir, shapeBottomTopHalf);
-            shapes[horId | maskTop] = ShapeUtils.rotateShape(Direction.NORTH, dir, shapeTopBottomHalf);
-            shapes[horId | maskTop | maskTopHalf] = ShapeUtils.rotateShape(Direction.NORTH, dir, shapeTopTopHalf);
-        }
+        ShapeUtils.makeHorizontalRotations(shapeBottomBottomHalf, Direction.NORTH, shapes, 0);
+        ShapeUtils.makeHorizontalRotations(shapeBottomTopHalf, Direction.NORTH, shapes, maskTopHalf);
+        ShapeUtils.makeHorizontalRotations(shapeTopBottomHalf, Direction.NORTH, shapes, maskTop);
+        ShapeUtils.makeHorizontalRotations(shapeTopTopHalf, Direction.NORTH, shapes, maskTop | maskTopHalf);
 
         for (BlockState state : states)
         {
@@ -202,14 +198,10 @@ public class FramedFlatSlopeSlabCornerBlock extends FramedBlock
         int maskTop = 0b0100;
         int maskTopHalf = 0b1000;
         VoxelShape[] shapes = new VoxelShape[16];
-        for (Direction dir : Direction.Plane.HORIZONTAL)
-        {
-            int horId = dir.get2DDataValue();
-            shapes[horId] = ShapeUtils.rotateShape(Direction.NORTH, dir, shapeBottomBottomHalf);
-            shapes[horId | maskTopHalf] = ShapeUtils.rotateShape(Direction.NORTH, dir, shapeBottomTopHalf);
-            shapes[horId | maskTop] = ShapeUtils.rotateShape(Direction.NORTH, dir, shapeTopBottomHalf);
-            shapes[horId | maskTop | maskTopHalf] = ShapeUtils.rotateShape(Direction.NORTH, dir, shapeTopTopHalf);
-        }
+        ShapeUtils.makeHorizontalRotations(shapeBottomBottomHalf, Direction.NORTH, shapes, 0);
+        ShapeUtils.makeHorizontalRotations(shapeBottomTopHalf, Direction.NORTH, shapes, maskTopHalf);
+        ShapeUtils.makeHorizontalRotations(shapeTopBottomHalf, Direction.NORTH, shapes, maskTop);
+        ShapeUtils.makeHorizontalRotations(shapeTopTopHalf, Direction.NORTH, shapes, maskTop | maskTopHalf);
 
         for (BlockState state : states)
         {

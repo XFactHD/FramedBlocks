@@ -142,7 +142,7 @@ public class FramedVerticalSlopedStairsBlock extends FramedBlock
 
         VoxelShape panelShape = box(0, 0, 0, 16, 16, 8);
 
-        VoxelShape shapeUp =  ShapeUtils.orUnoptimized(
+        VoxelShape shapeUp = ShapeUtils.orUnoptimized(
                 panelShape,
                 ShapeUtils.rotateShapeUnoptimized(
                         Direction.NORTH,
@@ -179,22 +179,10 @@ public class FramedVerticalSlopedStairsBlock extends FramedBlock
         );
 
         VoxelShape[] shapes = new VoxelShape[4 * 4];
-        for (Direction dir : Direction.Plane.HORIZONTAL)
-        {
-            int horId = dir.get2DDataValue();
-            shapes[horId] = ShapeUtils.rotateShape(
-                    Direction.NORTH, dir, shapeUp
-            );
-            shapes[horId | (HorizontalRotation.DOWN.ordinal() << 2)] = ShapeUtils.rotateShape(
-                    Direction.NORTH, dir, shapeDown
-            );
-            shapes[horId | (HorizontalRotation.RIGHT.ordinal() << 2)] = ShapeUtils.rotateShape(
-                    Direction.NORTH, dir, shapeRight
-            );
-            shapes[horId | (HorizontalRotation.LEFT.ordinal() << 2)] = ShapeUtils.rotateShape(
-                    Direction.NORTH, dir, shapeLeft
-            );
-        }
+        ShapeUtils.makeHorizontalRotations(shapeUp, Direction.NORTH, shapes, 0);
+        ShapeUtils.makeHorizontalRotations(shapeDown, Direction.NORTH, shapes, HorizontalRotation.DOWN.ordinal() << 2);
+        ShapeUtils.makeHorizontalRotations(shapeRight, Direction.NORTH, shapes, HorizontalRotation.RIGHT.ordinal() << 2);
+        ShapeUtils.makeHorizontalRotations(shapeLeft, Direction.NORTH, shapes, HorizontalRotation.LEFT.ordinal() << 2);
 
         for (BlockState state : states)
         {
