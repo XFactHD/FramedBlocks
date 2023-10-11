@@ -80,8 +80,9 @@ public final class AppearanceHelper
             {
                 LOGGER.error(
                         "AppearanceHelper#getAppearance() trying to recurse multiple times, this is a bug. " +
-                        "Please report this to FramedBlocks with the following stacktrace",
-                        new Throwable()
+                        "Please report this to FramedBlocks with the following stacktrace. " +
+                        "Pos: {}, State: {}, Side: {}",
+                        pos, state, side, new Throwable()
                 );
                 return AIR;
             }
