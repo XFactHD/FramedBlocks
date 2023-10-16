@@ -11,6 +11,7 @@ import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import org.jetbrains.annotations.Nullable;
 import xfacthd.framedblocks.api.block.FramedProperties;
+import xfacthd.framedblocks.api.block.PlacementStateBuilder;
 import xfacthd.framedblocks.api.util.*;
 import xfacthd.framedblocks.common.FBContent;
 import xfacthd.framedblocks.common.block.AbstractFramedDoubleBlock;
@@ -35,14 +36,9 @@ public class FramedVerticalDoubleStairsBlock extends AbstractFramedDoubleBlock
     }
 
     @Override
-    public BlockState getStateForPlacement(BlockPlaceContext context)
+    public BlockState getStateForPlacement(BlockPlaceContext ctx)
     {
-        return withCornerFacing(
-                defaultBlockState(),
-                context.getClickedFace(),
-                context.getHorizontalDirection(),
-                context.getClickLocation()
-        );
+        return PlacementStateBuilder.of(this, ctx).withHalfFacing().build();
     }
 
     @Override

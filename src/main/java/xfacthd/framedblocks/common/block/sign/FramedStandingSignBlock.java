@@ -13,6 +13,7 @@ import net.minecraft.world.level.block.state.properties.RotationSegment;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import xfacthd.framedblocks.api.block.IFramedBlock;
+import xfacthd.framedblocks.api.block.PlacementStateBuilder;
 import xfacthd.framedblocks.common.data.BlockType;
 import xfacthd.framedblocks.common.item.FramedSignItem;
 
@@ -34,11 +35,16 @@ public class FramedStandingSignBlock extends AbstractFramedSignBlock
     }
 
     @Override
-    public BlockState getStateForPlacement(BlockPlaceContext context)
+    public BlockState getStateForPlacement(BlockPlaceContext ctx)
     {
-        int rotation = RotationSegment.convertToSegment(context.getRotation() + 180.0F);
-        BlockState state = defaultBlockState().setValue(BlockStateProperties.ROTATION_16, rotation);
-        return withWater(state, context.getLevel(), context.getClickedPos());
+        return PlacementStateBuilder.of(this, ctx)
+                .withCustom((state, modCtx) ->
+                {
+                    int rotation = RotationSegment.convertToSegment(modCtx.getRotation() + 180.0F);
+                    return state.setValue(BlockStateProperties.ROTATION_16, rotation);
+                })
+                .withWater()
+                .build();
     }
 
     @Override

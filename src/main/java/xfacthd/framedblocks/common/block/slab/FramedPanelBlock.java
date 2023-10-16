@@ -18,6 +18,7 @@ import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import xfacthd.framedblocks.api.block.FramedProperties;
+import xfacthd.framedblocks.api.block.PlacementStateBuilder;
 import xfacthd.framedblocks.api.shapes.*;
 import xfacthd.framedblocks.api.util.*;
 import xfacthd.framedblocks.common.FBContent;
@@ -42,21 +43,12 @@ public class FramedPanelBlock extends FramedBlock
     }
 
     @Override
-    public BlockState getStateForPlacement(BlockPlaceContext context)
+    public BlockState getStateForPlacement(BlockPlaceContext ctx)
     {
-        BlockState state = defaultBlockState();
-
-        Direction face = context.getClickedFace();
-        if (face.getAxis().isHorizontal())
-        {
-            state = state.setValue(FramedProperties.FACING_HOR, face.getOpposite());
-        }
-        else
-        {
-            state = state.setValue(FramedProperties.FACING_HOR, context.getHorizontalDirection());
-        }
-
-        return withWater(state, context.getLevel(), context.getClickedPos());
+        return PlacementStateBuilder.of(this, ctx)
+                .withTargetOrHorizontalFacing()
+                .withWater()
+                .build();
     }
 
     @Override

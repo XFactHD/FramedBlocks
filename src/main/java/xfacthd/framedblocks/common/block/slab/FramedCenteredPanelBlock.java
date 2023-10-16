@@ -11,6 +11,7 @@ import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import xfacthd.framedblocks.api.block.FramedProperties;
+import xfacthd.framedblocks.api.block.PlacementStateBuilder;
 import xfacthd.framedblocks.api.shapes.ShapeProvider;
 import xfacthd.framedblocks.common.block.FramedBlock;
 import xfacthd.framedblocks.common.data.BlockType;
@@ -30,14 +31,20 @@ public class FramedCenteredPanelBlock extends FramedBlock
     }
 
     @Override
-    public BlockState getStateForPlacement(BlockPlaceContext context)
+    public BlockState getStateForPlacement(BlockPlaceContext ctx)
     {
-        Direction dir = context.getHorizontalDirection();
-        if (dir == Direction.SOUTH || dir == Direction.WEST)
-        {
-            dir = dir.getOpposite();
-        }
-        return defaultBlockState().setValue(FramedProperties.FACING_NE, dir);
+        return PlacementStateBuilder.of(this, ctx)
+                .withCustom((state, modCtx) ->
+                {
+                    Direction dir = modCtx.getHorizontalDirection();
+                    if (dir == Direction.SOUTH || dir == Direction.WEST)
+                    {
+                        dir = dir.getOpposite();
+                    }
+                    return state.setValue(FramedProperties.FACING_NE, dir);
+                })
+                .withWater()
+                .build();
     }
 
     @Override

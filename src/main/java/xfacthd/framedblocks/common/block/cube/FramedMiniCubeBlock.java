@@ -7,6 +7,7 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.block.state.properties.RotationSegment;
+import xfacthd.framedblocks.api.block.PlacementStateBuilder;
 import xfacthd.framedblocks.common.block.FramedBlock;
 import xfacthd.framedblocks.common.data.BlockType;
 
@@ -26,12 +27,15 @@ public class FramedMiniCubeBlock extends FramedBlock
     }
 
     @Override
-    public BlockState getStateForPlacement(BlockPlaceContext context)
+    public BlockState getStateForPlacement(BlockPlaceContext ctx)
     {
-        return defaultBlockState().setValue(
-                BlockStateProperties.ROTATION_16,
-                RotationSegment.convertToSegment(context.getRotation() + 180.0F)
-        );
+        return PlacementStateBuilder.of(this, ctx)
+                .withCustom((state, modCtx) -> state.setValue(
+                        BlockStateProperties.ROTATION_16,
+                        RotationSegment.convertToSegment(modCtx.getRotation() + 180F)
+                ))
+                .withWater()
+                .build();
     }
 
     @Override

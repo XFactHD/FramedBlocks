@@ -16,8 +16,7 @@ import xfacthd.framedblocks.api.block.FramedProperties;
 import xfacthd.framedblocks.api.block.IFramedBlock;
 import xfacthd.framedblocks.api.util.Utils;
 import xfacthd.framedblocks.common.FBContent;
-import xfacthd.framedblocks.common.block.AbstractFramedDoubleBlock;
-import xfacthd.framedblocks.common.block.ISlopeBlock;
+import xfacthd.framedblocks.common.block.*;
 import xfacthd.framedblocks.common.blockentity.doubled.FramedDividedSlopeBlockEntity;
 import xfacthd.framedblocks.common.data.BlockType;
 import xfacthd.framedblocks.common.data.PropertyHolder;
@@ -45,15 +44,12 @@ public class FramedDividedSlopeBlock extends AbstractFramedDoubleBlock implement
     }
 
     @Override
-    public BlockState getStateForPlacement(BlockPlaceContext context)
+    public BlockState getStateForPlacement(BlockPlaceContext ctx)
     {
-        BlockState state = withSlopeType(
-                defaultBlockState(),
-                context.getClickedFace(),
-                context.getHorizontalDirection(),
-                context.getClickLocation()
-        );
-        return withWater(state, context.getLevel(), context.getClickedPos());
+        return ExtPlacementStateBuilder.of(this, ctx)
+                .withHorizontalFacingAndSlopeType()
+                .withWater()
+                .build();
     }
 
     @Override

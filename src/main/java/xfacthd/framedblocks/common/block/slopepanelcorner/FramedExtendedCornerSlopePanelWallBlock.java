@@ -49,9 +49,7 @@ public class FramedExtendedCornerSlopePanelWallBlock extends FramedBlock
     public BlockState getStateForPlacement(BlockPlaceContext ctx)
     {
         return FramedCornerSlopePanelWallBlock.getStateForPlacement(
-                defaultBlockState(),
-                ctx,
-                getBlockType() == BlockType.FRAMED_EXT_CORNER_SLOPE_PANEL
+                this, ctx, getBlockType() == BlockType.FRAMED_EXT_CORNER_SLOPE_PANEL
         );
     }
 

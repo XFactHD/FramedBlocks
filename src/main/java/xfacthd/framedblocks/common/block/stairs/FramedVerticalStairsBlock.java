@@ -13,6 +13,7 @@ import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.block.state.properties.Half;
 import net.minecraft.world.phys.shapes.*;
 import xfacthd.framedblocks.api.block.FramedProperties;
+import xfacthd.framedblocks.api.block.PlacementStateBuilder;
 import xfacthd.framedblocks.api.shapes.*;
 import xfacthd.framedblocks.api.util.*;
 import xfacthd.framedblocks.common.block.FramedBlock;
@@ -38,15 +39,12 @@ public class FramedVerticalStairsBlock extends FramedBlock
     }
 
     @Override
-    public BlockState getStateForPlacement(BlockPlaceContext context)
+    public BlockState getStateForPlacement(BlockPlaceContext ctx)
     {
-        BlockState state = withCornerFacing(
-                defaultBlockState(),
-                context.getClickedFace(),
-                context.getHorizontalDirection(),
-                context.getClickLocation()
-        );
-        return getStateFromContext(state, context.getLevel(), context.getClickedPos());
+        return PlacementStateBuilder.of(this, ctx)
+                .withHalfOrHorizontalFacing()
+                .withCustom((state, modCtx) -> getStateFromContext(state, modCtx.getLevel(), modCtx.getClickedPos()))
+                .build();
     }
 
     @Override

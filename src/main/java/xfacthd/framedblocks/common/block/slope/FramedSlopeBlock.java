@@ -20,8 +20,7 @@ import net.minecraft.world.phys.shapes.VoxelShape;
 import xfacthd.framedblocks.api.block.*;
 import xfacthd.framedblocks.api.shapes.*;
 import xfacthd.framedblocks.api.util.*;
-import xfacthd.framedblocks.common.block.FramedBlock;
-import xfacthd.framedblocks.common.block.ISlopeBlock;
+import xfacthd.framedblocks.common.block.*;
 import xfacthd.framedblocks.common.data.*;
 import xfacthd.framedblocks.common.data.property.SlopeType;
 import xfacthd.framedblocks.common.util.FramedUtils;
@@ -48,15 +47,12 @@ public class FramedSlopeBlock extends FramedBlock implements ISlopeBlock
     }
 
     @Override
-    public BlockState getStateForPlacement(BlockPlaceContext context)
+    public BlockState getStateForPlacement(BlockPlaceContext ctx)
     {
-        BlockState state = withSlopeType(
-                defaultBlockState(),
-                context.getClickedFace(),
-                context.getHorizontalDirection(),
-                context.getClickLocation()
-        );
-        return withWater(state, context.getLevel(), context.getClickedPos());
+        return ExtPlacementStateBuilder.of(this, ctx)
+                .withHorizontalFacingAndSlopeType()
+                .withWater()
+                .build();
     }
 
     @Override

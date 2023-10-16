@@ -12,8 +12,7 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.phys.shapes.*;
-import xfacthd.framedblocks.api.block.FramedProperties;
-import xfacthd.framedblocks.api.block.IFramedBlock;
+import xfacthd.framedblocks.api.block.*;
 import xfacthd.framedblocks.api.shapes.ShapeProvider;
 import xfacthd.framedblocks.api.shapes.ShapeUtils;
 import xfacthd.framedblocks.api.util.Utils;
@@ -42,9 +41,12 @@ public class FramedPyramidBlock extends FramedBlock
     }
 
     @Override
-    public BlockState getStateForPlacement(BlockPlaceContext context)
+    public BlockState getStateForPlacement(BlockPlaceContext ctx)
     {
-        return defaultBlockState().setValue(BlockStateProperties.FACING, context.getClickedFace());
+        return PlacementStateBuilder.of(this, ctx)
+                .withTargetFacing(true)
+                .withWater()
+                .build();
     }
 
     @Override

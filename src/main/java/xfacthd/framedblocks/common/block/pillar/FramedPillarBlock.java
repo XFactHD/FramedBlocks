@@ -10,6 +10,7 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.phys.shapes.VoxelShape;
+import xfacthd.framedblocks.api.block.PlacementStateBuilder;
 import xfacthd.framedblocks.api.shapes.ShapeProvider;
 import xfacthd.framedblocks.api.util.Utils;
 import xfacthd.framedblocks.common.block.FramedBlock;
@@ -30,11 +31,14 @@ public class FramedPillarBlock extends FramedBlock
 
     @Nullable
     @Override
-    public BlockState getStateForPlacement(BlockPlaceContext context)
+    public BlockState getStateForPlacement(BlockPlaceContext ctx)
     {
-        BlockState state = defaultBlockState();
-        state = state.setValue(BlockStateProperties.AXIS, context.getClickedFace().getAxis());
-        return withWater(state, context.getLevel(), context.getClickedPos());
+        return PlacementStateBuilder.of(this, ctx)
+                .withCustom((state, modCtx) ->
+                        state.setValue(BlockStateProperties.AXIS, modCtx.getClickedFace().getAxis())
+                )
+                .withWater()
+                .build();
     }
 
     @Override

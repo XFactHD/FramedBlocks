@@ -10,6 +10,7 @@ import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import xfacthd.framedblocks.api.block.FramedProperties;
+import xfacthd.framedblocks.api.block.PlacementStateBuilder;
 import xfacthd.framedblocks.api.shapes.ShapeProvider;
 import xfacthd.framedblocks.api.shapes.ShapeUtils;
 import xfacthd.framedblocks.api.util.*;
@@ -28,9 +29,12 @@ public class FramedWallBoardBlock extends FramedBlock
     }
 
     @Override
-    public BlockState getStateForPlacement(BlockPlaceContext context)
+    public BlockState getStateForPlacement(BlockPlaceContext ctx)
     {
-        return defaultBlockState().setValue(FramedProperties.FACING_HOR, context.getHorizontalDirection());
+        return PlacementStateBuilder.of(this, ctx)
+                .withHorizontalFacing()
+                .withWater()
+                .build();
     }
 
     @Override

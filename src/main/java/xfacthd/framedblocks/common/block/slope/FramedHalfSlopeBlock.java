@@ -13,13 +13,13 @@ import net.minecraft.world.level.block.*;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
-import net.minecraft.world.phys.Vec3;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import xfacthd.framedblocks.api.block.IFramedBlock;
 import xfacthd.framedblocks.api.block.FramedProperties;
 import xfacthd.framedblocks.api.shapes.*;
 import xfacthd.framedblocks.api.util.Utils;
 import xfacthd.framedblocks.common.FBContent;
+import xfacthd.framedblocks.common.block.ExtPlacementStateBuilder;
 import xfacthd.framedblocks.common.block.FramedBlock;
 import xfacthd.framedblocks.common.data.BlockType;
 import xfacthd.framedblocks.common.data.PropertyHolder;
@@ -48,19 +48,14 @@ public class FramedHalfSlopeBlock extends FramedBlock
     }
 
     @Override
-    public BlockState getStateForPlacement(BlockPlaceContext context)
+    public BlockState getStateForPlacement(BlockPlaceContext ctx)
     {
-        Direction side = context.getClickedFace();
-        Vec3 hitVec = context.getClickLocation();
-
-        Direction dir = context.getHorizontalDirection();
-        BlockState state = defaultBlockState().setValue(FramedProperties.FACING_HOR, dir);
-
-        boolean right = Utils.fractionInDir(hitVec, dir.getClockWise()) > .5D;
-        state = state.setValue(PropertyHolder.RIGHT, right);
-
-        state = withTop(state, side, hitVec);
-        return withWater(state, context.getLevel(), context.getClickedPos());
+        return ExtPlacementStateBuilder.of(this, ctx)
+                .withHorizontalFacing()
+                .withTop()
+                .withRight()
+                .withWater()
+                .build();
     }
 
     @Override

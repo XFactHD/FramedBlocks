@@ -8,9 +8,9 @@ import net.minecraft.world.level.block.*;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
-import net.minecraft.world.phys.Vec3;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import xfacthd.framedblocks.api.block.FramedProperties;
+import xfacthd.framedblocks.api.block.PlacementStateBuilder;
 import xfacthd.framedblocks.api.shapes.ShapeProvider;
 import xfacthd.framedblocks.api.shapes.ShapeUtils;
 import xfacthd.framedblocks.api.util.*;
@@ -42,20 +42,13 @@ public class FramedSlopedStairsBlock extends FramedBlock
     }
 
     @Override
-    public BlockState getStateForPlacement(BlockPlaceContext context)
+    public BlockState getStateForPlacement(BlockPlaceContext ctx)
     {
-        Direction side = context.getClickedFace();
-        Vec3 hitVec = context.getClickLocation();
-
-        BlockState state = withCornerFacing(
-                defaultBlockState(),
-                context.getClickedFace(),
-                context.getHorizontalDirection(),
-                context.getClickLocation()
-        );
-
-        state = withTop(state, side, hitVec);
-        return withWater(state, context.getLevel(), context.getClickedPos());
+        return PlacementStateBuilder.of(this, ctx)
+                .withHalfFacing()
+                .withTop()
+                .withWater()
+                .build();
     }
 
     @Override

@@ -41,7 +41,7 @@ public class FramedDoublePrismBlock extends AbstractFramedDoubleBlock
     @Override
     public BlockState getStateForPlacement(BlockPlaceContext context)
     {
-        return FramedPrismBlock.getStateForPlacement(context, defaultBlockState(), getBlockType());
+        return FramedPrismBlock.getStateForPlacement(context, this);
     }
 
     @Override

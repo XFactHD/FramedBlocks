@@ -13,8 +13,7 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.phys.Vec3;
 import net.minecraft.world.phys.shapes.VoxelShape;
-import xfacthd.framedblocks.api.block.IFramedBlock;
-import xfacthd.framedblocks.api.block.FramedProperties;
+import xfacthd.framedblocks.api.block.*;
 import xfacthd.framedblocks.api.shapes.ShapeProvider;
 import xfacthd.framedblocks.common.data.BlockType;
 
@@ -42,27 +41,32 @@ public class FramedWallSignBlock extends AbstractFramedSignBlock
     }
 
     @Override
-    public BlockState getStateForPlacement(BlockPlaceContext context)
+    public BlockState getStateForPlacement(BlockPlaceContext ctx)
     {
-        BlockState state = defaultBlockState();
-        LevelReader level = context.getLevel();
-        BlockPos pos = context.getClickedPos();
-        Direction[] dirs = context.getNearestLookingDirections();
-
-        for (Direction direction : dirs)
-        {
-            if (direction.getAxis().isHorizontal())
-            {
-                Direction dir = direction.getOpposite();
-                state = state.setValue(FramedProperties.FACING_HOR, dir);
-                if (state.canSurvive(level, pos))
+        return PlacementStateBuilder.of(this, ctx)
+                .withCustom((state, modCtx) ->
                 {
-                    return withWater(state, level, pos);
-                }
-            }
-        }
+                    LevelReader level = modCtx.getLevel();
+                    BlockPos pos = modCtx.getClickedPos();
+                    Direction[] dirs = modCtx.getNearestLookingDirections();
 
-        return null;
+                    for (Direction direction : dirs)
+                    {
+                        if (direction.getAxis().isHorizontal())
+                        {
+                            Direction dir = direction.getOpposite();
+                            state = state.setValue(FramedProperties.FACING_HOR, dir);
+                            if (state.canSurvive(level, pos))
+                            {
+                                return state;
+                            }
+                        }
+                    }
+
+                    return null;
+                })
+                .withWater()
+                .build();
     }
 
     @Override

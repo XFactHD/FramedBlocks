@@ -13,8 +13,7 @@ import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.shapes.VoxelShape;
-import xfacthd.framedblocks.api.block.FramedProperties;
-import xfacthd.framedblocks.api.block.IFramedBlock;
+import xfacthd.framedblocks.api.block.*;
 import xfacthd.framedblocks.api.shapes.ShapeProvider;
 import xfacthd.framedblocks.api.shapes.ShapeUtils;
 import xfacthd.framedblocks.api.util.*;
@@ -43,26 +42,28 @@ public class FramedVerticalSlopedStairsBlock extends FramedBlock
     }
 
     @Override
-    public BlockState getStateForPlacement(BlockPlaceContext context)
+    public BlockState getStateForPlacement(BlockPlaceContext ctx)
     {
-        BlockState state = defaultBlockState();
+        return PlacementStateBuilder.of(this, ctx)
+                .withCustom((state, modCtx) ->
+                {
+                    Direction facing = ctx.getHorizontalDirection();
+                    state = state.setValue(FramedProperties.FACING_HOR, facing);
 
-        Direction facing = context.getHorizontalDirection();
-        state = state.setValue(FramedProperties.FACING_HOR, facing);
-
-        Direction face = context.getClickedFace();
-        HorizontalRotation rot;
-        if (face == facing.getOpposite())
-        {
-            rot = HorizontalRotation.fromWallCorner(context.getClickLocation(), face);
-        }
-        else
-        {
-            rot = HorizontalRotation.fromPerpendicularWallCorner(facing, face, context.getClickLocation());
-        }
-        state = state.setValue(PropertyHolder.ROTATION, rot);
-
-        return withWater(state, context.getLevel(), context.getClickedPos());
+                    Direction face = ctx.getClickedFace();
+                    HorizontalRotation rot;
+                    if (face == facing.getOpposite())
+                    {
+                        rot = HorizontalRotation.fromWallCorner(ctx.getClickLocation(), face);
+                    }
+                    else
+                    {
+                        rot = HorizontalRotation.fromPerpendicularWallCorner(facing, face, ctx.getClickLocation());
+                    }
+                    return state.setValue(PropertyHolder.ROTATION, rot);
+                })
+                .withWater()
+                .build();
     }
 
     @Override

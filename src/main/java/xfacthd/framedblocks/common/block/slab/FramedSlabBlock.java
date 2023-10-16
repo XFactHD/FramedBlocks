@@ -21,6 +21,7 @@ import net.minecraft.world.level.pathfinder.PathComputationType;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import xfacthd.framedblocks.api.block.FramedProperties;
+import xfacthd.framedblocks.api.block.PlacementStateBuilder;
 import xfacthd.framedblocks.api.shapes.ShapeCache;
 import xfacthd.framedblocks.api.shapes.ShapeProvider;
 import xfacthd.framedblocks.api.util.Utils;
@@ -47,17 +48,12 @@ public class FramedSlabBlock extends FramedBlock
     }
 
     @Override
-    public BlockState getStateForPlacement(BlockPlaceContext context)
+    public BlockState getStateForPlacement(BlockPlaceContext ctx)
     {
-        return withWater(
-                withTop(
-                        defaultBlockState(),
-                        context.getClickedFace(),
-                        context.getClickLocation()
-                ),
-                context.getLevel(),
-                context.getClickedPos()
-        );
+        return PlacementStateBuilder.of(this, ctx)
+                .withTop()
+                .withWater()
+                .build();
     }
 
     @Override

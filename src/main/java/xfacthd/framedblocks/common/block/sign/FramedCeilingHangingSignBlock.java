@@ -19,8 +19,7 @@ import net.minecraft.world.level.block.state.properties.RotationSegment;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
-import xfacthd.framedblocks.api.block.FramedProperties;
-import xfacthd.framedblocks.api.block.IFramedBlock;
+import xfacthd.framedblocks.api.block.*;
 import xfacthd.framedblocks.api.shapes.ShapeProvider;
 import xfacthd.framedblocks.api.util.Utils;
 import xfacthd.framedblocks.common.FBContent;
@@ -51,46 +50,49 @@ public class FramedCeilingHangingSignBlock extends AbstractFramedHangingSignBloc
     @Override
     public BlockState getStateForPlacement(BlockPlaceContext ctx)
     {
-        BlockState state = defaultBlockState();
-
-        Level level = ctx.getLevel();
-        BlockPos adjPos = ctx.getClickedPos().above();
-        BlockState adjState = level.getBlockState(adjPos);
-        Direction dir = Direction.fromYRot(ctx.getRotation());
-        boolean attached = !Block.isFaceFull(adjState.getCollisionShape(level, adjPos), Direction.DOWN) || ctx.isSecondaryUseActive();
-        if (adjState.getBlock() instanceof AbstractFramedHangingSignBlock && !ctx.isSecondaryUseActive())
-        {
-            if (adjState.hasProperty(FramedProperties.FACING_HOR))
-            {
-                Direction adjDir = adjState.getValue(FramedProperties.FACING_HOR);
-                if (adjDir.getAxis().test(dir))
+        return PlacementStateBuilder.of(this, ctx)
+                .withCustom((state, modCtx) ->
                 {
-                    attached = false;
-                }
-            }
-            else if (adjState.hasProperty(BlockStateProperties.ROTATION_16))
-            {
-                int adjRot = adjState.getValue(BlockStateProperties.ROTATION_16);
-                Optional<Direction> optDir = RotationSegment.convertToDirection(adjRot);
-                if (optDir.isPresent() && optDir.get().getAxis().test(dir))
-                {
-                    attached = false;
-                }
-            }
-        }
+                    Level level = modCtx.getLevel();
+                    BlockPos adjPos = modCtx.getClickedPos().above();
+                    BlockState adjState = level.getBlockState(adjPos);
+                    Direction dir = Direction.fromYRot(modCtx.getRotation());
+                    boolean attached = !Block.isFaceFull(adjState.getCollisionShape(level, adjPos), Direction.DOWN) || modCtx.isSecondaryUseActive();
+                    if (adjState.getBlock() instanceof AbstractFramedHangingSignBlock && !modCtx.isSecondaryUseActive())
+                    {
+                        if (adjState.hasProperty(FramedProperties.FACING_HOR))
+                        {
+                            Direction adjDir = adjState.getValue(FramedProperties.FACING_HOR);
+                            if (adjDir.getAxis().test(dir))
+                            {
+                                attached = false;
+                            }
+                        }
+                        else if (adjState.hasProperty(BlockStateProperties.ROTATION_16))
+                        {
+                            int adjRot = adjState.getValue(BlockStateProperties.ROTATION_16);
+                            Optional<Direction> optDir = RotationSegment.convertToDirection(adjRot);
+                            if (optDir.isPresent() && optDir.get().getAxis().test(dir))
+                            {
+                                attached = false;
+                            }
+                        }
+                    }
 
-        int rotation;
-        if (attached)
-        {
-            rotation = RotationSegment.convertToSegment(ctx.getRotation() + 180.0F);
-        }
-        else
-        {
-            rotation = RotationSegment.convertToSegment(dir.getOpposite());
-        }
-        state = state.setValue(BlockStateProperties.ROTATION_16, rotation)
-                .setValue(BlockStateProperties.ATTACHED, attached);
-        return withWater(state, ctx.getLevel(), ctx.getClickedPos());
+                    int rotation;
+                    if (attached)
+                    {
+                        rotation = RotationSegment.convertToSegment(modCtx.getRotation() + 180.0F);
+                    }
+                    else
+                    {
+                        rotation = RotationSegment.convertToSegment(dir.getOpposite());
+                    }
+                    return state.setValue(BlockStateProperties.ROTATION_16, rotation)
+                            .setValue(BlockStateProperties.ATTACHED, attached);
+                })
+                .withWater()
+                .build();
     }
 
     @Override

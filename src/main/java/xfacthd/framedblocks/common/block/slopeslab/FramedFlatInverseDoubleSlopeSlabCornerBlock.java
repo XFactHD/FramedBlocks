@@ -17,8 +17,7 @@ import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.Vec3;
 import net.minecraft.world.phys.shapes.*;
 import org.jetbrains.annotations.Nullable;
-import xfacthd.framedblocks.api.block.FramedProperties;
-import xfacthd.framedblocks.api.block.IFramedBlock;
+import xfacthd.framedblocks.api.block.*;
 import xfacthd.framedblocks.api.shapes.ShapeProvider;
 import xfacthd.framedblocks.api.shapes.ShapeUtils;
 import xfacthd.framedblocks.api.util.Utils;
@@ -53,17 +52,13 @@ public class FramedFlatInverseDoubleSlopeSlabCornerBlock extends AbstractFramedD
     }
 
     @Override
-    public BlockState getStateForPlacement(BlockPlaceContext context)
+    public BlockState getStateForPlacement(BlockPlaceContext ctx)
     {
-        BlockState state = withCornerFacing(
-                defaultBlockState(),
-                context.getClickedFace(),
-                context.getHorizontalDirection(),
-                context.getClickLocation()
-        );
-
-        state = withTop(state, context.getClickedFace(), context.getClickLocation());
-        return withWater(state, context.getLevel(), context.getClickedPos());
+        return PlacementStateBuilder.of(this, ctx)
+                .withHalfFacing()
+                .withTop()
+                .withWater()
+                .build();
     }
 
     @Override

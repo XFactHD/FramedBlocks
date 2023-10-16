@@ -13,8 +13,7 @@ import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
-import xfacthd.framedblocks.api.block.FramedProperties;
-import xfacthd.framedblocks.api.block.IFramedBlock;
+import xfacthd.framedblocks.api.block.*;
 import xfacthd.framedblocks.common.blockentity.special.FramedSignBlockEntity;
 import xfacthd.framedblocks.common.data.BlockType;
 
@@ -38,23 +37,29 @@ public class FramedWallHangingSignBlock extends AbstractFramedHangingSignBlock
     @Override
     public BlockState getStateForPlacement(BlockPlaceContext ctx)
     {
-        Level level = ctx.getLevel();
-        BlockPos pos = ctx.getClickedPos();
-        BlockState state = defaultBlockState();
-
-        for (Direction dir : ctx.getNearestLookingDirections())
-        {
-            if (dir.getAxis().isHorizontal() && !dir.getAxis().test(ctx.getClickedFace()))
-            {
-                state = state.setValue(FramedProperties.FACING_HOR, dir.getOpposite());
-                if (state.canSurvive(level, pos) && canPlace(state, level, pos))
+        return PlacementStateBuilder.of(this, ctx)
+                .withCustom((state, modCtx) ->
                 {
-                    return withWater(state, level, pos);
-                }
-            }
-        }
+                    Level level = modCtx.getLevel();
+                    BlockPos pos = modCtx.getClickedPos();
+                    Direction face = modCtx.getClickedFace();
 
-        return null;
+                    for (Direction dir : modCtx.getNearestLookingDirections())
+                    {
+                        if (dir.getAxis().isHorizontal() && !dir.getAxis().test(face))
+                        {
+                            state = state.setValue(FramedProperties.FACING_HOR, dir.getOpposite());
+                            if (state.canSurvive(level, pos) && canPlace(state, level, pos))
+                            {
+                                return state;
+                            }
+                        }
+                    }
+
+                    return null;
+                })
+                .withWater()
+                .build();
     }
 
     @Override

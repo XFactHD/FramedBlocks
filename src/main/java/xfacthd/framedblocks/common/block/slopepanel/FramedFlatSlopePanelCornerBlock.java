@@ -19,6 +19,7 @@ import xfacthd.framedblocks.api.block.IFramedBlock;
 import xfacthd.framedblocks.api.shapes.ShapeProvider;
 import xfacthd.framedblocks.api.shapes.ShapeUtils;
 import xfacthd.framedblocks.api.util.*;
+import xfacthd.framedblocks.common.block.ExtPlacementStateBuilder;
 import xfacthd.framedblocks.common.block.FramedBlock;
 import xfacthd.framedblocks.common.data.BlockType;
 import xfacthd.framedblocks.common.data.PropertyHolder;
@@ -53,44 +54,17 @@ public class FramedFlatSlopePanelCornerBlock extends FramedBlock
 
     public static BlockState getStateForPlacement(Block block, boolean hasFront, BlockPlaceContext context)
     {
-        return getStateForPlacement(block, hasFront, true, context);
-    }
+        ExtPlacementStateBuilder builder = ExtPlacementStateBuilder.of(block, context)
+                .withHorizontalFacing()
+                .withCornerOrSideRotation();
 
-    public static BlockState getStateForPlacement(Block block, boolean hasFront, boolean hasWater, BlockPlaceContext context)
-    {
-        Direction facing = context.getHorizontalDirection();
-
-        Direction side = context.getClickedFace();
-        HorizontalRotation rotation;
-        if (side == facing.getOpposite())
-        {
-            rotation = HorizontalRotation.fromWallCorner(context.getClickLocation(), side);
-        }
-        else
-        {
-            rotation = HorizontalRotation.fromDirection(facing, side, context.getClickLocation());
-        }
-
-        BlockState state = block.defaultBlockState()
-                .setValue(FramedProperties.FACING_HOR, facing)
-                .setValue(PropertyHolder.ROTATION, rotation);
         if (hasFront)
         {
-            boolean front = false;
-            if (side.getAxis() != facing.getAxis())
-            {
-                Vec3 subHit = Utils.fraction(context.getClickLocation());
-                double xz = Utils.isX(facing) ? subHit.x : subHit.z;
-                front = (xz < .5) == Utils.isPositive(facing);
-            }
+            builder = builder.withFront();
+        }
 
-            state = state.setValue(PropertyHolder.FRONT, front);
-        }
-        if (hasWater)
-        {
-            state = withWater(state, context.getLevel(), context.getClickedPos());
-        }
-        return state;
+        return builder.tryWithWater()
+                .build();
     }
 
     @Override

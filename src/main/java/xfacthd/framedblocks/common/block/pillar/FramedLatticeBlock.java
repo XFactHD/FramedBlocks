@@ -16,6 +16,7 @@ import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.block.state.properties.BooleanProperty;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import xfacthd.framedblocks.api.block.FramedProperties;
+import xfacthd.framedblocks.api.block.PlacementStateBuilder;
 import xfacthd.framedblocks.api.shapes.ShapeProvider;
 import xfacthd.framedblocks.api.shapes.ShapeUtils;
 import xfacthd.framedblocks.api.util.Utils;
@@ -57,26 +58,31 @@ public class FramedLatticeBlock extends FramedBlock
     }
 
     @Override
-    public BlockState getStateForPlacement(BlockPlaceContext context)
+    public BlockState getStateForPlacement(BlockPlaceContext ctx)
     {
-        Level level = context.getLevel();
-        BlockPos pos = context.getClickedPos();
+        return PlacementStateBuilder.of(this, ctx)
+                .withCustom((state, modCtx) ->
+                {
+                    Level level = modCtx.getLevel();
+                    BlockPos pos = modCtx.getClickedPos();
 
-        BlockState state = defaultBlockState();
-        state = state.setValue(
-                FramedProperties.X_AXIS,
-                canConnectTo(level, pos, Direction.EAST) || canConnectTo(level, pos, Direction.WEST)
-        );
-        state = state.setValue(
-                FramedProperties.Y_AXIS,
-                canConnectTo(level, pos, Direction.UP) || canConnectTo(level, pos, Direction.DOWN)
-        );
-        state = state.setValue(
-                FramedProperties.Z_AXIS,
-                canConnectTo(level, pos, Direction.NORTH) || canConnectTo(level, pos, Direction.SOUTH)
-        );
+                    state = state.setValue(
+                            FramedProperties.X_AXIS,
+                            canConnectTo(level, pos, Direction.EAST) || canConnectTo(level, pos, Direction.WEST)
+                    );
+                    state = state.setValue(
+                            FramedProperties.Y_AXIS,
+                            canConnectTo(level, pos, Direction.UP) || canConnectTo(level, pos, Direction.DOWN)
+                    );
+                    state = state.setValue(
+                            FramedProperties.Z_AXIS,
+                            canConnectTo(level, pos, Direction.NORTH) || canConnectTo(level, pos, Direction.SOUTH)
+                    );
 
-        return withWater(state, level, pos);
+                    return state;
+                })
+                .withWater()
+                .build();
     }
 
     @Override

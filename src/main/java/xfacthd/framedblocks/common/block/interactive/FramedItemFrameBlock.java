@@ -26,6 +26,7 @@ import net.minecraft.world.phys.shapes.VoxelShape;
 import net.minecraftforge.client.extensions.common.IClientBlockExtensions;
 import org.jetbrains.annotations.Nullable;
 import xfacthd.framedblocks.api.block.IFramedBlock;
+import xfacthd.framedblocks.api.block.PlacementStateBuilder;
 import xfacthd.framedblocks.api.block.render.FramedBlockRenderProperties;
 import xfacthd.framedblocks.api.shapes.ShapeProvider;
 import xfacthd.framedblocks.api.shapes.ShapeUtils;
@@ -71,15 +72,12 @@ public class FramedItemFrameBlock extends FramedBlock
     }
 
     @Override
-    public BlockState getStateForPlacement(BlockPlaceContext context)
+    public BlockState getStateForPlacement(BlockPlaceContext ctx)
     {
-        Direction face = context.getClickedFace();
-        BlockState state = defaultBlockState().setValue(BlockStateProperties.FACING, face.getOpposite());
-        if (canSurvive(state, context.getLevel(), context.getClickedPos()))
-        {
-            return state;
-        }
-        return null;
+        return PlacementStateBuilder.of(this, ctx)
+                .withTargetFacing()
+                .validate((state, modCtx) -> canSurvive(state, modCtx.getLevel(), modCtx.getClickedPos()))
+                .build();
     }
 
     @Override

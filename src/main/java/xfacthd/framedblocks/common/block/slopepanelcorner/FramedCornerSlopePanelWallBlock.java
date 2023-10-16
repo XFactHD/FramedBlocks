@@ -18,6 +18,7 @@ import xfacthd.framedblocks.api.block.FramedProperties;
 import xfacthd.framedblocks.api.block.IFramedBlock;
 import xfacthd.framedblocks.api.shapes.*;
 import xfacthd.framedblocks.api.util.Utils;
+import xfacthd.framedblocks.common.block.ExtPlacementStateBuilder;
 import xfacthd.framedblocks.common.block.FramedBlock;
 import xfacthd.framedblocks.common.block.slopepanel.FramedSlopePanelBlock;
 import xfacthd.framedblocks.common.block.slopeslab.FramedSlopeSlabBlock;
@@ -53,25 +54,16 @@ public class FramedCornerSlopePanelWallBlock extends FramedBlock
     @Override
     public BlockState getStateForPlacement(BlockPlaceContext ctx)
     {
-        return getStateForPlacement(defaultBlockState(), ctx, large);
+        return getStateForPlacement(this, ctx, large);
     }
 
-    public static BlockState getStateForPlacement(BlockState defState, BlockPlaceContext ctx, boolean invert)
+    public static BlockState getStateForPlacement(Block block, BlockPlaceContext ctx, boolean invert)
     {
-        Direction side = ctx.getClickedFace();
-        HorizontalRotation rot = HorizontalRotation.fromWallCorner(ctx.getClickLocation(), side);
-        if (!invert)
-        {
-            rot = rot.getOpposite();
-        }
-
-        defState = defState.setValue(FramedProperties.FACING_HOR, side.getOpposite())
-                .setValue(PropertyHolder.ROTATION, rot);
-        if (defState.hasProperty(BlockStateProperties.WATERLOGGED))
-        {
-            defState = withWater(defState, ctx.getLevel(), ctx.getClickedPos());
-        }
-        return defState;
+        return ExtPlacementStateBuilder.of(block, ctx)
+                .withHorizontalTargetFacing()
+                .withCornerRotation(!invert)
+                .tryWithWater()
+                .build();
     }
 
     @Override

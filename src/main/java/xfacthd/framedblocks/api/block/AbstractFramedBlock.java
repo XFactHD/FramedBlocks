@@ -231,6 +231,10 @@ public abstract class AbstractFramedBlock extends Block implements IFramedBlock,
 
 
 
+    /**
+     * @deprecated Use {@link PlacementStateBuilder} instead
+     */
+    @Deprecated(forRemoval = true)
     protected static BlockState withCornerFacing(BlockState state, Direction side, Direction facing, Vec3 hitVec)
     {
         if (Utils.isY(side))
@@ -248,11 +252,19 @@ public abstract class AbstractFramedBlock extends Block implements IFramedBlock,
         }
     }
 
+    /**
+     * @deprecated Use {@link PlacementStateBuilder} instead
+     */
+    @Deprecated(forRemoval = true)
     protected static BlockState withTop(BlockState state, Direction side, Vec3 hitVec)
     {
         return withTop(state, FramedProperties.TOP, side, hitVec);
     }
 
+    /**
+     * @deprecated Use {@link PlacementStateBuilder} instead
+     */
+    @Deprecated(forRemoval = true)
     protected static BlockState withTop(BlockState state, Property<Boolean> prop, Direction side, Vec3 hitVec)
     {
         if (side == Direction.DOWN)
@@ -273,6 +285,10 @@ public abstract class AbstractFramedBlock extends Block implements IFramedBlock,
         return state;
     }
 
+    /**
+     * @deprecated Use {@link PlacementStateBuilder} instead
+     */
+    @Deprecated(forRemoval = true)
     protected static BlockState withWater(BlockState state, LevelReader level, BlockPos pos)
     {
         FluidState fluidState = level.getFluidState(pos);

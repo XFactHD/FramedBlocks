@@ -12,9 +12,9 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.pathfinder.PathComputationType;
-import net.minecraft.world.phys.Vec3;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import xfacthd.framedblocks.api.block.FramedProperties;
+import xfacthd.framedblocks.api.block.PlacementStateBuilder;
 import xfacthd.framedblocks.api.shapes.ShapeProvider;
 import xfacthd.framedblocks.api.shapes.ShapeUtils;
 import xfacthd.framedblocks.common.block.FramedBlock;
@@ -37,33 +37,13 @@ public class FramedSlabCornerBlock extends FramedBlock
     }
 
     @Override
-    public BlockState getStateForPlacement(BlockPlaceContext context)
+    public BlockState getStateForPlacement(BlockPlaceContext ctx)
     {
-        BlockState state = defaultBlockState();
-
-        Direction face = context.getClickedFace();
-        Vec3 hitPoint = Utils.fraction(context.getClickLocation());
-        if (face.getAxis().isHorizontal())
-        {
-            state = withCornerFacing(
-                    state,
-                    context.getClickedFace(),
-                    context.getHorizontalDirection(),
-                    context.getClickLocation()
-            );
-        }
-        else
-        {
-            double x = hitPoint.x();
-            double z = hitPoint.z();
-
-            Direction dir = z > .5D ? Direction.SOUTH : Direction.NORTH;
-            if ((x > .5D) != Utils.isPositive(dir)) { dir = dir.getClockWise(); }
-            state = state.setValue(FramedProperties.FACING_HOR, dir);
-        }
-
-        state = withTop(state, face, context.getClickLocation());
-        return withWater(state, context.getLevel(), context.getClickedPos());
+        return PlacementStateBuilder.of(this, ctx)
+                .withHalfOrQuarterFacing()
+                .withTop()
+                .withWater()
+                .build();
     }
 
     @Override
