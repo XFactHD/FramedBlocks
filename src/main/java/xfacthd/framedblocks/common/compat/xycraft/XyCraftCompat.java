@@ -14,7 +14,7 @@ public final class XyCraftCompat
     {
         if (ModList.get().isLoaded("xycraft_core"))
         {
-            // Safeguard against potential changes in Create since the ct context property is not exposed as API
+            // Safeguard against potential changes in XyCraft since the ct context property is not exposed as API
             try
             {
                 if (FMLEnvironment.dist.isClient())
