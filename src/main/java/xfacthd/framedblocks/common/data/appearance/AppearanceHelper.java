@@ -1,5 +1,6 @@
 package xfacthd.framedblocks.common.data.appearance;
 
+import com.mojang.logging.LogUtils;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.world.level.BlockGetter;
@@ -9,6 +10,7 @@ import net.minecraftforge.client.model.data.ModelData;
 import net.minecraftforge.client.model.data.ModelDataManager;
 import net.minecraftforge.fml.loading.FMLEnvironment;
 import org.jetbrains.annotations.Nullable;
+import org.slf4j.Logger;
 import xfacthd.framedblocks.api.block.FramedBlockEntity;
 import xfacthd.framedblocks.api.block.IFramedBlock;
 import xfacthd.framedblocks.api.block.cache.StateCache;
@@ -22,6 +24,7 @@ import java.util.function.Predicate;
 
 public final class AppearanceHelper
 {
+    private static final Logger LOGGER = LogUtils.getLogger();
     private static final BlockState AIR = Blocks.AIR.defaultBlockState();
 
     public static BlockState getAppearance(
@@ -32,6 +35,20 @@ public final class AppearanceHelper
             Direction side,
             @Nullable BlockState queryState,
             @Nullable BlockPos queryPos
+    )
+    {
+        return getAppearance(framedBlock, state, level, pos, side, queryState, queryPos, false);
+    }
+
+    private static BlockState getAppearance(
+            IFramedBlock framedBlock,
+            BlockState state,
+            BlockGetter level,
+            BlockPos pos,
+            Direction side,
+            @Nullable BlockState queryState,
+            @Nullable BlockPos queryPos,
+            boolean recursive
     )
     {
         if (!FMLEnvironment.dist.isClient() || !framedBlock.getBlockType().supportsConnectedTextures())
@@ -57,6 +74,17 @@ public final class AppearanceHelper
         StateCache stateCache = framedBlock.getCache(state);
         if (framedBlock.getBlockType().isDoubleBlock())
         {
+            if (recursive)
+            {
+                LOGGER.error(
+                        "AppearanceHelper#getAppearance() trying to recurse multiple times, this is a bug. " +
+                        "Please report this to FramedBlocks with the following stacktrace. " +
+                        "Pos: {}, State: {}, Side: {}",
+                        pos, state, side, new Throwable()
+                );
+                return AIR;
+            }
+
             if (actualQueryState != null && level.getBlockEntity(pos) instanceof FramedBlockEntity be)
             {
                 if (canDoubleBlockConnectFullEdgeTo(pos, queryPos, actualQueryState, side, edge))
@@ -77,7 +105,7 @@ public final class AppearanceHelper
                 if (componentState != null)
                 {
                     IFramedBlock componentBlock = ((IFramedBlock) componentState.getBlock());
-                    return getAppearance(componentBlock, componentState, level, pos, side, actualQueryState, queryPos);
+                    return getAppearance(componentBlock, componentState, level, pos, side, actualQueryState, queryPos, true);
                 }
             }
             return AIR;
