@@ -16,8 +16,7 @@ import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.Vec3;
 import net.minecraft.world.phys.shapes.VoxelShape;
-import xfacthd.framedblocks.api.block.FramedProperties;
-import xfacthd.framedblocks.api.block.IFramedBlock;
+import xfacthd.framedblocks.api.block.*;
 import xfacthd.framedblocks.api.shapes.*;
 import xfacthd.framedblocks.api.util.Utils;
 import xfacthd.framedblocks.common.FBContent;
@@ -62,35 +61,35 @@ public class FramedCornerSlopePanelBlock extends FramedBlock
     @Override
     public BlockState getStateForPlacement(BlockPlaceContext ctx)
     {
-        return getStateForPlacement(defaultBlockState(), ctx, inner, frontEdge);
+        return getStateForPlacement(this, ctx, inner, frontEdge);
     }
 
     public static BlockState getStateForPlacement(
-            BlockState defState, BlockPlaceContext ctx, boolean invert, boolean invertFracDir
+            Block block, BlockPlaceContext ctx, boolean invert, boolean invertFracDir
     )
     {
-        Direction dir = ctx.getHorizontalDirection();
-        if (invert)
-        {
-            dir = dir.getOpposite();
-        }
-        Direction fracDir = ctx.getHorizontalDirection();
-        if (invertFracDir)
-        {
-            fracDir = fracDir.getOpposite();
-        }
-        if (Utils.fractionInDir(ctx.getClickLocation(), fracDir.getClockWise()) > .5)
-        {
-            dir = dir.getClockWise();
-        }
-        defState = defState.setValue(FramedProperties.FACING_HOR, dir);
-
-        defState = withTop(defState, ctx.getClickedFace(), ctx.getClickLocation());
-        if (defState.hasProperty(BlockStateProperties.WATERLOGGED))
-        {
-            defState = withWater(defState, ctx.getLevel(), ctx.getClickedPos());
-        }
-        return defState;
+        return PlacementStateBuilder.of(block, ctx)
+                .withCustom((state, modCtx) ->
+                {
+                    Direction dir = modCtx.getHorizontalDirection();
+                    if (invert)
+                    {
+                        dir = dir.getOpposite();
+                    }
+                    Direction fracDir = modCtx.getHorizontalDirection();
+                    if (invertFracDir)
+                    {
+                        fracDir = fracDir.getOpposite();
+                    }
+                    if (Utils.fractionInDir(modCtx.getClickLocation(), fracDir.getClockWise()) > .5)
+                    {
+                        dir = dir.getClockWise();
+                    }
+                    return state.setValue(FramedProperties.FACING_HOR, dir);
+                })
+                .withTop()
+                .tryWithWater()
+                .build();
     }
 
     @Override

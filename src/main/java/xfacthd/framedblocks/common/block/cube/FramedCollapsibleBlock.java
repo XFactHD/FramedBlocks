@@ -18,6 +18,7 @@ import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.phys.shapes.*;
 import org.jetbrains.annotations.Nullable;
 import xfacthd.framedblocks.api.block.IFramedBlock;
+import xfacthd.framedblocks.api.block.PlacementStateBuilder;
 import xfacthd.framedblocks.api.shapes.ShapeUtils;
 import xfacthd.framedblocks.api.util.Utils;
 import xfacthd.framedblocks.common.FBContent;
@@ -49,11 +50,10 @@ public class FramedCollapsibleBlock extends FramedBlock
         builder.add(PropertyHolder.NULLABLE_FACE, BlockStateProperties.WATERLOGGED, PropertyHolder.ROTATE_SPLIT_LINE);
     }
 
-    @Nullable
     @Override
-    public BlockState getStateForPlacement(BlockPlaceContext context)
+    public BlockState getStateForPlacement(BlockPlaceContext ctx)
     {
-        return withWater(defaultBlockState(), context.getLevel(), context.getClickedPos());
+        return PlacementStateBuilder.of(this, ctx).withWater().build();
     }
 
     @Override

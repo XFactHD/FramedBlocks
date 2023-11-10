@@ -16,11 +16,9 @@ import net.minecraft.world.level.block.*;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
-import net.minecraft.world.level.block.state.properties.Property;
 import net.minecraft.world.level.material.*;
 import net.minecraft.world.level.storage.loot.LootParams;
 import net.minecraft.world.phys.BlockHitResult;
-import net.minecraft.world.phys.Vec3;
 import net.minecraft.world.phys.shapes.*;
 import net.minecraftforge.client.extensions.common.IClientBlockExtensions;
 import net.minecraftforge.common.IPlantable;
@@ -28,7 +26,6 @@ import xfacthd.framedblocks.api.block.render.FramedBlockRenderProperties;
 import xfacthd.framedblocks.api.shapes.ShapeProvider;
 import xfacthd.framedblocks.api.shapes.ShapeUtils;
 import xfacthd.framedblocks.api.type.IBlockType;
-import xfacthd.framedblocks.api.util.Utils;
 
 import javax.annotation.Nullable;
 import java.util.List;
@@ -230,54 +227,6 @@ public abstract class AbstractFramedBlock extends Block implements IFramedBlock,
     }
 
 
-
-    protected static BlockState withCornerFacing(BlockState state, Direction side, Direction facing, Vec3 hitVec)
-    {
-        if (Utils.isY(side))
-        {
-            return state.setValue(FramedProperties.FACING_HOR, facing);
-        }
-
-        if (Utils.fractionInDir(hitVec, side.getCounterClockWise()) > .5)
-        {
-            return state.setValue(FramedProperties.FACING_HOR, side.getOpposite().getClockWise());
-        }
-        else
-        {
-            return state.setValue(FramedProperties.FACING_HOR, side.getOpposite());
-        }
-    }
-
-    protected static BlockState withTop(BlockState state, Direction side, Vec3 hitVec)
-    {
-        return withTop(state, FramedProperties.TOP, side, hitVec);
-    }
-
-    protected static BlockState withTop(BlockState state, Property<Boolean> prop, Direction side, Vec3 hitVec)
-    {
-        if (side == Direction.DOWN)
-        {
-            state = state.setValue(prop, true);
-        }
-        else if (side == Direction.UP)
-        {
-            state = state.setValue(prop, false);
-        }
-        else
-        {
-            double y = hitVec.y;
-            y -= Math.floor(y);
-
-            state = state.setValue(prop, y >= .5D);
-        }
-        return state;
-    }
-
-    protected static BlockState withWater(BlockState state, LevelReader level, BlockPos pos)
-    {
-        FluidState fluidState = level.getFluidState(pos);
-        return state.setValue(BlockStateProperties.WATERLOGGED, fluidState.getType() == Fluids.WATER);
-    }
 
     private static Object2BooleanMap<BlockState> computeBeaconBeamOcclusion(ShapeProvider shapes)
     {

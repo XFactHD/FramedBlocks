@@ -11,8 +11,7 @@ import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import org.jetbrains.annotations.Nullable;
-import xfacthd.framedblocks.api.block.FramedProperties;
-import xfacthd.framedblocks.api.block.IFramedBlock;
+import xfacthd.framedblocks.api.block.*;
 import xfacthd.framedblocks.api.util.*;
 import xfacthd.framedblocks.common.FBContent;
 import xfacthd.framedblocks.common.block.AbstractFramedDoubleBlock;
@@ -42,13 +41,12 @@ public class FramedElevatedDoubleSlopeSlabBlock extends AbstractFramedDoubleBloc
     }
 
     @Override
-    public BlockState getStateForPlacement(BlockPlaceContext context)
+    public BlockState getStateForPlacement(BlockPlaceContext ctx)
     {
-        Direction face = context.getClickedFace();
-        Direction facing = Utils.isY(face) ? context.getHorizontalDirection() : face.getOpposite();
-
-        BlockState state = defaultBlockState().setValue(FramedProperties.FACING_HOR, facing);
-        return withTop(state, face, context.getClickLocation());
+        return PlacementStateBuilder.of(this, ctx)
+                .withTargetOrHorizontalFacing()
+                .withTop()
+                .build();
     }
 
     @Override

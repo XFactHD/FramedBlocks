@@ -8,12 +8,12 @@ import net.minecraft.world.level.block.*;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
-import net.minecraft.world.phys.Vec3;
 import net.minecraft.world.phys.shapes.*;
 import xfacthd.framedblocks.api.block.FramedProperties;
 import xfacthd.framedblocks.api.shapes.ShapeProvider;
 import xfacthd.framedblocks.api.shapes.ShapeUtils;
 import xfacthd.framedblocks.api.util.Utils;
+import xfacthd.framedblocks.common.block.ExtPlacementStateBuilder;
 import xfacthd.framedblocks.common.block.FramedBlock;
 import xfacthd.framedblocks.common.data.BlockType;
 import xfacthd.framedblocks.common.data.PropertyHolder;
@@ -37,33 +37,14 @@ public class FramedHalfStairsBlock extends FramedBlock
     }
 
     @Override
-    public BlockState getStateForPlacement(BlockPlaceContext context)
+    public BlockState getStateForPlacement(BlockPlaceContext ctx)
     {
-        BlockState state = defaultBlockState();
-
-        Direction face = context.getClickedFace();
-        Vec3 hit = Utils.fraction(context.getClickLocation());
-
-        Direction facing;
-        if (!Utils.isY(face))
-        {
-            facing = face.getOpposite();
-        }
-        else
-        {
-            facing = context.getHorizontalDirection();
-        }
-        state = state.setValue(FramedProperties.FACING_HOR, facing);
-
-        boolean top = face == Direction.DOWN || hit.y > .5;
-        state = state.setValue(FramedProperties.TOP, top);
-
-        double xz = Utils.isX(facing) ? hit.z() : hit.x();
-        boolean rightPlus = Utils.isPositive(facing.getCounterClockWise());
-        boolean right = (xz <= .5) == rightPlus;
-        state = state.setValue(PropertyHolder.RIGHT, right);
-
-        return state;
+        return ExtPlacementStateBuilder.of(this, ctx)
+                .withTargetOrHorizontalFacing()
+                .withTop()
+                .withRight()
+                .withWater()
+                .build();
     }
 
     @Override

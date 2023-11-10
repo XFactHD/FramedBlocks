@@ -1,12 +1,11 @@
 package xfacthd.framedblocks.api.block;
 
 import net.minecraft.core.Direction;
-import net.minecraft.world.level.block.state.properties.BooleanProperty;
-import net.minecraft.world.level.block.state.properties.DirectionProperty;
+import net.minecraft.world.level.block.state.properties.*;
 
 public final class FramedProperties
 {
-    public static final DirectionProperty FACING_HOR = DirectionProperty.create("facing", Direction.Plane.HORIZONTAL);
+    public static final DirectionProperty FACING_HOR = BlockStateProperties.HORIZONTAL_FACING;
     public static final DirectionProperty FACING_NE = DirectionProperty.create("facing", dir -> dir == Direction.NORTH || dir == Direction.EAST);
 
     public static final BooleanProperty TOP = BooleanProperty.create("top");

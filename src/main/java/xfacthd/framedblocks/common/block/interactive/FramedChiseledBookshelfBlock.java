@@ -23,6 +23,7 @@ import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.Vec2;
 import org.jetbrains.annotations.Nullable;
 import xfacthd.framedblocks.api.block.FramedProperties;
+import xfacthd.framedblocks.api.block.PlacementStateBuilder;
 import xfacthd.framedblocks.api.util.Utils;
 import xfacthd.framedblocks.common.block.FramedBlock;
 import xfacthd.framedblocks.common.blockentity.special.FramedChiseledBookshelfBlockEntity;
@@ -55,7 +56,7 @@ public class FramedChiseledBookshelfBlock extends FramedBlock
     @Override
     public BlockState getStateForPlacement(BlockPlaceContext ctx)
     {
-        return defaultBlockState().setValue(FramedProperties.FACING_HOR, ctx.getHorizontalDirection().getOpposite());
+        return PlacementStateBuilder.of(this, ctx).withHorizontalFacing(true).build();
     }
 
     @Override

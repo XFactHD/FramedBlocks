@@ -14,6 +14,7 @@ import net.minecraft.core.Direction;
 import net.minecraft.world.level.pathfinder.PathComputationType;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import xfacthd.framedblocks.api.block.FramedProperties;
+import xfacthd.framedblocks.api.block.PlacementStateBuilder;
 import xfacthd.framedblocks.api.shapes.*;
 import xfacthd.framedblocks.common.block.FramedBlock;
 import xfacthd.framedblocks.common.data.BlockType;
@@ -35,11 +36,13 @@ public class FramedSlabEdgeBlock extends FramedBlock
     }
 
     @Override
-    public BlockState getStateForPlacement(BlockPlaceContext context)
+    public BlockState getStateForPlacement(BlockPlaceContext ctx)
     {
-        BlockState state = withTop(defaultBlockState(), context.getClickedFace(), context.getClickLocation());
-        state = state.setValue(FramedProperties.FACING_HOR, context.getHorizontalDirection());
-        return withWater(state, context.getLevel(), context.getClickedPos());
+        return PlacementStateBuilder.of(this, ctx)
+                .withHorizontalFacing()
+                .withTop()
+                .withWater()
+                .build();
     }
 
     @Override

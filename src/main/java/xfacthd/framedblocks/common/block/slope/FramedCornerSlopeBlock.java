@@ -11,13 +11,13 @@ import net.minecraft.world.level.block.*;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
-import net.minecraft.world.phys.Vec3;
 import net.minecraft.world.phys.shapes.*;
 import xfacthd.framedblocks.api.block.FramedProperties;
 import xfacthd.framedblocks.api.block.IFramedBlock;
 import xfacthd.framedblocks.api.shapes.ShapeProvider;
 import xfacthd.framedblocks.api.shapes.ShapeUtils;
 import xfacthd.framedblocks.api.util.*;
+import xfacthd.framedblocks.common.block.ExtPlacementStateBuilder;
 import xfacthd.framedblocks.common.block.FramedBlock;
 import xfacthd.framedblocks.common.data.*;
 import xfacthd.framedblocks.common.data.property.CornerType;
@@ -45,29 +45,12 @@ public class FramedCornerSlopeBlock extends FramedBlock
     }
 
     @Override
-    public BlockState getStateForPlacement(BlockPlaceContext context)
+    public BlockState getStateForPlacement(BlockPlaceContext ctx)
     {
-        BlockState state = defaultBlockState();
-
-        Direction side = context.getClickedFace();
-        Direction typeSide = side;
-        Vec3 hitPoint = Utils.fraction(context.getClickLocation());
-        if (!Utils.isY(side))
-        {
-            if (hitPoint.y() < (3D / 16D))
-            {
-                typeSide = Direction.UP;
-            }
-            else if (hitPoint.y() > (13D / 16D))
-            {
-                typeSide = Direction.DOWN;
-            }
-        }
-
-        Direction facing = context.getHorizontalDirection();
-        state = withCornerType(state, context, side, typeSide, hitPoint, facing);
-
-        return withWater(state, context.getLevel(), context.getClickedPos());
+        return ExtPlacementStateBuilder.of(this, ctx)
+                .withHorizontalFacingAndCornerType()
+                .withWater()
+                .build();
     }
 
     @Override

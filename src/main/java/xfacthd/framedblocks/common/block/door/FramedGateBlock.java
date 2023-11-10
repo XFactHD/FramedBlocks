@@ -20,8 +20,7 @@ import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.Vec3;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
-import xfacthd.framedblocks.api.block.IFramedBlock;
-import xfacthd.framedblocks.api.block.FramedProperties;
+import xfacthd.framedblocks.api.block.*;
 import xfacthd.framedblocks.api.util.Utils;
 import xfacthd.framedblocks.common.FBContent;
 import xfacthd.framedblocks.common.block.FramedBlock;
@@ -65,16 +64,18 @@ public class FramedGateBlock extends FramedBlock
     }
 
     @Override
-    public BlockState getStateForPlacement(BlockPlaceContext context)
+    public BlockState getStateForPlacement(BlockPlaceContext ctx)
     {
-        Level level = context.getLevel();
-        BlockPos pos = context.getClickedPos();
-        boolean powered = level.hasNeighborSignal(pos);
-        return defaultBlockState()
-                .setValue(BlockStateProperties.HORIZONTAL_FACING, context.getHorizontalDirection())
-                .setValue(BlockStateProperties.DOOR_HINGE, getHinge(context))
-                .setValue(BlockStateProperties.POWERED, powered)
-                .setValue(BlockStateProperties.OPEN, powered);
+        return PlacementStateBuilder.of(this, ctx)
+                .withHorizontalFacing()
+                .withCustom((state, modCtx) ->
+                {
+                    boolean powered = modCtx.getLevel().hasNeighborSignal(modCtx.getClickedPos());
+                    return state.setValue(BlockStateProperties.DOOR_HINGE, getHinge(modCtx))
+                            .setValue(BlockStateProperties.POWERED, powered)
+                            .setValue(BlockStateProperties.OPEN, powered);
+                })
+                .build();
     }
 
     private DoorHingeSide getHinge(BlockPlaceContext context)

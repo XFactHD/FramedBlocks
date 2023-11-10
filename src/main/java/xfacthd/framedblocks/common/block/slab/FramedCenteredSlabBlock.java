@@ -2,12 +2,14 @@ package xfacthd.framedblocks.common.block.slab;
 
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
+import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import xfacthd.framedblocks.api.block.FramedProperties;
+import xfacthd.framedblocks.api.block.PlacementStateBuilder;
 import xfacthd.framedblocks.api.shapes.ShapeProvider;
 import xfacthd.framedblocks.common.block.FramedBlock;
 import xfacthd.framedblocks.common.data.BlockType;
@@ -24,6 +26,12 @@ public class FramedCenteredSlabBlock extends FramedBlock
     {
         super.createBlockStateDefinition(builder);
         builder.add(FramedProperties.SOLID, BlockStateProperties.WATERLOGGED);
+    }
+
+    @Override
+    public BlockState getStateForPlacement(BlockPlaceContext ctx)
+    {
+        return PlacementStateBuilder.of(this, ctx).withWater().build();
     }
 
 

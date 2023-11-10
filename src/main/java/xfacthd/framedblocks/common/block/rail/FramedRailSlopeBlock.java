@@ -15,8 +15,6 @@ import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.*;
-import net.minecraft.world.level.material.FluidState;
-import net.minecraft.world.level.material.Fluids;
 import net.minecraft.world.level.storage.loot.LootParams;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.shapes.*;
@@ -69,16 +67,15 @@ public class FramedRailSlopeBlock extends BaseRailBlock implements IFramedBlock,
     }
 
     @Override
-    public BlockState getStateForPlacement(BlockPlaceContext context)
+    public BlockState getStateForPlacement(BlockPlaceContext ctx)
     {
-        RailShape shape = FramedUtils.getAscendingRailShapeFromDirection(context.getHorizontalDirection());
-
-        FluidState fluidState = context.getLevel().getFluidState(context.getClickedPos());
-        boolean waterlogged = fluidState.getType() == Fluids.WATER;
-
-        return defaultBlockState()
-                .setValue(PropertyHolder.ASCENDING_RAIL_SHAPE, shape)
-                .setValue(BlockStateProperties.WATERLOGGED, waterlogged);
+        return PlacementStateBuilder.of(this, ctx)
+                .withCustom((state, modCtx) -> state.setValue(
+                        PropertyHolder.ASCENDING_RAIL_SHAPE,
+                        FramedUtils.getAscendingRailShapeFromDirection(modCtx.getHorizontalDirection())
+                ))
+                .withWater()
+                .build();
     }
 
     @Override

@@ -12,11 +12,10 @@ import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
-import net.minecraft.world.phys.Vec3;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import xfacthd.framedblocks.api.block.FramedProperties;
+import xfacthd.framedblocks.api.block.PlacementStateBuilder;
 import xfacthd.framedblocks.api.shapes.ShapeProvider;
-import xfacthd.framedblocks.api.util.*;
 import xfacthd.framedblocks.common.block.FramedBlock;
 import xfacthd.framedblocks.common.data.BlockType;
 
@@ -37,25 +36,12 @@ public class FramedFloorBlock extends FramedBlock
     }
 
     @Override
-    public BlockState getStateForPlacement(BlockPlaceContext context)
+    public BlockState getStateForPlacement(BlockPlaceContext ctx)
     {
-        BlockState state = defaultBlockState();
-
-        Direction side = context.getClickedFace();
-
-        boolean top = false;
-        if (side == Direction.DOWN)
-        {
-            top = true;
-        }
-        else if (!Utils.isY(side))
-        {
-            Vec3 vec = Utils.fraction(context.getClickLocation());
-            top = vec.y > .5;
-        }
-
-        state = state.setValue(FramedProperties.TOP, top);
-        return withWater(state, context.getLevel(), context.getClickedPos());
+        return PlacementStateBuilder.of(this, ctx)
+                .withTop()
+                .withWater()
+                .build();
     }
 
     @Override

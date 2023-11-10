@@ -8,9 +8,9 @@ import net.minecraft.world.level.block.*;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
-import net.minecraft.world.phys.Vec3;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import xfacthd.framedblocks.api.block.FramedProperties;
+import xfacthd.framedblocks.api.block.PlacementStateBuilder;
 import xfacthd.framedblocks.api.shapes.*;
 import xfacthd.framedblocks.api.util.Utils;
 import xfacthd.framedblocks.common.block.FramedBlock;
@@ -34,20 +34,13 @@ public class FramedVerticalHalfSlopeBlock extends FramedBlock
     }
 
     @Override
-    public BlockState getStateForPlacement(BlockPlaceContext context)
+    public BlockState getStateForPlacement(BlockPlaceContext ctx)
     {
-        Direction side = context.getClickedFace();
-        Vec3 hitVec = context.getClickLocation();
-
-        Direction dir = side.getOpposite();
-        if (Utils.fractionInDir(hitVec, side.getCounterClockWise()) > .5D)
-        {
-            dir = dir.getClockWise();
-        }
-        BlockState state = defaultBlockState().setValue(FramedProperties.FACING_HOR, dir);
-
-        state = withTop(state, side, hitVec);
-        return withWater(state, context.getLevel(), context.getClickedPos());
+        return PlacementStateBuilder.of(this, ctx)
+                .withHalfOrHorizontalFacing()
+                .withTop()
+                .withWater()
+                .build();
     }
 
     @Override

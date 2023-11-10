@@ -16,6 +16,7 @@ import xfacthd.framedblocks.api.block.IFramedBlock;
 import xfacthd.framedblocks.api.util.*;
 import xfacthd.framedblocks.common.FBContent;
 import xfacthd.framedblocks.common.block.AbstractFramedDoubleBlock;
+import xfacthd.framedblocks.common.block.ExtPlacementStateBuilder;
 import xfacthd.framedblocks.common.blockentity.doubled.FramedExtendedDoubleSlopePanelBlockEntity;
 import xfacthd.framedblocks.common.data.BlockType;
 import xfacthd.framedblocks.common.data.PropertyHolder;
@@ -40,24 +41,12 @@ public class FramedExtendedDoubleSlopePanelBlock extends AbstractFramedDoubleBlo
     }
 
     @Override
-    public BlockState getStateForPlacement(BlockPlaceContext context)
+    public BlockState getStateForPlacement(BlockPlaceContext ctx)
     {
-        Direction facing = context.getHorizontalDirection();
-
-        Direction side = context.getClickedFace();
-        HorizontalRotation rotation;
-        if (side == facing.getOpposite())
-        {
-            rotation = HorizontalRotation.fromWallCross(context.getClickLocation(), side);
-        }
-        else
-        {
-            rotation = HorizontalRotation.fromDirection(facing, side);
-        }
-
-        return defaultBlockState()
-                .setValue(FramedProperties.FACING_HOR, facing)
-                .setValue(PropertyHolder.ROTATION, rotation);
+        return ExtPlacementStateBuilder.of(this, ctx)
+                .withHorizontalFacing()
+                .withCrossOrSideRotation()
+                .build();
     }
 
     @Override

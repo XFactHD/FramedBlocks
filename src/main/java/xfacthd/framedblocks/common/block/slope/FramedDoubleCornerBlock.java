@@ -10,13 +10,13 @@ import net.minecraft.world.level.block.*;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
-import net.minecraft.world.phys.Vec3;
 import org.jetbrains.annotations.Nullable;
 import xfacthd.framedblocks.api.block.FramedProperties;
 import xfacthd.framedblocks.api.block.IFramedBlock;
 import xfacthd.framedblocks.api.util.Utils;
 import xfacthd.framedblocks.common.FBContent;
 import xfacthd.framedblocks.common.block.AbstractFramedDoubleBlock;
+import xfacthd.framedblocks.common.block.ExtPlacementStateBuilder;
 import xfacthd.framedblocks.common.blockentity.doubled.FramedDoubleCornerBlockEntity;
 import xfacthd.framedblocks.common.data.BlockType;
 import xfacthd.framedblocks.common.data.PropertyHolder;
@@ -41,26 +41,9 @@ public class FramedDoubleCornerBlock extends AbstractFramedDoubleBlock
     }
 
     @Override
-    public BlockState getStateForPlacement(BlockPlaceContext context)
+    public BlockState getStateForPlacement(BlockPlaceContext ctx)
     {
-        BlockState state = defaultBlockState();
-
-        Direction side = context.getClickedFace();
-        Direction typeSide = side;
-        Vec3 hitPoint = Utils.fraction(context.getClickLocation());
-        if (!Utils.isY(side))
-        {
-            if (hitPoint.y() < (3D / 16D))
-            {
-                typeSide = Direction.UP;
-            }
-            else if (hitPoint.y() > (13D / 16D))
-            {
-                typeSide = Direction.DOWN;
-            }
-        }
-
-        return withCornerType(state, context, side, typeSide, hitPoint, context.getHorizontalDirection());
+        return ExtPlacementStateBuilder.of(this, ctx).withHorizontalFacingAndCornerType().build();
     }
 
     @Override

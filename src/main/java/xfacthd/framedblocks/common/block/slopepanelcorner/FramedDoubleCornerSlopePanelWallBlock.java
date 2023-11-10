@@ -55,9 +55,7 @@ public class FramedDoubleCornerSlopePanelWallBlock extends AbstractFramedDoubleB
     public BlockState getStateForPlacement(BlockPlaceContext ctx)
     {
         return FramedCornerSlopePanelWallBlock.getStateForPlacement(
-                defaultBlockState(),
-                ctx,
-                getBlockType() == BlockType.FRAMED_LARGE_DOUBLE_CORNER_SLOPE_PANEL_W
+                this, ctx, getBlockType() == BlockType.FRAMED_LARGE_DOUBLE_CORNER_SLOPE_PANEL_W
         );
     }
 

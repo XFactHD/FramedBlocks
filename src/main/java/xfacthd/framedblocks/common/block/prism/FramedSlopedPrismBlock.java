@@ -14,6 +14,7 @@ import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.phys.Vec3;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import xfacthd.framedblocks.api.block.FramedProperties;
+import xfacthd.framedblocks.api.block.PlacementStateBuilder;
 import xfacthd.framedblocks.api.shapes.ShapeProvider;
 import xfacthd.framedblocks.api.shapes.ShapeUtils;
 import xfacthd.framedblocks.api.type.IBlockType;
@@ -47,52 +48,52 @@ public class FramedSlopedPrismBlock extends FramedBlock
     @Override
     public BlockState getStateForPlacement(BlockPlaceContext context)
     {
-        return getStateForPlacement(context, defaultBlockState(), getBlockType());
+        return getStateForPlacement(context, this, getBlockType());
     }
 
-    public static BlockState getStateForPlacement(BlockPlaceContext context, BlockState state, IBlockType blockType)
+    public static BlockState getStateForPlacement(BlockPlaceContext context, Block block, IBlockType blockType)
     {
-        Direction face = context.getClickedFace();
-        Direction orientation;
-        if (Utils.isY(face))
-        {
-            orientation = context.getHorizontalDirection();
-            if (blockType == BlockType.FRAMED_INNER_SLOPED_PRISM || blockType == BlockType.FRAMED_DOUBLE_SLOPED_PRISM)
-            {
-                orientation = orientation.getOpposite();
-            }
-            state = state.setValue(FramedProperties.Y_SLOPE, true);
-        }
-        else
-        {
-            Vec3 subHit = Utils.fraction(context.getClickLocation());
-
-            double xz = (Utils.isX(face) ? subHit.z() : subHit.x()) - .5;
-            double y = subHit.y() - .5;
-
-            if (Math.max(Math.abs(xz), Math.abs(y)) == Math.abs(xz))
-            {
-                if (Utils.isX(face))
+        return PlacementStateBuilder.of(block, context)
+                .withCustom((state, modCtx) ->
                 {
-                    orientation = xz < 0 ? Direction.SOUTH : Direction.NORTH;
-                }
-                else
-                {
-                    orientation = xz < 0 ? Direction.EAST : Direction.WEST;
-                }
-            }
-            else
-            {
-                orientation = y < 0 ? Direction.UP : Direction.DOWN;
-            }
-        }
-        state = state.setValue(PropertyHolder.FACING_DIR, CompoundDirection.of(face, orientation));
+                    Direction face = modCtx.getClickedFace();
+                    Direction orientation;
+                    if (Utils.isY(face))
+                    {
+                        orientation = modCtx.getHorizontalDirection();
+                        if (blockType == BlockType.FRAMED_INNER_SLOPED_PRISM || blockType == BlockType.FRAMED_DOUBLE_SLOPED_PRISM)
+                        {
+                            orientation = orientation.getOpposite();
+                        }
+                    }
+                    else
+                    {
+                        Vec3 subHit = Utils.fraction(modCtx.getClickLocation());
 
-        if (blockType == BlockType.FRAMED_SLOPED_PRISM)
-        {
-            state = withWater(state, context.getLevel(), context.getClickedPos());
-        }
-        return state;
+                        double xz = (Utils.isX(face) ? subHit.z() : subHit.x()) - .5;
+                        double y = subHit.y() - .5;
+
+                        if (Math.max(Math.abs(xz), Math.abs(y)) == Math.abs(xz))
+                        {
+                            if (Utils.isX(face))
+                            {
+                                orientation = xz < 0 ? Direction.SOUTH : Direction.NORTH;
+                            }
+                            else
+                            {
+                                orientation = xz < 0 ? Direction.EAST : Direction.WEST;
+                            }
+                        }
+                        else
+                        {
+                            orientation = y < 0 ? Direction.UP : Direction.DOWN;
+                        }
+                    }
+                    return state.setValue(PropertyHolder.FACING_DIR, CompoundDirection.of(face, orientation));
+                })
+                .withYSlope(Utils.isY(context.getClickedFace()))
+                .tryWithWater()
+                .build();
     }
 
     @Override

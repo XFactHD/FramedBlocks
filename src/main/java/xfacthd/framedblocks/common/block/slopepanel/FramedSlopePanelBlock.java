@@ -17,6 +17,7 @@ import xfacthd.framedblocks.api.block.FramedProperties;
 import xfacthd.framedblocks.api.block.IFramedBlock;
 import xfacthd.framedblocks.api.shapes.*;
 import xfacthd.framedblocks.api.util.*;
+import xfacthd.framedblocks.common.block.ExtPlacementStateBuilder;
 import xfacthd.framedblocks.common.block.FramedBlock;
 import xfacthd.framedblocks.common.data.*;
 import xfacthd.framedblocks.common.data.property.HorizontalRotation;
@@ -52,32 +53,12 @@ public class FramedSlopePanelBlock extends FramedBlock
 
     public static BlockState getStateForPlacement(Block block, BlockPlaceContext context)
     {
-        Direction facing = context.getHorizontalDirection();
-
-        Direction side = context.getClickedFace();
-        HorizontalRotation rotation;
-        if (side == facing.getOpposite())
-        {
-            rotation = HorizontalRotation.fromWallCross(context.getClickLocation(), side);
-        }
-        else
-        {
-            rotation = HorizontalRotation.fromDirection(facing, side);
-        }
-
-        boolean front = false;
-        if (side.getAxis() != facing.getAxis())
-        {
-            Vec3 subHit = Utils.fraction(context.getClickLocation());
-            double xz = Utils.isX(facing) ? subHit.x : subHit.z;
-            front = (xz < .5) == Utils.isPositive(facing);
-        }
-
-        BlockState state = block.defaultBlockState()
-                .setValue(FramedProperties.FACING_HOR, facing)
-                .setValue(PropertyHolder.ROTATION, rotation)
-                .setValue(PropertyHolder.FRONT, front);
-        return withWater(state, context.getLevel(), context.getClickedPos());
+        return ExtPlacementStateBuilder.of(block, context)
+                .withHorizontalFacing()
+                .withCrossOrSideRotation()
+                .withFront()
+                .withWater()
+                .build();
     }
 
     @Override

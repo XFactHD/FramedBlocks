@@ -16,6 +16,7 @@ import xfacthd.framedblocks.api.block.IFramedBlock;
 import xfacthd.framedblocks.api.util.Utils;
 import xfacthd.framedblocks.common.FBContent;
 import xfacthd.framedblocks.common.block.AbstractFramedDoubleBlock;
+import xfacthd.framedblocks.common.block.ExtPlacementStateBuilder;
 import xfacthd.framedblocks.common.blockentity.doubled.FramedDoubleSlopeBlockEntity;
 import xfacthd.framedblocks.common.data.BlockType;
 import xfacthd.framedblocks.common.data.PropertyHolder;
@@ -39,16 +40,10 @@ public class FramedDoubleSlopeBlock extends AbstractFramedDoubleBlock
         builder.add(FramedProperties.FACING_HOR, PropertyHolder.SLOPE_TYPE, FramedProperties.Y_SLOPE);
     }
 
-    @Nullable
     @Override
-    public BlockState getStateForPlacement(BlockPlaceContext context)
+    public BlockState getStateForPlacement(BlockPlaceContext ctx)
     {
-        return withSlopeType(
-                defaultBlockState(),
-                context.getClickedFace(),
-                context.getHorizontalDirection(),
-                context.getClickLocation()
-        );
+        return ExtPlacementStateBuilder.of(this, ctx).withHorizontalFacingAndSlopeType().build();
     }
 
     @Override

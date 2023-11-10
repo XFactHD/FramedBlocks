@@ -14,9 +14,9 @@ import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.phys.Vec3;
 import net.minecraft.world.phys.shapes.*;
 import xfacthd.framedblocks.api.block.FramedProperties;
+import xfacthd.framedblocks.api.block.PlacementStateBuilder;
 import xfacthd.framedblocks.api.shapes.ShapeProvider;
 import xfacthd.framedblocks.api.shapes.ShapeUtils;
-import xfacthd.framedblocks.api.type.IBlockType;
 import xfacthd.framedblocks.api.util.*;
 import xfacthd.framedblocks.common.block.FramedBlock;
 import xfacthd.framedblocks.common.data.BlockType;
@@ -44,41 +44,37 @@ public class FramedPrismBlock extends FramedBlock
     @Override
     public BlockState getStateForPlacement(BlockPlaceContext context)
     {
-        return getStateForPlacement(context, defaultBlockState(), getBlockType());
+        return getStateForPlacement(context, this);
     }
 
-    public static BlockState getStateForPlacement(BlockPlaceContext context, BlockState state, IBlockType blockType)
+    public static BlockState getStateForPlacement(BlockPlaceContext ctx, Block block)
     {
-        Direction face = context.getClickedFace();
-        Direction.Axis axis;
-        if (Utils.isY(face))
-        {
-            axis = context.getHorizontalDirection().getAxis();
-            state = state.setValue(FramedProperties.Y_SLOPE, true);
-        }
-        else
-        {
-            Vec3 subHit = Utils.fraction(context.getClickLocation());
+        return PlacementStateBuilder.of(block, ctx)
+                .withCustom((state, modCtx) ->
+                {
+                    Direction face = modCtx.getClickedFace();
+                    Direction.Axis axis = modCtx.getHorizontalDirection().getAxis();
+                    if (!Utils.isY(face))
+                    {
+                        Vec3 subHit = Utils.fraction(modCtx.getClickLocation());
 
-            double xz = (Utils.isX(face) ? subHit.z() : subHit.x()) - .5;
-            double y = subHit.y() - .5;
+                        double xz = (Utils.isX(face) ? subHit.z() : subHit.x()) - .5;
+                        double y = subHit.y() - .5;
 
-            if (Math.max(Math.abs(xz), Math.abs(y)) == Math.abs(xz))
-            {
-                axis = face.getClockWise().getAxis();
-            }
-            else
-            {
-                axis = Direction.Axis.Y;
-            }
-        }
-        state = state.setValue(PropertyHolder.FACING_AXIS, DirectionAxis.of(face, axis));
-
-        if (blockType == BlockType.FRAMED_PRISM)
-        {
-            state = withWater(state, context.getLevel(), context.getClickedPos());
-        }
-        return state;
+                        if (Math.max(Math.abs(xz), Math.abs(y)) == Math.abs(xz))
+                        {
+                            axis = face.getClockWise().getAxis();
+                        }
+                        else
+                        {
+                            axis = Direction.Axis.Y;
+                        }
+                    }
+                    return state.setValue(PropertyHolder.FACING_AXIS, DirectionAxis.of(face, axis));
+                })
+                .withYSlope(Utils.isY(ctx.getClickedFace()))
+                .tryWithWater()
+                .build();
     }
 
     @Override

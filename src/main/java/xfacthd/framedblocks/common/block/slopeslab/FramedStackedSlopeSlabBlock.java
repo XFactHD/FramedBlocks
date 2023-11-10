@@ -13,8 +13,7 @@ import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.phys.BlockHitResult;
 import org.jetbrains.annotations.Nullable;
-import xfacthd.framedblocks.api.block.FramedProperties;
-import xfacthd.framedblocks.api.block.IFramedBlock;
+import xfacthd.framedblocks.api.block.*;
 import xfacthd.framedblocks.api.util.Utils;
 import xfacthd.framedblocks.common.FBContent;
 import xfacthd.framedblocks.common.block.AbstractFramedDoubleBlock;
@@ -44,14 +43,13 @@ public class FramedStackedSlopeSlabBlock extends AbstractFramedDoubleBlock
     }
 
     @Override
-    public BlockState getStateForPlacement(BlockPlaceContext context)
+    public BlockState getStateForPlacement(BlockPlaceContext ctx)
     {
-        Direction face = context.getClickedFace();
-        Direction facing = Utils.isY(face) ? context.getHorizontalDirection() : face.getOpposite();
-
-        BlockState state = defaultBlockState().setValue(FramedProperties.FACING_HOR, facing);
-        state = withTop(state, context.getClickedFace(), context.getClickLocation());
-        return withWater(state, context.getLevel(), context.getClickedPos());
+        return PlacementStateBuilder.of(this, ctx)
+                .withTargetOrHorizontalFacing()
+                .withTop()
+                .withWater()
+                .build();
     }
 
     @Override
