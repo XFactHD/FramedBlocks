@@ -140,14 +140,10 @@ public class FramedHalfStairsBlock extends FramedBlock
         int maskTop = 0b0100;
         int maskRight = 0b1000;
         VoxelShape[] shapes = new VoxelShape[4 * 4];
-        for (Direction dir : Direction.Plane.HORIZONTAL)
-        {
-            int horId = dir.get2DDataValue();
-            shapes[horId] = ShapeUtils.rotateShape(Direction.SOUTH, dir, bottomLeft);
-            shapes[horId | maskRight] = ShapeUtils.rotateShape(Direction.SOUTH, dir, bottomRight);
-            shapes[horId | maskTop] = ShapeUtils.rotateShape(Direction.SOUTH, dir, topLeft);
-            shapes[horId | maskTop | maskRight] = ShapeUtils.rotateShape(Direction.SOUTH, dir, topRight);
-        }
+        ShapeUtils.makeHorizontalRotations(bottomLeft, Direction.SOUTH, shapes, 0);
+        ShapeUtils.makeHorizontalRotations(bottomRight, Direction.SOUTH, shapes, maskRight);
+        ShapeUtils.makeHorizontalRotations(topLeft, Direction.SOUTH, shapes, maskTop);
+        ShapeUtils.makeHorizontalRotations(topRight, Direction.SOUTH, shapes, maskTop | maskRight);
 
         for (BlockState state : states)
         {

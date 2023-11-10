@@ -277,11 +277,7 @@ public class FramedDoubleCornerSlopePanelWallBlock extends AbstractFramedDoubleB
         for (HorizontalRotation rot : HorizontalRotation.values())
         {
             VoxelShape preShape = Shapes.joinUnoptimized(rot.getCornerShape(), Shapes.block(), BooleanOp.NOT_SAME);
-            for (Direction dir : Direction.Plane.HORIZONTAL)
-            {
-                int idx = dir.get2DDataValue() | (rot.ordinal() << 2);
-                shapes[idx] = ShapeUtils.rotateShape(Direction.NORTH, dir, preShape);
-            }
+            ShapeUtils.makeHorizontalRotations(preShape, Direction.NORTH, shapes, rot.ordinal() << 2);
         }
 
         for (BlockState state : states)

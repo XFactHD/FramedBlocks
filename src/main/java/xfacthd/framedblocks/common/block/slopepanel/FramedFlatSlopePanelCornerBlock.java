@@ -210,13 +210,8 @@ public class FramedFlatSlopePanelCornerBlock extends FramedBlock
             );
             VoxelShape preShapeFront = preShape.move(0, 0, .5);
 
-            for (Direction dir : Direction.Plane.HORIZONTAL)
-            {
-                int idx = dir.get2DDataValue() | (rot.ordinal() << 3);
-                shapes[idx] = ShapeUtils.rotateShape(Direction.NORTH, dir, preShape);
-                idx = dir.get2DDataValue() | maskFront | (rot.ordinal() << 3);
-                shapes[idx] = ShapeUtils.rotateShape(Direction.NORTH, dir, preShapeFront);
-            }
+            ShapeUtils.makeHorizontalRotations(preShape, Direction.NORTH, shapes, rot.ordinal() << 3);
+            ShapeUtils.makeHorizontalRotations(preShapeFront, Direction.NORTH, shapes, maskFront | (rot.ordinal() << 3));
         }
 
         for (BlockState state : states)

@@ -229,10 +229,10 @@ public class FramedFlatInverseDoubleSlopeSlabCornerBlock extends AbstractFramedD
         VoxelShape shapeTop = ShapeUtils.orUnoptimized(
                 ShapeUtils.andUnoptimized(
                         shapeSlopeTop,
-                        ShapeUtils.rotateShape(Direction.NORTH, Direction.WEST, shapeSlopeTop)
+                        ShapeUtils.rotateShapeUnoptimized(Direction.NORTH, Direction.WEST, shapeSlopeTop)
                 ),
-                ShapeUtils.rotateShape(Direction.NORTH, Direction.SOUTH, shapeSlopeBottom),
-                ShapeUtils.rotateShape(Direction.NORTH, Direction.EAST, shapeSlopeBottom)
+                ShapeUtils.rotateShapeUnoptimized(Direction.NORTH, Direction.SOUTH, shapeSlopeBottom),
+                ShapeUtils.rotateShapeUnoptimized(Direction.NORTH, Direction.EAST, shapeSlopeBottom)
         );
 
         VoxelShape[] shapes = ShapeUtils.makeHorizontalRotationsWithFlag(shapeBot, shapeTop, Direction.NORTH);

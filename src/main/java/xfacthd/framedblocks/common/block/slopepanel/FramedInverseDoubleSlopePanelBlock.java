@@ -203,12 +203,7 @@ public class FramedInverseDoubleSlopePanelBlock extends AbstractFramedDoubleBloc
                     ShapeUtils.rotateShapeUnoptimized(Direction.NORTH, Direction.SOUTH, shapeOne.move(0, 0, .5)),
                     FramedSlopePanelBlock.SHAPES.get(rot).move(0, 0, .5)
             );
-
-            for (Direction dir : Direction.Plane.HORIZONTAL)
-            {
-                int idx = dir.get2DDataValue() | (rot.ordinal() << 2);
-                shapes[idx] = ShapeUtils.rotateShape(Direction.NORTH, dir, preShape);
-            }
+            ShapeUtils.makeHorizontalRotations(preShape, Direction.NORTH, shapes, rot.ordinal() << 2);
         }
 
         for (BlockState state : states)

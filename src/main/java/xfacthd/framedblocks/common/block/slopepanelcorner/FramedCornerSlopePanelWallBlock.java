@@ -184,12 +184,7 @@ public class FramedCornerSlopePanelWallBlock extends FramedBlock
                 case DOWN, LEFT -> FramedSlopeSlabBlock.SHAPES.get(Boolean.FALSE);
             };
             VoxelShape preShape = ShapeUtils.andUnoptimized(shapeOne, shapeTwo);
-
-            for (Direction dir : Direction.Plane.HORIZONTAL)
-            {
-                int idx = dir.get2DDataValue() | (rot.ordinal() << 2);
-                shapes[idx] = ShapeUtils.rotateShape(Direction.NORTH, dir, preShape);
-            }
+            ShapeUtils.makeHorizontalRotations(preShape, Direction.NORTH, shapes, rot.ordinal() << 2);
         }
 
         for (BlockState state : states)
@@ -247,12 +242,7 @@ public class FramedCornerSlopePanelWallBlock extends FramedBlock
         for (HorizontalRotation rot : HorizontalRotation.values())
         {
             VoxelShape preShape = SHAPES_LARGE.get(rot);
-
-            for (Direction dir : Direction.Plane.HORIZONTAL)
-            {
-                int idx = dir.get2DDataValue() | (rot.ordinal() << 2);
-                shapes[idx] = ShapeUtils.rotateShape(Direction.NORTH, dir, preShape);
-            }
+            ShapeUtils.makeHorizontalRotations(preShape, Direction.NORTH, shapes, rot.ordinal() << 2);
         }
 
         for (BlockState state : states)
@@ -306,12 +296,7 @@ public class FramedCornerSlopePanelWallBlock extends FramedBlock
         for (HorizontalRotation rot : HorizontalRotation.values())
         {
             VoxelShape preShape = SHAPES_SMALL_INNER.get(rot);
-
-            for (Direction dir : Direction.Plane.HORIZONTAL)
-            {
-                int idx = dir.get2DDataValue() | (rot.ordinal() << 2);
-                shapes[idx] = ShapeUtils.rotateShape(Direction.NORTH, dir, preShape);
-            }
+            ShapeUtils.makeHorizontalRotations(preShape, Direction.NORTH, shapes, rot.ordinal() << 2);
         }
 
         for (BlockState state : states)
@@ -351,11 +336,7 @@ public class FramedCornerSlopePanelWallBlock extends FramedBlock
                 case DOWN, LEFT -> FramedSlopeSlabBlock.SHAPES.get(Boolean.TRUE).move(0, .5, 0);
             };
             VoxelShape preShape = ShapeUtils.orUnoptimized(shapeOne, shapeTwo);
-            for (Direction dir : Direction.Plane.HORIZONTAL)
-            {
-                int idx = dir.get2DDataValue() | (rot.ordinal() << 2);
-                shapes[idx] = ShapeUtils.rotateShape(Direction.NORTH, dir, preShape);
-            }
+            ShapeUtils.makeHorizontalRotations(preShape, Direction.NORTH, shapes, rot.ordinal() << 2);
         }
 
         for (BlockState state : states)

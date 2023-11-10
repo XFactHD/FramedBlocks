@@ -59,13 +59,7 @@ public class FramedLargeButtonBlock extends FramedButtonBlock
         VoxelShape shape = box(1, 1, 0, 15, 15, 2);
         VoxelShape shapePressed = box(1, 1, 0, 15, 15, 1);
 
-        VoxelShape[] shapes = new VoxelShape[8];
-        for (Direction dir : Direction.Plane.HORIZONTAL)
-        {
-            shapes[dir.get2DDataValue()] = ShapeUtils.rotateShape(Direction.SOUTH, dir, shape);
-            shapes[dir.get2DDataValue() + 4] = ShapeUtils.rotateShape(Direction.SOUTH, dir, shapePressed);
-        }
-        return shapes;
+        return ShapeUtils.makeHorizontalRotationsWithFlag(shape, shapePressed, Direction.SOUTH);
     }
 
     public static FramedLargeButtonBlock wood()
