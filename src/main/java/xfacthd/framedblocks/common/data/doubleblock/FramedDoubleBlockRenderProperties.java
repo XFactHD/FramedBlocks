@@ -10,7 +10,7 @@ import xfacthd.framedblocks.api.block.render.FramedBlockRenderProperties;
 import xfacthd.framedblocks.api.block.render.ParticleHelper;
 import xfacthd.framedblocks.common.blockentity.FramedDoubleBlockEntity;
 
-public class FramedDoubleBlockRenderProperties extends FramedBlockRenderProperties
+public final class FramedDoubleBlockRenderProperties extends FramedBlockRenderProperties
 {
     public static final FramedDoubleBlockRenderProperties INSTANCE = new FramedDoubleBlockRenderProperties();
 

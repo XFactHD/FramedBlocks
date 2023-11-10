@@ -143,7 +143,7 @@ public class FramedVerticalSlopedStairsBlock extends FramedBlock
 
         VoxelShape panelShape = box(0, 0, 0, 16, 16, 8);
 
-        VoxelShape shapeUp =  ShapeUtils.orUnoptimized(
+        VoxelShape shapeUp = ShapeUtils.orUnoptimized(
                 panelShape,
                 ShapeUtils.rotateShapeUnoptimized(
                         Direction.NORTH,

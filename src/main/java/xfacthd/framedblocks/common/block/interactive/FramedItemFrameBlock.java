@@ -42,8 +42,12 @@ import java.util.function.Consumer;
 @SuppressWarnings("deprecation")
 public class FramedItemFrameBlock extends FramedBlock
 {
-    private static final SoundType NORMAL_SOUND = new SoundType(1F, 1F, SoundEvents.ITEM_FRAME_BREAK, SoundEvents.EMPTY, SoundEvents.ITEM_FRAME_PLACE, SoundEvents.SCAFFOLDING_HIT, SoundEvents.EMPTY);
-    private static final SoundType GLOWING_SOUND = new SoundType(1F, 1F, SoundEvents.GLOW_ITEM_FRAME_BREAK, SoundEvents.EMPTY, SoundEvents.GLOW_ITEM_FRAME_PLACE, SoundEvents.SCAFFOLDING_HIT, SoundEvents.EMPTY);
+    private static final SoundType NORMAL_SOUND = new SoundType(
+            1F, 1F, SoundEvents.ITEM_FRAME_BREAK, SoundEvents.EMPTY, SoundEvents.ITEM_FRAME_PLACE, SoundEvents.SCAFFOLDING_HIT, SoundEvents.EMPTY
+    );
+    private static final SoundType GLOWING_SOUND = new SoundType(
+            1F, 1F, SoundEvents.GLOW_ITEM_FRAME_BREAK, SoundEvents.EMPTY, SoundEvents.GLOW_ITEM_FRAME_PLACE, SoundEvents.SCAFFOLDING_HIT, SoundEvents.EMPTY
+    );
 
     public FramedItemFrameBlock(BlockType type)
     {

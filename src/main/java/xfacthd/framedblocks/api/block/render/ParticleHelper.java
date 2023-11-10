@@ -14,7 +14,7 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.*;
-import xfacthd.framedblocks.common.FBContent;
+import xfacthd.framedblocks.api.FramedBlocksAPI;
 
 public final class ParticleHelper
 {
@@ -34,8 +34,8 @@ public final class ParticleHelper
             double offX = x - (double)pos.getX() - 0.5D;
             double offZ = z - (double)pos.getZ() - 0.5D;
             double maxOff = Math.max(Math.abs(offX), Math.abs(offZ));
-            x = (double)pos.getX() + 0.5D + offX / maxOff * 0.5D;
-            z = (double)pos.getZ() + 0.5D + offZ / maxOff * 0.5D;
+            x = (double) pos.getX() + 0.5D + offX / maxOff * 0.5D;
+            z = (double) pos.getZ() + 0.5D + offZ / maxOff * 0.5D;
         }
 
         level.sendParticles(
@@ -131,15 +131,15 @@ public final class ParticleHelper
                 int yCount = Math.max(2, Mth.ceil(sizeY / 0.25D));
                 int zCount = Math.max(2, Mth.ceil(sizeZ / 0.25D));
 
-                for(int iX = 0; iX < xCount; ++iX)
+                for (int iX = 0; iX < xCount; ++iX)
                 {
-                    for(int iY = 0; iY < yCount; ++iY)
+                    for (int iY = 0; iY < yCount; ++iY)
                     {
-                        for(int iZ = 0; iZ < zCount; ++iZ)
+                        for (int iZ = 0; iZ < zCount; ++iZ)
                         {
-                            double offX = ((double)iX + 0.5D) / (double)xCount;
-                            double offY = ((double)iY + 0.5D) / (double)yCount;
-                            double offZ = ((double)iZ + 0.5D) / (double)zCount;
+                            double offX = ((double) iX + 0.5D) / (double) xCount;
+                            double offY = ((double) iY + 0.5D) / (double) yCount;
+                            double offZ = ((double) iZ + 0.5D) / (double) zCount;
                             double x = pos.getX() + offX * sizeX + minX;
                             double y = pos.getY() + offY * sizeY + minY;
                             double z = pos.getZ() + offZ * sizeZ + minZ;

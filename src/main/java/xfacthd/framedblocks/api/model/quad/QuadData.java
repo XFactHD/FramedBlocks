@@ -129,9 +129,9 @@ public final class QuadData
         int packedNormal = vertexData[offset];
         vertexData[offset] =
                 (((byte) (vals.x * 127F)) & 0xFF) |
-                        ((((byte) (vals.y * 127F)) & 0xFF) << 8) |
-                        ((((byte) (vals.z * 127F)) & 0xFF) << 16) |
-                        (packedNormal & 0xFF000000);
+                ((((byte) (vals.y * 127F)) & 0xFF) << 8) |
+                ((((byte) (vals.z * 127F)) & 0xFF) << 16) |
+                (packedNormal & 0xFF000000);
     }
 
     public int color(int vert, int idx)

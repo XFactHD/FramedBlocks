@@ -29,7 +29,7 @@ import java.util.List;
 import java.util.UUID;
 import java.util.function.UnaryOperator;
 
-public final class FramedSignBlockEntity extends FramedBlockEntity
+public class FramedSignBlockEntity extends FramedBlockEntity
 {
     @Nullable
     private UUID editingPlayer;

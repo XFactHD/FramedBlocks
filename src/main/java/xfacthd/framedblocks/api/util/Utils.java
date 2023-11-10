@@ -52,6 +52,7 @@ import java.util.stream.Collectors;
 
 public final class Utils
 {
+    private static final ResourceLocation RL_TEMPLATE = new ResourceLocation(FramedConstants.MOD_ID, "");
     private static final Direction[] DIRECTIONS = Direction.values();
     public static final TagKey<Block> FRAMEABLE = blockTag("frameable");
     public static final TagKey<Block> BLACKLIST = blockTag("blacklisted");
@@ -250,11 +251,6 @@ public final class Utils
         return dir.getAxis() == Direction.Axis.Z;
     }
 
-    public static Direction dirByNormal(BlockPos normal)
-    {
-        return DIRECTION_BY_NORMAL.get(normal.asLong());
-    }
-
     public static Direction dirByNormal(int x, int y, int z)
     {
         return DIRECTION_BY_NORMAL.get(BlockPos.asLong(x, y, z));
@@ -418,15 +414,15 @@ public final class Utils
         FluidState fluidState = fluid.defaultFluidState();
         if (tag.contains("Properties", Tag.TAG_COMPOUND))
         {
-            CompoundTag compoundtag = tag.getCompound("Properties");
-            StateDefinition<Fluid, FluidState> statedefinition = fluid.getStateDefinition();
+            CompoundTag propsTag = tag.getCompound("Properties");
+            StateDefinition<Fluid, FluidState> stateDef = fluid.getStateDefinition();
 
-            for(String s : compoundtag.getAllKeys())
+            for (String propName : propsTag.getAllKeys())
             {
-                Property<?> property = statedefinition.getProperty(s);
+                Property<?> property = stateDef.getProperty(propName);
                 if (property != null)
                 {
-                    fluidState = NbtUtils.setValueHelper(fluidState, property, s, compoundtag, tag);
+                    fluidState = NbtUtils.setValueHelper(fluidState, property, propName, propsTag, tag);
                 }
             }
         }
@@ -517,7 +513,7 @@ public final class Utils
         }
     }
 
-    public static HolderLookup<Block> getBlockHolderLookup(Level level)
+    public static HolderLookup<Block> getBlockHolderLookup(@Nullable Level level)
     {
         if (level != null)
         {
@@ -529,7 +525,7 @@ public final class Utils
 
     public static ResourceLocation rl(String path)
     {
-        return new ResourceLocation(FramedConstants.MOD_ID, path);
+        return RL_TEMPLATE.withPath(path);
     }
 
     public static Method findMethod(Class<?> clazz, String methodName, Class<?>... paramTypes)

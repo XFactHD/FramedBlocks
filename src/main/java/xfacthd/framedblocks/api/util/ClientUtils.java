@@ -56,6 +56,7 @@ public final class ClientUtils
         return IClientFluidTypeExtensions.of(fluid).getTintColor(fluid, level, pos);
     }
 
+    @SuppressWarnings("BooleanMethodIsAlwaysInverted")
     public static boolean isDummyTexture(BakedQuad quad)
     {
         return isTexture(quad, DUMMY_TEXTURE);
