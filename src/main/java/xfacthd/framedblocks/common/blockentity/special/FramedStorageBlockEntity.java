@@ -7,8 +7,7 @@ import net.minecraft.nbt.Tag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.util.Mth;
-import net.minecraft.world.MenuProvider;
-import net.minecraft.world.Nameable;
+import net.minecraft.world.*;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
@@ -29,7 +28,7 @@ import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.List;
 
-public class FramedStorageBlockEntity extends FramedBlockEntity implements MenuProvider, Nameable
+public class FramedStorageBlockEntity extends FramedBlockEntity implements MenuProvider, Nameable, Clearable
 {
     public static final Component TITLE = Utils.translate("title", "framed_secret_storage");
 
@@ -107,7 +106,8 @@ public class FramedStorageBlockEntity extends FramedBlockEntity implements MenuP
         return drops;
     }
 
-    public void clearContents()
+    @Override
+    public void clearContent()
     {
         for (int i = 0; i < itemHandler.getSlots(); i++)
         {
