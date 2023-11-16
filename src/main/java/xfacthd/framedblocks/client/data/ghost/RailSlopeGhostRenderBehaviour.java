@@ -30,7 +30,7 @@ public final class RailSlopeGhostRenderBehaviour implements GhostRenderBehaviour
             BlockHitResult hit,
             BlockPlaceContext ctx,
             BlockState hitState,
-            boolean secondPass
+            int renderPass
     )
     {
         if (hitState.getBlock() == FBContent.BLOCK_FRAMED_SLOPE.get())
@@ -54,7 +54,7 @@ public final class RailSlopeGhostRenderBehaviour implements GhostRenderBehaviour
             BlockPlaceContext ctx,
             BlockState hitState,
             BlockPos defaultPos,
-            boolean secondPass
+            int renderPass
     )
     {
         return hit.getBlockPos();

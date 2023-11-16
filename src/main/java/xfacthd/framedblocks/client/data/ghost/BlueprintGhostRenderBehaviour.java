@@ -47,9 +47,9 @@ public final class BlueprintGhostRenderBehaviour implements GhostRenderBehaviour
     }
 
     @Override
-    public boolean hasSecondBlock(ItemStack stack, @Nullable ItemStack proxiedStack)
+    public int getPassCount(ItemStack stack, @Nullable ItemStack proxiedStack)
     {
-        return proxiedStack != null && proxyBehaviour(proxiedStack).hasSecondBlock(proxiedStack, null);
+        return proxiedStack != null ? proxyBehaviour(proxiedStack).getPassCount(proxiedStack, null) : 0;
     }
 
     @Override
@@ -60,14 +60,14 @@ public final class BlueprintGhostRenderBehaviour implements GhostRenderBehaviour
             BlockHitResult hit,
             BlockPlaceContext ctx,
             BlockState hitState,
-            boolean secondPass
+            int renderPass
     )
     {
         if (proxiedStack == null)
         {
             return null;
         }
-        return proxyBehaviour(proxiedStack).getRenderState(proxiedStack, null, hit, ctx, hitState, secondPass);
+        return proxyBehaviour(proxiedStack).getRenderState(proxiedStack, null, hit, ctx, hitState, renderPass);
     }
 
     @Override
@@ -78,14 +78,14 @@ public final class BlueprintGhostRenderBehaviour implements GhostRenderBehaviour
             BlockPlaceContext ctx,
             BlockState hitState,
             BlockPos defaultPos,
-            boolean secondPass
+            int renderPass
     )
     {
         if (proxiedStack == null)
         {
             return null;
         }
-        return proxyBehaviour(proxiedStack).getRenderPos(proxiedStack, null, hit, ctx, hitState, defaultPos, secondPass);
+        return proxyBehaviour(proxiedStack).getRenderPos(proxiedStack, null, hit, ctx, hitState, defaultPos, renderPass);
     }
 
     @Override
@@ -107,7 +107,7 @@ public final class BlueprintGhostRenderBehaviour implements GhostRenderBehaviour
     }
 
     @Override
-    public CamoPair readCamo(ItemStack stack, @Nullable ItemStack proxiedStack, boolean secondPass)
+    public CamoPair readCamo(ItemStack stack, @Nullable ItemStack proxiedStack, int renderPass)
     {
         //noinspection ConstantConditions
         if (proxiedStack != null && stack.hasTag() && stack.getTag().contains("blueprint_data"))
@@ -133,7 +133,7 @@ public final class BlueprintGhostRenderBehaviour implements GhostRenderBehaviour
             @Nullable ItemStack proxiedStack,
             BlockPlaceContext ctx,
             BlockState renderState,
-            boolean secondPass,
+            int renderPass,
             CamoPair camo
     )
     {
@@ -141,7 +141,7 @@ public final class BlueprintGhostRenderBehaviour implements GhostRenderBehaviour
         {
             return CamoPair.EMPTY;
         }
-        return proxyBehaviour(proxiedStack).postProcessCamo(proxiedStack, null, ctx, renderState, secondPass, camo);
+        return proxyBehaviour(proxiedStack).postProcessCamo(proxiedStack, null, ctx, renderState, renderPass, camo);
     }
 
     @Override
@@ -150,7 +150,7 @@ public final class BlueprintGhostRenderBehaviour implements GhostRenderBehaviour
             @Nullable ItemStack proxiedStack,
             BlockPlaceContext ctx,
             BlockState renderState,
-            boolean secondPass,
+            int renderPass,
             ModelData data
     )
     {
@@ -158,7 +158,7 @@ public final class BlueprintGhostRenderBehaviour implements GhostRenderBehaviour
         {
             return data;
         }
-        return proxyBehaviour(proxiedStack).appendModelData(proxiedStack, null, ctx, renderState, secondPass, data);
+        return proxyBehaviour(proxiedStack).appendModelData(proxiedStack, null, ctx, renderState, renderPass, data);
     }
 
     private static GhostRenderBehaviour proxyBehaviour(ItemStack proxiedStack)

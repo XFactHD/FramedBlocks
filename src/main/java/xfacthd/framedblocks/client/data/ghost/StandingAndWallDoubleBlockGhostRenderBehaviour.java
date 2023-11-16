@@ -7,7 +7,7 @@ import xfacthd.framedblocks.api.ghost.CamoPair;
 public final class StandingAndWallDoubleBlockGhostRenderBehaviour extends StandingAndWallBlockGhostRenderBehaviour
 {
     @Override
-    public CamoPair readCamo(ItemStack stack, @Nullable ItemStack proxiedStack, boolean secondPass)
+    public CamoPair readCamo(ItemStack stack, @Nullable ItemStack proxiedStack, int renderPass)
     {
         return DoubleBlockGhostRenderBehaviour.readDoubleCamo(stack);
     }

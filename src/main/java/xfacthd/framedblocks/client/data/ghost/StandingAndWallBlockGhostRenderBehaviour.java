@@ -26,7 +26,7 @@ public sealed class StandingAndWallBlockGhostRenderBehaviour implements GhostRen
             BlockHitResult hit,
             BlockPlaceContext ctx,
             BlockState hitState,
-            boolean secondPass
+            int renderPass
     )
     {
         try

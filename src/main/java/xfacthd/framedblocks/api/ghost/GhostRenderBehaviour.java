@@ -67,11 +67,11 @@ public interface GhostRenderBehaviour
      *
      * @param stack The {@link ItemStack} in the players main hand
      * @param proxiedStack The proxied {@code ItemStack} as returned from {@link GhostRenderBehaviour#getProxiedStack(ItemStack)}
-     * @return True if the block to be rendered consists of two separate blocks
+     * @return The amount of separate blocks to be rendered for the held item
      */
-    default boolean hasSecondBlock(ItemStack stack, @Nullable ItemStack proxiedStack)
+    default int getPassCount(ItemStack stack, @Nullable ItemStack proxiedStack)
     {
-        return false;
+        return 1;
     }
 
     /**
@@ -83,8 +83,7 @@ public interface GhostRenderBehaviour
      * @param ctx The {@link BlockPlaceContext} to use for determining the resulting {@code BlockState} via
      *            {@link Block#getStateForPlacement(BlockPlaceContext)}
      * @param hitState The {@code BlockState} hit by the given {@code BlockHitResult}
-     * @param secondPass True if {@link GhostRenderBehaviour#hasSecondBlock(ItemStack, ItemStack)} returns true and the
-     *                   second block is being rendered, otherwise false
+     * @param renderPass The current render pass index
      * @return The {@code BlockState} to render or null when none could be determined
      */
     @Nullable
@@ -94,7 +93,7 @@ public interface GhostRenderBehaviour
             BlockHitResult hit,
             BlockPlaceContext ctx,
             BlockState hitState,
-            boolean secondPass
+            int renderPass
     )
     {
         Block block = ((BlockItem) stack.getItem()).getBlock();
@@ -110,8 +109,7 @@ public interface GhostRenderBehaviour
      * @param ctx The {@link BlockPlaceContext} to use for determining the resulting
      * @param hitState The {@link BlockState} hit by the given {@code BlockHitResult}
      * @param defaultPos The {@code BlockPos} at which the block will be rendered and placed by default
-     * @param secondPass True if {@link GhostRenderBehaviour#hasSecondBlock(ItemStack, ItemStack)} returns true and
-     *                   the second block is being rendered, otherwise false
+     * @param renderPass The current render pass index
      * @return The {@code BlockPos} at which the block should be rendered
      */
     default BlockPos getRenderPos(
@@ -121,7 +119,7 @@ public interface GhostRenderBehaviour
             BlockPlaceContext ctx,
             BlockState hitState,
             BlockPos defaultPos,
-            boolean secondPass
+            int renderPass
     )
     {
         return defaultPos;
@@ -129,8 +127,8 @@ public interface GhostRenderBehaviour
 
     /**
      * Determine whether the previously calculated {@link BlockState} can actually render at the given {@link BlockPos}.
-     * If {@link GhostRenderBehaviour#hasSecondBlock(ItemStack, ItemStack)} returns true, this will only be called for the first block
-     * and controls whether both or none of the blocks are rendered.
+     * If {@link GhostRenderBehaviour#getPassCount(ItemStack, ItemStack)} returns a value higher than one, this will
+     * only be called for the first block and controls whether all or none of the blocks are rendered.
      *
      * @param stack The {@link ItemStack} in the players main hand
      * @param proxiedStack The proxied {@code ItemStack} as returned from {@link GhostRenderBehaviour#getProxiedStack(ItemStack)}
@@ -163,11 +161,10 @@ public interface GhostRenderBehaviour
      *
      * @param stack The {@link ItemStack} in the players main hand
      * @param proxiedStack The proxied {@code ItemStack} as returned from {@link GhostRenderBehaviour#getProxiedStack(ItemStack)}
-     * @param secondPass True if {@link GhostRenderBehaviour#hasSecondBlock(ItemStack, ItemStack)} returns true and
-     *                   the second block is being rendered, otherwise false
+     * @param renderPass The current render pass index
      * @return The camo(s) stored to apply to the rendered block
      */
-    default CamoPair readCamo(ItemStack stack, @Nullable ItemStack proxiedStack, boolean secondPass)
+    default CamoPair readCamo(ItemStack stack, @Nullable ItemStack proxiedStack, int renderPass)
     {
         //noinspection ConstantConditions
         if (stack.hasTag() && stack.getTag().contains("BlockEntityTag"))
@@ -181,16 +178,15 @@ public interface GhostRenderBehaviour
 
     /**
      * Post-process the {@link CamoPair} that was previously read from the {@link ItemStack} with the given context.
-     * Separated from {@link GhostRenderBehaviour#readCamo(ItemStack, ItemStack, boolean)} to allow the camo to be read
+     * Separated from {@link GhostRenderBehaviour#readCamo(ItemStack, ItemStack, int)} to allow the camo to be read
      * by a proxying item while allowing the proxied item to manipulate it according to the context.
      *
      * @param stack The {@link ItemStack} in the players main hand
      * @param proxiedStack The proxied {@code ItemStack} as returned from {@link GhostRenderBehaviour#getProxiedStack(ItemStack)}
      * @param ctx The {@link BlockPlaceContext} to use for determining the resulting
      * @param renderState The {@code BlockState} to render
-     * @param secondPass True if {@link GhostRenderBehaviour#hasSecondBlock(ItemStack, ItemStack)} returns true and
-     *                   the second block is being rendered, otherwise false
-     * @param camo The {@code CamoPair} previously read by {@link GhostRenderBehaviour#readCamo(ItemStack, ItemStack, boolean)}
+     * @param renderPass The current render pass index
+     * @param camo The {@code CamoPair} previously read by {@link GhostRenderBehaviour#readCamo(ItemStack, ItemStack, int)}
      * @return The {@code CamoPair} with any necessary modifications applied to it
      */
     default CamoPair postProcessCamo(
@@ -198,7 +194,7 @@ public interface GhostRenderBehaviour
             @Nullable ItemStack proxiedStack,
             BlockPlaceContext ctx,
             BlockState renderState,
-            boolean secondPass,
+            int renderPass,
             CamoPair camo
     )
     {
@@ -212,8 +208,7 @@ public interface GhostRenderBehaviour
      * @param proxiedStack The proxied {@code ItemStack} as returned from {@link GhostRenderBehaviour#getProxiedStack(ItemStack)}
      * @param ctx The {@link BlockPlaceContext} to use for determining the resulting
      * @param renderState The {@code BlockState} to render
-     * @param secondPass True if {@link GhostRenderBehaviour#hasSecondBlock(ItemStack, ItemStack)} returns true and
-     *                   the second block is being rendered, otherwise false
+     * @param renderPass The current render pass index
      * @param data The prepared {@code ModelData} to be given to the {@link BakedModel} that is to be rendered
      * @return The {@code ModelData} with any necessary modifications applied to it
      */
@@ -222,7 +217,7 @@ public interface GhostRenderBehaviour
             @Nullable ItemStack proxiedStack,
             BlockPlaceContext ctx,
             BlockState renderState,
-            boolean secondPass,
+            int renderPass,
             ModelData data
     )
     {

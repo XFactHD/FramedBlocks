@@ -21,7 +21,7 @@ public final class SlabGhostRenderBehaviour implements GhostRenderBehaviour
             BlockHitResult hit,
             BlockPlaceContext ctx,
             BlockState hitState,
-            boolean secondPass
+            int renderPass
     )
     {
         if (hitState.getBlock() == FBContent.BLOCK_FRAMED_SLAB.get())
@@ -32,7 +32,7 @@ public final class SlabGhostRenderBehaviour implements GhostRenderBehaviour
                 return hitState.setValue(FramedProperties.TOP, !top);
             }
         }
-        return GhostRenderBehaviour.super.getRenderState(stack, proxiedStack, hit, ctx, hitState, secondPass);
+        return GhostRenderBehaviour.super.getRenderState(stack, proxiedStack, hit, ctx, hitState, renderPass);
     }
 
     @Override
@@ -43,7 +43,7 @@ public final class SlabGhostRenderBehaviour implements GhostRenderBehaviour
             BlockPlaceContext ctx,
             BlockState hitState,
             BlockPos defaultPos,
-            boolean secondPass
+            int renderPass
     )
     {
         if (hitState.getBlock() == FBContent.BLOCK_FRAMED_SLAB.get())

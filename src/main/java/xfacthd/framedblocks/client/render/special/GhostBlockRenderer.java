@@ -107,10 +107,20 @@ public final class GhostBlockRenderer
         BlockState hitState = mc().level.getBlockState(hit.getBlockPos());
         profiler.pop(); //make_context
 
-        drawGhostBlock(poseStack, profiler, behaviour, stack, proxiedStack, hit, context, hitState, false);
+        int passCount = behaviour.getPassCount(stack, proxiedStack);
+        for (int pass = 0; pass < passCount; pass++)
+        {
+            if (!drawGhostBlock(poseStack, profiler, behaviour, stack, proxiedStack, hit, context, hitState, pass))
+            {
+                break;
+            }
+        }
+
+        GHOST_MODEL_DATA.setCamoState(Blocks.AIR.defaultBlockState());
+        GHOST_MODEL_DATA_TWO.setCamoState(Blocks.AIR.defaultBlockState());
     }
 
-    private static void drawGhostBlock(
+    private static boolean drawGhostBlock(
             PoseStack poseStack,
             ProfilerFiller profiler,
             GhostRenderBehaviour behaviour,
@@ -119,49 +129,43 @@ public final class GhostBlockRenderer
             BlockHitResult hit,
             BlockPlaceContext context,
             BlockState hitState,
-            boolean secondPass
+            int renderPass
     )
     {
         profiler.push("get_state");
-        BlockState renderState = behaviour.getRenderState(stack, proxiedStack, hit, context, hitState, secondPass);
+        BlockState renderState = behaviour.getRenderState(stack, proxiedStack, hit, context, hitState, renderPass);
         profiler.pop(); //get_state
         if (renderState == null)
         {
-            return;
+            return true;
         }
 
         profiler.push("get_pos");
-        BlockPos renderPos = behaviour.getRenderPos(stack, proxiedStack, hit, context, hitState, context.getClickedPos(), secondPass);
+        BlockPos renderPos = behaviour.getRenderPos(stack, proxiedStack, hit, context, hitState, context.getClickedPos(), renderPass);
         profiler.popPush("can_render"); //get_pos
-        if (!secondPass && !behaviour.canRenderAt(stack, proxiedStack, hit, context, hitState, renderState, renderPos))
+        if (renderPass == 0 && !behaviour.canRenderAt(stack, proxiedStack, hit, context, hitState, renderState, renderPos))
         {
             profiler.pop(); //can_render
-            return;
+            return false;
         }
         profiler.pop(); //can_render
 
         profiler.push("get_camo");
-        CamoPair camo = behaviour.readCamo(stack, proxiedStack, secondPass);
-        camo = behaviour.postProcessCamo(stack, proxiedStack, context, renderState, secondPass, camo);
+        CamoPair camo = behaviour.readCamo(stack, proxiedStack, renderPass);
+        camo = behaviour.postProcessCamo(stack, proxiedStack, context, renderState, renderPass, camo);
         GHOST_MODEL_DATA.setCamoState(camo.getCamoOne());
         GHOST_MODEL_DATA_TWO.setCamoState(camo.getCamoTwo());
         profiler.pop(); //get_camo
 
         profiler.push("append_modeldata");
-        ModelData modelData = behaviour.appendModelData(stack, proxiedStack, context, renderState, secondPass, MODEL_DATA);
+        ModelData modelData = behaviour.appendModelData(stack, proxiedStack, context, renderState, renderPass, MODEL_DATA);
         profiler.pop(); //append_modeldata
 
         MultiBufferSource.BufferSource buffers = mc().renderBuffers().bufferSource();
 
         doRenderGhostBlock(poseStack, buffers, profiler, renderPos, renderState, modelData);
 
-        GHOST_MODEL_DATA.setCamoState(Blocks.AIR.defaultBlockState());
-        GHOST_MODEL_DATA_TWO.setCamoState(Blocks.AIR.defaultBlockState());
-
-        if (!secondPass && behaviour.hasSecondBlock(stack, proxiedStack))
-        {
-            drawGhostBlock(poseStack, profiler, behaviour, stack, proxiedStack, hit, context, hitState, true);
-        }
+        return true;
     }
 
     private static void doRenderGhostBlock(

@@ -21,7 +21,7 @@ public final class PanelGhostRenderBehaviour implements GhostRenderBehaviour
             BlockHitResult hit,
             BlockPlaceContext ctx,
             BlockState hitState,
-            boolean secondPass
+            int renderPass
     )
     {
         if (hitState.getBlock() == FBContent.BLOCK_FRAMED_PANEL.get())
@@ -32,7 +32,7 @@ public final class PanelGhostRenderBehaviour implements GhostRenderBehaviour
                 return hitState.setValue(FramedProperties.FACING_HOR, dir.getOpposite());
             }
         }
-        return GhostRenderBehaviour.super.getRenderState(stack, proxiedStack, hit, ctx, hitState, secondPass);
+        return GhostRenderBehaviour.super.getRenderState(stack, proxiedStack, hit, ctx, hitState, renderPass);
     }
 
     @Override
@@ -43,7 +43,7 @@ public final class PanelGhostRenderBehaviour implements GhostRenderBehaviour
             BlockPlaceContext ctx,
             BlockState hitState,
             BlockPos defaultPos,
-            boolean secondPass
+            int renderPass
     )
     {
         if (hitState.getBlock() == FBContent.BLOCK_FRAMED_PANEL.get())

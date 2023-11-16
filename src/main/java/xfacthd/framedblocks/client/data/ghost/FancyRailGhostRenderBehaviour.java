@@ -26,15 +26,15 @@ public final class FancyRailGhostRenderBehaviour implements GhostRenderBehaviour
             BlockHitResult hit,
             BlockPlaceContext ctx,
             BlockState hitState,
-            boolean secondPass
+            int renderPass
     )
     {
-        BlockState state = railSlopeBehaviour.getRenderState(stack, proxiedStack, hit, ctx, hitState, secondPass);
+        BlockState state = railSlopeBehaviour.getRenderState(stack, proxiedStack, hit, ctx, hitState, renderPass);
         if (state != null)
         {
             return state;
         }
-        return GhostRenderBehaviour.super.getRenderState(stack, proxiedStack, hit, ctx, hitState, secondPass);
+        return GhostRenderBehaviour.super.getRenderState(stack, proxiedStack, hit, ctx, hitState, renderPass);
     }
 
     @Override
@@ -45,14 +45,14 @@ public final class FancyRailGhostRenderBehaviour implements GhostRenderBehaviour
             BlockPlaceContext ctx,
             BlockState hitState,
             BlockPos defaultPos,
-            boolean secondPass
+            int renderPass
     )
     {
         if (hitState.getBlock() == FBContent.BLOCK_FRAMED_SLOPE.get())
         {
-            return railSlopeBehaviour.getRenderPos(stack, proxiedStack, hit, ctx, hitState, defaultPos, secondPass);
+            return railSlopeBehaviour.getRenderPos(stack, proxiedStack, hit, ctx, hitState, defaultPos, renderPass);
         }
-        return GhostRenderBehaviour.super.getRenderPos(stack, proxiedStack, hit, ctx, hitState, defaultPos, secondPass);
+        return GhostRenderBehaviour.super.getRenderPos(stack, proxiedStack, hit, ctx, hitState, defaultPos, renderPass);
     }
 
     @Override

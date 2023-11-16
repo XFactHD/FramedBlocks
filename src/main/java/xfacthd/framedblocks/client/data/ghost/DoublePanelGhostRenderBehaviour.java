@@ -15,7 +15,7 @@ public final class DoublePanelGhostRenderBehaviour extends DoubleBlockGhostRende
             @Nullable ItemStack proxiedStack,
             BlockPlaceContext ctx,
             BlockState renderState,
-            boolean secondPass,
+            int renderPass,
             CamoPair camo
     )
     {

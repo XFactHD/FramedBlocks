@@ -1,6 +1,7 @@
 package xfacthd.framedblocks.client.data.ghost;
 
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.block.DoorBlock;
@@ -14,7 +15,10 @@ import xfacthd.framedblocks.api.ghost.GhostRenderBehaviour;
 public final class DoorGhostRenderBehaviour implements GhostRenderBehaviour
 {
     @Override
-    public boolean hasSecondBlock(ItemStack stack, ItemStack proxiedStack) { return true; }
+    public int getPassCount(ItemStack stack, ItemStack proxiedStack)
+    {
+        return 2;
+    }
 
     @Override
     @Nullable
@@ -24,11 +28,11 @@ public final class DoorGhostRenderBehaviour implements GhostRenderBehaviour
             BlockHitResult hit,
             BlockPlaceContext ctx,
             BlockState hitState,
-            boolean secondPass
+            int renderPass
     )
     {
-        BlockState state = GhostRenderBehaviour.super.getRenderState(stack, proxiedStack, hit, ctx, hitState, secondPass);
-        if (state != null && secondPass)
+        BlockState state = GhostRenderBehaviour.super.getRenderState(stack, proxiedStack, hit, ctx, hitState, renderPass);
+        if (state != null && renderPass == 1)
         {
             state = state.setValue(DoorBlock.HALF, DoubleBlockHalf.UPPER);
         }
@@ -43,10 +47,10 @@ public final class DoorGhostRenderBehaviour implements GhostRenderBehaviour
             BlockPlaceContext ctx,
             BlockState hitState,
             BlockPos defaultPos,
-            boolean secondPass
+            int renderPass
     )
     {
-        return secondPass ? defaultPos.above() : defaultPos;
+        return defaultPos.relative(Direction.UP, renderPass);
     }
 
     @Override
@@ -65,13 +69,10 @@ public final class DoorGhostRenderBehaviour implements GhostRenderBehaviour
     }
 
     @Override
-    public CamoPair readCamo(ItemStack stack, @Nullable ItemStack proxiedStack, boolean secondPass)
+    public CamoPair readCamo(ItemStack stack, @Nullable ItemStack proxiedStack, int renderPass)
     {
-        if (secondPass)
-        {
-            return CamoPair.EMPTY;
-        }
-        return GhostRenderBehaviour.super.readCamo(stack, proxiedStack, false);
+        CamoPair pair = GhostRenderBehaviour.super.readCamo(stack, proxiedStack, renderPass);
+        return renderPass == 1 ? pair.swap() : pair;
     }
 
     @Override
@@ -80,10 +81,10 @@ public final class DoorGhostRenderBehaviour implements GhostRenderBehaviour
             @Nullable ItemStack proxiedStack,
             BlockPlaceContext ctx,
             BlockState renderState,
-            boolean secondPass,
+            int renderPass,
             CamoPair camo
     )
     {
-        return secondPass ? camo.swap() : camo;
+        return renderPass == 1 ? camo.swap() : camo;
     }
 }
