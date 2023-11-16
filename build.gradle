@@ -1,10 +1,9 @@
 plugins {
+    id 'java-library'
     id 'eclipse'
     id 'idea'
     id 'maven-publish'
-    id 'net.neoforged.gradle' version '[6.0,6.2)'
-    id 'org.parchmentmc.librarian.forgegradle' version '1.+'
-    id 'org.spongepowered.mixin' version '0.7.+'
+    id 'net.neoforged.gradle.userdev' version '7.0.26'
 }
 
 version = mod_version
@@ -19,90 +18,59 @@ java.toolchain.languageVersion = JavaLanguageVersion.of(17)
 
 jarJar.enable()
 
-println "Java: ${System.getProperty 'java.version'}, JVM: ${System.getProperty 'java.vm.version'} (${System.getProperty 'java.vendor'}), Arch: ${System.getProperty 'os.arch'}"
+minecraft.accessTransformers.file project.file('src/main/resources/META-INF/accesstransformer.cfg')
+
 minecraft {
-    mappings channel: 'parchment', version: "${mapping_version}-${minecraft_version}"
-
-    copyIdeResources = true
-
-    accessTransformer = file('src/main/resources/META-INF/accesstransformer.cfg')
-
-    // Default run configurations.
-    // These can be tweaked, removed, or duplicated as needed.
     runs {
         client {
             workingDirectory project.file('run')
 
-            // Recommended logging data for a userdev environment
-            // property 'forge.logging.markers', 'SCAN,REGISTRIES,REGISTRYDUMP'
+            // systemProperty  'forge.logging.markers', 'SCAN,REGISTRIES,REGISTRYDUMP'
+            systemProperty  'forge.logging.console.level', 'debug'
+            systemProperty  'forge.enabledGameTestNamespaces', 'framedblocks'
 
-            // Recommended logging level for the console
-            property 'forge.logging.console.level', 'debug'
+            modSource project.sourceSets.main
+            modSource project.sourceSets.test
 
-            // Comma-separated list of namespaces to load gametests from. Empty = all namespaces.
-            property 'forge.enabledGameTestNamespaces', 'framedblocks'
-
-            mods {
-                framedblocks {
-                    source sourceSets.main
-                    source sourceSets.test
-                }
-            }
         }
 
         server {
             workingDirectory project.file('run_server')
 
-            // Recommended logging data for a userdev environment
-            // property 'forge.logging.markers', 'SCAN,REGISTRIES,REGISTRYDUMP'
+            // systemProperty  'forge.logging.markers', 'SCAN,REGISTRIES,REGISTRYDUMP'
+            systemProperty  'forge.logging.console.level', 'debug'
 
-            // Recommended logging level for the console
-            property 'forge.logging.console.level', 'debug'
+            programArgument '--nogui'
 
-            mods {
-                framedblocks {
-                    source sourceSets.main
-                    source sourceSets.test
-                }
-            }
+            modSource project.sourceSets.main
+            modSource project.sourceSets.test
         }
 
         data {
             workingDirectory project.file('run')
 
-            // Recommended logging data for a userdev environment
-            // property 'forge.logging.markers', 'SCAN,REGISTRIES,REGISTRYDUMP'
+            // systemProperty  'forge.logging.markers', 'SCAN,REGISTRIES,REGISTRYDUMP'
+            systemProperty  'forge.logging.console.level', 'debug'
 
-            // Recommended logging level for the console
-            property 'forge.logging.console.level', 'debug'
+            programArguments.addAll '--mod', 'framedblocks', '--all', '--output', file('src/generated/resources/'), '--existing', file('src/main/resources/')
 
-            args '--mod', 'framedblocks', '--all', '--output', file('src/generated/resources/'), '--existing', file('src/main/resources/')
-
-            mods {
-                framedblocks {
-                    source sourceSets.main
-                }
-            }
+            modSource project.sourceSets.main
         }
 
         gameTestServer {
             workingDirectory project.file('run_gametest')
 
             // Recommended logging data for a userdev environment
-            // property 'forge.logging.markers', 'SCAN,REGISTRIES,REGISTRYDUMP'
+            // systemProperty 'forge.logging.markers', 'SCAN,REGISTRIES,REGISTRYDUMP'
 
             // Recommended logging level for the console
-            property 'forge.logging.console.level', 'debug'
+            systemProperty 'forge.logging.console.level', 'debug'
 
             // Comma-separated list of namespaces to load gametests from. Empty = all namespaces.
-            property 'forge.enabledGameTestNamespaces', 'framedblocks'
+            systemProperty 'forge.enabledGameTestNamespaces', 'framedblocks'
 
-            mods {
-                framedblocks {
-                    source sourceSets.main
-                    source sourceSets.test
-                }
-            }
+            modSource project.sourceSets.main
+            modSource project.sourceSets.test
         }
     }
 }
@@ -146,61 +114,63 @@ repositories {
 }
 
 dependencies {
-    minecraft "net.neoforged:forge:${minecraft_version}-${forge_version}"
+    implementation("net.neoforged:neoforge:${neoforge_version}")
 
-    compileOnly fg.deobf("team.chisel.ctm:CTM:1.20.1-1.1.8+4")
+    //compileOnly("team.chisel.ctm:CTM:1.20.1-1.1.8+4")
 
-    //runtimeOnly fg.deobf("curse.maven:puzzleslib-495476:4621178") //Only needed when Diagonal Fences or Diagonal Windows is switched to implementation
-    compileOnly fg.deobf("curse.maven:diagonalfences-458048:4611775")
-    compileOnly fg.deobf("curse.maven:diagonalwindows-891328:4660584")
+    // Only needed when Diagonal Fences or Diagonal Windows is switched to implementation
+    //runtimeOnly("curse.maven:puzzleslib-495476:4621178")
+    //compileOnly("curse.maven:diagonalfences-458048:4611775")
+    //compileOnly("curse.maven:diagonalwindows-891328:4660584")
 
-    compileOnly fg.deobf("curse.maven:buildinggadgets-298187:3829297")
+    //compileOnly("curse.maven:buildinggadgets-298187:3829297")
 
-    implementation fg.deobf("xfacthd.contex:ConnectedTextures:2.1:slim") { transitive = false }
+    //implementation("xfacthd.contex:ConnectedTextures:2.1:slim") { transitive = false }
 
-    implementation fg.deobf("curse.maven:athena-841890:4764357")
-    //runtimeOnly fg.deobf("curse.maven:resfullib-570073:4681831")
-    //runtimeOnly fg.deobf("curse.maven:chipped-456956:4634856")
+    //implementation("curse.maven:athena-841890:4764357")
+    //runtimeOnly("curse.maven:resfullib-570073:4681831")
+    //runtimeOnly("curse.maven:chipped-456956:4634856")
 
-    compileOnly fg.deobf("curse.maven:xycraft_core-653786:4788862")
-    compileOnly fg.deobf("curse.maven:xycraft_world-653789:4788863")
+    //compileOnly("curse.maven:xycraft_core-653786:4788862")
+    //compileOnly("curse.maven:xycraft_world-653789:4788863")
 
-    compileOnly(fg.deobf("mezz.jei:jei-${minecraft_version}-common-api:${jei_version}"))
-    compileOnly(fg.deobf("mezz.jei:jei-${minecraft_version}-forge-api:${jei_version}"))
-    //runtimeOnly(fg.deobf("mezz.jei:jei-${minecraft_version}-forge:${jei_version}"))
+    //compileOnly("mezz.jei:jei-${minecraft_version}-common-api:${jei_version}")
+    //compileOnly("mezz.jei:jei-${minecraft_version}-forge-api:${jei_version}")
+    //runtimeOnly("mezz.jei:jei-${minecraft_version}-forge:${jei_version}")
 
     // Switch Arch, Cloth and REI-forge to impl for runtime testing
-    compileOnly fg.deobf("dev.architectury:architectury-forge:${arch_version}")
-    compileOnly fg.deobf("me.shedaniel.cloth:cloth-config-forge:${cloth_version}")
-    compileOnly fg.deobf("me.shedaniel:RoughlyEnoughItems-forge:${rei_version}")
-    //runtimeOnly fg.deobf("curse.maven:reipc-521393:4723408")
-    compileOnly fg.deobf("me.shedaniel:RoughlyEnoughItems-api-forge:${rei_version}")
-    compileOnly fg.deobf("me.shedaniel:RoughlyEnoughItems-default-plugin-forge:${rei_version}")
-    compileOnly fg.deobf("me.shedaniel:REIPluginCompatibilities-forge-annotations:${reipcanno_version}")
+    //compileOnly("dev.architectury:architectury-forge:${arch_version}")
+    //compileOnly("me.shedaniel.cloth:cloth-config-forge:${cloth_version}")
+    //compileOnly("me.shedaniel:RoughlyEnoughItems-forge:${rei_version}")
+    //runtimeOnly("curse.maven:reipc-521393:4723408")
+    //compileOnly("me.shedaniel:RoughlyEnoughItems-api-forge:${rei_version}")
+    //compileOnly("me.shedaniel:RoughlyEnoughItems-default-plugin-forge:${rei_version}")
+    //compileOnly("me.shedaniel:REIPluginCompatibilities-forge-annotations:${reipcanno_version}")
 
-    compileOnly fg.deobf("dev.emi:emi-forge:${emi_version}+${minecraft_version}:api")
-    runtimeOnly fg.deobf("dev.emi:emi-forge:${emi_version}+${minecraft_version}")
+    //compileOnly("dev.emi:emi-forge:${emi_version}+${minecraft_version}:api")
+    //runtimeOnly("dev.emi:emi-forge:${emi_version}+${minecraft_version}")
 
-    //runtimeOnly fg.deobf("curse.maven:spark-361579:3767286")
+    //runtimeOnly("curse.maven:spark-361579:3767286")
 
-    //runtimeOnly fg.deobf("curse.maven:rubidium-574856:4684247")
-    //runtimeOnly fg.deobf("curse.maven:oculus-581495:4578741")
-    //runtimeOnly fg.deobf("curse.maven:starlight-forge-526854:4631193")
+    //runtimeOnly("curse.maven:rubidium-574856:4684247")
+    //runtimeOnly("curse.maven:oculus-581495:4578741")
+    //runtimeOnly("curse.maven:starlight-forge-526854:4631193")
 
-    compileOnly fg.deobf("com.simibubi.create:create-1.20.1:0.5.1.d-11:slim") { transitive = false }
-    compileOnly fg.deobf("com.jozufozu.flywheel:flywheel-forge-1.20.1:0.6.9-5")
-    //runtimeOnly fg.deobf("com.tterrag.registrate:Registrate:MC1.20-1.3.3") //Only needed when Create and/or Flywheel are switched to implementation
+    //compileOnly("com.simibubi.create:create-1.20.1:0.5.1.d-11:slim") { transitive = false }
+    //compileOnly("com.jozufozu.flywheel:flywheel-forge-1.20.1:0.6.9-5")
+    // Only needed when Create and/or Flywheel are switched to implementation
+    //runtimeOnly("com.tterrag.registrate:Registrate:MC1.20-1.3.3")
 
-    compileOnly fg.deobf("curse.maven:moonlight-499980:4621773")
-    compileOnly fg.deobf("curse.maven:supplementaries-412082:4622527")
+    //compileOnly("curse.maven:moonlight-499980:4621773")
+    //compileOnly("curse.maven:supplementaries-412082:4622527")
 
-    compileOnly fg.deobf("curse.maven:nocubes-309664:3944569")
+    //compileOnly("curse.maven:nocubes-309664:3944569")
 
-    implementation fg.deobf("curse.maven:guidebook-253874:4593765")
+    //implementation("curse.maven:guidebook-253874:4593765")
 
-    compileOnly fg.deobf("curse.maven:atlasviewer-633577:4762356")
+    //compileOnly("curse.maven:atlasviewer-633577:4762356")
 
-    minecraftLibrary(group: 'com.github.ben-manes.caffeine', name: 'caffeine', version: '3.1.1')
+    //minecraftLibrary(group: 'com.github.ben-manes.caffeine', name: 'caffeine', version: '3.1.1')
     jarJar(group: 'com.github.ben-manes.caffeine', name: 'caffeine', version: '[3.1.1,4.0.0)') {
         transitive(false)
     }
@@ -209,33 +179,20 @@ dependencies {
     implementation(jarJar("io.github.llamalad7:mixinextras-forge:0.2.0-rc.4")) {
         jarJar.ranged(it, "[0.2.0-rc.4,)")
     }
-
-    annotationProcessor 'org.spongepowered:mixin:0.8.5:processor'
 }
 
-mixin {
-    add sourceSets.main, "framedblocks.refmap.json"
-    config "framedblocks.mixin.json"
-}
-
-// This block of code expands all declared replace properties in the specified resource targets.
-// A missing property will result in an error. Properties are expanded using ${} Groovy notation.
-// When "copyIdeResources" is enabled, this will also run before the game launches in IDE environments.
-// See https://docs.gradle.org/current/dsl/org.gradle.language.jvm.tasks.ProcessResources.html
-def resourceTargets = ['META-INF/mods.toml', 'pack.mcmeta']
-def replaceProperties = [
-        minecraft_version: minecraft_version, minecraft_version_range: minecraft_version_range,
-        forge_version: forge_version, forge_version_range: forge_version_range,
-        loader_version_range: loader_version_range, mod_version: mod_version
-]
-
-processResources {
-    //exclude("framedblocks.mixin.json")
-
+tasks.withType(ProcessResources).configureEach {
+    var replaceProperties = [
+            minecraft_version: minecraft_version,
+            minecraft_version_range: minecraft_version_range,
+            neoforge_version: neoforge_version,
+            neoforge_version_range: neoforge_version_range,
+            loader_version_range: loader_version_range,
+            mod_version: mod_version
+    ]
     inputs.properties replaceProperties
-    replaceProperties.put 'project', project
 
-    filesMatching(resourceTargets) {
+    filesMatching(['META-INF/mods.toml', 'pack.mcmeta']) {
         expand replaceProperties
     }
 }
@@ -248,35 +205,14 @@ tasks.jarJar.configure {
     archiveClassifier = ''
 }
 
-// Example for how to get properties into the manifest for reading by the runtime..
-tasks.named('jar', Jar).configure {
+tasks.jar.configure {
     archiveClassifier = 'slim'
-
-    manifest {
-        attributes([
-                "Specification-Title"     : "framedblocks",
-                "Specification-Vendor"    : "XFactHD",
-                "Specification-Version"   : "1", // We are version 1 of ourselves
-                "Implementation-Title"    : project.name,
-                "Implementation-Version"  : project.jar.archiveVersion,
-                "Implementation-Vendor"   : "XFactHD"
-        ])
-    }
-
-    // The settings below make sure that your build is reproducible
-    // More information at https://docs.gradle.org/current/userguide/working_with_files.html#sec:reproducible_archives
-    preserveFileTimestamps = false
-    reproducibleFileOrder = true
-
-    // Example configuration to allow publishing using the maven-publish plugin
-    // This is the preferred method to reobfuscate your jar file
-    finalizedBy('reobfJar')
 }
 
 publishing {
     publications {
-        mavenJava(MavenPublication) {
-            artifact jar
+        register ('mavenJava', MavenPublication) {
+            from components.java
         }
     }
     repositories {
