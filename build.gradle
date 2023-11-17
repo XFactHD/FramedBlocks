@@ -3,7 +3,7 @@ plugins {
     id 'eclipse'
     id 'idea'
     id 'maven-publish'
-    id 'net.neoforged.gradle.userdev' version '7.0.26'
+    id 'net.neoforged.gradle.userdev' version '7.0.43'
 }
 
 version = mod_version
@@ -20,58 +20,31 @@ jarJar.enable()
 
 minecraft.accessTransformers.file project.file('src/main/resources/META-INF/accesstransformer.cfg')
 
-minecraft {
-    runs {
-        client {
-            workingDirectory project.file('run')
+runs {
+    configureEach {
+        // systemProperty  'forge.logging.markers', 'SCAN,REGISTRIES,REGISTRYDUMP'
+        systemProperty  'forge.logging.console.level', 'debug'
+        systemProperty  'forge.enabledGameTestNamespaces', 'framedblocks'
 
-            // systemProperty  'forge.logging.markers', 'SCAN,REGISTRIES,REGISTRYDUMP'
-            systemProperty  'forge.logging.console.level', 'debug'
-            systemProperty  'forge.enabledGameTestNamespaces', 'framedblocks'
+        modSources.addAll project.sourceSets.main, project.sourceSets.test
+    }
 
-            modSource project.sourceSets.main
-            modSource project.sourceSets.test
+    client {
+        workingDirectory project.file('run')
+    }
 
-        }
+    server {
+        workingDirectory project.file('run_server')
+    }
 
-        server {
-            workingDirectory project.file('run_server')
+    data {
+        workingDirectory project.file('run')
 
-            // systemProperty  'forge.logging.markers', 'SCAN,REGISTRIES,REGISTRYDUMP'
-            systemProperty  'forge.logging.console.level', 'debug'
+        programArguments.addAll '--mod', 'framedblocks', '--all', '--output', file('src/generated/resources/'), '--existing', file('src/main/resources/')
+    }
 
-            programArgument '--nogui'
-
-            modSource project.sourceSets.main
-            modSource project.sourceSets.test
-        }
-
-        data {
-            workingDirectory project.file('run')
-
-            // systemProperty  'forge.logging.markers', 'SCAN,REGISTRIES,REGISTRYDUMP'
-            systemProperty  'forge.logging.console.level', 'debug'
-
-            programArguments.addAll '--mod', 'framedblocks', '--all', '--output', file('src/generated/resources/'), '--existing', file('src/main/resources/')
-
-            modSource project.sourceSets.main
-        }
-
-        gameTestServer {
-            workingDirectory project.file('run_gametest')
-
-            // Recommended logging data for a userdev environment
-            // systemProperty 'forge.logging.markers', 'SCAN,REGISTRIES,REGISTRYDUMP'
-
-            // Recommended logging level for the console
-            systemProperty 'forge.logging.console.level', 'debug'
-
-            // Comma-separated list of namespaces to load gametests from. Empty = all namespaces.
-            systemProperty 'forge.enabledGameTestNamespaces', 'framedblocks'
-
-            modSource project.sourceSets.main
-            modSource project.sourceSets.test
-        }
+    gameTestServer {
+        workingDirectory project.file('run_gametest')
     }
 }
 
@@ -152,6 +125,7 @@ dependencies {
 
     //runtimeOnly("curse.maven:spark-361579:3767286")
 
+    //compileOnly("curse.maven:modernfix-790626:4771907")
     //runtimeOnly("curse.maven:rubidium-574856:4684247")
     //runtimeOnly("curse.maven:oculus-581495:4578741")
     //runtimeOnly("curse.maven:starlight-forge-526854:4631193")
@@ -175,9 +149,8 @@ dependencies {
         transitive(false)
     }
 
-    implementation(annotationProcessor("io.github.llamalad7:mixinextras-common:0.2.0-rc.4"))
-    implementation(jarJar("io.github.llamalad7:mixinextras-forge:0.2.0-rc.4")) {
-        jarJar.ranged(it, "[0.2.0-rc.4,)")
+    implementation(jarJar("io.github.llamalad7:mixinextras-neoforge:0.2.0")) {
+        jarJar.ranged(it, "[0.2.0,)")
     }
 }
 
@@ -193,7 +166,7 @@ tasks.withType(ProcessResources).configureEach {
     inputs.properties replaceProperties
 
     filesMatching(['META-INF/mods.toml', 'pack.mcmeta']) {
-        expand replaceProperties
+        expand replaceProperties + [project: project]
     }
 }
 
@@ -205,7 +178,7 @@ tasks.jarJar.configure {
     archiveClassifier = ''
 }
 
-tasks.jar.configure {
+tasks.named('jar', Jar).configure {
     archiveClassifier = 'slim'
 }
 
