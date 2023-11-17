@@ -1,20 +1,20 @@
 package xfacthd.framedblocks;
 
 import com.mojang.logging.LogUtils;
-import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.event.AddReloadListenerEvent;
-import net.minecraftforge.eventbus.api.IEventBus;
-import net.minecraftforge.fml.CrashReportCallables;
-import net.minecraftforge.fml.ModLoadingContext;
-import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.fml.config.ModConfig;
-import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
-import net.minecraftforge.fml.event.lifecycle.FMLLoadCompleteEvent;
-import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
-import net.minecraftforge.fml.loading.FMLEnvironment;
-import net.minecraftforge.network.NetworkDirection;
-import net.minecraftforge.network.NetworkRegistry;
-import net.minecraftforge.network.simple.SimpleChannel;
+import net.neoforged.neoforge.common.NeoForge;
+import net.neoforged.neoforge.event.AddReloadListenerEvent;
+import net.neoforged.bus.api.IEventBus;
+import net.neoforged.fml.CrashReportCallables;
+import net.neoforged.fml.ModLoadingContext;
+import net.neoforged.fml.common.Mod;
+import net.neoforged.fml.config.ModConfig;
+import net.neoforged.fml.event.lifecycle.FMLCommonSetupEvent;
+import net.neoforged.fml.event.lifecycle.FMLLoadCompleteEvent;
+import net.neoforged.fml.javafmlmod.FMLJavaModLoadingContext;
+import net.neoforged.fml.loading.FMLEnvironment;
+import net.neoforged.neoforge.network.NetworkRegistry;
+import net.neoforged.neoforge.network.PlayNetworkDirection;
+import net.neoforged.neoforge.network.simple.SimpleChannel;
 import org.slf4j.Logger;
 import xfacthd.framedblocks.common.config.CommonConfig;
 import xfacthd.framedblocks.common.config.ServerConfig;
@@ -63,7 +63,7 @@ public final class FramedBlocks
         modBus.addListener(FramedBlocks::onCommonSetup);
         modBus.addListener(FramedBlocks::onLoadComplete);
 
-        IEventBus forgeBus = MinecraftForge.EVENT_BUS;
+        IEventBus forgeBus = NeoForge.EVENT_BUS;
         forgeBus.addListener(EventHandler::onBlockLeftClick);
         forgeBus.addListener(CullingUpdateTracker::onServerLevelTick);
         forgeBus.addListener(FramingSawRecipeCache::onAddReloadListener);
@@ -88,25 +88,25 @@ public final class FramedBlocks
 
     private static void onCommonSetup(final FMLCommonSetupEvent event)
     {
-        CHANNEL.messageBuilder(SignUpdatePacket.class, 0, NetworkDirection.PLAY_TO_SERVER)
+        CHANNEL.messageBuilder(SignUpdatePacket.class, 0, PlayNetworkDirection.PLAY_TO_SERVER)
                 .encoder(SignUpdatePacket::encode)
                 .decoder(SignUpdatePacket::decode)
                 .consumerNetworkThread(SignUpdatePacket::handle)
                 .add();
 
-        CHANNEL.messageBuilder(OpenSignScreenPacket.class, 1, NetworkDirection.PLAY_TO_CLIENT)
+        CHANNEL.messageBuilder(OpenSignScreenPacket.class, 1, PlayNetworkDirection.PLAY_TO_CLIENT)
                 .encoder(OpenSignScreenPacket::encode)
                 .decoder(OpenSignScreenPacket::new)
                 .consumerNetworkThread(OpenSignScreenPacket::handle)
                 .add();
 
-        CHANNEL.messageBuilder(CullingUpdatePacket.class, 2, NetworkDirection.PLAY_TO_CLIENT)
+        CHANNEL.messageBuilder(CullingUpdatePacket.class, 2, PlayNetworkDirection.PLAY_TO_CLIENT)
                 .encoder(CullingUpdatePacket::encode)
                 .decoder(CullingUpdatePacket::decode)
                 .consumerNetworkThread(CullingUpdatePacket::handle)
                 .add();
 
-        CHANNEL.messageBuilder(SelectFramingSawRecipePacket.class, 3, NetworkDirection.PLAY_TO_SERVER)
+        CHANNEL.messageBuilder(SelectFramingSawRecipePacket.class, 3, PlayNetworkDirection.PLAY_TO_SERVER)
                 .encoder(SelectFramingSawRecipePacket::encode)
                 .decoder(SelectFramingSawRecipePacket::new)
                 .consumerMainThread(SelectFramingSawRecipePacket::handle)

@@ -1,5 +1,5 @@
 package xfacthd.framedblocks.common.compat.emi;
-
+/*
 import com.google.common.base.Stopwatch;
 import dev.emi.emi.api.*;
 import dev.emi.emi.api.recipe.EmiRecipe;
@@ -100,4 +100,4 @@ public final class FramedEmiPlugin implements EmiPlugin
         }
         return FramingSawRecipeCache.sortRecipes(resultOne, resultTwo, sawRecipeOne.getResultType(), sawRecipeTwo.getResultType());
     }
-}
+}*/

@@ -1,7 +1,7 @@
 package xfacthd.framedblocks.api.util;
 
-import com.github.benmanes.caffeine.cache.Cache;
-import com.github.benmanes.caffeine.cache.Caffeine;
+//import com.github.benmanes.caffeine.cache.Cache;
+//import com.github.benmanes.caffeine.cache.Caffeine;
 import com.google.common.base.Preconditions;
 import com.google.common.math.IntMath;
 import it.unimi.dsi.fastutil.longs.Long2ObjectMap;
@@ -33,8 +33,8 @@ import net.minecraft.world.level.block.state.properties.Property;
 import net.minecraft.world.level.chunk.LevelChunk;
 import net.minecraft.world.level.material.*;
 import net.minecraft.world.phys.Vec3;
-import net.minecraftforge.fml.loading.FMLEnvironment;
-import net.minecraftforge.registries.*;
+import net.neoforged.fml.loading.FMLEnvironment;
+import net.neoforged.neoforge.registries.*;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.Nullable;
 import xfacthd.framedblocks.api.block.FramedBlockEntity;
@@ -623,12 +623,14 @@ public final class Utils
     }
 
     @SuppressWarnings("UnstableApiUsage")
+    //TODO: remove when ForgeRegistry is gone
     public static <T> int getId(IForgeRegistry<T> registry, T obj)
     {
         return ((ForgeRegistry<T>) registry).getID(obj);
     }
 
     @SuppressWarnings("UnstableApiUsage")
+    //TODO: remove when ForgeRegistry is gone
     public static <T> T getValue(IForgeRegistry<T> registry, int id)
     {
         return ((ForgeRegistry<T>) registry).getValue(id);
@@ -642,14 +644,15 @@ public final class Utils
                 .orElseThrow(() -> new NullPointerException("Failed to load service for " + clazz.getName()));
     }
 
-    @ApiStatus.Internal
+    // TODO: re-enable when Caffeine is back
+    /*@ApiStatus.Internal
     public static <K, V> Cache<K, V> makeLRUCache(Duration timeToExpiration)
     {
         return Caffeine.newBuilder()
                 .expireAfterAccess(timeToExpiration)
                 .executor(Util.backgroundExecutor())
                 .build();
-    }
+    }*/
 
 
 

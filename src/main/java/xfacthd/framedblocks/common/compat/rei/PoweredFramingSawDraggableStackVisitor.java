@@ -1,5 +1,5 @@
 package xfacthd.framedblocks.common.compat.rei;
-
+/*
 import me.shedaniel.math.Point;
 import me.shedaniel.math.Rectangle;
 import me.shedaniel.rei.api.client.gui.drag.*;
@@ -60,4 +60,4 @@ public final class PoweredFramingSawDraggableStackVisitor implements DraggableSt
         }
         return DraggedAcceptorResult.PASS;
     }
-}
+}*/

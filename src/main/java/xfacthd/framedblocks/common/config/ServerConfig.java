@@ -3,18 +3,18 @@ package xfacthd.framedblocks.common.config;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.Items;
-import net.minecraftforge.common.ForgeConfigSpec;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.config.ModConfig;
-import net.minecraftforge.fml.event.config.ModConfigEvent;
-import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
-import net.minecraftforge.registries.ForgeRegistries;
+import net.neoforged.neoforge.common.ModConfigSpec;
+import net.neoforged.bus.api.SubscribeEvent;
+import net.neoforged.fml.config.ModConfig;
+import net.neoforged.fml.event.config.ModConfigEvent;
+import net.neoforged.fml.javafmlmod.FMLJavaModLoadingContext;
+import net.neoforged.neoforge.registries.ForgeRegistries;
 import org.apache.commons.lang3.tuple.Pair;
 import xfacthd.framedblocks.api.util.Utils;
 
 public final class ServerConfig
 {
-    public static final ForgeConfigSpec SPEC;
+    public static final ModConfigSpec SPEC;
     public static final ServerConfig INSTANCE;
 
     private static final String KEY_ALLOW_BLOCK_ENTITIES = "allowBlockEntities";
@@ -35,21 +35,21 @@ public final class ServerConfig
     public static boolean oneWayWindowOwnable;
     public static boolean consumeCamoItem;
 
-    private final ForgeConfigSpec.BooleanValue allowBlockEntitiesValue;
-    private final ForgeConfigSpec.BooleanValue enableIntangibleFeatureValue;
-    private final ForgeConfigSpec.ConfigValue<String> intangibleMarkerItemValue;
-    private final ForgeConfigSpec.BooleanValue oneWayWindowOwnableValue;
-    private final ForgeConfigSpec.BooleanValue consumeCamoItemValue;
+    private final ModConfigSpec.BooleanValue allowBlockEntitiesValue;
+    private final ModConfigSpec.BooleanValue enableIntangibleFeatureValue;
+    private final ModConfigSpec.ConfigValue<String> intangibleMarkerItemValue;
+    private final ModConfigSpec.BooleanValue oneWayWindowOwnableValue;
+    private final ModConfigSpec.BooleanValue consumeCamoItemValue;
 
     static
     {
-        final Pair<ServerConfig, ForgeConfigSpec> configSpecPair = new ForgeConfigSpec.Builder().configure(ServerConfig::new);
+        final Pair<ServerConfig, ModConfigSpec> configSpecPair = new ModConfigSpec.Builder().configure(ServerConfig::new);
         SPEC = configSpecPair.getRight();
         INSTANCE = configSpecPair.getLeft();
     }
 
     @SuppressWarnings("ConstantConditions")
-    public ServerConfig(ForgeConfigSpec.Builder builder)
+    public ServerConfig(ModConfigSpec.Builder builder)
     {
         FMLJavaModLoadingContext.get().getModEventBus().register(this);
 

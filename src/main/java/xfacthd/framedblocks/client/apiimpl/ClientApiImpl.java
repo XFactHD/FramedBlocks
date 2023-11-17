@@ -3,7 +3,7 @@ package xfacthd.framedblocks.client.apiimpl;
 import net.minecraft.client.color.block.BlockColor;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.Block;
-import net.minecraftforge.client.model.data.ModelProperty;
+import net.neoforged.neoforge.client.model.data.ModelProperty;
 import xfacthd.framedblocks.api.FramedBlocksClientAPI;
 import xfacthd.framedblocks.api.ghost.GhostRenderBehaviour;
 import xfacthd.framedblocks.api.type.IBlockType;

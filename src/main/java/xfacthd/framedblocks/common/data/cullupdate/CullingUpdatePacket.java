@@ -5,9 +5,7 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.SectionPos;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.world.level.ChunkPos;
-import net.minecraftforge.network.NetworkEvent;
-
-import java.util.function.Supplier;
+import net.neoforged.neoforge.network.NetworkEvent;
 
 public record CullingUpdatePacket(LongSet positions)
 {
@@ -28,7 +26,7 @@ public record CullingUpdatePacket(LongSet positions)
         positions.forEach(buf::writeLong);
     }
 
-    public boolean handle(Supplier<NetworkEvent.Context> ctx)
+    public boolean handle(NetworkEvent.Context ctx)
     {
         Long2ObjectMap<CullingUpdateChunk> chunks = new Long2ObjectArrayMap<>();
 
@@ -44,7 +42,7 @@ public record CullingUpdatePacket(LongSet positions)
             chunk.positions().add(pos);
         });
 
-        ctx.get().enqueueWork(() -> ClientCullingUpdateTracker.handleCullingUpdates(chunks.values()));
+        ctx.enqueueWork(() -> ClientCullingUpdateTracker.handleCullingUpdates(chunks.values()));
 
         return true;
     }

@@ -2,9 +2,9 @@ package xfacthd.framedblocks.common.datagen.providers;
 
 import net.minecraft.data.PackOutput;
 import net.minecraft.world.item.Item;
-import net.minecraftforge.client.model.generators.*;
-import net.minecraftforge.common.data.ExistingFileHelper;
-import net.minecraftforge.registries.RegistryObject;
+import net.neoforged.neoforge.client.model.generators.*;
+import net.neoforged.neoforge.common.data.ExistingFileHelper;
+import net.neoforged.neoforge.registries.RegistryObject;
 import xfacthd.framedblocks.api.util.FramedConstants;
 import xfacthd.framedblocks.client.render.item.BlueprintPropertyOverride;
 import xfacthd.framedblocks.common.FBContent;

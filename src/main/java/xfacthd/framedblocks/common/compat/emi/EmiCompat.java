@@ -1,8 +1,8 @@
 package xfacthd.framedblocks.common.compat.emi;
 
 import net.minecraft.resources.ResourceLocation;
-import net.minecraftforge.fml.ModList;
-import net.minecraftforge.fml.loading.FMLEnvironment;
+import net.neoforged.fml.ModList;
+import net.neoforged.fml.loading.FMLEnvironment;
 import xfacthd.framedblocks.api.util.Utils;
 
 public final class EmiCompat

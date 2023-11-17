@@ -1,5 +1,5 @@
 package xfacthd.framedblocks.common.compat.emi;
-
+/*
 import dev.emi.emi.api.EmiApi;
 import dev.emi.emi.api.EmiStackProvider;
 import dev.emi.emi.api.stack.EmiStack;
@@ -23,4 +23,4 @@ public final class FramingSawStackProvider implements EmiStackProvider<FramingSa
         }
         return EmiStackInteraction.EMPTY;
     }
-}
+}*/

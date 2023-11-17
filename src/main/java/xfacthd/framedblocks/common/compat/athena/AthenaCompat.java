@@ -1,8 +1,8 @@
 package xfacthd.framedblocks.common.compat.athena;
 
-import earth.terrarium.athena.api.client.forge.AthenaBakedModel;
-import net.minecraftforge.fml.ModList;
-import net.minecraftforge.fml.loading.FMLEnvironment;
+//import earth.terrarium.athena.api.client.forge.AthenaBakedModel;
+import net.neoforged.fml.ModList;
+import net.neoforged.fml.loading.FMLEnvironment;
 import xfacthd.framedblocks.FramedBlocks;
 import xfacthd.framedblocks.client.data.ConTexDataHandler;
 
@@ -12,7 +12,6 @@ public final class AthenaCompat
     {
         if (ModList.get().isLoaded("athena"))
         {
-            // Safeguard against potential changes in Athena since the ct context property is not exposed as API
             try
             {
                 if (FMLEnvironment.dist.isClient())
@@ -31,7 +30,7 @@ public final class AthenaCompat
     {
         public static void init()
         {
-            ConTexDataHandler.addConTexProperty(AthenaBakedModel.DATA);
+            //ConTexDataHandler.addConTexProperty(AthenaBakedModel.DATA);
         }
     }
 

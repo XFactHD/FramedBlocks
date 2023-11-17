@@ -1,7 +1,7 @@
 package xfacthd.framedblocks.common.capability;
 
 import net.minecraft.world.level.block.entity.BlockEntity;
-import net.minecraftforge.energy.EnergyStorage;
+import net.neoforged.neoforge.energy.EnergyStorage;
 
 public class EntityAwareEnergyStorage extends EnergyStorage
 {

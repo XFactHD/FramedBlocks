@@ -14,11 +14,11 @@ import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraftforge.common.capabilities.Capability;
-import net.minecraftforge.common.capabilities.ForgeCapabilities;
-import net.minecraftforge.common.util.LazyOptional;
-import net.minecraftforge.items.*;
-import net.minecraftforge.network.NetworkHooks;
+import net.neoforged.neoforge.common.capabilities.Capability;
+import net.neoforged.neoforge.common.capabilities.Capabilities;
+import net.neoforged.neoforge.common.util.LazyOptional;
+import net.neoforged.neoforge.items.*;
+import net.neoforged.neoforge.network.NetworkHooks;
 import xfacthd.framedblocks.api.block.FramedBlockEntity;
 import xfacthd.framedblocks.api.util.Utils;
 import xfacthd.framedblocks.common.FBContent;
@@ -61,7 +61,7 @@ public class FramedStorageBlockEntity extends FramedBlockEntity implements MenuP
     @Override
     public <T> LazyOptional<T> getCapability(Capability<T> cap, @Nullable Direction side)
     {
-        if (cap == ForgeCapabilities.ITEM_HANDLER)
+        if (cap == Capabilities.ITEM_HANDLER)
         {
             return lazyItemHandler.cast();
         }

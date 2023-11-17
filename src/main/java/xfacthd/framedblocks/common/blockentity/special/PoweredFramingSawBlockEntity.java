@@ -6,17 +6,18 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.*;
+import net.minecraft.world.item.crafting.RecipeHolder;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraftforge.common.capabilities.Capability;
-import net.minecraftforge.common.capabilities.ForgeCapabilities;
-import net.minecraftforge.common.util.LazyOptional;
-import net.minecraftforge.energy.IEnergyStorage;
-import net.minecraftforge.fml.loading.FMLEnvironment;
-import net.minecraftforge.items.IItemHandler;
-import net.minecraftforge.items.ItemStackHandler;
-import net.minecraftforge.items.wrapper.RecipeWrapper;
+import net.neoforged.neoforge.common.capabilities.Capability;
+import net.neoforged.neoforge.common.capabilities.Capabilities;
+import net.neoforged.neoforge.common.util.LazyOptional;
+import net.neoforged.neoforge.energy.IEnergyStorage;
+import net.neoforged.fml.loading.FMLEnvironment;
+import net.neoforged.neoforge.items.IItemHandler;
+import net.neoforged.neoforge.items.ItemStackHandler;
+import net.neoforged.neoforge.items.wrapper.RecipeWrapper;
 import xfacthd.framedblocks.common.FBContent;
 import xfacthd.framedblocks.common.crafting.*;
 import xfacthd.framedblocks.common.data.PropertyHolder;
@@ -68,7 +69,7 @@ public class PoweredFramingSawBlockEntity extends BlockEntity
     private LazyOptional<IEnergyStorage> lazyEnergyStorage = LazyOptional.empty();
     private FramingSawRecipeCache cache = null;
     private ResourceLocation selectedRecipeId = null;
-    private FramingSawRecipe selectedRecipe = null;
+    private RecipeHolder<FramingSawRecipe> selectedRecipe = null;
     private boolean active = false;
     private long lastActive = 0;
     private boolean recipeSatisfied = false;
@@ -107,11 +108,11 @@ public class PoweredFramingSawBlockEntity extends BlockEntity
             {
                 be.progress = 0;
 
-                ItemStack result = be.selectedRecipe.getResult().copy();
+                ItemStack result = be.selectedRecipe.value().getResult().copy();
                 result.setCount(be.outputCount);
                 be.internalAccess = true;
                 be.inhibitUpdate = true;
-                for (int i = 0; i < be.selectedRecipe.getAdditives().size(); i++)
+                for (int i = 0; i < be.selectedRecipe.value().getAdditives().size(); i++)
                 {
                     int slot = i + FramingSawMenu.SLOT_ADDITIVE_FIRST;
                     be.itemHandler.extractItem(slot, be.calculation.getAdditiveCount(i), false);
@@ -147,7 +148,7 @@ public class PoweredFramingSawBlockEntity extends BlockEntity
         if (energyStorage.getEnergyStored() < ENERGY_CONSUMPTION) return false;
 
         ItemStack output = itemHandler.getStackInSlot(FramingSawMenu.SLOT_RESULT);
-        if (!output.isEmpty() && output.getItem() != selectedRecipe.getResult().getItem()) return false;
+        if (!output.isEmpty() && output.getItem() != selectedRecipe.value().getResult().getItem()) return false;
         if (output.getCount() + outputCount > output.getMaxStackSize()) return false;
 
         return true;
@@ -157,7 +158,7 @@ public class PoweredFramingSawBlockEntity extends BlockEntity
     {
         if (selectedRecipe != null)
         {
-            matchResult = selectedRecipe.matchWithResult(container, level);
+            matchResult = selectedRecipe.value().matchWithResult(container, level);
             recipeSatisfied = matchResult.success();
         }
         else
@@ -168,7 +169,7 @@ public class PoweredFramingSawBlockEntity extends BlockEntity
 
         if (recipeSatisfied)
         {
-            calculation = selectedRecipe.makeCraftingCalculation(container, false);
+            calculation = selectedRecipe.value().makeCraftingCalculation(container, false);
             outputCount = calculation.getOutputCount();
         }
         else
@@ -199,7 +200,7 @@ public class PoweredFramingSawBlockEntity extends BlockEntity
             if (selectedRecipe != null)
             {
                 int idx = slot - FramingSawMenu.SLOT_ADDITIVE_FIRST;
-                List<FramingSawRecipeAdditive> additives = selectedRecipe.getAdditives();
+                List<FramingSawRecipeAdditive> additives = selectedRecipe.value().getAdditives();
                 if (!additives.isEmpty() && idx < additives.size())
                 {
                     return additives.get(idx).ingredient().test(stack);
@@ -215,11 +216,11 @@ public class PoweredFramingSawBlockEntity extends BlockEntity
         throw new IllegalArgumentException("Invalid slot: " + slot);
     }
 
-    public void selectRecipe(FramingSawRecipe recipe)
+    public void selectRecipe(RecipeHolder<FramingSawRecipe> recipe)
     {
         ResourceLocation lastId = selectedRecipeId;
         selectedRecipe = recipe;
-        selectedRecipeId = recipe == null ? null : recipe.getId();
+        selectedRecipeId = recipe == null ? null : recipe.id();
         checkRecipeSatisfied();
         if (!Objects.equals(lastId, selectedRecipeId))
         {
@@ -227,7 +228,7 @@ public class PoweredFramingSawBlockEntity extends BlockEntity
         }
     }
 
-    public FramingSawRecipe getSelectedRecipe()
+    public RecipeHolder<FramingSawRecipe> getSelectedRecipe()
     {
         return selectedRecipe;
     }
@@ -268,11 +269,11 @@ public class PoweredFramingSawBlockEntity extends BlockEntity
     {
         if (side != Direction.UP)
         {
-            if (cap == ForgeCapabilities.ITEM_HANDLER)
+            if (cap == Capabilities.ITEM_HANDLER)
             {
                 return lazyItemHandler.cast();
             }
-            if (cap == ForgeCapabilities.ENERGY)
+            if (cap == Capabilities.ENERGY)
             {
                 return lazyEnergyStorage.cast();
             }
@@ -281,6 +282,7 @@ public class PoweredFramingSawBlockEntity extends BlockEntity
     }
 
     @Override
+    @SuppressWarnings("unchecked")
     public void onLoad()
     {
         super.onLoad();
@@ -290,9 +292,9 @@ public class PoweredFramingSawBlockEntity extends BlockEntity
         cache = FramingSawRecipeCache.get(level.isClientSide());
         if (selectedRecipeId != null && !level.isClientSide())
         {
-            FramingSawRecipe recipe = level.getRecipeManager().byKey(selectedRecipeId)
-                    .filter(FramingSawRecipe.class::isInstance)
-                    .map(FramingSawRecipe.class::cast)
+            RecipeHolder<FramingSawRecipe> recipe = (RecipeHolder<FramingSawRecipe>) level.getRecipeManager()
+                    .byKey(selectedRecipeId)
+                    .filter(h -> h.value() instanceof FramingSawRecipe)
                     .orElse(null);
             selectRecipe(recipe);
         }
@@ -322,7 +324,7 @@ public class PoweredFramingSawBlockEntity extends BlockEntity
         super.saveAdditional(tag);
         if (selectedRecipe != null)
         {
-            tag.putString("recipe", selectedRecipe.getId().toString());
+            tag.putString("recipe", selectedRecipe.id().toString());
         }
         tag.put("inventory", itemHandler.serializeNBT());
     }

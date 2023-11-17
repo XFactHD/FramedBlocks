@@ -1,6 +1,7 @@
 package xfacthd.framedblocks.common.datagen.providers;
 
-import net.minecraft.advancements.CriterionTriggerInstance;
+import net.minecraft.advancements.Criterion;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.data.PackOutput;
 import net.minecraft.data.recipes.*;
 import net.minecraft.tags.ItemTags;
@@ -8,22 +9,25 @@ import net.minecraft.world.item.Items;
 import net.minecraft.world.level.ItemLike;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
-import net.minecraftforge.common.Tags;
-import net.minecraftforge.registries.RegistryObject;
+import net.neoforged.neoforge.common.Tags;
+import net.neoforged.neoforge.registries.RegistryObject;
 import xfacthd.framedblocks.api.util.Utils;
 import xfacthd.framedblocks.common.FBContent;
 
-import java.util.function.Consumer;
+import java.util.concurrent.CompletableFuture;
 
 public final class FramedRecipeProvider extends RecipeProvider
 {
-    private final CriterionTriggerInstance HAS_FRAMED_BLOCK = has(FBContent.BLOCK_FRAMED_CUBE.get());
-    private final CriterionTriggerInstance HAS_FRAMED_SLOPE = has(FBContent.BLOCK_FRAMED_SLOPE.get());
+    private final Criterion<?> HAS_FRAMED_BLOCK = has(FBContent.BLOCK_FRAMED_CUBE.get());
+    private final Criterion<?> HAS_FRAMED_SLOPE = has(FBContent.BLOCK_FRAMED_SLOPE.get());
 
-    public FramedRecipeProvider(PackOutput output) { super(output); }
+    public FramedRecipeProvider(PackOutput output, CompletableFuture<HolderLookup.Provider> lookup)
+    {
+        super(output, lookup);
+    }
 
     @Override
-    protected void buildRecipes(Consumer<FinishedRecipe> consumer)
+    protected void buildRecipes(RecipeOutput consumer)
     {
         shapedBuildingBlock(FBContent.BLOCK_FRAMED_CUBE.get(), 4)
                 .pattern("PSP")
@@ -1281,7 +1285,7 @@ public final class FramedRecipeProvider extends RecipeProvider
         makeRotationRecipe(FBContent.BLOCK_FRAMED_CENTERED_SLAB, FBContent.BLOCK_FRAMED_CENTERED_PANEL, consumer);
     }
 
-    private static void makeRotationRecipe(RegistryObject<Block> first, RegistryObject<Block> second, Consumer<FinishedRecipe> consumer)
+    private static void makeRotationRecipe(RegistryObject<Block> first, RegistryObject<Block> second, RecipeOutput consumer)
     {
         String name = first.getId().getPath() + "_rotate_to_" + second.getId().getPath();
         shapelessBuildingBlock(second.get())

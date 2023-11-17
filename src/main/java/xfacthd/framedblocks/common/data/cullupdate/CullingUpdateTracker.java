@@ -5,8 +5,8 @@ import it.unimi.dsi.fastutil.longs.LongSet;
 import net.minecraft.core.BlockPos;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.level.Level;
-import net.minecraftforge.event.TickEvent;
-import net.minecraftforge.network.PacketDistributor;
+import net.neoforged.neoforge.event.TickEvent;
+import net.neoforged.neoforge.network.PacketDistributor;
 import xfacthd.framedblocks.FramedBlocks;
 
 import java.util.IdentityHashMap;

@@ -10,7 +10,6 @@ import net.minecraft.core.NonNullList;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.inventory.CraftingContainer;
 import net.minecraft.world.inventory.TransientCraftingContainer;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.*;
@@ -31,6 +30,7 @@ public final class RecipeCollisions
     private static final String PROGRESS_MSG = MSG_PREFIX + "%,d";
     private static final String RESULT_MSG = MSG_PREFIX + "Tested %,d combinations in %dms. ";
 
+    @SuppressWarnings("unchecked")
     public static void checkForRecipeCollisions(CommandContext<CommandSourceStack> ctx, Consumer<Component> msgQueueAppender)
     {
         Level level = ctx.getSource().getLevel();
@@ -39,13 +39,13 @@ public final class RecipeCollisions
         Stopwatch watch = Stopwatch.createStarted();
 
         RecipeManager recipeManager = level.getRecipeManager();
-        List<? extends Recipe<CraftingContainer>> recipes = recipeManager.getRecipeIds()
+        List<RecipeHolder<CraftingRecipe>> recipes = recipeManager.getRecipeIds()
                 .filter(id -> id.getNamespace().equals(FramedConstants.MOD_ID))
                 .map(recipeManager::byKey)
                 .filter(Optional::isPresent)
                 .map(Optional::get)
-                .filter(CraftingRecipe.class::isInstance)
-                .map(CraftingRecipe.class::cast)
+                .filter(h -> h.value() instanceof CraftingRecipe)
+                .map(h -> (RecipeHolder<CraftingRecipe>) h)
                 .toList();
 
         TransientCraftingContainer container = new TransientCraftingContainer(player.containerMenu, 3, 3);
@@ -53,8 +53,9 @@ public final class RecipeCollisions
 
         Multimap<ResourceLocation, ResourceLocation> collisions = ArrayListMultimap.create();
         MutableInt combinations = new MutableInt(0);
-        recipes.forEach(recipe ->
+        recipes.forEach(holder ->
         {
+            CraftingRecipe recipe = holder.value();
             List<Ingredient> ingredients = recipe.getIngredients();
 
             for (int x = 0; x < 3; x++)
@@ -86,12 +87,12 @@ public final class RecipeCollisions
             }
 
             recipes.stream()
-                    .filter(other -> other != recipe)
+                    .filter(other -> other.value() != recipe)
                     .forEach(other ->
                     {
-                        if (other.matches(container, level))
+                        if (other.value().matches(container, level))
                         {
-                            collisions.put(recipe.getId(), other.getId());
+                            collisions.put(holder.id(), other.id());
                         }
 
                         int value = combinations.incrementAndGet();

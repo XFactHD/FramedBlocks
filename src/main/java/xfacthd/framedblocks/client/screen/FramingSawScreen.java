@@ -21,6 +21,7 @@ import net.minecraft.world.inventory.tooltip.TooltipComponent;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Ingredient;
+import net.minecraft.world.item.crafting.RecipeHolder;
 import org.lwjgl.glfw.GLFW;
 import xfacthd.framedblocks.FramedBlocks;
 import xfacthd.framedblocks.api.util.Utils;
@@ -92,8 +93,6 @@ public class FramingSawScreen extends AbstractContainerScreen<FramingSawMenu>
     @Override
     protected void renderBg(GuiGraphics graphics, float partialTick, int mouseX, int mouseY)
     {
-        renderBackground(graphics);
-
         RenderSystem.setShader(GameRenderer::getPositionTexShader);
         RenderSystem.setShaderColor(1F, 1F, 1F, 1F);
 
@@ -120,10 +119,10 @@ public class FramingSawScreen extends AbstractContainerScreen<FramingSawMenu>
         renderButtons(graphics, mouseX, mouseY, recX, recY, lastIndex);
         renderRecipes(graphics, recX, recY, lastIndex);
 
-        List<FramingSawRecipe> recipes = cache.getRecipes();
+        List<RecipeHolder<FramingSawRecipe>> recipes = cache.getRecipes();
         if (idx >= 0 && idx < recipes.size())
         {
-            FramingSawRecipe recipe = recipes.get(idx);
+            FramingSawRecipe recipe = recipes.get(idx).value();
             if (input.isEmpty())
             {
                 ItemRenderHelper.renderFakeItemTransparent(graphics.pose(), cubeStack, leftPos + 20, topPos + 28, 127);
@@ -176,7 +175,7 @@ public class FramingSawScreen extends AbstractContainerScreen<FramingSawMenu>
         int x = leftPos + RECIPES_X;
         int y = topPos + RECIPES_Y;
         int last = firstIndex + RECIPE_COUNT;
-        List<FramingSawMenu.RecipeHolder> recipes = menu.getRecipes();
+        List<FramingSawMenu.FramedRecipeHolder> recipes = menu.getRecipes();
 
         for (int idx = firstIndex; idx < last && idx < recipes.size(); idx++)
         {
@@ -185,14 +184,14 @@ public class FramingSawScreen extends AbstractContainerScreen<FramingSawMenu>
             int recY = y + relIdx / RECIPE_COLS * RECIPE_HEIGHT;
             if (mouseX >= recX && mouseX < recX + RECIPE_WIDTH && mouseY >= recY && mouseY < recY + RECIPE_HEIGHT)
             {
-                FramingSawMenu.RecipeHolder recipe = recipes.get(idx);
+                FramingSawMenu.FramedRecipeHolder recipe = recipes.get(idx);
                 ItemStack result = recipe.getRecipe().getResult();
                 renderItemTooltip(graphics, mouseX, mouseY, result, recipe);
             }
         }
     }
 
-    private void renderItemTooltip(GuiGraphics graphics, int mouseX, int mouseY, ItemStack stack, FramingSawMenu.RecipeHolder recipeHolder)
+    private void renderItemTooltip(GuiGraphics graphics, int mouseX, int mouseY, ItemStack stack, FramingSawMenu.FramedRecipeHolder recipeHolder)
     {
         //noinspection ConstantConditions
         List<Component> components = new ArrayList<>(getTooltipFromItem(minecraft, stack));
@@ -212,7 +211,7 @@ public class FramingSawScreen extends AbstractContainerScreen<FramingSawMenu>
         graphics.renderTooltip(font, components, tooltip, stack, mouseX, mouseY);
     }
 
-    private void appendRecipeFailure(List<Component> components, FramingSawMenu.RecipeHolder recipeHolder)
+    private void appendRecipeFailure(List<Component> components, FramingSawMenu.FramedRecipeHolder recipeHolder)
     {
         appendRecipeFailure(components, cache, recipeHolder.getRecipe(), recipeHolder.getMatchResult(), menu);
     }
@@ -353,7 +352,7 @@ public class FramingSawScreen extends AbstractContainerScreen<FramingSawMenu>
 
     private void renderButtons(GuiGraphics graphics, int mouseX, int mouseY, int x, int y, int lastIdx)
     {
-        List<FramingSawMenu.RecipeHolder> recipes = menu.getRecipes();
+        List<FramingSawMenu.FramedRecipeHolder> recipes = menu.getRecipes();
         for (int idx = firstIndex; idx < lastIdx && idx < recipes.size(); ++idx)
         {
             int relIdx = idx - firstIndex;
@@ -387,7 +386,7 @@ public class FramingSawScreen extends AbstractContainerScreen<FramingSawMenu>
 
     private void renderRecipes(GuiGraphics graphics, int pLeft, int pTop, int lastIndex)
     {
-        List<FramingSawMenu.RecipeHolder> recipes = menu.getRecipes();
+        List<FramingSawMenu.FramedRecipeHolder> recipes = menu.getRecipes();
 
         RenderSystem.setShaderColor(1F, 1F, 1F, 1F);
         for (int idx = firstIndex; idx < lastIndex && idx < recipes.size(); idx++)
@@ -463,12 +462,12 @@ public class FramingSawScreen extends AbstractContainerScreen<FramingSawMenu>
     }
 
     @Override
-    public boolean mouseScrolled(double mouseX, double mouseY, double delta)
+    public boolean mouseScrolled(double mouseX, double mouseY, double deltaX, double deltaY)
     {
         if (isScrollBarActive())
         {
             int hiddenRows = getHiddenRows();
-            float offset = (float) delta / (float) hiddenRows;
+            float offset = (float) deltaY / (float) hiddenRows;
             scrollOffset = Mth.clamp(scrollOffset - offset, 0F, 1F);
             firstIndex = calculateFirstIndex(hiddenRows);
         }
@@ -508,10 +507,10 @@ public class FramingSawScreen extends AbstractContainerScreen<FramingSawMenu>
             int row = (int) ((mouseY - y) / RECIPE_HEIGHT);
             int idx = (row * RECIPE_COLS) + col + firstIndex;
 
-            List<FramingSawRecipe> recipes = cache.getRecipes();
+            List<RecipeHolder<FramingSawRecipe>> recipes = cache.getRecipes();
             if (idx > 0 && idx < recipes.size())
             {
-                return cache.getRecipes().get(idx);
+                return recipes.get(idx).value();
             }
         }
         return null;

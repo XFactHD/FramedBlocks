@@ -11,6 +11,7 @@ import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.inventory.tooltip.TooltipComponent;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.crafting.RecipeHolder;
 import xfacthd.framedblocks.FramedBlocks;
 import xfacthd.framedblocks.api.util.Utils;
 import xfacthd.framedblocks.client.render.item.ItemRenderHelper;
@@ -94,19 +95,19 @@ public class PoweredFramingSawScreen extends AbstractContainerScreen<PoweredFram
     @Override
     protected void renderBg(GuiGraphics graphics, float partialTick, int mouseX, int mouseY)
     {
-        renderBackground(graphics);
-
         graphics.blit(BACKGROUND, leftPos, topPos, 0, 0, imageWidth, imageHeight);
 
         int tx = leftPos + TITLE_TARGETBLOCK_X - font.width(TITLE_TARGETBLOCK);
         int ty = topPos + TITLE_TARGETBLOCK_Y;
         graphics.drawString(font, TITLE_TARGETBLOCK, tx, ty, 0x404040, false);
 
-        FramingSawRecipe recipe = menu.getSelectedRecipe();
+        RecipeHolder<FramingSawRecipe> recipe = menu.getSelectedRecipe();
+        if (recipe == null) return;
+
         FramingSawRecipeMatchResult match = menu.getMatchResult();
 
-        drawRecipeInfo(graphics, recipe, match);
-        drawStatus(graphics, recipe, match);
+        drawRecipeInfo(graphics, recipe.value(), match);
+        drawStatus(graphics, recipe.value(), match);
         drawEnergyBar(graphics, mouseX, mouseY);
     }
 
@@ -170,7 +171,7 @@ public class PoweredFramingSawScreen extends AbstractContainerScreen<PoweredFram
         else if (match != null && !match.success())
         {
             status = status.append(MSG_STATUS_NO_MATCH);
-            statusTooltip = FramingSawScreen.appendRecipeFailure(new ArrayList<>(), cache, menu.getSelectedRecipe(), match, menu);
+            statusTooltip = FramingSawScreen.appendRecipeFailure(new ArrayList<>(), cache, recipe, match, menu);
             width = font.width(MSG_STATUS_NO_MATCH);
         }
         else
@@ -254,8 +255,8 @@ public class PoweredFramingSawScreen extends AbstractContainerScreen<PoweredFram
             double mouseX = mouseHandler.xpos() * (double) window.getGuiScaledWidth() / (double) window.getScreenWidth();
             double mouseY = mouseHandler.ypos() * (double) window.getGuiScaledHeight() / (double) window.getScreenHeight();
 
-            FramingSawRecipe recipe = menu.getSelectedRecipe();
-            if (recipe != null && isMouseOverRecipeSlot(mouseX, mouseY) && RECIPE_VIEWER.handleShowRecipeRequest(recipe.getResult(), target))
+            RecipeHolder<FramingSawRecipe> recipe = menu.getSelectedRecipe();
+            if (recipe != null && isMouseOverRecipeSlot(mouseX, mouseY) && RECIPE_VIEWER.handleShowRecipeRequest(recipe.value().getResult(), target))
             {
                 return true;
             }
@@ -273,8 +274,8 @@ public class PoweredFramingSawScreen extends AbstractContainerScreen<PoweredFram
     {
         if (cursorStack.isEmpty() || cache.getMaterialValue(cursorStack.getItem()) != -1)
         {
-            FramingSawRecipe recipe = cache.findRecipeFor(cursorStack);
-            if (recipe == menu.getSelectedRecipe())
+            RecipeHolder<FramingSawRecipe> recipe = cache.findRecipeFor(cursorStack);
+            if (Objects.equals(recipe, menu.getSelectedRecipe()))
             {
                 return;
             }

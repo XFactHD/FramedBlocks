@@ -7,8 +7,8 @@ import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraftforge.fml.ModLoader;
-import net.minecraftforge.registries.RegistryObject;
+import net.neoforged.fml.ModLoader;
+import net.neoforged.neoforge.registries.RegistryObject;
 import xfacthd.framedblocks.FramedBlocks;
 import xfacthd.framedblocks.api.model.wrapping.ModelAccessor;
 import xfacthd.framedblocks.api.model.wrapping.RegisterModelWrappersEvent;
@@ -18,7 +18,7 @@ import java.util.*;
 @SuppressWarnings("deprecation")
 public final class ModelWrappingManager
 {
-    private static final Map<ResourceLocation, ModelWrappingHandler> HANDLERS = new IdentityHashMap<>();
+    private static final Map<ResourceLocation, ModelWrappingHandler> HANDLERS = new HashMap<>();
     private static boolean locked = true;
 
     public static void handleAll(Map<ResourceLocation, BakedModel> models)
@@ -57,7 +57,6 @@ public final class ModelWrappingManager
         );
     }
 
-    @SuppressWarnings("unused") // To be used in case on-demand model baking ever becomes a thing
     public static BakedModel handle(ResourceLocation id, BakedModel model, ModelAccessor modelAccessor)
     {
         if (id instanceof ModelResourceLocation modelId)

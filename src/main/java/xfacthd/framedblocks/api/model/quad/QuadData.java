@@ -1,7 +1,7 @@
 package xfacthd.framedblocks.api.model.quad;
 
 import net.minecraft.client.renderer.block.model.BakedQuad;
-import net.minecraftforge.client.model.IQuadTransformer;
+import net.neoforged.neoforge.client.model.IQuadTransformer;
 import org.joml.Vector3f;
 import xfacthd.framedblocks.api.model.util.ModelUtils;
 

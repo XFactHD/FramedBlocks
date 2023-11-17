@@ -1,7 +1,7 @@
 package xfacthd.framedblocks.client.util;
 
-import net.minecraftforge.client.event.ClientPlayerNetworkEvent;
-import net.minecraftforge.client.event.RecipesUpdatedEvent;
+import net.neoforged.neoforge.client.event.ClientPlayerNetworkEvent;
+import net.neoforged.neoforge.client.event.RecipesUpdatedEvent;
 import xfacthd.framedblocks.common.crafting.FramingSawRecipeCache;
 
 public final class ClientEventHandler

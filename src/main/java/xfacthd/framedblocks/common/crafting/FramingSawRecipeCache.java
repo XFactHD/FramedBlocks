@@ -7,9 +7,10 @@ import net.minecraft.server.ReloadableServerResources;
 import net.minecraft.server.packs.resources.ResourceManager;
 import net.minecraft.server.packs.resources.ResourceManagerReloadListener;
 import net.minecraft.world.item.*;
+import net.minecraft.world.item.crafting.RecipeHolder;
 import net.minecraft.world.item.crafting.RecipeManager;
-import net.minecraftforge.event.AddReloadListenerEvent;
-import net.minecraftforge.registries.ForgeRegistries;
+import net.neoforged.neoforge.event.AddReloadListenerEvent;
+import net.neoforged.neoforge.registries.ForgeRegistries;
 import org.jetbrains.annotations.Nullable;
 import xfacthd.framedblocks.api.type.IBlockType;
 import xfacthd.framedblocks.api.util.FramedConstants;
@@ -22,9 +23,9 @@ public final class FramingSawRecipeCache
     private static final FramingSawRecipeCache SERVER_INSTANCE = new FramingSawRecipeCache();
     private static final FramingSawRecipeCache CLIENT_INSTANCE = new FramingSawRecipeCache();
 
-    private final List<FramingSawRecipe> recipes = new ArrayList<>();
-    private final Map<Item, FramingSawRecipe> recipesByResult = new IdentityHashMap<>();
-    private final Map<Item, FramingSawRecipe> recipesWithAdditives = new IdentityHashMap<>();
+    private final List<RecipeHolder<FramingSawRecipe>> recipes = new ArrayList<>();
+    private final Map<Item, RecipeHolder<FramingSawRecipe>> recipesByResult = new IdentityHashMap<>();
+    private final Map<Item, RecipeHolder<FramingSawRecipe>> recipesWithAdditives = new IdentityHashMap<>();
     private final Object2IntMap<Item> materialValues = new Object2IntOpenCustomHashMap<>(Util.identityStrategy());
 
     public void update(RecipeManager recipeManager)
@@ -34,26 +35,27 @@ public final class FramingSawRecipeCache
         recipes.addAll(recipeManager.getAllRecipesFor(FBContent.RECIPE_TYPE_FRAMING_SAW_RECIPE.get()));
         recipes.sort(FramingSawRecipeCache::sortRecipes);
 
-        recipes.forEach(recipe ->
+        recipes.forEach(holder ->
         {
+            FramingSawRecipe recipe = holder.value();
             ItemStack result = recipe.getResult();
-
             int materialValue = recipe.getMaterialAmount();
             materialValues.put(result.getItem(), materialValue / result.getCount());
         });
 
         // Remove disabled recipes after extracting material values
-        recipes.removeIf(FramingSawRecipe::isDisabled);
+        recipes.removeIf(h -> h.value().isDisabled());
 
-        recipes.forEach(recipe ->
+        recipes.forEach(holder ->
         {
-            ItemStack result = recipe.getResult();
+            FramingSawRecipe recipe = holder.value();
 
-            recipesByResult.put(result.getItem(), recipe);
+            ItemStack result = recipe.getResult();
+            recipesByResult.put(result.getItem(), holder);
 
             if (!recipe.getAdditives().isEmpty())
             {
-                recipesWithAdditives.put(result.getItem(), recipe);
+                recipesWithAdditives.put(result.getItem(), holder);
             }
         });
     }
@@ -66,13 +68,13 @@ public final class FramingSawRecipeCache
         materialValues.clear();
     }
 
-    public List<FramingSawRecipe> getRecipes()
+    public List<RecipeHolder<FramingSawRecipe>> getRecipes()
     {
         return Collections.unmodifiableList(recipes);
     }
 
     @Nullable
-    public FramingSawRecipe findRecipeFor(ItemStack result)
+    public RecipeHolder<FramingSawRecipe> findRecipeFor(ItemStack result)
     {
         return recipesByResult.get(result.getItem());
     }
@@ -92,11 +94,11 @@ public final class FramingSawRecipeCache
         return recipesWithAdditives.containsKey(item);
     }
 
-    public List<FramingSawRecipe> getRecipesWithAdditive(ItemStack additive)
+    public List<RecipeHolder<FramingSawRecipe>> getRecipesWithAdditive(ItemStack additive)
     {
         return recipesWithAdditives.values()
                 .stream()
-                .filter(recipe -> recipe.getAdditives()
+                .filter(recipe -> recipe.value().getAdditives()
                         .stream()
                         .map(FramingSawRecipeAdditive::ingredient)
                         .anyMatch(ing -> ing.test(additive))
@@ -116,8 +118,10 @@ public final class FramingSawRecipeCache
         event.addListener(new Reloader(event.getServerResources()));
     }
 
-    private static int sortRecipes(FramingSawRecipe r1, FramingSawRecipe r2)
+    private static int sortRecipes(RecipeHolder<FramingSawRecipe> holder1, RecipeHolder<FramingSawRecipe> holder2)
     {
+        FramingSawRecipe r1 = holder1.value();
+        FramingSawRecipe r2 = holder2.value();
         return sortRecipes(r1.getResult(), r2.getResult(), r1.getResultType(), r2.getResultType());
     }
 

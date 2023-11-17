@@ -1,9 +1,9 @@
 package xfacthd.framedblocks.common.compat.ctm;
 
-import net.minecraftforge.client.model.data.ModelProperty;
-import net.minecraftforge.fml.ModList;
-import net.minecraftforge.fml.loading.FMLEnvironment;
-import team.chisel.ctm.client.model.AbstractCTMBakedModel;
+import net.neoforged.neoforge.client.model.data.ModelProperty;
+import net.neoforged.fml.ModList;
+import net.neoforged.fml.loading.FMLEnvironment;
+//import team.chisel.ctm.client.model.AbstractCTMBakedModel;
 import xfacthd.framedblocks.FramedBlocks;
 import xfacthd.framedblocks.api.util.Utils;
 import xfacthd.framedblocks.client.data.ConTexDataHandler;
@@ -37,10 +37,10 @@ public final class CtmCompat
     {
         public static void init()
         {
-            ModelProperty<?> property = Utils.getPrivateValue(
-                    AbstractCTMBakedModel.class, null, "CTM_CONTEXT"
-            );
-            ConTexDataHandler.addConTexProperty(property);
+            //ModelProperty<?> property = Utils.getPrivateValue(
+            //        AbstractCTMBakedModel.class, null, "CTM_CONTEXT"
+            //);
+            //ConTexDataHandler.addConTexProperty(property);
         }
     }
 

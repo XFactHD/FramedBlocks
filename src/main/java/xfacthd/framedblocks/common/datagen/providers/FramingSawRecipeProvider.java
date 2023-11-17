@@ -1,27 +1,27 @@
 package xfacthd.framedblocks.common.datagen.providers;
 
+import net.minecraft.core.HolderLookup;
 import net.minecraft.data.PackOutput;
-import net.minecraft.data.recipes.FinishedRecipe;
-import net.minecraft.data.recipes.RecipeProvider;
+import net.minecraft.data.recipes.*;
 import net.minecraft.tags.ItemTags;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.block.Blocks;
-import net.minecraftforge.common.Tags;
+import net.neoforged.neoforge.common.Tags;
 import xfacthd.framedblocks.common.FBContent;
 import xfacthd.framedblocks.common.crafting.*;
 
 import java.util.List;
-import java.util.function.Consumer;
+import java.util.concurrent.CompletableFuture;
 
 public final class FramingSawRecipeProvider extends RecipeProvider
 {
-    public FramingSawRecipeProvider(PackOutput output)
+    public FramingSawRecipeProvider(PackOutput output, CompletableFuture<HolderLookup.Provider> lookup)
     {
-        super(output);
+        super(output, lookup);
     }
 
     @Override
-    protected void buildRecipes(Consumer<FinishedRecipe> consumer)
+    protected void buildRecipes(RecipeOutput consumer)
     {
         FramingSawRecipeBuilder.builder(FBContent.BLOCK_FRAMED_CUBE)
                 .material(FramingSawRecipe.CUBE_MATERIAL_VALUE)

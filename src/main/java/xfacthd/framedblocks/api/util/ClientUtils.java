@@ -10,7 +10,7 @@ import net.minecraft.world.level.*;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.material.FluidState;
-import net.minecraftforge.client.extensions.common.IClientFluidTypeExtensions;
+import net.neoforged.neoforge.client.extensions.common.IClientFluidTypeExtensions;
 import xfacthd.framedblocks.api.internal.InternalClientAPI;
 
 import java.util.function.*;

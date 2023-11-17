@@ -2,7 +2,7 @@ package xfacthd.framedblocks.common.datagen.builders.book.elements;
 
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.ItemLike;
-import net.minecraftforge.registries.ForgeRegistries;
+import net.neoforged.neoforge.registries.ForgeRegistries;
 import xfacthd.framedblocks.common.datagen.builders.book.elements.attributes.ElementCategory;
 
 public final class Elements

@@ -1,10 +1,10 @@
 package xfacthd.framedblocks.common.compat.supplementaries;
 
-import net.mehvahdjukaar.supplementaries.common.block.IRopeConnection;
+//import net.mehvahdjukaar.supplementaries.common.block.IRopeConnection;
 import net.minecraft.core.BlockPos;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.LevelReader;
-import net.minecraftforge.fml.ModList;
+import net.neoforged.fml.ModList;
 import xfacthd.framedblocks.FramedBlocks;
 
 public final class SupplementariesCompat
@@ -46,7 +46,8 @@ public final class SupplementariesCompat
 
             try
             {
-                return IRopeConnection.isSupportingCeiling(pos, level);
+                //return IRopeConnection.isSupportingCeiling(pos, level);
+                return true;
             }
             catch (Throwable e)
             {

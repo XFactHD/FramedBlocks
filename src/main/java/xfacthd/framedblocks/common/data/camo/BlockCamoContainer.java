@@ -7,7 +7,7 @@ import net.minecraft.world.item.*;
 import net.minecraft.world.level.BlockAndTintGetter;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraftforge.fml.loading.FMLEnvironment;
+import net.neoforged.fml.loading.FMLEnvironment;
 import xfacthd.framedblocks.api.camo.*;
 import xfacthd.framedblocks.api.util.ClientUtils;
 import xfacthd.framedblocks.api.util.Utils;

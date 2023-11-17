@@ -1,16 +1,16 @@
 package xfacthd.framedblocks.common.config;
 
-import net.minecraftforge.common.ForgeConfigSpec;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.config.ModConfig;
-import net.minecraftforge.fml.event.config.ModConfigEvent;
-import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
+import net.neoforged.neoforge.common.ModConfigSpec;
+import net.neoforged.bus.api.SubscribeEvent;
+import net.neoforged.fml.config.ModConfig;
+import net.neoforged.fml.event.config.ModConfigEvent;
+import net.neoforged.fml.javafmlmod.FMLJavaModLoadingContext;
 import org.apache.commons.lang3.tuple.Pair;
 import xfacthd.framedblocks.api.util.Utils;
 
 public final class CommonConfig
 {
-    public static final ForgeConfigSpec SPEC;
+    public static final ModConfigSpec SPEC;
     public static final CommonConfig INSTANCE;
 
     private static final String KEY_FIREPROOF_BLOCKS = "fireproofBlocks";
@@ -19,16 +19,16 @@ public final class CommonConfig
 
     public static boolean fireproofBlocks = false;
 
-    private final ForgeConfigSpec.BooleanValue fireproofBlocksValue;
+    private final ModConfigSpec.BooleanValue fireproofBlocksValue;
 
     static
     {
-        final Pair<CommonConfig, ForgeConfigSpec> configSpecPair = new ForgeConfigSpec.Builder().configure(CommonConfig::new);
+        final Pair<CommonConfig, ModConfigSpec> configSpecPair = new ModConfigSpec.Builder().configure(CommonConfig::new);
         SPEC = configSpecPair.getRight();
         INSTANCE = configSpecPair.getLeft();
     }
 
-    public CommonConfig(ForgeConfigSpec.Builder builder)
+    public CommonConfig(ModConfigSpec.Builder builder)
     {
         FMLJavaModLoadingContext.get().getModEventBus().register(this);
 

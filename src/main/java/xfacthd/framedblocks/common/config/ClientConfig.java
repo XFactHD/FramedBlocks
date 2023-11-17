@@ -1,10 +1,10 @@
 package xfacthd.framedblocks.common.config;
 
-import net.minecraftforge.common.ForgeConfigSpec;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.config.ModConfig;
-import net.minecraftforge.fml.event.config.ModConfigEvent;
-import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
+import net.neoforged.neoforge.common.ModConfigSpec;
+import net.neoforged.bus.api.SubscribeEvent;
+import net.neoforged.fml.config.ModConfig;
+import net.neoforged.fml.event.config.ModConfigEvent;
+import net.neoforged.fml.javafmlmod.FMLJavaModLoadingContext;
 import org.apache.commons.lang3.tuple.Pair;
 import xfacthd.framedblocks.api.predicate.contex.ConTexMode;
 import xfacthd.framedblocks.api.util.Utils;
@@ -12,7 +12,7 @@ import xfacthd.framedblocks.client.screen.overlay.BlockInteractOverlay;
 
 public final class ClientConfig
 {
-    public static final ForgeConfigSpec SPEC;
+    public static final ModConfigSpec SPEC;
     public static final ClientConfig INSTANCE;
 
     private static final String KEY_SHOW_GHOST_BLOCKS = "showGhostBlocks";
@@ -70,32 +70,32 @@ public final class ClientConfig
     public static BlockInteractOverlay.Mode frameBackgroundMode;
     public static BlockInteractOverlay.Mode camoRotationMode;
 
-    private final ForgeConfigSpec.BooleanValue showGhostBlocksValue;
-    private final ForgeConfigSpec.BooleanValue altGhostRendererValue;
-    private final ForgeConfigSpec.BooleanValue fancyHitboxesValue;
-    private final ForgeConfigSpec.BooleanValue detailedCullingValue;
-    private final ForgeConfigSpec.BooleanValue useDiscreteUVStepsValue;
-    private final ForgeConfigSpec.EnumValue<ConTexMode> conTexModeValue;
-    private final ForgeConfigSpec.BooleanValue showAllRecipePermutationsInEmiValue;
+    private final ModConfigSpec.BooleanValue showGhostBlocksValue;
+    private final ModConfigSpec.BooleanValue altGhostRendererValue;
+    private final ModConfigSpec.BooleanValue fancyHitboxesValue;
+    private final ModConfigSpec.BooleanValue detailedCullingValue;
+    private final ModConfigSpec.BooleanValue useDiscreteUVStepsValue;
+    private final ModConfigSpec.EnumValue<ConTexMode> conTexModeValue;
+    private final ModConfigSpec.BooleanValue showAllRecipePermutationsInEmiValue;
 
-    private final ForgeConfigSpec.EnumValue<BlockInteractOverlay.Mode> stateLockModeValue;
-    private final ForgeConfigSpec.EnumValue<BlockInteractOverlay.Mode> toggleWaterlogModeValue;
-    private final ForgeConfigSpec.EnumValue<BlockInteractOverlay.Mode> toggleYSlopeModeValue;
-    private final ForgeConfigSpec.EnumValue<BlockInteractOverlay.Mode> reinforcementModeValue;
-    private final ForgeConfigSpec.EnumValue<BlockInteractOverlay.Mode> prismOffsetModeValue;
-    private final ForgeConfigSpec.EnumValue<BlockInteractOverlay.Mode> splitLineModeValue;
-    private final ForgeConfigSpec.EnumValue<BlockInteractOverlay.Mode> oneWayWindowModeValue;
-    private final ForgeConfigSpec.EnumValue<BlockInteractOverlay.Mode> frameBackgroundModeValue;
-    private final ForgeConfigSpec.EnumValue<BlockInteractOverlay.Mode> camoRotationModeValue;
+    private final ModConfigSpec.EnumValue<BlockInteractOverlay.Mode> stateLockModeValue;
+    private final ModConfigSpec.EnumValue<BlockInteractOverlay.Mode> toggleWaterlogModeValue;
+    private final ModConfigSpec.EnumValue<BlockInteractOverlay.Mode> toggleYSlopeModeValue;
+    private final ModConfigSpec.EnumValue<BlockInteractOverlay.Mode> reinforcementModeValue;
+    private final ModConfigSpec.EnumValue<BlockInteractOverlay.Mode> prismOffsetModeValue;
+    private final ModConfigSpec.EnumValue<BlockInteractOverlay.Mode> splitLineModeValue;
+    private final ModConfigSpec.EnumValue<BlockInteractOverlay.Mode> oneWayWindowModeValue;
+    private final ModConfigSpec.EnumValue<BlockInteractOverlay.Mode> frameBackgroundModeValue;
+    private final ModConfigSpec.EnumValue<BlockInteractOverlay.Mode> camoRotationModeValue;
 
     static
     {
-        final Pair<ClientConfig, ForgeConfigSpec> configSpecPair = new ForgeConfigSpec.Builder().configure(ClientConfig::new);
+        final Pair<ClientConfig, ModConfigSpec> configSpecPair = new ModConfigSpec.Builder().configure(ClientConfig::new);
         SPEC = configSpecPair.getRight();
         INSTANCE = configSpecPair.getLeft();
     }
 
-    public ClientConfig(ForgeConfigSpec.Builder builder)
+    public ClientConfig(ModConfigSpec.Builder builder)
     {
         FMLJavaModLoadingContext.get().getModEventBus().register(this);
 

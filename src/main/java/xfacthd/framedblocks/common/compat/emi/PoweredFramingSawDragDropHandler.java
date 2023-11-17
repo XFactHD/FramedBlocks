@@ -1,5 +1,5 @@
 package xfacthd.framedblocks.common.compat.emi;
-
+/*
 import dev.emi.emi.api.EmiDragDropHandler;
 import dev.emi.emi.api.stack.EmiIngredient;
 import dev.emi.emi.api.stack.EmiStack;
@@ -48,4 +48,4 @@ public final class PoweredFramingSawDragDropHandler implements EmiDragDropHandle
         }
         return false;
     }
-}
+}*/

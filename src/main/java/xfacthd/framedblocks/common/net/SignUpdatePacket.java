@@ -5,13 +5,12 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.level.Level;
-import net.minecraftforge.network.NetworkEvent;
+import net.neoforged.neoforge.network.NetworkEvent;
 import xfacthd.framedblocks.FramedBlocks;
 import xfacthd.framedblocks.common.blockentity.special.FramedSignBlockEntity;
 
 import java.util.List;
 import java.util.Objects;
-import java.util.function.Supplier;
 import java.util.stream.Stream;
 
 public record SignUpdatePacket(BlockPos pos, boolean front, String[] lines)
@@ -43,11 +42,11 @@ public record SignUpdatePacket(BlockPos pos, boolean front, String[] lines)
         }
     }
 
-    public boolean handle(Supplier<NetworkEvent.Context> ctx)
+    public boolean handle(NetworkEvent.Context ctx)
     {
-        ServerPlayer player = Objects.requireNonNull(ctx.get().getSender());
+        ServerPlayer player = Objects.requireNonNull(ctx.getSender());
         List<String> strippedLines = Stream.of(lines).map(ChatFormatting::stripFormatting).toList();
-        player.connection.filterTextPacket(strippedLines).thenAccept(filteredText -> ctx.get().enqueueWork(() ->
+        player.connection.filterTextPacket(strippedLines).thenAccept(filteredText -> ctx.enqueueWork(() ->
         {
             Level level = player.level();
 

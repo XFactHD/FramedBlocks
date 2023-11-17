@@ -8,7 +8,7 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.*;
-import net.minecraftforge.registries.ForgeRegistries;
+import net.neoforged.neoforge.registries.ForgeRegistries;
 import xfacthd.framedblocks.api.block.FramedProperties;
 import xfacthd.framedblocks.api.model.wrapping.WrapHelper;
 import xfacthd.framedblocks.cmdtests.SpecialTestCommand;

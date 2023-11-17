@@ -1,5 +1,5 @@
 package xfacthd.framedblocks.common.compat.jei;
-
+/*
 import com.google.common.collect.Lists;
 import mezz.jei.api.gui.builder.IRecipeLayoutBuilder;
 import mezz.jei.api.gui.builder.IRecipeSlotBuilder;
@@ -203,4 +203,4 @@ public final class FramingSawRecipeCategory implements IRecipeCategory<FramingSa
 
         return List.of();
     }
-}
+}*/

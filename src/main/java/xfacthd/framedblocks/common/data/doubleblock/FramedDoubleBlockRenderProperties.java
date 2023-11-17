@@ -8,6 +8,7 @@ import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.HitResult;
 import xfacthd.framedblocks.api.block.render.FramedBlockRenderProperties;
 import xfacthd.framedblocks.api.block.render.ParticleHelper;
+import xfacthd.framedblocks.common.FBContent;
 import xfacthd.framedblocks.common.blockentity.FramedDoubleBlockEntity;
 
 public final class FramedDoubleBlockRenderProperties extends FramedBlockRenderProperties
@@ -41,5 +42,32 @@ public final class FramedDoubleBlockRenderProperties extends FramedBlockRenderPr
             return true;
         }
         return suppressed;
+    }
+
+    @Override
+    public boolean playBreakSound(BlockState state, Level level, BlockPos pos)
+    {
+        if (level.getBlockEntity(pos) instanceof FramedDoubleBlockEntity be)
+        {
+            BlockState stateOne = be.getCamo().getState();
+            if (stateOne.isAir())
+            {
+                stateOne = FBContent.BLOCK_FRAMED_CUBE.get().defaultBlockState();
+            }
+            playCamoBreakSound(level, pos, stateOne);
+
+            BlockState stateTwo = be.getCamoTwo().getState();
+            if (stateTwo.isAir())
+            {
+                stateTwo = FBContent.BLOCK_FRAMED_CUBE.get().defaultBlockState();
+            }
+            if (stateTwo.getSoundType() != stateOne.getSoundType())
+            {
+                playCamoBreakSound(level, pos, stateTwo);
+            }
+
+            return true;
+        }
+        return false;
     }
 }

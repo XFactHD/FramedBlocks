@@ -1,6 +1,6 @@
 package xfacthd.framedblocks.common.compat.buildinggadgets;
 
-import com.direwolf20.buildinggadgets.common.tainted.building.tilesupport.ITileDataSerializer;
+/*import com.direwolf20.buildinggadgets.common.tainted.building.tilesupport.ITileDataSerializer;
 import com.direwolf20.buildinggadgets.common.tainted.building.tilesupport.ITileEntityData;
 import com.direwolf20.buildinggadgets.common.tainted.inventory.materials.MaterialList;
 import com.google.common.base.Preconditions;
@@ -44,4 +44,4 @@ final class FramedBlockEntityDataSerializer implements ITileDataSerializer
 
         return new FramedBlockEntityData(data, materialList);
     }
-}
+}*/

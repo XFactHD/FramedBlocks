@@ -1,5 +1,5 @@
 package xfacthd.framedblocks.common.compat.jei;
-
+/*
 import mezz.jei.api.constants.VanillaTypes;
 import mezz.jei.api.gui.handlers.IGuiClickableArea;
 import mezz.jei.api.gui.handlers.IGuiContainerHandler;
@@ -53,4 +53,4 @@ public final class PoweredFramingSawGuiContainerHandler implements IGuiContainer
             optIng.ifPresent(ing -> recipesGui.show(focusFactory.createFocus(RecipeIngredientRole.CATALYST, ing)));
         }
     }
-}
+}*/

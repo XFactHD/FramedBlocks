@@ -10,24 +10,23 @@ import net.minecraft.client.renderer.texture.atlas.*;
 import net.minecraft.client.renderer.texture.atlas.sources.LazyLoadedImage;
 import net.minecraft.client.resources.metadata.animation.*;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.server.packs.resources.Resource;
-import net.minecraft.server.packs.resources.ResourceManager;
+import net.minecraft.server.packs.resources.*;
 import net.minecraft.util.ExtraCodecs;
-import net.minecraftforge.fml.ModList;
+import net.neoforged.fml.ModList;
 import xfacthd.framedblocks.FramedBlocks;
 import xfacthd.framedblocks.api.util.FramedConstants;
 
 import java.util.List;
 import java.util.Optional;
 
-public sealed class AnimationSplitterSource implements SpriteSource permits AnimationSplitterSourceAV
+public/* sealed */class AnimationSplitterSource implements SpriteSource// permits AnimationSplitterSourceAV
 {
     private static final boolean AV_LOADED = ModList.get().isLoaded("atlasviewer");
     private static SpriteSourceType TYPE = null;
     private static final Codec<AnimationSplitterSource> CODEC = RecordCodecBuilder.create(inst -> inst.group(
             ResourceLocation.CODEC.fieldOf("resource").forGetter(s -> s.resource),
             ExtraCodecs.nonEmptyList(Frame.CODEC.listOf()).fieldOf("frames").forGetter(s -> s.frames)
-    ).apply(inst, AV_LOADED ? AnimationSplitterSourceAV::new : AnimationSplitterSource::new));
+    ).apply(inst, /*AV_LOADED ? AnimationSplitterSourceAV::new : */AnimationSplitterSource::new));
 
     private final ResourceLocation resource;
     private final List<Frame> frames;
@@ -77,7 +76,7 @@ public sealed class AnimationSplitterSource implements SpriteSource permits Anim
         ).apply(inst, Frame::new));
     }
 
-    static sealed class FrameInstance implements SpriteSupplier permits AnimationSplitterSourceAV.FrameInstanceAV
+    static /*sealed*/ class FrameInstance implements SpriteSupplier// permits AnimationSplitterSourceAV.FrameInstanceAV
     {
         final Resource resource;
         private final ResourceLocation texPath;
@@ -93,7 +92,7 @@ public sealed class AnimationSplitterSource implements SpriteSource permits Anim
         }
 
         @Override
-        public SpriteContents get()
+        public SpriteContents apply(SpriteResourceLoader loader)
         {
             try
             {
@@ -119,7 +118,8 @@ public sealed class AnimationSplitterSource implements SpriteSource permits Anim
 
                 NativeImage imageOut = new NativeImage(NativeImage.Format.RGBA, frameW, frameH, false);
                 image.copyRect(imageOut, srcX, srcY, 0, 0, frameW, frameH, false, false);
-                return postProcess(new SpriteContents(frame.outLoc, new FrameSize(frameW, frameH), imageOut, AnimationMetadataSection.EMPTY, null));
+                // TODO: find a way to copy over all resource meta entries, except animation
+                return postProcess(new SpriteContents(frame.outLoc, new FrameSize(frameW, frameH), imageOut, ResourceMetadata.EMPTY));
             }
             catch (Exception e)
             {

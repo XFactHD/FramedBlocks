@@ -7,19 +7,20 @@ license="LGPL v3"
 modId="framedblocks"
 version="${mod_version}"
 displayName="FramedBlocks"
-#updateJSONURL="http://myurl.me/"
 displayURL="https://www.curseforge.com/minecraft/mc-mods/framedblocks"
 logoFile="logo.png"
 logoBlur=false
-#credits="Thanks for this example mod goes to Java"
 authors="XFactHD"
 description='''
 '''
 
+[[mixins]]
+    config="framedblocks.mixin.json"
+
 [[dependencies.framedblocks]]
-    modId="forge"
+    modId="neoforge"
     mandatory=true
-    versionRange="${forge_version_range}"
+    versionRange="${neoforge_version_range}"
     ordering="NONE"
     side="BOTH"
 
@@ -92,3 +93,13 @@ description='''
     versionRange="[5.1.1,)"
     ordering="NONE"
     side="CLIENT"
+
+[[dependencies.framedblocks]]
+    modId="modernfix"
+    mandatory=false
+    versionRange="[5.7.5,)"
+    ordering="NONE"
+    side="CLIENT"
+
+[mods."modernfix:integration"]
+    client_entrypoint="xfacthd.framedblocks.common.compat.modernfix.FramedModernFixClientIntegration"

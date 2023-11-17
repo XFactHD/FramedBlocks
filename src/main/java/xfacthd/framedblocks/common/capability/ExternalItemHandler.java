@@ -1,7 +1,7 @@
 package xfacthd.framedblocks.common.capability;
 
 import net.minecraft.world.item.ItemStack;
-import net.minecraftforge.items.IItemHandler;
+import net.neoforged.neoforge.items.IItemHandler;
 import org.jetbrains.annotations.NotNull;
 
 public abstract class ExternalItemHandler implements IItemHandler

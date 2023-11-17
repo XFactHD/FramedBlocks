@@ -1,5 +1,5 @@
 package xfacthd.framedblocks.common.compat.emi;
-
+/*
 import dev.emi.emi.api.recipe.BasicEmiRecipe;
 import dev.emi.emi.api.render.EmiTexture;
 import dev.emi.emi.api.stack.EmiIngredient;
@@ -108,4 +108,4 @@ public final class FramingSawEmiRecipe extends BasicEmiRecipe
         ResourceLocation id = showOnRecipeRequest ? recipe.getId() : null;
         return new FramingSawEmiRecipe(recipe, id, input, additives, output);
     }
-}
+}*/

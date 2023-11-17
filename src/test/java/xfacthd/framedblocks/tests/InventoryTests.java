@@ -1,6 +1,6 @@
 package xfacthd.framedblocks.tests;
 
-import net.minecraftforge.gametest.GameTestHolder;
+import net.neoforged.neoforge.gametest.GameTestHolder;
 import xfacthd.framedblocks.api.util.FramedConstants;
 
 @GameTestHolder(FramedConstants.MOD_ID)

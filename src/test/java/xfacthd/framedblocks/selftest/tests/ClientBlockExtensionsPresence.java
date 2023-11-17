@@ -1,7 +1,7 @@
 package xfacthd.framedblocks.selftest.tests;
 
 import net.minecraft.world.level.block.Block;
-import net.minecraftforge.client.extensions.common.IClientBlockExtensions;
+import net.neoforged.neoforge.client.extensions.common.IClientBlockExtensions;
 import xfacthd.framedblocks.FramedBlocks;
 import xfacthd.framedblocks.api.block.render.FramedBlockRenderProperties;
 

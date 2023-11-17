@@ -6,7 +6,7 @@ import net.minecraft.core.Direction;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
-import net.minecraftforge.client.gui.overlay.ForgeGui;
+import net.neoforged.neoforge.client.gui.overlay.ExtendedGui;
 import xfacthd.framedblocks.api.util.Utils;
 import xfacthd.framedblocks.common.config.ClientConfig;
 import xfacthd.framedblocks.common.FBContent;
@@ -81,7 +81,7 @@ public final class OneWayWindowOverlay extends BlockInteractOverlay
     }
 
     @Override
-    protected void renderAfterIcon(ForgeGui gui, GuiGraphics graphics, Texture tex, int texX, int texY, Target target)
+    protected void renderAfterIcon(ExtendedGui gui, GuiGraphics graphics, Texture tex, int texX, int texY, Target target)
     {
         NullableDirection face = target.state().getValue(PropertyHolder.NULLABLE_FACE);
 

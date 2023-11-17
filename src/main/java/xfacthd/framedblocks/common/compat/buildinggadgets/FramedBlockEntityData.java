@@ -1,5 +1,5 @@
 package xfacthd.framedblocks.common.compat.buildinggadgets;
-
+/*
 import com.direwolf20.buildinggadgets.common.BuildingGadgets;
 import com.direwolf20.buildinggadgets.common.tainted.building.tilesupport.ITileDataSerializer;
 import com.direwolf20.buildinggadgets.common.tainted.building.tilesupport.NBTTileEntityData;
@@ -133,4 +133,4 @@ final class FramedBlockEntityData extends NBTTileEntityData
 
         return builder.build();
     }
-}
+}*/

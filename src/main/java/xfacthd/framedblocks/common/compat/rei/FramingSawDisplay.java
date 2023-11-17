@@ -1,5 +1,5 @@
 package xfacthd.framedblocks.common.compat.rei;
-
+/*
 import me.shedaniel.rei.api.common.category.CategoryIdentifier;
 import me.shedaniel.rei.api.common.display.Display;
 import me.shedaniel.rei.api.common.entry.EntryIngredient;
@@ -65,4 +65,4 @@ public final class FramingSawDisplay implements Display
     {
         return inputWithAdditives;
     }
-}
+}*/

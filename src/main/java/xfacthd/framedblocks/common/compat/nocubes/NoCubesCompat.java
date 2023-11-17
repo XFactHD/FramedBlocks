@@ -1,8 +1,8 @@
 package xfacthd.framedblocks.common.compat.nocubes;
 
-import io.github.cadiboo.nocubes.NoCubes;
+//import io.github.cadiboo.nocubes.NoCubes;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraftforge.fml.ModList;
+import net.neoforged.fml.ModList;
 
 public final class NoCubesCompat
 {
@@ -17,17 +17,17 @@ public final class NoCubesCompat
     {
         if (noCubesLoaded)
         {
-            return GuardedAccess.mayCull(state);
+            //return GuardedAccess.mayCull(state);
         }
         return true;
     }
 
     private static final class GuardedAccess
     {
-        public static boolean mayCull(BlockState state)
-        {
-            return !NoCubes.isSmoothable(state);
-        }
+        //public static boolean mayCull(BlockState state)
+        //{
+        //    return !NoCubes.isSmoothable(state);
+        //}
     }
 
 

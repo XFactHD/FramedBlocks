@@ -9,8 +9,8 @@ import net.minecraft.core.Direction;
 import net.minecraft.util.Mth;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraftforge.client.ChunkRenderTypeSet;
-import net.minecraftforge.client.model.data.ModelData;
+import net.neoforged.neoforge.client.ChunkRenderTypeSet;
+import net.neoforged.neoforge.client.model.data.ModelData;
 import org.joml.Vector3f;
 import xfacthd.framedblocks.api.model.data.FramedBlockData;
 import xfacthd.framedblocks.api.model.quad.QuadData;
@@ -25,7 +25,7 @@ public final class ModelUtils
     public static final ChunkRenderTypeSet SOLID = ChunkRenderTypeSet.of(RenderType.solid());
     public static final ChunkRenderTypeSet CUTOUT = ChunkRenderTypeSet.of(RenderType.cutout());
     public static final ChunkRenderTypeSet TRANSLUCENT = ChunkRenderTypeSet.of(RenderType.translucent());
-    private static final double UV_SUBSTEP_COUNT = 8D;
+    private static final float UV_SUBSTEP_COUNT = 8F;
 
     public static Direction fillNormal(QuadData data)
     {
@@ -133,13 +133,13 @@ public final class ModelUtils
         {
             if (ConfigView.Client.INSTANCE.useDiscreteUVSteps())
             {
-                double relMin = uvIdx == 0 ? sprite.getUOffset(uvMin) : sprite.getVOffset(uvMin);
-                double relMax = uvIdx == 0 ? sprite.getUOffset(uvMax) : sprite.getVOffset(uvMax);
+                float relMin = uvIdx == 0 ? sprite.getUOffset(uvMin) : sprite.getVOffset(uvMin);
+                float relMax = uvIdx == 0 ? sprite.getUOffset(uvMax) : sprite.getVOffset(uvMax);
 
-                double mult = (coordTo - coordMin) / (coordMax - coordMin);
-                if (invert) { mult = 1D - mult; }
+                float mult = (coordTo - coordMin) / (coordMax - coordMin);
+                if (invert) { mult = 1F - mult; }
 
-                double relTo = Mth.lerp(mult, relMin, relMax);
+                float relTo = Mth.lerp(mult, relMin, relMax);
                 relTo = Math.round(relTo * UV_SUBSTEP_COUNT) / UV_SUBSTEP_COUNT;
                 data.uv(uvTo, uvIdx, uvIdx == 0 ? sprite.getU(relTo) : sprite.getV(relTo));
             }

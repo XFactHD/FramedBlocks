@@ -11,7 +11,7 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.Vec3;
-import net.minecraftforge.client.event.RenderHighlightEvent;
+import net.neoforged.neoforge.client.event.RenderHighlightEvent;
 import org.joml.Matrix3f;
 import org.joml.Matrix4f;
 import xfacthd.framedblocks.api.render.OutlineRenderer;

@@ -3,7 +3,7 @@ package xfacthd.framedblocks.client.modelwrapping;
 import net.minecraft.client.resources.model.BakedModel;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraftforge.registries.RegistryObject;
+import net.neoforged.neoforge.registries.RegistryObject;
 import org.jetbrains.annotations.Nullable;
 import xfacthd.framedblocks.api.model.wrapping.*;
 

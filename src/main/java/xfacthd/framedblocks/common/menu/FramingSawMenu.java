@@ -6,6 +6,7 @@ import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.*;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.crafting.RecipeHolder;
 import net.minecraft.world.level.Level;
 import org.jetbrains.annotations.NotNull;
 import xfacthd.framedblocks.common.FBContent;
@@ -33,7 +34,7 @@ public class FramingSawMenu extends AbstractContainerMenu implements IFramingSaw
     private final ResultContainer resultContainer = new ResultContainer();
     private final DataSlot selectedRecipeIdx = DataSlot.standalone();
     private final FramingSawRecipeCache cache;
-    private final List<RecipeHolder> recipes;
+    private final List<FramedRecipeHolder> recipes;
     private final ItemStack[] lastAdditives;
     private ItemStack lastInput = ItemStack.EMPTY;
     private FramingSawRecipe selectedRecipe = null;
@@ -64,7 +65,7 @@ public class FramingSawMenu extends AbstractContainerMenu implements IFramingSaw
         this.cache = FramingSawRecipeCache.get(level.isClientSide());
         this.recipes = cache.getRecipes()
                 .stream()
-                .map(RecipeHolder::new)
+                .map(FramedRecipeHolder::new)
                 .toList();
     }
 
@@ -133,7 +134,7 @@ public class FramingSawMenu extends AbstractContainerMenu implements IFramingSaw
         if (isValidRecipeIndex(id))
         {
             selectedRecipeIdx.set(id);
-            selectedRecipe = recipes.get(id).recipe;
+            selectedRecipe = recipes.get(id).getRecipe();
             setupResultSlot();
             recipeChanged = true;
         }
@@ -164,9 +165,9 @@ public class FramingSawMenu extends AbstractContainerMenu implements IFramingSaw
 
         if (changed)
         {
-            for (RecipeHolder holder : recipes)
+            for (FramedRecipeHolder holder : recipes)
             {
-                holder.matchResult = holder.recipe.matchWithResult(inputContainer, level);
+                holder.matchResult = holder.getRecipe().matchWithResult(inputContainer, level);
             }
             setupResultSlot();
         }
@@ -176,17 +177,17 @@ public class FramingSawMenu extends AbstractContainerMenu implements IFramingSaw
     {
         if (isValidRecipeIndex(selectedRecipeIdx.get()))
         {
-            RecipeHolder holder = recipes.get(selectedRecipeIdx.get());
+            FramedRecipeHolder holder = recipes.get(selectedRecipeIdx.get());
             if (holder.matchResult.success())
             {
-                FramingSawRecipe recipe = holder.recipe;
+                FramingSawRecipe recipe = holder.getRecipe();
                 FramingSawRecipeCalculation calc = recipe.makeCraftingCalculation(
                         inputContainer, level.isClientSide()
                 );
 
                 ItemStack result = recipe.assemble(inputContainer, level.registryAccess());
                 result.setCount(calc.getOutputCount());
-                resultContainer.setRecipeUsed(recipe);
+                resultContainer.setRecipeUsed(holder.vanillaHolder);
                 resultSlot.set(result);
                 selectedRecipe = recipe;
 
@@ -238,7 +239,7 @@ public class FramingSawMenu extends AbstractContainerMenu implements IFramingSaw
         return additiveSlots[slot].getItem();
     }
 
-    public List<RecipeHolder> getRecipes()
+    public List<FramedRecipeHolder> getRecipes()
     {
         return recipes;
     }
@@ -323,19 +324,19 @@ public class FramingSawMenu extends AbstractContainerMenu implements IFramingSaw
         }
     }
 
-    public static class RecipeHolder
+    public static final class FramedRecipeHolder
     {
-        private final FramingSawRecipe recipe;
+        private final RecipeHolder<FramingSawRecipe> vanillaHolder;
         private FramingSawRecipeMatchResult matchResult = FramingSawRecipeMatchResult.MATERIAL_VALUE;
 
-        private RecipeHolder(FramingSawRecipe recipe)
+        private FramedRecipeHolder(RecipeHolder<FramingSawRecipe> holder)
         {
-            this.recipe = recipe;
+            this.vanillaHolder = holder;
         }
 
         public FramingSawRecipe getRecipe()
         {
-            return recipe;
+            return vanillaHolder.value();
         }
 
         public FramingSawRecipeMatchResult getMatchResult()

@@ -1,8 +1,8 @@
 package xfacthd.framedblocks.client.model.cube;
 
 import net.minecraft.client.renderer.block.model.BakedQuad;
-import net.minecraftforge.client.model.IQuadTransformer;
-import net.minecraftforge.client.model.QuadTransformers;
+import net.neoforged.neoforge.client.model.IQuadTransformer;
+import net.neoforged.neoforge.client.model.QuadTransformers;
 import xfacthd.framedblocks.api.model.wrapping.GeometryFactory;
 
 import java.util.*;

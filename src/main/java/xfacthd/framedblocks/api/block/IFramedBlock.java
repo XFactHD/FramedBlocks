@@ -7,8 +7,6 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.server.level.ServerLevel;
-import net.minecraft.sounds.SoundEvent;
-import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.Entity;
@@ -27,12 +25,11 @@ import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.Vec3;
 import net.minecraft.world.phys.shapes.*;
-import net.minecraftforge.common.IPlantable;
-import net.minecraftforge.common.Tags;
-import net.minecraftforge.common.extensions.IForgeBlock;
+import net.neoforged.neoforge.common.IPlantable;
+import net.neoforged.neoforge.common.Tags;
+import net.neoforged.neoforge.common.extensions.IBlockExtension;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.Nullable;
-import xfacthd.framedblocks.api.FramedBlocksAPI;
 import xfacthd.framedblocks.api.block.cache.IStateCacheAccessor;
 import xfacthd.framedblocks.api.block.cache.StateCache;
 import xfacthd.framedblocks.api.block.render.*;
@@ -47,7 +44,7 @@ import java.util.Optional;
 import java.util.function.Supplier;
 
 @SuppressWarnings({ "deprecation", "unused" })
-public interface IFramedBlock extends EntityBlock, IForgeBlock
+public interface IFramedBlock extends EntityBlock, IBlockExtension
 {
     String LOCK_MESSAGE = Utils.translationKey("msg", "lock_state");
     Component STATE_LOCKED = Utils.translate("msg", "lock_state.locked").withStyle(ChatFormatting.RED);
@@ -179,28 +176,6 @@ public interface IFramedBlock extends EntityBlock, IForgeBlock
             return be.getLightValue();
         }
         return 0;
-    }
-
-    default boolean playBreakSound(BlockState state, Level level, BlockPos pos)
-    {
-        if (level.getBlockEntity(pos) instanceof FramedBlockEntity be)
-        {
-            BlockState camoState = be.getCamo().getState();
-            if (camoState.isAir())
-            {
-                camoState = state;
-            }
-            playCamoBreakSound(level, pos, camoState);
-            return true;
-        }
-        return false;
-    }
-
-    static void playCamoBreakSound(Level level, BlockPos pos, BlockState camoState)
-    {
-        SoundType type = camoState.getSoundType();
-        SoundEvent sound = type.getBreakSound();
-        level.playLocalSound(pos, sound, SoundSource.BLOCKS, (type.getVolume() + 1F) / 2F, type.getPitch() * 0.8F, false);
     }
 
     @Override
@@ -616,7 +591,7 @@ public interface IFramedBlock extends EntityBlock, IForgeBlock
                 return false;
             }
         }
-        return IForgeBlock.super.canEntityDestroy(state, level, pos, entity);
+        return IBlockExtension.super.canEntityDestroy(state, level, pos, entity);
     }
 
     @Override

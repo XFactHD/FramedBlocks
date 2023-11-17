@@ -20,14 +20,14 @@ import net.minecraft.world.level.material.*;
 import net.minecraft.world.level.storage.loot.LootParams;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.shapes.*;
-import net.minecraftforge.client.extensions.common.IClientBlockExtensions;
-import net.minecraftforge.common.IPlantable;
+import net.neoforged.neoforge.client.extensions.common.IClientBlockExtensions;
+import net.neoforged.neoforge.common.IPlantable;
+import org.jetbrains.annotations.Nullable;
 import xfacthd.framedblocks.api.block.render.FramedBlockRenderProperties;
 import xfacthd.framedblocks.api.shapes.ShapeProvider;
 import xfacthd.framedblocks.api.shapes.ShapeUtils;
 import xfacthd.framedblocks.api.type.IBlockType;
 
-import javax.annotation.Nullable;
 import java.util.List;
 import java.util.function.Consumer;
 
@@ -161,9 +161,9 @@ public abstract class AbstractFramedBlock extends Block implements IFramedBlock,
     }
 
     @Override
-    public boolean canPlaceLiquid(BlockGetter level, BlockPos pos, BlockState state, Fluid fluid)
+    public boolean canPlaceLiquid(@Nullable Player player, BlockGetter level, BlockPos pos, BlockState state, Fluid fluid)
     {
-        return isWaterLoggable() && SimpleWaterloggedBlock.super.canPlaceLiquid(level, pos, state, fluid);
+        return isWaterLoggable() && SimpleWaterloggedBlock.super.canPlaceLiquid(player, level, pos, state, fluid);
     }
 
     @Override
@@ -173,13 +173,13 @@ public abstract class AbstractFramedBlock extends Block implements IFramedBlock,
     }
 
     @Override
-    public ItemStack pickupBlock(LevelAccessor level, BlockPos pos, BlockState state)
+    public ItemStack pickupBlock(@Nullable Player player, LevelAccessor level, BlockPos pos, BlockState state)
     {
         if (!isWaterLoggable())
         {
             return ItemStack.EMPTY;
         }
-        return SimpleWaterloggedBlock.super.pickupBlock(level, pos, state);
+        return SimpleWaterloggedBlock.super.pickupBlock(player, level, pos, state);
     }
 
     @Override

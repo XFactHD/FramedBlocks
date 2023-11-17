@@ -2,7 +2,7 @@ package xfacthd.framedblocks.common.util;
 
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
-import net.minecraftforge.registries.RegistryObject;
+import net.neoforged.neoforge.registries.RegistryObject;
 
 import java.util.function.Supplier;
 

@@ -21,8 +21,8 @@ import net.minecraft.util.FastColor;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.block.entity.SignText;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraftforge.client.RenderTypeHelper;
-import net.minecraftforge.client.model.data.ModelData;
+import net.neoforged.neoforge.client.RenderTypeHelper;
+import net.neoforged.neoforge.client.model.data.ModelData;
 import org.joml.Matrix4f;
 import org.lwjgl.glfw.GLFW;
 import xfacthd.framedblocks.FramedBlocks;
@@ -147,11 +147,12 @@ public class FramedSignScreen extends Screen
     }
 
     @Override
-    public void render(GuiGraphics graphics, int mouseX, int mouseY, float partialTicks)
+    public void renderBackground(GuiGraphics graphics, int mouseX, int mouseY, float partialTicks)
     {
+        super.renderBackground(graphics, mouseX, mouseY, partialTicks);
+
         Lighting.setupForEntityInInventory();
 
-        renderBackground(graphics);
         //noinspection ConstantConditions
         graphics.drawCenteredString(font, title, width / 2, 40, ChatFormatting.WHITE.getColor());
 

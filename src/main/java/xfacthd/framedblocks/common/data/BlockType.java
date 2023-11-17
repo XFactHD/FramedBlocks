@@ -5,7 +5,7 @@ import com.google.common.collect.ImmutableList;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.shapes.*;
-import net.minecraftforge.fml.loading.FMLEnvironment;
+import net.neoforged.fml.loading.FMLEnvironment;
 import org.jetbrains.annotations.Nullable;
 import xfacthd.framedblocks.api.predicate.contex.ConTexMode;
 import xfacthd.framedblocks.api.predicate.contex.ConnectionPredicate;

@@ -1,5 +1,5 @@
 package xfacthd.framedblocks.common.compat.rei;
-
+/*
 import me.shedaniel.math.Rectangle;
 import me.shedaniel.rei.api.client.plugins.REIClientPlugin;
 import me.shedaniel.rei.api.client.registry.category.CategoryRegistry;
@@ -52,4 +52,4 @@ public final class FramedReiPlugin implements REIClientPlugin
                 FramingSawRecipeCategory.SAW_CATEGORY
         );
     }
-}
+}*/

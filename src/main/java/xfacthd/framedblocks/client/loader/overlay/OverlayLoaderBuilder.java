@@ -3,9 +3,9 @@ package xfacthd.framedblocks.client.loader.overlay;
 import com.google.common.base.Preconditions;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
-import net.minecraftforge.client.model.generators.BlockModelBuilder;
-import net.minecraftforge.client.model.generators.CustomLoaderBuilder;
-import net.minecraftforge.common.data.ExistingFileHelper;
+import net.neoforged.neoforge.client.model.generators.BlockModelBuilder;
+import net.neoforged.neoforge.client.model.generators.CustomLoaderBuilder;
+import net.neoforged.neoforge.common.data.ExistingFileHelper;
 import org.joml.Vector3f;
 
 public final class OverlayLoaderBuilder extends CustomLoaderBuilder<BlockModelBuilder>

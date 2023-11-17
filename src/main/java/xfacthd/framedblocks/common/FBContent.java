@@ -8,11 +8,11 @@ import net.minecraft.world.item.crafting.*;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
-import net.minecraftforge.common.extensions.IForgeMenuType;
-import net.minecraftforge.eventbus.api.IEventBus;
-import net.minecraftforge.fml.loading.FMLEnvironment;
-import net.minecraftforge.network.IContainerFactory;
-import net.minecraftforge.registries.*;
+import net.neoforged.bus.api.IEventBus;
+import net.neoforged.fml.loading.FMLEnvironment;
+import net.neoforged.neoforge.common.extensions.IMenuTypeExtension;
+import net.neoforged.neoforge.network.IContainerFactory;
+import net.neoforged.neoforge.registries.*;
 import xfacthd.framedblocks.api.block.FramedBlockEntity;
 import xfacthd.framedblocks.api.block.IFramedBlock;
 import xfacthd.framedblocks.api.camo.*;
@@ -683,7 +683,7 @@ public final class FBContent
 
     private static <T extends AbstractContainerMenu> RegistryObject<MenuType<T>> createMenuType(IContainerFactory<T> factory, String name)
     {
-        return CONTAINER_TYPES.register(name, () -> IForgeMenuType.create(factory));
+        return CONTAINER_TYPES.register(name, () -> IMenuTypeExtension.create(factory));
     }
 
     @SuppressWarnings("SameParameterValue")

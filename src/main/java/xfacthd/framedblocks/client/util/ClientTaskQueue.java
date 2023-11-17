@@ -3,7 +3,7 @@ package xfacthd.framedblocks.client.util;
 import net.minecraft.client.Minecraft;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.level.Level;
-import net.minecraftforge.event.TickEvent;
+import net.neoforged.neoforge.event.TickEvent;
 import org.jetbrains.annotations.ApiStatus;
 
 import java.util.*;

@@ -8,17 +8,20 @@ import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.*;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.crafting.RecipeHolder;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
-import net.minecraftforge.items.*;
-import net.minecraftforge.items.wrapper.RecipeWrapper;
+import net.neoforged.neoforge.items.*;
+import net.neoforged.neoforge.items.wrapper.RecipeWrapper;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import xfacthd.framedblocks.common.FBContent;
 import xfacthd.framedblocks.common.blockentity.special.PoweredFramingSawBlockEntity;
 import xfacthd.framedblocks.common.crafting.*;
 import xfacthd.framedblocks.common.util.FramedUtils;
 
 import java.util.List;
+import java.util.Objects;
 
 public class PoweredFramingSawMenu extends AbstractContainerMenu implements IFramingSawMenu
 {
@@ -29,7 +32,8 @@ public class PoweredFramingSawMenu extends AbstractContainerMenu implements IFra
     private final DataSlot recipeStatusSlot;
     private final DataSlot energySlot;
     private final FramingSawRecipeCache cache;
-    private FramingSawRecipe lastRecipe = null;
+    @Nullable
+    private RecipeHolder<FramingSawRecipe> lastRecipe = null;
 
     public PoweredFramingSawMenu(int windowId, Inventory inv, FriendlyByteBuf buf)
     {
@@ -78,8 +82,8 @@ public class PoweredFramingSawMenu extends AbstractContainerMenu implements IFra
     public void broadcastChanges()
     {
         progressSlot.set(blockEntity.getProgress());
-        FramingSawRecipe recipe = blockEntity.getSelectedRecipe();
-        if (lastRecipe != recipe)
+        RecipeHolder<FramingSawRecipe> recipe = blockEntity.getSelectedRecipe();
+        if (!Objects.equals(lastRecipe, recipe))
         {
             recipeIdxSlot.set(recipe == null ? -1 : cache.getRecipes().indexOf(recipe));
             handleRecipeChange(recipe);
@@ -91,10 +95,10 @@ public class PoweredFramingSawMenu extends AbstractContainerMenu implements IFra
         super.broadcastChanges();
     }
 
-    private void handleRecipeChange(FramingSawRecipe recipe)
+    private void handleRecipeChange(RecipeHolder<FramingSawRecipe> recipe)
     {
         lastRecipe = recipe;
-        int additiveCount = recipe != null ? recipe.getAdditives().size() : FramingSawRecipe.MAX_ADDITIVE_COUNT;
+        int additiveCount = recipe != null ? recipe.value().getAdditives().size() : FramingSawRecipe.MAX_ADDITIVE_COUNT;
         for (int i = 0; i < FramingSawRecipe.MAX_ADDITIVE_COUNT; i++)
         {
             AdditiveSlot slot = (AdditiveSlot) getSlot(FramingSawMenu.SLOT_ADDITIVE_FIRST + i);
@@ -111,7 +115,7 @@ public class PoweredFramingSawMenu extends AbstractContainerMenu implements IFra
             return true;
         }
 
-        List<FramingSawRecipe> recipes = cache.getRecipes();
+        List<RecipeHolder<FramingSawRecipe>> recipes = cache.getRecipes();
         if (id >= 0 && id < recipes.size())
         {
             blockEntity.selectRecipe(recipes.get(id));
@@ -120,7 +124,7 @@ public class PoweredFramingSawMenu extends AbstractContainerMenu implements IFra
         return super.clickMenuButton(player, id);
     }
 
-    public FramingSawRecipe getSelectedRecipe()
+    public RecipeHolder<FramingSawRecipe> getSelectedRecipe()
     {
         return lastRecipe;
     }

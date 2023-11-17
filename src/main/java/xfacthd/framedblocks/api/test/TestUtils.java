@@ -19,12 +19,11 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.Vec3;
 import net.minecraft.world.phys.shapes.CollisionContext;
-import net.minecraftforge.client.extensions.common.IClientBlockExtensions;
-import net.minecraftforge.common.ForgeHooks;
-import net.minecraftforge.fml.loading.FMLEnvironment;
-import net.minecraftforge.registries.ForgeRegistries;
+import net.neoforged.neoforge.client.extensions.common.IClientBlockExtensions;
+import net.neoforged.neoforge.common.CommonHooks;
+import net.neoforged.fml.loading.FMLEnvironment;
+import net.neoforged.neoforge.registries.ForgeRegistries;
 import org.slf4j.Logger;
-import xfacthd.framedblocks.api.FramedBlocksAPI;
 import xfacthd.framedblocks.api.block.*;
 import xfacthd.framedblocks.api.block.render.FramedBlockRenderProperties;
 import xfacthd.framedblocks.api.util.*;
@@ -145,7 +144,7 @@ public final class TestUtils
         Player player = helper.makeMockPlayer();
         player.setItemInHand(InteractionHand.MAIN_HAND, new ItemStack(item));
 
-        ForgeHooks.onLeftClickBlock(player, helper.absolutePos(pos), Direction.UP, ServerboundPlayerActionPacket.Action.START_DESTROY_BLOCK);
+        CommonHooks.onLeftClickBlock(player, helper.absolutePos(pos), Direction.UP, ServerboundPlayerActionPacket.Action.START_DESTROY_BLOCK);
     }
 
     /**

@@ -1,5 +1,5 @@
 package xfacthd.framedblocks.common.compat.rei;
-
+/*
 import me.shedaniel.rei.api.client.registry.display.DynamicDisplayGenerator;
 import me.shedaniel.rei.api.client.view.ViewSearchBuilder;
 import me.shedaniel.rei.api.common.entry.EntryIngredient;
@@ -114,4 +114,4 @@ public final class FramingSawDisplayGenerator implements DynamicDisplayGenerator
 
         return new FramingSawDisplay(recipe, inputs, output, inputWithAdditives);
     }
-}
+}*/

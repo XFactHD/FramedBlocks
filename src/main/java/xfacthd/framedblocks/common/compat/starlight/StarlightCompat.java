@@ -3,7 +3,7 @@ package xfacthd.framedblocks.common.compat.starlight;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.block.entity.BlockEntity;
-import net.minecraftforge.fml.ModList;
+import net.neoforged.fml.ModList;
 import xfacthd.framedblocks.api.internal.InternalAPI;
 
 public final class StarlightCompat

@@ -1,6 +1,6 @@
 package xfacthd.framedblocks.common.util;
 
-import net.minecraftforge.fml.loading.FMLEnvironment;
+import net.neoforged.fml.loading.FMLEnvironment;
 import xfacthd.framedblocks.FramedBlocks;
 import xfacthd.framedblocks.common.data.BlockType;
 

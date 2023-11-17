@@ -1,14 +1,14 @@
 package xfacthd.framedblocks.common.compat.buildinggadgets;
 
-import com.direwolf20.buildinggadgets.common.tainted.building.tilesupport.*;
-import com.direwolf20.buildinggadgets.common.tainted.registry.TopologicalRegistryBuilder;
-import com.direwolf20.buildinggadgets.common.util.ref.Reference;
-import net.minecraftforge.fml.InterModComms;
-import net.minecraftforge.fml.ModList;
-import net.minecraftforge.fml.event.lifecycle.InterModEnqueueEvent;
-import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
-import net.minecraftforge.registries.DeferredRegister;
-import net.minecraftforge.registries.RegistryObject;
+//import com.direwolf20.buildinggadgets.common.tainted.building.tilesupport.*;
+//import com.direwolf20.buildinggadgets.common.tainted.registry.TopologicalRegistryBuilder;
+//import com.direwolf20.buildinggadgets.common.util.ref.Reference;
+import net.neoforged.fml.InterModComms;
+import net.neoforged.fml.ModList;
+import net.neoforged.fml.event.lifecycle.InterModEnqueueEvent;
+import net.neoforged.fml.javafmlmod.FMLJavaModLoadingContext;
+import net.neoforged.neoforge.registries.DeferredRegister;
+import net.neoforged.neoforge.registries.RegistryObject;
 import xfacthd.framedblocks.FramedBlocks;
 import xfacthd.framedblocks.api.block.FramedBlockEntity;
 import xfacthd.framedblocks.api.util.FramedConstants;
@@ -29,7 +29,7 @@ public final class BuildingGadgetsCompat
 
             try
             {
-                GuardedAccess.init();
+                //GuardedAccess.init();
             }
             catch (Throwable e)
             {
@@ -40,7 +40,7 @@ public final class BuildingGadgetsCompat
 
     static final class GuardedAccess
     {
-        private static final DeferredRegister<ITileDataSerializer> SERIALIZERS = DeferredRegister.create(
+        /*private static final DeferredRegister<ITileDataSerializer> SERIALIZERS = DeferredRegister.create(
                 Reference.TileDataSerializerReference.REGISTRY_ID_TILE_DATA_SERIALIZER,
                 FramedConstants.MOD_ID
         );
@@ -70,7 +70,7 @@ public final class BuildingGadgetsCompat
                 );
                 return factory;
             };
-        }
+        }*/
 
 
 

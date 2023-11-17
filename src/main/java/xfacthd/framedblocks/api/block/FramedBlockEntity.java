@@ -22,11 +22,11 @@ import net.minecraft.world.level.material.MapColor;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.EntityCollisionContext;
-import net.minecraftforge.client.model.data.ModelData;
-import net.minecraftforge.common.*;
-import net.minecraftforge.common.capabilities.ForgeCapabilities;
-import net.minecraftforge.fluids.capability.IFluidHandler;
-import net.minecraftforge.registries.ForgeRegistries;
+import net.neoforged.neoforge.client.model.data.ModelData;
+import net.neoforged.neoforge.common.*;
+import net.neoforged.neoforge.common.capabilities.Capabilities;
+import net.neoforged.neoforge.fluids.capability.IFluidHandler;
+import net.neoforged.neoforge.registries.ForgeRegistries;
 import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
 import xfacthd.framedblocks.api.FramedBlocksAPI;
@@ -82,7 +82,7 @@ public class FramedBlockEntity extends BlockEntity
         {
             return clearBlockCamo(player, camo, stack, secondary);
         }
-        else if (camo.getType().isFluid() && stack.getCapability(ForgeCapabilities.FLUID_HANDLER_ITEM).isPresent())
+        else if (camo.getType().isFluid() && stack.getCapability(Capabilities.FLUID_HANDLER_ITEM).isPresent())
         {
             return clearFluidCamo(player, camo, stack, secondary);
         }
@@ -90,7 +90,7 @@ public class FramedBlockEntity extends BlockEntity
         {
             return setBlockCamo(player, stack, secondary);
         }
-        else if (camo.isEmpty() && stack.getCapability(ForgeCapabilities.FLUID_HANDLER_ITEM).isPresent())
+        else if (camo.isEmpty() && stack.getCapability(Capabilities.FLUID_HANDLER_ITEM).isPresent())
         {
             return setFluidCamo(player, stack, secondary);
         }
@@ -237,7 +237,7 @@ public class FramedBlockEntity extends BlockEntity
             {
                 if (!player.isCreative() && ConfigView.Server.INSTANCE.shouldConsumeCamoItem())
                 {
-                    ItemStack result = stack.getCapability(ForgeCapabilities.FLUID_HANDLER_ITEM).map(handler ->
+                    ItemStack result = stack.getCapability(Capabilities.FLUID_HANDLER_ITEM).map(handler ->
                     {
                         handler.drain(1000, IFluidHandler.FluidAction.EXECUTE);
                         return handler.getContainer();

@@ -1,5 +1,5 @@
 package xfacthd.framedblocks.common.compat.jei;
-
+/*
 import mezz.jei.api.gui.ingredient.IRecipeSlotsView;
 import mezz.jei.api.recipe.transfer.IRecipeTransferError;
 import net.minecraft.client.Minecraft;
@@ -32,4 +32,4 @@ public final class RecipeTransferErrorTransferNotImplemented implements IRecipeT
             );
         }
     }
-}
+}*/

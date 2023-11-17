@@ -1,6 +1,6 @@
 package xfacthd.framedblocks.common.data;
 
-import net.minecraftforge.registries.RegistryObject;
+import net.neoforged.neoforge.registries.RegistryObject;
 import xfacthd.framedblocks.api.block.IFramedBlock;
 import xfacthd.framedblocks.api.blueprint.BlueprintCopyBehaviour;
 import xfacthd.framedblocks.common.FBContent;

@@ -1,8 +1,8 @@
 package xfacthd.framedblocks.common.compat.contex;
 
-import net.minecraftforge.fml.ModList;
-import net.minecraftforge.fml.loading.FMLEnvironment;
-import xfacthd.contex.api.utils.Constants;
+import net.neoforged.fml.ModList;
+import net.neoforged.fml.loading.FMLEnvironment;
+//import xfacthd.contex.api.utils.Constants;
 import xfacthd.framedblocks.client.data.ConTexDataHandler;
 
 public final class ConTexCompat
@@ -19,7 +19,7 @@ public final class ConTexCompat
     {
         public static void init()
         {
-            ConTexDataHandler.addConTexProperty(Constants.CT_STATE_PROPERTY);
+            //ConTexDataHandler.addConTexProperty(Constants.CT_STATE_PROPERTY);
         }
     }
 

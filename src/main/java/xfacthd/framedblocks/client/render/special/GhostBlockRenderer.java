@@ -16,9 +16,9 @@ import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.block.*;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.*;
-import net.minecraftforge.client.ForgeRenderTypes;
-import net.minecraftforge.client.event.RenderLevelStageEvent;
-import net.minecraftforge.client.model.data.ModelData;
+import net.neoforged.neoforge.client.NeoForgeRenderTypes;
+import net.neoforged.neoforge.client.event.RenderLevelStageEvent;
+import net.neoforged.neoforge.client.model.data.ModelData;
 import xfacthd.framedblocks.api.ghost.CamoPair;
 import xfacthd.framedblocks.api.ghost.GhostRenderBehaviour;
 import xfacthd.framedblocks.api.model.data.FramedBlockData;
@@ -179,7 +179,7 @@ public final class GhostBlockRenderer
     {
         RenderType bufferType = ClientConfig.altGhostRenderer ?
                 Sheets.translucentCullBlockSheet() :
-                ForgeRenderTypes.TRANSLUCENT_ON_PARTICLES_TARGET.get();
+                NeoForgeRenderTypes.TRANSLUCENT_ON_PARTICLES_TARGET.get();
 
         profiler.push("buffer");
         Vec3 offset = Vec3.atLowerCornerOf(renderPos).subtract(mc().gameRenderer.getMainCamera().getPosition());

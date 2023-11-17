@@ -12,7 +12,7 @@ import net.minecraft.world.item.crafting.*;
 import net.minecraft.world.level.ItemLike;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
-import net.minecraftforge.common.util.Lazy;
+import net.neoforged.neoforge.common.util.Lazy;
 import org.apache.commons.lang3.mutable.MutableInt;
 import xfacthd.framedblocks.api.util.FramedConstants;
 import xfacthd.framedblocks.cmdtests.SpecialTestCommand;
@@ -49,6 +49,7 @@ public final class RecipePresent
                 .map(recipeManager::byKey)
                 .filter(Optional::isPresent)
                 .map(Optional::get)
+                .map(RecipeHolder::value)
                 .toList();
 
         Set<ItemLike> craftResults = fbRecipes.stream()

@@ -10,16 +10,16 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.block.state.properties.Property;
 import net.minecraft.world.phys.Vec3;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.client.event.*;
-import net.minecraftforge.client.model.data.ModelProperty;
-import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.eventbus.api.*;
-import net.minecraftforge.fml.InterModComms;
-import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.fml.event.lifecycle.*;
-import net.minecraftforge.fml.loading.FMLEnvironment;
-import net.minecraftforge.registries.RegistryObject;
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.neoforge.client.event.*;
+import net.neoforged.neoforge.client.model.data.ModelProperty;
+import net.neoforged.bus.api.*;
+import net.neoforged.fml.InterModComms;
+import net.neoforged.fml.common.Mod;
+import net.neoforged.fml.event.lifecycle.*;
+import net.neoforged.fml.loading.FMLEnvironment;
+import net.neoforged.neoforge.common.NeoForge;
+import net.neoforged.neoforge.registries.RegistryObject;
 import org.jetbrains.annotations.Nullable;
 import xfacthd.framedblocks.api.block.FramedProperties;
 import xfacthd.framedblocks.api.block.IFramedBlock;
@@ -64,6 +64,7 @@ import xfacthd.framedblocks.common.block.slopepanelcorner.*;
 import xfacthd.framedblocks.common.block.slopeslab.*;
 import xfacthd.framedblocks.common.block.stairs.*;
 import xfacthd.framedblocks.common.blockentity.FramedDoubleBlockEntity;
+import xfacthd.framedblocks.common.compat.modernfix.ModernFixCompat;
 import xfacthd.framedblocks.common.compat.supplementaries.SupplementariesCompat;
 import xfacthd.framedblocks.common.data.BlockType;
 import xfacthd.framedblocks.common.data.StateCacheBuilder;
@@ -91,7 +92,7 @@ public final class FBClient
         GhostBlockRenderer.init();
         GhostRenderBehaviours.register();
 
-        IEventBus forgeBus = MinecraftForge.EVENT_BUS;
+        IEventBus forgeBus = NeoForge.EVENT_BUS;
         forgeBus.addListener(ClientTaskQueue::onClientTick);
         forgeBus.addListener(BlockOutlineRenderer::onRenderBlockHighlight);
         forgeBus.addListener(KeyMappings::onClientTick);
@@ -400,7 +401,10 @@ public final class FBClient
 
         FramedChestRenderer.onModelsLoaded(registry); //Must happen before the chest model is replaced
 
-        ModelWrappingManager.handleAll(registry);
+        if (!ModernFixCompat.dynamicResourcesEnabled())
+        {
+            ModelWrappingManager.handleAll(registry);
+        }
     }
 
     @SubscribeEvent

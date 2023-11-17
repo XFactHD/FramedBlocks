@@ -1,15 +1,15 @@
 package xfacthd.framedblocks.common.compat.create;
 
-import com.simibubi.create.AllInteractionBehaviours;
-import com.simibubi.create.content.contraptions.BlockMovementChecks;
-import com.simibubi.create.content.contraptions.behaviour.*;
-import com.simibubi.create.foundation.block.connected.CTModel;
-import com.simibubi.create.foundation.utility.NBTProcessors;
+//import com.simibubi.create.AllInteractionBehaviours;
+//import com.simibubi.create.content.contraptions.BlockMovementChecks;
+//import com.simibubi.create.content.contraptions.behaviour.*;
+//import com.simibubi.create.foundation.block.connected.CTModel;
+//import com.simibubi.create.foundation.utility.NBTProcessors;
 import net.minecraft.world.level.block.Block;
-import net.minecraftforge.client.model.data.ModelProperty;
-import net.minecraftforge.fml.ModList;
-import net.minecraftforge.fml.loading.FMLEnvironment;
-import net.minecraftforge.registries.RegistryObject;
+import net.neoforged.neoforge.client.model.data.ModelProperty;
+import net.neoforged.fml.ModList;
+import net.neoforged.fml.loading.FMLEnvironment;
+import net.neoforged.neoforge.registries.RegistryObject;
 import xfacthd.framedblocks.FramedBlocks;
 import xfacthd.framedblocks.api.util.Utils;
 import xfacthd.framedblocks.client.data.ConTexDataHandler;
@@ -26,7 +26,7 @@ public final class CreateCompat
             {
                 if (FMLEnvironment.dist.isClient())
                 {
-                    GuardedClientAccess.init();
+                    //GuardedClientAccess.init();
                 }
             }
             catch (Throwable e)
@@ -43,7 +43,7 @@ public final class CreateCompat
             // Safeguard against potential changes in Create since the interaction behaviours are not exposed as API
             try
             {
-                GuardedAccess.init();
+                //GuardedAccess.init();
             }
             catch (Throwable e)
             {
@@ -52,7 +52,7 @@ public final class CreateCompat
         }
     }
 
-    private static final class GuardedAccess
+    /*private static final class GuardedAccess
     {
         public static void init()
         {
@@ -90,7 +90,7 @@ public final class CreateCompat
             ModelProperty<?> ctProperty = Utils.getPrivateValue(CTModel.class, null, "CT_PROPERTY");
             ConTexDataHandler.addConTexProperty(ctProperty);
         }
-    }
+    }*/
 
 
 

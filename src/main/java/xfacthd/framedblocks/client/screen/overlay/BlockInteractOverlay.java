@@ -16,9 +16,9 @@ import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.HitResult;
-import net.minecraftforge.client.gui.overlay.ForgeGui;
-import net.minecraftforge.client.gui.overlay.IGuiOverlay;
-import net.minecraftforge.common.util.ConcatenatedListView;
+import net.neoforged.neoforge.client.gui.overlay.ExtendedGui;
+import net.neoforged.neoforge.client.gui.overlay.IGuiOverlay;
+import net.neoforged.neoforge.common.util.ConcatenatedListView;
 
 import java.util.*;
 import java.util.function.Supplier;
@@ -54,7 +54,7 @@ public abstract class BlockInteractOverlay implements IGuiOverlay
     }
 
     @Override
-    public void render(ForgeGui gui, GuiGraphics graphics, float partialTick, int screenWidth, int screenHeight)
+    public void render(ExtendedGui gui, GuiGraphics graphics, float partialTick, int screenWidth, int screenHeight)
     {
         Mode mode = modeGetter.get();
         if (mode == Mode.HIDDEN)
@@ -92,7 +92,7 @@ public abstract class BlockInteractOverlay implements IGuiOverlay
     }
 
     private void renderDetailed(
-            ForgeGui gui,
+            ExtendedGui gui,
             GuiGraphics graphics,
             Texture tex,
             List<Component> lines,
@@ -147,7 +147,7 @@ public abstract class BlockInteractOverlay implements IGuiOverlay
         return state ? linesTrue : linesFalse;
     }
 
-    protected void renderAfterIcon(ForgeGui gui, GuiGraphics graphics, Texture tex, int texX, int texY, Target target) { }
+    protected void renderAfterIcon(ExtendedGui gui, GuiGraphics graphics, Texture tex, int texX, int texY, Target target) { }
 
     private void updateTextWidth(Font font)
     {
@@ -200,7 +200,7 @@ public abstract class BlockInteractOverlay implements IGuiOverlay
             ResourceLocation location, int xOff, int yOff, int width, int height, int texWidth, int texHeight
     )
     {
-        public void draw(ForgeGui gui, GuiGraphics graphics, int x, int y)
+        public void draw(ExtendedGui gui, GuiGraphics graphics, int x, int y)
         {
             gui.setupOverlayRenderState(true, false);
             graphics.blit(location, x, y, 0, xOff, yOff, width, height, texWidth, texHeight);

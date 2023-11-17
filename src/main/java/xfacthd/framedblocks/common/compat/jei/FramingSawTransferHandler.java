@@ -1,5 +1,5 @@
 package xfacthd.framedblocks.common.compat.jei;
-
+/*
 import mezz.jei.api.gui.ingredient.IRecipeSlotsView;
 import mezz.jei.api.recipe.RecipeType;
 import mezz.jei.api.recipe.transfer.*;
@@ -77,4 +77,4 @@ public final class FramingSawTransferHandler implements IRecipeTransferHandler<F
         }
         return transferHelper.createUserErrorWithTooltip(JeiCompat.MSG_INVALID_RECIPE);
     }
-}
+}*/

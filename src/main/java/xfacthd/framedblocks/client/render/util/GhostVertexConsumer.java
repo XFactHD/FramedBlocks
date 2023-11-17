@@ -1,7 +1,7 @@
 package xfacthd.framedblocks.client.render.util;
 
 import com.mojang.blaze3d.vertex.VertexConsumer;
-import net.minecraftforge.client.model.pipeline.VertexConsumerWrapper;
+import net.neoforged.neoforge.client.model.pipeline.VertexConsumerWrapper;
 
 public final class GhostVertexConsumer extends VertexConsumerWrapper
 {

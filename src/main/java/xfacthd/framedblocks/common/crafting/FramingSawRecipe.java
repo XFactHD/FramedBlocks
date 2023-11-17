@@ -1,12 +1,14 @@
 package xfacthd.framedblocks.common.crafting;
 
+import com.google.gson.JsonSyntaxException;
 import net.minecraft.core.RegistryAccess;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.Container;
+import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.*;
 import net.minecraft.world.level.Level;
-import net.minecraftforge.common.util.Lazy;
+import net.neoforged.neoforge.common.util.Lazy;
+import xfacthd.framedblocks.api.block.IFramedBlock;
 import xfacthd.framedblocks.api.type.IBlockType;
 import xfacthd.framedblocks.common.FBContent;
 
@@ -18,20 +20,18 @@ public final class FramingSawRecipe implements Recipe<Container>
     public static final int MAX_ADDITIVE_COUNT = 3;
     private static final Lazy<ItemStack> TOAST_ICON = Lazy.of(() -> new ItemStack(FBContent.BLOCK_FRAMING_SAW.get()));
 
-    private final ResourceLocation id;
     private final int materialAmount;
     private final List<FramingSawRecipeAdditive> additives;
     private final ItemStack result;
     private final IBlockType resultType;
     private final boolean disabled;
 
-    FramingSawRecipe(ResourceLocation id, int materialAmount, List<FramingSawRecipeAdditive> additives, ItemStack result, IBlockType resultType, boolean disabled)
+    FramingSawRecipe(int materialAmount, List<FramingSawRecipeAdditive> additives, ItemStack result, boolean disabled)
     {
-        this.id = id;
         this.materialAmount = materialAmount;
         this.additives = additives;
         this.result = result;
-        this.resultType = resultType;
+        this.resultType = findResultType(result);
         this.disabled = disabled;
     }
 
@@ -144,12 +144,6 @@ public final class FramingSawRecipe implements Recipe<Container>
     }
 
     @Override
-    public ResourceLocation getId()
-    {
-        return id;
-    }
-
-    @Override
     public boolean isSpecial()
     {
         return true;
@@ -171,5 +165,20 @@ public final class FramingSawRecipe implements Recipe<Container>
     public RecipeType<?> getType()
     {
         return FBContent.RECIPE_TYPE_FRAMING_SAW_RECIPE.get();
+    }
+
+
+
+    private static IBlockType findResultType(ItemStack result)
+    {
+        if (!(result.getItem() instanceof BlockItem item))
+        {
+            throw new JsonSyntaxException("Result items must be BlockItems");
+        }
+        if (!(item.getBlock() instanceof IFramedBlock block))
+        {
+            throw new JsonSyntaxException("Block of result items must be IFramedBlocks");
+        }
+        return block.getBlockType();
     }
 }

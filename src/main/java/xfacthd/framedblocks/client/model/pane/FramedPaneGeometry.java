@@ -4,7 +4,7 @@ import com.google.common.base.Preconditions;
 import net.minecraft.client.renderer.block.model.BakedQuad;
 import net.minecraft.core.Direction;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
-import net.minecraftforge.fml.ModList;
+import net.neoforged.fml.ModList;
 import xfacthd.framedblocks.api.model.data.QuadMap;
 import xfacthd.framedblocks.api.model.geometry.Geometry;
 import xfacthd.framedblocks.api.model.wrapping.GeometryFactory;

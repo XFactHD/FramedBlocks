@@ -2,8 +2,8 @@ package xfacthd.framedblocks.client.model.torch;
 
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.block.Blocks;
-import net.minecraftforge.client.ChunkRenderTypeSet;
-import net.minecraftforge.client.model.data.ModelData;
+import net.neoforged.neoforge.client.ChunkRenderTypeSet;
+import net.neoforged.neoforge.client.model.data.ModelData;
 import xfacthd.framedblocks.api.model.wrapping.GeometryFactory;
 import xfacthd.framedblocks.api.model.util.ModelCache;
 

@@ -1,5 +1,5 @@
 package xfacthd.framedblocks.common.compat.jei;
-
+/*
 import me.shedaniel.rei.plugincompatibilities.api.REIPluginCompatIgnore;
 import mezz.jei.api.IModPlugin;
 import mezz.jei.api.JeiPlugin;
@@ -87,4 +87,4 @@ public final class FramedJeiPlugin implements IModPlugin
     {
         return ID;
     }
-}
+}*/

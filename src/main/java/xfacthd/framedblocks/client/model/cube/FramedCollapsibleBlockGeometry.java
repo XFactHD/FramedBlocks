@@ -3,7 +3,7 @@ package xfacthd.framedblocks.client.model.cube;
 import net.minecraft.client.renderer.block.model.BakedQuad;
 import net.minecraft.core.Direction;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraftforge.client.model.data.ModelData;
+import net.neoforged.neoforge.client.model.data.ModelData;
 import xfacthd.framedblocks.api.model.cache.QuadCacheKey;
 import xfacthd.framedblocks.api.model.data.QuadMap;
 import xfacthd.framedblocks.api.model.geometry.Geometry;

@@ -1,5 +1,5 @@
 package xfacthd.framedblocks.client.render.util;
-
+/*
 import net.minecraft.client.renderer.texture.SpriteContents;
 import net.minecraft.client.renderer.texture.atlas.sources.LazyLoadedImage;
 import net.minecraft.resources.ResourceLocation;
@@ -55,4 +55,4 @@ final class AnimationSplitterSourceAV extends AnimationSplitterSource implements
             return contents;
         }
     }
-}
+}*/

@@ -1,12 +1,12 @@
 package xfacthd.framedblocks.common.compat.rei;
 
-import me.shedaniel.rei.api.client.config.ConfigObject;
-import me.shedaniel.rei.api.client.view.ViewSearchBuilder;
-import me.shedaniel.rei.api.common.util.EntryStacks;
+//import me.shedaniel.rei.api.client.config.ConfigObject;
+//import me.shedaniel.rei.api.client.view.ViewSearchBuilder;
+//import me.shedaniel.rei.api.common.util.EntryStacks;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
-import net.minecraftforge.fml.ModList;
-import net.minecraftforge.fml.loading.FMLEnvironment;
+import net.neoforged.fml.ModList;
+import net.neoforged.fml.loading.FMLEnvironment;
 import xfacthd.framedblocks.api.util.Utils;
 import xfacthd.framedblocks.client.util.RecipeViewer;
 
@@ -34,7 +34,7 @@ public final class ReiCompat
     {
         if (loadedClient)
         {
-            return GuardedAccess.isShowRecipePressed(keyCode, scanCode);
+            //return GuardedAccess.isShowRecipePressed(keyCode, scanCode);
         }
         return null;
     }
@@ -43,7 +43,7 @@ public final class ReiCompat
     {
         if (loadedClient)
         {
-            return GuardedAccess.handleButtonRecipeRequest(result, target);
+            //return GuardedAccess.handleButtonRecipeRequest(result, target);
         }
         return false;
     }
@@ -57,7 +57,7 @@ public final class ReiCompat
 
         }
 
-        public static RecipeViewer.LookupTarget isShowRecipePressed(int keyCode, int scanCode)
+        /*public static RecipeViewer.LookupTarget isShowRecipePressed(int keyCode, int scanCode)
         {
             ConfigObject cfg = ConfigObject.getInstance();
             if (cfg.getRecipeKeybind().matchesKey(keyCode, scanCode))
@@ -80,7 +80,7 @@ public final class ReiCompat
                 case USAGE -> builder.addUsagesFor(EntryStacks.of(result));
             }
             return builder.open();
-        }
+        }*/
 
 
 

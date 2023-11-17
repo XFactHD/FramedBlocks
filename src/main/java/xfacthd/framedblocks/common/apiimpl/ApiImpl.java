@@ -3,7 +3,7 @@ package xfacthd.framedblocks.common.apiimpl;
 import net.minecraft.world.item.*;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraftforge.registries.IForgeRegistry;
+import net.neoforged.neoforge.registries.IForgeRegistry;
 import xfacthd.framedblocks.api.FramedBlocksAPI;
 import xfacthd.framedblocks.api.blueprint.BlueprintCopyBehaviour;
 import xfacthd.framedblocks.api.camo.CamoContainerFactory;

@@ -2,11 +2,14 @@ package xfacthd.framedblocks.api.block.render;
 
 import net.minecraft.client.particle.ParticleEngine;
 import net.minecraft.core.BlockPos;
+import net.minecraft.sounds.SoundEvent;
+import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.HitResult;
-import net.minecraftforge.client.extensions.common.IClientBlockExtensions;
+import net.neoforged.neoforge.client.extensions.common.IClientBlockExtensions;
 import xfacthd.framedblocks.api.block.FramedBlockEntity;
 import xfacthd.framedblocks.api.block.IFramedBlock;
 
@@ -55,6 +58,22 @@ public class FramedBlockRenderProperties implements IClientBlockExtensions
         return true;
     }
 
+    @Override
+    public boolean playBreakSound(BlockState state, Level level, BlockPos pos)
+    {
+        if (level.getBlockEntity(pos) instanceof FramedBlockEntity be)
+        {
+            BlockState camoState = be.getCamo().getState();
+            if (camoState.isAir())
+            {
+                camoState = state;
+            }
+            playCamoBreakSound(level, pos, camoState);
+            return true;
+        }
+        return false;
+    }
+
 
 
     protected static boolean suppressParticles(BlockState state, Level level, BlockPos pos)
@@ -64,5 +83,12 @@ public class FramedBlockRenderProperties implements IClientBlockExtensions
             return block.isIntangible(state, level, pos, null);
         }
         return false;
+    }
+
+    protected static void playCamoBreakSound(Level level, BlockPos pos, BlockState camoState)
+    {
+        SoundType type = camoState.getSoundType();
+        SoundEvent sound = type.getBreakSound();
+        level.playLocalSound(pos, sound, SoundSource.BLOCKS, (type.getVolume() + 1F) / 2F, type.getPitch() * 0.8F, false);
     }
 }

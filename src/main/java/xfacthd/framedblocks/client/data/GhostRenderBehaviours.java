@@ -1,7 +1,7 @@
 package xfacthd.framedblocks.client.data;
 
 import net.minecraft.world.item.Items;
-import net.minecraftforge.registries.RegistryObject;
+import net.neoforged.neoforge.registries.RegistryObject;
 import xfacthd.framedblocks.api.block.IFramedBlock;
 import xfacthd.framedblocks.api.ghost.GhostRenderBehaviour;
 import xfacthd.framedblocks.client.data.ghost.*;

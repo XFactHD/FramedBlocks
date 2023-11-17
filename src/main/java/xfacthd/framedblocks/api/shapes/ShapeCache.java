@@ -1,7 +1,7 @@
 package xfacthd.framedblocks.api.shapes;
 
 import net.minecraft.world.phys.shapes.VoxelShape;
-import net.minecraftforge.fml.loading.FMLEnvironment;
+import net.neoforged.fml.loading.FMLEnvironment;
 import org.jetbrains.annotations.ApiStatus;
 import xfacthd.framedblocks.api.internal.InternalAPI;
 

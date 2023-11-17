@@ -4,19 +4,17 @@ import com.google.common.base.Preconditions;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import net.minecraft.advancements.*;
-import net.minecraft.data.recipes.FinishedRecipe;
-import net.minecraft.data.recipes.RecipeBuilder;
+import net.minecraft.data.recipes.*;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.minecraft.world.level.ItemLike;
-import net.minecraftforge.registries.ForgeRegistries;
-import net.minecraftforge.registries.RegistryObject;
+import net.neoforged.neoforge.registries.ForgeRegistries;
+import net.neoforged.neoforge.registries.RegistryObject;
 import org.jetbrains.annotations.Nullable;
 import xfacthd.framedblocks.common.FBContent;
 
 import java.util.*;
-import java.util.function.Consumer;
 
 public final class FramingSawRecipeBuilder implements RecipeBuilder
 {
@@ -80,7 +78,7 @@ public final class FramingSawRecipeBuilder implements RecipeBuilder
     }
 
     @Override
-    public RecipeBuilder unlockedBy(String criterionName, CriterionTriggerInstance criterionTrigger)
+    public RecipeBuilder unlockedBy(String criterionName, Criterion<?> criterion)
     {
         throw new UnsupportedOperationException("Advancements are not supported");
     }
@@ -98,7 +96,7 @@ public final class FramingSawRecipeBuilder implements RecipeBuilder
     }
 
     @Override
-    public void save(Consumer<FinishedRecipe> finishedRecipeConsumer, ResourceLocation recipeId)
+    public void save(RecipeOutput finishedRecipeConsumer, ResourceLocation recipeId)
     {
         Preconditions.checkState(material > 0, "Material value not set");
         Preconditions.checkState(material / count * count == material, "Material value not divisible by result size");
@@ -129,7 +127,7 @@ public final class FramingSawRecipeBuilder implements RecipeBuilder
                 additives.forEach(add ->
                 {
                     JsonObject additive = new JsonObject();
-                    additive.add("ingredient", add.ingredient().toJson());
+                    additive.add("ingredient", add.ingredient().toJson(false));
                     additive.addProperty("count", add.count());
                     additiveArr.add(additive);
                 });
@@ -151,27 +149,16 @@ public final class FramingSawRecipeBuilder implements RecipeBuilder
         }
 
         @Override
-        public JsonObject serializeAdvancement()
-        {
-            return null;
-        }
-
-        @Override
-        public ResourceLocation getId()
-        {
-            return id;
-        }
-
-        @Override
-        public ResourceLocation getAdvancementId()
-        {
-            return null;
-        }
-
-        @Override
-        public RecipeSerializer<?> getType()
+        public RecipeSerializer<?> type()
         {
             return FBContent.RECIPE_SERIALIZER_FRAMING_SAW_RECIPE.get();
+        }
+
+        @Nullable
+        @Override
+        public AdvancementHolder advancement()
+        {
+            return null;
         }
     }
 }

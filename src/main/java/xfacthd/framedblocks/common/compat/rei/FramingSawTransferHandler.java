@@ -1,5 +1,5 @@
 package xfacthd.framedblocks.common.compat.rei;
-
+/*
 import me.shedaniel.rei.api.client.registry.transfer.TransferHandler;
 import net.minecraft.client.Minecraft;
 import net.minecraft.world.inventory.AbstractContainerMenu;
@@ -35,4 +35,4 @@ public final class FramingSawTransferHandler implements TransferHandler
         }
         return Result.createFailed(JeiCompat.MSG_INVALID_RECIPE);
     }
-}
+}*/

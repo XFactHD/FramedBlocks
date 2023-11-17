@@ -1,7 +1,7 @@
 package xfacthd.framedblocks.common.data.doubleblock;
 
 import net.minecraft.core.Direction;
-import net.minecraftforge.common.IPlantable;
+import net.neoforged.neoforge.common.IPlantable;
 import xfacthd.framedblocks.common.blockentity.FramedDoubleBlockEntity;
 
 public interface PlantablePredicate
