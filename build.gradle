@@ -142,7 +142,7 @@ dependencies {
 
     //implementation("curse.maven:guidebook-253874:4593765")
 
-    //compileOnly("curse.maven:atlasviewer-633577:4762356")
+    compileOnly("curse.maven:atlasviewer-633577:4882515")
 
     //minecraftLibrary(group: 'com.github.ben-manes.caffeine', name: 'caffeine', version: '3.1.1')
     jarJar(group: 'com.github.ben-manes.caffeine', name: 'caffeine', version: '[3.1.1,4.0.0)') {

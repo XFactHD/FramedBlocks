@@ -217,6 +217,8 @@
   "item.framedblocks.framed_screwdriver": "Framed Screwdriver",
   "item.framedblocks.framed_wrench": "Framed Wrench",
   "itemGroup.framed_blocks": "FramedBlocks",
+  "label.framedblocks.source_tooltip.anim_splitter.frames": "Frames",
+  "label.framedblocks.source_tooltip.anim_splitter.texture": "Texture",
   "msg.framedblocks.blacklisted": "This block is blacklisted!",
   "msg.framedblocks.block_entity": "Blocks with BlockEntities cannot be inserted into framed blocks!",
   "msg.framedblocks.frame_crafter.fail.incorrect_additive_0": "Incorrect additive ingredient present in the first slot",

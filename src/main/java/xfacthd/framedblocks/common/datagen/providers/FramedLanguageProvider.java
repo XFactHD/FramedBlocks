@@ -10,6 +10,7 @@ import xfacthd.framedblocks.api.block.IFramedBlock;
 import xfacthd.framedblocks.api.util.FramedConstants;
 import xfacthd.framedblocks.client.screen.*;
 import xfacthd.framedblocks.client.screen.overlay.*;
+import xfacthd.framedblocks.common.compat.atlasviewer.AtlasViewerCompat;
 import xfacthd.framedblocks.common.config.ClientConfig;
 import xfacthd.framedblocks.client.util.KeyMappings;
 import xfacthd.framedblocks.common.FBContent;
@@ -245,6 +246,9 @@ public final class FramedLanguageProvider extends LanguageProvider
 
         add(JeiCompat.MSG_INVALID_RECIPE, "Invalid recipe");
         add(JeiCompat.MSG_TRANSFER_NOT_IMPLEMENTED, "Transfer not implemented, no items will be transferred");
+
+        add(AtlasViewerCompat.LABEL_TEXTURE, "Texture");
+        add(AtlasViewerCompat.LABEL_FRAMES, "Frames");
     }
 
     private void addStatusMessageTranslations()

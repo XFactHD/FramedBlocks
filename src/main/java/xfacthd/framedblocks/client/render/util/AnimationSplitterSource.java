@@ -19,17 +19,17 @@ import xfacthd.framedblocks.api.util.FramedConstants;
 import java.util.List;
 import java.util.Optional;
 
-public/* sealed */class AnimationSplitterSource implements SpriteSource// permits AnimationSplitterSourceAV
+public sealed class AnimationSplitterSource implements SpriteSource permits AnimationSplitterSourceAV
 {
     private static final boolean AV_LOADED = ModList.get().isLoaded("atlasviewer");
     private static SpriteSourceType TYPE = null;
     private static final Codec<AnimationSplitterSource> CODEC = RecordCodecBuilder.create(inst -> inst.group(
             ResourceLocation.CODEC.fieldOf("resource").forGetter(s -> s.resource),
             ExtraCodecs.nonEmptyList(Frame.CODEC.listOf()).fieldOf("frames").forGetter(s -> s.frames)
-    ).apply(inst, /*AV_LOADED ? AnimationSplitterSourceAV::new : */AnimationSplitterSource::new));
+    ).apply(inst, AV_LOADED ? AnimationSplitterSourceAV::new : AnimationSplitterSource::new));
 
-    private final ResourceLocation resource;
-    private final List<Frame> frames;
+    final ResourceLocation resource;
+    final List<Frame> frames;
 
     public AnimationSplitterSource(ResourceLocation resource, List<Frame> frames)
     {
@@ -76,7 +76,7 @@ public/* sealed */class AnimationSplitterSource implements SpriteSource// permit
         ).apply(inst, Frame::new));
     }
 
-    static /*sealed*/ class FrameInstance implements SpriteSupplier// permits AnimationSplitterSourceAV.FrameInstanceAV
+    static sealed class FrameInstance implements SpriteSupplier permits AnimationSplitterSourceAV.FrameInstanceAV
     {
         final Resource resource;
         private final ResourceLocation texPath;
