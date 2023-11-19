@@ -25,7 +25,8 @@ public final class ModelUtils
     public static final ChunkRenderTypeSet SOLID = ChunkRenderTypeSet.of(RenderType.solid());
     public static final ChunkRenderTypeSet CUTOUT = ChunkRenderTypeSet.of(RenderType.cutout());
     public static final ChunkRenderTypeSet TRANSLUCENT = ChunkRenderTypeSet.of(RenderType.translucent());
-    private static final float UV_SUBSTEP_COUNT = 8F;
+    // Factor 16 is required because the relative UV of a TextureAtlasSprite is not 0-16 anymore since 1.20.2
+    private static final float UV_SUBSTEP_COUNT = 16F * 8F;
 
     public static Direction fillNormal(QuadData data)
     {
