@@ -56,6 +56,6 @@ public class FramedTargetGeometry implements Geometry
 
     public static BlockState itemSource()
     {
-        return FBContent.BLOCK_FRAMED_TARGET.get().defaultBlockState();
+        return FBContent.BLOCK_FRAMED_TARGET.value().defaultBlockState();
     }
 }

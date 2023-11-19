@@ -89,7 +89,7 @@ public class FramedVerticalSlopedStairsGeometry implements Geometry
 
     public static BlockState itemSource()
     {
-        return FBContent.BLOCK_FRAMED_VERTICAL_SLOPED_STAIRS.get()
+        return FBContent.BLOCK_FRAMED_VERTICAL_SLOPED_STAIRS.value()
                 .defaultBlockState()
                 .setValue(FramedProperties.FACING_HOR, Direction.SOUTH);
     }

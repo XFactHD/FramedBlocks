@@ -107,24 +107,24 @@ public class FramedExtendedDoubleCornerSlopePanelWallBlock extends AbstractFrame
         return switch ((BlockType) getBlockType())
         {
             case FRAMED_EXT_DOUBLE_CORNER_SLOPE_PANEL_W -> new Tuple<>(
-                    FBContent.BLOCK_FRAMED_EXTENDED_CORNER_SLOPE_PANEL_WALL.get()
+                    FBContent.BLOCK_FRAMED_EXTENDED_CORNER_SLOPE_PANEL_WALL.value()
                             .defaultBlockState()
                             .setValue(FramedProperties.FACING_HOR, dir)
                             .setValue(PropertyHolder.ROTATION, rot)
                             .setValue(FramedProperties.Y_SLOPE, ySlope),
-                    FBContent.BLOCK_FRAMED_LARGE_INNER_CORNER_SLOPE_PANEL_WALL.get()
+                    FBContent.BLOCK_FRAMED_LARGE_INNER_CORNER_SLOPE_PANEL_WALL.value()
                             .defaultBlockState()
                             .setValue(FramedProperties.FACING_HOR, dir.getOpposite())
                             .setValue(PropertyHolder.ROTATION, backRot)
                             .setValue(FramedProperties.Y_SLOPE, ySlope)
             );
             case FRAMED_EXT_INNER_DOUBLE_CORNER_SLOPE_PANEL_W -> new Tuple<>(
-                    FBContent.BLOCK_FRAMED_EXTENDED_INNER_CORNER_SLOPE_PANEL_WALL.get()
+                    FBContent.BLOCK_FRAMED_EXTENDED_INNER_CORNER_SLOPE_PANEL_WALL.value()
                             .defaultBlockState()
                             .setValue(FramedProperties.FACING_HOR, dir)
                             .setValue(PropertyHolder.ROTATION, rot)
                             .setValue(FramedProperties.Y_SLOPE, ySlope),
-                    FBContent.BLOCK_FRAMED_SMALL_CORNER_SLOPE_PANEL_WALL.get()
+                    FBContent.BLOCK_FRAMED_SMALL_CORNER_SLOPE_PANEL_WALL.value()
                             .defaultBlockState()
                             .setValue(FramedProperties.FACING_HOR, dir.getOpposite())
                             .setValue(PropertyHolder.ROTATION, backRot)

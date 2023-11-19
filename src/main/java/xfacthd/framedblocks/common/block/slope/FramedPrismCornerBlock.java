@@ -53,7 +53,7 @@ public class FramedPrismCornerBlock extends FramedThreewayCornerBlock
     @Override
     public boolean handleBlockLeftClick(BlockState state, Level level, BlockPos pos, Player player)
     {
-        if (player.getMainHandItem().getItem() == FBContent.ITEM_FRAMED_HAMMER.get())
+        if (player.getMainHandItem().getItem() == FBContent.ITEM_FRAMED_HAMMER.value())
         {
             level.setBlockAndUpdate(pos, state.setValue(FramedProperties.OFFSET, !state.getValue(FramedProperties.OFFSET)));
             return true;

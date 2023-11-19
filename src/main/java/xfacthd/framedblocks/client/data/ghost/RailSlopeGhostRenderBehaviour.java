@@ -33,7 +33,7 @@ public final class RailSlopeGhostRenderBehaviour implements GhostRenderBehaviour
             int renderPass
     )
     {
-        if (hitState.getBlock() == FBContent.BLOCK_FRAMED_SLOPE.get())
+        if (hitState.getBlock() == FBContent.BLOCK_FRAMED_SLOPE.value())
         {
             RailShape shape = FramedUtils.getAscendingRailShapeFromDirection(hitState.getValue(FramedProperties.FACING_HOR));
             if (!(stack.getItem() instanceof BlockItem item) || !(item.getBlock() instanceof BaseRailBlock block))

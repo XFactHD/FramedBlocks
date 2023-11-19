@@ -1,9 +1,9 @@
 package xfacthd.framedblocks.common.apiimpl;
 
+import net.minecraft.core.Registry;
 import net.minecraft.world.item.*;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
-import net.neoforged.neoforge.registries.IForgeRegistry;
 import xfacthd.framedblocks.api.FramedBlocksAPI;
 import xfacthd.framedblocks.api.blueprint.BlueprintCopyBehaviour;
 import xfacthd.framedblocks.api.camo.CamoContainerFactory;
@@ -17,19 +17,19 @@ public final class ApiImpl implements FramedBlocksAPI
     @Override
     public BlockState getDefaultModelState()
     {
-        return FBContent.BLOCK_FRAMED_CUBE.get().defaultBlockState();
+        return FBContent.BLOCK_FRAMED_CUBE.value().defaultBlockState();
     }
 
     @Override
     public CreativeModeTab getDefaultCreativeTab()
     {
-        return FBContent.MAIN_TAB.get();
+        return FBContent.MAIN_TAB.value();
     }
 
     @Override
-    public IForgeRegistry<CamoContainerFactory> getCamoContainerFactoryRegistry()
+    public Registry<CamoContainerFactory> getCamoContainerFactoryRegistry()
     {
-        return FBContent.CAMO_CONTAINER_FACTORY_REGISTRY.get();
+        return FBContent.CAMO_CONTAINER_FACTORY_REGISTRY;
     }
 
     @Override

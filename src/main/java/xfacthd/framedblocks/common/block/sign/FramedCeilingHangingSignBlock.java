@@ -177,7 +177,7 @@ public class FramedCeilingHangingSignBlock extends AbstractFramedHangingSignBloc
     @Override
     public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level level, BlockState state, BlockEntityType<T> type)
     {
-        return Utils.createBlockEntityTicker(type, FBContent.BE_TYPE_FRAMED_HANGING_SIGN.get(), FramedSignBlockEntity::tick);
+        return Utils.createBlockEntityTicker(type, FBContent.BE_TYPE_FRAMED_HANGING_SIGN.value(), FramedSignBlockEntity::tick);
     }
 
     @Override

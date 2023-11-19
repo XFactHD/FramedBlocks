@@ -13,7 +13,7 @@ public class FramedFlatInverseDoubleSlopeSlabCornerBlockEntity extends FramedDou
 {
     public FramedFlatInverseDoubleSlopeSlabCornerBlockEntity(BlockPos pos, BlockState state)
     {
-        super(FBContent.BE_TYPE_FRAMED_FLAT_INVERSE_DOUBLE_SLOPE_SLAB_CORNER.get(), pos, state);
+        super(FBContent.BE_TYPE_FRAMED_FLAT_INVERSE_DOUBLE_SLOPE_SLAB_CORNER.value(), pos, state);
     }
 
     @Override

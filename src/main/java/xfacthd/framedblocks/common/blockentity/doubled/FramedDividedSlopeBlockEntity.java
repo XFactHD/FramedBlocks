@@ -15,7 +15,7 @@ public class FramedDividedSlopeBlockEntity extends FramedDoubleBlockEntity
 {
     public FramedDividedSlopeBlockEntity(BlockPos pos, BlockState state)
     {
-        super(FBContent.BE_TYPE_FRAMED_DIVIDED_SLOPE.get(), pos, state);
+        super(FBContent.BE_TYPE_FRAMED_DIVIDED_SLOPE.value(), pos, state);
     }
 
     @Override

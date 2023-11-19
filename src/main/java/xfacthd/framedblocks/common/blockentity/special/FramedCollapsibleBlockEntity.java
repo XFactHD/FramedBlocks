@@ -29,7 +29,7 @@ public class FramedCollapsibleBlockEntity extends FramedBlockEntity
 
     public FramedCollapsibleBlockEntity(BlockPos pos, BlockState state)
     {
-        super(FBContent.BE_TYPE_FRAMED_COLLAPSIBLE_BLOCK.get(), pos, state);
+        super(FBContent.BE_TYPE_FRAMED_COLLAPSIBLE_BLOCK.value(), pos, state);
     }
 
     public void handleDeform(Player player)

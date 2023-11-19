@@ -3,6 +3,7 @@ package xfacthd.framedblocks.common.crafting;
 import it.unimi.dsi.fastutil.objects.Object2IntMap;
 import it.unimi.dsi.fastutil.objects.Object2IntOpenCustomHashMap;
 import net.minecraft.Util;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.server.ReloadableServerResources;
 import net.minecraft.server.packs.resources.ResourceManager;
 import net.minecraft.server.packs.resources.ResourceManagerReloadListener;
@@ -10,7 +11,6 @@ import net.minecraft.world.item.*;
 import net.minecraft.world.item.crafting.RecipeHolder;
 import net.minecraft.world.item.crafting.RecipeManager;
 import net.neoforged.neoforge.event.AddReloadListenerEvent;
-import net.neoforged.neoforge.registries.ForgeRegistries;
 import org.jetbrains.annotations.Nullable;
 import xfacthd.framedblocks.api.type.IBlockType;
 import xfacthd.framedblocks.api.util.FramedConstants;
@@ -32,7 +32,7 @@ public final class FramingSawRecipeCache
     {
         clear();
 
-        recipes.addAll(recipeManager.getAllRecipesFor(FBContent.RECIPE_TYPE_FRAMING_SAW_RECIPE.get()));
+        recipes.addAll(recipeManager.getAllRecipesFor(FBContent.RECIPE_TYPE_FRAMING_SAW_RECIPE.value()));
         recipes.sort(FramingSawRecipeCache::sortRecipes);
 
         recipes.forEach(holder ->
@@ -128,9 +128,9 @@ public final class FramingSawRecipeCache
     public static int sortRecipes(ItemStack resultOne, ItemStack resultTwo, IBlockType typeOne, IBlockType typeTwo)
     {
         //noinspection ConstantConditions
-        String ns1 = ForgeRegistries.ITEMS.getKey(resultOne.getItem()).getNamespace();
+        String ns1 = BuiltInRegistries.ITEM.getKey(resultOne.getItem()).getNamespace();
         //noinspection ConstantConditions
-        String ns2 = ForgeRegistries.ITEMS.getKey(resultTwo.getItem()).getNamespace();
+        String ns2 = BuiltInRegistries.ITEM.getKey(resultTwo.getItem()).getNamespace();
 
         if (!ns1.equals(ns2))
         {

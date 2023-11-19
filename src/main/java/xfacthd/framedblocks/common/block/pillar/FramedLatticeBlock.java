@@ -216,7 +216,7 @@ public class FramedLatticeBlock extends FramedBlock
 
     private static boolean canConnectThin(Direction side, BlockState state)
     {
-        if (state.is(FBContent.BLOCK_FRAMED_POST.get()))
+        if (state.is(FBContent.BLOCK_FRAMED_POST.value()))
         {
             return side.getAxis() == state.getValue(BlockStateProperties.AXIS);
         }
@@ -229,11 +229,11 @@ public class FramedLatticeBlock extends FramedBlock
         {
             return side == Direction.DOWN || (side == Direction.UP && state.getValue(BlockStateProperties.UP));
         }
-        if (state.is(FBContent.BLOCK_FRAMED_PILLAR.get()))
+        if (state.is(FBContent.BLOCK_FRAMED_PILLAR.value()))
         {
             return side.getAxis() == state.getValue(BlockStateProperties.AXIS);
         }
-        if (state.is(FBContent.BLOCK_FRAMED_HALF_PILLAR.get()))
+        if (state.is(FBContent.BLOCK_FRAMED_HALF_PILLAR.value()))
         {
             return side == state.getValue(BlockStateProperties.FACING).getOpposite();
         }

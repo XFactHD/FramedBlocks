@@ -13,7 +13,7 @@ public class FramedDividedSlabBlockEntity extends FramedDoubleBlockEntity
 {
     public FramedDividedSlabBlockEntity(BlockPos pos, BlockState state)
     {
-        super(FBContent.BE_TYPE_FRAMED_DIVIDED_SLAB.get(), pos, state);
+        super(FBContent.BE_TYPE_FRAMED_DIVIDED_SLAB.value(), pos, state);
     }
 
     @Override

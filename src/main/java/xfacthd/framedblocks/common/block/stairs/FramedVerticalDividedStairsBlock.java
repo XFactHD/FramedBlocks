@@ -73,7 +73,7 @@ public class FramedVerticalDividedStairsBlock extends AbstractFramedDoubleBlock
     @Override
     public Tuple<BlockState, BlockState> calculateBlockPair(BlockState state)
     {
-        BlockState defState = FBContent.BLOCK_FRAMED_VERTICAL_HALF_STAIRS.get().defaultBlockState();
+        BlockState defState = FBContent.BLOCK_FRAMED_VERTICAL_HALF_STAIRS.value().defaultBlockState();
         Direction facing = state.getValue(FramedProperties.FACING_HOR);
 
         return new Tuple<>(

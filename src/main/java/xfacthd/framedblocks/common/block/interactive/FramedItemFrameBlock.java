@@ -122,7 +122,7 @@ public class FramedItemFrameBlock extends FramedBlock
     @Override
     public boolean handleBlockLeftClick(BlockState state, Level level, BlockPos pos, Player player)
     {
-        if (player.getMainHandItem().is(FBContent.ITEM_FRAMED_HAMMER.get()))
+        if (player.getMainHandItem().is(FBContent.ITEM_FRAMED_HAMMER.value()))
         {
             if (!level.isClientSide())
             {
@@ -213,7 +213,7 @@ public class FramedItemFrameBlock extends FramedBlock
         if (!level.isClientSide() && state.getValue(PropertyHolder.MAP_FRAME))
         {
             return Utils.createBlockEntityTicker(
-                    type, FBContent.BE_TYPE_FRAMED_ITEM_FRAME.get(), (l, p, s, be) -> be.tickWithMap()
+                    type, FBContent.BE_TYPE_FRAMED_ITEM_FRAME.value(), (l, p, s, be) -> be.tickWithMap()
             );
         }
         return null;

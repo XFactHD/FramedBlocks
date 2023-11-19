@@ -75,7 +75,7 @@ public class FramedHalfSlopeGeometry implements Geometry
 
     public static BlockState itemSource()
     {
-        return FBContent.BLOCK_FRAMED_HALF_SLOPE.get()
+        return FBContent.BLOCK_FRAMED_HALF_SLOPE.value()
                 .defaultBlockState()
                 .setValue(FramedProperties.FACING_HOR, Direction.SOUTH);
     }

@@ -1,8 +1,8 @@
 package xfacthd.framedblocks.common.datagen.builders.book.elements;
 
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.ItemLike;
-import net.neoforged.neoforge.registries.ForgeRegistries;
 import xfacthd.framedblocks.common.datagen.builders.book.elements.attributes.ElementCategory;
 
 public final class Elements
@@ -29,7 +29,7 @@ public final class Elements
 
     public static StackElementBuilder stack(ItemLike item)
     {
-        return stack(ForgeRegistries.ITEMS.getKey(item.asItem()));
+        return stack(BuiltInRegistries.ITEM.getKey(item.asItem()));
     }
 
     public static StackElementBuilder stack(ResourceLocation itemId)

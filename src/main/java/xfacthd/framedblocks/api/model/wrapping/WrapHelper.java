@@ -1,11 +1,11 @@
 package xfacthd.framedblocks.api.model.wrapping;
 
 import com.mojang.logging.LogUtils;
+import net.minecraft.core.Holder;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.block.state.properties.Property;
-import net.neoforged.neoforge.registries.RegistryObject;
 import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
 import xfacthd.framedblocks.api.block.FramedProperties;
@@ -34,7 +34,7 @@ public final class WrapHelper
     public static final StateMerger IGNORE_ALL = state -> state.getBlock().defaultBlockState();
 
     public static void wrap(
-            RegistryObject<Block> block,
+            Holder<Block> block,
             GeometryFactory blockGeometryFactory,
             List<Property<?>> ignoredProps
     )
@@ -43,7 +43,7 @@ public final class WrapHelper
     }
 
     public static void wrap(
-            RegistryObject<Block> block,
+            Holder<Block> block,
             GeometryFactory blockGeometryFactory,
             @Nullable BlockState itemModelSource,
             List<Property<?>> ignoredProps
@@ -53,7 +53,7 @@ public final class WrapHelper
     }
 
     public static void wrap(
-            RegistryObject<Block> block,
+            Holder<Block> block,
             GeometryFactory blockGeometryFactory,
             StateMerger stateMerger
     )
@@ -62,7 +62,7 @@ public final class WrapHelper
     }
 
     public static void wrap(
-            RegistryObject<Block> block,
+            Holder<Block> block,
             GeometryFactory blockGeometryFactory,
             @Nullable BlockState itemModelSource,
             StateMerger stateMerger
@@ -74,7 +74,7 @@ public final class WrapHelper
 
 
     public static void wrapSpecial(
-            RegistryObject<Block> block,
+            Holder<Block> block,
             ModelFactory modelFactory,
             @Nullable BlockState itemModelSource,
             StateMerger stateMerger
@@ -86,8 +86,8 @@ public final class WrapHelper
 
 
     public static void copy(
-            RegistryObject<Block> block,
-            RegistryObject<Block> srcBlock,
+            Holder<Block> block,
+            Holder<Block> srcBlock,
             List<Property<?>> ignoredProps
     )
     {
@@ -95,8 +95,8 @@ public final class WrapHelper
     }
 
     public static void copy(
-            RegistryObject<Block> block,
-            RegistryObject<Block> srcBlock,
+            Holder<Block> block,
+            Holder<Block> srcBlock,
             @Nullable BlockState itemModelSource,
             List<Property<?>> ignoredProps
     )

@@ -14,7 +14,7 @@ public class FramedElevatedDoubleSlopeSlabBlockEntity extends FramedDoubleBlockE
 {
     public FramedElevatedDoubleSlopeSlabBlockEntity(BlockPos pos, BlockState state)
     {
-        super(FBContent.BE_TYPE_FRAMED_ELEVATED_DOUBLE_SLOPE_SLAB.get(), pos, state);
+        super(FBContent.BE_TYPE_FRAMED_ELEVATED_DOUBLE_SLOPE_SLAB.value(), pos, state);
     }
 
     @Override

@@ -133,7 +133,7 @@ public class FramedPaneBlock extends IronBarsBlock implements IFramedBlock
     @Override //The pane handles this through the SideSkipPredicate instead
     public boolean skipRendering(BlockState state, BlockState adjacentState, Direction side)
     {
-        return this == FBContent.BLOCK_FRAMED_BARS.get() && super.skipRendering(state, adjacentState, side);
+        return this == FBContent.BLOCK_FRAMED_BARS.value() && super.skipRendering(state, adjacentState, side);
     }
 
     @Override

@@ -13,7 +13,7 @@ public class FramedStackedSlopeSlabBlockEntity extends FramedDoubleBlockEntity
 {
     public FramedStackedSlopeSlabBlockEntity(BlockPos pos, BlockState state)
     {
-        super(FBContent.BE_TYPE_FRAMED_STACKED_SLOPE_SLAB.get(), pos, state);
+        super(FBContent.BE_TYPE_FRAMED_STACKED_SLOPE_SLAB.value(), pos, state);
     }
 
     @Override

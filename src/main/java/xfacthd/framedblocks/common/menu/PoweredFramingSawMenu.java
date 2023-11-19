@@ -42,7 +42,7 @@ public class PoweredFramingSawMenu extends AbstractContainerMenu implements IFra
 
     public PoweredFramingSawMenu(int windowId, Inventory inv, Level level, BlockPos pos)
     {
-        super(FBContent.MENU_TYPE_POWERED_FRAMING_SAW.get(), windowId);
+        super(FBContent.MENU_TYPE_POWERED_FRAMING_SAW.value(), windowId);
 
         BlockEntity be = level.getBlockEntity(pos);
         Preconditions.checkState(be instanceof PoweredFramingSawBlockEntity);

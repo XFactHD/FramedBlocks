@@ -45,7 +45,7 @@ public final class DoubleBlockSoundType extends SoundType
     @Override
     public SoundEvent getPlaceSound()
     {
-        return FBContent.BLOCK_FRAMED_CUBE.get().defaultBlockState().getSoundType().getPlaceSound();
+        return FBContent.BLOCK_FRAMED_CUBE.value().defaultBlockState().getSoundType().getPlaceSound();
     }
 
     @Override

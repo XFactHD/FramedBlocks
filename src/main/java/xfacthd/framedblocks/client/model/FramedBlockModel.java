@@ -71,7 +71,7 @@ public final class FramedBlockModel extends BakedModelProxy
         this.state = ctx.state();
         this.geometry = geometry;
         this.type = ((IFramedBlock) state.getBlock()).getBlockType();
-        this.isBaseCube = state.getBlock() == FBContent.BLOCK_FRAMED_CUBE.get();
+        this.isBaseCube = state.getBlock() == FBContent.BLOCK_FRAMED_CUBE.value();
         this.cacheFullRenderTypes = geometry.canFullyCacheRenderTypes();
         this.forceUngeneratedBaseModel = geometry.forceUngeneratedBaseModel();
         this.useBaseModel = geometry.useBaseModel();

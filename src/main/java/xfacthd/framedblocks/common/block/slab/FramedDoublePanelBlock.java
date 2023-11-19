@@ -47,7 +47,7 @@ public class FramedDoublePanelBlock extends AbstractFramedDoubleBlock
     @Override
     public ItemStack getCloneItemStack(BlockState state, HitResult target, BlockGetter level, BlockPos pos, Player player)
     {
-        return new ItemStack(FBContent.BLOCK_FRAMED_PANEL.get());
+        return new ItemStack(FBContent.BLOCK_FRAMED_PANEL.value());
     }
 
     @Override
@@ -68,7 +68,7 @@ public class FramedDoublePanelBlock extends AbstractFramedDoubleBlock
     {
         Direction facing = state.getValue(FramedProperties.FACING_NE);
 
-        BlockState defState = FBContent.BLOCK_FRAMED_PANEL.get().defaultBlockState();
+        BlockState defState = FBContent.BLOCK_FRAMED_PANEL.value().defaultBlockState();
         return new Tuple<>(
                 defState.setValue(FramedProperties.FACING_HOR, facing),
                 defState.setValue(FramedProperties.FACING_HOR, facing.getOpposite())

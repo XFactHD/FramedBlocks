@@ -265,7 +265,7 @@ public final class FramingSawRecipeProvider extends RecipeProvider
 
         FramingSawRecipeBuilder.builder(FBContent.BLOCK_FRAMED_SECRET_STORAGE)
                 .material(FramingSawRecipe.CUBE_MATERIAL_VALUE * 4)
-                .additive(FramingSawRecipeAdditive.of(FBContent.BLOCK_FRAMED_CHEST.get()))
+                .additive(FramingSawRecipeAdditive.of(FBContent.BLOCK_FRAMED_CHEST.value()))
                 .save(consumer);
 
         FramingSawRecipeBuilder.builder(FBContent.BLOCK_FRAMED_BARS)
@@ -609,22 +609,22 @@ public final class FramingSawRecipeProvider extends RecipeProvider
 
         FramingSawRecipeBuilder.builder(FBContent.BLOCK_FRAMED_FANCY_RAIL_SLOPE)
                 .material(FramingSawRecipe.CUBE_MATERIAL_VALUE / 2)
-                .additive(FramingSawRecipeAdditive.of(FBContent.BLOCK_FRAMED_FANCY_RAIL.get()))
+                .additive(FramingSawRecipeAdditive.of(FBContent.BLOCK_FRAMED_FANCY_RAIL.value()))
                 .save(consumer);
 
         FramingSawRecipeBuilder.builder(FBContent.BLOCK_FRAMED_FANCY_POWERED_RAIL_SLOPE)
                 .material(FramingSawRecipe.CUBE_MATERIAL_VALUE / 2)
-                .additive(FramingSawRecipeAdditive.of(FBContent.BLOCK_FRAMED_FANCY_POWERED_RAIL.get()))
+                .additive(FramingSawRecipeAdditive.of(FBContent.BLOCK_FRAMED_FANCY_POWERED_RAIL.value()))
                 .save(consumer);
 
         FramingSawRecipeBuilder.builder(FBContent.BLOCK_FRAMED_FANCY_DETECTOR_RAIL_SLOPE)
                 .material(FramingSawRecipe.CUBE_MATERIAL_VALUE / 2)
-                .additive(FramingSawRecipeAdditive.of(FBContent.BLOCK_FRAMED_FANCY_DETECTOR_RAIL.get()))
+                .additive(FramingSawRecipeAdditive.of(FBContent.BLOCK_FRAMED_FANCY_DETECTOR_RAIL.value()))
                 .save(consumer);
 
         FramingSawRecipeBuilder.builder(FBContent.BLOCK_FRAMED_FANCY_ACTIVATOR_RAIL_SLOPE)
                 .material(FramingSawRecipe.CUBE_MATERIAL_VALUE / 2)
-                .additive(FramingSawRecipeAdditive.of(FBContent.BLOCK_FRAMED_FANCY_ACTIVATOR_RAIL.get()))
+                .additive(FramingSawRecipeAdditive.of(FBContent.BLOCK_FRAMED_FANCY_ACTIVATOR_RAIL.value()))
                 .save(consumer);
 
         FramingSawRecipeBuilder.builder(FBContent.BLOCK_FRAMED_HALF_SLOPE)

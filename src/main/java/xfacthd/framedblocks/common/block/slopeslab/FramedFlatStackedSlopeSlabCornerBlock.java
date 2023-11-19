@@ -153,15 +153,15 @@ public class FramedFlatStackedSlopeSlabCornerBlock extends AbstractFramedDoubleB
         Block topBlock;
         if (getBlockType() == BlockType.FRAMED_FLAT_STACKED_INNER_SLOPE_SLAB_CORNER)
         {
-            topBlock = FBContent.BLOCK_FRAMED_FLAT_INNER_SLOPE_SLAB_CORNER.get();
+            topBlock = FBContent.BLOCK_FRAMED_FLAT_INNER_SLOPE_SLAB_CORNER.value();
         }
         else
         {
-            topBlock = FBContent.BLOCK_FRAMED_FLAT_SLOPE_SLAB_CORNER.get();
+            topBlock = FBContent.BLOCK_FRAMED_FLAT_SLOPE_SLAB_CORNER.value();
         }
 
         return new Tuple<>(
-                FBContent.BLOCK_FRAMED_SLAB.get()
+                FBContent.BLOCK_FRAMED_SLAB.value()
                         .defaultBlockState()
                         .setValue(FramedProperties.TOP, top),
                 topBlock.defaultBlockState()
@@ -228,14 +228,14 @@ public class FramedFlatStackedSlopeSlabCornerBlock extends AbstractFramedDoubleB
 
     public static BlockState itemModelSource()
     {
-        return FBContent.BLOCK_FRAMED_FLAT_STACKED_SLOPE_SLAB_CORNER.get()
+        return FBContent.BLOCK_FRAMED_FLAT_STACKED_SLOPE_SLAB_CORNER.value()
                 .defaultBlockState()
                 .setValue(FramedProperties.FACING_HOR, Direction.SOUTH);
     }
 
     public static BlockState itemModelSourceInner()
     {
-        return FBContent.BLOCK_FRAMED_FLAT_STACKED_INNER_SLOPE_SLAB_CORNER.get()
+        return FBContent.BLOCK_FRAMED_FLAT_STACKED_INNER_SLOPE_SLAB_CORNER.value()
                 .defaultBlockState()
                 .setValue(FramedProperties.FACING_HOR, Direction.SOUTH);
     }

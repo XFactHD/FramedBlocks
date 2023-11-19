@@ -127,6 +127,6 @@ public class FramedChestGeometry implements Geometry
 
     public static BlockState itemSource()
     {
-        return FBContent.BLOCK_FRAMED_CHEST.get().defaultBlockState();
+        return FBContent.BLOCK_FRAMED_CHEST.value().defaultBlockState();
     }
 }

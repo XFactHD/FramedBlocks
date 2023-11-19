@@ -56,11 +56,11 @@ class FramedFancyDetectorRailSlopeBlock extends FramedDetectorRailSlopeBlock imp
         Direction facing = FramedUtils.getDirectionFromAscendingRailShape(shape);
 
         return new Tuple<>(
-                FBContent.BLOCK_FRAMED_SLOPE.get().defaultBlockState()
+                FBContent.BLOCK_FRAMED_SLOPE.value().defaultBlockState()
                         .setValue(PropertyHolder.SLOPE_TYPE, SlopeType.BOTTOM)
                         .setValue(FramedProperties.FACING_HOR, facing)
                         .setValue(FramedProperties.Y_SLOPE, ySlope),
-                FBContent.BLOCK_FRAMED_FANCY_DETECTOR_RAIL.get().defaultBlockState()
+                FBContent.BLOCK_FRAMED_FANCY_DETECTOR_RAIL.value().defaultBlockState()
                         .setValue(BlockStateProperties.RAIL_SHAPE_STRAIGHT, shape)
         );
     }

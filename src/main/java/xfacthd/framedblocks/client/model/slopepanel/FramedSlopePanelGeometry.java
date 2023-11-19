@@ -149,7 +149,7 @@ public class FramedSlopePanelGeometry implements Geometry
 
     public static BlockState itemSource()
     {
-        return FBContent.BLOCK_FRAMED_SLOPE_PANEL.get()
+        return FBContent.BLOCK_FRAMED_SLOPE_PANEL.value()
                 .defaultBlockState()
                 .setValue(FramedProperties.FACING_HOR, Direction.SOUTH);
     }

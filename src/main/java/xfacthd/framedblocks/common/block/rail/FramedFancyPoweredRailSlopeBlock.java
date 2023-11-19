@@ -60,11 +60,11 @@ class FramedFancyPoweredRailSlopeBlock extends FramedPoweredRailSlopeBlock imple
             case FRAMED_FANCY_POWERED_RAIL_SLOPE -> FBContent.BLOCK_FRAMED_FANCY_POWERED_RAIL;
             case FRAMED_FANCY_ACTIVATOR_RAIL_SLOPE -> FBContent.BLOCK_FRAMED_FANCY_ACTIVATOR_RAIL;
             default -> throw new IllegalArgumentException("Invalid block type");
-        }).get().defaultBlockState();
+        }).value().defaultBlockState();
         Direction facing = FramedUtils.getDirectionFromAscendingRailShape(shape);
 
         return new Tuple<>(
-                FBContent.BLOCK_FRAMED_SLOPE.get().defaultBlockState()
+                FBContent.BLOCK_FRAMED_SLOPE.value().defaultBlockState()
                         .setValue(PropertyHolder.SLOPE_TYPE, SlopeType.BOTTOM)
                         .setValue(FramedProperties.FACING_HOR, facing)
                         .setValue(FramedProperties.Y_SLOPE, ySlope),

@@ -134,7 +134,7 @@ public class FramedInnerCornerSlopeGeometry implements Geometry
 
     public static BlockState itemSource()
     {
-        return FBContent.BLOCK_FRAMED_INNER_CORNER_SLOPE.get()
+        return FBContent.BLOCK_FRAMED_INNER_CORNER_SLOPE.value()
                 .defaultBlockState()
                 .setValue(FramedProperties.FACING_HOR, Direction.SOUTH);
     }

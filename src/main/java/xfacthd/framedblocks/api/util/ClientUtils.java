@@ -46,6 +46,11 @@ public final class ClientUtils
         Minecraft.getInstance().tell(task);
     }
 
+    public static void enqueueClientTask(long delay, Runnable task)
+    {
+        InternalClientAPI.INSTANCE.enqueueClientTask(delay, task);
+    }
+
     public static int getBlockColor(BlockAndTintGetter level, BlockPos pos, BlockState state, int tintIdx)
     {
         return Minecraft.getInstance().getBlockColors().getColor(state, level, pos, tintIdx);
@@ -65,11 +70,6 @@ public final class ClientUtils
     public static boolean isTexture(BakedQuad quad, ResourceLocation texture)
     {
         return quad.getSprite().contents().name().equals(texture);
-    }
-
-    public static void enqueueClientTask(long delay, Runnable task)
-    {
-        InternalClientAPI.INSTANCE.enqueueClientTask(delay, task);
     }
 
 

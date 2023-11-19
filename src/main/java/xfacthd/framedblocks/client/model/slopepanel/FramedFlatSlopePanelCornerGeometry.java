@@ -167,7 +167,7 @@ public class FramedFlatSlopePanelCornerGeometry implements Geometry
 
     public static BlockState itemSource()
     {
-        return FBContent.BLOCK_FRAMED_FLAT_SLOPE_PANEL_CORNER.get()
+        return FBContent.BLOCK_FRAMED_FLAT_SLOPE_PANEL_CORNER.value()
                 .defaultBlockState()
                 .setValue(FramedProperties.FACING_HOR, Direction.SOUTH)
                 .setValue(PropertyHolder.ROTATION, HorizontalRotation.RIGHT);

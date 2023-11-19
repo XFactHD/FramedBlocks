@@ -1,17 +1,18 @@
 package xfacthd.framedblocks.client.apiimpl;
 
 import net.minecraft.client.resources.model.BakedModel;
+import net.minecraft.core.Holder;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.Property;
 import net.minecraft.world.level.material.Fluid;
 import net.neoforged.neoforge.common.util.Lazy;
-import net.neoforged.neoforge.registries.RegistryObject;
 import org.jetbrains.annotations.Nullable;
 import xfacthd.framedblocks.FramedBlocks;
 import xfacthd.framedblocks.api.internal.InternalClientAPI;
 import xfacthd.framedblocks.api.model.wrapping.*;
+import xfacthd.framedblocks.api.util.Utils;
 import xfacthd.framedblocks.client.model.FluidModel;
 import xfacthd.framedblocks.client.model.FramedBlockModel;
 import xfacthd.framedblocks.client.modelwrapping.*;
@@ -23,7 +24,7 @@ public final class InternalClientApiImpl implements InternalClientAPI
 {
     @Override
     public void registerModelWrapper(
-            RegistryObject<Block> block,
+            Holder<Block> block,
             GeometryFactory geometryFactory,
             @Nullable BlockState itemModelSource,
             StateMerger stateMerger
@@ -39,7 +40,7 @@ public final class InternalClientApiImpl implements InternalClientAPI
 
     @Override
     public void registerSpecialModelWrapper(
-            RegistryObject<Block> block,
+            Holder<Block> block,
             ModelFactory modelFactory,
             @Nullable BlockState itemModelSource,
             StateMerger stateMerger
@@ -53,8 +54,8 @@ public final class InternalClientApiImpl implements InternalClientAPI
     @Override
     @SuppressWarnings({ "unchecked", "rawtypes" })
     public void registerCopyingModelWrapper(
-            RegistryObject<Block> block,
-            RegistryObject<Block> srcBlock,
+            Holder<Block> block,
+            Holder<Block> srcBlock,
             @Nullable BlockState itemModelSource,
             @Nullable List<Property<?>> ignoredProps
     )
@@ -64,13 +65,15 @@ public final class InternalClientApiImpl implements InternalClientAPI
                 new ModelFactory()
                 {
                     private final Lazy<ModelWrappingHandler> sourceWrapper = Lazy.of(() ->
-                            ModelWrappingManager.getHandler(srcBlock.get())
+                            ModelWrappingManager.getHandler(srcBlock.value())
                     );
 
                     @Override
                     public BakedModel create(GeometryFactory.Context ctx)
                     {
-                        ResourceLocation baseLoc = StateLocationCache.getLocationFromState(ctx.state(), srcBlock.getId());
+                        ResourceLocation baseLoc = StateLocationCache.getLocationFromState(
+                                ctx.state(), Utils.getKeyOrThrow(srcBlock).location()
+                        );
                         BakedModel baseModel = ctx.modelAccessor().get(baseLoc);
                         return sourceWrapper.get().wrapBlockModel(
                                 baseModel, ctx.state(), ctx.modelAccessor(), null
@@ -80,7 +83,7 @@ public final class InternalClientApiImpl implements InternalClientAPI
                 itemModelSource,
                 state ->
                 {
-                    BlockState sourceState = srcBlock.get().defaultBlockState();
+                    BlockState sourceState = srcBlock.value().defaultBlockState();
                     for (Property prop : state.getProperties())
                     {
                         if (sourceState.hasProperty(prop))

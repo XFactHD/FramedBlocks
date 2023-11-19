@@ -24,7 +24,7 @@ public final class SlabGhostRenderBehaviour implements GhostRenderBehaviour
             int renderPass
     )
     {
-        if (hitState.getBlock() == FBContent.BLOCK_FRAMED_SLAB.get())
+        if (hitState.getBlock() == FBContent.BLOCK_FRAMED_SLAB.value())
         {
             boolean top = hitState.getValue(FramedProperties.TOP);
             if ((top && hit.getDirection() == Direction.DOWN) || (!top && hit.getDirection() == Direction.UP))
@@ -46,7 +46,7 @@ public final class SlabGhostRenderBehaviour implements GhostRenderBehaviour
             int renderPass
     )
     {
-        if (hitState.getBlock() == FBContent.BLOCK_FRAMED_SLAB.get())
+        if (hitState.getBlock() == FBContent.BLOCK_FRAMED_SLAB.value())
         {
             boolean top = hitState.getValue(FramedProperties.TOP);
             if ((top && hit.getDirection() == Direction.DOWN) || (!top && hit.getDirection() == Direction.UP))

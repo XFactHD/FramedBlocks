@@ -39,7 +39,7 @@ public class FramedItemFrameBlockEntity extends FramedBlockEntity
 
     public FramedItemFrameBlockEntity(BlockPos pos, BlockState state)
     {
-        super(FBContent.BE_TYPE_FRAMED_ITEM_FRAME.get(), pos, state);
+        super(FBContent.BE_TYPE_FRAMED_ITEM_FRAME.value(), pos, state);
         this.glowing = getBlockType() == BlockType.FRAMED_GLOWING_ITEM_FRAME;
     }
 

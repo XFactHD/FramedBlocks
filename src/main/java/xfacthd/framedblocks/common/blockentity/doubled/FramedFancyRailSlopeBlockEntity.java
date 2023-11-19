@@ -15,7 +15,7 @@ public class FramedFancyRailSlopeBlockEntity extends FramedDoubleBlockEntity
 {
     public FramedFancyRailSlopeBlockEntity(BlockPos pos, BlockState state)
     {
-        super(FBContent.BE_TYPE_FRAMED_FANCY_RAIL_SLOPE.get(), pos, state);
+        super(FBContent.BE_TYPE_FRAMED_FANCY_RAIL_SLOPE.value(), pos, state);
     }
 
     @Override

@@ -16,8 +16,8 @@ public class FramedDividedPanelBlockEntity extends FramedDoubleBlockEntity
 
     public FramedDividedPanelBlockEntity(BlockPos pos, BlockState state)
     {
-        super(FBContent.BE_TYPE_FRAMED_DIVIDED_PANEL.get(), pos, state);
-        this.vertical = state.getBlock() == FBContent.BLOCK_FRAMED_DIVIDED_PANEL_VERT.get();
+        super(FBContent.BE_TYPE_FRAMED_DIVIDED_PANEL.value(), pos, state);
+        this.vertical = state.getBlock() == FBContent.BLOCK_FRAMED_DIVIDED_PANEL_VERT.value();
     }
 
     @Override

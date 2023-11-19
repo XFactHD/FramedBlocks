@@ -25,7 +25,7 @@ public class FramedChestBlockEntity extends FramedStorageBlockEntity
 
     public FramedChestBlockEntity(BlockPos pos, BlockState state)
     {
-        super(FBContent.blockEntityTypeFramedChest.get(), pos, state);
+        super(FBContent.BE_TYPE_FRAMED_CHEST.value(), pos, state);
     }
 
     public static void tick(Level level, BlockPos pos, BlockState state, FramedChestBlockEntity tile)

@@ -1,11 +1,12 @@
 package xfacthd.framedblocks.common.datagen.providers;
 
+import net.minecraft.core.Holder;
 import net.minecraft.data.PackOutput;
 import net.minecraft.world.item.Item;
 import net.neoforged.neoforge.client.model.generators.*;
 import net.neoforged.neoforge.common.data.ExistingFileHelper;
-import net.neoforged.neoforge.registries.RegistryObject;
 import xfacthd.framedblocks.api.util.FramedConstants;
+import xfacthd.framedblocks.api.util.Utils;
 import xfacthd.framedblocks.client.render.item.BlueprintPropertyOverride;
 import xfacthd.framedblocks.common.FBContent;
 
@@ -40,15 +41,15 @@ public final class FramedItemModelProvider extends ItemModelProvider
                     .end();
     }
 
-    private ItemModelBuilder handheldItem(RegistryObject<Item> item, String renderType)
+    private ItemModelBuilder handheldItem(Holder<Item> item, String renderType)
     {
-        String name = item.getId().getPath();
+        String name = Utils.getKeyOrThrow(item).location().getPath();
         return singleTexture(name, mcLoc("item/handheld"), "layer0", modLoc("item/" + name)).renderType(renderType);
     }
 
-    private ItemModelBuilder simpleItem(RegistryObject<Item> item, String renderType)
+    private ItemModelBuilder simpleItem(Holder<Item> item, String renderType)
     {
-        return simpleItem(item.getId().getPath(), renderType);
+        return simpleItem(Utils.getKeyOrThrow(item).location().getPath(), renderType);
     }
 
     private ItemModelBuilder simpleItem(String name, String renderType)

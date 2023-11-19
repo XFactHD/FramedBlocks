@@ -83,7 +83,7 @@ public class PoweredFramingSawBlockEntity extends BlockEntity
 
     public PoweredFramingSawBlockEntity(BlockPos pPos, BlockState pBlockState)
     {
-        super(FBContent.BE_TYPE_POWERED_FRAMING_SAW.get(), pPos, pBlockState);
+        super(FBContent.BE_TYPE_POWERED_FRAMING_SAW.value(), pPos, pBlockState);
     }
 
     public static void tick(Level level, BlockPos pos, BlockState state, PoweredFramingSawBlockEntity be)

@@ -1,6 +1,7 @@
 package xfacthd.framedblocks.common.data.camo;
 
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.NbtUtils;
 import net.minecraft.world.item.*;
@@ -16,7 +17,6 @@ import net.neoforged.neoforge.fluids.FluidType;
 import net.neoforged.neoforge.fluids.capability.IFluidHandler;
 import net.neoforged.neoforge.fluids.capability.IFluidHandlerItem;
 import net.neoforged.fml.loading.FMLEnvironment;
-import net.neoforged.neoforge.registries.ForgeRegistries;
 import xfacthd.framedblocks.api.camo.*;
 import xfacthd.framedblocks.api.util.Utils;
 import xfacthd.framedblocks.api.util.ClientUtils;
@@ -99,7 +99,7 @@ public class FluidCamoContainer extends CamoContainer
     @Override
     public CamoContainerFactory getFactory()
     {
-        return FBContent.FACTORY_FLUID.get();
+        return FBContent.FACTORY_FLUID.value();
     }
 
     @Override
@@ -111,7 +111,7 @@ public class FluidCamoContainer extends CamoContainer
     @Override
     public void toNetwork(CompoundTag tag)
     {
-        tag.putInt("fluid", Utils.getId(ForgeRegistries.FLUIDS, fluidState.getType()));
+        tag.putInt("fluid", BuiltInRegistries.FLUID.getId(fluidState.getType()));
     }
 
 
@@ -128,7 +128,7 @@ public class FluidCamoContainer extends CamoContainer
         @Override
         public CamoContainer fromNetwork(CompoundTag tag)
         {
-            FluidState fluidState = Utils.getValue(ForgeRegistries.FLUIDS, tag.getInt("fluid")).defaultFluidState();
+            FluidState fluidState = BuiltInRegistries.FLUID.byId(tag.getInt("fluid")).defaultFluidState();
             return new FluidCamoContainer(fluidState);
         }
 

@@ -14,7 +14,7 @@ public class FramedDoubleStairsBlockEntity extends FramedDoubleBlockEntity
 {
     public FramedDoubleStairsBlockEntity(BlockPos worldPosition, BlockState blockState)
     {
-        super(FBContent.BE_TYPE_FRAMED_DOUBLE_STAIRS.get(), worldPosition, blockState);
+        super(FBContent.BE_TYPE_FRAMED_DOUBLE_STAIRS.value(), worldPosition, blockState);
     }
 
     @Override

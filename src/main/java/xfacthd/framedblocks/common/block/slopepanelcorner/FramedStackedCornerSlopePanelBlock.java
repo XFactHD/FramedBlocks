@@ -141,20 +141,20 @@ public class FramedStackedCornerSlopePanelBlock extends AbstractFramedDoubleBloc
         return switch ((BlockType) getBlockType())
         {
             case FRAMED_STACKED_CORNER_SLOPE_PANEL -> new Tuple<>(
-                    FBContent.BLOCK_FRAMED_CORNER_PILLAR.get()
+                    FBContent.BLOCK_FRAMED_CORNER_PILLAR.value()
                             .defaultBlockState()
                             .setValue(FramedProperties.FACING_HOR, dir),
-                    FBContent.BLOCK_FRAMED_LARGE_CORNER_SLOPE_PANEL.get()
+                    FBContent.BLOCK_FRAMED_LARGE_CORNER_SLOPE_PANEL.value()
                             .defaultBlockState()
                             .setValue(FramedProperties.FACING_HOR, dir)
                             .setValue(FramedProperties.TOP, top)
                             .setValue(FramedProperties.Y_SLOPE, ySlope)
             );
             case FRAMED_STACKED_INNER_CORNER_SLOPE_PANEL -> new Tuple<>(
-                    FBContent.BLOCK_FRAMED_VERTICAL_STAIRS.get()
+                    FBContent.BLOCK_FRAMED_VERTICAL_STAIRS.value()
                             .defaultBlockState()
                             .setValue(FramedProperties.FACING_HOR, dir.getOpposite()),
-                    FBContent.BLOCK_FRAMED_SMALL_INNER_CORNER_SLOPE_PANEL.get()
+                    FBContent.BLOCK_FRAMED_SMALL_INNER_CORNER_SLOPE_PANEL.value()
                             .defaultBlockState()
                             .setValue(FramedProperties.FACING_HOR, dir)
                             .setValue(FramedProperties.TOP, top)
@@ -263,8 +263,8 @@ public class FramedStackedCornerSlopePanelBlock extends AbstractFramedDoubleBloc
     {
         Block other = switch ((BlockType) getBlockType())
         {
-            case FRAMED_STACKED_CORNER_SLOPE_PANEL -> FBContent.BLOCK_FRAMED_STACKED_CORNER_SLOPE_PANEL_WALL.get();
-            case FRAMED_STACKED_INNER_CORNER_SLOPE_PANEL -> FBContent.BLOCK_FRAMED_STACKED_INNER_CORNER_SLOPE_PANEL_WALL.get();
+            case FRAMED_STACKED_CORNER_SLOPE_PANEL -> FBContent.BLOCK_FRAMED_STACKED_CORNER_SLOPE_PANEL_WALL.value();
+            case FRAMED_STACKED_INNER_CORNER_SLOPE_PANEL -> FBContent.BLOCK_FRAMED_STACKED_INNER_CORNER_SLOPE_PANEL_WALL.value();
             default -> throw new IllegalStateException("Unexpected type: " + getBlockType());
         };
         return new VerticalAndWallBlockItem(this, other, new Item.Properties());
@@ -274,14 +274,14 @@ public class FramedStackedCornerSlopePanelBlock extends AbstractFramedDoubleBloc
 
     public static BlockState itemModelSource()
     {
-        return FBContent.BLOCK_FRAMED_STACKED_CORNER_SLOPE_PANEL.get()
+        return FBContent.BLOCK_FRAMED_STACKED_CORNER_SLOPE_PANEL.value()
                 .defaultBlockState()
                 .setValue(FramedProperties.FACING_HOR, Direction.WEST);
     }
 
     public static BlockState itemModelSourceInner()
     {
-        return FBContent.BLOCK_FRAMED_STACKED_INNER_CORNER_SLOPE_PANEL.get()
+        return FBContent.BLOCK_FRAMED_STACKED_INNER_CORNER_SLOPE_PANEL.value()
                 .defaultBlockState()
                 .setValue(FramedProperties.FACING_HOR, Direction.EAST);
     }

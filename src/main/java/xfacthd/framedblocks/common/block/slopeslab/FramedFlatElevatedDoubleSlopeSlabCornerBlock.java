@@ -94,13 +94,13 @@ public class FramedFlatElevatedDoubleSlopeSlabCornerBlock extends AbstractFramed
         BlockState defStateTwo;
         if (getBlockType() == BlockType.FRAMED_FLAT_ELEV_INNER_DOUBLE_SLOPE_SLAB_CORNER)
         {
-            defStateOne = FBContent.BLOCK_FRAMED_FLAT_ELEVATED_INNER_SLOPE_SLAB_CORNER.get().defaultBlockState();
-            defStateTwo = FBContent.BLOCK_FRAMED_FLAT_SLOPE_SLAB_CORNER.get().defaultBlockState();
+            defStateOne = FBContent.BLOCK_FRAMED_FLAT_ELEVATED_INNER_SLOPE_SLAB_CORNER.value().defaultBlockState();
+            defStateTwo = FBContent.BLOCK_FRAMED_FLAT_SLOPE_SLAB_CORNER.value().defaultBlockState();
         }
         else
         {
-            defStateOne = FBContent.BLOCK_FRAMED_FLAT_ELEVATED_SLOPE_SLAB_CORNER.get().defaultBlockState();
-            defStateTwo = FBContent.BLOCK_FRAMED_FLAT_INNER_SLOPE_SLAB_CORNER.get().defaultBlockState();
+            defStateOne = FBContent.BLOCK_FRAMED_FLAT_ELEVATED_SLOPE_SLAB_CORNER.value().defaultBlockState();
+            defStateTwo = FBContent.BLOCK_FRAMED_FLAT_INNER_SLOPE_SLAB_CORNER.value().defaultBlockState();
         }
 
         Direction facing = state.getValue(FramedProperties.FACING_HOR);
@@ -199,14 +199,14 @@ public class FramedFlatElevatedDoubleSlopeSlabCornerBlock extends AbstractFramed
 
     public static BlockState itemModelSource()
     {
-        return FBContent.BLOCK_FRAMED_FLAT_ELEVATED_DOUBLE_SLOPE_SLAB_CORNER.get()
+        return FBContent.BLOCK_FRAMED_FLAT_ELEVATED_DOUBLE_SLOPE_SLAB_CORNER.value()
                 .defaultBlockState()
                 .setValue(FramedProperties.FACING_HOR, Direction.SOUTH);
     }
 
     public static BlockState itemModelSourceInner()
     {
-        return FBContent.BLOCK_FRAMED_FLAT_ELEVATED_INNER_DOUBLE_SLOPE_SLAB_CORNER.get()
+        return FBContent.BLOCK_FRAMED_FLAT_ELEVATED_INNER_DOUBLE_SLOPE_SLAB_CORNER.value()
                 .defaultBlockState()
                 .setValue(FramedProperties.FACING_HOR, Direction.SOUTH);
     }

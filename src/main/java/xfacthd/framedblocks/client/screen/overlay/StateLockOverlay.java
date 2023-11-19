@@ -33,7 +33,7 @@ public final class StateLockOverlay extends BlockInteractOverlay
     @Override
     protected boolean isValidTool(ItemStack stack)
     {
-        return stack.is(FBContent.ITEM_FRAMED_KEY.get());
+        return stack.is(FBContent.ITEM_FRAMED_KEY.value());
     }
 
     @Override

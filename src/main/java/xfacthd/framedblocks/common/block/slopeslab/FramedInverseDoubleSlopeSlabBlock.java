@@ -79,7 +79,7 @@ public class FramedInverseDoubleSlopeSlabBlock extends AbstractFramedDoubleBlock
         Direction facing = state.getValue(FramedProperties.FACING_HOR);
         boolean ySlope = state.getValue(FramedProperties.Y_SLOPE);
 
-        BlockState defState = FBContent.BLOCK_FRAMED_SLOPE_SLAB.get().defaultBlockState();
+        BlockState defState = FBContent.BLOCK_FRAMED_SLOPE_SLAB.value().defaultBlockState();
         return new Tuple<>(
                 defState.setValue(FramedProperties.FACING_HOR, facing.getOpposite())
                         .setValue(PropertyHolder.TOP_HALF, false)
@@ -153,6 +153,6 @@ public class FramedInverseDoubleSlopeSlabBlock extends AbstractFramedDoubleBlock
 
     public static BlockState itemModelSource()
     {
-        return FBContent.BLOCK_FRAMED_INVERSE_DOUBLE_SLOPE_SLAB.get().defaultBlockState();
+        return FBContent.BLOCK_FRAMED_INVERSE_DOUBLE_SLOPE_SLAB.value().defaultBlockState();
     }
 }

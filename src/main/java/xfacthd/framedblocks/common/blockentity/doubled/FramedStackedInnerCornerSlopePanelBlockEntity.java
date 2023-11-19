@@ -14,7 +14,7 @@ public class FramedStackedInnerCornerSlopePanelBlockEntity extends FramedDoubleB
 {
     public FramedStackedInnerCornerSlopePanelBlockEntity(BlockPos pos, BlockState state)
     {
-        super(FBContent.BE_TYPE_FRAMED_STACKED_INNER_CORNER_SLOPE_PANEL.get(), pos, state);
+        super(FBContent.BE_TYPE_FRAMED_STACKED_INNER_CORNER_SLOPE_PANEL.value(), pos, state);
     }
 
     @Override

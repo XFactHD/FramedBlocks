@@ -16,8 +16,8 @@ public final class CamoContainerFactories
 
     public static void registerCamoFactories()
     {
-        FBContent.CAMO_CONTAINER_FACTORY_REGISTRY.get()
-                .getEntries()
+        FBContent.CAMO_CONTAINER_FACTORY_REGISTRY
+                .entrySet()
                 .stream()
                 .filter(e -> !e.getKey().location().getNamespace().equals(FramedConstants.MOD_ID))
                 .map(Map.Entry::getValue)
@@ -39,9 +39,9 @@ public final class CamoContainerFactories
         }
         if (stack.getCapability(Capabilities.FLUID_HANDLER_ITEM).isPresent())
         {
-            return FBContent.FACTORY_FLUID.get();
+            return FBContent.FACTORY_FLUID.value();
         }
-        return FBContent.FACTORY_BLOCK.get();
+        return FBContent.FACTORY_BLOCK.value();
     }
 
 

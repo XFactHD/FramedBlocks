@@ -162,7 +162,7 @@ public abstract class AbstractFramedSignBlock extends FramedBlock
     @Override
     public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level level, BlockState state, BlockEntityType<T> type)
     {
-        return Utils.createBlockEntityTicker(type, FBContent.BE_TYPE_FRAMED_SIGN.get(), FramedSignBlockEntity::tick);
+        return Utils.createBlockEntityTicker(type, FBContent.BE_TYPE_FRAMED_SIGN.value(), FramedSignBlockEntity::tick);
     }
 
 

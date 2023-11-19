@@ -17,6 +17,6 @@ public final class LadderSkipPredicate implements SideSkipPredicate
     @CullTest.SingleTarget(BlockType.FRAMED_LADDER)
     public boolean test(BlockGetter level, BlockPos pos, BlockState state, BlockState adjState, Direction side)
     {
-        return Utils.isY(side) && adjState.getBlock() == FBContent.BLOCK_FRAMED_LADDER.get();
+        return Utils.isY(side) && adjState.getBlock() == FBContent.BLOCK_FRAMED_LADDER.value();
     }
 }

@@ -29,13 +29,13 @@ public class FramedDoubleSlabBlock extends AbstractFramedDoubleBlock
     @Override
     public ItemStack getCloneItemStack(BlockState state, HitResult target, BlockGetter level, BlockPos pos, Player player)
     {
-        return new ItemStack(FBContent.BLOCK_FRAMED_SLAB.get());
+        return new ItemStack(FBContent.BLOCK_FRAMED_SLAB.value());
     }
 
     @Override
     public Tuple<BlockState, BlockState> calculateBlockPair(BlockState state)
     {
-        BlockState defState = FBContent.BLOCK_FRAMED_SLAB.get().defaultBlockState();
+        BlockState defState = FBContent.BLOCK_FRAMED_SLAB.value().defaultBlockState();
         return new Tuple<>(
                 defState.setValue(FramedProperties.TOP, false),
                 defState.setValue(FramedProperties.TOP, true)

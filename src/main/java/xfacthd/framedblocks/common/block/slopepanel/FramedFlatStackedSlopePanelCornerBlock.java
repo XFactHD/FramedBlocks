@@ -158,15 +158,15 @@ public class FramedFlatStackedSlopePanelCornerBlock extends AbstractFramedDouble
         Block topBlock;
         if (getBlockType() == BlockType.FRAMED_FLAT_STACKED_INNER_SLOPE_PANEL_CORNER)
         {
-            topBlock = FBContent.BLOCK_FRAMED_FLAT_INNER_SLOPE_PANEL_CORNER.get();
+            topBlock = FBContent.BLOCK_FRAMED_FLAT_INNER_SLOPE_PANEL_CORNER.value();
         }
         else
         {
-            topBlock = FBContent.BLOCK_FRAMED_FLAT_SLOPE_PANEL_CORNER.get();
+            topBlock = FBContent.BLOCK_FRAMED_FLAT_SLOPE_PANEL_CORNER.value();
         }
 
         return new Tuple<>(
-                FBContent.BLOCK_FRAMED_PANEL.get()
+                FBContent.BLOCK_FRAMED_PANEL.value()
                         .defaultBlockState()
                         .setValue(FramedProperties.FACING_HOR, facing),
                 topBlock.defaultBlockState()
@@ -227,14 +227,14 @@ public class FramedFlatStackedSlopePanelCornerBlock extends AbstractFramedDouble
 
     public static BlockState itemModelSource()
     {
-        return FBContent.BLOCK_FRAMED_FLAT_STACKED_SLOPE_PANEL_CORNER.get()
+        return FBContent.BLOCK_FRAMED_FLAT_STACKED_SLOPE_PANEL_CORNER.value()
                 .defaultBlockState()
                 .setValue(FramedProperties.FACING_HOR, Direction.SOUTH);
     }
 
     public static BlockState itemModelSourceInner()
     {
-        return FBContent.BLOCK_FRAMED_FLAT_STACKED_INNER_SLOPE_PANEL_CORNER.get()
+        return FBContent.BLOCK_FRAMED_FLAT_STACKED_INNER_SLOPE_PANEL_CORNER.value()
                 .defaultBlockState()
                 .setValue(FramedProperties.FACING_HOR, Direction.SOUTH);
     }

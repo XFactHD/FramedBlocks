@@ -97,12 +97,12 @@ public class FramedFlatExtendedDoubleSlopePanelCornerBlock extends AbstractFrame
         if (getBlockType() == BlockType.FRAMED_FLAT_EXT_INNER_DOUBLE_SLOPE_PANEL_CORNER)
         {
             return new Tuple<>(
-                    FBContent.BLOCK_FRAMED_FLAT_EXTENDED_INNER_SLOPE_PANEL_CORNER.get()
+                    FBContent.BLOCK_FRAMED_FLAT_EXTENDED_INNER_SLOPE_PANEL_CORNER.value()
                             .defaultBlockState()
                             .setValue(FramedProperties.FACING_HOR, facing)
                             .setValue(PropertyHolder.ROTATION, rotation)
                             .setValue(FramedProperties.Y_SLOPE, ySlope),
-                    FBContent.BLOCK_FRAMED_FLAT_SLOPE_PANEL_CORNER.get()
+                    FBContent.BLOCK_FRAMED_FLAT_SLOPE_PANEL_CORNER.value()
                             .defaultBlockState()
                             .setValue(FramedProperties.FACING_HOR, facing.getOpposite())
                             .setValue(PropertyHolder.ROTATION, backRot)
@@ -112,12 +112,12 @@ public class FramedFlatExtendedDoubleSlopePanelCornerBlock extends AbstractFrame
         else
         {
             return new Tuple<>(
-                    FBContent.BLOCK_FRAMED_FLAT_EXTENDED_SLOPE_PANEL_CORNER.get()
+                    FBContent.BLOCK_FRAMED_FLAT_EXTENDED_SLOPE_PANEL_CORNER.value()
                             .defaultBlockState()
                             .setValue(FramedProperties.FACING_HOR, facing)
                             .setValue(PropertyHolder.ROTATION, rotation)
                             .setValue(FramedProperties.Y_SLOPE, ySlope),
-                    FBContent.BLOCK_FRAMED_FLAT_INNER_SLOPE_PANEL_CORNER.get()
+                    FBContent.BLOCK_FRAMED_FLAT_INNER_SLOPE_PANEL_CORNER.value()
                             .defaultBlockState()
                             .setValue(FramedProperties.FACING_HOR, facing.getOpposite())
                             .setValue(PropertyHolder.ROTATION, backRot)
@@ -212,7 +212,7 @@ public class FramedFlatExtendedDoubleSlopePanelCornerBlock extends AbstractFrame
 
     public static BlockState itemModelSource()
     {
-        return FBContent.BLOCK_FRAMED_FLAT_EXTENDED_DOUBLE_SLOPE_PANEL_CORNER.get()
+        return FBContent.BLOCK_FRAMED_FLAT_EXTENDED_DOUBLE_SLOPE_PANEL_CORNER.value()
                 .defaultBlockState()
                 .setValue(FramedProperties.FACING_HOR, Direction.SOUTH)
                 .setValue(PropertyHolder.ROTATION, HorizontalRotation.RIGHT);
@@ -220,7 +220,7 @@ public class FramedFlatExtendedDoubleSlopePanelCornerBlock extends AbstractFrame
 
     public static BlockState itemModelSourceInner()
     {
-        return FBContent.BLOCK_FRAMED_FLAT_EXTENDED_INNER_DOUBLE_SLOPE_PANEL_CORNER.get()
+        return FBContent.BLOCK_FRAMED_FLAT_EXTENDED_INNER_DOUBLE_SLOPE_PANEL_CORNER.value()
                 .defaultBlockState()
                 .setValue(FramedProperties.FACING_HOR, Direction.SOUTH)
                 .setValue(PropertyHolder.ROTATION, HorizontalRotation.RIGHT);

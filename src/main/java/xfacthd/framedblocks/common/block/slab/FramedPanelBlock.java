@@ -55,7 +55,7 @@ public class FramedPanelBlock extends FramedBlock
     public InteractionResult use(BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hit)
     {
         ItemStack stack = player.getItemInHand(hand);
-        if (stack.getItem() == FBContent.BLOCK_FRAMED_PANEL.get().asItem())
+        if (stack.getItem() == FBContent.BLOCK_FRAMED_PANEL.value().asItem())
         {
             Direction facing = state.getValue(FramedProperties.FACING_HOR);
             if (hit.getDirection() == facing.getOpposite())
@@ -63,13 +63,13 @@ public class FramedPanelBlock extends FramedBlock
                 if (!level.isClientSide())
                 {
                     Direction newFacing = (facing == Direction.NORTH || facing == Direction.EAST) ? facing : facing.getOpposite();
-                    BlockState newState = FBContent.BLOCK_FRAMED_DOUBLE_PANEL.get().defaultBlockState();
+                    BlockState newState = FBContent.BLOCK_FRAMED_DOUBLE_PANEL.value().defaultBlockState();
 
                     Utils.wrapInStateCopy(level, pos, player, stack, facing != newFacing, true, () ->
                             level.setBlockAndUpdate(pos, newState.setValue(FramedProperties.FACING_NE, newFacing))
                     );
 
-                    SoundType sound = FBContent.BLOCK_FRAMED_CUBE.get().getSoundType(FBContent.BLOCK_FRAMED_CUBE.get().defaultBlockState());
+                    SoundType sound = FBContent.BLOCK_FRAMED_CUBE.value().getSoundType(FBContent.BLOCK_FRAMED_CUBE.value().defaultBlockState());
                     level.playSound(null, pos, sound.getPlaceSound(), SoundSource.BLOCKS, (sound.getVolume() + 1.0F) / 2.0F, sound.getPitch() * 0.8F);
                 }
                 return InteractionResult.sidedSuccess(level.isClientSide());

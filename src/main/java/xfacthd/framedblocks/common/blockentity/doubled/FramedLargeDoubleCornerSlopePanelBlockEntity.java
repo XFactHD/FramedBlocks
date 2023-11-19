@@ -14,7 +14,7 @@ public class FramedLargeDoubleCornerSlopePanelBlockEntity extends FramedDoubleBl
 {
     public FramedLargeDoubleCornerSlopePanelBlockEntity(BlockPos pos, BlockState state)
     {
-        super(FBContent.BE_TYPE_FRAMED_LARGE_DOUBLE_CORNER_SLOPE_PANEL.get(), pos, state);
+        super(FBContent.BE_TYPE_FRAMED_LARGE_DOUBLE_CORNER_SLOPE_PANEL.value(), pos, state);
     }
 
     @Override

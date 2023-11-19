@@ -22,7 +22,7 @@ public class FramedStorageMenu extends AbstractContainerMenu
 
     public FramedStorageMenu(int windowId, Inventory inv, BlockEntity blockEntity)
     {
-        super(FBContent.MENU_TYPE_FRAMED_STORAGE.get(), windowId);
+        super(FBContent.MENU_TYPE_FRAMED_STORAGE.value(), windowId);
 
         Preconditions.checkArgument(blockEntity instanceof FramedStorageBlockEntity);
         this.blockEntity = (FramedStorageBlockEntity) blockEntity;

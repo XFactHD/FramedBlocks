@@ -1,6 +1,6 @@
 package xfacthd.framedblocks.common.data;
 
-import net.neoforged.neoforge.registries.RegistryObject;
+import net.minecraft.core.Holder;
 import xfacthd.framedblocks.api.block.IFramedBlock;
 import xfacthd.framedblocks.api.blueprint.BlueprintCopyBehaviour;
 import xfacthd.framedblocks.common.FBContent;
@@ -15,16 +15,16 @@ public final class BlueprintBehaviours
 
         FBContent.getRegisteredBlocks()
                 .stream()
-                .map(RegistryObject::get)
+                .map(Holder::value)
                 .filter(IFramedBlock.class::isInstance)
                 .filter(b -> ((IFramedBlock) b).getBlockType().isDoubleBlock())
                 .forEach(block ->
                 {
-                    if (block == FBContent.BLOCK_FRAMED_DOUBLE_SLAB.get())
+                    if (block == FBContent.BLOCK_FRAMED_DOUBLE_SLAB.value())
                     {
                         FramedBlueprintItem.registerBehaviour(new DoubleSlabCopyBehaviour(), block);
                     }
-                    else if (block == FBContent.BLOCK_FRAMED_DOUBLE_PANEL.get())
+                    else if (block == FBContent.BLOCK_FRAMED_DOUBLE_PANEL.value())
                     {
                         FramedBlueprintItem.registerBehaviour(new DoublePanelCopyBehaviour(), block);
                     }
@@ -36,13 +36,13 @@ public final class BlueprintBehaviours
 
         FramedBlueprintItem.registerBehaviour(
                 new DoorCopyBehaviour(),
-                FBContent.BLOCK_FRAMED_DOOR.get(),
-                FBContent.BLOCK_FRAMED_IRON_DOOR.get()
+                FBContent.BLOCK_FRAMED_DOOR.value(),
+                FBContent.BLOCK_FRAMED_IRON_DOOR.value()
         );
 
         FramedBlueprintItem.registerBehaviour(
                 new CollapsibleBlockCopyBehaviour(),
-                FBContent.BLOCK_FRAMED_COLLAPSIBLE_BLOCK.get()
+                FBContent.BLOCK_FRAMED_COLLAPSIBLE_BLOCK.value()
         );
     }
 

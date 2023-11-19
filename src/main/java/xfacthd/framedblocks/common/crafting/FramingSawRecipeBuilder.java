@@ -4,13 +4,13 @@ import com.google.common.base.Preconditions;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import net.minecraft.advancements.*;
+import net.minecraft.core.Holder;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.data.recipes.*;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.minecraft.world.level.ItemLike;
-import net.neoforged.neoforge.registries.ForgeRegistries;
-import net.neoforged.neoforge.registries.RegistryObject;
 import org.jetbrains.annotations.Nullable;
 import xfacthd.framedblocks.common.FBContent;
 
@@ -30,9 +30,9 @@ public final class FramingSawRecipeBuilder implements RecipeBuilder
         this.count = count;
     }
 
-    public static <T extends ItemLike> FramingSawRecipeBuilder builder(RegistryObject<T> result)
+    public static <T extends ItemLike> FramingSawRecipeBuilder builder(Holder<T> result)
     {
-        return builder(result.get());
+        return builder(result.value());
     }
 
     public static FramingSawRecipeBuilder builder(ItemLike result)
@@ -40,9 +40,9 @@ public final class FramingSawRecipeBuilder implements RecipeBuilder
         return builder(result, 1);
     }
 
-    public static <T extends ItemLike> FramingSawRecipeBuilder builder(RegistryObject<T> result, int count)
+    public static <T extends ItemLike> FramingSawRecipeBuilder builder(Holder<T> result, int count)
     {
-        return builder(result.get(), count);
+        return builder(result.value(), count);
     }
 
     public static FramingSawRecipeBuilder builder(ItemLike result, int count)
@@ -135,7 +135,7 @@ public final class FramingSawRecipeBuilder implements RecipeBuilder
             }
 
             JsonObject resultObj = new JsonObject();
-            resultObj.addProperty("item", Objects.requireNonNull(ForgeRegistries.ITEMS.getKey(result)).toString());
+            resultObj.addProperty("item", Objects.requireNonNull(BuiltInRegistries.ITEM.getKey(result)).toString());
             if (count > 1)
             {
                 resultObj.addProperty("count", count);
@@ -151,7 +151,7 @@ public final class FramingSawRecipeBuilder implements RecipeBuilder
         @Override
         public RecipeSerializer<?> type()
         {
-            return FBContent.RECIPE_SERIALIZER_FRAMING_SAW_RECIPE.get();
+            return FBContent.RECIPE_SERIALIZER_FRAMING_SAW_RECIPE.value();
         }
 
         @Nullable

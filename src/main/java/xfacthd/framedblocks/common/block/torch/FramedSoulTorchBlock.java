@@ -33,8 +33,8 @@ public class FramedSoulTorchBlock extends FramedTorchBlock
     public BlockItem createBlockItem()
     {
         return new StandingAndWallBlockItem(
-                FBContent.BLOCK_FRAMED_SOUL_TORCH.get(),
-                FBContent.BLOCK_FRAMED_SOUL_WALL_TORCH.get(),
+                FBContent.BLOCK_FRAMED_SOUL_TORCH.value(),
+                FBContent.BLOCK_FRAMED_SOUL_WALL_TORCH.value(),
                 new Item.Properties(),
                 Direction.DOWN
         );

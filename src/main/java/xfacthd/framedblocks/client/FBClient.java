@@ -3,6 +3,7 @@ package xfacthd.framedblocks.client;
 import net.minecraft.client.gui.screens.MenuScreens;
 import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
 import net.minecraft.client.resources.model.BakedModel;
+import net.minecraft.core.Holder;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.packs.resources.ResourceManagerReloadListener;
 import net.minecraft.world.level.block.Block;
@@ -19,7 +20,6 @@ import net.neoforged.fml.common.Mod;
 import net.neoforged.fml.event.lifecycle.*;
 import net.neoforged.fml.loading.FMLEnvironment;
 import net.neoforged.neoforge.common.NeoForge;
-import net.neoforged.neoforge.registries.RegistryObject;
 import org.jetbrains.annotations.Nullable;
 import xfacthd.framedblocks.api.block.FramedProperties;
 import xfacthd.framedblocks.api.block.IFramedBlock;
@@ -81,9 +81,9 @@ public final class FBClient
     {
         event.enqueueWork(() ->
         {
-            MenuScreens.register(FBContent.MENU_TYPE_FRAMED_STORAGE.get(), FramedStorageScreen::new);
-            MenuScreens.register(FBContent.MENU_TYPE_FRAMING_SAW.get(), FramingSawScreen::new);
-            MenuScreens.register(FBContent.MENU_TYPE_POWERED_FRAMING_SAW.get(), PoweredFramingSawScreen::new);
+            MenuScreens.register(FBContent.MENU_TYPE_FRAMED_STORAGE.value(), FramedStorageScreen::new);
+            MenuScreens.register(FBContent.MENU_TYPE_FRAMING_SAW.value(), FramingSawScreen::new);
+            MenuScreens.register(FBContent.MENU_TYPE_POWERED_FRAMING_SAW.value(), PoweredFramingSawScreen::new);
 
             BlueprintPropertyOverride.register();
         });
@@ -132,17 +132,15 @@ public final class FBClient
     @SubscribeEvent
     public static void onRegisterRenderers(final EntityRenderersEvent.RegisterRenderers event)
     {
-        event.registerBlockEntityRenderer(FBContent.BE_TYPE_FRAMED_SIGN.get(), FramedSignRenderer::new);
-        event.registerBlockEntityRenderer(FBContent.BE_TYPE_FRAMED_HANGING_SIGN.get(), FramedHangingSignRenderer::new);
-        event.registerBlockEntityRenderer(FBContent.blockEntityTypeFramedChest.get(), FramedChestRenderer::new);
-        event.registerBlockEntityRenderer(FBContent.BE_TYPE_FRAMED_ITEM_FRAME.get(), FramedItemFrameRenderer::new);
+        event.registerBlockEntityRenderer(FBContent.BE_TYPE_FRAMED_SIGN.value(), FramedSignRenderer::new);
+        event.registerBlockEntityRenderer(FBContent.BE_TYPE_FRAMED_HANGING_SIGN.value(), FramedHangingSignRenderer::new);
+        event.registerBlockEntityRenderer(FBContent.BE_TYPE_FRAMED_CHEST.value(), FramedChestRenderer::new);
+        event.registerBlockEntityRenderer(FBContent.BE_TYPE_FRAMED_ITEM_FRAME.value(), FramedItemFrameRenderer::new);
 
         if (!FMLEnvironment.production && FramedDoubleBlockEntity.ENABLE_DOUBLE_BLOCK_DEBUG_RENDERER)
         {
             BlockEntityRendererProvider<FramedDoubleBlockEntity> provider = FramedDoubleBlockDebugRenderer::new;
-            FBContent.getDoubleBlockEntities().forEach(type ->
-                    event.registerBlockEntityRenderer(type.get(), provider)
-            );
+            FBContent.getDoubleBlockEntities().forEach(type -> event.registerBlockEntityRenderer(type.value(), provider));
         }
     }
 
@@ -152,7 +150,7 @@ public final class FBClient
         //noinspection SuspiciousToArrayCall
         Block[] blocks = FBContent.getRegisteredBlocks()
                 .stream()
-                .map(RegistryObject::get)
+                .map(Holder::value)
                 .filter(IFramedBlock.class::isInstance)
                 .map(IFramedBlock.class::cast)
                 .filter(FBClient::useDefaultColorHandler)
@@ -160,13 +158,13 @@ public final class FBClient
 
         event.register(FramedBlockColor.INSTANCE, blocks);
 
-        event.register(FramedTargetBlockColor.INSTANCE, FBContent.BLOCK_FRAMED_TARGET.get());
+        event.register(FramedTargetBlockColor.INSTANCE, FBContent.BLOCK_FRAMED_TARGET.value());
     }
 
     @SubscribeEvent
     public static void onItemColors(final RegisterColorHandlersEvent.Item event)
     {
-        event.register(FramedTargetBlockColor.INSTANCE, FBContent.BLOCK_FRAMED_TARGET.get());
+        event.register(FramedTargetBlockColor.INSTANCE, FBContent.BLOCK_FRAMED_TARGET.value());
     }
 
     @SubscribeEvent
@@ -426,7 +424,7 @@ public final class FBClient
 
 
     private static void wrapDoubleModel(
-            RegistryObject<Block> block,
+            Holder<Block> block,
             @Nullable BlockState itemModelSource,
             @Nullable List<Property<?>> ignoredProps
     )
@@ -435,7 +433,7 @@ public final class FBClient
     }
 
     private static void wrapDoubleModel(
-            RegistryObject<Block> block,
+            Holder<Block> block,
             @Nullable Vec3 firstpersonTransform,
             @Nullable BlockState itemModelSource,
             @Nullable List<Property<?>> ignoredProps

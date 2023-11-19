@@ -4,11 +4,11 @@ import com.google.common.base.Stopwatch;
 import com.mojang.brigadier.Command;
 import com.mojang.brigadier.context.CommandContext;
 import net.minecraft.commands.CommandSourceStack;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.*;
-import net.neoforged.neoforge.registries.ForgeRegistries;
 import xfacthd.framedblocks.api.block.FramedProperties;
 import xfacthd.framedblocks.api.model.wrapping.WrapHelper;
 import xfacthd.framedblocks.cmdtests.SpecialTestCommand;
@@ -50,7 +50,7 @@ public final class BlockStateInfo
         {
             Block block = FBContent.byType(type);
             //noinspection ConstantConditions
-            String name = ForgeRegistries.BLOCKS.getKey(block).getPath();
+            String name = BuiltInRegistries.BLOCK.getKey(block).getPath();
             int stateCount = block.getStateDefinition().getPossibleStates().size();
             int modelStateCount = filterIgnoredProperties(block.defaultBlockState(), stateCount);
 

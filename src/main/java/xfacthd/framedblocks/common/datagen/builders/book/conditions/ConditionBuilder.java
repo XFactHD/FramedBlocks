@@ -1,8 +1,8 @@
 package xfacthd.framedblocks.common.datagen.builders.book.conditions;
 
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.ItemLike;
-import net.neoforged.neoforge.registries.ForgeRegistries;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import xfacthd.framedblocks.common.datagen.builders.book.primitives.Identifiable;
@@ -55,7 +55,7 @@ public abstract class ConditionBuilder implements Printable, Identifiable
 
     public static ItemExistsConditionBuilder itemExists(String name, ItemLike item)
     {
-        return itemExists(name, ForgeRegistries.ITEMS.getKey(item.asItem()));
+        return itemExists(name, BuiltInRegistries.ITEM.getKey(item.asItem()));
     }
 
     public static ItemExistsConditionBuilder itemExists(String name, ResourceLocation itemId)

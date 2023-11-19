@@ -90,7 +90,7 @@ public class FramedFlatSlopeSlabCornerGeometry implements Geometry
 
     public static BlockState itemSource()
     {
-        return FBContent.BLOCK_FRAMED_FLAT_SLOPE_SLAB_CORNER.get()
+        return FBContent.BLOCK_FRAMED_FLAT_SLOPE_SLAB_CORNER.value()
                 .defaultBlockState()
                 .setValue(FramedProperties.FACING_HOR, Direction.SOUTH);
     }

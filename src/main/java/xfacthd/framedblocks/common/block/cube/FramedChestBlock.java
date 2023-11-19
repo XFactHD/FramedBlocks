@@ -52,7 +52,7 @@ public class FramedChestBlock extends FramedStorageBlock
     public boolean handleBlockLeftClick(BlockState state, Level level, BlockPos pos, Player player)
     {
         ItemStack stack = player.getMainHandItem();
-        if (stack.is(Utils.FRAMED_HAMMER.get()))
+        if (stack.is(Utils.FRAMED_HAMMER.value()))
         {
             if (!level.isClientSide())
             {
@@ -93,6 +93,6 @@ public class FramedChestBlock extends FramedStorageBlock
         {
             return null;
         }
-        return Utils.createBlockEntityTicker(type, FBContent.blockEntityTypeFramedChest.get(), FramedChestBlockEntity::tick);
+        return Utils.createBlockEntityTicker(type, FBContent.BE_TYPE_FRAMED_CHEST.value(), FramedChestBlockEntity::tick);
     }
 }

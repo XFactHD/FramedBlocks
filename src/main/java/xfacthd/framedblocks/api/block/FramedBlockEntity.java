@@ -3,6 +3,7 @@ package xfacthd.framedblocks.api.block;
 import com.mojang.logging.LogUtils;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.Connection;
 import net.minecraft.network.chat.Component;
@@ -26,7 +27,6 @@ import net.neoforged.neoforge.client.model.data.ModelData;
 import net.neoforged.neoforge.common.*;
 import net.neoforged.neoforge.common.capabilities.Capabilities;
 import net.neoforged.neoforge.fluids.capability.IFluidHandler;
-import net.neoforged.neoforge.registries.ForgeRegistries;
 import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
 import xfacthd.framedblocks.api.FramedBlocksAPI;
@@ -78,7 +78,7 @@ public class FramedBlockEntity extends BlockEntity
         boolean secondary = hitSecondary(hit);
         CamoContainer camo = getCamo(secondary);
 
-        if (camo.getType().isBlock() && stack.is(Utils.FRAMED_HAMMER.get()))
+        if (camo.getType().isBlock() && stack.is(Utils.FRAMED_HAMMER.value()))
         {
             return clearBlockCamo(player, camo, stack, secondary);
         }
@@ -98,7 +98,7 @@ public class FramedBlockEntity extends BlockEntity
         {
             return applyGlowstone(player, stack);
         }
-        else if (!camo.isEmpty() && !player.isShiftKeyDown() && stack.is(Utils.FRAMED_SCREWDRIVER.get()))
+        else if (!camo.isEmpty() && !player.isShiftKeyDown() && stack.is(Utils.FRAMED_SCREWDRIVER.value()))
         {
             return rotateCamo(camo);
         }
@@ -106,11 +106,11 @@ public class FramedBlockEntity extends BlockEntity
         {
             return applyIntangibility(player, stack);
         }
-        else if (intangible && player.isShiftKeyDown() && stack.is(Utils.FRAMED_SCREWDRIVER.get()))
+        else if (intangible && player.isShiftKeyDown() && stack.is(Utils.FRAMED_SCREWDRIVER.value()))
         {
             return removeIntangibility(player);
         }
-        else if (!reinforced && stack.is(Utils.FRAMED_REINFORCEMENT.get()))
+        else if (!reinforced && stack.is(Utils.FRAMED_REINFORCEMENT.value()))
         {
             return applyReinforcement(player, stack);
         }
@@ -359,7 +359,7 @@ public class FramedBlockEntity extends BlockEntity
 
             stack.hurtAndBreak(1, player, p -> p.broadcastBreakEvent(hand));
 
-            ItemStack result = new ItemStack(Utils.FRAMED_REINFORCEMENT.get());
+            ItemStack result = new ItemStack(Utils.FRAMED_REINFORCEMENT.value());
             if (!player.getInventory().add(result))
             {
                 player.drop(result, false);
@@ -731,7 +731,7 @@ public class FramedBlockEntity extends BlockEntity
         }
         if (reinforced)
         {
-            drops.add(new ItemStack(Utils.FRAMED_REINFORCEMENT.get()));
+            drops.add(new ItemStack(Utils.FRAMED_REINFORCEMENT.value()));
         }
     }
 
@@ -1044,9 +1044,9 @@ public class FramedBlockEntity extends BlockEntity
             recheckStates = true;
             LOGGER.warn(
                     "Framed Block of type \"{}\" at position {} contains an invalid camo of type \"{}\", removing camo! This might be caused by a config or tag change!",
-                    ForgeRegistries.BLOCKS.getKey(getBlockState().getBlock()),
+                    BuiltInRegistries.BLOCK.getKey(getBlockState().getBlock()),
                     worldPosition,
-                    ForgeRegistries.BLOCKS.getKey(camo.getState().getBlock())
+                    BuiltInRegistries.BLOCK.getKey(camo.getState().getBlock())
             );
         }
         glowing = nbt.getBoolean("glowing");

@@ -28,7 +28,7 @@ public class FramedChiseledBookshelfBlockEntity extends FramedBlockEntity
 
     public FramedChiseledBookshelfBlockEntity(BlockPos pos, BlockState state)
     {
-        super(FBContent.BE_TYPE_FRAMED_CHISELED_BOOKSHELF.get(), pos, state);
+        super(FBContent.BE_TYPE_FRAMED_CHISELED_BOOKSHELF.value(), pos, state);
     }
 
     public void placeBook(ItemStack stack, int slot)

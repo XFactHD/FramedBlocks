@@ -118,7 +118,7 @@ public class FramedGateBlock extends FramedBlock
             return result;
         }
 
-        if (this == FBContent.BLOCK_FRAMED_IRON_GATE.get())
+        if (this == FBContent.BLOCK_FRAMED_IRON_GATE.value())
         {
             return InteractionResult.PASS;
         }

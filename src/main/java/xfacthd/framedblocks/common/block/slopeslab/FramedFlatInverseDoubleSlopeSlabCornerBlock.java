@@ -148,13 +148,13 @@ public class FramedFlatInverseDoubleSlopeSlabCornerBlock extends AbstractFramedD
         boolean ySlope = state.getValue(FramedProperties.Y_SLOPE);
 
         return new Tuple<>(
-                FBContent.BLOCK_FRAMED_FLAT_INNER_SLOPE_SLAB_CORNER.get()
+                FBContent.BLOCK_FRAMED_FLAT_INNER_SLOPE_SLAB_CORNER.value()
                         .defaultBlockState()
                         .setValue(FramedProperties.FACING_HOR, facing.getOpposite())
                         .setValue(PropertyHolder.TOP_HALF, top)
                         .setValue(FramedProperties.TOP, !top)
                         .setValue(FramedProperties.Y_SLOPE, ySlope),
-                FBContent.BLOCK_FRAMED_FLAT_SLOPE_SLAB_CORNER.get()
+                FBContent.BLOCK_FRAMED_FLAT_SLOPE_SLAB_CORNER.value()
                         .defaultBlockState()
                         .setValue(FramedProperties.FACING_HOR, facing)
                         .setValue(PropertyHolder.TOP_HALF, !top)
@@ -244,7 +244,7 @@ public class FramedFlatInverseDoubleSlopeSlabCornerBlock extends AbstractFramedD
 
     public static BlockState itemModelSource()
     {
-        return FBContent.BLOCK_FRAMED_FLAT_INVERSE_DOUBLE_SLOPE_SLAB_CORNER.get()
+        return FBContent.BLOCK_FRAMED_FLAT_INVERSE_DOUBLE_SLOPE_SLAB_CORNER.value()
                 .defaultBlockState()
                 .setValue(FramedProperties.FACING_HOR, Direction.SOUTH);
     }

@@ -308,14 +308,14 @@ public class FramedPoweredRailSlopeBlock extends PoweredRailBlock implements IFr
 
     public static BlockState itemModelSourceFancyPowered()
     {
-        return FBContent.BLOCK_FRAMED_FANCY_POWERED_RAIL_SLOPE.get()
+        return FBContent.BLOCK_FRAMED_FANCY_POWERED_RAIL_SLOPE.value()
                 .defaultBlockState()
                 .setValue(PropertyHolder.ASCENDING_RAIL_SHAPE, RailShape.ASCENDING_SOUTH);
     }
 
     public static BlockState itemModelSourceFancyActivator()
     {
-        return FBContent.BLOCK_FRAMED_FANCY_ACTIVATOR_RAIL_SLOPE.get()
+        return FBContent.BLOCK_FRAMED_FANCY_ACTIVATOR_RAIL_SLOPE.value()
                 .defaultBlockState()
                 .setValue(PropertyHolder.ASCENDING_RAIL_SHAPE, RailShape.ASCENDING_SOUTH);
     }

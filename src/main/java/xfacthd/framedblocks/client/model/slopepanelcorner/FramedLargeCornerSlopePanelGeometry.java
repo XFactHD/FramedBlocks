@@ -82,7 +82,7 @@ public class FramedLargeCornerSlopePanelGeometry implements Geometry
 
     public static BlockState itemModelSource()
     {
-        return FBContent.BLOCK_FRAMED_LARGE_CORNER_SLOPE_PANEL.get()
+        return FBContent.BLOCK_FRAMED_LARGE_CORNER_SLOPE_PANEL.value()
                 .defaultBlockState()
                 .setValue(FramedProperties.FACING_HOR, Direction.WEST);
     }

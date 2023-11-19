@@ -1,5 +1,6 @@
 package xfacthd.framedblocks.common.config;
 
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.Items;
@@ -8,7 +9,6 @@ import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.config.ModConfig;
 import net.neoforged.fml.event.config.ModConfigEvent;
 import net.neoforged.fml.javafmlmod.FMLJavaModLoadingContext;
-import net.neoforged.neoforge.registries.ForgeRegistries;
 import org.apache.commons.lang3.tuple.Pair;
 import xfacthd.framedblocks.api.util.Utils;
 
@@ -65,7 +65,7 @@ public final class ServerConfig
         intangibleMarkerItemValue = builder
                 .comment("The item to use for making Framed Blocks intangible. The value must be a valid item registry name")
                 .translation(TRANSLATION_INTANGIBLE_MARKER)
-                .define(KEY_INTANGIBLE_MARKER, ForgeRegistries.ITEMS.getKey(Items.PHANTOM_MEMBRANE).toString(), ServerConfig::validateItemName);
+                .define(KEY_INTANGIBLE_MARKER, BuiltInRegistries.ITEM.getKey(Items.PHANTOM_MEMBRANE).toString(), ServerConfig::validateItemName);
         oneWayWindowOwnableValue = builder
                 .comment("If true, only the player who placed the Framed One-Way Window can modify the window direction")
                 .translation(TRANSLATION_ONE_WAY_WINDOW_OWNABLE)
@@ -82,9 +82,9 @@ public final class ServerConfig
         if (obj instanceof String name)
         {
             ResourceLocation key = new ResourceLocation(name);
-            if (ForgeRegistries.ITEMS.containsKey(key))
+            if (BuiltInRegistries.ITEM.containsKey(key))
             {
-                return ForgeRegistries.ITEMS.getValue(key) != Items.AIR;
+                return BuiltInRegistries.ITEM.get(key) != Items.AIR;
             }
         }
         return false;
@@ -102,7 +102,7 @@ public final class ServerConfig
         {
             allowBlockEntities = allowBlockEntitiesValue.get();
             enableIntangibleFeature = enableIntangibleFeatureValue.get();
-            intangibleMarkerItem = ForgeRegistries.ITEMS.getValue(new ResourceLocation(intangibleMarkerItemValue.get()));
+            intangibleMarkerItem = BuiltInRegistries.ITEM.get(new ResourceLocation(intangibleMarkerItemValue.get()));
             oneWayWindowOwnable = oneWayWindowOwnableValue.get();
             consumeCamoItem = consumeCamoItemValue.get();
         }

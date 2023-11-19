@@ -62,7 +62,7 @@ public class FramedSlabBlock extends FramedBlock
     )
     {
         ItemStack stack = player.getItemInHand(hand);
-        if (stack.getItem() == FBContent.BLOCK_FRAMED_SLAB.get().asItem())
+        if (stack.getItem() == FBContent.BLOCK_FRAMED_SLAB.value().asItem())
         {
             boolean top = state.getValue(FramedProperties.TOP);
             Direction face = hit.getDirection();
@@ -71,10 +71,10 @@ public class FramedSlabBlock extends FramedBlock
                 if (!level.isClientSide())
                 {
                     Utils.wrapInStateCopy(level, pos, player, stack, top, true, () ->
-                            level.setBlockAndUpdate(pos, FBContent.BLOCK_FRAMED_DOUBLE_SLAB.get().defaultBlockState())
+                            level.setBlockAndUpdate(pos, FBContent.BLOCK_FRAMED_DOUBLE_SLAB.value().defaultBlockState())
                     );
 
-                    SoundType sound = FBContent.BLOCK_FRAMED_CUBE.get().getSoundType(FBContent.BLOCK_FRAMED_CUBE.get().defaultBlockState());
+                    SoundType sound = FBContent.BLOCK_FRAMED_CUBE.value().getSoundType(FBContent.BLOCK_FRAMED_CUBE.value().defaultBlockState());
                     level.playSound(null, pos, sound.getPlaceSound(), SoundSource.BLOCKS, (sound.getVolume() + 1.0F) / 2.0F, sound.getPitch() * 0.8F);
                 }
                 return InteractionResult.sidedSuccess(level.isClientSide());

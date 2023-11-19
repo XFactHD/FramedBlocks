@@ -67,7 +67,7 @@ public class FramedCollapsibleBlock extends FramedBlock
             level.setBlockAndUpdate(pos, state.setValue(PropertyHolder.ROTATE_SPLIT_LINE, !rotSplitLine));
             return true;
         }
-        else if (heldItem.getItem() == FBContent.ITEM_FRAMED_HAMMER.get())
+        else if (heldItem.getItem() == FBContent.ITEM_FRAMED_HAMMER.value())
         {
             if (level.getBlockEntity(pos) instanceof FramedCollapsibleBlockEntity be)
             {

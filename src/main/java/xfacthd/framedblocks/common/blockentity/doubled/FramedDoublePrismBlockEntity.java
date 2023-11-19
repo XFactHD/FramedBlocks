@@ -14,7 +14,7 @@ public class FramedDoublePrismBlockEntity extends FramedDoubleBlockEntity
 {
     public FramedDoublePrismBlockEntity(BlockPos pos, BlockState state)
     {
-        this(FBContent.BE_TYPE_FRAMED_DOUBLE_PRISM.get(), pos, state);
+        this(FBContent.BE_TYPE_FRAMED_DOUBLE_PRISM.value(), pos, state);
     }
 
     protected FramedDoublePrismBlockEntity(BlockEntityType<?> type, BlockPos pos, BlockState state)

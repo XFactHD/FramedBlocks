@@ -71,7 +71,7 @@ public class FramedDividedPanelBlock extends AbstractFramedDoubleBlock
         Direction dir = state.getValue(FramedProperties.FACING_HOR);
         if (getBlockType() == BlockType.FRAMED_DIVIDED_PANEL_HORIZONTAL)
         {
-            BlockState defState = FBContent.BLOCK_FRAMED_SLAB_EDGE.get()
+            BlockState defState = FBContent.BLOCK_FRAMED_SLAB_EDGE.value()
                     .defaultBlockState()
                     .setValue(FramedProperties.FACING_HOR, dir);
 
@@ -79,7 +79,7 @@ public class FramedDividedPanelBlock extends AbstractFramedDoubleBlock
         }
         else
         {
-            BlockState defState = FBContent.BLOCK_FRAMED_CORNER_PILLAR.get().defaultBlockState();
+            BlockState defState = FBContent.BLOCK_FRAMED_CORNER_PILLAR.value().defaultBlockState();
             return new Tuple<>(
                     defState.setValue(FramedProperties.FACING_HOR, dir),
                     defState.setValue(FramedProperties.FACING_HOR, dir.getClockWise())
@@ -109,7 +109,7 @@ public class FramedDividedPanelBlock extends AbstractFramedDoubleBlock
         }
 
         Direction facing = state.getValue(FramedProperties.FACING_HOR);
-        boolean vertical = state.getBlock() == FBContent.BLOCK_FRAMED_DIVIDED_PANEL_VERT.get();
+        boolean vertical = state.getBlock() == FBContent.BLOCK_FRAMED_DIVIDED_PANEL_VERT.value();
         if (edge == facing)
         {
             if ((!vertical && side == Direction.DOWN) || (vertical && side == facing.getCounterClockWise()))

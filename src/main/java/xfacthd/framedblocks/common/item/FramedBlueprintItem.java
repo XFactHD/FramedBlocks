@@ -3,6 +3,7 @@ package xfacthd.framedblocks.common.item;
 import com.google.common.base.Preconditions;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.*;
 import net.minecraft.resources.ResourceLocation;
@@ -15,9 +16,9 @@ import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.BlockHitResult;
-import net.neoforged.neoforge.registries.ForgeRegistries;
 import xfacthd.framedblocks.api.blueprint.BlueprintCopyBehaviour;
 import xfacthd.framedblocks.api.camo.CamoContainer;
 import xfacthd.framedblocks.api.util.Utils;
@@ -115,7 +116,7 @@ public class FramedBlueprintItem extends FramedToolItem
         {
             BlockState state = level.getBlockState(pos);
             //noinspection ConstantConditions
-            String blockName = ForgeRegistries.BLOCKS.getKey(state.getBlock()).toString();
+            String blockName = BuiltInRegistries.BLOCK.getKey(state.getBlock()).toString();
             tag.putString("framed_block", blockName);
 
             Block block = state.getBlock();
@@ -192,7 +193,7 @@ public class FramedBlueprintItem extends FramedToolItem
         int reinforcement = behaviour.getReinforcementCount(tag);
         if (reinforcement > 0)
         {
-            materials.add(new ItemStack(FBContent.ITEM_FRAMED_REINFORCEMENT.get(), reinforcement));
+            materials.add(new ItemStack(FBContent.ITEM_FRAMED_REINFORCEMENT.value(), reinforcement));
         }
 
         List<ItemStack> missingMaterials = new ArrayList<>();
@@ -286,7 +287,7 @@ public class FramedBlueprintItem extends FramedToolItem
         int reinforcement = behaviour.getReinforcementCount(tag);
         if (reinforcement > 0)
         {
-            materials.add(new ItemStack(FBContent.ITEM_FRAMED_REINFORCEMENT.get(), reinforcement));
+            materials.add(new ItemStack(FBContent.ITEM_FRAMED_REINFORCEMENT.value(), reinforcement));
         }
 
         Inventory inv = player.getInventory();
@@ -371,7 +372,7 @@ public class FramedBlueprintItem extends FramedToolItem
     public static Block getTargetBlock(ItemStack stack)
     {
         CompoundTag tag = stack.getOrCreateTagElement("blueprint_data");
-        Block block = ForgeRegistries.BLOCKS.getValue(new ResourceLocation(tag.getString("framed_block")));
+        Block block = BuiltInRegistries.BLOCK.get(new ResourceLocation(tag.getString("framed_block")));
         Objects.requireNonNull(block);
         return block;
     }
@@ -386,8 +387,8 @@ public class FramedBlueprintItem extends FramedToolItem
         }
         else
         {
-            Block block = ForgeRegistries.BLOCKS.getValue(new ResourceLocation(tag.getString("framed_block")));
-            Component blockName = block == null ? BLOCK_INVALID : block.getName().withStyle(ChatFormatting.WHITE);
+            Block block = BuiltInRegistries.BLOCK.get(new ResourceLocation(tag.getString("framed_block")));
+            Component blockName = block == Blocks.AIR ? BLOCK_INVALID : block.getName().withStyle(ChatFormatting.WHITE);
 
             CompoundTag beTag = tag.getCompound("camo_data");
             Component camoName = !(block instanceof IFramedBlock fb) ? BLOCK_NONE : fb.printCamoBlock(beTag).orElse(BLOCK_NONE);

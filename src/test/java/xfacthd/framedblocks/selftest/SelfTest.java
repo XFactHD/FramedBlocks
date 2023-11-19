@@ -1,13 +1,13 @@
 package xfacthd.framedblocks.selftest;
 
 import com.google.common.base.Stopwatch;
+import net.minecraft.core.Holder;
 import net.minecraft.world.level.block.Block;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.bus.api.EventPriority;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.Mod;
 import net.neoforged.fml.event.lifecycle.FMLLoadCompleteEvent;
-import net.neoforged.neoforge.registries.RegistryObject;
 import xfacthd.framedblocks.FramedBlocks;
 import xfacthd.framedblocks.api.block.IFramedBlock;
 import xfacthd.framedblocks.api.util.FramedConstants;
@@ -28,7 +28,7 @@ public final class SelfTest
 
         List<Block> blocks = FBContent.getRegisteredBlocks()
                 .stream()
-                .map(RegistryObject::get)
+                .map(Holder::value)
                 .filter(IFramedBlock.class::isInstance)
                 .toList();
 

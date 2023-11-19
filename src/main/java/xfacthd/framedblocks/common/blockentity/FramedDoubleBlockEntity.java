@@ -1,6 +1,7 @@
 package xfacthd.framedblocks.common.blockentity;
 
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.util.Tuple;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Player;
@@ -17,7 +18,6 @@ import net.minecraft.world.phys.BlockHitResult;
 import net.neoforged.neoforge.client.model.data.*;
 import net.neoforged.neoforge.common.IPlantable;
 import net.neoforged.fml.loading.FMLEnvironment;
-import net.neoforged.neoforge.registries.ForgeRegistries;
 import org.jetbrains.annotations.Nullable;
 import xfacthd.framedblocks.FramedBlocks;
 import xfacthd.framedblocks.api.block.FramedBlockEntity;
@@ -532,9 +532,9 @@ public abstract class FramedDoubleBlockEntity extends FramedBlockEntity
         {
             FramedBlocks.LOGGER.warn(
                     "Framed Block of type \"{}\" at position {} contains an invalid camo of type \"{}\", removing camo! This might be caused by a config or tag change!",
-                    ForgeRegistries.BLOCKS.getKey(getBlockState().getBlock()),
+                    BuiltInRegistries.BLOCK.getKey(getBlockState().getBlock()),
                     worldPosition,
-                    ForgeRegistries.BLOCKS.getKey(camo.getState().getBlock())
+                    BuiltInRegistries.BLOCK.getKey(camo.getState().getBlock())
             );
         }
     }

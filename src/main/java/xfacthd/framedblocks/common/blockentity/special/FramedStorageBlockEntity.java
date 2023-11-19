@@ -45,7 +45,7 @@ public class FramedStorageBlockEntity extends FramedBlockEntity implements MenuP
 
     public FramedStorageBlockEntity(BlockPos pos, BlockState state)
     {
-        super(FBContent.BE_TYPE_FRAMED_SECRET_STORAGE.get(), pos, state);
+        super(FBContent.BE_TYPE_FRAMED_SECRET_STORAGE.value(), pos, state);
     }
 
     protected FramedStorageBlockEntity(BlockEntityType<?> type, BlockPos pos, BlockState state)

@@ -86,7 +86,7 @@ public class FramedSlopeSlabGeometry implements Geometry
 
     public static BlockState itemSource()
     {
-        return FBContent.BLOCK_FRAMED_SLOPE_SLAB.get()
+        return FBContent.BLOCK_FRAMED_SLOPE_SLAB.value()
                 .defaultBlockState()
                 .setValue(FramedProperties.FACING_HOR, Direction.SOUTH);
     }

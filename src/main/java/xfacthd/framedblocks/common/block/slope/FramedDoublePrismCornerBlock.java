@@ -41,7 +41,7 @@ public class FramedDoublePrismCornerBlock extends FramedDoubleThreewayCornerBloc
     @Override
     public boolean handleBlockLeftClick(BlockState state, Level level, BlockPos pos, Player player)
     {
-        if (player.getMainHandItem().getItem() == FBContent.ITEM_FRAMED_HAMMER.get())
+        if (player.getMainHandItem().getItem() == FBContent.ITEM_FRAMED_HAMMER.value())
         {
             level.setBlockAndUpdate(pos, state.setValue(FramedProperties.OFFSET, !state.getValue(FramedProperties.OFFSET)));
             return true;
@@ -58,12 +58,12 @@ public class FramedDoublePrismCornerBlock extends FramedDoubleThreewayCornerBloc
         boolean ySlope = state.getValue(FramedProperties.Y_SLOPE);
 
         return new Tuple<>(
-                FBContent.BLOCK_FRAMED_INNER_PRISM_CORNER.get().defaultBlockState()
+                FBContent.BLOCK_FRAMED_INNER_PRISM_CORNER.value().defaultBlockState()
                         .setValue(FramedProperties.FACING_HOR, facing)
                         .setValue(FramedProperties.TOP, top)
                         .setValue(FramedProperties.OFFSET, offset)
                         .setValue(FramedProperties.Y_SLOPE, ySlope),
-                FBContent.BLOCK_FRAMED_PRISM_CORNER.get().defaultBlockState()
+                FBContent.BLOCK_FRAMED_PRISM_CORNER.value().defaultBlockState()
                         .setValue(FramedProperties.FACING_HOR, facing.getOpposite())
                         .setValue(FramedProperties.TOP, !top)
                         .setValue(FramedProperties.OFFSET, !offset)
@@ -75,7 +75,7 @@ public class FramedDoublePrismCornerBlock extends FramedDoubleThreewayCornerBloc
 
     public static BlockState itemModelSourcePrism()
     {
-        return FBContent.BLOCK_FRAMED_DOUBLE_PRISM_CORNER.get()
+        return FBContent.BLOCK_FRAMED_DOUBLE_PRISM_CORNER.value()
                 .defaultBlockState()
                 .setValue(FramedProperties.FACING_HOR, Direction.WEST);
     }

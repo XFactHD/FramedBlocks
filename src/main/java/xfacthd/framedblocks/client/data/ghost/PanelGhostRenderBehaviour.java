@@ -24,7 +24,7 @@ public final class PanelGhostRenderBehaviour implements GhostRenderBehaviour
             int renderPass
     )
     {
-        if (hitState.getBlock() == FBContent.BLOCK_FRAMED_PANEL.get())
+        if (hitState.getBlock() == FBContent.BLOCK_FRAMED_PANEL.value())
         {
             Direction dir = hitState.getValue(FramedProperties.FACING_HOR);
             if (dir.getOpposite() == hit.getDirection())
@@ -46,7 +46,7 @@ public final class PanelGhostRenderBehaviour implements GhostRenderBehaviour
             int renderPass
     )
     {
-        if (hitState.getBlock() == FBContent.BLOCK_FRAMED_PANEL.get())
+        if (hitState.getBlock() == FBContent.BLOCK_FRAMED_PANEL.value())
         {
             Direction dir = hitState.getValue(FramedProperties.FACING_HOR);
             if (dir.getOpposite() == hit.getDirection())

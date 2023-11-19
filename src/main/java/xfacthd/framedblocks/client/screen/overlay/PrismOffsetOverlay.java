@@ -30,7 +30,7 @@ public final class PrismOffsetOverlay extends BlockInteractOverlay
     @Override
     protected boolean isValidTool(ItemStack stack)
     {
-        return stack.getItem() == FBContent.ITEM_FRAMED_HAMMER.get();
+        return stack.getItem() == FBContent.ITEM_FRAMED_HAMMER.value();
     }
 
     @Override

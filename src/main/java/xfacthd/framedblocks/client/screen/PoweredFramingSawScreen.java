@@ -63,7 +63,7 @@ public class PoweredFramingSawScreen extends AbstractContainerScreen<PoweredFram
     private static final RecipeViewer RECIPE_VIEWER = RecipeViewer.get();
 
     private final FramingSawRecipeCache cache = FramingSawRecipeCache.get(true);
-    private final ItemStack cubeStack = new ItemStack(FBContent.BLOCK_FRAMED_CUBE.get());
+    private final ItemStack cubeStack = new ItemStack(FBContent.BLOCK_FRAMED_CUBE.value());
     private int targetStackX;
     private int targetStackY;
     private Rect2i statusTooltipArea = EMPTY;

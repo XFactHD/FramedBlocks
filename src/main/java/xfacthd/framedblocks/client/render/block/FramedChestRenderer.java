@@ -153,7 +153,7 @@ public class FramedChestRenderer implements BlockEntityRenderer<FramedChestBlock
         {
             for (LatchType latch : LatchType.values())
             {
-                BlockState state = FBContent.BLOCK_FRAMED_CHEST.get().defaultBlockState()
+                BlockState state = FBContent.BLOCK_FRAMED_CHEST.value().defaultBlockState()
                         .setValue(FramedProperties.FACING_HOR, dir)
                         .setValue(PropertyHolder.LATCH_TYPE, latch);
 

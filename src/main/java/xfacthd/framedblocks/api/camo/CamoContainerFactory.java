@@ -28,7 +28,7 @@ public abstract class CamoContainerFactory
     {
         if (syncId == -1)
         {
-            syncId = Utils.getId(FramedBlocksAPI.INSTANCE.getCamoContainerFactoryRegistry(), this);
+            syncId = FramedBlocksAPI.INSTANCE.getCamoContainerFactoryRegistry().getId(this);
             Preconditions.checkState(syncId != -1, "Attempted to get sync ID for unregistered CamoContainer.Factory");
         }
         return syncId;

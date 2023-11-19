@@ -113,7 +113,7 @@ public class FramedDoubleHalfSlopeBlock extends AbstractFramedDoubleBlock
     {
         return new VerticalAndWallBlockItem(
                 this,
-                FBContent.BLOCK_FRAMED_VERTICAL_DOUBLE_HALF_SLOPE.get(),
+                FBContent.BLOCK_FRAMED_VERTICAL_DOUBLE_HALF_SLOPE.value(),
                 new Item.Properties()
         );
     }
@@ -125,7 +125,7 @@ public class FramedDoubleHalfSlopeBlock extends AbstractFramedDoubleBlock
         boolean right = state.getValue(PropertyHolder.RIGHT);
         boolean ySlope = state.getValue(FramedProperties.Y_SLOPE);
 
-        BlockState defState = FBContent.BLOCK_FRAMED_HALF_SLOPE.get().defaultBlockState();
+        BlockState defState = FBContent.BLOCK_FRAMED_HALF_SLOPE.value().defaultBlockState();
         return new Tuple<>(
                 defState.setValue(FramedProperties.FACING_HOR, facing)
                         .setValue(FramedProperties.TOP, false)
@@ -214,7 +214,7 @@ public class FramedDoubleHalfSlopeBlock extends AbstractFramedDoubleBlock
 
     public static BlockState itemSource()
     {
-        return FBContent.BLOCK_FRAMED_DOUBLE_HALF_SLOPE.get()
+        return FBContent.BLOCK_FRAMED_DOUBLE_HALF_SLOPE.value()
                 .defaultBlockState()
                 .setValue(FramedProperties.FACING_HOR, Direction.WEST);
     }

@@ -2,15 +2,16 @@ package xfacthd.framedblocks.tests;
 
 import com.google.common.base.Preconditions;
 import net.minecraft.core.Direction;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.gametest.framework.GameTestGenerator;
 import net.minecraft.gametest.framework.TestFunction;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.AttachFace;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.neoforged.neoforge.gametest.GameTestHolder;
-import net.neoforged.neoforge.registries.ForgeRegistries;
 import xfacthd.framedblocks.api.block.IFramedBlock;
 import xfacthd.framedblocks.api.type.IBlockType;
 import xfacthd.framedblocks.api.util.FramedConstants;
@@ -93,8 +94,8 @@ public final class BeaconTintTests
         return Arrays.stream(BlockType.values())
                 .filter(type -> !NON_TINTING.contains(type))
                 .map(type -> Utils.rl(type.getName()))
-                .map(ForgeRegistries.BLOCKS::getValue)
-                .filter(Objects::nonNull)
+                .map(BuiltInRegistries.BLOCK::get)
+                .filter(b -> b != Blocks.AIR)
                 .map(BeaconTintTests::getTestState)
                 .map(state -> new TestFunction(
                         BATCH_NAME,
@@ -141,8 +142,7 @@ public final class BeaconTintTests
 
     private static String getTestName(BlockState state)
     {
-        ResourceLocation regName = ForgeRegistries.BLOCKS.getKey(state.getBlock());
-        Preconditions.checkState(regName != null);
+        ResourceLocation regName = BuiltInRegistries.BLOCK.getKey(state.getBlock());
         return String.format("beacontinttests.test_%s", regName.getPath());
     }
 

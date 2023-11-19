@@ -7,12 +7,12 @@ import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.resources.model.BakedModel;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.core.Direction;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
 import net.neoforged.neoforge.client.model.data.ModelData;
-import net.neoforged.neoforge.registries.ForgeRegistries;
 import xfacthd.framedblocks.client.model.FramedBlockModel;
 import xfacthd.framedblocks.api.model.data.FramedBlockData;
 import xfacthd.framedblocks.api.util.TestProperties;
@@ -47,13 +47,13 @@ public final class ModelPerformanceTest
         Map<String, BlockState> testStates = new LinkedHashMap<>();
 
         //noinspection ConstantConditions
-        String stoneName = ForgeRegistries.BLOCKS.getKey(Blocks.STONE).toString();
+        String stoneName = BuiltInRegistries.BLOCK.getKey(Blocks.STONE).toString();
         testStates.put(stoneName, Blocks.STONE.defaultBlockState());
         for (BlockType type : BlockType.values())
         {
             BlockState state = FBContent.byType(type).defaultBlockState();
             //noinspection ConstantConditions
-            String blockName = ForgeRegistries.BLOCKS.getKey(state.getBlock()).toString();
+            String blockName = BuiltInRegistries.BLOCK.getKey(state.getBlock()).toString();
             testStates.put(blockName, state);
         }
 

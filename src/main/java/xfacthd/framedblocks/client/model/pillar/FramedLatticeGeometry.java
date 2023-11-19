@@ -29,7 +29,7 @@ public class FramedLatticeGeometry implements Geometry
         this.xAxis = ctx.state().getValue(FramedProperties.X_AXIS);
         this.yAxis = ctx.state().getValue(FramedProperties.Y_AXIS);
         this.zAxis = ctx.state().getValue(FramedProperties.Z_AXIS);
-        boolean thick = ctx.state().getBlock() == FBContent.BLOCK_FRAMED_THICK_LATTICE.get();
+        boolean thick = ctx.state().getBlock() == FBContent.BLOCK_FRAMED_THICK_LATTICE.value();
         this.minCoord = thick ? MIN_COORD_THICK : MIN_COORD;
         this.maxCoord = thick ? MAX_COORD_THICK : MAX_COORD;
     }

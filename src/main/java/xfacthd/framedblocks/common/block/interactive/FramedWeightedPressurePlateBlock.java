@@ -86,7 +86,7 @@ public class FramedWeightedPressurePlateBlock extends WeightedPressurePlateBlock
     @Override
     public boolean handleBlockLeftClick(BlockState state, Level level, BlockPos pos, Player player)
     {
-        if (player.getMainHandItem().is(FBContent.ITEM_FRAMED_HAMMER.get()))
+        if (player.getMainHandItem().is(FBContent.ITEM_FRAMED_HAMMER.value()))
         {
             if (!level.isClientSide())
             {

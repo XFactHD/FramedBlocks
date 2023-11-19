@@ -117,10 +117,10 @@ public class FramedStackedSlopeSlabBlock extends AbstractFramedDoubleBlock
         boolean ySlope = state.getValue(FramedProperties.Y_SLOPE);
 
         return new Tuple<>(
-                FBContent.BLOCK_FRAMED_SLAB.get()
+                FBContent.BLOCK_FRAMED_SLAB.value()
                         .defaultBlockState()
                         .setValue(FramedProperties.TOP, top),
-                FBContent.BLOCK_FRAMED_SLOPE_SLAB.get()
+                FBContent.BLOCK_FRAMED_SLOPE_SLAB.value()
                         .defaultBlockState()
                         .setValue(FramedProperties.FACING_HOR, dir)
                         .setValue(FramedProperties.TOP, top)
@@ -180,7 +180,7 @@ public class FramedStackedSlopeSlabBlock extends AbstractFramedDoubleBlock
 
     public static BlockState itemModelSource()
     {
-        return FBContent.BLOCK_FRAMED_STACKED_SLOPE_SLAB.get()
+        return FBContent.BLOCK_FRAMED_STACKED_SLOPE_SLAB.value()
                 .defaultBlockState()
                 .setValue(FramedProperties.FACING_HOR, Direction.SOUTH);
     }

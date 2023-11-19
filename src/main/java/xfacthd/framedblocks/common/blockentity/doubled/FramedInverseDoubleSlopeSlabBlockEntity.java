@@ -12,7 +12,7 @@ public class FramedInverseDoubleSlopeSlabBlockEntity extends FramedDoubleBlockEn
 {
     public FramedInverseDoubleSlopeSlabBlockEntity(BlockPos pos, BlockState state)
     {
-        super(FBContent.BE_TYPE_FRAMED_INVERSE_DOUBLE_SLOPE_SLAB.get(), pos, state);
+        super(FBContent.BE_TYPE_FRAMED_INVERSE_DOUBLE_SLOPE_SLAB.value(), pos, state);
     }
 
     @Override

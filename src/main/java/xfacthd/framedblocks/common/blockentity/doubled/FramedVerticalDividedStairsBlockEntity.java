@@ -12,7 +12,7 @@ public class FramedVerticalDividedStairsBlockEntity extends FramedDoubleBlockEnt
 {
     public FramedVerticalDividedStairsBlockEntity(BlockPos pos, BlockState state)
     {
-        super(FBContent.BE_TYPE_FRAMED_VERTICAL_DIVIDED_STAIRS.get(), pos, state);
+        super(FBContent.BE_TYPE_FRAMED_VERTICAL_DIVIDED_STAIRS.value(), pos, state);
     }
 
     @Override

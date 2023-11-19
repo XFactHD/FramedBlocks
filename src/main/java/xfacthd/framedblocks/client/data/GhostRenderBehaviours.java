@@ -1,7 +1,7 @@
 package xfacthd.framedblocks.client.data;
 
+import net.minecraft.core.Holder;
 import net.minecraft.world.item.Items;
-import net.neoforged.neoforge.registries.RegistryObject;
 import xfacthd.framedblocks.api.block.IFramedBlock;
 import xfacthd.framedblocks.api.ghost.GhostRenderBehaviour;
 import xfacthd.framedblocks.client.data.ghost.*;
@@ -16,12 +16,12 @@ public final class GhostRenderBehaviours
 
         FBContent.getRegisteredBlocks()
                 .stream()
-                .map(RegistryObject::get)
+                .map(Holder::value)
                 .filter(IFramedBlock.class::isInstance)
                 .filter(b -> ((IFramedBlock) b).getBlockType().isDoubleBlock())
                 .forEach(block ->
                 {
-                    if (block == FBContent.BLOCK_FRAMED_DOUBLE_PANEL.get())
+                    if (block == FBContent.BLOCK_FRAMED_DOUBLE_PANEL.value())
                     {
                         GhostBlockRenderer.registerBehaviour(
                                 new DoublePanelGhostRenderBehaviour(),
@@ -39,50 +39,50 @@ public final class GhostRenderBehaviours
 
         GhostBlockRenderer.registerBehaviour(
                 new DoorGhostRenderBehaviour(),
-                FBContent.BLOCK_FRAMED_DOOR.get(), FBContent.BLOCK_FRAMED_IRON_DOOR.get()
+                FBContent.BLOCK_FRAMED_DOOR.value(), FBContent.BLOCK_FRAMED_IRON_DOOR.value()
         );
 
         GhostBlockRenderer.registerBehaviour(
                 new SlabGhostRenderBehaviour(),
-                FBContent.BLOCK_FRAMED_SLAB.get()
+                FBContent.BLOCK_FRAMED_SLAB.value()
         );
 
         GhostBlockRenderer.registerBehaviour(
                 new PanelGhostRenderBehaviour(),
-                FBContent.BLOCK_FRAMED_PANEL.get()
+                FBContent.BLOCK_FRAMED_PANEL.value()
         );
 
         GhostBlockRenderer.registerBehaviour(
                 new StandingAndWallBlockGhostRenderBehaviour(),
-                FBContent.BLOCK_FRAMED_SIGN.get(),
-                FBContent.BLOCK_FRAMED_HANGING_SIGN.get(),
-                FBContent.BLOCK_FRAMED_TORCH.get(),
-                FBContent.BLOCK_FRAMED_SOUL_TORCH.get(),
-                FBContent.BLOCK_FRAMED_REDSTONE_TORCH.get(),
-                FBContent.BLOCK_FRAMED_HALF_SLOPE.get(),
-                FBContent.BLOCK_FRAMED_DOUBLE_HALF_SLOPE.get(),
-                FBContent.BLOCK_FRAMED_SMALL_CORNER_SLOPE_PANEL.get(),
-                FBContent.BLOCK_FRAMED_LARGE_CORNER_SLOPE_PANEL.get(),
-                FBContent.BLOCK_FRAMED_SMALL_INNER_CORNER_SLOPE_PANEL.get(),
-                FBContent.BLOCK_FRAMED_LARGE_INNER_CORNER_SLOPE_PANEL.get(),
-                FBContent.BLOCK_FRAMED_EXTENDED_CORNER_SLOPE_PANEL.get(),
-                FBContent.BLOCK_FRAMED_EXTENDED_INNER_CORNER_SLOPE_PANEL.get(),
-                FBContent.BLOCK_FRAMED_STACKED_CORNER_SLOPE_PANEL.get(),
-                FBContent.BLOCK_FRAMED_STACKED_INNER_CORNER_SLOPE_PANEL.get()
+                FBContent.BLOCK_FRAMED_SIGN.value(),
+                FBContent.BLOCK_FRAMED_HANGING_SIGN.value(),
+                FBContent.BLOCK_FRAMED_TORCH.value(),
+                FBContent.BLOCK_FRAMED_SOUL_TORCH.value(),
+                FBContent.BLOCK_FRAMED_REDSTONE_TORCH.value(),
+                FBContent.BLOCK_FRAMED_HALF_SLOPE.value(),
+                FBContent.BLOCK_FRAMED_DOUBLE_HALF_SLOPE.value(),
+                FBContent.BLOCK_FRAMED_SMALL_CORNER_SLOPE_PANEL.value(),
+                FBContent.BLOCK_FRAMED_LARGE_CORNER_SLOPE_PANEL.value(),
+                FBContent.BLOCK_FRAMED_SMALL_INNER_CORNER_SLOPE_PANEL.value(),
+                FBContent.BLOCK_FRAMED_LARGE_INNER_CORNER_SLOPE_PANEL.value(),
+                FBContent.BLOCK_FRAMED_EXTENDED_CORNER_SLOPE_PANEL.value(),
+                FBContent.BLOCK_FRAMED_EXTENDED_INNER_CORNER_SLOPE_PANEL.value(),
+                FBContent.BLOCK_FRAMED_STACKED_CORNER_SLOPE_PANEL.value(),
+                FBContent.BLOCK_FRAMED_STACKED_INNER_CORNER_SLOPE_PANEL.value()
         );
 
         GhostBlockRenderer.registerBehaviour(
                 new StandingAndWallDoubleBlockGhostRenderBehaviour(),
-                FBContent.BLOCK_FRAMED_SMALL_DOUBLE_CORNER_SLOPE_PANEL.get(),
-                FBContent.BLOCK_FRAMED_LARGE_DOUBLE_CORNER_SLOPE_PANEL.get(),
-                FBContent.BLOCK_FRAMED_INVERSE_DOUBLE_CORNER_SLOPE_PANEL.get(),
-                FBContent.BLOCK_FRAMED_EXTENDED_DOUBLE_CORNER_SLOPE_PANEL.get(),
-                FBContent.BLOCK_FRAMED_EXTENDED_INNER_DOUBLE_CORNER_SLOPE_PANEL.get()
+                FBContent.BLOCK_FRAMED_SMALL_DOUBLE_CORNER_SLOPE_PANEL.value(),
+                FBContent.BLOCK_FRAMED_LARGE_DOUBLE_CORNER_SLOPE_PANEL.value(),
+                FBContent.BLOCK_FRAMED_INVERSE_DOUBLE_CORNER_SLOPE_PANEL.value(),
+                FBContent.BLOCK_FRAMED_EXTENDED_DOUBLE_CORNER_SLOPE_PANEL.value(),
+                FBContent.BLOCK_FRAMED_EXTENDED_INNER_DOUBLE_CORNER_SLOPE_PANEL.value()
         );
 
         GhostBlockRenderer.registerBehaviour(
                 new CollapsibleBlockGhostRenderBehaviour(),
-                FBContent.BLOCK_FRAMED_COLLAPSIBLE_BLOCK.get()
+                FBContent.BLOCK_FRAMED_COLLAPSIBLE_BLOCK.value()
         );
 
         GhostBlockRenderer.registerBehaviour(
@@ -95,15 +95,15 @@ public final class GhostRenderBehaviours
 
         GhostBlockRenderer.registerBehaviour(
                 new FancyRailGhostRenderBehaviour(),
-                FBContent.BLOCK_FRAMED_FANCY_RAIL.get().asItem(),
-                FBContent.BLOCK_FRAMED_FANCY_POWERED_RAIL.get().asItem(),
-                FBContent.BLOCK_FRAMED_FANCY_DETECTOR_RAIL.get().asItem(),
-                FBContent.BLOCK_FRAMED_FANCY_ACTIVATOR_RAIL.get().asItem()
+                FBContent.BLOCK_FRAMED_FANCY_RAIL.value().asItem(),
+                FBContent.BLOCK_FRAMED_FANCY_POWERED_RAIL.value().asItem(),
+                FBContent.BLOCK_FRAMED_FANCY_DETECTOR_RAIL.value().asItem(),
+                FBContent.BLOCK_FRAMED_FANCY_ACTIVATOR_RAIL.value().asItem()
         );
 
         GhostBlockRenderer.registerBehaviour(
                 new BlueprintGhostRenderBehaviour(),
-                FBContent.ITEM_FRAMED_BLUEPRINT.get()
+                FBContent.ITEM_FRAMED_BLUEPRINT.value()
         );
     }
 

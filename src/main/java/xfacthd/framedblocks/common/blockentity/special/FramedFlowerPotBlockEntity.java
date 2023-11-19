@@ -1,6 +1,7 @@
 package xfacthd.framedblocks.common.blockentity.special;
 
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
@@ -9,7 +10,6 @@ import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
 import net.neoforged.neoforge.client.model.data.ModelData;
 import net.neoforged.neoforge.client.model.data.ModelProperty;
-import net.neoforged.neoforge.registries.ForgeRegistries;
 import xfacthd.framedblocks.api.block.FramedBlockEntity;
 import xfacthd.framedblocks.common.FBContent;
 
@@ -23,7 +23,7 @@ public class FramedFlowerPotBlockEntity extends FramedBlockEntity
 
     public FramedFlowerPotBlockEntity(BlockPos pos, BlockState state)
     {
-        super(FBContent.BE_TYPE_FRAMED_FLOWER_POT.get(), pos, state);
+        super(FBContent.BE_TYPE_FRAMED_FLOWER_POT.value(), pos, state);
     }
 
     public void setFlowerBlock(Block flowerBlock)
@@ -73,13 +73,13 @@ public class FramedFlowerPotBlockEntity extends FramedBlockEntity
     {
         super.writeToDataPacket(nbt);
         //noinspection ConstantConditions
-        nbt.putString("flower", ForgeRegistries.BLOCKS.getKey(flowerBlock).toString());
+        nbt.putString("flower", BuiltInRegistries.BLOCK.getKey(flowerBlock).toString());
     }
 
     @Override
     protected boolean readFromDataPacket(CompoundTag nbt)
     {
-        Block flower = ForgeRegistries.BLOCKS.getValue(new ResourceLocation(nbt.getString("flower")));
+        Block flower = BuiltInRegistries.BLOCK.get(new ResourceLocation(nbt.getString("flower")));
 
         boolean update = flower != flowerBlock;
         if (update)
@@ -96,7 +96,7 @@ public class FramedFlowerPotBlockEntity extends FramedBlockEntity
         CompoundTag nbt = super.getUpdateTag();
 
         //noinspection ConstantConditions
-        nbt.putString("flower", ForgeRegistries.BLOCKS.getKey(flowerBlock).toString());
+        nbt.putString("flower", BuiltInRegistries.BLOCK.getKey(flowerBlock).toString());
 
         return nbt;
     }
@@ -106,7 +106,7 @@ public class FramedFlowerPotBlockEntity extends FramedBlockEntity
     {
         super.handleUpdateTag(nbt);
 
-        Block flower = ForgeRegistries.BLOCKS.getValue(new ResourceLocation(nbt.getString("flower")));
+        Block flower = BuiltInRegistries.BLOCK.get(new ResourceLocation(nbt.getString("flower")));
         if (flower != flowerBlock)
         {
             flowerBlock = flower;
@@ -117,7 +117,7 @@ public class FramedFlowerPotBlockEntity extends FramedBlockEntity
     public void saveAdditional(CompoundTag nbt)
     {
         //noinspection ConstantConditions
-        nbt.putString("flower", ForgeRegistries.BLOCKS.getKey(flowerBlock).toString());
+        nbt.putString("flower", BuiltInRegistries.BLOCK.getKey(flowerBlock).toString());
         super.saveAdditional(nbt);
     }
 
@@ -125,6 +125,6 @@ public class FramedFlowerPotBlockEntity extends FramedBlockEntity
     public void load(CompoundTag nbt)
     {
         super.load(nbt);
-        flowerBlock = ForgeRegistries.BLOCKS.getValue(new ResourceLocation(nbt.getString("flower")));
+        flowerBlock = BuiltInRegistries.BLOCK.get(new ResourceLocation(nbt.getString("flower")));
     }
 }

@@ -1,11 +1,11 @@
 package xfacthd.framedblocks.common.data;
 
 import com.google.common.base.Stopwatch;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.server.packs.resources.ResourceManager;
 import net.minecraft.server.packs.resources.ResourceManagerReloadListener;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.StateDefinition;
-import net.neoforged.neoforge.registries.ForgeRegistries;
 import xfacthd.framedblocks.FramedBlocks;
 import xfacthd.framedblocks.api.block.IFramedBlock;
 import xfacthd.framedblocks.api.block.cache.IStateCacheAccessor;
@@ -37,8 +37,9 @@ public final class StateCacheBuilder
         FramedBlocks.LOGGER.debug("Initializing custom state metadata caches");
         Stopwatch watch = Stopwatch.createStarted();
         Map<Block, List<StateCache>> dedupMap = new HashMap<>();
-        long count = ForgeRegistries.BLOCKS.getValues()
+        long count = BuiltInRegistries.BLOCK.entrySet()
                 .stream()
+                .map(Map.Entry::getValue)
                 .filter(block -> block instanceof IFramedBlock)
                 .map(Block::getStateDefinition)
                 .map(StateDefinition::getPossibleStates)

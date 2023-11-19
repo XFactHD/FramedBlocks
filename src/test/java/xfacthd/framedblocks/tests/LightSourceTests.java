@@ -2,12 +2,13 @@ package xfacthd.framedblocks.tests;
 
 import com.google.common.base.Preconditions;
 import net.minecraft.core.Direction;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.gametest.framework.*;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
 import net.neoforged.neoforge.gametest.GameTestHolder;
-import net.neoforged.neoforge.registries.ForgeRegistries;
 import xfacthd.framedblocks.api.block.IFramedBlock;
 import xfacthd.framedblocks.api.type.IBlockType;
 import xfacthd.framedblocks.api.util.FramedConstants;
@@ -32,8 +33,8 @@ public final class LightSourceTests
         return Arrays.stream(BlockType.values())
                 .filter(LightSourceTests::isNotSelfEmitting)
                 .map(type -> Utils.rl(type.getName()))
-                .map(ForgeRegistries.BLOCKS::getValue)
-                .filter(Objects::nonNull)
+                .map(BuiltInRegistries.BLOCK::get)
+                .filter(b -> b != Blocks.AIR)
                 .map(LightSourceTests::getTestState)
                 .map(state -> new TestFunction(
                         BATCH_NAME,
@@ -79,8 +80,7 @@ public final class LightSourceTests
 
     private static String getTestName(BlockState state)
     {
-        ResourceLocation regName = ForgeRegistries.BLOCKS.getKey(state.getBlock());
-        Preconditions.checkState(regName != null);
+        ResourceLocation regName = BuiltInRegistries.BLOCK.getKey(state.getBlock());
         return String.format("lightsourcetests.test_%s", regName.getPath());
     }
 

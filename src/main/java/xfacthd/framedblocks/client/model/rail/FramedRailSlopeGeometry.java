@@ -67,7 +67,7 @@ public class FramedRailSlopeGeometry extends FramedSlopeGeometry
         Direction dir = FramedUtils.getDirectionFromAscendingRailShape(shape);
         boolean ySlope = state.getValue(FramedProperties.Y_SLOPE);
 
-        return FBContent.BLOCK_FRAMED_SLOPE.get()
+        return FBContent.BLOCK_FRAMED_SLOPE.value()
                 .defaultBlockState()
                 .setValue(FramedProperties.FACING_HOR, dir)
                 .setValue(FramedProperties.Y_SLOPE, ySlope);
@@ -112,28 +112,28 @@ public class FramedRailSlopeGeometry extends FramedSlopeGeometry
 
     public static BlockState itemSourceNormal()
     {
-        return FBContent.BLOCK_FRAMED_RAIL_SLOPE.get()
+        return FBContent.BLOCK_FRAMED_RAIL_SLOPE.value()
                 .defaultBlockState()
                 .setValue(PropertyHolder.ASCENDING_RAIL_SHAPE, RailShape.ASCENDING_SOUTH);
     }
 
     public static BlockState itemSourcePowered()
     {
-        return FBContent.BLOCK_FRAMED_POWERED_RAIL_SLOPE.get()
+        return FBContent.BLOCK_FRAMED_POWERED_RAIL_SLOPE.value()
                 .defaultBlockState()
                 .setValue(PropertyHolder.ASCENDING_RAIL_SHAPE, RailShape.ASCENDING_SOUTH);
     }
 
     public static BlockState itemSourceDetector()
     {
-        return FBContent.BLOCK_FRAMED_DETECTOR_RAIL_SLOPE.get()
+        return FBContent.BLOCK_FRAMED_DETECTOR_RAIL_SLOPE.value()
                 .defaultBlockState()
                 .setValue(PropertyHolder.ASCENDING_RAIL_SHAPE, RailShape.ASCENDING_SOUTH);
     }
 
     public static BlockState itemSourceActivator()
     {
-        return FBContent.BLOCK_FRAMED_ACTIVATOR_RAIL_SLOPE.get()
+        return FBContent.BLOCK_FRAMED_ACTIVATOR_RAIL_SLOPE.value()
                 .defaultBlockState()
                 .setValue(PropertyHolder.ASCENDING_RAIL_SHAPE, RailShape.ASCENDING_SOUTH);
     }

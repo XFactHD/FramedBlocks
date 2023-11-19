@@ -15,6 +15,7 @@ import net.minecraft.nbt.*;
 import net.minecraft.nbt.Tag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.*;
 import net.minecraft.util.Mth;
@@ -34,7 +35,7 @@ import net.minecraft.world.level.chunk.LevelChunk;
 import net.minecraft.world.level.material.*;
 import net.minecraft.world.phys.Vec3;
 import net.neoforged.fml.loading.FMLEnvironment;
-import net.neoforged.neoforge.registries.*;
+import net.neoforged.neoforge.registries.DeferredItem;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.Nullable;
 import xfacthd.framedblocks.api.block.FramedBlockEntity;
@@ -63,21 +64,11 @@ public final class Utils
     /** Allow other mods to add items that temporarily disable intangibility to allow interaction with the targeted block */
     public static final TagKey<Item> DISABLE_INTANGIBLE = itemTag("disable_intangible");
 
-    public static final RegistryObject<Item> FRAMED_HAMMER = RegistryObject.create(
-            Utils.rl("framed_hammer"), ForgeRegistries.ITEMS
-    );
-    public static final RegistryObject<Item> FRAMED_WRENCH = RegistryObject.create(
-            Utils.rl("framed_wrench"), ForgeRegistries.ITEMS
-    );
-    public static final RegistryObject<Item> FRAMED_KEY = RegistryObject.create(
-            Utils.rl("framed_key"), ForgeRegistries.ITEMS
-    );
-    public static final RegistryObject<Item> FRAMED_SCREWDRIVER = RegistryObject.create(
-            Utils.rl("framed_screwdriver"), ForgeRegistries.ITEMS
-    );
-    public static final RegistryObject<Item> FRAMED_REINFORCEMENT = RegistryObject.create(
-            Utils.rl("framed_reinforcement"), ForgeRegistries.ITEMS
-    );
+    public static final Holder<Item> FRAMED_HAMMER = DeferredItem.createItem(Utils.rl("framed_hammer"));
+    public static final Holder<Item> FRAMED_WRENCH = DeferredItem.createItem(Utils.rl("framed_wrench"));
+    public static final Holder<Item> FRAMED_KEY = DeferredItem.createItem(Utils.rl("framed_key"));
+    public static final Holder<Item> FRAMED_SCREWDRIVER = DeferredItem.createItem(Utils.rl("framed_screwdriver"));
+    public static final Holder<Item> FRAMED_REINFORCEMENT = DeferredItem.createItem(Utils.rl("framed_reinforcement"));
 
     private static final Long2ObjectMap<Direction> DIRECTION_BY_NORMAL = Arrays.stream(Direction.values())
             .collect(Collectors.toMap(
@@ -407,7 +398,6 @@ public final class Utils
             return Fluids.EMPTY.defaultFluidState();
         }
 
-        //noinspection deprecation
         Fluid fluid = BuiltInRegistries.FLUID.get(new ResourceLocation(tag.getString("Name")));
         Preconditions.checkNotNull(fluid);
 
@@ -519,7 +509,6 @@ public final class Utils
         {
             return level.holderLookup(Registries.BLOCK);
         }
-        //noinspection deprecation
         return BuiltInRegistries.BLOCK.asLookup();
     }
 
@@ -622,18 +611,11 @@ public final class Utils
         }
     }
 
-    @SuppressWarnings("UnstableApiUsage")
-    //TODO: remove when ForgeRegistry is gone
-    public static <T> int getId(IForgeRegistry<T> registry, T obj)
+    public static <T> ResourceKey<T> getKeyOrThrow(Holder<T> holder)
     {
-        return ((ForgeRegistry<T>) registry).getID(obj);
-    }
-
-    @SuppressWarnings("UnstableApiUsage")
-    //TODO: remove when ForgeRegistry is gone
-    public static <T> T getValue(IForgeRegistry<T> registry, int id)
-    {
-        return ((ForgeRegistry<T>) registry).getValue(id);
+        return holder.unwrapKey().orElseThrow(
+                () -> new IllegalArgumentException("Direct holders and unbound reference holders are not supported")
+        );
     }
 
     @ApiStatus.Internal

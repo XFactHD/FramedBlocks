@@ -76,7 +76,7 @@ public class FramedExtendedInnerCornerSlopePanelGeometry implements Geometry
 
     public static BlockState itemModelSource()
     {
-        return FBContent.BLOCK_FRAMED_EXTENDED_INNER_CORNER_SLOPE_PANEL.get()
+        return FBContent.BLOCK_FRAMED_EXTENDED_INNER_CORNER_SLOPE_PANEL.value()
                 .defaultBlockState()
                 .setValue(FramedProperties.FACING_HOR, Direction.EAST);
     }

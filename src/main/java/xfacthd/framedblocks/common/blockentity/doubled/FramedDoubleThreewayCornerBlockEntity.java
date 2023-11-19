@@ -14,7 +14,7 @@ public class FramedDoubleThreewayCornerBlockEntity extends FramedDoubleBlockEnti
 {
     public FramedDoubleThreewayCornerBlockEntity(BlockPos pos, BlockState state)
     {
-        super(FBContent.BE_TYPE_DOUBLE_FRAMED_THREEWAY_CORNER.get(), pos, state);
+        super(FBContent.BE_TYPE_DOUBLE_FRAMED_THREEWAY_CORNER.value(), pos, state);
     }
 
     @Override

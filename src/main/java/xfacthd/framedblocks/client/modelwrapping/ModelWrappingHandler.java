@@ -1,25 +1,27 @@
 package xfacthd.framedblocks.client.modelwrapping;
 
 import net.minecraft.client.resources.model.BakedModel;
+import net.minecraft.core.Holder;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
-import net.neoforged.neoforge.registries.RegistryObject;
 import org.jetbrains.annotations.Nullable;
 import xfacthd.framedblocks.api.model.wrapping.*;
+import xfacthd.framedblocks.api.util.Utils;
 
 import java.util.*;
 
 public final class ModelWrappingHandler
 {
     private final Map<BlockState, BakedModel> visitedStates = new IdentityHashMap<>();
-    private final RegistryObject<Block> block;
+    private final Holder<Block> block;
     private final ModelFactory blockModelFactory;
     @Nullable
     private final BlockState itemModelSource;
     private final StateMerger stateMerger;
 
     public ModelWrappingHandler(
-            RegistryObject<Block> block,
+            Holder<Block> block,
             ModelFactory blockModelFactory,
             @Nullable BlockState itemModelSource,
             StateMerger stateMerger
@@ -49,8 +51,9 @@ public final class ModelWrappingHandler
     {
         if (itemModelSource == null)
         {
+            ResourceLocation key = Utils.getKeyOrThrow(block).location();
             throw new IllegalStateException(
-                    "ModelWrappingHandler for block '" + block.getId() + "' does not support item model wrapping"
+                    "ModelWrappingHandler for block '" + key + "' does not support item model wrapping"
             );
         }
 
@@ -69,7 +72,7 @@ public final class ModelWrappingHandler
 
     public Block getBlock()
     {
-        return block.get();
+        return block.value();
     }
 
     public void reset()

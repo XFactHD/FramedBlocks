@@ -18,7 +18,7 @@ public final class FramingSawRecipe implements Recipe<Container>
 {
     public static final int CUBE_MATERIAL_VALUE = 6144; // Empirically determined value
     public static final int MAX_ADDITIVE_COUNT = 3;
-    private static final Lazy<ItemStack> TOAST_ICON = Lazy.of(() -> new ItemStack(FBContent.BLOCK_FRAMING_SAW.get()));
+    private static final Lazy<ItemStack> TOAST_ICON = Lazy.of(() -> new ItemStack(FBContent.BLOCK_FRAMING_SAW.value()));
 
     private final int materialAmount;
     private final List<FramingSawRecipeAdditive> additives;
@@ -158,13 +158,13 @@ public final class FramingSawRecipe implements Recipe<Container>
     @Override
     public RecipeSerializer<?> getSerializer()
     {
-        return FBContent.RECIPE_SERIALIZER_FRAMING_SAW_RECIPE.get();
+        return FBContent.RECIPE_SERIALIZER_FRAMING_SAW_RECIPE.value();
     }
 
     @Override
     public RecipeType<?> getType()
     {
-        return FBContent.RECIPE_TYPE_FRAMING_SAW_RECIPE.get();
+        return FBContent.RECIPE_TYPE_FRAMING_SAW_RECIPE.value();
     }
 
 

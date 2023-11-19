@@ -20,7 +20,7 @@ public class FramedFlatExtendedDoubleSlopePanelCornerBlockEntity extends FramedD
 
     public FramedFlatExtendedDoubleSlopePanelCornerBlockEntity(BlockPos pos, BlockState state)
     {
-        super(FBContent.BE_TYPE_FRAMED_FLAT_EXTENDED_DOUBLE_SLOPE_PANEL_CORNER.get(), pos, state);
+        super(FBContent.BE_TYPE_FRAMED_FLAT_EXTENDED_DOUBLE_SLOPE_PANEL_CORNER.value(), pos, state);
         this.isInner = getBlockType() == BlockType.FRAMED_FLAT_EXT_INNER_DOUBLE_SLOPE_PANEL_CORNER;
     }
 

@@ -30,13 +30,13 @@ public final class SplitLineOverlay extends BlockInteractOverlay
     @Override
     protected boolean isValidTool(ItemStack stack)
     {
-        return stack.getItem() == FBContent.ITEM_FRAMED_WRENCH.get();
+        return stack.getItem() == FBContent.ITEM_FRAMED_WRENCH.value();
     }
 
     @Override
     protected boolean isValidTarget(Target target)
     {
-        return target.state().getBlock() == FBContent.BLOCK_FRAMED_COLLAPSIBLE_BLOCK.get();
+        return target.state().getBlock() == FBContent.BLOCK_FRAMED_COLLAPSIBLE_BLOCK.value();
     }
 
     @Override

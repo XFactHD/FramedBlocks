@@ -3,8 +3,8 @@ package xfacthd.framedblocks.api.test;
 import com.mojang.logging.LogUtils;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.particle.ParticleEngine;
-import net.minecraft.core.BlockPos;
-import net.minecraft.core.Direction;
+import net.minecraft.core.*;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.gametest.framework.*;
 import net.minecraft.network.protocol.game.ServerboundPlayerActionPacket;
 import net.minecraft.world.InteractionHand;
@@ -22,7 +22,6 @@ import net.minecraft.world.phys.shapes.CollisionContext;
 import net.neoforged.neoforge.client.extensions.common.IClientBlockExtensions;
 import net.neoforged.neoforge.common.CommonHooks;
 import net.neoforged.fml.loading.FMLEnvironment;
-import net.neoforged.neoforge.registries.ForgeRegistries;
 import org.slf4j.Logger;
 import xfacthd.framedblocks.api.block.*;
 import xfacthd.framedblocks.api.block.render.FramedBlockRenderProperties;
@@ -52,7 +51,7 @@ public final class TestUtils
     {
         if (!(block instanceof IFramedBlock))
         {
-            helper.fail(String.format("Expected instance of IFramedBlock, got %s", ForgeRegistries.BLOCKS.getKey(block)));
+            helper.fail(String.format("Expected instance of IFramedBlock, got %s", BuiltInRegistries.BLOCK.getKey(block)));
             return false;
         }
         return true;
@@ -76,7 +75,7 @@ public final class TestUtils
             Direction side = entry.getKey();
             Block camo = entry.getValue();
 
-            Item item = camo == Blocks.AIR ? Utils.FRAMED_HAMMER.get() : camo.asItem();
+            Item item = camo == Blocks.AIR ? Utils.FRAMED_HAMMER.value() : camo.asItem();
             player.setItemInHand(InteractionHand.MAIN_HAND, new ItemStack(item));
 
             Vec3 hitVec = switch (count)
@@ -226,7 +225,7 @@ public final class TestUtils
 
         if (!((IFramedBlock) block).getBlockType().canOccludeWithSolidCamo())
         {
-            helper.fail(String.format("Block %s can not occlude with a solid camo", ForgeRegistries.BLOCKS.getKey(block)));
+            helper.fail(String.format("Block %s can not occlude with a solid camo", BuiltInRegistries.BLOCK.getKey(block)));
             return false;
         }
         return true;
@@ -442,9 +441,9 @@ public final class TestUtils
                     Player player = helper.makeMockPlayer();
                     CollisionContext ctx = CollisionContext.of(player);
                     //noinspection ConstantConditions
-                    ForgeRegistries.ITEMS.tags()
-                            .getTag(Utils.DISABLE_INTANGIBLE)
+                    BuiltInRegistries.ITEM.getTag(Utils.DISABLE_INTANGIBLE)
                             .stream()
+                            .flatMap(HolderSet::stream)
                             .forEach(item ->
                             {
                                 player.setItemInHand(InteractionHand.MAIN_HAND, new ItemStack(item));
@@ -481,7 +480,7 @@ public final class TestUtils
                         LOGGER.warn("Can't test particle override of block '{}', running on dedicated server", state.getBlock());
                     }
                 },
-                () -> clickWithItem(helper, INTANGIBILITY_BLOCK, Utils.FRAMED_SCREWDRIVER.get(), true),
+                () -> clickWithItem(helper, INTANGIBILITY_BLOCK, Utils.FRAMED_SCREWDRIVER.value(), true),
                 () ->
                 {
                     FramedBlockEntity be = getBlockEntity(helper, INTANGIBILITY_BLOCK, FramedBlockEntity.class);

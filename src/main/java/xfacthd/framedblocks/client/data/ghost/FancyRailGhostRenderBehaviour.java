@@ -48,7 +48,7 @@ public final class FancyRailGhostRenderBehaviour implements GhostRenderBehaviour
             int renderPass
     )
     {
-        if (hitState.getBlock() == FBContent.BLOCK_FRAMED_SLOPE.get())
+        if (hitState.getBlock() == FBContent.BLOCK_FRAMED_SLOPE.value())
         {
             return railSlopeBehaviour.getRenderPos(stack, proxiedStack, hit, ctx, hitState, defaultPos, renderPass);
         }

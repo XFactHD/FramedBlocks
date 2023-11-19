@@ -17,7 +17,7 @@ public class FramedFlatElevatedDoubleSlopeSlabCornerBlockEntity extends FramedDo
 
     public FramedFlatElevatedDoubleSlopeSlabCornerBlockEntity(BlockPos pos, BlockState state)
     {
-        super(FBContent.BE_TYPE_FRAMED_FLAT_ELEVATED_DOUBLE_SLOPE_SLAB_CORNER.get(), pos, state);
+        super(FBContent.BE_TYPE_FRAMED_FLAT_ELEVATED_DOUBLE_SLOPE_SLAB_CORNER.value(), pos, state);
         this.isInner = getBlockType() == BlockType.FRAMED_FLAT_ELEV_INNER_DOUBLE_SLOPE_SLAB_CORNER;
     }
 

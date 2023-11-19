@@ -72,7 +72,7 @@ public class PoweredFramingSawBlock extends FramingSawBlock implements EntityBlo
         if (!level.isClientSide())
         {
             return Utils.createBlockEntityTicker(
-                    type, FBContent.BE_TYPE_POWERED_FRAMING_SAW.get(), PoweredFramingSawBlockEntity::tick
+                    type, FBContent.BE_TYPE_POWERED_FRAMING_SAW.value(), PoweredFramingSawBlockEntity::tick
             );
         }
         return null;

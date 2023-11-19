@@ -113,8 +113,8 @@ public class FramedRedstoneTorchBlock extends RedstoneTorchBlock implements IFra
     public BlockItem createBlockItem()
     {
         return new StandingAndWallBlockItem(
-                FBContent.BLOCK_FRAMED_REDSTONE_TORCH.get(),
-                FBContent.BLOCK_FRAMED_REDSTONE_WALL_TORCH.get(),
+                FBContent.BLOCK_FRAMED_REDSTONE_TORCH.value(),
+                FBContent.BLOCK_FRAMED_REDSTONE_WALL_TORCH.value(),
                 new Item.Properties(),
                 Direction.DOWN
         );

@@ -14,7 +14,7 @@ public class FramedVerticalDoubleHalfSlopeBlockEntity extends FramedDoubleBlockE
 {
     public FramedVerticalDoubleHalfSlopeBlockEntity(BlockPos pos, BlockState state)
     {
-        super(FBContent.BE_TYPE_FRAMED_VERTICAL_DOUBLE_HALF_SLOPE.get(), pos, state);
+        super(FBContent.BE_TYPE_FRAMED_VERTICAL_DOUBLE_HALF_SLOPE.value(), pos, state);
     }
 
     @Override

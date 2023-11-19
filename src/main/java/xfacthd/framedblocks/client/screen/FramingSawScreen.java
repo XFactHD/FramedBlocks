@@ -68,7 +68,7 @@ public class FramingSawScreen extends AbstractContainerScreen<FramingSawMenu>
     private static final RecipeViewer RECIPE_VIEWER = RecipeViewer.get();
 
     private final FramingSawRecipeCache cache = FramingSawRecipeCache.get(true);
-    private final ItemStack cubeStack = new ItemStack(FBContent.BLOCK_FRAMED_CUBE.get());
+    private final ItemStack cubeStack = new ItemStack(FBContent.BLOCK_FRAMED_CUBE.value());
     private int firstIndex = 0;
     private boolean scrolling = false;
     private float scrollOffset = 0F;

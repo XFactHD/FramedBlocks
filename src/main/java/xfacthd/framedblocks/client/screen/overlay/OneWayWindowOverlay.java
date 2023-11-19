@@ -42,13 +42,13 @@ public final class OneWayWindowOverlay extends BlockInteractOverlay
     @Override
     protected boolean isValidTool(ItemStack stack)
     {
-        return stack.is(FBContent.ITEM_FRAMED_WRENCH.get());
+        return stack.is(FBContent.ITEM_FRAMED_WRENCH.value());
     }
 
     @Override
     protected boolean isValidTarget(Target target)
     {
-        if (target.state().getBlock() != FBContent.BLOCK_FRAMED_ONE_WAY_WINDOW.get())
+        if (target.state().getBlock() != FBContent.BLOCK_FRAMED_ONE_WAY_WINDOW.value())
         {
             return false;
         }

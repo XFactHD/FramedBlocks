@@ -100,11 +100,11 @@ public class FramedBookshelfGeometry implements Geometry
 
     public static BlockState itemSourceNormal()
     {
-        return FBContent.BLOCK_FRAMED_BOOKSHELF.get().defaultBlockState();
+        return FBContent.BLOCK_FRAMED_BOOKSHELF.value().defaultBlockState();
     }
 
     public static BlockState itemSourceChiseled()
     {
-        return FBContent.BLOCK_FRAMED_CHISELED_BOOKSHELF.get().defaultBlockState();
+        return FBContent.BLOCK_FRAMED_CHISELED_BOOKSHELF.value().defaultBlockState();
     }
 }

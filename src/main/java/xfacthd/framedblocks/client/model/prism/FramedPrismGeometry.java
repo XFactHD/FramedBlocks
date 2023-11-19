@@ -107,7 +107,7 @@ public class FramedPrismGeometry implements Geometry
 
     public static BlockState itemSource()
     {
-        return FBContent.BLOCK_FRAMED_PRISM.get()
+        return FBContent.BLOCK_FRAMED_PRISM.value()
                 .defaultBlockState()
                 .setValue(PropertyHolder.FACING_AXIS, DirectionAxis.UP_X);
     }

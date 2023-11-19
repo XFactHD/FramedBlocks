@@ -35,7 +35,7 @@ public final class FrameBackgroundOverlay extends BlockInteractOverlay
     @Override
     protected boolean isValidTool(ItemStack stack)
     {
-        return stack.is(FBContent.ITEM_FRAMED_HAMMER.get());
+        return stack.is(FBContent.ITEM_FRAMED_HAMMER.value());
     }
 
     @Override

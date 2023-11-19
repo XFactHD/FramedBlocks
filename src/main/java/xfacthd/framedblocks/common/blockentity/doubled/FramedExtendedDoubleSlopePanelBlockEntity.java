@@ -15,7 +15,7 @@ public class FramedExtendedDoubleSlopePanelBlockEntity extends FramedDoubleBlock
 {
     public FramedExtendedDoubleSlopePanelBlockEntity(BlockPos pos, BlockState state)
     {
-        super(FBContent.BE_TYPE_FRAMED_EXTENDED_DOUBLE_SLOPE_PANEL.get(), pos, state);
+        super(FBContent.BE_TYPE_FRAMED_EXTENDED_DOUBLE_SLOPE_PANEL.value(), pos, state);
     }
 
     @Override

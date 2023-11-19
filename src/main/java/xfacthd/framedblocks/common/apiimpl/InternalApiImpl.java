@@ -16,6 +16,7 @@ import xfacthd.framedblocks.api.block.FramedBlockEntity;
 import xfacthd.framedblocks.api.block.IFramedBlock;
 import xfacthd.framedblocks.api.camo.CamoContainerFactory;
 import xfacthd.framedblocks.api.shapes.*;
+import xfacthd.framedblocks.api.util.Utils;
 import xfacthd.framedblocks.common.compat.nocubes.NoCubesCompat;
 import xfacthd.framedblocks.common.data.appearance.AppearanceHelper;
 import xfacthd.framedblocks.common.data.cullupdate.CullingUpdateTracker;
@@ -30,13 +31,15 @@ public final class InternalApiImpl implements InternalAPI
     @Override
     public BlockEntityType<FramedBlockEntity> getDefaultBlockEntity()
     {
-        return FBContent.BE_TYPE_FRAMED_BLOCK.get();
+        // TODO: move to internal API and remove generic to remove the cast
+        //noinspection unchecked
+        return (BlockEntityType<FramedBlockEntity>) FBContent.BE_TYPE_FRAMED_BLOCK.value();
     }
 
     @Override
     public CamoContainerFactory getEmptyCamoContainerFactory()
     {
-        return FBContent.FACTORY_EMPTY.get();
+        return FBContent.FACTORY_EMPTY.value();
     }
 
     @Override
@@ -64,7 +67,7 @@ public final class InternalApiImpl implements InternalAPI
             tag.remove(stateKey);
             tag.remove(stackKey);
             CompoundTag camoTag = new CompoundTag();
-            camoTag.putString("type", FBContent.FACTORY_BLOCK.getId().toString());
+            camoTag.putString("type", Utils.getKeyOrThrow(FBContent.FACTORY_BLOCK).location().toString());
             camoTag.put("state", stateTag);
             tag.put(camoKey, camoTag);
         }

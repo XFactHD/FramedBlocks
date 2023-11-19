@@ -46,22 +46,22 @@ public final class FramedUtils
                 Items.POWERED_RAIL,
                 Items.DETECTOR_RAIL,
                 Items.ACTIVATOR_RAIL,
-                FBContent.BLOCK_FRAMED_FANCY_RAIL.get().asItem(),
-                FBContent.BLOCK_FRAMED_FANCY_POWERED_RAIL.get().asItem(),
-                FBContent.BLOCK_FRAMED_FANCY_DETECTOR_RAIL.get().asItem(),
-                FBContent.BLOCK_FRAMED_FANCY_ACTIVATOR_RAIL.get().asItem()
+                FBContent.BLOCK_FRAMED_FANCY_RAIL.value().asItem(),
+                FBContent.BLOCK_FRAMED_FANCY_POWERED_RAIL.value().asItem(),
+                FBContent.BLOCK_FRAMED_FANCY_DETECTOR_RAIL.value().asItem(),
+                FBContent.BLOCK_FRAMED_FANCY_ACTIVATOR_RAIL.value().asItem()
         ));
         return items;
     });
     private static final Lazy<Map<Item, Block>> RAIL_SLOPE_BLOCKS = Lazy.concurrentOf(() -> new IdentityHashMap<>(Map.of(
-            Items.RAIL, FBContent.BLOCK_FRAMED_RAIL_SLOPE.get(),
-            Items.POWERED_RAIL, FBContent.BLOCK_FRAMED_POWERED_RAIL_SLOPE.get(),
-            Items.DETECTOR_RAIL, FBContent.BLOCK_FRAMED_DETECTOR_RAIL_SLOPE.get(),
-            Items.ACTIVATOR_RAIL, FBContent.BLOCK_FRAMED_ACTIVATOR_RAIL_SLOPE.get(),
-            FBContent.BLOCK_FRAMED_FANCY_RAIL.get().asItem(), FBContent.BLOCK_FRAMED_FANCY_RAIL_SLOPE.get(),
-            FBContent.BLOCK_FRAMED_FANCY_POWERED_RAIL.get().asItem(), FBContent.BLOCK_FRAMED_FANCY_POWERED_RAIL_SLOPE.get(),
-            FBContent.BLOCK_FRAMED_FANCY_DETECTOR_RAIL.get().asItem(), FBContent.BLOCK_FRAMED_FANCY_DETECTOR_RAIL_SLOPE.get(),
-            FBContent.BLOCK_FRAMED_FANCY_ACTIVATOR_RAIL.get().asItem(), FBContent.BLOCK_FRAMED_FANCY_ACTIVATOR_RAIL_SLOPE.get()
+            Items.RAIL, FBContent.BLOCK_FRAMED_RAIL_SLOPE.value(),
+            Items.POWERED_RAIL, FBContent.BLOCK_FRAMED_POWERED_RAIL_SLOPE.value(),
+            Items.DETECTOR_RAIL, FBContent.BLOCK_FRAMED_DETECTOR_RAIL_SLOPE.value(),
+            Items.ACTIVATOR_RAIL, FBContent.BLOCK_FRAMED_ACTIVATOR_RAIL_SLOPE.value(),
+            FBContent.BLOCK_FRAMED_FANCY_RAIL.value().asItem(), FBContent.BLOCK_FRAMED_FANCY_RAIL_SLOPE.value(),
+            FBContent.BLOCK_FRAMED_FANCY_POWERED_RAIL.value().asItem(), FBContent.BLOCK_FRAMED_FANCY_POWERED_RAIL_SLOPE.value(),
+            FBContent.BLOCK_FRAMED_FANCY_DETECTOR_RAIL.value().asItem(), FBContent.BLOCK_FRAMED_FANCY_DETECTOR_RAIL_SLOPE.value(),
+            FBContent.BLOCK_FRAMED_FANCY_ACTIVATOR_RAIL.value().asItem(), FBContent.BLOCK_FRAMED_FANCY_ACTIVATOR_RAIL_SLOPE.value()
     )));
 
     public static boolean isRailItem(Item item)

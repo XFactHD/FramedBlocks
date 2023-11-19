@@ -1,5 +1,6 @@
 package xfacthd.framedblocks.common.datagen.providers;
 
+import net.minecraft.core.Holder;
 import net.minecraft.data.PackOutput;
 import net.minecraft.data.loot.BlockLootSubProvider;
 import net.minecraft.data.loot.LootTableProvider;
@@ -10,7 +11,6 @@ import net.minecraft.world.level.storage.loot.entries.LootItem;
 import net.minecraft.world.level.storage.loot.functions.SetItemCountFunction;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParamSets;
 import net.minecraft.world.level.storage.loot.providers.number.ConstantValue;
-import net.neoforged.neoforge.registries.RegistryObject;
 import xfacthd.framedblocks.common.FBContent;
 
 import java.util.*;
@@ -37,7 +37,7 @@ public final class FramedLootTableProvider extends LootTableProvider
         {
             return FBContent.getRegisteredBlocks()
                     .stream()
-                    .map(RegistryObject::get)
+                    .map(Holder::value)
                     .collect(Collectors.toList());
         }
 
@@ -45,23 +45,23 @@ public final class FramedLootTableProvider extends LootTableProvider
         protected void generate()
         {
 
-            dropOther(FBContent.BLOCK_FRAMED_WATERLOGGABLE_PRESSURE_PLATE.get(), FBContent.BLOCK_FRAMED_PRESSURE_PLATE.get());
-            dropOther(FBContent.BLOCK_FRAMED_WATERLOGGABLE_STONE_PRESSURE_PLATE.get(), FBContent.BLOCK_FRAMED_STONE_PRESSURE_PLATE.get());
-            dropOther(FBContent.BLOCK_FRAMED_WATERLOGGABLE_OBSIDIAN_PRESSURE_PLATE.get(), FBContent.BLOCK_FRAMED_OBSIDIAN_PRESSURE_PLATE.get());
-            dropOther(FBContent.BLOCK_FRAMED_WATERLOGGABLE_GOLD_PRESSURE_PLATE.get(), FBContent.BLOCK_FRAMED_GOLD_PRESSURE_PLATE.get());
-            dropOther(FBContent.BLOCK_FRAMED_WATERLOGGABLE_IRON_PRESSURE_PLATE.get(), FBContent.BLOCK_FRAMED_IRON_PRESSURE_PLATE.get());
+            dropOther(FBContent.BLOCK_FRAMED_WATERLOGGABLE_PRESSURE_PLATE.value(), FBContent.BLOCK_FRAMED_PRESSURE_PLATE.value());
+            dropOther(FBContent.BLOCK_FRAMED_WATERLOGGABLE_STONE_PRESSURE_PLATE.value(), FBContent.BLOCK_FRAMED_STONE_PRESSURE_PLATE.value());
+            dropOther(FBContent.BLOCK_FRAMED_WATERLOGGABLE_OBSIDIAN_PRESSURE_PLATE.value(), FBContent.BLOCK_FRAMED_OBSIDIAN_PRESSURE_PLATE.value());
+            dropOther(FBContent.BLOCK_FRAMED_WATERLOGGABLE_GOLD_PRESSURE_PLATE.value(), FBContent.BLOCK_FRAMED_GOLD_PRESSURE_PLATE.value());
+            dropOther(FBContent.BLOCK_FRAMED_WATERLOGGABLE_IRON_PRESSURE_PLATE.value(), FBContent.BLOCK_FRAMED_IRON_PRESSURE_PLATE.value());
 
-            dropDoor(FBContent.BLOCK_FRAMED_DOOR.get());
-            dropDoor(FBContent.BLOCK_FRAMED_IRON_DOOR.get());
-            dropTwoOf(FBContent.BLOCK_FRAMED_DOUBLE_SLAB.get(), FBContent.BLOCK_FRAMED_SLAB.get());
-            dropTwoOf(FBContent.BLOCK_FRAMED_DOUBLE_PANEL.get(), FBContent.BLOCK_FRAMED_PANEL.get());
+            dropDoor(FBContent.BLOCK_FRAMED_DOOR.value());
+            dropDoor(FBContent.BLOCK_FRAMED_IRON_DOOR.value());
+            dropTwoOf(FBContent.BLOCK_FRAMED_DOUBLE_SLAB.value(), FBContent.BLOCK_FRAMED_SLAB.value());
+            dropTwoOf(FBContent.BLOCK_FRAMED_DOUBLE_PANEL.value(), FBContent.BLOCK_FRAMED_PANEL.value());
 
-            dropOther(FBContent.BLOCK_FRAMED_VERTICAL_HALF_SLOPE.get(), FBContent.BLOCK_FRAMED_HALF_SLOPE.get());
-            dropOther(FBContent.BLOCK_FRAMED_VERTICAL_DOUBLE_HALF_SLOPE.get(), FBContent.BLOCK_FRAMED_DOUBLE_HALF_SLOPE.get());
+            dropOther(FBContent.BLOCK_FRAMED_VERTICAL_HALF_SLOPE.value(), FBContent.BLOCK_FRAMED_HALF_SLOPE.value());
+            dropOther(FBContent.BLOCK_FRAMED_VERTICAL_DOUBLE_HALF_SLOPE.value(), FBContent.BLOCK_FRAMED_DOUBLE_HALF_SLOPE.value());
 
             FBContent.getRegisteredBlocks()
                     .stream()
-                    .map(RegistryObject::get)
+                    .map(Holder::value)
                     .filter(block -> !map.containsKey(block.getLootTable()))
                     .forEach(this::dropSelf);
         }

@@ -180,7 +180,7 @@ public abstract class CamoContainer
         }
 
         ResourceLocation id = ResourceLocation.tryParse(tag.getString("type"));
-        CamoContainerFactory factory = FramedBlocksAPI.INSTANCE.getCamoContainerFactoryRegistry().getValue(id);
+        CamoContainerFactory factory = FramedBlocksAPI.INSTANCE.getCamoContainerFactoryRegistry().get(id);
         if (factory == null)
         {
             LOGGER.error("Unknown ICamoContainer with ID {}, dropping!", id);
@@ -197,7 +197,7 @@ public abstract class CamoContainer
         }
 
         int id = tag.getInt("type");
-        CamoContainerFactory factory = Utils.getValue(FramedBlocksAPI.INSTANCE.getCamoContainerFactoryRegistry(), id);
+        CamoContainerFactory factory = FramedBlocksAPI.INSTANCE.getCamoContainerFactoryRegistry().byId(id);
         if (factory == null)
         {
             LOGGER.error("Unknown ICamoContainer with ID {}, dropping!", id);

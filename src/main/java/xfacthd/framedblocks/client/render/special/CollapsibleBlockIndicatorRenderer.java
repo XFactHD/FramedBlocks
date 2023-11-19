@@ -31,7 +31,7 @@ public final class CollapsibleBlockIndicatorRenderer
     {
         //noinspection ConstantConditions
         ItemStack heldItem = Minecraft.getInstance().player.getMainHandItem();
-        if (heldItem.getItem() != FBContent.ITEM_FRAMED_HAMMER.get())
+        if (heldItem.getItem() != FBContent.ITEM_FRAMED_HAMMER.value())
         {
             return;
         }
@@ -40,7 +40,7 @@ public final class CollapsibleBlockIndicatorRenderer
         Level level = Minecraft.getInstance().level;
         //noinspection ConstantConditions
         BlockState state = level.getBlockState(hit.getBlockPos());
-        if (state.getBlock() != FBContent.BLOCK_FRAMED_COLLAPSIBLE_BLOCK.get())
+        if (state.getBlock() != FBContent.BLOCK_FRAMED_COLLAPSIBLE_BLOCK.value())
         {
             return;
         }

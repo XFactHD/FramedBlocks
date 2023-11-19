@@ -128,12 +128,12 @@ public class FramedInverseDoubleCornerSlopePanelBlock extends AbstractFramedDoub
         boolean ySlope = state.getValue(FramedProperties.Y_SLOPE);
 
         return new Tuple<>(
-                FBContent.BLOCK_FRAMED_LARGE_CORNER_SLOPE_PANEL.get()
+                FBContent.BLOCK_FRAMED_LARGE_CORNER_SLOPE_PANEL.value()
                         .defaultBlockState()
                         .setValue(FramedProperties.FACING_HOR, dir)
                         .setValue(FramedProperties.TOP, top)
                         .setValue(FramedProperties.Y_SLOPE, ySlope),
-                FBContent.BLOCK_FRAMED_SMALL_INNER_CORNER_SLOPE_PANEL.get()
+                FBContent.BLOCK_FRAMED_SMALL_INNER_CORNER_SLOPE_PANEL.value()
                         .defaultBlockState()
                         .setValue(FramedProperties.FACING_HOR, dir)
                         .setValue(FramedProperties.TOP, !top)
@@ -170,7 +170,7 @@ public class FramedInverseDoubleCornerSlopePanelBlock extends AbstractFramedDoub
     {
         return new VerticalAndWallBlockItem(
                 this,
-                FBContent.BLOCK_FRAMED_INVERSE_DOUBLE_CORNER_SLOPE_PANEL_WALL.get(),
+                FBContent.BLOCK_FRAMED_INVERSE_DOUBLE_CORNER_SLOPE_PANEL_WALL.value(),
                 new Item.Properties()
         );
     }
@@ -210,6 +210,6 @@ public class FramedInverseDoubleCornerSlopePanelBlock extends AbstractFramedDoub
 
     public static BlockState itemModelSource()
     {
-        return FBContent.BLOCK_FRAMED_INVERSE_DOUBLE_CORNER_SLOPE_PANEL.get().defaultBlockState();
+        return FBContent.BLOCK_FRAMED_INVERSE_DOUBLE_CORNER_SLOPE_PANEL.value().defaultBlockState();
     }
 }

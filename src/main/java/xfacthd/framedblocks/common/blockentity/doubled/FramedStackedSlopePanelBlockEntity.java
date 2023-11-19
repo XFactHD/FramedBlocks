@@ -14,7 +14,7 @@ public class FramedStackedSlopePanelBlockEntity extends FramedDoubleBlockEntity
 {
     public FramedStackedSlopePanelBlockEntity(BlockPos pos, BlockState state)
     {
-        super(FBContent.BE_TYPE_FRAMED_STACKED_SLOPE_PANEL.get(), pos, state);
+        super(FBContent.BE_TYPE_FRAMED_STACKED_SLOPE_PANEL.value(), pos, state);
     }
 
     @Override

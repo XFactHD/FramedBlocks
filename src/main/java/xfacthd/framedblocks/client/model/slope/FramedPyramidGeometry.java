@@ -129,6 +129,6 @@ public class FramedPyramidGeometry implements Geometry
 
     public static BlockState itemSource()
     {
-        return FBContent.BLOCK_FRAMED_PYRAMID.get().defaultBlockState();
+        return FBContent.BLOCK_FRAMED_PYRAMID.value().defaultBlockState();
     }
 }

@@ -366,11 +366,11 @@ public class FramedSignBlockEntity extends FramedBlockEntity
 
     public static FramedSignBlockEntity normalSign(BlockPos pos, BlockState state)
     {
-        return new FramedSignBlockEntity(FBContent.BE_TYPE_FRAMED_SIGN.get(), pos, state);
+        return new FramedSignBlockEntity(FBContent.BE_TYPE_FRAMED_SIGN.value(), pos, state);
     }
 
     public static FramedSignBlockEntity hangingSign(BlockPos pos, BlockState state)
     {
-        return new FramedSignBlockEntity(FBContent.BE_TYPE_FRAMED_HANGING_SIGN.get(), pos, state);
+        return new FramedSignBlockEntity(FBContent.BE_TYPE_FRAMED_HANGING_SIGN.value(), pos, state);
     }
 }

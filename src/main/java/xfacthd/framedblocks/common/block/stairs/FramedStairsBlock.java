@@ -31,7 +31,7 @@ public class FramedStairsBlock extends StairBlock implements IFramedBlock
 {
     public FramedStairsBlock()
     {
-        super(() -> FBContent.BLOCK_FRAMED_CUBE.get().defaultBlockState(), IFramedBlock.createProperties(BlockType.FRAMED_STAIRS));
+        super(() -> FBContent.BLOCK_FRAMED_CUBE.value().defaultBlockState(), IFramedBlock.createProperties(BlockType.FRAMED_STAIRS));
         registerDefaultState(defaultBlockState()
                 .setValue(FramedProperties.SOLID, false)
                 .setValue(FramedProperties.GLOWING, false)

@@ -1,9 +1,9 @@
 package xfacthd.framedblocks.api;
 
+import net.minecraft.core.Registry;
 import net.minecraft.world.item.*;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
-import net.neoforged.neoforge.registries.IForgeRegistry;
 import xfacthd.framedblocks.api.blueprint.BlueprintCopyBehaviour;
 import xfacthd.framedblocks.api.camo.CamoContainerFactory;
 import xfacthd.framedblocks.api.util.Utils;
@@ -28,7 +28,7 @@ public interface FramedBlocksAPI
     /**
      * Returns the registry of camo container factories
      */
-    IForgeRegistry<CamoContainerFactory> getCamoContainerFactoryRegistry();
+    Registry<CamoContainerFactory> getCamoContainerFactoryRegistry();
 
     /**
      * Returns the camo container factory to use for the given {@link ItemStack}

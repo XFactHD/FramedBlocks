@@ -14,7 +14,7 @@ public class FramedTargetBlockEntity extends FramedBlockEntity
 
     public FramedTargetBlockEntity(BlockPos pos, BlockState state)
     {
-        super(FBContent.BE_TYPE_FRAMED_TARGET.get(), pos, state);
+        super(FBContent.BE_TYPE_FRAMED_TARGET.value(), pos, state);
     }
 
     public boolean setOverlayColor(DyeColor overlayColor)

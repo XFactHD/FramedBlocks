@@ -18,7 +18,7 @@ public final class DoublePanelCopyBehaviour extends DoubleBlockCopyBehaviour
     @Override
     public Optional<ItemStack> getBlockItem()
     {
-        return Optional.of(new ItemStack(FBContent.BLOCK_FRAMED_PANEL.get(), 2));
+        return Optional.of(new ItemStack(FBContent.BLOCK_FRAMED_PANEL.value(), 2));
     }
 
     @Override

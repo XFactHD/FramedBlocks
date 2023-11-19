@@ -2,6 +2,7 @@ package xfacthd.framedblocks.common.block.interactive;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.stats.Stats;
 import net.minecraft.world.InteractionHand;
@@ -18,7 +19,6 @@ import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.gameevent.GameEvent;
 import net.minecraft.world.level.pathfinder.PathComputationType;
 import net.minecraft.world.phys.BlockHitResult;
-import net.neoforged.neoforge.registries.ForgeRegistries;
 import xfacthd.framedblocks.common.block.FramedBlock;
 import xfacthd.framedblocks.common.blockentity.special.FramedFlowerPotBlockEntity;
 import xfacthd.framedblocks.common.compat.supplementaries.SupplementariesCompat;
@@ -168,8 +168,8 @@ public class FramedFlowerPotBlock extends FramedBlock
     {
         Map<ResourceLocation, Supplier<? extends Block>> fullPots = ((FlowerPotBlock) Blocks.FLOWER_POT).getFullPotsView();
         return fullPots.getOrDefault(
-                ForgeRegistries.BLOCKS.getKey(flower),
-                ForgeRegistries.BLOCKS.getDelegateOrThrow(Blocks.AIR)
+                BuiltInRegistries.BLOCK.getKey(flower),
+                () -> Blocks.AIR
         ).get().defaultBlockState();
     }
 }

@@ -82,11 +82,11 @@ public class FramedDoubleStairsBlock extends AbstractFramedDoubleBlock
         boolean top = state.getValue(FramedProperties.TOP);
 
         return new Tuple<>(
-                FBContent.BLOCK_FRAMED_STAIRS.get()
+                FBContent.BLOCK_FRAMED_STAIRS.value()
                         .defaultBlockState()
                         .setValue(BlockStateProperties.HORIZONTAL_FACING, facing)
                         .setValue(BlockStateProperties.HALF, top ? Half.TOP : Half.BOTTOM),
-                FBContent.BLOCK_FRAMED_SLAB_EDGE.get()
+                FBContent.BLOCK_FRAMED_SLAB_EDGE.value()
                         .defaultBlockState()
                         .setValue(FramedProperties.FACING_HOR, facing.getOpposite())
                         .setValue(FramedProperties.TOP, !top)
@@ -163,7 +163,7 @@ public class FramedDoubleStairsBlock extends AbstractFramedDoubleBlock
 
     public static BlockState itemSource()
     {
-        return FBContent.BLOCK_FRAMED_DOUBLE_STAIRS.get()
+        return FBContent.BLOCK_FRAMED_DOUBLE_STAIRS.value()
                 .defaultBlockState()
                 .setValue(FramedProperties.FACING_HOR, Direction.SOUTH);
     }

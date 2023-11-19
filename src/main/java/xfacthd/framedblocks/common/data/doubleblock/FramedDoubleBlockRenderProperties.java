@@ -52,14 +52,14 @@ public final class FramedDoubleBlockRenderProperties extends FramedBlockRenderPr
             BlockState stateOne = be.getCamo().getState();
             if (stateOne.isAir())
             {
-                stateOne = FBContent.BLOCK_FRAMED_CUBE.get().defaultBlockState();
+                stateOne = FBContent.BLOCK_FRAMED_CUBE.value().defaultBlockState();
             }
             playCamoBreakSound(level, pos, stateOne);
 
             BlockState stateTwo = be.getCamoTwo().getState();
             if (stateTwo.isAir())
             {
-                stateTwo = FBContent.BLOCK_FRAMED_CUBE.get().defaultBlockState();
+                stateTwo = FBContent.BLOCK_FRAMED_CUBE.value().defaultBlockState();
             }
             if (stateTwo.getSoundType() != stateOne.getSoundType())
             {

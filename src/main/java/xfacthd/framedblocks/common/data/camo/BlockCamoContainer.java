@@ -41,7 +41,7 @@ public class BlockCamoContainer extends CamoContainer
     @Override
     public CamoContainerFactory getFactory()
     {
-        return FBContent.FACTORY_BLOCK.get();
+        return FBContent.FACTORY_BLOCK.value();
     }
 
     @Override

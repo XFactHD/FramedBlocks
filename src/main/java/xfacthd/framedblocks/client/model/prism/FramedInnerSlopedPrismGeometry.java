@@ -230,7 +230,7 @@ public class FramedInnerSlopedPrismGeometry implements Geometry
 
     public static BlockState itemSource()
     {
-        return FBContent.BLOCK_FRAMED_INNER_SLOPED_PRISM.get()
+        return FBContent.BLOCK_FRAMED_INNER_SLOPED_PRISM.value()
                 .defaultBlockState()
                 .setValue(PropertyHolder.FACING_DIR, CompoundDirection.UP_EAST);
     }

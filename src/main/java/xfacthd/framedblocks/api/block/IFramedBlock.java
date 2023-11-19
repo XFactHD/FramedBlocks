@@ -480,7 +480,7 @@ public interface IFramedBlock extends EntityBlock, IBlockExtension
 
     default boolean lockState(Level level, BlockPos pos, Player player, ItemStack stack)
     {
-        if (stack.getItem() != Utils.FRAMED_KEY.get())
+        if (stack.getItem() != Utils.FRAMED_KEY.value())
         {
             return false;
         }
@@ -613,7 +613,7 @@ public interface IFramedBlock extends EntityBlock, IBlockExtension
 
     static boolean toggleYSlope(BlockState state, Level level, BlockPos pos, Player player)
     {
-        if (player.getMainHandItem().getItem() == Utils.FRAMED_WRENCH.get())
+        if (player.getMainHandItem().getItem() == Utils.FRAMED_WRENCH.value())
         {
             level.setBlockAndUpdate(pos, state.setValue(FramedProperties.Y_SLOPE, !state.getValue(FramedProperties.Y_SLOPE)));
             return true;

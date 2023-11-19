@@ -37,7 +37,7 @@ public final class ReinforcementOverlay extends BlockInteractOverlay
     @Override
     protected boolean isValidTool(ItemStack stack)
     {
-        return stack.is(Utils.FRAMED_REINFORCEMENT.get());
+        return stack.is(Utils.FRAMED_REINFORCEMENT.value());
     }
 
     @Override

@@ -108,8 +108,8 @@ public class FramedTorchBlock extends TorchBlock implements IFramedBlock
     public BlockItem createBlockItem()
     {
         return new StandingAndWallBlockItem(
-                FBContent.BLOCK_FRAMED_TORCH.get(),
-                FBContent.BLOCK_FRAMED_WALL_TORCH.get(),
+                FBContent.BLOCK_FRAMED_TORCH.value(),
+                FBContent.BLOCK_FRAMED_WALL_TORCH.value(),
                 new Item.Properties(),
                 Direction.DOWN
         );

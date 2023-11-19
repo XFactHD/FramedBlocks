@@ -96,7 +96,7 @@ public class FramedInnerPrismCornerGeometry implements Geometry
 
     public static BlockState itemSource()
     {
-        return FBContent.BLOCK_FRAMED_INNER_PRISM_CORNER.get()
+        return FBContent.BLOCK_FRAMED_INNER_PRISM_CORNER.value()
                 .defaultBlockState()
                 .setValue(FramedProperties.FACING_HOR, Direction.SOUTH);
     }
