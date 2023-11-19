@@ -58,7 +58,7 @@ public final class ClientConfig
     public static boolean fancyHitboxes = false;
     public static boolean detailedCulling = false;
     public static boolean useDiscreteUVSteps = false;
-    public static ConTexMode conTexMode = ConTexMode.FULL_FACE;
+    public static ConTexMode conTexMode = ConTexMode.DETAILED;
     public static boolean showAllRecipePermutationsInEmi = false;
     public static BlockInteractOverlay.Mode stateLockMode;
     public static BlockInteractOverlay.Mode toggleWaterlogMode;
@@ -130,7 +130,7 @@ public final class ClientConfig
                         "If DETAILED, connected textures are supported as above and on most faces when interacting with other framed blocks"
                 )
                 .translation(TRANSLATION_CON_TEX_MODE)
-                .defineEnum(KEY_CON_TEX_MODE, ConTexMode.FULL_FACE);
+                .defineEnum(KEY_CON_TEX_MODE, ConTexMode.DETAILED);
         showAllRecipePermutationsInEmiValue = builder
                 .comment("If true, all possible recipes of the Framing Saw will be added to EMI, else only the permutations using the Framed Cube will be added")
                 .comment("This setting only has an effect when EMI is installed")
