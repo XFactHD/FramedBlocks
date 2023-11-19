@@ -1,5 +1,5 @@
 package xfacthd.framedblocks.common.compat.rei;
-/*
+
 import me.shedaniel.math.Point;
 import me.shedaniel.math.Rectangle;
 import me.shedaniel.rei.api.client.gui.Renderer;
@@ -39,7 +39,7 @@ public final class FramingSawRecipeCategory implements DisplayCategory<FramingSa
     private static final float WARNING_SCALE = .75F;
     private static final int WARNING_DRAW_SIZE = (int) (WARNING_SIZE * WARNING_SCALE);
 
-    private final Renderer icon = EntryStacks.of(FBContent.BLOCK_FRAMING_SAW.get());
+    private final Renderer icon = EntryStacks.of(FBContent.BLOCK_FRAMING_SAW.value());
 
     @Override
     public CategoryIdentifier<FramingSawDisplay> getCategoryIdentifier()
@@ -122,4 +122,4 @@ public final class FramingSawRecipeCategory implements DisplayCategory<FramingSa
 
         return widgets;
     }
-}*/
+}

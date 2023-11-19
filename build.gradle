@@ -112,12 +112,12 @@ dependencies {
     //runtimeOnly("mezz.jei:jei-${minecraft_version}-forge:${jei_version}")
 
     // Switch Arch, Cloth and REI-forge to impl for runtime testing
-    //compileOnly("dev.architectury:architectury-forge:${arch_version}")
-    //compileOnly("me.shedaniel.cloth:cloth-config-forge:${cloth_version}")
-    //compileOnly("me.shedaniel:RoughlyEnoughItems-forge:${rei_version}")
+    compileOnly("dev.architectury:architectury-neoforge:${arch_version}")
+    compileOnly("me.shedaniel.cloth:cloth-config-neoforge:${cloth_version}")
+    compileOnly("me.shedaniel:RoughlyEnoughItems-neoforge:${rei_version}")
     //runtimeOnly("curse.maven:reipc-521393:4723408")
-    //compileOnly("me.shedaniel:RoughlyEnoughItems-api-forge:${rei_version}")
-    //compileOnly("me.shedaniel:RoughlyEnoughItems-default-plugin-forge:${rei_version}")
+    compileOnly("me.shedaniel:RoughlyEnoughItems-api-neoforge:${rei_version}")
+    compileOnly("me.shedaniel:RoughlyEnoughItems-default-plugin-neoforge:${rei_version}")
     //compileOnly("me.shedaniel:REIPluginCompatibilities-forge-annotations:${reipcanno_version}")
 
     //compileOnly("dev.emi:emi-forge:${emi_version}+${minecraft_version}:api")
@@ -161,7 +161,8 @@ tasks.withType(ProcessResources).configureEach {
             neoforge_version: neoforge_version,
             neoforge_version_range: neoforge_version_range,
             loader_version_range: loader_version_range,
-            mod_version: mod_version
+            mod_version: mod_version,
+            rei_version: rei_version
     ]
     inputs.properties replaceProperties
 

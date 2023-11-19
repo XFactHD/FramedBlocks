@@ -1,5 +1,5 @@
 package xfacthd.framedblocks.common.compat.rei;
-/*
+
 import me.shedaniel.rei.api.client.registry.display.DynamicDisplayGenerator;
 import me.shedaniel.rei.api.client.view.ViewSearchBuilder;
 import me.shedaniel.rei.api.common.entry.EntryIngredient;
@@ -8,6 +8,7 @@ import me.shedaniel.rei.api.common.entry.type.VanillaEntryTypes;
 import me.shedaniel.rei.api.common.util.EntryStacks;
 import net.minecraft.world.SimpleContainer;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.crafting.RecipeHolder;
 import xfacthd.framedblocks.common.FBContent;
 import xfacthd.framedblocks.common.crafting.*;
 
@@ -21,9 +22,9 @@ public final class FramingSawDisplayGenerator implements DynamicDisplayGenerator
     {
         if (!entry.isEmpty() && entry.getType() == VanillaEntryTypes.ITEM)
         {
-            ItemStack input = new ItemStack(FBContent.BLOCK_FRAMED_CUBE.get());
+            ItemStack input = new ItemStack(FBContent.BLOCK_FRAMED_CUBE.value());
             ItemStack output = entry.castValue();
-            FramingSawRecipe recipe = FramingSawRecipeCache.get(true).findRecipeFor(output);
+            RecipeHolder<FramingSawRecipe> recipe = FramingSawRecipeCache.get(true).findRecipeFor(output);
             if (recipe != null)
             {
                 return Optional.of(List.of(makeDisplay(recipe, input)));
@@ -38,29 +39,29 @@ public final class FramingSawDisplayGenerator implements DynamicDisplayGenerator
         if (!entry.isEmpty() && entry.getType() == VanillaEntryTypes.ITEM)
         {
             ItemStack input = entry.castValue();
-            if (input.is(FBContent.BLOCK_FRAMING_SAW.get().asItem()) || input.is(FBContent.BLOCK_POWERED_FRAMING_SAW.get().asItem()))
+            if (input.is(FBContent.BLOCK_FRAMING_SAW.value().asItem()) || input.is(FBContent.BLOCK_POWERED_FRAMING_SAW.value().asItem()))
             {
-                return getUsageFor(EntryStacks.of(FBContent.BLOCK_FRAMED_CUBE.get()));
+                return getUsageFor(EntryStacks.of(FBContent.BLOCK_FRAMED_CUBE.value()));
             }
 
             FramingSawRecipeCache cache = FramingSawRecipeCache.get(true);
             if (cache.getMaterialValue(input.getItem()) > -1)
             {
-                List<FramingSawRecipe> recipes = cache.getRecipes();
+                List<RecipeHolder<FramingSawRecipe>> recipes = cache.getRecipes();
                 List<FramingSawDisplay> displays = new ArrayList<>(recipes.size());
-                for (FramingSawRecipe recipe : recipes)
+                for (RecipeHolder<FramingSawRecipe> recipe : recipes)
                 {
                     displays.add(makeDisplay(recipe, input));
                 }
                 return Optional.of(displays);
             }
 
-            List<FramingSawRecipe> recipes = cache.getRecipesWithAdditive(input);
+            List<RecipeHolder<FramingSawRecipe>> recipes = cache.getRecipesWithAdditive(input);
             if (!recipes.isEmpty())
             {
                 List<FramingSawDisplay> displays = new ArrayList<>(recipes.size());
-                input = new ItemStack(FBContent.BLOCK_FRAMED_CUBE.get());
-                for (FramingSawRecipe recipe : recipes)
+                input = new ItemStack(FBContent.BLOCK_FRAMED_CUBE.value());
+                for (RecipeHolder<FramingSawRecipe> recipe : recipes)
                 {
                     displays.add(makeDisplay(recipe, input));
                 }
@@ -75,17 +76,18 @@ public final class FramingSawDisplayGenerator implements DynamicDisplayGenerator
     {
         if (builder.getUsagesFor().isEmpty() && builder.getRecipesFor().isEmpty() && builder.getCategories().contains(FramingSawRecipeCategory.SAW_CATEGORY))
         {
-            return getUsageFor(EntryStacks.of(FBContent.BLOCK_FRAMED_CUBE.get()));
+            return getUsageFor(EntryStacks.of(FBContent.BLOCK_FRAMED_CUBE.value()));
         }
         return Optional.empty();
     }
 
 
 
-    private static FramingSawDisplay makeDisplay(FramingSawRecipe recipe, ItemStack input)
+    private static FramingSawDisplay makeDisplay(RecipeHolder<FramingSawRecipe> holder, ItemStack input)
     {
         boolean inputWithAdditives = FramingSawRecipeCache.get(true).containsAdditive(input.getItem());
 
+        FramingSawRecipe recipe = holder.value();
         List<FramingSawRecipeAdditive> additives = recipe.getAdditives();
         List<EntryIngredient> inputs = new ArrayList<>(additives.size() + 1);
         FramingSawRecipeCalculation calc = recipe.makeCraftingCalculation(
@@ -112,6 +114,6 @@ public final class FramingSawDisplayGenerator implements DynamicDisplayGenerator
         result.setCount(outputCount);
         EntryIngredient output = EntryIngredient.of(EntryStacks.of(result));
 
-        return new FramingSawDisplay(recipe, inputs, output, inputWithAdditives);
+        return new FramingSawDisplay(holder, inputs, output, inputWithAdditives);
     }
-}*/
+}
