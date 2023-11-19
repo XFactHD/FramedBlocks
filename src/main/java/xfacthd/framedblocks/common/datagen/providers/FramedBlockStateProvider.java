@@ -688,7 +688,7 @@ public final class FramedBlockStateProvider extends BlockStateProvider
 
     private void registerFramedGlowingCube()
     {
-        ModelFile block = makeUnderlayedCube("framed_glowing_cube", new ResourceLocation("forge", "white")).ao(false);
+        ModelFile block = makeUnderlayedCube("framed_glowing_cube", ClientUtils.DUMMY_TEXTURE).ao(false);
         simpleBlockWithItem(FBContent.BLOCK_FRAMED_GLOWING_CUBE, block);
     }
 

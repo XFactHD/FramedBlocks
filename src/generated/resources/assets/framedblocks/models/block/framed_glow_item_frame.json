@@ -1,9 +1,9 @@
 {
   "parent": "framedblocks:block/template_framed_item_frame",
   "textures": {
-    "back": "forge:white",
+    "back": "neoforge:white",
     "front": "minecraft:block/glow_item_frame",
     "particle": "framedblocks:block/framed_block",
-    "wood": "forge:white"
+    "wood": "neoforge:white"
   }
 }

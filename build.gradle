@@ -40,7 +40,7 @@ runs {
     data {
         workingDirectory project.file('run')
 
-        programArguments.addAll '--mod', 'framedblocks', '--all', '--output', file('src/generated/resources/'), '--existing', file('src/main/resources/')
+        programArguments.addAll '--mod', 'framedblocks', '--all', '--output', file('src/generated/resources/').getAbsolutePath(), '--existing', file('src/main/resources/').getAbsolutePath()
     }
 
     gameTestServer {

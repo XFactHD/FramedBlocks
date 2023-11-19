@@ -17,7 +17,7 @@ import java.util.function.*;
 
 public final class ClientUtils
 {
-    public static final ResourceLocation DUMMY_TEXTURE = new ResourceLocation("forge", "white");
+    public static final ResourceLocation DUMMY_TEXTURE = new ResourceLocation("neoforge", "white");
 
     public static BlockEntity getBlockEntitySafe(BlockGetter blockGetter, BlockPos pos)
     {
