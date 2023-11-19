@@ -22,8 +22,8 @@
   },
   "requirements": [
     [
-      "hasFramedSlope",
-      "has_the_recipe"
+      "has_the_recipe",
+      "hasFramedSlope"
     ]
   ],
   "rewards": {

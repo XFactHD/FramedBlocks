@@ -22,8 +22,8 @@
   },
   "requirements": [
     [
-      "hasFramedSlabEdge",
-      "has_the_recipe"
+      "has_the_recipe",
+      "hasFramedSlabEdge"
     ]
   ],
   "rewards": {

@@ -22,8 +22,8 @@
   },
   "requirements": [
     [
-      "has_framed_divided_panel_horizontal",
-      "has_the_recipe"
+      "has_the_recipe",
+      "has_framed_divided_panel_horizontal"
     ]
   ],
   "rewards": {

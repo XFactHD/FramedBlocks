@@ -22,8 +22,8 @@
   },
   "requirements": [
     [
-      "has_framed_elevated_slope_slab",
-      "has_the_recipe"
+      "has_the_recipe",
+      "has_framed_elevated_slope_slab"
     ]
   ],
   "rewards": {

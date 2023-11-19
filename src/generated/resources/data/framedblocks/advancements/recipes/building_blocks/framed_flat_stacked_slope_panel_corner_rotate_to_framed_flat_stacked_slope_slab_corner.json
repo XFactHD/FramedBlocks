@@ -22,8 +22,8 @@
   },
   "requirements": [
     [
-      "has_framed_flat_stacked_slope_panel_corner",
-      "has_the_recipe"
+      "has_the_recipe",
+      "has_framed_flat_stacked_slope_panel_corner"
     ]
   ],
   "rewards": {

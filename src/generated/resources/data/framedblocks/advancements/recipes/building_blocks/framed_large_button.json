@@ -22,8 +22,8 @@
   },
   "requirements": [
     [
-      "hasFramedButton",
-      "has_the_recipe"
+      "has_the_recipe",
+      "hasFramedButton"
     ]
   ],
   "rewards": {

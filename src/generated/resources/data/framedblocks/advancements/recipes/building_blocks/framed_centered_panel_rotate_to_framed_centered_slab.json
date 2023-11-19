@@ -22,8 +22,8 @@
   },
   "requirements": [
     [
-      "has_framed_centered_panel",
-      "has_the_recipe"
+      "has_the_recipe",
+      "has_framed_centered_panel"
     ]
   ],
   "rewards": {

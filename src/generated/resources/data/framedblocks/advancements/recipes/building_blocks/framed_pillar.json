@@ -22,8 +22,8 @@
   },
   "requirements": [
     [
-      "hasFramedCornerPillar",
-      "has_the_recipe"
+      "has_the_recipe",
+      "hasFramedCornerPillar"
     ]
   ],
   "rewards": {

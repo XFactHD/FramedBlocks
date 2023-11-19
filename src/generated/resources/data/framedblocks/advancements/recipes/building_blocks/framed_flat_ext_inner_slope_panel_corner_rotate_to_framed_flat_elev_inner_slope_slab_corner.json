@@ -22,8 +22,8 @@
   },
   "requirements": [
     [
-      "has_framed_flat_ext_inner_slope_panel_corner",
-      "has_the_recipe"
+      "has_the_recipe",
+      "has_framed_flat_ext_inner_slope_panel_corner"
     ]
   ],
   "rewards": {

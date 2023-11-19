@@ -22,8 +22,8 @@
   },
   "requirements": [
     [
-      "hasFramedFlatSlopePanelCorner",
-      "has_the_recipe"
+      "has_the_recipe",
+      "hasFramedFlatSlopePanelCorner"
     ]
   ],
   "rewards": {

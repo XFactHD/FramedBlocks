@@ -22,8 +22,8 @@
   },
   "requirements": [
     [
-      "hasFramedIronDoor",
-      "has_the_recipe"
+      "has_the_recipe",
+      "hasFramedIronDoor"
     ]
   ],
   "rewards": {

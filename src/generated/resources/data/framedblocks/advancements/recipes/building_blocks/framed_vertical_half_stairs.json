@@ -22,8 +22,8 @@
   },
   "requirements": [
     [
-      "hasFramedVerticalStairs",
-      "has_the_recipe"
+      "has_the_recipe",
+      "hasFramedVerticalStairs"
     ]
   ],
   "rewards": {
