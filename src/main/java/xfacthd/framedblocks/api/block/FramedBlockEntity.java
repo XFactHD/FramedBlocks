@@ -27,6 +27,7 @@ import net.neoforged.neoforge.client.model.data.ModelData;
 import net.neoforged.neoforge.common.*;
 import net.neoforged.neoforge.common.capabilities.Capabilities;
 import net.neoforged.neoforge.fluids.capability.IFluidHandler;
+import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
 import xfacthd.framedblocks.api.FramedBlocksAPI;
@@ -61,12 +62,16 @@ public class FramedBlockEntity extends BlockEntity
     private boolean reinforced = false;
     private boolean recheckStates = false;
 
+    /**
+     * @apiNote internal, addons must use their own {@link BlockEntityType} with the three-arg constructor
+     */
+    @ApiStatus.Internal
     public FramedBlockEntity(BlockPos pos, BlockState state)
     {
         this(InternalAPI.INSTANCE.getDefaultBlockEntity(), pos, state);
     }
 
-    protected FramedBlockEntity(BlockEntityType<?> type, BlockPos pos, BlockState state)
+    public FramedBlockEntity(BlockEntityType<?> type, BlockPos pos, BlockState state)
     {
         super(type, pos, state);
         this.stateCache = ((IFramedBlock) state.getBlock()).getCache(state);
