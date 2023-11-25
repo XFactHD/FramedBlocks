@@ -10,7 +10,6 @@ import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.Nullable;
-import xfacthd.framedblocks.api.block.FramedBlockEntity;
 import xfacthd.framedblocks.api.block.IFramedBlock;
 import xfacthd.framedblocks.api.camo.CamoContainerFactory;
 import xfacthd.framedblocks.api.shapes.ReloadableShapeProvider;
@@ -24,7 +23,7 @@ public interface InternalAPI
 
 
 
-    BlockEntityType<FramedBlockEntity> getDefaultBlockEntity();
+    BlockEntityType<?> getDefaultBlockEntity();
 
     CamoContainerFactory getEmptyCamoContainerFactory();
 

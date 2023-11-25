@@ -12,7 +12,6 @@ import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.neoforged.fml.loading.FMLEnvironment;
 import org.jetbrains.annotations.Nullable;
-import xfacthd.framedblocks.api.block.FramedBlockEntity;
 import xfacthd.framedblocks.api.block.IFramedBlock;
 import xfacthd.framedblocks.api.camo.CamoContainerFactory;
 import xfacthd.framedblocks.api.shapes.*;
@@ -29,11 +28,9 @@ import xfacthd.framedblocks.common.data.shapes.ShapeReloader;
 public final class InternalApiImpl implements InternalAPI
 {
     @Override
-    public BlockEntityType<FramedBlockEntity> getDefaultBlockEntity()
+    public BlockEntityType<?> getDefaultBlockEntity()
     {
-        // TODO: move to internal API and remove generic to remove the cast
-        //noinspection unchecked
-        return (BlockEntityType<FramedBlockEntity>) FBContent.BE_TYPE_FRAMED_BLOCK.value();
+        return FBContent.BE_TYPE_FRAMED_BLOCK.value();
     }
 
     @Override
