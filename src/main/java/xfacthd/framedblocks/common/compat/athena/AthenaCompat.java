@@ -1,6 +1,6 @@
 package xfacthd.framedblocks.common.compat.athena;
 
-//import earth.terrarium.athena.api.client.forge.AthenaBakedModel;
+import earth.terrarium.athena.api.client.neoforge.AthenaBakedModel;
 import net.neoforged.fml.ModList;
 import net.neoforged.fml.loading.FMLEnvironment;
 import xfacthd.framedblocks.FramedBlocks;
@@ -30,7 +30,7 @@ public final class AthenaCompat
     {
         public static void init()
         {
-            //ConTexDataHandler.addConTexProperty(AthenaBakedModel.DATA);
+            ConTexDataHandler.addConTexProperty(AthenaBakedModel.DATA);
         }
     }
 

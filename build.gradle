@@ -100,7 +100,7 @@ dependencies {
 
     //implementation("xfacthd.contex:ConnectedTextures:2.1:slim") { transitive = false }
 
-    //implementation("curse.maven:athena-841890:4764357")
+    implementation("curse.maven:athena-841890:4884962")
     //runtimeOnly("curse.maven:resfullib-570073:4681831")
     //runtimeOnly("curse.maven:chipped-456956:4634856")
 
