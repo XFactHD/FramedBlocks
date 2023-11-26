@@ -1,7 +1,7 @@
 package xfacthd.framedblocks.api.util;
 
-//import com.github.benmanes.caffeine.cache.Cache;
-//import com.github.benmanes.caffeine.cache.Caffeine;
+import com.github.benmanes.caffeine.cache.Cache;
+import com.github.benmanes.caffeine.cache.Caffeine;
 import com.google.common.base.Preconditions;
 import com.google.common.math.IntMath;
 import it.unimi.dsi.fastutil.longs.Long2ObjectMap;
@@ -626,15 +626,14 @@ public final class Utils
                 .orElseThrow(() -> new NullPointerException("Failed to load service for " + clazz.getName()));
     }
 
-    // TODO: re-enable when Caffeine is back
-    /*@ApiStatus.Internal
+    @ApiStatus.Internal
     public static <K, V> Cache<K, V> makeLRUCache(Duration timeToExpiration)
     {
         return Caffeine.newBuilder()
                 .expireAfterAccess(timeToExpiration)
                 .executor(Util.backgroundExecutor())
                 .build();
-    }*/
+    }
 
 
 

@@ -1,6 +1,6 @@
 package xfacthd.framedblocks.common.block.cube;
 
-//import com.github.benmanes.caffeine.cache.*;
+import com.github.benmanes.caffeine.cache.*;
 import net.minecraft.Util;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -29,11 +29,10 @@ import xfacthd.framedblocks.common.data.property.NullableDirection;
 
 public class FramedCollapsibleBlock extends FramedBlock
 {
-    // TODO: re-enabled when Caffeine is back
-    //private static final LoadingCache<Integer, VoxelShape> SHAPE_CACHE = Caffeine.newBuilder()
-    //        .maximumSize(1024)
-    //        .executor(Util.backgroundExecutor())
-    //        .build(new ShapeLoader());
+    private static final LoadingCache<Integer, VoxelShape> SHAPE_CACHE = Caffeine.newBuilder()
+            .maximumSize(1024)
+            .executor(Util.backgroundExecutor())
+            .build(new ShapeLoader());
 
     public FramedCollapsibleBlock(BlockType blockType)
     {
@@ -96,8 +95,7 @@ public class FramedCollapsibleBlock extends FramedBlock
             {
                 int offsets = be.getPackedOffsets();
                 offsets |= (face.toDirection().get3DDataValue() << 20);
-                // TODO: re-enabled when Caffeine is back
-                //return SHAPE_CACHE.get(offsets);
+                return SHAPE_CACHE.get(offsets);
             }
         }
         return Shapes.block();
@@ -138,7 +136,7 @@ public class FramedCollapsibleBlock extends FramedBlock
 
 
 
-    /*private static class ShapeLoader implements CacheLoader<Integer, VoxelShape>
+    private static class ShapeLoader implements CacheLoader<Integer, VoxelShape>
     {
         @Override
         @SuppressWarnings("SuspiciousNameCombination")
@@ -184,5 +182,5 @@ public class FramedCollapsibleBlock extends FramedBlock
 
             return result.optimize();
         }
-    }*/
+    }
 }

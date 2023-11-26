@@ -1,6 +1,6 @@
 package xfacthd.framedblocks.client.model;
 
-//import com.github.benmanes.caffeine.cache.Cache;
+import com.github.benmanes.caffeine.cache.Cache;
 import com.google.common.base.Preconditions;
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.renderer.RenderType;
@@ -52,9 +52,8 @@ public final class FramedBlockModel extends BakedModelProxy
     public static final ResourceLocation REINFORCEMENT_LOCATION = Utils.rl("block/framed_reinforcement");
     private static BakedModel reinforcementModel = null;
 
-    // TODO: re-enable when Caffeine is back
-    //private final Cache<QuadCacheKey, QuadTable> quadCache = Utils.makeLRUCache(ModelCache.DEFAULT_CACHE_DURATION);
-    //private final Cache<QuadCacheKey, CachedRenderTypes> renderTypeCache = Utils.makeLRUCache(ModelCache.DEFAULT_CACHE_DURATION);
+    private final Cache<QuadCacheKey, QuadTable> quadCache = Utils.makeLRUCache(ModelCache.DEFAULT_CACHE_DURATION);
+    private final Cache<QuadCacheKey, CachedRenderTypes> renderTypeCache = Utils.makeLRUCache(ModelCache.DEFAULT_CACHE_DURATION);
     private final BlockState state;
     private final Geometry geometry;
     private final IBlockType type;
@@ -177,12 +176,10 @@ public final class FramedBlockModel extends BakedModelProxy
             BlockState keyState, BlockState camoState, RandomSource rand, ModelData data
     )
     {
-        // TODO: re-enable when Caffeine is back
-        //return renderTypeCache.get(
-        //        geometry.makeCacheKey(keyState, null, data),
-        //        key -> buildRenderTypeCache(camoState, rand, data)
-        //);
-        return buildRenderTypeCache(camoState, rand, data);
+        return renderTypeCache.get(
+                geometry.makeCacheKey(keyState, null, data),
+                key -> buildRenderTypeCache(camoState, rand, data)
+        );
     }
 
     private CachedRenderTypes buildRenderTypeCache(BlockState camoState, RandomSource rand, ModelData data)
@@ -267,16 +264,15 @@ public final class FramedBlockModel extends BakedModelProxy
         else
         {
             Object ctCtx = needCtCtx ? ConTexDataHandler.extractConTexData(camoData) : null;
-            //if (DISABLE_QUAD_CACHE)
+            if (DISABLE_QUAD_CACHE)
             {
                 return buildQuadCache(state, camoState, rand, extraData, ctCtx != null ? camoData : ModelData.EMPTY, noCamo, addReinforcement)
                         .getQuads(renderType, side);
             }
-            // TODO: re-enable when Caffeine is back
-            //return quadCache.get(
-            //        geometry.makeCacheKey(camoState, ctCtx, extraData),
-            //        key -> buildQuadCache(state, key.state(), rand, extraData, ctCtx != null ? camoData : ModelData.EMPTY, noCamo, addReinforcement)
-            //).getQuads(renderType, side);
+            return quadCache.get(
+                    geometry.makeCacheKey(camoState, ctCtx, extraData),
+                    key -> buildQuadCache(state, key.state(), rand, extraData, ctCtx != null ? camoData : ModelData.EMPTY, noCamo, addReinforcement)
+            ).getQuads(renderType, side);
         }
     }
 
@@ -482,9 +478,8 @@ public final class FramedBlockModel extends BakedModelProxy
 
     public void clearCache()
     {
-        // TODO: re-enable when Caffeine is back
-        //quadCache.invalidateAll();
-        //renderTypeCache.invalidateAll();
+        quadCache.invalidateAll();
+        renderTypeCache.invalidateAll();
     }
 
 
