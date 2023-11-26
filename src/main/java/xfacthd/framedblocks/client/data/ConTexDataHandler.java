@@ -9,8 +9,6 @@ import java.util.Set;
 
 public final class ConTexDataHandler
 {
-    public static final String IMC_METHOD_ADD_PROPERTY = "add_ct_property";
-
     private static Set<ModelProperty<?>> prelimProperties = new HashSet<>();
     private static boolean locked = false;
     private static ModelProperty<?>[] properties = null;

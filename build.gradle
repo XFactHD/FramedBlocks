@@ -98,7 +98,7 @@ dependencies {
 
     //compileOnly("curse.maven:buildinggadgets-298187:3829297")
 
-    //implementation("xfacthd.contex:ConnectedTextures:2.1:slim") { transitive = false }
+    runtimeOnly("xfacthd.contex:ConnectedTextures:3.0:slim") { transitive = false }
 
     implementation("curse.maven:athena-841890:4884962")
     //runtimeOnly("curse.maven:resfullib-570073:4681831")

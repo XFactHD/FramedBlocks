@@ -3,7 +3,6 @@ package xfacthd.framedblocks.common.compat;
 import xfacthd.framedblocks.common.compat.athena.AthenaCompat;
 import xfacthd.framedblocks.common.compat.atlasviewer.AtlasViewerCompat;
 import xfacthd.framedblocks.common.compat.buildinggadgets.BuildingGadgetsCompat;
-import xfacthd.framedblocks.common.compat.contex.ConTexCompat;
 import xfacthd.framedblocks.common.compat.create.CreateCompat;
 import xfacthd.framedblocks.common.compat.ctm.CtmCompat;
 import xfacthd.framedblocks.common.compat.emi.EmiCompat;
@@ -23,7 +22,6 @@ public final class CompatHandler
         AthenaCompat.init();
         AtlasViewerCompat.init();
         BuildingGadgetsCompat.init();
-        ConTexCompat.init();
         CreateCompat.init();
         CtmCompat.init();
         EmiCompat.init();

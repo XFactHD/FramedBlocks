@@ -106,7 +106,7 @@ public final class FBClient
     public static void onImcMessageReceived(final InterModProcessEvent event)
     {
         event.getIMCStream()
-                .filter(msg -> msg.method().equals(ConTexDataHandler.IMC_METHOD_ADD_PROPERTY))
+                .filter(msg -> msg.method().equals(FramedConstants.IMC_METHOD_ADD_PROPERTY))
                 .map(InterModComms.IMCMessage::messageSupplier)
                 .map(Supplier::get)
                 .filter(ModelProperty.class::isInstance)
