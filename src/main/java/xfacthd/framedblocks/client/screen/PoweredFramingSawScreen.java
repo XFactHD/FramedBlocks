@@ -102,12 +102,13 @@ public class PoweredFramingSawScreen extends AbstractContainerScreen<PoweredFram
         graphics.drawString(font, TITLE_TARGETBLOCK, tx, ty, 0x404040, false);
 
         RecipeHolder<FramingSawRecipe> recipe = menu.getSelectedRecipe();
-        if (recipe == null) return;
+        if (recipe != null)
+        {
+            FramingSawRecipeMatchResult match = menu.getMatchResult();
+            drawRecipeInfo(graphics, recipe.value(), match);
+            drawStatus(graphics, recipe.value(), match);
+        }
 
-        FramingSawRecipeMatchResult match = menu.getMatchResult();
-
-        drawRecipeInfo(graphics, recipe.value(), match);
-        drawStatus(graphics, recipe.value(), match);
         drawEnergyBar(graphics, mouseX, mouseY);
     }
 
