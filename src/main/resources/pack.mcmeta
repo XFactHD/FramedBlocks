@@ -1,8 +1,0 @@
-{
-    "pack": {
-        "description": "framedblocks resources",
-        "pack_format": 15,
-        "forge:resource_pack_format": 15,
-        "forge:data_pack_format": 15
-    }
-}

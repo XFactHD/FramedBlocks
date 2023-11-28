@@ -1,16 +1,25 @@
 package xfacthd.framedblocks.common.datagen;
 
+import net.minecraft.SharedConstants;
+import net.minecraft.WorldVersion;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.data.PackOutput;
+import net.minecraft.data.metadata.PackMetadataGenerator;
+import net.minecraft.network.chat.Component;
+import net.minecraft.server.packs.PackType;
+import net.minecraft.server.packs.metadata.pack.PackMetadataSection;
 import net.neoforged.neoforge.common.data.BlockTagsProvider;
 import net.neoforged.neoforge.common.data.ExistingFileHelper;
 import net.neoforged.neoforge.data.event.GatherDataEvent;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.Mod;
+import net.neoforged.neoforgespi.language.IModInfo;
 import xfacthd.framedblocks.api.util.FramedConstants;
 import xfacthd.framedblocks.common.datagen.providers.*;
 
+import java.util.EnumMap;
+import java.util.Map;
 import java.util.concurrent.CompletableFuture;
 
 @Mod.EventBusSubscriber(modid = FramedConstants.MOD_ID, bus = Mod.EventBusSubscriber.Bus.MOD)
@@ -24,6 +33,7 @@ public final class GeneratorHandler
         ExistingFileHelper fileHelper = event.getExistingFileHelper();
         CompletableFuture<HolderLookup.Provider> lookupProvider = event.getLookupProvider();
 
+        gen.addProvider(true, buildPackMetadata(output, event.getModContainer().getModInfo()));
         gen.addProvider(event.includeClient(), new FramedSpriteSourceProvider(output, lookupProvider, fileHelper));
         gen.addProvider(event.includeClient(), new FramedBlockStateProvider(output, fileHelper));
         gen.addProvider(event.includeClient(), new FramedItemModelProvider(output, fileHelper));
@@ -34,6 +44,22 @@ public final class GeneratorHandler
         gen.addProvider(event.includeServer(), tagProvider);
         gen.addProvider(event.includeServer(), new FramedItemTagProvider(output, lookupProvider, tagProvider.contentsGetter(), fileHelper));
         gen.addProvider(event.includeClient(), new FramedLanguageProvider(output));
+    }
+
+    private static PackMetadataGenerator buildPackMetadata(PackOutput output, IModInfo modInfo)
+    {
+        WorldVersion version = SharedConstants.getCurrentVersion();
+        Map<PackType, Integer> packVersions = new EnumMap<>(PackType.class);
+        int maxVersion = 0;
+        for (PackType type : PackType.values())
+        {
+            int typeVersion = version.getPackVersion(type);
+            packVersions.put(type, typeVersion);
+            maxVersion = Math.max(maxVersion, typeVersion);
+        }
+        return new PackMetadataGenerator(output).add(PackMetadataSection.TYPE, new PackMetadataSection(
+                Component.literal(modInfo.getDisplayName() + " resources"), maxVersion, packVersions
+        ));
     }
 
 
