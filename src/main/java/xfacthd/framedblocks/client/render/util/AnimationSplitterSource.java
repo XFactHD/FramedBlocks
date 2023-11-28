@@ -15,6 +15,7 @@ import net.minecraft.util.ExtraCodecs;
 import net.neoforged.fml.ModList;
 import xfacthd.framedblocks.FramedBlocks;
 import xfacthd.framedblocks.api.util.FramedConstants;
+import xfacthd.framedblocks.client.util.NoAnimationResourceMetadata;
 
 import java.util.List;
 import java.util.Optional;
@@ -96,7 +97,8 @@ public sealed class AnimationSplitterSource implements SpriteSource permits Anim
         {
             try
             {
-                Optional<AnimationMetadataSection> optAnim = resource.metadata().getSection(AnimationMetadataSection.SERIALIZER);
+                ResourceMetadata srcMeta = resource.metadata();
+                Optional<AnimationMetadataSection> optAnim = srcMeta.getSection(AnimationMetadataSection.SERIALIZER);
                 if (optAnim.isEmpty())
                 {
                     throw new IllegalArgumentException("Texture '%s' is not an animated texture".formatted(texPath));
@@ -118,8 +120,9 @@ public sealed class AnimationSplitterSource implements SpriteSource permits Anim
 
                 NativeImage imageOut = new NativeImage(NativeImage.Format.RGBA, frameW, frameH, false);
                 image.copyRect(imageOut, srcX, srcY, 0, 0, frameW, frameH, false, false);
-                // TODO: find a way to copy over all resource meta entries, except animation
-                return postProcess(new SpriteContents(frame.outLoc, new FrameSize(frameW, frameH), imageOut, ResourceMetadata.EMPTY));
+                return postProcess(new SpriteContents(
+                        frame.outLoc, new FrameSize(frameW, frameH), imageOut, new NoAnimationResourceMetadata(srcMeta)
+                ));
             }
             catch (Exception e)
             {
