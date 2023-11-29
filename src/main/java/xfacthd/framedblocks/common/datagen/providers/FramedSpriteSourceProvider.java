@@ -3,7 +3,7 @@ package xfacthd.framedblocks.common.datagen.providers;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.data.PackOutput;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.server.packs.PackType;
+import net.neoforged.neoforge.client.model.generators.ModelProvider;
 import net.neoforged.neoforge.common.data.ExistingFileHelper;
 import net.neoforged.neoforge.common.data.SpriteSourceProvider;
 import xfacthd.framedblocks.api.util.FramedConstants;
@@ -15,7 +15,6 @@ import java.util.concurrent.CompletableFuture;
 
 public final class FramedSpriteSourceProvider extends SpriteSourceProvider
 {
-    private static final ExistingFileHelper.ResourceType TYPE_TEXTURE = new ExistingFileHelper.ResourceType(PackType.CLIENT_RESOURCES, ".png", "textures");
     public static final ResourceLocation SPRITE_SAW_STILL = Utils.rl("block/stonecutter_saw_still");
 
     public FramedSpriteSourceProvider(
@@ -28,9 +27,7 @@ public final class FramedSpriteSourceProvider extends SpriteSourceProvider
     @Override
     protected void gather()
     {
-        AnimationSplitterSource.register(); // Minecraft is not instantiated in datagen
-
-        existingFileHelper.trackGenerated(SPRITE_SAW_STILL, TYPE_TEXTURE);
+        existingFileHelper.trackGenerated(SPRITE_SAW_STILL, ModelProvider.TEXTURE);
 
         atlas(BLOCKS_ATLAS)
                 .addSource(new AnimationSplitterSource(

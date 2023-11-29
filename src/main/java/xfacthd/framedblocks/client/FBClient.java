@@ -417,8 +417,13 @@ public final class FBClient
     public static void onRegisterReloadListener(final RegisterClientReloadListenersEvent event)
     {
         event.registerReloadListener((ResourceManagerReloadListener) BlockInteractOverlay::onResourceReload);
-        AnimationSplitterSource.register();
         ModelWrappingManager.fireRegistration();
+    }
+
+    @SubscribeEvent
+    public static void onRegisterSpriteSources(final RegisterSpriteSourceTypesEvent event)
+    {
+        AnimationSplitterSource.register(event::register);
     }
 
 

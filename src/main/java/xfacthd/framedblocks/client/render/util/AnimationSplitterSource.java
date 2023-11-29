@@ -14,11 +14,12 @@ import net.minecraft.server.packs.resources.*;
 import net.minecraft.util.ExtraCodecs;
 import net.neoforged.fml.ModList;
 import xfacthd.framedblocks.FramedBlocks;
-import xfacthd.framedblocks.api.util.FramedConstants;
+import xfacthd.framedblocks.api.util.Utils;
 import xfacthd.framedblocks.client.util.NoAnimationResourceMetadata;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.function.BiFunction;
 
 public sealed class AnimationSplitterSource implements SpriteSource permits AnimationSplitterSourceAV
 {
@@ -113,10 +114,10 @@ public sealed class AnimationSplitterSource implements SpriteSource permits Anim
                 int frameW = size.width();
                 int frameH = size.height();
 
-                int rowSize = (imgW / frameW) * (imgH / frameH);
-                checkFrameExists(texPath, anim, frame.frameIdx, rowSize);
-                int srcX = (frame.frameIdx % rowSize) * frameW;
-                int srcY = (frame.frameIdx / rowSize) * frameH;
+                int frameCount = (imgW / frameW) * (imgH / frameH);
+                checkFrameExists(texPath, anim, frame.frameIdx, frameCount);
+                int srcX = (frame.frameIdx % frameCount) * frameW;
+                int srcY = (frame.frameIdx / frameCount) * frameH;
 
                 NativeImage imageOut = new NativeImage(NativeImage.Format.RGBA, frameW, frameH, false);
                 image.copyRect(imageOut, srcX, srcY, 0, 0, frameW, frameH, false, false);
@@ -141,7 +142,7 @@ public sealed class AnimationSplitterSource implements SpriteSource permits Anim
         }
 
         private static void checkFrameExists(
-                ResourceLocation texPath, AnimationMetadataSection anim, int frameIdx, int rowSize
+                ResourceLocation texPath, AnimationMetadataSection anim, int frameIdx, int frameCount
         )
         {
             boolean[] frameFound = new boolean[1];
@@ -154,9 +155,9 @@ public sealed class AnimationSplitterSource implements SpriteSource permits Anim
                     frameFound[0] = true;
                 }
             });
-            if (!frameFound[0] && (maxIdx[0] != -1 || frameIdx >= rowSize))
+            if (!frameFound[0] && (maxIdx[0] != -1 || frameIdx >= frameCount))
             {
-                int max = maxIdx[0] != -1 ? maxIdx[0] : rowSize;
+                int max = maxIdx[0] != -1 ? maxIdx[0] : frameCount;
                 throw new IllegalArgumentException("Texture '%s' has no frame with index %d, max index is %d".formatted(
                         texPath, frameIdx, max
                 ));
@@ -172,10 +173,8 @@ public sealed class AnimationSplitterSource implements SpriteSource permits Anim
 
 
 
-    // TODO: replace with dedicated event when switching to Neo and the event is merged
-    public static void register()
+    public static void register(BiFunction<ResourceLocation, Codec<? extends SpriteSource>, SpriteSourceType> registrar)
     {
-        String name = FramedConstants.MOD_ID + ":anim_splitter";
-        TYPE = SpriteSources.register(name, CODEC);
+        TYPE = registrar.apply(Utils.rl("anim_splitter"), CODEC);
     }
 }
