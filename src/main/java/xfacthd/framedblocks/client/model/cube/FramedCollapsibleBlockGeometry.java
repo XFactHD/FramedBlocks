@@ -57,7 +57,7 @@ public class FramedCollapsibleBlockGeometry implements Geometry
             boolean rotate = (diff13 > diff02) != rotSplitLine;
 
             QuadModifier.geometry(quad)
-                    .apply(Modifiers.setPosition(vertexPos, true))
+                    .apply(Modifiers.setPosition(vertexPos))
                     .applyIf(Modifiers.rotateVertices(), rotate)
                     .export(quadMap.get(null));
         }

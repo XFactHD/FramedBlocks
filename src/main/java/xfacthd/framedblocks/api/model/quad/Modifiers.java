@@ -725,12 +725,12 @@ public final class Modifiers
     }
 
     /**
-     * Moves the individual vertices of the quad to the given values in the quad's facing direction
+     * Moves the individual vertices of the quad to the given values in the quad's facing direction. Vertices which are
+     * not on the outer corners of the block face will have their position interpolated between the given target positions
      * @param posTarget The target positions in the quad's facing direction
-     * @param interpolate Whether the vertex positions should be interpolated for quads smaller than the full face
      * @implNote This does not create the same shape for all vertices when displacing a single one, this is not fixable without extreme effort
      */
-    public static QuadModifier.Modifier setPosition(float[] posTarget, boolean interpolate)
+    public static QuadModifier.Modifier setPosition(float[] posTarget)
     {
         Preconditions.checkArgument(posTarget.length == 4, "Target position array must contain 4 elements!");
 
