@@ -147,9 +147,9 @@ public class FramedSignScreen extends Screen
     }
 
     @Override
-    public void renderBackground(GuiGraphics graphics, int mouseX, int mouseY, float partialTicks)
+    public void render(GuiGraphics graphics, int mouseX, int mouseY, float partialTicks)
     {
-        super.renderBackground(graphics, mouseX, mouseY, partialTicks);
+        super.render(graphics, mouseX, mouseY, partialTicks);
 
         Lighting.setupForEntityInInventory();
 
@@ -161,7 +161,6 @@ public class FramedSignScreen extends Screen
         drawText(graphics);
 
         Lighting.setupFor3DItems();
-        super.render(graphics, mouseX, mouseY, partialTicks);
     }
 
     private void drawSignBlock(GuiGraphics graphics)
