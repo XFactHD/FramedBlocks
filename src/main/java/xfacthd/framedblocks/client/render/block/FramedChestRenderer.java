@@ -7,6 +7,7 @@ import com.mojang.math.Axis;
 import net.minecraft.client.renderer.block.BlockModelShaper;
 import net.minecraft.client.renderer.block.ModelBlockRenderer;
 import net.minecraft.client.renderer.blockentity.*;
+import net.minecraft.core.BlockPos;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.client.Minecraft;
@@ -16,6 +17,7 @@ import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.core.Direction;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
+import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 import net.neoforged.neoforge.client.RenderTypeHelper;
 import net.neoforged.neoforge.client.model.data.ModelData;
@@ -142,7 +144,16 @@ public class FramedChestRenderer implements BlockEntityRenderer<FramedChestBlock
     @Override
     public boolean shouldRender(FramedChestBlockEntity be, Vec3 camera)
     {
-        return !ClientUtils.OPTIFINE_LOADED.get() && BlockEntityRenderer.super.shouldRender(be, camera);
+        return !ClientUtils.OPTIFINE_LOADED.get() &&
+                be.getBlockState().getValue(PropertyHolder.CHEST_STATE) != ChestState.CLOSED &&
+                BlockEntityRenderer.super.shouldRender(be, camera);
+    }
+
+    @Override
+    public AABB getRenderBoundingBox(FramedChestBlockEntity blockEntity)
+    {
+        BlockPos pos = blockEntity.getBlockPos();
+        return new AABB(pos.getX() - .25, pos.getY() + .5625, pos.getZ() - .25, pos.getX() + 1.25, pos.getY() + 1.5, pos.getZ() + 1.25);
     }
 
 

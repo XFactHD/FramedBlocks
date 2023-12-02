@@ -13,6 +13,7 @@ import net.minecraft.world.level.block.entity.SignText;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.renderer.MultiBufferSource;
+import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 import org.joml.Matrix4f;
 import org.joml.Vector3f;
@@ -62,6 +63,17 @@ public class FramedSignRenderer implements BlockEntityRenderer<FramedSignBlockEn
         renderText(pos, signBlock, sign.getFrontText(), poseStack, buffer, light, lineHeight, lineWidth, true);
         renderText(pos, signBlock, sign.getBackText(), poseStack, buffer, light, lineHeight, lineWidth, false);
         poseStack.popPose();
+    }
+
+    @Override
+    public AABB getRenderBoundingBox(FramedSignBlockEntity blockEntity)
+    {
+        if (blockEntity.getBlockState().getBlock() instanceof FramedStandingSignBlock)
+        {
+            BlockPos pos = blockEntity.getBlockPos();
+            return new AABB(pos.getX(), pos.getY() + .625, pos.getZ(), pos.getX() + 1.0, pos.getY() + 1.125, pos.getZ() + 1.0);
+        }
+        return BlockEntityRenderer.super.getRenderBoundingBox(blockEntity);
     }
 
     protected void applyTransforms(PoseStack poseStack, float yRot, BlockState state)

@@ -12,13 +12,13 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.server.network.FilteredText;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.level.EmptyBlockGetter;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.entity.SignText;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.phys.*;
+import net.minecraft.world.phys.Vec2;
+import net.minecraft.world.phys.Vec3;
 import org.jetbrains.annotations.Nullable;
 import xfacthd.framedblocks.FramedBlocks;
 import xfacthd.framedblocks.api.block.FramedBlockEntity;
@@ -36,12 +36,10 @@ public class FramedSignBlockEntity extends FramedBlockEntity
     private SignText frontText = new SignText();
     private SignText backText = new SignText();
     private boolean waxed;
-    private AABB renderBounds;
 
     private FramedSignBlockEntity(BlockEntityType<?> type, BlockPos pos, BlockState state)
     {
         super(type, pos, state);
-        this.renderBounds = state.getShape(EmptyBlockGetter.INSTANCE, pos).bounds().move(pos);
     }
 
     public boolean isFacingFrontText(Player player)
@@ -235,21 +233,6 @@ public class FramedSignBlockEntity extends FramedBlockEntity
     public boolean isTooFarAwayToEdit(Player player)
     {
         return player == null || player.distanceToSqr(worldPosition.getX(), worldPosition.getY(), worldPosition.getZ()) > 64.0D;
-    }
-
-    @Override
-    @SuppressWarnings("deprecation")
-    public void setBlockState(BlockState state)
-    {
-        super.setBlockState(state);
-        //noinspection ConstantConditions
-        renderBounds = state.getShape(level, worldPosition).bounds().move(worldPosition);
-    }
-
-    @Override
-    public AABB getRenderBoundingBox()
-    {
-        return renderBounds;
     }
 
     @Override

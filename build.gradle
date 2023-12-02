@@ -157,10 +157,6 @@ dependencies {
     jarJar(group: 'com.github.ben-manes.caffeine', name: 'caffeine', version: '[3.1.1,4.0.0)') {
         transitive(false)
     }
-
-    implementation(jarJar("io.github.llamalad7:mixinextras-neoforge:0.2.0")) {
-        jarJar.ranged(it, "[0.2.0,)")
-    }
 }
 
 tasks.withType(ProcessResources).configureEach {

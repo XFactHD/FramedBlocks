@@ -100,6 +100,11 @@ public final class FBClient
         forgeBus.addListener(EventPriority.HIGH, ClientEventHandler::onRecipesUpdated);
         forgeBus.addListener(ClientEventHandler::onClientDisconnect);
         forgeBus.addListener(EventPriority.LOW, true, CollapsibleBlockIndicatorRenderer::onRenderBlockHighlight);
+
+        if (!FMLEnvironment.production)
+        {
+            forgeBus.addListener(BlockEntityRenderBoundsDebugRenderer::onRenderLevelStage);
+        }
     }
 
     @SubscribeEvent
@@ -170,21 +175,21 @@ public final class FBClient
     @SubscribeEvent
     public static void onOverlayRegister(final RegisterGuiOverlaysEvent event)
     {
-        event.registerAboveAll("state_lock", new StateLockOverlay());
-        event.registerAboveAll("toggle_waterloggable", new ToggleWaterloggableOverlay());
-        event.registerAboveAll("y_slope", new ToggleYSlopeOverlay());
-        event.registerAboveAll("reinforced", new ReinforcementOverlay());
-        event.registerAboveAll("prism_offset", new PrismOffsetOverlay());
-        event.registerAboveAll("split_line", new SplitLineOverlay());
-        event.registerAboveAll("one_way_window", new OneWayWindowOverlay());
-        event.registerAboveAll("frame_background", new FrameBackgroundOverlay());
-        event.registerAboveAll("camo_rotation", new CamoRotationOverlay());
+        event.registerAboveAll(Utils.rl("state_lock"), new StateLockOverlay());
+        event.registerAboveAll(Utils.rl("toggle_waterloggable"), new ToggleWaterloggableOverlay());
+        event.registerAboveAll(Utils.rl("y_slope"), new ToggleYSlopeOverlay());
+        event.registerAboveAll(Utils.rl("reinforced"), new ReinforcementOverlay());
+        event.registerAboveAll(Utils.rl("prism_offset"), new PrismOffsetOverlay());
+        event.registerAboveAll(Utils.rl("split_line"), new SplitLineOverlay());
+        event.registerAboveAll(Utils.rl("one_way_window"), new OneWayWindowOverlay());
+        event.registerAboveAll(Utils.rl("frame_background"), new FrameBackgroundOverlay());
+        event.registerAboveAll(Utils.rl("camo_rotation"), new CamoRotationOverlay());
     }
 
     @SubscribeEvent
     public static void onGeometryLoaderRegister(final ModelEvent.RegisterGeometryLoaders event)
     {
-        event.register(OverlayLoader.ID.getPath(), new OverlayLoader());
+        event.register(OverlayLoader.ID, new OverlayLoader());
     }
 
     @SubscribeEvent
