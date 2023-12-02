@@ -142,7 +142,7 @@ public final class FBClient
         event.registerBlockEntityRenderer(FBContent.BE_TYPE_FRAMED_CHEST.value(), FramedChestRenderer::new);
         event.registerBlockEntityRenderer(FBContent.BE_TYPE_FRAMED_ITEM_FRAME.value(), FramedItemFrameRenderer::new);
 
-        if (!FMLEnvironment.production && FramedDoubleBlockEntity.ENABLE_DOUBLE_BLOCK_DEBUG_RENDERER)
+        if (!FMLEnvironment.production && TestProperties.ENABLE_DOUBLE_BLOCK_PART_HIT_DEBUG_RENDERER)
         {
             BlockEntityRendererProvider<FramedDoubleBlockEntity> provider = FramedDoubleBlockDebugRenderer::new;
             FBContent.getDoubleBlockEntities().forEach(type -> event.registerBlockEntityRenderer(type.value(), provider));
