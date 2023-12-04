@@ -4,18 +4,21 @@ issueTrackerURL="https://www.github.com/xfacthd/framedblocks"
 license="LGPL v3"
 
 [[mods]]
-modId="framedblocks"
-version="${mod_version}"
-displayName="FramedBlocks"
-displayURL="https://www.curseforge.com/minecraft/mc-mods/framedblocks"
-logoFile="logo.png"
-logoBlur=false
-authors="XFactHD"
-description='''
-'''
+    modId="framedblocks"
+    version="${mod_version}"
+    displayName="FramedBlocks"
+    displayURL="https://www.curseforge.com/minecraft/mc-mods/framedblocks"
+    logoFile="logo.png"
+    logoBlur=false
+    authors="XFactHD"
+    description='''Fancy building blocks'''
+
+
 
 [[mixins]]
     config="framedblocks.mixin.json"
+
+
 
 [[dependencies.framedblocks]]
     modId="neoforge"
@@ -32,46 +35,88 @@ description='''
     side="BOTH"
 
 [[dependencies.framedblocks]]
+    modId="athena"
+    mandatory=false
+    versionRange="[${athena_version},)"
+    ordering="NONE"
+    side="CLIENT"
+
+[[dependencies.framedblocks]]
+    modId="atlasviewer"
+    mandatory=false
+    versionRange="[${atlasviewer_version},)"
+    ordering="NONE"
+    side="CLIENT"
+
+[[dependencies.framedblocks]]
     modId="buildinggadgets"
     mandatory=false
-    versionRange="[3.14.0,)"
+    versionRange="[${buildinggadgets_version},)"
     ordering="AFTER"
     side="BOTH"
 
-#[[dependencies.framedblocks]]
-#    modId="ctm"
-#    mandatory=false
-#    versionRange="[1.18-1.1.3+1,)"
-#    ordering="AFTER"
-#    side="CLIENT"
+[[dependencies.framedblocks]]
+    modId="contex"
+    mandatory=false
+    versionRange="[${contex_version},)"
+    ordering="NONE"
+    side="CLIENT"
+
+[[dependencies.framedblocks]]
+    modId="ctm"
+    mandatory=false
+    versionRange="[${ctm_version},)"
+    ordering="AFTER"
+    side="CLIENT"
+
+[[dependencies.framedblocks]]
+    modId="create"
+    mandatory=false
+    versionRange="[${create_version},)"
+    ordering="AFTER"
+    side="CLIENT"
 
 [[dependencies.framedblocks]]
     modId="diagonalfences"
     mandatory=false
-    versionRange="[8.0.0,)"
+    versionRange="[${diag_fences_version},)"
     ordering="NONE"
     side="BOTH"
 
 [[dependencies.framedblocks]]
     modId="diagonalwindows"
     mandatory=false
-    versionRange="[8.0.1,)"
+    versionRange="[${diag_windows_version},)"
     ordering="NONE"
     side="BOTH"
 
 [[dependencies.framedblocks]]
-    modId="nocubes"
+    modId="emi"
     mandatory=false
-    versionRange="[1.19.1-0.5.0,)"
+    versionRange="[${emi_version},)"
     ordering="NONE"
-    side="CLIENT"
+    side="BOTH"
 
 [[dependencies.framedblocks]]
     modId="jei"
     mandatory=false
-    versionRange="[15.0.0.15,)"
+    versionRange="[${jei_version},)"
     ordering="NONE"
     side="BOTH"
+
+[[dependencies.framedblocks]]
+    modId="modernfix"
+    mandatory=false
+    versionRange="[${modernfix_version},)"
+    ordering="NONE"
+    side="CLIENT"
+
+[[dependencies.framedblocks]]
+    modId="nocubes"
+    mandatory=false
+    versionRange="[${nocubes_version},)"
+    ordering="NONE"
+    side="CLIENT"
 
 [[dependencies.framedblocks]]
     modId="rei"
@@ -81,25 +126,13 @@ description='''
     side="BOTH"
 
 [[dependencies.framedblocks]]
-    modId="emi"
+    modId="supplementaries"
     mandatory=false
-    versionRange="[1.0.17,)"
+    versionRange="[${supplementaries_version},)"
     ordering="NONE"
     side="BOTH"
 
-[[dependencies.framedblocks]]
-    modId="atlasviewer"
-    mandatory=false
-    versionRange="[5.1.1,)"
-    ordering="NONE"
-    side="CLIENT"
 
-[[dependencies.framedblocks]]
-    modId="modernfix"
-    mandatory=false
-    versionRange="[5.7.5,)"
-    ordering="NONE"
-    side="CLIENT"
 
 [mods."modernfix:integration"]
     client_entrypoint="xfacthd.framedblocks.common.compat.modernfix.FramedModernFixClientIntegration"
