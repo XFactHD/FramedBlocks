@@ -759,31 +759,6 @@ public final class Modifiers
         };
     }
 
-    /**
-     * Rotates the vertices of the quad by 90 degree
-     */
-    public static QuadModifier.Modifier rotateVertices()
-    {
-        return data ->
-        {
-            float[] pos = new float[4 * 3];
-            float[] uv = new float[4 * 2];
-            for (int i = 0; i < 4; i++)
-            {
-                int j = (i + i) % 4;
-                data.pos(i, pos, j * 3);
-                data.uv(i, uv, j * 2);
-            }
-            for (int i = 0; i < 4; i++)
-            {
-                data.pos(i, pos[i * 3], pos[i * 3 + 1], pos[i * 3 + 2]);
-                data.uv(i, uv[i * 2], uv[i * 2 + 1]);
-            }
-
-            return true;
-        };
-    }
-
 
 
     /**

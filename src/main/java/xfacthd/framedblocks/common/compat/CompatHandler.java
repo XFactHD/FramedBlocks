@@ -10,7 +10,6 @@ import xfacthd.framedblocks.common.compat.flywheel.FlywheelCompat;
 import xfacthd.framedblocks.common.compat.jei.JeiCompat;
 import xfacthd.framedblocks.common.compat.nocubes.NoCubesCompat;
 import xfacthd.framedblocks.common.compat.rei.ReiCompat;
-import xfacthd.framedblocks.common.compat.rubidium.RubidiumCompat;
 import xfacthd.framedblocks.common.compat.starlight.StarlightCompat;
 import xfacthd.framedblocks.common.compat.supplementaries.SupplementariesCompat;
 import xfacthd.framedblocks.common.compat.xycraft.XyCraftCompat;
@@ -29,7 +28,6 @@ public final class CompatHandler
         JeiCompat.init();
         NoCubesCompat.init();
         ReiCompat.init();
-        RubidiumCompat.init();
         StarlightCompat.init();
         SupplementariesCompat.init();
         XyCraftCompat.init();
