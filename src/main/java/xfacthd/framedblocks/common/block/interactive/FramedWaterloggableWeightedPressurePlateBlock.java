@@ -5,8 +5,7 @@ import net.minecraft.core.Direction;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.context.BlockPlaceContext;
-import net.minecraft.world.level.BlockGetter;
-import net.minecraft.world.level.LevelAccessor;
+import net.minecraft.world.level.*;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.SimpleWaterloggedBlock;
 import net.minecraft.world.level.block.state.BlockState;
@@ -20,9 +19,9 @@ import xfacthd.framedblocks.common.data.BlockType;
 
 public class FramedWaterloggableWeightedPressurePlateBlock extends FramedWeightedPressurePlateBlock implements SimpleWaterloggedBlock
 {
-    FramedWaterloggableWeightedPressurePlateBlock(BlockType type, int maxWeight, Properties props, BlockSetType blockSet)
+    FramedWaterloggableWeightedPressurePlateBlock(BlockType type, int maxWeight, BlockSetType blockSet, Properties props)
     {
-        super(type, maxWeight, props, blockSet);
+        super(type, maxWeight, blockSet, props);
         registerDefaultState(defaultBlockState().setValue(BlockStateProperties.WATERLOGGED, false));
     }
 
@@ -70,7 +69,7 @@ public class FramedWaterloggableWeightedPressurePlateBlock extends FramedWeighte
     }
 
     @Override
-    public ItemStack getCloneItemStack(BlockState state, HitResult target, BlockGetter level, BlockPos pos, Player player)
+    public ItemStack getCloneItemStack(BlockState state, HitResult target, LevelReader level, BlockPos pos, Player player)
     {
         return new ItemStack(getCounterpart());
     }

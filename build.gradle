@@ -150,9 +150,9 @@ dependencies {
 
     //compileOnly("curse.maven:buildinggadgets-298187:3829297")
 
-    runtimeOnly("xfacthd.contex:ConnectedTextures:${contex_version}:slim") { transitive = false }
+    //runtimeOnly("xfacthd.contex:ConnectedTextures:${contex_version}:slim") { transitive = false }
 
-    implementation("earth.terrarium.athena:athena-neoforge-${athena_mc_version}:${athena_version}")
+    compileOnly("earth.terrarium.athena:athena-neoforge-${athena_mc_version}:${athena_version}")
     //runtimeOnly("com.teamresourceful.resourcefullib:resourcefullib-neoforge-${resful_lib_mc_version}:${resful_lib_version}")
     //runtimeOnly("earth.terrarium.chipped:chipped-neoforge-${chipped_mc_version}:${chipped_version}")
 

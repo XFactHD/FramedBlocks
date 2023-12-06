@@ -1,7 +1,6 @@
 package xfacthd.framedblocks.common.blockentity.special;
 
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.Tag;
 import net.minecraft.network.chat.Component;
@@ -14,9 +13,6 @@ import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
-import net.neoforged.neoforge.common.capabilities.Capability;
-import net.neoforged.neoforge.common.capabilities.Capabilities;
-import net.neoforged.neoforge.common.util.LazyOptional;
 import net.neoforged.neoforge.items.*;
 import net.neoforged.neoforge.network.NetworkHooks;
 import xfacthd.framedblocks.api.block.FramedBlockEntity;
@@ -24,7 +20,6 @@ import xfacthd.framedblocks.api.util.Utils;
 import xfacthd.framedblocks.common.FBContent;
 import xfacthd.framedblocks.common.menu.FramedStorageMenu;
 
-import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -40,7 +35,6 @@ public class FramedStorageBlockEntity extends FramedBlockEntity implements MenuP
             FramedStorageBlockEntity.this.setChanged();
         }
     };
-    private LazyOptional<IItemHandler> lazyItemHandler = LazyOptional.empty();
     private Component customName = null;
 
     public FramedStorageBlockEntity(BlockPos pos, BlockState state)
@@ -56,30 +50,6 @@ public class FramedStorageBlockEntity extends FramedBlockEntity implements MenuP
     public void open(ServerPlayer player)
     {
         NetworkHooks.openScreen(player, this, worldPosition);
-    }
-
-    @Override
-    public <T> LazyOptional<T> getCapability(Capability<T> cap, @Nullable Direction side)
-    {
-        if (cap == Capabilities.ITEM_HANDLER)
-        {
-            return lazyItemHandler.cast();
-        }
-        return super.getCapability(cap, side);
-    }
-
-    @Override
-    public void onLoad()
-    {
-        super.onLoad();
-        lazyItemHandler = LazyOptional.of(() -> itemHandler);
-    }
-
-    @Override
-    public void invalidateCaps()
-    {
-        super.invalidateCaps();
-        lazyItemHandler.invalidate();
     }
 
     public boolean isUsableByPlayer(Player player)
@@ -134,6 +104,11 @@ public class FramedStorageBlockEntity extends FramedBlockEntity implements MenuP
 
         fullness /= (float)itemHandler.getSlots();
         return Mth.floor(fullness * 14F) + (stacks > 0 ? 1 : 0);
+    }
+
+    public IItemHandler getItemHandler()
+    {
+        return itemHandler;
     }
 
     public void setCustomName(Component customName)

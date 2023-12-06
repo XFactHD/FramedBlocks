@@ -30,6 +30,5 @@
     "recipes": [
       "framedblocks:framed_iron_trapdoor"
     ]
-  },
-  "sends_telemetry_event": false
+  }
 }

@@ -1,5 +1,6 @@
 package xfacthd.framedblocks.common.block.rail;
 
+import com.mojang.serialization.MapCodec;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.world.InteractionHand;
@@ -237,6 +238,12 @@ public class FramedRailSlopeBlock extends BaseRailBlock implements IFramedBlock,
     public BlockType getBlockType()
     {
         return type;
+    }
+
+    @Override
+    protected MapCodec<? extends BaseRailBlock> codec()
+    {
+        throw new UnsupportedOperationException("NO");
     }
 
     @Override

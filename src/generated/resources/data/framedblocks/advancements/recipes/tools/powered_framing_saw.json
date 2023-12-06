@@ -30,6 +30,5 @@
     "recipes": [
       "framedblocks:powered_framing_saw"
     ]
-  },
-  "sends_telemetry_event": false
+  }
 }

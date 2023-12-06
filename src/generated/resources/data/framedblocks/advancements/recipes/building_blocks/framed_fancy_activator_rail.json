@@ -30,6 +30,5 @@
     "recipes": [
       "framedblocks:framed_fancy_activator_rail"
     ]
-  },
-  "sends_telemetry_event": false
+  }
 }

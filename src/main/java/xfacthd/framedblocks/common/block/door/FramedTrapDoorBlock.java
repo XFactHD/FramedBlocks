@@ -33,9 +33,9 @@ public class FramedTrapDoorBlock extends TrapDoorBlock implements IFramedBlock
 {
     private final BlockType type;
 
-    private FramedTrapDoorBlock(BlockType type, Properties props, BlockSetType blockSet)
+    private FramedTrapDoorBlock(BlockType type, BlockSetType blockSet, Properties props)
     {
-        super(props, blockSet);
+        super(blockSet, props);
         this.type = type;
         registerDefaultState(defaultBlockState()
                 .setValue(FramedProperties.SOLID, false)
@@ -159,8 +159,8 @@ public class FramedTrapDoorBlock extends TrapDoorBlock implements IFramedBlock
     {
         return new FramedTrapDoorBlock(
                 BlockType.FRAMED_TRAPDOOR,
-                IFramedBlock.createProperties(BlockType.FRAMED_TRAPDOOR),
-                BlockSetType.OAK
+                BlockSetType.OAK,
+                IFramedBlock.createProperties(BlockType.FRAMED_TRAPDOOR)
         );
     }
 
@@ -168,9 +168,9 @@ public class FramedTrapDoorBlock extends TrapDoorBlock implements IFramedBlock
     {
         return new FramedTrapDoorBlock(
                 BlockType.FRAMED_IRON_TRAPDOOR,
+                BlockSetType.IRON,
                 IFramedBlock.createProperties(BlockType.FRAMED_IRON_TRAPDOOR)
-                        .requiresCorrectToolForDrops(),
-                BlockSetType.IRON
+                        .requiresCorrectToolForDrops()
         );
     }
 }

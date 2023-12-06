@@ -30,6 +30,5 @@
     "recipes": [
       "framedblocks:framed_slab_edge"
     ]
-  },
-  "sends_telemetry_event": false
+  }
 }

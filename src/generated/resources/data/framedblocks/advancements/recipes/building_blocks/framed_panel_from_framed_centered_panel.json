@@ -30,6 +30,5 @@
     "recipes": [
       "framedblocks:framed_panel_from_framed_centered_panel"
     ]
-  },
-  "sends_telemetry_event": false
+  }
 }

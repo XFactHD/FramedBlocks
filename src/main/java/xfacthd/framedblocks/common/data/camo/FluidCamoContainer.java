@@ -10,8 +10,7 @@ import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.material.Fluid;
 import net.minecraft.world.level.material.FluidState;
-import net.neoforged.neoforge.common.capabilities.Capabilities;
-import net.neoforged.neoforge.common.util.LazyOptional;
+import net.neoforged.neoforge.capabilities.Capabilities;
 import net.neoforged.neoforge.fluids.FluidStack;
 import net.neoforged.neoforge.fluids.FluidType;
 import net.neoforged.neoforge.fluids.capability.IFluidHandler;
@@ -52,17 +51,19 @@ public class FluidCamoContainer extends CamoContainer
             return ItemStack.EMPTY;
         }
 
-        LazyOptional<IFluidHandlerItem> cap = stack.getCapability(Capabilities.FLUID_HANDLER_ITEM);
-        return cap.map(handler ->
+        IFluidHandlerItem handler = stack.getCapability(Capabilities.FluidHandler.ITEM);
+        if (handler == null)
         {
-            FluidStack fluid = new FluidStack(fluidState.getType(), FluidType.BUCKET_VOLUME);
-            if (handler.fill(fluid, IFluidHandler.FluidAction.SIMULATE) == FluidType.BUCKET_VOLUME)
-            {
-                handler.fill(fluid, IFluidHandler.FluidAction.EXECUTE);
-                return handler.getContainer();
-            }
             return ItemStack.EMPTY;
-        }).orElse(ItemStack.EMPTY);
+        }
+
+        FluidStack fluid = new FluidStack(fluidState.getType(), FluidType.BUCKET_VOLUME);
+        if (handler.fill(fluid, IFluidHandler.FluidAction.SIMULATE) == FluidType.BUCKET_VOLUME)
+        {
+            handler.fill(fluid, IFluidHandler.FluidAction.EXECUTE);
+            return handler.getContainer();
+        }
+        return ItemStack.EMPTY;
     }
 
     @Override
@@ -135,22 +136,24 @@ public class FluidCamoContainer extends CamoContainer
         @Override
         public CamoContainer fromItem(ItemStack stack)
         {
-            LazyOptional<IFluidHandlerItem> cap = stack.getCapability(Capabilities.FLUID_HANDLER_ITEM);
-            return cap.map(handler ->
+            IFluidHandlerItem handler = stack.getCapability(Capabilities.FluidHandler.ITEM);
+            if (handler == null)
             {
-                FluidStack fluid = handler.getFluidInTank(0);
-
-                FluidState state = fluid.getFluid().defaultFluidState();
-                if (!state.isEmpty())
-                {
-                    int amount = FluidType.BUCKET_VOLUME;
-                    if (fluid.getAmount() >= amount && handler.drain(amount, IFluidHandler.FluidAction.SIMULATE).getAmount() == amount)
-                    {
-                        return new FluidCamoContainer(state);
-                    }
-                }
                 return EmptyCamoContainer.EMPTY;
-            }).orElse(EmptyCamoContainer.EMPTY);
+            }
+
+            FluidStack fluid = handler.getFluidInTank(0);
+
+            FluidState state = fluid.getFluid().defaultFluidState();
+            if (!state.isEmpty())
+            {
+                int amount = FluidType.BUCKET_VOLUME;
+                if (fluid.getAmount() >= amount && handler.drain(amount, IFluidHandler.FluidAction.SIMULATE).getAmount() == amount)
+                {
+                    return new FluidCamoContainer(state);
+                }
+            }
+            return EmptyCamoContainer.EMPTY;
         }
 
         @Override

@@ -30,6 +30,5 @@
     "recipes": [
       "framedblocks:framed_vertical_stairs_rotate_to_framed_stairs"
     ]
-  },
-  "sends_telemetry_event": false
+  }
 }

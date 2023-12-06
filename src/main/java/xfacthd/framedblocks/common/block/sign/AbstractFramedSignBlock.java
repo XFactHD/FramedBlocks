@@ -4,7 +4,7 @@ import net.minecraft.advancements.CriteriaTriggers;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.network.chat.CommonComponents;
-import net.minecraft.network.chat.contents.LiteralContents;
+import net.minecraft.network.chat.contents.PlainTextContents;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
@@ -177,7 +177,7 @@ public abstract class AbstractFramedSignBlock extends FramedBlock
     {
         SignText text = sign.getText(frontText);
         return Arrays.stream(text.getMessages(player.isTextFilteringEnabled())).allMatch(line ->
-                line.equals(CommonComponents.EMPTY) || line.getContents() instanceof LiteralContents
+                line.equals(CommonComponents.EMPTY) || line.getContents() instanceof PlainTextContents
         );
     }
 

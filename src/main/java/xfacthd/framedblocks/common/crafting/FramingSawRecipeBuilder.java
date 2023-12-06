@@ -1,18 +1,14 @@
 package xfacthd.framedblocks.common.crafting;
 
 import com.google.common.base.Preconditions;
-import com.google.gson.JsonArray;
-import com.google.gson.JsonObject;
 import net.minecraft.advancements.*;
 import net.minecraft.core.Holder;
-import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.data.recipes.*;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Item;
-import net.minecraft.world.item.crafting.RecipeSerializer;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.ItemLike;
 import org.jetbrains.annotations.Nullable;
-import xfacthd.framedblocks.common.FBContent;
 
 import java.util.*;
 
@@ -21,7 +17,7 @@ public final class FramingSawRecipeBuilder implements RecipeBuilder
     private final Item result;
     private final int count;
     private int material = 0;
-    private List<FramingSawRecipeAdditive> additives = null;
+    private List<FramingSawRecipeAdditive> additives = List.of();
     private boolean disabled = false;
 
     private FramingSawRecipeBuilder(ItemLike result, int count)
@@ -61,12 +57,14 @@ public final class FramingSawRecipeBuilder implements RecipeBuilder
 
     public FramingSawRecipeBuilder additive(FramingSawRecipeAdditive additive)
     {
-        this.additives = additive != null ? List.of(additive) : null;
+        Preconditions.checkNotNull(additive, "Additive must be non-null");
+        this.additives = List.of(additive);
         return this;
     }
 
     public FramingSawRecipeBuilder additives(List<FramingSawRecipeAdditive> additives)
     {
+        Preconditions.checkNotNull(additives, "Additives must be non-null");
         this.additives = additives;
         return this;
     }
@@ -96,69 +94,13 @@ public final class FramingSawRecipeBuilder implements RecipeBuilder
     }
 
     @Override
-    public void save(RecipeOutput finishedRecipeConsumer, ResourceLocation recipeId)
+    public void save(RecipeOutput output, ResourceLocation recipeId)
     {
         Preconditions.checkState(material > 0, "Material value not set");
         Preconditions.checkState(material / count * count == material, "Material value not divisible by result size");
 
         recipeId = recipeId.withPrefix("framing_saw/");
-        finishedRecipeConsumer.accept(new Result(recipeId, result, count, material, additives, disabled));
-    }
-
-
-
-    private record Result(
-            ResourceLocation id,
-            Item result,
-            int count,
-            int material,
-            List<FramingSawRecipeAdditive> additives,
-            boolean disabled
-    ) implements FinishedRecipe
-    {
-        @Override
-        public void serializeRecipeData(JsonObject json)
-        {
-            json.addProperty("material", material);
-
-            if (additives != null)
-            {
-                JsonArray additiveArr = new JsonArray();
-                additives.forEach(add ->
-                {
-                    JsonObject additive = new JsonObject();
-                    additive.add("ingredient", add.ingredient().toJson(false));
-                    additive.addProperty("count", add.count());
-                    additiveArr.add(additive);
-                });
-                json.add("additives", additiveArr);
-            }
-
-            JsonObject resultObj = new JsonObject();
-            resultObj.addProperty("item", Objects.requireNonNull(BuiltInRegistries.ITEM.getKey(result)).toString());
-            if (count > 1)
-            {
-                resultObj.addProperty("count", count);
-            }
-            json.add("result", resultObj);
-
-            if (disabled)
-            {
-                json.addProperty("disabled", true);
-            }
-        }
-
-        @Override
-        public RecipeSerializer<?> type()
-        {
-            return FBContent.RECIPE_SERIALIZER_FRAMING_SAW_RECIPE.value();
-        }
-
-        @Nullable
-        @Override
-        public AdvancementHolder advancement()
-        {
-            return null;
-        }
+        FramingSawRecipe recipe = new FramingSawRecipe(material, additives, new ItemStack(result, count), disabled);
+        output.accept(recipeId, recipe, null);
     }
 }

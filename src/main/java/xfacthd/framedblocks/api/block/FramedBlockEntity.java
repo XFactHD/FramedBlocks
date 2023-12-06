@@ -23,10 +23,11 @@ import net.minecraft.world.level.material.MapColor;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.EntityCollisionContext;
+import net.neoforged.neoforge.capabilities.Capabilities;
 import net.neoforged.neoforge.client.model.data.ModelData;
 import net.neoforged.neoforge.common.*;
-import net.neoforged.neoforge.common.capabilities.Capabilities;
 import net.neoforged.neoforge.fluids.capability.IFluidHandler;
+import net.neoforged.neoforge.fluids.capability.IFluidHandlerItem;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
@@ -87,7 +88,7 @@ public class FramedBlockEntity extends BlockEntity
         {
             return clearBlockCamo(player, camo, stack, secondary);
         }
-        else if (camo.getType().isFluid() && stack.getCapability(Capabilities.FLUID_HANDLER_ITEM).isPresent())
+        else if (camo.getType().isFluid() && stack.getCapability(Capabilities.FluidHandler.ITEM) != null)
         {
             return clearFluidCamo(player, camo, stack, secondary);
         }
@@ -95,7 +96,7 @@ public class FramedBlockEntity extends BlockEntity
         {
             return setBlockCamo(player, stack, secondary);
         }
-        else if (camo.isEmpty() && stack.getCapability(Capabilities.FLUID_HANDLER_ITEM).isPresent())
+        else if (camo.isEmpty() && stack.getCapability(Capabilities.FluidHandler.ITEM) != null)
         {
             return setFluidCamo(player, stack, secondary);
         }
@@ -242,19 +243,20 @@ public class FramedBlockEntity extends BlockEntity
             {
                 if (!player.isCreative() && ConfigView.Server.INSTANCE.shouldConsumeCamoItem())
                 {
-                    ItemStack result = stack.getCapability(Capabilities.FLUID_HANDLER_ITEM).map(handler ->
+                    IFluidHandlerItem handler = stack.getCapability(Capabilities.FluidHandler.ITEM);
+                    if (handler != null)
                     {
                         handler.drain(1000, IFluidHandler.FluidAction.EXECUTE);
-                        return handler.getContainer();
-                    }).orElse(ItemStack.EMPTY);
+                        ItemStack result = handler.getContainer();
 
-                    // Container holds fluid by type (i.e. bucket) -> got a new stack
-                    if (result != stack)
-                    {
-                        stack.shrink(1);
-                        if (!result.isEmpty() && !player.getInventory().add(result))
+                        // Container holds fluid by type (i.e. bucket) -> got a new stack
+                        if (result != stack)
                         {
-                            player.drop(result, false);
+                            stack.shrink(1);
+                            if (!result.isEmpty() && !player.getInventory().add(result))
+                            {
+                                player.drop(result, false);
+                            }
                         }
                     }
                 }

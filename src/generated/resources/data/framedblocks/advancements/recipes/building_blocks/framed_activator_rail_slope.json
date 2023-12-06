@@ -30,6 +30,5 @@
     "recipes": [
       "framedblocks:framed_activator_rail_slope"
     ]
-  },
-  "sends_telemetry_event": false
+  }
 }

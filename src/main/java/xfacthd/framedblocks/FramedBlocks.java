@@ -18,6 +18,7 @@ import net.neoforged.neoforge.network.simple.SimpleChannel;
 import org.slf4j.Logger;
 import xfacthd.framedblocks.common.config.CommonConfig;
 import xfacthd.framedblocks.common.config.ServerConfig;
+import xfacthd.framedblocks.common.data.capabilities.CapabilitySetup;
 import xfacthd.framedblocks.common.data.cullupdate.CullingUpdatePacket;
 import xfacthd.framedblocks.common.data.cullupdate.CullingUpdateTracker;
 import xfacthd.framedblocks.common.data.shapes.ShapeReloader;
@@ -60,6 +61,7 @@ public final class FramedBlocks
         ModLoadingContext.get().registerConfig(ModConfig.Type.COMMON, CommonConfig.SPEC);
         ModLoadingContext.get().registerConfig(ModConfig.Type.SERVER, ServerConfig.SPEC);
 
+        modBus.addListener(CapabilitySetup::onRegisterCapabilities);
         modBus.addListener(FramedBlocks::onCommonSetup);
         modBus.addListener(FramedBlocks::onLoadComplete);
 

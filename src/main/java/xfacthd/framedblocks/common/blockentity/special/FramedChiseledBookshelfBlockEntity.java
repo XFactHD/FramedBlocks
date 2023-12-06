@@ -1,29 +1,23 @@
 package xfacthd.framedblocks.common.blockentity.special;
 
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.ChiseledBookShelfBlock;
 import net.minecraft.world.level.block.entity.ChiseledBookShelfBlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.BooleanProperty;
-import net.neoforged.neoforge.common.capabilities.Capability;
-import net.neoforged.neoforge.common.capabilities.Capabilities;
-import net.neoforged.neoforge.common.util.LazyOptional;
 import net.neoforged.neoforge.items.IItemHandler;
 import net.neoforged.neoforge.items.ItemStackHandler;
 import xfacthd.framedblocks.api.block.FramedBlockEntity;
 import xfacthd.framedblocks.common.FBContent;
 
-import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.List;
 
 public class FramedChiseledBookshelfBlockEntity extends FramedBlockEntity
 {
     private final ItemStackHandler itemHandler = new ItemStackHandler(6);
-    private LazyOptional<IItemHandler> lazyItemHandler = LazyOptional.empty();
     private int lastInteractedSlot = -1;
 
     public FramedChiseledBookshelfBlockEntity(BlockPos pos, BlockState state)
@@ -66,28 +60,9 @@ public class FramedChiseledBookshelfBlockEntity extends FramedBlockEntity
         updateState(lastInteractedSlot);
     }
 
-    @Override
-    public <T> LazyOptional<T> getCapability(Capability<T> cap, @Nullable Direction side)
+    public IItemHandler getItemHandler()
     {
-        if (cap == Capabilities.ITEM_HANDLER)
-        {
-            return lazyItemHandler.cast();
-        }
-        return super.getCapability(cap, side);
-    }
-
-    @Override
-    public void onLoad()
-    {
-        super.onLoad();
-        lazyItemHandler = LazyOptional.of(() -> itemHandler);
-    }
-
-    @Override
-    public void invalidateCaps()
-    {
-        super.invalidateCaps();
-        lazyItemHandler.invalidate();
+        return itemHandler;
     }
 
     public List<ItemStack> getDrops()

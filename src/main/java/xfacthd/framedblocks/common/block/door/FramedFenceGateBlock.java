@@ -30,7 +30,7 @@ public class FramedFenceGateBlock extends FenceGateBlock implements IFramedBlock
 {
     public FramedFenceGateBlock()
     {
-        super(IFramedBlock.createProperties(BlockType.FRAMED_FENCE_GATE), WoodType.OAK);
+        super(WoodType.OAK, IFramedBlock.createProperties(BlockType.FRAMED_FENCE_GATE));
         registerDefaultState(defaultBlockState()
                 .setValue(FramedProperties.GLOWING, false)
                 .setValue(FramedProperties.PROPAGATES_SKYLIGHT, false)

@@ -2,8 +2,7 @@ package xfacthd.framedblocks.common.block.torch;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
-import net.minecraft.core.particles.ParticleOptions;
-import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.core.particles.*;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
@@ -30,20 +29,19 @@ public class FramedWallTorchBlock extends WallTorchBlock implements IFramedBlock
 {
     public FramedWallTorchBlock()
     {
-        this(Properties.of()
+        this(ParticleTypes.FLAME, Properties.of()
                 .pushReaction(PushReaction.DESTROY)
                 .noCollission()
                 .strength(0.5F)
                 .sound(SoundType.WOOD)
                 .lightLevel(state -> 14)
-                .noOcclusion(),
-                ParticleTypes.FLAME
+                .noOcclusion()
         );
     }
 
-    protected FramedWallTorchBlock(Properties props, ParticleOptions particle)
+    protected FramedWallTorchBlock(SimpleParticleType particle, Properties props)
     {
-        super(props, particle);
+        super(particle, props);
         registerDefaultState(defaultBlockState()
                 .setValue(FramedProperties.GLOWING, false)
                 .setValue(FramedProperties.PROPAGATES_SKYLIGHT, false)

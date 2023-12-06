@@ -28,6 +28,5 @@
     "recipes": [
       "framedblocks:framed_cube"
     ]
-  },
-  "sends_telemetry_event": false
+  }
 }

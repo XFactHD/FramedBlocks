@@ -333,7 +333,7 @@ public final class FBContent
             FramedDividedStairsBlockEntity::new,
             BlockType.FRAMED_DIVIDED_STAIRS
     );
-    public static final Holder<BlockEntityType<?>> BE_TYPE_FRAMED_SECRET_STORAGE = createBlockEntityType(
+    public static final DeferredBlockEntity<FramedStorageBlockEntity> BE_TYPE_FRAMED_SECRET_STORAGE = createBlockEntityType(
             FramedStorageBlockEntity::new,
             BlockType.FRAMED_SECRET_STORAGE
     );
@@ -500,7 +500,7 @@ public final class FBContent
             FramedOwnableBlockEntity::new,
             BlockType.FRAMED_ONE_WAY_WINDOW
     );
-    public static final Holder<BlockEntityType<?>> BE_TYPE_FRAMED_CHISELED_BOOKSHELF = createBlockEntityType(
+    public static final DeferredBlockEntity<FramedChiseledBookshelfBlockEntity> BE_TYPE_FRAMED_CHISELED_BOOKSHELF = createBlockEntityType(
             FramedChiseledBookshelfBlockEntity::new,
             BlockType.FRAMED_CHISELED_BOOKSHELF
     );

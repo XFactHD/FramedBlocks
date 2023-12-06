@@ -1,14 +1,14 @@
 package xfacthd.framedblocks.common.block.interactive;
 
 import net.minecraft.core.BlockPos;
+import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.*;
-import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.PressurePlateBlock;
+import net.minecraft.world.level.block.*;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BlockSetType;
@@ -18,6 +18,7 @@ import net.neoforged.neoforge.client.extensions.common.IClientBlockExtensions;
 import xfacthd.framedblocks.api.block.FramedProperties;
 import xfacthd.framedblocks.api.block.IFramedBlock;
 import xfacthd.framedblocks.api.block.render.FramedBlockRenderProperties;
+import xfacthd.framedblocks.api.util.FramedConstants;
 import xfacthd.framedblocks.api.util.Utils;
 import xfacthd.framedblocks.common.FBContent;
 import xfacthd.framedblocks.common.data.BlockType;
@@ -38,14 +39,30 @@ public class FramedPressurePlateBlock extends PressurePlateBlock implements IFra
             BlockType.FRAMED_OBSIDIAN_PRESSURE_PLATE, BlockType.FRAMED_WATERLOGGABLE_OBSIDIAN_PRESSURE_PLATE,
             BlockType.FRAMED_WATERLOGGABLE_OBSIDIAN_PRESSURE_PLATE, BlockType.FRAMED_OBSIDIAN_PRESSURE_PLATE
     );
+    private static final BlockSetType OBSIDIAN = BlockSetType.register(new BlockSetType(
+            FramedConstants.MOD_ID + ":obsidian",
+            true,
+            true,
+            false,
+            BlockSetType.PressurePlateSensitivity.MOBS,
+            SoundType.STONE,
+            SoundEvents.IRON_DOOR_CLOSE,
+            SoundEvents.IRON_DOOR_OPEN,
+            SoundEvents.IRON_TRAPDOOR_CLOSE,
+            SoundEvents.IRON_TRAPDOOR_OPEN,
+            SoundEvents.STONE_PRESSURE_PLATE_CLICK_OFF,
+            SoundEvents.STONE_PRESSURE_PLATE_CLICK_ON,
+            SoundEvents.STONE_BUTTON_CLICK_OFF,
+            SoundEvents.STONE_BUTTON_CLICK_ON
+    ));
 
-    private final BlockType type;
+    private final BlockType blockType;
 
     @SuppressWarnings("ConstantConditions")
-    protected FramedPressurePlateBlock(BlockType type, Sensitivity sensitivity, Properties props, BlockSetType blockSet)
+    protected FramedPressurePlateBlock(BlockType type, BlockSetType blockSet, Properties props)
     {
-        super(sensitivity, props, blockSet);
-        this.type = type;
+        super(blockSet, props);
+        this.blockType = type;
         registerDefaultState(defaultBlockState()
                 .setValue(FramedProperties.GLOWING, false)
                 .setValue(FramedProperties.PROPAGATES_SKYLIGHT, false)
@@ -112,22 +129,9 @@ public class FramedPressurePlateBlock extends PressurePlateBlock implements IFra
     @Override
     protected int getSignalStrength(Level level, BlockPos pos)
     {
-        //noinspection ConstantConditions
-        if (sensitivity == null)
+        if (type == OBSIDIAN)
         {
-            List<Player> players = level.getEntitiesOfClass(Player.class, TOUCH_AABB.move(pos));
-            if (!players.isEmpty())
-            {
-                for(Player player : players)
-                {
-                    if (!player.isIgnoringBlockTriggers())
-                    {
-                        return 15;
-                    }
-                }
-            }
-
-            return 0;
+            return getEntityCount(level, TOUCH_AABB.move(pos), Player.class) > 0 ? 15 : 0;
         }
         return super.getSignalStrength(level, pos);
     }
@@ -141,7 +145,7 @@ public class FramedPressurePlateBlock extends PressurePlateBlock implements IFra
     @Override
     public BlockType getBlockType()
     {
-        return type;
+        return blockType;
     }
 
     @Override
@@ -152,7 +156,7 @@ public class FramedPressurePlateBlock extends PressurePlateBlock implements IFra
 
     protected final Block getCounterpart()
     {
-        return FBContent.byType(WATERLOGGING_SWITCH.get(type));
+        return FBContent.byType(WATERLOGGING_SWITCH.get(blockType));
     }
 
 
@@ -161,11 +165,10 @@ public class FramedPressurePlateBlock extends PressurePlateBlock implements IFra
     {
         return new FramedPressurePlateBlock(
                 BlockType.FRAMED_PRESSURE_PLATE,
-                Sensitivity.EVERYTHING,
+                BlockSetType.OAK,
                 IFramedBlock.createProperties(BlockType.FRAMED_PRESSURE_PLATE)
                         .noCollission()
-                        .strength(0.5F),
-                BlockSetType.OAK
+                        .strength(0.5F)
         );
     }
 
@@ -173,11 +176,10 @@ public class FramedPressurePlateBlock extends PressurePlateBlock implements IFra
     {
         return new FramedWaterloggablePressurePlateBlock(
                 BlockType.FRAMED_WATERLOGGABLE_PRESSURE_PLATE,
-                Sensitivity.EVERYTHING,
+                BlockSetType.OAK,
                 IFramedBlock.createProperties(BlockType.FRAMED_WATERLOGGABLE_PRESSURE_PLATE)
                         .noCollission()
-                        .strength(0.5F),
-                BlockSetType.OAK
+                        .strength(0.5F)
         );
     }
 
@@ -185,12 +187,11 @@ public class FramedPressurePlateBlock extends PressurePlateBlock implements IFra
     {
         return new FramedPressurePlateBlock(
                 BlockType.FRAMED_STONE_PRESSURE_PLATE,
-                Sensitivity.MOBS,
+                BlockSetType.STONE,
                 IFramedBlock.createProperties(BlockType.FRAMED_STONE_PRESSURE_PLATE)
                         .requiresCorrectToolForDrops()
                         .noCollission()
-                        .strength(0.5F),
-                BlockSetType.STONE
+                        .strength(0.5F)
         );
     }
 
@@ -198,12 +199,11 @@ public class FramedPressurePlateBlock extends PressurePlateBlock implements IFra
     {
         return new FramedWaterloggablePressurePlateBlock(
                 BlockType.FRAMED_WATERLOGGABLE_STONE_PRESSURE_PLATE,
-                Sensitivity.MOBS,
+                BlockSetType.STONE,
                 IFramedBlock.createProperties(BlockType.FRAMED_WATERLOGGABLE_STONE_PRESSURE_PLATE)
                         .requiresCorrectToolForDrops()
                         .noCollission()
-                        .strength(0.5F),
-                BlockSetType.STONE
+                        .strength(0.5F)
         );
     }
 
@@ -211,12 +211,11 @@ public class FramedPressurePlateBlock extends PressurePlateBlock implements IFra
     {
         return new FramedPressurePlateBlock(
                 BlockType.FRAMED_OBSIDIAN_PRESSURE_PLATE,
-                null, //Abuse null for player-only sensitivity
+                OBSIDIAN,
                 IFramedBlock.createProperties(BlockType.FRAMED_OBSIDIAN_PRESSURE_PLATE)
                         .requiresCorrectToolForDrops()
                         .noCollission()
-                        .strength(0.5F),
-                BlockSetType.STONE
+                        .strength(0.5F)
         );
     }
 
@@ -224,12 +223,11 @@ public class FramedPressurePlateBlock extends PressurePlateBlock implements IFra
     {
         return new FramedWaterloggablePressurePlateBlock(
                 BlockType.FRAMED_WATERLOGGABLE_OBSIDIAN_PRESSURE_PLATE,
-                null, //Abuse null for player-only sensitivity
+                OBSIDIAN,
                 IFramedBlock.createProperties(BlockType.FRAMED_WATERLOGGABLE_OBSIDIAN_PRESSURE_PLATE)
                         .requiresCorrectToolForDrops()
                         .noCollission()
-                        .strength(0.5F),
-                BlockSetType.STONE
+                        .strength(0.5F)
         );
     }
 }

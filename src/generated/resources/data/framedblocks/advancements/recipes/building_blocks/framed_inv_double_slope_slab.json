@@ -30,6 +30,5 @@
     "recipes": [
       "framedblocks:framed_inv_double_slope_slab"
     ]
-  },
-  "sends_telemetry_event": false
+  }
 }

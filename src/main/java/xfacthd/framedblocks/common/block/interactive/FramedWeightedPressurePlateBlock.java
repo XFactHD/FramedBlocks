@@ -40,9 +40,9 @@ public class FramedWeightedPressurePlateBlock extends WeightedPressurePlateBlock
 
     private final BlockType type;
 
-    protected FramedWeightedPressurePlateBlock(BlockType type, int maxWeight, Properties props, BlockSetType blockSet)
+    protected FramedWeightedPressurePlateBlock(BlockType type, int maxWeight, BlockSetType blockSet, Properties props)
     {
-        super(maxWeight, props, blockSet);
+        super(maxWeight, blockSet, props);
         this.type = type;
         registerDefaultState(defaultBlockState()
                 .setValue(FramedProperties.GLOWING, false)
@@ -152,10 +152,10 @@ public class FramedWeightedPressurePlateBlock extends WeightedPressurePlateBlock
         return new FramedWeightedPressurePlateBlock(
                 BlockType.FRAMED_GOLD_PRESSURE_PLATE,
                 15,
+                BlockSetType.GOLD,
                 IFramedBlock.createProperties(BlockType.FRAMED_GOLD_PRESSURE_PLATE)
                         .noCollission()
-                        .strength(0.5F),
-                BlockSetType.GOLD
+                        .strength(0.5F)
         );
     }
 
@@ -164,10 +164,10 @@ public class FramedWeightedPressurePlateBlock extends WeightedPressurePlateBlock
         return new FramedWaterloggableWeightedPressurePlateBlock(
                 BlockType.FRAMED_WATERLOGGABLE_GOLD_PRESSURE_PLATE,
                 15,
+                BlockSetType.GOLD,
                 IFramedBlock.createProperties(BlockType.FRAMED_WATERLOGGABLE_GOLD_PRESSURE_PLATE)
                         .noCollission()
-                        .strength(0.5F),
-                BlockSetType.GOLD
+                        .strength(0.5F)
         );
     }
 
@@ -176,11 +176,11 @@ public class FramedWeightedPressurePlateBlock extends WeightedPressurePlateBlock
         return new FramedWeightedPressurePlateBlock(
                 BlockType.FRAMED_IRON_PRESSURE_PLATE,
                 150,
+                BlockSetType.IRON,
                 IFramedBlock.createProperties(BlockType.FRAMED_IRON_PRESSURE_PLATE)
                         .requiresCorrectToolForDrops()
                         .noCollission()
-                        .strength(0.5F),
-                BlockSetType.IRON
+                        .strength(0.5F)
         );
     }
 
@@ -189,11 +189,11 @@ public class FramedWeightedPressurePlateBlock extends WeightedPressurePlateBlock
         return new FramedWaterloggableWeightedPressurePlateBlock(
                 BlockType.FRAMED_WATERLOGGABLE_IRON_PRESSURE_PLATE,
                 150,
+                BlockSetType.IRON,
                 IFramedBlock.createProperties(BlockType.FRAMED_WATERLOGGABLE_IRON_PRESSURE_PLATE)
                         .requiresCorrectToolForDrops()
                         .noCollission()
-                        .strength(0.5F),
-                BlockSetType.IRON
+                        .strength(0.5F)
         );
     }
 }

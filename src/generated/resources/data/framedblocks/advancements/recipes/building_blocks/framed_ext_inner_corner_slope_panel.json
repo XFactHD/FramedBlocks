@@ -30,6 +30,5 @@
     "recipes": [
       "framedblocks:framed_ext_inner_corner_slope_panel"
     ]
-  },
-  "sends_telemetry_event": false
+  }
 }

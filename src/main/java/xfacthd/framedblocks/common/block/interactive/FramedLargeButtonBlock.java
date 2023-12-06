@@ -20,9 +20,9 @@ public class FramedLargeButtonBlock extends FramedButtonBlock
     private static final VoxelShape SHAPE_TOP_PRESSED = box(1, 15, 1, 15, 16, 15);
     private static final VoxelShape[] SHAPES_HORIZONTAL = makeHorizontalShapes();
 
-    private FramedLargeButtonBlock(BlockType type, int pressTime, boolean arrowsCanPress, BlockSetType blockSet)
+    private FramedLargeButtonBlock(BlockType type, BlockSetType blockSet, int pressTime)
     {
-        super(type, pressTime, arrowsCanPress, blockSet);
+        super(type, blockSet, pressTime);
     }
 
     @Override
@@ -66,9 +66,8 @@ public class FramedLargeButtonBlock extends FramedButtonBlock
     {
         return new FramedLargeButtonBlock(
                 BlockType.FRAMED_LARGE_BUTTON,
-                30,
-                true,
-                BlockSetType.OAK
+                BlockSetType.OAK,
+                30
         );
     }
 
@@ -76,9 +75,8 @@ public class FramedLargeButtonBlock extends FramedButtonBlock
     {
         return new FramedLargeButtonBlock(
                 BlockType.FRAMED_LARGE_STONE_BUTTON,
-                20,
-                false,
-                BlockSetType.STONE
+                BlockSetType.STONE,
+                20
         );
     }
 }

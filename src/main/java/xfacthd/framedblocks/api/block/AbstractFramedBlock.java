@@ -1,9 +1,8 @@
 package xfacthd.framedblocks.api.block;
 
 import com.google.common.base.Preconditions;
-import it.unimi.dsi.fastutil.objects.Object2BooleanMap;
-import it.unimi.dsi.fastutil.objects.Object2BooleanOpenCustomHashMap;
-import net.minecraft.Util;
+import it.unimi.dsi.fastutil.objects.Reference2BooleanMap;
+import it.unimi.dsi.fastutil.objects.Reference2BooleanOpenHashMap;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.world.InteractionHand;
@@ -37,7 +36,7 @@ public abstract class AbstractFramedBlock extends Block implements IFramedBlock,
     private static final VoxelShape BEACON_BEAM_SHAPE = box(5, 0, 5, 11, 16, 11);
     private final IBlockType blockType;
     private final ShapeProvider shapes;
-    private final Object2BooleanMap<BlockState> beaconBeamOcclusion;
+    private final Reference2BooleanMap<BlockState> beaconBeamOcclusion;
 
     public AbstractFramedBlock(IBlockType blockType, Properties props)
     {
@@ -228,14 +227,14 @@ public abstract class AbstractFramedBlock extends Block implements IFramedBlock,
 
 
 
-    private static Object2BooleanMap<BlockState> computeBeaconBeamOcclusion(ShapeProvider shapes)
+    private static Reference2BooleanMap<BlockState> computeBeaconBeamOcclusion(ShapeProvider shapes)
     {
         if (shapes.isEmpty())
         {
             return null;
         }
 
-        Object2BooleanMap<BlockState> beamColorMasking = new Object2BooleanOpenCustomHashMap<>(Util.identityStrategy());
+        Reference2BooleanMap<BlockState> beamColorMasking = new Reference2BooleanOpenHashMap<>();
 
         shapes.forEach((state, shape) ->
         {

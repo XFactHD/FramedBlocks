@@ -1,7 +1,6 @@
 package xfacthd.framedblocks.common.blockentity.special;
 
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Player;
@@ -10,11 +9,8 @@ import net.minecraft.world.item.crafting.RecipeHolder;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
-import net.neoforged.neoforge.common.capabilities.Capability;
-import net.neoforged.neoforge.common.capabilities.Capabilities;
-import net.neoforged.neoforge.common.util.LazyOptional;
-import net.neoforged.neoforge.energy.IEnergyStorage;
 import net.neoforged.fml.loading.FMLEnvironment;
+import net.neoforged.neoforge.energy.IEnergyStorage;
 import net.neoforged.neoforge.items.IItemHandler;
 import net.neoforged.neoforge.items.ItemStackHandler;
 import net.neoforged.neoforge.items.wrapper.RecipeWrapper;
@@ -25,7 +21,6 @@ import xfacthd.framedblocks.common.menu.FramingSawMenu;
 import xfacthd.framedblocks.common.capability.EntityAwareEnergyStorage;
 import xfacthd.framedblocks.common.capability.ExternalItemHandler;
 
-import javax.annotation.Nullable;
 import java.util.List;
 import java.util.Objects;
 import java.util.function.Consumer;
@@ -35,7 +30,7 @@ public class PoweredFramingSawBlockEntity extends BlockEntity
     public static final int ENERGY_CAPACITY = 5000;
     public static final int ENERGY_MAX_INSERT = 250;
     public static final int ENERGY_CONSUMPTION = 50;
-    private static final boolean INSERT_ENERGY_DEBUG = false;
+    private static final boolean INSERT_ENERGY_DEBUG = true;
     private static final long ACTIVE_TIMEOUT = 40;
     public static final int MAX_PROGRESS = 30;
 
@@ -65,8 +60,6 @@ public class PoweredFramingSawBlockEntity extends BlockEntity
     private final EntityAwareEnergyStorage energyStorage = new EntityAwareEnergyStorage(
             ENERGY_CAPACITY, ENERGY_MAX_INSERT, 0, this
     );
-    private LazyOptional<IItemHandler> lazyItemHandler = LazyOptional.empty();
-    private LazyOptional<IEnergyStorage> lazyEnergyStorage = LazyOptional.empty();
     private FramingSawRecipeCache cache = null;
     private ResourceLocation selectedRecipeId = null;
     private RecipeHolder<FramingSawRecipe> selectedRecipe = null;
@@ -248,6 +241,16 @@ public class PoweredFramingSawBlockEntity extends BlockEntity
         return itemHandler;
     }
 
+    public IItemHandler getExternalItemHandler()
+    {
+        return externalItemHandler;
+    }
+
+    public IEnergyStorage getEnergyStorage()
+    {
+        return energyStorage;
+    }
+
     public int getEnergy()
     {
         return energyStorage.getEnergyStored();
@@ -265,29 +268,10 @@ public class PoweredFramingSawBlockEntity extends BlockEntity
     }
 
     @Override
-    public <T> LazyOptional<T> getCapability(Capability<T> cap, @Nullable Direction side)
-    {
-        if (side != Direction.UP)
-        {
-            if (cap == Capabilities.ITEM_HANDLER)
-            {
-                return lazyItemHandler.cast();
-            }
-            if (cap == Capabilities.ENERGY)
-            {
-                return lazyEnergyStorage.cast();
-            }
-        }
-        return super.getCapability(cap, side);
-    }
-
-    @Override
     @SuppressWarnings("unchecked")
     public void onLoad()
     {
         super.onLoad();
-        lazyItemHandler = LazyOptional.of(() -> externalItemHandler);
-        lazyEnergyStorage = LazyOptional.of(() -> energyStorage);
         //noinspection ConstantConditions
         cache = FramingSawRecipeCache.get(level.isClientSide());
         if (selectedRecipeId != null && !level.isClientSide())
@@ -298,14 +282,6 @@ public class PoweredFramingSawBlockEntity extends BlockEntity
                     .orElse(null);
             selectRecipe(recipe);
         }
-    }
-
-    @Override
-    public void invalidateCaps()
-    {
-        super.invalidateCaps();
-        lazyItemHandler.invalidate();
-        lazyEnergyStorage.invalidate();
     }
 
     public boolean isUsableByPlayer(Player player)

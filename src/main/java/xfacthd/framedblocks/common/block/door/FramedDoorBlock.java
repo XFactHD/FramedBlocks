@@ -31,9 +31,9 @@ public class FramedDoorBlock extends DoorBlock implements IFramedBlock
 {
     private final BlockType type;
 
-    private FramedDoorBlock(BlockType type, Properties props, BlockSetType blockSet)
+    private FramedDoorBlock(BlockType type, BlockSetType blockSet, Properties props)
     {
-        super(props, blockSet);
+        super(blockSet, props);
         this.type = type;
         registerDefaultState(defaultBlockState()
                 .setValue(FramedProperties.SOLID, false)
@@ -149,8 +149,8 @@ public class FramedDoorBlock extends DoorBlock implements IFramedBlock
     {
         return new FramedDoorBlock(
                 BlockType.FRAMED_DOOR,
-                IFramedBlock.createProperties(BlockType.FRAMED_DOOR),
-                BlockSetType.OAK
+                BlockSetType.OAK,
+                IFramedBlock.createProperties(BlockType.FRAMED_DOOR)
         );
     }
 
@@ -158,9 +158,9 @@ public class FramedDoorBlock extends DoorBlock implements IFramedBlock
     {
         return new FramedDoorBlock(
                 BlockType.FRAMED_IRON_DOOR,
+                BlockSetType.IRON,
                 IFramedBlock.createProperties(BlockType.FRAMED_IRON_DOOR)
-                        .requiresCorrectToolForDrops(),
-                BlockSetType.IRON
+                        .requiresCorrectToolForDrops()
         );
     }
 }

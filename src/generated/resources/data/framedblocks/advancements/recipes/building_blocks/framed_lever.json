@@ -30,6 +30,5 @@
     "recipes": [
       "framedblocks:framed_lever"
     ]
-  },
-  "sends_telemetry_event": false
+  }
 }

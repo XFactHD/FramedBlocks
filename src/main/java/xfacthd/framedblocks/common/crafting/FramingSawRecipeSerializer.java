@@ -17,7 +17,7 @@ public final class FramingSawRecipeSerializer implements RecipeSerializer<Framin
                     FramingSawRecipeSerializer::verifyAndMapAdditivesDecode,
                     FramingSawRecipeSerializer::verifyAndMapAdditivesEncode
             ).forGetter(FramingSawRecipe::getAdditives),
-            CraftingRecipeCodecs.ITEMSTACK_OBJECT_CODEC.fieldOf("result").forGetter(FramingSawRecipe::getResult),
+            ItemStack.ITEM_WITH_COUNT_CODEC.fieldOf("result").forGetter(FramingSawRecipe::getResult),
             Codec.BOOL.optionalFieldOf("disabled").xmap(
                     opt -> opt.orElse(false), flag -> flag ? Optional.of(true) : Optional.empty()
             ).forGetter(FramingSawRecipe::isDisabled)

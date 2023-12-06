@@ -30,6 +30,5 @@
     "recipes": [
       "framedblocks:framed_stone_pressure_plate"
     ]
-  },
-  "sends_telemetry_event": false
+  }
 }

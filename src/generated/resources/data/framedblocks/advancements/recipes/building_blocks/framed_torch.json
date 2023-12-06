@@ -30,6 +30,5 @@
     "recipes": [
       "framedblocks:framed_torch"
     ]
-  },
-  "sends_telemetry_event": false
+  }
 }

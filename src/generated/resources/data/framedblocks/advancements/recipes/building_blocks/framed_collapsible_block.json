@@ -30,6 +30,5 @@
     "recipes": [
       "framedblocks:framed_collapsible_block"
     ]
-  },
-  "sends_telemetry_event": false
+  }
 }

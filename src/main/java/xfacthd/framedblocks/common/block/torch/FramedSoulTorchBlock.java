@@ -12,14 +12,13 @@ public class FramedSoulTorchBlock extends FramedTorchBlock
 {
     public FramedSoulTorchBlock()
     {
-        super(Properties.of()
+        super(ParticleTypes.SOUL_FIRE_FLAME, Properties.of()
                 .pushReaction(PushReaction.DESTROY)
                 .noCollission()
                 .strength(0.5F)
                 .sound(SoundType.WOOD)
                 .lightLevel(state -> 14)
-                .noOcclusion(),
-                ParticleTypes.SOUL_FIRE_FLAME
+                .noOcclusion()
         );
     }
 

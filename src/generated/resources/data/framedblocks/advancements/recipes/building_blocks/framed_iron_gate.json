@@ -30,6 +30,5 @@
     "recipes": [
       "framedblocks:framed_iron_gate"
     ]
-  },
-  "sends_telemetry_event": false
+  }
 }

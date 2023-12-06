@@ -30,6 +30,5 @@
     "recipes": [
       "framedblocks:framed_one_way_window"
     ]
-  },
-  "sends_telemetry_event": false
+  }
 }
