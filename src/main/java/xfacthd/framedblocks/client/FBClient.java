@@ -100,11 +100,6 @@ public final class FBClient
         forgeBus.addListener(EventPriority.HIGH, ClientEventHandler::onRecipesUpdated);
         forgeBus.addListener(ClientEventHandler::onClientDisconnect);
         forgeBus.addListener(EventPriority.LOW, true, CollapsibleBlockIndicatorRenderer::onRenderBlockHighlight);
-
-        if (!FMLEnvironment.production)
-        {
-            forgeBus.addListener(BlockEntityRenderBoundsDebugRenderer::onRenderLevelStage);
-        }
     }
 
     @SubscribeEvent

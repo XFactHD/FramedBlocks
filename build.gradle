@@ -42,7 +42,6 @@ runs {
         workingDirectory project.file('run')
 
         //systemProperty 'framedblocks.test.disable_model_quad_cache', 'true'
-        //systemProperty 'framedblocks.test.enable_ber_render_bounds_debug_renderer', 'true'
         //systemProperty 'framedblocks.test.enable_double_block_part_hit_debug_renderer', 'true'
     }
 
