@@ -3,7 +3,7 @@ plugins {
     id 'eclipse'
     id 'idea'
     id 'maven-publish'
-    id 'net.neoforged.gradle.userdev' version '7.0.57'
+    id 'net.neoforged.gradle.userdev' version '7.0.60'
 }
 
 version = mod_version
@@ -150,7 +150,7 @@ dependencies {
 
     //compileOnly("curse.maven:buildinggadgets-298187:3829297")
 
-    //runtimeOnly("xfacthd.contex:ConnectedTextures:${contex_version}:slim") { transitive = false }
+    runtimeOnly("xfacthd.contex:ConnectedTextures:${contex_version}:slim") { transitive = false }
 
     compileOnly("earth.terrarium.athena:athena-neoforge-${athena_mc_version}:${athena_version}")
     //runtimeOnly("com.teamresourceful.resourcefullib:resourcefullib-neoforge-${resful_lib_mc_version}:${resful_lib_version}")
@@ -175,7 +175,7 @@ dependencies {
     //compileOnly("dev.emi:emi-forge:${emi_version}+${emi_mc_version}:api")
     //runtimeOnly("dev.emi:emi-forge:${emi_version}+${emi_mc_version}")
 
-    //compileOnly("curse.maven:modernfix-790626:4771907")
+    implementation("curse.maven:modernfix-790626:4930959")
     //runtimeOnly("org.embeddedt:embeddium-${embeddium_mc_version}:${embeddium_version}")
     //runtimeOnly("curse.maven:oculus-581495:4578741")
     //runtimeOnly("curse.maven:starlight-forge-526854:4631193")

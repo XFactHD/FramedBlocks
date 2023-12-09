@@ -8,6 +8,7 @@ import xfacthd.framedblocks.common.compat.ctm.CtmCompat;
 import xfacthd.framedblocks.common.compat.emi.EmiCompat;
 import xfacthd.framedblocks.common.compat.flywheel.FlywheelCompat;
 import xfacthd.framedblocks.common.compat.jei.JeiCompat;
+import xfacthd.framedblocks.common.compat.modernfix.ModernFixCompat;
 import xfacthd.framedblocks.common.compat.nocubes.NoCubesCompat;
 import xfacthd.framedblocks.common.compat.rei.ReiCompat;
 import xfacthd.framedblocks.common.compat.starlight.StarlightCompat;
@@ -26,6 +27,7 @@ public final class CompatHandler
         EmiCompat.init();
         FlywheelCompat.init();
         JeiCompat.init();
+        ModernFixCompat.init();
         NoCubesCompat.init();
         ReiCompat.init();
         StarlightCompat.init();
