@@ -156,20 +156,21 @@ public class FramedFenceGateGeometry implements Geometry
             QuadModifier topMod = mod.derive()
                     .apply(Modifiers.cutSideUpDown(true, 4F/16F + yOff));
 
-            topMod.export(quadMap.get(null));
+            topMod.derive().export(quadMap.get(null));
             topMod.apply(Modifiers.setPosition(2F/16F))
                     .export(quadMap.get(null));
 
             QuadModifier botMod = mod.derive()
                     .apply(Modifiers.cutSideUpDown(false, 9F/16F - yOff));
 
-            botMod.export(quadMap.get(null));
+            botMod.derive().export(quadMap.get(null));
             botMod.apply(Modifiers.setPosition(2F/16F))
                     .export(quadMap.get(null));
 
             mod.apply(Modifiers.cutSideUpDown(false, 12F/16F - yOff))
                     .apply(Modifiers.cutSideUpDown(true, 7F/16F + yOff))
                     .apply(Modifiers.cutSideLeftRight(dir.getOpposite(), 3F/16F))
+                    .derive()
                     .export(quadMap.get(null));
 
             mod.apply(Modifiers.setPosition(2F/16F))
@@ -189,7 +190,7 @@ public class FramedFenceGateGeometry implements Geometry
                     .apply(Modifiers.cutTopBottom(dir.getClockWise(), 2F/16F))
                     .apply(Modifiers.setPosition(heightOuter));
 
-            leftMod.export(quadMap.get(null));
+            leftMod.derive().export(quadMap.get(null));
             leftMod.apply(Modifiers.cutTopBottom(dir, 13F/16F))
                     .apply(Modifiers.setPosition(heightInner))
                     .export(quadMap.get(null));
@@ -198,7 +199,7 @@ public class FramedFenceGateGeometry implements Geometry
                     .apply(Modifiers.cutTopBottom(dir.getCounterClockWise(), 2F/16F))
                     .apply(Modifiers.setPosition(heightOuter));
 
-            rightMod.export(quadMap.get(null));
+            rightMod.derive().export(quadMap.get(null));
             rightMod.apply(Modifiers.cutTopBottom(dir, 13F/16F))
                     .apply(Modifiers.setPosition(heightInner))
                     .export(quadMap.get(null));
