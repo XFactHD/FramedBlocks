@@ -59,7 +59,6 @@ public final class ModelWrappingManager
         );
     }
 
-    // FIXME: this sometimes gets non-MRL locations, which can't work :screm:
     public static BakedModel handle(ResourceLocation id, BakedModel model, ModelAccessor modelAccessor)
     {
         if (id instanceof ModelResourceLocation modelId)
