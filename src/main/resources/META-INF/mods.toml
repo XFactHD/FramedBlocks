@@ -22,112 +22,112 @@ license="LGPL v3"
 
 [[dependencies.framedblocks]]
     modId="neoforge"
-    mandatory=true
+    type="required"
     versionRange="${neoforge_version_range}"
     ordering="NONE"
     side="BOTH"
 
 [[dependencies.framedblocks]]
     modId="minecraft"
-    mandatory=true
+    type="required"
     versionRange="${minecraft_version_range}"
     ordering="NONE"
     side="BOTH"
 
 [[dependencies.framedblocks]]
     modId="athena"
-    mandatory=false
+    type="optional"
     versionRange="[${athena_version},)"
     ordering="NONE"
     side="CLIENT"
 
 [[dependencies.framedblocks]]
     modId="atlasviewer"
-    mandatory=false
+    type="optional"
     versionRange="[${atlasviewer_version},)"
     ordering="NONE"
     side="CLIENT"
 
 [[dependencies.framedblocks]]
     modId="buildinggadgets"
-    mandatory=false
+    type="optional"
     versionRange="[${buildinggadgets_version},)"
     ordering="AFTER"
     side="BOTH"
 
 [[dependencies.framedblocks]]
     modId="contex"
-    mandatory=false
+    type="optional"
     versionRange="[${contex_version},)"
     ordering="NONE"
     side="CLIENT"
 
 [[dependencies.framedblocks]]
     modId="ctm"
-    mandatory=false
+    type="optional"
     versionRange="[${ctm_version},)"
     ordering="AFTER"
     side="CLIENT"
 
 [[dependencies.framedblocks]]
     modId="create"
-    mandatory=false
+    type="optional"
     versionRange="[${create_version},)"
     ordering="AFTER"
     side="CLIENT"
 
 [[dependencies.framedblocks]]
     modId="diagonalfences"
-    mandatory=false
+    type="optional"
     versionRange="[${diag_fences_version},)"
     ordering="NONE"
     side="BOTH"
 
 [[dependencies.framedblocks]]
     modId="diagonalwindows"
-    mandatory=false
+    type="optional"
     versionRange="[${diag_windows_version},)"
     ordering="NONE"
     side="BOTH"
 
 [[dependencies.framedblocks]]
     modId="emi"
-    mandatory=false
+    type="optional"
     versionRange="[${emi_version},)"
     ordering="NONE"
     side="BOTH"
 
 [[dependencies.framedblocks]]
     modId="jei"
-    mandatory=false
+    type="optional"
     versionRange="[${jei_version},)"
     ordering="NONE"
     side="BOTH"
 
 [[dependencies.framedblocks]]
     modId="modernfix"
-    mandatory=false
+    type="optional"
     versionRange="[${modernfix_version},)"
     ordering="NONE"
     side="CLIENT"
 
 [[dependencies.framedblocks]]
     modId="nocubes"
-    mandatory=false
+    type="optional"
     versionRange="[${nocubes_version},)"
     ordering="NONE"
     side="CLIENT"
 
 [[dependencies.framedblocks]]
     modId="rei"
-    mandatory=false
+    type="optional"
     versionRange="[${rei_version},)"
     ordering="NONE"
     side="BOTH"
 
 [[dependencies.framedblocks]]
     modId="supplementaries"
-    mandatory=false
+    type="optional"
     versionRange="[${supplementaries_version},)"
     ordering="NONE"
     side="BOTH"
