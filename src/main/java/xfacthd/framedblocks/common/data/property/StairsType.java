@@ -7,8 +7,12 @@ import java.util.Locale;
 public enum StairsType implements StringRepresentable
 {
     VERTICAL,
-    TOP_CORNER,
-    BOTTOM_CORNER;
+    TOP_FWD,
+    TOP_CCW,
+    TOP_BOTH,
+    BOTTOM_FWD,
+    BOTTOM_CCW,
+    BOTTOM_BOTH;
 
     private final String name = toString().toLowerCase(Locale.ENGLISH);
 
@@ -20,11 +24,21 @@ public enum StairsType implements StringRepresentable
 
     public boolean isTop()
     {
-        return this == TOP_CORNER;
+        return this == TOP_FWD || this == TOP_CCW || this == TOP_BOTH;
     }
 
     public boolean isBottom()
     {
-        return this == BOTTOM_CORNER;
+        return this == BOTTOM_FWD || this == BOTTOM_CCW || this == BOTTOM_BOTH;
+    }
+
+    public boolean isForward()
+    {
+        return this == TOP_FWD || this == BOTTOM_FWD || this == TOP_BOTH || this == BOTTOM_BOTH;
+    }
+
+    public boolean isCounterClockwise()
+    {
+        return this == TOP_CCW || this == BOTTOM_CCW || this == TOP_BOTH || this == BOTTOM_BOTH;
     }
 }

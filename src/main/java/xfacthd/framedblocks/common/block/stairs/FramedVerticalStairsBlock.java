@@ -58,7 +58,7 @@ public class FramedVerticalStairsBlock extends FramedBlock
         return super.updateShape(state, facing, facingState, level, pos, facingPos);
     }
 
-    private BlockState getStateFromContext(BlockState state, LevelAccessor level, BlockPos pos)
+    private static BlockState getStateFromContext(BlockState state, LevelAccessor level, BlockPos pos)
     {
         if (state.getValue(FramedProperties.STATE_LOCKED))
         {
@@ -76,15 +76,13 @@ public class FramedVerticalStairsBlock extends FramedBlock
         }
         else
         {
-            StairsType type;
-
-            boolean topCorner = false;
-            boolean bottomCorner = false;
+            boolean topCornerFront = false;
+            boolean bottomCornerFront = false;
 
             if (front.getBlock() instanceof StairBlock && front.getValue(BlockStateProperties.HORIZONTAL_FACING) == dir.getCounterClockWise())
             {
-                topCorner = front.getValue(BlockStateProperties.HALF) == Half.BOTTOM;
-                bottomCorner = front.getValue(BlockStateProperties.HALF) == Half.TOP;
+                topCornerFront = front.getValue(BlockStateProperties.HALF) == Half.BOTTOM;
+                bottomCornerFront = front.getValue(BlockStateProperties.HALF) == Half.TOP;
             }
             else if (front.getBlock() instanceof FramedHalfStairsBlock && front.getValue(FramedProperties.FACING_HOR) == dir.getCounterClockWise())
             {
@@ -92,15 +90,18 @@ public class FramedVerticalStairsBlock extends FramedBlock
 
                 if (!front.getValue(PropertyHolder.RIGHT))
                 {
-                    topCorner = !top;
-                    bottomCorner = top;
+                    topCornerFront = !top;
+                    bottomCornerFront = top;
                 }
             }
 
+            boolean topCornerLeft = false;
+            boolean bottomCornerLeft = false;
+
             if (left.getBlock() instanceof StairBlock && left.getValue(BlockStateProperties.HORIZONTAL_FACING) == dir)
             {
-                topCorner |= left.getValue(BlockStateProperties.HALF) == Half.BOTTOM;
-                bottomCorner |= left.getValue(BlockStateProperties.HALF) == Half.TOP;
+                topCornerLeft = left.getValue(BlockStateProperties.HALF) == Half.BOTTOM;
+                bottomCornerLeft = left.getValue(BlockStateProperties.HALF) == Half.TOP;
             }
             else if (left.getBlock() instanceof FramedHalfStairsBlock && left.getValue(FramedProperties.FACING_HOR) == dir)
             {
@@ -108,17 +109,45 @@ public class FramedVerticalStairsBlock extends FramedBlock
 
                 if (left.getValue(PropertyHolder.RIGHT))
                 {
-                    topCorner = !top;
-                    bottomCorner = top;
+                    topCornerLeft = !top;
+                    bottomCornerLeft = top;
                 }
             }
 
             BlockState above = level.getBlockState(pos.above());
             BlockState below = level.getBlockState(pos.below());
 
-            if (topCorner && !above.is(this)) { type = StairsType.TOP_CORNER; }
-            else if (bottomCorner && !below.is(this)) { type = StairsType.BOTTOM_CORNER; }
-            else { type = StairsType.VERTICAL; }
+            StairsType type = StairsType.VERTICAL;
+            if ((topCornerFront || topCornerLeft) && !above.is(state.getBlock()))
+            {
+                if (!topCornerLeft)
+                {
+                    type = StairsType.TOP_FWD;
+                }
+                else if (!topCornerFront)
+                {
+                    type = StairsType.TOP_CCW;
+                }
+                else
+                {
+                    type = StairsType.TOP_BOTH;
+                }
+            }
+            else if ((bottomCornerFront || bottomCornerLeft) && !below.is(state.getBlock()))
+            {
+                if (!bottomCornerLeft)
+                {
+                    type = StairsType.BOTTOM_FWD;
+                }
+                else if (!bottomCornerFront)
+                {
+                    type = StairsType.BOTTOM_CCW;
+                }
+                else
+                {
+                    type = StairsType.BOTTOM_BOTH;
+                }
+            }
 
             return state.setValue(PropertyHolder.STAIRS_TYPE, type);
         }
@@ -155,21 +184,45 @@ public class FramedVerticalStairsBlock extends FramedBlock
                 Block.box(8, 0, 0, 16, 16, 8)
         );
 
-        VoxelShape topCornerShape = ShapeUtils.orUnoptimized(
+        VoxelShape topFwdShape = ShapeUtils.orUnoptimized(
+                Block.box(0, 0, 0, 8, 16, 16),
+                Block.box(8, 0, 0, 16, 8, 8)
+        );
+
+        VoxelShape topCcwShape = ShapeUtils.orUnoptimized(
+                Block.box(0, 0, 0, 16, 16, 8),
+                Block.box(0, 0, 8, 8, 8, 16)
+        );
+
+        VoxelShape topBothShape = ShapeUtils.orUnoptimized(
                 Block.box(8, 0, 8, 16, 16, 16),
                 Block.box(8, 0, 0, 16, 8, 8),
                 Block.box(0, 0, 8, 8, 8, 16)
         );
 
-        VoxelShape bottomCornerShape = ShapeUtils.orUnoptimized(
+        VoxelShape bottomFwdShape = ShapeUtils.orUnoptimized(
+                Block.box(0, 0, 0, 8, 16, 16),
+                Block.box(8, 8, 0, 16, 16, 8)
+        );
+
+        VoxelShape bottomCcwShape = ShapeUtils.orUnoptimized(
+                Block.box(0, 0, 0, 16, 16, 8),
+                Block.box(0, 8, 8, 8, 16, 16)
+        );
+
+        VoxelShape bottomBothShape = ShapeUtils.orUnoptimized(
                 Block.box(8, 0, 8, 16, 16, 16),
                 Block.box(8, 8, 0, 16, 16, 8),
                 Block.box(0, 8, 8, 8, 16, 16)
         );
 
         ShapeUtils.makeHorizontalRotations(vertShape, Direction.SOUTH, map, StairsType.VERTICAL, ShapeKey::new);
-        ShapeUtils.makeHorizontalRotations(topCornerShape, Direction.SOUTH, map, StairsType.TOP_CORNER, ShapeKey::new);
-        ShapeUtils.makeHorizontalRotations(bottomCornerShape, Direction.SOUTH, map, StairsType.BOTTOM_CORNER, ShapeKey::new);
+        ShapeUtils.makeHorizontalRotations(topFwdShape, Direction.NORTH, map, StairsType.TOP_FWD, ShapeKey::new);
+        ShapeUtils.makeHorizontalRotations(topCcwShape, Direction.NORTH, map, StairsType.TOP_CCW, ShapeKey::new);
+        ShapeUtils.makeHorizontalRotations(topBothShape, Direction.SOUTH, map, StairsType.TOP_BOTH, ShapeKey::new);
+        ShapeUtils.makeHorizontalRotations(bottomFwdShape, Direction.NORTH, map, StairsType.BOTTOM_FWD, ShapeKey::new);
+        ShapeUtils.makeHorizontalRotations(bottomCcwShape, Direction.NORTH, map, StairsType.BOTTOM_CCW, ShapeKey::new);
+        ShapeUtils.makeHorizontalRotations(bottomBothShape, Direction.SOUTH, map, StairsType.BOTTOM_BOTH, ShapeKey::new);
     });
 
     public static ShapeProvider generateShapes(ImmutableList<BlockState> states)

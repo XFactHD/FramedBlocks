@@ -15,29 +15,43 @@ public final class VerticalStairsConnectionPredicate implements ConnectionPredic
     {
         Direction facing = state.getValue(FramedProperties.FACING_HOR);
         StairsType type = state.getValue(PropertyHolder.STAIRS_TYPE);
-        boolean topEdge = type != StairsType.TOP_CORNER;
-        boolean botEdge = type != StairsType.BOTTOM_CORNER;
-        boolean vert = topEdge && botEdge;
 
-        if ((topEdge && side == Direction.UP) || (botEdge && side == Direction.DOWN))
+        boolean top = type.isTop();
+        boolean bottom = type.isBottom();
+        boolean fwd = type.isForward();
+        boolean ccw = type.isCounterClockwise();
+
+        if (side == facing)
         {
-            return edge == facing || edge == facing.getCounterClockWise();
-        }
-        else if (side == facing)
-        {
-            if (edge == facing.getCounterClockWise() || (vert && edge == facing.getClockWise()))
+            if (!fwd)
             {
                 return true;
             }
-            return (topEdge && edge == Direction.UP) || (botEdge && edge == Direction.DOWN);
+            return edge != facing.getClockWise() && ((top && edge != Direction.UP) || (bottom && edge != Direction.DOWN));
         }
         else if (side == facing.getCounterClockWise())
         {
-            if (edge == facing || (vert && edge == facing.getOpposite()))
+            if (!ccw)
             {
                 return true;
             }
-            return (topEdge && edge == Direction.UP) || (botEdge && edge == Direction.DOWN);
+            return edge != facing.getOpposite() && ((top && edge != Direction.UP) || (bottom && edge != Direction.DOWN));
+        }
+        else if (side == facing.getOpposite())
+        {
+            return !ccw && edge == facing.getCounterClockWise();
+        }
+        else if (side == facing.getClockWise())
+        {
+            return !fwd && edge == facing;
+        }
+        else if (side == Direction.UP)
+        {
+            return !top || (!fwd && edge == facing) || (!ccw && edge == facing.getCounterClockWise());
+        }
+        else if (side == Direction.DOWN)
+        {
+            return !bottom || (!fwd && edge == facing) || (!ccw && edge == facing.getCounterClockWise());
         }
         return false;
     }
@@ -47,40 +61,43 @@ public final class VerticalStairsConnectionPredicate implements ConnectionPredic
     {
         Direction facing = state.getValue(FramedProperties.FACING_HOR);
         StairsType type = state.getValue(PropertyHolder.STAIRS_TYPE);
-        boolean topEdge = type != StairsType.TOP_CORNER;
-        boolean botEdge = type != StairsType.BOTTOM_CORNER;
 
-        if (side == Direction.UP)
+        boolean top = type.isTop();
+        boolean bottom = type.isBottom();
+        boolean fwd = type.isForward();
+        boolean ccw = type.isCounterClockwise();
+
+        if (side == facing && fwd)
         {
-            return !topEdge || edge == facing.getOpposite() || edge == facing.getClockWise();
+            return edge == facing.getClockWise() || (top && edge == Direction.UP) || (bottom && edge == Direction.DOWN);
         }
-        else if (side == Direction.DOWN)
+        else if (side == facing.getCounterClockWise() && ccw)
         {
-            return !botEdge || edge == facing.getOpposite() || edge == facing.getClockWise();
-        }
-        else if (side == facing && type != StairsType.VERTICAL)
-        {
-            return edge == facing.getClockWise() || (!topEdge && edge == Direction.UP) || (!botEdge && edge == Direction.DOWN);
-        }
-        else if (side == facing.getCounterClockWise() && type != StairsType.VERTICAL)
-        {
-            return edge == facing.getOpposite() || (!topEdge && edge == Direction.UP) || (!botEdge && edge == Direction.DOWN);
+            return edge == facing.getOpposite() || (top && edge == Direction.UP) || (bottom && edge == Direction.DOWN);
         }
         else if (side == facing.getOpposite())
         {
-            if ((topEdge && edge == Direction.UP) || (botEdge && edge == Direction.DOWN))
-            {
-                return true;
-            }
-            return type != StairsType.VERTICAL || edge == facing.getClockWise();
+            return ccw || edge != facing.getCounterClockWise();
         }
         else if (side == facing.getClockWise())
         {
-            if ((topEdge && edge == Direction.UP) || (botEdge && edge == Direction.DOWN))
+            return fwd || edge != facing;
+        }
+        else if (side == Direction.UP)
+        {
+            if (edge == facing.getOpposite() || edge == facing.getClockWise())
             {
                 return true;
             }
-            return type != StairsType.VERTICAL || edge == facing.getOpposite();
+            return top && ((fwd && edge == facing) || (ccw && edge == facing.getCounterClockWise()));
+        }
+        else if (side == Direction.DOWN)
+        {
+            if (edge == facing.getOpposite() || edge == facing.getClockWise())
+            {
+                return true;
+            }
+            return bottom && ((fwd && edge == facing) || (ccw && edge == facing.getCounterClockWise()));
         }
         return false;
     }

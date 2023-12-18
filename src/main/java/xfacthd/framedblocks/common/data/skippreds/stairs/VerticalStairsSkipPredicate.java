@@ -934,37 +934,68 @@ public final class VerticalStairsSkipPredicate implements SideSkipPredicate
 
     public static TriangleDir getStairDir(Direction dir, StairsType type, Direction side)
     {
-        if ((side == Direction.DOWN && type != StairsType.BOTTOM_CORNER) || (side == Direction.UP && type != StairsType.TOP_CORNER))
+        if (side == Direction.DOWN)
         {
-            return TriangleDir.fromDirections(dir, dir.getCounterClockWise());
+            if (!type.isBottom())
+            {
+                return TriangleDir.fromDirections(dir, dir.getCounterClockWise());
+            }
         }
-        if (side == dir && type != StairsType.VERTICAL)
+        else if (side == Direction.UP)
         {
-            Direction dirTwo = type == StairsType.TOP_CORNER ? Direction.DOWN : Direction.UP;
-            return TriangleDir.fromDirections(dir.getCounterClockWise(), dirTwo);
+            if (!type.isTop())
+            {
+                return TriangleDir.fromDirections(dir, dir.getCounterClockWise());
+            }
         }
-        if (side == dir.getCounterClockWise() && type != StairsType.VERTICAL)
+        else if (side == dir && type != StairsType.VERTICAL)
         {
-            Direction dirTwo = type == StairsType.TOP_CORNER ? Direction.DOWN : Direction.UP;
-            return TriangleDir.fromDirections(dir, dirTwo);
+            if (type.isForward())
+            {
+                Direction dirTwo = type.isTop() ? Direction.DOWN : Direction.UP;
+                return TriangleDir.fromDirections(dir.getCounterClockWise(), dirTwo);
+            }
+        }
+        else if (side == dir.getCounterClockWise())
+        {
+            if (type.isCounterClockwise())
+            {
+                Direction dirTwo = type.isTop() ? Direction.DOWN : Direction.UP;
+                return TriangleDir.fromDirections(dir, dirTwo);
+            }
         }
         return TriangleDir.NULL;
     }
 
     public static HalfDir getHalfDir(Direction dir, StairsType type, Direction side)
     {
-        if (type != StairsType.VERTICAL)
-        {
-            return HalfDir.NULL;
-        }
-
         if (side == dir.getClockWise())
         {
-            return HalfDir.fromDirections(side, dir);
+            if (!type.isForward())
+            {
+                return HalfDir.fromDirections(side, dir);
+            }
         }
-        if (side == dir.getOpposite())
+        else if (side == dir.getOpposite())
         {
-            return HalfDir.fromDirections(side, dir.getCounterClockWise());
+            if (!type.isCounterClockwise())
+            {
+                return HalfDir.fromDirections(side, dir.getCounterClockWise());
+            }
+        }
+        else if (side == Direction.UP)
+        {
+            if (type.isTop())
+            {
+                return HalfDir.fromDirections(side, type.isForward() ? dir.getCounterClockWise() : dir);
+            }
+        }
+        else if (side == Direction.DOWN)
+        {
+            if (type.isBottom())
+            {
+                return HalfDir.fromDirections(side, type.isForward() ? dir.getCounterClockWise() : dir);
+            }
         }
         return HalfDir.NULL;
     }
@@ -976,18 +1007,27 @@ public final class VerticalStairsSkipPredicate implements SideSkipPredicate
             return CornerDir.NULL;
         }
 
-        Direction dirTwo = type == StairsType.TOP_CORNER ? Direction.DOWN : Direction.UP;
+        Direction dirTwo = type.isTop() ? Direction.DOWN : Direction.UP;
         if (side == dirTwo.getOpposite())
         {
-            return CornerDir.fromDirections(side, dir, dir.getCounterClockWise());
+            if (type.isForward() && type.isCounterClockwise())
+            {
+                return CornerDir.fromDirections(side, dir, dir.getCounterClockWise());
+            }
         }
-        if (side == dir.getOpposite())
+        else if (side == dir.getOpposite())
         {
-            return CornerDir.fromDirections(side, dir.getCounterClockWise(), dirTwo);
+            if (type.isCounterClockwise())
+            {
+                return CornerDir.fromDirections(side, dir.getCounterClockWise(), dirTwo);
+            }
         }
-        if (side == dir.getClockWise())
+        else if (side == dir.getClockWise())
         {
-            return CornerDir.fromDirections(side, dir, dirTwo);
+            if (type.isForward())
+            {
+                return CornerDir.fromDirections(side, dir, dirTwo);
+            }
         }
         return CornerDir.NULL;
     }

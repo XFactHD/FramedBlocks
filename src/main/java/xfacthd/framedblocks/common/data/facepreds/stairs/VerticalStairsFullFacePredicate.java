@@ -13,10 +13,14 @@ public final class VerticalStairsFullFacePredicate implements FullFacePredicate
     public boolean test(BlockState state, Direction side)
     {
         StairsType type = state.getValue(PropertyHolder.STAIRS_TYPE);
-        if (type == StairsType.VERTICAL)
+        Direction dir = state.getValue(FramedProperties.FACING_HOR);
+        if (side == dir)
         {
-            Direction dir = state.getValue(FramedProperties.FACING_HOR);
-            return side == dir || side == dir.getCounterClockWise();
+            return !type.isForward();
+        }
+        else if (side == dir.getCounterClockWise())
+        {
+            return !type.isCounterClockwise();
         }
         return false;
     }

@@ -13,12 +13,21 @@ import xfacthd.framedblocks.common.data.property.StairsType;
 
 public class FramedVerticalStairsGeometry implements Geometry
 {
-    private final StairsType type;
+    private final boolean vertical;
+    private final boolean top;
+    private final boolean bottom;
+    private final boolean forward;
+    private final boolean counterClockWise;
     private final Direction dir;
 
     public FramedVerticalStairsGeometry(GeometryFactory.Context ctx)
     {
-        this.type = ctx.state().getValue(PropertyHolder.STAIRS_TYPE);
+        StairsType type = ctx.state().getValue(PropertyHolder.STAIRS_TYPE);
+        this.vertical = type == StairsType.VERTICAL;
+        this.top = type.isTop();
+        this.bottom = type.isBottom();
+        this.forward = type.isForward();
+        this.counterClockWise = type.isCounterClockwise();
         this.dir = ctx.state().getValue(FramedProperties.FACING_HOR);
     }
 
@@ -26,7 +35,7 @@ public class FramedVerticalStairsGeometry implements Geometry
     public void transformQuad(QuadMap quadMap, BakedQuad quad)
     {
         Direction quadDir = quad.getDirection();
-        if (type == StairsType.VERTICAL && (quadDir == dir.getOpposite() || quadDir == dir.getClockWise()))
+        if (vertical && (quadDir == dir.getOpposite() || quadDir == dir.getClockWise()))
         {
             Direction cutDir = quadDir == dir.getOpposite() ? dir.getClockWise() : dir.getOpposite();
 
@@ -40,7 +49,7 @@ public class FramedVerticalStairsGeometry implements Geometry
                     .export(quadMap.get(null));
         }
 
-        if ((quadDir == Direction.UP && !type.isTop()) || (quadDir == Direction.DOWN && !type.isBottom()))
+        if ((quadDir == Direction.UP && !top) || (quadDir == Direction.DOWN && !bottom))
         {
             QuadModifier.geometry(quad)
                     .apply(Modifiers.cutTopBottom(dir.getOpposite(), .5F))
@@ -52,61 +61,99 @@ public class FramedVerticalStairsGeometry implements Geometry
                     .export(quadMap.get(quadDir));
         }
 
-        if ((quadDir == dir.getOpposite() || quadDir == dir.getClockWise()) && type != StairsType.VERTICAL)
+        if (quadDir == dir.getOpposite() && !vertical)
         {
-            boolean opposite = quadDir == dir.getOpposite();
-            Direction cutDir = opposite ? dir.getClockWise() : dir.getOpposite();
-
             QuadModifier.geometry(quad)
-                    .apply(Modifiers.cutSideLeftRight(cutDir, .5F))
-                    .apply(Modifiers.cutSideUpDown(!type.isTop(), .5F))
+                    .apply(Modifiers.cutSideLeftRight(dir.getClockWise(), .5F))
+                    .applyIf(Modifiers.cutSideUpDown(bottom, .5F), counterClockWise)
                     .export(quadMap.get(quadDir));
 
             QuadModifier.geometry(quad)
-                    .apply(Modifiers.cutSideLeftRight(cutDir, .5F))
-                    .apply(Modifiers.cutSideUpDown(type.isTop(), .5F))
+                    .apply(Modifiers.cutSideLeftRight(dir.getCounterClockWise(), .5F))
+                    .applyIf(Modifiers.cutSideUpDown(bottom, .5F), forward)
                     .apply(Modifiers.setPosition(.5F))
                     .export(quadMap.get(null));
 
-            cutDir = opposite ? dir.getCounterClockWise() : dir;
-            QuadModifier.geometry(quad)
-                    .apply(Modifiers.cutSideLeftRight(cutDir, .5F))
-                    .apply(Modifiers.cutSideUpDown(!type.isTop(), .5F))
-                    .apply(Modifiers.setPosition(.5F))
-                    .export(quadMap.get(null));
+            if (counterClockWise)
+            {
+                QuadModifier.geometry(quad)
+                        .apply(Modifiers.cutSideLeftRight(dir.getClockWise(), .5F))
+                        .apply(Modifiers.cutSideUpDown(!bottom, .5F))
+                        .apply(Modifiers.setPosition(.5F))
+                        .export(quadMap.get(null));
+            }
         }
 
-        if ((quadDir == Direction.UP && type.isTop()) || (quadDir == Direction.DOWN && type.isBottom()))
+        if (quadDir == dir.getClockWise() && !vertical)
         {
             QuadModifier.geometry(quad)
-                    .apply(Modifiers.cutTopBottom(dir.getOpposite(), .5F))
-                    .apply(Modifiers.cutTopBottom(dir.getClockWise(), .5F))
+                    .apply(Modifiers.cutSideLeftRight(dir.getOpposite(), .5F))
+                    .applyIf(Modifiers.cutSideUpDown(bottom, .5F), forward)
                     .export(quadMap.get(quadDir));
 
             QuadModifier.geometry(quad)
-                    .apply(Modifiers.cutTopBottom(dir.getOpposite(), .5F))
-                    .apply(Modifiers.cutTopBottom(dir.getCounterClockWise(), .5F))
+                    .apply(Modifiers.cutSideLeftRight(dir, .5F))
+                    .applyIf(Modifiers.cutSideUpDown(bottom, .5F), counterClockWise)
                     .apply(Modifiers.setPosition(.5F))
                     .export(quadMap.get(null));
 
-            QuadModifier.geometry(quad)
-                    .apply(Modifiers.cutTopBottom(dir, .5F))
-                    .apply(Modifiers.cutTopBottom(dir.getClockWise(), .5F))
-                    .apply(Modifiers.setPosition(.5F))
-                    .export(quadMap.get(null));
+            if (forward)
+            {
+                QuadModifier.geometry(quad)
+                        .apply(Modifiers.cutSideLeftRight(dir.getOpposite(), .5F))
+                        .apply(Modifiers.cutSideUpDown(!bottom, .5F))
+                        .apply(Modifiers.setPosition(.5F))
+                        .export(quadMap.get(null));
+            }
         }
 
-        if ((quadDir == dir || quadDir == dir.getCounterClockWise()) && type != StairsType.VERTICAL)
+        if ((quadDir == Direction.UP && top) || (quadDir == Direction.DOWN && bottom))
         {
-            boolean ccw = quadDir == dir.getCounterClockWise();
-
             QuadModifier.geometry(quad)
-                    .apply(Modifiers.cutSideUpDown(!type.isTop(), .5F))
+                    .applyIf(Modifiers.cutTopBottom(dir.getOpposite(), .5F), counterClockWise)
+                    .applyIf(Modifiers.cutTopBottom(dir.getClockWise(), .5F), forward)
+                    .export(quadMap.get(quadDir));
+
+            if (forward)
+            {
+                QuadModifier.geometry(quad)
+                        .apply(Modifiers.cutTopBottom(dir.getOpposite(), .5F))
+                        .apply(Modifiers.cutTopBottom(dir.getCounterClockWise(), .5F))
+                        .apply(Modifiers.setPosition(.5F))
+                        .export(quadMap.get(null));
+            }
+
+            if (counterClockWise)
+            {
+                QuadModifier.geometry(quad)
+                        .apply(Modifiers.cutTopBottom(dir, .5F))
+                        .apply(Modifiers.cutTopBottom(dir.getClockWise(), .5F))
+                        .apply(Modifiers.setPosition(.5F))
+                        .export(quadMap.get(null));
+            }
+        }
+
+        if (quadDir == dir && forward)
+        {
+            QuadModifier.geometry(quad)
+                    .apply(Modifiers.cutSideUpDown(bottom, .5F))
                     .export(quadMap.get(quadDir));
 
             QuadModifier.geometry(quad)
-                    .apply(Modifiers.cutSideUpDown(type.isTop(), .5F))
-                    .apply(Modifiers.cutSideLeftRight(ccw ? dir.getOpposite() : dir.getClockWise(), .5F))
+                    .apply(Modifiers.cutSideUpDown(top, .5F))
+                    .apply(Modifiers.cutSideLeftRight(dir.getClockWise(), .5F))
+                    .export(quadMap.get(quadDir));
+        }
+
+        if (quadDir == dir.getCounterClockWise() && counterClockWise)
+        {
+            QuadModifier.geometry(quad)
+                    .apply(Modifiers.cutSideUpDown(bottom, .5F))
+                    .export(quadMap.get(quadDir));
+
+            QuadModifier.geometry(quad)
+                    .apply(Modifiers.cutSideUpDown(top, .5F))
+                    .apply(Modifiers.cutSideLeftRight(dir.getOpposite(), .5F))
                     .export(quadMap.get(quadDir));
         }
     }
