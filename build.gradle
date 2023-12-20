@@ -3,7 +3,7 @@ plugins {
     id 'eclipse'
     id 'idea'
     id 'maven-publish'
-    id 'net.neoforged.gradle.userdev' version '7.0.60'
+    id 'net.neoforged.gradle.userdev' version '7.0.71'
 }
 
 version = mod_version
@@ -32,7 +32,7 @@ runs {
         systemProperty  'forge.enabledGameTestNamespaces', 'framedblocks'
 
         dependencies {
-            runtime configuration(project.configurations.nonModLibrary)
+            runtime project.configurations.nonModLibrary
         }
 
         modSources.addAll project.sourceSets.main, project.sourceSets.test
@@ -47,6 +47,8 @@ runs {
 
     server {
         workingDirectory project.file('run_server')
+
+        programArgument '--nogui'
     }
 
     data {
