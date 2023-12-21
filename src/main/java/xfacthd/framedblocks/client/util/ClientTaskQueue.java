@@ -4,24 +4,27 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.level.Level;
 import net.neoforged.neoforge.event.TickEvent;
-import org.jetbrains.annotations.ApiStatus;
 
 import java.util.*;
 
 public final class ClientTaskQueue
 {
     private static final List<ClientTask> tasks = new ArrayList<>();
+    private static ResourceKey<Level> lastDimension = null;
 
     public static void enqueueClientTask(long delay, Runnable task)
     {
+        if (delay == 0)
+        {
+            Minecraft.getInstance().tell(task);
+            return;
+        }
+
         //noinspection ConstantConditions
         long time = Minecraft.getInstance().level.getGameTime() + delay;
         tasks.add(new ClientTask(time, task));
     }
 
-    private static ResourceKey<Level> lastDimension = null;
-
-    @ApiStatus.Internal
     public static void onClientTick(TickEvent.ClientTickEvent event)
     {
         if (event.phase != TickEvent.Phase.END || tasks.isEmpty()) { return; }
