@@ -480,6 +480,10 @@ public final class StairsSkipPredicate implements SideSkipPredicate
         {
             return true;
         }
+        else if (getHalfDir(dir, shape, half, side).isEqualTo(VerticalStairsSkipPredicate.getHalfDir(adjDir, adjType, side.getOpposite())))
+        {
+            return true;
+        }
         else if (getCornerDir(dir, shape, half, side).isEqualTo(VerticalStairsSkipPredicate.getCornerDir(adjDir, adjType, side.getOpposite())))
         {
             return true;
