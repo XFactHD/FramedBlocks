@@ -28,7 +28,7 @@ import java.util.*;
 public final class BeaconTintTests
 {
     private static final String BATCH_NAME = "beacon_tint";
-    private static final String STRUCTURE_NAME = FramedConstants.MOD_ID + ":empty";
+    private static final String STRUCTURE_NAME = FramedConstants.MOD_ID + ":floor_slab_1x1";
 
     // All blocks that are completely unable to apply a tint to the beacon beam
     private static final Set<BlockType> NON_TINTING = Set.of(

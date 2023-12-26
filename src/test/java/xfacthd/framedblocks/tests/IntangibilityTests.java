@@ -23,7 +23,7 @@ import java.util.*;
 public final class IntangibilityTests
 {
     private static final String BATCH_NAME = "intangibility";
-    private static final String STRUCTURE_NAME = FramedConstants.MOD_ID + ":empty";
+    private static final String STRUCTURE_NAME = FramedConstants.MOD_ID + ":floor_slab_1x1";
 
     private static boolean intangibility = false;
 

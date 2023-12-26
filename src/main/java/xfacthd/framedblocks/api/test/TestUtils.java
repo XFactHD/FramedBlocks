@@ -41,8 +41,8 @@ public final class TestUtils
     private static final BlockPos OCCLUSION_LIGHT_SIDE = new BlockPos(1, 2, 3);
     private static final BlockPos EMISSION_BLOCK = new BlockPos(1, 2, 1);
     private static final BlockPos EMISSION_LIGHT = new BlockPos(1, 3, 1);
-    private static final BlockPos INTANGIBILITY_BLOCK = new BlockPos(0, 1, 0);
-    private static final BlockPos BEACON_TINT_BLOCK = new BlockPos(0, 1, 0);
+    private static final BlockPos INTANGIBILITY_BLOCK = new BlockPos(0, 2, 0);
+    private static final BlockPos BEACON_TINT_BLOCK = new BlockPos(0, 2, 0);
     private static final BlockPos BEACON_TINT_BEACON = new BlockPos(0, 0, 0);
     private static final Predicate<float[]> BEACON_PREDICATE_RED = arr -> Arrays.equals(arr, DyeColor.RED.getTextureDiffuseColors());
     private static final String BEACON_COLOR_TEXT_RED = Arrays.toString(DyeColor.RED.getTextureDiffuseColors());

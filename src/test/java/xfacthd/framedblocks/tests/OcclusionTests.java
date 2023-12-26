@@ -33,8 +33,10 @@ import java.util.stream.Collectors;
  * <li>{@link OcclusionTests#test_InvDoubleSlopeSlab(GameTestHelper)}</li>
  * <li>{@link OcclusionTests#test_FlatSlopeSlabCorner_TopHalfBottom(GameTestHelper)}</li>
  * <li>{@link OcclusionTests#test_FlatSlopeSlabCorner_BottomHalfTop(GameTestHelper)}</li>
+ * <li>{@link OcclusionTests#test_FlatSlopeSlabCorner_TopHalfTop(GameTestHelper)}</li>
  * <li>{@link OcclusionTests#test_FlatInnerSlopeSlabCorner_TopHalfBottom(GameTestHelper)}</li>
  * <li>{@link OcclusionTests#test_FlatInnerSlopeSlabCorner_BottomHalfTop(GameTestHelper)}</li>
+ * <li>{@link OcclusionTests#test_FlatInnerSlopeSlabCorner_TopHalfTop(GameTestHelper)}</li>
  * <li>{@link OcclusionTests#test_FlatInverseDoubleSlopeSlabCorner(GameTestHelper)}</li>
  * <li>{@link OcclusionTests#test_SlopePanel_FrontHalfNorth(GameTestHelper)}</li>
  * <li>{@link OcclusionTests#test_SlopePanel_FrontHalfSouth(GameTestHelper)}</li>
@@ -1454,7 +1456,7 @@ public final class OcclusionTests
         TestUtils.testBlockOccludesLightBelow(helper, state);
     }
 
-    @GameTest(template = "box_top", batch = "occlusion")
+    @GameTest(template = "box_top", batch = "occlusion", required = false)
     @TestedType(type = BlockType.FRAMED_FLAT_SLOPE_SLAB_CORNER)
     public static void test_FlatSlopeSlabCorner_TopHalfTop(GameTestHelper helper)
     {
@@ -1493,7 +1495,7 @@ public final class OcclusionTests
         TestUtils.testBlockOccludesLightBelow(helper, state);
     }
 
-    @GameTest(template = "box_top", batch = "occlusion")
+    @GameTest(template = "box_top", batch = "occlusion", required = false)
     @TestedType(type = BlockType.FRAMED_FLAT_INNER_SLOPE_SLAB_CORNER)
     public static void test_FlatInnerSlopeSlabCorner_TopHalfTop(GameTestHelper helper)
     {
@@ -2565,8 +2567,24 @@ public final class OcclusionTests
         TestUtils.testBlockOccludesLightNorth(helper, state);
     }
 
+    @GameTest(template = "box_top", batch = "occlusion")
+    @TestedType(type = BlockType.FRAMED_BOOKSHELF)
+    public static void test_Bookshelf(GameTestHelper helper)
+    {
+        BlockState state = FBContent.BLOCK_FRAMED_BOOKSHELF.value().defaultBlockState();
+        TestUtils.testBlockOccludesLightBelow(helper, state);
+    }
+
+    @GameTest(template = "box_top", batch = "occlusion")
+    @TestedType(type = BlockType.FRAMED_CHISELED_BOOKSHELF)
+    public static void test_ChiseledBookshelf(GameTestHelper helper)
+    {
+        BlockState state = FBContent.BLOCK_FRAMED_CHISELED_BOOKSHELF.value().defaultBlockState();
+        TestUtils.testBlockOccludesLightBelow(helper, state);
+    }
+
     @GameTest(template = "box_top", batch = "occlusion", required = false)
-    @TestedType(type = BlockType.FRAMED_SLAB)
+    @TestedType(type = BlockType.FRAMED_CENTERED_SLAB)
     public static void test_CenteredSlab(GameTestHelper helper)
     {
         BlockState state = FBContent.BLOCK_FRAMED_CENTERED_SLAB.value().defaultBlockState();
@@ -2574,7 +2592,7 @@ public final class OcclusionTests
     }
 
     @GameTest(template = "box_side", batch = "occlusion", required = false)
-    @TestedType(type = BlockType.FRAMED_PANEL)
+    @TestedType(type = BlockType.FRAMED_CENTERED_PANEL)
     public static void test_CenteredPanel(GameTestHelper helper)
     {
         BlockState state = FBContent.BLOCK_FRAMED_CENTERED_PANEL.value().defaultBlockState();

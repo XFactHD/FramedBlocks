@@ -230,10 +230,9 @@ public final class InteractionTests
         ));
     }
 
-    @GameTest(template = "floor_1x1", batch = "interaction")
+    @GameTest(template = "floor_slab_1x1", batch = "interaction")
     public static void testPressurePlateInteract(GameTestHelper helper)
     {
-        helper.setBlock(POS_ABOVE_FLOOR.below(), Blocks.REDSTONE_LAMP);
         int delay = TestUtils.chainTasks(helper, List.of(
                 () -> helper.setBlock(POS_ABOVE_FLOOR, FBContent.BLOCK_FRAMED_PRESSURE_PLATE.value()),
                 () -> helper.assertBlockProperty(POS_ABOVE_FLOOR, PressurePlateBlock.POWERED, false),
