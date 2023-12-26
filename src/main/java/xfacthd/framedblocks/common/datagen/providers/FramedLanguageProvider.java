@@ -62,6 +62,8 @@ public final class FramedLanguageProvider extends LanguageProvider
         add(FBContent.BLOCK_FRAMED_CORNER_PILLAR.value(), "Framed Corner Pillar");
         add(FBContent.BLOCK_FRAMED_DIVIDED_PANEL_HOR.value(), "Framed Divided Panel (Horizontal)");
         add(FBContent.BLOCK_FRAMED_DIVIDED_PANEL_VERT.value(), "Framed Divided Panel (Vertical)");
+        add(FBContent.BLOCK_FRAMED_MASONRY_CORNER_SEGMENT.value(), "Framed Masonry Corner Segment");
+        add(FBContent.BLOCK_FRAMED_MASONRY_CORNER.value(), "Framed Masonry Corner");
         add(FBContent.BLOCK_FRAMED_STAIRS.value(), "Framed Stairs");
         add(FBContent.BLOCK_FRAMED_WALL.value(), "Framed Wall");
         add(FBContent.BLOCK_FRAMED_FENCE.value(), "Framed Fence");

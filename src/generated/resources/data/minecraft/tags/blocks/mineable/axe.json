@@ -16,6 +16,8 @@
     "framedblocks:framed_corner_pillar",
     "framedblocks:framed_divided_panel_horizontal",
     "framedblocks:framed_divided_panel_vertical",
+    "framedblocks:framed_masonry_corner_segment",
+    "framedblocks:framed_masonry_corner",
     "framedblocks:framed_stairs",
     "framedblocks:framed_wall",
     "framedblocks:framed_fence",

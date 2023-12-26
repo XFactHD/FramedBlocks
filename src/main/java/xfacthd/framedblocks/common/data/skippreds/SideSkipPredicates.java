@@ -43,6 +43,8 @@ public final class SideSkipPredicates extends BlockTypeMap<SideSkipPredicate>
         put(BlockType.FRAMED_CORNER_PILLAR, new CornerPillarSkipPredicate());
         put(BlockType.FRAMED_DIVIDED_PANEL_HORIZONTAL, SideSkipPredicate.FALSE);
         put(BlockType.FRAMED_DIVIDED_PANEL_VERTICAL, SideSkipPredicate.FALSE);
+        put(BlockType.FRAMED_MASONRY_CORNER_SEGMENT, new MasonryCornerSegmentSkipPredicate());
+        put(BlockType.FRAMED_MASONRY_CORNER, SideSkipPredicate.FALSE);
         put(BlockType.FRAMED_STAIRS, new StairsSkipPredicate());
         put(BlockType.FRAMED_DOUBLE_STAIRS, SideSkipPredicate.FALSE);
         put(BlockType.FRAMED_HALF_STAIRS, new HalfStairsSkipPredicate());
