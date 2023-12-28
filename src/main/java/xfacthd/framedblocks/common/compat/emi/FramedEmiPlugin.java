@@ -1,5 +1,5 @@
 package xfacthd.framedblocks.common.compat.emi;
-/*
+
 import com.google.common.base.Stopwatch;
 import dev.emi.emi.api.*;
 import dev.emi.emi.api.recipe.EmiRecipe;
@@ -15,8 +15,7 @@ import xfacthd.framedblocks.client.screen.FramingSawScreen;
 import xfacthd.framedblocks.client.screen.PoweredFramingSawScreen;
 import xfacthd.framedblocks.common.config.ClientConfig;
 import xfacthd.framedblocks.common.FBContent;
-import xfacthd.framedblocks.common.crafting.FramingSawRecipeCache;
-import xfacthd.framedblocks.common.crafting.FramingSawRecipeCalculation;
+import xfacthd.framedblocks.common.crafting.*;
 
 import java.util.List;
 import java.util.Set;
@@ -24,10 +23,10 @@ import java.util.Set;
 @EmiEntrypoint
 public final class FramedEmiPlugin implements EmiPlugin
 {
-    public static final EmiStack SAW_WORKSTATION = EmiStack.of(FBContent.BLOCK_FRAMING_SAW.get());
-    private static final EmiStack POWERED_SAW_WORKSTATION = EmiStack.of(FBContent.BLOCK_POWERED_FRAMING_SAW.get());
+    public static final EmiStack SAW_WORKSTATION = EmiStack.of(FBContent.BLOCK_FRAMING_SAW.value());
+    private static final EmiStack POWERED_SAW_WORKSTATION = EmiStack.of(FBContent.BLOCK_POWERED_FRAMING_SAW.value());
     public static final EmiRecipeCategory SAW_CATEGORY = new FramingSawRecipeCategory(SAW_WORKSTATION, SAW_WORKSTATION);
-    private static final Set<Item> CUBE_ITEM = Set.of(FBContent.BLOCK_FRAMED_CUBE.get().asItem());
+    private static final Set<Item> CUBE_ITEM = Set.of(FBContent.BLOCK_FRAMED_CUBE.value().asItem());
 
     @Override
     public void register(EmiRegistry registry)
@@ -52,8 +51,9 @@ public final class FramedEmiPlugin implements EmiPlugin
         FramingSawRecipeCache cache = FramingSawRecipeCache.get(true);
         Set<Item> inputItems = ClientConfig.showAllRecipePermutationsInEmi ? cache.getKnownItems() : CUBE_ITEM;
         Container dummyContainer = new SimpleContainer(1);
-        cache.getRecipes().forEach(recipe ->
+        cache.getRecipes().forEach(holder ->
         {
+            FramingSawRecipe recipe = holder.value();
             for (Item item : inputItems)
             {
                 if (recipe.getResult().is(item))
@@ -76,7 +76,7 @@ public final class FramedEmiPlugin implements EmiPlugin
                         })
                         .toList();
                 EmiStack output = EmiStack.of(recipe.getResult(), outputCount);
-                registry.addRecipe(FramingSawEmiRecipe.make(recipe, input, additives, output));
+                registry.addRecipe(FramingSawEmiRecipe.make(holder, input, additives, output));
 
                 recipeCount[0]++;
             }
@@ -100,4 +100,4 @@ public final class FramedEmiPlugin implements EmiPlugin
         }
         return FramingSawRecipeCache.sortRecipes(resultOne, resultTwo, sawRecipeOne.getResultType(), sawRecipeTwo.getResultType());
     }
-}*/
+}

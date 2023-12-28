@@ -1,5 +1,5 @@
 package xfacthd.framedblocks.common.compat.emi;
-/*
+
 import dev.emi.emi.api.recipe.BasicEmiRecipe;
 import dev.emi.emi.api.render.EmiTexture;
 import dev.emi.emi.api.stack.EmiIngredient;
@@ -7,6 +7,7 @@ import dev.emi.emi.api.stack.EmiStack;
 import dev.emi.emi.api.widget.WidgetHolder;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.crafting.RecipeHolder;
 import xfacthd.framedblocks.api.type.IBlockType;
 import xfacthd.framedblocks.client.screen.FramingSawScreen;
 import xfacthd.framedblocks.common.FBContent;
@@ -28,24 +29,23 @@ public final class FramingSawEmiRecipe extends BasicEmiRecipe
             FramingSawScreen.WARNING_ICON, 8, 8, WARNING_DRAW_SIZE, WARNING_DRAW_SIZE, WARNING_SIZE, WARNING_SIZE, 32, 32
     );
 
-    private final FramingSawRecipe recipe;
+    private final RecipeHolder<FramingSawRecipe> recipe;
     // Only enumerate recipes with the framed cube as input when the recipes of an item are requested
     // All other recipes are only supposed to be shown when the recipes accepting the item are requested to prevent clutter
     private final boolean showOnRecipeRequest;
     private final boolean inputWithAdditives;
 
     private FramingSawEmiRecipe(
-            FramingSawRecipe recipe, ResourceLocation id, EmiStack input, List<EmiIngredient> additives, EmiStack output
+            RecipeHolder<FramingSawRecipe> recipe, ResourceLocation id, EmiStack input, List<EmiIngredient> additives, EmiStack output
     )
     {
         super(FramedEmiPlugin.SAW_CATEGORY, id, WIDTH, HEIGHT);
         this.recipe = recipe;
-        this.showOnRecipeRequest = input.getItemStack().is(FBContent.BLOCK_FRAMED_CUBE.get().asItem());
+        this.showOnRecipeRequest = input.getItemStack().is(FBContent.BLOCK_FRAMED_CUBE.value().asItem());
         this.inputWithAdditives = FramingSawRecipeCache.get(true).containsAdditive(input.getItemStack().getItem());
         this.inputs.add(input);
         this.inputs.addAll(additives);
         this.outputs.add(output);
-        this.catalysts.add(FramedEmiPlugin.SAW_WORKSTATION);
     }
 
     @Override
@@ -87,10 +87,10 @@ public final class FramingSawEmiRecipe extends BasicEmiRecipe
 
     public IBlockType getResultType()
     {
-        return recipe.getResultType();
+        return recipe.value().getResultType();
     }
 
-    public FramingSawRecipe getRecipe()
+    public RecipeHolder<FramingSawRecipe> getRecipe()
     {
         return recipe;
     }
@@ -102,10 +102,10 @@ public final class FramingSawEmiRecipe extends BasicEmiRecipe
 
 
 
-    public static FramingSawEmiRecipe make(FramingSawRecipe recipe, EmiStack input, List<EmiIngredient> additives, EmiStack output)
+    public static FramingSawEmiRecipe make(RecipeHolder<FramingSawRecipe> recipe, EmiStack input, List<EmiIngredient> additives, EmiStack output)
     {
-        boolean showOnRecipeRequest = input.getItemStack().is(FBContent.BLOCK_FRAMED_CUBE.get().asItem());
-        ResourceLocation id = showOnRecipeRequest ? recipe.getId() : null;
+        boolean showOnRecipeRequest = input.getItemStack().is(FBContent.BLOCK_FRAMED_CUBE.value().asItem());
+        ResourceLocation id = showOnRecipeRequest ? recipe.id() : null;
         return new FramingSawEmiRecipe(recipe, id, input, additives, output);
     }
-}*/
+}

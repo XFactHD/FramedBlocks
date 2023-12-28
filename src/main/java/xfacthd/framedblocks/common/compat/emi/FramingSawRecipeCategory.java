@@ -1,5 +1,5 @@
 package xfacthd.framedblocks.common.compat.emi;
-/*
+
 import dev.emi.emi.api.recipe.EmiRecipeCategory;
 import dev.emi.emi.api.render.EmiRenderable;
 import net.minecraft.network.chat.Component;
@@ -17,4 +17,4 @@ public final class FramingSawRecipeCategory extends EmiRecipeCategory
     {
         return FramingSawBlock.SAW_MENU_TITLE;
     }
-}*/
+}
