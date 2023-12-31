@@ -14,12 +14,12 @@ body:
     attributes:
       label: Minecraft version
       options:
-        - 1.20
-        - 1.19
-        - 1.18 - UNSUPPORTED
-        - 1.17 - UNSUPPORTED
-        - 1.16 - UNSUPPORTED
-        - 1.15 - UNSUPPORTED
+        - "1.20"
+        - "1.19"
+        - "1.18 - UNSUPPORTED"
+        - "1.17 - UNSUPPORTED"
+        - "1.16 - UNSUPPORTED"
+        - "1.15 - UNSUPPORTED"
     validations:
       required: true
   - type: input
