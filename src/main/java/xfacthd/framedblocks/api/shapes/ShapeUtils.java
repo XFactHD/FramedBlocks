@@ -26,6 +26,16 @@ public final class ShapeUtils
         return first;
     }
 
+    public static VoxelShape or(VoxelShape first, VoxelShape second)
+    {
+        return orUnoptimized(first, second).optimize();
+    }
+
+    public static VoxelShape or(VoxelShape first, VoxelShape... others)
+    {
+        return orUnoptimized(first, others).optimize();
+    }
+
     public static VoxelShape andUnoptimized(VoxelShape first, VoxelShape second)
     {
         return Shapes.joinUnoptimized(first, second, BooleanOp.AND);
