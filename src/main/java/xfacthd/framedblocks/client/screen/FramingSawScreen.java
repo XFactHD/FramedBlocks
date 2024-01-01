@@ -22,8 +22,8 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.item.crafting.RecipeHolder;
+import net.neoforged.neoforge.network.PacketDistributor;
 import org.lwjgl.glfw.GLFW;
-import xfacthd.framedblocks.FramedBlocks;
 import xfacthd.framedblocks.api.util.Utils;
 import xfacthd.framedblocks.client.render.item.ItemRenderHelper;
 import xfacthd.framedblocks.client.util.RecipeViewer;
@@ -31,7 +31,7 @@ import xfacthd.framedblocks.common.FBContent;
 import xfacthd.framedblocks.common.crafting.*;
 import xfacthd.framedblocks.common.menu.FramingSawMenu;
 import xfacthd.framedblocks.common.menu.IFramingSawMenu;
-import xfacthd.framedblocks.common.net.SelectFramingSawRecipePacket;
+import xfacthd.framedblocks.common.net.payload.SelectFramingSawRecipePayload;
 import xfacthd.framedblocks.common.util.FramedUtils;
 
 import java.util.*;
@@ -424,7 +424,7 @@ public class FramingSawScreen extends AbstractContainerScreen<FramingSawMenu>
             if (menu.clickMenuButton(minecraft.player, idx))
             {
                 Minecraft.getInstance().getSoundManager().play(SimpleSoundInstance.forUI(SoundEvents.UI_STONECUTTER_SELECT_RECIPE, 1.0F));
-                FramedBlocks.CHANNEL.sendToServer(new SelectFramingSawRecipePacket(menu.containerId, idx));
+                PacketDistributor.SERVER.noArg().send(new SelectFramingSawRecipePayload(menu.containerId, idx));
                 return true;
             }
         }

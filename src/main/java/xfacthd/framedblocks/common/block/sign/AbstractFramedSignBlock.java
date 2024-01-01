@@ -27,13 +27,12 @@ import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.Vec3;
 import net.neoforged.neoforge.common.ToolActions;
 import net.neoforged.neoforge.network.PacketDistributor;
-import xfacthd.framedblocks.FramedBlocks;
 import xfacthd.framedblocks.api.util.Utils;
 import xfacthd.framedblocks.common.FBContent;
 import xfacthd.framedblocks.common.block.FramedBlock;
 import xfacthd.framedblocks.common.data.BlockType;
 import xfacthd.framedblocks.common.blockentity.special.FramedSignBlockEntity;
-import xfacthd.framedblocks.common.net.OpenSignScreenPacket;
+import xfacthd.framedblocks.common.net.payload.OpenSignScreenPayload;
 
 import java.util.Arrays;
 import java.util.UUID;
@@ -184,10 +183,7 @@ public abstract class AbstractFramedSignBlock extends FramedBlock
     public static void openEditScreen(Player player, FramedSignBlockEntity sign, boolean frontText)
     {
         sign.setEditingPlayer(player.getUUID());
-        FramedBlocks.CHANNEL.send(
-                PacketDistributor.PLAYER.with(() -> (ServerPlayer) player),
-                new OpenSignScreenPacket(sign.getBlockPos(), frontText)
-        );
+        PacketDistributor.PLAYER.with((ServerPlayer) player).send(new OpenSignScreenPayload(sign.getBlockPos(), frontText));
     }
 
 

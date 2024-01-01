@@ -11,18 +11,13 @@ import net.neoforged.fml.config.ModConfig;
 import net.neoforged.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.neoforged.fml.event.lifecycle.FMLLoadCompleteEvent;
 import net.neoforged.fml.loading.FMLEnvironment;
-import net.neoforged.neoforge.network.NetworkRegistry;
-import net.neoforged.neoforge.network.PlayNetworkDirection;
-import net.neoforged.neoforge.network.simple.SimpleChannel;
 import org.slf4j.Logger;
 import xfacthd.framedblocks.common.config.CommonConfig;
 import xfacthd.framedblocks.common.config.ServerConfig;
 import xfacthd.framedblocks.common.data.capabilities.CapabilitySetup;
-import xfacthd.framedblocks.common.data.cullupdate.CullingUpdatePacket;
 import xfacthd.framedblocks.common.data.cullupdate.CullingUpdateTracker;
 import xfacthd.framedblocks.common.data.shapes.ShapeReloader;
 import xfacthd.framedblocks.api.util.FramedConstants;
-import xfacthd.framedblocks.api.util.Utils;
 import xfacthd.framedblocks.common.config.ClientConfig;
 import xfacthd.framedblocks.common.FBContent;
 import xfacthd.framedblocks.common.compat.CompatHandler;
@@ -34,22 +29,14 @@ import xfacthd.framedblocks.common.data.conpreds.ConnectionPredicates;
 import xfacthd.framedblocks.common.data.facepreds.FullFacePredicates;
 import xfacthd.framedblocks.common.data.skippreds.SideSkipPredicates;
 import xfacthd.framedblocks.common.item.FramedBlueprintItem;
-import xfacthd.framedblocks.common.net.*;
-import xfacthd.framedblocks.common.util.*;
+import xfacthd.framedblocks.common.net.NetworkHandler;
+import xfacthd.framedblocks.common.util.EventHandler;
 
 @Mod(FramedConstants.MOD_ID)
 @SuppressWarnings("UtilityClassWithPublicConstructor")
 public final class FramedBlocks
 {
     public static final Logger LOGGER = LogUtils.getLogger();
-
-    private static final String PROTOCOL_VERSION = "3";
-    public static final SimpleChannel CHANNEL = NetworkRegistry.newSimpleChannel(
-            Utils.rl("main"),
-            () -> PROTOCOL_VERSION,
-            PROTOCOL_VERSION::equals,
-            PROTOCOL_VERSION::equals
-    );
 
     public FramedBlocks(IEventBus modBus)
     {
@@ -61,6 +48,7 @@ public final class FramedBlocks
         modBus.addListener(CapabilitySetup::onRegisterCapabilities);
         modBus.addListener(FramedBlocks::onCommonSetup);
         modBus.addListener(FramedBlocks::onLoadComplete);
+        modBus.addListener(NetworkHandler::onRegisterPayloads);
 
         IEventBus forgeBus = NeoForge.EVENT_BUS;
         forgeBus.addListener(EventHandler::onBlockLeftClick);
@@ -87,30 +75,6 @@ public final class FramedBlocks
 
     private static void onCommonSetup(final FMLCommonSetupEvent event)
     {
-        CHANNEL.messageBuilder(SignUpdatePacket.class, 0, PlayNetworkDirection.PLAY_TO_SERVER)
-                .encoder(SignUpdatePacket::encode)
-                .decoder(SignUpdatePacket::decode)
-                .consumerNetworkThread(SignUpdatePacket::handle)
-                .add();
-
-        CHANNEL.messageBuilder(OpenSignScreenPacket.class, 1, PlayNetworkDirection.PLAY_TO_CLIENT)
-                .encoder(OpenSignScreenPacket::encode)
-                .decoder(OpenSignScreenPacket::new)
-                .consumerNetworkThread(OpenSignScreenPacket::handle)
-                .add();
-
-        CHANNEL.messageBuilder(CullingUpdatePacket.class, 2, PlayNetworkDirection.PLAY_TO_CLIENT)
-                .encoder(CullingUpdatePacket::encode)
-                .decoder(CullingUpdatePacket::decode)
-                .consumerNetworkThread(CullingUpdatePacket::handle)
-                .add();
-
-        CHANNEL.messageBuilder(SelectFramingSawRecipePacket.class, 3, PlayNetworkDirection.PLAY_TO_SERVER)
-                .encoder(SelectFramingSawRecipePacket::encode)
-                .decoder(SelectFramingSawRecipePacket::new)
-                .consumerMainThread(SelectFramingSawRecipePacket::handle)
-                .add();
-
         StateCacheBuilder.ensureStateCachesInitialized();
         BlueprintBehaviours.register();
         CompatHandler.commonSetup();

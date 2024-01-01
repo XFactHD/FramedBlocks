@@ -174,7 +174,7 @@ dependencies {
     //compileOnly("me.shedaniel:REIPluginCompatibilities-forge-annotations:${reipcanno_version}")
 
     compileOnly("dev.emi:emi-neoforge:${emi_version}+${emi_mc_version}:api")
-    runtimeOnly("dev.emi:emi-neoforge:${emi_version}+${emi_mc_version}")
+    //runtimeOnly("dev.emi:emi-neoforge:${emi_version}+${emi_mc_version}")
 
     compileOnly("curse.maven:modernfix-790626:4954621")
     //runtimeOnly("org.embeddedt:embeddium-${embeddium_mc_version}:${embeddium_version}")

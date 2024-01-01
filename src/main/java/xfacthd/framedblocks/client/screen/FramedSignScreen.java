@@ -23,16 +23,17 @@ import net.minecraft.world.level.block.entity.SignText;
 import net.minecraft.world.level.block.state.BlockState;
 import net.neoforged.neoforge.client.RenderTypeHelper;
 import net.neoforged.neoforge.client.model.data.ModelData;
+import net.neoforged.neoforge.network.PacketDistributor;
 import org.joml.Matrix4f;
 import org.lwjgl.glfw.GLFW;
-import xfacthd.framedblocks.FramedBlocks;
 import xfacthd.framedblocks.api.render.Quaternions;
 import xfacthd.framedblocks.api.util.Utils;
 import xfacthd.framedblocks.common.block.sign.AbstractFramedSignBlock;
 import xfacthd.framedblocks.common.data.BlockType;
-import xfacthd.framedblocks.common.net.SignUpdatePacket;
+import xfacthd.framedblocks.common.net.payload.SignUpdatePayload;
 import xfacthd.framedblocks.common.blockentity.special.FramedSignBlockEntity;
 
+import java.util.Arrays;
 import java.util.stream.IntStream;
 
 public class FramedSignScreen extends Screen
@@ -98,7 +99,7 @@ public class FramedSignScreen extends Screen
     @Override
     public void removed()
     {
-        FramedBlocks.CHANNEL.sendToServer(new SignUpdatePacket(sign.getBlockPos(), front, lines));
+        PacketDistributor.SERVER.noArg().send(new SignUpdatePayload(sign.getBlockPos(), front, Arrays.copyOf(lines, lines.length)));
     }
 
     @Override

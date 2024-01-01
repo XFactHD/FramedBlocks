@@ -14,7 +14,6 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.neoforged.neoforge.items.*;
-import net.neoforged.neoforge.network.NetworkHooks;
 import xfacthd.framedblocks.api.block.FramedBlockEntity;
 import xfacthd.framedblocks.api.util.Utils;
 import xfacthd.framedblocks.common.FBContent;
@@ -49,7 +48,7 @@ public class FramedStorageBlockEntity extends FramedBlockEntity implements MenuP
 
     public void open(ServerPlayer player)
     {
-        NetworkHooks.openScreen(player, this, worldPosition);
+        player.openMenu(this, worldPosition);
     }
 
     public boolean isUsableByPlayer(Player player)

@@ -7,7 +7,7 @@ import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.level.Level;
 import net.neoforged.neoforge.event.TickEvent;
 import net.neoforged.neoforge.network.PacketDistributor;
-import xfacthd.framedblocks.FramedBlocks;
+import xfacthd.framedblocks.common.net.payload.CullingUpdatePayload;
 
 import java.util.IdentityHashMap;
 import java.util.Map;
@@ -28,10 +28,7 @@ public final class CullingUpdateTracker
         LongSet positions = UPDATED_POSITIONS.get(dim);
         if (positions != null && !positions.isEmpty())
         {
-            FramedBlocks.CHANNEL.send(
-                    PacketDistributor.DIMENSION.with(() -> dim),
-                    new CullingUpdatePacket(positions)
-            );
+            PacketDistributor.DIMENSION.with(dim).send(new CullingUpdatePayload(new LongArraySet(positions)));
             positions.clear();
         }
     }

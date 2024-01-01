@@ -1,21 +1,25 @@
-package xfacthd.framedblocks.common.net;
+package xfacthd.framedblocks.common.net.payload;
 
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.level.Level;
-import net.neoforged.neoforge.network.NetworkEvent;
+import net.neoforged.neoforge.network.handling.PlayPayloadContext;
 import xfacthd.framedblocks.FramedBlocks;
+import xfacthd.framedblocks.api.util.Utils;
 import xfacthd.framedblocks.common.blockentity.special.FramedSignBlockEntity;
 
 import java.util.List;
-import java.util.Objects;
 import java.util.stream.Stream;
 
-public record SignUpdatePacket(BlockPos pos, boolean front, String[] lines)
+public record SignUpdatePayload(BlockPos pos, boolean front, String[] lines) implements CustomPacketPayload
 {
-    public static SignUpdatePacket decode(FriendlyByteBuf buffer)
+    public static final ResourceLocation ID = Utils.rl("sign_update");
+
+    public static SignUpdatePayload decode(FriendlyByteBuf buffer)
     {
         BlockPos pos = buffer.readBlockPos();
         boolean front = buffer.readBoolean();
@@ -27,10 +31,11 @@ public record SignUpdatePacket(BlockPos pos, boolean front, String[] lines)
             lines[i] = buffer.readUtf(384);
         }
 
-        return new SignUpdatePacket(pos, front, lines);
+        return new SignUpdatePayload(pos, front, lines);
     }
 
-    public void encode(FriendlyByteBuf buffer)
+    @Override
+    public void write(FriendlyByteBuf buffer)
     {
         buffer.writeBlockPos(pos);
         buffer.writeBoolean(front);
@@ -42,11 +47,17 @@ public record SignUpdatePacket(BlockPos pos, boolean front, String[] lines)
         }
     }
 
-    public boolean handle(NetworkEvent.Context ctx)
+    @Override
+    public ResourceLocation id()
     {
-        ServerPlayer player = Objects.requireNonNull(ctx.getSender());
+        return ID;
+    }
+
+    public void handle(PlayPayloadContext ctx)
+    {
+        ServerPlayer player = (ServerPlayer) ctx.player().orElseThrow();
         List<String> strippedLines = Stream.of(lines).map(ChatFormatting::stripFormatting).toList();
-        player.connection.filterTextPacket(strippedLines).thenAccept(filteredText -> ctx.enqueueWork(() ->
+        player.connection.filterTextPacket(strippedLines).thenAccept(filteredText -> ctx.workHandler().submitAsync(() ->
         {
             Level level = player.level();
 
@@ -65,6 +76,5 @@ public record SignUpdatePacket(BlockPos pos, boolean front, String[] lines)
                 sign.updateTextFromPacket(player, front, filteredText);
             }
         }));
-        return true;
     }
 }

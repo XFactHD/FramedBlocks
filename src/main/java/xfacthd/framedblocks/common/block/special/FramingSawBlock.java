@@ -3,7 +3,6 @@ package xfacthd.framedblocks.common.block.special;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.network.chat.Component;
-import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.*;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
@@ -21,7 +20,6 @@ import net.minecraft.world.level.material.MapColor;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
-import net.neoforged.neoforge.network.NetworkHooks;
 import xfacthd.framedblocks.api.block.FramedProperties;
 import xfacthd.framedblocks.api.util.Utils;
 import xfacthd.framedblocks.common.menu.FramingSawMenu;
@@ -61,7 +59,7 @@ public class FramingSawBlock extends Block
     {
         if (!level.isClientSide())
         {
-            NetworkHooks.openScreen((ServerPlayer) player, new MenuProvider()
+            player.openMenu(new MenuProvider()
             {
                 @Override
                 public Component getDisplayName()

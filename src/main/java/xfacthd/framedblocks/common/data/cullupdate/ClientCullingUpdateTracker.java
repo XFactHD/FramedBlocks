@@ -1,20 +1,43 @@
 package xfacthd.framedblocks.common.data.cullupdate;
 
+import it.unimi.dsi.fastutil.longs.*;
 import net.minecraft.client.Minecraft;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.SectionPos;
 import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.level.Level;
+import net.neoforged.neoforge.network.handling.PlayPayloadContext;
 import xfacthd.framedblocks.api.block.FramedBlockEntity;
-import xfacthd.framedblocks.api.util.ClientUtils;
+import xfacthd.framedblocks.client.util.ClientTaskQueue;
+import xfacthd.framedblocks.common.net.payload.CullingUpdatePayload;
 
 import java.util.Collection;
 import java.util.Objects;
 
-final class ClientCullingUpdateTracker
+public final class ClientCullingUpdateTracker
 {
-    public static void handleCullingUpdates(Collection<CullingUpdateChunk> chunks)
+    public static void handleCullingUpdates(CullingUpdatePayload payload, PlayPayloadContext ctx)
     {
-        ClientUtils.enqueueClientTask(1, () ->
+        Long2ObjectMap<CullingUpdateChunk> chunks = new Long2ObjectArrayMap<>();
+
+        payload.positions().forEach(pos ->
+        {
+            long chunkPos = ChunkPos.asLong(
+                    SectionPos.blockToSectionCoord(BlockPos.getX(pos)),
+                    SectionPos.blockToSectionCoord(BlockPos.getX(pos))
+            );
+            CullingUpdateChunk chunk = chunks.computeIfAbsent(chunkPos, cp ->
+                    new CullingUpdateChunk(new ChunkPos(cp), new LongArraySet())
+            );
+            chunk.positions().add(pos);
+        });
+
+        ctx.workHandler().submitAsync(() -> handleCullingUpdates(chunks.values()));
+    }
+
+    private static void handleCullingUpdates(Collection<CullingUpdateChunk> chunks)
+    {
+        ClientTaskQueue.enqueueClientTask(1, () ->
         {
             Level level = Objects.requireNonNull(Minecraft.getInstance().level);
             BlockPos.MutableBlockPos blockPos = new BlockPos.MutableBlockPos();

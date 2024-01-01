@@ -11,7 +11,6 @@ import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.material.FluidState;
 import net.neoforged.neoforge.client.extensions.common.IClientFluidTypeExtensions;
-import xfacthd.framedblocks.api.internal.InternalClientAPI;
 
 import java.util.function.*;
 
@@ -44,11 +43,6 @@ public final class ClientUtils
     public static void enqueueClientTask(Runnable task)
     {
         Minecraft.getInstance().tell(task);
-    }
-
-    public static void enqueueClientTask(long delay, Runnable task)
-    {
-        InternalClientAPI.INSTANCE.enqueueClientTask(delay, task);
     }
 
     public static int getBlockColor(BlockAndTintGetter level, BlockPos pos, BlockState state, int tintIdx)
