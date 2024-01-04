@@ -1,4 +1,4 @@
-package xfacthd.framedblocks.client.util;
+package xfacthd.framedblocks.client.render.color;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.color.block.BlockColor;

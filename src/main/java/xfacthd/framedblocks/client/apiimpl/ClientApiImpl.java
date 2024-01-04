@@ -11,7 +11,7 @@ import xfacthd.framedblocks.api.render.OutlineRenderer;
 import xfacthd.framedblocks.client.data.ConTexDataHandler;
 import xfacthd.framedblocks.client.render.special.BlockOutlineRenderer;
 import xfacthd.framedblocks.client.render.special.GhostBlockRenderer;
-import xfacthd.framedblocks.client.util.FramedBlockColor;
+import xfacthd.framedblocks.client.render.color.FramedBlockColor;
 
 @SuppressWarnings("unused")
 public final class ClientApiImpl implements FramedBlocksClientAPI

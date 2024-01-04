@@ -48,6 +48,8 @@ import xfacthd.framedblocks.client.model.slopeslab.*;
 import xfacthd.framedblocks.client.model.stairs.*;
 import xfacthd.framedblocks.client.model.torch.*;
 import xfacthd.framedblocks.client.render.block.*;
+import xfacthd.framedblocks.client.render.color.FramedBlockColor;
+import xfacthd.framedblocks.client.render.color.FramedTargetBlockColor;
 import xfacthd.framedblocks.client.render.item.BlueprintPropertyOverride;
 import xfacthd.framedblocks.client.render.special.*;
 import xfacthd.framedblocks.client.render.util.AnimationSplitterSource;
