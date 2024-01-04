@@ -29,7 +29,7 @@ public class FramedMasonryCornerSegmentBlock extends FramedBlock
     protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder)
     {
         super.createBlockStateDefinition(builder);
-        builder.add(FramedProperties.FACING_HOR, FramedProperties.SOLID, BlockStateProperties.WATERLOGGED);
+        builder.add(FramedProperties.FACING_HOR, BlockStateProperties.WATERLOGGED);
     }
 
     @Override

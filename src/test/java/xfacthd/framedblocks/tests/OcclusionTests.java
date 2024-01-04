@@ -58,10 +58,6 @@ import java.util.stream.Collectors;
 @GameTestHolder(FramedConstants.MOD_ID)
 public final class OcclusionTests
 {
-    private static final Set<BlockType> IGNORED_SOLID_TYPES = Set.of(
-            BlockType.FRAMED_MASONRY_CORNER_SEGMENT
-    );
-
     @GameTest(template = "box_top", batch = "occlusion")
     @TestedType(type = BlockType.FRAMED_CUBE)
     public static void test_Cube(GameTestHelper helper)
@@ -2629,7 +2625,6 @@ public final class OcclusionTests
 
         List<BlockType> missing = Arrays.stream(BlockType.values())
                 .filter(IBlockType::canOccludeWithSolidCamo)
-                .filter(type -> !IGNORED_SOLID_TYPES.contains(type))
                 .filter(type -> !types.contains(type))
                 .toList();
 
