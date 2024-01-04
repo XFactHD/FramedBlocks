@@ -22,24 +22,28 @@ public final class ServerConfig
     private static final String KEY_INTANGIBLE_MARKER = "intangibleMarkerItem";
     private static final String KEY_ONE_WAY_WINDOW_OWNABLE = "oneWayWindowOwnable";
     private static final String KEY_CONSUME_CAMO_ITEM = "consumeCamoItem";
+    private static final String KEY_GLOWSTONE_LIGHT_LEVEL = "glowstoneLightLevel";
 
     public static final String TRANSLATION_ALLOW_BLOCK_ENTITIES = translate(KEY_ALLOW_BLOCK_ENTITIES);
     public static final String TRANSLATION_ENABLE_INTANGIBILITY = translate(KEY_ENABLE_INTANGIBILITY);
     public static final String TRANSLATION_INTANGIBLE_MARKER = translate(KEY_INTANGIBLE_MARKER);
     public static final String TRANSLATION_ONE_WAY_WINDOW_OWNABLE = translate(KEY_ONE_WAY_WINDOW_OWNABLE);
     public static final String TRANSLATION_CONSUME_CAMO_ITEM = translate(KEY_CONSUME_CAMO_ITEM);
+    public static final String TRANSLATION_GLOWSTONE_LIGHT_LEVEL = translate("glowstoneLightLevel");
 
     public static boolean allowBlockEntities;
     public static boolean enableIntangibleFeature;
     public static Item intangibleMarkerItem;
     public static boolean oneWayWindowOwnable;
     public static boolean consumeCamoItem;
+    public static int glowstoneLightLevel;
 
     private final ModConfigSpec.BooleanValue allowBlockEntitiesValue;
     private final ModConfigSpec.BooleanValue enableIntangibleFeatureValue;
     private final ModConfigSpec.ConfigValue<String> intangibleMarkerItemValue;
     private final ModConfigSpec.BooleanValue oneWayWindowOwnableValue;
     private final ModConfigSpec.BooleanValue consumeCamoItemValue;
+    private final ModConfigSpec.IntValue glowstoneLightLevelValue;
 
     static
     {
@@ -55,7 +59,7 @@ public final class ServerConfig
 
         builder.push("general");
         allowBlockEntitiesValue = builder
-                .comment("Whether blocks with block entities can be placed in Framed Blocks")
+                .comment("Whether blocks with block entities can be placed in framed blocks")
                 .translation(TRANSLATION_ALLOW_BLOCK_ENTITIES)
                 .define(KEY_ALLOW_BLOCK_ENTITIES, false);
         enableIntangibleFeatureValue = builder
@@ -74,6 +78,10 @@ public final class ServerConfig
                 .comment("If true, applying a camo will consume the item and removing the camo will drop it again")
                 .translation(TRANSLATION_CONSUME_CAMO_ITEM)
                 .define(KEY_CONSUME_CAMO_ITEM, true);
+        glowstoneLightLevelValue = builder
+                .comment("The light level to emit when glowstone dust is applied to a framed block")
+                .translation(TRANSLATION_GLOWSTONE_LIGHT_LEVEL)
+                .defineInRange(KEY_GLOWSTONE_LIGHT_LEVEL, 15, 0, 15);
         builder.pop();
     }
 
@@ -105,6 +113,7 @@ public final class ServerConfig
             intangibleMarkerItem = BuiltInRegistries.ITEM.get(new ResourceLocation(intangibleMarkerItemValue.get()));
             oneWayWindowOwnable = oneWayWindowOwnableValue.get();
             consumeCamoItem = consumeCamoItemValue.get();
+            glowstoneLightLevel = glowstoneLightLevelValue.get();
         }
     }
 }

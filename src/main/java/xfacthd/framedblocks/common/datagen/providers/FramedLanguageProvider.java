@@ -388,6 +388,7 @@ public final class FramedLanguageProvider extends LanguageProvider
         add(ServerConfig.TRANSLATION_INTANGIBLE_MARKER, "Intangibility marker item");
         add(ServerConfig.TRANSLATION_ONE_WAY_WINDOW_OWNABLE, "One-Way Window ownability");
         add(ServerConfig.TRANSLATION_CONSUME_CAMO_ITEM, "Consume camo item");
+        add(ServerConfig.TRANSLATION_GLOWSTONE_LIGHT_LEVEL, "Glowstone Light Level");
 
         add(ClientConfig.TRANSLATION_SHOW_GHOST_BLOCKS, "Show ghost blocks");
         add(ClientConfig.TRANSLATION_ALT_GHOST_RENDERER, "Use alternative placement preview renderer");

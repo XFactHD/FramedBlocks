@@ -34,4 +34,10 @@ public final class ServerConfigViewImpl implements ConfigView.Server
     {
         return ServerConfig.consumeCamoItem;
     }
+
+    @Override
+    public int getGlowstoneLightLevel()
+    {
+        return ServerConfig.glowstoneLightLevel;
+    }
 }
