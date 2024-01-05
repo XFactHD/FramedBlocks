@@ -1,10 +1,8 @@
 package xfacthd.framedblocks.api.model.util;
 
-import com.google.common.base.Preconditions;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.ItemBlockRenderTypes;
 import net.minecraft.client.resources.model.BakedModel;
-import net.minecraft.client.resources.model.ModelBakery;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.block.LiquidBlock;
 import net.minecraft.world.level.block.state.BlockState;
@@ -20,20 +18,18 @@ import java.util.concurrent.ConcurrentHashMap;
 public final class ModelCache
 {
     public static final Duration DEFAULT_CACHE_DURATION = Duration.ofMinutes(10);
-    private static final Map<Fluid, BakedModel> modelCache = new ConcurrentHashMap<>();
-    private static ModelBakery modelBakery = null;
+    private static final Map<Fluid, BakedModel> fluidModelCache = new ConcurrentHashMap<>();
 
-    public static void clear(ModelBakery bakery)
+    public static void clear()
     {
-        modelCache.clear();
-        modelBakery = bakery;
+        fluidModelCache.clear();
     }
 
     public static BakedModel getModel(BlockState state)
     {
         if (state.getBlock() instanceof LiquidBlock fluidBlock)
         {
-            return modelCache.computeIfAbsent(
+            return fluidModelCache.computeIfAbsent(
                     fluidBlock.getFluid(),
                     InternalClientAPI.INSTANCE::createFluidModel
             );
@@ -59,12 +55,6 @@ public final class ModelCache
         BakedModel model = getModel(state);
         data = ModelUtils.getCamoModelData(data);
         return model.getRenderTypes(state, random, data);
-    }
-
-    public static ModelBakery getModelBakery()
-    {
-        Preconditions.checkNotNull(modelBakery, "ModelBakery requested before first resource reload");
-        return modelBakery;
     }
 
 

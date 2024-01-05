@@ -413,7 +413,7 @@ public final class FBClient
     @SubscribeEvent
     public static void onModelsLoaded(final ModelEvent.BakingCompleted event)
     {
-        ModelCache.clear(event.getModelBakery());
+        ModelCache.clear();
         FramedChestRenderer.onModelLoadingComplete();
         FramedBlockModel.captureReinforcementModel(event.getModels());
     }

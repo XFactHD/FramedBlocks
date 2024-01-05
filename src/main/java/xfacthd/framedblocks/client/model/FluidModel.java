@@ -22,7 +22,6 @@ import net.neoforged.neoforge.client.extensions.common.IClientFluidTypeExtension
 import net.neoforged.neoforge.client.model.*;
 import net.neoforged.neoforge.client.model.data.ModelData;
 import org.jetbrains.annotations.Nullable;
-import xfacthd.framedblocks.api.model.util.ModelCache;
 import xfacthd.framedblocks.api.util.Utils;
 
 import java.util.*;
@@ -124,7 +123,7 @@ public final class FluidModel implements BakedModel
 
     public static FluidModel create(Fluid fluid)
     {
-        ModelBakery modelBakery = ModelCache.getModelBakery();
+        ModelBakery modelBakery = Minecraft.getInstance().getModelManager().getModelBakery();
         UnbakedModel bareModel = modelBakery.getModel(BARE_MODEL);
         Preconditions.checkNotNull(bareModel, "Bare fluid model not loaded!");
 
