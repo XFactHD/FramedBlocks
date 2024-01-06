@@ -2,17 +2,13 @@ package xfacthd.framedblocks.client.model.interactive;
 
 import net.minecraft.client.renderer.block.model.BakedQuad;
 import net.minecraft.core.Direction;
-import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.level.block.state.properties.AttachFace;
-import net.minecraft.world.level.block.state.properties.BlockStateProperties;
-import xfacthd.framedblocks.api.block.FramedProperties;
+import net.minecraft.world.level.block.state.properties.*;
 import xfacthd.framedblocks.api.model.data.QuadMap;
 import xfacthd.framedblocks.api.model.geometry.Geometry;
 import xfacthd.framedblocks.api.model.wrapping.GeometryFactory;
 import xfacthd.framedblocks.api.model.quad.Modifiers;
 import xfacthd.framedblocks.api.model.quad.QuadModifier;
 import xfacthd.framedblocks.api.util.Utils;
-import xfacthd.framedblocks.common.block.interactive.FramedLargeButtonBlock;
 
 public class FramedLargeButtonGeometry implements Geometry
 {
@@ -100,17 +96,5 @@ public class FramedLargeButtonGeometry implements Geometry
             case CEILING -> Direction.DOWN;
             case WALL -> dir;
         };
-    }
-
-    public static BlockState mergeStates(BlockState state)
-    {
-        AttachFace face = state.getValue(FramedLargeButtonBlock.FACE);
-        if (face == AttachFace.WALL)
-        {
-            return state;
-        }
-
-        return state.setValue(FramedLargeButtonBlock.FACING, Direction.NORTH)
-                .setValue(FramedProperties.GLOWING, false);
     }
 }

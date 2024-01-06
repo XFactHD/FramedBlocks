@@ -1,6 +1,7 @@
 package xfacthd.framedblocks.common.block.interactive;
 
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Holder;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.LivingEntity;
@@ -11,26 +12,26 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.WeightedPressurePlateBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
-import net.minecraft.world.level.block.state.properties.BlockSetType;
-import net.minecraft.world.level.block.state.properties.BlockStateProperties;
+import net.minecraft.world.level.block.state.properties.*;
 import net.minecraft.world.level.storage.loot.LootParams;
 import net.minecraft.world.phys.BlockHitResult;
 import net.neoforged.neoforge.client.extensions.common.IClientBlockExtensions;
 import xfacthd.framedblocks.api.block.FramedProperties;
 import xfacthd.framedblocks.api.block.IFramedBlock;
 import xfacthd.framedblocks.api.block.render.FramedBlockRenderProperties;
+import xfacthd.framedblocks.api.model.wrapping.statemerger.StateMerger;
 import xfacthd.framedblocks.api.util.Utils;
 import xfacthd.framedblocks.common.FBContent;
 import xfacthd.framedblocks.common.data.BlockType;
 
 import javax.annotation.Nullable;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.function.Consumer;
 
 @SuppressWarnings("deprecation")
 public class FramedWeightedPressurePlateBlock extends WeightedPressurePlateBlock implements IFramedBlock
 {
+    public static final StateMerger STATE_MERGER = new WeightedPressurePlateStateMerger();
     private static final Map<BlockType, BlockType> WATERLOGGING_SWITCH = Map.of(
             BlockType.FRAMED_GOLD_PRESSURE_PLATE, BlockType.FRAMED_WATERLOGGABLE_GOLD_PRESSURE_PLATE,
             BlockType.FRAMED_WATERLOGGABLE_GOLD_PRESSURE_PLATE, BlockType.FRAMED_GOLD_PRESSURE_PLATE,
@@ -132,21 +133,6 @@ public class FramedWeightedPressurePlateBlock extends WeightedPressurePlateBlock
 
 
 
-    // Merge states with power > 0 and ignore waterlogging and glowing to avoid unnecessary model duplication
-    public static BlockState mergeWeightedState(BlockState state)
-    {
-        if (state.hasProperty(BlockStateProperties.WATERLOGGED))
-        {
-            state = state.setValue(BlockStateProperties.WATERLOGGED, false);
-        }
-
-        if (state.getValue(WeightedPressurePlateBlock.POWER) > 1)
-        {
-            return state.setValue(WeightedPressurePlateBlock.POWER, 1);
-        }
-        return state.setValue(FramedProperties.GLOWING, false);
-    }
-
     public static FramedWeightedPressurePlateBlock gold()
     {
         return new FramedWeightedPressurePlateBlock(
@@ -195,5 +181,36 @@ public class FramedWeightedPressurePlateBlock extends WeightedPressurePlateBlock
                         .noCollission()
                         .strength(0.5F)
         );
+    }
+
+
+
+    private static final class WeightedPressurePlateStateMerger implements StateMerger
+    {
+        @Override
+        public BlockState apply(BlockState state)
+        {
+            if (state.hasProperty(BlockStateProperties.WATERLOGGED))
+            {
+                state = state.setValue(BlockStateProperties.WATERLOGGED, false);
+            }
+
+            if (state.getValue(WeightedPressurePlateBlock.POWER) > 1)
+            {
+                return state.setValue(WeightedPressurePlateBlock.POWER, 1);
+            }
+            return state.setValue(FramedProperties.GLOWING, false).setValue(FramedProperties.PROPAGATES_SKYLIGHT, false);
+        }
+
+        @Override
+        public Set<Property<?>> getHandledProperties(Holder<Block> block)
+        {
+            return Set.of(
+                    BlockStateProperties.WATERLOGGED,
+                    WeightedPressurePlateBlock.POWER,
+                    FramedProperties.GLOWING,
+                    FramedProperties.PROPAGATES_SKYLIGHT
+            );
+        }
     }
 }

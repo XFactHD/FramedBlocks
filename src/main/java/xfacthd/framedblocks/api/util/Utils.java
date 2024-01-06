@@ -357,6 +357,14 @@ public final class Utils
         return List.copyOf(list);
     }
 
+    public static <T> Set<T> concat(Set<T> setOne, Set<T> setTwo)
+    {
+        Set<T> set = new HashSet<>(setOne.size() + setTwo.size());
+        set.addAll(setOne);
+        set.addAll(setTwo);
+        return Set.copyOf(set);
+    }
+
     /**
      * Copy all elements from the source list to the destination list
      * (Significantly faster than {@link ArrayList#addAll(Collection)} in benchmarks)

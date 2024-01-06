@@ -16,19 +16,11 @@ import xfacthd.framedblocks.common.FBContent;
 import xfacthd.framedblocks.common.data.BlockType;
 import xfacthd.framedblocks.util.MarkdownTable;
 
-import java.util.List;
-import java.util.Set;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
-
 public final class BlockStateInfo
 {
     public static final String NAME = "BlockStateInfo";
     private static final String RESULT_MSG = "[" + NAME + "] Collected blockstate info for %s blocks in %s. ";
     private static final BlockType[] TYPES = BlockType.values();
-    private static final Set<Property<?>> IGNORED_PROPERTIES = Stream.of(
-            WrapHelper.IGNORE_DEFAULT_LOCK
-    ).flatMap(List::stream).collect(Collectors.toSet());
 
     public static int dumpBlockStateInfo(CommandContext<CommandSourceStack> ctx)
     {
@@ -91,7 +83,7 @@ public final class BlockStateInfo
 
     private static int filterIgnoredProperties(BlockState defState, int stateCount)
     {
-        for (Property<?> prop : IGNORED_PROPERTIES)
+        for (Property<?> prop : WrapHelper.IGNORE_DEFAULT_LOCK)
         {
             if (defState.hasProperty(prop))
             {

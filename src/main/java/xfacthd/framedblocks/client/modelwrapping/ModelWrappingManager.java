@@ -14,6 +14,7 @@ import net.neoforged.fml.ModLoader;
 import xfacthd.framedblocks.FramedBlocks;
 import xfacthd.framedblocks.api.model.wrapping.ModelAccessor;
 import xfacthd.framedblocks.api.model.wrapping.RegisterModelWrappersEvent;
+import xfacthd.framedblocks.api.util.TestProperties;
 import xfacthd.framedblocks.api.util.Utils;
 
 import java.util.*;
@@ -92,7 +93,18 @@ public final class ModelWrappingManager
         Stopwatch stopwatch = Stopwatch.createStarted();
 
         locked = false;
+        if (TestProperties.ENABLE_STATE_MERGER_DEBUG_LOGGING)
+        {
+            FramedBlocks.LOGGER.info("=============== Model Wrapper Registration Start ===============");
+            FramedBlocks.LOGGER.info("\"%-70s | %-150s | %-150s\"".formatted(
+                    "Block", "Unhandled properties", "Handled or ignored properties"
+            ));
+        }
         ModLoader.get().postEvent(new RegisterModelWrappersEvent());
+        if (TestProperties.ENABLE_STATE_MERGER_DEBUG_LOGGING)
+        {
+            FramedBlocks.LOGGER.info("=============== Model Wrapper Registration End =================");
+        }
         locked = true;
 
         stopwatch.stop();

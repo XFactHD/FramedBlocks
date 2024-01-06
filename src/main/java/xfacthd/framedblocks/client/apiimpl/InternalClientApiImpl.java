@@ -1,27 +1,37 @@
 package xfacthd.framedblocks.client.apiimpl;
 
+import net.minecraft.Util;
 import net.minecraft.client.resources.model.BakedModel;
 import net.minecraft.core.Holder;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.Property;
 import net.minecraft.world.level.material.Fluid;
-import net.neoforged.neoforge.common.util.Lazy;
 import org.jetbrains.annotations.Nullable;
 import xfacthd.framedblocks.FramedBlocks;
 import xfacthd.framedblocks.api.internal.InternalClientAPI;
 import xfacthd.framedblocks.api.model.wrapping.*;
+import xfacthd.framedblocks.api.model.wrapping.statemerger.StateMerger;
+import xfacthd.framedblocks.api.util.TestProperties;
 import xfacthd.framedblocks.api.util.Utils;
 import xfacthd.framedblocks.client.model.FluidModel;
 import xfacthd.framedblocks.client.model.FramedBlockModel;
 import xfacthd.framedblocks.client.modelwrapping.*;
 import xfacthd.framedblocks.client.util.ClientTaskQueue;
 
-import java.util.List;
+import java.util.*;
+import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 
 public final class InternalClientApiImpl implements InternalClientAPI
 {
+    private static final Pattern DEBUG_FILTER_PATTERN = Util.make(() ->
+    {
+        if (TestProperties.STATE_MERGER_DEBUG_FILTER == null) return null;
+        if (TestProperties.STATE_MERGER_DEBUG_FILTER.isEmpty()) return null;
+        return Pattern.compile(TestProperties.STATE_MERGER_DEBUG_FILTER);
+    });
+
     @Override
     public void registerModelWrapper(
             Holder<Block> block,
@@ -46,61 +56,22 @@ public final class InternalClientApiImpl implements InternalClientAPI
             StateMerger stateMerger
     )
     {
+        debugStateMerger(block, stateMerger);
+
         ModelWrappingManager.register(block, new ModelWrappingHandler(
                 block, modelFactory, itemModelSource, stateMerger
         ));
     }
 
     @Override
-    @SuppressWarnings({ "unchecked", "rawtypes" })
     public void registerCopyingModelWrapper(
             Holder<Block> block,
             Holder<Block> srcBlock,
             @Nullable BlockState itemModelSource,
-            @Nullable List<Property<?>> ignoredProps
+            StateMerger stateMerger
     )
     {
-        ModelWrappingManager.register(block, new ModelWrappingHandler(
-                block,
-                new ModelFactory()
-                {
-                    private final Lazy<ModelWrappingHandler> sourceWrapper = Lazy.of(() ->
-                            ModelWrappingManager.getHandler(srcBlock.value())
-                    );
-
-                    @Override
-                    public BakedModel create(GeometryFactory.Context ctx)
-                    {
-                        ResourceLocation baseLoc = StateLocationCache.getLocationFromState(
-                                ctx.state(), Utils.getKeyOrThrow(srcBlock).location()
-                        );
-                        BakedModel baseModel = ctx.modelAccessor().get(baseLoc);
-                        return sourceWrapper.get().wrapBlockModel(
-                                baseModel, ctx.state(), ctx.modelAccessor(), null
-                        );
-                    }
-                },
-                itemModelSource,
-                state ->
-                {
-                    BlockState sourceState = srcBlock.value().defaultBlockState();
-                    for (Property prop : state.getProperties())
-                    {
-                        if (sourceState.hasProperty(prop))
-                        {
-                            sourceState = sourceState.setValue(prop, state.getValue(prop));
-                        }
-                        else if (ignoredProps != null && !ignoredProps.contains(prop))
-                        {
-                            FramedBlocks.LOGGER.warn(
-                                    "Found un-ignored property {} which is invalid for source block {}!",
-                                    prop, sourceState.getBlock()
-                            );
-                        }
-                    }
-                    return sourceState;
-                }
-        ));
+        registerSpecialModelWrapper(block, new CopyingModelFactory(srcBlock), itemModelSource, stateMerger);
     }
 
     @Override
@@ -113,5 +84,34 @@ public final class InternalClientApiImpl implements InternalClientAPI
     public BakedModel createFluidModel(Fluid fluid)
     {
         return FluidModel.create(fluid);
+    }
+
+
+
+    private static void debugStateMerger(Holder<Block> block, StateMerger stateMerger)
+    {
+        if (!TestProperties.ENABLE_STATE_MERGER_DEBUG_LOGGING) return;
+        //noinspection ConstantConditions
+        if (DEBUG_FILTER_PATTERN != null)
+        {
+            String key = Utils.getKeyOrThrow(block).location().toString();
+            if (!DEBUG_FILTER_PATTERN.matcher(key).matches()) return;
+        }
+
+        Set<Property<?>> props = new HashSet<>(block.value().getStateDefinition().getProperties());
+        Set<Property<?>> ignoredProps = stateMerger.getHandledProperties(block);
+
+        props.removeAll(ignoredProps);
+
+        FramedBlocks.LOGGER.info("%-70s | %-150s | %-150s".formatted(
+                block.value(), propsToString(props), propsToString(ignoredProps)
+        ));
+    }
+
+    private static String propsToString(Collection<Property<?>> properties)
+    {
+        return properties.stream()
+                .map(Property::getName)
+                .collect(Collectors.joining(", ", "[ ", " ]"));
     }
 }

@@ -40,8 +40,8 @@ public final class SkipPredicateConsistency
     private static final BlockPos CENTER = new BlockPos(1, 1, 1);
     private static final Set<Property<?>> IGNORED_PROPERTIES = Stream.of(
             WrapHelper.IGNORE_DEFAULT_LOCK,
-            List.of(BlockStateProperties.POWERED, FramedProperties.Y_SLOPE, FramedProperties.OFFSET)
-    ).flatMap(List::stream).collect(Collectors.toSet());
+            Set.of(BlockStateProperties.POWERED, FramedProperties.Y_SLOPE, FramedProperties.OFFSET)
+    ).flatMap(Set::stream).collect(Collectors.toSet());
 
     public static void testSkipPredicates(
             @SuppressWarnings("unused") CommandContext<CommandSourceStack> ctx, Consumer<Component> msgQueueAppender
