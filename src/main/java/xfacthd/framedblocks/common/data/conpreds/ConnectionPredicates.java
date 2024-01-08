@@ -205,5 +205,11 @@ public final class ConnectionPredicates extends BlockTypeMap<ConnectionPredicate
         put(BlockType.FRAMED_CHISELED_BOOKSHELF, new ChiseledBookshelfConnectionPredicate());
         put(BlockType.FRAMED_CENTERED_SLAB, new CenteredSlabConnectionPredicate());
         put(BlockType.FRAMED_CENTERED_PANEL, new CenteredPanelConnectionPredicate());
+        put(BlockType.FRAMED_CHECKERED_CUBE_SEGMENT, new CheckeredCubeSegmentConnectionPredicate());
+        put(BlockType.FRAMED_CHECKERED_CUBE, ConnectionPredicate.FALSE);
+        put(BlockType.FRAMED_CHECKERED_SLAB_SEGMENT, new CheckeredSlabSegmentConnectionPredicate());
+        put(BlockType.FRAMED_CHECKERED_SLAB, ConnectionPredicate.FALSE);
+        put(BlockType.FRAMED_CHECKERED_PANEL_SEGMENT, new CheckeredPanelSegmentConnectionPredicate());
+        put(BlockType.FRAMED_CHECKERED_PANEL, ConnectionPredicate.FALSE);
     }
 }

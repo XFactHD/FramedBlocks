@@ -2607,6 +2607,40 @@ public final class OcclusionTests
         TestUtils.testBlockOccludesLightNorth(helper, state);
     }
 
+    @GameTest(template = "box_top", batch = "occlusion")
+    @TestedType(type = BlockType.FRAMED_CHECKERED_CUBE)
+    public static void test_CheckeredCube(GameTestHelper helper)
+    {
+        BlockState state = FBContent.BLOCK_FRAMED_CHECKERED_CUBE.value().defaultBlockState();
+        TestUtils.testDoubleBlockOccludesLightBelow(helper, state, List.of(Direction.DOWN, Direction.UP));
+    }
+
+    @GameTest(template = "box_top", batch = "occlusion")
+    @TestedType(type = BlockType.FRAMED_CHECKERED_SLAB)
+    public static void test_CheckeredSlab_Bottom(GameTestHelper helper)
+    {
+        BlockState state = FBContent.BLOCK_FRAMED_CHECKERED_SLAB.value().defaultBlockState();
+        TestUtils.testDoubleBlockOccludesLightBelow(helper, state, List.of(Direction.NORTH, Direction.WEST));
+    }
+
+    @GameTest(template = "box_bottom", batch = "occlusion")
+    @TestedType(type = BlockType.FRAMED_CHECKERED_SLAB)
+    public static void test_CheckeredSlab_Top(GameTestHelper helper)
+    {
+        BlockState state = FBContent.BLOCK_FRAMED_CHECKERED_SLAB.value()
+                .defaultBlockState()
+                .setValue(FramedProperties.TOP, true);
+        TestUtils.testDoubleBlockOccludesLightAbove(helper, state, List.of(Direction.SOUTH, Direction.UP));
+    }
+
+    @GameTest(template = "box_side", batch = "occlusion")
+    @TestedType(type = BlockType.FRAMED_CHECKERED_PANEL)
+    public static void test_CheckeredPanel(GameTestHelper helper)
+    {
+        BlockState state = FBContent.BLOCK_FRAMED_CHECKERED_PANEL.value().defaultBlockState();
+        TestUtils.testDoubleBlockOccludesLightNorth(helper, state, List.of(Direction.DOWN, Direction.WEST));
+    }
+
 
 
     private static boolean firstBatch = true;

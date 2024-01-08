@@ -261,6 +261,12 @@ public final class StairsSkipPredicate implements SideSkipPredicate
                 case FRAMED_VERTICAL_SLOPED_STAIRS -> testAgainstVerticalSlopedStairs(
                         dir, shape, half, adjState, side
                 );
+                case FRAMED_CHECKERED_PANEL_SEGMENT -> testAgainstCheckeredPanelSegment(
+                        dir, shape, half, adjState, side
+                );
+                case FRAMED_CHECKERED_PANEL -> testAgainstCheckeredPanel(
+                        dir, shape, half, adjState, side
+                );
                 default -> false;
             };
         }
@@ -1242,6 +1248,29 @@ public final class StairsSkipPredicate implements SideSkipPredicate
         HorizontalRotation adjRot = adjState.getValue(PropertyHolder.ROTATION);
 
         return getHalfDir(dir, shape, half, side).isEqualTo(VerticalSlopedStairsSkipPredicate.getHalfDir(adjDir, adjRot, side.getOpposite()));
+    }
+
+    @CullTest.SingleTarget(BlockType.FRAMED_CHECKERED_PANEL_SEGMENT)
+    private static boolean testAgainstCheckeredPanelSegment(
+            Direction dir, StairsShape shape, Half half, BlockState adjState, Direction side
+    )
+    {
+        Direction adjDir = adjState.getValue(FramedProperties.FACING_HOR);
+        boolean adjSecond = adjState.getValue(PropertyHolder.SECOND);
+        return getCornerDir(dir, shape, half, side).isEqualTo(CheckeredPanelSegmentSkipPredicate.getCornerDir(adjDir, adjSecond, side.getOpposite()));
+    }
+
+    @CullTest.DoubleTarget(
+            value = BlockType.FRAMED_CHECKERED_PANEL,
+            partTargets = BlockType.FRAMED_CHECKERED_PANEL_SEGMENT
+    )
+    private static boolean testAgainstCheckeredPanel(
+            Direction dir, StairsShape shape, Half half, BlockState adjState, Direction side
+    )
+    {
+        Tuple<BlockState, BlockState> states = AbstractFramedDoubleBlock.getStatePair(adjState);
+        return testAgainstCheckeredPanelSegment(dir, shape, half, states.getA(), side) ||
+               testAgainstCheckeredPanelSegment(dir, shape, half, states.getB(), side);
     }
 
 

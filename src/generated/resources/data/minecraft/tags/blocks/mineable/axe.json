@@ -172,6 +172,12 @@
     "framedblocks:framed_bookshelf",
     "framedblocks:framed_chiseled_bookshelf",
     "framedblocks:framed_centered_slab",
-    "framedblocks:framed_centered_panel"
+    "framedblocks:framed_centered_panel",
+    "framedblocks:framed_checkered_cube_segment",
+    "framedblocks:framed_checkered_cube",
+    "framedblocks:framed_checkered_slab_segment",
+    "framedblocks:framed_checkered_slab",
+    "framedblocks:framed_checkered_panel_segment",
+    "framedblocks:framed_checkered_panel"
   ]
 }

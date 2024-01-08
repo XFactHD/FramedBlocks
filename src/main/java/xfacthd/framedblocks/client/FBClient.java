@@ -373,6 +373,12 @@ public final class FBClient
         WrapHelper.wrap(FBContent.BLOCK_FRAMED_CHISELED_BOOKSHELF, FramedBookshelfGeometry::chiseled, FramedBookshelfGeometry.itemSourceChiseled(), WrapHelper.IGNORE_SOLID);
         WrapHelper.wrap(FBContent.BLOCK_FRAMED_CENTERED_SLAB, FramedCenteredSlabGeometry::new, WrapHelper.IGNORE_DEFAULT);
         WrapHelper.wrap(FBContent.BLOCK_FRAMED_CENTERED_PANEL, FramedCenteredPanelGeometry::new, WrapHelper.IGNORE_DEFAULT);
+        WrapHelper.wrap(FBContent.BLOCK_FRAMED_CHECKERED_CUBE_SEGMENT, FramedCheckeredCubeSegmentGeometry::new, WrapHelper.IGNORE_WATERLOGGED);
+        wrapDoubleModel(FBContent.BLOCK_FRAMED_CHECKERED_CUBE, FramedCheckeredCubeBlock.itemModelSource(), WrapHelper.IGNORE_SOLID);
+        WrapHelper.wrap(FBContent.BLOCK_FRAMED_CHECKERED_SLAB_SEGMENT, FramedCheckeredSlabSegmentGeometry::new, WrapHelper.IGNORE_WATERLOGGED);
+        wrapDoubleModel(FBContent.BLOCK_FRAMED_CHECKERED_SLAB, FramedCheckeredSlabBlock.itemModelSource(), WrapHelper.IGNORE_WATERLOGGED);
+        WrapHelper.wrap(FBContent.BLOCK_FRAMED_CHECKERED_PANEL_SEGMENT, FramedCheckeredPanelSegmentGeometry::new, WrapHelper.IGNORE_WATERLOGGED);
+        wrapDoubleModel(FBContent.BLOCK_FRAMED_CHECKERED_PANEL, FramedCheckeredPanelBlock.itemModelSource(), WrapHelper.IGNORE_WATERLOGGED);
     }
 
     @SubscribeEvent

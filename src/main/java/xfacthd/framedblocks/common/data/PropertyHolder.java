@@ -24,6 +24,7 @@ public final class PropertyHolder
     public static final BooleanProperty MAP_FRAME = BooleanProperty.create("map_frame");
     public static final BooleanProperty ROTATE_SPLIT_LINE = BooleanProperty.create("rot_split_line");
     public static final BooleanProperty ACTIVE = BooleanProperty.create("active");
+    public static final BooleanProperty SECOND = BooleanProperty.create("second");
 
 
 

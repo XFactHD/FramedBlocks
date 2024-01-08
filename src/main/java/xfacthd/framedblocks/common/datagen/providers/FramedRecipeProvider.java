@@ -1191,6 +1191,28 @@ public final class FramedRecipeProvider extends RecipeProvider
                 .unlockedBy("hasFramedCenteredPanel", has(FBContent.BLOCK_FRAMED_CENTERED_PANEL.value()))
                 .save(consumer, Utils.rl("framed_panel_from_framed_centered_panel"));
 
+        shapedBuildingBlock(FBContent.BLOCK_FRAMED_CHECKERED_CUBE.value())
+                .pattern("CCC")
+                .pattern("C C")
+                .pattern("CCC")
+                .define('C', FBContent.BLOCK_FRAMED_SLAB_CORNER.value())
+                .unlockedBy("hasFramedSlabCorner", has(FBContent.BLOCK_FRAMED_SLAB_CORNER.value()))
+                .save(consumer);
+
+        shapedBuildingBlock(FBContent.BLOCK_FRAMED_CHECKERED_SLAB.value(), 6)
+                .pattern("CCC")
+                .define('C', FBContent.BLOCK_FRAMED_CHECKERED_CUBE.value())
+                .unlockedBy("hasFramedCheckeredBlock", has(FBContent.BLOCK_FRAMED_CHECKERED_CUBE.value()))
+                .save(consumer);
+
+        shapedBuildingBlock(FBContent.BLOCK_FRAMED_CHECKERED_PANEL.value(), 6)
+                .pattern("C")
+                .pattern("C")
+                .pattern("C")
+                .define('C', FBContent.BLOCK_FRAMED_CHECKERED_CUBE.value())
+                .unlockedBy("hasFramedCheckeredBlock", has(FBContent.BLOCK_FRAMED_CHECKERED_CUBE.value()))
+                .save(consumer);
+
 
 
         ShapedRecipeBuilder.shaped(RecipeCategory.TOOLS, FBContent.BLOCK_FRAMING_SAW.value())

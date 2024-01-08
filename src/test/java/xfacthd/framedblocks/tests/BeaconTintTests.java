@@ -85,7 +85,9 @@ public final class BeaconTintTests
             BlockType.FRAMED_FANCY_DETECTOR_RAIL,
             BlockType.FRAMED_FANCY_ACTIVATOR_RAIL,
             BlockType.FRAMED_HALF_SLOPE,
-            BlockType.FRAMED_DOUBLE_HALF_SLOPE
+            BlockType.FRAMED_DOUBLE_HALF_SLOPE,
+            BlockType.FRAMED_CHECKERED_PANEL_SEGMENT,
+            BlockType.FRAMED_CHECKERED_PANEL
     );
 
     @GameTestGenerator
@@ -178,6 +180,8 @@ public final class BeaconTintTests
             case FRAMED_DIVIDED_PANEL_VERTICAL,
                  FRAMED_DIVIDED_SLOPE,
                  FRAMED_DIVIDED_STAIRS -> List.of(Direction.EAST, Direction.WEST);
+
+            case FRAMED_CHECKERED_SLAB -> List.of(Direction.NORTH, Direction.WEST);
 
             default -> List.of(Direction.DOWN, Direction.UP);
         };

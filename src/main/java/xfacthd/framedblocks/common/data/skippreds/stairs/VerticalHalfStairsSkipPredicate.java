@@ -185,6 +185,18 @@ public final class VerticalHalfStairsSkipPredicate implements SideSkipPredicate
                 case FRAMED_SLOPED_STAIRS -> testAgainstSlopedStairs(
                         dir, top, adjState, side
                 );
+                case FRAMED_CHECKERED_SLAB_SEGMENT -> testAgainstCheckeredSlabSegment(
+                        dir, top, adjState, side
+                );
+                case FRAMED_CHECKERED_SLAB -> testAgainstCheckeredSlab(
+                        dir, top, adjState, side
+                );
+                case FRAMED_CHECKERED_PANEL_SEGMENT -> testAgainstCheckeredPanelSegment(
+                        dir, top, adjState, side
+                );
+                case FRAMED_CHECKERED_PANEL -> testAgainstCheckeredPanel(
+                        dir, top, adjState, side
+                );
                 default -> false;
             };
         }
@@ -844,6 +856,52 @@ public final class VerticalHalfStairsSkipPredicate implements SideSkipPredicate
         boolean adjTop = adjState.getValue(FramedProperties.TOP);
 
         return getHalfDir(dir, top, side).isEqualTo(SlopedStairsSkipPredicate.getHalfDir(adjDir, adjTop, side.getOpposite()));
+    }
+
+    @CullTest.SingleTarget(BlockType.FRAMED_CHECKERED_SLAB_SEGMENT)
+    private static boolean testAgainstCheckeredSlabSegment(
+            Direction dir, boolean top, BlockState adjState, Direction side
+    )
+    {
+        boolean adjTop = adjState.getValue(FramedProperties.TOP);
+        boolean adjSecond = adjState.getValue(PropertyHolder.SECOND);
+        return getCornerDir(dir, top, side).isEqualTo(CheckeredSlabSegmentSkipPredicate.getCornerDir(adjTop, adjSecond, side.getOpposite()));
+    }
+
+    @CullTest.DoubleTarget(
+            value = BlockType.FRAMED_CHECKERED_SLAB,
+            partTargets = BlockType.FRAMED_CHECKERED_SLAB_SEGMENT
+    )
+    private static boolean testAgainstCheckeredSlab(
+            Direction dir, boolean top, BlockState adjState, Direction side
+    )
+    {
+        Tuple<BlockState, BlockState> states = AbstractFramedDoubleBlock.getStatePair(adjState);
+        return testAgainstCheckeredSlabSegment(dir, top, states.getA(), side) ||
+               testAgainstCheckeredSlabSegment(dir, top, states.getB(), side);
+    }
+
+    @CullTest.SingleTarget(BlockType.FRAMED_CHECKERED_PANEL_SEGMENT)
+    private static boolean testAgainstCheckeredPanelSegment(
+            Direction dir, boolean top, BlockState adjState, Direction side
+    )
+    {
+        Direction adjDir = adjState.getValue(FramedProperties.FACING_HOR);
+        boolean adjSecond = adjState.getValue(PropertyHolder.SECOND);
+        return getCornerDir(dir, top, side).isEqualTo(CheckeredPanelSegmentSkipPredicate.getCornerDir(adjDir, adjSecond, side.getOpposite()));
+    }
+
+    @CullTest.DoubleTarget(
+            value = BlockType.FRAMED_CHECKERED_PANEL,
+            partTargets = BlockType.FRAMED_CHECKERED_PANEL_SEGMENT
+    )
+    private static boolean testAgainstCheckeredPanel(
+            Direction dir, boolean top, BlockState adjState, Direction side
+    )
+    {
+        Tuple<BlockState, BlockState> states = AbstractFramedDoubleBlock.getStatePair(adjState);
+        return testAgainstCheckeredPanelSegment(dir, top, states.getA(), side) ||
+               testAgainstCheckeredPanelSegment(dir, top, states.getB(), side);
     }
 
 

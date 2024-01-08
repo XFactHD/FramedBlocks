@@ -203,5 +203,11 @@ public final class FullFacePredicates extends BlockTypeMap<FullFacePredicate>
         put(BlockType.FRAMED_CHISELED_BOOKSHELF, FullFacePredicate.NOT_HOR_DIR);
         put(BlockType.FRAMED_CENTERED_SLAB, FullFacePredicate.FALSE);
         put(BlockType.FRAMED_CENTERED_PANEL, FullFacePredicate.FALSE);
+        put(BlockType.FRAMED_CHECKERED_CUBE_SEGMENT, FullFacePredicate.FALSE);
+        put(BlockType.FRAMED_CHECKERED_CUBE, FullFacePredicate.FALSE);
+        put(BlockType.FRAMED_CHECKERED_SLAB_SEGMENT, FullFacePredicate.FALSE);
+        put(BlockType.FRAMED_CHECKERED_SLAB, FullFacePredicate.FALSE);
+        put(BlockType.FRAMED_CHECKERED_PANEL_SEGMENT, FullFacePredicate.FALSE);
+        put(BlockType.FRAMED_CHECKERED_PANEL, FullFacePredicate.FALSE);
     }
 }
