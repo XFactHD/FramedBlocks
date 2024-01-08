@@ -6,7 +6,6 @@ import net.minecraft.util.Tuple;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.*;
-import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.nbt.CompoundTag;
@@ -54,29 +53,15 @@ public abstract class FramedDoubleBlockEntity extends FramedBlockEntity
     }
 
     @Override
-    public void setCamo(CamoContainer camo, boolean secondary)
+    public void setCamoInternal(CamoContainer camo, boolean secondary)
     {
         if (secondary)
         {
-            int light = getLightValue();
-
             this.camoContainer = camo;
-
-            setChanged();
-            if (getLightValue() != light)
-            {
-                doLightUpdate();
-            }
-
-            if (!updateDynamicStates(true, true, true))
-            {
-                //noinspection ConstantConditions
-                level.sendBlockUpdated(worldPosition, getBlockState(), getBlockState(), Block.UPDATE_ALL);
-            }
         }
         else
         {
-            super.setCamo(camo, false);
+            super.setCamoInternal(camo, false);
         }
     }
 
@@ -110,6 +95,12 @@ public abstract class FramedDoubleBlockEntity extends FramedBlockEntity
     public int getLightValue()
     {
         return Math.max(camoContainer.getState().getLightEmission(), super.getLightValue());
+    }
+
+    @Override
+    public IFramedDoubleBlock getBlock()
+    {
+        return (IFramedDoubleBlock) super.getBlock();
     }
 
     @Override
@@ -291,6 +282,22 @@ public abstract class FramedDoubleBlockEntity extends FramedBlockEntity
         return Math.min(spreadSpeedOne, spreadSpeedTwo);
     }
 
+    @Override
+    public float getCamoShadeBrightness(float ownShade)
+    {
+        if (!getCamo().isEmpty())
+        {
+            //noinspection ConstantConditions
+            ownShade = Math.max(ownShade, getCamo().getState().getShadeBrightness(level, worldPosition));
+        }
+        if (!camoContainer.isEmpty())
+        {
+            //noinspection ConstantConditions
+            ownShade = Math.max(ownShade, camoContainer.getState().getShadeBrightness(level, worldPosition));
+        }
+        return ownShade;
+    }
+
     public final DoubleBlockSoundType getSoundType()
     {
         return soundType;
@@ -353,7 +360,7 @@ public abstract class FramedDoubleBlockEntity extends FramedBlockEntity
         return !FMLEnvironment.production && TestProperties.ENABLE_DOUBLE_BLOCK_PART_HIT_DEBUG_RENDERER;
     }
 
-    public Tuple<BlockState, BlockState> getBlockPair()
+    public final Tuple<BlockState, BlockState> getBlockPair()
     {
         return stateCache.getBlockPair();
     }
@@ -393,7 +400,7 @@ public abstract class FramedDoubleBlockEntity extends FramedBlockEntity
     }
 
     @Override
-    public ModelData getModelData(ModelData data, BlockState state)
+    public final ModelData getModelData(ModelData data, BlockState state)
     {
         if (state == stateCache.getBlockPair().getA())
         {

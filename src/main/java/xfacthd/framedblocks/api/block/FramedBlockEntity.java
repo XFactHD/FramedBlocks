@@ -409,11 +409,11 @@ public class FramedBlockEntity extends BlockEntity
         return false;
     }
 
-    public void setCamo(CamoContainer camo, boolean secondary)
+    public final void setCamo(CamoContainer camo, boolean secondary)
     {
         int light = getLightValue();
 
-        this.camoContainer = camo;
+        setCamoInternal(camo, secondary);
 
         setChanged();
         if (getLightValue() != light)
@@ -426,6 +426,11 @@ public class FramedBlockEntity extends BlockEntity
             //noinspection ConstantConditions
             level.sendBlockUpdated(worldPosition, getBlockState(), getBlockState(), Block.UPDATE_ALL);
         }
+    }
+
+    protected void setCamoInternal(CamoContainer camo, boolean secondary)
+    {
+        this.camoContainer = camo;
     }
 
     public boolean isSolidSide(Direction side)
@@ -626,6 +631,16 @@ public class FramedBlockEntity extends BlockEntity
         return camoContainer.isEmpty() ? -1 : camoContainer.getState().getFireSpreadSpeed(level, worldPosition, face);
     }
 
+    public float getCamoShadeBrightness(float ownShade)
+    {
+        if (!camoContainer.isEmpty())
+        {
+            //noinspection ConstantConditions
+            return Math.max(ownShade, camoContainer.getState().getShadeBrightness(level, worldPosition));
+        }
+        return ownShade;
+    }
+
     public final void setGlowing(boolean glowing)
     {
         if (this.glowing != glowing)
@@ -711,7 +726,7 @@ public class FramedBlockEntity extends BlockEntity
         level.getChunkSource().getLightEngine().checkBlock(worldPosition);
     }
 
-    public final IFramedBlock getBlock()
+    public IFramedBlock getBlock()
     {
         return (IFramedBlock) getBlockState().getBlock();
     }
