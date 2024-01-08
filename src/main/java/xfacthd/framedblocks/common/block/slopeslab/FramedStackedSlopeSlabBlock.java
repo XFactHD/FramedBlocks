@@ -176,9 +176,8 @@ public class FramedStackedSlopeSlabBlock extends AbstractFramedDoubleBlock
         return SolidityCheck.NONE;
     }
 
-
-
-    public static BlockState itemModelSource()
+    @Override
+    public BlockState getItemModelSource()
     {
         return FBContent.BLOCK_FRAMED_STACKED_SLOPE_SLAB.value()
                 .defaultBlockState()

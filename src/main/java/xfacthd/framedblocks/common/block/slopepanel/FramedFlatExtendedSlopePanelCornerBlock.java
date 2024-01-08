@@ -18,6 +18,7 @@ import xfacthd.framedblocks.api.block.FramedProperties;
 import xfacthd.framedblocks.api.block.IFramedBlock;
 import xfacthd.framedblocks.api.shapes.*;
 import xfacthd.framedblocks.api.util.*;
+import xfacthd.framedblocks.common.FBContent;
 import xfacthd.framedblocks.common.block.FramedBlock;
 import xfacthd.framedblocks.common.data.BlockType;
 import xfacthd.framedblocks.common.data.PropertyHolder;
@@ -127,6 +128,25 @@ public class FramedFlatExtendedSlopePanelCornerBlock extends FramedBlock
     public BlockState mirror(BlockState state, Mirror mirror)
     {
         return FramedFlatSlopePanelCornerBlock.mirrorCorner(state, mirror);
+    }
+
+    @Override
+    public BlockState getItemModelSource()
+    {
+        return switch ((BlockType) getBlockType())
+        {
+            case FRAMED_FLAT_EXT_SLOPE_PANEL_CORNER ->
+                    FBContent.BLOCK_FRAMED_FLAT_EXTENDED_SLOPE_PANEL_CORNER.value()
+                            .defaultBlockState()
+                            .setValue(FramedProperties.FACING_HOR, Direction.SOUTH)
+                            .setValue(PropertyHolder.ROTATION, HorizontalRotation.RIGHT);
+            case FRAMED_FLAT_EXT_INNER_SLOPE_PANEL_CORNER ->
+                    FBContent.BLOCK_FRAMED_FLAT_EXTENDED_INNER_SLOPE_PANEL_CORNER.value()
+                            .defaultBlockState()
+                            .setValue(FramedProperties.FACING_HOR, Direction.SOUTH)
+                            .setValue(PropertyHolder.ROTATION, HorizontalRotation.RIGHT);
+            default -> throw new IllegalStateException("Invalid block type: " + getBlockType());
+        };
     }
 
 

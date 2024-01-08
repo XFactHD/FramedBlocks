@@ -17,6 +17,7 @@ import xfacthd.framedblocks.api.block.FramedProperties;
 import xfacthd.framedblocks.api.block.IFramedBlock;
 import xfacthd.framedblocks.api.shapes.*;
 import xfacthd.framedblocks.api.util.*;
+import xfacthd.framedblocks.common.FBContent;
 import xfacthd.framedblocks.common.block.ExtPlacementStateBuilder;
 import xfacthd.framedblocks.common.block.FramedBlock;
 import xfacthd.framedblocks.common.data.*;
@@ -105,6 +106,14 @@ public class FramedExtendedSlopePanelBlock extends FramedBlock
     public BlockState mirror(BlockState state, Mirror mirror)
     {
         return FramedSlopePanelBlock.mirrorPanel(state, mirror);
+    }
+
+    @Override
+    public BlockState getItemModelSource()
+    {
+        return FBContent.BLOCK_FRAMED_EXTENDED_SLOPE_PANEL.value()
+                .defaultBlockState()
+                .setValue(FramedProperties.FACING_HOR, Direction.SOUTH);
     }
 
 

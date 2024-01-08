@@ -252,6 +252,23 @@ public class FramedRailSlopeBlock extends BaseRailBlock implements IFramedBlock,
         consumer.accept(FramedBlockRenderProperties.INSTANCE);
     }
 
+    @Override
+    public BlockState getItemModelSource()
+    {
+        return switch (getBlockType())
+        {
+            case FRAMED_RAIL_SLOPE ->
+                    FBContent.BLOCK_FRAMED_RAIL_SLOPE.value()
+                            .defaultBlockState()
+                            .setValue(PropertyHolder.ASCENDING_RAIL_SHAPE, RailShape.ASCENDING_SOUTH);
+            case FRAMED_FANCY_RAIL_SLOPE ->
+                    FBContent.BLOCK_FRAMED_FANCY_RAIL_SLOPE.value()
+                            .defaultBlockState()
+                            .setValue(PropertyHolder.ASCENDING_RAIL_SHAPE, RailShape.ASCENDING_SOUTH);
+            default -> throw new IllegalStateException("Invalid block type: " + getBlockType());
+        };
+    }
+
 
 
     public static FramedRailSlopeBlock normal()
@@ -268,14 +285,5 @@ public class FramedRailSlopeBlock extends BaseRailBlock implements IFramedBlock,
                 BlockType.FRAMED_FANCY_RAIL_SLOPE,
                 FramedFancyRailSlopeBlockEntity::new
         );
-    }
-
-
-
-    public static BlockState itemModelSourceFancy()
-    {
-        return FBContent.BLOCK_FRAMED_FANCY_RAIL_SLOPE.value()
-                .defaultBlockState()
-                .setValue(PropertyHolder.ASCENDING_RAIL_SHAPE, RailShape.ASCENDING_SOUTH);
     }
 }

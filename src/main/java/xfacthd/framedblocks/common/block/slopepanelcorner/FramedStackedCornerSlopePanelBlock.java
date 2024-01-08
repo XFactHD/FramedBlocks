@@ -270,19 +270,20 @@ public class FramedStackedCornerSlopePanelBlock extends AbstractFramedDoubleBloc
         return new VerticalAndWallBlockItem(this, other, new Item.Properties());
     }
 
-
-
-    public static BlockState itemModelSource()
+    @Override
+    public BlockState getItemModelSource()
     {
-        return FBContent.BLOCK_FRAMED_STACKED_CORNER_SLOPE_PANEL.value()
-                .defaultBlockState()
-                .setValue(FramedProperties.FACING_HOR, Direction.WEST);
-    }
-
-    public static BlockState itemModelSourceInner()
-    {
-        return FBContent.BLOCK_FRAMED_STACKED_INNER_CORNER_SLOPE_PANEL.value()
-                .defaultBlockState()
-                .setValue(FramedProperties.FACING_HOR, Direction.EAST);
+        return switch ((BlockType) getBlockType())
+        {
+            case FRAMED_STACKED_CORNER_SLOPE_PANEL ->
+                    FBContent.BLOCK_FRAMED_STACKED_CORNER_SLOPE_PANEL.value()
+                            .defaultBlockState()
+                            .setValue(FramedProperties.FACING_HOR, Direction.WEST);
+            case FRAMED_STACKED_INNER_CORNER_SLOPE_PANEL ->
+                    FBContent.BLOCK_FRAMED_STACKED_INNER_CORNER_SLOPE_PANEL.value()
+                            .defaultBlockState()
+                            .setValue(FramedProperties.FACING_HOR, Direction.EAST);
+            default -> throw new IllegalStateException("Invalid block type: " + getBlockType());
+        };
     }
 }

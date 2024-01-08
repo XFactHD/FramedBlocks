@@ -2,14 +2,12 @@ package xfacthd.framedblocks.client.model.slopeslab;
 
 import net.minecraft.client.renderer.block.model.BakedQuad;
 import net.minecraft.core.Direction;
-import net.minecraft.world.level.block.state.BlockState;
 import xfacthd.framedblocks.api.model.data.QuadMap;
 import xfacthd.framedblocks.api.model.geometry.Geometry;
 import xfacthd.framedblocks.api.model.wrapping.GeometryFactory;
 import xfacthd.framedblocks.api.model.quad.Modifiers;
 import xfacthd.framedblocks.api.model.quad.QuadModifier;
 import xfacthd.framedblocks.api.block.FramedProperties;
-import xfacthd.framedblocks.common.FBContent;
 
 public class FramedElevatedSlopeSlabGeometry implements Geometry
 {
@@ -55,14 +53,5 @@ public class FramedElevatedSlopeSlabGeometry implements Geometry
                     .apply(Modifiers.cutSideUpDown(top, rightFace ? .5F : 1, rightFace ? 1 : .5F))
                     .export(quadMap.get(face));
         }
-    }
-
-
-
-    public static BlockState itemSource()
-    {
-        return FBContent.BLOCK_FRAMED_ELEVATED_SLOPE_SLAB.value()
-                .defaultBlockState()
-                .setValue(FramedProperties.FACING_HOR, Direction.SOUTH);
     }
 }

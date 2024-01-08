@@ -230,6 +230,23 @@ public class FramedDoubleCornerSlopePanelBlock extends AbstractFramedDoubleBlock
         return new VerticalAndWallBlockItem(this, other, new Item.Properties());
     }
 
+    @Override
+    public BlockState getItemModelSource()
+    {
+        return switch ((BlockType) getBlockType())
+        {
+            case FRAMED_SMALL_DOUBLE_CORNER_SLOPE_PANEL ->
+                    FBContent.BLOCK_FRAMED_SMALL_DOUBLE_CORNER_SLOPE_PANEL.value()
+                            .defaultBlockState()
+                            .setValue(FramedProperties.FACING_HOR, Direction.EAST);
+            case FRAMED_LARGE_DOUBLE_CORNER_SLOPE_PANEL ->
+                    FBContent.BLOCK_FRAMED_LARGE_DOUBLE_CORNER_SLOPE_PANEL.value()
+                            .defaultBlockState()
+                            .setValue(FramedProperties.FACING_HOR, Direction.EAST);
+            default -> throw new IllegalStateException("Invalid block type: " + getBlockType());
+        };
+    }
+
 
 
     public static ShapeProvider generateSmallShapes(ImmutableList<BlockState> states)
@@ -258,19 +275,5 @@ public class FramedDoubleCornerSlopePanelBlock extends AbstractFramedDoubleBlock
         }
 
         return ShapeProvider.of(builder.build());
-    }
-
-    public static BlockState itemModelSourceSmall()
-    {
-        return FBContent.BLOCK_FRAMED_SMALL_DOUBLE_CORNER_SLOPE_PANEL.value()
-                .defaultBlockState()
-                .setValue(FramedProperties.FACING_HOR, Direction.EAST);
-    }
-
-    public static BlockState itemModelSourceLarge()
-    {
-        return FBContent.BLOCK_FRAMED_LARGE_DOUBLE_CORNER_SLOPE_PANEL.value()
-                .defaultBlockState()
-                .setValue(FramedProperties.FACING_HOR, Direction.EAST);
     }
 }

@@ -2,10 +2,8 @@ package xfacthd.framedblocks.api.model.wrapping;
 
 import net.minecraft.core.Holder;
 import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.block.state.properties.Property;
-import org.jetbrains.annotations.Nullable;
 import xfacthd.framedblocks.api.block.FramedProperties;
 import xfacthd.framedblocks.api.internal.InternalClientAPI;
 import xfacthd.framedblocks.api.model.wrapping.statemerger.StateMerger;
@@ -28,94 +26,34 @@ public final class WrapHelper
     /** {@link WrapHelper#IGNORE_ALWAYS} + solid + waterlogged + state-lock */
     public static final Set<Property<?>> IGNORE_DEFAULT_LOCK = Utils.concat(Set.of(FramedProperties.STATE_LOCKED), IGNORE_DEFAULT);
 
-    public static void wrap(
-            Holder<Block> block,
-            GeometryFactory blockGeometryFactory,
-            Set<Property<?>> ignoredProps
-    )
+    public static void wrap(Holder<Block> block, GeometryFactory blockGeometryFactory, Set<Property<?>> ignoredProps)
     {
-        wrap(block, blockGeometryFactory, null, ignoredProps);
+        wrap(block, blockGeometryFactory, StateMerger.ignoring(ignoredProps));
     }
 
-    public static void wrap(
-            Holder<Block> block,
-            GeometryFactory blockGeometryFactory,
-            @Nullable BlockState itemModelSource,
-            Set<Property<?>> ignoredProps
-    )
+    public static void wrap(Holder<Block> block, GeometryFactory blockGeometryFactory, StateMerger stateMerger)
     {
-        wrap(block, blockGeometryFactory, itemModelSource, StateMerger.ignoring(ignoredProps));
+        InternalClientAPI.INSTANCE.registerModelWrapper(block, blockGeometryFactory, stateMerger);
     }
 
-    public static void wrap(
-            Holder<Block> block,
-            GeometryFactory blockGeometryFactory,
-            StateMerger stateMerger
-    )
+    public static void wrapSpecial(Holder<Block> block, ModelFactory modelFactory, Set<Property<?>> ignoredProps)
     {
-        wrap(block, blockGeometryFactory, null, stateMerger);
+        wrapSpecial(block, modelFactory, StateMerger.ignoring(ignoredProps));
     }
 
-    public static void wrap(
-            Holder<Block> block,
-            GeometryFactory blockGeometryFactory,
-            @Nullable BlockState itemModelSource,
-            StateMerger stateMerger
-    )
+    public static void wrapSpecial(Holder<Block> block, ModelFactory modelFactory, StateMerger stateMerger)
     {
-        InternalClientAPI.INSTANCE.registerModelWrapper(block, blockGeometryFactory, itemModelSource, stateMerger);
+        InternalClientAPI.INSTANCE.registerSpecialModelWrapper(block, modelFactory, stateMerger);
     }
 
-
-
-    public static void wrapSpecial(
-            Holder<Block> block,
-            ModelFactory modelFactory,
-            @Nullable BlockState itemModelSource,
-            StateMerger stateMerger
-    )
+    public static void copy(Holder<Block> block, Holder<Block> srcBlock, Set<Property<?>> ignoredProps)
     {
-        InternalClientAPI.INSTANCE.registerSpecialModelWrapper(block, modelFactory, itemModelSource, stateMerger);
+        copy(block, srcBlock, StateMerger.ignoring(ignoredProps));
     }
 
-
-
-    public static void copy(
-            Holder<Block> block,
-            Holder<Block> srcBlock,
-            Set<Property<?>> ignoredProps
-    )
+    public static void copy(Holder<Block> block, Holder<Block> srcBlock, StateMerger stateMerger)
     {
-        copy(block, srcBlock, null, ignoredProps);
-    }
-
-    public static void copy(
-            Holder<Block> block,
-            Holder<Block> srcBlock,
-            @Nullable BlockState itemModelSource,
-            Set<Property<?>> ignoredProps
-    )
-    {
-        copy(block, srcBlock, itemModelSource, StateMerger.ignoring(ignoredProps));
-    }
-
-    public static void copy(
-            Holder<Block> block,
-            Holder<Block> srcBlock,
-            StateMerger stateMerger
-    )
-    {
-        copy(block, srcBlock, null, stateMerger);
-    }
-
-    public static void copy(
-            Holder<Block> block,
-            Holder<Block> srcBlock,
-            @Nullable BlockState itemModelSource,
-            StateMerger stateMerger
-    )
-    {
-        InternalClientAPI.INSTANCE.registerCopyingModelWrapper(block, srcBlock, itemModelSource, stateMerger);
+        InternalClientAPI.INSTANCE.registerCopyingModelWrapper(block, srcBlock, stateMerger);
     }
 
 

@@ -223,9 +223,8 @@ public class FramedDoubleCornerBlock extends AbstractFramedDoubleBlock
         return new FramedDoubleCornerBlockEntity(pos, state);
     }
 
-
-
-    public static BlockState itemModelSource()
+    @Override
+    public BlockState getItemModelSource()
     {
         return FBContent.BLOCK_FRAMED_DOUBLE_CORNER.value()
                 .defaultBlockState()

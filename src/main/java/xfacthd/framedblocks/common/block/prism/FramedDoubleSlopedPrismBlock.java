@@ -153,9 +153,8 @@ public class FramedDoubleSlopedPrismBlock extends AbstractFramedDoubleBlock
         return new FramedDoubleSlopedPrismBlockEntity(pos, state);
     }
 
-
-
-    public static BlockState itemModelSource()
+    @Override
+    public BlockState getItemModelSource()
     {
         return FBContent.BLOCK_FRAMED_DOUBLE_SLOPED_PRISM.value()
                 .defaultBlockState()

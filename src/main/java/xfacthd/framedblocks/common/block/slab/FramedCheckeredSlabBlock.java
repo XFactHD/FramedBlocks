@@ -87,9 +87,8 @@ public class FramedCheckeredSlabBlock extends AbstractFramedDoubleBlock
         return SolidityCheck.BOTH;
     }
 
-
-
-    public static BlockState itemModelSource()
+    @Override
+    public BlockState getItemModelSource()
     {
         return FBContent.BLOCK_FRAMED_CHECKERED_SLAB.value().defaultBlockState();
     }

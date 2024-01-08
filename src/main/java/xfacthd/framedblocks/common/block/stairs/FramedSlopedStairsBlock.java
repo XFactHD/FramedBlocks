@@ -14,6 +14,7 @@ import xfacthd.framedblocks.api.block.PlacementStateBuilder;
 import xfacthd.framedblocks.api.shapes.ShapeProvider;
 import xfacthd.framedblocks.api.shapes.ShapeUtils;
 import xfacthd.framedblocks.api.util.*;
+import xfacthd.framedblocks.common.FBContent;
 import xfacthd.framedblocks.common.block.FramedBlock;
 import xfacthd.framedblocks.common.block.slab.FramedSlabBlock;
 import xfacthd.framedblocks.common.block.slope.FramedVerticalHalfSlopeBlock;
@@ -77,6 +78,14 @@ public class FramedSlopedStairsBlock extends FramedBlock
     public BlockState mirror(BlockState state, Mirror mirror)
     {
         return Utils.mirrorCornerBlock(state, mirror);
+    }
+
+    @Override
+    public BlockState getItemModelSource()
+    {
+        return FBContent.BLOCK_FRAMED_SLOPED_STAIRS.value()
+                .defaultBlockState()
+                .setValue(FramedProperties.FACING_HOR, Direction.SOUTH);
     }
 
 

@@ -4,7 +4,6 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.renderer.block.model.BakedQuad;
 import net.minecraft.core.Direction;
 import net.minecraft.world.item.ItemDisplayContext;
-import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import org.joml.Vector3f;
 import xfacthd.framedblocks.api.block.FramedProperties;
@@ -14,7 +13,6 @@ import xfacthd.framedblocks.api.model.wrapping.GeometryFactory;
 import xfacthd.framedblocks.api.model.quad.Modifiers;
 import xfacthd.framedblocks.api.model.quad.QuadModifier;
 import xfacthd.framedblocks.api.util.Utils;
-import xfacthd.framedblocks.common.FBContent;
 
 public class FramedPyramidSlabGeometry implements Geometry
 {
@@ -120,12 +118,5 @@ public class FramedPyramidSlabGeometry implements Geometry
     public void applyInHandTransformation(PoseStack poseStack, ItemDisplayContext ctx)
     {
         poseStack.translate(0, .5, 0);
-    }
-
-
-
-    public static BlockState itemSource()
-    {
-        return FBContent.BLOCK_FRAMED_PYRAMID_SLAB.value().defaultBlockState();
     }
 }

@@ -4,7 +4,6 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.renderer.block.model.BakedQuad;
 import net.minecraft.core.Direction;
 import net.minecraft.world.item.ItemDisplayContext;
-import net.minecraft.world.level.block.state.BlockState;
 import org.joml.Vector3f;
 import xfacthd.framedblocks.api.block.FramedProperties;
 import xfacthd.framedblocks.api.model.data.QuadMap;
@@ -13,7 +12,6 @@ import xfacthd.framedblocks.api.model.wrapping.GeometryFactory;
 import xfacthd.framedblocks.api.model.quad.Modifiers;
 import xfacthd.framedblocks.api.model.quad.QuadModifier;
 import xfacthd.framedblocks.client.model.slopepanel.FramedSlopePanelGeometry;
-import xfacthd.framedblocks.common.FBContent;
 
 public class FramedSmallCornerSlopePanelGeometry implements Geometry
 {
@@ -82,14 +80,5 @@ public class FramedSmallCornerSlopePanelGeometry implements Geometry
     public void applyInHandTransformation(PoseStack poseStack, ItemDisplayContext ctx)
     {
         poseStack.translate(0, .5, -.5);
-    }
-
-
-
-    public static BlockState itemModelSource()
-    {
-        return FBContent.BLOCK_FRAMED_SMALL_CORNER_SLOPE_PANEL.value()
-                .defaultBlockState()
-                .setValue(FramedProperties.FACING_HOR, Direction.WEST);
     }
 }

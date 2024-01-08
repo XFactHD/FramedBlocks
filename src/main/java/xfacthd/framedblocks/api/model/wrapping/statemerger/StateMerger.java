@@ -22,6 +22,10 @@ public interface StateMerger extends UnaryOperator<BlockState>
 
     static StateMerger ignoring(Set<Property<?>> ignoredProps)
     {
+        if (ignoredProps == null || ignoredProps.isEmpty())
+        {
+            return PASSTHROUGH;
+        }
         return new IgnoringStateMerger(ignoredProps);
     }
 }

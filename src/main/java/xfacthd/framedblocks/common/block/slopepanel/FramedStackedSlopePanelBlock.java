@@ -176,9 +176,8 @@ public class FramedStackedSlopePanelBlock extends AbstractFramedDoubleBlock
         return new FramedStackedSlopePanelBlockEntity(pos, state);
     }
 
-
-
-    public static BlockState itemModelSource()
+    @Override
+    public BlockState getItemModelSource()
     {
         return FBContent.BLOCK_FRAMED_STACKED_SLOPE_PANEL.value()
                 .defaultBlockState()

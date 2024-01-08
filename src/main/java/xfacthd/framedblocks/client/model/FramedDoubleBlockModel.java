@@ -37,7 +37,6 @@ public final class FramedDoubleBlockModel extends BakedModelWrapper<BakedModel>
     private static final ModelData EMPTY_FRAME = makeDefaultData(false);
     private static final ModelData EMPTY_ALT_FRAME = makeDefaultData(true);
 
-    private final boolean specialItemModel;
     private final DoubleBlockTopInteractionMode particleMode;
     private final Vec3 firstpersonTransform;
     private final Tuple<BlockState, BlockState> dummyStates;
@@ -45,8 +44,7 @@ public final class FramedDoubleBlockModel extends BakedModelWrapper<BakedModel>
 
     public FramedDoubleBlockModel(
             GeometryFactory.Context ctx,
-            Vec3 firstpersonTransform,
-            boolean specialItemModel
+            Vec3 firstpersonTransform
     )
     {
         super(ctx.baseModel());
@@ -55,7 +53,6 @@ public final class FramedDoubleBlockModel extends BakedModelWrapper<BakedModel>
         this.dummyStates = cache.getBlockPair();
         this.particleMode = cache.getTopInteractionMode();
         this.firstpersonTransform = firstpersonTransform;
-        this.specialItemModel = specialItemModel;
     }
 
     @Override
@@ -86,11 +83,7 @@ public final class FramedDoubleBlockModel extends BakedModelWrapper<BakedModel>
     @Override
     public List<BakedQuad> getQuads(BlockState state, Direction side, RandomSource rand)
     {
-        if (specialItemModel)
-        {
-            return getQuads(state, side, rand, ModelData.EMPTY, RenderType.cutout());
-        }
-        return super.getQuads(state, side, rand);
+        return getQuads(state, side, rand, ModelData.EMPTY, RenderType.cutout());
     }
 
     @Override

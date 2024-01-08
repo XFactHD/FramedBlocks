@@ -224,19 +224,20 @@ public class FramedFlatStackedSlopeSlabCornerBlock extends AbstractFramedDoubleB
         return SolidityCheck.NONE;
     }
 
-
-
-    public static BlockState itemModelSource()
+    @Override
+    public BlockState getItemModelSource()
     {
-        return FBContent.BLOCK_FRAMED_FLAT_STACKED_SLOPE_SLAB_CORNER.value()
-                .defaultBlockState()
-                .setValue(FramedProperties.FACING_HOR, Direction.SOUTH);
-    }
-
-    public static BlockState itemModelSourceInner()
-    {
-        return FBContent.BLOCK_FRAMED_FLAT_STACKED_INNER_SLOPE_SLAB_CORNER.value()
-                .defaultBlockState()
-                .setValue(FramedProperties.FACING_HOR, Direction.SOUTH);
+        return switch ((BlockType) getBlockType())
+        {
+            case FRAMED_FLAT_STACKED_SLOPE_SLAB_CORNER ->
+                    FBContent.BLOCK_FRAMED_FLAT_STACKED_SLOPE_SLAB_CORNER.value()
+                            .defaultBlockState()
+                            .setValue(FramedProperties.FACING_HOR, Direction.SOUTH);
+            case FRAMED_FLAT_STACKED_INNER_SLOPE_SLAB_CORNER ->
+                    FBContent.BLOCK_FRAMED_FLAT_STACKED_INNER_SLOPE_SLAB_CORNER.value()
+                            .defaultBlockState()
+                            .setValue(FramedProperties.FACING_HOR, Direction.SOUTH);
+            default -> throw new IllegalStateException("Invalid block type: " + getBlockType());
+        };
     }
 }

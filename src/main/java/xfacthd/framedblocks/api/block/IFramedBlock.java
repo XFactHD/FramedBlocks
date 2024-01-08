@@ -620,4 +620,13 @@ public interface IFramedBlock extends EntityBlock, IBlockExtension
         }
         return false;
     }
+
+    /**
+     * {@return the state whose block model to reuse for the item or null if the loaded item model should be used}
+     */
+    @Nullable
+    default BlockState getItemModelSource()
+    {
+        return null;
+    }
 }

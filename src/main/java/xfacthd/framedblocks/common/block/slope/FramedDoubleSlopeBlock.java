@@ -245,9 +245,8 @@ public class FramedDoubleSlopeBlock extends AbstractFramedDoubleBlock
         return new FramedDoubleSlopeBlockEntity(pos, state);
     }
 
-
-
-    public static BlockState itemModelSource()
+    @Override
+    public BlockState getItemModelSource()
     {
         return FBContent.BLOCK_FRAMED_DOUBLE_SLOPE.value()
                 .defaultBlockState()

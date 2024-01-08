@@ -16,6 +16,7 @@ import xfacthd.framedblocks.api.block.*;
 import xfacthd.framedblocks.api.shapes.ShapeProvider;
 import xfacthd.framedblocks.api.shapes.ShapeUtils;
 import xfacthd.framedblocks.api.util.*;
+import xfacthd.framedblocks.common.FBContent;
 import xfacthd.framedblocks.common.block.FramedBlock;
 import xfacthd.framedblocks.common.data.*;
 
@@ -83,6 +84,14 @@ public class FramedThreewayCornerBlock extends FramedBlock
     public BlockState mirror(BlockState state, Mirror mirror)
     {
         return Utils.mirrorCornerBlock(state, mirror);
+    }
+
+    @Override
+    public BlockState getItemModelSource()
+    {
+        return FBContent.BLOCK_FRAMED_THREEWAY_CORNER.value()
+                .defaultBlockState()
+                .setValue(FramedProperties.FACING_HOR, Direction.SOUTH);
     }
 
 

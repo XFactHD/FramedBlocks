@@ -71,9 +71,8 @@ public class FramedDoublePrismCornerBlock extends FramedDoubleThreewayCornerBloc
         );
     }
 
-
-
-    public static BlockState itemModelSourcePrism()
+    @Override
+    public BlockState getItemModelSource()
     {
         return FBContent.BLOCK_FRAMED_DOUBLE_PRISM_CORNER.value()
                 .defaultBlockState()

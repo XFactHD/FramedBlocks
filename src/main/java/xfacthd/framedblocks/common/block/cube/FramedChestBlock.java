@@ -95,4 +95,10 @@ public class FramedChestBlock extends FramedStorageBlock
         }
         return Utils.createBlockEntityTicker(type, FBContent.BE_TYPE_FRAMED_CHEST.value(), FramedChestBlockEntity::tick);
     }
+
+    @Override
+    public BlockState getItemModelSource()
+    {
+        return FBContent.BLOCK_FRAMED_CHEST.value().defaultBlockState();
+    }
 }

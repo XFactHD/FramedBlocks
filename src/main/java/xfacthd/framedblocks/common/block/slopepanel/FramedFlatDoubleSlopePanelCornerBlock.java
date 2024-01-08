@@ -191,6 +191,15 @@ public class FramedFlatDoubleSlopePanelCornerBlock extends AbstractFramedDoubleB
         return new FramedFlatDoubleSlopePanelCornerBlockEntity(pos, state);
     }
 
+    @Override
+    public BlockState getItemModelSource()
+    {
+        return FBContent.BLOCK_FRAMED_FLAT_DOUBLE_SLOPE_PANEL_CORNER.value()
+                .defaultBlockState()
+                .setValue(FramedProperties.FACING_HOR, Direction.SOUTH)
+                .setValue(PropertyHolder.ROTATION, HorizontalRotation.RIGHT);
+    }
+
 
 
     public static ShapeProvider generateShapes(ImmutableList<BlockState> states)
@@ -208,13 +217,5 @@ public class FramedFlatDoubleSlopePanelCornerBlock extends AbstractFramedDoubleB
         }
 
         return ShapeProvider.of(builder.build());
-    }
-
-    public static BlockState itemSource()
-    {
-        return FBContent.BLOCK_FRAMED_FLAT_DOUBLE_SLOPE_PANEL_CORNER.value()
-                .defaultBlockState()
-                .setValue(FramedProperties.FACING_HOR, Direction.SOUTH)
-                .setValue(PropertyHolder.ROTATION, HorizontalRotation.RIGHT);
     }
 }

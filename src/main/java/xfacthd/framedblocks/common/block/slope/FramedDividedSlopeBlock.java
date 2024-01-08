@@ -230,9 +230,8 @@ public class FramedDividedSlopeBlock extends AbstractFramedDoubleBlock implement
         return new FramedDividedSlopeBlockEntity(pos, state);
     }
 
-
-
-    public static BlockState itemSource()
+    @Override
+    public BlockState getItemModelSource()
     {
         return FBContent.BLOCK_FRAMED_DIVIDED_SLOPE.value()
                 .defaultBlockState()

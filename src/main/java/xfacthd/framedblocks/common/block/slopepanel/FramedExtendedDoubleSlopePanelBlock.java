@@ -175,9 +175,8 @@ public class FramedExtendedDoubleSlopePanelBlock extends AbstractFramedDoubleBlo
         return new FramedExtendedDoubleSlopePanelBlockEntity(pos, state);
     }
 
-
-
-    public static BlockState itemSource()
+    @Override
+    public BlockState getItemModelSource()
     {
         return FBContent.BLOCK_FRAMED_EXTENDED_DOUBLE_SLOPE_PANEL.value()
                 .defaultBlockState()

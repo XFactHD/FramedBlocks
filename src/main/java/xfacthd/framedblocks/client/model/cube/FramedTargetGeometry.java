@@ -14,7 +14,6 @@ import xfacthd.framedblocks.api.model.geometry.Geometry;
 import xfacthd.framedblocks.api.model.wrapping.GeometryFactory;
 import xfacthd.framedblocks.api.util.Utils;
 import xfacthd.framedblocks.api.model.util.ModelUtils;
-import xfacthd.framedblocks.common.FBContent;
 
 import java.util.ArrayList;
 
@@ -50,12 +49,5 @@ public class FramedTargetGeometry implements Geometry
     )
     {
         Utils.copyAll(overlayModel.getQuads(state, side, rand, data, renderType), quads);
-    }
-
-
-
-    public static BlockState itemSource()
-    {
-        return FBContent.BLOCK_FRAMED_TARGET.value().defaultBlockState();
     }
 }

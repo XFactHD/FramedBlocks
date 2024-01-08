@@ -134,9 +134,8 @@ public class FramedVerticalDoubleStairsBlock extends AbstractFramedDoubleBlock
         return new FramedVerticalDoubleStairsBlockEntity(pos, state);
     }
 
-
-
-    public static BlockState itemModelSource()
+    @Override
+    public BlockState getItemModelSource()
     {
         return FBContent.BLOCK_FRAMED_VERTICAL_DOUBLE_STAIRS.value()
                 .defaultBlockState()

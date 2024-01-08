@@ -61,6 +61,14 @@ public class FramedPrismCornerBlock extends FramedThreewayCornerBlock
         return super.handleBlockLeftClick(state, level, pos, player);
     }
 
+    @Override
+    public BlockState getItemModelSource()
+    {
+        return FBContent.BLOCK_FRAMED_PRISM_CORNER.value()
+                .defaultBlockState()
+                .setValue(FramedProperties.FACING_HOR, Direction.SOUTH);
+    }
+
 
 
     public static ShapeProvider generatePrismShapes(ImmutableList<BlockState> states)

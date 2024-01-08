@@ -208,21 +208,20 @@ public class FramedFlatExtendedDoubleSlopePanelCornerBlock extends AbstractFrame
         return new FramedFlatExtendedDoubleSlopePanelCornerBlockEntity(pos, state);
     }
 
-
-
-    public static BlockState itemModelSource()
+    @Override
+    public BlockState getItemModelSource()
     {
-        return FBContent.BLOCK_FRAMED_FLAT_EXTENDED_DOUBLE_SLOPE_PANEL_CORNER.value()
-                .defaultBlockState()
-                .setValue(FramedProperties.FACING_HOR, Direction.SOUTH)
-                .setValue(PropertyHolder.ROTATION, HorizontalRotation.RIGHT);
-    }
-
-    public static BlockState itemModelSourceInner()
-    {
-        return FBContent.BLOCK_FRAMED_FLAT_EXTENDED_INNER_DOUBLE_SLOPE_PANEL_CORNER.value()
-                .defaultBlockState()
-                .setValue(FramedProperties.FACING_HOR, Direction.SOUTH)
-                .setValue(PropertyHolder.ROTATION, HorizontalRotation.RIGHT);
+        return switch ((BlockType) getBlockType())
+        {
+            case FRAMED_FLAT_EXT_DOUBLE_SLOPE_PANEL_CORNER -> FBContent.BLOCK_FRAMED_FLAT_EXTENDED_DOUBLE_SLOPE_PANEL_CORNER.value()
+                    .defaultBlockState()
+                    .setValue(FramedProperties.FACING_HOR, Direction.SOUTH)
+                    .setValue(PropertyHolder.ROTATION, HorizontalRotation.RIGHT);
+            case FRAMED_FLAT_EXT_INNER_DOUBLE_SLOPE_PANEL_CORNER -> FBContent.BLOCK_FRAMED_FLAT_EXTENDED_INNER_DOUBLE_SLOPE_PANEL_CORNER.value()
+                    .defaultBlockState()
+                    .setValue(FramedProperties.FACING_HOR, Direction.SOUTH)
+                    .setValue(PropertyHolder.ROTATION, HorizontalRotation.RIGHT);
+            default -> throw new IllegalStateException("Invalid block type: " + getBlockType());
+        };
     }
 }

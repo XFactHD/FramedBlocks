@@ -131,6 +131,23 @@ public class FramedExtendedCornerSlopePanelBlock extends FramedBlock
         return new VerticalAndWallBlockItem(this, other, new Item.Properties());
     }
 
+    @Override
+    public BlockState getItemModelSource()
+    {
+        return switch ((BlockType) getBlockType())
+        {
+            case FRAMED_EXT_CORNER_SLOPE_PANEL ->
+                    FBContent.BLOCK_FRAMED_EXTENDED_CORNER_SLOPE_PANEL.value()
+                            .defaultBlockState()
+                            .setValue(FramedProperties.FACING_HOR, Direction.WEST);
+            case FRAMED_EXT_INNER_CORNER_SLOPE_PANEL ->
+                    FBContent.BLOCK_FRAMED_EXTENDED_INNER_CORNER_SLOPE_PANEL.value()
+                            .defaultBlockState()
+                            .setValue(FramedProperties.FACING_HOR, Direction.EAST);
+            default -> throw new IllegalStateException("Invalid block type: " + getBlockType());
+        };
+    }
+
 
 
     public static ShapeProvider generateShapes(ImmutableList<BlockState> states)

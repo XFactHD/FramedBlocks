@@ -266,6 +266,31 @@ public class FramedPoweredRailSlopeBlock extends PoweredRailBlock implements IFr
         consumer.accept(FramedBlockRenderProperties.INSTANCE);
     }
 
+    @Override
+    public @Nullable BlockState getItemModelSource()
+    {
+        return switch ((BlockType) getBlockType())
+        {
+            case FRAMED_POWERED_RAIL_SLOPE ->
+                    FBContent.BLOCK_FRAMED_POWERED_RAIL_SLOPE.value()
+                            .defaultBlockState()
+                            .setValue(PropertyHolder.ASCENDING_RAIL_SHAPE, RailShape.ASCENDING_SOUTH);
+            case FRAMED_FANCY_POWERED_RAIL_SLOPE ->
+                    FBContent.BLOCK_FRAMED_FANCY_POWERED_RAIL_SLOPE.value()
+                            .defaultBlockState()
+                            .setValue(PropertyHolder.ASCENDING_RAIL_SHAPE, RailShape.ASCENDING_SOUTH);
+            case FRAMED_ACTIVATOR_RAIL_SLOPE ->
+                    FBContent.BLOCK_FRAMED_ACTIVATOR_RAIL_SLOPE.value()
+                            .defaultBlockState()
+                            .setValue(PropertyHolder.ASCENDING_RAIL_SHAPE, RailShape.ASCENDING_SOUTH);
+            case FRAMED_FANCY_ACTIVATOR_RAIL_SLOPE ->
+                    FBContent.BLOCK_FRAMED_FANCY_ACTIVATOR_RAIL_SLOPE.value()
+                            .defaultBlockState()
+                            .setValue(PropertyHolder.ASCENDING_RAIL_SHAPE, RailShape.ASCENDING_SOUTH);
+            default -> null;
+        };
+    }
+
 
 
     public static FramedPoweredRailSlopeBlock powered()
@@ -302,21 +327,5 @@ public class FramedPoweredRailSlopeBlock extends PoweredRailBlock implements IFr
                 false,
                 FramedFancyRailSlopeBlockEntity::new
         );
-    }
-
-
-
-    public static BlockState itemModelSourceFancyPowered()
-    {
-        return FBContent.BLOCK_FRAMED_FANCY_POWERED_RAIL_SLOPE.value()
-                .defaultBlockState()
-                .setValue(PropertyHolder.ASCENDING_RAIL_SHAPE, RailShape.ASCENDING_SOUTH);
-    }
-
-    public static BlockState itemModelSourceFancyActivator()
-    {
-        return FBContent.BLOCK_FRAMED_FANCY_ACTIVATOR_RAIL_SLOPE.value()
-                .defaultBlockState()
-                .setValue(PropertyHolder.ASCENDING_RAIL_SHAPE, RailShape.ASCENDING_SOUTH);
     }
 }

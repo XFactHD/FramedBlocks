@@ -17,7 +17,6 @@ import xfacthd.framedblocks.api.model.quad.QuadModifier;
 import xfacthd.framedblocks.api.util.*;
 import xfacthd.framedblocks.api.util.ClientUtils;
 import xfacthd.framedblocks.api.model.util.ModelUtils;
-import xfacthd.framedblocks.common.FBContent;
 import xfacthd.framedblocks.common.data.PropertyHolder;
 import xfacthd.framedblocks.common.data.property.ChestState;
 import xfacthd.framedblocks.common.data.property.LatchType;
@@ -121,12 +120,5 @@ public class FramedChestGeometry implements Geometry
         {
             quadMap.get(null).add(quad);
         }
-    }
-
-
-
-    public static BlockState itemSource()
-    {
-        return FBContent.BLOCK_FRAMED_CHEST.value().defaultBlockState();
     }
 }

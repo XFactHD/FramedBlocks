@@ -124,9 +124,8 @@ public class FramedMasonryCornerBlock extends AbstractFramedDoubleBlock
         return CamoGetter.NONE;
     }
 
-
-
-    public static BlockState itemModelSource()
+    @Override
+    public BlockState getItemModelSource()
     {
         return FBContent.BLOCK_FRAMED_MASONRY_CORNER.value().defaultBlockState();
     }

@@ -203,6 +203,14 @@ public class FramedFlatInverseDoubleSlopeSlabCornerBlock extends AbstractFramedD
         return new FramedFlatInverseDoubleSlopeSlabCornerBlockEntity(pos, state);
     }
 
+    @Override
+    public BlockState getItemModelSource()
+    {
+        return FBContent.BLOCK_FRAMED_FLAT_INVERSE_DOUBLE_SLOPE_SLAB_CORNER.value()
+                .defaultBlockState()
+                .setValue(FramedProperties.FACING_HOR, Direction.SOUTH);
+    }
+
 
 
     public static ShapeProvider generateShapes(ImmutableList<BlockState> states)
@@ -240,12 +248,5 @@ public class FramedFlatInverseDoubleSlopeSlabCornerBlock extends AbstractFramedD
         }
 
         return ShapeProvider.of(builder.build());
-    }
-
-    public static BlockState itemModelSource()
-    {
-        return FBContent.BLOCK_FRAMED_FLAT_INVERSE_DOUBLE_SLOPE_SLAB_CORNER.value()
-                .defaultBlockState()
-                .setValue(FramedProperties.FACING_HOR, Direction.SOUTH);
     }
 }

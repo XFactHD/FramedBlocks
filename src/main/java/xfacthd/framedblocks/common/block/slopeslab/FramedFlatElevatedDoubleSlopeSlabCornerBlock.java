@@ -195,19 +195,20 @@ public class FramedFlatElevatedDoubleSlopeSlabCornerBlock extends AbstractFramed
         return new FramedFlatElevatedDoubleSlopeSlabCornerBlockEntity(pos, state);
     }
 
-
-
-    public static BlockState itemModelSource()
+    @Override
+    public BlockState getItemModelSource()
     {
-        return FBContent.BLOCK_FRAMED_FLAT_ELEVATED_DOUBLE_SLOPE_SLAB_CORNER.value()
-                .defaultBlockState()
-                .setValue(FramedProperties.FACING_HOR, Direction.SOUTH);
-    }
-
-    public static BlockState itemModelSourceInner()
-    {
-        return FBContent.BLOCK_FRAMED_FLAT_ELEVATED_INNER_DOUBLE_SLOPE_SLAB_CORNER.value()
-                .defaultBlockState()
-                .setValue(FramedProperties.FACING_HOR, Direction.SOUTH);
+        return switch ((BlockType) getBlockType())
+        {
+            case FRAMED_FLAT_ELEV_DOUBLE_SLOPE_SLAB_CORNER ->
+                    FBContent.BLOCK_FRAMED_FLAT_ELEVATED_DOUBLE_SLOPE_SLAB_CORNER.value()
+                            .defaultBlockState()
+                            .setValue(FramedProperties.FACING_HOR, Direction.SOUTH);
+            case FRAMED_FLAT_ELEV_INNER_DOUBLE_SLOPE_SLAB_CORNER ->
+                    FBContent.BLOCK_FRAMED_FLAT_ELEVATED_INNER_DOUBLE_SLOPE_SLAB_CORNER.value()
+                            .defaultBlockState()
+                            .setValue(FramedProperties.FACING_HOR, Direction.SOUTH);
+            default -> throw new IllegalStateException("Invalid block type: " + getBlockType());
+        };
     }
 }

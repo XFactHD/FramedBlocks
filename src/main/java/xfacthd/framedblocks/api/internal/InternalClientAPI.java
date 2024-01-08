@@ -3,10 +3,8 @@ package xfacthd.framedblocks.api.internal;
 import net.minecraft.client.resources.model.BakedModel;
 import net.minecraft.core.Holder;
 import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.material.Fluid;
 import org.jetbrains.annotations.ApiStatus;
-import org.jetbrains.annotations.Nullable;
 import xfacthd.framedblocks.api.model.wrapping.*;
 import xfacthd.framedblocks.api.model.wrapping.statemerger.StateMerger;
 import xfacthd.framedblocks.api.util.Utils;
@@ -18,26 +16,11 @@ public interface InternalClientAPI
 
 
 
-    void registerModelWrapper(
-            Holder<Block> block,
-            GeometryFactory geometryFactory,
-            @Nullable BlockState itemModelSource,
-            StateMerger stateMerger
-    );
+    void registerModelWrapper(Holder<Block> block, GeometryFactory geometryFactory, StateMerger stateMerger);
 
-    void registerSpecialModelWrapper(
-            Holder<Block> block,
-            ModelFactory modelFactory,
-            @Nullable BlockState itemModelSource,
-            StateMerger stateMerger
-    );
+    void registerSpecialModelWrapper(Holder<Block> block, ModelFactory modelFactory, StateMerger stateMerger);
 
-    void registerCopyingModelWrapper(
-            Holder<Block> block,
-            Holder<Block> srcBlock,
-            @Nullable BlockState itemModelSource,
-            StateMerger stateMerger
-    );
+    void registerCopyingModelWrapper(Holder<Block> block, Holder<Block> srcBlock, StateMerger stateMerger);
 
     void enqueueClientTask(long delay, Runnable task);
 

@@ -127,6 +127,12 @@ public class FramedInverseDoubleSlopeSlabBlock extends AbstractFramedDoubleBlock
         return new FramedInverseDoubleSlopeSlabBlockEntity(pos, state);
     }
 
+    @Override
+    public BlockState getItemModelSource()
+    {
+        return FBContent.BLOCK_FRAMED_INVERSE_DOUBLE_SLOPE_SLAB.value().defaultBlockState();
+    }
+
 
 
     public static ShapeProvider generateShapes(ImmutableList<BlockState> states)
@@ -149,10 +155,5 @@ public class FramedInverseDoubleSlopeSlabBlock extends AbstractFramedDoubleBlock
         }
 
         return ShapeProvider.of(builder.build());
-    }
-
-    public static BlockState itemModelSource()
-    {
-        return FBContent.BLOCK_FRAMED_INVERSE_DOUBLE_SLOPE_SLAB.value().defaultBlockState();
     }
 }

@@ -179,9 +179,8 @@ public class FramedDoubleThreewayCornerBlock extends AbstractFramedDoubleBlock
         return new FramedDoubleThreewayCornerBlockEntity(pos, state);
     }
 
-
-
-    public static BlockState itemModelSourceThreeway()
+    @Override
+    public BlockState getItemModelSource()
     {
         return FBContent.BLOCK_FRAMED_DOUBLE_THREEWAY_CORNER.value()
                 .defaultBlockState()

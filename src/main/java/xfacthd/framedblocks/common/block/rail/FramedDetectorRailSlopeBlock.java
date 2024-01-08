@@ -251,6 +251,23 @@ public class FramedDetectorRailSlopeBlock extends DetectorRailBlock implements I
         consumer.accept(FramedBlockRenderProperties.INSTANCE);
     }
 
+    @Override
+    public BlockState getItemModelSource()
+    {
+        return switch ((BlockType) getBlockType())
+        {
+            case FRAMED_DETECTOR_RAIL_SLOPE ->
+                    FBContent.BLOCK_FRAMED_DETECTOR_RAIL_SLOPE.value()
+                            .defaultBlockState()
+                            .setValue(PropertyHolder.ASCENDING_RAIL_SHAPE, RailShape.ASCENDING_SOUTH);
+            case FRAMED_FANCY_DETECTOR_RAIL_SLOPE ->
+                    FBContent.BLOCK_FRAMED_FANCY_DETECTOR_RAIL_SLOPE.value()
+                            .defaultBlockState()
+                            .setValue(PropertyHolder.ASCENDING_RAIL_SHAPE, RailShape.ASCENDING_SOUTH);
+            default -> throw new IllegalStateException("Invalid block type: " + getBlockType());
+        };
+    }
+
 
 
     public static FramedDetectorRailSlopeBlock normal()
@@ -267,14 +284,5 @@ public class FramedDetectorRailSlopeBlock extends DetectorRailBlock implements I
                 BlockType.FRAMED_FANCY_DETECTOR_RAIL_SLOPE,
                 FramedFancyRailSlopeBlockEntity::new
         );
-    }
-
-
-
-    public static BlockState itemModelSourceFancy()
-    {
-        return FBContent.BLOCK_FRAMED_FANCY_DETECTOR_RAIL_SLOPE.value()
-                .defaultBlockState()
-                .setValue(PropertyHolder.ASCENDING_RAIL_SHAPE, RailShape.ASCENDING_SOUTH);
     }
 }

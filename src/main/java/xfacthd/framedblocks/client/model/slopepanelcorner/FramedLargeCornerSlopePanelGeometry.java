@@ -2,7 +2,6 @@ package xfacthd.framedblocks.client.model.slopepanelcorner;
 
 import net.minecraft.client.renderer.block.model.BakedQuad;
 import net.minecraft.core.Direction;
-import net.minecraft.world.level.block.state.BlockState;
 import xfacthd.framedblocks.api.block.FramedProperties;
 import xfacthd.framedblocks.api.model.data.QuadMap;
 import xfacthd.framedblocks.api.model.geometry.Geometry;
@@ -10,7 +9,6 @@ import xfacthd.framedblocks.api.model.wrapping.GeometryFactory;
 import xfacthd.framedblocks.api.model.quad.Modifiers;
 import xfacthd.framedblocks.api.model.quad.QuadModifier;
 import xfacthd.framedblocks.client.model.slopepanel.FramedSlopePanelGeometry;
-import xfacthd.framedblocks.common.FBContent;
 
 public class FramedLargeCornerSlopePanelGeometry implements Geometry
 {
@@ -76,14 +74,5 @@ public class FramedLargeCornerSlopePanelGeometry implements Geometry
                     .apply(Modifiers.cutTopBottom(dir.getClockWise(), .5F))
                     .export(quadMap.get(quadDir));
         }
-    }
-
-
-
-    public static BlockState itemModelSource()
-    {
-        return FBContent.BLOCK_FRAMED_LARGE_CORNER_SLOPE_PANEL.value()
-                .defaultBlockState()
-                .setValue(FramedProperties.FACING_HOR, Direction.WEST);
     }
 }

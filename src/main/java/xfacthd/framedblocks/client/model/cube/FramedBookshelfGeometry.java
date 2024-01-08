@@ -16,7 +16,6 @@ import xfacthd.framedblocks.api.model.quad.Modifiers;
 import xfacthd.framedblocks.api.model.quad.QuadModifier;
 import xfacthd.framedblocks.api.model.util.ModelUtils;
 import xfacthd.framedblocks.api.util.Utils;
-import xfacthd.framedblocks.common.FBContent;
 
 import java.util.List;
 import java.util.function.Predicate;
@@ -96,15 +95,5 @@ public class FramedBookshelfGeometry implements Geometry
     {
         Direction facing = ctx.state().getValue(FramedProperties.FACING_HOR);
         return new FramedBookshelfGeometry(ctx, facing::equals);
-    }
-
-    public static BlockState itemSourceNormal()
-    {
-        return FBContent.BLOCK_FRAMED_BOOKSHELF.value().defaultBlockState();
-    }
-
-    public static BlockState itemSourceChiseled()
-    {
-        return FBContent.BLOCK_FRAMED_CHISELED_BOOKSHELF.value().defaultBlockState();
     }
 }

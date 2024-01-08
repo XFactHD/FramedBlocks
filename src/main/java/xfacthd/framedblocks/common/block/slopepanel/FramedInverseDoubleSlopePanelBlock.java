@@ -178,6 +178,12 @@ public class FramedInverseDoubleSlopePanelBlock extends AbstractFramedDoubleBloc
         return new FramedInverseDoubleSlopePanelBlockEntity(pos, state);
     }
 
+    @Override
+    public BlockState getItemModelSource()
+    {
+        return FBContent.BLOCK_FRAMED_INVERSE_DOUBLE_SLOPE_PANEL.value().defaultBlockState();
+    }
+
 
 
     public static ShapeProvider generateShapes(ImmutableList<BlockState> states)
@@ -204,10 +210,5 @@ public class FramedInverseDoubleSlopePanelBlock extends AbstractFramedDoubleBloc
         }
 
         return ShapeProvider.of(builder.build());
-    }
-
-    public static BlockState itemModelSource()
-    {
-        return FBContent.BLOCK_FRAMED_INVERSE_DOUBLE_SLOPE_PANEL.value().defaultBlockState();
     }
 }

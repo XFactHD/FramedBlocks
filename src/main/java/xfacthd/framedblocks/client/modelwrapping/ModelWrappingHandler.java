@@ -6,6 +6,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 import org.jetbrains.annotations.Nullable;
+import xfacthd.framedblocks.api.block.IFramedBlock;
 import xfacthd.framedblocks.api.model.wrapping.*;
 import xfacthd.framedblocks.api.model.wrapping.statemerger.StateMerger;
 import xfacthd.framedblocks.api.util.Utils;
@@ -21,16 +22,22 @@ public final class ModelWrappingHandler
     private final BlockState itemModelSource;
     private final StateMerger stateMerger;
 
-    public ModelWrappingHandler(
-            Holder<Block> block,
-            ModelFactory blockModelFactory,
-            @Nullable BlockState itemModelSource,
-            StateMerger stateMerger
-    )
+    public ModelWrappingHandler(Holder<Block> block, ModelFactory blockModelFactory, StateMerger stateMerger)
     {
         this.block = block;
         this.blockModelFactory = blockModelFactory;
-        this.itemModelSource = itemModelSource;
+        BlockState itemSource = null;
+        if (block.value() instanceof IFramedBlock framedBlock)
+        {
+            itemSource = framedBlock.getItemModelSource();
+            if (itemSource != null && !itemSource.is(block))
+            {
+                throw new IllegalArgumentException(
+                        "Item model source '" + itemSource + "' is invalid for block '" + block.value() + "'"
+                );
+            }
+        }
+        this.itemModelSource = itemSource;
         this.stateMerger = stateMerger;
     }
 

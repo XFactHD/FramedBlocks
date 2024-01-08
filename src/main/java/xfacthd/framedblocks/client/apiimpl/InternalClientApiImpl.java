@@ -4,10 +4,8 @@ import net.minecraft.Util;
 import net.minecraft.client.resources.model.BakedModel;
 import net.minecraft.core.Holder;
 import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.Property;
 import net.minecraft.world.level.material.Fluid;
-import org.jetbrains.annotations.Nullable;
 import xfacthd.framedblocks.FramedBlocks;
 import xfacthd.framedblocks.api.internal.InternalClientAPI;
 import xfacthd.framedblocks.api.model.wrapping.*;
@@ -33,45 +31,27 @@ public final class InternalClientApiImpl implements InternalClientAPI
     });
 
     @Override
-    public void registerModelWrapper(
-            Holder<Block> block,
-            GeometryFactory geometryFactory,
-            @Nullable BlockState itemModelSource,
-            StateMerger stateMerger
-    )
+    public void registerModelWrapper(Holder<Block> block, GeometryFactory geometryFactory, StateMerger stateMerger)
     {
         registerSpecialModelWrapper(
                 block,
                 ctx -> new FramedBlockModel(ctx, geometryFactory.create(ctx)),
-                itemModelSource,
                 stateMerger
         );
     }
 
     @Override
-    public void registerSpecialModelWrapper(
-            Holder<Block> block,
-            ModelFactory modelFactory,
-            @Nullable BlockState itemModelSource,
-            StateMerger stateMerger
-    )
+    public void registerSpecialModelWrapper(Holder<Block> block, ModelFactory modelFactory, StateMerger stateMerger)
     {
         debugStateMerger(block, stateMerger);
 
-        ModelWrappingManager.register(block, new ModelWrappingHandler(
-                block, modelFactory, itemModelSource, stateMerger
-        ));
+        ModelWrappingManager.register(block, new ModelWrappingHandler(block, modelFactory, stateMerger));
     }
 
     @Override
-    public void registerCopyingModelWrapper(
-            Holder<Block> block,
-            Holder<Block> srcBlock,
-            @Nullable BlockState itemModelSource,
-            StateMerger stateMerger
-    )
+    public void registerCopyingModelWrapper(Holder<Block> block, Holder<Block> srcBlock, StateMerger stateMerger)
     {
-        registerSpecialModelWrapper(block, new CopyingModelFactory(srcBlock), itemModelSource, stateMerger);
+        registerSpecialModelWrapper(block, new CopyingModelFactory(srcBlock), stateMerger);
     }
 
     @Override

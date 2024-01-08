@@ -25,6 +25,7 @@ import org.jetbrains.annotations.Nullable;
 import xfacthd.framedblocks.api.block.FramedProperties;
 import xfacthd.framedblocks.api.block.PlacementStateBuilder;
 import xfacthd.framedblocks.api.util.Utils;
+import xfacthd.framedblocks.common.FBContent;
 import xfacthd.framedblocks.common.block.FramedBlock;
 import xfacthd.framedblocks.common.blockentity.special.FramedChiseledBookshelfBlockEntity;
 import xfacthd.framedblocks.common.data.BlockType;
@@ -202,5 +203,11 @@ public class FramedChiseledBookshelfBlock extends FramedBlock
     public BlockEntity newBlockEntity(BlockPos pos, BlockState state)
     {
         return new FramedChiseledBookshelfBlockEntity(pos, state);
+    }
+
+    @Override
+    public BlockState getItemModelSource()
+    {
+        return FBContent.BLOCK_FRAMED_CHISELED_BOOKSHELF.value().defaultBlockState();
     }
 }
