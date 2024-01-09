@@ -11,12 +11,11 @@ import xfacthd.framedblocks.common.FBContent;
 
 public final class FancyRailGhostRenderBehaviour implements GhostRenderBehaviour
 {
-    private final RailSlopeGhostRenderBehaviour railSlopeBehaviour = new RailSlopeGhostRenderBehaviour();
-
     @Override
     public boolean mayRender(ItemStack stack, @Nullable ItemStack proxiedStack)
     {
-        return railSlopeBehaviour.mayRender(stack, proxiedStack) || GhostRenderBehaviour.super.mayRender(stack, proxiedStack);
+        return RailSlopeGhostRenderBehaviour.INSTANCE.mayRender(stack, proxiedStack) ||
+                GhostRenderBehaviour.super.mayRender(stack, proxiedStack);
     }
 
     @Override
@@ -29,7 +28,7 @@ public final class FancyRailGhostRenderBehaviour implements GhostRenderBehaviour
             int renderPass
     )
     {
-        BlockState state = railSlopeBehaviour.getRenderState(stack, proxiedStack, hit, ctx, hitState, renderPass);
+        BlockState state = RailSlopeGhostRenderBehaviour.INSTANCE.getRenderState(stack, proxiedStack, hit, ctx, hitState, renderPass);
         if (state != null)
         {
             return state;
@@ -50,7 +49,7 @@ public final class FancyRailGhostRenderBehaviour implements GhostRenderBehaviour
     {
         if (hitState.getBlock() == FBContent.BLOCK_FRAMED_SLOPE.value())
         {
-            return railSlopeBehaviour.getRenderPos(stack, proxiedStack, hit, ctx, hitState, defaultPos, renderPass);
+            return RailSlopeGhostRenderBehaviour.INSTANCE.getRenderPos(stack, proxiedStack, hit, ctx, hitState, defaultPos, renderPass);
         }
         return GhostRenderBehaviour.super.getRenderPos(stack, proxiedStack, hit, ctx, hitState, defaultPos, renderPass);
     }
@@ -68,7 +67,7 @@ public final class FancyRailGhostRenderBehaviour implements GhostRenderBehaviour
     {
         if (renderPos.equals(hit.getBlockPos()))
         {
-            return railSlopeBehaviour.canRenderAt(stack, proxiedStack, hit, ctx, hitState, renderState, renderPos);
+            return RailSlopeGhostRenderBehaviour.INSTANCE.canRenderAt(stack, proxiedStack, hit, ctx, hitState, renderState, renderPos);
         }
         return GhostRenderBehaviour.super.canRenderAt(stack, proxiedStack, hit, ctx, hitState, renderState, renderPos);
     }

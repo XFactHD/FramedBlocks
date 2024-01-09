@@ -13,7 +13,6 @@ import net.neoforged.neoforge.common.data.ExistingFileHelper;
 import org.joml.Vector3f;
 import xfacthd.framedblocks.api.block.FramedProperties;
 import xfacthd.framedblocks.api.util.*;
-import xfacthd.framedblocks.api.util.ClientUtils;
 import xfacthd.framedblocks.client.loader.overlay.OverlayLoaderBuilder;
 import xfacthd.framedblocks.client.model.cube.FramedMarkedCubeGeometry;
 import xfacthd.framedblocks.client.model.cube.FramedTargetGeometry;

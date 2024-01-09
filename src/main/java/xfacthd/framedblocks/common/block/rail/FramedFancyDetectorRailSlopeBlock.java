@@ -18,7 +18,6 @@ import xfacthd.framedblocks.common.data.BlockType;
 import xfacthd.framedblocks.common.data.PropertyHolder;
 import xfacthd.framedblocks.common.data.doubleblock.*;
 import xfacthd.framedblocks.common.data.property.SlopeType;
-import xfacthd.framedblocks.common.data.doubleblock.DoubleBlockTopInteractionMode;
 import xfacthd.framedblocks.common.util.FramedUtils;
 
 import java.util.function.BiFunction;
@@ -26,9 +25,9 @@ import java.util.function.Consumer;
 
 class FramedFancyDetectorRailSlopeBlock extends FramedDetectorRailSlopeBlock implements IFramedDoubleBlock, ISlopeBlock.IRailSlopeBlock
 {
-    FramedFancyDetectorRailSlopeBlock(BlockType type, BiFunction<BlockPos, BlockState, FramedBlockEntity> beFactory)
+    FramedFancyDetectorRailSlopeBlock(BiFunction<BlockPos, BlockState, FramedBlockEntity> beFactory)
     {
-        super(type, beFactory);
+        super(BlockType.FRAMED_FANCY_DETECTOR_RAIL_SLOPE, beFactory);
     }
 
     @Override

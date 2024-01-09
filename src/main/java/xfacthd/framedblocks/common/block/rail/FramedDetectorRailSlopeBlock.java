@@ -23,7 +23,6 @@ import org.jetbrains.annotations.Nullable;
 import xfacthd.framedblocks.api.block.*;
 import xfacthd.framedblocks.api.block.render.FramedBlockRenderProperties;
 import xfacthd.framedblocks.api.shapes.ShapeProvider;
-import xfacthd.framedblocks.api.type.IBlockType;
 import xfacthd.framedblocks.api.util.Utils;
 import xfacthd.framedblocks.common.FBContent;
 import xfacthd.framedblocks.common.block.ISlopeBlock;
@@ -240,7 +239,7 @@ public class FramedDetectorRailSlopeBlock extends DetectorRailBlock implements I
     }
 
     @Override
-    public IBlockType getBlockType()
+    public BlockType getBlockType()
     {
         return type;
     }
@@ -254,7 +253,7 @@ public class FramedDetectorRailSlopeBlock extends DetectorRailBlock implements I
     @Override
     public BlockState getItemModelSource()
     {
-        return switch ((BlockType) getBlockType())
+        return switch (getBlockType())
         {
             case FRAMED_DETECTOR_RAIL_SLOPE ->
                     FBContent.BLOCK_FRAMED_DETECTOR_RAIL_SLOPE.value()
@@ -280,9 +279,6 @@ public class FramedDetectorRailSlopeBlock extends DetectorRailBlock implements I
 
     public static FramedDetectorRailSlopeBlock fancy()
     {
-        return new FramedFancyDetectorRailSlopeBlock(
-                BlockType.FRAMED_FANCY_DETECTOR_RAIL_SLOPE,
-                FramedFancyRailSlopeBlockEntity::new
-        );
+        return new FramedFancyDetectorRailSlopeBlock(FramedFancyRailSlopeBlockEntity::new);
     }
 }

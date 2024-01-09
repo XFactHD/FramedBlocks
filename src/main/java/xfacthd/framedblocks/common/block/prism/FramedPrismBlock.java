@@ -108,7 +108,7 @@ public class FramedPrismBlock extends FramedBlock
     @Override
     public BlockState getItemModelSource()
     {
-        return switch ((BlockType) getBlockType())
+        return switch (getBlockType())
         {
             case FRAMED_PRISM ->
                     FBContent.BLOCK_FRAMED_PRISM.value()

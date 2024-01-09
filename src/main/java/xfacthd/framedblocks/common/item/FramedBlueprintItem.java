@@ -115,7 +115,6 @@ public class FramedBlueprintItem extends FramedToolItem
         if (!level.isClientSide())
         {
             BlockState state = level.getBlockState(pos);
-            //noinspection ConstantConditions
             String blockName = BuiltInRegistries.BLOCK.getKey(state.getBlock()).toString();
             tag.putString("framed_block", blockName);
 

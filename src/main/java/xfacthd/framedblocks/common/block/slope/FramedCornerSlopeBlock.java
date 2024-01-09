@@ -103,7 +103,7 @@ public class FramedCornerSlopeBlock extends FramedBlock
     @Override
     public BlockState getItemModelSource()
     {
-        return switch ((BlockType) getBlockType())
+        return switch (getBlockType())
         {
             case FRAMED_CORNER_SLOPE ->
                     FBContent.BLOCK_FRAMED_CORNER_SLOPE.value()

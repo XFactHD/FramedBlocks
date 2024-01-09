@@ -3,10 +3,10 @@ package xfacthd.framedblocks.common.compat.buildinggadgets;
 //import com.direwolf20.buildinggadgets.common.tainted.building.tilesupport.*;
 //import com.direwolf20.buildinggadgets.common.tainted.registry.TopologicalRegistryBuilder;
 //import com.direwolf20.buildinggadgets.common.util.ref.Reference;
+import net.neoforged.bus.api.IEventBus;
 import net.neoforged.fml.InterModComms;
 import net.neoforged.fml.ModList;
 import net.neoforged.fml.event.lifecycle.InterModEnqueueEvent;
-import net.neoforged.fml.javafmlmod.FMLJavaModLoadingContext;
 import net.neoforged.neoforge.registries.DeferredRegister;
 import xfacthd.framedblocks.FramedBlocks;
 import xfacthd.framedblocks.api.block.FramedBlockEntity;
@@ -17,7 +17,7 @@ import java.util.function.Supplier;
 
 public final class BuildingGadgetsCompat
 {
-    public static void init()
+    public static void init(IEventBus modBus)
     {
         if (ModList.get().isLoaded("buildinggadgets"))
         {
@@ -28,7 +28,7 @@ public final class BuildingGadgetsCompat
 
             try
             {
-                //GuardedAccess.init();
+                //GuardedAccess.init(modBus);
             }
             catch (Throwable e)
             {
@@ -47,10 +47,10 @@ public final class BuildingGadgetsCompat
                 "framed_serializer", FramedBlockEntityDataSerializer::new
         );
 
-        public static void init()
+        public static void init(IEventBus modBus)
         {
-            SERIALIZERS.register(FMLJavaModLoadingContext.get().getModEventBus());
-            FMLJavaModLoadingContext.get().getModEventBus().addListener(GuardedAccess::sendCompatImc);
+            SERIALIZERS.register(modBus);
+            modBus.addListener(GuardedAccess::sendCompatImc);
         }
 
         private static void sendCompatImc(@SuppressWarnings("unused") final InterModEnqueueEvent event)

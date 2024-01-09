@@ -72,7 +72,6 @@ public class FramedFlowerPotBlockEntity extends FramedBlockEntity
     protected void writeToDataPacket(CompoundTag nbt)
     {
         super.writeToDataPacket(nbt);
-        //noinspection ConstantConditions
         nbt.putString("flower", BuiltInRegistries.BLOCK.getKey(flowerBlock).toString());
     }
 
@@ -95,7 +94,6 @@ public class FramedFlowerPotBlockEntity extends FramedBlockEntity
     {
         CompoundTag nbt = super.getUpdateTag();
 
-        //noinspection ConstantConditions
         nbt.putString("flower", BuiltInRegistries.BLOCK.getKey(flowerBlock).toString());
 
         return nbt;
@@ -116,7 +114,6 @@ public class FramedFlowerPotBlockEntity extends FramedBlockEntity
     @Override
     public void saveAdditional(CompoundTag nbt)
     {
-        //noinspection ConstantConditions
         nbt.putString("flower", BuiltInRegistries.BLOCK.getKey(flowerBlock).toString());
         super.saveAdditional(nbt);
     }

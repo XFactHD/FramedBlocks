@@ -103,7 +103,7 @@ public class FramedCornerSlopePanelBlock extends FramedBlock
     {
         Direction side = hit.getDirection();
         Direction dir = state.getValue(FramedProperties.FACING_HOR);
-        switch ((BlockType) getBlockType())
+        switch (getBlockType())
         {
             case FRAMED_SMALL_CORNER_SLOPE_PANEL, FRAMED_LARGE_CORNER_SLOPE_PANEL ->
             {
@@ -156,7 +156,7 @@ public class FramedCornerSlopePanelBlock extends FramedBlock
     @Override
     public BlockItem createBlockItem()
     {
-        Block other = switch ((BlockType) getBlockType())
+        Block other = switch (getBlockType())
         {
             case FRAMED_SMALL_CORNER_SLOPE_PANEL -> FBContent.BLOCK_FRAMED_SMALL_CORNER_SLOPE_PANEL_WALL.value();
             case FRAMED_LARGE_CORNER_SLOPE_PANEL -> FBContent.BLOCK_FRAMED_LARGE_CORNER_SLOPE_PANEL_WALL.value();
@@ -170,7 +170,7 @@ public class FramedCornerSlopePanelBlock extends FramedBlock
     @Override
     public BlockState getItemModelSource()
     {
-        return switch ((BlockType) getBlockType())
+        return switch (getBlockType())
         {
             case FRAMED_SMALL_CORNER_SLOPE_PANEL ->
                     FBContent.BLOCK_FRAMED_SMALL_CORNER_SLOPE_PANEL.value()

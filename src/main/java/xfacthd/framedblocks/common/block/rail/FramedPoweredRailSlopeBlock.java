@@ -23,7 +23,6 @@ import org.jetbrains.annotations.Nullable;
 import xfacthd.framedblocks.api.block.*;
 import xfacthd.framedblocks.api.block.render.FramedBlockRenderProperties;
 import xfacthd.framedblocks.api.shapes.ShapeProvider;
-import xfacthd.framedblocks.api.type.IBlockType;
 import xfacthd.framedblocks.api.util.Utils;
 import xfacthd.framedblocks.common.FBContent;
 import xfacthd.framedblocks.common.block.ISlopeBlock;
@@ -255,7 +254,7 @@ public class FramedPoweredRailSlopeBlock extends PoweredRailBlock implements IFr
     }
 
     @Override
-    public IBlockType getBlockType()
+    public BlockType getBlockType()
     {
         return type;
     }
@@ -269,7 +268,7 @@ public class FramedPoweredRailSlopeBlock extends PoweredRailBlock implements IFr
     @Override
     public @Nullable BlockState getItemModelSource()
     {
-        return switch ((BlockType) getBlockType())
+        return switch (getBlockType())
         {
             case FRAMED_POWERED_RAIL_SLOPE ->
                     FBContent.BLOCK_FRAMED_POWERED_RAIL_SLOPE.value()

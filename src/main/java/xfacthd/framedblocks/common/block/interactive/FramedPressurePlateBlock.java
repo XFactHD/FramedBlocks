@@ -58,7 +58,6 @@ public class FramedPressurePlateBlock extends PressurePlateBlock implements IFra
 
     private final BlockType blockType;
 
-    @SuppressWarnings("ConstantConditions")
     protected FramedPressurePlateBlock(BlockType type, BlockSetType blockSet, Properties props)
     {
         super(blockSet, props);

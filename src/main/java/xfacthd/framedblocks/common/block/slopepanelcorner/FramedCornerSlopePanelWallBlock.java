@@ -81,7 +81,7 @@ public class FramedCornerSlopePanelWallBlock extends FramedBlock
         HorizontalRotation rotation = state.getValue(PropertyHolder.ROTATION);
         Direction rotDir = rotation.withFacing(dir);
         Direction perpRotDir = rotation.rotate(Rotation.COUNTERCLOCKWISE_90).withFacing(dir);
-        switch ((BlockType) getBlockType())
+        switch (getBlockType())
         {
             case FRAMED_SMALL_CORNER_SLOPE_PANEL_W, FRAMED_LARGE_CORNER_SLOPE_PANEL_W ->
             {

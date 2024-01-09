@@ -127,7 +127,7 @@ public class FramedSlopedPrismBlock extends FramedBlock
     @Override
     public BlockState getItemModelSource()
     {
-        return switch ((BlockType) getBlockType())
+        return switch (getBlockType())
         {
             case FRAMED_SLOPED_PRISM ->
                     FBContent.BLOCK_FRAMED_SLOPED_PRISM.value()

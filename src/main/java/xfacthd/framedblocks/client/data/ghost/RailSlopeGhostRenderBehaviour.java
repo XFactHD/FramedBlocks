@@ -16,6 +16,10 @@ import xfacthd.framedblocks.common.util.FramedUtils;
 
 public final class RailSlopeGhostRenderBehaviour implements GhostRenderBehaviour
 {
+    public static final RailSlopeGhostRenderBehaviour INSTANCE = new RailSlopeGhostRenderBehaviour();
+
+    private RailSlopeGhostRenderBehaviour() { }
+
     @Override
     public boolean mayRender(ItemStack stack, @Nullable ItemStack proxiedStack)
     {

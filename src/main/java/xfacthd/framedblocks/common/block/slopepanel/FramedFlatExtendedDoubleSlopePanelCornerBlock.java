@@ -211,7 +211,7 @@ public class FramedFlatExtendedDoubleSlopePanelCornerBlock extends AbstractFrame
     @Override
     public BlockState getItemModelSource()
     {
-        return switch ((BlockType) getBlockType())
+        return switch (getBlockType())
         {
             case FRAMED_FLAT_EXT_DOUBLE_SLOPE_PANEL_CORNER -> FBContent.BLOCK_FRAMED_FLAT_EXTENDED_DOUBLE_SLOPE_PANEL_CORNER.value()
                     .defaultBlockState()

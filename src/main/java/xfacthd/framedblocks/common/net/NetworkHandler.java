@@ -3,7 +3,6 @@ package xfacthd.framedblocks.common.net;
 import net.neoforged.neoforge.network.event.RegisterPayloadHandlerEvent;
 import xfacthd.framedblocks.api.util.FramedConstants;
 import xfacthd.framedblocks.common.data.cullupdate.ClientCullingUpdateTracker;
-import xfacthd.framedblocks.common.net.payload.CullingUpdatePayload;
 import xfacthd.framedblocks.common.net.payload.*;
 
 public final class NetworkHandler

@@ -80,7 +80,6 @@ public class FramedOwnableBlockEntity extends FramedBlockEntity
         super.handleUpdateTag(nbt);
         if (nbt.contains("owner"))
         {
-            //noinspection ConstantConditions
             owner = nbt.getUUID("owner");
         }
     }
@@ -101,7 +100,6 @@ public class FramedOwnableBlockEntity extends FramedBlockEntity
         super.load(tag);
         if (tag.contains("owner"))
         {
-            //noinspection ConstantConditions
             owner = tag.getUUID("owner");
         }
     }

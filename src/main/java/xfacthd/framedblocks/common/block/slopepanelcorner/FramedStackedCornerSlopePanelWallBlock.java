@@ -71,7 +71,7 @@ public class FramedStackedCornerSlopePanelWallBlock extends AbstractFramedDouble
         HorizontalRotation rotation = state.getValue(PropertyHolder.ROTATION);
         Direction rotDir = rotation.withFacing(dir);
         Direction perpRotDir = rotation.rotate(Rotation.COUNTERCLOCKWISE_90).withFacing(dir);
-        switch ((BlockType) getBlockType())
+        switch (getBlockType())
         {
             case FRAMED_STACKED_CORNER_SLOPE_PANEL_W ->
             {
@@ -128,7 +128,7 @@ public class FramedStackedCornerSlopePanelWallBlock extends AbstractFramedDouble
     @Override
     public BlockEntity newBlockEntity(BlockPos pos, BlockState state)
     {
-        return switch ((BlockType) getBlockType())
+        return switch (getBlockType())
         {
             case FRAMED_STACKED_CORNER_SLOPE_PANEL_W -> new FramedStackedCornerSlopePanelWallBlockEntity(pos, state);
             case FRAMED_STACKED_INNER_CORNER_SLOPE_PANEL_W -> new FramedStackedInnerCornerSlopePanelWallBlockEntity(pos, state);
@@ -170,7 +170,7 @@ public class FramedStackedCornerSlopePanelWallBlock extends AbstractFramedDouble
             default -> throw new IncompatibleClassChangeError();
         }
 
-        return switch ((BlockType) getBlockType())
+        return switch (getBlockType())
         {
             case FRAMED_STACKED_CORNER_SLOPE_PANEL_W -> new Tuple<>(
                     FBContent.BLOCK_FRAMED_SLAB_EDGE.value()
@@ -212,7 +212,7 @@ public class FramedStackedCornerSlopePanelWallBlock extends AbstractFramedDouble
     @Override
     public CamoGetter calculateCamoGetter(BlockState state, Direction side, @Nullable Direction edge)
     {
-        return switch ((BlockType) getBlockType())
+        return switch (getBlockType())
         {
             case FRAMED_STACKED_CORNER_SLOPE_PANEL_W ->
             {
@@ -261,7 +261,7 @@ public class FramedStackedCornerSlopePanelWallBlock extends AbstractFramedDouble
     @Override
     public SolidityCheck calculateSolidityCheck(BlockState state, Direction side)
     {
-        return switch ((BlockType) getBlockType())
+        return switch (getBlockType())
         {
             case FRAMED_STACKED_CORNER_SLOPE_PANEL_W ->
             {

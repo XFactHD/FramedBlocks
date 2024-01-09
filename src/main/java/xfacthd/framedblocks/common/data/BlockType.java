@@ -220,8 +220,6 @@ public enum BlockType implements IBlockType
     FRAMED_CHECKERED_PANEL                          ( true, false,  true,  true,  true,  true,  true, false, ConTexMode.DETAILED, FramedPanelBlock::generateShapes),
     ;
 
-    public static final int COUNT = values().length;
-
     private final String name = toString().toLowerCase(Locale.ROOT);
     private final boolean canOcclude;
     private final boolean specialHitbox;

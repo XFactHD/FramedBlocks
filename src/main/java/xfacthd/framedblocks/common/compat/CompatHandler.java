@@ -1,5 +1,6 @@
 package xfacthd.framedblocks.common.compat;
 
+import net.neoforged.bus.api.IEventBus;
 import xfacthd.framedblocks.common.compat.athena.AthenaCompat;
 import xfacthd.framedblocks.common.compat.atlasviewer.AtlasViewerCompat;
 import xfacthd.framedblocks.common.compat.buildinggadgets.BuildingGadgetsCompat;
@@ -17,11 +18,11 @@ import xfacthd.framedblocks.common.compat.xycraft.XyCraftCompat;
 
 public final class CompatHandler
 {
-    public static void init()
+    public static void init(IEventBus modBus)
     {
         AthenaCompat.init();
-        AtlasViewerCompat.init();
-        BuildingGadgetsCompat.init();
+        AtlasViewerCompat.init(modBus);
+        BuildingGadgetsCompat.init(modBus);
         CreateCompat.init();
         CtmCompat.init();
         EmiCompat.init();

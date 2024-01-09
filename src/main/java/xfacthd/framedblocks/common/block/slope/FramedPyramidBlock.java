@@ -80,7 +80,7 @@ public class FramedPyramidBlock extends FramedBlock
     @Override
     public BlockState getItemModelSource()
     {
-        return switch ((BlockType) getBlockType())
+        return switch (getBlockType())
         {
             case FRAMED_PYRAMID -> FBContent.BLOCK_FRAMED_PYRAMID.value().defaultBlockState();
             case FRAMED_PYRAMID_SLAB -> FBContent.BLOCK_FRAMED_PYRAMID_SLAB.value().defaultBlockState();

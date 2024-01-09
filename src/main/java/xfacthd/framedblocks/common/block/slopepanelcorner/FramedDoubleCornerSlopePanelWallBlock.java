@@ -96,7 +96,7 @@ public class FramedDoubleCornerSlopePanelWallBlock extends AbstractFramedDoubleB
     @Override
     public BlockEntity newBlockEntity(BlockPos pos, BlockState state)
     {
-        return switch ((BlockType) getBlockType())
+        return switch (getBlockType())
         {
             case FRAMED_SMALL_DOUBLE_CORNER_SLOPE_PANEL_W -> new FramedSmallDoubleCornerSlopePanelWallBlockEntity(pos, state);
             case FRAMED_LARGE_DOUBLE_CORNER_SLOPE_PANEL_W -> new FramedLargeDoubleCornerSlopePanelWallBlockEntity(pos, state);
@@ -112,7 +112,7 @@ public class FramedDoubleCornerSlopePanelWallBlock extends AbstractFramedDoubleB
         HorizontalRotation backRot = rot.rotate(rot.isVertical() ? Rotation.CLOCKWISE_90 : Rotation.COUNTERCLOCKWISE_90);
         boolean ySlope = state.getValue(FramedProperties.Y_SLOPE);
 
-        return switch ((BlockType) getBlockType())
+        return switch (getBlockType())
         {
             case FRAMED_SMALL_DOUBLE_CORNER_SLOPE_PANEL_W -> new Tuple<>(
                     FBContent.BLOCK_FRAMED_SMALL_INNER_CORNER_SLOPE_PANEL_WALL.value()
@@ -145,7 +145,7 @@ public class FramedDoubleCornerSlopePanelWallBlock extends AbstractFramedDoubleB
     @Override
     public DoubleBlockTopInteractionMode calculateTopInteractionMode(BlockState state)
     {
-        return switch ((BlockType) getBlockType())
+        return switch (getBlockType())
         {
             case FRAMED_SMALL_DOUBLE_CORNER_SLOPE_PANEL_W ->
             {
@@ -172,7 +172,7 @@ public class FramedDoubleCornerSlopePanelWallBlock extends AbstractFramedDoubleB
     @Override
     public CamoGetter calculateCamoGetter(BlockState state, Direction side, @Nullable Direction edge)
     {
-        return switch ((BlockType) getBlockType())
+        return switch (getBlockType())
         {
             case FRAMED_SMALL_DOUBLE_CORNER_SLOPE_PANEL_W ->
             {
@@ -223,7 +223,7 @@ public class FramedDoubleCornerSlopePanelWallBlock extends AbstractFramedDoubleB
     @Override
     public SolidityCheck calculateSolidityCheck(BlockState state, Direction side)
     {
-        return switch ((BlockType) getBlockType())
+        return switch (getBlockType())
         {
             case FRAMED_SMALL_DOUBLE_CORNER_SLOPE_PANEL_W -> SolidityCheck.NONE;
             case FRAMED_LARGE_DOUBLE_CORNER_SLOPE_PANEL_W ->
@@ -240,8 +240,6 @@ public class FramedDoubleCornerSlopePanelWallBlock extends AbstractFramedDoubleB
             }
             default -> throw new IllegalStateException("Unexpected type: " + getBlockType());
         };
-
-
     }
 
 

@@ -39,7 +39,6 @@ import xfacthd.framedblocks.api.internal.InternalAPI;
 import xfacthd.framedblocks.api.model.data.FramedBlockData;
 import xfacthd.framedblocks.api.type.IBlockType;
 import xfacthd.framedblocks.api.util.*;
-import xfacthd.framedblocks.api.util.ClientUtils;
 
 import java.util.List;
 
@@ -586,7 +585,6 @@ public class FramedBlockEntity extends BlockEntity
             modelData.setSideHidden(side, hidden);
             if (rerender)
             {
-                //noinspection ConstantConditions
                 level.sendBlockUpdated(worldPosition, getBlockState(), getBlockState(), Block.UPDATE_ALL);
             }
             return true;

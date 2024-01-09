@@ -52,7 +52,6 @@ public final class ServerConfig
         INSTANCE = configSpecPair.getLeft();
     }
 
-    @SuppressWarnings("ConstantConditions")
     public ServerConfig(ModConfigSpec.Builder builder)
     {
         FMLJavaModLoadingContext.get().getModEventBus().register(this);

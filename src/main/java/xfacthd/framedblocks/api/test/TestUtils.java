@@ -440,7 +440,6 @@ public final class TestUtils
 
                     Player player = helper.makeMockPlayer();
                     CollisionContext ctx = CollisionContext.of(player);
-                    //noinspection ConstantConditions
                     BuiltInRegistries.ITEM.getTag(Utils.DISABLE_INTANGIBLE)
                             .stream()
                             .flatMap(HolderSet::stream)

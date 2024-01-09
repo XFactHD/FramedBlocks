@@ -86,14 +86,13 @@ public final class FBClient
         GhostBlockRenderer.init();
         GhostRenderBehaviours.register();
 
-        IEventBus forgeBus = NeoForge.EVENT_BUS;
-        forgeBus.addListener(ClientTaskQueue::onClientTick);
-        forgeBus.addListener(BlockOutlineRenderer::onRenderBlockHighlight);
-        forgeBus.addListener(KeyMappings::onClientTick);
-        forgeBus.addListener(GhostBlockRenderer::onRenderLevelStage);
-        forgeBus.addListener(EventPriority.HIGH, ClientEventHandler::onRecipesUpdated);
-        forgeBus.addListener(ClientEventHandler::onClientDisconnect);
-        forgeBus.addListener(EventPriority.LOW, true, CollapsibleBlockIndicatorRenderer::onRenderBlockHighlight);
+        NeoForge.EVENT_BUS.addListener(ClientTaskQueue::onClientTick);
+        NeoForge.EVENT_BUS.addListener(BlockOutlineRenderer::onRenderBlockHighlight);
+        NeoForge.EVENT_BUS.addListener(KeyMappings::onClientTick);
+        NeoForge.EVENT_BUS.addListener(GhostBlockRenderer::onRenderLevelStage);
+        NeoForge.EVENT_BUS.addListener(EventPriority.HIGH, ClientEventHandler::onRecipesUpdated);
+        NeoForge.EVENT_BUS.addListener(ClientEventHandler::onClientDisconnect);
+        NeoForge.EVENT_BUS.addListener(EventPriority.LOW, true, CollapsibleBlockIndicatorRenderer::onRenderBlockHighlight);
     }
 
     @SubscribeEvent

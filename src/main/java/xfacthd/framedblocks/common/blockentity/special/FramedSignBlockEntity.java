@@ -221,7 +221,6 @@ public class FramedSignBlockEntity extends FramedBlockEntity
     {
         if (be.editingPlayer != null)
         {
-            //noinspection ConstantConditions
             Player player = level.getPlayerByUUID(be.editingPlayer);
             if (be.isTooFarAwayToEdit(player))
             {

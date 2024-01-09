@@ -86,7 +86,7 @@ public final class GhostRenderBehaviours
         );
 
         GhostBlockRenderer.registerBehaviour(
-                new RailSlopeGhostRenderBehaviour(),
+                RailSlopeGhostRenderBehaviour.INSTANCE,
                 Items.RAIL,
                 Items.POWERED_RAIL,
                 Items.DETECTOR_RAIL,

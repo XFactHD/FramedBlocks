@@ -133,7 +133,7 @@ public class FramedFlatExtendedSlopePanelCornerBlock extends FramedBlock
     @Override
     public BlockState getItemModelSource()
     {
-        return switch ((BlockType) getBlockType())
+        return switch (getBlockType())
         {
             case FRAMED_FLAT_EXT_SLOPE_PANEL_CORNER ->
                     FBContent.BLOCK_FRAMED_FLAT_EXTENDED_SLOPE_PANEL_CORNER.value()

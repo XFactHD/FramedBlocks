@@ -15,7 +15,7 @@ public final class OverlayLoaderBuilder extends CustomLoaderBuilder<BlockModelBu
 
     public OverlayLoaderBuilder(BlockModelBuilder parent, ExistingFileHelper fileHelper)
     {
-        super(OverlayLoader.ID, parent, fileHelper);
+        super(OverlayLoader.ID, parent, fileHelper, false);
     }
 
     public OverlayLoaderBuilder model(BlockModelBuilder model)

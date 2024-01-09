@@ -10,7 +10,6 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 import org.jetbrains.annotations.Nullable;
 
-@SuppressWarnings("deprecation")
 public final class StateLocationCache
 {
     private static final BiMap<ModelResourceLocation, BlockState> STATE_LOCATIONS = HashBiMap.create();

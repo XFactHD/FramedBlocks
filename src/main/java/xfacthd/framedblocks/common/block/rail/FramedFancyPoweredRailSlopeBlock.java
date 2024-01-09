@@ -18,7 +18,6 @@ import xfacthd.framedblocks.common.data.BlockType;
 import xfacthd.framedblocks.common.data.PropertyHolder;
 import xfacthd.framedblocks.common.data.doubleblock.*;
 import xfacthd.framedblocks.common.data.property.SlopeType;
-import xfacthd.framedblocks.common.data.doubleblock.DoubleBlockTopInteractionMode;
 import xfacthd.framedblocks.common.util.FramedUtils;
 
 import java.util.function.BiFunction;
@@ -55,7 +54,7 @@ class FramedFancyPoweredRailSlopeBlock extends FramedPoweredRailSlopeBlock imple
         RailShape shape = state.getValue(PropertyHolder.ASCENDING_RAIL_SHAPE);
         boolean ySlope = state.getValue(FramedProperties.Y_SLOPE);
 
-        BlockState railState = (switch ((BlockType) getBlockType())
+        BlockState railState = (switch (getBlockType())
         {
             case FRAMED_FANCY_POWERED_RAIL_SLOPE -> FBContent.BLOCK_FRAMED_FANCY_POWERED_RAIL;
             case FRAMED_FANCY_ACTIVATOR_RAIL_SLOPE -> FBContent.BLOCK_FRAMED_FANCY_ACTIVATOR_RAIL;

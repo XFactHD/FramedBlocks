@@ -281,9 +281,6 @@ public class FramedRailSlopeBlock extends BaseRailBlock implements IFramedBlock,
 
     public static FramedRailSlopeBlock fancy()
     {
-        return new FramedFancyRailSlopeBlock(
-                BlockType.FRAMED_FANCY_RAIL_SLOPE,
-                FramedFancyRailSlopeBlockEntity::new
-        );
+        return new FramedFancyRailSlopeBlock(FramedFancyRailSlopeBlockEntity::new);
     }
 }

@@ -278,7 +278,6 @@ public final class AppearanceHelper
         return true;
     }
 
-    @SuppressWarnings("UnstableApiUsage")
     private static boolean isSideHidden(BlockGetter level, BlockPos pos, BlockState state, Direction side)
     {
         ModelDataManager manager = level.getModelDataManager();

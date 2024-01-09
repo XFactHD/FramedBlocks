@@ -64,7 +64,7 @@ public final class FramedBlocks
         SideSkipPredicates.PREDICATES.initialize();
         ConnectionPredicates.PREDICATES.initialize();
 
-        CompatHandler.init();
+        CompatHandler.init(modBus);
 
         CrashReportCallables.registerCrashCallable(
                 "FramedBlocks BlockEntity Warning",

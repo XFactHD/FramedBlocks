@@ -8,7 +8,6 @@
         "MixinMapItemSavedData"
     ],
     "client": [
-        "client.AccessorLevelRenderer"
     ],
     "injectors": {
         "defaultRequire": 1

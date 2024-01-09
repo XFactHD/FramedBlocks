@@ -70,7 +70,7 @@ public class FramedStackedCornerSlopePanelBlock extends AbstractFramedDoubleBloc
     {
         Direction side = hit.getDirection();
         Direction dir = state.getValue(FramedProperties.FACING_HOR);
-        switch ((BlockType) getBlockType())
+        switch (getBlockType())
         {
             case FRAMED_STACKED_CORNER_SLOPE_PANEL ->
             {
@@ -123,7 +123,7 @@ public class FramedStackedCornerSlopePanelBlock extends AbstractFramedDoubleBloc
     @Override
     public BlockEntity newBlockEntity(BlockPos pos, BlockState state)
     {
-        return switch ((BlockType) getBlockType())
+        return switch (getBlockType())
         {
             case FRAMED_STACKED_CORNER_SLOPE_PANEL -> new FramedStackedCornerSlopePanelBlockEntity(pos, state);
             case FRAMED_STACKED_INNER_CORNER_SLOPE_PANEL -> new FramedStackedInnerCornerSlopePanelBlockEntity(pos, state);
@@ -138,7 +138,7 @@ public class FramedStackedCornerSlopePanelBlock extends AbstractFramedDoubleBloc
         boolean top = state.getValue(FramedProperties.TOP);
         boolean ySlope = state.getValue(FramedProperties.Y_SLOPE);
 
-        return switch ((BlockType) getBlockType())
+        return switch (getBlockType())
         {
             case FRAMED_STACKED_CORNER_SLOPE_PANEL -> new Tuple<>(
                     FBContent.BLOCK_FRAMED_CORNER_PILLAR.value()
@@ -173,7 +173,7 @@ public class FramedStackedCornerSlopePanelBlock extends AbstractFramedDoubleBloc
     @Override
     public CamoGetter calculateCamoGetter(BlockState state, Direction side, @Nullable Direction edge)
     {
-        return switch ((BlockType) getBlockType())
+        return switch (getBlockType())
         {
             case FRAMED_STACKED_CORNER_SLOPE_PANEL ->
             {
@@ -222,7 +222,7 @@ public class FramedStackedCornerSlopePanelBlock extends AbstractFramedDoubleBloc
     @Override
     public SolidityCheck calculateSolidityCheck(BlockState state, Direction side)
     {
-        return switch ((BlockType) getBlockType())
+        return switch (getBlockType())
         {
             case FRAMED_STACKED_CORNER_SLOPE_PANEL ->
             {
@@ -261,7 +261,7 @@ public class FramedStackedCornerSlopePanelBlock extends AbstractFramedDoubleBloc
     @Override
     public BlockItem createBlockItem()
     {
-        Block other = switch ((BlockType) getBlockType())
+        Block other = switch (getBlockType())
         {
             case FRAMED_STACKED_CORNER_SLOPE_PANEL -> FBContent.BLOCK_FRAMED_STACKED_CORNER_SLOPE_PANEL_WALL.value();
             case FRAMED_STACKED_INNER_CORNER_SLOPE_PANEL -> FBContent.BLOCK_FRAMED_STACKED_INNER_CORNER_SLOPE_PANEL_WALL.value();
@@ -273,7 +273,7 @@ public class FramedStackedCornerSlopePanelBlock extends AbstractFramedDoubleBloc
     @Override
     public BlockState getItemModelSource()
     {
-        return switch ((BlockType) getBlockType())
+        return switch (getBlockType())
         {
             case FRAMED_STACKED_CORNER_SLOPE_PANEL ->
                     FBContent.BLOCK_FRAMED_STACKED_CORNER_SLOPE_PANEL.value()

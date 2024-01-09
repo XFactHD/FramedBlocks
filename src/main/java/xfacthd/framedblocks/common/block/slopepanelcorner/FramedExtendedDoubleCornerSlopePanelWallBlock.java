@@ -88,7 +88,7 @@ public class FramedExtendedDoubleCornerSlopePanelWallBlock extends AbstractFrame
     @Override
     public BlockEntity newBlockEntity(BlockPos pos, BlockState state)
     {
-        return switch ((BlockType) getBlockType())
+        return switch (getBlockType())
         {
             case FRAMED_EXT_DOUBLE_CORNER_SLOPE_PANEL_W -> new FramedExtendedDoubleCornerSlopePanelWallBlockEntity(pos, state);
             case FRAMED_EXT_INNER_DOUBLE_CORNER_SLOPE_PANEL_W -> new FramedExtendedInnerDoubleCornerSlopePanelWallBlockEntity(pos, state);
@@ -104,7 +104,7 @@ public class FramedExtendedDoubleCornerSlopePanelWallBlock extends AbstractFrame
         HorizontalRotation backRot = rot.rotate(rot.isVertical() ? Rotation.CLOCKWISE_90 : Rotation.COUNTERCLOCKWISE_90);
         boolean ySlope = state.getValue(FramedProperties.Y_SLOPE);
 
-        return switch ((BlockType) getBlockType())
+        return switch (getBlockType())
         {
             case FRAMED_EXT_DOUBLE_CORNER_SLOPE_PANEL_W -> new Tuple<>(
                     FBContent.BLOCK_FRAMED_EXTENDED_CORNER_SLOPE_PANEL_WALL.value()
@@ -148,7 +148,7 @@ public class FramedExtendedDoubleCornerSlopePanelWallBlock extends AbstractFrame
     @Override
     public CamoGetter calculateCamoGetter(BlockState state, Direction side, @Nullable Direction edge)
     {
-        return switch ((BlockType) getBlockType())
+        return switch (getBlockType())
         {
             case FRAMED_EXT_DOUBLE_CORNER_SLOPE_PANEL_W ->
             {
@@ -238,7 +238,7 @@ public class FramedExtendedDoubleCornerSlopePanelWallBlock extends AbstractFrame
     @Override
     public SolidityCheck calculateSolidityCheck(BlockState state, Direction side)
     {
-        return switch ((BlockType) getBlockType())
+        return switch (getBlockType())
         {
             case FRAMED_EXT_DOUBLE_CORNER_SLOPE_PANEL_W ->
             {

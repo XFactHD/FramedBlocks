@@ -41,7 +41,6 @@ public final class BlockStateInfo
         for (BlockType type : TYPES)
         {
             Block block = FBContent.byType(type);
-            //noinspection ConstantConditions
             String name = BuiltInRegistries.BLOCK.getKey(block).getPath();
             int stateCount = block.getStateDefinition().getPossibleStates().size();
             int modelStateCount = filterIgnoredProperties(block.defaultBlockState(), stateCount);

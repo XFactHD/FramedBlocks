@@ -46,13 +46,11 @@ public final class ModelPerformanceTest
     {
         Map<String, BlockState> testStates = new LinkedHashMap<>();
 
-        //noinspection ConstantConditions
         String stoneName = BuiltInRegistries.BLOCK.getKey(Blocks.STONE).toString();
         testStates.put(stoneName, Blocks.STONE.defaultBlockState());
         for (BlockType type : BlockType.values())
         {
             BlockState state = FBContent.byType(type).defaultBlockState();
-            //noinspection ConstantConditions
             String blockName = BuiltInRegistries.BLOCK.getKey(state.getBlock()).toString();
             testStates.put(blockName, state);
         }

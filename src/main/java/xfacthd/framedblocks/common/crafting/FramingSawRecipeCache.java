@@ -126,9 +126,7 @@ public final class FramingSawRecipeCache
 
     public static int sortRecipes(ItemStack resultOne, ItemStack resultTwo, IBlockType typeOne, IBlockType typeTwo)
     {
-        //noinspection ConstantConditions
         String ns1 = BuiltInRegistries.ITEM.getKey(resultOne.getItem()).getNamespace();
-        //noinspection ConstantConditions
         String ns2 = BuiltInRegistries.ITEM.getKey(resultTwo.getItem()).getNamespace();
 
         if (!ns1.equals(ns2))

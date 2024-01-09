@@ -226,7 +226,7 @@ public class FramedFlatStackedSlopePanelCornerBlock extends AbstractFramedDouble
     @Override
     public BlockState getItemModelSource()
     {
-        return switch ((BlockType) getBlockType())
+        return switch (getBlockType())
         {
             case FRAMED_FLAT_STACKED_SLOPE_PANEL_CORNER ->
                     FBContent.BLOCK_FRAMED_FLAT_STACKED_SLOPE_PANEL_CORNER.value()

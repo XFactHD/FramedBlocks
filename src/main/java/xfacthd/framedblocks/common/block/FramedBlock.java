@@ -30,4 +30,10 @@ public abstract class FramedBlock extends AbstractFramedBlock
         }
         return super.isPathfindable(state, level, pos, type);
     }
+
+    @Override
+    public BlockType getBlockType()
+    {
+        return (BlockType) super.getBlockType();
+    }
 }
