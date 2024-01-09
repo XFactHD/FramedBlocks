@@ -431,13 +431,16 @@ public interface IFramedBlock extends EntityBlock, IBlockExtension
     @Override
     default void onBlockStateChange(LevelReader level, BlockPos pos, BlockState oldState, BlockState newState)
     {
-        if (needCullingUpdateAfterStateChange(level, oldState, newState))
+        if (level.isClientSide())
         {
-            updateCulling(level, pos);
-        }
-        if (level.isClientSide() && level.getBlockEntity(pos) instanceof FramedBlockEntity be)
-        {
-            be.setBlockState(newState);
+            if (oldState.getBlock() == newState.getBlock())
+            {
+                updateCulling(level, pos);
+            }
+            if (level.getBlockEntity(pos) instanceof FramedBlockEntity be)
+            {
+                be.setBlockState(newState);
+            }
         }
     }
 
@@ -451,31 +454,6 @@ public interface IFramedBlock extends EntityBlock, IBlockExtension
         {
             be.updateCulling(true, false);
         }
-    }
-
-    @SuppressWarnings("RedundantIfStatement")
-    default boolean needCullingUpdateAfterStateChange(LevelReader level, BlockState oldState, BlockState newState)
-    {
-        if (!level.isClientSide() || oldState.getBlock() != newState.getBlock())
-        {
-            return false;
-        }
-
-        // Camo-based BlockState property changes should not update culling because the BlockEntity handles these data changes
-        if (getBlockType().canOccludeWithSolidCamo())
-        {
-            if (oldState.setValue(FramedProperties.SOLID, !oldState.getValue(FramedProperties.SOLID)) == newState)
-            {
-                return false;
-            }
-        }
-
-        if (oldState.setValue(FramedProperties.GLOWING, !oldState.getValue(FramedProperties.GLOWING)) == newState)
-        {
-            return false;
-        }
-
-        return true;
     }
 
     default boolean lockState(Level level, BlockPos pos, Player player, ItemStack stack)
