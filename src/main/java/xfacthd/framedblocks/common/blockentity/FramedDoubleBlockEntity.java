@@ -20,7 +20,6 @@ import net.neoforged.fml.loading.FMLEnvironment;
 import org.jetbrains.annotations.Nullable;
 import xfacthd.framedblocks.FramedBlocks;
 import xfacthd.framedblocks.api.block.FramedBlockEntity;
-import xfacthd.framedblocks.api.block.IFramedBlock;
 import xfacthd.framedblocks.api.camo.EmptyCamoContainer;
 import xfacthd.framedblocks.api.camo.CamoContainer;
 import xfacthd.framedblocks.api.internal.InternalAPI;
@@ -33,7 +32,6 @@ import xfacthd.framedblocks.common.data.doubleblock.DoubleBlockSoundType;
 import xfacthd.framedblocks.common.data.doubleblock.DoubleBlockTopInteractionMode;
 
 import java.util.List;
-import java.util.Objects;
 
 public abstract class FramedDoubleBlockEntity extends FramedBlockEntity
 {
@@ -48,7 +46,7 @@ public abstract class FramedDoubleBlockEntity extends FramedBlockEntity
     public FramedDoubleBlockEntity(BlockEntityType<?> type, BlockPos pos, BlockState state)
     {
         super(type, pos, state);
-        this.stateCache = getDoubleBlock().getCache(state);
+        this.stateCache = getBlock().getCache(state);
         this.modelData.setUseAltModel(true);
     }
 
@@ -342,12 +340,7 @@ public abstract class FramedDoubleBlockEntity extends FramedBlockEntity
     public void setBlockState(BlockState state)
     {
         super.setBlockState(state);
-        stateCache = getDoubleBlock().getCache(state);
-    }
-
-    protected IFramedDoubleBlock getDoubleBlock()
-    {
-        return (IFramedDoubleBlock) getBlockState().getBlock();
+        stateCache = getBlock().getCache(state);
     }
 
     /*
@@ -368,49 +361,6 @@ public abstract class FramedDoubleBlockEntity extends FramedBlockEntity
     public final boolean debugHitSecondary(BlockHitResult hit)
     {
         return hitSecondary(hit);
-    }
-
-    /*
-     * Special handling for connected textures
-     */
-
-    @Override
-    @Nullable
-    public BlockState getComponentBySkipPredicate(BlockGetter ctLevel, BlockState neighborState, Direction side)
-    {
-        BlockState compA = stateCache.getBlockPair().getA();
-        if (testComponent(ctLevel, worldPosition, compA, neighborState, side))
-        {
-            return compA;
-        }
-        BlockState compB = stateCache.getBlockPair().getB();
-        if (testComponent(ctLevel, worldPosition, compB, neighborState, side))
-        {
-            return compB;
-        }
-        return null;
-    }
-
-    protected static boolean testComponent(
-            BlockGetter ctLevel, BlockPos pos, BlockState component, BlockState neighborState, Direction side
-    )
-    {
-        IFramedBlock block = (IFramedBlock) component.getBlock();
-        return block.getBlockType().getSideSkipPredicate().test(ctLevel, pos, component, neighborState, side);
-    }
-
-    @Override
-    public final ModelData getModelData(ModelData data, BlockState state)
-    {
-        if (state == stateCache.getBlockPair().getA())
-        {
-            return Objects.requireNonNullElse(data.get(DATA_LEFT), ModelData.EMPTY);
-        }
-        if (state == stateCache.getBlockPair().getB())
-        {
-            return Objects.requireNonNullElse(data.get(DATA_RIGHT), ModelData.EMPTY);
-        }
-        return ModelData.EMPTY;
     }
 
     /*

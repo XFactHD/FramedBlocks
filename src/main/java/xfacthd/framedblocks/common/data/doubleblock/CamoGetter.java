@@ -1,26 +1,57 @@
 package xfacthd.framedblocks.common.data.doubleblock;
 
+import net.minecraft.util.Tuple;
+import net.minecraft.world.level.block.state.BlockState;
 import xfacthd.framedblocks.api.camo.CamoContainer;
 import xfacthd.framedblocks.api.camo.EmptyCamoContainer;
 import xfacthd.framedblocks.common.blockentity.FramedDoubleBlockEntity;
 
-import java.util.function.Function;
-
 public enum CamoGetter
 {
-    NONE(be -> EmptyCamoContainer.EMPTY),
-    FIRST(FramedDoubleBlockEntity::getCamo),
-    SECOND(FramedDoubleBlockEntity::getCamoTwo);
-
-    private final Function<FramedDoubleBlockEntity, CamoContainer> camoGetter;
-
-    CamoGetter(Function<FramedDoubleBlockEntity, CamoContainer> camoGetter)
+    NONE
     {
-        this.camoGetter = camoGetter;
-    }
+        @Override
+        public CamoContainer getCamo(FramedDoubleBlockEntity be)
+        {
+            return EmptyCamoContainer.EMPTY;
+        }
 
-    public CamoContainer getCamo(FramedDoubleBlockEntity be)
+        @Override
+        public BlockState getComponent(Tuple<BlockState, BlockState> blockPair)
+        {
+            return null;
+        }
+    },
+    FIRST
     {
-        return camoGetter.apply(be);
-    }
+        @Override
+        public CamoContainer getCamo(FramedDoubleBlockEntity be)
+        {
+            return be.getCamo();
+        }
+
+        @Override
+        public BlockState getComponent(Tuple<BlockState, BlockState> blockPair)
+        {
+            return blockPair.getA();
+        }
+    },
+    SECOND
+    {
+        @Override
+        public CamoContainer getCamo(FramedDoubleBlockEntity be)
+        {
+            return be.getCamoTwo();
+        }
+
+        @Override
+        public BlockState getComponent(Tuple<BlockState, BlockState> blockPair)
+        {
+            return blockPair.getB();
+        }
+    };
+
+    public abstract CamoContainer getCamo(FramedDoubleBlockEntity be);
+
+    public abstract BlockState getComponent(Tuple<BlockState, BlockState> blockPair);
 }

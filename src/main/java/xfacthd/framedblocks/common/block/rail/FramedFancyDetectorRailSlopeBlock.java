@@ -8,18 +8,21 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.block.state.properties.RailShape;
 import net.neoforged.neoforge.client.extensions.common.IClientBlockExtensions;
+import net.neoforged.neoforge.client.model.data.ModelData;
 import org.jetbrains.annotations.Nullable;
 import xfacthd.framedblocks.api.block.FramedBlockEntity;
 import xfacthd.framedblocks.api.block.FramedProperties;
 import xfacthd.framedblocks.api.predicate.cull.SideSkipPredicate;
 import xfacthd.framedblocks.common.FBContent;
 import xfacthd.framedblocks.common.block.*;
+import xfacthd.framedblocks.common.blockentity.FramedDoubleBlockEntity;
 import xfacthd.framedblocks.common.data.BlockType;
 import xfacthd.framedblocks.common.data.PropertyHolder;
 import xfacthd.framedblocks.common.data.doubleblock.*;
 import xfacthd.framedblocks.common.data.property.SlopeType;
 import xfacthd.framedblocks.common.util.FramedUtils;
 
+import java.util.Objects;
 import java.util.function.BiFunction;
 import java.util.function.Consumer;
 
@@ -38,6 +41,26 @@ class FramedFancyDetectorRailSlopeBlock extends FramedDetectorRailSlopeBlock imp
     {
         Tuple<BlockState, BlockState> statePair = getBlockPair(adjState);
         return super.runOcclusionTestAndGetLookupState(pred, level, pos, state, statePair.getA(), side);
+    }
+
+    @Override
+    @Nullable
+    public BlockState getComponentBySkipPredicate(
+            BlockGetter level, BlockPos pos, BlockState state, BlockState neighborState, Direction side
+    )
+    {
+        BlockState slopeState = getBlockPair(state).getA();
+        if (IFramedDoubleBlock.testComponent(level, pos, slopeState, neighborState, side))
+        {
+            return slopeState;
+        }
+        return null;
+    }
+
+    @Override
+    public ModelData unpackNestedModelData(ModelData data, BlockState state, BlockState componentState)
+    {
+        return Objects.requireNonNullElse(data.get(FramedDoubleBlockEntity.DATA_LEFT), ModelData.EMPTY);
     }
 
     @Override

@@ -25,6 +25,7 @@ import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.Vec3;
 import net.minecraft.world.phys.shapes.*;
+import net.neoforged.neoforge.client.model.data.ModelData;
 import net.neoforged.neoforge.common.IPlantable;
 import net.neoforged.neoforge.common.Tags;
 import net.neoforged.neoforge.common.extensions.IBlockExtension;
@@ -235,6 +236,39 @@ public interface IFramedBlock extends EntityBlock, IBlockExtension
     )
     {
         return InternalAPI.INSTANCE.getAppearance(this, state, level, pos, side, queryState, queryPos);
+    }
+
+    /**
+     * Get a double block's component located at the given edge on the given side or covering the full face if the
+     * given edge is null. Only relevant for double blocks
+     */
+    @Nullable
+    default BlockState getComponentAtEdge(
+            BlockGetter level, BlockPos pos, BlockState state, Direction side, @Nullable Direction edge
+    )
+    {
+        return state;
+    }
+
+    /**
+     * Get a double block's component which is occluded by the given neighbor state on the given side.
+     * Only relevant for double blocks
+     */
+    @Nullable
+    default BlockState getComponentBySkipPredicate(
+            BlockGetter level, BlockPos pos, BlockState state, BlockState neighborState, Direction side
+    )
+    {
+        return state;
+    }
+
+    /**
+     * Extract the nested {@link ModelData}, if any, from the given data based on the given state.
+     * Only relevant for double blocks
+     */
+    default ModelData unpackNestedModelData(ModelData data, BlockState state, BlockState componentState)
+    {
+        return data;
     }
 
     default boolean shouldPreventNeighborCulling(

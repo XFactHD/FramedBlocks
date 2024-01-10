@@ -1,7 +1,6 @@
 package xfacthd.framedblocks.common.block;
 
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.Direction;
 import net.minecraft.util.Tuple;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.level.*;
@@ -11,9 +10,7 @@ import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.neoforged.neoforge.client.extensions.common.IClientBlockExtensions;
-import org.jetbrains.annotations.Nullable;
 import xfacthd.framedblocks.api.block.FramedProperties;
-import xfacthd.framedblocks.api.predicate.cull.SideSkipPredicate;
 import xfacthd.framedblocks.common.blockentity.FramedDoubleBlockEntity;
 import xfacthd.framedblocks.common.data.BlockType;
 import xfacthd.framedblocks.common.data.doubleblock.FramedDoubleBlockRenderProperties;
@@ -43,24 +40,6 @@ public abstract class AbstractFramedDoubleBlock extends FramedBlock implements I
             return be.getSoundType();
         }
         return getSoundType(state);
-    }
-
-    @Override
-    @Nullable
-    public BlockState runOcclusionTestAndGetLookupState(
-            SideSkipPredicate pred, BlockGetter level, BlockPos pos, BlockState state, BlockState adjState, Direction side
-    )
-    {
-        Tuple<BlockState, BlockState> statePair = getBlockPair(adjState);
-        if (pred.test(level, pos, state, statePair.getA(), side))
-        {
-            return statePair.getA();
-        }
-        if (pred.test(level, pos, state, statePair.getB(), side))
-        {
-            return statePair.getB();
-        }
-        return null;
     }
 
     @Override
