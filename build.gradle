@@ -166,7 +166,7 @@ dependencies {
     //compileOnly("mezz.jei:jei-${jei_mc_version}-forge-api:${jei_version}")
     //runtimeOnly("mezz.jei:jei-${jei_mc_version}-forge:${jei_version}")
 
-    // Switch Arch, Cloth and REI-forge to impl for runtime testing
+    // Switch Arch, Cloth and REI-neoforge to impl for runtime testing
     compileOnly("dev.architectury:architectury-neoforge:${arch_version}")
     compileOnly("me.shedaniel.cloth:cloth-config-neoforge:${cloth_version}")
     compileOnly("me.shedaniel:RoughlyEnoughItems-neoforge:${rei_version}")
