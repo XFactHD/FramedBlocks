@@ -14,7 +14,7 @@ import xfacthd.framedblocks.common.data.skippreds.CullTest;
 public final class GateSkipPredicate implements SideSkipPredicate
 {
     @Override
-    @CullTest.SingleTarget(BlockType.FRAMED_GATE)
+    @CullTest.TestTarget(BlockType.FRAMED_GATE)
     public boolean test(BlockGetter level, BlockPos pos, BlockState state, BlockState adjState, Direction side)
     {
         if (!(adjState.getBlock() instanceof FramedGateBlock))

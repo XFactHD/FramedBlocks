@@ -15,7 +15,7 @@ import xfacthd.framedblocks.common.data.skippreds.CullTest;
 public final class TrapdoorSkipPredicate implements SideSkipPredicate
 {
     @Override
-    @CullTest.SingleTarget(BlockType.FRAMED_TRAPDOOR)
+    @CullTest.TestTarget(BlockType.FRAMED_TRAPDOOR)
     public boolean test(BlockGetter level, BlockPos pos, BlockState state, BlockState adjState, Direction side)
     {
         Direction facing = getTrapDoorFacing(state);

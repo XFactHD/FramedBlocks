@@ -2,13 +2,11 @@ package xfacthd.framedblocks.common.data.skippreds.slab;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
-import net.minecraft.util.Tuple;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.block.state.BlockState;
 import xfacthd.framedblocks.api.block.FramedProperties;
 import xfacthd.framedblocks.api.block.IFramedBlock;
 import xfacthd.framedblocks.api.predicate.cull.SideSkipPredicate;
-import xfacthd.framedblocks.common.block.AbstractFramedDoubleBlock;
 import xfacthd.framedblocks.common.data.BlockType;
 import xfacthd.framedblocks.common.data.PropertyHolder;
 import xfacthd.framedblocks.common.data.skippreds.CullTest;
@@ -28,19 +26,10 @@ public final class CheckeredCubeSegmentSkipPredicate implements SideSkipPredicat
                 case FRAMED_CHECKERED_CUBE_SEGMENT -> testAgainstCheckeredCubeSegment(
                         second, adjState, side
                 );
-                case FRAMED_CHECKERED_CUBE -> testAgainstCheckeredCube(
-                        second, adjState, side
-                );
                 case FRAMED_CHECKERED_SLAB_SEGMENT -> testAgainstCheckeredSlabSegment(
                         second, adjState, side
                 );
-                case FRAMED_CHECKERED_SLAB -> testAgainstCheckeredSlab(
-                        second, adjState, side
-                );
                 case FRAMED_CHECKERED_PANEL_SEGMENT -> testAgainstCheckeredPanelSegment(
-                        second, adjState, side
-                );
-                case FRAMED_CHECKERED_PANEL -> testAgainstCheckeredPanel(
                         second, adjState, side
                 );
                 default -> false;
@@ -49,7 +38,7 @@ public final class CheckeredCubeSegmentSkipPredicate implements SideSkipPredicat
         return false;
     }
 
-    @CullTest.SingleTarget(BlockType.FRAMED_CHECKERED_CUBE_SEGMENT)
+    @CullTest.TestTarget(BlockType.FRAMED_CHECKERED_CUBE_SEGMENT)
     private static boolean testAgainstCheckeredCubeSegment(
             boolean second, BlockState adjState, Direction side
     )
@@ -58,20 +47,7 @@ public final class CheckeredCubeSegmentSkipPredicate implements SideSkipPredicat
         return getDiagCornerDir(second, side).isEqualTo(getDiagCornerDir(adjSecond, side.getOpposite()));
     }
 
-    @CullTest.DoubleTarget(
-            value = BlockType.FRAMED_CHECKERED_CUBE,
-            partTargets = BlockType.FRAMED_CHECKERED_CUBE_SEGMENT
-    )
-    private static boolean testAgainstCheckeredCube(
-            boolean second, BlockState adjState, Direction side
-    )
-    {
-        Tuple<BlockState, BlockState> states = AbstractFramedDoubleBlock.getStatePair(adjState);
-        return testAgainstCheckeredCubeSegment(second, states.getA(), side) ||
-               testAgainstCheckeredCubeSegment(second, states.getB(), side);
-    }
-
-    @CullTest.SingleTarget(BlockType.FRAMED_CHECKERED_SLAB_SEGMENT)
+    @CullTest.TestTarget(BlockType.FRAMED_CHECKERED_SLAB_SEGMENT)
     private static boolean testAgainstCheckeredSlabSegment(
             boolean second, BlockState adjState, Direction side
     )
@@ -81,20 +57,7 @@ public final class CheckeredCubeSegmentSkipPredicate implements SideSkipPredicat
         return getDiagCornerDir(second, side).isEqualTo(CheckeredSlabSegmentSkipPredicate.getDiagCornerDir(adjTop, adjSecond, side.getOpposite()));
     }
 
-    @CullTest.DoubleTarget(
-            value = BlockType.FRAMED_CHECKERED_SLAB,
-            partTargets = BlockType.FRAMED_CHECKERED_SLAB_SEGMENT
-    )
-    private static boolean testAgainstCheckeredSlab(
-            boolean second, BlockState adjState, Direction side
-    )
-    {
-        Tuple<BlockState, BlockState> states = AbstractFramedDoubleBlock.getStatePair(adjState);
-        return testAgainstCheckeredSlabSegment(second, states.getA(), side) ||
-               testAgainstCheckeredSlabSegment(second, states.getB(), side);
-    }
-
-    @CullTest.SingleTarget(BlockType.FRAMED_CHECKERED_PANEL_SEGMENT)
+    @CullTest.TestTarget(BlockType.FRAMED_CHECKERED_PANEL_SEGMENT)
     private static boolean testAgainstCheckeredPanelSegment(
             boolean second, BlockState adjState, Direction side
     )
@@ -102,19 +65,6 @@ public final class CheckeredCubeSegmentSkipPredicate implements SideSkipPredicat
         Direction adjDir = adjState.getValue(FramedProperties.FACING_HOR);
         boolean adjSecond = adjState.getValue(PropertyHolder.SECOND);
         return getDiagCornerDir(second, side).isEqualTo(CheckeredPanelSegmentSkipPredicate.getDiagCornerDir(adjDir, adjSecond, side.getOpposite()));
-    }
-
-    @CullTest.DoubleTarget(
-            value = BlockType.FRAMED_CHECKERED_PANEL,
-            partTargets = BlockType.FRAMED_CHECKERED_PANEL_SEGMENT
-    )
-    private static boolean testAgainstCheckeredPanel(
-            boolean second, BlockState adjState, Direction side
-    )
-    {
-        Tuple<BlockState, BlockState> states = AbstractFramedDoubleBlock.getStatePair(adjState);
-        return testAgainstCheckeredPanelSegment(second, states.getA(), side) ||
-               testAgainstCheckeredPanelSegment(second, states.getB(), side);
     }
 
 

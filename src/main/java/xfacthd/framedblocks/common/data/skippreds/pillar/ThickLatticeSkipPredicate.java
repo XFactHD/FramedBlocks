@@ -36,7 +36,7 @@ public final class ThickLatticeSkipPredicate implements SideSkipPredicate
         return false;
     }
 
-    @CullTest.SingleTarget(BlockType.FRAMED_THICK_LATTICE)
+    @CullTest.TestTarget(BlockType.FRAMED_THICK_LATTICE)
     private static boolean testAgainstThickLattice(
             boolean xAxis, boolean yAxis, boolean zAxis, BlockState adjState, Direction side
     )
@@ -49,7 +49,7 @@ public final class ThickLatticeSkipPredicate implements SideSkipPredicate
         };
     }
 
-    @CullTest.SingleTarget(BlockType.FRAMED_WALL)
+    @CullTest.TestTarget(BlockType.FRAMED_WALL)
     private static boolean testAgainstWall(
             boolean yAxis, BlockState adjState, Direction side
     )
@@ -61,7 +61,7 @@ public final class ThickLatticeSkipPredicate implements SideSkipPredicate
         return false;
     }
 
-    @CullTest.SingleTarget(BlockType.FRAMED_PILLAR)
+    @CullTest.TestTarget(BlockType.FRAMED_PILLAR)
     private static boolean testAgainstPillar(
             boolean xAxis, boolean yAxis, boolean zAxis, BlockState adjState, Direction side
     )
@@ -75,7 +75,7 @@ public final class ThickLatticeSkipPredicate implements SideSkipPredicate
         };
     }
 
-    @CullTest.SingleTarget(BlockType.FRAMED_HALF_PILLAR)
+    @CullTest.TestTarget(BlockType.FRAMED_HALF_PILLAR)
     private static boolean testAgainstHalfPillar(
             boolean xAxis, boolean yAxis, boolean zAxis, BlockState adjState, Direction side
     )

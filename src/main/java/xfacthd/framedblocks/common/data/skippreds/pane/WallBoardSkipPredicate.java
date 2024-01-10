@@ -13,7 +13,7 @@ import xfacthd.framedblocks.common.data.skippreds.CullTest;
 public final class WallBoardSkipPredicate implements SideSkipPredicate
 {
     @Override
-    @CullTest.SingleTarget(BlockType.FRAMED_WALL_BOARD)
+    @CullTest.TestTarget(BlockType.FRAMED_WALL_BOARD)
     public boolean test(BlockGetter level, BlockPos pos, BlockState state, BlockState adjState, Direction side)
     {
         Direction dir = state.getValue(FramedProperties.FACING_HOR);
