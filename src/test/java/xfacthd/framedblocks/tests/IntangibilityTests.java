@@ -25,8 +25,6 @@ public final class IntangibilityTests
     private static final String BATCH_NAME = "intangibility";
     private static final String STRUCTURE_NAME = FramedConstants.MOD_ID + ":floor_slab_1x1";
 
-    private static boolean intangibility = false;
-
     @GameTestGenerator
     public static Collection<TestFunction> generateIntangibilityTests()
     {
@@ -51,14 +49,13 @@ public final class IntangibilityTests
     @BeforeBatch(batch = BATCH_NAME)
     public static void beforeBatch(ServerLevel level)
     {
-        intangibility = ServerConfig.enableIntangibleFeature;
-        ServerConfig.enableIntangibleFeature = true;
+        ServerConfig.VIEW.setOverrideIntangibilityConfig(true);
     }
 
     @AfterBatch(batch = BATCH_NAME)
     public static void afterBatch(ServerLevel level)
     {
-        ServerConfig.enableIntangibleFeature = intangibility;
+        ServerConfig.VIEW.setOverrideIntangibilityConfig(false);
     }
 
     private static BlockState getTestState(Block block)

@@ -278,7 +278,7 @@ public final class FramedBlockModel extends BakedModelProxy
 
     private static boolean needCtContext(boolean noProcessing, ConTexMode minMode)
     {
-        ConTexMode mode = ClientConfig.conTexMode;
+        ConTexMode mode = ClientConfig.VIEW.getConTexMode();
         if (mode == ConTexMode.NONE)
         {
             return false;

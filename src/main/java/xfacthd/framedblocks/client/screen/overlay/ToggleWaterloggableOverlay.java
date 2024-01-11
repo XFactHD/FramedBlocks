@@ -28,7 +28,7 @@ public final class ToggleWaterloggableOverlay extends BlockInteractOverlay
 
     public ToggleWaterloggableOverlay()
     {
-        super(LINES_FALSE, LINES_TRUE, TEXTURE_FALSE, TEXTURE_TRUE, () -> ClientConfig.toggleWaterlogMode);
+        super(LINES_FALSE, LINES_TRUE, TEXTURE_FALSE, TEXTURE_TRUE, ClientConfig.VIEW::getToggleWaterlogMode);
     }
 
     @Override

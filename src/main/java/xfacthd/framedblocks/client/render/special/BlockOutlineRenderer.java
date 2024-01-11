@@ -25,7 +25,7 @@ public final class BlockOutlineRenderer
 
     public static void onRenderBlockHighlight(final RenderHighlightEvent.Block event)
     {
-        if (!ClientConfig.fancyHitboxes)
+        if (!ClientConfig.VIEW.useFancySelectionBoxes())
         {
             return;
         }

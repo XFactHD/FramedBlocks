@@ -4,18 +4,17 @@ import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.Items;
-import net.neoforged.neoforge.common.ModConfigSpec;
-import net.neoforged.bus.api.SubscribeEvent;
+import net.neoforged.bus.api.IEventBus;
 import net.neoforged.fml.config.ModConfig;
 import net.neoforged.fml.event.config.ModConfigEvent;
-import net.neoforged.fml.javafmlmod.FMLJavaModLoadingContext;
-import org.apache.commons.lang3.tuple.Pair;
+import net.neoforged.neoforge.common.ModConfigSpec;
+import xfacthd.framedblocks.api.util.ConfigView;
 import xfacthd.framedblocks.api.util.Utils;
 
 public final class ServerConfig
 {
-    public static final ModConfigSpec SPEC;
-    public static final ServerConfig INSTANCE;
+    public static final ExtConfigView.Server VIEW = (ExtConfigView.Server) ConfigView.Server.INSTANCE;
+    private static ModConfigSpec spec;
 
     private static final String KEY_ALLOW_BLOCK_ENTITIES = "allowBlockEntities";
     private static final String KEY_ENABLE_INTANGIBILITY = "enableIntangibleFeature";
@@ -23,39 +22,42 @@ public final class ServerConfig
     private static final String KEY_ONE_WAY_WINDOW_OWNABLE = "oneWayWindowOwnable";
     private static final String KEY_CONSUME_CAMO_ITEM = "consumeCamoItem";
     private static final String KEY_GLOWSTONE_LIGHT_LEVEL = "glowstoneLightLevel";
+    private static final String KEY_FIREPROOF_BLOCKS = "fireproofBlocks";
 
     public static final String TRANSLATION_ALLOW_BLOCK_ENTITIES = translate(KEY_ALLOW_BLOCK_ENTITIES);
     public static final String TRANSLATION_ENABLE_INTANGIBILITY = translate(KEY_ENABLE_INTANGIBILITY);
     public static final String TRANSLATION_INTANGIBLE_MARKER = translate(KEY_INTANGIBLE_MARKER);
     public static final String TRANSLATION_ONE_WAY_WINDOW_OWNABLE = translate(KEY_ONE_WAY_WINDOW_OWNABLE);
     public static final String TRANSLATION_CONSUME_CAMO_ITEM = translate(KEY_CONSUME_CAMO_ITEM);
-    public static final String TRANSLATION_GLOWSTONE_LIGHT_LEVEL = translate("glowstoneLightLevel");
+    public static final String TRANSLATION_GLOWSTONE_LIGHT_LEVEL = translate(KEY_GLOWSTONE_LIGHT_LEVEL);
+    public static final String TRANSLATION_FIREPROOF_BLOCKS = translate(KEY_FIREPROOF_BLOCKS);
 
-    public static boolean allowBlockEntities;
-    public static boolean enableIntangibleFeature;
-    public static Item intangibleMarkerItem;
-    public static boolean oneWayWindowOwnable;
-    public static boolean consumeCamoItem;
-    public static int glowstoneLightLevel;
+    private static boolean allowBlockEntities = false;
+    private static boolean enableIntangibleFeature = false;
+    private static Item intangibleMarkerItem = Items.PHANTOM_MEMBRANE;
+    private static boolean oneWayWindowOwnable = true;
+    private static boolean consumeCamoItem = true;
+    private static int glowstoneLightLevel = 15;
+    private static boolean fireproofBlocks = false;
 
-    private final ModConfigSpec.BooleanValue allowBlockEntitiesValue;
-    private final ModConfigSpec.BooleanValue enableIntangibleFeatureValue;
-    private final ModConfigSpec.ConfigValue<String> intangibleMarkerItemValue;
-    private final ModConfigSpec.BooleanValue oneWayWindowOwnableValue;
-    private final ModConfigSpec.BooleanValue consumeCamoItemValue;
-    private final ModConfigSpec.IntValue glowstoneLightLevelValue;
+    private static ModConfigSpec.BooleanValue allowBlockEntitiesValue;
+    private static ModConfigSpec.BooleanValue enableIntangibleFeatureValue;
+    private static ModConfigSpec.ConfigValue<String> intangibleMarkerItemValue;
+    private static ModConfigSpec.BooleanValue oneWayWindowOwnableValue;
+    private static ModConfigSpec.BooleanValue consumeCamoItemValue;
+    private static ModConfigSpec.IntValue glowstoneLightLevelValue;
+    private static ModConfigSpec.BooleanValue fireproofBlocksValue;
 
-    static
+    public static ModConfigSpec create(IEventBus modBus)
     {
-        final Pair<ServerConfig, ModConfigSpec> configSpecPair = new ModConfigSpec.Builder().configure(ServerConfig::new);
-        SPEC = configSpecPair.getRight();
-        INSTANCE = configSpecPair.getLeft();
+        modBus.addListener((ModConfigEvent.Loading event) -> onConfigReloaded(event));
+        modBus.addListener((ModConfigEvent.Reloading event) -> onConfigReloaded(event));
+        spec = new ModConfigSpec.Builder().configure(ServerConfig::build).getRight();
+        return spec;
     }
 
-    public ServerConfig(ModConfigSpec.Builder builder)
+    private static Object build(ModConfigSpec.Builder builder)
     {
-        FMLJavaModLoadingContext.get().getModEventBus().register(this);
-
         builder.push("general");
         allowBlockEntitiesValue = builder
                 .comment("Whether blocks with block entities can be placed in framed blocks")
@@ -81,7 +83,13 @@ public final class ServerConfig
                 .comment("The light level to emit when glowstone dust is applied to a framed block")
                 .translation(TRANSLATION_GLOWSTONE_LIGHT_LEVEL)
                 .defineInRange(KEY_GLOWSTONE_LIGHT_LEVEL, 15, 0, 15);
+        fireproofBlocksValue = builder
+                .comment("If true, framed blocks are completely fire proof")
+                .translation(TRANSLATION_FIREPROOF_BLOCKS)
+                .define(KEY_FIREPROOF_BLOCKS, false);
         builder.pop();
+
+        return null;
     }
 
     private static boolean validateItemName(Object obj)
@@ -102,10 +110,9 @@ public final class ServerConfig
         return Utils.translateConfig("server", key);
     }
 
-    @SubscribeEvent
-    public void onConfigReloaded(ModConfigEvent event)
+    private static void onConfigReloaded(ModConfigEvent event)
     {
-        if (event.getConfig().getType() == ModConfig.Type.SERVER && event.getConfig().getSpec() == SPEC)
+        if (event.getConfig().getType() == ModConfig.Type.SERVER && event.getConfig().getSpec() == spec)
         {
             allowBlockEntities = allowBlockEntitiesValue.get();
             enableIntangibleFeature = enableIntangibleFeatureValue.get();
@@ -113,6 +120,64 @@ public final class ServerConfig
             oneWayWindowOwnable = oneWayWindowOwnableValue.get();
             consumeCamoItem = consumeCamoItemValue.get();
             glowstoneLightLevel = glowstoneLightLevelValue.get();
+            fireproofBlocks = fireproofBlocksValue.get();
+        }
+    }
+
+    private ServerConfig() { }
+
+
+
+    public static final class ViewImpl implements ExtConfigView.Server
+    {
+        private static boolean overrideIntangibilityConfig = false;
+
+        @Override
+        public boolean allowBlockEntities()
+        {
+            return allowBlockEntities;
+        }
+
+        @Override
+        public void setOverrideIntangibilityConfig(boolean override)
+        {
+            overrideIntangibilityConfig = override;
+        }
+
+        @Override
+        public boolean enableIntangibility()
+        {
+            return overrideIntangibilityConfig || enableIntangibleFeature;
+        }
+
+        @Override
+        public Item getIntangibilityMarkerItem()
+        {
+            return intangibleMarkerItem;
+        }
+
+        @Override
+        public boolean isOneWayWindowOwnable()
+        {
+            return oneWayWindowOwnable;
+        }
+
+        @Override
+        public boolean shouldConsumeCamoItem()
+        {
+            return consumeCamoItem;
+        }
+
+        @Override
+        public int getGlowstoneLightLevel()
+        {
+            return glowstoneLightLevel;
+        }
+
+        @Override
+        public boolean areBlocksFireproof()
+        {
+            return fireproofBlocks;
         }
     }
 }

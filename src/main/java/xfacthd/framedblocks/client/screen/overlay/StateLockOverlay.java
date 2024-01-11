@@ -27,7 +27,7 @@ public final class StateLockOverlay extends BlockInteractOverlay
 
     public StateLockOverlay()
     {
-        super(LINES_FALSE, LINES_TRUE, TEXTURE_FALSE, TEXTURE_TRUE, () -> ClientConfig.stateLockMode);
+        super(LINES_FALSE, LINES_TRUE, TEXTURE_FALSE, TEXTURE_TRUE, ClientConfig.VIEW::getStateLockMode);
     }
 
     @Override

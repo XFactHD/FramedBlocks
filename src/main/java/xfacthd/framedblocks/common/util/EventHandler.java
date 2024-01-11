@@ -32,7 +32,7 @@ public final class EventHandler
                 }
             }
 
-            if (ServerConfig.enableIntangibleFeature && !event.isCanceled() && block.getBlockType().allowMakingIntangible())
+            if (ServerConfig.VIEW.enableIntangibility() && !event.isCanceled() && block.getBlockType().allowMakingIntangible())
             {
                 if (level.getBlockEntity(pos) instanceof FramedBlockEntity be && be.isIntangible(null))
                 {

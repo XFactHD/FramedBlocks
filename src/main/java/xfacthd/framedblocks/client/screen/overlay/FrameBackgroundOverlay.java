@@ -29,7 +29,7 @@ public final class FrameBackgroundOverlay extends BlockInteractOverlay
 
     public FrameBackgroundOverlay()
     {
-        super(LINES_FALSE, LINES_TRUE, null, null, () -> ClientConfig.frameBackgroundMode);
+        super(LINES_FALSE, LINES_TRUE, null, null, ClientConfig.VIEW::getFrameBackgroundMode);
     }
 
     @Override

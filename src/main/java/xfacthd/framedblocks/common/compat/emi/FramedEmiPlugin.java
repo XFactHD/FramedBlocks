@@ -49,7 +49,7 @@ public final class FramedEmiPlugin implements EmiPlugin
         int[] recipeCount = new int[1];
 
         FramingSawRecipeCache cache = FramingSawRecipeCache.get(true);
-        Set<Item> inputItems = ClientConfig.showAllRecipePermutationsInEmi ? cache.getKnownItems() : CUBE_ITEM;
+        Set<Item> inputItems = ClientConfig.VIEW.showAllRecipePermutationsInEmi() ? cache.getKnownItems() : CUBE_ITEM;
         Container dummyContainer = new SimpleContainer(1);
         cache.getRecipes().forEach(holder ->
         {

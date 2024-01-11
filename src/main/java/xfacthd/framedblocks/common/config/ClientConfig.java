@@ -1,19 +1,18 @@
 package xfacthd.framedblocks.common.config;
 
-import net.neoforged.neoforge.common.ModConfigSpec;
-import net.neoforged.bus.api.SubscribeEvent;
+import net.neoforged.bus.api.IEventBus;
 import net.neoforged.fml.config.ModConfig;
 import net.neoforged.fml.event.config.ModConfigEvent;
-import net.neoforged.fml.javafmlmod.FMLJavaModLoadingContext;
-import org.apache.commons.lang3.tuple.Pair;
+import net.neoforged.neoforge.common.ModConfigSpec;
 import xfacthd.framedblocks.api.predicate.contex.ConTexMode;
+import xfacthd.framedblocks.api.util.ConfigView;
 import xfacthd.framedblocks.api.util.Utils;
 import xfacthd.framedblocks.client.screen.overlay.BlockInteractOverlay;
 
 public final class ClientConfig
 {
-    public static final ModConfigSpec SPEC;
-    public static final ClientConfig INSTANCE;
+    public static final ExtConfigView.Client VIEW = (ExtConfigView.Client) ConfigView.Client.INSTANCE;
+    private static ModConfigSpec spec;
 
     private static final String KEY_SHOW_GHOST_BLOCKS = "showGhostBlocks";
     private static final String KEY_ALT_GHOST_RENDERER = "altGhostRenderer";
@@ -53,52 +52,51 @@ public final class ClientConfig
     private static final String COMMENT_OVERLAY_ICON = "If set to ICON, the %s overlay will only show an icon";
     private static final String COMMENT_OVERLAY_DETAILED = "If set to DETAILED, the %s overlay will show detailed info";
 
-    public static boolean showGhostBlocks = false;
-    public static boolean altGhostRenderer = false;
-    public static boolean fancyHitboxes = false;
-    public static boolean detailedCulling = false;
-    public static boolean useDiscreteUVSteps = false;
-    public static ConTexMode conTexMode = ConTexMode.DETAILED;
-    public static boolean showAllRecipePermutationsInEmi = false;
-    public static BlockInteractOverlay.Mode stateLockMode;
-    public static BlockInteractOverlay.Mode toggleWaterlogMode;
-    public static BlockInteractOverlay.Mode toggleYSlopeMode;
-    public static BlockInteractOverlay.Mode reinforcementMode;
-    public static BlockInteractOverlay.Mode prismOffsetMode;
-    public static BlockInteractOverlay.Mode splitLineMode;
-    public static BlockInteractOverlay.Mode oneWayWindowMode;
-    public static BlockInteractOverlay.Mode frameBackgroundMode;
-    public static BlockInteractOverlay.Mode camoRotationMode;
+    private static boolean showGhostBlocks = false;
+    private static boolean altGhostRenderer = false;
+    private static boolean fancyHitboxes = false;
+    private static boolean detailedCulling = false;
+    private static boolean useDiscreteUVSteps = false;
+    private static ConTexMode conTexMode = ConTexMode.DETAILED;
+    private static boolean showAllRecipePermutationsInEmi = false;
+    private static BlockInteractOverlay.Mode stateLockMode = BlockInteractOverlay.Mode.DETAILED;
+    private static BlockInteractOverlay.Mode toggleWaterlogMode = BlockInteractOverlay.Mode.DETAILED;
+    private static BlockInteractOverlay.Mode toggleYSlopeMode = BlockInteractOverlay.Mode.DETAILED;
+    private static BlockInteractOverlay.Mode reinforcementMode = BlockInteractOverlay.Mode.DETAILED;
+    private static BlockInteractOverlay.Mode prismOffsetMode = BlockInteractOverlay.Mode.DETAILED;
+    private static BlockInteractOverlay.Mode splitLineMode = BlockInteractOverlay.Mode.DETAILED;
+    private static BlockInteractOverlay.Mode oneWayWindowMode = BlockInteractOverlay.Mode.DETAILED;
+    private static BlockInteractOverlay.Mode frameBackgroundMode = BlockInteractOverlay.Mode.DETAILED;
+    private static BlockInteractOverlay.Mode camoRotationMode = BlockInteractOverlay.Mode.DETAILED;
 
-    private final ModConfigSpec.BooleanValue showGhostBlocksValue;
-    private final ModConfigSpec.BooleanValue altGhostRendererValue;
-    private final ModConfigSpec.BooleanValue fancyHitboxesValue;
-    private final ModConfigSpec.BooleanValue detailedCullingValue;
-    private final ModConfigSpec.BooleanValue useDiscreteUVStepsValue;
-    private final ModConfigSpec.EnumValue<ConTexMode> conTexModeValue;
-    private final ModConfigSpec.BooleanValue showAllRecipePermutationsInEmiValue;
+    private static ModConfigSpec.BooleanValue showGhostBlocksValue;
+    private static ModConfigSpec.BooleanValue altGhostRendererValue;
+    private static ModConfigSpec.BooleanValue fancyHitboxesValue;
+    private static ModConfigSpec.BooleanValue detailedCullingValue;
+    private static ModConfigSpec.BooleanValue useDiscreteUVStepsValue;
+    private static ModConfigSpec.EnumValue<ConTexMode> conTexModeValue;
+    private static ModConfigSpec.BooleanValue showAllRecipePermutationsInEmiValue;
 
-    private final ModConfigSpec.EnumValue<BlockInteractOverlay.Mode> stateLockModeValue;
-    private final ModConfigSpec.EnumValue<BlockInteractOverlay.Mode> toggleWaterlogModeValue;
-    private final ModConfigSpec.EnumValue<BlockInteractOverlay.Mode> toggleYSlopeModeValue;
-    private final ModConfigSpec.EnumValue<BlockInteractOverlay.Mode> reinforcementModeValue;
-    private final ModConfigSpec.EnumValue<BlockInteractOverlay.Mode> prismOffsetModeValue;
-    private final ModConfigSpec.EnumValue<BlockInteractOverlay.Mode> splitLineModeValue;
-    private final ModConfigSpec.EnumValue<BlockInteractOverlay.Mode> oneWayWindowModeValue;
-    private final ModConfigSpec.EnumValue<BlockInteractOverlay.Mode> frameBackgroundModeValue;
-    private final ModConfigSpec.EnumValue<BlockInteractOverlay.Mode> camoRotationModeValue;
+    private static ModConfigSpec.EnumValue<BlockInteractOverlay.Mode> stateLockModeValue;
+    private static ModConfigSpec.EnumValue<BlockInteractOverlay.Mode> toggleWaterlogModeValue;
+    private static ModConfigSpec.EnumValue<BlockInteractOverlay.Mode> toggleYSlopeModeValue;
+    private static ModConfigSpec.EnumValue<BlockInteractOverlay.Mode> reinforcementModeValue;
+    private static ModConfigSpec.EnumValue<BlockInteractOverlay.Mode> prismOffsetModeValue;
+    private static ModConfigSpec.EnumValue<BlockInteractOverlay.Mode> splitLineModeValue;
+    private static ModConfigSpec.EnumValue<BlockInteractOverlay.Mode> oneWayWindowModeValue;
+    private static ModConfigSpec.EnumValue<BlockInteractOverlay.Mode> frameBackgroundModeValue;
+    private static ModConfigSpec.EnumValue<BlockInteractOverlay.Mode> camoRotationModeValue;
 
-    static
+    public static ModConfigSpec create(IEventBus modBus)
     {
-        final Pair<ClientConfig, ModConfigSpec> configSpecPair = new ModConfigSpec.Builder().configure(ClientConfig::new);
-        SPEC = configSpecPair.getRight();
-        INSTANCE = configSpecPair.getLeft();
+        modBus.addListener((ModConfigEvent.Loading event) -> onConfigReloaded(event));
+        modBus.addListener((ModConfigEvent.Reloading event) -> onConfigReloaded(event));
+        spec = new ModConfigSpec.Builder().configure(ClientConfig::build).getRight();
+        return spec;
     }
 
-    public ClientConfig(ModConfigSpec.Builder builder)
+    private static Object build(ModConfigSpec.Builder builder)
     {
-        FMLJavaModLoadingContext.get().getModEventBus().register(this);
-
         builder.push("general");
         showGhostBlocksValue = builder
                 .comment("Whether ghost blocks are shown when you are holding a framed block")
@@ -194,6 +192,8 @@ public final class ClientConfig
                 .translation(TRANSLATION_CAMO_ROTATION_MODE)
                 .defineEnum(KEY_CAMO_ROTATION_MODE, BlockInteractOverlay.Mode.DETAILED);
         builder.pop();
+
+        return null;
     }
 
     private static String translate(String key)
@@ -201,10 +201,9 @@ public final class ClientConfig
         return Utils.translateConfig("client", key);
     }
 
-    @SubscribeEvent
-    public void onConfigReloaded(ModConfigEvent event)
+    private static void onConfigReloaded(ModConfigEvent event)
     {
-        if (event.getConfig().getType() == ModConfig.Type.CLIENT && event.getConfig().getSpec() == SPEC)
+        if (event.getConfig().getType() == ModConfig.Type.CLIENT && event.getConfig().getSpec() == spec)
         {
             showGhostBlocks = showGhostBlocksValue.get();
             altGhostRenderer = altGhostRendererValue.get();
@@ -223,6 +222,109 @@ public final class ClientConfig
             oneWayWindowMode = oneWayWindowModeValue.get();
             frameBackgroundMode = frameBackgroundModeValue.get();
             camoRotationMode = camoRotationModeValue.get();
+        }
+    }
+
+    private ClientConfig() { }
+
+
+
+    public static final class ViewImpl implements ExtConfigView.Client
+    {
+        @Override
+        public boolean showGhostBlocks()
+        {
+            return showGhostBlocks;
+        }
+
+        @Override
+        public boolean useAltGhostRenderer()
+        {
+            return altGhostRenderer;
+        }
+
+        @Override
+        public boolean useFancySelectionBoxes()
+        {
+            return fancyHitboxes;
+        }
+
+        @Override
+        public boolean detailedCullingEnabled()
+        {
+            return detailedCulling;
+        }
+
+        @Override
+        public boolean useDiscreteUVSteps()
+        {
+            return useDiscreteUVSteps;
+        }
+
+        @Override
+        public ConTexMode getConTexMode()
+        {
+            return conTexMode;
+        }
+
+        @Override
+        public boolean showAllRecipePermutationsInEmi()
+        {
+            return showAllRecipePermutationsInEmi;
+        }
+
+        @Override
+        public BlockInteractOverlay.Mode getStateLockMode()
+        {
+            return stateLockMode;
+        }
+
+        @Override
+        public BlockInteractOverlay.Mode getToggleWaterlogMode()
+        {
+            return toggleWaterlogMode;
+        }
+
+        @Override
+        public BlockInteractOverlay.Mode getToggleYSlopeMode()
+        {
+            return toggleYSlopeMode;
+        }
+
+        @Override
+        public BlockInteractOverlay.Mode getReinforcementMode()
+        {
+            return reinforcementMode;
+        }
+
+        @Override
+        public BlockInteractOverlay.Mode getPrismOffsetMode()
+        {
+            return prismOffsetMode;
+        }
+
+        @Override
+        public BlockInteractOverlay.Mode getSplitLineMode()
+        {
+            return splitLineMode;
+        }
+
+        @Override
+        public BlockInteractOverlay.Mode getOneWayWindowMode()
+        {
+            return oneWayWindowMode;
+        }
+
+        @Override
+        public BlockInteractOverlay.Mode getFrameBackgroundMode()
+        {
+            return frameBackgroundMode;
+        }
+
+        @Override
+        public BlockInteractOverlay.Mode getCamoRotationMode()
+        {
+            return camoRotationMode;
         }
     }
 }

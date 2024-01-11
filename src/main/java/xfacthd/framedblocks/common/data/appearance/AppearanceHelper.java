@@ -56,7 +56,7 @@ public final class AppearanceHelper
             return AIR;
         }
 
-        ConTexMode cfgMode = ClientConfig.conTexMode;
+        ConTexMode cfgMode = ClientConfig.VIEW.getConTexMode();
         if (cfgMode == ConTexMode.NONE || queryPos == null)
         {
             // If queryPos is null, we can't make sure the connection is possible

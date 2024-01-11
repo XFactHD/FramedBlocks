@@ -64,7 +64,7 @@ public final class GhostBlockRenderer
 
     public static void onRenderLevelStage(final RenderLevelStageEvent event)
     {
-        if (!ClientConfig.showGhostBlocks || event.getStage() != RenderLevelStageEvent.Stage.AFTER_PARTICLES)
+        if (!ClientConfig.VIEW.showGhostBlocks() || event.getStage() != RenderLevelStageEvent.Stage.AFTER_PARTICLES)
         {
             return;
         }
@@ -177,7 +177,7 @@ public final class GhostBlockRenderer
             ModelData modelData
     )
     {
-        RenderType bufferType = ClientConfig.altGhostRenderer ?
+        RenderType bufferType = ClientConfig.VIEW.useAltGhostRenderer() ?
                 Sheets.translucentCullBlockSheet() :
                 NeoForgeRenderTypes.TRANSLUCENT_ON_PARTICLES_TARGET.get();
 

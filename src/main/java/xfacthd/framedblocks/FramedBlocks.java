@@ -12,13 +12,12 @@ import net.neoforged.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.neoforged.fml.event.lifecycle.FMLLoadCompleteEvent;
 import net.neoforged.fml.loading.FMLEnvironment;
 import org.slf4j.Logger;
-import xfacthd.framedblocks.common.config.CommonConfig;
+import xfacthd.framedblocks.common.config.ClientConfig;
 import xfacthd.framedblocks.common.config.ServerConfig;
 import xfacthd.framedblocks.common.data.capabilities.CapabilitySetup;
 import xfacthd.framedblocks.common.data.cullupdate.CullingUpdateTracker;
 import xfacthd.framedblocks.common.data.shapes.ShapeReloader;
 import xfacthd.framedblocks.api.util.FramedConstants;
-import xfacthd.framedblocks.common.config.ClientConfig;
 import xfacthd.framedblocks.common.FBContent;
 import xfacthd.framedblocks.common.compat.CompatHandler;
 import xfacthd.framedblocks.common.crafting.FramingSawRecipeCache;
@@ -41,9 +40,8 @@ public final class FramedBlocks
     public FramedBlocks(IEventBus modBus)
     {
         FBContent.init(modBus);
-        ModLoadingContext.get().registerConfig(ModConfig.Type.CLIENT, ClientConfig.SPEC);
-        ModLoadingContext.get().registerConfig(ModConfig.Type.COMMON, CommonConfig.SPEC);
-        ModLoadingContext.get().registerConfig(ModConfig.Type.SERVER, ServerConfig.SPEC);
+        ModLoadingContext.get().registerConfig(ModConfig.Type.CLIENT, ClientConfig.create(modBus));
+        ModLoadingContext.get().registerConfig(ModConfig.Type.SERVER, ServerConfig.create(modBus));
 
         modBus.addListener(CapabilitySetup::onRegisterCapabilities);
         modBus.addListener(FramedBlocks::onCommonSetup);
@@ -69,7 +67,7 @@ public final class FramedBlocks
         CrashReportCallables.registerCrashCallable(
                 "FramedBlocks BlockEntity Warning",
                 FramedBlocks::getBlockEntityWarning,
-                () -> ServerConfig.allowBlockEntities
+                ServerConfig.VIEW::allowBlockEntities
         );
     }
 

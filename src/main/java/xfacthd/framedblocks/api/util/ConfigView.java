@@ -7,18 +7,6 @@ import xfacthd.framedblocks.api.predicate.contex.ConTexMode;
 @SuppressWarnings("unused")
 public final class ConfigView
 {
-    public interface Common
-    {
-        Common INSTANCE = Utils.loadService(ConfigView.Common.class);
-
-
-
-        /**
-         * Returns the current value of the {@code fireproofBlocks} setting in the common config
-         */
-        boolean areBlocksFireproof();
-    }
-
     public interface Server
     {
         Server INSTANCE = Utils.loadService(ConfigView.Server.class);
@@ -54,6 +42,11 @@ public final class ConfigView
          * {@return the light value to use when glowstone is applied to a block}
          */
         int getGlowstoneLightLevel();
+
+        /**
+         * Returns the current value of the {@code fireproofBlocks} setting in the common config
+         */
+        boolean areBlocksFireproof();
     }
 
     public interface Client

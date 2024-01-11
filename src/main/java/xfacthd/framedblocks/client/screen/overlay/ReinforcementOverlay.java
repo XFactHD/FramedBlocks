@@ -31,7 +31,7 @@ public final class ReinforcementOverlay extends BlockInteractOverlay
 
     public ReinforcementOverlay()
     {
-        super(LIST_FALSE, LIST_TRUE, TEXTURE_FALSE, TEXTURE_TRUE, () -> ClientConfig.reinforcementMode);
+        super(LIST_FALSE, LIST_TRUE, TEXTURE_FALSE, TEXTURE_TRUE, ClientConfig.VIEW::getReinforcementMode);
     }
 
     @Override

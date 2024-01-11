@@ -314,7 +314,7 @@ public interface IFramedBlock extends EntityBlock, IBlockExtension
     @Override
     default boolean isFlammable(BlockState state, BlockGetter level, BlockPos pos, Direction face)
     {
-        if (ConfigView.Common.INSTANCE.areBlocksFireproof())
+        if (ConfigView.Server.INSTANCE.areBlocksFireproof())
         {
             return false;
         }
@@ -329,7 +329,7 @@ public interface IFramedBlock extends EntityBlock, IBlockExtension
     @Override
     default int getFlammability(BlockState state, BlockGetter level, BlockPos pos, Direction face)
     {
-        if (ConfigView.Common.INSTANCE.areBlocksFireproof())
+        if (ConfigView.Server.INSTANCE.areBlocksFireproof())
         {
             return 0;
         }
@@ -348,7 +348,7 @@ public interface IFramedBlock extends EntityBlock, IBlockExtension
     @Override
     default int getFireSpreadSpeed(BlockState state, BlockGetter level, BlockPos pos, Direction face)
     {
-        if (ConfigView.Common.INSTANCE.areBlocksFireproof())
+        if (ConfigView.Server.INSTANCE.areBlocksFireproof())
         {
             return 0;
         }

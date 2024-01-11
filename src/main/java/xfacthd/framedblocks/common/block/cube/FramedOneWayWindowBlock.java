@@ -199,7 +199,7 @@ public class FramedOneWayWindowBlock extends FramedBlock
 
     public static boolean isOwnedBy(BlockGetter level, BlockPos pos, Player player)
     {
-        if (!ServerConfig.oneWayWindowOwnable)
+        if (!ServerConfig.VIEW.isOneWayWindowOwnable())
         {
             return true;
         }

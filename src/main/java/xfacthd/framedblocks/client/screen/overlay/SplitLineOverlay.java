@@ -24,7 +24,7 @@ public final class SplitLineOverlay extends BlockInteractOverlay
 
     public SplitLineOverlay()
     {
-        super(LINES_FALSE, LINES_TRUE, TEXTURE_FALSE, TEXTURE_TRUE, () -> ClientConfig.splitLineMode);
+        super(LINES_FALSE, LINES_TRUE, TEXTURE_FALSE, TEXTURE_TRUE, ClientConfig.VIEW::getSplitLineMode);
     }
 
     @Override

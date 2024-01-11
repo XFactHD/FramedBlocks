@@ -31,7 +31,7 @@ public final class ToggleYSlopeOverlay extends BlockInteractOverlay
 
     public ToggleYSlopeOverlay()
     {
-        super(LINES_FALSE, LINES_TRUE, TEXTURE_FALSE, TEXTURE_TRUE, () -> ClientConfig.toggleYSlopeMode);
+        super(LINES_FALSE, LINES_TRUE, TEXTURE_FALSE, TEXTURE_TRUE, ClientConfig.VIEW::getToggleYSlopeMode);
     }
 
     @Override

@@ -18,7 +18,6 @@ import xfacthd.framedblocks.common.block.special.FramingSawBlock;
 import xfacthd.framedblocks.common.block.special.PoweredFramingSawBlock;
 import xfacthd.framedblocks.common.blockentity.special.FramedStorageBlockEntity;
 import xfacthd.framedblocks.common.compat.jei.JeiCompat;
-import xfacthd.framedblocks.common.config.CommonConfig;
 import xfacthd.framedblocks.common.config.ServerConfig;
 import xfacthd.framedblocks.common.crafting.FramingSawRecipeMatchResult;
 import xfacthd.framedblocks.common.data.property.NullableDirection;
@@ -387,14 +386,13 @@ public final class FramedLanguageProvider extends LanguageProvider
 
     private void addConfigTranslations()
     {
-        add(CommonConfig.TRANSLATION_FIREPROOF_BLOCKS, "Fireproof blocks");
-
         add(ServerConfig.TRANSLATION_ALLOW_BLOCK_ENTITIES, "Allow BlockEntities");
         add(ServerConfig.TRANSLATION_ENABLE_INTANGIBILITY, "Enable intangibility feature");
         add(ServerConfig.TRANSLATION_INTANGIBLE_MARKER, "Intangibility marker item");
         add(ServerConfig.TRANSLATION_ONE_WAY_WINDOW_OWNABLE, "One-Way Window ownability");
         add(ServerConfig.TRANSLATION_CONSUME_CAMO_ITEM, "Consume camo item");
         add(ServerConfig.TRANSLATION_GLOWSTONE_LIGHT_LEVEL, "Glowstone Light Level");
+        add(ServerConfig.TRANSLATION_FIREPROOF_BLOCKS, "Fireproof blocks");
 
         add(ClientConfig.TRANSLATION_SHOW_GHOST_BLOCKS, "Show ghost blocks");
         add(ClientConfig.TRANSLATION_ALT_GHOST_RENDERER, "Use alternative placement preview renderer");

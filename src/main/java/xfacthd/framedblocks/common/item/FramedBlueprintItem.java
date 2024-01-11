@@ -161,7 +161,7 @@ public class FramedBlueprintItem extends FramedToolItem
         Set<CamoContainer> camos = getCamoContainers(item, tag);
 
         //Copying fluid camos is currently not possible
-        if (ServerConfig.consumeCamoItem && camos.stream().anyMatch(camo -> camo.getType().isFluid()))
+        if (ServerConfig.VIEW.shouldConsumeCamoItem() && camos.stream().anyMatch(camo -> camo.getType().isFluid()))
         {
             if (player.level().isClientSide())
             {
@@ -172,7 +172,7 @@ public class FramedBlueprintItem extends FramedToolItem
 
         List<ItemStack> materials = new ArrayList<>();
         materials.add(getBlockItem(item));
-        if (ServerConfig.consumeCamoItem)
+        if (ServerConfig.VIEW.shouldConsumeCamoItem())
         {
             materials.addAll(getCamoStacksMerged(camos));
         }
@@ -187,7 +187,7 @@ public class FramedBlueprintItem extends FramedToolItem
         int intangible = behaviour.getIntangibleCount(tag);
         if (intangible > 0)
         {
-            materials.add(new ItemStack(ServerConfig.intangibleMarkerItem, glowstone));
+            materials.add(new ItemStack(ServerConfig.VIEW.getIntangibilityMarkerItem(), glowstone));
         }
         int reinforcement = behaviour.getReinforcementCount(tag);
         if (reinforcement > 0)
@@ -259,14 +259,14 @@ public class FramedBlueprintItem extends FramedToolItem
         Set<CamoContainer> camos = getCamoContainers(item, tag);
 
         //Copying fluid camos is currently not possible
-        if (ServerConfig.consumeCamoItem && camos.stream().anyMatch(camo -> camo.getType().isFluid()))
+        if (ServerConfig.VIEW.shouldConsumeCamoItem() && camos.stream().anyMatch(camo -> camo.getType().isFluid()))
         {
             return;
         }
 
         List<ItemStack> materials = new ArrayList<>();
         materials.add(getBlockItem(item));
-        if (ServerConfig.consumeCamoItem)
+        if (ServerConfig.VIEW.shouldConsumeCamoItem())
         {
             materials.addAll(getCamoStacksMerged(camos));
         }
@@ -281,7 +281,7 @@ public class FramedBlueprintItem extends FramedToolItem
         int intangible = behaviour.getIntangibleCount(tag);
         if (intangible > 0)
         {
-            materials.add(new ItemStack(ServerConfig.intangibleMarkerItem, glowstone));
+            materials.add(new ItemStack(ServerConfig.VIEW.getIntangibilityMarkerItem(), glowstone));
         }
         int reinforcement = behaviour.getReinforcementCount(tag);
         if (reinforcement > 0)
