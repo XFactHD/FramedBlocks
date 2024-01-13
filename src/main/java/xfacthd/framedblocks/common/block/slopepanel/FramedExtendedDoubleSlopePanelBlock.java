@@ -17,7 +17,7 @@ import xfacthd.framedblocks.api.util.*;
 import xfacthd.framedblocks.common.FBContent;
 import xfacthd.framedblocks.common.block.AbstractFramedDoubleBlock;
 import xfacthd.framedblocks.common.block.ExtPlacementStateBuilder;
-import xfacthd.framedblocks.common.blockentity.doubled.FramedExtendedDoubleSlopePanelBlockEntity;
+import xfacthd.framedblocks.common.blockentity.doubled.slopepanel.FramedExtendedDoubleSlopePanelBlockEntity;
 import xfacthd.framedblocks.common.data.BlockType;
 import xfacthd.framedblocks.common.data.PropertyHolder;
 import xfacthd.framedblocks.common.data.doubleblock.CamoGetter;

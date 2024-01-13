@@ -4,7 +4,7 @@ import net.minecraft.util.Tuple;
 import net.minecraft.world.level.block.state.BlockState;
 import xfacthd.framedblocks.api.camo.CamoContainer;
 import xfacthd.framedblocks.api.camo.EmptyCamoContainer;
-import xfacthd.framedblocks.common.blockentity.FramedDoubleBlockEntity;
+import xfacthd.framedblocks.common.blockentity.doubled.FramedDoubleBlockEntity;
 
 public enum CamoGetter
 {

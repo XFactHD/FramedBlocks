@@ -20,7 +20,7 @@ import xfacthd.framedblocks.api.util.Utils;
 import xfacthd.framedblocks.common.FBContent;
 import xfacthd.framedblocks.common.block.AbstractFramedDoubleBlock;
 import xfacthd.framedblocks.common.block.slab.FramedSlabBlock;
-import xfacthd.framedblocks.common.blockentity.doubled.FramedVerticalDoubleHalfSlopeBlockEntity;
+import xfacthd.framedblocks.common.blockentity.doubled.slope.FramedVerticalDoubleHalfSlopeBlockEntity;
 import xfacthd.framedblocks.common.data.BlockType;
 import xfacthd.framedblocks.common.data.doubleblock.CamoGetter;
 import xfacthd.framedblocks.common.data.doubleblock.SolidityCheck;

@@ -22,7 +22,7 @@ import xfacthd.framedblocks.api.util.*;
 import xfacthd.framedblocks.common.FBContent;
 import xfacthd.framedblocks.common.block.AbstractFramedDoubleBlock;
 import xfacthd.framedblocks.common.block.slab.FramedPanelBlock;
-import xfacthd.framedblocks.common.blockentity.doubled.FramedFlatDoubleSlopePanelCornerBlockEntity;
+import xfacthd.framedblocks.common.blockentity.doubled.slopepanel.FramedFlatDoubleSlopePanelCornerBlockEntity;
 import xfacthd.framedblocks.common.data.BlockType;
 import xfacthd.framedblocks.common.data.PropertyHolder;
 import xfacthd.framedblocks.common.data.doubleblock.CamoGetter;

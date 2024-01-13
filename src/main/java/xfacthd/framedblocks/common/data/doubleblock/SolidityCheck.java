@@ -3,7 +3,7 @@ package xfacthd.framedblocks.common.data.doubleblock;
 import net.minecraft.core.Direction;
 import net.neoforged.neoforge.common.IPlantable;
 import xfacthd.framedblocks.api.block.FramedBlockEntity;
-import xfacthd.framedblocks.common.blockentity.FramedDoubleBlockEntity;
+import xfacthd.framedblocks.common.blockentity.doubled.FramedDoubleBlockEntity;
 
 import java.util.function.Predicate;
 
