@@ -26,6 +26,7 @@ import net.minecraft.world.phys.shapes.EntityCollisionContext;
 import net.neoforged.neoforge.capabilities.Capabilities;
 import net.neoforged.neoforge.client.model.data.ModelData;
 import net.neoforged.neoforge.common.*;
+import net.neoforged.neoforge.common.world.AuxiliaryLightManager;
 import net.neoforged.neoforge.fluids.capability.IFluidHandler;
 import net.neoforged.neoforge.fluids.capability.IFluidHandlerItem;
 import org.jetbrains.annotations.ApiStatus;
@@ -663,7 +664,7 @@ public class FramedBlockEntity extends BlockEntity
         return glowing;
     }
 
-    public int getLightValue()
+    protected int getLightValue()
     {
         int baseLight = glowing ? ConfigView.Server.INSTANCE.getGlowstoneLightLevel() : 0;
         return Math.max(baseLight, camoContainer.getState().getLightEmission());
@@ -721,7 +722,11 @@ public class FramedBlockEntity extends BlockEntity
     protected final void doLightUpdate()
     {
         //noinspection ConstantConditions
-        level.getChunkSource().getLightEngine().checkBlock(worldPosition);
+        AuxiliaryLightManager lightManager = level.getAuxLightManager(worldPosition);
+        if (lightManager != null)
+        {
+            lightManager.setLightAt(worldPosition, getLightValue());
+        }
     }
 
     public IFramedBlock getBlock()

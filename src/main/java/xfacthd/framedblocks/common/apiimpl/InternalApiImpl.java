@@ -7,7 +7,6 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.neoforged.fml.loading.FMLEnvironment;
@@ -22,7 +21,6 @@ import xfacthd.framedblocks.common.data.cullupdate.CullingUpdateTracker;
 import xfacthd.framedblocks.api.internal.InternalAPI;
 import xfacthd.framedblocks.common.FBContent;
 import xfacthd.framedblocks.common.compat.flywheel.FlywheelCompat;
-import xfacthd.framedblocks.common.compat.starlight.StarlightCompat;
 import xfacthd.framedblocks.common.data.shapes.ShapeReloader;
 
 public final class InternalApiImpl implements InternalAPI
@@ -37,22 +35,6 @@ public final class InternalApiImpl implements InternalAPI
     public CamoContainerFactory getEmptyCamoContainerFactory()
     {
         return FBContent.FACTORY_EMPTY.value();
-    }
-
-    @Override
-    public BlockEntity getExistingBlockEntity(BlockGetter level, BlockPos pos)
-    {
-        if (FlywheelCompat.isVirtualLevel(level))
-        {
-            return level.getBlockEntity(pos);
-        }
-        return level.getExistingBlockEntity(pos);
-    }
-
-    @Override
-    public BlockEntity getBlockEntityForLight(BlockGetter level, BlockPos pos)
-    {
-        return StarlightCompat.getBlockEntityForLight(level, pos);
     }
 
     @Override

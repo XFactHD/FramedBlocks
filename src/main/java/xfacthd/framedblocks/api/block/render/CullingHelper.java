@@ -199,7 +199,7 @@ public final class CullingHelper
         {
             return true;
         }
-        if (level.getExistingBlockEntity(pos) instanceof FramedBlockEntity be)
+        if (level.getBlockEntity(pos) instanceof FramedBlockEntity be)
         {
             return be.isSolidSide(side) && !be.isIntangible(null);
         }

@@ -42,7 +42,7 @@ runs {
         workingDirectory project.file('run')
 
         //systemProperty 'framedblocks.test.disable_model_quad_cache', 'true'
-        systemProperty 'framedblocks.test.enable_double_block_part_hit_debug_renderer', 'true'
+        //systemProperty 'framedblocks.test.enable_double_block_part_hit_debug_renderer', 'true'
         //systemProperty 'framedblocks.test.enable_state_merger_debug_logging', 'true'
         //systemProperty 'framedblocks.test.state_merger_debug_filter', '.*'
     }
@@ -181,7 +181,7 @@ dependencies {
     compileOnly("curse.maven:modernfix-790626:4954621")
     //runtimeOnly("org.embeddedt:embeddium-${embeddium_mc_version}:${embeddium_version}")
     //runtimeOnly("curse.maven:oculus-581495:4578741")
-    //runtimeOnly("curse.maven:starlight-forge-526854:4631193")
+    //runtimeOnly("curse.maven:starlight-neoforge-951766:4967623")
 
     //compileOnly("com.simibubi.create:create-${create_mc_version}:${create_version}:slim") { transitive = false }
     //compileOnly("com.jozufozu.flywheel:flywheel-forge-${flywheel_mc_version}:${flywheel_version}")

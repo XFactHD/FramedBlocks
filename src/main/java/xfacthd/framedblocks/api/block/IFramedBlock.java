@@ -29,6 +29,7 @@ import net.neoforged.neoforge.client.model.data.ModelData;
 import net.neoforged.neoforge.common.IPlantable;
 import net.neoforged.neoforge.common.Tags;
 import net.neoforged.neoforge.common.extensions.IBlockExtension;
+import net.neoforged.neoforge.common.world.AuxiliaryLightManager;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.Nullable;
 import xfacthd.framedblocks.api.block.cache.IStateCacheAccessor;
@@ -172,9 +173,10 @@ public interface IFramedBlock extends EntityBlock, IBlockExtension
         {
             return 0;
         }
-        if (InternalAPI.INSTANCE.getBlockEntityForLight(level, pos) instanceof FramedBlockEntity be)
+        AuxiliaryLightManager lightManager = level.getAuxLightManager(pos);
+        if (lightManager != null)
         {
-            return be.getLightValue();
+            return lightManager.getLightAt(pos);
         }
         return 0;
     }

@@ -5,7 +5,6 @@ import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import org.jetbrains.annotations.ApiStatus;
@@ -26,10 +25,6 @@ public interface InternalAPI
     BlockEntityType<?> getDefaultBlockEntity();
 
     CamoContainerFactory getEmptyCamoContainerFactory();
-
-    BlockEntity getExistingBlockEntity(BlockGetter level, BlockPos pos);
-
-    BlockEntity getBlockEntityForLight(BlockGetter level, BlockPos pos);
 
     void updateCamoNbt(CompoundTag tag, String stateKey, String stackKey, String camoKey);
 

@@ -90,7 +90,7 @@ public abstract class FramedDoubleBlockEntity extends FramedBlockEntity
 
     @Override
     @SuppressWarnings("deprecation")
-    public int getLightValue()
+    protected int getLightValue()
     {
         return Math.max(camoContainer.getState().getLightEmission(), super.getLightValue());
     }
