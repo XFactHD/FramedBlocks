@@ -60,7 +60,7 @@ public final class FramedEmiRecipeHandler<T extends AbstractContainerMenu & IFra
             return false;
         }
 
-        int idx = FramingSawRecipeCache.get(true).getRecipes().indexOf(sawRecipe.getRecipe());
+        int idx = FramingSawRecipeCache.get(true).getRecipes().indexOf(sawRecipe.getBackingRecipe());
         T menu = context.getScreenHandler();
         if (idx != -1 && menu.isValidRecipeIndex(idx))
         {

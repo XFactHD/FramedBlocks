@@ -90,7 +90,8 @@ public final class FramingSawEmiRecipe extends BasicEmiRecipe
         return recipe.value().getResultType();
     }
 
-    public RecipeHolder<FramingSawRecipe> getRecipe()
+    @Override
+    public RecipeHolder<FramingSawRecipe> getBackingRecipe()
     {
         return recipe;
     }
