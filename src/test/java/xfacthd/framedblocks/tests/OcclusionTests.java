@@ -2193,6 +2193,14 @@ public final class OcclusionTests
         TestUtils.testDoubleBlockOccludesLightNorth(helper, state, List.of(Direction.UP, Direction.DOWN));
     }
 
+    @GameTest(template = "box_top", batch = "occlusion")
+    @TestedType(type = BlockType.FRAMED_DOUBLE_THREEWAY_CORNER_PILLAR)
+    public static void test_DoubleThreewayCornerPillar(GameTestHelper helper)
+    {
+        BlockState state = FBContent.BLOCK_FRAMED_DOUBLE_THREEWAY_CORNER_PILLAR.value().defaultBlockState();
+        TestUtils.testDoubleBlockOccludesLightBelow(helper, state, List.of(Direction.DOWN, Direction.UP));
+    }
+
     @GameTest(template = "box_side", batch = "occlusion")
     @TestedType(type = BlockType.FRAMED_IRON_DOOR)
     public static void test_IronDoor_Closed(GameTestHelper helper)

@@ -11,6 +11,7 @@ import xfacthd.framedblocks.api.predicate.cull.SideSkipPredicate;
 import xfacthd.framedblocks.common.data.*;
 import xfacthd.framedblocks.common.data.property.*;
 import xfacthd.framedblocks.common.data.skippreds.*;
+import xfacthd.framedblocks.common.data.skippreds.pillar.ThreewayCornerPillarSkipPredicate;
 import xfacthd.framedblocks.common.data.skippreds.slope.*;
 import xfacthd.framedblocks.common.data.skippreds.slopepanel.*;
 import xfacthd.framedblocks.common.data.skippreds.slopepanelcorner.*;
@@ -52,6 +53,9 @@ public final class SlabEdgeSkipPredicate implements SideSkipPredicate
                         dir, top, adjState, side
                 );
                 case FRAMED_HALF_STAIRS -> testAgainstHalfStairs(
+                        dir, top, adjState, side
+                );
+                case FRAMED_THREEWAY_CORNER_PILLAR -> testAgainstThreewayCornerPillar(
                         dir, top, adjState, side
                 );
                 case FRAMED_SLOPE_SLAB -> testAgainstSlopeSlab(
@@ -214,6 +218,15 @@ public final class SlabEdgeSkipPredicate implements SideSkipPredicate
             return true;
         }
         return false;
+    }
+
+    @CullTest.TestTarget(BlockType.FRAMED_THREEWAY_CORNER_PILLAR)
+    private static boolean testAgainstThreewayCornerPillar(Direction dir, boolean top, BlockState adjState, Direction side)
+    {
+        Direction adjDir = adjState.getValue(FramedProperties.FACING_HOR);
+        boolean adjTop = adjState.getValue(FramedProperties.TOP);
+
+        return getCornerDir(dir, top, side).isEqualTo(ThreewayCornerPillarSkipPredicate.getCornerDir(adjDir, adjTop, side.getOpposite()));
     }
 
     @CullTest.TestTarget(BlockType.FRAMED_SLOPE_SLAB)

@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "building",
+  "key": {
+    "F": {
+      "item": "framedblocks:framed_threeway_corner_pillar"
+    }
+  },
+  "pattern": [
+    "F",
+    "F"
+  ],
+  "result": {
+    "item": "framedblocks:framed_double_threeway_corner_pillar"
+  }
+}

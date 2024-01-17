@@ -204,6 +204,8 @@ public final class FBClient
         WrapHelper.wrap(FBContent.BLOCK_FRAMED_MASONRY_CORNER_SEGMENT, FramedMasonryCornerSegmentGeometry::new, WrapHelper.IGNORE_WATERLOGGED);
         wrapDoubleModel(FBContent.BLOCK_FRAMED_MASONRY_CORNER, null, WrapHelper.IGNORE_SOLID);
         WrapHelper.wrap(FBContent.BLOCK_FRAMED_STAIRS, FramedStairsGeometry::new, WrapHelper.IGNORE_DEFAULT_LOCK);
+        WrapHelper.wrap(FBContent.BLOCK_FRAMED_THREEWAY_CORNER_PILLAR, FramedThreewayCornerPillarGeometry::new, WrapHelper.IGNORE_WATERLOGGED);
+        wrapDoubleModel(FBContent.BLOCK_FRAMED_DOUBLE_THREEWAY_CORNER_PILLAR, null, WrapHelper.IGNORE_SOLID);
         WrapHelper.wrap(FBContent.BLOCK_FRAMED_WALL, FramedWallGeometry::new, WrapHelper.IGNORE_WATERLOGGED_LOCK);
         WrapHelper.wrap(FBContent.BLOCK_FRAMED_FENCE, FramedFenceGeometry::createFenceGeometry, WrapHelper.IGNORE_WATERLOGGED_LOCK);
         WrapHelper.wrap(FBContent.BLOCK_FRAMED_FENCE_GATE, FramedFenceGateGeometry::new, Utils.concat(Set.of(BlockStateProperties.POWERED), WrapHelper.IGNORE_ALWAYS));

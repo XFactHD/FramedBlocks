@@ -48,6 +48,9 @@ public final class CornerPillarSkipPredicate implements SideSkipPredicate
                 case FRAMED_VERTICAL_STAIRS -> testAgainstVerticalStairs(
                         dir, adjState, side
                 );
+                case FRAMED_THREEWAY_CORNER_PILLAR -> testAgainstThreewayCornerPillar(
+                        dir, adjState, side
+                );
                 case FRAMED_SLOPE_PANEL -> testAgainstSlopePanel(
                         dir, adjState, side
                 );
@@ -148,6 +151,15 @@ public final class CornerPillarSkipPredicate implements SideSkipPredicate
             return true;
         }
         return false;
+    }
+
+    @CullTest.TestTarget(BlockType.FRAMED_THREEWAY_CORNER_PILLAR)
+    private static boolean testAgainstThreewayCornerPillar(Direction dir, BlockState adjState, Direction side)
+    {
+        Direction adjDir = adjState.getValue(FramedProperties.FACING_HOR);
+        boolean adjTop = adjState.getValue(FramedProperties.TOP);
+
+        return getCornerDir(dir, side).isEqualTo(ThreewayCornerPillarSkipPredicate.getCornerDir(adjDir, adjTop, side.getOpposite()));
     }
 
     @CullTest.TestTarget(BlockType.FRAMED_HALF_STAIRS)
