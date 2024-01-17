@@ -157,6 +157,21 @@ public final class FramedRecipeProvider extends RecipeProvider
                 .unlockedBy("hasFramedBlock", HAS_FRAMED_BLOCK)
                 .save(consumer);
 
+        shapedBuildingBlock(FBContent.BLOCK_FRAMED_THREEWAY_CORNER_PILLAR.value())
+                .pattern("P")
+                .pattern("E")
+                .define('P', FBContent.BLOCK_FRAMED_CORNER_PILLAR.value())
+                .define('E', FBContent.BLOCK_FRAMED_SLAB_EDGE.value())
+                .unlockedBy("hasFramedCornerPillar", has(FBContent.BLOCK_FRAMED_CORNER_PILLAR.value()))
+                .save(consumer);
+
+        shapedBuildingBlock(FBContent.BLOCK_FRAMED_DOUBLE_THREEWAY_CORNER_PILLAR.value())
+                .pattern("F")
+                .pattern("F")
+                .define('F', FBContent.BLOCK_FRAMED_THREEWAY_CORNER_PILLAR.value())
+                .unlockedBy("hasFramedThreewayCornerPillar", has(FBContent.BLOCK_FRAMED_THREEWAY_CORNER_PILLAR.value()))
+                .save(consumer);
+
         shapedBuildingBlock(FBContent.BLOCK_FRAMED_WALL.value(), 6)
                 .pattern("FFF")
                 .pattern("FFF")
@@ -1191,7 +1206,7 @@ public final class FramedRecipeProvider extends RecipeProvider
                 .unlockedBy("hasFramedCenteredPanel", has(FBContent.BLOCK_FRAMED_CENTERED_PANEL.value()))
                 .save(consumer, Utils.rl("framed_panel_from_framed_centered_panel"));
 
-        shapedBuildingBlock(FBContent.BLOCK_FRAMED_CHECKERED_CUBE.value())
+        shapedBuildingBlock(FBContent.BLOCK_FRAMED_CHECKERED_CUBE.value(), 2)
                 .pattern("CCC")
                 .pattern("C C")
                 .pattern("CCC")
