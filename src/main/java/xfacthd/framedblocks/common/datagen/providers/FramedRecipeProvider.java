@@ -215,6 +215,13 @@ public final class FramedRecipeProvider extends RecipeProvider
                 .unlockedBy("hasFramedHalfStairs", has(FBContent.BLOCK_FRAMED_HALF_STAIRS.value()))
                 .save(consumer);
 
+        shapedBuildingBlock(FBContent.BLOCK_FRAMED_DOUBLE_HALF_STAIRS.value())
+                .pattern("SC")
+                .define('S', FBContent.BLOCK_FRAMED_HALF_STAIRS.value())
+                .define('C', FBContent.BLOCK_FRAMED_SLAB_CORNER.value())
+                .unlockedBy("hasFramedHalfStairs", has(FBContent.BLOCK_FRAMED_HALF_STAIRS.value()))
+                .save(consumer);
+
         shapedBuildingBlock(FBContent.BLOCK_FRAMED_SLOPED_STAIRS.value())
                 .pattern("H")
                 .pattern("S")
@@ -248,6 +255,13 @@ public final class FramedRecipeProvider extends RecipeProvider
                 .pattern("S")
                 .pattern("S")
                 .define('S', FBContent.BLOCK_FRAMED_VERTICAL_HALF_STAIRS.value())
+                .unlockedBy("hasFramedVerticalHalfStairs", has(FBContent.BLOCK_FRAMED_VERTICAL_HALF_STAIRS.value()))
+                .save(consumer);
+
+        shapedBuildingBlock(FBContent.BLOCK_FRAMED_VERTICAL_DOUBLE_HALF_STAIRS.value())
+                .pattern("SC")
+                .define('S', FBContent.BLOCK_FRAMED_VERTICAL_HALF_STAIRS.value())
+                .define('C', FBContent.BLOCK_FRAMED_SLAB_CORNER.value())
                 .unlockedBy("hasFramedVerticalHalfStairs", has(FBContent.BLOCK_FRAMED_VERTICAL_HALF_STAIRS.value()))
                 .save(consumer);
 
