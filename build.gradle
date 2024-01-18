@@ -2,7 +2,7 @@ plugins {
     id 'eclipse'
     id 'idea'
     id 'maven-publish'
-    id 'net.minecraftforge.gradle' version '6.0.16'
+    id 'net.neoforged.gradle' version '6.0.21'
     id 'org.parchmentmc.librarian.forgegradle' version '1.2.0'
     id 'org.spongepowered.mixin' version '0.7.38'
 }
@@ -123,6 +123,10 @@ sourceSets {
 }
 
 repositories {
+    maven {
+        name = 'MinecraftForge'
+        url = 'https://maven.minecraftforge.net/'
+    }
     maven {
         url "https://www.cursemaven.com"
     }
