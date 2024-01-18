@@ -24,7 +24,6 @@ import xfacthd.framedblocks.api.block.*;
 import xfacthd.framedblocks.api.block.render.FramedBlockRenderProperties;
 import xfacthd.framedblocks.api.shapes.ShapeProvider;
 import xfacthd.framedblocks.api.util.Utils;
-import xfacthd.framedblocks.common.FBContent;
 import xfacthd.framedblocks.common.block.ISlopeBlock;
 import xfacthd.framedblocks.common.blockentity.doubled.rail.FramedFancyRailSlopeBlockEntity;
 import xfacthd.framedblocks.common.data.BlockType;
@@ -266,28 +265,9 @@ public class FramedPoweredRailSlopeBlock extends PoweredRailBlock implements IFr
     }
 
     @Override
-    public @Nullable BlockState getItemModelSource()
+    public BlockState getItemModelSource()
     {
-        return switch (getBlockType())
-        {
-            case FRAMED_POWERED_RAIL_SLOPE ->
-                    FBContent.BLOCK_FRAMED_POWERED_RAIL_SLOPE.value()
-                            .defaultBlockState()
-                            .setValue(PropertyHolder.ASCENDING_RAIL_SHAPE, RailShape.ASCENDING_SOUTH);
-            case FRAMED_FANCY_POWERED_RAIL_SLOPE ->
-                    FBContent.BLOCK_FRAMED_FANCY_POWERED_RAIL_SLOPE.value()
-                            .defaultBlockState()
-                            .setValue(PropertyHolder.ASCENDING_RAIL_SHAPE, RailShape.ASCENDING_SOUTH);
-            case FRAMED_ACTIVATOR_RAIL_SLOPE ->
-                    FBContent.BLOCK_FRAMED_ACTIVATOR_RAIL_SLOPE.value()
-                            .defaultBlockState()
-                            .setValue(PropertyHolder.ASCENDING_RAIL_SHAPE, RailShape.ASCENDING_SOUTH);
-            case FRAMED_FANCY_ACTIVATOR_RAIL_SLOPE ->
-                    FBContent.BLOCK_FRAMED_FANCY_ACTIVATOR_RAIL_SLOPE.value()
-                            .defaultBlockState()
-                            .setValue(PropertyHolder.ASCENDING_RAIL_SHAPE, RailShape.ASCENDING_SOUTH);
-            default -> null;
-        };
+        return defaultBlockState().setValue(PropertyHolder.ASCENDING_RAIL_SHAPE, RailShape.ASCENDING_SOUTH);
     }
 
 

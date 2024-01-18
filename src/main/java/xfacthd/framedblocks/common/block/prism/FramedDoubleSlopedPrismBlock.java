@@ -156,8 +156,6 @@ public class FramedDoubleSlopedPrismBlock extends AbstractFramedDoubleBlock
     @Override
     public BlockState getItemModelSource()
     {
-        return FBContent.BLOCK_FRAMED_DOUBLE_SLOPED_PRISM.value()
-                .defaultBlockState()
-                .setValue(PropertyHolder.FACING_DIR, CompoundDirection.UP_EAST);
+        return defaultBlockState().setValue(PropertyHolder.FACING_DIR, CompoundDirection.UP_EAST);
     }
 }

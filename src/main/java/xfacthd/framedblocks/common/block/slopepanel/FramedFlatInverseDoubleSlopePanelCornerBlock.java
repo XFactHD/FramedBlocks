@@ -201,8 +201,7 @@ public class FramedFlatInverseDoubleSlopePanelCornerBlock extends AbstractFramed
     @Override
     public BlockState getItemModelSource()
     {
-        return FBContent.BLOCK_FRAMED_FLAT_INVERSE_DOUBLE_SLOPE_PANEL_CORNER.value()
-                .defaultBlockState()
+        return defaultBlockState()
                 .setValue(FramedProperties.FACING_HOR, Direction.SOUTH)
                 .setValue(PropertyHolder.ROTATION, HorizontalRotation.RIGHT);
     }

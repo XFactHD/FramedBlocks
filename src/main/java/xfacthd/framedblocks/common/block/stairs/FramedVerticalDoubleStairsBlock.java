@@ -137,8 +137,6 @@ public class FramedVerticalDoubleStairsBlock extends AbstractFramedDoubleBlock
     @Override
     public BlockState getItemModelSource()
     {
-        return FBContent.BLOCK_FRAMED_VERTICAL_DOUBLE_STAIRS.value()
-                .defaultBlockState()
-                .setValue(FramedProperties.FACING_HOR, Direction.SOUTH);
+        return defaultBlockState().setValue(FramedProperties.FACING_HOR, Direction.SOUTH);
     }
 }

@@ -24,7 +24,6 @@ import xfacthd.framedblocks.api.block.*;
 import xfacthd.framedblocks.api.block.render.FramedBlockRenderProperties;
 import xfacthd.framedblocks.api.shapes.ShapeProvider;
 import xfacthd.framedblocks.api.util.Utils;
-import xfacthd.framedblocks.common.FBContent;
 import xfacthd.framedblocks.common.block.ISlopeBlock;
 import xfacthd.framedblocks.common.blockentity.doubled.rail.FramedFancyRailSlopeBlockEntity;
 import xfacthd.framedblocks.common.data.BlockType;
@@ -255,18 +254,7 @@ public class FramedRailSlopeBlock extends BaseRailBlock implements IFramedBlock,
     @Override
     public BlockState getItemModelSource()
     {
-        return switch (getBlockType())
-        {
-            case FRAMED_RAIL_SLOPE ->
-                    FBContent.BLOCK_FRAMED_RAIL_SLOPE.value()
-                            .defaultBlockState()
-                            .setValue(PropertyHolder.ASCENDING_RAIL_SHAPE, RailShape.ASCENDING_SOUTH);
-            case FRAMED_FANCY_RAIL_SLOPE ->
-                    FBContent.BLOCK_FRAMED_FANCY_RAIL_SLOPE.value()
-                            .defaultBlockState()
-                            .setValue(PropertyHolder.ASCENDING_RAIL_SHAPE, RailShape.ASCENDING_SOUTH);
-            default -> throw new IllegalStateException("Invalid block type: " + getBlockType());
-        };
+        return defaultBlockState().setValue(PropertyHolder.ASCENDING_RAIL_SHAPE, RailShape.ASCENDING_SOUTH);
     }
 
 

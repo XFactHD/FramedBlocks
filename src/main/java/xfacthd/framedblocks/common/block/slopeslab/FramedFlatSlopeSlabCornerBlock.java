@@ -18,7 +18,6 @@ import xfacthd.framedblocks.api.block.*;
 import xfacthd.framedblocks.api.shapes.ShapeProvider;
 import xfacthd.framedblocks.api.shapes.ShapeUtils;
 import xfacthd.framedblocks.api.util.*;
-import xfacthd.framedblocks.common.FBContent;
 import xfacthd.framedblocks.common.block.FramedBlock;
 import xfacthd.framedblocks.common.data.BlockType;
 import xfacthd.framedblocks.common.data.PropertyHolder;
@@ -138,18 +137,7 @@ public class FramedFlatSlopeSlabCornerBlock extends FramedBlock
     @Override
     public BlockState getItemModelSource()
     {
-        return switch (getBlockType())
-        {
-            case FRAMED_FLAT_SLOPE_SLAB_CORNER ->
-                    FBContent.BLOCK_FRAMED_FLAT_SLOPE_SLAB_CORNER.value()
-                            .defaultBlockState()
-                            .setValue(FramedProperties.FACING_HOR, Direction.SOUTH);
-            case FRAMED_FLAT_INNER_SLOPE_SLAB_CORNER ->
-                    FBContent.BLOCK_FRAMED_FLAT_INNER_SLOPE_SLAB_CORNER.value()
-                            .defaultBlockState()
-                            .setValue(FramedProperties.FACING_HOR, Direction.SOUTH);
-            default -> throw new IllegalStateException("Invalid block type: " + getBlockType());
-        };
+        return defaultBlockState().setValue(FramedProperties.FACING_HOR, Direction.SOUTH);
     }
 
 

@@ -25,7 +25,6 @@ import net.neoforged.neoforge.common.IPlantable;
 import xfacthd.framedblocks.api.block.*;
 import xfacthd.framedblocks.api.block.render.FramedBlockRenderProperties;
 import xfacthd.framedblocks.api.type.IBlockType;
-import xfacthd.framedblocks.common.FBContent;
 import xfacthd.framedblocks.common.blockentity.special.FramedTargetBlockEntity;
 import xfacthd.framedblocks.common.data.BlockType;
 
@@ -187,6 +186,6 @@ public class FramedTargetBlock extends TargetBlock implements IFramedBlock
     @Override
     public BlockState getItemModelSource()
     {
-        return FBContent.BLOCK_FRAMED_TARGET.value().defaultBlockState();
+        return defaultBlockState();
     }
 }

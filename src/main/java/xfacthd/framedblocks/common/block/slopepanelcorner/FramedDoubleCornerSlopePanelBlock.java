@@ -233,18 +233,7 @@ public class FramedDoubleCornerSlopePanelBlock extends AbstractFramedDoubleBlock
     @Override
     public BlockState getItemModelSource()
     {
-        return switch (getBlockType())
-        {
-            case FRAMED_SMALL_DOUBLE_CORNER_SLOPE_PANEL ->
-                    FBContent.BLOCK_FRAMED_SMALL_DOUBLE_CORNER_SLOPE_PANEL.value()
-                            .defaultBlockState()
-                            .setValue(FramedProperties.FACING_HOR, Direction.EAST);
-            case FRAMED_LARGE_DOUBLE_CORNER_SLOPE_PANEL ->
-                    FBContent.BLOCK_FRAMED_LARGE_DOUBLE_CORNER_SLOPE_PANEL.value()
-                            .defaultBlockState()
-                            .setValue(FramedProperties.FACING_HOR, Direction.EAST);
-            default -> throw new IllegalStateException("Invalid block type: " + getBlockType());
-        };
+        return defaultBlockState().setValue(FramedProperties.FACING_HOR, Direction.EAST);
     }
 
 

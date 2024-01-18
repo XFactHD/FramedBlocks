@@ -18,7 +18,6 @@ import xfacthd.framedblocks.api.block.PlacementStateBuilder;
 import xfacthd.framedblocks.api.shapes.ShapeProvider;
 import xfacthd.framedblocks.api.shapes.ShapeUtils;
 import xfacthd.framedblocks.api.util.*;
-import xfacthd.framedblocks.common.FBContent;
 import xfacthd.framedblocks.common.block.FramedBlock;
 import xfacthd.framedblocks.common.data.BlockType;
 import xfacthd.framedblocks.common.data.PropertyHolder;
@@ -108,18 +107,7 @@ public class FramedPrismBlock extends FramedBlock
     @Override
     public BlockState getItemModelSource()
     {
-        return switch (getBlockType())
-        {
-            case FRAMED_PRISM ->
-                    FBContent.BLOCK_FRAMED_PRISM.value()
-                            .defaultBlockState()
-                            .setValue(PropertyHolder.FACING_AXIS, DirectionAxis.UP_X);
-            case FRAMED_INNER_PRISM ->
-                    FBContent.BLOCK_FRAMED_INNER_PRISM.value()
-                            .defaultBlockState()
-                            .setValue(PropertyHolder.FACING_AXIS, DirectionAxis.UP_X);
-            default -> throw new IllegalStateException("Invalid block type: " + getBlockType());
-        };
+        return defaultBlockState().setValue(PropertyHolder.FACING_AXIS, DirectionAxis.UP_X);
     }
 
 

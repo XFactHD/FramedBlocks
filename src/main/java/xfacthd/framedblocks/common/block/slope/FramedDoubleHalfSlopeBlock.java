@@ -196,9 +196,7 @@ public class FramedDoubleHalfSlopeBlock extends AbstractFramedDoubleBlock
     @Override
     public BlockState getItemModelSource()
     {
-        return FBContent.BLOCK_FRAMED_DOUBLE_HALF_SLOPE.value()
-                .defaultBlockState()
-                .setValue(FramedProperties.FACING_HOR, Direction.WEST);
+        return defaultBlockState().setValue(FramedProperties.FACING_HOR, Direction.WEST);
     }
 
 

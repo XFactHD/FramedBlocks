@@ -94,6 +94,6 @@ public class FramedCheckeredPanelBlock extends AbstractFramedDoubleBlock
     @Override
     public BlockState getItemModelSource()
     {
-        return FBContent.BLOCK_FRAMED_CHECKERED_PANEL.value().defaultBlockState();
+        return defaultBlockState();
     }
 }

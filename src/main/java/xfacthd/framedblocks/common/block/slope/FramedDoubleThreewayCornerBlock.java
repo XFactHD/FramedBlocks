@@ -182,8 +182,6 @@ public class FramedDoubleThreewayCornerBlock extends AbstractFramedDoubleBlock
     @Override
     public BlockState getItemModelSource()
     {
-        return FBContent.BLOCK_FRAMED_DOUBLE_THREEWAY_CORNER.value()
-                .defaultBlockState()
-                .setValue(FramedProperties.FACING_HOR, Direction.WEST);
+        return defaultBlockState().setValue(FramedProperties.FACING_HOR, Direction.WEST);
     }
 }

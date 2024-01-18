@@ -156,8 +156,6 @@ public class FramedDoublePrismBlock extends AbstractFramedDoubleBlock
     @Override
     public BlockState getItemModelSource()
     {
-        return FBContent.BLOCK_FRAMED_DOUBLE_PRISM.value()
-                .defaultBlockState()
-                .setValue(PropertyHolder.FACING_AXIS, DirectionAxis.UP_X);
+        return defaultBlockState().setValue(PropertyHolder.FACING_AXIS, DirectionAxis.UP_X);
     }
 }

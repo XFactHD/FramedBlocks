@@ -233,8 +233,6 @@ public class FramedDividedSlopeBlock extends AbstractFramedDoubleBlock implement
     @Override
     public BlockState getItemModelSource()
     {
-        return FBContent.BLOCK_FRAMED_DIVIDED_SLOPE.value()
-                .defaultBlockState()
-                .setValue(FramedProperties.FACING_HOR, Direction.SOUTH);
+        return defaultBlockState().setValue(FramedProperties.FACING_HOR, Direction.SOUTH);
     }
 }

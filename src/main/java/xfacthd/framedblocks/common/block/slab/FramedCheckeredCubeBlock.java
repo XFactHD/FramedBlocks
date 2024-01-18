@@ -54,6 +54,6 @@ public class FramedCheckeredCubeBlock extends AbstractFramedDoubleBlock
     @Override
     public BlockState getItemModelSource()
     {
-        return FBContent.BLOCK_FRAMED_CHECKERED_CUBE.value().defaultBlockState();
+        return defaultBlockState();
     }
 }

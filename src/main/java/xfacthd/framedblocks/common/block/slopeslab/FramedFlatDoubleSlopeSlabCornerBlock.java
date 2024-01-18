@@ -191,9 +191,7 @@ public class FramedFlatDoubleSlopeSlabCornerBlock extends AbstractFramedDoubleBl
     @Override
     public BlockState getItemModelSource()
     {
-        return FBContent.BLOCK_FRAMED_FLAT_DOUBLE_SLOPE_SLAB_CORNER.value()
-                .defaultBlockState()
-                .setValue(FramedProperties.FACING_HOR, Direction.SOUTH);
+        return defaultBlockState().setValue(FramedProperties.FACING_HOR, Direction.SOUTH);
     }
 
 

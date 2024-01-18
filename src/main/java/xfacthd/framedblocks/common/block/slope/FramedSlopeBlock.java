@@ -20,7 +20,6 @@ import net.minecraft.world.phys.shapes.VoxelShape;
 import xfacthd.framedblocks.api.block.*;
 import xfacthd.framedblocks.api.shapes.*;
 import xfacthd.framedblocks.api.util.*;
-import xfacthd.framedblocks.common.FBContent;
 import xfacthd.framedblocks.common.block.*;
 import xfacthd.framedblocks.common.data.*;
 import xfacthd.framedblocks.common.data.property.SlopeType;
@@ -151,9 +150,7 @@ public class FramedSlopeBlock extends FramedBlock implements ISlopeBlock
     @Override
     public BlockState getItemModelSource()
     {
-        return FBContent.BLOCK_FRAMED_SLOPE.value()
-                .defaultBlockState()
-                .setValue(FramedProperties.FACING_HOR, Direction.SOUTH);
+        return defaultBlockState().setValue(FramedProperties.FACING_HOR, Direction.SOUTH);
     }
 
 

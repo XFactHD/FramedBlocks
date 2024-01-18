@@ -188,7 +188,7 @@ public class FramedDoubleSlopePanelBlock extends AbstractFramedDoubleBlock
     @Override
     public BlockState getItemModelSource()
     {
-        return FBContent.BLOCK_FRAMED_DOUBLE_SLOPE_PANEL.value().defaultBlockState();
+        return defaultBlockState();
     }
 
 

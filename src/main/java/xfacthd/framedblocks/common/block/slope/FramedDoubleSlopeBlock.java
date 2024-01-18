@@ -248,8 +248,7 @@ public class FramedDoubleSlopeBlock extends AbstractFramedDoubleBlock
     @Override
     public BlockState getItemModelSource()
     {
-        return FBContent.BLOCK_FRAMED_DOUBLE_SLOPE.value()
-                .defaultBlockState()
+        return defaultBlockState()
                 .setValue(FramedProperties.FACING_HOR, Direction.WEST)
                 .setValue(PropertyHolder.SLOPE_TYPE, SlopeType.HORIZONTAL);
     }

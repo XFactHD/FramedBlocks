@@ -16,7 +16,6 @@ import xfacthd.framedblocks.api.block.*;
 import xfacthd.framedblocks.api.shapes.ShapeProvider;
 import xfacthd.framedblocks.api.shapes.ShapeUtils;
 import xfacthd.framedblocks.api.util.Utils;
-import xfacthd.framedblocks.common.FBContent;
 import xfacthd.framedblocks.common.block.FramedBlock;
 import xfacthd.framedblocks.common.data.BlockType;
 
@@ -80,12 +79,7 @@ public class FramedPyramidBlock extends FramedBlock
     @Override
     public BlockState getItemModelSource()
     {
-        return switch (getBlockType())
-        {
-            case FRAMED_PYRAMID -> FBContent.BLOCK_FRAMED_PYRAMID.value().defaultBlockState();
-            case FRAMED_PYRAMID_SLAB -> FBContent.BLOCK_FRAMED_PYRAMID_SLAB.value().defaultBlockState();
-            default -> throw new IllegalStateException("Invalid block type: " + getBlockType());
-        };
+        return defaultBlockState();
     }
 
 

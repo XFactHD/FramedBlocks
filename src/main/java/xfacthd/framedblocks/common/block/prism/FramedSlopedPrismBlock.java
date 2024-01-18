@@ -19,7 +19,6 @@ import xfacthd.framedblocks.api.shapes.ShapeProvider;
 import xfacthd.framedblocks.api.shapes.ShapeUtils;
 import xfacthd.framedblocks.api.type.IBlockType;
 import xfacthd.framedblocks.api.util.*;
-import xfacthd.framedblocks.common.FBContent;
 import xfacthd.framedblocks.common.block.FramedBlock;
 import xfacthd.framedblocks.common.data.BlockType;
 import xfacthd.framedblocks.common.data.PropertyHolder;
@@ -127,18 +126,9 @@ public class FramedSlopedPrismBlock extends FramedBlock
     @Override
     public BlockState getItemModelSource()
     {
-        return switch (getBlockType())
-        {
-            case FRAMED_SLOPED_PRISM ->
-                    FBContent.BLOCK_FRAMED_SLOPED_PRISM.value()
-                            .defaultBlockState()
-                            .setValue(PropertyHolder.FACING_DIR, CompoundDirection.UP_WEST);
-            case FRAMED_INNER_SLOPED_PRISM ->
-                    FBContent.BLOCK_FRAMED_INNER_SLOPED_PRISM.value()
-                            .defaultBlockState()
-                            .setValue(PropertyHolder.FACING_DIR, CompoundDirection.UP_EAST);
-            default -> throw new IllegalStateException("Invalid block type: " + getBlockType());
-        };
+        boolean inner = getBlockType() == BlockType.FRAMED_INNER_SLOPED_PRISM;
+        return defaultBlockState()
+                .setValue(PropertyHolder.FACING_DIR, inner ? CompoundDirection.UP_EAST : CompoundDirection.UP_WEST);
     }
 
 

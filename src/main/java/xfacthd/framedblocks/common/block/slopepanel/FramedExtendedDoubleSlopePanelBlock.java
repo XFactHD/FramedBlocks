@@ -178,8 +178,6 @@ public class FramedExtendedDoubleSlopePanelBlock extends AbstractFramedDoubleBlo
     @Override
     public BlockState getItemModelSource()
     {
-        return FBContent.BLOCK_FRAMED_EXTENDED_DOUBLE_SLOPE_PANEL.value()
-                .defaultBlockState()
-                .setValue(FramedProperties.FACING_HOR, Direction.SOUTH);
+        return defaultBlockState().setValue(FramedProperties.FACING_HOR, Direction.SOUTH);
     }
 }

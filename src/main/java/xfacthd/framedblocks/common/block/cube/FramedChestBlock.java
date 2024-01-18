@@ -99,6 +99,6 @@ public class FramedChestBlock extends FramedStorageBlock
     @Override
     public BlockState getItemModelSource()
     {
-        return FBContent.BLOCK_FRAMED_CHEST.value().defaultBlockState();
+        return defaultBlockState();
     }
 }
