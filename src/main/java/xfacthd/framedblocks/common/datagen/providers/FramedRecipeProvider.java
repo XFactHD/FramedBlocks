@@ -230,6 +230,21 @@ public final class FramedRecipeProvider extends RecipeProvider
                 .unlockedBy("hasFramedSlab", has(FBContent.BLOCK_FRAMED_SLAB.value()))
                 .save(consumer);
 
+        shapedBuildingBlock(FBContent.BLOCK_FRAMED_SLICED_STAIRS_SLAB.value())
+                .pattern("E")
+                .pattern("S")
+                .define('S', FBContent.BLOCK_FRAMED_SLAB.value())
+                .define('E', FBContent.BLOCK_FRAMED_SLAB_EDGE.value())
+                .unlockedBy("hasFramedSlab", has(FBContent.BLOCK_FRAMED_SLAB.value()))
+                .save(consumer);
+
+        shapedBuildingBlock(FBContent.BLOCK_FRAMED_SLICED_STAIRS_PANEL.value())
+                .pattern("PE")
+                .define('P', FBContent.BLOCK_FRAMED_PANEL.value())
+                .define('E', FBContent.BLOCK_FRAMED_SLAB_EDGE.value())
+                .unlockedBy("hasFramedPanel", has(FBContent.BLOCK_FRAMED_PANEL.value()))
+                .save(consumer);
+
         shapedBuildingBlock(FBContent.BLOCK_FRAMED_VERTICAL_STAIRS.value(), 4)
                 .pattern("FFF")
                 .pattern("FF ")
@@ -263,6 +278,14 @@ public final class FramedRecipeProvider extends RecipeProvider
                 .define('S', FBContent.BLOCK_FRAMED_VERTICAL_HALF_STAIRS.value())
                 .define('C', FBContent.BLOCK_FRAMED_SLAB_CORNER.value())
                 .unlockedBy("hasFramedVerticalHalfStairs", has(FBContent.BLOCK_FRAMED_VERTICAL_HALF_STAIRS.value()))
+                .save(consumer);
+
+        shapedBuildingBlock(FBContent.BLOCK_FRAMED_VERTICAL_SLICED_STAIRS.value())
+                .pattern("PEW")
+                .define('P', FBContent.BLOCK_FRAMED_PANEL.value())
+                .define('E', FBContent.BLOCK_FRAMED_SLAB_EDGE.value())
+                .define('W', FBContent.ITEM_FRAMED_WRENCH.value())
+                .unlockedBy("hasFramedPanel", has(FBContent.BLOCK_FRAMED_PANEL.value()))
                 .save(consumer);
 
         shapedBuildingBlock(FBContent.BLOCK_FRAMED_VERTICAL_SLOPED_STAIRS.value())

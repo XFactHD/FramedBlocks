@@ -118,7 +118,9 @@ public final class LightSourceTests
 
             case FRAMED_DIVIDED_PANEL_VERTICAL,
                  FRAMED_DIVIDED_SLOPE,
-                 FRAMED_DIVIDED_STAIRS -> List.of(Direction.EAST, Direction.WEST);
+                 FRAMED_DIVIDED_STAIRS,
+                 FRAMED_SLICED_STAIRS_SLAB,
+                 FRAMED_VERTICAL_SLICED_STAIRS -> List.of(Direction.EAST, Direction.WEST);
 
             case FRAMED_CHECKERED_SLAB -> List.of(Direction.NORTH, Direction.WEST);
 

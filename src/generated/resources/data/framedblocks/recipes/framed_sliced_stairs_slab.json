@@ -1,0 +1,19 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "building",
+  "key": {
+    "E": {
+      "item": "framedblocks:framed_slab_edge"
+    },
+    "S": {
+      "item": "framedblocks:framed_slab"
+    }
+  },
+  "pattern": [
+    "E",
+    "S"
+  ],
+  "result": {
+    "item": "framedblocks:framed_sliced_stairs_slab"
+  }
+}

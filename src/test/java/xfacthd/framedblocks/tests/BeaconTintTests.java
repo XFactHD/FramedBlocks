@@ -58,6 +58,7 @@ public final class BeaconTintTests
             BlockType.FRAMED_REDSTONE_WALL_TORCH,
             BlockType.FRAMED_LATTICE_BLOCK,
             BlockType.FRAMED_VERTICAL_STAIRS,
+            BlockType.FRAMED_VERTICAL_SLICED_STAIRS,
             BlockType.FRAMED_BARS,
             BlockType.FRAMED_PANE,
             BlockType.FRAMED_FLOWER_POT,
@@ -180,7 +181,8 @@ public final class BeaconTintTests
 
             case FRAMED_DIVIDED_PANEL_VERTICAL,
                  FRAMED_DIVIDED_SLOPE,
-                 FRAMED_DIVIDED_STAIRS -> List.of(Direction.EAST, Direction.WEST);
+                 FRAMED_DIVIDED_STAIRS,
+                 FRAMED_SLICED_STAIRS_SLAB -> List.of(Direction.EAST, Direction.WEST);
 
             case FRAMED_CHECKERED_SLAB -> List.of(Direction.NORTH, Direction.WEST);
 

@@ -50,11 +50,14 @@ public final class ConnectionPredicates extends BlockTypeMap<ConnectionPredicate
         put(BlockType.FRAMED_HALF_STAIRS, new HalfStairsConnectionPredicate());
         put(BlockType.FRAMED_DIVIDED_STAIRS, new DividedStairsConnectionPredicate());
         put(BlockType.FRAMED_DOUBLE_HALF_STAIRS, new DoubleHalfStairsConnectionPredicate());
+        put(BlockType.FRAMED_SLICED_STAIRS_SLAB, new SlicedStairsSlabConnectionPredicate());
+        put(BlockType.FRAMED_SLICED_STAIRS_PANEL, new SlicedStairsPanelConnectionPredicate());
         put(BlockType.FRAMED_VERTICAL_STAIRS, new VerticalStairsConnectionPredicate());
         put(BlockType.FRAMED_VERTICAL_DOUBLE_STAIRS, new VerticalDoubleStairsConnectionPredicate());
         put(BlockType.FRAMED_VERTICAL_HALF_STAIRS, new VerticalHalfStairsConnectionPredicate());
         put(BlockType.FRAMED_VERTICAL_DIVIDED_STAIRS, new VerticalDividedStairsConnectionPredicate());
         put(BlockType.FRAMED_VERTICAL_DOUBLE_HALF_STAIRS, new VerticalDoubleHalfStairsConnectionPredicate());
+        put(BlockType.FRAMED_VERTICAL_SLICED_STAIRS, new VerticalSlicedStairsConnectionPredicate());
         put(BlockType.FRAMED_THREEWAY_CORNER_PILLAR, new ThreewayCornerPillarConnectionPredicate());
         put(BlockType.FRAMED_DOUBLE_THREEWAY_CORNER_PILLAR, new DoubleThreewayCornerPillarConnectionPredicate());
         put(BlockType.FRAMED_WALL, ConnectionPredicate.FALSE);
