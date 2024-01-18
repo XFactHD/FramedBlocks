@@ -323,7 +323,7 @@ public final class FBContent
     );
     public static final Holder<BlockEntityType<?>> BE_TYPE_DOUBLE_FRAMED_THREEWAY_CORNER = createBlockEntityType(
             FramedDoubleThreewayCornerBlockEntity::new,
-            BlockType.FRAMED_DOUBLE_PRISM_CORNER, BlockType.FRAMED_DOUBLE_THREEWAY_CORNER
+            BlockType.FRAMED_DOUBLE_THREEWAY_CORNER, BlockType.FRAMED_DOUBLE_PRISM_CORNER
     );
     public static final Holder<BlockEntityType<?>> BE_TYPE_DOUBLE_FRAMED_SLAB = createBlockEntityType(
             FramedDoubleSlabBlockEntity::new,
