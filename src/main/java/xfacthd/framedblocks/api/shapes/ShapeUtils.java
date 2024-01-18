@@ -114,6 +114,11 @@ public final class ShapeUtils
                 out[idx] = orUnoptimized(out[idx], Shapes.create(box));
             }
         }
+
+        for (int i = 0; i < 4; i++)
+        {
+            out[baseOffset + i] = out[baseOffset + i].optimize();
+        }
     }
 
     public static VoxelShape[] makeHorizontalRotations(VoxelShape shape, Direction srcDir)
