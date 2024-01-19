@@ -1,7 +1,7 @@
 {
   "parent": "minecraft:recipes/root",
   "criteria": {
-    "has_framed_extended_slope_panel": {
+    "hasFramedExtendedSlopePanel": {
       "conditions": {
         "items": [
           {
@@ -23,7 +23,7 @@
   "requirements": [
     [
       "has_the_recipe",
-      "has_framed_extended_slope_panel"
+      "hasFramedExtendedSlopePanel"
     ]
   ],
   "rewards": {
