@@ -1,6 +1,5 @@
 package xfacthd.framedblocks.client;
 
-import net.minecraft.client.gui.screens.MenuScreens;
 import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
 import net.minecraft.client.resources.model.BakedModel;
 import net.minecraft.core.Holder;
@@ -73,14 +72,7 @@ public final class FBClient
     @SubscribeEvent
     public static void onClientSetup(final FMLClientSetupEvent event)
     {
-        event.enqueueWork(() ->
-        {
-            MenuScreens.register(FBContent.MENU_TYPE_FRAMED_STORAGE.value(), FramedStorageScreen::new);
-            MenuScreens.register(FBContent.MENU_TYPE_FRAMING_SAW.value(), FramingSawScreen::new);
-            MenuScreens.register(FBContent.MENU_TYPE_POWERED_FRAMING_SAW.value(), PoweredFramingSawScreen::new);
-
-            BlueprintPropertyOverride.register();
-        });
+        event.enqueueWork(BlueprintPropertyOverride::register);
 
         BlockOutlineRenderers.register();
         GhostBlockRenderer.init();
@@ -93,6 +85,14 @@ public final class FBClient
         NeoForge.EVENT_BUS.addListener(EventPriority.HIGH, ClientEventHandler::onRecipesUpdated);
         NeoForge.EVENT_BUS.addListener(ClientEventHandler::onClientDisconnect);
         NeoForge.EVENT_BUS.addListener(EventPriority.LOW, true, CollapsibleBlockIndicatorRenderer::onRenderBlockHighlight);
+    }
+
+    @SubscribeEvent
+    public static void onRegisterMenuScreens(final RegisterMenuScreensEvent event)
+    {
+        event.register(FBContent.MENU_TYPE_FRAMED_STORAGE.value(), FramedStorageScreen::new);
+        event.register(FBContent.MENU_TYPE_FRAMING_SAW.value(), FramingSawScreen::new);
+        event.register(FBContent.MENU_TYPE_POWERED_FRAMING_SAW.value(), PoweredFramingSawScreen::new);
     }
 
     @SubscribeEvent
