@@ -84,13 +84,6 @@ public class FramedSlabEdgeBlock extends FramedBlock
 
     public record ShapeKey(Direction dir, boolean top) { }
 
-    public static final ShapeCache<ShapeKey> SHAPES = new ShapeCache<>(map ->
-    {
-        VoxelShape shapeBot = box(0.0D, 0.0D, 0.0D, 16.0D, 8.0D, 8.0D);
-        VoxelShape shapeTop = box(0.0D, 8.0D, 0.0D, 16.0D, 16.0D, 8.0D);
-        ShapeUtils.makeHorizontalRotationsWithFlag(shapeBot, shapeTop, Direction.NORTH, map, ShapeKey::new);
-    });
-
     public static ShapeProvider generateShapes(ImmutableList<BlockState> states)
     {
         ImmutableMap.Builder<BlockState, VoxelShape> builder = ImmutableMap.builder();
@@ -99,7 +92,7 @@ public class FramedSlabEdgeBlock extends FramedBlock
         {
             Direction dir = state.getValue(FramedProperties.FACING_HOR);
             boolean top = state.getValue(FramedProperties.TOP);
-            builder.put(state, SHAPES.get(new ShapeKey(dir, top)));
+            builder.put(state, CommonShapes.SLAB_EDGE.get(new CommonShapes.DirBoolKey(dir, top)));
         }
 
         return ShapeProvider.of(builder.build());

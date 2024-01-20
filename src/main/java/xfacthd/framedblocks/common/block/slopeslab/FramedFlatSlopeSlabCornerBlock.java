@@ -15,8 +15,7 @@ import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.Vec3;
 import net.minecraft.world.phys.shapes.*;
 import xfacthd.framedblocks.api.block.*;
-import xfacthd.framedblocks.api.shapes.ShapeProvider;
-import xfacthd.framedblocks.api.shapes.ShapeUtils;
+import xfacthd.framedblocks.api.shapes.*;
 import xfacthd.framedblocks.api.util.*;
 import xfacthd.framedblocks.common.block.FramedBlock;
 import xfacthd.framedblocks.common.data.BlockType;
@@ -142,31 +141,37 @@ public class FramedFlatSlopeSlabCornerBlock extends FramedBlock
 
 
 
-    public static ShapeProvider generateShapes(ImmutableList<BlockState> states)
+    public static final ShapeCache<SlopeSlabShape> SHAPES = ShapeCache.createEnum(SlopeSlabShape.class, map ->
     {
-        ImmutableMap.Builder<BlockState, VoxelShape> builder = ImmutableMap.builder();
-
-        VoxelShape shapeSlopeBottom = FramedSlopeSlabBlock.SHAPES.get(Boolean.FALSE);
-        VoxelShape shapeSlopeTop = FramedSlopeSlabBlock.SHAPES.get(Boolean.TRUE);
+        VoxelShape shapeSlopeBottom = FramedSlopeSlabBlock.SHAPES.get(SlopeSlabShape.BOTTOM_BOTTOM_HALF);
+        VoxelShape shapeSlopeTop = FramedSlopeSlabBlock.SHAPES.get(SlopeSlabShape.TOP_BOTTOM_HALF);
 
         VoxelShape shapeBottomBottomHalf = ShapeUtils.andUnoptimized(
                 shapeSlopeBottom,
                 ShapeUtils.rotateShapeUnoptimized(Direction.NORTH, Direction.WEST, shapeSlopeBottom)
         );
-        VoxelShape shapeBottomTopHalf = shapeBottomBottomHalf.move(0, .5, 0);
+        map.put(SlopeSlabShape.BOTTOM_BOTTOM_HALF, shapeBottomBottomHalf);
+        map.put(SlopeSlabShape.BOTTOM_TOP_HALF, shapeBottomBottomHalf.move(0, .5, 0));
+
         VoxelShape shapeTopBottomHalf = ShapeUtils.andUnoptimized(
                 shapeSlopeTop,
                 ShapeUtils.rotateShapeUnoptimized(Direction.NORTH, Direction.WEST, shapeSlopeTop)
         );
-        VoxelShape shapeTopTopHalf = shapeTopBottomHalf.move(0, .5, 0);
+        map.put(SlopeSlabShape.TOP_BOTTOM_HALF, shapeTopBottomHalf);
+        map.put(SlopeSlabShape.TOP_TOP_HALF, shapeTopBottomHalf.move(0, .5, 0));
+    });
+
+    public static ShapeProvider generateShapes(ImmutableList<BlockState> states)
+    {
+        ImmutableMap.Builder<BlockState, VoxelShape> builder = ImmutableMap.builder();
 
         int maskTop = 0b0100;
         int maskTopHalf = 0b1000;
         VoxelShape[] shapes = new VoxelShape[16];
-        ShapeUtils.makeHorizontalRotations(shapeBottomBottomHalf, Direction.NORTH, shapes, 0);
-        ShapeUtils.makeHorizontalRotations(shapeBottomTopHalf, Direction.NORTH, shapes, maskTopHalf);
-        ShapeUtils.makeHorizontalRotations(shapeTopBottomHalf, Direction.NORTH, shapes, maskTop);
-        ShapeUtils.makeHorizontalRotations(shapeTopTopHalf, Direction.NORTH, shapes, maskTop | maskTopHalf);
+        ShapeUtils.makeHorizontalRotations(SHAPES.get(SlopeSlabShape.BOTTOM_BOTTOM_HALF), Direction.NORTH, shapes, 0);
+        ShapeUtils.makeHorizontalRotations(SHAPES.get(SlopeSlabShape.BOTTOM_TOP_HALF), Direction.NORTH, shapes, maskTopHalf);
+        ShapeUtils.makeHorizontalRotations(SHAPES.get(SlopeSlabShape.TOP_BOTTOM_HALF), Direction.NORTH, shapes, maskTop);
+        ShapeUtils.makeHorizontalRotations(SHAPES.get(SlopeSlabShape.TOP_TOP_HALF), Direction.NORTH, shapes, maskTop | maskTopHalf);
 
         for (BlockState state : states)
         {
@@ -180,31 +185,37 @@ public class FramedFlatSlopeSlabCornerBlock extends FramedBlock
         return ShapeProvider.of(builder.build());
     }
 
-    public static ShapeProvider generateInnerShapes(ImmutableList<BlockState> states)
+    public static final ShapeCache<SlopeSlabShape> INNER_SHAPES = ShapeCache.createEnum(SlopeSlabShape.class, map ->
     {
-        ImmutableMap.Builder<BlockState, VoxelShape> builder = ImmutableMap.builder();
-
-        VoxelShape shapeSlopeBottom = FramedSlopeSlabBlock.SHAPES.get(Boolean.FALSE);
-        VoxelShape shapeSlopeTop = FramedSlopeSlabBlock.SHAPES.get(Boolean.TRUE);
+        VoxelShape shapeSlopeBottom = FramedSlopeSlabBlock.SHAPES.get(SlopeSlabShape.BOTTOM_BOTTOM_HALF);
+        VoxelShape shapeSlopeTop = FramedSlopeSlabBlock.SHAPES.get(SlopeSlabShape.TOP_BOTTOM_HALF);
 
         VoxelShape shapeBottomBottomHalf = ShapeUtils.orUnoptimized(
                 shapeSlopeBottom,
                 ShapeUtils.rotateShapeUnoptimized(Direction.NORTH, Direction.WEST, shapeSlopeBottom)
         );
-        VoxelShape shapeBottomTopHalf = shapeBottomBottomHalf.move(0, .5, 0);
+        map.put(SlopeSlabShape.BOTTOM_BOTTOM_HALF, shapeBottomBottomHalf);
+        map.put(SlopeSlabShape.BOTTOM_TOP_HALF, shapeBottomBottomHalf.move(0, .5, 0));
+
         VoxelShape shapeTopBottomHalf = ShapeUtils.orUnoptimized(
                 shapeSlopeTop,
                 ShapeUtils.rotateShapeUnoptimized(Direction.NORTH, Direction.WEST, shapeSlopeTop)
         );
-        VoxelShape shapeTopTopHalf = shapeTopBottomHalf.move(0, .5, 0);
+        map.put(SlopeSlabShape.TOP_BOTTOM_HALF, shapeTopBottomHalf);
+        map.put(SlopeSlabShape.TOP_TOP_HALF, shapeTopBottomHalf.move(0, .5, 0));
+    });
+
+    public static ShapeProvider generateInnerShapes(ImmutableList<BlockState> states)
+    {
+        ImmutableMap.Builder<BlockState, VoxelShape> builder = ImmutableMap.builder();
 
         int maskTop = 0b0100;
         int maskTopHalf = 0b1000;
         VoxelShape[] shapes = new VoxelShape[16];
-        ShapeUtils.makeHorizontalRotations(shapeBottomBottomHalf, Direction.NORTH, shapes, 0);
-        ShapeUtils.makeHorizontalRotations(shapeBottomTopHalf, Direction.NORTH, shapes, maskTopHalf);
-        ShapeUtils.makeHorizontalRotations(shapeTopBottomHalf, Direction.NORTH, shapes, maskTop);
-        ShapeUtils.makeHorizontalRotations(shapeTopTopHalf, Direction.NORTH, shapes, maskTop | maskTopHalf);
+        ShapeUtils.makeHorizontalRotations(INNER_SHAPES.get(SlopeSlabShape.BOTTOM_BOTTOM_HALF), Direction.NORTH, shapes, 0);
+        ShapeUtils.makeHorizontalRotations(INNER_SHAPES.get(SlopeSlabShape.BOTTOM_TOP_HALF), Direction.NORTH, shapes, maskTopHalf);
+        ShapeUtils.makeHorizontalRotations(INNER_SHAPES.get(SlopeSlabShape.TOP_BOTTOM_HALF), Direction.NORTH, shapes, maskTop);
+        ShapeUtils.makeHorizontalRotations(INNER_SHAPES.get(SlopeSlabShape.TOP_TOP_HALF), Direction.NORTH, shapes, maskTop | maskTopHalf);
 
         for (BlockState state : states)
         {

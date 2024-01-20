@@ -140,9 +140,11 @@ public class FramedInverseDoubleSlopeSlabBlock extends AbstractFramedDoubleBlock
         ImmutableMap.Builder<BlockState, VoxelShape> builder = ImmutableMap.builder();
 
         VoxelShape shape = ShapeUtils.orUnoptimized(
-                FramedSlopeSlabBlock.SHAPES.get(Boolean.FALSE).move(0, .5, 0),
+                FramedSlopeSlabBlock.SHAPES.get(SlopeSlabShape.BOTTOM_TOP_HALF),
                 ShapeUtils.rotateShapeUnoptimized(
-                        Direction.NORTH, Direction.SOUTH, FramedSlopeSlabBlock.SHAPES.get(Boolean.TRUE)
+                        Direction.NORTH,
+                        Direction.SOUTH,
+                        FramedSlopeSlabBlock.SHAPES.get(SlopeSlabShape.TOP_BOTTOM_HALF)
                 )
         );
 

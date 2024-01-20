@@ -18,6 +18,7 @@ import xfacthd.framedblocks.common.FBContent;
 import xfacthd.framedblocks.common.blockentity.special.FramedChestBlockEntity;
 import xfacthd.framedblocks.common.data.*;
 import xfacthd.framedblocks.common.data.property.ChestState;
+import xfacthd.framedblocks.common.util.FramedUtils;
 
 import javax.annotation.Nullable;
 
@@ -31,12 +32,12 @@ public class FramedChestBlock extends FramedStorageBlock
     @Override
     protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder)
     {
-        //Don't call super, this block doesn't need the SOLID property
+        super.createBlockStateDefinition(builder);
         builder.add(
                 FramedProperties.FACING_HOR, PropertyHolder.CHEST_STATE, PropertyHolder.LATCH_TYPE,
-                FramedProperties.GLOWING, FramedProperties.PROPAGATES_SKYLIGHT,
                 BlockStateProperties.WATERLOGGED
         );
+        FramedUtils.removeProperty(builder, FramedProperties.SOLID);
     }
 
     @Override

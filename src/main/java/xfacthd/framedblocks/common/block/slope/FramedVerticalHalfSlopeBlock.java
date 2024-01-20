@@ -15,8 +15,7 @@ import xfacthd.framedblocks.api.shapes.*;
 import xfacthd.framedblocks.api.util.Utils;
 import xfacthd.framedblocks.common.block.FramedBlock;
 import xfacthd.framedblocks.common.data.BlockType;
-
-import java.util.IdentityHashMap;
+import xfacthd.framedblocks.common.data.property.SlopeType;
 
 public class FramedVerticalHalfSlopeBlock extends FramedBlock
 {
@@ -74,24 +73,15 @@ public class FramedVerticalHalfSlopeBlock extends FramedBlock
 
 
 
-    public static final ShapeCache<Boolean> SHAPES = new ShapeCache<>(new IdentityHashMap<>(), map ->
+    public static final ShapeCache<Boolean> SHAPES = ShapeCache.createIdentity(map ->
     {
-        map.put(false, ShapeUtils.orUnoptimized(
-                box(   0, 0, 0,   .5,  8,   16),
-                box(   0, 0, 0,    4,  8, 15.5),
-                box(   4, 0, 0,    8,  8,   12),
-                box(   8, 0, 0,   12,  8,    8),
-                box(  12, 0, 0, 15.5,  8,    4),
-                box(15.5, 0, 0,   16,  8,   .5)
+        map.put(Boolean.FALSE, ShapeUtils.andUnoptimized(
+                FramedSlopeBlock.SHAPES.get(SlopeType.HORIZONTAL),
+                CommonShapes.SLAB.get(Boolean.FALSE)
         ));
-
-        map.put(true, ShapeUtils.orUnoptimized(
-                box(   0, 8, 0,   .5, 16,   16),
-                box(   0, 8, 0,    4, 16, 15.5),
-                box(   4, 8, 0,    8, 16,   12),
-                box(   8, 8, 0,   12, 16,    8),
-                box(  12, 8, 0, 15.5, 16,    4),
-                box(15.5, 8, 0,   16, 16,   .5)
+        map.put(Boolean.TRUE, ShapeUtils.andUnoptimized(
+                FramedSlopeBlock.SHAPES.get(SlopeType.HORIZONTAL),
+                CommonShapes.SLAB.get(Boolean.TRUE)
         ));
     });
 

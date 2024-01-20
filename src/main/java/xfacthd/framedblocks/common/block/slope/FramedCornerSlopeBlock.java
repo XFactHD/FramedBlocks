@@ -114,30 +114,23 @@ public class FramedCornerSlopeBlock extends FramedBlock
         VoxelShape shapeSlopeBottom = FramedSlopeBlock.SHAPES.get(SlopeType.BOTTOM);
         VoxelShape shapeSlopeTop = FramedSlopeBlock.SHAPES.get(SlopeType.TOP);
         VoxelShape shapeSlopeHorizontal = FramedSlopeBlock.SHAPES.get(SlopeType.HORIZONTAL);
+        VoxelShape shapeSlopeHorizontalEast = ShapeUtils.rotateShapeUnoptimized(
+                Direction.NORTH, Direction.EAST, shapeSlopeHorizontal
+        );
 
         VoxelShape shapeTop = ShapeUtils.andUnoptimized(
                 shapeSlopeTop,
                 ShapeUtils.rotateShapeUnoptimized(Direction.NORTH, Direction.WEST, shapeSlopeTop)
         );
-
         VoxelShape shapeBottom = ShapeUtils.andUnoptimized(
                 shapeSlopeBottom,
                 ShapeUtils.rotateShapeUnoptimized(Direction.NORTH, Direction.WEST, shapeSlopeBottom)
         );
 
         VoxelShape shapeBottomLeft = ShapeUtils.andUnoptimized(shapeSlopeBottom, shapeSlopeHorizontal);
-
-        VoxelShape shapeBottomRight = ShapeUtils.andUnoptimized(
-                shapeSlopeBottom,
-                ShapeUtils.rotateShapeUnoptimized(Direction.NORTH, Direction.EAST, shapeSlopeHorizontal)
-        );
-
+        VoxelShape shapeBottomRight = ShapeUtils.andUnoptimized(shapeSlopeBottom, shapeSlopeHorizontalEast);
         VoxelShape shapeTopLeft = ShapeUtils.andUnoptimized(shapeSlopeTop, shapeSlopeHorizontal);
-
-        VoxelShape shapeTopRight = ShapeUtils.andUnoptimized(
-                shapeSlopeTop,
-                ShapeUtils.rotateShapeUnoptimized(Direction.NORTH, Direction.EAST, shapeSlopeHorizontal)
-        );
+        VoxelShape shapeTopRight = ShapeUtils.andUnoptimized(shapeSlopeTop, shapeSlopeHorizontalEast);
 
         Map<ShapeKey, VoxelShape> shapes = new HashMap<>();
         for (CornerType type : CornerType.values())
@@ -173,30 +166,23 @@ public class FramedCornerSlopeBlock extends FramedBlock
         VoxelShape shapeSlopeBottom = FramedSlopeBlock.SHAPES.get(SlopeType.BOTTOM);
         VoxelShape shapeSlopeTop = FramedSlopeBlock.SHAPES.get(SlopeType.TOP);
         VoxelShape shapeSlopeHorizontal = FramedSlopeBlock.SHAPES.get(SlopeType.HORIZONTAL);
+        VoxelShape shapeSlopeHorizontalEast = ShapeUtils.rotateShapeUnoptimized(
+                Direction.NORTH, Direction.EAST, shapeSlopeHorizontal
+        );
 
         VoxelShape shapeTop = ShapeUtils.orUnoptimized(
                 shapeSlopeTop,
                 ShapeUtils.rotateShapeUnoptimized(Direction.NORTH, Direction.WEST, shapeSlopeTop)
         );
-
         VoxelShape shapeBottom = ShapeUtils.orUnoptimized(
                 shapeSlopeBottom,
                 ShapeUtils.rotateShapeUnoptimized(Direction.NORTH, Direction.WEST, shapeSlopeBottom)
         );
 
         VoxelShape shapeBottomLeft = ShapeUtils.orUnoptimized(shapeSlopeBottom, shapeSlopeHorizontal);
-
-        VoxelShape shapeBottomRight = ShapeUtils.orUnoptimized(
-                shapeSlopeBottom,
-                ShapeUtils.rotateShapeUnoptimized(Direction.NORTH, Direction.EAST, shapeSlopeHorizontal)
-        );
-
+        VoxelShape shapeBottomRight = ShapeUtils.orUnoptimized(shapeSlopeBottom, shapeSlopeHorizontalEast);
         VoxelShape shapeTopLeft = ShapeUtils.orUnoptimized(shapeSlopeTop, shapeSlopeHorizontal);
-
-        VoxelShape shapeTopRight = ShapeUtils.orUnoptimized(
-                shapeSlopeTop,
-                ShapeUtils.rotateShapeUnoptimized(Direction.NORTH, Direction.EAST, shapeSlopeHorizontal)
-        );
+        VoxelShape shapeTopRight = ShapeUtils.orUnoptimized(shapeSlopeTop, shapeSlopeHorizontalEast);
 
         Map<ShapeKey, VoxelShape> shapes = new HashMap<>();
         for (CornerType type : CornerType.values())

@@ -19,8 +19,6 @@ import xfacthd.framedblocks.common.block.FramedBlock;
 import xfacthd.framedblocks.common.data.BlockType;
 import xfacthd.framedblocks.common.data.PropertyHolder;
 
-import java.util.IdentityHashMap;
-
 public class FramedSlopeSlabBlock extends FramedBlock
 {
     public FramedSlopeSlabBlock()
@@ -99,35 +97,41 @@ public class FramedSlopeSlabBlock extends FramedBlock
 
 
 
-    public static final ShapeCache<Boolean> SHAPES = new ShapeCache<>(new IdentityHashMap<>(), map ->
+    public record ShapeKey(boolean top, boolean topHalf) { }
+
+    public static final ShapeCache<SlopeSlabShape> SHAPES = ShapeCache.create(map ->
     {
-        map.put(false, ShapeUtils.orUnoptimized(
+        VoxelShape shapeBottom = ShapeUtils.orUnoptimized(
                 box(0, 0, 0, 16,   .5, 16),
                 box(0, 0, 0, 16,    2, 15),
                 box(0, 2, 0, 16,    4, 12),
                 box(0, 4, 0, 16,    6,  8),
                 box(0, 6, 0, 16, 7.75,  4),
                 box(0, 6, 0, 16,    8, .5)
-        ));
+        );
+        map.put(SlopeSlabShape.BOTTOM_BOTTOM_HALF, shapeBottom);
+        map.put(SlopeSlabShape.BOTTOM_TOP_HALF, shapeBottom.move(0, .5, 0));
 
-        map.put(true, ShapeUtils.orUnoptimized(
+        VoxelShape shapeTop = ShapeUtils.orUnoptimized(
                 box(0,   0, 0, 16, 2, .5),
                 box(0, .25, 0, 16, 2,  4),
                 box(0,   2, 0, 16, 4,  8),
                 box(0,   4, 0, 16, 6, 12),
                 box(0,   6, 0, 16, 8, 15),
                 box(0, 7.5, 0, 16, 8, 16)
-        ));
+        );
+        map.put(SlopeSlabShape.TOP_BOTTOM_HALF, shapeTop);
+        map.put(SlopeSlabShape.TOP_TOP_HALF, shapeTop.move(0, .5, 0));
     });
 
     public static ShapeProvider generateShapes(ImmutableList<BlockState> states)
     {
         ImmutableMap.Builder<BlockState, VoxelShape> builder = ImmutableMap.builder();
 
-        VoxelShape shapeBottomBottomHalf = SHAPES.get(Boolean.FALSE);
-        VoxelShape shapeBottomTopHalf = shapeBottomBottomHalf.move(0, .5, 0);
-        VoxelShape shapeTopBottomHalf = SHAPES.get(Boolean.TRUE);
-        VoxelShape shapeTopTopHalf = shapeTopBottomHalf.move(0, .5, 0);
+        VoxelShape shapeBottomBottomHalf = SHAPES.get(SlopeSlabShape.BOTTOM_BOTTOM_HALF);
+        VoxelShape shapeBottomTopHalf = SHAPES.get(SlopeSlabShape.BOTTOM_TOP_HALF);
+        VoxelShape shapeTopBottomHalf = SHAPES.get(SlopeSlabShape.TOP_BOTTOM_HALF);
+        VoxelShape shapeTopTopHalf = SHAPES.get(SlopeSlabShape.TOP_TOP_HALF);
 
         int maskTop = 0b0100;
         int maskTopHalf = 0b1000;

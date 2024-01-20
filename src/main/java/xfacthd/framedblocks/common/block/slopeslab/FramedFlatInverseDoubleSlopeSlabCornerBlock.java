@@ -215,25 +215,21 @@ public class FramedFlatInverseDoubleSlopeSlabCornerBlock extends AbstractFramedD
     {
         ImmutableMap.Builder<BlockState, VoxelShape> builder = ImmutableMap.builder();
 
-        VoxelShape shapeSlopeBottom = FramedSlopeSlabBlock.SHAPES.get(Boolean.FALSE).move(0, .5, 0);
-        VoxelShape shapeSlopeTop = FramedSlopeSlabBlock.SHAPES.get(Boolean.TRUE);
-
         VoxelShape shapeBot = ShapeUtils.orUnoptimized(
-                ShapeUtils.andUnoptimized(
-                        shapeSlopeBottom,
-                        ShapeUtils.rotateShapeUnoptimized(Direction.NORTH, Direction.WEST, shapeSlopeBottom)
-                ),
-                ShapeUtils.rotateShapeUnoptimized(Direction.NORTH, Direction.SOUTH, shapeSlopeTop),
-                ShapeUtils.rotateShapeUnoptimized(Direction.NORTH, Direction.EAST, shapeSlopeTop)
+                FramedFlatSlopeSlabCornerBlock.SHAPES.get(SlopeSlabShape.BOTTOM_TOP_HALF),
+                ShapeUtils.rotateShapeUnoptimized(
+                        Direction.NORTH,
+                        Direction.SOUTH,
+                        FramedFlatSlopeSlabCornerBlock.INNER_SHAPES.get(SlopeSlabShape.TOP_BOTTOM_HALF)
+                )
         );
-
         VoxelShape shapeTop = ShapeUtils.orUnoptimized(
-                ShapeUtils.andUnoptimized(
-                        shapeSlopeTop,
-                        ShapeUtils.rotateShapeUnoptimized(Direction.NORTH, Direction.WEST, shapeSlopeTop)
-                ),
-                ShapeUtils.rotateShapeUnoptimized(Direction.NORTH, Direction.SOUTH, shapeSlopeBottom),
-                ShapeUtils.rotateShapeUnoptimized(Direction.NORTH, Direction.EAST, shapeSlopeBottom)
+                FramedFlatSlopeSlabCornerBlock.SHAPES.get(SlopeSlabShape.TOP_BOTTOM_HALF),
+                ShapeUtils.rotateShapeUnoptimized(
+                        Direction.NORTH,
+                        Direction.SOUTH,
+                        FramedFlatSlopeSlabCornerBlock.INNER_SHAPES.get(SlopeSlabShape.BOTTOM_TOP_HALF)
+                )
         );
 
         VoxelShape[] shapes = ShapeUtils.makeHorizontalRotationsWithFlag(shapeBot, shapeTop, Direction.NORTH);

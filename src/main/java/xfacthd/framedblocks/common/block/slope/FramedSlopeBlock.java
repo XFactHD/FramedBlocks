@@ -25,8 +25,6 @@ import xfacthd.framedblocks.common.data.*;
 import xfacthd.framedblocks.common.data.property.SlopeType;
 import xfacthd.framedblocks.common.util.FramedUtils;
 
-import java.util.EnumMap;
-
 @SuppressWarnings("deprecation")
 public class FramedSlopeBlock extends FramedBlock implements ISlopeBlock
 {
@@ -155,7 +153,7 @@ public class FramedSlopeBlock extends FramedBlock implements ISlopeBlock
 
 
 
-    public static final ShapeCache<SlopeType> SHAPES = new ShapeCache<>(new EnumMap<>(SlopeType.class), map ->
+    public static final ShapeCache<SlopeType> SHAPES = ShapeCache.createEnum(SlopeType.class, map ->
     {
         map.put(SlopeType.BOTTOM, ShapeUtils.orUnoptimized(
                 box(0,    0, 0, 16,   .5,   16),
@@ -187,7 +185,7 @@ public class FramedSlopeBlock extends FramedBlock implements ISlopeBlock
 
     private record ShapeKey(Direction dir, SlopeType type) { }
 
-    private static final ShapeCache<ShapeKey> FINAL_SHAPES = new ShapeCache<>(map ->
+    private static final ShapeCache<ShapeKey> FINAL_SHAPES = ShapeCache.create(map ->
     {
         for (SlopeType type : SlopeType.values())
         {

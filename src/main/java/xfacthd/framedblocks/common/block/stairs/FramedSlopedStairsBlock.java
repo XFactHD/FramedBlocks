@@ -11,11 +11,9 @@ import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import xfacthd.framedblocks.api.block.FramedProperties;
 import xfacthd.framedblocks.api.block.PlacementStateBuilder;
-import xfacthd.framedblocks.api.shapes.ShapeProvider;
-import xfacthd.framedblocks.api.shapes.ShapeUtils;
+import xfacthd.framedblocks.api.shapes.*;
 import xfacthd.framedblocks.api.util.*;
 import xfacthd.framedblocks.common.block.FramedBlock;
-import xfacthd.framedblocks.common.block.slab.FramedSlabBlock;
 import xfacthd.framedblocks.common.block.slope.FramedVerticalHalfSlopeBlock;
 import xfacthd.framedblocks.common.data.BlockType;
 import xfacthd.framedblocks.common.data.PropertyHolder;
@@ -93,12 +91,12 @@ public class FramedSlopedStairsBlock extends FramedBlock
 
         VoxelShape shapeBottom = ShapeUtils.orUnoptimized(
                 FramedVerticalHalfSlopeBlock.SHAPES.get(Boolean.TRUE),
-                FramedSlabBlock.SHAPES.get(Boolean.FALSE)
+                CommonShapes.SLAB.get(Boolean.FALSE)
         );
 
         VoxelShape shapeTop = ShapeUtils.orUnoptimized(
                 FramedVerticalHalfSlopeBlock.SHAPES.get(Boolean.FALSE),
-                FramedSlabBlock.SHAPES.get(Boolean.TRUE)
+                CommonShapes.SLAB.get(Boolean.TRUE)
         );
 
         VoxelShape[] shapes = ShapeUtils.makeHorizontalRotationsWithFlag(shapeBottom, shapeTop, Direction.NORTH);

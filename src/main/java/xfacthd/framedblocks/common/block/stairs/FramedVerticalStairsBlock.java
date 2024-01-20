@@ -177,13 +177,8 @@ public class FramedVerticalStairsBlock extends FramedBlock
 
     public record ShapeKey(Direction dir, StairsType type) { }
 
-    public static final ShapeCache<ShapeKey> SHAPES = new ShapeCache<>(map ->
+    public static final ShapeCache<ShapeKey> SHAPES = ShapeCache.create(map ->
     {
-        VoxelShape vertShape = ShapeUtils.orUnoptimized(
-                Block.box(0, 0, 8, 16, 16, 16),
-                Block.box(8, 0, 0, 16, 16, 8)
-        );
-
         VoxelShape topFwdShape = ShapeUtils.orUnoptimized(
                 Block.box(0, 0, 0, 8, 16, 16),
                 Block.box(8, 0, 0, 16, 8, 8)
@@ -216,7 +211,10 @@ public class FramedVerticalStairsBlock extends FramedBlock
                 Block.box(0, 8, 8, 8, 16, 16)
         );
 
-        ShapeUtils.makeHorizontalRotations(vertShape, Direction.SOUTH, map, StairsType.VERTICAL, ShapeKey::new);
+        CommonShapes.STRAIGHT_VERTICAL_STAIRS.forEach((dir, shape) ->
+                map.put(new ShapeKey(dir, StairsType.VERTICAL), shape)
+        );
+
         ShapeUtils.makeHorizontalRotations(topFwdShape, Direction.NORTH, map, StairsType.TOP_FWD, ShapeKey::new);
         ShapeUtils.makeHorizontalRotations(topCcwShape, Direction.NORTH, map, StairsType.TOP_CCW, ShapeKey::new);
         ShapeUtils.makeHorizontalRotations(topBothShape, Direction.SOUTH, map, StairsType.TOP_BOTH, ShapeKey::new);

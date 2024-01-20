@@ -17,12 +17,10 @@ import net.minecraft.world.phys.shapes.*;
 import org.jetbrains.annotations.Nullable;
 import xfacthd.framedblocks.api.block.FramedProperties;
 import xfacthd.framedblocks.api.block.IFramedBlock;
-import xfacthd.framedblocks.api.shapes.ShapeProvider;
-import xfacthd.framedblocks.api.shapes.ShapeUtils;
+import xfacthd.framedblocks.api.shapes.*;
 import xfacthd.framedblocks.api.util.Utils;
 import xfacthd.framedblocks.common.FBContent;
 import xfacthd.framedblocks.common.block.AbstractFramedDoubleBlock;
-import xfacthd.framedblocks.common.block.slab.FramedSlabEdgeBlock;
 import xfacthd.framedblocks.common.blockentity.doubled.slopepanelcorner.FramedLargeDoubleCornerSlopePanelWallBlockEntity;
 import xfacthd.framedblocks.common.blockentity.doubled.slopepanelcorner.FramedSmallDoubleCornerSlopePanelWallBlockEntity;
 import xfacthd.framedblocks.common.data.BlockType;
@@ -252,14 +250,14 @@ public class FramedDoubleCornerSlopePanelWallBlock extends AbstractFramedDoubleB
         {
             Direction dir = state.getValue(FramedProperties.FACING_HOR);
             HorizontalRotation rot = state.getValue(PropertyHolder.ROTATION);
-            FramedSlabEdgeBlock.ShapeKey key = switch (rot)
+            CommonShapes.DirBoolKey key = switch (rot)
             {
-                case UP -> new FramedSlabEdgeBlock.ShapeKey(dir.getCounterClockWise(), true);
-                case DOWN -> new FramedSlabEdgeBlock.ShapeKey(dir.getClockWise(), false);
-                case RIGHT -> new FramedSlabEdgeBlock.ShapeKey(dir.getClockWise(), true);
-                case LEFT -> new FramedSlabEdgeBlock.ShapeKey(dir.getCounterClockWise(), false);
+                case UP ->    new CommonShapes.DirBoolKey(dir.getCounterClockWise(), true);
+                case DOWN ->  new CommonShapes.DirBoolKey(dir.getClockWise(), false);
+                case RIGHT -> new CommonShapes.DirBoolKey(dir.getClockWise(), true);
+                case LEFT ->  new CommonShapes.DirBoolKey(dir.getCounterClockWise(), false);
             };
-            builder.put(state, FramedSlabEdgeBlock.SHAPES.get(key));
+            builder.put(state, CommonShapes.SLAB_EDGE.get(key));
         }
 
         return ShapeProvider.of(builder.build());

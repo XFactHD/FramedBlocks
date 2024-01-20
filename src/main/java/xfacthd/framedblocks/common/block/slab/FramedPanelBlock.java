@@ -19,13 +19,12 @@ import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import xfacthd.framedblocks.api.block.FramedProperties;
 import xfacthd.framedblocks.api.block.PlacementStateBuilder;
-import xfacthd.framedblocks.api.shapes.*;
-import xfacthd.framedblocks.api.util.*;
+import xfacthd.framedblocks.api.shapes.CommonShapes;
+import xfacthd.framedblocks.api.shapes.ShapeProvider;
+import xfacthd.framedblocks.api.util.Utils;
 import xfacthd.framedblocks.common.FBContent;
 import xfacthd.framedblocks.common.block.FramedBlock;
 import xfacthd.framedblocks.common.data.BlockType;
-
-import java.util.EnumMap;
 
 @SuppressWarnings("deprecation")
 public class FramedPanelBlock extends FramedBlock
@@ -94,12 +93,6 @@ public class FramedPanelBlock extends FramedBlock
 
 
 
-    public static final ShapeCache<Direction> SHAPES = new ShapeCache<>(new EnumMap<>(Direction.class), map ->
-    {
-        VoxelShape shape = box(0, 0, 0, 16, 16, 8);
-        ShapeUtils.makeHorizontalRotations(shape, Direction.NORTH, map);
-    });
-
     public static ShapeProvider generateShapes(ImmutableList<BlockState> states)
     {
         ImmutableMap.Builder<BlockState, VoxelShape> builder = ImmutableMap.builder();
@@ -107,7 +100,7 @@ public class FramedPanelBlock extends FramedBlock
         for (BlockState state : states)
         {
             Direction dir = state.getValue(FramedProperties.FACING_HOR);
-            builder.put(state, SHAPES.get(dir));
+            builder.put(state, CommonShapes.PANEL.get(dir));
         }
 
         return ShapeProvider.of(builder.build());

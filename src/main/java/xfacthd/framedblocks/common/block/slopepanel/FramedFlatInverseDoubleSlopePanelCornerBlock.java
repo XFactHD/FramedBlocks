@@ -215,17 +215,13 @@ public class FramedFlatInverseDoubleSlopePanelCornerBlock extends AbstractFramed
         VoxelShape[] shapes = new VoxelShape[4 * 4];
         for (HorizontalRotation rot : HorizontalRotation.values())
         {
-            HorizontalRotation frontRot = rot.getOpposite();
-            VoxelShape frontShape = ShapeUtils.andUnoptimized(
-                    FramedSlopePanelBlock.SHAPES.get(frontRot),
-                    FramedSlopePanelBlock.SHAPES.get(frontRot.rotate(Rotation.COUNTERCLOCKWISE_90))
-            ).move(0, 0, .5);
-
+            VoxelShape frontShape = FramedFlatSlopePanelCornerBlock.SHAPES.get(
+                    new FramedFlatSlopePanelCornerBlock.ShapeKey(rot.getOpposite(), true)
+            );
             HorizontalRotation backRot = rot.rotate(rot.isVertical() ? Rotation.CLOCKWISE_90 : Rotation.COUNTERCLOCKWISE_90);
-            VoxelShape backShape = ShapeUtils.orUnoptimized(
-                    FramedSlopePanelBlock.SHAPES.get(backRot),
-                    FramedSlopePanelBlock.SHAPES.get(backRot.rotate(Rotation.COUNTERCLOCKWISE_90))
-            ).move(0, 0, .5);
+            VoxelShape backShape = FramedFlatSlopePanelCornerBlock.INNER_SHAPES.get(
+                    new FramedFlatSlopePanelCornerBlock.ShapeKey(backRot, true)
+            );
             backShape = ShapeUtils.rotateShapeUnoptimized(Direction.NORTH, Direction.SOUTH, backShape);
 
             VoxelShape preShape = ShapeUtils.orUnoptimized(frontShape, backShape);

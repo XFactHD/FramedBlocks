@@ -139,10 +139,10 @@ public class FramedFlatElevatedSlopeSlabCornerBlock extends FramedBlock
 
     private record ShapeKey(Direction dir, boolean top) { }
 
-    private static final ShapeCache<ShapeKey> FINAL_SHAPES = new ShapeCache<>(map ->
+    private static final ShapeCache<ShapeKey> FINAL_SHAPES = ShapeCache.create(map ->
     {
-        VoxelShape shapeSlopeBottom = FramedSlopeSlabBlock.SHAPES.get(Boolean.FALSE).move(0, .5, 0);
-        VoxelShape shapeSlopeTop = FramedSlopeSlabBlock.SHAPES.get(Boolean.TRUE);
+        VoxelShape shapeSlopeBottom = FramedSlopeSlabBlock.SHAPES.get(SlopeSlabShape.BOTTOM_TOP_HALF);
+        VoxelShape shapeSlopeTop = FramedSlopeSlabBlock.SHAPES.get(SlopeSlabShape.TOP_BOTTOM_HALF);
 
         VoxelShape shapeBottom = ShapeUtils.orUnoptimized(
                 ShapeUtils.andUnoptimized(
@@ -176,10 +176,10 @@ public class FramedFlatElevatedSlopeSlabCornerBlock extends FramedBlock
         return ShapeProvider.of(builder.build());
     }
 
-    private static final ShapeCache<ShapeKey> FINAL_INNER_SHAPES = new ShapeCache<>(map ->
+    private static final ShapeCache<ShapeKey> FINAL_INNER_SHAPES = ShapeCache.create(map ->
     {
-        VoxelShape shapeSlopeBottom = FramedSlopeSlabBlock.SHAPES.get(Boolean.FALSE).move(0, .5, 0);
-        VoxelShape shapeSlopeTop = FramedSlopeSlabBlock.SHAPES.get(Boolean.TRUE);
+        VoxelShape shapeSlopeBottom = FramedSlopeSlabBlock.SHAPES.get(SlopeSlabShape.BOTTOM_TOP_HALF);
+        VoxelShape shapeSlopeTop = FramedSlopeSlabBlock.SHAPES.get(SlopeSlabShape.TOP_BOTTOM_HALF);
 
         VoxelShape shapeBottom = ShapeUtils.orUnoptimized(
                 ShapeUtils.orUnoptimized(

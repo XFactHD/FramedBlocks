@@ -1,5 +1,7 @@
 package xfacthd.framedblocks.common.block.slopeslab;
 
+import com.google.common.collect.ImmutableList;
+import com.google.common.collect.ImmutableMap;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.util.Tuple;
@@ -14,6 +16,8 @@ import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.phys.shapes.*;
 import org.jetbrains.annotations.Nullable;
 import xfacthd.framedblocks.api.block.*;
+import xfacthd.framedblocks.api.shapes.CommonShapes;
+import xfacthd.framedblocks.api.shapes.ShapeProvider;
 import xfacthd.framedblocks.api.util.*;
 import xfacthd.framedblocks.common.FBContent;
 import xfacthd.framedblocks.common.block.AbstractFramedDoubleBlock;
@@ -26,9 +30,6 @@ import xfacthd.framedblocks.common.data.doubleblock.DoubleBlockTopInteractionMod
 
 public class FramedDoubleSlopeSlabBlock extends AbstractFramedDoubleBlock
 {
-    private static final VoxelShape SHAPE_BOTTOM = Block.box(0.0D, 0.0D, 0.0D, 16.0D, 8.0D, 16.0D);
-    private static final VoxelShape SHAPE_TOP = Block.box(0.0D, 8.0D, 0.0D, 16.0D, 16.0D, 16.0D);
-
     public FramedDoubleSlopeSlabBlock()
     {
         super(BlockType.FRAMED_DOUBLE_SLOPE_SLAB);
@@ -56,22 +57,6 @@ public class FramedDoubleSlopeSlabBlock extends AbstractFramedDoubleBlock
                 .withTop(PropertyHolder.TOP_HALF)
                 .withWater()
                 .build();
-    }
-
-    @Override
-    public VoxelShape getShape(BlockState state, BlockGetter level, BlockPos pos, CollisionContext ctx)
-    {
-        if (isIntangible(state, level, pos, ctx))
-        {
-            return Shapes.empty();
-        }
-        return state.getValue(PropertyHolder.TOP_HALF) ? SHAPE_TOP : SHAPE_BOTTOM;
-    }
-
-    @Override
-    public boolean doesBlockOccludeBeaconBeam(BlockState state, LevelReader level, BlockPos pos)
-    {
-        return true;
     }
 
     @Override
@@ -183,5 +168,19 @@ public class FramedDoubleSlopeSlabBlock extends AbstractFramedDoubleBlock
     public BlockState getItemModelSource()
     {
         return defaultBlockState();
+    }
+
+
+
+    public static ShapeProvider generateShapes(ImmutableList<BlockState> states)
+    {
+        ImmutableMap.Builder<BlockState, VoxelShape> builder = ImmutableMap.builder();
+
+        for (BlockState state : states)
+        {
+            builder.put(state, CommonShapes.SLAB.get(state.getValue(PropertyHolder.TOP_HALF)));
+        }
+
+        return ShapeProvider.of(builder.build());
     }
 }

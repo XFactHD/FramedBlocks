@@ -20,17 +20,15 @@ import xfacthd.framedblocks.api.util.Utils;
 import xfacthd.framedblocks.common.block.FramedBlock;
 import xfacthd.framedblocks.common.data.BlockType;
 
-import java.util.EnumMap;
-
 public class FramedLadderBlock extends FramedBlock
 {
     private static final VoxelShape SHAPE_NORTH = box( 0, 0,  0, 16, 16,  2);
     private static final VoxelShape COLLISION_SHAPE_NORTH = box( 0, 0,  0, 16, 16,  3);
 
-    private static final ShapeCache<Direction> SHAPES = new ShapeCache<>(new EnumMap<>(Direction.class), map ->
+    private static final ShapeCache<Direction> SHAPES = ShapeCache.createEnum(Direction.class, map ->
             ShapeUtils.makeHorizontalRotations(SHAPE_NORTH, Direction.NORTH, map)
     );
-    private static final ShapeCache<Direction> COLLISION_SHAPES = new ShapeCache<>(new EnumMap<>(Direction.class), map ->
+    private static final ShapeCache<Direction> COLLISION_SHAPES = ShapeCache.createEnum(Direction.class, map ->
             ShapeUtils.makeHorizontalRotations(COLLISION_SHAPE_NORTH, Direction.NORTH, map)
     );
 

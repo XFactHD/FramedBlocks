@@ -14,6 +14,7 @@ import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import org.jetbrains.annotations.Nullable;
 import xfacthd.framedblocks.api.block.FramedProperties;
+import xfacthd.framedblocks.api.shapes.CommonShapes;
 import xfacthd.framedblocks.api.shapes.ShapeProvider;
 import xfacthd.framedblocks.api.util.Utils;
 import xfacthd.framedblocks.common.FBContent;
@@ -23,7 +24,6 @@ import xfacthd.framedblocks.common.blockentity.doubled.stairs.FramedVerticalSlic
 import xfacthd.framedblocks.common.data.BlockType;
 import xfacthd.framedblocks.common.data.PropertyHolder;
 import xfacthd.framedblocks.common.data.doubleblock.*;
-import xfacthd.framedblocks.common.data.property.StairsType;
 
 public class FramedVerticalSlicedStairsBlock extends AbstractFramedDoubleBlock
 {
@@ -155,9 +155,7 @@ public class FramedVerticalSlicedStairsBlock extends AbstractFramedDoubleBlock
         {
             Direction dir = state.getValue(FramedProperties.FACING_HOR);
             boolean right = state.getValue(PropertyHolder.RIGHT);
-            builder.put(state, FramedVerticalStairsBlock.SHAPES.get(new FramedVerticalStairsBlock.ShapeKey(
-                    right ? dir.getClockWise() : dir, StairsType.VERTICAL
-            )));
+            builder.put(state, CommonShapes.STRAIGHT_VERTICAL_STAIRS.get(right ? dir.getClockWise() : dir));
         }
 
         return ShapeProvider.of(builder.build());

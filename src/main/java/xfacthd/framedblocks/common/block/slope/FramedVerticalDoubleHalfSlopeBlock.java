@@ -15,11 +15,11 @@ import net.minecraft.world.phys.shapes.VoxelShape;
 import org.jetbrains.annotations.Nullable;
 import xfacthd.framedblocks.api.block.FramedProperties;
 import xfacthd.framedblocks.api.block.PlacementStateBuilder;
+import xfacthd.framedblocks.api.shapes.CommonShapes;
 import xfacthd.framedblocks.api.shapes.ShapeProvider;
 import xfacthd.framedblocks.api.util.Utils;
 import xfacthd.framedblocks.common.FBContent;
 import xfacthd.framedblocks.common.block.AbstractFramedDoubleBlock;
-import xfacthd.framedblocks.common.block.slab.FramedSlabBlock;
 import xfacthd.framedblocks.common.blockentity.doubled.slope.FramedVerticalDoubleHalfSlopeBlockEntity;
 import xfacthd.framedblocks.common.data.BlockType;
 import xfacthd.framedblocks.common.data.doubleblock.CamoGetter;
@@ -146,7 +146,7 @@ public class FramedVerticalDoubleHalfSlopeBlock extends AbstractFramedDoubleBloc
         for (BlockState state : states)
         {
             Boolean top = state.getValue(FramedProperties.TOP);
-            builder.put(state, FramedSlabBlock.SHAPES.get(top));
+            builder.put(state, CommonShapes.SLAB.get(top));
         }
 
         return ShapeProvider.of(builder.build());

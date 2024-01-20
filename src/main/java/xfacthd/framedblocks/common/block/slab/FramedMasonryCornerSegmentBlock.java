@@ -11,8 +11,7 @@ import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import xfacthd.framedblocks.api.block.FramedProperties;
 import xfacthd.framedblocks.api.block.PlacementStateBuilder;
-import xfacthd.framedblocks.api.shapes.ShapeProvider;
-import xfacthd.framedblocks.api.shapes.ShapeUtils;
+import xfacthd.framedblocks.api.shapes.*;
 import xfacthd.framedblocks.api.util.Utils;
 import xfacthd.framedblocks.common.block.FramedBlock;
 import xfacthd.framedblocks.common.data.BlockType;
@@ -61,8 +60,8 @@ public class FramedMasonryCornerSegmentBlock extends FramedBlock
         ImmutableMap.Builder<BlockState, VoxelShape> builder = ImmutableMap.builder();
 
         VoxelShape preShape = ShapeUtils.orUnoptimized(
-                FramedSlabEdgeBlock.SHAPES.get(new FramedSlabEdgeBlock.ShapeKey(Direction.SOUTH, false)),
-                FramedSlabEdgeBlock.SHAPES.get(new FramedSlabEdgeBlock.ShapeKey(Direction.EAST, true))
+                CommonShapes.SLAB_EDGE.get(new CommonShapes.DirBoolKey(Direction.SOUTH, false)),
+                CommonShapes.SLAB_EDGE.get(new CommonShapes.DirBoolKey(Direction.EAST, true))
         );
         VoxelShape[] shapes = ShapeUtils.makeHorizontalRotations(preShape, Direction.NORTH);
 

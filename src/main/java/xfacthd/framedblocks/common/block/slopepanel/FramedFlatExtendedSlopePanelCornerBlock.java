@@ -141,17 +141,13 @@ public class FramedFlatExtendedSlopePanelCornerBlock extends FramedBlock
 
     private record ShapeKey(Direction dir, HorizontalRotation rot) { }
 
-    private static final ShapeCache<ShapeKey> FINAL_SHAPES = new ShapeCache<>(map ->
+    private static final ShapeCache<ShapeKey> FINAL_SHAPES = ShapeCache.create(map ->
     {
-        VoxelShape panelShape = box(0, 0, 0, 16, 16, 8);
         for (HorizontalRotation rot : HorizontalRotation.values())
         {
-            VoxelShape shape = ShapeUtils.orUnoptimized(
-                    panelShape,
-                    ShapeUtils.andUnoptimized(
-                            FramedSlopePanelBlock.SHAPES.get(rot),
-                            FramedSlopePanelBlock.SHAPES.get(rot.rotate(Rotation.COUNTERCLOCKWISE_90))
-                    ).move(0, 0, .5)
+            VoxelShape shape = ShapeUtils.andUnoptimized(
+                    FramedExtendedSlopePanelBlock.SHAPES.get(rot),
+                    FramedExtendedSlopePanelBlock.SHAPES.get(rot.rotate(Rotation.COUNTERCLOCKWISE_90))
             );
             ShapeUtils.makeHorizontalRotations(shape, Direction.NORTH, map, rot, ShapeKey::new);
         }
@@ -171,17 +167,13 @@ public class FramedFlatExtendedSlopePanelCornerBlock extends FramedBlock
         return ShapeProvider.of(builder.build());
     }
 
-    private static final ShapeCache<ShapeKey> FINAL_INNER_SHAPES = new ShapeCache<>(map ->
+    private static final ShapeCache<ShapeKey> FINAL_INNER_SHAPES = ShapeCache.create(map ->
     {
-        VoxelShape panelShape = box(0, 0, 0, 16, 16, 8);
         for (HorizontalRotation rot : HorizontalRotation.values())
         {
             VoxelShape shape = ShapeUtils.orUnoptimized(
-                    panelShape,
-                    ShapeUtils.orUnoptimized(
-                            FramedSlopePanelBlock.SHAPES.get(rot),
-                            FramedSlopePanelBlock.SHAPES.get(rot.rotate(Rotation.COUNTERCLOCKWISE_90))
-                    ).move(0, 0, .5)
+                    FramedExtendedSlopePanelBlock.SHAPES.get(rot),
+                    FramedExtendedSlopePanelBlock.SHAPES.get(rot.rotate(Rotation.COUNTERCLOCKWISE_90))
             );
             ShapeUtils.makeHorizontalRotations(shape, Direction.NORTH, map, rot, ShapeKey::new);
         }
