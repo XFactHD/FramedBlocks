@@ -119,7 +119,6 @@ public final class Modifiers
         boolean up = quadDir == Direction.UP;
 
         // Mirror targets so left and right are actually left and right of the cut direction
-        // TODO: this is a bandaid fix, needs reworking
         if (cutDir == Direction.NORTH || (!up && cutDir == Direction.EAST) || (up && cutDir == Direction.WEST))
         {
             float temp = lengthR;
