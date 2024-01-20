@@ -1,6 +1,7 @@
 package xfacthd.framedblocks.common.config;
 
 import xfacthd.framedblocks.api.util.ConfigView;
+import xfacthd.framedblocks.client.model.SolidFrameMode;
 import xfacthd.framedblocks.client.screen.overlay.BlockInteractOverlay;
 
 public final class ExtConfigView
@@ -16,6 +17,8 @@ public final class ExtConfigView
          * If true, all recipe permutations will be added to EMI, otherwise only cube->any variants will be added
          */
         boolean showAllRecipePermutationsInEmi();
+
+        SolidFrameMode getSolidFrameMode();
 
         BlockInteractOverlay.Mode getStateLockMode();
 

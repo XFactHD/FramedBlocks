@@ -2,6 +2,14 @@
   "multipart": [
     {
       "apply": {
+        "model": "framedblocks:block/framed_underlay"
+      },
+      "when": {
+        "solid_bg": "true"
+      }
+    },
+    {
+      "apply": {
         "model": "framedblocks:block/framed_cube"
       },
       "when": {

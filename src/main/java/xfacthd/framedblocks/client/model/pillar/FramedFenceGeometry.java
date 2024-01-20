@@ -98,6 +98,12 @@ public class FramedFenceGeometry implements Geometry
         }
     }
 
+    @Override
+    public boolean useSolidNoCamoModel()
+    {
+        return true;
+    }
+
 
 
     public static Geometry createFenceGeometry(GeometryFactory.Context ctx)

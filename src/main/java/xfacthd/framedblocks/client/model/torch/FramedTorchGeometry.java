@@ -72,4 +72,10 @@ public class FramedTorchGeometry implements Geometry
                     .export(quadMap.get(null));
         }
     }
+
+    @Override
+    public boolean useSolidNoCamoModel()
+    {
+        return true;
+    }
 }

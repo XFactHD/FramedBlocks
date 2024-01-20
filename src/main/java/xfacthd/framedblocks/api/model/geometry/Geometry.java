@@ -146,4 +146,13 @@ public interface Geometry
      * Apply transformations to the item model when it is rendered in hand
      */
     default void applyInHandTransformation(PoseStack poseStack, ItemDisplayContext ctx) { }
+
+    /**
+     * {@return whether the model should use a solid model when no camo is applied}
+     * @apiNote Only has an effect if {@link #useBaseModel()} returns {@code false}
+     */
+    default boolean useSolidNoCamoModel()
+    {
+        return false;
+    }
 }

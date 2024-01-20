@@ -98,6 +98,12 @@ public class FramedWallTorchGeometry implements Geometry
         }
     }
 
+    @Override
+    public boolean useSolidNoCamoModel()
+    {
+        return true;
+    }
+
     public static QuadModifier.Modifier applyRotation(float yAngle)
     {
         return data ->

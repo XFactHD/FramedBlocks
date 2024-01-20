@@ -7,6 +7,7 @@ import net.neoforged.neoforge.common.ModConfigSpec;
 import xfacthd.framedblocks.api.predicate.contex.ConTexMode;
 import xfacthd.framedblocks.api.util.ConfigView;
 import xfacthd.framedblocks.api.util.Utils;
+import xfacthd.framedblocks.client.model.SolidFrameMode;
 import xfacthd.framedblocks.client.screen.overlay.BlockInteractOverlay;
 
 public final class ClientConfig
@@ -21,6 +22,7 @@ public final class ClientConfig
     private static final String KEY_USE_DISCRETE_UV_STEPS = "discreteUVSteps";
     private static final String KEY_CON_TEX_MODE = "conTexMode";
     private static final String KEY_SHOW_ALL_RECIPE_PERMUTATIONS_IN_EMI = "showAllRecipePermutationsInEmi";
+    private static final String KEY_SOLID_FRAME_MODE = "solidFrameMode";
     private static final String KEY_STATE_LOCK_MODE = "stateLockMode";
     private static final String KEY_TOGGLE_WATERLOG_MODE = "toggleWaterlogMode";
     private static final String KEY_TOGGLE_Y_SLOPE_MODE = "toggleYSlopeMode";
@@ -38,6 +40,7 @@ public final class ClientConfig
     public static final String TRANSLATION_USE_DISCRETE_UV_STEPS = translate(KEY_USE_DISCRETE_UV_STEPS);
     public static final String TRANSLATION_CON_TEX_MODE = translate(KEY_CON_TEX_MODE);
     public static final String TRANSLATION_SHOW_ALL_RECIPE_PERMUTATIONS_IN_EMI = translate(KEY_SHOW_ALL_RECIPE_PERMUTATIONS_IN_EMI);
+    public static final String TRANSLATION_SOLID_FRAME_MODE = translate(KEY_SOLID_FRAME_MODE);
     public static final String TRANSLATION_STATE_LOCK_MODE = translate(KEY_STATE_LOCK_MODE);
     public static final String TRANSLATION_TOGGLE_WATERLOG_MODE = translate(KEY_TOGGLE_WATERLOG_MODE);
     public static final String TRANSLATION_TOGGLE_Y_SLOPE_MODE = translate(KEY_TOGGLE_Y_SLOPE_MODE);
@@ -59,6 +62,7 @@ public final class ClientConfig
     private static boolean useDiscreteUVSteps = false;
     private static ConTexMode conTexMode = ConTexMode.DETAILED;
     private static boolean showAllRecipePermutationsInEmi = false;
+    private static SolidFrameMode solidFrameMode = SolidFrameMode.DEFAULT;
     private static BlockInteractOverlay.Mode stateLockMode = BlockInteractOverlay.Mode.DETAILED;
     private static BlockInteractOverlay.Mode toggleWaterlogMode = BlockInteractOverlay.Mode.DETAILED;
     private static BlockInteractOverlay.Mode toggleYSlopeMode = BlockInteractOverlay.Mode.DETAILED;
@@ -76,6 +80,7 @@ public final class ClientConfig
     private static ModConfigSpec.BooleanValue useDiscreteUVStepsValue;
     private static ModConfigSpec.EnumValue<ConTexMode> conTexModeValue;
     private static ModConfigSpec.BooleanValue showAllRecipePermutationsInEmiValue;
+    private static ModConfigSpec.EnumValue<SolidFrameMode> solidFrameModeValue;
 
     private static ModConfigSpec.EnumValue<BlockInteractOverlay.Mode> stateLockModeValue;
     private static ModConfigSpec.EnumValue<BlockInteractOverlay.Mode> toggleWaterlogModeValue;
@@ -134,6 +139,15 @@ public final class ClientConfig
                 .comment("This setting only has an effect when EMI is installed")
                 .translation(TRANSLATION_SHOW_ALL_RECIPE_PERMUTATIONS_IN_EMI)
                 .define(KEY_SHOW_ALL_RECIPE_PERMUTATIONS_IN_EMI, true);
+        solidFrameModeValue = builder
+                .comment(
+                        "Configures in which cases a framed block without a camo gets a solid model",
+                        "If NEVER, the default frame texture will always be used",
+                        "If DEFAULT, certain blocks will use the default frame texture with a solid background texture",
+                        "If ALWAYS, all blocks will use the default frame texture with a solid background texture"
+                )
+                .translation(TRANSLATION_SOLID_FRAME_MODE)
+                .defineEnum(KEY_SOLID_FRAME_MODE, SolidFrameMode.DEFAULT);
         builder.pop();
 
         builder.push("overlay");
@@ -212,6 +226,7 @@ public final class ClientConfig
             useDiscreteUVSteps = useDiscreteUVStepsValue.get();
             conTexMode = conTexModeValue.get();
             showAllRecipePermutationsInEmi = showAllRecipePermutationsInEmiValue.get();
+            solidFrameMode = solidFrameModeValue.get();
 
             stateLockMode = stateLockModeValue.get();
             toggleWaterlogMode = toggleWaterlogModeValue.get();
@@ -271,6 +286,12 @@ public final class ClientConfig
         public boolean showAllRecipePermutationsInEmi()
         {
             return showAllRecipePermutationsInEmi;
+        }
+
+        @Override
+        public SolidFrameMode getSolidFrameMode()
+        {
+            return solidFrameMode;
         }
 
         @Override

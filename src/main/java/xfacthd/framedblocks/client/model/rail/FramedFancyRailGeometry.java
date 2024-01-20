@@ -247,6 +247,12 @@ public class FramedFancyRailGeometry implements Geometry
         Utils.forAllDirections(dir -> quadMap.get(dir).addAll(baseModel.getQuads(state, dir, rand, data, renderType)));
     }
 
+    @Override
+    public boolean useSolidNoCamoModel()
+    {
+        return true;
+    }
+
     @SuppressWarnings("DuplicateBranchesInSwitch")
     public static Direction getDirectionFromRailShape(RailShape shape)
     {

@@ -92,4 +92,10 @@ public class FramedLadderGeometry implements Geometry
                     .export(quadMap.get(null));
         }
     }
+
+    @Override
+    public boolean useSolidNoCamoModel()
+    {
+        return true;
+    }
 }

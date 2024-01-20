@@ -6,6 +6,7 @@ import net.minecraft.world.level.block.state.StateDefinition;
 import xfacthd.framedblocks.api.block.FramedProperties;
 import xfacthd.framedblocks.common.block.FramedBlock;
 import xfacthd.framedblocks.common.data.BlockType;
+import xfacthd.framedblocks.common.data.PropertyHolder;
 
 public class FramedCube extends FramedBlock
 {
@@ -13,8 +14,9 @@ public class FramedCube extends FramedBlock
     {
         super(BlockType.FRAMED_CUBE);
         registerDefaultState(defaultBlockState()
-                .setValue(FramedProperties.ALT, false)
-                .setValue(FramedProperties.REINFORCED, false)
+                .setValue(PropertyHolder.ALT, false)
+                .setValue(PropertyHolder.REINFORCED, false)
+                .setValue(PropertyHolder.SOLID_BG, false)
         );
     }
 
@@ -22,6 +24,6 @@ public class FramedCube extends FramedBlock
     protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder)
     {
         super.createBlockStateDefinition(builder);
-        builder.add(FramedProperties.SOLID, FramedProperties.ALT, FramedProperties.REINFORCED);
+        builder.add(FramedProperties.SOLID, PropertyHolder.ALT, PropertyHolder.REINFORCED, PropertyHolder.SOLID_BG);
     }
 }

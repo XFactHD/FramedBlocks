@@ -18,6 +18,7 @@ public class FramedPillarGeometry implements Geometry
     private final float capStart;
     private final float capEnd;
     private final float sideCut;
+    private final boolean useSolidBase;
 
     public FramedPillarGeometry(GeometryFactory.Context ctx)
     {
@@ -26,6 +27,7 @@ public class FramedPillarGeometry implements Geometry
         boolean post = ((IFramedBlock) ctx.state().getBlock()).getBlockType() == BlockType.FRAMED_POST;
         this.capStart = post ? (6F / 16F) : (4F / 16F);
         this.capEnd = this.sideCut = post ? (10F / 16F) : (12F / 16F);
+        this.useSolidBase = post;
     }
 
     @Override
@@ -76,6 +78,12 @@ public class FramedPillarGeometry implements Geometry
                         .apply(Modifiers.setPosition(sideCut));
             }
         }
+    }
+
+    @Override
+    public boolean useSolidNoCamoModel()
+    {
+        return useSolidBase;
     }
 
     private static Direction axisToDir(Direction.Axis axis, boolean positive)

@@ -71,4 +71,10 @@ public class FramedSignGeometry implements Geometry
                     .export(quadMap.get(Direction.DOWN));
         }
     }
+
+    @Override
+    public boolean useSolidNoCamoModel()
+    {
+        return true;
+    }
 }

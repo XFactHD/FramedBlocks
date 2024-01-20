@@ -131,4 +131,10 @@ public class FramedLeverGeometry implements Geometry
             case CEILING -> Direction.DOWN;
         };
     }
+
+    @Override
+    public boolean useSolidNoCamoModel()
+    {
+        return true;
+    }
 }

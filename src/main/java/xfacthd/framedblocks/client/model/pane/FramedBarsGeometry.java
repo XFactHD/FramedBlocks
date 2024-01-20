@@ -92,6 +92,12 @@ public class FramedBarsGeometry extends FramedPaneGeometry
         }
     }
 
+    @Override
+    public boolean useSolidNoCamoModel()
+    {
+        return true;
+    }
+
     /**
      * @param perpNeg Connection state in the negative direction perpendicular to the quad
      * @param perpPos Connection state in the positive direction perpendicular to the quad

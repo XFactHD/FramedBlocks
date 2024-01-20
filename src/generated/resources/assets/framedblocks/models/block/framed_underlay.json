@@ -1,0 +1,4 @@
+{
+  "parent": "minecraft:block/stripped_dark_oak_wood",
+  "render_type": "minecraft:cutout"
+}

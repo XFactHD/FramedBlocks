@@ -138,6 +138,12 @@ public class FramedFlowerPotGeometry implements Geometry
         return new FlowerPotQuadCacheKey(state, ctCtx, getFlowerBlock(data));
     }
 
+    @Override
+    public boolean useSolidNoCamoModel()
+    {
+        return true;
+    }
+
     private static void addPlantQuads(QuadMap quadMap, BlockState potState, RandomSource rand, RenderType layer)
     {
         BakedModel potModel = ModelCache.getModel(potState);

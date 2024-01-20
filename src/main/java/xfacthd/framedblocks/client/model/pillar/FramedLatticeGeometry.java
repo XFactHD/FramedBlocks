@@ -23,6 +23,7 @@ public class FramedLatticeGeometry implements Geometry
     private final boolean zAxis;
     private final float minCoord;
     private final float maxCoord;
+    private final boolean useSolidBase;
 
     public FramedLatticeGeometry(GeometryFactory.Context ctx)
     {
@@ -32,6 +33,7 @@ public class FramedLatticeGeometry implements Geometry
         boolean thick = ctx.state().getBlock() == FBContent.BLOCK_FRAMED_THICK_LATTICE.value();
         this.minCoord = thick ? MIN_COORD_THICK : MIN_COORD;
         this.maxCoord = thick ? MAX_COORD_THICK : MAX_COORD;
+        this.useSolidBase = !thick;
     }
 
     @Override
@@ -113,5 +115,11 @@ public class FramedLatticeGeometry implements Geometry
                     .apply(Modifiers.setPosition(maxCoord))
                     .export(quadMap.get(null));
         }
+    }
+
+    @Override
+    public boolean useSolidNoCamoModel()
+    {
+        return useSolidBase;
     }
 }

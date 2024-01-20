@@ -20,7 +20,6 @@ import net.neoforged.neoforge.client.model.data.ModelData;
 import net.neoforged.fml.loading.FMLEnvironment;
 import org.jetbrains.annotations.ApiStatus;
 import xfacthd.framedblocks.api.FramedBlocksAPI;
-import xfacthd.framedblocks.api.block.FramedProperties;
 import xfacthd.framedblocks.api.block.cache.StateCache;
 import xfacthd.framedblocks.api.model.cache.QuadCacheKey;
 import xfacthd.framedblocks.api.model.data.*;
@@ -36,11 +35,10 @@ import xfacthd.framedblocks.api.util.Utils;
 import xfacthd.framedblocks.client.data.ConTexDataHandler;
 import xfacthd.framedblocks.common.config.ClientConfig;
 import xfacthd.framedblocks.common.FBContent;
+import xfacthd.framedblocks.common.data.PropertyHolder;
 
 import java.util.*;
 
-// TODO: add solid Framed Cube model with frame texture overlayed on spruce planks (not sure), to be used for blocks with
-//       small shapes that look weird with the open frame texture (see 1.19.2 stash)
 @SuppressWarnings("deprecation")
 public final class FramedBlockModel extends BakedModelProxy
 {
@@ -62,6 +60,7 @@ public final class FramedBlockModel extends BakedModelProxy
     private final boolean forceUngeneratedBaseModel;
     private final boolean useBaseModel;
     private final boolean transformAllQuads;
+    private final boolean useSolidBase;
     private final StateCache stateCache;
 
     public FramedBlockModel(GeometryFactory.Context ctx, Geometry geometry)
@@ -75,6 +74,7 @@ public final class FramedBlockModel extends BakedModelProxy
         this.forceUngeneratedBaseModel = geometry.forceUngeneratedBaseModel();
         this.useBaseModel = geometry.useBaseModel();
         this.transformAllQuads = geometry.transformAllQuads();
+        this.useSolidBase = geometry.useSolidNoCamoModel();
         this.stateCache = ((IFramedBlock) state.getBlock()).getCache(state);
 
         Preconditions.checkState(
@@ -390,11 +390,15 @@ public final class FramedBlockModel extends BakedModelProxy
         }
         if (fbData.useAltModel())
         {
-            camoState = camoState.setValue(FramedProperties.ALT, true);
+            camoState = camoState.setValue(PropertyHolder.ALT, true);
         }
         if (fbData.isReinforced())
         {
-            camoState = camoState.setValue(FramedProperties.REINFORCED, true);
+            camoState = camoState.setValue(PropertyHolder.REINFORCED, true);
+        }
+        if (ClientConfig.VIEW.getSolidFrameMode().useSolidFrame(useSolidBase))
+        {
+            camoState = camoState.setValue(PropertyHolder.SOLID_BG, true);
         }
         return camoState;
     }
