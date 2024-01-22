@@ -1,6 +1,6 @@
 package xfacthd.framedblocks.common.compat.jei;
-/*
-import me.shedaniel.rei.plugincompatibilities.api.REIPluginCompatIgnore;
+
+//import me.shedaniel.rei.plugincompatibilities.api.REIPluginCompatIgnore;
 import mezz.jei.api.IModPlugin;
 import mezz.jei.api.JeiPlugin;
 import mezz.jei.api.recipe.RecipeType;
@@ -8,6 +8,7 @@ import mezz.jei.api.registration.*;
 import mezz.jei.api.runtime.IJeiRuntime;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.crafting.RecipeHolder;
 import xfacthd.framedblocks.api.util.Utils;
 import xfacthd.framedblocks.client.screen.PoweredFramingSawScreen;
 import xfacthd.framedblocks.common.FBContent;
@@ -15,7 +16,7 @@ import xfacthd.framedblocks.common.crafting.FramingSawRecipeCache;
 import xfacthd.framedblocks.common.crafting.FramingSawRecipe;
 
 @JeiPlugin
-@REIPluginCompatIgnore
+//@REIPluginCompatIgnore
 public final class FramedJeiPlugin implements IModPlugin
 {
     private static final ResourceLocation ID = Utils.rl("jei_plugin");
@@ -32,14 +33,21 @@ public final class FramedJeiPlugin implements IModPlugin
     @Override
     public void registerRecipes(IRecipeRegistration registration)
     {
-        registration.addRecipes(FRAMING_SAW_RECIPE_TYPE, FramingSawRecipeCache.get(true).getRecipes());
+        registration.addRecipes(
+                FRAMING_SAW_RECIPE_TYPE,
+                FramingSawRecipeCache.get(true).getRecipes().stream().map(RecipeHolder::value).toList()
+        );
     }
 
     @Override
     public void registerRecipeTransferHandlers(IRecipeTransferRegistration registration)
     {
         registration.addRecipeTransferHandler(
-                new FramingSawTransferHandler(registration.getTransferHelper()),
+                new FramingSawTransferHandler.FramingSaw(registration.getTransferHelper()),
+                FRAMING_SAW_RECIPE_TYPE
+        );
+        registration.addRecipeTransferHandler(
+                new FramingSawTransferHandler.PoweredFramingSaw(registration.getTransferHelper()),
                 FRAMING_SAW_RECIPE_TYPE
         );
     }
@@ -48,11 +56,11 @@ public final class FramedJeiPlugin implements IModPlugin
     public void registerRecipeCatalysts(IRecipeCatalystRegistration registration)
     {
         registration.addRecipeCatalyst(
-                new ItemStack(FBContent.BLOCK_FRAMING_SAW.get()),
+                new ItemStack(FBContent.BLOCK_FRAMING_SAW.value()),
                 FRAMING_SAW_RECIPE_TYPE
         );
         registration.addRecipeCatalyst(
-                new ItemStack(FBContent.BLOCK_POWERED_FRAMING_SAW.get()),
+                new ItemStack(FBContent.BLOCK_POWERED_FRAMING_SAW.value()),
                 FRAMING_SAW_RECIPE_TYPE
         );
     }
@@ -87,4 +95,4 @@ public final class FramedJeiPlugin implements IModPlugin
     {
         return ID;
     }
-}*/
+}

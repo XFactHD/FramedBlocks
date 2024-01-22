@@ -1,5 +1,5 @@
 package xfacthd.framedblocks.common.compat.jei;
-/*
+
 import mezz.jei.api.constants.VanillaTypes;
 import mezz.jei.api.gui.handlers.IGhostIngredientHandler;
 import mezz.jei.api.ingredients.ITypedIngredient;
@@ -51,4 +51,4 @@ public final class PoweredFramingSawGhostIngredientHandler implements IGhostIngr
             screen.selectRecipe(stack);
         }
     }
-}*/
+}

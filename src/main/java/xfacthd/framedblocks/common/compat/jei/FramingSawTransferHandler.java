@@ -1,31 +1,36 @@
 package xfacthd.framedblocks.common.compat.jei;
-/*
+
 import mezz.jei.api.gui.ingredient.IRecipeSlotsView;
 import mezz.jei.api.recipe.RecipeType;
 import mezz.jei.api.recipe.transfer.*;
 import net.minecraft.client.Minecraft;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.inventory.MenuType;
+import net.minecraft.world.item.crafting.RecipeHolder;
 import org.jetbrains.annotations.Nullable;
 import xfacthd.framedblocks.common.FBContent;
 import xfacthd.framedblocks.common.crafting.FramingSawRecipe;
 import xfacthd.framedblocks.common.crafting.FramingSawRecipeCache;
-import xfacthd.framedblocks.common.menu.FramingSawMenu;
+import xfacthd.framedblocks.common.menu.*;
 
+import java.util.List;
 import java.util.Optional;
 
-public final class FramingSawTransferHandler implements IRecipeTransferHandler<FramingSawMenu, FramingSawRecipe>
+public abstract sealed class FramingSawTransferHandler<C extends AbstractContainerMenu & IFramingSawMenu>
+        implements IRecipeTransferHandler<C, FramingSawRecipe>
+        permits FramingSawTransferHandler.FramingSaw, FramingSawTransferHandler.PoweredFramingSaw
 {
     private final IRecipeTransferHandlerHelper transferHelper;
-    private final IRecipeTransferInfo<FramingSawMenu, FramingSawRecipe> transferInfo;
-    private final IRecipeTransferHandler<FramingSawMenu, FramingSawRecipe> wrappedHandler;
+    private final IRecipeTransferInfo<C, FramingSawRecipe> transferInfo;
+    private final IRecipeTransferHandler<C, FramingSawRecipe> wrappedHandler;
 
-    public FramingSawTransferHandler(IRecipeTransferHandlerHelper transferHelper)
+    private FramingSawTransferHandler(IRecipeTransferHandlerHelper transferHelper, Class<? extends C> menuClass, MenuType<C> menuType)
     {
         this.transferHelper = transferHelper;
         this.transferInfo = transferHelper.createBasicRecipeTransferInfo(
-                FramingSawMenu.class,
-                FBContent.MENU_TYPE_FRAMING_SAW.get(),
+                menuClass,
+                menuType,
                 FramedJeiPlugin.FRAMING_SAW_RECIPE_TYPE,
                 FramingSawMenu.SLOT_INPUT,
                 FramingSawMenu.SLOT_RESULT,
@@ -36,13 +41,13 @@ public final class FramingSawTransferHandler implements IRecipeTransferHandler<F
     }
 
     @Override
-    public Class<? extends FramingSawMenu> getContainerClass()
+    public Class<? extends C> getContainerClass()
     {
         return transferInfo.getContainerClass();
     }
 
     @Override
-    public Optional<MenuType<FramingSawMenu>> getMenuType()
+    public Optional<MenuType<C>> getMenuType()
     {
         return transferInfo.getMenuType();
     }
@@ -55,9 +60,18 @@ public final class FramingSawTransferHandler implements IRecipeTransferHandler<F
 
     @Override
     @Nullable
-    public IRecipeTransferError transferRecipe(FramingSawMenu menu, FramingSawRecipe recipe, IRecipeSlotsView recipeSlots, Player player, boolean maxTransfer, boolean doTransfer)
+    public IRecipeTransferError transferRecipe(C menu, FramingSawRecipe recipe, IRecipeSlotsView recipeSlots, Player player, boolean maxTransfer, boolean doTransfer)
     {
-        int idx = FramingSawRecipeCache.get(true).getRecipes().indexOf(recipe);
+        int idx = -1;
+        List<RecipeHolder<FramingSawRecipe>> recipes = FramingSawRecipeCache.get(true).getRecipes();
+        for (int i = 0; i < recipes.size(); i++)
+        {
+            if (recipes.get(i).value() == recipe)
+            {
+                idx = i;
+                break;
+            }
+        }
         if (idx != -1 && menu.isValidRecipeIndex(idx))
         {
             //TODO: https://github.com/mezz/JustEnoughItems/issues/3146
@@ -77,4 +91,22 @@ public final class FramingSawTransferHandler implements IRecipeTransferHandler<F
         }
         return transferHelper.createUserErrorWithTooltip(JeiCompat.MSG_INVALID_RECIPE);
     }
-}*/
+
+
+
+    public static final class FramingSaw extends FramingSawTransferHandler<FramingSawMenu>
+    {
+        public FramingSaw(IRecipeTransferHandlerHelper transferHelper)
+        {
+            super(transferHelper, FramingSawMenu.class, FBContent.MENU_TYPE_FRAMING_SAW.get());
+        }
+    }
+
+    public static final class PoweredFramingSaw extends FramingSawTransferHandler<PoweredFramingSawMenu>
+    {
+        public PoweredFramingSaw(IRecipeTransferHandlerHelper transferHelper)
+        {
+            super(transferHelper, PoweredFramingSawMenu.class, FBContent.MENU_TYPE_POWERED_FRAMING_SAW.get());
+        }
+    }
+}

@@ -162,9 +162,9 @@ dependencies {
     //compileOnly("curse.maven:xycraft_core-653786:4788862")
     //compileOnly("curse.maven:xycraft_world-653789:4788863")
 
-    //compileOnly("mezz.jei:jei-${jei_mc_version}-common-api:${jei_version}")
-    //compileOnly("mezz.jei:jei-${jei_mc_version}-forge-api:${jei_version}")
-    //runtimeOnly("mezz.jei:jei-${jei_mc_version}-forge:${jei_version}")
+    compileOnly("mezz.jei:jei-${jei_mc_version}-common-api:${jei_version}")
+    compileOnly("mezz.jei:jei-${jei_mc_version}-neoforge-api:${jei_version}")
+    //runtimeOnly("mezz.jei:jei-${jei_mc_version}-neoforge:${jei_version}")
 
     // Switch Arch, Cloth and REI-neoforge to impl for runtime testing
     compileOnly("dev.architectury:architectury-neoforge:${arch_version}")

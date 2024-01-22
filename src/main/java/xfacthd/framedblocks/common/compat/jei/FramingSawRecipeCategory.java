@@ -1,5 +1,5 @@
 package xfacthd.framedblocks.common.compat.jei;
-/*
+
 import com.google.common.collect.Lists;
 import mezz.jei.api.gui.builder.IRecipeLayoutBuilder;
 import mezz.jei.api.gui.builder.IRecipeSlotBuilder;
@@ -42,7 +42,7 @@ public final class FramingSawRecipeCategory implements IRecipeCategory<FramingSa
     public FramingSawRecipeCategory(IGuiHelper guiHelper)
     {
         this.background = guiHelper.createDrawable(BACKGROUND, 0, 0, WIDTH, HEIGHT);
-        this.icon = guiHelper.createDrawableItemStack(new ItemStack(FBContent.BLOCK_FRAMING_SAW.get()));
+        this.icon = guiHelper.createDrawableItemStack(new ItemStack(FBContent.BLOCK_FRAMING_SAW.value()));
         this.warning = guiHelper.drawableBuilder(FramingSawScreen.WARNING_ICON, 8, 8, WARNING_SIZE, WARNING_SIZE).setTextureSize(32, 32).build();
     }
 
@@ -123,7 +123,7 @@ public final class FramingSawRecipeCategory implements IRecipeCategory<FramingSa
         }
         else
         {
-            setRecipe(FBContent.BLOCK_FRAMED_CUBE.get().asItem(), recipe, inputSlot, additiveSlots, outputSlot);
+            setRecipe(FBContent.BLOCK_FRAMED_CUBE.value().asItem(), recipe, inputSlot, additiveSlots, outputSlot);
         }
     }
 
@@ -203,4 +203,4 @@ public final class FramingSawRecipeCategory implements IRecipeCategory<FramingSa
 
         return List.of();
     }
-}*/
+}

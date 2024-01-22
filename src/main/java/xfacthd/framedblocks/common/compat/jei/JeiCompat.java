@@ -2,11 +2,11 @@ package xfacthd.framedblocks.common.compat.jei;
 
 import com.google.common.base.Preconditions;
 import com.mojang.blaze3d.platform.InputConstants;
-//import mezz.jei.api.constants.VanillaTypes;
-//import mezz.jei.api.helpers.IJeiHelpers;
-//import mezz.jei.api.ingredients.ITypedIngredient;
-//import mezz.jei.api.recipe.*;
-//import mezz.jei.api.runtime.*;
+import mezz.jei.api.constants.VanillaTypes;
+import mezz.jei.api.helpers.IJeiHelpers;
+import mezz.jei.api.ingredients.ITypedIngredient;
+import mezz.jei.api.recipe.*;
+import mezz.jei.api.runtime.*;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.ItemStack;
 import net.neoforged.fml.ModList;
@@ -41,7 +41,7 @@ public final class JeiCompat
     {
         if (loadedClient)
         {
-            //return GuardedAccess.isShowRecipePressed(keyCode, scanCode);
+            return GuardedAccess.isShowRecipePressed(keyCode, scanCode);
         }
         return null;
     }
@@ -50,7 +50,7 @@ public final class JeiCompat
     {
         if (loadedClient)
         {
-            //return GuardedAccess.handleButtonRecipeRequest(result, target);
+            return GuardedAccess.handleButtonRecipeRequest(result, target);
         }
         return false;
     }
@@ -59,7 +59,7 @@ public final class JeiCompat
 
     static final class GuardedAccess
     {
-        /*private static IJeiRuntime runtime = null;
+        private static IJeiRuntime runtime = null;
         private static IJeiKeyMappings keys = null;
 
         public static RecipeViewer.LookupTarget isShowRecipePressed(int keyCode, int scanCode)
@@ -115,7 +115,7 @@ public final class JeiCompat
         public static IJeiRuntime getRuntime()
         {
             return runtime;
-        }*/
+        }
 
 
 

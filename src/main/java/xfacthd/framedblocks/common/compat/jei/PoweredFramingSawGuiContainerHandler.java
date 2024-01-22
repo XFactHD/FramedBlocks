@@ -1,5 +1,5 @@
 package xfacthd.framedblocks.common.compat.jei;
-/*
+
 import mezz.jei.api.constants.VanillaTypes;
 import mezz.jei.api.gui.handlers.IGuiClickableArea;
 import mezz.jei.api.gui.handlers.IGuiContainerHandler;
@@ -48,9 +48,9 @@ public final class PoweredFramingSawGuiContainerHandler implements IGuiContainer
         {
             IIngredientManager ingredients = JeiCompat.GuardedAccess.getRuntime().getIngredientManager();
             Optional<ITypedIngredient<ItemStack>> optIng = ingredients.createTypedIngredient(
-                    VanillaTypes.ITEM_STACK, new ItemStack(FBContent.BLOCK_POWERED_FRAMING_SAW.get())
+                    VanillaTypes.ITEM_STACK, new ItemStack(FBContent.BLOCK_POWERED_FRAMING_SAW.value())
             );
             optIng.ifPresent(ing -> recipesGui.show(focusFactory.createFocus(RecipeIngredientRole.CATALYST, ing)));
         }
     }
-}*/
+}
