@@ -40,13 +40,11 @@ public abstract class FramedDoubleBlockEntity extends FramedBlockEntity
 
     private final FramedBlockData modelData = new FramedBlockData();
     private final DoubleBlockSoundType soundType = new DoubleBlockSoundType(this);
-    private DoubleBlockStateCache stateCache;
     private CamoContainer camoContainer = EmptyCamoContainer.EMPTY;
 
     public FramedDoubleBlockEntity(BlockEntityType<?> type, BlockPos pos, BlockState state)
     {
         super(type, pos, state);
-        this.stateCache = getBlock().getCache(state);
         this.modelData.setUseAltModel(true);
     }
 
@@ -66,11 +64,12 @@ public abstract class FramedDoubleBlockEntity extends FramedBlockEntity
     @Override
     public CamoContainer getCamo(BlockState state)
     {
-        if (state == stateCache.getBlockPair().getA())
+        Tuple<BlockState, BlockState> blockPair = getStateCache().getBlockPair();
+        if (state == blockPair.getA())
         {
             return getCamo();
         }
-        if (state == stateCache.getBlockPair().getB())
+        if (state == blockPair.getB())
         {
             return getCamoTwo();
         }
@@ -102,6 +101,12 @@ public abstract class FramedDoubleBlockEntity extends FramedBlockEntity
     }
 
     @Override
+    public DoubleBlockStateCache getStateCache()
+    {
+        return (DoubleBlockStateCache) super.getStateCache();
+    }
+
+    @Override
     public boolean canAutoApplyCamoOnPlacement()
     {
         return false;
@@ -120,7 +125,7 @@ public abstract class FramedDoubleBlockEntity extends FramedBlockEntity
     @Override
     public MapColor getMapColor()
     {
-        return switch (stateCache.getTopInteractionMode())
+        return switch (getStateCache().getTopInteractionMode())
         {
             case FIRST -> super.getMapColor();
             case SECOND -> camoContainer.getMapColor(level, worldPosition);
@@ -171,7 +176,7 @@ public abstract class FramedDoubleBlockEntity extends FramedBlockEntity
     @Override
     public float getCamoFriction(BlockState state, @Nullable Entity entity)
     {
-        return switch (stateCache.getTopInteractionMode())
+        return switch (getStateCache().getTopInteractionMode())
         {
             case FIRST -> getFriction(this, getCamo(), state, entity);
             case SECOND -> getFriction(this, getCamoTwo(), state, entity);
@@ -185,7 +190,7 @@ public abstract class FramedDoubleBlockEntity extends FramedBlockEntity
     @Override
     public boolean canCamoSustainPlant(Direction side, IPlantable plant)
     {
-        return stateCache.getSolidityCheck(side).canSustainPlant(this, side, plant);
+        return getStateCache().getSolidityCheck(side).canSustainPlant(this, side, plant);
     }
 
     @Override
@@ -306,7 +311,7 @@ public abstract class FramedDoubleBlockEntity extends FramedBlockEntity
 
     public final DoubleBlockTopInteractionMode getTopInteractionMode()
     {
-        return stateCache.getTopInteractionMode();
+        return getStateCache().getTopInteractionMode();
     }
 
     @Override
@@ -318,29 +323,22 @@ public abstract class FramedDoubleBlockEntity extends FramedBlockEntity
     @Override
     public final CamoContainer getCamo(Direction side, @Nullable Direction edge)
     {
-        return stateCache.getCamoGetter(side, edge).getCamo(this);
+        return getStateCache().getCamoGetter(side, edge).getCamo(this);
     }
 
     @Override
     public final boolean isSolidSide(Direction side)
     {
-        return stateCache.getSolidityCheck(side).isSolid(this);
+        return getStateCache().getSolidityCheck(side).isSolid(this);
     }
 
     @Override
     public boolean updateCulling(Direction side, boolean rerender)
     {
-        boolean changed = updateCulling(getModelDataInternal(), stateCache.getBlockPair().getA(), side, rerender);
-        changed |= updateCulling(modelData, stateCache.getBlockPair().getB(), side, rerender);
+        Tuple<BlockState, BlockState> blockPair = getStateCache().getBlockPair();
+        boolean changed = updateCulling(getModelDataInternal(), blockPair.getA(), side, rerender);
+        changed |= updateCulling(modelData, blockPair.getB(), side, rerender);
         return changed;
-    }
-
-    @Override
-    @SuppressWarnings("deprecation")
-    public void setBlockState(BlockState state)
-    {
-        super.setBlockState(state);
-        stateCache = getBlock().getCache(state);
     }
 
     /*
@@ -355,7 +353,7 @@ public abstract class FramedDoubleBlockEntity extends FramedBlockEntity
 
     public final Tuple<BlockState, BlockState> getBlockPair()
     {
-        return stateCache.getBlockPair();
+        return getStateCache().getBlockPair();
     }
 
     public final boolean debugHitSecondary(BlockHitResult hit)
