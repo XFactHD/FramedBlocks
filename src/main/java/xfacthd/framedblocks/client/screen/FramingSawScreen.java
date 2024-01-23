@@ -244,6 +244,8 @@ public class FramingSawScreen extends AbstractContainerScreen<FramingSawMenu>
                 }
                 case MATERIAL_LCM ->
                 {
+                    if (input.isEmpty()) yield Component.empty();
+
                     FramingSawRecipeCalculation calc = recipe.makeCraftingCalculation(
                             menu.getInputContainer(), true
                     );
@@ -280,6 +282,8 @@ public class FramingSawScreen extends AbstractContainerScreen<FramingSawMenu>
                 }
                 case INSUFFICIENT_ADDITIVE_0, INSUFFICIENT_ADDITIVE_1, INSUFFICIENT_ADDITIVE_2 ->
                 {
+                    if (input.isEmpty()) yield Component.empty();
+
                     FramingSawRecipeCalculation calc = recipe.makeCraftingCalculation(
                             menu.getInputContainer(), true
                     );
