@@ -1,50 +1,40 @@
 package xfacthd.framedblocks.client.model.interactive;
 
 import net.minecraft.client.renderer.RenderType;
-import net.minecraft.client.renderer.block.model.BakedQuad;
-import net.minecraft.client.resources.model.BakedModel;
+import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.core.Direction;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.RandomSource;
-import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.AttachFace;
 import net.neoforged.neoforge.client.ChunkRenderTypeSet;
-import net.neoforged.neoforge.client.event.ModelEvent;
 import net.neoforged.neoforge.client.model.data.ModelData;
+import xfacthd.framedblocks.api.FramedBlocksClientAPI;
 import xfacthd.framedblocks.api.model.data.FramedBlockData;
 import xfacthd.framedblocks.api.model.data.QuadMap;
 import xfacthd.framedblocks.api.model.wrapping.GeometryFactory;
-import xfacthd.framedblocks.api.model.quad.Modifiers;
-import xfacthd.framedblocks.api.model.quad.QuadModifier;
 import xfacthd.framedblocks.api.util.Utils;
 import xfacthd.framedblocks.api.model.util.ModelUtils;
 
-import java.util.List;
-
 public class FramedStoneButtonGeometry extends FramedButtonGeometry
 {
-    private static final ResourceLocation FRAME_LOCATION = Utils.rl("block/framed_stone_button_frame");
-    private static final ResourceLocation FRAME_PRESSED_LOCATION = Utils.rl("block/framed_stone_button_pressed_frame");
+    private static final ResourceLocation FRAME_LOCATION_FRONT = Utils.rl("block/stone_button_frame_front");
+    private static final ResourceLocation FRAME_LOCATION_NARROW = Utils.rl("block/stone_button_frame_narrow");
+    private static final ResourceLocation FRAME_LOCATION_WIDE = Utils.rl("block/stone_button_frame_wide");
 
-    private final BakedModel frameModel;
-    private final int rotX;
-    private final int rotY;
+    private final TextureAtlasSprite frameSpriteFront;
+    private final TextureAtlasSprite frameSpriteNarrow;
+    private final TextureAtlasSprite frameSpriteWide;
 
     public FramedStoneButtonGeometry(GeometryFactory.Context ctx)
     {
         super(ctx);
-        this.frameModel = ctx.modelAccessor().get(pressed ? FRAME_PRESSED_LOCATION : FRAME_LOCATION);
-        this.rotX = switch (face)
-        {
-            case FLOOR -> 0;
-            case WALL -> 90;
-            case CEILING -> 180;
-        };
-        this.rotY = (int)-dir.toYRot();
+        this.frameSpriteFront = ctx.textureLookup().get(FRAME_LOCATION_FRONT);
+        this.frameSpriteNarrow = ctx.textureLookup().get(FRAME_LOCATION_NARROW);
+        this.frameSpriteWide = ctx.textureLookup().get(FRAME_LOCATION_WIDE);
     }
 
     @Override
-    public ChunkRenderTypeSet getAdditionalRenderTypes(RandomSource rand, ModelData extraData)
+    public ChunkRenderTypeSet getOverlayRenderTypes(RandomSource rand, ModelData extraData)
     {
         FramedBlockData fbData = extraData.get(FramedBlockData.PROPERTY);
         if (fbData != null && !fbData.getCamoState().isAir())
@@ -55,58 +45,24 @@ public class FramedStoneButtonGeometry extends FramedButtonGeometry
     }
 
     @Override
-    public void getAdditionalQuads(
-            QuadMap quadMap,
-            BlockState state,
-            RandomSource rand,
-            ModelData data,
-            RenderType layer
-    )
+    public void getGeneratedOverlayQuads(QuadMap quadMap, RandomSource rand, ModelData data, RenderType layer)
     {
-        FramedBlockData fbData = data.get(FramedBlockData.PROPERTY);
-        if (fbData == null || fbData.getCamoState().isAir())
+        FramedBlocksClientAPI.INSTANCE.generateOverlayQuads(quadMap, facing.getOpposite(), frameSpriteFront);
+        FramedBlocksClientAPI.INSTANCE.generateOverlayQuads(quadMap, null, dir ->
         {
-            return;
-        }
+            if (dir == facing) return frameSpriteFront;
+            if (dir.getAxis() == this.dir.getClockWise().getAxis()) return frameSpriteNarrow;
 
-        List<BakedQuad> quads = frameModel.getQuads(state, null, rand, data, layer);
-        addRotatedQuads(quads, quadMap.get(null));
+            Direction.Axis wideAxis = face == AttachFace.WALL ? Direction.Axis.Y : dir.getAxis();
+            if (dir.getAxis() == wideAxis) return frameSpriteWide;
 
-        for (Direction side : Direction.values())
-        {
-            quads = frameModel.getQuads(state, side, rand, data, layer);
-            addRotatedQuads(quads, quadMap.get(side));
-        }
-    }
-
-    private void addRotatedQuads(List<BakedQuad> source, List<BakedQuad> dest)
-    {
-        if (face == AttachFace.FLOOR && Utils.isZ(dir))
-        {
-            dest.addAll(source);
-            return;
-        }
-
-        for (BakedQuad quad : source)
-        {
-            QuadModifier.geometry(quad)
-                    .apply(Modifiers.rotateCentered(Direction.Axis.X, rotX, false))
-                    .apply(Modifiers.rotateCentered(Direction.Axis.Y, rotY, false))
-                    .export(dest);
-        }
+            throw new IllegalArgumentException("Invalid face %s for facing %s".formatted(dir, facing));
+        }, dir -> true);
     }
 
     @Override
     public boolean useBaseModel()
     {
         return true;
-    }
-
-
-
-    public static void registerFrameModels(ModelEvent.RegisterAdditional event)
-    {
-        event.register(FRAME_LOCATION);
-        event.register(FRAME_PRESSED_LOCATION);
     }
 }

@@ -2,6 +2,7 @@ package xfacthd.framedblocks.client.overlaygen;
 
 import net.minecraft.client.renderer.block.model.BakedQuad;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
+import net.minecraft.core.Direction;
 import net.minecraft.server.packs.resources.ResourceManager;
 import net.minecraft.util.Mth;
 import net.neoforged.neoforge.client.model.IQuadTransformer;
@@ -12,20 +13,22 @@ import xfacthd.framedblocks.common.config.ClientConfig;
 
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.function.Function;
 import java.util.function.Predicate;
 
 public final class OverlayQuadGenerator
 {
     private static final Map<OverlayCacheKey, BakedQuad> OVERLAY_CACHE = new ConcurrentHashMap<>();
 
-    public static List<BakedQuad> generate(List<BakedQuad> srcQuads, TextureAtlasSprite sprite, Predicate<BakedQuad> filter)
+    public static List<BakedQuad> generate(List<BakedQuad> srcQuads, Function<Direction, TextureAtlasSprite> spriteGetter, Predicate<Direction> filter)
     {
         List<BakedQuad> outQuads = new ArrayList<>(srcQuads.size());
         Set<OverlayCacheKey> uniqueKeys = new HashSet<>(srcQuads.size());
         for (BakedQuad quad : srcQuads)
         {
-            if (!filter.test(quad)) continue;
+            if (!filter.test(quad.getDirection())) continue;
 
+            TextureAtlasSprite sprite = spriteGetter.apply(quad.getDirection());
             OverlayCacheKey key = buildCacheKey(quad, sprite);
             if (uniqueKeys.add(key))
             {

@@ -10,13 +10,11 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.*;
 import net.neoforged.neoforge.client.model.generators.*;
 import net.neoforged.neoforge.common.data.ExistingFileHelper;
-import org.joml.Vector3f;
 import xfacthd.framedblocks.api.block.FramedProperties;
 import xfacthd.framedblocks.api.util.*;
 import xfacthd.framedblocks.client.loader.overlay.OverlayLoaderBuilder;
 import xfacthd.framedblocks.client.model.cube.FramedMarkedCubeGeometry;
 import xfacthd.framedblocks.client.model.cube.FramedTargetGeometry;
-import xfacthd.framedblocks.client.model.interactive.FramedMarkedPressurePlateGeometry;
 import xfacthd.framedblocks.client.model.rail.FramedFancyRailGeometry;
 import xfacthd.framedblocks.common.FBContent;
 import xfacthd.framedblocks.common.data.PropertyHolder;
@@ -342,21 +340,6 @@ public final class FramedBlockStateProvider extends BlockStateProvider
         simpleBlock(FBContent.BLOCK_FRAMED_STONE_PRESSURE_PLATE.value(), cube);
         simpleBlock(FBContent.BLOCK_FRAMED_WATERLOGGABLE_STONE_PRESSURE_PLATE.value(), cube);
 
-        makeOverlayModel(
-                FramedMarkedPressurePlateGeometry.STONE_FRAME_LOCATION,
-                modLoc("block/framed_pressure_plate_frame_up"),
-                "texture",
-                modLoc("block/stone_plate_frame"),
-                new Vector3f(8F, 0.5F, 8F)
-        );
-        makeOverlayModel(
-                FramedMarkedPressurePlateGeometry.STONE_FRAME_DOWN_LOCATION,
-                modLoc("block/framed_pressure_plate_frame_down"),
-                "texture",
-                modLoc("block/stone_plate_frame"),
-                new Vector3f(8F, 0.25F, 8F)
-        );
-
         itemModels().withExistingParent("framed_stone_pressure_plate", modLoc("block/framed_pressure_plate_up"))
                 .texture("background", mcLoc("block/stone"))
                 .renderType("cutout");
@@ -366,21 +349,6 @@ public final class FramedBlockStateProvider extends BlockStateProvider
     {
         simpleBlock(FBContent.BLOCK_FRAMED_OBSIDIAN_PRESSURE_PLATE.value(), cube);
         simpleBlock(FBContent.BLOCK_FRAMED_WATERLOGGABLE_OBSIDIAN_PRESSURE_PLATE.value(), cube);
-
-        makeOverlayModel(
-                FramedMarkedPressurePlateGeometry.OBSIDIAN_FRAME_LOCATION,
-                modLoc("block/framed_pressure_plate_frame_up"),
-                "texture",
-                modLoc("block/obsidian_plate_frame"),
-                new Vector3f(8F, 0.5F, 8F)
-        );
-        makeOverlayModel(
-                FramedMarkedPressurePlateGeometry.OBSIDIAN_FRAME_DOWN_LOCATION,
-                modLoc("block/framed_pressure_plate_frame_down"),
-                "texture",
-                modLoc("block/obsidian_plate_frame"),
-                new Vector3f(8F, 0.25F, 8F)
-        );
 
         itemModels().withExistingParent("framed_obsidian_pressure_plate", modLoc("block/framed_pressure_plate_up"))
                 .texture("background", mcLoc("block/obsidian"))
@@ -392,21 +360,6 @@ public final class FramedBlockStateProvider extends BlockStateProvider
         simpleBlock(FBContent.BLOCK_FRAMED_GOLD_PRESSURE_PLATE.value(), cube);
         simpleBlock(FBContent.BLOCK_FRAMED_WATERLOGGABLE_GOLD_PRESSURE_PLATE.value(), cube);
 
-        makeOverlayModel(
-                FramedMarkedPressurePlateGeometry.GOLD_FRAME_LOCATION,
-                modLoc("block/framed_pressure_plate_frame_up"),
-                "texture",
-                modLoc("block/gold_plate_frame"),
-                new Vector3f(8F, 0.5F, 8F)
-        );
-        makeOverlayModel(
-                FramedMarkedPressurePlateGeometry.GOLD_FRAME_DOWN_LOCATION,
-                modLoc("block/framed_pressure_plate_frame_down"),
-                "texture",
-                modLoc("block/gold_plate_frame"),
-                new Vector3f(8F, 0.25F, 8F)
-        );
-
         itemModels().withExistingParent("framed_gold_pressure_plate", modLoc("block/framed_pressure_plate_up"))
                 .texture("background", mcLoc("block/gold_block"))
                 .renderType("cutout");
@@ -416,21 +369,6 @@ public final class FramedBlockStateProvider extends BlockStateProvider
     {
         simpleBlock(FBContent.BLOCK_FRAMED_IRON_PRESSURE_PLATE.value(), cube);
         simpleBlock(FBContent.BLOCK_FRAMED_WATERLOGGABLE_IRON_PRESSURE_PLATE.value(), cube);
-
-        makeOverlayModel(
-                FramedMarkedPressurePlateGeometry.IRON_FRAME_LOCATION,
-                modLoc("block/framed_pressure_plate_frame_up"),
-                "texture",
-                modLoc("block/iron_plate_frame"),
-                new Vector3f(8F, 0.5F, 8F)
-        );
-        makeOverlayModel(
-                FramedMarkedPressurePlateGeometry.IRON_FRAME_DOWN_LOCATION,
-                modLoc("block/framed_pressure_plate_frame_down"),
-                "texture",
-                modLoc("block/iron_plate_frame"),
-                new Vector3f(8F, 0.25F, 8F)
-        );
 
         itemModels().withExistingParent("framed_iron_pressure_plate", modLoc("block/framed_pressure_plate_up"))
                 .texture("background", mcLoc("block/iron_block"))
@@ -1130,22 +1068,12 @@ public final class FramedBlockStateProvider extends BlockStateProvider
     @SuppressWarnings("SameParameterValue")
     private void makeOverlayModel(ResourceLocation name, ResourceLocation parent, String textureKey, ResourceLocation texture)
     {
-        makeOverlayModel(name, parent, textureKey, texture, null);
-    }
-
-    private void makeOverlayModel(ResourceLocation name, ResourceLocation parent, String textureKey, ResourceLocation texture, Vector3f center)
-    {
-        OverlayLoaderBuilder builder = models().getBuilder(name.getPath())
+        models().getBuilder(name.getPath())
                 .customLoader(OverlayLoaderBuilder::new)
                 .model(models()
                         .nested()
                         .parent(models().getExistingFile(parent))
                         .texture(textureKey, texture)
                 );
-
-        if (center != null)
-        {
-            builder.center(center);
-        }
     }
 }

@@ -22,6 +22,7 @@ import xfacthd.framedblocks.client.overlaygen.OverlayQuadGenerator;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.function.Function;
 import java.util.function.Predicate;
 
 @SuppressWarnings("unused")
@@ -60,18 +61,24 @@ public final class ClientApiImpl implements FramedBlocksClientAPI
     @Override
     public void generateOverlayQuads(QuadMap quadMap, Direction side, TextureAtlasSprite sprite)
     {
-        generateOverlayQuads(quadMap, side, sprite, quad -> true);
+        generateOverlayQuads(quadMap, side, sprite, dir -> true);
     }
 
     @Override
-    public void generateOverlayQuads(QuadMap quadMap, Direction side, TextureAtlasSprite sprite, Predicate<BakedQuad> filter)
+    public void generateOverlayQuads(QuadMap quadMap, Direction side, TextureAtlasSprite sprite, Predicate<Direction> filter)
+    {
+        generateOverlayQuads(quadMap, side, dir -> sprite, filter);
+    }
+
+    @Override
+    public void generateOverlayQuads(QuadMap quadMap, Direction side, Function<Direction, TextureAtlasSprite> spriteGetter, Predicate<Direction> filter)
     {
         QuadTable quadTable = (QuadTable) quadMap;
 
         List<BakedQuad> allQuads = quadTable.getAllQuads(side);
         if (allQuads.isEmpty()) return;
 
-        List<BakedQuad> generatedQuads = OverlayQuadGenerator.generate(allQuads, sprite, filter);
+        List<BakedQuad> generatedQuads = OverlayQuadGenerator.generate(allQuads, spriteGetter, filter);
         if (generatedQuads.isEmpty()) return;
 
         List<BakedQuad> existingQuads = quadTable.get(side);

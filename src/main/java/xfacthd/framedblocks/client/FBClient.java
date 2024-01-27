@@ -386,9 +386,6 @@ public final class FBClient
         event.register(FramedBlockModel.REINFORCEMENT_LOCATION);
         event.register(FramedMarkedCubeGeometry.SLIME_FRAME_LOCATION);
         event.register(FramedMarkedCubeGeometry.REDSTONE_FRAME_LOCATION);
-        FramedMarkedPressurePlateGeometry.registerFrameModels(event);
-        FramedStoneButtonGeometry.registerFrameModels(event);
-        FramedLargeStoneButtonGeometry.registerFrameModels(event);
         event.register(FramedTargetGeometry.OVERLAY_LOCATION);
 
         if (SupplementariesCompat.isLoaded())
