@@ -20,12 +20,15 @@ public class FramedMarkedCubeGeometry extends FramedCubeGeometry
 {
     public static final ResourceLocation SLIME_FRAME_LOCATION = Utils.rl("block/slime_frame");
     public static final ResourceLocation REDSTONE_FRAME_LOCATION = Utils.rl("block/redstone_frame");
+
+    private final BlockState state;
     private final BakedModel frameModel;
 
     private FramedMarkedCubeGeometry(GeometryFactory.Context ctx, ResourceLocation frameLocation)
     {
         super(ctx);
-        frameModel = ctx.modelAccessor().get(frameLocation);
+        this.state = ctx.state();
+        this.frameModel = ctx.modelAccessor().get(frameLocation);
     }
 
     @Override
@@ -40,14 +43,7 @@ public class FramedMarkedCubeGeometry extends FramedCubeGeometry
     }
 
     @Override
-    public void getAdditionalQuads(
-            ArrayList<BakedQuad> quads,
-            Direction side,
-            BlockState state,
-            RandomSource rand,
-            ModelData data,
-            RenderType renderType
-    )
+    public void getAdditionalQuads(ArrayList<BakedQuad> quads, Direction side, RandomSource rand, ModelData data, RenderType renderType)
     {
         FramedBlockData fbData = data.get(FramedBlockData.PROPERTY);
         if (fbData != null && !fbData.getCamoState().isAir())

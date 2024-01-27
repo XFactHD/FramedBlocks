@@ -26,10 +26,12 @@ public class FramedTorchGeometry implements Geometry
     private static final float MAX = 9F/16F;
     private static final float TOP = 8F/16F;
 
+    private final BlockState state;
     private final BakedModel baseModel;
 
     public FramedTorchGeometry(GeometryFactory.Context ctx)
     {
+        this.state = ctx.state();
         this.baseModel = ctx.baseModel();
     }
 
@@ -40,7 +42,7 @@ public class FramedTorchGeometry implements Geometry
     }
 
     @Override
-    public void getAdditionalQuads(QuadMap quadMap, BlockState state, RandomSource rand, ModelData extraData, RenderType layer)
+    public void getAdditionalQuads(QuadMap quadMap, RandomSource rand, ModelData extraData, RenderType layer)
     {
         List<BakedQuad> quads = baseModel.getQuads(state, null, rand, extraData, layer);
         for (BakedQuad quad : quads)

@@ -56,7 +56,6 @@ public final class FramedBlockModel extends BakedModelProxy
     private final Geometry geometry;
     private final IBlockType type;
     private final boolean isBaseCube;
-    private final boolean cacheFullRenderTypes;
     private final boolean forceUngeneratedBaseModel;
     private final boolean useBaseModel;
     private final boolean transformAllQuads;
@@ -70,7 +69,6 @@ public final class FramedBlockModel extends BakedModelProxy
         this.geometry = geometry;
         this.type = ((IFramedBlock) state.getBlock()).getBlockType();
         this.isBaseCube = state.getBlock() == FBContent.BLOCK_FRAMED_CUBE.value();
-        this.cacheFullRenderTypes = geometry.canFullyCacheRenderTypes();
         this.forceUngeneratedBaseModel = geometry.forceUngeneratedBaseModel();
         this.useBaseModel = geometry.useBaseModel();
         this.transformAllQuads = geometry.transformAllQuads();
@@ -89,24 +87,18 @@ public final class FramedBlockModel extends BakedModelProxy
     )
     {
         BlockState camoState = Blocks.AIR.defaultBlockState();
-
-        if (state == null)
-        {
-            state = this.state;
-        }
-
         FramedBlockData data = extraData.get(FramedBlockData.PROPERTY);
         if (data != null && renderType != null)
         {
             if (side != null && data.isSideHidden(side))
             {
-                return Collections.emptyList();
+                return List.of();
             }
 
             camoState = data.getCamoState();
             if (camoState != null && !camoState.isAir())
             {
-                return getCamoQuads(state, camoState, side, rand, extraData, data, renderType);
+                return getCamoQuads(camoState, side, rand, extraData, data, renderType);
             }
         }
 
@@ -120,20 +112,16 @@ public final class FramedBlockModel extends BakedModelProxy
         }
         if (camoState == null || camoState.isAir())
         {
-            return getCamoQuads(state, null, side, rand, extraData, data, renderType);
+            return getCamoQuads(null, side, rand, extraData, data, renderType);
         }
 
-        return Collections.emptyList();
+        return List.of();
     }
 
     @Override
     public List<BakedQuad> getQuads(BlockState state, Direction side, RandomSource rand)
     {
-        if (state == null)
-        {
-            state = this.state;
-        }
-        return getCamoQuads(state, null, side, rand, ModelData.EMPTY, DEFAULT_DATA, RenderType.cutout());
+        return getCamoQuads(null, side, rand, ModelData.EMPTY, DEFAULT_DATA, RenderType.cutout());
     }
 
     @Override
@@ -156,21 +144,7 @@ public final class FramedBlockModel extends BakedModelProxy
             camoState = Blocks.AIR.defaultBlockState();
             keyState = getNoCamoModelState(FramedBlocksAPI.INSTANCE.getDefaultModelState(), fbData);
         }
-
-        CachedRenderTypes cachedTypes = getCachedRenderTypes(keyState, camoState, rand, data);
-        if (cacheFullRenderTypes)
-        {
-            return cachedTypes.allTypes;
-        }
-
-        ChunkRenderTypeSet renderTypes = cachedTypes.camoTypes;
-        ChunkRenderTypeSet additionalTypes = geometry.getAdditionalRenderTypes(rand, data);
-        ChunkRenderTypeSet overlayTypes = geometry.getOverlayRenderTypes(rand, data);
-        if (!additionalTypes.isEmpty() || !overlayTypes.isEmpty())
-        {
-            renderTypes = ChunkRenderTypeSet.union(renderTypes, additionalTypes, overlayTypes);
-        }
-        return renderTypes;
+        return getCachedRenderTypes(keyState, camoState, rand, data).allTypes;
     }
 
     private CachedRenderTypes getCachedRenderTypes(
@@ -188,23 +162,16 @@ public final class FramedBlockModel extends BakedModelProxy
         ChunkRenderTypeSet camoTypes = BASE_MODEL_RENDER_TYPES;
         if (!camoState.isAir())
         {
-            camoTypes = ChunkRenderTypeSet.union(
-                ModelCache.getRenderTypes(camoState, rand, ModelData.EMPTY),
-                ModelCache.getCamoRenderTypes(camoState, rand, data)
-            );
+            camoTypes = ModelCache.getCamoRenderTypes(camoState, rand, data);
         }
-        ChunkRenderTypeSet additionalTypes = ChunkRenderTypeSet.none();
-        ChunkRenderTypeSet overlayTypes = ChunkRenderTypeSet.none();
-        if (cacheFullRenderTypes)
-        {
-            additionalTypes = geometry.getAdditionalRenderTypes(rand, data);
-            overlayTypes = geometry.getOverlayRenderTypes(rand, data);
-        }
-        return new CachedRenderTypes(camoTypes, additionalTypes, overlayTypes);
+        return new CachedRenderTypes(
+                camoTypes,
+                geometry.getAdditionalRenderTypes(rand, data),
+                geometry.getOverlayRenderTypes(rand, data)
+        );
     }
 
     private List<BakedQuad> getCamoQuads(
-            BlockState state,
             BlockState camoState,
             Direction side,
             RandomSource rand,
@@ -214,72 +181,67 @@ public final class FramedBlockModel extends BakedModelProxy
     )
     {
         ModelData camoData;
-        BakedModel model;
-        boolean noProcessing;
-        boolean noCamo = camoState == null;
+        BakedModel camoModel;
+        boolean noProcessing = stateCache.isFullFace(side);
         boolean needCtCtx;
-        boolean camoInRenderType;
-        boolean addReinforcement;
+        CachedRenderTypes renderTypes;
+        boolean reinforce;
 
-        if (noCamo)
+        if (camoState == null)
         {
             needCtCtx = false;
             camoState = getNoCamoModelState(FramedBlocksAPI.INSTANCE.getDefaultModelState(), fbData);
-            addReinforcement = useBaseModel && fbData.isReinforced();
-            camoInRenderType = BASE_MODEL_RENDER_TYPES.contains(renderType);
-            noProcessing = (camoInRenderType && forceUngeneratedBaseModel) || stateCache.isFullFace(side);
-            model = getCamoModel(camoState, useBaseModel);
+            reinforce = useBaseModel && fbData.isReinforced();
+            noProcessing |= forceUngeneratedBaseModel && BASE_MODEL_RENDER_TYPES.contains(renderType);
+            camoModel = getCamoModel(camoState, useBaseModel);
             camoData = ModelData.EMPTY;
+            renderTypes = getCachedRenderTypes(Blocks.AIR.defaultBlockState(), camoState, rand, extraData);
         }
         else
         {
-            noProcessing = stateCache.isFullFace(side);
             needCtCtx = type.supportsConnectedTextures() && needCtContext(noProcessing, type.getMinimumConTexMode());
-            model = getCamoModel(camoState, false);
+            camoModel = getCamoModel(camoState, false);
             camoData = needCtCtx ? ModelUtils.getCamoModelData(extraData) : ModelData.EMPTY;
-            camoInRenderType = getCachedRenderTypes(camoState, camoState, rand, camoData).camoTypes.contains(renderType);
-            addReinforcement = false;
+            renderTypes = getCachedRenderTypes(camoState, camoState, rand, extraData);
+            reinforce = false;
         }
 
         if (noProcessing)
         {
-            ChunkRenderTypeSet addLayers = geometry.getAdditionalRenderTypes(rand, extraData);
-            boolean additionalQuads = addLayers.contains(renderType);
-            if (!camoInRenderType && !additionalQuads && !addReinforcement)
+            boolean camoInRenderType = renderTypes.camoTypes.contains(renderType);
+            boolean additionalQuads = renderTypes.additionalTypes.contains(renderType);
+            if (!camoInRenderType && !additionalQuads)
             {
                 return List.of();
             }
 
             ArrayList<BakedQuad> quads = new ArrayList<>();
-
             if (camoInRenderType)
             {
-                Utils.copyAll(model.getQuads(camoState, side, rand, camoData, renderType), quads);
+                Utils.copyAll(camoModel.getQuads(camoState, side, rand, camoData, renderType), quads);
             }
-
             if (additionalQuads)
             {
-                geometry.getAdditionalQuads(quads, side, state, rand, extraData, renderType);
+                geometry.getAdditionalQuads(quads, side, rand, extraData, renderType);
             }
-
-            if (addReinforcement && renderType == RenderType.cutout())
+            if (reinforce && renderType == RenderType.cutout())
             {
                 Utils.copyAll(reinforcementModel.getQuads(camoState, side, rand, camoData, renderType), quads);
             }
-
             return geometry.postProcessUncachedQuads(quads);
         }
         else
         {
             Object ctCtx = needCtCtx ? ConTexDataHandler.extractConTexData(camoData) : null;
+            ModelData ctData = ctCtx != null ? camoData : ModelData.EMPTY;
             if (DISABLE_QUAD_CACHE)
             {
-                return buildQuadCache(state, camoState, rand, extraData, ctCtx != null ? camoData : ModelData.EMPTY, noCamo, addReinforcement)
+                return buildQuadCache(camoState, camoModel, rand, extraData, ctData, renderTypes, reinforce)
                         .getQuads(renderType, side);
             }
             return quadCache.get(
                     geometry.makeCacheKey(camoState, ctCtx, extraData),
-                    key -> buildQuadCache(state, key.state(), rand, extraData, ctCtx != null ? camoData : ModelData.EMPTY, noCamo, addReinforcement)
+                    key -> buildQuadCache(key.state(), camoModel, rand, extraData, ctData, renderTypes, reinforce)
             ).getQuads(renderType, side);
         }
     }
@@ -298,81 +260,23 @@ public final class FramedBlockModel extends BakedModelProxy
      * Builds a {@link RenderType} -> {@link Direction} -> {@link List<BakedQuad>} table with all render types used by this model
      */
     private QuadTable buildQuadCache(
-            BlockState state,
-            BlockState camoState,
-            RandomSource rand,
-            ModelData data,
-            ModelData camoData,
-            boolean noCamo,
-            boolean addReinforcement
-    )
-    {
-        QuadTable quadTable = new QuadTable();
-
-        ChunkRenderTypeSet modelLayers = getRenderTypes(state, rand, data);
-        ChunkRenderTypeSet camoLayers = BASE_MODEL_RENDER_TYPES;
-        if (!noCamo)
-        {
-            camoLayers = ModelCache.getRenderTypes(camoState, rand, camoData);
-        }
-        else
-        {
-            // Make sure the RenderType set being iterated actually contains the no-camo layers in case getQuads()
-            // was called with a null RenderType while a camo is provided (i.e. block breaking overlay)
-            modelLayers = ChunkRenderTypeSet.union(modelLayers, camoLayers);
-        }
-
-        BakedModel camoModel = getCamoModel(camoState, noCamo && useBaseModel);
-
-        for (RenderType renderType : modelLayers)
-        {
-            boolean camoInRenderType = camoLayers.contains(renderType);
-
-            makeQuadsForLayer(
-                    quadTable,
-                    state,
-                    camoState,
-                    camoModel,
-                    rand,
-                    data,
-                    camoData,
-                    renderType,
-                    camoInRenderType,
-                    addReinforcement && renderType == RenderType.cutout()
-            );
-        }
-        for (RenderType renderType : geometry.getOverlayRenderTypes(rand, data))
-        {
-            quadTable.initializeForLayer(renderType);
-            geometry.getGeneratedOverlayQuads(quadTable, rand, data, renderType);
-        }
-        quadTable.bindRenderType(null);
-
-        return quadTable;
-    }
-
-    /**
-     * Builds the list of quads per side for a given {@linkplain BlockState camo state} and {@link RenderType}
-     */
-    private void makeQuadsForLayer(
-            QuadTable quadMap,
-            BlockState state,
             BlockState camoState,
             BakedModel camoModel,
             RandomSource rand,
             ModelData data,
             ModelData camoData,
-            RenderType renderType,
-            boolean camoInRenderType,
-            boolean addReinforcement
+            CachedRenderTypes renderTypes,
+            boolean reinforce
     )
     {
-        quadMap.initializeForLayer(renderType);
+        QuadTable quadTable = new QuadTable();
 
-        if (camoInRenderType)
+        for (RenderType renderType : renderTypes.camoTypes)
         {
+            quadTable.initializeForLayer(renderType);
+
             ArrayList<BakedQuad> quads = ModelUtils.getAllCullableQuads(camoModel, camoState, rand, camoData, renderType);
-            if (addReinforcement)
+            if (reinforce && renderType == RenderType.cutout())
             {
                 Utils.copyAll(ModelUtils.getAllCullableQuads(reinforcementModel, camoState, rand, camoData, renderType), quads);
             }
@@ -380,18 +284,25 @@ public final class FramedBlockModel extends BakedModelProxy
             {
                 quads.removeIf(q -> stateCache.isFullFace(q.getDirection()));
             }
-
             for (BakedQuad quad : quads)
             {
-                geometry.transformQuad(quadMap, quad, data);
+                geometry.transformQuad(quadTable, quad, data);
             }
         }
-
-        ChunkRenderTypeSet addLayers = geometry.getAdditionalRenderTypes(rand, data);
-        if (addLayers.contains(renderType))
+        for (RenderType renderType : renderTypes.additionalTypes)
         {
-            geometry.getAdditionalQuads(quadMap, state, rand, data, renderType);
+            quadTable.initializeForLayer(renderType);
+            geometry.getAdditionalQuads(quadTable, rand, data, renderType);
         }
+        for (RenderType renderType : renderTypes.overlayTypes)
+        {
+            quadTable.initializeForLayer(renderType);
+            geometry.getGeneratedOverlayQuads(quadTable, rand, data, renderType);
+        }
+        quadTable.bindRenderType(null);
+        quadTable.trim();
+
+        return quadTable;
     }
 
     @ApiStatus.Internal

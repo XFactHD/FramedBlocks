@@ -1,6 +1,5 @@
 package xfacthd.framedblocks.client.model.interactive;
 
-import com.mojang.datafixers.util.Pair;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.block.model.BakedQuad;
 import net.minecraft.client.resources.model.BakedModel;
@@ -28,8 +27,7 @@ import xfacthd.framedblocks.common.blockentity.special.FramedFlowerPotBlockEntit
 import xfacthd.framedblocks.common.compat.supplementaries.SupplementariesCompat;
 import xfacthd.framedblocks.common.data.PropertyHolder;
 
-import java.util.*;
-import java.util.stream.Collectors;
+import java.util.List;
 
 public class FramedFlowerPotGeometry implements Geometry
 {
@@ -93,22 +91,16 @@ public class FramedFlowerPotGeometry implements Geometry
     @Override
     public ChunkRenderTypeSet getAdditionalRenderTypes(RandomSource rand, ModelData data)
     {
-        Block flower = getFlowerBlock(data);
+        BlockState potState = FramedFlowerPotBlock.getFlowerPotState(getFlowerBlock(data));
         return ChunkRenderTypeSet.union(
                 ModelCache.getRenderTypes(Blocks.DIRT.defaultBlockState(), rand, ModelData.EMPTY),
-                ModelCache.getRenderTypes(flower.defaultBlockState(), rand, ModelData.EMPTY),
+                !potState.isAir() ? ModelCache.getRenderTypes(potState, rand, ModelData.EMPTY) : ChunkRenderTypeSet.none(),
                 hanging ? ModelUtils.CUTOUT : ChunkRenderTypeSet.none()
         );
     }
 
     @Override
-    public void getAdditionalQuads(
-            QuadMap quadMap,
-            BlockState state,
-            RandomSource rand,
-            ModelData data,
-            RenderType layer
-    )
+    public void getAdditionalQuads(QuadMap quadMap, RandomSource rand, ModelData data, RenderType layer)
     {
         BlockState potState = FramedFlowerPotBlock.getFlowerPotState(getFlowerBlock(data));
         if (!potState.isAir())
@@ -119,16 +111,9 @@ public class FramedFlowerPotGeometry implements Geometry
 
         if (hanging && layer == RenderType.cutout())
         {
-            quadMap.get(null).addAll(hangingPotModel.getQuads(
-                    null, null, rand, data, null
-            ));
-
-            for (Direction side : Direction.values())
-            {
-                quadMap.get(side).addAll(hangingPotModel.getQuads(
-                        null, side, rand, data, null
-                ));
-            }
+            Utils.forAllDirections(dir ->
+                    Utils.copyAll(hangingPotModel.getQuads(null, dir, rand, data, null), quadMap.get(dir))
+            );
         }
     }
 
@@ -150,24 +135,18 @@ public class FramedFlowerPotGeometry implements Geometry
 
         if (potModel.getRenderTypes(potState, rand, ModelData.EMPTY).contains(layer))
         {
-            Arrays.stream(Direction.values())
-                    .map(dir -> Pair.of(dir, getFilteredPlantQuads(potState, potModel, dir, rand, layer)))
-                    .forEach(pair -> quadMap.get(pair.getFirst()).addAll(pair.getSecond()));
-
-            quadMap.get(null).addAll(getFilteredPlantQuads(potState, potModel, null, rand, layer));
+            Utils.forAllDirections(dir ->
+            {
+                List<BakedQuad> outQuads = quadMap.get(dir);
+                for (BakedQuad quad : potModel.getQuads(potState, dir, rand, ModelData.EMPTY, layer))
+                {
+                    if (!ClientUtils.isTexture(quad, POT_TEXTURE) && !ClientUtils.isTexture(quad, DIRT_TEXTURE))
+                    {
+                        outQuads.add(ModelUtils.invertTintIndex(quad));
+                    }
+                }
+            });
         }
-    }
-
-    private static List<BakedQuad> getFilteredPlantQuads(
-            BlockState potState, BakedModel potModel, Direction face, RandomSource rand, RenderType layer
-    )
-    {
-        return potModel.getQuads(potState, face, rand, ModelData.EMPTY, layer)
-                .stream()
-                .filter(q -> !ClientUtils.isTexture(q, POT_TEXTURE))
-                .filter(q -> !ClientUtils.isTexture(q, DIRT_TEXTURE))
-                .map(ModelUtils::invertTintIndex)
-                .collect(Collectors.toList());
     }
 
     private static void addDirtQuads(QuadMap quadMap, RandomSource rand, ModelData data, RenderType layer)
@@ -185,20 +164,24 @@ public class FramedFlowerPotGeometry implements Geometry
             FramedBlockData fbData = data.get(FramedBlockData.PROPERTY);
             if (fbData != null && !fbData.getCamoState().canOcclude())
             {
-                dirtModel.getQuads(Blocks.DIRT.defaultBlockState(), Direction.DOWN, rand, ModelData.EMPTY, layer).forEach(q ->
-                        QuadModifier.geometry(q)
-                                .apply(Modifiers.cutTopBottom(6F/16F, 6F/16F, 10F/16F, 10F/16F))
-                                .apply(Modifiers.setPosition(15F/16F))
-                                .export(quadMap.get(null))
-                );
+                for (BakedQuad quad : dirtModel.getQuads(Blocks.DIRT.defaultBlockState(), Direction.DOWN, rand, ModelData.EMPTY, layer))
+                {
+                    QuadModifier.geometry(quad)
+                            .apply(Modifiers.cutTopBottom(6F / 16F, 6F / 16F, 10F / 16F, 10F / 16F))
+                            .apply(Modifiers.setPosition(15F / 16F))
+                            .export(quadMap.get(null));
+                }
 
-                Direction.Plane.HORIZONTAL.stream()
-                        .flatMap(face -> dirtModel.getQuads(Blocks.AIR.defaultBlockState(), face, rand, ModelData.EMPTY, layer).stream())
-                        .forEach(q -> QuadModifier.geometry(q)
-                                .apply(Modifiers.cutSide(6F/16F, 1F/16F, 10F/16F, 4F/16F))
-                                .apply(Modifiers.setPosition(10F/16F))
-                                .export(quadMap.get(null))
-                        );
+                Utils.forHorizontalDirections(dir ->
+                {
+                    for (BakedQuad quad : dirtModel.getQuads(Blocks.AIR.defaultBlockState(), dir, rand, ModelData.EMPTY, layer))
+                    {
+                        QuadModifier.geometry(quad)
+                                .apply(Modifiers.cutSide(6F / 16F, 1F / 16F, 10F / 16F, 4F / 16F))
+                                .apply(Modifiers.setPosition(10F / 16F))
+                                .export(quadMap.get(null));
+                    }
+                });
             }
         }
     }

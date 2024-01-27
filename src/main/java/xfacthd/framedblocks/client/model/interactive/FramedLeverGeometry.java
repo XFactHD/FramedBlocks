@@ -30,12 +30,14 @@ public class FramedLeverGeometry implements Geometry
     private static final float MAX_LARGE = 12F/16F;
     private static final float HEIGHT = 3F/16F;
 
+    private final BlockState state;
     private final BakedModel baseModel;
     private final Direction dir;
     private final AttachFace face;
 
     public FramedLeverGeometry(GeometryFactory.Context ctx)
     {
+        this.state = ctx.state();
         this.baseModel = ctx.baseModel();
         this.dir = ctx.state().getValue(BlockStateProperties.HORIZONTAL_FACING);
         this.face = ctx.state().getValue(BlockStateProperties.ATTACH_FACE);
@@ -48,13 +50,7 @@ public class FramedLeverGeometry implements Geometry
     }
 
     @Override
-    public void getAdditionalQuads(
-            QuadMap quadMap,
-            BlockState state,
-            RandomSource rand,
-            ModelData data,
-            RenderType renderType
-    )
+    public void getAdditionalQuads(QuadMap quadMap, RandomSource rand, ModelData data, RenderType renderType)
     {
         List<BakedQuad> quads = baseModel.getQuads(state, null, rand, data, renderType);
         for (BakedQuad quad : quads)

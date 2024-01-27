@@ -23,6 +23,7 @@ import java.util.List;
 
 public class FramedChestLidGeometry implements Geometry
 {
+    private final BlockState state;
     private final BakedModel baseModel;
     private final Direction facing;
     private final LatchType latch;
@@ -30,6 +31,7 @@ public class FramedChestLidGeometry implements Geometry
 
     public FramedChestLidGeometry(GeometryFactory.Context ctx)
     {
+        this.state = ctx.state();
         this.baseModel = ctx.baseModel();
         this.facing = ctx.state().getValue(FramedProperties.FACING_HOR);
         this.latch = ctx.state().getValue(PropertyHolder.LATCH_TYPE);
@@ -68,13 +70,7 @@ public class FramedChestLidGeometry implements Geometry
     }
 
     @Override
-    public void getAdditionalQuads(
-            QuadMap quadMap,
-            BlockState state,
-            RandomSource rand,
-            ModelData data,
-            RenderType layer
-    )
+    public void getAdditionalQuads(QuadMap quadMap, RandomSource rand, ModelData data, RenderType layer)
     {
         List<BakedQuad> quads = baseModel.getQuads(state, null, rand, data, layer);
         for (BakedQuad quad : quads)

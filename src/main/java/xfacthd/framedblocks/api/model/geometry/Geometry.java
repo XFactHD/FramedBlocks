@@ -85,17 +85,6 @@ public interface Geometry
     }
 
     /**
-     * Return true if the full set of {@link RenderType}s including overlay render types returned by
-     * {@link Geometry#getAdditionalRenderTypes(RandomSource, ModelData)} are only dependent on the
-     * {@link BlockState} associated with this model and/or the camo BlockState in the model data and can
-     * therefore be cached based on the camo BlockState
-     */
-    default boolean canFullyCacheRenderTypes()
-    {
-        return true;
-    }
-
-    /**
      * Return {@link RenderType}s which contain additional quads (i.e. non-camo quads read from other models)
      * or {@link ChunkRenderTypeSet#none()} when no additional render types are present
      */
@@ -108,28 +97,13 @@ public interface Geometry
      * Add additional quads to faces that return {@code true} from {@link FullFacePredicate#test(BlockState, Direction)}<br>
      * The result of this method will NOT be cached, execution should therefore be as fast as possible
      */
-    default void getAdditionalQuads(
-            ArrayList<BakedQuad> quads,
-            Direction side,
-            BlockState state,
-            RandomSource rand,
-            ModelData data,
-            RenderType renderType
-    )
-    { }
+    default void getAdditionalQuads(ArrayList<BakedQuad> quads, Direction side, RandomSource rand, ModelData data, RenderType renderType) { }
 
     /**
      * Add additional quads to faces that return {@code false} from {@link FullFacePredicate#test(BlockState, Direction)}<br>
      * The result of this method will be cached, processing time is therefore not critical
      */
-    default void getAdditionalQuads(
-            QuadMap quadMap,
-            BlockState state,
-            RandomSource rand,
-            ModelData data,
-            RenderType renderType
-    )
-    { }
+    default void getAdditionalQuads(QuadMap quadMap, RandomSource rand, ModelData data, RenderType renderType) { }
 
     /**
      * Return {@link RenderType}s which contain overlay quads generated in {@link #getGeneratedOverlayQuads(QuadMap, RandomSource, ModelData, RenderType)}

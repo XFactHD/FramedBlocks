@@ -21,6 +21,7 @@ import java.util.List;
 
 public class FramedCeilingHangingSignGeometry implements Geometry
 {
+    private final BlockState state;
     private final BakedModel baseModel;
     private final Direction dir;
     private final float rotDegrees;
@@ -28,6 +29,7 @@ public class FramedCeilingHangingSignGeometry implements Geometry
 
     public FramedCeilingHangingSignGeometry(GeometryFactory.Context ctx)
     {
+        this.state = ctx.state();
         this.baseModel = ctx.baseModel();
         int rotation = ctx.state().getValue(BlockStateProperties.ROTATION_16);
         this.dir = Direction.from2DDataValue(rotation / 4);
@@ -76,9 +78,7 @@ public class FramedCeilingHangingSignGeometry implements Geometry
     }
 
     @Override
-    public void getAdditionalQuads(
-            QuadMap quadMap, BlockState state, RandomSource rand, ModelData data, RenderType renderType
-    )
+    public void getAdditionalQuads(QuadMap quadMap, RandomSource rand, ModelData data, RenderType renderType)
     {
         if (renderType == RenderType.cutout())
         {

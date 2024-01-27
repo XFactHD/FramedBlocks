@@ -54,6 +54,7 @@ public final class Utils
 {
     private static final ResourceLocation RL_TEMPLATE = new ResourceLocation(FramedConstants.MOD_ID, "");
     private static final Direction[] DIRECTIONS = Direction.values();
+    private static final Direction[] HORIZONTAL_DIRECTIONS = Direction.Plane.HORIZONTAL.stream().toArray(Direction[]::new);
     public static final TagKey<Block> FRAMEABLE = blockTag("frameable");
     public static final TagKey<Block> BLACKLIST = blockTag("blacklisted");
     /**Allow other mods to whitelist their BEs, circumventing the config setting*/
@@ -460,6 +461,14 @@ public final class Utils
             consumer.accept(null);
         }
         for (Direction dir : DIRECTIONS)
+        {
+            consumer.accept(dir);
+        }
+    }
+
+    public static void forHorizontalDirections(Consumer<Direction> consumer)
+    {
+        for (Direction dir : HORIZONTAL_DIRECTIONS)
         {
             consumer.accept(dir);
         }

@@ -25,6 +25,7 @@ public class FramedItemFrameGeometry implements Geometry
 {
     private static final int GLOWING_BRIGHTNESS = 5;
 
+    private final BlockState state;
     private final BakedModel baseModel;
     private final Direction facing;
     private final boolean leather;
@@ -39,6 +40,7 @@ public class FramedItemFrameGeometry implements Geometry
 
     private FramedItemFrameGeometry(GeometryFactory.Context ctx, boolean glowing)
     {
+        this.state = ctx.state();
         this.baseModel = ctx.baseModel();
         this.facing = ctx.state().getValue(BlockStateProperties.FACING);
         this.leather = ctx.state().getValue(PropertyHolder.LEATHER);
@@ -254,13 +256,7 @@ public class FramedItemFrameGeometry implements Geometry
     }
 
     @Override
-    public void getAdditionalQuads(
-            QuadMap quadMap,
-            BlockState state,
-            RandomSource rand,
-            ModelData data,
-            RenderType renderType
-    )
+    public void getAdditionalQuads(QuadMap quadMap, RandomSource rand, ModelData data, RenderType renderType)
     {
         if (leather)
         {

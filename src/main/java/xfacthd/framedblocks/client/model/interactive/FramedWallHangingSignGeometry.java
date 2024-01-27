@@ -19,11 +19,13 @@ import xfacthd.framedblocks.api.util.Utils;
 
 public class FramedWallHangingSignGeometry implements Geometry
 {
+    private final BlockState state;
     private final BakedModel baseModel;
     private final Direction dir;
 
     public FramedWallHangingSignGeometry(GeometryFactory.Context ctx)
     {
+        this.state = ctx.state();
         this.baseModel = ctx.baseModel();
         this.dir = ctx.state().getValue(FramedProperties.FACING_HOR);
     }
@@ -81,9 +83,7 @@ public class FramedWallHangingSignGeometry implements Geometry
     }
 
     @Override
-    public void getAdditionalQuads(
-            QuadMap quadMap, BlockState state, RandomSource rand, ModelData data, RenderType renderType
-    )
+    public void getAdditionalQuads(QuadMap quadMap, RandomSource rand, ModelData data, RenderType renderType)
     {
         if (renderType == RenderType.cutout())
         {

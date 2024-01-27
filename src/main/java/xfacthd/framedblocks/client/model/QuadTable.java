@@ -60,6 +60,7 @@ public final class QuadTable implements QuadMap
 
     public void initializeForLayer(RenderType renderType)
     {
+        Objects.requireNonNull(renderType, "Can't initialize for null layer");
         bindRenderType(renderType);
         int end = boundBaseIdx + SIDE_COUNT;
         for (int i = boundBaseIdx; i < end; i++)
@@ -74,5 +75,17 @@ public final class QuadTable implements QuadMap
     public void bindRenderType(RenderType renderType)
     {
         boundBaseIdx = renderType != null ? (renderType.getChunkLayerId() * SIDE_COUNT) : -1;
+    }
+
+    public void trim()
+    {
+        for (int i = 0; i < quads.length; i++)
+        {
+            List<BakedQuad> list = quads[i];
+            if (list != null && list.isEmpty())
+            {
+                quads[i] = null;
+            }
+        }
     }
 }

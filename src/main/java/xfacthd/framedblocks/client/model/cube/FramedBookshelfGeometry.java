@@ -22,11 +22,13 @@ import java.util.function.Predicate;
 
 public class FramedBookshelfGeometry implements Geometry
 {
+    private final BlockState state;
     private final BakedModel baseModel;
     private final Predicate<Direction> frontFacePred;
 
     private FramedBookshelfGeometry(GeometryFactory.Context ctx, Predicate<Direction> frontFacePred)
     {
+        this.state = ctx.state();
         this.baseModel = ctx.baseModel();
         this.frontFacePred = frontFacePred;
     }
@@ -73,7 +75,7 @@ public class FramedBookshelfGeometry implements Geometry
     }
 
     @Override
-    public void getAdditionalQuads(QuadMap quadMap, BlockState state, RandomSource rand, ModelData data, RenderType renderType)
+    public void getAdditionalQuads(QuadMap quadMap, RandomSource rand, ModelData data, RenderType renderType)
     {
         if (renderType == RenderType.cutout())
         {

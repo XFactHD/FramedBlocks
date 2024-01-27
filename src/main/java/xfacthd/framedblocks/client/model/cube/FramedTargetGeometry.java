@@ -22,10 +22,12 @@ public class FramedTargetGeometry implements Geometry
     public static final ResourceLocation OVERLAY_LOCATION = Utils.rl("block/target_overlay");
     public static final int OVERLAY_TINT_IDX = 1024;
 
+    private final BlockState state;
     private final BakedModel overlayModel;
 
     public FramedTargetGeometry(GeometryFactory.Context ctx)
     {
+        this.state = ctx.state();
         this.overlayModel = ctx.modelAccessor().get(OVERLAY_LOCATION);
     }
 
@@ -39,14 +41,7 @@ public class FramedTargetGeometry implements Geometry
     }
 
     @Override
-    public void getAdditionalQuads(
-            ArrayList<BakedQuad> quads,
-            Direction side,
-            BlockState state,
-            RandomSource rand,
-            ModelData data,
-            RenderType renderType
-    )
+    public void getAdditionalQuads(ArrayList<BakedQuad> quads, Direction side, RandomSource rand, ModelData data, RenderType renderType)
     {
         Utils.copyAll(overlayModel.getQuads(state, side, rand, data, renderType), quads);
     }

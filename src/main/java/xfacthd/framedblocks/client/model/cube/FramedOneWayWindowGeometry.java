@@ -8,7 +8,6 @@ import net.minecraft.core.Direction;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.block.Blocks;
-import net.minecraft.world.level.block.state.BlockState;
 import net.neoforged.neoforge.client.ChunkRenderTypeSet;
 import net.neoforged.neoforge.client.model.data.ModelData;
 import xfacthd.framedblocks.api.model.data.QuadMap;
@@ -49,7 +48,6 @@ public class FramedOneWayWindowGeometry implements Geometry
     @Override
     public void getAdditionalQuads(
             QuadMap quadMap,
-            BlockState state,
             RandomSource rand,
             ModelData data,
             RenderType renderType

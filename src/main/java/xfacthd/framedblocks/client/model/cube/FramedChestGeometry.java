@@ -24,6 +24,7 @@ import java.util.List;
 
 public class FramedChestGeometry implements Geometry
 {
+    private final BlockState state;
     private final BakedModel baseModel;
     private final Direction facing;
     private final boolean closed;
@@ -32,6 +33,7 @@ public class FramedChestGeometry implements Geometry
 
     public FramedChestGeometry(GeometryFactory.Context ctx)
     {
+        this.state = ctx.state();
         this.baseModel = ctx.baseModel();
         this.facing = ctx.state().getValue(FramedProperties.FACING_HOR);
         this.closed = ctx.state().getValue(PropertyHolder.CHEST_STATE) == ChestState.CLOSED || ClientUtils.OPTIFINE_LOADED.get();
@@ -101,13 +103,7 @@ public class FramedChestGeometry implements Geometry
     }
 
     @Override
-    public void getAdditionalQuads(
-            QuadMap quadMap,
-            BlockState state,
-            RandomSource rand,
-            ModelData data,
-            RenderType renderType
-    )
+    public void getAdditionalQuads(QuadMap quadMap, RandomSource rand, ModelData data, RenderType renderType)
     {
         if (!closed || latch != LatchType.DEFAULT)
         {

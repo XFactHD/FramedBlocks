@@ -36,7 +36,6 @@ public class FramedRailSlopeGeometry extends FramedSlopeGeometry
     @Override
     public void getAdditionalQuads(
             QuadMap quadMap,
-            BlockState state,
             RandomSource rand,
             ModelData data,
             RenderType renderType

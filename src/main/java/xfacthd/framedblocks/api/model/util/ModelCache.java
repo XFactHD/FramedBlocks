@@ -29,10 +29,7 @@ public final class ModelCache
     {
         if (state.getBlock() instanceof LiquidBlock fluidBlock)
         {
-            return fluidModelCache.computeIfAbsent(
-                    fluidBlock.getFluid(),
-                    InternalClientAPI.INSTANCE::createFluidModel
-            );
+            return fluidModelCache.computeIfAbsent(fluidBlock.getFluid(), InternalClientAPI.INSTANCE::createFluidModel);
         }
         return Minecraft.getInstance().getBlockRenderer().getBlockModel(state);
     }

@@ -28,12 +28,14 @@ public class FramedRedstoneWallTorchGeometry implements Geometry
     private static final float TOP = 11.5F/16F;
     private static final float BOTTOM = 12.5F/16F;
 
+    private final BlockState state;
     private final BakedModel baseModel;
     private final float yAngle;
     private final boolean lit;
 
     public FramedRedstoneWallTorchGeometry(GeometryFactory.Context ctx)
     {
+        this.state = ctx.state();
         this.baseModel = ctx.baseModel();
         this.yAngle = 270F - ctx.state().getValue(BlockStateProperties.HORIZONTAL_FACING).toYRot();
         this.lit = ctx.state().getValue(BlockStateProperties.LIT);
@@ -46,13 +48,7 @@ public class FramedRedstoneWallTorchGeometry implements Geometry
     }
 
     @Override
-    public void getAdditionalQuads(
-            QuadMap quadMap,
-            BlockState state,
-            RandomSource rand,
-            ModelData extraData,
-            RenderType renderType
-    )
+    public void getAdditionalQuads(QuadMap quadMap, RandomSource rand, ModelData extraData, RenderType renderType)
     {
         List<BakedQuad> quads = baseModel.getQuads(state, null, rand, extraData, renderType);
         for (BakedQuad quad : quads)

@@ -238,7 +238,6 @@ public class FramedFancyRailGeometry implements Geometry
     @Override
     public void getAdditionalQuads(
             QuadMap quadMap,
-            BlockState state,
             RandomSource rand,
             ModelData data,
             RenderType renderType
