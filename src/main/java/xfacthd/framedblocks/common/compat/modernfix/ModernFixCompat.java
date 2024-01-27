@@ -5,13 +5,14 @@ import org.embeddedt.modernfix.core.ModernFixMixinPlugin;
 
 public final class ModernFixCompat
 {
+    private static final boolean ENABLED = false; // TODO: reactivate when ModernFix provides a texture getter
     static volatile boolean dynamicResources = false;
 
     public static void init()
     {
-        if (ModList.get().isLoaded("modernfix"))
+        if (ENABLED && ModList.get().isLoaded("modernfix"))
         {
-            Guarded.init();
+            GuardedAccess.init();
         }
     }
 
@@ -22,7 +23,7 @@ public final class ModernFixCompat
 
 
 
-    private static final class Guarded
+    private static final class GuardedAccess
     {
         public static void init()
         {

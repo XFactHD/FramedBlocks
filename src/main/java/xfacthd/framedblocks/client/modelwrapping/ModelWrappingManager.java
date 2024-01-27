@@ -12,8 +12,7 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 import net.neoforged.fml.ModLoader;
 import xfacthd.framedblocks.FramedBlocks;
-import xfacthd.framedblocks.api.model.wrapping.ModelAccessor;
-import xfacthd.framedblocks.api.model.wrapping.RegisterModelWrappersEvent;
+import xfacthd.framedblocks.api.model.wrapping.*;
 import xfacthd.framedblocks.api.util.TestProperties;
 import xfacthd.framedblocks.api.util.Utils;
 
@@ -24,7 +23,7 @@ public final class ModelWrappingManager
     private static final Map<ResourceKey<Block>, ModelWrappingHandler> HANDLERS = new IdentityHashMap<>();
     private static boolean locked = true;
 
-    public static void handleAll(Map<ResourceLocation, BakedModel> models)
+    public static void handleAll(Map<ResourceLocation, BakedModel> models, TextureLookup textureLookup)
     {
         Stopwatch stopwatch = Stopwatch.createStarted();
 
@@ -41,14 +40,14 @@ public final class ModelWrappingManager
             {
                 ResourceLocation location = StateLocationCache.getLocationFromState(state, blockId);
                 BakedModel baseModel = models.get(location);
-                BakedModel replacement = handler.wrapBlockModel(baseModel, state, accessor, counter);
+                BakedModel replacement = handler.wrapBlockModel(baseModel, state, accessor, textureLookup, counter);
                 models.put(location, replacement);
             }
 
             if (handler.handlesItemModel())
             {
                 ModelResourceLocation itemId = new ModelResourceLocation(blockId, "inventory");
-                BakedModel itemModel = handler.replaceItemModel(accessor, counter);
+                BakedModel itemModel = handler.replaceItemModel(accessor, textureLookup, counter);
                 models.put(itemId, itemModel);
             }
         }
@@ -60,7 +59,7 @@ public final class ModelWrappingManager
         );
     }
 
-    public static BakedModel handle(ResourceLocation id, BakedModel model, ModelAccessor modelAccessor)
+    public static BakedModel handle(ResourceLocation id, BakedModel model, ModelAccessor modelAccessor, TextureLookup textureLookup)
     {
         if (id instanceof ModelResourceLocation modelId)
         {
@@ -78,11 +77,11 @@ public final class ModelWrappingManager
             {
                 Block block = BuiltInRegistries.BLOCK.get(blockId);
                 BlockState state = StateLocationCache.getStateFromLocation(blockId.location(), block, modelId);
-                return handler.wrapBlockModel(model, state, modelAccessor, null);
+                return handler.wrapBlockModel(model, state, modelAccessor, textureLookup, null);
             }
             else if (handler.handlesItemModel())
             {
-                return handler.replaceItemModel(modelAccessor, null);
+                return handler.replaceItemModel(modelAccessor, textureLookup, null);
             }
         }
         return model;

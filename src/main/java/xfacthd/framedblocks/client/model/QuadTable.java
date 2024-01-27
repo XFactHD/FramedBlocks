@@ -25,6 +25,22 @@ public final class QuadTable implements QuadMap
         return Objects.requireNonNullElse(quads[idx], EMPTY);
     }
 
+    public List<BakedQuad> getAllQuads(Direction side)
+    {
+        ArrayList<BakedQuad> allQuads = new ArrayList<>(LAYER_COUNT);
+        int sideIdx = Utils.maskNullDirection(side);
+        for (int i = 0; i < LAYER_COUNT; i++)
+        {
+            int idx = i * SIDE_COUNT + sideIdx;
+            List<BakedQuad> layerQuads = quads[idx];
+            if (layerQuads != null && !layerQuads.isEmpty())
+            {
+                Utils.copyAll(layerQuads, allQuads);
+            }
+        }
+        return allQuads;
+    }
+
     @Override
     public ArrayList<BakedQuad> get(Direction side)
     {
@@ -48,7 +64,10 @@ public final class QuadTable implements QuadMap
         int end = boundBaseIdx + SIDE_COUNT;
         for (int i = boundBaseIdx; i < end; i++)
         {
-            quads[i] = new ArrayList<>();
+            if (quads[i] == null)
+            {
+                quads[i] = new ArrayList<>();
+            }
         }
     }
 

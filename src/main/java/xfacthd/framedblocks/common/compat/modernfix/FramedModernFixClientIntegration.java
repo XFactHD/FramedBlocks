@@ -4,6 +4,7 @@ import net.minecraft.client.resources.model.*;
 import net.minecraft.resources.ResourceLocation;
 import org.embeddedt.modernfix.api.entrypoint.ModernFixClientIntegration;
 import xfacthd.framedblocks.api.model.wrapping.ModelAccessor;
+import xfacthd.framedblocks.api.model.wrapping.TextureLookup;
 import xfacthd.framedblocks.client.model.FramedBlockModel;
 import xfacthd.framedblocks.client.modelwrapping.ModelWrappingManager;
 
@@ -30,7 +31,8 @@ public final class FramedModernFixClientIntegration implements ModernFixClientIn
                 baseModel = framedModel.getBaseModel();
             }
             ModelAccessor accessor = bakery.getBakedTopLevelModels()::get;
-            BakedModel wrappedModel = ModelWrappingManager.handle(location, baseModel, accessor);
+            TextureLookup textureLookup = id -> { throw new UnsupportedOperationException(); };
+            BakedModel wrappedModel = ModelWrappingManager.handle(location, baseModel, accessor, textureLookup);
             // Return incoming original model instead of the potentially unwrapped model if no wrapping was done
             return wrappedModel != baseModel ? wrappedModel : originalModel;
         }

@@ -42,7 +42,7 @@ public final class ModelWrappingHandler
     }
 
     public synchronized BakedModel wrapBlockModel(
-            BakedModel srcModel, BlockState state, ModelAccessor modelAccessor, @Nullable ModelCounter counter
+            BakedModel srcModel, BlockState state, ModelAccessor modelAccessor, TextureLookup textureLookup, @Nullable ModelCounter counter
     )
     {
         BlockState mergedState = stateMerger.apply(state);
@@ -51,11 +51,11 @@ public final class ModelWrappingHandler
             counter.increment(mergedState == state);
         }
         return visitedStates.computeIfAbsent(mergedState, keyState ->
-                blockModelFactory.create(new GeometryFactory.Context(keyState, srcModel, modelAccessor))
+                blockModelFactory.create(new GeometryFactory.Context(keyState, srcModel, modelAccessor, textureLookup))
         );
     }
 
-    public synchronized BakedModel replaceItemModel(ModelAccessor modelAccessor, @Nullable ModelCounter counter)
+    public synchronized BakedModel replaceItemModel(ModelAccessor modelAccessor, TextureLookup textureLookup, @Nullable ModelCounter counter)
     {
         if (itemModelSource == null)
         {
@@ -69,7 +69,7 @@ public final class ModelWrappingHandler
         if (model == null)
         {
             BakedModel srcModel = modelAccessor.get(StateLocationCache.getLocationFromState(itemModelSource, null));
-            model = wrapBlockModel(srcModel, itemModelSource, modelAccessor, null);
+            model = wrapBlockModel(srcModel, itemModelSource, modelAccessor, textureLookup, null);
         }
         if (counter != null)
         {

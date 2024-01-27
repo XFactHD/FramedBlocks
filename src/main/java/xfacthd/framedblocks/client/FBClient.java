@@ -45,6 +45,7 @@ import xfacthd.framedblocks.client.model.slopepanelcorner.*;
 import xfacthd.framedblocks.client.model.slopeslab.*;
 import xfacthd.framedblocks.client.model.stairs.*;
 import xfacthd.framedblocks.client.model.torch.*;
+import xfacthd.framedblocks.client.overlaygen.OverlayQuadGenerator;
 import xfacthd.framedblocks.client.render.block.*;
 import xfacthd.framedblocks.client.render.color.FramedBlockColor;
 import xfacthd.framedblocks.client.render.color.FramedTargetBlockColor;
@@ -404,12 +405,13 @@ public final class FBClient
         StateCacheBuilder.ensureStateCachesInitialized();
 
         Map<ResourceLocation, BakedModel> registry = event.getModels();
+        TextureLookup textureLookup = TextureLookup.bindBlockAtlas(event.getTextureGetter());
 
-        FramedChestRenderer.onModelsLoaded(registry); //Must happen before the chest model is replaced
+        FramedChestRenderer.onModelsLoaded(registry, textureLookup); //Must happen before the chest model is replaced
 
         if (!ModernFixCompat.dynamicResourcesEnabled())
         {
-            ModelWrappingManager.handleAll(registry);
+            ModelWrappingManager.handleAll(registry, textureLookup);
         }
     }
 
@@ -425,6 +427,7 @@ public final class FBClient
     public static void onRegisterReloadListener(final RegisterClientReloadListenersEvent event)
     {
         event.registerReloadListener((ResourceManagerReloadListener) BlockInteractOverlay::onResourceReload);
+        event.registerReloadListener((ResourceManagerReloadListener) OverlayQuadGenerator::onResourceReload);
         ModelWrappingManager.fireRegistration();
     }
 

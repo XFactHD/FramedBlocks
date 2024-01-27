@@ -164,10 +164,11 @@ public final class FramedBlockModel extends BakedModelProxy
         }
 
         ChunkRenderTypeSet renderTypes = cachedTypes.camoTypes;
-        ChunkRenderTypeSet overlayTypes = geometry.getAdditionalRenderTypes(rand, data);
-        if (!overlayTypes.isEmpty())
+        ChunkRenderTypeSet additionalTypes = geometry.getAdditionalRenderTypes(rand, data);
+        ChunkRenderTypeSet overlayTypes = geometry.getOverlayRenderTypes(rand, data);
+        if (!additionalTypes.isEmpty() || !overlayTypes.isEmpty())
         {
-            renderTypes = ChunkRenderTypeSet.union(renderTypes, overlayTypes);
+            renderTypes = ChunkRenderTypeSet.union(renderTypes, additionalTypes, overlayTypes);
         }
         return renderTypes;
     }
@@ -192,7 +193,14 @@ public final class FramedBlockModel extends BakedModelProxy
                 ModelCache.getCamoRenderTypes(camoState, rand, data)
             );
         }
-        return new CachedRenderTypes(camoTypes, cacheFullRenderTypes ? geometry.getAdditionalRenderTypes(rand, data) : ChunkRenderTypeSet.none());
+        ChunkRenderTypeSet additionalTypes = ChunkRenderTypeSet.none();
+        ChunkRenderTypeSet overlayTypes = ChunkRenderTypeSet.none();
+        if (cacheFullRenderTypes)
+        {
+            additionalTypes = geometry.getAdditionalRenderTypes(rand, data);
+            overlayTypes = geometry.getOverlayRenderTypes(rand, data);
+        }
+        return new CachedRenderTypes(camoTypes, additionalTypes, overlayTypes);
     }
 
     private List<BakedQuad> getCamoQuads(
@@ -332,6 +340,11 @@ public final class FramedBlockModel extends BakedModelProxy
                     camoInRenderType,
                     addReinforcement && renderType == RenderType.cutout()
             );
+        }
+        for (RenderType renderType : geometry.getOverlayRenderTypes(rand, data))
+        {
+            quadTable.initializeForLayer(renderType);
+            geometry.getGeneratedOverlayQuads(quadTable, rand, data, renderType);
         }
         quadTable.bindRenderType(null);
 
@@ -495,11 +508,16 @@ public final class FramedBlockModel extends BakedModelProxy
 
 
 
-    private record CachedRenderTypes(ChunkRenderTypeSet camoTypes, ChunkRenderTypeSet overlayTypes, ChunkRenderTypeSet allTypes)
+    private record CachedRenderTypes(
+            ChunkRenderTypeSet camoTypes,
+            ChunkRenderTypeSet additionalTypes,
+            ChunkRenderTypeSet overlayTypes,
+            ChunkRenderTypeSet allTypes
+    )
     {
-        public CachedRenderTypes(ChunkRenderTypeSet camoTypes, ChunkRenderTypeSet overlayTypes)
+        public CachedRenderTypes(ChunkRenderTypeSet camoTypes, ChunkRenderTypeSet additionalTypes, ChunkRenderTypeSet overlayTypes)
         {
-            this(camoTypes, overlayTypes, ChunkRenderTypeSet.union(camoTypes, overlayTypes));
+            this(camoTypes, additionalTypes, overlayTypes, ChunkRenderTypeSet.union(camoTypes, additionalTypes, overlayTypes));
         }
     }
 }

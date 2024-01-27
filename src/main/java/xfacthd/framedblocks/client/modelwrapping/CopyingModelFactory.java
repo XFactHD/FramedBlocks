@@ -40,7 +40,7 @@ public final class CopyingModelFactory implements ModelFactory
         );
         BakedModel baseModel = ctx.modelAccessor().get(baseLoc);
         return sourceWrapper.get().wrapBlockModel(
-                baseModel, srcState, ctx.modelAccessor(), null
+                baseModel, srcState, ctx.modelAccessor(), ctx.textureLookup(), null
         );
     }
 }

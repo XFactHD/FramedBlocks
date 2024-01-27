@@ -3,12 +3,14 @@ package xfacthd.framedblocks.api.model.geometry;
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.block.model.BakedQuad;
+import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.core.Direction;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.item.ItemDisplayContext;
 import net.minecraft.world.level.block.state.BlockState;
 import net.neoforged.neoforge.client.ChunkRenderTypeSet;
 import net.neoforged.neoforge.client.model.data.ModelData;
+import xfacthd.framedblocks.api.FramedBlocksClientAPI;
 import xfacthd.framedblocks.api.block.FramedBlockEntity;
 import xfacthd.framedblocks.api.model.cache.QuadCacheKey;
 import xfacthd.framedblocks.api.model.cache.SimpleQuadCacheKey;
@@ -18,6 +20,7 @@ import xfacthd.framedblocks.api.predicate.fullface.FullFacePredicate;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.function.Predicate;
 
 public interface Geometry
 {
@@ -93,8 +96,8 @@ public interface Geometry
     }
 
     /**
-     * Return {@link RenderType}s which contain additional quads (i.e. overlays) or {@link ChunkRenderTypeSet#none()}
-     * when no additional render types are present
+     * Return {@link RenderType}s which contain additional quads (i.e. non-camo quads read from other models)
+     * or {@link ChunkRenderTypeSet#none()} when no additional render types are present
      */
     default ChunkRenderTypeSet getAdditionalRenderTypes(RandomSource rand, ModelData extraData)
     {
@@ -127,6 +130,26 @@ public interface Geometry
             RenderType renderType
     )
     { }
+
+    /**
+     * Return {@link RenderType}s which contain overlay quads generated in {@link #getGeneratedOverlayQuads(QuadMap, RandomSource, ModelData, RenderType)}
+     * or {@link ChunkRenderTypeSet#none()} when no overlay quads are used
+     */
+    default ChunkRenderTypeSet getOverlayRenderTypes(RandomSource rand, ModelData extraData)
+    {
+        return ChunkRenderTypeSet.none();
+    }
+
+    /**
+     * Add additional generated quads based on the full set of previously generated quads to avoid z-fighting with the
+     * other quads below the overlay on faces that return {@code false} from {@link FullFacePredicate#test(BlockState, Direction)}
+     *
+     * @param quadMap The {@link QuadMap} containing all transformed quads
+     * @param layer The {@link RenderType} for which overlay quads are being requested
+     * @see FramedBlocksClientAPI#generateOverlayQuads(QuadMap, Direction, TextureAtlasSprite)
+     * @see FramedBlocksClientAPI#generateOverlayQuads(QuadMap, Direction, TextureAtlasSprite, Predicate)
+     */
+    default void getGeneratedOverlayQuads(QuadMap quadMap, RandomSource rand, ModelData data, RenderType layer) { }
 
     /**
      * Return a custom {@link QuadCacheKey} that holds additional metadata which influences the resulting quads.

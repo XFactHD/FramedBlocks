@@ -23,6 +23,7 @@ import net.neoforged.neoforge.client.RenderTypeHelper;
 import net.neoforged.neoforge.client.model.data.ModelData;
 import xfacthd.framedblocks.api.block.FramedProperties;
 import xfacthd.framedblocks.api.model.wrapping.GeometryFactory;
+import xfacthd.framedblocks.api.model.wrapping.TextureLookup;
 import xfacthd.framedblocks.api.util.Utils;
 import xfacthd.framedblocks.api.util.ClientUtils;
 import xfacthd.framedblocks.client.model.FramedBlockModel;
@@ -158,7 +159,7 @@ public class FramedChestRenderer implements BlockEntityRenderer<FramedChestBlock
 
 
 
-    public static void onModelsLoaded(Map<ResourceLocation, BakedModel> registry)
+    public static void onModelsLoaded(Map<ResourceLocation, BakedModel> registry, TextureLookup textureLookup)
     {
         for (Direction dir : Direction.Plane.HORIZONTAL)
         {
@@ -170,7 +171,7 @@ public class FramedChestRenderer implements BlockEntityRenderer<FramedChestBlock
 
                 ResourceLocation location = BlockModelShaper.stateToModelLocation(state);
 
-                GeometryFactory.Context ctx = new GeometryFactory.Context(state, registry.get(location), registry::get);
+                GeometryFactory.Context ctx = new GeometryFactory.Context(state, registry.get(location), registry::get, textureLookup);
                 LID_MODELS_PRE_CACHE.put(dir, latch, new FramedBlockModel(ctx, new FramedChestLidGeometry(ctx)));
             }
         }
