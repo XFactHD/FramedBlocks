@@ -19,6 +19,7 @@ import net.neoforged.neoforge.client.ChunkRenderTypeSet;
 import net.neoforged.neoforge.client.model.data.ModelData;
 import net.neoforged.fml.loading.FMLEnvironment;
 import org.jetbrains.annotations.ApiStatus;
+import org.jetbrains.annotations.Nullable;
 import xfacthd.framedblocks.api.FramedBlocksAPI;
 import xfacthd.framedblocks.api.block.cache.StateCache;
 import xfacthd.framedblocks.api.model.cache.QuadCacheKey;
@@ -82,13 +83,11 @@ public final class FramedBlockModel extends BakedModelProxy
     }
 
     @Override
-    public List<BakedQuad> getQuads(
-            BlockState state, Direction side, RandomSource rand, ModelData extraData, RenderType renderType
-    )
+    public List<BakedQuad> getQuads(BlockState state, Direction side, RandomSource rand, ModelData extraData, RenderType renderType)
     {
         BlockState camoState = Blocks.AIR.defaultBlockState();
         FramedBlockData data = extraData.get(FramedBlockData.PROPERTY);
-        if (data != null && renderType != null)
+        if (data != null)
         {
             if (side != null && data.isSideHidden(side))
             {
@@ -105,10 +104,6 @@ public final class FramedBlockModel extends BakedModelProxy
         if (data == null)
         {
             data = DEFAULT_DATA;
-        }
-        if (renderType == null)
-        {
-            renderType = RenderType.cutout();
         }
         if (camoState == null || camoState.isAir())
         {
@@ -177,9 +172,10 @@ public final class FramedBlockModel extends BakedModelProxy
             RandomSource rand,
             ModelData extraData,
             FramedBlockData fbData,
-            RenderType renderType
+            @Nullable RenderType renderType
     )
     {
+        boolean nullLayer = renderType == null;
         ModelData camoData;
         BakedModel camoModel;
         boolean noProcessing = stateCache.isFullFace(side);
@@ -192,7 +188,7 @@ public final class FramedBlockModel extends BakedModelProxy
             needCtCtx = false;
             camoState = getNoCamoModelState(FramedBlocksAPI.INSTANCE.getDefaultModelState(), fbData);
             reinforce = useBaseModel && fbData.isReinforced();
-            noProcessing |= forceUngeneratedBaseModel && BASE_MODEL_RENDER_TYPES.contains(renderType);
+            noProcessing |= forceUngeneratedBaseModel && (nullLayer || BASE_MODEL_RENDER_TYPES.contains(renderType));
             camoModel = getCamoModel(camoState, useBaseModel);
             camoData = ModelData.EMPTY;
             renderTypes = getCachedRenderTypes(Blocks.AIR.defaultBlockState(), camoState, rand, extraData);
@@ -208,8 +204,8 @@ public final class FramedBlockModel extends BakedModelProxy
 
         if (noProcessing)
         {
-            boolean camoInRenderType = renderTypes.camoTypes.contains(renderType);
-            boolean additionalQuads = renderTypes.additionalTypes.contains(renderType);
+            boolean camoInRenderType = nullLayer || renderTypes.camoTypes.contains(renderType);
+            boolean additionalQuads = !nullLayer && renderTypes.additionalTypes.contains(renderType);
             if (!camoInRenderType && !additionalQuads)
             {
                 return List.of();
@@ -234,15 +230,19 @@ public final class FramedBlockModel extends BakedModelProxy
         {
             Object ctCtx = needCtCtx ? ConTexDataHandler.extractConTexData(camoData) : null;
             ModelData ctData = ctCtx != null ? camoData : ModelData.EMPTY;
+            QuadTable quadTable;
             if (DISABLE_QUAD_CACHE)
             {
-                return buildQuadCache(camoState, camoModel, rand, extraData, ctData, renderTypes, reinforce)
-                        .getQuads(renderType, side);
+                quadTable = buildQuadCache(camoState, camoModel, rand, extraData, ctData, renderTypes, reinforce);
             }
-            return quadCache.get(
-                    geometry.makeCacheKey(camoState, ctCtx, extraData),
-                    key -> buildQuadCache(key.state(), camoModel, rand, extraData, ctData, renderTypes, reinforce)
-            ).getQuads(renderType, side);
+            else
+            {
+                quadTable = quadCache.get(
+                        geometry.makeCacheKey(camoState, ctCtx, extraData),
+                        key -> buildQuadCache(key.state(), camoModel, rand, extraData, ctData, renderTypes, reinforce)
+                );
+            }
+            return nullLayer ? quadTable.getAllQuads(side) : quadTable.getQuads(renderType, side);
         }
     }
 
