@@ -22,15 +22,13 @@ import org.jetbrains.annotations.Nullable;
 import xfacthd.framedblocks.api.block.IFramedBlock;
 import xfacthd.framedblocks.api.model.wrapping.*;
 import xfacthd.framedblocks.api.model.wrapping.statemerger.StateMerger;
+import xfacthd.framedblocks.client.model.*;
 import xfacthd.framedblocks.client.modelwrapping.ModelWrappingManager;
-import xfacthd.framedblocks.client.model.FramedBlockModel;
 import xfacthd.framedblocks.api.type.IBlockType;
 import xfacthd.framedblocks.api.util.*;
 import xfacthd.framedblocks.api.model.util.ModelCache;
 import xfacthd.framedblocks.client.data.*;
 import xfacthd.framedblocks.client.loader.overlay.OverlayLoader;
-import xfacthd.framedblocks.client.model.FluidModel;
-import xfacthd.framedblocks.client.model.FramedDoubleBlockModel;
 import xfacthd.framedblocks.client.model.cube.*;
 import xfacthd.framedblocks.client.model.door.*;
 import xfacthd.framedblocks.client.model.interactive.*;
@@ -383,7 +381,7 @@ public final class FBClient
     public static void onModelRegister(final ModelEvent.RegisterAdditional event)
     {
         event.register(FluidModel.BARE_MODEL);
-        event.register(FramedBlockModel.REINFORCEMENT_LOCATION);
+        event.register(ReinforcementModel.LOCATION);
         event.register(FramedMarkedCubeGeometry.SLIME_FRAME_LOCATION);
         event.register(FramedMarkedCubeGeometry.REDSTONE_FRAME_LOCATION);
         event.register(FramedTargetGeometry.OVERLAY_LOCATION);
@@ -417,7 +415,7 @@ public final class FBClient
     {
         ModelCache.clear();
         FramedChestRenderer.onModelLoadingComplete();
-        FramedBlockModel.captureReinforcementModel(event.getModels());
+        ReinforcementModel.reload(event.getModels());
     }
 
     @SubscribeEvent

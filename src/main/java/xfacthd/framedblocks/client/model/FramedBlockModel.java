@@ -9,7 +9,6 @@ import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.resources.model.BakedModel;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.item.ItemDisplayContext;
 import net.minecraft.world.level.BlockAndTintGetter;
@@ -48,8 +47,6 @@ public final class FramedBlockModel extends BakedModelProxy
             Blocks.AIR.defaultBlockState(), new boolean[6], false
     );
     private static final ChunkRenderTypeSet BASE_MODEL_RENDER_TYPES = ModelUtils.CUTOUT;
-    public static final ResourceLocation REINFORCEMENT_LOCATION = Utils.rl("block/framed_reinforcement");
-    private static BakedModel reinforcementModel = null;
 
     private final Cache<QuadCacheKey, QuadTable> quadCache = Utils.makeLRUCache(ModelCache.DEFAULT_CACHE_DURATION);
     private final Cache<QuadCacheKey, CachedRenderTypes> renderTypeCache = Utils.makeLRUCache(ModelCache.DEFAULT_CACHE_DURATION);
@@ -220,9 +217,9 @@ public final class FramedBlockModel extends BakedModelProxy
             {
                 geometry.getAdditionalQuads(quads, side, rand, extraData, renderType);
             }
-            if (reinforce && renderType == RenderType.cutout())
+            if (reinforce && renderType == RenderType.cutout() && side != null)
             {
-                Utils.copyAll(reinforcementModel.getQuads(camoState, side, rand, camoData, renderType), quads);
+                quads.add(ReinforcementModel.getQuad(side));
             }
             return geometry.postProcessUncachedQuads(quads);
         }
@@ -278,7 +275,7 @@ public final class FramedBlockModel extends BakedModelProxy
             ArrayList<BakedQuad> quads = ModelUtils.getAllCullableQuads(camoModel, camoState, rand, camoData, renderType);
             if (reinforce && renderType == RenderType.cutout())
             {
-                Utils.copyAll(ModelUtils.getAllCullableQuads(reinforcementModel, camoState, rand, camoData, renderType), quads);
+                Utils.copyAll(ReinforcementModel.getAllQuads(), quads);
             }
             if (!transformAllQuads)
             {
@@ -408,13 +405,6 @@ public final class FramedBlockModel extends BakedModelProxy
     {
         quadCache.invalidateAll();
         renderTypeCache.invalidateAll();
-    }
-
-
-
-    public static void captureReinforcementModel(Map<ResourceLocation, BakedModel> models)
-    {
-        reinforcementModel = models.get(REINFORCEMENT_LOCATION);
     }
 
 
