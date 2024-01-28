@@ -38,7 +38,6 @@ import java.util.*;
 
 public class FramedChestRenderer implements BlockEntityRenderer<FramedChestBlockEntity>
 {
-    private static final Table<Direction, LatchType, BakedModel> LID_MODELS_PRE_CACHE = HashBasedTable.create(4, 3);
     private static final Table<Direction, LatchType, BakedModel> LID_MODELS = HashBasedTable.create(4, 3);
 
     @SuppressWarnings("unused")
@@ -159,7 +158,7 @@ public class FramedChestRenderer implements BlockEntityRenderer<FramedChestBlock
 
 
 
-    public static void onModelsLoaded(Map<ResourceLocation, BakedModel> registry, TextureLookup textureLookup)
+    public static void onModelsLoaded(Map<ResourceLocation, BakedModel> registry)
     {
         for (Direction dir : Direction.Plane.HORIZONTAL)
         {
@@ -171,15 +170,14 @@ public class FramedChestRenderer implements BlockEntityRenderer<FramedChestBlock
 
                 ResourceLocation location = BlockModelShaper.stateToModelLocation(state);
 
-                GeometryFactory.Context ctx = new GeometryFactory.Context(state, registry.get(location), registry::get, textureLookup);
-                LID_MODELS_PRE_CACHE.put(dir, latch, new FramedBlockModel(ctx, new FramedChestLidGeometry(ctx)));
+                BakedModel model = registry.get(location);
+                if (model instanceof FramedBlockModel fbModel)
+                {
+                    model = fbModel.getBaseModel();
+                }
+                GeometryFactory.Context ctx = new GeometryFactory.Context(state, model, registry::get, TextureLookup.runtime());
+                LID_MODELS.put(dir, latch, new FramedBlockModel(ctx, new FramedChestLidGeometry(ctx)));
             }
         }
-    }
-
-    public static void onModelLoadingComplete()
-    {
-        LID_MODELS.putAll(LID_MODELS_PRE_CACHE);
-        LID_MODELS_PRE_CACHE.clear();
     }
 }

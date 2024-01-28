@@ -402,8 +402,6 @@ public final class FBClient
         Map<ResourceLocation, BakedModel> registry = event.getModels();
         TextureLookup textureLookup = TextureLookup.bindBlockAtlas(event.getTextureGetter());
 
-        FramedChestRenderer.onModelsLoaded(registry, textureLookup); //Must happen before the chest model is replaced
-
         if (!ModernFixCompat.dynamicResourcesEnabled())
         {
             ModelWrappingManager.handleAll(registry, textureLookup);
@@ -414,7 +412,7 @@ public final class FBClient
     public static void onModelsLoaded(final ModelEvent.BakingCompleted event)
     {
         ModelCache.clear();
-        FramedChestRenderer.onModelLoadingComplete();
+        FramedChestRenderer.onModelsLoaded(event.getModels());
         ReinforcementModel.reload(event.getModels());
     }
 
