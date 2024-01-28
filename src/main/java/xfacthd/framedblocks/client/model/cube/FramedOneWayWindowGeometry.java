@@ -29,7 +29,7 @@ public class FramedOneWayWindowGeometry implements Geometry
     public FramedOneWayWindowGeometry(GeometryFactory.Context ctx)
     {
         this.face = ctx.state().getValue(PropertyHolder.NULLABLE_FACE);
-        this.tintedGlassModel = ctx.modelAccessor().get(TINTED_GLASS_LOC);
+        this.tintedGlassModel = ctx.modelLookup().get(TINTED_GLASS_LOC);
     }
 
     @Override

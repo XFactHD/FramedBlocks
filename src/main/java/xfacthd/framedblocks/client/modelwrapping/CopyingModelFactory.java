@@ -38,9 +38,9 @@ public final class CopyingModelFactory implements ModelFactory
         ResourceLocation baseLoc = StateLocationCache.getLocationFromState(
                 srcState, Utils.getKeyOrThrow(srcBlock).location()
         );
-        BakedModel baseModel = ctx.modelAccessor().get(baseLoc);
+        BakedModel baseModel = ctx.modelLookup().get(baseLoc);
         return sourceWrapper.get().wrapBlockModel(
-                baseModel, srcState, ctx.modelAccessor(), ctx.textureLookup(), null
+                baseModel, srcState, ctx.modelLookup(), ctx.textureLookup(), null
         );
     }
 }

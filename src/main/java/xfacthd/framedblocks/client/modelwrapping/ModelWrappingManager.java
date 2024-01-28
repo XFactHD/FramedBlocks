@@ -27,7 +27,7 @@ public final class ModelWrappingManager
     {
         Stopwatch stopwatch = Stopwatch.createStarted();
 
-        ModelAccessor accessor = models::get;
+        ModelLookup accessor = models::get;
         ModelCounter counter = new ModelCounter();
 
         for (Map.Entry<ResourceKey<Block>, ModelWrappingHandler> entry : HANDLERS.entrySet())
@@ -59,7 +59,7 @@ public final class ModelWrappingManager
         );
     }
 
-    public static BakedModel handle(ResourceLocation id, BakedModel model, ModelAccessor modelAccessor, TextureLookup textureLookup)
+    public static BakedModel handle(ResourceLocation id, BakedModel model, ModelLookup modelLookup, TextureLookup textureLookup)
     {
         if (id instanceof ModelResourceLocation modelId)
         {
@@ -77,11 +77,11 @@ public final class ModelWrappingManager
             {
                 Block block = BuiltInRegistries.BLOCK.get(blockId);
                 BlockState state = StateLocationCache.getStateFromLocation(blockId.location(), block, modelId);
-                return handler.wrapBlockModel(model, state, modelAccessor, textureLookup, null);
+                return handler.wrapBlockModel(model, state, modelLookup, textureLookup, null);
             }
             else if (handler.handlesItemModel())
             {
-                return handler.replaceItemModel(modelAccessor, textureLookup, null);
+                return handler.replaceItemModel(modelLookup, textureLookup, null);
             }
         }
         return model;

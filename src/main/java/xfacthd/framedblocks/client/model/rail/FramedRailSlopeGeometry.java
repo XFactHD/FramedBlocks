@@ -27,7 +27,7 @@ public class FramedRailSlopeGeometry extends FramedSlopeGeometry
 
     private FramedRailSlopeGeometry(GeometryFactory.Context ctx, BlockState railBlock, EnumProperty<RailShape> shapeProperty)
     {
-        super(new GeometryFactory.Context(getSlopeState(ctx.state()), ctx.baseModel(), ctx.modelAccessor(), ctx.textureLookup()));
+        super(new GeometryFactory.Context(getSlopeState(ctx.state()), ctx.baseModel(), ctx.modelLookup(), ctx.textureLookup()));
 
         RailShape shape = ctx.state().getValue(PropertyHolder.ASCENDING_RAIL_SHAPE);
         railState = railBlock.setValue(shapeProperty, shape);

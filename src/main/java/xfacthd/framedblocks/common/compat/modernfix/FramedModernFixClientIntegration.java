@@ -3,7 +3,7 @@ package xfacthd.framedblocks.common.compat.modernfix;
 import net.minecraft.client.resources.model.*;
 import net.minecraft.resources.ResourceLocation;
 import org.embeddedt.modernfix.api.entrypoint.ModernFixClientIntegration;
-import xfacthd.framedblocks.api.model.wrapping.ModelAccessor;
+import xfacthd.framedblocks.api.model.wrapping.ModelLookup;
 import xfacthd.framedblocks.api.model.wrapping.TextureLookup;
 import xfacthd.framedblocks.client.model.FramedBlockModel;
 import xfacthd.framedblocks.client.modelwrapping.ModelWrappingManager;
@@ -30,7 +30,7 @@ public final class FramedModernFixClientIntegration implements ModernFixClientIn
                 // -> unwrap it to be consistent with vanilla behaviour and avoid double wrapping
                 baseModel = framedModel.getBaseModel();
             }
-            ModelAccessor accessor = bakery.getBakedTopLevelModels()::get;
+            ModelLookup accessor = bakery.getBakedTopLevelModels()::get;
             TextureLookup textureLookup = id -> { throw new UnsupportedOperationException(); };
             BakedModel wrappedModel = ModelWrappingManager.handle(location, baseModel, accessor, textureLookup);
             // Return incoming original model instead of the potentially unwrapped model if no wrapping was done

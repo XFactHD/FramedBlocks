@@ -10,5 +10,5 @@ public interface GeometryFactory
 
 
 
-    record Context(BlockState state, BakedModel baseModel, ModelAccessor modelAccessor, TextureLookup textureLookup) { }
+    record Context(BlockState state, BakedModel baseModel, ModelLookup modelLookup, TextureLookup textureLookup) { }
 }

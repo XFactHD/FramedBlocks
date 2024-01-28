@@ -28,7 +28,7 @@ public class FramedMarkedCubeGeometry extends FramedCubeGeometry
     {
         super(ctx);
         this.state = ctx.state();
-        this.frameModel = ctx.modelAccessor().get(frameLocation);
+        this.frameModel = ctx.modelLookup().get(frameLocation);
     }
 
     @Override

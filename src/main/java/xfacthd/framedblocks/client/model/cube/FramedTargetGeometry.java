@@ -28,7 +28,7 @@ public class FramedTargetGeometry implements Geometry
     public FramedTargetGeometry(GeometryFactory.Context ctx)
     {
         this.state = ctx.state();
-        this.overlayModel = ctx.modelAccessor().get(OVERLAY_LOCATION);
+        this.overlayModel = ctx.modelLookup().get(OVERLAY_LOCATION);
     }
 
     @Override
