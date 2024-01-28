@@ -38,6 +38,7 @@ import xfacthd.framedblocks.common.FBContent;
 import xfacthd.framedblocks.common.data.PropertyHolder;
 
 import java.util.*;
+import java.util.function.Predicate;
 
 @SuppressWarnings("deprecation")
 public final class FramedBlockModel extends BakedModelProxy
@@ -56,9 +57,9 @@ public final class FramedBlockModel extends BakedModelProxy
     private final boolean isBaseCube;
     private final boolean forceUngeneratedBaseModel;
     private final boolean useBaseModel;
-    private final boolean transformAllQuads;
     private final boolean useSolidBase;
     private final StateCache stateCache;
+    private final Predicate<Direction> xformDirFilter;
 
     public FramedBlockModel(GeometryFactory.Context ctx, Geometry geometry)
     {
@@ -69,9 +70,9 @@ public final class FramedBlockModel extends BakedModelProxy
         this.isBaseCube = state.getBlock() == FBContent.BLOCK_FRAMED_CUBE.value();
         this.forceUngeneratedBaseModel = geometry.forceUngeneratedBaseModel();
         this.useBaseModel = geometry.useBaseModel();
-        this.transformAllQuads = geometry.transformAllQuads();
         this.useSolidBase = geometry.useSolidNoCamoModel();
         this.stateCache = ((IFramedBlock) state.getBlock()).getCache(state);
+        this.xformDirFilter = geometry.transformAllQuads() ? d -> true : d -> !stateCache.isFullFace(d);
 
         Preconditions.checkState(
                 this.useBaseModel || !this.forceUngeneratedBaseModel,
@@ -272,14 +273,10 @@ public final class FramedBlockModel extends BakedModelProxy
         {
             quadTable.initializeForLayer(renderType);
 
-            ArrayList<BakedQuad> quads = ModelUtils.getAllCullableQuads(camoModel, camoState, rand, camoData, renderType);
+            ArrayList<BakedQuad> quads = ModelUtils.getCullableQuads(camoModel, camoState, rand, camoData, renderType, xformDirFilter);
             if (reinforce && renderType == RenderType.cutout())
             {
-                Utils.copyAll(ReinforcementModel.getAllQuads(), quads);
-            }
-            if (!transformAllQuads)
-            {
-                quads.removeIf(q -> stateCache.isFullFace(q.getDirection()));
+                ReinforcementModel.getFiltered(quads, xformDirFilter);
             }
             for (BakedQuad quad : quads)
             {

@@ -10,27 +10,32 @@ import net.neoforged.neoforge.client.model.data.ModelData;
 import xfacthd.framedblocks.api.util.Utils;
 
 import java.util.*;
+import java.util.function.Predicate;
 
 public final class ReinforcementModel
 {
     public static final ResourceLocation LOCATION = Utils.rl("block/framed_reinforcement");
     private static final RandomSource RAND = RandomSource.create();
     private static final BakedQuad[] QUADS_PER_FACE = new BakedQuad[6];
-    private static final List<BakedQuad> ALL_QUADS = new ArrayList<>(6);
 
     public static BakedQuad getQuad(Direction side)
     {
-        return QUADS_PER_FACE[side.ordinal()];
+        return QUADS_PER_FACE[side.get3DDataValue()];
     }
 
-    public static List<BakedQuad> getAllQuads()
+    public static void getFiltered(List<BakedQuad> out, Predicate<Direction> filter)
     {
-        return ALL_QUADS;
+        for (int i = 0; i < QUADS_PER_FACE.length; i++)
+        {
+            if (filter.test(Direction.from3DDataValue(i)))
+            {
+                out.add(QUADS_PER_FACE[i]);
+            }
+        }
     }
 
     public static void reload(Map<ResourceLocation, BakedModel> models)
     {
-        ALL_QUADS.clear();
         BakedModel model = Objects.requireNonNull(models.get(LOCATION));
         Utils.forAllDirections(false, dir ->
         {
@@ -42,8 +47,7 @@ public final class ReinforcementModel
             }
 
             BakedQuad quad = quads.get(0);
-            QUADS_PER_FACE[dir.ordinal()] = quad;
-            ALL_QUADS.add(quad);
+            QUADS_PER_FACE[dir.get3DDataValue()] = quad;
         });
     }
 

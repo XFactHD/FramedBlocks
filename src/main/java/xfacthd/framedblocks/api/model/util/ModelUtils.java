@@ -16,12 +16,14 @@ import xfacthd.framedblocks.api.model.data.FramedBlockData;
 import xfacthd.framedblocks.api.model.quad.QuadData;
 import xfacthd.framedblocks.api.util.ConfigView;
 import xfacthd.framedblocks.api.util.Utils;
+import xfacthd.framedblocks.mixin.client.AccessorWeightedBakedModel;
 
-import java.lang.invoke.MethodHandle;
 import java.util.*;
+import java.util.function.Predicate;
 
 public final class ModelUtils
 {
+    private static final Direction[] DIRECTIONS = Direction.values();
     public static final ChunkRenderTypeSet SOLID = ChunkRenderTypeSet.of(RenderType.solid());
     public static final ChunkRenderTypeSet CUTOUT = ChunkRenderTypeSet.of(RenderType.cutout());
     public static final ChunkRenderTypeSet TRANSLUCENT = ChunkRenderTypeSet.of(RenderType.translucent());
@@ -205,30 +207,27 @@ public final class ModelUtils
         return camoData != null ? camoData : ModelData.EMPTY;
     }
 
-    private static final MethodHandle WBM_WRAPPED_MODEL = Utils.unreflectFieldGetter(WeightedBakedModel.class, "wrapped");
-
-    public static ArrayList<BakedQuad> getAllCullableQuads(
-            BakedModel model, BlockState state, RandomSource rand, ModelData data, RenderType renderType
+    public static ArrayList<BakedQuad> getCullableQuads(
+            BakedModel model,
+            BlockState state,
+            RandomSource rand,
+            ModelData data,
+            RenderType renderType,
+            Predicate<Direction> filter
     )
     {
         if (model instanceof WeightedBakedModel weighted)
         {
-            try
-            {
-                // Use wrapped model for consistency and to avoid issues with invisible faces
-                model = (BakedModel) WBM_WRAPPED_MODEL.invokeExact(weighted);
-            }
-            catch (Throwable e)
-            {
-                throw new RuntimeException("Failed to access field 'WeightedBakedModel#wrapped'", e);
-            }
-            Objects.requireNonNull(model, "Wrapped model of WeightedBakedModel is null?!");
+            model = ((AccessorWeightedBakedModel) weighted).framedblocks$getWrappedModel();
         }
 
         ArrayList<BakedQuad> quads = new ArrayList<>();
-        for (Direction dir : Direction.values())
+        for (Direction dir : DIRECTIONS)
         {
-            Utils.copyAll(model.getQuads(state, dir, rand, data, renderType), quads);
+            if (filter.test(dir))
+            {
+                Utils.copyAll(model.getQuads(state, dir, rand, data, renderType), quads);
+            }
         }
         return quads;
     }
