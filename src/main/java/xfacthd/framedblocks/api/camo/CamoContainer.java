@@ -134,6 +134,12 @@ public abstract class CamoContainer
         return false;
     }
 
+    @Override
+    public abstract boolean equals(Object obj);
+
+    @Override
+    public abstract int hashCode();
+
     /**
      * Returns the type of camo this container holds
      */

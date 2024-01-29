@@ -39,6 +39,18 @@ public class BlockCamoContainer extends CamoContainer
     }
 
     @Override
+    public boolean equals(Object o)
+    {
+        return this == o || (o != null && getClass() == o.getClass() && state == ((CamoContainer) o).getState());
+    }
+
+    @Override
+    public int hashCode()
+    {
+        return state.hashCode();
+    }
+
+    @Override
     public CamoContainerFactory getFactory()
     {
         return FBContent.FACTORY_BLOCK.value();

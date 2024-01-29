@@ -9,6 +9,7 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.*;
 import net.neoforged.neoforge.client.model.data.ModelData;
 import net.neoforged.neoforge.client.model.data.ModelProperty;
+import org.jetbrains.annotations.Nullable;
 import xfacthd.framedblocks.api.block.FramedBlockEntity;
 import xfacthd.framedblocks.api.model.data.FramedBlockData;
 import xfacthd.framedblocks.api.util.Utils;
@@ -23,6 +24,7 @@ public class FramedCollapsibleBlockEntity extends FramedBlockEntity
     private static final int VERTEX_COUNT = 4;
     private static final NeighborVertex[][] VERTEX_MAPPINGS = makeVertexMapping();
 
+    @Nullable
     private Direction collapsedFace = null;
     private int packedOffsets = 0;
     private byte[] vertexOffsets = new byte[4];
@@ -34,7 +36,7 @@ public class FramedCollapsibleBlockEntity extends FramedBlockEntity
 
     public void handleDeform(Player player)
     {
-        HitResult hit = player.pick(10D, 0, false);
+        HitResult hit = player.pick(10D, 1F, false);
         if (!(hit instanceof BlockHitResult blockHit))
         {
             return;
@@ -112,7 +114,7 @@ public class FramedCollapsibleBlockEntity extends FramedBlockEntity
             }
             else
             {
-                level.sendBlockUpdated(worldPosition, getBlockState(), getBlockState(), 3);
+                level.sendBlockUpdated(worldPosition, getBlockState(), getBlockState(), Block.UPDATE_ALL);
             }
         }
         else if (collapsedFace == null)
@@ -122,7 +124,7 @@ public class FramedCollapsibleBlockEntity extends FramedBlockEntity
         }
         else
         {
-            level.sendBlockUpdated(worldPosition, getBlockState(), getBlockState(), 3);
+            level.sendBlockUpdated(worldPosition, getBlockState(), getBlockState(), Block.UPDATE_ALL);
         }
 
         setChanged();
@@ -188,6 +190,7 @@ public class FramedCollapsibleBlockEntity extends FramedBlockEntity
         }
     }
 
+    @Nullable
     public Direction getCollapsedFace()
     {
         return collapsedFace;
