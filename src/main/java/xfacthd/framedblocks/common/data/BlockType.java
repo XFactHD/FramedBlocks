@@ -163,7 +163,7 @@ public enum BlockType implements IBlockType
     FRAMED_FLAT_STACKED_SLOPE_SLAB_CORNER           ( true,  true,  true,  true,  true,  true,  true, false, ConTexMode.FULL_FACE, FramedFlatElevatedSlopeSlabCornerBlock::generateShapes),
     FRAMED_FLAT_STACKED_INNER_SLOPE_SLAB_CORNER     ( true,  true,  true,  true,  true,  true,  true, false, ConTexMode.FULL_FACE, FramedFlatElevatedSlopeSlabCornerBlock::generateInnerShapes),
     FRAMED_SLOPE_PANEL                              ( true,  true, false,  true,  true,  true, false, false, ConTexMode.FULL_FACE, FramedSlopePanelBlock::generateShapes),
-    FRAMED_EXTENDED_SLOPE_PANEL                     ( true,  true,  true,  true,  true,  true, false, false, ConTexMode.FULL_FACE, FramedExtendedSlopePanelBlock::generateShapes),
+    FRAMED_EXTENDED_SLOPE_PANEL                     ( true,  true, false,  true,  true,  true, false, false, ConTexMode.FULL_FACE, FramedExtendedSlopePanelBlock::generateShapes),
     FRAMED_DOUBLE_SLOPE_PANEL                       ( true, false,  true,  true,  true,  true,  true, false, ConTexMode.FULL_FACE, FramedDoubleSlopePanelBlock::generateShapes),
     FRAMED_INV_DOUBLE_SLOPE_PANEL                   ( true,  true,  true,  true,  true,  true,  true, false, ConTexMode.FULL_EDGE, FramedInverseDoubleSlopePanelBlock::generateShapes),
     FRAMED_EXTENDED_DOUBLE_SLOPE_PANEL              ( true, false,  true, false,  true,  true,  true, false, ConTexMode.FULL_FACE, Shapes.block()),
