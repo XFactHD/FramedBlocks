@@ -43,6 +43,7 @@ runs {
 
         //systemProperty 'framedblocks.test.disable_model_quad_cache', 'true'
         //systemProperty 'framedblocks.test.enable_double_block_part_hit_debug_renderer', 'true'
+        //systemProperty 'framedblocks.test.enable_connection_debug_renderer', 'true'
         //systemProperty 'framedblocks.test.enable_state_merger_debug_logging', 'true'
         //systemProperty 'framedblocks.test.state_merger_debug_filter', '.*'
     }

@@ -86,6 +86,7 @@ public final class FBContent
 
     private static final Map<BlockType, Holder<Block>> BLOCKS_BY_TYPE = new EnumMap<>(BlockType.class);
     private static final Map<FramedToolType, Holder<Item>> TOOLS_BY_TYPE = new EnumMap<>(FramedToolType.class);
+    private static final List<DeferredBlockEntity<? extends FramedBlockEntity>> FRAMED_BLOCK_ENTITIES = new ArrayList<>();
     private static final List<DeferredBlockEntity<? extends FramedDoubleBlockEntity>> DOUBLE_BLOCK_ENTITIES = new ArrayList<>();
 
     // region Blocks
@@ -302,7 +303,8 @@ public final class FBContent
     public static final Holder<BlockEntityType<?>> BE_TYPE_FRAMED_BLOCK = createBlockEntityType(
             FramedBlockEntity::new,
             "framed_tile",
-            getDefaultEntityBlocks()
+            getDefaultEntityBlocks(),
+            true
     );
     public static final Holder<BlockEntityType<?>> BE_TYPE_DOUBLE_FRAMED_SLOPE = createBlockEntityType(
             FramedDoubleSlopeBlockEntity::new,
@@ -569,7 +571,8 @@ public final class FBContent
     public static final DeferredBlockEntity<PoweredFramingSawBlockEntity> BE_TYPE_POWERED_FRAMING_SAW = createBlockEntityType(
             PoweredFramingSawBlockEntity::new,
             "powered_framing_saw",
-            () -> new Block[] { BLOCK_POWERED_FRAMING_SAW.value() }
+            () -> new Block[] { BLOCK_POWERED_FRAMING_SAW.value() },
+            false
     );
     // endregion
 
@@ -649,6 +652,11 @@ public final class FBContent
         return TOOLS_BY_TYPE.get(type).value();
     }
 
+    public static List<DeferredBlockEntity<? extends FramedBlockEntity>> getBlockEntities()
+    {
+        return FRAMED_BLOCK_ENTITIES;
+    }
+
     public static List<DeferredBlockEntity<? extends FramedDoubleBlockEntity>> getDoubleBlockEntities()
     {
         return DOUBLE_BLOCK_ENTITIES;
@@ -719,7 +727,7 @@ public final class FBContent
                 .map(Holder::value)
                 .toArray(Block[]::new);
 
-        DeferredBlockEntity<T> result = createBlockEntityType(factory, types[0].getName(), blocks);
+        DeferredBlockEntity<T> result = createBlockEntityType(factory, types[0].getName(), blocks, true);
         if (!FMLEnvironment.production && Arrays.stream(types).anyMatch(BlockType::isDoubleBlock))
         {
             //noinspection unchecked
@@ -729,14 +737,20 @@ public final class FBContent
     }
 
     private static <T extends BlockEntity> DeferredBlockEntity<T> createBlockEntityType(
-            BlockEntityType.BlockEntitySupplier<T> factory, String name, Supplier<Block[]> blocks
+            BlockEntityType.BlockEntitySupplier<T> factory, String name, Supplier<Block[]> blocks, boolean isFramedBE
     )
     {
-        return DeferredBlockEntity.createBlockEntity(BE_TYPES.register(name, () ->
+        DeferredBlockEntity<T> result = DeferredBlockEntity.createBlockEntity(BE_TYPES.register(name, () ->
         {
             //noinspection ConstantConditions
             return BlockEntityType.Builder.of(factory, blocks.get()).build(null);
         }));
+        if (!FMLEnvironment.production && isFramedBE)
+        {
+            //noinspection unchecked
+            FRAMED_BLOCK_ENTITIES.add((DeferredBlockEntity<? extends FramedBlockEntity>) result);
+        }
+        return result;
     }
 
     private static <T extends AbstractContainerMenu> DeferredHolder<MenuType<?>, MenuType<T>> createMenuType(IContainerFactory<T> factory, String name)

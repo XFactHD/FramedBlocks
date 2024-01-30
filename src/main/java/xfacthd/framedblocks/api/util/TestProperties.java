@@ -10,6 +10,9 @@ public final class TestProperties
     public static final boolean ENABLE_DOUBLE_BLOCK_PART_HIT_DEBUG_RENDERER = Boolean.getBoolean(
             "framedblocks.test.enable_double_block_part_hit_debug_renderer"
     );
+    public static final boolean ENABLE_CONNECTION_DEBUG_RENDERER = Boolean.getBoolean(
+            "framedblocks.test.enable_connection_debug_renderer"
+    );
     /**
      * If enabled, all model wrapper registrations will print which state properties of the associated block
      * are used as-is and which ones are handled by the {@link StateMerger}

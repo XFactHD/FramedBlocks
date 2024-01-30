@@ -1,6 +1,7 @@
 package xfacthd.framedblocks.client;
 
 import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
+import net.minecraft.client.renderer.texture.TextureAtlas;
 import net.minecraft.client.resources.model.BakedModel;
 import net.minecraft.core.Holder;
 import net.minecraft.resources.ResourceLocation;
@@ -19,6 +20,7 @@ import net.neoforged.fml.event.lifecycle.*;
 import net.neoforged.fml.loading.FMLEnvironment;
 import net.neoforged.neoforge.common.NeoForge;
 import org.jetbrains.annotations.Nullable;
+import xfacthd.framedblocks.api.block.FramedBlockEntity;
 import xfacthd.framedblocks.api.block.IFramedBlock;
 import xfacthd.framedblocks.api.model.wrapping.*;
 import xfacthd.framedblocks.api.model.wrapping.statemerger.StateMerger;
@@ -133,6 +135,11 @@ public final class FBClient
         {
             BlockEntityRendererProvider<FramedDoubleBlockEntity> provider = FramedDoubleBlockDebugRenderer::new;
             FBContent.getDoubleBlockEntities().forEach(type -> event.registerBlockEntityRenderer(type.value(), provider));
+        }
+        if (!FMLEnvironment.production && TestProperties.ENABLE_CONNECTION_DEBUG_RENDERER)
+        {
+            BlockEntityRendererProvider<FramedBlockEntity> provider = FramedBlockConnectionDebugRenderer::new;
+            FBContent.getBlockEntities().forEach(type -> event.registerBlockEntityRenderer(type.value(), provider));
         }
     }
 
@@ -428,6 +435,16 @@ public final class FBClient
     public static void onRegisterSpriteSources(final RegisterSpriteSourceTypesEvent event)
     {
         AnimationSplitterSource.register(event::register);
+    }
+
+    @SubscribeEvent
+    public static void onTexturesStitched(final TextureAtlasStitchedEvent event)
+    {
+        //noinspection deprecation
+        if (event.getAtlas().location().equals(TextureAtlas.LOCATION_BLOCKS))
+        {
+            FramedBlockConnectionDebugRenderer.captureDummySprite(event.getAtlas());
+        }
     }
 
 
