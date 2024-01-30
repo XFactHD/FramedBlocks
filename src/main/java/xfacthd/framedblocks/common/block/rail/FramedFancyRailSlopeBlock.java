@@ -11,6 +11,7 @@ import net.neoforged.neoforge.client.model.data.ModelData;
 import org.jetbrains.annotations.Nullable;
 import xfacthd.framedblocks.api.block.*;
 import xfacthd.framedblocks.api.predicate.cull.SideSkipPredicate;
+import xfacthd.framedblocks.api.util.Utils;
 import xfacthd.framedblocks.common.FBContent;
 import xfacthd.framedblocks.common.block.*;
 import xfacthd.framedblocks.common.blockentity.doubled.FramedDoubleBlockEntity;
@@ -88,7 +89,19 @@ class FramedFancyRailSlopeBlock extends FramedRailSlopeBlock implements IFramedD
     @Override
     public CamoGetter calculateCamoGetter(BlockState state, Direction side, @Nullable Direction edge)
     {
-        return CamoGetter.FIRST;
+        Direction facing = getFacing(state);
+        if (side == facing || side == Direction.DOWN)
+        {
+            return CamoGetter.FIRST;
+        }
+        else if (side.getAxis() != facing.getAxis() && !Utils.isY(side))
+        {
+            if (edge == facing || edge == Direction.DOWN)
+            {
+                return CamoGetter.FIRST;
+            }
+        }
+        return CamoGetter.NONE;
     }
 
     @Override

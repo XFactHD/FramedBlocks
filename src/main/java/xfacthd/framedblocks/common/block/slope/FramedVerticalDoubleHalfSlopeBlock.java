@@ -104,10 +104,22 @@ public class FramedVerticalDoubleHalfSlopeBlock extends AbstractFramedDoubleBloc
     @Override
     public CamoGetter calculateCamoGetter(BlockState state, Direction side, @Nullable Direction edge)
     {
+        Direction facing = state.getValue(FramedProperties.FACING_HOR);
         boolean top = state.getValue(FramedProperties.TOP);
-        if ((!top && edge == Direction.DOWN) || (top && edge == Direction.UP))
+        Direction dirTwo = top ? Direction.UP : Direction.DOWN;
+        if (side == dirTwo)
         {
-            Direction facing = state.getValue(FramedProperties.FACING_HOR);
+            if (edge == facing || edge == facing.getCounterClockWise())
+            {
+                return CamoGetter.FIRST;
+            }
+            if (edge == facing.getOpposite() || edge == facing.getClockWise())
+            {
+                return CamoGetter.SECOND;
+            }
+        }
+        else if (edge == dirTwo)
+        {
             if (side == facing || side == facing.getCounterClockWise())
             {
                 return CamoGetter.FIRST;

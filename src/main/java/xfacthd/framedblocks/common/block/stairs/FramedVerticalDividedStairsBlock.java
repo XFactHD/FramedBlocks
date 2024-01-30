@@ -94,14 +94,17 @@ public class FramedVerticalDividedStairsBlock extends AbstractFramedDoubleBlock
     public CamoGetter calculateCamoGetter(BlockState state, Direction side, @Nullable Direction edge)
     {
         Direction facing = state.getValue(FramedProperties.FACING_HOR);
+        if (side == facing || side == facing.getCounterClockWise())
+        {
+            if (edge == Direction.DOWN) return CamoGetter.FIRST;
+            if (edge == Direction.UP) return CamoGetter.SECOND;
+            return CamoGetter.NONE;
+        }
         if (edge == facing || edge == facing.getCounterClockWise())
         {
-            return switch (side)
-            {
-                case UP -> CamoGetter.SECOND;
-                case DOWN -> CamoGetter.FIRST;
-                default -> CamoGetter.NONE;
-            };
+            if (side == Direction.DOWN) return CamoGetter.FIRST;
+            if (side == Direction.UP) return CamoGetter.SECOND;
+            return CamoGetter.NONE;
         }
         return CamoGetter.NONE;
     }

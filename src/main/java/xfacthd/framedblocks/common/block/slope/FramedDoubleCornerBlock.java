@@ -131,46 +131,79 @@ public class FramedDoubleCornerBlock extends AbstractFramedDoubleBlock
     {
         CornerType type = state.getValue(PropertyHolder.CORNER_TYPE);
         Direction dir = state.getValue(FramedProperties.FACING_HOR);
+        Direction dirTwo = type.isTop() ? Direction.UP : Direction.DOWN;
 
         if (type.isHorizontal())
         {
-            if (side == dir || (!type.isTop() && side == Direction.DOWN) || (type.isTop() && side == Direction.UP) ||
-                    (!type.isRight() && side == dir.getCounterClockWise()) || (type.isRight() && side == dir.getClockWise())
-            )
+            Direction dirThree = type.isRight() ? dir.getClockWise() : dir.getCounterClockWise();
+            if (side == dir || side == dirTwo || side == dirThree)
             {
                 return CamoGetter.FIRST;
             }
-
-            if (side == dir.getOpposite() || (!type.isTop() && side == Direction.UP) || (type.isTop() && side == Direction.DOWN) ||
-                    (!type.isRight() && side == dir.getClockWise()) || (type.isRight() && side == dir.getCounterClockWise())
-            )
+            if (side == dir.getOpposite())
             {
                 return CamoGetter.SECOND;
             }
+            if (side == dirTwo.getOpposite())
+            {
+                if (edge == dir || edge == dirThree)
+                {
+                    return CamoGetter.FIRST;
+                }
+                if (edge == dir.getOpposite() || edge == dirThree.getOpposite())
+                {
+                    return CamoGetter.SECOND;
+                }
+                return CamoGetter.NONE;
+            }
+            if (side == dirThree.getOpposite())
+            {
+                if (edge == dir || edge == dirTwo)
+                {
+                    return CamoGetter.FIRST;
+                }
+                if (edge == dir.getOpposite() || edge == dirTwo.getOpposite())
+                {
+                    return CamoGetter.SECOND;
+                }
+                return CamoGetter.NONE;
+            }
         }
-        else if (type == CornerType.TOP)
+        else
         {
-            if (side == dir || side == Direction.UP || side == dir.getCounterClockWise())
+            if (side == dir || side == dir.getCounterClockWise() || side == dirTwo)
             {
                 return CamoGetter.FIRST;
             }
-            if (side == dir.getOpposite() || side == Direction.DOWN || side == dir.getClockWise())
+            if (side == dirTwo.getOpposite())
             {
                 return CamoGetter.SECOND;
             }
-        }
-        else if (type == CornerType.BOTTOM)
-        {
-            if (side == dir || side == Direction.DOWN || side == dir.getCounterClockWise())
+            if (side == dir.getClockWise())
             {
-                return CamoGetter.FIRST;
+                if (edge == dirTwo || edge == dir)
+                {
+                    return CamoGetter.FIRST;
+                }
+                if (edge == dirTwo.getOpposite() || edge == dir.getOpposite())
+                {
+                    return CamoGetter.SECOND;
+                }
+                return CamoGetter.NONE;
             }
-            if (side == dir.getOpposite() || side == Direction.UP || side == dir.getClockWise())
+            if (side == dir.getOpposite())
             {
-                return CamoGetter.SECOND;
+                if (edge == dirTwo || edge == dir.getCounterClockWise())
+                {
+                    return CamoGetter.FIRST;
+                }
+                if (edge == dirTwo.getOpposite() || edge == dir.getClockWise())
+                {
+                    return CamoGetter.SECOND;
+                }
+                return CamoGetter.NONE;
             }
         }
-
         return CamoGetter.NONE;
     }
 

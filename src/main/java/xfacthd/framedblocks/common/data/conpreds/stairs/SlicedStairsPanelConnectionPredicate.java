@@ -18,6 +18,10 @@ public final class SlicedStairsPanelConnectionPredicate extends NonDetailedConne
         {
             return true;
         }
+        else if (side == dirTwo && edge == dir.getOpposite())
+        {
+            return true;
+        }
         return side == dir.getOpposite() && edge == dirTwo;
     }
 }
