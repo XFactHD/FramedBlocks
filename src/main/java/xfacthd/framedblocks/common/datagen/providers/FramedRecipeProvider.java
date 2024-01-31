@@ -1,7 +1,6 @@
 package xfacthd.framedblocks.common.datagen.providers;
 
 import net.minecraft.core.Holder;
-import net.minecraft.core.HolderLookup;
 import net.minecraft.data.PackOutput;
 import net.minecraft.data.recipes.*;
 import net.minecraft.tags.ItemTags;
@@ -15,13 +14,11 @@ import xfacthd.framedblocks.common.FBContent;
 import xfacthd.framedblocks.common.datagen.builders.recipe.ExtShapedRecipeBuilder;
 import xfacthd.framedblocks.common.datagen.builders.recipe.ExtShapelessRecipeBuilder;
 
-import java.util.concurrent.CompletableFuture;
-
 public final class FramedRecipeProvider extends RecipeProvider
 {
-    public FramedRecipeProvider(PackOutput output, CompletableFuture<HolderLookup.Provider> lookup)
+    public FramedRecipeProvider(PackOutput output)
     {
-        super(output, lookup);
+        super(output);
     }
 
     @Override

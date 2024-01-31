@@ -1,6 +1,5 @@
 package xfacthd.framedblocks.common.datagen.providers;
 
-import net.minecraft.core.HolderLookup;
 import net.minecraft.data.PackOutput;
 import net.minecraft.data.recipes.*;
 import net.minecraft.tags.ItemTags;
@@ -11,13 +10,12 @@ import xfacthd.framedblocks.common.FBContent;
 import xfacthd.framedblocks.common.crafting.*;
 
 import java.util.List;
-import java.util.concurrent.CompletableFuture;
 
 public final class FramingSawRecipeProvider extends RecipeProvider
 {
-    public FramingSawRecipeProvider(PackOutput output, CompletableFuture<HolderLookup.Provider> lookup)
+    public FramingSawRecipeProvider(PackOutput output)
     {
-        super(output, lookup);
+        super(output);
     }
 
     @Override
