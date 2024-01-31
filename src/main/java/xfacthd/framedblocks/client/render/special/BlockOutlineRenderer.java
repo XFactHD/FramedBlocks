@@ -19,7 +19,7 @@ import java.util.*;
 
 public final class BlockOutlineRenderer
 {
-    private static final Map<IBlockType, OutlineRenderer> OUTLINE_RENDERERS = new HashMap<>();
+    private static final Map<IBlockType, OutlineRenderer> OUTLINE_RENDERERS = new IdentityHashMap<>();
     private static final Set<IBlockType> ERRORED_TYPES = new HashSet<>();
     private static boolean locked = false;
 
