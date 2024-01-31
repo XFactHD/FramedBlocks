@@ -9,16 +9,25 @@ public final class BlockOutlineRenderers
     public static void register()
     {
         BlockOutlineRenderer.registerOutlineRender(BlockType.FRAMED_SLOPE, SlopeOutlineRenderer.INSTANCE);
+        BlockOutlineRenderer.registerOutlineRender(BlockType.FRAMED_HALF_SLOPE, new HalfSlopeOutlineRenderer());
+        BlockOutlineRenderer.registerOutlineRender(BlockType.FRAMED_VERTICAL_HALF_SLOPE, new VerticalHalfSlopeOutlineRenderer());
+        BlockOutlineRenderer.registerOutlineRender(BlockType.FRAMED_DIVIDED_SLOPE, SlopeOutlineRenderer.INSTANCE);
         BlockOutlineRenderer.registerOutlineRender(BlockType.FRAMED_CORNER_SLOPE, new CornerSlopeOutlineRenderer());
         BlockOutlineRenderer.registerOutlineRender(BlockType.FRAMED_INNER_CORNER_SLOPE, new InnerCornerSlopeOutlineRenderer());
         BlockOutlineRenderer.registerOutlineRender(BlockType.FRAMED_PRISM_CORNER, new PrismCornerOutlineRenderer());
         BlockOutlineRenderer.registerOutlineRender(BlockType.FRAMED_INNER_PRISM_CORNER, new InnerPrismCornerOutlineRenderer());
         BlockOutlineRenderer.registerOutlineRender(BlockType.FRAMED_THREEWAY_CORNER, new ThreewayCornerOutlineRenderer());
         BlockOutlineRenderer.registerOutlineRender(BlockType.FRAMED_INNER_THREEWAY_CORNER, new InnerThreewayCornerOutlineRenderer());
+        BlockOutlineRenderer.registerOutlineRender(BlockType.FRAMED_SLOPED_STAIRS, new SlopedStairsOutlineRenderer());
+        BlockOutlineRenderer.registerOutlineRender(BlockType.FRAMED_VERTICAL_SLOPED_STAIRS, new VerticalSlopedStairsOutlineRenderer());
         BlockOutlineRenderer.registerOutlineRender(BlockType.FRAMED_RAIL_SLOPE, SlopeOutlineRenderer.INSTANCE);
         BlockOutlineRenderer.registerOutlineRender(BlockType.FRAMED_POWERED_RAIL_SLOPE, SlopeOutlineRenderer.INSTANCE);
         BlockOutlineRenderer.registerOutlineRender(BlockType.FRAMED_DETECTOR_RAIL_SLOPE, SlopeOutlineRenderer.INSTANCE);
         BlockOutlineRenderer.registerOutlineRender(BlockType.FRAMED_ACTIVATOR_RAIL_SLOPE, SlopeOutlineRenderer.INSTANCE);
+        BlockOutlineRenderer.registerOutlineRender(BlockType.FRAMED_FANCY_RAIL_SLOPE, SlopeOutlineRenderer.INSTANCE);
+        BlockOutlineRenderer.registerOutlineRender(BlockType.FRAMED_FANCY_POWERED_RAIL_SLOPE, SlopeOutlineRenderer.INSTANCE);
+        BlockOutlineRenderer.registerOutlineRender(BlockType.FRAMED_FANCY_DETECTOR_RAIL_SLOPE, SlopeOutlineRenderer.INSTANCE);
+        BlockOutlineRenderer.registerOutlineRender(BlockType.FRAMED_FANCY_ACTIVATOR_RAIL_SLOPE, SlopeOutlineRenderer.INSTANCE);
         BlockOutlineRenderer.registerOutlineRender(BlockType.FRAMED_COLLAPSIBLE_BLOCK, new CollapsibleBlockOutlineRenderer());
         BlockOutlineRenderer.registerOutlineRender(BlockType.FRAMED_PRISM, new PrismOutlineRenderer());
         BlockOutlineRenderer.registerOutlineRender(BlockType.FRAMED_INNER_PRISM, new InnerPrismOutlineRenderer());
@@ -68,15 +77,6 @@ public final class BlockOutlineRenderers
         BlockOutlineRenderer.registerOutlineRender(BlockType.FRAMED_PYRAMID_SLAB, new PyramidOutlineRenderer(true));
         BlockOutlineRenderer.registerOutlineRender(BlockType.FRAMED_ITEM_FRAME, NoopOutlineRenderer.INSTANCE);
         BlockOutlineRenderer.registerOutlineRender(BlockType.FRAMED_GLOWING_ITEM_FRAME, NoopOutlineRenderer.INSTANCE);
-        BlockOutlineRenderer.registerOutlineRender(BlockType.FRAMED_FANCY_RAIL_SLOPE, SlopeOutlineRenderer.INSTANCE);
-        BlockOutlineRenderer.registerOutlineRender(BlockType.FRAMED_FANCY_POWERED_RAIL_SLOPE, SlopeOutlineRenderer.INSTANCE);
-        BlockOutlineRenderer.registerOutlineRender(BlockType.FRAMED_FANCY_DETECTOR_RAIL_SLOPE, SlopeOutlineRenderer.INSTANCE);
-        BlockOutlineRenderer.registerOutlineRender(BlockType.FRAMED_FANCY_ACTIVATOR_RAIL_SLOPE, SlopeOutlineRenderer.INSTANCE);
-        BlockOutlineRenderer.registerOutlineRender(BlockType.FRAMED_HALF_SLOPE, new HalfSlopeOutlineRenderer());
-        BlockOutlineRenderer.registerOutlineRender(BlockType.FRAMED_VERTICAL_HALF_SLOPE, new VerticalHalfSlopeOutlineRenderer());
-        BlockOutlineRenderer.registerOutlineRender(BlockType.FRAMED_DIVIDED_SLOPE, SlopeOutlineRenderer.INSTANCE);
-        BlockOutlineRenderer.registerOutlineRender(BlockType.FRAMED_SLOPED_STAIRS, new SlopedStairsOutlineRenderer());
-        BlockOutlineRenderer.registerOutlineRender(BlockType.FRAMED_VERTICAL_SLOPED_STAIRS, new VerticalSlopedStairsOutlineRenderer());
     }
 
 
