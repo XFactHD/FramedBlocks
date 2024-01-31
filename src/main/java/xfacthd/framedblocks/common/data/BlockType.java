@@ -147,7 +147,7 @@ public enum BlockType implements IBlockType
     FRAMED_INNER_SLOPED_PRISM                       ( true,  true, false,  true,  true,  true, false, false, ConTexMode.FULL_FACE, FramedSlopedPrismBlock::generateInnerShapes),
     FRAMED_DOUBLE_SLOPED_PRISM                      ( true, false,  true, false,  true,  true,  true, false, ConTexMode.FULL_FACE, Shapes.block()),
     FRAMED_SLOPE_SLAB                               ( true,  true, false,  true,  true,  true, false, false, ConTexMode.FULL_FACE, FramedSlopeSlabBlock::generateShapes),
-    FRAMED_ELEVATED_SLOPE_SLAB                      ( true,  true,  true,  true,  true,  true, false, false, ConTexMode.FULL_FACE, FramedElevatedSlopeSlabBlock::generateShapes),
+    FRAMED_ELEVATED_SLOPE_SLAB                      ( true,  true, false,  true,  true,  true, false, false, ConTexMode.FULL_FACE, FramedElevatedSlopeSlabBlock::generateShapes),
     FRAMED_DOUBLE_SLOPE_SLAB                        ( true, false,  true,  true,  true,  true,  true, false, ConTexMode.FULL_FACE, FramedDoubleSlopeSlabBlock::generateShapes),
     FRAMED_INV_DOUBLE_SLOPE_SLAB                    ( true,  true,  true,  true,  true,  true,  true, false, ConTexMode.FULL_EDGE, FramedInverseDoubleSlopeSlabBlock::generateShapes),
     FRAMED_ELEVATED_DOUBLE_SLOPE_SLAB               ( true, false,  true, false,  true,  true,  true, false, ConTexMode.FULL_FACE, Shapes.block()),
