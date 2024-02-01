@@ -19,6 +19,9 @@ public final class BlockOutlineRenderers
         register(BlockType.FRAMED_INNER_PRISM_CORNER, new InnerPrismCornerOutlineRenderer());
         register(BlockType.FRAMED_THREEWAY_CORNER, new ThreewayCornerOutlineRenderer());
         register(BlockType.FRAMED_INNER_THREEWAY_CORNER, new InnerThreewayCornerOutlineRenderer());
+        register(BlockType.FRAMED_SLOPE_EDGE, new SlopeEdgeOutlineRenderer());
+        register(BlockType.FRAMED_ELEVATED_SLOPE_EDGE, ElevatedSlopeEdgeOutlineRenderer.INSTANCE);
+        register(BlockType.FRAMED_STACKED_SLOPE_EDGE, ElevatedSlopeEdgeOutlineRenderer.INSTANCE);
         register(BlockType.FRAMED_SLOPED_STAIRS, new SlopedStairsOutlineRenderer());
         register(BlockType.FRAMED_VERTICAL_SLOPED_STAIRS, new VerticalSlopedStairsOutlineRenderer());
         register(BlockType.FRAMED_RAIL_SLOPE, SlopeOutlineRenderer.INSTANCE);

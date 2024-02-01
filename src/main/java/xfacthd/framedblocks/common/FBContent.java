@@ -23,6 +23,7 @@ import xfacthd.framedblocks.api.camo.*;
 import xfacthd.framedblocks.api.util.FramedConstants;
 import xfacthd.framedblocks.api.util.Utils;
 import xfacthd.framedblocks.common.block.sign.*;
+import xfacthd.framedblocks.common.block.slopeedge.*;
 import xfacthd.framedblocks.common.block.special.FramingSawBlock;
 import xfacthd.framedblocks.common.block.special.PoweredFramingSawBlock;
 import xfacthd.framedblocks.common.block.cube.*;
@@ -45,6 +46,7 @@ import xfacthd.framedblocks.common.blockentity.doubled.prism.*;
 import xfacthd.framedblocks.common.blockentity.doubled.rail.*;
 import xfacthd.framedblocks.common.blockentity.doubled.slab.*;
 import xfacthd.framedblocks.common.blockentity.doubled.slope.*;
+import xfacthd.framedblocks.common.blockentity.doubled.slopeedge.*;
 import xfacthd.framedblocks.common.blockentity.doubled.slopepanel.*;
 import xfacthd.framedblocks.common.blockentity.doubled.slopepanelcorner.*;
 import xfacthd.framedblocks.common.blockentity.doubled.slopeslab.*;
@@ -107,6 +109,10 @@ public final class FBContent
     public static final Holder<Block> BLOCK_FRAMED_THREEWAY_CORNER = registerBlock(FramedThreewayCornerBlock::new, BlockType.FRAMED_THREEWAY_CORNER);
     public static final Holder<Block> BLOCK_FRAMED_INNER_THREEWAY_CORNER = registerBlock(FramedInnerThreewayCornerBlock::new, BlockType.FRAMED_INNER_THREEWAY_CORNER);
     public static final Holder<Block> BLOCK_FRAMED_DOUBLE_THREEWAY_CORNER = registerBlock(FramedDoubleThreewayCornerBlock::new, BlockType.FRAMED_DOUBLE_THREEWAY_CORNER);
+    public static final Holder<Block> BLOCK_FRAMED_SLOPE_EDGE = registerBlock(FramedSlopeEdgeBlock::new, BlockType.FRAMED_SLOPE_EDGE);
+    public static final Holder<Block> BLOCK_FRAMED_ELEVATED_SLOPE_EDGE = registerBlock(FramedElevatedSlopeEdgeBlock::new, BlockType.FRAMED_ELEVATED_SLOPE_EDGE);
+    public static final Holder<Block> BLOCK_FRAMED_ELEVATED_DOUBLE_SLOPE_EDGE = registerBlock(FramedElevatedDoubleSlopeEdgeBlock::new, BlockType.FRAMED_ELEVATED_DOUBLE_SLOPE_EDGE);
+    public static final Holder<Block> BLOCK_FRAMED_STACKED_SLOPE_EDGE = registerBlock(FramedStackedSlopeEdgeBlock::new, BlockType.FRAMED_STACKED_SLOPE_EDGE);
     public static final Holder<Block> BLOCK_FRAMED_SLAB = registerBlock(FramedSlabBlock::new, BlockType.FRAMED_SLAB);
     public static final Holder<Block> BLOCK_FRAMED_DOUBLE_SLAB = registerBlock(FramedDoubleSlabBlock::new, BlockType.FRAMED_DOUBLE_SLAB);
     public static final Holder<Block> BLOCK_FRAMED_DIVIDED_SLAB = registerBlock(FramedDividedSlabBlock::new, BlockType.FRAMED_DIVIDED_SLAB);
@@ -329,6 +335,14 @@ public final class FBContent
     public static final Holder<BlockEntityType<?>> BE_TYPE_DOUBLE_FRAMED_THREEWAY_CORNER = createBlockEntityType(
             FramedDoubleThreewayCornerBlockEntity::new,
             BlockType.FRAMED_DOUBLE_THREEWAY_CORNER, BlockType.FRAMED_DOUBLE_PRISM_CORNER
+    );
+    public static final Holder<BlockEntityType<?>> BE_TYPE_FRAMED_ELEVATED_DOUBLE_SLOPE_EDGE = createBlockEntityType(
+            FramedElevatedDoubleSlopeEdgeBlockEntity::new,
+            BlockType.FRAMED_ELEVATED_DOUBLE_SLOPE_EDGE
+    );
+    public static final Holder<BlockEntityType<?>> BE_TYPE_FRAMED_STACKED_SLOPE_EDGE = createBlockEntityType(
+            FramedStackedSlopeEdgeBlockEntity::new,
+            BlockType.FRAMED_STACKED_SLOPE_EDGE
     );
     public static final Holder<BlockEntityType<?>> BE_TYPE_DOUBLE_FRAMED_SLAB = createBlockEntityType(
             FramedDoubleSlabBlockEntity::new,

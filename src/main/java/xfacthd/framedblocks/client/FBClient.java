@@ -25,6 +25,7 @@ import xfacthd.framedblocks.api.block.IFramedBlock;
 import xfacthd.framedblocks.api.model.wrapping.*;
 import xfacthd.framedblocks.api.model.wrapping.statemerger.StateMerger;
 import xfacthd.framedblocks.client.model.*;
+import xfacthd.framedblocks.client.model.slopeedge.*;
 import xfacthd.framedblocks.client.modelwrapping.ModelWrappingManager;
 import xfacthd.framedblocks.api.type.IBlockType;
 import xfacthd.framedblocks.api.util.*;
@@ -208,6 +209,10 @@ public final class FBClient
         WrapHelper.wrap(FBContent.BLOCK_FRAMED_THREEWAY_CORNER, FramedThreewayCornerGeometry::new, WrapHelper.IGNORE_WATERLOGGED);
         WrapHelper.wrap(FBContent.BLOCK_FRAMED_INNER_THREEWAY_CORNER, FramedInnerThreewayCornerGeometry::new, WrapHelper.IGNORE_DEFAULT);
         wrapDoubleModel(FBContent.BLOCK_FRAMED_DOUBLE_THREEWAY_CORNER, null, WrapHelper.IGNORE_SOLID);
+        WrapHelper.wrap(FBContent.BLOCK_FRAMED_SLOPE_EDGE, FramedSlopeEdgeGeometry::new, WrapHelper.IGNORE_WATERLOGGED);
+        WrapHelper.wrap(FBContent.BLOCK_FRAMED_ELEVATED_SLOPE_EDGE, FramedElevatedSlopeEdgeModel::new, WrapHelper.IGNORE_WATERLOGGED);
+        wrapDoubleModel(FBContent.BLOCK_FRAMED_ELEVATED_DOUBLE_SLOPE_EDGE, null, WrapHelper.IGNORE_SOLID);
+        wrapDoubleModel(FBContent.BLOCK_FRAMED_STACKED_SLOPE_EDGE, null, WrapHelper.IGNORE_SOLID);
         WrapHelper.wrap(FBContent.BLOCK_FRAMED_SLAB, FramedSlabGeometry::new, WrapHelper.IGNORE_DEFAULT);
         wrapDoubleModel(FBContent.BLOCK_FRAMED_DOUBLE_SLAB, null, WrapHelper.IGNORE_SOLID);
         wrapDoubleModel(FBContent.BLOCK_FRAMED_DIVIDED_SLAB, null, WrapHelper.IGNORE_DEFAULT);

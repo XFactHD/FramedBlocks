@@ -9,6 +9,7 @@ import xfacthd.framedblocks.common.data.conpreds.pillar.*;
 import xfacthd.framedblocks.common.data.conpreds.prism.*;
 import xfacthd.framedblocks.common.data.conpreds.slab.*;
 import xfacthd.framedblocks.common.data.conpreds.slope.*;
+import xfacthd.framedblocks.common.data.conpreds.slopeedge.*;
 import xfacthd.framedblocks.common.data.conpreds.slopepanel.*;
 import xfacthd.framedblocks.common.data.conpreds.slopepanelcorner.*;
 import xfacthd.framedblocks.common.data.conpreds.slopeslab.*;
@@ -44,6 +45,10 @@ public final class ConnectionPredicates extends BlockTypeMap<ConnectionPredicate
         put(BlockType.FRAMED_THREEWAY_CORNER, new ThreewayCornerConnectionPredicate());
         put(BlockType.FRAMED_INNER_THREEWAY_CORNER, new InnerThreewayCornerConnectionPredicate());
         put(BlockType.FRAMED_DOUBLE_THREEWAY_CORNER, DoubleThreewayCornerConnectionPredicate.INSTANCE);
+        put(BlockType.FRAMED_SLOPE_EDGE, new SlopeEdgeConnectionPredicate());
+        put(BlockType.FRAMED_ELEVATED_SLOPE_EDGE, new ElevatedSlopeEdgeConnectionPredicate());
+        put(BlockType.FRAMED_ELEVATED_DOUBLE_SLOPE_EDGE, new ElevatedDoubleSlopeEdgeConnectionPredicate());
+        put(BlockType.FRAMED_STACKED_SLOPE_EDGE, new StackedSlopeEdgeConnectionPredicate());
         put(BlockType.FRAMED_SLAB, new SlabConnectionPredicate());
         put(BlockType.FRAMED_DOUBLE_SLAB, new DoubleSlabConnectionPredicate());
         put(BlockType.FRAMED_DIVIDED_SLAB, new DividedSlabConnectionPredicate());

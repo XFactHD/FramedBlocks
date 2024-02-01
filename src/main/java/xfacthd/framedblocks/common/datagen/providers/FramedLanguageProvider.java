@@ -62,6 +62,10 @@ public final class FramedLanguageProvider extends LanguageProvider
         add(FBContent.BLOCK_FRAMED_THREEWAY_CORNER.value(), "Framed Threeway Corner");
         add(FBContent.BLOCK_FRAMED_INNER_THREEWAY_CORNER.value(), "Framed Inner Threeway Corner");
         add(FBContent.BLOCK_FRAMED_DOUBLE_THREEWAY_CORNER.value(), "Framed Double Threeway Corner");
+        add(FBContent.BLOCK_FRAMED_SLOPE_EDGE.value(), "Framed Slope Edge");
+        add(FBContent.BLOCK_FRAMED_ELEVATED_SLOPE_EDGE.value(), "Framed Elevated Slope Edge");
+        add(FBContent.BLOCK_FRAMED_ELEVATED_DOUBLE_SLOPE_EDGE.value(), "Framed Elevated Double Slope Edge");
+        add(FBContent.BLOCK_FRAMED_STACKED_SLOPE_EDGE.value(), "Framed Stacked Slope Edge");
         add(FBContent.BLOCK_FRAMED_SLAB.value(), "Framed Slab");
         add(FBContent.BLOCK_FRAMED_DOUBLE_SLAB.value(), "Framed Double Slab");
         add(FBContent.BLOCK_FRAMED_DIVIDED_SLAB.value(), "Framed Divided Slab");
@@ -345,6 +349,10 @@ public final class FramedLanguageProvider extends LanguageProvider
         add(ToggleYSlopeOverlay.TOGGLE_MESSAGE, "Hit with a Framed Wrench to switch to %s faces");
         add(ToggleYSlopeOverlay.SLOPE_HOR, "horizontal");
         add(ToggleYSlopeOverlay.SLOPE_VERT, "vertical");
+        add(ToggleYSlopeOverlay.SLOPE_MESSAGE_ALT, "Block uses the %s face for horizontal sloped faces.");
+        add(ToggleYSlopeOverlay.TOGGLE_MESSAGE_ALT, "Hit with a Framed Wrench to switch to the %s face");
+        add(ToggleYSlopeOverlay.SLOPE_FRONT, "front");
+        add(ToggleYSlopeOverlay.SLOPE_SIDE, "right");
 
         add(ReinforcementOverlay.REINFORCE_MESSAGE, "Block is %s.");
         add(ReinforcementOverlay.STATE_NOT_REINFORCED, "not reinforced");

@@ -150,6 +150,18 @@ public final class ShapeUtils
         }
     }
 
+    public static <V> void makeHorizontalRotations(
+            VoxelShape shape, Direction srcDir, VoxelShape[] shapes, V staticKeyParam, ArbIndexGenerator<V> keyGen
+    )
+    {
+        VoxelShape[] preShapes = new VoxelShape[4];
+        makeHorizontalRotations(shape, srcDir, preShapes, 0);
+        for (Direction dir : HORIZONTAL_DIRECTIONS)
+        {
+            shapes[keyGen.makeKey(dir, staticKeyParam)] = preShapes[dir.get2DDataValue()];
+        }
+    }
+
     public static VoxelShape[] makeHorizontalRotationsWithFlag(VoxelShape shapeFalse, VoxelShape shapeTrue, Direction srcDir)
     {
         VoxelShape[] shapes = new VoxelShape[8];
@@ -176,9 +188,33 @@ public final class ShapeUtils
         }
     }
 
+    public static void makeHorizontalRotationsWithFlag(
+            VoxelShape shapeFalse, VoxelShape shapeTrue, Direction srcDir, VoxelShape[] shapes, FlagIndexGenerator keyGen
+    )
+    {
+        VoxelShape[] preShapes = new VoxelShape[8];
+        makeHorizontalRotations(shapeFalse, srcDir, preShapes, 0);
+        makeHorizontalRotations(shapeTrue, srcDir, preShapes, 4);
+        for (Direction dir : HORIZONTAL_DIRECTIONS)
+        {
+            shapes[keyGen.makeKey(dir, false)] = preShapes[dir.get2DDataValue()];
+            shapes[keyGen.makeKey(dir, true)] = preShapes[dir.get2DDataValue() + 4];
+        }
+    }
+
+    public interface ArbIndexGenerator<V>
+    {
+        int makeKey(Direction dir, V staticParam);
+    }
+
     public interface ArbKeyGenerator<V, T>
     {
         T makeKey(Direction dir, V staticParam);
+    }
+
+    public interface FlagIndexGenerator
+    {
+        int makeKey(Direction dir, boolean flag);
     }
 
     public interface FlagKeyGenerator<T>

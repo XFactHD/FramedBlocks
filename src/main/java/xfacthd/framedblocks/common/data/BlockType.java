@@ -21,6 +21,7 @@ import xfacthd.framedblocks.common.block.prism.*;
 import xfacthd.framedblocks.common.block.sign.*;
 import xfacthd.framedblocks.common.block.slab.*;
 import xfacthd.framedblocks.common.block.slope.*;
+import xfacthd.framedblocks.common.block.slopeedge.*;
 import xfacthd.framedblocks.common.block.slopepanel.*;
 import xfacthd.framedblocks.common.block.slopepanelcorner.*;
 import xfacthd.framedblocks.common.block.slopeslab.*;
@@ -52,6 +53,10 @@ public enum BlockType implements IBlockType
     FRAMED_THREEWAY_CORNER                          (false,  true, false,  true,  true,  true, false, false, ConTexMode.FULL_EDGE, FramedThreewayCornerBlock::generateThreewayShapes),
     FRAMED_INNER_THREEWAY_CORNER                    ( true,  true, false,  true,  true,  true, false, false, ConTexMode.FULL_FACE, FramedThreewayCornerBlock::generateInnerThreewayShapes),
     FRAMED_DOUBLE_THREEWAY_CORNER                   ( true, false,  true, false,  true,  true,  true, false, ConTexMode.FULL_FACE, Shapes.block()),
+    FRAMED_SLOPE_EDGE                               (false,  true, false,  true,  true,  true, false, false, ConTexMode.FULL_EDGE, FramedSlopeEdgeBlock::generateShapes),
+    FRAMED_ELEVATED_SLOPE_EDGE                      ( true,  true, false,  true,  true,  true, false, false, ConTexMode.FULL_FACE, FramedElevatedSlopeEdgeBlock::generateShapes),
+    FRAMED_ELEVATED_DOUBLE_SLOPE_EDGE               ( true, false, false, false,  true,  true,  true, false, ConTexMode.FULL_FACE, Shapes.block()),
+    FRAMED_STACKED_SLOPE_EDGE                       ( true,  true, false,  true,  true,  true,  true, false, ConTexMode.FULL_FACE, FramedElevatedSlopeEdgeBlock::generateShapes),
     FRAMED_SLAB                                     ( true, false, false,  true,  true,  true, false, false, ConTexMode.FULL_FACE, FramedSlabBlock::generateShapes),
     FRAMED_DOUBLE_SLAB                              ( true, false,  true, false,  true,  true,  true, false, ConTexMode.FULL_FACE, Shapes.block()),
     FRAMED_DIVIDED_SLAB                             ( true, false,  true,  true,  true,  true,  true, false, ConTexMode.FULL_EDGE, FramedSlabBlock::generateShapes),

@@ -32,6 +32,7 @@ public final class BeaconTintTests
 
     // All blocks that are completely unable to apply a tint to the beacon beam
     private static final Set<BlockType> NON_TINTING = Set.of(
+            BlockType.FRAMED_SLOPE_EDGE,
             BlockType.FRAMED_SLAB_EDGE,
             BlockType.FRAMED_SLAB_CORNER,
             BlockType.FRAMED_PANEL,
