@@ -11,7 +11,7 @@ import xfacthd.framedblocks.api.model.wrapping.GeometryFactory;
 import xfacthd.framedblocks.api.util.Utils;
 import xfacthd.framedblocks.common.data.PropertyHolder;
 
-public class FramedCheckeredPanelSegmentGeometry implements Geometry
+public class FramedCheckeredPanelSegmentGeometry extends Geometry
 {
     private final Direction dir;
     private final boolean second;

@@ -21,7 +21,7 @@ import xfacthd.framedblocks.common.data.PropertyHolder;
 
 import java.util.List;
 
-public class FramedItemFrameGeometry implements Geometry
+public class FramedItemFrameGeometry extends Geometry
 {
     private static final int GLOWING_BRIGHTNESS = 5;
 

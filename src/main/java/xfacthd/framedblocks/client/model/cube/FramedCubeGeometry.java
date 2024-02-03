@@ -5,7 +5,7 @@ import xfacthd.framedblocks.api.model.data.QuadMap;
 import xfacthd.framedblocks.api.model.geometry.Geometry;
 import xfacthd.framedblocks.api.model.wrapping.GeometryFactory;
 
-public class FramedCubeGeometry implements Geometry
+public class FramedCubeGeometry extends Geometry
 {
     public FramedCubeGeometry(@SuppressWarnings("unused") GeometryFactory.Context ctx) { }
 

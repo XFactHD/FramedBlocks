@@ -12,7 +12,7 @@ import xfacthd.framedblocks.api.util.Utils;
 
 import java.util.List;
 
-public class FramedStairsGeometry implements Geometry
+public class FramedStairsGeometry extends Geometry
 {
     private final Direction dir;
     private final boolean top;

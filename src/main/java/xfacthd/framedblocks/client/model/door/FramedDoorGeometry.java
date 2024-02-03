@@ -11,7 +11,7 @@ import xfacthd.framedblocks.api.model.quad.Modifiers;
 import xfacthd.framedblocks.api.model.quad.QuadModifier;
 import xfacthd.framedblocks.api.util.Utils;
 
-public class FramedDoorGeometry implements Geometry
+public class FramedDoorGeometry extends Geometry
 {
     private final Direction dir;
     private final boolean hingeRight;

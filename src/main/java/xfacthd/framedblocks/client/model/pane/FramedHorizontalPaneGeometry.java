@@ -9,7 +9,7 @@ import xfacthd.framedblocks.api.model.quad.Modifiers;
 import xfacthd.framedblocks.api.model.quad.QuadModifier;
 import xfacthd.framedblocks.api.util.Utils;
 
-public class FramedHorizontalPaneGeometry implements Geometry
+public class FramedHorizontalPaneGeometry extends Geometry
 {
     public FramedHorizontalPaneGeometry(@SuppressWarnings("unused") GeometryFactory.Context ctx) { }
 

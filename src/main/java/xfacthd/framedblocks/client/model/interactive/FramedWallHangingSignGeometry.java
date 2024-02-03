@@ -17,7 +17,7 @@ import xfacthd.framedblocks.api.model.quad.QuadModifier;
 import xfacthd.framedblocks.api.model.util.ModelUtils;
 import xfacthd.framedblocks.api.util.Utils;
 
-public class FramedWallHangingSignGeometry implements Geometry
+public class FramedWallHangingSignGeometry extends Geometry
 {
     private final BlockState state;
     private final BakedModel baseModel;

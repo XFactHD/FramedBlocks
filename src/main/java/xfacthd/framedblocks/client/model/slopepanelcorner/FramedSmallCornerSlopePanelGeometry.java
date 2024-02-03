@@ -13,7 +13,7 @@ import xfacthd.framedblocks.api.model.quad.Modifiers;
 import xfacthd.framedblocks.api.model.quad.QuadModifier;
 import xfacthd.framedblocks.client.model.slopepanel.FramedSlopePanelGeometry;
 
-public class FramedSmallCornerSlopePanelGeometry implements Geometry
+public class FramedSmallCornerSlopePanelGeometry extends Geometry
 {
     private static final Vector3f ORIGIN_BOTTOM = new Vector3f(.5F, 0, .5F);
     private static final Vector3f ORIGIN_TOP = new Vector3f(.5F, 1, .5F);

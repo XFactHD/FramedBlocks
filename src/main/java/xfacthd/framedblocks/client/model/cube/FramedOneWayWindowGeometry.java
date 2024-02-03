@@ -17,7 +17,7 @@ import xfacthd.framedblocks.api.model.util.ModelUtils;
 import xfacthd.framedblocks.common.data.PropertyHolder;
 import xfacthd.framedblocks.common.data.property.NullableDirection;
 
-public class FramedOneWayWindowGeometry implements Geometry
+public class FramedOneWayWindowGeometry extends Geometry
 {
     private static final ResourceLocation TINTED_GLASS_LOC = BlockModelShaper.stateToModelLocation(
             Blocks.TINTED_GLASS.defaultBlockState()

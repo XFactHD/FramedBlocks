@@ -22,7 +22,7 @@ import xfacthd.framedblocks.api.model.util.ModelCache;
 
 import java.util.List;
 
-public class FramedLeverGeometry implements Geometry
+public class FramedLeverGeometry extends Geometry
 {
     private static final float MIN_SMALL = 5F/16F;
     private static final float MAX_SMALL = 11F/16F;

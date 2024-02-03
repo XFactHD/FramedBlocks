@@ -11,7 +11,7 @@ import xfacthd.framedblocks.api.model.quad.Modifiers;
 import xfacthd.framedblocks.api.model.quad.QuadModifier;
 import xfacthd.framedblocks.api.util.Utils;
 
-public class FramedTrapDoorGeometry implements Geometry
+public class FramedTrapDoorGeometry extends Geometry
 {
     private static final float DEPTH = 3F/16F;
 

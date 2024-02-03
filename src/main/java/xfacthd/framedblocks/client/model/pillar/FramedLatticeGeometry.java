@@ -11,7 +11,7 @@ import xfacthd.framedblocks.api.block.FramedProperties;
 import xfacthd.framedblocks.api.util.Utils;
 import xfacthd.framedblocks.common.FBContent;
 
-public class FramedLatticeGeometry implements Geometry
+public class FramedLatticeGeometry extends Geometry
 {
     private static final float MIN_COORD = 6F/16F;
     private static final float MAX_COORD = 10F/16F;

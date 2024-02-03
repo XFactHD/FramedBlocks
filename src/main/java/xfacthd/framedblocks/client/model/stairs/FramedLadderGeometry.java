@@ -10,7 +10,7 @@ import xfacthd.framedblocks.api.model.quad.QuadModifier;
 import xfacthd.framedblocks.api.block.FramedProperties;
 import xfacthd.framedblocks.api.util.Utils;
 
-public class FramedLadderGeometry implements Geometry
+public class FramedLadderGeometry extends Geometry
 {
     private static final float RUNG_DEPTH = 1F/16F;
     private static final float LEG_DEPTH = RUNG_DEPTH * 2F;

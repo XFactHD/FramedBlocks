@@ -12,7 +12,7 @@ import xfacthd.framedblocks.api.util.Utils;
 
 import java.util.List;
 
-public class FramedFenceGateGeometry implements Geometry
+public class FramedFenceGateGeometry extends Geometry
 {
     private final Direction dir;
     private final boolean inWall;

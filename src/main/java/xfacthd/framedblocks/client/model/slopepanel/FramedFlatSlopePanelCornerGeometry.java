@@ -15,7 +15,7 @@ import xfacthd.framedblocks.api.util.Utils;
 import xfacthd.framedblocks.common.data.PropertyHolder;
 import xfacthd.framedblocks.common.data.property.HorizontalRotation;
 
-public class FramedFlatSlopePanelCornerGeometry implements Geometry
+public class FramedFlatSlopePanelCornerGeometry extends Geometry
 {
     private final Direction facing;
     private final HorizontalRotation rotation;

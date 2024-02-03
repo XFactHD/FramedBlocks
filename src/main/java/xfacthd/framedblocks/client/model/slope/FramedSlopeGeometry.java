@@ -12,7 +12,7 @@ import xfacthd.framedblocks.api.util.Utils;
 import xfacthd.framedblocks.common.data.PropertyHolder;
 import xfacthd.framedblocks.common.data.property.SlopeType;
 
-public class FramedSlopeGeometry implements Geometry
+public class FramedSlopeGeometry extends Geometry
 {
     private final Direction dir;
     private final SlopeType type;

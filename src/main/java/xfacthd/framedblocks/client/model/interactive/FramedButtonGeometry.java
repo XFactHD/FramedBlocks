@@ -11,7 +11,7 @@ import xfacthd.framedblocks.api.model.quad.Modifiers;
 import xfacthd.framedblocks.api.model.quad.QuadModifier;
 import xfacthd.framedblocks.api.util.Utils;
 
-public class FramedButtonGeometry implements Geometry
+public class FramedButtonGeometry extends Geometry
 {
     protected final Direction dir;
     protected final AttachFace face;

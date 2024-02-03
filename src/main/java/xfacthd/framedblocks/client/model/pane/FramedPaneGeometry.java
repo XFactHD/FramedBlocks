@@ -14,7 +14,7 @@ import xfacthd.framedblocks.api.util.Utils;
 
 import java.util.List;
 
-public class FramedPaneGeometry implements Geometry
+public class FramedPaneGeometry extends Geometry
 {
     protected final boolean north;
     protected final boolean east;

@@ -16,7 +16,7 @@ import xfacthd.framedblocks.api.util.Utils;
 import xfacthd.framedblocks.client.model.slopepanel.FramedSlopePanelGeometry;
 import xfacthd.framedblocks.client.model.slopeslab.FramedSlopeSlabGeometry;
 
-public class FramedPyramidGeometry implements Geometry
+public class FramedPyramidGeometry extends Geometry
 {
     private static final Vector3f BOTTOM_CENTER = new Vector3f(.5F, 0, .5F);
     private static final Vector3f TOP_CENTER = new Vector3f(.5F, 1, .5F);

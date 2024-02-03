@@ -10,7 +10,7 @@ import xfacthd.framedblocks.api.model.quad.Modifiers;
 import xfacthd.framedblocks.api.model.quad.QuadModifier;
 import xfacthd.framedblocks.api.util.Utils;
 
-public class FramedSignGeometry implements Geometry
+public class FramedSignGeometry extends Geometry
 {
     private static final float Y_OFF = 1.75F/16F;
     private static final float POS = 9F/16F;

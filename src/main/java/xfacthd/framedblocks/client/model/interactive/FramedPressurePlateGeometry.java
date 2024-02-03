@@ -10,7 +10,7 @@ import xfacthd.framedblocks.api.model.quad.Modifiers;
 import xfacthd.framedblocks.api.model.quad.QuadModifier;
 import xfacthd.framedblocks.api.util.Utils;
 
-public class FramedPressurePlateGeometry implements Geometry
+public class FramedPressurePlateGeometry extends Geometry
 {
     private final boolean pressed;
 

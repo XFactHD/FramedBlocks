@@ -12,7 +12,7 @@ import xfacthd.framedblocks.api.model.quad.QuadModifier;
 import xfacthd.framedblocks.api.util.Utils;
 import xfacthd.framedblocks.common.data.BlockType;
 
-public class FramedPillarGeometry implements Geometry
+public class FramedPillarGeometry extends Geometry
 {
     private final Direction.Axis axis;
     private final float capStart;

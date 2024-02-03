@@ -11,7 +11,7 @@ import xfacthd.framedblocks.api.block.FramedProperties;
 import xfacthd.framedblocks.common.data.PropertyHolder;
 import xfacthd.framedblocks.common.data.property.StairsType;
 
-public class FramedVerticalStairsGeometry implements Geometry
+public class FramedVerticalStairsGeometry extends Geometry
 {
     private final boolean vertical;
     private final boolean top;

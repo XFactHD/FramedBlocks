@@ -13,7 +13,7 @@ import xfacthd.framedblocks.api.model.quad.QuadModifier;
 import xfacthd.framedblocks.api.render.Quaternions;
 import xfacthd.framedblocks.client.model.slopepanel.FramedSlopePanelGeometry;
 
-public class FramedSmallInnerCornerSlopePanelGeometry implements Geometry
+public class FramedSmallInnerCornerSlopePanelGeometry extends Geometry
 {
     private final Direction dir;
     private final boolean top;

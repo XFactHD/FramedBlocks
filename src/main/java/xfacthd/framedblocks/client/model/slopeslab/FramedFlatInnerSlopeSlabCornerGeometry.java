@@ -12,7 +12,7 @@ import xfacthd.framedblocks.api.model.quad.QuadModifier;
 import xfacthd.framedblocks.api.block.FramedProperties;
 import xfacthd.framedblocks.common.data.PropertyHolder;
 
-public class FramedFlatInnerSlopeSlabCornerGeometry implements Geometry
+public class FramedFlatInnerSlopeSlabCornerGeometry extends Geometry
 {
     private final Direction facing;
     private final boolean top;

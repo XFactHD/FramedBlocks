@@ -14,7 +14,7 @@ import xfacthd.framedblocks.client.model.slopepanel.FramedSlopePanelGeometry;
 import xfacthd.framedblocks.common.data.PropertyHolder;
 import xfacthd.framedblocks.common.data.property.HorizontalRotation;
 
-public class FramedExtendedInnerCornerSlopePanelWallGeometry implements Geometry
+public class FramedExtendedInnerCornerSlopePanelWallGeometry extends Geometry
 {
     private final Direction dir;
     private final Direction horRotDir;

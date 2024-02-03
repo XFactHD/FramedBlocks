@@ -11,7 +11,7 @@ import xfacthd.framedblocks.api.model.quad.Modifiers;
 import xfacthd.framedblocks.api.model.quad.QuadModifier;
 import xfacthd.framedblocks.api.util.Utils;
 
-public class FramedFenceGeometry implements Geometry
+public class FramedFenceGeometry extends Geometry
 {
     private final boolean north;
     private final boolean east;

@@ -14,7 +14,7 @@ import xfacthd.framedblocks.api.util.Utils;
 import xfacthd.framedblocks.common.blockentity.special.FramedCollapsibleBlockEntity;
 import xfacthd.framedblocks.common.data.PropertyHolder;
 
-public class FramedCollapsibleBlockGeometry implements Geometry
+public class FramedCollapsibleBlockGeometry extends Geometry
 {
     private static final float MIN_DEPTH = .001F;
 

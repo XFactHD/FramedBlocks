@@ -10,7 +10,7 @@ import xfacthd.framedblocks.api.model.quad.QuadModifier;
 import xfacthd.framedblocks.api.block.FramedProperties;
 import xfacthd.framedblocks.api.util.Utils;
 
-public class FramedPanelGeometry implements Geometry
+public class FramedPanelGeometry extends Geometry
 {
     private final Direction dir;
 

@@ -12,7 +12,7 @@ import xfacthd.framedblocks.api.util.Utils;
 import xfacthd.framedblocks.common.data.PropertyHolder;
 import xfacthd.framedblocks.common.data.property.DirectionAxis;
 
-public class FramedInnerPrismGeometry implements Geometry
+public class FramedInnerPrismGeometry extends Geometry
 {
     private final Direction facing;
     private final Direction.Axis axis;

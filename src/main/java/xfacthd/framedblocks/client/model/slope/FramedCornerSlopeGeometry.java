@@ -12,7 +12,7 @@ import xfacthd.framedblocks.api.util.Utils;
 import xfacthd.framedblocks.common.data.PropertyHolder;
 import xfacthd.framedblocks.common.data.property.CornerType;
 
-public class FramedCornerSlopeGeometry implements Geometry
+public class FramedCornerSlopeGeometry extends Geometry
 {
     private final Direction dir;
     private final CornerType type;

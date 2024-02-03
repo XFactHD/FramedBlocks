@@ -9,7 +9,7 @@ import xfacthd.framedblocks.api.model.quad.Modifiers;
 import xfacthd.framedblocks.api.model.quad.QuadModifier;
 import xfacthd.framedblocks.api.block.FramedProperties;
 
-public class FramedInnerPrismCornerGeometry implements Geometry
+public class FramedInnerPrismCornerGeometry extends Geometry
 {
     private final Direction dir;
     private final boolean top;

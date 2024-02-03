@@ -16,7 +16,7 @@ import xfacthd.framedblocks.api.util.Utils;
 import xfacthd.framedblocks.common.data.PropertyHolder;
 import xfacthd.framedblocks.common.data.property.HorizontalRotation;
 
-public class FramedSlopePanelGeometry implements Geometry
+public class FramedSlopePanelGeometry extends Geometry
 {
     public static final float SLOPE_ANGLE = (float) Math.toDegrees(Math.atan(.5));
     public static final float SLOPE_ANGLE_VERT = (float) (90D - Math.toDegrees(Math.atan(.5)));

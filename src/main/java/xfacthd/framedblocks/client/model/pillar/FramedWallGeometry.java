@@ -14,7 +14,7 @@ import xfacthd.framedblocks.api.util.Utils;
 
 import java.util.List;
 
-public class FramedWallGeometry implements Geometry
+public class FramedWallGeometry extends Geometry
 {
     private static final Vector4f[] rects = new Vector4f[] { //Wall half segment top/bottom rects
             new Vector4f( 5F/16F,      0F, 11F/16F,  5F/16F), //North

@@ -10,7 +10,7 @@ import xfacthd.framedblocks.api.model.quad.Modifiers;
 import xfacthd.framedblocks.api.model.quad.QuadModifier;
 import xfacthd.framedblocks.api.util.Utils;
 
-public class FramedLargeButtonGeometry implements Geometry
+public class FramedLargeButtonGeometry extends Geometry
 {
     protected final Direction dir;
     protected final AttachFace face;

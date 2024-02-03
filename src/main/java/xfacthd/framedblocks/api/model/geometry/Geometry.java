@@ -22,7 +22,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Predicate;
 
-public interface Geometry
+public abstract class Geometry
 {
     /**
      * Called for each {@link BakedQuad} of the camo block's model for whose side this block's
@@ -32,7 +32,7 @@ public interface Geometry
      *             modify the quad
      * @param data The {@link ModelData}
      */
-    default void transformQuad(QuadMap quadMap, BakedQuad quad, ModelData data)
+    public void transformQuad(QuadMap quadMap, BakedQuad quad, ModelData data)
     {
         transformQuad(quadMap, quad);
     }
@@ -44,13 +44,13 @@ public interface Geometry
      * @param quad The source quad. Must not be modified directly, use {@link QuadModifier}s to
      *             modify the quad
      */
-    void transformQuad(QuadMap quadMap, BakedQuad quad);
+    public abstract void transformQuad(QuadMap quadMap, BakedQuad quad);
 
     /**
      * Post-process quads on faces that return {@code false} from {@link FullFacePredicate#test(BlockState, Direction)}<br>
      * Any additional processing done in this method should be as fast as possible
      */
-    default List<BakedQuad> postProcessUncachedQuads(List<BakedQuad> quads)
+    public List<BakedQuad> postProcessUncachedQuads(List<BakedQuad> quads)
     {
         return quads;
     }
@@ -59,7 +59,7 @@ public interface Geometry
      * Return true if the base model loaded from JSON should be used when no camo is applied without going
      * through the quad manipulation process
      */
-    default boolean forceUngeneratedBaseModel()
+    public boolean forceUngeneratedBaseModel()
     {
         return false;
     }
@@ -70,7 +70,7 @@ public interface Geometry
      * {@link Geometry#forceUngeneratedBaseModel()} returns false
      * @apiNote Must return true if {@link Geometry#forceUngeneratedBaseModel()} returns true
      */
-    default boolean useBaseModel()
+    public boolean useBaseModel()
     {
         return forceUngeneratedBaseModel();
     }
@@ -79,7 +79,7 @@ public interface Geometry
      * Return true if all quads should be submitted for transformation, even if their cull-face would be filtered
      * by the {@link FullFacePredicate}
      */
-    default boolean transformAllQuads()
+    public boolean transformAllQuads()
     {
         return false;
     }
@@ -88,7 +88,7 @@ public interface Geometry
      * Return {@link RenderType}s which contain additional quads (i.e. non-camo quads read from other models)
      * or {@link ChunkRenderTypeSet#none()} when no additional render types are present
      */
-    default ChunkRenderTypeSet getAdditionalRenderTypes(RandomSource rand, ModelData extraData)
+    public ChunkRenderTypeSet getAdditionalRenderTypes(RandomSource rand, ModelData extraData)
     {
         return ChunkRenderTypeSet.none();
     }
@@ -97,19 +97,19 @@ public interface Geometry
      * Add additional quads to faces that return {@code true} from {@link FullFacePredicate#test(BlockState, Direction)}<br>
      * The result of this method will NOT be cached, execution should therefore be as fast as possible
      */
-    default void getAdditionalQuads(ArrayList<BakedQuad> quads, Direction side, RandomSource rand, ModelData data, RenderType renderType) { }
+    public void getAdditionalQuads(ArrayList<BakedQuad> quads, Direction side, RandomSource rand, ModelData data, RenderType renderType) { }
 
     /**
      * Add additional quads to faces that return {@code false} from {@link FullFacePredicate#test(BlockState, Direction)}<br>
      * The result of this method will be cached, processing time is therefore not critical
      */
-    default void getAdditionalQuads(QuadMap quadMap, RandomSource rand, ModelData data, RenderType renderType) { }
+    public void getAdditionalQuads(QuadMap quadMap, RandomSource rand, ModelData data, RenderType renderType) { }
 
     /**
      * Return {@link RenderType}s which contain overlay quads generated in {@link #getGeneratedOverlayQuads(QuadMap, RandomSource, ModelData, RenderType)}
      * or {@link ChunkRenderTypeSet#none()} when no overlay quads are used
      */
-    default ChunkRenderTypeSet getOverlayRenderTypes(RandomSource rand, ModelData extraData)
+    public ChunkRenderTypeSet getOverlayRenderTypes(RandomSource rand, ModelData extraData)
     {
         return ChunkRenderTypeSet.none();
     }
@@ -123,7 +123,7 @@ public interface Geometry
      * @see FramedBlocksClientAPI#generateOverlayQuads(QuadMap, Direction, TextureAtlasSprite)
      * @see FramedBlocksClientAPI#generateOverlayQuads(QuadMap, Direction, TextureAtlasSprite, Predicate)
      */
-    default void getGeneratedOverlayQuads(QuadMap quadMap, RandomSource rand, ModelData data, RenderType layer) { }
+    public void getGeneratedOverlayQuads(QuadMap quadMap, RandomSource rand, ModelData data, RenderType layer) { }
 
     /**
      * Return a custom {@link QuadCacheKey} that holds additional metadata which influences the resulting quads.
@@ -134,7 +134,7 @@ public interface Geometry
      * @param ctCtx The current connected textures context object, may be null
      * @param data The {@link ModelData} from the {@link FramedBlockEntity}
      */
-    default QuadCacheKey makeCacheKey(BlockState state, Object ctCtx, ModelData data)
+    public QuadCacheKey makeCacheKey(BlockState state, Object ctCtx, ModelData data)
     {
         return new SimpleQuadCacheKey(state, ctCtx);
     }
@@ -142,13 +142,13 @@ public interface Geometry
     /**
      * Apply transformations to the item model when it is rendered in hand
      */
-    default void applyInHandTransformation(PoseStack poseStack, ItemDisplayContext ctx) { }
+    public void applyInHandTransformation(PoseStack poseStack, ItemDisplayContext ctx) { }
 
     /**
      * {@return whether the model should use a solid model when no camo is applied}
      * @apiNote Only has an effect if {@link #useBaseModel()} returns {@code false}
      */
-    default boolean useSolidNoCamoModel()
+    public boolean useSolidNoCamoModel()
     {
         return false;
     }

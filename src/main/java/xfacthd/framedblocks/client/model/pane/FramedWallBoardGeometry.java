@@ -10,7 +10,7 @@ import xfacthd.framedblocks.api.model.quad.QuadModifier;
 import xfacthd.framedblocks.api.block.FramedProperties;
 import xfacthd.framedblocks.api.util.Utils;
 
-public class FramedWallBoardGeometry implements Geometry
+public class FramedWallBoardGeometry extends Geometry
 {
     private static final float DEPTH = 1F/16F;
 

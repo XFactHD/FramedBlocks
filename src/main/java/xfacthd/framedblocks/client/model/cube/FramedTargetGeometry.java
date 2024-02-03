@@ -17,7 +17,7 @@ import xfacthd.framedblocks.api.model.util.ModelUtils;
 
 import java.util.ArrayList;
 
-public class FramedTargetGeometry implements Geometry
+public class FramedTargetGeometry extends Geometry
 {
     public static final ResourceLocation OVERLAY_LOCATION = Utils.rl("block/target_overlay");
     public static final int OVERLAY_TINT_IDX = 1024;

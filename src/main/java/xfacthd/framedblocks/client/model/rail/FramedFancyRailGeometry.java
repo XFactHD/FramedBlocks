@@ -21,7 +21,7 @@ import xfacthd.framedblocks.api.util.Utils;
 
 import java.util.*;
 
-public class FramedFancyRailGeometry implements Geometry
+public class FramedFancyRailGeometry extends Geometry
 {
     private static final int SLEEPER_COUNT = 4;
     private static final int SLEEPER_COUNT_CURVE = 3;

@@ -21,7 +21,7 @@ import xfacthd.framedblocks.api.model.util.ModelCache;
 
 import java.util.List;
 
-public class FramedRedstoneTorchGeometry implements Geometry
+public class FramedRedstoneTorchGeometry extends Geometry
 {
     private static final float MIN = 7F/16F;
     private static final float MAX = 9F/16F;

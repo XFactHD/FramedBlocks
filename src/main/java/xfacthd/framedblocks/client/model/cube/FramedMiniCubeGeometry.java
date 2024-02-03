@@ -11,7 +11,7 @@ import xfacthd.framedblocks.api.model.quad.Modifiers;
 import xfacthd.framedblocks.api.model.quad.QuadModifier;
 import xfacthd.framedblocks.api.util.Utils;
 
-public class FramedMiniCubeGeometry implements Geometry
+public class FramedMiniCubeGeometry extends Geometry
 {
     private static final Vector3f ORIGIN = new Vector3f(.5F, 0, .5F);
 

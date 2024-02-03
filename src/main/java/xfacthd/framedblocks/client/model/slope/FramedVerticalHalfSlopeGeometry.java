@@ -12,7 +12,7 @@ import xfacthd.framedblocks.api.model.quad.QuadModifier;
 import xfacthd.framedblocks.api.block.FramedProperties;
 import xfacthd.framedblocks.api.util.Utils;
 
-public class FramedVerticalHalfSlopeGeometry implements Geometry
+public class FramedVerticalHalfSlopeGeometry extends Geometry
 {
     private final Direction dir;
     private final boolean top;

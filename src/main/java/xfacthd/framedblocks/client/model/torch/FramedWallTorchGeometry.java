@@ -22,7 +22,7 @@ import xfacthd.framedblocks.api.util.Utils;
 
 import java.util.List;
 
-public class FramedWallTorchGeometry implements Geometry
+public class FramedWallTorchGeometry extends Geometry
 {
     private static final Vector3f ROTATION_ORIGIN = new Vector3f(0, 3.5F/16F, 8F/16F);
     private static final float MIN = 7F/16F;

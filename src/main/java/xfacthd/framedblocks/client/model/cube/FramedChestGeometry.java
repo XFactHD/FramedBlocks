@@ -22,7 +22,7 @@ import xfacthd.framedblocks.common.data.property.LatchType;
 
 import java.util.List;
 
-public class FramedChestGeometry implements Geometry
+public class FramedChestGeometry extends Geometry
 {
     private final BlockState state;
     private final BakedModel baseModel;

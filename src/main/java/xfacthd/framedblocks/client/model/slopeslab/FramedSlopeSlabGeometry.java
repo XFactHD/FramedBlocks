@@ -12,7 +12,7 @@ import xfacthd.framedblocks.api.model.quad.QuadModifier;
 import xfacthd.framedblocks.api.block.FramedProperties;
 import xfacthd.framedblocks.common.data.PropertyHolder;
 
-public class FramedSlopeSlabGeometry implements Geometry
+public class FramedSlopeSlabGeometry extends Geometry
 {
     public static final float SLOPE_ANGLE = (float) (90D - Math.toDegrees(Math.atan(.5)));
     public static final float SLOPE_ANGLE_VERT = (float) Math.toDegrees(Math.atan(.5));

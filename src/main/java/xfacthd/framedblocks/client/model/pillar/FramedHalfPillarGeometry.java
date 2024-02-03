@@ -10,7 +10,7 @@ import xfacthd.framedblocks.api.model.quad.Modifiers;
 import xfacthd.framedblocks.api.model.quad.QuadModifier;
 import xfacthd.framedblocks.api.util.Utils;
 
-public class FramedHalfPillarGeometry implements Geometry
+public class FramedHalfPillarGeometry extends Geometry
 {
     private final Direction face;
 

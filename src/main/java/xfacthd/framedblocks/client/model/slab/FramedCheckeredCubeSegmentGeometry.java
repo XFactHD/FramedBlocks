@@ -10,7 +10,7 @@ import xfacthd.framedblocks.api.model.wrapping.GeometryFactory;
 import xfacthd.framedblocks.api.util.Utils;
 import xfacthd.framedblocks.common.data.PropertyHolder;
 
-public class FramedCheckeredCubeSegmentGeometry implements Geometry
+public class FramedCheckeredCubeSegmentGeometry extends Geometry
 {
     private final boolean second;
 

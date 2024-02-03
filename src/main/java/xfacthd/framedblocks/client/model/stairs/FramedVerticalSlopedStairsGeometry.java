@@ -13,7 +13,7 @@ import xfacthd.framedblocks.api.util.Utils;
 import xfacthd.framedblocks.common.data.PropertyHolder;
 import xfacthd.framedblocks.common.data.property.HorizontalRotation;
 
-public class FramedVerticalSlopedStairsGeometry implements Geometry
+public class FramedVerticalSlopedStairsGeometry extends Geometry
 {
     private final Direction facing;
     private final Direction rotDir;

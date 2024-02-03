@@ -19,7 +19,7 @@ import xfacthd.framedblocks.api.util.Utils;
 
 import java.util.List;
 
-public class FramedCeilingHangingSignGeometry implements Geometry
+public class FramedCeilingHangingSignGeometry extends Geometry
 {
     private final BlockState state;
     private final BakedModel baseModel;

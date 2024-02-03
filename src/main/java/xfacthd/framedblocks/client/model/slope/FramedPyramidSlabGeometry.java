@@ -14,7 +14,7 @@ import xfacthd.framedblocks.api.model.quad.Modifiers;
 import xfacthd.framedblocks.api.model.quad.QuadModifier;
 import xfacthd.framedblocks.api.util.Utils;
 
-public class FramedPyramidSlabGeometry implements Geometry
+public class FramedPyramidSlabGeometry extends Geometry
 {
     private static final Vector3f ZERO = new Vector3f();
 

@@ -9,7 +9,7 @@ import xfacthd.framedblocks.api.model.quad.Modifiers;
 import xfacthd.framedblocks.api.model.quad.QuadModifier;
 import xfacthd.framedblocks.api.block.FramedProperties;
 
-public class FramedCornerPillarGeometry implements Geometry
+public class FramedCornerPillarGeometry extends Geometry
 {
     private final Direction dir;
 

@@ -20,7 +20,7 @@ import xfacthd.framedblocks.api.util.Utils;
 import java.util.List;
 import java.util.function.Predicate;
 
-public class FramedBookshelfGeometry implements Geometry
+public class FramedBookshelfGeometry extends Geometry
 {
     private final BlockState state;
     private final BakedModel baseModel;

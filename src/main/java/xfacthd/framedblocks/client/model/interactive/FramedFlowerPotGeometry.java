@@ -29,7 +29,7 @@ import xfacthd.framedblocks.common.data.PropertyHolder;
 
 import java.util.List;
 
-public class FramedFlowerPotGeometry implements Geometry
+public class FramedFlowerPotGeometry extends Geometry
 {
     private static final ResourceLocation POT_TEXTURE = new ResourceLocation("minecraft:block/flower_pot");
     private static final ResourceLocation DIRT_TEXTURE = new ResourceLocation("minecraft:block/dirt");

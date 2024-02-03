@@ -10,7 +10,7 @@ import xfacthd.framedblocks.api.model.quad.Modifiers;
 import xfacthd.framedblocks.api.model.quad.QuadModifier;
 import xfacthd.framedblocks.api.util.Utils;
 
-public class FramedWallSignGeometry implements Geometry
+public class FramedWallSignGeometry extends Geometry
 {
     private static final float DEPTH = 2F/16F;
     private final Direction dir;

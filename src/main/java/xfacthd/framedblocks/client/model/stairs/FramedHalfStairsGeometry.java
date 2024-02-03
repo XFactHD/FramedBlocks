@@ -11,7 +11,7 @@ import xfacthd.framedblocks.api.block.FramedProperties;
 import xfacthd.framedblocks.api.util.Utils;
 import xfacthd.framedblocks.common.data.PropertyHolder;
 
-public class FramedHalfStairsGeometry implements Geometry
+public class FramedHalfStairsGeometry extends Geometry
 {
     private final Direction dir;
     private final boolean top;
