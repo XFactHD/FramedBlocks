@@ -179,7 +179,7 @@ dependencies {
     compileOnly("dev.emi:emi-neoforge:${emi_version}+${emi_mc_version}:api")
     runtimeOnly("dev.emi:emi-neoforge:${emi_version}+${emi_mc_version}")
 
-    compileOnly("curse.maven:modernfix-790626:4954621")
+    compileOnly("curse.maven:modernfix-790626:5077296")
     //runtimeOnly("org.embeddedt:embeddium-${embeddium_mc_version}:${embeddium_version}")
     //runtimeOnly("curse.maven:oculus-581495:4578741")
     //runtimeOnly("curse.maven:starlight-neoforge-951766:4967623")
