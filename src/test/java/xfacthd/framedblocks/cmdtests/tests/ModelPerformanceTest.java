@@ -15,7 +15,6 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.neoforged.neoforge.client.model.data.ModelData;
 import xfacthd.framedblocks.client.model.FramedBlockModel;
 import xfacthd.framedblocks.api.model.data.FramedBlockData;
-import xfacthd.framedblocks.api.util.TestProperties;
 import xfacthd.framedblocks.cmdtests.SpecialTestCommand;
 import xfacthd.framedblocks.common.FBContent;
 import xfacthd.framedblocks.common.blockentity.doubled.FramedDoubleBlockEntity;
@@ -131,9 +130,7 @@ public final class ModelPerformanceTest
             count[0]++;
         });
 
-        StringBuilder data = new StringBuilder("Quad cache enabled: ")
-                .append(TestProperties.DISABLE_MODEL_QUAD_CACHE ? "false" : "true")
-                .append("\n\n");
+        StringBuilder data = new StringBuilder();
 
         float minBlank = Float.MAX_VALUE;
         float maxBlank = 0;

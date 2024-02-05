@@ -20,20 +20,11 @@ jarJar.enable()
 
 minecraft.accessTransformers.file project.file('src/main/resources/META-INF/accesstransformer.cfg')
 
-configurations {
-    nonModLibrary {}
-    implementation.extendsFrom(nonModLibrary)
-}
-
 runs {
     configureEach {
         // systemProperty  'forge.logging.markers', 'SCAN,REGISTRIES,REGISTRYDUMP'
         systemProperty  'forge.logging.console.level', 'debug'
         systemProperty  'forge.enabledGameTestNamespaces', 'framedblocks'
-
-        dependencies {
-            runtime project.configurations.nonModLibrary
-        }
 
         modSources.addAll project.sourceSets.main, project.sourceSets.test
     }
@@ -41,7 +32,6 @@ runs {
     client {
         workingDirectory project.file('run')
 
-        //systemProperty 'framedblocks.test.disable_model_quad_cache', 'true'
         //systemProperty 'framedblocks.test.enable_double_block_part_hit_debug_renderer', 'true'
         //systemProperty 'framedblocks.test.enable_connection_debug_renderer', 'true'
         //systemProperty 'framedblocks.test.enable_state_merger_debug_logging', 'true'
@@ -130,11 +120,6 @@ repositories {
             includeGroup('earth.terrarium.athena')
         }
     }
-    mavenCentral() {
-        content {
-            includeGroup('com.github.ben-manes.caffeine')
-        }
-    }
     mavenLocal() {
         content {
             includeGroupByRegex('xfacthd.*')
@@ -154,7 +139,7 @@ dependencies {
 
     //compileOnly("curse.maven:buildinggadgets-298187:3829297")
 
-    runtimeOnly("xfacthd.contex:ConnectedTextures:${contex_version}:slim") { transitive = false }
+    runtimeOnly("xfacthd.contex:ConnectedTextures:${contex_version}")
 
     compileOnly("earth.terrarium.athena:athena-neoforge-${athena_mc_version}:${athena_version}")
     //runtimeOnly("com.teamresourceful.resourcefullib:resourcefullib-neoforge-${resful_lib_mc_version}:${resful_lib_version}")
@@ -196,12 +181,11 @@ dependencies {
 
     //implementation("curse.maven:guidebook-253874:4593765")
 
-    compileOnly("curse.maven:atlasviewer-633577:4882515")
+    //runtimeOnly("curse.maven:corelib-454372:4976551")
+    //runtimeOnly("curse.maven:fusion-854949:5005142")
+    //runtimeOnly("curse.maven:conglass-383129:5002616")
 
-    nonModLibrary(jarJar("com.github.ben-manes.caffeine:caffeine:${caffeine_version}")) {
-        jarJar.ranged(it, "[${caffeine_version},${caffeine_version_upper})")
-        transitive(false)
-    }
+    compileOnly("curse.maven:atlasviewer-633577:4882515")
 }
 
 tasks.withType(ProcessResources).configureEach {
@@ -236,14 +220,6 @@ tasks.withType(ProcessResources).configureEach {
 
 processTestResources {
     duplicatesStrategy(DuplicatesStrategy.INCLUDE)
-}
-
-tasks.jarJar.configure {
-    archiveClassifier = ''
-}
-
-tasks.named('jar', Jar).configure {
-    archiveClassifier = 'slim'
 }
 
 publishing {

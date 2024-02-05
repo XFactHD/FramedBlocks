@@ -1,6 +1,5 @@
 package xfacthd.framedblocks.client.model;
 
-import com.github.benmanes.caffeine.cache.Cache;
 import com.google.common.base.Preconditions;
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.renderer.RenderType;
@@ -16,7 +15,6 @@ import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
 import net.neoforged.neoforge.client.ChunkRenderTypeSet;
 import net.neoforged.neoforge.client.model.data.ModelData;
-import net.neoforged.fml.loading.FMLEnvironment;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.Nullable;
 import xfacthd.framedblocks.api.FramedBlocksAPI;
@@ -30,7 +28,6 @@ import xfacthd.framedblocks.api.model.util.ModelUtils;
 import xfacthd.framedblocks.api.predicate.contex.ConTexMode;
 import xfacthd.framedblocks.api.type.IBlockType;
 import xfacthd.framedblocks.api.block.IFramedBlock;
-import xfacthd.framedblocks.api.util.TestProperties;
 import xfacthd.framedblocks.api.util.Utils;
 import xfacthd.framedblocks.client.data.ConTexDataHandler;
 import xfacthd.framedblocks.common.config.ClientConfig;
@@ -38,19 +35,19 @@ import xfacthd.framedblocks.common.FBContent;
 import xfacthd.framedblocks.common.data.PropertyHolder;
 
 import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Predicate;
 
 @SuppressWarnings("deprecation")
 public final class FramedBlockModel extends BakedModelProxy
 {
-    private static final boolean DISABLE_QUAD_CACHE = !FMLEnvironment.production && TestProperties.DISABLE_MODEL_QUAD_CACHE;
     private static final FramedBlockData DEFAULT_DATA = new FramedBlockData.Immutable(
             Blocks.AIR.defaultBlockState(), new boolean[6], false
     );
     private static final ChunkRenderTypeSet BASE_MODEL_RENDER_TYPES = ModelUtils.CUTOUT;
 
-    private final Cache<QuadCacheKey, QuadTable> quadCache = Utils.makeLRUCache(ModelCache.DEFAULT_CACHE_DURATION);
-    private final Cache<QuadCacheKey, CachedRenderTypes> renderTypeCache = Utils.makeLRUCache(ModelCache.DEFAULT_CACHE_DURATION);
+    private final Map<QuadCacheKey, QuadTable> quadCache = new ConcurrentHashMap<>();
+    private final Map<QuadCacheKey, CachedRenderTypes> renderTypeCache = new ConcurrentHashMap<>();
     private final BlockState state;
     private final Geometry geometry;
     private final IBlockType type;
@@ -144,10 +141,14 @@ public final class FramedBlockModel extends BakedModelProxy
             BlockState keyState, BlockState camoState, RandomSource rand, ModelData data
     )
     {
-        return renderTypeCache.get(
-                geometry.makeCacheKey(keyState, null, data),
-                key -> buildRenderTypeCache(camoState, rand, data)
-        );
+        QuadCacheKey key = geometry.makeCacheKey(keyState, null, data);
+        CachedRenderTypes cachedTypes = renderTypeCache.get(key);
+        if (cachedTypes == null)
+        {
+            cachedTypes = buildRenderTypeCache(camoState, rand, data);
+            renderTypeCache.put(key, cachedTypes);
+        }
+        return cachedTypes;
     }
 
     private CachedRenderTypes buildRenderTypeCache(BlockState camoState, RandomSource rand, ModelData data)
@@ -227,18 +228,13 @@ public final class FramedBlockModel extends BakedModelProxy
         else
         {
             Object ctCtx = needCtCtx ? ConTexDataHandler.extractConTexData(camoData) : null;
-            ModelData ctData = ctCtx != null ? camoData : ModelData.EMPTY;
-            QuadTable quadTable;
-            if (DISABLE_QUAD_CACHE)
+            QuadCacheKey key = geometry.makeCacheKey(camoState, ctCtx, extraData);
+            QuadTable quadTable = quadCache.get(key);
+            if (quadTable == null)
             {
-                quadTable = buildQuadCache(camoState, camoModel, rand, extraData, ctData, renderTypes, reinforce);
-            }
-            else
-            {
-                quadTable = quadCache.get(
-                        geometry.makeCacheKey(camoState, ctCtx, extraData),
-                        key -> buildQuadCache(key.state(), camoModel, rand, extraData, ctData, renderTypes, reinforce)
-                );
+                ModelData ctData = ctCtx != null ? camoData : ModelData.EMPTY;
+                quadTable = buildQuadCache(key.state(), camoModel, rand, extraData, ctData, renderTypes, reinforce);
+                quadCache.put(key, quadTable);
             }
             return nullLayer ? quadTable.getAllQuads(side) : quadTable.getQuads(renderType, side);
         }
@@ -400,8 +396,8 @@ public final class FramedBlockModel extends BakedModelProxy
 
     public void clearCache()
     {
-        quadCache.invalidateAll();
-        renderTypeCache.invalidateAll();
+        quadCache.clear();
+        renderTypeCache.clear();
     }
 
 

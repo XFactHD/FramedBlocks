@@ -1,7 +1,5 @@
 package xfacthd.framedblocks.common.block.cube;
 
-import com.github.benmanes.caffeine.cache.*;
-import net.minecraft.Util;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.util.Mth;
@@ -27,12 +25,12 @@ import xfacthd.framedblocks.common.blockentity.special.FramedCollapsibleBlockEnt
 import xfacthd.framedblocks.common.data.*;
 import xfacthd.framedblocks.common.data.property.NullableDirection;
 
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
+
 public class FramedCollapsibleBlock extends FramedBlock
 {
-    private static final LoadingCache<Integer, VoxelShape> SHAPE_CACHE = Caffeine.newBuilder()
-            .maximumSize(1024)
-            .executor(Util.backgroundExecutor())
-            .build(new ShapeLoader());
+    private static final Map<Integer, VoxelShape> SHAPE_CACHE = new ConcurrentHashMap<>();
 
     public FramedCollapsibleBlock(BlockType blockType)
     {
@@ -95,7 +93,7 @@ public class FramedCollapsibleBlock extends FramedBlock
             {
                 int offsets = be.getPackedOffsets();
                 offsets |= (face.toDirection().get3DDataValue() << 20);
-                return SHAPE_CACHE.get(offsets);
+                return SHAPE_CACHE.computeIfAbsent(offsets, FramedCollapsibleBlock::buildShape);
             }
         }
         return Shapes.block();
@@ -136,51 +134,47 @@ public class FramedCollapsibleBlock extends FramedBlock
 
 
 
-    private static class ShapeLoader implements CacheLoader<Integer, VoxelShape>
+    @SuppressWarnings("SuspiciousNameCombination")
+    private static VoxelShape buildShape(Integer packedData)
     {
-        @Override
-        @SuppressWarnings("SuspiciousNameCombination")
-        public VoxelShape load(Integer packedData)
+        Direction face = Direction.from3DDataValue(packedData >> 20);
+        byte[] offsets = FramedCollapsibleBlockEntity.unpackOffsets(packedData & 0xFFFFF);
+
+        boolean positive = Utils.isPositive(face);
+        boolean flipX = face == Direction.NORTH || face == Direction.EAST;
+        boolean flipZ = face != Direction.UP;
+
+        VoxelShape result = Shapes.empty();
+        for (int x = 0; x < 4; x++)
         {
-            Direction face = Direction.from3DDataValue(packedData >> 20);
-            byte[] offsets = FramedCollapsibleBlockEntity.unpackOffsets(packedData & 0xFFFFF);
-
-            boolean positive = Utils.isPositive(face);
-            boolean flipX = face == Direction.NORTH || face == Direction.EAST;
-            boolean flipZ = face != Direction.UP;
-
-            VoxelShape result = Shapes.empty();
-            for (int x = 0; x < 4; x++)
+            for (int z = 0; z < 4; z++)
             {
-                for (int z = 0; z < 4; z++)
+                double x0 = flipX ? (1D - x / 4D) : (x / 4D);
+                double x1 = flipX ? (1D - (x + 1) / 4D) : ((x + 1) / 4D);
+                double z0 = flipZ ? (1D - z / 4D) : (z / 4D);
+                double z1 = flipZ ? (1D - (z + 1) / 4D) : ((z + 1) / 4D);
+
+                double y0 = Mth.lerp2(x0, z0, offsets[0], offsets[3], offsets[1], offsets[2]);
+                double y1 = Mth.lerp2(x1, z1, offsets[0], offsets[3], offsets[1], offsets[2]);
+
+                double y = positive ?
+                        Math.max(16D - Math.min(y0, y1), Mth.EPSILON * 2D) :
+                        Math.min(Math.min(y0, y1), 16D - (Mth.EPSILON * 2D));
+
+                VoxelShape shape = switch (face)
                 {
-                    double x0 = flipX ? (1D - x / 4D) : (x / 4D);
-                    double x1 = flipX ? (1D - (x + 1) / 4D) : ((x + 1) / 4D);
-                    double z0 = flipZ ? (1D - z / 4D) : (z / 4D);
-                    double z1 = flipZ ? (1D - (z + 1) / 4D) : ((z + 1) / 4D);
+                    case NORTH -> box(x * 4, z * 4, y, (x + 1) * 4, (z + 1) * 4, 16);
+                    case EAST -> box(0, z * 4, x * 4, y, (z + 1) * 4, (x + 1) * 4);
+                    case SOUTH -> box(x * 4, z * 4, 0, (x + 1) * 4, (z + 1) * 4, y);
+                    case WEST -> box(y, z * 4, x * 4, 16, (z + 1) * 4, (x + 1) * 4);
+                    case UP -> box(x * 4, 0, z * 4, (x + 1) * 4, y, (z + 1) * 4);
+                    case DOWN -> box(x * 4, y, z * 4, (x + 1) * 4, 16, (z + 1) * 4);
+                };
 
-                    double y0 = Mth.lerp2(x0, z0, offsets[0], offsets[3], offsets[1], offsets[2]);
-                    double y1 = Mth.lerp2(x1, z1, offsets[0], offsets[3], offsets[1], offsets[2]);
-
-                    double y = positive ?
-                            Math.max(16D - Math.min(y0, y1), Mth.EPSILON * 2D) :
-                            Math.min(Math.min(y0, y1), 16D - (Mth.EPSILON * 2D));
-
-                    VoxelShape shape = switch (face)
-                    {
-                        case NORTH -> box(x * 4, z * 4, y, (x + 1) * 4, (z + 1) * 4, 16);
-                        case EAST -> box(0, z * 4, x * 4, y, (z + 1) * 4, (x + 1) * 4);
-                        case SOUTH -> box(x * 4, z * 4, 0, (x + 1) * 4, (z + 1) * 4, y);
-                        case WEST -> box(y, z * 4, x * 4, 16, (z + 1) * 4, (x + 1) * 4);
-                        case UP -> box(x * 4, 0, z * 4, (x + 1) * 4, y, (z + 1) * 4);
-                        case DOWN -> box(x * 4, y, z * 4, (x + 1) * 4, 16, (z + 1) * 4);
-                    };
-
-                    result = ShapeUtils.orUnoptimized(result, shape);
-                }
+                result = ShapeUtils.orUnoptimized(result, shape);
             }
-
-            return result.optimize();
         }
+
+        return result.optimize();
     }
 }
