@@ -173,6 +173,11 @@ public interface IFramedBlock extends EntityBlock, IBlockExtension
         {
             return 0;
         }
+        if (pos == BlockPos.ZERO)
+        {
+            // Ensure chunk sections with this block are correctly considered as containing a light source
+            return 15;
+        }
         AuxiliaryLightManager lightManager = level.getAuxLightManager(pos);
         if (lightManager != null)
         {
