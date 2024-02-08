@@ -260,7 +260,7 @@ public final class SkipPredicateGeneratorImpl
             builder.append(COUNTERPART_TEST_MTH_TEMPLATE.formatted(
                     getShortTypeName(type),
                     buildTestCase(sourceType, propArgsList).stripTrailing(),
-                    type.type(),
+                    sourceType.type(),
                     getShortTypeName(sourceType),
                     propParamsList,
                     propLookupList
