@@ -50,6 +50,10 @@ public final class SlopePanelConnectionPredicate implements ConnectionPredicate
         {
             return edge == rotDir.getOpposite();
         }
+        else if (side == facing && front)
+        {
+            return true;
+        }
         return false;
     }
 }
