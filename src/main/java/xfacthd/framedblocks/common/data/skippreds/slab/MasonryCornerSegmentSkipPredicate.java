@@ -69,6 +69,9 @@ public final class MasonryCornerSegmentSkipPredicate implements SideSkipPredicat
                 case FRAMED_EXTENDED_SLOPE_PANEL -> testAgainstExtendedSlopePanel(
                         dir, adjState, side
                 );
+                case FRAMED_COMPOUND_SLOPE_PANEL -> testAgainstCompoundSlopePanel(
+                        dir, adjState, side
+                );
                 case FRAMED_FLAT_INNER_SLOPE_PANEL_CORNER -> testAgainstFlatInnerSlopePanelCorner(
                         dir, adjState, side
                 );
@@ -250,6 +253,17 @@ public final class MasonryCornerSegmentSkipPredicate implements SideSkipPredicat
         HorizontalRotation adjRot = adjState.getValue(PropertyHolder.ROTATION);
 
         return getHalfDir(dir, side).isEqualTo(ExtendedSlopePanelSkipPredicate.getHalfDir(adjDir, adjRot, side.getOpposite()));
+    }
+
+    @CullTest.TestTarget(BlockType.FRAMED_COMPOUND_SLOPE_PANEL)
+    private static boolean testAgainstCompoundSlopePanel(
+            Direction dir, BlockState adjState, Direction side
+    )
+    {
+        Direction adjDir = adjState.getValue(FramedProperties.FACING_HOR);
+        HorizontalRotation adjRot = adjState.getValue(PropertyHolder.ROTATION);
+
+        return getHalfDir(dir, side).isEqualTo(CompoundSlopePanelSkipPredicate.getHalfDir(adjDir, adjRot, side.getOpposite()));
     }
 
     @CullTest.TestTarget(BlockType.FRAMED_FLAT_INNER_SLOPE_PANEL_CORNER)

@@ -18,8 +18,7 @@ import net.minecraft.world.phys.shapes.VoxelShape;
 import org.jetbrains.annotations.Nullable;
 import xfacthd.framedblocks.api.block.FramedProperties;
 import xfacthd.framedblocks.api.block.IFramedBlock;
-import xfacthd.framedblocks.api.shapes.ShapeProvider;
-import xfacthd.framedblocks.api.shapes.ShapeUtils;
+import xfacthd.framedblocks.api.shapes.*;
 import xfacthd.framedblocks.api.util.Utils;
 import xfacthd.framedblocks.common.FBContent;
 import xfacthd.framedblocks.common.block.AbstractFramedDoubleBlock;
@@ -186,11 +185,10 @@ public class FramedInverseDoubleSlopePanelBlock extends AbstractFramedDoubleBloc
 
 
 
-    public static ShapeProvider generateShapes(ImmutableList<BlockState> states)
-    {
-        ImmutableMap.Builder<BlockState, VoxelShape> builder = ImmutableMap.builder();
+    private record ShapeKey(Direction dir, HorizontalRotation rot) { }
 
-        VoxelShape[] shapes = new VoxelShape[4 * 4];
+    private static final ShapeCache<ShapeKey> SHAPES = ShapeCache.create(map ->
+    {
         for (HorizontalRotation rot : HorizontalRotation.values())
         {
             HorizontalRotation rotOne = rot.isVertical() ? rot.getOpposite() : rot;
@@ -199,15 +197,19 @@ public class FramedInverseDoubleSlopePanelBlock extends AbstractFramedDoubleBloc
                     ShapeUtils.rotateShapeUnoptimized(Direction.NORTH, Direction.SOUTH, shapeOne),
                     FramedSlopePanelBlock.SHAPES.get(SlopePanelShape.get(rot, true))
             );
-            ShapeUtils.makeHorizontalRotations(preShape, Direction.NORTH, shapes, rot.ordinal() << 2);
+            ShapeUtils.makeHorizontalRotations(preShape, Direction.NORTH, map, rot, ShapeKey::new);
         }
+    });
+
+    public static ShapeProvider generateShapes(ImmutableList<BlockState> states)
+    {
+        ImmutableMap.Builder<BlockState, VoxelShape> builder = ImmutableMap.builder();
 
         for (BlockState state : states)
         {
             Direction dir = state.getValue(FramedProperties.FACING_HOR);
             HorizontalRotation rot = state.getValue(PropertyHolder.ROTATION);
-            int idx = dir.get2DDataValue() | (rot.ordinal() << 2);
-            builder.put(state, shapes[idx]);
+            builder.put(state, SHAPES.get(new ShapeKey(dir, rot)));
         }
 
         return ShapeProvider.of(builder.build());

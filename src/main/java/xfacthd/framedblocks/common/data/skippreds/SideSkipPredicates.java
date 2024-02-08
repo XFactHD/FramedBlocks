@@ -145,6 +145,7 @@ public final class SideSkipPredicates extends BlockTypeMap<SideSkipPredicate>
         put(BlockType.FRAMED_DOUBLE_SLOPED_PRISM, SideSkipPredicate.FALSE);
         put(BlockType.FRAMED_SLOPE_SLAB, new SlopeSlabSkipPredicate());
         put(BlockType.FRAMED_ELEVATED_SLOPE_SLAB, new ElevatedSlopeSlabSkipPredicate());
+        put(BlockType.FRAMED_COMPOUND_SLOPE_SLAB, new CompoundSlopeSlabSkipPredicate());
         put(BlockType.FRAMED_DOUBLE_SLOPE_SLAB, SideSkipPredicate.FALSE);
         put(BlockType.FRAMED_INV_DOUBLE_SLOPE_SLAB, SideSkipPredicate.FALSE);
         put(BlockType.FRAMED_ELEVATED_DOUBLE_SLOPE_SLAB,SideSkipPredicate.FALSE );
@@ -161,6 +162,7 @@ public final class SideSkipPredicates extends BlockTypeMap<SideSkipPredicate>
         put(BlockType.FRAMED_FLAT_STACKED_INNER_SLOPE_SLAB_CORNER, SideSkipPredicate.FALSE);
         put(BlockType.FRAMED_SLOPE_PANEL, new SlopePanelSkipPredicate());
         put(BlockType.FRAMED_EXTENDED_SLOPE_PANEL, new ExtendedSlopePanelSkipPredicate());
+        put(BlockType.FRAMED_COMPOUND_SLOPE_PANEL, new CompoundSlopePanelSkipPredicate());
         put(BlockType.FRAMED_DOUBLE_SLOPE_PANEL, SideSkipPredicate.FALSE);
         put(BlockType.FRAMED_INV_DOUBLE_SLOPE_PANEL, SideSkipPredicate.FALSE);
         put(BlockType.FRAMED_EXTENDED_DOUBLE_SLOPE_PANEL, SideSkipPredicate.FALSE);

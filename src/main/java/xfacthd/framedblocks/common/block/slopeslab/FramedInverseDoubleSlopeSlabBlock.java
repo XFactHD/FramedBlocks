@@ -16,8 +16,7 @@ import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import org.jetbrains.annotations.Nullable;
 import xfacthd.framedblocks.api.block.*;
-import xfacthd.framedblocks.api.shapes.ShapeProvider;
-import xfacthd.framedblocks.api.shapes.ShapeUtils;
+import xfacthd.framedblocks.api.shapes.*;
 import xfacthd.framedblocks.api.util.Utils;
 import xfacthd.framedblocks.common.FBContent;
 import xfacthd.framedblocks.common.block.AbstractFramedDoubleBlock;
@@ -135,10 +134,8 @@ public class FramedInverseDoubleSlopeSlabBlock extends AbstractFramedDoubleBlock
 
 
 
-    public static ShapeProvider generateShapes(ImmutableList<BlockState> states)
+    private static final ShapeCache<Direction> SHAPES = ShapeCache.createEnum(Direction.class, map ->
     {
-        ImmutableMap.Builder<BlockState, VoxelShape> builder = ImmutableMap.builder();
-
         VoxelShape shape = ShapeUtils.orUnoptimized(
                 FramedSlopeSlabBlock.SHAPES.get(SlopeSlabShape.BOTTOM_TOP_HALF),
                 ShapeUtils.rotateShapeUnoptimized(
@@ -147,13 +144,17 @@ public class FramedInverseDoubleSlopeSlabBlock extends AbstractFramedDoubleBlock
                         FramedSlopeSlabBlock.SHAPES.get(SlopeSlabShape.TOP_BOTTOM_HALF)
                 )
         );
+        ShapeUtils.makeHorizontalRotations(shape, Direction.NORTH, map);
+    });
 
-        VoxelShape[] shapes = ShapeUtils.makeHorizontalRotations(shape, Direction.NORTH);
+    public static ShapeProvider generateShapes(ImmutableList<BlockState> states)
+    {
+        ImmutableMap.Builder<BlockState, VoxelShape> builder = ImmutableMap.builder();
 
         for (BlockState state : states)
         {
             Direction dir = state.getValue(FramedProperties.FACING_HOR);
-            builder.put(state, shapes[dir.get2DDataValue()]);
+            builder.put(state, SHAPES.get(dir));
         }
 
         return ShapeProvider.of(builder.build());

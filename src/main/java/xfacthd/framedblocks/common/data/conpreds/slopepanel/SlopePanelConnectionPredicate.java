@@ -44,7 +44,7 @@ public final class SlopePanelConnectionPredicate implements ConnectionPredicate
 
         if (side == rotDir.getOpposite() || side == facing.getOpposite() || side == rotDir)
         {
-            return front ? edge != rotDir.getOpposite() : edge != rotDir;
+            return front ? (edge != rotDir.getOpposite() && edge != facing.getOpposite()) : (edge != rotDir && edge != facing);
         }
         else if (side.getAxis() == rotDir.getClockWise(facing.getAxis()).getAxis())
         {

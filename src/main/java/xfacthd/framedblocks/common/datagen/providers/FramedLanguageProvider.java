@@ -158,6 +158,7 @@ public final class FramedLanguageProvider extends LanguageProvider
         add(FBContent.BLOCK_FRAMED_DOUBLE_SLOPED_PRISM.value(), "Framed Double Sloped Prism");
         add(FBContent.BLOCK_FRAMED_SLOPE_SLAB.value(), "Framed Slope Slab");
         add(FBContent.BLOCK_FRAMED_ELEVATED_SLOPE_SLAB.value(), "Framed Elevated Slope Slab");
+        add(FBContent.BLOCK_FRAMED_COMPOUND_SLOPE_SLAB.value(), "Framed Compound Slope Slab");
         add(FBContent.BLOCK_FRAMED_DOUBLE_SLOPE_SLAB.value(), "Framed Double Slope Slab");
         add(FBContent.BLOCK_FRAMED_INVERSE_DOUBLE_SLOPE_SLAB.value(), "Framed Inverted Double Slope Slab");
         add(FBContent.BLOCK_FRAMED_ELEVATED_DOUBLE_SLOPE_SLAB.value(), "Framed Elevated Double Slope Slab");
@@ -174,6 +175,7 @@ public final class FramedLanguageProvider extends LanguageProvider
         add(FBContent.BLOCK_FRAMED_FLAT_STACKED_INNER_SLOPE_SLAB_CORNER.value(), "Framed Flat Stacked Inner Slope Slab Corner");
         add(FBContent.BLOCK_FRAMED_SLOPE_PANEL.value(), "Framed Slope Panel");
         add(FBContent.BLOCK_FRAMED_EXTENDED_SLOPE_PANEL.value(), "Framed Extended Slope Panel");
+        add(FBContent.BLOCK_FRAMED_COMPOUND_SLOPE_PANEL.value(), "Framed Compound Slope Panel");
         add(FBContent.BLOCK_FRAMED_DOUBLE_SLOPE_PANEL.value(), "Framed Double Slope Panel");
         add(FBContent.BLOCK_FRAMED_INVERSE_DOUBLE_SLOPE_PANEL.value(), "Framed Inverted Double Slope Panel");
         add(FBContent.BLOCK_FRAMED_EXTENDED_DOUBLE_SLOPE_PANEL.value(), "Framed Extended Double Slope Panel");

@@ -50,6 +50,9 @@ public final class FlatInnerSlopeSlabCornerSkipPredicate implements SideSkipPred
                 case FRAMED_ELEVATED_SLOPE_SLAB -> testAgainstElevatedSlopeSlab(
                         dir, topHalf, adjState, side
                 );
+                case FRAMED_COMPOUND_SLOPE_SLAB -> testAgainstCompoundSlopeSlab(
+                        dir, topHalf, adjState, side
+                );
                 case FRAMED_FLAT_ELEV_SLOPE_SLAB_CORNER -> testAgainstFlatElevatedSlopeSlabCorner(
                         dir, topHalf, adjState, side
                 );
@@ -153,6 +156,15 @@ public final class FlatInnerSlopeSlabCornerSkipPredicate implements SideSkipPred
         boolean adjTop = adjState.getValue(FramedProperties.TOP);
 
         return getHalfDir(dir, topHalf, side).isEqualTo(ElevatedSlopeSlabSkipPredicate.getHalfDir(adjDir, adjTop, side.getOpposite()));
+    }
+
+    @CullTest.TestTarget(BlockType.FRAMED_COMPOUND_SLOPE_SLAB)
+    private static boolean testAgainstCompoundSlopeSlab(
+            Direction dir, boolean topHalf, BlockState adjState, Direction side
+    )
+    {
+        Direction adjDir = adjState.getValue(FramedProperties.FACING_HOR);
+        return getHalfDir(dir, topHalf, side).isEqualTo(CompoundSlopeSlabSkipPredicate.getHalfDir(adjDir, side.getOpposite()));
     }
 
     @CullTest.TestTarget(BlockType.FRAMED_FLAT_ELEV_SLOPE_SLAB_CORNER)

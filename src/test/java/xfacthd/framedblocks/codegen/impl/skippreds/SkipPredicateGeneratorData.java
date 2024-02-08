@@ -120,6 +120,9 @@ public final class SkipPredicateGeneratorData
                     Property.api("Direction", "dir", "FACING_HOR", PropType.PRIMITIVE),
                     Property.api("boolean", "top", "TOP", PropType.PRIMITIVE)
             )),
+            entry("FRAMED_COMPOUND_SLOPE_SLAB", List.of(
+                    Property.api("Direction", "dir", "FACING_HOR", PropType.PRIMITIVE)
+            )),
             entry("FRAMED_FLAT_SLOPE_SLAB_CORNER", List.of(
                     Property.api("Direction", "dir", "FACING_HOR", PropType.PRIMITIVE),
                     Property.api("boolean", "top", "TOP", PropType.PRIMITIVE),
@@ -144,6 +147,10 @@ public final class SkipPredicateGeneratorData
                     Property.internal("boolean", "front", "FRONT", PropType.PRIMITIVE)
             )),
             entry("FRAMED_EXTENDED_SLOPE_PANEL", List.of(
+                    Property.api("Direction", "dir", "FACING_HOR", PropType.PRIMITIVE),
+                    Property.internal("HorizontalRotation", "rot", "ROTATION", PropType.CUSTOM)
+            )),
+            entry("FRAMED_COMPOUND_SLOPE_PANEL", List.of(
                     Property.api("Direction", "dir", "FACING_HOR", PropType.PRIMITIVE),
                     Property.internal("HorizontalRotation", "rot", "ROTATION", PropType.CUSTOM)
             )),

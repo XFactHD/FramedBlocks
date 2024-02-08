@@ -143,6 +143,7 @@ public final class FullFacePredicates extends BlockTypeMap<FullFacePredicate>
         put(BlockType.FRAMED_DOUBLE_SLOPED_PRISM, new DoubleSlopedPrismFullFacePredicate());
         put(BlockType.FRAMED_SLOPE_SLAB, SlopeSlabFullFacePredicate.INSTANCE);
         put(BlockType.FRAMED_ELEVATED_SLOPE_SLAB, new ElevatedSlopeSlabFullFacePredicate());
+        put(BlockType.FRAMED_COMPOUND_SLOPE_SLAB, FullFacePredicate.FALSE);
         put(BlockType.FRAMED_DOUBLE_SLOPE_SLAB, new DoubleSlopeSlabFullFacePredicate());
         put(BlockType.FRAMED_INV_DOUBLE_SLOPE_SLAB, FullFacePredicate.FALSE);
         put(BlockType.FRAMED_ELEVATED_DOUBLE_SLOPE_SLAB, new ElevatedDoubleSlopeSlabFullFacePredicate());
@@ -159,6 +160,7 @@ public final class FullFacePredicates extends BlockTypeMap<FullFacePredicate>
         put(BlockType.FRAMED_FLAT_STACKED_INNER_SLOPE_SLAB_CORNER, FullFacePredicate.TOP);
         put(BlockType.FRAMED_SLOPE_PANEL, SlopePanelFullFacePredicate.INSTANCE);
         put(BlockType.FRAMED_EXTENDED_SLOPE_PANEL, new ExtendedSlopePanelFullFacePredicate());
+        put(BlockType.FRAMED_COMPOUND_SLOPE_PANEL, FullFacePredicate.FALSE);
         put(BlockType.FRAMED_DOUBLE_SLOPE_PANEL, new DoubleSlopePanelFullFacePredicate());
         put(BlockType.FRAMED_INV_DOUBLE_SLOPE_PANEL, FullFacePredicate.FALSE);
         put(BlockType.FRAMED_EXTENDED_DOUBLE_SLOPE_PANEL, new ExtendedDoubleSlopePanelFullFacePredicate());

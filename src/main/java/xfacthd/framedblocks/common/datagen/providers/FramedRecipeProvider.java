@@ -802,6 +802,13 @@ public final class FramedRecipeProvider extends RecipeProvider
                 .unlockedBy(FBContent.BLOCK_FRAMED_SLOPE_SLAB)
                 .save(consumer);
 
+        shapedBuildingBlock(FBContent.BLOCK_FRAMED_COMPOUND_SLOPE_SLAB.value())
+                .pattern("SSH")
+                .define('S', FBContent.BLOCK_FRAMED_SLOPE_SLAB.value())
+                .define('H', FBContent.ITEM_FRAMED_HAMMER.value())
+                .unlockedBy(FBContent.BLOCK_FRAMED_SLOPE_SLAB)
+                .save(consumer);
+
         shapedBuildingBlock(FBContent.BLOCK_FRAMED_DOUBLE_SLOPE_SLAB.value())
                 .pattern("FF")
                 .define('F', FBContent.BLOCK_FRAMED_SLOPE_SLAB.value())
@@ -934,6 +941,13 @@ public final class FramedRecipeProvider extends RecipeProvider
                 .pattern("PS")
                 .define('P', FBContent.BLOCK_FRAMED_PANEL.value())
                 .define('S', FBContent.BLOCK_FRAMED_SLOPE_PANEL.value())
+                .unlockedBy(FBContent.BLOCK_FRAMED_SLOPE_PANEL)
+                .save(consumer);
+
+        shapedBuildingBlock(FBContent.BLOCK_FRAMED_COMPOUND_SLOPE_PANEL.value())
+                .pattern("PPH")
+                .define('P', FBContent.BLOCK_FRAMED_SLOPE_PANEL.value())
+                .define('H', FBContent.ITEM_FRAMED_HAMMER.value())
                 .unlockedBy(FBContent.BLOCK_FRAMED_SLOPE_PANEL)
                 .save(consumer);
 

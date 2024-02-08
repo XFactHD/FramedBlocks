@@ -71,6 +71,9 @@ public final class SlopeEdgeSkipPredicate implements SideSkipPredicate
                 case FRAMED_ELEVATED_SLOPE_SLAB -> testAgainstElevatedSlopeSlab(
                         dir, type, alt, adjState, side
                 );
+                case FRAMED_COMPOUND_SLOPE_SLAB -> testAgainstCompoundSlopeSlab(
+                        dir, type, alt, adjState, side
+                );
                 case FRAMED_FLAT_INNER_SLOPE_SLAB_CORNER -> testAgainstFlatInnerSlopeSlabCorner(
                         dir, type, alt, adjState, side
                 );
@@ -81,6 +84,9 @@ public final class SlopeEdgeSkipPredicate implements SideSkipPredicate
                         dir, type, alt, adjState, side
                 );
                 case FRAMED_EXTENDED_SLOPE_PANEL -> testAgainstExtendedSlopePanel(
+                        dir, type, alt, adjState, side
+                );
+                case FRAMED_COMPOUND_SLOPE_PANEL -> testAgainstCompoundSlopePanel(
                         dir, type, alt, adjState, side
                 );
                 case FRAMED_FLAT_INNER_SLOPE_PANEL_CORNER -> testAgainstFlatInnerSlopePanelCorner(
@@ -240,6 +246,15 @@ public final class SlopeEdgeSkipPredicate implements SideSkipPredicate
         return getHalfDir(dir, type, alt, side).isEqualTo(ElevatedSlopeSlabSkipPredicate.getHalfDir(adjDir, adjTop, side.getOpposite()));
     }
 
+    @CullTest.TestTarget(BlockType.FRAMED_COMPOUND_SLOPE_SLAB)
+    private static boolean testAgainstCompoundSlopeSlab(
+            Direction dir, SlopeType type, boolean alt, BlockState adjState, Direction side
+    )
+    {
+        Direction adjDir = adjState.getValue(FramedProperties.FACING_HOR);
+        return getHalfDir(dir, type, alt, side).isEqualTo(CompoundSlopeSlabSkipPredicate.getHalfDir(adjDir, side.getOpposite()));
+    }
+
     @CullTest.TestTarget(BlockType.FRAMED_FLAT_INNER_SLOPE_SLAB_CORNER)
     private static boolean testAgainstFlatInnerSlopeSlabCorner(
             Direction dir, SlopeType type, boolean alt, BlockState adjState, Direction side
@@ -283,6 +298,17 @@ public final class SlopeEdgeSkipPredicate implements SideSkipPredicate
         HorizontalRotation adjRot = adjState.getValue(PropertyHolder.ROTATION);
 
         return getHalfDir(dir, type, alt, side).isEqualTo(ExtendedSlopePanelSkipPredicate.getHalfDir(adjDir, adjRot, side.getOpposite()));
+    }
+
+    @CullTest.TestTarget(BlockType.FRAMED_COMPOUND_SLOPE_PANEL)
+    private static boolean testAgainstCompoundSlopePanel(
+            Direction dir, SlopeType type, boolean alt, BlockState adjState, Direction side
+    )
+    {
+        Direction adjDir = adjState.getValue(FramedProperties.FACING_HOR);
+        HorizontalRotation adjRot = adjState.getValue(PropertyHolder.ROTATION);
+
+        return getHalfDir(dir, type, alt, side).isEqualTo(CompoundSlopePanelSkipPredicate.getHalfDir(adjDir, adjRot, side.getOpposite()));
     }
 
     @CullTest.TestTarget(BlockType.FRAMED_FLAT_INNER_SLOPE_PANEL_CORNER)

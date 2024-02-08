@@ -39,7 +39,8 @@ public final class BlockOutlineRenderers
         register(BlockType.FRAMED_INNER_SLOPED_PRISM, new InnerSlopedPrismOutlineRenderer());
         register(BlockType.FRAMED_SLOPE_SLAB, new SlopeSlabOutlineRenderer());
         register(BlockType.FRAMED_ELEVATED_SLOPE_SLAB, new ElevatedSlopeSlabOutlineRenderer());
-        register(BlockType.FRAMED_INV_DOUBLE_SLOPE_SLAB, new InverseDoubleSlopeSlabOutlineRenderer());
+        register(BlockType.FRAMED_COMPOUND_SLOPE_SLAB, InverseDoubleSlopeSlabOutlineRenderer.INSTANCE);
+        register(BlockType.FRAMED_INV_DOUBLE_SLOPE_SLAB, InverseDoubleSlopeSlabOutlineRenderer.INSTANCE);
         register(BlockType.FRAMED_STACKED_SLOPE_SLAB, new ElevatedSlopeSlabOutlineRenderer());
         register(BlockType.FRAMED_FLAT_SLOPE_SLAB_CORNER, new FlatSlopeSlabCornerOutlineRenderer());
         register(BlockType.FRAMED_FLAT_INNER_SLOPE_SLAB_CORNER, new FlatInnerSlopeSlabCornerOutlineRenderer());
@@ -50,7 +51,8 @@ public final class BlockOutlineRenderers
         register(BlockType.FRAMED_FLAT_STACKED_INNER_SLOPE_SLAB_CORNER, new FlatElevatedInnerSlopeSlabCornerOutlineRenderer());
         register(BlockType.FRAMED_SLOPE_PANEL, new SlopePanelOutlineRenderer());
         register(BlockType.FRAMED_EXTENDED_SLOPE_PANEL, new ExtendedSlopePanelOutlineRenderer());
-        register(BlockType.FRAMED_INV_DOUBLE_SLOPE_PANEL, new InverseDoubleSlopePanelOutlineRenderer());
+        register(BlockType.FRAMED_COMPOUND_SLOPE_PANEL, InverseDoubleSlopePanelOutlineRenderer.INSTANCE);
+        register(BlockType.FRAMED_INV_DOUBLE_SLOPE_PANEL, InverseDoubleSlopePanelOutlineRenderer.INSTANCE);
         register(BlockType.FRAMED_STACKED_SLOPE_PANEL, new ExtendedSlopePanelOutlineRenderer());
         register(BlockType.FRAMED_FLAT_SLOPE_PANEL_CORNER, new FlatSlopePanelCornerOutlineRenderer());
         register(BlockType.FRAMED_FLAT_INNER_SLOPE_PANEL_CORNER, new FlatInnerSlopePanelCornerOutlineRenderer());
