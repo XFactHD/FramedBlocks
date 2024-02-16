@@ -313,6 +313,10 @@ public final class FramingSawRecipeProvider extends RecipeProvider
                 .material(FramingSawRecipe.CUBE_MATERIAL_VALUE / 16)
                 .save(consumer);
 
+        FramingSawRecipeBuilder.builder(FBContent.BLOCK_FRAMED_CORNER_STRIP)
+                .material(FramingSawRecipe.CUBE_MATERIAL_VALUE / 16 / 16)
+                .save(consumer);
+
         FramingSawRecipeBuilder.builder(FBContent.BLOCK_FRAMED_LATTICE)
                 .material(FramingSawRecipe.CUBE_MATERIAL_VALUE / 6)
                 .save(consumer);

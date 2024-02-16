@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "building",
+  "ingredients": [
+    {
+      "item": "framedblocks:framed_wall_board"
+    },
+    {
+      "item": "framedblocks:framed_hammer"
+    }
+  ],
+  "result": {
+    "count": 16,
+    "item": "framedblocks:framed_corner_strip"
+  }
+}

@@ -79,6 +79,7 @@ public final class BeaconTintTests
             BlockType.FRAMED_SMALL_DOUBLE_CORNER_SLOPE_PANEL,
             BlockType.FRAMED_SMALL_DOUBLE_CORNER_SLOPE_PANEL_W,
             BlockType.FRAMED_WALL_BOARD,
+            BlockType.FRAMED_CORNER_STRIP,
             BlockType.FRAMED_GATE,
             BlockType.FRAMED_IRON_GATE,
             BlockType.FRAMED_ITEM_FRAME,

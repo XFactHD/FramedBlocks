@@ -528,6 +528,18 @@ public final class FramedRecipeProvider extends RecipeProvider
                 .unlockedBy(FBContent.BLOCK_FRAMED_PANEL)
                 .save(consumer);
 
+        shapelessBuildingBlock(FBContent.BLOCK_FRAMED_CORNER_STRIP.value(), 16)
+                .requires(FBContent.BLOCK_FRAMED_FLOOR.value())
+                .requires(FBContent.ITEM_FRAMED_HAMMER.value())
+                .unlockedBy(FBContent.BLOCK_FRAMED_FLOOR)
+                .save(consumer, Utils.rl("framed_corner_strip_from_framed_floor_board"));
+
+        shapelessBuildingBlock(FBContent.BLOCK_FRAMED_CORNER_STRIP.value(), 16)
+                .requires(FBContent.BLOCK_FRAMED_WALL_BOARD.value())
+                .requires(FBContent.ITEM_FRAMED_HAMMER.value())
+                .unlockedBy(FBContent.BLOCK_FRAMED_WALL_BOARD)
+                .save(consumer, Utils.rl("framed_corner_strip_from_framed_wall_board"));
+
         shapedBuildingBlock(FBContent.BLOCK_FRAMED_LATTICE.value(), 3)
                 .pattern(" F ")
                 .pattern("FFF")

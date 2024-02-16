@@ -119,6 +119,7 @@ public enum BlockType implements IBlockType
     FRAMED_REDSTONE_WALL_TORCH                      (false, false, false, false, false, false, false, false, null),
     FRAMED_FLOOR_BOARD                              ( true, false, false,  true,  true,  true, false, false, ConTexMode.FULL_FACE, FramedFloorBlock::generateShapes),
     FRAMED_WALL_BOARD                               ( true, false, false,  true,  true,  true, false, false, ConTexMode.FULL_FACE, FramedWallBoardBlock::generateShapes),
+    FRAMED_CORNER_STRIP                             (false, false, false,  true,  true,  true, false, false, ConTexMode.FULL_EDGE, FramedCornerStripBlock::generateShapes),
     FRAMED_LATTICE_BLOCK                            (false, false, false,  true,  true,  true, false,  true, ConTexMode.DETAILED, FramedLatticeBlock::generateThinShapes),
     FRAMED_THICK_LATTICE                            (false, false, false,  true,  true,  true, false,  true, ConTexMode.DETAILED, FramedLatticeBlock::generateThickShapes),
     FRAMED_CHEST                                    (false, false,  true,  true,  true, false, false, false, null, Block.box(1, 0, 1, 15, 14, 15)),
