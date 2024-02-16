@@ -44,7 +44,6 @@ public final class FramedLootTableProvider extends LootTableProvider
         @Override
         protected void generate()
         {
-
             dropOther(FBContent.BLOCK_FRAMED_WATERLOGGABLE_PRESSURE_PLATE.get(), FBContent.BLOCK_FRAMED_PRESSURE_PLATE.get());
             dropOther(FBContent.BLOCK_FRAMED_WATERLOGGABLE_STONE_PRESSURE_PLATE.get(), FBContent.BLOCK_FRAMED_STONE_PRESSURE_PLATE.get());
             dropOther(FBContent.BLOCK_FRAMED_WATERLOGGABLE_OBSIDIAN_PRESSURE_PLATE.get(), FBContent.BLOCK_FRAMED_OBSIDIAN_PRESSURE_PLATE.get());

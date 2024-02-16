@@ -39,6 +39,11 @@ public final class SupplementariesCompat
 
         public static boolean canSurviveHanging(LevelReader level, BlockPos pos)
         {
+            if (failedPreviously)
+            {
+                return true;
+            }
+
             try
             {
                 return IRopeConnection.isSupportingCeiling(pos, level);

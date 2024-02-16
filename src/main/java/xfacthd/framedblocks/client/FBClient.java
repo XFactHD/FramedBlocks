@@ -410,8 +410,6 @@ public final class FBClient
         ClientUtils.replaceModels(FBContent.BLOCK_FRAMED_CENTERED_PANEL, registry, FramedCenteredPanelModel::new, ClientUtils.IGNORE_DEFAULT);
 
         stopwatch.stop();
-        // TODO: add total and distinct model count when reworking model replacement to use a wrapping handler and
-        //       a geometry generator separate from the actual model
         FramedBlocks.LOGGER.debug("Replaced models for {} blocks in {}", BlockType.COUNT, stopwatch);
     }
 
