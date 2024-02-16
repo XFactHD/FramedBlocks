@@ -135,6 +135,7 @@ public final class SideSkipPredicates extends BlockTypeMap<SideSkipPredicate>
         put(BlockType.FRAMED_HALF_PILLAR, new HalfPillarSkipPredicate());
         put(BlockType.FRAMED_POST, new PostSkipPredicate());
         put(BlockType.FRAMED_COLLAPSIBLE_BLOCK, new CollapsibleBlockSkipPredicate());
+        put(BlockType.FRAMED_COLLAPSIBLE_COPYCAT_BLOCK, new CollapsibleCopycatBlockSkipPredicate());
         put(BlockType.FRAMED_BOUNCY_CUBE, SideSkipPredicate.FALSE);
         put(BlockType.FRAMED_REDSTONE_BLOCK, SideSkipPredicate.FALSE);
         put(BlockType.FRAMED_PRISM, new PrismSkipPredicate());

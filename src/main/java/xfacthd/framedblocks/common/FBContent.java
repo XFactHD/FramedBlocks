@@ -199,6 +199,7 @@ public final class FBContent
     public static final Holder<Block> BLOCK_FRAMED_HALF_PILLAR = registerBlock(FramedHalfPillarBlock::new, BlockType.FRAMED_HALF_PILLAR);
     public static final Holder<Block> BLOCK_FRAMED_POST = registerBlock(FramedPillarBlock::new, BlockType.FRAMED_POST);
     public static final Holder<Block> BLOCK_FRAMED_COLLAPSIBLE_BLOCK = registerBlock(FramedCollapsibleBlock::new, BlockType.FRAMED_COLLAPSIBLE_BLOCK);
+    public static final Holder<Block> BLOCK_FRAMED_COLLAPSIBLE_COPYCAT_BLOCK = registerBlock(FramedCollapsibleCopycatBlock::new, BlockType.FRAMED_COLLAPSIBLE_COPYCAT_BLOCK);
     public static final Holder<Block> BLOCK_FRAMED_BOUNCY_CUBE = registerBlock(FramedBouncyCubeBlock::new, BlockType.FRAMED_BOUNCY_CUBE);
     public static final Holder<Block> BLOCK_FRAMED_REDSTONE_BLOCK = registerBlock(FramedRedstoneBlock::new, BlockType.FRAMED_REDSTONE_BLOCK);
     public static final Holder<Block> BLOCK_FRAMED_PRISM = registerBlock(FramedPrismBlock::new, BlockType.FRAMED_PRISM);
@@ -432,6 +433,10 @@ public final class FBContent
     public static final Holder<BlockEntityType<?>> BE_TYPE_FRAMED_COLLAPSIBLE_BLOCK = createBlockEntityType(
             FramedCollapsibleBlockEntity::new,
             BlockType.FRAMED_COLLAPSIBLE_BLOCK
+    );
+    public static final Holder<BlockEntityType<?>> BE_TYPE_FRAMED_COLLAPSIBLE_COPYCAT_BLOCK = createBlockEntityType(
+            FramedCollapsibleCopycatBlockEntity::new,
+            BlockType.FRAMED_COLLAPSIBLE_COPYCAT_BLOCK
     );
     public static final Holder<BlockEntityType<?>> BE_TYPE_FRAMED_DOUBLE_PRISM = createBlockEntityType(
             FramedDoublePrismBlockEntity::new,

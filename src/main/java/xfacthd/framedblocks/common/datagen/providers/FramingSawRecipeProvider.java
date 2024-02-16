@@ -432,6 +432,11 @@ public final class FramingSawRecipeProvider extends RecipeProvider
                 .material(FramingSawRecipe.CUBE_MATERIAL_VALUE * 2)
                 .save(consumer);
 
+        FramingSawRecipeBuilder.builder(FBContent.BLOCK_FRAMED_COLLAPSIBLE_COPYCAT_BLOCK)
+                .material(FramingSawRecipe.CUBE_MATERIAL_VALUE)
+                .additive(FramingSawRecipeAdditive.of(Tags.Items.INGOTS_COPPER))
+                .save(consumer);
+
         FramingSawRecipeBuilder.builder(FBContent.BLOCK_FRAMED_BOUNCY_CUBE)
                 .material(FramingSawRecipe.CUBE_MATERIAL_VALUE)
                 .additive(FramingSawRecipeAdditive.of(Tags.Items.SLIMEBALLS, 4))

@@ -30,6 +30,8 @@ public final class PropertyHolder
     public static final BooleanProperty SOLID_BG = BooleanProperty.create("solid_bg");
     public static final BooleanProperty ALT_TYPE = BooleanProperty.create("alt_type");
 
+    public static final IntegerProperty SOLID_FACES = IntegerProperty.create("solid_faces", 0b00000000, 0b00111111);
+
 
 
     private PropertyHolder() { }
