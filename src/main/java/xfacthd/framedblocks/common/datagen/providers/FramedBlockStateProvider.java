@@ -422,9 +422,9 @@ public final class FramedBlockStateProvider extends BlockStateProvider
             AttachFace face = state.getValue(FaceAttachedHorizontalDirectionalBlock.FACE);
             boolean powered = state.getValue(LeverBlock.POWERED);
 
-            int rotY = (int)(facing.toYRot() + 180F) % 360;
+            int rotY = (int)(facing.toYRot() + (face != AttachFace.CEILING ? 180F : 0F)) % 360;
             int rotX = face.ordinal() * 90;
-            ModelFile model = powered ? leverOn : lever;
+            ModelFile model = powered ? lever : leverOn;
             return ConfiguredModel.builder()
                     .modelFile(model)
                     .rotationX(rotX)
