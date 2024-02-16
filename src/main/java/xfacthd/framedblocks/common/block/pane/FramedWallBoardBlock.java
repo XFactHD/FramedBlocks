@@ -19,7 +19,10 @@ import xfacthd.framedblocks.common.data.BlockType;
 
 public class FramedWallBoardBlock extends FramedBlock
 {
-    public FramedWallBoardBlock() { super(BlockType.FRAMED_WALL_BOARD); }
+    public FramedWallBoardBlock()
+    {
+        super(BlockType.FRAMED_WALL_BOARD);
+    }
 
     @Override
     protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder)
