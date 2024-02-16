@@ -20,6 +20,10 @@ public final class ExtConfigView
 
         SolidFrameMode getSolidFrameMode();
 
+        boolean showButtonPlateOverlay();
+
+        boolean showSpecialCubeOverlay();
+
         BlockInteractOverlay.Mode getStateLockMode();
 
         BlockInteractOverlay.Mode getToggleWaterlogMode();

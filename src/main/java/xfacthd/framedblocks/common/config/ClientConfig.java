@@ -23,6 +23,8 @@ public final class ClientConfig
     private static final String KEY_CON_TEX_MODE = "conTexMode";
     private static final String KEY_SHOW_ALL_RECIPE_PERMUTATIONS_IN_EMI = "showAllRecipePermutationsInEmi";
     private static final String KEY_SOLID_FRAME_MODE = "solidFrameMode";
+    private static final String KEY_SHOW_BUTTON_PLATE_OVERLAY = "showButtonPlateTypeOverlay";
+    private static final String KEY_SHOW_SPECIAL_CUBE_OVERLAY = "showSpecialCubeTypeOverlay";
     private static final String KEY_STATE_LOCK_MODE = "stateLockMode";
     private static final String KEY_TOGGLE_WATERLOG_MODE = "toggleWaterlogMode";
     private static final String KEY_TOGGLE_Y_SLOPE_MODE = "toggleYSlopeMode";
@@ -41,6 +43,8 @@ public final class ClientConfig
     public static final String TRANSLATION_CON_TEX_MODE = translate(KEY_CON_TEX_MODE);
     public static final String TRANSLATION_SHOW_ALL_RECIPE_PERMUTATIONS_IN_EMI = translate(KEY_SHOW_ALL_RECIPE_PERMUTATIONS_IN_EMI);
     public static final String TRANSLATION_SOLID_FRAME_MODE = translate(KEY_SOLID_FRAME_MODE);
+    public static final String TRANSLATION_SHOW_BUTTON_PLATE_OVERLAY = translate(KEY_SHOW_BUTTON_PLATE_OVERLAY);
+    public static final String TRANSLATION_SHOW_SPECIAL_CUBE_OVERLAY = translate(KEY_SHOW_SPECIAL_CUBE_OVERLAY);
     public static final String TRANSLATION_STATE_LOCK_MODE = translate(KEY_STATE_LOCK_MODE);
     public static final String TRANSLATION_TOGGLE_WATERLOG_MODE = translate(KEY_TOGGLE_WATERLOG_MODE);
     public static final String TRANSLATION_TOGGLE_Y_SLOPE_MODE = translate(KEY_TOGGLE_Y_SLOPE_MODE);
@@ -63,6 +67,8 @@ public final class ClientConfig
     private static ConTexMode conTexMode = ConTexMode.DETAILED;
     private static boolean showAllRecipePermutationsInEmi = false;
     private static SolidFrameMode solidFrameMode = SolidFrameMode.DEFAULT;
+    private static boolean showButtonPlateOverlay = false;
+    private static boolean showSpecialCubeOverlay = false;
     private static BlockInteractOverlay.Mode stateLockMode = BlockInteractOverlay.Mode.DETAILED;
     private static BlockInteractOverlay.Mode toggleWaterlogMode = BlockInteractOverlay.Mode.DETAILED;
     private static BlockInteractOverlay.Mode toggleYSlopeMode = BlockInteractOverlay.Mode.DETAILED;
@@ -81,6 +87,8 @@ public final class ClientConfig
     private static ModConfigSpec.EnumValue<ConTexMode> conTexModeValue;
     private static ModConfigSpec.BooleanValue showAllRecipePermutationsInEmiValue;
     private static ModConfigSpec.EnumValue<SolidFrameMode> solidFrameModeValue;
+    private static ModConfigSpec.BooleanValue showButtonPlateOverlayValue;
+    private static ModConfigSpec.BooleanValue showSpecialCubeOverlayValue;
 
     private static ModConfigSpec.EnumValue<BlockInteractOverlay.Mode> stateLockModeValue;
     private static ModConfigSpec.EnumValue<BlockInteractOverlay.Mode> toggleWaterlogModeValue;
@@ -148,6 +156,20 @@ public final class ClientConfig
                 )
                 .translation(TRANSLATION_SOLID_FRAME_MODE)
                 .defineEnum(KEY_SOLID_FRAME_MODE, SolidFrameMode.DEFAULT);
+        showButtonPlateOverlayValue = builder
+                .comment(
+                        "If enabled, non-wooden buttons and pressure plates will show a material overlay when a camo is applied",
+                        "Requires resource reload to take effect"
+                )
+                .translation(TRANSLATION_SHOW_BUTTON_PLATE_OVERLAY)
+                .define(KEY_SHOW_BUTTON_PLATE_OVERLAY, true);
+        showSpecialCubeOverlayValue = builder
+                .comment(
+                        "If enabled, special cube blocks will show a type overlay when a camo is applied",
+                        "Requires resource reload to take effect"
+                )
+                .translation(TRANSLATION_SHOW_SPECIAL_CUBE_OVERLAY)
+                .define(KEY_SHOW_SPECIAL_CUBE_OVERLAY, true);
         builder.pop();
 
         builder.push("overlay");
@@ -227,6 +249,8 @@ public final class ClientConfig
             conTexMode = conTexModeValue.get();
             showAllRecipePermutationsInEmi = showAllRecipePermutationsInEmiValue.get();
             solidFrameMode = solidFrameModeValue.get();
+            showButtonPlateOverlay = showButtonPlateOverlayValue.get();
+            showSpecialCubeOverlay = showSpecialCubeOverlayValue.get();
 
             stateLockMode = stateLockModeValue.get();
             toggleWaterlogMode = toggleWaterlogModeValue.get();
@@ -292,6 +316,18 @@ public final class ClientConfig
         public SolidFrameMode getSolidFrameMode()
         {
             return solidFrameMode;
+        }
+
+        @Override
+        public boolean showButtonPlateOverlay()
+        {
+            return showButtonPlateOverlay;
+        }
+
+        @Override
+        public boolean showSpecialCubeOverlay()
+        {
+            return showSpecialCubeOverlay;
         }
 
         @Override
