@@ -252,6 +252,12 @@ public final class ClientUtils
 
     public static void enqueueClientTask(long delay, Runnable task)
     {
+        if (delay == 0)
+        {
+            Minecraft.getInstance().tell(task);
+            return;
+        }
+
         //noinspection ConstantConditions
         long time = Minecraft.getInstance().level.getGameTime() + delay;
         tasks.add(new ClientTask(time, task));
