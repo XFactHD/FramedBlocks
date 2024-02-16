@@ -10,7 +10,6 @@ import xfacthd.framedblocks.api.model.quad.Modifiers;
 import xfacthd.framedblocks.api.model.quad.QuadModifier;
 import xfacthd.framedblocks.api.util.Utils;
 import xfacthd.framedblocks.common.blockentity.special.FramedCollapsibleBlockEntity;
-import xfacthd.framedblocks.common.compat.rubidium.RubidiumCompat;
 import xfacthd.framedblocks.common.data.PropertyHolder;
 
 import java.util.List;
@@ -27,7 +26,7 @@ public class FramedCollapsibleBlockModel extends FramedBlockModel
     {
         super(state, baseModel);
         this.collapsedFace = state.getValue(PropertyHolder.NULLABLE_FACE).toDirection();
-        this.rotSplitLine = state.getValue(PropertyHolder.ROTATE_SPLIT_LINE) ^ RubidiumCompat.isLoaded();
+        this.rotSplitLine = state.getValue(PropertyHolder.ROTATE_SPLIT_LINE);
     }
 
     @Override
@@ -58,10 +57,47 @@ public class FramedCollapsibleBlockModel extends FramedBlockModel
             float diff13 = Math.abs(vertexPos[1] - vertexPos[3]);
             boolean rotate = (diff13 > diff02) != rotSplitLine;
 
-            QuadModifier.geometry(quad)
-                    .apply(Modifiers.setPosition(vertexPos, true))
-                    .applyIf(Modifiers.rotateVertices(), rotate)
-                    .export(quadMap.get(null));
+            float[] vertexPosTwo = new float[] { 1F, 1F, 1F, 1F };
+            System.arraycopy(vertexPos, 0, vertexPosTwo, 0, vertexPos.length);
+            if (rotate)
+            {
+                vertexPos[2] = vertexPos[1] + vertexPos[3] - vertexPos[0];
+                vertexPosTwo[0] = vertexPosTwo[1] + vertexPosTwo[3] - vertexPosTwo[2];
+            }
+            else
+            {
+                vertexPos[3] = vertexPos[0] + vertexPos[2] - vertexPos[1];
+                vertexPosTwo[1] = vertexPosTwo[0] + vertexPosTwo[2] - vertexPosTwo[3];
+            }
+
+            if (Utils.isY(collapsedFace))
+            {
+                rotate ^= collapsedFace == Direction.DOWN;
+                float left = rotate ? 0F : 1F;
+                float right = rotate ? 1F : 0F;
+
+                QuadModifier.geometry(quad)
+                        .apply(Modifiers.cutTopBottom(Direction.EAST, left, right))
+                        .apply(Modifiers.setPosition(vertexPos))
+                        .export(quadMap.get(null));
+
+                QuadModifier.geometry(quad)
+                        .apply(Modifiers.cutTopBottom(Direction.WEST, left, right))
+                        .apply(Modifiers.setPosition(vertexPosTwo))
+                        .export(quadMap.get(null));
+            }
+            else
+            {
+                QuadModifier.geometry(quad)
+                        .apply(Modifiers.cutSideLeftRight(quadDir.getCounterClockWise(), rotate ? 1F : 0F, rotate ? 0F : 1F))
+                        .apply(Modifiers.setPosition(vertexPos))
+                        .export(quadMap.get(null));
+
+                QuadModifier.geometry(quad)
+                        .apply(Modifiers.cutSideLeftRight(quadDir.getClockWise(), rotate ? 0F : 1F, rotate ? 1F : 0F))
+                        .apply(Modifiers.setPosition(vertexPosTwo))
+                        .export(quadMap.get(null));
+            }
         }
         else
         {
