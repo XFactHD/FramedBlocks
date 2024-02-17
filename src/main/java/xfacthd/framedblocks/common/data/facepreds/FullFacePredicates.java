@@ -41,6 +41,8 @@ public final class FullFacePredicates extends BlockTypeMap<FullFacePredicate>
         put(BlockType.FRAMED_CORNER_PILLAR, FullFacePredicate.FALSE);
         put(BlockType.FRAMED_DIVIDED_PANEL_HORIZONTAL, FullFacePredicate.FALSE);
         put(BlockType.FRAMED_DIVIDED_PANEL_VERTICAL, FullFacePredicate.FALSE);
+        put(BlockType.FRAMED_MASONRY_CORNER_SEGMENT, FullFacePredicate.FALSE);
+        put(BlockType.FRAMED_MASONRY_CORNER, FullFacePredicate.FALSE);
         put(BlockType.FRAMED_STAIRS, new StairsFullFacePredicate());
         put(BlockType.FRAMED_DOUBLE_STAIRS, new DoubleStairsFullFacePredicate());
         put(BlockType.FRAMED_HALF_STAIRS, FullFacePredicate.FALSE);

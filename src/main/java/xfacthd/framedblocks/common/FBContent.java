@@ -99,6 +99,8 @@ public final class FBContent
     public static final RegistryObject<Block> BLOCK_FRAMED_CORNER_PILLAR = registerBlock(FramedCornerPillarBlock::new, BlockType.FRAMED_CORNER_PILLAR);
     public static final RegistryObject<Block> BLOCK_FRAMED_DIVIDED_PANEL_HOR = registerBlock(FramedDividedPanelBlock::new, BlockType.FRAMED_DIVIDED_PANEL_HORIZONTAL);
     public static final RegistryObject<Block> BLOCK_FRAMED_DIVIDED_PANEL_VERT = registerBlock(FramedDividedPanelBlock::new, BlockType.FRAMED_DIVIDED_PANEL_VERTICAL);
+    public static final RegistryObject<Block> BLOCK_FRAMED_MASONRY_CORNER_SEGMENT = registerBlock(FramedMasonryCornerSegmentBlock::new, BlockType.FRAMED_MASONRY_CORNER_SEGMENT);
+    public static final RegistryObject<Block> BLOCK_FRAMED_MASONRY_CORNER = registerBlock(FramedMasonryCornerBlock::new, BlockType.FRAMED_MASONRY_CORNER);
     public static final RegistryObject<Block> BLOCK_FRAMED_STAIRS = registerBlock(FramedStairsBlock::new, BlockType.FRAMED_STAIRS);
     public static final RegistryObject<Block> BLOCK_FRAMED_WALL = registerBlock(FramedWallBlock::new, BlockType.FRAMED_WALL);
     public static final RegistryObject<Block> BLOCK_FRAMED_FENCE = registerBlock(FramedFenceBlock::new, BlockType.FRAMED_FENCE);
@@ -290,6 +292,10 @@ public final class FBContent
     public static final RegisteredBE<FramedDividedPanelBlockEntity> BE_TYPE_FRAMED_DIVIDED_PANEL = createBlockEntityType(
             FramedDividedPanelBlockEntity::new,
             BlockType.FRAMED_DIVIDED_PANEL_HORIZONTAL, BlockType.FRAMED_DIVIDED_PANEL_VERTICAL
+    );
+    public static final RegisteredBE<FramedMasonryCornerBlockEntity> BE_TYPE_FRAMED_MASONRY_CORNER = createBlockEntityType(
+            FramedMasonryCornerBlockEntity::new,
+            BlockType.FRAMED_MASONRY_CORNER
     );
     public static final RegisteredBE<FramedSignBlockEntity> BE_TYPE_FRAMED_SIGN = createBlockEntityType(
             FramedSignBlockEntity::normalSign,

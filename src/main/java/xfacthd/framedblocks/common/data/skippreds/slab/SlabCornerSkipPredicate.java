@@ -39,6 +39,8 @@ public final class SlabCornerSkipPredicate implements SideSkipPredicate
                 case FRAMED_DIVIDED_PANEL_HORIZONTAL -> testAgainstDividedPanelHor(dir, top, adjState, side);
                 case FRAMED_CORNER_PILLAR -> testAgainstPillar(dir, top, adjState, side);
                 case FRAMED_DIVIDED_PANEL_VERTICAL -> testAgainstDividedPanelVert(dir, top, adjState, side);
+                case FRAMED_MASONRY_CORNER_SEGMENT -> testAgainstMasonryCornerSegment(dir, top, adjState, side);
+                case FRAMED_MASONRY_CORNER -> testAgainstMasonryCorner(dir, top, adjState, side);
                 case FRAMED_STAIRS -> testAgainstStairs(dir, top, adjState, side);
                 case FRAMED_DOUBLE_STAIRS -> testAgainstDoubleStairs(dir, top, adjState, side);
                 case FRAMED_VERTICAL_STAIRS -> testAgainstVerticalStairs(dir, top, adjState, side);
@@ -164,6 +166,24 @@ public final class SlabCornerSkipPredicate implements SideSkipPredicate
         Tuple<BlockState, BlockState> states = AbstractFramedDoubleBlock.getStatePair(adjState);
         return testAgainstPillar(dir, top, states.getA(), side) ||
                testAgainstPillar(dir, top, states.getB(), side);
+    }
+
+    @CullTest.SingleTarget(BlockType.FRAMED_MASONRY_CORNER_SEGMENT)
+    private static boolean testAgainstMasonryCornerSegment(Direction dir, boolean top, BlockState adjState, Direction side)
+    {
+        Direction adjDir = adjState.getValue(FramedProperties.FACING_HOR);
+        return getCornerDir(dir, top, side).isEqualTo(MasonryCornerSegmentSkipPredicate.getCornerDir(adjDir, side.getOpposite()));
+    }
+
+    @CullTest.DoubleTarget(
+            value = BlockType.FRAMED_MASONRY_CORNER,
+            partTargets = BlockType.FRAMED_MASONRY_CORNER_SEGMENT
+    )
+    private static boolean testAgainstMasonryCorner(Direction dir, boolean top, BlockState adjState, Direction side)
+    {
+        Tuple<BlockState, BlockState> states = AbstractFramedDoubleBlock.getStatePair(adjState);
+        return testAgainstMasonryCornerSegment(dir, top, states.getA(), side) ||
+                testAgainstMasonryCornerSegment(dir, top, states.getB(), side);
     }
 
     @CullTest.SingleTarget(BlockType.FRAMED_STAIRS)

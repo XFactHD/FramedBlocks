@@ -138,6 +138,13 @@ public final class FramedRecipeProvider extends RecipeProvider
                 .unlockedBy("hasFramedCornerPillar", has(FBContent.BLOCK_FRAMED_CORNER_PILLAR.get()))
                 .save(consumer);
 
+        shapedBuildingBlock(FBContent.BLOCK_FRAMED_MASONRY_CORNER.get())
+                .pattern("EE")
+                .pattern("EE")
+                .define('E', FBContent.BLOCK_FRAMED_SLAB_EDGE.get())
+                .unlockedBy("hasFramedSlabEdge", has(FBContent.BLOCK_FRAMED_SLAB_EDGE.get()))
+                .save(consumer);
+
         shapedBuildingBlock(FBContent.BLOCK_FRAMED_STAIRS.get(), 4)
                 .pattern("F  ")
                 .pattern("FF ")

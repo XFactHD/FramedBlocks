@@ -663,6 +663,14 @@ public final class OcclusionTests
         TestUtils.testBlockOccludesLightBelow(helper, state);
     }
 
+    @GameTest(template = "box_top", batch = "occlusion")
+    @TestedType(type = BlockType.FRAMED_MASONRY_CORNER)
+    public static void test_MasonryCorner(GameTestHelper helper)
+    {
+        BlockState state = FBContent.BLOCK_FRAMED_MASONRY_CORNER.get().defaultBlockState();
+        TestUtils.testDoubleBlockOccludesLightBelow(helper, state, List.of(Direction.UP, Direction.DOWN));
+    }
+
     @GameTest(template = "box_side", batch = "occlusion")
     @TestedType(type = BlockType.FRAMED_DOOR)
     public static void test_Door_Closed(GameTestHelper helper)

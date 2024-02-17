@@ -52,6 +52,12 @@ public final class PanelSkipPredicate implements SideSkipPredicate
                 case FRAMED_DIVIDED_PANEL_VERTICAL -> testAgainstDividedPanelVert(
                         dir, adjState, side
                 );
+                case FRAMED_MASONRY_CORNER_SEGMENT -> testAgainstMasonryCornerSegment(
+                        dir, adjState, side
+                );
+                case FRAMED_MASONRY_CORNER -> testAgainstMasonryCorner(
+                        dir, adjState, side
+                );
                 case FRAMED_STAIRS -> testAgainstStairs(
                         dir, adjState, side
                 );
@@ -190,6 +196,24 @@ public final class PanelSkipPredicate implements SideSkipPredicate
         Tuple<BlockState, BlockState> states = AbstractFramedDoubleBlock.getStatePair(adjState);
         return testAgainstPillar(dir, states.getA(), side) ||
                testAgainstPillar(dir, states.getB(), side);
+    }
+
+    @CullTest.SingleTarget(BlockType.FRAMED_MASONRY_CORNER_SEGMENT)
+    private static boolean testAgainstMasonryCornerSegment(Direction dir, BlockState adjState, Direction side)
+    {
+        Direction adjDir = adjState.getValue(FramedProperties.FACING_HOR);
+        return getHalfDir(dir, side).isEqualTo(MasonryCornerSegmentSkipPredicate.getHalfDir(adjDir, side.getOpposite()));
+    }
+
+    @CullTest.DoubleTarget(
+            value = BlockType.FRAMED_MASONRY_CORNER,
+            partTargets = BlockType.FRAMED_MASONRY_CORNER_SEGMENT
+    )
+    private static boolean testAgainstMasonryCorner(Direction dir, BlockState adjState, Direction side)
+    {
+        Tuple<BlockState, BlockState> states = AbstractFramedDoubleBlock.getStatePair(adjState);
+        return testAgainstMasonryCornerSegment(dir, states.getA(), side) ||
+                testAgainstMasonryCornerSegment(dir, states.getB(), side);
     }
 
     @CullTest.SingleTarget(BlockType.FRAMED_STAIRS)

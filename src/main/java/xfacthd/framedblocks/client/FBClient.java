@@ -61,6 +61,7 @@ import xfacthd.framedblocks.common.FBContent;
 import xfacthd.framedblocks.common.block.interactive.*;
 import xfacthd.framedblocks.common.block.prism.*;
 import xfacthd.framedblocks.common.block.rail.*;
+import xfacthd.framedblocks.common.block.slab.FramedMasonryCornerBlock;
 import xfacthd.framedblocks.common.block.slope.*;
 import xfacthd.framedblocks.common.block.slopepanel.*;
 import xfacthd.framedblocks.common.block.slopepanelcorner.*;
@@ -248,6 +249,8 @@ public final class FBClient
         ClientUtils.replaceModels(FBContent.BLOCK_FRAMED_CORNER_PILLAR, registry, FramedCornerPillarModel::new, ClientUtils.IGNORE_WATERLOGGED);
         replaceDoubleBlockModels(FBContent.BLOCK_FRAMED_DIVIDED_PANEL_HOR, registry, null, ClientUtils.IGNORE_DEFAULT);
         replaceDoubleBlockModels(FBContent.BLOCK_FRAMED_DIVIDED_PANEL_VERT, registry, null, ClientUtils.IGNORE_DEFAULT);
+        ClientUtils.replaceModels(FBContent.BLOCK_FRAMED_MASONRY_CORNER_SEGMENT, registry, FramedMasonryCornerSegmentModel::new, ClientUtils.IGNORE_WATERLOGGED);
+        replaceDoubleBlockModels(FBContent.BLOCK_FRAMED_MASONRY_CORNER, registry, null, FramedMasonryCornerBlock.itemModelSource(), ClientUtils.IGNORE_SOLID);
         ClientUtils.replaceModels(FBContent.BLOCK_FRAMED_STAIRS, registry, FramedStairsModel::new, ClientUtils.IGNORE_DEFAULT_LOCK);
         ClientUtils.replaceModels(FBContent.BLOCK_FRAMED_WALL, registry, FramedWallModel::new, ClientUtils.IGNORE_WATERLOGGED_LOCK);
         ClientUtils.replaceModels(FBContent.BLOCK_FRAMED_FENCE, registry, FramedFenceModel::createFenceModel, ClientUtils.IGNORE_WATERLOGGED_LOCK);
