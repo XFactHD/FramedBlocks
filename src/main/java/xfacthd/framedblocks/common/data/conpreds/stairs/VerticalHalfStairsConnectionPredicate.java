@@ -35,11 +35,11 @@ public final class VerticalHalfStairsConnectionPredicate implements ConnectionPr
 
         if (side.getAxis() == facing.getAxis())
         {
-            return edge.getAxis() == facing.getClockWise().getAxis();
+            return edge.getAxis() == facing.getClockWise().getAxis() || (side == facing.getOpposite() && edge == dirTwo);
         }
         else if (side.getAxis() == facing.getClockWise().getAxis())
         {
-            return edge.getAxis() == facing.getAxis();
+            return edge.getAxis() == facing.getAxis() || (side == facing.getClockWise() && edge == dirTwo);
         }
         else if (side == dirTwo)
         {
