@@ -11,6 +11,7 @@ import xfacthd.framedblocks.common.data.skippreds.CullTest;
 import xfacthd.framedblocks.common.data.skippreds.SideSkipPredicates;
 
 import java.lang.reflect.Method;
+import java.lang.reflect.Modifier;
 import java.util.*;
 
 public final class SkipPredicatePresenceConsistency
@@ -68,13 +69,24 @@ public final class SkipPredicatePresenceConsistency
                     if (doubleTargets.value().length <= 1)
                     {
                         FramedBlocks.LOGGER.error(
-                                "DoubleTargets container annotation on method '{}' in class '{}' should be replaced with DoubleTarget",
+                                "    DoubleTargets container annotation on method '{}' in class '{}' should be replaced with DoubleTarget",
                                 mth.getName(), test.clazzName
                         );
                     }
                     for (CullTest.DoubleTarget target : doubleTargets.value())
                     {
                         collectDoubleTarget(doubleBlockPartTypes, type, test, doubleTypes, mth, target);
+                    }
+                }
+
+                if (Modifier.isStatic(mth.getModifiers()) && mth.getReturnType() == Boolean.TYPE && mth.getName().contains("test"))
+                {
+                    if (singleTarget == null && doubleTarget == null && doubleTargets == null)
+                    {
+                        FramedBlocks.LOGGER.error(
+                                "    Method '{}' in class '{}' is missing test target annotation",
+                                mth.getName(), test.clazzName
+                        );
                     }
                 }
             }
