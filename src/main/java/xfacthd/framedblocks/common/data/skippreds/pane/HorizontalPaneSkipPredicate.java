@@ -13,7 +13,7 @@ import xfacthd.framedblocks.common.data.skippreds.CullTest;
 public final class HorizontalPaneSkipPredicate implements SideSkipPredicate
 {
     @Override
-    @CullTest.SingleTarget(BlockType.FRAMED_HORIZONTAL_PANE)
+    @CullTest.TestTarget(BlockType.FRAMED_HORIZONTAL_PANE)
     public boolean test(BlockGetter level, BlockPos pos, BlockState state, BlockState adjState, Direction side)
     {
         return adjState.getBlock() == state.getBlock() && !Utils.isY(side);

@@ -34,14 +34,14 @@ public final class FenceGateSkipPredicate implements SideSkipPredicate
         return false;
     }
 
-    @CullTest.SingleTarget(BlockType.FRAMED_FENCE_GATE)
+    @CullTest.TestTarget(BlockType.FRAMED_FENCE_GATE)
     private static boolean testAgainstFenceGate(Direction dir, boolean inWall, BlockState adjState)
     {
         Direction adjDir = adjState.getValue(FenceGateBlock.FACING);
         return adjDir.getAxis() == dir.getAxis() && inWall == adjState.getValue(FenceGateBlock.IN_WALL);
     }
 
-    @CullTest.SingleTarget(value = BlockType.FRAMED_WALL, oneWay = true)
+    @CullTest.TestTarget(value = BlockType.FRAMED_WALL, oneWay = true)
     private static boolean testAgainstWall(boolean inWall, BlockState adjState, Direction side)
     {
         return inWall && WallSkipPredicate.getArm(adjState, side.getOpposite()) != WallSide.NONE;

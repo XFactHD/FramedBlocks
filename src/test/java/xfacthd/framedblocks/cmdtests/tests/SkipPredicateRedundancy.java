@@ -90,7 +90,7 @@ public final class SkipPredicateRedundancy
             }
 
             SkipPredicatePresenceConsistency.Test test = SkipPredicatePresenceConsistency.getTestOf(type);
-            if (test == null || !(test.targets().contains(adjType) || hasTestAgainstDoubleType(test, adjType)))
+            if (test == null || !test.targets().contains(adjType))
             {
                 // No point in checking for redundancy if no test is present -> bail out early
                 continue;
@@ -140,14 +140,6 @@ public final class SkipPredicateRedundancy
             }
         }
         return false;
-    }
-
-    private static boolean hasTestAgainstDoubleType(SkipPredicatePresenceConsistency.Test test, BlockType adjType)
-    {
-        return adjType.isDoubleBlock() && test.doubleTargets()
-                .stream()
-                .map(SkipPredicatePresenceConsistency.DoubleTarget::target)
-                .anyMatch(Predicate.isEqual(adjType));
     }
 
     private record Redundancy(BlockType typeOne, BlockType typeTwo) { }

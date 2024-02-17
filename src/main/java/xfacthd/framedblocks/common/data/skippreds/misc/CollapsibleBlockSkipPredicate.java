@@ -19,7 +19,7 @@ public final class CollapsibleBlockSkipPredicate implements SideSkipPredicate
     private static final VertexPair[][] EDGE_MAPPING = makeEdgeMappings();
 
     @Override
-    @CullTest.SingleTarget(BlockType.FRAMED_COLLAPSIBLE_BLOCK)
+    @CullTest.TestTarget(BlockType.FRAMED_COLLAPSIBLE_BLOCK)
     public boolean test(BlockGetter level, BlockPos pos, BlockState state, BlockState adjState, Direction side)
     {
         NullableDirection face = state.getValue(PropertyHolder.NULLABLE_FACE);

@@ -14,7 +14,7 @@ import xfacthd.framedblocks.common.data.skippreds.CullTest;
 public final class FloorBoardSkipPredicate implements SideSkipPredicate
 {
     @Override
-    @CullTest.SingleTarget(BlockType.FRAMED_FLOOR_BOARD)
+    @CullTest.TestTarget(BlockType.FRAMED_FLOOR_BOARD)
     public boolean test(BlockGetter level, BlockPos pos, BlockState state, BlockState adjState, Direction side)
     {
         if (!Utils.isY(side) && adjState.getBlock() == state.getBlock())

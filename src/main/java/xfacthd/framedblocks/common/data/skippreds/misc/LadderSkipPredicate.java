@@ -14,7 +14,7 @@ import xfacthd.framedblocks.common.data.skippreds.CullTest;
 public final class LadderSkipPredicate implements SideSkipPredicate
 {
     @Override
-    @CullTest.SingleTarget(BlockType.FRAMED_LADDER)
+    @CullTest.TestTarget(BlockType.FRAMED_LADDER)
     public boolean test(BlockGetter level, BlockPos pos, BlockState state, BlockState adjState, Direction side)
     {
         return Utils.isY(side) && adjState.getBlock() == FBContent.BLOCK_FRAMED_LADDER.get();

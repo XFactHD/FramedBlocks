@@ -32,25 +32,25 @@ public final class PillarSkipPredicate implements SideSkipPredicate
         return false;
     }
 
-    @CullTest.SingleTarget(BlockType.FRAMED_PILLAR)
+    @CullTest.TestTarget(BlockType.FRAMED_PILLAR)
     private static boolean testAgainstPillar(Direction.Axis axis, BlockState adjState)
     {
         return axis == adjState.getValue(BlockStateProperties.AXIS);
     }
 
-    @CullTest.SingleTarget(BlockType.FRAMED_HALF_PILLAR)
+    @CullTest.TestTarget(BlockType.FRAMED_HALF_PILLAR)
     private static boolean testAgainstHalfPillar(BlockState adjState, Direction side)
     {
         return adjState.getValue(BlockStateProperties.FACING) == side.getOpposite();
     }
 
-    @CullTest.SingleTarget(BlockType.FRAMED_WALL)
+    @CullTest.TestTarget(BlockType.FRAMED_WALL)
     private static boolean testAgainstWall(Direction.Axis axis, BlockState adjState)
     {
         return axis == Direction.Axis.Y && adjState.getValue(BlockStateProperties.UP);
     }
 
-    @CullTest.SingleTarget(BlockType.FRAMED_THICK_LATTICE)
+    @CullTest.TestTarget(BlockType.FRAMED_THICK_LATTICE)
     private static boolean testAgainstThickLattice(Direction.Axis axis, BlockState adjState)
     {
         return switch (axis)

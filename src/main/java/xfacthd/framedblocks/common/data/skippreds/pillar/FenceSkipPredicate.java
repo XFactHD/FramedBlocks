@@ -33,13 +33,13 @@ public final class FenceSkipPredicate implements SideSkipPredicate
         return false;
     }
 
-    @CullTest.SingleTarget(BlockType.FRAMED_FENCE)
+    @CullTest.TestTarget(BlockType.FRAMED_FENCE)
     private static boolean testAgainstFence(BlockState state, BlockState adjState, Direction side)
     {
         return Utils.isY(side) || (hasFenceArm(state, side) && hasFenceArm(adjState, side.getOpposite()));
     }
 
-    @CullTest.SingleTarget(value = BlockType.FRAMED_FENCE_GATE, oneWay = true)
+    @CullTest.TestTarget(value = BlockType.FRAMED_FENCE_GATE, oneWay = true)
     private static boolean testAgainstFenceGate(BlockState state, BlockState adjState, Direction side)
     {
         if (!Utils.isY(side) && hasFenceArm(state, side))
@@ -50,13 +50,13 @@ public final class FenceSkipPredicate implements SideSkipPredicate
         return false;
     }
 
-    @CullTest.SingleTarget(BlockType.FRAMED_POST)
+    @CullTest.TestTarget(BlockType.FRAMED_POST)
     private static boolean testAgainstPost(BlockState adjState, Direction side)
     {
         return Utils.isY(side) && adjState.getValue(BlockStateProperties.AXIS) == Direction.Axis.Y;
     }
 
-    @CullTest.SingleTarget(BlockType.FRAMED_LATTICE_BLOCK)
+    @CullTest.TestTarget(BlockType.FRAMED_LATTICE_BLOCK)
     private static boolean testAgainstLattice(BlockState adjState, Direction side)
     {
         return Utils.isY(side) && adjState.getValue(FramedProperties.Y_AXIS);

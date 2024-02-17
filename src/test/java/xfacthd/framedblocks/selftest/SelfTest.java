@@ -37,7 +37,7 @@ public final class SelfTest
         LockingPropertyConsistency.checkLockingProperty(blocks);
         ClientBlockExtensionsPresence.checkClientExtensionsPresent(blocks);
         SpecialShapeRendererPresence.checkSpecialShapePresent(blocks);
-        SkipPredicatePresenceConsistency.checkSkipPredicateConsistency(blocks);
+        SkipPredicatePresenceConsistency.checkSkipPredicateConsistency();
         StateCacheValidity.checkStateCacheValid(blocks);
 
         stopwatch.stop();

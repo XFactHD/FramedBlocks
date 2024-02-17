@@ -31,19 +31,19 @@ public final class PostSkipPredicate implements SideSkipPredicate
         return false;
     }
 
-    @CullTest.SingleTarget(BlockType.FRAMED_POST)
+    @CullTest.TestTarget(BlockType.FRAMED_POST)
     private static boolean testAgainstPost(Direction.Axis axis, BlockState adjState)
     {
         return axis == adjState.getValue(BlockStateProperties.AXIS);
     }
 
-    @CullTest.SingleTarget(BlockType.FRAMED_FENCE)
+    @CullTest.TestTarget(BlockType.FRAMED_FENCE)
     private static boolean testAgainstFence(Direction.Axis axis)
     {
         return axis == Direction.Axis.Y;
     }
 
-    @CullTest.SingleTarget(BlockType.FRAMED_LATTICE_BLOCK)
+    @CullTest.TestTarget(BlockType.FRAMED_LATTICE_BLOCK)
     private static boolean testAgainstLattice(Direction.Axis axis, BlockState adjState)
     {
         return switch (axis)

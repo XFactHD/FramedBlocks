@@ -15,7 +15,7 @@ public @interface CullTest
 
     @Retention(RetentionPolicy.RUNTIME)
     @Target(ElementType.METHOD)
-    @interface SingleTarget
+    @interface TestTarget
     {
         /**
          * The type(s) tested against
@@ -26,33 +26,5 @@ public @interface CullTest
          * Indicate that this test intentionally does not have a reverse test
          */
         boolean oneWay() default false;
-    }
-
-    @Retention(RetentionPolicy.RUNTIME)
-    @Target(ElementType.METHOD)
-    @Repeatable(DoubleTargets.class)
-    @interface DoubleTarget
-    {
-        /**
-         * The double block type(s) being tested against
-         */
-        BlockType value();
-
-        /**
-         * The part types of the double blocks being tested against
-         */
-        BlockType[] partTargets();
-
-        /**
-         * Part types of the double block being tested against which are intentionally ignored
-         */
-        BlockType[] ignoredParts() default { };
-    }
-
-    @Retention(RetentionPolicy.RUNTIME)
-    @Target(ElementType.METHOD)
-    @interface DoubleTargets
-    {
-        DoubleTarget[] value();
     }
 }
