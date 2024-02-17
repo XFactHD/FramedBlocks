@@ -415,9 +415,9 @@ public interface IFramedBlock extends EntityBlock, IForgeBlock
 
     default float getCamoShadeBrightness(BlockState state, BlockGetter level, BlockPos pos, float ownShade)
     {
-        if (level.getBlockEntity(pos) instanceof FramedBlockEntity be && !be.getCamo().isEmpty())
+        if (level.getBlockEntity(pos) instanceof FramedBlockEntity be)
         {
-            return Math.max(ownShade, be.getCamo().getState().getShadeBrightness(level, pos));
+            return be.getCamoShadeBrightness(ownShade);
         }
         return ownShade;
     }

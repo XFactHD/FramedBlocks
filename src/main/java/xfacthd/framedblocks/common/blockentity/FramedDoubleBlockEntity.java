@@ -49,7 +49,7 @@ public abstract class FramedDoubleBlockEntity extends FramedBlockEntity
     public FramedDoubleBlockEntity(BlockEntityType<?> type, BlockPos pos, BlockState state)
     {
         super(type, pos, state);
-        this.stateCache = getDoubleBlock().getCache(state);
+        this.stateCache = getBlock().getCache(state);
         this.modelData.setUseAltModel(true);
     }
 
@@ -110,6 +110,12 @@ public abstract class FramedDoubleBlockEntity extends FramedBlockEntity
     public int getLightValue()
     {
         return Math.max(camoContainer.getState().getLightEmission(), super.getLightValue());
+    }
+
+    @Override
+    public IFramedDoubleBlock getBlock()
+    {
+        return (IFramedDoubleBlock) super.getBlock();
     }
 
     @Override
@@ -291,6 +297,22 @@ public abstract class FramedDoubleBlockEntity extends FramedBlockEntity
         return Math.min(spreadSpeedOne, spreadSpeedTwo);
     }
 
+    @Override
+    public float getCamoShadeBrightness(float ownShade)
+    {
+        if (!getCamo().isEmpty())
+        {
+            //noinspection ConstantConditions
+            ownShade = Math.max(ownShade, getCamo().getState().getShadeBrightness(level, worldPosition));
+        }
+        if (!camoContainer.isEmpty())
+        {
+            //noinspection ConstantConditions
+            ownShade = Math.max(ownShade, camoContainer.getState().getShadeBrightness(level, worldPosition));
+        }
+        return ownShade;
+    }
+
     public final DoubleBlockSoundType getSoundType()
     {
         return soundType;
@@ -335,12 +357,7 @@ public abstract class FramedDoubleBlockEntity extends FramedBlockEntity
     public void setBlockState(BlockState state)
     {
         super.setBlockState(state);
-        stateCache = getDoubleBlock().getCache(state);
-    }
-
-    protected IFramedDoubleBlock getDoubleBlock()
-    {
-        return (IFramedDoubleBlock) getBlockState().getBlock();
+        stateCache = getBlock().getCache(state);
     }
 
     /*
@@ -393,7 +410,7 @@ public abstract class FramedDoubleBlockEntity extends FramedBlockEntity
     }
 
     @Override
-    public ModelData getModelData(ModelData data, BlockState state)
+    public final ModelData getModelData(ModelData data, BlockState state)
     {
         if (state == stateCache.getBlockPair().getA())
         {

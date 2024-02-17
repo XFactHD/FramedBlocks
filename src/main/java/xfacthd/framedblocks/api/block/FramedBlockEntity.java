@@ -625,6 +625,16 @@ public class FramedBlockEntity extends BlockEntity
         return camoContainer.isEmpty() ? -1 : camoContainer.getState().getFireSpreadSpeed(level, worldPosition, face);
     }
 
+    public float getCamoShadeBrightness(float ownShade)
+    {
+        if (!camoContainer.isEmpty())
+        {
+            //noinspection ConstantConditions
+            return Math.max(ownShade, camoContainer.getState().getShadeBrightness(level, worldPosition));
+        }
+        return ownShade;
+    }
+
     public final void setGlowing(boolean glowing)
     {
         if (this.glowing != glowing)
@@ -710,7 +720,7 @@ public class FramedBlockEntity extends BlockEntity
         level.getChunkSource().getLightEngine().checkBlock(worldPosition);
     }
 
-    public final IFramedBlock getBlock()
+    public IFramedBlock getBlock()
     {
         return (IFramedBlock) getBlockState().getBlock();
     }
