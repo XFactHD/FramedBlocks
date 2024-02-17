@@ -10,19 +10,23 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.Tuple;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraftforge.client.model.data.ModelData;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.Nullable;
 import xfacthd.framedblocks.api.block.IFramedBlock;
 import xfacthd.framedblocks.api.block.cache.StateCache;
 import xfacthd.framedblocks.api.block.render.ParticleHelper;
 import xfacthd.framedblocks.api.camo.CamoContainer;
+import xfacthd.framedblocks.api.predicate.cull.SideSkipPredicate;
 import xfacthd.framedblocks.common.blockentity.FramedDoubleBlockEntity;
 import xfacthd.framedblocks.common.data.doubleblock.*;
 import xfacthd.framedblocks.common.item.FramedBlueprintItem;
 import xfacthd.framedblocks.common.util.DoubleBlockTopInteractionMode;
 
+import java.util.Objects;
 import java.util.Optional;
 
 public interface IFramedDoubleBlock extends IFramedBlock
@@ -73,6 +77,77 @@ public interface IFramedDoubleBlock extends IFramedBlock
     default DoubleBlockStateCache getCache(BlockState state)
     {
         return (DoubleBlockStateCache) IFramedBlock.super.getCache(state);
+    }
+
+    @Override
+    @Nullable
+    default BlockState runOcclusionTestAndGetLookupState(
+            SideSkipPredicate pred, BlockGetter level, BlockPos pos, BlockState state, BlockState adjState, Direction side
+    )
+    {
+        Tuple<BlockState, BlockState> statePair = getBlockPair(adjState);
+        if (pred.test(level, pos, state, statePair.getA(), side))
+        {
+            return statePair.getA();
+        }
+        if (pred.test(level, pos, state, statePair.getB(), side))
+        {
+            return statePair.getB();
+        }
+        return null;
+    }
+
+    @Override
+    @Nullable
+    default BlockState getComponentAtEdge(
+            BlockGetter level, BlockPos pos, BlockState state, Direction side, @Nullable Direction edge
+    )
+    {
+        DoubleBlockStateCache cache = getCache(state);
+        return cache.getCamoGetter(side, edge).getComponent(cache.getBlockPair());
+    }
+
+    @Override
+    @Nullable
+    default BlockState getComponentBySkipPredicate(
+            BlockGetter level, BlockPos pos, BlockState state, BlockState neighborState, Direction side
+    )
+    {
+        Tuple<BlockState, BlockState> blockPair = getBlockPair(state);
+        BlockState compA = blockPair.getA();
+        if (testComponent(level, pos, compA, neighborState, side))
+        {
+            return compA;
+        }
+        BlockState compB = blockPair.getB();
+        if (testComponent(level, pos, compB, neighborState, side))
+        {
+            return compB;
+        }
+        return null;
+    }
+
+    static boolean testComponent(
+            BlockGetter ctLevel, BlockPos pos, BlockState component, BlockState neighborState, Direction side
+    )
+    {
+        IFramedBlock block = (IFramedBlock) component.getBlock();
+        return block.getBlockType().getSideSkipPredicate().test(ctLevel, pos, component, neighborState, side);
+    }
+
+    @Override
+    default ModelData unpackNestedModelData(ModelData data, BlockState state, BlockState componentState)
+    {
+        Tuple<BlockState, BlockState> blockPair = getBlockPair(state);
+        if (componentState == blockPair.getA())
+        {
+            return Objects.requireNonNullElse(data.get(FramedDoubleBlockEntity.DATA_LEFT), ModelData.EMPTY);
+        }
+        if (componentState == blockPair.getB())
+        {
+            return Objects.requireNonNullElse(data.get(FramedDoubleBlockEntity.DATA_RIGHT), ModelData.EMPTY);
+        }
+        return ModelData.EMPTY;
     }
 
     @Override

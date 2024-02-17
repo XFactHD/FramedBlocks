@@ -2,10 +2,8 @@ package xfacthd.framedblocks.common.blockentity.doubled;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
-import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.BlockHitResult;
-import org.jetbrains.annotations.Nullable;
 import xfacthd.framedblocks.api.camo.CamoContainer;
 import xfacthd.framedblocks.common.FBContent;
 import xfacthd.framedblocks.common.block.ISlopeBlock;
@@ -38,17 +36,5 @@ public class FramedFancyRailSlopeBlockEntity extends FramedDoubleBlockEntity
     {
         CamoContainer camo = getCamo();
         return !camo.isEmpty() && camo.isSolid(level, worldPosition);
-    }
-
-    @Override
-    @Nullable
-    public BlockState getComponentBySkipPredicate(BlockGetter ctLevel, BlockState neighborState, Direction side)
-    {
-        BlockState slopeState = getBlockPair().getA();
-        if (testComponent(ctLevel, worldPosition, slopeState, neighborState, side))
-        {
-            return slopeState;
-        }
-        return null;
     }
 }

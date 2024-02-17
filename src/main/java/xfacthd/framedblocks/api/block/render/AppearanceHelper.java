@@ -13,7 +13,6 @@ import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
 import xfacthd.framedblocks.api.FramedBlocksClientAPI;
-import xfacthd.framedblocks.api.block.FramedBlockEntity;
 import xfacthd.framedblocks.api.block.IFramedBlock;
 import xfacthd.framedblocks.api.block.cache.StateCache;
 import xfacthd.framedblocks.api.model.data.FramedBlockData;
@@ -53,13 +52,14 @@ public final class AppearanceHelper
             boolean recursive
     )
     {
-        if (!FMLEnvironment.dist.isClient() || !framedBlock.getBlockType().supportsConnectedTextures())
+        IBlockType type = framedBlock.getBlockType();
+        if (!FMLEnvironment.dist.isClient() || !type.supportsConnectedTextures())
         {
             return AIR;
         }
 
-        ConTexMode mode = FramedBlocksClientAPI.getInstance().getConTexMode();
-        if (mode == ConTexMode.NONE || queryPos == null)
+        ConTexMode cfgMode = FramedBlocksClientAPI.getInstance().getConTexMode();
+        if (cfgMode == ConTexMode.NONE || queryPos == null)
         {
             // If queryPos is null, we can't make sure the connection is possible
             return AIR;
@@ -74,7 +74,7 @@ public final class AppearanceHelper
 
         Direction edge = findFirstSuitableDirectionFromOffset(pos, queryPos, side, $ -> true);
         StateCache stateCache = framedBlock.getCache(state);
-        if (framedBlock.getBlockType().isDoubleBlock())
+        if (type.isDoubleBlock())
         {
             if (recursive)
             {
@@ -87,15 +87,23 @@ public final class AppearanceHelper
                 return AIR;
             }
 
-            if (actualQueryState != null && level.getBlockEntity(pos) instanceof FramedBlockEntity be)
+            if (actualQueryState != null)
             {
-                if (canDoubleBlockConnectFullEdgeTo(pos, queryPos, actualQueryState, side, edge))
+                if (isNotFramedOrCanConnectFullEdgeTo(pos, queryPos, actualQueryState, side, edge))
                 {
-                    if (stateCache.canConnectFullEdge(side, edge))
+                    if (!stateCache.canConnectFullEdge(side, edge))
                     {
-                        return getCamo(level, pos, side, edge);
+                        return AIR;
                     }
-                    return AIR;
+
+                    BlockState componentState = framedBlock.getComponentAtEdge(level, pos, state, side, edge);
+                    if (componentState == null)
+                    {
+                        return AIR;
+                    }
+
+                    FramedBlockData modelData = getModelData(level, pos, componentState, false);
+                    return modelData != null ? modelData.getCamoState() : AIR;
                 }
 
                 if (edge == null)
@@ -103,7 +111,7 @@ public final class AppearanceHelper
                     return AIR;
                 }
 
-                BlockState componentState = be.getComponentBySkipPredicate(level, actualQueryState, edge);
+                BlockState componentState = framedBlock.getComponentBySkipPredicate(level, pos, state, actualQueryState, edge);
                 if (componentState != null)
                 {
                     IFramedBlock componentBlock = ((IFramedBlock) componentState.getBlock());
@@ -113,12 +121,19 @@ public final class AppearanceHelper
             return AIR;
         }
 
+        FramedBlockData modelData = getModelData(level, pos, state, true);
+        if (modelData == null)
+        {
+            // If the model data is inaccessible then there's no camo, so there's no point in continuing
+            return AIR;
+        }
+
         ConTexMode typeMode = framedBlock.getBlockType().getMinimumConTexMode();
-        if (canUseMode(mode, typeMode, ConTexMode.FULL_FACE) && stateCache.canConnectFullEdge(side, null))
+        if (canUseMode(cfgMode, typeMode, ConTexMode.FULL_FACE) && stateCache.canConnectFullEdge(side, null))
         {
             if (isNotFramedOrCanConnectFullEdgeTo(pos, queryPos, actualQueryState, side, edge))
             {
-                return getCamo(level, pos, state);
+                return modelData.getCamoState();
             }
             return AIR;
         }
@@ -129,25 +144,23 @@ public final class AppearanceHelper
             return AIR;
         }
 
-        if (canUseMode(mode, typeMode, ConTexMode.FULL_EDGE))
+        if (canUseMode(cfgMode, typeMode, ConTexMode.FULL_EDGE))
         {
             Direction conEdge = findFirstSuitableDirectionFromOffset(pos, queryPos, side, testEdge ->
                     stateCache.canConnectFullEdge(side, testEdge)
             );
             if (conEdge != null)
             {
-                return getCamo(level, pos, state);
+                return modelData.getCamoState();
             }
         }
 
-        if (mode == ConTexMode.DETAILED && !queryPos.equals(pos))
+        if (cfgMode == ConTexMode.DETAILED && !queryPos.equals(pos))
         {
-            Direction detEdge = findFirstSuitableDirectionFromOffset(pos, queryPos, side, testEdge ->
-                    isSideHidden(level, pos, state, testEdge)
-            );
+            Direction detEdge = findFirstSuitableDirectionFromOffset(pos, queryPos, side, modelData::isSideHidden);
             if (detEdge != null && stateCache.canConnectDetailed(side, detEdge))
             {
-                return getCamo(level, pos, state);
+                return modelData.getCamoState();
             }
         }
         return AIR;
@@ -158,6 +171,9 @@ public final class AppearanceHelper
         return cfgMode.atleast(targetMode) && targetMode.atleast(typeMode);
     }
 
+    /**
+     * Determine the first direction from the difference between the two given positions which matches the given predicate
+     */
     private static Direction findFirstSuitableDirectionFromOffset(
             BlockPos pos, BlockPos queryPos, Direction side, Predicate<Direction> pred
     )
@@ -202,66 +218,57 @@ public final class AppearanceHelper
         return null;
     }
 
-    /*
-     * Non-null, non-AIR => connectable block
-     * Non-null, AIR => framed block without CT support
-     * Null => Double framed block, can't determine connecting component, won't connect to other double blocks,
-     *         or neighbor state is actually air, in which case full-face and full-edge camos need to be returned
+    /**
+     * Determine the actual query state depending on whether it's a framed block, its CT support if it is and whether
+     * it's a double block
+     * <ul>
+     *     <li>Non-null, non-AIR => connectable block</li>
+     *     <li>Non-null, AIR => framed block without CT support</li>
+     *     <li>Null => Double framed block, can't determine connecting component, won't connect to other double blocks,
+     *     or neighbor state is actually air, in which case full-face and full-edge camos need to be returned</li>
+     * </ul>
      */
     private static BlockState findApplicableNeighbor(BlockGetter level, BlockPos queryPos, @Nullable BlockState queryState)
     {
-        if (queryState != null && queryState.getBlock() instanceof IFramedBlock block)
+        if (queryState != null && queryState.getBlock() instanceof IFramedBlock queryBlock)
         {
-            return block.getBlockType().supportsConnectedTextures() ? queryState : AIR;
-        }
-
-        BlockState actualQueryState = level.getBlockState(queryPos);
-        if (actualQueryState.getBlock() instanceof IFramedBlock block)
-        {
-            IBlockType type = block.getBlockType();
+            IBlockType type = queryBlock.getBlockType();
             if (type.isDoubleBlock())
             {
                 return null;
             }
-            else if (!type.supportsConnectedTextures())
+            return type.supportsConnectedTextures() ? queryState : AIR;
+        }
+        else if (queryState == null)
+        {
+            BlockState actualQueryState = level.getBlockState(queryPos);
+            if (actualQueryState.getBlock() instanceof IFramedBlock queryBlock)
             {
-                return AIR;
+                IBlockType type = queryBlock.getBlockType();
+                if (type.isDoubleBlock())
+                {
+                    return null;
+                }
+                else if (!type.supportsConnectedTextures())
+                {
+                    return AIR;
+                }
+                return actualQueryState;
             }
-            return actualQueryState;
+            queryState = actualQueryState;
         }
-
-        return queryState != null && queryState.isAir() ? null : queryState;
+        return queryState.isAir() ? null : queryState;
     }
 
-    private static boolean canDoubleBlockConnectFullEdgeTo(
-            BlockPos pos, BlockPos queryPos, BlockState queryState, Direction side, @Nullable Direction edge
-    )
-    {
-        if (!(queryState.getBlock() instanceof IFramedBlock block))
-        {
-            return true;
-        }
-
-        int nx = queryPos.getX() - pos.getX();
-        int ny = queryPos.getY() - pos.getY();
-        int nz = queryPos.getZ() - pos.getZ();
-        if (side.getAxis().choose(nx, ny, nz) != 0)
-        {
-            // CT impl is trying to check connection occlusion => check opposite side
-            side = side.getOpposite();
-        }
-        if (edge != null)
-        {
-            edge = edge.getOpposite();
-        }
-        return block.getCache(queryState).canConnectFullEdge(side, edge);
-    }
-
+    /**
+     * Check that the querying block is either not a framed block or can be connected to from the given edge
+     * of the given side
+     */
     private static boolean isNotFramedOrCanConnectFullEdgeTo(
             BlockPos pos, BlockPos queryPos, BlockState queryState, Direction side, @Nullable Direction edge
     )
     {
-        if (queryState != null && queryState.getBlock() instanceof IFramedBlock block)
+        if (queryState != null && queryState.getBlock() instanceof IFramedBlock queryBlock)
         {
             int nx = queryPos.getX() - pos.getX();
             int ny = queryPos.getY() - pos.getY();
@@ -275,56 +282,43 @@ public final class AppearanceHelper
             {
                 edge = edge.getOpposite();
             }
-            return block.getCache(queryState).canConnectFullEdge(side, edge);
+            return queryBlock.getCache(queryState).canConnectFullEdge(side, edge);
         }
         return true;
     }
 
     @SuppressWarnings("UnstableApiUsage")
-    private static boolean isSideHidden(BlockGetter level, BlockPos pos, BlockState state, Direction side)
+    private static FramedBlockData getModelData(
+            BlockGetter level, BlockPos pos, BlockState componentState, boolean mayBeSingle
+    )
     {
         ModelDataManager manager = level.getModelDataManager();
         if (manager == null)
         {
-            return false;
+            return null;
         }
 
         ModelData data = manager.getAt(pos);
         if (data == null)
         {
-            return false;
+            return null;
         }
 
-        FramedBlockData fbData = data.get(FramedBlockData.PROPERTY);
-        if (fbData != null)
+        if (mayBeSingle)
         {
-            return fbData.isSideHidden(side);
+            FramedBlockData fbData = data.get(FramedBlockData.PROPERTY);
+            if (fbData != null)
+            {
+                return fbData;
+            }
         }
 
-        if (level.getBlockEntity(pos) instanceof FramedBlockEntity be)
+        BlockState state = level.getBlockState(pos);
+        if (state.getBlock() instanceof IFramedBlock block)
         {
-            fbData = be.getModelData(data, state).get(FramedBlockData.PROPERTY);
-            return fbData != null && fbData.isSideHidden(side);
+            return block.unpackNestedModelData(data, state, componentState).get(FramedBlockData.PROPERTY);
         }
-        return false;
-    }
-
-    private static BlockState getCamo(BlockGetter level, BlockPos pos, Direction side, @Nullable Direction edge)
-    {
-        if (level.getBlockEntity(pos) instanceof FramedBlockEntity be)
-        {
-            return be.getCamo(side, edge).getState();
-        }
-        return AIR;
-    }
-
-    private static BlockState getCamo(BlockGetter level, BlockPos pos, BlockState state)
-    {
-        if (level.getBlockEntity(pos) instanceof FramedBlockEntity be)
-        {
-            return be.getCamo(state).getState();
-        }
-        return AIR;
+        return null;
     }
 
 

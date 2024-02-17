@@ -833,7 +833,11 @@ public class FramedBlockEntity extends BlockEntity
      * Special handling for connected textures
      */
 
+    /**
+     * @deprecated Use {@link IFramedBlock#getComponentBySkipPredicate(BlockGetter, BlockPos, BlockState, BlockState, Direction)} instead
+     */
     @Nullable
+    @Deprecated(forRemoval = true)
     public BlockState getComponentBySkipPredicate(BlockGetter ctLevel, BlockState neighborState, Direction side)
     {
         return getBlockState();
@@ -842,7 +846,10 @@ public class FramedBlockEntity extends BlockEntity
     /**
      * Extract the nested {@link ModelData}, if any, from the given data based on the given state,
      * only relevant for double blocks
+     *
+     * @deprecated Use {@link IFramedBlock#unpackNestedModelData(ModelData, BlockState, BlockState)} instead
      */
+    @Deprecated(forRemoval = true)
     public ModelData getModelData(ModelData data, BlockState state)
     {
         return data;
