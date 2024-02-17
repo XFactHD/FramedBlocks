@@ -1,6 +1,5 @@
 package xfacthd.framedblocks.api.model.util;
 
-import com.google.common.base.Preconditions;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.ItemBlockRenderTypes;
 import net.minecraft.client.resources.model.BakedModel;
@@ -21,12 +20,10 @@ public final class ModelCache
 {
     public static final Duration DEFAULT_CACHE_DURATION = Duration.ofMinutes(10);
     private static final Map<Fluid, BakedModel> modelCache = new ConcurrentHashMap<>();
-    private static ModelBakery modelBakery = null;
 
-    public static void clear(ModelBakery bakery)
+    public static void clear()
     {
         modelCache.clear();
-        modelBakery = bakery;
     }
 
     public static BakedModel getModel(BlockState state)
@@ -61,10 +58,10 @@ public final class ModelCache
         return model.getRenderTypes(state, random, data);
     }
 
+    @Deprecated(forRemoval = true)
     public static ModelBakery getModelBakery()
     {
-        Preconditions.checkNotNull(modelBakery, "ModelBakery requested before first resource reload");
-        return modelBakery;
+        return Minecraft.getInstance().getModelManager().getModelBakery();
     }
 
 
