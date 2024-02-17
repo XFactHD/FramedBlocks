@@ -651,7 +651,8 @@ public class FramedBlockEntity extends BlockEntity
 
     public int getLightValue()
     {
-        return glowing ? 15 : camoContainer.getState().getLightEmission();
+        int baseLight = glowing ? FramedBlocksAPI.getInstance().getGlowstoneLightLevel() : 0;
+        return Math.max(baseLight, camoContainer.getState().getLightEmission());
     }
 
     public void setIntangible(boolean intangible)

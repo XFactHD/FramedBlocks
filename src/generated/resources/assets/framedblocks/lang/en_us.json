@@ -196,6 +196,7 @@
   "config.framedblocks.server.allowBlockEntities": "Allow BlockEntities",
   "config.framedblocks.server.consumeCamoItem": "Consume camo item",
   "config.framedblocks.server.enableIntangibleFeature": "Enable intangibility feature",
+  "config.framedblocks.server.glowstoneLightLevel": "Glowstone Light Level",
   "config.framedblocks.server.intangibleMarkerItem": "Intangibility marker item",
   "config.framedblocks.server.oneWayWindowOwnable": "One-Way Window ownability",
   "desc.framedblocks.blueprint_block": "Contained Block: %s",

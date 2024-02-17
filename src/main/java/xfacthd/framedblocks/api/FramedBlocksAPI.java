@@ -106,4 +106,9 @@ public interface FramedBlocksAPI
      * {@return true if the camo item should be consumed on application and dropped on removal of the camo}
      */
     boolean shouldConsumeCamo();
+
+    /**
+     * {@return the light value to use when glowstone is applied to a block}
+     */
+    int getGlowstoneLightLevel();
 }

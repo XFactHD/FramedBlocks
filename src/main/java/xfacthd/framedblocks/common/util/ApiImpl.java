@@ -116,4 +116,10 @@ public final class ApiImpl implements FramedBlocksAPI
     {
         return ServerConfig.consumeCamoItem;
     }
+
+    @Override
+    public int getGlowstoneLightLevel()
+    {
+        return ServerConfig.glowstoneLightLevel;
+    }
 }
