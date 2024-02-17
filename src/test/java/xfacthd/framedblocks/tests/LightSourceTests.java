@@ -120,6 +120,8 @@ public final class LightSourceTests
                  FRAMED_DIVIDED_SLOPE,
                  FRAMED_DIVIDED_STAIRS -> List.of(Direction.EAST, Direction.WEST);
 
+            case FRAMED_CHECKERED_SLAB -> List.of(Direction.NORTH, Direction.WEST);
+
             default -> List.of(Direction.DOWN, Direction.UP);
         };
     }

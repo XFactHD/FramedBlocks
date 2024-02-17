@@ -219,6 +219,12 @@ public final class FramedLanguageProvider extends LanguageProvider
         add(FBContent.BLOCK_FRAMED_CHISELED_BOOKSHELF.get(), "Framed Chiseled Bookshelf");
         add(FBContent.BLOCK_FRAMED_CENTERED_SLAB.get(), "Framed Centered Slab");
         add(FBContent.BLOCK_FRAMED_CENTERED_PANEL.get(), "Framed Centered Panel");
+        add(FBContent.BLOCK_FRAMED_CHECKERED_CUBE_SEGMENT.get(), "Framed Checkered Cube Segment");
+        add(FBContent.BLOCK_FRAMED_CHECKERED_CUBE.get(), "Framed Checkered Cube");
+        add(FBContent.BLOCK_FRAMED_CHECKERED_SLAB_SEGMENT.get(), "Framed Checkered Slab Segment");
+        add(FBContent.BLOCK_FRAMED_CHECKERED_SLAB.get(), "Framed Checkered Slab");
+        add(FBContent.BLOCK_FRAMED_CHECKERED_PANEL_SEGMENT.get(), "Framed Checkered Panel Segment");
+        add(FBContent.BLOCK_FRAMED_CHECKERED_PANEL.get(), "Framed Checkered Panel");
     }
 
     private void addSpecialBlockTranslations()

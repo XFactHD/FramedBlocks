@@ -61,7 +61,7 @@ import xfacthd.framedblocks.common.FBContent;
 import xfacthd.framedblocks.common.block.interactive.*;
 import xfacthd.framedblocks.common.block.prism.*;
 import xfacthd.framedblocks.common.block.rail.*;
-import xfacthd.framedblocks.common.block.slab.FramedMasonryCornerBlock;
+import xfacthd.framedblocks.common.block.slab.*;
 import xfacthd.framedblocks.common.block.slope.*;
 import xfacthd.framedblocks.common.block.slopepanel.*;
 import xfacthd.framedblocks.common.block.slopepanelcorner.*;
@@ -411,6 +411,12 @@ public final class FBClient
         ClientUtils.replaceModels(FBContent.BLOCK_FRAMED_CHISELED_BOOKSHELF, registry, FramedBookshelfModel::chiseled, FramedBookshelfModel.itemSourceChiseled(), ClientUtils.IGNORE_SOLID);
         ClientUtils.replaceModels(FBContent.BLOCK_FRAMED_CENTERED_SLAB, registry, FramedCenteredSlabModel::new, ClientUtils.IGNORE_DEFAULT);
         ClientUtils.replaceModels(FBContent.BLOCK_FRAMED_CENTERED_PANEL, registry, FramedCenteredPanelModel::new, ClientUtils.IGNORE_DEFAULT);
+        ClientUtils.replaceModels(FBContent.BLOCK_FRAMED_CHECKERED_CUBE_SEGMENT, registry, FramedCheckeredCubeSegmentModel::new, ClientUtils.IGNORE_WATERLOGGED);
+        replaceDoubleBlockModels(FBContent.BLOCK_FRAMED_CHECKERED_CUBE, registry, FramedCheckeredCubeBlock.itemModelSource(), ClientUtils.IGNORE_SOLID);
+        ClientUtils.replaceModels(FBContent.BLOCK_FRAMED_CHECKERED_SLAB_SEGMENT, registry, FramedCheckeredSlabSegmentModel::new, ClientUtils.IGNORE_WATERLOGGED);
+        replaceDoubleBlockModels(FBContent.BLOCK_FRAMED_CHECKERED_SLAB, registry, FramedCheckeredSlabBlock.itemModelSource(), ClientUtils.IGNORE_SOLID);
+        ClientUtils.replaceModels(FBContent.BLOCK_FRAMED_CHECKERED_PANEL_SEGMENT, registry, FramedCheckeredPanelSegmentModel::new, ClientUtils.IGNORE_WATERLOGGED);
+        replaceDoubleBlockModels(FBContent.BLOCK_FRAMED_CHECKERED_PANEL, registry, FramedCheckeredPanelBlock.itemModelSource(), ClientUtils.IGNORE_SOLID);
 
         stopwatch.stop();
         FramedBlocks.LOGGER.debug("Replaced models for {} blocks in {}", BlockType.COUNT, stopwatch);

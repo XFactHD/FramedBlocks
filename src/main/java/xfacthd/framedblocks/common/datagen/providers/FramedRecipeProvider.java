@@ -1206,6 +1206,28 @@ public final class FramedRecipeProvider extends RecipeProvider
                 .unlockedBy("hasFramedBlock", HAS_FRAMED_BLOCK)
                 .save(consumer);
 
+        shapedBuildingBlock(FBContent.BLOCK_FRAMED_CHECKERED_CUBE.get())
+                .pattern("CCC")
+                .pattern("C C")
+                .pattern("CCC")
+                .define('C', FBContent.BLOCK_FRAMED_SLAB_CORNER.get())
+                .unlockedBy("hasFramedSlabCorner", has(FBContent.BLOCK_FRAMED_SLAB_CORNER.get()))
+                .save(consumer);
+
+        shapedBuildingBlock(FBContent.BLOCK_FRAMED_CHECKERED_SLAB.get(), 6)
+                .pattern("CCC")
+                .define('C', FBContent.BLOCK_FRAMED_CHECKERED_CUBE.get())
+                .unlockedBy("hasFramedCheckeredBlock", has(FBContent.BLOCK_FRAMED_CHECKERED_CUBE.get()))
+                .save(consumer);
+
+        shapedBuildingBlock(FBContent.BLOCK_FRAMED_CHECKERED_PANEL.get(), 6)
+                .pattern("C")
+                .pattern("C")
+                .pattern("C")
+                .define('C', FBContent.BLOCK_FRAMED_CHECKERED_CUBE.get())
+                .unlockedBy("hasFramedCheckeredBlock", has(FBContent.BLOCK_FRAMED_CHECKERED_CUBE.get()))
+                .save(consumer);
+
 
 
         ShapedRecipeBuilder.shaped(RecipeCategory.TOOLS, FBContent.ITEM_FRAMED_HAMMER.get())

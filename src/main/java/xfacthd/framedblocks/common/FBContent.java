@@ -261,6 +261,12 @@ public final class FBContent
     public static final RegistryObject<Block> BLOCK_FRAMED_CHISELED_BOOKSHELF = registerBlock(FramedChiseledBookshelfBlock::new, BlockType.FRAMED_CHISELED_BOOKSHELF);
     public static final RegistryObject<Block> BLOCK_FRAMED_CENTERED_SLAB = registerBlock(FramedCenteredSlabBlock::new, BlockType.FRAMED_CENTERED_SLAB);
     public static final RegistryObject<Block> BLOCK_FRAMED_CENTERED_PANEL = registerBlock(FramedCenteredPanelBlock::new, BlockType.FRAMED_CENTERED_PANEL);
+    public static final RegistryObject<Block> BLOCK_FRAMED_CHECKERED_CUBE_SEGMENT = registerBlock(FramedCheckeredCubeSegmentBlock::new, BlockType.FRAMED_CHECKERED_CUBE_SEGMENT);
+    public static final RegistryObject<Block> BLOCK_FRAMED_CHECKERED_CUBE = registerBlock(FramedCheckeredCubeBlock::new, BlockType.FRAMED_CHECKERED_CUBE);
+    public static final RegistryObject<Block> BLOCK_FRAMED_CHECKERED_SLAB_SEGMENT = registerBlock(FramedCheckeredSlabSegmentBlock::new, BlockType.FRAMED_CHECKERED_SLAB_SEGMENT);
+    public static final RegistryObject<Block> BLOCK_FRAMED_CHECKERED_SLAB = registerBlock(FramedCheckeredSlabBlock::new, BlockType.FRAMED_CHECKERED_SLAB);
+    public static final RegistryObject<Block> BLOCK_FRAMED_CHECKERED_PANEL_SEGMENT = registerBlock(FramedCheckeredPanelSegmentBlock::new, BlockType.FRAMED_CHECKERED_PANEL_SEGMENT);
+    public static final RegistryObject<Block> BLOCK_FRAMED_CHECKERED_PANEL = registerBlock(FramedCheckeredPanelBlock::new, BlockType.FRAMED_CHECKERED_PANEL);
     // endregion
 
     // region Special Blocks
@@ -511,6 +517,18 @@ public final class FBContent
     public static final RegisteredBE<FramedChiseledBookshelfBlockEntity> BE_TYPE_FRAMED_CHISELED_BOOKSHELF = createBlockEntityType(
             FramedChiseledBookshelfBlockEntity::new,
             BlockType.FRAMED_CHISELED_BOOKSHELF
+    );
+    public static final RegisteredBE<FramedCheckeredCubeBlockEntity> BE_TYPE_FRAMED_CHECKERED_CUBE = createBlockEntityType(
+            FramedCheckeredCubeBlockEntity::new,
+            BlockType.FRAMED_CHECKERED_CUBE
+    );
+    public static final RegisteredBE<FramedCheckeredSlabBlockEntity> BE_TYPE_FRAMED_CHECKERED_SLAB = createBlockEntityType(
+            FramedCheckeredSlabBlockEntity::new,
+            BlockType.FRAMED_CHECKERED_SLAB
+    );
+    public static final RegisteredBE<FramedCheckeredPanelBlockEntity> BE_TYPE_FRAMED_CHECKERED_PANEL = createBlockEntityType(
+            FramedCheckeredPanelBlockEntity::new,
+            BlockType.FRAMED_CHECKERED_PANEL
     );
     // endregion
 

@@ -205,5 +205,11 @@ public final class SideSkipPredicates extends BlockTypeMap<SideSkipPredicate>
         put(BlockType.FRAMED_CHISELED_BOOKSHELF, SideSkipPredicate.FALSE);
         put(BlockType.FRAMED_CENTERED_SLAB, new CenteredSlabSkipPredicate());
         put(BlockType.FRAMED_CENTERED_PANEL, new CenteredPanelSkipPredicate());
+        put(BlockType.FRAMED_CHECKERED_CUBE_SEGMENT, new CheckeredCubeSegmentSkipPredicate());
+        put(BlockType.FRAMED_CHECKERED_CUBE, SideSkipPredicate.FALSE);
+        put(BlockType.FRAMED_CHECKERED_SLAB_SEGMENT, new CheckeredSlabSegmentSkipPredicate());
+        put(BlockType.FRAMED_CHECKERED_SLAB, SideSkipPredicate.FALSE);
+        put(BlockType.FRAMED_CHECKERED_PANEL_SEGMENT, new CheckeredPanelSegmentSkipPredicate());
+        put(BlockType.FRAMED_CHECKERED_PANEL, SideSkipPredicate.FALSE);
     }
 }

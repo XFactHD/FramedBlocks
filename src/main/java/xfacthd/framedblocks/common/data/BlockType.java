@@ -212,6 +212,12 @@ public enum BlockType implements IBlockType
     FRAMED_CHISELED_BOOKSHELF                       ( true, false,  true, false,  true,  true, false, false, ConTexMode.FULL_FACE, Shapes.block()),
     FRAMED_CENTERED_SLAB                            ( true, false, false,  true,  true,  true, false, false, ConTexMode.DETAILED, FramedCenteredSlabBlock::generateShapes),
     FRAMED_CENTERED_PANEL                           ( true, false, false,  true,  true,  true, false, false, ConTexMode.DETAILED, FramedCenteredPanelBlock::generateShapes),
+    FRAMED_CHECKERED_CUBE_SEGMENT                   (false, false, false,  true, false,  true, false, false, ConTexMode.DETAILED, FramedCheckeredCubeSegmentBlock::generateShapes),
+    FRAMED_CHECKERED_CUBE                           ( true, false,  true, false,  true,  true,  true, false, ConTexMode.DETAILED, Shapes.block()),
+    FRAMED_CHECKERED_SLAB_SEGMENT                   (false, false, false,  true, false,  true, false, false, ConTexMode.DETAILED, FramedCheckeredSlabSegmentBlock::generateShapes),
+    FRAMED_CHECKERED_SLAB                           ( true, false,  true,  true,  true,  true,  true, false, ConTexMode.DETAILED, FramedSlabBlock::generateShapes),
+    FRAMED_CHECKERED_PANEL_SEGMENT                  (false, false, false,  true, false,  true, false, false, ConTexMode.DETAILED, FramedCheckeredPanelSegmentBlock::generateShapes),
+    FRAMED_CHECKERED_PANEL                          ( true, false,  true,  true,  true,  true,  true, false, ConTexMode.DETAILED, FramedPanelBlock::generateShapes),
     ;
 
     public static final int COUNT = values().length;

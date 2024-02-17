@@ -59,6 +59,9 @@ public final class FramedLootTableProvider extends LootTableProvider
             dropOther(FBContent.BLOCK_FRAMED_VERTICAL_DOUBLE_HALF_SLOPE.get(), FBContent.BLOCK_FRAMED_DOUBLE_HALF_SLOPE.get());
 
             add(FBContent.BLOCK_FRAMED_MASONRY_CORNER_SEGMENT.get(), noDrop());
+            add(FBContent.BLOCK_FRAMED_CHECKERED_CUBE_SEGMENT.get(), noDrop());
+            add(FBContent.BLOCK_FRAMED_CHECKERED_SLAB_SEGMENT.get(), noDrop());
+            add(FBContent.BLOCK_FRAMED_CHECKERED_PANEL_SEGMENT.get(), noDrop());
 
             FBContent.getRegisteredBlocks()
                     .stream()
