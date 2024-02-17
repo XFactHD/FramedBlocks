@@ -1307,7 +1307,7 @@ public final class FramedRecipeProvider extends RecipeProvider
                 .unlockedBy(FBContent.BLOCK_FRAMED_SLAB_EDGE)
                 .save(consumer);
 
-        shapedBuildingBlock(FBContent.BLOCK_FRAMED_CHECKERED_CUBE.value(), 2)
+        shapedBuildingBlock(FBContent.BLOCK_FRAMED_CHECKERED_CUBE.value())
                 .pattern("CCC")
                 .pattern("C C")
                 .pattern("CCC")
