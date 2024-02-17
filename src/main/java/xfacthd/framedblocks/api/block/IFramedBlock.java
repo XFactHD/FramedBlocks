@@ -457,13 +457,16 @@ public interface IFramedBlock extends EntityBlock, IForgeBlock
     @Override
     default void onBlockStateChange(LevelReader level, BlockPos pos, BlockState oldState, BlockState newState)
     {
-        if (needCullingUpdateAfterStateChange(level, oldState, newState))
+        if (level.isClientSide())
         {
-            updateCulling(level, pos);
-        }
-        if (level.isClientSide() && level.getBlockEntity(pos) instanceof FramedBlockEntity be)
-        {
-            be.setBlockState(newState);
+            if (oldState.getBlock() == newState.getBlock())
+            {
+                updateCulling(level, pos);
+            }
+            if (level.getBlockEntity(pos) instanceof FramedBlockEntity be)
+            {
+                be.setBlockState(newState);
+            }
         }
     }
 
@@ -479,6 +482,7 @@ public interface IFramedBlock extends EntityBlock, IForgeBlock
         }
     }
 
+    @Deprecated(forRemoval = true)
     @SuppressWarnings("RedundantIfStatement")
     default boolean needCullingUpdateAfterStateChange(LevelReader level, BlockState oldState, BlockState newState)
     {
