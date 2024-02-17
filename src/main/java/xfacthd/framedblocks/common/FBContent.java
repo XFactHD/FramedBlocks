@@ -102,6 +102,8 @@ public final class FBContent
     public static final RegistryObject<Block> BLOCK_FRAMED_MASONRY_CORNER_SEGMENT = registerBlock(FramedMasonryCornerSegmentBlock::new, BlockType.FRAMED_MASONRY_CORNER_SEGMENT);
     public static final RegistryObject<Block> BLOCK_FRAMED_MASONRY_CORNER = registerBlock(FramedMasonryCornerBlock::new, BlockType.FRAMED_MASONRY_CORNER);
     public static final RegistryObject<Block> BLOCK_FRAMED_STAIRS = registerBlock(FramedStairsBlock::new, BlockType.FRAMED_STAIRS);
+    public static final RegistryObject<Block> BLOCK_FRAMED_THREEWAY_CORNER_PILLAR = registerBlock(FramedThreewayCornerPillarBlock::new, BlockType.FRAMED_THREEWAY_CORNER_PILLAR);
+    public static final RegistryObject<Block> BLOCK_FRAMED_DOUBLE_THREEWAY_CORNER_PILLAR = registerBlock(FramedDoubleThreewayCornerPillarBlock::new, BlockType.FRAMED_DOUBLE_THREEWAY_CORNER_PILLAR);
     public static final RegistryObject<Block> BLOCK_FRAMED_WALL = registerBlock(FramedWallBlock::new, BlockType.FRAMED_WALL);
     public static final RegistryObject<Block> BLOCK_FRAMED_FENCE = registerBlock(FramedFenceBlock::new, BlockType.FRAMED_FENCE);
     public static final RegistryObject<Block> BLOCK_FRAMED_FENCE_GATE = registerBlock(FramedFenceGateBlock::new, BlockType.FRAMED_FENCE_GATE);
@@ -378,6 +380,10 @@ public final class FBContent
     public static final RegisteredBE<FramedVerticalDividedStairsBlockEntity> BE_TYPE_FRAMED_VERTICAL_DIVIDED_STAIRS = createBlockEntityType(
             FramedVerticalDividedStairsBlockEntity::new,
             BlockType.FRAMED_VERTICAL_DIVIDED_STAIRS
+    );
+    public static final RegisteredBE<FramedDoubleThreewayCornerPillarBlockEntity> BE_TYPE_FRAMED_DOUBLE_THREEWAY_CORNER_PILLAR = createBlockEntityType(
+            FramedDoubleThreewayCornerPillarBlockEntity::new,
+            BlockType.FRAMED_DOUBLE_THREEWAY_CORNER_PILLAR
     );
     public static final RegisteredBE<FramedFlatDoubleSlopeSlabCornerBlockEntity> BE_TYPE_FRAMED_FLAT_DOUBLE_SLOPE_SLAB_CORNER = createBlockEntityType(
             FramedFlatDoubleSlopeSlabCornerBlockEntity::new,

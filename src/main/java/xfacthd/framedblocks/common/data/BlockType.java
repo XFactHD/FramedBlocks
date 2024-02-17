@@ -60,6 +60,8 @@ public enum BlockType implements IBlockType
     FRAMED_VERTICAL_DOUBLE_STAIRS                   ( true, false,  true, false,  true,  true,  true, false, ConTexMode.FULL_FACE, Shapes.block()),
     FRAMED_VERTICAL_HALF_STAIRS                     (false, false, false,  true,  true, false, false, false, ConTexMode.FULL_EDGE, FramedVerticalHalfStairsBlock::generateShapes),
     FRAMED_VERTICAL_DIVIDED_STAIRS                  ( true, false,  true,  true,  true,  true,  true, false, ConTexMode.FULL_EDGE, FramedVerticalDividedStairsBlock::generateShapes),
+    FRAMED_THREEWAY_CORNER_PILLAR                   (false, false, false,  true,  true,  true, false, false, ConTexMode.FULL_EDGE, FramedThreewayCornerPillarBlock::generateShapes),
+    FRAMED_DOUBLE_THREEWAY_CORNER_PILLAR            ( true, false,  true, false,  true,  true,  true, false, ConTexMode.FULL_EDGE, Shapes.block()),
     FRAMED_WALL                                     (false, false, false,  true,  true, false, false,  true, ConTexMode.DETAILED),
     FRAMED_FENCE                                    (false, false, false,  true,  true, false, false,  true, ConTexMode.DETAILED),
     FRAMED_FENCE_GATE                               (false, false, false, false,  true, false, false, false, ConTexMode.DETAILED),

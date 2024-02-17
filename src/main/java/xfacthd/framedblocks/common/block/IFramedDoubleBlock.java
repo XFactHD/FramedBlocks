@@ -41,7 +41,7 @@ public interface IFramedDoubleBlock extends IFramedBlock
     SolidityCheck calculateSolidityCheck(BlockState state, Direction side);
 
     @ApiStatus.OverrideOnly
-    CamoGetter calculateCamoGetter(BlockState state, Direction side, Direction edge);
+    CamoGetter calculateCamoGetter(BlockState state, Direction side, @Nullable Direction edge);
 
     @ApiStatus.NonExtendable
     default DoubleBlockTopInteractionMode getTopInteractionMode(BlockState state)
