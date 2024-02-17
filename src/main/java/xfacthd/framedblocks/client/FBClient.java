@@ -391,9 +391,9 @@ public final class FBClient
         WrapHelper.wrap(FBContent.BLOCK_FRAMED_CHECKERED_CUBE_SEGMENT, FramedCheckeredCubeSegmentGeometry::new, WrapHelper.IGNORE_WATERLOGGED);
         wrapDoubleModel(FBContent.BLOCK_FRAMED_CHECKERED_CUBE, null, WrapHelper.IGNORE_SOLID);
         WrapHelper.wrap(FBContent.BLOCK_FRAMED_CHECKERED_SLAB_SEGMENT, FramedCheckeredSlabSegmentGeometry::new, WrapHelper.IGNORE_WATERLOGGED);
-        wrapDoubleModel(FBContent.BLOCK_FRAMED_CHECKERED_SLAB, null, WrapHelper.IGNORE_WATERLOGGED);
+        wrapDoubleModel(FBContent.BLOCK_FRAMED_CHECKERED_SLAB, null, WrapHelper.IGNORE_DEFAULT);
         WrapHelper.wrap(FBContent.BLOCK_FRAMED_CHECKERED_PANEL_SEGMENT, FramedCheckeredPanelSegmentGeometry::new, WrapHelper.IGNORE_WATERLOGGED);
-        wrapDoubleModel(FBContent.BLOCK_FRAMED_CHECKERED_PANEL, null, WrapHelper.IGNORE_WATERLOGGED);
+        wrapDoubleModel(FBContent.BLOCK_FRAMED_CHECKERED_PANEL, null, WrapHelper.IGNORE_DEFAULT);
     }
 
     @SubscribeEvent
