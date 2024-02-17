@@ -186,10 +186,10 @@ public final class FullFacePredicates extends BlockTypeMap<FullFacePredicate>
         put(BlockType.FRAMED_FANCY_POWERED_RAIL, FullFacePredicate.FALSE);
         put(BlockType.FRAMED_FANCY_DETECTOR_RAIL, FullFacePredicate.FALSE);
         put(BlockType.FRAMED_FANCY_ACTIVATOR_RAIL, FullFacePredicate.FALSE);
-        put(BlockType.FRAMED_FANCY_RAIL_SLOPE, FullFacePredicate.FALSE);
-        put(BlockType.FRAMED_FANCY_POWERED_RAIL_SLOPE, FullFacePredicate.FALSE);
-        put(BlockType.FRAMED_FANCY_DETECTOR_RAIL_SLOPE, FullFacePredicate.FALSE);
-        put(BlockType.FRAMED_FANCY_ACTIVATOR_RAIL_SLOPE, FullFacePredicate.FALSE);
+        put(BlockType.FRAMED_FANCY_RAIL_SLOPE, SlopeFullFacePredicate.INSTANCE);
+        put(BlockType.FRAMED_FANCY_POWERED_RAIL_SLOPE, SlopeFullFacePredicate.INSTANCE);
+        put(BlockType.FRAMED_FANCY_DETECTOR_RAIL_SLOPE, SlopeFullFacePredicate.INSTANCE);
+        put(BlockType.FRAMED_FANCY_ACTIVATOR_RAIL_SLOPE, SlopeFullFacePredicate.INSTANCE);
         put(BlockType.FRAMED_HALF_SLOPE, FullFacePredicate.FALSE);
         put(BlockType.FRAMED_VERTICAL_HALF_SLOPE, FullFacePredicate.FALSE);
         put(BlockType.FRAMED_DIVIDED_SLOPE, FullFacePredicate.FALSE);
