@@ -344,14 +344,19 @@ public final class TestUtils
                 new TestDelay(5), //Light changes from BlockState changes may take a few ticks to propagate, apparently
                 () -> assertBlockLightEmission(helper, EMISSION_BLOCK, EMISSION_LIGHT, baseEmission), //Check camo emission reset
                 () -> clickWithItem(helper, EMISSION_BLOCK, Items.GLOWSTONE_DUST),
+                new TestDelay(5), //Light changes from BlockState changes may take a few ticks to propagate, apparently
                 () -> assertBlockLightEmission(helper, EMISSION_BLOCK, EMISSION_LIGHT, 15), //Check glowstone dust emission without camo
                 () -> applyCamo(helper, EMISSION_BLOCK, Blocks.GLASS, camoSides),
+                new TestDelay(5), //Light changes from BlockState changes may take a few ticks to propagate, apparently
                 () -> assertBlockLightEmission(helper, EMISSION_BLOCK, EMISSION_LIGHT, 15), //Check glowstone dust emission with non-solid camo
                 () -> applyCamo(helper, EMISSION_BLOCK, Blocks.AIR, camoSides),
+                new TestDelay(5), //Light changes from BlockState changes may take a few ticks to propagate, apparently
                 () -> assertBlockLightEmission(helper, EMISSION_BLOCK, EMISSION_LIGHT, 15), //Check glowstone dust emission after non-solid camo removed
                 () -> applyCamo(helper, EMISSION_BLOCK, Blocks.GRANITE, camoSides),
+                new TestDelay(5), //Light changes from BlockState changes may take a few ticks to propagate, apparently
                 () -> assertBlockLightEmission(helper, EMISSION_BLOCK, EMISSION_LIGHT, 15), //Check glowstone dust emission with solid camo
                 () -> applyCamo(helper, EMISSION_BLOCK, Blocks.AIR, camoSides),
+                new TestDelay(5), //Light changes from BlockState changes may take a few ticks to propagate, apparently
                 () -> assertBlockLightEmission(helper, EMISSION_BLOCK, EMISSION_LIGHT, 15), //Check glowstone dust emission after solid camo removed
                 helper::succeed
         ));
