@@ -312,6 +312,8 @@ public final class FBClient
         ClientUtils.replaceModels(FBContent.BLOCK_FRAMED_HALF_STAIRS, registry, FramedHalfStairsModel::new, ClientUtils.IGNORE_WATERLOGGED);
         replaceDoubleBlockModels(FBContent.BLOCK_FRAMED_DIVIDED_STAIRS, registry, null, ClientUtils.IGNORE_DEFAULT);
         replaceDoubleBlockModels(FBContent.BLOCK_FRAMED_DOUBLE_HALF_STAIRS, registry, FramedDoubleHalfStairsBlock.itemModelSource(), ClientUtils.IGNORE_DEFAULT);
+        replaceDoubleBlockModels(FBContent.BLOCK_FRAMED_SLICED_STAIRS_SLAB, registry, FramedSlicedStairsBlock.itemModelSourceSlab(), ClientUtils.IGNORE_DEFAULT);
+        replaceDoubleBlockModels(FBContent.BLOCK_FRAMED_SLICED_STAIRS_PANEL, registry, FramedSlicedStairsBlock.itemModelSourcePanel(), ClientUtils.IGNORE_DEFAULT);
         ClientUtils.replaceModels(FBContent.BLOCK_FRAMED_BOUNCY_CUBE, registry, (state, baseModel) -> FramedMarkedCubeModel.slime(state, baseModel, registry), ClientUtils.IGNORE_SOLID);
         ClientUtils.replaceModels(FBContent.BLOCK_FRAMED_SECRET_STORAGE, registry, FramedCubeBaseModel::new, ClientUtils.IGNORE_SOLID);
         ClientUtils.replaceModels(FBContent.BLOCK_FRAMED_REDSTONE_BLOCK, registry, (state, baseModel) -> FramedMarkedCubeModel.redstone(state, baseModel, registry), ClientUtils.IGNORE_SOLID);
@@ -340,6 +342,7 @@ public final class FBClient
         ClientUtils.replaceModels(FBContent.BLOCK_FRAMED_VERTICAL_HALF_STAIRS, registry, FramedVerticalHalfStairsModel::new, ClientUtils.IGNORE_WATERLOGGED);
         replaceDoubleBlockModels(FBContent.BLOCK_FRAMED_VERTICAL_DIVIDED_STAIRS, registry, null, ClientUtils.IGNORE_DEFAULT);
         replaceDoubleBlockModels(FBContent.BLOCK_FRAMED_VERTICAL_DOUBLE_HALF_STAIRS, registry, FramedVerticalDoubleHalfStairsBlock.itemModelSource(), ClientUtils.IGNORE_DEFAULT);
+        replaceDoubleBlockModels(FBContent.BLOCK_FRAMED_VERTICAL_SLICED_STAIRS, registry, FramedVerticalSlicedStairsBlock.itemModelSource(), ClientUtils.IGNORE_DEFAULT);
         ClientUtils.replaceModels(FBContent.BLOCK_FRAMED_SLOPE_PANEL, registry, FramedSlopePanelModel::new, FramedSlopePanelModel.itemSource(), ClientUtils.IGNORE_DEFAULT);
         ClientUtils.replaceModels(FBContent.BLOCK_FRAMED_EXTENDED_SLOPE_PANEL, registry, FramedExtendedSlopePanelModel::new, FramedExtendedSlopePanelModel.itemSource(), ClientUtils.IGNORE_DEFAULT);
         replaceDoubleBlockModels(FBContent.BLOCK_FRAMED_DOUBLE_SLOPE_PANEL, registry, FramedDoubleSlopePanelBlock.itemSource(), ClientUtils.IGNORE_DEFAULT);
