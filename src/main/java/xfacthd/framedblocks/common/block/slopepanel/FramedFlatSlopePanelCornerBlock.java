@@ -16,8 +16,7 @@ import net.minecraft.world.phys.Vec3;
 import net.minecraft.world.phys.shapes.*;
 import xfacthd.framedblocks.api.block.FramedProperties;
 import xfacthd.framedblocks.api.block.IFramedBlock;
-import xfacthd.framedblocks.api.shapes.ShapeProvider;
-import xfacthd.framedblocks.api.shapes.ShapeUtils;
+import xfacthd.framedblocks.api.shapes.*;
 import xfacthd.framedblocks.api.util.*;
 import xfacthd.framedblocks.common.block.ExtPlacementStateBuilder;
 import xfacthd.framedblocks.common.block.FramedBlock;
@@ -170,6 +169,21 @@ public class FramedFlatSlopePanelCornerBlock extends FramedBlock
 
 
 
+    public record ShapeKey(HorizontalRotation rot, boolean front) { }
+
+    public static final ShapeCache<ShapeKey> SHAPES = ShapeCache.create(map ->
+    {
+        for (HorizontalRotation rot : HorizontalRotation.values())
+        {
+            VoxelShape preShape = ShapeUtils.andUnoptimized(
+                    FramedSlopePanelBlock.SHAPES.get(SlopePanelShape.get(rot, false)),
+                    FramedSlopePanelBlock.SHAPES.get(SlopePanelShape.get(rot.rotate(Rotation.COUNTERCLOCKWISE_90), false))
+            );
+            map.put(new ShapeKey(rot, false), preShape);
+            map.put(new ShapeKey(rot, true), preShape.move(0, 0, .5));
+        }
+    });
+
     public static ShapeProvider generateShapes(ImmutableList<BlockState> states)
     {
         ImmutableMap.Builder<BlockState, VoxelShape> builder = ImmutableMap.builder();
@@ -178,11 +192,8 @@ public class FramedFlatSlopePanelCornerBlock extends FramedBlock
         VoxelShape[] shapes = new VoxelShape[4 * 4 * 2];
         for (HorizontalRotation rot : HorizontalRotation.values())
         {
-            VoxelShape preShape = ShapeUtils.andUnoptimized(
-                    FramedSlopePanelBlock.SHAPES.get(rot),
-                    FramedSlopePanelBlock.SHAPES.get(rot.rotate(Rotation.COUNTERCLOCKWISE_90))
-            );
-            VoxelShape preShapeFront = preShape.move(0, 0, .5);
+            VoxelShape preShape = SHAPES.get(new ShapeKey(rot, false));
+            VoxelShape preShapeFront = SHAPES.get(new ShapeKey(rot, true));
 
             ShapeUtils.makeHorizontalRotations(preShape, Direction.NORTH, shapes, rot.ordinal() << 3);
             ShapeUtils.makeHorizontalRotations(preShapeFront, Direction.NORTH, shapes, maskFront | (rot.ordinal() << 3));
@@ -200,6 +211,19 @@ public class FramedFlatSlopePanelCornerBlock extends FramedBlock
         return ShapeProvider.of(builder.build());
     }
 
+    public static final ShapeCache<ShapeKey> INNER_SHAPES = ShapeCache.create(map ->
+    {
+        for (HorizontalRotation rot : HorizontalRotation.values())
+        {
+            VoxelShape preShape = ShapeUtils.orUnoptimized(
+                    FramedSlopePanelBlock.SHAPES.get(SlopePanelShape.get(rot, false)),
+                    FramedSlopePanelBlock.SHAPES.get(SlopePanelShape.get(rot.rotate(Rotation.COUNTERCLOCKWISE_90), false))
+            );
+            map.put(new ShapeKey(rot, false), preShape);
+            map.put(new ShapeKey(rot, true), preShape.move(0, 0, .5));
+        }
+    });
+
     public static ShapeProvider generateInnerShapes(ImmutableList<BlockState> states)
     {
         ImmutableMap.Builder<BlockState, VoxelShape> builder = ImmutableMap.builder();
@@ -208,14 +232,16 @@ public class FramedFlatSlopePanelCornerBlock extends FramedBlock
         VoxelShape[] shapes = new VoxelShape[4 * 4 * 2];
         for (HorizontalRotation rot : HorizontalRotation.values())
         {
-            VoxelShape preShape = ShapeUtils.orUnoptimized(
-                    FramedSlopePanelBlock.SHAPES.get(rot),
-                    FramedSlopePanelBlock.SHAPES.get(rot.rotate(Rotation.COUNTERCLOCKWISE_90))
-            );
-            VoxelShape preShapeFront = preShape.move(0, 0, .5);
+            VoxelShape preShape = INNER_SHAPES.get(new ShapeKey(rot, false));
+            VoxelShape preShapeFront = INNER_SHAPES.get(new ShapeKey(rot, true));
 
-            ShapeUtils.makeHorizontalRotations(preShape, Direction.NORTH, shapes, rot.ordinal() << 3);
-            ShapeUtils.makeHorizontalRotations(preShapeFront, Direction.NORTH, shapes, maskFront | (rot.ordinal() << 3));
+            for (Direction dir : Direction.Plane.HORIZONTAL)
+            {
+                int idx = dir.get2DDataValue() | (rot.ordinal() << 3);
+                shapes[idx] = ShapeUtils.rotateShape(Direction.NORTH, dir, preShape);
+                idx = dir.get2DDataValue() | maskFront | (rot.ordinal() << 3);
+                shapes[idx] = ShapeUtils.rotateShape(Direction.NORTH, dir, preShapeFront);
+            }
         }
 
         for (BlockState state : states)

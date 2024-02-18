@@ -16,11 +16,11 @@ import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import org.jetbrains.annotations.Nullable;
 import xfacthd.framedblocks.api.block.*;
+import xfacthd.framedblocks.api.shapes.CommonShapes;
 import xfacthd.framedblocks.api.shapes.ShapeProvider;
 import xfacthd.framedblocks.api.util.*;
 import xfacthd.framedblocks.common.FBContent;
 import xfacthd.framedblocks.common.block.AbstractFramedDoubleBlock;
-import xfacthd.framedblocks.common.block.slab.FramedSlabBlock;
 import xfacthd.framedblocks.common.blockentity.doubled.FramedFlatDoubleSlopeSlabCornerBlockEntity;
 import xfacthd.framedblocks.common.data.BlockType;
 import xfacthd.framedblocks.common.data.PropertyHolder;
@@ -197,7 +197,7 @@ public class FramedFlatDoubleSlopeSlabCornerBlock extends AbstractFramedDoubleBl
         for (BlockState state : states)
         {
             Boolean topHalf = state.getValue(PropertyHolder.TOP_HALF);
-            builder.put(state, FramedSlabBlock.SHAPES.get(topHalf));
+            builder.put(state, CommonShapes.SLAB.get(topHalf));
         }
 
         return ShapeProvider.of(builder.build());

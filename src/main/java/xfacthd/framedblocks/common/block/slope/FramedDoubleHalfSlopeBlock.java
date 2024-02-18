@@ -19,12 +19,12 @@ import net.minecraft.world.phys.shapes.VoxelShape;
 import org.jetbrains.annotations.Nullable;
 import xfacthd.framedblocks.api.block.IFramedBlock;
 import xfacthd.framedblocks.api.block.FramedProperties;
+import xfacthd.framedblocks.api.shapes.CommonShapes;
 import xfacthd.framedblocks.api.shapes.ShapeProvider;
 import xfacthd.framedblocks.api.util.Utils;
 import xfacthd.framedblocks.common.FBContent;
 import xfacthd.framedblocks.common.block.AbstractFramedDoubleBlock;
 import xfacthd.framedblocks.common.block.ExtPlacementStateBuilder;
-import xfacthd.framedblocks.common.block.slab.FramedPanelBlock;
 import xfacthd.framedblocks.common.blockentity.doubled.FramedDoubleHalfSlopeBlockEntity;
 import xfacthd.framedblocks.common.data.BlockType;
 import xfacthd.framedblocks.common.data.PropertyHolder;
@@ -206,7 +206,7 @@ public class FramedDoubleHalfSlopeBlock extends AbstractFramedDoubleBlock
             {
                 dir = dir.getOpposite();
             }
-            builder.put(state, FramedPanelBlock.SHAPES.get(dir.getCounterClockWise()));
+            builder.put(state, CommonShapes.PANEL.get(dir.getCounterClockWise()));
         }
 
         return ShapeProvider.of(builder.build());

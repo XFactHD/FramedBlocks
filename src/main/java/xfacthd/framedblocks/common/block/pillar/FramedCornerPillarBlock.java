@@ -16,8 +16,6 @@ import xfacthd.framedblocks.common.block.FramedBlock;
 import xfacthd.framedblocks.common.data.BlockType;
 import xfacthd.framedblocks.api.util.Utils;
 
-import java.util.EnumMap;
-
 public class FramedCornerPillarBlock extends FramedBlock
 {
     public FramedCornerPillarBlock()
@@ -58,12 +56,6 @@ public class FramedCornerPillarBlock extends FramedBlock
 
 
 
-    public static final ShapeCache<Direction> SHAPES = new ShapeCache<>(new EnumMap<>(Direction.class), map ->
-    {
-        VoxelShape shape = box(0, 0, 0, 8, 16, 8);
-        ShapeUtils.makeHorizontalRotations(shape, Direction.NORTH, map);
-    });
-
     public static ShapeProvider generateShapes(ImmutableList<BlockState> states)
     {
         ImmutableMap.Builder<BlockState, VoxelShape> builder = ImmutableMap.builder();
@@ -71,7 +63,7 @@ public class FramedCornerPillarBlock extends FramedBlock
         for (BlockState state : states)
         {
             Direction dir = state.getValue(FramedProperties.FACING_HOR);
-            builder.put(state, SHAPES.get(dir));
+            builder.put(state, CommonShapes.CORNER_PILLAR.get(dir));
         }
 
         return ShapeProvider.of(builder.build());

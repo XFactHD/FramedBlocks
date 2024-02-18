@@ -13,6 +13,7 @@ import xfacthd.framedblocks.api.predicate.cull.SideSkipPredicate;
 import xfacthd.framedblocks.api.predicate.fullface.FullFacePredicate;
 import xfacthd.framedblocks.api.shapes.*;
 import xfacthd.framedblocks.api.type.IBlockType;
+import xfacthd.framedblocks.common.block.door.*;
 import xfacthd.framedblocks.common.block.interactive.*;
 import xfacthd.framedblocks.common.block.pane.*;
 import xfacthd.framedblocks.common.block.pillar.*;
@@ -110,16 +111,16 @@ public enum BlockType implements IBlockType
     FRAMED_WALL_BOARD                               ( true, false, false,  true,  true,  true, false, false, ConTexMode.FULL_FACE, FramedWallBoardBlock::generateShapes),
     FRAMED_LATTICE_BLOCK                            (false, false, false,  true,  true,  true, false,  true, ConTexMode.DETAILED, FramedLatticeBlock::generateThinShapes),
     FRAMED_THICK_LATTICE                            (false, false, false,  true,  true,  true, false,  true, ConTexMode.DETAILED, FramedLatticeBlock::generateThickShapes),
-    FRAMED_CHEST                                    (false, false,  true,  true,  true, false, false, false, null, Shapes.box(1D/16D, 0, 1D/16D, 15D/16D, 14D/16D, 15D/16D)),
+    FRAMED_CHEST                                    (false, false,  true,  true,  true, false, false, false, null, Block.box(1, 0, 1, 15, 14, 15)),
     FRAMED_SECRET_STORAGE                           ( true, false,  true, false,  true, false, false, false, ConTexMode.FULL_FACE, Shapes.block()),
     FRAMED_BARS                                     (false, false, false,  true,  true,  true, false,  true, null),
     FRAMED_PANE                                     (false, false, false,  true,  true,  true, false,  true, ConTexMode.DETAILED),
-    FRAMED_HORIZONTAL_PANE                          ( true, false, false,  true,  true,  true, false, false, ConTexMode.DETAILED, Shapes.box(0, 7D/16D, 0, 1, 9D/16D, 1)),
+    FRAMED_HORIZONTAL_PANE                          ( true, false, false,  true,  true,  true, false, false, ConTexMode.DETAILED, Block.box(0, 7, 0, 16, 9, 16)),
     FRAMED_RAIL_SLOPE                               ( true,  true, false,  true,  true, false, false, false, ConTexMode.FULL_FACE, FramedSlopeBlock::generateShapes),
     FRAMED_POWERED_RAIL_SLOPE                       ( true,  true, false,  true,  true, false, false, false, ConTexMode.FULL_FACE, FramedSlopeBlock::generateShapes),
     FRAMED_DETECTOR_RAIL_SLOPE                      ( true,  true, false,  true,  true, false, false, false, ConTexMode.FULL_FACE, FramedSlopeBlock::generateShapes),
     FRAMED_ACTIVATOR_RAIL_SLOPE                     ( true,  true, false,  true,  true, false, false, false, ConTexMode.FULL_FACE, FramedSlopeBlock::generateShapes),
-    FRAMED_FLOWER_POT                               (false, false,  true, false,  true, false, false, false, null, Shapes.box(5D/16D, 0, 5D/16D, 11D/16D, 6D/16D, 11D/16D)),
+    FRAMED_FLOWER_POT                               (false, false,  true, false,  true, false, false, false, null, Block.box(5, 0, 5, 11, 6, 11)),
     FRAMED_PILLAR                                   (false, false, false,  true,  true,  true, false, false, ConTexMode.DETAILED, FramedPillarBlock::generatePillarShapes),
     FRAMED_HALF_PILLAR                              (false, false, false,  true,  true,  true, false, false, ConTexMode.DETAILED, FramedHalfPillarBlock::generateShapes),
     FRAMED_POST                                     (false, false, false,  true,  true,  true, false, false, ConTexMode.DETAILED, FramedPillarBlock::generatePostShapes),
@@ -134,7 +135,7 @@ public enum BlockType implements IBlockType
     FRAMED_DOUBLE_SLOPED_PRISM                      ( true, false,  true, false,  true,  true,  true, false, ConTexMode.FULL_FACE, Shapes.block()),
     FRAMED_SLOPE_SLAB                               ( true,  true, false,  true,  true,  true, false, false, ConTexMode.FULL_FACE, FramedSlopeSlabBlock::generateShapes),
     FRAMED_ELEVATED_SLOPE_SLAB                      ( true,  true,  true,  true,  true,  true, false, false, ConTexMode.FULL_FACE, FramedElevatedSlopeSlabBlock::generateShapes),
-    FRAMED_DOUBLE_SLOPE_SLAB                        ( true, false,  true,  true,  true,  true,  true, false, ConTexMode.FULL_FACE),
+    FRAMED_DOUBLE_SLOPE_SLAB                        ( true, false,  true,  true,  true,  true,  true, false, ConTexMode.FULL_FACE, FramedDoubleSlopeSlabBlock::generateShapes),
     FRAMED_INV_DOUBLE_SLOPE_SLAB                    ( true,  true,  true,  true,  true,  true,  true, false, ConTexMode.FULL_EDGE, FramedInverseDoubleSlopeSlabBlock::generateShapes),
     FRAMED_ELEVATED_DOUBLE_SLOPE_SLAB               ( true, false,  true, false,  true,  true,  true, false, ConTexMode.FULL_FACE, Shapes.block()),
     FRAMED_STACKED_SLOPE_SLAB                       ( true,  true,  true,  true,  true,  true,  true, false, ConTexMode.FULL_FACE, FramedElevatedSlopeSlabBlock::generateShapes),
@@ -194,8 +195,8 @@ public enum BlockType implements IBlockType
     FRAMED_PYRAMID                                  ( true,  true, false,  true,  true,  true, false, false, ConTexMode.FULL_FACE, FramedPyramidBlock::generateShapes),
     FRAMED_PYRAMID_SLAB                             ( true,  true, false,  true,  true,  true, false, false, ConTexMode.FULL_FACE, FramedPyramidBlock::generateSlabShapes),
     FRAMED_TARGET                                   ( true, false,  true, false,  true,  true, false, false, ConTexMode.FULL_FACE, Shapes.block()),
-    FRAMED_GATE                                     ( true, false, false, false,  true, false, false, false, ConTexMode.FULL_FACE),
-    FRAMED_IRON_GATE                                ( true, false, false, false,  true, false, false, false, ConTexMode.FULL_FACE),
+    FRAMED_GATE                                     ( true, false, false, false,  true, false, false, false, ConTexMode.FULL_FACE, FramedGateBlock::generateShapes),
+    FRAMED_IRON_GATE                                ( true, false, false, false,  true, false, false, false, ConTexMode.FULL_FACE, FramedGateBlock::generateShapes),
     FRAMED_ITEM_FRAME                               (false,  true,  true, false,  true, false, false, false, null, FramedItemFrameBlock::generateShapes),
     FRAMED_GLOWING_ITEM_FRAME                       (false,  true,  true, false,  true, false, false, false, null, FramedItemFrameBlock::generateShapes),
     FRAMED_FANCY_RAIL                               (false, false, false,  true,  true, false, false, false, null),
@@ -217,7 +218,7 @@ public enum BlockType implements IBlockType
     FRAMED_ONE_WAY_WINDOW                           (false, false,  true, false,  true, false, false, false, ConTexMode.FULL_FACE, Shapes.block()),
     FRAMED_BOOKSHELF                                ( true, false, false, false,  true,  true, false, false, ConTexMode.FULL_FACE, Shapes.block()),
     FRAMED_CHISELED_BOOKSHELF                       ( true, false,  true, false,  true,  true, false, false, ConTexMode.FULL_FACE, Shapes.block()),
-    FRAMED_CENTERED_SLAB                            ( true, false, false,  true,  true,  true, false, false, ConTexMode.DETAILED, FramedCenteredSlabBlock::generateShapes),
+    FRAMED_CENTERED_SLAB                            ( true, false, false,  true,  true,  true, false, false, ConTexMode.DETAILED, Block.box(0, 4, 0, 16, 12, 16)),
     FRAMED_CENTERED_PANEL                           ( true, false, false,  true,  true,  true, false, false, ConTexMode.DETAILED, FramedCenteredPanelBlock::generateShapes),
     FRAMED_CHECKERED_CUBE_SEGMENT                   (false, false, false,  true, false,  true, false, false, ConTexMode.DETAILED, FramedCheckeredCubeSegmentBlock::generateShapes),
     FRAMED_CHECKERED_CUBE                           ( true, false,  true, false,  true,  true,  true, false, ConTexMode.DETAILED, Shapes.block()),

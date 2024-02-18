@@ -1,5 +1,7 @@
 package xfacthd.framedblocks.common.block.door;
 
+import com.google.common.collect.ImmutableList;
+import com.google.common.collect.ImmutableMap;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.sounds.*;
@@ -18,9 +20,9 @@ import net.minecraft.world.level.material.PushReaction;
 import net.minecraft.world.level.pathfinder.PathComputationType;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.Vec3;
-import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import xfacthd.framedblocks.api.block.*;
+import xfacthd.framedblocks.api.shapes.*;
 import xfacthd.framedblocks.api.util.Utils;
 import xfacthd.framedblocks.common.FBContent;
 import xfacthd.framedblocks.common.block.FramedBlock;
@@ -31,11 +33,6 @@ import javax.annotation.Nullable;
 @SuppressWarnings("deprecation")
 public class FramedGateBlock extends FramedBlock
 {
-    private static final VoxelShape SHAPE_SOUTH = box(0.0D, 0.0D, 0.0D, 16.0D, 16.0D, 3.0D);
-    private static final VoxelShape SHAPE_NORTH = box(0.0D, 0.0D, 13.0D, 16.0D, 16.0D, 16.0D);
-    private static final VoxelShape SHAPE_WEST = box(13.0D, 0.0D, 0.0D, 16.0D, 16.0D, 16.0D);
-    private static final VoxelShape SHAPE_EAST = box(0.0D, 0.0D, 0.0D, 3.0D, 16.0D, 16.0D);
-
     private final SoundEvent closeSound;
     private final SoundEvent openSound;
 
@@ -156,27 +153,6 @@ public class FramedGateBlock extends FramedBlock
     }
 
     @Override
-    public VoxelShape getShape(BlockState state, BlockGetter level, BlockPos pos, CollisionContext ctx)
-    {
-        boolean open = !state.getValue(BlockStateProperties.OPEN);
-        boolean rightHinge = state.getValue(BlockStateProperties.DOOR_HINGE) == DoorHingeSide.RIGHT;
-        return switch (state.getValue(BlockStateProperties.HORIZONTAL_FACING))
-        {
-            case NORTH -> open ? SHAPE_NORTH : (rightHinge ? SHAPE_WEST  : SHAPE_EAST);
-            case EAST ->  open ? SHAPE_EAST  : (rightHinge ? SHAPE_NORTH : SHAPE_SOUTH);
-            case SOUTH -> open ? SHAPE_SOUTH : (rightHinge ? SHAPE_EAST  : SHAPE_WEST);
-            case WEST ->  open ? SHAPE_WEST  : (rightHinge ? SHAPE_SOUTH : SHAPE_NORTH);
-            default -> SHAPE_NORTH;
-        };
-    }
-
-    @Override
-    public boolean doesBlockOccludeBeaconBeam(BlockState state, LevelReader level, BlockPos pos)
-    {
-        return false;
-    }
-
-    @Override
     public BlockState rotate(BlockState state, Rotation rotation)
     {
         return state.setValue(BlockStateProperties.HORIZONTAL_FACING, rotation.rotate(state.getValue(BlockStateProperties.HORIZONTAL_FACING)));
@@ -228,5 +204,31 @@ public class FramedGateBlock extends FramedBlock
                 SoundEvents.IRON_DOOR_CLOSE,
                 SoundEvents.IRON_DOOR_OPEN
         );
+    }
+
+
+
+    private static final ShapeCache<Direction> SHAPES = ShapeCache.createEnum(Direction.class, map ->
+    {
+        VoxelShape shape = box(0.0D, 0.0D, 13.0D, 16.0D, 16.0D, 16.0D);
+        ShapeUtils.makeHorizontalRotations(shape, Direction.NORTH, map);
+    });
+
+    public static ShapeProvider generateShapes(ImmutableList<BlockState> states)
+    {
+        ImmutableMap.Builder<BlockState, VoxelShape> builder = ImmutableMap.builder();
+
+        for (BlockState state : states)
+        {
+            Direction dir = state.getValue(BlockStateProperties.HORIZONTAL_FACING);
+            if (state.getValue(BlockStateProperties.OPEN))
+            {
+                boolean rightHinge = state.getValue(BlockStateProperties.DOOR_HINGE) == DoorHingeSide.RIGHT;
+                dir = rightHinge ? dir.getCounterClockWise() : dir.getClockWise();
+            }
+            builder.put(state, SHAPES.get(dir));
+        }
+
+        return ShapeProvider.of(builder.build());
     }
 }

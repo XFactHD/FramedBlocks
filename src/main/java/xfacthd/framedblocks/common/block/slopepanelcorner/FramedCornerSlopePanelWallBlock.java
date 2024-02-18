@@ -21,12 +21,12 @@ import xfacthd.framedblocks.api.util.Utils;
 import xfacthd.framedblocks.common.block.ExtPlacementStateBuilder;
 import xfacthd.framedblocks.common.block.FramedBlock;
 import xfacthd.framedblocks.common.block.slopepanel.FramedSlopePanelBlock;
+import xfacthd.framedblocks.common.block.slopepanel.SlopePanelShape;
 import xfacthd.framedblocks.common.block.slopeslab.FramedSlopeSlabBlock;
+import xfacthd.framedblocks.common.block.slopeslab.SlopeSlabShape;
 import xfacthd.framedblocks.common.data.BlockType;
 import xfacthd.framedblocks.common.data.PropertyHolder;
 import xfacthd.framedblocks.common.data.property.HorizontalRotation;
-
-import java.util.EnumMap;
 
 @SuppressWarnings("deprecation")
 public class FramedCornerSlopePanelWallBlock extends FramedBlock
@@ -154,26 +154,29 @@ public class FramedCornerSlopePanelWallBlock extends FramedBlock
     {
         ImmutableMap.Builder<BlockState, VoxelShape> builder = ImmutableMap.builder();
 
+        VoxelShape shapeOneUpLeft = ShapeUtils.rotateShapeUnoptimized(
+                Direction.NORTH,
+                Direction.WEST,
+                FramedSlopePanelBlock.SHAPES.get(SlopePanelShape.LEFT_BACK)
+        );
+        VoxelShape shapeOneDownRight = ShapeUtils.rotateShapeUnoptimized(
+                Direction.NORTH,
+                Direction.EAST,
+                FramedSlopePanelBlock.SHAPES.get(SlopePanelShape.RIGHT_BACK)
+        );
+
         VoxelShape[] shapes = new VoxelShape[4 * 4];
         for (HorizontalRotation rot : HorizontalRotation.values())
         {
             VoxelShape shapeOne = switch (rot)
             {
-                case UP, LEFT -> ShapeUtils.rotateShapeUnoptimized(
-                        Direction.NORTH,
-                        Direction.WEST,
-                        FramedSlopePanelBlock.SHAPES.get(HorizontalRotation.LEFT)
-                );
-                case DOWN, RIGHT -> ShapeUtils.rotateShapeUnoptimized(
-                        Direction.NORTH,
-                        Direction.EAST,
-                        FramedSlopePanelBlock.SHAPES.get(HorizontalRotation.RIGHT)
-                );
+                case UP, LEFT -> shapeOneUpLeft;
+                case DOWN, RIGHT -> shapeOneDownRight;
             };
             VoxelShape shapeTwo = switch (rot)
             {
-                case UP, RIGHT -> FramedSlopeSlabBlock.SHAPES.get(Boolean.TRUE).move(0, .5, 0);
-                case DOWN, LEFT -> FramedSlopeSlabBlock.SHAPES.get(Boolean.FALSE);
+                case UP, RIGHT -> FramedSlopeSlabBlock.SHAPES.get(SlopeSlabShape.TOP_TOP_HALF);
+                case DOWN, LEFT -> FramedSlopeSlabBlock.SHAPES.get(SlopeSlabShape.BOTTOM_BOTTOM_HALF);
             };
             VoxelShape preShape = ShapeUtils.andUnoptimized(shapeOne, shapeTwo);
             ShapeUtils.makeHorizontalRotations(preShape, Direction.NORTH, shapes, rot.ordinal() << 2);
@@ -190,41 +193,17 @@ public class FramedCornerSlopePanelWallBlock extends FramedBlock
         return ShapeProvider.of(builder.build());
     }
 
-    public static final ShapeCache<HorizontalRotation> SHAPES_LARGE = new ShapeCache<>(
-            new EnumMap<>(HorizontalRotation.class),
-            map ->
-            {
-                for (HorizontalRotation rot : HorizontalRotation.values())
-                {
-                    VoxelShape shapeOne = switch (rot)
-                    {
-                        case UP, LEFT -> ShapeUtils.rotateShapeUnoptimized(
-                                Direction.NORTH,
-                                Direction.WEST,
-                                FramedSlopePanelBlock.SHAPES.get(HorizontalRotation.LEFT).move(0, 0, .5)
-                        );
-                        case DOWN, RIGHT -> ShapeUtils.rotateShapeUnoptimized(
-                                Direction.NORTH,
-                                Direction.EAST,
-                                FramedSlopePanelBlock.SHAPES.get(HorizontalRotation.RIGHT).move(0, 0, .5)
-                        );
-                    };
-                    VoxelShape shapeTwo = switch (rot)
-                    {
-                        case UP, RIGHT -> FramedSlopeSlabBlock.SHAPES.get(Boolean.TRUE);
-                        case DOWN, LEFT -> FramedSlopeSlabBlock.SHAPES.get(Boolean.FALSE).move(0, .5, 0);
-                    };
-                    VoxelShape mask = Shapes.joinUnoptimized(Shapes.block(), rot.getOpposite().getCornerShape(), BooleanOp.NOT_SAME);
-                    map.put(rot, ShapeUtils.orUnoptimized(
-                            ShapeUtils.andUnoptimized(shapeOne, shapeTwo),
-                            ShapeUtils.orUnoptimized(
-                                    ShapeUtils.andUnoptimized(shapeOne, mask),
-                                    ShapeUtils.andUnoptimized(shapeTwo, mask)
-                            )
-                    ));
-                }
-            }
-    );
+    public static final ShapeCache<HorizontalRotation> SHAPES_LARGE = ShapeCache.createEnum(HorizontalRotation.class, map ->
+    {
+        for (HorizontalRotation rot : HorizontalRotation.values())
+        {
+            map.put(rot, Shapes.joinUnoptimized(
+                    FramedExtendedCornerSlopePanelWallBlock.SHAPES.get(rot),
+                    rot.getCornerShape(),
+                    BooleanOp.NOT_SAME
+            ));
+        }
+    });
 
     public static ShapeProvider generateLargeShapes(ImmutableList<BlockState> states)
     {
@@ -248,37 +227,16 @@ public class FramedCornerSlopePanelWallBlock extends FramedBlock
         return ShapeProvider.of(builder.build());
     }
 
-    public static final ShapeCache<HorizontalRotation> SHAPES_SMALL_INNER = new ShapeCache<>(
-            new EnumMap<>(HorizontalRotation.class),
-            shapes ->
-            {
-                for (HorizontalRotation rot : HorizontalRotation.values())
-                {
-                    VoxelShape shapeOne = switch (rot)
-                    {
-                        case UP, LEFT -> ShapeUtils.rotateShapeUnoptimized(
-                                Direction.NORTH,
-                                Direction.EAST,
-                                FramedSlopePanelBlock.SHAPES.get(HorizontalRotation.RIGHT).move(0, 0, .5)
-                        );
-                        case DOWN, RIGHT -> ShapeUtils.rotateShapeUnoptimized(
-                                Direction.NORTH,
-                                Direction.WEST,
-                                FramedSlopePanelBlock.SHAPES.get(HorizontalRotation.LEFT).move(0, 0, .5)
-                        );
-                    };
-                    VoxelShape shapeTwo = switch (rot)
-                    {
-                        case UP, RIGHT -> FramedSlopeSlabBlock.SHAPES.get(Boolean.FALSE).move(0, .5, 0);
-                        case DOWN, LEFT -> FramedSlopeSlabBlock.SHAPES.get(Boolean.TRUE);
-                    };
-                    shapes.put(rot, ShapeUtils.andUnoptimized(
-                            ShapeUtils.orUnoptimized(shapeOne, shapeTwo),
-                            rot.getCornerShape()
-                    ));
-                }
-            }
-    );
+    public static final ShapeCache<HorizontalRotation> SHAPES_SMALL_INNER = ShapeCache.createEnum(HorizontalRotation.class, map ->
+    {
+        for (HorizontalRotation rot : HorizontalRotation.values())
+        {
+            map.put(rot, ShapeUtils.andUnoptimized(
+                    FramedExtendedCornerSlopePanelWallBlock.INNER_SHAPES.get(rot),
+                    rot.getCornerShape()
+            ));
+        }
+    });
 
     public static ShapeProvider generateSmallInnerShapes(ImmutableList<BlockState> states)
     {
@@ -306,26 +264,29 @@ public class FramedCornerSlopePanelWallBlock extends FramedBlock
     {
         ImmutableMap.Builder<BlockState, VoxelShape> builder = ImmutableMap.builder();
 
+        VoxelShape shapeOneUpLeft = ShapeUtils.rotateShapeUnoptimized(
+                Direction.NORTH,
+                Direction.EAST,
+                FramedSlopePanelBlock.SHAPES.get(SlopePanelShape.RIGHT_BACK)
+        );
+        VoxelShape shapeOneDownRight = ShapeUtils.rotateShapeUnoptimized(
+                Direction.NORTH,
+                Direction.WEST,
+                FramedSlopePanelBlock.SHAPES.get(SlopePanelShape.LEFT_BACK)
+        );
+
         VoxelShape[] shapes = new VoxelShape[4 * 4];
         for (HorizontalRotation rot : HorizontalRotation.values())
         {
             VoxelShape shapeOne = switch (rot)
             {
-                case UP, LEFT -> ShapeUtils.rotateShapeUnoptimized(
-                        Direction.NORTH,
-                        Direction.EAST,
-                        FramedSlopePanelBlock.SHAPES.get(HorizontalRotation.RIGHT)
-                );
-                case DOWN, RIGHT -> ShapeUtils.rotateShapeUnoptimized(
-                        Direction.NORTH,
-                        Direction.WEST,
-                        FramedSlopePanelBlock.SHAPES.get(HorizontalRotation.LEFT)
-                );
+                case UP, LEFT -> shapeOneUpLeft;
+                case DOWN, RIGHT -> shapeOneDownRight;
             };
             VoxelShape shapeTwo = switch (rot)
             {
-                case UP, RIGHT -> FramedSlopeSlabBlock.SHAPES.get(Boolean.FALSE);
-                case DOWN, LEFT -> FramedSlopeSlabBlock.SHAPES.get(Boolean.TRUE).move(0, .5, 0);
+                case UP, RIGHT -> FramedSlopeSlabBlock.SHAPES.get(SlopeSlabShape.BOTTOM_BOTTOM_HALF);
+                case DOWN, LEFT -> FramedSlopeSlabBlock.SHAPES.get(SlopeSlabShape.TOP_TOP_HALF);
             };
             VoxelShape preShape = ShapeUtils.orUnoptimized(shapeOne, shapeTwo);
             ShapeUtils.makeHorizontalRotations(preShape, Direction.NORTH, shapes, rot.ordinal() << 2);

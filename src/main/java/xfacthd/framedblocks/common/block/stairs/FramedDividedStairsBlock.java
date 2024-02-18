@@ -160,21 +160,6 @@ public class FramedDividedStairsBlock extends AbstractFramedDoubleBlock
 
 
 
-    public record ShapeKey(Direction dir, boolean top) { }
-
-    public static final ShapeCache<ShapeKey> SHAPES = new ShapeCache<>(map ->
-    {
-        VoxelShape shapeBottom = ShapeUtils.orUnoptimized(
-                box(0, 0, 0, 16, 8, 16),
-                box(0, 8, 8, 16, 16, 16)
-        );
-        VoxelShape shapeTop = ShapeUtils.orUnoptimized(
-                box(0, 8, 0, 16, 16, 16),
-                box(0, 0, 8, 16, 8, 16)
-        );
-        ShapeUtils.makeHorizontalRotationsWithFlag(shapeBottom, shapeTop, Direction.SOUTH, map, ShapeKey::new);
-    });
-
     public static ShapeProvider generateShapes(ImmutableList<BlockState> states)
     {
         ImmutableMap.Builder<BlockState, VoxelShape> builder = ImmutableMap.builder();
@@ -183,7 +168,7 @@ public class FramedDividedStairsBlock extends AbstractFramedDoubleBlock
         {
             Direction dir = state.getValue(FramedProperties.FACING_HOR);
             boolean top = state.getValue(FramedProperties.TOP);
-            builder.put(state, SHAPES.get(new ShapeKey(dir, top)));
+            builder.put(state, CommonShapes.STRAIGHT_STAIRS.get(new CommonShapes.DirBoolKey(dir, top)));
         }
 
         return ShapeProvider.of(builder.build());

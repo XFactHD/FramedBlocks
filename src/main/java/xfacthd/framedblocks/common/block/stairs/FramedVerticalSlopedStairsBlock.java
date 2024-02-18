@@ -14,8 +14,7 @@ import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import xfacthd.framedblocks.api.block.*;
-import xfacthd.framedblocks.api.shapes.ShapeProvider;
-import xfacthd.framedblocks.api.shapes.ShapeUtils;
+import xfacthd.framedblocks.api.shapes.*;
 import xfacthd.framedblocks.api.util.*;
 import xfacthd.framedblocks.common.block.FramedBlock;
 import xfacthd.framedblocks.common.block.slope.FramedHalfSlopeBlock;
@@ -141,7 +140,7 @@ public class FramedVerticalSlopedStairsBlock extends FramedBlock
     {
         ImmutableMap.Builder<BlockState, VoxelShape> builder = ImmutableMap.builder();
 
-        VoxelShape panelShape = box(0, 0, 0, 16, 16, 8);
+        VoxelShape panelShape = CommonShapes.PANEL.get(Direction.NORTH);
 
         VoxelShape shapeUp = ShapeUtils.orUnoptimized(
                 panelShape,

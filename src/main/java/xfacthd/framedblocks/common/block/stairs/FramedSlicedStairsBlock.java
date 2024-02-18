@@ -15,6 +15,7 @@ import net.minecraft.world.phys.shapes.VoxelShape;
 import org.jetbrains.annotations.Nullable;
 import xfacthd.framedblocks.api.block.FramedProperties;
 import xfacthd.framedblocks.api.block.PlacementStateBuilder;
+import xfacthd.framedblocks.api.shapes.CommonShapes;
 import xfacthd.framedblocks.api.shapes.ShapeProvider;
 import xfacthd.framedblocks.api.util.Utils;
 import xfacthd.framedblocks.common.FBContent;
@@ -213,7 +214,7 @@ public class FramedSlicedStairsBlock extends AbstractFramedDoubleBlock
         {
             Direction dir = state.getValue(FramedProperties.FACING_HOR);
             boolean top = state.getValue(FramedProperties.TOP);
-            builder.put(state, FramedDividedStairsBlock.SHAPES.get(new FramedDividedStairsBlock.ShapeKey(dir, top)));
+            builder.put(state, CommonShapes.STRAIGHT_STAIRS.get(new CommonShapes.DirBoolKey(dir, top)));
         }
 
         return ShapeProvider.of(builder.build());

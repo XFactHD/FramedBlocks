@@ -22,12 +22,10 @@ import xfacthd.framedblocks.api.util.Utils;
 import xfacthd.framedblocks.common.FBContent;
 import xfacthd.framedblocks.common.block.FramedBlock;
 import xfacthd.framedblocks.common.block.slopepanel.FramedSlopePanelBlock;
+import xfacthd.framedblocks.common.block.slopepanel.SlopePanelShape;
 import xfacthd.framedblocks.common.data.BlockType;
 import xfacthd.framedblocks.common.data.CornerSlopePanelShape;
-import xfacthd.framedblocks.common.data.property.HorizontalRotation;
 import xfacthd.framedblocks.common.item.VerticalAndWallBlockItem;
-
-import java.util.EnumMap;
 
 @SuppressWarnings("deprecation")
 public class FramedCornerSlopePanelBlock extends FramedBlock
@@ -169,10 +167,10 @@ public class FramedCornerSlopePanelBlock extends FramedBlock
 
 
 
-    public static final ShapeCache<CornerSlopePanelShape> SHAPES = new ShapeCache<>(new EnumMap<>(CornerSlopePanelShape.class), map ->
+    public static final ShapeCache<CornerSlopePanelShape> SHAPES = ShapeCache.createEnum(CornerSlopePanelShape.class, map ->
     {
         {
-            VoxelShape panelShapeBottom = FramedSlopePanelBlock.SHAPES.get(HorizontalRotation.UP);
+            VoxelShape panelShapeBottom = FramedSlopePanelBlock.SHAPES.get(SlopePanelShape.UP_BACK);
             map.put(CornerSlopePanelShape.SMALL_BOTTOM, ShapeUtils.andUnoptimized(
                     panelShapeBottom,
                     ShapeUtils.rotateShapeUnoptimized(Direction.NORTH, Direction.WEST, panelShapeBottom)
@@ -180,7 +178,7 @@ public class FramedCornerSlopePanelBlock extends FramedBlock
         }
 
         {
-            VoxelShape panelShapeTop = FramedSlopePanelBlock.SHAPES.get(HorizontalRotation.DOWN);
+            VoxelShape panelShapeTop = FramedSlopePanelBlock.SHAPES.get(SlopePanelShape.DOWN_BACK);
             map.put(CornerSlopePanelShape.SMALL_TOP, ShapeUtils.andUnoptimized(
                     panelShapeTop,
                     ShapeUtils.rotateShapeUnoptimized(Direction.NORTH, Direction.WEST, panelShapeTop)
@@ -188,7 +186,7 @@ public class FramedCornerSlopePanelBlock extends FramedBlock
         }
 
         {
-            VoxelShape panelShapeBot = FramedSlopePanelBlock.SHAPES.get(HorizontalRotation.UP).move(0, 0, .5);
+            VoxelShape panelShapeBot = FramedSlopePanelBlock.SHAPES.get(SlopePanelShape.UP_FRONT);
             VoxelShape panelShapeBotRot = ShapeUtils.rotateShapeUnoptimized(Direction.NORTH, Direction.WEST, panelShapeBot);
             map.put(CornerSlopePanelShape.LARGE_BOTTOM, ShapeUtils.orUnoptimized(
                     ShapeUtils.andUnoptimized(panelShapeBot, panelShapeBotRot),
@@ -200,7 +198,7 @@ public class FramedCornerSlopePanelBlock extends FramedBlock
         }
 
         {
-            VoxelShape panelShapeTop = FramedSlopePanelBlock.SHAPES.get(HorizontalRotation.DOWN).move(0, 0, .5);
+            VoxelShape panelShapeTop = FramedSlopePanelBlock.SHAPES.get(SlopePanelShape.DOWN_FRONT);
             VoxelShape panelShapeTopRot = ShapeUtils.rotateShapeUnoptimized(Direction.NORTH, Direction.WEST, panelShapeTop);
             map.put(CornerSlopePanelShape.LARGE_TOP, ShapeUtils.orUnoptimized(
                     ShapeUtils.andUnoptimized(panelShapeTop, panelShapeTopRot),
@@ -212,7 +210,7 @@ public class FramedCornerSlopePanelBlock extends FramedBlock
         }
 
         {
-            VoxelShape panelShapeBottom = FramedSlopePanelBlock.SHAPES.get(HorizontalRotation.UP).move(0, 0, .5);
+            VoxelShape panelShapeBottom = FramedSlopePanelBlock.SHAPES.get(SlopePanelShape.UP_FRONT);
             map.put(CornerSlopePanelShape.SMALL_INNER_BOTTOM, ShapeUtils.andUnoptimized(
                     box(8, 0, 8, 16, 16, 16),
                     ShapeUtils.orUnoptimized(
@@ -223,7 +221,7 @@ public class FramedCornerSlopePanelBlock extends FramedBlock
         }
 
         {
-            VoxelShape panelShapeTop = FramedSlopePanelBlock.SHAPES.get(HorizontalRotation.DOWN).move(0, 0, .5);
+            VoxelShape panelShapeTop = FramedSlopePanelBlock.SHAPES.get(SlopePanelShape.DOWN_FRONT);
             map.put(CornerSlopePanelShape.SMALL_INNER_TOP, ShapeUtils.andUnoptimized(
                     box(8, 0, 8, 16, 16, 16),
                     ShapeUtils.orUnoptimized(
@@ -234,7 +232,7 @@ public class FramedCornerSlopePanelBlock extends FramedBlock
         }
 
         {
-            VoxelShape panelShapeBottom = FramedSlopePanelBlock.SHAPES.get(HorizontalRotation.UP);
+            VoxelShape panelShapeBottom = FramedSlopePanelBlock.SHAPES.get(SlopePanelShape.UP_BACK);
             map.put(CornerSlopePanelShape.LARGE_INNER_BOTTOM, ShapeUtils.orUnoptimized(
                     panelShapeBottom,
                     ShapeUtils.rotateShapeUnoptimized(Direction.NORTH, Direction.WEST, panelShapeBottom)
@@ -242,7 +240,7 @@ public class FramedCornerSlopePanelBlock extends FramedBlock
         }
 
         {
-            VoxelShape panelShapeTop = FramedSlopePanelBlock.SHAPES.get(HorizontalRotation.DOWN);
+            VoxelShape panelShapeTop = FramedSlopePanelBlock.SHAPES.get(SlopePanelShape.DOWN_BACK);
             map.put(CornerSlopePanelShape.LARGE_INNER_TOP, ShapeUtils.orUnoptimized(
                     panelShapeTop,
                     ShapeUtils.rotateShapeUnoptimized(Direction.NORTH, Direction.WEST, panelShapeTop)

@@ -19,18 +19,16 @@ import net.minecraft.world.phys.shapes.VoxelShape;
 import org.jetbrains.annotations.Nullable;
 import xfacthd.framedblocks.api.block.FramedProperties;
 import xfacthd.framedblocks.api.block.IFramedBlock;
+import xfacthd.framedblocks.api.shapes.CommonShapes;
 import xfacthd.framedblocks.api.shapes.ShapeProvider;
 import xfacthd.framedblocks.api.util.Utils;
 import xfacthd.framedblocks.common.FBContent;
 import xfacthd.framedblocks.common.block.AbstractFramedDoubleBlock;
-import xfacthd.framedblocks.common.block.pillar.FramedCornerPillarBlock;
-import xfacthd.framedblocks.common.block.stairs.FramedVerticalStairsBlock;
 import xfacthd.framedblocks.common.blockentity.doubled.FramedLargeDoubleCornerSlopePanelBlockEntity;
 import xfacthd.framedblocks.common.blockentity.doubled.FramedSmallDoubleCornerSlopePanelBlockEntity;
 import xfacthd.framedblocks.common.data.BlockType;
 import xfacthd.framedblocks.common.data.doubleblock.CamoGetter;
 import xfacthd.framedblocks.common.data.doubleblock.SolidityCheck;
-import xfacthd.framedblocks.common.data.property.StairsType;
 import xfacthd.framedblocks.common.item.VerticalAndWallBlockItem;
 import xfacthd.framedblocks.common.util.DoubleBlockTopInteractionMode;
 
@@ -239,7 +237,7 @@ public class FramedDoubleCornerSlopePanelBlock extends AbstractFramedDoubleBlock
         for (BlockState state : states)
         {
             Direction dir = state.getValue(FramedProperties.FACING_HOR);
-            builder.put(state, FramedCornerPillarBlock.SHAPES.get(dir));
+            builder.put(state, CommonShapes.CORNER_PILLAR.get(dir));
         }
 
         return ShapeProvider.of(builder.build());
@@ -252,9 +250,7 @@ public class FramedDoubleCornerSlopePanelBlock extends AbstractFramedDoubleBlock
         for (BlockState state : states)
         {
             Direction dir = state.getValue(FramedProperties.FACING_HOR);
-            builder.put(state, FramedVerticalStairsBlock.SHAPES.get(
-                    new FramedVerticalStairsBlock.ShapeKey(dir.getOpposite(), StairsType.VERTICAL)
-            ));
+            builder.put(state, CommonShapes.STRAIGHT_VERTICAL_STAIRS.get(dir.getOpposite()));
         }
 
         return ShapeProvider.of(builder.build());

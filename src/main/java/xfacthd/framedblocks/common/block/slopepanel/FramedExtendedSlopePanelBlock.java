@@ -22,8 +22,6 @@ import xfacthd.framedblocks.common.block.FramedBlock;
 import xfacthd.framedblocks.common.data.*;
 import xfacthd.framedblocks.common.data.property.HorizontalRotation;
 
-import java.util.EnumMap;
-
 public class FramedExtendedSlopePanelBlock extends FramedBlock
 {
     public FramedExtendedSlopePanelBlock()
@@ -109,26 +107,23 @@ public class FramedExtendedSlopePanelBlock extends FramedBlock
 
 
 
-    public static final ShapeCache<HorizontalRotation> SHAPES = new ShapeCache<>(
-            new EnumMap<>(HorizontalRotation.class),
-            map ->
-            {
-                VoxelShape shapePanel = box(0, 0, 0, 16, 16, 8);
+    public static final ShapeCache<HorizontalRotation> SHAPES = ShapeCache.createEnum(HorizontalRotation.class, map ->
+    {
+        VoxelShape shapePanel = CommonShapes.PANEL.get(Direction.NORTH);
 
-                for (HorizontalRotation rot : HorizontalRotation.values())
-                {
-                    VoxelShape shape = ShapeUtils.orUnoptimized(
-                            shapePanel,
-                            FramedSlopePanelBlock.SHAPES.get(rot).move(0, 0, .5)
-                    );
-                    map.put(rot, shape);
-                }
-            }
-    );
+        for (HorizontalRotation rot : HorizontalRotation.values())
+        {
+            VoxelShape shape = ShapeUtils.orUnoptimized(
+                    shapePanel,
+                    FramedSlopePanelBlock.SHAPES.get(SlopePanelShape.get(rot, true))
+            );
+            map.put(rot, shape);
+        }
+    });
 
     private record ShapeKey(Direction dir, HorizontalRotation rot) { }
 
-    private static final ShapeCache<ShapeKey> FINAL_SHAPES = new ShapeCache<>(map ->
+    private static final ShapeCache<ShapeKey> FINAL_SHAPES = ShapeCache.create(map ->
     {
         for (HorizontalRotation rot : HorizontalRotation.values())
         {

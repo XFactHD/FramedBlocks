@@ -23,6 +23,7 @@ import xfacthd.framedblocks.common.block.ExtPlacementStateBuilder;
 import xfacthd.framedblocks.common.block.FramedBlock;
 import xfacthd.framedblocks.common.data.BlockType;
 import xfacthd.framedblocks.common.data.PropertyHolder;
+import xfacthd.framedblocks.common.data.property.SlopeType;
 import xfacthd.framedblocks.common.item.VerticalAndWallBlockItem;
 
 public class FramedHalfSlopeBlock extends FramedBlock
@@ -119,42 +120,23 @@ public class FramedHalfSlopeBlock extends FramedBlock
 
     public record ShapeKey(boolean top, boolean right) { }
 
-    public static final ShapeCache<ShapeKey> SHAPES = new ShapeCache<>(map ->
+    public static final ShapeCache<ShapeKey> SHAPES = ShapeCache.create(map ->
     {
-        map.put(new ShapeKey(false, false), ShapeUtils.orUnoptimized(
-                box(0,    0, 0, 8,   .5,   16),
-                box(0,   .5, 0, 8,    4, 15.5),
-                box(0,    4, 0, 8,    8,   12),
-                box(0,    8, 0, 8,   12,    8),
-                box(0,   12, 0, 8, 15.5,    4),
-                box(0, 15.5, 0, 8,   16,   .5)
+        map.put(new ShapeKey(false, false), ShapeUtils.andUnoptimized(
+                FramedSlopeBlock.SHAPES.get(SlopeType.BOTTOM),
+                CommonShapes.PANEL.get(Direction.WEST)
         ));
-
-        map.put(new ShapeKey(false, true), ShapeUtils.orUnoptimized(
-                box(8,    0, 0, 16,   .5,   16),
-                box(8,   .5, 0, 16,    4, 15.5),
-                box(8,    4, 0, 16,    8,   12),
-                box(8,    8, 0, 16,   12,    8),
-                box(8,   12, 0, 16, 15.5,    4),
-                box(8, 15.5, 0, 16,   16,   .5)
+        map.put(new ShapeKey(false, true), ShapeUtils.andUnoptimized(
+                FramedSlopeBlock.SHAPES.get(SlopeType.BOTTOM),
+                CommonShapes.PANEL.get(Direction.EAST)
         ));
-
-        map.put(new ShapeKey(true, false), ShapeUtils.orUnoptimized(
-                box(0,    0, 0, 8,   .5,   .5),
-                box(0,   .5, 0, 8,    4,    4),
-                box(0,    4, 0, 8,    8,    8),
-                box(0,    8, 0, 8,   12,   12),
-                box(0,   12, 0, 8, 15.5, 15.5),
-                box(0, 15.5, 0, 8,   16,   16)
+        map.put(new ShapeKey(true, false), ShapeUtils.andUnoptimized(
+                FramedSlopeBlock.SHAPES.get(SlopeType.TOP),
+                CommonShapes.PANEL.get(Direction.WEST)
         ));
-
-        map.put(new ShapeKey(true, true), ShapeUtils.orUnoptimized(
-                box(8,    0, 0, 16,   .5,   .5),
-                box(8,   .5, 0, 16,    4,    4),
-                box(8,    4, 0, 16,    8,    8),
-                box(8,    8, 0, 16,   12,   12),
-                box(8,   12, 0, 16, 15.5, 15.5),
-                box(8, 15.5, 0, 16,   16,   16)
+        map.put(new ShapeKey(true, true), ShapeUtils.andUnoptimized(
+                FramedSlopeBlock.SHAPES.get(SlopeType.TOP),
+                CommonShapes.PANEL.get(Direction.EAST)
         ));
     });
 

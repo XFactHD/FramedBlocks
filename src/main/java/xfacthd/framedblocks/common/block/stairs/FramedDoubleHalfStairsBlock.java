@@ -14,12 +14,12 @@ import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import org.jetbrains.annotations.Nullable;
 import xfacthd.framedblocks.api.block.FramedProperties;
+import xfacthd.framedblocks.api.shapes.CommonShapes;
 import xfacthd.framedblocks.api.shapes.ShapeProvider;
 import xfacthd.framedblocks.api.util.Utils;
 import xfacthd.framedblocks.common.FBContent;
 import xfacthd.framedblocks.common.block.AbstractFramedDoubleBlock;
 import xfacthd.framedblocks.common.block.ExtPlacementStateBuilder;
-import xfacthd.framedblocks.common.block.slab.FramedPanelBlock;
 import xfacthd.framedblocks.common.blockentity.doubled.FramedDoubleHalfStairsBlockEntity;
 import xfacthd.framedblocks.common.data.BlockType;
 import xfacthd.framedblocks.common.data.PropertyHolder;
@@ -199,7 +199,7 @@ public class FramedDoubleHalfStairsBlock extends AbstractFramedDoubleBlock
             Direction dir = state.getValue(FramedProperties.FACING_HOR);
             boolean right = state.getValue(PropertyHolder.RIGHT);
             dir = right ? dir.getClockWise() : dir.getCounterClockWise();
-            builder.put(state, FramedPanelBlock.SHAPES.get(dir));
+            builder.put(state, CommonShapes.PANEL.get(dir));
         }
 
         return ShapeProvider.of(builder.build());

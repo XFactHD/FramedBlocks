@@ -15,6 +15,7 @@ import net.minecraft.world.phys.shapes.*;
 import org.jetbrains.annotations.Nullable;
 import xfacthd.framedblocks.api.block.FramedProperties;
 import xfacthd.framedblocks.api.block.PlacementStateBuilder;
+import xfacthd.framedblocks.api.shapes.CommonShapes;
 import xfacthd.framedblocks.api.shapes.ShapeProvider;
 import xfacthd.framedblocks.api.util.Utils;
 import xfacthd.framedblocks.common.FBContent;
@@ -23,7 +24,6 @@ import xfacthd.framedblocks.common.blockentity.doubled.FramedVerticalDividedStai
 import xfacthd.framedblocks.common.data.BlockType;
 import xfacthd.framedblocks.common.data.doubleblock.CamoGetter;
 import xfacthd.framedblocks.common.data.doubleblock.SolidityCheck;
-import xfacthd.framedblocks.common.data.property.StairsType;
 import xfacthd.framedblocks.common.util.DoubleBlockTopInteractionMode;
 
 public class FramedVerticalDividedStairsBlock extends AbstractFramedDoubleBlock
@@ -126,9 +126,7 @@ public class FramedVerticalDividedStairsBlock extends AbstractFramedDoubleBlock
         for (BlockState state : states)
         {
             Direction dir = state.getValue(FramedProperties.FACING_HOR);
-            builder.put(state, FramedVerticalStairsBlock.SHAPES.get(new FramedVerticalStairsBlock.ShapeKey(
-                    dir, StairsType.VERTICAL
-            )));
+            builder.put(state, CommonShapes.STRAIGHT_VERTICAL_STAIRS.get(dir));
         }
 
         return ShapeProvider.of(builder.build());

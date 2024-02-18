@@ -19,8 +19,6 @@ import xfacthd.framedblocks.api.util.*;
 import xfacthd.framedblocks.common.block.FramedBlock;
 import xfacthd.framedblocks.common.data.BlockType;
 
-import java.util.IdentityHashMap;
-
 public class FramedElevatedSlopeSlabBlock extends FramedBlock
 {
     public FramedElevatedSlopeSlabBlock()
@@ -105,22 +103,22 @@ public class FramedElevatedSlopeSlabBlock extends FramedBlock
 
 
 
-    public static final ShapeCache<Boolean> SHAPES = new ShapeCache<>(new IdentityHashMap<>(), map ->
+    public static final ShapeCache<Boolean> SHAPES = ShapeCache.createIdentity(map ->
     {
         map.put(Boolean.FALSE, ShapeUtils.orUnoptimized(
-                FramedSlopeSlabBlock.SHAPES.get(Boolean.FALSE).move(0, .5, 0),
+                FramedSlopeSlabBlock.SHAPES.get(SlopeSlabShape.BOTTOM_TOP_HALF),
                 box(0, 0, 0, 16, 8, 16)
         ));
 
         map.put(Boolean.TRUE, ShapeUtils.orUnoptimized(
-                FramedSlopeSlabBlock.SHAPES.get(Boolean.TRUE),
+                FramedSlopeSlabBlock.SHAPES.get(SlopeSlabShape.TOP_BOTTOM_HALF),
                 box(0, 8, 0, 16, 16, 16)
         ));
     });
 
     private record ShapeKey(Direction dir, boolean top) { }
 
-    private static final ShapeCache<ShapeKey> FINAL_SHAPES = new ShapeCache<>(map ->
+    private static final ShapeCache<ShapeKey> FINAL_SHAPES = ShapeCache.create(map ->
             ShapeUtils.makeHorizontalRotationsWithFlag(
                     SHAPES.get(Boolean.FALSE),
                     SHAPES.get(Boolean.TRUE),
