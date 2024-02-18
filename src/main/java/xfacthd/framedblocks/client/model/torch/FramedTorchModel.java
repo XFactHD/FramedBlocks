@@ -69,4 +69,10 @@ public class FramedTorchModel extends FramedBlockModel
 
     @Override
     public boolean useAmbientOcclusion() { return false; }
+
+    @Override
+    public boolean useSolidNoCamoModel()
+    {
+        return true;
+    }
 }

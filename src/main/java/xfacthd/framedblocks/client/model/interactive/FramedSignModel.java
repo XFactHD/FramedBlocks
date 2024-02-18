@@ -75,4 +75,10 @@ public class FramedSignModel extends FramedBlockModel
                     .export(quadMap.get(Direction.DOWN));
         }
     }
+
+    @Override
+    public boolean useSolidNoCamoModel()
+    {
+        return true;
+    }
 }

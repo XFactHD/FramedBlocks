@@ -229,4 +229,10 @@ public class FramedFenceGateModel extends FramedBlockModel
                     .export(quadMap.get(null));
         }
     }
+
+    @Override
+    public boolean useSolidNoCamoModel()
+    {
+        return true;
+    }
 }

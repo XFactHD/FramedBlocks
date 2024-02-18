@@ -129,4 +129,10 @@ public class FramedLeverModel extends FramedBlockModel
             case CEILING -> Direction.DOWN;
         };
     }
+
+    @Override
+    public boolean useSolidNoCamoModel()
+    {
+        return true;
+    }
 }

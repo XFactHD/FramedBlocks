@@ -86,4 +86,10 @@ public class FramedRedstoneTorchModel extends FramedBlockModel
     {
         return false;
     }
+
+    @Override
+    public boolean useSolidNoCamoModel()
+    {
+        return true;
+    }
 }

@@ -237,12 +237,20 @@ public final class FramedBlockStateProvider extends BlockStateProvider
 
     private void registerFramedCube(ModelFile cube)
     {
+        ModelFile spruceUnderlay = models().withExistingParent("framed_underlay", mcLoc("block/stripped_dark_oak_wood"))
+                .texture("particle", TEXTURE)
+                .renderType("cutout");
         ModelFile altCube = models().cubeAll("framed_cube_alt", modLoc("block/framed_block_alt"))
                 .renderType("cutout");
         ModelFile reinforcement = models().cubeAll("framed_reinforcement", modLoc("block/framed_reinforcement"))
                 .renderType("cutout");
 
         getMultipartBuilder(FBContent.BLOCK_FRAMED_CUBE.get())
+                    .part()
+                    .modelFile(spruceUnderlay)
+                    .addModel()
+                    .condition(FramedProperties.SOLID_BG, true)
+                    .end()
                 .part()
                     .modelFile(cube)
                     .addModel()

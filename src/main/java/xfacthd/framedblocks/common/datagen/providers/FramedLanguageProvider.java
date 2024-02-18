@@ -405,6 +405,7 @@ public final class FramedLanguageProvider extends LanguageProvider
         add(ClientConfig.TRANSLATION_USE_DISCRETE_UV_STEPS, "Use discrete UV steps");
         add(ClientConfig.TRANSLATION_CON_TEX_MODE, "Connected textures mode");
         add(ClientConfig.TRANSLATION_SHOW_ALL_RECIPE_PERMUTATIONS_IN_EMI, "Show all Framing Saw recipe permutations in EMI");
+        add(ClientConfig.TRANSLATION_SOLID_FRAME_MODE, "Solid frame mode");
         add(ClientConfig.TRANSLATION_STATE_LOCK_MODE, "State lock overlay: Display mode");
         add(ClientConfig.TRANSLATION_TOGGLE_WATERLOG_MODE, "Toggle waterloggable overlay: Display mode");
         add(ClientConfig.TRANSLATION_TOGGLE_Y_SLOPE_MODE, "Toggle Y slope overlay: Display mode");

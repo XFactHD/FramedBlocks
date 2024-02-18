@@ -104,6 +104,12 @@ public class FramedFenceModel extends FramedBlockModel
         }
     }
 
+    @Override
+    public boolean useSolidNoCamoModel()
+    {
+        return true;
+    }
+
 
 
     public static BakedModel createFenceModel(BlockState state, BakedModel baseModel)

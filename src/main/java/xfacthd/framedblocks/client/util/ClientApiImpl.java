@@ -9,6 +9,7 @@ import net.minecraftforge.client.model.data.ModelData;
 import net.minecraftforge.client.model.data.ModelProperty;
 import xfacthd.framedblocks.api.FramedBlocksClientAPI;
 import xfacthd.framedblocks.api.ghost.GhostRenderBehaviour;
+import xfacthd.framedblocks.api.model.SolidFrameMode;
 import xfacthd.framedblocks.api.type.IBlockType;
 import xfacthd.framedblocks.api.predicate.contex.ConTexMode;
 import xfacthd.framedblocks.api.render.OutlineRenderer;
@@ -60,6 +61,12 @@ public final class ClientApiImpl implements FramedBlocksClientAPI
     public ConTexMode getConTexMode()
     {
         return ClientConfig.conTexMode;
+    }
+
+    @Override
+    public SolidFrameMode getSolidFrameMode()
+    {
+        return ClientConfig.solidFrameMode;
     }
 
     @Override

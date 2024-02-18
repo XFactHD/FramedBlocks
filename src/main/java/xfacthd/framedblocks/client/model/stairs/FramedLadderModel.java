@@ -99,6 +99,12 @@ public class FramedLadderModel extends FramedBlockModel
         }
     }
 
+    @Override
+    public boolean useSolidNoCamoModel()
+    {
+        return true;
+    }
+
 
 
     public static BlockState itemSource()

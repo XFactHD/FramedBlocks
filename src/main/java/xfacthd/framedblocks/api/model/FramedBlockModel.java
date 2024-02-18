@@ -58,6 +58,7 @@ public abstract class FramedBlockModel extends BakedModelProxy
     private final boolean forceUngeneratedBaseModel;
     private final boolean useBaseModel;
     private final boolean transformAllQuads;
+    private final boolean useSolidBase;
     private final StateCache stateCache;
 
     public FramedBlockModel(BlockState state, BakedModel baseModel)
@@ -69,6 +70,7 @@ public abstract class FramedBlockModel extends BakedModelProxy
         this.forceUngeneratedBaseModel = forceUngeneratedBaseModel();
         this.useBaseModel = useBaseModel();
         this.transformAllQuads = transformAllQuads(state);
+        this.useSolidBase = useSolidNoCamoModel();
         this.stateCache = ((IFramedBlock) state.getBlock()).getCache(state);
 
         Preconditions.checkState(
@@ -421,6 +423,15 @@ public abstract class FramedBlockModel extends BakedModelProxy
     }
 
     /**
+     * {@return whether the model should use a solid model when no camo is applied}
+     * @apiNote Only has an effect if {@link #useBaseModel()} returns {@code false}
+     */
+    protected boolean useSolidNoCamoModel()
+    {
+        return false;
+    }
+
+    /**
      * Return true if all quads should be submitted for transformation, even if their cull-face would be filtered
      * by the {@link FullFacePredicate}
      */
@@ -451,6 +462,10 @@ public abstract class FramedBlockModel extends BakedModelProxy
         if (fbData.isReinforced())
         {
             camoState = camoState.setValue(FramedProperties.REINFORCED, true);
+        }
+        if (FramedBlocksClientAPI.getInstance().getSolidFrameMode().useSolidFrame(useSolidBase))
+        {
+            camoState = camoState.setValue(FramedProperties.SOLID_BG, true);
         }
         return camoState;
     }

@@ -136,6 +136,12 @@ public class FramedFlowerPotModel extends FramedBlockModel
         return new FlowerPotQuadCacheKey(state, ctCtx, getFlowerBlock(data));
     }
 
+    @Override
+    public boolean useSolidNoCamoModel()
+    {
+        return true;
+    }
+
     private static void addPlantQuads(
             Map<Direction, List<BakedQuad>> quadMap, BlockState potState, RandomSource rand, RenderType layer
     )

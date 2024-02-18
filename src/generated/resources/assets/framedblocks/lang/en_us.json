@@ -201,6 +201,7 @@
   "config.framedblocks.client.reinforcedMode": "Reinforcement overlay: Display mode",
   "config.framedblocks.client.showAllRecipePermutationsInEmi": "Show all Framing Saw recipe permutations in EMI",
   "config.framedblocks.client.showGhostBlocks": "Show ghost blocks",
+  "config.framedblocks.client.solidFrameMode": "Solid frame mode",
   "config.framedblocks.client.splitLineMode": "Collapsible block split lines overlay: Display mode",
   "config.framedblocks.client.stateLockMode": "State lock overlay: Display mode",
   "config.framedblocks.client.toggleWaterlogMode": "Toggle waterloggable overlay: Display mode",

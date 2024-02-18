@@ -84,6 +84,12 @@ public class FramedPillarModel extends FramedBlockModel
         }
     }
 
+    @Override
+    public boolean useSolidNoCamoModel()
+    {
+        return true;
+    }
+
     private static Direction axisToDir(Direction.Axis axis, boolean positive)
     {
         return switch (axis)

@@ -8,6 +8,7 @@ import net.minecraft.world.level.material.Fluid;
 import net.minecraftforge.client.model.data.ModelData;
 import net.minecraftforge.client.model.data.ModelProperty;
 import xfacthd.framedblocks.api.ghost.GhostRenderBehaviour;
+import xfacthd.framedblocks.api.model.SolidFrameMode;
 import xfacthd.framedblocks.api.type.IBlockType;
 import xfacthd.framedblocks.api.predicate.contex.ConTexMode;
 import xfacthd.framedblocks.api.util.WriteOnceHolder;
@@ -60,6 +61,11 @@ public interface FramedBlocksClientAPI
      * Returns the currently configured {@link ConTexMode}
      */
     ConTexMode getConTexMode();
+
+    /**
+     * Returns the currently configured {@link SolidFrameMode}
+     */
+    SolidFrameMode getSolidFrameMode();
 
     /**
      * Add a {@link ModelProperty} for connected textures data to allow FramedBlocks to look up the data for use
