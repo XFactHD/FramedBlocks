@@ -1,7 +1,7 @@
 {
   "parent": "minecraft:recipes/root",
   "criteria": {
-    "has_framed_divided_panel_horizontal": {
+    "hasFramedDividedPanelHorizontal": {
       "conditions": {
         "items": [
           {
@@ -22,7 +22,7 @@
   },
   "requirements": [
     [
-      "has_framed_divided_panel_horizontal",
+      "hasFramedDividedPanelHorizontal",
       "has_the_recipe"
     ]
   ],

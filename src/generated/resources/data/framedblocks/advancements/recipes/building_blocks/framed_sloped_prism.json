@@ -1,7 +1,7 @@
 {
   "parent": "minecraft:recipes/root",
   "criteria": {
-    "hasFramedCorner": {
+    "hasFramedCornerSlope": {
       "conditions": {
         "items": [
           {
@@ -22,7 +22,7 @@
   },
   "requirements": [
     [
-      "hasFramedCorner",
+      "hasFramedCornerSlope",
       "has_the_recipe"
     ]
   ],

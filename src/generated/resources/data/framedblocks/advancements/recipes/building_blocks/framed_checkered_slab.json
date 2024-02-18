@@ -1,7 +1,7 @@
 {
   "parent": "minecraft:recipes/root",
   "criteria": {
-    "hasFramedCheckeredBlock": {
+    "hasFramedCheckeredCube": {
       "conditions": {
         "items": [
           {
@@ -22,7 +22,7 @@
   },
   "requirements": [
     [
-      "hasFramedCheckeredBlock",
+      "hasFramedCheckeredCube",
       "has_the_recipe"
     ]
   ],

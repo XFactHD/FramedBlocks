@@ -1,7 +1,7 @@
 {
   "parent": "minecraft:recipes/root",
   "criteria": {
-    "has_framed_double_stairs": {
+    "hasFramedDoubleStairs": {
       "conditions": {
         "items": [
           {
@@ -22,7 +22,7 @@
   },
   "requirements": [
     [
-      "has_framed_double_stairs",
+      "hasFramedDoubleStairs",
       "has_the_recipe"
     ]
   ],

@@ -1,7 +1,7 @@
 {
   "parent": "minecraft:recipes/root",
   "criteria": {
-    "hasFramedFlatInverseDoubleSlopeSlabCorner": {
+    "hasFramedFlatInvDoubleSlopeSlabCorner": {
       "conditions": {
         "items": [
           {
@@ -22,7 +22,7 @@
   },
   "requirements": [
     [
-      "hasFramedFlatInverseDoubleSlopeSlabCorner",
+      "hasFramedFlatInvDoubleSlopeSlabCorner",
       "has_the_recipe"
     ]
   ],
