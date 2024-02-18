@@ -56,7 +56,9 @@ public class FramedBlockEntity extends BlockEntity
     protected static final int FLAG_REINFORCED = 1 << 2;
 
     private final FramedBlockData modelData = new FramedBlockData();
-    protected final StateCache stateCache;
+    /** @apiNote Use {@link #getStateCache()} instead */
+    @ApiStatus.Internal
+    protected StateCache stateCache;
     private CamoContainer camoContainer = EmptyCamoContainer.EMPTY;
     private boolean glowing = false;
     private boolean intangible = false;
@@ -730,6 +732,11 @@ public class FramedBlockEntity extends BlockEntity
         return getBlock().getBlockType();
     }
 
+    protected StateCache getStateCache()
+    {
+        return stateCache;
+    }
+
     public boolean canAutoApplyCamoOnPlacement()
     {
         return true;
@@ -827,6 +834,14 @@ public class FramedBlockEntity extends BlockEntity
             checkCamoSolid();
         }
         super.onLoad();
+    }
+
+    @Override
+    @SuppressWarnings("deprecation")
+    public void setBlockState(BlockState state)
+    {
+        super.setBlockState(state);
+        this.stateCache = ((IFramedBlock) state.getBlock()).getCache(state);
     }
 
     /*
