@@ -117,6 +117,7 @@ public final class FramedLanguageProvider extends LanguageProvider
         add(FBContent.BLOCK_FRAMED_COLLAPSIBLE_BLOCK.get(), "Framed Collapsible Block");
         add(FBContent.BLOCK_FRAMED_HALF_STAIRS.get(), "Framed Half Stairs");
         add(FBContent.BLOCK_FRAMED_DIVIDED_STAIRS.get(), "Framed Divided Stairs");
+        add(FBContent.BLOCK_FRAMED_DOUBLE_HALF_STAIRS.get(), "Framed Double Half Stairs");
         add(FBContent.BLOCK_FRAMED_BOUNCY_CUBE.get(), "Framed Bouncy Cube");
         add(FBContent.BLOCK_FRAMED_SECRET_STORAGE.get(), "Framed Secret Storage");
         add(FBContent.BLOCK_FRAMED_REDSTONE_BLOCK.get(), "Framed Redstone Block");
@@ -144,6 +145,7 @@ public final class FramedLanguageProvider extends LanguageProvider
         add(FBContent.BLOCK_FRAMED_FLAT_STACKED_INNER_SLOPE_SLAB_CORNER.get(), "Framed Flat Stacked Inner Slope Slab Corner");
         add(FBContent.BLOCK_FRAMED_VERTICAL_HALF_STAIRS.get(), "Framed Vertical Half Stairs");
         add(FBContent.BLOCK_FRAMED_VERTICAL_DIVIDED_STAIRS.get(), "Framed Vertical Divided Stairs");
+        add(FBContent.BLOCK_FRAMED_VERTICAL_DOUBLE_HALF_STAIRS.get(), "Framed Vertical Double Half Stairs");
         add(FBContent.BLOCK_FRAMED_SLOPE_PANEL.get(), "Framed Slope Panel");
         add(FBContent.BLOCK_FRAMED_EXTENDED_SLOPE_PANEL.get(), "Framed Extended Slope Panel");
         add(FBContent.BLOCK_FRAMED_DOUBLE_SLOPE_PANEL.get(), "Framed Double Slope Panel");

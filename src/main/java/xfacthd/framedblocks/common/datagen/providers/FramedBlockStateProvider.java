@@ -83,6 +83,7 @@ public final class FramedBlockStateProvider extends BlockStateProvider
         simpleBlock(FBContent.BLOCK_FRAMED_POST.get(), cube);
         simpleBlock(FBContent.BLOCK_FRAMED_HALF_STAIRS.get(), cube);
         simpleBlock(FBContent.BLOCK_FRAMED_DIVIDED_STAIRS.get(), cube);
+        simpleBlockWithItem(FBContent.BLOCK_FRAMED_DOUBLE_HALF_STAIRS, cube, "cutout");
         simpleBlockWithItem(FBContent.BLOCK_FRAMED_PRISM, cube, "cutout");
         simpleBlockWithItem(FBContent.BLOCK_FRAMED_INNER_PRISM, cube, "cutout");
         simpleBlockWithItem(FBContent.BLOCK_FRAMED_DOUBLE_PRISM, cube, "cutout");
@@ -107,6 +108,7 @@ public final class FramedBlockStateProvider extends BlockStateProvider
         simpleBlockWithItem(FBContent.BLOCK_FRAMED_FLAT_STACKED_INNER_SLOPE_SLAB_CORNER, cube, "cutout");
         simpleBlock(FBContent.BLOCK_FRAMED_VERTICAL_HALF_STAIRS.get(), cube);
         simpleBlock(FBContent.BLOCK_FRAMED_VERTICAL_DIVIDED_STAIRS.get(), cube);
+        simpleBlockWithItem(FBContent.BLOCK_FRAMED_VERTICAL_DOUBLE_HALF_STAIRS, cube, "cutout");
         simpleBlockWithItem(FBContent.BLOCK_FRAMED_SLOPE_PANEL, cube, "cutout");
         simpleBlockWithItem(FBContent.BLOCK_FRAMED_EXTENDED_SLOPE_PANEL, cube, "cutout");
         simpleBlockWithItem(FBContent.BLOCK_FRAMED_DOUBLE_SLOPE_PANEL, cube, "cutout");

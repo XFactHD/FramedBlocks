@@ -62,6 +62,7 @@ public final class BeaconTintTests
             BlockType.FRAMED_FLOWER_POT,
             BlockType.FRAMED_POST,
             BlockType.FRAMED_HALF_STAIRS,
+            BlockType.FRAMED_DOUBLE_HALF_STAIRS,
             BlockType.FRAMED_SLOPE_PANEL,
             BlockType.FRAMED_DOUBLE_SLOPE_PANEL,
             BlockType.FRAMED_FLAT_SLOPE_PANEL_CORNER,
