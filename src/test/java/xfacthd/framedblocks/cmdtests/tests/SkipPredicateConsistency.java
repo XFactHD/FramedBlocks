@@ -108,7 +108,6 @@ public final class SkipPredicateConsistency
                 {
                     for (Direction side : SIDES)
                     {
-                        // TODO: include double blocks
                         if (!type.isDoubleBlock() && !adjType.isDoubleBlock())
                         {
                             StateCache cache = ((IFramedBlock) block).getCache(state);
