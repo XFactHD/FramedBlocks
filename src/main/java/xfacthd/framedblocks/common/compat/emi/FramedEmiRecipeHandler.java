@@ -5,9 +5,12 @@ import dev.emi.emi.api.recipe.handler.*;
 import net.minecraft.client.Minecraft;
 import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.inventory.Slot;
+import net.minecraftforge.network.PacketDistributor;
+import xfacthd.framedblocks.FramedBlocks;
 import xfacthd.framedblocks.common.crafting.FramingSawRecipe;
 import xfacthd.framedblocks.common.crafting.FramingSawRecipeCache;
 import xfacthd.framedblocks.common.menu.*;
+import xfacthd.framedblocks.common.net.SelectFramingSawRecipePacket;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -67,8 +70,7 @@ public final class FramedEmiRecipeHandler<T extends AbstractContainerMenu & IFra
             //noinspection ConstantConditions
             if (menu.clickMenuButton(Minecraft.getInstance().player, idx))
             {
-                //noinspection ConstantConditions
-                Minecraft.getInstance().gameMode.handleInventoryButtonClick(menu.containerId, idx);
+                FramedBlocks.CHANNEL.send(PacketDistributor.SERVER.noArg(), new SelectFramingSawRecipePacket(menu.containerId, idx));
             }
         }
         return true;

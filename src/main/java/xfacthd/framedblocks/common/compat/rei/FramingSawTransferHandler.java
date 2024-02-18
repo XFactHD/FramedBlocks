@@ -3,9 +3,12 @@ package xfacthd.framedblocks.common.compat.rei;
 import me.shedaniel.rei.api.client.registry.transfer.TransferHandler;
 import net.minecraft.client.Minecraft;
 import net.minecraft.world.inventory.AbstractContainerMenu;
+import net.minecraftforge.network.PacketDistributor;
+import xfacthd.framedblocks.FramedBlocks;
 import xfacthd.framedblocks.common.compat.jei.JeiCompat;
 import xfacthd.framedblocks.common.crafting.FramingSawRecipeCache;
 import xfacthd.framedblocks.common.menu.IFramingSawMenu;
+import xfacthd.framedblocks.common.net.SelectFramingSawRecipePacket;
 
 public final class FramingSawTransferHandler implements TransferHandler
 {
@@ -27,8 +30,7 @@ public final class FramingSawTransferHandler implements TransferHandler
             //noinspection ConstantConditions
             if (ctx.isActuallyCrafting() && menu.clickMenuButton(minecraft.player, idx))
             {
-                //noinspection ConstantConditions
-                minecraft.gameMode.handleInventoryButtonClick(menu.containerId, idx);
+                FramedBlocks.CHANNEL.send(PacketDistributor.SERVER.noArg(), new SelectFramingSawRecipePacket(menu.containerId, idx));
                 minecraft.setScreen(ctx.getContainerScreen());
             }
             return Result.createSuccessful().tooltip(JeiCompat.MSG_TRANSFER_NOT_IMPLEMENTED).color(0x80FFA500);
