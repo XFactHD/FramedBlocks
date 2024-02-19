@@ -226,7 +226,6 @@ public final class FBClient
 
         Map<ResourceLocation, BakedModel> registry = event.getModels();
 
-        FramedChestRenderer.onModelsLoaded(registry); //Must happen before the chest model is replaced
         FramedMarkedPressurePlateModel.cacheFrameModels(registry);
         FramedStoneButtonModel.cacheFrameModels(registry);
         FramedLargeStoneButtonModel.cacheFrameModels(registry);
@@ -435,7 +434,7 @@ public final class FBClient
     public static void onModelsLoaded(final ModelEvent.BakingCompleted event)
     {
         ModelCache.clear();
-        FramedChestRenderer.onModelLoadingComplete();
+        FramedChestRenderer.onModelsLoaded(event.getModels());
         FramedBlockModel.captureReinforcementModel(event.getModels());
         FramedOneWayWindowModel.captureTintedGlassModel(event.getModels());
     }

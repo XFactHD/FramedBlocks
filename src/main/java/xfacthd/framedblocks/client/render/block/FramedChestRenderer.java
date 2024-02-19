@@ -20,6 +20,7 @@ import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.client.RenderTypeHelper;
 import net.minecraftforge.client.model.data.ModelData;
 import xfacthd.framedblocks.api.block.FramedProperties;
+import xfacthd.framedblocks.api.model.FramedBlockModel;
 import xfacthd.framedblocks.api.util.Utils;
 import xfacthd.framedblocks.api.util.ClientUtils;
 import xfacthd.framedblocks.client.model.cube.FramedChestLidModel;
@@ -33,7 +34,6 @@ import java.util.*;
 
 public class FramedChestRenderer implements BlockEntityRenderer<FramedChestBlockEntity>
 {
-    private static final Table<Direction, LatchType, BakedModel> LID_MODELS_PRE_CACHE = HashBasedTable.create(4, 3);
     private static final Table<Direction, LatchType, BakedModel> LID_MODELS = HashBasedTable.create(4, 3);
 
     @SuppressWarnings("unused")
@@ -157,17 +157,13 @@ public class FramedChestRenderer implements BlockEntityRenderer<FramedChestBlock
 
                 ResourceLocation location = BlockModelShaper.stateToModelLocation(state);
 
-                LID_MODELS_PRE_CACHE.put(dir, latch, new FramedChestLidModel(
-                        state,
-                        registry.get(location)
-                ));
+                BakedModel model = registry.get(location);
+                if (model instanceof FramedBlockModel fbModel)
+                {
+                    model = fbModel.getBaseModel();
+                }
+                LID_MODELS.put(dir, latch, new FramedChestLidModel(state, model));
             }
         }
-    }
-
-    public static void onModelLoadingComplete()
-    {
-        LID_MODELS.putAll(LID_MODELS_PRE_CACHE);
-        LID_MODELS_PRE_CACHE.clear();
     }
 }

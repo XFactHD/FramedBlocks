@@ -84,4 +84,9 @@ public abstract class BakedModelProxy implements BakedModel
      * Apply transformations to the item model when it is rendered in hand
      */
     protected void applyInHandTransformation(PoseStack poseStack, ItemDisplayContext ctx) { }
+
+    public final BakedModel getBaseModel()
+    {
+        return baseModel;
+    }
 }
