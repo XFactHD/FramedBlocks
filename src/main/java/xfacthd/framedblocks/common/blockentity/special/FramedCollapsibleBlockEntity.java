@@ -9,6 +9,7 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.*;
 import net.minecraftforge.client.model.data.ModelData;
 import net.minecraftforge.client.model.data.ModelProperty;
+import org.jetbrains.annotations.Nullable;
 import xfacthd.framedblocks.api.block.FramedBlockEntity;
 import xfacthd.framedblocks.api.model.data.FramedBlockData;
 import xfacthd.framedblocks.api.util.Utils;
@@ -23,6 +24,7 @@ public class FramedCollapsibleBlockEntity extends FramedBlockEntity
     private static final int VERTEX_COUNT = 4;
     private static final NeighborVertex[][] VERTEX_MAPPINGS = makeVertexMapping();
 
+    @Nullable
     private Direction collapsedFace = null;
     private int packedOffsets = 0;
     private byte[] vertexOffsets = new byte[4];

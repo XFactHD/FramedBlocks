@@ -73,6 +73,18 @@ public final class EmptyCamoContainer extends CamoContainer
     }
 
     @Override
+    public boolean equals(Object obj)
+    {
+        return obj == this;
+    }
+
+    @Override
+    public int hashCode()
+    {
+        return state.hashCode();
+    }
+
+    @Override
     public ContainerType getType()
     {
         return ContainerType.EMPTY;
