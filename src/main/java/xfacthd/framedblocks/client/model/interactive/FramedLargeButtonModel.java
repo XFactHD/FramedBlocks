@@ -11,6 +11,7 @@ import xfacthd.framedblocks.api.model.FramedBlockModel;
 import xfacthd.framedblocks.api.model.quad.Modifiers;
 import xfacthd.framedblocks.api.model.quad.QuadModifier;
 import xfacthd.framedblocks.api.util.Utils;
+import xfacthd.framedblocks.common.FBContent;
 import xfacthd.framedblocks.common.block.interactive.FramedLargeButtonBlock;
 
 import java.util.List;
@@ -91,6 +92,12 @@ public class FramedLargeButtonModel extends FramedBlockModel
                     .apply(Modifiers.setPosition(15F/16F))
                     .export(quadMap.get(null));
         }
+    }
+
+    @Override
+    protected boolean useBaseModel()
+    {
+        return !state.is(FBContent.BLOCK_FRAMED_LARGE_BUTTON.get());
     }
 
 

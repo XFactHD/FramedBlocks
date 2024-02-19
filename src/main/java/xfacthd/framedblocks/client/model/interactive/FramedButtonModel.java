@@ -10,6 +10,7 @@ import xfacthd.framedblocks.api.model.FramedBlockModel;
 import xfacthd.framedblocks.api.model.quad.Modifiers;
 import xfacthd.framedblocks.api.model.quad.QuadModifier;
 import xfacthd.framedblocks.api.util.Utils;
+import xfacthd.framedblocks.common.FBContent;
 
 import java.util.List;
 import java.util.Map;
@@ -92,6 +93,12 @@ public class FramedButtonModel extends FramedBlockModel
                     .apply(Modifiers.setPosition(11F / 16F))
                     .export(quadMap.get(null));
         }
+    }
+
+    @Override
+    protected boolean useBaseModel()
+    {
+        return !state.is(FBContent.BLOCK_FRAMED_BUTTON.get());
     }
 
 

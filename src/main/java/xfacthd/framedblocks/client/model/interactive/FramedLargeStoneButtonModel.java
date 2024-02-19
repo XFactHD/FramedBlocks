@@ -16,6 +16,7 @@ import xfacthd.framedblocks.api.model.quad.Modifiers;
 import xfacthd.framedblocks.api.model.quad.QuadModifier;
 import xfacthd.framedblocks.api.util.Utils;
 import xfacthd.framedblocks.api.model.util.ModelUtils;
+import xfacthd.framedblocks.client.util.ClientConfig;
 
 import java.util.List;
 import java.util.Map;
@@ -32,7 +33,7 @@ public class FramedLargeStoneButtonModel extends FramedLargeButtonModel
     private final int rotX;
     private final int rotY;
 
-    public FramedLargeStoneButtonModel(BlockState state, BakedModel baseModel)
+    private FramedLargeStoneButtonModel(BlockState state, BakedModel baseModel)
     {
         super(state, baseModel);
         this.frameModel = pressed ? framePressedModel : frameNormalModel;
@@ -96,13 +97,16 @@ public class FramedLargeStoneButtonModel extends FramedLargeButtonModel
         }
     }
 
-    @Override
-    protected boolean useBaseModel()
+
+
+    public static FramedLargeButtonModel create(BlockState state, BakedModel baseModel)
     {
-        return true;
+        if (ClientConfig.showButtonPlateOverlay)
+        {
+            return new FramedLargeStoneButtonModel(state, baseModel);
+        }
+        return new FramedLargeButtonModel(state, baseModel);
     }
-
-
 
     public static void registerFrameModels(ModelEvent.RegisterAdditional event)
     {

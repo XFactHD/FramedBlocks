@@ -280,7 +280,7 @@ public final class FBClient
         ClientUtils.reuseModels(FBContent.BLOCK_FRAMED_WATERLOGGABLE_IRON_PRESSURE_PLATE, registry, FBContent.BLOCK_FRAMED_IRON_PRESSURE_PLATE, ClientUtils.IGNORE_WATERLOGGED);
         ClientUtils.replaceModels(FBContent.BLOCK_FRAMED_LADDER, registry, FramedLadderModel::new, FramedLadderModel.itemSource(), ClientUtils.IGNORE_WATERLOGGED);
         ClientUtils.replaceModels(FBContent.BLOCK_FRAMED_BUTTON, registry, FramedButtonModel::new, null);
-        ClientUtils.replaceModels(FBContent.BLOCK_FRAMED_STONE_BUTTON, registry, FramedStoneButtonModel::new, null);
+        ClientUtils.replaceModels(FBContent.BLOCK_FRAMED_STONE_BUTTON, registry, FramedStoneButtonModel::create, null);
         ClientUtils.replaceModels(FBContent.BLOCK_FRAMED_LEVER, registry, FramedLeverModel::new, null);
         ClientUtils.replaceModels(FBContent.BLOCK_FRAMED_SIGN, registry, FramedSignModel::new, ClientUtils.IGNORE_WATERLOGGED);
         ClientUtils.replaceModels(FBContent.BLOCK_FRAMED_WALL_SIGN, registry, FramedWallSignModel::new, ClientUtils.IGNORE_WATERLOGGED);
@@ -400,7 +400,7 @@ public final class FBClient
         ClientUtils.replaceModels(FBContent.BLOCK_FRAMED_PYRAMID, registry, FramedPyramidModel::new, FramedPyramidModel.itemSource(), ClientUtils.IGNORE_DEFAULT);
         ClientUtils.replaceModels(FBContent.BLOCK_FRAMED_PYRAMID_SLAB, registry, FramedPyramidSlabModel::new, FramedPyramidSlabModel.itemSource(), ClientUtils.IGNORE_DEFAULT);
         ClientUtils.replaceModelsSpecial(FBContent.BLOCK_FRAMED_LARGE_BUTTON, registry, FramedLargeButtonModel::new, FramedLargeButtonModel::mergeStates);
-        ClientUtils.replaceModelsSpecial(FBContent.BLOCK_FRAMED_LARGE_STONE_BUTTON, registry, FramedLargeStoneButtonModel::new, FramedLargeButtonModel::mergeStates);
+        ClientUtils.replaceModelsSpecial(FBContent.BLOCK_FRAMED_LARGE_STONE_BUTTON, registry, FramedLargeStoneButtonModel::create, FramedLargeButtonModel::mergeStates);
         ClientUtils.replaceModels(FBContent.BLOCK_FRAMED_HORIZONTAL_PANE, registry, FramedHorizontalPaneModel::new, ClientUtils.IGNORE_DEFAULT);
         ClientUtils.replaceModelsSpecial(FBContent.BLOCK_FRAMED_TARGET, registry, (state, model) -> new FramedTargetModel(state, model, registry), FramedTargetModel.itemSource(), ClientUtils.IGNORE_ALL);
         ClientUtils.replaceModels(FBContent.BLOCK_FRAMED_GATE, registry, FramedDoorModel::new, ClientUtils.IGNORE_SOLID);

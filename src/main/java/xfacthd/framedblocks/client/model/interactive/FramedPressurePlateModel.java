@@ -9,6 +9,7 @@ import xfacthd.framedblocks.api.model.FramedBlockModel;
 import xfacthd.framedblocks.api.model.quad.Modifiers;
 import xfacthd.framedblocks.api.model.quad.QuadModifier;
 import xfacthd.framedblocks.api.util.Utils;
+import xfacthd.framedblocks.common.FBContent;
 
 import java.util.List;
 import java.util.Map;
@@ -49,5 +50,11 @@ public class FramedPressurePlateModel extends FramedBlockModel
                     .apply(Modifiers.setPosition(15F/16F))
                     .export(quadMap.get(null));
         }
+    }
+
+    @Override
+    protected boolean useBaseModel()
+    {
+        return !state.is(FBContent.BLOCK_FRAMED_PRESSURE_PLATE.get()) && !state.is(FBContent.BLOCK_FRAMED_WATERLOGGABLE_PRESSURE_PLATE.get());
     }
 }

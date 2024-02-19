@@ -15,6 +15,7 @@ import net.minecraftforge.client.model.data.ModelData;
 import xfacthd.framedblocks.api.model.data.FramedBlockData;
 import xfacthd.framedblocks.api.model.util.ModelUtils;
 import xfacthd.framedblocks.api.util.Utils;
+import xfacthd.framedblocks.client.util.ClientConfig;
 
 import java.util.*;
 
@@ -73,38 +74,52 @@ public class FramedMarkedPressurePlateModel extends FramedPressurePlateModel
         }
     }
 
-    @Override
-    protected boolean useBaseModel()
-    {
-        return true;
-    }
 
 
-
-    public static FramedMarkedPressurePlateModel stone(BlockState state, BakedModel baseModel)
+    public static FramedPressurePlateModel stone(BlockState state, BakedModel baseModel)
     {
         boolean powered = state.getValue(PressurePlateBlock.POWERED);
+        if (!ClientConfig.showButtonPlateOverlay)
+        {
+            return new FramedPressurePlateModel(state, baseModel, powered);
+        }
+
         ResourceLocation frame = powered ? STONE_FRAME_DOWN_LOCATION : STONE_FRAME_LOCATION;
         return new FramedMarkedPressurePlateModel(state, baseModel, frame, powered);
     }
 
-    public static FramedMarkedPressurePlateModel obsidian(BlockState state, BakedModel baseModel)
+    public static FramedPressurePlateModel obsidian(BlockState state, BakedModel baseModel)
     {
         boolean powered = state.getValue(PressurePlateBlock.POWERED);
+        if (!ClientConfig.showButtonPlateOverlay)
+        {
+            return new FramedPressurePlateModel(state, baseModel, powered);
+        }
+
         ResourceLocation frame = powered ? OBSIDIAN_FRAME_DOWN_LOCATION : OBSIDIAN_FRAME_LOCATION;
         return new FramedMarkedPressurePlateModel(state, baseModel, frame, powered);
     }
 
-    public static FramedMarkedPressurePlateModel gold(BlockState state, BakedModel baseModel)
+    public static FramedPressurePlateModel gold(BlockState state, BakedModel baseModel)
     {
         boolean powered = state.getValue(WeightedPressurePlateBlock.POWER) > 0;
+        if (!ClientConfig.showButtonPlateOverlay)
+        {
+            return new FramedPressurePlateModel(state, baseModel, powered);
+        }
+
         ResourceLocation frame = powered ? GOLD_FRAME_DOWN_LOCATION : GOLD_FRAME_LOCATION;
         return new FramedMarkedPressurePlateModel(state, baseModel, frame, powered);
     }
 
-    public static FramedMarkedPressurePlateModel iron(BlockState state, BakedModel baseModel)
+    public static FramedPressurePlateModel iron(BlockState state, BakedModel baseModel)
     {
         boolean powered = state.getValue(WeightedPressurePlateBlock.POWER) > 0;
+        if (!ClientConfig.showButtonPlateOverlay)
+        {
+            return new FramedPressurePlateModel(state, baseModel, powered);
+        }
+
         ResourceLocation frame = powered ? IRON_FRAME_DOWN_LOCATION : IRON_FRAME_LOCATION;
         return new FramedMarkedPressurePlateModel(state, baseModel, frame, powered);
     }

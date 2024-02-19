@@ -12,6 +12,7 @@ import net.minecraftforge.client.model.data.ModelData;
 import xfacthd.framedblocks.api.model.data.FramedBlockData;
 import xfacthd.framedblocks.api.model.util.ModelUtils;
 import xfacthd.framedblocks.api.util.Utils;
+import xfacthd.framedblocks.client.util.ClientConfig;
 
 import java.util.*;
 
@@ -62,17 +63,25 @@ public class FramedMarkedCubeModel extends FramedCubeBaseModel
 
 
 
-    public static FramedMarkedCubeModel slime(
+    public static FramedCubeBaseModel slime(
             BlockState state, BakedModel baseModel, Map<ResourceLocation, BakedModel> registry
     )
     {
-        return new FramedMarkedCubeModel(state, baseModel, registry, SLIME_FRAME_LOCATION);
+        if (ClientConfig.showSpecialCubeOverlay)
+        {
+            return new FramedMarkedCubeModel(state, baseModel, registry, SLIME_FRAME_LOCATION);
+        }
+        return new FramedCubeBaseModel(state, baseModel);
     }
 
-    public static FramedMarkedCubeModel redstone(
+    public static FramedCubeBaseModel redstone(
             BlockState state, BakedModel baseModel, Map<ResourceLocation, BakedModel> registry
     )
     {
-        return new FramedMarkedCubeModel(state, baseModel, registry, REDSTONE_FRAME_LOCATION);
+        if (ClientConfig.showSpecialCubeOverlay)
+        {
+            return new FramedMarkedCubeModel(state, baseModel, registry, REDSTONE_FRAME_LOCATION);
+        }
+        return new FramedCubeBaseModel(state, baseModel);
     }
 }
