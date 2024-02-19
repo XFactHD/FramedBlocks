@@ -176,6 +176,11 @@ public interface IFramedBlock extends EntityBlock, IForgeBlock
         {
             return 0;
         }
+        if (pos == BlockPos.ZERO)
+        {
+            // Ensure chunk sections with this block are correctly considered as containing a light source
+            return 15;
+        }
         if (InternalAPI.INSTANCE.getBlockEntityForLight(level, pos) instanceof FramedBlockEntity be)
         {
             return be.getLightValue();
