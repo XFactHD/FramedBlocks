@@ -20,6 +20,7 @@ import xfacthd.framedblocks.api.camo.CamoContainer;
 import xfacthd.framedblocks.api.util.FramedConstants;
 import xfacthd.framedblocks.api.util.Utils;
 import xfacthd.framedblocks.common.block.sign.*;
+import xfacthd.framedblocks.common.block.slopeedge.*;
 import xfacthd.framedblocks.common.block.special.FramingSawBlock;
 import xfacthd.framedblocks.common.block.special.PoweredFramingSawBlock;
 import xfacthd.framedblocks.common.block.cube.*;
@@ -91,6 +92,10 @@ public final class FBContent
     public static final RegistryObject<Block> BLOCK_FRAMED_INNER_PRISM_CORNER = registerBlock(FramedInnerPrismCornerBlock::new, BlockType.FRAMED_INNER_PRISM_CORNER);
     public static final RegistryObject<Block> BLOCK_FRAMED_THREEWAY_CORNER = registerBlock(FramedThreewayCornerBlock::new, BlockType.FRAMED_THREEWAY_CORNER);
     public static final RegistryObject<Block> BLOCK_FRAMED_INNER_THREEWAY_CORNER = registerBlock(FramedInnerThreewayCornerBlock::new, BlockType.FRAMED_INNER_THREEWAY_CORNER);
+    public static final RegistryObject<Block> BLOCK_FRAMED_SLOPE_EDGE = registerBlock(FramedSlopeEdgeBlock::new, BlockType.FRAMED_SLOPE_EDGE);
+    public static final RegistryObject<Block> BLOCK_FRAMED_ELEVATED_SLOPE_EDGE = registerBlock(FramedElevatedSlopeEdgeBlock::new, BlockType.FRAMED_ELEVATED_SLOPE_EDGE);
+    public static final RegistryObject<Block> BLOCK_FRAMED_ELEVATED_DOUBLE_SLOPE_EDGE = registerBlock(FramedElevatedDoubleSlopeEdgeBlock::new, BlockType.FRAMED_ELEVATED_DOUBLE_SLOPE_EDGE);
+    public static final RegistryObject<Block> BLOCK_FRAMED_STACKED_SLOPE_EDGE = registerBlock(FramedStackedSlopeEdgeBlock::new, BlockType.FRAMED_STACKED_SLOPE_EDGE);
     public static final RegistryObject<Block> BLOCK_FRAMED_SLAB = registerBlock(FramedSlabBlock::new, BlockType.FRAMED_SLAB);
     public static final RegistryObject<Block> BLOCK_FRAMED_SLAB_EDGE = registerBlock(FramedSlabEdgeBlock::new, BlockType.FRAMED_SLAB_EDGE);
     public static final RegistryObject<Block> BLOCK_FRAMED_SLAB_CORNER = registerBlock(FramedSlabCornerBlock::new, BlockType.FRAMED_SLAB_CORNER);
@@ -297,6 +302,14 @@ public final class FBContent
             FramedBlockEntity::new,
             "framed_tile",
             getDefaultEntityBlocks()
+    );
+    public static final RegisteredBE<FramedElevatedDoubleSlopeEdgeBlockEntity> BE_TYPE_FRAMED_ELEVATED_DOUBLE_SLOPE_EDGE = createBlockEntityType(
+            FramedElevatedDoubleSlopeEdgeBlockEntity::new,
+            BlockType.FRAMED_ELEVATED_DOUBLE_SLOPE_EDGE
+    );
+    public static final RegisteredBE<FramedStackedSlopeEdgeBlockEntity> BE_TYPE_FRAMED_STACKED_SLOPE_EDGE = createBlockEntityType(
+            FramedStackedSlopeEdgeBlockEntity::new,
+            BlockType.FRAMED_STACKED_SLOPE_EDGE
     );
     public static final RegisteredBE<FramedDividedSlabBlockEntity> BE_TYPE_FRAMED_DIVIDED_SLAB = createBlockEntityType(
             FramedDividedSlabBlockEntity::new,

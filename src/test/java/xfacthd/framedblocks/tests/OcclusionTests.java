@@ -434,6 +434,30 @@ public final class OcclusionTests
     }
 
     @GameTest(template = "box_top", batch = "occlusion")
+    @TestedType(type = BlockType.FRAMED_ELEVATED_SLOPE_EDGE)
+    public static void test_ElevatedSlopeEdge(GameTestHelper helper)
+    {
+        BlockState state = FBContent.BLOCK_FRAMED_ELEVATED_SLOPE_EDGE.get().defaultBlockState();
+        TestUtils.testBlockOccludesLightBelow(helper, state);
+    }
+
+    @GameTest(template = "box_top", batch = "occlusion")
+    @TestedType(type = BlockType.FRAMED_ELEVATED_DOUBLE_SLOPE_EDGE)
+    public static void test_ElevatedDoubleSlopeEdge(GameTestHelper helper)
+    {
+        BlockState state = FBContent.BLOCK_FRAMED_ELEVATED_DOUBLE_SLOPE_EDGE.get().defaultBlockState();
+        TestUtils.testDoubleBlockOccludesLightBelow(helper, state, List.of(Direction.DOWN, Direction.UP));
+    }
+
+    @GameTest(template = "box_top", batch = "occlusion")
+    @TestedType(type = BlockType.FRAMED_STACKED_SLOPE_EDGE)
+    public static void test_StackedSlopeEdge(GameTestHelper helper)
+    {
+        BlockState state = FBContent.BLOCK_FRAMED_STACKED_SLOPE_EDGE.get().defaultBlockState();
+        TestUtils.testDoubleBlockOccludesLightBelow(helper, state, List.of(Direction.DOWN, Direction.UP));
+    }
+
+    @GameTest(template = "box_top", batch = "occlusion")
     @TestedType(type = BlockType.FRAMED_SLAB)
     public static void testTop_Slab_Bottom(GameTestHelper helper)
     {

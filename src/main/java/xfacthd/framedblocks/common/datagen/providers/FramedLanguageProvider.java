@@ -52,6 +52,10 @@ public final class FramedLanguageProvider extends LanguageProvider
         add(FBContent.BLOCK_FRAMED_INNER_PRISM_CORNER.get(), "Framed Inner Prism Corner");
         add(FBContent.BLOCK_FRAMED_THREEWAY_CORNER.get(), "Framed Threeway Corner");
         add(FBContent.BLOCK_FRAMED_INNER_THREEWAY_CORNER.get(), "Framed Inner Threeway Corner");
+        add(FBContent.BLOCK_FRAMED_SLOPE_EDGE.get(), "Framed Slope Edge");
+        add(FBContent.BLOCK_FRAMED_ELEVATED_SLOPE_EDGE.get(), "Framed Elevated Slope Edge");
+        add(FBContent.BLOCK_FRAMED_ELEVATED_DOUBLE_SLOPE_EDGE.get(), "Framed Elevated Double Slope Edge");
+        add(FBContent.BLOCK_FRAMED_STACKED_SLOPE_EDGE.get(), "Framed Stacked Slope Edge");
         add(FBContent.BLOCK_FRAMED_SLAB.get(), "Framed Slab");
         add(FBContent.BLOCK_FRAMED_SLAB_EDGE.get(), "Framed Slab Edge");
         add(FBContent.BLOCK_FRAMED_SLAB_CORNER.get(), "Framed Slab Corner");

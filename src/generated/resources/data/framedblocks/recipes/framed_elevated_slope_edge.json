@@ -1,0 +1,20 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "building",
+  "key": {
+    "E": {
+      "item": "framedblocks:framed_slope_edge"
+    },
+    "S": {
+      "item": "framedblocks:framed_stairs"
+    }
+  },
+  "pattern": [
+    "E",
+    "S"
+  ],
+  "result": {
+    "item": "framedblocks:framed_elevated_slope_edge"
+  },
+  "show_notification": true
+}

@@ -7,6 +7,7 @@ import xfacthd.framedblocks.common.data.facepreds.misc.*;
 import xfacthd.framedblocks.common.data.facepreds.prism.*;
 import xfacthd.framedblocks.common.data.facepreds.slab.*;
 import xfacthd.framedblocks.common.data.facepreds.slope.*;
+import xfacthd.framedblocks.common.data.facepreds.slopeedge.ElevatedSlopeEdgeFullFacePredicate;
 import xfacthd.framedblocks.common.data.facepreds.slopepanel.*;
 import xfacthd.framedblocks.common.data.facepreds.slopepanelcorner.*;
 import xfacthd.framedblocks.common.data.facepreds.slopeslab.*;
@@ -33,6 +34,10 @@ public final class FullFacePredicates extends BlockTypeMap<FullFacePredicate>
         put(BlockType.FRAMED_INNER_PRISM_CORNER, InnerThreewayCornerFullFacePredicate.INSTANCE);
         put(BlockType.FRAMED_THREEWAY_CORNER, FullFacePredicate.FALSE);
         put(BlockType.FRAMED_INNER_THREEWAY_CORNER, InnerThreewayCornerFullFacePredicate.INSTANCE);
+        put(BlockType.FRAMED_SLOPE_EDGE, FullFacePredicate.FALSE);
+        put(BlockType.FRAMED_ELEVATED_SLOPE_EDGE, ElevatedSlopeEdgeFullFacePredicate.INSTANCE);
+        put(BlockType.FRAMED_ELEVATED_DOUBLE_SLOPE_EDGE, ElevatedSlopeEdgeFullFacePredicate.INSTANCE);
+        put(BlockType.FRAMED_STACKED_SLOPE_EDGE, ElevatedSlopeEdgeFullFacePredicate.INSTANCE);
         put(BlockType.FRAMED_SLAB, FullFacePredicate.TOP);
         put(BlockType.FRAMED_SLAB_EDGE, FullFacePredicate.FALSE);
         put(BlockType.FRAMED_SLAB_CORNER, FullFacePredicate.FALSE);

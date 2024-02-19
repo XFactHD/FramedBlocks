@@ -83,6 +83,40 @@ public final class FramedRecipeProvider extends RecipeProvider
                 .unlockedBy(FBContent.BLOCK_FRAMED_SLOPE)
                 .save(consumer);
 
+        shapedBuildingBlock(FBContent.BLOCK_FRAMED_SLOPE_EDGE.get(), 6)
+                .pattern("FFF")
+                .pattern(" H ")
+                .define('F', FBContent.BLOCK_FRAMED_SLOPE.get())
+                .define('H', FBContent.ITEM_FRAMED_HAMMER.get())
+                .unlockedBy(FBContent.BLOCK_FRAMED_SLOPE)
+                .save(consumer);
+
+        shapedBuildingBlock(FBContent.BLOCK_FRAMED_ELEVATED_SLOPE_EDGE.get())
+                .pattern("E")
+                .pattern("S")
+                .define('E', FBContent.BLOCK_FRAMED_SLOPE_EDGE.get())
+                .define('S', FBContent.BLOCK_FRAMED_STAIRS.get())
+                .unlockedBy(FBContent.BLOCK_FRAMED_SLOPE_EDGE)
+                .save(consumer);
+
+        shapedBuildingBlock(FBContent.BLOCK_FRAMED_ELEVATED_DOUBLE_SLOPE_EDGE.get())
+                .pattern("S")
+                .pattern("E")
+                .define('S', FBContent.BLOCK_FRAMED_SLOPE_EDGE.get())
+                .define('E', FBContent.BLOCK_FRAMED_ELEVATED_SLOPE_EDGE.get())
+                .unlockedBy(FBContent.BLOCK_FRAMED_SLOPE_EDGE)
+                .save(consumer);
+
+        shapedBuildingBlock(FBContent.BLOCK_FRAMED_STACKED_SLOPE_EDGE.get())
+                .pattern("H")
+                .pattern("E")
+                .pattern("S")
+                .define('H', FBContent.ITEM_FRAMED_HAMMER.get())
+                .define('E', FBContent.BLOCK_FRAMED_SLOPE_EDGE.get())
+                .define('S', FBContent.BLOCK_FRAMED_STAIRS.get())
+                .unlockedBy(FBContent.BLOCK_FRAMED_SLOPE_EDGE)
+                .save(consumer);
+
         shapedBuildingBlock(FBContent.BLOCK_FRAMED_SLAB.get(), 6)
                 .pattern("FFF")
                 .define('F', FBContent.BLOCK_FRAMED_CUBE.get())
