@@ -9,6 +9,7 @@ import xfacthd.framedblocks.api.model.wrapping.GeometryFactory;
 import xfacthd.framedblocks.api.model.quad.Modifiers;
 import xfacthd.framedblocks.api.model.quad.QuadModifier;
 import xfacthd.framedblocks.api.util.Utils;
+import xfacthd.framedblocks.common.FBContent;
 
 public class FramedLargeButtonGeometry extends Geometry
 {
@@ -16,6 +17,7 @@ public class FramedLargeButtonGeometry extends Geometry
     protected final AttachFace face;
     protected final Direction facing;
     protected final boolean pressed;
+    private final boolean useBaseModel;
 
     public FramedLargeButtonGeometry(GeometryFactory.Context ctx)
     {
@@ -23,6 +25,7 @@ public class FramedLargeButtonGeometry extends Geometry
         this.face = ctx.state().getValue(BlockStateProperties.ATTACH_FACE);
         this.facing = getFacing(dir, face);
         this.pressed = ctx.state().getValue(BlockStateProperties.POWERED);
+        this.useBaseModel = !ctx.state().is(FBContent.BLOCK_FRAMED_LARGE_BUTTON);
     }
 
     @Override
@@ -84,6 +87,12 @@ public class FramedLargeButtonGeometry extends Geometry
                     .apply(Modifiers.setPosition(15F/16F))
                     .export(quadMap.get(null));
         }
+    }
+
+    @Override
+    public boolean useBaseModel()
+    {
+        return useBaseModel;
     }
 
 

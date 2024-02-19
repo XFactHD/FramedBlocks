@@ -13,15 +13,17 @@ import xfacthd.framedblocks.api.util.Utils;
 public class FramedPressurePlateGeometry extends Geometry
 {
     private final boolean pressed;
+    private final boolean useBaseModel;
 
     public FramedPressurePlateGeometry(GeometryFactory.Context ctx)
     {
-        this(ctx.state().getValue(BlockStateProperties.POWERED));
+        this(ctx.state().getValue(BlockStateProperties.POWERED), false);
     }
 
-    protected FramedPressurePlateGeometry(boolean powered)
+    protected FramedPressurePlateGeometry(boolean powered, boolean useBaseModel)
     {
         this.pressed = powered;
+        this.useBaseModel = useBaseModel;
     }
 
     @Override
@@ -45,5 +47,11 @@ public class FramedPressurePlateGeometry extends Geometry
                     .apply(Modifiers.setPosition(15F/16F))
                     .export(quadMap.get(null));
         }
+    }
+
+    @Override
+    public boolean useBaseModel()
+    {
+        return useBaseModel;
     }
 }

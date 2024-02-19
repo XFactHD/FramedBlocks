@@ -13,6 +13,7 @@ import xfacthd.framedblocks.api.model.data.FramedBlockData;
 import xfacthd.framedblocks.api.model.wrapping.GeometryFactory;
 import xfacthd.framedblocks.api.model.util.ModelUtils;
 import xfacthd.framedblocks.api.util.Utils;
+import xfacthd.framedblocks.common.config.ClientConfig;
 
 import java.util.*;
 
@@ -54,13 +55,21 @@ public class FramedMarkedCubeGeometry extends FramedCubeGeometry
 
 
 
-    public static FramedMarkedCubeGeometry slime(GeometryFactory.Context ctx)
+    public static FramedCubeGeometry slime(GeometryFactory.Context ctx)
     {
-        return new FramedMarkedCubeGeometry(ctx, SLIME_FRAME_LOCATION);
+        if (ClientConfig.VIEW.showSpecialCubeOverlay())
+        {
+            return new FramedMarkedCubeGeometry(ctx, SLIME_FRAME_LOCATION);
+        }
+        return new FramedCubeGeometry(ctx);
     }
 
-    public static FramedMarkedCubeGeometry redstone(GeometryFactory.Context ctx)
+    public static FramedCubeGeometry redstone(GeometryFactory.Context ctx)
     {
-        return new FramedMarkedCubeGeometry(ctx, REDSTONE_FRAME_LOCATION);
+        if (ClientConfig.VIEW.showSpecialCubeOverlay())
+        {
+            return new FramedMarkedCubeGeometry(ctx, REDSTONE_FRAME_LOCATION);
+        }
+        return new FramedCubeGeometry(ctx);
     }
 }

@@ -14,6 +14,7 @@ import xfacthd.framedblocks.api.model.data.QuadMap;
 import xfacthd.framedblocks.api.model.wrapping.GeometryFactory;
 import xfacthd.framedblocks.api.util.Utils;
 import xfacthd.framedblocks.api.model.util.ModelUtils;
+import xfacthd.framedblocks.common.config.ClientConfig;
 
 public class FramedStoneButtonGeometry extends FramedButtonGeometry
 {
@@ -25,7 +26,7 @@ public class FramedStoneButtonGeometry extends FramedButtonGeometry
     private final TextureAtlasSprite frameSpriteNarrow;
     private final TextureAtlasSprite frameSpriteWide;
 
-    public FramedStoneButtonGeometry(GeometryFactory.Context ctx)
+    private FramedStoneButtonGeometry(GeometryFactory.Context ctx)
     {
         super(ctx);
         this.frameSpriteFront = ctx.textureLookup().get(FRAME_LOCATION_FRONT);
@@ -64,5 +65,16 @@ public class FramedStoneButtonGeometry extends FramedButtonGeometry
     public boolean useBaseModel()
     {
         return true;
+    }
+
+
+
+    public static FramedButtonGeometry create(GeometryFactory.Context ctx)
+    {
+        if (ClientConfig.VIEW.showButtonPlateOverlay())
+        {
+            return new FramedStoneButtonGeometry(ctx);
+        }
+        return new FramedButtonGeometry(ctx);
     }
 }

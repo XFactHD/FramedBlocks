@@ -26,7 +26,6 @@ import xfacthd.framedblocks.api.model.wrapping.*;
 import xfacthd.framedblocks.api.model.wrapping.statemerger.StateMerger;
 import xfacthd.framedblocks.client.model.*;
 import xfacthd.framedblocks.client.model.slopeedge.*;
-import xfacthd.framedblocks.client.modelwrapping.ConditionallyWrappingModelFactory;
 import xfacthd.framedblocks.client.modelwrapping.ModelWrappingManager;
 import xfacthd.framedblocks.api.type.IBlockType;
 import xfacthd.framedblocks.api.util.*;
@@ -62,13 +61,11 @@ import xfacthd.framedblocks.common.block.interactive.*;
 import xfacthd.framedblocks.common.blockentity.doubled.FramedDoubleBlockEntity;
 import xfacthd.framedblocks.common.compat.modernfix.ModernFixCompat;
 import xfacthd.framedblocks.common.compat.supplementaries.SupplementariesCompat;
-import xfacthd.framedblocks.common.config.ClientConfig;
 import xfacthd.framedblocks.common.data.BlockType;
 import xfacthd.framedblocks.common.data.StateCacheBuilder;
 
 import java.util.Map;
 import java.util.Set;
-import java.util.function.BooleanSupplier;
 import java.util.function.Supplier;
 
 @Mod.EventBusSubscriber(modid = FramedConstants.MOD_ID, bus = Mod.EventBusSubscriber.Bus.MOD, value = Dist.CLIENT)
@@ -252,19 +249,19 @@ public final class FBClient
         WrapHelper.wrap(FBContent.BLOCK_FRAMED_IRON_TRAP_DOOR, FramedIronTrapDoorGeometry::new, Utils.concat(Set.of(BlockStateProperties.POWERED), WrapHelper.IGNORE_DEFAULT));
         WrapHelper.wrap(FBContent.BLOCK_FRAMED_PRESSURE_PLATE, FramedPressurePlateGeometry::new, WrapHelper.IGNORE_ALWAYS);
         WrapHelper.copy(FBContent.BLOCK_FRAMED_WATERLOGGABLE_PRESSURE_PLATE, FBContent.BLOCK_FRAMED_PRESSURE_PLATE, WrapHelper.IGNORE_WATERLOGGED);
-        wrapOrCopyModel(FBContent.BLOCK_FRAMED_STONE_PRESSURE_PLATE, ClientConfig.VIEW::showButtonPlateOverlay, FramedMarkedPressurePlateGeometry::stone, FBContent.BLOCK_FRAMED_PRESSURE_PLATE, WrapHelper.IGNORE_ALWAYS);
+        WrapHelper.wrap(FBContent.BLOCK_FRAMED_STONE_PRESSURE_PLATE, FramedMarkedPressurePlateGeometry::stone, WrapHelper.IGNORE_ALWAYS);
         WrapHelper.copy(FBContent.BLOCK_FRAMED_WATERLOGGABLE_STONE_PRESSURE_PLATE, FBContent.BLOCK_FRAMED_STONE_PRESSURE_PLATE, WrapHelper.IGNORE_WATERLOGGED);
-        wrapOrCopyModel(FBContent.BLOCK_FRAMED_OBSIDIAN_PRESSURE_PLATE, ClientConfig.VIEW::showButtonPlateOverlay, FramedMarkedPressurePlateGeometry::obsidian, FBContent.BLOCK_FRAMED_PRESSURE_PLATE, WrapHelper.IGNORE_ALWAYS);
+        WrapHelper.wrap(FBContent.BLOCK_FRAMED_OBSIDIAN_PRESSURE_PLATE, FramedMarkedPressurePlateGeometry::obsidian, WrapHelper.IGNORE_ALWAYS);
         WrapHelper.copy(FBContent.BLOCK_FRAMED_WATERLOGGABLE_OBSIDIAN_PRESSURE_PLATE, FBContent.BLOCK_FRAMED_OBSIDIAN_PRESSURE_PLATE, WrapHelper.IGNORE_WATERLOGGED);
-        wrapOrCopyModel(FBContent.BLOCK_FRAMED_GOLD_PRESSURE_PLATE, ClientConfig.VIEW::showButtonPlateOverlay, FramedMarkedPressurePlateGeometry::gold, FBContent.BLOCK_FRAMED_PRESSURE_PLATE, FramedWeightedPressurePlateBlock.STATE_MERGER);
+        WrapHelper.wrap(FBContent.BLOCK_FRAMED_GOLD_PRESSURE_PLATE, FramedMarkedPressurePlateGeometry::gold, FramedWeightedPressurePlateBlock.STATE_MERGER);
         WrapHelper.copy(FBContent.BLOCK_FRAMED_WATERLOGGABLE_GOLD_PRESSURE_PLATE, FBContent.BLOCK_FRAMED_GOLD_PRESSURE_PLATE, FramedWeightedPressurePlateBlock.STATE_MERGER);
-        wrapOrCopyModel(FBContent.BLOCK_FRAMED_IRON_PRESSURE_PLATE, ClientConfig.VIEW::showButtonPlateOverlay, FramedMarkedPressurePlateGeometry::iron, FBContent.BLOCK_FRAMED_PRESSURE_PLATE, FramedWeightedPressurePlateBlock.STATE_MERGER);
+        WrapHelper.wrap(FBContent.BLOCK_FRAMED_IRON_PRESSURE_PLATE, FramedMarkedPressurePlateGeometry::iron, FramedWeightedPressurePlateBlock.STATE_MERGER);
         WrapHelper.copy(FBContent.BLOCK_FRAMED_WATERLOGGABLE_IRON_PRESSURE_PLATE, FBContent.BLOCK_FRAMED_IRON_PRESSURE_PLATE, FramedWeightedPressurePlateBlock.STATE_MERGER);
         WrapHelper.wrap(FBContent.BLOCK_FRAMED_LADDER, FramedLadderGeometry::new, WrapHelper.IGNORE_WATERLOGGED);
         WrapHelper.wrap(FBContent.BLOCK_FRAMED_BUTTON, FramedButtonGeometry::new, WrapHelper.IGNORE_ALWAYS);
-        wrapOrCopyModel(FBContent.BLOCK_FRAMED_STONE_BUTTON, ClientConfig.VIEW::showButtonPlateOverlay, FramedStoneButtonGeometry::new, FBContent.BLOCK_FRAMED_BUTTON, WrapHelper.IGNORE_ALWAYS);
+        WrapHelper.wrap(FBContent.BLOCK_FRAMED_STONE_BUTTON, FramedStoneButtonGeometry::create, WrapHelper.IGNORE_ALWAYS);
         WrapHelper.wrap(FBContent.BLOCK_FRAMED_LARGE_BUTTON, FramedLargeButtonGeometry::new, FramedLargeButtonBlock.STATE_MERGER);
-        wrapOrCopyModel(FBContent.BLOCK_FRAMED_LARGE_STONE_BUTTON, ClientConfig.VIEW::showButtonPlateOverlay, FramedLargeStoneButtonGeometry::new, FBContent.BLOCK_FRAMED_LARGE_BUTTON, FramedLargeButtonBlock.STATE_MERGER);
+        WrapHelper.wrap(FBContent.BLOCK_FRAMED_LARGE_STONE_BUTTON, FramedLargeStoneButtonGeometry::create, FramedLargeButtonBlock.STATE_MERGER);
         WrapHelper.wrap(FBContent.BLOCK_FRAMED_LEVER, FramedLeverGeometry::new, WrapHelper.IGNORE_ALWAYS);
         WrapHelper.wrap(FBContent.BLOCK_FRAMED_SIGN, FramedSignGeometry::new, WrapHelper.IGNORE_WATERLOGGED);
         WrapHelper.wrap(FBContent.BLOCK_FRAMED_WALL_SIGN, FramedWallSignGeometry::new, WrapHelper.IGNORE_WATERLOGGED);
@@ -304,8 +301,8 @@ public final class FBClient
         WrapHelper.wrap(FBContent.BLOCK_FRAMED_POST, FramedPillarGeometry::new, WrapHelper.IGNORE_WATERLOGGED);
         WrapHelper.wrap(FBContent.BLOCK_FRAMED_COLLAPSIBLE_BLOCK, FramedCollapsibleBlockGeometry::new, WrapHelper.IGNORE_WATERLOGGED);
         WrapHelper.wrap(FBContent.BLOCK_FRAMED_COLLAPSIBLE_COPYCAT_BLOCK, FramedCollapsibleCopycatBlockGeometry::new, WrapHelper.IGNORE_WATERLOGGED);
-        wrapOrCopyModel(FBContent.BLOCK_FRAMED_BOUNCY_CUBE, ClientConfig.VIEW::showSpecialCubeOverlay, FramedMarkedCubeGeometry::slime, FBContent.BLOCK_FRAMED_CUBE, WrapHelper.IGNORE_SOLID);
-        wrapOrCopyModel(FBContent.BLOCK_FRAMED_REDSTONE_BLOCK, ClientConfig.VIEW::showSpecialCubeOverlay, FramedMarkedCubeGeometry::redstone, FBContent.BLOCK_FRAMED_CUBE, WrapHelper.IGNORE_SOLID);
+        WrapHelper.wrap(FBContent.BLOCK_FRAMED_BOUNCY_CUBE, FramedMarkedCubeGeometry::slime, WrapHelper.IGNORE_SOLID);
+        WrapHelper.wrap(FBContent.BLOCK_FRAMED_REDSTONE_BLOCK, FramedMarkedCubeGeometry::redstone, WrapHelper.IGNORE_SOLID);
         WrapHelper.wrap(FBContent.BLOCK_FRAMED_PRISM, FramedPrismGeometry::new, WrapHelper.IGNORE_DEFAULT);
         WrapHelper.wrap(FBContent.BLOCK_FRAMED_INNER_PRISM, FramedInnerPrismGeometry::new, WrapHelper.IGNORE_DEFAULT);
         wrapDoubleModel(FBContent.BLOCK_FRAMED_DOUBLE_PRISM, null, WrapHelper.IGNORE_SOLID);
@@ -474,32 +471,6 @@ public final class FBClient
                         firstpersonTransform
                 ),
                 StateMerger.ignoring(ignoredProps)
-        );
-    }
-
-    private static void wrapOrCopyModel(
-            Holder<Block> block,
-            BooleanSupplier wrapToggle,
-            GeometryFactory geometryFactory,
-            Holder<Block> copySource,
-            Set<Property<?>> ignoredProps
-    )
-    {
-        wrapOrCopyModel(block, wrapToggle, geometryFactory, copySource, StateMerger.ignoring(ignoredProps));
-    }
-
-    private static void wrapOrCopyModel(
-            Holder<Block> block,
-            BooleanSupplier wrapToggle,
-            GeometryFactory geometryFactory,
-            Holder<Block> copySource,
-            StateMerger stateMerger
-    )
-    {
-        WrapHelper.wrapSpecial(
-                block,
-                new ConditionallyWrappingModelFactory(wrapToggle, geometryFactory, copySource),
-                stateMerger
         );
     }
 

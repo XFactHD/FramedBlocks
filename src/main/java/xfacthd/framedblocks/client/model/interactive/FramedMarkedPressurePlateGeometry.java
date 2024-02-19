@@ -15,6 +15,7 @@ import xfacthd.framedblocks.api.model.data.QuadMap;
 import xfacthd.framedblocks.api.model.wrapping.GeometryFactory;
 import xfacthd.framedblocks.api.model.util.ModelUtils;
 import xfacthd.framedblocks.api.util.Utils;
+import xfacthd.framedblocks.common.config.ClientConfig;
 
 public class FramedMarkedPressurePlateGeometry extends FramedPressurePlateGeometry
 {
@@ -27,7 +28,7 @@ public class FramedMarkedPressurePlateGeometry extends FramedPressurePlateGeomet
 
     private FramedMarkedPressurePlateGeometry(TextureAtlasSprite frameSprite, boolean powered)
     {
-        super(powered);
+        super(powered, true);
         this.frameSprite = frameSprite;
     }
 
@@ -52,38 +53,52 @@ public class FramedMarkedPressurePlateGeometry extends FramedPressurePlateGeomet
         }
     }
 
-    @Override
-    public boolean useBaseModel()
-    {
-        return true;
-    }
 
 
-
-    public static FramedMarkedPressurePlateGeometry stone(GeometryFactory.Context ctx)
+    public static FramedPressurePlateGeometry stone(GeometryFactory.Context ctx)
     {
         boolean powered = ctx.state().getValue(PressurePlateBlock.POWERED);
+        if (!ClientConfig.VIEW.showButtonPlateOverlay())
+        {
+            return new FramedPressurePlateGeometry(powered, true);
+        }
+
         TextureAtlasSprite frame = ctx.textureLookup().get(STONE_FRAME_LOCATION);
         return new FramedMarkedPressurePlateGeometry(frame, powered);
     }
 
-    public static FramedMarkedPressurePlateGeometry obsidian(GeometryFactory.Context ctx)
+    public static FramedPressurePlateGeometry obsidian(GeometryFactory.Context ctx)
     {
         boolean powered = ctx.state().getValue(PressurePlateBlock.POWERED);
+        if (!ClientConfig.VIEW.showButtonPlateOverlay())
+        {
+            return new FramedPressurePlateGeometry(powered, true);
+        }
+
         TextureAtlasSprite frame = ctx.textureLookup().get(OBSIDIAN_FRAME_LOCATION);
         return new FramedMarkedPressurePlateGeometry(frame, powered);
     }
 
-    public static FramedMarkedPressurePlateGeometry gold(GeometryFactory.Context ctx)
+    public static FramedPressurePlateGeometry gold(GeometryFactory.Context ctx)
     {
         boolean powered = ctx.state().getValue(WeightedPressurePlateBlock.POWER) > 0;
+        if (!ClientConfig.VIEW.showButtonPlateOverlay())
+        {
+            return new FramedPressurePlateGeometry(powered, true);
+        }
+
         TextureAtlasSprite frame = ctx.textureLookup().get(GOLD_FRAME_LOCATION);
         return new FramedMarkedPressurePlateGeometry(frame, powered);
     }
 
-    public static FramedMarkedPressurePlateGeometry iron(GeometryFactory.Context ctx)
+    public static FramedPressurePlateGeometry iron(GeometryFactory.Context ctx)
     {
         boolean powered = ctx.state().getValue(WeightedPressurePlateBlock.POWER) > 0;
+        if (!ClientConfig.VIEW.showButtonPlateOverlay())
+        {
+            return new FramedPressurePlateGeometry(powered, true);
+        }
+
         TextureAtlasSprite frame = ctx.textureLookup().get(IRON_FRAME_LOCATION);
         return new FramedMarkedPressurePlateGeometry(frame, powered);
     }

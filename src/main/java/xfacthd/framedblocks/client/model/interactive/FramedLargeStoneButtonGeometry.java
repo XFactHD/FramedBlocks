@@ -12,6 +12,7 @@ import xfacthd.framedblocks.api.model.data.QuadMap;
 import xfacthd.framedblocks.api.model.wrapping.GeometryFactory;
 import xfacthd.framedblocks.api.util.Utils;
 import xfacthd.framedblocks.api.model.util.ModelUtils;
+import xfacthd.framedblocks.common.config.ClientConfig;
 
 public class FramedLargeStoneButtonGeometry extends FramedLargeButtonGeometry
 {
@@ -21,7 +22,7 @@ public class FramedLargeStoneButtonGeometry extends FramedLargeButtonGeometry
     private final TextureAtlasSprite frameSpriteFront;
     private final TextureAtlasSprite frameSpriteSide;
 
-    public FramedLargeStoneButtonGeometry(GeometryFactory.Context ctx)
+    private FramedLargeStoneButtonGeometry(GeometryFactory.Context ctx)
     {
         super(ctx);
         this.frameSpriteFront = ctx.textureLookup().get(FRAME_LOCATION_FRONT);
@@ -50,5 +51,16 @@ public class FramedLargeStoneButtonGeometry extends FramedLargeButtonGeometry
     public boolean useBaseModel()
     {
         return true;
+    }
+
+
+
+    public static FramedLargeButtonGeometry create(GeometryFactory.Context ctx)
+    {
+        if (ClientConfig.VIEW.showButtonPlateOverlay())
+        {
+            return new FramedLargeStoneButtonGeometry(ctx);
+        }
+        return new FramedLargeButtonGeometry(ctx);
     }
 }
