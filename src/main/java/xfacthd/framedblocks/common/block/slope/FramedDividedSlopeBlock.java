@@ -151,19 +151,18 @@ public class FramedDividedSlopeBlock extends AbstractFramedDoubleBlock implement
     @Override
     public CamoGetter calculateCamoGetter(BlockState state, Direction side, @Nullable Direction edge)
     {
+        Direction facing = state.getValue(FramedProperties.FACING_HOR);
         SlopeType type = state.getValue(PropertyHolder.SLOPE_TYPE);
         if (type == SlopeType.HORIZONTAL)
         {
-            if (side == Direction.UP)
+            if (side == Direction.UP && (edge == facing || edge == facing.getCounterClockWise()))
             {
                 return CamoGetter.SECOND;
             }
-            if (side == Direction.DOWN)
+            if (side == Direction.DOWN && (edge == facing || edge == facing.getCounterClockWise()))
             {
                 return CamoGetter.FIRST;
             }
-
-            Direction facing = state.getValue(FramedProperties.FACING_HOR);
             if (side == facing || side == facing.getCounterClockWise())
             {
                 if (edge == Direction.UP)
@@ -178,17 +177,15 @@ public class FramedDividedSlopeBlock extends AbstractFramedDoubleBlock implement
         }
         else
         {
-            Direction facing = state.getValue(FramedProperties.FACING_HOR);
-            if (side == facing.getClockWise())
+            Direction dirTwo = type == SlopeType.TOP ? Direction.UP : Direction.DOWN;
+            if (side == facing.getClockWise() && (edge == facing || edge == dirTwo))
             {
                 return CamoGetter.SECOND;
             }
-            if (side == facing.getCounterClockWise())
+            if (side == facing.getCounterClockWise() && (edge == facing || edge == dirTwo))
             {
                 return CamoGetter.FIRST;
             }
-
-            Direction dirTwo = type == SlopeType.TOP ? Direction.UP : Direction.DOWN;
             if (side == facing || side == dirTwo)
             {
                 if (edge == facing.getClockWise())

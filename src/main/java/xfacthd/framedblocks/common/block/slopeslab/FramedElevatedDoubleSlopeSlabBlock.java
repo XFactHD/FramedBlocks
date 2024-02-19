@@ -131,7 +131,7 @@ public class FramedElevatedDoubleSlopeSlabBlock extends AbstractFramedDoubleBloc
         }
         else if (!Utils.isY(side))
         {
-            if (edge == dirTwo)
+            if (edge == dirTwo || edge == facing)
             {
                 return CamoGetter.FIRST;
             }

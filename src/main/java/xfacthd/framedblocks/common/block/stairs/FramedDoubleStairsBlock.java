@@ -136,7 +136,13 @@ public class FramedDoubleStairsBlock extends AbstractFramedDoubleBlock
                 return CamoGetter.SECOND;
             }
         }
-
+        else if (side.getAxis() == facing.getClockWise().getAxis())
+        {
+            if (edge == facing || edge == dirTwo)
+            {
+                return CamoGetter.FIRST;
+            }
+        }
         return CamoGetter.NONE;
     }
 

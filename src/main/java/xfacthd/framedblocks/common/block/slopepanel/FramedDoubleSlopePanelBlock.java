@@ -139,7 +139,7 @@ public class FramedDoubleSlopePanelBlock extends AbstractFramedDoubleBlock
         {
             return front ? CamoGetter.NONE : CamoGetter.FIRST;
         }
-        else if (side == facing.getOpposite() && edge != null)
+        else if (side == facing.getOpposite())
         {
             return front ? CamoGetter.SECOND : CamoGetter.NONE;
         }

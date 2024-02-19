@@ -143,6 +143,10 @@ public class FramedExtendedDoubleSlopePanelBlock extends AbstractFramedDoubleBlo
             {
                 return CamoGetter.SECOND;
             }
+            else if (side.getAxis() != orientation.getAxis() && edge == orientation.getOpposite())
+            {
+                return CamoGetter.FIRST;
+            }
         }
 
         return CamoGetter.NONE;

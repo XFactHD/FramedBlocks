@@ -39,6 +39,7 @@ public final class SelfTest
         SpecialShapeRendererPresence.checkSpecialShapePresent(blocks);
         SkipPredicatePresenceConsistency.checkSkipPredicateConsistency();
         StateCacheValidity.checkStateCacheValid(blocks);
+        DoubleBlockCamoConnectionConsistency.checkConnectionConsistency(blocks);
 
         stopwatch.stop();
         FramedBlocks.LOGGER.info("Self test completed in {}", stopwatch);

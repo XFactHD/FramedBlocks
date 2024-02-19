@@ -156,23 +156,17 @@ public class FramedDoubleHalfStairsBlock extends AbstractFramedDoubleBlock
         }
 
         Direction dir = state.getValue(FramedProperties.FACING_HOR);
+        boolean top = state.getValue(FramedProperties.TOP);
         boolean right = state.getValue(PropertyHolder.RIGHT);
-        if (side == dir)
+        Direction dirTwo = top ? Direction.UP : Direction.DOWN;
+        Direction dirThree = right ? dir.getClockWise() : dir.getCounterClockWise();
+        if ((side == dir || side == dirTwo) && edge == dirThree)
         {
-            if ((!right && edge == dir.getCounterClockWise()) || (right && edge == dir.getClockWise()))
-            {
-                return CamoGetter.FIRST;
-            }
+            return CamoGetter.FIRST;
         }
-        else if ((!right && side == dir.getCounterClockWise()) || (right && side == dir.getClockWise()))
+        else if (side == dirThree)
         {
-            if (edge == dir)
-            {
-                return CamoGetter.FIRST;
-            }
-
-            boolean top = state.getValue(FramedProperties.TOP);
-            if ((!top && edge == Direction.DOWN) || (top && edge == Direction.UP))
+            if (edge == dir || edge == dirTwo)
             {
                 return CamoGetter.FIRST;
             }

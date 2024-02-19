@@ -21,6 +21,10 @@ public final class ExtendedDoubleSlopePanelConnectionPredicate extends NonDetail
         {
             return true;
         }
+        if (side.getAxis() != rotDir.getAxis())
+        {
+            return edge != null && edge != rotDir;
+        }
         return edge != null && edge.getAxis() == facing.getAxis();
     }
 }

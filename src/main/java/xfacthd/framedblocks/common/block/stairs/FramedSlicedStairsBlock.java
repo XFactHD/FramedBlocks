@@ -175,6 +175,10 @@ public class FramedSlicedStairsBlock extends AbstractFramedDoubleBlock
             {
                 return CamoGetter.SECOND;
             }
+            else if (side == dir.getOpposite() && edge == dirTwo)
+            {
+                return CamoGetter.SECOND;
+            }
         }
         else
         {
@@ -183,6 +187,10 @@ public class FramedSlicedStairsBlock extends AbstractFramedDoubleBlock
                 return CamoGetter.FIRST;
             }
             else if (side == dir && edge == dirTwo.getOpposite())
+            {
+                return CamoGetter.SECOND;
+            }
+            else if (side == dirTwo.getOpposite() && edge == dir)
             {
                 return CamoGetter.SECOND;
             }
