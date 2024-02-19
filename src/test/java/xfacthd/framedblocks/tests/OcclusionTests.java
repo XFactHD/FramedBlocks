@@ -30,6 +30,7 @@ import java.util.stream.Collectors;
  * <li>{@link OcclusionTests#testBottom_SlopeSlab_BottomHalfTop(GameTestHelper)}</li>
  * <li>{@link OcclusionTests#testBottom_SlopeSlab_TopHalfBottom(GameTestHelper)}</li>
  * <li>{@link OcclusionTests#testBottom_SlopeSlab_TopHalfTop(GameTestHelper)}</li>
+ * <li>{@link OcclusionTests#test_CompoundSlopeSlab(GameTestHelper)}</li>
  * <li>{@link OcclusionTests#test_InvDoubleSlopeSlab(GameTestHelper)}</li>
  * <li>{@link OcclusionTests#test_FlatSlopeSlabCorner_TopHalfBottom(GameTestHelper)}</li>
  * <li>{@link OcclusionTests#test_FlatSlopeSlabCorner_BottomHalfTop(GameTestHelper)}</li>
@@ -38,6 +39,7 @@ import java.util.stream.Collectors;
  * <li>{@link OcclusionTests#test_FlatInverseDoubleSlopeSlabCorner(GameTestHelper)}</li>
  * <li>{@link OcclusionTests#test_SlopePanel_FrontHalfNorth(GameTestHelper)}</li>
  * <li>{@link OcclusionTests#test_SlopePanel_FrontHalfSouth(GameTestHelper)}</li>
+ * <li>{@link OcclusionTests#test_CompoundSlopePanel(GameTestHelper)}</li>
  * <li>{@link OcclusionTests#test_InvDoubleSlopePanel(GameTestHelper)}</li>
  * <li>{@link OcclusionTests#test_FlatSlopePanelCorner_FrontHalfNorth(GameTestHelper)}</li>
  * <li>{@link OcclusionTests#test_FlatSlopePanelCorner_FrontHalfSouth(GameTestHelper)}</li>
@@ -1416,6 +1418,14 @@ public final class OcclusionTests
         TestUtils.testBlockOccludesLightAbove(helper, state);
     }
 
+    @GameTest(template = "box_top", batch = "occlusion", required = false)
+    @TestedType(type = BlockType.FRAMED_COMPOUND_SLOPE_SLAB)
+    public static void test_CompoundSlopeSlab(GameTestHelper helper)
+    {
+        BlockState state = FBContent.BLOCK_FRAMED_COMPOUND_SLOPE_SLAB.get().defaultBlockState();
+        TestUtils.testBlockOccludesLightBelow(helper, state);
+    }
+
     @GameTest(template = "box_top", batch = "occlusion")
     @TestedType(type = BlockType.FRAMED_DOUBLE_SLOPE_SLAB)
     public static void test_DoubleSlopeSlab_BottomHalf(GameTestHelper helper)
@@ -1722,6 +1732,14 @@ public final class OcclusionTests
     public static void test_ExtendedSlopePanel(GameTestHelper helper)
     {
         BlockState state = FBContent.BLOCK_FRAMED_EXTENDED_SLOPE_PANEL.get().defaultBlockState();
+        TestUtils.testBlockOccludesLightNorth(helper, state);
+    }
+
+    @GameTest(template = "box_side", batch = "occlusion", required = false)
+    @TestedType(type = BlockType.FRAMED_COMPOUND_SLOPE_PANEL)
+    public static void test_CompoundSlopePanel(GameTestHelper helper)
+    {
+        BlockState state = FBContent.BLOCK_FRAMED_COMPOUND_SLOPE_PANEL.get().defaultBlockState();
         TestUtils.testBlockOccludesLightNorth(helper, state);
     }
 

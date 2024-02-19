@@ -132,6 +132,7 @@ public final class ConnectionPredicates extends BlockTypeMap<ConnectionPredicate
         put(BlockType.FRAMED_DOUBLE_SLOPED_PRISM, new DoubleSlopedPrismConnectionPredicate());
         put(BlockType.FRAMED_SLOPE_SLAB, new SlopeSlabConnectionPredicate());
         put(BlockType.FRAMED_ELEVATED_SLOPE_SLAB, new ElevatedSlopeSlabConnectionPredicate());
+        put(BlockType.FRAMED_COMPOUND_SLOPE_SLAB, new CompoundSlopeSlabConnectionPredicate());
         put(BlockType.FRAMED_DOUBLE_SLOPE_SLAB, new DoubleSlopeSlabConnectionPredicate());
         put(BlockType.FRAMED_INV_DOUBLE_SLOPE_SLAB, new InverseDoubleSlopeSlabConnectionPredicate());
         put(BlockType.FRAMED_ELEVATED_DOUBLE_SLOPE_SLAB, new ElevatedDoubleSlopeSlabConnectionPredicate());
@@ -148,6 +149,7 @@ public final class ConnectionPredicates extends BlockTypeMap<ConnectionPredicate
         put(BlockType.FRAMED_FLAT_STACKED_INNER_SLOPE_SLAB_CORNER, new FlatStackedInnerSlopeSlabCornerConnectionPredicate());
         put(BlockType.FRAMED_SLOPE_PANEL, new SlopePanelConnectionPredicate());
         put(BlockType.FRAMED_EXTENDED_SLOPE_PANEL, new ExtendedSlopePanelConnectionPredicate());
+        put(BlockType.FRAMED_COMPOUND_SLOPE_PANEL, new CompoundSlopePanelConnectionPredicate());
         put(BlockType.FRAMED_DOUBLE_SLOPE_PANEL, new DoubleSlopePanelConnectionPredicate());
         put(BlockType.FRAMED_INV_DOUBLE_SLOPE_PANEL, new InverseDoubleSlopePanelConnectionPredicate());
         put(BlockType.FRAMED_EXTENDED_DOUBLE_SLOPE_PANEL, new ExtendedDoubleSlopePanelConnectionPredicate());

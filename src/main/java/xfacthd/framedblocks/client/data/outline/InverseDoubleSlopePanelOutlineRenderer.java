@@ -9,6 +9,10 @@ import xfacthd.framedblocks.common.data.property.HorizontalRotation;
 
 public final class InverseDoubleSlopePanelOutlineRenderer implements OutlineRenderer
 {
+    public static final InverseDoubleSlopePanelOutlineRenderer INSTANCE = new InverseDoubleSlopePanelOutlineRenderer();
+
+    private InverseDoubleSlopePanelOutlineRenderer() { }
+
     @Override
     public void draw(BlockState state, PoseStack poseStack, VertexConsumer builder)
     {

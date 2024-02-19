@@ -7,6 +7,10 @@ import xfacthd.framedblocks.api.render.OutlineRenderer;
 
 public final class InverseDoubleSlopeSlabOutlineRenderer implements OutlineRenderer
 {
+    public static final InverseDoubleSlopeSlabOutlineRenderer INSTANCE = new InverseDoubleSlopeSlabOutlineRenderer();
+
+    private InverseDoubleSlopeSlabOutlineRenderer() { }
+
     @Override
     public void draw(BlockState state, PoseStack poseStack, VertexConsumer builder)
     {

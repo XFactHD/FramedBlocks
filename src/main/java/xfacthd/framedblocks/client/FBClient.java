@@ -330,6 +330,7 @@ public final class FBClient
         replaceDoubleBlockModels(FBContent.BLOCK_FRAMED_DOUBLE_SLOPED_PRISM, registry, FramedDoubleSlopedPrismBlock.itemModelSource(), ClientUtils.IGNORE_SOLID);
         ClientUtils.replaceModels(FBContent.BLOCK_FRAMED_SLOPE_SLAB, registry, FramedSlopeSlabModel::new, FramedSlopeSlabModel.itemSource(), ClientUtils.IGNORE_DEFAULT);
         ClientUtils.replaceModels(FBContent.BLOCK_FRAMED_ELEVATED_SLOPE_SLAB, registry, FramedElevatedSlopeSlabModel::new, FramedElevatedSlopeSlabModel.itemSource(), ClientUtils.IGNORE_DEFAULT);
+        ClientUtils.replaceModels(FBContent.BLOCK_FRAMED_COMPOUND_SLOPE_SLAB, registry, FramedCompoundSlopeSlabModel::new, FramedCompoundSlopeSlabBlock.itemModelSource(), ClientUtils.IGNORE_DEFAULT);
         replaceDoubleBlockModels(FBContent.BLOCK_FRAMED_DOUBLE_SLOPE_SLAB, registry, yHalfUp, FramedDoubleSlopeSlabBlock.itemModelSource(), ClientUtils.IGNORE_DEFAULT);
         replaceDoubleBlockModels(FBContent.BLOCK_FRAMED_INVERSE_DOUBLE_SLOPE_SLAB, registry, FramedInverseDoubleSlopeSlabBlock.itemModelSource(), ClientUtils.IGNORE_DEFAULT);
         replaceDoubleBlockModels(FBContent.BLOCK_FRAMED_ELEVATED_DOUBLE_SLOPE_SLAB, registry, FramedElevatedDoubleSlopeSlabBlock.itemModelSource(), ClientUtils.IGNORE_SOLID);
@@ -350,6 +351,7 @@ public final class FBClient
         replaceDoubleBlockModels(FBContent.BLOCK_FRAMED_VERTICAL_SLICED_STAIRS, registry, FramedVerticalSlicedStairsBlock.itemModelSource(), ClientUtils.IGNORE_DEFAULT);
         ClientUtils.replaceModels(FBContent.BLOCK_FRAMED_SLOPE_PANEL, registry, FramedSlopePanelModel::new, FramedSlopePanelModel.itemSource(), ClientUtils.IGNORE_DEFAULT);
         ClientUtils.replaceModels(FBContent.BLOCK_FRAMED_EXTENDED_SLOPE_PANEL, registry, FramedExtendedSlopePanelModel::new, FramedExtendedSlopePanelModel.itemSource(), ClientUtils.IGNORE_DEFAULT);
+        ClientUtils.replaceModels(FBContent.BLOCK_FRAMED_COMPOUND_SLOPE_PANEL, registry, FramedCompoundSlopePanelModel::new, FramedCompoundSlopePanelBlock.itemModelSource(), ClientUtils.IGNORE_DEFAULT);
         replaceDoubleBlockModels(FBContent.BLOCK_FRAMED_DOUBLE_SLOPE_PANEL, registry, FramedDoubleSlopePanelBlock.itemSource(), ClientUtils.IGNORE_DEFAULT);
         replaceDoubleBlockModels(FBContent.BLOCK_FRAMED_INVERSE_DOUBLE_SLOPE_PANEL, registry, FramedInverseDoubleSlopePanelBlock.itemModelSource(), ClientUtils.IGNORE_DEFAULT);
         replaceDoubleBlockModels(FBContent.BLOCK_FRAMED_EXTENDED_DOUBLE_SLOPE_PANEL, registry, FramedExtendedDoubleSlopePanelBlock.itemSource(), ClientUtils.IGNORE_SOLID);

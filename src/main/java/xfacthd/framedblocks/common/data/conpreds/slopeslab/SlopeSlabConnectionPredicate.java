@@ -55,7 +55,7 @@ public final class SlopeSlabConnectionPredicate implements ConnectionPredicate
         }
         else if (side == facing.getOpposite() || side == dirTwo)
         {
-            return top == topHalf ? edge != facing.getOpposite() : edge != facing;
+            return (top == topHalf ? edge != facing.getOpposite() : edge != facing) && edge != dirTwo.getOpposite();
         }
         return false;
     }
