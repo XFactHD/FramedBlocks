@@ -23,10 +23,18 @@ public final class FenceSkipPredicate implements SideSkipPredicate
         {
             return switch (type)
             {
-                case FRAMED_FENCE -> testAgainstFence(state, adjState, side);
-                case FRAMED_FENCE_GATE -> testAgainstFenceGate(state, adjState, side);
-                case FRAMED_POST -> testAgainstPost(adjState, side);
-                case FRAMED_LATTICE_BLOCK -> testAgainstLattice(adjState, side);
+                case FRAMED_FENCE -> testAgainstFence(
+                        state, adjState, side
+                );
+                case FRAMED_FENCE_GATE -> testAgainstFenceGate(
+                        state, adjState, side
+                );
+                case FRAMED_POST -> testAgainstPost(
+                        adjState, side
+                );
+                case FRAMED_LATTICE_BLOCK -> testAgainstLattice(
+                        adjState, side
+                );
                 default -> false;
             };
         }

@@ -23,10 +23,18 @@ public final class HalfPillarSkipPredicate implements SideSkipPredicate
         {
             return switch (type)
             {
-                case FRAMED_HALF_PILLAR -> testAgainstHalfPillar(adjState, side);
-                case FRAMED_PILLAR -> testAgainstPillar(adjState, side);
-                case FRAMED_WALL -> testAgainstWall(adjState, side);
-                case FRAMED_THICK_LATTICE -> testAgainstThickLattice(adjState, side);
+                case FRAMED_HALF_PILLAR -> testAgainstHalfPillar(
+                        adjState, side
+                );
+                case FRAMED_PILLAR -> testAgainstPillar(
+                        adjState, side
+                );
+                case FRAMED_WALL -> testAgainstWall(
+                        adjState, side
+                );
+                case FRAMED_THICK_LATTICE -> testAgainstThickLattice(
+                        adjState, side
+                );
                 default -> false;
             };
         }

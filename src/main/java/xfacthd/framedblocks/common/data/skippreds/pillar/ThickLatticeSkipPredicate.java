@@ -26,10 +26,18 @@ public final class ThickLatticeSkipPredicate implements SideSkipPredicate
 
             return switch (type)
             {
-                case FRAMED_THICK_LATTICE -> testAgainstThickLattice(xAxis, yAxis, zAxis, adjState, side);
-                case FRAMED_WALL -> testAgainstWall(yAxis, adjState, side);
-                case FRAMED_PILLAR -> testAgainstPillar(xAxis, yAxis, zAxis, adjState, side);
-                case FRAMED_HALF_PILLAR -> testAgainstHalfPillar(xAxis, yAxis, zAxis, adjState, side);
+                case FRAMED_THICK_LATTICE -> testAgainstThickLattice(
+                        xAxis, yAxis, zAxis, adjState, side
+                );
+                case FRAMED_WALL -> testAgainstWall(
+                        yAxis, adjState, side
+                );
+                case FRAMED_PILLAR -> testAgainstPillar(
+                        xAxis, yAxis, zAxis, adjState, side
+                );
+                case FRAMED_HALF_PILLAR -> testAgainstHalfPillar(
+                        xAxis, yAxis, zAxis, adjState, side
+                );
                 default -> false;
             };
         }

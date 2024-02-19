@@ -33,23 +33,57 @@ public final class VerticalStairsSkipPredicate implements SideSkipPredicate
 
             return switch (blockType)
             {
-                case FRAMED_VERTICAL_STAIRS -> testAgainstVerticalStairs(dir, type, adjState, side);
-                case FRAMED_VERTICAL_HALF_STAIRS -> testAgainstVerticalHalfStairs(dir, type, adjState, side);
-                case FRAMED_STAIRS -> testAgainstStairs(dir, type, adjState, side);
-                case FRAMED_HALF_STAIRS -> testAgainstHalfStairs(dir, type, adjState, side);
-                case FRAMED_PANEL -> testAgainstPanel(dir, type, adjState, side);
-                case FRAMED_SLAB_CORNER -> testAgainstCorner(dir, type, adjState, side);
-                case FRAMED_CORNER_PILLAR -> testAgainstPillar(dir, type, adjState, side);
-                case FRAMED_SLAB_EDGE -> testAgainstEdge(dir, type, adjState, side);
-                case FRAMED_MASONRY_CORNER_SEGMENT -> testAgainstMasonryCornerSegment(dir, type, adjState, side);
-                case FRAMED_THREEWAY_CORNER_PILLAR -> testAgainstThreewayCornerPillar(dir, type, adjState, side);
-                case FRAMED_SLOPE_EDGE -> testAgainstSlopeEdge(dir, type, adjState, side);
-                case FRAMED_ELEVATED_SLOPE_EDGE -> testAgainstElevatedSlopeEdge(dir, type, adjState, side);
-                case FRAMED_SLOPE_PANEL -> testAgainstSlopePanel(dir, type, adjState, side);
-                case FRAMED_EXTENDED_SLOPE_PANEL -> testAgainstExtendedSlopePanel(dir, type, adjState, side);
-                case FRAMED_COMPOUND_SLOPE_PANEL -> testAgainstCompoundSlopePanel(dir, type, adjState, side);
-                case FRAMED_FLAT_INNER_SLOPE_PANEL_CORNER -> testAgainstFlatInnerSlopePanelCorner(dir, type, adjState, side);
-                case FRAMED_FLAT_EXT_SLOPE_PANEL_CORNER -> testAgainstFlatExtendedSlopePanelCorner(dir, type, adjState, side);
+                case FRAMED_VERTICAL_STAIRS -> testAgainstVerticalStairs(
+                        dir, type, adjState, side
+                );
+                case FRAMED_VERTICAL_HALF_STAIRS -> testAgainstVerticalHalfStairs(
+                        dir, type, adjState, side
+                );
+                case FRAMED_STAIRS -> testAgainstStairs(
+                        dir, type, adjState, side
+                );
+                case FRAMED_HALF_STAIRS -> testAgainstHalfStairs(
+                        dir, type, adjState, side
+                );
+                case FRAMED_PANEL -> testAgainstPanel(
+                        dir, type, adjState, side
+                );
+                case FRAMED_SLAB_CORNER -> testAgainstCorner(
+                        dir, type, adjState, side
+                );
+                case FRAMED_CORNER_PILLAR -> testAgainstPillar(
+                        dir, type, adjState, side
+                );
+                case FRAMED_SLAB_EDGE -> testAgainstEdge(
+                        dir, type, adjState, side
+                );
+                case FRAMED_MASONRY_CORNER_SEGMENT -> testAgainstMasonryCornerSegment(
+                        dir, type, adjState, side
+                );
+                case FRAMED_THREEWAY_CORNER_PILLAR -> testAgainstThreewayCornerPillar(
+                        dir, type, adjState, side
+                );
+                case FRAMED_SLOPE_EDGE -> testAgainstSlopeEdge(
+                        dir, type, adjState, side
+                );
+                case FRAMED_ELEVATED_SLOPE_EDGE -> testAgainstElevatedSlopeEdge(
+                        dir, type, adjState, side
+                );
+                case FRAMED_SLOPE_PANEL -> testAgainstSlopePanel(
+                        dir, type, adjState, side
+                );
+                case FRAMED_EXTENDED_SLOPE_PANEL -> testAgainstExtendedSlopePanel(
+                        dir, type, adjState, side
+                );
+                case FRAMED_COMPOUND_SLOPE_PANEL -> testAgainstCompoundSlopePanel(
+                        dir, type, adjState, side
+                );
+                case FRAMED_FLAT_INNER_SLOPE_PANEL_CORNER -> testAgainstFlatInnerSlopePanelCorner(
+                        dir, type, adjState, side
+                );
+                case FRAMED_FLAT_EXT_SLOPE_PANEL_CORNER -> testAgainstFlatExtendedSlopePanelCorner(
+                        dir, type, adjState, side
+                );
                 case FRAMED_SMALL_CORNER_SLOPE_PANEL -> testAgainstSmallCornerSlopePanel(
                         dir, type, adjState, side
                 );
@@ -86,8 +120,12 @@ public final class VerticalStairsSkipPredicate implements SideSkipPredicate
                 case FRAMED_EXT_INNER_CORNER_SLOPE_PANEL_W -> testAgainstExtendedInnerCornerSlopePanelWall(
                         dir, type, adjState, side
                 );
-                case FRAMED_HALF_SLOPE -> testAgainstHalfSlope(dir, type, adjState, side);
-                case FRAMED_VERTICAL_SLOPED_STAIRS -> testAgainstVerticalSlopedStairs(dir, type, adjState, side);
+                case FRAMED_HALF_SLOPE -> testAgainstHalfSlope(
+                        dir, type, adjState, side
+                );
+                case FRAMED_VERTICAL_SLOPED_STAIRS -> testAgainstVerticalSlopedStairs(
+                        dir, type, adjState, side
+                );
                 case FRAMED_CHECKERED_SLAB_SEGMENT -> testAgainstCheckeredSlabSegment(
                         dir, type, adjState, side
                 );

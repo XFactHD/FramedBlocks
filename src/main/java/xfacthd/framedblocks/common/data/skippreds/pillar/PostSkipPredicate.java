@@ -22,9 +22,15 @@ public final class PostSkipPredicate implements SideSkipPredicate
         {
             return switch (type)
             {
-                case FRAMED_POST -> testAgainstPost(axis, adjState);
-                case FRAMED_FENCE -> testAgainstFence(axis);
-                case FRAMED_LATTICE_BLOCK -> testAgainstLattice(axis, adjState);
+                case FRAMED_POST -> testAgainstPost(
+                        axis, adjState
+                );
+                case FRAMED_FENCE -> testAgainstFence(
+                        axis
+                );
+                case FRAMED_LATTICE_BLOCK -> testAgainstLattice(
+                        axis, adjState
+                );
                 default -> false;
             };
         }

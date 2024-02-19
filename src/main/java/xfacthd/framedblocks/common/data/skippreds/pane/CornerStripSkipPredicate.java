@@ -25,9 +25,15 @@ public final class CornerStripSkipPredicate implements SideSkipPredicate
 
             return switch (blockType)
             {
-                case FRAMED_CORNER_STRIP -> testAgainstCornerStrip(dir, type, adjState, side);
-                case FRAMED_FLOOR_BOARD -> testAgainstFloorBoard(dir, type, adjState, side);
-                case FRAMED_WALL_BOARD -> testAgainstWallBoard(dir, type, adjState, side);
+                case FRAMED_CORNER_STRIP -> testAgainstCornerStrip(
+                        dir, type, adjState, side
+                );
+                case FRAMED_FLOOR_BOARD -> testAgainstFloorBoard(
+                        dir, type, adjState, side
+                );
+                case FRAMED_WALL_BOARD -> testAgainstWallBoard(
+                        dir, type, adjState, side
+                );
                 default -> false;
             };
         }

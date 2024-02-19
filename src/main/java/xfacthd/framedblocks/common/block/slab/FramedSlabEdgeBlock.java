@@ -82,8 +82,6 @@ public class FramedSlabEdgeBlock extends FramedBlock
 
 
 
-    public record ShapeKey(Direction dir, boolean top) { }
-
     public static ShapeProvider generateShapes(ImmutableList<BlockState> states)
     {
         ImmutableMap.Builder<BlockState, VoxelShape> builder = ImmutableMap.builder();

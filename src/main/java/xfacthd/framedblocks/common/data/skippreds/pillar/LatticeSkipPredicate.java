@@ -26,9 +26,15 @@ public final class LatticeSkipPredicate implements SideSkipPredicate
 
             return switch (type)
             {
-                case FRAMED_LATTICE_BLOCK -> testAgainstLattice(xAxis, yAxis, zAxis, adjState, side);
-                case FRAMED_FENCE -> testAgainstWall(yAxis, side);
-                case FRAMED_POST -> testAgainstPost(xAxis, yAxis, zAxis, adjState, side);
+                case FRAMED_LATTICE_BLOCK -> testAgainstLattice(
+                        xAxis, yAxis, zAxis, adjState, side
+                );
+                case FRAMED_FENCE -> testAgainstWall(
+                        yAxis, side
+                );
+                case FRAMED_POST -> testAgainstPost(
+                        xAxis, yAxis, zAxis, adjState, side
+                );
                 default -> false;
             };
         }

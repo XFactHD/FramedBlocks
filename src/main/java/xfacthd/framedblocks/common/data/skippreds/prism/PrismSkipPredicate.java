@@ -31,8 +31,12 @@ public final class PrismSkipPredicate implements SideSkipPredicate
         {
             return switch (type)
             {
-                case FRAMED_PRISM -> testAgainstPrism(dirAxis, adjState, side);
-                case FRAMED_SLOPED_PRISM -> testAgainstSlopedPrism(dirAxis, adjState, side);
+                case FRAMED_PRISM -> testAgainstPrism(
+                        dirAxis, adjState, side
+                );
+                case FRAMED_SLOPED_PRISM -> testAgainstSlopedPrism(
+                        dirAxis, adjState, side
+                );
                 default -> false;
             };
         }

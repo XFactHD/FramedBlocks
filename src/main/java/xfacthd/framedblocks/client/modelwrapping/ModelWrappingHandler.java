@@ -83,7 +83,7 @@ public final class ModelWrappingHandler
         return block.value();
     }
 
-    public void reset()
+    public synchronized void reset()
     {
         visitedStates.clear();
         blockModelFactory.reset();

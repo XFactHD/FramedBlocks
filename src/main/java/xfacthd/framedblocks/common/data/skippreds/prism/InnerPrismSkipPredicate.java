@@ -29,8 +29,12 @@ public final class InnerPrismSkipPredicate implements SideSkipPredicate
         {
             return switch (type)
             {
-                case FRAMED_INNER_PRISM -> testAgainstInnerPrism(dirAxis, adjState, side);
-                case FRAMED_INNER_SLOPED_PRISM -> testAgainstInnerSlopedPrism(dirAxis, adjState, side);
+                case FRAMED_INNER_PRISM -> testAgainstInnerPrism(
+                        dirAxis, adjState, side
+                );
+                case FRAMED_INNER_SLOPED_PRISM -> testAgainstInnerSlopedPrism(
+                        dirAxis, adjState, side
+                );
                 default -> false;
             };
         }

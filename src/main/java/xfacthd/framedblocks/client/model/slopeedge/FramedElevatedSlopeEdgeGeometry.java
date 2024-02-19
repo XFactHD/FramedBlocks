@@ -12,13 +12,13 @@ import xfacthd.framedblocks.api.util.Utils;
 import xfacthd.framedblocks.common.data.PropertyHolder;
 import xfacthd.framedblocks.common.data.property.SlopeType;
 
-public class FramedElevatedSlopeEdgeModel extends Geometry
+public class FramedElevatedSlopeEdgeGeometry extends Geometry
 {
     private final Direction dir;
     private final SlopeType type;
     private final boolean ySlope;
 
-    public FramedElevatedSlopeEdgeModel(GeometryFactory.Context ctx)
+    public FramedElevatedSlopeEdgeGeometry(GeometryFactory.Context ctx)
     {
         this.dir = ctx.state().getValue(FramedProperties.FACING_HOR);
         this.type = ctx.state().getValue(PropertyHolder.SLOPE_TYPE);

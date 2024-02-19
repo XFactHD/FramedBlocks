@@ -47,12 +47,6 @@ public class FramedLargeStoneButtonGeometry extends FramedLargeButtonGeometry
         FramedBlocksClientAPI.INSTANCE.generateOverlayQuads(quadMap, null, dir -> dir == facing ? frameSpriteFront : frameSpriteSide, dir -> true);
     }
 
-    @Override
-    public boolean useBaseModel()
-    {
-        return true;
-    }
-
 
 
     public static FramedLargeButtonGeometry create(GeometryFactory.Context ctx)

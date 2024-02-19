@@ -26,8 +26,12 @@ public final class FenceGateSkipPredicate implements SideSkipPredicate
 
             return switch (type)
             {
-                case FRAMED_FENCE_GATE -> testAgainstFenceGate(dir, inWall, adjState);
-                case FRAMED_WALL -> testAgainstWall(inWall, adjState, side);
+                case FRAMED_FENCE_GATE -> testAgainstFenceGate(
+                        dir, inWall, adjState
+                );
+                case FRAMED_WALL -> testAgainstWall(
+                        inWall, adjState, side
+                );
                 default -> false;
             };
         }

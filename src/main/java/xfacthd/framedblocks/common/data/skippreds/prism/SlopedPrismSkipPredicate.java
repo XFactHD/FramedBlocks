@@ -31,8 +31,12 @@ public final class SlopedPrismSkipPredicate implements SideSkipPredicate
         {
             return switch (type)
             {
-                case FRAMED_SLOPED_PRISM -> testAgainstSlopedPrism(cmpDir, adjState, side);
-                case FRAMED_PRISM -> testAgainstPrism(cmpDir, adjState, side);
+                case FRAMED_SLOPED_PRISM -> testAgainstSlopedPrism(
+                        cmpDir, adjState, side
+                );
+                case FRAMED_PRISM -> testAgainstPrism(
+                        cmpDir, adjState, side
+                );
                 default -> false;
             };
         }

@@ -15,7 +15,6 @@ import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
 import net.neoforged.neoforge.client.ChunkRenderTypeSet;
 import net.neoforged.neoforge.client.model.data.ModelData;
-import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.Nullable;
 import xfacthd.framedblocks.api.FramedBlocksAPI;
 import xfacthd.framedblocks.api.block.cache.StateCache;
@@ -73,7 +72,11 @@ public final class FramedBlockModel extends BakedModelProxy
 
         Preconditions.checkState(
                 this.useBaseModel || !this.forceUngeneratedBaseModel,
-                "FramedBlockModel::useBaseModel() must return true when FramedBlockModel::forceUngeneratedBaseModel() returns true"
+                "Geometry::useBaseModel() must return true when Geometry::forceUngeneratedBaseModel() returns true"
+        );
+        Preconditions.checkState(
+                !this.useSolidBase || !this.useBaseModel,
+                "Geometry#useSolidNoCamoModel() and Geometry#useBaseModel() cannot both return true"
         );
     }
 
@@ -295,7 +298,6 @@ public final class FramedBlockModel extends BakedModelProxy
         return quadTable;
     }
 
-    @ApiStatus.Internal
     private BlockState getNoCamoModelState(BlockState camoState, FramedBlockData fbData)
     {
         if (isBaseCube)
