@@ -57,26 +57,16 @@ public class FramedDoubleBlockModel extends BakedModelProxy
     }
 
     @Override
-    public List<BakedQuad> getQuads(
-            @Nullable BlockState state,
-            @Nullable Direction side,
-            RandomSource rand,
-            ModelData extraData,
-            RenderType layer
-    )
+    public List<BakedQuad> getQuads(@Nullable BlockState state, @Nullable Direction side, RandomSource rand, ModelData extraData, RenderType layer)
     {
         List<List<BakedQuad>> quads = new ArrayList<>(2);
         Tuple<BakedModel, BakedModel> models = getModels();
 
-        ModelData dataLeft = extraData.get(FramedDoubleBlockEntity.DATA_LEFT);
-        quads.add(
-                models.getA().getQuads(dummyStates.getA(), side, rand, dataLeft != null ? dataLeft : EMPTY_FRAME, layer)
-        );
+        ModelData dataLeft = Objects.requireNonNullElse(extraData.get(FramedDoubleBlockEntity.DATA_LEFT), EMPTY_FRAME);
+        quads.add(models.getA().getQuads(dummyStates.getA(), side, rand, dataLeft, layer));
 
-        ModelData dataRight = extraData.get(FramedDoubleBlockEntity.DATA_RIGHT);
-        quads.add(invertTintIndizes(
-                models.getB().getQuads(dummyStates.getB(), side, rand, dataRight != null ? dataRight : EMPTY_ALT_FRAME, layer)
-        ));
+        ModelData dataRight = Objects.requireNonNullElse(extraData.get(FramedDoubleBlockEntity.DATA_RIGHT), EMPTY_ALT_FRAME);
+        quads.add(invertTintIndizes(models.getB().getQuads(dummyStates.getB(), side, rand, dataRight, layer)));
 
         return ConcatenatedListView.of(quads);
     }
@@ -123,12 +113,12 @@ public class FramedDoubleBlockModel extends BakedModelProxy
     {
         Tuple<BakedModel, BakedModel> models = getModels();
 
-        ModelData dataLeft = data.get(FramedDoubleBlockEntity.DATA_LEFT);
-        ModelData dataRight = data.get(FramedDoubleBlockEntity.DATA_RIGHT);
+        ModelData dataLeft = Objects.requireNonNullElse(data.get(FramedDoubleBlockEntity.DATA_LEFT), ModelData.EMPTY);
+        ModelData dataRight = Objects.requireNonNullElse(data.get(FramedDoubleBlockEntity.DATA_RIGHT), ModelData.EMPTY);
 
         return ChunkRenderTypeSet.union(
-                models.getA().getRenderTypes(dummyStates.getA(), rand, dataLeft != null ? dataLeft : ModelData.EMPTY),
-                models.getB().getRenderTypes(dummyStates.getB(), rand, dataRight != null ? dataRight : ModelData.EMPTY)
+                models.getA().getRenderTypes(dummyStates.getA(), rand, dataLeft),
+                models.getB().getRenderTypes(dummyStates.getB(), rand, dataRight)
         );
     }
 
@@ -137,11 +127,11 @@ public class FramedDoubleBlockModel extends BakedModelProxy
     {
         Tuple<BakedModel, BakedModel> models = getModels();
 
-        ModelData dataLeft = tileData.get(FramedDoubleBlockEntity.DATA_LEFT);
-        ModelData dataRight = tileData.get(FramedDoubleBlockEntity.DATA_RIGHT);
+        ModelData dataLeft = Objects.requireNonNullElse(tileData.get(FramedDoubleBlockEntity.DATA_LEFT), ModelData.EMPTY);
+        ModelData dataRight = Objects.requireNonNullElse(tileData.get(FramedDoubleBlockEntity.DATA_RIGHT), ModelData.EMPTY);
 
-        dataLeft = models.getA().getModelData(level, pos, dummyStates.getA(), dataLeft != null ? dataLeft : ModelData.EMPTY);
-        dataRight = models.getB().getModelData(level, pos, dummyStates.getB(), dataRight != null ? dataRight : ModelData.EMPTY);
+        dataLeft = models.getA().getModelData(level, pos, dummyStates.getA(), dataLeft);
+        dataRight = models.getB().getModelData(level, pos, dummyStates.getB(), dataRight);
 
         return tileData.derive()
                 .with(FramedDoubleBlockEntity.DATA_LEFT, dataLeft)
