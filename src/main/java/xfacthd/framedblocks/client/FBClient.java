@@ -432,9 +432,9 @@ public final class FBClient
         ClientUtils.replaceModels(FBContent.BLOCK_FRAMED_CHECKERED_CUBE_SEGMENT, registry, FramedCheckeredCubeSegmentModel::new, ClientUtils.IGNORE_WATERLOGGED);
         replaceDoubleBlockModels(FBContent.BLOCK_FRAMED_CHECKERED_CUBE, registry, FramedCheckeredCubeBlock.itemModelSource(), ClientUtils.IGNORE_SOLID);
         ClientUtils.replaceModels(FBContent.BLOCK_FRAMED_CHECKERED_SLAB_SEGMENT, registry, FramedCheckeredSlabSegmentModel::new, ClientUtils.IGNORE_WATERLOGGED);
-        replaceDoubleBlockModels(FBContent.BLOCK_FRAMED_CHECKERED_SLAB, registry, FramedCheckeredSlabBlock.itemModelSource(), ClientUtils.IGNORE_SOLID);
+        replaceDoubleBlockModels(FBContent.BLOCK_FRAMED_CHECKERED_SLAB, registry, FramedCheckeredSlabBlock.itemModelSource(), ClientUtils.IGNORE_DEFAULT);
         ClientUtils.replaceModels(FBContent.BLOCK_FRAMED_CHECKERED_PANEL_SEGMENT, registry, FramedCheckeredPanelSegmentModel::new, ClientUtils.IGNORE_WATERLOGGED);
-        replaceDoubleBlockModels(FBContent.BLOCK_FRAMED_CHECKERED_PANEL, registry, FramedCheckeredPanelBlock.itemModelSource(), ClientUtils.IGNORE_SOLID);
+        replaceDoubleBlockModels(FBContent.BLOCK_FRAMED_CHECKERED_PANEL, registry, FramedCheckeredPanelBlock.itemModelSource(), ClientUtils.IGNORE_DEFAULT);
 
         stopwatch.stop();
         FramedBlocks.LOGGER.debug("Replaced models for {} blocks in {}", BlockType.COUNT, stopwatch);
