@@ -24,7 +24,7 @@ public class FramedCollapsibleCopycatBlockEntity extends FramedBlockEntity
 
     private int packedOffsets = 0;
     private byte[] faceOffsets = new byte[DIRECTIONS.length];
-    private boolean occludesBeacon = false;
+    private boolean occludesBeacon = true;
 
     public FramedCollapsibleCopycatBlockEntity(BlockPos pos, BlockState state)
     {
