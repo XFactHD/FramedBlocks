@@ -60,8 +60,8 @@ import xfacthd.framedblocks.client.screen.overlay.*;
 import xfacthd.framedblocks.client.util.*;
 import xfacthd.framedblocks.common.FBContent;
 import xfacthd.framedblocks.common.block.interactive.*;
-import xfacthd.framedblocks.common.block.pillar.FramedDoubleThreewayCornerPillarBlock;
-import xfacthd.framedblocks.common.block.pillar.FramedThreewayCornerPillarBlock;
+import xfacthd.framedblocks.common.block.pane.*;
+import xfacthd.framedblocks.common.block.pillar.*;
 import xfacthd.framedblocks.common.block.prism.*;
 import xfacthd.framedblocks.common.block.rail.*;
 import xfacthd.framedblocks.common.block.slab.*;
@@ -396,6 +396,7 @@ public final class FBClient
         replaceDoubleBlockModels(FBContent.BLOCK_FRAMED_DOUBLE_STAIRS, registry, FramedDoubleStairsBlock.itemSource(), ClientUtils.IGNORE_SOLID);
         replaceDoubleBlockModels(FBContent.BLOCK_FRAMED_VERTICAL_DOUBLE_STAIRS, registry, FramedVerticalDoubleStairsBlock.itemModelSource(), ClientUtils.IGNORE_SOLID);
         ClientUtils.replaceModels(FBContent.BLOCK_FRAMED_WALL_BOARD, registry, FramedWallBoardModel::new, ClientUtils.IGNORE_DEFAULT);
+        ClientUtils.replaceModels(FBContent.BLOCK_FRAMED_CORNER_STRIP, registry, FramedCornerStripModel::new, FramedCornerStripBlock.itemModelSource(), ClientUtils.IGNORE_WATERLOGGED);
         ClientUtils.replaceModels(FBContent.BLOCK_FRAMED_GLOWING_CUBE, registry, FramedGlowingCubeModel::new, ClientUtils.IGNORE_SOLID);
         ClientUtils.replaceModels(FBContent.BLOCK_FRAMED_PYRAMID, registry, FramedPyramidModel::new, FramedPyramidModel.itemSource(), ClientUtils.IGNORE_DEFAULT);
         ClientUtils.replaceModels(FBContent.BLOCK_FRAMED_PYRAMID_SLAB, registry, FramedPyramidSlabModel::new, FramedPyramidSlabModel.itemSource(), ClientUtils.IGNORE_DEFAULT);
