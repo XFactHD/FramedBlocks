@@ -122,6 +122,7 @@ public final class ConnectionPredicates extends BlockTypeMap<ConnectionPredicate
         put(BlockType.FRAMED_HALF_PILLAR, new HalfPillarConnectionPredicate());
         put(BlockType.FRAMED_POST, PillarConnectionPredicate.INSTANCE);
         put(BlockType.FRAMED_COLLAPSIBLE_BLOCK, new CollapsibleBlockConnectionPredicate());
+        put(BlockType.FRAMED_COLLAPSIBLE_COPYCAT_BLOCK, new CollapsibleCopycatConnectionPredicate());
         put(BlockType.FRAMED_BOUNCY_CUBE, ConnectionPredicate.FULL_EDGE);
         put(BlockType.FRAMED_REDSTONE_BLOCK, ConnectionPredicate.FULL_EDGE);
         put(BlockType.FRAMED_PRISM, new PrismConnectionPredicate());

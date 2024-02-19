@@ -222,6 +222,7 @@ public final class FramedBlockStateProvider extends BlockStateProvider
         registerFramedPaneBlock(cube);
         registerFramedFlowerPotBlock(cube);
         registerFramedCollapsibleBlock();
+        registerFramedCollapsibleCopycatBlock();
         registerFramedBouncyBlock();
         registerFramedSecretStorage();
         registerFramedRedstoneBlock();
@@ -661,6 +662,12 @@ public final class FramedBlockStateProvider extends BlockStateProvider
     {
         ModelFile block = makeUnderlayedCube("framed_collapsible_block", mcLoc("block/oak_planks")).renderType("cutout");
         simpleBlockWithItem(FBContent.BLOCK_FRAMED_COLLAPSIBLE_BLOCK, block, "cutout");
+    }
+
+    private void registerFramedCollapsibleCopycatBlock()
+    {
+        ModelFile block = makeUnderlayedCube("framed_collapsible_copycat_block", mcLoc("block/copper_block")).renderType("cutout");
+        simpleBlockWithItem(FBContent.BLOCK_FRAMED_COLLAPSIBLE_COPYCAT_BLOCK, block, "cutout");
     }
 
     private void registerFramedBouncyBlock()

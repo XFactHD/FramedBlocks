@@ -119,6 +119,7 @@ public final class FramedLanguageProvider extends LanguageProvider
         add(FBContent.BLOCK_FRAMED_HALF_PILLAR.get(), "Framed Half Pillar");
         add(FBContent.BLOCK_FRAMED_POST.get(), "Framed Post");
         add(FBContent.BLOCK_FRAMED_COLLAPSIBLE_BLOCK.get(), "Framed Collapsible Block");
+        add(FBContent.BLOCK_FRAMED_COLLAPSIBLE_COPYCAT_BLOCK.get(), "Framed Collapsible Copycat Block");
         add(FBContent.BLOCK_FRAMED_HALF_STAIRS.get(), "Framed Half Stairs");
         add(FBContent.BLOCK_FRAMED_DIVIDED_STAIRS.get(), "Framed Divided Stairs");
         add(FBContent.BLOCK_FRAMED_DOUBLE_HALF_STAIRS.get(), "Framed Double Half Stairs");

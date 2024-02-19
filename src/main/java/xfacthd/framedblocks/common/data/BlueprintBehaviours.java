@@ -44,6 +44,11 @@ public final class BlueprintBehaviours
                 new CollapsibleBlockCopyBehaviour(),
                 FBContent.BLOCK_FRAMED_COLLAPSIBLE_BLOCK.get()
         );
+
+        FramedBlueprintItem.registerBehaviour(
+                new CollapsibleCopycatBlockCopyBehaviour(),
+                FBContent.BLOCK_FRAMED_COLLAPSIBLE_COPYCAT_BLOCK.get()
+        );
     }
 
 

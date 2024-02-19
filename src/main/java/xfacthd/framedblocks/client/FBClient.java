@@ -314,6 +314,7 @@ public final class FBClient
         ClientUtils.replaceModels(FBContent.BLOCK_FRAMED_HALF_PILLAR, registry, FramedHalfPillarModel::new, ClientUtils.IGNORE_WATERLOGGED);
         ClientUtils.replaceModels(FBContent.BLOCK_FRAMED_POST, registry, FramedPillarModel::new, ClientUtils.IGNORE_WATERLOGGED);
         ClientUtils.replaceModels(FBContent.BLOCK_FRAMED_COLLAPSIBLE_BLOCK, registry, FramedCollapsibleBlockModel::new, ClientUtils.IGNORE_WATERLOGGED);
+        ClientUtils.replaceModels(FBContent.BLOCK_FRAMED_COLLAPSIBLE_COPYCAT_BLOCK, registry, FramedCollapsibleCopycatBlockModel::new, ClientUtils.IGNORE_WATERLOGGED);
         ClientUtils.replaceModels(FBContent.BLOCK_FRAMED_HALF_STAIRS, registry, FramedHalfStairsModel::new, ClientUtils.IGNORE_WATERLOGGED);
         replaceDoubleBlockModels(FBContent.BLOCK_FRAMED_DIVIDED_STAIRS, registry, null, ClientUtils.IGNORE_DEFAULT);
         replaceDoubleBlockModels(FBContent.BLOCK_FRAMED_DOUBLE_HALF_STAIRS, registry, FramedDoubleHalfStairsBlock.itemModelSource(), ClientUtils.IGNORE_DEFAULT);

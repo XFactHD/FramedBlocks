@@ -86,6 +86,11 @@ public final class GhostRenderBehaviours
         );
 
         GhostBlockRenderer.registerBehaviour(
+                new CollapsibleCopycatBlockGhostRenderBehaviour(),
+                FBContent.BLOCK_FRAMED_COLLAPSIBLE_COPYCAT_BLOCK.get()
+        );
+
+        GhostBlockRenderer.registerBehaviour(
                 new RailSlopeGhostRenderBehaviour(),
                 Items.RAIL,
                 Items.POWERED_RAIL,

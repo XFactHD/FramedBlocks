@@ -1,0 +1,4 @@
+{
+  "parent": "framedblocks:block/framed_collapsible_copycat_block",
+  "render_type": "minecraft:cutout"
+}

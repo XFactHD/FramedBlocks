@@ -162,6 +162,7 @@ public final class FBContent
     public static final RegistryObject<Block> BLOCK_FRAMED_HALF_PILLAR = registerBlock(FramedHalfPillarBlock::new, BlockType.FRAMED_HALF_PILLAR);
     public static final RegistryObject<Block> BLOCK_FRAMED_POST = registerBlock(FramedPillarBlock::new, BlockType.FRAMED_POST);
     public static final RegistryObject<Block> BLOCK_FRAMED_COLLAPSIBLE_BLOCK = registerBlock(FramedCollapsibleBlock::new, BlockType.FRAMED_COLLAPSIBLE_BLOCK);
+    public static final RegistryObject<Block> BLOCK_FRAMED_COLLAPSIBLE_COPYCAT_BLOCK = registerBlock(FramedCollapsibleCopycatBlock::new, BlockType.FRAMED_COLLAPSIBLE_COPYCAT_BLOCK);
     public static final RegistryObject<Block> BLOCK_FRAMED_HALF_STAIRS = registerBlock(FramedHalfStairsBlock::new, BlockType.FRAMED_HALF_STAIRS);
     public static final RegistryObject<Block> BLOCK_FRAMED_DIVIDED_STAIRS = registerBlock(FramedDividedStairsBlock::new, BlockType.FRAMED_DIVIDED_STAIRS);
     public static final RegistryObject<Block> BLOCK_FRAMED_DOUBLE_HALF_STAIRS = registerBlock(FramedDoubleHalfStairsBlock::new, BlockType.FRAMED_DOUBLE_HALF_STAIRS);
@@ -364,6 +365,10 @@ public final class FBContent
     public static final RegisteredBE<FramedCollapsibleBlockEntity> BE_TYPE_FRAMED_COLLAPSIBLE_BLOCK = createBlockEntityType(
             FramedCollapsibleBlockEntity::new,
             BlockType.FRAMED_COLLAPSIBLE_BLOCK
+    );
+    public static final RegisteredBE<FramedCollapsibleCopycatBlockEntity> BE_TYPE_FRAMED_COLLAPSIBLE_COPYCAT_BLOCK = createBlockEntityType(
+            FramedCollapsibleCopycatBlockEntity::new,
+            BlockType.FRAMED_COLLAPSIBLE_COPYCAT_BLOCK
     );
     public static final RegisteredBE<FramedDividedStairsBlockEntity> BE_TYPE_FRAMED_DIVIDED_STAIRS = createBlockEntityType(
             FramedDividedStairsBlockEntity::new,
