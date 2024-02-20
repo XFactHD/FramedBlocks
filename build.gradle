@@ -45,7 +45,13 @@ runs {
     data {
         workingDirectory project.file('run')
 
-        programArguments.addAll '--mod', 'framedblocks', '--all', '--output', file('src/generated/resources/').getAbsolutePath(), '--existing', file('src/main/resources/').getAbsolutePath()
+        programArguments.addAll(
+                '--mod', 'framedblocks',
+                '--all',
+                '--output', file('src/generated/resources/').getAbsolutePath(),
+                '--existing', file('src/main/resources/').getAbsolutePath(),
+                '--existing-mod', 'ae2'
+        )
     }
 
     gameTestServer {
@@ -118,6 +124,13 @@ repositories {
             includeGroup('earth.terrarium.athena')
         }
     }
+    maven {
+        name = 'Modmaven'
+        url = 'https://modmaven.dev/'
+        content {
+            includeGroup('appeng')
+        }
+    }
     mavenLocal() {
         content {
             includeGroupByRegex('xfacthd.*')
@@ -183,6 +196,9 @@ dependencies {
     //runtimeOnly("curse.maven:fusion-854949:5005142")
     //runtimeOnly("curse.maven:conglass-383129:5002616")
 
+    compileOnly("appeng:appliedenergistics2-neoforge:${ae2_version}:api")
+    runtimeOnly("appeng:appliedenergistics2-neoforge:${ae2_version}")
+
     compileOnly("curse.maven:atlasviewer-633577:4882515")
 }
 
@@ -207,7 +223,8 @@ tasks.withType(ProcessResources).configureEach {
             supplementaries_version: supplementaries_version,
             athena_version: athena_version,
             contex_version: contex_version,
-            create_version: create_version
+            create_version: create_version,
+            ae2_version: ae2_version
     ]
     inputs.properties replaceProperties
 

@@ -2,6 +2,7 @@ package xfacthd.framedblocks.common.datagen.providers;
 
 import net.minecraft.core.Holder;
 import net.minecraft.data.PackOutput;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Item;
 import net.neoforged.neoforge.client.model.generators.*;
 import net.neoforged.neoforge.common.data.ExistingFileHelper;
@@ -27,6 +28,7 @@ public final class FramedItemModelProvider extends ItemModelProvider
         handheldItem(FBContent.ITEM_FRAMED_SCREWDRIVER, "cutout");
 
         simpleItem(FBContent.ITEM_FRAMED_REINFORCEMENT, "cutout");
+        singleTexture("framing_saw_pattern", mcLoc("item/generated"), "layer0", new ResourceLocation("ae2", "item/crafting_pattern"));
 
         ItemModelBuilder modelNormal = simpleItem(FBContent.ITEM_FRAMED_BLUEPRINT, "cutout");
         ModelFile modelWritten = simpleItem("framed_blueprint_written", "cutout");

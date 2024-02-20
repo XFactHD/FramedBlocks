@@ -267,6 +267,18 @@ public class PoweredFramingSawBlockEntity extends BlockEntity
         inhibitUpdate = false;
     }
 
+    public boolean isInputEmpty()
+    {
+        for (int i = 0; i < FramingSawMenu.SLOT_RESULT; i++)
+        {
+            if (!itemHandler.getStackInSlot(i).isEmpty())
+            {
+                return false;
+            }
+        }
+        return true;
+    }
+
     @Override
     @SuppressWarnings("unchecked")
     public void onLoad()

@@ -257,6 +257,7 @@ public final class FramedLanguageProvider extends LanguageProvider
         add(FBContent.ITEM_FRAMED_KEY.value(), "Framed Key");
         add(FBContent.ITEM_FRAMED_SCREWDRIVER.value(), "Framed Screwdriver");
         add(FBContent.ITEM_FRAMED_REINFORCEMENT.value(), "Framed Reinforcement");
+        add("item.framedblocks.framing_saw_pattern", "Framing Saw Pattern");
     }
 
     private void addSpecialTranslations()
