@@ -24,7 +24,7 @@ public final class FramingSawRecipeCalculation
 
     public int getOutputCount()
     {
-        return (int) (lcm / recipe.getMaterialAmount()) * recipe.getResult().getCount();
+        return getOutputCount(recipe.getMaterialAmount(), recipe.getResult(), lcm);
     }
 
     public int getAdditiveCount(int idx)
@@ -43,6 +43,11 @@ public final class FramingSawRecipeCalculation
     static long getMaterialLCM(FramingSawRecipe recipe, int inputValue)
     {
         return Utils.lcm(inputValue, recipe.getMaterialAmount());
+    }
+
+    static int getOutputCount(int materialAmount, ItemStack result, long lcm)
+    {
+        return (int) (lcm / materialAmount * result.getCount());
     }
 
     static int getAdditiveCount(FramingSawRecipe recipe, FramingSawRecipeAdditive additive, long lcm)

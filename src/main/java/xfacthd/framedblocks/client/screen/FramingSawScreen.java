@@ -44,6 +44,7 @@ public class FramingSawScreen extends AbstractContainerScreen<FramingSawMenu>
     public static final String TOOLTIP_HAVE_X_BUT_NEED_Y_TAG = Utils.translationKey("tooltip", "framing_saw.have_x_but_need_y_tag");
     public static final String TOOLTIP_HAVE_X_BUT_NEED_Y_ITEM_COUNT = Utils.translationKey("tooltip", "framing_saw.have_x_but_need_y_item_count");
     public static final String TOOLTIP_HAVE_X_BUT_NEED_Y_MATERIAL_COUNT = Utils.translationKey("tooltip", "framing_saw.have_x_but_need_y_material_count");
+    public static final String TOOLTIP_OUTPUT_COUNT = Utils.translationKey("tooltip", "framing_saw.output_count");
     public static final Component TOOLTIP_HAVE_ITEM_NONE = Utils.translate("tooltip", "framing_saw.have_item_none").withStyle(ChatFormatting.GOLD);
     public static final String TOOLTIP_PRESS_TO_SHOW = Utils.translationKey("tooltip", "framing_saw.press_to_show");
     private static final ResourceLocation BACKGROUND = Utils.rl("textures/gui/framing_saw.png");
@@ -254,6 +255,16 @@ public class FramingSawScreen extends AbstractContainerScreen<FramingSawMenu>
                             Component.literal(Integer.toString(input.getCount())).withStyle(ChatFormatting.GOLD),
                             Component.literal(Integer.toString(calc.getInputCount())).withStyle(ChatFormatting.GOLD)
                     );
+                }
+                case OUTPUT_SIZE ->
+                {
+                    if (input.isEmpty()) yield Component.empty();
+
+                    FramingSawRecipeCalculation calc = recipe.makeCraftingCalculation(
+                            menu.getInputContainer(), true
+                    );
+                    int maxSize = recipe.getResult().getMaxStackSize();
+                    yield Component.translatable(TOOLTIP_OUTPUT_COUNT, calc.getOutputCount(), maxSize);
                 }
                 case MISSING_ADDITIVE_0, MISSING_ADDITIVE_1, MISSING_ADDITIVE_2 ->
                 {

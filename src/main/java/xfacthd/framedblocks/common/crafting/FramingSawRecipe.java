@@ -62,6 +62,11 @@ public final class FramingSawRecipe implements Recipe<Container>
             return FramingSawRecipeMatchResult.MATERIAL_LCM;
         }
 
+        if (FramingSawRecipeCalculation.getOutputCount(materialAmount, result, matLcm) > result.getMaxStackSize())
+        {
+            return FramingSawRecipeMatchResult.OUTPUT_SIZE;
+        }
+
         for (int idx = 0; idx < MAX_ADDITIVE_COUNT; idx++)
         {
             ItemStack stack = container.getItem(idx + 1);
