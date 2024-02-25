@@ -11,7 +11,6 @@ import net.minecraft.world.phys.HitResult;
 import net.neoforged.neoforge.client.model.data.ModelData;
 import net.neoforged.neoforge.client.model.data.ModelProperty;
 import xfacthd.framedblocks.api.block.FramedBlockEntity;
-import xfacthd.framedblocks.api.model.data.FramedBlockData;
 import xfacthd.framedblocks.common.FBContent;
 import xfacthd.framedblocks.common.data.PropertyHolder;
 
@@ -107,12 +106,9 @@ public class FramedCollapsibleCopycatBlockEntity extends FramedBlockEntity
     }
 
     @Override
-    public ModelData getModelData()
+    protected void attachAdditionalModelData(ModelData.Builder builder)
     {
-        return ModelData.builder()
-                .with(FramedBlockData.PROPERTY, getModelDataInternal())
-                .with(OFFSETS, getPackedOffsets())
-                .build();
+        builder.with(OFFSETS, getPackedOffsets());
     }
 
     @Override

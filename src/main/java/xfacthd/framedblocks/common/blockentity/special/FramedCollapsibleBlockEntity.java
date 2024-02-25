@@ -11,7 +11,6 @@ import net.neoforged.neoforge.client.model.data.ModelData;
 import net.neoforged.neoforge.client.model.data.ModelProperty;
 import org.jetbrains.annotations.Nullable;
 import xfacthd.framedblocks.api.block.FramedBlockEntity;
-import xfacthd.framedblocks.api.model.data.FramedBlockData;
 import xfacthd.framedblocks.api.util.Utils;
 import xfacthd.framedblocks.common.FBContent;
 import xfacthd.framedblocks.common.data.property.NullableDirection;
@@ -207,12 +206,9 @@ public class FramedCollapsibleBlockEntity extends FramedBlockEntity
     }
 
     @Override
-    public ModelData getModelData()
+    protected void attachAdditionalModelData(ModelData.Builder builder)
     {
-        return ModelData.builder()
-                .with(FramedBlockData.PROPERTY, getModelDataInternal())
-                .with(OFFSETS, getPackedOffsets())
-                .build();
+        builder.with(OFFSETS, getPackedOffsets());
     }
 
     @Override

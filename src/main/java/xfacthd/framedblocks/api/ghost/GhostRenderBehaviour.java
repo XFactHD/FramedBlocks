@@ -21,6 +21,7 @@ import org.jetbrains.annotations.Nullable;
 import xfacthd.framedblocks.api.FramedBlocksClientAPI;
 import xfacthd.framedblocks.api.block.IFramedBlock;
 import xfacthd.framedblocks.api.camo.CamoContainer;
+import xfacthd.framedblocks.api.model.data.FramedBlockData;
 
 import java.util.Objects;
 
@@ -199,6 +200,30 @@ public interface GhostRenderBehaviour
     )
     {
         return camo;
+    }
+
+    /**
+     * Build the {@link ModelData} to render the placement preview with. Allows full control over the model data creation,
+     * for example to allow custom double blocks with two camos
+     *
+     * @param stack The {@link ItemStack} in the players main hand
+     * @param proxiedStack The proxied {@code ItemStack} as returned from {@link GhostRenderBehaviour#getProxiedStack(ItemStack)}
+     * @param ctx The {@link BlockPlaceContext} to use for determining the resulting
+     * @param renderState The {@code BlockState} to render
+     * @param renderPass The current render pass index
+     * @param camo The prepared {@code ModelData} to be given to the {@link BakedModel} that is to be rendered
+     * @return The {@code ModelData} with any necessary modifications applied to it
+     */
+    default ModelData buildModelData(
+            ItemStack stack,
+            @Nullable ItemStack proxiedStack,
+            BlockPlaceContext ctx,
+            BlockState renderState,
+            int renderPass,
+            CamoPair camo
+    )
+    {
+        return ModelData.builder().with(FramedBlockData.PROPERTY, new FramedBlockData(camo.getCamoOne(), false)).build();
     }
 
     /**

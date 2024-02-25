@@ -38,14 +38,13 @@ public abstract class FramedDoubleBlockEntity extends FramedBlockEntity
     public static final ModelProperty<ModelData> DATA_LEFT = new ModelProperty<>();
     public static final ModelProperty<ModelData> DATA_RIGHT = new ModelProperty<>();
 
-    private final FramedBlockData modelData = new FramedBlockData();
+    private final boolean[] culledFaces = new boolean[6];
     private final DoubleBlockSoundType soundType = new DoubleBlockSoundType(this);
     private CamoContainer camoContainer = EmptyCamoContainer.EMPTY;
 
     public FramedDoubleBlockEntity(BlockEntityType<?> type, BlockPos pos, BlockState state)
     {
         super(type, pos, state);
-        this.modelData.setUseAltModel(true);
     }
 
     @Override
@@ -333,11 +332,11 @@ public abstract class FramedDoubleBlockEntity extends FramedBlockEntity
     }
 
     @Override
-    public boolean updateCulling(Direction side, boolean rerender)
+    protected boolean updateCulling(Direction side, BlockState state, boolean rerender)
     {
         Tuple<BlockState, BlockState> blockPair = getStateCache().getBlockPair();
-        boolean changed = updateCulling(getModelDataInternal(), blockPair.getA(), side, rerender);
-        changed |= updateCulling(modelData, blockPair.getB(), side, rerender);
+        boolean changed = super.updateCulling(side, blockPair.getA(), rerender);
+        changed |= updateCulling(culledFaces, blockPair.getB(), side, rerender);
         return changed;
     }
 
@@ -382,21 +381,13 @@ public abstract class FramedDoubleBlockEntity extends FramedBlockEntity
         {
             int oldLight = getLightValue();
             camoContainer = newCamo;
-            if (oldLight != getLightValue()) { doLightUpdate(); }
-
-            modelData.setCamoState(camoContainer.getState());
+            if (oldLight != getLightValue())
+            {
+                doLightUpdate();
+            }
 
             needUpdate = true;
             updateCulling(true, false);
-        }
-
-        byte flags = nbt.getByte("flags");
-
-        boolean newReinforced = readFlag(flags, FLAG_REINFORCED);
-        if (isReinforced() != newReinforced)
-        {
-            modelData.setReinforced(newReinforced);
-            needUpdate = true;
         }
 
         return super.readFromDataPacket(nbt) || needUpdate;
@@ -421,18 +412,7 @@ public abstract class FramedDoubleBlockEntity extends FramedBlockEntity
         if (!newCamo.equals(camoContainer))
         {
             camoContainer = newCamo;
-
-            modelData.setCamoState(camoContainer.getState());
-
             ClientUtils.enqueueClientTask(() -> updateCulling(true, true));
-        }
-
-        byte flags = nbt.getByte("flags");
-
-        boolean newReinforced = readFlag(flags, FLAG_REINFORCED);
-        if (isReinforced() != newReinforced)
-        {
-            modelData.setReinforced(newReinforced);
         }
     }
 
@@ -443,20 +423,11 @@ public abstract class FramedDoubleBlockEntity extends FramedBlockEntity
     @Override
     public ModelData getModelData()
     {
+        FramedBlockData modelData = new FramedBlockData(camoContainer.getState(), culledFaces, true, isReinforced());
         return ModelData.builder()
                 .with(DATA_LEFT, super.getModelData())
-                .with(DATA_RIGHT, ModelData.builder()
-                        .with(FramedBlockData.PROPERTY, modelData)
-                        .build()
-                )
+                .with(DATA_RIGHT, ModelData.builder().with(FramedBlockData.PROPERTY, modelData).build())
                 .build();
-    }
-
-    @Override
-    protected void initModelData()
-    {
-        super.initModelData();
-        modelData.setCamoState(camoContainer.getState());
     }
 
     /*

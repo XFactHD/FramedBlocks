@@ -145,6 +145,16 @@ public final class BlueprintGhostRenderBehaviour implements GhostRenderBehaviour
     }
 
     @Override
+    public ModelData buildModelData(ItemStack stack, ItemStack proxiedStack, BlockPlaceContext ctx, BlockState renderState, int renderPass, CamoPair camo)
+    {
+        if (proxiedStack == null)
+        {
+            return ModelData.EMPTY;
+        }
+        return proxyBehaviour(proxiedStack).buildModelData(stack, proxiedStack, ctx, renderState, renderPass, camo);
+    }
+
+    @Override
     public ModelData appendModelData(
             ItemStack stack,
             @Nullable ItemStack proxiedStack,

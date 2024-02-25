@@ -2,38 +2,37 @@ package xfacthd.framedblocks.api.model.data;
 
 import net.minecraft.core.Direction;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.level.block.Blocks;
 import net.neoforged.neoforge.client.model.data.*;
 
-public sealed class FramedBlockData permits FramedBlockData.Immutable
+public final class FramedBlockData
 {
     public static final ModelProperty<FramedBlockData> PROPERTY = new ModelProperty<>();
     public static final ModelProperty<ModelData> CAMO_DATA = new ModelProperty<>();
+    private static final boolean[] NO_CULLED_FACES = new boolean[6];
 
-    protected final boolean[] hidden = new boolean[6];
-    protected BlockState camoState = Blocks.AIR.defaultBlockState();
-    protected boolean altModel = false;
-    protected boolean reinforced = false;
+    private final BlockState camoState;
+    private final byte hidden;
+    private final boolean altModel;
+    private final boolean reinforced;
 
-    public FramedBlockData() { }
+    public FramedBlockData(BlockState camoState, boolean altModel)
+    {
+        this(camoState, NO_CULLED_FACES, altModel, false);
+    }
 
-    public void setCamoState(BlockState camoState)
+    public FramedBlockData(BlockState camoState, boolean[] hidden, boolean altModel, boolean reinforced)
     {
         this.camoState = camoState;
-    }
-
-    public void setSideHidden(Direction side, boolean hide)
-    {
-        hidden[side.ordinal()] = hide;
-    }
-
-    public void setUseAltModel(boolean altModel)
-    {
+        byte mask = 0;
+        for (int i = 0; i < hidden.length; i++)
+        {
+            if (hidden[i])
+            {
+                mask |= (byte) (1 << i);
+            }
+        }
+        this.hidden = mask;
         this.altModel = altModel;
-    }
-
-    public void setReinforced(boolean reinforced)
-    {
         this.reinforced = reinforced;
     }
 
@@ -44,7 +43,7 @@ public sealed class FramedBlockData permits FramedBlockData.Immutable
 
     public boolean isSideHidden(Direction side)
     {
-        return hidden[side.ordinal()];
+        return (hidden & (1 << side.ordinal())) != 0;
     }
 
     public boolean useAltModel()
@@ -55,41 +54,5 @@ public sealed class FramedBlockData permits FramedBlockData.Immutable
     public boolean isReinforced()
     {
         return reinforced;
-    }
-
-
-
-    public static final class Immutable extends FramedBlockData
-    {
-        public Immutable(BlockState camoState, boolean[] hidden, boolean altModel)
-        {
-            this.camoState = camoState;
-            System.arraycopy(hidden, 0, this.hidden, 0, this.hidden.length);
-            this.altModel = altModel;
-        }
-
-        @Override
-        public void setCamoState(BlockState camoState)
-        {
-            throw new UnsupportedOperationException("Immutable");
-        }
-
-        @Override
-        public void setSideHidden(Direction side, boolean hide)
-        {
-            throw new UnsupportedOperationException("Immutable");
-        }
-
-        @Override
-        public void setUseAltModel(boolean altModel)
-        {
-            throw new UnsupportedOperationException("Immutable");
-        }
-
-        @Override
-        public void setReinforced(boolean reinforced)
-        {
-            throw new UnsupportedOperationException("Immutable");
-        }
     }
 }

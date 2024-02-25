@@ -40,9 +40,7 @@ import java.util.function.Predicate;
 @SuppressWarnings("deprecation")
 public final class FramedBlockModel extends BakedModelProxy
 {
-    private static final FramedBlockData DEFAULT_DATA = new FramedBlockData.Immutable(
-            Blocks.AIR.defaultBlockState(), new boolean[6], false
-    );
+    private static final FramedBlockData DEFAULT_DATA = new FramedBlockData(Blocks.AIR.defaultBlockState(), false);
     private static final ChunkRenderTypeSet BASE_MODEL_RENDER_TYPES = ModelUtils.CUTOUT;
 
     private final Map<QuadCacheKey, QuadTable> quadCache = new ConcurrentHashMap<>();

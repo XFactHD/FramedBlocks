@@ -2,7 +2,6 @@ package xfacthd.framedblocks.client.render.block;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
-import net.minecraft.Util;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.*;
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderer;
@@ -21,12 +20,10 @@ import xfacthd.framedblocks.common.blockentity.doubled.FramedDoubleBlockEntity;
 
 public class FramedDoubleBlockDebugRenderer implements BlockEntityRenderer<FramedDoubleBlockEntity>
 {
-    private static final ModelData MODEL_DATA = Util.make(() ->
-    {
-        FramedBlockData data = new FramedBlockData();
-        data.setCamoState(Blocks.STONE.defaultBlockState());
-        return ModelData.EMPTY.derive().with(FramedBlockData.PROPERTY, data).build();
-    });
+    private static final ModelData MODEL_DATA = ModelData.builder().with(
+            FramedBlockData.PROPERTY,
+            new FramedBlockData(Blocks.STONE.defaultBlockState(), new boolean[6], false, false)
+    ).build();
 
     public FramedDoubleBlockDebugRenderer(@SuppressWarnings("unused") BlockEntityRendererProvider.Context ctx) { }
 

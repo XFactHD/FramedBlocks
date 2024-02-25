@@ -21,11 +21,9 @@ import net.neoforged.neoforge.client.event.RenderLevelStageEvent;
 import net.neoforged.neoforge.client.model.data.ModelData;
 import xfacthd.framedblocks.api.ghost.CamoPair;
 import xfacthd.framedblocks.api.ghost.GhostRenderBehaviour;
-import xfacthd.framedblocks.api.model.data.FramedBlockData;
 import xfacthd.framedblocks.api.util.*;
 import xfacthd.framedblocks.api.model.util.ModelCache;
 import xfacthd.framedblocks.client.render.util.GhostVertexConsumer;
-import xfacthd.framedblocks.common.blockentity.doubled.FramedDoubleBlockEntity;
 import xfacthd.framedblocks.common.config.ClientConfig;
 
 import java.util.IdentityHashMap;
@@ -35,32 +33,10 @@ import java.util.Map;
 public final class GhostBlockRenderer
 {
     private static final RandomSource RANDOM = RandomSource.create();
-    private static ModelData MODEL_DATA;
-    private static final FramedBlockData GHOST_MODEL_DATA = new FramedBlockData();
-    private static final FramedBlockData GHOST_MODEL_DATA_TWO = new FramedBlockData();
     private static final Map<Item, GhostRenderBehaviour> RENDER_BEHAVIOURS = new IdentityHashMap<>();
     private static boolean locked = false;
     private static final GhostRenderBehaviour DEFAULT_BEHAVIOUR = new GhostRenderBehaviour() {};
     private static final String PROFILER_KEY = FramedConstants.MOD_ID + "_ghost_block";
-
-    public static void init()
-    {
-        MODEL_DATA = ModelData.builder()
-                .with(FramedBlockData.PROPERTY, GHOST_MODEL_DATA)
-                .with(FramedDoubleBlockEntity.DATA_LEFT, ModelData.builder()
-                        .with(FramedBlockData.PROPERTY, GHOST_MODEL_DATA)
-                        .build()
-                )
-                .with(FramedDoubleBlockEntity.DATA_RIGHT, ModelData.builder()
-                        .with(FramedBlockData.PROPERTY, GHOST_MODEL_DATA_TWO)
-                        .build()
-                )
-                .build();
-
-        GHOST_MODEL_DATA.setCamoState(Blocks.AIR.defaultBlockState());
-        GHOST_MODEL_DATA_TWO.setCamoState(Blocks.AIR.defaultBlockState());
-        GHOST_MODEL_DATA_TWO.setUseAltModel(true);
-    }
 
     public static void onRenderLevelStage(final RenderLevelStageEvent event)
     {
@@ -115,9 +91,6 @@ public final class GhostBlockRenderer
                 break;
             }
         }
-
-        GHOST_MODEL_DATA.setCamoState(Blocks.AIR.defaultBlockState());
-        GHOST_MODEL_DATA_TWO.setCamoState(Blocks.AIR.defaultBlockState());
     }
 
     private static boolean drawGhostBlock(
@@ -153,12 +126,12 @@ public final class GhostBlockRenderer
         profiler.push("get_camo");
         CamoPair camo = behaviour.readCamo(stack, proxiedStack, renderPass);
         camo = behaviour.postProcessCamo(stack, proxiedStack, context, renderState, renderPass, camo);
-        GHOST_MODEL_DATA.setCamoState(camo.getCamoOne());
-        GHOST_MODEL_DATA_TWO.setCamoState(camo.getCamoTwo());
+        profiler.popPush("build_modeldata"); //get_camo
+        ModelData modelData = behaviour.buildModelData(stack, proxiedStack, context, renderState, renderPass, camo);
         profiler.pop(); //get_camo
 
         profiler.push("append_modeldata");
-        ModelData modelData = behaviour.appendModelData(stack, proxiedStack, context, renderState, renderPass, MODEL_DATA);
+        modelData = behaviour.appendModelData(stack, proxiedStack, context, renderState, renderPass, modelData);
         profiler.pop(); //append_modeldata
 
         MultiBufferSource.BufferSource buffers = mc().renderBuffers().bufferSource();

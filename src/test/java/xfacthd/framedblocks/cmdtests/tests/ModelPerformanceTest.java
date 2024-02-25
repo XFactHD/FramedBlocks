@@ -182,12 +182,8 @@ public final class ModelPerformanceTest
 
     private static ModelData makeModelData(BlockState camo)
     {
-        FramedBlockData dataOne = new FramedBlockData();
-        FramedBlockData dataTwo = new FramedBlockData();
-
-        dataOne.setCamoState(camo);
-        dataTwo.setCamoState(camo);
-        dataTwo.setUseAltModel(true);
+        FramedBlockData dataOne = new FramedBlockData(camo, false);
+        FramedBlockData dataTwo = new FramedBlockData(camo, true);
 
         return ModelData.builder()
                 .with(FramedBlockData.PROPERTY, dataOne)

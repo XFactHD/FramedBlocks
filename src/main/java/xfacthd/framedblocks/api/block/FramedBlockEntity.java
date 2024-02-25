@@ -55,7 +55,7 @@ public class FramedBlockEntity extends BlockEntity
     protected static final int FLAG_INTANGIBLE = 1 << 1;
     protected static final int FLAG_REINFORCED = 1 << 2;
 
-    private final FramedBlockData modelData = new FramedBlockData();
+    private final boolean[] culledFaces = new boolean[6];
     private StateCache stateCache;
     private CamoContainer camoContainer = EmptyCamoContainer.EMPTY;
     private boolean glowing = false;
@@ -556,34 +556,38 @@ public class FramedBlockEntity extends BlockEntity
         boolean changed = false;
         for (Direction dir : DIRECTIONS)
         {
-            changed |= updateCulling(dir, false);
+            BlockState state = getBlockState();
+            changed |= updateCulling(dir, state, false);
             if (neighbors && level.getBlockEntity(worldPosition.relative(dir)) instanceof FramedBlockEntity be)
             {
-                be.updateCulling(dir.getOpposite(), true);
+                be.updateCulling(dir.getOpposite(), state, true);
             }
         }
 
-        if (rerender && changed)
+        if (changed)
         {
-            level.sendBlockUpdated(worldPosition, getBlockState(), getBlockState(), Block.UPDATE_ALL);
+            requestModelDataUpdate();
+            if (rerender)
+            {
+                level.sendBlockUpdated(worldPosition, getBlockState(), getBlockState(), Block.UPDATE_ALL);
+            }
         }
     }
 
-    public boolean updateCulling(Direction side, boolean rerender)
+    protected boolean updateCulling(Direction side, BlockState state, boolean rerender)
     {
-        return updateCulling(modelData, getBlockState(), side, rerender);
+        return updateCulling(culledFaces, state, side, rerender);
     }
 
-    protected final boolean updateCulling(
-            FramedBlockData modelData, BlockState testState, Direction side, boolean rerender
-    )
+    protected final boolean updateCulling(boolean[] culledFaces, BlockState testState, Direction side, boolean rerender)
     {
-        boolean wasHidden = modelData.isSideHidden(side);
+        boolean wasHidden = culledFaces[side.ordinal()];
         //noinspection ConstantConditions
         boolean hidden = CullingHelper.isSideHidden(level, worldPosition, testState, side);
         if (wasHidden != hidden)
         {
-            modelData.setSideHidden(side, hidden);
+            culledFaces[side.ordinal()] = hidden;
+            requestModelDataUpdate();
             if (rerender)
             {
                 level.sendBlockUpdated(worldPosition, getBlockState(), getBlockState(), Block.UPDATE_ALL);
@@ -899,8 +903,6 @@ public class FramedBlockEntity extends BlockEntity
                 doLightUpdate();
             }
 
-            modelData.setCamoState(camoContainer.getState());
-
             needUpdate = true;
             needCullingUpdate = true;
         }
@@ -928,7 +930,6 @@ public class FramedBlockEntity extends BlockEntity
         if (newReinforced != reinforced)
         {
             reinforced = newReinforced;
-            modelData.setReinforced(reinforced);
             needUpdate = true;
         }
 
@@ -958,9 +959,6 @@ public class FramedBlockEntity extends BlockEntity
         if (!newCamo.equals(camoContainer))
         {
             camoContainer = newCamo;
-
-            modelData.setCamoState(camoContainer.getState());
-
             ClientUtils.enqueueClientTask(() -> updateCulling(true, true));
         }
 
@@ -972,7 +970,6 @@ public class FramedBlockEntity extends BlockEntity
         if (newReinforced != reinforced)
         {
             reinforced = newReinforced;
-            modelData.setReinforced(reinforced);
         }
 
         requestModelDataUpdate();
@@ -999,31 +996,13 @@ public class FramedBlockEntity extends BlockEntity
     @Override
     public ModelData getModelData()
     {
-        return ModelData.builder()
-                .with(FramedBlockData.PROPERTY, modelData)
-                .build();
+        FramedBlockData modelData = new FramedBlockData(camoContainer.getState(), culledFaces, false, isReinforced());
+        ModelData.Builder builder = ModelData.builder().with(FramedBlockData.PROPERTY, modelData);
+        attachAdditionalModelData(builder);
+        return builder.build();
     }
 
-    protected final FramedBlockData getModelDataInternal()
-    {
-        return modelData;
-    }
-
-    protected void initModelData()
-    {
-        modelData.setCamoState(camoContainer.getState());
-    }
-
-    @Override
-    public void setLevel(Level level)
-    {
-        super.setLevel(level);
-        if (level.isClientSide())
-        {
-            //Try initializing model data early to make it work on Create contraptions
-            initModelData();
-        }
-    }
+    protected void attachAdditionalModelData(ModelData.Builder builder) { }
 
     /*
      * NBT stuff

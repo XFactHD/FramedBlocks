@@ -204,9 +204,7 @@ public final class FramedDoubleBlockModel extends BakedModelWrapper<BakedModel>
 
     private static ModelData makeDefaultData(boolean altModel)
     {
-        FramedBlockData data = new FramedBlockData.Immutable(Blocks.AIR.defaultBlockState(), new boolean[6], altModel);
-        return ModelData.builder()
-                .with(FramedBlockData.PROPERTY, data)
-                .build();
+        FramedBlockData data = new FramedBlockData(Blocks.AIR.defaultBlockState(), altModel);
+        return ModelData.builder().with(FramedBlockData.PROPERTY, data).build();
     }
 }

@@ -77,7 +77,6 @@ public final class FBClient
         event.enqueueWork(BlueprintPropertyOverride::register);
 
         BlockOutlineRenderers.register();
-        GhostBlockRenderer.init();
         GhostRenderBehaviours.register();
 
         NeoForge.EVENT_BUS.addListener(ClientTaskQueue::onClientTick);
