@@ -32,8 +32,7 @@ public class FramedOwnableBlockEntity extends FramedBlockEntity
 
         if (forceSync)
         {
-            //noinspection ConstantConditions
-            level.sendBlockUpdated(worldPosition, getBlockState(), getBlockState(), Block.UPDATE_ALL);
+            level().sendBlockUpdated(worldPosition, getBlockState(), getBlockState(), Block.UPDATE_ALL);
         }
     }
 

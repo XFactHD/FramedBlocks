@@ -53,8 +53,7 @@ public class FramedStorageBlockEntity extends FramedBlockEntity implements MenuP
 
     public boolean isUsableByPlayer(Player player)
     {
-        //noinspection ConstantConditions
-        if (level.getBlockEntity(worldPosition) != this)
+        if (level().getBlockEntity(worldPosition) != this)
         {
             return false;
         }

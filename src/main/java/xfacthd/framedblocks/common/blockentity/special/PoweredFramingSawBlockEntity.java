@@ -151,7 +151,7 @@ public class PoweredFramingSawBlockEntity extends BlockEntity
     {
         if (selectedRecipe != null)
         {
-            matchResult = selectedRecipe.value().matchWithResult(container, level);
+            matchResult = selectedRecipe.value().matchWithResult(container, level());
             recipeSatisfied = matchResult.success();
         }
         else
@@ -284,11 +284,10 @@ public class PoweredFramingSawBlockEntity extends BlockEntity
     public void onLoad()
     {
         super.onLoad();
-        //noinspection ConstantConditions
-        cache = FramingSawRecipeCache.get(level.isClientSide());
-        if (selectedRecipeId != null && !level.isClientSide())
+        cache = FramingSawRecipeCache.get(level().isClientSide());
+        if (selectedRecipeId != null && !level().isClientSide())
         {
-            RecipeHolder<FramingSawRecipe> recipe = (RecipeHolder<FramingSawRecipe>) level.getRecipeManager()
+            RecipeHolder<FramingSawRecipe> recipe = (RecipeHolder<FramingSawRecipe>) level().getRecipeManager()
                     .byKey(selectedRecipeId)
                     .filter(h -> h.value() instanceof FramingSawRecipe)
                     .orElse(null);
@@ -296,10 +295,14 @@ public class PoweredFramingSawBlockEntity extends BlockEntity
         }
     }
 
+    private Level level()
+    {
+        return Objects.requireNonNull(level, "BlockEntity#level accessed before it was set");
+    }
+
     public boolean isUsableByPlayer(Player player)
     {
-        //noinspection ConstantConditions
-        if (level.getBlockEntity(worldPosition) != this)
+        if (level().getBlockEntity(worldPosition) != this)
         {
             return false;
         }

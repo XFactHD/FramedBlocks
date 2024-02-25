@@ -119,8 +119,7 @@ public class FramedSignBlockEntity extends FramedBlockEntity
         if (text != this.frontText) {
             frontText = text;
 
-            //noinspection ConstantConditions
-            level.sendBlockUpdated(getBlockPos(), getBlockState(), getBlockState(), Block.UPDATE_ALL);
+            level().sendBlockUpdated(getBlockPos(), getBlockState(), getBlockState(), Block.UPDATE_ALL);
             setChanged();
 
             return true;
@@ -134,8 +133,7 @@ public class FramedSignBlockEntity extends FramedBlockEntity
         {
             backText = text;
 
-            //noinspection ConstantConditions
-            level.sendBlockUpdated(getBlockPos(), getBlockState(), getBlockState(), Block.UPDATE_ALL);
+            level().sendBlockUpdated(getBlockPos(), getBlockState(), getBlockState(), Block.UPDATE_ALL);
             setChanged();
 
             return true;
@@ -154,8 +152,7 @@ public class FramedSignBlockEntity extends FramedBlockEntity
         {
             this.waxed = waxed;
 
-            //noinspection ConstantConditions
-            level.sendBlockUpdated(getBlockPos(), getBlockState(), getBlockState(), Block.UPDATE_ALL);
+            level().sendBlockUpdated(getBlockPos(), getBlockState(), getBlockState(), Block.UPDATE_ALL);
             setChanged();
 
             return true;

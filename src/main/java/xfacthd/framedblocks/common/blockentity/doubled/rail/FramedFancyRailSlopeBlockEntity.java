@@ -35,6 +35,6 @@ public class FramedFancyRailSlopeBlockEntity extends FramedDoubleBlockEntity
     protected boolean isCamoSolid()
     {
         CamoContainer camo = getCamo();
-        return !camo.isEmpty() && camo.isSolid(level, worldPosition);
+        return !camo.isEmpty() && camo.isSolid(level(), worldPosition);
     }
 }

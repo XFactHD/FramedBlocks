@@ -109,21 +109,21 @@ public class FramedCollapsibleBlockEntity extends FramedBlockEntity
             if (noOffsets)
             {
                 collapsedFace = null;
-                level.setBlock(worldPosition, getBlockState().setValue(PropertyHolder.NULLABLE_FACE, NullableDirection.NONE), Block.UPDATE_ALL);
+                level().setBlock(worldPosition, getBlockState().setValue(PropertyHolder.NULLABLE_FACE, NullableDirection.NONE), Block.UPDATE_ALL);
             }
             else
             {
-                level.sendBlockUpdated(worldPosition, getBlockState(), getBlockState(), Block.UPDATE_ALL);
+                level().sendBlockUpdated(worldPosition, getBlockState(), getBlockState(), Block.UPDATE_ALL);
             }
         }
         else if (collapsedFace == null)
         {
             collapsedFace = faceHit;
-            level.setBlock(worldPosition, getBlockState().setValue(PropertyHolder.NULLABLE_FACE, NullableDirection.fromDirection(collapsedFace)), Block.UPDATE_ALL);
+            level().setBlock(worldPosition, getBlockState().setValue(PropertyHolder.NULLABLE_FACE, NullableDirection.fromDirection(collapsedFace)), Block.UPDATE_ALL);
         }
         else
         {
-            level.sendBlockUpdated(worldPosition, getBlockState(), getBlockState(), Block.UPDATE_ALL);
+            level().sendBlockUpdated(worldPosition, getBlockState(), getBlockState(), Block.UPDATE_ALL);
         }
 
         setChanged();
@@ -136,8 +136,7 @@ public class FramedCollapsibleBlockEntity extends FramedBlockEntity
         {
             NeighborVertex vert = verts[i];
             BlockPos pos = worldPosition.offset(vert.offset);
-            //noinspection ConstantConditions
-            if (level.getBlockEntity(pos) instanceof FramedCollapsibleBlockEntity be)
+            if (level().getBlockEntity(pos) instanceof FramedCollapsibleBlockEntity be)
             {
                 if (be.collapsedFace == null || be.collapsedFace == faceHit)
                 {

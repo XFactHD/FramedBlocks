@@ -57,8 +57,7 @@ public class FramedCollapsibleCopycatBlockEntity extends FramedBlockEntity
             updateBeaconOcclusion();
             if (!updateFaceSolidity())
             {
-                //noinspection ConstantConditions
-                level.sendBlockUpdated(worldPosition, getBlockState(), getBlockState(), Block.UPDATE_ALL);
+                level().sendBlockUpdated(worldPosition, getBlockState(), getBlockState(), Block.UPDATE_ALL);
             }
             setChanged();
         }
@@ -85,8 +84,7 @@ public class FramedCollapsibleCopycatBlockEntity extends FramedBlockEntity
         int solid = computeSolidFaces(packedOffsets);
         if (state.getValue(PropertyHolder.SOLID_FACES) != solid)
         {
-            //noinspection ConstantConditions
-            level.setBlockAndUpdate(worldPosition, state.setValue(PropertyHolder.SOLID_FACES, solid));
+            level().setBlockAndUpdate(worldPosition, state.setValue(PropertyHolder.SOLID_FACES, solid));
             return true;
         }
         return false;

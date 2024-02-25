@@ -51,8 +51,7 @@ public class FramedChiseledBookshelfBlockEntity extends FramedBlockEntity
             BooleanProperty prop = ChiseledBookShelfBlock.SLOT_OCCUPIED_PROPERTIES.get(i);
             state = state.setValue(prop, !itemHandler.getStackInSlot(i).isEmpty());
         }
-        //noinspection ConstantConditions
-        level.setBlockAndUpdate(worldPosition, state);
+        level().setBlockAndUpdate(worldPosition, state);
     }
 
     public void forceStateUpdate()

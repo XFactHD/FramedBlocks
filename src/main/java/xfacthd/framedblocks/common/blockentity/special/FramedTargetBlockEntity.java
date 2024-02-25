@@ -21,12 +21,11 @@ public class FramedTargetBlockEntity extends FramedBlockEntity
     {
         if (this.overlayColor != overlayColor)
         {
-            //noinspection ConstantConditions
-            if (!level.isClientSide())
+            if (!level().isClientSide())
             {
                 this.overlayColor = overlayColor;
 
-                level.sendBlockUpdated(worldPosition, getBlockState(), getBlockState(), Block.UPDATE_ALL);
+                level().sendBlockUpdated(worldPosition, getBlockState(), getBlockState(), Block.UPDATE_ALL);
                 setChanged();
             }
 

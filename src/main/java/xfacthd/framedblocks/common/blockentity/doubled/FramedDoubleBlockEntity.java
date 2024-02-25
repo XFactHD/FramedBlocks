@@ -127,7 +127,7 @@ public abstract class FramedDoubleBlockEntity extends FramedBlockEntity
         return switch (getStateCache().getTopInteractionMode())
         {
             case FIRST -> super.getMapColor();
-            case SECOND -> camoContainer.getMapColor(level, worldPosition);
+            case SECOND -> camoContainer.getMapColor(level(), worldPosition);
             case EITHER ->
             {
                 MapColor color = super.getMapColor();
@@ -135,7 +135,7 @@ public abstract class FramedDoubleBlockEntity extends FramedBlockEntity
                 {
                     yield color;
                 }
-                yield camoContainer.getMapColor(level, worldPosition);
+                yield camoContainer.getMapColor(level(), worldPosition);
             }
         };
     }
@@ -210,15 +210,13 @@ public abstract class FramedDoubleBlockEntity extends FramedBlockEntity
             return false;
         }
 
-        //noinspection ConstantConditions
-        return super.isCamoSolid() && camoContainer.getState().isSolidRender(level, worldPosition);
+        return super.isCamoSolid() && camoContainer.getState().isSolidRender(level(), worldPosition);
     }
 
     @Override
     protected boolean doesCamoPropagateSkylightDown()
     {
-        //noinspection ConstantConditions
-        if (!camoContainer.getState().propagatesSkylightDown(level, worldPosition))
+        if (!camoContainer.getState().propagatesSkylightDown(level(), worldPosition))
         {
             return false;
         }
@@ -230,7 +228,7 @@ public abstract class FramedDoubleBlockEntity extends FramedBlockEntity
     {
         return Math.max(
                 super.getCamoExplosionResistance(explosion),
-                camoContainer.getState().getExplosionResistance(level, worldPosition, explosion)
+                camoContainer.getState().getExplosionResistance(level(), worldPosition, explosion)
         );
     }
 
@@ -240,12 +238,12 @@ public abstract class FramedDoubleBlockEntity extends FramedBlockEntity
         CamoContainer camo = getCamo(face);
         if (camo.isEmpty() && (!getCamo().isEmpty() || !camoContainer.isEmpty()))
         {
-            return (getCamo().isEmpty() || getCamo().getState().isFlammable(level, worldPosition, face)) &&
-                   (camoContainer.isEmpty() || camoContainer.getState().isFlammable(level, worldPosition, face));
+            return (getCamo().isEmpty() || getCamo().getState().isFlammable(level(), worldPosition, face)) &&
+                   (camoContainer.isEmpty() || camoContainer.getState().isFlammable(level(), worldPosition, face));
         }
         else if (!camo.isEmpty())
         {
-            return camo.getState().isFlammable(level, worldPosition, face);
+            return camo.getState().isFlammable(level(), worldPosition, face);
         }
         return true;
     }
@@ -254,7 +252,7 @@ public abstract class FramedDoubleBlockEntity extends FramedBlockEntity
     public int getCamoFlammability(Direction face)
     {
         int flammabilityOne = super.getCamoFlammability(face);
-        int flammabilityTwo = camoContainer.isEmpty() ? -1 : camoContainer.getState().getFlammability(level, worldPosition, face);
+        int flammabilityTwo = camoContainer.isEmpty() ? -1 : camoContainer.getState().getFlammability(level(), worldPosition, face);
 
         if (flammabilityOne == -1)
         {
@@ -271,7 +269,7 @@ public abstract class FramedDoubleBlockEntity extends FramedBlockEntity
     public int getCamoFireSpreadSpeed(Direction face)
     {
         int spreadSpeedOne = super.getCamoFireSpreadSpeed(face);
-        int spreadSpeedTwo = camoContainer.isEmpty() ? -1 : camoContainer.getState().getFireSpreadSpeed(level, worldPosition, face);
+        int spreadSpeedTwo = camoContainer.isEmpty() ? -1 : camoContainer.getState().getFireSpreadSpeed(level(), worldPosition, face);
 
         if (spreadSpeedOne == -1)
         {
@@ -289,13 +287,11 @@ public abstract class FramedDoubleBlockEntity extends FramedBlockEntity
     {
         if (!getCamo().isEmpty())
         {
-            //noinspection ConstantConditions
-            ownShade = Math.max(ownShade, getCamo().getState().getShadeBrightness(level, worldPosition));
+            ownShade = Math.max(ownShade, getCamo().getState().getShadeBrightness(level(), worldPosition));
         }
         if (!camoContainer.isEmpty())
         {
-            //noinspection ConstantConditions
-            ownShade = Math.max(ownShade, camoContainer.getState().getShadeBrightness(level, worldPosition));
+            ownShade = Math.max(ownShade, camoContainer.getState().getShadeBrightness(level(), worldPosition));
         }
         return ownShade;
     }

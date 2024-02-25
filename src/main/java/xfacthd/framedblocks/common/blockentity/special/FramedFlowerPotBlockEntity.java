@@ -34,8 +34,7 @@ public class FramedFlowerPotBlockEntity extends FramedBlockEntity
 
             setChanged();
 
-            //noinspection ConstantConditions
-            level.sendBlockUpdated(worldPosition, getBlockState(), getBlockState(), 3);
+            level().sendBlockUpdated(worldPosition, getBlockState(), getBlockState(), 3);
         }
     }
 

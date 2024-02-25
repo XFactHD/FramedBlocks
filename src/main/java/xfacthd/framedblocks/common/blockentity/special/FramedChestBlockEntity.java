@@ -42,9 +42,8 @@ public class FramedChestBlockEntity extends FramedStorageBlockEntity
     {
         if (getBlockState().getValue(PropertyHolder.CHEST_STATE) != ChestState.OPENING)
         {
-            //noinspection ConstantConditions
-            level.setBlockAndUpdate(worldPosition, getBlockState().setValue(PropertyHolder.CHEST_STATE, ChestState.OPENING));
-            level.playSound(null, worldPosition, SoundEvents.CHEST_OPEN, SoundSource.BLOCKS, 0.5F, level.random.nextFloat() * 0.1F + 0.9F);
+            level().setBlockAndUpdate(worldPosition, getBlockState().setValue(PropertyHolder.CHEST_STATE, ChestState.OPENING));
+            level().playSound(null, worldPosition, SoundEvents.CHEST_OPEN, SoundSource.BLOCKS, 0.5F, level().random.nextFloat() * 0.1F + 0.9F);
         }
 
         openCount++;
@@ -59,11 +58,10 @@ public class FramedChestBlockEntity extends FramedStorageBlockEntity
             openCount--;
             if (openCount == 0)
             {
-                //noinspection ConstantConditions
-                level.playSound(null, worldPosition, SoundEvents.CHEST_CLOSE, SoundSource.BLOCKS, 0.5F, level.random.nextFloat() * 0.1F + 0.9F);
-                level.setBlockAndUpdate(worldPosition, getBlockState().setValue(PropertyHolder.CHEST_STATE, ChestState.CLOSING));
+                level().playSound(null, worldPosition, SoundEvents.CHEST_CLOSE, SoundSource.BLOCKS, 0.5F, level().random.nextFloat() * 0.1F + 0.9F);
+                level().setBlockAndUpdate(worldPosition, getBlockState().setValue(PropertyHolder.CHEST_STATE, ChestState.CLOSING));
 
-                closeStart = level.getGameTime();
+                closeStart = level().getGameTime();
             }
         }
     }
@@ -74,14 +72,12 @@ public class FramedChestBlockEntity extends FramedStorageBlockEntity
         {
             if ((lastState == ChestState.CLOSING && state == ChestState.OPENING) || (lastState == ChestState.OPENING && state == ChestState.CLOSING))
             {
-                //noinspection ConstantConditions
-                long diff = level.getGameTime() - lastChangeTime;
-                lastChangeTime = level.getGameTime() - (diff < 10 ? 10 - diff : 0);
+                long diff = level().getGameTime() - lastChangeTime;
+                lastChangeTime = level().getGameTime() - (diff < 10 ? 10 - diff : 0);
             }
             else
             {
-                //noinspection ConstantConditions
-                lastChangeTime = level.getGameTime();
+                lastChangeTime = level().getGameTime();
             }
             lastState = state;
         }

@@ -42,6 +42,7 @@ import xfacthd.framedblocks.api.type.IBlockType;
 import xfacthd.framedblocks.api.util.*;
 
 import java.util.List;
+import java.util.Objects;
 
 @SuppressWarnings("deprecation")
 public class FramedBlockEntity extends BlockEntity
@@ -148,8 +149,7 @@ public class FramedBlockEntity extends BlockEntity
 
     private InteractionResult clearBlockCamo(Player player, CamoContainer camo, ItemStack stack, boolean secondary)
     {
-        //noinspection ConstantConditions
-        if (!level.isClientSide())
+        if (!level().isClientSide())
         {
             ItemStack camoStack = camo.toItemStack(stack);
             if (!player.isCreative() && ConfigView.Server.INSTANCE.shouldConsumeCamoItem())
@@ -167,7 +167,7 @@ public class FramedBlockEntity extends BlockEntity
             setCamo(EmptyCamoContainer.EMPTY, secondary);
         }
 
-        return InteractionResult.sidedSuccess(level.isClientSide());
+        return InteractionResult.sidedSuccess(level().isClientSide());
     }
 
     private InteractionResult clearFluidCamo(Player player, CamoContainer camo, ItemStack stack, boolean secondary)
@@ -178,8 +178,7 @@ public class FramedBlockEntity extends BlockEntity
         ItemStack result = camo.toItemStack(input);
         if (!result.isEmpty())
         {
-            //noinspection ConstantConditions
-            if (!level.isClientSide())
+            if (!level().isClientSide())
             {
                 if (!player.isCreative() && ConfigView.Server.INSTANCE.shouldConsumeCamoItem())
                 {
@@ -200,7 +199,7 @@ public class FramedBlockEntity extends BlockEntity
 
                 setCamo(EmptyCamoContainer.EMPTY, secondary);
             }
-            return InteractionResult.sidedSuccess(level.isClientSide());
+            return InteractionResult.sidedSuccess(level().isClientSide());
         }
         return InteractionResult.FAIL;
     }
@@ -215,8 +214,7 @@ public class FramedBlockEntity extends BlockEntity
 
         if (isValidBlock(state, player))
         {
-            //noinspection ConstantConditions
-            if (!level.isClientSide())
+            if (!level().isClientSide())
             {
                 CamoContainerFactory factory = FramedBlocksAPI.INSTANCE.getCamoContainerFactory(stack);
                 setCamo(factory.fromItem(stack), secondary);
@@ -227,7 +225,7 @@ public class FramedBlockEntity extends BlockEntity
                 }
             }
 
-            return InteractionResult.sidedSuccess(level.isClientSide());
+            return InteractionResult.sidedSuccess(level().isClientSide());
         }
         return InteractionResult.CONSUME;
     }
@@ -238,8 +236,7 @@ public class FramedBlockEntity extends BlockEntity
         CamoContainer camo = factory.fromItem(stack);
         if (!camo.isEmpty())
         {
-            //noinspection ConstantConditions
-            if (!level.isClientSide())
+            if (!level().isClientSide())
             {
                 if (!player.isCreative() && ConfigView.Server.INSTANCE.shouldConsumeCamoItem())
                 {
@@ -263,15 +260,14 @@ public class FramedBlockEntity extends BlockEntity
 
                 setCamo(camo, secondary);
             }
-            return InteractionResult.sidedSuccess(level.isClientSide());
+            return InteractionResult.sidedSuccess(level().isClientSide());
         }
         return InteractionResult.CONSUME;
     }
 
     private InteractionResult applyGlowstone(Player player, ItemStack stack)
     {
-        //noinspection ConstantConditions
-        if (!level.isClientSide())
+        if (!level().isClientSide())
         {
             if (!player.isCreative())
             {
@@ -282,7 +278,7 @@ public class FramedBlockEntity extends BlockEntity
             glowing = true;
             if (!updateDynamicStates(false, true, false))
             {
-                level.sendBlockUpdated(worldPosition, getBlockState(), getBlockState(), Block.UPDATE_ALL);
+                level().sendBlockUpdated(worldPosition, getBlockState(), getBlockState(), Block.UPDATE_ALL);
             }
 
             boolean lightUpdate = getLightValue() != light;
@@ -293,28 +289,26 @@ public class FramedBlockEntity extends BlockEntity
                 doLightUpdate();
             }
         }
-        return InteractionResult.sidedSuccess(level.isClientSide());
+        return InteractionResult.sidedSuccess(level().isClientSide());
     }
 
     private InteractionResult rotateCamo(CamoContainer camo)
     {
         if (camo.rotateCamo())
         {
-            //noinspection ConstantConditions
-            if (!level.isClientSide())
+            if (!level().isClientSide())
             {
                 setChanged();
-                level.sendBlockUpdated(worldPosition, getBlockState(), getBlockState(), Block.UPDATE_ALL);
+                level().sendBlockUpdated(worldPosition, getBlockState(), getBlockState(), Block.UPDATE_ALL);
             }
-            return InteractionResult.sidedSuccess(level.isClientSide());
+            return InteractionResult.sidedSuccess(level().isClientSide());
         }
         return InteractionResult.FAIL;
     }
 
     private InteractionResult applyIntangibility(Player player, ItemStack stack)
     {
-        //noinspection ConstantConditions
-        if (!level.isClientSide())
+        if (!level().isClientSide())
         {
             if (!player.isCreative())
             {
@@ -323,13 +317,12 @@ public class FramedBlockEntity extends BlockEntity
 
             setIntangible(true);
         }
-        return InteractionResult.sidedSuccess(level.isClientSide());
+        return InteractionResult.sidedSuccess(level().isClientSide());
     }
 
     private InteractionResult removeIntangibility(Player player)
     {
-        //noinspection ConstantConditions
-        if (!level.isClientSide())
+        if (!level().isClientSide())
         {
             setIntangible(false);
 
@@ -339,13 +332,12 @@ public class FramedBlockEntity extends BlockEntity
                 player.drop(result, false);
             }
         }
-        return InteractionResult.sidedSuccess(level.isClientSide());
+        return InteractionResult.sidedSuccess(level().isClientSide());
     }
 
     private InteractionResult applyReinforcement(Player player, ItemStack stack)
     {
-        //noinspection ConstantConditions
-        if (!level.isClientSide())
+        if (!level().isClientSide())
         {
             if (!player.isCreative())
             {
@@ -354,13 +346,12 @@ public class FramedBlockEntity extends BlockEntity
 
             setReinforced(true);
         }
-        return InteractionResult.sidedSuccess(level.isClientSide());
+        return InteractionResult.sidedSuccess(level().isClientSide());
     }
 
     private InteractionResult removeReinforcement(Player player, ItemStack stack, InteractionHand hand)
     {
-        //noinspection ConstantConditions
-        if (!level.isClientSide())
+        if (!level().isClientSide())
         {
             setReinforced(false);
 
@@ -372,7 +363,7 @@ public class FramedBlockEntity extends BlockEntity
                 player.drop(result, false);
             }
         }
-        return InteractionResult.sidedSuccess(level.isClientSide());
+        return InteractionResult.sidedSuccess(level().isClientSide());
     }
 
     protected final boolean isValidBlock(BlockState state, Player player)
@@ -400,8 +391,7 @@ public class FramedBlockEntity extends BlockEntity
             return false;
         }
 
-        //noinspection ConstantConditions
-        return state.isSolidRender(level, worldPosition) || state.is(Utils.FRAMEABLE) || state.getBlock() instanceof LiquidBlock;
+        return state.isSolidRender(level(), worldPosition) || state.is(Utils.FRAMEABLE) || state.getBlock() instanceof LiquidBlock;
     }
 
     protected boolean hitSecondary(BlockHitResult hit)
@@ -423,8 +413,7 @@ public class FramedBlockEntity extends BlockEntity
 
         if (!updateDynamicStates(true, true, true))
         {
-            //noinspection ConstantConditions
-            level.sendBlockUpdated(worldPosition, getBlockState(), getBlockState(), Block.UPDATE_ALL);
+            level().sendBlockUpdated(worldPosition, getBlockState(), getBlockState(), Block.UPDATE_ALL);
         }
     }
 
@@ -439,7 +428,7 @@ public class FramedBlockEntity extends BlockEntity
         {
             return false;
         }
-        return stateCache.isFullFace(side) && camoContainer.isSolid(level, worldPosition);
+        return stateCache.isFullFace(side) && camoContainer.isSolid(level(), worldPosition);
     }
 
     /**
@@ -488,13 +477,12 @@ public class FramedBlockEntity extends BlockEntity
 
     protected boolean isCamoSolid()
     {
-        return !camoContainer.isEmpty() && camoContainer.isSolid(level, worldPosition);
+        return !camoContainer.isEmpty() && camoContainer.isSolid(level(), worldPosition);
     }
 
     protected boolean doesCamoPropagateSkylightDown()
     {
-        //noinspection ConstantConditions
-        return camoContainer.getState().propagatesSkylightDown(level, worldPosition);
+        return camoContainer.getState().propagatesSkylightDown(level(), worldPosition);
     }
 
     public final void checkCamoSolid()
@@ -544,8 +532,7 @@ public class FramedBlockEntity extends BlockEntity
 
         if (changed)
         {
-            //noinspection ConstantConditions
-            level.setBlock(worldPosition, state, Block.UPDATE_ALL);
+            level().setBlock(worldPosition, state, Block.UPDATE_ALL);
         }
         return changed;
     }
@@ -558,7 +545,7 @@ public class FramedBlockEntity extends BlockEntity
         {
             BlockState state = getBlockState();
             changed |= updateCulling(dir, state, false);
-            if (neighbors && level.getBlockEntity(worldPosition.relative(dir)) instanceof FramedBlockEntity be)
+            if (neighbors && level().getBlockEntity(worldPosition.relative(dir)) instanceof FramedBlockEntity be)
             {
                 be.updateCulling(dir.getOpposite(), state, true);
             }
@@ -569,7 +556,7 @@ public class FramedBlockEntity extends BlockEntity
             requestModelDataUpdate();
             if (rerender)
             {
-                level.sendBlockUpdated(worldPosition, getBlockState(), getBlockState(), Block.UPDATE_ALL);
+                level().sendBlockUpdated(worldPosition, getBlockState(), getBlockState(), Block.UPDATE_ALL);
             }
         }
     }
@@ -582,15 +569,14 @@ public class FramedBlockEntity extends BlockEntity
     protected final boolean updateCulling(boolean[] culledFaces, BlockState testState, Direction side, boolean rerender)
     {
         boolean wasHidden = culledFaces[side.ordinal()];
-        //noinspection ConstantConditions
-        boolean hidden = CullingHelper.isSideHidden(level, worldPosition, testState, side);
+        boolean hidden = CullingHelper.isSideHidden(level(), worldPosition, testState, side);
         if (wasHidden != hidden)
         {
             culledFaces[side.ordinal()] = hidden;
             requestModelDataUpdate();
             if (rerender)
             {
-                level.sendBlockUpdated(worldPosition, getBlockState(), getBlockState(), Block.UPDATE_ALL);
+                level().sendBlockUpdated(worldPosition, getBlockState(), getBlockState(), Block.UPDATE_ALL);
             }
             return true;
         }
@@ -599,7 +585,7 @@ public class FramedBlockEntity extends BlockEntity
 
     public float getCamoExplosionResistance(Explosion explosion)
     {
-        float camoRes = camoContainer.getState().getExplosionResistance(level, worldPosition, explosion);
+        float camoRes = camoContainer.getState().getExplosionResistance(level(), worldPosition, explosion);
         if (reinforced)
         {
             camoRes = Math.max(camoRes, Blocks.OBSIDIAN.getExplosionResistance());
@@ -613,7 +599,7 @@ public class FramedBlockEntity extends BlockEntity
         {
             return false;
         }
-        return camoContainer.isEmpty() || camoContainer.getState().isFlammable(level, worldPosition, face);
+        return camoContainer.isEmpty() || camoContainer.getState().isFlammable(level(), worldPosition, face);
     }
 
     public int getCamoFlammability(Direction face)
@@ -622,7 +608,7 @@ public class FramedBlockEntity extends BlockEntity
         {
             return 0;
         }
-        return camoContainer.isEmpty() ? -1 : camoContainer.getState().getFlammability(level, worldPosition, face);
+        return camoContainer.isEmpty() ? -1 : camoContainer.getState().getFlammability(level(), worldPosition, face);
     }
 
     public int getCamoFireSpreadSpeed(Direction face)
@@ -631,15 +617,14 @@ public class FramedBlockEntity extends BlockEntity
         {
             return 0;
         }
-        return camoContainer.isEmpty() ? -1 : camoContainer.getState().getFireSpreadSpeed(level, worldPosition, face);
+        return camoContainer.isEmpty() ? -1 : camoContainer.getState().getFireSpreadSpeed(level(), worldPosition, face);
     }
 
     public float getCamoShadeBrightness(float ownShade)
     {
         if (!camoContainer.isEmpty())
         {
-            //noinspection ConstantConditions
-            return Math.max(ownShade, camoContainer.getState().getShadeBrightness(level, worldPosition));
+            return Math.max(ownShade, camoContainer.getState().getShadeBrightness(level(), worldPosition));
         }
         return ownShade;
     }
@@ -658,8 +643,7 @@ public class FramedBlockEntity extends BlockEntity
             }
 
             setChanged();
-            //noinspection ConstantConditions
-            level.sendBlockUpdated(worldPosition, getBlockState(), getBlockState(), Block.UPDATE_ALL);
+            level().sendBlockUpdated(worldPosition, getBlockState(), getBlockState(), Block.UPDATE_ALL);
         }
     }
 
@@ -684,8 +668,7 @@ public class FramedBlockEntity extends BlockEntity
 
             if (!updateDynamicStates(true, false, false))
             {
-                //noinspection ConstantConditions
-                level.sendBlockUpdated(worldPosition, getBlockState(), getBlockState(), Block.UPDATE_ALL);
+                level().sendBlockUpdated(worldPosition, getBlockState(), getBlockState(), Block.UPDATE_ALL);
             }
         }
     }
@@ -712,8 +695,7 @@ public class FramedBlockEntity extends BlockEntity
         {
             this.reinforced = reinforced;
 
-            //noinspection ConstantConditions
-            level.sendBlockUpdated(worldPosition, getBlockState(), getBlockState(), Block.UPDATE_ALL);
+            level().sendBlockUpdated(worldPosition, getBlockState(), getBlockState(), Block.UPDATE_ALL);
             setChanged();
         }
     }
@@ -725,8 +707,7 @@ public class FramedBlockEntity extends BlockEntity
 
     protected final void doLightUpdate()
     {
-        //noinspection ConstantConditions
-        AuxiliaryLightManager lightManager = level.getAuxLightManager(worldPosition);
+        AuxiliaryLightManager lightManager = level().getAuxLightManager(worldPosition);
         if (lightManager != null)
         {
             lightManager.setLightAt(worldPosition, getLightValue());
@@ -741,6 +722,11 @@ public class FramedBlockEntity extends BlockEntity
     public final IBlockType getBlockType()
     {
         return getBlock().getBlockType();
+    }
+
+    protected final Level level()
+    {
+        return Objects.requireNonNull(level, "BlockEntity#level accessed before it was set");
     }
 
     protected StateCache getStateCache()
@@ -772,7 +758,7 @@ public class FramedBlockEntity extends BlockEntity
 
     public MapColor getMapColor()
     {
-        return camoContainer.getMapColor(level, worldPosition);
+        return camoContainer.getMapColor(level(), worldPosition);
     }
 
     public float[] getCamoBeaconColorMultiplier(LevelReader level, BlockPos pos, BlockPos beaconPos)
@@ -800,7 +786,7 @@ public class FramedBlockEntity extends BlockEntity
     {
         if (!camo.isEmpty())
         {
-            return camo.getState().getFriction(be.level, be.worldPosition, entity);
+            return camo.getState().getFriction(be.level(), be.worldPosition, entity);
         }
         return state.getBlock().getFriction();
     }
@@ -813,12 +799,12 @@ public class FramedBlockEntity extends BlockEntity
     public static boolean canSustainPlant(FramedBlockEntity be, CamoContainer camo, Direction side, IPlantable plant)
     {
         BlockState state = camo.getState();
-        return state.is(Utils.CAMO_SUSTAIN_PLANT) && state.canSustainPlant(be.level, be.worldPosition, side, plant);
+        return state.is(Utils.CAMO_SUSTAIN_PLANT) && state.canSustainPlant(be.level(), be.worldPosition, side, plant);
     }
 
     public boolean doesCamoPreventDestructionByEntity(Entity entity)
     {
-        if (reinforced && !Blocks.OBSIDIAN.defaultBlockState().canEntityDestroy(level, worldPosition, entity))
+        if (reinforced && !Blocks.OBSIDIAN.defaultBlockState().canEntityDestroy(level(), worldPosition, entity))
         {
             return false;
         }
@@ -833,14 +819,13 @@ public class FramedBlockEntity extends BlockEntity
         }
 
         BlockState state = camo.getState();
-        return !state.canEntityDestroy(be.level, be.worldPosition, entity);
+        return !state.canEntityDestroy(be.level(), be.worldPosition, entity);
     }
 
     @Override
     public void onLoad()
     {
-        //noinspection ConstantConditions
-        if (!level.isClientSide() && recheckStates)
+        if (!level().isClientSide() && recheckStates)
         {
             checkCamoSolid();
         }
@@ -876,8 +861,7 @@ public class FramedBlockEntity extends BlockEntity
         CompoundTag nbt = pkt.getTag();
         if (nbt != null && readFromDataPacket(nbt))
         {
-            //noinspection ConstantConditions
-            level.sendBlockUpdated(worldPosition, getBlockState(), getBlockState(), Block.UPDATE_ALL);
+            level().sendBlockUpdated(worldPosition, getBlockState(), getBlockState(), Block.UPDATE_ALL);
             requestModelDataUpdate();
         }
     }

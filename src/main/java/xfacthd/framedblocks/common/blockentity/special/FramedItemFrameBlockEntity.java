@@ -53,12 +53,11 @@ public class FramedItemFrameBlockEntity extends FramedBlockEntity
                 mapTickCount = mapTickOffset;
             }
 
-            //noinspection ConstantConditions
-            MapItemSavedData mapData = MapItem.getSavedData(heldItem, level);
+            MapItemSavedData mapData = MapItem.getSavedData(heldItem, level());
             if (mapData != null)
             {
                 int mapId = Objects.requireNonNull(MapItem.getMapId(heldItem));
-                for (Player player : level.players())
+                for (Player player : level().players())
                 {
                     mapData.tickCarriedBy(player, heldItem);
                     Packet<?> packet = mapData.getUpdatePacket(mapId, player);
@@ -77,22 +76,20 @@ public class FramedItemFrameBlockEntity extends FramedBlockEntity
         ItemStack stack = player.getItemInHand(hand);
         if (stack.isEmpty() && hasItem())
         {
-            //noinspection ConstantConditions
-            if (!level.isClientSide())
+            if (!level().isClientSide())
             {
                 rotation = (rotation + 1) % ROTATION_STEPS;
 
                 playSound(glowing ? SoundEvents.GLOW_ITEM_FRAME_ROTATE_ITEM : SoundEvents.ITEM_FRAME_ROTATE_ITEM);
 
                 setChanged();
-                level.sendBlockUpdated(worldPosition, getBlockState(), getBlockState(), Block.UPDATE_ALL);
+                level().sendBlockUpdated(worldPosition, getBlockState(), getBlockState(), Block.UPDATE_ALL);
             }
-            return InteractionResult.sidedSuccess(level.isClientSide());
+            return InteractionResult.sidedSuccess(level().isClientSide());
         }
         else if (!stack.isEmpty() && !hasItem())
         {
-            //noinspection ConstantConditions
-            if (!level.isClientSide())
+            if (!level().isClientSide())
             {
                 setItem(stack);
                 if (!player.isCreative())
@@ -103,7 +100,7 @@ public class FramedItemFrameBlockEntity extends FramedBlockEntity
 
                 playSound(glowing ? SoundEvents.GLOW_ITEM_FRAME_ADD_ITEM : SoundEvents.ITEM_FRAME_ADD_ITEM);
             }
-            return InteractionResult.sidedSuccess(level.isClientSide());
+            return InteractionResult.sidedSuccess(level().isClientSide());
         }
         return InteractionResult.PASS;
     }
@@ -114,8 +111,7 @@ public class FramedItemFrameBlockEntity extends FramedBlockEntity
         {
             //noinspection ConstantConditions
             heldItem.getTag().remove(NBT_KEY_FRAMED_MAP);
-            //noinspection ConstantConditions
-            MapItemSavedData mapData = MapItem.getSavedData(heldItem, level);
+            MapItemSavedData mapData = MapItem.getSavedData(heldItem, level());
             if (mapData instanceof MapMarkerRemover remover)
             {
                 remover.framedblocks$removeMapMarker(worldPosition);
@@ -157,8 +153,7 @@ public class FramedItemFrameBlockEntity extends FramedBlockEntity
         setChanged();
         if (!changeMapStateIfNeeded())
         {
-            //noinspection ConstantConditions
-            level.sendBlockUpdated(worldPosition, getBlockState(), getBlockState(), Block.UPDATE_ALL);
+            level().sendBlockUpdated(worldPosition, getBlockState(), getBlockState(), Block.UPDATE_ALL);
         }
     }
 
@@ -200,9 +195,8 @@ public class FramedItemFrameBlockEntity extends FramedBlockEntity
 
         if (mapItem != mapState)
         {
-            //noinspection ConstantConditions
-            level.setBlockAndUpdate(worldPosition, getBlockState().setValue(PropertyHolder.MAP_FRAME, mapItem));
-            mapTickCount = mapTickOffset = mapItem ? level.random.nextInt(MAP_UPDATE_INTERVAL) : 0;
+            level().setBlockAndUpdate(worldPosition, getBlockState().setValue(PropertyHolder.MAP_FRAME, mapItem));
+            mapTickCount = mapTickOffset = mapItem ? level().random.nextInt(MAP_UPDATE_INTERVAL) : 0;
             return true;
         }
         return false;
@@ -210,8 +204,7 @@ public class FramedItemFrameBlockEntity extends FramedBlockEntity
 
     private void playSound(SoundEvent sound)
     {
-        //noinspection ConstantConditions
-        level.playSound(null, worldPosition.getX(), worldPosition.getY(), worldPosition.getZ(), sound, SoundSource.BLOCKS, 1F, 1F);
+        level().playSound(null, worldPosition.getX(), worldPosition.getY(), worldPosition.getZ(), sound, SoundSource.BLOCKS, 1F, 1F);
     }
 
     @Override
