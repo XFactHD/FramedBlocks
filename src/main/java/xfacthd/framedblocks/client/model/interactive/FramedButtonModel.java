@@ -25,10 +25,10 @@ public class FramedButtonModel extends FramedBlockModel
     public FramedButtonModel(BlockState state, BakedModel baseModel)
     {
         super(state, baseModel);
-        dir = state.getValue(BlockStateProperties.HORIZONTAL_FACING);
-        face = state.getValue(BlockStateProperties.ATTACH_FACE);
-        facing = getFacing(dir, face);
-        pressed = state.getValue(BlockStateProperties.POWERED);
+        this.dir = state.getValue(BlockStateProperties.HORIZONTAL_FACING);
+        this.face = state.getValue(BlockStateProperties.ATTACH_FACE);
+        this.facing = getFacing(dir, face);
+        this.pressed = state.getValue(BlockStateProperties.POWERED);
     }
 
     @Override

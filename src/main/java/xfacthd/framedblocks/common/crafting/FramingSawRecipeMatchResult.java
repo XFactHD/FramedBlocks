@@ -11,6 +11,7 @@ public enum FramingSawRecipeMatchResult
     SUCCESS(true),
     MATERIAL_VALUE(false),
     MATERIAL_LCM(false),
+    OUTPUT_SIZE(false),
     MISSING_ADDITIVE_0(false, 0),
     MISSING_ADDITIVE_1(false, 1),
     MISSING_ADDITIVE_2(false, 2),

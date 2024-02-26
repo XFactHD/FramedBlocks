@@ -180,8 +180,9 @@ public final class ClientUtils
     @SuppressWarnings({ "unchecked", "rawtypes" })
     private static BlockState ignoreProps(BlockState state, @Nullable List<Property<?>> ignoredProps)
     {
-        List<Property<?>> props = new ArrayList<>();
+        Set<Property<?>> props = new HashSet<>();
         props.add(FramedProperties.GLOWING);
+        props.add(FramedProperties.PROPAGATES_SKYLIGHT);
         if (ignoredProps != null)
         {
             props.addAll(ignoredProps);

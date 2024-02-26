@@ -292,6 +292,7 @@ public final class FramedLanguageProvider extends LanguageProvider
         add(FramingSawScreen.TOOLTIP_HAVE_X_BUT_NEED_Y_TAG, "Have %s, but need any %s");
         add(FramingSawScreen.TOOLTIP_HAVE_X_BUT_NEED_Y_ITEM_COUNT, "Have %s item(s), but need at least %s item(s)");
         add(FramingSawScreen.TOOLTIP_HAVE_X_BUT_NEED_Y_MATERIAL_COUNT, "Have %s material, but need at least %s material");
+        add(FramingSawScreen.TOOLTIP_OUTPUT_COUNT, "Result size: %s, max size: %s");
         add(FramingSawScreen.TOOLTIP_HAVE_ITEM_NONE, "none");
         add(FramingSawScreen.TOOLTIP_PRESS_TO_SHOW, "Press [%s] to show all possible items");
         add(PoweredFramingSawScreen.TITLE_TARGETBLOCK, "Target:");
@@ -304,6 +305,7 @@ public final class FramedLanguageProvider extends LanguageProvider
         add(FramingSawRecipeMatchResult.SUCCESS.translation(), "Craftable");
         add(FramingSawRecipeMatchResult.MATERIAL_VALUE.translation(), "Insufficient input material available");
         add(FramingSawRecipeMatchResult.MATERIAL_LCM.translation(), "Too few input items to evenly convert to this output");
+        add(FramingSawRecipeMatchResult.OUTPUT_SIZE.translation(), "Result count exceeds maximum result stack size");
         add(FramingSawRecipeMatchResult.MISSING_ADDITIVE_0.translation(), "Missing additive ingredient in the first slot");
         add(FramingSawRecipeMatchResult.MISSING_ADDITIVE_1.translation(), "Missing additive ingredient in the second slot");
         add(FramingSawRecipeMatchResult.MISSING_ADDITIVE_2.translation(), "Missing additive ingredient in the third slot");
