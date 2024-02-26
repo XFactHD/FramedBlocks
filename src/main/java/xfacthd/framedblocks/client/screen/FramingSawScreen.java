@@ -26,6 +26,7 @@ import net.neoforged.neoforge.network.PacketDistributor;
 import org.lwjgl.glfw.GLFW;
 import xfacthd.framedblocks.api.util.Utils;
 import xfacthd.framedblocks.client.render.item.ItemRenderHelper;
+import xfacthd.framedblocks.client.screen.widget.SearchEditBox;
 import xfacthd.framedblocks.client.util.RecipeViewer;
 import xfacthd.framedblocks.common.FBContent;
 import xfacthd.framedblocks.common.crafting.*;
@@ -47,41 +48,63 @@ public class FramingSawScreen extends AbstractContainerScreen<FramingSawMenu>
     public static final String TOOLTIP_OUTPUT_COUNT = Utils.translationKey("tooltip", "framing_saw.output_count");
     public static final Component TOOLTIP_HAVE_ITEM_NONE = Utils.translate("tooltip", "framing_saw.have_item_none").withStyle(ChatFormatting.GOLD);
     public static final String TOOLTIP_PRESS_TO_SHOW = Utils.translationKey("tooltip", "framing_saw.press_to_show");
+    public static final Component MSG_HINT_SEARCH = Utils.translate("msg", "search");
     private static final ResourceLocation BACKGROUND = Utils.rl("textures/gui/framing_saw.png");
     public static final ResourceLocation WARNING_ICON = new ResourceLocation("neoforge", "textures/gui/experimental_warning.png");
     private static final int IMAGE_WIDTH = 256;
     private static final int IMAGE_HEIGHT = 233;
     private static final int RECIPES_X = 48;
-    private static final int RECIPES_Y = 18;
+    private static final int RECIPES_Y = 22;
     private static final int RECIPE_ROWS = 6;
     private static final int RECIPE_COLS = 8;
     private static final int RECIPE_COUNT = RECIPE_ROWS * RECIPE_COLS;
     private static final int RECIPE_WIDTH = 18;
     private static final int RECIPE_HEIGHT = 18;
     private static final int SCROLL_BAR_X = 195;
-    private static final int SCROLL_BAR_Y = 18;
+    private static final int SCROLL_BAR_Y = 22;
     private static final int SCROLL_BTN_WIDTH = 12;
     private static final int SCROLL_BTN_HEIGHT = 15;
     private static final int SCROLL_BTN_TEX_X = RECIPE_WIDTH * 3;
     private static final int SCROLL_BAR_HEIGHT = 108;
     private static final int WARNING_X = 20;
     private static final int WARNING_Y = 46;
+    private static final int SEARCH_WIDTH = 120;
+    private static final int SEARCH_HEIGHT = 14;
+    private static final int SEARCH_X = IMAGE_WIDTH - SEARCH_WIDTH - 6;
+    private static final int SEARCH_Y = 5;
     private static final RecipeViewer RECIPE_VIEWER = RecipeViewer.get();
 
     private final FramingSawRecipeCache cache = FramingSawRecipeCache.get(true);
     private final ItemStack cubeStack = new ItemStack(FBContent.BLOCK_FRAMED_CUBE.value());
+    private final List<FramingSawMenu.FramedRecipeHolder> filteredRecipes = new ArrayList<>();
+    private SearchEditBox searchBox = null;
     private int firstIndex = 0;
     private boolean scrolling = false;
     private float scrollOffset = 0F;
+    private boolean hasEffectiveSearchQuery = false;
 
     public FramingSawScreen(FramingSawMenu menu, Inventory inv, Component title)
     {
         super(menu, inv, title);
-        titleLabelY -= 1;
-        inventoryLabelX = 47;
-        inventoryLabelY = 139;
-        imageWidth = IMAGE_WIDTH;
-        imageHeight = IMAGE_HEIGHT;
+        this.titleLabelY -= 1;
+        this.inventoryLabelX = 47;
+        this.inventoryLabelY = 139;
+        this.imageWidth = IMAGE_WIDTH;
+        this.imageHeight = IMAGE_HEIGHT;
+        this.filteredRecipes.addAll(menu.getRecipes());
+    }
+
+    @Override
+    protected void init()
+    {
+        super.init();
+
+        int searchX = leftPos + SEARCH_X;
+        int searchY = topPos + SEARCH_Y;
+        searchBox = addRenderableWidget(new SearchEditBox(
+                font, searchX, searchY, SEARCH_WIDTH, SEARCH_HEIGHT, MSG_HINT_SEARCH, this::onSearchChanged, searchBox
+        ));
+        searchBox.setMaxLength(50);
     }
 
     @Override
@@ -147,6 +170,11 @@ public class FramingSawScreen extends AbstractContainerScreen<FramingSawMenu>
 
     private void tryScrollToRecipe(int idx)
     {
+        if (idx != -1 && hasEffectiveSearchQuery)
+        {
+            FramingSawMenu.FramedRecipeHolder recipe = menu.getRecipes().get(idx);
+            idx = filteredRecipes.indexOf(recipe);
+        }
         if (idx != -1 && (idx < firstIndex || idx >= firstIndex + RECIPE_COUNT))
         {
             int row = (idx / RECIPE_COLS) - 2; // Center the selected recipe if possible
@@ -154,6 +182,10 @@ public class FramingSawScreen extends AbstractContainerScreen<FramingSawMenu>
             scrollOffset = (float) row / (float) hidden;
             scrollOffset = Mth.clamp(scrollOffset, 0, 1);
             firstIndex = calculateFirstIndex(hidden);
+        }
+        else if (idx == -1)
+        {
+            firstIndex = 0;
         }
     }
 
@@ -176,16 +208,15 @@ public class FramingSawScreen extends AbstractContainerScreen<FramingSawMenu>
         int x = leftPos + RECIPES_X;
         int y = topPos + RECIPES_Y;
         int last = firstIndex + RECIPE_COUNT;
-        List<FramingSawMenu.FramedRecipeHolder> recipes = menu.getRecipes();
 
-        for (int idx = firstIndex; idx < last && idx < recipes.size(); idx++)
+        for (int idx = firstIndex; idx < last && idx < filteredRecipes.size(); idx++)
         {
             int relIdx = idx - firstIndex;
             int recX = x + relIdx % RECIPE_COLS * RECIPE_WIDTH;
             int recY = y + relIdx / RECIPE_COLS * RECIPE_HEIGHT;
             if (mouseX >= recX && mouseX < recX + RECIPE_WIDTH && mouseY >= recY && mouseY < recY + RECIPE_HEIGHT)
             {
-                FramingSawMenu.FramedRecipeHolder recipe = recipes.get(idx);
+                FramingSawMenu.FramedRecipeHolder recipe = filteredRecipes.get(idx);
                 ItemStack result = recipe.getRecipe().getResult();
                 renderItemTooltip(graphics, mouseX, mouseY, result, recipe);
             }
@@ -367,8 +398,15 @@ public class FramingSawScreen extends AbstractContainerScreen<FramingSawMenu>
 
     private void renderButtons(GuiGraphics graphics, int mouseX, int mouseY, int x, int y, int lastIdx)
     {
-        List<FramingSawMenu.FramedRecipeHolder> recipes = menu.getRecipes();
-        for (int idx = firstIndex; idx < lastIdx && idx < recipes.size(); ++idx)
+        int selIdx = menu.getSelectedRecipeIndex();
+        // Only need to convert the index into filtered space when a query is present which shrinks the displayed count
+        if (selIdx != -1 && hasEffectiveSearchQuery)
+        {
+            FramingSawMenu.FramedRecipeHolder recipe = menu.getRecipes().get(selIdx);
+            selIdx = filteredRecipes.indexOf(recipe);
+        }
+
+        for (int idx = firstIndex; idx < lastIdx && idx < filteredRecipes.size(); ++idx)
         {
             int relIdx = idx - firstIndex;
             int recX = x + relIdx % RECIPE_COLS * RECIPE_WIDTH;
@@ -376,7 +414,7 @@ public class FramingSawScreen extends AbstractContainerScreen<FramingSawMenu>
 
             int u = 0;
             boolean hovered = false;
-            if (idx == menu.getSelectedRecipeIndex())
+            if (idx == selIdx)
             {
                 u += RECIPE_WIDTH;
             }
@@ -386,7 +424,7 @@ public class FramingSawScreen extends AbstractContainerScreen<FramingSawMenu>
                 hovered = true;
             }
 
-            if (!hovered && !recipes.get(idx).getMatchResult().success())
+            if (!hovered && !filteredRecipes.get(idx).getMatchResult().success())
             {
                 RenderSystem.setShaderColor(.9F, .3F, .3F, 1F);
             }
@@ -401,25 +439,34 @@ public class FramingSawScreen extends AbstractContainerScreen<FramingSawMenu>
 
     private void renderRecipes(GuiGraphics graphics, int pLeft, int pTop, int lastIndex)
     {
-        List<FramingSawMenu.FramedRecipeHolder> recipes = menu.getRecipes();
-
         RenderSystem.setShaderColor(1F, 1F, 1F, 1F);
-        for (int idx = firstIndex; idx < lastIndex && idx < recipes.size(); idx++)
+        for (int idx = firstIndex; idx < lastIndex && idx < filteredRecipes.size(); idx++)
         {
             int relIdx = idx - firstIndex;
             int x = pLeft + relIdx % RECIPE_COLS * RECIPE_WIDTH + 1;
             int y = pTop + relIdx / RECIPE_COLS * RECIPE_HEIGHT + 1;
 
-            ItemStack stack = recipes.get(idx).getRecipe().getResult();
+            ItemStack stack = filteredRecipes.get(idx).getRecipe().getResult();
             graphics.renderItem(stack, x, y, x * y * imageWidth);
             graphics.renderItemDecorations(font, stack, x, y);
         }
     }
 
     @Override
+    protected void containerTick()
+    {
+        searchBox.tick();
+    }
+
+    @Override
     public boolean mouseClicked(double mouseX, double mouseY, int button)
     {
         scrolling = false;
+
+        if (searchBox.isFocused() && !searchBox.isMouseOver(mouseX, mouseY))
+        {
+            searchBox.setFocused(false);
+        }
 
         int x = leftPos + RECIPES_X;
         int y = topPos + RECIPES_Y;
@@ -433,6 +480,15 @@ public class FramingSawScreen extends AbstractContainerScreen<FramingSawMenu>
             if (recRelX < 0 || recRelY < 0 || recRelX > RECIPE_WIDTH || recRelY > RECIPE_HEIGHT)
             {
                 continue;
+            }
+
+            if (hasEffectiveSearchQuery)
+            {
+                if (idx < 0 || idx >= filteredRecipes.size()) break;
+
+                RecipeHolder<FramingSawRecipe> recipe = filteredRecipes.get(idx).toVanilla();
+                idx = cache.getRecipes().indexOf(recipe);
+                if (idx == -1) break;
             }
 
             //noinspection ConstantConditions
@@ -493,6 +549,12 @@ public class FramingSawScreen extends AbstractContainerScreen<FramingSawMenu>
     @Override
     public boolean keyPressed(int keyCode, int scanCode, int modifiers)
     {
+        // Prevent typing E in the search box from closing the screen
+        if (searchBox.isFocused() && Objects.requireNonNull(minecraft).options.keyInventory.matches(keyCode, scanCode))
+        {
+            return true;
+        }
+
         RecipeViewer.LookupTarget target;
         if (RECIPE_VIEWER != null && (target = RECIPE_VIEWER.isShowRecipePressed(keyCode, scanCode)) != null)
         {
@@ -501,8 +563,8 @@ public class FramingSawScreen extends AbstractContainerScreen<FramingSawMenu>
             double mouseX = mouseHandler.xpos() * (double)window.getGuiScaledWidth() / (double)window.getScreenWidth();
             double mouseY = mouseHandler.ypos() * (double)window.getGuiScaledHeight() / (double)window.getScreenHeight();
 
-            RecipeHolder<FramingSawRecipe> recipe = getRecipeAt(mouseX, mouseY);
-            if (recipe != null && RECIPE_VIEWER.handleShowRecipeRequest(recipe.value().getResult(), target))
+            FramingSawMenu.FramedRecipeHolder recipe = getRecipeAt(mouseX, mouseY);
+            if (recipe != null && RECIPE_VIEWER.handleShowRecipeRequest(recipe.getRecipe().getResult(), target))
             {
                 return true;
             }
@@ -511,7 +573,7 @@ public class FramingSawScreen extends AbstractContainerScreen<FramingSawMenu>
         return super.keyPressed(keyCode, scanCode, modifiers);
     }
 
-    public RecipeHolder<FramingSawRecipe> getRecipeAt(double mouseX, double mouseY)
+    public FramingSawMenu.FramedRecipeHolder getRecipeAt(double mouseX, double mouseY)
     {
         double x = leftPos + RECIPES_X;
         double y = topPos + RECIPES_Y;
@@ -522,27 +584,55 @@ public class FramingSawScreen extends AbstractContainerScreen<FramingSawMenu>
             int row = (int) ((mouseY - y) / RECIPE_HEIGHT);
             int idx = (row * RECIPE_COLS) + col + firstIndex;
 
-            List<RecipeHolder<FramingSawRecipe>> recipes = cache.getRecipes();
-            if (idx > 0 && idx < recipes.size())
+            if (idx > 0 && idx < filteredRecipes.size())
             {
-                return recipes.get(idx);
+                return filteredRecipes.get(idx);
             }
         }
         return null;
     }
 
+    private void onSearchChanged(String query)
+    {
+        if (query.isBlank())
+        {
+            filteredRecipes.clear();
+            filteredRecipes.addAll(menu.getRecipes());
+            hasEffectiveSearchQuery = false;
+            tryScrollToRecipe(menu.getSelectedRecipeIndex());
+            return;
+        }
+
+        filteredRecipes.clear();
+        query = query.toLowerCase(Locale.ROOT);
+        for (FramingSawMenu.FramedRecipeHolder recipe : menu.getRecipes())
+        {
+            Component name = recipe.getRecipe().getResult().getItem().getDescription();
+            if (name.getString().toLowerCase(Locale.ROOT).contains(query))
+            {
+                filteredRecipes.add(recipe);
+            }
+        }
+        hasEffectiveSearchQuery = filteredRecipes.size() != menu.getRecipes().size();
+        if (filteredRecipes.contains(menu.getRecipes().get(menu.getSelectedRecipeIndex())))
+        {
+            tryScrollToRecipe(menu.getSelectedRecipeIndex());
+        }
+    }
+
     private boolean isScrollBarActive()
     {
-        return menu.getRecipes().size() > RECIPE_COUNT;
+        return filteredRecipes.size() > RECIPE_COUNT;
     }
 
     private int getHiddenRows()
     {
-        return (menu.getRecipes().size() + RECIPE_COLS - 1) / RECIPE_COLS - RECIPE_ROWS;
+        return (filteredRecipes.size() + RECIPE_COLS - 1) / RECIPE_COLS - RECIPE_ROWS;
     }
 
     private int calculateFirstIndex(int hiddenRows)
     {
-        return (int) ((double) (scrollOffset * (float) hiddenRows) + .5D) * RECIPE_COLS;
+        int idx = (int) ((double) (scrollOffset * (float) hiddenRows) + .5D) * RECIPE_COLS;
+        return Mth.clamp(idx, 0, filteredRecipes.size() - 1);
     }
 }

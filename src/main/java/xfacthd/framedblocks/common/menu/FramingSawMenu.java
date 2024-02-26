@@ -334,6 +334,11 @@ public class FramingSawMenu extends AbstractContainerMenu implements IFramingSaw
             this.vanillaHolder = holder;
         }
 
+        public RecipeHolder<FramingSawRecipe> toVanilla()
+        {
+            return vanillaHolder;
+        }
+
         public FramingSawRecipe getRecipe()
         {
             return vanillaHolder.value();
@@ -342,6 +347,26 @@ public class FramingSawMenu extends AbstractContainerMenu implements IFramingSaw
         public FramingSawRecipeMatchResult getMatchResult()
         {
             return matchResult;
+        }
+
+        @Override
+        public boolean equals(Object obj)
+        {
+            if (obj == this)
+            {
+                return true;
+            }
+            if (obj != null && obj.getClass() == this.getClass())
+            {
+                return vanillaHolder.id().equals(((FramedRecipeHolder) obj).vanillaHolder.id());
+            }
+            return false;
+        }
+
+        @Override
+        public int hashCode()
+        {
+            return vanillaHolder.id().hashCode();
         }
     }
 }
