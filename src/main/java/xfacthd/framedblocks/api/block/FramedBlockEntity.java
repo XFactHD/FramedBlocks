@@ -391,7 +391,8 @@ public class FramedBlockEntity extends BlockEntity
             return false;
         }
 
-        return state.isSolidRender(level(), worldPosition) || state.is(Utils.FRAMEABLE) || state.getBlock() instanceof LiquidBlock;
+        BlockGetter level = Objects.requireNonNullElse(this.level, EmptyBlockGetter.INSTANCE);
+        return state.isSolidRender(level, worldPosition) || state.is(Utils.FRAMEABLE) || state.getBlock() instanceof LiquidBlock;
     }
 
     protected boolean hitSecondary(BlockHitResult hit)
@@ -547,7 +548,7 @@ public class FramedBlockEntity extends BlockEntity
             changed |= updateCulling(dir, state, false);
             if (neighbors && level().getBlockEntity(worldPosition.relative(dir)) instanceof FramedBlockEntity be)
             {
-                be.updateCulling(dir.getOpposite(), state, true);
+                be.updateCulling(dir.getOpposite(), be.getBlockState(), true);
             }
         }
 
