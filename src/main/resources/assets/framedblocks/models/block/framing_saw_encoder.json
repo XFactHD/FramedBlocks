@@ -1,8 +1,18 @@
 {
+	"loader": "framedblocks:fallback",
+	"fallback": "framedblocks:block/framing_saw",
+	"conditions": [
+		{
+			"type": "neoforge:mod_loaded",
+			"modid": "ae2"
+		}
+	],
 	"parent": "block/stonecutter",
 	"render_type": "cutout",
 	"textures": {
 		"stone": "minecraft:block/stone",
+		"ornament_top": "ae2:block/controller_conflict",
+		"ornament_side": "ae2:block/controller_column_conflict",
 		"bottom": "framedblocks:block/framing_saw_bottom",
 		"side": "framedblocks:block/framing_saw_side",
 		"top": "framedblocks:block/framing_saw_top",
@@ -20,6 +30,18 @@
 				"west": {"uv": [0, 7, 16, 16], "texture": "#stone"},
 				"up": {"uv": [0, 0, 16, 16], "texture": "#stone"},
 				"down": {"uv": [0, 0, 16, 16], "texture": "#stone"}
+			}
+		},
+		{
+			"from": [0, 0, 0],
+			"to": [16, 9, 16],
+			"faces": {
+				"north": {"uv": [0, 7, 16, 16], "texture": "#ornament_side"},
+				"east": {"uv": [0, 7, 16, 16], "texture": "#ornament_side"},
+				"south": {"uv": [0, 7, 16, 16], "texture": "#ornament_side"},
+				"west": {"uv": [0, 7, 16, 16], "texture": "#ornament_side"},
+				"up": {"uv": [0, 0, 16, 16], "texture": "#ornament_top"},
+				"down": {"uv": [0, 0, 16, 16], "texture": "#ornament_top"}
 			}
 		},
 		{

@@ -22,6 +22,7 @@ import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import xfacthd.framedblocks.api.block.FramedProperties;
 import xfacthd.framedblocks.api.util.Utils;
+import xfacthd.framedblocks.common.data.PropertyHolder;
 import xfacthd.framedblocks.common.menu.FramingSawMenu;
 
 public class FramingSawBlock extends Block
@@ -37,12 +38,17 @@ public class FramingSawBlock extends Block
                 .requiresCorrectToolForDrops()
                 .strength(3.5F)
         );
+        if (defaultBlockState().hasProperty(PropertyHolder.SAW_ENCODER))
+        {
+            // Powered saw does not have this property
+            registerDefaultState(defaultBlockState().setValue(PropertyHolder.SAW_ENCODER, false));
+        }
     }
 
     @Override
     protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder)
     {
-        builder.add(FramedProperties.FACING_HOR);
+        builder.add(FramedProperties.FACING_HOR, PropertyHolder.SAW_ENCODER);
     }
 
     @Override
@@ -99,6 +105,6 @@ public class FramingSawBlock extends Block
 
     protected AbstractContainerMenu createSawMenu(int containerId, Inventory inventory, Level level, BlockPos pos)
     {
-        return new FramingSawMenu(containerId, inventory, ContainerLevelAccess.create(level, pos));
+        return FramingSawMenu.create(containerId, inventory, ContainerLevelAccess.create(level, pos));
     }
 }

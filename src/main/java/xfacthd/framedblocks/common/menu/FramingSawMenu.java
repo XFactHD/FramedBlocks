@@ -10,6 +10,7 @@ import net.minecraft.world.item.crafting.RecipeHolder;
 import net.minecraft.world.level.Level;
 import org.jetbrains.annotations.NotNull;
 import xfacthd.framedblocks.common.FBContent;
+import xfacthd.framedblocks.common.compat.ae2.AppliedEnergisticsCompat;
 import xfacthd.framedblocks.common.crafting.*;
 import xfacthd.framedblocks.common.util.FramedUtils;
 
@@ -25,12 +26,12 @@ public class FramingSawMenu extends AbstractContainerMenu implements IFramingSaw
     public static final int INV_SLOT_COUNT = 4 * 9;
     public static final int TOTAL_SLOT_COUNT = SLOT_INV_FIRST + INV_SLOT_COUNT;
 
-    private final Level level;
+    protected final Level level;
     private final Slot inputSlot;
     private final Slot[] additiveSlots;
     private final Slot resultSlot;
-    private final ContainerLevelAccess levelAccess;
-    private final Container inputContainer = new FrameCrafterContainer(this);
+    protected final ContainerLevelAccess levelAccess;
+    protected final Container inputContainer = new FrameCrafterContainer(this);
     private final ResultContainer resultContainer = new ResultContainer();
     private final DataSlot selectedRecipeIdx = DataSlot.standalone();
     private final FramingSawRecipeCache cache;
@@ -40,18 +41,18 @@ public class FramingSawMenu extends AbstractContainerMenu implements IFramingSaw
     private FramingSawRecipe selectedRecipe = null;
     private boolean recipeChanged = false;
 
-    public FramingSawMenu(int containerId, Inventory inv, ContainerLevelAccess levelAccess)
+    protected FramingSawMenu(int containerId, Inventory inv, ContainerLevelAccess levelAccess)
     {
         super(FBContent.MENU_TYPE_FRAMING_SAW.value(), containerId);
 
         this.level = inv.player.level();
         this.levelAccess = levelAccess;
-        this.inputSlot = addSlot(new Slot(inputContainer, SLOT_INPUT, 20, 28));
-        this.additiveSlots = new Slot[FramingSawRecipe.MAX_ADDITIVE_COUNT];
+        this.inputSlot = addSlot(new CraftingSlot(this, inputContainer, SLOT_INPUT, 20, 28));
+        this.additiveSlots = new CraftingSlot[FramingSawRecipe.MAX_ADDITIVE_COUNT];
         for (int i = 0; i < additiveSlots.length; i++)
         {
             int y = 64 + (i * 18);
-            additiveSlots[i] = addSlot(new Slot(inputContainer, SLOT_ADDITIVE_FIRST + i, 20, y));
+            additiveSlots[i] = addSlot(new CraftingSlot(this, inputContainer, SLOT_ADDITIVE_FIRST + i, 20, y));
         }
         this.resultSlot = addSlot(new ResultSlot(this, resultContainer, 0, 223, 64));
 
@@ -91,7 +92,7 @@ public class FramingSawMenu extends AbstractContainerMenu implements IFramingSaw
             }
             else if (index < SLOT_INV_FIRST)
             {
-                if (!moveItemStackTo(stack, SLOT_INV_FIRST, slots.size(), true))
+                if (!moveItemStackTo(stack, SLOT_INV_FIRST, SLOT_INV_FIRST + INV_SLOT_COUNT, true))
                 {
                     return ItemStack.EMPTY;
                 }
@@ -135,7 +136,10 @@ public class FramingSawMenu extends AbstractContainerMenu implements IFramingSaw
         {
             selectedRecipeIdx.set(id);
             selectedRecipe = recipes.get(id).getRecipe();
-            setupResultSlot();
+            if (isCraftingEnabled())
+            {
+                setupResultSlot();
+            }
             recipeChanged = true;
         }
         return true;
@@ -204,7 +208,7 @@ public class FramingSawMenu extends AbstractContainerMenu implements IFramingSaw
     @Override
     public boolean canTakeItemForPickAll(ItemStack stack, Slot slot)
     {
-        return slot.index != SLOT_RESULT && super.canTakeItemForPickAll(stack, slot);
+        return slot.index != SLOT_RESULT && slot.isActive();
     }
 
     @Override
@@ -262,6 +266,22 @@ public class FramingSawMenu extends AbstractContainerMenu implements IFramingSaw
         return idx >= 0 && idx < recipes.size();
     }
 
+    protected boolean isCraftingEnabled()
+    {
+        return true;
+    }
+
+
+
+    public static FramingSawMenu create(int containerId, Inventory inv, ContainerLevelAccess levelAccess)
+    {
+        if (AppliedEnergisticsCompat.isLoaded())
+        {
+            return new FramingSawWithEncoderMenu(containerId, inv, levelAccess);
+        }
+        return new FramingSawMenu(containerId, inv, levelAccess);
+    }
+
 
 
     private static class FrameCrafterContainer extends SimpleContainer
@@ -282,13 +302,30 @@ public class FramingSawMenu extends AbstractContainerMenu implements IFramingSaw
         }
     }
 
-    private static class ResultSlot extends Slot
+    private static class CraftingSlot extends Slot
+    {
+        private final FramingSawMenu menu;
+
+        public CraftingSlot(FramingSawMenu menu, Container pContainer, int pSlot, int pX, int pY)
+        {
+            super(pContainer, pSlot, pX, pY);
+            this.menu = menu;
+        }
+
+        @Override
+        public boolean isActive()
+        {
+            return menu.isCraftingEnabled();
+        }
+    }
+
+    private static class ResultSlot extends CraftingSlot
     {
         private final FramingSawMenu menu;
 
         ResultSlot(FramingSawMenu menu, Container container, int index, int x, int y)
         {
-            super(container, index, x, y);
+            super(menu, container, index, x, y);
             this.menu = menu;
         }
 

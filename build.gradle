@@ -197,7 +197,7 @@ dependencies {
     //runtimeOnly("curse.maven:conglass-383129:5002616")
 
     compileOnly("appeng:appliedenergistics2-neoforge:${ae2_version}:api")
-    runtimeOnly("appeng:appliedenergistics2-neoforge:${ae2_version}")
+    //runtimeOnly("appeng:appliedenergistics2-neoforge:${ae2_version}")
 
     compileOnly("curse.maven:atlasviewer-633577:4882515")
 }

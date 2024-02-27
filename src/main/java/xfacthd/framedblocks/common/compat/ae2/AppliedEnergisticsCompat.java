@@ -6,6 +6,7 @@ import net.minecraft.core.Direction;
 import net.minecraft.core.Holder;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.fml.ModList;
 import net.neoforged.fml.loading.FMLEnvironment;
@@ -20,13 +21,56 @@ import xfacthd.framedblocks.common.FBContent;
 public final class AppliedEnergisticsCompat
 {
     private static final boolean ENABLED = !FMLEnvironment.production;
+    private static boolean loaded = false;
 
     public static void init(IEventBus modBus)
     {
         if (ENABLED && ModList.get().isLoaded("ae2"))
         {
             GuardedAccess.init(modBus);
+            loaded = true;
         }
+    }
+
+    public static boolean isLoaded()
+    {
+        return loaded;
+    }
+
+    public static ItemStack makeBlankPatternStack()
+    {
+        if (loaded)
+        {
+            return GuardedAccess.makeBlankPatternStack();
+        }
+        return ItemStack.EMPTY;
+    }
+
+    public static ItemStack makeSawPatternStack()
+    {
+        if (loaded)
+        {
+            return GuardedAccess.makeSawPatternStack();
+        }
+        return ItemStack.EMPTY;
+    }
+
+    public static boolean isPattern(ItemStack stack, boolean encoded)
+    {
+        if (loaded)
+        {
+            return GuardedAccess.isPattern(stack, encoded);
+        }
+        return false;
+    }
+
+    public static ItemStack tryEncodePattern(ItemStack input, ItemStack[] additives, ItemStack output)
+    {
+        if (loaded)
+        {
+            return GuardedAccess.tryEncodePattern(input, additives, output);
+        }
+        return null;
     }
 
 
@@ -44,6 +88,8 @@ public final class AppliedEnergisticsCompat
                 new ResourceLocation("ae2", "crafting_machine"), ICraftingMachine.class
         );
 
+        static final Holder<Item> ITEM_BLANK_PATTERN = DeferredItem.createItem(new ResourceLocation("ae2", "blank_pattern"));
+
         public static void init(IEventBus modBus)
         {
             ITEMS.register(modBus);
@@ -59,6 +105,26 @@ public final class AppliedEnergisticsCompat
                     FBContent.BE_TYPE_POWERED_FRAMING_SAW.value(),
                     (saw, side) -> saw.getData(ATTACHMENT_SAW_MACHINE)
             );
+        }
+
+        public static ItemStack makeBlankPatternStack()
+        {
+            return new ItemStack(ITEM_BLANK_PATTERN);
+        }
+
+        public static ItemStack makeSawPatternStack()
+        {
+            return new ItemStack(ITEM_FRAMING_SAW_PATTERN);
+        }
+
+        public static boolean isPattern(ItemStack stack, boolean encoded)
+        {
+            return stack.is(encoded ? ITEM_FRAMING_SAW_PATTERN : ITEM_BLANK_PATTERN);
+        }
+
+        public static ItemStack tryEncodePattern(ItemStack input, ItemStack[] additives, ItemStack output)
+        {
+            return FramingSawPatternItem.encode(input, additives, output);
         }
 
 

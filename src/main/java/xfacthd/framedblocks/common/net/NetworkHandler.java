@@ -32,6 +32,11 @@ public final class NetworkHandler
                         SelectFramingSawRecipePayload.ID,
                         SelectFramingSawRecipePayload::new,
                         handler -> handler.server(SelectFramingSawRecipePayload::handle)
+                )
+                .play(
+                        EncodeFramingSawPatternPayload.ID,
+                        EncodeFramingSawPatternPayload::new,
+                        handler -> handler.server(EncodeFramingSawPatternPayload::handle)
                 );
     }
 

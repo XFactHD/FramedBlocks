@@ -10,6 +10,7 @@ import xfacthd.framedblocks.api.util.FramedConstants;
 import xfacthd.framedblocks.api.util.Utils;
 import xfacthd.framedblocks.client.render.item.BlueprintPropertyOverride;
 import xfacthd.framedblocks.common.FBContent;
+import xfacthd.framedblocks.common.compat.ae2.AppliedEnergisticsCompat;
 
 @SuppressWarnings({ "SameParameterValue", "UnusedReturnValue" })
 public final class FramedItemModelProvider extends ItemModelProvider
@@ -28,7 +29,14 @@ public final class FramedItemModelProvider extends ItemModelProvider
         handheldItem(FBContent.ITEM_FRAMED_SCREWDRIVER, "cutout");
 
         simpleItem(FBContent.ITEM_FRAMED_REINFORCEMENT, "cutout");
-        singleTexture("framing_saw_pattern", mcLoc("item/generated"), "layer0", new ResourceLocation("ae2", "item/crafting_pattern"));
+
+        ResourceLocation patternTexture = new ResourceLocation("ae2", "item/crafting_pattern");
+        if (!AppliedEnergisticsCompat.isLoaded())
+        {
+            // Pretend that the texture exists when AE2 is not present so this doesn't crash
+            existingFileHelper.trackGenerated(patternTexture, ModelProvider.TEXTURE);
+        }
+        singleTexture("framing_saw_pattern", mcLoc("item/generated"), "layer0", patternTexture);
 
         ItemModelBuilder modelNormal = simpleItem(FBContent.ITEM_FRAMED_BLUEPRINT, "cutout");
         ModelFile modelWritten = simpleItem("framed_blueprint_written", "cutout");

@@ -954,12 +954,14 @@ public final class FramedBlockStateProvider extends BlockStateProvider
     private void registerFramingSaw()
     {
         ModelFile model = models().getExistingFile(modLoc("block/framing_saw"));
+        ModelFile modelEncoder = models().getExistingFile(modLoc("block/framing_saw_encoder"));
         getVariantBuilder(FBContent.BLOCK_FRAMING_SAW.value()).forAllStates(state ->
         {
             int rotY = (int) state.getValue(FramedProperties.FACING_HOR).toYRot();
+            boolean encoder = state.getValue(PropertyHolder.SAW_ENCODER);
             return ConfiguredModel.builder()
                     .rotationY(rotY)
-                    .modelFile(model)
+                    .modelFile(encoder ? modelEncoder : model)
                     .build();
         });
         simpleBlockItem(FBContent.BLOCK_FRAMING_SAW, model);

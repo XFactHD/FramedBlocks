@@ -21,7 +21,7 @@ final class FramingSawPatternDetailsDecoder implements IPatternDetailsDecoder
     {
         if (level != null && what.getItem() == AppliedEnergisticsCompat.GuardedAccess.ITEM_FRAMING_SAW_PATTERN.value())
         {
-            return FramingSawPatternItem.decode(what, level);
+            return FramingSawPatternItem.decode(what, level, true);
         }
         return null;
     }
@@ -32,7 +32,7 @@ final class FramingSawPatternDetailsDecoder implements IPatternDetailsDecoder
     {
         if (level != null && what.getItem() == AppliedEnergisticsCompat.GuardedAccess.ITEM_FRAMING_SAW_PATTERN.value())
         {
-            return FramingSawPatternItem.decode(what, level, tryRecovery);
+            return FramingSawPatternItem.decode(AEItemKey.of(what), level, true);
         }
         return null;
     }

@@ -604,7 +604,7 @@ public final class FBContent
             "framed_chest"
     );
     public static final DeferredHolder<MenuType<?>, MenuType<FramingSawMenu>> MENU_TYPE_FRAMING_SAW = createMenuType(
-            (id, inv, buf) -> new FramingSawMenu(id, inv, ContainerLevelAccess.NULL),
+            (id, inv, buf) -> FramingSawMenu.create(id, inv, ContainerLevelAccess.NULL),
             "framing_saw"
     );
     public static final DeferredHolder<MenuType<?>, MenuType<PoweredFramingSawMenu>> MENU_TYPE_POWERED_FRAMING_SAW = createMenuType(

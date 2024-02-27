@@ -7,6 +7,7 @@ import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.MouseHandler;
 import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.components.events.GuiEventListener;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
 import net.minecraft.client.renderer.GameRenderer;
 import net.minecraft.client.resources.sounds.SimpleSoundInstance;
@@ -16,6 +17,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.tags.TagKey;
 import net.minecraft.util.Mth;
+import net.minecraft.world.Container;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.inventory.tooltip.TooltipComponent;
 import net.minecraft.world.item.Item;
@@ -29,15 +31,15 @@ import xfacthd.framedblocks.client.render.item.ItemRenderHelper;
 import xfacthd.framedblocks.client.screen.widget.SearchEditBox;
 import xfacthd.framedblocks.client.util.RecipeViewer;
 import xfacthd.framedblocks.common.FBContent;
+import xfacthd.framedblocks.common.compat.ae2.AppliedEnergisticsCompat;
 import xfacthd.framedblocks.common.crafting.*;
 import xfacthd.framedblocks.common.menu.FramingSawMenu;
-import xfacthd.framedblocks.common.menu.IFramingSawMenu;
 import xfacthd.framedblocks.common.net.payload.SelectFramingSawRecipePayload;
 import xfacthd.framedblocks.common.util.FramedUtils;
 
 import java.util.*;
 
-public class FramingSawScreen extends AbstractContainerScreen<FramingSawMenu>
+public class FramingSawScreen extends AbstractContainerScreen<FramingSawMenu> implements IFramingSawScreen
 {
     public static final String TOOLTIP_MATERIAL = Utils.translationKey("tooltip", "framing_saw.material");
     public static final Component TOOLTIP_LOOSE_ADDITIVE = Utils.translate("tooltip", "framing_saw.loose_additive");
@@ -48,7 +50,7 @@ public class FramingSawScreen extends AbstractContainerScreen<FramingSawMenu>
     public static final String TOOLTIP_OUTPUT_COUNT = Utils.translationKey("tooltip", "framing_saw.output_count");
     public static final Component TOOLTIP_HAVE_ITEM_NONE = Utils.translate("tooltip", "framing_saw.have_item_none").withStyle(ChatFormatting.GOLD);
     public static final String TOOLTIP_PRESS_TO_SHOW = Utils.translationKey("tooltip", "framing_saw.press_to_show");
-    public static final Component MSG_HINT_SEARCH = Utils.translate("msg", "search");
+    public static final Component MSG_HINT_SEARCH = Utils.translate("msg", "framing_saw.search");
     private static final ResourceLocation BACKGROUND = Utils.rl("textures/gui/framing_saw.png");
     public static final ResourceLocation WARNING_ICON = new ResourceLocation("neoforge", "textures/gui/experimental_warning.png");
     private static final int IMAGE_WIDTH = 256;
@@ -74,8 +76,8 @@ public class FramingSawScreen extends AbstractContainerScreen<FramingSawMenu>
     private static final int SEARCH_Y = 5;
     private static final RecipeViewer RECIPE_VIEWER = RecipeViewer.get();
 
-    private final FramingSawRecipeCache cache = FramingSawRecipeCache.get(true);
-    private final ItemStack cubeStack = new ItemStack(FBContent.BLOCK_FRAMED_CUBE.value());
+    protected final FramingSawRecipeCache cache = FramingSawRecipeCache.get(true);
+    protected final ItemStack cubeStack = new ItemStack(FBContent.BLOCK_FRAMED_CUBE.value());
     private final List<FramingSawMenu.FramedRecipeHolder> filteredRecipes = new ArrayList<>();
     private SearchEditBox searchBox = null;
     private int firstIndex = 0;
@@ -83,7 +85,7 @@ public class FramingSawScreen extends AbstractContainerScreen<FramingSawMenu>
     private float scrollOffset = 0F;
     private boolean hasEffectiveSearchQuery = false;
 
-    public FramingSawScreen(FramingSawMenu menu, Inventory inv, Component title)
+    protected FramingSawScreen(FramingSawMenu menu, Inventory inv, Component title)
     {
         super(menu, inv, title);
         this.titleLabelY -= 1;
@@ -120,12 +122,12 @@ public class FramingSawScreen extends AbstractContainerScreen<FramingSawMenu>
         RenderSystem.setShader(GameRenderer::getPositionTexShader);
         RenderSystem.setShaderColor(1F, 1F, 1F, 1F);
 
-        graphics.blit(BACKGROUND, leftPos, topPos, 0, 0, imageWidth, imageHeight);
+        graphics.blit(getBackground(), leftPos, topPos, 0, 0, imageWidth, imageHeight);
         int offset = (int) ((SCROLL_BAR_HEIGHT - SCROLL_BTN_HEIGHT) * scrollOffset);
         int scrollU = SCROLL_BTN_TEX_X + (isScrollBarActive() ? 0 : SCROLL_BTN_WIDTH);
         graphics.blit(BACKGROUND, leftPos + SCROLL_BAR_X, topPos + SCROLL_BAR_Y + offset, scrollU, imageHeight, SCROLL_BTN_WIDTH, SCROLL_BTN_HEIGHT);
 
-        ItemStack input = menu.getInputStack();
+        ItemStack input = getInputStack();
         if (!input.isEmpty() && cache.containsAdditive(input.getItem()))
         {
             graphics.blit(WARNING_ICON, leftPos + WARNING_X, topPos + WARNING_Y, 8, 8, 24, 24, 32, 32);
@@ -134,7 +136,7 @@ public class FramingSawScreen extends AbstractContainerScreen<FramingSawMenu>
         int idx = menu.getSelectedRecipeIndex();
         if (menu.hasRecipeChanged())
         {
-            tryScrollToRecipe(idx);
+            handleRecipeChange();
         }
 
         int recX = leftPos + RECIPES_X;
@@ -147,25 +149,71 @@ public class FramingSawScreen extends AbstractContainerScreen<FramingSawMenu>
         if (idx >= 0 && idx < recipes.size())
         {
             FramingSawRecipe recipe = recipes.get(idx).value();
-            if (input.isEmpty())
-            {
-                ItemRenderHelper.renderFakeItemTransparent(graphics.pose(), cubeStack, leftPos + 20, topPos + 28, 127);
-            }
+            drawInputStackHint(graphics, input);
 
             List<FramingSawRecipeAdditive> additives = recipe.getAdditives();
             for (int i = 0; i < additives.size(); i++)
             {
-                if (!menu.getAdditiveStack(i).isEmpty())
-                {
-                    continue;
-                }
-
-                ItemStack[] items = additives.get(i).ingredient().getItems();
-                int t = (int) (System.currentTimeMillis() / 1700) % items.length;
+                ItemStack additive = getAdditiveStack(i);
                 int y = topPos + 64 + (18 * i);
-                ItemRenderHelper.renderFakeItemTransparent(graphics.pose(), items[t], leftPos + 20, y, 127);
+                drawAdditiveStackHint(graphics, i, additive, additives, y);
             }
         }
+    }
+
+    protected ResourceLocation getBackground()
+    {
+        return BACKGROUND;
+    }
+
+    @Override
+    public ItemStack getInputStack()
+    {
+        return menu.getInputStack();
+    }
+
+    @Override
+    public ItemStack getAdditiveStack(int slot)
+    {
+        return menu.getAdditiveStack(slot);
+    }
+
+    @Override
+    public Container getInputContainer()
+    {
+        return menu.getInputContainer();
+    }
+
+    protected void handleRecipeChange()
+    {
+        tryScrollToRecipe(menu.getSelectedRecipeIndex());
+    }
+
+    protected boolean drawInputStackHint(GuiGraphics graphics, ItemStack input)
+    {
+        if (input.isEmpty())
+        {
+            ItemRenderHelper.renderFakeItemTransparent(graphics.pose(), cubeStack, leftPos + 20, topPos + 28, 127);
+            return true;
+        }
+        return false;
+    }
+
+    protected boolean drawAdditiveStackHint(GuiGraphics graphics, int index, ItemStack additive, List<FramingSawRecipeAdditive> additives, int y)
+    {
+        if (additive.isEmpty())
+        {
+            ItemStack[] items = additives.get(index).ingredient().getItems();
+            int t = (int) (System.currentTimeMillis() / 1700) % items.length;
+            ItemRenderHelper.renderFakeItemTransparent(graphics.pose(), items[t], leftPos + 20, y, 127);
+            return true;
+        }
+        return false;
+    }
+
+    protected boolean displayRecipeErrors()
+    {
+        return true;
     }
 
     private void tryScrollToRecipe(int idx)
@@ -198,7 +246,7 @@ public class FramingSawScreen extends AbstractContainerScreen<FramingSawMenu>
             return;
         }
 
-        ItemStack input = menu.getInputStack();
+        ItemStack input = getInputStack();
         if (!input.isEmpty() && isHovering(WARNING_X, WARNING_Y, 16, 16, mouseX, mouseY) && cache.containsAdditive(input.getItem()))
         {
             graphics.renderTooltip(font, TOOLTIP_LOOSE_ADDITIVE, mouseX, mouseY);
@@ -219,11 +267,12 @@ public class FramingSawScreen extends AbstractContainerScreen<FramingSawMenu>
                 FramingSawMenu.FramedRecipeHolder recipe = filteredRecipes.get(idx);
                 ItemStack result = recipe.getRecipe().getResult();
                 renderItemTooltip(graphics, mouseX, mouseY, result, recipe);
+                break;
             }
         }
     }
 
-    private void renderItemTooltip(GuiGraphics graphics, int mouseX, int mouseY, ItemStack stack, FramingSawMenu.FramedRecipeHolder recipeHolder)
+    protected void renderItemTooltip(GuiGraphics graphics, int mouseX, int mouseY, ItemStack stack, FramingSawMenu.FramedRecipeHolder recipeHolder)
     {
         //noinspection ConstantConditions
         List<Component> components = new ArrayList<>(getTooltipFromItem(minecraft, stack));
@@ -235,7 +284,7 @@ public class FramingSawScreen extends AbstractContainerScreen<FramingSawMenu>
             components.add(Component.translatable(TOOLTIP_MATERIAL, material));
         }
 
-        if (recipeHolder != null)
+        if (recipeHolder != null && displayRecipeErrors())
         {
             appendRecipeFailure(components, recipeHolder);
         }
@@ -245,7 +294,7 @@ public class FramingSawScreen extends AbstractContainerScreen<FramingSawMenu>
 
     private void appendRecipeFailure(List<Component> components, FramingSawMenu.FramedRecipeHolder recipeHolder)
     {
-        appendRecipeFailure(components, cache, recipeHolder.getRecipe(), recipeHolder.getMatchResult(), menu);
+        appendRecipeFailure(components, cache, recipeHolder.getRecipe(), recipeHolder.getMatchResult(), this);
     }
 
     public static List<Component> appendRecipeFailure(
@@ -253,14 +302,14 @@ public class FramingSawScreen extends AbstractContainerScreen<FramingSawMenu>
             FramingSawRecipeCache cache,
             FramingSawRecipe recipe,
             FramingSawRecipeMatchResult matchResult,
-            IFramingSawMenu menu
+            IFramingSawScreen screen
     )
     {
         if (!matchResult.success())
         {
             components.add(matchResult.translation());
 
-            ItemStack input = menu.getInputStack();
+            ItemStack input = screen.getInputStack();
             int listAdditives = -1;
             MutableComponent detail = switch (matchResult)
             {
@@ -279,7 +328,7 @@ public class FramingSawScreen extends AbstractContainerScreen<FramingSawMenu>
                     if (input.isEmpty()) yield Component.empty();
 
                     FramingSawRecipeCalculation calc = recipe.makeCraftingCalculation(
-                            menu.getInputContainer(), true
+                            screen.getInputContainer(), true
                     );
                     yield Component.translatable(
                             TOOLTIP_HAVE_X_BUT_NEED_Y_ITEM_COUNT,
@@ -292,7 +341,7 @@ public class FramingSawScreen extends AbstractContainerScreen<FramingSawMenu>
                     if (input.isEmpty()) yield Component.empty();
 
                     FramingSawRecipeCalculation calc = recipe.makeCraftingCalculation(
-                            menu.getInputContainer(), true
+                            screen.getInputContainer(), true
                     );
                     int maxSize = recipe.getResult().getMaxStackSize();
                     yield Component.translatable(TOOLTIP_OUTPUT_COUNT, calc.getOutputCount(), maxSize);
@@ -305,7 +354,7 @@ public class FramingSawScreen extends AbstractContainerScreen<FramingSawMenu>
                 }
                 case UNEXPECTED_ADDITIVE_0, UNEXPECTED_ADDITIVE_1, UNEXPECTED_ADDITIVE_2 ->
                 {
-                    Item itemIn = menu.getAdditiveStack(matchResult.additiveSlot()).getItem();
+                    Item itemIn = screen.getAdditiveStack(matchResult.additiveSlot()).getItem();
                     yield Component.translatable(
                             TOOLTIP_HAVE_X_BUT_NEED_Y_ITEM,
                             Component.translatable(itemIn.getDescriptionId()).withStyle(ChatFormatting.GOLD),
@@ -315,7 +364,7 @@ public class FramingSawScreen extends AbstractContainerScreen<FramingSawMenu>
                 case INCORRECT_ADDITIVE_0, INCORRECT_ADDITIVE_1, INCORRECT_ADDITIVE_2 ->
                 {
                     listAdditives = matchResult.additiveSlot();
-                    Item itemIn = menu.getAdditiveStack(matchResult.additiveSlot()).getItem();
+                    Item itemIn = screen.getAdditiveStack(matchResult.additiveSlot()).getItem();
                     Ingredient additive = recipe.getAdditives().get(matchResult.additiveSlot()).ingredient();
                     yield makeHaveButNeedTooltip(
                             Component.translatable(itemIn.getDescriptionId()).withStyle(ChatFormatting.GOLD),
@@ -327,9 +376,9 @@ public class FramingSawScreen extends AbstractContainerScreen<FramingSawMenu>
                     if (input.isEmpty()) yield Component.empty();
 
                     FramingSawRecipeCalculation calc = recipe.makeCraftingCalculation(
-                            menu.getInputContainer(), true
+                            screen.getInputContainer(), true
                     );
-                    int cntIn = menu.getAdditiveStack(matchResult.additiveSlot()).getCount();
+                    int cntIn = screen.getAdditiveStack(matchResult.additiveSlot()).getCount();
                     int cntReq = calc.getAdditiveCount(matchResult.additiveSlot());
                     yield Component.translatable(
                             TOOLTIP_HAVE_X_BUT_NEED_Y_ITEM_COUNT,
@@ -424,7 +473,7 @@ public class FramingSawScreen extends AbstractContainerScreen<FramingSawMenu>
                 hovered = true;
             }
 
-            if (!hovered && !filteredRecipes.get(idx).getMatchResult().success())
+            if (!hovered && displayRecipeErrors() && !filteredRecipes.get(idx).getMatchResult().success())
             {
                 RenderSystem.setShaderColor(.9F, .3F, .3F, 1F);
             }
@@ -463,9 +512,10 @@ public class FramingSawScreen extends AbstractContainerScreen<FramingSawMenu>
     {
         scrolling = false;
 
-        if (searchBox.isFocused() && !searchBox.isMouseOver(mouseX, mouseY))
+        GuiEventListener focused = getFocused();
+        if (focused != null && !focused.isMouseOver(mouseX, mouseY))
         {
-            searchBox.setFocused(false);
+            setFocused(null);
         }
 
         int x = leftPos + RECIPES_X;
@@ -634,5 +684,16 @@ public class FramingSawScreen extends AbstractContainerScreen<FramingSawMenu>
     {
         int idx = (int) ((double) (scrollOffset * (float) hiddenRows) + .5D) * RECIPE_COLS;
         return Mth.clamp(idx, 0, filteredRecipes.size() - 1);
+    }
+
+
+
+    public static FramingSawScreen create(FramingSawMenu menu, Inventory inv, Component title)
+    {
+        if (AppliedEnergisticsCompat.isLoaded())
+        {
+            return new FramingSawWithEncoderScreen(menu, inv, title);
+        }
+        return new FramingSawScreen(menu, inv, title);
     }
 }

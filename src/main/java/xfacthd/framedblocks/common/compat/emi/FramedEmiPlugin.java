@@ -11,8 +11,7 @@ import net.minecraft.world.SimpleContainer;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import xfacthd.framedblocks.FramedBlocks;
-import xfacthd.framedblocks.client.screen.FramingSawScreen;
-import xfacthd.framedblocks.client.screen.PoweredFramingSawScreen;
+import xfacthd.framedblocks.client.screen.*;
 import xfacthd.framedblocks.common.config.ClientConfig;
 import xfacthd.framedblocks.common.FBContent;
 import xfacthd.framedblocks.common.crafting.*;
@@ -38,7 +37,9 @@ public final class FramedEmiPlugin implements EmiPlugin
         registry.addRecipeHandler(FBContent.MENU_TYPE_POWERED_FRAMING_SAW.get(), new FramedEmiRecipeHandler<>());
         registry.addStackProvider(FramingSawScreen.class, new FramingSawStackProvider());
         registry.addStackProvider(PoweredFramingSawScreen.class, new PoweredFramingSawStackProvider());
+        registry.addDragDropHandler(FramingSawWithEncoderScreen.class, new FramingSawDragDropHandler());
         registry.addDragDropHandler(PoweredFramingSawScreen.class, new PoweredFramingSawDragDropHandler());
+        registry.addExclusionArea(FramingSawWithEncoderScreen.class, new FramingSawExclusionArea());
         registerRecipes(registry);
     }
 

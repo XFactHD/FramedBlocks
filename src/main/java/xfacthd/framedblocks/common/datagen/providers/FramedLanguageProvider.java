@@ -301,6 +301,8 @@ public final class FramedLanguageProvider extends LanguageProvider
         add(FramingSawScreen.TOOLTIP_HAVE_ITEM_NONE, "none");
         add(FramingSawScreen.TOOLTIP_PRESS_TO_SHOW, "Press [%s] to show all possible items");
         add(FramingSawScreen.MSG_HINT_SEARCH, "Search...");
+        add(FramingSawWithEncoderScreen.TOOLTIP_TAB_CRAFTING, "Crafting");
+        add(FramingSawWithEncoderScreen.TOOLTIP_TAB_PATTERN, "AE2 Pattern Encoding");
         add(PoweredFramingSawScreen.TITLE_TARGETBLOCK, "Target:");
         add(PoweredFramingSawScreen.MSG_STATUS, "Status: ");
         add(PoweredFramingSawScreen.MSG_STATUS_NO_RECIPE, "No recipe");

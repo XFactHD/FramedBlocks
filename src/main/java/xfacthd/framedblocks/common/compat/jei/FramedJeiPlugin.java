@@ -10,7 +10,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.RecipeHolder;
 import xfacthd.framedblocks.api.util.Utils;
-import xfacthd.framedblocks.client.screen.PoweredFramingSawScreen;
+import xfacthd.framedblocks.client.screen.*;
 import xfacthd.framedblocks.common.FBContent;
 import xfacthd.framedblocks.common.crafting.FramingSawRecipeCache;
 import xfacthd.framedblocks.common.crafting.FramingSawRecipe;
@@ -68,6 +68,14 @@ public final class FramedJeiPlugin implements IModPlugin
     @Override
     public void registerGuiHandlers(IGuiHandlerRegistration registration)
     {
+        registration.addGhostIngredientHandler(
+                FramingSawWithEncoderScreen.class,
+                new FramingSawGhostIngredientHandler()
+        );
+        registration.addGuiContainerHandler(
+                FramingSawWithEncoderScreen.class,
+                new FramingSawGuiContainerHandler()
+        );
         registration.addGhostIngredientHandler(
                 PoweredFramingSawScreen.class,
                 new PoweredFramingSawGhostIngredientHandler()

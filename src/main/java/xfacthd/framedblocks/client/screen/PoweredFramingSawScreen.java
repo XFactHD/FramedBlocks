@@ -7,6 +7,7 @@ import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
 import net.minecraft.client.renderer.Rect2i;
 import net.minecraft.network.chat.*;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.Container;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.inventory.tooltip.TooltipComponent;
@@ -25,7 +26,7 @@ import xfacthd.framedblocks.common.net.payload.SelectFramingSawRecipePayload;
 
 import java.util.*;
 
-public class PoweredFramingSawScreen extends AbstractContainerScreen<PoweredFramingSawMenu>
+public class PoweredFramingSawScreen extends AbstractContainerScreen<PoweredFramingSawMenu> implements IFramingSawScreen
 {
     private static final ResourceLocation BACKGROUND = Utils.rl("textures/gui/powered_framing_saw.png");
     public static final Component TITLE_TARGETBLOCK = Utils.translate("title", "powered_saw.target_block");
@@ -172,7 +173,7 @@ public class PoweredFramingSawScreen extends AbstractContainerScreen<PoweredFram
         else if (match != null && !match.success())
         {
             status = status.append(MSG_STATUS_NO_MATCH);
-            statusTooltip = FramingSawScreen.appendRecipeFailure(new ArrayList<>(), cache, recipe, match, menu);
+            statusTooltip = FramingSawScreen.appendRecipeFailure(new ArrayList<>(), cache, recipe, match, this);
             width = font.width(MSG_STATUS_NO_MATCH);
         }
         else
@@ -200,6 +201,24 @@ public class PoweredFramingSawScreen extends AbstractContainerScreen<PoweredFram
                     TOOLTIP_ENERGY, menu.getEnergy(), PoweredFramingSawBlockEntity.ENERGY_CAPACITY
             ));
         }
+    }
+
+    @Override
+    public ItemStack getInputStack()
+    {
+        return menu.getInputStack();
+    }
+
+    @Override
+    public ItemStack getAdditiveStack(int slot)
+    {
+        return menu.getAdditiveStack(slot);
+    }
+
+    @Override
+    public Container getInputContainer()
+    {
+        return menu.getInputContainer();
     }
 
     @Override

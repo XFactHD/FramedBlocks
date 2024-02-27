@@ -10,6 +10,7 @@ import net.minecraft.world.level.Level;
 import org.jetbrains.annotations.Nullable;
 import xfacthd.framedblocks.common.crafting.*;
 
+import java.util.List;
 import java.util.Objects;
 
 final class FramingSawPatternDetails implements IPatternDetails
@@ -32,12 +33,19 @@ final class FramingSawPatternDetails implements IPatternDetails
         SimpleContainer container = new SimpleContainer(input);
         FramingSawRecipeCalculation calc = recipe.makeCraftingCalculation(container, level.isClientSide());
 
-        this.inputs = new IInput[1 + recipe.getAdditives().size()];
+        List<FramingSawRecipeAdditive> additives = recipe.getAdditives();
+        this.inputs = new IInput[1 + additives.size()];
         this.inputs[0] = new Input(input, calc.getInputCount());
-        ItemStack[] additives = FramingSawPatternEncoding.getAdditives(tag);
-        for (int i = 0; i < recipe.getAdditives().size(); i++)
+        ItemStack[] loadedAdditives = FramingSawPatternEncoding.getAdditives(tag, additives.size());
+        for (int i = 0; i < additives.size(); i++)
         {
-            inputs[i + 1] = new Input(additives[i], calc.getAdditiveCount(i));
+            if (!additives.get(i).ingredient().test(loadedAdditives[i]))
+            {
+                throw new IllegalArgumentException("Invalid additive '%s' in slot '%d' for recipe '%s'".formatted(
+                        loadedAdditives[i], i, this.recipe.id()
+                ));
+            }
+            inputs[i + 1] = new Input(loadedAdditives[i], calc.getAdditiveCount(i));
         }
         this.outputs = new GenericStack[] { new GenericStack(AEItemKey.of(result), calc.getOutputCount()) };
     }

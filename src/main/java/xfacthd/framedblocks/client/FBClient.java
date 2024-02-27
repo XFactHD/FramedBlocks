@@ -24,6 +24,7 @@ import xfacthd.framedblocks.api.block.FramedBlockEntity;
 import xfacthd.framedblocks.api.block.IFramedBlock;
 import xfacthd.framedblocks.api.model.wrapping.*;
 import xfacthd.framedblocks.api.model.wrapping.statemerger.StateMerger;
+import xfacthd.framedblocks.client.loader.fallback.FallbackLoader;
 import xfacthd.framedblocks.client.model.*;
 import xfacthd.framedblocks.client.model.slopeedge.*;
 import xfacthd.framedblocks.client.modelwrapping.ModelWrappingManager;
@@ -64,8 +65,7 @@ import xfacthd.framedblocks.common.compat.supplementaries.SupplementariesCompat;
 import xfacthd.framedblocks.common.data.BlockType;
 import xfacthd.framedblocks.common.data.StateCacheBuilder;
 
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 import java.util.function.Supplier;
 
 @Mod.EventBusSubscriber(modid = FramedConstants.MOD_ID, bus = Mod.EventBusSubscriber.Bus.MOD, value = Dist.CLIENT)
@@ -92,7 +92,7 @@ public final class FBClient
     public static void onRegisterMenuScreens(final RegisterMenuScreensEvent event)
     {
         event.register(FBContent.MENU_TYPE_FRAMED_STORAGE.value(), FramedStorageScreen::new);
-        event.register(FBContent.MENU_TYPE_FRAMING_SAW.value(), FramingSawScreen::new);
+        event.register(FBContent.MENU_TYPE_FRAMING_SAW.value(), FramingSawScreen::create);
         event.register(FBContent.MENU_TYPE_POWERED_FRAMING_SAW.value(), PoweredFramingSawScreen::new);
     }
 
@@ -184,6 +184,7 @@ public final class FBClient
     public static void onGeometryLoaderRegister(final ModelEvent.RegisterGeometryLoaders event)
     {
         event.register(OverlayLoader.ID, new OverlayLoader());
+        event.register(FallbackLoader.ID, new FallbackLoader());
     }
 
     @SubscribeEvent

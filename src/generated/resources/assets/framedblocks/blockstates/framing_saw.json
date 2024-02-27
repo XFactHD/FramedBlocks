@@ -1,18 +1,33 @@
 {
   "variants": {
-    "facing=east": {
+    "facing=east,saw_encoder=false": {
       "model": "framedblocks:block/framing_saw",
       "y": 270
     },
-    "facing=north": {
+    "facing=east,saw_encoder=true": {
+      "model": "framedblocks:block/framing_saw_encoder",
+      "y": 270
+    },
+    "facing=north,saw_encoder=false": {
       "model": "framedblocks:block/framing_saw",
       "y": 180
     },
-    "facing=south": {
+    "facing=north,saw_encoder=true": {
+      "model": "framedblocks:block/framing_saw_encoder",
+      "y": 180
+    },
+    "facing=south,saw_encoder=false": {
       "model": "framedblocks:block/framing_saw"
     },
-    "facing=west": {
+    "facing=south,saw_encoder=true": {
+      "model": "framedblocks:block/framing_saw_encoder"
+    },
+    "facing=west,saw_encoder=false": {
       "model": "framedblocks:block/framing_saw",
+      "y": 90
+    },
+    "facing=west,saw_encoder=true": {
+      "model": "framedblocks:block/framing_saw_encoder",
       "y": 90
     }
   }

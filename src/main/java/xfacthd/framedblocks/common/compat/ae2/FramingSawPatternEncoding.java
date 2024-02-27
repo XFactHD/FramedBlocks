@@ -22,10 +22,10 @@ final class FramingSawPatternEncoding
         return BuiltInRegistries.ITEM.get(new ResourceLocation(tag.getString(KEY_RESULT))).getDefaultInstance();
     }
 
-    public static ItemStack[] getAdditives(CompoundTag tag)
+    public static ItemStack[] getAdditives(CompoundTag tag, int count)
     {
         ListTag list = tag.getList(KEY_ADDITIVES, Tag.TAG_COMPOUND);
-        ItemStack[] additives = new ItemStack[list.size()];
+        ItemStack[] additives = new ItemStack[count];
         for (int i = 0; i < additives.length; i++)
         {
             additives[i] = ItemStack.of(list.getCompound(i));
