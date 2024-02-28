@@ -771,7 +771,7 @@ public final class FramedRecipeProvider extends RecipeProvider
                 .unlockedBy(FBContent.BLOCK_FRAMED_SLOPE)
                 .save(consumer);
 
-        shapedBuildingBlock(FBContent.BLOCK_FRAMED_INNER_PRISM.value(), 2)
+        shapedBuildingBlock(FBContent.BLOCK_FRAMED_ELEVATED_INNER_PRISM.value(), 2)
                 .pattern("FF")
                 .pattern("SS")
                 .define('F', FBContent.BLOCK_FRAMED_SLOPE.value())
@@ -779,11 +779,11 @@ public final class FramedRecipeProvider extends RecipeProvider
                 .unlockedBy(FBContent.BLOCK_FRAMED_SLOPE)
                 .save(consumer);
 
-        shapedBuildingBlock(FBContent.BLOCK_FRAMED_DOUBLE_PRISM.value())
+        shapedBuildingBlock(FBContent.BLOCK_FRAMED_ELEVATED_INNER_DOUBLE_PRISM.value())
                 .pattern("P")
                 .pattern("I")
                 .define('P', FBContent.BLOCK_FRAMED_PRISM.value())
-                .define('I', FBContent.BLOCK_FRAMED_INNER_PRISM.value())
+                .define('I', FBContent.BLOCK_FRAMED_ELEVATED_INNER_PRISM.value())
                 .unlockedBy(FBContent.BLOCK_FRAMED_PRISM)
                 .save(consumer);
 
@@ -793,7 +793,7 @@ public final class FramedRecipeProvider extends RecipeProvider
                 .unlockedBy(FBContent.BLOCK_FRAMED_CORNER_SLOPE)
                 .save(consumer);
 
-        shapedBuildingBlock(FBContent.BLOCK_FRAMED_INNER_SLOPED_PRISM.value(), 2)
+        shapedBuildingBlock(FBContent.BLOCK_FRAMED_ELEVATED_INNER_SLOPED_PRISM.value(), 2)
                 .pattern("FF")
                 .pattern("SS")
                 .define('F', FBContent.BLOCK_FRAMED_CORNER_SLOPE.value())
@@ -801,11 +801,11 @@ public final class FramedRecipeProvider extends RecipeProvider
                 .unlockedBy(FBContent.BLOCK_FRAMED_CORNER_SLOPE)
                 .save(consumer);
 
-        shapedBuildingBlock(FBContent.BLOCK_FRAMED_DOUBLE_SLOPED_PRISM.value())
+        shapedBuildingBlock(FBContent.BLOCK_FRAMED_ELEVATED_INNER_DOUBLE_SLOPED_PRISM.value())
                 .pattern("P")
                 .pattern("I")
                 .define('P', FBContent.BLOCK_FRAMED_SLOPED_PRISM.value())
-                .define('I', FBContent.BLOCK_FRAMED_INNER_SLOPED_PRISM.value())
+                .define('I', FBContent.BLOCK_FRAMED_ELEVATED_INNER_SLOPED_PRISM.value())
                 .unlockedBy(FBContent.BLOCK_FRAMED_SLOPED_PRISM)
                 .save(consumer);
 

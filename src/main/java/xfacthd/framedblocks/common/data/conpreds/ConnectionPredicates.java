@@ -140,11 +140,11 @@ public final class ConnectionPredicates extends BlockTypeMap<ConnectionPredicate
         put(BlockType.FRAMED_BOUNCY_CUBE, ConnectionPredicate.FULL_EDGE);
         put(BlockType.FRAMED_REDSTONE_BLOCK, ConnectionPredicate.FULL_EDGE);
         put(BlockType.FRAMED_PRISM, new PrismConnectionPredicate());
-        put(BlockType.FRAMED_INNER_PRISM, new InnerPrismConnectionPredicate());
-        put(BlockType.FRAMED_DOUBLE_PRISM, new DoublePrismConnectionPredicate());
+        put(BlockType.FRAMED_ELEVATED_INNER_PRISM, new ElevatedInnerPrismConnectionPredicate());
+        put(BlockType.FRAMED_ELEVATED_INNER_DOUBLE_PRISM, new ElevatedInnerDoublePrismConnectionPredicate());
         put(BlockType.FRAMED_SLOPED_PRISM, new SlopedPrismConnectionPredicate());
-        put(BlockType.FRAMED_INNER_SLOPED_PRISM, new InnerSlopedPrismConnectionPredicate());
-        put(BlockType.FRAMED_DOUBLE_SLOPED_PRISM, new DoubleSlopedPrismConnectionPredicate());
+        put(BlockType.FRAMED_ELEVATED_INNER_SLOPED_PRISM, new ElevatedInnerSlopedPrismConnectionPredicate());
+        put(BlockType.FRAMED_ELEVATED_INNER_DOUBLE_SLOPED_PRISM, new ElevatedInnerDoubleSlopedPrismConnectionPredicate());
         put(BlockType.FRAMED_SLOPE_SLAB, new SlopeSlabConnectionPredicate());
         put(BlockType.FRAMED_ELEVATED_SLOPE_SLAB, new ElevatedSlopeSlabConnectionPredicate());
         put(BlockType.FRAMED_COMPOUND_SLOPE_SLAB, new CompoundSlopeSlabConnectionPredicate());

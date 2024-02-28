@@ -11,21 +11,19 @@ import net.minecraft.world.level.block.*;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
-import net.minecraft.world.phys.Vec3;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import xfacthd.framedblocks.api.block.FramedProperties;
-import xfacthd.framedblocks.api.block.PlacementStateBuilder;
 import xfacthd.framedblocks.api.shapes.ShapeProvider;
 import xfacthd.framedblocks.api.shapes.ShapeUtils;
-import xfacthd.framedblocks.api.util.*;
+import xfacthd.framedblocks.api.util.Utils;
 import xfacthd.framedblocks.common.block.FramedBlock;
 import xfacthd.framedblocks.common.data.BlockType;
 import xfacthd.framedblocks.common.data.PropertyHolder;
 import xfacthd.framedblocks.common.data.property.CompoundDirection;
 
-public class FramedSlopedPrismBlock extends FramedBlock implements IFramedPrismBlock
+public class FramedElevatedSlopedPrismBlock extends FramedBlock implements IFramedPrismBlock
 {
-    public FramedSlopedPrismBlock(BlockType type)
+    public FramedElevatedSlopedPrismBlock(BlockType type)
     {
         super(type);
         registerDefaultState(defaultBlockState()
@@ -47,52 +45,7 @@ public class FramedSlopedPrismBlock extends FramedBlock implements IFramedPrismB
     @Override
     public BlockState getStateForPlacement(BlockPlaceContext context)
     {
-        return getStateForPlacement(context, this);
-    }
-
-    public static <T extends Block & IFramedPrismBlock> BlockState getStateForPlacement(BlockPlaceContext context, T block)
-    {
-        return PlacementStateBuilder.of(block, context)
-                .withCustom((state, modCtx) ->
-                {
-                    Direction face = modCtx.getClickedFace();
-                    Direction orientation;
-                    if (Utils.isY(face))
-                    {
-                        orientation = modCtx.getHorizontalDirection();
-                        if (block.isInnerPrism())
-                        {
-                            orientation = orientation.getOpposite();
-                        }
-                    }
-                    else
-                    {
-                        Vec3 subHit = Utils.fraction(modCtx.getClickLocation());
-
-                        double xz = (Utils.isX(face) ? subHit.z() : subHit.x()) - .5;
-                        double y = subHit.y() - .5;
-
-                        if (Math.max(Math.abs(xz), Math.abs(y)) == Math.abs(xz))
-                        {
-                            if (Utils.isX(face))
-                            {
-                                orientation = xz < 0 ? Direction.SOUTH : Direction.NORTH;
-                            }
-                            else
-                            {
-                                orientation = xz < 0 ? Direction.EAST : Direction.WEST;
-                            }
-                        }
-                        else
-                        {
-                            orientation = y < 0 ? Direction.UP : Direction.DOWN;
-                        }
-                    }
-                    return state.setValue(PropertyHolder.FACING_DIR, CompoundDirection.of(face, orientation));
-                })
-                .withYSlope(Utils.isY(context.getClickedFace()))
-                .tryWithWater()
-                .build();
+        return FramedSlopedPrismBlock.getStateForPlacement(context, this);
     }
 
     @Override
@@ -125,20 +78,20 @@ public class FramedSlopedPrismBlock extends FramedBlock implements IFramedPrismB
     @Override
     public BlockState getItemModelSource()
     {
-        boolean outer = getBlockType() == BlockType.FRAMED_SLOPED_PRISM;
-        CompoundDirection cmpDir = outer ? CompoundDirection.UP_WEST : CompoundDirection.UP_EAST;
+        boolean inner = getBlockType() == BlockType.FRAMED_ELEVATED_INNER_SLOPED_PRISM;
+        CompoundDirection cmpDir = inner ? CompoundDirection.UP_EAST : CompoundDirection.UP_WEST;
         return defaultBlockState().setValue(PropertyHolder.FACING_DIR, cmpDir);
     }
 
     @Override
     public boolean isInnerPrism()
     {
-        return getBlockType() != BlockType.FRAMED_SLOPED_PRISM;
+        return getBlockType() == BlockType.FRAMED_ELEVATED_INNER_SLOPED_PRISM;
     }
 
 
 
-    public static ShapeProvider generateShapes(ImmutableList<BlockState> states)
+    /*public static ShapeProvider generateShapes(ImmutableList<BlockState> states)
     {
         ImmutableMap.Builder<BlockState, VoxelShape> builder = ImmutableMap.builder();
 
@@ -227,9 +180,9 @@ public class FramedSlopedPrismBlock extends FramedBlock implements IFramedPrismB
         }
 
         return ShapeProvider.of(builder.build());
-    }
+    }*/
 
-    /*public static ShapeProvider generateInnerShapes(ImmutableList<BlockState> states)
+    public static ShapeProvider generateInnerShapes(ImmutableList<BlockState> states)
     {
         ImmutableMap.Builder<BlockState, VoxelShape> builder = ImmutableMap.builder();
 
@@ -342,5 +295,5 @@ public class FramedSlopedPrismBlock extends FramedBlock implements IFramedPrismB
         }
 
         return ShapeProvider.of(builder.build());
-    }*/
+    }
 }

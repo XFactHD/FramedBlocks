@@ -140,11 +140,11 @@ public final class SideSkipPredicates extends BlockTypeMap<SideSkipPredicate>
         put(BlockType.FRAMED_BOUNCY_CUBE, SideSkipPredicate.FALSE);
         put(BlockType.FRAMED_REDSTONE_BLOCK, SideSkipPredicate.FALSE);
         put(BlockType.FRAMED_PRISM, new PrismSkipPredicate());
-        put(BlockType.FRAMED_INNER_PRISM, new InnerPrismSkipPredicate());
-        put(BlockType.FRAMED_DOUBLE_PRISM, SideSkipPredicate.FALSE);
+        put(BlockType.FRAMED_ELEVATED_INNER_PRISM, new ElevatedInnerPrismSkipPredicate());
+        put(BlockType.FRAMED_ELEVATED_INNER_DOUBLE_PRISM, SideSkipPredicate.FALSE);
         put(BlockType.FRAMED_SLOPED_PRISM, new SlopedPrismSkipPredicate());
-        put(BlockType.FRAMED_INNER_SLOPED_PRISM, new InnerSlopedPrismSkipPredicate());
-        put(BlockType.FRAMED_DOUBLE_SLOPED_PRISM, SideSkipPredicate.FALSE);
+        put(BlockType.FRAMED_ELEVATED_INNER_SLOPED_PRISM, new ElevatedInnerSlopedPrismSkipPredicate());
+        put(BlockType.FRAMED_ELEVATED_INNER_DOUBLE_SLOPED_PRISM, SideSkipPredicate.FALSE);
         put(BlockType.FRAMED_SLOPE_SLAB, new SlopeSlabSkipPredicate());
         put(BlockType.FRAMED_ELEVATED_SLOPE_SLAB, new ElevatedSlopeSlabSkipPredicate());
         put(BlockType.FRAMED_COMPOUND_SLOPE_SLAB, new CompoundSlopeSlabSkipPredicate());

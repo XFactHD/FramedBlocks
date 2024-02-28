@@ -204,11 +204,11 @@ public final class FBContent
     public static final Holder<Block> BLOCK_FRAMED_BOUNCY_CUBE = registerBlock(FramedBouncyCubeBlock::new, BlockType.FRAMED_BOUNCY_CUBE);
     public static final Holder<Block> BLOCK_FRAMED_REDSTONE_BLOCK = registerBlock(FramedRedstoneBlock::new, BlockType.FRAMED_REDSTONE_BLOCK);
     public static final Holder<Block> BLOCK_FRAMED_PRISM = registerBlock(FramedPrismBlock::new, BlockType.FRAMED_PRISM);
-    public static final Holder<Block> BLOCK_FRAMED_INNER_PRISM = registerBlock(FramedPrismBlock::new, BlockType.FRAMED_INNER_PRISM);
-    public static final Holder<Block> BLOCK_FRAMED_DOUBLE_PRISM = registerBlock(FramedDoublePrismBlock::new, BlockType.FRAMED_DOUBLE_PRISM);
+    public static final Holder<Block> BLOCK_FRAMED_ELEVATED_INNER_PRISM = registerBlock(FramedPrismBlock::new, BlockType.FRAMED_ELEVATED_INNER_PRISM);
+    public static final Holder<Block> BLOCK_FRAMED_ELEVATED_INNER_DOUBLE_PRISM = registerBlock(FramedElevatedDoublePrismBlock::new, BlockType.FRAMED_ELEVATED_INNER_DOUBLE_PRISM);
     public static final Holder<Block> BLOCK_FRAMED_SLOPED_PRISM = registerBlock(FramedSlopedPrismBlock::new, BlockType.FRAMED_SLOPED_PRISM);
-    public static final Holder<Block> BLOCK_FRAMED_INNER_SLOPED_PRISM = registerBlock(FramedSlopedPrismBlock::new, BlockType.FRAMED_INNER_SLOPED_PRISM);
-    public static final Holder<Block> BLOCK_FRAMED_DOUBLE_SLOPED_PRISM = registerBlock(FramedDoubleSlopedPrismBlock::new, BlockType.FRAMED_DOUBLE_SLOPED_PRISM);
+    public static final Holder<Block> BLOCK_FRAMED_ELEVATED_INNER_SLOPED_PRISM = registerBlock(FramedSlopedPrismBlock::new, BlockType.FRAMED_ELEVATED_INNER_SLOPED_PRISM);
+    public static final Holder<Block> BLOCK_FRAMED_ELEVATED_INNER_DOUBLE_SLOPED_PRISM = registerBlock(FramedElevatedDoubleSlopedPrismBlock::new, BlockType.FRAMED_ELEVATED_INNER_DOUBLE_SLOPED_PRISM);
     public static final Holder<Block> BLOCK_FRAMED_SLOPE_SLAB = registerBlock(FramedSlopeSlabBlock::new, BlockType.FRAMED_SLOPE_SLAB);
     public static final Holder<Block> BLOCK_FRAMED_ELEVATED_SLOPE_SLAB = registerBlock(FramedElevatedSlopeSlabBlock::new, BlockType.FRAMED_ELEVATED_SLOPE_SLAB);
     public static final Holder<Block> BLOCK_FRAMED_COMPOUND_SLOPE_SLAB = registerBlock(FramedCompoundSlopeSlabBlock::new, BlockType.FRAMED_COMPOUND_SLOPE_SLAB);
@@ -439,13 +439,13 @@ public final class FBContent
             FramedCollapsibleCopycatBlockEntity::new,
             BlockType.FRAMED_COLLAPSIBLE_COPYCAT_BLOCK
     );
-    public static final Holder<BlockEntityType<?>> BE_TYPE_FRAMED_DOUBLE_PRISM = createBlockEntityType(
-            FramedDoublePrismBlockEntity::new,
-            BlockType.FRAMED_DOUBLE_PRISM
+    public static final Holder<BlockEntityType<?>> BE_TYPE_FRAMED_ELEVATED_DOUBLE_PRISM = createBlockEntityType(
+            FramedElevatedDoublePrismBlockEntity::new,
+            BlockType.FRAMED_ELEVATED_INNER_DOUBLE_PRISM
     );
-    public static final Holder<BlockEntityType<?>> BE_TYPE_FRAMED_DOUBLE_SLOPED_PRISM = createBlockEntityType(
-            FramedDoubleSlopedPrismBlockEntity::new,
-            BlockType.FRAMED_DOUBLE_SLOPED_PRISM
+    public static final Holder<BlockEntityType<?>> BE_TYPE_FRAMED_ELEVATED_DOUBLE_SLOPED_PRISM = createBlockEntityType(
+            FramedElevatedDoubleSlopedPrismBlockEntity::new,
+            BlockType.FRAMED_ELEVATED_INNER_DOUBLE_SLOPED_PRISM
     );
     public static final Holder<BlockEntityType<?>> BE_TYPE_FRAMED_DOUBLE_SLOPE_SLAB = createBlockEntityType(
             FramedDoubleSlopeSlabBlockEntity::new,

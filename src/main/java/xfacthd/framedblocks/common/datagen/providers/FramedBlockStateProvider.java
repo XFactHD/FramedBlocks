@@ -108,11 +108,11 @@ public final class FramedBlockStateProvider extends BlockStateProvider
         simpleBlock(FBContent.BLOCK_FRAMED_HALF_PILLAR.value(), cube);
         simpleBlock(FBContent.BLOCK_FRAMED_POST.value(), cube);
         simpleBlockWithItem(FBContent.BLOCK_FRAMED_PRISM, cube, "cutout");
-        simpleBlockWithItem(FBContent.BLOCK_FRAMED_INNER_PRISM, cube, "cutout");
-        simpleBlockWithItem(FBContent.BLOCK_FRAMED_DOUBLE_PRISM, cube, "cutout");
+        simpleBlockWithItem(FBContent.BLOCK_FRAMED_ELEVATED_INNER_PRISM, cube, "cutout");
+        simpleBlockWithItem(FBContent.BLOCK_FRAMED_ELEVATED_INNER_DOUBLE_PRISM, cube, "cutout");
         simpleBlockWithItem(FBContent.BLOCK_FRAMED_SLOPED_PRISM, cube, "cutout");
-        simpleBlockWithItem(FBContent.BLOCK_FRAMED_INNER_SLOPED_PRISM, cube, "cutout");
-        simpleBlockWithItem(FBContent.BLOCK_FRAMED_DOUBLE_SLOPED_PRISM, cube, "cutout");
+        simpleBlockWithItem(FBContent.BLOCK_FRAMED_ELEVATED_INNER_SLOPED_PRISM, cube, "cutout");
+        simpleBlockWithItem(FBContent.BLOCK_FRAMED_ELEVATED_INNER_DOUBLE_SLOPED_PRISM, cube, "cutout");
         simpleBlockWithItem(FBContent.BLOCK_FRAMED_SLOPE_SLAB, cube, "cutout");
         simpleBlockWithItem(FBContent.BLOCK_FRAMED_ELEVATED_SLOPE_SLAB, cube, "cutout");
         simpleBlockWithItem(FBContent.BLOCK_FRAMED_COMPOUND_SLOPE_SLAB, cube, "cutout");

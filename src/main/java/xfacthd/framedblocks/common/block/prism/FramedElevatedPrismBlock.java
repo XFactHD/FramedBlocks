@@ -11,21 +11,19 @@ import net.minecraft.world.level.block.*;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
-import net.minecraft.world.phys.Vec3;
-import net.minecraft.world.phys.shapes.*;
+import net.minecraft.world.phys.shapes.VoxelShape;
 import xfacthd.framedblocks.api.block.FramedProperties;
-import xfacthd.framedblocks.api.block.PlacementStateBuilder;
 import xfacthd.framedblocks.api.shapes.ShapeProvider;
 import xfacthd.framedblocks.api.shapes.ShapeUtils;
-import xfacthd.framedblocks.api.util.*;
+import xfacthd.framedblocks.api.util.Utils;
 import xfacthd.framedblocks.common.block.FramedBlock;
 import xfacthd.framedblocks.common.data.BlockType;
 import xfacthd.framedblocks.common.data.PropertyHolder;
 import xfacthd.framedblocks.common.data.property.DirectionAxis;
 
-public class FramedPrismBlock extends FramedBlock implements IFramedPrismBlock
+public class FramedElevatedPrismBlock extends FramedBlock implements IFramedPrismBlock
 {
-    public FramedPrismBlock(BlockType type)
+    public FramedElevatedPrismBlock(BlockType type)
     {
         super(type);
         registerDefaultState(defaultBlockState().setValue(FramedProperties.Y_SLOPE, false));
@@ -44,37 +42,7 @@ public class FramedPrismBlock extends FramedBlock implements IFramedPrismBlock
     @Override
     public BlockState getStateForPlacement(BlockPlaceContext context)
     {
-        return getStateForPlacement(context, this);
-    }
-
-    public static BlockState getStateForPlacement(BlockPlaceContext ctx, Block block)
-    {
-        return PlacementStateBuilder.of(block, ctx)
-                .withCustom((state, modCtx) ->
-                {
-                    Direction face = modCtx.getClickedFace();
-                    Direction.Axis axis = modCtx.getHorizontalDirection().getAxis();
-                    if (!Utils.isY(face))
-                    {
-                        Vec3 subHit = Utils.fraction(modCtx.getClickLocation());
-
-                        double xz = (Utils.isX(face) ? subHit.z() : subHit.x()) - .5;
-                        double y = subHit.y() - .5;
-
-                        if (Math.max(Math.abs(xz), Math.abs(y)) == Math.abs(xz))
-                        {
-                            axis = face.getClockWise().getAxis();
-                        }
-                        else
-                        {
-                            axis = Direction.Axis.Y;
-                        }
-                    }
-                    return state.setValue(PropertyHolder.FACING_AXIS, DirectionAxis.of(face, axis));
-                })
-                .withYSlope(Utils.isY(ctx.getClickedFace()))
-                .tryWithWater()
-                .build();
+        return FramedPrismBlock.getStateForPlacement(context, this);
     }
 
     @Override
@@ -113,12 +81,12 @@ public class FramedPrismBlock extends FramedBlock implements IFramedPrismBlock
     @Override
     public boolean isInnerPrism()
     {
-        return getBlockType() != BlockType.FRAMED_PRISM;
+        return getBlockType() == BlockType.FRAMED_ELEVATED_INNER_PRISM;
     }
 
 
 
-    public static ShapeProvider generateShapes(ImmutableList<BlockState> states)
+    /*public static ShapeProvider generateShapes(ImmutableList<BlockState> states)
     {
         ImmutableMap.Builder<BlockState, VoxelShape> builder = ImmutableMap.builder();
 
@@ -177,9 +145,9 @@ public class FramedPrismBlock extends FramedBlock implements IFramedPrismBlock
         }
 
         return ShapeProvider.of(builder.build());
-    }
+    }*/
 
-    /*public static ShapeProvider generateInnerShapes(ImmutableList<BlockState> states)
+    public static ShapeProvider generateInnerShapes(ImmutableList<BlockState> states)
     {
         ImmutableMap.Builder<BlockState, VoxelShape> builder = ImmutableMap.builder();
 
@@ -246,5 +214,5 @@ public class FramedPrismBlock extends FramedBlock implements IFramedPrismBlock
         }
 
         return ShapeProvider.of(builder.build());
-    }*/
+    }
 }

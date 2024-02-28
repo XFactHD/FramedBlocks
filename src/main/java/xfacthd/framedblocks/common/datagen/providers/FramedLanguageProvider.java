@@ -153,11 +153,11 @@ public final class FramedLanguageProvider extends LanguageProvider
         add(FBContent.BLOCK_FRAMED_BOUNCY_CUBE.value(), "Framed Bouncy Cube");
         add(FBContent.BLOCK_FRAMED_REDSTONE_BLOCK.value(), "Framed Redstone Block");
         add(FBContent.BLOCK_FRAMED_PRISM.value(), "Framed Prism");
-        add(FBContent.BLOCK_FRAMED_INNER_PRISM.value(), "Framed Inner Prism");
-        add(FBContent.BLOCK_FRAMED_DOUBLE_PRISM.value(), "Framed Double Prism");
+        add(FBContent.BLOCK_FRAMED_ELEVATED_INNER_PRISM.value(), "Framed Inner Prism");
+        add(FBContent.BLOCK_FRAMED_ELEVATED_INNER_DOUBLE_PRISM.value(), "Framed Double Prism");
         add(FBContent.BLOCK_FRAMED_SLOPED_PRISM.value(), "Framed Sloped Prism");
-        add(FBContent.BLOCK_FRAMED_INNER_SLOPED_PRISM.value(), "Framed Inner Sloped Prism");
-        add(FBContent.BLOCK_FRAMED_DOUBLE_SLOPED_PRISM.value(), "Framed Double Sloped Prism");
+        add(FBContent.BLOCK_FRAMED_ELEVATED_INNER_SLOPED_PRISM.value(), "Framed Inner Sloped Prism");
+        add(FBContent.BLOCK_FRAMED_ELEVATED_INNER_DOUBLE_SLOPED_PRISM.value(), "Framed Double Sloped Prism");
         add(FBContent.BLOCK_FRAMED_SLOPE_SLAB.value(), "Framed Slope Slab");
         add(FBContent.BLOCK_FRAMED_ELEVATED_SLOPE_SLAB.value(), "Framed Elevated Slope Slab");
         add(FBContent.BLOCK_FRAMED_COMPOUND_SLOPE_SLAB.value(), "Framed Compound Slope Slab");

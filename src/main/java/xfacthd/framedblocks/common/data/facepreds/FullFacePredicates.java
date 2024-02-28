@@ -138,11 +138,11 @@ public final class FullFacePredicates extends BlockTypeMap<FullFacePredicate>
         put(BlockType.FRAMED_BOUNCY_CUBE, FullFacePredicate.TRUE);
         put(BlockType.FRAMED_REDSTONE_BLOCK, FullFacePredicate.TRUE);
         put(BlockType.FRAMED_PRISM, new PrismFullFacePredicate());
-        put(BlockType.FRAMED_INNER_PRISM, new InnerPrismFullFacePredicate());
-        put(BlockType.FRAMED_DOUBLE_PRISM, new DoublePrismFullFacePredicate());
+        put(BlockType.FRAMED_ELEVATED_INNER_PRISM, new ElevatedInnerPrismFullFacePredicate());
+        put(BlockType.FRAMED_ELEVATED_INNER_DOUBLE_PRISM, new ElevatedInnerDoublePrismFullFacePredicate());
         put(BlockType.FRAMED_SLOPED_PRISM, new SlopedPrismFullFacePredicate());
-        put(BlockType.FRAMED_INNER_SLOPED_PRISM, new InnerSlopedPrismFullFacePredicate());
-        put(BlockType.FRAMED_DOUBLE_SLOPED_PRISM, new DoubleSlopedPrismFullFacePredicate());
+        put(BlockType.FRAMED_ELEVATED_INNER_SLOPED_PRISM, new ElevatedInnerSlopedPrismFullFacePredicate());
+        put(BlockType.FRAMED_ELEVATED_INNER_DOUBLE_SLOPED_PRISM, new ElevatedInnerDoubleSlopedPrismFullFacePredicate());
         put(BlockType.FRAMED_SLOPE_SLAB, SlopeSlabFullFacePredicate.INSTANCE);
         put(BlockType.FRAMED_ELEVATED_SLOPE_SLAB, new ElevatedSlopeSlabFullFacePredicate());
         put(BlockType.FRAMED_COMPOUND_SLOPE_SLAB, FullFacePredicate.FALSE);

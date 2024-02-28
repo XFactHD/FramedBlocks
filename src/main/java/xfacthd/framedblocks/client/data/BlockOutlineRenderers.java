@@ -34,9 +34,9 @@ public final class BlockOutlineRenderers
         register(BlockType.FRAMED_FANCY_ACTIVATOR_RAIL_SLOPE, SlopeOutlineRenderer.INSTANCE);
         register(BlockType.FRAMED_COLLAPSIBLE_BLOCK, new CollapsibleBlockOutlineRenderer());
         register(BlockType.FRAMED_PRISM, new PrismOutlineRenderer());
-        register(BlockType.FRAMED_INNER_PRISM, new InnerPrismOutlineRenderer());
+        register(BlockType.FRAMED_ELEVATED_INNER_PRISM, new ElevatedInnerPrismOutlineRenderer());
         register(BlockType.FRAMED_SLOPED_PRISM, new SlopedPrismOutlineRenderer());
-        register(BlockType.FRAMED_INNER_SLOPED_PRISM, new InnerSlopedPrismOutlineRenderer());
+        register(BlockType.FRAMED_ELEVATED_INNER_SLOPED_PRISM, new ElevatedInnerSlopedPrismOutlineRenderer());
         register(BlockType.FRAMED_SLOPE_SLAB, new SlopeSlabOutlineRenderer());
         register(BlockType.FRAMED_ELEVATED_SLOPE_SLAB, new ElevatedSlopeSlabOutlineRenderer());
         register(BlockType.FRAMED_COMPOUND_SLOPE_SLAB, InverseDoubleSlopeSlabOutlineRenderer.INSTANCE);
