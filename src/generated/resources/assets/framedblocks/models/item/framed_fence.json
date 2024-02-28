@@ -1,7 +1,8 @@
 {
-  "parent": "minecraft:block/fence_inventory",
+  "parent": "framedblocks:item/framed_fence_inventory",
   "render_type": "minecraft:cutout",
   "textures": {
-    "texture": "framedblocks:block/framed_block"
+    "texture": "framedblocks:block/framed_block",
+    "underlay": "minecraft:block/stripped_dark_oak_log"
   }
 }

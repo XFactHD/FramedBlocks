@@ -10,6 +10,7 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.phys.shapes.VoxelShape;
+import org.jetbrains.annotations.Nullable;
 import xfacthd.framedblocks.api.block.PlacementStateBuilder;
 import xfacthd.framedblocks.api.shapes.ShapeProvider;
 import xfacthd.framedblocks.api.util.Utils;
@@ -18,7 +19,10 @@ import xfacthd.framedblocks.common.data.BlockType;
 
 public class FramedPillarBlock extends FramedBlock
 {
-    public FramedPillarBlock(BlockType blockType) { super(blockType); }
+    public FramedPillarBlock(BlockType blockType)
+    {
+        super(blockType);
+    }
 
     @Override
     protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder)
@@ -59,6 +63,17 @@ public class FramedPillarBlock extends FramedBlock
             return state.setValue(BlockStateProperties.AXIS, axis);
         }
         return state;
+    }
+
+    @Override
+    @Nullable
+    public BlockState getItemModelSource()
+    {
+        if (getBlockType() == BlockType.FRAMED_POST)
+        {
+            return defaultBlockState().setValue(BlockStateProperties.AXIS, Direction.Axis.Y);
+        }
+        return null;
     }
 
 

@@ -25,11 +25,13 @@ import java.util.function.Function;
 public final class FramedBlockStateProvider extends BlockStateProvider
 {
     private final ResourceLocation TEXTURE;
+    private final ResourceLocation TEXTURE_UNDERLAY;
 
     public FramedBlockStateProvider(PackOutput output, ExistingFileHelper fileHelper)
     {
         super(output, FramedConstants.MOD_ID, fileHelper);
         TEXTURE = modLoc("block/framed_block");
+        TEXTURE_UNDERLAY = mcLoc("block/stripped_dark_oak_log");
     }
 
     @Override
@@ -86,6 +88,7 @@ public final class FramedBlockStateProvider extends BlockStateProvider
         simpleBlockWithItem(FBContent.BLOCK_FRAMED_VERTICAL_SLOPED_STAIRS, cube, "cutout");
         simpleBlockWithItem(FBContent.BLOCK_FRAMED_THREEWAY_CORNER_PILLAR, cube);
         simpleBlockWithItem(FBContent.BLOCK_FRAMED_DOUBLE_THREEWAY_CORNER_PILLAR, cube);
+        simpleBlockWithItem(FBContent.BLOCK_FRAMED_FENCE_GATE, cube, "cutout");
         simpleBlock(FBContent.BLOCK_FRAMED_IRON_TRAP_DOOR.value(), ironCube);
         simpleBlock(FBContent.BLOCK_FRAMED_STONE_BUTTON.value(), stoneCube);
         simpleBlock(FBContent.BLOCK_FRAMED_LARGE_BUTTON.value(), cube);
@@ -93,7 +96,7 @@ public final class FramedBlockStateProvider extends BlockStateProvider
         simpleBlock(FBContent.BLOCK_FRAMED_WALL_SIGN.value(), cube);
         simpleBlock(FBContent.BLOCK_FRAMED_WALL_BOARD.value(), cube);
         simpleBlockWithItem(FBContent.BLOCK_FRAMED_CORNER_STRIP, cube, "cutout");
-        simpleBlock(FBContent.BLOCK_FRAMED_LATTICE.value(), cube);
+        simpleBlockWithItem(FBContent.BLOCK_FRAMED_LATTICE, cube, "cutout");
         simpleBlock(FBContent.BLOCK_FRAMED_THICK_LATTICE.value(), cube);
         simpleBlock(FBContent.BLOCK_FRAMED_HORIZONTAL_PANE.value(), cube);
         simpleBlockWithItem(FBContent.BLOCK_FRAMED_RAIL_SLOPE, cube, "cutout");
@@ -106,7 +109,7 @@ public final class FramedBlockStateProvider extends BlockStateProvider
         simpleBlockWithItem(FBContent.BLOCK_FRAMED_FANCY_ACTIVATOR_RAIL_SLOPE, cube, "cutout");
         simpleBlock(FBContent.BLOCK_FRAMED_PILLAR.value(), cube);
         simpleBlock(FBContent.BLOCK_FRAMED_HALF_PILLAR.value(), cube);
-        simpleBlock(FBContent.BLOCK_FRAMED_POST.value(), cube);
+        simpleBlockWithItem(FBContent.BLOCK_FRAMED_POST, cube, "cutout");
         simpleBlockWithItem(FBContent.BLOCK_FRAMED_PRISM, cube, "cutout");
         simpleBlockWithItem(FBContent.BLOCK_FRAMED_ELEVATED_INNER_PRISM, cube, "cutout");
         simpleBlockWithItem(FBContent.BLOCK_FRAMED_ELEVATED_INNER_DOUBLE_PRISM, cube, "cutout");
@@ -193,7 +196,6 @@ public final class FramedBlockStateProvider extends BlockStateProvider
         registerFramedStairs(cube);
         registerFramedWall(cube);
         registerFramedFence(cube);
-        registerFramedFenceGate(cube);
         registerFramedDoor(cube);
         registerFramedIronDoor(ironCube);
         registerFramedTrapDoor(cube);
@@ -242,7 +244,7 @@ public final class FramedBlockStateProvider extends BlockStateProvider
 
     private void registerFramedCube(ModelFile cube)
     {
-        ModelFile spruceUnderlay = models().withExistingParent("framed_underlay", mcLoc("block/stripped_dark_oak_wood"))
+        ModelFile solidUnderlay = models().cubeAll("framed_underlay", TEXTURE_UNDERLAY)
                 .texture("particle", TEXTURE)
                 .renderType("cutout");
         ModelFile altCube = models().cubeAll("framed_cube_alt", modLoc("block/framed_block_alt"))
@@ -252,7 +254,7 @@ public final class FramedBlockStateProvider extends BlockStateProvider
 
         getMultipartBuilder(FBContent.BLOCK_FRAMED_CUBE.value())
                 .part()
-                    .modelFile(spruceUnderlay)
+                    .modelFile(solidUnderlay)
                     .addModel()
                     .condition(PropertyHolder.SOLID_BG, true)
                     .end()
@@ -304,15 +306,10 @@ public final class FramedBlockStateProvider extends BlockStateProvider
                 .addModel();
 
         itemModels().getBuilder("framed_fence")
-                .parent(models().getExistingFile(mcLoc("block/fence_inventory")))
+                .parent(models().getExistingFile(modLoc("item/framed_fence_inventory")))
                 .texture("texture", TEXTURE)
+                .texture("underlay", TEXTURE_UNDERLAY)
                 .renderType("cutout");
-    }
-
-    private void registerFramedFenceGate(ModelFile cube)
-    {
-        simpleBlock(FBContent.BLOCK_FRAMED_FENCE_GATE.value(), cube);
-        itemModels().fenceGate("framed_fence_gate", TEXTURE).renderType("cutout");
     }
 
     private void registerFramedDoor(ModelFile cube)
