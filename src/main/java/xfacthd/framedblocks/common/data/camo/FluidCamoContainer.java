@@ -7,7 +7,6 @@ import net.minecraft.nbt.NbtUtils;
 import net.minecraft.world.item.*;
 import net.minecraft.world.level.BlockAndTintGetter;
 import net.minecraft.world.level.block.SoundType;
-import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.material.Fluid;
 import net.minecraft.world.level.material.FluidState;
 import net.neoforged.neoforge.capabilities.Capabilities;
@@ -29,7 +28,7 @@ public class FluidCamoContainer extends CamoContainer
 
     private FluidCamoContainer(FluidState fluidState)
     {
-        super(fluidState.createLegacyBlock().setValue(BlockStateProperties.LEVEL, 8));
+        super(fluidState.createLegacyBlock());
         this.fluidState = fluidState;
     }
 
@@ -157,7 +156,7 @@ public class FluidCamoContainer extends CamoContainer
             FluidStack fluid = handler.getFluidInTank(0);
 
             FluidState state = fluid.getFluid().defaultFluidState();
-            if (!state.isEmpty())
+            if (!state.isEmpty() && !state.createLegacyBlock().isAir())
             {
                 int amount = FluidType.BUCKET_VOLUME;
                 if (fluid.getAmount() >= amount && handler.drain(amount, IFluidHandler.FluidAction.SIMULATE).getAmount() == amount)
