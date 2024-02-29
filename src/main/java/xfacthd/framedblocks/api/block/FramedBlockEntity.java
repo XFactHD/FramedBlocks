@@ -294,9 +294,9 @@ public class FramedBlockEntity extends BlockEntity
 
     private InteractionResult rotateCamo(CamoContainer camo)
     {
-        if (camo.rotateCamo())
+        if (camo.canRotateCamo())
         {
-            if (!level().isClientSide())
+            if (!level().isClientSide() && camo.rotateCamo())
             {
                 setChanged();
                 level().sendBlockUpdated(worldPosition, getBlockState(), getBlockState(), Block.UPDATE_ALL);
