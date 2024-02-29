@@ -98,6 +98,7 @@ public abstract class CamoContainer
     /**
      * Rotate the camo by cycling through the first property considered rotatable by {@link Utils#getRotatableProperty(BlockState)}.
      * @return True if the rotation was successful, requiring a render update
+     * @apiNote This method must only modify the state and return true if {@link #canRotateCamo()} returns true for the current state
      */
     public boolean rotateCamo()
     {
