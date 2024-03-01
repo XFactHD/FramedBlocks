@@ -84,7 +84,12 @@ public class FramedCheckeredSlabBlock extends AbstractFramedDoubleBlock
     @Override
     public SolidityCheck calculateSolidityCheck(BlockState state, Direction side)
     {
-        return SolidityCheck.BOTH;
+        boolean top = state.getValue(FramedProperties.TOP);
+        if ((!top && side == Direction.DOWN) || (top && side == Direction.UP))
+        {
+            return SolidityCheck.BOTH;
+        }
+        return SolidityCheck.NONE;
     }
 
     @Override

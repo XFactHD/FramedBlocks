@@ -40,6 +40,7 @@ public final class SelfTest
         SkipPredicatePresenceConsistency.checkSkipPredicateConsistency();
         StateCacheValidity.checkStateCacheValid(blocks);
         DoubleBlockCamoConnectionConsistency.checkConnectionConsistency(blocks);
+        DoubleBlockSolidSideConsistency.checkSolidSideConsistency(blocks);
 
         stopwatch.stop();
         FramedBlocks.LOGGER.info("Self test completed in {}", stopwatch);
