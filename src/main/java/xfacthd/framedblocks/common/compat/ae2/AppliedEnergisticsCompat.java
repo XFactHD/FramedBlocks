@@ -9,7 +9,6 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.fml.ModList;
-import net.neoforged.fml.loading.FMLEnvironment;
 import net.neoforged.neoforge.attachment.AttachmentType;
 import net.neoforged.neoforge.capabilities.BlockCapability;
 import net.neoforged.neoforge.capabilities.RegisterCapabilitiesEvent;
@@ -20,12 +19,11 @@ import xfacthd.framedblocks.common.FBContent;
 
 public final class AppliedEnergisticsCompat
 {
-    private static final boolean ENABLED = !FMLEnvironment.production;
     private static boolean loaded = false;
 
     public static void init(IEventBus modBus)
     {
-        if (ENABLED && ModList.get().isLoaded("ae2"))
+        if (ModList.get().isLoaded("ae2"))
         {
             GuardedAccess.init(modBus);
             loaded = true;
