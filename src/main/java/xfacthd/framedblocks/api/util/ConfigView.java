@@ -86,6 +86,11 @@ public final class ConfigView
          * Returns the currently configured {@link ConTexMode}
          */
         ConTexMode getConTexMode();
+
+        /**
+         * Returns the verbosity of messages displayed when a block cannot be used as a camo
+         */
+        CamoMessageVerbosity getCamoMessageVerbosity();
     }
 
 

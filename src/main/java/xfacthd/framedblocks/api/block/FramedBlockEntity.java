@@ -48,8 +48,9 @@ import java.util.Objects;
 public class FramedBlockEntity extends BlockEntity
 {
     private static final Logger LOGGER = LogUtils.getLogger();
-    public static final Component MSG_BLACKLISTED = Utils.translate("msg", "blacklisted");
-    public static final Component MSG_BLOCK_ENTITY = Utils.translate("msg", "block_entity");
+    public static final Component MSG_BLACKLISTED = Utils.translate("msg", "camo.blacklisted");
+    public static final Component MSG_BLOCK_ENTITY = Utils.translate("msg", "camo.block_entity");
+    public static final Component MSG_NON_SOLID = Utils.translate("msg", "camo.non_solid");
     private static final Direction[] DIRECTIONS = Direction.values();
     private static final int DATA_VERSION = 3;
     protected static final int FLAG_GLOWING = 1;
@@ -376,7 +377,7 @@ public class FramedBlockEntity extends BlockEntity
 
         if (state.is(Utils.BLACKLIST))
         {
-            if (player != null)
+            if (canShowDisallowedCamoMessage(player, CamoMessageVerbosity.DEFAULT))
             {
                 player.displayClientMessage(MSG_BLACKLISTED, true);
             }
@@ -384,7 +385,7 @@ public class FramedBlockEntity extends BlockEntity
         }
         if (state.hasBlockEntity() && !ConfigView.Server.INSTANCE.allowBlockEntities() && !state.is(Utils.BE_WHITELIST))
         {
-            if (player != null)
+            if (canShowDisallowedCamoMessage(player, CamoMessageVerbosity.DEFAULT))
             {
                 player.displayClientMessage(MSG_BLOCK_ENTITY, true);
             }
@@ -392,7 +393,24 @@ public class FramedBlockEntity extends BlockEntity
         }
 
         BlockGetter level = Objects.requireNonNullElse(this.level, EmptyBlockGetter.INSTANCE);
-        return state.isSolidRender(level, worldPosition) || state.is(Utils.FRAMEABLE) || state.getBlock() instanceof LiquidBlock;
+        if (state.isSolidRender(level, worldPosition) || state.is(Utils.FRAMEABLE) || state.getBlock() instanceof LiquidBlock)
+        {
+            return true;
+        }
+        if (canShowDisallowedCamoMessage(player, CamoMessageVerbosity.DETAILED))
+        {
+            player.displayClientMessage(MSG_NON_SOLID, true);
+        }
+        return false;
+    }
+
+    private static boolean canShowDisallowedCamoMessage(Player player, CamoMessageVerbosity verbosity)
+    {
+        if (player != null && player.level().isClientSide())
+        {
+            return ConfigView.Client.INSTANCE.getCamoMessageVerbosity().isAtLeast(verbosity);
+        }
+        return false;
     }
 
     protected boolean hitSecondary(BlockHitResult hit)
