@@ -74,7 +74,7 @@ public class FramedItemFrameBlockEntity extends FramedBlockEntity
     public InteractionResult handleFrameInteraction(Player player, InteractionHand hand)
     {
         ItemStack stack = player.getItemInHand(hand);
-        if (stack.isEmpty() && hasItem())
+        if (hasItem())
         {
             if (!level().isClientSide())
             {
@@ -123,7 +123,7 @@ public class FramedItemFrameBlockEntity extends FramedBlockEntity
             player.drop(heldItem, false);
         }
 
-        rotation = 0;
+        // Don't clear rotation
         setItem(ItemStack.EMPTY);
 
         playSound(glowing ? SoundEvents.GLOW_ITEM_FRAME_REMOVE_ITEM : SoundEvents.ITEM_FRAME_REMOVE_ITEM);

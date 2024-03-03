@@ -199,6 +199,8 @@ dependencies {
     compileOnly("appeng:appliedenergistics2-neoforge:${ae2_version}:api")
     //runtimeOnly("appeng:appliedenergistics2-neoforge:${ae2_version}")
 
+    compileOnly("curse.maven:jade-324717:5109393")
+
     compileOnly("curse.maven:atlasviewer-633577:4882515")
 }
 
