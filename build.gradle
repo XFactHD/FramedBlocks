@@ -170,7 +170,7 @@ dependencies {
     //runtimeOnly("curse.maven:reipc-521393:4723408")
     compileOnly("me.shedaniel:RoughlyEnoughItems-api-neoforge:${rei_version}")
     compileOnly("me.shedaniel:RoughlyEnoughItems-default-plugin-neoforge:${rei_version}")
-    //compileOnly("me.shedaniel:REIPluginCompatibilities-forge-annotations:${reipcanno_version}")
+    compileOnly("me.shedaniel:REIPluginCompatibilities-forge-annotations:${reipcanno_version}")
 
     compileOnly("dev.emi:emi-neoforge:${emi_version}+${emi_mc_version}:api")
     runtimeOnly("dev.emi:emi-neoforge:${emi_version}+${emi_mc_version}")
