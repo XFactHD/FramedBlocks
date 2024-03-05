@@ -1,7 +1,6 @@
 package xfacthd.framedblocks.common.block.door;
 
-import net.minecraft.core.BlockPos;
-import net.minecraft.core.Direction;
+import net.minecraft.core.*;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.LivingEntity;
@@ -20,6 +19,9 @@ import net.minecraft.world.phys.shapes.VoxelShape;
 import net.neoforged.neoforge.client.extensions.common.IClientBlockExtensions;
 import xfacthd.framedblocks.api.block.*;
 import xfacthd.framedblocks.api.block.render.FramedBlockRenderProperties;
+import xfacthd.framedblocks.api.model.wrapping.WrapHelper;
+import xfacthd.framedblocks.api.model.wrapping.statemerger.StateMerger;
+import xfacthd.framedblocks.api.util.Utils;
 import xfacthd.framedblocks.common.data.BlockType;
 
 import javax.annotation.Nullable;
@@ -162,5 +164,50 @@ public class FramedDoorBlock extends DoorBlock implements IFramedBlock
                 IFramedBlock.createProperties(BlockType.FRAMED_IRON_DOOR)
                         .requiresCorrectToolForDrops()
         );
+    }
+
+
+
+    public static final class DoorStateMerger implements StateMerger
+    {
+        public static final DoorStateMerger INSTANCE = new DoorStateMerger();
+
+        private final StateMerger ignoreMerger = StateMerger.ignoring(Utils.concat(
+                Set.of(BlockStateProperties.POWERED),
+                WrapHelper.IGNORE_SOLID
+        ));
+
+        private DoorStateMerger() { }
+
+        @Override
+        public BlockState apply(BlockState state)
+        {
+            state = ignoreMerger.apply(state);
+            if (state.getValue(BlockStateProperties.OPEN))
+            {
+                Direction dir = state.getValue(BlockStateProperties.HORIZONTAL_FACING);
+                DoorHingeSide hinge = state.getValue(BlockStateProperties.DOOR_HINGE);
+                boolean right = hinge == DoorHingeSide.RIGHT;
+
+                // Rotate to the visually equivalent closed variant
+                Direction newDir = right ? dir.getCounterClockWise() : dir.getClockWise();
+                // Flip hinge to match expected door knob position
+                DoorHingeSide newHinge = right ? DoorHingeSide.LEFT : DoorHingeSide.RIGHT;
+
+                state = state.setValue(BlockStateProperties.OPEN, false)
+                        .setValue(BlockStateProperties.HORIZONTAL_FACING, newDir)
+                        .setValue(BlockStateProperties.DOOR_HINGE, newHinge);
+            }
+            return state;
+        }
+
+        @Override
+        public Set<Property<?>> getHandledProperties(Holder<Block> block)
+        {
+            return Utils.concat(
+                    ignoreMerger.getHandledProperties(block),
+                    Set.of(BlockStateProperties.OPEN, BlockStateProperties.DOOR_HINGE)
+            );
+        }
     }
 }
