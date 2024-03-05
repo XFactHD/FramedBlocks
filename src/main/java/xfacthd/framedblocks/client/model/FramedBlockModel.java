@@ -16,7 +16,6 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.neoforged.neoforge.client.ChunkRenderTypeSet;
 import net.neoforged.neoforge.client.model.data.ModelData;
 import org.jetbrains.annotations.Nullable;
-import xfacthd.framedblocks.api.FramedBlocksAPI;
 import xfacthd.framedblocks.api.block.cache.StateCache;
 import xfacthd.framedblocks.api.model.cache.QuadCacheKey;
 import xfacthd.framedblocks.api.model.data.*;
@@ -133,7 +132,7 @@ public final class FramedBlockModel extends BakedModelProxy
         if (camoState == null || camoState.isAir())
         {
             camoState = Blocks.AIR.defaultBlockState();
-            keyState = getNoCamoModelState(FramedBlocksAPI.INSTANCE.getDefaultModelState(), fbData);
+            keyState = getNoCamoModelState(fbData);
         }
         return getCachedRenderTypes(keyState, camoState, rand, data).allTypes;
     }
@@ -186,7 +185,7 @@ public final class FramedBlockModel extends BakedModelProxy
         if (camoState == null)
         {
             needCtCtx = false;
-            camoState = getNoCamoModelState(FramedBlocksAPI.INSTANCE.getDefaultModelState(), fbData);
+            camoState = getNoCamoModelState(fbData);
             reinforce = useBaseModel && fbData.isReinforced();
             noProcessing |= forceUngeneratedBaseModel && (nullLayer || BASE_MODEL_RENDER_TYPES.contains(renderType));
             camoModel = getCamoModel(camoState, useBaseModel);
@@ -296,12 +295,9 @@ public final class FramedBlockModel extends BakedModelProxy
         return quadTable;
     }
 
-    private BlockState getNoCamoModelState(BlockState camoState, FramedBlockData fbData)
+    private BlockState getNoCamoModelState(FramedBlockData fbData)
     {
-        if (isBaseCube)
-        {
-            camoState = state;
-        }
+        BlockState camoState = isBaseCube ? state : FBContent.BLOCK_FRAMED_CUBE.value().defaultBlockState();
         if (fbData.useAltModel())
         {
             camoState = camoState.setValue(PropertyHolder.ALT, true);
@@ -398,6 +394,20 @@ public final class FramedBlockModel extends BakedModelProxy
     {
         quadCache.clear();
         renderTypeCache.clear();
+    }
+
+    @Override
+    public int hashCode()
+    {
+        return geometry.hashCode();
+    }
+
+    @Override
+    public boolean equals(Object obj)
+    {
+        if (obj == this) return true;
+        if (obj == null || obj.getClass() != getClass()) return false;
+        return geometry.equals(((FramedBlockModel) obj).geometry);
     }
 
 
