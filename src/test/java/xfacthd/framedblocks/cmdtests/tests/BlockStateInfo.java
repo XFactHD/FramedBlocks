@@ -7,14 +7,16 @@ import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.*;
 import xfacthd.framedblocks.api.block.FramedProperties;
-import xfacthd.framedblocks.api.model.wrapping.WrapHelper;
+import xfacthd.framedblocks.client.modelwrapping.ModelWrappingHandler;
+import xfacthd.framedblocks.client.modelwrapping.ModelWrappingManager;
 import xfacthd.framedblocks.cmdtests.SpecialTestCommand;
 import xfacthd.framedblocks.common.FBContent;
 import xfacthd.framedblocks.common.data.BlockType;
 import xfacthd.framedblocks.util.MarkdownTable;
+
+import java.util.stream.Collectors;
 
 public final class BlockStateInfo
 {
@@ -34,7 +36,8 @@ public final class BlockStateInfo
                 .header("Glowing")
                 .header("Skylight")
                 .header("Waterlogging")
-                .header("State lock");
+                .header("State lock")
+                .header("Ignored properties");
 
         long totalStates = 0;
         long totalModelStates = 0;
@@ -42,14 +45,16 @@ public final class BlockStateInfo
         {
             Block block = FBContent.byType(type);
             String name = BuiltInRegistries.BLOCK.getKey(block).getPath();
+            ModelWrappingHandler wrapper = ModelWrappingManager.getHandler(block);
             int stateCount = block.getStateDefinition().getPossibleStates().size();
-            int modelStateCount = filterIgnoredProperties(block.defaultBlockState(), stateCount);
+            int modelStateCount = wrapper.getVisitedStateCount();
 
             String solid = type.canOccludeWithSolidCamo() ? checkBooleanProperty(block, FramedProperties.SOLID) : "-";
             String glowing = checkBooleanProperty(block, FramedProperties.GLOWING);
             String skylight = checkBooleanProperty(block, FramedProperties.PROPAGATES_SKYLIGHT);
             String waterlogging = type.supportsWaterLogging() ? checkBooleanProperty(block, BlockStateProperties.WATERLOGGED) : "-";
             String stateLock = type.canLockState() ? checkBooleanProperty(block, FramedProperties.STATE_LOCKED) : "-";
+            String ignoredProperties = printIgnoredProperties(wrapper, block);
 
             table.cell(name)
                     .cell("%,d".formatted(stateCount))
@@ -59,6 +64,7 @@ public final class BlockStateInfo
                     .cell(skylight)
                     .cell(waterlogging)
                     .cell(stateLock)
+                    .cell(ignoredProperties)
                     .newRow();
 
             totalStates += stateCount;
@@ -80,16 +86,16 @@ public final class BlockStateInfo
         return Command.SINGLE_SUCCESS;
     }
 
-    private static int filterIgnoredProperties(BlockState defState, int stateCount)
+    @SuppressWarnings("deprecation")
+    private static String printIgnoredProperties(ModelWrappingHandler wrapper, Block block)
     {
-        for (Property<?> prop : WrapHelper.IGNORE_DEFAULT_LOCK)
-        {
-            if (defState.hasProperty(prop))
-            {
-                stateCount /= prop.getPossibleValues().size();
-            }
-        }
-        return stateCount;
+        return wrapper.getStateMerger()
+                .getHandledProperties(block.builtInRegistryHolder())
+                .stream()
+                .filter(block.defaultBlockState()::hasProperty)
+                .map(Property::getName)
+                .sorted()
+                .collect(Collectors.joining(", "));
     }
 
     private static String checkBooleanProperty(Block block, BooleanProperty property)

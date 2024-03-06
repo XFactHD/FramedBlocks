@@ -1,8 +1,7 @@
 package xfacthd.framedblocks.common.block.sign;
 
 import net.minecraft.advancements.CriteriaTriggers;
-import net.minecraft.core.BlockPos;
-import net.minecraft.core.Direction;
+import net.minecraft.core.*;
 import net.minecraft.network.chat.CommonComponents;
 import net.minecraft.network.chat.contents.PlainTextContents;
 import net.minecraft.server.level.ServerPlayer;
@@ -21,12 +20,15 @@ import net.minecraft.world.level.block.entity.*;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
+import net.minecraft.world.level.block.state.properties.Property;
 import net.minecraft.world.level.material.Fluids;
 import net.minecraft.world.level.pathfinder.PathComputationType;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.Vec3;
 import net.neoforged.neoforge.common.ToolActions;
 import net.neoforged.neoforge.network.PacketDistributor;
+import xfacthd.framedblocks.api.model.wrapping.WrapHelper;
+import xfacthd.framedblocks.api.model.wrapping.statemerger.StateMerger;
 import xfacthd.framedblocks.api.util.Utils;
 import xfacthd.framedblocks.common.FBContent;
 import xfacthd.framedblocks.common.block.FramedBlock;
@@ -34,8 +36,7 @@ import xfacthd.framedblocks.common.data.BlockType;
 import xfacthd.framedblocks.common.blockentity.special.FramedSignBlockEntity;
 import xfacthd.framedblocks.common.net.payload.OpenSignScreenPayload;
 
-import java.util.Arrays;
-import java.util.UUID;
+import java.util.*;
 
 public abstract class AbstractFramedSignBlock extends FramedBlock
 {
@@ -273,5 +274,35 @@ public abstract class AbstractFramedSignBlock extends FramedBlock
     private interface Action
     {
         boolean apply(Level level, BlockPos pos, Player player, ItemStack stack, boolean front, FramedSignBlockEntity sign);
+    }
+
+    public static final class RotatingSignStateMerger implements StateMerger
+    {
+        public static final RotatingSignStateMerger INSTANCE = new RotatingSignStateMerger();
+
+        private final StateMerger ignoringMerger = StateMerger.ignoring(WrapHelper.IGNORE_WATERLOGGED);
+
+        private RotatingSignStateMerger() { }
+
+        @Override
+        public BlockState apply(BlockState state)
+        {
+            state = ignoringMerger.apply(state);
+            int rot = state.getValue(BlockStateProperties.ROTATION_16);
+            if (rot > 7)
+            {
+                state = state.setValue(BlockStateProperties.ROTATION_16, rot - 8);
+            }
+            return state;
+        }
+
+        @Override
+        public Set<Property<?>> getHandledProperties(Holder<Block> block)
+        {
+            return Utils.concat(
+                    ignoringMerger.getHandledProperties(block),
+                    Set.of(BlockStateProperties.ROTATION_16)
+            );
+        }
     }
 }

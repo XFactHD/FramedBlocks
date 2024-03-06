@@ -1,7 +1,6 @@
 package xfacthd.framedblocks.common.block.door;
 
-import net.minecraft.core.BlockPos;
-import net.minecraft.core.Direction;
+import net.minecraft.core.*;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.LivingEntity;
@@ -12,7 +11,7 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.FenceGateBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
-import net.minecraft.world.level.block.state.properties.WoodType;
+import net.minecraft.world.level.block.state.properties.*;
 import net.minecraft.world.level.storage.loot.LootParams;
 import net.minecraft.world.phys.BlockHitResult;
 import net.neoforged.neoforge.client.extensions.common.IClientBlockExtensions;
@@ -20,9 +19,13 @@ import org.jetbrains.annotations.Nullable;
 import xfacthd.framedblocks.api.block.FramedProperties;
 import xfacthd.framedblocks.api.block.IFramedBlock;
 import xfacthd.framedblocks.api.block.render.FramedBlockRenderProperties;
+import xfacthd.framedblocks.api.model.wrapping.WrapHelper;
+import xfacthd.framedblocks.api.model.wrapping.statemerger.StateMerger;
+import xfacthd.framedblocks.api.util.Utils;
 import xfacthd.framedblocks.common.data.BlockType;
 
 import java.util.List;
+import java.util.Set;
 import java.util.function.Consumer;
 
 @SuppressWarnings("deprecation")
@@ -120,5 +123,43 @@ public class FramedFenceGateBlock extends FenceGateBlock implements IFramedBlock
     public BlockState getItemModelSource()
     {
         return defaultBlockState();
+    }
+
+
+
+    public static final class FenceGateStateMerger implements StateMerger
+    {
+        public static final FenceGateStateMerger INSTANCE = new FenceGateStateMerger();
+
+        private final StateMerger ignoringMerger = StateMerger.ignoring(Utils.concat(
+                Set.of(BlockStateProperties.POWERED),
+                WrapHelper.IGNORE_ALWAYS
+        ));
+
+        private FenceGateStateMerger() { }
+
+        @Override
+        public BlockState apply(BlockState state)
+        {
+            state = ignoringMerger.apply(state);
+            if (!state.getValue(OPEN))
+            {
+                Direction dir = state.getValue(FACING);
+                if (dir == Direction.SOUTH || dir == Direction.WEST)
+                {
+                    state = state.setValue(FACING, dir.getOpposite());
+                }
+            }
+            return state;
+        }
+
+        @Override
+        public Set<Property<?>> getHandledProperties(Holder<Block> block)
+        {
+            return Utils.concat(
+                    ignoringMerger.getHandledProperties(block),
+                    Set.of(FACING)
+            );
+        }
     }
 }

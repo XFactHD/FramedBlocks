@@ -46,7 +46,7 @@ public class FramedInverseDoubleCornerSlopePanelWallBlock extends AbstractFramed
     {
         super.createBlockStateDefinition(builder);
         builder.add(
-                FramedProperties.FACING_HOR, FramedProperties.TOP, PropertyHolder.ROTATION,
+                FramedProperties.FACING_HOR, PropertyHolder.ROTATION,
                 FramedProperties.Y_SLOPE, BlockStateProperties.WATERLOGGED
         );
     }

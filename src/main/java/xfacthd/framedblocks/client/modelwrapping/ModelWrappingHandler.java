@@ -73,7 +73,7 @@ public final class ModelWrappingHandler
         }
         if (counter != null)
         {
-            counter.increment(true);
+            counter.incrementItem();
         }
         return model;
     }
@@ -92,5 +92,15 @@ public final class ModelWrappingHandler
     public boolean handlesItemModel()
     {
         return itemModelSource != null;
+    }
+
+    public StateMerger getStateMerger()
+    {
+        return stateMerger;
+    }
+
+    public int getVisitedStateCount()
+    {
+        return visitedStates.size();
     }
 }

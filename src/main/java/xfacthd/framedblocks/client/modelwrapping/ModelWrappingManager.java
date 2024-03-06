@@ -54,8 +54,8 @@ public final class ModelWrappingManager
 
         stopwatch.stop();
         FramedBlocks.LOGGER.debug(
-                "Wrapped {} unique models ({} total) for {} blocks in {}",
-                counter.getDistinctCount(), counter.getTotalCount(), HANDLERS.size(), stopwatch
+                "Wrapped {} unique block models ({} total) and {} item models for {} blocks in {}",
+                counter.getDistinctCount(), counter.getTotalCount(), counter.getItemCount(), HANDLERS.size(), stopwatch
         );
     }
 

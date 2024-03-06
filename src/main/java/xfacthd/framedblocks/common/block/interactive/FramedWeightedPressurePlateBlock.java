@@ -19,6 +19,7 @@ import net.neoforged.neoforge.client.extensions.common.IClientBlockExtensions;
 import xfacthd.framedblocks.api.block.FramedProperties;
 import xfacthd.framedblocks.api.block.IFramedBlock;
 import xfacthd.framedblocks.api.block.render.FramedBlockRenderProperties;
+import xfacthd.framedblocks.api.model.wrapping.WrapHelper;
 import xfacthd.framedblocks.api.model.wrapping.statemerger.StateMerger;
 import xfacthd.framedblocks.api.util.Utils;
 import xfacthd.framedblocks.common.FBContent;
@@ -31,7 +32,6 @@ import java.util.function.Consumer;
 @SuppressWarnings("deprecation")
 public class FramedWeightedPressurePlateBlock extends WeightedPressurePlateBlock implements IFramedBlock
 {
-    public static final StateMerger STATE_MERGER = new WeightedPressurePlateStateMerger();
     private static final Map<BlockType, BlockType> WATERLOGGING_SWITCH = Map.of(
             BlockType.FRAMED_GOLD_PRESSURE_PLATE, BlockType.FRAMED_WATERLOGGABLE_GOLD_PRESSURE_PLATE,
             BlockType.FRAMED_WATERLOGGABLE_GOLD_PRESSURE_PLATE, BlockType.FRAMED_GOLD_PRESSURE_PLATE,
@@ -185,11 +185,16 @@ public class FramedWeightedPressurePlateBlock extends WeightedPressurePlateBlock
 
 
 
-    private static final class WeightedPressurePlateStateMerger implements StateMerger
+    public static final class WeightedStateMerger implements StateMerger
     {
+        public static final WeightedStateMerger INSTANCE = new WeightedStateMerger();
+
+        private final StateMerger ignoringMerger = StateMerger.ignoring(WrapHelper.IGNORE_ALWAYS);
+
         @Override
         public BlockState apply(BlockState state)
         {
+            state = ignoringMerger.apply(state);
             if (state.hasProperty(BlockStateProperties.WATERLOGGED))
             {
                 state = state.setValue(BlockStateProperties.WATERLOGGED, false);
@@ -197,19 +202,17 @@ public class FramedWeightedPressurePlateBlock extends WeightedPressurePlateBlock
 
             if (state.getValue(WeightedPressurePlateBlock.POWER) > 1)
             {
-                return state.setValue(WeightedPressurePlateBlock.POWER, 1);
+                state = state.setValue(WeightedPressurePlateBlock.POWER, 1);
             }
-            return state.setValue(FramedProperties.GLOWING, false).setValue(FramedProperties.PROPAGATES_SKYLIGHT, false);
+            return state;
         }
 
         @Override
         public Set<Property<?>> getHandledProperties(Holder<Block> block)
         {
-            return Set.of(
-                    BlockStateProperties.WATERLOGGED,
-                    WeightedPressurePlateBlock.POWER,
-                    FramedProperties.GLOWING,
-                    FramedProperties.PROPAGATES_SKYLIGHT
+            return Utils.concat(
+                    ignoringMerger.getHandledProperties(block),
+                    Set.of(BlockStateProperties.WATERLOGGED, WeightedPressurePlateBlock.POWER)
             );
         }
     }

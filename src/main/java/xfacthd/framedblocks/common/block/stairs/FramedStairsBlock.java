@@ -1,7 +1,6 @@
 package xfacthd.framedblocks.common.block.stairs;
 
-import net.minecraft.core.BlockPos;
-import net.minecraft.core.Direction;
+import net.minecraft.core.*;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.LivingEntity;
@@ -12,6 +11,8 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.StairBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
+import net.minecraft.world.level.block.state.properties.Property;
+import net.minecraft.world.level.block.state.properties.StairsShape;
 import net.minecraft.world.level.storage.loot.LootParams;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.shapes.*;
@@ -19,11 +20,15 @@ import net.neoforged.neoforge.client.extensions.common.IClientBlockExtensions;
 import net.neoforged.neoforge.common.IPlantable;
 import xfacthd.framedblocks.api.block.*;
 import xfacthd.framedblocks.api.block.render.FramedBlockRenderProperties;
+import xfacthd.framedblocks.api.model.wrapping.WrapHelper;
+import xfacthd.framedblocks.api.model.wrapping.statemerger.StateMerger;
+import xfacthd.framedblocks.api.util.Utils;
 import xfacthd.framedblocks.common.FBContent;
 import xfacthd.framedblocks.common.data.BlockType;
 
 import javax.annotation.Nullable;
 import java.util.List;
+import java.util.Set;
 import java.util.function.Consumer;
 
 @SuppressWarnings("deprecation")
@@ -162,5 +167,43 @@ public class FramedStairsBlock extends StairBlock implements IFramedBlock
     public BlockType getBlockType()
     {
         return BlockType.FRAMED_STAIRS;
+    }
+
+
+
+    public static final class StairStateMerger implements StateMerger
+    {
+        public static final StairStateMerger INSTANCE = new StairStateMerger();
+
+        private final StateMerger ignoringMerger = StateMerger.ignoring(WrapHelper.IGNORE_DEFAULT_LOCK);
+
+        private StairStateMerger() { }
+
+        @Override
+        public BlockState apply(BlockState state)
+        {
+            state = ignoringMerger.apply(state);
+            StairsShape shape = state.getValue(SHAPE);
+            if (shape == StairsShape.INNER_RIGHT)
+            {
+                state = state.setValue(SHAPE, StairsShape.INNER_LEFT)
+                        .setValue(FACING, state.getValue(FACING).getClockWise());
+            }
+            else if (shape == StairsShape.OUTER_RIGHT)
+            {
+                state = state.setValue(SHAPE, StairsShape.OUTER_LEFT)
+                        .setValue(FACING, state.getValue(FACING).getClockWise());
+            }
+            return state;
+        }
+
+        @Override
+        public Set<Property<?>> getHandledProperties(Holder<Block> block)
+        {
+            return Utils.concat(
+                    ignoringMerger.getHandledProperties(block),
+                    Set.of(SHAPE)
+            );
+        }
     }
 }

@@ -4,6 +4,7 @@ public final class ModelCounter
 {
     private int totalCount = 0;
     private int distinctCount = 0;
+    private int itemCount = 0;
 
     public void increment(boolean distinct)
     {
@@ -14,6 +15,11 @@ public final class ModelCounter
         }
     }
 
+    public void incrementItem()
+    {
+        itemCount++;
+    }
+
     public int getTotalCount()
     {
         return totalCount;
@@ -22,5 +28,10 @@ public final class ModelCounter
     public int getDistinctCount()
     {
         return distinctCount;
+    }
+
+    public int getItemCount()
+    {
+        return itemCount;
     }
 }

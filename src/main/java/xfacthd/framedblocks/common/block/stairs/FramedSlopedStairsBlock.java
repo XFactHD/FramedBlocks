@@ -16,17 +16,13 @@ import xfacthd.framedblocks.api.util.*;
 import xfacthd.framedblocks.common.block.FramedBlock;
 import xfacthd.framedblocks.common.block.slope.FramedVerticalHalfSlopeBlock;
 import xfacthd.framedblocks.common.data.BlockType;
-import xfacthd.framedblocks.common.data.PropertyHolder;
 
 public class FramedSlopedStairsBlock extends FramedBlock
 {
     public FramedSlopedStairsBlock()
     {
         super(BlockType.FRAMED_SLOPED_STAIRS);
-        registerDefaultState(defaultBlockState()
-                .setValue(FramedProperties.TOP, false)
-                .setValue(PropertyHolder.RIGHT, false)
-        );
+        registerDefaultState(defaultBlockState().setValue(FramedProperties.TOP, false));
     }
 
     @Override
@@ -34,8 +30,8 @@ public class FramedSlopedStairsBlock extends FramedBlock
     {
         super.createBlockStateDefinition(builder);
         builder.add(
-                FramedProperties.FACING_HOR, FramedProperties.TOP, FramedProperties.SOLID,
-                PropertyHolder.RIGHT, BlockStateProperties.WATERLOGGED
+                FramedProperties.FACING_HOR, FramedProperties.TOP,
+                FramedProperties.SOLID, BlockStateProperties.WATERLOGGED
         );
     }
 

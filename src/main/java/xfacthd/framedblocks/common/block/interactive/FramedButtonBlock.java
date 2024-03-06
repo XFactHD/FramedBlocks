@@ -1,7 +1,6 @@
 package xfacthd.framedblocks.common.block.interactive;
 
-import net.minecraft.core.BlockPos;
-import net.minecraft.core.Direction;
+import net.minecraft.core.*;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.LivingEntity;
@@ -12,8 +11,7 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.*;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
-import net.minecraft.world.level.block.state.properties.AttachFace;
-import net.minecraft.world.level.block.state.properties.BlockSetType;
+import net.minecraft.world.level.block.state.properties.*;
 import net.minecraft.world.level.material.PushReaction;
 import net.minecraft.world.level.storage.loot.LootParams;
 import net.minecraft.world.phys.BlockHitResult;
@@ -21,10 +19,14 @@ import net.neoforged.neoforge.client.extensions.common.IClientBlockExtensions;
 import xfacthd.framedblocks.api.block.FramedProperties;
 import xfacthd.framedblocks.api.block.IFramedBlock;
 import xfacthd.framedblocks.api.block.render.FramedBlockRenderProperties;
+import xfacthd.framedblocks.api.model.wrapping.WrapHelper;
+import xfacthd.framedblocks.api.model.wrapping.statemerger.StateMerger;
+import xfacthd.framedblocks.api.util.Utils;
 import xfacthd.framedblocks.common.data.BlockType;
 
 import javax.annotation.Nullable;
 import java.util.List;
+import java.util.Set;
 import java.util.function.Consumer;
 
 @SuppressWarnings("deprecation")
@@ -128,5 +130,42 @@ public class FramedButtonBlock extends ButtonBlock implements IFramedBlock
                 BlockSetType.STONE,
                 20
         );
+    }
+
+
+
+    public static final class ButtonStateMerger implements StateMerger
+    {
+        public static final ButtonStateMerger INSTANCE = new ButtonStateMerger();
+
+        private final StateMerger ignoringMerger = StateMerger.ignoring(WrapHelper.IGNORE_ALWAYS);
+
+        private ButtonStateMerger() { }
+
+        @Override
+        public BlockState apply(BlockState state)
+        {
+            state = ignoringMerger.apply(state);
+
+            AttachFace face = state.getValue(FACE);
+            if (face != AttachFace.WALL)
+            {
+                Direction dir = state.getValue(FACING);
+                if (dir == Direction.SOUTH || dir == Direction.WEST)
+                {
+                    state = state.setValue(FACING, dir.getOpposite());
+                }
+            }
+            return state;
+        }
+
+        @Override
+        public Set<Property<?>> getHandledProperties(Holder<Block> block)
+        {
+            return Utils.concat(
+                    ignoringMerger.getHandledProperties(block),
+                    Set.of(FramedLargeButtonBlock.FACING)
+            );
+        }
     }
 }

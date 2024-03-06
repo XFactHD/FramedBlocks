@@ -8,17 +8,16 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.*;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
-import xfacthd.framedblocks.api.block.FramedProperties;
+import xfacthd.framedblocks.api.model.wrapping.WrapHelper;
 import xfacthd.framedblocks.api.model.wrapping.statemerger.StateMerger;
 import xfacthd.framedblocks.api.shapes.ShapeUtils;
+import xfacthd.framedblocks.api.util.Utils;
 import xfacthd.framedblocks.common.data.BlockType;
 
 import java.util.Set;
 
 public class FramedLargeButtonBlock extends FramedButtonBlock
 {
-    public static final StateMerger STATE_MERGER = new LargeButtonStateMerger();
-
     private static final VoxelShape SHAPE_BOTTOM = box(1, 0, 1, 15, 2, 15);
     private static final VoxelShape SHAPE_BOTTOM_PRESSED = box(1, 0, 1, 15, 1, 15);
     private static final VoxelShape SHAPE_TOP = box(1, 14, 1, 15, 16, 15);
@@ -87,27 +86,34 @@ public class FramedLargeButtonBlock extends FramedButtonBlock
 
 
 
-    private static final class LargeButtonStateMerger implements StateMerger
+    public static final class LargeButtonStateMerger implements StateMerger
     {
+        public static final LargeButtonStateMerger INSTANCE = new LargeButtonStateMerger();
+
+        private final StateMerger ignoringMerger = StateMerger.ignoring(WrapHelper.IGNORE_ALWAYS);
+
+        private LargeButtonStateMerger() { }
+
         @Override
         public BlockState apply(BlockState state)
         {
-            state = state.setValue(FramedProperties.GLOWING, false).setValue(FramedProperties.PROPAGATES_SKYLIGHT, false);
+            state = ignoringMerger.apply(state);
 
             AttachFace face = state.getValue(FramedLargeButtonBlock.FACE);
-            if (face == AttachFace.WALL)
+            if (face != AttachFace.WALL)
             {
-                return state;
+                state = state.setValue(FramedLargeButtonBlock.FACING, Direction.NORTH);
             }
-
-            return state.setValue(FramedLargeButtonBlock.FACING, Direction.NORTH)
-                    .setValue(FramedProperties.GLOWING, false);
+            return state;
         }
 
         @Override
         public Set<Property<?>> getHandledProperties(Holder<Block> block)
         {
-            return Set.of(FramedLargeButtonBlock.FACING, FramedProperties.GLOWING, FramedProperties.PROPAGATES_SKYLIGHT);
+            return Utils.concat(
+                    ignoringMerger.getHandledProperties(block),
+                    Set.of(FramedLargeButtonBlock.FACING)
+            );
         }
     }
 }
