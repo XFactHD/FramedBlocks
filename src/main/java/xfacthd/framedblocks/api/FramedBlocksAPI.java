@@ -9,6 +9,7 @@ import net.minecraftforge.registries.IForgeRegistry;
 import xfacthd.framedblocks.api.block.FramedBlockEntity;
 import xfacthd.framedblocks.api.blueprint.BlueprintCopyBehaviour;
 import xfacthd.framedblocks.api.camo.CamoContainer;
+import xfacthd.framedblocks.api.util.CamoMessageVerbosity;
 import xfacthd.framedblocks.api.util.WriteOnceHolder;
 
 @SuppressWarnings({ "unused", "SameReturnValue" })
@@ -111,4 +112,9 @@ public interface FramedBlocksAPI
      * {@return the light value to use when glowstone is applied to a block}
      */
     int getGlowstoneLightLevel();
+
+    /**
+     * Returns the verbosity of messages displayed when a block cannot be used as a camo
+     */
+    CamoMessageVerbosity getCamoMessageVerbosity();
 }

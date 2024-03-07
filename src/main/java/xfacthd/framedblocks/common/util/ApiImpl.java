@@ -11,6 +11,7 @@ import xfacthd.framedblocks.api.FramedBlocksAPI;
 import xfacthd.framedblocks.api.block.FramedBlockEntity;
 import xfacthd.framedblocks.api.blueprint.BlueprintCopyBehaviour;
 import xfacthd.framedblocks.api.camo.CamoContainer;
+import xfacthd.framedblocks.api.util.CamoMessageVerbosity;
 import xfacthd.framedblocks.client.util.ClientConfig;
 import xfacthd.framedblocks.common.FBContent;
 import xfacthd.framedblocks.common.compat.flywheel.FlywheelCompat;
@@ -121,5 +122,11 @@ public final class ApiImpl implements FramedBlocksAPI
     public int getGlowstoneLightLevel()
     {
         return ServerConfig.glowstoneLightLevel;
+    }
+
+    @Override
+    public CamoMessageVerbosity getCamoMessageVerbosity()
+    {
+        return ClientConfig.camoMessageVerbosity;
     }
 }

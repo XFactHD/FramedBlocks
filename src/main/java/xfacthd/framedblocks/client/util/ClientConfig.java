@@ -8,6 +8,7 @@ import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import org.apache.commons.lang3.tuple.Pair;
 import xfacthd.framedblocks.api.model.SolidFrameMode;
 import xfacthd.framedblocks.api.predicate.contex.ConTexMode;
+import xfacthd.framedblocks.api.util.CamoMessageVerbosity;
 import xfacthd.framedblocks.api.util.Utils;
 import xfacthd.framedblocks.client.screen.overlay.BlockInteractOverlay;
 
@@ -22,6 +23,7 @@ public final class ClientConfig
     private static final String KEY_DETAILED_CULLING = "detailedCulling";
     private static final String KEY_USE_DISCRETE_UV_STEPS = "discreteUVSteps";
     private static final String KEY_CON_TEX_MODE = "conTexMode";
+    private static final String KEY_CAMO_MESSAGE_VERBOSITY = "camoMessageVerbosity";
     private static final String KEY_SHOW_ALL_RECIPE_PERMUTATIONS_IN_EMI = "showAllRecipePermutationsInEmi";
     private static final String KEY_SOLID_FRAME_MODE = "solidFrameMode";
     private static final String KEY_SHOW_BUTTON_PLATE_OVERLAY = "showButtonPlateTypeOverlay";
@@ -42,6 +44,7 @@ public final class ClientConfig
     public static final String TRANSLATION_DETAILED_CULLING = translate(KEY_DETAILED_CULLING);
     public static final String TRANSLATION_USE_DISCRETE_UV_STEPS = translate(KEY_USE_DISCRETE_UV_STEPS);
     public static final String TRANSLATION_CON_TEX_MODE = translate(KEY_CON_TEX_MODE);
+    public static final String TRANSLATION_CAMO_MESSAGE_VERBOSITY = translate(KEY_CAMO_MESSAGE_VERBOSITY);
     public static final String TRANSLATION_SHOW_ALL_RECIPE_PERMUTATIONS_IN_EMI = translate(KEY_SHOW_ALL_RECIPE_PERMUTATIONS_IN_EMI);
     public static final String TRANSLATION_SOLID_FRAME_MODE = translate(KEY_SOLID_FRAME_MODE);
     public static final String TRANSLATION_SHOW_BUTTON_PLATE_OVERLAY = translate(KEY_SHOW_BUTTON_PLATE_OVERLAY);
@@ -66,6 +69,7 @@ public final class ClientConfig
     public static boolean detailedCulling = false;
     public static boolean useDiscreteUVSteps = false;
     public static ConTexMode conTexMode = ConTexMode.FULL_FACE;
+    public static CamoMessageVerbosity camoMessageVerbosity = CamoMessageVerbosity.DEFAULT;
     public static boolean showAllRecipePermutationsInEmi = false;
     public static SolidFrameMode solidFrameMode = SolidFrameMode.DEFAULT;
     public static boolean showButtonPlateOverlay = false;
@@ -86,6 +90,7 @@ public final class ClientConfig
     private final ForgeConfigSpec.BooleanValue detailedCullingValue;
     private final ForgeConfigSpec.BooleanValue useDiscreteUVStepsValue;
     private final ForgeConfigSpec.EnumValue<ConTexMode> conTexModeValue;
+    private final ForgeConfigSpec.EnumValue<CamoMessageVerbosity> camoMessageVerbosityValue;
     private final ForgeConfigSpec.BooleanValue showAllRecipePermutationsInEmiValue;
     private final ForgeConfigSpec.EnumValue<SolidFrameMode> solidFrameModeValue;
     private final ForgeConfigSpec.BooleanValue showButtonPlateOverlayValue;
@@ -144,6 +149,15 @@ public final class ClientConfig
                 )
                 .translation(TRANSLATION_CON_TEX_MODE)
                 .defineEnum(KEY_CON_TEX_MODE, ConTexMode.FULL_FACE);
+        camoMessageVerbosityValue = builder
+                .comment(
+                        "Configures the verbosity of messages displayed when a block cannot be used as a camo",
+                        "If NONE, no message will be shown",
+                        "If DEFAULT, a message will be shown when the block has a BlockEntity and isn't explicitly allowed or the block is explicitly disallowed",
+                        "If DETAILED, a message will be shown as above or when a block is non-solid and not explicitly allowed"
+                )
+                .translation(TRANSLATION_CAMO_MESSAGE_VERBOSITY)
+                .defineEnum(KEY_CAMO_MESSAGE_VERBOSITY, CamoMessageVerbosity.DEFAULT);
         showAllRecipePermutationsInEmiValue = builder
                 .comment("If true, all possible recipes of the Framing Saw will be added to EMI, else only the permutations using the Framed Cube will be added")
                 .comment("This setting only has an effect when EMI is installed")
@@ -248,6 +262,7 @@ public final class ClientConfig
             detailedCulling = detailedCullingValue.get();
             useDiscreteUVSteps = useDiscreteUVStepsValue.get();
             conTexMode = conTexModeValue.get();
+            camoMessageVerbosity = camoMessageVerbosityValue.get();
             showAllRecipePermutationsInEmi = showAllRecipePermutationsInEmiValue.get();
             solidFrameMode = solidFrameModeValue.get();
             showButtonPlateOverlay = showButtonPlateOverlayValue.get();

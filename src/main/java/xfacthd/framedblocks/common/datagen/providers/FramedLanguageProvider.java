@@ -271,8 +271,9 @@ public final class FramedLanguageProvider extends LanguageProvider
 
     private void addStatusMessageTranslations()
     {
-        add(FramedBlockEntity.MSG_BLACKLISTED, "This block is blacklisted!");
+        add(FramedBlockEntity.MSG_BLACKLISTED, "This block is disallowed as a camo!");
         add(FramedBlockEntity.MSG_BLOCK_ENTITY, "Blocks with BlockEntities cannot be inserted into framed blocks!");
+        add(FramedBlockEntity.MSG_NON_SOLID, "Untagged non-solid blocks cannot be inserted into framed blocks!");
 
         add(IFramedBlock.LOCK_MESSAGE, "The state of this block is now %s");
     }
@@ -414,6 +415,7 @@ public final class FramedLanguageProvider extends LanguageProvider
         add(ClientConfig.TRANSLATION_DETAILED_CULLING, "Detailed culling");
         add(ClientConfig.TRANSLATION_USE_DISCRETE_UV_STEPS, "Use discrete UV steps");
         add(ClientConfig.TRANSLATION_CON_TEX_MODE, "Connected textures mode");
+        add(ClientConfig.TRANSLATION_CAMO_MESSAGE_VERBOSITY, "Disallowed camo message verbosity");
         add(ClientConfig.TRANSLATION_SHOW_ALL_RECIPE_PERMUTATIONS_IN_EMI, "Show all Framing Saw recipe permutations in EMI");
         add(ClientConfig.TRANSLATION_SOLID_FRAME_MODE, "Solid frame mode");
         add(ClientConfig.TRANSLATION_SHOW_BUTTON_PLATE_OVERLAY, "Show button and pressure plate type overlay");
