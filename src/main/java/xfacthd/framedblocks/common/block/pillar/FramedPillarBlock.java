@@ -13,6 +13,7 @@ import net.minecraft.world.phys.shapes.VoxelShape;
 import xfacthd.framedblocks.api.block.PlacementStateBuilder;
 import xfacthd.framedblocks.api.shapes.ShapeProvider;
 import xfacthd.framedblocks.api.util.Utils;
+import xfacthd.framedblocks.common.FBContent;
 import xfacthd.framedblocks.common.block.FramedBlock;
 import xfacthd.framedblocks.common.data.BlockType;
 
@@ -20,7 +21,10 @@ import javax.annotation.Nullable;
 
 public class FramedPillarBlock extends FramedBlock
 {
-    public FramedPillarBlock(BlockType blockType) { super(blockType); }
+    public FramedPillarBlock(BlockType blockType)
+    {
+        super(blockType);
+    }
 
     @Override
     protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder)
@@ -65,6 +69,11 @@ public class FramedPillarBlock extends FramedBlock
     }
 
 
+
+    public static BlockState itemModelSourcePost()
+    {
+        return FBContent.BLOCK_FRAMED_POST.get().defaultBlockState().setValue(BlockStateProperties.AXIS, Direction.Axis.Y);
+    }
 
     public static ShapeProvider generatePillarShapes(ImmutableList<BlockState> states)
     {

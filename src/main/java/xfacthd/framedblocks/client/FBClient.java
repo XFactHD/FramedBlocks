@@ -59,6 +59,7 @@ import xfacthd.framedblocks.client.screen.*;
 import xfacthd.framedblocks.client.screen.overlay.*;
 import xfacthd.framedblocks.client.util.*;
 import xfacthd.framedblocks.common.FBContent;
+import xfacthd.framedblocks.common.block.door.FramedFenceGateBlock;
 import xfacthd.framedblocks.common.block.interactive.*;
 import xfacthd.framedblocks.common.block.pane.*;
 import xfacthd.framedblocks.common.block.pillar.*;
@@ -263,7 +264,7 @@ public final class FBClient
         replaceDoubleBlockModels(FBContent.BLOCK_FRAMED_DOUBLE_THREEWAY_CORNER_PILLAR, registry, FramedDoubleThreewayCornerPillarBlock.itemModelSource(), ClientUtils.IGNORE_SOLID);
         ClientUtils.replaceModels(FBContent.BLOCK_FRAMED_WALL, registry, FramedWallModel::new, ClientUtils.IGNORE_WATERLOGGED_LOCK);
         ClientUtils.replaceModels(FBContent.BLOCK_FRAMED_FENCE, registry, FramedFenceModel::createFenceModel, ClientUtils.IGNORE_WATERLOGGED_LOCK);
-        ClientUtils.replaceModels(FBContent.BLOCK_FRAMED_FENCE_GATE, registry, FramedFenceGateModel::new, List.of(BlockStateProperties.POWERED));
+        ClientUtils.replaceModels(FBContent.BLOCK_FRAMED_FENCE_GATE, registry, FramedFenceGateModel::new, FramedFenceGateBlock.itemModelSource(), List.of(BlockStateProperties.POWERED));
         ClientUtils.replaceModels(FBContent.BLOCK_FRAMED_DOOR, registry, FramedDoorModel::new, ClientUtils.IGNORE_SOLID);
         ClientUtils.replaceModels(FBContent.BLOCK_FRAMED_IRON_DOOR, registry, FramedIronDoorModel::new, ClientUtils.IGNORE_SOLID);
         ClientUtils.replaceModels(FBContent.BLOCK_FRAMED_TRAP_DOOR, registry, FramedTrapDoorModel::new, ClientUtils.IGNORE_DEFAULT);
@@ -299,7 +300,7 @@ public final class FBClient
         ClientUtils.replaceModels(FBContent.BLOCK_FRAMED_REDSTONE_TORCH, registry, FramedRedstoneTorchModel::new, null);
         ClientUtils.replaceModels(FBContent.BLOCK_FRAMED_REDSTONE_WALL_TORCH, registry, FramedRedstoneWallTorchModel::new, null);
         ClientUtils.replaceModels(FBContent.BLOCK_FRAMED_FLOOR, registry, FramedFloorModel::new, ClientUtils.IGNORE_DEFAULT);
-        ClientUtils.replaceModels(FBContent.BLOCK_FRAMED_LATTICE, registry, FramedLatticeModel::new, ClientUtils.IGNORE_WATERLOGGED_LOCK);
+        ClientUtils.replaceModels(FBContent.BLOCK_FRAMED_LATTICE, registry, FramedLatticeModel::new, FramedLatticeBlock.itemModelSourceThin(), ClientUtils.IGNORE_WATERLOGGED_LOCK);
         ClientUtils.replaceModels(FBContent.BLOCK_FRAMED_THICK_LATTICE, registry, FramedLatticeModel::new, ClientUtils.IGNORE_WATERLOGGED_LOCK);
         ClientUtils.replaceModels(FBContent.BLOCK_FRAMED_VERTICAL_STAIRS, registry, FramedVerticalStairsModel::new, ClientUtils.IGNORE_DEFAULT_LOCK);
         ClientUtils.replaceModels(FBContent.BLOCK_FRAMED_CHEST, registry, FramedChestModel::new, FramedChestModel.itemSource(), ClientUtils.IGNORE_WATERLOGGED);
@@ -312,7 +313,7 @@ public final class FBClient
         ClientUtils.replaceModels(FBContent.BLOCK_FRAMED_FLOWER_POT, registry, (state, model) -> new FramedFlowerPotModel(state, model, registry), null);
         ClientUtils.replaceModels(FBContent.BLOCK_FRAMED_PILLAR, registry, FramedPillarModel::new, ClientUtils.IGNORE_WATERLOGGED);
         ClientUtils.replaceModels(FBContent.BLOCK_FRAMED_HALF_PILLAR, registry, FramedHalfPillarModel::new, ClientUtils.IGNORE_WATERLOGGED);
-        ClientUtils.replaceModels(FBContent.BLOCK_FRAMED_POST, registry, FramedPillarModel::new, ClientUtils.IGNORE_WATERLOGGED);
+        ClientUtils.replaceModels(FBContent.BLOCK_FRAMED_POST, registry, FramedPillarModel::new, FramedPillarBlock.itemModelSourcePost(), ClientUtils.IGNORE_WATERLOGGED);
         ClientUtils.replaceModels(FBContent.BLOCK_FRAMED_COLLAPSIBLE_BLOCK, registry, FramedCollapsibleBlockModel::new, ClientUtils.IGNORE_WATERLOGGED);
         ClientUtils.replaceModels(FBContent.BLOCK_FRAMED_COLLAPSIBLE_COPYCAT_BLOCK, registry, FramedCollapsibleCopycatBlockModel::new, ClientUtils.IGNORE_WATERLOGGED);
         ClientUtils.replaceModels(FBContent.BLOCK_FRAMED_HALF_STAIRS, registry, FramedHalfStairsModel::new, ClientUtils.IGNORE_WATERLOGGED);

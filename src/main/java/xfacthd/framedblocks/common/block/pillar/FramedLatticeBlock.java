@@ -143,6 +143,15 @@ public class FramedLatticeBlock extends FramedBlock
 
 
 
+    public static BlockState itemModelSourceThin()
+    {
+        return FBContent.BLOCK_FRAMED_LATTICE.get()
+                .defaultBlockState()
+                .setValue(FramedProperties.X_AXIS, true)
+                .setValue(FramedProperties.Y_AXIS, true)
+                .setValue(FramedProperties.Z_AXIS, true);
+    }
+
     public static ShapeProvider generateThinShapes(ImmutableList<BlockState> states)
     {
         return generateShapes(

@@ -19,6 +19,7 @@ import net.minecraftforge.client.extensions.common.IClientBlockExtensions;
 import xfacthd.framedblocks.api.block.FramedProperties;
 import xfacthd.framedblocks.api.block.IFramedBlock;
 import xfacthd.framedblocks.api.block.render.FramedBlockRenderProperties;
+import xfacthd.framedblocks.common.FBContent;
 import xfacthd.framedblocks.common.data.BlockType;
 
 import javax.annotation.Nullable;
@@ -114,5 +115,12 @@ public class FramedFenceGateBlock extends FenceGateBlock implements IFramedBlock
     public void initializeClient(Consumer<IClientBlockExtensions> consumer)
     {
         consumer.accept(FramedBlockRenderProperties.INSTANCE);
+    }
+
+
+
+    public static BlockState itemModelSource()
+    {
+        return FBContent.BLOCK_FRAMED_FENCE_GATE.get().defaultBlockState();
     }
 }

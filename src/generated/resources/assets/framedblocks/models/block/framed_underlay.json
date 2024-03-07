@@ -1,7 +1,8 @@
 {
-  "parent": "minecraft:block/stripped_dark_oak_wood",
+  "parent": "minecraft:block/cube_all",
   "render_type": "minecraft:cutout",
   "textures": {
+    "all": "minecraft:block/stripped_dark_oak_log",
     "particle": "framedblocks:block/framed_block"
   }
 }
