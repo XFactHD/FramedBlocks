@@ -84,7 +84,7 @@ public class FramedDividedStairsBlock extends AbstractFramedDoubleBlock
         {
             state = state.setValue(FramedProperties.FACING_HOR, dir.getOpposite());
         }
-        return state.cycle(PropertyHolder.RIGHT);
+        return state;
     }
 
     @Override
