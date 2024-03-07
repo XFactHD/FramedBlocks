@@ -89,7 +89,11 @@ public class FramedCheckeredPanelBlock extends AbstractFramedDoubleBlock
     @Override
     public SolidityCheck calculateSolidityCheck(BlockState state, Direction side)
     {
-        return SolidityCheck.BOTH;
+        if (side == state.getValue(FramedProperties.FACING_HOR))
+        {
+            return SolidityCheck.BOTH;
+        }
+        return SolidityCheck.NONE;
     }
 
 
