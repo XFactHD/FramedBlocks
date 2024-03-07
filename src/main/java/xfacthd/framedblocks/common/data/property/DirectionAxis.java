@@ -70,7 +70,7 @@ public enum DirectionAxis implements StringRepresentable
         else
         {
             Direction.Axis newAxis = axis;
-            if (axis != Direction.Axis.Y)
+            if (axis != Direction.Axis.Y && rot != Rotation.CLOCKWISE_180)
             {
                 newAxis = Utils.nextAxisNotEqualTo(axis, Direction.Axis.Y);
             }

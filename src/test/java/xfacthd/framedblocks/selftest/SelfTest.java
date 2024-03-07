@@ -41,6 +41,7 @@ public final class SelfTest
         StateCacheValidity.checkStateCacheValid(blocks);
         DoubleBlockCamoConnectionConsistency.checkConnectionConsistency(blocks);
         DoubleBlockSolidSideConsistency.checkSolidSideConsistency(blocks);
+        RotateMirrorErrors.checkRotateMirrorErrors(blocks);
 
         stopwatch.stop();
         FramedBlocks.LOGGER.info("Self test completed in {}", stopwatch);
