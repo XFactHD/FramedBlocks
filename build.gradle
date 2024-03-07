@@ -202,6 +202,8 @@ dependencies {
 
     implementation fg.deobf("curse.maven:guidebook-253874:4593765")
 
+    compileOnly fg.deobf("curse.maven:jade-324717:5072729")
+
     compileOnly fg.deobf("curse.maven:atlasviewer-633577:4762356")
 
     minecraftLibrary(group: 'com.github.ben-manes.caffeine', name: 'caffeine', version: '3.1.1')

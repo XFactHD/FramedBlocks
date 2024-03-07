@@ -224,6 +224,7 @@
   "config.framedblocks.server.glowstoneLightLevel": "Glowstone Light Level",
   "config.framedblocks.server.intangibleMarkerItem": "Intangibility marker item",
   "config.framedblocks.server.oneWayWindowOwnable": "One-Way Window ownability",
+  "config.jade.plugin_framedblocks.framed_item_frame": "Framed Item Frame",
   "desc.framedblocks.blueprint_block": "Contained Block: %s",
   "desc.framedblocks.blueprint_camo": "Camo Block: %s",
   "desc.framedblocks.blueprint_cant_copy": "[Framed Blueprint] This block can currently not be copied!",
