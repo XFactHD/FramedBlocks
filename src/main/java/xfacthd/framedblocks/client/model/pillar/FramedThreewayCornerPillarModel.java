@@ -56,7 +56,7 @@ public class FramedThreewayCornerPillarModel extends FramedBlockModel
                     .apply(Modifiers.cutTopBottom(dir.getOpposite(), .5F))
                     .apply(Modifiers.cutTopBottom(dir.getCounterClockWise(), .5F))
                     .apply(Modifiers.setPosition(.5F))
-                    .export(quadMap.get(quadDir));
+                    .export(quadMap.get(null));
         }
         else if (quadDir == dir)
         {
