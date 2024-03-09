@@ -16,6 +16,7 @@ public final class ClientConfig
 
     private static final String KEY_SHOW_GHOST_BLOCKS = "showGhostBlocks";
     private static final String KEY_ALT_GHOST_RENDERER = "altGhostRenderer";
+    private static final String KEY_GHOST_RENDER_OPACITY = "ghostRenderOpacity";
     private static final String KEY_FANCY_HITBOXES = "fancyHitboxes";
     private static final String KEY_DETAILED_CULLING = "detailedCulling";
     private static final String KEY_USE_DISCRETE_UV_STEPS = "discreteUVSteps";
@@ -37,6 +38,7 @@ public final class ClientConfig
 
     public static final String TRANSLATION_SHOW_GHOST_BLOCKS = translate(KEY_SHOW_GHOST_BLOCKS);
     public static final String TRANSLATION_ALT_GHOST_RENDERER = translate(KEY_ALT_GHOST_RENDERER);
+    public static final String TRANSLATION_GHOST_RENDER_OPACITY = translate(KEY_GHOST_RENDER_OPACITY);
     public static final String TRANSLATION_FANCY_HITBOXES = translate(KEY_FANCY_HITBOXES);
     public static final String TRANSLATION_DETAILED_CULLING = translate(KEY_DETAILED_CULLING);
     public static final String TRANSLATION_USE_DISCRETE_UV_STEPS = translate(KEY_USE_DISCRETE_UV_STEPS);
@@ -62,6 +64,7 @@ public final class ClientConfig
 
     private static boolean showGhostBlocks = false;
     private static boolean altGhostRenderer = false;
+    private static int ghostRenderOpacity = 0;
     private static boolean fancyHitboxes = false;
     private static boolean detailedCulling = false;
     private static boolean useDiscreteUVSteps = false;
@@ -83,6 +86,7 @@ public final class ClientConfig
 
     private static ModConfigSpec.BooleanValue showGhostBlocksValue;
     private static ModConfigSpec.BooleanValue altGhostRendererValue;
+    private static ModConfigSpec.IntValue ghostRenderOpacityValue;
     private static ModConfigSpec.BooleanValue fancyHitboxesValue;
     private static ModConfigSpec.BooleanValue detailedCullingValue;
     private static ModConfigSpec.BooleanValue useDiscreteUVStepsValue;
@@ -122,6 +126,10 @@ public final class ClientConfig
                 .comment("If true, an alternate renderer will be used for the placement preview. May solve issues with certain shaders")
                 .translation(TRANSLATION_ALT_GHOST_RENDERER)
                 .define(KEY_ALT_GHOST_RENDERER, false);
+        ghostRenderOpacityValue = builder
+                .comment("Set the opacity of the placement preview. 30 is almost completely transparent, 255 is fully opaque")
+                .translation(TRANSLATION_GHOST_RENDER_OPACITY)
+                .defineInRange(KEY_GHOST_RENDER_OPACITY, 170, 30, 255);
         fancyHitboxesValue = builder
                 .comment("Whether certain framed blocks should show fancy hitboxes")
                 .translation(TRANSLATION_FANCY_HITBOXES)
@@ -255,6 +263,7 @@ public final class ClientConfig
         {
             showGhostBlocks = showGhostBlocksValue.get();
             altGhostRenderer = altGhostRendererValue.get();
+            ghostRenderOpacity = ghostRenderOpacityValue.get();
             fancyHitboxes = fancyHitboxesValue.get();
             detailedCulling = detailedCullingValue.get();
             useDiscreteUVSteps = useDiscreteUVStepsValue.get();
@@ -293,6 +302,12 @@ public final class ClientConfig
         public boolean useAltGhostRenderer()
         {
             return altGhostRenderer;
+        }
+
+        @Override
+        public int getGhostRenderOpacity()
+        {
+            return ghostRenderOpacity;
         }
 
         @Override

@@ -425,6 +425,7 @@ public final class FramedLanguageProvider extends LanguageProvider
 
         add(ClientConfig.TRANSLATION_SHOW_GHOST_BLOCKS, "Show ghost blocks");
         add(ClientConfig.TRANSLATION_ALT_GHOST_RENDERER, "Use alternative placement preview renderer");
+        add(ClientConfig.TRANSLATION_GHOST_RENDER_OPACITY, "Placement preview opacity");
         add(ClientConfig.TRANSLATION_FANCY_HITBOXES, "Fancy hitboxes");
         add(ClientConfig.TRANSLATION_DETAILED_CULLING, "Detailed culling");
         add(ClientConfig.TRANSLATION_USE_DISCRETE_UV_STEPS, "Use discrete UV steps");

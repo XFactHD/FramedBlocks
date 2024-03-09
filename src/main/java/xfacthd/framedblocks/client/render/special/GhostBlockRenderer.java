@@ -153,10 +153,11 @@ public final class GhostBlockRenderer
         RenderType bufferType = ClientConfig.VIEW.useAltGhostRenderer() ?
                 Sheets.translucentCullBlockSheet() :
                 NeoForgeRenderTypes.TRANSLUCENT_ON_PARTICLES_TARGET.get();
+        int opacity = ClientConfig.VIEW.getGhostRenderOpacity();
 
         profiler.push("buffer");
         Vec3 offset = Vec3.atLowerCornerOf(renderPos).subtract(mc().gameRenderer.getMainCamera().getPosition());
-        VertexConsumer builder = new GhostVertexConsumer(buffers.getBuffer(bufferType), 0xAA);
+        VertexConsumer builder = new GhostVertexConsumer(buffers.getBuffer(bufferType), opacity);
         profiler.pop(); //buffer
 
         profiler.push("draw");

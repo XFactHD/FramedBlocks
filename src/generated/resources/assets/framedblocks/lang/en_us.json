@@ -204,6 +204,7 @@
   "config.framedblocks.client.detailedCulling": "Detailed culling",
   "config.framedblocks.client.discreteUVSteps": "Use discrete UV steps",
   "config.framedblocks.client.fancyHitboxes": "Fancy hitboxes",
+  "config.framedblocks.client.ghostRenderOpacity": "Placement preview opacity",
   "config.framedblocks.client.itemFrameBackgroundMode": "Item Frame Background overlay: Display mode",
   "config.framedblocks.client.oneWayWindowMode": "One-Way Window overlay: Display mode",
   "config.framedblocks.client.prismOffsetMode": "Prism offset overlay: Display mode",
