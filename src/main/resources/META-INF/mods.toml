@@ -132,6 +132,13 @@ license="LGPL v3"
     ordering="NONE"
     side="BOTH"
 
+[[dependencies.framedblocks]]
+    modId="ae2"
+    type="optional"
+    versionRange="[${ae2_version},)"
+    ordering="NONE"
+    side="BOTH"
+
 
 
 [mods."modernfix:integration"]

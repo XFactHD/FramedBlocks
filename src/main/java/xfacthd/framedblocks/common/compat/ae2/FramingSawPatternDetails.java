@@ -68,6 +68,12 @@ final class FramingSawPatternDetails implements IPatternDetails
         return outputs;
     }
 
+    @Override
+    public boolean supportsPushInputsToExternalInventory()
+    {
+        return false;
+    }
+
     public RecipeHolder<FramingSawRecipe> getRecipe()
     {
         return recipe;

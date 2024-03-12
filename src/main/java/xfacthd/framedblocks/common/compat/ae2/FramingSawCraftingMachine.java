@@ -52,7 +52,7 @@ final class FramingSawCraftingMachine implements ICraftingMachine
             for (int i = 0; i < FramingSawMenu.SLOT_RESULT; i++)
             {
                 ItemStack stack = inv.getStackInSlot(i);
-                if (i > inputs.length)
+                if (i >= inputs.length)
                 {
                     if (!stack.isEmpty())
                     {
@@ -66,7 +66,11 @@ final class FramingSawCraftingMachine implements ICraftingMachine
                 {
                     continue;
                 }
-                if (!(entry.getKey() instanceof AEItemKey itemKey) || !itemKey.matches(stack) || stack.getCount() + entry.getLongValue() > stack.getMaxStackSize())
+                if (!(entry.getKey() instanceof AEItemKey itemKey))
+                {
+                    return false;
+                }
+                if (!stack.isEmpty() && (!itemKey.matches(stack) || stack.getCount() + entry.getLongValue() > stack.getMaxStackSize()))
                 {
                     return false;
                 }
