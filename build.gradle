@@ -201,7 +201,7 @@ dependencies {
 
     compileOnly("curse.maven:jade-324717:5109393")
 
-    compileOnly("curse.maven:atlasviewer-633577:4882515")
+    implementation("curse.maven:atlasviewer-633577:5024183")
 }
 
 tasks.withType(ProcessResources).configureEach {
