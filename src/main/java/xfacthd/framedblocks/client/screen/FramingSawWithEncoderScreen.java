@@ -17,8 +17,8 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.neoforged.neoforge.network.PacketDistributor;
 import org.lwjgl.glfw.GLFW;
+import xfacthd.framedblocks.api.util.ClientUtils;
 import xfacthd.framedblocks.api.util.Utils;
-import xfacthd.framedblocks.client.render.item.ItemRenderHelper;
 import xfacthd.framedblocks.common.compat.ae2.AppliedEnergisticsCompat;
 import xfacthd.framedblocks.common.crafting.*;
 import xfacthd.framedblocks.common.menu.FramingSawMenu;
@@ -107,17 +107,17 @@ public class FramingSawWithEncoderScreen extends FramingSawScreen
         {
             FramingSawRecipe recipe = cache.getRecipes().get(menu.getSelectedRecipeIndex()).value();
 
-            ItemRenderHelper.renderFakeItemTransparent(graphics.pose(), recipe.getResult(), leftPos + 223, topPos + 31, 127);
+            ClientUtils.renderTransparentFakeItem(graphics, recipe.getResult(), leftPos + 223, topPos + 31);
             int count = Optionull.mapOrDefault(encoderCalculation, FramingSawRecipeCalculation::getOutputCount, 1);
             drawItemCount(graphics, count, leftPos + 223, topPos + 31);
 
             if (!menu.getSlot(FramingSawWithEncoderMenu.SLOT_PATTERN_INPUT).hasItem())
             {
-                ItemRenderHelper.renderFakeItemTransparent(graphics.pose(), blankPatternStack, leftPos + 223, topPos + 73, 127);
+                ClientUtils.renderTransparentFakeItem(graphics, blankPatternStack, leftPos + 223, topPos + 73);
             }
             if (!menu.getSlot(FramingSawWithEncoderMenu.SLOT_PATTERN_OUTPUT).hasItem())
             {
-                ItemRenderHelper.renderFakeItemTransparent(graphics.pose(), sawPatternStack, leftPos + 223, topPos + 109, 127);
+                ClientUtils.renderTransparentFakeItem(graphics, sawPatternStack, leftPos + 223, topPos + 109);
             }
         }
     }

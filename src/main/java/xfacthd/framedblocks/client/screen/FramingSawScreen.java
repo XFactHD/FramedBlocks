@@ -26,8 +26,8 @@ import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.item.crafting.RecipeHolder;
 import net.neoforged.neoforge.network.PacketDistributor;
 import org.lwjgl.glfw.GLFW;
+import xfacthd.framedblocks.api.util.ClientUtils;
 import xfacthd.framedblocks.api.util.Utils;
-import xfacthd.framedblocks.client.render.item.ItemRenderHelper;
 import xfacthd.framedblocks.client.screen.widget.SearchEditBox;
 import xfacthd.framedblocks.client.util.RecipeViewer;
 import xfacthd.framedblocks.common.FBContent;
@@ -193,7 +193,7 @@ public class FramingSawScreen extends AbstractContainerScreen<FramingSawMenu> im
     {
         if (input.isEmpty())
         {
-            ItemRenderHelper.renderFakeItemTransparent(graphics.pose(), cubeStack, leftPos + 20, topPos + 28, 127);
+            ClientUtils.renderTransparentFakeItem(graphics, cubeStack, leftPos + 20, topPos + 28);
             return true;
         }
         return false;
@@ -205,7 +205,7 @@ public class FramingSawScreen extends AbstractContainerScreen<FramingSawMenu> im
         {
             ItemStack[] items = additives.get(index).ingredient().getItems();
             int t = (int) (System.currentTimeMillis() / 1700) % items.length;
-            ItemRenderHelper.renderFakeItemTransparent(graphics.pose(), items[t], leftPos + 20, y, 127);
+            ClientUtils.renderTransparentFakeItem(graphics, items[t], leftPos + 20, y);
             return true;
         }
         return false;
