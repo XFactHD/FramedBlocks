@@ -27,10 +27,8 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.DirectionProperty;
 import net.minecraft.world.level.block.state.properties.Property;
-import net.minecraft.world.level.chunk.LevelChunk;
 import net.minecraft.world.level.material.*;
 import net.minecraft.world.phys.Vec3;
-import net.neoforged.fml.loading.FMLEnvironment;
 import net.neoforged.neoforge.registries.DeferredItem;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.Nullable;
@@ -199,23 +197,6 @@ public final class Utils
             components[v.ordinal()] = Component.translatable(key, valueTranslations[v.ordinal()]);
         }
         return components;
-    }
-
-    public static BlockEntity getBlockEntitySafe(BlockGetter blockGetter, BlockPos pos)
-    {
-        if (blockGetter instanceof Level level)
-        {
-            return level.getChunkAt(pos).getBlockEntity(pos, LevelChunk.EntityCreationType.CHECK);
-        }
-        else if (blockGetter instanceof LevelChunk chunk)
-        {
-            return chunk.getBlockEntity(pos, LevelChunk.EntityCreationType.CHECK);
-        }
-        else if (FMLEnvironment.dist.isClient())
-        {
-            return ClientUtils.getBlockEntitySafe(blockGetter, pos);
-        }
-        return null;
     }
 
     public static boolean isPositive(Direction dir)

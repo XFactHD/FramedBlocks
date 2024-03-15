@@ -5,12 +5,10 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.block.model.BakedQuad;
-import net.minecraft.client.renderer.chunk.RenderChunkRegion;
 import net.minecraft.core.BlockPos;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.*;
-import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.material.FluidState;
 import net.neoforged.neoforge.client.extensions.common.IClientFluidTypeExtensions;
@@ -20,15 +18,6 @@ import java.util.function.*;
 public final class ClientUtils
 {
     public static final ResourceLocation DUMMY_TEXTURE = new ResourceLocation("neoforge", "white");
-
-    public static BlockEntity getBlockEntitySafe(BlockGetter blockGetter, BlockPos pos)
-    {
-        if (blockGetter instanceof RenderChunkRegion renderChunk)
-        {
-            return renderChunk.getBlockEntity(pos);
-        }
-        return null;
-    }
 
     public static final Supplier<Boolean> OPTIFINE_LOADED = Suppliers.memoize(() ->
     {

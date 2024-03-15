@@ -6,7 +6,6 @@ import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import xfacthd.framedblocks.api.predicate.cull.SideSkipPredicate;
-import xfacthd.framedblocks.api.util.Utils;
 import xfacthd.framedblocks.common.blockentity.special.FramedCollapsibleBlockEntity;
 import xfacthd.framedblocks.common.data.BlockType;
 import xfacthd.framedblocks.common.data.property.NullableDirection;
@@ -30,8 +29,8 @@ public final class CollapsibleBlockSkipPredicate implements SideSkipPredicate
 
         if (adjState.getBlock() == state.getBlock() && adjState.getValue(PropertyHolder.NULLABLE_FACE) == face)
         {
-            BlockEntity be = Utils.getBlockEntitySafe(level, pos);
-            BlockEntity adjBe = Utils.getBlockEntitySafe(level, pos.relative(side));
+            BlockEntity be = level.getBlockEntity(pos);
+            BlockEntity adjBe = level.getBlockEntity(pos.relative(side));
 
             if (be instanceof FramedCollapsibleBlockEntity cbe && adjBe instanceof FramedCollapsibleBlockEntity adjCbe)
             {
