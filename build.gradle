@@ -188,7 +188,8 @@ dependencies {
     //runtimeOnly fg.deobf("curse.maven:spark-361579:3767286")
 
     //runtimeOnly fg.deobf("curse.maven:rubidium-574856:4684247")
-    //runtimeOnly fg.deobf("curse.maven:oculus-581495:4578741")
+    //runtimeOnly fg.deobf("org.embeddedt:embeddium-${embeddium_mc_version}:${embeddium_version}")
+    //runtimeOnly fg.deobf("curse.maven:oculus-581495:5108615")
     //runtimeOnly fg.deobf("curse.maven:starlight-forge-526854:4631193")
 
     compileOnly fg.deobf("com.simibubi.create:create-1.20.1:0.5.1.d-11:slim") { transitive = false }

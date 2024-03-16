@@ -560,6 +560,16 @@ public abstract class FramedBlockModel extends BakedModelProxy
         return new SimpleQuadCacheKey(state, ctCtx);
     }
 
+    /**
+     * Controls the AO behaviour of light emitting blocks
+     * @return true if AO should be used even if the block emits light or false for the vanilla behavior of disabling AO
+     *         when the block emits light
+     */
+    public boolean useAmbientOcclusionWithLightEmission(BlockState state, RenderType layer)
+    {
+        return true;
+    }
+
     @Override
     public final ModelData getModelData(BlockAndTintGetter level, BlockPos pos, BlockState state, ModelData tileData)
     {

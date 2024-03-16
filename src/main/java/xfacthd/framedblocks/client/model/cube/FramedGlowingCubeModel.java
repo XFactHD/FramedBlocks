@@ -40,6 +40,13 @@ public class FramedGlowingCubeModel extends FramedCubeBaseModel
         return false;
     }
 
+    @Override
+    public boolean useAmbientOcclusionWithLightEmission(BlockState state, RenderType layer)
+    {
+        // Return true despite explicitly not wanting AO on this, simply to avoid the light emission check
+        return true;
+    }
+
 
 
     private static List<BakedQuad> applyFullbright(List<BakedQuad> quads)
@@ -53,6 +60,7 @@ public class FramedGlowingCubeModel extends FramedCubeBaseModel
                     quad.getTintIndex(),
                     quad.getDirection(),
                     quad.getSprite(),
+                    false,
                     false
             );
             QuadTransformers.settingMaxEmissivity().processInPlace(newQuad);

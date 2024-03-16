@@ -9,7 +9,8 @@
         "MixinMapItemSavedData"
     ],
     "client": [
-        "client.MixinLevelRenderer"
+        "client.MixinLevelRenderer",
+        "client.MixinModelBlockRenderer"
     ],
     "injectors": {
         "defaultRequire": 1
