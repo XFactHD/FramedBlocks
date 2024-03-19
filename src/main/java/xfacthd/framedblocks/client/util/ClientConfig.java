@@ -24,6 +24,7 @@ public final class ClientConfig
     private static final String KEY_USE_DISCRETE_UV_STEPS = "discreteUVSteps";
     private static final String KEY_CON_TEX_MODE = "conTexMode";
     private static final String KEY_CAMO_MESSAGE_VERBOSITY = "camoMessageVerbosity";
+    private static final String KEY_FORCE_AO_ON_GLOWING_BLOCKS = "forceAoOnGlowingBlocks";
     private static final String KEY_SHOW_ALL_RECIPE_PERMUTATIONS_IN_EMI = "showAllRecipePermutationsInEmi";
     private static final String KEY_SOLID_FRAME_MODE = "solidFrameMode";
     private static final String KEY_SHOW_BUTTON_PLATE_OVERLAY = "showButtonPlateTypeOverlay";
@@ -45,6 +46,7 @@ public final class ClientConfig
     public static final String TRANSLATION_USE_DISCRETE_UV_STEPS = translate(KEY_USE_DISCRETE_UV_STEPS);
     public static final String TRANSLATION_CON_TEX_MODE = translate(KEY_CON_TEX_MODE);
     public static final String TRANSLATION_CAMO_MESSAGE_VERBOSITY = translate(KEY_CAMO_MESSAGE_VERBOSITY);
+    public static final String TRANSLATION_FORCE_AO_ON_GLOWING_BLOCKS = translate(KEY_FORCE_AO_ON_GLOWING_BLOCKS);
     public static final String TRANSLATION_SHOW_ALL_RECIPE_PERMUTATIONS_IN_EMI = translate(KEY_SHOW_ALL_RECIPE_PERMUTATIONS_IN_EMI);
     public static final String TRANSLATION_SOLID_FRAME_MODE = translate(KEY_SOLID_FRAME_MODE);
     public static final String TRANSLATION_SHOW_BUTTON_PLATE_OVERLAY = translate(KEY_SHOW_BUTTON_PLATE_OVERLAY);
@@ -70,6 +72,7 @@ public final class ClientConfig
     public static boolean useDiscreteUVSteps = false;
     public static ConTexMode conTexMode = ConTexMode.FULL_FACE;
     public static CamoMessageVerbosity camoMessageVerbosity = CamoMessageVerbosity.DEFAULT;
+    public static boolean forceAoOnGlowingBlocks = false;
     public static boolean showAllRecipePermutationsInEmi = false;
     public static SolidFrameMode solidFrameMode = SolidFrameMode.DEFAULT;
     public static boolean showButtonPlateOverlay = false;
@@ -91,6 +94,7 @@ public final class ClientConfig
     private final ForgeConfigSpec.BooleanValue useDiscreteUVStepsValue;
     private final ForgeConfigSpec.EnumValue<ConTexMode> conTexModeValue;
     private final ForgeConfigSpec.EnumValue<CamoMessageVerbosity> camoMessageVerbosityValue;
+    private final ForgeConfigSpec.BooleanValue forceAoOnGlowingBlocksValue;
     private final ForgeConfigSpec.BooleanValue showAllRecipePermutationsInEmiValue;
     private final ForgeConfigSpec.EnumValue<SolidFrameMode> solidFrameModeValue;
     private final ForgeConfigSpec.BooleanValue showButtonPlateOverlayValue;
@@ -158,6 +162,13 @@ public final class ClientConfig
                 )
                 .translation(TRANSLATION_CAMO_MESSAGE_VERBOSITY)
                 .defineEnum(KEY_CAMO_MESSAGE_VERBOSITY, CamoMessageVerbosity.DEFAULT);
+        forceAoOnGlowingBlocksValue = builder
+                .comment(
+                        "If true, ambient occlusion is applied to framed blocks which glow from applied glowstone dust.",
+                        "If false, the vanilla behavior of disabling AO for light-emitting blocks is used"
+                )
+                .translation(TRANSLATION_FORCE_AO_ON_GLOWING_BLOCKS)
+                .define(KEY_FORCE_AO_ON_GLOWING_BLOCKS, true);
         showAllRecipePermutationsInEmiValue = builder
                 .comment("If true, all possible recipes of the Framing Saw will be added to EMI, else only the permutations using the Framed Cube will be added")
                 .comment("This setting only has an effect when EMI is installed")
@@ -263,6 +274,7 @@ public final class ClientConfig
             useDiscreteUVSteps = useDiscreteUVStepsValue.get();
             conTexMode = conTexModeValue.get();
             camoMessageVerbosity = camoMessageVerbosityValue.get();
+            forceAoOnGlowingBlocks = forceAoOnGlowingBlocksValue.get();
             showAllRecipePermutationsInEmi = showAllRecipePermutationsInEmiValue.get();
             solidFrameMode = solidFrameModeValue.get();
             showButtonPlateOverlay = showButtonPlateOverlayValue.get();

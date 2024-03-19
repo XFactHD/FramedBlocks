@@ -567,7 +567,7 @@ public abstract class FramedBlockModel extends BakedModelProxy
      */
     public boolean useAmbientOcclusionWithLightEmission(BlockState state, RenderType layer)
     {
-        return true;
+        return FramedBlocksClientAPI.getInstance().shouldForceAmbientOcclusionOnGlowingBlocks();
     }
 
     @Override

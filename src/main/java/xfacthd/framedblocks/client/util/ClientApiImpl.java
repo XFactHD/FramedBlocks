@@ -70,6 +70,12 @@ public final class ClientApiImpl implements FramedBlocksClientAPI
     }
 
     @Override
+    public boolean shouldForceAmbientOcclusionOnGlowingBlocks()
+    {
+        return ClientConfig.forceAoOnGlowingBlocks;
+    }
+
+    @Override
     public void addConTexProperty(ModelProperty<?> ctProperty)
     {
         ConTexDataHandler.addConTexProperty(ctProperty);
