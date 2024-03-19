@@ -403,20 +403,6 @@ public final class FramedBlockModel extends BakedModelProxy
         renderTypeCache.clear();
     }
 
-    @Override
-    public int hashCode()
-    {
-        return geometry.hashCode();
-    }
-
-    @Override
-    public boolean equals(Object obj)
-    {
-        if (obj == this) return true;
-        if (obj == null || obj.getClass() != getClass()) return false;
-        return geometry.equals(((FramedBlockModel) obj).geometry);
-    }
-
 
 
     private record CachedRenderTypes(

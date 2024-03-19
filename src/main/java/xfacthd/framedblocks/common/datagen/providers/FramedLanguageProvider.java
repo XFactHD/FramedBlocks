@@ -28,7 +28,10 @@ import xfacthd.framedblocks.api.block.FramedBlockEntity;
 
 public final class FramedLanguageProvider extends LanguageProvider
 {
-    public FramedLanguageProvider(PackOutput output) { super(output, FramedConstants.MOD_ID, "en_us"); }
+    public FramedLanguageProvider(PackOutput output)
+    {
+        super(output, FramedConstants.MOD_ID, "en_us");
+    }
 
     @Override
     protected void addTranslations()
