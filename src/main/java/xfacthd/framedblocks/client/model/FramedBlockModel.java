@@ -15,6 +15,7 @@ import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
 import net.neoforged.neoforge.client.ChunkRenderTypeSet;
 import net.neoforged.neoforge.client.model.data.ModelData;
+import net.neoforged.neoforge.common.util.TriState;
 import org.jetbrains.annotations.Nullable;
 import xfacthd.framedblocks.api.block.cache.StateCache;
 import xfacthd.framedblocks.api.model.cache.QuadCacheKey;
@@ -388,6 +389,12 @@ public final class FramedBlockModel extends BakedModelProxy
     protected void applyInHandTransformation(PoseStack poseStack, ItemDisplayContext ctx)
     {
         geometry.applyInHandTransformation(poseStack, ctx);
+    }
+
+    @Override
+    public TriState useAmbientOcclusion(BlockState state, ModelData data, RenderType renderType)
+    {
+        return geometry.useAmbientOcclusion(state, data, renderType);
     }
 
     public void clearCache()

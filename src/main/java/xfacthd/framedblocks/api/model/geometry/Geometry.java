@@ -9,14 +9,19 @@ import net.minecraft.util.RandomSource;
 import net.minecraft.world.item.ItemDisplayContext;
 import net.minecraft.world.level.block.state.BlockState;
 import net.neoforged.neoforge.client.ChunkRenderTypeSet;
+import net.neoforged.neoforge.client.extensions.IBakedModelExtension;
 import net.neoforged.neoforge.client.model.data.ModelData;
+import net.neoforged.neoforge.common.util.TriState;
 import xfacthd.framedblocks.api.FramedBlocksClientAPI;
 import xfacthd.framedblocks.api.block.FramedBlockEntity;
 import xfacthd.framedblocks.api.model.cache.QuadCacheKey;
 import xfacthd.framedblocks.api.model.cache.SimpleQuadCacheKey;
+import xfacthd.framedblocks.api.model.data.FramedBlockData;
 import xfacthd.framedblocks.api.model.data.QuadMap;
 import xfacthd.framedblocks.api.model.quad.QuadModifier;
+import xfacthd.framedblocks.api.model.util.ModelCache;
 import xfacthd.framedblocks.api.predicate.fullface.FullFacePredicate;
+import xfacthd.framedblocks.api.util.ConfigView;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -151,5 +156,29 @@ public abstract class Geometry
     public boolean useSolidNoCamoModel()
     {
         return false;
+    }
+
+    /**
+     * Controls the AO behavior for all quads of this model.
+     * @see IBakedModelExtension#useAmbientOcclusion(BlockState, ModelData, RenderType)
+     */
+    public TriState useAmbientOcclusion(BlockState state, ModelData data, RenderType renderType)
+    {
+        FramedBlockData fbData = data.get(FramedBlockData.PROPERTY);
+        BlockState camoState;
+        if (fbData != null && !(camoState = fbData.getCamoState()).isAir())
+        {
+            TriState camoAO = ModelCache.getModel(camoState).useAmbientOcclusion(camoState, ModelData.EMPTY, renderType);
+            //noinspection deprecation
+            if (camoAO != TriState.DEFAULT || camoState.getLightEmission() != 0)
+            {
+                return camoAO;
+            }
+        }
+        if (ConfigView.Client.INSTANCE.shouldForceAmbientOcclusionOnGlowingBlocks())
+        {
+            return TriState.TRUE;
+        }
+        return TriState.DEFAULT;
     }
 }

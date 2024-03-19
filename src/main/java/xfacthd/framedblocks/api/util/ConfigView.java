@@ -91,6 +91,11 @@ public final class ConfigView
          * Returns the verbosity of messages displayed when a block cannot be used as a camo
          */
         CamoMessageVerbosity getCamoMessageVerbosity();
+
+        /**
+         * Returns whether ambient occlusion should be forced on framed blocks which glow through applied glowstone dust
+         */
+        boolean shouldForceAmbientOcclusionOnGlowingBlocks();
     }
 
 

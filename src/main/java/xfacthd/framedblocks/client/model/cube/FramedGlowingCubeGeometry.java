@@ -1,8 +1,12 @@
 package xfacthd.framedblocks.client.model.cube;
 
+import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.block.model.BakedQuad;
+import net.minecraft.world.level.block.state.BlockState;
 import net.neoforged.neoforge.client.model.IQuadTransformer;
 import net.neoforged.neoforge.client.model.QuadTransformers;
+import net.neoforged.neoforge.client.model.data.ModelData;
+import net.neoforged.neoforge.common.util.TriState;
 import xfacthd.framedblocks.api.model.wrapping.GeometryFactory;
 
 import java.util.*;
@@ -35,5 +39,11 @@ public class FramedGlowingCubeGeometry extends FramedCubeGeometry
             fullbrightQuads.add(newQuad);
         }
         return fullbrightQuads;
+    }
+
+    @Override
+    public TriState useAmbientOcclusion(BlockState state, ModelData data, RenderType renderType)
+    {
+        return TriState.FALSE;
     }
 }
