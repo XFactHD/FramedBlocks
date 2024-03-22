@@ -21,6 +21,7 @@ import net.neoforged.neoforge.client.ChunkRenderTypeSet;
 import net.neoforged.neoforge.client.model.BakedModelWrapper;
 import net.neoforged.neoforge.client.model.data.*;
 import net.neoforged.neoforge.common.util.ConcatenatedListView;
+import net.neoforged.neoforge.common.util.TriState;
 import xfacthd.framedblocks.api.model.data.FramedBlockData;
 import xfacthd.framedblocks.api.model.wrapping.GeometryFactory;
 import xfacthd.framedblocks.api.model.util.ModelUtils;
@@ -143,6 +144,28 @@ public final class FramedDoubleBlockModel extends BakedModelWrapper<BakedModel>
             }
         }
         return this;
+    }
+
+    @Override
+    public TriState useAmbientOcclusion(BlockState state, ModelData data, RenderType renderType)
+    {
+        Tuple<BakedModel, BakedModel> models = getModels();
+
+        ModelData dataLeft = Objects.requireNonNullElse(data.get(FramedDoubleBlockEntity.DATA_LEFT), ModelData.EMPTY);
+        TriState aoLeft = models.getA().useAmbientOcclusion(dummyStates.getA(), dataLeft, renderType);
+        if (aoLeft == TriState.TRUE)
+        {
+            return aoLeft;
+        }
+
+        ModelData dataRight = Objects.requireNonNullElse(data.get(FramedDoubleBlockEntity.DATA_RIGHT), ModelData.EMPTY);
+        TriState aoRight = models.getA().useAmbientOcclusion(dummyStates.getB(), dataRight, renderType);
+        if (aoRight == TriState.TRUE)
+        {
+            return aoRight;
+        }
+
+        return TriState.DEFAULT;
     }
 
     @Override
