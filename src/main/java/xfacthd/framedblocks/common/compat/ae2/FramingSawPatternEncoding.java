@@ -1,25 +1,41 @@
 package xfacthd.framedblocks.common.compat.ae2;
 
+import appeng.api.stacks.AEItemKey;
+import appeng.api.stacks.AEKey;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.nbt.*;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.*;
 import xfacthd.framedblocks.api.util.Utils;
+
+import java.util.function.BiConsumer;
 
 final class FramingSawPatternEncoding
 {
-    private static final String KEY_INPUT = "input";
-    private static final String KEY_RESULT = "result";
+    public static final String KEY_INPUT = "input";
+    public static final String KEY_RESULT = "result";
     private static final String KEY_ADDITIVES = "additives";
 
-    public static ItemStack getInput(CompoundTag tag)
+    public static ItemStack getItem(CompoundTag tag, String key)
     {
-        return BuiltInRegistries.ITEM.get(new ResourceLocation(tag.getString(KEY_INPUT))).getDefaultInstance();
+        return BuiltInRegistries.ITEM.get(new ResourceLocation(tag.getString(key))).getDefaultInstance();
     }
 
-    public static ItemStack getResult(CompoundTag tag)
+    public static ItemStack tryGetItem(CompoundTag tag, String key, BiConsumer<AEKey, Long> tooltip)
     {
-        return BuiltInRegistries.ITEM.get(new ResourceLocation(tag.getString(KEY_RESULT))).getDefaultInstance();
+        if (!tag.contains(key)) return ItemStack.EMPTY;
+
+        String value = tag.getString(key);
+        ResourceLocation itemId = ResourceLocation.tryParse(value);
+        if (itemId == null) return ItemStack.EMPTY;
+
+        Item item = BuiltInRegistries.ITEM.get(itemId);
+        if (item != Items.AIR)
+        {
+            tooltip.accept(AEItemKey.of(item), 1L);
+            return item.getDefaultInstance();
+        }
+        return ItemStack.EMPTY;
     }
 
     public static ItemStack[] getAdditives(CompoundTag tag, int count)
@@ -31,6 +47,22 @@ final class FramingSawPatternEncoding
             additives[i] = ItemStack.of(list.getCompound(i));
         }
         return additives;
+    }
+
+    public static void tryGetAdditives(CompoundTag tag, BiConsumer<AEKey, Long> tooltip)
+    {
+        if (!tag.contains(KEY_ADDITIVES, Tag.TAG_LIST)) return;
+
+        ListTag list = tag.getList(KEY_ADDITIVES, Tag.TAG_COMPOUND);
+        if (list.isEmpty()) return;
+
+        for (int i = 0; i < list.size(); i++)
+        {
+            ItemStack stack = ItemStack.of(list.getCompound(i));
+            if (stack.isEmpty()) continue;
+
+            tooltip.accept(AEItemKey.of(stack), (long) stack.getCount());
+        }
     }
 
     public static void encodeFramingSawPattern(CompoundTag tag, ItemStack input, ItemStack[] additives, ItemStack output)

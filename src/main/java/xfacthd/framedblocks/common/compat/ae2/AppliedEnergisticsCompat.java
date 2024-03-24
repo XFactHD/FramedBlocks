@@ -78,7 +78,11 @@ public final class AppliedEnergisticsCompat
         private static final DeferredRegister.Items ITEMS = DeferredRegister.createItems(FramedConstants.MOD_ID);
         private static final DeferredRegister<AttachmentType<?>> ATTACHMENTS = DeferredRegister.create(NeoForgeRegistries.ATTACHMENT_TYPES, FramedConstants.MOD_ID);
 
-        static final Holder<Item> ITEM_FRAMING_SAW_PATTERN = ITEMS.register("framing_saw_pattern", FramingSawPatternItem::new);
+        static final Holder<Item> ITEM_FRAMING_SAW_PATTERN = ITEMS.register("framing_saw_pattern", () ->
+                PatternDetailsHelper.encodedPatternItemBuilder(FramingSawPatternDetails::new)
+                        .invalidPatternTooltip(FramingSawPatternDetails::makeInvalidPatternTooltip)
+                        .build()
+        );
         static final DeferredHolder<AttachmentType<?>, AttachmentType<FramingSawCraftingMachine>> ATTACHMENT_SAW_MACHINE = ATTACHMENTS.register(
                 "framing_saw_machine", () -> AttachmentType.builder(FramingSawCraftingMachine::new).build()
         );
@@ -93,7 +97,6 @@ public final class AppliedEnergisticsCompat
             ITEMS.register(modBus);
             ATTACHMENTS.register(modBus);
             modBus.addListener(GuardedAccess::onRegisterCapabilities);
-            PatternDetailsHelper.registerDecoder(new FramingSawPatternDetailsDecoder());
         }
 
         private static void onRegisterCapabilities(final RegisterCapabilitiesEvent event)
@@ -122,7 +125,9 @@ public final class AppliedEnergisticsCompat
 
         public static ItemStack tryEncodePattern(ItemStack input, ItemStack[] additives, ItemStack output)
         {
-            return FramingSawPatternItem.encode(input, additives, output);
+            ItemStack stack = new ItemStack(AppliedEnergisticsCompat.GuardedAccess.ITEM_FRAMING_SAW_PATTERN);
+            FramingSawPatternEncoding.encodeFramingSawPattern(stack.getOrCreateTag(), input, additives, output);
+            return stack;
         }
 
 

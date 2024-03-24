@@ -1,10 +1,13 @@
 package xfacthd.framedblocks.common.compat.ae2;
 
 import appeng.api.crafting.IPatternDetails;
+import appeng.api.crafting.PatternDetailsTooltip;
 import appeng.api.stacks.*;
 import net.minecraft.nbt.*;
+import net.minecraft.network.chat.Component;
 import net.minecraft.world.SimpleContainer;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.item.crafting.RecipeHolder;
 import net.minecraft.world.level.Level;
 import org.jetbrains.annotations.Nullable;
@@ -25,8 +28,8 @@ final class FramingSawPatternDetails implements IPatternDetails
         this.definition = definition;
 
         CompoundTag tag = Objects.requireNonNull(definition.getTag());
-        ItemStack input = FramingSawPatternEncoding.getInput(tag);
-        ItemStack result = FramingSawPatternEncoding.getResult(tag);
+        ItemStack input = FramingSawPatternEncoding.getItem(tag, FramingSawPatternEncoding.KEY_INPUT);
+        ItemStack result = FramingSawPatternEncoding.getItem(tag, FramingSawPatternEncoding.KEY_RESULT);
 
         this.recipe = Objects.requireNonNull(FramingSawRecipeCache.get(level.isClientSide()).findRecipeFor(result));
         FramingSawRecipe recipe = this.recipe.value();
@@ -89,6 +92,29 @@ final class FramingSawPatternDetails implements IPatternDetails
     public boolean equals(Object obj)
     {
         return obj != null && obj.getClass() == getClass() && ((FramingSawPatternDetails) obj).definition.equals(definition);
+    }
+
+
+
+    public static PatternDetailsTooltip makeInvalidPatternTooltip(
+            CompoundTag tag, Level level, @SuppressWarnings("unused") @Nullable Exception cause, TooltipFlag flags
+    )
+    {
+        PatternDetailsTooltip tooltip = new PatternDetailsTooltip(PatternDetailsTooltip.OUTPUT_TEXT_PRODUCES);
+
+        FramingSawPatternEncoding.tryGetItem(tag, FramingSawPatternEncoding.KEY_INPUT, tooltip::addInput);
+        FramingSawPatternEncoding.tryGetAdditives(tag, tooltip::addInput);
+        ItemStack result = FramingSawPatternEncoding.tryGetItem(tag, FramingSawPatternEncoding.KEY_RESULT, tooltip::addOutput);
+
+        if (flags.isAdvanced() && !result.isEmpty())
+        {
+            RecipeHolder<FramingSawRecipe> recipe = FramingSawRecipeCache.get(level.isClientSide()).findRecipeFor(result);
+            if (recipe != null)
+            {
+                tooltip.addProperty(Component.literal("Recipe"), Component.literal(recipe.id().toString()));
+            }
+        }
+        return tooltip;
     }
 
 
