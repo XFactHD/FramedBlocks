@@ -18,27 +18,16 @@ public final class ModelWrappingHandler
     private final Map<BlockState, BakedModel> visitedStates = new IdentityHashMap<>();
     private final Holder<Block> block;
     private final ModelFactory blockModelFactory;
-    @Nullable
-    private final BlockState itemModelSource;
     private final StateMerger stateMerger;
+    @Nullable
+    private BlockState itemModelSource;
 
     public ModelWrappingHandler(Holder<Block> block, ModelFactory blockModelFactory, StateMerger stateMerger)
     {
         this.block = block;
         this.blockModelFactory = blockModelFactory;
-        BlockState itemSource = null;
-        if (block.value() instanceof IFramedBlock framedBlock)
-        {
-            itemSource = framedBlock.getItemModelSource();
-            if (itemSource != null && !itemSource.is(block))
-            {
-                throw new IllegalArgumentException(
-                        "Item model source '" + itemSource + "' is invalid for block '" + block.value() + "'"
-                );
-            }
-        }
-        this.itemModelSource = itemSource;
         this.stateMerger = stateMerger;
+        updateItemModelSource();
     }
 
     public synchronized BakedModel wrapBlockModel(
@@ -76,6 +65,22 @@ public final class ModelWrappingHandler
             counter.incrementItem();
         }
         return model;
+    }
+
+    private void updateItemModelSource()
+    {
+        BlockState itemSource = null;
+        if (block.value() instanceof IFramedBlock framedBlock)
+        {
+            itemSource = framedBlock.getItemModelSource();
+            if (itemSource != null && !itemSource.is(block))
+            {
+                throw new IllegalArgumentException(
+                        "Item model source '" + itemSource + "' is invalid for block '" + block.value() + "'"
+                );
+            }
+        }
+        itemModelSource = itemSource;
     }
 
     public Block getBlock()
