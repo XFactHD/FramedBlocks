@@ -1,7 +1,5 @@
 package xfacthd.framedblocks.common.block.slab;
 
-import com.google.common.collect.ImmutableList;
-import com.google.common.collect.ImmutableMap;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.sounds.SoundSource;
@@ -19,11 +17,8 @@ import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.pathfinder.PathComputationType;
 import net.minecraft.world.phys.BlockHitResult;
-import net.minecraft.world.phys.shapes.VoxelShape;
 import xfacthd.framedblocks.api.block.FramedProperties;
 import xfacthd.framedblocks.api.block.PlacementStateBuilder;
-import xfacthd.framedblocks.api.shapes.CommonShapes;
-import xfacthd.framedblocks.api.shapes.ShapeProvider;
 import xfacthd.framedblocks.api.util.Utils;
 import xfacthd.framedblocks.common.FBContent;
 import xfacthd.framedblocks.common.block.FramedBlock;
@@ -101,19 +96,5 @@ public class FramedSlabBlock extends FramedBlock
     public BlockState getJadeRenderState(BlockState state)
     {
         return defaultBlockState();
-    }
-
-
-
-    public static ShapeProvider generateShapes(ImmutableList<BlockState> states)
-    {
-        ImmutableMap.Builder<BlockState, VoxelShape> builder = ImmutableMap.builder();
-
-        for (BlockState state : states)
-        {
-            builder.put(state, CommonShapes.SLAB.get(state.getValue(FramedProperties.TOP)));
-        }
-
-        return ShapeProvider.of(builder.build());
     }
 }

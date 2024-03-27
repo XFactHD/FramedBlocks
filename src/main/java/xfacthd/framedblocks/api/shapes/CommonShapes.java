@@ -1,8 +1,13 @@
 package xfacthd.framedblocks.api.shapes;
 
+import com.google.common.collect.ImmutableMap;
 import net.minecraft.core.Direction;
 import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.state.properties.BooleanProperty;
+import net.minecraft.world.level.block.state.properties.DirectionProperty;
 import net.minecraft.world.phys.shapes.VoxelShape;
+import xfacthd.framedblocks.api.block.FramedProperties;
 
 public final class CommonShapes
 {
@@ -49,6 +54,60 @@ public final class CommonShapes
         );
         ShapeUtils.makeHorizontalRotations(shape, Direction.SOUTH, map);
     });
+
+    public static final ShapeGenerator SLAB_GENERATOR = createSlabGenerator(FramedProperties.TOP);
+    public static final ShapeGenerator PANEL_GENERATOR = createPanelGenerator(FramedProperties.FACING_HOR);
+
+    public static ShapeGenerator createSlabGenerator(BooleanProperty topProp)
+    {
+        return states ->
+        {
+            ImmutableMap.Builder<BlockState, VoxelShape> builder = ImmutableMap.builder();
+
+            for (BlockState state : states)
+            {
+                builder.put(state, SLAB.get(state.getValue(topProp)));
+            }
+
+            return ShapeProvider.of(builder.build());
+        };
+    }
+
+    public static ShapeGenerator createPanelGenerator(DirectionProperty dirProp)
+    {
+        return states ->
+        {
+            ImmutableMap.Builder<BlockState, VoxelShape> builder = ImmutableMap.builder();
+
+            for (BlockState state : states)
+            {
+                Direction dir = state.getValue(dirProp);
+                builder.put(state, PANEL.get(dir));
+            }
+
+            return ShapeProvider.of(builder.build());
+        };
+    }
+
+    public static ShapeGenerator createPanelGenerator(DirectionProperty dirProp, BooleanProperty invProp)
+    {
+        return states ->
+        {
+            ImmutableMap.Builder<BlockState, VoxelShape> builder = ImmutableMap.builder();
+
+            for (BlockState state : states)
+            {
+                Direction dir = state.getValue(dirProp);
+                if (state.getValue(invProp))
+                {
+                    dir = dir.getOpposite();
+                }
+                builder.put(state, PANEL.get(dir));
+            }
+
+            return ShapeProvider.of(builder.build());
+        };
+    }
 
 
 

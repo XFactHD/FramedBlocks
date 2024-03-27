@@ -242,19 +242,6 @@ public class FramedDoubleCornerSlopePanelBlock extends AbstractFramedDoubleBlock
 
 
 
-    public static ShapeProvider generateSmallShapes(ImmutableList<BlockState> states)
-    {
-        ImmutableMap.Builder<BlockState, VoxelShape> builder = ImmutableMap.builder();
-
-        for (BlockState state : states)
-        {
-            Direction dir = state.getValue(FramedProperties.FACING_HOR);
-            builder.put(state, CommonShapes.CORNER_PILLAR.get(dir));
-        }
-
-        return ShapeProvider.of(builder.build());
-    }
-
     public static ShapeProvider generateLargeShapes(ImmutableList<BlockState> states)
     {
         ImmutableMap.Builder<BlockState, VoxelShape> builder = ImmutableMap.builder();
