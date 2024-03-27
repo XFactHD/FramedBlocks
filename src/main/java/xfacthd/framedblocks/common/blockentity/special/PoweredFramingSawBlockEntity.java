@@ -15,6 +15,7 @@ import net.neoforged.neoforge.items.IItemHandler;
 import net.neoforged.neoforge.items.ItemStackHandler;
 import net.neoforged.neoforge.items.wrapper.RecipeWrapper;
 import xfacthd.framedblocks.common.FBContent;
+import xfacthd.framedblocks.common.config.ServerConfig;
 import xfacthd.framedblocks.common.crafting.*;
 import xfacthd.framedblocks.common.data.PropertyHolder;
 import xfacthd.framedblocks.common.menu.FramingSawMenu;
@@ -27,12 +28,8 @@ import java.util.function.Consumer;
 
 public class PoweredFramingSawBlockEntity extends BlockEntity
 {
-    public static final int ENERGY_CAPACITY = 5000;
-    public static final int ENERGY_MAX_INSERT = 250;
-    public static final int ENERGY_CONSUMPTION = 50;
     private static final boolean INSERT_ENERGY_DEBUG = true;
     private static final long ACTIVE_TIMEOUT = 40;
-    public static final int MAX_PROGRESS = 30;
 
     private final ItemStackHandler itemHandler = new ItemStackHandler(FramingSawMenu.SLOT_RESULT + 1)
     {
@@ -58,8 +55,13 @@ public class PoweredFramingSawBlockEntity extends BlockEntity
     };
     private final RecipeWrapper container = new RecipeWrapper(itemHandler);
     private final EntityAwareEnergyStorage energyStorage = new EntityAwareEnergyStorage(
-            ENERGY_CAPACITY, ENERGY_MAX_INSERT, 0, () -> this.needSaving = true
+            ServerConfig.VIEW.getPoweredSawEnergyCapacity(),
+            ServerConfig.VIEW.getPoweredSawMaxInput(),
+            0,
+            () -> this.needSaving = true
     );
+    private final int energyConsumption;
+    private final int craftingDuration;
     private FramingSawRecipeCache cache = null;
     private ResourceLocation selectedRecipeId = null;
     private RecipeHolder<FramingSawRecipe> selectedRecipe = null;
@@ -77,13 +79,15 @@ public class PoweredFramingSawBlockEntity extends BlockEntity
     public PoweredFramingSawBlockEntity(BlockPos pPos, BlockState pBlockState)
     {
         super(FBContent.BE_TYPE_POWERED_FRAMING_SAW.value(), pPos, pBlockState);
+        this.energyConsumption = ServerConfig.VIEW.getPoweredSawConsumption();
+        this.craftingDuration = ServerConfig.VIEW.getPoweredSawCraftingDuration();
     }
 
     public static void tick(Level level, BlockPos pos, BlockState state, PoweredFramingSawBlockEntity be)
     {
         if (!FMLEnvironment.production && INSERT_ENERGY_DEBUG)
         {
-            be.energyStorage.receiveEnergy(ENERGY_MAX_INSERT, false);
+            be.energyStorage.receiveEnergy(be.energyStorage.getMaxReceive(), false);
         }
 
         if ((be.active || level.getGameTime() - be.lastActive > ACTIVE_TIMEOUT) && be.canRun())
@@ -94,10 +98,10 @@ public class PoweredFramingSawBlockEntity extends BlockEntity
                 level.setBlockAndUpdate(pos, state.setValue(PropertyHolder.ACTIVE, true));
             }
 
-            be.energyStorage.extractEnergyInternal(ENERGY_CONSUMPTION);
+            be.energyStorage.extractEnergyInternal(be.energyConsumption);
             be.progress++;
 
-            if (be.progress >= MAX_PROGRESS)
+            if (be.progress >= be.craftingDuration)
             {
                 be.progress = 0;
 
@@ -138,7 +142,7 @@ public class PoweredFramingSawBlockEntity extends BlockEntity
     private boolean canRun()
     {
         if (selectedRecipe == null || !recipeSatisfied) return false;
-        if (energyStorage.getEnergyStored() < ENERGY_CONSUMPTION) return false;
+        if (energyStorage.getEnergyStored() < energyConsumption) return false;
 
         ItemStack output = itemHandler.getStackInSlot(FramingSawMenu.SLOT_RESULT);
         if (!output.isEmpty() && output.getItem() != selectedRecipe.value().getResult().getItem()) return false;
@@ -256,6 +260,16 @@ public class PoweredFramingSawBlockEntity extends BlockEntity
         return energyStorage.getEnergyStored();
     }
 
+    public int getEnergyCapacity()
+    {
+        return energyStorage.getCapacity();
+    }
+
+    public int getCraftingDuration()
+    {
+        return craftingDuration;
+    }
+
     public void dropContents(Consumer<ItemStack> dropper)
     {
         inhibitUpdate = true;
@@ -318,6 +332,7 @@ public class PoweredFramingSawBlockEntity extends BlockEntity
             tag.putString("recipe", selectedRecipe.id().toString());
         }
         tag.put("inventory", itemHandler.serializeNBT());
+        tag.put("energy", energyStorage.serializeNBT());
     }
 
     @Override
@@ -329,5 +344,6 @@ public class PoweredFramingSawBlockEntity extends BlockEntity
             selectedRecipeId = new ResourceLocation(tag.getString("recipe"));
         }
         itemHandler.deserializeNBT(tag.getCompound("inventory"));
+        energyStorage.deserializeNBT(tag.getCompound("energy"));
     }
 }

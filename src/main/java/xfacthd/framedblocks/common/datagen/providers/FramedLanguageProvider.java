@@ -432,6 +432,10 @@ public final class FramedLanguageProvider extends LanguageProvider
         add(ServerConfig.TRANSLATION_CONSUME_CAMO_ITEM, "Consume camo item");
         add(ServerConfig.TRANSLATION_GLOWSTONE_LIGHT_LEVEL, "Glowstone Light Level");
         add(ServerConfig.TRANSLATION_FIREPROOF_BLOCKS, "Fireproof blocks");
+        add(ServerConfig.TRANSLATION_POWERED_SAW_ENERGY_CAPACITY, "Energy Capacity");
+        add(ServerConfig.TRANSLATION_POWERED_SAW_MAX_RECEIVE, "Max input");
+        add(ServerConfig.TRANSLATION_POWERED_SAW_CONSUMPTION, "Consumption");
+        add(ServerConfig.TRANSLATION_POWERED_SAW_RECIPE_DURATION, "Crafting Duration");
 
         add(ClientConfig.TRANSLATION_SHOW_GHOST_BLOCKS, "Show ghost blocks");
         add(ClientConfig.TRANSLATION_ALT_GHOST_RENDERER, "Use alternative placement preview renderer");

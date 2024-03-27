@@ -31,6 +31,8 @@ public class PoweredFramingSawMenu extends AbstractContainerMenu implements IFra
     private final DataSlot recipeIdxSlot;
     private final DataSlot recipeStatusSlot;
     private final DataSlot energySlot;
+    private final DataSlot capacitySlot;
+    private final DataSlot durationSlot;
     private final FramingSawRecipeCache cache;
     @Nullable
     private RecipeHolder<FramingSawRecipe> lastRecipe = null;
@@ -53,6 +55,8 @@ public class PoweredFramingSawMenu extends AbstractContainerMenu implements IFra
         this.recipeIdxSlot = addDataSlot(!level.isClientSide() ? DataSlot.standalone() : new RecipeIndexDataSlot());
         this.recipeStatusSlot = addDataSlot(DataSlot.standalone());
         this.energySlot = addDataSlot(DataSlot.standalone());
+        this.capacitySlot = addDataSlot(DataSlot.standalone());
+        this.durationSlot = addDataSlot(DataSlot.standalone());
 
         IItemHandlerModifiable itemHandler = FramedUtils.makeMenuItemHandler(blockEntity.getItemHandler(), level);
         this.inputContainer = new RecipeWrapper(itemHandler);
@@ -76,6 +80,11 @@ public class PoweredFramingSawMenu extends AbstractContainerMenu implements IFra
         FramedUtils.addPlayerInvSlots(this::addSlot, inv, 8, 100);
 
         recipeIdxSlot.set(-1);
+        if (!level.isClientSide())
+        {
+            capacitySlot.set(blockEntity.getEnergyCapacity());
+            durationSlot.set(blockEntity.getCraftingDuration());
+        }
     }
 
     @Override
@@ -143,6 +152,16 @@ public class PoweredFramingSawMenu extends AbstractContainerMenu implements IFra
     public int getEnergy()
     {
         return energySlot.get();
+    }
+
+    public int getEnergyCapacity()
+    {
+        return capacitySlot.get();
+    }
+
+    public int getCraftingDuration()
+    {
+        return durationSlot.get();
     }
 
     @Override

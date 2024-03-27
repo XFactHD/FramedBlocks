@@ -18,7 +18,6 @@ import xfacthd.framedblocks.api.util.ClientUtils;
 import xfacthd.framedblocks.api.util.Utils;
 import xfacthd.framedblocks.client.util.RecipeViewer;
 import xfacthd.framedblocks.common.FBContent;
-import xfacthd.framedblocks.common.blockentity.special.PoweredFramingSawBlockEntity;
 import xfacthd.framedblocks.common.crafting.*;
 import xfacthd.framedblocks.common.menu.FramingSawMenu;
 import xfacthd.framedblocks.common.menu.PoweredFramingSawMenu;
@@ -150,7 +149,7 @@ public class PoweredFramingSawScreen extends AbstractContainerScreen<PoweredFram
 
             if (match != null && match.success())
             {
-                float progress = (float) menu.getProgress() / (float) PoweredFramingSawBlockEntity.MAX_PROGRESS;
+                float progress = (float) menu.getProgress() / (float) menu.getCraftingDuration();
                 if (progress > 0F)
                 {
                     int width = Math.round(PROGRESS_WIDTH * progress);
@@ -188,7 +187,7 @@ public class PoweredFramingSawScreen extends AbstractContainerScreen<PoweredFram
 
     private void drawEnergyBar(GuiGraphics graphics, int mouseX, int mouseY)
     {
-        float energy = (float) menu.getEnergy() / (float) PoweredFramingSawBlockEntity.ENERGY_CAPACITY;
+        float energy = (float) menu.getEnergy() / (float) menu.getEnergyCapacity();
         int height = (int) (energy * ENERGY_HEIGHT);
         int y = topPos + ENERGY_Y + (ENERGY_HEIGHT - height);
         graphics.blit(BACKGROUND, leftPos + ENERGY_X, y, ENERGY_U, ENERGY_V + (ENERGY_HEIGHT - height), ENERGY_WIDTH, height);
@@ -198,7 +197,7 @@ public class PoweredFramingSawScreen extends AbstractContainerScreen<PoweredFram
         if (mouseX >= minX && mouseX < minX + ENERGY_WIDTH && mouseY >= minY && mouseY < minY + ENERGY_HEIGHT)
         {
             setTooltipForNextRenderPass(Component.translatable(
-                    TOOLTIP_ENERGY, menu.getEnergy(), PoweredFramingSawBlockEntity.ENERGY_CAPACITY
+                    TOOLTIP_ENERGY, menu.getEnergy(), menu.getEnergyCapacity()
             ));
         }
     }
