@@ -8,9 +8,9 @@ import xfacthd.framedblocks.common.block.FramedBlock;
 import xfacthd.framedblocks.common.data.BlockType;
 import xfacthd.framedblocks.common.data.PropertyHolder;
 
-public class FramedCube extends FramedBlock
+public class FramedCubeBlock extends FramedBlock
 {
-    public FramedCube()
+    public FramedCubeBlock()
     {
         super(BlockType.FRAMED_CUBE);
         registerDefaultState(defaultBlockState()

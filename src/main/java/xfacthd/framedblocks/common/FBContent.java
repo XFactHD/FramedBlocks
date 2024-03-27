@@ -96,7 +96,7 @@ public final class FBContent
     private static final List<DeferredBlockEntity<? extends FramedDoubleBlockEntity>> DOUBLE_BLOCK_ENTITIES = new ArrayList<>();
 
     // region Blocks
-    public static final Holder<Block> BLOCK_FRAMED_CUBE = registerBlock(FramedCube::new, BlockType.FRAMED_CUBE);
+    public static final Holder<Block> BLOCK_FRAMED_CUBE = registerBlock(FramedCubeBlock::new, BlockType.FRAMED_CUBE);
     public static final Holder<Block> BLOCK_FRAMED_SLOPE = registerBlock(FramedSlopeBlock::new, BlockType.FRAMED_SLOPE);
     public static final Holder<Block> BLOCK_FRAMED_DOUBLE_SLOPE = registerBlock(FramedDoubleSlopeBlock::new, BlockType.FRAMED_DOUBLE_SLOPE);
     public static final Holder<Block> BLOCK_FRAMED_HALF_SLOPE = registerBlock(FramedHalfSlopeBlock::new, BlockType.FRAMED_HALF_SLOPE);
@@ -273,7 +273,7 @@ public final class FBContent
     public static final Holder<Block> BLOCK_FRAMED_STACKED_CORNER_SLOPE_PANEL_WALL = registerBlock(FramedStackedCornerSlopePanelWallBlock::new, BlockType.FRAMED_STACKED_CORNER_SLOPE_PANEL_W);
     public static final Holder<Block> BLOCK_FRAMED_STACKED_INNER_CORNER_SLOPE_PANEL = registerBlock(FramedStackedCornerSlopePanelBlock::new, BlockType.FRAMED_STACKED_INNER_CORNER_SLOPE_PANEL);
     public static final Holder<Block> BLOCK_FRAMED_STACKED_INNER_CORNER_SLOPE_PANEL_WALL = registerBlock(FramedStackedCornerSlopePanelWallBlock::new, BlockType.FRAMED_STACKED_INNER_CORNER_SLOPE_PANEL_W);
-    public static final Holder<Block> BLOCK_FRAMED_GLOWING_CUBE = registerBlock(FramedGlowingCube::new, BlockType.FRAMED_GLOWING_CUBE);
+    public static final Holder<Block> BLOCK_FRAMED_GLOWING_CUBE = registerBlock(FramedGlowingCubeBlock::new, BlockType.FRAMED_GLOWING_CUBE);
     public static final Holder<Block> BLOCK_FRAMED_PYRAMID = registerBlock(FramedPyramidBlock::new, BlockType.FRAMED_PYRAMID);
     public static final Holder<Block> BLOCK_FRAMED_PYRAMID_SLAB = registerBlock(FramedPyramidBlock::new, BlockType.FRAMED_PYRAMID_SLAB);
     public static final Holder<Block> BLOCK_FRAMED_TARGET = registerBlock(FramedTargetBlock::new, BlockType.FRAMED_TARGET);

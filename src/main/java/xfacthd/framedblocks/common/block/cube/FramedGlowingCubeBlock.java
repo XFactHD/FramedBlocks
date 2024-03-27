@@ -7,9 +7,9 @@ import xfacthd.framedblocks.api.block.FramedProperties;
 import xfacthd.framedblocks.common.block.FramedBlock;
 import xfacthd.framedblocks.common.data.BlockType;
 
-public class FramedGlowingCube extends FramedBlock
+public class FramedGlowingCubeBlock extends FramedBlock
 {
-    public FramedGlowingCube()
+    public FramedGlowingCubeBlock()
     {
         super(BlockType.FRAMED_GLOWING_CUBE);
     }
