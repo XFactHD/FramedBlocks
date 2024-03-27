@@ -9,7 +9,7 @@ import net.neoforged.fml.ModList;
 import net.neoforged.fml.event.lifecycle.InterModEnqueueEvent;
 import net.neoforged.neoforge.registries.DeferredRegister;
 import xfacthd.framedblocks.FramedBlocks;
-import xfacthd.framedblocks.api.block.FramedBlockEntity;
+import xfacthd.framedblocks.api.block.blockentity.FramedBlockEntity;
 import xfacthd.framedblocks.api.util.FramedConstants;
 import xfacthd.framedblocks.api.util.Utils;
 
