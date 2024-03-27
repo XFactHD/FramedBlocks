@@ -15,7 +15,7 @@ import xfacthd.framedblocks.api.shapes.ShapeProvider;
 import xfacthd.framedblocks.api.shapes.ShapeUtils;
 import xfacthd.framedblocks.api.util.Utils;
 import xfacthd.framedblocks.common.block.FramedBlock;
-import xfacthd.framedblocks.common.block.stairs.FramedVerticalStairsBlock;
+import xfacthd.framedblocks.common.block.stairs.vertical.FramedVerticalStairsBlock;
 import xfacthd.framedblocks.common.data.BlockType;
 import xfacthd.framedblocks.common.data.property.StairsType;
 

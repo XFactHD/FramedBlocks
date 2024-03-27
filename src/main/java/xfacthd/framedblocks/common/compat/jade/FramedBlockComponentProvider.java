@@ -6,7 +6,9 @@ import org.jetbrains.annotations.Nullable;
 import snownee.jade.api.*;
 import snownee.jade.api.config.IPluginConfig;
 import snownee.jade.api.ui.IElement;
-import xfacthd.framedblocks.api.block.*;
+import xfacthd.framedblocks.api.block.IFramedBlock;
+import xfacthd.framedblocks.api.block.blockentity.FramedBlockEntity;
+import xfacthd.framedblocks.api.block.blockentity.IFramedDoubleBlockEntity;
 
 class FramedBlockComponentProvider implements IBlockComponentProvider
 {

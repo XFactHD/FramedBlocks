@@ -8,8 +8,8 @@ import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import xfacthd.framedblocks.api.util.Utils;
 import xfacthd.framedblocks.common.config.ClientConfig;
 import xfacthd.framedblocks.common.FBContent;
-import xfacthd.framedblocks.common.block.interactive.FramedPressurePlateBlock;
-import xfacthd.framedblocks.common.block.interactive.FramedWeightedPressurePlateBlock;
+import xfacthd.framedblocks.common.block.interactive.pressureplate.FramedPressurePlateBlock;
+import xfacthd.framedblocks.common.block.interactive.pressureplate.FramedWeightedPressurePlateBlock;
 
 import java.util.List;
 

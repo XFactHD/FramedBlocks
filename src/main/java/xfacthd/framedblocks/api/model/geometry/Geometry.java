@@ -13,7 +13,7 @@ import net.neoforged.neoforge.client.extensions.IBakedModelExtension;
 import net.neoforged.neoforge.client.model.data.ModelData;
 import net.neoforged.neoforge.common.util.TriState;
 import xfacthd.framedblocks.api.FramedBlocksClientAPI;
-import xfacthd.framedblocks.api.block.FramedBlockEntity;
+import xfacthd.framedblocks.api.block.blockentity.FramedBlockEntity;
 import xfacthd.framedblocks.api.model.cache.QuadCacheKey;
 import xfacthd.framedblocks.api.model.cache.SimpleQuadCacheKey;
 import xfacthd.framedblocks.api.model.data.FramedBlockData;
