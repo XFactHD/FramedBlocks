@@ -10,8 +10,9 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.Tuple;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.level.BlockGetter;
-import net.minecraft.world.level.Level;
+import net.minecraft.world.level.*;
+import net.minecraft.world.level.block.SoundType;
+import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.neoforged.neoforge.client.model.data.ModelData;
 import org.jetbrains.annotations.ApiStatus;
@@ -30,6 +31,19 @@ import java.util.Optional;
 
 public interface IFramedDoubleBlock extends IFramedBlock
 {
+    @Override
+    default SoundType getSoundType(BlockState state, LevelReader level, BlockPos pos, @Nullable Entity entity)
+    {
+        if (level.getBlockEntity(pos) instanceof FramedDoubleBlockEntity be)
+        {
+            return be.getSoundType();
+        }
+        return state.getSoundType();
+    }
+
+    @Override
+    BlockEntity newBlockEntity(BlockPos pos, BlockState state);
+
     @ApiStatus.OverrideOnly
     DoubleBlockTopInteractionMode calculateTopInteractionMode(BlockState state);
 
