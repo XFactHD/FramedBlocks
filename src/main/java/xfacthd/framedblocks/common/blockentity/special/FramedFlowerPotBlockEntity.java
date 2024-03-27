@@ -32,8 +32,7 @@ public class FramedFlowerPotBlockEntity extends FramedBlockEntity
         {
             this.flowerBlock = flowerBlock;
 
-            setChanged();
-
+            setChangedWithoutSignalUpdate();
             level().sendBlockUpdated(worldPosition, getBlockState(), getBlockState(), 3);
         }
     }

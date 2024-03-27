@@ -26,7 +26,7 @@ public class FramedTargetBlockEntity extends FramedBlockEntity
                 this.overlayColor = overlayColor;
 
                 level().sendBlockUpdated(worldPosition, getBlockState(), getBlockState(), Block.UPDATE_ALL);
-                setChanged();
+                setChangedWithoutSignalUpdate();
             }
 
             return true;

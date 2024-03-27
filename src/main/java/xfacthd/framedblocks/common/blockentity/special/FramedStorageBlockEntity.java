@@ -112,7 +112,7 @@ public class FramedStorageBlockEntity extends FramedBlockEntity implements MenuP
     public void setCustomName(Component customName)
     {
         this.customName = customName;
-        setChanged();
+        setChangedWithoutSignalUpdate();
     }
 
     @Override

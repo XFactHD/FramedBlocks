@@ -58,7 +58,7 @@ public class PoweredFramingSawBlockEntity extends BlockEntity
     };
     private final RecipeWrapper container = new RecipeWrapper(itemHandler);
     private final EntityAwareEnergyStorage energyStorage = new EntityAwareEnergyStorage(
-            ENERGY_CAPACITY, ENERGY_MAX_INSERT, 0, this
+            ENERGY_CAPACITY, ENERGY_MAX_INSERT, 0, () -> this.needSaving = true
     );
     private FramingSawRecipeCache cache = null;
     private ResourceLocation selectedRecipeId = null;
@@ -130,7 +130,7 @@ public class PoweredFramingSawBlockEntity extends BlockEntity
 
         if (be.needSaving)
         {
-            be.setChanged();
+            level.blockEntityChanged(be.worldPosition);
             be.needSaving = false;
         }
     }

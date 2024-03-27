@@ -59,7 +59,7 @@ public class FramedCollapsibleCopycatBlockEntity extends FramedBlockEntity
             {
                 level().sendBlockUpdated(worldPosition, getBlockState(), getBlockState(), Block.UPDATE_ALL);
             }
-            setChanged();
+            setChangedWithoutSignalUpdate();
         }
     }
 

@@ -126,7 +126,7 @@ public class FramedCollapsibleBlockEntity extends FramedBlockEntity
             level().sendBlockUpdated(worldPosition, getBlockState(), getBlockState(), Block.UPDATE_ALL);
         }
 
-        setChanged();
+        setChangedWithoutSignalUpdate();
     }
 
     private void deformNeighbors(Direction faceHit, int srcVert, byte offset)

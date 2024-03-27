@@ -1,16 +1,15 @@
 package xfacthd.framedblocks.common.capability;
 
-import net.minecraft.world.level.block.entity.BlockEntity;
 import net.neoforged.neoforge.energy.EnergyStorage;
 
 public class EntityAwareEnergyStorage extends EnergyStorage
 {
-    private final BlockEntity be;
+    private final Runnable changeNotifier;
 
-    public EntityAwareEnergyStorage(int capacity, int maxReceive, int maxExtract, BlockEntity be)
+    public EntityAwareEnergyStorage(int capacity, int maxReceive, int maxExtract, Runnable changeNotifier)
     {
         super(capacity, maxReceive, maxExtract);
-        this.be = be;
+        this.changeNotifier = changeNotifier;
     }
 
     @Override
@@ -39,7 +38,7 @@ public class EntityAwareEnergyStorage extends EnergyStorage
     {
         if (!simulate && diff > 0)
         {
-            be.setChanged();
+            changeNotifier.run();
         }
     }
 }

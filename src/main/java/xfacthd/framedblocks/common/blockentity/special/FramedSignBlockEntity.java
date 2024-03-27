@@ -120,7 +120,7 @@ public class FramedSignBlockEntity extends FramedBlockEntity
             frontText = text;
 
             level().sendBlockUpdated(getBlockPos(), getBlockState(), getBlockState(), Block.UPDATE_ALL);
-            setChanged();
+            setChangedWithoutSignalUpdate();
 
             return true;
         }
@@ -134,7 +134,7 @@ public class FramedSignBlockEntity extends FramedBlockEntity
             backText = text;
 
             level().sendBlockUpdated(getBlockPos(), getBlockState(), getBlockState(), Block.UPDATE_ALL);
-            setChanged();
+            setChangedWithoutSignalUpdate();
 
             return true;
         }
@@ -153,7 +153,7 @@ public class FramedSignBlockEntity extends FramedBlockEntity
             this.waxed = waxed;
 
             level().sendBlockUpdated(getBlockPos(), getBlockState(), getBlockState(), Block.UPDATE_ALL);
-            setChanged();
+            setChangedWithoutSignalUpdate();
 
             return true;
         }

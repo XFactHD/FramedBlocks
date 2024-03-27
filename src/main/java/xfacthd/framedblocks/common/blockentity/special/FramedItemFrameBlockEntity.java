@@ -82,7 +82,7 @@ public class FramedItemFrameBlockEntity extends FramedBlockEntity
 
                 playSound(glowing ? SoundEvents.GLOW_ITEM_FRAME_ROTATE_ITEM : SoundEvents.ITEM_FRAME_ROTATE_ITEM);
 
-                setChanged();
+                setChangedWithoutSignalUpdate();
                 level().sendBlockUpdated(worldPosition, getBlockState(), getBlockState(), Block.UPDATE_ALL);
             }
             return InteractionResult.sidedSuccess(level().isClientSide());
@@ -150,7 +150,7 @@ public class FramedItemFrameBlockEntity extends FramedBlockEntity
             }
         }
 
-        setChanged();
+        setChangedWithoutSignalUpdate();
         if (!changeMapStateIfNeeded())
         {
             level().sendBlockUpdated(worldPosition, getBlockState(), getBlockState(), Block.UPDATE_ALL);

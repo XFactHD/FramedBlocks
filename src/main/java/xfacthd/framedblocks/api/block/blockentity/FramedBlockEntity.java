@@ -277,20 +277,7 @@ public class FramedBlockEntity extends BlockEntity
                 stack.shrink(1);
             }
 
-            int light = getLightValue();
-            glowing = true;
-            if (!updateDynamicStates(false, true, false))
-            {
-                level().sendBlockUpdated(worldPosition, getBlockState(), getBlockState(), Block.UPDATE_ALL);
-            }
-
-            boolean lightUpdate = getLightValue() != light;
-
-            setChanged();
-            if (lightUpdate)
-            {
-                doLightUpdate();
-            }
+            setGlowing(true);
         }
         return InteractionResult.sidedSuccess(level().isClientSide());
     }
@@ -301,7 +288,7 @@ public class FramedBlockEntity extends BlockEntity
         {
             if (!level().isClientSide() && camo.rotateCamo())
             {
-                setChanged();
+                setChangedWithoutSignalUpdate();
                 level().sendBlockUpdated(worldPosition, getBlockState(), getBlockState(), Block.UPDATE_ALL);
             }
             return InteractionResult.sidedSuccess(level().isClientSide());
@@ -426,7 +413,7 @@ public class FramedBlockEntity extends BlockEntity
 
         setCamoInternal(camo, secondary);
 
-        setChanged();
+        setChangedWithoutSignalUpdate();
         if (getLightValue() != light)
         {
             doLightUpdate();
@@ -655,16 +642,17 @@ public class FramedBlockEntity extends BlockEntity
         if (this.glowing != glowing)
         {
             int oldLight = getLightValue();
-
             this.glowing = glowing;
-
             if (oldLight != getLightValue())
             {
                 doLightUpdate();
             }
 
-            setChanged();
-            level().sendBlockUpdated(worldPosition, getBlockState(), getBlockState(), Block.UPDATE_ALL);
+            setChangedWithoutSignalUpdate();
+            if (!updateDynamicStates(false, true, false))
+            {
+                level().sendBlockUpdated(worldPosition, getBlockState(), getBlockState(), Block.UPDATE_ALL);
+            }
         }
     }
 
@@ -685,7 +673,7 @@ public class FramedBlockEntity extends BlockEntity
         {
             this.intangible = intangible;
 
-            setChanged();
+            setChangedWithoutSignalUpdate();
 
             if (!updateDynamicStates(true, false, false))
             {
@@ -717,7 +705,7 @@ public class FramedBlockEntity extends BlockEntity
             this.reinforced = reinforced;
 
             level().sendBlockUpdated(worldPosition, getBlockState(), getBlockState(), Block.UPDATE_ALL);
-            setChanged();
+            setChangedWithoutSignalUpdate();
         }
     }
 
@@ -748,6 +736,11 @@ public class FramedBlockEntity extends BlockEntity
     protected final Level level()
     {
         return Objects.requireNonNull(level, "BlockEntity#level accessed before it was set");
+    }
+
+    protected final void setChangedWithoutSignalUpdate()
+    {
+        level().blockEntityChanged(worldPosition);
     }
 
     protected StateCache getStateCache()

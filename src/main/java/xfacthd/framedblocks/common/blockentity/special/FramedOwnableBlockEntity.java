@@ -28,7 +28,7 @@ public class FramedOwnableBlockEntity extends FramedBlockEntity
     public void setOwner(UUID owner, boolean forceSync)
     {
         this.owner = owner;
-        setChanged();
+        setChangedWithoutSignalUpdate();
 
         if (forceSync)
         {
