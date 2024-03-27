@@ -27,6 +27,7 @@ public final class ClientConfig
     private static final String KEY_SOLID_FRAME_MODE = "solidFrameMode";
     private static final String KEY_SHOW_BUTTON_PLATE_OVERLAY = "showButtonPlateTypeOverlay";
     private static final String KEY_SHOW_SPECIAL_CUBE_OVERLAY = "showSpecialCubeTypeOverlay";
+    private static final String KEY_RENDER_CAMO_IN_JADE = "renderCamoInJade";
     private static final String KEY_STATE_LOCK_MODE = "stateLockMode";
     private static final String KEY_TOGGLE_WATERLOG_MODE = "toggleWaterlogMode";
     private static final String KEY_TOGGLE_Y_SLOPE_MODE = "toggleYSlopeMode";
@@ -50,6 +51,7 @@ public final class ClientConfig
     public static final String TRANSLATION_SOLID_FRAME_MODE = translate(KEY_SOLID_FRAME_MODE);
     public static final String TRANSLATION_SHOW_BUTTON_PLATE_OVERLAY = translate(KEY_SHOW_BUTTON_PLATE_OVERLAY);
     public static final String TRANSLATION_SHOW_SPECIAL_CUBE_OVERLAY = translate(KEY_SHOW_SPECIAL_CUBE_OVERLAY);
+    public static final String TRANSLATION_RENDER_CAMO_IN_JADE = translate(KEY_RENDER_CAMO_IN_JADE);
     public static final String TRANSLATION_STATE_LOCK_MODE = translate(KEY_STATE_LOCK_MODE);
     public static final String TRANSLATION_TOGGLE_WATERLOG_MODE = translate(KEY_TOGGLE_WATERLOG_MODE);
     public static final String TRANSLATION_TOGGLE_Y_SLOPE_MODE = translate(KEY_TOGGLE_Y_SLOPE_MODE);
@@ -77,6 +79,7 @@ public final class ClientConfig
     private static SolidFrameMode solidFrameMode = SolidFrameMode.DEFAULT;
     private static boolean showButtonPlateOverlay = false;
     private static boolean showSpecialCubeOverlay = false;
+    private static boolean renderCamoInJade = false;
     private static BlockInteractOverlay.Mode stateLockMode = BlockInteractOverlay.Mode.DETAILED;
     private static BlockInteractOverlay.Mode toggleWaterlogMode = BlockInteractOverlay.Mode.DETAILED;
     private static BlockInteractOverlay.Mode toggleYSlopeMode = BlockInteractOverlay.Mode.DETAILED;
@@ -100,6 +103,7 @@ public final class ClientConfig
     private static ModConfigSpec.EnumValue<SolidFrameMode> solidFrameModeValue;
     private static ModConfigSpec.BooleanValue showButtonPlateOverlayValue;
     private static ModConfigSpec.BooleanValue showSpecialCubeOverlayValue;
+    private static ModConfigSpec.BooleanValue renderCamoInJadeValue;
 
     private static ModConfigSpec.EnumValue<BlockInteractOverlay.Mode> stateLockModeValue;
     private static ModConfigSpec.EnumValue<BlockInteractOverlay.Mode> toggleWaterlogModeValue;
@@ -201,6 +205,10 @@ public final class ClientConfig
                 )
                 .translation(TRANSLATION_SHOW_SPECIAL_CUBE_OVERLAY)
                 .define(KEY_SHOW_SPECIAL_CUBE_OVERLAY, true);
+        renderCamoInJadeValue = builder
+                .comment("If true, framed blocks will be rendered with their camo in Jade, otherwise they will be rendered blank")
+                .translation(TRANSLATION_RENDER_CAMO_IN_JADE)
+                .define(KEY_RENDER_CAMO_IN_JADE, true);
         builder.pop();
 
         builder.push("overlay");
@@ -285,6 +293,7 @@ public final class ClientConfig
             solidFrameMode = solidFrameModeValue.get();
             showButtonPlateOverlay = showButtonPlateOverlayValue.get();
             showSpecialCubeOverlay = showSpecialCubeOverlayValue.get();
+            renderCamoInJade = renderCamoInJadeValue.get();
 
             stateLockMode = stateLockModeValue.get();
             toggleWaterlogMode = toggleWaterlogModeValue.get();
@@ -380,6 +389,12 @@ public final class ClientConfig
         public boolean showSpecialCubeOverlay()
         {
             return showSpecialCubeOverlay;
+        }
+
+        @Override
+        public boolean shouldRenderCamoInJade()
+        {
+            return renderCamoInJade;
         }
 
         @Override

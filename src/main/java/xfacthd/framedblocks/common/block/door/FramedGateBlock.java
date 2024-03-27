@@ -183,6 +183,12 @@ public class FramedGateBlock extends FramedBlock
         level.playSound(entity, pos, open ? openSound : closeSound, SoundSource.BLOCKS, 1F, level.getRandom().nextFloat() * .1F + .9F);
     }
 
+    @Override
+    public BlockState getJadeRenderState(BlockState state)
+    {
+        return defaultBlockState();
+    }
+
 
 
     public static FramedGateBlock wood()

@@ -145,6 +145,18 @@ public class FramedDoorBlock extends DoorBlock implements IFramedBlock
         consumer.accept(FramedBlockRenderProperties.INSTANCE);
     }
 
+    @Override
+    public boolean shouldRenderAsBlockInJadeTooltip()
+    {
+        return false;
+    }
+
+    @Override
+    public BlockState getJadeRenderState(BlockState state)
+    {
+        return state;
+    }
+
 
 
     public static FramedDoorBlock wood()

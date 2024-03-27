@@ -85,6 +85,12 @@ public class FramedCheckeredSlabSegmentBlock extends FramedBlock
         return super.mirror(state, mirror);
     }
 
+    @Override
+    public BlockState getJadeRenderState(BlockState state)
+    {
+        return state;
+    }
+
 
 
     public static ShapeProvider generateShapes(ImmutableList<BlockState> states)

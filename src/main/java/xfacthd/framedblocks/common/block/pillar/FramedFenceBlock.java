@@ -120,4 +120,10 @@ public class FramedFenceBlock extends FenceBlock implements IFramedBlock
     {
         consumer.accept(FramedBlockRenderProperties.INSTANCE);
     }
+
+    @Override
+    public BlockState getJadeRenderState(BlockState state)
+    {
+        return defaultBlockState().setValue(EAST, true).setValue(WEST, true);
+    }
 }

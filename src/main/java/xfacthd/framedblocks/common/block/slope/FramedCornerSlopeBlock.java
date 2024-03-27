@@ -105,6 +105,12 @@ public class FramedCornerSlopeBlock extends FramedBlock
         return defaultBlockState().setValue(FramedProperties.FACING_HOR, Direction.SOUTH);
     }
 
+    @Override
+    public BlockState getJadeRenderState(BlockState state)
+    {
+        return defaultBlockState().setValue(FramedProperties.FACING_HOR, Direction.WEST);
+    }
+
 
 
     private record ShapeKey(Direction dir, CornerType type) { }

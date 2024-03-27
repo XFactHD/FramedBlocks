@@ -22,7 +22,10 @@ import javax.annotation.Nullable;
 
 public class FramedStorageBlock extends FramedBlock
 {
-    public FramedStorageBlock(BlockType type) { super(type); }
+    public FramedStorageBlock(BlockType type)
+    {
+        super(type);
+    }
 
     @Override
     protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder)
@@ -99,5 +102,11 @@ public class FramedStorageBlock extends FramedBlock
     public BlockEntity newBlockEntity(BlockPos pos, BlockState state)
     {
         return new FramedStorageBlockEntity(pos, state);
+    }
+
+    @Override
+    public BlockState getJadeRenderState(BlockState state)
+    {
+        return state;
     }
 }

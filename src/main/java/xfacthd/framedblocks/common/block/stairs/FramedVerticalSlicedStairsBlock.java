@@ -145,6 +145,12 @@ public class FramedVerticalSlicedStairsBlock extends AbstractFramedDoubleBlock
         return defaultBlockState().setValue(FramedProperties.FACING_HOR, Direction.SOUTH);
     }
 
+    @Override
+    public BlockState getJadeRenderState(BlockState state)
+    {
+        return defaultBlockState().setValue(FramedProperties.FACING_HOR, Direction.WEST);
+    }
+
 
 
     public static ShapeProvider generateShapes(ImmutableList<BlockState> states)

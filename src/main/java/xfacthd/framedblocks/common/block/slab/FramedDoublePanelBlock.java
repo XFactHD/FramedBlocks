@@ -117,4 +117,10 @@ public class FramedDoublePanelBlock extends AbstractFramedDoubleBlock
     {
         return new FramedDoublePanelBlockEntity(pos, state);
     }
+
+    @Override
+    public BlockState getJadeRenderState(BlockState state)
+    {
+        return defaultBlockState();
+    }
 }

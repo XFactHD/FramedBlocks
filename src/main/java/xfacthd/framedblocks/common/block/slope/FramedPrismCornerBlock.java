@@ -61,6 +61,12 @@ public class FramedPrismCornerBlock extends FramedThreewayCornerBlock
         return super.handleBlockLeftClick(state, level, pos, player);
     }
 
+    @Override
+    public BlockState getJadeRenderState(BlockState state)
+    {
+        return super.getJadeRenderState(state).setValue(FramedProperties.OFFSET, state.getValue(FramedProperties.OFFSET));
+    }
+
 
 
     public static ShapeProvider generatePrismShapes(ImmutableList<BlockState> states)

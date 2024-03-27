@@ -173,6 +173,12 @@ public class FramedVerticalStairsBlock extends FramedBlock
         return Utils.mirrorCornerBlock(state, mirror);
     }
 
+    @Override
+    public BlockState getJadeRenderState(BlockState state)
+    {
+        return defaultBlockState().setValue(FramedProperties.FACING_HOR, Direction.WEST);
+    }
+
 
 
     public record ShapeKey(Direction dir, StairsType type) { }

@@ -72,6 +72,12 @@ public class FramedMiniCubeBlock extends FramedBlock
         return state.setValue(BlockStateProperties.ROTATION_16, mirror.mirror(rot, 16));
     }
 
+    @Override
+    public BlockState getJadeRenderState(BlockState state)
+    {
+        return defaultBlockState();
+    }
+
 
 
     public static final class MiniCubeStateMerger implements StateMerger

@@ -276,4 +276,10 @@ public class FramedStackedCornerSlopePanelBlock extends AbstractFramedDoubleBloc
         boolean inner = getBlockType() == BlockType.FRAMED_STACKED_INNER_CORNER_SLOPE_PANEL;
         return defaultBlockState().setValue(FramedProperties.FACING_HOR, inner ? Direction.EAST : Direction.WEST);
     }
+
+    @Override
+    public BlockState getJadeRenderState(BlockState state)
+    {
+        return getItemModelSource();
+    }
 }

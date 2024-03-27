@@ -130,4 +130,10 @@ public class FramedCollapsibleCopycatBlock extends FramedBlock
     {
         return new FramedCollapsibleCopycatBlockEntity(pos, state);
     }
+
+    @Override
+    public BlockState getJadeRenderState(BlockState state)
+    {
+        return state;
+    }
 }

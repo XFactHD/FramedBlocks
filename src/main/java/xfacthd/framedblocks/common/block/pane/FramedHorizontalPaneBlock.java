@@ -29,4 +29,10 @@ public class FramedHorizontalPaneBlock extends FramedBlock
     {
         return PlacementStateBuilder.of(this, ctx).withWater().build();
     }
+
+    @Override
+    public BlockState getJadeRenderState(BlockState state)
+    {
+        return state;
+    }
 }

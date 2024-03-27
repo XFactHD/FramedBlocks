@@ -19,6 +19,7 @@ import net.neoforged.neoforge.client.extensions.common.IClientBlockExtensions;
 import xfacthd.framedblocks.api.block.FramedProperties;
 import xfacthd.framedblocks.api.block.IFramedBlock;
 import xfacthd.framedblocks.api.block.render.FramedBlockRenderProperties;
+import xfacthd.framedblocks.common.FBContent;
 import xfacthd.framedblocks.common.data.BlockType;
 
 import java.util.List;
@@ -104,5 +105,17 @@ public class FramedWallTorchBlock extends WallTorchBlock implements IFramedBlock
     public void initializeClient(Consumer<IClientBlockExtensions> consumer)
     {
         consumer.accept(FramedBlockRenderProperties.INSTANCE);
+    }
+
+    @Override
+    public BlockState getJadeRenderState(BlockState state)
+    {
+        return ((IFramedBlock) FBContent.BLOCK_FRAMED_TORCH.value()).getJadeRenderState(state);
+    }
+
+    @Override
+    public float getJadeRenderScale(BlockState state)
+    {
+        return ((IFramedBlock) FBContent.BLOCK_FRAMED_TORCH.value()).getJadeRenderScale(state);
     }
 }

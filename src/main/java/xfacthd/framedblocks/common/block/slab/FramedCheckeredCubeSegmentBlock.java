@@ -64,6 +64,12 @@ public class FramedCheckeredCubeSegmentBlock extends FramedBlock
         return state;
     }
 
+    @Override
+    public BlockState getJadeRenderState(BlockState state)
+    {
+        return state;
+    }
+
 
 
     public static ShapeProvider generateShapes(ImmutableList<BlockState> states)

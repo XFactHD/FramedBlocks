@@ -104,4 +104,10 @@ public class FramedLadderBlock extends FramedBlock
     {
         return defaultBlockState().setValue(FramedProperties.FACING_HOR, Direction.SOUTH);
     }
+
+    @Override
+    public BlockState getJadeRenderState(BlockState state)
+    {
+        return getItemModelSource();
+    }
 }

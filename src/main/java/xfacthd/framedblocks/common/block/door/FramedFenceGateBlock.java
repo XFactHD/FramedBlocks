@@ -125,6 +125,12 @@ public class FramedFenceGateBlock extends FenceGateBlock implements IFramedBlock
         return defaultBlockState();
     }
 
+    @Override
+    public BlockState getJadeRenderState(BlockState state)
+    {
+        return defaultBlockState();
+    }
+
 
 
     public static final class FenceGateStateMerger implements StateMerger

@@ -147,4 +147,10 @@ public class FramedPaneBlock extends IronBarsBlock implements IFramedBlock
     {
         return type;
     }
+
+    @Override
+    public BlockState getJadeRenderState(BlockState state)
+    {
+        return defaultBlockState().setValue(EAST, true).setValue(WEST, true);
+    }
 }

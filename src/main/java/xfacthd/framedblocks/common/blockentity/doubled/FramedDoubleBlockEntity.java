@@ -20,6 +20,7 @@ import net.neoforged.fml.loading.FMLEnvironment;
 import org.jetbrains.annotations.Nullable;
 import xfacthd.framedblocks.FramedBlocks;
 import xfacthd.framedblocks.api.block.FramedBlockEntity;
+import xfacthd.framedblocks.api.block.IFramedDoubleBlockEntity;
 import xfacthd.framedblocks.api.camo.EmptyCamoContainer;
 import xfacthd.framedblocks.api.camo.CamoContainer;
 import xfacthd.framedblocks.api.internal.InternalAPI;
@@ -33,7 +34,7 @@ import xfacthd.framedblocks.common.data.doubleblock.DoubleBlockTopInteractionMod
 
 import java.util.List;
 
-public abstract class FramedDoubleBlockEntity extends FramedBlockEntity
+public abstract class FramedDoubleBlockEntity extends FramedBlockEntity implements IFramedDoubleBlockEntity
 {
     public static final ModelProperty<ModelData> DATA_LEFT = new ModelProperty<>();
     public static final ModelProperty<ModelData> DATA_RIGHT = new ModelProperty<>();
@@ -81,6 +82,7 @@ public abstract class FramedDoubleBlockEntity extends FramedBlockEntity
         return secondary ? camoContainer : getCamo();
     }
 
+    @Override
     public final CamoContainer getCamoTwo()
     {
         return camoContainer;
@@ -417,11 +419,12 @@ public abstract class FramedDoubleBlockEntity extends FramedBlockEntity
      */
 
     @Override
-    public ModelData getModelData()
+    public ModelData getModelData(boolean includeCullInfo)
     {
-        FramedBlockData modelData = new FramedBlockData(camoContainer.getState(), culledFaces, true, isReinforced());
+        boolean[] cullData = includeCullInfo ? culledFaces : FramedBlockData.NO_CULLED_FACES;
+        FramedBlockData modelData = new FramedBlockData(camoContainer.getState(), cullData, true, isReinforced());
         return ModelData.builder()
-                .with(DATA_LEFT, super.getModelData())
+                .with(DATA_LEFT, super.getModelData(includeCullInfo))
                 .with(DATA_RIGHT, ModelData.builder().with(FramedBlockData.PROPERTY, modelData).build())
                 .build();
     }

@@ -33,6 +33,7 @@ import java.util.function.Consumer;
 public class FramedButtonBlock extends ButtonBlock implements IFramedBlock
 {
     private final BlockType type;
+    private final float jadeScale;
 
     protected FramedButtonBlock(BlockType type, BlockSetType blockSet, int pressTime)
     {
@@ -44,6 +45,7 @@ public class FramedButtonBlock extends ButtonBlock implements IFramedBlock
                 .noOcclusion()
         );
         this.type = type;
+        this.jadeScale = (type == BlockType.FRAMED_BUTTON || type == BlockType.FRAMED_STONE_BUTTON) ? 2F : 1F;
         registerDefaultState(defaultBlockState()
                 .setValue(FramedProperties.GLOWING, false)
                 .setValue(FramedProperties.PROPAGATES_SKYLIGHT, false)
@@ -110,6 +112,24 @@ public class FramedButtonBlock extends ButtonBlock implements IFramedBlock
     public void initializeClient(Consumer<IClientBlockExtensions> consumer)
     {
         consumer.accept(FramedBlockRenderProperties.INSTANCE);
+    }
+
+    @Override
+    public Class<? extends Block> getJadeTargetClass()
+    {
+        return FramedButtonBlock.class;
+    }
+
+    @Override
+    public BlockState getJadeRenderState(BlockState state)
+    {
+        return defaultBlockState().setValue(FACE, AttachFace.FLOOR);
+    }
+
+    @Override
+    public float getJadeRenderScale(BlockState state)
+    {
+        return jadeScale;
     }
 
 

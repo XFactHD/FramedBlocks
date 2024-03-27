@@ -53,6 +53,12 @@ public class FramedMasonryCornerSegmentBlock extends FramedBlock
         return Utils.mirrorCornerBlock(state, mirror);
     }
 
+    @Override
+    public BlockState getJadeRenderState(BlockState state)
+    {
+        return state;
+    }
+
 
 
     public static ShapeProvider generateShapes(ImmutableList<BlockState> states)

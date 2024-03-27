@@ -648,4 +648,35 @@ public interface IFramedBlock extends EntityBlock, IBlockExtension
     {
         return null;
     }
+
+    /**
+     * {@return the class under which this block should be registered to the Jade BlockComponentProvider to prevent
+     * duplicate provider attachment for blocks which extend a class that is instantiated for other blocks}
+     * @apiNote This is only relevant for blocks which do not extend {@link AbstractFramedBlock}
+     */
+    default Class<? extends Block> getJadeTargetClass()
+    {
+        return ((Block) this).getClass();
+    }
+
+    /**
+     * {@return whether this block should be rendered as a block or as the item on the Jade tooltip}
+     */
+    default boolean shouldRenderAsBlockInJadeTooltip()
+    {
+        return true;
+    }
+
+    /**
+     * {@return the state which should be drawn on the Jade tooltip for the given in-world state}
+     */
+    BlockState getJadeRenderState(BlockState state);
+
+    /**
+     * {@return the scale value at which this block should be drawn on the Jade tooltip}
+     */
+    default float getJadeRenderScale(BlockState state)
+    {
+        return 1F;
+    }
 }

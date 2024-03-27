@@ -20,4 +20,10 @@ public class FramedGlowingCube extends FramedBlock
         super.createBlockStateDefinition(builder);
         builder.add(FramedProperties.SOLID);
     }
+
+    @Override
+    public BlockState getJadeRenderState(BlockState state)
+    {
+        return state;
+    }
 }

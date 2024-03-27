@@ -17,7 +17,10 @@ import xfacthd.framedblocks.common.data.BlockType;
 
 public class FramedHalfPillarBlock extends FramedBlock
 {
-    public FramedHalfPillarBlock(BlockType blockType) { super(blockType); }
+    public FramedHalfPillarBlock(BlockType blockType)
+    {
+        super(blockType);
+    }
 
     @Override
     protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder)
@@ -58,6 +61,12 @@ public class FramedHalfPillarBlock extends FramedBlock
     public BlockState mirror(BlockState state, Mirror mirror)
     {
         return Utils.mirrorFaceBlock(state, BlockStateProperties.FACING, mirror);
+    }
+
+    @Override
+    public BlockState getJadeRenderState(BlockState state)
+    {
+        return state.setValue(BlockStateProperties.FACING, Direction.DOWN);
     }
 
 

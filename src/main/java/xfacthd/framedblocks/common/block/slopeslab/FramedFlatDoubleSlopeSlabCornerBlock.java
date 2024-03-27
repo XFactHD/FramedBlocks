@@ -191,7 +191,13 @@ public class FramedFlatDoubleSlopeSlabCornerBlock extends AbstractFramedDoubleBl
     @Override
     public BlockState getItemModelSource()
     {
-        return defaultBlockState().setValue(FramedProperties.FACING_HOR, Direction.SOUTH);
+        return defaultBlockState().setValue(FramedProperties.FACING_HOR, Direction.WEST);
+    }
+
+    @Override
+    public BlockState getJadeRenderState(BlockState state)
+    {
+        return getItemModelSource();
     }
 
 

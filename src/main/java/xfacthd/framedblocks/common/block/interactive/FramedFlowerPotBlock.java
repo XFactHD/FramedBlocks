@@ -162,6 +162,12 @@ public class FramedFlowerPotBlock extends FramedBlock
         return new FramedFlowerPotBlockEntity(pos, state);
     }
 
+    @Override
+    public BlockState getJadeRenderState(BlockState state)
+    {
+        return state;
+    }
+
 
 
     public static BlockState getFlowerPotState(Block flower)

@@ -234,6 +234,12 @@ public class FramedDoubleCornerSlopePanelBlock extends AbstractFramedDoubleBlock
         return defaultBlockState().setValue(FramedProperties.FACING_HOR, Direction.EAST);
     }
 
+    @Override
+    public BlockState getJadeRenderState(BlockState state)
+    {
+        return getItemModelSource();
+    }
+
 
 
     public static ShapeProvider generateSmallShapes(ImmutableList<BlockState> states)

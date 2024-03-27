@@ -997,9 +997,18 @@ public class FramedBlockEntity extends BlockEntity
      */
 
     @Override
-    public ModelData getModelData()
+    public final ModelData getModelData()
     {
-        FramedBlockData modelData = new FramedBlockData(camoContainer.getState(), culledFaces, false, isReinforced());
+        return getModelData(true);
+    }
+
+    /**
+     * @param includeCullInfo Whether culling data should be included
+     */
+    public ModelData getModelData(boolean includeCullInfo)
+    {
+        boolean[] cullData = includeCullInfo ? culledFaces : FramedBlockData.NO_CULLED_FACES;
+        FramedBlockData modelData = new FramedBlockData(camoContainer.getState(), cullData, false, isReinforced());
         ModelData.Builder builder = ModelData.builder().with(FramedBlockData.PROPERTY, modelData);
         attachAdditionalModelData(builder);
         return builder.build();

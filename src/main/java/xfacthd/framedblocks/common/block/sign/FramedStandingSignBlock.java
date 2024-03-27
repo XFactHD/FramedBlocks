@@ -123,4 +123,10 @@ public class FramedStandingSignBlock extends AbstractFramedSignBlock
     {
         return new FramedSignItem();
     }
+
+    @Override
+    public BlockState getJadeRenderState(BlockState state)
+    {
+        return defaultBlockState();
+    }
 }

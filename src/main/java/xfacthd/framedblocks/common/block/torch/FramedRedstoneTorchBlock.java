@@ -125,4 +125,16 @@ public class FramedRedstoneTorchBlock extends RedstoneTorchBlock implements IFra
     {
         consumer.accept(FramedBlockRenderProperties.INSTANCE);
     }
+
+    @Override
+    public BlockState getJadeRenderState(BlockState state)
+    {
+        return defaultBlockState();
+    }
+
+    @Override
+    public float getJadeRenderScale(BlockState state)
+    {
+        return 2F;
+    }
 }

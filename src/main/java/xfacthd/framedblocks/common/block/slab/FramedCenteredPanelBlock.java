@@ -58,6 +58,12 @@ public class FramedCenteredPanelBlock extends FramedBlock
         return state.cycle(FramedProperties.FACING_NE);
     }
 
+    @Override
+    public BlockState getJadeRenderState(BlockState state)
+    {
+        return defaultBlockState();
+    }
+
 
 
     public static ShapeProvider generateShapes(ImmutableList<BlockState> states)

@@ -206,6 +206,14 @@ public class FramedFlatInverseDoubleSlopePanelCornerBlock extends AbstractFramed
                 .setValue(PropertyHolder.ROTATION, HorizontalRotation.RIGHT);
     }
 
+    @Override
+    public BlockState getJadeRenderState(BlockState state)
+    {
+        return defaultBlockState()
+                .setValue(FramedProperties.FACING_HOR, Direction.SOUTH)
+                .setValue(PropertyHolder.ROTATION, HorizontalRotation.LEFT);
+    }
+
 
 
     public static ShapeProvider generateShapes(ImmutableList<BlockState> states)

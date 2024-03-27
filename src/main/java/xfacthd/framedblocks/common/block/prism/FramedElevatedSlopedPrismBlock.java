@@ -84,6 +84,12 @@ public class FramedElevatedSlopedPrismBlock extends FramedBlock implements IFram
     }
 
     @Override
+    public BlockState getJadeRenderState(BlockState state)
+    {
+        return getItemModelSource();
+    }
+
+    @Override
     public boolean isInnerPrism()
     {
         return getBlockType() == BlockType.FRAMED_ELEVATED_INNER_SLOPED_PRISM;

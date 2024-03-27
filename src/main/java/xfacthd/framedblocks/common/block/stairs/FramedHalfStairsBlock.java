@@ -92,6 +92,12 @@ public class FramedHalfStairsBlock extends FramedBlock
         return state.cycle(PropertyHolder.RIGHT);
     }
 
+    @Override
+    public BlockState getJadeRenderState(BlockState state)
+    {
+        return defaultBlockState().setValue(FramedProperties.FACING_HOR, Direction.SOUTH);
+    }
+
 
 
     public static ShapeProvider generateShapes(ImmutableList<BlockState> states)

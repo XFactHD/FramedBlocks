@@ -3,6 +3,7 @@ package xfacthd.framedblocks.api.camo;
 import com.mojang.logging.LogUtils;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.*;
@@ -74,6 +75,14 @@ public abstract class CamoContainer
      * @return The tint color for the given index
      */
     public abstract int getColor(BlockAndTintGetter level, BlockPos pos, int tintIdx);
+
+    /**
+     * {@return the name of this camo to be displayed in tooltips}
+     */
+    public Component getBlockName()
+    {
+        return state.getBlock().getName();
+    }
 
     /**
      * Returns the item to be dropped when the block is destroyed or when the item for the BuildingGadgets material

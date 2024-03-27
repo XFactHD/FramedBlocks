@@ -65,6 +65,12 @@ public class FramedCheckeredPanelSegmentBlock extends FramedBlock
         return Utils.mirrorFaceBlock(state, mirror).cycle(PropertyHolder.SECOND);
     }
 
+    @Override
+    public BlockState getJadeRenderState(BlockState state)
+    {
+        return state;
+    }
+
 
 
     public static ShapeProvider generateShapes(ImmutableList<BlockState> states)

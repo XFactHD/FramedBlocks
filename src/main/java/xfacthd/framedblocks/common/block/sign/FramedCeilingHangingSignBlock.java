@@ -186,6 +186,12 @@ public class FramedCeilingHangingSignBlock extends AbstractFramedHangingSignBloc
         return new FramedHangingSignItem();
     }
 
+    @Override
+    public BlockState getJadeRenderState(BlockState state)
+    {
+        return defaultBlockState();
+    }
+
 
 
     public static ShapeProvider generateShapes(ImmutableList<BlockState> states)

@@ -209,6 +209,12 @@ public class FramedElevatedDoubleSlopeEdgeBlock extends AbstractFramedDoubleBloc
     }
 
     @Override
+    public BlockState getJadeRenderState(BlockState state)
+    {
+        return getItemModelSource();
+    }
+
+    @Override
     public boolean isHorizontalSlope(BlockState state)
     {
         return state.getValue(PropertyHolder.SLOPE_TYPE) == SlopeType.HORIZONTAL;

@@ -1,7 +1,9 @@
 package xfacthd.framedblocks.api.camo;
 
+import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.*;
@@ -9,12 +11,14 @@ import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.material.MapColor;
 import xfacthd.framedblocks.api.internal.InternalAPI;
+import xfacthd.framedblocks.api.util.Utils;
 
 import java.util.function.Consumer;
 
 public final class EmptyCamoContainer extends CamoContainer
 {
     public static final EmptyCamoContainer EMPTY = new EmptyCamoContainer();
+    public static final Component BLOCK_NAME = Utils.translate("desc", "camo.empty").withStyle(ChatFormatting.ITALIC);
 
     private EmptyCamoContainer()
     {
@@ -37,6 +41,12 @@ public final class EmptyCamoContainer extends CamoContainer
     public float[] getBeaconColorMultiplier(LevelReader level, BlockPos pos, BlockPos beaconPos)
     {
         return null;
+    }
+
+    @Override
+    public Component getBlockName()
+    {
+        return BLOCK_NAME;
     }
 
     @Override

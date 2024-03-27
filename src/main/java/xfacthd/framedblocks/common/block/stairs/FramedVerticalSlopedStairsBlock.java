@@ -140,6 +140,12 @@ public class FramedVerticalSlopedStairsBlock extends FramedBlock
         return defaultBlockState().setValue(FramedProperties.FACING_HOR, Direction.SOUTH);
     }
 
+    @Override
+    public BlockState getJadeRenderState(BlockState state)
+    {
+        return getItemModelSource();
+    }
+
 
 
     public static ShapeProvider generateShapes(ImmutableList<BlockState> states)

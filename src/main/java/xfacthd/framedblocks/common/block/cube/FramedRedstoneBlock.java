@@ -150,4 +150,10 @@ public class FramedRedstoneBlock extends PoweredBlock implements IFramedBlock
     {
         return BlockType.FRAMED_REDSTONE_BLOCK;
     }
+
+    @Override
+    public BlockState getJadeRenderState(BlockState state)
+    {
+        return state;
+    }
 }

@@ -147,6 +147,12 @@ public class FramedWallBlock extends WallBlock implements IFramedBlock
     }
 
     @Override
+    public BlockState getJadeRenderState(BlockState state)
+    {
+        return defaultBlockState().setValue(EAST_WALL, WallSide.LOW).setValue(WEST_WALL, WallSide.LOW);
+    }
+
+    @Override
     protected Map<BlockState, VoxelShape> makeShapes(float pWidth, float pDepth, float pWallPostHeight, float pWallMinY, float pWallLowHeight, float pWallTallHeight)
     {
         // Effectively NO-OP to conserve memory, the shape building is taken over below

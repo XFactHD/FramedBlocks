@@ -38,6 +38,12 @@ public class FramedFloorBlock extends FramedBlock
                 .build();
     }
 
+    @Override
+    public BlockState getJadeRenderState(BlockState state)
+    {
+        return defaultBlockState();
+    }
+
 
 
     public static ShapeProvider generateShapes(ImmutableList<BlockState> states)

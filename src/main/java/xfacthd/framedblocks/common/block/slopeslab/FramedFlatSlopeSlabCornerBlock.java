@@ -139,6 +139,12 @@ public class FramedFlatSlopeSlabCornerBlock extends FramedBlock
         return defaultBlockState().setValue(FramedProperties.FACING_HOR, Direction.SOUTH);
     }
 
+    @Override
+    public BlockState getJadeRenderState(BlockState state)
+    {
+        return defaultBlockState().setValue(FramedProperties.FACING_HOR, Direction.WEST);
+    }
+
 
 
     public static final ShapeCache<SlopeSlabShape> SHAPES = ShapeCache.createEnum(SlopeSlabShape.class, map ->

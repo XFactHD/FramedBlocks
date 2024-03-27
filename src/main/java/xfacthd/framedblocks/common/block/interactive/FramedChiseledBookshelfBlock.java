@@ -209,4 +209,10 @@ public class FramedChiseledBookshelfBlock extends FramedBlock
     {
         return defaultBlockState();
     }
+
+    @Override
+    public BlockState getJadeRenderState(BlockState state)
+    {
+        return state.setValue(FramedProperties.FACING_HOR, Direction.NORTH);
+    }
 }

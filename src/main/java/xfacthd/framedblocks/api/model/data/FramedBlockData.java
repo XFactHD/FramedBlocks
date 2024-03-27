@@ -8,7 +8,7 @@ public final class FramedBlockData
 {
     public static final ModelProperty<FramedBlockData> PROPERTY = new ModelProperty<>();
     public static final ModelProperty<ModelData> CAMO_DATA = new ModelProperty<>();
-    private static final boolean[] NO_CULLED_FACES = new boolean[6];
+    public static final boolean[] NO_CULLED_FACES = new boolean[0];
 
     private final BlockState camoState;
     private final byte hidden;

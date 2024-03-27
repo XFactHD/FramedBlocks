@@ -105,4 +105,16 @@ public class FramedLeverBlock extends LeverBlock implements IFramedBlock
     {
         consumer.accept(FramedBlockRenderProperties.INSTANCE);
     }
+
+    @Override
+    public BlockState getJadeRenderState(BlockState state)
+    {
+        return defaultBlockState().setValue(FACE, AttachFace.FLOOR);
+    }
+
+    @Override
+    public float getJadeRenderScale(BlockState state)
+    {
+        return 1.6F;
+    }
 }

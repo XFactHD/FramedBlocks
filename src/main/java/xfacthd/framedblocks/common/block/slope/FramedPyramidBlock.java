@@ -82,6 +82,12 @@ public class FramedPyramidBlock extends FramedBlock
         return defaultBlockState();
     }
 
+    @Override
+    public BlockState getJadeRenderState(BlockState state)
+    {
+        return defaultBlockState();
+    }
+
 
 
     public static ShapeProvider generateShapes(ImmutableList<BlockState> states)

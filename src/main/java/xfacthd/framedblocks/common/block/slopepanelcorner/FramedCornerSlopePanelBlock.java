@@ -171,6 +171,12 @@ public class FramedCornerSlopePanelBlock extends FramedBlock
         return defaultBlockState().setValue(FramedProperties.FACING_HOR, inner ? Direction.EAST : Direction.WEST);
     }
 
+    @Override
+    public BlockState getJadeRenderState(BlockState state)
+    {
+        return getItemModelSource();
+    }
+
 
 
     public static final ShapeCache<CornerSlopePanelShape> SHAPES = ShapeCache.createEnum(CornerSlopePanelShape.class, map ->

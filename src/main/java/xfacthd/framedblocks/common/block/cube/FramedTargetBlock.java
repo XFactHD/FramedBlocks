@@ -188,4 +188,10 @@ public class FramedTargetBlock extends TargetBlock implements IFramedBlock
     {
         return defaultBlockState();
     }
+
+    @Override
+    public BlockState getJadeRenderState(BlockState state)
+    {
+        return state;
+    }
 }

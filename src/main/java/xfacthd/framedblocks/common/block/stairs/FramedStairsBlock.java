@@ -169,6 +169,12 @@ public class FramedStairsBlock extends StairBlock implements IFramedBlock
         return BlockType.FRAMED_STAIRS;
     }
 
+    @Override
+    public BlockState getJadeRenderState(BlockState state)
+    {
+        return defaultBlockState().setValue(FACING, Direction.SOUTH);
+    }
+
 
 
     public static final class StairStateMerger implements StateMerger

@@ -86,4 +86,10 @@ public class FramedDoubleSlabBlock extends AbstractFramedDoubleBlock
     {
         return new FramedDoubleSlabBlockEntity(pos, state);
     }
+
+    @Override
+    public BlockState getJadeRenderState(BlockState state)
+    {
+        return defaultBlockState();
+    }
 }

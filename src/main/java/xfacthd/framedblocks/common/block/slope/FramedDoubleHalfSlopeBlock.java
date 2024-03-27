@@ -199,6 +199,12 @@ public class FramedDoubleHalfSlopeBlock extends AbstractFramedDoubleBlock
         return defaultBlockState().setValue(FramedProperties.FACING_HOR, Direction.WEST);
     }
 
+    @Override
+    public BlockState getJadeRenderState(BlockState state)
+    {
+        return getItemModelSource();
+    }
+
 
 
     public static ShapeProvider generateShapes(ImmutableList<BlockState> states)

@@ -2,8 +2,7 @@ package xfacthd.framedblocks.common.block.slopepanelcorner;
 
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
-import net.minecraft.core.BlockPos;
-import net.minecraft.core.Direction;
+import net.minecraft.core.*;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.Level;
@@ -18,6 +17,7 @@ import xfacthd.framedblocks.api.block.FramedProperties;
 import xfacthd.framedblocks.api.block.IFramedBlock;
 import xfacthd.framedblocks.api.shapes.*;
 import xfacthd.framedblocks.api.util.Utils;
+import xfacthd.framedblocks.common.FBContent;
 import xfacthd.framedblocks.common.block.FramedBlock;
 import xfacthd.framedblocks.common.block.slopepanel.FramedExtendedSlopePanelBlock;
 import xfacthd.framedblocks.common.block.slopeslab.FramedElevatedSlopeSlabBlock;
@@ -28,10 +28,18 @@ import xfacthd.framedblocks.common.data.property.HorizontalRotation;
 @SuppressWarnings("deprecation")
 public class FramedExtendedCornerSlopePanelWallBlock extends FramedBlock
 {
-    public FramedExtendedCornerSlopePanelWallBlock(BlockType blockType)
+    private final Holder<Block> nonWallBlock;
+
+    public FramedExtendedCornerSlopePanelWallBlock(BlockType type)
     {
-        super(blockType);
+        super(type);
         registerDefaultState(defaultBlockState().setValue(FramedProperties.Y_SLOPE, true));
+        this.nonWallBlock = switch (type)
+        {
+            case FRAMED_EXT_CORNER_SLOPE_PANEL_W -> FBContent.BLOCK_FRAMED_EXTENDED_CORNER_SLOPE_PANEL;
+            case FRAMED_EXT_INNER_CORNER_SLOPE_PANEL_W -> FBContent.BLOCK_FRAMED_EXTENDED_INNER_CORNER_SLOPE_PANEL;
+            default -> throw new IllegalArgumentException("Unknown corner slope panel type: " + type);
+        };
     }
 
     @Override
@@ -119,6 +127,12 @@ public class FramedExtendedCornerSlopePanelWallBlock extends FramedBlock
     public BlockState mirror(BlockState state, Mirror mirror)
     {
         return FramedCornerSlopePanelWallBlock.mirrorCornerPanel(state, mirror);
+    }
+
+    @Override
+    public BlockState getJadeRenderState(BlockState state)
+    {
+        return ((IFramedBlock) nonWallBlock.value()).getJadeRenderState(state);
     }
 
 

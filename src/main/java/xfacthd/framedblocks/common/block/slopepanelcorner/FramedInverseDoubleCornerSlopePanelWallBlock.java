@@ -176,6 +176,12 @@ public class FramedInverseDoubleCornerSlopePanelWallBlock extends AbstractFramed
         return SolidityCheck.NONE;
     }
 
+    @Override
+    public BlockState getJadeRenderState(BlockState state)
+    {
+        return ((IFramedBlock) FBContent.BLOCK_FRAMED_INVERSE_DOUBLE_CORNER_SLOPE_PANEL.value()).getJadeRenderState(state);
+    }
+
 
 
     public static ShapeProvider generateShapes(ImmutableList<BlockState> states)

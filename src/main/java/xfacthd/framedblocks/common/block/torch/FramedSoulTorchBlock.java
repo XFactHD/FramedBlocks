@@ -4,6 +4,7 @@ import net.minecraft.core.Direction;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.world.item.*;
 import net.minecraft.world.level.block.SoundType;
+import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.material.PushReaction;
 import xfacthd.framedblocks.common.FBContent;
 import xfacthd.framedblocks.common.data.BlockType;
@@ -37,5 +38,17 @@ public class FramedSoulTorchBlock extends FramedTorchBlock
                 new Item.Properties(),
                 Direction.DOWN
         );
+    }
+
+    @Override
+    public BlockState getJadeRenderState(BlockState state)
+    {
+        return defaultBlockState();
+    }
+
+    @Override
+    public float getJadeRenderScale(BlockState state)
+    {
+        return 2F;
     }
 }

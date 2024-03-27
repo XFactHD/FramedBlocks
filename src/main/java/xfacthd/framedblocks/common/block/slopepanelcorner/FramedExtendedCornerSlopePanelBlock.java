@@ -138,6 +138,12 @@ public class FramedExtendedCornerSlopePanelBlock extends FramedBlock
         return defaultBlockState().setValue(FramedProperties.FACING_HOR, inner ? Direction.EAST : Direction.WEST);
     }
 
+    @Override
+    public BlockState getJadeRenderState(BlockState state)
+    {
+        return getItemModelSource();
+    }
+
 
 
     public static ShapeProvider generateShapes(ImmutableList<BlockState> states)

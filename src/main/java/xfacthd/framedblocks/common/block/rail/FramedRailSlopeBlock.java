@@ -257,6 +257,18 @@ public class FramedRailSlopeBlock extends BaseRailBlock implements IFramedBlock,
         return defaultBlockState().setValue(PropertyHolder.ASCENDING_RAIL_SHAPE, RailShape.ASCENDING_SOUTH);
     }
 
+    @Override
+    public Class<? extends Block> getJadeTargetClass()
+    {
+        return FramedRailSlopeBlock.class;
+    }
+
+    @Override
+    public BlockState getJadeRenderState(BlockState state)
+    {
+        return getItemModelSource();
+    }
+
 
 
     public static FramedRailSlopeBlock normal()

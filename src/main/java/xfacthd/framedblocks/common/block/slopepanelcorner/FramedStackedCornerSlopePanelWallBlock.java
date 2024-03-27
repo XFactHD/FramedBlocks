@@ -1,7 +1,6 @@
 package xfacthd.framedblocks.common.block.slopepanelcorner;
 
-import net.minecraft.core.BlockPos;
-import net.minecraft.core.Direction;
+import net.minecraft.core.*;
 import net.minecraft.util.Tuple;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.context.BlockPlaceContext;
@@ -32,10 +31,18 @@ import xfacthd.framedblocks.common.data.doubleblock.DoubleBlockTopInteractionMod
 @SuppressWarnings("deprecation")
 public class FramedStackedCornerSlopePanelWallBlock extends AbstractFramedDoubleBlock
 {
-    public FramedStackedCornerSlopePanelWallBlock(BlockType blockType)
+    private final Holder<Block> nonWallBlock;
+
+    public FramedStackedCornerSlopePanelWallBlock(BlockType type)
     {
-        super(blockType);
+        super(type);
         registerDefaultState(defaultBlockState().setValue(FramedProperties.Y_SLOPE, true));
+        this.nonWallBlock = switch (type)
+        {
+            case FRAMED_STACKED_CORNER_SLOPE_PANEL_W -> FBContent.BLOCK_FRAMED_STACKED_CORNER_SLOPE_PANEL;
+            case FRAMED_STACKED_INNER_CORNER_SLOPE_PANEL_W -> FBContent.BLOCK_FRAMED_STACKED_INNER_CORNER_SLOPE_PANEL;
+            default -> throw new IllegalArgumentException("Unknown corner slope panel type: " + type);
+        };
     }
 
     @Override
@@ -290,5 +297,11 @@ public class FramedStackedCornerSlopePanelWallBlock extends AbstractFramedDouble
             }
             default -> throw new IllegalStateException("Unexpected type: " + getBlockType());
         };
+    }
+
+    @Override
+    public BlockState getJadeRenderState(BlockState state)
+    {
+        return ((IFramedBlock) nonWallBlock.value()).getJadeRenderState(state);
     }
 }

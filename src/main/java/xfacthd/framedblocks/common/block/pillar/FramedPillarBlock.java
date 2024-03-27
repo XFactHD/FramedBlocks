@@ -76,6 +76,12 @@ public class FramedPillarBlock extends FramedBlock
         return null;
     }
 
+    @Override
+    public BlockState getJadeRenderState(BlockState state)
+    {
+        return defaultBlockState().setValue(BlockStateProperties.AXIS, Direction.Axis.Y);
+    }
+
 
 
     public static ShapeProvider generatePillarShapes(ImmutableList<BlockState> states)

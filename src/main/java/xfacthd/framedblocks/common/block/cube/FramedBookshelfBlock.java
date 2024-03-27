@@ -26,4 +26,10 @@ public class FramedBookshelfBlock extends FramedBlock
     {
         return defaultBlockState();
     }
+
+    @Override
+    public BlockState getJadeRenderState(BlockState state)
+    {
+        return state;
+    }
 }

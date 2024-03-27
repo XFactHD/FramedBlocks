@@ -26,6 +26,8 @@ public final class ExtConfigView
 
         boolean showSpecialCubeOverlay();
 
+        boolean shouldRenderCamoInJade();
+
         BlockInteractOverlay.Mode getStateLockMode();
 
         BlockInteractOverlay.Mode getToggleWaterlogMode();

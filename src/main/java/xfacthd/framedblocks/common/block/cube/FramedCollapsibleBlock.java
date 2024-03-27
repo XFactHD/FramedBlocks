@@ -132,6 +132,12 @@ public class FramedCollapsibleBlock extends FramedBlock
         return new FramedCollapsibleBlockEntity(pos, state);
     }
 
+    @Override
+    public BlockState getJadeRenderState(BlockState state)
+    {
+        return state;
+    }
+
 
 
     @SuppressWarnings("SuspiciousNameCombination")

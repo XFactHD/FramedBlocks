@@ -151,6 +151,12 @@ public class FramedSlopeBlock extends FramedBlock implements ISlopeBlock
         return defaultBlockState().setValue(FramedProperties.FACING_HOR, Direction.SOUTH);
     }
 
+    @Override
+    public BlockState getJadeRenderState(BlockState state)
+    {
+        return getItemModelSource();
+    }
+
 
 
     public static final ShapeCache<SlopeType> SHAPES = ShapeCache.createEnum(SlopeType.class, map ->

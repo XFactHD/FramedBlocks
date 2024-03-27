@@ -7,6 +7,7 @@ import net.minecraft.network.chat.ComponentContents;
 import net.minecraft.network.chat.contents.TranslatableContents;
 import net.neoforged.neoforge.common.data.LanguageProvider;
 import xfacthd.framedblocks.api.block.IFramedBlock;
+import xfacthd.framedblocks.api.camo.EmptyCamoContainer;
 import xfacthd.framedblocks.api.util.FramedConstants;
 import xfacthd.framedblocks.client.screen.*;
 import xfacthd.framedblocks.client.screen.overlay.*;
@@ -271,13 +272,19 @@ public final class FramedLanguageProvider extends LanguageProvider
 
         add(FBContent.MAIN_TAB.value().getDisplayName(), "FramedBlocks");
 
+        add(EmptyCamoContainer.BLOCK_NAME, "Empty");
+
         add(JeiCompat.MSG_INVALID_RECIPE, "Invalid recipe");
         add(JeiCompat.MSG_TRANSFER_NOT_IMPLEMENTED, "Transfer not implemented, no items will be transferred");
 
         add(AtlasViewerCompat.LABEL_TEXTURE, "Texture");
         add(AtlasViewerCompat.LABEL_FRAMES, "Frames");
 
+        add(JadeCompat.configTranslation(JadeCompat.ID_FRAMED_BLOCK), "FramedBlocks camo");
         add(JadeCompat.configTranslation(JadeCompat.ID_ITEM_FRAME), "Framed Item Frame");
+        add(JadeCompat.LABEL_CAMO, "Camo: %s");
+        add(JadeCompat.LABEL_CAMO_ONE, "Camo one: %s");
+        add(JadeCompat.LABEL_CAMO_TWO, "Camo two: %s");
     }
 
     private void addStatusMessageTranslations()
@@ -439,6 +446,7 @@ public final class FramedLanguageProvider extends LanguageProvider
         add(ClientConfig.TRANSLATION_SOLID_FRAME_MODE, "Solid frame mode");
         add(ClientConfig.TRANSLATION_SHOW_BUTTON_PLATE_OVERLAY, "Show button and pressure plate type overlay");
         add(ClientConfig.TRANSLATION_SHOW_SPECIAL_CUBE_OVERLAY, "Show special cube type overlay");
+        add(ClientConfig.TRANSLATION_RENDER_CAMO_IN_JADE, "Render camo in Jade overlay");
         add(ClientConfig.TRANSLATION_STATE_LOCK_MODE, "State lock overlay: Display mode");
         add(ClientConfig.TRANSLATION_TOGGLE_WATERLOG_MODE, "Toggle waterloggable overlay: Display mode");
         add(ClientConfig.TRANSLATION_TOGGLE_Y_SLOPE_MODE, "Toggle Y slope overlay: Display mode");

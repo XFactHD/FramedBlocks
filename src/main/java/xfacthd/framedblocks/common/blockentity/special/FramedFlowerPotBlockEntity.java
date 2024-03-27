@@ -59,12 +59,9 @@ public class FramedFlowerPotBlockEntity extends FramedBlockEntity
     }
 
     @Override
-    public ModelData getModelData()
+    protected void attachAdditionalModelData(ModelData.Builder builder)
     {
-        return super.getModelData()
-                .derive()
-                .with(FLOWER_BLOCK, flowerBlock)
-                .build();
+        builder.with(FLOWER_BLOCK, flowerBlock);
     }
 
     @Override

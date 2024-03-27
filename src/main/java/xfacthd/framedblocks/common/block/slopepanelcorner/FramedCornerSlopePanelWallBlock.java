@@ -2,8 +2,7 @@ package xfacthd.framedblocks.common.block.slopepanelcorner;
 
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
-import net.minecraft.core.BlockPos;
-import net.minecraft.core.Direction;
+import net.minecraft.core.*;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.Level;
@@ -18,6 +17,7 @@ import xfacthd.framedblocks.api.block.FramedProperties;
 import xfacthd.framedblocks.api.block.IFramedBlock;
 import xfacthd.framedblocks.api.shapes.*;
 import xfacthd.framedblocks.api.util.Utils;
+import xfacthd.framedblocks.common.FBContent;
 import xfacthd.framedblocks.common.block.ExtPlacementStateBuilder;
 import xfacthd.framedblocks.common.block.FramedBlock;
 import xfacthd.framedblocks.common.block.slopepanel.FramedSlopePanelBlock;
@@ -32,6 +32,7 @@ import xfacthd.framedblocks.common.data.property.HorizontalRotation;
 public class FramedCornerSlopePanelWallBlock extends FramedBlock
 {
     private final boolean large;
+    private final Holder<Block> nonWallBlock;
 
     public FramedCornerSlopePanelWallBlock(BlockType type)
     {
@@ -39,6 +40,14 @@ public class FramedCornerSlopePanelWallBlock extends FramedBlock
         registerDefaultState(defaultBlockState().setValue(FramedProperties.Y_SLOPE, true));
         this.large = type == BlockType.FRAMED_LARGE_CORNER_SLOPE_PANEL_W ||
                      type == BlockType.FRAMED_LARGE_INNER_CORNER_SLOPE_PANEL_W;
+        this.nonWallBlock = switch (type)
+        {
+            case FRAMED_SMALL_CORNER_SLOPE_PANEL_W -> FBContent.BLOCK_FRAMED_SMALL_CORNER_SLOPE_PANEL;
+            case FRAMED_SMALL_INNER_CORNER_SLOPE_PANEL_W -> FBContent.BLOCK_FRAMED_SMALL_INNER_CORNER_SLOPE_PANEL;
+            case FRAMED_LARGE_CORNER_SLOPE_PANEL_W -> FBContent.BLOCK_FRAMED_LARGE_CORNER_SLOPE_PANEL;
+            case FRAMED_LARGE_INNER_CORNER_SLOPE_PANEL_W -> FBContent.BLOCK_FRAMED_LARGE_INNER_CORNER_SLOPE_PANEL;
+            default -> throw new IllegalArgumentException("Unknown corner slope panel type: " + type);
+        };
     }
 
     @Override
@@ -146,6 +155,12 @@ public class FramedCornerSlopePanelWallBlock extends FramedBlock
         HorizontalRotation rot = state.getValue(PropertyHolder.ROTATION);
         rot = rot.rotate(rot.isVertical() ? Rotation.CLOCKWISE_90 : Rotation.COUNTERCLOCKWISE_90);
         return newState.setValue(PropertyHolder.ROTATION, rot);
+    }
+
+    @Override
+    public BlockState getJadeRenderState(BlockState state)
+    {
+        return ((IFramedBlock) nonWallBlock.value()).getJadeRenderState(state);
     }
 
 

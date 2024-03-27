@@ -97,6 +97,12 @@ public class FramedSlabBlock extends FramedBlock
         return state;
     }
 
+    @Override
+    public BlockState getJadeRenderState(BlockState state)
+    {
+        return defaultBlockState();
+    }
+
 
 
     public static ShapeProvider generateShapes(ImmutableList<BlockState> states)

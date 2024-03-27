@@ -176,4 +176,10 @@ public class FramedElevatedDoubleSlopeSlabBlock extends AbstractFramedDoubleBloc
     {
         return defaultBlockState().setValue(FramedProperties.FACING_HOR, Direction.SOUTH);
     }
+
+    @Override
+    public BlockState getJadeRenderState(BlockState state)
+    {
+        return getItemModelSource();
+    }
 }

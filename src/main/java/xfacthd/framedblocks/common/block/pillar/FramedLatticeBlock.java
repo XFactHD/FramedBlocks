@@ -156,6 +156,15 @@ public class FramedLatticeBlock extends FramedBlock
         return null;
     }
 
+    @Override
+    public BlockState getJadeRenderState(BlockState state)
+    {
+        return defaultBlockState()
+                .setValue(FramedProperties.X_AXIS, true)
+                .setValue(FramedProperties.Y_AXIS, true)
+                .setValue(FramedProperties.Z_AXIS, true);
+    }
+
 
 
     public static ShapeProvider generateThinShapes(ImmutableList<BlockState> states)

@@ -131,6 +131,18 @@ public class FramedWeightedPressurePlateBlock extends WeightedPressurePlateBlock
         return FBContent.byType(WATERLOGGING_SWITCH.get(type));
     }
 
+    @Override
+    public Class<? extends Block> getJadeTargetClass()
+    {
+        return FramedWeightedPressurePlateBlock.class;
+    }
+
+    @Override
+    public BlockState getJadeRenderState(BlockState state)
+    {
+        return defaultBlockState();
+    }
+
 
 
     public static FramedWeightedPressurePlateBlock gold()

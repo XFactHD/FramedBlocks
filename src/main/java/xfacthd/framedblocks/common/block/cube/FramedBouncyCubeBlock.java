@@ -149,4 +149,10 @@ public class FramedBouncyCubeBlock extends SlimeBlock implements IFramedBlock
     {
         consumer.accept(FramedBlockRenderProperties.INSTANCE);
     }
+
+    @Override
+    public BlockState getJadeRenderState(BlockState state)
+    {
+        return state;
+    }
 }

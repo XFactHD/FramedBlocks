@@ -160,6 +160,12 @@ public class FramedElevatedDoublePrismBlock extends AbstractFramedDoubleBlock im
     }
 
     @Override
+    public BlockState getJadeRenderState(BlockState state)
+    {
+        return getItemModelSource();
+    }
+
+    @Override
     public boolean isInnerPrism()
     {
         return getBlockType() == BlockType.FRAMED_ELEVATED_INNER_DOUBLE_PRISM;

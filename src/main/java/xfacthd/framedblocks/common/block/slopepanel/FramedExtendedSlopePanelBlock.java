@@ -111,6 +111,12 @@ public class FramedExtendedSlopePanelBlock extends FramedBlock
         return defaultBlockState().setValue(FramedProperties.FACING_HOR, Direction.SOUTH);
     }
 
+    @Override
+    public BlockState getJadeRenderState(BlockState state)
+    {
+        return getItemModelSource();
+    }
+
 
 
     public static final ShapeCache<HorizontalRotation> SHAPES = ShapeCache.createEnum(HorizontalRotation.class, map ->

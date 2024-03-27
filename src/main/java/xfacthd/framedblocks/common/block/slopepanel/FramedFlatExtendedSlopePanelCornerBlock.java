@@ -137,6 +137,12 @@ public class FramedFlatExtendedSlopePanelCornerBlock extends FramedBlock
                 .setValue(PropertyHolder.ROTATION, HorizontalRotation.RIGHT);
     }
 
+    @Override
+    public BlockState getJadeRenderState(BlockState state)
+    {
+        return defaultBlockState().setValue(FramedProperties.FACING_HOR, Direction.SOUTH);
+    }
+
 
 
     private record ShapeKey(Direction dir, HorizontalRotation rot) { }

@@ -141,6 +141,12 @@ public class FramedFancyPoweredRailBlock extends PoweredRailBlock implements IFr
         consumer.accept(FramedBlockRenderProperties.INSTANCE);
     }
 
+    @Override
+    public BlockState getJadeRenderState(BlockState state)
+    {
+        return defaultBlockState();
+    }
+
 
 
     public static FramedFancyPoweredRailBlock powered()

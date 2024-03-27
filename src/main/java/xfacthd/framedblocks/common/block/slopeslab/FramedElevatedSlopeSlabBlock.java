@@ -107,6 +107,12 @@ public class FramedElevatedSlopeSlabBlock extends FramedBlock
         return defaultBlockState().setValue(FramedProperties.FACING_HOR, Direction.SOUTH);
     }
 
+    @Override
+    public BlockState getJadeRenderState(BlockState state)
+    {
+        return defaultBlockState().setValue(FramedProperties.FACING_HOR, Direction.SOUTH);
+    }
+
 
 
     public static final ShapeCache<Boolean> SHAPES = ShapeCache.createIdentity(map ->

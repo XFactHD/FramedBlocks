@@ -228,4 +228,10 @@ public class FramedFlatStackedSlopePanelCornerBlock extends AbstractFramedDouble
     {
         return defaultBlockState().setValue(FramedProperties.FACING_HOR, Direction.SOUTH);
     }
+
+    @Override
+    public BlockState getJadeRenderState(BlockState state)
+    {
+        return getItemModelSource();
+    }
 }

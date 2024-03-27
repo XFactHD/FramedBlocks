@@ -285,6 +285,12 @@ public class FramedExtendedDoubleCornerSlopePanelBlock extends AbstractFramedDou
     public BlockState getItemModelSource()
     {
         boolean inner = getBlockType() == BlockType.FRAMED_EXT_INNER_DOUBLE_CORNER_SLOPE_PANEL;
-        return defaultBlockState().setValue(FramedProperties.FACING_HOR, inner ? Direction.EAST : Direction.NORTH);
+        return defaultBlockState().setValue(FramedProperties.FACING_HOR, inner ? Direction.EAST : Direction.WEST);
+    }
+
+    @Override
+    public BlockState getJadeRenderState(BlockState state)
+    {
+        return getItemModelSource();
     }
 }

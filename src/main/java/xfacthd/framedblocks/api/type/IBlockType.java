@@ -7,6 +7,7 @@ import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import org.jetbrains.annotations.ApiStatus;
 import xfacthd.framedblocks.api.block.FramedProperties;
+import xfacthd.framedblocks.api.block.IFramedDoubleBlockEntity;
 import xfacthd.framedblocks.api.block.render.FramedBlockRenderProperties;
 import xfacthd.framedblocks.api.predicate.contex.ConTexMode;
 import xfacthd.framedblocks.api.predicate.contex.ConnectionPredicate;
@@ -53,9 +54,10 @@ public interface IBlockType
     /**
      * @return true if this type represents a block that combines two models into one and allows those to have separate
      * camos applied.
-     * @apiNote Returning true doesn't imply that the {@link Block}, {@link BlockEntity} or {@link BakedModel} extends
-     * any specific class, it should only ideally guarantee compliance with the data layout used by the reference
-     * implementation in FramedBlocks
+     *
+     * @apiNote if a block's type returns true from this method, its {@link BlockEntity} must implement
+     * {@link IFramedDoubleBlockEntity}. The {@link Block} and {@link BakedModel} are not required to extend or implement
+     * any specific class
      */
     default boolean isDoubleBlock()
     {

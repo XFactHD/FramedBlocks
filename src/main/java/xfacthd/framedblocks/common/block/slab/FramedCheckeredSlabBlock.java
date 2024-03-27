@@ -97,4 +97,10 @@ public class FramedCheckeredSlabBlock extends AbstractFramedDoubleBlock
     {
         return defaultBlockState();
     }
+
+    @Override
+    public BlockState getJadeRenderState(BlockState state)
+    {
+        return defaultBlockState();
+    }
 }

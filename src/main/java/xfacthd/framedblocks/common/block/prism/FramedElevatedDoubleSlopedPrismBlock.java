@@ -162,6 +162,12 @@ public class FramedElevatedDoubleSlopedPrismBlock extends AbstractFramedDoubleBl
     }
 
     @Override
+    public BlockState getJadeRenderState(BlockState state)
+    {
+        return getItemModelSource();
+    }
+
+    @Override
     public boolean isInnerPrism()
     {
         return getBlockType() == BlockType.FRAMED_ELEVATED_INNER_DOUBLE_SLOPED_PRISM;

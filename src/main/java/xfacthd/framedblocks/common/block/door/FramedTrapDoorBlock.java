@@ -153,6 +153,12 @@ public class FramedTrapDoorBlock extends TrapDoorBlock implements IFramedBlock
         consumer.accept(FramedBlockRenderProperties.INSTANCE);
     }
 
+    @Override
+    public BlockState getJadeRenderState(BlockState state)
+    {
+        return defaultBlockState();
+    }
+
 
 
     public static FramedTrapDoorBlock wood()

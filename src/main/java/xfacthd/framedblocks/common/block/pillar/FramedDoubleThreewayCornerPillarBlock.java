@@ -146,4 +146,10 @@ public class FramedDoubleThreewayCornerPillarBlock extends AbstractFramedDoubleB
     {
         return defaultBlockState().setValue(FramedProperties.FACING_HOR, Direction.WEST);
     }
+
+    @Override
+    public BlockState getJadeRenderState(BlockState state)
+    {
+        return state.setValue(FramedProperties.FACING_HOR, Direction.WEST);
+    }
 }

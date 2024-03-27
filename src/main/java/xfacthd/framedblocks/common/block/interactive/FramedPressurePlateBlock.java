@@ -158,6 +158,18 @@ public class FramedPressurePlateBlock extends PressurePlateBlock implements IFra
         return FBContent.byType(WATERLOGGING_SWITCH.get(blockType));
     }
 
+    @Override
+    public Class<? extends Block> getJadeTargetClass()
+    {
+        return FramedPressurePlateBlock.class;
+    }
+
+    @Override
+    public BlockState getJadeRenderState(BlockState state)
+    {
+        return defaultBlockState();
+    }
+
 
 
     public static FramedPressurePlateBlock wood()

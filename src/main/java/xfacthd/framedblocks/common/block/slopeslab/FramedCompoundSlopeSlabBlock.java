@@ -67,4 +67,10 @@ public class FramedCompoundSlopeSlabBlock extends FramedBlock
     {
         return defaultBlockState();
     }
+
+    @Override
+    public BlockState getJadeRenderState(BlockState state)
+    {
+        return defaultBlockState().setValue(FramedProperties.FACING_HOR, Direction.SOUTH);
+    }
 }

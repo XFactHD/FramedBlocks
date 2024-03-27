@@ -132,6 +132,12 @@ public class FramedInverseDoubleSlopeSlabBlock extends AbstractFramedDoubleBlock
         return defaultBlockState();
     }
 
+    @Override
+    public BlockState getJadeRenderState(BlockState state)
+    {
+        return defaultBlockState().setValue(FramedProperties.FACING_HOR, Direction.SOUTH);
+    }
+
 
 
     private static final ShapeCache<Direction> SHAPES = ShapeCache.createEnum(Direction.class, map ->

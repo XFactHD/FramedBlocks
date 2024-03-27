@@ -100,6 +100,12 @@ public class FramedSlopeEdgeBlock extends FramedBlock implements IComplexSlopeSo
     }
 
     @Override
+    public BlockState getJadeRenderState(BlockState state)
+    {
+        return getItemModelSource();
+    }
+
+    @Override
     public boolean isHorizontalSlope(BlockState state)
     {
         return state.getValue(PropertyHolder.SLOPE_TYPE) == SlopeType.HORIZONTAL;

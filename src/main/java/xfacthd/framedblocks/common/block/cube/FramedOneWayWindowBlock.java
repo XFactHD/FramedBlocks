@@ -195,6 +195,12 @@ public class FramedOneWayWindowBlock extends FramedBlock
         });
     }
 
+    @Override
+    public BlockState getJadeRenderState(BlockState state)
+    {
+        return state;
+    }
+
 
 
     public static boolean isOwnedBy(BlockGetter level, BlockPos pos, Player player)

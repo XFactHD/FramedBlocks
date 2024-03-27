@@ -19,7 +19,11 @@ import xfacthd.framedblocks.common.data.BlockType;
 
 public class FramedVerticalHalfStairsBlock extends FramedBlock
 {
-    public FramedVerticalHalfStairsBlock() { super(BlockType.FRAMED_VERTICAL_HALF_STAIRS); }
+    public FramedVerticalHalfStairsBlock()
+    {
+        super(BlockType.FRAMED_VERTICAL_HALF_STAIRS);
+        registerDefaultState(defaultBlockState().setValue(FramedProperties.TOP, false));
+    }
 
     @Override
     protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder)
@@ -65,6 +69,12 @@ public class FramedVerticalHalfStairsBlock extends FramedBlock
     public BlockState mirror(BlockState state, Mirror mirror)
     {
         return Utils.mirrorCornerBlock(state, mirror);
+    }
+
+    @Override
+    public BlockState getJadeRenderState(BlockState state)
+    {
+        return defaultBlockState().setValue(FramedProperties.FACING_HOR, Direction.WEST);
     }
 
 

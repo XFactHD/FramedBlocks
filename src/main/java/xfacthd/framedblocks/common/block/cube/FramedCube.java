@@ -26,4 +26,10 @@ public class FramedCube extends FramedBlock
         super.createBlockStateDefinition(builder);
         builder.add(FramedProperties.SOLID, PropertyHolder.ALT, PropertyHolder.REINFORCED, PropertyHolder.SOLID_BG);
     }
+
+    @Override
+    public BlockState getJadeRenderState(BlockState state)
+    {
+        return state;
+    }
 }

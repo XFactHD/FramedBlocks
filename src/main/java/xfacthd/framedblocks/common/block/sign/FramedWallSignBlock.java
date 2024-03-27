@@ -119,6 +119,12 @@ public class FramedWallSignBlock extends AbstractFramedSignBlock
         return HITBOX_CENTERS[state.getValue(FramedProperties.FACING_HOR).get2DDataValue()];
     }
 
+    @Override
+    public BlockState getJadeRenderState(BlockState state)
+    {
+        return defaultBlockState();
+    }
+
 
 
     public static ShapeProvider generateShapes(ImmutableList<BlockState> states)

@@ -239,6 +239,18 @@ public class FramedItemFrameBlock extends FramedBlock
         });
     }
 
+    @Override
+    public BlockState getJadeRenderState(BlockState state)
+    {
+        return state.setValue(BlockStateProperties.FACING, Direction.SOUTH);
+    }
+
+    @Override
+    public float getJadeRenderScale(BlockState state)
+    {
+        return 1.3F;
+    }
+
 
 
     public static ShapeProvider generateShapes(ImmutableList<BlockState> states)

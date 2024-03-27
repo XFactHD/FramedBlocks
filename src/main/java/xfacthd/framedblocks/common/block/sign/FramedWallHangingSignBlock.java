@@ -136,6 +136,12 @@ public class FramedWallHangingSignBlock extends AbstractFramedHangingSignBlock
         return false;
     }
 
+    @Override
+    public BlockState getJadeRenderState(BlockState state)
+    {
+        return state;
+    }
+
 
 
     public static boolean canPlace(BlockState state, LevelReader level, BlockPos pos)

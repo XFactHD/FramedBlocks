@@ -270,6 +270,18 @@ public class FramedPoweredRailSlopeBlock extends PoweredRailBlock implements IFr
         return defaultBlockState().setValue(PropertyHolder.ASCENDING_RAIL_SHAPE, RailShape.ASCENDING_SOUTH);
     }
 
+    @Override
+    public Class<? extends Block> getJadeTargetClass()
+    {
+        return FramedPoweredRailSlopeBlock.class;
+    }
+
+    @Override
+    public BlockState getJadeRenderState(BlockState state)
+    {
+        return getItemModelSource();
+    }
+
 
 
     public static FramedPoweredRailSlopeBlock powered()

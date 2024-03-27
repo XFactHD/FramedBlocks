@@ -42,6 +42,7 @@ public final class SelfTest
         DoubleBlockCamoConnectionConsistency.checkConnectionConsistency(blocks);
         DoubleBlockSolidSideConsistency.checkSolidSideConsistency(blocks);
         RotateMirrorErrors.checkRotateMirrorErrors(blocks);
+        JadeRenderStateErrors.checkJadeRenderStateErrors(blocks);
 
         stopwatch.stop();
         FramedBlocks.LOGGER.info("Self test completed in {}", stopwatch);

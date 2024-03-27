@@ -100,4 +100,10 @@ public class FramedCheckeredPanelBlock extends AbstractFramedDoubleBlock
     {
         return defaultBlockState();
     }
+
+    @Override
+    public BlockState getJadeRenderState(BlockState state)
+    {
+        return defaultBlockState();
+    }
 }
