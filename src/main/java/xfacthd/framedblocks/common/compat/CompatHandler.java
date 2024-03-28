@@ -6,7 +6,6 @@ import xfacthd.framedblocks.common.compat.athena.AthenaCompat;
 import xfacthd.framedblocks.common.compat.atlasviewer.AtlasViewerCompat;
 import xfacthd.framedblocks.common.compat.buildinggadgets.BuildingGadgetsCompat;
 import xfacthd.framedblocks.common.compat.create.CreateCompat;
-import xfacthd.framedblocks.common.compat.ctm.CtmCompat;
 import xfacthd.framedblocks.common.compat.emi.EmiCompat;
 import xfacthd.framedblocks.common.compat.flywheel.FlywheelCompat;
 import xfacthd.framedblocks.common.compat.jei.JeiCompat;
@@ -24,7 +23,6 @@ public final class CompatHandler
         AtlasViewerCompat.init(modBus);
         BuildingGadgetsCompat.init(modBus);
         CreateCompat.init();
-        CtmCompat.init();
         EmiCompat.init();
         FlywheelCompat.init();
         JeiCompat.init();

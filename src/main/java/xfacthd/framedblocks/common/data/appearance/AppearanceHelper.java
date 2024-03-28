@@ -66,7 +66,7 @@ public final class AppearanceHelper
         BlockState actualQueryState = findApplicableNeighbor(level, queryPos, queryState);
         if (actualQueryState == AIR)
         {
-            // Don't perform additional checks against framed blocks without CT support
+            // Don't perform additional checks against framed blocks without CT support or air blocks
             return AIR;
         }
 
@@ -221,14 +221,18 @@ public final class AppearanceHelper
      * it's a double block
      * <ul>
      *     <li>Non-null, non-AIR => connectable block</li>
-     *     <li>Non-null, AIR => framed block without CT support</li>
+     *     <li>Non-null, AIR => air block or framed block without CT support</li>
      *     <li>Null => Double framed block, can't determine connecting component, won't connect to other double blocks,
      *     or neighbor state is actually air, in which case full-face and full-edge camos need to be returned</li>
      * </ul>
      */
     private static BlockState findApplicableNeighbor(BlockGetter level, BlockPos queryPos, @Nullable BlockState queryState)
     {
-        if (queryState != null && queryState.getBlock() instanceof IFramedBlock queryBlock)
+        if (queryState == null)
+        {
+            queryState = level.getBlockState(queryPos);
+        }
+        if (queryState.getBlock() instanceof IFramedBlock queryBlock)
         {
             IBlockType type = queryBlock.getBlockType();
             if (type.isDoubleBlock())
@@ -237,25 +241,7 @@ public final class AppearanceHelper
             }
             return type.supportsConnectedTextures() ? queryState : AIR;
         }
-        else if (queryState == null)
-        {
-            BlockState actualQueryState = level.getBlockState(queryPos);
-            if (actualQueryState.getBlock() instanceof IFramedBlock queryBlock)
-            {
-                IBlockType type = queryBlock.getBlockType();
-                if (type.isDoubleBlock())
-                {
-                    return null;
-                }
-                else if (!type.supportsConnectedTextures())
-                {
-                    return AIR;
-                }
-                return actualQueryState;
-            }
-            queryState = actualQueryState;
-        }
-        return queryState.isAir() ? null : queryState;
+        return queryState.isAir() ? AIR : queryState;
     }
 
     /**
