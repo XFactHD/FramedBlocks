@@ -1,8 +1,7 @@
 package xfacthd.framedblocks.common.compat.ae2;
 
+import appeng.api.AECapabilities;
 import appeng.api.crafting.PatternDetailsHelper;
-import appeng.api.implementations.blockentities.ICraftingMachine;
-import net.minecraft.core.Direction;
 import net.minecraft.core.Holder;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Item;
@@ -10,10 +9,8 @@ import net.minecraft.world.item.ItemStack;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.fml.ModList;
 import net.neoforged.neoforge.attachment.AttachmentType;
-import net.neoforged.neoforge.capabilities.BlockCapability;
 import net.neoforged.neoforge.capabilities.RegisterCapabilitiesEvent;
 import net.neoforged.neoforge.registries.*;
-import org.jetbrains.annotations.Nullable;
 import xfacthd.framedblocks.api.util.FramedConstants;
 import xfacthd.framedblocks.common.FBContent;
 
@@ -86,9 +83,6 @@ public final class AppliedEnergisticsCompat
         static final DeferredHolder<AttachmentType<?>, AttachmentType<FramingSawCraftingMachine>> ATTACHMENT_SAW_MACHINE = ATTACHMENTS.register(
                 "framing_saw_machine", () -> AttachmentType.builder(FramingSawCraftingMachine::new).build()
         );
-        private static final BlockCapability<ICraftingMachine, @Nullable Direction> CAPABILITY_CRAFTING_MACHINE = BlockCapability.createSided(
-                new ResourceLocation("ae2", "crafting_machine"), ICraftingMachine.class
-        );
 
         static final Holder<Item> ITEM_BLANK_PATTERN = DeferredItem.createItem(new ResourceLocation("ae2", "blank_pattern"));
 
@@ -102,7 +96,7 @@ public final class AppliedEnergisticsCompat
         private static void onRegisterCapabilities(final RegisterCapabilitiesEvent event)
         {
             event.registerBlockEntity(
-                    CAPABILITY_CRAFTING_MACHINE,
+                    AECapabilities.CRAFTING_MACHINE,
                     FBContent.BE_TYPE_POWERED_FRAMING_SAW.value(),
                     (saw, side) -> saw.getData(ATTACHMENT_SAW_MACHINE)
             );
