@@ -35,7 +35,7 @@ public record SingleBlockFakeLevel(BlockPos realPos, BlockState state, BlockEnti
     @Override
     public int getBrightness(LightLayer layer, BlockPos pos)
     {
-        return layer == LightLayer.BLOCK ? 0 : 15;
+        return 15;
     }
 
     @Override
