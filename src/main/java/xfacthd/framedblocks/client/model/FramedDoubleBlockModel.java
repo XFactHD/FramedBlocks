@@ -14,6 +14,7 @@ import net.minecraft.util.Tuple;
 import net.minecraft.world.item.ItemDisplayContext;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.BlockAndTintGetter;
+import net.minecraft.world.level.EmptyBlockGetter;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.Vec3;
 import net.neoforged.neoforge.client.ChunkRenderTypeSet;
@@ -21,16 +22,15 @@ import net.neoforged.neoforge.client.model.BakedModelWrapper;
 import net.neoforged.neoforge.client.model.data.*;
 import net.neoforged.neoforge.common.util.ConcatenatedListView;
 import net.neoforged.neoforge.common.util.TriState;
+import org.jetbrains.annotations.Nullable;
 import xfacthd.framedblocks.api.camo.empty.EmptyCamoContent;
 import xfacthd.framedblocks.api.model.data.FramedBlockData;
 import xfacthd.framedblocks.api.model.wrapping.GeometryFactory;
 import xfacthd.framedblocks.api.model.util.ModelUtils;
-import xfacthd.framedblocks.common.data.doubleblock.DoubleBlockStateCache;
+import xfacthd.framedblocks.common.data.doubleblock.*;
 import xfacthd.framedblocks.common.block.IFramedDoubleBlock;
 import xfacthd.framedblocks.common.blockentity.doubled.FramedDoubleBlockEntity;
-import xfacthd.framedblocks.common.data.doubleblock.DoubleBlockTopInteractionMode;
 
-import javax.annotation.Nullable;
 import java.util.*;
 
 public final class FramedDoubleBlockModel extends BakedModelWrapper<BakedModel>
@@ -39,33 +39,52 @@ public final class FramedDoubleBlockModel extends BakedModelWrapper<BakedModel>
     private static final ModelData EMPTY_ALT_FRAME = makeDefaultData(true);
 
     private final DoubleBlockTopInteractionMode particleMode;
-    private final Vec3 firstpersonTransform;
+    private final Vec3 handTransform;
     private final Tuple<BlockState, BlockState> dummyStates;
+    private final boolean canCullLeft;
+    private final boolean canCullRight;
     private Tuple<BakedModel, BakedModel> models = null;
 
-    public FramedDoubleBlockModel(GeometryFactory.Context ctx, Vec3 firstpersonTransform)
+    public FramedDoubleBlockModel(GeometryFactory.Context ctx, Vec3 handTransform, NullCullPredicate cullPredicate)
     {
         super(ctx.baseModel());
         BlockState state = ctx.state();
         DoubleBlockStateCache cache = ((IFramedDoubleBlock) state.getBlock()).getCache(state);
         this.dummyStates = cache.getBlockPair();
         this.particleMode = cache.getTopInteractionMode();
-        this.firstpersonTransform = firstpersonTransform;
+        this.handTransform = handTransform;
+        this.canCullLeft = cullPredicate.testLeft(state);
+        this.canCullRight = cullPredicate.testRight(state);
     }
 
     @Override
     public List<BakedQuad> getQuads(@Nullable BlockState state, @Nullable Direction side, RandomSource rand, ModelData extraData, RenderType layer)
     {
+        ModelData dataLeft = Objects.requireNonNullElse(extraData.get(FramedDoubleBlockEntity.DATA_LEFT), EMPTY_FRAME);
+        ModelData dataRight = Objects.requireNonNullElse(extraData.get(FramedDoubleBlockEntity.DATA_RIGHT), EMPTY_ALT_FRAME);
+
+        boolean leftVisible = true;
+        boolean rightVisible = true;
+        if (side == null)
+        {
+            if (canCullLeft && hasSolidCamo(dataRight)) leftVisible = false;
+            if (canCullRight && hasSolidCamo(dataLeft)) rightVisible = false;
+            if (!leftVisible && !rightVisible) return List.of();
+        }
+
         List<List<BakedQuad>> quads = new ArrayList<>(2);
         Tuple<BakedModel, BakedModel> models = getModels();
 
-        ModelData dataLeft = Objects.requireNonNullElse(extraData.get(FramedDoubleBlockEntity.DATA_LEFT), EMPTY_FRAME);
-        quads.add(models.getA().getQuads(dummyStates.getA(), side, rand, dataLeft, layer));
-
-        ModelData dataRight = Objects.requireNonNullElse(extraData.get(FramedDoubleBlockEntity.DATA_RIGHT), EMPTY_ALT_FRAME);
-        quads.add(invertTintIndizes(models.getB().getQuads(dummyStates.getB(), side, rand, dataRight, layer)));
+        if (leftVisible) quads.add(models.getA().getQuads(dummyStates.getA(), side, rand, dataLeft, layer));
+        if (rightVisible) quads.add(invertTintIndizes(models.getB().getQuads(dummyStates.getB(), side, rand, dataRight, layer)));
 
         return ConcatenatedListView.of(quads);
+    }
+
+    private static boolean hasSolidCamo(ModelData data)
+    {
+        FramedBlockData fbData = data.get(FramedBlockData.PROPERTY);
+        return fbData != null && fbData.getCamoContent().isSolid(EmptyBlockGetter.INSTANCE, BlockPos.ZERO);
     }
 
     @Override
@@ -138,9 +157,9 @@ public final class FramedDoubleBlockModel extends BakedModelWrapper<BakedModel>
         getTransforms().getTransform(type).apply(applyLeftHandTransform, poseStack);
         if (type.firstPerson() || type == ItemDisplayContext.THIRD_PERSON_LEFT_HAND || type == ItemDisplayContext.THIRD_PERSON_RIGHT_HAND)
         {
-            if (firstpersonTransform != null)
+            if (handTransform != null)
             {
-                poseStack.translate(firstpersonTransform.x, firstpersonTransform.y, firstpersonTransform.z);
+                poseStack.translate(handTransform.x, handTransform.y, handTransform.z);
             }
         }
         return this;
@@ -173,8 +192,6 @@ public final class FramedDoubleBlockModel extends BakedModelWrapper<BakedModel>
     {
         return List.of(this);
     }
-
-
 
     private Tuple<BakedModel, BakedModel> getModels()
     {

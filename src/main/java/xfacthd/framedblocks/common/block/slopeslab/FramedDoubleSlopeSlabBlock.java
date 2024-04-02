@@ -19,12 +19,15 @@ import xfacthd.framedblocks.common.block.AbstractFramedDoubleBlock;
 import xfacthd.framedblocks.common.blockentity.doubled.slopeslab.FramedDoubleSlopeSlabBlockEntity;
 import xfacthd.framedblocks.common.data.BlockType;
 import xfacthd.framedblocks.common.data.PropertyHolder;
-import xfacthd.framedblocks.common.data.doubleblock.CamoGetter;
-import xfacthd.framedblocks.common.data.doubleblock.SolidityCheck;
-import xfacthd.framedblocks.common.data.doubleblock.DoubleBlockTopInteractionMode;
+import xfacthd.framedblocks.common.data.doubleblock.*;
 
 public class FramedDoubleSlopeSlabBlock extends AbstractFramedDoubleBlock
 {
+    public static final NullCullPredicate NULL_CULL_PREDICATE = new NullCullPredicate(
+            state -> !state.getValue(PropertyHolder.TOP_HALF),
+            state -> state.getValue(PropertyHolder.TOP_HALF)
+    );
+
     public FramedDoubleSlopeSlabBlock()
     {
         super(BlockType.FRAMED_DOUBLE_SLOPE_SLAB);

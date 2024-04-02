@@ -20,13 +20,16 @@ import xfacthd.framedblocks.common.block.AbstractFramedDoubleBlock;
 import xfacthd.framedblocks.common.blockentity.doubled.slopepanel.FramedDoubleSlopePanelBlockEntity;
 import xfacthd.framedblocks.common.data.BlockType;
 import xfacthd.framedblocks.common.data.PropertyHolder;
-import xfacthd.framedblocks.common.data.doubleblock.CamoGetter;
-import xfacthd.framedblocks.common.data.doubleblock.SolidityCheck;
+import xfacthd.framedblocks.common.data.doubleblock.*;
 import xfacthd.framedblocks.common.data.property.HorizontalRotation;
-import xfacthd.framedblocks.common.data.doubleblock.DoubleBlockTopInteractionMode;
 
 public class FramedDoubleSlopePanelBlock extends AbstractFramedDoubleBlock
 {
+    public static final NullCullPredicate NULL_CULL_PREDICATE = new NullCullPredicate(
+            state -> !state.getValue(PropertyHolder.FRONT),
+            state -> state.getValue(PropertyHolder.FRONT)
+    );
+
     public FramedDoubleSlopePanelBlock()
     {
         super(BlockType.FRAMED_DOUBLE_SLOPE_PANEL);
