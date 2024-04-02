@@ -28,9 +28,10 @@ public final class EmptyCamoContent extends CamoContent<EmptyCamoContent>
     }
 
     @Override
+    @SuppressWarnings("deprecation")
     public float getExplosionResistance(BlockGetter level, BlockPos pos, Explosion explosion)
     {
-        return 0;
+        return FramedBlocksAPI.INSTANCE.getDefaultModelState().getBlock().getExplosionResistance();
     }
 
     @Override

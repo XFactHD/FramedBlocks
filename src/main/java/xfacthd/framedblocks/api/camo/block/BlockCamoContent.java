@@ -165,7 +165,7 @@ public final class BlockCamoContent extends CamoContent<BlockCamoContent>
         {
             return isOccludedBy(blockCamo.state, level, pos, adjPos);
         }
-        return false;
+        return adjCamo.isSolid(level, adjPos);
     }
 
     @Override
