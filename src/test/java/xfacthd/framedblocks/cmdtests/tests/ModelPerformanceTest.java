@@ -13,6 +13,9 @@ import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
 import net.neoforged.neoforge.client.model.data.ModelData;
+import xfacthd.framedblocks.api.camo.CamoContent;
+import xfacthd.framedblocks.api.camo.block.BlockCamoContent;
+import xfacthd.framedblocks.api.camo.empty.EmptyCamoContent;
 import xfacthd.framedblocks.client.model.FramedBlockModel;
 import xfacthd.framedblocks.api.model.data.FramedBlockData;
 import xfacthd.framedblocks.cmdtests.SpecialTestCommand;
@@ -36,8 +39,8 @@ public final class ModelPerformanceTest
             Arrays.stream(Direction.values()), Stream.of((Direction) null)
     ).toArray(Direction[]::new);
     private static final RandomSource RANDOM = RandomSource.create();
-    private static final ModelData MODEL_DATA_EMPTY = makeModelData(Blocks.AIR.defaultBlockState());
-    private static final ModelData MODEL_DATA_CAMO = makeModelData(Blocks.STONE.defaultBlockState());
+    private static final ModelData MODEL_DATA_EMPTY = makeModelData(EmptyCamoContent.EMPTY);
+    private static final ModelData MODEL_DATA_CAMO = makeModelData(new BlockCamoContent(Blocks.STONE.defaultBlockState()));
 
     public static void testModelPerformance(
             @SuppressWarnings("unused") CommandContext<CommandSourceStack> ctx, Consumer<Component> msgQueueAppender
@@ -180,7 +183,7 @@ public final class ModelPerformanceTest
         return watch.elapsed(TimeUnit.MICROSECONDS);
     }
 
-    private static ModelData makeModelData(BlockState camo)
+    private static ModelData makeModelData(CamoContent<?> camo)
     {
         FramedBlockData dataOne = new FramedBlockData(camo, false);
         FramedBlockData dataTwo = new FramedBlockData(camo, true);

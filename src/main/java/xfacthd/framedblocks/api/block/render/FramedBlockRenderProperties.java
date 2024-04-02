@@ -12,6 +12,7 @@ import net.minecraft.world.phys.HitResult;
 import net.neoforged.neoforge.client.extensions.common.IClientBlockExtensions;
 import xfacthd.framedblocks.api.block.blockentity.FramedBlockEntity;
 import xfacthd.framedblocks.api.block.IFramedBlock;
+import xfacthd.framedblocks.api.camo.CamoContainer;
 
 public class FramedBlockRenderProperties implements IClientBlockExtensions
 {
@@ -35,7 +36,7 @@ public class FramedBlockRenderProperties implements IClientBlockExtensions
             BlockState state, Level level, BlockHitResult hit, FramedBlockEntity be, ParticleEngine engine
     )
     {
-        ParticleHelper.Client.addHitEffects(state, level, hit, be.getCamo().getState(), engine);
+        ParticleHelper.Client.addHitEffects(state, level, hit, be.getCamo().getContent(), engine);
         return true;
     }
 
@@ -54,7 +55,7 @@ public class FramedBlockRenderProperties implements IClientBlockExtensions
             BlockState state, Level level, BlockPos pos, FramedBlockEntity be, ParticleEngine engine
     )
     {
-        ParticleHelper.Client.addDestroyEffects(state, level, pos, be.getCamo().getState(), engine);
+        ParticleHelper.Client.addDestroyEffects(state, level, pos, be.getCamo().getContent(), engine);
         return true;
     }
 
@@ -63,12 +64,7 @@ public class FramedBlockRenderProperties implements IClientBlockExtensions
     {
         if (level.getBlockEntity(pos) instanceof FramedBlockEntity be)
         {
-            BlockState camoState = be.getCamo().getState();
-            if (camoState.isAir())
-            {
-                camoState = state;
-            }
-            playCamoBreakSound(level, pos, camoState);
+            playCamoBreakSound(level, pos, be.getCamo());
             return true;
         }
         return false;
@@ -85,9 +81,9 @@ public class FramedBlockRenderProperties implements IClientBlockExtensions
         return false;
     }
 
-    protected static void playCamoBreakSound(Level level, BlockPos pos, BlockState camoState)
+    protected static void playCamoBreakSound(Level level, BlockPos pos, CamoContainer<?, ?> camoContainer)
     {
-        SoundType type = camoState.getSoundType();
+        SoundType type = camoContainer.getContent().getSoundType();
         SoundEvent sound = type.getBreakSound();
         level.playLocalSound(pos, sound, SoundSource.BLOCKS, (type.getVolume() + 1F) / 2F, type.getPitch() * 0.8F, false);
     }

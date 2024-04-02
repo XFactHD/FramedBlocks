@@ -8,7 +8,6 @@ import xfacthd.framedblocks.api.FramedBlocksAPI;
 import xfacthd.framedblocks.api.blueprint.BlueprintCopyBehaviour;
 import xfacthd.framedblocks.api.camo.CamoContainerFactory;
 import xfacthd.framedblocks.common.FBContent;
-import xfacthd.framedblocks.common.data.camo.CamoContainerFactories;
 import xfacthd.framedblocks.common.item.FramedBlueprintItem;
 
 @SuppressWarnings("unused")
@@ -27,15 +26,9 @@ public final class ApiImpl implements FramedBlocksAPI
     }
 
     @Override
-    public Registry<CamoContainerFactory> getCamoContainerFactoryRegistry()
+    public Registry<CamoContainerFactory<?>> getCamoContainerFactoryRegistry()
     {
         return FBContent.CAMO_CONTAINER_FACTORY_REGISTRY;
-    }
-
-    @Override
-    public CamoContainerFactory getCamoContainerFactory(ItemStack stack)
-    {
-        return CamoContainerFactories.getFactory(stack);
     }
 
     @Override

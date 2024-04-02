@@ -3,12 +3,10 @@ package xfacthd.framedblocks.api.block.render;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.world.level.BlockGetter;
-import net.minecraft.world.level.block.Blocks;
-import net.minecraft.world.level.block.HalfTransparentBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import xfacthd.framedblocks.api.block.blockentity.FramedBlockEntity;
 import xfacthd.framedblocks.api.block.IFramedBlock;
-import xfacthd.framedblocks.api.internal.InternalAPI;
+import xfacthd.framedblocks.api.camo.CamoContent;
 import xfacthd.framedblocks.api.predicate.cull.SideSkipPredicate;
 import xfacthd.framedblocks.api.util.ConfigView;
 
@@ -20,8 +18,6 @@ import xfacthd.framedblocks.api.util.ConfigView;
  */
 public final class CullingHelper
 {
-    private static final BlockState AIR = Blocks.AIR.defaultBlockState();
-
     /**
      * Test whether the given {@link IFramedBlock} is occluded on the given side by the neighboring block
      * and their camos either match or the camo of the occluding block is solid
@@ -61,7 +57,22 @@ public final class CullingHelper
         {
             if (fullFace && (!adjFramed || adjBlock.getCache(adjState).isFullFace(side.getOpposite())))
             {
-                return compareState(level, pos, adjPos, adjState, adjFramed, side);
+                if (!(level.getBlockEntity(pos) instanceof FramedBlockEntity be))
+                {
+                    return false;
+                }
+
+                CamoContent<?> camoContent = be.getCamo(side).getContent();
+                if (adjFramed)
+                {
+                    if (!(level.getBlockEntity(adjPos) instanceof FramedBlockEntity adjBe))
+                    {
+                        return false;
+                    }
+                    CamoContent<?> adjCamoContent = adjBe.getCamo(side.getOpposite()).getContent();
+                    return camoContent.isOccludedBy(adjCamoContent, level, pos, adjPos);
+                }
+                return camoContent.isOccludedBy(adjState, level, pos, adjPos);
             }
             return false;
         }
@@ -70,106 +81,20 @@ public final class CullingHelper
         BlockState adjTestState = adjBlock.runOcclusionTestAndGetLookupState(pred, level, pos, state, adjState, side);
         if (adjTestState != null)
         {
-            return compareState(level, pos, side, state, adjTestState);
-        }
-        return false;
-    }
-
-    /**
-     * Compares the camo state of the {@link FramedBlockEntity} at the given position against the camo state of the
-     * {@code FramedBlockEntity} at the given position offset by the given {@link Direction side} or the adjacent
-     * state itself if it's not an {@link IFramedBlock}.
-     * On the {@code FramedBlockEntity} at the given position, the given side will be used for the camo lookup,
-     * on the neighboring {@code FramedBlockEntity}, if applicable, the opposite of that side will be used
-     * for the camo lookup
-     *
-     * @param level The Level
-     * @param pos The position of the block being tested
-     * @param adjPos The position of the adjacent block
-     * @param adjState The adjacent state used in the test, used as the adjacent camo if it's not an {@code IFramedBlock}
-     * @param adjFramed Whether the adjacent block is an {@code IFramedBlock}
-     * @param side The side on which the neighbor to be tested against is located
-     * @return true if the camo states either match (with certain exclusions) or occlude each other by being solid
-     */
-    public static boolean compareState(
-            BlockGetter level, BlockPos pos, BlockPos adjPos, BlockState adjState, boolean adjFramed, Direction side
-    )
-    {
-        BlockState adjCamoState = adjState;
-        if (adjFramed)
-        {
-            if (!(level.getBlockEntity(adjPos) instanceof FramedBlockEntity be))
+            if (!(level.getBlockEntity(adjPos) instanceof FramedBlockEntity adjBe))
             {
                 return false;
             }
-            adjCamoState = be.getCamo(side.getOpposite()).getState();
-        }
 
-        BlockState camoState = AIR;
-        if (level.getBlockEntity(pos) instanceof FramedBlockEntity be)
-        {
-            camoState = be.getCamo(side).getState();
-        }
-
-        return compareState(level, pos, camoState, adjCamoState, side);
-    }
-
-    /**
-     * Compares the camo state of the {@link FramedBlockEntity} at the given position against the camo state of the
-     * {@code FramedBlockEntity} at the given position offset by the given {@link Direction side}.
-     * On the {@code FramedBlockEntity} at the given position, the given testState will be used for the camo lookup,
-     * on the neighboring {@code FramedBlockEntity} the given adjTestState will be used for the camo lookup
-     *
-     * @param level The Level
-     * @param pos The position of the block being tested
-     * @param side The side on which the neighbor to be tested against is located
-     * @param testState The state used in the test, used to look up the camo on the FramedBlockEntity at the given position
-     * @param adjTestState The adjacent state used in the test, used to look up the camo in the neighboring FramedBlockEntity
-     * @return true if the camo states either match (with certain exclusions) or occlude each other by being solid
-     */
-    public static boolean compareState(
-            BlockGetter level, BlockPos pos, Direction side, BlockState testState, BlockState adjTestState
-    )
-    {
-        BlockState adjCamoState = AIR;
-        if (level.getBlockEntity(pos.relative(side)) instanceof FramedBlockEntity be)
-        {
-            adjCamoState = be.getCamo(adjTestState).getState();
-        }
-
-        if (!adjCamoState.isAir() && level.getBlockEntity(pos) instanceof FramedBlockEntity be)
-        {
-            BlockState camoState = be.getCamo(testState).getState();
-            return compareState(level, pos, camoState, adjCamoState, side);
-        }
-        return false;
-    }
-
-    /**
-     * Compares the two given camo states against each other
-     *
-     * @param level The Level
-     * @param pos The position of the block being tested
-     * @param camoState The camo state of the block at the given position
-     * @param adjCamoState The camo state of the block at the neighboring position
-     * @param side The side on which the neighbor to be tested against is located
-     * @return true if the camo states either match (with certain exclusions) or the occluding camo is solid
-     */
-    public static boolean compareState(
-            BlockGetter level, BlockPos pos, BlockState camoState, BlockState adjCamoState, Direction side
-    )
-    {
-        if (camoState.isAir() || adjCamoState.isAir())
-        {
+            CamoContent<?> adjCamoContent = adjBe.getCamo(adjTestState).getContent();
+            if (!adjCamoContent.isEmpty() && level.getBlockEntity(pos) instanceof FramedBlockEntity be)
+            {
+                CamoContent<?> camoContent = be.getCamo(state).getContent();
+                return camoContent.isOccludedBy(adjCamoContent, level, pos, adjPos);
+            }
             return false;
         }
-
-        if (camoState == adjCamoState)
-        {
-            return InternalAPI.INSTANCE.canCullBlockNextTo(camoState, adjCamoState);
-        }
-        // Always cull the face if the other camo is solid, even if the camo being culled is non-solid
-        return adjCamoState.isSolidRender(level, pos.relative(side));
+        return false;
     }
 
     /**
@@ -186,38 +111,19 @@ public final class CullingHelper
             IFramedBlock block, BlockGetter level, BlockPos pos, BlockState state, BlockState adjState, Direction side
     )
     {
-        if (!InternalAPI.INSTANCE.canHideNeighborFaceInLevel(level) || adjState.getBlock() instanceof IFramedBlock)
+        BlockPos adjPos = pos.relative(side);
+        if (block.shouldPreventNeighborCulling(level, pos, state, adjPos, adjState) || adjState.getBlock() instanceof IFramedBlock)
         {
             return false;
-        }
-
-        if (block.shouldPreventNeighborCulling(level, pos, state, pos.relative(side), adjState))
-        {
-            return false;
-        }
-        if (doesFullFaceOccludeWithCamo(level, pos, state, adjState, side))
-        {
-            return true;
         }
         if (level.getBlockEntity(pos) instanceof FramedBlockEntity be)
         {
-            return be.isSolidSide(side) && !be.isIntangible(null);
-        }
-        return false;
-    }
-
-    private static boolean doesFullFaceOccludeWithCamo(
-            BlockGetter level, BlockPos pos, BlockState state, BlockState adjState, Direction side
-    )
-    {
-        if (!(adjState.getBlock() instanceof HalfTransparentBlock))
-        {
-            return false;
-        }
-
-        if (((IFramedBlock) state.getBlock()).getCache(state).isFullFace(side))
-        {
-            return compareState(level, pos, pos.relative(side), adjState, false, side);
+            if (((IFramedBlock) state.getBlock()).getCache(state).isFullFace(side))
+            {
+                CamoContent<?> camoContent = be.getCamo(side).getContent();
+                return camoContent.occludes(adjState, level, pos, adjPos);
+            }
+            return be.isSolidSide(side);
         }
         return false;
     }

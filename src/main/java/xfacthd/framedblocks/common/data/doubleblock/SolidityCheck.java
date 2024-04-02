@@ -2,7 +2,6 @@ package xfacthd.framedblocks.common.data.doubleblock;
 
 import net.minecraft.core.Direction;
 import net.neoforged.neoforge.common.IPlantable;
-import xfacthd.framedblocks.api.block.blockentity.FramedBlockEntity;
 import xfacthd.framedblocks.common.blockentity.doubled.FramedDoubleBlockEntity;
 
 import java.util.function.Predicate;
@@ -14,12 +13,12 @@ public enum SolidityCheck
             (be, side, plant) -> false
     ),
     FIRST(
-            be -> be.getCamo().isSolid(be.getLevel(), be.getBlockPos()),
-            (be, side, plant) -> FramedBlockEntity.canSustainPlant(be, be.getCamo(), side, plant)
+            be -> be.getCamo().getContent().isSolid(be.getLevel(), be.getBlockPos()),
+            (be, side, plant) -> be.getCamo().getContent().canSustainPlant(be.getLevel(), be.getBlockPos(), side, plant)
     ),
     SECOND(
-            be -> be.getCamoTwo().isSolid(be.getLevel(), be.getBlockPos()),
-            (be, side, plant) -> FramedBlockEntity.canSustainPlant(be, be.getCamoTwo(), side, plant)
+            be -> be.getCamoTwo().getContent().isSolid(be.getLevel(), be.getBlockPos()),
+            (be, side, plant) -> be.getCamoTwo().getContent().canSustainPlant(be.getLevel(), be.getBlockPos(), side, plant)
     ),
     BOTH(
             be -> FIRST.isSolid(be) && SECOND.isSolid(be),

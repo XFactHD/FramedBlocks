@@ -9,6 +9,8 @@ import net.minecraft.world.phys.BlockHitResult;
 import net.neoforged.neoforge.client.model.data.ModelData;
 import org.jetbrains.annotations.Nullable;
 import xfacthd.framedblocks.api.camo.CamoContainer;
+import xfacthd.framedblocks.api.camo.CamoContent;
+import xfacthd.framedblocks.api.camo.empty.EmptyCamoContent;
 import xfacthd.framedblocks.api.ghost.CamoPair;
 import xfacthd.framedblocks.api.ghost.GhostRenderBehaviour;
 import xfacthd.framedblocks.client.render.special.GhostBlockRenderer;
@@ -113,14 +115,14 @@ public final class BlueprintGhostRenderBehaviour implements GhostRenderBehaviour
         if (proxiedStack != null && stack.hasTag() && stack.getTag().contains("blueprint_data"))
         {
             CompoundTag tag = stack.getOrCreateTagElement("blueprint_data");
-            Set<CamoContainer> camos = FramedBlueprintItem.getCamoContainers((BlockItem) proxiedStack.getItem(), tag);
+            Set<CamoContainer<?, ?>> camos = FramedBlueprintItem.getCamoContainers((BlockItem) proxiedStack.getItem(), tag);
 
-            Iterator<CamoContainer> it = camos.iterator();
-            BlockState camoState = it.next().getState();
-            BlockState camoStateTwo = null;
+            Iterator<CamoContainer<?, ?>> it = camos.iterator();
+            CamoContent<?> camoState = it.next().getContent();
+            CamoContent<?> camoStateTwo = EmptyCamoContent.EMPTY;
             if (it.hasNext())
             {
-                camoStateTwo = it.next().getState();
+                camoStateTwo = it.next().getContent();
             }
             return new CamoPair(camoState, camoStateTwo);
         }

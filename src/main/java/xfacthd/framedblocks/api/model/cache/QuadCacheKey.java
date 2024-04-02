@@ -1,11 +1,11 @@
 package xfacthd.framedblocks.api.model.cache;
 
-import net.minecraft.world.level.block.state.BlockState;
+import xfacthd.framedblocks.api.camo.CamoContent;
 
 @SuppressWarnings("unused")
 public interface QuadCacheKey
 {
-    BlockState state();
+    CamoContent<?> camo();
 
     Object ctCtx();
 }

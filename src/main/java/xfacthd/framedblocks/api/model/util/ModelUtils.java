@@ -1,5 +1,6 @@
 package xfacthd.framedblocks.api.model.util;
 
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.block.model.BakedQuad;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
@@ -205,6 +206,16 @@ public final class ModelUtils
     {
         ModelData camoData = data.get(FramedBlockData.CAMO_DATA);
         return camoData != null ? camoData : ModelData.EMPTY;
+    }
+
+    public static BakedModel getModel(BlockState state)
+    {
+        return Minecraft.getInstance().getBlockRenderer().getBlockModel(state);
+    }
+
+    public static ChunkRenderTypeSet getRenderTypes(BlockState state, RandomSource random, ModelData data)
+    {
+        return getModel(state).getRenderTypes(state, random, data);
     }
 
     public static ArrayList<BakedQuad> getCullableQuads(

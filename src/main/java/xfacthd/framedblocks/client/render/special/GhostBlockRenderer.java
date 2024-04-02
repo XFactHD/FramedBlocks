@@ -21,8 +21,8 @@ import net.neoforged.neoforge.client.event.RenderLevelStageEvent;
 import net.neoforged.neoforge.client.model.data.ModelData;
 import xfacthd.framedblocks.api.ghost.CamoPair;
 import xfacthd.framedblocks.api.ghost.GhostRenderBehaviour;
+import xfacthd.framedblocks.api.model.util.ModelUtils;
 import xfacthd.framedblocks.api.util.*;
-import xfacthd.framedblocks.api.model.util.ModelCache;
 import xfacthd.framedblocks.client.render.util.GhostVertexConsumer;
 import xfacthd.framedblocks.common.config.ClientConfig;
 
@@ -161,7 +161,7 @@ public final class GhostBlockRenderer
         profiler.pop(); //buffer
 
         profiler.push("draw");
-        BakedModel model = ModelCache.getModel(renderState);
+        BakedModel model = ModelUtils.getModel(renderState);
         poseStack.pushPose();
         poseStack.translate(offset.x, offset.y, offset.z);
         for (RenderType type : model.getRenderTypes(renderState, RANDOM, modelData))

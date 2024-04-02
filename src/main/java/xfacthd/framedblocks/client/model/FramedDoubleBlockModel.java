@@ -14,7 +14,6 @@ import net.minecraft.util.Tuple;
 import net.minecraft.world.item.ItemDisplayContext;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.BlockAndTintGetter;
-import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.Vec3;
 import net.neoforged.neoforge.client.ChunkRenderTypeSet;
@@ -22,6 +21,7 @@ import net.neoforged.neoforge.client.model.BakedModelWrapper;
 import net.neoforged.neoforge.client.model.data.*;
 import net.neoforged.neoforge.common.util.ConcatenatedListView;
 import net.neoforged.neoforge.common.util.TriState;
+import xfacthd.framedblocks.api.camo.empty.EmptyCamoContent;
 import xfacthd.framedblocks.api.model.data.FramedBlockData;
 import xfacthd.framedblocks.api.model.wrapping.GeometryFactory;
 import xfacthd.framedblocks.api.model.util.ModelUtils;
@@ -206,7 +206,7 @@ public final class FramedDoubleBlockModel extends BakedModelWrapper<BakedModel>
         if (innerData != null)
         {
             FramedBlockData fbData = innerData.get(FramedBlockData.PROPERTY);
-            if (fbData != null && !fbData.getCamoState().isAir())
+            if (fbData != null && !fbData.getCamoContent().isEmpty())
             {
                 BakedModel model = secondary ? getModels().getB() : getModels().getA();
                 return model.getParticleIcon(innerData);
@@ -227,7 +227,7 @@ public final class FramedDoubleBlockModel extends BakedModelWrapper<BakedModel>
 
     private static ModelData makeDefaultData(boolean altModel)
     {
-        FramedBlockData data = new FramedBlockData(Blocks.AIR.defaultBlockState(), altModel);
+        FramedBlockData data = new FramedBlockData(EmptyCamoContent.EMPTY, altModel);
         return ModelData.builder().with(FramedBlockData.PROPERTY, data).build();
     }
 }

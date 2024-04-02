@@ -10,10 +10,9 @@ import net.minecraft.core.SectionPos;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.Items;
 import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.neoforged.neoforge.common.util.FakePlayer;
@@ -21,10 +20,10 @@ import net.neoforged.neoforge.event.TickEvent;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.Mod;
 import xfacthd.framedblocks.api.block.blockentity.FramedBlockEntity;
-import xfacthd.framedblocks.api.camo.CamoContainer;
 import xfacthd.framedblocks.api.util.FramedConstants;
 import xfacthd.framedblocks.common.FBContent;
 import xfacthd.framedblocks.common.blockentity.doubled.FramedDoubleBlockEntity;
+import xfacthd.framedblocks.common.data.camo.block.BlockCamoContainer;
 
 import java.util.function.Consumer;
 import java.util.function.Supplier;
@@ -71,17 +70,15 @@ public final class ChunkBanTest
     private static final Component MSG_NO_CONFIRM = Component.literal("Incorrect confirmation key, expected '" + CONFIRMATION_KEY + "'");
     private static final Component MSG_NOT_A_PLAYER = Component.literal("This command can only be executed by a real player");
     private static final Component MSG_ALREADY_RUNNING = Component.literal("Chunkban test preparation is already running");
-    private static final Supplier<CamoContainer> CAMO_ONE_FACTORY = () ->
+    private static final Supplier<BlockCamoContainer> CAMO_ONE_FACTORY = () ->
     {
-        ItemStack stack = new ItemStack(Items.POLISHED_GRANITE);
-        CamoContainer container = FBContent.FACTORY_BLOCK.value().fromItem(stack);
+        BlockCamoContainer container = new BlockCamoContainer(Blocks.POLISHED_GRANITE.defaultBlockState());
         Preconditions.checkState(!container.isEmpty(), "Container is empty?!");
         return container;
     };
-    private static final Supplier<CamoContainer> CAMO_TWO_FACTORY = () ->
+    private static final Supplier<BlockCamoContainer> CAMO_TWO_FACTORY = () ->
     {
-        ItemStack stack = new ItemStack(Items.POLISHED_DIORITE);
-        CamoContainer container = FBContent.FACTORY_BLOCK.value().fromItem(stack);
+        BlockCamoContainer container = new BlockCamoContainer(Blocks.POLISHED_DIORITE.defaultBlockState());
         Preconditions.checkState(!container.isEmpty(), "Container is empty?!");
         return container;
     };

@@ -28,12 +28,7 @@ public interface FramedBlocksAPI
     /**
      * Returns the registry of camo container factories
      */
-    Registry<CamoContainerFactory> getCamoContainerFactoryRegistry();
-
-    /**
-     * Returns the camo container factory to use for the given {@link ItemStack}
-     */
-    CamoContainerFactory getCamoContainerFactory(ItemStack stack);
+    Registry<CamoContainerFactory<?>> getCamoContainerFactoryRegistry();
 
     /**
      * Register a custom {@link BlueprintCopyBehaviour} for the given {@link Block}s

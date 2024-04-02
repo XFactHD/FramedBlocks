@@ -36,7 +36,7 @@ import xfacthd.framedblocks.api.block.blockentity.FramedBlockEntity;
 import xfacthd.framedblocks.api.block.cache.IStateCacheAccessor;
 import xfacthd.framedblocks.api.block.cache.StateCache;
 import xfacthd.framedblocks.api.block.render.*;
-import xfacthd.framedblocks.api.camo.CamoContainer;
+import xfacthd.framedblocks.api.camo.*;
 import xfacthd.framedblocks.api.internal.InternalAPI;
 import xfacthd.framedblocks.api.predicate.cull.SideSkipPredicate;
 import xfacthd.framedblocks.api.type.IBlockType;
@@ -192,13 +192,10 @@ public interface IFramedBlock extends EntityBlock, IBlockExtension
     {
         if (level.getBlockEntity(pos) instanceof FramedBlockEntity be)
         {
-            CamoContainer camo = be.getCamo();
-            if (!camo.isEmpty())
-            {
-                return camo.getSoundType();
-            }
+            CamoContainer<?, ?> camo = be.getCamo();
+            return camo.getContent().getSoundType();
         }
-        return ((Block) this).getSoundType(state);
+        return state.getSoundType();
     }
 
     default List<ItemStack> getCamoDrops(List<ItemStack> drops, LootParams.Builder builder)
@@ -283,16 +280,15 @@ public interface IFramedBlock extends EntityBlock, IBlockExtension
             BlockGetter level, BlockPos pos, BlockState state, BlockPos adjPos, BlockState adjState
     )
     {
-        if (!ConfigView.Server.INSTANCE.enableIntangibility() || isIntangible(adjState, level, adjPos, null))
+        if (!ConfigView.Server.INSTANCE.enableIntangibility())
         {
             return false;
         }
-
-        if (getBlockType().allowMakingIntangible())
+        if (adjState.getBlock() instanceof IFramedBlock adjBlock && adjBlock.isIntangible(adjState, level, adjPos, null))
         {
-            return isIntangible(state, level, pos, null);
+            return false;
         }
-        return false;
+        return isIntangible(state, level, pos, null);
     }
 
     @Override
@@ -300,7 +296,7 @@ public interface IFramedBlock extends EntityBlock, IBlockExtension
     {
         if (level.getBlockEntity(pos) instanceof FramedBlockEntity be)
         {
-            return be.getCamoFriction(state, entity);
+            return be.getCamoFriction(state, entity, state.getBlock().getFriction());
         }
         return state.getBlock().getFriction();
     }
@@ -443,7 +439,7 @@ public interface IFramedBlock extends EntityBlock, IBlockExtension
     {
         if (level.getBlockEntity(pos) instanceof FramedBlockEntity be)
         {
-            ParticleHelper.spawnRunningParticles(be.getCamo().getState(), level, pos, entity);
+            ParticleHelper.spawnRunningParticles(be.getCamo(), level, pos, entity);
             return true;
         }
         return false;
@@ -456,7 +452,7 @@ public interface IFramedBlock extends EntityBlock, IBlockExtension
     {
         if (level.getBlockEntity(pos) instanceof FramedBlockEntity be)
         {
-            ParticleHelper.spawnLandingParticles(be.getCamo().getState(), level, pos, entity, count);
+            ParticleHelper.spawnLandingParticles(be.getCamo(), level, pos, entity, count);
             return true;
         }
         return false;
@@ -604,12 +600,9 @@ public interface IFramedBlock extends EntityBlock, IBlockExtension
     @Override
     default boolean canEntityDestroy(BlockState state, BlockGetter level, BlockPos pos, Entity entity)
     {
-        if (level.getBlockEntity(pos) instanceof FramedBlockEntity be)
+        if (level.getBlockEntity(pos) instanceof FramedBlockEntity be && !be.canEntityDestroyCamo(entity))
         {
-            if (be.doesCamoPreventDestructionByEntity(entity))
-            {
-                return false;
-            }
+            return false;
         }
         return IBlockExtension.super.canEntityDestroy(state, level, pos, entity);
     }
@@ -622,13 +615,13 @@ public interface IFramedBlock extends EntityBlock, IBlockExtension
 
     default Optional<MutableComponent> printCamoBlock(CompoundTag beTag)
     {
-        BlockState camoState = CamoContainer.load(beTag.getCompound("camo")).getState();
+        CamoContainer<?, ?> camoContent = CamoContainerHelper.readFromDisk(beTag.getCompound("camo"));
 
-        if (camoState.isAir())
+        if (camoContent.isEmpty())
         {
             return Optional.empty();
         }
-        return Optional.of(camoState.getBlock().getName().withStyle(ChatFormatting.WHITE));
+        return Optional.of(camoContent.getContent().getCamoName().withStyle(ChatFormatting.WHITE));
     }
 
     static boolean toggleYSlope(BlockState state, Level level, BlockPos pos, Player player)

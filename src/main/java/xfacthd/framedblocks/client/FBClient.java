@@ -24,13 +24,13 @@ import xfacthd.framedblocks.api.block.blockentity.FramedBlockEntity;
 import xfacthd.framedblocks.api.block.IFramedBlock;
 import xfacthd.framedblocks.api.model.wrapping.*;
 import xfacthd.framedblocks.api.model.wrapping.statemerger.StateMerger;
+import xfacthd.framedblocks.common.data.camo.fluid.FluidCamoClientHandler;
 import xfacthd.framedblocks.client.loader.fallback.FallbackLoader;
 import xfacthd.framedblocks.client.model.*;
 import xfacthd.framedblocks.client.model.slopeedge.*;
 import xfacthd.framedblocks.client.modelwrapping.ModelWrappingManager;
 import xfacthd.framedblocks.api.type.IBlockType;
 import xfacthd.framedblocks.api.util.*;
-import xfacthd.framedblocks.api.model.util.ModelCache;
 import xfacthd.framedblocks.client.data.*;
 import xfacthd.framedblocks.client.loader.overlay.OverlayLoader;
 import xfacthd.framedblocks.client.model.cube.*;
@@ -434,7 +434,7 @@ public final class FBClient
     @SubscribeEvent
     public static void onModelsLoaded(final ModelEvent.BakingCompleted event)
     {
-        ModelCache.clear();
+        FluidCamoClientHandler.clearModelCache();
         FramedChestRenderer.onModelsLoaded(event.getModels());
         ReinforcementModel.reload(event.getModels());
     }

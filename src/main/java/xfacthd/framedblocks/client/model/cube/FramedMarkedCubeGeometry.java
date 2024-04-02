@@ -36,7 +36,7 @@ public class FramedMarkedCubeGeometry extends FramedCubeGeometry
     public ChunkRenderTypeSet getAdditionalRenderTypes(RandomSource rand, ModelData extraData)
     {
         FramedBlockData fbData = extraData.get(FramedBlockData.PROPERTY);
-        if (fbData != null && !fbData.getCamoState().isAir())
+        if (fbData != null && !fbData.getCamoContent().isEmpty())
         {
             return ModelUtils.CUTOUT;
         }
@@ -47,7 +47,7 @@ public class FramedMarkedCubeGeometry extends FramedCubeGeometry
     public void getAdditionalQuads(ArrayList<BakedQuad> quads, Direction side, RandomSource rand, ModelData data, RenderType renderType)
     {
         FramedBlockData fbData = data.get(FramedBlockData.PROPERTY);
-        if (fbData != null && !fbData.getCamoState().isAir())
+        if (fbData != null && !fbData.getCamoContent().isEmpty())
         {
             Utils.copyAll(frameModel.getQuads(state, side, rand, data, renderType), quads);
         }

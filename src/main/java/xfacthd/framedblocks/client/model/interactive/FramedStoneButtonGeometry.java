@@ -38,7 +38,7 @@ public class FramedStoneButtonGeometry extends FramedButtonGeometry
     public ChunkRenderTypeSet getOverlayRenderTypes(RandomSource rand, ModelData extraData)
     {
         FramedBlockData fbData = extraData.get(FramedBlockData.PROPERTY);
-        if (fbData != null && !fbData.getCamoState().isAir())
+        if (fbData != null && !fbData.getCamoContent().isEmpty())
         {
             return ModelUtils.CUTOUT;
         }

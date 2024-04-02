@@ -29,7 +29,7 @@ public class FramedBlockColor implements BlockColor
 
                 if (be instanceof FramedDoubleBlockEntity dbe)
                 {
-                    return dbe.getCamoTwo().getColor(level, pos, tintIndex);
+                    return dbe.getCamoTwo().getTintColor(level, pos, tintIndex);
                 }
                 else if (be instanceof FramedFlowerPotBlockEntity pbe)
                 {
@@ -42,7 +42,7 @@ public class FramedBlockColor implements BlockColor
             }
             else if (be instanceof FramedBlockEntity fbe)
             {
-                return fbe.getCamo().getColor(level, pos, tintIndex);
+                return fbe.getCamo().getTintColor(level, pos, tintIndex);
             }
         }
         return -1;

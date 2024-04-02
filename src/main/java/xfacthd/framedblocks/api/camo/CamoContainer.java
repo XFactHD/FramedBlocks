@@ -1,47 +1,25 @@
 package xfacthd.framedblocks.api.camo;
 
-import com.mojang.logging.LogUtils;
 import net.minecraft.core.BlockPos;
-import net.minecraft.nbt.CompoundTag;
-import net.minecraft.network.chat.Component;
-import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.*;
-import net.minecraft.world.level.block.SoundType;
-import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.level.block.state.properties.Property;
-import net.minecraft.world.level.material.Fluid;
 import net.minecraft.world.level.material.MapColor;
-import org.slf4j.Logger;
-import xfacthd.framedblocks.api.FramedBlocksAPI;
-import xfacthd.framedblocks.api.util.Utils;
+import org.jetbrains.annotations.Nullable;
 
-public abstract class CamoContainer
+public abstract class CamoContainer<C extends CamoContent<C>, T extends CamoContainer<C, T>>
 {
-    private static final Logger LOGGER = LogUtils.getLogger();
+    protected final C content;
 
-    protected BlockState state;
-
-    protected CamoContainer(BlockState state)
+    protected CamoContainer(C content)
     {
-        this.state = state;
+        this.content = content;
     }
 
     /**
-     * Returns the {@link BlockState} used as the data source in the model
+     * {@return this container's camo content}
      */
-    public BlockState getState()
+    public final C getContent()
     {
-        return state;
-    }
-
-    /**
-     * Returns the fluid contained in this camo container, if applicable
-     * @apiNote Must be overridden by CamoContainers returning {@link CamoContainerType#FLUID} from {@link CamoContainer#getType()}
-     */
-    public Fluid getFluid()
-    {
-        throw new UnsupportedOperationException("CamoContainer#getType() returns ContainerType.FLUID but doesn't override CamoContainer#getFluid()");
+        return content;
     }
 
     /**
@@ -52,7 +30,19 @@ public abstract class CamoContainer
      */
     public MapColor getMapColor(BlockGetter level, BlockPos pos)
     {
-        return state.getMapColor(level, pos);
+        return content.getMapColor(level, pos);
+    }
+
+    /**
+     * Returns the tint color for use in {@link net.minecraft.client.color.block.BlockColor}
+     * @param level The current level
+     * @param pos The position of the framed block
+     * @param tintIdx The tint index for which the color was requested
+     * @return The tint color for the given index
+     */
+    public int getTintColor(BlockAndTintGetter level, BlockPos pos, int tintIdx)
+    {
+        return content.getTintColor(level, pos, tintIdx);
     }
 
     /**
@@ -64,161 +54,35 @@ public abstract class CamoContainer
      */
     public float[] getBeaconColorMultiplier(LevelReader level, BlockPos pos, BlockPos beaconPos)
     {
-        return state.getBeaconColorMultiplier(level, pos, beaconPos);
+        return content.getBeaconColorMultiplier(level, pos, beaconPos);
     }
 
-    /**
-     * Returns the tint color for use in {@link net.minecraft.client.color.block.BlockColor}
-     * @param level The current level
-     * @param pos The position of the framed block
-     * @param tintIdx The tint index for which the color was requested
-     * @return The tint color for the given index
-     */
-    public abstract int getColor(BlockAndTintGetter level, BlockPos pos, int tintIdx);
+    public abstract boolean canRotateCamo();
 
     /**
-     * {@return the name of this camo to be displayed in tooltips}
+     * Rotate the camo if possible. Must return {@code null} if the specific content or this container in general does
+     * not support camo rotation
+     * @return A new container with the rotated camo if the rotation was successful, null otherwise
      */
-    public Component getBlockName()
+    @Nullable
+    public abstract T rotateCamo();
+
+    /**
+     * {@return whether this container represents a non-existent camo}
+     */
+    public final boolean isEmpty()
     {
-        return state.getBlock().getName();
+        return content.isEmpty();
     }
-
-    /**
-     * Returns the item to be dropped when the block is destroyed or when the item for the BuildingGadgets material
-     * list is requested
-     * @param stack The item used to interact with the block, mainly important for fluid camo containers as they
-     *              may use this item as the container
-     * @return An {@link ItemStack} to drop, {@link ItemStack#EMPTY} when the drop fails or, in the case of fluid
-     *         containers, the input stack if it needs to be modified to fill it with the fluid
-     * @implNote Must return a new {@link ItemStack}, the empty ItemStack or the given {@code ItemStack} on every call
-     */
-    public abstract ItemStack toItemStack(ItemStack stack);
-
-    /**
-     * {@return true if this camo can be rotated}
-     */
-    public boolean canRotateCamo()
-    {
-        return Utils.getRotatableProperty(getState()) != null;
-    }
-
-    /**
-     * Rotate the camo by cycling through the first property considered rotatable by {@link Utils#getRotatableProperty(BlockState)}.
-     * @return True if the rotation was successful, requiring a render update
-     * @apiNote This method must only modify the state and return true if {@link #canRotateCamo()} returns true for the current state
-     */
-    public boolean rotateCamo()
-    {
-        Property<?> prop = Utils.getRotatableProperty(getState());
-        if (prop == null)
-        {
-            return false;
-        }
-
-        state = state.cycle(prop);
-        return true;
-    }
-
-    /**
-     * Returns the {@link SoundType} to use for the camo this container holds
-     */
-    public SoundType getSoundType()
-    {
-        return state.getSoundType();
-    }
-
-    /**
-     * @return True if the camo is fully solid
-     */
-    public boolean isSolid(BlockGetter level, BlockPos pos)
-    {
-        return getState().isSolidRender(level, pos);
-    }
-
-    /**
-     * Returns true if this container is empty
-     */
-    public boolean isEmpty()
-    {
-        return false;
-    }
-
-    @Override
-    public abstract boolean equals(Object obj);
 
     @Override
     public abstract int hashCode();
 
-    /**
-     * Returns the type of camo this container holds
-     */
-    public abstract CamoContainerType getType();
+    @Override
+    public abstract boolean equals(Object obj);
 
     /**
-     * Returns the {@link CamoContainerFactory} used to reconstruct
+     * Returns the {@link CamoContainerFactory} used to load and save this container
      */
-    public abstract CamoContainerFactory getFactory();
-
-    /**
-     * Save the data of this container to the given {@link CompoundTag}
-     */
-    public abstract void save(CompoundTag tag);
-
-    /**
-     * Save the data of this container to the given {@link CompoundTag} for sync over the network
-     */
-    public abstract void toNetwork(CompoundTag tag);
-
-
-
-    public static CompoundTag save(CamoContainer camo)
-    {
-        CompoundTag tag = new CompoundTag();
-        tag.putString("type", camo.getFactory().getId());
-        camo.save(tag);
-        return tag;
-    }
-
-    public static CompoundTag writeToNetwork(CamoContainer camo)
-    {
-        CompoundTag tag = new CompoundTag();
-        tag.putInt("type", camo.getFactory().getSyncId());
-        camo.toNetwork(tag);
-        return tag;
-    }
-
-    public static CamoContainer load(CompoundTag tag)
-    {
-        if (tag.isEmpty())
-        {
-            return EmptyCamoContainer.EMPTY;
-        }
-
-        ResourceLocation id = ResourceLocation.tryParse(tag.getString("type"));
-        CamoContainerFactory factory = FramedBlocksAPI.INSTANCE.getCamoContainerFactoryRegistry().get(id);
-        if (factory == null)
-        {
-            LOGGER.error("Unknown ICamoContainer with ID {}, dropping!", id);
-            return EmptyCamoContainer.EMPTY;
-        }
-        return factory.fromNbt(tag);
-    }
-
-    public static CamoContainer readFromNetwork(CompoundTag tag)
-    {
-        if (tag.isEmpty())
-        {
-            return EmptyCamoContainer.EMPTY;
-        }
-
-        int id = tag.getInt("type");
-        CamoContainerFactory factory = FramedBlocksAPI.INSTANCE.getCamoContainerFactoryRegistry().byId(id);
-        if (factory == null)
-        {
-            LOGGER.error("Unknown ICamoContainer with ID {}, dropping!", id);
-            return EmptyCamoContainer.EMPTY;
-        }
-        return factory.fromNetwork(tag);
-    }
+    public abstract CamoContainerFactory<T> getFactory();
 }

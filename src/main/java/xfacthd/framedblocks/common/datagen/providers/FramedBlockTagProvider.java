@@ -99,7 +99,7 @@ public final class FramedBlockTagProvider extends BlockTagsProvider
                  .addOptionalTag(rl("chipped", "black_stained_glass"))
                  .addOptionalTag(rl("forge", "hardened_glass"));
 
-        tag(Utils.BLACKLIST).add(
+        tag(Utils.BLOCK_BLACKLIST).add(
                 Blocks.PISTON,
                 Blocks.STICKY_PISTON,
                 Blocks.COMPOSTER

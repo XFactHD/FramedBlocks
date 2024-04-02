@@ -2,11 +2,9 @@ package xfacthd.framedblocks.api.block.render;
 
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.particle.ParticleEngine;
-import net.minecraft.client.particle.TerrainParticle;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
-import net.minecraft.core.particles.BlockParticleOption;
-import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.core.particles.*;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.Entity;
@@ -14,17 +12,17 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.*;
-import xfacthd.framedblocks.api.FramedBlocksAPI;
+import xfacthd.framedblocks.api.camo.*;
 
 public final class ParticleHelper
 {
-    public static void spawnLandingParticles(BlockState state, ServerLevel level, BlockPos pos, LivingEntity entity, int count)
+    public static void spawnLandingParticles(CamoContainer<?, ?> camo, ServerLevel level, BlockPos pos, LivingEntity entity, int count)
     {
-        if (state.isAir())
-        {
-            state = FramedBlocksAPI.INSTANCE.getDefaultModelState();
-        }
+        spawnLandingParticles(camo.getContent(), level, pos, entity, count);
+    }
 
+    public static void spawnLandingParticles(CamoContent<?> camo, ServerLevel level, BlockPos pos, LivingEntity entity, int count)
+    {
         double x = entity.getX();
         double y = entity.getY();
         double z = entity.getZ();
@@ -38,19 +36,17 @@ public final class ParticleHelper
             z = (double) pos.getZ() + 0.5D + offZ / maxOff * 0.5D;
         }
 
-        level.sendParticles(
-                new BlockParticleOption(ParticleTypes.BLOCK, state),
-                x, y, z, count, 0D, 0D, 0D, 0.15D
-        );
+        ParticleOptions options = camo.makeRunningLandingParticles();
+        level.sendParticles(options, x, y, z, count, 0D, 0D, 0D, 0.15D);
     }
 
-    public static void spawnRunningParticles(BlockState state, Level level, BlockPos pos, Entity entity)
+    public static void spawnRunningParticles(CamoContainer<?, ?> camo, Level level, BlockPos pos, Entity entity)
     {
-        if (state.isAir())
-        {
-            state = FramedBlocksAPI.INSTANCE.getDefaultModelState();
-        }
+        spawnRunningParticles(camo.getContent(), level, pos, entity);
+    }
 
+    public static void spawnRunningParticles(CamoContent<?> camo, Level level, BlockPos pos, Entity entity)
+    {
         Vec3 delta = entity.getDeltaMovement();
         BlockPos enityPos = entity.blockPosition();
 
@@ -65,25 +61,19 @@ public final class ParticleHelper
             z = Mth.clamp(z, pos.getZ(), pos.getZ() + 1D);
         }
 
-        level.addParticle(
-                new BlockParticleOption(ParticleTypes.BLOCK, state),
-                x, entity.getY() + 0.1D, z, delta.x * -4D, 1.5D, delta.z * -4D
-        );
+        ParticleOptions options = camo.makeRunningLandingParticles();
+        level.addParticle(options, x, entity.getY() + 0.1D, z, delta.x * -4D, 1.5D, delta.z * -4D);
     }
 
 
 
     public static final class Client
     {
+        @SuppressWarnings({ "rawtypes", "unchecked" })
         public static void addHitEffects(
-                BlockState state, Level level, BlockHitResult target, BlockState camoState, ParticleEngine engine
+                BlockState state, Level level, BlockHitResult target, CamoContent<?> camo, ParticleEngine engine
         )
         {
-            if (camoState.isAir())
-            {
-                camoState = FramedBlocksAPI.INSTANCE.getDefaultModelState();
-            }
-
             BlockPos pos = target.getBlockPos();
             Direction side = target.getDirection();
 
@@ -106,21 +96,19 @@ public final class ParticleHelper
                 case EAST ->  x = bx + aabb.maxX + (double)0.1F;
             }
 
-            engine.add(new TerrainParticle((ClientLevel) level, x, y, z, 0.0D, 0.0D, 0.0D, camoState, pos)
+            CamoClientHandler handler = camo.getClientHandler();
+            engine.add(handler.makeHitDestroyParticle((ClientLevel) level, x, y, z, 0.0D, 0.0D, 0.0D, camo, pos)
                     .setPower(0.2F)
                     .scale(0.6F)
             );
         }
 
+        @SuppressWarnings({ "rawtypes", "unchecked" })
         public static void addDestroyEffects(
-                BlockState state, Level level, BlockPos pos, BlockState camoState, ParticleEngine engine
+                BlockState state, Level level, BlockPos pos, CamoContent<?> camo, ParticleEngine engine
         )
         {
-            if (camoState.isAir())
-            {
-                camoState = FramedBlocksAPI.INSTANCE.getDefaultModelState();
-            }
-            BlockState fCamoState = camoState;
+            CamoClientHandler handler = camo.getClientHandler();
 
             state.getShape(level, pos).forAllBoxes((minX, minY, minZ, maxX, maxY, maxZ) ->
             {
@@ -143,8 +131,8 @@ public final class ParticleHelper
                             double x = pos.getX() + offX * sizeX + minX;
                             double y = pos.getY() + offY * sizeY + minY;
                             double z = pos.getZ() + offZ * sizeZ + minZ;
-                            engine.add(new TerrainParticle(
-                                    (ClientLevel) level, x, y, z, offX - 0.5D, offY - 0.5D, offZ - 0.5D, fCamoState, pos
+                            engine.add(handler.makeHitDestroyParticle(
+                                    (ClientLevel) level, x, y, z, offX - 0.5D, offY - 0.5D, offZ - 0.5D, camo, pos
                             ));
                         }
                     }

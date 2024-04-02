@@ -1,21 +1,17 @@
 package xfacthd.framedblocks.client.apiimpl;
 
 import net.minecraft.Util;
-import net.minecraft.client.resources.model.BakedModel;
 import net.minecraft.core.Holder;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.properties.Property;
-import net.minecraft.world.level.material.Fluid;
 import xfacthd.framedblocks.FramedBlocks;
 import xfacthd.framedblocks.api.internal.InternalClientAPI;
 import xfacthd.framedblocks.api.model.wrapping.*;
 import xfacthd.framedblocks.api.model.wrapping.statemerger.StateMerger;
 import xfacthd.framedblocks.api.util.TestProperties;
 import xfacthd.framedblocks.api.util.Utils;
-import xfacthd.framedblocks.client.model.FluidModel;
 import xfacthd.framedblocks.client.model.FramedBlockModel;
 import xfacthd.framedblocks.client.modelwrapping.*;
-import xfacthd.framedblocks.client.util.ClientTaskQueue;
 
 import java.util.*;
 import java.util.regex.Pattern;
@@ -52,18 +48,6 @@ public final class InternalClientApiImpl implements InternalClientAPI
     public void registerCopyingModelWrapper(Holder<Block> block, Holder<Block> srcBlock, StateMerger stateMerger)
     {
         registerSpecialModelWrapper(block, new CopyingModelFactory(srcBlock), stateMerger);
-    }
-
-    @Override
-    public void enqueueClientTask(long delay, Runnable task)
-    {
-        ClientTaskQueue.enqueueClientTask(delay, task);
-    }
-
-    @Override
-    public BakedModel createFluidModel(Fluid fluid)
-    {
-        return FluidModel.create(fluid);
     }
 
 

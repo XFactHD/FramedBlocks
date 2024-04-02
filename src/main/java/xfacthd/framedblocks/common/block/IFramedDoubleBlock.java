@@ -21,6 +21,7 @@ import xfacthd.framedblocks.api.block.IFramedBlock;
 import xfacthd.framedblocks.api.block.cache.StateCache;
 import xfacthd.framedblocks.api.block.render.ParticleHelper;
 import xfacthd.framedblocks.api.camo.CamoContainer;
+import xfacthd.framedblocks.api.camo.CamoContainerHelper;
 import xfacthd.framedblocks.api.predicate.cull.SideSkipPredicate;
 import xfacthd.framedblocks.common.blockentity.doubled.FramedDoubleBlockEntity;
 import xfacthd.framedblocks.common.data.doubleblock.*;
@@ -171,20 +172,12 @@ public interface IFramedDoubleBlock extends IFramedBlock
             Tuple<BlockState, BlockState> statePair = getBlockPair(state);
             switch (getTopInteractionMode(state))
             {
-                case FIRST -> ParticleHelper.spawnRunningParticles(
-                        be.getCamo(statePair.getA()).getState(), level, pos, entity
-                );
-                case SECOND -> ParticleHelper.spawnRunningParticles(
-                        be.getCamo(statePair.getB()).getState(), level, pos, entity
-                );
+                case FIRST -> ParticleHelper.spawnRunningParticles(be.getCamo(statePair.getA()), level, pos, entity);
+                case SECOND -> ParticleHelper.spawnRunningParticles(be.getCamo(statePair.getB()), level, pos, entity);
                 case EITHER ->
                 {
-                    ParticleHelper.spawnRunningParticles(
-                            be.getCamo(statePair.getA()).getState(), level, pos, entity
-                    );
-                    ParticleHelper.spawnRunningParticles(
-                            be.getCamo(statePair.getB()).getState(), level, pos, entity
-                    );
+                    ParticleHelper.spawnRunningParticles(be.getCamo(statePair.getA()), level, pos, entity);
+                    ParticleHelper.spawnRunningParticles(be.getCamo(statePair.getB()), level, pos, entity);
                 }
             }
             return true;
@@ -202,20 +195,12 @@ public interface IFramedDoubleBlock extends IFramedBlock
             Tuple<BlockState, BlockState> statePair = getBlockPair(state);
             switch (getTopInteractionMode(state))
             {
-                case FIRST -> ParticleHelper.spawnLandingParticles(
-                        be.getCamo(statePair.getA()).getState(), level, pos, entity, count
-                );
-                case SECOND -> ParticleHelper.spawnLandingParticles(
-                        be.getCamo(statePair.getB()).getState(), level, pos, entity, count
-                );
+                case FIRST -> ParticleHelper.spawnLandingParticles(be.getCamo(statePair.getA()), level, pos, entity, count);
+                case SECOND -> ParticleHelper.spawnLandingParticles(be.getCamo(statePair.getB()), level, pos, entity, count);
                 case EITHER ->
                 {
-                    ParticleHelper.spawnLandingParticles(
-                            be.getCamo(statePair.getA()).getState(), level, pos, entity, count
-                    );
-                    ParticleHelper.spawnLandingParticles(
-                            be.getCamo(statePair.getB()).getState(), level, pos, entity, count
-                    );
+                    ParticleHelper.spawnLandingParticles(be.getCamo(statePair.getA()), level, pos, entity, count);
+                    ParticleHelper.spawnLandingParticles(be.getCamo(statePair.getB()), level, pos, entity, count);
                 }
             }
             return true;
@@ -226,21 +211,21 @@ public interface IFramedDoubleBlock extends IFramedBlock
     @Override
     default Optional<MutableComponent> printCamoBlock(CompoundTag beTag)
     {
-        BlockState camoState = CamoContainer.load(beTag.getCompound("camo")).getState();
-        BlockState camoStateTwo = CamoContainer.load(beTag.getCompound("camo_two")).getState();
+        CamoContainer<?, ?> camoContainer = CamoContainerHelper.readFromDisk(beTag.getCompound("camo"));
+        CamoContainer<?, ?> camoContainerTwo = CamoContainerHelper.readFromDisk(beTag.getCompound("camo_two"));
 
-        MutableComponent component = getCamoComponent(camoState);
+        MutableComponent component = getCamoComponent(camoContainer);
         component.append(Component.literal(" | ").withStyle(ChatFormatting.GOLD));
-        component.append(getCamoComponent(camoStateTwo));
+        component.append(getCamoComponent(camoContainerTwo));
 
         return Optional.of(component);
     }
 
-    private static MutableComponent getCamoComponent(BlockState camoState)
+    private static MutableComponent getCamoComponent(CamoContainer<?, ?> camoContainer)
     {
-        if (!camoState.isAir())
+        if (!camoContainer.isEmpty())
         {
-            return camoState.getBlock().getName().withStyle(ChatFormatting.WHITE);
+            return camoContainer.getContent().getCamoName().withStyle(ChatFormatting.WHITE);
         }
         return FramedBlueprintItem.BLOCK_NONE.copy();
     }

@@ -25,7 +25,7 @@ public class FramedFancyRailSlopeBlockEntity extends FramedDoubleBlockEntity
     }
 
     @Override
-    public CamoContainer getCamo(BlockState state)
+    public CamoContainer<?, ?> getCamo(BlockState state)
     {
         //The primary camo is the only camo needed in skip predicates
         return getCamo();
@@ -34,7 +34,7 @@ public class FramedFancyRailSlopeBlockEntity extends FramedDoubleBlockEntity
     @Override
     protected boolean isCamoSolid()
     {
-        CamoContainer camo = getCamo();
-        return !camo.isEmpty() && camo.isSolid(level(), worldPosition);
+        CamoContainer<?, ?> camo = getCamo();
+        return !camo.isEmpty() && camo.getContent().isSolid(level(), worldPosition);
     }
 }

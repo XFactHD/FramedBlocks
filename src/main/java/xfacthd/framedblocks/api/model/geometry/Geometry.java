@@ -4,6 +4,7 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.block.model.BakedQuad;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
+import net.minecraft.client.resources.model.BakedModel;
 import net.minecraft.core.Direction;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.item.ItemDisplayContext;
@@ -14,12 +15,12 @@ import net.neoforged.neoforge.client.model.data.ModelData;
 import net.neoforged.neoforge.common.util.TriState;
 import xfacthd.framedblocks.api.FramedBlocksClientAPI;
 import xfacthd.framedblocks.api.block.blockentity.FramedBlockEntity;
+import xfacthd.framedblocks.api.camo.*;
 import xfacthd.framedblocks.api.model.cache.QuadCacheKey;
 import xfacthd.framedblocks.api.model.cache.SimpleQuadCacheKey;
 import xfacthd.framedblocks.api.model.data.FramedBlockData;
 import xfacthd.framedblocks.api.model.data.QuadMap;
 import xfacthd.framedblocks.api.model.quad.QuadModifier;
-import xfacthd.framedblocks.api.model.util.ModelCache;
 import xfacthd.framedblocks.api.predicate.fullface.FullFacePredicate;
 import xfacthd.framedblocks.api.util.ConfigView;
 
@@ -135,13 +136,14 @@ public abstract class Geometry
      * @implNote The resulting object must at least store the given {@link BlockState} and connected textures context object
      * and should either be a record or have an otherwise properly implemented {@code hashCode()} and {@code equals()}
      * implementation
-     * @param state The {@link BlockState} of the camo applied to the block
+     * @param camo The {@link CamoContent} of the camo applied to the block
      * @param ctCtx The current connected textures context object, may be null
      * @param data The {@link ModelData} from the {@link FramedBlockEntity}
      */
-    public QuadCacheKey makeCacheKey(BlockState state, Object ctCtx, ModelData data)
+    public QuadCacheKey makeCacheKey(CamoContent<?> camo, Object ctCtx, ModelData data)
     {
-        return new SimpleQuadCacheKey(state, ctCtx);
+        // Avoid allocating a key if the CT context is null
+        return ctCtx != null ? new SimpleQuadCacheKey(camo, ctCtx) : camo;
     }
 
     /**
@@ -165,12 +167,12 @@ public abstract class Geometry
     public TriState useAmbientOcclusion(BlockState state, ModelData data, RenderType renderType)
     {
         FramedBlockData fbData = data.get(FramedBlockData.PROPERTY);
-        BlockState camoState;
-        if (fbData != null && !(camoState = fbData.getCamoState()).isAir())
+        CamoContent<?> camoContent;
+        if (fbData != null && !(camoContent = fbData.getCamoContent()).isEmpty())
         {
-            TriState camoAO = ModelCache.getModel(camoState).useAmbientOcclusion(camoState, ModelData.EMPTY, renderType);
-            //noinspection deprecation
-            if (camoAO != TriState.DEFAULT || camoState.getLightEmission() != 0)
+            BakedModel model = CamoContainerHelper.Client.getOrCreateModel(camoContent);
+            TriState camoAO = model.useAmbientOcclusion(camoContent.getAppearanceState(), ModelData.EMPTY, renderType);
+            if (camoAO != TriState.DEFAULT || camoContent.getLightEmission() != 0)
             {
                 return camoAO;
             }

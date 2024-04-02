@@ -8,6 +8,7 @@ import net.minecraft.world.level.block.*;
 import net.minecraft.world.level.block.state.BlockState;
 import net.neoforged.neoforge.gametest.GameTestHolder;
 import xfacthd.framedblocks.api.block.blockentity.FramedBlockEntity;
+import xfacthd.framedblocks.api.camo.block.BlockCamoContent;
 import xfacthd.framedblocks.api.util.FramedConstants;
 import xfacthd.framedblocks.api.block.FramedProperties;
 import xfacthd.framedblocks.api.test.TestUtils;
@@ -351,8 +352,8 @@ public final class InteractionTests
                     TestUtils.assertTrue(
                             helper,
                             POS_ABOVE_FLOOR,
-                            be.getCamo().getState() == Blocks.OAK_LOG.defaultBlockState(),
-                            () -> String.format("Expected oak log default state as camo, got %s", be.getCamo().getState())
+                            be.getCamo().getContent().equals(new BlockCamoContent(Blocks.OAK_LOG.defaultBlockState())),
+                            () -> String.format("Expected oak log default state as camo, got %s", be.getCamo().getContent())
                     );
                 },
                 () -> TestUtils.clickWithItem(helper, POS_ABOVE_FLOOR, FBContent.ITEM_FRAMED_SCREWDRIVER.value()),
@@ -362,8 +363,8 @@ public final class InteractionTests
                     TestUtils.assertTrue(
                             helper,
                             POS_ABOVE_FLOOR,
-                            be.getCamo().getState() == Blocks.OAK_LOG.defaultBlockState().cycle(RotatedPillarBlock.AXIS),
-                            () -> String.format("Expected oak log rotated once as camo, got %s", be.getCamo().getState())
+                            be.getCamo().getContent().equals(new BlockCamoContent(Blocks.OAK_LOG.defaultBlockState().cycle(RotatedPillarBlock.AXIS))),
+                            () -> String.format("Expected oak log rotated once as camo, got %s", be.getCamo().getContent())
                     );
                 },
                 helper::succeed

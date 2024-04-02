@@ -14,6 +14,7 @@ import net.minecraft.world.level.block.state.properties.DoubleBlockHalf;
 import xfacthd.framedblocks.api.block.blockentity.FramedBlockEntity;
 import xfacthd.framedblocks.api.blueprint.BlueprintCopyBehaviour;
 import xfacthd.framedblocks.api.camo.CamoContainer;
+import xfacthd.framedblocks.api.camo.CamoContainerHelper;
 
 import java.util.*;
 
@@ -39,11 +40,11 @@ public final class DoorCopyBehaviour implements BlueprintCopyBehaviour
     }
 
     @Override
-    public Optional<Set<CamoContainer>> getCamos(CompoundTag blueprintData)
+    public Optional<Set<CamoContainer<?, ?>>> getCamos(CompoundTag blueprintData)
     {
-        Set<CamoContainer> camos = new ObjectArraySet<>(2);
-        camos.add(CamoContainer.load(blueprintData.getCompound(MAIN_CAMO_KEY).getCompound(CAMO_CONTAINER_KEY)));
-        camos.add(CamoContainer.load(blueprintData.getCompound(SECOND_CAMO_KEY).getCompound(CAMO_CONTAINER_KEY)));
+        Set<CamoContainer<?, ?>> camos = new ObjectArraySet<>(2);
+        camos.add(CamoContainerHelper.readFromDisk(blueprintData.getCompound(MAIN_CAMO_KEY).getCompound(CAMO_CONTAINER_KEY)));
+        camos.add(CamoContainerHelper.readFromDisk(blueprintData.getCompound(SECOND_CAMO_KEY).getCompound(CAMO_CONTAINER_KEY)));
         return Optional.of(camos);
     }
 

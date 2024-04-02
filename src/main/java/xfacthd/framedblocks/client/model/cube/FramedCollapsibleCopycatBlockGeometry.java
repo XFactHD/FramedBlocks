@@ -2,8 +2,8 @@ package xfacthd.framedblocks.client.model.cube;
 
 import net.minecraft.client.renderer.block.model.BakedQuad;
 import net.minecraft.core.Direction;
-import net.minecraft.world.level.block.state.BlockState;
 import net.neoforged.neoforge.client.model.data.ModelData;
+import xfacthd.framedblocks.api.camo.CamoContent;
 import xfacthd.framedblocks.api.model.cache.QuadCacheKey;
 import xfacthd.framedblocks.api.model.data.QuadMap;
 import xfacthd.framedblocks.api.model.geometry.Geometry;
@@ -182,13 +182,13 @@ public class FramedCollapsibleCopycatBlockGeometry extends Geometry
     }
 
     @Override
-    public QuadCacheKey makeCacheKey(BlockState state, Object ctCtx, ModelData data)
+    public QuadCacheKey makeCacheKey(CamoContent<?> camo, Object ctCtx, ModelData data)
     {
         Integer packedOffsets = data.get(FramedCollapsibleCopycatBlockEntity.OFFSETS);
-        return new CollapsibleCopycatBlockQuadCacheKey(state, ctCtx, packedOffsets);
+        return new CollapsibleCopycatBlockQuadCacheKey(camo, ctCtx, packedOffsets);
     }
 
     private record FloatPair(float valOne, float valTwo) { }
 
-    private record CollapsibleCopycatBlockQuadCacheKey(BlockState state, Object ctCtx, Integer packedOffsets) implements QuadCacheKey { }
+    private record CollapsibleCopycatBlockQuadCacheKey(CamoContent<?> camo, Object ctCtx, Integer packedOffsets) implements QuadCacheKey { }
 }

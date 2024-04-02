@@ -1,25 +1,25 @@
 package xfacthd.framedblocks.api.ghost;
 
-import net.minecraft.world.level.block.Blocks;
-import net.minecraft.world.level.block.state.BlockState;
+import xfacthd.framedblocks.api.camo.CamoContent;
+import xfacthd.framedblocks.api.camo.empty.EmptyCamoContent;
 
 @SuppressWarnings("unused")
 public final class CamoPair
 {
-    public static final CamoPair EMPTY = new CamoPair(null, null);
+    public static final CamoPair EMPTY = new CamoPair(EmptyCamoContent.EMPTY, EmptyCamoContent.EMPTY);
 
-    private BlockState camoOne;
-    private BlockState camoTwo;
+    private CamoContent<?> camoOne;
+    private CamoContent<?> camoTwo;
 
-    public CamoPair(BlockState camoOne, BlockState camoTwo)
+    public CamoPair(CamoContent<?> camoOne, CamoContent<?> camoTwo)
     {
-        this.camoOne = camoOne != null ? camoOne : Blocks.AIR.defaultBlockState();
-        this.camoTwo = camoTwo != null ? camoTwo : Blocks.AIR.defaultBlockState();
+        this.camoOne = camoOne != null ? camoOne : EmptyCamoContent.EMPTY;
+        this.camoTwo = camoTwo != null ? camoTwo : EmptyCamoContent.EMPTY;
     }
 
     public CamoPair swap()
     {
-        BlockState temp = camoOne;
+        CamoContent<?> temp = camoOne;
         camoOne = camoTwo;
         camoTwo = temp;
         return this;
@@ -27,17 +27,17 @@ public final class CamoPair
 
     public CamoPair clear()
     {
-        camoOne = Blocks.AIR.defaultBlockState();
-        camoTwo = Blocks.AIR.defaultBlockState();
+        camoOne = EmptyCamoContent.EMPTY;
+        camoTwo = EmptyCamoContent.EMPTY;
         return this;
     }
 
-    public BlockState getCamoOne()
+    public CamoContent<?> getCamoOne()
     {
         return camoOne;
     }
 
-    public BlockState getCamoTwo()
+    public CamoContent<?> getCamoTwo()
     {
         return camoTwo;
     }

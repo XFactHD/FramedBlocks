@@ -34,12 +34,12 @@ class FramedBlockComponentProvider implements IBlockComponentProvider
         {
             if (fbe.getBlockType().isDoubleBlock() && fbe instanceof IFramedDoubleBlockEntity fdbe)
             {
-                tooltip.add(Component.translatable(JadeCompat.LABEL_CAMO_ONE, fbe.getCamo().getBlockName()));
-                tooltip.add(Component.translatable(JadeCompat.LABEL_CAMO_TWO, fdbe.getCamoTwo().getBlockName()));
+                tooltip.add(Component.translatable(JadeCompat.LABEL_CAMO_ONE, fbe.getCamo().getContent().getCamoName()));
+                tooltip.add(Component.translatable(JadeCompat.LABEL_CAMO_TWO, fdbe.getCamoTwo().getContent().getCamoName()));
             }
             else
             {
-                tooltip.add(Component.translatable(JadeCompat.LABEL_CAMO, fbe.getCamo().getBlockName()));
+                tooltip.add(Component.translatable(JadeCompat.LABEL_CAMO, fbe.getCamo().getContent().getCamoName()));
             }
         }
     }

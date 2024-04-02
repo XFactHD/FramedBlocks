@@ -20,6 +20,7 @@ import net.neoforged.neoforge.registries.DeferredRegister;
 import xfacthd.framedblocks.api.block.blockentity.FramedBlockEntity;
 import xfacthd.framedblocks.api.block.IFramedBlock;
 import xfacthd.framedblocks.api.camo.*;
+import xfacthd.framedblocks.api.camo.empty.EmptyCamoContainerFactory;
 import xfacthd.framedblocks.api.util.FramedConstants;
 import xfacthd.framedblocks.api.util.Utils;
 import xfacthd.framedblocks.common.block.interactive.button.*;
@@ -58,8 +59,8 @@ import xfacthd.framedblocks.common.blockentity.doubled.stairs.*;
 import xfacthd.framedblocks.common.blockentity.special.*;
 import xfacthd.framedblocks.common.crafting.FramingSawRecipe;
 import xfacthd.framedblocks.common.crafting.FramingSawRecipeSerializer;
-import xfacthd.framedblocks.common.data.camo.BlockCamoContainer;
-import xfacthd.framedblocks.common.data.camo.FluidCamoContainer;
+import xfacthd.framedblocks.common.data.camo.block.BlockCamoContainerFactory;
+import xfacthd.framedblocks.common.data.camo.fluid.FluidCamoContainerFactory;
 import xfacthd.framedblocks.common.menu.*;
 import xfacthd.framedblocks.common.data.BlockType;
 import xfacthd.framedblocks.common.data.FramedToolType;
@@ -82,11 +83,11 @@ public final class FBContent
     private static final DeferredRegister<RecipeSerializer<?>> RECIPE_SERIALIZERS = DeferredRegister.create(BuiltInRegistries.RECIPE_SERIALIZER, FramedConstants.MOD_ID);
     private static final DeferredRegister<CreativeModeTab> CREATIVE_TABS = DeferredRegister.create(Registries.CREATIVE_MODE_TAB, FramedConstants.MOD_ID);
 
-    private static final DeferredRegister<CamoContainerFactory> CAMO_CONTAINER_FACTORIES = DeferredRegister.create(
+    private static final DeferredRegister<CamoContainerFactory<?>> CAMO_CONTAINER_FACTORIES = DeferredRegister.create(
             FramedConstants.CAMO_CONTAINER_FACTORY_REGISTRY_NAME,
             FramedConstants.MOD_ID
     );
-    public static final Registry<CamoContainerFactory> CAMO_CONTAINER_FACTORY_REGISTRY = CAMO_CONTAINER_FACTORIES.makeRegistry(
+    public static final Registry<CamoContainerFactory<?>> CAMO_CONTAINER_FACTORY_REGISTRY = CAMO_CONTAINER_FACTORIES.makeRegistry(
             builder -> builder.sync(true)
     );
 
@@ -635,17 +636,17 @@ public final class FBContent
     // endregion
 
     // region CamoContainer.Factories
-    public static final Holder<CamoContainerFactory> FACTORY_EMPTY = CAMO_CONTAINER_FACTORIES.register(
+    public static final DeferredHolder<CamoContainerFactory<?>, EmptyCamoContainerFactory> FACTORY_EMPTY = CAMO_CONTAINER_FACTORIES.register(
             "empty",
-            EmptyCamoContainer.Factory::new
+            EmptyCamoContainerFactory::new
     );
-    public static final Holder<CamoContainerFactory> FACTORY_BLOCK = CAMO_CONTAINER_FACTORIES.register(
+    public static final DeferredHolder<CamoContainerFactory<?>, BlockCamoContainerFactory> FACTORY_BLOCK = CAMO_CONTAINER_FACTORIES.register(
             "block",
-            BlockCamoContainer.Factory::new
+            BlockCamoContainerFactory::new
     );
-    public static final Holder<CamoContainerFactory> FACTORY_FLUID = CAMO_CONTAINER_FACTORIES.register(
+    public static final DeferredHolder<CamoContainerFactory<?>, FluidCamoContainerFactory> FACTORY_FLUID = CAMO_CONTAINER_FACTORIES.register(
             "fluid",
-            FluidCamoContainer.Factory::new
+            FluidCamoContainerFactory::new
     );
     // endregion
 

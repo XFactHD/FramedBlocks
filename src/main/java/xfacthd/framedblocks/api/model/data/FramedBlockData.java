@@ -1,8 +1,8 @@
 package xfacthd.framedblocks.api.model.data;
 
 import net.minecraft.core.Direction;
-import net.minecraft.world.level.block.state.BlockState;
 import net.neoforged.neoforge.client.model.data.*;
+import xfacthd.framedblocks.api.camo.CamoContent;
 
 public final class FramedBlockData
 {
@@ -10,19 +10,19 @@ public final class FramedBlockData
     public static final ModelProperty<ModelData> CAMO_DATA = new ModelProperty<>();
     public static final boolean[] NO_CULLED_FACES = new boolean[0];
 
-    private final BlockState camoState;
+    private final CamoContent<?> camoContent;
     private final byte hidden;
     private final boolean altModel;
     private final boolean reinforced;
 
-    public FramedBlockData(BlockState camoState, boolean altModel)
+    public FramedBlockData(CamoContent<?> camoContent, boolean altModel)
     {
-        this(camoState, NO_CULLED_FACES, altModel, false);
+        this(camoContent, NO_CULLED_FACES, altModel, false);
     }
 
-    public FramedBlockData(BlockState camoState, boolean[] hidden, boolean altModel, boolean reinforced)
+    public FramedBlockData(CamoContent<?> camoContent, boolean[] hidden, boolean altModel, boolean reinforced)
     {
-        this.camoState = camoState;
+        this.camoContent = camoContent;
         byte mask = 0;
         for (int i = 0; i < hidden.length; i++)
         {
@@ -36,9 +36,9 @@ public final class FramedBlockData
         this.reinforced = reinforced;
     }
 
-    public BlockState getCamoState()
+    public CamoContent<?> getCamoContent()
     {
-        return camoState;
+        return camoContent;
     }
 
     public boolean isSideHidden(Direction side)

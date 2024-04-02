@@ -11,7 +11,6 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.shapes.CollisionContext;
@@ -21,6 +20,8 @@ import org.jetbrains.annotations.Nullable;
 import xfacthd.framedblocks.api.FramedBlocksClientAPI;
 import xfacthd.framedblocks.api.block.IFramedBlock;
 import xfacthd.framedblocks.api.camo.CamoContainer;
+import xfacthd.framedblocks.api.camo.CamoContainerHelper;
+import xfacthd.framedblocks.api.camo.empty.EmptyCamoContent;
 import xfacthd.framedblocks.api.model.data.FramedBlockData;
 
 import java.util.Objects;
@@ -171,8 +172,8 @@ public interface GhostRenderBehaviour
         if (stack.hasTag() && stack.getTag().contains("BlockEntityTag"))
         {
             CompoundTag tag = stack.getTag().getCompound("BlockEntityTag").getCompound("camo");
-            CamoContainer camo = CamoContainer.load(tag);
-            return new CamoPair(camo.getState(), Blocks.AIR.defaultBlockState());
+            CamoContainer<?, ?> camo = CamoContainerHelper.readFromDisk(tag);
+            return new CamoPair(camo.getContent(), EmptyCamoContent.EMPTY);
         }
         return CamoPair.EMPTY;
     }

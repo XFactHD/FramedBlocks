@@ -11,8 +11,8 @@ import net.neoforged.neoforge.client.ChunkRenderTypeSet;
 import net.neoforged.neoforge.client.model.data.ModelData;
 import xfacthd.framedblocks.api.block.FramedProperties;
 import xfacthd.framedblocks.api.model.data.QuadMap;
+import xfacthd.framedblocks.api.model.util.ModelUtils;
 import xfacthd.framedblocks.api.model.wrapping.GeometryFactory;
-import xfacthd.framedblocks.api.model.util.ModelCache;
 import xfacthd.framedblocks.client.model.slope.FramedSlopeGeometry;
 import xfacthd.framedblocks.common.FBContent;
 import xfacthd.framedblocks.common.data.PropertyHolder;
@@ -52,12 +52,12 @@ public class FramedRailSlopeGeometry extends FramedSlopeGeometry
     @Override
     public ChunkRenderTypeSet getAdditionalRenderTypes(RandomSource rand, ModelData extraData)
     {
-        return ModelCache.getRenderTypes(railState, rand, ModelData.EMPTY);
+        return ModelUtils.getRenderTypes(railState, rand, ModelData.EMPTY);
     }
 
     private List<BakedQuad> getRailQuads(@Nullable Direction side, RandomSource rand, RenderType layer)
     {
-        return ModelCache.getModel(railState).getQuads(railState, side, rand, ModelData.EMPTY, layer);
+        return ModelUtils.getModel(railState).getQuads(railState, side, rand, ModelData.EMPTY, layer);
     }
 
     private static BlockState getSlopeState(BlockState state)

@@ -32,8 +32,8 @@ public final class DoublePanelCopyBehaviour extends DoubleBlockCopyBehaviour
             if (level.getBlockEntity(pos) instanceof FramedDoubleBlockEntity be)
             {
                 //Mirror camos
-                CamoContainer camoOne = be.getCamo();
-                CamoContainer camoTwo = be.getCamoTwo();
+                CamoContainer<?, ?> camoOne = be.getCamo();
+                CamoContainer<?, ?> camoTwo = be.getCamoTwo();
                 be.setCamo(camoTwo, false);
                 be.setCamo(camoOne, true);
             }

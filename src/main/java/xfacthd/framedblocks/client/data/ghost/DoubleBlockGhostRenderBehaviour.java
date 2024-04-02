@@ -7,6 +7,7 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.neoforged.neoforge.client.model.data.ModelData;
 import org.jetbrains.annotations.Nullable;
 import xfacthd.framedblocks.api.camo.CamoContainer;
+import xfacthd.framedblocks.api.camo.CamoContainerHelper;
 import xfacthd.framedblocks.api.ghost.CamoPair;
 import xfacthd.framedblocks.api.ghost.GhostRenderBehaviour;
 import xfacthd.framedblocks.api.model.data.FramedBlockData;
@@ -32,12 +33,12 @@ public sealed class DoubleBlockGhostRenderBehaviour implements GhostRenderBehavi
         if (stack.hasTag() && stack.getTag().contains("BlockEntityTag"))
         {
             CompoundTag tag = stack.getTag().getCompound("BlockEntityTag").getCompound("camo");
-            CamoContainer camo = CamoContainer.load(tag);
+            CamoContainer<?, ?> camo = CamoContainerHelper.readFromDisk(tag);
 
             tag = stack.getTag().getCompound("BlockEntityTag").getCompound("camo_two");
-            CamoContainer camoTwo = CamoContainer.load(tag);
+            CamoContainer<?, ?> camoTwo = CamoContainerHelper.readFromDisk(tag);
 
-            return new CamoPair(camo.getState(), camoTwo.getState());
+            return new CamoPair(camo.getContent(), camoTwo.getContent());
         }
         return CamoPair.EMPTY;
     }

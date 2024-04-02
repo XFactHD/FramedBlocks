@@ -11,6 +11,7 @@ import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
 import net.neoforged.neoforge.client.ChunkRenderTypeSet;
 import net.neoforged.neoforge.client.model.data.ModelData;
+import xfacthd.framedblocks.api.camo.CamoContent;
 import xfacthd.framedblocks.api.model.cache.QuadCacheKey;
 import xfacthd.framedblocks.api.model.data.QuadMap;
 import xfacthd.framedblocks.api.model.geometry.Geometry;
@@ -20,7 +21,6 @@ import xfacthd.framedblocks.api.model.quad.QuadModifier;
 import xfacthd.framedblocks.api.model.data.FramedBlockData;
 import xfacthd.framedblocks.api.util.ClientUtils;
 import xfacthd.framedblocks.api.util.Utils;
-import xfacthd.framedblocks.api.model.util.ModelCache;
 import xfacthd.framedblocks.api.model.util.ModelUtils;
 import xfacthd.framedblocks.common.block.interactive.FramedFlowerPotBlock;
 import xfacthd.framedblocks.common.blockentity.special.FramedFlowerPotBlockEntity;
@@ -93,8 +93,8 @@ public class FramedFlowerPotGeometry extends Geometry
     {
         BlockState potState = FramedFlowerPotBlock.getFlowerPotState(getFlowerBlock(data));
         return ChunkRenderTypeSet.union(
-                ModelCache.getRenderTypes(Blocks.DIRT.defaultBlockState(), rand, ModelData.EMPTY),
-                !potState.isAir() ? ModelCache.getRenderTypes(potState, rand, ModelData.EMPTY) : ChunkRenderTypeSet.none(),
+                ModelUtils.getRenderTypes(Blocks.DIRT.defaultBlockState(), rand, ModelData.EMPTY),
+                !potState.isAir() ? ModelUtils.getRenderTypes(potState, rand, ModelData.EMPTY) : ChunkRenderTypeSet.none(),
                 hanging ? ModelUtils.CUTOUT : ChunkRenderTypeSet.none()
         );
     }
@@ -118,9 +118,9 @@ public class FramedFlowerPotGeometry extends Geometry
     }
 
     @Override
-    public QuadCacheKey makeCacheKey(BlockState state, Object ctCtx, ModelData data)
+    public QuadCacheKey makeCacheKey(CamoContent<?> camo, Object ctCtx, ModelData data)
     {
-        return new FlowerPotQuadCacheKey(state, ctCtx, getFlowerBlock(data));
+        return new FlowerPotQuadCacheKey(camo, ctCtx, getFlowerBlock(data));
     }
 
     @Override
@@ -131,7 +131,7 @@ public class FramedFlowerPotGeometry extends Geometry
 
     private static void addPlantQuads(QuadMap quadMap, BlockState potState, RandomSource rand, RenderType layer)
     {
-        BakedModel potModel = ModelCache.getModel(potState);
+        BakedModel potModel = ModelUtils.getModel(potState);
 
         if (potModel.getRenderTypes(potState, rand, ModelData.EMPTY).contains(layer))
         {
@@ -151,7 +151,7 @@ public class FramedFlowerPotGeometry extends Geometry
 
     private static void addDirtQuads(QuadMap quadMap, RandomSource rand, ModelData data, RenderType layer)
     {
-        BakedModel dirtModel = ModelCache.getModel(Blocks.DIRT.defaultBlockState());
+        BakedModel dirtModel = ModelUtils.getModel(Blocks.DIRT.defaultBlockState());
         if (dirtModel.getRenderTypes(Blocks.DIRT.defaultBlockState(), rand, ModelData.EMPTY).contains(layer))
         {
             dirtModel.getQuads(Blocks.DIRT.defaultBlockState(), Direction.UP, rand, ModelData.EMPTY, layer).forEach(q ->
@@ -162,7 +162,7 @@ public class FramedFlowerPotGeometry extends Geometry
             );
 
             FramedBlockData fbData = data.get(FramedBlockData.PROPERTY);
-            if (fbData != null && !fbData.getCamoState().canOcclude())
+            if (fbData != null && !fbData.getCamoContent().canOcclude())
             {
                 for (BakedQuad quad : dirtModel.getQuads(Blocks.DIRT.defaultBlockState(), Direction.DOWN, rand, ModelData.EMPTY, layer))
                 {
@@ -192,5 +192,5 @@ public class FramedFlowerPotGeometry extends Geometry
         return flower != null ? flower : Blocks.AIR;
     }
 
-    private record FlowerPotQuadCacheKey(BlockState state, Object ctCtx, Block flower) implements QuadCacheKey { }
+    private record FlowerPotQuadCacheKey(CamoContent<?> camo, Object ctCtx, Block flower) implements QuadCacheKey { }
 }

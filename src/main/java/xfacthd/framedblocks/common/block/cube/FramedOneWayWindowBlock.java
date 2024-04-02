@@ -23,6 +23,7 @@ import org.jetbrains.annotations.Nullable;
 import xfacthd.framedblocks.api.block.blockentity.FramedBlockEntity;
 import xfacthd.framedblocks.api.block.render.FramedBlockRenderProperties;
 import xfacthd.framedblocks.api.block.render.ParticleHelper;
+import xfacthd.framedblocks.api.camo.block.BlockCamoContent;
 import xfacthd.framedblocks.api.util.Utils;
 import xfacthd.framedblocks.common.FBContent;
 import xfacthd.framedblocks.common.block.FramedBlock;
@@ -36,6 +37,8 @@ import java.util.function.Consumer;
 
 public class FramedOneWayWindowBlock extends FramedBlock
 {
+    private final BlockCamoContent GLASS_DUMMY_CAMO = new BlockCamoContent(Blocks.TINTED_GLASS.defaultBlockState());
+
     public FramedOneWayWindowBlock()
     {
         super(BlockType.FRAMED_ONE_WAY_WINDOW);
@@ -113,7 +116,7 @@ public class FramedOneWayWindowBlock extends FramedBlock
     {
         if (state.getValue(PropertyHolder.NULLABLE_FACE) == NullableDirection.UP)
         {
-            ParticleHelper.spawnRunningParticles(Blocks.TINTED_GLASS.defaultBlockState(), level, pos, entity);
+            ParticleHelper.spawnRunningParticles(GLASS_DUMMY_CAMO, level, pos, entity);
             return true;
         }
         return super.addRunningEffects(state, level, pos, entity);
@@ -126,7 +129,7 @@ public class FramedOneWayWindowBlock extends FramedBlock
     {
         if (state.getValue(PropertyHolder.NULLABLE_FACE) == NullableDirection.UP)
         {
-            ParticleHelper.spawnLandingParticles(Blocks.TINTED_GLASS.defaultBlockState(), level, pos, entity, count);
+            ParticleHelper.spawnLandingParticles(GLASS_DUMMY_CAMO, level, pos, entity, count);
             return true;
         }
         return super.addLandingEffects(state, level, pos, sameState, entity, count);
@@ -176,7 +179,7 @@ public class FramedOneWayWindowBlock extends FramedBlock
             {
                 if (state.getValue(PropertyHolder.NULLABLE_FACE) != NullableDirection.NONE)
                 {
-                    ParticleHelper.Client.addHitEffects(state, level, hit, Blocks.TINTED_GLASS.defaultBlockState(), engine);
+                    ParticleHelper.Client.addHitEffects(state, level, hit, GLASS_DUMMY_CAMO, engine);
                 }
                 return super.addHitEffectsUnsuppressed(state, level, hit, be, engine);
             }
@@ -188,7 +191,7 @@ public class FramedOneWayWindowBlock extends FramedBlock
             {
                 if (state.getValue(PropertyHolder.NULLABLE_FACE) != NullableDirection.NONE)
                 {
-                    ParticleHelper.Client.addDestroyEffects(state, level, pos, Blocks.TINTED_GLASS.defaultBlockState(), engine);
+                    ParticleHelper.Client.addDestroyEffects(state, level, pos, GLASS_DUMMY_CAMO, engine);
                 }
                 return super.addDestroyEffectsUnsuppressed(state, level, pos, be, engine);
             }

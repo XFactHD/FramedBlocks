@@ -12,12 +12,12 @@ import net.neoforged.neoforge.client.ChunkRenderTypeSet;
 import net.neoforged.neoforge.client.model.data.ModelData;
 import xfacthd.framedblocks.api.model.data.QuadMap;
 import xfacthd.framedblocks.api.model.geometry.Geometry;
+import xfacthd.framedblocks.api.model.util.ModelUtils;
 import xfacthd.framedblocks.api.model.wrapping.GeometryFactory;
 import xfacthd.framedblocks.api.model.quad.Modifiers;
 import xfacthd.framedblocks.api.model.quad.QuadModifier;
 import xfacthd.framedblocks.api.util.Utils;
 import xfacthd.framedblocks.api.util.ClientUtils;
-import xfacthd.framedblocks.api.model.util.ModelCache;
 
 import java.util.List;
 
@@ -44,7 +44,7 @@ public class FramedRedstoneWallTorchGeometry extends Geometry
     @Override
     public ChunkRenderTypeSet getAdditionalRenderTypes(RandomSource rand, ModelData extraData)
     {
-        return ModelCache.getRenderTypes(Blocks.REDSTONE_WALL_TORCH.defaultBlockState(), rand, extraData);
+        return ModelUtils.getRenderTypes(Blocks.REDSTONE_WALL_TORCH.defaultBlockState(), rand, extraData);
     }
 
     @Override

@@ -20,7 +20,7 @@ import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.BlockHitResult;
 import xfacthd.framedblocks.api.blueprint.BlueprintCopyBehaviour;
-import xfacthd.framedblocks.api.camo.CamoContainer;
+import xfacthd.framedblocks.api.camo.*;
 import xfacthd.framedblocks.api.util.Utils;
 import xfacthd.framedblocks.api.block.IFramedBlock;
 import xfacthd.framedblocks.common.FBContent;
@@ -158,10 +158,10 @@ public class FramedBlueprintItem extends FramedToolItem
             return false;
         }
 
-        Set<CamoContainer> camos = getCamoContainers(item, tag);
+        Set<CamoContainer<?, ?>> camos = getCamoContainers(item, tag);
 
         //Copying fluid camos is currently not possible
-        if (ServerConfig.VIEW.shouldConsumeCamoItem() && camos.stream().anyMatch(camo -> camo.getType().isFluid()))
+        if (ServerConfig.VIEW.shouldConsumeCamoItem() && camos.stream().map(CamoContainer::getFactory).anyMatch(CamoContainerFactory::canTriviallyConvertToItemStack))
         {
             if (player.level().isClientSide())
             {
@@ -256,10 +256,10 @@ public class FramedBlueprintItem extends FramedToolItem
 
     private static void consumeItems(Player player, BlockItem item, CompoundTag tag)
     {
-        Set<CamoContainer> camos = getCamoContainers(item, tag);
+        Set<CamoContainer<?, ?>> camos = getCamoContainers(item, tag);
 
         //Copying fluid camos is currently not possible
-        if (ServerConfig.VIEW.shouldConsumeCamoItem() && camos.stream().anyMatch(camo -> camo.getType().isFluid()))
+        if (ServerConfig.VIEW.shouldConsumeCamoItem() && camos.stream().map(CamoContainer::getFactory).anyMatch(CamoContainerFactory::canTriviallyConvertToItemStack))
         {
             return;
         }
@@ -318,12 +318,12 @@ public class FramedBlueprintItem extends FramedToolItem
         return COPY_BEHAVIOURS.getOrDefault(block, NO_OP_BEHAVIOUR);
     }
 
-    public static Set<CamoContainer> getCamoContainers(BlockItem item, CompoundTag tag)
+    public static Set<CamoContainer<?, ?>> getCamoContainers(BlockItem item, CompoundTag tag)
     {
         return getBehaviour(item.getBlock())
                 .getCamos(tag)
                 .orElseGet(() ->
-                        Set.of(CamoContainer.load(tag.getCompound("camo_data").getCompound("camo")))
+                        Set.of(CamoContainerHelper.readFromDisk(tag.getCompound("camo_data").getCompound("camo")))
                 );
     }
 
@@ -334,12 +334,12 @@ public class FramedBlueprintItem extends FramedToolItem
                 .orElse(new ItemStack(item));
     }
 
-    private static List<ItemStack> getCamoStacksMerged(Set<CamoContainer> camos)
+    private static List<ItemStack> getCamoStacksMerged(Set<CamoContainer<?, ?>> camos)
     {
         List<ItemStack> camoStacks = new ArrayList<>();
-        for (CamoContainer camo : camos)
+        for (CamoContainer<?, ?> camo : camos)
         {
-            ItemStack stack = camo.toItemStack(ItemStack.EMPTY);
+            ItemStack stack = CamoContainerHelper.dropCamo(camo);
             if (stack.isEmpty())
             {
                 continue;

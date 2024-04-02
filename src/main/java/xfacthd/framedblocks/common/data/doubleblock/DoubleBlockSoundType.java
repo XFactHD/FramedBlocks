@@ -69,10 +69,10 @@ public final class DoubleBlockSoundType extends SoundType
             return getEitherSoundType();
         }
 
-        CamoContainer camo = mode == DoubleBlockTopInteractionMode.SECOND ? be.getCamoTwo() : be.getCamo();
+        CamoContainer<?, ?> camo = mode == DoubleBlockTopInteractionMode.SECOND ? be.getCamoTwo() : be.getCamo();
         if (!camo.isEmpty())
         {
-            return camo.getSoundType();
+            return camo.getContent().getSoundType();
         }
 
         // Default to no-camo sound
@@ -81,16 +81,16 @@ public final class DoubleBlockSoundType extends SoundType
 
     private SoundType getEitherSoundType()
     {
-        CamoContainer camo = be.getCamo();
+        CamoContainer<?, ?> camo = be.getCamo();
         if (!camo.isEmpty())
         {
-            return camo.getSoundType();
+            return camo.getContent().getSoundType();
         }
 
         camo = be.getCamoTwo();
         if (!camo.isEmpty())
         {
-            return camo.getSoundType();
+            return camo.getContent().getSoundType();
         }
 
         // Default to no-camo sound

@@ -3,8 +3,7 @@ package xfacthd.framedblocks.common.apiimpl;
 import com.google.common.base.Preconditions;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
-import net.minecraft.nbt.CompoundTag;
-import net.minecraft.tags.BlockTags;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntityType;
@@ -12,15 +11,15 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.neoforged.fml.loading.FMLEnvironment;
 import org.jetbrains.annotations.Nullable;
 import xfacthd.framedblocks.api.block.IFramedBlock;
+import xfacthd.framedblocks.api.camo.CamoContainer;
 import xfacthd.framedblocks.api.camo.CamoContainerFactory;
+import xfacthd.framedblocks.api.camo.empty.EmptyCamoContainer;
 import xfacthd.framedblocks.api.shapes.*;
-import xfacthd.framedblocks.api.util.Utils;
-import xfacthd.framedblocks.common.compat.nocubes.NoCubesCompat;
 import xfacthd.framedblocks.common.data.appearance.AppearanceHelper;
+import xfacthd.framedblocks.common.data.camo.CamoContainerFactories;
 import xfacthd.framedblocks.common.data.cullupdate.CullingUpdateTracker;
 import xfacthd.framedblocks.api.internal.InternalAPI;
 import xfacthd.framedblocks.common.FBContent;
-import xfacthd.framedblocks.common.compat.flywheel.FlywheelCompat;
 import xfacthd.framedblocks.common.data.shapes.ShapeReloader;
 
 public final class InternalApiImpl implements InternalAPI
@@ -32,24 +31,21 @@ public final class InternalApiImpl implements InternalAPI
     }
 
     @Override
-    public CamoContainerFactory getEmptyCamoContainerFactory()
+    public CamoContainerFactory<EmptyCamoContainer> getEmptyCamoContainerFactory()
     {
         return FBContent.FACTORY_EMPTY.value();
     }
 
     @Override
-    public void updateCamoNbt(CompoundTag tag, String stateKey, String stackKey, String camoKey)
+    public CamoContainerFactory<?> findCamoFactory(ItemStack stack)
     {
-        if (tag.contains(stateKey))
-        {
-            CompoundTag stateTag = tag.getCompound(stateKey);
-            tag.remove(stateKey);
-            tag.remove(stackKey);
-            CompoundTag camoTag = new CompoundTag();
-            camoTag.putString("type", Utils.getKeyOrThrow(FBContent.FACTORY_BLOCK).location().toString());
-            camoTag.put("state", stateTag);
-            tag.put(camoKey, camoTag);
-        }
+        return CamoContainerFactories.findCamoFactory(stack);
+    }
+
+    @Override
+    public boolean isValidRemovalTool(CamoContainer<?, ?> container, ItemStack stack)
+    {
+        return CamoContainerFactories.isValidRemovalTool(container, stack);
     }
 
     @Override
@@ -70,18 +66,6 @@ public final class InternalApiImpl implements InternalAPI
     )
     {
         return AppearanceHelper.getAppearance(block, state, level, pos, side, queryState, queryPos);
-    }
-
-    @Override
-    public boolean canHideNeighborFaceInLevel(BlockGetter level)
-    {
-        return !FlywheelCompat.isVirtualLevel(level);
-    }
-
-    @Override
-    public boolean canCullBlockNextTo(BlockState state, BlockState adjState)
-    {
-        return !state.is(BlockTags.LEAVES) && NoCubesCompat.mayCullNextTo(adjState);
     }
 
     @Override

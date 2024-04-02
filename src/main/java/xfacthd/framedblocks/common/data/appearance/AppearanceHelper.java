@@ -101,7 +101,7 @@ public final class AppearanceHelper
                     }
 
                     FramedBlockData modelData = getModelData(level, pos, componentState, false);
-                    return modelData != null ? modelData.getCamoState() : AIR;
+                    return modelData != null ? modelData.getCamoContent().getAppearanceState() : AIR;
                 }
 
                 if (edge == null)
@@ -131,7 +131,7 @@ public final class AppearanceHelper
         {
             if (isNotFramedOrCanConnectFullEdgeTo(pos, queryPos, actualQueryState, side, edge))
             {
-                return modelData.getCamoState();
+                return modelData.getCamoContent().getAppearanceState();
             }
             return AIR;
         }
@@ -149,7 +149,7 @@ public final class AppearanceHelper
             );
             if (conEdge != null)
             {
-                return modelData.getCamoState();
+                return modelData.getCamoContent().getAppearanceState();
             }
         }
 
@@ -158,7 +158,7 @@ public final class AppearanceHelper
             Direction detEdge = findFirstSuitableDirectionFromOffset(pos, queryPos, side, modelData::isSideHidden);
             if (detEdge != null && stateCache.canConnectDetailed(side, detEdge))
             {
-                return modelData.getCamoState();
+                return modelData.getCamoContent().getAppearanceState();
             }
         }
         return AIR;

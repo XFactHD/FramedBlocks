@@ -7,7 +7,7 @@ import net.minecraft.network.chat.ComponentContents;
 import net.minecraft.network.chat.contents.TranslatableContents;
 import net.neoforged.neoforge.common.data.LanguageProvider;
 import xfacthd.framedblocks.api.block.IFramedBlock;
-import xfacthd.framedblocks.api.camo.EmptyCamoContainer;
+import xfacthd.framedblocks.api.camo.empty.EmptyCamoContainer;
 import xfacthd.framedblocks.api.util.FramedConstants;
 import xfacthd.framedblocks.client.screen.*;
 import xfacthd.framedblocks.client.screen.overlay.*;
@@ -272,7 +272,7 @@ public final class FramedLanguageProvider extends LanguageProvider
 
         add(FBContent.MAIN_TAB.value().getDisplayName(), "FramedBlocks");
 
-        add(EmptyCamoContainer.BLOCK_NAME, "Empty");
+        add(EmptyCamoContainer.CAMO_NAME, "Empty");
 
         add(JeiCompat.MSG_INVALID_RECIPE, "Invalid recipe");
         add(JeiCompat.MSG_TRANSFER_NOT_IMPLEMENTED, "Transfer not implemented, no items will be transferred");

@@ -71,7 +71,7 @@ public interface BlueprintCopyBehaviour
      * @return The Set of CamoContainers to consume when the {@link Block} is placed. The set must contain at least one
      *         entry when a non-empty optional is returned. The returned set should retain insertion order.
      */
-    default Optional<Set<CamoContainer>> getCamos(CompoundTag blueprintData)
+    default Optional<Set<CamoContainer<?, ?>>> getCamos(CompoundTag blueprintData)
     {
         return Optional.empty();
     }

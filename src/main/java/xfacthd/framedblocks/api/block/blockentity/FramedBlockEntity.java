@@ -23,21 +23,18 @@ import net.minecraft.world.level.material.MapColor;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.EntityCollisionContext;
-import net.neoforged.neoforge.capabilities.Capabilities;
 import net.neoforged.neoforge.client.model.data.ModelData;
 import net.neoforged.neoforge.common.*;
 import net.neoforged.neoforge.common.world.AuxiliaryLightManager;
-import net.neoforged.neoforge.fluids.capability.IFluidHandler;
-import net.neoforged.neoforge.fluids.capability.IFluidHandlerItem;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
-import xfacthd.framedblocks.api.FramedBlocksAPI;
 import xfacthd.framedblocks.api.block.FramedProperties;
 import xfacthd.framedblocks.api.block.IFramedBlock;
 import xfacthd.framedblocks.api.block.cache.StateCache;
 import xfacthd.framedblocks.api.block.render.CullingHelper;
 import xfacthd.framedblocks.api.camo.*;
+import xfacthd.framedblocks.api.camo.empty.EmptyCamoContainer;
 import xfacthd.framedblocks.api.internal.InternalAPI;
 import xfacthd.framedblocks.api.model.data.FramedBlockData;
 import xfacthd.framedblocks.api.type.IBlockType;
@@ -61,7 +58,7 @@ public class FramedBlockEntity extends BlockEntity
 
     private final boolean[] culledFaces = new boolean[6];
     private StateCache stateCache;
-    private CamoContainer camoContainer = EmptyCamoContainer.EMPTY;
+    private CamoContainer<?, ?> camoContainer = EmptyCamoContainer.EMPTY;
     private boolean glowing = false;
     private boolean intangible = false;
     private boolean reinforced = false;
@@ -86,23 +83,16 @@ public class FramedBlockEntity extends BlockEntity
     {
         ItemStack stack = player.getItemInHand(hand);
         boolean secondary = hitSecondary(hit);
-        CamoContainer camo = getCamo(secondary);
+        CamoContainer<?, ?> camo = getCamo(secondary);
 
-        if (camo.getType().isBlock() && stack.is(Utils.FRAMED_HAMMER.value()))
+        CamoContainerFactory<?> camoFactory;
+        if (camo.isEmpty() && (camoFactory = CamoContainerHelper.findCamoFactory(stack)) != null)
         {
-            return clearBlockCamo(player, camo, stack, secondary);
+            return setCamo(player, stack, camoFactory, secondary);
         }
-        else if (camo.getType().isFluid() && stack.getCapability(Capabilities.FluidHandler.ITEM) != null)
+        else if (!camo.isEmpty() && CamoContainerHelper.isValidRemovalTool(camo, stack))
         {
-            return clearFluidCamo(player, camo, stack, secondary);
-        }
-        else if (camo.isEmpty() && stack.getItem() instanceof BlockItem)
-        {
-            return setBlockCamo(player, stack, secondary);
-        }
-        else if (camo.isEmpty() && stack.getCapability(Capabilities.FluidHandler.ITEM) != null)
-        {
-            return setFluidCamo(player, stack, secondary);
+            return clearCamo(player, stack, camo, secondary);
         }
         else if (stack.is(Tags.Items.DUSTS_GLOWSTONE) && !glowing)
         {
@@ -110,7 +100,7 @@ public class FramedBlockEntity extends BlockEntity
         }
         else if (!camo.isEmpty() && !player.isShiftKeyDown() && stack.is(Utils.FRAMED_SCREWDRIVER.value()))
         {
-            return rotateCamo(camo);
+            return rotateCamo(camo, secondary);
         }
         else if (!intangible && canMakeIntangible(stack))
         {
@@ -150,122 +140,36 @@ public class FramedBlockEntity extends BlockEntity
         return false;
     }
 
-    private InteractionResult clearBlockCamo(Player player, CamoContainer camo, ItemStack stack, boolean secondary)
+    private InteractionResult setCamo(Player player, ItemStack stack, CamoContainerFactory<?> factory, boolean secondary)
     {
-        if (!level().isClientSide())
-        {
-            ItemStack camoStack = camo.toItemStack(stack);
-            if (!player.isCreative() && ConfigView.Server.INSTANCE.shouldConsumeCamoItem())
-            {
-                if (!player.getInventory().add(camoStack))
-                {
-                    player.drop(camoStack, false);
-                }
-            }
-            else if (player.isCreative() && !player.getInventory().contains(camoStack))
-            {
-                player.getInventory().add(camoStack);
-            }
-
-            setCamo(EmptyCamoContainer.EMPTY, secondary);
-        }
-
-        return InteractionResult.sidedSuccess(level().isClientSide());
-    }
-
-    private InteractionResult clearFluidCamo(Player player, CamoContainer camo, ItemStack stack, boolean secondary)
-    {
-        ItemStack input = stack.copy();
-        input.setCount(1);
-
-        ItemStack result = camo.toItemStack(input);
-        if (!result.isEmpty())
-        {
-            if (!level().isClientSide())
-            {
-                if (!player.isCreative() && ConfigView.Server.INSTANCE.shouldConsumeCamoItem())
-                {
-                    // Container holds fluid in NBT -> stack doesn't change
-                    if (result == input)
-                    {
-                        player.setItemInHand(InteractionHand.MAIN_HAND, result);
-                    }
-                    else // Container holds fluid by type (i.e. bucket) -> got a new stack
-                    {
-                        stack.shrink(1);
-                        if (!player.getInventory().add(result))
-                        {
-                            player.drop(result, false);
-                        }
-                    }
-                }
-
-                setCamo(EmptyCamoContainer.EMPTY, secondary);
-            }
-            return InteractionResult.sidedSuccess(level().isClientSide());
-        }
-        return InteractionResult.FAIL;
-    }
-
-    private InteractionResult setBlockCamo(Player player, ItemStack stack, boolean secondary)
-    {
-        BlockState state = ((BlockItem) stack.getItem()).getBlock().defaultBlockState();
-        if (state.getBlock() instanceof IFramedBlock)
+        if (stack.getItem() instanceof BlockItem item && item.getBlock() instanceof IFramedBlock)
         {
             return InteractionResult.FAIL;
         }
 
-        if (isValidBlock(state, player))
+        CamoContainer<?, ?> camo = factory.applyCamo(level(), worldPosition, player, stack);
+        if (camo != null)
         {
             if (!level().isClientSide())
             {
-                CamoContainerFactory factory = FramedBlocksAPI.INSTANCE.getCamoContainerFactory(stack);
-                setCamo(factory.fromItem(stack), secondary);
-
-                if (!player.isCreative() && ConfigView.Server.INSTANCE.shouldConsumeCamoItem())
-                {
-                    stack.shrink(1);
-                }
-            }
-
-            return InteractionResult.sidedSuccess(level().isClientSide());
-        }
-        return InteractionResult.CONSUME;
-    }
-
-    private InteractionResult setFluidCamo(Player player, ItemStack stack, boolean secondary)
-    {
-        CamoContainerFactory factory = FramedBlocksAPI.INSTANCE.getCamoContainerFactory(stack);
-        CamoContainer camo = factory.fromItem(stack);
-        if (!camo.isEmpty())
-        {
-            if (!level().isClientSide())
-            {
-                if (!player.isCreative() && ConfigView.Server.INSTANCE.shouldConsumeCamoItem())
-                {
-                    IFluidHandlerItem handler = stack.getCapability(Capabilities.FluidHandler.ITEM);
-                    if (handler != null)
-                    {
-                        handler.drain(1000, IFluidHandler.FluidAction.EXECUTE);
-                        ItemStack result = handler.getContainer();
-
-                        // Container holds fluid by type (i.e. bucket) -> got a new stack
-                        if (result != stack)
-                        {
-                            stack.shrink(1);
-                            if (!result.isEmpty() && !player.getInventory().add(result))
-                            {
-                                player.drop(result, false);
-                            }
-                        }
-                    }
-                }
-
                 setCamo(camo, secondary);
             }
             return InteractionResult.sidedSuccess(level().isClientSide());
         }
         return InteractionResult.CONSUME;
+    }
+
+    private InteractionResult clearCamo(Player player, ItemStack stack, CamoContainer<?, ?> camo, boolean secondary)
+    {
+        if (CamoContainerHelper.removeCamo(camo, level(), worldPosition, player, stack))
+        {
+            if (!level().isClientSide())
+            {
+                setCamo(EmptyCamoContainer.EMPTY, secondary);
+            }
+            return InteractionResult.sidedSuccess(level().isClientSide());
+        }
+        return InteractionResult.FAIL;
     }
 
     private InteractionResult applyGlowstone(Player player, ItemStack stack)
@@ -282,12 +186,15 @@ public class FramedBlockEntity extends BlockEntity
         return InteractionResult.sidedSuccess(level().isClientSide());
     }
 
-    private InteractionResult rotateCamo(CamoContainer camo)
+    private InteractionResult rotateCamo(CamoContainer<?, ?> camo, boolean secondary)
     {
         if (camo.canRotateCamo())
         {
-            if (!level().isClientSide() && camo.rotateCamo())
+            if (!level().isClientSide())
             {
+                CamoContainer<?, ?> newCamo = camo.rotateCamo();
+                Objects.requireNonNull(newCamo, "CamoContainer#rotateCamo() must not return null if CamoContainer#canRotateCamo() returns true");
+                setCamo(newCamo, secondary);
                 setChangedWithoutSignalUpdate();
                 level().sendBlockUpdated(worldPosition, getBlockState(), getBlockState(), Block.UPDATE_ALL);
             }
@@ -356,58 +263,12 @@ public class FramedBlockEntity extends BlockEntity
         return InteractionResult.sidedSuccess(level().isClientSide());
     }
 
-    protected final boolean isValidBlock(BlockState state, Player player)
-    {
-        Block block = state.getBlock();
-        if (block instanceof IFramedBlock)
-        {
-            return false;
-        }
-
-        if (state.is(Utils.BLACKLIST))
-        {
-            if (canShowDisallowedCamoMessage(player, CamoMessageVerbosity.DEFAULT))
-            {
-                player.displayClientMessage(MSG_BLACKLISTED, true);
-            }
-            return false;
-        }
-        if (state.hasBlockEntity() && !ConfigView.Server.INSTANCE.allowBlockEntities() && !state.is(Utils.BE_WHITELIST))
-        {
-            if (canShowDisallowedCamoMessage(player, CamoMessageVerbosity.DEFAULT))
-            {
-                player.displayClientMessage(MSG_BLOCK_ENTITY, true);
-            }
-            return false;
-        }
-
-        BlockGetter level = Objects.requireNonNullElse(this.level, EmptyBlockGetter.INSTANCE);
-        if (state.isSolidRender(level, worldPosition) || state.is(Utils.FRAMEABLE) || state.getBlock() instanceof LiquidBlock)
-        {
-            return true;
-        }
-        if (canShowDisallowedCamoMessage(player, CamoMessageVerbosity.DETAILED))
-        {
-            player.displayClientMessage(MSG_NON_SOLID, true);
-        }
-        return false;
-    }
-
-    private static boolean canShowDisallowedCamoMessage(Player player, CamoMessageVerbosity verbosity)
-    {
-        if (player != null && player.level().isClientSide())
-        {
-            return ConfigView.Client.INSTANCE.getCamoMessageVerbosity().isAtLeast(verbosity);
-        }
-        return false;
-    }
-
     protected boolean hitSecondary(BlockHitResult hit)
     {
         return false;
     }
 
-    public final void setCamo(CamoContainer camo, boolean secondary)
+    public final void setCamo(CamoContainer<?, ?> camo, boolean secondary)
     {
         int light = getLightValue();
 
@@ -425,7 +286,7 @@ public class FramedBlockEntity extends BlockEntity
         }
     }
 
-    protected void setCamoInternal(CamoContainer camo, boolean secondary)
+    protected void setCamoInternal(CamoContainer<?, ?> camo, boolean secondary)
     {
         this.camoContainer = camo;
     }
@@ -436,14 +297,14 @@ public class FramedBlockEntity extends BlockEntity
         {
             return false;
         }
-        return stateCache.isFullFace(side) && camoContainer.isSolid(level(), worldPosition);
+        return stateCache.isFullFace(side) && camoContainer.getContent().isSolid(level(), worldPosition);
     }
 
     /**
      * Returns the camo for the given {@link BlockState}. Used for cases where different double blocks
      * with the same underlying shape(s) don't use the same side to return the camo for a given "sub-state".
      */
-    public CamoContainer getCamo(BlockState state)
+    public CamoContainer<?, ?> getCamo(BlockState state)
     {
         return camoContainer;
     }
@@ -452,7 +313,7 @@ public class FramedBlockEntity extends BlockEntity
      * Used to return a different camo depending on the given side
      * @param side The blocks face, can return EMPTY if the face does not pass the CTM_PREDICATE
      */
-    public CamoContainer getCamo(Direction side)
+    public CamoContainer<?, ?> getCamo(Direction side)
     {
         return camoContainer;
     }
@@ -460,7 +321,7 @@ public class FramedBlockEntity extends BlockEntity
     /**
      * Returns the camo for the given edge of the given side
      */
-    public CamoContainer getCamo(Direction side, @Nullable Direction edge)
+    public CamoContainer<?, ?> getCamo(Direction side, @Nullable Direction edge)
     {
         return getCamo(side);
     }
@@ -468,29 +329,29 @@ public class FramedBlockEntity extends BlockEntity
     /**
      * Used to return a different camo depending on the exact interaction location
      */
-    public CamoContainer getCamo(BlockHitResult hit)
+    public CamoContainer<?, ?> getCamo(BlockHitResult hit)
     {
         return getCamo(hitSecondary(hit));
     }
 
-    protected CamoContainer getCamo(boolean secondary)
+    protected CamoContainer<?, ?> getCamo(boolean secondary)
     {
         return camoContainer;
     }
 
-    public final CamoContainer getCamo()
+    public final CamoContainer<?, ?> getCamo()
     {
         return camoContainer;
     }
 
     protected boolean isCamoSolid()
     {
-        return !camoContainer.isEmpty() && camoContainer.isSolid(level(), worldPosition);
+        return camoContainer.getContent().isSolid(level(), worldPosition);
     }
 
     protected boolean doesCamoPropagateSkylightDown()
     {
-        return camoContainer.getState().propagatesSkylightDown(level(), worldPosition);
+        return camoContainer.getContent().propagatesSkylightDown(level(), worldPosition);
     }
 
     public final void checkCamoSolid()
@@ -593,7 +454,7 @@ public class FramedBlockEntity extends BlockEntity
 
     public float getCamoExplosionResistance(Explosion explosion)
     {
-        float camoRes = camoContainer.getState().getExplosionResistance(level(), worldPosition, explosion);
+        float camoRes = camoContainer.getContent().getExplosionResistance(level(), worldPosition, explosion);
         if (reinforced)
         {
             camoRes = Math.max(camoRes, Blocks.OBSIDIAN.getExplosionResistance());
@@ -607,7 +468,7 @@ public class FramedBlockEntity extends BlockEntity
         {
             return false;
         }
-        return camoContainer.isEmpty() || camoContainer.getState().isFlammable(level(), worldPosition, face);
+        return camoContainer.isEmpty() || camoContainer.getContent().isFlammable(level(), worldPosition, face);
     }
 
     public int getCamoFlammability(Direction face)
@@ -616,7 +477,7 @@ public class FramedBlockEntity extends BlockEntity
         {
             return 0;
         }
-        return camoContainer.isEmpty() ? -1 : camoContainer.getState().getFlammability(level(), worldPosition, face);
+        return camoContainer.isEmpty() ? -1 : camoContainer.getContent().getFlammability(level(), worldPosition, face);
     }
 
     public int getCamoFireSpreadSpeed(Direction face)
@@ -625,16 +486,12 @@ public class FramedBlockEntity extends BlockEntity
         {
             return 0;
         }
-        return camoContainer.isEmpty() ? -1 : camoContainer.getState().getFireSpreadSpeed(level(), worldPosition, face);
+        return camoContainer.isEmpty() ? -1 : camoContainer.getContent().getFireSpreadSpeed(level(), worldPosition, face);
     }
 
     public float getCamoShadeBrightness(float ownShade)
     {
-        if (!camoContainer.isEmpty())
-        {
-            return Math.max(ownShade, camoContainer.getState().getShadeBrightness(level(), worldPosition));
-        }
-        return ownShade;
+        return camoContainer.getContent().getShadeBrightness(level(), worldPosition, ownShade);
     }
 
     public final void setGlowing(boolean glowing)
@@ -664,7 +521,7 @@ public class FramedBlockEntity extends BlockEntity
     protected int getLightValue()
     {
         int baseLight = glowing ? ConfigView.Server.INSTANCE.getGlowstoneLightLevel() : 0;
-        return Math.max(baseLight, camoContainer.getState().getLightEmission());
+        return Math.max(baseLight, camoContainer.getContent().getLightEmission());
     }
 
     public void setIntangible(boolean intangible)
@@ -762,7 +619,11 @@ public class FramedBlockEntity extends BlockEntity
     {
         if (dropCamo && !camoContainer.isEmpty())
         {
-            drops.add(camoContainer.toItemStack(ItemStack.EMPTY));
+            ItemStack stack = CamoContainerHelper.dropCamo(camoContainer);
+            if (!stack.isEmpty())
+            {
+                drops.add(stack);
+            }
         }
         if (reinforced)
         {
@@ -777,63 +638,32 @@ public class FramedBlockEntity extends BlockEntity
 
     public float[] getCamoBeaconColorMultiplier(LevelReader level, BlockPos pos, BlockPos beaconPos)
     {
-        if (!camoContainer.isEmpty())
-        {
-            return camoContainer.getBeaconColorMultiplier(level, pos, beaconPos);
-        }
-        return null;
+        return camoContainer.getBeaconColorMultiplier(level, pos, beaconPos);
     }
 
     public boolean shouldCamoDisplayFluidOverlay(BlockAndTintGetter level, BlockPos pos, FluidState fluid)
     {
-        return camoContainer.isEmpty() || camoContainer.getState().shouldDisplayFluidOverlay(level, pos, fluid);
+        return camoContainer.getContent().shouldDisplayFluidOverlay(level, pos, fluid);
     }
 
-    public float getCamoFriction(BlockState state, @Nullable Entity entity)
+    public float getCamoFriction(BlockState state, @Nullable Entity entity, float frameFriction)
     {
-        return getFriction(this, camoContainer, state, entity);
-    }
-
-    protected static float getFriction(
-            FramedBlockEntity be, CamoContainer camo, BlockState state, @Nullable Entity entity
-    )
-    {
-        if (!camo.isEmpty())
-        {
-            return camo.getState().getFriction(be.level(), be.worldPosition, entity);
-        }
-        return state.getBlock().getFriction();
+        return camoContainer.getContent().getFriction(level(), worldPosition, entity, frameFriction);
     }
 
     public boolean canCamoSustainPlant(Direction side, IPlantable plant)
     {
-        return !camoContainer.isEmpty() && canSustainPlant(this, camoContainer, side, plant);
+        return camoContainer.getContent().canSustainPlant(level(), worldPosition, side, plant);
     }
 
-    public static boolean canSustainPlant(FramedBlockEntity be, CamoContainer camo, Direction side, IPlantable plant)
-    {
-        BlockState state = camo.getState();
-        return state.is(Utils.CAMO_SUSTAIN_PLANT) && state.canSustainPlant(be.level(), be.worldPosition, side, plant);
-    }
-
-    public boolean doesCamoPreventDestructionByEntity(Entity entity)
+    @SuppressWarnings("BooleanMethodIsAlwaysInverted")
+    public boolean canEntityDestroyCamo(Entity entity)
     {
         if (reinforced && !Blocks.OBSIDIAN.defaultBlockState().canEntityDestroy(level(), worldPosition, entity))
         {
             return false;
         }
-        return doesCamoPreventDestructionByEntity(this, camoContainer, entity);
-    }
-
-    protected static boolean doesCamoPreventDestructionByEntity(FramedBlockEntity be, CamoContainer camo, Entity entity)
-    {
-        if (camo.isEmpty())
-        {
-            return false;
-        }
-
-        BlockState state = camo.getState();
-        return !state.canEntityDestroy(be.level(), be.worldPosition, entity);
+        return camoContainer.getContent().canEntityDestroy(level(), worldPosition, entity);
     }
 
     @Override
@@ -847,7 +677,6 @@ public class FramedBlockEntity extends BlockEntity
     }
 
     @Override
-    @SuppressWarnings("deprecation")
     public void setBlockState(BlockState state)
     {
         super.setBlockState(state);
@@ -882,7 +711,7 @@ public class FramedBlockEntity extends BlockEntity
 
     protected void writeToDataPacket(CompoundTag nbt)
     {
-        nbt.put("camo", CamoContainer.writeToNetwork(camoContainer));
+        nbt.put("camo", CamoContainerHelper.writeToNetwork(camoContainer));
         nbt.putByte("flags", writeFlags());
     }
 
@@ -891,7 +720,7 @@ public class FramedBlockEntity extends BlockEntity
         boolean needUpdate = false;
         boolean needCullingUpdate = false;
 
-        CamoContainer newCamo = CamoContainer.readFromNetwork(nbt.getCompound("camo"));
+        CamoContainer<?, ?> newCamo = CamoContainerHelper.readFromNetwork(nbt.getCompound("camo"));
         if (!newCamo.equals(camoContainer))
         {
             int oldLight = getLightValue();
@@ -944,7 +773,7 @@ public class FramedBlockEntity extends BlockEntity
     {
         CompoundTag nbt = super.getUpdateTag();
 
-        nbt.put("camo", CamoContainer.writeToNetwork(camoContainer));
+        nbt.put("camo", CamoContainerHelper.writeToNetwork(camoContainer));
         nbt.putByte("flags", writeFlags());
 
         return nbt;
@@ -953,7 +782,7 @@ public class FramedBlockEntity extends BlockEntity
     @Override
     public void handleUpdateTag(CompoundTag nbt)
     {
-        CamoContainer newCamo = CamoContainer.readFromNetwork(nbt.getCompound("camo"));
+        CamoContainer<?, ?> newCamo = CamoContainerHelper.readFromNetwork(nbt.getCompound("camo"));
         if (!newCamo.equals(camoContainer))
         {
             camoContainer = newCamo;
@@ -1003,7 +832,7 @@ public class FramedBlockEntity extends BlockEntity
     public ModelData getModelData(boolean includeCullInfo)
     {
         boolean[] cullData = includeCullInfo ? culledFaces : FramedBlockData.NO_CULLED_FACES;
-        FramedBlockData modelData = new FramedBlockData(camoContainer.getState(), cullData, false, isReinforced());
+        FramedBlockData modelData = new FramedBlockData(camoContainer.getContent(), cullData, false, isReinforced());
         ModelData.Builder builder = ModelData.builder().with(FramedBlockData.PROPERTY, modelData);
         attachAdditionalModelData(builder);
         return builder.build();
@@ -1023,7 +852,7 @@ public class FramedBlockEntity extends BlockEntity
     @Override
     public void saveAdditional(CompoundTag nbt)
     {
-        nbt.put("camo", CamoContainer.save(camoContainer));
+        nbt.put("camo", CamoContainerHelper.writeToDisk(camoContainer));
         nbt.putBoolean("glowing", glowing);
         nbt.putBoolean("intangible", intangible);
         nbt.putBoolean("reinforced", reinforced);
@@ -1037,26 +866,27 @@ public class FramedBlockEntity extends BlockEntity
     {
         super.load(nbt);
 
-        InternalAPI.INSTANCE.updateCamoNbt(nbt, "camo_state", "camo_stack", "camo");
-
-        CamoContainer camo = CamoContainer.load(nbt.getCompound("camo"));
-        if (camo.isEmpty() || isValidBlock(camo.getState(), null))
-        {
-            recheckStates = nbt.getByte("updated") < DATA_VERSION;
-            camoContainer = camo;
-        }
-        else
-        {
-            recheckStates = true;
-            LOGGER.warn(
-                    "Framed Block of type \"{}\" at position {} contains an invalid camo of type \"{}\", removing camo! This might be caused by a config or tag change!",
-                    BuiltInRegistries.BLOCK.getKey(getBlockState().getBlock()),
-                    worldPosition,
-                    BuiltInRegistries.BLOCK.getKey(camo.getState().getBlock())
-            );
-        }
+        camoContainer = loadAndValidateCamo(nbt, "camo");
         glowing = nbt.getBoolean("glowing");
         intangible = nbt.getBoolean("intangible");
         reinforced = nbt.getBoolean("reinforced");
+    }
+
+    protected CamoContainer<?, ?> loadAndValidateCamo(CompoundTag tag, String key)
+    {
+        CamoContainer<?, ?> camo = CamoContainerHelper.readFromDisk(tag.getCompound(key));
+        if (!CamoContainerHelper.validateCamo(camo))
+        {
+            recheckStates = true;
+            LOGGER.warn(
+                    "Framed Block of type \"{}\" at position {} contains an invalid camo of type \"\" containing \"{}\", removing camo! This might be caused by a config or tag change!",
+                    BuiltInRegistries.BLOCK.getKey(getBlockState().getBlock()),
+                    worldPosition,
+                    camo.getContent().getCamoId()
+            );
+            return EmptyCamoContainer.EMPTY;
+        }
+        recheckStates = tag.getByte("updated") < DATA_VERSION;
+        return camo;
     }
 }

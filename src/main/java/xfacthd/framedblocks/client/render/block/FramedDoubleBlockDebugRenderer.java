@@ -15,6 +15,7 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.HitResult;
 import net.neoforged.neoforge.client.model.data.ModelData;
+import xfacthd.framedblocks.api.camo.block.BlockCamoContent;
 import xfacthd.framedblocks.api.model.data.FramedBlockData;
 import xfacthd.framedblocks.common.blockentity.doubled.FramedDoubleBlockEntity;
 
@@ -22,7 +23,7 @@ public class FramedDoubleBlockDebugRenderer implements BlockEntityRenderer<Frame
 {
     private static final ModelData MODEL_DATA = ModelData.builder().with(
             FramedBlockData.PROPERTY,
-            new FramedBlockData(Blocks.STONE.defaultBlockState(), new boolean[6], false, false)
+            new FramedBlockData(new BlockCamoContent(Blocks.STONE.defaultBlockState()), new boolean[6], false, false)
     ).build();
 
     public FramedDoubleBlockDebugRenderer(@SuppressWarnings("unused") BlockEntityRendererProvider.Context ctx) { }
