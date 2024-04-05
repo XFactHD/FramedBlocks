@@ -317,10 +317,11 @@ public final class FramedBlockModel extends BakedModelProxy
         BlockCamoContent[] contents = new BlockCamoContent[1 << 3];
         for (int i = 0; i < contents.length; i++)
         {
-            if ((i & FLAG_NO_CAMO_ATL_MODEL) != 0) state = state.setValue(PropertyHolder.ALT, true);
-            if ((i & FLAG_NO_CAMO_REINFORCED) != 0) state = state.setValue(PropertyHolder.REINFORCED, true);
-            if ((i & FLAG_NO_CAMO_SOLID_BG) != 0) state = state.setValue(PropertyHolder.SOLID_BG, true);
-            contents[i] = new BlockCamoContent(state);
+            BlockState stateOut = state;
+            if ((i & FLAG_NO_CAMO_ATL_MODEL) != 0) stateOut = stateOut.setValue(PropertyHolder.ALT, true);
+            if ((i & FLAG_NO_CAMO_REINFORCED) != 0) stateOut = stateOut.setValue(PropertyHolder.REINFORCED, true);
+            if ((i & FLAG_NO_CAMO_SOLID_BG) != 0) stateOut = stateOut.setValue(PropertyHolder.SOLID_BG, true);
+            contents[i] = new BlockCamoContent(stateOut);
         }
         return contents;
     }
