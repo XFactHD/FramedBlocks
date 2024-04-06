@@ -8,16 +8,17 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.*;
-import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.IronBarsBlock;
+import net.minecraft.world.level.block.*;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
+import net.minecraft.world.level.block.state.properties.BooleanProperty;
 import net.minecraft.world.level.storage.loot.LootParams;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.shapes.*;
 import net.neoforged.neoforge.client.extensions.common.IClientBlockExtensions;
 import xfacthd.framedblocks.api.block.*;
 import xfacthd.framedblocks.api.block.render.FramedBlockRenderProperties;
+import xfacthd.framedblocks.api.util.Utils;
 import xfacthd.framedblocks.common.FBContent;
 import xfacthd.framedblocks.common.data.BlockType;
 
@@ -83,6 +84,21 @@ public class FramedPaneBlock extends IronBarsBlock implements IFramedBlock
         }
         return newState;
     }
+
+    /*@Override // TODO: Missing side context
+    public boolean attachsTo(BlockState adjState, boolean sideSolid)
+    {
+        Direction adjSide = null;
+        if (adjSide != null && !Utils.isY(adjSide) && adjState.getBlock() instanceof FramedPaneBlock && adjState.getValue(FramedProperties.STATE_LOCKED))
+        {
+            BooleanProperty prop = CrossCollisionBlock.PROPERTY_BY_DIRECTION.get(adjSide);
+            if (!adjState.getValue(prop))
+            {
+                return false;
+            }
+        }
+        return super.attachsTo(adjState, sideSolid);
+    }*/
 
     @Override
     public void neighborChanged(

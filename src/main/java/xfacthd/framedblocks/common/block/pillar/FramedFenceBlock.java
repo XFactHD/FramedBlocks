@@ -8,16 +8,17 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.*;
-import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.FenceBlock;
+import net.minecraft.world.level.block.*;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
+import net.minecraft.world.level.block.state.properties.BooleanProperty;
 import net.minecraft.world.level.storage.loot.LootParams;
 import net.minecraft.world.phys.BlockHitResult;
 import net.neoforged.neoforge.client.extensions.common.IClientBlockExtensions;
 import xfacthd.framedblocks.api.block.FramedProperties;
 import xfacthd.framedblocks.api.block.IFramedBlock;
 import xfacthd.framedblocks.api.block.render.FramedBlockRenderProperties;
+import xfacthd.framedblocks.api.util.Utils;
 import xfacthd.framedblocks.common.data.BlockType;
 
 import javax.annotation.Nullable;
@@ -81,6 +82,20 @@ public class FramedFenceBlock extends FenceBlock implements IFramedBlock
             updateCulling(level, currentPos);
         }
         return newState;
+    }
+
+    @Override
+    public boolean connectsTo(BlockState adjState, boolean sideSolid, Direction adjSide)
+    {
+        if (!Utils.isY(adjSide) && adjState.getBlock() == this && adjState.getValue(FramedProperties.STATE_LOCKED))
+        {
+            BooleanProperty prop = CrossCollisionBlock.PROPERTY_BY_DIRECTION.get(adjSide);
+            if (!adjState.getValue(prop))
+            {
+                return false;
+            }
+        }
+        return super.connectsTo(adjState, sideSolid, adjSide);
     }
 
     @Override

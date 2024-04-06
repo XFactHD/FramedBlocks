@@ -14,6 +14,7 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.WallBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
+import net.minecraft.world.level.block.state.properties.EnumProperty;
 import net.minecraft.world.level.block.state.properties.WallSide;
 import net.minecraft.world.level.storage.loot.LootParams;
 import net.minecraft.world.phys.BlockHitResult;
@@ -24,6 +25,7 @@ import xfacthd.framedblocks.api.block.FramedProperties;
 import xfacthd.framedblocks.api.block.IFramedBlock;
 import xfacthd.framedblocks.api.block.render.FramedBlockRenderProperties;
 import xfacthd.framedblocks.api.shapes.*;
+import xfacthd.framedblocks.api.util.Utils;
 import xfacthd.framedblocks.common.data.BlockType;
 
 import javax.annotation.Nullable;
@@ -34,6 +36,12 @@ import java.util.function.Consumer;
 @SuppressWarnings("deprecation")
 public class FramedWallBlock extends WallBlock implements IFramedBlock
 {
+    private static final Map<Direction, EnumProperty<WallSide>> PROPERTY_BY_DIRECTION = Map.of(
+            Direction.NORTH, NORTH_WALL,
+            Direction.EAST, EAST_WALL,
+            Direction.SOUTH, SOUTH_WALL,
+            Direction.WEST, WEST_WALL
+    );
     private final ShapeProvider shapes = makeShapeProvider(states -> generateShapes(states, 14F, 16F));
     private final ShapeProvider collisionShapes = makeShapeProvider(states -> generateShapes(states, 24F, 24F));
 
@@ -88,6 +96,20 @@ public class FramedWallBlock extends WallBlock implements IFramedBlock
             updateCulling(level, currentPos);
         }
         return newState;
+    }
+
+    @Override
+    public boolean connectsTo(BlockState adjState, boolean sideSolid, Direction adjSide)
+    {
+        if (!Utils.isY(adjSide) && adjState.getBlock() == this && adjState.getValue(FramedProperties.STATE_LOCKED))
+        {
+            EnumProperty<WallSide> prop = PROPERTY_BY_DIRECTION.get(adjSide);
+            if (adjState.getValue(prop) == WallSide.NONE)
+            {
+                return false;
+            }
+        }
+        return super.connectsTo(adjState, sideSolid, adjSide);
     }
 
     @Override
