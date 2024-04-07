@@ -160,8 +160,7 @@ public class FramedBlueprintItem extends FramedToolItem
 
         Set<CamoContainer<?, ?>> camos = getCamoContainers(item, tag);
 
-        //Copying fluid camos is currently not possible
-        if (ServerConfig.VIEW.shouldConsumeCamoItem() && camos.stream().map(CamoContainer::getFactory).anyMatch(CamoContainerFactory::canTriviallyConvertToItemStack))
+        if (!canCopyAllCamos(camos))
         {
             if (player.level().isClientSide())
             {
@@ -258,11 +257,7 @@ public class FramedBlueprintItem extends FramedToolItem
     {
         Set<CamoContainer<?, ?>> camos = getCamoContainers(item, tag);
 
-        //Copying fluid camos is currently not possible
-        if (ServerConfig.VIEW.shouldConsumeCamoItem() && camos.stream().map(CamoContainer::getFactory).anyMatch(CamoContainerFactory::canTriviallyConvertToItemStack))
-        {
-            return;
-        }
+        if (!canCopyAllCamos(camos)) return;
 
         List<ItemStack> materials = new ArrayList<>();
         materials.add(getBlockItem(item));
@@ -311,6 +306,17 @@ public class FramedBlueprintItem extends FramedToolItem
                 break;
             }
         }
+    }
+
+    @SuppressWarnings("BooleanMethodIsAlwaysInverted")
+    private static boolean canCopyAllCamos(Set<CamoContainer<?, ?>> camos)
+    {
+        if (!ServerConfig.VIEW.shouldConsumeCamoItem()) return true;
+
+        //Copying fluid camos is currently not possible
+        return camos.stream()
+                .map(CamoContainer::getFactory)
+                .allMatch(CamoContainerFactory::canTriviallyConvertToItemStack);
     }
 
     private static BlueprintCopyBehaviour getBehaviour(Block block)
