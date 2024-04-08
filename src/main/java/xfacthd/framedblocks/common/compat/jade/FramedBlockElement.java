@@ -4,16 +4,18 @@ import com.mojang.blaze3d.platform.Lighting;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
-import com.mojang.math.Axis;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
-import net.minecraft.client.renderer.*;
+import net.minecraft.client.renderer.MultiBufferSource;
+import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.client.resources.model.BakedModel;
 import net.minecraft.core.BlockPos;
 import net.minecraft.util.RandomSource;
+import net.minecraft.world.item.ItemDisplayContext;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.Vec2;
+import net.neoforged.neoforge.client.RenderTypeHelper;
 import net.neoforged.neoforge.client.model.data.ModelData;
 import org.jetbrains.annotations.Nullable;
 import org.joml.Vector3f;
@@ -37,7 +39,6 @@ final class FramedBlockElement extends Element
     private final SingleBlockFakeLevel fakeLevel;
     private final BakedModel model;
     private final ModelData modelData;
-    private final RenderType renderType;
     private final float scale;
 
     FramedBlockElement(BlockState state, FramedBlockEntity blockEntity)
@@ -48,8 +49,7 @@ final class FramedBlockElement extends Element
         this.model = Minecraft.getInstance().getBlockRenderer().getBlockModel(this.state);
         boolean renderCamo = ClientConfig.VIEW.shouldRenderCamoInJade();
         this.modelData = renderCamo ? blockEntity.getModelData(false) : ModelData.EMPTY;
-        this.renderType = renderCamo ? Sheets.translucentCullBlockSheet() : Sheets.cutoutBlockSheet();
-        this.scale = block.getJadeRenderScale(this.state) * .625F;
+        this.scale = block.getJadeRenderScale(this.state);
     }
 
     @Override
@@ -68,16 +68,15 @@ final class FramedBlockElement extends Element
 
             poseStack.translate(x + (SIZE / 2F), y + (SIZE / 2F), Z_OFFSET);
             poseStack.scale(RENDER_SIZE * scale, -RENDER_SIZE * scale, RENDER_SIZE * scale);
-            poseStack.mulPose(Axis.XP.rotationDegrees(30F));
-            poseStack.mulPose(Axis.YP.rotationDegrees(225F));
+            model.applyTransform(ItemDisplayContext.GUI, poseStack, false);
             poseStack.translate(-.5F, -.5F, -.5F);
 
             long seed = state.getSeed(BlockPos.ZERO);
             RANDOM.setSeed(seed);
             MultiBufferSource.BufferSource buffer = Minecraft.getInstance().renderBuffers().bufferSource();
-            VertexConsumer consumer = buffer.getBuffer(renderType);
             for (RenderType renderType : model.getRenderTypes(state, RANDOM, modelData))
             {
+                VertexConsumer consumer = buffer.getBuffer(RenderTypeHelper.getEntityRenderType(renderType, true));
                 Minecraft.getInstance().getBlockRenderer().getModelRenderer().tesselateBlock(
                         fakeLevel,
                         model,
