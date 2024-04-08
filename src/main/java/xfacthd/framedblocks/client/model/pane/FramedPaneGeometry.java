@@ -4,7 +4,6 @@ import com.google.common.base.Preconditions;
 import net.minecraft.client.renderer.block.model.BakedQuad;
 import net.minecraft.core.Direction;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
-import net.neoforged.fml.ModList;
 import xfacthd.framedblocks.api.model.data.QuadMap;
 import xfacthd.framedblocks.api.model.geometry.Geometry;
 import xfacthd.framedblocks.api.model.wrapping.GeometryFactory;
@@ -21,7 +20,7 @@ public class FramedPaneGeometry extends Geometry
     protected final boolean south;
     protected final boolean west;
 
-    protected FramedPaneGeometry(GeometryFactory.Context ctx)
+    public FramedPaneGeometry(GeometryFactory.Context ctx)
     {
         this.north = ctx.state().getValue(BlockStateProperties.NORTH);
         this.east = ctx.state().getValue(BlockStateProperties.EAST);
@@ -123,16 +122,5 @@ public class FramedPaneGeometry extends Geometry
             case WEST -> !west;
             default -> throw new IllegalArgumentException(String.format("Invalid face: %s!", face));
         };
-    }
-
-
-
-    public static Geometry createPaneGeometry(GeometryFactory.Context ctx)
-    {
-        if (ModList.get().isLoaded("diagonalwindows"))
-        {
-            return new FramedDiagonalPaneGeometry(ctx);
-        }
-        return new FramedPaneGeometry(ctx);
     }
 }

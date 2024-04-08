@@ -1,7 +1,7 @@
-package xfacthd.framedblocks.client.model.pane;
+package xfacthd.framedblocks.common.compat.diagonalblocks;
 
 import com.google.common.base.Preconditions;
-//import fuzs.diagonalwindows.api.world.level.block.DiagonalBlock;
+import fuzs.diagonalblocks.api.v2.DiagonalBlock;
 import net.minecraft.client.renderer.block.model.BakedQuad;
 import net.minecraft.core.Direction;
 import org.joml.Vector3f;
@@ -10,10 +10,11 @@ import xfacthd.framedblocks.api.model.wrapping.GeometryFactory;
 import xfacthd.framedblocks.api.model.quad.Modifiers;
 import xfacthd.framedblocks.api.model.quad.QuadModifier;
 import xfacthd.framedblocks.api.util.Utils;
+import xfacthd.framedblocks.client.model.pane.FramedPaneGeometry;
 
 import java.util.List;
 
-public class FramedDiagonalPaneGeometry extends FramedPaneGeometry
+class FramedDiagonalPaneGeometry extends FramedPaneGeometry
 {
     private final boolean northEast;
     private final boolean southEast;
@@ -21,15 +22,14 @@ public class FramedDiagonalPaneGeometry extends FramedPaneGeometry
     private final boolean southWest;
     private final boolean noPillar;
 
-    FramedDiagonalPaneGeometry(GeometryFactory.Context ctx)
+    public FramedDiagonalPaneGeometry(GeometryFactory.Context ctx)
     {
         super(ctx);
 
-        //boolean hasProps = ctx.state().getBlock() instanceof DiagonalBlock diagonalBlock && diagonalBlock.hasProperties();
-        this.northEast = false;//hasProps && ctx.state().getValue(DiagonalBlock.NORTH_EAST);
-        this.southEast = false;//hasProps && ctx.state().getValue(DiagonalBlock.SOUTH_EAST);
-        this.northWest = false;//hasProps && ctx.state().getValue(DiagonalBlock.NORTH_WEST);
-        this.southWest = false;//hasProps && ctx.state().getValue(DiagonalBlock.SOUTH_WEST);
+        this.northEast = ctx.state().getValue(DiagonalBlock.NORTH_EAST);
+        this.southEast = ctx.state().getValue(DiagonalBlock.SOUTH_EAST);
+        this.northWest = ctx.state().getValue(DiagonalBlock.NORTH_WEST);
+        this.southWest = ctx.state().getValue(DiagonalBlock.SOUTH_WEST);
         this.noPillar = (northEast && southWest && !southEast && !northWest) || (southEast && northWest && !northEast && !southWest);
     }
 

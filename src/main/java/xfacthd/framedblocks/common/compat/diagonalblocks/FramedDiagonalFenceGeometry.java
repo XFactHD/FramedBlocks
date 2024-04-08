@@ -1,6 +1,6 @@
-package xfacthd.framedblocks.client.model.pillar;
+package xfacthd.framedblocks.common.compat.diagonalblocks;
 
-//import fuzs.diagonalfences.api.world.level.block.DiagonalBlock;
+import fuzs.diagonalblocks.api.v2.DiagonalBlock;
 import net.minecraft.client.renderer.block.model.BakedQuad;
 import net.minecraft.core.Direction;
 import org.joml.Vector3f;
@@ -9,22 +9,22 @@ import xfacthd.framedblocks.api.model.wrapping.GeometryFactory;
 import xfacthd.framedblocks.api.model.quad.Modifiers;
 import xfacthd.framedblocks.api.model.quad.QuadModifier;
 import xfacthd.framedblocks.api.util.Utils;
+import xfacthd.framedblocks.client.model.pillar.FramedFenceGeometry;
 
-public class FramedDiagonalFenceGeometry extends FramedFenceGeometry
+class FramedDiagonalFenceGeometry extends FramedFenceGeometry
 {
     private final boolean northEast;
     private final boolean southEast;
     private final boolean northWest;
     private final boolean southWest;
 
-    FramedDiagonalFenceGeometry(GeometryFactory.Context ctx)
+    public FramedDiagonalFenceGeometry(GeometryFactory.Context ctx)
     {
         super(ctx);
-        //boolean hasProps = ctx.state().getBlock() instanceof DiagonalBlock diagonalBlock && diagonalBlock.hasProperties();
-        this.northEast = false;//hasProps && ctx.state().getValue(DiagonalBlock.NORTH_EAST);
-        this.southEast = false;//hasProps && ctx.state().getValue(DiagonalBlock.SOUTH_EAST);
-        this.northWest = false;//hasProps && ctx.state().getValue(DiagonalBlock.NORTH_WEST);
-        this.southWest = false;//hasProps && ctx.state().getValue(DiagonalBlock.SOUTH_WEST);
+        this.northEast = ctx.state().getValue(DiagonalBlock.NORTH_EAST);
+        this.southEast = ctx.state().getValue(DiagonalBlock.SOUTH_EAST);
+        this.northWest = ctx.state().getValue(DiagonalBlock.NORTH_WEST);
+        this.southWest = ctx.state().getValue(DiagonalBlock.SOUTH_WEST);
     }
 
     @Override

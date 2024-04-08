@@ -1,5 +1,8 @@
-package xfacthd.framedblocks.common.block.pillar;
+package xfacthd.framedblocks.common.compat.diagonalblocks;
 
+import fuzs.diagonalblocks.api.v2.EightWayDirection;
+import fuzs.diagonalblocks.api.v2.impl.StarCollisionBlock;
+import fuzs.diagonalblocks.neoforge.api.v2.impl.NeoForgeDiagonalFenceBlock;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.world.InteractionHand;
@@ -8,7 +11,8 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.*;
-import net.minecraft.world.level.block.*;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.CrossCollisionBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BooleanProperty;
@@ -19,7 +23,6 @@ import xfacthd.framedblocks.api.block.FramedProperties;
 import xfacthd.framedblocks.api.block.IFramedBlock;
 import xfacthd.framedblocks.api.block.render.FramedBlockRenderProperties;
 import xfacthd.framedblocks.api.util.Utils;
-import xfacthd.framedblocks.common.compat.diagonalblocks.DiagonalBlocksCompat;
 import xfacthd.framedblocks.common.data.BlockType;
 
 import javax.annotation.Nullable;
@@ -27,11 +30,11 @@ import java.util.List;
 import java.util.function.Consumer;
 
 @SuppressWarnings("deprecation")
-public class FramedFenceBlock extends FenceBlock implements IFramedBlock
+public final class FramedDiagonalFenceBlock extends NeoForgeDiagonalFenceBlock implements IFramedBlock
 {
-    public FramedFenceBlock()
+    public FramedDiagonalFenceBlock(Block block)
     {
-        super(IFramedBlock.createProperties(BlockType.FRAMED_FENCE));
+        super(block);
         registerDefaultState(defaultBlockState()
                 .setValue(FramedProperties.STATE_LOCKED, false)
                 .setValue(FramedProperties.GLOWING, false)
@@ -47,7 +50,7 @@ public class FramedFenceBlock extends FenceBlock implements IFramedBlock
     }
 
     @Override
-    public final InteractionResult use(
+    public InteractionResult use(
             BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hit
     )
     {
@@ -100,6 +103,30 @@ public class FramedFenceBlock extends FenceBlock implements IFramedBlock
     }
 
     @Override
+    public BlockState updateIndirectNeighborDiagonalProperty(BlockState state, LevelAccessor level, BlockPos pos, EightWayDirection dir)
+    {
+        if (state.getValue(FramedProperties.STATE_LOCKED))
+        {
+            return null;
+        }
+        return super.updateIndirectNeighborDiagonalProperty(state, level, pos, dir);
+    }
+
+    @Override
+    public boolean attachesDiagonallyTo(BlockState adjState, EightWayDirection adjDir)
+    {
+        if (adjState.getBlock() == this && adjState.getValue(FramedProperties.STATE_LOCKED))
+        {
+            BooleanProperty prop = StarCollisionBlock.PROPERTY_BY_DIRECTION.get(adjDir);
+            if (!adjState.getValue(prop))
+            {
+                return false;
+            }
+        }
+        return super.attachesDiagonallyTo(adjState, adjDir);
+    }
+
+    @Override
     public void neighborChanged(
             BlockState state, Level level, BlockPos pos, Block block, BlockPos fromPos, boolean isMoving
     )
@@ -140,6 +167,6 @@ public class FramedFenceBlock extends FenceBlock implements IFramedBlock
     @Override
     public BlockState getJadeRenderState(BlockState state)
     {
-        return defaultBlockState().setValue(EAST, true).setValue(WEST, true);
+        return defaultBlockState().setValue(CrossCollisionBlock.EAST, true).setValue(CrossCollisionBlock.WEST, true);
     }
 }

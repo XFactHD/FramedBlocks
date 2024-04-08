@@ -20,6 +20,7 @@ import xfacthd.framedblocks.api.block.*;
 import xfacthd.framedblocks.api.block.render.FramedBlockRenderProperties;
 import xfacthd.framedblocks.api.util.Utils;
 import xfacthd.framedblocks.common.FBContent;
+import xfacthd.framedblocks.common.compat.diagonalblocks.DiagonalBlocksCompat;
 import xfacthd.framedblocks.common.data.BlockType;
 
 import javax.annotation.Nullable;
@@ -89,7 +90,7 @@ public class FramedPaneBlock extends IronBarsBlock implements IFramedBlock
     public boolean attachsTo(BlockState adjState, boolean sideSolid)
     {
         Direction adjSide = null;
-        if (adjSide != null && !Utils.isY(adjSide) && adjState.getBlock() instanceof FramedPaneBlock && adjState.getValue(FramedProperties.STATE_LOCKED))
+        if (adjSide != null && !Utils.isY(adjSide) && DiagonalBlocksCompat.isFramedPane(adjState) && adjState.getValue(FramedProperties.STATE_LOCKED))
         {
             BooleanProperty prop = CrossCollisionBlock.PROPERTY_BY_DIRECTION.get(adjSide);
             if (!adjState.getValue(prop))

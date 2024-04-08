@@ -14,6 +14,8 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.*;
 import xfacthd.framedblocks.api.camo.*;
 
+import java.util.List;
+
 public final class ParticleHelper
 {
     public static void spawnLandingParticles(CamoContainer<?, ?> camo, ServerLevel level, BlockPos pos, LivingEntity entity, int count)
@@ -110,14 +112,16 @@ public final class ParticleHelper
         {
             CamoClientHandler handler = camo.getClientHandler();
 
-            state.getShape(level, pos).forAllBoxes((minX, minY, minZ, maxX, maxY, maxZ) ->
+            List<AABB> boxes = state.getShape(level, pos).toAabbs();
+            double countMult = 1D / boxes.size();
+            boxes.forEach(aabb ->
             {
-                double sizeX = Math.min(1D, maxX - minX);
-                double sizeY = Math.min(1D, maxY - minY);
-                double sizeZ = Math.min(1D, maxZ - minZ);
-                int xCount = Math.max(2, Mth.ceil(sizeX / 0.25D));
-                int yCount = Math.max(2, Mth.ceil(sizeY / 0.25D));
-                int zCount = Math.max(2, Mth.ceil(sizeZ / 0.25D));
+                double sizeX = Math.min(1D, aabb.maxX - aabb.minX);
+                double sizeY = Math.min(1D, aabb.maxY - aabb.minY);
+                double sizeZ = Math.min(1D, aabb.maxZ - aabb.minZ);
+                int xCount = Math.max(2, Mth.ceil(sizeX / 0.25D * countMult));
+                int yCount = Math.max(2, Mth.ceil(sizeY / 0.25D * countMult));
+                int zCount = Math.max(2, Mth.ceil(sizeZ / 0.25D * countMult));
 
                 for (int iX = 0; iX < xCount; ++iX)
                 {
@@ -128,9 +132,9 @@ public final class ParticleHelper
                             double offX = ((double) iX + 0.5D) / (double) xCount;
                             double offY = ((double) iY + 0.5D) / (double) yCount;
                             double offZ = ((double) iZ + 0.5D) / (double) zCount;
-                            double x = pos.getX() + offX * sizeX + minX;
-                            double y = pos.getY() + offY * sizeY + minY;
-                            double z = pos.getZ() + offZ * sizeZ + minZ;
+                            double x = pos.getX() + offX * sizeX + aabb.minX;
+                            double y = pos.getY() + offY * sizeY + aabb.minY;
+                            double z = pos.getZ() + offZ * sizeZ + aabb.minZ;
                             engine.add(handler.makeHitDestroyParticle(
                                     (ClientLevel) level, x, y, z, offX - 0.5D, offY - 0.5D, offZ - 0.5D, camo, pos
                             ));

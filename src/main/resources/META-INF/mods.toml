@@ -77,16 +77,9 @@ license="LGPL v3"
     side="CLIENT"
 
 [[dependencies.framedblocks]]
-    modId="diagonalfences"
+    modId="diagonalblocks"
     type="optional"
-    versionRange="[${diag_fences_version},)"
-    ordering="NONE"
-    side="BOTH"
-
-[[dependencies.framedblocks]]
-    modId="diagonalwindows"
-    type="optional"
-    versionRange="[${diag_windows_version},)"
+    versionRange="[${diag_blocks_version},)"
     ordering="NONE"
     side="BOTH"
 

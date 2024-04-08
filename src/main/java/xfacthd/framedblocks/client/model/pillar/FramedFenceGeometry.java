@@ -3,7 +3,6 @@ package xfacthd.framedblocks.client.model.pillar;
 import net.minecraft.client.renderer.block.model.BakedQuad;
 import net.minecraft.core.Direction;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
-import net.neoforged.fml.ModList;
 import xfacthd.framedblocks.api.model.data.QuadMap;
 import xfacthd.framedblocks.api.model.geometry.Geometry;
 import xfacthd.framedblocks.api.model.wrapping.GeometryFactory;
@@ -18,7 +17,7 @@ public class FramedFenceGeometry extends Geometry
     private final boolean south;
     private final boolean west;
 
-    protected FramedFenceGeometry(GeometryFactory.Context ctx)
+    public FramedFenceGeometry(GeometryFactory.Context ctx)
     {
         this.north = ctx.state().getValue(BlockStateProperties.NORTH);
         this.east = ctx.state().getValue(BlockStateProperties.EAST);
@@ -102,16 +101,5 @@ public class FramedFenceGeometry extends Geometry
     public boolean useSolidNoCamoModel()
     {
         return true;
-    }
-
-
-
-    public static Geometry createFenceGeometry(GeometryFactory.Context ctx)
-    {
-        if (ModList.get().isLoaded("diagonalfences"))
-        {
-            return new FramedDiagonalFenceGeometry(ctx);
-        }
-        return new FramedFenceGeometry(ctx);
     }
 }

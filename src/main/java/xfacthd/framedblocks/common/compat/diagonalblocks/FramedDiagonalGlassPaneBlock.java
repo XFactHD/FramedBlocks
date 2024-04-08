@@ -1,5 +1,8 @@
-package xfacthd.framedblocks.common.block.pillar;
+package xfacthd.framedblocks.common.compat.diagonalblocks;
 
+import fuzs.diagonalblocks.api.v2.EightWayDirection;
+import fuzs.diagonalblocks.api.v2.impl.StarCollisionBlock;
+import fuzs.diagonalblocks.neoforge.api.v2.impl.NeoForgeDiagonalGlassPaneBlock;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.world.InteractionHand;
@@ -14,12 +17,13 @@ import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BooleanProperty;
 import net.minecraft.world.level.storage.loot.LootParams;
 import net.minecraft.world.phys.BlockHitResult;
+import net.minecraft.world.phys.shapes.*;
 import net.neoforged.neoforge.client.extensions.common.IClientBlockExtensions;
 import xfacthd.framedblocks.api.block.FramedProperties;
 import xfacthd.framedblocks.api.block.IFramedBlock;
 import xfacthd.framedblocks.api.block.render.FramedBlockRenderProperties;
 import xfacthd.framedblocks.api.util.Utils;
-import xfacthd.framedblocks.common.compat.diagonalblocks.DiagonalBlocksCompat;
+import xfacthd.framedblocks.common.FBContent;
 import xfacthd.framedblocks.common.data.BlockType;
 
 import javax.annotation.Nullable;
@@ -27,11 +31,11 @@ import java.util.List;
 import java.util.function.Consumer;
 
 @SuppressWarnings("deprecation")
-public class FramedFenceBlock extends FenceBlock implements IFramedBlock
+public class FramedDiagonalGlassPaneBlock extends NeoForgeDiagonalGlassPaneBlock implements IFramedBlock
 {
-    public FramedFenceBlock()
+    public FramedDiagonalGlassPaneBlock(Block block)
     {
-        super(IFramedBlock.createProperties(BlockType.FRAMED_FENCE));
+        super(block);
         registerDefaultState(defaultBlockState()
                 .setValue(FramedProperties.STATE_LOCKED, false)
                 .setValue(FramedProperties.GLOWING, false)
@@ -43,7 +47,7 @@ public class FramedFenceBlock extends FenceBlock implements IFramedBlock
     protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder)
     {
         super.createBlockStateDefinition(builder);
-        builder.add(FramedProperties.GLOWING, FramedProperties.STATE_LOCKED, FramedProperties.PROPAGATES_SKYLIGHT);
+        builder.add(FramedProperties.STATE_LOCKED, FramedProperties.GLOWING, FramedProperties.PROPAGATES_SKYLIGHT);
     }
 
     @Override
@@ -51,10 +55,7 @@ public class FramedFenceBlock extends FenceBlock implements IFramedBlock
             BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hit
     )
     {
-        InteractionResult result = handleUse(state, level, pos, player, hand, hit);
-        if (result.consumesAction()) { return result; }
-
-        return super.use(state, level, pos, player, hand, hit);
+        return handleUse(state, level, pos, player, hand, hit);
     }
 
     @Override
@@ -85,10 +86,11 @@ public class FramedFenceBlock extends FenceBlock implements IFramedBlock
         return newState;
     }
 
-    @Override
-    public boolean connectsTo(BlockState adjState, boolean sideSolid, Direction adjSide)
+    /*@Override // TODO: Missing side context
+    public boolean attachsTo(BlockState adjState, boolean sideSolid)
     {
-        if (!Utils.isY(adjSide) && DiagonalBlocksCompat.isFramedFence(adjState) && adjState.getValue(FramedProperties.STATE_LOCKED))
+        Direction adjSide = null;
+        if (adjSide != null && !Utils.isY(adjSide) && DiagonalBlocksCompat.isFramedPane(adjState) && adjState.getValue(FramedProperties.STATE_LOCKED))
         {
             BooleanProperty prop = CrossCollisionBlock.PROPERTY_BY_DIRECTION.get(adjSide);
             if (!adjState.getValue(prop))
@@ -96,7 +98,31 @@ public class FramedFenceBlock extends FenceBlock implements IFramedBlock
                 return false;
             }
         }
-        return super.connectsTo(adjState, sideSolid, adjSide);
+        return super.attachsTo(adjState, sideSolid);
+    }*/
+
+    @Override
+    public BlockState updateIndirectNeighborDiagonalProperty(BlockState state, LevelAccessor level, BlockPos pos, EightWayDirection dir)
+    {
+        if (state.getValue(FramedProperties.STATE_LOCKED))
+        {
+            return null;
+        }
+        return super.updateIndirectNeighborDiagonalProperty(state, level, pos, dir);
+    }
+
+    @Override
+    public boolean attachesDiagonallyTo(BlockState adjState, EightWayDirection adjDir)
+    {
+        if (adjState.getBlock() == this && adjState.getValue(FramedProperties.STATE_LOCKED))
+        {
+            BooleanProperty prop = StarCollisionBlock.PROPERTY_BY_DIRECTION.get(adjDir);
+            if (!adjState.getValue(prop))
+            {
+                return false;
+            }
+        }
+        return super.attachesDiagonallyTo(adjState, adjDir);
     }
 
     @Override
@@ -105,6 +131,32 @@ public class FramedFenceBlock extends FenceBlock implements IFramedBlock
     )
     {
         updateCulling(level, pos);
+    }
+
+    @Override
+    public List<ItemStack> getDrops(BlockState state, LootParams.Builder builder)
+    {
+        return getCamoDrops(super.getDrops(state, builder), builder);
+    }
+
+    @Override
+    public VoxelShape getShape(BlockState state, BlockGetter level, BlockPos pos, CollisionContext ctx)
+    {
+        if (isIntangible(state, level, pos, ctx))
+        {
+            return Shapes.empty();
+        }
+        return super.getShape(state, level, pos, ctx);
+    }
+
+    @Override
+    public VoxelShape getCollisionShape(BlockState state, BlockGetter level, BlockPos pos, CollisionContext ctx)
+    {
+        if (isIntangible(state, level, pos, null))
+        {
+            return Shapes.empty();
+        }
+        return super.getCollisionShape(state, level, pos, ctx);
     }
 
     @Override
@@ -119,16 +171,10 @@ public class FramedFenceBlock extends FenceBlock implements IFramedBlock
         return state.getValue(FramedProperties.PROPAGATES_SKYLIGHT);
     }
 
-    @Override
-    public List<ItemStack> getDrops(BlockState state, LootParams.Builder builder)
+    @Override //The pane handles this through the SideSkipPredicate instead
+    public boolean skipRendering(BlockState state, BlockState adjacentState, Direction side)
     {
-        return getCamoDrops(super.getDrops(state, builder), builder);
-    }
-
-    @Override
-    public BlockType getBlockType()
-    {
-        return BlockType.FRAMED_FENCE;
+        return this == FBContent.BLOCK_FRAMED_BARS.value() && super.skipRendering(state, adjacentState, side);
     }
 
     @Override
@@ -138,8 +184,14 @@ public class FramedFenceBlock extends FenceBlock implements IFramedBlock
     }
 
     @Override
+    public BlockType getBlockType()
+    {
+        return BlockType.FRAMED_PANE;
+    }
+
+    @Override
     public BlockState getJadeRenderState(BlockState state)
     {
-        return defaultBlockState().setValue(EAST, true).setValue(WEST, true);
+        return defaultBlockState().setValue(CrossCollisionBlock.EAST, true).setValue(CrossCollisionBlock.WEST, true);
     }
 }

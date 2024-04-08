@@ -131,6 +131,13 @@ repositories {
             includeGroup('appeng')
         }
     }
+    maven {
+        name = "Fuzs Mod Resources"
+        url = "https://raw.githubusercontent.com/Fuzss/modresources/main/maven/"
+        content {
+            includeGroupByRegex('fuzs.*')
+        }
+    }
     mavenLocal() {
         content {
             includeGroupByRegex('xfacthd.*')
@@ -143,10 +150,10 @@ dependencies {
 
     //compileOnly("team.chisel.ctm:CTM:${ctm_version}")
 
-    // Only needed when Diagonal Fences or Diagonal Windows is switched to implementation
-    //runtimeOnly("curse.maven:puzzleslib-495476:4621178")
-    //compileOnly("curse.maven:diagonalfences-458048:4611775")
-    //compileOnly("curse.maven:diagonalwindows-891328:4660584")
+    // Only needed when DiagonalBlocks is switched to implementation
+    //runtimeOnly("curse.maven:puzzleslib-495476:5233008")
+    //runtimeOnly("curse.maven:forgecfgapi-547434:5051716")
+    compileOnly("fuzs.diagonalblocks:diagonalblocks-neoforge:${diag_blocks_version}")
 
     //compileOnly("curse.maven:buildinggadgets-298187:3829297")
 
@@ -215,8 +222,7 @@ tasks.withType(ProcessResources).configureEach {
             jei_version: jei_version,
             rei_version: rei_version,
             emi_version: emi_version,
-            diag_fences_version: diag_fences_version,
-            diag_windows_version: diag_windows_version,
+            diag_blocks_version: diag_blocks_version,
             ctm_version: ctm_version,
             buildinggadgets_version: buildinggadgets_version,
             nocubes_version: nocubes_version,
