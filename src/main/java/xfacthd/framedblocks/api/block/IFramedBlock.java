@@ -168,16 +168,17 @@ public interface IFramedBlock extends EntityBlock, IBlockExtension
     }
 
     @Override
+    default boolean hasDynamicLightEmission(BlockState state)
+    {
+        return state.getValue(FramedProperties.GLOWING);
+    }
+
+    @Override
     default int getLightEmission(BlockState state, BlockGetter level, BlockPos pos)
     {
         if (!state.getValue(FramedProperties.GLOWING))
         {
             return 0;
-        }
-        if (pos == BlockPos.ZERO)
-        {
-            // Ensure chunk sections with this block are correctly considered as containing a light source
-            return 15;
         }
         AuxiliaryLightManager lightManager = level.getAuxLightManager(pos);
         if (lightManager != null)
