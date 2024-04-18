@@ -428,7 +428,7 @@ public class FramingSawScreen extends AbstractContainerScreen<FramingSawMenu> im
         ItemStack[] options = additive.getItems();
         if (options.length > 1 && FramedUtils.getSingleIngredientValue(additive) instanceof Ingredient.TagValue value)
         {
-            TagKey<Item> tag = FramedUtils.getItemTagFromValue(value);
+            TagKey<Item> tag = value.tag();
             return Component.translatable(
                     TOOLTIP_HAVE_X_BUT_NEED_Y_TAG,
                     present,

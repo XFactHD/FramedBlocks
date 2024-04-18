@@ -37,9 +37,6 @@ import xfacthd.framedblocks.api.block.FramedProperties;
 import xfacthd.framedblocks.api.camo.CamoContainer;
 import xfacthd.framedblocks.api.camo.empty.EmptyCamoContainer;
 
-import java.lang.invoke.*;
-import java.lang.reflect.Field;
-import java.lang.reflect.Method;
 import java.util.*;
 import java.util.function.*;
 import java.util.stream.Collectors;
@@ -509,100 +506,6 @@ public final class Utils
     public static ResourceLocation rl(String path)
     {
         return RL_TEMPLATE.withPath(path);
-    }
-
-    public static Method findMethod(Class<?> clazz, String methodName, Class<?>... paramTypes)
-    {
-        try
-        {
-            Method method = clazz.getDeclaredMethod(methodName, paramTypes);
-            method.setAccessible(true);
-            return method;
-        }
-        catch (NoSuchMethodException e)
-        {
-            throw new RuntimeException("Failed to find method '%s#%s()'".formatted(clazz.getName(), methodName), e);
-        }
-    }
-
-    public static Field findField(Class<?> clazz, String fieldName)
-    {
-        try
-        {
-            Field field = clazz.getDeclaredField(fieldName);
-            field.setAccessible(true);
-            return field;
-        }
-        catch (NoSuchFieldException e)
-        {
-            throw new RuntimeException("Failed to find field '%s#%s'".formatted(clazz.getName(), fieldName), e);
-        }
-    }
-
-    public static MethodHandle unreflectMethod(Class<?> clazz, String methodName, Class<?>... paramTypes)
-    {
-        Method method = findMethod(clazz, methodName, paramTypes);
-        try
-        {
-            return MethodHandles.publicLookup().unreflect(method);
-        }
-        catch (IllegalAccessException e)
-        {
-            throw new RuntimeException("Failed to unreflect method '%s#%s()'".formatted(clazz.getName(), methodName), e);
-        }
-    }
-
-    public static MethodHandle unreflectFieldGetter(Class<?> clazz, String fieldName)
-    {
-        Field field = findField(clazz, fieldName);
-        try
-        {
-            return MethodHandles.publicLookup().unreflectGetter(field);
-        }
-        catch (IllegalAccessException e)
-        {
-            throw new RuntimeException("Failed to unreflect field '%s#%s'".formatted(clazz.getName(), fieldName), e);
-        }
-    }
-
-    public static MethodHandle unreflectFieldSetter(Class<?> clazz, String fieldName)
-    {
-        Field field = findField(clazz, fieldName);
-        try
-        {
-            return MethodHandles.publicLookup().unreflectSetter(field);
-        }
-        catch (IllegalAccessException e)
-        {
-            throw new RuntimeException("Failed to unreflect field '%s#%s'".formatted(clazz.getName(), fieldName), e);
-        }
-    }
-
-    @SuppressWarnings("unchecked")
-    public static <T, E> T getPrivateValue(Class<? super E> clazz, @Nullable E instance, String fieldName)
-    {
-        Field field = findField(clazz, fieldName);
-        try
-        {
-            return (T) field.get(instance);
-        }
-        catch (IllegalAccessException e)
-        {
-            throw new RuntimeException("Failed to get private value of field '%s#%s'".formatted(clazz.getName(), fieldName), e);
-        }
-    }
-
-    public static <T, E> void setPrivateValue(Class<? super E> clazz, @Nullable E instance, @Nullable T value, String fieldName)
-    {
-        Field field = findField(clazz, fieldName);
-        try
-        {
-            field.set(instance, value);
-        }
-        catch (IllegalAccessException e)
-        {
-            throw new RuntimeException("Failed to set private value of field '%s#%s'".formatted(clazz.getName(), fieldName), e);
-        }
     }
 
     public static <T> ResourceKey<T> getKeyOrThrow(Holder<T> holder)

@@ -4,7 +4,6 @@ import net.minecraft.core.Direction;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.TickTask;
 import net.minecraft.server.level.ServerLevel;
-import net.minecraft.tags.TagKey;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.Item;
@@ -20,24 +19,15 @@ import net.minecraft.world.level.block.state.properties.RailShape;
 import net.neoforged.neoforge.common.util.Lazy;
 import net.neoforged.neoforge.items.IItemHandlerModifiable;
 import net.neoforged.neoforge.items.ItemStackHandler;
-import xfacthd.framedblocks.api.util.Utils;
 import xfacthd.framedblocks.common.FBContent;
+import xfacthd.framedblocks.mixin.AccessorIngredient;
+import xfacthd.framedblocks.mixin.AccessorStateDefinitionBuilder;
 
-import java.lang.invoke.MethodHandle;
 import java.util.*;
 import java.util.function.Consumer;
 
 public final class FramedUtils
 {
-    private static final MethodHandle MH_STATE_DEF_BUILDER_GET_PROPERTIES = Utils.unreflectFieldGetter(
-            StateDefinition.Builder.class, "properties"
-    );
-    private static final MethodHandle INGREDIENT_GET_VALUES = Utils.unreflectFieldGetter(
-            Ingredient.class, "values"
-    );
-    private static final MethodHandle INGREDIENT_TAGVALUE_GET_TAG = Utils.unreflectFieldGetter(
-            Ingredient.TagValue.class, "tag"
-    );
     private static final Lazy<Set<Item>> RAIL_ITEMS = Lazy.concurrentOf(() ->
     {
         Set<Item> items = Collections.newSetFromMap(new IdentityHashMap<>());
@@ -143,18 +133,10 @@ public final class FramedUtils
         }
     }
 
-    @SuppressWarnings("unchecked")
     public static void removeProperty(StateDefinition.Builder<Block, BlockState> builder, Property<?> property)
     {
-        try
-        {
-            var properties = (Map<String, Property<?>>) MH_STATE_DEF_BUILDER_GET_PROPERTIES.invoke(builder);
-            properties.remove(property.getName());
-        }
-        catch (Throwable e)
-        {
-            throw new RuntimeException("Failed to remove property from state builder", e);
-        }
+        Map<String, Property<?>> properties = ((AccessorStateDefinitionBuilder) builder).framedblocks$getProperties();
+        properties.remove(property.getName());
     }
 
     public static IItemHandlerModifiable makeMenuItemHandler(IItemHandlerModifiable handler, Level level)
@@ -168,29 +150,8 @@ public final class FramedUtils
 
     public static Ingredient.Value getSingleIngredientValue(Ingredient ing)
     {
-        Ingredient.Value[] values;
-        try
-        {
-            values = (Ingredient.Value[]) INGREDIENT_GET_VALUES.invoke(ing);
-        }
-        catch (Throwable e)
-        {
-            throw new RuntimeException(e);
-        }
+        Ingredient.Value[] values = ((AccessorIngredient) ing).framedblocks$getValues();
         return values.length == 1 ? values[0] : null;
-    }
-
-    @SuppressWarnings("unchecked")
-    public static TagKey<Item> getItemTagFromValue(Ingredient.TagValue value)
-    {
-        try
-        {
-            return (TagKey<Item>) INGREDIENT_TAGVALUE_GET_TAG.invoke(value);
-        }
-        catch (Throwable e)
-        {
-            throw new RuntimeException(e);
-        }
     }
 
 
