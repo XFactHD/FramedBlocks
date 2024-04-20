@@ -77,6 +77,10 @@ public final class GhostBlockRenderer
 
     private static void tryDrawGhostBlock(PoseStack poseStack, ProfilerFiller profiler)
     {
+        if (mc().player.isSpectator())
+        {
+            return;
+        }
         if (!(mc().hitResult instanceof BlockHitResult hit) || hit.getType() != HitResult.Type.BLOCK)
         {
             return;
