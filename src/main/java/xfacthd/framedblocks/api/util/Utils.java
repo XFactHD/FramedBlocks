@@ -28,12 +28,14 @@ import net.minecraft.world.level.block.state.properties.DirectionProperty;
 import net.minecraft.world.level.block.state.properties.Property;
 import net.minecraft.world.level.chunk.LevelChunk;
 import net.minecraft.world.level.material.*;
-import net.minecraft.world.phys.Vec3;
+import net.minecraft.world.phys.*;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import net.minecraftforge.fml.loading.FMLEnvironment;
 import net.minecraftforge.fml.util.ObfuscationReflectionHelper;
 import net.minecraftforge.registries.*;
+import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.jetbrains.annotations.ApiStatus;
+import org.jetbrains.annotations.Nullable;
 import xfacthd.framedblocks.api.block.FramedBlockEntity;
 import xfacthd.framedblocks.api.block.FramedProperties;
 import xfacthd.framedblocks.api.camo.CamoContainer;
@@ -579,6 +581,45 @@ public final class Utils
     public static <T> T getValue(IForgeRegistry<T> registry, int id)
     {
         return ((ForgeRegistry<T>) registry).getValue(id);
+    }
+
+    public static String formatItemStack(ItemStack stack)
+    {
+        if (stack.isEmpty())
+        {
+            return "~~EMPTY~~";
+        }
+
+        String result = stack.getCount() + "x " + stack.getItem() + "[";
+        CompoundTag tag = stack.getTag();
+        if (tag != null)
+        {
+            result += tag;
+        }
+        return result + "]";
+    }
+
+    public static String formatHitResult(@Nullable HitResult hitResult)
+    {
+        if (hitResult == null)
+        {
+            return "~~NULL~~";
+        }
+
+        ToStringBuilder result = new ToStringBuilder(hitResult)
+                .append("Type", hitResult.getType())
+                .append("Location", hitResult.getLocation());
+        if (hitResult instanceof BlockHitResult blockHit)
+        {
+            result.append("Position", blockHit.getBlockPos())
+                    .append("Side", blockHit.getDirection())
+                    .append("Inside", blockHit.isInside());
+        }
+        else if (hitResult instanceof EntityHitResult entityHit)
+        {
+            result.append("Entity", entityHit.getEntity());
+        }
+        return result.toString();
     }
 
     @ApiStatus.Internal
