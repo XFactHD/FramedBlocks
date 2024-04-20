@@ -4,6 +4,7 @@ import com.google.common.base.Preconditions;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
+import net.minecraft.*;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.*;
 import net.minecraft.client.resources.model.BakedModel;
@@ -47,7 +48,26 @@ public final class GhostBlockRenderer
 
         ProfilerFiller profiler = mc().getProfiler();
         profiler.push(PROFILER_KEY);
-        tryDrawGhostBlock(event.getPoseStack(), profiler);
+        try
+        {
+            tryDrawGhostBlock(event.getPoseStack(), profiler);
+        }
+        catch (Throwable t)
+        {
+            CrashReport report = CrashReport.forThrowable(t, "FramedBlocks: Rendering placement preview");
+
+            CrashReportCategory category = report.addCategory("Placement preview context");
+            mc().player.fillCrashReportCategory(category);
+            category.setDetail("Rotation", mc().player.getYRot());
+            category.setDetail("Direction", mc().player.getDirection());
+            category.setDetail("Held item", Utils.formatItemStack(mc().player.getMainHandItem()));
+            category.setDetail("Level", mc().level);
+            category.setDetail("Hit result", Utils.formatHitResult(mc().hitResult));
+            // Nuke pointless stacktrace spam
+            category.trimStacktrace(category.getStacktrace().length);
+
+            throw new ReportedException(report);
+        }
         profiler.pop();
     }
 

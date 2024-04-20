@@ -135,6 +135,12 @@ public final class ExtPlacementStateBuilder extends PlacementStateBuilder<ExtPla
 
         Direction facing = ctx.getHorizontalDirection();
         Direction side = ctx.getClickedFace();
+        if (side == facing)
+        {
+            // Protect against nonsensical context data
+            state = null;
+            return self();
+        }
 
         HorizontalRotation rotation;
         if (side == facing.getOpposite())
@@ -165,6 +171,12 @@ public final class ExtPlacementStateBuilder extends PlacementStateBuilder<ExtPla
 
         Direction facing = ctx.getHorizontalDirection();
         Direction side = ctx.getClickedFace();
+        if (side == facing)
+        {
+            // Protect against nonsensical context data
+            state = null;
+            return self();
+        }
 
         HorizontalRotation rotation;
         if (side == facing.getOpposite())

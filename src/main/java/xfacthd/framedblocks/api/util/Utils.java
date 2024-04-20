@@ -28,8 +28,9 @@ import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.DirectionProperty;
 import net.minecraft.world.level.block.state.properties.Property;
 import net.minecraft.world.level.material.*;
-import net.minecraft.world.phys.Vec3;
+import net.minecraft.world.phys.*;
 import net.neoforged.neoforge.registries.DeferredItem;
+import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.Nullable;
 import xfacthd.framedblocks.api.block.blockentity.FramedBlockEntity;
@@ -513,6 +514,45 @@ public final class Utils
         return holder.unwrapKey().orElseThrow(
                 () -> new IllegalArgumentException("Direct holders and unbound reference holders are not supported")
         );
+    }
+
+    public static String formatItemStack(ItemStack stack)
+    {
+        if (stack.isEmpty())
+        {
+            return "~~EMPTY~~";
+        }
+
+        String result = stack.getCount() + "x " + stack.getItem() + "[";
+        CompoundTag tag = stack.getTag();
+        if (tag != null)
+        {
+            result += tag;
+        }
+        return result + "]";
+    }
+
+    public static String formatHitResult(@Nullable HitResult hitResult)
+    {
+        if (hitResult == null)
+        {
+            return "~~NULL~~";
+        }
+
+        ToStringBuilder result = new ToStringBuilder(hitResult)
+                .append("Type", hitResult.getType())
+                .append("Location", hitResult.getLocation());
+        if (hitResult instanceof BlockHitResult blockHit)
+        {
+            result.append("Position", blockHit.getBlockPos())
+                    .append("Side", blockHit.getDirection())
+                    .append("Inside", blockHit.isInside());
+        }
+        else if (hitResult instanceof EntityHitResult entityHit)
+        {
+            result.append("Entity", entityHit.getEntity());
+        }
+        return result.toString();
     }
 
     @ApiStatus.Internal
