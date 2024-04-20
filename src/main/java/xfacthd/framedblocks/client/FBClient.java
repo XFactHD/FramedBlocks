@@ -470,7 +470,7 @@ public final class FBClient
 
     private static void replaceDoubleBlockModels(
             RegistryObject<Block> block, Map<ResourceLocation, BakedModel> models,
-            @Nullable Vec3 firstpersonTransform,
+            @Nullable Vec3 handTransform,
             @Nullable BlockState itemModelSource,
             @Nullable List<Property<?>> ignoredProps
     )
@@ -481,7 +481,7 @@ public final class FBClient
                 (state, model) -> new FramedDoubleBlockModel(
                         state,
                         model,
-                        firstpersonTransform,
+                        handTransform,
                         itemModelSource != null
                 ),
                 itemModelSource,

@@ -37,14 +37,14 @@ public class FramedDoubleBlockModel extends BakedModelProxy
 
     private final boolean specialItemModel;
     private final DoubleBlockTopInteractionMode particleMode;
-    private final Vec3 firstpersonTransform;
+    private final Vec3 handTransform;
     private final Tuple<BlockState, BlockState> dummyStates;
     private Tuple<BakedModel, BakedModel> models = null;
 
     public FramedDoubleBlockModel(
             BlockState state,
             BakedModel baseModel,
-            Vec3 firstpersonTransform,
+            Vec3 handTransform,
             boolean specialItemModel
     )
     {
@@ -52,7 +52,7 @@ public class FramedDoubleBlockModel extends BakedModelProxy
         DoubleBlockStateCache cache = ((IFramedDoubleBlock) state.getBlock()).getCache(state);
         this.dummyStates = cache.getBlockPair();
         this.particleMode = cache.getTopInteractionMode();
-        this.firstpersonTransform = firstpersonTransform;
+        this.handTransform = handTransform;
         this.specialItemModel = specialItemModel;
     }
 
@@ -142,9 +142,9 @@ public class FramedDoubleBlockModel extends BakedModelProxy
     @Override
     protected void applyInHandTransformation(PoseStack poseStack, ItemDisplayContext ctx)
     {
-        if (firstpersonTransform != null)
+        if (handTransform != null)
         {
-            poseStack.translate(firstpersonTransform.x, firstpersonTransform.y, firstpersonTransform.z);
+            poseStack.translate(handTransform.x, handTransform.y, handTransform.z);
         }
     }
 
