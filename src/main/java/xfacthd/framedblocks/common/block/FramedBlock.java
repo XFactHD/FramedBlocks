@@ -22,13 +22,13 @@ public abstract class FramedBlock extends AbstractFramedBlock
 
     @Override
     @SuppressWarnings("deprecation")
-    public boolean isPathfindable(BlockState state, BlockGetter level, BlockPos pos, PathComputationType type)
+    public boolean isPathfindable(BlockState state, PathComputationType type)
     {
         if (getBlockType() != BlockType.FRAMED_CUBE)
         {
             return false;
         }
-        return super.isPathfindable(state, level, pos, type);
+        return super.isPathfindable(state, type);
     }
 
     @Override

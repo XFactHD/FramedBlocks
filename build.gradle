@@ -14,7 +14,7 @@ base {
 }
 
 // Mojang ships Java 17 to end users in 1.18+, so your mod should target Java 17.
-java.toolchain.languageVersion = JavaLanguageVersion.of(17)
+java.toolchain.languageVersion = JavaLanguageVersion.of(21)
 
 minecraft.accessTransformers.file project.file('src/main/resources/META-INF/accesstransformer.cfg')
 
@@ -157,7 +157,7 @@ dependencies {
 
     //compileOnly("curse.maven:buildinggadgets-298187:3829297")
 
-    runtimeOnly("xfacthd.contex:ConnectedTextures:${contex_version}")
+    //runtimeOnly("xfacthd.contex:ConnectedTextures:${contex_version}")
 
     compileOnly("earth.terrarium.athena:athena-neoforge-${athena_mc_version}:${athena_version}")
     //runtimeOnly("com.teamresourceful.resourcefullib:resourcefullib-neoforge-${resful_lib_mc_version}:${resful_lib_version}")

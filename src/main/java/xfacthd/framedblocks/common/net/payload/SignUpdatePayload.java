@@ -7,7 +7,7 @@ import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.level.Level;
-import net.neoforged.neoforge.network.handling.PlayPayloadContext;
+import net.neoforged.neoforge.network.handling.IPayloadContext;
 import xfacthd.framedblocks.FramedBlocks;
 import xfacthd.framedblocks.api.util.Utils;
 import xfacthd.framedblocks.common.blockentity.special.FramedSignBlockEntity;
@@ -17,7 +17,7 @@ import java.util.stream.Stream;
 
 public record SignUpdatePayload(BlockPos pos, boolean front, String[] lines) implements CustomPacketPayload
 {
-    public static final ResourceLocation ID = Utils.rl("sign_update");
+    public static final CustomPacketPayload.Type<SignUpdatePayload> ID = Utils.payloadType("sign_update");
 
     public static SignUpdatePayload decode(FriendlyByteBuf buffer)
     {
@@ -34,7 +34,6 @@ public record SignUpdatePayload(BlockPos pos, boolean front, String[] lines) imp
         return new SignUpdatePayload(pos, front, lines);
     }
 
-    @Override
     public void write(FriendlyByteBuf buffer)
     {
         buffer.writeBlockPos(pos);
@@ -48,16 +47,16 @@ public record SignUpdatePayload(BlockPos pos, boolean front, String[] lines) imp
     }
 
     @Override
-    public ResourceLocation id()
+    public CustomPacketPayload.Type<SignUpdatePayload> type()
     {
         return ID;
     }
 
-    public void handle(PlayPayloadContext ctx)
+    public void handle(IPayloadContext ctx)
     {
-        ServerPlayer player = (ServerPlayer) ctx.player().orElseThrow();
+        ServerPlayer player = (ServerPlayer) ctx.player();
         List<String> strippedLines = Stream.of(lines).map(ChatFormatting::stripFormatting).toList();
-        player.connection.filterTextPacket(strippedLines).thenAccept(filteredText -> ctx.workHandler().submitAsync(() ->
+        player.connection.filterTextPacket(strippedLines).thenAccept(filteredText -> ctx.enqueueWork(() ->
         {
             Level level = player.level();
 

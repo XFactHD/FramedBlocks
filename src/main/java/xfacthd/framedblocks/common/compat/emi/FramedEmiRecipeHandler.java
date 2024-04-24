@@ -69,7 +69,7 @@ public final class FramedEmiRecipeHandler<T extends AbstractContainerMenu & IFra
             //noinspection ConstantConditions
             if (menu.clickMenuButton(Minecraft.getInstance().player, idx))
             {
-                PacketDistributor.SERVER.noArg().send(new SelectFramingSawRecipePayload(menu.containerId, idx));
+                PacketDistributor.sendToServer(new SelectFramingSawRecipePayload(menu.containerId, idx));
             }
         }
         return true;

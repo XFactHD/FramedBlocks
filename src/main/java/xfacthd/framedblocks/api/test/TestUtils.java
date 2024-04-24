@@ -9,8 +9,10 @@ import net.minecraft.gametest.framework.*;
 import net.minecraft.network.protocol.game.ServerboundPlayerActionPacket;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
+import net.minecraft.world.ItemInteractionResult;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.*;
+import net.minecraft.world.level.GameType;
 import net.minecraft.world.level.ItemLike;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
@@ -68,7 +70,7 @@ public final class TestUtils
     public static void applyCamo(GameTestHelper helper, BlockPos pos, Map<Direction, Block> camos)
     {
         BlockPos absPos = helper.absolutePos(pos);
-        Player player = helper.makeMockPlayer();
+        Player player = helper.makeMockPlayer(GameType.SURVIVAL);
 
         int count = 0;
         for (Map.Entry<Direction, Block> entry : camos.entrySet())
@@ -77,7 +79,8 @@ public final class TestUtils
             Block camo = entry.getValue();
 
             Item item = camo == Blocks.AIR ? Utils.FRAMED_HAMMER.value() : camo.asItem();
-            player.setItemInHand(InteractionHand.MAIN_HAND, new ItemStack(item));
+            ItemStack stack = new ItemStack(item);
+            player.setItemInHand(InteractionHand.MAIN_HAND, stack);
 
             Vec3 hitVec = switch (count)
             {
@@ -85,7 +88,8 @@ public final class TestUtils
                 case 1 -> Vec3.atCenterOf(absPos).add(.1, .1, .1);
                 default -> Vec3.atCenterOf(absPos);
             };
-            InteractionResult result = helper.getBlockState(pos).use(
+            ItemInteractionResult result = helper.getBlockState(pos).useItemOn(
+                    stack,
                     helper.getLevel(),
                     player,
                     InteractionHand.MAIN_HAND,

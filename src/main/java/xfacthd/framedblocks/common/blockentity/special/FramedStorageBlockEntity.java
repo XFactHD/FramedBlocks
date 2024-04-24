@@ -1,6 +1,7 @@
 package xfacthd.framedblocks.common.blockentity.special;
 
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.Tag;
 import net.minecraft.network.chat.Component;
@@ -130,33 +131,33 @@ public class FramedStorageBlockEntity extends FramedBlockEntity implements MenuP
 
 
     @Override //Prevent writing inventory contents
-    public CompoundTag writeToBlueprint()
+    public CompoundTag writeToBlueprint(HolderLookup.Provider provider)
     {
-        CompoundTag tag = saveWithoutMetadata();
+        CompoundTag tag = saveWithoutMetadata(provider);
         tag.remove("inventory");
         tag.remove("custom_name");
         return tag;
     }
 
     @Override
-    public void saveAdditional(CompoundTag nbt)
+    public void saveAdditional(CompoundTag nbt, HolderLookup.Provider provider)
     {
-        nbt.put("inventory", itemHandler.serializeNBT());
+        nbt.put("inventory", itemHandler.serializeNBT(provider));
         if (customName != null)
         {
-            nbt.putString("custom_name", Component.Serializer.toJson(customName));
+            nbt.putString("custom_name", Component.Serializer.toJson(customName, provider));
         }
-        super.saveAdditional(nbt);
+        super.saveAdditional(nbt, provider);
     }
 
     @Override
-    public void load(CompoundTag nbt)
+    public void loadAdditional(CompoundTag nbt, HolderLookup.Provider provider)
     {
-        super.load(nbt);
-        itemHandler.deserializeNBT(nbt.getCompound("inventory"));
+        super.loadAdditional(nbt, provider);
+        itemHandler.deserializeNBT(provider, nbt.getCompound("inventory"));
         if (nbt.contains("custom_name", Tag.TAG_STRING))
         {
-            customName = Component.Serializer.fromJson(nbt.getString("custom_name"));
+            customName = Component.Serializer.fromJson(nbt.getString("custom_name"), provider);
         }
     }
 

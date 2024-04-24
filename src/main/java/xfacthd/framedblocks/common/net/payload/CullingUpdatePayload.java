@@ -8,7 +8,7 @@ import xfacthd.framedblocks.api.util.Utils;
 
 public record CullingUpdatePayload(LongSet positions) implements CustomPacketPayload
 {
-    public static final ResourceLocation ID = Utils.rl("culling_update");
+    public static final CustomPacketPayload.Type<CullingUpdatePayload> ID = Utils.payloadType("culling_update");
 
     public static CullingUpdatePayload decode(FriendlyByteBuf buf)
     {
@@ -21,7 +21,6 @@ public record CullingUpdatePayload(LongSet positions) implements CustomPacketPay
         return new CullingUpdatePayload(positions);
     }
 
-    @Override
     public void write(FriendlyByteBuf buf)
     {
         buf.writeInt(positions.size());
@@ -29,7 +28,7 @@ public record CullingUpdatePayload(LongSet positions) implements CustomPacketPay
     }
 
     @Override
-    public ResourceLocation id()
+    public CustomPacketPayload.Type<CullingUpdatePayload> type()
     {
         return ID;
     }

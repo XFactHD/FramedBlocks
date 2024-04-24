@@ -99,7 +99,7 @@ public class FramedSignScreen extends Screen
     @Override
     public void removed()
     {
-        PacketDistributor.SERVER.noArg().send(new SignUpdatePayload(sign.getBlockPos(), front, Arrays.copyOf(lines, lines.length)));
+        PacketDistributor.sendToServer(new SignUpdatePayload(sign.getBlockPos(), front, Arrays.copyOf(lines, lines.length)));
     }
 
     @Override

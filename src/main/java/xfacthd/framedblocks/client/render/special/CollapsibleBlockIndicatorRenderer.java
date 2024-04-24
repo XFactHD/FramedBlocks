@@ -183,10 +183,9 @@ public final class CollapsibleBlockIndicatorRenderer
         nY = nY / nLen;
         nZ = nZ / nLen;
 
-        Matrix4f pose = poseStack.last().pose();
-        Matrix3f normal = poseStack.last().normal();
-        builder.vertex(pose, (float)x1, (float)y1, (float)z1).color(1f, 0F, 0F, .6F).normal(normal, nX, nY, nZ).endVertex();
-        builder.vertex(pose, (float)x2, (float)y2, (float)z2).color(1f, 0F, 0F, .6F).normal(normal, nX, nY, nZ).endVertex();
+        PoseStack.Pose pose = poseStack.last();
+        builder.vertex(pose, (float)x1, (float)y1, (float)z1).color(1f, 0F, 0F, .6F).normal(pose, nX, nY, nZ).endVertex();
+        builder.vertex(pose, (float)x2, (float)y2, (float)z2).color(1f, 0F, 0F, .6F).normal(pose, nX, nY, nZ).endVertex();
     }
 
 

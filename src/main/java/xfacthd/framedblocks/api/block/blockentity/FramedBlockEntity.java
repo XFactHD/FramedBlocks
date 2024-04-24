@@ -3,6 +3,7 @@ package xfacthd.framedblocks.api.block.blockentity;
 import com.mojang.logging.LogUtils;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.Connection;
@@ -10,7 +11,9 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
+import net.minecraft.world.ItemInteractionResult;
 import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.*;
 import net.minecraft.world.level.*;
@@ -79,7 +82,7 @@ public class FramedBlockEntity extends BlockEntity
         this.stateCache = ((IFramedBlock) state.getBlock()).getCache(state);
     }
 
-    public final InteractionResult handleInteraction(Player player, InteractionHand hand, BlockHitResult hit)
+    public final ItemInteractionResult handleInteraction(Player player, InteractionHand hand, BlockHitResult hit)
     {
         ItemStack stack = player.getItemInHand(hand);
         boolean secondary = hitSecondary(hit);
@@ -119,7 +122,7 @@ public class FramedBlockEntity extends BlockEntity
             return removeReinforcement(player, stack, hand);
         }
 
-        return InteractionResult.PASS;
+        return ItemInteractionResult.PASS_TO_DEFAULT_BLOCK_INTERACTION;
     }
 
     private boolean canMakeIntangible(ItemStack stack)
@@ -140,11 +143,11 @@ public class FramedBlockEntity extends BlockEntity
         return false;
     }
 
-    private InteractionResult setCamo(Player player, ItemStack stack, CamoContainerFactory<?> factory, boolean secondary)
+    private ItemInteractionResult setCamo(Player player, ItemStack stack, CamoContainerFactory<?> factory, boolean secondary)
     {
         if (stack.getItem() instanceof BlockItem item && item.getBlock() instanceof IFramedBlock)
         {
-            return InteractionResult.FAIL;
+            return ItemInteractionResult.FAIL;
         }
 
         CamoContainer<?, ?> camo = factory.applyCamo(level(), worldPosition, player, stack);
@@ -154,12 +157,12 @@ public class FramedBlockEntity extends BlockEntity
             {
                 setCamo(camo, secondary);
             }
-            return InteractionResult.sidedSuccess(level().isClientSide());
+            return ItemInteractionResult.sidedSuccess(level().isClientSide());
         }
-        return InteractionResult.CONSUME;
+        return ItemInteractionResult.CONSUME;
     }
 
-    private InteractionResult clearCamo(Player player, ItemStack stack, CamoContainer<?, ?> camo, boolean secondary)
+    private ItemInteractionResult clearCamo(Player player, ItemStack stack, CamoContainer<?, ?> camo, boolean secondary)
     {
         if (CamoContainerHelper.removeCamo(camo, level(), worldPosition, player, stack))
         {
@@ -167,12 +170,12 @@ public class FramedBlockEntity extends BlockEntity
             {
                 setCamo(EmptyCamoContainer.EMPTY, secondary);
             }
-            return InteractionResult.sidedSuccess(level().isClientSide());
+            return ItemInteractionResult.sidedSuccess(level().isClientSide());
         }
-        return InteractionResult.FAIL;
+        return ItemInteractionResult.FAIL;
     }
 
-    private InteractionResult applyGlowstone(Player player, ItemStack stack)
+    private ItemInteractionResult applyGlowstone(Player player, ItemStack stack)
     {
         if (!level().isClientSide())
         {
@@ -183,10 +186,10 @@ public class FramedBlockEntity extends BlockEntity
 
             setGlowing(true);
         }
-        return InteractionResult.sidedSuccess(level().isClientSide());
+        return ItemInteractionResult.sidedSuccess(level().isClientSide());
     }
 
-    private InteractionResult rotateCamo(CamoContainer<?, ?> camo, boolean secondary)
+    private ItemInteractionResult rotateCamo(CamoContainer<?, ?> camo, boolean secondary)
     {
         if (camo.canRotateCamo())
         {
@@ -198,12 +201,12 @@ public class FramedBlockEntity extends BlockEntity
                 setChangedWithoutSignalUpdate();
                 level().sendBlockUpdated(worldPosition, getBlockState(), getBlockState(), Block.UPDATE_ALL);
             }
-            return InteractionResult.sidedSuccess(level().isClientSide());
+            return ItemInteractionResult.sidedSuccess(level().isClientSide());
         }
-        return InteractionResult.FAIL;
+        return ItemInteractionResult.FAIL;
     }
 
-    private InteractionResult applyIntangibility(Player player, ItemStack stack)
+    private ItemInteractionResult applyIntangibility(Player player, ItemStack stack)
     {
         if (!level().isClientSide())
         {
@@ -214,10 +217,10 @@ public class FramedBlockEntity extends BlockEntity
 
             setIntangible(true);
         }
-        return InteractionResult.sidedSuccess(level().isClientSide());
+        return ItemInteractionResult.sidedSuccess(level().isClientSide());
     }
 
-    private InteractionResult removeIntangibility(Player player)
+    private ItemInteractionResult removeIntangibility(Player player)
     {
         if (!level().isClientSide())
         {
@@ -229,10 +232,10 @@ public class FramedBlockEntity extends BlockEntity
                 player.drop(result, false);
             }
         }
-        return InteractionResult.sidedSuccess(level().isClientSide());
+        return ItemInteractionResult.sidedSuccess(level().isClientSide());
     }
 
-    private InteractionResult applyReinforcement(Player player, ItemStack stack)
+    private ItemInteractionResult applyReinforcement(Player player, ItemStack stack)
     {
         if (!level().isClientSide())
         {
@@ -243,16 +246,16 @@ public class FramedBlockEntity extends BlockEntity
 
             setReinforced(true);
         }
-        return InteractionResult.sidedSuccess(level().isClientSide());
+        return ItemInteractionResult.sidedSuccess(level().isClientSide());
     }
 
-    private InteractionResult removeReinforcement(Player player, ItemStack stack, InteractionHand hand)
+    private ItemInteractionResult removeReinforcement(Player player, ItemStack stack, InteractionHand hand)
     {
         if (!level().isClientSide())
         {
             setReinforced(false);
 
-            stack.hurtAndBreak(1, player, p -> p.broadcastBreakEvent(hand));
+            stack.hurtAndBreak(1, player.getRandom(), player, () -> player.broadcastBreakEvent(LivingEntity.getSlotForHand(hand)));
 
             ItemStack result = new ItemStack(Utils.FRAMED_REINFORCEMENT.value());
             if (!player.getInventory().add(result))
@@ -260,7 +263,7 @@ public class FramedBlockEntity extends BlockEntity
                 player.drop(result, false);
             }
         }
-        return InteractionResult.sidedSuccess(level().isClientSide());
+        return ItemInteractionResult.sidedSuccess(level().isClientSide());
     }
 
     protected boolean hitSecondary(BlockHitResult hit)
@@ -690,7 +693,7 @@ public class FramedBlockEntity extends BlockEntity
     @Override
     public final ClientboundBlockEntityDataPacket getUpdatePacket()
     {
-        return ClientboundBlockEntityDataPacket.create(this, be ->
+        return ClientboundBlockEntityDataPacket.create(this, (be, registryAccess) ->
         {
             CompoundTag tag = new CompoundTag();
             ((FramedBlockEntity) be).writeToDataPacket(tag);
@@ -699,7 +702,7 @@ public class FramedBlockEntity extends BlockEntity
     }
 
     @Override
-    public final void onDataPacket(Connection net, ClientboundBlockEntityDataPacket pkt)
+    public final void onDataPacket(Connection net, ClientboundBlockEntityDataPacket pkt, HolderLookup.Provider lookupProvider)
     {
         CompoundTag nbt = pkt.getTag();
         if (nbt != null && readFromDataPacket(nbt))
@@ -769,9 +772,9 @@ public class FramedBlockEntity extends BlockEntity
     }
 
     @Override
-    public CompoundTag getUpdateTag()
+    public CompoundTag getUpdateTag(HolderLookup.Provider provider)
     {
-        CompoundTag nbt = super.getUpdateTag();
+        CompoundTag nbt = super.getUpdateTag(provider);
 
         nbt.put("camo", CamoContainerHelper.writeToNetwork(camoContainer));
         nbt.putByte("flags", writeFlags());
@@ -780,7 +783,7 @@ public class FramedBlockEntity extends BlockEntity
     }
 
     @Override
-    public void handleUpdateTag(CompoundTag nbt)
+    public void handleUpdateTag(CompoundTag nbt, HolderLookup.Provider provider)
     {
         CamoContainer<?, ?> newCamo = CamoContainerHelper.readFromNetwork(nbt.getCompound("camo"));
         if (!newCamo.equals(camoContainer))
@@ -844,13 +847,13 @@ public class FramedBlockEntity extends BlockEntity
      * NBT stuff
      */
 
-    public CompoundTag writeToBlueprint()
+    public CompoundTag writeToBlueprint(HolderLookup.Provider provider)
     {
-        return saveWithoutMetadata();
+        return saveWithoutMetadata(provider);
     }
 
     @Override
-    public void saveAdditional(CompoundTag nbt)
+    public void saveAdditional(CompoundTag nbt, HolderLookup.Provider provider)
     {
         nbt.put("camo", CamoContainerHelper.writeToDisk(camoContainer));
         nbt.putBoolean("glowing", glowing);
@@ -858,13 +861,12 @@ public class FramedBlockEntity extends BlockEntity
         nbt.putBoolean("reinforced", reinforced);
         nbt.putByte("updated", (byte) DATA_VERSION);
 
-        super.saveAdditional(nbt);
+        super.saveAdditional(nbt, provider);
     }
 
-    @Override
-    public void load(CompoundTag nbt)
+    public void loadAdditional(CompoundTag nbt, HolderLookup.Provider provider)
     {
-        super.load(nbt);
+        super.loadAdditional(nbt, provider);
 
         camoContainer = loadAndValidateCamo(nbt, "camo");
         glowing = nbt.getBoolean("glowing");

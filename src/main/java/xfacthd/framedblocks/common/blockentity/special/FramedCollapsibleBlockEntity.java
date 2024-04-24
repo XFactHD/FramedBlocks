@@ -245,16 +245,16 @@ public class FramedCollapsibleBlockEntity extends FramedBlockEntity
     }
 
     @Override
-    public CompoundTag getUpdateTag()
+    public CompoundTag getUpdateTag(HolderLookup.Provider provider)
     {
-        CompoundTag nbt = super.getUpdateTag();
+        CompoundTag nbt = super.getUpdateTag(provider);
         nbt.putInt("offsets", packedOffsets);
         nbt.putByte("face", (byte) (collapsedFace == null ? -1 : collapsedFace.get3DDataValue()));
         return nbt;
     }
 
     @Override
-    public void handleUpdateTag(CompoundTag nbt)
+    public void handleUpdateTag(CompoundTag nbt, HolderLookup.Provider provider)
     {
         packedOffsets = nbt.getInt("offsets");
         vertexOffsets = unpackOffsets(packedOffsets);
@@ -262,21 +262,21 @@ public class FramedCollapsibleBlockEntity extends FramedBlockEntity
         int face = nbt.getByte("face");
         collapsedFace = face == -1 ? null : Direction.from3DDataValue(face);
 
-        super.handleUpdateTag(nbt);
+        super.handleUpdateTag(nbt, provider);
     }
 
     @Override
-    public void saveAdditional(CompoundTag nbt)
+    public void saveAdditional(CompoundTag nbt, HolderLookup.Provider provider)
     {
-        super.saveAdditional(nbt);
+        super.saveAdditional(nbt, provider);
         nbt.putInt("offsets", packedOffsets);
         nbt.putInt("face", collapsedFace == null ? -1 : collapsedFace.get3DDataValue());
     }
 
     @Override
-    public void load(CompoundTag nbt)
+    public void loadAdditional(CompoundTag nbt, HolderLookup.Provider provider)
     {
-        super.load(nbt);
+        super.loadAdditional(nbt, provider);
         packedOffsets = nbt.getInt("offsets");
         vertexOffsets = unpackOffsets(packedOffsets);
         int face = nbt.getInt("face");

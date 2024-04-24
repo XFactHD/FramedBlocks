@@ -8,6 +8,7 @@ import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.context.BlockPlaceContext;
+import net.minecraft.world.level.EmptyBlockGetter;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.*;
 import net.minecraft.world.level.block.state.BlockState;
@@ -63,7 +64,7 @@ public class FramedPanelBlock extends FramedBlock
                             level.setBlockAndUpdate(pos, newState.setValue(FramedProperties.FACING_NE, newFacing))
                     );
 
-                    SoundType sound = FBContent.BLOCK_FRAMED_CUBE.value().getSoundType(FBContent.BLOCK_FRAMED_CUBE.value().defaultBlockState());
+                    SoundType sound = FBContent.BLOCK_FRAMED_CUBE.value().defaultBlockState().getSoundType();
                     level.playSound(null, pos, sound.getPlaceSound(), SoundSource.BLOCKS, (sound.getVolume() + 1.0F) / 2.0F, sound.getPitch() * 0.8F);
                 }
                 return InteractionResult.sidedSuccess(level.isClientSide());

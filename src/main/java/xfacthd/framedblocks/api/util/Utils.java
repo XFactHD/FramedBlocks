@@ -11,6 +11,7 @@ import net.minecraft.core.registries.Registries;
 import net.minecraft.nbt.*;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
+import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.*;
@@ -507,6 +508,10 @@ public final class Utils
     public static ResourceLocation rl(String path)
     {
         return RL_TEMPLATE.withPath(path);
+    }
+
+    public static <T extends CustomPacketPayload> CustomPacketPayload.Type<T> payloadType(String path) {
+        return new CustomPacketPayload.Type<>(rl(path));
     }
 
     public static <T> ResourceKey<T> getKeyOrThrow(Holder<T> holder)

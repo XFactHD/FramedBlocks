@@ -275,14 +275,8 @@ public final class AppearanceHelper
             BlockGetter level, BlockPos pos, BlockState componentState, boolean mayBeSingle
     )
     {
-        ModelDataManager manager = level.getModelDataManager();
-        if (manager == null)
-        {
-            return null;
-        }
-
-        ModelData data = manager.getAt(pos);
-        if (data == null)
+        ModelData data = level.getModelData(pos);
+        if (data == ModelData.EMPTY)
         {
             return null;
         }

@@ -99,7 +99,7 @@ public final class ModelWrappingManager
                     "Block", "Unhandled properties", "Handled or ignored properties"
             ));
         }
-        ModLoader.get().postEvent(new RegisterModelWrappersEvent());
+        ModLoader.postEvent(new RegisterModelWrappersEvent());
         if (TestProperties.ENABLE_STATE_MERGER_DEBUG_LOGGING)
         {
             FramedBlocks.LOGGER.info("=============== Model Wrapper Registration End =================");

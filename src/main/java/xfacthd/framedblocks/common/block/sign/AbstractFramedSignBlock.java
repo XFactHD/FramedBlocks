@@ -184,7 +184,7 @@ public abstract class AbstractFramedSignBlock extends FramedBlock
     public static void openEditScreen(Player player, FramedSignBlockEntity sign, boolean frontText)
     {
         sign.setEditingPlayer(player.getUUID());
-        PacketDistributor.PLAYER.with((ServerPlayer) player).send(new OpenSignScreenPayload(sign.getBlockPos(), frontText));
+        PacketDistributor.sendToPlayer((ServerPlayer)player, new OpenSignScreenPayload(sign.getBlockPos(), frontText));
     }
 
 

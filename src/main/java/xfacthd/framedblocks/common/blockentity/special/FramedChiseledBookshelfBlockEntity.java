@@ -1,6 +1,7 @@
 package xfacthd.framedblocks.common.blockentity.special;
 
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.ChiseledBookShelfBlock;
@@ -92,27 +93,27 @@ public class FramedChiseledBookshelfBlockEntity extends FramedBlockEntity
     }
 
     @Override //Prevent writing inventory contents
-    public CompoundTag writeToBlueprint()
+    public CompoundTag writeToBlueprint(HolderLookup.Provider provider)
     {
-        CompoundTag tag = saveWithoutMetadata();
+        CompoundTag tag = saveWithoutMetadata(provider);
         tag.remove("inventory");
         tag.remove("last_slot");
         return tag;
     }
 
     @Override
-    public void saveAdditional(CompoundTag nbt)
+    public void saveAdditional(CompoundTag nbt, HolderLookup.Provider provider)
     {
-        nbt.put("inventory", itemHandler.serializeNBT());
+        nbt.put("inventory", itemHandler.serializeNBT(provider));
         nbt.putInt("last_slot", lastInteractedSlot);
-        super.saveAdditional(nbt);
+        super.saveAdditional(nbt, provider);
     }
 
     @Override
-    public void load(CompoundTag nbt)
+    public void loadAdditional(CompoundTag nbt, HolderLookup.Provider provider)
     {
-        super.load(nbt);
-        itemHandler.deserializeNBT(nbt.getCompound("inventory"));
+        super.loadAdditional(nbt, provider);
+        itemHandler.deserializeNBT(provider, nbt.getCompound("inventory"));
         lastInteractedSlot = nbt.getInt("last_slot");
     }
 }

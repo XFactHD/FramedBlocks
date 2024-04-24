@@ -1,6 +1,7 @@
 package xfacthd.framedblocks.common.blockentity.doubled;
 
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.util.Tuple;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Player;
@@ -382,9 +383,9 @@ public abstract class FramedDoubleBlockEntity extends FramedBlockEntity implemen
     }
 
     @Override
-    public CompoundTag getUpdateTag()
+    public CompoundTag getUpdateTag(HolderLookup.Provider provider)
     {
-        CompoundTag nbt = super.getUpdateTag();
+        CompoundTag nbt = super.getUpdateTag(provider);
 
         nbt.put("camo_two", CamoContainerHelper.writeToNetwork(camoContainer));
 
@@ -392,9 +393,9 @@ public abstract class FramedDoubleBlockEntity extends FramedBlockEntity implemen
     }
 
     @Override
-    public void handleUpdateTag(CompoundTag nbt)
+    public void handleUpdateTag(CompoundTag nbt, HolderLookup.Provider provider)
     {
-        super.handleUpdateTag(nbt);
+        super.handleUpdateTag(nbt, provider);
 
         CamoContainer<?, ?> newCamo = CamoContainerHelper.readFromNetwork(nbt.getCompound("camo_two"));
         if (!newCamo.equals(camoContainer))
@@ -424,17 +425,17 @@ public abstract class FramedDoubleBlockEntity extends FramedBlockEntity implemen
      */
 
     @Override
-    public void saveAdditional(CompoundTag nbt)
+    public void saveAdditional(CompoundTag nbt, HolderLookup.Provider provider)
     {
         nbt.put("camo_two", CamoContainerHelper.writeToDisk(camoContainer));
 
-        super.saveAdditional(nbt);
+        super.saveAdditional(nbt, provider);
     }
 
     @Override
-    public void load(CompoundTag nbt)
+    public void loadAdditional(CompoundTag nbt, HolderLookup.Provider provider)
     {
-        super.load(nbt);
+        super.loadAdditional(nbt, provider);
         camoContainer = loadAndValidateCamo(nbt, "camo_two");
     }
 }

@@ -350,7 +350,7 @@ public class FramingSawWithEncoderScreen extends FramingSawScreen
     {
         if (encoderMatchResult == null || !encoderMatchResult.success()) return;
 
-        PacketDistributor.SERVER.noArg().send(new EncodeFramingSawPatternPayload(
+        PacketDistributor.sendToServer(new EncodeFramingSawPatternPayload(
                 menu.containerId,
                 cache.getRecipes().get(menu.getSelectedRecipeIndex()).id(),
                 encodingInputs

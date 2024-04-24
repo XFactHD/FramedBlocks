@@ -303,7 +303,7 @@ public class PoweredFramingSawScreen extends AbstractContainerScreen<PoweredFram
             //noinspection ConstantConditions
             if (menu.clickMenuButton(minecraft.player, id))
             {
-                PacketDistributor.SERVER.noArg().send(new SelectFramingSawRecipePayload(menu.containerId, id));
+                PacketDistributor.sendToServer(new SelectFramingSawRecipePayload(menu.containerId, id));
             }
         }
     }

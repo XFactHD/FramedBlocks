@@ -84,7 +84,7 @@ public abstract sealed class FramingSawTransferHandler<C extends AbstractContain
 
             if (doTransfer && menu.clickMenuButton(player, idx))
             {
-                PacketDistributor.SERVER.noArg().send(new SelectFramingSawRecipePayload(menu.containerId, idx));
+                PacketDistributor.sendToServer(new SelectFramingSawRecipePayload(menu.containerId, idx));
             }
             // TODO: return null instead of "transfer not implemented" when the suggestion is implemented
             return new RecipeTransferErrorTransferNotImplemented();

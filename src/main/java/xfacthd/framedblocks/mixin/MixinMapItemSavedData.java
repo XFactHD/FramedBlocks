@@ -2,6 +2,7 @@ package xfacthd.framedblocks.mixin;
 
 import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Holder;
 import net.minecraft.nbt.*;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.player.Player;
@@ -27,7 +28,7 @@ public abstract class MixinMapItemSavedData implements FramedItemFrameBlockEntit
 
     @Shadow @Final private boolean trackingPosition;
 
-    @Shadow protected abstract void addDecoration(MapDecoration.Type pType, @Nullable LevelAccessor pLevel, String pDecorationName, double pLevelX, double pLevelZ, double pRotation, @Nullable Component pName);
+    @Shadow protected abstract void addDecoration(Holder<MapDecorationType> pType, @Nullable LevelAccessor pLevel, String pDecorationName, double pLevelX, double pLevelZ, double pRotation, @Nullable Component pName);
     @Shadow protected abstract void removeDecoration(String pIdentifier);
 
     @ModifyExpressionValue(method = "tickCarriedBy", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/item/ItemStack;isFramed()Z", ordinal = 0))
@@ -101,7 +102,7 @@ public abstract class MixinMapItemSavedData implements FramedItemFrameBlockEntit
     {
         BlockPos pos = framedMap.pos();
         int rot = framedMap.yRot();
-        addDecoration(MapDecoration.Type.FRAME, level, frameId, pos.getX(), pos.getZ(), rot, null);
+        addDecoration(MapDecorationTypes.FRAME, level, frameId, pos.getX(), pos.getZ(), rot, null);
         framedblocks$frameMarkers.put(frameId, framedMap);
     }
 }

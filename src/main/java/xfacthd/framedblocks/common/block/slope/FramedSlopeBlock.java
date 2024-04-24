@@ -72,7 +72,7 @@ public class FramedSlopeBlock extends FramedBlock implements ISlopeBlock
                         .setValue(PropertyHolder.ASCENDING_RAIL_SHAPE, FramedUtils.getAscendingRailShapeFromDirection(dir))
                         .setValue(BlockStateProperties.WATERLOGGED, state.getValue(BlockStateProperties.WATERLOGGED));
 
-                if (!railSlope.canSurvive(newState, level, pos)) { return InteractionResult.FAIL; }
+                if (!newState.canSurvive(level, pos)) { return InteractionResult.FAIL; }
 
                 if (!level.isClientSide())
                 {
@@ -80,7 +80,7 @@ public class FramedSlopeBlock extends FramedBlock implements ISlopeBlock
                             level.setBlockAndUpdate(pos, newState)
                     );
 
-                    SoundType sound = Blocks.RAIL.getSoundType(Blocks.RAIL.defaultBlockState());
+                    SoundType sound = Blocks.RAIL.defaultBlockState().getSoundType();
                     level.playSound(null, pos, sound.getPlaceSound(), SoundSource.BLOCKS, (sound.getVolume() + 1.0F) / 2.0F, sound.getPitch() * 0.8F);
                 }
 

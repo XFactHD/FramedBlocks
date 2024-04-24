@@ -2,6 +2,7 @@ package xfacthd.framedblocks.common.blockentity.special;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.protocol.Packet;
 import net.minecraft.server.level.ServerPlayer;
@@ -246,16 +247,16 @@ public class FramedItemFrameBlockEntity extends FramedBlockEntity
     }
 
     @Override
-    public void handleUpdateTag(CompoundTag tag)
+    public void handleUpdateTag(CompoundTag tag, HolderLookup.Provider provider)
     {
-        super.handleUpdateTag(tag);
+        super.handleUpdateTag(tag, provider);
         readFromNetwork(tag);
     }
 
     @Override
-    public CompoundTag getUpdateTag()
+    public CompoundTag getUpdateTag(HolderLookup.Provider provider)
     {
-        CompoundTag tag = super.getUpdateTag();
+        CompoundTag tag = super.getUpdateTag(provider);
         writeToNetwork(tag);
         return tag;
     }
@@ -263,9 +264,9 @@ public class FramedItemFrameBlockEntity extends FramedBlockEntity
     // NBT
 
     @Override
-    public void load(CompoundTag tag)
+    public void loadAdditional(CompoundTag tag, HolderLookup.Provider provider)
     {
-        super.load(tag);
+        super.loadAdditional(tag, provider);
 
         heldItem = ItemStack.of(tag.getCompound("item"));
         rotation = tag.getByte("rotation");
@@ -273,9 +274,9 @@ public class FramedItemFrameBlockEntity extends FramedBlockEntity
     }
 
     @Override
-    public void saveAdditional(CompoundTag tag)
+    public void saveAdditional(CompoundTag tag, HolderLookup.Provider provider)
     {
-        super.saveAdditional(tag);
+        super.saveAdditional(tag, provider);
 
         tag.put("item", heldItem.save(new CompoundTag()));
         tag.putByte("rotation", (byte) rotation);

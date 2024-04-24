@@ -1,6 +1,7 @@
 package xfacthd.framedblocks.api.camo.empty;
 
 import com.mojang.serialization.Codec;
+import com.mojang.serialization.MapCodec;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.entity.player.Player;
@@ -11,7 +12,7 @@ import xfacthd.framedblocks.api.camo.TriggerRegistrar;
 
 public final class EmptyCamoContainerFactory extends CamoContainerFactory<EmptyCamoContainer>
 {
-    private static final Codec<EmptyCamoContainer> CODEC = Codec.unit(EmptyCamoContainer.EMPTY);
+    private static final MapCodec<EmptyCamoContainer> CODEC = MapCodec.unit(EmptyCamoContainer.EMPTY);
 
     @Override
     protected void writeToDisk(CompoundTag tag, EmptyCamoContainer container) { }
@@ -62,7 +63,7 @@ public final class EmptyCamoContainerFactory extends CamoContainerFactory<EmptyC
     }
 
     @Override
-    public Codec<EmptyCamoContainer> codec()
+    public MapCodec<EmptyCamoContainer> codec()
     {
         return CODEC;
     }

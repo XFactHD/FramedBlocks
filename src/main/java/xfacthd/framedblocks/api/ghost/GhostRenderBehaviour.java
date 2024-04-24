@@ -3,6 +3,8 @@ package xfacthd.framedblocks.api.ghost;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.resources.model.BakedModel;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.component.DataComponentType;
+import net.minecraft.core.component.DataComponents;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.BlockItem;
@@ -169,9 +171,10 @@ public interface GhostRenderBehaviour
     default CamoPair readCamo(ItemStack stack, @Nullable ItemStack proxiedStack, int renderPass)
     {
         //noinspection ConstantConditions
-        if (stack.hasTag() && stack.getTag().contains("BlockEntityTag"))
+        var data = stack.get(DataComponents.BLOCK_ENTITY_DATA);
+        if (data != null)
         {
-            CompoundTag tag = stack.getTag().getCompound("BlockEntityTag").getCompound("camo");
+            CompoundTag tag = data.getUnsafe().getCompound("camo");
             CamoContainer<?, ?> camo = CamoContainerHelper.readFromDisk(tag);
             return new CamoPair(camo.getContent(), EmptyCamoContent.EMPTY);
         }
