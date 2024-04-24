@@ -77,6 +77,8 @@ public class FramedChiseledBookshelfBlock extends FramedBlock
         }
     }
 
+    // TODO port
+    /*
     @Override
     public InteractionResult use(BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hit)
     {
@@ -113,6 +115,8 @@ public class FramedChiseledBookshelfBlock extends FramedBlock
         }
         return InteractionResult.PASS;
     }
+
+     */
 
     private static void placeBook(
             Level level, BlockPos pos, Player player, FramedChiseledBookshelfBlockEntity be, ItemStack stack, int slot

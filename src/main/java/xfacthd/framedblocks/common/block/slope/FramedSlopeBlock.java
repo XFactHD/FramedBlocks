@@ -6,6 +6,7 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
+import net.minecraft.world.ItemInteractionResult;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.*;
 import net.minecraft.world.level.Level;
@@ -54,11 +55,10 @@ public class FramedSlopeBlock extends FramedBlock implements ISlopeBlock
     }
 
     @Override
-    public InteractionResult use(
-            BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hit
+    public ItemInteractionResult useItemOn(
+            ItemStack stack, BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hit
     )
     {
-        ItemStack stack = player.getItemInHand(hand);
         if (!stack.isEmpty() && FramedUtils.isRailItem(stack.getItem()))
         {
             Direction dir = state.getValue(FramedProperties.FACING_HOR);
@@ -72,7 +72,7 @@ public class FramedSlopeBlock extends FramedBlock implements ISlopeBlock
                         .setValue(PropertyHolder.ASCENDING_RAIL_SHAPE, FramedUtils.getAscendingRailShapeFromDirection(dir))
                         .setValue(BlockStateProperties.WATERLOGGED, state.getValue(BlockStateProperties.WATERLOGGED));
 
-                if (!newState.canSurvive(level, pos)) { return InteractionResult.FAIL; }
+                if (!newState.canSurvive(level, pos)) { return ItemInteractionResult.FAIL; }
 
                 if (!level.isClientSide())
                 {
@@ -84,10 +84,10 @@ public class FramedSlopeBlock extends FramedBlock implements ISlopeBlock
                     level.playSound(null, pos, sound.getPlaceSound(), SoundSource.BLOCKS, (sound.getVolume() + 1.0F) / 2.0F, sound.getPitch() * 0.8F);
                 }
 
-                return InteractionResult.sidedSuccess(level.isClientSide());
+                return ItemInteractionResult.sidedSuccess(level.isClientSide());
             }
         }
-        return super.use(state, level, pos, player, hand, hit);
+        return super.useItemOn(stack, state, level, pos, player, hand, hit);
     }
 
     @Override

@@ -3,6 +3,7 @@ package xfacthd.framedblocks.common.blockentity.special;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.HolderLookup;
+import net.minecraft.core.component.DataComponents;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.protocol.Packet;
 import net.minecraft.server.level.ServerPlayer;
@@ -17,6 +18,7 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.saveddata.maps.MapFrame;
+import net.minecraft.world.level.saveddata.maps.MapId;
 import net.minecraft.world.level.saveddata.maps.MapItemSavedData;
 import xfacthd.framedblocks.api.block.blockentity.FramedBlockEntity;
 import xfacthd.framedblocks.api.util.FramedConstants;
@@ -58,7 +60,7 @@ public class FramedItemFrameBlockEntity extends FramedBlockEntity
             MapItemSavedData mapData = MapItem.getSavedData(heldItem, level());
             if (mapData != null)
             {
-                int mapId = Objects.requireNonNull(MapItem.getMapId(heldItem));
+                MapId mapId = Objects.requireNonNull(heldItem.get(DataComponents.MAP_ID));
                 for (Player player : level().players())
                 {
                     mapData.tickCarriedBy(player, heldItem);
