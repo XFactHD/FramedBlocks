@@ -36,9 +36,9 @@ public final class GeneratorHandler
         gen.addProvider(event.includeClient(), new FramedSpriteSourceProvider(output, lookupProvider, fileHelper));
         gen.addProvider(event.includeClient(), new FramedBlockStateProvider(output, fileHelper));
         gen.addProvider(event.includeClient(), new FramedItemModelProvider(output, fileHelper));
-        gen.addProvider(event.includeServer(), new FramedLootTableProvider(output));
-        gen.addProvider(event.includeServer(), new FramedRecipeProvider(output));
-        gen.addProvider(event.includeServer(), new FramingSawRecipeProvider(output));
+        gen.addProvider(event.includeServer(), new FramedLootTableProvider(output, lookupProvider));
+        gen.addProvider(event.includeServer(), new FramedRecipeProvider(output, lookupProvider));
+        gen.addProvider(event.includeServer(), new FramingSawRecipeProvider(output, lookupProvider));
         BlockTagsProvider tagProvider = new FramedBlockTagProvider(output, lookupProvider, fileHelper);
         gen.addProvider(event.includeServer(), tagProvider);
         gen.addProvider(event.includeServer(), new FramedItemTagProvider(output, lookupProvider, tagProvider.contentsGetter(), fileHelper));
