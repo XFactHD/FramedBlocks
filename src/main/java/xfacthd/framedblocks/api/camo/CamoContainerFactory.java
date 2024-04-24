@@ -101,9 +101,9 @@ public abstract class CamoContainerFactory<T extends CamoContainer<?, T>>
     }
 
     /**
-     * {@return A {@link MapCodec} for reading and writing the {@link CamoContainer}}
+     * {@return A {@link Codec} for reading and writing the {@link CamoContainer}}
      */
-    public abstract MapCodec<T> codec();
+    public abstract Codec<T> codec();
 
     /* *
      * {@return A {@link StreamCodec} for reading and writing the {@link CamoContainer} from and to network packets}

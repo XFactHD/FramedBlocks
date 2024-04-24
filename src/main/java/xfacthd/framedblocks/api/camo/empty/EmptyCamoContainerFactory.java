@@ -12,7 +12,7 @@ import xfacthd.framedblocks.api.camo.TriggerRegistrar;
 
 public final class EmptyCamoContainerFactory extends CamoContainerFactory<EmptyCamoContainer>
 {
-    private static final MapCodec<EmptyCamoContainer> CODEC = MapCodec.unit(EmptyCamoContainer.EMPTY);
+    private static final Codec<EmptyCamoContainer> CODEC = Codec.unit(EmptyCamoContainer.EMPTY);
 
     @Override
     protected void writeToDisk(CompoundTag tag, EmptyCamoContainer container) { }
@@ -63,7 +63,7 @@ public final class EmptyCamoContainerFactory extends CamoContainerFactory<EmptyC
     }
 
     @Override
-    public MapCodec<EmptyCamoContainer> codec()
+    public Codec<EmptyCamoContainer> codec()
     {
         return CODEC;
     }

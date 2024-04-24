@@ -3,6 +3,7 @@ package xfacthd.framedblocks.api.camo;
 import com.google.common.base.Preconditions;
 import com.mojang.logging.LogUtils;
 import com.mojang.serialization.Codec;
+import com.mojang.serialization.MapCodec;
 import net.minecraft.client.resources.model.BakedModel;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Registry;
@@ -20,11 +21,13 @@ import xfacthd.framedblocks.api.FramedBlocksAPI;
 import xfacthd.framedblocks.api.camo.empty.EmptyCamoContainer;
 import xfacthd.framedblocks.api.internal.InternalAPI;
 
+import java.util.function.Function;
+
 public final class CamoContainerHelper
 {
     private static final Logger LOGGER = LogUtils.getLogger();
     private static final Registry<CamoContainerFactory<?>> REGISTRY = FramedBlocksAPI.INSTANCE.getCamoContainerFactoryRegistry();
-    public static final Codec<CamoContainer<?, ?>> CODEC = REGISTRY.byNameCodec().dispatch(CamoContainer::getFactory, CamoContainerFactory::codec);
+    public static final Codec<CamoContainer<?, ?>> CODEC = REGISTRY.byNameCodec().dispatch(CamoContainer::getFactory, f -> f.codec().fieldOf("container"));
     //public static final StreamCodec<RegistryFriendlyByteBuf, CamoContainer<?, ?>> STREAM_CODEC = ...;
 
     /**
