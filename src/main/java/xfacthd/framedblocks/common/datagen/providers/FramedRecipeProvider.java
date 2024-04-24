@@ -1,6 +1,7 @@
 package xfacthd.framedblocks.common.datagen.providers;
 
 import net.minecraft.core.Holder;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.data.PackOutput;
 import net.minecraft.data.recipes.*;
 import net.minecraft.tags.ItemTags;
@@ -14,11 +15,13 @@ import xfacthd.framedblocks.common.FBContent;
 import xfacthd.framedblocks.common.datagen.builders.recipe.ExtShapedRecipeBuilder;
 import xfacthd.framedblocks.common.datagen.builders.recipe.ExtShapelessRecipeBuilder;
 
+import java.util.concurrent.CompletableFuture;
+
 public final class FramedRecipeProvider extends RecipeProvider
 {
-    public FramedRecipeProvider(PackOutput output)
+    public FramedRecipeProvider(PackOutput output, CompletableFuture<HolderLookup.Provider> providerFuture)
     {
-        super(output);
+        super(output, providerFuture);
     }
 
     @Override
@@ -400,7 +403,7 @@ public final class FramedRecipeProvider extends RecipeProvider
                 .pattern("FF")
                 .pattern("SS")
                 .define('F', FBContent.BLOCK_FRAMED_CUBE.value())
-                .define('S', Tags.Items.STONE)
+                .define('S', Tags.Items.STONES)
                 .unlockedBy(FBContent.BLOCK_FRAMED_CUBE)
                 .save(consumer);
 
@@ -408,7 +411,7 @@ public final class FramedRecipeProvider extends RecipeProvider
                 .pattern("FF")
                 .pattern("OO")
                 .define('F', FBContent.BLOCK_FRAMED_CUBE.value())
-                .define('O', Tags.Items.OBSIDIAN)
+                .define('O', Tags.Items.OBSIDIANS)
                 .unlockedBy(FBContent.BLOCK_FRAMED_CUBE)
                 .save(consumer);
 
@@ -444,7 +447,7 @@ public final class FramedRecipeProvider extends RecipeProvider
 
         shapelessBuildingBlock(FBContent.BLOCK_FRAMED_STONE_BUTTON.value())
                 .requires(FBContent.BLOCK_FRAMED_CUBE.value())
-                .requires(Tags.Items.STONE)
+                .requires(Tags.Items.STONES)
                 .unlockedBy(FBContent.BLOCK_FRAMED_CUBE)
                 .save(consumer);
 
@@ -1233,7 +1236,7 @@ public final class FramedRecipeProvider extends RecipeProvider
                 .pattern("FLF")
                 .pattern("FFF")
                 .define('F', FBContent.BLOCK_FRAMED_CUBE.value())
-                .define('L', Tags.Items.LEATHER)
+                .define('L', Tags.Items.LEATHERS)
                 .unlockedBy(FBContent.BLOCK_FRAMED_CUBE)
                 .save(consumer);
 
@@ -1398,7 +1401,7 @@ public final class FramedRecipeProvider extends RecipeProvider
                 .pattern("OSO")
                 .pattern("SFS")
                 .pattern("OSO")
-                .define('O', Tags.Items.OBSIDIAN)
+                .define('O', Tags.Items.OBSIDIANS)
                 .define('S', Items.STICK)
                 .define('F', FBContent.BLOCK_FRAMED_CUBE.value())
                 .unlockedBy(FBContent.BLOCK_FRAMED_CUBE)

@@ -65,8 +65,8 @@ public final class FramedBlockTagProvider extends BlockTagsProvider
         tag(Tags.Blocks.BOOKSHELVES).add(FBContent.BLOCK_FRAMED_BOOKSHELF.value());
 
         TagsProvider.TagAppender<Block> frameable = tag(Utils.FRAMEABLE).addTags(
-                Tags.Blocks.GLASS,
-                Tags.Blocks.STAINED_GLASS,
+                Tags.Blocks.GLASS_BLOCKS,
+                Tags.Blocks.GLASS_BLOCKS_COLORLESS,
                 BlockTags.ICE,
                 BlockTags.LEAVES
         );
